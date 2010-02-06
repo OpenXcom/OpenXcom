@@ -51,7 +51,9 @@ public:
 	int getY();
 	void setCrop(SDL_Rect *crop);
 	SDL_Rect *getCrop();
-	Uint8 Surface::getPixel(int x, int y);
+	void setPixel(int x, int y, Uint8 pixel);
+	void setPixelIterative(int *x, int *y, Uint8 pixel);
+	Uint8 getPixel(int x, int y);
 	SDL_Surface* getSurface();
 	int getWidth();
 	int getHeight();

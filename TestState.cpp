@@ -26,7 +26,7 @@ TestState::TestState(Game *game) : State(game)
 	_button = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 100, 20, 110, 150);
 	_list = new TextList(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 300, 180, 10, 10);
 	_set = game->getSurfaceSet("BASEBITS.PCK");
-	_set->getFrame(0);
+	_set->getFrame(1);
 	
 	// Set palette
 	_game->setPalette(_game->getPalette("PALETTES.DAT_1")->getColors());
@@ -36,6 +36,7 @@ TestState::TestState(Game *game) : State(game)
 	add(_button);
 	add(_text);
 	add(_list);
+	add(_set->getSurface());
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)+4);

@@ -20,7 +20,7 @@
 
 Surface::Surface(int width, int height, int x, int y) : _width(width), _height(height), _x(x), _y(y), _visible(true)
 {
-	_surface = SDL_CreateRGBSurface(SDL_HWSURFACE, width, height, 8, 0, 0, 0, 0);
+	_surface = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, 8, 0, 0, 0, 0);
 
 	if (_surface == NULL)
 	{
@@ -42,24 +42,22 @@ Surface::~Surface()
 
 void Surface::loadScr(string filename)
 {
-	// Lock the surface
-	SDL_LockSurface(_surface);
-
-	Uint8 *index = (Uint8 *)_surface->pixels;
-	
 	// Load file and put pixels in surface
 	ifstream imgFile (filename.c_str(), ios::in | ios::binary);
 	if (!imgFile)
 	{
 		throw "Failed to load SCR";
 	}
+
+	// Lock the surface
+	SDL_LockSurface(_surface);
 	
 	char value;
+	int x = 0, y = 0;
 
 	while (imgFile.read(&value, 1))
 	{
-		*index = Uint8(value);
-		index++;
+		setPixelIterative(&x, &y, Uint8(value));
 	}
 
 	if (!imgFile.eof())
@@ -75,20 +73,19 @@ void Surface::loadScr(string filename)
 
 void Surface::loadSpk(string filename)
 {
-	// Lock the surface
-	SDL_LockSurface(_surface);
-
-	Uint8 *index = (Uint8 *)_surface->pixels;
-	
 	// Load file and put pixels in surface
 	ifstream imgFile (filename.c_str(), ios::in | ios::binary);
 	if (!imgFile)
 	{
 		throw "Failed to load SPK";
 	}
+
+	// Lock the surface
+	SDL_LockSurface(_surface);
 	
 	Uint16 flag;
 	char value;
+	int x = 0, y = 0;
 
 	while (imgFile.read((char*)&flag, sizeof(flag)))
 	{
@@ -97,8 +94,7 @@ void Surface::loadSpk(string filename)
 			imgFile.read((char*)&flag, sizeof(flag));
 			for (int i = 0; i < flag*2; i++)
 			{
-				*index = 0;
-				index++;
+				setPixelIterative(&x, &y, 0);
 			}
 		}
 		else if (flag == 65534)
@@ -107,8 +103,7 @@ void Surface::loadSpk(string filename)
 			for (int i = 0; i < flag*2; i++)
 			{
 				imgFile.read(&value, 1);
-				*index = Uint8(value);
-				index++;
+				setPixelIterative(&x, &y, Uint8(value));
 			}
 		}
 		else if (flag == 65533)
@@ -144,13 +139,13 @@ void Surface::offset(int off)
 	// Lock the surface
 	SDL_LockSurface(_surface);
 	
-	Uint8 *index = (Uint8 *)_surface->pixels;
-
-	for (int i = 0; i < _surface->w * _surface->h; i++)
+	for (int x = 0, y = 0; x < _surface->w && y < _surface->h;)
 	{
-		if (*index > 0)
-			*index += off;
-		index++;
+		Uint8 pixel = getPixel(x, y);
+		if (pixel > 0)
+			setPixelIterative(&x, &y, pixel + off);
+		else
+			setPixelIterative(&x, &y, 0);
 	}
 
 	// Unlock the surface
@@ -161,14 +156,14 @@ void Surface::invert(Uint8 mid)
 {
 	// Lock the surface
 	SDL_LockSurface(_surface);
-	
-	Uint8 *index = (Uint8 *)_surface->pixels;
 
-	for (int i = 0; i < _surface->w * _surface->h; i++)
+	for (int x = 0, y = 0; x < _surface->w && y < _surface->h;)
 	{
-		if (*index > 0)
-			*index += 2 * (mid - *index);
-		index++;
+		Uint8 pixel = getPixel(x, y);
+		if (pixel > 0)
+			setPixelIterative(&x, &y, pixel + 2 * (mid - pixel));
+		else
+			setPixelIterative(&x, &y, 0);
 	}
 
 	// Unlock the surface
@@ -255,11 +250,25 @@ SDL_Color* Surface::getPalette()
 	return _surface->format->palette->colors;
 }
 
+void Surface::setPixel(int x, int y, Uint8 pixel)
+{
+    *((Uint8 *)_surface->pixels + y * _surface->pitch + x * _surface->format->BytesPerPixel) = pixel;
+}
+
+void Surface::setPixelIterative(int *x, int *y, Uint8 pixel)
+{
+    setPixel(*x, *y, pixel);
+	(*x)++;
+	if (*x == _surface->w)
+	{
+		(*y)++;
+		*x = 0;
+	}
+}
+
 Uint8 Surface::getPixel(int x, int y)
 {
-    Uint8 *pixels = (Uint8 *)_surface->pixels;
-
-    return pixels[(y * _width) + x];
+    return *((Uint8 *)_surface->pixels + y * _surface->pitch + x * _surface->format->BytesPerPixel);
 }
 
 SDL_Surface* Surface::getSurface()

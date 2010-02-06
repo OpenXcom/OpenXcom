@@ -20,8 +20,6 @@
 
 #define FIRST_CHAR '!'
 
-using namespace std;
-
 Font::Font(int width, int height, int nchar, int spacing) : _width(width), _height(height), _nchar(nchar), _chars(), _spacing(spacing)
 {
 	_surface = new Surface(width, height*nchar);

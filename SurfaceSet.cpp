@@ -18,10 +18,6 @@
  */
 #include "SurfaceSet.h"
 
-#define FIRST_CHAR '!'
-
-using namespace std;
-
 SurfaceSet::SurfaceSet(int width, int height) : _width(width), _height(height), _nframe(0), _frames()
 {
 
@@ -62,7 +58,6 @@ void SurfaceSet::loadPck(string filename)
 	}
 
 	_surface = new Surface(_width, _height * _nframe);
-	SDL_Surface *surface = _surface->getSurface();
 
 	// Load PCX and put pixels in surface
     ifstream imgFile (pck.c_str(), ios::in | ios::binary);
@@ -72,21 +67,21 @@ void SurfaceSet::loadPck(string filename)
 	}
 	
 	// Lock the surface
-	SDL_LockSurface(surface);
+	SDL_LockSurface(_surface->getSurface());
 
 	char value;
 	
 	for (int frame = 0; frame < _nframe; frame++)
 	{
-		Uint8 *index = (Uint8 *)surface->pixels + (frame * _width * _height);
+		int x = 0;
+		int y = frame * _height;
 
 		imgFile.read(&value, 1);
 		for (int i = 0; i < value; i++)
 		{
 			for (int j = 0; j < _width; j++)
 			{
-				*index = 0;
-				index++;
+				_surface->setPixelIterative(&x, &y, 0);
 			}
 		}
 		
@@ -97,8 +92,7 @@ void SurfaceSet::loadPck(string filename)
 				imgFile.read(&value, 1);
 				for (int i = 0; i < value; i++)
 				{
-					*index = 0;
-					index++;
+					_surface->setPixelIterative(&x, &y, 0);
 				}
 			}
 			else if (value == -1)
@@ -107,8 +101,7 @@ void SurfaceSet::loadPck(string filename)
 			}
 			else
 			{
-				*index = Uint8(value);
-				index++;
+				_surface->setPixelIterative(&x, &y, Uint8(value));
 			}
 		}
 	}
@@ -121,7 +114,7 @@ void SurfaceSet::loadPck(string filename)
 	*/
 
 	// Unlock the surface
-	SDL_UnlockSurface(surface);
+	SDL_UnlockSurface(_surface->getSurface());
 
 	imgFile.close();
 	offsetFile.close();

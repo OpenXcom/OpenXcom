@@ -48,7 +48,7 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _rotLon(0), _rotLat(0)
 	_txtHour = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 20, 13, 259, 74);
 	_txtHourSep = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 4, 13, 279, 74);
 	_txtMin = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 20, 13, 283, 74);
-	_txtMinSep = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 20, 4, 303, 74);
+	_txtMinSep = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 4, 13, 303, 74);
 	_txtSec = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 11, 8, 307, 80);
 	_txtWeekday = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 59, 8, 259, 87);
 	_txtDay = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 29, 8, 259, 94);
