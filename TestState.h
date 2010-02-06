@@ -16,10 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef __TESTSTATE_H__
-#define __TESTSTATE_H__
+#ifndef OPENXCOM__TESTSTATE_H
+#define OPENXCOM__TESTSTATE_H
 
-#include "State.h"
+#include "State_Interactive.h"
 #include "Palette.h"
 #include "SurfaceSet.h"
 #include "Surface.h"
@@ -43,9 +43,7 @@ private:
 public:
 	TestState(Game *game);
 	~TestState();
-	void handle(SDL_Event *ev, int scale);
 	void think();
-	void blit();
 };
 
 #endif

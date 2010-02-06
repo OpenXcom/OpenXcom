@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef __POLYGON_H__
-#define __POLYGON_H__
+#ifndef OPENXCOM__POLYGON_H
+#define OPENXCOM__POLYGON_H
 
 #include <string>
 

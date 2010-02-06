@@ -16,8 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef __GAME_H__
-#define __GAME_H__
+#ifndef OPENXCOM__GAME_H
+#define OPENXCOM__GAME_H
+
+#define DATA_FOLDER "./DATA/"
 
 class State;
 

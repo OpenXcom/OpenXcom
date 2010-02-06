@@ -46,6 +46,11 @@ void Text::setText(string text)
 	_text = text;
 }
 
+string Text::getText()
+{
+	return _text;
+}
+
 void Text::setWordWrap(bool wrap)
 {
 	_wrap = wrap;

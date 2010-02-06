@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef __SURFACE_H__
-#define __SURFACE_H__
+#ifndef OPENXCOM__SURFACE_H
+#define OPENXCOM__SURFACE_H
 
 #include "SDL.h"
 #include <string>
@@ -32,6 +32,7 @@ protected:
 	SDL_Surface *_surface;
 	int _width, _height, _x, _y;
 	SDL_Rect _crop;
+	bool _visible;
 public:
 	Surface(int width, int height, int x = 0, int y = 0);
 	~Surface();
@@ -40,19 +41,22 @@ public:
 	void clear();
 	void offset(int off);
 	void invert(Uint8 mid);
-	void blit(Surface *surface);
-	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
+	virtual void blit(Surface *surface);
+	void copy(Surface *surface);
+	virtual void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
+	SDL_Color* getPalette();
 	void setX(int x);
 	int getX();
 	void setY(int y);
 	int getY();
 	void setCrop(SDL_Rect *crop);
 	SDL_Rect *getCrop();
-	SDL_Color* getPalette();
 	Uint8 Surface::getPixel(int x, int y);
 	SDL_Surface* getSurface();
 	int getWidth();
 	int getHeight();
+	void setVisible(bool visible);
+	bool getVisible();
 };
 
 #endif

@@ -17,9 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Game.h"
-#include "State.h"
-
-#define DATA_FOLDER "../UFO/"
+#include "State_Interactive.h"
 
 Game::Game(char* title, int width, int height, int bpp) : _quit(false), _state(NULL), _newState(NULL), _palettes(), _fonts(), _languages(), _surfaces(), _sets()
 {

@@ -28,7 +28,7 @@
 
 int main(int argc, char** args)
 {
-	Game *game = new Game("Open X-Com", 320, 200, 8);
+	Game *game = new Game("OpenXcom", 320, 200, 8);
 	game->load();
 	
 	//game->getScreen()->setFullscreen(true);

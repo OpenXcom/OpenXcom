@@ -61,8 +61,6 @@ void Cursor::blit(Surface *surface)
 		y2--;
 		x2--;
 		color++;
-		if (color == 0)
-			color = 255;
 	}
 
 	Surface::blit(surface);

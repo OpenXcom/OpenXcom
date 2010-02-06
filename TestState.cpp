@@ -32,10 +32,10 @@ TestState::TestState(Game *game) : State(game)
 	_game->setPalette(_game->getPalette("PALETTES.DAT_1")->getColors());
 	_game->setPalette(_game->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
 
-	_window->setPalette(_game->getScreen()->getPalette());
-	_button->setPalette(_game->getScreen()->getPalette());
-	_text->setPalette(_game->getScreen()->getPalette());
-	_list->setPalette(_game->getScreen()->getPalette());
+	add(_window);
+	add(_button);
+	add(_text);
+	add(_list);
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)+4);
@@ -62,16 +62,7 @@ TestState::TestState(Game *game) : State(game)
 
 TestState::~TestState()
 {
-	delete _window;
-	delete _text;
-	delete _button;
-	delete _list;
 	State::~State();
-}
-
-void TestState::handle(SDL_Event *ev, int scale)
-{
-	_button->handle(ev, scale, this);
 }
 
 void TestState::think()
@@ -80,15 +71,6 @@ void TestState::think()
 	_text->setText(_game->getLanguage()->getString(_i));
 	_i++;
 	*/
-}
-
-void TestState::blit()
-{
-	_window->blit(_game->getScreen()->getSurface());
-	_text->blit(_game->getScreen()->getSurface());
-	_list->blit(_game->getScreen()->getSurface());
-	_set->getSurface()->blit(_game->getScreen()->getSurface());
-	_button->blit(_game->getScreen()->getSurface());
 }
 
 SDL_Surface *TestState::testSurface()

@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;..\SDL\include&quot;"
+				AdditionalIncludeDirectories="&quot;.\SDL\include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -64,7 +64,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="SDLmain.lib SDL.lib SDL_mixer.lib SDL_gfx.lib SDL_sound.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;..\SDL\lib&quot;"
+				AdditionalLibraryDirectories="&quot;.\SDL\lib&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				RandomizedBaseAddress="1"
@@ -118,7 +118,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;..\SDL\include&quot;"
+				AdditionalIncludeDirectories="&quot;.\SDL\include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -139,7 +139,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="SDLmain.lib SDL.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;..\SDL\lib&quot;"
+				AdditionalLibraryDirectories="&quot;.\SDL\lib&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				OptimizeReferences="2"
@@ -175,7 +175,7 @@
 	</References>
 	<Files>
 		<Filter
-			Name="Game"
+			Name="Rules"
 			>
 		</Filter>
 		<Filter
@@ -195,6 +195,30 @@
 			</File>
 			<File
 				RelativePath=".\Cursor.h"
+				>
+			</File>
+			<File
+				RelativePath=".\CustomButton.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\CustomButton.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Globe.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Globe.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Polygon.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Polygon.h"
 				>
 			</File>
 			<File
@@ -242,6 +266,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\InteractiveSurface.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Language.cpp"
 				>
 			</File>
@@ -270,7 +298,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\State.h"
+				RelativePath=".\State_Interactive.h"
 				>
 			</File>
 			<File
@@ -334,24 +362,12 @@
 				>
 			</File>
 		</Filter>
-		<File
-			RelativePath=".\Globe.cpp"
+		<Filter
+			Name="Game"
 			>
-		</File>
-		<File
-			RelativePath=".\Globe.h"
-			>
-		</File>
+		</Filter>
 		<File
 			RelativePath=".\main.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\Polygon.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\Polygon.h"
 			>
 		</File>
 	</Files>

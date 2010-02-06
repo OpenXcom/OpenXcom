@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef __PALETTE_H__
-#define __PALETTE_H__
+#ifndef OPENXCOM__PALETTE_H
+#define OPENXCOM__PALETTE_H
 
 #include <string>
 #include <fstream>

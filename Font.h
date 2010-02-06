@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef __FONT_H__
-#define __FONT_H__
+#ifndef OPENXCOM__FONT_H
+#define OPENXCOM__FONT_H
 
 #include <map>
 #include "SDL.h"
@@ -30,7 +30,7 @@ class Font
 private:
 	Surface *_surface;
 	int _width, _height, _nchar;
-	map<int, SDL_Rect> _chars;
+	map<unsigned char, SDL_Rect> _chars;
 	// For some reason the X-Com small font is smooshed together by one pixel...
 	int _spacing;
 public:

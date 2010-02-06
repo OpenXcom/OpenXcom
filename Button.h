@@ -16,38 +16,33 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef __BUTTON_H__
-#define __BUTTON_H__
+#ifndef OPENXCOM__BUTTON_H
+#define OPENXCOM__BUTTON_H
 
 #include "SDL.h"
-#include "Surface.h"
-#include "State.h"
+#include "State_Interactive.h"
 #include "Text.h"
 
-enum ButtonState { STATE_NORMAL, STATE_PRESSED };
-
-typedef State &(State::*EventHandler)(SDL_Event *);
-
-class Button : public Surface
+class Button : public InteractiveSurface
 {
 private:
 	Uint8 _color;
-	ButtonState _state;
 	Text *_text;
-	EventHandler _click, _press, _release;
+	Button **_group;
 
+	void mousePress(SDL_Event *ev, int scale, State *state);
+	void mouseRelease(SDL_Event *ev, int scale, State *state);
 public:
 	Button(Font *big, Font *small, int width, int height, int x = 0, int y = 0);
 	~Button();
-	void handle(SDL_Event *ev, int scale, State *state);
 	void setColor(Uint8 color);
 	Uint8 getColor();
 	void setText(string text);
+	string getText();
+	void setGroup(Button **group);
 	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
 	void blit(Surface *surface);
-	void onClick(EventHandler handler);
-	void onPress(EventHandler handler);
-	void onRelease(EventHandler handler);
+	void handle(SDL_Event *ev, int scale, State *state);
 };
 
 #endif

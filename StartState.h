@@ -16,29 +16,27 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef __STARTSTATE_H__
-#define __STARTSTATE_H__
+#ifndef OPENXCOM__STARTSTATE_H
+#define OPENXCOM__STARTSTATE_H
 
-#include "State.h"
-#include "MainMenuState.h"
+#include "State_Interactive.h"
 #include "Palette.h"
 #include "Button.h"
 #include "Window.h"
+#include "MainMenuState.h"
 
 class StartState : public State
 {
 private:
-	Button *_buttonEn, *_buttonFr, *_buttonDe;
+	Button *_btnEnglish, *_btnDeutsche, *_btnFrench;
 	Window *_window;
 public:
 	StartState(Game *game);
 	~StartState();
-	void handle(SDL_Event *ev, int scale);
 	void think();
-	void blit();
-	void buttonEnClick(SDL_Event *ev);
-	void buttonFrClick(SDL_Event *ev);
-	void buttonDeClick(SDL_Event *ev);
+	void btnEnglishClick(SDL_Event *ev, int scale);
+	void btnDeutscheClick(SDL_Event *ev, int scale);
+	void btnFrenchClick(SDL_Event *ev, int scale);
 };
 
 #endif

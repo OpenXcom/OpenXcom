@@ -18,35 +18,44 @@
  */
 #include "Globe.h"
 
-Globe::Globe(int cenX, int cenY, int width, int height, int x, int y) : Surface(width, height, x, y), _polygons(), _cenX(cenX), _cenY(cenY), _radius(90), _zoom(1), _rotX(0), _rotY(0)
+Globe::Globe(int cenX, int cenY, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _polygons(), _cenX(cenX), _cenY(cenY), _radius(90), _zoom(1), _rotLon(0), _rotLat(0), _testLon(0), _testLat(0)
 {
-	_testX = _cenX - 20;
-	_testY = _cenY - 20;
 }
 
 Globe::~Globe()
 {
 }
 
-void Globe::polarToCart(double lat, double lon, Sint16 *x, Sint16 *y)
+void Globe::polarToCart(double lon, double lat, Sint16 *x, Sint16 *y)
 {
-	lon = longitudeLoop(lon + _rotX);
+	lon = longitudeLoop(lon + _rotLon);
 	
 	// Pre-calculate why not
-	double sin_lon = sin(lon), sin_lat = sin(lat), sin_rotY = sin(_rotY);
-	double cos_lon = cos(lon), cos_lat = cos(lat), cos_rotY = cos(_rotY);
+	double sin_lon = sin(lon), sin_lat = sin(lat), sin_rotLat = sin(_rotLat);
+	double cos_lon = cos(lon), cos_lat = cos(lat), cos_rotLat = cos(_rotLat);
 
 	// Convert polar coordinates to cartesian
 	*x = _cenX + (int)floor(_radius * _zoom * sin_lon * cos_lat);
 	*y = _cenY + (int)floor(_radius * _zoom * sin_lat);
-	//*y = _cenY + (int)floor(_radius * _zoom * (sin_lat * cos_rotY + cos_lat * sin_rotY * cos_lon));	
+	//*y = _cenY + (int)floor(_radius * _zoom * (sin_lat * cos_rotLat + cos_lat * sin_rotLat * cos_lon));	
 }
 
-void Globe::cartToPolar(Sint16 x, Sint16 y, double *lat, double *lon)
-{
+void Globe::cartToPolar(Sint16 x, Sint16 y, double *lon, double *lat)
+{	
 	// Convert cartesian coordinates to polar
 	*lat = asin((y - _cenY) / (_radius * _zoom));
-	*lon = longitudeLoop(asin((x - _cenX) / (_radius * _zoom * cos(*lat))) - _rotX);
+	*lon = asin((x - _cenX) / (_radius * _zoom * cos(*lat)));
+
+	// Check for errors
+	if (!(*lat == *lat && *lon == *lon))
+	{
+		*lat = COORD_OUT_OF_BOUNDS;
+		*lon = COORD_OUT_OF_BOUNDS;
+	}
+	else
+	{
+		*lon = longitudeLoop(*lon - _rotLon);
+	}
 }
 
 double Globe::longitudeLoop(double lon)
@@ -63,8 +72,46 @@ double Globe::longitudeLoop(double lon)
 bool Globe::pointBack(double lon, double lat)
 {
 	// Is the point on the back side of the sphere?
-	//return (longitudeLoop(lon + _rotX) > PI/2 && longitudeLoop(lon + _rotX) < 3*PI/2);
-	return (sin(_rotY) * sin(lat) + cos(longitudeLoop(lon + _rotX)) * cos(lat) <= 0);
+	return (longitudeLoop(lon + _rotLon) > PI/2 && longitudeLoop(lon + _rotLon) < 3*PI/2);
+	//return (sin(_rotLat) * sin(lat) + cos(longitudeLoop(lon + _rotLon)) * cos(lat) <= 0);
+}
+
+bool Globe::insidePolygon(double lon, double lat, Polygon *poly)
+{
+	
+	double sign = 0;
+	// Is the point inside terrain?
+	for (int i = 0; i < poly->getPoints(); i++)
+	{
+		int j = (i + 1) % poly->getPoints();
+
+		double lat_i = poly->getLatitude(i), lat_j = poly->getLatitude(j);
+		double lon_i = poly->getLongitude(i), lon_j = poly->getLongitude(j);
+		/*
+		if (lon_i < PI/6 && lon_j > 11*(PI/6))
+			lon_j -= 2*PI;
+		else if (lon_j < PI/6 && lon_i > 11*(PI/6))
+			lon_i -= 2*PI;
+		*/
+		double d = (lat_j - lat_i) * lon + (lon_i - lon_j) * lat + lat_i * lon_j - lon_i * lat_j;
+
+		if ((d < 0 && sign > 0) || (d > 0 && sign < 0))
+			return false;
+		else
+			sign = d;
+	}
+	return true;
+	
+	/*
+	int i, j;
+	bool c = false;
+	for (i = 0, j = nvert-1; i < nvert; j = i++) {
+		if ( ((verty[i]>testy) != (verty[j]>testy)) &&
+			 (testx < (vertx[j]-vertx[i]) * (testy-verty[i]) / (verty[j]-verty[i]) + vertx[i]) )
+		c = !c;
+	}
+	return c;
+	*/
 }
 
 void Globe::loadDat(string filename)
@@ -121,6 +168,27 @@ void Globe::setTexture(SurfaceSet *texture)
 	_texture = texture;
 }
 
+void Globe::rotate(double lon, double lat)
+{
+	_rotLon = longitudeLoop(_rotLon + lon);
+	//_rotLat += lat;
+}
+
+void Globe::zoom(double amount)
+{
+	_zoom += amount;
+	if (_zoom < 1.0f)
+		_zoom = 1.0f;
+	else if (_zoom > 2.5f)
+		_zoom = 2.5f;
+}
+
+void Globe::center(double lon, double lat)
+{
+	_rotLon = -lon;
+	//_rotLat = lat;
+}
+
 void Globe::blit(Surface *surface)
 {
 	Sint16 x[4], y[4];
@@ -143,28 +211,50 @@ void Globe::blit(Surface *surface)
 
 		for (int j = 0; j < (*i)->getPoints(); j++)
 		{
-			polarToCart((*i)->getLatitude(j), (*i)->getLongitude(j), &x[j], &y[j]);
+			polarToCart((*i)->getLongitude(j), (*i)->getLatitude(j), &x[j], &y[j]);
 		}
 		//texturedPolygon(getSurface(), (Sint16*)&x, (Sint16*)&y, (*i)->getPoints(), _texture->getSurface()->getSurface(), 0, 0);
 		filledPolygonColor(getSurface(), (Sint16*)&x, (Sint16*)&y, (*i)->getPoints(), _texture->getSurface()->getPixel(0, 32*(*i)->getTexture()));
+		//polygonColor(getSurface(), (Sint16*)&x, (Sint16*)&y, (*i)->getPoints(), _texture->getSurface()->getPixel(0, 32*(*i)->getTexture()));
 	}
+	
+	if (!pointBack(_testLon, _testLat))
+	{
+		Sint16 testx[4], testy[4];
+		int xx[4] = {-1, -1, 1, 1};
+		int yy[4] = {-1, 1, 1, -1};
+		for (int i = 0; i < 4; i++)
+		{
+			polarToCart(_testLon, _testLat, &testx[i], &testy[i]);
+			testx[i]+=xx[i];
+			testy[i]+=yy[i];
+		}
 
-	double testlat[4], testlon[4];
-	Sint16 testx[4], testy[4];
-	int xx[4] = {-1, -1, 1, 1};
-	int yy[4] = {-1, 1, 1, -1};
-	for (int i = 0; i < 4; i++) {
-		cartToPolar(_testX, _testY, &testlat[i], &testlon[i]);
-		polarToCart(testlat[i], testlon[i], &testx[i], &testy[i]);
-		testx[i]+=xx[i];
-		testy[i]+=yy[i];
+		polygonColor(getSurface(), (Sint16*)&testx, (Sint16*)&testy, 4, 1);
 	}
-
-	polygonColor(getSurface(), (Sint16*)&testx, (Sint16*)&testy, 4, 1);
-
+	
 	SDL_UnlockSurface(this->getSurface());
 
-	_rotX = longitudeLoop(_rotX + 0.01f);
-
 	Surface::blit(surface);
+}
+
+void Globe::handle(SDL_Event *ev, int scale, State *state)
+{
+	double pos[2];
+	cartToPolar(ev->button.x / scale, ev->button.y / scale, &pos[0], &pos[1]);
+
+	if (pos[0] != COORD_OUT_OF_BOUNDS)
+		InteractiveSurface::handle(ev, scale, state);
+}
+
+void Globe::test(double lon, double lat)
+{
+	_testLon = lon;
+	_testLat = lat;
+	bool inside = false;
+	for (vector<Polygon*>::iterator i = _polygons.begin(); i < _polygons.end() && !inside; i++)
+	{
+		inside = insidePolygon(_testLon, _testLat, *i);
+	}
+	cout << inside << endl;
 }

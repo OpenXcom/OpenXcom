@@ -18,7 +18,7 @@
  */
 #include "Surface.h"
 
-Surface::Surface(int width, int height, int x, int y) : _width(width), _height(height), _x(x), _y(y)
+Surface::Surface(int width, int height, int x, int y) : _width(width), _height(height), _x(x), _y(y), _visible(true)
 {
 	_surface = SDL_CreateRGBSurface(SDL_HWSURFACE, width, height, 8, 0, 0, 0, 0);
 
@@ -178,15 +178,28 @@ void Surface::invert(Uint8 mid)
 
 void Surface::blit(Surface *surface)
 {
-	SDL_Rect* cropper;
-	SDL_Rect target;
-	if (_crop.w == 0 && _crop.h == 0)
-		cropper = NULL;
-	else
-		cropper = &_crop;
-	target.x = _x;
-	target.y = _y;
-	SDL_BlitSurface(_surface, cropper, surface->getSurface(), &target);
+	if (_visible)
+	{
+		SDL_Rect* cropper;
+		SDL_Rect target;
+		if (_crop.w == 0 && _crop.h == 0)
+			cropper = NULL;
+		else
+			cropper = &_crop;
+		target.x = _x;
+		target.y = _y;
+		SDL_BlitSurface(_surface, cropper, surface->getSurface(), &target);
+	}
+}
+
+void Surface::copy(Surface *surface)
+{
+	SDL_Rect from;
+	from.x = _x;
+	from.y = _y;
+	from.w = _width;
+	from.h = _height;
+	SDL_BlitSurface(surface->getSurface(), &from, _surface, NULL);
 }
 
 void Surface::setX(int x)
@@ -262,4 +275,14 @@ int Surface::getWidth()
 int Surface::getHeight()
 {
 	return _height;
+}
+
+void Surface::setVisible(bool visible)
+{
+	_visible = visible;
+}
+
+bool Surface::getVisible()
+{
+	return _visible;
 }

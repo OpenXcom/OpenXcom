@@ -22,81 +22,66 @@ MainMenuState::MainMenuState(Game *game) : State(game)
 {
 	// Create objects
 	_window = new Window(256, 160, 32, 20);
-	_buttonNew = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 192, 20, 64, 90);
-	_buttonLoad = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 192, 20, 64, 120);
-	_buttonQuit = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 192, 20, 64, 150);
-	_title = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 256, 40, 32, 45);
+	_btnNew = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 192, 20, 64, 90);
+	_btnLoad = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 192, 20, 64, 118);
+	_btnQuit = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 192, 20, 64, 146);
+	_txtTitle = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 256, 30, 32, 45);
+	_txtVersion = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 160, 10, 160, 190);
 	
-	// Set palette
-	_window->setPalette(_game->getScreen()->getPalette());
-	_buttonNew->setPalette(_game->getScreen()->getPalette());
-	_buttonLoad->setPalette(_game->getScreen()->getPalette());
-	_buttonQuit->setPalette(_game->getScreen()->getPalette());
-	_title->setPalette(_game->getScreen()->getPalette());
+	add(_window);
+	add(_btnNew);
+	add(_btnLoad);
+	add(_btnQuit);
+	add(_txtTitle);
+	add(_txtVersion);
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(8)+8);
 	_window->setBg(game->getSurface("BACK01.SCR"));
 
-	_buttonNew->setColor(Palette::blockOffset(8)+8);
-	_buttonNew->setText(_game->getLanguage()->getString(780));
-	_buttonNew->onClick((EventHandler)&MainMenuState::buttonNewClick);
+	_btnNew->setColor(Palette::blockOffset(8)+8);
+	_btnNew->setText(_game->getLanguage()->getString(780));
+	_btnNew->onMouseClick((EventHandler)&MainMenuState::btnNewClick);
 
-	_buttonLoad->setColor(Palette::blockOffset(8)+8);
-	_buttonLoad->setText(_game->getLanguage()->getString(781));
-	_buttonLoad->onClick((EventHandler)&MainMenuState::buttonLoadClick);
+	_btnLoad->setColor(Palette::blockOffset(8)+8);
+	_btnLoad->setText(_game->getLanguage()->getString(781));
+	_btnLoad->onMouseClick((EventHandler)&MainMenuState::btnLoadClick);
 
-	_buttonQuit->setColor(Palette::blockOffset(8)+8);
-	_buttonQuit->setText(_game->getLanguage()->getString(801));
-	_buttonQuit->onClick((EventHandler)&MainMenuState::buttonQuitClick);
+	_btnQuit->setColor(Palette::blockOffset(8)+8);
+	_btnQuit->setText(_game->getLanguage()->getString(801));
+	_btnQuit->onMouseClick((EventHandler)&MainMenuState::btnQuitClick);
 
-	_title->setColor(Palette::blockOffset(8)+10);
-	_title->setAlign(ALIGN_CENTER);
-	_title->setBig();
-	_title->setText(_game->getLanguage()->getString(779));
+	_txtTitle->setColor(Palette::blockOffset(8)+10);
+	_txtTitle->setAlign(ALIGN_CENTER);
+	_txtTitle->setBig();
+	_txtTitle->setText(_game->getLanguage()->getString(779));
+	
+	_txtVersion->setColor(Palette::blockOffset(8)+10);
+	_txtVersion->setAlign(ALIGN_RIGHT);
+	_txtVersion->setSmall();
+	_txtVersion->setText("OpenXcom v0.1");
 }
 
 MainMenuState::~MainMenuState()
 {
-	delete _window;
-	delete _buttonNew;
-	delete _buttonLoad;
-	delete _buttonQuit;
-	delete _title;
 	State::~State();
-}
-
-void MainMenuState::handle(SDL_Event *ev, int scale)
-{
-	_buttonNew->handle(ev, scale, this);
-	_buttonLoad->handle(ev, scale, this);
-	_buttonQuit->handle(ev, scale, this);
 }
 
 void MainMenuState::think()
 {
 }
 
-void MainMenuState::blit()
-{
-	_window->blit(_game->getScreen()->getSurface());
-	_buttonNew->blit(_game->getScreen()->getSurface());
-	_buttonLoad->blit(_game->getScreen()->getSurface());
-	_buttonQuit->blit(_game->getScreen()->getSurface());
-	_title->blit(_game->getScreen()->getSurface());
-}
-
-void MainMenuState::buttonNewClick(SDL_Event *ev)
+void MainMenuState::btnNewClick(SDL_Event *ev, int scale)
 {
 	_game->setState(new NewGameState(_game));
 }
 
-void MainMenuState::buttonLoadClick(SDL_Event *ev)
+void MainMenuState::btnLoadClick(SDL_Event *ev, int scale)
 {
 	
 }
 
-void MainMenuState::buttonQuitClick(SDL_Event *ev)
+void MainMenuState::btnQuitClick(SDL_Event *ev, int scale)
 {
 	_game->quit();
 }

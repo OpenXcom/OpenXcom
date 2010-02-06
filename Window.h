@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef __WINDOW_H__
-#define __WINDOW_H__
+#ifndef OPENXCOM__WINDOW_H
+#define OPENXCOM__WINDOW_H
 
 #include "Surface.h"
 

@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "State.h"
+#include "State_Interactive.h"
 
 State::State(Game *game) : _game(game)
 {
@@ -25,5 +25,28 @@ State::State(Game *game) : _game(game)
 
 State::~State()
 {
-	
+	for (vector<Surface*>::iterator i = _surfaces.begin(); i < _surfaces.end(); i++)
+		delete *i;
+}
+
+void State::add(Surface *surface)
+{
+	surface->setPalette(_game->getScreen()->getPalette());
+	_surfaces.push_back(surface);
+}
+
+void State::handle(SDL_Event *ev, int scale)
+{
+	for (vector<Surface*>::iterator i = _surfaces.begin(); i < _surfaces.end(); i++)
+	{
+		InteractiveSurface* j = dynamic_cast<InteractiveSurface*>(*i);
+		if (j != NULL)
+			j->handle(ev, scale, this);
+	}
+}
+
+void State::blit()
+{
+	for (vector<Surface*>::iterator i = _surfaces.begin(); i < _surfaces.end(); i++)
+		(*i)->blit(_game->getScreen()->getSurface());
 }

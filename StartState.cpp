@@ -22,78 +22,59 @@ StartState::StartState(Game *game) : State(game)
 {
 	// Create objects
 	_window = new Window(256, 160, 32, 20);
-	_buttonEn = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 192, 20, 64, 90);
-	_buttonFr = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 192, 20, 64, 150);
-	_buttonDe = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 192, 20, 64, 120);
+	_btnEnglish = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 192, 20, 64, 90);
+	_btnDeutsche = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 192, 20, 64, 118);
+	_btnFrench = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 192, 20, 64, 146);
 	
 	// Set palette
 	_game->setPalette(_game->getPalette("PALETTES.DAT_0")->getColors());
 	_game->setPalette(_game->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
-
-	_window->setPalette(_game->getScreen()->getPalette());
-	_buttonEn->setPalette(_game->getScreen()->getPalette());
-	_buttonFr->setPalette(_game->getScreen()->getPalette());
-	_buttonDe->setPalette(_game->getScreen()->getPalette());
+	
+	add(_window);
+	add(_btnEnglish);
+	add(_btnDeutsche);
+	add(_btnFrench);
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(8)+8);
 	_window->setBg(game->getSurface("BACK01.SCR"));
 
-	_buttonEn->setColor(Palette::blockOffset(8)+8);
-	_buttonEn->setText("ENGLISH");
-	_buttonEn->onClick((EventHandler)&StartState::buttonEnClick);
+	_btnEnglish->setColor(Palette::blockOffset(8)+8);
+	_btnEnglish->setText("ENGLISH");
+	_btnEnglish->onMouseClick((EventHandler)&StartState::btnEnglishClick);
+	
+	_btnDeutsche->setColor(Palette::blockOffset(8)+8);
+	_btnDeutsche->setText("DEUTSCHE");
+	_btnDeutsche->onMouseClick((EventHandler)&StartState::btnDeutscheClick);
 
-	_buttonFr->setColor(Palette::blockOffset(8)+8);
-	_buttonFr->setText("FRANCAIS");
-	_buttonFr->onClick((EventHandler)&StartState::buttonFrClick);
-
-	_buttonDe->setColor(Palette::blockOffset(8)+8);
-	_buttonDe->setText("DEUTSCHE");
-	_buttonDe->onClick((EventHandler)&StartState::buttonDeClick);
+	_btnFrench->setColor(Palette::blockOffset(8)+8);
+	_btnFrench->setText("FRANCAIS");
+	_btnFrench->onMouseClick((EventHandler)&StartState::btnFrenchClick);
 }
 
 StartState::~StartState()
 {
-	delete _window;
-	delete _buttonEn;
-	delete _buttonFr;
-	delete _buttonDe;
 	State::~State();
-}
-
-void StartState::handle(SDL_Event *ev, int scale)
-{
-	_buttonEn->handle(ev, scale, this);
-	_buttonFr->handle(ev, scale, this);
-	_buttonDe->handle(ev, scale, this);
 }
 
 void StartState::think()
 {
 }
 
-void StartState::blit()
-{
-	_window->blit(_game->getScreen()->getSurface());
-	_buttonEn->blit(_game->getScreen()->getSurface());
-	_buttonFr->blit(_game->getScreen()->getSurface());
-	_buttonDe->blit(_game->getScreen()->getSurface());
-}
-
-void StartState::buttonEnClick(SDL_Event *ev)
+void StartState::btnEnglishClick(SDL_Event *ev, int scale)
 {
 	_game->setLanguage("ENGLISH.DAT");
 	_game->setState(new MainMenuState(_game));
 }
 
-void StartState::buttonFrClick(SDL_Event *ev)
+void StartState::btnDeutscheClick(SDL_Event *ev, int scale)
 {
-	_game->setLanguage("FRENCH.DAT");
+	_game->setLanguage("GERMAN.DAT");
 	_game->setState(new MainMenuState(_game));
 }
 
-void StartState::buttonDeClick(SDL_Event *ev)
+void StartState::btnFrenchClick(SDL_Event *ev, int scale)
 {
-	_game->setLanguage("GERMAN.DAT");
+	_game->setLanguage("FRENCH.DAT");
 	_game->setState(new MainMenuState(_game));
 }

@@ -16,22 +16,28 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef __STATE_H__
-#define __STATE_H__
+#ifndef OPENXCOM__CUSTOMBUTTON_H
+#define OPENXCOM__CUSTOMBUTTON_H
 
 #include "SDL.h"
-#include "Game.h"
+#include "State_Interactive.h"
 
-class State
+class CustomButton : public InteractiveSurface
 {
-protected:
-	Game *_game;
+private:
+	Uint8 _color;
+	CustomButton **_group;
+
+	void mousePress(SDL_Event *ev, int scale, State *state);
+	void mouseRelease(SDL_Event *ev, int scale, State *state);
 public:
-	State(Game* game);
-	~State();
-	virtual void handle(SDL_Event* ev, int scale) = 0;
-	virtual void think() = 0;
-	virtual void blit() = 0;
+	CustomButton(int width, int height, int x = 0, int y = 0);
+	~CustomButton();
+	void setColor(Uint8 color);
+	Uint8 getColor();
+	void setGroup(CustomButton **group);
+	void blit(Surface *surface);
+	void handle(SDL_Event *ev, int scale, State *state);
 };
 
 #endif

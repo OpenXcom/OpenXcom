@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef __SURFACESET_H__
-#define __SURFACESET_H__
+#ifndef OPENXCOM__SURFACESET_H
+#define OPENXCOM__SURFACESET_H
 
 #include <map>
 #include "SDL.h"

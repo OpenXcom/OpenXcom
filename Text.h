@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef __TEXT_H__
-#define __TEXT_H__
+#ifndef OPENXCOM__TEXT_H
+#define OPENXCOM__TEXT_H
 
 #include "Font.h"
 #include "Surface.h"
@@ -39,6 +39,7 @@ public:
 	void setBig();
 	void setSmall();
 	void setText(string text);
+	string getText();
 	void setWordWrap(bool wrap);
 	void setInvert(bool invert);
 	void setAlign(TextAlign align);

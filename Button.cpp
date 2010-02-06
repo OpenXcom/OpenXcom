@@ -18,7 +18,7 @@
  */
 #include "Button.h"
 
-Button::Button(Font *big, Font *small, int width, int height, int x, int y) : Surface(width, height, x, y), _color(0), _state(STATE_NORMAL), _click(NULL), _press(NULL), _release(NULL)
+Button::Button(Font *big, Font *small, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _color(0), _group(NULL)
 {
 	_text = new Text(big, small, width, small->getHeight(), 0, (height - small->getHeight())/2);
 	_text->setSmall();
@@ -30,32 +30,6 @@ Button::~Button()
 	delete _text;
 
 	Surface::~Surface();
-}
-
-void Button::handle(SDL_Event *ev, int scale, State *state)
-{
-	if (_state == STATE_NORMAL && ev->type == SDL_MOUSEBUTTONDOWN && ev->button.button == SDL_BUTTON_LEFT)
-	{
-		if ((ev->button.x >= _x * scale && ev->button.x < (_x + _width) * scale) &&
-			(ev->button.y >= _y * scale && ev->button.y < (_y + _height) * scale))
-		{
-			_state = STATE_PRESSED;
-			if (_press != NULL)
-				(state->*_press)(ev);
-		}
-	}
-	else if (_state == STATE_PRESSED && ev->type == SDL_MOUSEBUTTONUP && ev->button.button == SDL_BUTTON_LEFT)
-	{
-		_state = STATE_NORMAL;
-		if (_release != NULL)
-			(state->*_release)(ev);
-		if ((ev->button.x >= _x * scale && ev->button.x < (_x + _width) * scale) &&
-			(ev->button.y >= _y * scale && ev->button.y < (_y + _height) * scale))
-		{
-			if (_click != NULL)
-				(state->*_click)(ev);
-		}
-	}
 }
 
 void Button::setColor(Uint8 color)
@@ -72,6 +46,16 @@ Uint8 Button::getColor()
 void Button::setText(string text)
 {
 	_text->setText(text);
+}
+
+string Button::getText()
+{
+	return _text->getText();
+}
+
+void Button::setGroup(Button **group)
+{
+	_group = group;
 }
 
 void Button::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
@@ -119,32 +103,38 @@ void Button::blit(Surface *surface)
 		}
 	}
 	
-	if (_state == STATE_PRESSED)
+	bool press;
+	if (_group == NULL)
+		press = _isPressed;
+	else
+		press = (*_group == this);
+
+	if (press)
 	{
 		this->invert(_color);
-		_text->setInvert(true);
 	}
-	else
-	{
-		_text->setInvert(false);
-	}
+	_text->setInvert(press);
 
 	_text->blit(this);
 
 	Surface::blit(surface);
 }
 
-void Button::onClick(EventHandler handler)
+void Button::handle(SDL_Event *ev, int scale, State *state)
 {
-	_click = handler;
+	if (ev->button.button == SDL_BUTTON_LEFT)
+		InteractiveSurface::handle(ev, scale, state);
 }
 
-void Button::onPress(EventHandler handler)
+void Button::mousePress(SDL_Event *ev, int scale, State *state)
 {
-	_press = handler;
+	if (_group != NULL)
+		*_group = this;
+
+	InteractiveSurface::mousePress(ev, scale, state);
 }
 
-void Button::onRelease(EventHandler handler)
+void Button::mouseRelease(SDL_Event *ev, int scale, State *state)
 {
-	_release = handler;
+	InteractiveSurface::mouseRelease(ev, scale, state);
 }

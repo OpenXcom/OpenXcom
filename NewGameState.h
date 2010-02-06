@@ -16,10 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef __NEWGAMESTATE_H__
-#define __NEWGAMESTATE_H__
+#ifndef OPENXCOM__NEWGAMESTATE_H
+#define OPENXCOM__NEWGAMESTATE_H
 
-#include "State.h"
+#include "State_Interactive.h"
 #include "Palette.h"
 #include "Button.h"
 #include "Window.h"
@@ -29,20 +29,18 @@
 class NewGameState : public State
 {
 private:
-	Button *_buttonBeg, *_buttonExp, *_buttonVet, *_buttonGen, *_buttonSup;
+	Button *_btnBeginner, *_btnExperienced, *_btnVeteran, *_btnGenius, *_btnSuperhuman;
 	Window *_window;
-	Text *_title;
+	Text *_txtTitle;
 public:
 	NewGameState(Game *game);
 	~NewGameState();
-	void handle(SDL_Event *ev, int scale);
 	void think();
-	void blit();
-	void buttonBegClick(SDL_Event *ev);
-	void buttonExpClick(SDL_Event *ev);
-	void buttonVetClick(SDL_Event *ev);
-	void buttonGenClick(SDL_Event *ev);
-	void buttonSupClick(SDL_Event *ev);
+	void btnBeginnerClick(SDL_Event *ev, int scale);
+	void btnExperiencedClick(SDL_Event *ev, int scale);
+	void btnVeteranClick(SDL_Event *ev, int scale);
+	void btnGeniusClick(SDL_Event *ev, int scale);
+	void btnSuperhumanClick(SDL_Event *ev, int scale);
 };
 
 #endif

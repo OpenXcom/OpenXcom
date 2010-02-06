@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef __TEXTLIST_H__
-#define __TEXTLIST_H__
+#ifndef OPENXCOM__TEXTLIST_H
+#define OPENXCOM__TEXTLIST_H
 
 #include <vector>
 #include <cstdarg>

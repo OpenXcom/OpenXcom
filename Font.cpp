@@ -34,7 +34,7 @@ Font::~Font()
 
 void Font::load()
 {
-	for (int i = FIRST_CHAR; i < FIRST_CHAR + _nchar; i++)
+	for (unsigned char i = FIRST_CHAR; i < FIRST_CHAR + _nchar; i++)
 	{
 		SDL_Rect rect;
 		int left = -1, right = -1;

@@ -16,10 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef __MAINMENUSTATE_H__
-#define __MAINMENUSTATE_H__
+#ifndef OPENXCOM__MAINMENUSTATE_H
+#define OPENXCOM__MAINMENUSTATE_H
 
-#include "State.h"
+#include "State_Interactive.h"
 #include "Palette.h"
 #include "Button.h"
 #include "Window.h"
@@ -29,18 +29,16 @@
 class MainMenuState : public State
 {
 private:
-	Button *_buttonNew, *_buttonLoad, *_buttonQuit;
+	Button *_btnNew, *_btnLoad, *_btnQuit;
 	Window *_window;
-	Text *_title;
+	Text *_txtTitle, *_txtVersion;
 public:
 	MainMenuState(Game *game);
 	~MainMenuState();
-	void handle(SDL_Event *ev, int scale);
 	void think();
-	void blit();
-	void buttonNewClick(SDL_Event *ev);
-	void buttonLoadClick(SDL_Event *ev);
-	void buttonQuitClick(SDL_Event *ev);
+	void btnNewClick(SDL_Event *ev, int scale);
+	void btnLoadClick(SDL_Event *ev, int scale);
+	void btnQuitClick(SDL_Event *ev, int scale);
 };
 
 #endif
