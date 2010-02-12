@@ -44,6 +44,7 @@ public:
 	TestState(Game *game);
 	~TestState();
 	void think();
+	void blit();
 };
 
 #endif

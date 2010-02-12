@@ -252,7 +252,7 @@ SDL_Color* Surface::getPalette()
 
 void Surface::setPixel(int x, int y, Uint8 pixel)
 {
-    *((Uint8 *)_surface->pixels + y * _surface->pitch + x * _surface->format->BytesPerPixel) = pixel;
+    ((Uint8 *)_surface->pixels)[y * _surface->pitch + x * _surface->format->BytesPerPixel] = pixel;
 }
 
 void Surface::setPixelIterative(int *x, int *y, Uint8 pixel)
@@ -268,7 +268,7 @@ void Surface::setPixelIterative(int *x, int *y, Uint8 pixel)
 
 Uint8 Surface::getPixel(int x, int y)
 {
-    return *((Uint8 *)_surface->pixels + y * _surface->pitch + x * _surface->format->BytesPerPixel);
+    return ((Uint8 *)_surface->pixels)[y * _surface->pitch + x * _surface->format->BytesPerPixel];
 }
 
 SDL_Surface* Surface::getSurface()

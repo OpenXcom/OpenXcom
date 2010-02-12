@@ -36,7 +36,6 @@ TestState::TestState(Game *game) : State(game)
 	add(_button);
 	add(_text);
 	add(_list);
-	add(_set->getSurface());
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)+4);
@@ -72,6 +71,13 @@ void TestState::think()
 	_text->setText(_game->getLanguage()->getString(_i));
 	_i++;
 	*/
+}
+
+void TestState::blit()
+{
+	State::blit();
+
+	_set->getSurface()->blit(_game->getScreen()->getSurface());
 }
 
 SDL_Surface *TestState::testSurface()

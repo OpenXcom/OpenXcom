@@ -33,6 +33,8 @@ private:
 	bool _wrap, _invert;
 	TextAlign _align;
 	Uint8 _color;
+
+	void refresh();
 public:
 	Text(Font *big, Font *small, int width, int height, int x = 0, int y = 0);
 	~Text();
