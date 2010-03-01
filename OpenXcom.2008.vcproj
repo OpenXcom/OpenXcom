@@ -322,11 +322,27 @@
 			Name="States"
 			>
 			<File
+				RelativePath=".\FundingState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\FundingState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\GeoscapeState.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\GeoscapeState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\InterceptState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\InterceptState.h"
 				>
 			</File>
 			<File
