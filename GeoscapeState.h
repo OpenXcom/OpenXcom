@@ -27,6 +27,8 @@
 #include "Text.h"
 #include "CustomButton.h"
 #include "MainMenuState.h"
+#include "InterceptState.h"
+#include "FundingState.h"
 
 #define LONGITUDE_SPEED 0.05
 #define LATITUDE_SPEED 0.01

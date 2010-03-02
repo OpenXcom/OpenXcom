@@ -19,6 +19,7 @@
 #ifndef OPENXCOM__BUTTON_H
 #define OPENXCOM__BUTTON_H
 
+#include <cmath>
 #include "SDL.h"
 #include "State_Interactive.h"
 #include "Text.h"

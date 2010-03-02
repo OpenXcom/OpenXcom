@@ -28,6 +28,9 @@ MainMenuState::MainMenuState(Game *game) : State(game)
 	_txtTitle = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 256, 30, 32, 45);
 	_txtVersion = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 160, 10, 160, 190);
 	
+	// Set palette
+	_game->setPalette(_game->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+
 	add(_window);
 	add(_btnNew);
 	add(_btnLoad);

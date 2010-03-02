@@ -21,22 +21,26 @@
 InterceptState::InterceptState(Game *game) : State(game)
 {
 	// Create objects
-	_window = new Window(256, 160, 32, 20);
-	_btnCancel = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 192, 20, 64, 90);
-	_txtTitle = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 256, 30, 32, 45);
+	_window = new Window(320, 140, 0, 30);
+	_btnCancel = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 288, 16, 16, 146);
+	_txtTitle = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 300, 16, 10, 46);
 	
+	// Set palette
+	_game->setPalette(_game->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
+
 	add(_window);
 	add(_btnCancel);
 	add(_txtTitle);
+
 	// Set up objects
-	_window->setColor(Palette::blockOffset(8)+8);
+	_window->setColor(Palette::blockOffset(15)+2);
 	_window->setBg(game->getSurface("BACK12.SCR"));
 
 	_btnCancel->setColor(Palette::blockOffset(8)+8);
 	_btnCancel->setText(_game->getLanguage()->getString(71));
 	_btnCancel->onMouseClick((EventHandler)&InterceptState::btnCancelClick);
 
-	_txtTitle->setColor(Palette::blockOffset(8)+10);
+	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
 	_txtTitle->setText(_game->getLanguage()->getString(264));
@@ -53,5 +57,5 @@ void InterceptState::think()
 
 void InterceptState::btnCancelClick(SDL_Event *ev, int scale)
 {
-	
+	_game->setState(new GeoscapeState(_game));
 }

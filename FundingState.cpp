@@ -22,23 +22,25 @@ FundingState::FundingState(Game *game) : State(game)
 {
 	// Create objects
 	_window = new Window(320, 200, 0, 00);
-	_btnOk = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 192, 20, 64, 90);
-	_txtTitle = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 256, 30, 32, 45);
+	_btnOk = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 50, 12, 135, 180);
+	_txtTitle = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 280, 15, 32, 8);
 	
+	// Set palette
+	_game->setPalette(_game->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+
 	add(_window);
 	add(_btnOk);
 	add(_txtTitle);
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(8)+8);
+	_window->setColor(Palette::blockOffset(15)+2);
 	_window->setBg(game->getSurface("BACK13.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(8)+8);
+	_btnOk->setColor(Palette::blockOffset(15)+2);
 	_btnOk->setText(_game->getLanguage()->getString(76));
 	_btnOk->onMouseClick((EventHandler)&FundingState::btnOkClick);
 
-	_txtTitle->setColor(Palette::blockOffset(8)+10);
-	_txtTitle->setAlign(ALIGN_CENTER);
+	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
 	_txtTitle->setText(_game->getLanguage()->getString(638));
 }
@@ -54,5 +56,5 @@ void FundingState::think()
 
 void FundingState::btnOkClick(SDL_Event *ev, int scale)
 {
-	
+	_game->setState(new GeoscapeState(_game));
 }
