@@ -20,16 +20,25 @@
 #define OPENXCOM__TIMER_H
 
 #include "SDL.h"
+#include "State_Interactive.h"
+
+typedef State &(State::*TimerHandler)();
 
 class Timer
 {
 private:
-	Uint32 _startTime, _triggerTime;
+	Uint32 _start, _interval;
+	bool _running;
+	TimerHandler _timer;
 public:
-	Timer();
+	Timer(Uint32 interval);
 	~Timer();
-	void start() {}
-	void stop() {}
+	void start();
+	void stop();
+	Uint32 getTime();
+	void think(State* state);
+	void setInterval(Uint32 interval);
+	void onTimer(TimerHandler handler);
 };
 
 #endif

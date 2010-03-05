@@ -24,6 +24,7 @@ InterceptState::InterceptState(Game *game) : State(game)
 	_window = new Window(320, 140, 0, 30);
 	_btnCancel = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 288, 16, 16, 146);
 	_txtTitle = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 300, 16, 10, 46);
+	_lstCrafts = new TextList(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 300, 74, 14, 70);
 	
 	// Set palette
 	_game->setPalette(_game->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
@@ -31,6 +32,7 @@ InterceptState::InterceptState(Game *game) : State(game)
 	add(_window);
 	add(_btnCancel);
 	add(_txtTitle);
+	add(_lstCrafts);
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)+2);
@@ -44,6 +46,10 @@ InterceptState::InterceptState(Game *game) : State(game)
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
 	_txtTitle->setText(_game->getLanguage()->getString(264));
+
+	_lstCrafts->setColor(Palette::blockOffset(15)-1);
+	_lstCrafts->setColumns(4, 86, 65, 85, 64);
+	_lstCrafts->addRow(4, "TEEEEEST", "TEEEEST", "TEEEEST", "TEEEEEST");
 }
 
 InterceptState::~InterceptState()

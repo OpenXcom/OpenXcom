@@ -24,6 +24,7 @@ FundingState::FundingState(Game *game) : State(game)
 	_window = new Window(320, 200, 0, 00);
 	_btnOk = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 50, 12, 135, 180);
 	_txtTitle = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 280, 15, 32, 8);
+	_lstCountries = new TextList(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 280, 136, 32, 40);
 	
 	// Set palette
 	_game->setPalette(_game->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
@@ -31,6 +32,7 @@ FundingState::FundingState(Game *game) : State(game)
 	add(_window);
 	add(_btnOk);
 	add(_txtTitle);
+	add(_lstCountries);
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)+2);
@@ -43,6 +45,10 @@ FundingState::FundingState(Game *game) : State(game)
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
 	_txtTitle->setText(_game->getLanguage()->getString(638));
+
+	_lstCountries->setColor(Palette::blockOffset(15)-1);
+	_lstCountries->setColumns(3, 108, 100, 72);
+	_lstCountries->addRow(3, "TEEEEEST", "TEEEEST", "TEEEEST");
 }
 
 FundingState::~FundingState()

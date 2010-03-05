@@ -18,10 +18,52 @@
  */
 #include "Timer.h"
 
-Timer::Timer()
+Timer::Timer(Uint32 interval) : _interval(interval), _running(false)
 {
 }
 
 Timer::~Timer()
 {
+}
+
+void Timer::start()
+{
+	_start = SDL_GetTicks();
+	_running = true;
+}
+
+void Timer::stop()
+{
+	_start = 0;
+	_running = false;
+}
+
+Uint32 Timer::getTime()
+{
+	if (_running)
+		return SDL_GetTicks() - _start;
+	return 0;
+}
+
+void Timer::think(State* state)
+{
+	if (_running)
+	{
+		if (getTime() >= _interval)
+		{
+			_start = SDL_GetTicks();
+			if (_timer != NULL)
+				(state->*_timer)();
+		}
+	}
+}
+
+void Timer::setInterval(Uint32 interval)
+{
+	_interval = interval;
+}
+
+void Timer::onTimer(TimerHandler handler)
+{
+	_timer = handler;
 }

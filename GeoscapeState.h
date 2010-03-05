@@ -26,12 +26,13 @@
 #include "Globe.h"
 #include "Text.h"
 #include "CustomButton.h"
+#include "Timer.h"
 #include "MainMenuState.h"
 #include "InterceptState.h"
 #include "FundingState.h"
 
-#define LONGITUDE_SPEED 0.05
-#define LATITUDE_SPEED 0.01
+#define LONGITUDE_SPEED 0.2
+#define LATITUDE_SPEED 0.1
 
 class GeoscapeState : public State
 {
@@ -43,11 +44,13 @@ private:
 	CustomButton *_btn5Secs, *_btn1Min, *_btn5Mins, *_btn30Mins, *_btn1Hour, *_btn1Day;
 	InteractiveSurface *_btnRotateLeft, *_btnRotateRight, *_btnRotateUp, *_btnRotateDown, *_btnZoomIn, *_btnZoomOut;
 	Text *_txtHour, *_txtHourSep, *_txtMin, *_txtMinSep, *_txtSec, *_txtWeekday, *_txtDay, *_txtMonth, *_txtYear;
+	Timer *_rotTimer;
 	double _rotLon, _rotLat;
 public:
 	GeoscapeState(Game *game);
 	~GeoscapeState();
 	void think();
+	void globeRotate();
 	void globeClick(SDL_Event *ev, int scale);
 	void btnInterceptClick(SDL_Event *ev, int scale);
 	void btnBasesClick(SDL_Event *ev, int scale);

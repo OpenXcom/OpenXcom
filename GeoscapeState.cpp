@@ -56,6 +56,8 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _rotLon(0), _rotLat(0)
 	_txtYear = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 59, 8, 259, 101);
 
 	_timer = _btn5Secs;
+
+	_rotTimer = new Timer(25);
 	
 	add(_bg);
 	add(_globe);
@@ -214,6 +216,8 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _rotLon(0), _rotLat(0)
 	_txtYear->setColor(Palette::blockOffset(15)+4);
 	_txtYear->setText("1999");
 	_txtYear->setAlign(ALIGN_CENTER);
+
+	_rotTimer->onTimer((TimerHandler)&GeoscapeState::globeRotate);
 }
 
 GeoscapeState::~GeoscapeState()
@@ -222,6 +226,11 @@ GeoscapeState::~GeoscapeState()
 }
 
 void GeoscapeState::think()
+{
+	_rotTimer->think(this);
+}
+
+void GeoscapeState::globeRotate()
 {
 	_globe->rotate(_rotLon, _rotLat);
 }
@@ -274,41 +283,53 @@ void GeoscapeState::btnFundingClick(SDL_Event *ev, int scale)
 void GeoscapeState::btnRotateLeftPress(SDL_Event *ev, int scale)
 {
 	_rotLon += LONGITUDE_SPEED;
+	_rotTimer->start();
+	globeRotate();
 }
 
 void GeoscapeState::btnRotateLeftRelease(SDL_Event *ev, int scale)
 {
 	_rotLon -= LONGITUDE_SPEED;
+	_rotTimer->stop();
 }
 
 void GeoscapeState::btnRotateRightPress(SDL_Event *ev, int scale)
 {
 	_rotLon += -LONGITUDE_SPEED;
+	_rotTimer->start();
+	globeRotate();
 }
 
 void GeoscapeState::btnRotateRightRelease(SDL_Event *ev, int scale)
 {
 	_rotLon -= -LONGITUDE_SPEED;
+	_rotTimer->stop();
 }
 
 void GeoscapeState::btnRotateUpPress(SDL_Event *ev, int scale)
 {
 	_rotLat += LATITUDE_SPEED;
+	_rotTimer->start();
+	globeRotate();
 }
 
 void GeoscapeState::btnRotateUpRelease(SDL_Event *ev, int scale)
 {
 	_rotLat -= LATITUDE_SPEED;
+	_rotTimer->stop();
 }
 
 void GeoscapeState::btnRotateDownPress(SDL_Event *ev, int scale)
 {
 	_rotLat += -LATITUDE_SPEED;
+	_rotTimer->start();
+	globeRotate();
 }
 
 void GeoscapeState::btnRotateDownRelease(SDL_Event *ev, int scale)
 {
 	_rotLat -= -LATITUDE_SPEED;
+	_rotTimer->stop();
 }
 
 void GeoscapeState::btnZoomInClick(SDL_Event *ev, int scale)
