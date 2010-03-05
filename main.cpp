@@ -24,7 +24,7 @@
 
 #include <iostream>
 
-#define XCOM_TEST
+//#define XCOM_TEST
 
 int main(int argc, char** args)
 {

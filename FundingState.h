@@ -32,7 +32,7 @@ class FundingState : public State
 private:
 	Button *_btnOk;
 	Window *_window;
-	Text *_txtTitle, *_txtFunding, *_txtRelations;
+	Text *_txtTitle, *_txtCountry, *_txtFunding, *_txtChange;
 	TextList *_lstCountries;
 public:
 	FundingState(Game *game);

@@ -23,7 +23,10 @@ FundingState::FundingState(Game *game) : State(game)
 	// Create objects
 	_window = new Window(320, 200, 0, 00);
 	_btnOk = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 50, 12, 135, 180);
-	_txtTitle = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 280, 15, 32, 8);
+	_txtTitle = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 280, 16, 32, 8);
+	_txtCountry = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 100, 16, 32, 24);
+	_txtFunding = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 60, 16, 140, 24);
+	_txtChange = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 120, 16, 200, 24);
 	_lstCountries = new TextList(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 280, 136, 32, 40);
 	
 	// Set palette
@@ -32,6 +35,9 @@ FundingState::FundingState(Game *game) : State(game)
 	add(_window);
 	add(_btnOk);
 	add(_txtTitle);
+	add(_txtCountry);
+	add(_txtFunding);
+	add(_txtChange);
 	add(_lstCountries);
 
 	// Set up objects
@@ -45,6 +51,18 @@ FundingState::FundingState(Game *game) : State(game)
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
 	_txtTitle->setText(_game->getLanguage()->getString(638));
+
+	_txtCountry->setColor(Palette::blockOffset(15)-1);
+	_txtCountry->setBig();
+	_txtCountry->setText(_game->getLanguage()->getString(639));
+
+	_txtFunding->setColor(Palette::blockOffset(15)-1);
+	_txtFunding->setBig();
+	_txtFunding->setText(_game->getLanguage()->getString(640));
+
+	_txtChange->setColor(Palette::blockOffset(15)-1);
+	_txtChange->setBig();
+	_txtChange->setText(_game->getLanguage()->getString(641));
 
 	_lstCountries->setColor(Palette::blockOffset(15)-1);
 	_lstCountries->setColumns(3, 108, 100, 72);

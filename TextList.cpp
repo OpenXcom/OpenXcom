@@ -50,10 +50,10 @@ void TextList::addRow(int num, ...)
 		Text* txt = new Text(_big, _small, _columns[i], _small->getHeight());
 		txt->setX(rowX);
 		txt->setY(_rowY);
+		txt->setPalette(this->getPalette());
 		txt->setText(va_arg(args, char*));
 		txt->setColor(_color);
 		txt->setSmall();
-		txt->setPalette(this->getPalette());
 		temp.push_back(txt);
 		rowX += _columns[i];
 	}
