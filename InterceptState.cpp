@@ -24,7 +24,11 @@ InterceptState::InterceptState(Game *game) : State(game)
 	_window = new Window(320, 140, 0, 30);
 	_btnCancel = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 288, 16, 16, 146);
 	_txtTitle = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 300, 16, 10, 46);
-	_lstCrafts = new TextList(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 300, 74, 14, 70);
+	_txtCraft = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 86, 9, 14, 70);
+	_txtStatus = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 65, 9, 100, 70);
+	_txtBase = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 85, 9, 165, 70);
+	_txtWeapons = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 64, 16, 242, 62);
+	_lstCrafts = new TextList(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 300, 64, 14, 78);
 	
 	// Set palette
 	_game->setPalette(_game->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
@@ -32,6 +36,10 @@ InterceptState::InterceptState(Game *game) : State(game)
 	add(_window);
 	add(_btnCancel);
 	add(_txtTitle);
+	add(_txtCraft);
+	add(_txtStatus);
+	add(_txtBase);
+	add(_txtWeapons);
 	add(_lstCrafts);
 
 	// Set up objects
@@ -47,9 +55,22 @@ InterceptState::InterceptState(Game *game) : State(game)
 	_txtTitle->setBig();
 	_txtTitle->setText(_game->getLanguage()->getString(264));
 
+	_txtCraft->setColor(Palette::blockOffset(8)+5);
+	_txtCraft->setText(_game->getLanguage()->getString(265));
+
+	_txtStatus->setColor(Palette::blockOffset(8)+5);
+	_txtStatus->setText(_game->getLanguage()->getString(266));
+
+	_txtBase->setColor(Palette::blockOffset(8)+5);
+	_txtBase->setText(_game->getLanguage()->getString(267));
+
+	_txtWeapons->setColor(Palette::blockOffset(8)+5);
+	_txtWeapons->setText(_game->getLanguage()->getString(799));
+
 	_lstCrafts->setColor(Palette::blockOffset(15)-1);
 	_lstCrafts->setColumns(4, 86, 65, 85, 64);
-	_lstCrafts->addRow(4, "TEEEEEST", "TEEEEST", "TEEEEST", "TEEEEEST");
+	_lstCrafts->addRow(4, "SKYRANGER-1", _game->getLanguage()->getString(268).c_str(), "Base", "8/0/0");
+	_lstCrafts->getCell(0, 1)->setColor(Palette::blockOffset(8)+10);
 }
 
 InterceptState::~InterceptState()

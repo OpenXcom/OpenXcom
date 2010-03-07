@@ -173,7 +173,7 @@ void Text::refresh()
 				start++;
 
 			// Go down a line
-			y += _font->getHeight();
+			y += _font->getHeight() + _font->getSpacing();
 			x = 0;
 
 			// Reset counters

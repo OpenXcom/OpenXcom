@@ -32,7 +32,7 @@ class InterceptState : public State
 private:
 	Button *_btnCancel;
 	Window *_window;
-	Text *_txtTitle;
+	Text *_txtTitle, *_txtCraft, *_txtStatus, *_txtBase, *_txtWeapons;
 	TextList *_lstCrafts;
 public:
 	InterceptState(Game *game);

@@ -199,7 +199,7 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _rotLon(0), _rotLat(0)
 
 	_txtWeekday->setSmall();
 	_txtWeekday->setColor(Palette::blockOffset(15)+4);
-	_txtWeekday->setText("FRIDAY");
+	_txtWeekday->setText(_game->getLanguage()->getString(190));
 	_txtWeekday->setAlign(ALIGN_CENTER);
 
 	_txtDay->setSmall();
@@ -209,7 +209,7 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _rotLon(0), _rotLat(0)
 
 	_txtMonth->setSmall();
 	_txtMonth->setColor(Palette::blockOffset(15)+4);
-	_txtMonth->setText("Jan");
+	_txtMonth->setText(_game->getLanguage()->getString(626));
 	_txtMonth->setAlign(ALIGN_CENTER);
 
 	_txtYear->setSmall();

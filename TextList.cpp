@@ -18,7 +18,7 @@
  */
 #include "TextList.h"
 
-TextList::TextList(Font *big, Font *small, int width, int height, int x, int y) : Surface(width, height, x, y), _big(big), _small(small), _texts(), _columns(), _rowY(0), _color(0)
+TextList::TextList(Font *big, Font *small, int width, int height, int x, int y) : Surface(width, height, x, y), _big(big), _small(small), _texts(), _columns(), _rowY(0), _color(0), _dot(false)
 {
 
 }
@@ -46,19 +46,38 @@ void TextList::addRow(int num, ...)
 	vector<Text*> temp;
 	int rowX = 0;
 
-	for (int i = 0; i < num; i++) {
-		Text* txt = new Text(_big, _small, _columns[i], _small->getHeight());
-		txt->setX(rowX);
-		txt->setY(_rowY);
+	for (int i = 0; i < num; i++)
+	{
+		Text* txt = new Text(_big, _small, _columns[i], _small->getHeight(), rowX, _rowY);
 		txt->setPalette(this->getPalette());
-		txt->setText(va_arg(args, char*));
+		
+		string buf = va_arg(args, char*);
+		// Places dots between text
+		if (_dot && i < num - 1)
+		{
+			int w = 0;
+			for (string::iterator c = buf.begin(); c < buf.end(); c++)
+			{
+				if (*c == ' ')
+					w += _small->getWidth() / 2;
+				else
+					w += _small->getChar(*c)->getCrop()->w + _small->getSpacing();
+			}
+			while (w < _columns[i])
+			{
+				w += _small->getChar('.')->getCrop()->w + _small->getSpacing();
+				buf += '.';
+			}
+		}
+		txt->setText(buf);
+
 		txt->setColor(_color);
 		txt->setSmall();
 		temp.push_back(txt);
 		rowX += _columns[i];
 	}
 	_texts.push_back(temp);
-	_rowY += _small->getHeight();
+	_rowY += _small->getHeight() + _small->getSpacing();
 
 	va_end(args);
 }
@@ -89,6 +108,11 @@ void TextList::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 void TextList::setColor(Uint8 color)
 {
 	_color = color;
+}
+
+void TextList::setDot(bool dot)
+{
+	_dot = dot;
 }
 
 void TextList::blit(Surface *surface)

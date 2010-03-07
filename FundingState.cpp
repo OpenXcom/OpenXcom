@@ -66,7 +66,9 @@ FundingState::FundingState(Game *game) : State(game)
 
 	_lstCountries->setColor(Palette::blockOffset(15)-1);
 	_lstCountries->setColumns(3, 108, 100, 72);
-	_lstCountries->addRow(3, "TEEEEEST", "TEEEEST", "TEEEEST");
+	_lstCountries->setDot(true);
+	_lstCountries->addRow(3, _game->getLanguage()->getString(601).c_str(), "$800 000", "0");
+	_lstCountries->addRow(3, _game->getLanguage()->getString(602).c_str(), "$300 000", "0");
 }
 
 FundingState::~FundingState()

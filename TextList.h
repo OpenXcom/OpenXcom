@@ -32,6 +32,7 @@ private:
 	Font *_big, *_small;
 	int _rowY;
 	Uint8 _color;
+	bool _dot;
 
 public:
 	TextList(Font *big, Font *small, int width, int height, int x = 0, int y = 0);
@@ -40,6 +41,7 @@ public:
 	void addRow(int num, ...);
 	void setColumns(int num, ...);
 	void setColor(Uint8 color);
+	void setDot(bool dot);
 	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
 	void blit(Surface *surface);
 };
