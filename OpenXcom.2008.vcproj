@@ -330,6 +330,14 @@
 			Name="States"
 			>
 			<File
+				RelativePath=".\AbandonGameState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\AbandonGameState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\FundingState.cpp"
 				>
 			</File>
@@ -367,6 +375,14 @@
 			</File>
 			<File
 				RelativePath=".\NewGameState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\OptionsState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\OptionsState.h"
 				>
 			</File>
 			<File
