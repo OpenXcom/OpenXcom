@@ -21,48 +21,47 @@
 OptionsState::OptionsState(Game *game) : State(game)
 {
 	// Create objects
-	_window = new Window(256, 160, 32, 20);
-	_btnNew = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 192, 20, 64, 90);
-	_btnLoad = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 192, 20, 64, 118);
-	_btnQuit = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 192, 20, 64, 146);
-	_txtTitle = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 256, 30, 32, 45);
-	_txtVersion = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 160, 10, 160, 190);
+	_window = new Window(216, 160, 20, 20);
+	_btnLoad = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 180, 20, 38, 60);
+	_btnSave = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 180, 20, 38, 85);
+	_btnAbandon = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 180, 20, 38, 110);
+	_btnCancel = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 180, 20, 38, 135);
+	_txtTitle = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 206, 15, 25, 32);
 	
 	// Set palette
 	_game->setPalette(_game->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
 
 	add(_window);
-	add(_btnNew);
 	add(_btnLoad);
-	add(_btnQuit);
+	add(_btnSave);
+	add(_btnAbandon);
+	add(_btnCancel);
 	add(_txtTitle);
-	add(_txtVersion);
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(8)+8);
+	_window->setColor(Palette::blockOffset(15)+2);
 	_window->setBg(game->getSurface("BACK01.SCR"));
 
-	_btnNew->setColor(Palette::blockOffset(8)+8);
-	_btnNew->setText(_game->getLanguage()->getString(780));
-	_btnNew->onMouseClick((EventHandler)&OptionsState::btnNewClick);
-
-	_btnLoad->setColor(Palette::blockOffset(8)+8);
-	_btnLoad->setText(_game->getLanguage()->getString(781));
+	_btnLoad->setColor(Palette::blockOffset(15)+2);
+	_btnLoad->setText(_game->getLanguage()->getString(316));
 	_btnLoad->onMouseClick((EventHandler)&OptionsState::btnLoadClick);
 
-	_btnQuit->setColor(Palette::blockOffset(8)+8);
-	_btnQuit->setText(_game->getLanguage()->getString(801));
-	_btnQuit->onMouseClick((EventHandler)&OptionsState::btnQuitClick);
+	_btnSave->setColor(Palette::blockOffset(15)+2);
+	_btnSave->setText(_game->getLanguage()->getString(317));
+	_btnSave->onMouseClick((EventHandler)&OptionsState::btnSaveClick);
 
-	_txtTitle->setColor(Palette::blockOffset(8)+10);
+	_btnAbandon->setColor(Palette::blockOffset(15)+2);
+	_btnAbandon->setText(_game->getLanguage()->getString(800));
+	_btnAbandon->onMouseClick((EventHandler)&OptionsState::btnAbandonClick);
+
+	_btnCancel->setColor(Palette::blockOffset(15)+2);
+	_btnCancel->setText(_game->getLanguage()->getString(49));
+	_btnCancel->onMouseClick((EventHandler)&OptionsState::btnCancelClick);
+
+	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
-	_txtTitle->setText(_game->getLanguage()->getString(779));
-	
-	_txtVersion->setColor(Palette::blockOffset(8)+10);
-	_txtVersion->setAlign(ALIGN_RIGHT);
-	_txtVersion->setSmall();
-	_txtVersion->setText("OpenXcom v0.1");
+	_txtTitle->setText(_game->getLanguage()->getString(315));
 }
 
 OptionsState::~OptionsState()
@@ -74,17 +73,22 @@ void OptionsState::think()
 {
 }
 
-void OptionsState::btnNewClick(SDL_Event *ev, int scale)
-{
-	_game->setState(new NewGameState(_game));
-}
-
 void OptionsState::btnLoadClick(SDL_Event *ev, int scale)
 {
 	
 }
 
-void OptionsState::btnQuitClick(SDL_Event *ev, int scale)
+void OptionsState::btnSaveClick(SDL_Event *ev, int scale)
 {
-	_game->quit();
+	
+}
+
+void OptionsState::btnAbandonClick(SDL_Event *ev, int scale)
+{
+	_game->setState(new AbandonGameState(_game));
+}
+
+void OptionsState::btnCancelClick(SDL_Event *ev, int scale)
+{
+	_game->setState(new GeoscapeState(_game));
 }

@@ -21,48 +21,37 @@
 AbandonGameState::AbandonGameState(Game *game) : State(game)
 {
 	// Create objects
-	_window = new Window(256, 160, 32, 20);
-	_btnNew = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 192, 20, 64, 90);
-	_btnLoad = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 192, 20, 64, 118);
-	_btnQuit = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 192, 20, 64, 146);
-	_txtTitle = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 256, 30, 32, 45);
-	_txtVersion = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 160, 10, 160, 190);
+	_window = new Window(216, 160, 20, 20);
+	_btnYes = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 50, 20, 38, 140);
+	_btnNo = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 50, 20, 168, 140);
+	_txtTitle = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 206, 15, 25, 70);
 	
 	// Set palette
 	_game->setPalette(_game->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
 
 	add(_window);
-	add(_btnNew);
-	add(_btnLoad);
-	add(_btnQuit);
+	add(_btnYes);
+	add(_btnNo);
 	add(_txtTitle);
-	add(_txtVersion);
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(8)+8);
+	_window->setColor(Palette::blockOffset(15)+2);
 	_window->setBg(game->getSurface("BACK01.SCR"));
 
-	_btnNew->setColor(Palette::blockOffset(8)+8);
-	_btnNew->setText(_game->getLanguage()->getString(780));
-	_btnNew->onMouseClick((EventHandler)&AbandonGameState::btnNewClick);
+	_btnYes->setColor(Palette::blockOffset(15)+2);
+	_btnYes->setText(_game->getLanguage()->getString(279));
+	_btnYes->onMouseClick((EventHandler)&AbandonGameState::btnYesClick);
 
-	_btnLoad->setColor(Palette::blockOffset(8)+8);
-	_btnLoad->setText(_game->getLanguage()->getString(781));
-	_btnLoad->onMouseClick((EventHandler)&AbandonGameState::btnLoadClick);
+	_btnNo->setColor(Palette::blockOffset(15)+2);
+	_btnNo->setText(_game->getLanguage()->getString(280));
+	_btnNo->onMouseClick((EventHandler)&AbandonGameState::btnNoClick);
 
-	_btnQuit->setColor(Palette::blockOffset(8)+8);
-	_btnQuit->setText(_game->getLanguage()->getString(801));
-	_btnQuit->onMouseClick((EventHandler)&AbandonGameState::btnQuitClick);
-
-	_txtTitle->setColor(Palette::blockOffset(8)+10);
+	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
-	_txtTitle->setText(_game->getLanguage()->getString(779));
-	
-	_txtVersion->setColor(Palette::blockOffset(8)+10);
-	_txtVersion->setAlign(ALIGN_RIGHT);
-	_txtVersion->setSmall();
-	_txtVersion->setText("OpenXcom v0.1");
+	stringstream ss;
+	ss << _game->getLanguage()->getString(800) << "?";
+	_txtTitle->setText(ss.str());
 }
 
 AbandonGameState::~AbandonGameState()
@@ -74,17 +63,12 @@ void AbandonGameState::think()
 {
 }
 
-void AbandonGameState::btnNewClick(SDL_Event *ev, int scale)
+void AbandonGameState::btnYesClick(SDL_Event *ev, int scale)
 {
-	_game->setState(new NewGameState(_game));
+	_game->setState(new MainMenuState(_game));
 }
 
-void AbandonGameState::btnLoadClick(SDL_Event *ev, int scale)
+void AbandonGameState::btnNoClick(SDL_Event *ev, int scale)
 {
-	
-}
-
-void AbandonGameState::btnQuitClick(SDL_Event *ev, int scale)
-{
-	_game->quit();
+	_game->setState(new OptionsState(_game));
 }

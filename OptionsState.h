@@ -24,21 +24,23 @@
 #include "Button.h"
 #include "Window.h"
 #include "Text.h"
-#include "NewGameState.h"
+#include "AbandonGameState.h"
+#include "GeoscapeState.h"
 
 class OptionsState : public State
 {
 private:
-	Button *_btnNew, *_btnLoad, *_btnQuit;
+	Button *_btnLoad, *_btnSave, *_btnAbandon, *_btnCancel;
 	Window *_window;
-	Text *_txtTitle, *_txtVersion;
+	Text *_txtTitle;
 public:
 	OptionsState(Game *game);
 	~OptionsState();
 	void think();
-	void btnNewClick(SDL_Event *ev, int scale);
 	void btnLoadClick(SDL_Event *ev, int scale);
-	void btnQuitClick(SDL_Event *ev, int scale);
+	void btnSaveClick(SDL_Event *ev, int scale);
+	void btnAbandonClick(SDL_Event *ev, int scale);
+	void btnCancelClick(SDL_Event *ev, int scale);
 };
 
 #endif

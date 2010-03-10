@@ -27,7 +27,7 @@
 #include "Text.h"
 #include "CustomButton.h"
 #include "Timer.h"
-#include "MainMenuState.h"
+#include "OptionsState.h"
 #include "InterceptState.h"
 #include "FundingState.h"
 

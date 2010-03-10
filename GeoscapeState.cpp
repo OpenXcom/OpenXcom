@@ -272,7 +272,7 @@ void GeoscapeState::btnUfopaediaClick(SDL_Event *ev, int scale)
 
 void GeoscapeState::btnOptionsClick(SDL_Event *ev, int scale)
 {
-	_game->setState(new MainMenuState(_game));
+	_game->setState(new OptionsState(_game));
 }
 
 void GeoscapeState::btnFundingClick(SDL_Event *ev, int scale)

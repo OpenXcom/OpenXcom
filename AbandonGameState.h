@@ -24,21 +24,21 @@
 #include "Button.h"
 #include "Window.h"
 #include "Text.h"
-#include "NewGameState.h"
+#include "MainMenuState.h"
+#include "OptionsState.h"
 
 class AbandonGameState : public State
 {
 private:
-	Button *_btnNew, *_btnLoad, *_btnQuit;
+	Button *_btnYes, *_btnNo;
 	Window *_window;
-	Text *_txtTitle, *_txtVersion;
+	Text *_txtTitle;
 public:
 	AbandonGameState(Game *game);
 	~AbandonGameState();
 	void think();
-	void btnNewClick(SDL_Event *ev, int scale);
-	void btnLoadClick(SDL_Event *ev, int scale);
-	void btnQuitClick(SDL_Event *ev, int scale);
+	void btnYesClick(SDL_Event *ev, int scale);
+	void btnNoClick(SDL_Event *ev, int scale);
 };
 
 #endif
