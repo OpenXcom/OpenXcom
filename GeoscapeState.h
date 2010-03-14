@@ -29,6 +29,7 @@
 #include "Timer.h"
 #include "OptionsState.h"
 #include "InterceptState.h"
+#include "BasescapeState.h"
 #include "FundingState.h"
 
 #define LONGITUDE_SPEED 0.2

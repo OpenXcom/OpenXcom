@@ -16,32 +16,29 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM__PALETTE_H
-#define OPENXCOM__PALETTE_H
+#ifndef OPENXCOM__CRAFTSSTATE_H
+#define OPENXCOM__CRAFTSSTATE_H
 
-#include <string>
-#include <fstream>
-#include "SDL.h"
+#include "State_Interactive.h"
+#include "Palette.h"
+#include "Button.h"
+#include "Window.h"
+#include "Text.h"
+#include "TextList.h"
+#include "BasescapeState.h"
 
-using namespace std;
-
-class Palette
+class CraftsState : public State
 {
 private:
-	SDL_Color *_colors;
-	int _ncolors;
+	Button *_btnOk;
+	Window *_window;
+	Text *_txtTitle, *_txtBase, *_txtName, *_txtStatus, *_txtWeapon, *_txtCrew, *_txtHwp;
+	TextList *_lstCrafts;
 public:
-	Palette();
-	~Palette();
-	void loadDat(string filename, int ncolors, int offset = 0);
-	SDL_Color *getColors(int offset = 0);
-
-	// Position of each palette in PALETTES.DAT
-	static inline int palOffset(int palette) { return palette*(768+6); }
-	// Position of each color block in a palette
-	static inline int blockOffset(int block) { return block*16; }
-	// Position of the background block in a peltte
-	static const int backPos = 224;
+	CraftsState(Game *game);
+	~CraftsState();
+	void think();
+	void btnOkClick(SDL_Event *ev, int scale);
 };
 
 #endif

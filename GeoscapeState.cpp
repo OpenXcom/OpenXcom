@@ -58,6 +58,9 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _rotLon(0), _rotLat(0)
 	_timer = _btn5Secs;
 
 	_rotTimer = new Timer(25);
+
+	// Set palette
+	_game->setPalette(_game->getPalette("PALETTES.DAT_0")->getColors());
 	
 	add(_bg);
 	add(_globe);
@@ -257,7 +260,7 @@ void GeoscapeState::btnInterceptClick(SDL_Event *ev, int scale)
 
 void GeoscapeState::btnBasesClick(SDL_Event *ev, int scale)
 {
-
+	_game->setState(new BasescapeState(_game));
 }
 
 void GeoscapeState::btnGraphsClick(SDL_Event *ev, int scale)

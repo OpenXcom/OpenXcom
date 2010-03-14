@@ -338,6 +338,22 @@
 				>
 			</File>
 			<File
+				RelativePath=".\BasescapeState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\BasescapeState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\CraftsState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\CraftsState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\FundingState.cpp"
 				>
 			</File>
@@ -383,6 +399,14 @@
 			</File>
 			<File
 				RelativePath=".\OptionsState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\SoldiersState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\SoldiersState.h"
 				>
 			</File>
 			<File

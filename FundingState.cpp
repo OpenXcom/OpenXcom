@@ -21,7 +21,7 @@
 FundingState::FundingState(Game *game) : State(game)
 {
 	// Create objects
-	_window = new Window(320, 200, 0, 00);
+	_window = new Window(320, 200, 0, 0);
 	_btnOk = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 50, 12, 135, 180);
 	_txtTitle = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 280, 16, 32, 8);
 	_txtCountry = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 100, 16, 32, 24);
