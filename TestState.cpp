@@ -62,7 +62,7 @@ TestState::TestState(Game *game) : State(game)
 
 TestState::~TestState()
 {
-	State::~State();
+	
 }
 
 void TestState::think()

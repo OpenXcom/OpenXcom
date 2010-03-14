@@ -31,7 +31,7 @@ TextList::~TextList()
 		}
 	}
 
-	Surface::~Surface();
+	
 }
 
 Text* TextList::getCell(int row, int col)

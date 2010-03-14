@@ -27,7 +27,7 @@
 class TextList : public Surface
 {
 private:
-	vector<vector<Text*>> _texts;
+	vector< vector<Text*> > _texts;
 	vector<int> _columns;
 	Font *_big, *_small;
 	int _rowY;

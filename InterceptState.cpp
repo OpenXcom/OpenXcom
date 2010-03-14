@@ -75,7 +75,7 @@ InterceptState::InterceptState(Game *game) : State(game)
 
 InterceptState::~InterceptState()
 {
-	State::~State();
+	
 }
 
 void InterceptState::think()

@@ -56,7 +56,7 @@ AbandonGameState::AbandonGameState(Game *game) : State(game)
 
 AbandonGameState::~AbandonGameState()
 {
-	State::~State();
+	
 }
 
 void AbandonGameState::think()

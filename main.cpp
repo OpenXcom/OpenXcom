@@ -17,7 +17,6 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "SDL.h"
-
 #include "Game.h"
 #include "TestState.h"
 #include "StartState.h"

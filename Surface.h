@@ -35,7 +35,7 @@ protected:
 	bool _visible;
 public:
 	Surface(int width, int height, int x = 0, int y = 0);
-	~Surface();
+	virtual ~Surface();
 	void loadScr(string filename);
 	void loadSpk(string filename);
 	void clear();

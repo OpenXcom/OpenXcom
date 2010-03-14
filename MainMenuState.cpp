@@ -67,7 +67,7 @@ MainMenuState::MainMenuState(Game *game) : State(game)
 
 MainMenuState::~MainMenuState()
 {
-	State::~State();
+	
 }
 
 void MainMenuState::think()

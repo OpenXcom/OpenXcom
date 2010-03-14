@@ -84,7 +84,7 @@ CraftsState::CraftsState(Game *game) : State(game)
 
 CraftsState::~CraftsState()
 {
-	State::~State();
+	
 }
 
 void CraftsState::think()

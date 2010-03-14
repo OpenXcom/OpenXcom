@@ -73,7 +73,7 @@ FundingState::FundingState(Game *game) : State(game)
 
 FundingState::~FundingState()
 {
-	State::~State();
+	
 }
 
 void FundingState::think()

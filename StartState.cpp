@@ -54,7 +54,7 @@ StartState::StartState(Game *game) : State(game)
 
 StartState::~StartState()
 {
-	State::~State();
+	
 }
 
 void StartState::think()

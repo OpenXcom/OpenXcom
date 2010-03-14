@@ -69,7 +69,7 @@ NewGameState::NewGameState(Game *game) : State(game)
 
 NewGameState::~NewGameState()
 {
-	State::~State();
+	
 }
 
 void NewGameState::think()

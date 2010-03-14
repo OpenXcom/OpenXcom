@@ -29,7 +29,7 @@ Button::~Button()
 {
 	delete _text;
 
-	Surface::~Surface();
+	
 }
 
 void Button::setColor(Uint8 color)

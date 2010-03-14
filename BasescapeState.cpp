@@ -109,7 +109,7 @@ BasescapeState::BasescapeState(Game *game) : State(game)
 
 BasescapeState::~BasescapeState()
 {
-	State::~State();
+	
 }
 
 void BasescapeState::think()

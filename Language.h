@@ -37,4 +37,4 @@ public:
 	void addString(string str);
 };
 
-#endif __LANGUAGE_H
+#endif

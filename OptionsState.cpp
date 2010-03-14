@@ -66,7 +66,7 @@ OptionsState::OptionsState(Game *game) : State(game)
 
 OptionsState::~OptionsState()
 {
-	State::~State();
+	
 }
 
 void OptionsState::think()

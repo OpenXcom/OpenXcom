@@ -24,7 +24,7 @@ Window::Window(int width, int height, int x, int y) : Surface(width, height, x, 
 
 Window::~Window()
 {
-	Surface::~Surface();
+	
 }
 
 void Window::setBg(Surface *bg)

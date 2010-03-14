@@ -69,7 +69,7 @@ SoldiersState::SoldiersState(Game *game) : State(game)
 
 SoldiersState::~SoldiersState()
 {
-	State::~State();
+	
 }
 
 void SoldiersState::think()

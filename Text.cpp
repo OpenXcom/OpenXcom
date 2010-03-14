@@ -25,7 +25,7 @@ Text::Text(Font *big, Font *small, int width, int height, int x, int y) : Surfac
 
 Text::~Text()
 {
-	Surface::~Surface();
+	
 }
 
 void Text::setBig()

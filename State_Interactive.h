@@ -38,7 +38,7 @@ protected:
 
 public:
 	State(Game* game);
-	~State();
+	virtual ~State();
 	void add(Surface *surface);
 	virtual void handle(SDL_Event* ev, int scale);
 	virtual void think() = 0;
@@ -60,7 +60,7 @@ protected:
 	virtual void mouseOut(SDL_Event *ev, int scale, State *state);
 public:
 	InteractiveSurface(int width, int height, int x, int y);
-	~InteractiveSurface();
+	virtual ~InteractiveSurface();
 	virtual void handle(SDL_Event *ev, int scale, State *state);
 	void onMouseClick(EventHandler handler);
 	void onMousePress(EventHandler handler);

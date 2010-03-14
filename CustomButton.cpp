@@ -24,7 +24,7 @@ CustomButton::CustomButton(int width, int height, int x, int y) : InteractiveSur
 
 CustomButton::~CustomButton()
 {
-	Surface::~Surface();
+	
 }
 
 void CustomButton::setColor(Uint8 color)
