@@ -18,14 +18,14 @@
  */
 #include "TextList.h"
 
-TextList::TextList(Font *big, Font *small, int width, int height, int x, int y) : Surface(width, height, x, y), _big(big), _small(small), _texts(), _columns(), _rowY(0), _color(0), _dot(false)
+TextList::TextList(Font *big, Font *small, int width, int height, int x, int y) : Surface(width, height, x, y), _texts(), _columns(), _big(big), _small(small), _rowY(0), _color(0), _dot(false)
 {
 
 }
 
 TextList::~TextList()
 {
-	for (vector<vector<Text*>>::iterator u = _texts.begin(); u < _texts.end(); u++) {
+	for (vector< vector<Text*> >::iterator u = _texts.begin(); u < _texts.end(); u++) {
 		for (vector<Text*>::iterator v = (*u).begin(); v < (*u).end(); v++) {
 			delete (*v);
 		}
@@ -98,7 +98,7 @@ void TextList::setColumns(int num, ...)
 void TextList::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 {
 	Surface::setPalette(colors, firstcolor, ncolors);
-	for (vector<vector<Text*>>::iterator u = _texts.begin(); u < _texts.end(); u++) {
+	for (vector< vector<Text*> >::iterator u = _texts.begin(); u < _texts.end(); u++) {
 		for (vector<Text*>::iterator v = (*u).begin(); v < (*u).end(); v++) {
 			(*v)->setPalette(colors, firstcolor, ncolors);
 		}
@@ -117,7 +117,7 @@ void TextList::setDot(bool dot)
 
 void TextList::blit(Surface *surface)
 {
-	for (vector<vector<Text*>>::iterator u = _texts.begin(); u < _texts.end(); u++) {
+	for (vector< vector<Text*> >::iterator u = _texts.begin(); u < _texts.end(); u++) {
 		for (vector<Text*>::iterator v = (*u).begin(); v < (*u).end(); v++) {
             (*v)->blit(this);
         }

@@ -19,7 +19,7 @@
 #include "Game.h"
 #include "State_Interactive.h"
 
-Game::Game(char* title, int width, int height, int bpp) : _quit(false), _state(NULL), _newState(NULL), _palettes(), _fonts(), _languages(), _surfaces(), _sets()
+Game::Game(char* title, int width, int height, int bpp) : _state(NULL), _newState(NULL), _palettes(), _fonts(), _languages(), _surfaces(), _sets(), _quit(false)
 {
 	// Initialize SDL
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)

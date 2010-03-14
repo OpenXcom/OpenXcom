@@ -18,7 +18,7 @@
  */
 #include "Globe.h"
 
-Globe::Globe(int cenX, int cenY, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _polygons(), _cenX(cenX), _cenY(cenY), _radius(90), _zoom(1), _rotLon(0), _rotLat(0), _testLon(0), _testLat(0)
+Globe::Globe(int cenX, int cenY, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _polygons(), _radius(90), _zoom(1), _rotLon(0), _rotLat(0), _cenX(cenX), _cenY(cenY), _testLon(0), _testLat(0)
 {
 }
 

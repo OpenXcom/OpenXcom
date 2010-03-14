@@ -100,7 +100,7 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _rotLon(0), _rotLat(0)
 	_game->getSurface("GEOBORD.SCR")->blit(_bg);
 	if (_game->getLanguageName() != "ENGLISH.DAT")
 	{
-		Surface* sidebar;
+		Surface* sidebar = NULL;
 		if (_game->getLanguageName() == "GERMAN.DAT")
 			sidebar = _game->getSurface("LANG1.DAT");
 		else if (_game->getLanguageName() == "FRENCH.DAT")
