@@ -89,6 +89,7 @@ BasescapeState::BasescapeState(Game *game) : State(game)
 
 	_btnResearch->setColor(Palette::blockOffset(13)+8);
 	_btnResearch->setText(_game->getLanguage()->getString(61));
+	_btnResearch->onMouseClick((EventHandler)&BasescapeState::btnResearchClick);
 
 	_btnManufacture->setColor(Palette::blockOffset(13)+8);
 	_btnManufacture->setText(_game->getLanguage()->getString(62));
@@ -124,6 +125,11 @@ void BasescapeState::btnSoldiersClick(SDL_Event *ev, int scale)
 void BasescapeState::btnCraftsClick(SDL_Event *ev, int scale)
 {
 	_game->setState(new CraftsState(_game));
+}
+
+void BasescapeState::btnResearchClick(SDL_Event *ev, int scale)
+{
+	_game->setState(new ResearchState(_game));
 }
 
 void BasescapeState::btnGeoscapeClick(SDL_Event *ev, int scale)

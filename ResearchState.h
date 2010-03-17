@@ -16,32 +16,29 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM__BASESCAPESTATE_H
-#define OPENXCOM__BASESCAPESTATE_H
+#ifndef OPENXCOM__RESEARCHSTATE_H
+#define OPENXCOM__RESEARCHSTATE_H
 
 #include "State_Interactive.h"
 #include "Palette.h"
 #include "Button.h"
+#include "Window.h"
 #include "Text.h"
-#include "GeoscapeState.h"
-#include "SoldiersState.h"
-#include "CraftsState.h"
-#include "ResearchState.h"
-//#include "ManufactureState.h"
+#include "TextList.h"
+#include "BasescapeState.h"
 
-class BasescapeState : public State
+class ResearchState : public State
 {
 private:
-	Text *_txtFacility, *_txtBase, *_txtLocation, *_txtFunds;
-	Button *_btnNewBase, *_btnBaseInfo, *_btnSoldiers, *_btnCrafts, *_btnFacilities, *_btnResearch, *_btnManufacture, *_btnTransfer, *_btnPurchase, *_btnSell, *_btnGeoscape;
+	Button *_btnNew, *_btnOk;
+	Window *_window;
+	Text *_txtTitle, *_txtAvailable, *_txtAllocated, *_txtSpace, *_txtProject, *_txtScientists, *_txtProgress;
+	TextList *_lstResearch;
 public:
-	BasescapeState(Game *game);
-	~BasescapeState();
+	ResearchState(Game *game);
+	~ResearchState();
 	void think();
-	void btnSoldiersClick(SDL_Event *ev, int scale);
-	void btnCraftsClick(SDL_Event *ev, int scale);
-	void btnResearchClick(SDL_Event *ev, int scale);
-	void btnGeoscapeClick(SDL_Event *ev, int scale);
+	void btnOkClick(SDL_Event *ev, int scale);
 };
 
 #endif

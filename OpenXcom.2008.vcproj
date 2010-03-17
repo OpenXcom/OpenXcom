@@ -402,6 +402,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ResearchState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ResearchState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\SoldiersState.cpp"
 				>
 			</File>

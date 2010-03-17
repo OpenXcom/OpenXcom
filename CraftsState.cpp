@@ -78,7 +78,7 @@ CraftsState::CraftsState(Game *game) : State(game)
 	_txtHwp->setText(_game->getLanguage()->getString(644));
 
 	_lstCrafts->setColor(Palette::blockOffset(13)+10);
-	_lstCrafts->setColumns(5, 94, 66, 47, 46, 0);
+	_lstCrafts->setColumns(5, 94, 66, 47, 46, 45);
 	_lstCrafts->addRow(5, "SKYRANGER-1", _game->getLanguage()->getString(268).c_str(), "0/0", "8", "0");
 }
 
