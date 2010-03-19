@@ -37,58 +37,57 @@ BaseInfoState::BaseInfoState(Game *game) : State(game)
 	_numScientists = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 40, 9, 126, 61);
 
 	_txtSpace = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 300, 9, 8, 72);
-	// SOMETHING FUCKED HERE!!!
 	_txtQuarters = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 114, 9, 8, 83);
 	_numQuarters = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 40, 9, 126, 83);
-	//_txtStores = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 114, 9, 8, 93);
-	//_numStores = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 40, 9, 126, 93);
-	//_txtLaboratories = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 114, 9, 8, 103);
-	//_numLaboratories = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 40, 9, 126, 103);
-	//_txtWorkshops = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 114, 9, 8, 113);
-	//_numWorkshops = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 40, 9, 126, 113);
-	//_txtHangars = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 114, 9, 8, 123);
-	//_numHangars = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 40, 9, 126, 123);
+	_txtStores = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 114, 9, 8, 93);
+	_numStores = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 40, 9, 126, 93);
+	_txtLaboratories = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 114, 9, 8, 103);
+	_numLaboratories = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 40, 9, 126, 103);
+	_txtWorkshops = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 114, 9, 8, 113);
+	_numWorkshops = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 40, 9, 126, 113);
+	_txtHangars = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 114, 9, 8, 123);
+	_numHangars = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 40, 9, 126, 123);
 
-	//_txtDefence = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 114, 9, 8, 138);
-	//_numDefence = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 40, 9, 126, 138);
-	//_txtShortRange = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 114, 9, 8, 153);
-	//_numShortRange = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 40, 9, 126, 153);
-	//_txtLongRange = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 114, 9, 8, 163);
-	//_numLongRange = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 40, 9, 126, 163);
+	_txtDefence = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 114, 9, 8, 138);
+	_numDefence = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 40, 9, 126, 138);
+	_txtShortRange = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 130, 9, 8, 153);
+	_numShortRange = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 40, 9, 126, 153);
+	_txtLongRange = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 130, 9, 8, 163);
+	_numLongRange = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 40, 9, 126, 163);
 	
 	add(_bg);
 	add(_btnOk);
 	add(_btnTransfers);
 	add(_btnStores);
 	add(_btnMonthlyCosts);
-	//
-	//add(_txtBase);
-	//add(_txtPersonnel);
-	//add(_txtSoldiers);
-	//add(_numSoldiers);
-	//add(_txtEngineers);
-	//add(_numEngineers);
-	//add(_txtScientists);
-	//add(_numScientists);
+	
+	add(_txtBase);
+	add(_txtPersonnel);
+	add(_txtSoldiers);
+	add(_numSoldiers);
+	add(_txtEngineers);
+	add(_numEngineers);
+	add(_txtScientists);
+	add(_numScientists);
 
-	//add(_txtSpace);
-	//add(_txtQuarters);
-	//add(_numQuarters);
-	//add(_txtStores);
-	//add(_numStores);
-	//add(_txtLaboratories);
-	//add(_numLaboratories);
-	//add(_txtWorkshops);
-	//add(_numWorkshops);
-	//add(_txtHangars);
-	//add(_numHangars);
+	add(_txtSpace);
+	add(_txtQuarters);
+	add(_numQuarters);
+	add(_txtStores);
+	add(_numStores);
+	add(_txtLaboratories);
+	add(_numLaboratories);
+	add(_txtWorkshops);
+	add(_numWorkshops);
+	add(_txtHangars);
+	add(_numHangars);
 
-	//add(_txtDefence);
-	//add(_numDefence);
-	//add(_txtShortRange);
-	//add(_numShortRange);
-	//add(_txtLongRange);
-	//add(_numLongRange);
+	add(_txtDefence);
+	add(_numDefence);
+	add(_txtShortRange);
+	add(_numShortRange);
+	add(_txtLongRange);
+	add(_numLongRange);
 	
 	// Set up objects
 	_game->getSurface("BACK07.SCR")->blit(_bg);
@@ -106,7 +105,7 @@ BaseInfoState::BaseInfoState(Game *game) : State(game)
 	_btnMonthlyCosts->setColor(Palette::blockOffset(15)+9);
 	_btnMonthlyCosts->setText(_game->getLanguage()->getString(954));
 
-	/*_txtBase->setColor(Palette::blockOffset(15)+1);
+	_txtBase->setColor(Palette::blockOffset(15)+1);
 	_txtBase->setBig();
 	_txtBase->setText("Some Base");
 
@@ -180,7 +179,7 @@ BaseInfoState::BaseInfoState(Game *game) : State(game)
 	_txtLongRange->setText(_game->getLanguage()->getString(933));
 
 	_numLongRange->setColor(Palette::blockOffset(13));
-	_numLongRange->setText("0:0");*/
+	_numLongRange->setText("0:0");
 }
 
 BaseInfoState::~BaseInfoState()

@@ -30,6 +30,7 @@
 #include "OptionsState.h"
 #include "InterceptState.h"
 #include "BasescapeState.h"
+#include "GraphsState.h"
 #include "FundingState.h"
 
 #define LONGITUDE_SPEED 0.2

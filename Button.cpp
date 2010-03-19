@@ -28,8 +28,6 @@ Button::Button(Font *big, Font *small, int width, int height, int x, int y) : In
 Button::~Button()
 {
 	delete _text;
-
-	
 }
 
 void Button::setColor(Uint8 color)

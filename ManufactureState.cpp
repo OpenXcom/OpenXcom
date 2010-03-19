@@ -35,7 +35,7 @@ ManufactureState::ManufactureState(Game *game) : State(game)
 	_txtTotal = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 42, 18, 180, 44);
 	_txtCost = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 42, 27, 223, 44);
 	_txtTimeLeft = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 54, 18, 265, 44);
-	_lstManufacture = new TextList(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 300, 100, 10, 74);
+	_lstManufacture = new TextList(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 300, 100, 9, 80);
 	
 	// Set palette
 	_game->setPalette(_game->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
@@ -102,9 +102,9 @@ ManufactureState::ManufactureState(Game *game) : State(game)
 	_txtTimeLeft->setColor(Palette::blockOffset(15)+1);
 	_txtTimeLeft->setText(_game->getLanguage()->getString(102));
 
-	_lstManufacture->setColor(Palette::blockOffset(15)+6);
-	_lstManufacture->setColumns(6, 50, 50, 50, 50, 50, 50);
-	_lstManufacture->addRow(6, "Laser Rifle", "30", "2", "8", "40 000", "5/2");
+	_lstManufacture->setColor(Palette::blockOffset(13)+10);
+	_lstManufacture->setColumns(6, 105, 39, 45, 27, 47, 37);
+	_lstManufacture->addRow(6, "Laser Rifle", "30", "2", "8", "$40 000", "5/2");
 }
 
 ManufactureState::~ManufactureState()

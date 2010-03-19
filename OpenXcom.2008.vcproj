@@ -378,6 +378,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\GraphsState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\GraphsState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\InterceptState.cpp"
 				>
 			</File>

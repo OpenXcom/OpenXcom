@@ -265,7 +265,7 @@ void GeoscapeState::btnBasesClick(SDL_Event *ev, int scale)
 
 void GeoscapeState::btnGraphsClick(SDL_Event *ev, int scale)
 {
-
+	_game->setState(new GraphsState(_game));
 }
 
 void GeoscapeState::btnUfopaediaClick(SDL_Event *ev, int scale)
