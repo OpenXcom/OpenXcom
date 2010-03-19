@@ -24,10 +24,13 @@
 #include "Button.h"
 #include "Text.h"
 #include "GeoscapeState.h"
+#include "BaseInfoState.h"
 #include "SoldiersState.h"
 #include "CraftsState.h"
 #include "ResearchState.h"
-//#include "ManufactureState.h"
+#include "ManufactureState.h"
+#include "PurchaseState.h"
+#include "SellState.h"
 
 class BasescapeState : public State
 {
@@ -38,9 +41,13 @@ public:
 	BasescapeState(Game *game);
 	~BasescapeState();
 	void think();
+	void btnBaseInfoClick(SDL_Event *ev, int scale);
 	void btnSoldiersClick(SDL_Event *ev, int scale);
 	void btnCraftsClick(SDL_Event *ev, int scale);
 	void btnResearchClick(SDL_Event *ev, int scale);
+	void btnManufactureClick(SDL_Event *ev, int scale);
+	void btnPurchaseClick(SDL_Event *ev, int scale);
+	void btnSellClick(SDL_Event *ev, int scale);
 	void btnGeoscapeClick(SDL_Event *ev, int scale);
 };
 

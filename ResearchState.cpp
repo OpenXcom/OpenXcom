@@ -22,16 +22,16 @@ ResearchState::ResearchState(Game *game) : State(game)
 {
 	// Create objects
 	_window = new Window(320, 200, 0, 0);
-	_btnNew = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 288, 16, 16, 176);
-	_btnOk = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 288, 16, 16, 176);
+	_btnNew = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 148, 16, 8, 176);
+	_btnOk = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 148, 16, 164, 176);
 	_txtTitle = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 310, 13, 5, 8);
-	_txtAvailable = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 298, 13, 16, 24);
-	_txtAllocated = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 298, 13, 16, 24);
-	_txtSpace = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 298, 13, 16, 24);
-	_txtProject = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 94, 13, 16, 40);
-	_txtScientists = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 50, 13, 110, 40);
-	_txtProgress = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 50, 16, 160, 40);
-	_lstResearch = new TextList(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 298, 136, 16, 40);
+	_txtAvailable = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 150, 9, 8, 24);
+	_txtAllocated = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 150, 9, 160, 24);
+	_txtSpace = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 300, 9, 8, 34);
+	_txtProject = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 106, 9, 8, 44);
+	_txtScientists = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 144, 9, 115, 44);
+	_txtProgress = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 64, 9, 250, 44);
+	_lstResearch = new TextList(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 300, 120, 10, 54);
 	
 	// Set palette
 	_game->setPalette(_game->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(1)), Palette::backPos, 16);
@@ -82,8 +82,8 @@ ResearchState::ResearchState(Game *game) : State(game)
 	_txtProgress->setColor(Palette::blockOffset(13)+10);
 	_txtProgress->setText(_game->getLanguage()->getString(84));
 
-	_lstResearch->setColor(Palette::blockOffset(13)+10);
-	_lstResearch->setColumns(3, 114, 102, 82);
+	_lstResearch->setColor(Palette::blockOffset(15)+6);
+	_lstResearch->setColumns(3, 158, 82, 60);
 	_lstResearch->addRow(3, "Laser Weapons", "30", "Good");
 }
 

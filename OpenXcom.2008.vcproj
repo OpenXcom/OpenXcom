@@ -338,6 +338,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\BaseInfoState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\BaseInfoState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\BasescapeState.cpp"
 				>
 			</File>
@@ -386,6 +394,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ManufactureState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ManufactureState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\NewGameState.cpp"
 				>
 			</File>
@@ -402,11 +418,27 @@
 				>
 			</File>
 			<File
+				RelativePath=".\PurchaseState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\PurchaseState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\ResearchState.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\ResearchState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\SellState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\SellState.h"
 				>
 			</File>
 			<File

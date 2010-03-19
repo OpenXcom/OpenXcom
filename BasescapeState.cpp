@@ -75,6 +75,7 @@ BasescapeState::BasescapeState(Game *game) : State(game)
 
 	_btnBaseInfo->setColor(Palette::blockOffset(13)+8);
 	_btnBaseInfo->setText(_game->getLanguage()->getString(58));
+	_btnBaseInfo->onMouseClick((EventHandler)&BasescapeState::btnBaseInfoClick);
 
 	_btnSoldiers->setColor(Palette::blockOffset(13)+8);
 	_btnSoldiers->setText(_game->getLanguage()->getString(820));
@@ -93,15 +94,18 @@ BasescapeState::BasescapeState(Game *game) : State(game)
 
 	_btnManufacture->setColor(Palette::blockOffset(13)+8);
 	_btnManufacture->setText(_game->getLanguage()->getString(62));
+	_btnManufacture->onMouseClick((EventHandler)&BasescapeState::btnManufactureClick);
 
 	_btnTransfer->setColor(Palette::blockOffset(13)+8);
 	_btnTransfer->setText(_game->getLanguage()->getString(63));
 
 	_btnPurchase->setColor(Palette::blockOffset(13)+8);
 	_btnPurchase->setText(_game->getLanguage()->getString(64));
+	_btnPurchase->onMouseClick((EventHandler)&BasescapeState::btnPurchaseClick);
 
 	_btnSell->setColor(Palette::blockOffset(13)+8);
 	_btnSell->setText(_game->getLanguage()->getString(65));
+	_btnSell->onMouseClick((EventHandler)&BasescapeState::btnSellClick);
 
 	_btnGeoscape->setColor(Palette::blockOffset(13)+8);
 	_btnGeoscape->setText(_game->getLanguage()->getString(66));
@@ -117,6 +121,11 @@ void BasescapeState::think()
 {
 }
 
+void BasescapeState::btnBaseInfoClick(SDL_Event *ev, int scale)
+{
+	_game->setState(new BaseInfoState(_game));
+}
+
 void BasescapeState::btnSoldiersClick(SDL_Event *ev, int scale)
 {
 	_game->setState(new SoldiersState(_game));
@@ -130,6 +139,21 @@ void BasescapeState::btnCraftsClick(SDL_Event *ev, int scale)
 void BasescapeState::btnResearchClick(SDL_Event *ev, int scale)
 {
 	_game->setState(new ResearchState(_game));
+}
+
+void BasescapeState::btnManufactureClick(SDL_Event *ev, int scale)
+{
+	_game->setState(new ManufactureState(_game));
+}
+
+void BasescapeState::btnPurchaseClick(SDL_Event *ev, int scale)
+{
+	_game->setState(new PurchaseState(_game));
+}
+
+void BasescapeState::btnSellClick(SDL_Event *ev, int scale)
+{
+	_game->setState(new SellState(_game));
 }
 
 void BasescapeState::btnGeoscapeClick(SDL_Event *ev, int scale)
