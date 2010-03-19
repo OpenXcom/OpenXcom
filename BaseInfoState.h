@@ -31,9 +31,19 @@ class BaseInfoState : public State
 private:
 	Button *_btnOk, *_btnTransfers, *_btnStores, *_btnMonthlyCosts;
 	Surface *_bg;
+
 	Text *_txtBase, *_txtPersonnel, *_txtSoldiers, *_txtEngineers, *_txtScientists;
-	Text *_txtSpace, *_txtQuarters, *_txtStores, *_txtLabs, *_txtWorkshops, *_txtHangars;
+	Text *_numSoldiers, *_numEngineers, *_numScientists;
+	//Bar *_barSoldiers, *_barEngineers, *_barScientists;
+
+	Text *_txtSpace, *_txtQuarters, *_txtStores, *_txtLaboratories, *_txtWorkshops, *_txtHangars;
+	Text *_numQuarters, *_numStores, *_numLaboratories, *_numWorkshops, *_numHangars;
+	//Bar *_barQuarters, *_barStores, *_barLaboratories, *_barWorkshops, *_barHangars;
+
 	Text *_txtDefence, *_txtShortRange, *_txtLongRange;
+	Text *_numDefence, *_numShortRange, *_numLongRange;
+	//Bar *_barDefence, *_barShortRange, *_barLongRange;
+
 public:
 	BaseInfoState(Game *game);
 	~BaseInfoState();
