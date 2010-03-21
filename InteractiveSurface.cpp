@@ -67,7 +67,14 @@ void InteractiveSurface::handle(SDL_Event *ev, int scale, State *state)
 
 	if (_isFocused)
 	{
-
+		if (ev->type == SDL_KEYDOWN)
+		{
+			keyboardPress(ev, scale, state);
+		}
+		else if (ev->type == SDL_KEYUP)
+		{
+			keyboardRelease(ev, scale, state);
+		}
 	}
 }
 

@@ -25,6 +25,7 @@
 #include "Bar.h"
 #include "Button.h"
 #include "Text.h"
+#include "TextEdit.h"
 #include "Surface.h"
 #include "BasescapeState.h"
 
@@ -33,8 +34,9 @@ class BaseInfoState : public State
 private:
 	Button *_btnOk, *_btnTransfers, *_btnStores, *_btnMonthlyCosts;
 	Surface *_bg;
-
-	Text *_txtBase, *_txtPersonnel, *_txtSoldiers, *_txtEngineers, *_txtScientists;
+	
+	TextEdit *_edtBase;
+	Text *_txtPersonnel, *_txtSoldiers, *_txtEngineers, *_txtScientists;
 	Text *_numSoldiers, *_numEngineers, *_numScientists;
 	Bar *_barSoldiers, *_barEngineers, *_barScientists;
 

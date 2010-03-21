@@ -27,7 +27,7 @@ BaseInfoState::BaseInfoState(Game *game) : State(game)
 	_btnStores = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 80, 14, 132, 180);
 	_btnMonthlyCosts = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 92, 14, 218, 180);
 	
-	_txtBase = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 170, 16, 8, 8);
+	_edtBase = new TextEdit(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 170, 16, 8, 8);
 	_txtPersonnel = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 300, 9, 8, 30);
 	_txtSoldiers = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 114, 9, 8, 41);
 	_numSoldiers = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 40, 9, 126, 41);
@@ -72,7 +72,8 @@ BaseInfoState::BaseInfoState(Game *game) : State(game)
 	add(_btnStores);
 	add(_btnMonthlyCosts);
 	
-	add(_txtBase);
+	//add(_txtBase);
+	add(_edtBase);
 	add(_txtPersonnel);
 	add(_txtSoldiers);
 	add(_numSoldiers);
@@ -127,9 +128,9 @@ BaseInfoState::BaseInfoState(Game *game) : State(game)
 	_btnMonthlyCosts->setColor(Palette::blockOffset(15)+9);
 	_btnMonthlyCosts->setText(_game->getLanguage()->getString(STR_MONTHLY_COSTS));
 
-	_txtBase->setColor(Palette::blockOffset(15)+1);
-	_txtBase->setBig();
-	_txtBase->setText("Some Base");
+	_edtBase->setColor(Palette::blockOffset(15)+1);
+	_edtBase->setBig();
+	_edtBase->setText("Some Base");
 
 
 	_txtPersonnel->setColor(Palette::blockOffset(15)+1);
