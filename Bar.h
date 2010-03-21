@@ -16,30 +16,30 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM__INTERCEPTSTATE_H
-#define OPENXCOM__INTERCEPTSTATE_H
+#ifndef OPENXCOM__BAR_H
+#define OPENXCOM__BAR_H
 
-#include "State_Interactive.h"
-#include "LangString.h"
-#include "Palette.h"
-#include "Button.h"
-#include "Window.h"
-#include "Text.h"
-#include "TextList.h"
-#include "GeoscapeState.h"
+#include <cmath>
+#include "SDL.h"
+#include "Surface.h"
 
-class InterceptState : public State
+class Bar : public Surface
 {
 private:
-	Button *_btnCancel;
-	Window *_window;
-	Text *_txtTitle, *_txtCraft, *_txtStatus, *_txtBase, *_txtWeapons;
-	TextList *_lstCrafts;
+	Uint8 _color;
+	double _scale, _max, _value;
 public:
-	InterceptState(Game *game);
-	~InterceptState();
-	void think();
-	void btnCancelClick(SDL_Event *ev, int scale);
+	Bar(int width, int height, int x = 0, int y = 0);
+	~Bar();
+	void setColor(Uint8 color);
+	Uint8 getColor();
+	void setScale(double scale);
+	double getScale();
+	void setMax(double max);
+	double getMax();
+	void setValue(double value);
+	double getValue();
+	void blit(Surface *surface);
 };
 
 #endif

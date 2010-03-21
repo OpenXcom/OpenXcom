@@ -53,35 +53,35 @@ SellState::SellState(Game *game) : State(game)
 	_window->setBg(game->getSurface("BACK13.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(13)+13);
-	_btnOk->setText(_game->getLanguage()->getString(233));
+	_btnOk->setText(_game->getLanguage()->getString(STR_SELL_SACK));
 	_btnOk->onMouseClick((EventHandler)&SellState::btnOkClick);
 
 	_btnCancel->setColor(Palette::blockOffset(13)+13);
-	_btnCancel->setText(_game->getLanguage()->getString(71));
+	_btnCancel->setText(_game->getLanguage()->getString(STR_CANCEL));
 	_btnCancel->onMouseClick((EventHandler)&SellState::btnCancelClick);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setText(_game->getLanguage()->getString(230));
+	_txtTitle->setText(_game->getLanguage()->getString(STR_SELL_ITEMS_SACK_PERSONNEL));
 
 	_txtSales->setColor(Palette::blockOffset(13)+10);
-	_txtSales->setText(_game->getLanguage()->getString(231));
+	_txtSales->setText(_game->getLanguage()->getString(STR_VALUE_OF_SALES));
 
 	_txtFunds->setColor(Palette::blockOffset(13)+10);
-	_txtFunds->setText(_game->getLanguage()->getString(232));
+	_txtFunds->setText(_game->getLanguage()->getString(STR_FUNDS));
 
 	_txtItem->setColor(Palette::blockOffset(13)+10);
-	_txtItem->setText(_game->getLanguage()->getString(97));
+	_txtItem->setText(_game->getLanguage()->getString(STR_ITEM));
 
 	_txtQuantity->setColor(Palette::blockOffset(13)+10);
-	_txtQuantity->setText(_game->getLanguage()->getString(127));
+	_txtQuantity->setText(_game->getLanguage()->getString(STR_QUANTITY));
 
 	_txtSell->setColor(Palette::blockOffset(13)+10);
-	_txtSell->setText(_game->getLanguage()->getString(233));
+	_txtSell->setText(_game->getLanguage()->getString(STR_SELL_SACK));
 
 	_txtValue->setColor(Palette::blockOffset(13)+10);
-	_txtValue->setText(_game->getLanguage()->getString(234));
+	_txtValue->setText(_game->getLanguage()->getString(STR_VALUE));
 
 	_lstItems->setColor(Palette::blockOffset(13)+10);
 	_lstItems->setColumns(4, 156, 62, 28, 54);

@@ -61,6 +61,7 @@ void Language::loadDat(string filename)
 	txtFile.close();
 }
 
+//string Language::getString(LangString id)
 string Language::getString(int id)
 {
 	return _strings[id];

@@ -186,7 +186,7 @@ void Globe::zoom(double amount)
 void Globe::center(double lon, double lat)
 {
 	_rotLon = -lon;
-	//_rotLat = lat;
+	//_rotLat = -lat;
 }
 
 void Globe::blit(Surface *surface)

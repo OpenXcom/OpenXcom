@@ -53,34 +53,34 @@ ResearchState::ResearchState(Game *game) : State(game)
 	_window->setBg(game->getSurface("BACK05.SCR"));
 	
 	_btnNew->setColor(Palette::blockOffset(15)+9);
-	_btnNew->setText(_game->getLanguage()->getString(85));
+	_btnNew->setText(_game->getLanguage()->getString(STR_NEW_PROJECT));
 
 	_btnOk->setColor(Palette::blockOffset(15)+9);
-	_btnOk->setText(_game->getLanguage()->getString(76));
+	_btnOk->setText(_game->getLanguage()->getString(STR_OK));
 	_btnOk->onMouseClick((EventHandler)&ResearchState::btnOkClick);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setText(_game->getLanguage()->getString(78));
+	_txtTitle->setText(_game->getLanguage()->getString(STR_CURRENT_RESEARCH));
 
 	_txtAvailable->setColor(Palette::blockOffset(13)+10);
-	_txtAvailable->setText(_game->getLanguage()->getString(79));
+	_txtAvailable->setText(_game->getLanguage()->getString(STR_SCIENTISTS_AVAILABLE));
 
 	_txtAllocated->setColor(Palette::blockOffset(13)+10);
-	_txtAllocated->setText(_game->getLanguage()->getString(80));
+	_txtAllocated->setText(_game->getLanguage()->getString(STR_SCIENTISTS_ALLOCATED));
 
 	_txtSpace->setColor(Palette::blockOffset(13)+10);
-	_txtSpace->setText(_game->getLanguage()->getString(81));
+	_txtSpace->setText(_game->getLanguage()->getString(STR_LABORATORY_SPACE_AVAILABLE));
 
 	_txtProject->setColor(Palette::blockOffset(13)+10);
-	_txtProject->setText(_game->getLanguage()->getString(82));
+	_txtProject->setText(_game->getLanguage()->getString(STR_RESEARCH_PROJECT));
 
 	_txtScientists->setColor(Palette::blockOffset(13)+10);
-	_txtScientists->setText(_game->getLanguage()->getString(83));
+	_txtScientists->setText(_game->getLanguage()->getString(STR_SCIENTISTS_ALLOCATED_UC));
 
 	_txtProgress->setColor(Palette::blockOffset(13)+10);
-	_txtProgress->setText(_game->getLanguage()->getString(84));
+	_txtProgress->setText(_game->getLanguage()->getString(STR_PROGRESS));
 
 	_lstResearch->setColor(Palette::blockOffset(15)+6);
 	_lstResearch->setColumns(3, 158, 82, 60);

@@ -61,47 +61,47 @@ ManufactureState::ManufactureState(Game *game) : State(game)
 	_window->setBg(game->getSurface("BACK17.SCR"));
 	
 	_btnNew->setColor(Palette::blockOffset(13)+13);
-	_btnNew->setText(_game->getLanguage()->getString(103));
+	_btnNew->setText(_game->getLanguage()->getString(STR_NEW_PRODUCTION));
 
 	_btnOk->setColor(Palette::blockOffset(13)+13);
-	_btnOk->setText(_game->getLanguage()->getString(76));
+	_btnOk->setText(_game->getLanguage()->getString(STR_OK));
 	_btnOk->onMouseClick((EventHandler)&ManufactureState::btnOkClick);
 
 	_txtTitle->setColor(Palette::blockOffset(15)+6);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setText(_game->getLanguage()->getString(92));
+	_txtTitle->setText(_game->getLanguage()->getString(STR_CURRENT_PRODUCTION));
 
 	_txtAvailable->setColor(Palette::blockOffset(15)+6);
-	_txtAvailable->setText(_game->getLanguage()->getString(93));
+	_txtAvailable->setText(_game->getLanguage()->getString(STR_ENGINEERS_AVAILABLE));
 
 	_txtAllocated->setColor(Palette::blockOffset(15)+6);
-	_txtAllocated->setText(_game->getLanguage()->getString(94));
+	_txtAllocated->setText(_game->getLanguage()->getString(STR_ENGINEERS_ALLOCATED_UC));
 
 	_txtSpace->setColor(Palette::blockOffset(15)+6);
-	_txtSpace->setText(_game->getLanguage()->getString(95));
+	_txtSpace->setText(_game->getLanguage()->getString(STR_WORKSHOP_SPACE_AVAILABLE));
 
 	_txtFunds->setColor(Palette::blockOffset(15)+6);
-	_txtFunds->setText(_game->getLanguage()->getString(96));
+	_txtFunds->setText(_game->getLanguage()->getString(STR_CURRENT_FUNDS));
 
 	_txtItem->setColor(Palette::blockOffset(15)+1);
-	_txtItem->setText(_game->getLanguage()->getString(97));
+	_txtItem->setText(_game->getLanguage()->getString(STR_ITEM));
 
 	_txtEngineers->setColor(Palette::blockOffset(15)+1);
-	_txtEngineers->setText(_game->getLanguage()->getString(98));
+	_txtEngineers->setText(_game->getLanguage()->getString(STR_ENGINEERS_ALLOCATED));
 
 	_txtProduced->setColor(Palette::blockOffset(15)+1);
-	_txtProduced->setText(_game->getLanguage()->getString(99));
+	_txtProduced->setText(_game->getLanguage()->getString(STR_UNITS_PRODUCED));
 
 	_txtTotal->setColor(Palette::blockOffset(15)+1);
-	_txtTotal->setText(_game->getLanguage()->getString(100));
+	_txtTotal->setText(_game->getLanguage()->getString(STR_TOTAL_TO_PRODUCE));
 
 	_txtCost->setColor(Palette::blockOffset(15)+1);
-	_txtCost->setText(_game->getLanguage()->getString(101));
+	_txtCost->setText(_game->getLanguage()->getString(STR_COST_PER_UNIT));
 
 	_txtTimeLeft->setColor(Palette::blockOffset(15)+1);
-	_txtTimeLeft->setText(_game->getLanguage()->getString(102));
-
+	_txtTimeLeft->setText(_game->getLanguage()->getString(STR_DAYS_HOURS_LEFT));
+	
 	_lstManufacture->setColor(Palette::blockOffset(13)+10);
 	_lstManufacture->setColumns(6, 105, 39, 45, 27, 47, 37);
 	_lstManufacture->addRow(6, "Laser Rifle", "30", "2", "8", "$40 000", "5/2");

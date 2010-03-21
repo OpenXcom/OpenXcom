@@ -43,15 +43,15 @@ OptionsState::OptionsState(Game *game) : State(game)
 	_window->setBg(game->getSurface("BACK01.SCR"));
 
 	_btnLoad->setColor(Palette::blockOffset(15)+2);
-	_btnLoad->setText(_game->getLanguage()->getString(316));
+	_btnLoad->setText(_game->getLanguage()->getString(STR_LOAD_GAME));
 	_btnLoad->onMouseClick((EventHandler)&OptionsState::btnLoadClick);
 
 	_btnSave->setColor(Palette::blockOffset(15)+2);
-	_btnSave->setText(_game->getLanguage()->getString(317));
+	_btnSave->setText(_game->getLanguage()->getString(STR_SAVE_GAME));
 	_btnSave->onMouseClick((EventHandler)&OptionsState::btnSaveClick);
 
 	_btnAbandon->setColor(Palette::blockOffset(15)+2);
-	_btnAbandon->setText(_game->getLanguage()->getString(800));
+	_btnAbandon->setText(_game->getLanguage()->getString(STR_ABANDON_GAME));
 	_btnAbandon->onMouseClick((EventHandler)&OptionsState::btnAbandonClick);
 
 	_btnCancel->setColor(Palette::blockOffset(15)+2);
@@ -61,7 +61,7 @@ OptionsState::OptionsState(Game *game) : State(game)
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
-	_txtTitle->setText(_game->getLanguage()->getString(315));
+	_txtTitle->setText(_game->getLanguage()->getString(STR_GAME_OPTIONS));
 }
 
 OptionsState::~OptionsState()

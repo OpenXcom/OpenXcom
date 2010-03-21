@@ -19,6 +19,7 @@
 #ifndef OPENXCOM__LANGUAGE_H
 #define OPENXCOM__LANGUAGE_H
 
+#include "LangString.h"
 #include <vector>
 #include <string>
 #include <fstream>
@@ -33,6 +34,7 @@ public:
 	Language();
 	~Language();
 	void loadDat(string filename);
+	//string getString(LangString id);
 	string getString(int id);
 	void addString(string str);
 };

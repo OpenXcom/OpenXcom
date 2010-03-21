@@ -51,31 +51,31 @@ CraftsState::CraftsState(Game *game) : State(game)
 	_window->setBg(game->getSurface("BACK14.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(13)+13);
-	_btnOk->setText(_game->getLanguage()->getString(76));
+	_btnOk->setText(_game->getLanguage()->getString(STR_OK));
 	_btnOk->onMouseClick((EventHandler)&CraftsState::btnOkClick);
 
 	_txtTitle->setColor(Palette::blockOffset(15)+1);
 	_txtTitle->setBig();
-	_txtTitle->setText(_game->getLanguage()->getString(318));
+	_txtTitle->setText(_game->getLanguage()->getString(STR_INTERCEPTION_CRAFT));
 
 	_txtBase->setColor(Palette::blockOffset(15)+1);
 	_txtBase->setBig();
-	_txtBase->setText(_game->getLanguage()->getString(319));
+	_txtBase->setText(_game->getLanguage()->getString(STR_BASE_));
 
 	_txtName->setColor(Palette::blockOffset(15)+1);
-	_txtName->setText(_game->getLanguage()->getString(320));
+	_txtName->setText(_game->getLanguage()->getString(STR_NAME));
 
 	_txtStatus->setColor(Palette::blockOffset(15)+1);
 	_txtStatus->setText(_game->getLanguage()->getString(321));
 
 	_txtWeapon->setColor(Palette::blockOffset(15)+1);
-	_txtWeapon->setText(_game->getLanguage()->getString(642));
+	_txtWeapon->setText(_game->getLanguage()->getString(STR_WEAPON_SYSTEMS));
 
 	_txtCrew->setColor(Palette::blockOffset(15)+1);
-	_txtCrew->setText(_game->getLanguage()->getString(643));
+	_txtCrew->setText(_game->getLanguage()->getString(STR_CREW));
 
 	_txtHwp->setColor(Palette::blockOffset(15)+1);
-	_txtHwp->setText(_game->getLanguage()->getString(644));
+	_txtHwp->setText(_game->getLanguage()->getString(STR_HWPS));
 
 	_lstCrafts->setColor(Palette::blockOffset(13)+10);
 	_lstCrafts->setColumns(5, 94, 66, 47, 46, 45);

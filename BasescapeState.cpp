@@ -68,47 +68,47 @@ BasescapeState::BasescapeState(Game *game) : State(game)
 	_txtLocation->setText("Some Location");
 
 	_txtFunds->setColor(Palette::blockOffset(13)+10);
-	_txtFunds->setText(_game->getLanguage()->getString(56));
+	_txtFunds->setText(_game->getLanguage()->getString(STR_FUNDS_));
 	
 	_btnNewBase->setColor(Palette::blockOffset(13)+8);
-	_btnNewBase->setText(_game->getLanguage()->getString(57));
+	_btnNewBase->setText(_game->getLanguage()->getString(STR_BUILD_NEW_BASE));
 
 	_btnBaseInfo->setColor(Palette::blockOffset(13)+8);
-	_btnBaseInfo->setText(_game->getLanguage()->getString(58));
+	_btnBaseInfo->setText(_game->getLanguage()->getString(STR_BASE_INFORMATION));
 	_btnBaseInfo->onMouseClick((EventHandler)&BasescapeState::btnBaseInfoClick);
 
 	_btnSoldiers->setColor(Palette::blockOffset(13)+8);
-	_btnSoldiers->setText(_game->getLanguage()->getString(820));
+	_btnSoldiers->setText(_game->getLanguage()->getString(STR_SOLDIERS_UC));
 	_btnSoldiers->onMouseClick((EventHandler)&BasescapeState::btnSoldiersClick);
 
 	_btnCrafts->setColor(Palette::blockOffset(13)+8);
-	_btnCrafts->setText(_game->getLanguage()->getString(59));
+	_btnCrafts->setText(_game->getLanguage()->getString(STR_EQUIP_CRAFT));
 	_btnCrafts->onMouseClick((EventHandler)&BasescapeState::btnCraftsClick);
 
 	_btnFacilities->setColor(Palette::blockOffset(13)+8);
-	_btnFacilities->setText(_game->getLanguage()->getString(60));
+	_btnFacilities->setText(_game->getLanguage()->getString(STR_BUILD_FACILITIES));
 
 	_btnResearch->setColor(Palette::blockOffset(13)+8);
-	_btnResearch->setText(_game->getLanguage()->getString(61));
+	_btnResearch->setText(_game->getLanguage()->getString(STR_RESEARCH));
 	_btnResearch->onMouseClick((EventHandler)&BasescapeState::btnResearchClick);
 
 	_btnManufacture->setColor(Palette::blockOffset(13)+8);
-	_btnManufacture->setText(_game->getLanguage()->getString(62));
+	_btnManufacture->setText(_game->getLanguage()->getString(STR_MANUFACTURE));
 	_btnManufacture->onMouseClick((EventHandler)&BasescapeState::btnManufactureClick);
 
 	_btnTransfer->setColor(Palette::blockOffset(13)+8);
-	_btnTransfer->setText(_game->getLanguage()->getString(63));
+	_btnTransfer->setText(_game->getLanguage()->getString(STR_TRANSFER));
 
 	_btnPurchase->setColor(Palette::blockOffset(13)+8);
-	_btnPurchase->setText(_game->getLanguage()->getString(64));
+	_btnPurchase->setText(_game->getLanguage()->getString(STR_PURCHASE_RECRUIT));
 	_btnPurchase->onMouseClick((EventHandler)&BasescapeState::btnPurchaseClick);
 
 	_btnSell->setColor(Palette::blockOffset(13)+8);
-	_btnSell->setText(_game->getLanguage()->getString(65));
+	_btnSell->setText(_game->getLanguage()->getString(STR_SELL_SACK_UC));
 	_btnSell->onMouseClick((EventHandler)&BasescapeState::btnSellClick);
 
 	_btnGeoscape->setColor(Palette::blockOffset(13)+8);
-	_btnGeoscape->setText(_game->getLanguage()->getString(66));
+	_btnGeoscape->setText(_game->getLanguage()->getString(STR_GEOSCAPE));
 	_btnGeoscape->onMouseClick((EventHandler)&BasescapeState::btnGeoscapeClick);
 }
 

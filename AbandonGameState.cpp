@@ -39,18 +39,18 @@ AbandonGameState::AbandonGameState(Game *game) : State(game)
 	_window->setBg(game->getSurface("BACK01.SCR"));
 
 	_btnYes->setColor(Palette::blockOffset(15)+2);
-	_btnYes->setText(_game->getLanguage()->getString(279));
+	_btnYes->setText(_game->getLanguage()->getString(STR_YES));
 	_btnYes->onMouseClick((EventHandler)&AbandonGameState::btnYesClick);
 
 	_btnNo->setColor(Palette::blockOffset(15)+2);
-	_btnNo->setText(_game->getLanguage()->getString(280));
+	_btnNo->setText(_game->getLanguage()->getString(STR_NO));
 	_btnNo->onMouseClick((EventHandler)&AbandonGameState::btnNoClick);
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
 	stringstream ss;
-	ss << _game->getLanguage()->getString(800) << "?";
+	ss << _game->getLanguage()->getString(STR_ABANDON_GAME) << "?";
 	_txtTitle->setText(ss.str());
 }
 

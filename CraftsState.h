@@ -20,6 +20,7 @@
 #define OPENXCOM__CRAFTSSTATE_H
 
 #include "State_Interactive.h"
+#include "LangString.h"
 #include "Palette.h"
 #include "Button.h"
 #include "Window.h"

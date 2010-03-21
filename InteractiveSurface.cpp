@@ -18,7 +18,7 @@
  */
 #include "State_Interactive.h"
 
-InteractiveSurface::InteractiveSurface(int width, int height, int x, int y) : Surface(width, height, x, y), _click(NULL), _press(NULL), _release(NULL), _in(NULL), _out(NULL), _isPressed(false), _isHovered(false)
+InteractiveSurface::InteractiveSurface(int width, int height, int x, int y) : Surface(width, height, x, y), _click(NULL), _press(NULL), _release(NULL), _in(NULL), _out(NULL), _keyPress(NULL), _keyRelease(NULL), _isPressed(false), _isHovered(false), _isFocused(false)
 {
 
 }
@@ -64,6 +64,11 @@ void InteractiveSurface::handle(SDL_Event *ev, int scale, State *state)
 			mouseClick(ev, scale, state);
 		}
 	}
+
+	if (_isFocused)
+	{
+
+	}
 }
 
 void InteractiveSurface::mousePress(SDL_Event *ev, int scale, State *state)
@@ -96,6 +101,18 @@ void InteractiveSurface::mouseOut(SDL_Event *ev, int scale, State *state)
 		(state->*_out)(ev, scale);
 }
 
+void InteractiveSurface::keyboardPress(SDL_Event *ev, int scale, State *state)
+{
+	if (_keyPress != NULL)
+		(state->*_keyPress)(ev, scale);
+}
+
+void InteractiveSurface::keyboardRelease(SDL_Event *ev, int scale, State *state)
+{
+	if (_keyRelease != NULL)
+		(state->*_keyRelease)(ev, scale);
+}
+
 void InteractiveSurface::onMouseClick(EventHandler handler)
 {
 	_click = handler;
@@ -119,4 +136,14 @@ void InteractiveSurface::onMouseIn(EventHandler handler)
 void InteractiveSurface::onMouseOut(EventHandler handler)
 {
 	_out = handler;
+}
+
+void InteractiveSurface::onKeyboardPress(EventHandler handler)
+{
+	_keyPress = handler;
+}
+
+void InteractiveSurface::onKeyboardRelease(EventHandler handler)
+{
+	_keyRelease = handler;
 }

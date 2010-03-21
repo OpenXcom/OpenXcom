@@ -45,24 +45,24 @@ FundingState::FundingState(Game *game) : State(game)
 	_window->setBg(game->getSurface("BACK13.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(15)+2);
-	_btnOk->setText(_game->getLanguage()->getString(76));
+	_btnOk->setText(_game->getLanguage()->getString(STR_OK));
 	_btnOk->onMouseClick((EventHandler)&FundingState::btnOkClick);
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
-	_txtTitle->setText(_game->getLanguage()->getString(638));
+	_txtTitle->setText(_game->getLanguage()->getString(STR_INTERNATIONAL_RELATIONS));
 
 	_txtCountry->setColor(Palette::blockOffset(15)-1);
 	_txtCountry->setBig();
-	_txtCountry->setText(_game->getLanguage()->getString(639));
+	_txtCountry->setText(_game->getLanguage()->getString(STR_COUNTRY));
 
 	_txtFunding->setColor(Palette::blockOffset(15)-1);
 	_txtFunding->setBig();
-	_txtFunding->setText(_game->getLanguage()->getString(640));
+	_txtFunding->setText(_game->getLanguage()->getString(STR_FUNDING));
 
 	_txtChange->setColor(Palette::blockOffset(15)-1);
 	_txtChange->setBig();
-	_txtChange->setText(_game->getLanguage()->getString(641));
+	_txtChange->setText(_game->getLanguage()->getString(STR_CHANGE));
 
 	_lstCountries->setColor(Palette::blockOffset(15)-1);
 	_lstCountries->setColumns(3, 108, 100, 72);

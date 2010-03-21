@@ -62,9 +62,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="SDLmain.lib SDL.lib SDL_mixer.lib SDL_gfx.lib SDL_sound.lib"
+				AdditionalDependencies="SDLmain.lib SDL.lib SDL_gfx.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;.\SDL\lib&quot;"
+				GenerateManifest="true"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				RandomizedBaseAddress="1"
@@ -76,6 +77,7 @@
 			/>
 			<Tool
 				Name="VCManifestTool"
+				EmbedManifest="true"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -137,9 +139,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="SDLmain.lib SDL.lib"
+				AdditionalDependencies="SDLmain.lib SDL.lib SDL_gfx.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;.\SDL\lib&quot;"
+				GenerateManifest="true"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				OptimizeReferences="2"
@@ -153,6 +156,7 @@
 			/>
 			<Tool
 				Name="VCManifestTool"
+				EmbedManifest="true"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -181,6 +185,14 @@
 		<Filter
 			Name="Interface"
 			>
+			<File
+				RelativePath=".\Bar.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Bar.h"
+				>
+			</File>
 			<File
 				RelativePath=".\Button.cpp"
 				>
@@ -230,6 +242,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\TextEdit.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\TextEdit.h"
+				>
+			</File>
+			<File
 				RelativePath=".\TextList.cpp"
 				>
 			</File>
@@ -267,6 +287,10 @@
 			</File>
 			<File
 				RelativePath=".\InteractiveSurface.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LangString.h"
 				>
 			</File>
 			<File

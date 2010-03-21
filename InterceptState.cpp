@@ -47,25 +47,25 @@ InterceptState::InterceptState(Game *game) : State(game)
 	_window->setBg(game->getSurface("BACK12.SCR"));
 
 	_btnCancel->setColor(Palette::blockOffset(8)+8);
-	_btnCancel->setText(_game->getLanguage()->getString(71));
+	_btnCancel->setText(_game->getLanguage()->getString(STR_CANCEL));
 	_btnCancel->onMouseClick((EventHandler)&InterceptState::btnCancelClick);
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
-	_txtTitle->setText(_game->getLanguage()->getString(264));
+	_txtTitle->setText(_game->getLanguage()->getString(STR_LAUNCH_INTERCEPTION));
 
 	_txtCraft->setColor(Palette::blockOffset(8)+5);
-	_txtCraft->setText(_game->getLanguage()->getString(265));
+	_txtCraft->setText(_game->getLanguage()->getString(STR_CRAFT));
 
 	_txtStatus->setColor(Palette::blockOffset(8)+5);
-	_txtStatus->setText(_game->getLanguage()->getString(266));
+	_txtStatus->setText(_game->getLanguage()->getString(STR_STATUS));
 
 	_txtBase->setColor(Palette::blockOffset(8)+5);
-	_txtBase->setText(_game->getLanguage()->getString(267));
+	_txtBase->setText(_game->getLanguage()->getString(STR_BASE));
 
 	_txtWeapons->setColor(Palette::blockOffset(8)+5);
-	_txtWeapons->setText(_game->getLanguage()->getString(799));
+	_txtWeapons->setText(_game->getLanguage()->getString(STR_WEAPONS_CREW_HWPS));
 
 	_lstCrafts->setColor(Palette::blockOffset(15)-1);
 	_lstCrafts->setColumns(4, 86, 65, 85, 64);

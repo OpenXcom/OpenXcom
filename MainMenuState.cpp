@@ -43,21 +43,21 @@ MainMenuState::MainMenuState(Game *game) : State(game)
 	_window->setBg(game->getSurface("BACK01.SCR"));
 
 	_btnNew->setColor(Palette::blockOffset(8)+8);
-	_btnNew->setText(_game->getLanguage()->getString(780));
+	_btnNew->setText(_game->getLanguage()->getString(STR_NEW_GAME));
 	_btnNew->onMouseClick((EventHandler)&MainMenuState::btnNewClick);
 
 	_btnLoad->setColor(Palette::blockOffset(8)+8);
-	_btnLoad->setText(_game->getLanguage()->getString(781));
+	_btnLoad->setText(_game->getLanguage()->getString(STR_LOAD_SAVED_GAME));
 	_btnLoad->onMouseClick((EventHandler)&MainMenuState::btnLoadClick);
 
 	_btnQuit->setColor(Palette::blockOffset(8)+8);
-	_btnQuit->setText(_game->getLanguage()->getString(801));
+	_btnQuit->setText(_game->getLanguage()->getString(STR_QUIT));
 	_btnQuit->onMouseClick((EventHandler)&MainMenuState::btnQuitClick);
 
 	_txtTitle->setColor(Palette::blockOffset(8)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
-	_txtTitle->setText(_game->getLanguage()->getString(779));
+	_txtTitle->setText(_game->getLanguage()->getString(STR_UFO_ENEMY_UNKNOWN));
 	
 	_txtVersion->setColor(Palette::blockOffset(8)+10);
 	_txtVersion->setAlign(ALIGN_RIGHT);

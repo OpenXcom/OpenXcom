@@ -51,32 +51,32 @@ PurchaseState::PurchaseState(Game *game) : State(game)
 	_window->setBg(game->getSurface("BACK13.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(13)+13);
-	_btnOk->setText(_game->getLanguage()->getString(76));
+	_btnOk->setText(_game->getLanguage()->getString(STR_OK));
 	_btnOk->onMouseClick((EventHandler)&PurchaseState::btnOkClick);
 
 	_btnCancel->setColor(Palette::blockOffset(13)+13);
-	_btnCancel->setText(_game->getLanguage()->getString(71));
+	_btnCancel->setText(_game->getLanguage()->getString(STR_CANCEL));
 	_btnCancel->onMouseClick((EventHandler)&PurchaseState::btnCancelClick);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setText(_game->getLanguage()->getString(123));
+	_txtTitle->setText(_game->getLanguage()->getString(STR_PURCHASE_HIRE_PERSONNEL));
 
 	_txtFunds->setColor(Palette::blockOffset(13)+10);
-	_txtFunds->setText(_game->getLanguage()->getString(124));
+	_txtFunds->setText(_game->getLanguage()->getString(STR_CURRENT_FUNDS));
 
 	_txtPurchases->setColor(Palette::blockOffset(13)+10);
-	_txtPurchases->setText(_game->getLanguage()->getString(125));
+	_txtPurchases->setText(_game->getLanguage()->getString(STR_COST_OF_PURCHASES));
 
 	_txtItem->setColor(Palette::blockOffset(13)+10);
-	_txtItem->setText(_game->getLanguage()->getString(97));
+	_txtItem->setText(_game->getLanguage()->getString(STR_ITEM));
 
 	_txtCost->setColor(Palette::blockOffset(13)+10);
-	_txtCost->setText(_game->getLanguage()->getString(126));
+	_txtCost->setText(_game->getLanguage()->getString(STR_COST_PER_UNIT_UC));
 
 	_txtQuantity->setColor(Palette::blockOffset(13)+10);
-	_txtQuantity->setText(_game->getLanguage()->getString(127));
+	_txtQuantity->setText(_game->getLanguage()->getString(STR_QUANTITY));
 
 	_lstItems->setColor(Palette::blockOffset(13)+10);
 	_lstItems->setColumns(3, 162, 92, 40);

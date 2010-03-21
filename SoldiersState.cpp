@@ -45,7 +45,7 @@ SoldiersState::SoldiersState(Game *game) : State(game)
 	_window->setBg(game->getSurface("BACK02.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(13)+13);
-	_btnOk->setText(_game->getLanguage()->getString(76));
+	_btnOk->setText(_game->getLanguage()->getString(STR_OK));
 	_btnOk->onMouseClick((EventHandler)&SoldiersState::btnOkClick);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
@@ -54,10 +54,10 @@ SoldiersState::SoldiersState(Game *game) : State(game)
 	_txtTitle->setText(_game->getLanguage()->getString(803));
 
 	_txtName->setColor(Palette::blockOffset(15)+1);
-	_txtName->setText(_game->getLanguage()->getString(320));
+	_txtName->setText(_game->getLanguage()->getString(STR_NAME));
 
 	_txtRank->setColor(Palette::blockOffset(15)+1);
-	_txtRank->setText(_game->getLanguage()->getString(336));
+	_txtRank->setText(_game->getLanguage()->getString(STR_RANK));
 
 	_txtCraft->setColor(Palette::blockOffset(15)+1);
 	_txtCraft->setText(_game->getLanguage()->getString(337));
