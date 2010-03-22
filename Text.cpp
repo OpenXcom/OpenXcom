@@ -18,7 +18,7 @@
  */
 #include "Text.h"
 
-Text::Text(Font *big, Font *small, int width, int height, int x, int y) : Surface(width, height, x, y), _big(big), _small(small), _font(small), _text(""), _wrap(true), _invert(false), _align(ALIGN_LEFT), _color(0)
+Text::Text(Font *big, Font *small, int width, int height, int x, int y) : Surface(width, height, x, y), _big(big), _small(small), _font(small), _text(""), _wrap(false), _invert(false), _align(ALIGN_LEFT), _color(0)
 {
 
 }
