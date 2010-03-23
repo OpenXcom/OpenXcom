@@ -40,8 +40,11 @@ void Text::setSmall()
 
 void Text::setText(string text)
 {
-	_text = text;
-	refresh();
+	if (text != _text)
+	{
+		_text = text;
+		refresh();
+	}
 }
 
 string Text::getText()
@@ -88,9 +91,6 @@ void Text::blit(Surface *surface)
 // manually redrawn only when an attribute is changed.
 void Text::refresh()
 {
-	if (_text.empty())
-		return;
-
 	clear();
 
 	// For drawing each letter
