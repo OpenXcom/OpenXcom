@@ -338,3 +338,13 @@ void Game::setState(State *state)
 {
 	_newState = state;
 }
+
+SavedGame *Game::getSavedGame()
+{
+	return _save;
+}
+
+Ruleset *Game::getRuleset()
+{
+	return _rules;
+}

@@ -33,6 +33,8 @@ class State;
 #include "Font.h"
 #include "Palette.h"
 #include "Cursor.h"
+#include "SavedGame.h"
+#include "Ruleset.h"
 
 class Game
 {
@@ -48,6 +50,8 @@ private:
 	map<string, Language*> _languages;
 	map<string, Surface*> _surfaces;
 	map<string, SurfaceSet*> _sets;
+	SavedGame *_save;
+	Ruleset *_rules;
 	bool _quit;
 public:
 	Game(char* title, int width, int height, int bpp);
@@ -65,6 +69,8 @@ public:
 	Palette *getPalette(string name);
 	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
 	void setState(State *state);
+	SavedGame *getSavedGame();
+	Ruleset *getRuleset();
 };
 
 #endif

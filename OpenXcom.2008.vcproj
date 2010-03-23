@@ -181,6 +181,14 @@
 		<Filter
 			Name="Rules"
 			>
+			<File
+				RelativePath=".\Ruleset.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Interface"
@@ -501,6 +509,14 @@
 		<Filter
 			Name="Game"
 			>
+			<File
+				RelativePath=".\SavedGame.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\SavedGame.h"
+				>
+			</File>
 		</Filter>
 		<File
 			RelativePath=".\main.cpp"
