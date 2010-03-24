@@ -27,21 +27,19 @@
 //#define XCOM_TEST
 #define DATA_FOLDER "./DATA/"
 
+Game *game;
+
 int main(int argc, char** args)
 {
-	Game *game = new Game("OpenXcom", 320, 200, 8);
-	game->setResourcePack(new XcomResourcePack(DATA_FOLDER));
-	
-	//game->getScreen()->setFullscreen(true);
-	game->getScreen()->setScale(2);
-#ifdef XCOM_TEST
-	game->setState(new TestState(game));
-#else
-	game->setState(new StartState(game));
-#endif
-
 	try
 	{
+		game = new Game("OpenXcom", 320, 200, 8);
+		game->setResourcePack(new XcomResourcePack(DATA_FOLDER));
+		
+		//game->getScreen()->setFullscreen(true);
+		game->getScreen()->setScale(2);
+		//game->setState(new TestState(game));
+		game->setState(new StartState(game));
 		game->run();
 	}
 	catch(char* c)
