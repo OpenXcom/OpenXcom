@@ -24,7 +24,6 @@
 
 #include <iostream>
 
-//#define XCOM_TEST
 #define DATA_FOLDER "./DATA/"
 
 Game *game;

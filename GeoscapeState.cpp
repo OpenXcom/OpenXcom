@@ -58,6 +58,7 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _rotLon(0), _rotLat(0)
 	_timer = _btn5Secs;
 
 	_rotTimer = new Timer(25);
+	_gameTimer = new Timer(50);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
@@ -231,6 +232,7 @@ GeoscapeState::~GeoscapeState()
 void GeoscapeState::think()
 {
 	_rotTimer->think(this);
+	_gameTimer->think(this);
 }
 
 void GeoscapeState::globeRotate()
