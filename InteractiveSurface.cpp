@@ -78,6 +78,11 @@ void InteractiveSurface::handle(SDL_Event *ev, int scale, State *state)
 	}
 }
 
+void InteractiveSurface::focus()
+{
+	_isFocused = true;
+}
+
 void InteractiveSurface::mousePress(SDL_Event *ev, int scale, State *state)
 {
 	if (_press != NULL)

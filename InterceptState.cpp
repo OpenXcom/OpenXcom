@@ -22,16 +22,16 @@ InterceptState::InterceptState(Game *game) : State(game)
 {
 	// Create objects
 	_window = new Window(320, 140, 0, 30);
-	_btnCancel = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 288, 16, 16, 146);
-	_txtTitle = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 300, 16, 10, 46);
-	_txtCraft = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 86, 9, 14, 70);
-	_txtStatus = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 65, 9, 100, 70);
-	_txtBase = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 85, 9, 165, 70);
-	_txtWeapons = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 64, 16, 242, 62);
-	_lstCrafts = new TextList(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 300, 64, 14, 78);
+	_btnCancel = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 288, 16, 16, 146);
+	_txtTitle = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 300, 16, 10, 46);
+	_txtCraft = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 86, 9, 14, 70);
+	_txtStatus = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 65, 9, 100, 70);
+	_txtBase = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 85, 9, 165, 70);
+	_txtWeapons = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 64, 16, 242, 62);
+	_lstCrafts = new TextList(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 300, 64, 14, 78);
 	
 	// Set palette
-	_game->setPalette(_game->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
+	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
 
 	add(_window);
 	add(_btnCancel);
@@ -44,32 +44,32 @@ InterceptState::InterceptState(Game *game) : State(game)
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)+2);
-	_window->setBg(game->getSurface("BACK12.SCR"));
+	_window->setBg(game->getResourcePack()->getSurface("BACK12.SCR"));
 
 	_btnCancel->setColor(Palette::blockOffset(8)+8);
-	_btnCancel->setText(_game->getLanguage()->getString(STR_CANCEL));
+	_btnCancel->setText(_game->getResourcePack()->getLanguage()->getString(STR_CANCEL));
 	_btnCancel->onMouseClick((EventHandler)&InterceptState::btnCancelClick);
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
-	_txtTitle->setText(_game->getLanguage()->getString(STR_LAUNCH_INTERCEPTION));
+	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString(STR_LAUNCH_INTERCEPTION));
 
 	_txtCraft->setColor(Palette::blockOffset(8)+5);
-	_txtCraft->setText(_game->getLanguage()->getString(STR_CRAFT));
+	_txtCraft->setText(_game->getResourcePack()->getLanguage()->getString(STR_CRAFT));
 
 	_txtStatus->setColor(Palette::blockOffset(8)+5);
-	_txtStatus->setText(_game->getLanguage()->getString(STR_STATUS));
+	_txtStatus->setText(_game->getResourcePack()->getLanguage()->getString(STR_STATUS));
 
 	_txtBase->setColor(Palette::blockOffset(8)+5);
-	_txtBase->setText(_game->getLanguage()->getString(STR_BASE));
+	_txtBase->setText(_game->getResourcePack()->getLanguage()->getString(STR_BASE));
 
 	_txtWeapons->setColor(Palette::blockOffset(8)+5);
-	_txtWeapons->setText(_game->getLanguage()->getString(STR_WEAPONS_CREW_HWPS));
+	_txtWeapons->setText(_game->getResourcePack()->getLanguage()->getString(STR_WEAPONS_CREW_HWPS));
 
 	_lstCrafts->setColor(Palette::blockOffset(15)-1);
 	_lstCrafts->setColumns(4, 86, 65, 85, 64);
-	_lstCrafts->addRow(4, "SKYRANGER-1", _game->getLanguage()->getString(268).c_str(), "Base", "8/0/0");
+	_lstCrafts->addRow(4, "SKYRANGER-1", _game->getResourcePack()->getLanguage()->getString(268).c_str(), "Base", "8/0/0");
 	_lstCrafts->getCell(0, 1)->setColor(Palette::blockOffset(8)+10);
 }
 

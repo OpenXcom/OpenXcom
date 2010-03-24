@@ -21,6 +21,7 @@
 TextEdit::TextEdit(Font *big, Font *small, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _value("")
 {
 	_text = new Text(big, small, width, height, 0, 0);
+	_i = 0;
 }
 
 TextEdit::~TextEdit()
@@ -73,11 +74,6 @@ Uint8 TextEdit::getColor()
 	return _text->getColor();
 }
 
-void TextEdit::focus()
-{
-	_isFocused = true;
-}
-
 void TextEdit::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 {
 	Surface::setPalette(colors, firstcolor, ncolors);
@@ -88,9 +84,14 @@ void TextEdit::blit(Surface *surface)
 {
 	clear();
 
+	if (_isFocused)
+		_i = (_i + 1) % 30;
+	else
+		_i = 0;
+
 	stringstream ss;
 	ss << _value << "*";
-	if (_isFocused)
+	if (_isFocused && _i < 15)
 		_text->setText(ss.str());
 	else
 		_text->setText(_value);

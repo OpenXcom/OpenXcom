@@ -22,19 +22,19 @@ ResearchState::ResearchState(Game *game) : State(game)
 {
 	// Create objects
 	_window = new Window(320, 200, 0, 0);
-	_btnNew = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 148, 16, 8, 176);
-	_btnOk = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 148, 16, 164, 176);
-	_txtTitle = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 310, 13, 5, 8);
-	_txtAvailable = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 150, 9, 8, 24);
-	_txtAllocated = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 150, 9, 160, 24);
-	_txtSpace = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 300, 9, 8, 34);
-	_txtProject = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 106, 9, 8, 44);
-	_txtScientists = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 144, 9, 115, 44);
-	_txtProgress = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 64, 9, 250, 44);
-	_lstResearch = new TextList(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 300, 120, 10, 54);
+	_btnNew = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 148, 16, 8, 176);
+	_btnOk = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 148, 16, 164, 176);
+	_txtTitle = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 310, 13, 5, 8);
+	_txtAvailable = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 150, 9, 8, 24);
+	_txtAllocated = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 150, 9, 160, 24);
+	_txtSpace = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 300, 9, 8, 34);
+	_txtProject = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 106, 9, 8, 44);
+	_txtScientists = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 144, 9, 115, 44);
+	_txtProgress = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 64, 9, 250, 44);
+	_lstResearch = new TextList(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 300, 120, 10, 54);
 	
 	// Set palette
-	_game->setPalette(_game->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(1)), Palette::backPos, 16);
+	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(1)), Palette::backPos, 16);
 
 	add(_window);
 	add(_btnNew);
@@ -50,37 +50,37 @@ ResearchState::ResearchState(Game *game) : State(game)
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(13)+13);
-	_window->setBg(game->getSurface("BACK05.SCR"));
+	_window->setBg(game->getResourcePack()->getSurface("BACK05.SCR"));
 	
 	_btnNew->setColor(Palette::blockOffset(15)+9);
-	_btnNew->setText(_game->getLanguage()->getString(STR_NEW_PROJECT));
+	_btnNew->setText(_game->getResourcePack()->getLanguage()->getString(STR_NEW_PROJECT));
 
 	_btnOk->setColor(Palette::blockOffset(15)+9);
-	_btnOk->setText(_game->getLanguage()->getString(STR_OK));
+	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString(STR_OK));
 	_btnOk->onMouseClick((EventHandler)&ResearchState::btnOkClick);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setText(_game->getLanguage()->getString(STR_CURRENT_RESEARCH));
+	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString(STR_CURRENT_RESEARCH));
 
 	_txtAvailable->setColor(Palette::blockOffset(13)+10);
-	_txtAvailable->setText(_game->getLanguage()->getString(STR_SCIENTISTS_AVAILABLE));
+	_txtAvailable->setText(_game->getResourcePack()->getLanguage()->getString(STR_SCIENTISTS_AVAILABLE));
 
 	_txtAllocated->setColor(Palette::blockOffset(13)+10);
-	_txtAllocated->setText(_game->getLanguage()->getString(STR_SCIENTISTS_ALLOCATED));
+	_txtAllocated->setText(_game->getResourcePack()->getLanguage()->getString(STR_SCIENTISTS_ALLOCATED));
 
 	_txtSpace->setColor(Palette::blockOffset(13)+10);
-	_txtSpace->setText(_game->getLanguage()->getString(STR_LABORATORY_SPACE_AVAILABLE));
+	_txtSpace->setText(_game->getResourcePack()->getLanguage()->getString(STR_LABORATORY_SPACE_AVAILABLE));
 
 	_txtProject->setColor(Palette::blockOffset(13)+10);
-	_txtProject->setText(_game->getLanguage()->getString(STR_RESEARCH_PROJECT));
+	_txtProject->setText(_game->getResourcePack()->getLanguage()->getString(STR_RESEARCH_PROJECT));
 
 	_txtScientists->setColor(Palette::blockOffset(13)+10);
-	_txtScientists->setText(_game->getLanguage()->getString(STR_SCIENTISTS_ALLOCATED_UC));
+	_txtScientists->setText(_game->getResourcePack()->getLanguage()->getString(STR_SCIENTISTS_ALLOCATED_UC));
 
 	_txtProgress->setColor(Palette::blockOffset(13)+10);
-	_txtProgress->setText(_game->getLanguage()->getString(STR_PROGRESS));
+	_txtProgress->setText(_game->getResourcePack()->getLanguage()->getString(STR_PROGRESS));
 
 	_lstResearch->setColor(Palette::blockOffset(15)+6);
 	_lstResearch->setColumns(3, 158, 82, 60);

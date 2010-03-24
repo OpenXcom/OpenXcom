@@ -16,31 +16,19 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM__ABANDONGAMESTATE_H
-#define OPENXCOM__ABANDONGAMESTATE_H
+#ifndef OPENXCOM__XCOMRESOURCEPACK_H
+#define OPENXCOM__XCOMRESOURCEPACK_H
 
 #include <sstream>
-#include "State_Interactive.h"
-#include "LangString.h"
-#include "Palette.h"
-#include "Button.h"
-#include "Window.h"
-#include "Text.h"
-#include "MainMenuState.h"
-#include "OptionsState.h"
+#include "ResourcePack.h"
 
-class AbandonGameState : public State
+class XcomResourcePack : public ResourcePack
 {
 private:
-	Button *_btnYes, *_btnNo;
-	Window *_window;
-	Text *_txtTitle;
+
 public:
-	AbandonGameState(Game *game);
-	~AbandonGameState();
-	void think();
-	void btnYesClick(SDL_Event *ev, int scale);
-	void btnNoClick(SDL_Event *ev, int scale);
+	XcomResourcePack(string folder);
+	~XcomResourcePack();
 };
 
 #endif

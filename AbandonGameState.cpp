@@ -22,12 +22,12 @@ AbandonGameState::AbandonGameState(Game *game) : State(game)
 {
 	// Create objects
 	_window = new Window(216, 160, 20, 20);
-	_btnYes = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 50, 20, 38, 140);
-	_btnNo = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 50, 20, 168, 140);
-	_txtTitle = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 206, 15, 25, 70);
+	_btnYes = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 50, 20, 38, 140);
+	_btnNo = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 50, 20, 168, 140);
+	_txtTitle = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 206, 15, 25, 70);
 	
 	// Set palette
-	_game->setPalette(_game->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
 
 	add(_window);
 	add(_btnYes);
@@ -36,21 +36,21 @@ AbandonGameState::AbandonGameState(Game *game) : State(game)
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)+2);
-	_window->setBg(game->getSurface("BACK01.SCR"));
+	_window->setBg(game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_btnYes->setColor(Palette::blockOffset(15)+2);
-	_btnYes->setText(_game->getLanguage()->getString(STR_YES));
+	_btnYes->setText(_game->getResourcePack()->getLanguage()->getString(STR_YES));
 	_btnYes->onMouseClick((EventHandler)&AbandonGameState::btnYesClick);
 
 	_btnNo->setColor(Palette::blockOffset(15)+2);
-	_btnNo->setText(_game->getLanguage()->getString(STR_NO));
+	_btnNo->setText(_game->getResourcePack()->getLanguage()->getString(STR_NO));
 	_btnNo->onMouseClick((EventHandler)&AbandonGameState::btnNoClick);
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
 	stringstream ss;
-	ss << _game->getLanguage()->getString(STR_ABANDON_GAME) << "?";
+	ss << _game->getResourcePack()->getLanguage()->getString(STR_ABANDON_GAME) << "?";
 	_txtTitle->setText(ss.str());
 }
 

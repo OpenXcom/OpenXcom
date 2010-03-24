@@ -22,15 +22,15 @@ FundingState::FundingState(Game *game) : State(game)
 {
 	// Create objects
 	_window = new Window(320, 200, 0, 0);
-	_btnOk = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 50, 12, 135, 180);
-	_txtTitle = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 280, 16, 32, 8);
-	_txtCountry = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 100, 16, 32, 24);
-	_txtFunding = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 60, 16, 140, 24);
-	_txtChange = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 120, 16, 200, 24);
-	_lstCountries = new TextList(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 280, 136, 32, 40);
+	_btnOk = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 50, 12, 135, 180);
+	_txtTitle = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 280, 16, 32, 8);
+	_txtCountry = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 100, 16, 32, 24);
+	_txtFunding = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 60, 16, 140, 24);
+	_txtChange = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 120, 16, 200, 24);
+	_lstCountries = new TextList(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 280, 136, 32, 40);
 	
 	// Set palette
-	_game->setPalette(_game->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
 
 	add(_window);
 	add(_btnOk);
@@ -42,33 +42,33 @@ FundingState::FundingState(Game *game) : State(game)
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)+2);
-	_window->setBg(game->getSurface("BACK13.SCR"));
+	_window->setBg(game->getResourcePack()->getSurface("BACK13.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(15)+2);
-	_btnOk->setText(_game->getLanguage()->getString(STR_OK));
+	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString(STR_OK));
 	_btnOk->onMouseClick((EventHandler)&FundingState::btnOkClick);
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
-	_txtTitle->setText(_game->getLanguage()->getString(STR_INTERNATIONAL_RELATIONS));
+	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString(STR_INTERNATIONAL_RELATIONS));
 
 	_txtCountry->setColor(Palette::blockOffset(15)-1);
 	_txtCountry->setBig();
-	_txtCountry->setText(_game->getLanguage()->getString(STR_COUNTRY));
+	_txtCountry->setText(_game->getResourcePack()->getLanguage()->getString(STR_COUNTRY));
 
 	_txtFunding->setColor(Palette::blockOffset(15)-1);
 	_txtFunding->setBig();
-	_txtFunding->setText(_game->getLanguage()->getString(STR_FUNDING));
+	_txtFunding->setText(_game->getResourcePack()->getLanguage()->getString(STR_FUNDING));
 
 	_txtChange->setColor(Palette::blockOffset(15)-1);
 	_txtChange->setBig();
-	_txtChange->setText(_game->getLanguage()->getString(STR_CHANGE));
+	_txtChange->setText(_game->getResourcePack()->getLanguage()->getString(STR_CHANGE));
 
 	_lstCountries->setColor(Palette::blockOffset(15)-1);
 	_lstCountries->setColumns(3, 108, 100, 72);
 	_lstCountries->setDot(true);
-	_lstCountries->addRow(3, _game->getLanguage()->getString(601).c_str(), "$800 000", "0");
-	_lstCountries->addRow(3, _game->getLanguage()->getString(602).c_str(), "$300 000", "0");
+	_lstCountries->addRow(3, _game->getResourcePack()->getLanguage()->getString(601).c_str(), "$800 000", "0");
+	_lstCountries->addRow(3, _game->getResourcePack()->getLanguage()->getString(602).c_str(), "$300 000", "0");
 }
 
 FundingState::~FundingState()

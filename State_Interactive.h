@@ -64,6 +64,7 @@ public:
 	InteractiveSurface(int width, int height, int x, int y);
 	virtual ~InteractiveSurface();
 	virtual void handle(SDL_Event *ev, int scale, State *state);
+	void focus();
 	void onMouseClick(EventHandler handler);
 	void onMousePress(EventHandler handler);
 	void onMouseRelease(EventHandler handler);

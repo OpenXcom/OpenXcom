@@ -22,18 +22,18 @@ PurchaseState::PurchaseState(Game *game) : State(game)
 {
 	// Create objects
 	_window = new Window(320, 200, 0, 0);
-	_btnOk = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 148, 16, 8, 176);
-	_btnCancel = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 148, 16, 164, 176);
-	_txtTitle = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 310, 13, 5, 8);
-	_txtFunds = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 150, 9, 10, 24);
-	_txtPurchases = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 150, 9, 160, 24);
-	_txtItem = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 140, 9, 10, 32);
-	_txtCost = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 102, 9, 152, 32);
-	_txtQuantity = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 60, 9, 256, 32);
-	_lstItems = new TextList(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 300, 128, 10, 40);
+	_btnOk = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 148, 16, 8, 176);
+	_btnCancel = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 148, 16, 164, 176);
+	_txtTitle = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 310, 13, 5, 8);
+	_txtFunds = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 150, 9, 10, 24);
+	_txtPurchases = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 150, 9, 160, 24);
+	_txtItem = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 140, 9, 10, 32);
+	_txtCost = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 102, 9, 152, 32);
+	_txtQuantity = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 60, 9, 256, 32);
+	_lstItems = new TextList(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 300, 128, 10, 40);
 	
 	// Set palette
-	_game->setPalette(_game->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
 
 	add(_window);
 	add(_btnOk);
@@ -48,35 +48,35 @@ PurchaseState::PurchaseState(Game *game) : State(game)
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(13)+13);
-	_window->setBg(game->getSurface("BACK13.SCR"));
+	_window->setBg(game->getResourcePack()->getSurface("BACK13.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(13)+13);
-	_btnOk->setText(_game->getLanguage()->getString(STR_OK));
+	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString(STR_OK));
 	_btnOk->onMouseClick((EventHandler)&PurchaseState::btnOkClick);
 
 	_btnCancel->setColor(Palette::blockOffset(13)+13);
-	_btnCancel->setText(_game->getLanguage()->getString(STR_CANCEL));
+	_btnCancel->setText(_game->getResourcePack()->getLanguage()->getString(STR_CANCEL));
 	_btnCancel->onMouseClick((EventHandler)&PurchaseState::btnCancelClick);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setText(_game->getLanguage()->getString(STR_PURCHASE_HIRE_PERSONNEL));
+	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString(STR_PURCHASE_HIRE_PERSONNEL));
 
 	_txtFunds->setColor(Palette::blockOffset(13)+10);
-	_txtFunds->setText(_game->getLanguage()->getString(STR_CURRENT_FUNDS));
+	_txtFunds->setText(_game->getResourcePack()->getLanguage()->getString(STR_CURRENT_FUNDS));
 
 	_txtPurchases->setColor(Palette::blockOffset(13)+10);
-	_txtPurchases->setText(_game->getLanguage()->getString(STR_COST_OF_PURCHASES));
+	_txtPurchases->setText(_game->getResourcePack()->getLanguage()->getString(STR_COST_OF_PURCHASES));
 
 	_txtItem->setColor(Palette::blockOffset(13)+10);
-	_txtItem->setText(_game->getLanguage()->getString(STR_ITEM));
+	_txtItem->setText(_game->getResourcePack()->getLanguage()->getString(STR_ITEM));
 
 	_txtCost->setColor(Palette::blockOffset(13)+10);
-	_txtCost->setText(_game->getLanguage()->getString(STR_COST_PER_UNIT_UC));
+	_txtCost->setText(_game->getResourcePack()->getLanguage()->getString(STR_COST_PER_UNIT_UC));
 
 	_txtQuantity->setColor(Palette::blockOffset(13)+10);
-	_txtQuantity->setText(_game->getLanguage()->getString(STR_QUANTITY));
+	_txtQuantity->setText(_game->getResourcePack()->getLanguage()->getString(STR_QUANTITY));
 
 	_lstItems->setColor(Palette::blockOffset(13)+10);
 	_lstItems->setColumns(3, 162, 92, 40);

@@ -21,24 +21,24 @@
 BasescapeState::BasescapeState(Game *game) : State(game)
 {
 	// Create objects
-	_txtFacility = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 192, 9, 0, 0);
-	_txtBase = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 127, 17, 193, 0);
-	_txtLocation = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 126, 9, 194, 16);
-	_txtFunds = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 126, 9, 194, 24);
-	_btnNewBase = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 128, 12, 192, 58);
-	_btnBaseInfo = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 128, 12, 192, 71);
-	_btnSoldiers = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 128, 12, 192, 84);
-	_btnCrafts = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 128, 12, 192, 97);
-	_btnFacilities = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 128, 12, 192, 110);
-	_btnResearch = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 128, 12, 192, 123);
-	_btnManufacture = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 128, 12, 192, 136);
-	_btnTransfer = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 128, 12, 192, 149);
-	_btnPurchase = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 128, 12, 192, 162);
-	_btnSell = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 128, 12, 192, 175);
-	_btnGeoscape = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 128, 12, 192, 188);
+	_txtFacility = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 192, 9, 0, 0);
+	_txtBase = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 127, 17, 193, 0);
+	_txtLocation = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 126, 9, 194, 16);
+	_txtFunds = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 126, 9, 194, 24);
+	_btnNewBase = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 128, 12, 192, 58);
+	_btnBaseInfo = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 128, 12, 192, 71);
+	_btnSoldiers = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 128, 12, 192, 84);
+	_btnCrafts = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 128, 12, 192, 97);
+	_btnFacilities = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 128, 12, 192, 110);
+	_btnResearch = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 128, 12, 192, 123);
+	_btnManufacture = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 128, 12, 192, 136);
+	_btnTransfer = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 128, 12, 192, 149);
+	_btnPurchase = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 128, 12, 192, 162);
+	_btnSell = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 128, 12, 192, 175);
+	_btnGeoscape = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 128, 12, 192, 188);
 	
 	// Set palette
-	_game->setPalette(_game->getPalette("PALETTES.DAT_1")->getColors());
+	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
 
 	add(_txtFacility);
 	add(_txtBase);
@@ -68,47 +68,47 @@ BasescapeState::BasescapeState(Game *game) : State(game)
 	_txtLocation->setText("Some Location");
 
 	_txtFunds->setColor(Palette::blockOffset(13)+10);
-	_txtFunds->setText(_game->getLanguage()->getString(STR_FUNDS_));
+	_txtFunds->setText(_game->getResourcePack()->getLanguage()->getString(STR_FUNDS_));
 	
 	_btnNewBase->setColor(Palette::blockOffset(13)+8);
-	_btnNewBase->setText(_game->getLanguage()->getString(STR_BUILD_NEW_BASE));
+	_btnNewBase->setText(_game->getResourcePack()->getLanguage()->getString(STR_BUILD_NEW_BASE));
 
 	_btnBaseInfo->setColor(Palette::blockOffset(13)+8);
-	_btnBaseInfo->setText(_game->getLanguage()->getString(STR_BASE_INFORMATION));
+	_btnBaseInfo->setText(_game->getResourcePack()->getLanguage()->getString(STR_BASE_INFORMATION));
 	_btnBaseInfo->onMouseClick((EventHandler)&BasescapeState::btnBaseInfoClick);
 
 	_btnSoldiers->setColor(Palette::blockOffset(13)+8);
-	_btnSoldiers->setText(_game->getLanguage()->getString(STR_SOLDIERS_UC));
+	_btnSoldiers->setText(_game->getResourcePack()->getLanguage()->getString(STR_SOLDIERS_UC));
 	_btnSoldiers->onMouseClick((EventHandler)&BasescapeState::btnSoldiersClick);
 
 	_btnCrafts->setColor(Palette::blockOffset(13)+8);
-	_btnCrafts->setText(_game->getLanguage()->getString(STR_EQUIP_CRAFT));
+	_btnCrafts->setText(_game->getResourcePack()->getLanguage()->getString(STR_EQUIP_CRAFT));
 	_btnCrafts->onMouseClick((EventHandler)&BasescapeState::btnCraftsClick);
 
 	_btnFacilities->setColor(Palette::blockOffset(13)+8);
-	_btnFacilities->setText(_game->getLanguage()->getString(STR_BUILD_FACILITIES));
+	_btnFacilities->setText(_game->getResourcePack()->getLanguage()->getString(STR_BUILD_FACILITIES));
 
 	_btnResearch->setColor(Palette::blockOffset(13)+8);
-	_btnResearch->setText(_game->getLanguage()->getString(STR_RESEARCH));
+	_btnResearch->setText(_game->getResourcePack()->getLanguage()->getString(STR_RESEARCH));
 	_btnResearch->onMouseClick((EventHandler)&BasescapeState::btnResearchClick);
 
 	_btnManufacture->setColor(Palette::blockOffset(13)+8);
-	_btnManufacture->setText(_game->getLanguage()->getString(STR_MANUFACTURE));
+	_btnManufacture->setText(_game->getResourcePack()->getLanguage()->getString(STR_MANUFACTURE));
 	_btnManufacture->onMouseClick((EventHandler)&BasescapeState::btnManufactureClick);
 
 	_btnTransfer->setColor(Palette::blockOffset(13)+8);
-	_btnTransfer->setText(_game->getLanguage()->getString(STR_TRANSFER));
+	_btnTransfer->setText(_game->getResourcePack()->getLanguage()->getString(STR_TRANSFER));
 
 	_btnPurchase->setColor(Palette::blockOffset(13)+8);
-	_btnPurchase->setText(_game->getLanguage()->getString(STR_PURCHASE_RECRUIT));
+	_btnPurchase->setText(_game->getResourcePack()->getLanguage()->getString(STR_PURCHASE_RECRUIT));
 	_btnPurchase->onMouseClick((EventHandler)&BasescapeState::btnPurchaseClick);
 
 	_btnSell->setColor(Palette::blockOffset(13)+8);
-	_btnSell->setText(_game->getLanguage()->getString(STR_SELL_SACK_UC));
+	_btnSell->setText(_game->getResourcePack()->getLanguage()->getString(STR_SELL_SACK_UC));
 	_btnSell->onMouseClick((EventHandler)&BasescapeState::btnSellClick);
 
 	_btnGeoscape->setColor(Palette::blockOffset(13)+8);
-	_btnGeoscape->setText(_game->getLanguage()->getString(STR_GEOSCAPE));
+	_btnGeoscape->setText(_game->getResourcePack()->getLanguage()->getString(STR_GEOSCAPE));
 	_btnGeoscape->onMouseClick((EventHandler)&BasescapeState::btnGeoscapeClick);
 }
 

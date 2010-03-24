@@ -19,6 +19,7 @@
 #ifndef OPENXCOM__TEXTEDIT_H
 #define OPENXCOM__TEXTEDIT_H
 
+#include <sstream>
 #include "SDL.h"
 #include "State_Interactive.h"
 #include "Text.h"
@@ -28,6 +29,7 @@ class TextEdit : public InteractiveSurface
 private:
 	Text *_text;
 	string _value;
+	int _i;
 
 	void mousePress(SDL_Event *ev, int scale, State *state);
 	void mouseRelease(SDL_Event *ev, int scale, State *state);
@@ -45,7 +47,6 @@ public:
 	void setAlign(TextAlign align);
 	void setColor(Uint8 color);
 	Uint8 getColor();
-	void focus();
 	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
 	void blit(Surface *surface);
 	void handle(SDL_Event *ev, int scale, State *state);

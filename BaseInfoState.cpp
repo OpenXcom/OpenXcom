@@ -22,48 +22,48 @@ BaseInfoState::BaseInfoState(Game *game) : State(game)
 {
 	// Create objects
 	_bg = new Surface(320, 200, 0, 0);
-	_btnOk = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 30, 14, 10, 180);
-	_btnTransfers = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 80, 14, 46, 180);
-	_btnStores = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 80, 14, 132, 180);
-	_btnMonthlyCosts = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 92, 14, 218, 180);
+	_btnOk = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 30, 14, 10, 180);
+	_btnTransfers = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 80, 14, 46, 180);
+	_btnStores = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 80, 14, 132, 180);
+	_btnMonthlyCosts = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 92, 14, 218, 180);
 	
-	_edtBase = new TextEdit(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 170, 16, 8, 8);
-	_txtPersonnel = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 300, 9, 8, 30);
-	_txtSoldiers = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 114, 9, 8, 41);
-	_numSoldiers = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 40, 9, 126, 41);
+	_edtBase = new TextEdit(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 170, 16, 8, 8);
+	_txtPersonnel = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 300, 9, 8, 30);
+	_txtSoldiers = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 114, 9, 8, 41);
+	_numSoldiers = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 40, 9, 126, 41);
 	_barSoldiers = new Bar(150, 5, 165, 43);
-	_txtEngineers = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 114, 9, 8, 51);
-	_numEngineers = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 40, 9, 126, 51);
+	_txtEngineers = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 114, 9, 8, 51);
+	_numEngineers = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 40, 9, 126, 51);
 	_barEngineers = new Bar(150, 5, 165, 53);
-	_txtScientists = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 114, 9, 8, 61);
-	_numScientists = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 40, 9, 126, 61);
+	_txtScientists = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 114, 9, 8, 61);
+	_numScientists = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 40, 9, 126, 61);
 	_barScientists = new Bar(150, 5, 165, 63);
 
-	_txtSpace = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 300, 9, 8, 72);
-	_txtQuarters = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 114, 9, 8, 83);
-	_numQuarters = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 40, 9, 126, 83);
+	_txtSpace = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 300, 9, 8, 72);
+	_txtQuarters = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 114, 9, 8, 83);
+	_numQuarters = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 40, 9, 126, 83);
 	_barQuarters = new Bar(150, 5, 165, 85);
-	_txtStores = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 114, 9, 8, 93);
-	_numStores = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 40, 9, 126, 93);
+	_txtStores = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 114, 9, 8, 93);
+	_numStores = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 40, 9, 126, 93);
 	_barStores = new Bar(150, 5, 165, 95);
-	_txtLaboratories = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 114, 9, 8, 103);
-	_numLaboratories = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 40, 9, 126, 103);
+	_txtLaboratories = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 114, 9, 8, 103);
+	_numLaboratories = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 40, 9, 126, 103);
 	_barLaboratories = new Bar(150, 5, 165, 105);
-	_txtWorkshops = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 114, 9, 8, 113);
-	_numWorkshops = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 40, 9, 126, 113);
+	_txtWorkshops = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 114, 9, 8, 113);
+	_numWorkshops = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 40, 9, 126, 113);
 	_barWorkshops = new Bar(150, 5, 165, 115);
-	_txtHangars = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 114, 9, 8, 123);
-	_numHangars = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 40, 9, 126, 123);
+	_txtHangars = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 114, 9, 8, 123);
+	_numHangars = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 40, 9, 126, 123);
 	_barHangars = new Bar(150, 5, 165, 125);
 
-	_txtDefence = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 114, 9, 8, 138);
-	_numDefence = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 40, 9, 126, 138);
+	_txtDefence = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 114, 9, 8, 138);
+	_numDefence = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 40, 9, 126, 138);
 	_barDefence = new Bar(150, 5, 165, 140);
-	_txtShortRange = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 130, 9, 8, 153);
-	_numShortRange = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 40, 9, 126, 153);
+	_txtShortRange = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 130, 9, 8, 153);
+	_numShortRange = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 40, 9, 126, 153);
 	_barShortRange = new Bar(150, 5, 165, 155);
-	_txtLongRange = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 130, 9, 8, 163);
-	_numLongRange = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 40, 9, 126, 163);
+	_txtLongRange = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 130, 9, 8, 163);
+	_numLongRange = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 40, 9, 126, 163);
 	_barLongRange = new Bar(150, 5, 165, 165);
 	
 	add(_bg);
@@ -113,20 +113,20 @@ BaseInfoState::BaseInfoState(Game *game) : State(game)
 	add(_barLongRange);
 	
 	// Set up objects
-	_game->getSurface("BACK07.SCR")->blit(_bg);
+	_game->getResourcePack()->getSurface("BACK07.SCR")->blit(_bg);
 
 	_btnOk->setColor(Palette::blockOffset(15)+9);
-	_btnOk->setText(_game->getLanguage()->getString(STR_OK));
+	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString(STR_OK));
 	_btnOk->onMouseClick((EventHandler)&BaseInfoState::btnOkClick);
 
 	_btnTransfers->setColor(Palette::blockOffset(15)+9);
-	_btnTransfers->setText(_game->getLanguage()->getString(STR_TRANSFERS));
+	_btnTransfers->setText(_game->getResourcePack()->getLanguage()->getString(STR_TRANSFERS));
 
 	_btnStores->setColor(Palette::blockOffset(15)+9);
-	_btnStores->setText(_game->getLanguage()->getString(STR_STORES_UC));
+	_btnStores->setText(_game->getResourcePack()->getLanguage()->getString(STR_STORES_UC));
 
 	_btnMonthlyCosts->setColor(Palette::blockOffset(15)+9);
-	_btnMonthlyCosts->setText(_game->getLanguage()->getString(STR_MONTHLY_COSTS));
+	_btnMonthlyCosts->setText(_game->getResourcePack()->getLanguage()->getString(STR_MONTHLY_COSTS));
 
 	_edtBase->setColor(Palette::blockOffset(15)+1);
 	_edtBase->setBig();
@@ -134,10 +134,10 @@ BaseInfoState::BaseInfoState(Game *game) : State(game)
 
 
 	_txtPersonnel->setColor(Palette::blockOffset(15)+1);
-	_txtPersonnel->setText(_game->getLanguage()->getString(STR_PERSONNEL_AVAILABLE));
+	_txtPersonnel->setText(_game->getResourcePack()->getLanguage()->getString(STR_PERSONNEL_AVAILABLE));
 
 	_txtSoldiers->setColor(Palette::blockOffset(13)+5);
-	_txtSoldiers->setText(_game->getLanguage()->getString(STR_SOLDIERS));
+	_txtSoldiers->setText(_game->getResourcePack()->getLanguage()->getString(STR_SOLDIERS));
 
 	_numSoldiers->setColor(Palette::blockOffset(13));
 	_numSoldiers->setText("0:0");
@@ -148,7 +148,7 @@ BaseInfoState::BaseInfoState(Game *game) : State(game)
 	_barSoldiers->setValue(50.0);
 
 	_txtEngineers->setColor(Palette::blockOffset(13)+5);
-	_txtEngineers->setText(_game->getLanguage()->getString(STR_ENGINEERS));
+	_txtEngineers->setText(_game->getResourcePack()->getLanguage()->getString(STR_ENGINEERS));
 
 	_numEngineers->setColor(Palette::blockOffset(13));
 	_numEngineers->setText("0:0");
@@ -159,7 +159,7 @@ BaseInfoState::BaseInfoState(Game *game) : State(game)
 	_barEngineers->setValue(50.0);
 
 	_txtScientists->setColor(Palette::blockOffset(13)+5);
-	_txtScientists->setText(_game->getLanguage()->getString(STR_SCIENTISTS));
+	_txtScientists->setText(_game->getResourcePack()->getLanguage()->getString(STR_SCIENTISTS));
 
 	_numScientists->setColor(Palette::blockOffset(13));
 	_numScientists->setText("0:0");
@@ -171,10 +171,10 @@ BaseInfoState::BaseInfoState(Game *game) : State(game)
 
 
 	_txtSpace->setColor(Palette::blockOffset(15)+1);
-	_txtSpace->setText(_game->getLanguage()->getString(STR_SPACE_USED));
+	_txtSpace->setText(_game->getResourcePack()->getLanguage()->getString(STR_SPACE_USED));
 
 	_txtQuarters->setColor(Palette::blockOffset(13)+5);
-	_txtQuarters->setText(_game->getLanguage()->getString(STR_LIVING_QUARTERS));
+	_txtQuarters->setText(_game->getResourcePack()->getLanguage()->getString(STR_LIVING_QUARTERS));
 
 	_numQuarters->setColor(Palette::blockOffset(13));
 	_numQuarters->setText("0:0");
@@ -185,7 +185,7 @@ BaseInfoState::BaseInfoState(Game *game) : State(game)
 	_barQuarters->setValue(50.0);
 
 	_txtStores->setColor(Palette::blockOffset(13)+5);
-	_txtStores->setText(_game->getLanguage()->getString(STR_STORES));
+	_txtStores->setText(_game->getResourcePack()->getLanguage()->getString(STR_STORES));
 
 	_numStores->setColor(Palette::blockOffset(13));
 	_numStores->setText("0:0");
@@ -196,7 +196,7 @@ BaseInfoState::BaseInfoState(Game *game) : State(game)
 	_barStores->setValue(50.0);
 
 	_txtLaboratories->setColor(Palette::blockOffset(13)+5);
-	_txtLaboratories->setText(_game->getLanguage()->getString(STR_LABORATORIES));
+	_txtLaboratories->setText(_game->getResourcePack()->getLanguage()->getString(STR_LABORATORIES));
 
 	_numLaboratories->setColor(Palette::blockOffset(13));
 	_numLaboratories->setText("0:0");
@@ -207,7 +207,7 @@ BaseInfoState::BaseInfoState(Game *game) : State(game)
 	_barLaboratories->setValue(50.0);
 
 	_txtWorkshops->setColor(Palette::blockOffset(13)+5);
-	_txtWorkshops->setText(_game->getLanguage()->getString(STR_WORK_SHOPS));
+	_txtWorkshops->setText(_game->getResourcePack()->getLanguage()->getString(STR_WORK_SHOPS));
 
 	_numWorkshops->setColor(Palette::blockOffset(13));
 	_numWorkshops->setText("0:0");
@@ -218,7 +218,7 @@ BaseInfoState::BaseInfoState(Game *game) : State(game)
 	_barWorkshops->setValue(50.0);
 
 	_txtHangars->setColor(Palette::blockOffset(13)+5);
-	_txtHangars->setText(_game->getLanguage()->getString(STR_HANGARS));
+	_txtHangars->setText(_game->getResourcePack()->getLanguage()->getString(STR_HANGARS));
 
 	_numHangars->setColor(Palette::blockOffset(13));
 	_numHangars->setText("0:0");
@@ -230,7 +230,7 @@ BaseInfoState::BaseInfoState(Game *game) : State(game)
 	
 
 	_txtDefence->setColor(Palette::blockOffset(13)+5);
-	_txtDefence->setText(_game->getLanguage()->getString(STR_DEFENCE_STRENGTH));
+	_txtDefence->setText(_game->getResourcePack()->getLanguage()->getString(STR_DEFENCE_STRENGTH));
 
 	_numDefence->setColor(Palette::blockOffset(13));
 	_numDefence->setText("0");
@@ -241,7 +241,7 @@ BaseInfoState::BaseInfoState(Game *game) : State(game)
 	_barDefence->setValue(200.0);
 
 	_txtShortRange->setColor(Palette::blockOffset(13)+5);
-	_txtShortRange->setText(_game->getLanguage()->getString(STR_SHORT_RANGE_DETECTION));
+	_txtShortRange->setText(_game->getResourcePack()->getLanguage()->getString(STR_SHORT_RANGE_DETECTION));
 
 	_numShortRange->setColor(Palette::blockOffset(13));
 	_numShortRange->setText("0");
@@ -252,7 +252,7 @@ BaseInfoState::BaseInfoState(Game *game) : State(game)
 	_barShortRange->setValue(2.0);
 
 	_txtLongRange->setColor(Palette::blockOffset(13)+5);
-	_txtLongRange->setText(_game->getLanguage()->getString(STR_LONG_RANGE_DETECTION));
+	_txtLongRange->setText(_game->getResourcePack()->getLanguage()->getString(STR_LONG_RANGE_DETECTION));
 
 	_numLongRange->setColor(Palette::blockOffset(13));
 	_numLongRange->setText("0");

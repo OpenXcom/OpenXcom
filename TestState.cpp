@@ -22,15 +22,15 @@ TestState::TestState(Game *game) : State(game)
 {
 	// Create objects
 	_window = new Window(300, 180, 10, 10);
-	_text = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 280, 160, 20, 50);
-	_button = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 100, 20, 110, 150);
-	_list = new TextList(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 300, 180, 10, 10);
-	_set = game->getSurfaceSet("BASEBITS.PCK");
+	_text = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 280, 160, 20, 50);
+	_button = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 100, 20, 110, 150);
+	_list = new TextList(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 300, 180, 10, 10);
+	_set = game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
 	_set->getFrame(1);
 	
 	// Set palette
-	_game->setPalette(_game->getPalette("PALETTES.DAT_1")->getColors());
-	_game->setPalette(_game->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
+	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
+	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
 
 	add(_window);
 	add(_button);
@@ -39,7 +39,7 @@ TestState::TestState(Game *game) : State(game)
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)+4);
-	_window->setBg(game->getSurface("BACK04.SCR"));
+	_window->setBg(game->getResourcePack()->getSurface("BACK04.SCR"));
 
 	_button->setColor(Palette::blockOffset(15)+4);
 	_button->setText("LOLOLOL");
@@ -48,8 +48,8 @@ TestState::TestState(Game *game) : State(game)
 	_text->setBig();
 	//_text->setWordWrap(false);
 	_text->setAlign(ALIGN_CENTER);
-	//_game->setLanguage("GERMAN.DAT");
-	_text->setText(_game->getLanguage()->getString(251));
+	//_game->getResourcePack()->setLanguage("GERMAN.DAT");
+	_text->setText(_game->getResourcePack()->getLanguage()->getString(251));
 
 	_list->setColor(Palette::blockOffset(15)+1);
 	_list->setColumns(3, 100, 50, 100);
@@ -68,7 +68,7 @@ TestState::~TestState()
 void TestState::think()
 {
 	/*
-	_text->setText(_game->getLanguage()->getString(_i));
+	_text->setText(_game->getResourcePack()->getLanguage()->getString(_i));
 	_i++;
 	*/
 }

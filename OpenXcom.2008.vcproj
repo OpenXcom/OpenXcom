@@ -179,18 +179,6 @@
 	</References>
 	<Files>
 		<Filter
-			Name="Rules"
-			>
-			<File
-				RelativePath=".\Ruleset.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Ruleset.h"
-				>
-			</File>
-		</Filter>
-		<Filter
 			Name="Interface"
 			>
 			<File
@@ -223,22 +211,6 @@
 			</File>
 			<File
 				RelativePath=".\CustomButton.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Globe.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Globe.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Polygon.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Polygon.h"
 				>
 			</File>
 			<File
@@ -507,16 +479,64 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="Game"
+			Name="Xcom"
 			>
 			<File
-				RelativePath=".\SavedGame.cpp"
+				RelativePath=".\Globe.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\SavedGame.h"
+				RelativePath=".\Globe.h"
 				>
 			</File>
+			<File
+				RelativePath=".\Polygon.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Polygon.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ResourcePack.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ResourcePack.h"
+				>
+			</File>
+			<File
+				RelativePath=".\XcomResourcePack.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\XcomResourcePack.h"
+				>
+			</File>
+			<Filter
+				Name="Rules"
+				>
+				<File
+					RelativePath=".\Ruleset.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Ruleset.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Game"
+				>
+				<File
+					RelativePath=".\SavedGame.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SavedGame.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<File
 			RelativePath=".\main.cpp"

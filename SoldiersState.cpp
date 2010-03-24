@@ -22,15 +22,15 @@ SoldiersState::SoldiersState(Game *game) : State(game)
 {
 	// Create objects
 	_window = new Window(320, 200, 0, 0);
-	_btnOk = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 288, 16, 16, 176);
-	_txtTitle = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 310, 13, 5, 8);
-	_txtName = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 114, 9, 16, 32);
-	_txtRank = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 102, 9, 130, 32);
-	_txtCraft = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 82, 9, 232, 32);
-	_lstSoldiers = new TextList(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 298, 136, 16, 40);
+	_btnOk = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 288, 16, 16, 176);
+	_txtTitle = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 310, 13, 5, 8);
+	_txtName = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 114, 9, 16, 32);
+	_txtRank = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 102, 9, 130, 32);
+	_txtCraft = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 82, 9, 232, 32);
+	_lstSoldiers = new TextList(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 298, 136, 16, 40);
 	
 	// Set palette
-	_game->setPalette(_game->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
+	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
 
 	add(_window);
 	add(_btnOk);
@@ -42,29 +42,29 @@ SoldiersState::SoldiersState(Game *game) : State(game)
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)+4);
-	_window->setBg(game->getSurface("BACK02.SCR"));
+	_window->setBg(game->getResourcePack()->getSurface("BACK02.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(13)+13);
-	_btnOk->setText(_game->getLanguage()->getString(STR_OK));
+	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString(STR_OK));
 	_btnOk->onMouseClick((EventHandler)&SoldiersState::btnOkClick);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setText(_game->getLanguage()->getString(803));
+	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString(803));
 
 	_txtName->setColor(Palette::blockOffset(15)+1);
-	_txtName->setText(_game->getLanguage()->getString(STR_NAME));
+	_txtName->setText(_game->getResourcePack()->getLanguage()->getString(STR_NAME));
 
 	_txtRank->setColor(Palette::blockOffset(15)+1);
-	_txtRank->setText(_game->getLanguage()->getString(STR_RANK));
+	_txtRank->setText(_game->getResourcePack()->getLanguage()->getString(STR_RANK));
 
 	_txtCraft->setColor(Palette::blockOffset(15)+1);
-	_txtCraft->setText(_game->getLanguage()->getString(337));
+	_txtCraft->setText(_game->getResourcePack()->getLanguage()->getString(337));
 
 	_lstSoldiers->setColor(Palette::blockOffset(13)+10);
 	_lstSoldiers->setColumns(3, 114, 102, 82);
-	_lstSoldiers->addRow(3, "Some Guy", _game->getLanguage()->getString(327).c_str(), "SKYRANGER-1");
+	_lstSoldiers->addRow(3, "Some Guy", _game->getResourcePack()->getLanguage()->getString(327).c_str(), "SKYRANGER-1");
 }
 
 SoldiersState::~SoldiersState()

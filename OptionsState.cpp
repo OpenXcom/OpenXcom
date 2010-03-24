@@ -22,14 +22,14 @@ OptionsState::OptionsState(Game *game) : State(game)
 {
 	// Create objects
 	_window = new Window(216, 160, 20, 20);
-	_btnLoad = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 180, 20, 38, 60);
-	_btnSave = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 180, 20, 38, 85);
-	_btnAbandon = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 180, 20, 38, 110);
-	_btnCancel = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 180, 20, 38, 135);
-	_txtTitle = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 206, 15, 25, 32);
+	_btnLoad = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 180, 20, 38, 60);
+	_btnSave = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 180, 20, 38, 85);
+	_btnAbandon = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 180, 20, 38, 110);
+	_btnCancel = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 180, 20, 38, 135);
+	_txtTitle = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 206, 15, 25, 32);
 	
 	// Set palette
-	_game->setPalette(_game->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
 
 	add(_window);
 	add(_btnLoad);
@@ -40,28 +40,28 @@ OptionsState::OptionsState(Game *game) : State(game)
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)+2);
-	_window->setBg(game->getSurface("BACK01.SCR"));
+	_window->setBg(game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_btnLoad->setColor(Palette::blockOffset(15)+2);
-	_btnLoad->setText(_game->getLanguage()->getString(STR_LOAD_GAME));
+	_btnLoad->setText(_game->getResourcePack()->getLanguage()->getString(STR_LOAD_GAME));
 	_btnLoad->onMouseClick((EventHandler)&OptionsState::btnLoadClick);
 
 	_btnSave->setColor(Palette::blockOffset(15)+2);
-	_btnSave->setText(_game->getLanguage()->getString(STR_SAVE_GAME));
+	_btnSave->setText(_game->getResourcePack()->getLanguage()->getString(STR_SAVE_GAME));
 	_btnSave->onMouseClick((EventHandler)&OptionsState::btnSaveClick);
 
 	_btnAbandon->setColor(Palette::blockOffset(15)+2);
-	_btnAbandon->setText(_game->getLanguage()->getString(STR_ABANDON_GAME));
+	_btnAbandon->setText(_game->getResourcePack()->getLanguage()->getString(STR_ABANDON_GAME));
 	_btnAbandon->onMouseClick((EventHandler)&OptionsState::btnAbandonClick);
 
 	_btnCancel->setColor(Palette::blockOffset(15)+2);
-	_btnCancel->setText(_game->getLanguage()->getString(49));
+	_btnCancel->setText(_game->getResourcePack()->getLanguage()->getString(49));
 	_btnCancel->onMouseClick((EventHandler)&OptionsState::btnCancelClick);
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
-	_txtTitle->setText(_game->getLanguage()->getString(STR_GAME_OPTIONS));
+	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString(STR_GAME_OPTIONS));
 }
 
 OptionsState::~OptionsState()

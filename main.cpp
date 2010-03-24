@@ -20,15 +20,17 @@
 #include "Game.h"
 #include "TestState.h"
 #include "StartState.h"
+#include "XcomResourcePack.h"
 
 #include <iostream>
 
 //#define XCOM_TEST
+#define DATA_FOLDER "./DATA/"
 
 int main(int argc, char** args)
 {
 	Game *game = new Game("OpenXcom", 320, 200, 8);
-	game->load();
+	game->setResourcePack(new XcomResourcePack(DATA_FOLDER));
 	
 	//game->getScreen()->setFullscreen(true);
 	game->getScreen()->setScale(2);

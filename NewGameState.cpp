@@ -22,12 +22,12 @@ NewGameState::NewGameState(Game *game) : State(game)
 {
 	// Create objects
 	_window = new Window(192, 180, 64, 10);
-	_btnBeginner = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 160, 18, 80, 55);
-	_btnExperienced = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 160, 18, 80, 80);
-	_btnVeteran = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 160, 18, 80, 105);
-	_btnGenius = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 160, 18, 80, 130);
-	_btnSuperhuman = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 160, 18, 80, 155);
-	_txtTitle = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 192, 10, 64, 30);
+	_btnBeginner = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 160, 18, 80, 55);
+	_btnExperienced = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 160, 18, 80, 80);
+	_btnVeteran = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 160, 18, 80, 105);
+	_btnGenius = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 160, 18, 80, 130);
+	_btnSuperhuman = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 160, 18, 80, 155);
+	_txtTitle = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 192, 10, 64, 30);
 	
 	add(_window);
 	add(_btnBeginner);
@@ -39,32 +39,32 @@ NewGameState::NewGameState(Game *game) : State(game)
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(8)+8);
-	_window->setBg(game->getSurface("BACK01.SCR"));
+	_window->setBg(game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_btnBeginner->setColor(Palette::blockOffset(8)+8);
-	_btnBeginner->setText(_game->getLanguage()->getString(STR_BEGINNER));
+	_btnBeginner->setText(_game->getResourcePack()->getLanguage()->getString(STR_BEGINNER));
 	_btnBeginner->onMouseClick((EventHandler)&NewGameState::btnBeginnerClick);
 
 	_btnExperienced->setColor(Palette::blockOffset(8)+8);
-	_btnExperienced->setText(_game->getLanguage()->getString(STR_EXPERIENCED));
+	_btnExperienced->setText(_game->getResourcePack()->getLanguage()->getString(STR_EXPERIENCED));
 	_btnExperienced->onMouseClick((EventHandler)&NewGameState::btnExperiencedClick);
 
 	_btnVeteran->setColor(Palette::blockOffset(8)+8);
-	_btnVeteran->setText(_game->getLanguage()->getString(STR_VETERAN));
+	_btnVeteran->setText(_game->getResourcePack()->getLanguage()->getString(STR_VETERAN));
 	_btnVeteran->onMouseClick((EventHandler)&NewGameState::btnVeteranClick);
 
 	_btnGenius->setColor(Palette::blockOffset(8)+8);
-	_btnGenius->setText(_game->getLanguage()->getString(STR_GENIUS));
+	_btnGenius->setText(_game->getResourcePack()->getLanguage()->getString(STR_GENIUS));
 	_btnGenius->onMouseClick((EventHandler)&NewGameState::btnGeniusClick);
 
 	_btnSuperhuman->setColor(Palette::blockOffset(8)+8);
-	_btnSuperhuman->setText(_game->getLanguage()->getString(STR_SUPERHUMAN));
+	_btnSuperhuman->setText(_game->getResourcePack()->getLanguage()->getString(STR_SUPERHUMAN));
 	_btnSuperhuman->onMouseClick((EventHandler)&NewGameState::btnSuperhumanClick);
 
 	_txtTitle->setColor(Palette::blockOffset(8)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setSmall();
-	_txtTitle->setText(_game->getLanguage()->getString(STR_SELECT_DIFFICULTY_LEVEL));
+	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString(STR_SELECT_DIFFICULTY_LEVEL));
 }
 
 NewGameState::~NewGameState()

@@ -22,13 +22,13 @@ StartState::StartState(Game *game) : State(game)
 {
 	// Create objects
 	_window = new Window(256, 160, 32, 20);
-	_btnEnglish = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 192, 20, 64, 90);
-	_btnDeutsche = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 192, 20, 64, 118);
-	_btnFrench = new Button(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 192, 20, 64, 146);
+	_btnEnglish = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 192, 20, 64, 90);
+	_btnDeutsche = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 192, 20, 64, 118);
+	_btnFrench = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 192, 20, 64, 146);
 	
 	// Set palette
-	_game->setPalette(_game->getPalette("PALETTES.DAT_0")->getColors());
-	_game->setPalette(_game->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
+	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
 	
 	add(_window);
 	add(_btnEnglish);
@@ -37,7 +37,7 @@ StartState::StartState(Game *game) : State(game)
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(8)+8);
-	_window->setBg(game->getSurface("BACK01.SCR"));
+	_window->setBg(game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_btnEnglish->setColor(Palette::blockOffset(8)+8);
 	_btnEnglish->setText("ENGLISH");
@@ -63,18 +63,18 @@ void StartState::think()
 
 void StartState::btnEnglishClick(SDL_Event *ev, int scale)
 {
-	_game->setLanguage("ENGLISH.DAT");
+	_game->getResourcePack()->setLanguage("ENGLISH.DAT");
 	_game->setState(new MainMenuState(_game));
 }
 
 void StartState::btnDeutscheClick(SDL_Event *ev, int scale)
 {
-	_game->setLanguage("GERMAN.DAT");
+	_game->getResourcePack()->setLanguage("GERMAN.DAT");
 	_game->setState(new MainMenuState(_game));
 }
 
 void StartState::btnFrenchClick(SDL_Event *ev, int scale)
 {
-	_game->setLanguage("FRENCH.DAT");
+	_game->getResourcePack()->setLanguage("FRENCH.DAT");
 	_game->setState(new MainMenuState(_game));
 }

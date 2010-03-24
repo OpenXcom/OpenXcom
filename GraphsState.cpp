@@ -25,13 +25,13 @@ GraphsState::GraphsState(Game *game) : State(game)
 	_btnGeoscape = new InteractiveSurface(32, 24, 288, 0);
 	
 	// Set palette
-	_game->setPalette(_game->getPalette("PALETTES.DAT_2")->getColors());
+	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_2")->getColors());
 
 	add(_bg);
 	add(_btnGeoscape);
 
 	// Set up objects
-	_game->getSurface("GRAPHS.SPK")->blit(_bg);
+	_game->getResourcePack()->getSurface("GRAPHS.SPK")->blit(_bg);
 
 	_btnGeoscape->onMouseClick((EventHandler)&GraphsState::btnGeoscapeClick);
 }

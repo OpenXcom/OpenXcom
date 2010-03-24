@@ -45,22 +45,22 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _rotLon(0), _rotLat(0)
 	_btnZoomIn = new InteractiveSurface(23, 23, 295, 156);
 	_btnZoomOut = new InteractiveSurface(13, 17, 300, 182);
 
-	_txtHour = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 20, 13, 259, 74);
-	_txtHourSep = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 4, 13, 279, 74);
-	_txtMin = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 20, 13, 283, 74);
-	_txtMinSep = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 4, 13, 303, 74);
-	_txtSec = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 11, 8, 307, 80);
-	_txtWeekday = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 59, 8, 259, 87);
-	_txtDay = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 29, 8, 259, 94);
-	_txtMonth = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 29, 8, 288, 94);
-	_txtYear = new Text(game->getFont("BIGLETS.DAT"), game->getFont("SMALLSET.DAT"), 59, 8, 259, 101);
+	_txtHour = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 20, 13, 259, 74);
+	_txtHourSep = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 4, 13, 279, 74);
+	_txtMin = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 20, 13, 283, 74);
+	_txtMinSep = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 4, 13, 303, 74);
+	_txtSec = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 11, 8, 307, 80);
+	_txtWeekday = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 59, 8, 259, 87);
+	_txtDay = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 29, 8, 259, 94);
+	_txtMonth = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 29, 8, 288, 94);
+	_txtYear = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 59, 8, 259, 101);
 
 	_timer = _btn5Secs;
 
 	_rotTimer = new Timer(25);
 
 	// Set palette
-	_game->setPalette(_game->getPalette("PALETTES.DAT_0")->getColors());
+	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
 	
 	add(_bg);
 	add(_globe);
@@ -97,23 +97,23 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _rotLon(0), _rotLat(0)
 	add(_txtYear);
 	
 	// Set up objects
-	_game->getSurface("GEOBORD.SCR")->blit(_bg);
-	if (_game->getLanguageName() != "ENGLISH.DAT")
+	_game->getResourcePack()->getSurface("GEOBORD.SCR")->blit(_bg);
+	if (_game->getResourcePack()->getLanguageName() != "ENGLISH.DAT")
 	{
 		Surface* sidebar = NULL;
-		if (_game->getLanguageName() == "GERMAN.DAT")
-			sidebar = _game->getSurface("LANG1.DAT");
-		else if (_game->getLanguageName() == "FRENCH.DAT")
-			sidebar = _game->getSurface("LANG2.DAT");
+		if (_game->getResourcePack()->getLanguageName() == "GERMAN.DAT")
+			sidebar = _game->getResourcePack()->getSurface("LANG1.DAT");
+		else if (_game->getResourcePack()->getLanguageName() == "FRENCH.DAT")
+			sidebar = _game->getResourcePack()->getSurface("LANG2.DAT");
 		sidebar->setX(320 - sidebar->getWidth());
 		sidebar->setY(0);
 		sidebar->blit(_bg);
 	}
 	
 	stringstream s;
-	s << DATA_FOLDER << "GEODATA/WORLD.DAT";
+	s << _game->getResourcePack()->getFolder() << "GEODATA/WORLD.DAT";
 	_globe->loadDat(s.str());
-	_globe->setTexture(game->getSurfaceSet("TEXTURE.DAT"));
+	_globe->setTexture(game->getResourcePack()->getSurfaceSet("TEXTURE.DAT"));
 	_globe->onMouseClick((EventHandler)&GeoscapeState::globeClick);
 
 	_btnIntercept->copy(_bg);
@@ -202,7 +202,7 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _rotLon(0), _rotLat(0)
 
 	_txtWeekday->setSmall();
 	_txtWeekday->setColor(Palette::blockOffset(15)+4);
-	_txtWeekday->setText(_game->getLanguage()->getString(190));
+	_txtWeekday->setText(_game->getResourcePack()->getLanguage()->getString(190));
 	_txtWeekday->setAlign(ALIGN_CENTER);
 
 	_txtDay->setSmall();
@@ -212,7 +212,7 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _rotLon(0), _rotLat(0)
 
 	_txtMonth->setSmall();
 	_txtMonth->setColor(Palette::blockOffset(15)+4);
-	_txtMonth->setText(_game->getLanguage()->getString(626));
+	_txtMonth->setText(_game->getResourcePack()->getLanguage()->getString(626));
 	_txtMonth->setAlign(ALIGN_CENTER);
 
 	_txtYear->setSmall();

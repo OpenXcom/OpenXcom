@@ -19,20 +19,12 @@
 #ifndef OPENXCOM__GAME_H
 #define OPENXCOM__GAME_H
 
-#define DATA_FOLDER "./DATA/"
-
 class State;
 
-#include <map>
-#include <sstream>
 #include "SDL.h"
 #include "Screen.h"
-#include "Language.h"
-#include "Surface.h"
-#include "SurfaceSet.h"
-#include "Font.h"
-#include "Palette.h"
 #include "Cursor.h"
+#include "ResourcePack.h"
 #include "SavedGame.h"
 #include "Ruleset.h"
 
@@ -43,34 +35,24 @@ private:
 	Screen *_screen;
 	Cursor *_cursor;
 	State *_state, *_newState;
-	Language *_currentLang;
-	string _langName;
-	map<string, Palette*> _palettes;
-	map<string, Font*> _fonts;
-	map<string, Language*> _languages;
-	map<string, Surface*> _surfaces;
-	map<string, SurfaceSet*> _sets;
+	ResourcePack *_res;
 	SavedGame *_save;
 	Ruleset *_rules;
 	bool _quit;
 public:
 	Game(char* title, int width, int height, int bpp);
 	~Game();
-	void load();
 	void run();
 	void quit();
 	Screen *getScreen();
-	Language *getLanguage();
-	string getLanguageName();
-	void setLanguage(string lang);
-	Font *getFont(string name);
-	Surface *getSurface(string name);
-	SurfaceSet *getSurfaceSet(string name);
-	Palette *getPalette(string name);
 	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
 	void setState(State *state);
+	ResourcePack *getResourcePack();
+	void setResourcePack(ResourcePack *res);
 	SavedGame *getSavedGame();
+	void setSavedGame(SavedGame *save);
 	Ruleset *getRuleset();
+	void setRuleset(Ruleset *rules);
 };
 
 #endif

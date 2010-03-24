@@ -19,6 +19,7 @@
 #ifndef OPENXCOM__GEOSCAPESTATE_H
 #define OPENXCOM__GEOSCAPESTATE_H
 
+#include <sstream>
 #include "State_Interactive.h"
 #include "Game.h"
 #include "Palette.h"
@@ -46,7 +47,7 @@ private:
 	CustomButton *_btn5Secs, *_btn1Min, *_btn5Mins, *_btn30Mins, *_btn1Hour, *_btn1Day;
 	InteractiveSurface *_btnRotateLeft, *_btnRotateRight, *_btnRotateUp, *_btnRotateDown, *_btnZoomIn, *_btnZoomOut;
 	Text *_txtHour, *_txtHourSep, *_txtMin, *_txtMinSep, *_txtSec, *_txtWeekday, *_txtDay, *_txtMonth, *_txtYear;
-	Timer *_rotTimer;
+	Timer *_rotTimer, *_gameTimer;
 	double _rotLon, _rotLat;
 public:
 	GeoscapeState(Game *game);
