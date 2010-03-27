@@ -78,25 +78,30 @@ void NewGameState::think()
 
 void NewGameState::btnBeginnerClick(SDL_Event *ev, int scale)
 {
+	_game->setSavedGame(new SavedGame());
 	_game->setState(new GeoscapeState(_game));
 }
 
 void NewGameState::btnExperiencedClick(SDL_Event *ev, int scale)
 {
+	_game->setSavedGame(new SavedGame());
 	_game->setState(new GeoscapeState(_game));
 }
 
 void NewGameState::btnVeteranClick(SDL_Event *ev, int scale)
 {
+	_game->setSavedGame(new SavedGame());
 	_game->setState(new GeoscapeState(_game));
 }
 
 void NewGameState::btnGeniusClick(SDL_Event *ev, int scale)
 {
+	_game->setSavedGame(new SavedGame());
 	_game->setState(new GeoscapeState(_game));
 }
 
 void NewGameState::btnSuperhumanClick(SDL_Event *ev, int scale)
 {
+	_game->setSavedGame(new SavedGame());
 	_game->setState(new GeoscapeState(_game));
 }

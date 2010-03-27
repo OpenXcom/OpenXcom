@@ -65,6 +65,7 @@ void AbandonGameState::think()
 
 void AbandonGameState::btnYesClick(SDL_Event *ev, int scale)
 {
+	delete _game->getSavedGame();
 	_game->setState(new MainMenuState(_game));
 }
 

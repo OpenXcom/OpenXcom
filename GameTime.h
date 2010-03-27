@@ -16,19 +16,24 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM__SAVEDGAME_H
-#define OPENXCOM__SAVEDGAME_H
+#ifndef OPENXCOM__GAMETIME_H
+#define OPENXCOM__GAMETIME_H
 
-#include "GameTime.h"
-
-class SavedGame
+class GameTime
 {
 private:
-	GameTime *_time;
+	int _second, _minute, _hour, _weekday, _day, _month, _year;
 public:
-	SavedGame();
-	~SavedGame();
-	GameTime *getTime();
+	GameTime(int weekday, int day, int month, int year, int hour, int minute, int second);
+	~GameTime();
+	void advance();
+	int getSecond();
+	int getMinute();
+	int getHour();
+	int getWeekday();
+	int getDay();
+	int getMonth();
+	int getYear();
 };
 
 #endif

@@ -20,8 +20,14 @@
 
 SavedGame::SavedGame()
 {
+	_time = new GameTime(6, 1, 1, 1999, 12, 0, 0);
 }
 
 SavedGame::~SavedGame()
 {
+}
+
+GameTime *SavedGame::getTime()
+{
+	return _time;
 }

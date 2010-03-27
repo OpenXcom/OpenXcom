@@ -34,6 +34,8 @@
 #include "GraphsState.h"
 #include "FundingState.h"
 
+using namespace std;
+
 #define LONGITUDE_SPEED 0.2
 #define LATITUDE_SPEED 0.1
 
@@ -54,6 +56,7 @@ public:
 	~GeoscapeState();
 	void think();
 	void globeRotate();
+	void timeAdvance();
 	void globeClick(SDL_Event *ev, int scale);
 	void btnInterceptClick(SDL_Event *ev, int scale);
 	void btnBasesClick(SDL_Event *ev, int scale);

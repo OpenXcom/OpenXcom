@@ -58,7 +58,7 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _rotLon(0), _rotLat(0)
 	_timer = _btn5Secs;
 
 	_rotTimer = new Timer(25);
-	_gameTimer = new Timer(50);
+	_gameTimer = new Timer(100);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
@@ -183,7 +183,8 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _rotLon(0), _rotLat(0)
 
 	_txtHour->setBig();
 	_txtHour->setColor(Palette::blockOffset(15)+4);
-	_txtHour->setText("22");
+	_txtHour->setAlign(ALIGN_RIGHT);
+	_txtHour->setText("");
 
 	_txtHourSep->setBig();
 	_txtHourSep->setColor(Palette::blockOffset(15)+4);
@@ -191,7 +192,7 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _rotLon(0), _rotLat(0)
 
 	_txtMin->setBig();
 	_txtMin->setColor(Palette::blockOffset(15)+4);
-	_txtMin->setText("22");
+	_txtMin->setText("");
 
 	_txtMinSep->setBig();
 	_txtMinSep->setColor(Palette::blockOffset(15)+4);
@@ -199,29 +200,34 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _rotLon(0), _rotLat(0)
 
 	_txtSec->setSmall();
 	_txtSec->setColor(Palette::blockOffset(15)+4);
-	_txtSec->setText("22");
+	_txtSec->setText("");
 
 	_txtWeekday->setSmall();
 	_txtWeekday->setColor(Palette::blockOffset(15)+4);
-	_txtWeekday->setText(_game->getResourcePack()->getLanguage()->getString(190));
+	_txtWeekday->setText("");
 	_txtWeekday->setAlign(ALIGN_CENTER);
 
 	_txtDay->setSmall();
 	_txtDay->setColor(Palette::blockOffset(15)+4);
-	_txtDay->setText("1st");
+	_txtDay->setText("");
 	_txtDay->setAlign(ALIGN_CENTER);
 
 	_txtMonth->setSmall();
 	_txtMonth->setColor(Palette::blockOffset(15)+4);
-	_txtMonth->setText(_game->getResourcePack()->getLanguage()->getString(626));
+	_txtMonth->setText("");
 	_txtMonth->setAlign(ALIGN_CENTER);
 
 	_txtYear->setSmall();
 	_txtYear->setColor(Palette::blockOffset(15)+4);
-	_txtYear->setText("1999");
+	_txtYear->setText("");
 	_txtYear->setAlign(ALIGN_CENTER);
 
 	_rotTimer->onTimer((TimerHandler)&GeoscapeState::globeRotate);
+
+	_gameTimer->onTimer((TimerHandler)&GeoscapeState::timeAdvance);
+	_gameTimer->start();
+
+	timeAdvance();
 }
 
 GeoscapeState::~GeoscapeState()
@@ -238,6 +244,71 @@ void GeoscapeState::think()
 void GeoscapeState::globeRotate()
 {
 	_globe->rotate(_rotLon, _rotLat);
+}
+
+void GeoscapeState::timeAdvance()
+{
+	int timeSpan;
+	if (_timer == _btn5Secs)
+		timeSpan = 1;
+	else if (_timer == _btn1Min)
+		timeSpan = 12;
+	else if (_timer == _btn5Mins)
+		timeSpan = 12 * 5;
+	else if (_timer == _btn30Mins)
+		timeSpan = 12 * 5 * 6;
+	else if (_timer == _btn1Hour)
+		timeSpan = 12 * 5 * 6 * 2;
+	else if (_timer == _btn1Day)
+		timeSpan = 12 * 5 * 6 * 2 * 24;
+		
+	for (int i = 0; i < timeSpan; i++)
+		_game->getSavedGame()->getTime()->advance();
+
+	stringstream ss, ss2, ss3, ss4, ss5;
+	
+	if (_game->getSavedGame()->getTime()->getSecond() < 10)
+		ss << "0" << _game->getSavedGame()->getTime()->getSecond();
+	else
+		ss << _game->getSavedGame()->getTime()->getSecond();
+	_txtSec->setText(ss.str());
+
+	if (_game->getSavedGame()->getTime()->getMinute() < 10)
+		ss2 << "0" << _game->getSavedGame()->getTime()->getMinute();
+	else
+		ss2 << _game->getSavedGame()->getTime()->getMinute();
+	_txtMin->setText(ss2.str());
+
+	ss3 << _game->getSavedGame()->getTime()->getHour();
+	_txtHour->setText(ss3.str());
+
+	ss4 << _game->getSavedGame()->getTime()->getDay();
+	switch (_game->getSavedGame()->getTime()->getDay())
+	{
+	case 1:
+	case 21:
+	case 31:
+		ss4 << _game->getResourcePack()->getLanguage()->getString(STR_ST);
+		break;
+	case 2:
+	case 22:
+		ss4 << _game->getResourcePack()->getLanguage()->getString(STR_ND);
+		break;
+	case 3:
+		ss4 << _game->getResourcePack()->getLanguage()->getString(STR_RD);
+		break;
+	default:
+		ss4 << _game->getResourcePack()->getLanguage()->getString(STR_TH);
+		break;
+	}
+	_txtDay->setText(ss4.str());
+
+	_txtWeekday->setText(_game->getResourcePack()->getLanguage()->getString(STR_SUNDAY - 1 + _game->getSavedGame()->getTime()->getWeekday()));
+
+	_txtMonth->setText(_game->getResourcePack()->getLanguage()->getString(STR_JAN - 1 + _game->getSavedGame()->getTime()->getMonth()));
+
+	ss5 << _game->getSavedGame()->getTime()->getYear();
+	_txtYear->setText(ss5.str());
 }
 
 void GeoscapeState::globeClick(SDL_Event *ev, int scale)
