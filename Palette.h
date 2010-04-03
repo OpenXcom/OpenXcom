@@ -35,6 +35,7 @@ public:
 	~Palette();
 	void loadDat(string filename, int ncolors, int offset = 0);
 	SDL_Color *getColors(int offset = 0);
+	static Uint32 getRGBA(SDL_Color* pal, Uint8 color);
 
 	// Position of each palette in PALETTES.DAT
 	static inline int palOffset(int palette) { return palette*(768+6); }

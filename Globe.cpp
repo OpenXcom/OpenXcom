@@ -196,7 +196,7 @@ void Globe::blit(Surface *surface)
 	clear();
 	SDL_LockSurface(this->getSurface());
 
-	filledCircleRGBA(this->getSurface(), _cenX, _cenY, (Sint16)floor(_radius * _zoom), 16, 16, 16, Palette::blockOffset(12));
+	filledCircleColor(this->getSurface(), _cenX, _cenY, (Sint16)floor(_radius * _zoom), Palette::getRGBA(this->getPalette(), Palette::blockOffset(12)));
 	for (vector<Polygon*>::iterator i = _polygons.begin(); i < _polygons.end(); i++)
 	{
 		// Don't draw if polygon is facing back
@@ -214,7 +214,7 @@ void Globe::blit(Surface *surface)
 			polarToCart((*i)->getLongitude(j), (*i)->getLatitude(j), &x[j], &y[j]);
 		}
 		//texturedPolygon(getSurface(), (Sint16*)&x, (Sint16*)&y, (*i)->getPoints(), _texture->getSurface()->getSurface(), 0, 0);
-		filledPolygonColor(getSurface(), (Sint16*)&x, (Sint16*)&y, (*i)->getPoints(), _texture->getSurface()->getPixel(0, 32*(*i)->getTexture()));
+		filledPolygonColor(getSurface(), (Sint16*)&x, (Sint16*)&y, (*i)->getPoints(), Palette::getRGBA(this->getPalette(), _texture->getSurface()->getPixel(0, 32*(*i)->getTexture())));
 		//polygonColor(getSurface(), (Sint16*)&x, (Sint16*)&y, (*i)->getPoints(), _texture->getSurface()->getPixel(0, 32*(*i)->getTexture()));
 	}
 	
@@ -230,7 +230,7 @@ void Globe::blit(Surface *surface)
 			testy[i]+=yy[i];
 		}
 
-		polygonColor(getSurface(), (Sint16*)&testx, (Sint16*)&testy, 4, 1);
+		polygonColor(getSurface(), (Sint16*)&testx, (Sint16*)&testy, 4, Palette::getRGBA(this->getPalette(), 1));
 	}
 	
 	SDL_UnlockSurface(this->getSurface());

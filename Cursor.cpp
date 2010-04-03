@@ -54,8 +54,8 @@ void Cursor::blit(Surface *surface)
 
 	for (int i = 0; i < 5; i++)
 	{
-		lineColor(getSurface(), x1, y1, x1, y2, color);
-		lineColor(getSurface(), x1, y1, x2, _width-1, color);
+		lineColor(getSurface(), x1, y1, x1, y2, Palette::getRGBA(this->getPalette(), color));
+		lineColor(getSurface(), x1, y1, x2, _width-1, Palette::getRGBA(this->getPalette(), color));
 		x1++;
 		y1 += 2;
 		y2--;

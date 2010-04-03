@@ -22,6 +22,7 @@
 #include "SDL.h"
 #include "SDL_gfxPrimitives.h"
 #include "Surface.h"
+#include "Palette.h"
 
 class Cursor : public Surface
 {
