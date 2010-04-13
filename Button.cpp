@@ -18,7 +18,7 @@
  */
 #include "Button.h"
 
-Button::Button(Font *big, Font *small, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _color(0), _group(NULL)
+Button::Button(Font *big, Font *small, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _color(0), _group(0)
 {
 	_text = new Text(big, small, width, small->getHeight(), 0, (int)ceil((double)(height - small->getHeight()) / 2));
 	_text->setSmall();
@@ -102,7 +102,7 @@ void Button::blit(Surface *surface)
 	}
 	
 	bool press;
-	if (_group == NULL)
+	if (_group == 0)
 		press = _isPressed;
 	else
 		press = (*_group == this);
@@ -126,7 +126,7 @@ void Button::handle(SDL_Event *ev, int scale, State *state)
 
 void Button::mousePress(SDL_Event *ev, int scale, State *state)
 {
-	if (_group != NULL)
+	if (_group != 0)
 		*_group = this;
 
 	InteractiveSurface::mousePress(ev, scale, state);

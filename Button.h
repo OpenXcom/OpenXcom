@@ -30,9 +30,6 @@ private:
 	Uint8 _color;
 	Text *_text;
 	Button **_group;
-
-	void mousePress(SDL_Event *ev, int scale, State *state);
-	void mouseRelease(SDL_Event *ev, int scale, State *state);
 public:
 	Button(Font *big, Font *small, int width, int height, int x = 0, int y = 0);
 	~Button();
@@ -44,6 +41,8 @@ public:
 	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
 	void blit(Surface *surface);
 	void handle(SDL_Event *ev, int scale, State *state);
+	void mousePress(SDL_Event *ev, int scale, State *state);
+	void mouseRelease(SDL_Event *ev, int scale, State *state);
 };
 
 #endif

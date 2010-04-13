@@ -18,7 +18,7 @@
  */
 #include "ResourcePack.h"
 
-ResourcePack::ResourcePack(string folder) : _folder(folder), _currentLang(NULL), _langName(""), _palettes(), _fonts(), _languages(), _surfaces(), _sets()
+ResourcePack::ResourcePack(string folder) : _folder(folder), _currentLang(0), _langName(""), _palettes(), _fonts(), _languages(), _surfaces(), _sets()
 {
 }
 

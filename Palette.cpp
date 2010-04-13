@@ -18,7 +18,7 @@
  */
 #include "Palette.h"
 
-Palette::Palette() : _colors(NULL), _ncolors(0)
+Palette::Palette() : _colors(0), _ncolors(0)
 {
 }
 

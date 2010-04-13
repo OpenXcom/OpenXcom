@@ -28,6 +28,7 @@
 #include "Text.h"
 #include "CustomButton.h"
 #include "Timer.h"
+#include "GameTime.h"
 #include "OptionsState.h"
 #include "InterceptState.h"
 #include "BasescapeState.h"
@@ -51,12 +52,15 @@ private:
 	Text *_txtHour, *_txtHourSep, *_txtMin, *_txtMinSep, *_txtSec, *_txtWeekday, *_txtDay, *_txtMonth, *_txtYear;
 	Timer *_rotTimer, *_gameTimer;
 	double _rotLon, _rotLat;
+	bool _pause;
 public:
 	GeoscapeState(Game *game);
 	~GeoscapeState();
 	void think();
 	void globeRotate();
 	void timeAdvance();
+	void timeSecond();
+	void timeHour();
 	void globeClick(SDL_Event *ev, int scale);
 	void btnInterceptClick(SDL_Event *ev, int scale);
 	void btnBasesClick(SDL_Event *ev, int scale);

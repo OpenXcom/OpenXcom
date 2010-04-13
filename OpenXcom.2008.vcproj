@@ -62,7 +62,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="SDLmain.lib SDL.lib SDL_gfx.lib"
+				AdditionalDependencies="SDLmain.lib SDL.lib SDL_gfx_d.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;.\SDL\lib&quot;"
 				GenerateManifest="true"
@@ -122,7 +122,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="&quot;.\SDL\include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
-				RuntimeLibrary="2"
+				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="false"

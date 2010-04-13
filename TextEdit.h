@@ -30,11 +30,6 @@ private:
 	Text *_text;
 	string _value;
 	int _i;
-
-	void mousePress(SDL_Event *ev, int scale, State *state);
-	void mouseRelease(SDL_Event *ev, int scale, State *state);
-	void keyboardPress(SDL_Event *ev, int scale, State *state);
-	void keyboardRelease(SDL_Event *ev, int scale, State *state);
 public:
 	TextEdit(Font *big, Font *small, int width, int height, int x = 0, int y = 0);
 	~TextEdit();
@@ -50,6 +45,10 @@ public:
 	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
 	void blit(Surface *surface);
 	void handle(SDL_Event *ev, int scale, State *state);
+	void mousePress(SDL_Event *ev, int scale, State *state);
+	void mouseRelease(SDL_Event *ev, int scale, State *state);
+	void keyboardPress(SDL_Event *ev, int scale, State *state);
+	void keyboardRelease(SDL_Event *ev, int scale, State *state);
 };
 
 #endif

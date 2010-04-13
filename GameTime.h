@@ -19,6 +19,8 @@
 #ifndef OPENXCOM__GAMETIME_H
 #define OPENXCOM__GAMETIME_H
 
+enum TimeTrigger { TIME_SEC, TIME_MIN, TIME_HOUR, TIME_DAY, TIME_MONTH };
+
 class GameTime
 {
 private:
@@ -26,7 +28,7 @@ private:
 public:
 	GameTime(int weekday, int day, int month, int year, int hour, int minute, int second);
 	~GameTime();
-	void advance();
+	TimeTrigger advance();
 	int getSecond();
 	int getMinute();
 	int getHour();

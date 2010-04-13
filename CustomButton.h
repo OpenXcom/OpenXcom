@@ -27,9 +27,6 @@ class CustomButton : public InteractiveSurface
 private:
 	Uint8 _color;
 	CustomButton **_group;
-
-	void mousePress(SDL_Event *ev, int scale, State *state);
-	void mouseRelease(SDL_Event *ev, int scale, State *state);
 public:
 	CustomButton(int width, int height, int x = 0, int y = 0);
 	~CustomButton();
@@ -38,6 +35,8 @@ public:
 	void setGroup(CustomButton **group);
 	void blit(Surface *surface);
 	void handle(SDL_Event *ev, int scale, State *state);
+	void mousePress(SDL_Event *ev, int scale, State *state);
+	void mouseRelease(SDL_Event *ev, int scale, State *state);
 };
 
 #endif

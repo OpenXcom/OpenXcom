@@ -18,7 +18,7 @@
  */
 #include "State_Interactive.h"
 
-InteractiveSurface::InteractiveSurface(int width, int height, int x, int y) : Surface(width, height, x, y), _click(NULL), _press(NULL), _release(NULL), _in(NULL), _out(NULL), _keyPress(NULL), _keyRelease(NULL), _isPressed(false), _isHovered(false), _isFocused(false)
+InteractiveSurface::InteractiveSurface(int width, int height, int x, int y) : Surface(width, height, x, y), _click(0), _press(0), _release(0), _in(0), _out(0), _keyPress(0), _keyRelease(0), _isPressed(false), _isHovered(false), _isFocused(false)
 {
 
 }
@@ -85,43 +85,43 @@ void InteractiveSurface::focus()
 
 void InteractiveSurface::mousePress(SDL_Event *ev, int scale, State *state)
 {
-	if (_press != NULL)
+	if (_press != 0)
 		(state->*_press)(ev, scale);
 }
 
 void InteractiveSurface::mouseRelease(SDL_Event *ev, int scale, State *state)
 {
-	if (_release != NULL)
+	if (_release != 0)
 		(state->*_release)(ev, scale);
 }
 
 void InteractiveSurface::mouseClick(SDL_Event *ev, int scale, State *state)
 {
-	if (_click != NULL)
+	if (_click != 0)
 		(state->*_click)(ev, scale);
 }
 
 void InteractiveSurface::mouseIn(SDL_Event *ev, int scale, State *state)
 {
-	if (_in != NULL)
+	if (_in != 0)
 		(state->*_in)(ev, scale);
 }
 
 void InteractiveSurface::mouseOut(SDL_Event *ev, int scale, State *state)
 {
-	if (_out != NULL)
+	if (_out != 0)
 		(state->*_out)(ev, scale);
 }
 
 void InteractiveSurface::keyboardPress(SDL_Event *ev, int scale, State *state)
 {
-	if (_keyPress != NULL)
+	if (_keyPress != 0)
 		(state->*_keyPress)(ev, scale);
 }
 
 void InteractiveSurface::keyboardRelease(SDL_Event *ev, int scale, State *state)
 {
-	if (_keyRelease != NULL)
+	if (_keyRelease != 0)
 		(state->*_keyRelease)(ev, scale);
 }
 

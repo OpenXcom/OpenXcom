@@ -18,7 +18,7 @@
  */
 #include "Window.h"
 
-Window::Window(int width, int height, int x, int y) : Surface(width, height, x, y), _bg(NULL), _color(0)
+Window::Window(int width, int height, int x, int y) : Surface(width, height, x, y), _bg(0), _color(0)
 {
 }
 

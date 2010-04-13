@@ -22,7 +22,7 @@ Surface::Surface(int width, int height, int x, int y) : _width(width), _height(h
 {
 	_surface = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, 8, 0, 0, 0, 0);
 
-	if (_surface == NULL)
+	if (_surface == 0)
 	{
 		throw SDL_GetError();
 	}
@@ -178,7 +178,7 @@ void Surface::blit(Surface *surface)
 		SDL_Rect* cropper;
 		SDL_Rect target;
 		if (_crop.w == 0 && _crop.h == 0)
-			cropper = NULL;
+			cropper = 0;
 		else
 			cropper = &_crop;
 		target.x = _x;
@@ -194,7 +194,7 @@ void Surface::copy(Surface *surface)
 	from.y = _y;
 	from.w = _width;
 	from.h = _height;
-	SDL_BlitSurface(surface->getSurface(), &from, _surface, NULL);
+	SDL_BlitSurface(surface->getSurface(), &from, _surface, 0);
 }
 
 void Surface::setX(int x)
@@ -219,7 +219,7 @@ int Surface::getY()
 
 void Surface::setCrop(SDL_Rect *crop)
 {
-	if (crop == NULL)
+	if (crop == 0)
 	{
 		_crop.w = 0;
 		_crop.h = 0;

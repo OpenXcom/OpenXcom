@@ -18,7 +18,7 @@
  */
 #include "CustomButton.h"
 
-CustomButton::CustomButton(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _color(0), _group(NULL)
+CustomButton::CustomButton(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _color(0), _group(0)
 {
 }
 
@@ -40,7 +40,7 @@ Uint8 CustomButton::getColor()
 void CustomButton::setGroup(CustomButton **group)
 {
 	_group = group;
-	if (_group != NULL && *_group == this)
+	if (_group != 0 && *_group == this)
 		invert(_color);
 }
 
@@ -57,7 +57,7 @@ void CustomButton::handle(SDL_Event *ev, int scale, State *state)
 
 void CustomButton::mousePress(SDL_Event *ev, int scale, State *state)
 {
-	if (_group != NULL)
+	if (_group != 0)
 	{
 		(*_group)->invert((*_group)->getColor());
 		*_group = this;
@@ -68,7 +68,7 @@ void CustomButton::mousePress(SDL_Event *ev, int scale, State *state)
 
 void CustomButton::mouseRelease(SDL_Event *ev, int scale, State *state)
 {
-	if (_group == NULL)
+	if (_group == 0)
 		invert(_color);
 	InteractiveSurface::mouseRelease(ev, scale, state);
 }

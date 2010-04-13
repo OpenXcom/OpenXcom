@@ -52,7 +52,7 @@ void Timer::think(State* state)
 		if (getTime() >= _interval)
 		{
 			_start = SDL_GetTicks();
-			if (_timer != NULL)
+			if (_timer != 0)
 				(state->*_timer)();
 		}
 	}

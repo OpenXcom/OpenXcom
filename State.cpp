@@ -40,7 +40,7 @@ void State::handle(SDL_Event *ev, int scale)
 	for (vector<Surface*>::iterator i = _surfaces.begin(); i < _surfaces.end(); i++)
 	{
 		InteractiveSurface* j = dynamic_cast<InteractiveSurface*>(*i);
-		if (j != NULL)
+		if (j != 0)
 			j->handle(ev, scale, this);
 	}
 }

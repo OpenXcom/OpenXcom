@@ -26,25 +26,30 @@ GameTime::~GameTime()
 {
 }
 
-void GameTime::advance()
+TimeTrigger GameTime::advance()
 {
+	TimeTrigger trigger = TIME_SEC;
+
 	_second += 5;
 
 	if (_second >= 60)
 	{
 		_minute++;
 		_second = 0;
+		trigger = TIME_MIN;
 	}
 	if (_minute >= 60)
 	{
 		_hour++;
 		_minute = 0;
+		trigger = TIME_HOUR;
 	}
 	if (_hour >= 24)
 	{
 		_day++;
 		_weekday++;
 		_hour = 0;
+		trigger = TIME_DAY;
 	}
 	if (_weekday > 7)
 	{
@@ -63,6 +68,7 @@ void GameTime::advance()
 		{
 			_day = 1;
 			_month++;
+			trigger = TIME_MONTH;
 		}
 		break;
 	case 2:
@@ -70,6 +76,7 @@ void GameTime::advance()
 		{
 			_day = 1;
 			_month++;
+			trigger = TIME_MONTH;
 		}
 		break;
 	case 4:
@@ -80,6 +87,7 @@ void GameTime::advance()
 		{
 			_day = 1;
 			_month++;
+			trigger = TIME_MONTH;
 		}
 		break;
 	}
@@ -88,6 +96,8 @@ void GameTime::advance()
 		_month = 1;
 		_year++;
 	}
+
+	return trigger;
 }
 
 int GameTime::getSecond()

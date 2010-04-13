@@ -23,7 +23,7 @@ Screen::Screen(int width, int height, int bpp) : _width(width), _height(height),
 	_flags = SDL_DOUBLEBUF|SDL_HWPALETTE;
 
 	_screen = SDL_SetVideoMode(_width, _height, _bpp, _flags);
-	if (_screen == NULL)
+	if (_screen == 0)
 	{
 		throw SDL_GetError();
 	}
@@ -46,12 +46,12 @@ void Screen::flip()
 	if (_scale != 1)
 	{
 		SDL_Surface* zoom = zoomSurface(_surface->getSurface(), _scale, _scale, 0);
-		SDL_BlitSurface(zoom, NULL, _screen, NULL);
+		SDL_BlitSurface(zoom, 0, _screen, 0);
 		SDL_FreeSurface(zoom);
 	}
 	else
 	{
-		SDL_BlitSurface(_surface->getSurface(), NULL, _screen, NULL);
+		SDL_BlitSurface(_surface->getSurface(), 0, _screen, 0);
 	}
 
 	if (SDL_Flip(_screen) == -1)
@@ -85,7 +85,7 @@ SDL_Color* Screen::getPalette()
 void Screen::setResolution(int width, int height)
 {
 	_screen = SDL_SetVideoMode(width, height, _bpp, _flags);
-	if (_screen == NULL)
+	if (_screen == 0)
 	{
 		throw SDL_GetError();
 	}

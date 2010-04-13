@@ -18,7 +18,7 @@
  */
 #include "GeoscapeState.h"
 
-GeoscapeState::GeoscapeState(Game *game) : State(game), _rotLon(0), _rotLat(0)
+GeoscapeState::GeoscapeState(Game *game) : State(game), _rotLon(0), _rotLat(0), _pause(false)
 {
 	// Create objects
 	_bg = new Surface(320, 200, 0, 0);
@@ -101,7 +101,7 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _rotLon(0), _rotLat(0)
 	_game->getResourcePack()->getSurface("GEOBORD.SCR")->blit(_bg);
 	if (_game->getResourcePack()->getLanguageName() != "ENGLISH.DAT")
 	{
-		Surface* sidebar = NULL;
+		Surface* sidebar = 0;
 		if (_game->getResourcePack()->getLanguageName() == "GERMAN.DAT")
 			sidebar = _game->getResourcePack()->getSurface("LANG1.DAT");
 		else if (_game->getResourcePack()->getLanguageName() == "FRENCH.DAT")
@@ -248,7 +248,7 @@ void GeoscapeState::globeRotate()
 
 void GeoscapeState::timeAdvance()
 {
-	int timeSpan;
+	int timeSpan = 0;
 	if (_timer == _btn5Secs)
 		timeSpan = 1;
 	else if (_timer == _btn1Min)
@@ -262,8 +262,24 @@ void GeoscapeState::timeAdvance()
 	else if (_timer == _btn1Day)
 		timeSpan = 12 * 5 * 6 * 2 * 24;
 		
-	for (int i = 0; i < timeSpan; i++)
-		_game->getSavedGame()->getTime()->advance();
+	for (int i = 0; i < timeSpan && !_pause; i++)
+	{
+		TimeTrigger trigger;
+		trigger = _game->getSavedGame()->getTime()->advance();
+		switch (trigger)
+		{
+		case TIME_MONTH:
+		case TIME_DAY:
+		case TIME_HOUR:
+			timeHour();
+		case TIME_MIN:
+		case TIME_SEC:
+			timeSecond();
+		}
+
+	}
+
+	_pause = false;
 
 	stringstream ss, ss2, ss3, ss4, ss5;
 	
@@ -309,6 +325,14 @@ void GeoscapeState::timeAdvance()
 
 	ss5 << _game->getSavedGame()->getTime()->getYear();
 	_txtYear->setText(ss5.str());
+}
+
+void GeoscapeState::timeSecond()
+{
+}
+
+void GeoscapeState::timeHour()
+{
 }
 
 void GeoscapeState::globeClick(SDL_Event *ev, int scale)

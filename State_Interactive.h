@@ -45,7 +45,7 @@ public:
 	virtual void blit();
 };
 
-typedef State &(State::*EventHandler)(SDL_Event *, int scale);
+typedef State &(State::*EventHandler)(SDL_Event *, int);
 
 class InteractiveSurface : public Surface
 {
@@ -53,13 +53,6 @@ protected:
 	EventHandler _click, _press, _release, _in, _out, _keyPress, _keyRelease;
 	bool _isPressed, _isHovered, _isFocused;
 
-	virtual void mousePress(SDL_Event *ev, int scale, State *state);
-	virtual void mouseRelease(SDL_Event *ev, int scale, State *state);
-	virtual void mouseClick(SDL_Event *ev, int scale, State *state);
-	virtual void mouseIn(SDL_Event *ev, int scale, State *state);
-	virtual void mouseOut(SDL_Event *ev, int scale, State *state);
-	virtual void keyboardPress(SDL_Event *ev, int scale, State *state);
-	virtual void keyboardRelease(SDL_Event *ev, int scale, State *state);
 public:
 	InteractiveSurface(int width, int height, int x, int y);
 	virtual ~InteractiveSurface();
@@ -72,6 +65,15 @@ public:
 	void onMouseOut(EventHandler handler);
 	void onKeyboardPress(EventHandler handler);
 	void onKeyboardRelease(EventHandler handler);
+	
+	virtual void mousePress(SDL_Event *ev, int scale, State *state);
+	virtual void mouseRelease(SDL_Event *ev, int scale, State *state);
+	virtual void mouseClick(SDL_Event *ev, int scale, State *state);
+	virtual void mouseIn(SDL_Event *ev, int scale, State *state);
+	virtual void mouseOut(SDL_Event *ev, int scale, State *state);
+	virtual void keyboardPress(SDL_Event *ev, int scale, State *state);
+	virtual void keyboardRelease(SDL_Event *ev, int scale, State *state);
+
 };
 
 #endif
