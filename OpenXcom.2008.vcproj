@@ -529,6 +529,14 @@
 				Name="Game"
 				>
 				<File
+					RelativePath=".\Country.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Country.h"
+					>
+				</File>
+				<File
 					RelativePath=".\GameTime.cpp"
 					>
 				</File>

@@ -19,6 +19,8 @@
 #ifndef OPENXCOM__RULESET_H
 #define OPENXCOM__RULESET_H
 
+#include "SavedGame.h"
+
 class Ruleset
 {
 private:
@@ -26,6 +28,7 @@ private:
 public:
 	Ruleset();
 	~Ruleset();
+	SavedGame *newSave(GameDifficulty diff);
 };
 
 #endif

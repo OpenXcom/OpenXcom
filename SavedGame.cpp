@@ -18,7 +18,7 @@
  */
 #include "SavedGame.h"
 
-SavedGame::SavedGame()
+SavedGame::SavedGame(GameDifficulty diff) : _difficulty(diff)
 {
 	_time = new GameTime(6, 1, 1, 1999, 12, 0, 0);
 }
@@ -30,4 +30,9 @@ SavedGame::~SavedGame()
 GameTime *SavedGame::getTime()
 {
 	return _time;
+}
+
+map<LangString, Country*> *SavedGame::getCountries()
+{
+	return &_countries;
 }

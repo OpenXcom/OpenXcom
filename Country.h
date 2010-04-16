@@ -16,19 +16,20 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "Ruleset.h"
+#ifndef OPENXCOM__COUNTRY_H
+#define OPENXCOM__COUNTRY_H
 
-Ruleset::Ruleset()
+class Country
 {
-}
+private:
+	int _funding, _change;
+public:
+	Country();
+	~Country();
+	int getFunding();
+	void setFunding(int funding);
+	int getChange();
+	void setChange(int change);
+};
 
-Ruleset::~Ruleset()
-{
-}
-
-SavedGame *Ruleset::newSave(GameDifficulty diff)
-{
-	SavedGame *save = new SavedGame(diff);
-
-	return save;
-}
+#endif

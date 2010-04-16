@@ -19,16 +19,23 @@
 #ifndef OPENXCOM__SAVEDGAME_H
 #define OPENXCOM__SAVEDGAME_H
 
+#include <map>
 #include "GameTime.h"
+#include "Country.h"
+
+enum GameDifficulty { DIFF_BEGINNER, DIFF_EXPERIENCED, DIFF_VETERAN, DIFF_GENIUS, DIFF_SUPERHUMAN };
 
 class SavedGame
 {
 private:
+	GameDifficulty _diff;
 	GameTime *_time;
+	map<LangString, Country*> _countries;
 public:
 	SavedGame();
 	~SavedGame();
 	GameTime *getTime();
+	map<LangString, Country*> *getCountries();
 };
 
 #endif
