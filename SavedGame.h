@@ -22,6 +22,9 @@
 #include <map>
 #include "GameTime.h"
 #include "Country.h"
+#include "LangString.h"
+
+using namespace std;
 
 enum GameDifficulty { DIFF_BEGINNER, DIFF_EXPERIENCED, DIFF_VETERAN, DIFF_GENIUS, DIFF_SUPERHUMAN };
 
@@ -32,7 +35,7 @@ private:
 	GameTime *_time;
 	map<LangString, Country*> _countries;
 public:
-	SavedGame();
+	SavedGame(GameDifficulty diff);
 	~SavedGame();
 	GameTime *getTime();
 	map<LangString, Country*> *getCountries();

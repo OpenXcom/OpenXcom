@@ -18,7 +18,7 @@
  */
 #include "SavedGame.h"
 
-SavedGame::SavedGame(GameDifficulty diff) : _difficulty(diff)
+SavedGame::SavedGame(GameDifficulty diff) : _diff(diff)
 {
 	_time = new GameTime(6, 1, 1, 1999, 12, 0, 0);
 }

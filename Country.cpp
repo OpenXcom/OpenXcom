@@ -41,7 +41,7 @@ int Country::getChange()
 	return _change;
 }
 
-void Country::setChange()
+void Country::setChange(int change)
 {
 	_change = change;
 }
