@@ -1,0 +1,195 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectName>OpenXcom</ProjectName>
+    <ProjectGuid>{D8F55ED4-1A4E-4111-8E83-153CF91FE25A}</ProjectGuid>
+    <RootNamespace>OpenXcom</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Configuration)\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</GenerateManifest>
+    <EmbedManifest Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</EmbedManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration)\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</GenerateManifest>
+    <EmbedManifest Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</EmbedManifest>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>.\SDL\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>SDL_gfx.lib;SDLmain.lib;SDL.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>.\SDL\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>.\SDL\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>SDL_gfx.lib;SDLmain.lib;SDL.lib;SDL_gfx.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>.\SDL\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="Bar.cpp" />
+    <ClCompile Include="Button.cpp" />
+    <ClCompile Include="Cursor.cpp" />
+    <ClCompile Include="CustomButton.cpp" />
+    <ClCompile Include="Text.cpp" />
+    <ClCompile Include="TextEdit.cpp" />
+    <ClCompile Include="TextList.cpp" />
+    <ClCompile Include="Window.cpp" />
+    <ClCompile Include="Font.cpp" />
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="InteractiveSurface.cpp" />
+    <ClCompile Include="Language.cpp" />
+    <ClCompile Include="Palette.cpp" />
+    <ClCompile Include="Screen.cpp" />
+    <ClCompile Include="State.cpp" />
+    <ClCompile Include="Surface.cpp" />
+    <ClCompile Include="SurfaceSet.cpp" />
+    <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="AbandonGameState.cpp" />
+    <ClCompile Include="BaseInfoState.cpp" />
+    <ClCompile Include="BasescapeState.cpp" />
+    <ClCompile Include="CraftsState.cpp" />
+    <ClCompile Include="FundingState.cpp" />
+    <ClCompile Include="GeoscapeState.cpp" />
+    <ClCompile Include="GraphsState.cpp" />
+    <ClCompile Include="InterceptState.cpp" />
+    <ClCompile Include="MainMenuState.cpp" />
+    <ClCompile Include="ManufactureState.cpp" />
+    <ClCompile Include="NewGameState.cpp" />
+    <ClCompile Include="OptionsState.cpp" />
+    <ClCompile Include="PurchaseState.cpp" />
+    <ClCompile Include="ResearchState.cpp" />
+    <ClCompile Include="SellState.cpp" />
+    <ClCompile Include="SoldiersState.cpp" />
+    <ClCompile Include="StartState.cpp" />
+    <ClCompile Include="TestState.cpp" />
+    <ClCompile Include="Globe.cpp" />
+    <ClCompile Include="Polygon.cpp" />
+    <ClCompile Include="ResourcePack.cpp" />
+    <ClCompile Include="XcomResourcePack.cpp" />
+    <ClCompile Include="Ruleset.cpp" />
+    <ClCompile Include="Country.cpp" />
+    <ClCompile Include="GameTime.cpp" />
+    <ClCompile Include="SavedGame.cpp" />
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Bar.h" />
+    <ClInclude Include="Button.h" />
+    <ClInclude Include="Cursor.h" />
+    <ClInclude Include="CustomButton.h" />
+    <ClInclude Include="Text.h" />
+    <ClInclude Include="TextEdit.h" />
+    <ClInclude Include="TextList.h" />
+    <ClInclude Include="Window.h" />
+    <ClInclude Include="Font.h" />
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="LangString.h" />
+    <ClInclude Include="Language.h" />
+    <ClInclude Include="Palette.h" />
+    <ClInclude Include="Screen.h" />
+    <ClInclude Include="State_Interactive.h" />
+    <ClInclude Include="Surface.h" />
+    <ClInclude Include="SurfaceSet.h" />
+    <ClInclude Include="Timer.h" />
+    <ClInclude Include="AbandonGameState.h" />
+    <ClInclude Include="BaseInfoState.h" />
+    <ClInclude Include="BasescapeState.h" />
+    <ClInclude Include="CraftsState.h" />
+    <ClInclude Include="FundingState.h" />
+    <ClInclude Include="GeoscapeState.h" />
+    <ClInclude Include="GraphsState.h" />
+    <ClInclude Include="InterceptState.h" />
+    <ClInclude Include="MainMenuState.h" />
+    <ClInclude Include="ManufactureState.h" />
+    <ClInclude Include="NewGameState.h" />
+    <ClInclude Include="OptionsState.h" />
+    <ClInclude Include="PurchaseState.h" />
+    <ClInclude Include="ResearchState.h" />
+    <ClInclude Include="SellState.h" />
+    <ClInclude Include="SoldiersState.h" />
+    <ClInclude Include="StartState.h" />
+    <ClInclude Include="TestState.h" />
+    <ClInclude Include="Globe.h" />
+    <ClInclude Include="Polygon.h" />
+    <ClInclude Include="ResourcePack.h" />
+    <ClInclude Include="XcomResourcePack.h" />
+    <ClInclude Include="Ruleset.h" />
+    <ClInclude Include="Country.h" />
+    <ClInclude Include="GameTime.h" />
+    <ClInclude Include="SavedGame.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
