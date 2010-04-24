@@ -28,7 +28,7 @@ private:
 public:
 	Ruleset();
 	~Ruleset();
-	SavedGame *newSave(GameDifficulty diff);
+	virtual SavedGame *newSave(GameDifficulty diff);
 };
 
 #endif

@@ -16,43 +16,21 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "SDL.h"
-#include "Game.h"
-#include "TestState.h"
-#include "StartState.h"
-#include "XcomResourcePack.h"
-#include "XcomRuleset.h"
-#include "SavedGame.h"
+#ifndef OPENXCOM__XCOMRULESET_H
+#define OPENXCOM__XCOMRULESET_H
 
-#include <iostream>
+#include "Ruleset.h"
+#include "Country.h"
+#include "LangString.h"
 
-#define DATA_FOLDER "./DATA/"
-
-Game *game;
-
-int main(int argc, char** args)
+class XcomRuleset : public Ruleset
 {
-	try
-	{
-		game = new Game("OpenXcom", 320, 200, 8);
-		game->setResourcePack(new XcomResourcePack(DATA_FOLDER));
-		game->setRuleset(new XcomRuleset());
-		
-		//game->getScreen()->setFullscreen(true);
-		game->getScreen()->setScale(2);
-		//game->setState(new TestState(game));
-		game->setState(new StartState(game));
-		game->run();
-	}
-	catch(char* c)
-	{
-		cout << "ERROR: " << c << endl;
-		exit(-1);
-	}
-	
-	delete game;
+private:
 
-	SDL_Quit();
+public:
+	XcomRuleset();
+	~XcomRuleset();
+	SavedGame *newSave(GameDifficulty diff);
+};
 
-	return 0;
-}
+#endif

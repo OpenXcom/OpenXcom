@@ -270,10 +270,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\LangString.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Language.cpp"
 				>
 			</File>
@@ -490,6 +486,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\LangString.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Polygon.cpp"
 				>
 			</File>
@@ -522,6 +522,14 @@
 				</File>
 				<File
 					RelativePath=".\Ruleset.h"
+					>
+				</File>
+				<File
+					RelativePath=".\XcomRuleset.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\XcomRuleset.h"
 					>
 				</File>
 			</Filter>
