@@ -191,6 +191,12 @@ XcomResourcePack::XcomResourcePack(string folder) : ResourcePack(folder)
 		}
 		cout << pcks[i] << endl;
 	}
+
+	// Load polygons
+	stringstream s;
+	s << folder << "GEODATA/" << "WORLD.DAT";
+	Globe::loadDat(s.str(), &_polygons);
+	cout << "WORLD.DAT" << endl;
 }
 
 XcomResourcePack::~XcomResourcePack()

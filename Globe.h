@@ -31,13 +31,13 @@
 
 using namespace std;
 
-#define PI 3.14159265358979323846
+#define PI 3.141592653589793238461
 #define COORD_OUT_OF_BOUNDS -2.0f
 
 class Globe : public InteractiveSurface
 {
 private:
-	vector<Polygon*> _polygons;
+	vector<Polygon*> *_polygons;
 	double _radius, _zoom, _rotLon, _rotLat;
 	int _cenX, _cenY;
 	SurfaceSet *_texture;
@@ -49,10 +49,11 @@ private:
 public:
 	Globe(int cenX, int cenY, int width, int height, int x = 0, int y = 0);
 	~Globe();
+	static void loadDat(string filename, vector<Polygon*> *polygons);
 	void polarToCart(double lon, double lat, Sint16 *x, Sint16 *y);
 	void cartToPolar(Sint16 x, Sint16 y, double *lon, double *lat);
-	void loadDat(string filename);
 	void setTexture(SurfaceSet *texture);
+	void setPolygons(vector<Polygon*> *polygons);
 	void rotate(double lon, double lat);
 	void zoom(double amount);
 	void center(double lon, double lat);

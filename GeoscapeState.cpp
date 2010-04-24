@@ -111,9 +111,7 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _rotLon(0), _rotLat(0), 
 		sidebar->blit(_bg);
 	}
 	
-	stringstream s;
-	s << _game->getResourcePack()->getFolder() << "GEODATA/WORLD.DAT";
-	_globe->loadDat(s.str());
+	_globe->setPolygons(_game->getResourcePack()->getPolygons());
 	_globe->setTexture(game->getResourcePack()->getSurfaceSet("TEXTURE.DAT"));
 	_globe->onMouseClick((EventHandler)&GeoscapeState::globeClick);
 

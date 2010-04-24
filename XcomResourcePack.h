@@ -21,6 +21,7 @@
 
 #include <sstream>
 #include "ResourcePack.h"
+#include "Globe.h"
 
 class XcomResourcePack : public ResourcePack
 {

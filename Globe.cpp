@@ -114,7 +114,7 @@ bool Globe::insidePolygon(double lon, double lat, Polygon *poly)
 	*/
 }
 
-void Globe::loadDat(string filename)
+void Globe::loadDat(string filename, vector<Polygon*> *polygons)
 {
 	// Load file
 	ifstream mapFile (filename.c_str(), ios::in | ios::binary);
@@ -152,7 +152,7 @@ void Globe::loadDat(string filename)
 		}
 		poly->setTexture(value[8]);
 
-		_polygons.push_back(poly);
+		polygons->push_back(poly);
 	}
 
 	if (!mapFile.eof())
@@ -166,6 +166,11 @@ void Globe::loadDat(string filename)
 void Globe::setTexture(SurfaceSet *texture)
 {
 	_texture = texture;
+}
+
+void Globe::setPolygons(vector<Polygon*> *polygons)
+{
+	_polygons = polygons;
 }
 
 void Globe::rotate(double lon, double lat)
@@ -197,7 +202,7 @@ void Globe::blit(Surface *surface)
 	SDL_LockSurface(this->getSurface());
 
 	filledCircleColor(this->getSurface(), _cenX, _cenY, (Sint16)floor(_radius * _zoom), Palette::getRGBA(this->getPalette(), Palette::blockOffset(12)));
-	for (vector<Polygon*>::iterator i = _polygons.begin(); i < _polygons.end(); i++)
+	for (vector<Polygon*>::iterator i = _polygons->begin(); i < _polygons->end(); i++)
 	{
 		// Don't draw if polygon is facing back
 		bool backFace = true;
@@ -252,7 +257,7 @@ void Globe::test(double lon, double lat)
 	_testLon = lon;
 	_testLat = lat;
 	bool inside = false;
-	for (vector<Polygon*>::iterator i = _polygons.begin(); i < _polygons.end() && !inside; i++)
+	for (vector<Polygon*>::iterator i = _polygons->begin(); i < _polygons->end() && !inside; i++)
 	{
 		inside = insidePolygon(_testLon, _testLat, *i);
 	}

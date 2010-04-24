@@ -18,7 +18,7 @@
  */
 #include "Country.h"
 
-Country::Country() : _funding(0), _change(0)
+Country::Country(int funding) : _funding(funding), _change(0)
 {
 }
 

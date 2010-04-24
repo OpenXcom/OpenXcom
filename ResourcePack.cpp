@@ -77,6 +77,11 @@ SurfaceSet *ResourcePack::getSurfaceSet(string name)
 	return _sets[name];
 }
 
+vector<Polygon*> *ResourcePack::getPolygons()
+{
+	return &_polygons;
+}
+
 Palette *ResourcePack::getPalette(string name)
 {
 	return _palettes[name];

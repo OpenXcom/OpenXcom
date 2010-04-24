@@ -24,7 +24,7 @@ class Country
 private:
 	int _funding, _change;
 public:
-	Country();
+	Country(int funding);
 	~Country();
 	int getFunding();
 	void setFunding(int funding);

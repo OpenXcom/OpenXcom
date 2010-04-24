@@ -22,11 +22,12 @@
 #include "Ruleset.h"
 #include "Country.h"
 #include "LangString.h"
+#include <cmath>
 
 class XcomRuleset : public Ruleset
 {
 private:
-
+	int genFunding(int min, int max);
 public:
 	XcomRuleset();
 	~XcomRuleset();
