@@ -28,7 +28,7 @@ XcomRuleset::~XcomRuleset()
 
 int XcomRuleset::genFunding(int min, int max)
 {
-	return rand() % (max - min) + min * 1000;
+	return (rand() % (max - min) + min) * 1000;
 }
 
 SavedGame *XcomRuleset::newSave(GameDifficulty diff)

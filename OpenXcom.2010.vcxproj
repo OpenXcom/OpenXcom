@@ -142,6 +142,7 @@
     <ClCompile Include="GameTime.cpp" />
     <ClCompile Include="SavedGame.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="XcomRuleset.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bar.h" />
@@ -188,6 +189,7 @@
     <ClInclude Include="Country.h" />
     <ClInclude Include="GameTime.h" />
     <ClInclude Include="SavedGame.h" />
+    <ClInclude Include="XcomRuleset.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

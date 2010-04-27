@@ -24,19 +24,24 @@ ResourcePack::ResourcePack(string folder) : _folder(folder), _currentLang(0), _l
 
 ResourcePack::~ResourcePack()
 {
-	for (map<string, Language*>::iterator i = _languages.begin(); i != _languages.end(); i++) {
+	for (map<string, Language*>::iterator i = _languages.begin(); i != _languages.end(); i++)
+	{
 		delete i->second;
 	}
-	for (map<string, Font*>::iterator i = _fonts.begin(); i != _fonts.end(); i++) {
+	for (map<string, Font*>::iterator i = _fonts.begin(); i != _fonts.end(); i++)
+	{
 		delete i->second;
 	}
-	for (map<string, Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); i++) {
+	for (map<string, Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); i++)
+	{
 		delete i->second;
 	}
-	for (map<string, SurfaceSet*>::iterator i = _sets.begin(); i != _sets.end(); i++) {
+	for (map<string, SurfaceSet*>::iterator i = _sets.begin(); i != _sets.end(); i++)
+	{
 		delete i->second;
 	}
-	for (map<string, Palette*>::iterator i = _palettes.begin(); i != _palettes.end(); i++) {
+	for (map<string, Palette*>::iterator i = _palettes.begin(); i != _palettes.end(); i++)
+	{
 		delete i->second;
 	}
 }
@@ -89,13 +94,16 @@ Palette *ResourcePack::getPalette(string name)
 
 void ResourcePack::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 {
-	for (map<string, Font*>::iterator i = _fonts.begin(); i != _fonts.end(); i++) {
+	for (map<string, Font*>::iterator i = _fonts.begin(); i != _fonts.end(); i++)
+	{
 		i->second->getSurface()->setPalette(colors, firstcolor, ncolors);
 	}
-	for (map<string, Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); i++) {
+	for (map<string, Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); i++)
+	{
 		i->second->setPalette(colors, firstcolor, ncolors);
 	}
-	for (map<string, SurfaceSet*>::iterator i = _sets.begin(); i != _sets.end(); i++) {
+	for (map<string, SurfaceSet*>::iterator i = _sets.begin(); i != _sets.end(); i++)
+	{
 		i->second->getSurface()->setPalette(colors, firstcolor, ncolors);
 	}
 }

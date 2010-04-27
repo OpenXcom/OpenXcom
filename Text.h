@@ -22,6 +22,7 @@
 #include "Font.h"
 #include "Surface.h"
 #include <string>
+#include <sstream>
 
 enum TextAlign { ALIGN_LEFT, ALIGN_CENTER, ALIGN_RIGHT };
 
@@ -38,6 +39,7 @@ private:
 public:
 	Text(Font *big, Font *small, int width, int height, int x = 0, int y = 0);
 	~Text();
+	static string formatFunding(int funds);
 	void setBig();
 	void setSmall();
 	void setText(string text);

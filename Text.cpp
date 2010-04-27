@@ -28,6 +28,21 @@ Text::~Text()
 	
 }
 
+string Text::formatFunding(int funds)
+{
+	stringstream ss;
+	ss << funds;
+	string s = ss.str();
+	size_t spacer = s.size() - 3;
+	while (spacer > 0 && spacer < s.size())
+	{
+		s.insert(spacer, " ");
+		spacer -= 3;
+	}
+	s.insert(0, "$");
+	return s;
+}
+
 void Text::setBig()
 {
 	_font = _big;
