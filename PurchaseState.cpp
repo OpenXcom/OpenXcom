@@ -63,8 +63,10 @@ PurchaseState::PurchaseState(Game *game) : State(game)
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString(STR_PURCHASE_HIRE_PERSONNEL));
 
+	string s = _game->getResourcePack()->getLanguage()->getString(STR_CURRENT_FUNDS);
+	s += Text::formatFunding(_game->getSavedGame()->getFunds());
 	_txtFunds->setColor(Palette::blockOffset(13)+10);
-	_txtFunds->setText(_game->getResourcePack()->getLanguage()->getString(STR_CURRENT_FUNDS));
+	_txtFunds->setText(s);
 
 	_txtPurchases->setColor(Palette::blockOffset(13)+10);
 	_txtPurchases->setText(_game->getResourcePack()->getLanguage()->getString(STR_COST_OF_PURCHASES));

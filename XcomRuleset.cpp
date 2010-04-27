@@ -34,6 +34,7 @@ int XcomRuleset::genFunding(int min, int max)
 SavedGame *XcomRuleset::newSave(GameDifficulty diff)
 {
 	SavedGame *save = new SavedGame(diff);
+	save->setSeed(time(NULL));
 	save->getCountries()->insert(pair<LangString, Country*>(STR_USA, new Country(genFunding(600, 1200))));
 	save->getCountries()->insert(pair<LangString, Country*>(STR_RUSSIA, new Country(genFunding(230, 460))));
 	save->getCountries()->insert(pair<LangString, Country*>(STR_UK, new Country(genFunding(240, 480))));
@@ -50,6 +51,6 @@ SavedGame *XcomRuleset::newSave(GameDifficulty diff)
 	save->getCountries()->insert(pair<LangString, Country*>(STR_SOUTH_AFRICA, new Country(genFunding(310, 620))));
 	save->getCountries()->insert(pair<LangString, Country*>(STR_EGYPT, new Country(genFunding(160, 320))));
 	save->getCountries()->insert(pair<LangString, Country*>(STR_CANADA, new Country(genFunding(110, 220))));
-
+	save->setFunds(save->getCountryFunding());
 	return save;
 }

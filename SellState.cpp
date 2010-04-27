@@ -68,8 +68,10 @@ SellState::SellState(Game *game) : State(game)
 	_txtSales->setColor(Palette::blockOffset(13)+10);
 	_txtSales->setText(_game->getResourcePack()->getLanguage()->getString(STR_VALUE_OF_SALES));
 
+	string s = _game->getResourcePack()->getLanguage()->getString(STR_FUNDS);
+	s += Text::formatFunding(_game->getSavedGame()->getFunds());
 	_txtFunds->setColor(Palette::blockOffset(13)+10);
-	_txtFunds->setText(_game->getResourcePack()->getLanguage()->getString(STR_FUNDS));
+	_txtFunds->setText(s);
 
 	_txtItem->setColor(Palette::blockOffset(13)+10);
 	_txtItem->setText(_game->getResourcePack()->getLanguage()->getString(STR_ITEM));

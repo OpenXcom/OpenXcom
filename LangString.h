@@ -154,7 +154,8 @@ enum LangString
 	STR_NIGERIA = 613,
 	STR_SOUTH_AFRICA = 614,
 	STR_EGYPT = 615,
-	STR_CANADA = 616
+	STR_CANADA = 616,
+	STR_TOTAL = 160
 };
 
 #endif

@@ -33,12 +33,18 @@ class SavedGame
 private:
 	GameDifficulty _diff;
 	GameTime *_time;
+	int _funds;
+	time_t _seed;
 	map<LangString, Country*> _countries;
 public:
 	SavedGame(GameDifficulty diff);
 	~SavedGame();
+	int getFunds();
+	void setFunds(int funds);
+	void setSeed(time_t seed);
 	GameTime *getTime();
 	map<LangString, Country*> *getCountries();
+	int getCountryFunding();
 };
 
 #endif

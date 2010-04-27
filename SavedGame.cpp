@@ -27,6 +27,22 @@ SavedGame::~SavedGame()
 {
 }
 
+int SavedGame::getFunds()
+{
+	return _funds;
+}
+
+void SavedGame::setFunds(int funds)
+{
+	_funds = funds;
+}
+
+void SavedGame::setSeed(time_t seed)
+{
+	_seed = seed;
+	srand(seed);
+}
+
 GameTime *SavedGame::getTime()
 {
 	return _time;
@@ -35,4 +51,14 @@ GameTime *SavedGame::getTime()
 map<LangString, Country*> *SavedGame::getCountries()
 {
 	return &_countries;
+}
+
+int SavedGame::getCountryFunding()
+{
+	int total = 0;
+	for (map<LangString, Country*>::iterator i = _countries.begin(); i != _countries.end(); i++)
+	{
+		total += i->second->getFunding();
+	}
+	return total;
 }
