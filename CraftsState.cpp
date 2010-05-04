@@ -93,5 +93,5 @@ void CraftsState::think()
 
 void CraftsState::btnOkClick(SDL_Event *ev, int scale)
 {
-	_game->setState(new BasescapeState(_game));
+	_game->popState();
 }

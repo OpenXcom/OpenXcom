@@ -89,5 +89,5 @@ void FundingState::think()
 
 void FundingState::btnOkClick(SDL_Event *ev, int scale)
 {
-	_game->setState(new GeoscapeState(_game));
+	_game->popState();
 }

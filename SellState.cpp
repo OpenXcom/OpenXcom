@@ -101,10 +101,10 @@ void SellState::think()
 
 void SellState::btnOkClick(SDL_Event *ev, int scale)
 {
-	_game->setState(new BasescapeState(_game));
+	
 }
 
 void SellState::btnCancelClick(SDL_Event *ev, int scale)
 {
-	_game->setState(new BasescapeState(_game));
+	_game->popState();
 }

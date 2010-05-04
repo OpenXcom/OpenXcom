@@ -71,5 +71,5 @@ void AbandonGameState::btnYesClick(SDL_Event *ev, int scale)
 
 void AbandonGameState::btnNoClick(SDL_Event *ev, int scale)
 {
-	_game->setState(new OptionsState(_game));
+	_game->popState();
 }

@@ -350,7 +350,7 @@ void GeoscapeState::globeClick(SDL_Event *ev, int scale)
 
 void GeoscapeState::btnInterceptClick(SDL_Event *ev, int scale)
 {
-	_game->setState(new InterceptState(_game));
+	_game->pushState(new InterceptState(_game));
 }
 
 void GeoscapeState::btnBasesClick(SDL_Event *ev, int scale)
@@ -370,12 +370,12 @@ void GeoscapeState::btnUfopaediaClick(SDL_Event *ev, int scale)
 
 void GeoscapeState::btnOptionsClick(SDL_Event *ev, int scale)
 {
-	_game->setState(new OptionsState(_game));
+	_game->pushState(new OptionsState(_game));
 }
 
 void GeoscapeState::btnFundingClick(SDL_Event *ev, int scale)
 {
-	_game->setState(new FundingState(_game));
+	_game->pushState(new FundingState(_game));
 }
 
 void GeoscapeState::btnRotateLeftPress(SDL_Event *ev, int scale)

@@ -118,5 +118,5 @@ void ManufactureState::think()
 
 void ManufactureState::btnOkClick(SDL_Event *ev, int scale)
 {
-	_game->setState(new BasescapeState(_game));
+	_game->popState();
 }

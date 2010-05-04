@@ -21,6 +21,7 @@
 
 class State;
 
+#include <list>
 #include "SDL.h"
 #include "Screen.h"
 #include "Cursor.h"
@@ -34,7 +35,8 @@ private:
 	SDL_Event _event;
 	Screen *_screen;
 	Cursor *_cursor;
-	State *_state, *_newState;
+
+	list<State*> _states, _deleted;
 	ResourcePack *_res;
 	SavedGame *_save;
 	Ruleset *_rules;
@@ -47,6 +49,8 @@ public:
 	Screen *getScreen();
 	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
 	void setState(State *state);
+	void pushState(State *state);
+	void popState();
 	ResourcePack *getResourcePack();
 	void setResourcePack(ResourcePack *res);
 	SavedGame *getSavedGame();

@@ -85,10 +85,10 @@ void OptionsState::btnSaveClick(SDL_Event *ev, int scale)
 
 void OptionsState::btnAbandonClick(SDL_Event *ev, int scale)
 {
-	_game->setState(new AbandonGameState(_game));
+	_game->pushState(new AbandonGameState(_game));
 }
 
 void OptionsState::btnCancelClick(SDL_Event *ev, int scale)
 {
-	_game->setState(new GeoscapeState(_game));
+	_game->popState();
 }

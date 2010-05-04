@@ -19,7 +19,7 @@
 #include "Game.h"
 #include "State_Interactive.h"
 
-Game::Game(char* title, int width, int height, int bpp) : _state(0), _newState(0), _quit(false)
+Game::Game(char* title, int width, int height, int bpp) : _states(), _deleted(), _quit(false)
 {
 	// Initialize SDL
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
@@ -41,22 +41,17 @@ Game::Game(char* title, int width, int height, int bpp) : _state(0), _newState(0
 Game::~Game()
 {
 	delete _screen;
-	delete _state;
 }
 
 void Game::run()
 {
 	while (!_quit)
 	{
-		// Process state change
-		if (_newState != 0)
+		// Clean up states
+		while (!_deleted.empty())
 		{
-			if (_state != 0)
-			{
-				delete _state;
-			}
-			_state = _newState;
-			_newState = 0;
+			delete _deleted.back();
+			_deleted.pop_back();
 		}
 
 		// Process events
@@ -69,16 +64,17 @@ void Game::run()
 			else
 			{
 				_cursor->handle(&_event, _screen->getScale());
-				_state->handle(&_event, _screen->getScale());
+				_states.back()->handle(&_event, _screen->getScale());
 			}
 		}
 		
 		// Process logic
-		_state->think();
+		_states.back()->think();
 		
 		// Process rendering
 		_screen->clear();
-		_state->blit();
+		for (list<State*>::iterator i = _states.begin(); i != _states.end(); i++)
+			(*i)->blit();
 		_cursor->blit(_screen->getSurface());
 		_screen->flip();
 	}
@@ -103,7 +99,20 @@ void Game::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 
 void Game::setState(State *state)
 {
-	_newState = state;
+	while (!_states.empty())
+		popState();
+	pushState(state);
+}
+
+void Game::pushState(State *state)
+{
+	_states.push_back(state);
+}
+
+void Game::popState()
+{
+	_deleted.push_back(_states.back());
+	_states.pop_back();
 }
 
 ResourcePack *Game::getResourcePack()

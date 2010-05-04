@@ -126,37 +126,37 @@ void BasescapeState::think()
 
 void BasescapeState::btnBaseInfoClick(SDL_Event *ev, int scale)
 {
-	_game->setState(new BaseInfoState(_game));
+	_game->pushState(new BaseInfoState(_game));
 }
 
 void BasescapeState::btnSoldiersClick(SDL_Event *ev, int scale)
 {
-	_game->setState(new SoldiersState(_game));
+	_game->pushState(new SoldiersState(_game));
 }
 
 void BasescapeState::btnCraftsClick(SDL_Event *ev, int scale)
 {
-	_game->setState(new CraftsState(_game));
+	_game->pushState(new CraftsState(_game));
 }
 
 void BasescapeState::btnResearchClick(SDL_Event *ev, int scale)
 {
-	_game->setState(new ResearchState(_game));
+	_game->pushState(new ResearchState(_game));
 }
 
 void BasescapeState::btnManufactureClick(SDL_Event *ev, int scale)
 {
-	_game->setState(new ManufactureState(_game));
+	_game->pushState(new ManufactureState(_game));
 }
 
 void BasescapeState::btnPurchaseClick(SDL_Event *ev, int scale)
 {
-	_game->setState(new PurchaseState(_game));
+	_game->pushState(new PurchaseState(_game));
 }
 
 void BasescapeState::btnSellClick(SDL_Event *ev, int scale)
 {
-	_game->setState(new SellState(_game));
+	_game->pushState(new SellState(_game));
 }
 
 void BasescapeState::btnGeoscapeClick(SDL_Event *ev, int scale)

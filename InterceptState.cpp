@@ -84,5 +84,5 @@ void InterceptState::think()
 
 void InterceptState::btnCancelClick(SDL_Event *ev, int scale)
 {
-	_game->setState(new GeoscapeState(_game));
+	_game->popState();
 }
