@@ -26,7 +26,6 @@
 #include "Window.h"
 #include "Text.h"
 #include "AbandonGameState.h"
-#include "GeoscapeState.h"
 
 class OptionsState : public State
 {

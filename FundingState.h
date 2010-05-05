@@ -26,8 +26,6 @@
 #include "Window.h"
 #include "Text.h"
 #include "TextList.h"
-#include "GeoscapeState.h"
-
 class FundingState : public State
 {
 private:

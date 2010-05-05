@@ -34,6 +34,7 @@
 #include "BasescapeState.h"
 #include "GraphsState.h"
 #include "FundingState.h"
+#include "MonthlyReportState.h"
 
 using namespace std;
 
@@ -61,6 +62,7 @@ public:
 	void timeAdvance();
 	void timeSecond();
 	void timeHour();
+	void timeMonth();
 	void globeClick(SDL_Event *ev, int scale);
 	void btnInterceptClick(SDL_Event *ev, int scale);
 	void btnBasesClick(SDL_Event *ev, int scale);

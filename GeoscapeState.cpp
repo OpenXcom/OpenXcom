@@ -267,6 +267,7 @@ void GeoscapeState::timeAdvance()
 		switch (trigger)
 		{
 		case TIME_MONTH:
+			timeMonth();
 		case TIME_DAY:
 		case TIME_HOUR:
 			timeHour();
@@ -331,6 +332,12 @@ void GeoscapeState::timeSecond()
 
 void GeoscapeState::timeHour()
 {
+}
+
+void GeoscapeState::timeMonth()
+{
+	_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() + _game->getSavedGame()->getCountryFunding());
+	_game->pushState(new MonthlyReportState(_game));
 }
 
 void GeoscapeState::globeClick(SDL_Event *ev, int scale)

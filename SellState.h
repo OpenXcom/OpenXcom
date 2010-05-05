@@ -26,7 +26,6 @@
 #include "Window.h"
 #include "Text.h"
 #include "TextList.h"
-#include "BasescapeState.h"
 
 class SellState : public State
 {

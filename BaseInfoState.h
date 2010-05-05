@@ -27,7 +27,6 @@
 #include "Text.h"
 #include "TextEdit.h"
 #include "Surface.h"
-#include "BasescapeState.h"
 
 class BaseInfoState : public State
 {

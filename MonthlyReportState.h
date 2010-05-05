@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM__SOLDIERSSTATE_H
-#define OPENXCOM__SOLDIERSSTATE_H
+#ifndef OPENXCOM__MONTHLYREPORTSTATE_H
+#define OPENXCOM__MONTHLYREPORTSTATE_H
 
 #include "State_Interactive.h"
 #include "LangString.h"
@@ -25,18 +25,16 @@
 #include "Button.h"
 #include "Window.h"
 #include "Text.h"
-#include "TextList.h"
 
-class SoldiersState : public State
+class MonthlyReportState : public State
 {
 private:
 	Button *_btnOk;
 	Window *_window;
-	Text *_txtTitle, *_txtName, *_txtRank, *_txtCraft;
-	TextList *_lstSoldiers;
+	Text *_txtTitle, *_txtMonth, *_txtRating, *_txtChange, *_txtDesc;
 public:
-	SoldiersState(Game *game);
-	~SoldiersState();
+	MonthlyReportState(Game *game);
+	~MonthlyReportState();
 	void think();
 	void btnOkClick(SDL_Event *ev, int scale);
 };

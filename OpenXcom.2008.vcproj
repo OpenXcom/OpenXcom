@@ -410,6 +410,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\MonthlyReportState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\MonthlyReportState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\NewGameState.cpp"
 				>
 			</File>
@@ -477,42 +485,6 @@
 		<Filter
 			Name="Xcom"
 			>
-			<File
-				RelativePath=".\Globe.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Globe.h"
-				>
-			</File>
-			<File
-				RelativePath=".\LangString.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Polygon.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Polygon.h"
-				>
-			</File>
-			<File
-				RelativePath=".\ResourcePack.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\ResourcePack.h"
-				>
-			</File>
-			<File
-				RelativePath=".\XcomResourcePack.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\XcomResourcePack.h"
-				>
-			</File>
 			<Filter
 				Name="Rules"
 				>
@@ -558,6 +530,46 @@
 				</File>
 				<File
 					RelativePath=".\SavedGame.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Resource"
+				>
+				<File
+					RelativePath=".\Globe.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Globe.h"
+					>
+				</File>
+				<File
+					RelativePath=".\LangString.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Polygon.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Polygon.h"
+					>
+				</File>
+				<File
+					RelativePath=".\ResourcePack.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\ResourcePack.h"
+					>
+				</File>
+				<File
+					RelativePath=".\XcomResourcePack.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\XcomResourcePack.h"
 					>
 				</File>
 			</Filter>

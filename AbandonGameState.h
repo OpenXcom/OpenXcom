@@ -27,7 +27,6 @@
 #include "Window.h"
 #include "Text.h"
 #include "MainMenuState.h"
-#include "OptionsState.h"
 
 class AbandonGameState : public State
 {

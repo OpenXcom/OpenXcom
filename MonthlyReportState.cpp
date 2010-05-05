@@ -1,0 +1,80 @@
+/*
+ * Copyright 2010 Daniel Albano
+ *
+ * This file is part of OpenXcom.
+ *
+ * OpenXcom is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * OpenXcom is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
+ */
+#include "MonthlyReportState.h"
+
+MonthlyReportState::MonthlyReportState(Game *game) : State(game)
+{
+	// Create objects
+	_window = new Window(320, 200, 0, 0);
+	_btnOk = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 50, 12, 135, 180);
+	_txtTitle = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 280, 16, 32, 8);
+	_txtMonth = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 100, 16, 32, 24);
+	_txtRating = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 60, 16, 140, 24);
+	_txtChange = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 120, 16, 200, 24);
+	_txtDesc = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 120, 16, 200, 24);
+	
+	// Set palette
+	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+
+	add(_window);
+	add(_btnOk);
+	add(_txtTitle);
+	add(_txtMonth);
+	add(_txtRating);
+	add(_txtChange);
+	add(_txtDesc);
+
+	// Set up objects
+	_window->setColor(Palette::blockOffset(15)+2);
+	_window->setBg(game->getResourcePack()->getSurface("BACK13.SCR"));
+
+	_btnOk->setColor(Palette::blockOffset(15)+2);
+	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString(STR_OK));
+	_btnOk->onMouseClick((EventHandler)&MonthlyReportState::btnOkClick);
+
+	_txtTitle->setColor(Palette::blockOffset(15)-1);
+	_txtTitle->setBig();
+	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString(STR_XCOM_PROJECT_MONTHLY_REPORT));
+
+	_txtMonth->setColor(Palette::blockOffset(15)-1);
+	_txtMonth->setText(_game->getResourcePack()->getLanguage()->getString(STR_MONTH));
+
+	_txtRating->setColor(Palette::blockOffset(15)-1);
+	_txtRating->setText(_game->getResourcePack()->getLanguage()->getString(STR_MONTHLY_RATING));
+
+	_txtChange->setColor(Palette::blockOffset(15)-1);
+	_txtChange->setText(_game->getResourcePack()->getLanguage()->getString(STR_FUNDING_CHANGE));
+
+	_txtDesc->setColor(Palette::blockOffset(15)-1);
+	_txtDesc->setText(_game->getResourcePack()->getLanguage()->getString(STR_COUNCIL_SATISFIED));
+}
+
+MonthlyReportState::~MonthlyReportState()
+{
+	
+}
+
+void MonthlyReportState::think()
+{
+}
+
+void MonthlyReportState::btnOkClick(SDL_Event *ev, int scale)
+{
+	_game->popState();
+}

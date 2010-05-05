@@ -125,6 +125,7 @@
     <ClCompile Include="InterceptState.cpp" />
     <ClCompile Include="MainMenuState.cpp" />
     <ClCompile Include="ManufactureState.cpp" />
+	<ClCompile Include="MonthlyReportState.cpp" />
     <ClCompile Include="NewGameState.cpp" />
     <ClCompile Include="OptionsState.cpp" />
     <ClCompile Include="PurchaseState.cpp" />
@@ -173,6 +174,7 @@
     <ClInclude Include="InterceptState.h" />
     <ClInclude Include="MainMenuState.h" />
     <ClInclude Include="ManufactureState.h" />
+	<ClInclude Include="MonthlyReportState.h" />
     <ClInclude Include="NewGameState.h" />
     <ClInclude Include="OptionsState.h" />
     <ClInclude Include="PurchaseState.h" />
