@@ -336,6 +336,8 @@ void GeoscapeState::timeHour()
 
 void GeoscapeState::timeMonth()
 {
+	_pause = true;
+	_timer = _btn5Secs;
 	_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() + _game->getSavedGame()->getCountryFunding());
 	_game->pushState(new MonthlyReportState(_game));
 }

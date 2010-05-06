@@ -274,5 +274,5 @@ void BaseInfoState::think()
 
 void BaseInfoState::btnOkClick(SDL_Event *ev, int scale)
 {
-	_game->setState(new BasescapeState(_game));
+	_game->popState();
 }
