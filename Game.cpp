@@ -73,7 +73,12 @@ void Game::run()
 		
 		// Process rendering
 		_screen->clear();
-		for (list<State*>::iterator i = _states.begin(); i != _states.end(); i++)
+		list<State*>::iterator i = _states.end();
+		do
+			i--;
+		while(i != _states.begin() && !(*i)->isScreen());
+
+		for (; i != _states.end(); i++)
 			(*i)->blit();
 		_cursor->blit(_screen->getSurface());
 		_screen->flip();

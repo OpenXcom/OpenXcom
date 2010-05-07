@@ -18,7 +18,7 @@
  */
 #include "State_Interactive.h"
 
-State::State(Game *game) : _game(game)
+State::State(Game *game) : _game(game), _screen(true)
 {
 	
 }
@@ -33,6 +33,11 @@ void State::add(Surface *surface)
 {
 	surface->setPalette(_game->getScreen()->getPalette());
 	_surfaces.push_back(surface);
+}
+
+bool State::isScreen()
+{
+	return _screen;
 }
 
 void State::handle(SDL_Event *ev, int scale)

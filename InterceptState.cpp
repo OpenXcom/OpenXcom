@@ -20,6 +20,8 @@
 
 InterceptState::InterceptState(Game *game) : State(game)
 {
+	_screen = false;
+
 	// Create objects
 	_window = new Window(320, 140, 0, 30);
 	_btnCancel = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 288, 16, 16, 146);

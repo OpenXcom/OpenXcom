@@ -20,6 +20,8 @@
 
 AbandonGameState::AbandonGameState(Game *game) : State(game)
 {
+	_screen = false;
+
 	// Create objects
 	_window = new Window(216, 160, 20, 20);
 	_btnYes = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 50, 20, 38, 140);

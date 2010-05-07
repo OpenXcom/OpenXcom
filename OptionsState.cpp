@@ -20,6 +20,8 @@
 
 OptionsState::OptionsState(Game *game) : State(game)
 {
+	_screen = false;
+
 	// Create objects
 	_window = new Window(216, 160, 20, 20);
 	_btnLoad = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 180, 20, 38, 60);

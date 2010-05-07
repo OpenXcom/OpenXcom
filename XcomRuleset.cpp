@@ -26,31 +26,25 @@ XcomRuleset::~XcomRuleset()
 {
 }
 
-int XcomRuleset::genFunding(int min, int max)
-{
-	return (rand() % (max - min) + min) * 1000;
-}
-
 SavedGame *XcomRuleset::newSave(GameDifficulty diff)
 {
 	SavedGame *save = new SavedGame(diff);
-	save->setSeed(time(NULL));
-	save->getCountries()->insert(pair<LangString, Country*>(STR_USA, new Country(genFunding(600, 1200))));
-	save->getCountries()->insert(pair<LangString, Country*>(STR_RUSSIA, new Country(genFunding(230, 460))));
-	save->getCountries()->insert(pair<LangString, Country*>(STR_UK, new Country(genFunding(240, 480))));
-	save->getCountries()->insert(pair<LangString, Country*>(STR_FRANCE, new Country(genFunding(320, 640))));
-	save->getCountries()->insert(pair<LangString, Country*>(STR_GERMANY, new Country(genFunding(250, 500))));
-	save->getCountries()->insert(pair<LangString, Country*>(STR_ITALY, new Country(genFunding(160, 320))));
-	save->getCountries()->insert(pair<LangString, Country*>(STR_SPAIN, new Country(genFunding(140, 280))));
-	save->getCountries()->insert(pair<LangString, Country*>(STR_CHINA, new Country(genFunding(245, 490))));
-	save->getCountries()->insert(pair<LangString, Country*>(STR_JAPAN, new Country(genFunding(400, 800))));
-	save->getCountries()->insert(pair<LangString, Country*>(STR_INDIA, new Country(genFunding(150, 300))));
-	save->getCountries()->insert(pair<LangString, Country*>(STR_BRAZIL, new Country(genFunding(300, 600))));
-	save->getCountries()->insert(pair<LangString, Country*>(STR_AUSTRALIA, new Country(genFunding(280, 560))));
-	save->getCountries()->insert(pair<LangString, Country*>(STR_NIGERIA, new Country(genFunding(180, 360))));
-	save->getCountries()->insert(pair<LangString, Country*>(STR_SOUTH_AFRICA, new Country(genFunding(310, 620))));
-	save->getCountries()->insert(pair<LangString, Country*>(STR_EGYPT, new Country(genFunding(160, 320))));
-	save->getCountries()->insert(pair<LangString, Country*>(STR_CANADA, new Country(genFunding(110, 220))));
+	save->getCountries()->insert(pair<LangString, Country*>(STR_USA, new Country(SavedGame::genRandom(600, 1200)*1000)));
+	save->getCountries()->insert(pair<LangString, Country*>(STR_RUSSIA, new Country(SavedGame::genRandom(230, 460)*1000)));
+	save->getCountries()->insert(pair<LangString, Country*>(STR_UK, new Country(SavedGame::genRandom(240, 480)*1000)));
+	save->getCountries()->insert(pair<LangString, Country*>(STR_FRANCE, new Country(SavedGame::genRandom(320, 640)*1000)));
+	save->getCountries()->insert(pair<LangString, Country*>(STR_GERMANY, new Country(SavedGame::genRandom(250, 500)*1000)));
+	save->getCountries()->insert(pair<LangString, Country*>(STR_ITALY, new Country(SavedGame::genRandom(160, 320)*1000)));
+	save->getCountries()->insert(pair<LangString, Country*>(STR_SPAIN, new Country(SavedGame::genRandom(140, 280)*1000)));
+	save->getCountries()->insert(pair<LangString, Country*>(STR_CHINA, new Country(SavedGame::genRandom(245, 490)*1000)));
+	save->getCountries()->insert(pair<LangString, Country*>(STR_JAPAN, new Country(SavedGame::genRandom(400, 800)*1000)));
+	save->getCountries()->insert(pair<LangString, Country*>(STR_INDIA, new Country(SavedGame::genRandom(150, 300)*1000)));
+	save->getCountries()->insert(pair<LangString, Country*>(STR_BRAZIL, new Country(SavedGame::genRandom(300, 600)*1000)));
+	save->getCountries()->insert(pair<LangString, Country*>(STR_AUSTRALIA, new Country(SavedGame::genRandom(280, 560)*1000)));
+	save->getCountries()->insert(pair<LangString, Country*>(STR_NIGERIA, new Country(SavedGame::genRandom(180, 360)*1000)));
+	save->getCountries()->insert(pair<LangString, Country*>(STR_SOUTH_AFRICA, new Country(SavedGame::genRandom(310, 620)*1000)));
+	save->getCountries()->insert(pair<LangString, Country*>(STR_EGYPT, new Country(SavedGame::genRandom(160, 320)*1000)));
+	save->getCountries()->insert(pair<LangString, Country*>(STR_CANADA, new Country(SavedGame::genRandom(110, 220)*1000)));
 	save->setFunds(save->getCountryFunding());
 	return save;
 }

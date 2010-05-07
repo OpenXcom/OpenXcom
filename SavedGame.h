@@ -20,6 +20,8 @@
 #define OPENXCOM__SAVEDGAME_H
 
 #include <map>
+#include <cmath>
+#include <ctime>
 #include "GameTime.h"
 #include "Country.h"
 #include "LangString.h"
@@ -34,14 +36,14 @@ private:
 	GameDifficulty _diff;
 	GameTime *_time;
 	int _funds;
-	time_t _seed;
 	map<LangString, Country*> _countries;
 public:
 	SavedGame(GameDifficulty diff);
 	~SavedGame();
+	static int seed;
+	static int genRandom(int min, int max);
 	int getFunds();
 	void setFunds(int funds);
-	void setSeed(time_t seed);
 	GameTime *getTime();
 	map<LangString, Country*> *getCountries();
 	int getCountryFunding();

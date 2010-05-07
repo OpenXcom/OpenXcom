@@ -18,13 +18,22 @@
  */
 #include "SavedGame.h"
 
-SavedGame::SavedGame(GameDifficulty diff) : _diff(diff), _funds(0), _seed(0)
+SavedGame::SavedGame(GameDifficulty diff) : _diff(diff), _funds(0)
 {
 	_time = new GameTime(6, 1, 1, 1999, 12, 0, 0);
+	srand(seed);
 }
 
 SavedGame::~SavedGame()
 {
+}
+
+int SavedGame::seed = (int)time(NULL);
+
+int SavedGame::genRandom(int min, int max)
+{
+	seed = rand();
+	return (seed % (max - min) + min);
 }
 
 int SavedGame::getFunds()
@@ -35,12 +44,6 @@ int SavedGame::getFunds()
 void SavedGame::setFunds(int funds)
 {
 	_funds = funds;
-}
-
-void SavedGame::setSeed(time_t seed)
-{
-	_seed = seed;
-	srand(seed);
 }
 
 GameTime *SavedGame::getTime()

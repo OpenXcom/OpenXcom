@@ -35,11 +35,13 @@ class State
 protected:
 	Game *_game;
 	vector<Surface*> _surfaces;
+	bool _screen;
 
 public:
 	State(Game* game);
 	virtual ~State();
 	void add(Surface *surface);
+	bool isScreen();
 	virtual void handle(SDL_Event* ev, int scale);
 	virtual void think() = 0;
 	virtual void blit();

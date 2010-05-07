@@ -22,8 +22,6 @@
 #include "Ruleset.h"
 #include "Country.h"
 #include "LangString.h"
-#include <cmath>
-#include <ctime>
 
 class XcomRuleset : public Ruleset
 {
