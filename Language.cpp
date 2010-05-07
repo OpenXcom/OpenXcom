@@ -62,7 +62,7 @@ void Language::loadDat(string filename)
 }
 
 //string Language::getString(LangString id)
-string Language::getString(int id)
+string Language::getString(LangString id)
 {
 	return _strings[id];
 }

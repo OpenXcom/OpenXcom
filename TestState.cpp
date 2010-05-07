@@ -49,7 +49,7 @@ TestState::TestState(Game *game) : State(game)
 	//_text->setWordWrap(false);
 	_text->setAlign(ALIGN_CENTER);
 	//_game->getResourcePack()->setLanguage("GERMAN.DAT");
-	_text->setText(_game->getResourcePack()->getLanguage()->getString(251));
+	_text->setText(_game->getResourcePack()->getLanguage()->getString(STR_COUNCIL_TERMINATED));
 
 	_list->setColor(Palette::blockOffset(15)+1);
 	_list->setColumns(3, 100, 50, 100);

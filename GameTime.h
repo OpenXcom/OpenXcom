@@ -19,6 +19,8 @@
 #ifndef OPENXCOM__GAMETIME_H
 #define OPENXCOM__GAMETIME_H
 
+#include "LangString.h"
+
 enum TimeTrigger { TIME_SEC, TIME_MIN, TIME_HOUR, TIME_DAY, TIME_MONTH };
 
 class GameTime
@@ -33,8 +35,11 @@ public:
 	int getMinute();
 	int getHour();
 	int getWeekday();
+	LangString getWeekdayString();
 	int getDay();
+	LangString getDayString();
 	int getMonth();
+	LangString getMonthString();
 	int getYear();
 };
 

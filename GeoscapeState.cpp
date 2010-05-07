@@ -297,30 +297,12 @@ void GeoscapeState::timeAdvance()
 	ss3 << _game->getSavedGame()->getTime()->getHour();
 	_txtHour->setText(ss3.str());
 
-	ss4 << _game->getSavedGame()->getTime()->getDay();
-	switch (_game->getSavedGame()->getTime()->getDay())
-	{
-	case 1:
-	case 21:
-	case 31:
-		ss4 << _game->getResourcePack()->getLanguage()->getString(STR_ST);
-		break;
-	case 2:
-	case 22:
-		ss4 << _game->getResourcePack()->getLanguage()->getString(STR_ND);
-		break;
-	case 3:
-		ss4 << _game->getResourcePack()->getLanguage()->getString(STR_RD);
-		break;
-	default:
-		ss4 << _game->getResourcePack()->getLanguage()->getString(STR_TH);
-		break;
-	}
+	ss4 << _game->getSavedGame()->getTime()->getDay() << _game->getSavedGame()->getTime()->getDayString();
 	_txtDay->setText(ss4.str());
 
-	_txtWeekday->setText(_game->getResourcePack()->getLanguage()->getString(STR_SUNDAY - 1 + _game->getSavedGame()->getTime()->getWeekday()));
+	_txtWeekday->setText(_game->getResourcePack()->getLanguage()->getString(_game->getSavedGame()->getTime()->getWeekdayString()));
 
-	_txtMonth->setText(_game->getResourcePack()->getLanguage()->getString(STR_JAN - 1 + _game->getSavedGame()->getTime()->getMonth()));
+	_txtMonth->setText(_game->getResourcePack()->getLanguage()->getString(_game->getSavedGame()->getTime()->getMonthString()));
 
 	ss5 << _game->getSavedGame()->getTime()->getYear();
 	_txtYear->setText(ss5.str());

@@ -69,7 +69,7 @@ InterceptState::InterceptState(Game *game) : State(game)
 
 	_lstCrafts->setColor(Palette::blockOffset(15)-1);
 	_lstCrafts->setColumns(4, 86, 65, 85, 64);
-	_lstCrafts->addRow(4, "SKYRANGER-1", _game->getResourcePack()->getLanguage()->getString(268).c_str(), "Base", "8/0/0");
+	_lstCrafts->addRow(4, "SKYRANGER-1", _game->getResourcePack()->getLanguage()->getString((LangString)268).c_str(), "Base", "8/0/0");
 	_lstCrafts->getCell(0, 1)->setColor(Palette::blockOffset(8)+10);
 }
 

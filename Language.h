@@ -35,7 +35,7 @@ public:
 	~Language();
 	void loadDat(string filename);
 	//string getString(LangString id);
-	string getString(int id);
+	string getString(LangString id);
 	void addString(string str);
 };
 

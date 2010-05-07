@@ -55,7 +55,7 @@ OptionsState::OptionsState(Game *game) : State(game)
 	_btnAbandon->onMouseClick((EventHandler)&OptionsState::btnAbandonClick);
 
 	_btnCancel->setColor(Palette::blockOffset(15)+2);
-	_btnCancel->setText(_game->getResourcePack()->getLanguage()->getString(49));
+	_btnCancel->setText(_game->getResourcePack()->getLanguage()->getString(STR_CANCEL_UC));
 	_btnCancel->onMouseClick((EventHandler)&OptionsState::btnCancelClick);
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);

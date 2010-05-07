@@ -51,7 +51,7 @@ SoldiersState::SoldiersState(Game *game) : State(game)
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString(803));
+	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString((LangString)803));
 
 	_txtName->setColor(Palette::blockOffset(15)+1);
 	_txtName->setText(_game->getResourcePack()->getLanguage()->getString(STR_NAME));
@@ -60,11 +60,11 @@ SoldiersState::SoldiersState(Game *game) : State(game)
 	_txtRank->setText(_game->getResourcePack()->getLanguage()->getString(STR_RANK));
 
 	_txtCraft->setColor(Palette::blockOffset(15)+1);
-	_txtCraft->setText(_game->getResourcePack()->getLanguage()->getString(337));
+	_txtCraft->setText(_game->getResourcePack()->getLanguage()->getString((LangString)337));
 
 	_lstSoldiers->setColor(Palette::blockOffset(13)+10);
 	_lstSoldiers->setColumns(3, 114, 102, 82);
-	_lstSoldiers->addRow(3, "Some Guy", _game->getResourcePack()->getLanguage()->getString(327).c_str(), "SKYRANGER-1");
+	_lstSoldiers->addRow(3, "Some Guy", _game->getResourcePack()->getLanguage()->getString((LangString)327).c_str(), "SKYRANGER-1");
 }
 
 SoldiersState::~SoldiersState()

@@ -120,14 +120,42 @@ int GameTime::getWeekday()
 	return _weekday;
 }
 
+LangString GameTime::getWeekdayString()
+{
+	switch (_day)
+	{
+	case 1:
+	case 21:
+	case 31:
+		return STR_ST;
+	case 2:
+	case 22:
+		return STR_ND;
+	case 3:
+		return STR_RD;
+	default:
+		return STR_TH;
+	}
+}
+
 int GameTime::getDay()
 {
 	return _day;
 }
 
+LangString GameTime::getDayString()
+{
+	return (LangString)(STR_SUNDAY - 1 + _weekday);
+}
+
 int GameTime::getMonth()
 {
 	return _month;
+}
+
+LangString GameTime::getMonthString()
+{
+	return (LangString)(STR_JAN - 1 + _month);
 }
 
 int GameTime::getYear()

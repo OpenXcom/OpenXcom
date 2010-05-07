@@ -66,7 +66,7 @@ CraftsState::CraftsState(Game *game) : State(game)
 	_txtName->setText(_game->getResourcePack()->getLanguage()->getString(STR_NAME));
 
 	_txtStatus->setColor(Palette::blockOffset(15)+1);
-	_txtStatus->setText(_game->getResourcePack()->getLanguage()->getString(321));
+	_txtStatus->setText(_game->getResourcePack()->getLanguage()->getString((LangString)321));
 
 	_txtWeapon->setColor(Palette::blockOffset(15)+1);
 	_txtWeapon->setText(_game->getResourcePack()->getLanguage()->getString(STR_WEAPON_SYSTEMS));
@@ -79,7 +79,7 @@ CraftsState::CraftsState(Game *game) : State(game)
 
 	_lstCrafts->setColor(Palette::blockOffset(13)+10);
 	_lstCrafts->setColumns(5, 94, 66, 47, 46, 45);
-	_lstCrafts->addRow(5, "SKYRANGER-1", _game->getResourcePack()->getLanguage()->getString(268).c_str(), "0/0", "8", "0");
+	_lstCrafts->addRow(5, "SKYRANGER-1", _game->getResourcePack()->getLanguage()->getString((LangString)268).c_str(), "0/0", "8", "0");
 }
 
 CraftsState::~CraftsState()
