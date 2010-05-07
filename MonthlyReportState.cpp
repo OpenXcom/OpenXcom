@@ -51,9 +51,12 @@ MonthlyReportState::MonthlyReportState(Game *game) : State(game)
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
 	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString(STR_XCOM_PROJECT_MONTHLY_REPORT));
+	
+	stringstream ss;
+	ss << _game->getResourcePack()->getLanguage()->getString(STR_MONTH) << _game->getResourcePack()->getLanguage()->getString(_game->getSavedGame()->getTime()->getMonthString()) << " " << _game->getSavedGame()->getTime()->getYear();
 
 	_txtMonth->setColor(Palette::blockOffset(15)-1);
-	_txtMonth->setText(_game->getResourcePack()->getLanguage()->getString(STR_MONTH));
+	_txtMonth->setText(ss.str());
 
 	_txtRating->setColor(Palette::blockOffset(15)-1);
 	_txtRating->setText(_game->getResourcePack()->getLanguage()->getString(STR_MONTHLY_RATING));

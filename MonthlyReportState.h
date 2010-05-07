@@ -19,6 +19,7 @@
 #ifndef OPENXCOM__MONTHLYREPORTSTATE_H
 #define OPENXCOM__MONTHLYREPORTSTATE_H
 
+#include <sstream>
 #include "State_Interactive.h"
 #include "LangString.h"
 #include "Palette.h"

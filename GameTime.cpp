@@ -122,6 +122,16 @@ int GameTime::getWeekday()
 
 LangString GameTime::getWeekdayString()
 {
+	return (LangString)(STR_SUNDAY - 1 + _weekday);
+}
+
+int GameTime::getDay()
+{
+	return _day;
+}
+
+LangString GameTime::getDayString()
+{
 	switch (_day)
 	{
 	case 1:
@@ -136,16 +146,6 @@ LangString GameTime::getWeekdayString()
 	default:
 		return STR_TH;
 	}
-}
-
-int GameTime::getDay()
-{
-	return _day;
-}
-
-LangString GameTime::getDayString()
-{
-	return (LangString)(STR_SUNDAY - 1 + _weekday);
 }
 
 int GameTime::getMonth()

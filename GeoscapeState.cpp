@@ -297,7 +297,7 @@ void GeoscapeState::timeAdvance()
 	ss3 << _game->getSavedGame()->getTime()->getHour();
 	_txtHour->setText(ss3.str());
 
-	ss4 << _game->getSavedGame()->getTime()->getDay() << _game->getSavedGame()->getTime()->getDayString();
+	ss4 << _game->getSavedGame()->getTime()->getDay() << _game->getResourcePack()->getLanguage()->getString(_game->getSavedGame()->getTime()->getDayString());
 	_txtDay->setText(ss4.str());
 
 	_txtWeekday->setText(_game->getResourcePack()->getLanguage()->getString(_game->getSavedGame()->getTime()->getWeekdayString()));
