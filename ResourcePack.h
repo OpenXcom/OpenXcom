@@ -27,6 +27,7 @@
 #include "Font.h"
 #include "Palette.h"
 #include "Polygon.h"
+#include "Music.h"
 
 using namespace std;
 
@@ -42,6 +43,7 @@ protected:
 	map<string, Surface*> _surfaces;
 	map<string, SurfaceSet*> _sets;
 	vector<Polygon*> _polygons;
+	map<string, Music*> _musics;
 public:
 	ResourcePack(string folder);
 	~ResourcePack();
@@ -53,6 +55,7 @@ public:
 	Surface *getSurface(string name);
 	SurfaceSet *getSurfaceSet(string name);
 	vector<Polygon*> *getPolygons();
+	Music *getMusic(string name);
 	Palette *getPalette(string name);
 	void setPalette(SDL_Color *colors, int firstcolor, int ncolors);
 };

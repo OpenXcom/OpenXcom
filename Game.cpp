@@ -27,6 +27,12 @@ Game::Game(char* title, int width, int height, int bpp) : _states(), _deleted(),
 		throw SDL_GetError();
 	}
 
+	// Initialize SDL_mixer
+	if (Mix_OpenAudio(22050, AUDIO_S16SYS, 2, 4096) != 0)
+	{
+		throw Mix_GetError();
+	}
+
 	// Set the window caption
 	SDL_WM_SetCaption(title, 0);
 
@@ -41,6 +47,10 @@ Game::Game(char* title, int width, int height, int bpp) : _states(), _deleted(),
 Game::~Game()
 {
 	delete _screen;
+
+	Mix_CloseAudio();
+
+	SDL_Quit();
 }
 
 void Game::run()

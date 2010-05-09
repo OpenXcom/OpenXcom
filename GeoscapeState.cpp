@@ -226,6 +226,9 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _rotLon(0), _rotLat(0), 
 	_gameTimer->start();
 
 	timeAdvance();
+
+	// Set music
+	_game->getResourcePack()->getMusic("GMGEO1.MID")->play();
 }
 
 GeoscapeState::~GeoscapeState()

@@ -23,6 +23,7 @@ class State;
 
 #include <list>
 #include "SDL.h"
+#include "SDL_mixer.h"
 #include "Screen.h"
 #include "Cursor.h"
 #include "ResourcePack.h"

@@ -18,7 +18,7 @@
  */
 #include "ResourcePack.h"
 
-ResourcePack::ResourcePack(string folder) : _folder(folder), _currentLang(0), _langName(""), _palettes(), _fonts(), _languages(), _surfaces(), _sets()
+ResourcePack::ResourcePack(string folder) : _folder(folder), _currentLang(0), _langName(""), _palettes(), _fonts(), _languages(), _surfaces(), _sets(), _polygons(), _musics()
 {
 }
 
@@ -41,6 +41,10 @@ ResourcePack::~ResourcePack()
 		delete i->second;
 	}
 	for (map<string, Palette*>::iterator i = _palettes.begin(); i != _palettes.end(); i++)
+	{
+		delete i->second;
+	}
+	for (map<string, Music*>::iterator i = _musics.begin(); i != _musics.end(); i++)
 	{
 		delete i->second;
 	}
@@ -85,6 +89,11 @@ SurfaceSet *ResourcePack::getSurfaceSet(string name)
 vector<Polygon*> *ResourcePack::getPolygons()
 {
 	return &_polygons;
+}
+
+Music *ResourcePack::getMusic(string name)
+{
+	return _musics[name];
 }
 
 Palette *ResourcePack::getPalette(string name)

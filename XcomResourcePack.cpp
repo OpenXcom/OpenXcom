@@ -197,6 +197,20 @@ XcomResourcePack::XcomResourcePack(string folder) : ResourcePack(folder)
 	s << folder << "GEODATA/" << "WORLD.DAT";
 	Globe::loadDat(s.str(), &_polygons);
 	cout << "WORLD.DAT" << endl;
+
+	// Load musics
+	string mids[] = {"GMSTORY.MID",
+					 "GMGEO1.MID",
+					 "GMGEO2.MID"};
+
+	for (int i = 0; i < 3; i++)
+	{
+		stringstream s;
+		s << folder << "SOUND/" << mids[i];
+		_musics[mids[i]] = new Music();
+		_musics[mids[i]]->load(s.str());
+		cout << mids[i] << endl;
+	}
 }
 
 XcomResourcePack::~XcomResourcePack()

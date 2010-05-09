@@ -16,40 +16,30 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "Game.h"
-#include "TestState.h"
-#include "StartState.h"
-#include "XcomResourcePack.h"
-#include "XcomRuleset.h"
-#include "SavedGame.h"
+#include "Music.h"
 
-#include <iostream>
-
-#define DATA_FOLDER "./DATA/"
-
-Game *game;
-
-int main(int argc, char** args)
+Music::Music() : _music(0)
 {
-	try
-	{
-		game = new Game("OpenXcom", 320, 200, 8);
-		game->setResourcePack(new XcomResourcePack(DATA_FOLDER));
-		game->setRuleset(new XcomRuleset());
-		
-		//game->getScreen()->setFullscreen(true);
-		game->getScreen()->setScale(2);
-		//game->setState(new TestState(game));
-		game->setState(new StartState(game));
-		game->run();
-	}
-	catch(char* c)
-	{
-		cout << "ERROR: " << c << endl;
-		exit(-1);
-	}
-	
-	delete game;
+}
 
-	return 0;
+Music::~Music()
+{
+	Mix_FreeMusic(_music);
+}
+
+void Music::load(string filename)
+{
+	_music = Mix_LoadMUS(filename.c_str());
+	if(_music == 0) 
+	{
+		throw Mix_GetError();
+	}
+}
+
+void Music::play()
+{
+	if(Mix_PlayMusic(_music, 0) == -1) 
+	{
+		throw Mix_GetError();
+	}
 }

@@ -16,40 +16,23 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "Game.h"
-#include "TestState.h"
-#include "StartState.h"
-#include "XcomResourcePack.h"
-#include "XcomRuleset.h"
-#include "SavedGame.h"
+#ifndef OPENXCOM__MUSIC_H
+#define OPENXCOM__MUSIC_H
 
-#include <iostream>
+#include "SDL_mixer.h"
+#include <string>
 
-#define DATA_FOLDER "./DATA/"
+using namespace std;
 
-Game *game;
-
-int main(int argc, char** args)
+class Music
 {
-	try
-	{
-		game = new Game("OpenXcom", 320, 200, 8);
-		game->setResourcePack(new XcomResourcePack(DATA_FOLDER));
-		game->setRuleset(new XcomRuleset());
-		
-		//game->getScreen()->setFullscreen(true);
-		game->getScreen()->setScale(2);
-		//game->setState(new TestState(game));
-		game->setState(new StartState(game));
-		game->run();
-	}
-	catch(char* c)
-	{
-		cout << "ERROR: " << c << endl;
-		exit(-1);
-	}
-	
-	delete game;
+private:
+	Mix_Music *_music;
+public:
+	Music();
+	~Music();
+	void load(string filename);
+	void play();
+};
 
-	return 0;
-}
+#endif
