@@ -29,6 +29,7 @@ XcomRuleset::~XcomRuleset()
 SavedGame *XcomRuleset::newSave(GameDifficulty diff)
 {
 	SavedGame *save = new SavedGame(diff);
+
 	save->getCountries()->insert(pair<LangString, Country*>(STR_USA, new Country(SavedGame::genRandom(600, 1200)*1000)));
 	save->getCountries()->insert(pair<LangString, Country*>(STR_RUSSIA, new Country(SavedGame::genRandom(230, 460)*1000)));
 	save->getCountries()->insert(pair<LangString, Country*>(STR_UK, new Country(SavedGame::genRandom(240, 480)*1000)));
@@ -46,5 +47,9 @@ SavedGame *XcomRuleset::newSave(GameDifficulty diff)
 	save->getCountries()->insert(pair<LangString, Country*>(STR_EGYPT, new Country(SavedGame::genRandom(160, 320)*1000)));
 	save->getCountries()->insert(pair<LangString, Country*>(STR_CANADA, new Country(SavedGame::genRandom(110, 220)*1000)));
 	save->setFunds(save->getCountryFunding());
+	
+	Base *base = new Base(0.0, 0.0);
+	base->setName("X-COM BASE 1");
+	save->getBases()->push_back(base);
 	return save;
 }

@@ -65,3 +65,8 @@ int SavedGame::getCountryFunding()
 	}
 	return total;
 }
+
+vector<Base*> *SavedGame::getBases()
+{
+	return &_bases;
+}

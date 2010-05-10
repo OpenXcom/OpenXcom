@@ -16,29 +16,32 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM__POLYGON_H
-#define OPENXCOM__POLYGON_H
+#include "Base.h"
 
-#include <string>
-
-using namespace std;
-
-class Polygon
+Base::Base(double lat, double lon) : _lat(lat), _lon(lon), _name("")
 {
-private:
-	double *_lat, *_lon;
-	const int _points;
-	int _texture;
-public:
-	Polygon(int points);
-	~Polygon();
-	double getLatitude(int i);
-	void setLatitude(int i, double lat);
-	double getLongitude(int i);
-	void setLongitude(int i, double lon);
-	int getTexture();
-	void setTexture(int tex);
-	int getPoints();
-};
+}
 
-#endif
+Base::~Base()
+{
+}
+
+string Base::getName()
+{
+	return _name;
+}
+
+void Base::setName(string name)
+{
+	_name = name;
+}
+
+double Base::getLatitude()
+{
+	return _lat;
+}
+
+double Base::getLongitude()
+{
+	return _lon;
+}

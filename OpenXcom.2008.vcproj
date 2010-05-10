@@ -62,7 +62,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="SDLmain.lib SDL.lib SDL_gfx.lib"
+				AdditionalDependencies="SDLmain.lib SDL.lib SDL_gfx.lib SDL_mixer.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;.\SDL\lib&quot;"
 				GenerateManifest="true"
@@ -139,7 +139,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="SDLmain.lib SDL.lib SDL_gfx.lib"
+				AdditionalDependencies="SDLmain.lib SDL.lib SDL_gfx.lib SDL_mixer.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;.\SDL\lib&quot;"
 				GenerateManifest="true"
@@ -275,6 +275,14 @@
 			</File>
 			<File
 				RelativePath=".\Language.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Music.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Music.h"
 				>
 			</File>
 			<File
@@ -508,6 +516,14 @@
 			<Filter
 				Name="Game"
 				>
+				<File
+					RelativePath=".\Base.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Base.h"
+					>
+				</File>
 				<File
 					RelativePath=".\Country.cpp"
 					>

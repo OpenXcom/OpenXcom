@@ -141,6 +141,7 @@
     <ClCompile Include="XcomResourcePack.cpp" />
     <ClCompile Include="Ruleset.cpp" />
     <ClCompile Include="Country.cpp" />
+    <ClCompile Include="Base.cpp" />
     <ClCompile Include="GameTime.cpp" />
     <ClCompile Include="SavedGame.cpp" />
     <ClCompile Include="main.cpp" />
@@ -190,6 +191,7 @@
     <ClInclude Include="ResourcePack.h" />
     <ClInclude Include="XcomResourcePack.h" />
     <ClInclude Include="Ruleset.h" />
+    <ClCompile Include="Base.h" />
     <ClInclude Include="Country.h" />
     <ClInclude Include="GameTime.h" />
     <ClInclude Include="SavedGame.h" />

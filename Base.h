@@ -16,41 +16,25 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM__SAVEDGAME_H
-#define OPENXCOM__SAVEDGAME_H
+#ifndef OPENXCOM__BASE_H
+#define OPENXCOM__BASE_H
 
-#include <map>
-#include <vector>
-#include <cmath>
-#include <ctime>
-#include "GameTime.h"
-#include "Country.h"
-#include "LangString.h"
-#include "Base.h"
+#include <string>
 
 using namespace std;
 
-enum GameDifficulty { DIFF_BEGINNER, DIFF_EXPERIENCED, DIFF_VETERAN, DIFF_GENIUS, DIFF_SUPERHUMAN };
-
-class SavedGame
+class Base
 {
 private:
-	GameDifficulty _diff;
-	GameTime *_time;
-	int _funds;
-	map<LangString, Country*> _countries;
-	vector<Base*> _bases;
+	double _lat, _lon;
+	string _name;
 public:
-	SavedGame(GameDifficulty diff);
-	~SavedGame();
-	static int seed;
-	static int genRandom(int min, int max);
-	int getFunds();
-	void setFunds(int funds);
-	GameTime *getTime();
-	map<LangString, Country*> *getCountries();
-	int getCountryFunding();
-	vector<Base*> *getBases();
+	Base(double lat, double lon);
+	~Base();
+	string getName();
+	void setName(string name);
+	double getLatitude();
+	double getLongitude();
 };
 
 #endif
