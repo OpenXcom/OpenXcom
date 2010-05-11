@@ -51,7 +51,6 @@ private:
 public:
 	BaseInfoState(Game *game, Base *base);
 	~BaseInfoState();
-	void think();
 	void btnOkClick(SDL_Event *ev, int scale);
 };
 

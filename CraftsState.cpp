@@ -87,10 +87,6 @@ CraftsState::~CraftsState()
 	
 }
 
-void CraftsState::think()
-{
-}
-
 void CraftsState::btnOkClick(SDL_Event *ev, int scale)
 {
 	_game->popState();

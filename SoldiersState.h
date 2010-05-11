@@ -37,7 +37,6 @@ private:
 public:
 	SoldiersState(Game *game);
 	~SoldiersState();
-	void think();
 	void btnOkClick(SDL_Event *ev, int scale);
 };
 

@@ -18,7 +18,7 @@
  */
 #include "Ruleset.h"
 
-Ruleset::Ruleset()
+Ruleset::Ruleset() : _facilities(), _crafts()
 {
 }
 
@@ -31,4 +31,14 @@ SavedGame *Ruleset::newSave(GameDifficulty diff)
 	SavedGame *save = new SavedGame(diff);
 
 	return save;
+}
+
+RuleBaseFacility *Ruleset::getBaseFacility(LangString id)
+{
+	return _facilities[id];
+}
+
+RuleCraft *Ruleset::getCraft(LangString id)
+{
+	return _crafts[id];
 }

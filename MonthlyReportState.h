@@ -36,7 +36,6 @@ private:
 public:
 	MonthlyReportState(Game *game);
 	~MonthlyReportState();
-	void think();
 	void btnOkClick(SDL_Event *ev, int scale);
 };
 

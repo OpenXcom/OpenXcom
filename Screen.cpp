@@ -20,7 +20,7 @@
 
 Screen::Screen(int width, int height, int bpp) : _width(width), _height(height), _bpp(bpp), _scale(1)
 {
-	_flags = SDL_DOUBLEBUF|SDL_HWPALETTE;
+	_flags = SDL_HWPALETTE;
 
 	_screen = SDL_SetVideoMode(_width, _height, _bpp, _flags);
 	if (_screen == 0)

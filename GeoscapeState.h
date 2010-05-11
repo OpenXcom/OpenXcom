@@ -57,8 +57,10 @@ private:
 public:
 	GeoscapeState(Game *game);
 	~GeoscapeState();
+	void init();
 	void think();
 	void globeRotate();
+	void timeDisplay();
 	void timeAdvance();
 	void timeSecond();
 	void timeHour();

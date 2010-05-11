@@ -40,6 +40,16 @@ bool State::isScreen()
 	return _screen;
 }
 
+void State::init()
+{
+
+}
+
+void State::think()
+{
+
+}
+
 void State::handle(SDL_Event *ev, int scale)
 {
 	for (vector<Surface*>::iterator i = _surfaces.begin(); i < _surfaces.end(); i++)

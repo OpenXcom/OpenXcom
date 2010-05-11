@@ -83,10 +83,6 @@ FundingState::~FundingState()
 	
 }
 
-void FundingState::think()
-{
-}
-
 void FundingState::btnOkClick(SDL_Event *ev, int scale)
 {
 	_game->popState();

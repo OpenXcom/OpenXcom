@@ -21,14 +21,18 @@
 
 #include "Surface.h"
 
+enum WindowPopup { POPUP_NONE, POPUP_HORIZONTAL, POPUP_VERTICAL, POPUP_BOTH };
+
 class Window : public Surface
 {
 private:
 	Surface *_bg;
 	Uint8 _color;
+	WindowPopup _popup;
+	double _popupStep;
 
 public:
-	Window(int width, int height, int x = 0, int y = 0);
+	Window(int width, int height, int x = 0, int y = 0, WindowPopup popup = POPUP_NONE);
 	~Window();
 	void setBg(Surface *bg);
 	void setColor(Uint8 color);

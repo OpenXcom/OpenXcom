@@ -36,7 +36,6 @@ private:
 public:
 	OptionsState(Game *game);
 	~OptionsState();
-	void think();
 	void btnLoadClick(SDL_Event *ev, int scale);
 	void btnSaveClick(SDL_Event *ev, int scale);
 	void btnAbandonClick(SDL_Event *ev, int scale);

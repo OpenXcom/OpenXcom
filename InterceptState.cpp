@@ -23,7 +23,7 @@ InterceptState::InterceptState(Game *game) : State(game)
 	_screen = false;
 
 	// Create objects
-	_window = new Window(320, 140, 0, 30);
+	_window = new Window(320, 140, 0, 30, POPUP_HORIZONTAL);
 	_btnCancel = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 288, 16, 16, 146);
 	_txtTitle = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 300, 16, 10, 46);
 	_txtCraft = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 86, 9, 14, 70);
@@ -78,10 +78,6 @@ InterceptState::InterceptState(Game *game) : State(game)
 InterceptState::~InterceptState()
 {
 	
-}
-
-void InterceptState::think()
-{
 }
 
 void InterceptState::btnCancelClick(SDL_Event *ev, int scale)

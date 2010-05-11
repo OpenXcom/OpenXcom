@@ -23,7 +23,7 @@ OptionsState::OptionsState(Game *game) : State(game)
 	_screen = false;
 
 	// Create objects
-	_window = new Window(216, 160, 20, 20);
+	_window = new Window(216, 160, 20, 20, POPUP_BOTH);
 	_btnLoad = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 180, 20, 38, 60);
 	_btnSave = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 180, 20, 38, 85);
 	_btnAbandon = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 180, 20, 38, 110);
@@ -69,10 +69,6 @@ OptionsState::OptionsState(Game *game) : State(game)
 OptionsState::~OptionsState()
 {
 	
-}
-
-void OptionsState::think()
-{
 }
 
 void OptionsState::btnLoadClick(SDL_Event *ev, int scale)

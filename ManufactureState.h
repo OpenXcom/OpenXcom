@@ -38,7 +38,6 @@ private:
 public:
 	ManufactureState(Game *game);
 	~ManufactureState();
-	void think();
 	void btnOkClick(SDL_Event *ev, int scale);
 };
 

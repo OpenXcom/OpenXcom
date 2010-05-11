@@ -16,32 +16,31 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM__BASE_H
-#define OPENXCOM__BASE_H
+#ifndef OPENXCOM__SOLDIER_H
+#define OPENXCOM__SOLDIER_H
 
 #include <string>
-#include <vector>
-#include "BaseFacility.h"
-#include "Soldier.h"
-#include "Craft.h"
+
+enum SoldierRank { RANK_ROOKIE, RANK_SQUADDIE, RANK_SERGEANT, RANK_CAPTAIN, RANK_COLONEL, RANK_COMMANDER };
+enum SoldierGender { GENDER_MALE, GENDER_FEMALE };
+enum SoldierLook { LOOK_BLONDE, LOOK_BROWNHAIR, LOOK_ORIENTAL, LOOK_AFRICAN };
 
 using namespace std;
 
-class Base
+class Soldier
 {
 private:
-	double _lat, _lon;
 	string _name;
-	vector<BaseFacility*> _facilities;
-	vector<Soldier*> _soldiers;
-	vector<Craft*> _crafts;
+	int _tu, _energy, _health, _bravery, _reactions, _firing, _throwing, _strength, _psiStrength, _psiSkill;
+	SoldierRank _rank;
+	SoldierGender _gender;
+	SoldierLook _look;
+	int _missions, _kills;
 public:
-	Base(double lat, double lon);
-	~Base();
+	Soldier();
+	~Soldier();
 	string getName();
 	void setName(string name);
-	double getLatitude();
-	double getLongitude();
 };
 
 #endif

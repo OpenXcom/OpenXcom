@@ -37,7 +37,6 @@ private:
 public:
 	ResearchState(Game *game);
 	~ResearchState();
-	void think();
 	void btnOkClick(SDL_Event *ev, int scale);
 };
 

@@ -36,7 +36,6 @@ private:
 public:
 	FundingState(Game *game);
 	~FundingState();
-	void think();
 	void btnOkClick(SDL_Event *ev, int scale);
 };
 

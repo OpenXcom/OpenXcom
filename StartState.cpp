@@ -21,7 +21,7 @@
 StartState::StartState(Game *game) : State(game)
 {
 	// Create objects
-	_window = new Window(256, 160, 32, 20);
+	_window = new Window(256, 160, 32, 20, POPUP_BOTH);
 	_btnEnglish = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 192, 20, 64, 90);
 	_btnDeutsche = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 192, 20, 64, 118);
 	_btnFrench = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 192, 20, 64, 146);
@@ -55,10 +55,6 @@ StartState::StartState(Game *game) : State(game)
 StartState::~StartState()
 {
 	
-}
-
-void StartState::think()
-{
 }
 
 void StartState::btnEnglishClick(SDL_Event *ev, int scale)

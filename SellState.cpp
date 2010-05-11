@@ -95,10 +95,6 @@ SellState::~SellState()
 	
 }
 
-void SellState::think()
-{
-}
-
 void SellState::btnOkClick(SDL_Event *ev, int scale)
 {
 	

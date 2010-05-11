@@ -34,7 +34,6 @@ private:
 public:
 	GraphsState(Game *game);
 	~GraphsState();
-	void think();
 	void btnGeoscapeClick(SDL_Event *ev, int scale);
 };
 

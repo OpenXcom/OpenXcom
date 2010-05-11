@@ -36,7 +36,6 @@ private:
 public:
 	NewGameState(Game *game);
 	~NewGameState();
-	void think();
 	void btnBeginnerClick(SDL_Event *ev, int scale);
 	void btnExperiencedClick(SDL_Event *ev, int scale);
 	void btnVeteranClick(SDL_Event *ev, int scale);

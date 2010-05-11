@@ -21,7 +21,7 @@
 MainMenuState::MainMenuState(Game *game) : State(game)
 {
 	// Create objects
-	_window = new Window(256, 160, 32, 20);
+	_window = new Window(256, 160, 32, 20, POPUP_BOTH);
 	_btnNew = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 192, 20, 64, 90);
 	_btnLoad = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 192, 20, 64, 118);
 	_btnQuit = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 192, 20, 64, 146);
@@ -71,10 +71,6 @@ MainMenuState::MainMenuState(Game *game) : State(game)
 MainMenuState::~MainMenuState()
 {
 	
-}
-
-void MainMenuState::think()
-{
 }
 
 void MainMenuState::btnNewClick(SDL_Event *ev, int scale)

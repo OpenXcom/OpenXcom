@@ -37,7 +37,6 @@ private:
 public:
 	AbandonGameState(Game *game);
 	~AbandonGameState();
-	void think();
 	void btnYesClick(SDL_Event *ev, int scale);
 	void btnNoClick(SDL_Event *ev, int scale);
 };

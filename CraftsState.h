@@ -37,7 +37,6 @@ private:
 public:
 	CraftsState(Game *game);
 	~CraftsState();
-	void think();
 	void btnOkClick(SDL_Event *ev, int scale);
 };
 

@@ -18,8 +18,10 @@
  */
 #include "Window.h"
 
-Window::Window(int width, int height, int x, int y) : Surface(width, height, x, y), _bg(0), _color(0)
+Window::Window(int width, int height, int x, int y, WindowPopup popup) : Surface(width, height, x, y), _bg(0), _color(0), _popup(popup), _popupStep(0.0)
 {
+	if (_popup == POPUP_NONE)
+		_popupStep = 1.0;
 }
 
 Window::~Window()
@@ -47,34 +49,60 @@ void Window::blit(Surface *surface)
 	SDL_Rect cropper;
 	SDL_Rect square;
 	int color = _color;
+	
+	clear();
 
-	square.x = 0;
-	square.y = 0;
-	square.w = _width;
-	square.h = _height;
-
-	for (int i = 0; i < 5; i++)
+	if (_popupStep > 0.0)
 	{
-		SDL_FillRect(_surface, &square, color);
-		if (i < 2)
-			color--;
+		if (_popup == POPUP_HORIZONTAL || _popup == POPUP_BOTH)
+		{
+			square.x = (_width - _width * _popupStep) / 2;
+			square.w = _width * _popupStep;
+		}
 		else
-			color++;
-		square.x++;
-		square.y++;
-		square.w -= 2;
-		square.h -= 2;
+		{
+			square.x = 0;
+			square.w = _width;
+		}
+		if (_popup == POPUP_VERTICAL || _popup == POPUP_BOTH)
+		{
+			square.y = (_height - _height * _popupStep) / 2;
+			square.h = _height * _popupStep;
+		}
+		else
+		{
+			square.y = 0;
+			square.h = _height;
+		}
+
+		for (int i = 0; i < 5; i++)
+		{
+			SDL_FillRect(_surface, &square, color);
+			if (i < 2)
+				color--;
+			else
+				color++;
+			square.x++;
+			square.y++;
+			square.w -= 2;
+			square.h -= 2;
+		}
+
+		cropper.x = _x + square.x;
+		cropper.y = _y + square.y;
+		cropper.w = square.w;
+		cropper.h = square.h;
+		
+		_bg->setCrop(&cropper);
+		_bg->setX(square.x);
+		_bg->setY(square.y);
+		_bg->blit(this);
 	}
 
-	cropper.x = _x + square.x;
-	cropper.y = _y + square.y;
-	cropper.w = square.w;
-	cropper.h = square.h;
-	
-	_bg->setCrop(&cropper);
-	_bg->setX(square.x);
-	_bg->setY(square.y);
-	_bg->blit(this);
+	if (_popupStep >= 1.0)
+		_popupStep = 1.0;
+	else
+		_popupStep += 0.1;
 
 	Surface::blit(surface);
 }

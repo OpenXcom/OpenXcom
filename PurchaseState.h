@@ -37,7 +37,6 @@ private:
 public:
 	PurchaseState(Game *game);
 	~PurchaseState();
-	void think();
 	void btnOkClick(SDL_Event *ev, int scale);
 	void btnCancelClick(SDL_Event *ev, int scale);
 };

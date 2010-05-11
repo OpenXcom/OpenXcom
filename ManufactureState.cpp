@@ -112,10 +112,6 @@ ManufactureState::~ManufactureState()
 	
 }
 
-void ManufactureState::think()
-{
-}
-
 void ManufactureState::btnOkClick(SDL_Event *ev, int scale)
 {
 	_game->popState();

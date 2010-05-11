@@ -92,10 +92,6 @@ ResearchState::~ResearchState()
 	
 }
 
-void ResearchState::think()
-{
-}
-
 void ResearchState::btnOkClick(SDL_Event *ev, int scale)
 {
 	_game->popState();

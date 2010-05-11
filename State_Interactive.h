@@ -42,8 +42,9 @@ public:
 	virtual ~State();
 	void add(Surface *surface);
 	bool isScreen();
+	virtual void init();
 	virtual void handle(SDL_Event* ev, int scale);
-	virtual void think() = 0;
+	virtual void think();
 	virtual void blit();
 };
 

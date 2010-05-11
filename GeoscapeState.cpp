@@ -225,8 +225,6 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _rotLon(0), _rotLat(0), 
 	_gameTimer->onTimer((TimerHandler)&GeoscapeState::timeAdvance);
 	_gameTimer->start();
 
-	timeAdvance();
-
 	// Set music
 	_game->getResourcePack()->getMusic("GMGEO1.MID")->play();
 }
@@ -234,6 +232,11 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _rotLon(0), _rotLat(0), 
 GeoscapeState::~GeoscapeState()
 {
 	
+}
+
+void GeoscapeState::init()
+{
+	timeDisplay();
 }
 
 void GeoscapeState::think()
@@ -245,6 +248,36 @@ void GeoscapeState::think()
 void GeoscapeState::globeRotate()
 {
 	_globe->rotate(_rotLon, _rotLat);
+}
+
+void GeoscapeState::timeDisplay()
+{
+	stringstream ss, ss2, ss3, ss4, ss5;
+	
+	if (_game->getSavedGame()->getTime()->getSecond() < 10)
+		ss << "0" << _game->getSavedGame()->getTime()->getSecond();
+	else
+		ss << _game->getSavedGame()->getTime()->getSecond();
+	_txtSec->setText(ss.str());
+
+	if (_game->getSavedGame()->getTime()->getMinute() < 10)
+		ss2 << "0" << _game->getSavedGame()->getTime()->getMinute();
+	else
+		ss2 << _game->getSavedGame()->getTime()->getMinute();
+	_txtMin->setText(ss2.str());
+
+	ss3 << _game->getSavedGame()->getTime()->getHour();
+	_txtHour->setText(ss3.str());
+
+	ss4 << _game->getSavedGame()->getTime()->getDay() << _game->getResourcePack()->getLanguage()->getString(_game->getSavedGame()->getTime()->getDayString());
+	_txtDay->setText(ss4.str());
+
+	_txtWeekday->setText(_game->getResourcePack()->getLanguage()->getString(_game->getSavedGame()->getTime()->getWeekdayString()));
+
+	_txtMonth->setText(_game->getResourcePack()->getLanguage()->getString(_game->getSavedGame()->getTime()->getMonthString()));
+
+	ss5 << _game->getSavedGame()->getTime()->getYear();
+	_txtYear->setText(ss5.str());
 }
 
 void GeoscapeState::timeAdvance()
@@ -283,32 +316,7 @@ void GeoscapeState::timeAdvance()
 
 	_pause = false;
 
-	stringstream ss, ss2, ss3, ss4, ss5;
-	
-	if (_game->getSavedGame()->getTime()->getSecond() < 10)
-		ss << "0" << _game->getSavedGame()->getTime()->getSecond();
-	else
-		ss << _game->getSavedGame()->getTime()->getSecond();
-	_txtSec->setText(ss.str());
-
-	if (_game->getSavedGame()->getTime()->getMinute() < 10)
-		ss2 << "0" << _game->getSavedGame()->getTime()->getMinute();
-	else
-		ss2 << _game->getSavedGame()->getTime()->getMinute();
-	_txtMin->setText(ss2.str());
-
-	ss3 << _game->getSavedGame()->getTime()->getHour();
-	_txtHour->setText(ss3.str());
-
-	ss4 << _game->getSavedGame()->getTime()->getDay() << _game->getResourcePack()->getLanguage()->getString(_game->getSavedGame()->getTime()->getDayString());
-	_txtDay->setText(ss4.str());
-
-	_txtWeekday->setText(_game->getResourcePack()->getLanguage()->getString(_game->getSavedGame()->getTime()->getWeekdayString()));
-
-	_txtMonth->setText(_game->getResourcePack()->getLanguage()->getString(_game->getSavedGame()->getTime()->getMonthString()));
-
-	ss5 << _game->getSavedGame()->getTime()->getYear();
-	_txtYear->setText(ss5.str());
+	timeDisplay();
 }
 
 void GeoscapeState::timeSecond()
@@ -322,7 +330,7 @@ void GeoscapeState::timeHour()
 void GeoscapeState::timeMonth()
 {
 	_pause = true;
-	_timer = _btn5Secs;
+	_btn5Secs->mousePress(0, _game->getScreen()->getScale(), this);
 	_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() + _game->getSavedGame()->getCountryFunding());
 	_game->pushState(new MonthlyReportState(_game));
 }

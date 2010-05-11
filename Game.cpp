@@ -122,12 +122,15 @@ void Game::setState(State *state)
 void Game::pushState(State *state)
 {
 	_states.push_back(state);
+	state->init();
 }
 
 void Game::popState()
 {
 	_deleted.push_back(_states.back());
 	_states.pop_back();
+	if (!_states.empty())
+		_states.back()->init();
 }
 
 ResourcePack *Game::getResourcePack()

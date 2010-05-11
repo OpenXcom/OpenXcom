@@ -21,7 +21,7 @@
 NewGameState::NewGameState(Game *game) : State(game)
 {
 	// Create objects
-	_window = new Window(192, 180, 64, 10);
+	_window = new Window(192, 180, 64, 10, POPUP_VERTICAL);
 	_btnBeginner = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 160, 18, 80, 55);
 	_btnExperienced = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 160, 18, 80, 80);
 	_btnVeteran = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 160, 18, 80, 105);
@@ -70,10 +70,6 @@ NewGameState::NewGameState(Game *game) : State(game)
 NewGameState::~NewGameState()
 {
 	
-}
-
-void NewGameState::think()
-{
 }
 
 void NewGameState::btnBeginnerClick(SDL_Event *ev, int scale)

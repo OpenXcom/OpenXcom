@@ -36,7 +36,6 @@ private:
 public:
 	MainMenuState(Game *game);
 	~MainMenuState();
-	void think();
 	void btnNewClick(SDL_Event *ev, int scale);
 	void btnLoadClick(SDL_Event *ev, int scale);
 	void btnQuitClick(SDL_Event *ev, int scale);

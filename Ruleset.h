@@ -19,16 +19,24 @@
 #ifndef OPENXCOM__RULESET_H
 #define OPENXCOM__RULESET_H
 
+#include <map>
 #include "SavedGame.h"
+#include "RuleBaseFacility.h"
+#include "RuleCraft.h"
+
+using namespace std;
 
 class Ruleset
 {
 private:
-
+	map<LangString, RuleBaseFacility*> _facilities;
+	map<LangString, RuleCraft*> _crafts;
 public:
 	Ruleset();
 	~Ruleset();
 	virtual SavedGame *newSave(GameDifficulty diff);
+	RuleBaseFacility *getBaseFacility(LangString id);
+	RuleCraft *getCraft(LangString id);
 };
 
 #endif

@@ -23,7 +23,7 @@ AbandonGameState::AbandonGameState(Game *game) : State(game)
 	_screen = false;
 
 	// Create objects
-	_window = new Window(216, 160, 20, 20);
+	_window = new Window(216, 160, 20, 20, POPUP_BOTH);
 	_btnYes = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 50, 20, 38, 140);
 	_btnNo = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 50, 20, 168, 140);
 	_txtTitle = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 206, 15, 25, 70);
@@ -61,14 +61,10 @@ AbandonGameState::~AbandonGameState()
 	
 }
 
-void AbandonGameState::think()
-{
-}
-
 void AbandonGameState::btnYesClick(SDL_Event *ev, int scale)
 {
-	delete _game->getSavedGame();
 	_game->setState(new MainMenuState(_game));
+	delete _game->getSavedGame();
 }
 
 void AbandonGameState::btnNoClick(SDL_Event *ev, int scale)

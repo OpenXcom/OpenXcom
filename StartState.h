@@ -33,7 +33,6 @@ private:
 public:
 	StartState(Game *game);
 	~StartState();
-	void think();
 	void btnEnglishClick(SDL_Event *ev, int scale);
 	void btnDeutscheClick(SDL_Event *ev, int scale);
 	void btnFrenchClick(SDL_Event *ev, int scale);

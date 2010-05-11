@@ -37,7 +37,6 @@ private:
 public:
 	InterceptState(Game *game);
 	~InterceptState();
-	void think();
 	void btnCancelClick(SDL_Event *ev, int scale);
 };
 

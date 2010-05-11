@@ -122,8 +122,16 @@ BasescapeState::~BasescapeState()
 	
 }
 
-void BasescapeState::think()
+void BasescapeState::init()
 {
+	_txtBase->setText(_base->getName());
+
+	_txtLocation->setText("Some Location");
+
+	string s = _game->getResourcePack()->getLanguage()->getString(STR_FUNDS_);
+	s.erase(s.size()-1, 1);
+	s += Text::formatFunding(_game->getSavedGame()->getFunds());
+	_txtFunds->setText(s);
 }
 
 void BasescapeState::btnBaseInfoClick(SDL_Event *ev, int scale)

@@ -72,10 +72,6 @@ SoldiersState::~SoldiersState()
 	
 }
 
-void SoldiersState::think()
-{
-}
-
 void SoldiersState::btnOkClick(SDL_Event *ev, int scale)
 {
 	_game->popState();

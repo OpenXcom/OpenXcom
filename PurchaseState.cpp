@@ -90,10 +90,6 @@ PurchaseState::~PurchaseState()
 	
 }
 
-void PurchaseState::think()
-{
-}
-
 void PurchaseState::btnOkClick(SDL_Event *ev, int scale)
 {
 	

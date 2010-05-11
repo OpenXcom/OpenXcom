@@ -497,6 +497,22 @@
 				Name="Rules"
 				>
 				<File
+					RelativePath=".\RuleBaseFacility.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\RuleBaseFacility.h"
+					>
+				</File>
+				<File
+					RelativePath=".\RuleCraft.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\RuleCraft.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Ruleset.cpp"
 					>
 				</File>
@@ -525,11 +541,27 @@
 					>
 				</File>
 				<File
+					RelativePath=".\BaseFacility.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\BaseFacility.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Country.cpp"
 					>
 				</File>
 				<File
 					RelativePath=".\Country.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Craft.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Craft.h"
 					>
 				</File>
 				<File
@@ -546,6 +578,14 @@
 				</File>
 				<File
 					RelativePath=".\SavedGame.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Soldier.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Soldier.h"
 					>
 				</File>
 			</Filter>

@@ -16,32 +16,20 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM__BASE_H
-#define OPENXCOM__BASE_H
+#ifndef OPENXCOM__CRAFT_H
+#define OPENXCOM__CRAFT_H
 
-#include <string>
-#include <vector>
-#include "BaseFacility.h"
-#include "Soldier.h"
-#include "Craft.h"
+#include "LangString.h"
 
-using namespace std;
-
-class Base
+class Craft
 {
 private:
+	LangString _type;
 	double _lat, _lon;
-	string _name;
-	vector<BaseFacility*> _facilities;
-	vector<Soldier*> _soldiers;
-	vector<Craft*> _crafts;
+	int _id, _fuel, _damage;
 public:
-	Base(double lat, double lon);
-	~Base();
-	string getName();
-	void setName(string name);
-	double getLatitude();
-	double getLongitude();
+	Craft(double lat, double lon);
+	~Craft();
 };
 
 #endif

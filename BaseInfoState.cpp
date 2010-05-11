@@ -267,10 +267,6 @@ BaseInfoState::~BaseInfoState()
 	
 }
 
-void BaseInfoState::think()
-{
-}
-
 void BaseInfoState::btnOkClick(SDL_Event *ev, int scale)
 {
 	_base->setName(_edtBase->getText());

@@ -42,7 +42,7 @@ private:
 public:
 	BasescapeState(Game *game);
 	~BasescapeState();
-	void think();
+	void init();
 	void btnBaseInfoClick(SDL_Event *ev, int scale);
 	void btnSoldiersClick(SDL_Event *ev, int scale);
 	void btnCraftsClick(SDL_Event *ev, int scale);

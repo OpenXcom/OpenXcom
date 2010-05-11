@@ -74,10 +74,6 @@ MonthlyReportState::~MonthlyReportState()
 	
 }
 
-void MonthlyReportState::think()
-{
-}
-
 void MonthlyReportState::btnOkClick(SDL_Event *ev, int scale)
 {
 	_game->popState();
