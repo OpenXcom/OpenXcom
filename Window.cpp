@@ -56,8 +56,8 @@ void Window::blit(Surface *surface)
 	{
 		if (_popup == POPUP_HORIZONTAL || _popup == POPUP_BOTH)
 		{
-			square.x = (_width - _width * _popupStep) / 2;
-			square.w = _width * _popupStep;
+			square.x = (int)((_width - _width * _popupStep) / 2);
+			square.w = (int)(_width * _popupStep);
 		}
 		else
 		{
@@ -66,8 +66,8 @@ void Window::blit(Surface *surface)
 		}
 		if (_popup == POPUP_VERTICAL || _popup == POPUP_BOTH)
 		{
-			square.y = (_height - _height * _popupStep) / 2;
-			square.h = _height * _popupStep;
+			square.y = (int)((_height - _height * _popupStep) / 2);
+			square.h = (int)(_height * _popupStep);
 		}
 		else
 		{

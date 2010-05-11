@@ -21,7 +21,7 @@
 
 #include <map>
 #include <vector>
-#include <cmath>
+#include <cstdlib>
 #include <ctime>
 #include "GameTime.h"
 #include "Country.h"

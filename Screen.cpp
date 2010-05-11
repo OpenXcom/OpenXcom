@@ -97,9 +97,9 @@ void Screen::setResolution(int width, int height)
 void Screen::setFullscreen(bool full)
 {
 	if (full)
-		_flags = SDL_DOUBLEBUF|SDL_HWPALETTE|SDL_FULLSCREEN;
+		_flags |= SDL_FULLSCREEN;
 	else
-		_flags = SDL_DOUBLEBUF|SDL_HWPALETTE;
+		_flags &= ~SDL_FULLSCREEN;
 	setResolution(_width, _height);
 }
 

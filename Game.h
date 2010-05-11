@@ -22,6 +22,7 @@
 class State;
 
 #include <list>
+#include <string>
 #include "SDL.h"
 #include "SDL_mixer.h"
 #include "Screen.h"
@@ -29,6 +30,8 @@ class State;
 #include "ResourcePack.h"
 #include "SavedGame.h"
 #include "Ruleset.h"
+
+using namespace std;
 
 class Game
 {
@@ -43,7 +46,7 @@ private:
 	Ruleset *_rules;
 	bool _quit;
 public:
-	Game(char* title, int width, int height, int bpp);
+	Game(string title, int width, int height, int bpp);
 	~Game();
 	void run();
 	void quit();

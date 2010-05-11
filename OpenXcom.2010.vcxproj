@@ -99,10 +99,15 @@
   <ItemGroup>
     <ClCompile Include="Bar.cpp" />
     <ClCompile Include="Base.cpp" />
+    <ClCompile Include="BaseFacility.cpp" />
     <ClCompile Include="Button.cpp" />
+    <ClCompile Include="Craft.cpp" />
     <ClCompile Include="Cursor.cpp" />
     <ClCompile Include="CustomButton.cpp" />
     <ClCompile Include="Music.cpp" />
+    <ClCompile Include="RuleBaseFacility.cpp" />
+    <ClCompile Include="RuleCraft.cpp" />
+    <ClCompile Include="Soldier.cpp" />
     <ClCompile Include="Text.cpp" />
     <ClCompile Include="TextEdit.cpp" />
     <ClCompile Include="TextList.cpp" />
@@ -150,10 +155,15 @@
   <ItemGroup>
     <ClInclude Include="Bar.h" />
     <ClInclude Include="Base.h" />
+    <ClInclude Include="BaseFacility.h" />
     <ClInclude Include="Button.h" />
+    <ClInclude Include="Craft.h" />
     <ClInclude Include="Cursor.h" />
     <ClInclude Include="CustomButton.h" />
     <ClInclude Include="Music.h" />
+    <ClInclude Include="RuleBaseFacility.h" />
+    <ClInclude Include="RuleCraft.h" />
+    <ClInclude Include="Soldier.h" />
     <ClInclude Include="Text.h" />
     <ClInclude Include="TextEdit.h" />
     <ClInclude Include="TextList.h" />

@@ -19,7 +19,7 @@
 #include "Game.h"
 #include "State_Interactive.h"
 
-Game::Game(char* title, int width, int height, int bpp) : _states(), _deleted(), _quit(false)
+Game::Game(string title, int width, int height, int bpp) : _states(), _deleted(), _quit(false)
 {
 	// Initialize SDL
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
@@ -34,7 +34,7 @@ Game::Game(char* title, int width, int height, int bpp) : _states(), _deleted(),
 	}
 
 	// Set the window caption
-	SDL_WM_SetCaption(title, 0);
+	SDL_WM_SetCaption(title.c_str(), 0);
 
 	// Create display
 	_screen = new Screen(width, height, bpp);

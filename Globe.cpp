@@ -31,8 +31,8 @@ void Globe::polarToCart(double lon, double lat, Sint16 *x, Sint16 *y)
 	lon = longitudeLoop(lon + _rotLon);
 	
 	// Pre-calculate why not
-	double sin_lon = sin(lon), sin_lat = sin(lat), sin_rotLat = sin(_rotLat);
-	double cos_lon = cos(lon), cos_lat = cos(lat), cos_rotLat = cos(_rotLat);
+	double sin_lon = sin(lon), sin_lat = sin(lat)/*, sin_rotLat = sin(_rotLat)*/;
+	double /*cos_lon = cos(lon),*/ cos_lat = cos(lat)/*, cos_rotLat = cos(_rotLat)*/;
 
 	// Convert polar coordinates to cartesian
 	*x = _cenX + (int)floor(_radius * _zoom * sin_lon * cos_lat);
