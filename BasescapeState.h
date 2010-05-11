@@ -38,6 +38,7 @@ class BasescapeState : public State
 private:
 	Text *_txtFacility, *_txtBase, *_txtLocation, *_txtFunds;
 	Button *_btnNewBase, *_btnBaseInfo, *_btnSoldiers, *_btnCrafts, *_btnFacilities, *_btnResearch, *_btnManufacture, *_btnTransfer, *_btnPurchase, *_btnSell, *_btnGeoscape;
+	Base *_base;
 public:
 	BasescapeState(Game *game);
 	~BasescapeState();

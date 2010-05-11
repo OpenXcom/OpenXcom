@@ -31,6 +31,8 @@
 class BaseInfoState : public State
 {
 private:
+	Base *_base;
+
 	Button *_btnOk, *_btnTransfers, *_btnStores, *_btnMonthlyCosts;
 	Surface *_bg;
 	
@@ -46,9 +48,8 @@ private:
 	Text *_txtDefence, *_txtShortRange, *_txtLongRange;
 	Text *_numDefence, *_numShortRange, *_numLongRange;
 	Bar *_barDefence, *_barShortRange, *_barLongRange;
-
 public:
-	BaseInfoState(Game *game);
+	BaseInfoState(Game *game, Base *base);
 	~BaseInfoState();
 	void think();
 	void btnOkClick(SDL_Event *ev, int scale);

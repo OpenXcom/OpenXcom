@@ -18,7 +18,7 @@
  */
 #include "BaseInfoState.h"
 
-BaseInfoState::BaseInfoState(Game *game) : State(game)
+BaseInfoState::BaseInfoState(Game *game, Base *base) : State(game), _base(base)
 {
 	// Create objects
 	_bg = new Surface(320, 200, 0, 0);
@@ -72,7 +72,6 @@ BaseInfoState::BaseInfoState(Game *game) : State(game)
 	add(_btnStores);
 	add(_btnMonthlyCosts);
 	
-	//add(_txtBase);
 	add(_edtBase);
 	add(_txtPersonnel);
 	add(_txtSoldiers);
@@ -130,7 +129,7 @@ BaseInfoState::BaseInfoState(Game *game) : State(game)
 
 	_edtBase->setColor(Palette::blockOffset(15)+1);
 	_edtBase->setBig();
-	_edtBase->setText("Some Base");
+	_edtBase->setText(_base->getName());
 
 
 	_txtPersonnel->setColor(Palette::blockOffset(15)+1);
@@ -274,5 +273,6 @@ void BaseInfoState::think()
 
 void BaseInfoState::btnOkClick(SDL_Event *ev, int scale)
 {
+	_base->setName(_edtBase->getText());
 	_game->popState();
 }

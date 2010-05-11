@@ -84,7 +84,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>SDL_gfx.lib;SDLmain.lib;SDL.lib;SDL_gfx.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL_mixer.lib;SDL_gfx.lib;SDLmain.lib;SDL.lib;SDL_gfx.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>.\SDL\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
@@ -98,6 +98,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Bar.cpp" />
+    <ClCompile Include="Base.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Cursor.cpp" />
     <ClCompile Include="CustomButton.cpp" />
@@ -141,7 +142,6 @@
     <ClCompile Include="XcomResourcePack.cpp" />
     <ClCompile Include="Ruleset.cpp" />
     <ClCompile Include="Country.cpp" />
-    <ClCompile Include="Base.cpp" />
     <ClCompile Include="GameTime.cpp" />
     <ClCompile Include="SavedGame.cpp" />
     <ClCompile Include="main.cpp" />
@@ -149,6 +149,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bar.h" />
+    <ClInclude Include="Base.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Cursor.h" />
     <ClInclude Include="CustomButton.h" />
@@ -191,7 +192,6 @@
     <ClInclude Include="ResourcePack.h" />
     <ClInclude Include="XcomResourcePack.h" />
     <ClInclude Include="Ruleset.h" />
-    <ClCompile Include="Base.h" />
     <ClInclude Include="Country.h" />
     <ClInclude Include="GameTime.h" />
     <ClInclude Include="SavedGame.h" />

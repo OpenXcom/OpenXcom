@@ -20,7 +20,6 @@
 #define OPENXCOM__XCOMRULESET_H
 
 #include "Ruleset.h"
-#include "Country.h"
 #include "LangString.h"
 
 class XcomRuleset : public Ruleset

@@ -51,5 +51,6 @@ SavedGame *XcomRuleset::newSave(GameDifficulty diff)
 	Base *base = new Base(0.0, 0.0);
 	base->setName("X-COM BASE 1");
 	save->getBases()->push_back(base);
+	
 	return save;
 }

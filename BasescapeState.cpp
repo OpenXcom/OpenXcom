@@ -36,6 +36,8 @@ BasescapeState::BasescapeState(Game *game) : State(game)
 	_btnPurchase = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 128, 12, 192, 162);
 	_btnSell = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 128, 12, 192, 175);
 	_btnGeoscape = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 128, 12, 192, 188);
+
+	_base = _game->getSavedGame()->getBases()->front();
 	
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
@@ -62,7 +64,7 @@ BasescapeState::BasescapeState(Game *game) : State(game)
 
 	_txtBase->setColor(Palette::blockOffset(15)+1);
 	_txtBase->setBig();
-	_txtBase->setText("Some Base");
+	_txtBase->setText(_base->getName());
 
 	_txtLocation->setColor(Palette::blockOffset(15)+6);
 	_txtLocation->setText("Some Location");
@@ -126,7 +128,7 @@ void BasescapeState::think()
 
 void BasescapeState::btnBaseInfoClick(SDL_Event *ev, int scale)
 {
-	_game->pushState(new BaseInfoState(_game));
+	_game->pushState(new BaseInfoState(_game, _base));
 }
 
 void BasescapeState::btnSoldiersClick(SDL_Event *ev, int scale)

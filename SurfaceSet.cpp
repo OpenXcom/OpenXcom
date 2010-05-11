@@ -133,7 +133,7 @@ void SurfaceSet::loadDat(string filename)
 	streamoff size = imgFile.tellg();
 	imgFile.seekg(0, ios::beg);
 
-	_nframe = size / (_width * _height);
+	_nframe = (int)size / (_width * _height);
 
 	for (int i = 0; i < _nframe; i++)
 	{
