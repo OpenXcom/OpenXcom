@@ -45,3 +45,18 @@ double Base::getLongitude()
 {
 	return _lon;
 }
+
+vector<BaseFacility*> *Base::getFacilities()
+{
+	return &_facilities;
+}
+
+vector<Soldier*> *Base::getSoldiers()
+{
+	return &_soldiers;
+}
+
+vector<Craft*> *Base::getCrafts()
+{
+	return &_crafts;
+}

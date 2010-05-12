@@ -18,7 +18,7 @@
  */
 #include "SoldiersState.h"
 
-SoldiersState::SoldiersState(Game *game) : State(game)
+SoldiersState::SoldiersState(Game *game, Base *base) : State(game), _base(base)
 {
 	// Create objects
 	_window = new Window(320, 200, 0, 0);
@@ -64,7 +64,10 @@ SoldiersState::SoldiersState(Game *game) : State(game)
 
 	_lstSoldiers->setColor(Palette::blockOffset(13)+10);
 	_lstSoldiers->setColumns(3, 114, 102, 82);
-	_lstSoldiers->addRow(3, "Some Guy", _game->getResourcePack()->getLanguage()->getString((LangString)327).c_str(), "SKYRANGER-1");
+	for (vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); i++)
+	{
+		_lstSoldiers->addRow(3, (*i)->getName().c_str(), _game->getResourcePack()->getLanguage()->getString((*i)->getRank()).c_str(), "SKYRANGER-1");
+	}
 }
 
 SoldiersState::~SoldiersState()

@@ -20,8 +20,9 @@
 #define OPENXCOM__SOLDIER_H
 
 #include <string>
+#include "SavedGame.h"
+#include "LangString.h"
 
-enum SoldierRank { RANK_ROOKIE, RANK_SQUADDIE, RANK_SERGEANT, RANK_CAPTAIN, RANK_COLONEL, RANK_COMMANDER };
 enum SoldierGender { GENDER_MALE, GENDER_FEMALE };
 enum SoldierLook { LOOK_BLONDE, LOOK_BROWNHAIR, LOOK_ORIENTAL, LOOK_AFRICAN };
 
@@ -31,8 +32,8 @@ class Soldier
 {
 private:
 	string _name;
-	int _tu, _energy, _health, _bravery, _reactions, _firing, _throwing, _strength, _psiStrength, _psiSkill;
-	SoldierRank _rank;
+	int _tu, _energy, _health, _bravery, _reactions, _firing, _throwing, _strength, _psiStrength, _psiSkill, _melee;
+	LangString _rank;
 	SoldierGender _gender;
 	SoldierLook _look;
 	int _missions, _kills;
@@ -41,6 +42,7 @@ public:
 	~Soldier();
 	string getName();
 	void setName(string name);
+	LangString getRank();
 };
 
 #endif

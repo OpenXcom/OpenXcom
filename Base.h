@@ -42,6 +42,9 @@ public:
 	void setName(string name);
 	double getLatitude();
 	double getLongitude();
+	vector<BaseFacility*> *getFacilities();
+	vector<Soldier*> *getSoldiers();
+	vector<Craft*> *getCrafts();
 };
 
 #endif

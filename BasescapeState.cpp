@@ -141,7 +141,7 @@ void BasescapeState::btnBaseInfoClick(SDL_Event *ev, int scale)
 
 void BasescapeState::btnSoldiersClick(SDL_Event *ev, int scale)
 {
-	_game->pushState(new SoldiersState(_game));
+	_game->pushState(new SoldiersState(_game, _base));
 }
 
 void BasescapeState::btnCraftsClick(SDL_Event *ev, int scale)

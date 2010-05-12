@@ -18,8 +18,20 @@
  */
 #include "Soldier.h"
 
-Soldier::Soldier() : _name("")
+Soldier::Soldier() : _name("LOLOLOL")
 {
+	_tu = SavedGame::genRandom(50, 60);
+	_energy = SavedGame::genRandom(40, 70);
+	_health = SavedGame::genRandom(25, 40);
+	_bravery = SavedGame::genRandom(1, 6)*10;
+	_reactions = SavedGame::genRandom(50, 60);
+	_firing = SavedGame::genRandom(40, 70);
+	_throwing = SavedGame::genRandom(50, 80);
+	_strength = SavedGame::genRandom(20, 40);
+	_psiStrength = SavedGame::genRandom(0, 100);
+	_psiSkill = 0;
+	_melee = SavedGame::genRandom(20, 40);
+	_rank = STR_ROOKIE;
 }
 
 Soldier::~Soldier()
@@ -34,4 +46,9 @@ string Soldier::getName()
 void Soldier::setName(string name)
 {
 	_name = name;
+}
+
+LangString Soldier::getRank()
+{
+	return _rank;
 }

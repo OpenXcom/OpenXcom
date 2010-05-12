@@ -50,6 +50,11 @@ SavedGame *XcomRuleset::newSave(GameDifficulty diff)
 	
 	Base *base = new Base(0.0, 0.0);
 	base->setName("X-COM BASE 1");
+	for (int i = 0; i < 8; i++)
+	{
+		base->getSoldiers()->push_back(new Soldier());
+	}
+
 	save->getBases()->push_back(base);
 	
 	return save;

@@ -26,6 +26,7 @@
 #include "Window.h"
 #include "Text.h"
 #include "TextList.h"
+#include "Soldier.h"
 
 class SoldiersState : public State
 {
@@ -34,8 +35,9 @@ private:
 	Window *_window;
 	Text *_txtTitle, *_txtName, *_txtRank, *_txtCraft;
 	TextList *_lstSoldiers;
+	Base *_base;
 public:
-	SoldiersState(Game *game);
+	SoldiersState(Game *game, Base *base);
 	~SoldiersState();
 	void btnOkClick(SDL_Event *ev, int scale);
 };
