@@ -21,9 +21,10 @@
 
 #include <string>
 #include <vector>
-#include "BaseFacility.h"
-#include "Soldier.h"
-#include "Craft.h"
+
+class BaseFacility;
+class Soldier;
+class Craft;
 
 using namespace std;
 

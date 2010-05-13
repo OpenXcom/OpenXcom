@@ -21,6 +21,7 @@
 
 #include "Ruleset.h"
 #include "LangString.h"
+#include "Soldier.h"
 
 class XcomRuleset : public Ruleset
 {
