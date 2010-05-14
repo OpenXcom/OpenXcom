@@ -32,7 +32,7 @@ void Music::load(string filename)
 	_music = Mix_LoadMUS(filename.c_str());
 	if(_music == 0) 
 	{
-		throw Mix_GetError();
+		//throw Mix_GetError();
 	}
 }
 
@@ -40,6 +40,6 @@ void Music::play()
 {
 	if(Mix_PlayMusic(_music, 0) == -1) 
 	{
-		throw Mix_GetError();
+		//throw Mix_GetError();
 	}
 }

@@ -33,7 +33,7 @@ int SavedGame::seed = (int)time(NULL);
 int SavedGame::genRandom(int min, int max)
 {
 	seed = rand();
-	return (seed % (max - min) + min);
+	return (seed % (max - min + 1) + min);
 }
 
 int SavedGame::getFunds()

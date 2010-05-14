@@ -22,6 +22,7 @@
 #include <string>
 #include "SavedGame.h"
 #include "LangString.h"
+#include "SoldierNamePool.h"
 
 enum SoldierGender { GENDER_MALE, GENDER_FEMALE };
 enum SoldierLook { LOOK_BLONDE, LOOK_BROWNHAIR, LOOK_ORIENTAL, LOOK_AFRICAN };

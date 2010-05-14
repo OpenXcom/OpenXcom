@@ -18,7 +18,7 @@
  */
 #include "Soldier.h"
 
-Soldier::Soldier() : _name("LOLOLOL")
+Soldier::Soldier() : _name("")
 {
 	_tu = SavedGame::genRandom(50, 60);
 	_energy = SavedGame::genRandom(40, 70);
@@ -32,6 +32,11 @@ Soldier::Soldier() : _name("LOLOLOL")
 	_psiSkill = 0;
 	_melee = SavedGame::genRandom(20, 40);
 	_rank = STR_ROOKIE;
+
+	SoldierNamePool pool = SoldierNamePool();
+	int gender;
+	_name = pool.genName(&gender);
+	_gender = (SoldierGender)gender;
 }
 
 Soldier::~Soldier()
