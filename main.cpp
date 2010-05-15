@@ -47,7 +47,7 @@ int main(int argc, char** args)
 	catch(char* c)
 	{
 		cout << "ERROR: " << c << endl;
-		cin >> c;
+		getc(stdin);
 		exit(-1);
 	}
 	
