@@ -27,18 +27,25 @@ Music::~Music()
 	Mix_FreeMusic(_music);
 }
 
-void Music::load(string filename)
+bool Music::load(string filename)
 {
+	struct stat info;
+	if(stat(filename.c_str(), &info) != 0) 
+	{
+		return false;
+	}
 	_music = Mix_LoadMUS(filename.c_str());
 	if(_music == 0) 
 	{
 		//throw Mix_GetError();
+		return false;
 	}
+	return true;
 }
 
 void Music::play()
 {
-	if(Mix_PlayMusic(_music, 0) == -1) 
+	if(Mix_PlayMusic(_music, -1) == -1) 
 	{
 		//throw Mix_GetError();
 	}

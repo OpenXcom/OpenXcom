@@ -43,5 +43,5 @@ GraphsState::~GraphsState()
 
 void GraphsState::btnGeoscapeClick(SDL_Event *ev, int scale)
 {
-	_game->setState(new GeoscapeState(_game));
+	_game->popState();
 }

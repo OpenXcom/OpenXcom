@@ -199,17 +199,22 @@ XcomResourcePack::XcomResourcePack(string folder) : ResourcePack(folder)
 	cout << "WORLD.DAT" << endl;
 
 	// Load musics
-	string mids[] = {"GMSTORY.MID",
-					 "GMGEO1.MID",
-					 "GMGEO2.MID"};
+	string mus[] = {"GMSTORY",
+					 "GMGEO1",
+					 "GMGEO2"};
+	string exts[] = {"OGG", "MP3", "MID"};
 
 	for (int i = 0; i < 3; i++)
 	{
-		stringstream s;
-		s << folder << "SOUND/" << mids[i];
-		_musics[mids[i]] = new Music();
-		_musics[mids[i]]->load(s.str());
-		cout << mids[i] << endl;
+		_musics[mus[i]] = new Music();
+		for (int j = 0; j < 3; j++)
+		{
+			stringstream s;
+			s << folder << "SOUND/" << mus[i] << "." << exts[j];
+			if (_musics[mus[i]]->load(s.str()))
+				break;
+		}
+		cout << mus[i] << endl;
 	}
 }
 

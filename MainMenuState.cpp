@@ -65,7 +65,7 @@ MainMenuState::MainMenuState(Game *game) : State(game)
 	_txtVersion->setText("OpenXcom v0.1");
 
 	// Set music
-	_game->getResourcePack()->getMusic("GMSTORY.MID")->play();
+	_game->getResourcePack()->getMusic("GMSTORY")->play();
 }
 
 MainMenuState::~MainMenuState()

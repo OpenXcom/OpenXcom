@@ -21,6 +21,7 @@
 
 #include "SDL_mixer.h"
 #include <string>
+#include <sys/stat.h>
 
 using namespace std;
 
@@ -31,7 +32,7 @@ private:
 public:
 	Music();
 	~Music();
-	void load(string filename);
+	bool load(string filename);
 	void play();
 };
 

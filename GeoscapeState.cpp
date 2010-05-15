@@ -226,7 +226,9 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _rotLon(0), _rotLat(0), 
 	_gameTimer->start();
 
 	// Set music
-	_game->getResourcePack()->getMusic("GMGEO1.MID")->play();
+	stringstream ss;
+	ss << "GMGEO" << SavedGame::genRandom(1, 2);
+	_game->getResourcePack()->getMusic(ss.str())->play();
 }
 
 GeoscapeState::~GeoscapeState()
@@ -236,6 +238,9 @@ GeoscapeState::~GeoscapeState()
 
 void GeoscapeState::init()
 {
+	// Set palette
+	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
+
 	timeDisplay();
 }
 
@@ -357,12 +362,12 @@ void GeoscapeState::btnInterceptClick(SDL_Event *ev, int scale)
 
 void GeoscapeState::btnBasesClick(SDL_Event *ev, int scale)
 {
-	_game->setState(new BasescapeState(_game));
+	_game->pushState(new BasescapeState(_game));
 }
 
 void GeoscapeState::btnGraphsClick(SDL_Event *ev, int scale)
 {
-	_game->setState(new GraphsState(_game));
+	_game->pushState(new GraphsState(_game));
 }
 
 void GeoscapeState::btnUfopaediaClick(SDL_Event *ev, int scale)

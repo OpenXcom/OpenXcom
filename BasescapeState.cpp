@@ -171,5 +171,5 @@ void BasescapeState::btnSellClick(SDL_Event *ev, int scale)
 
 void BasescapeState::btnGeoscapeClick(SDL_Event *ev, int scale)
 {
-	_game->setState(new GeoscapeState(_game));
+	_game->popState();
 }
