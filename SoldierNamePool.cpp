@@ -20,15 +20,6 @@
 
 SoldierNamePool::SoldierNamePool() : _maleNames(), _femaleNames(), _lastNames()
 {
-	_maleNames.push_back("guy1");
-	_maleNames.push_back("guy2");
-	_maleNames.push_back("guy3");
-	_femaleNames.push_back("girl1");
-	_femaleNames.push_back("girl2");
-	_lastNames.push_back("lol");
-	_lastNames.push_back("heh");
-	_lastNames.push_back("welp");
-	_lastNames.push_back("omg");
 }
 
 SoldierNamePool::~SoldierNamePool()
@@ -38,8 +29,8 @@ SoldierNamePool::~SoldierNamePool()
 string SoldierNamePool::genName(int *gender)
 {
 	stringstream name;
-	int first = SavedGame::genRandom(1, _maleNames.size() + _femaleNames.size());
-	int last = SavedGame::genRandom(1, _lastNames.size());
+	unsigned int first = SavedGame::genRandom(1, _maleNames.size() + _femaleNames.size());
+	unsigned int last = SavedGame::genRandom(1, _lastNames.size());
 	if (first <= _maleNames.size())
 	{
 		*gender = 0;
@@ -52,4 +43,19 @@ string SoldierNamePool::genName(int *gender)
 	}
 	name << " " << _lastNames[last - 1];
 	return name.str();
+}
+
+vector<string> *SoldierNamePool::getMaleNames()
+{
+	return &_maleNames;
+}
+
+vector<string> *SoldierNamePool::getFemaleNames()
+{
+	return &_femaleNames;
+}
+
+vector<string> *SoldierNamePool::getLastNames()
+{
+	return &_lastNames;
 }

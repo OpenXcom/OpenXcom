@@ -39,7 +39,7 @@ private:
 	SoldierLook _look;
 	int _missions, _kills;
 public:
-	Soldier();
+	Soldier(vector<SoldierNamePool*> *names);
 	~Soldier();
 	string getName();
 	void setName(string name);

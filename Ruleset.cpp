@@ -18,7 +18,7 @@
  */
 #include "Ruleset.h"
 
-Ruleset::Ruleset() : _facilities(), _crafts()
+Ruleset::Ruleset() : _names(), _facilities(), _crafts()
 {
 }
 

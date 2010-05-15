@@ -37,7 +37,8 @@ int main(int argc, char** args)
 		game->setResourcePack(new XcomResourcePack(DATA_FOLDER));
 		game->setRuleset(new XcomRuleset());
 		
-		//game->getScreen()->setFullscreen(true);
+		if (argc == 2 && strcmp(args[1], "-fullscreen") == 0)
+			game->getScreen()->setFullscreen(true);
 		game->getScreen()->setScale(2);
 		//game->setState(new TestState(game));
 		game->setState(new StartState(game));

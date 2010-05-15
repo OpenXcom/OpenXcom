@@ -34,6 +34,9 @@ public:
 	SoldierNamePool();
 	~SoldierNamePool();
 	string genName(int *gender);
+	vector<string> *getMaleNames();
+	vector<string> *getFemaleNames();
+	vector<string> *getLastNames();
 };
 
 #endif

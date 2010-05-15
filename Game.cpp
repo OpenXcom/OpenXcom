@@ -92,6 +92,8 @@ void Game::run()
 			(*i)->blit();
 		_cursor->blit(_screen->getSurface());
 		_screen->flip();
+
+		SDL_Delay(0);
 	}
 }
 

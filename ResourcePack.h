@@ -21,6 +21,7 @@
 
 #include <map>
 #include <string>
+#include <vector>
 #include "Language.h"
 #include "Surface.h"
 #include "SurfaceSet.h"

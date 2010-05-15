@@ -52,7 +52,7 @@ void Cursor::blit(Surface *surface)
 	Uint8 color = _color;
 	int x1 = 0, y1 = 0, x2 = _width-1, y2 = _height-1;
 
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < 4; i++)
 	{
 		lineColor(getSurface(), x1, y1, x1, y2, Palette::getRGBA(this->getPalette(), color));
 		lineColor(getSurface(), x1, y1, x2, _width-1, Palette::getRGBA(this->getPalette(), color));
@@ -62,6 +62,7 @@ void Cursor::blit(Surface *surface)
 		x2--;
 		color++;
 	}
+	pixelColor(getSurface(), 4, 8, Palette::getRGBA(this->getPalette(), --color));
 
 	Surface::blit(surface);
 }

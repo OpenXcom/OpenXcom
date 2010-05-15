@@ -20,15 +20,18 @@
 #define OPENXCOM__RULESET_H
 
 #include <map>
+#include <vector>
 #include "SavedGame.h"
 #include "RuleBaseFacility.h"
 #include "RuleCraft.h"
+#include "SoldierNamePool.h"
 
 using namespace std;
 
 class Ruleset
 {
-private:
+protected:
+	vector<SoldierNamePool*> _names;
 	map<LangString, RuleBaseFacility*> _facilities;
 	map<LangString, RuleCraft*> _crafts;
 public:

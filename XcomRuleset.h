@@ -26,7 +26,6 @@
 class XcomRuleset : public Ruleset
 {
 private:
-	int genFunding(int min, int max);
 public:
 	XcomRuleset();
 	~XcomRuleset();

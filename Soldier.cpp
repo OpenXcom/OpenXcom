@@ -18,7 +18,7 @@
  */
 #include "Soldier.h"
 
-Soldier::Soldier() : _name("")
+Soldier::Soldier(vector<SoldierNamePool*> *names)
 {
 	_tu = SavedGame::genRandom(50, 60);
 	_energy = SavedGame::genRandom(40, 70);
@@ -33,10 +33,10 @@ Soldier::Soldier() : _name("")
 	_melee = SavedGame::genRandom(20, 40);
 	_rank = STR_ROOKIE;
 
-	SoldierNamePool pool = SoldierNamePool();
 	int gender;
-	_name = pool.genName(&gender);
+	_name = names->at(SavedGame::genRandom(0, names->size()-1))->genName(&gender);
 	_gender = (SoldierGender)gender;
+	_look = (SoldierLook)SavedGame::genRandom(0, 3);
 }
 
 Soldier::~Soldier()
