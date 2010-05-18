@@ -19,6 +19,16 @@
 #include "Game.h"
 #include "State_Interactive.h"
 
+/**
+ * Starts up SDL with all the subsystems and SDL_mixer for audio processing,
+ * creates the display screen and sets up the cursor.
+ * @param title Title of the game window.
+ * @param width Width of the display screen.
+ * @param height Height of the display screen.
+ * @param bpp Bits-per-pixel of the display screen.
+ * @warning Currently the game is designed for 8bpp, so there's no telling what'll
+ * happen if you use a different value.
+ */
 Game::Game(string title, int width, int height, int bpp) : _states(), _deleted(), _quit(false)
 {
 	// Initialize SDL
@@ -44,15 +54,24 @@ Game::Game(string title, int width, int height, int bpp) : _states(), _deleted()
 	_cursor->setColor(Palette::blockOffset(15)+12);
 }
 
+/**
+ * Shuts down all the SDL subsystems and deletes the display screen and cursor.
+ */
 Game::~Game()
 {
 	delete _screen;
+	delete _cursor;
 
 	Mix_CloseAudio();
 
 	SDL_Quit();
 }
 
+/**
+ * The state machine takes care of passing all the events from SDL to the
+ * active state, running any code within and blitting all the states and
+ * cursor to the screen. This is run indefinitely until the game quits.
+ */
 void Game::run()
 {
 	while (!_quit)
@@ -97,16 +116,30 @@ void Game::run()
 	}
 }
 
+/**
+ * Stops the state machine and the game is shut down.
+ */
 void Game::quit()
 {
 	_quit = true;
 }
 
+/**
+ * Returns the display screen used by the game.
+ * @return Pointer to the screen.
+ */
 Screen *Game::getScreen()
 {
 	return _screen;
 }
 
+/**
+ * Replaces a certain amount of colors in the palettes of the game's
+ * screen and resources.
+ * @param colors Pointer to the set of colors.
+ * @param firstcolor Offset of the first color to replace.
+ * @param ncolors Amount of colors to replace.
+ */
 void Game::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 {
 	_screen->setPalette(colors, firstcolor, ncolors);
@@ -114,6 +147,12 @@ void Game::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 	_res->setPalette(colors, firstcolor, ncolors);
 }
 
+/**
+ * Pops all the states currently in stack and pushes in the new state.
+ * A shortcut for cleaning up all the old states when they're not necessary
+ * like in one-way transitions.
+ * @param state Pointer to the new state.
+ */
 void Game::setState(State *state)
 {
 	while (!_states.empty())
@@ -121,12 +160,23 @@ void Game::setState(State *state)
 	pushState(state);
 }
 
+/**
+ * Pushes a new state into the front of the stack and initializes it.
+ * The new state will be used once the next game cycle starts.
+ * @param state Pointer to the new state.
+ */
 void Game::pushState(State *state)
 {
 	_states.push_back(state);
 	state->init();
 }
 
+/**
+ * Pops the last state from the front of the stack. Since states
+ * can't actually be deleted mid-cycle, it's moved into a separate queue
+ * which is cleared at the start of every cycle, so the transition
+ * is seamless.
+ */
 void Game::popState()
 {
 	_deleted.push_back(_states.back());
@@ -135,31 +185,55 @@ void Game::popState()
 		_states.back()->init();
 }
 
+/**
+ * Returns the resource pack currently in use by the game.
+ * @return Pointer to the resource pack.
+ */
 ResourcePack *Game::getResourcePack()
 {
 	return _res;
 }
 
+/**
+ * Sets a new resource pack for the game to use.
+ * @param res Pointer to the resource pack.
+ */
 void Game::setResourcePack(ResourcePack *res)
 {
 	_res = res;
 }
 
+/**
+ * Returns the saved game currently in use by the game.
+ * @return Pointer to the saved game.
+ */
 SavedGame *Game::getSavedGame()
 {
 	return _save;
 }
 
+/**
+ * Sets a new saved game for the game to use.
+ * @param save Pointer to the saved game.
+ */
 void Game::setSavedGame(SavedGame *save)
 {
 	_save = save;
 }
 
+/**
+ * Returns the ruleset currently in use by the game.
+ * @return Pointer to the ruleset.
+ */
 Ruleset *Game::getRuleset()
 {
 	return _rules;
 }
 
+/**
+ * Sets a new ruleset for the game to use.
+ * @param rules Pointer to the ruleset.
+ */
 void Game::setRuleset(Ruleset *rules)
 {
 	_rules = rules;

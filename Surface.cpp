@@ -18,6 +18,14 @@
  */
 #include "Surface.h"
 
+/**
+ * Sets up a blank 8bpp surface with the specified size and position,
+ * with pure black as the transparent color.
+ * @param width Width in pixels.
+ * @param height Height in pixels.
+ * @param x X position in pixels.
+ * @param y Y position in pixels.
+ */
 Surface::Surface(int width, int height, int x, int y) : _width(width), _height(height), _x(x), _y(y), _visible(true)
 {
 	_surface = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, 8, 0, 0, 0, 0);
@@ -35,11 +43,21 @@ Surface::Surface(int width, int height, int x, int y) : _width(width), _height(h
 	_crop.y = 0;
 }
 
+/**
+ * Deletes the surface from memory.
+ */
 Surface::~Surface()
 {
 	SDL_FreeSurface(_surface);
 }
 
+/**
+ * Loads the contents of an X-Com SCR image file into
+ * the surface. SCR files are simply uncompressed images
+ * containing the palette offset of each pixel.
+ * @param filename Filename of the SCR image.
+ * @sa http://www.ufopaedia.org/index.php?title=Image_Formats#SCR_.26_DAT
+ */
 void Surface::loadScr(string filename)
 {
 	// Load file and put pixels in surface
@@ -71,6 +89,13 @@ void Surface::loadScr(string filename)
 	imgFile.close();
 }
 
+/**
+ * Loads the contents of an X-Com SPK image file into
+ * the surface. SPK files are compressed with a custom
+ * algorithm since they're usually full-screen images.
+ * @param filename Filename of the SPK image.
+ * @sa http://www.ufopaedia.org/index.php?title=Image_Formats#SPK
+ */
 void Surface::loadSpk(string filename)
 {
 	// Load file and put pixels in surface
@@ -124,6 +149,10 @@ void Surface::loadSpk(string filename)
 	imgFile.close();
 }
 
+/**
+ * Clears the entire contents of the surface, resulting
+ * in a blank image.
+ */
 void Surface::clear()
 {
 	SDL_Rect square;
@@ -134,6 +163,12 @@ void Surface::clear()
 	SDL_FillRect(_surface, &square, 0);
 }
 
+/**
+ * Shifts all the colors in the surface by a set amount.
+ * This is a common method in 8bpp games to simulate color
+ * effects for cheap.
+ * @param off Amount to shift.
+ */
 void Surface::offset(int off)
 {
 	// Lock the surface
@@ -152,6 +187,11 @@ void Surface::offset(int off)
 	SDL_UnlockSurface(_surface);
 }
 
+/**
+ * Inverts all the colors in the surface according to a middle point.
+ * Used for effects like shifting a button between pressed and unpressed.
+ * @param mid Middle point.
+ */
 void Surface::invert(Uint8 mid)
 {
 	// Lock the surface
@@ -170,7 +210,13 @@ void Surface::invert(Uint8 mid)
 	SDL_UnlockSurface(_surface);
 }
 
-
+/**
+ * Blits this surface onto another one, with its position
+ * relative to the top-left corner of the target surface.
+ * The cropping rectangle controls the portion of the surface
+ * that is blitted.
+ * @param surface Pointer to surface to blit onto.
+ */
 void Surface::blit(Surface *surface)
 {
 	if (_visible)
@@ -187,6 +233,13 @@ void Surface::blit(Surface *surface)
 	}
 }
 
+/**
+ * Copies the exact contents of another surface onto this one.
+ * Only the content that would overlap both surfaces is copied, in
+ * accordance with their positions. This is handy for applying
+ * effects over another surface without modifying the original.
+ * @surface Pointer to surface to copy from.
+ */
 void Surface::copy(Surface *surface)
 {
 	SDL_Rect from;
@@ -197,26 +250,48 @@ void Surface::copy(Surface *surface)
 	SDL_BlitSurface(surface->getSurface(), &from, _surface, 0);
 }
 
+/**
+ * Changes the position of the surface in the X axis.
+ * @param x X position in pixels.
+ */
 void Surface::setX(int x)
 {
 	_x = x;
 }
 
+/**
+ * Returns the position of the surface in the X axis.
+ * @return X position in pixels.
+ */
 int Surface::getX()
 {
 	return _x;
 }
 
+/**
+ * Changes the position of the surface in the Y axis.
+ * @param y Y position in pixels.
+ */
 void Surface::setY(int y)
 {
 	_y = y;
 }
 
+/**
+ * Returns the position of the surface in the Y axis.
+ * @return Y position in pixels.
+ */
 int Surface::getY()
 {
 	return _y;
 }
 
+/**
+ * Changes the cropping rectangle set for this surface.
+ * @param crop Pointer to the cropping rectangle. A null
+ * pointer removes the cropping rectangle (the whole surface
+ * is blitted).
+ */
 void Surface::setCrop(SDL_Rect *crop)
 {
 	if (crop == 0)
@@ -235,26 +310,55 @@ void Surface::setCrop(SDL_Rect *crop)
 	}
 }
 
+/**
+ * Returns the cropping rectangle for this surface.
+ * @return Pointer to the cropping rectangle.
+ */
 SDL_Rect *Surface::getCrop()
 {
 	return &_crop;
 }
 
+/**
+ * Replaces a certain amount of colors in the surface's palette.
+ * @param colors Pointer to the set of colors.
+ * @param firstcolor Offset of the first color to replace.
+ * @param ncolors Amount of colors to replace.
+ */
 void Surface::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 {
 	SDL_SetColors(_surface, colors, firstcolor, ncolors);
 }
 
+/**
+ * Returns the surface's 8bpp palette.
+ * @return Pointer to the palette's colors.
+ */
 SDL_Color* Surface::getPalette()
 {
 	return _surface->format->palette->colors;
 }
 
+/**
+ * Changes the color of a pixel in the surface, relative to
+ * the top-left corner of the surface.
+ * @param x X position of the pixel.
+ * @param y Y position of the pixel.
+ * @param pixel New color for the pixel.
+ */
 void Surface::setPixel(int x, int y, Uint8 pixel)
 {
     ((Uint8 *)_surface->pixels)[y * _surface->pitch + x * _surface->format->BytesPerPixel] = pixel;
 }
 
+/**
+ * Changes the color of a pixel in the surface and returns the
+ * next pixel position. Useful when changing a lot of pixels in
+ * a row, eg. loading images.
+ * @param x Pointer to the X position of the pixel. Changed to the next X position in the sequence.
+ * @param y Pointer to the Y position of the pixel. Changed to the next Y position in the sequence.
+ * @param pixel New color for the pixel.
+ */
 void Surface::setPixelIterative(int *x, int *y, Uint8 pixel)
 {
     setPixel(*x, *y, pixel);
@@ -266,31 +370,58 @@ void Surface::setPixelIterative(int *x, int *y, Uint8 pixel)
 	}
 }
 
+/**
+ * Returns the color of a specified pixel in the surface.
+ * @param x X position of the pixel.
+ * @param y Y position of the pixel.
+ * @return Color of the pixel.
+ */
 Uint8 Surface::getPixel(int x, int y)
 {
     return ((Uint8 *)_surface->pixels)[y * _surface->pitch + x * _surface->format->BytesPerPixel];
 }
 
+/**
+ * Returns the internal SDL_Surface for SDL calls.
+ * @return Pointer to the surface.
+ */
 SDL_Surface* Surface::getSurface()
 {
 	return _surface;
 }
 
+/**
+ * Returns the width of the surface.
+ * @return Width in pixels.
+ */
 int Surface::getWidth()
 {
 	return _width;
 }
 
+/**
+ * Returns the height of the surface.
+ * @return Height in pixels
+ */
 int Surface::getHeight()
 {
 	return _height;
 }
 
+/**
+ * Changes the visibility of the surface. A hidden surface
+ * isn't blitted.
+ * @visible New visibility.
+ */
 void Surface::setVisible(bool visible)
 {
 	_visible = visible;
 }
 
+/**
+ * Returns the visible state of the surface.
+ * @return Current visibility.
+ */
 bool Surface::getVisible()
 {
 	return _visible;

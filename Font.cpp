@@ -18,18 +18,35 @@
  */
 #include "Font.h"
 
+// Fonts start with this character
 #define FIRST_CHAR '!'
 
+/**
+ * Initializes the font with a blank surface sized big enough to
+ * contain all the characters.
+ * @param width Width in pixels of each character.
+ * @param height Height in pixels of each character.
+ * @param nchar Number of characters the font contains.
+ * @param spacing Horizontal spacing between each character.
+ */
 Font::Font(int width, int height, int nchar, int spacing) : _width(width), _height(height), _nchar(nchar), _chars(), _spacing(spacing)
 {
 	_surface = new Surface(width, height*nchar);
 }
 
+/**
+ * Deletes the font's surface.
+ */
 Font::~Font()
 {
 	delete _surface;
 }
 
+/**
+ * Calculates the real size and position of each character in
+ * the surface and stores them in SDL_Rect's for future use
+ * by other classes.
+ */
 void Font::load()
 {
 	for (unsigned char i = FIRST_CHAR; i < FIRST_CHAR + _nchar; i++)
@@ -63,27 +80,51 @@ void Font::load()
 	}
 }
 
+/**
+ * Returns a particular character from the set stored in the font.
+ * @param c Character to use for size/position.
+ * @return Pointer to the font's surface with the respective
+ * cropping rectangle set up.
+ */
 Surface *Font::getChar(char c)
 {
 	_surface->setCrop(&_chars[c]);
 	return _surface;
 }
-
+/**
+ * Returns the maximum width for any character in the font.
+ * @return Width in pixels.
+ */
 int Font::getWidth()
 {
 	return _width;
 }
 
+/**
+ * Returns the maximum height for any character in the font.
+ * @return Height in pixels.
+ */
 int Font::getHeight()
 {
 	return _height;
 }
 
+/**
+ * Returns the horizontal spacing for any character in the font.
+ * @return Spacing in pixels.
+ * @note This does not refer to character spacing within the surface,
+ * but to the spacing used when drawing a series of characters.
+ */
 int Font::getSpacing()
 {
 	return _spacing;
 }
 
+/**
+ * Returns the surface stored within the font. Used for loading the
+ * actual graphic into the font.
+ * @return Pointer to the internal surface.
+ */
 Surface* Font::getSurface()
 {
 	return _surface;

@@ -18,19 +18,33 @@
  */
 #include "Palette.h"
 
-Palette::Palette() : _colors(0), _ncolors(0)
+/**
+ * Initializes a brand new palette.
+ */
+Palette::Palette() : _colors(0)
 {
 }
 
+/**
+ * Deletes any colors contained within.
+ */
 Palette::~Palette()
 {
 	free(_colors);
 }
 
+/**
+ * Loads an X-Com palette from a file. X-Com palettes are just a set
+ * of RGB colors in a row, on a 0-63 scale, which have to be adjusted
+ * for modern computers (0-255 scale).
+ * @param filename Filename of the palette.
+ * @param ncolors Number of colors in the palette.
+ * @param offset Position of the palette in the file (in bytes).
+ * @sa http://www.ufopaedia.org/index.php?title=PALETTES.DAT
+ */
 void Palette::loadDat(string filename, int ncolors, int offset)
 {
-	_ncolors = ncolors;
-	_colors = (SDL_Color *)malloc(sizeof(SDL_Color) * _ncolors);
+	_colors = (SDL_Color *)malloc(sizeof(SDL_Color) * ncolors);
 
 	// Load file and put colors in pallete
 	ifstream palFile (filename.c_str(), ios::in | ios::binary);
@@ -44,7 +58,7 @@ void Palette::loadDat(string filename, int ncolors, int offset)
 	
 	char value[3];
 
-	for (int j = 0; j < _ncolors && palFile.read(value, 3); j++)
+	for (int j = 0; j < ncolors && palFile.read(value, 3); j++)
 	{
 		// Correct X-Com colors to RGB colors
 		_colors[j].r = Uint8(value[0])*4;
@@ -62,11 +76,23 @@ void Palette::loadDat(string filename, int ncolors, int offset)
 	palFile.close();
 }
 
+/**
+ * Provides access to colors contained in the palette.
+ * @param offset Offset to a specific color.
+ * @return Pointer to the requested SDL_Color.
+ */
 SDL_Color *Palette::getColors(int offset)
 {
 	return _colors + offset;
 }
 
+/**
+ * Converts an SDL_Color struct into an hexadecimal RGBA color value.
+ * Mostly used for operations with SDL_gfx that require colors in this format.
+ * @param pal Requested palette.
+ * @param color Requested color in the palette.
+ * @return Hexadecimal RGBA value.
+ */
 Uint32 Palette::getRGBA(SDL_Color* pal, Uint8 color)
 {
 	return ((Uint32) pal[color].r << 24) | ((Uint32) pal[color].g << 16) | ((Uint32) pal[color].b << 8) | (Uint32) 0xFF;

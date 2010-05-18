@@ -25,6 +25,13 @@
 
 using namespace std;
 
+/**
+ * @file SurfaceSet.h
+ * Container of a set of surfaces.
+ * Used to manage single images that contain series of
+ * frames inside, like animated sprites, making them easier
+ * to access without constant cropping.
+ */
 class SurfaceSet
 {
 private:
@@ -32,13 +39,21 @@ private:
 	int _width, _height, _nframe;
 	map<int, SDL_Rect> _frames;
 public:
+	/// Crates a surface set with frames of the specified size.
 	SurfaceSet(int width, int height);
+	/// Cleans up the surface set.
 	~SurfaceSet();
+	/// Loads an X-Com set of PCK/TAB image files.
 	void loadPck(string filename);
+	/// Loads an X-Com DAT image file.
 	void loadDat(string filename);
+	/// Gets a particular frame from the set.
 	Surface *getFrame(int i);
+	/// Gets the width of all frames.
 	int getWidth();
+	/// Gets the height of all frames.
 	int getHeight();
+	/// Gets the internal surface.
 	Surface *getSurface();
 };
 

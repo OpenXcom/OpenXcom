@@ -18,26 +18,43 @@
  */
 #include "Timer.h"
 
+/**
+ * Initializes a new timer with a set interval.
+ * @param interval Time interval in miliseconds.
+ */
 Timer::Timer(Uint32 interval) : _interval(interval), _running(false)
 {
 }
 
+/**
+ *
+ */
 Timer::~Timer()
 {
 }
 
+/**
+ * Starts the timer running and counting time.
+ */
 void Timer::start()
 {
 	_start = SDL_GetTicks();
 	_running = true;
 }
 
+/**
+ * Stops the timer from running.
+ */
 void Timer::stop()
 {
 	_start = 0;
 	_running = false;
 }
 
+/**
+ * Returns the time passed since the last interval.
+ * @return Time in miliseconds.
+ */
 Uint32 Timer::getTime()
 {
 	if (_running)
@@ -45,6 +62,11 @@ Uint32 Timer::getTime()
 	return 0;
 }
 
+/**
+ * The timer keeps calculating the passed time while it's running,
+ * calling the respective event handler whenever the set interval passes.
+ * @param state State that the event handler belongs to.
+ */
 void Timer::think(State* state)
 {
 	if (_running)
@@ -58,11 +80,19 @@ void Timer::think(State* state)
 	}
 }
 
+/**
+ * Changes the timer's interval to a new value.
+ * @param interval Interval in miliseconds.
+ */
 void Timer::setInterval(Uint32 interval)
 {
 	_interval = interval;
 }
 
+/**
+ * Sets a function for the timer to run every interval.
+ * @param handler Event handler.
+ */
 void Timer::onTimer(TimerHandler handler)
 {
 	_timer = handler;

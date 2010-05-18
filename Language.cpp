@@ -18,16 +18,27 @@
  */
 #include "Language.h"
 
+/**
+ *
+ */
 Language::Language() : _strings()
 {
 
 }
 
+/**
+ *
+ */
 Language::~Language()
 {
 	
 }
 
+/**
+ * Loads a series of null-terminated strings contained in
+ * a raw text file into the Language. IDs are determined
+ * automatically.
+ */
 void Language::loadDat(string filename)
 {
 	_strings.clear();
@@ -61,13 +72,12 @@ void Language::loadDat(string filename)
 	txtFile.close();
 }
 
-//string Language::getString(LangString id)
+/**
+ * Returns the localizable string with the specified ID.
+ * @param id ID of the string.
+ * @return String with the request ID.
+ */
 string Language::getString(LangString id)
 {
 	return _strings[id];
-}
-
-void Language::addString(string str)
-{
-	_strings.push_back(str);
 }

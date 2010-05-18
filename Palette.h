@@ -25,23 +25,45 @@
 
 using namespace std;
 
+/**
+ * @file Palette.h
+ * Container for palettes (sets of 8bpp colors).
+ * Works as an encapsulation for SDL's SDL_Color struct and
+ * provides shortcuts for common tasks to make code more readable.
+ */
 class Palette
 {
 private:
 	SDL_Color *_colors;
-	int _ncolors;
 public:
+	/// Creates a blank palette.
 	Palette();
+	/// Cleans up the palette.
 	~Palette();
+	/// Loads the colors from an X-Com palette.
 	void loadDat(string filename, int ncolors, int offset = 0);
+	// Gets a certain color from the palette.
 	SDL_Color *getColors(int offset = 0);
-	static Uint32 getRGBA(SDL_Color* pal, Uint8 color);
 
-	// Position of each palette in PALETTES.DAT
+	/// Converts a given color into a RGBA color value.
+	static Uint32 getRGBA(SDL_Color* pal, Uint8 color);
+	/// Gets the position of a given palette.
+	/**
+	 * Returns the position of a palette inside an X-Com palette file (each is a 768-byte chunks).
+	 * Handy for loading the palettes from the game files.
+	 * @param palette Requested palette.
+	 * @return Palette position in bytes.
+	 */
 	static inline int palOffset(int palette) { return palette*(768+6); }
-	// Position of each color block in a palette
+	/// Gets the position of a certain color block in a palette.
+	/**
+	 * Returns the position of a certain color block in an X-Com palette (they're usually split in 16-color gradients).
+	 * Makes setting element colors a lot easier than determining the exact color position.
+	 * @param block Requested block.
+	 * @return Color position.
+	 */
 	static inline int blockOffset(int block) { return block*16; }
-	// Position of the background block in a peltte
+	/// Position of the background colors block in an X-Com palette (used for background images in screens).
 	static const int backPos = 224;
 };
 

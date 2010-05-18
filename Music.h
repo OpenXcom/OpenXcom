@@ -25,14 +25,23 @@
 
 using namespace std;
 
+/**
+ * @file Music.h
+ * Container for music tracks.
+ * Handles loading and playing various formats through SDL_mixer.
+ */
 class Music
 {
 private:
 	Mix_Music *_music;
 public:
+	/// Creates a blank music track.
 	Music();
+	/// Cleans up the music track.
 	~Music();
+	/// Loads music from the specified file.
 	bool load(string filename);
+	/// Plays the music.
 	void play();
 };
 

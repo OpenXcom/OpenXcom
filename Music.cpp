@@ -18,24 +18,35 @@
  */
 #include "Music.h"
 
+/**
+ * Initializes a new music track.
+ */
 Music::Music() : _music(0)
 {
 }
 
+/**
+ * Deletes the loaded music content.
+ */
 Music::~Music()
 {
 	Mix_FreeMusic(_music);
 }
 
+/**
+ * Loads a MID, MP3 or OGG file from a specified filename.
+ * @param filename Filename of the music file.
+ * @return True if the music was loaded successfully, False otherwise.
+ */
 bool Music::load(string filename)
 {
 	struct stat info;
-	if(stat(filename.c_str(), &info) != 0) 
+	if (stat(filename.c_str(), &info) != 0) 
 	{
 		return false;
 	}
 	_music = Mix_LoadMUS(filename.c_str());
-	if(_music == 0) 
+	if (_music == 0) 
 	{
 		//throw Mix_GetError();
 		return false;
@@ -43,6 +54,9 @@ bool Music::load(string filename)
 	return true;
 }
 
+/**
+ * Plays the contained music track.
+ */
 void Music::play()
 {
 	if(Mix_PlayMusic(_music, -1) == -1) 

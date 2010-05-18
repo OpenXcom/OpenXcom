@@ -24,6 +24,12 @@
 
 typedef State &(State::*TimerHandler)();
 
+/***
+  * @file Timer.h
+  * Timer used to run code in fixed intervals.
+  * Used for code that should run at the same fixed interval
+  * in various machines, based on miliseconds instead of CPU cycles.
+  */
 class Timer
 {
 private:
@@ -31,13 +37,21 @@ private:
 	bool _running;
 	TimerHandler _timer;
 public:
+	/// Creates a stopped timer.
 	Timer(Uint32 interval);
+	/// Cleans up the timer.
 	~Timer();
+	/// Starts the timer.
 	void start();
+	/// Stops the timer.
 	void stop();
+	/// Gets the current time interval.
 	Uint32 getTime();
+	/// Advances the timer.
 	void think(State* state);
+	/// Sets the timer's interval.
 	void setInterval(Uint32 interval);
+	/// Hooks an event handler to the timer.
 	void onTimer(TimerHandler handler);
 };
 

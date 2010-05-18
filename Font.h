@@ -25,6 +25,14 @@
 
 using namespace std;
 
+/**
+ * @file Font.h
+ * Takes care of loading and storing each character in a sprite font.
+ * Sprite fonts consist of a set of fixed-size characters all lined up
+ * in one column in a surface.
+ * @note The characters don't all need to be the same size, they can
+ * have blank space and will be automatically lined up properly.
+ */
 class Font
 {
 private:
@@ -34,13 +42,21 @@ private:
 	// For some reason the X-Com small font is smooshed together by one pixel...
 	int _spacing;
 public:
+	/// Creates a font with a blank surface.
 	Font(int width, int height, int nchar, int spacing = 0);
+	/// Cleans up the font.
 	~Font();
+	/// Determines the size and position of each character in the font.
 	void load();
+	/// Gets a particular character from the font, with its real size.
 	Surface *getChar(char c);
+	/// Gets the font's character width.
 	int getWidth();
+	/// Gets the font's character height.
 	int getHeight();
+	/// Gets the horizontal spacing between characters.
 	int getSpacing();
+	/// Gets the font's surface.
 	Surface *getSurface();
 };
 

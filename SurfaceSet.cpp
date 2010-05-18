@@ -23,11 +23,22 @@ SurfaceSet::SurfaceSet(int width, int height) : _width(width), _height(height), 
 
 }
 
+/**
+ * Deletes the image from memory.
+ */
 SurfaceSet::~SurfaceSet()
 {
 	delete _surface;
 }
 
+/**
+ * Loads the contents of an X-Com set of PCK/TAB image files
+ * into the surface. The PCK file contains an RLE compressed
+ * image, while the TAB file contains the offsets to each
+ * frame in the image.
+ * @param filename Filename of the PCK image.
+ * @sa http://www.ufopaedia.org/index.php?title=Image_Formats#PCK
+ */
 void SurfaceSet::loadPck(string filename)
 {
 	string pck = string();
@@ -120,6 +131,14 @@ void SurfaceSet::loadPck(string filename)
 	offsetFile.close();
 }
 
+/**
+ * Loads the contents of an X-Com DAT image file into the
+ * surface. Unlike the PCK, a DAT file is an uncompressed
+ * image with no offsets so these have to be figured out
+ * manually, usually by splitting the image into equal portions.
+ * @param filename Filename of the DAT image.
+ * @sa http://www.ufopaedia.org/index.php?title=Image_Formats#SCR_.26_DAT
+ */
 void SurfaceSet::loadDat(string filename)
 {
 	// Load file and put pixels in surface
@@ -172,22 +191,40 @@ void SurfaceSet::loadDat(string filename)
 	imgFile.close();
 }
 
+/**
+ * Returns a particular frame from the image set.
+ * @param i Frame to use for size/position.
+ * @return Pointer to the set's surface with the respective
+ * cropping rectangle set up.
+ */
 Surface *SurfaceSet::getFrame(int i)
 {
 	_surface->setCrop(&_frames[i]);
 	return _surface;
 }
 
+/**
+ * Returns the full width of a frame in the set.
+ * @return Width in pixels.
+ */
 int SurfaceSet::getWidth()
 {
 	return _width;
 }
 
+/**
+ * Returns the full height of a frame in the set.
+ * @return Height in pixels.
+ */
 int SurfaceSet::getHeight()
 {
 	return _height;
 }
 
+/**
+ * Returns the surface stored within the set.
+ * @return Pointer to the internal surface.
+ */
 Surface* SurfaceSet::getSurface()
 {
 	return _surface;
