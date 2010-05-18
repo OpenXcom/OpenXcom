@@ -28,6 +28,10 @@
 #include "TextEdit.h"
 #include "Surface.h"
 
+/**
+ * Base Info screen that shows all the 
+ * stats of a base from the Basescape.
+ */
 class BaseInfoState : public State
 {
 private:
@@ -49,8 +53,11 @@ private:
 	Text *_numDefence, *_numShortRange, *_numLongRange;
 	Bar *_barDefence, *_barShortRange, *_barLongRange;
 public:
+	/// Creates the Base Info state.
 	BaseInfoState(Game *game, Base *base);
+	/// Cleans up the Base Info state.
 	~BaseInfoState();
+	/// Handler for clicking the OK button.
 	void btnOkClick(SDL_Event *ev, int scale);
 };
 

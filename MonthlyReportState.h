@@ -27,6 +27,10 @@
 #include "Window.h"
 #include "Text.h"
 
+/**
+ * Report screen shown monthly to display
+ * changes in the player's performance and funding.
+ */
 class MonthlyReportState : public State
 {
 private:
@@ -34,8 +38,11 @@ private:
 	Window *_window;
 	Text *_txtTitle, *_txtMonth, *_txtRating, *_txtChange, *_txtDesc;
 public:
+	/// Creates the Monthly Report state.
 	MonthlyReportState(Game *game);
+	/// Cleans up the Monthly Report state.
 	~MonthlyReportState();
+	/// Handler for clicking the OK button.
 	void btnOkClick(SDL_Event *ev, int scale);
 };
 

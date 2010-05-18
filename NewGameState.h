@@ -27,6 +27,11 @@
 #include "Text.h"
 #include "GeoscapeState.h"
 
+/**
+ * New Game window that displays a list
+ * of possible difficulties for creating
+ * a saved game.
+ */
 class NewGameState : public State
 {
 private:
@@ -34,12 +39,19 @@ private:
 	Window *_window;
 	Text *_txtTitle;
 public:
+	/// Creates the New Game state.
 	NewGameState(Game *game);
+	/// Cleans up the New Game state.
 	~NewGameState();
+	/// Handler for clicking the Beginner button.
 	void btnBeginnerClick(SDL_Event *ev, int scale);
+	/// Handler for clicking the Experienced button.
 	void btnExperiencedClick(SDL_Event *ev, int scale);
+	/// Handler for clicking the Veteran button.
 	void btnVeteranClick(SDL_Event *ev, int scale);
+	/// Handler for clicking the Genius button.
 	void btnGeniusClick(SDL_Event *ev, int scale);
+	/// Handler for clicking the Superhuman button.
 	void btnSuperhumanClick(SDL_Event *ev, int scale);
 };
 

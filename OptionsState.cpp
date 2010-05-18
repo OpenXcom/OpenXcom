@@ -18,6 +18,10 @@
  */
 #include "OptionsState.h"
 
+/**
+ * Initializes all the elements in the Game Options window.
+ * @param game Pointer to the core game.
+ */
 OptionsState::OptionsState(Game *game) : State(game)
 {
 	_screen = false;
@@ -66,6 +70,9 @@ OptionsState::OptionsState(Game *game) : State(game)
 	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString(STR_GAME_OPTIONS));
 }
 
+/**
+ *
+ */
 OptionsState::~OptionsState()
 {
 	
@@ -81,11 +88,21 @@ void OptionsState::btnSaveClick(SDL_Event *ev, int scale)
 	
 }
 
+/**
+ * Opens the Abandon Game window.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
 void OptionsState::btnAbandonClick(SDL_Event *ev, int scale)
 {
 	_game->pushState(new AbandonGameState(_game));
 }
 
+/**
+ * Returns to the previous screen.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
 void OptionsState::btnCancelClick(SDL_Event *ev, int scale)
 {
 	_game->popState();

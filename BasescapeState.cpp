@@ -18,6 +18,10 @@
  */
 #include "BasescapeState.h"
 
+/**
+ * Initializes all the elements in the Basescape screen.
+ * @param game Pointer to the core game.
+ */
 BasescapeState::BasescapeState(Game *game) : State(game)
 {
 	// Create objects
@@ -117,16 +121,21 @@ BasescapeState::BasescapeState(Game *game) : State(game)
 	_btnGeoscape->onMouseClick((EventHandler)&BasescapeState::btnGeoscapeClick);
 }
 
+/**
+ *
+ */
 BasescapeState::~BasescapeState()
 {
 	
 }
 
+/**
+ * The base name and funds can change
+ * after going into other screens.
+ */
 void BasescapeState::init()
 {
 	_txtBase->setText(_base->getName());
-
-	_txtLocation->setText("Some Location");
 
 	string s = _game->getResourcePack()->getLanguage()->getString(STR_FUNDS_);
 	s.erase(s.size()-1, 1);
@@ -134,41 +143,81 @@ void BasescapeState::init()
 	_txtFunds->setText(s);
 }
 
+/**
+ * Goes to the Base Info screen.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
 void BasescapeState::btnBaseInfoClick(SDL_Event *ev, int scale)
 {
 	_game->pushState(new BaseInfoState(_game, _base));
 }
 
+/**
+ * Goes to the Soldiers screen.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
 void BasescapeState::btnSoldiersClick(SDL_Event *ev, int scale)
 {
 	_game->pushState(new SoldiersState(_game, _base));
 }
 
+/**
+ * Goes to the Crafts screen.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
 void BasescapeState::btnCraftsClick(SDL_Event *ev, int scale)
 {
 	_game->pushState(new CraftsState(_game));
 }
 
+/**
+ * Goes to the Research screen.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
 void BasescapeState::btnResearchClick(SDL_Event *ev, int scale)
 {
 	_game->pushState(new ResearchState(_game));
 }
 
+/**
+ * Goes to the Manufacture screen.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
 void BasescapeState::btnManufactureClick(SDL_Event *ev, int scale)
 {
 	_game->pushState(new ManufactureState(_game));
 }
 
+/**
+ * Goes to the Purchase screen.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
 void BasescapeState::btnPurchaseClick(SDL_Event *ev, int scale)
 {
 	_game->pushState(new PurchaseState(_game));
 }
 
+/**
+ * Goes to the Sell screen.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
 void BasescapeState::btnSellClick(SDL_Event *ev, int scale)
 {
 	_game->pushState(new SellState(_game));
 }
 
+/**
+ * Returns to the previous screen.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
 void BasescapeState::btnGeoscapeClick(SDL_Event *ev, int scale)
 {
 	_game->popState();

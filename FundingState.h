@@ -26,6 +26,11 @@
 #include "Window.h"
 #include "Text.h"
 #include "TextList.h"
+
+/**
+ * Funding screen accessible from the Geoscape
+ * that shows all the countries' funding.
+ */
 class FundingState : public State
 {
 private:
@@ -34,8 +39,11 @@ private:
 	Text *_txtTitle, *_txtCountry, *_txtFunding, *_txtChange;
 	TextList *_lstCountries;
 public:
+	/// Creates the Funding state.
 	FundingState(Game *game);
+	/// Cleans up the Funding state.
 	~FundingState();
+	/// Handler for clicking the OK button.
 	void btnOkClick(SDL_Event *ev, int scale);
 };
 

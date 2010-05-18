@@ -18,6 +18,10 @@
  */
 #include "MonthlyReportState.h"
 
+/**
+ * Initializes all the elements in the Monthly Report screen.
+ * @param game Pointer to the core game.
+ */
 MonthlyReportState::MonthlyReportState(Game *game) : State(game)
 {
 	// Create objects
@@ -69,11 +73,19 @@ MonthlyReportState::MonthlyReportState(Game *game) : State(game)
 	_txtDesc->setWordWrap(true);
 }
 
+/**
+ *
+ */
 MonthlyReportState::~MonthlyReportState()
 {
 	
 }
 
+/**
+ * Returns to the previous screen.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
 void MonthlyReportState::btnOkClick(SDL_Event *ev, int scale)
 {
 	_game->popState();

@@ -28,6 +28,10 @@
 #include "TextList.h"
 #include "BasescapeState.h"
 
+/**
+ * Manufacture screen that lets the player manage
+ * all the manufacturing operations of a base.
+ */
 class ManufactureState : public State
 {
 private:
@@ -36,8 +40,11 @@ private:
 	Text *_txtTitle, *_txtAvailable, *_txtAllocated, *_txtSpace, *_txtFunds, *_txtItem, *_txtEngineers, *_txtProduced, *_txtTotal, *_txtCost, *_txtTimeLeft;
 	TextList *_lstManufacture;
 public:
+	/// Creates the Manufacture state.
 	ManufactureState(Game *game);
+	/// Cleans up the Manufacture state.
 	~ManufactureState();
+	/// Handler for clicking the OK button.
 	void btnOkClick(SDL_Event *ev, int scale);
 };
 

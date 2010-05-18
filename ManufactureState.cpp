@@ -18,6 +18,10 @@
  */
 #include "ManufactureState.h"
 
+/**
+ * Initializes all the elements in the Manufacture screen.
+ * @param game Pointer to the core game.
+ */
 ManufactureState::ManufactureState(Game *game) : State(game)
 {
 	// Create objects
@@ -107,11 +111,19 @@ ManufactureState::ManufactureState(Game *game) : State(game)
 	_lstManufacture->addRow(6, "Laser Rifle", "30", "2", "8", "$40 000", "5/2");
 }
 
+/**
+ *
+ */
 ManufactureState::~ManufactureState()
 {
 	
 }
 
+/**
+ * Returns to the previous screen.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
 void ManufactureState::btnOkClick(SDL_Event *ev, int scale)
 {
 	_game->popState();

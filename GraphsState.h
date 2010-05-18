@@ -26,14 +26,21 @@
 #include "Text.h"
 #include "GeoscapeState.h"
 
+/**
+ * Graphs screen for displaying graphs of various
+ * monthly game data like activity and funding.
+ */
 class GraphsState : public State
 {
 private:
 	Surface *_bg;
 	InteractiveSurface *_btnGeoscape;
 public:
+	/// Creates the Graphs state.
 	GraphsState(Game *game);
+	/// Cleans up the Graphs state.
 	~GraphsState();
+	/// Handler for clicking the Geoscape icon.
 	void btnGeoscapeClick(SDL_Event *ev, int scale);
 };
 

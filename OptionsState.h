@@ -27,6 +27,12 @@
 #include "Text.h"
 #include "AbandonGameState.h"
 
+/**
+ * Options window shown in the Geoscape for loading/saving
+ * and quitting the game.
+ * Not to be confused with an actual Settings window that
+ * might come later for changing game settings during runtime.
+ */
 class OptionsState : public State
 {
 private:
@@ -34,11 +40,17 @@ private:
 	Window *_window;
 	Text *_txtTitle;
 public:
+	/// Creates the Options state.
 	OptionsState(Game *game);
+	/// Cleans up the Options state.
 	~OptionsState();
+	/// Handler for clicking the Load Game button.
 	void btnLoadClick(SDL_Event *ev, int scale);
+	/// Handler for clicking the Save Game button.
 	void btnSaveClick(SDL_Event *ev, int scale);
+	/// Handler for clicking the Abandon Game button.
 	void btnAbandonClick(SDL_Event *ev, int scale);
+	/// Handler for clicking the Cancel button.
 	void btnCancelClick(SDL_Event *ev, int scale);
 };
 

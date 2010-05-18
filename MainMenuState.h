@@ -27,6 +27,10 @@
 #include "Text.h"
 #include "NewGameState.h"
 
+/**
+ * Main Menu window displayed when first
+ * starting the game.
+ */
 class MainMenuState : public State
 {
 private:
@@ -34,10 +38,15 @@ private:
 	Window *_window;
 	Text *_txtTitle, *_txtVersion;
 public:
+	/// Creates the Main Menu state.
 	MainMenuState(Game *game);
+	/// Cleans up the Main Menu state.
 	~MainMenuState();
+	/// Handler for clicking the New Game button.
 	void btnNewClick(SDL_Event *ev, int scale);
+	/// Handler for clicking the Load Saved Game button.
 	void btnLoadClick(SDL_Event *ev, int scale);
+	/// Handler for clicking the Quit button.
 	void btnQuitClick(SDL_Event *ev, int scale);
 };
 

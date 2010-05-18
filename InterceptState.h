@@ -27,6 +27,10 @@
 #include "Text.h"
 #include "TextList.h"
 
+/**
+ * Intercept window that lets the player launch
+ * crafts into missions from the Geoscape.
+ */
 class InterceptState : public State
 {
 private:
@@ -35,8 +39,11 @@ private:
 	Text *_txtTitle, *_txtCraft, *_txtStatus, *_txtBase, *_txtWeapons;
 	TextList *_lstCrafts;
 public:
+	/// Creates the Intercept state.
 	InterceptState(Game *game);
+	/// Cleans up the Intercept state.
 	~InterceptState();
+	/// Handler for clicking the Cancel button.
 	void btnCancelClick(SDL_Event *ev, int scale);
 };
 

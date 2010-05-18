@@ -18,6 +18,10 @@
  */
 #include "FundingState.h"
 
+/**
+ * Initializes all the elements in the Funding screen.
+ * @param game Pointer to the core game.
+ */
 FundingState::FundingState(Game *game) : State(game)
 {
 	// Create objects
@@ -78,11 +82,19 @@ FundingState::FundingState(Game *game) : State(game)
 	_lstCountries->getCell(_game->getSavedGame()->getCountries()->size(), 1)->setColor(Palette::blockOffset(8)+5);
 }
 
+/**
+ *
+ */
 FundingState::~FundingState()
 {
 	
 }
 
+/**
+ * Returns to the previous screen.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
 void FundingState::btnOkClick(SDL_Event *ev, int scale)
 {
 	_game->popState();

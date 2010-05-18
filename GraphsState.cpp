@@ -18,6 +18,10 @@
  */
 #include "GraphsState.h"
 
+/**
+ * Initializes all the elements in the Graphs screen.
+ * @param game Pointer to the core game.
+ */
 GraphsState::GraphsState(Game *game) : State(game)
 {
 	// Create objects
@@ -36,11 +40,19 @@ GraphsState::GraphsState(Game *game) : State(game)
 	_btnGeoscape->onMouseClick((EventHandler)&GraphsState::btnGeoscapeClick);
 }
 
+/**
+ *
+ */
 GraphsState::~GraphsState()
 {
 	
 }
 
+/**
+ * Returns to the previous screen.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
 void GraphsState::btnGeoscapeClick(SDL_Event *ev, int scale)
 {
 	_game->popState();

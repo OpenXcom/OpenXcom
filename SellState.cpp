@@ -18,6 +18,10 @@
  */
 #include "SellState.h"
 
+/**
+ * Initializes all the elements in the Sell/Sack screen.
+ * @param game Pointer to the core game.
+ */
 SellState::SellState(Game *game) : State(game)
 {
 	// Create objects
@@ -90,6 +94,9 @@ SellState::SellState(Game *game) : State(game)
 	_lstItems->addRow(4, "Soldier", "1", "0", "$40 000");
 }
 
+/**
+ *
+ */
 SellState::~SellState()
 {
 	
@@ -100,6 +107,11 @@ void SellState::btnOkClick(SDL_Event *ev, int scale)
 	
 }
 
+/**
+ * Returns to the previous screen.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
 void SellState::btnCancelClick(SDL_Event *ev, int scale)
 {
 	_game->popState();

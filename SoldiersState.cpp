@@ -18,6 +18,11 @@
  */
 #include "SoldiersState.h"
 
+/**
+ * Initializes all the elements in the Soldiers screen.
+ * @param game Pointer to the core game.
+ * @param base Pointer to the base to get info from.
+ */
 SoldiersState::SoldiersState(Game *game, Base *base) : State(game), _base(base)
 {
 	// Create objects
@@ -70,11 +75,19 @@ SoldiersState::SoldiersState(Game *game, Base *base) : State(game), _base(base)
 	}
 }
 
+/**
+ *
+ */
 SoldiersState::~SoldiersState()
 {
 	
 }
 
+/**
+ * Returns to the previous screen.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
 void SoldiersState::btnOkClick(SDL_Event *ev, int scale)
 {
 	_game->popState();

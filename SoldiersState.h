@@ -28,6 +28,10 @@
 #include "TextList.h"
 #include "Soldier.h"
 
+/**
+ * Soldiers screen that lets the player
+ * manage all the soldiers in a base.
+ */
 class SoldiersState : public State
 {
 private:
@@ -39,6 +43,7 @@ private:
 public:
 	SoldiersState(Game *game, Base *base);
 	~SoldiersState();
+	/// Handler for clicking the OK button.
 	void btnOkClick(SDL_Event *ev, int scale);
 };
 

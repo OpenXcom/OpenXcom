@@ -33,6 +33,10 @@
 #include "PurchaseState.h"
 #include "SellState.h"
 
+/**
+ * Basescape screen that shows a base's layout
+ * and lets the player manage their bases.
+ */
 class BasescapeState : public State
 {
 private:
@@ -40,16 +44,27 @@ private:
 	Button *_btnNewBase, *_btnBaseInfo, *_btnSoldiers, *_btnCrafts, *_btnFacilities, *_btnResearch, *_btnManufacture, *_btnTransfer, *_btnPurchase, *_btnSell, *_btnGeoscape;
 	Base *_base;
 public:
+	/// Creates the Basescape state.
 	BasescapeState(Game *game);
+	/// Cleans up the Basescape state.
 	~BasescapeState();
+	/// Updates the base name and funds.
 	void init();
+	/// Handler for clicking the Base Information button.
 	void btnBaseInfoClick(SDL_Event *ev, int scale);
+	/// Handler for clicking the Soldiers button.
 	void btnSoldiersClick(SDL_Event *ev, int scale);
+	/// Handler for clicking the Equip Craft button.
 	void btnCraftsClick(SDL_Event *ev, int scale);
+	/// Handler for clicking the Research button.
 	void btnResearchClick(SDL_Event *ev, int scale);
+	/// Handler for clicking the Manufacture button.
 	void btnManufactureClick(SDL_Event *ev, int scale);
+	/// Handler for clicking the Purchase/Hire button.
 	void btnPurchaseClick(SDL_Event *ev, int scale);
+	/// Handler for clicking the Sell/Sack button.
 	void btnSellClick(SDL_Event *ev, int scale);
+	/// Handler for clicking the Geoscape button.
 	void btnGeoscapeClick(SDL_Event *ev, int scale);
 };
 

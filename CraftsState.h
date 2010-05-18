@@ -27,6 +27,10 @@
 #include "Text.h"
 #include "TextList.h"
 
+/**
+ * Equip Craft screen that lets the player
+ * manage all the crafts in a base.
+ */
 class CraftsState : public State
 {
 private:
@@ -35,8 +39,11 @@ private:
 	Text *_txtTitle, *_txtBase, *_txtName, *_txtStatus, *_txtWeapon, *_txtCrew, *_txtHwp;
 	TextList *_lstCrafts;
 public:
+	/// Creates the Crafts state.
 	CraftsState(Game *game);
+	/// Cleans up the Crafts state.
 	~CraftsState();
+	/// Handler for clicking the OK button.
 	void btnOkClick(SDL_Event *ev, int scale);
 };
 

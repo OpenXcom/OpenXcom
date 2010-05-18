@@ -25,16 +25,25 @@
 #include "Window.h"
 #include "MainMenuState.h"
 
+/**
+ * Initializes the game and displays the Language
+ * window that lets the player pick a language.
+ */
 class StartState : public State
 {
 private:
-	Button *_btnEnglish, *_btnDeutsche, *_btnFrench;
+	Button *_btnEnglish, *_btnGerman, *_btnFrench;
 	Window *_window;
 public:
+	/// Creates the Start state.
 	StartState(Game *game);
+	/// Cleans up the Start state.
 	~StartState();
+	/// Handler for clicking the English button.
 	void btnEnglishClick(SDL_Event *ev, int scale);
-	void btnDeutscheClick(SDL_Event *ev, int scale);
+	/// Handler for clicking the Deutsche button.
+	void btnGermanClick(SDL_Event *ev, int scale);
+	/// Handler for clicking the Francais button.
 	void btnFrenchClick(SDL_Event *ev, int scale);
 };
 

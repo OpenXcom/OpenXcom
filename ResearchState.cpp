@@ -18,6 +18,10 @@
  */
 #include "ResearchState.h"
 
+/**
+ * Initializes all the elements in the Research screen.
+ * @param game Pointer to the core game.
+ */
 ResearchState::ResearchState(Game *game) : State(game)
 {
 	// Create objects
@@ -87,11 +91,19 @@ ResearchState::ResearchState(Game *game) : State(game)
 	_lstResearch->addRow(3, "Laser Weapons", "30", "Good");
 }
 
+/**
+ *
+ */
 ResearchState::~ResearchState()
 {
 	
 }
 
+/**
+ * Returns to the previous screen.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
 void ResearchState::btnOkClick(SDL_Event *ev, int scale)
 {
 	_game->popState();

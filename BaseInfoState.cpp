@@ -18,6 +18,11 @@
  */
 #include "BaseInfoState.h"
 
+/**
+ * Initializes all the elements in the Base Info screen.
+ * @param game Pointer to the core game.
+ * @param base Pointer to the base to get info from.
+ */
 BaseInfoState::BaseInfoState(Game *game, Base *base) : State(game), _base(base)
 {
 	// Create objects
@@ -262,11 +267,19 @@ BaseInfoState::BaseInfoState(Game *game, Base *base) : State(game), _base(base)
 	_barLongRange->setValue(2.0);
 }
 
+/**
+ *
+ */
 BaseInfoState::~BaseInfoState()
 {
 	
 }
 
+/**
+ * Returns to the previous screen.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
 void BaseInfoState::btnOkClick(SDL_Event *ev, int scale)
 {
 	_base->setName(_edtBase->getText());

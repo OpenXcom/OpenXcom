@@ -18,6 +18,10 @@
  */
 #include "GeoscapeState.h"
 
+/**
+ * Initializes all the elements in the Geoscape screen.
+ * @param game Pointer to the core game.
+ */
 GeoscapeState::GeoscapeState(Game *game) : State(game), _rotLon(0), _rotLat(0), _pause(false)
 {
 	// Create objects
@@ -231,11 +235,18 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _rotLon(0), _rotLat(0), 
 	_game->getResourcePack()->getMusic(ss.str())->play();
 }
 
+/**
+ *
+ */
 GeoscapeState::~GeoscapeState()
 {
 	
 }
 
+/**
+ * Updates the timer display and resets the palette
+ * since it's bound to change on other screens.
+ */
 void GeoscapeState::init()
 {
 	// Set palette
@@ -244,17 +255,29 @@ void GeoscapeState::init()
 	timeDisplay();
 }
 
+/**
+ * Runs the game timer and globe rotation timer.
+ */
 void GeoscapeState::think()
 {
 	_rotTimer->think(this);
 	_gameTimer->think(this);
 }
 
+/**
+ * Rotates the globe by a set amount. Necessary
+ * since the globe keeps rotating while the button
+ * is pressed down.
+ */
 void GeoscapeState::globeRotate()
 {
 	_globe->rotate(_rotLon, _rotLat);
 }
 
+/**
+ * Updates the Geoscape clock with the latest
+ * game time and date in human-readable format.
+ */
 void GeoscapeState::timeDisplay()
 {
 	stringstream ss, ss2, ss3, ss4, ss5;
@@ -285,6 +308,16 @@ void GeoscapeState::timeDisplay()
 	_txtYear->setText(ss5.str());
 }
 
+/**
+ * Advances the game timer according to
+ * the timer speed set, and calls the respective
+ * triggers. The timer always advances in "5 secs"
+ * cycles regardless of the speed otherwise it might
+ * skip important steps. Instead, it just keeps advancing
+ * the timer until the next speed step (eg. the next day
+ * on 1 Day speed) or until an event occurs, since updating
+ * the screen on each step would become cumbersomely slow.
+ */
 void GeoscapeState::timeAdvance()
 {
 	int timeSpan = 0;
@@ -324,14 +357,26 @@ void GeoscapeState::timeAdvance()
 	timeDisplay();
 }
 
+/**
+ * Takes care of any game logic that has to
+ * run every game second, like craft movement.
+ */
 void GeoscapeState::timeSecond()
 {
 }
 
+/**
+ * Takes care of any game logic that has to
+ * run every game hour, like constructions.
+ */
 void GeoscapeState::timeHour()
 {
 }
 
+/**
+ * Takes care of any game logic that has to
+ * run every game month, like funding.
+ */
 void GeoscapeState::timeMonth()
 {
 	_pause = true;
@@ -340,6 +385,12 @@ void GeoscapeState::timeMonth()
 	_game->pushState(new MonthlyReportState(_game));
 }
 
+/**
+ * Processes any left-clicks on globe markers,
+ * or right-clicks to scroll the globe.
+ * @note Currently left-clicking is used to move around
+ * a marker for testing globe functionality.
+ */
 void GeoscapeState::globeClick(SDL_Event *ev, int scale)
 {
 	double pos[2];
@@ -355,16 +406,31 @@ void GeoscapeState::globeClick(SDL_Event *ev, int scale)
 	}
 }
 
+/**
+ * Opens the Intercept window.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
 void GeoscapeState::btnInterceptClick(SDL_Event *ev, int scale)
 {
 	_game->pushState(new InterceptState(_game));
 }
 
+/**
+ * Goes to the Basescape screen.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
 void GeoscapeState::btnBasesClick(SDL_Event *ev, int scale)
 {
 	_game->pushState(new BasescapeState(_game));
 }
 
+/**
+ * Goes to the Graphs screen.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
 void GeoscapeState::btnGraphsClick(SDL_Event *ev, int scale)
 {
 	_game->pushState(new GraphsState(_game));
@@ -375,16 +441,31 @@ void GeoscapeState::btnUfopaediaClick(SDL_Event *ev, int scale)
 
 }
 
+/**
+ * Opens the Options window.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
 void GeoscapeState::btnOptionsClick(SDL_Event *ev, int scale)
 {
 	_game->pushState(new OptionsState(_game));
 }
 
+/**
+ * Goes to the Funding screen.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
 void GeoscapeState::btnFundingClick(SDL_Event *ev, int scale)
 {
 	_game->pushState(new FundingState(_game));
 }
 
+/**
+ * Starts rotating the globe to the left.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
 void GeoscapeState::btnRotateLeftPress(SDL_Event *ev, int scale)
 {
 	_rotLon += LONGITUDE_SPEED;
@@ -392,12 +473,22 @@ void GeoscapeState::btnRotateLeftPress(SDL_Event *ev, int scale)
 	globeRotate();
 }
 
+/**
+ * Stops rotating the globe to the left.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
 void GeoscapeState::btnRotateLeftRelease(SDL_Event *ev, int scale)
 {
 	_rotLon -= LONGITUDE_SPEED;
 	_rotTimer->stop();
 }
 
+/**
+ * Starts rotating the globe to the right.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
 void GeoscapeState::btnRotateRightPress(SDL_Event *ev, int scale)
 {
 	_rotLon += -LONGITUDE_SPEED;
@@ -405,12 +496,22 @@ void GeoscapeState::btnRotateRightPress(SDL_Event *ev, int scale)
 	globeRotate();
 }
 
+/**
+ * Stops rotating the globe to the right.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
 void GeoscapeState::btnRotateRightRelease(SDL_Event *ev, int scale)
 {
 	_rotLon -= -LONGITUDE_SPEED;
 	_rotTimer->stop();
 }
 
+/**
+ * Starts rotating the globe upwards.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
 void GeoscapeState::btnRotateUpPress(SDL_Event *ev, int scale)
 {
 	_rotLat += LATITUDE_SPEED;
@@ -418,12 +519,22 @@ void GeoscapeState::btnRotateUpPress(SDL_Event *ev, int scale)
 	globeRotate();
 }
 
+/**
+ * Stops rotating the globe upwards.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
 void GeoscapeState::btnRotateUpRelease(SDL_Event *ev, int scale)
 {
 	_rotLat -= LATITUDE_SPEED;
 	_rotTimer->stop();
 }
 
+/**
+ * Starts rotating the globe downwards.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
 void GeoscapeState::btnRotateDownPress(SDL_Event *ev, int scale)
 {
 	_rotLat += -LATITUDE_SPEED;
@@ -431,17 +542,32 @@ void GeoscapeState::btnRotateDownPress(SDL_Event *ev, int scale)
 	globeRotate();
 }
 
+/**
+ * Stops rotating the globe downwards.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
 void GeoscapeState::btnRotateDownRelease(SDL_Event *ev, int scale)
 {
 	_rotLat -= -LATITUDE_SPEED;
 	_rotTimer->stop();
 }
 
+/**
+ * Zooms into the globe.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
 void GeoscapeState::btnZoomInClick(SDL_Event *ev, int scale)
 {
 	_globe->zoom(0.3);
 }
 
+/**
+ * Zooms out of the globe.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
 void GeoscapeState::btnZoomOutClick(SDL_Event *ev, int scale)
 {
 	_globe->zoom(-0.3);

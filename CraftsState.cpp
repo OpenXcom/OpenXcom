@@ -18,6 +18,10 @@
  */
 #include "CraftsState.h"
 
+/**
+ * Initializes all the elements in the Equip Craft screen.
+ * @param game Pointer to the core game.
+ */
 CraftsState::CraftsState(Game *game) : State(game)
 {
 	// Create objects
@@ -82,11 +86,19 @@ CraftsState::CraftsState(Game *game) : State(game)
 	_lstCrafts->addRow(5, "SKYRANGER-1", _game->getResourcePack()->getLanguage()->getString((LangString)268).c_str(), "0/0", "8", "0");
 }
 
+/**
+ *
+ */
 CraftsState::~CraftsState()
 {
 	
 }
 
+/**
+ * Returns to the previous screen.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
 void CraftsState::btnOkClick(SDL_Event *ev, int scale)
 {
 	_game->popState();

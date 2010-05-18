@@ -27,6 +27,10 @@
 #include "Text.h"
 #include "TextList.h"
 
+/**
+ * Sell/Sack screen that lets the player sell
+ * any items in a particular base.
+ */
 class SellState : public State
 {
 private:
@@ -37,7 +41,9 @@ private:
 public:
 	SellState(Game *game);
 	~SellState();
+	/// Handler for clicking the OK button.
 	void btnOkClick(SDL_Event *ev, int scale);
+	/// Handler for clicking the Cancel button.
 	void btnCancelClick(SDL_Event *ev, int scale);
 };
 

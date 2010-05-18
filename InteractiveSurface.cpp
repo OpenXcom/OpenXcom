@@ -18,15 +18,34 @@
  */
 #include "State_Interactive.h"
 
+/**
+ * Sets up a blank interactive surface with the specified size and position.
+ * @param width Width in pixels.
+ * @param height Height in pixels.
+ * @param x X position in pixels.
+ * @param y Y position in pixels.
+ */
 InteractiveSurface::InteractiveSurface(int width, int height, int x, int y) : Surface(width, height, x, y), _click(0), _press(0), _release(0), _in(0), _out(0), _keyPress(0), _keyRelease(0), _isPressed(false), _isHovered(false), _isFocused(false)
 {
 
 }
 
+/**
+ *
+ */
 InteractiveSurface::~InteractiveSurface()
 {
 }
 
+/**
+ * Called whenever an SDL_event occurs, and processes it to
+ * check if it's relevant to the surface and convert it into
+ * a meaningful interaction like a "click", calling the respective
+ * handlers.
+ * @param ev Pointer to a SDL_Event.
+ * @param scale Current screen scale (used to correct mouse input).
+ * @param state State that the event handlers belong to.
+ */
 void InteractiveSurface::handle(SDL_Event *ev, int scale, State *state)
 {
 	if ((ev->button.x >= _x * scale && ev->button.x < (_x + _width) * scale) &&
@@ -78,83 +97,171 @@ void InteractiveSurface::handle(SDL_Event *ev, int scale, State *state)
 	}
 }
 
+/**
+ * Marks ths surface as focused. Surfaces will only receive
+ * keyboard events if focused.
+ */
 void InteractiveSurface::focus()
 {
 	_isFocused = true;
 }
 
+/**
+ * Called everytime there's a mouse press over the surface.
+ * Allows the surface to have custom functionality for this event,
+ * and can be called externally to simulate the event.
+ * @param ev Pointer to a SDL_Event.
+ * @param scale Current screen scale (used to correct mouse input).
+ * @param state State that the event handlers belong to.
+ */
 void InteractiveSurface::mousePress(SDL_Event *ev, int scale, State *state)
 {
 	if (_press != 0)
 		(state->*_press)(ev, scale);
 }
 
+/**
+ * Called everytime there's a mouse release over the surface.
+ * Allows the surface to have custom functionality for this event,
+ * and can be called externally to simulate the event.
+ * @param ev Pointer to a SDL_Event.
+ * @param scale Current screen scale (used to correct mouse input).
+ * @param state State that the event handlers belong to.
+ */
 void InteractiveSurface::mouseRelease(SDL_Event *ev, int scale, State *state)
 {
 	if (_release != 0)
 		(state->*_release)(ev, scale);
 }
 
+/**
+ * Called everytime there's a mouse click on the surface.
+ * Allows the surface to have custom functionality for this event,
+ * and can be called externally to simulate the event.
+ * @param ev Pointer to a SDL_Event.
+ * @param scale Current screen scale (used to correct mouse input).
+ * @param state State that the event handlers belong to.
+ */
 void InteractiveSurface::mouseClick(SDL_Event *ev, int scale, State *state)
 {
 	if (_click != 0)
 		(state->*_click)(ev, scale);
 }
 
+/**
+ * Called everytime the mouse moves into the surface.
+ * Allows the surface to have custom functionality for this event,
+ * and can be called externally to simulate the event.
+ * @param ev Pointer to a SDL_Event.
+ * @param scale Current screen scale (used to correct mouse input).
+ * @param state State that the event handlers belong to.
+ */
 void InteractiveSurface::mouseIn(SDL_Event *ev, int scale, State *state)
 {
 	if (_in != 0)
 		(state->*_in)(ev, scale);
 }
 
+/**
+ * Called everytime the mouse moves out of the surface.
+ * Allows the surface to have custom functionality for this event,
+ * and can be called externally to simulate the event.
+ * @param ev Pointer to a SDL_Event.
+ * @param scale Current screen scale (used to correct mouse input).
+ * @param state State that the event handlers belong to.
+ */
 void InteractiveSurface::mouseOut(SDL_Event *ev, int scale, State *state)
 {
 	if (_out != 0)
 		(state->*_out)(ev, scale);
 }
 
+/**
+ * Called everytime there's a keyboard press when the surface is focused.
+ * Allows the surface to have custom functionality for this event,
+ * and can be called externally to simulate the event.
+ * @param ev Pointer to a SDL_Event.
+ * @param scale Current screen scale (used to correct mouse input).
+ * @param state State that the event handlers belong to.
+ */
 void InteractiveSurface::keyboardPress(SDL_Event *ev, int scale, State *state)
 {
 	if (_keyPress != 0)
 		(state->*_keyPress)(ev, scale);
 }
 
+/**
+ * Called everytime there's a keyboard release over the surface.
+ * Allows the surface to have custom functionality for this event,
+ * and can be called externally to simulate the event.
+ * @param ev Pointer to a SDL_Event.
+ * @param scale Current screen scale (used to correct mouse input).
+ * @param state State that the event handlers belong to.
+ */
 void InteractiveSurface::keyboardRelease(SDL_Event *ev, int scale, State *state)
 {
 	if (_keyRelease != 0)
 		(state->*_keyRelease)(ev, scale);
 }
 
+/**
+ * Sets a function to be called everytime the surface is mouse clicked.
+ * @param handler Event handler.
+ */
 void InteractiveSurface::onMouseClick(EventHandler handler)
 {
 	_click = handler;
 }
 
+/**
+ * Sets a function to be called everytime the surface is mouse pressed.
+ * @param handler Event handler.
+ */
 void InteractiveSurface::onMousePress(EventHandler handler)
 {
 	_press = handler;
 }
 
+/**
+ * Sets a function to be called everytime the surface is mouse released.
+ * @param handler Event handler.
+ */
 void InteractiveSurface::onMouseRelease(EventHandler handler)
 {
 	_release = handler;
 }
 
+/**
+ * Sets a function to be called everytime the mouse moves into the surface.
+ * @param handler Event handler.
+ */
 void InteractiveSurface::onMouseIn(EventHandler handler)
 {
 	_in = handler;
 }
 
+/**
+ * Sets a function to be called everytime the mouse moves out of the surface.
+ * @param handler Event handler.
+ */
 void InteractiveSurface::onMouseOut(EventHandler handler)
 {
 	_out = handler;
 }
 
+/**
+ * Sets a function to be called everytime a key is pressed when the surface is focused.
+ * @param handler Event handler.
+ */
 void InteractiveSurface::onKeyboardPress(EventHandler handler)
 {
 	_keyPress = handler;
 }
 
+/**
+ * Sets a function to be called everytime a key is released when the surface is focused.
+ * @param handler Event handler.
+ */
 void InteractiveSurface::onKeyboardRelease(EventHandler handler)
 {
 	_keyRelease = handler;

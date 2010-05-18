@@ -18,6 +18,10 @@
  */
 #include "AbandonGameState.h"
 
+/**
+ * Initializes all the elements in the Abandon Game screen.
+ * @param game Pointer to the core game.
+ */
 AbandonGameState::AbandonGameState(Game *game) : State(game)
 {
 	_screen = false;
@@ -56,17 +60,30 @@ AbandonGameState::AbandonGameState(Game *game) : State(game)
 	_txtTitle->setText(ss.str());
 }
 
+/**
+ *
+ */
 AbandonGameState::~AbandonGameState()
 {
 	
 }
 
+/**
+ * Goes back to the Main Menu.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
 void AbandonGameState::btnYesClick(SDL_Event *ev, int scale)
 {
 	_game->setState(new MainMenuState(_game));
 	delete _game->getSavedGame();
 }
 
+/**
+ * Closes the window.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
 void AbandonGameState::btnNoClick(SDL_Event *ev, int scale)
 {
 	_game->popState();

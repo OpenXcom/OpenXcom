@@ -24,11 +24,15 @@
 #include "SavedGame.h"
 
 #include <iostream>
+#include <cstring>
+#include <cstdlib>
 
 #define DATA_FOLDER "./DATA/"
 
 Game *game;
 
+// If you can't tell what the main() is for you should have your
+// programming license revoked...
 int main(int argc, char** args)
 {
 	try
@@ -37,9 +41,16 @@ int main(int argc, char** args)
 		game->setResourcePack(new XcomResourcePack(DATA_FOLDER));
 		game->setRuleset(new XcomRuleset());
 		
-		if (argc == 2 && strcmp(args[1], "-fullscreen") == 0)
-			game->getScreen()->setFullscreen(true);
-		game->getScreen()->setScale(2);
+		// Handles command line arguments
+		int scale = 2;
+		for (int i = 1; i < argc; i++)
+		{
+			if (strcmp(args[i], "-fullscreen") == 0)
+				game->getScreen()->setFullscreen(true);
+			if (strcmp(args[i], "-scale") == 0 && argc > i + 1)
+				scale = atoi(args[i+1]);
+		}
+		game->getScreen()->setScale(scale);
 		//game->setState(new TestState(game));
 		game->setState(new StartState(game));
 		game->run();

@@ -90,7 +90,7 @@ void Timer::setInterval(Uint32 interval)
 }
 
 /**
- * Sets a function for the timer to run every interval.
+ * Sets a function for the timer to call every interval.
  * @param handler Event handler.
  */
 void Timer::onTimer(TimerHandler handler)

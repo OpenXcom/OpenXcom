@@ -18,6 +18,10 @@
  */
 #include "MainMenuState.h"
 
+/**
+ * Initializes all the elements in the Main Menu window.
+ * @param game Pointer to the core game.
+ */
 MainMenuState::MainMenuState(Game *game) : State(game)
 {
 	// Create objects
@@ -68,11 +72,19 @@ MainMenuState::MainMenuState(Game *game) : State(game)
 	_game->getResourcePack()->getMusic("GMSTORY")->play();
 }
 
+/**
+ *
+ */
 MainMenuState::~MainMenuState()
 {
 	
 }
 
+/**
+ * Opens the New Game window.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
 void MainMenuState::btnNewClick(SDL_Event *ev, int scale)
 {
 	_game->setState(new NewGameState(_game));
@@ -83,6 +95,11 @@ void MainMenuState::btnLoadClick(SDL_Event *ev, int scale)
 	
 }
 
+/**
+ * Quits the game.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
 void MainMenuState::btnQuitClick(SDL_Event *ev, int scale)
 {
 	_game->quit();

@@ -18,9 +18,15 @@
  */
 #include "Screen.h"
 
+/**
+ * Initializes a new display screen for the game to render contents to.
+ * @param width Width in pixels.
+ * @param height Height in pixels.
+ * @param bpp Bits-per-pixel.
+ */
 Screen::Screen(int width, int height, int bpp) : _width(width), _height(height), _bpp(bpp), _scale(1)
 {
-	_flags = SDL_HWPALETTE;
+	_flags = SDL_SWSURFACE|SDL_HWPALETTE;
 
 	_screen = SDL_SetVideoMode(_width, _height, _bpp, _flags);
 	if (_screen == 0)
@@ -31,16 +37,32 @@ Screen::Screen(int width, int height, int bpp) : _width(width), _height(height),
 	_surface = new Surface(_width, _height);
 }
 
+/**
+ * Deletes the buffer from memory. The display screen itself
+ * is automatically freed once SDL shuts down.
+ */
 Screen::~Screen()
 {
 	delete _surface;
 }
 
+/**
+ * Returns the screen's internal buffer surface. Any
+ * contents that need to be shown will be blitted to this.
+ * @return Pointer to the buffer surface.
+ */
 Surface *Screen::getSurface()
 {
 	return _surface;
 }
 
+/**
+ * Renders the buffer's contents onto the screen, applying
+ * any necessary filters or conversions in the process.
+ * If the scaling factor is bigger than 1, the entire contents
+ * of the buffer are resized by that factor (eg. 2 = doubled)
+ * before being put on screen.
+ */
 void Screen::flip()
 {
 	if (_scale != 1)
@@ -60,6 +82,9 @@ void Screen::flip()
     }
 }
 
+/**
+ * Clears all the contents out of the internal buffer.
+ */
 void Screen::clear()
 {
 	_surface->clear();
@@ -71,17 +96,33 @@ void Screen::clear()
 	SDL_FillRect(_screen, &square, 0);
 }
 
+/**
+ * Changes the 8bpp palette used to render the screen's contents.
+ * @param colors Pointer to the set of colors.
+ * @param firstcolor Offset of the first color to replace.
+ * @param ncolors Amount of colors to replace.
+ */
 void Screen::setPalette(SDL_Color* colors, int firstcolor, int ncolors)
 {
 	_surface->setPalette(colors, firstcolor, ncolors);
 	SDL_SetColors(_screen, colors, firstcolor, ncolors);
 }
 
+/**
+ * Returns the screen's 8bpp palette.
+ * @return Pointer to the palette's colors.
+ */
 SDL_Color* Screen::getPalette()
 {
 	return _surface->getPalette();
 }
 
+/**
+ * Changes the screen's resolution. The display surface
+ * and palette have to be reset for this to happen properly.
+ * @param width Width in pixels.
+ * @param height Height in pixels.
+ */
 void Screen::setResolution(int width, int height)
 {
 	_screen = SDL_SetVideoMode(width, height, _bpp, _flags);
@@ -94,6 +135,11 @@ void Screen::setResolution(int width, int height)
 	setPalette(_surface->getPalette());
 }
 
+/**
+ * Switches the screen between full-screen and/or windowed.
+ * The screen has to be reset for this to happen properly.
+ * @param full True for full-screen, False for windowed.
+ */
 void Screen::setFullscreen(bool full)
 {
 	if (full)
@@ -103,11 +149,20 @@ void Screen::setFullscreen(bool full)
 	setResolution(_width, _height);
 }
 
+/**
+ * Returns the scaling factor used by the screen.
+ * @return Scaling factor.
+ */
 int Screen::getScale()
 {
 	return _scale;
 }
 
+/**
+ * Changes the scaling factor used to render the screen,
+ * and adapts the resolution respectively.
+ * @param amount Scaling factor.
+ */
 void Screen::setScale(int amount)
 {
 	_scale = amount;

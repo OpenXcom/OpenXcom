@@ -28,6 +28,11 @@
 #include "Text.h"
 #include "MainMenuState.h"
 
+/**
+ * @file AbandonGameState.h
+ * Abandon Game window shown before
+ * quitting the game from the Geoscape.
+ */
 class AbandonGameState : public State
 {
 private:
@@ -35,9 +40,13 @@ private:
 	Window *_window;
 	Text *_txtTitle;
 public:
+	/// Creates the Abandon Game state.
 	AbandonGameState(Game *game);
+	/// Cleans up the Abandon Game state.
 	~AbandonGameState();
+	/// Handler for clicking the Yes button.
 	void btnYesClick(SDL_Event *ev, int scale);
+	/// Handler for clicking the No button.
 	void btnNoClick(SDL_Event *ev, int scale);
 };
 

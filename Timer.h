@@ -51,7 +51,7 @@ public:
 	void think(State* state);
 	/// Sets the timer's interval.
 	void setInterval(Uint32 interval);
-	/// Hooks an event handler to the timer.
+	/// Hooks an event handler to the timer interval.
 	void onTimer(TimerHandler handler);
 };
 

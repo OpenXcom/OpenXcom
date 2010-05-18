@@ -27,6 +27,10 @@
 #include "Text.h"
 #include "TextList.h"
 
+/**
+ * Purchase/Hire screen that lets the player buy
+ * new items for a base.
+ */
 class PurchaseState : public State
 {
 private:
@@ -35,9 +39,13 @@ private:
 	Text *_txtTitle, *_txtFunds, *_txtPurchases, *_txtItem, *_txtCost, *_txtQuantity;
 	TextList *_lstItems;
 public:
+	/// Creates the Purchase state.
 	PurchaseState(Game *game);
+	/// Cleans up the Purchase state.
 	~PurchaseState();
+	/// Handler for clicking the OK button.
 	void btnOkClick(SDL_Event *ev, int scale);
+	/// Handler for clicking the Cancel button.
 	void btnCancelClick(SDL_Event *ev, int scale);
 };
 

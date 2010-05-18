@@ -18,6 +18,10 @@
  */
 #include "NewGameState.h"
 
+/**
+ * Initializes all the elements in the Difficulty window.
+ * @param game Pointer to the core game.
+ */
 NewGameState::NewGameState(Game *game) : State(game)
 {
 	// Create objects
@@ -67,35 +71,68 @@ NewGameState::NewGameState(Game *game) : State(game)
 	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString(STR_SELECT_DIFFICULTY_LEVEL));
 }
 
+/**
+ *
+ */
 NewGameState::~NewGameState()
 {
 	
 }
 
+/**
+ * Creates a new game in Beginner difficulty and
+ * jumps to the Geoscape screen.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
 void NewGameState::btnBeginnerClick(SDL_Event *ev, int scale)
 {
 	_game->setSavedGame(_game->getRuleset()->newSave(DIFF_BEGINNER));
 	_game->setState(new GeoscapeState(_game));
 }
 
+/**
+ * Creates a new game in Experienced difficulty and
+ * jumps to the Geoscape screen.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
 void NewGameState::btnExperiencedClick(SDL_Event *ev, int scale)
 {
 	_game->setSavedGame(_game->getRuleset()->newSave(DIFF_EXPERIENCED));
 	_game->setState(new GeoscapeState(_game));
 }
 
+/**
+ * Creates a new game in Veteran difficulty and
+ * jumps to the Geoscape screen.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
 void NewGameState::btnVeteranClick(SDL_Event *ev, int scale)
 {
 	_game->setSavedGame(_game->getRuleset()->newSave(DIFF_VETERAN));
 	_game->setState(new GeoscapeState(_game));
 }
 
+/**
+ * Creates a new game in Genius difficulty and
+ * jumps to the Geoscape screen.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
 void NewGameState::btnGeniusClick(SDL_Event *ev, int scale)
 {
 	_game->setSavedGame(_game->getRuleset()->newSave(DIFF_GENIUS));
 	_game->setState(new GeoscapeState(_game));
 }
 
+/**
+ * Creates a new game in Superhuman difficulty and
+ * jumps to the Geoscape screen.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
 void NewGameState::btnSuperhumanClick(SDL_Event *ev, int scale)
 {
 	_game->setSavedGame(_game->getRuleset()->newSave(DIFF_SUPERHUMAN));

@@ -18,6 +18,10 @@
  */
 #include "PurchaseState.h"
 
+/**
+ * Initializes all the elements in the Purchase/Hire screen.
+ * @param game Pointer to the core game.
+ */
 PurchaseState::PurchaseState(Game *game) : State(game)
 {
 	// Create objects
@@ -85,6 +89,9 @@ PurchaseState::PurchaseState(Game *game) : State(game)
 	_lstItems->addRow(3, "Soldier", "40 000", "0");
 }
 
+/**
+ *
+ */
 PurchaseState::~PurchaseState()
 {
 	
@@ -95,6 +102,11 @@ void PurchaseState::btnOkClick(SDL_Event *ev, int scale)
 	
 }
 
+/**
+ * Returns to the previous screen.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
 void PurchaseState::btnCancelClick(SDL_Event *ev, int scale)
 {
 	_game->popState();

@@ -18,6 +18,10 @@
  */
 #include "InterceptState.h"
 
+/**
+ * Initializes all the elements in the Intercept window.
+ * @param game Pointer to the core game.
+ */
 InterceptState::InterceptState(Game *game) : State(game)
 {
 	_screen = false;
@@ -75,11 +79,19 @@ InterceptState::InterceptState(Game *game) : State(game)
 	_lstCrafts->getCell(0, 1)->setColor(Palette::blockOffset(8)+10);
 }
 
+/**
+ *
+ */
 InterceptState::~InterceptState()
 {
 	
 }
 
+/**
+ * Closes the window.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
 void InterceptState::btnCancelClick(SDL_Event *ev, int scale)
 {
 	_game->popState();

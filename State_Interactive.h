@@ -30,6 +30,15 @@ using namespace std;
 
 class InteractiveSurface;
 
+/**
+ * @file State_Interactive.h
+ * A game state that receives user input and reacts accordingly.
+ ª Game states typically represent a whole window or screen that
+ * the user interacts with, making the game... well, interactive.
+ * They automatically handle child elements used to transmit
+ * information from/to the user, and are linked to the core game
+ * engine which manages them.
+ */
 class State
 {
 protected:
@@ -38,18 +47,33 @@ protected:
 	bool _screen;
 
 public:
+	/// Creates a new state linked to a game.
 	State(Game* game);
+	/// Cleans up the state.
 	virtual ~State();
+	/// Adds a child element to the state.
 	void add(Surface *surface);
+	/// Gets whether the state is a full-screen.
 	bool isScreen();
+	/// Initializes the state.
 	virtual void init();
+	/// Handles any events
 	virtual void handle(SDL_Event* ev, int scale);
+	/// Runs state functionality every cycle.
 	virtual void think();
+	/// Blits the state to the screen.
 	virtual void blit();
 };
 
 typedef State &(State::*EventHandler)(SDL_Event *, int);
 
+/**
+ * Surface that the user can interact with.
+ * Specialized version of the standard Surface that
+ * processes all the various SDL events and turns
+ * them into useful interactions with the Surface,
+ * so specialized subclasses don't need to worry about it.
+ */
 class InteractiveSurface : public Surface
 {
 protected:
@@ -57,24 +81,42 @@ protected:
 	bool _isPressed, _isHovered, _isFocused;
 
 public:
-	InteractiveSurface(int width, int height, int x, int y);
+	/// Creates a new interactive surface with the specified size and position.
+	InteractiveSurface(int width, int height, int x = 0, int y = 0);
+	/// Cleans up the interactive surface.
 	virtual ~InteractiveSurface();
+	/// Processes any pending events.
 	virtual void handle(SDL_Event *ev, int scale, State *state);
+	/// Sets focus on this surface.
 	void focus();
+	/// Hooks an event handler to a mouse click on the surface.
 	void onMouseClick(EventHandler handler);
+	/// Hooks an event handler to a mouse press over the surface.
 	void onMousePress(EventHandler handler);
+	/// Hooks an event handler to a mouse release over the surface.
 	void onMouseRelease(EventHandler handler);
+	/// Hooks an event handler to moving the mouse into the surface.
 	void onMouseIn(EventHandler handler);
+	/// Hooks an event handler to moving the mouse out of the surface.
 	void onMouseOut(EventHandler handler);
+	/// Hooks an event handler to pressing a key when the surface is focused.
 	void onKeyboardPress(EventHandler handler);
+	/// Hooks an event handler to releasing a key when the surface is focused.
 	void onKeyboardRelease(EventHandler handler);
 	
+	/// Processes a mouse button press event.
 	virtual void mousePress(SDL_Event *ev, int scale, State *state);
+	/// Processes a mouse button release event.
 	virtual void mouseRelease(SDL_Event *ev, int scale, State *state);
+	/// Processes a mouse click event.
 	virtual void mouseClick(SDL_Event *ev, int scale, State *state);
+	/// Processes a mouse hover in event.
 	virtual void mouseIn(SDL_Event *ev, int scale, State *state);
+	/// Processes a mouse hover out event.
 	virtual void mouseOut(SDL_Event *ev, int scale, State *state);
+	/// Processes a keyboard key press event.
 	virtual void keyboardPress(SDL_Event *ev, int scale, State *state);
+	/// Processes a keyboard key release event.
 	virtual void keyboardRelease(SDL_Event *ev, int scale, State *state);
 
 };

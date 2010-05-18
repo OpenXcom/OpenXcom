@@ -18,6 +18,10 @@
  */
 #include "TestState.h"
 
+/**
+ * Initializes all the elements in the test screen.
+ * @param game Pointer to the core game.
+ */
 TestState::TestState(Game *game) : State(game)
 {
 	// Create objects
@@ -80,6 +84,12 @@ void TestState::blit()
 	_set->getSurface()->blit(_game->getScreen()->getSurface());
 }
 
+/**
+ * Generates a surface with a row of every single color currently
+ * loaded in the game palette (like a rainbow). First used for
+ * testing 8bpp functionality, still useful for debugging palette issues.
+ * @return Test surface.
+ */
 SDL_Surface *TestState::testSurface()
 {
 	SDL_Surface *surface;

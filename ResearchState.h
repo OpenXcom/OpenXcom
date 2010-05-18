@@ -27,6 +27,10 @@
 #include "Text.h"
 #include "TextList.h"
 
+/**
+ * Research screen that lets the player manage
+ * all the researching operations of a base.
+ */
 class ResearchState : public State
 {
 private:
@@ -37,6 +41,7 @@ private:
 public:
 	ResearchState(Game *game);
 	~ResearchState();
+	/// Handler for clicking the OK button.
 	void btnOkClick(SDL_Event *ev, int scale);
 };
 

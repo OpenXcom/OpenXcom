@@ -28,6 +28,14 @@
 #include "Text.h"
 #include "TextList.h"
 
+/**
+ * A state purely for testing game functionality.
+ * Fun fact, this was the project's original main(),
+ * used for testing and implementing basic engine
+ * features until it grew a proper structure and was
+ * put aside for actual game states. Useful as a
+ * sandbox / testing ground.
+ */
 class TestState : public State
 {
 private:
@@ -38,10 +46,13 @@ private:
 	Text *_text;
 	TextList *_list;
 	int _i;
-
+	
+	/// Creates a surface with every color in the palette.
 	SDL_Surface *testSurface();
 public:
+	/// Creates the Test state.
 	TestState(Game *game);
+	/// Cleans up the Test state.
 	~TestState();
 	void think();
 	void blit();
