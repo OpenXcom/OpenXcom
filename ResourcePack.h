@@ -32,6 +32,15 @@
 
 using namespace std;
 
+/**
+ * Packs of external game media.
+ * Resource packs contain all the game media that's
+ * loaded externally, like graphics, fonts, languages,
+ * audio and world map.
+ * @note The game is still hardcoded to X-Com resources,
+ * so for now this just serves to keep all the file loading
+ * in one place.
+ */
 class ResourcePack
 {
 protected:
@@ -46,18 +55,29 @@ protected:
 	vector<Polygon*> _polygons;
 	map<string, Music*> _musics;
 public:
+	/// Create a new resource pack with a folder's contents.
 	ResourcePack(string folder);
+	/// Cleans up the resource pack.
 	~ResourcePack();
-	string getFolder();
+	/// Gets the current language.
 	Language *getLanguage();
+	/// Gets the name of the current language.
 	string getLanguageName();
+	/// Sets a new language as current.
 	void setLanguage(string lang);
+	/// Gets a particular font.
 	Font *getFont(string name);
+	/// Gets a particular surface.
 	Surface *getSurface(string name);
+	/// Gets a particular surface set.
 	SurfaceSet *getSurfaceSet(string name);
+	/// Gets the list of world polygons.
 	vector<Polygon*> *getPolygons();
+	/// Gets a particular music.
 	Music *getMusic(string name);
+	/// Gets a particular palette.
 	Palette *getPalette(string name);
+	/// Sets a new palette.
 	void setPalette(SDL_Color *colors, int firstcolor, int ncolors);
 };
 

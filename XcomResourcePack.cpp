@@ -18,6 +18,11 @@
  */
 #include "XcomResourcePack.h"
 
+/**
+ * Initializes the resource pack by loading all the resources
+ * contained in the original game folder.
+ * @param folder Subfolder to load resources from.
+ */
 XcomResourcePack::XcomResourcePack(string folder) : ResourcePack(folder)
 {
 	cout << "Loading resources..." << endl;
@@ -218,6 +223,9 @@ XcomResourcePack::XcomResourcePack(string folder) : ResourcePack(folder)
 	}
 }
 
+/**
+ *
+ */
 XcomResourcePack::~XcomResourcePack()
 {
 }

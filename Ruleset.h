@@ -28,6 +28,12 @@
 
 using namespace std;
 
+/**
+ * Set of rules and stats for a game.
+ * A ruleset holds all the constant info that never changes
+ * throughout a game, like stats of all the in-game items,
+ * countries, research tree, soldier names, starting base, etc.
+ */
 class Ruleset
 {
 protected:
@@ -35,10 +41,17 @@ protected:
 	map<LangString, RuleBaseFacility*> _facilities;
 	map<LangString, RuleCraft*> _crafts;
 public:
+	/// Creates a blank ruleset.
 	Ruleset();
+	/// Cleans up the ruleset.
 	~Ruleset();
+	/// Generates the starting saved game.
 	virtual SavedGame *newSave(GameDifficulty diff);
+	/// Gets the pool list for soldier names.
+	vector<SoldierNamePool*> *getPools();
+	/// Gets the ruleset for a facility type.
 	RuleBaseFacility *getBaseFacility(LangString id);
+	/// Gets the ruleset for a craft type.
 	RuleCraft *getCraft(LangString id);
 };
 

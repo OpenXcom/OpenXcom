@@ -18,44 +18,84 @@
  */
 #include "SavedGame.h"
 
-SavedGame::SavedGame(GameDifficulty diff) : _diff(diff), _funds(0)
+/**
+ * Initializes a brand new saved game according to the specified difficulty.
+ * @param diff Game difficulty.
+ */
+SavedGame::SavedGame(GameDifficulty diff) : _diff(diff), _funds(0), _bases()
 {
 	_time = new GameTime(6, 1, 1, 1999, 12, 0, 0);
 	srand(seed);
 }
 
+/** 
+ * Deletes the game content from memory.
+ */
 SavedGame::~SavedGame()
 {
+	for (vector<Base*>::iterator i = _bases.begin(); i != _bases.end(); i++)
+	{
+		delete *i;
+	}
 }
 
+/**
+ * Defaults to the current time.
+ */
 int SavedGame::seed = (int)time(NULL);
 
+/**
+ * Generates a random number between a certain number.
+ * @param min Minimum number.
+ * @param max Maximum number.
+ * @return Generated number.
+ */
 int SavedGame::genRandom(int min, int max)
 {
 	seed = rand();
 	return (seed % (max - min + 1) + min);
 }
 
+/**
+ * Returns the player's current funds.
+ * @return Current funds.
+ */
 int SavedGame::getFunds()
 {
 	return _funds;
 }
 
+/**
+ * Changes the player's funds to a new value.
+ * @param funds New funds.
+ */
 void SavedGame::setFunds(int funds)
 {
 	_funds = funds;
 }
 
+/**
+ * Returns the current time of the game.
+ * @return Pointer to the game time.
+ */
 GameTime *SavedGame::getTime()
 {
 	return _time;
 }
 
+/**
+ * Returns the list of countries in the game world.
+ * @return Pointer to country list.
+ */
 map<LangString, Country*> *SavedGame::getCountries()
 {
 	return &_countries;
 }
 
+/**
+ * Adds up the monthly funding of all the countries.
+ * @return Total funding.
+ */
 int SavedGame::getCountryFunding()
 {
 	int total = 0;
@@ -66,6 +106,10 @@ int SavedGame::getCountryFunding()
 	return total;
 }
 
+/**
+ * Returns the list of player bases.
+ * @return Pointer to base list.
+ */
 vector<Base*> *SavedGame::getBases()
 {
 	return &_bases;

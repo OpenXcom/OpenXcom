@@ -18,6 +18,10 @@
  */
 #include "XcomRuleset.h"
 
+/**
+ * Initializes the X-Com ruleset with all the rules
+ * mimicking the original game.
+ */
 XcomRuleset::XcomRuleset() : Ruleset()
 {
 	SoldierNamePool *american = new SoldierNamePool();
@@ -279,10 +283,19 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_names.push_back(russian);
 }
 
+/**
+ *
+ */
 XcomRuleset::~XcomRuleset()
 {
 }
 
+/**
+ * Generates a brand new saved game with the default countries
+ * and a base with all the starting equipment.
+ * @param diff Difficulty for the save.
+ * @return New saved game.
+ */
 SavedGame *XcomRuleset::newSave(GameDifficulty diff)
 {
 	SavedGame *save = new SavedGame(diff);

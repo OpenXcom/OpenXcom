@@ -30,8 +30,17 @@
 
 using namespace std;
 
+/**
+ * Enumator containing all the possible game difficulties.
+ */
 enum GameDifficulty { DIFF_BEGINNER, DIFF_EXPERIENCED, DIFF_VETERAN, DIFF_GENIUS, DIFF_SUPERHUMAN };
 
+/**
+ * Saved game 
+ * A saved game holds all the variable info in a game that
+ * gets written to disk when the game is saved. Funds, gane time,
+ * current bases and contents, world activities, score, etc.
+ */
 class SavedGame
 {
 private:
@@ -41,15 +50,25 @@ private:
 	map<LangString, Country*> _countries;
 	vector<Base*> _bases;
 public:
+	/// Creates a new save with a certain difficulty.
 	SavedGame(GameDifficulty diff);
+	/// Cleans up the saved game.
 	~SavedGame();
+	/// Seed used for random number generation.
 	static int seed;
+	/// Generates a random number.
 	static int genRandom(int min, int max);
+	/// Gets the current funds.
 	int getFunds();
+	/// Sets new funds.
 	void setFunds(int funds);
+	/// Gets the current game time.
 	GameTime *getTime();
+	/// Gets the list of countries.
 	map<LangString, Country*> *getCountries();
+	/// Gets the total country funding.
 	int getCountryFunding();
+	/// Gets the list of bases.
 	vector<Base*> *getBases();
 };
 

@@ -23,12 +23,17 @@
 #include "ResourcePack.h"
 #include "Globe.h"
 
+/**
+ * Resource pack for the X-Com: UFO Defense game.
+ */
 class XcomResourcePack : public ResourcePack
 {
 private:
 
 public:
+	/// Creates the X-Com ruleset.
 	XcomResourcePack(string folder);
+	/// Cleans up the X-Com ruleset.
 	~XcomResourcePack();
 };
 

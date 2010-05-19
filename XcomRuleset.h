@@ -23,12 +23,18 @@
 #include "LangString.h"
 #include "Soldier.h"
 
+/**
+ * Ruleset for the X-Com: UFO Defense game.
+ */
 class XcomRuleset : public Ruleset
 {
 private:
 public:
+	/// Creates the X-Com ruleset.
 	XcomRuleset();
+	/// Cleans up the X-Com ruleset.
 	~XcomRuleset();
+	/// Generates a saved game with starting equipment.
 	SavedGame *newSave(GameDifficulty diff);
 };
 
