@@ -23,22 +23,39 @@
 #include "SDL.h"
 #include "Surface.h"
 
+/**
+ * Bar graphic that represents a certain value.
+ * Drawn with a coloured border and partially
+ * filled content to contrast two values, typically
+ * used for showing base and soldier stats.
+ */
 class Bar : public Surface
 {
 private:
 	Uint8 _color;
 	double _scale, _max, _value;
 public:
+	/// Creates a new bar with the specified size and position.
 	Bar(int width, int height, int x = 0, int y = 0);
+	/// Cleans up the bar.
 	~Bar();
+	/// Sets the bar's color.
 	void setColor(Uint8 color);
+	/// Gets the bar's color.
 	Uint8 getColor();
+	/// Sets the bar's scale.
 	void setScale(double scale);
+	/// Gets the bar's scale.
 	double getScale();
+	/// Sets the bar's maximum value.
 	void setMax(double max);
+	/// Gets the bar's maximum value.
 	double getMax();
+	/// Sets the bar's current value.
 	void setValue(double value);
+	/// Gets the bar's current value.
 	double getValue();
+	/// Blits the bar onto a surface.
 	void blit(Surface *surface);
 };
 

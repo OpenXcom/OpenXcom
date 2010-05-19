@@ -18,25 +18,48 @@
  */
 #include "CustomButton.h"
 
+/**
+ * Sets up a custom button with the specified size and position.
+ * @param width Width in pixels.
+ * @param height Height in pixels.
+ * @param x X position in pixels.
+ * @param y Y position in pixels.
+ */
 CustomButton::CustomButton(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _color(0), _group(0)
 {
 }
 
+/**
+ *
+ */
 CustomButton::~CustomButton()
 {
 	
 }
 
+/**
+ * Changes the color for the custom button.
+ * @param color Color value.
+ */
 void CustomButton::setColor(Uint8 color)
 {
 	_color = color;
 }
 
+/**
+ * Returns the color for the custom button.
+ * @return Color value.
+ */
 Uint8 CustomButton::getColor()
 {
 	return _color;
 }
 
+/**
+ * Changes the button group this button belongs to.
+ * @param group Pointer to the pressed button pointer in the group.
+ * Null makes it a regular button.
+ */
 void CustomButton::setGroup(CustomButton **group)
 {
 	_group = group;
@@ -44,17 +67,34 @@ void CustomButton::setGroup(CustomButton **group)
 		invert(_color);
 }
 
+/**
+ * Blits the custom button onto another surface.
+ * @param surface Pointer to surface to blit onto.
+ */
 void CustomButton::blit(Surface *surface)
 {
 	Surface::blit(surface);
 }
 
+/**
+ * Ignores any mouse clicks that aren't the left mouse button.
+ * @param ev Pointer to a SDL_Event.
+ * @param scale Current screen scale (used to correct mouse input).
+ * @param state State that the event handlers belong to.
+ */
 void CustomButton::handle(SDL_Event *ev, int scale, State *state)
 {
 	if (ev->button.button == SDL_BUTTON_LEFT)
 		InteractiveSurface::handle(ev, scale, state);
 }
 
+/**
+ * Sets the button as the pressed button if it's part of a group,
+ * and inverts the colors when pressed.
+ * @param ev Pointer to a SDL_Event.
+ * @param scale Current screen scale (used to correct mouse input).
+ * @param state State that the event handlers belong to.
+ */
 void CustomButton::mousePress(SDL_Event *ev, int scale, State *state)
 {
 	if (_group != 0)
@@ -66,6 +106,12 @@ void CustomButton::mousePress(SDL_Event *ev, int scale, State *state)
 	InteractiveSurface::mousePress(ev, scale, state);
 }
 
+/*
+ * Sets the button as the released button if it's part of a group.
+ * @param ev Pointer to a SDL_Event.
+ * @param scale Current screen scale (used to correct mouse input).
+ * @param state State that the event handlers belong to.
+ */
 void CustomButton::mouseRelease(SDL_Event *ev, int scale, State *state)
 {
 	if (_group == 0)

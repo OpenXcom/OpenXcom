@@ -34,7 +34,6 @@ class State;
 using namespace std;
 
 /**
- * @file Game.h
  * The core of the game engine, manages the game's entire contents and structure.
  * Takes care of encapsulating all the core SDL commands, provides access to all
  * the game's resources and contains a stack state machine to handle all the

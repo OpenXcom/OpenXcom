@@ -18,16 +18,35 @@
  */
 #include "Cursor.h"
 
+/**
+ * Sets up a cursor with the specified size and position
+ * and hides the system cursor.
+ * @note The size and position don't really matter since
+ * it's a 9x13 shape, they're just there for inhertiance.
+ * @param width Width in pixels.
+ * @param height Height in pixels.
+ * @param x X position in pixels.
+ * @param y Y position in pixels.
+ */
 Cursor::Cursor(int width, int height, int x, int y) : Surface(width, height, x, y), _color(0)
 {
 	SDL_ShowCursor(SDL_DISABLE);
 }
 
+/**
+ *
+ */
 Cursor::~Cursor()
 {
 	
 }
 
+/**
+ * Automatically updates the cursor position
+ * when the mouse moves.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
 void Cursor::handle(SDL_Event *ev, int scale)
 {
 	if (ev->type == SDL_MOUSEMOTION)
@@ -37,16 +56,28 @@ void Cursor::handle(SDL_Event *ev, int scale)
 	}
 }
 
+/**
+ * Changes the cursor's base color.
+ * @param color Color value.
+ */
 void Cursor::setColor(Uint8 color)
 {
 	_color = color;
 }
 
+/**
+ * Returns the cursor's base color.
+ * @return Color value.
+ */
 Uint8 Cursor::getColor()
 {
 	return _color;
 }
 
+/**
+ * Blits the bar graphic onto another surface.
+ * @param surface Pointer to surface to blit onto.
+ */
 void Cursor::blit(Surface *surface)
 {
 	Uint8 color = _color;

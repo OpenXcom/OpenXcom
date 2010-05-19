@@ -31,7 +31,6 @@ using namespace std;
 class InteractiveSurface;
 
 /**
- * @file State_Interactive.h
  * A game state that receives user input and reacts accordingly.
  ª Game states typically represent a whole window or screen that
  * the user interacts with, making the game... well, interactive.

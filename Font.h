@@ -26,7 +26,6 @@
 using namespace std;
 
 /**
- * @file Font.h
  * Takes care of loading and storing each character in a sprite font.
  * Sprite fonts consist of a set of fixed-size characters all lined up
  * in one column in a surface.

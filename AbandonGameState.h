@@ -29,7 +29,6 @@
 #include "MainMenuState.h"
 
 /**
- * @file AbandonGameState.h
  * Abandon Game window shown before
  * quitting the game from the Geoscape.
  */

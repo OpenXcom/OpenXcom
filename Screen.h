@@ -24,7 +24,6 @@
 #include "Surface.h"
 
 /**
- * @file Screen.h
  * A display screen, handles rendering onto the game window.
  * In SDL a Screen is treated like a Surface, so this is just
  * a specialized version of a Surface with functionality more

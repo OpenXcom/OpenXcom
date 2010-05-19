@@ -27,7 +27,6 @@
 using namespace std;
 
 /**
- * @file Language.h
  * Contains strings used throughout the game for localization.
  * Languages are just a set of strings identified by an ID number.
  */

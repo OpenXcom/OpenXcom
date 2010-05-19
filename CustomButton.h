@@ -22,20 +22,36 @@
 #include "SDL.h"
 #include "State_Interactive.h"
 
+/**
+ * Regular graphic that works like a button.
+ * Unlike the regular Button, this button doesn't draw
+ * anything on its own. It takes an existing graphic and
+ * treats it as a button, inverting colors when necessary.
+ * This is necessary for special buttons like in the Geoscape.
+ */
 class CustomButton : public InteractiveSurface
 {
 private:
 	Uint8 _color;
 	CustomButton **_group;
 public:
+	/// Creates a new custom button with the specified size and position.
 	CustomButton(int width, int height, int x = 0, int y = 0);
+	/// Cleans up the custom button.
 	~CustomButton();
+	/// Sets the custom button's color.
 	void setColor(Uint8 color);
+	/// Gets the custom button's color.
 	Uint8 getColor();
+	/// Sets the custom button's group.
 	void setGroup(CustomButton **group);
+	/// Blits the custom button onto a surface.
 	void blit(Surface *surface);
+	/// Handles mouse events.
 	void handle(SDL_Event *ev, int scale, State *state);
+	/// Special handling for mouse presses.
 	void mousePress(SDL_Event *ev, int scale, State *state);
+	/// Special handling for mouse releases.
 	void mouseRelease(SDL_Event *ev, int scale, State *state);
 };
 

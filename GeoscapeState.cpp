@@ -390,6 +390,8 @@ void GeoscapeState::timeMonth()
  * or right-clicks to scroll the globe.
  * @note Currently left-clicking is used to move around
  * a marker for testing globe functionality.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
  */
 void GeoscapeState::globeClick(SDL_Event *ev, int scale)
 {

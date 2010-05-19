@@ -26,7 +26,6 @@
 using namespace std;
 
 /**
- * @file Palette.h
  * Container for palettes (sets of 8bpp colors).
  * Works as an encapsulation for SDL's SDL_Color struct and
  * provides shortcuts for common tasks to make code more readable.

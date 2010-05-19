@@ -21,6 +21,9 @@
 /**
  * Sets up a blank 8bpp surface with the specified size and position,
  * with pure black as the transparent color.
+ * @note Surfaces don't have to fill the whole size since their
+ * background is transparent, specially subclasses with their own
+ * drawing logic, so it just covers the maximum drawing area.
  * @param width Width in pixels.
  * @param height Height in pixels.
  * @param x X position in pixels.
@@ -288,9 +291,8 @@ int Surface::getY()
 
 /**
  * Changes the cropping rectangle set for this surface.
- * @param crop Pointer to the cropping rectangle. A null
- * pointer removes the cropping rectangle (the whole surface
- * is blitted).
+ * @param crop Pointer to the cropping rectangle. Null
+ * removes the cropping rectangle (the whole surface is blitted).
  */
 void Surface::setCrop(SDL_Rect *crop)
 {

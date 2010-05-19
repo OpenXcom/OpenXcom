@@ -26,7 +26,6 @@
 using namespace std;
 
 /**
- * @file SurfaceSet.h
  * Container of a set of surfaces.
  * Used to manage single images that contain series of
  * frames inside, like animated sprites, making them easier

@@ -23,7 +23,6 @@
 // When there's two equal strings, _UC denotes the Upper-Case one
 
 /**
- * @file LangString.h
  * Enumerator used to make the localizable string IDs
  * more readable.
  */

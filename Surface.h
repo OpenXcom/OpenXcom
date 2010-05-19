@@ -27,7 +27,6 @@
 using namespace std;
 
 /**
- * @file Surface.h
  * Element that is blit (rendered) onto the screen.
  * Mainly an encapsulation for SDL's SDL_Surface struct, so it
  * borrows a lot of its terminology. Takes care of all the common

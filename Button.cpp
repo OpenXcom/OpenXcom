@@ -18,6 +18,14 @@
  */
 #include "Button.h"
 
+/**
+ * Sets up a button with the specified size and position.
+ * The text is centered on the button.
+ * @param width Width in pixels.
+ * @param height Height in pixels.
+ * @param x X position in pixels.
+ * @param y Y position in pixels.
+ */
 Button::Button(Font *big, Font *small, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _color(0), _group(0)
 {
 	_text = new Text(big, small, width, small->getHeight(), 0, (int)ceil((double)(height - small->getHeight()) / 2));
@@ -25,43 +33,78 @@ Button::Button(Font *big, Font *small, int width, int height, int x, int y) : In
 	_text->setAlign(ALIGN_CENTER);
 }
 
+/**
+ * Deletes the contained Text.
+ */
 Button::~Button()
 {
 	delete _text;
 }
 
+/**
+ * Changes the color for the button and text.
+ * @param color Color value.
+ */
 void Button::setColor(Uint8 color)
 {
 	_color = color;
 	_text->setColor(_color-3);
 }
 
+/**
+ * Returns the color for the button and text.
+ * @return Color value.
+ */
 Uint8 Button::getColor()
 {
 	return _color;
 }
 
+/**
+ * Changes the text of the button label.
+ * @param color Color value.
+ */
 void Button::setText(string text)
 {
 	_text->setText(text);
 }
 
+/**
+ * Returns the text of the button label.
+ * @return Color value.
+ */
 string Button::getText()
 {
 	return _text->getText();
 }
 
+/**
+ * Changes the button group this button belongs to.
+ * @param group Pointer to the pressed button pointer in the group.
+ * Null makes it a regular button.
+ */
 void Button::setGroup(Button **group)
 {
 	_group = group;
 }
 
+/**
+ * Replaces a certain amount of colors in the surface's palette.
+ * @param colors Pointer to the set of colors.
+ * @param firstcolor Offset of the first color to replace.
+ * @param ncolors Amount of colors to replace.
+ */
 void Button::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 {
 	Surface::setPalette(colors, firstcolor, ncolors);
 	_text->setPalette(colors, firstcolor, ncolors);
 }
 
+/**
+ * Blits the labelled button onto another surface.
+ * The colors are inverted if the button is pressed.
+ * @param surface Pointer to surface to blit onto.
+ */
 void Button::blit(Surface *surface)
 {
 	SDL_Rect square;
@@ -118,12 +161,24 @@ void Button::blit(Surface *surface)
 	Surface::blit(surface);
 }
 
+/**
+ * Ignores any mouse clicks that aren't the left mouse button.
+ * @param ev Pointer to a SDL_Event.
+ * @param scale Current screen scale (used to correct mouse input).
+ * @param state State that the event handlers belong to.
+ */
 void Button::handle(SDL_Event *ev, int scale, State *state)
 {
 	if (ev->button.button == SDL_BUTTON_LEFT)
 		InteractiveSurface::handle(ev, scale, state);
 }
 
+/**
+ * Sets the button as the pressed button if it's part of a group.
+ * @param ev Pointer to a SDL_Event.
+ * @param scale Current screen scale (used to correct mouse input).
+ * @param state State that the event handlers belong to.
+ */
 void Button::mousePress(SDL_Event *ev, int scale, State *state)
 {
 	if (_group != 0)
@@ -132,6 +187,12 @@ void Button::mousePress(SDL_Event *ev, int scale, State *state)
 	InteractiveSurface::mousePress(ev, scale, state);
 }
 
+/*
+ * Sets the button as the released button if it's part of a group.
+ * @param ev Pointer to a SDL_Event.
+ * @param scale Current screen scale (used to correct mouse input).
+ * @param state State that the event handlers belong to.
+ */
 void Button::mouseRelease(SDL_Event *ev, int scale, State *state)
 {
 	InteractiveSurface::mouseRelease(ev, scale, state);

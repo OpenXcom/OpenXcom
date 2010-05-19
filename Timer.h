@@ -24,12 +24,11 @@
 
 typedef State &(State::*TimerHandler)();
 
-/***
-  * @file Timer.h
-  * Timer used to run code in fixed intervals.
-  * Used for code that should run at the same fixed interval
-  * in various machines, based on miliseconds instead of CPU cycles.
-  */
+/**
+ * Timer used to run code in fixed intervals.
+ * Used for code that should run at the same fixed interval
+ * in various machines, based on miliseconds instead of CPU cycles.
+ */
 class Timer
 {
 private:

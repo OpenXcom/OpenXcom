@@ -26,7 +26,6 @@
 using namespace std;
 
 /**
- * @file Music.h
  * Container for music tracks.
  * Handles loading and playing various formats through SDL_mixer.
  */

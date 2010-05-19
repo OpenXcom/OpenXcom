@@ -24,17 +24,28 @@
 #include "Surface.h"
 #include "Palette.h"
 
+/**
+ * Mouse cursor that replaces the system cursor.
+ * Drawn as a shaded triangle-like shape, automatically
+ * matches the mouse coordinates.
+ */
 class Cursor : public Surface
 {
 private:
 	Uint8 _color;
 
 public:
+	/// Creates a new cursor with the specified size and position.
 	Cursor(int width, int height, int x = 0, int y = 0);
+	/// Cleans up the cursor.
 	~Cursor();
+	/// Handles mouse events.
 	void handle(SDL_Event *ev, int scale);
+	/// Sets the cursor's color.
 	void setColor(Uint8 color);
+	/// Gets the cursor's color.
 	Uint8 getColor();
+	/// Blits the cursor onto a surface.
 	void blit(Surface *surface);
 };
 
