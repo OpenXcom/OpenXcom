@@ -26,17 +26,29 @@
 
 using namespace std;
 
+/**
+ * Pool of soldier names to generate random names.
+ * Each pool contains a set of first names (male or female) and last names.
+ * The first names define the soldier's gender, and are randomly associated
+ * with a last name.
+ */
 class SoldierNamePool
 {
 private:
 	vector<string> _maleNames, _femaleNames, _lastNames;
 public:
+	/// Creates a blank pool.
 	SoldierNamePool();
+	/// Cleans up the pool.
 	~SoldierNamePool();
+	/// Generates a new name from the pool.
 	string genName(int *gender);
-	vector<string> *getMaleNames();
-	vector<string> *getFemaleNames();
-	vector<string> *getLastNames();
+	/// Adds a male first name.
+	void addMaleName(string name);
+	/// Adds a female first name.
+	void addFemaleName(string name);
+	/// Adds a last name.
+	void addLastName(string name);
 };
 
 #endif

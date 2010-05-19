@@ -521,6 +521,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\SoldierNamePool.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SoldierNamePool.h"
+					>
+				</File>
+				<File
 					RelativePath=".\XcomRuleset.cpp"
 					>
 				</File>
@@ -618,14 +626,6 @@
 				</File>
 				<File
 					RelativePath=".\ResourcePack.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SoldierNamePool.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\SoldierNamePool.h"
 					>
 				</File>
 				<File

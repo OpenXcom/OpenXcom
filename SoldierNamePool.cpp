@@ -18,14 +18,26 @@
  */
 #include "SoldierNamePool.h"
 
+/**
+ * Initializes a new pool with blank lists of names.
+ */
 SoldierNamePool::SoldierNamePool() : _maleNames(), _femaleNames(), _lastNames()
 {
 }
 
+/**
+ *
+ */
 SoldierNamePool::~SoldierNamePool()
 {
 }
 
+/**
+ * Returns a new random name (first + last) from the
+ * lists of names contained within.
+ * @param gender Returned gender of the name.
+ * @return Soldier name.
+ */
 string SoldierNamePool::genName(int *gender)
 {
 	stringstream name;
@@ -45,17 +57,29 @@ string SoldierNamePool::genName(int *gender)
 	return name.str();
 }
 
-vector<string> *SoldierNamePool::getMaleNames()
+/**
+ * Adds a new male first name to the pool.
+ * @param name New name.
+ */
+void SoldierNamePool::addMaleName(string name)
 {
-	return &_maleNames;
+	_maleNames.push_back(name);
 }
 
-vector<string> *SoldierNamePool::getFemaleNames()
+/**
+ * Adds a new female first name to the pool.
+ * @param name New name.
+ */
+void SoldierNamePool::addFemaleName(string name)
 {
-	return &_femaleNames;
+	_femaleNames.push_back(name);
 }
 
-vector<string> *SoldierNamePool::getLastNames()
+/**
+ * Adds a new last name to the pool.
+ * @param name New name.
+ */
+void SoldierNamePool::addLastName(string name)
 {
-	return &_lastNames;
+	_lastNames.push_back(name);
 }

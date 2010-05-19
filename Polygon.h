@@ -23,6 +23,11 @@
 
 using namespace std;
 
+/**
+ * Represents a polygon in the world map.
+ * Polygons constitute the textured land portions
+ * of the X-Com globe and typically have 3-4 points.
+ */
 class Polygon
 {
 private:
@@ -30,14 +35,23 @@ private:
 	const int _points;
 	int _texture;
 public:
+	/// Creates a polygon with a number of points.
 	Polygon(int points);
+	/// Cleans up the polygon.
 	~Polygon();
+	/// Gets the latitude of a point.
 	double getLatitude(int i);
+	/// Sets the latitude of a point.
 	void setLatitude(int i, double lat);
+	/// Gets the longitude of a point.
 	double getLongitude(int i);
+	/// Sets the longitude of a point.
 	void setLongitude(int i, double lon);
+	/// Gets the texture of the polygon.
 	int getTexture();
+	/// Sets the texture of the polygon.
 	void setTexture(int tex);
+	/// Gets the number of points of the polygon.
 	int getPoints();
 };
 
