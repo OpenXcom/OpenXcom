@@ -18,16 +18,36 @@
  */
 #include "Text.h"
 
+/**
+ * Sets up a blank text with the specified size and position.
+ * The different fonts need to be passed in advance since the
+ * text size can change mid-text.
+ * @param big Pointer to the big-size font.
+ * @param small Pointer to the small-size font.
+ * @param width Width in pixels.
+ * @param height Height in pixels.
+ * @param x X position in pixels.
+ * @param y Y position in pixels.
+ */
 Text::Text(Font *big, Font *small, int width, int height, int x, int y) : Surface(width, height, x, y), _big(big), _small(small), _font(small), _text(""), _wrap(false), _invert(false), _align(ALIGN_LEFT), _color(0)
 {
 
 }
 
+/**
+ *
+ */
 Text::~Text()
 {
 	
 }
 
+/**
+ * Takes an integer value and formats it as currency,
+ * spacing the thousands and adding a $ sign to the front.
+ * @param funds The funding value.
+ * @return The formatted string.
+ */
 string Text::formatFunding(int funds)
 {
 	stringstream ss;
@@ -43,16 +63,26 @@ string Text::formatFunding(int funds)
 	return s;
 }
 
+/**
+ * Changes the text to use the big-size font.
+ */
 void Text::setBig()
 {
 	_font = _big;
 }
 
+/**
+ * Changes the text to use the small-size font.
+ */
 void Text::setSmall()
 {
 	_font = _small;
 }
 
+/**
+ * Changes the string displayed on screen.
+ * @param text Text string.
+ */
 void Text::setText(string text)
 {
 	if (text != _text)
@@ -62,48 +92,85 @@ void Text::setText(string text)
 	}
 }
 
+/**
+ * Returns the string displayed on screen.
+ * @return Text string.
+ */
 string Text::getText()
 {
 	return _text;
 }
 
+/**
+ * Enables/disables text wordwrapping. When enabled, lines of
+ * text are automatically split to ensure they stay within the
+ * drawing area, otherwise they simply go off the edge.
+ * @param wrap Wordwrapping setting.
+ */
 void Text::setWordWrap(bool wrap)
 {
 	_wrap = wrap;
 	refresh();
 }
 
+/**
+ * Enables/disables color inverting. Mostly used to make
+ * button text look pressed along with the button.
+ * @param invert Invert setting.
+ */
 void Text::setInvert(bool invert)
 {
 	_invert = invert;
 	refresh();
 }
 
+/**
+ * Changes the way the text is aligned relative to the
+ * drawing area.
+ * @param align Text alignment.
+ */
 void Text::setAlign(TextAlign align)
 {
 	_align = align;
 	refresh();
 }
 
+/**
+ * Changes the color used to render the text. Unlike regular graphics,
+ * fonts are greyscale so they need to be assigned a specific position
+ * in the palette to be displayed.
+ * @param color Color value.
+ */
 void Text::setColor(Uint8 color)
 {
 	_color = color;
 	refresh();
 }
 
+/**
+ * Returns the color used to render the text.
+ * @return Color value.
+ */
 Uint8 Text::getColor()
 {
 	return _color;
 }
 
+/**
+ * Blits the text onto another surface.
+ * @param surface Pointer to another surface.
+ */
 void Text::blit(Surface *surface)
 {
 	Surface::blit(surface);
 }
 
-// Unlike other elements, text isn't redrawn every frame.
-// This is because text rendering is very slow, so it's
-// manually redrawn only when an attribute is changed.
+/**
+ * All the nasty complex gritty text rendering algorithm logic stuff.
+ * @note Unlike other elements, text isn't redrawn every frame.
+ * This is because text rendering is very slow, so it's
+ * manually redrawn only when an attribute is changed.
+ */
 void Text::refresh()
 {
 	clear();

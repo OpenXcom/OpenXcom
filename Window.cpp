@@ -18,32 +18,62 @@
  */
 #include "Window.h"
 
+/**
+ * Sets up a blank window with the specified size and position.
+ * @param width Width in pixels.
+ * @param height Height in pixels.
+ * @param x X position in pixels.
+ * @param y Y position in pixels.
+ * @param popup Popup animation.
+ */
 Window::Window(int width, int height, int x, int y, WindowPopup popup) : Surface(width, height, x, y), _bg(0), _color(0), _popup(popup), _popupStep(0.0)
 {
 	if (_popup == POPUP_NONE)
 		_popupStep = 1.0;
 }
 
+/**
+ *
+ */
 Window::~Window()
 {
 	
 }
 
+/**
+ * Changes the surface used to draw the background of the window.
+ * @param bg New background.
+ */
 void Window::setBg(Surface *bg)
 {
 	_bg = bg;
 }
 
+/**
+ * Changes the color used to draw the shaded border.
+ * @param color Color value.
+ */
 void Window::setColor(Uint8 color)
 {
 	_color = color;
 }
 
+/**
+ * Returns the color used to draw the shaded border.
+ * @return Color value.
+ */
 Uint8 Window::getColor()
 {
 	return _color;
 }
 
+/**
+ * Draws the bordered window on top of another surface.
+ * The background never moves with the window, it's
+ * always aligned to the top-left corner of the screen
+ * and cropped to fit the inside area.
+ * @param surface Pointer to surface to blit onto.
+ */
 void Window::blit(Surface *surface)
 {
 	SDL_Rect cropper;

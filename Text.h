@@ -24,8 +24,17 @@
 #include <string>
 #include <sstream>
 
+/**
+ * Enumator for the possible text alignments.
+ */
 enum TextAlign { ALIGN_LEFT, ALIGN_CENTER, ALIGN_RIGHT };
 
+/**
+ * Text string displayed on screen.
+ * Takes the characters from a Font and puts them together on screen
+ * to display a string of text, taking care of any required aligning
+ * or wrapping.
+ */
 class Text : public Surface
 {
 private:
@@ -35,20 +44,34 @@ private:
 	TextAlign _align;
 	Uint8 _color;
 
+	/// Updates the internal text graphic.
 	void refresh();
 public:
+	/// Creates a new text with the specified size, position and fonts.
 	Text(Font *big, Font *small, int width, int height, int x = 0, int y = 0);
+	/// Cleans up the text.
 	~Text();
+	/// Formats an integer value as currency.
 	static string formatFunding(int funds);
+	/// Sets the text size to big.
 	void setBig();
+	/// Sets the text size to small.
 	void setSmall();
+	/// Sets the text's string.
 	void setText(string text);
+	/// Gets the text's string.
 	string getText();
+	/// Sets the text's wordwrap setting.
 	void setWordWrap(bool wrap);
+	/// Sets the text's color invert setting.
 	void setInvert(bool invert);
+	/// Sets the text's alignment.
 	void setAlign(TextAlign align);
+	/// Sets the text's color.
 	void setColor(Uint8 color);
+	/// Gets the text's color.
 	Uint8 getColor();
+	/// Blits the text onto another surface.
 	void blit(Surface *surface);
 };
 

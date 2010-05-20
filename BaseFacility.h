@@ -21,13 +21,19 @@
 
 #include "LangString.h"
 
+/**
+ * Represents a base facility placed in a base.
+ * Contains variable info about a facility like
+ * position and build time.
+ * @sa RuleBaseFacility
+ */
 class BaseFacility
 {
 private:
 	LangString _type;
 	int _x, _y, _buildTime;
 public:
-	BaseFacility();
+	BaseFacility(int x, int y);
 	~BaseFacility();
 };
 

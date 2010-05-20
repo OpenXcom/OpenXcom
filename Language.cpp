@@ -38,6 +38,7 @@ Language::~Language()
  * Loads a series of null-terminated strings contained in
  * a raw text file into the Language. IDs are determined
  * automatically.
+ * @param filename Filename of the DAT language.
  * @sa http://www.ufopaedia.org/index.php?title=GeoScape_String_Files
  */
 void Language::loadDat(string filename)

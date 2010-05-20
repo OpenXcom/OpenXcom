@@ -34,6 +34,13 @@ using namespace std;
 #define PI 3.141592653589793238461
 #define COORD_OUT_OF_BOUNDS -2.0f
 
+/**
+ * Interactive globe view of the world.
+ * Takes a flat world map and renders it as a 3D-looking globe
+ * that the player can interact with.
+ * @note The globe is still very much in development, so no
+ * full documentation yet.
+ */
 class Globe : public InteractiveSurface
 {
 private:

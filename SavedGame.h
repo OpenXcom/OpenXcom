@@ -36,10 +36,9 @@ using namespace std;
 enum GameDifficulty { DIFF_BEGINNER, DIFF_EXPERIENCED, DIFF_VETERAN, DIFF_GENIUS, DIFF_SUPERHUMAN };
 
 /**
- * Saved game 
- * A saved game holds all the variable info in a game that
- * gets written to disk when the game is saved. Funds, gane time,
- * current bases and contents, world activities, score, etc.
+ * The game data that gets written to disk when the game is saved.
+ * A saved game holds all the variable info in a game like funds,
+ * game time, current bases and contents, world activities, score, etc.
  */
 class SavedGame
 {

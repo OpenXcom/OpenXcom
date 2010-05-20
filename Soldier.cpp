@@ -18,6 +18,11 @@
  */
 #include "Soldier.h"
 
+/**
+ * Initializes a new soldier with random stats and a name
+ * pulled from a set of SoldierNamePool's.
+ * @param names List of name pools.
+ */
 Soldier::Soldier(vector<SoldierNamePool*> *names)
 {
 	_tu = SavedGame::genRandom(50, 60);
@@ -39,20 +44,35 @@ Soldier::Soldier(vector<SoldierNamePool*> *names)
 	_look = (SoldierLook)SavedGame::genRandom(0, 3);
 }
 
+/**
+ *
+ */
 Soldier::~Soldier()
 {
 }
 
+/**
+ * Returns the soldier's full name.
+ * @return Soldier name.
+ */
 string Soldier::getName()
 {
 	return _name;
 }
 
+/**
+ * Changes the soldier's full name.
+ * @param name Soldier name.
+ */
 void Soldier::setName(string name)
 {
 	_name = name;
 }
 
+/**
+ * Returns the soldier's military rank.
+ * @return String ID for rank.
+ */
 LangString Soldier::getRank()
 {
 	return _rank;

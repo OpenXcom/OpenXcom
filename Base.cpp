@@ -18,44 +18,80 @@
  */
 #include "Base.h"
 
-Base::Base(double lat, double lon) : _lat(lat), _lon(lon), _name("")
+/**
+ * Initializes an empty base at specific globe coordinates.
+ * @param lat Latitude in radian.
+ * @param lon Longitude in radian.
+ */
+Base::Base(double lat, double lon) : _lat(lat), _lon(lon), _name(""), _facilities(), _soldiers(), _crafts()
 {
 }
 
+/**
+ *
+ */
 Base::~Base()
 {
 }
 
+/**
+ * Returns the custom name for the base.
+ * @return Name.
+ */
 string Base::getName()
 {
 	return _name;
 }
 
+/**
+ * Changes the custom name for the base.
+ * @param name Name.
+ */
 void Base::setName(string name)
 {
 	_name = name;
 }
 
+/**
+ * Returns the latitude coordinate of the base.
+ * @return Latitude in radian.
+ */
 double Base::getLatitude()
 {
 	return _lat;
 }
 
+/**
+ * Returns the longitude coordinate of the base.
+ * @return Longitude in radian.
+ */
 double Base::getLongitude()
 {
 	return _lon;
 }
 
+/**
+ * Returns the list of facilities in the base.
+ * @return Pointer to the facility list.
+ */
 vector<BaseFacility*> *Base::getFacilities()
 {
 	return &_facilities;
 }
 
+/**
+ * Returns the list of soldiers in the base.
+ * @return Pointer to the soldier list.
+ */
 vector<Soldier*> *Base::getSoldiers()
 {
 	return &_soldiers;
 }
 
+/**
+ * Returns the list of crafts in the base.
+ * @return Pointer to the craft list.
+ */
 vector<Craft*> *Base::getCrafts()
 {
 	return &_crafts;

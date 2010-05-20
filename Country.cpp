@@ -18,30 +18,44 @@
  */
 #include "Country.h"
 
+/**
+ * Initializes a country with a starting amount of monthly funding.
+ * @param funding Starting monthly funding.
+ */
 Country::Country(int funding) : _funding(funding), _change(0)
 {
 }
 
+/**
+ *
+ */
 Country::~Country()
 {
 }
 
+/**
+ * Returns the country's current monthly funding.
+ * @return Monthly funding.
+ */
 int Country::getFunding()
 {
 	return _funding;
 }
 
+/**
+ * Changes the country's current monthly funding.
+ * @param funding Monthly funding.
+ */
 void Country::setFunding(int funding)
 {
 	_funding = funding;
 }
 
+/**
+ * Returns the country's funding change since last month.
+ * @return Funding change.
+ */
 int Country::getChange()
 {
 	return _change;
-}
-
-void Country::setChange(int change)
-{
-	_change = change;
 }

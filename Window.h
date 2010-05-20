@@ -21,8 +21,17 @@
 
 #include "Surface.h"
 
+/**
+ * Enumeration for the type of animation when a window pops up.
+ */
 enum WindowPopup { POPUP_NONE, POPUP_HORIZONTAL, POPUP_VERTICAL, POPUP_BOTH };
 
+/**
+ * Box with a coloured border and custom background.
+ * Pretty much used as the background in most of the interface. In fact
+ * it's also used in screens, so it's not really much of a window, just a... box.
+ * But box sounds lame.
+ */
 class Window : public Surface
 {
 private:
@@ -32,11 +41,17 @@ private:
 	double _popupStep;
 
 public:
+	/// Creates a new window with the specified size and position
 	Window(int width, int height, int x = 0, int y = 0, WindowPopup popup = POPUP_NONE);
+	/// Cleans up the window
 	~Window();
+	/// Sets the background surface.
 	void setBg(Surface *bg);
+	/// Sets the border color.
 	void setColor(Uint8 color);
+	/// Gets the border color.
 	Uint8 getColor();
+	/// Blits the window onto another surface.
 	void blit(Surface *surface);
 };
 

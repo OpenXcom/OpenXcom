@@ -241,7 +241,7 @@ void Surface::blit(Surface *surface)
  * Only the content that would overlap both surfaces is copied, in
  * accordance with their positions. This is handy for applying
  * effects over another surface without modifying the original.
- * @surface Pointer to surface to copy from.
+ * @param surface Pointer to surface to copy from.
  */
 void Surface::copy(Surface *surface)
 {
@@ -413,7 +413,7 @@ int Surface::getHeight()
 /**
  * Changes the visibility of the surface. A hidden surface
  * isn't blitted.
- * @visible New visibility.
+ * @param visible New visibility.
  */
 void Surface::setVisible(bool visible)
 {

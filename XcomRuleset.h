@@ -24,7 +24,7 @@
 #include "Soldier.h"
 
 /**
- * Ruleset for the X-Com: UFO Defense game.
+ * Rule set for the X-Com: UFO Defense game.
  */
 class XcomRuleset : public Ruleset
 {

@@ -21,6 +21,12 @@
 
 #include "LangString.h"
 
+/**
+ * Represents a craft stored in a base.
+ * Contains variable info about a craft like
+ * position, fuel, damage, etc.
+ * @sa RuleCraft
+ */
 class Craft
 {
 private:

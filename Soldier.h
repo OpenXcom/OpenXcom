@@ -29,6 +29,11 @@ enum SoldierLook { LOOK_BLONDE, LOOK_BROWNHAIR, LOOK_ORIENTAL, LOOK_AFRICAN };
 
 using namespace std;
 
+/**
+ * Represents a soldier hired by the player.
+ * Soldiers have a wide variety of stats that affect
+ * their performance during battles.
+ */
 class Soldier
 {
 private:
@@ -39,10 +44,15 @@ private:
 	SoldierLook _look;
 	int _missions, _kills;
 public:
+	/// Creates a new soldier with a random name.
 	Soldier(vector<SoldierNamePool*> *names);
+	/// Cleans up the soldier.
 	~Soldier();
+	/// Gets the soldier's name.
 	string getName();
+	/// Sets the soldier's name.
 	void setName(string name);
+	/// Gets the soldier's rank.
 	LangString getRank();
 };
 

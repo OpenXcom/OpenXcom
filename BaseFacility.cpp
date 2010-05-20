@@ -18,7 +18,7 @@
  */
 #include "BaseFacility.h"
 
-BaseFacility::BaseFacility()
+BaseFacility::BaseFacility(int x, int y) : _x(x), _y(y)
 {
 }
 

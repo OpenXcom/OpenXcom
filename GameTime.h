@@ -21,25 +21,46 @@
 
 #include "LangString.h"
 
+/**
+ * Enumator for time periods.
+ */
 enum TimeTrigger { TIME_SEC, TIME_MIN, TIME_HOUR, TIME_DAY, TIME_MONTH };
 
+/**
+ * Stores the current ingame time/date.
+ * Takes care of managing and representing each component,
+ * as well as common time operations.
+ */
 class GameTime
 {
 private:
 	int _second, _minute, _hour, _weekday, _day, _month, _year;
 public:
+	/// Creates a new ingame time at a certain point.
 	GameTime(int weekday, int day, int month, int year, int hour, int minute, int second);
+	/// Cleans up the ingame time.
 	~GameTime();
+	/// Advances the time by 5 seconds.
 	TimeTrigger advance();
+	/// Gets the ingame second.
 	int getSecond();
+	/// Gets the ingame minute.
 	int getMinute();
+	/// Gets the ingame hour.
 	int getHour();
+	/// Gets the ingame weekday.
 	int getWeekday();
+	// Gets a string version of the ingame weekday.
 	LangString getWeekdayString();
+	/// Gets the ingame day.
 	int getDay();
+	// Gets a string version of the ingame day.
 	LangString getDayString();
+	/// Gets the ingame month.
 	int getMonth();
+	// Gets a string version of the ingame month.
 	LangString getMonthString();
+	/// Gets the ingame year.
 	int getYear();
 };
 

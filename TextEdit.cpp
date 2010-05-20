@@ -18,68 +18,133 @@
  */
 #include "TextEdit.h"
 
+/**
+ * Sets up a blank text with the specified size and position.
+ * The different fonts need to be passed in advance since the
+ * text size can change mid-text.
+ * @param big Pointer to the big-size font.
+ * @param small Pointer to the small-size font.
+ * @param width Width in pixels.
+ * @param height Height in pixels.
+ * @param x X position in pixels.
+ * @param y Y position in pixels.
+ */
 TextEdit::TextEdit(Font *big, Font *small, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _value("")
 {
 	_text = new Text(big, small, width, height, 0, 0);
 	_i = 0;
 }
 
+/**
+ *
+ */
 TextEdit::~TextEdit()
 {
 	delete _text;
 }
 
+/**
+ * Changes the text to use the big-size font.
+ */
 void TextEdit::setBig()
 {
 	_text->setBig();
 }
 
+/**
+ * Changes the text to use the small-size font.
+ */
 void TextEdit::setSmall()
 {
 	_text->setSmall();
 }
 
+/**
+ * Changes the string displayed on screen.
+ * @param text Text string.
+ */
 void TextEdit::setText(string text)
 {
 	_value = text;
 }
 
+/**
+ * Returns the string displayed on screen.
+ * @return Text string.
+ */
 string TextEdit::getText()
 {
 	return _value;
 }
 
+/**
+ * Enables/disables text wordwrapping. When enabled, lines of
+ * text are automatically split to ensure they stay within the
+ * drawing area, otherwise they simply go off the edge.
+ * @param wrap Wordwrapping setting.
+ */
 void TextEdit::setWordWrap(bool wrap)
 {
 	_text->setWordWrap(wrap);
 }
 
+/**
+ * Enables/disables color inverting. Mostly used to make
+ * button text look pressed along with the button.
+ * @param invert Invert setting.
+ */
 void TextEdit::setInvert(bool invert)
 {
 	_text->setInvert(invert);
 }
 
+/**
+ * Changes the way the text is aligned relative to the
+ * drawing area.
+ * @param align Text alignment.
+ */
 void TextEdit::setAlign(TextAlign align)
 {
 	_text->setAlign(align);
 }
 
+/**
+ * Changes the color used to render the text. Unlike regular graphics,
+ * fonts are greyscale so they need to be assigned a specific position
+ * in the palette to be displayed.
+ * @param color Color value.
+ */
 void TextEdit::setColor(Uint8 color)
 {
 	_text->setColor(color);
 }
 
+/**
+ * Returns the color used to render the text.
+ * @return Color value.
+ */
 Uint8 TextEdit::getColor()
 {
 	return _text->getColor();
 }
 
+/**
+ * Replaces a certain amount of colors in the surface's palette.
+ * @param colors Pointer to the set of colors.
+ * @param firstcolor Offset of the first color to replace.
+ * @param ncolors Amount of colors to replace.
+ */
 void TextEdit::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 {
 	Surface::setPalette(colors, firstcolor, ncolors);
 	_text->setPalette(colors, firstcolor, ncolors);
 }
 
+/**
+ * Blits the text onto another surface. Adds a flashing \*
+ * to the end to show when the text is focused and editable.
+ * @param surface Pointer to another surface.
+ */
 void TextEdit::blit(Surface *surface)
 {
 	clear();
@@ -100,12 +165,24 @@ void TextEdit::blit(Surface *surface)
 	Surface::blit(surface);
 }
 
+/**
+ * Ignores any mouse clicks that aren't the left mouse button.
+ * @param ev Pointer to a SDL_Event.
+ * @param scale Current screen scale (used to correct mouse input).
+ * @param state State that the event handlers belong to.
+ */
 void TextEdit::handle(SDL_Event *ev, int scale, State *state)
 {
 	if (ev->button.button == SDL_BUTTON_LEFT)
 		InteractiveSurface::handle(ev, scale, state);
 }
 
+/**
+ * Focuses the text when it's pressed on.
+ * @param ev Pointer to a SDL_Event.
+ * @param scale Current screen scale (used to correct mouse input).
+ * @param state State that the event handlers belong to.
+ */
 void TextEdit::mousePress(SDL_Event *ev, int scale, State *state)
 {
 	_isFocused = true;
@@ -113,11 +190,13 @@ void TextEdit::mousePress(SDL_Event *ev, int scale, State *state)
 	InteractiveSurface::mousePress(ev, scale, state);
 }
 
-void TextEdit::mouseRelease(SDL_Event *ev, int scale, State *state)
-{
-	InteractiveSurface::mouseRelease(ev, scale, state);
-}
-
+/**
+ * Changes the text according to keyboard input, and unfocuses the
+ * text if Enter is pressed.
+ * @param ev Pointer to a SDL_Event.
+ * @param scale Current screen scale (used to correct mouse input).
+ * @param state State that the event handlers belong to.
+ */
 void TextEdit::keyboardPress(SDL_Event *ev, int scale, State *state)
 {
 	switch (ev->key.keysym.sym)
@@ -140,9 +219,4 @@ void TextEdit::keyboardPress(SDL_Event *ev, int scale, State *state)
 	}
 
 	InteractiveSurface::keyboardPress(ev, scale, state);
-}
-
-void TextEdit::keyboardRelease(SDL_Event *ev, int scale, State *state)
-{
-	InteractiveSurface::keyboardRelease(ev, scale, state);
 }

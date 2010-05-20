@@ -24,6 +24,11 @@
 #include "State_Interactive.h"
 #include "Text.h"
 
+/**
+ * Editable version of Text.
+ * Receives keyboard input to allow the player
+ * to change the text himself.
+ */
 class TextEdit : public InteractiveSurface
 {
 private:
@@ -31,24 +36,38 @@ private:
 	string _value;
 	int _i;
 public:
+	/// Creates a new text with the specified size, position and fonts.
 	TextEdit(Font *big, Font *small, int width, int height, int x = 0, int y = 0);
+	/// Cleans up the text.
 	~TextEdit();
+	/// Sets the text size to big.
 	void setBig();
+	/// Sets the text size to small.
 	void setSmall();
+	/// Sets the text's string.
 	void setText(string text);
+	/// Gets the text's string.
 	string getText();
+	/// Sets the text's wordwrap setting.
 	void setWordWrap(bool wrap);
+	/// Sets the text's color invert setting.
 	void setInvert(bool invert);
+	/// Sets the text's alignment.
 	void setAlign(TextAlign align);
+	/// Sets the text's color.
 	void setColor(Uint8 color);
+	/// Gets the text's color.
 	Uint8 getColor();
+	/// Sets the surface's palette.
 	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
+	/// Blits the text onto another surface.
 	void blit(Surface *surface);
+	/// Handles mouse and keyboard events.
 	void handle(SDL_Event *ev, int scale, State *state);
+	/// Special handling for mouse presses.
 	void mousePress(SDL_Event *ev, int scale, State *state);
-	void mouseRelease(SDL_Event *ev, int scale, State *state);
+	/// Special handling for keyboard presses.
 	void keyboardPress(SDL_Event *ev, int scale, State *state);
-	void keyboardRelease(SDL_Event *ev, int scale, State *state);
 };
 
 #endif

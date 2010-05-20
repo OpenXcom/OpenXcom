@@ -19,11 +19,20 @@
 #ifndef OPENXCOM__RULECRAFT_H
 #define OPENXCOM__RULECRAFT_H
 
+/**
+ * Represents a specific type of craft.
+ * Contains constant info about a craft like
+ * costs, speed, capacities, consumptions, etc.
+ * @sa Craft
+ */
 class RuleCraft
 {
 private:
+	int _fuel, _speed, _accel;
 public:
+	/// Creates a blank craft ruleset.
 	RuleCraft();
+	/// Cleans up the craft ruleset.
 	~RuleCraft();
 };
 

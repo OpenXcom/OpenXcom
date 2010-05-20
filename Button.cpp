@@ -21,6 +21,8 @@
 /**
  * Sets up a button with the specified size and position.
  * The text is centered on the button.
+ * @param big Pointer to the big-size font.
+ * @param small Pointer to the small-size font.
  * @param width Width in pixels.
  * @param height Height in pixels.
  * @param x X position in pixels.
@@ -62,7 +64,7 @@ Uint8 Button::getColor()
 
 /**
  * Changes the text of the button label.
- * @param color Color value.
+ * @param text Text string.
  */
 void Button::setText(string text)
 {
@@ -71,7 +73,7 @@ void Button::setText(string text)
 
 /**
  * Returns the text of the button label.
- * @return Color value.
+ * @return Text string.
  */
 string Button::getText()
 {
@@ -185,15 +187,4 @@ void Button::mousePress(SDL_Event *ev, int scale, State *state)
 		*_group = this;
 
 	InteractiveSurface::mousePress(ev, scale, state);
-}
-
-/*
- * Sets the button as the released button if it's part of a group.
- * @param ev Pointer to a SDL_Event.
- * @param scale Current screen scale (used to correct mouse input).
- * @param state State that the event handlers belong to.
- */
-void Button::mouseRelease(SDL_Event *ev, int scale, State *state)
-{
-	InteractiveSurface::mouseRelease(ev, scale, state);
 }

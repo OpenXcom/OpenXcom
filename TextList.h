@@ -24,6 +24,12 @@
 #include "Surface.h"
 #include "Text.h"
 
+/**
+ * List of Text's split into columns.
+ * Contains a set of Text's that are automatically lined up
+ * by rows and columns, like a big table, making it easy to
+ * manage them together.
+ */
 class TextList : public Surface
 {
 private:
@@ -35,14 +41,23 @@ private:
 	bool _dot;
 
 public:
+	/// Creates a text list with the specified size and position.
 	TextList(Font *big, Font *small, int width, int height, int x = 0, int y = 0);
+	/// Cleans up the text list.
 	~TextList();
+	/// Gets a certain cell in the text list.
 	Text* getCell(int row, int col);
+	/// Adds a new row to the text list.
 	void addRow(int num, ...);
+	/// Sets the number of columns in the text list.
 	void setColumns(int num, ...);
+	/// Sets the text color of the text list.
 	void setColor(Uint8 color);
+	/// Sets whether to separate columns with dots.
 	void setDot(bool dot);
+	/// Sets the palette of the text list.
 	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
+	/// Blits the text list onto another surface.
 	void blit(Surface *surface);
 };
 

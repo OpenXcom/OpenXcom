@@ -19,17 +19,27 @@
 #ifndef OPENXCOM__COUNTRY_H
 #define OPENXCOM__COUNTRY_H
 
+/**
+ * Represents a country who funds the player.
+ * Countries provide an amount of monthly funding that
+ * changes based on X-Com's or alien's actions in their
+ * area.
+ */
 class Country
 {
 private:
 	int _funding, _change;
 public:
+	/// Creates a new country with a certain funding.
 	Country(int funding);
+	/// Cleans up the country.
 	~Country();
+	/// Gets the country's funding.
 	int getFunding();
+	/// Sets the country's funding.
 	void setFunding(int funding);
+	/// Gets the country's funding change.
 	int getChange();
-	void setChange(int change);
 };
 
 #endif

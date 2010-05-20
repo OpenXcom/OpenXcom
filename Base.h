@@ -28,6 +28,10 @@ class Craft;
 
 using namespace std;
 
+/**
+ * Represents a player base on the globe.
+ * Bases can contain facilities, personnel, crafts and equipment.
+ */
 class Base
 {
 private:
@@ -37,14 +41,23 @@ private:
 	vector<Soldier*> _soldiers;
 	vector<Craft*> _crafts;
 public:
+	/// Creates a base on the specified coordinates.
 	Base(double lat, double lon);
+	/// Cleans up the base.
 	~Base();
+	/// Gets the base's name.
 	string getName();
+	/// Sets the base's name.
 	void setName(string name);
+	/// Gets the base's latitude.
 	double getLatitude();
+	/// Gets the base's longitude.
 	double getLongitude();
+	/// Gets the base's facilities.
 	vector<BaseFacility*> *getFacilities();
+	/// Gets the base's soldiers.
 	vector<Soldier*> *getSoldiers();
+	/// Gets the base's crafts.
 	vector<Craft*> *getCrafts();
 };
 

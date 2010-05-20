@@ -19,14 +19,22 @@
 #ifndef OPENXCOM__RULEBASEFACILITY_H
 #define OPENXCOM__RULEBASEFACILITY_H
 
+/**
+ * Represents a specific type of base facility.
+ * Contains constant info about a facility like
+ * costs, capacities, size, etc.
+ * @sa BaseFacility
+ */
 class RuleBaseFacility
 {
 private:
-	int _size, _buildCost, _monthlyCost;
+	int _size, _buildCost, _buildTime, _monthlyCost;
 	int _stores, _quarters, _aliens, _hangars, _labs, _workshops;
 	int _radarRange, _radarChance, _defence;
 public:
+	/// Creates a blank facility ruleset.
 	RuleBaseFacility();
+	/// Cleans up the facility ruleset.
 	~RuleBaseFacility();
 };
 
