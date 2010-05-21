@@ -27,7 +27,7 @@
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-TextList::TextList(Font *big, Font *small, int width, int height, int x, int y) : Surface(width, height, x, y), _texts(), _columns(), _big(big), _small(small), _rowY(0), _color(0), _dot(false)
+TextList::TextList(Font *big, Font *small, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _texts(), _columns(), _big(big), _small(small), _rowY(0), _color(0), _dot(false), _selectable(false), _selRow(0)
 {
 
 }
@@ -42,8 +42,6 @@ TextList::~TextList()
 			delete (*v);
 		}
 	}
-
-	
 }
 
 /**
@@ -165,6 +163,16 @@ void TextList::setDot(bool dot)
 }
 
 /**
+ * If enabled, the list will respond to player input,
+ * highlighting selected rows and receiving clicks.
+ * @param select Selectable setting.
+ */
+void TextList::setSelectable(bool selectable)
+{
+	_selectable = selectable;
+}
+
+/**
  * Draws the text list and all the text contained within onto another surface.
  * @param surface Pointer to surface to blit onto.
  */
@@ -176,4 +184,21 @@ void TextList::blit(Surface *surface)
         }
     }
 	Surface::blit(surface);
+}
+
+/**
+ * Ignores any mouse clicks that aren't on a row with the left mouse button.
+ * @param ev Pointer to a SDL_Event.
+ * @param scale Current screen scale (used to correct mouse input).
+ * @param state State that the event handlers belong to.
+ */
+void TextList::handle(SDL_Event *ev, int scale, State *state)
+{
+	if (_selectable && ev->button.button == SDL_BUTTON_LEFT)
+	{
+		double y = ev->button.y - _y * scale;
+		_selRow = (int)floor(y / (8.0 * scale));
+		if (_selRow < _texts.size())
+			InteractiveSurface::handle(ev, scale, state);
+	}
 }

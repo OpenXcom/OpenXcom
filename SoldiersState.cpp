@@ -69,6 +69,7 @@ SoldiersState::SoldiersState(Game *game, Base *base) : State(game), _base(base)
 
 	_lstSoldiers->setColor(Palette::blockOffset(13)+10);
 	_lstSoldiers->setColumns(3, 114, 102, 82);
+	_lstSoldiers->setSelectable(true);
 	for (vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); i++)
 	{
 		_lstSoldiers->addRow(3, (*i)->getName().c_str(), _game->getResourcePack()->getLanguage()->getString((*i)->getRank()).c_str(), "SKYRANGER-1");

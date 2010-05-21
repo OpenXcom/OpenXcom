@@ -21,7 +21,8 @@
 
 #include <vector>
 #include <cstdarg>
-#include "Surface.h"
+#include <cmath>
+#include "State_Interactive.h"
 #include "Text.h"
 
 /**
@@ -30,7 +31,7 @@
  * by rows and columns, like a big table, making it easy to
  * manage them together.
  */
-class TextList : public Surface
+class TextList : public InteractiveSurface
 {
 private:
 	vector< vector<Text*> > _texts;
@@ -38,8 +39,8 @@ private:
 	Font *_big, *_small;
 	int _rowY;
 	Uint8 _color;
-	bool _dot;
-
+	bool _dot, _selectable;
+	unsigned int _selRow;
 public:
 	/// Creates a text list with the specified size and position.
 	TextList(Font *big, Font *small, int width, int height, int x = 0, int y = 0);
@@ -55,10 +56,14 @@ public:
 	void setColor(Uint8 color);
 	/// Sets whether to separate columns with dots.
 	void setDot(bool dot);
+	/// Sets whether the list is selectable.
+	void setSelectable(bool selectable);
 	/// Sets the palette of the text list.
 	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
 	/// Blits the text list onto another surface.
 	void blit(Surface *surface);
+	/// Handles mouse events.
+	void handle(SDL_Event *ev, int scale, State *state);
 };
 
 #endif

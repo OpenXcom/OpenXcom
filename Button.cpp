@@ -30,7 +30,7 @@
  */
 Button::Button(Font *big, Font *small, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _color(0), _group(0)
 {
-	_text = new Text(big, small, width, small->getHeight(), 0, (int)ceil((double)(height - small->getHeight()) / 2));
+	_text = new Text(big, small, width, small->getHeight(), 0, (int)ceil((double)(height - small->getHeight()) / 2.0));
 	_text->setSmall();
 	_text->setAlign(ALIGN_CENTER);
 }
