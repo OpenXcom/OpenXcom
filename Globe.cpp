@@ -31,13 +31,13 @@ void Globe::polarToCart(double lon, double lat, Sint16 *x, Sint16 *y)
 	lon = longitudeLoop(lon + _rotLon);
 	
 	// Pre-calculate why not
-	double sin_lon = sin(lon), sin_lat = sin(lat)/*, sin_rotLat = sin(_rotLat)*/;
-	double /*cos_lon = cos(lon),*/ cos_lat = cos(lat)/*, cos_rotLat = cos(_rotLat)*/;
+	double sin_lon = sin(lon), sin_lat = sin(lat), sin_rotLat = sin(_rotLat);
+	double cos_lon = cos(lon), cos_lat = cos(lat), cos_rotLat = cos(_rotLat);
 
 	// Convert polar coordinates to cartesian
 	*x = _cenX + (int)floor(_radius * _zoom * sin_lon * cos_lat);
-	*y = _cenY + (int)floor(_radius * _zoom * sin_lat);
-	//*y = _cenY + (int)floor(_radius * _zoom * (sin_lat * cos_rotLat + cos_lat * sin_rotLat * cos_lon));	
+	//*y = _cenY + (int)floor(_radius * _zoom * sin_lat);
+	*y = _cenY + (int)floor(_radius * _zoom * (sin_lat * cos_rotLat + cos_lat * sin_rotLat * cos_lon));	
 }
 
 void Globe::cartToPolar(Sint16 x, Sint16 y, double *lon, double *lat)
@@ -72,8 +72,16 @@ double Globe::longitudeLoop(double lon)
 bool Globe::pointBack(double lon, double lat)
 {
 	// Is the point on the back side of the sphere?
-	return (longitudeLoop(lon + _rotLon) > PI/2 && longitudeLoop(lon + _rotLon) < 3*PI/2);
-	//return (sin(_rotLat) * sin(lat) + cos(longitudeLoop(lon + _rotLon)) * cos(lat) <= 0);
+	double dLat = -_rotLat - lat;
+	double dLon = -_rotLon - lon;
+	// Haversine's formula
+	double a = sin(dLat / 2) * sin(dLat / 2) +
+			cos(lat) * cos(-_rotLat) * 
+			sin(dLon / 2) * sin(dLon / 2); 
+	double c = 2 * atan2(sqrt(a), sqrt(1 - a)); 
+	
+	// Distance to front center point must be at most PI/2 otherwise it's hidden.
+	return c > PI/2;
 }
 
 bool Globe::insidePolygon(double lon, double lat, Polygon *poly)
@@ -108,7 +116,7 @@ bool Globe::insidePolygon(double lon, double lat, Polygon *poly)
 	for (i = 0, j = nvert-1; i < nvert; j = i++) {
 		if ( ((verty[i]>testy) != (verty[j]>testy)) &&
 			 (testx < (vertx[j]-vertx[i]) * (testy-verty[i]) / (verty[j]-verty[i]) + vertx[i]) )
-		c = !c;
+			c = !c;
 	}
 	return c;
 	*/
@@ -176,7 +184,7 @@ void Globe::setPolygons(vector<Polygon*> *polygons)
 void Globe::rotate(double lon, double lat)
 {
 	_rotLon = longitudeLoop(_rotLon + lon);
-	//_rotLat += lat;
+	_rotLat += lat;
 }
 
 void Globe::zoom(double amount)
@@ -191,7 +199,7 @@ void Globe::zoom(double amount)
 void Globe::center(double lon, double lat)
 {
 	_rotLon = -lon;
-	//_rotLat = -lat;
+	_rotLat = -lat;
 }
 
 void Globe::blit(Surface *surface)
