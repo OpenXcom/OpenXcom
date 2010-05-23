@@ -136,7 +136,7 @@ void TextList::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 {
 	Surface::setPalette(colors, firstcolor, ncolors);
 	for (vector< vector<Text*> >::iterator u = _texts.begin(); u < _texts.end(); u++) {
-		for (vector<Text*>::iterator v = (*u).begin(); v < (*u).end(); v++) {
+		for (vector<Text*>::iterator v = u->begin(); v < u->end(); v++) {
 			(*v)->setPalette(colors, firstcolor, ncolors);
 		}
 	}
@@ -173,11 +173,37 @@ void TextList::setSelectable(bool selectable)
 }
 
 /**
+ * Returns the currently selected row if the text
+ * list is selectable.
+ * @return Selected row.
+ */
+int TextList::getSelectedRow()
+{
+	return _selRow;
+}
+
+/**
+ * Removes all the rows currently stored in the list.
+ */
+void TextList::clearList()
+{
+	for (vector< vector<Text*> >::iterator u = _texts.begin(); u < _texts.end(); u++) {
+		for (vector<Text*>::iterator v = u->begin(); v < u->end(); v++) {
+			delete (*v);
+		}
+		u->clear();
+	}
+	_texts.clear();
+	_rowY = 0;
+}
+
+/**
  * Draws the text list and all the text contained within onto another surface.
  * @param surface Pointer to surface to blit onto.
  */
 void TextList::blit(Surface *surface)
 {
+	clear();
 	for (vector< vector<Text*> >::iterator u = _texts.begin(); u < _texts.end(); u++) {
 		for (vector<Text*>::iterator v = (*u).begin(); v < (*u).end(); v++) {
             (*v)->blit(this);

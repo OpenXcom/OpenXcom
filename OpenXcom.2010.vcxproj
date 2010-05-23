@@ -108,6 +108,7 @@
     <ClCompile Include="RuleBaseFacility.cpp" />
     <ClCompile Include="RuleCraft.cpp" />
     <ClCompile Include="Soldier.cpp" />
+    <ClCompile Include="SoldierInfoState.cpp" />
     <ClCompile Include="SoldierNamePool.cpp" />
     <ClCompile Include="Text.cpp" />
     <ClCompile Include="TextEdit.cpp" />
@@ -165,6 +166,7 @@
     <ClInclude Include="RuleBaseFacility.h" />
     <ClInclude Include="RuleCraft.h" />
     <ClInclude Include="Soldier.h" />
+    <ClInclude Include="SoldierInfoState.h" />
     <ClInclude Include="SoldierNamePool.h" />
     <ClInclude Include="Text.h" />
     <ClInclude Include="TextEdit.h" />

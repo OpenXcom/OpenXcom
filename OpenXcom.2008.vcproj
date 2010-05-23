@@ -466,6 +466,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\SoldierInfoState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\SoldierInfoState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\SoldiersState.cpp"
 				>
 			</File>

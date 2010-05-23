@@ -70,10 +70,7 @@ SoldiersState::SoldiersState(Game *game, Base *base) : State(game), _base(base)
 	_lstSoldiers->setColor(Palette::blockOffset(13)+10);
 	_lstSoldiers->setColumns(3, 114, 102, 82);
 	_lstSoldiers->setSelectable(true);
-	for (vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); i++)
-	{
-		_lstSoldiers->addRow(3, (*i)->getName().c_str(), _game->getResourcePack()->getLanguage()->getString((*i)->getRank()).c_str(), "SKYRANGER-1");
-	}
+	_lstSoldiers->onMouseClick((EventHandler)&SoldiersState::lstSoldiersClick);
 }
 
 /**
@@ -85,6 +82,19 @@ SoldiersState::~SoldiersState()
 }
 
 /**
+ * The soldier names can change
+ * after going into other screens.
+ */
+void SoldiersState::init()
+{
+	_lstSoldiers->clearList();
+	for (vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); i++)
+	{
+		_lstSoldiers->addRow(3, (*i)->getName().c_str(), _game->getResourcePack()->getLanguage()->getString((*i)->getRank()).c_str(), "SKYRANGER-1");
+	}
+}
+
+/**
  * Returns to the previous screen.
  * @param ev Pointer to the SDL_Event.
  * @param scale Scale of the screen.
@@ -92,4 +102,14 @@ SoldiersState::~SoldiersState()
 void SoldiersState::btnOkClick(SDL_Event *ev, int scale)
 {
 	_game->popState();
+}
+
+/**
+ * Shows the selected soldier's info.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
+void SoldiersState::lstSoldiersClick(SDL_Event *ev, int scale)
+{
+	_game->pushState(new SoldierInfoState(_game, _base, _lstSoldiers->getSelectedRow()));
 }

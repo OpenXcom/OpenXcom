@@ -68,16 +68,11 @@ BasescapeState::BasescapeState(Game *game) : State(game)
 
 	_txtBase->setColor(Palette::blockOffset(15)+1);
 	_txtBase->setBig();
-	_txtBase->setText(_base->getName());
 
 	_txtLocation->setColor(Palette::blockOffset(15)+6);
 	_txtLocation->setText("Some Location");
 
-	string s = _game->getResourcePack()->getLanguage()->getString(STR_FUNDS_);
-	s.erase(s.size()-1, 1);
-	s += Text::formatFunding(_game->getSavedGame()->getFunds());
 	_txtFunds->setColor(Palette::blockOffset(13)+10);
-	_txtFunds->setText(s);
 	
 	_btnNewBase->setColor(Palette::blockOffset(13)+8);
 	_btnNewBase->setText(_game->getResourcePack()->getLanguage()->getString(STR_BUILD_NEW_BASE));

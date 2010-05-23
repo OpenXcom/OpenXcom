@@ -31,8 +31,8 @@ BaseInfoState::BaseInfoState(Game *game, Base *base) : State(game), _base(base)
 	_btnTransfers = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 80, 14, 46, 180);
 	_btnStores = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 80, 14, 132, 180);
 	_btnMonthlyCosts = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 92, 14, 218, 180);
-	
 	_edtBase = new TextEdit(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 170, 16, 8, 8);
+
 	_txtPersonnel = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 300, 9, 8, 30);
 	_txtSoldiers = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 114, 9, 8, 41);
 	_numSoldiers = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 40, 9, 126, 41);
@@ -76,8 +76,8 @@ BaseInfoState::BaseInfoState(Game *game, Base *base) : State(game), _base(base)
 	add(_btnTransfers);
 	add(_btnStores);
 	add(_btnMonthlyCosts);
-	
 	add(_edtBase);
+
 	add(_txtPersonnel);
 	add(_txtSoldiers);
 	add(_numSoldiers);

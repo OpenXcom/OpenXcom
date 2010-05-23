@@ -34,6 +34,7 @@ class Bar : public Surface
 private:
 	Uint8 _color;
 	double _scale, _max, _value;
+	bool _invert;
 public:
 	/// Creates a new bar with the specified size and position.
 	Bar(int width, int height, int x = 0, int y = 0);
@@ -55,6 +56,8 @@ public:
 	void setValue(double value);
 	/// Gets the bar's current value.
 	double getValue();
+	/// Sets the text's color invert setting.
+	void setInvert(bool invert);
 	/// Blits the bar onto a surface.
 	void blit(Surface *surface);
 };

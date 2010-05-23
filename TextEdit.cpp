@@ -209,13 +209,8 @@ void TextEdit::keyboardPress(SDL_Event *ev, int scale, State *state)
 			_value.resize(_value.length() - 1);
 		break;
 	default:
-		if (ev->key.keysym.sym >= '!' && ev->key.keysym.sym < 162)
-		{
-			if (ev->key.keysym.mod & KMOD_CAPS || ev->key.keysym.mod & KMOD_LSHIFT || ev->key.keysym.mod & KMOD_RSHIFT)
-				_value += toupper(ev->key.keysym.sym);
-			else
-				_value += ev->key.keysym.sym;
-		}
+		if (ev->key.keysym.unicode != 0)
+			_value += ev->key.keysym.unicode;
 	}
 
 	InteractiveSurface::keyboardPress(ev, scale, state);

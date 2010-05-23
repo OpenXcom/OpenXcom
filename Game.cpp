@@ -46,6 +46,10 @@ Game::Game(string title, int width, int height, int bpp) : _states(), _deleted()
 	// Set the window caption
 	SDL_WM_SetCaption(title.c_str(), 0);
 
+	// Set up keyboard events
+	SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
+	SDL_EnableUNICODE(1);
+
 	// Create display
 	_screen = new Screen(width, height, bpp);
 

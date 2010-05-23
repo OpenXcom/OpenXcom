@@ -36,11 +36,11 @@ class BaseInfoState : public State
 {
 private:
 	Base *_base;
-
-	Button *_btnOk, *_btnTransfers, *_btnStores, *_btnMonthlyCosts;
-	Surface *_bg;
 	
+	Surface *_bg;
+	Button *_btnOk, *_btnTransfers, *_btnStores, *_btnMonthlyCosts;
 	TextEdit *_edtBase;
+
 	Text *_txtPersonnel, *_txtSoldiers, *_txtEngineers, *_txtScientists;
 	Text *_numSoldiers, *_numEngineers, *_numScientists;
 	Bar *_barSoldiers, *_barEngineers, *_barScientists;

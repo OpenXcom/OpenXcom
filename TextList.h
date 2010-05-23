@@ -58,6 +58,10 @@ public:
 	void setDot(bool dot);
 	/// Sets whether the list is selectable.
 	void setSelectable(bool selectable);
+	/// Gets the selected row in the list.
+	int getSelectedRow();
+	/// Clears the list.
+	void clearList();
 	/// Sets the palette of the text list.
 	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
 	/// Blits the text list onto another surface.

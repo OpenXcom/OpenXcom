@@ -27,6 +27,7 @@
 #include "Text.h"
 #include "TextList.h"
 #include "Soldier.h"
+#include "SoldierInfoState.h"
 
 /**
  * Soldiers screen that lets the player
@@ -41,10 +42,16 @@ private:
 	TextList *_lstSoldiers;
 	Base *_base;
 public:
+	/// Creates the Soldiers state.
 	SoldiersState(Game *game, Base *base);
+	/// Cleans up the Soldiers state.
 	~SoldiersState();
+	/// Updates the soldier names.
+	void init();
 	/// Handler for clicking the OK button.
 	void btnOkClick(SDL_Event *ev, int scale);
+	/// Handler for clicking the Soldiers list.
+	void lstSoldiersClick(SDL_Event *ev, int scale);
 };
 
 #endif

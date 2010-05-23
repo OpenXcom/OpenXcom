@@ -26,7 +26,7 @@
 Soldier::Soldier(vector<SoldierNamePool*> *names)
 {
 	_tu = SavedGame::genRandom(50, 60);
-	_energy = SavedGame::genRandom(40, 70);
+	_stamina = SavedGame::genRandom(40, 70);
 	_health = SavedGame::genRandom(25, 40);
 	_bravery = SavedGame::genRandom(1, 6)*10;
 	_reactions = SavedGame::genRandom(50, 60);
@@ -37,6 +37,8 @@ Soldier::Soldier(vector<SoldierNamePool*> *names)
 	_psiSkill = 0;
 	_melee = SavedGame::genRandom(20, 40);
 	_rank = STR_ROOKIE;
+	_missions = 0;
+	_kills = 0;
 
 	int gender;
 	_name = names->at(SavedGame::genRandom(0, names->size()-1))->genName(&gender);
@@ -76,4 +78,94 @@ void Soldier::setName(string name)
 LangString Soldier::getRank()
 {
 	return _rank;
+}
+
+/**
+ * Returns the soldier's amount of time units.
+ * @return Time units.
+ */
+int Soldier::getTimeUnits()
+{
+	return _tu;
+}
+
+/**
+ * Returns the soldier's amount of stamina.
+ * @return Stamina.
+ */
+int Soldier::getStamina()
+{
+	return _stamina;
+}
+
+/**
+ * Returns the soldier's amount of health.
+ * @return Health.
+ */
+int Soldier::getHealth()
+{
+	return _health;
+}
+
+/**
+ * Returns the soldier's amount of bravery.
+ * @return Bravery.
+ */
+int Soldier::getBravery()
+{
+	return _bravery;
+}
+
+/**
+ * Returns the soldier's amount of reactions.
+ * @return Reactions.
+ */
+int Soldier::getReactions()
+{
+	return _reactions;
+}
+
+/**
+ * Returns the soldier's amount of firing accuracy.
+ * @return Firing accuracy.
+ */
+int Soldier::getFiringAccuracy()
+{
+	return _firing;
+}
+
+/**
+ * Returns the soldier's amount of throwing accuracy.
+ * @return Throwing accuracy.
+ */
+int Soldier::getThrowingAccuracy()
+{
+	return _throwing;
+}
+
+/**
+ * Returns the soldier's amount of strength.
+ * @return Strength.
+ */
+int Soldier::getStrength()
+{
+	return _strength;
+}
+
+/**
+ * Returns the soldier's amount of missions.
+ * @return Missions.
+ */
+int Soldier::getMissions()
+{
+	return _missions;
+}
+
+/**
+ * Returns the soldier's amount of kills.
+ * @return Kills.
+ */
+int Soldier::getKills()
+{
+	return _kills;
 }

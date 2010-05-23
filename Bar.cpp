@@ -25,7 +25,7 @@
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Bar::Bar(int width, int height, int x, int y) : Surface(width, height, x, y), _color(0), _scale(0), _max(0), _value(0)
+Bar::Bar(int width, int height, int x, int y) : Surface(width, height, x, y), _color(0), _scale(0), _max(0), _value(0), _invert(false)
 {
 }
 
@@ -109,11 +109,23 @@ double Bar::getValue()
 }
 
 /**
+ * Enables/disables color inverting. Some bars have
+ * darker borders and others have lighter borders.
+ * @param invert Invert setting.
+ */
+void Bar::setInvert(bool invert)
+{
+	_invert = invert;
+}
+
+/**
  * Blits the bar graphic onto another surface.
  * @param surface Pointer to surface to blit onto.
  */
 void Bar::blit(Surface *surface)
 {
+	clear();
+
 	SDL_Rect square;
 
 	square.x = 0;
@@ -121,7 +133,10 @@ void Bar::blit(Surface *surface)
 	square.w = (Uint16)(_scale * _max) + 2;
 	square.h = _height;
 
-	SDL_FillRect(_surface, &square, _color + 4);
+	if (_invert)
+		SDL_FillRect(_surface, &square, _color);
+	else
+		SDL_FillRect(_surface, &square, _color + 4);
 
 	square.x++;
 	square.y++;
@@ -132,7 +147,10 @@ void Bar::blit(Surface *surface)
 	
 	square.w = (Uint16)(_scale * _value);
 
-	SDL_FillRect(_surface, &square, _color);
+	if (_invert)
+		SDL_FillRect(_surface, &square, _color + 4);
+	else
+		SDL_FillRect(_surface, &square, _color);
 
 	Surface::blit(surface);
 }

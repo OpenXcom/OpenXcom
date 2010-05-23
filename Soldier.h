@@ -38,7 +38,7 @@ class Soldier
 {
 private:
 	string _name;
-	int _tu, _energy, _health, _bravery, _reactions, _firing, _throwing, _strength, _psiStrength, _psiSkill, _melee;
+	int _tu, _stamina, _health, _bravery, _reactions, _firing, _throwing, _strength, _psiStrength, _psiSkill, _melee;
 	LangString _rank;
 	SoldierGender _gender;
 	SoldierLook _look;
@@ -54,6 +54,26 @@ public:
 	void setName(string name);
 	/// Gets the soldier's rank.
 	LangString getRank();
+	/// Gets the soldier's time units.
+	int getTimeUnits();
+	/// Gets the soldier's stamina.
+	int getStamina();
+	/// Gets the soldier's health.
+	int getHealth();
+	/// Gets the soldier's bravery.
+	int getBravery();
+	/// Gets the soldier's reactions.
+	int getReactions();
+	/// Gets the soldier's firing accuracy.
+	int getFiringAccuracy();
+	/// Gets the soldier's throwing accuracy.
+	int getThrowingAccuracy();
+	/// Gets the soldier's strength.
+	int getStrength();
+	/// Gets the soldier's missions.
+	int getMissions();
+	/// Gets the soldier's kills.
+	int getKills();
 };
 
 #endif
