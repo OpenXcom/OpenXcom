@@ -39,7 +39,7 @@ class Soldier
 private:
 	string _name;
 	int _tu, _stamina, _health, _bravery, _reactions, _firing, _throwing, _strength, _psiStrength, _psiSkill, _melee;
-	LangString _rank;
+	int _rank;
 	SoldierGender _gender;
 	SoldierLook _look;
 	int _missions, _kills;
@@ -52,8 +52,10 @@ public:
 	string getName();
 	/// Sets the soldier's name.
 	void setName(string name);
-	/// Gets the soldier's rank.
-	LangString getRank();
+	/// Gets a string version of the soldier's rank.
+	LangString getRankString();
+	/// Gets a sprite version of the soldier's rank.
+	int getRankSprite();
 	/// Gets the soldier's time units.
 	int getTimeUnits();
 	/// Gets the soldier's stamina.

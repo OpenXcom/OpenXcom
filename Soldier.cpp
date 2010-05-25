@@ -36,7 +36,7 @@ Soldier::Soldier(vector<SoldierNamePool*> *names)
 	_psiStrength = SavedGame::genRandom(0, 100);
 	_psiSkill = 0;
 	_melee = SavedGame::genRandom(20, 40);
-	_rank = STR_ROOKIE;
+	_rank = 0;
 	_missions = 0;
 	_kills = 0;
 
@@ -72,12 +72,23 @@ void Soldier::setName(string name)
 }
 
 /**
- * Returns the soldier's military rank.
+ * Returns a localizable-string representation of
+ * the soldier's military rank.
  * @return String ID for rank.
  */
-LangString Soldier::getRank()
+LangString Soldier::getRankString()
 {
-	return _rank;
+	return (LangString)(STR_ROOKIE + _rank);
+}
+
+/**
+ * Returns a graphic representation of
+ * the soldier's military rank.
+ * @return Sprite ID for rank.
+ */
+int Soldier::getRankSprite()
+{
+	return 42 + _rank;
 }
 
 /**

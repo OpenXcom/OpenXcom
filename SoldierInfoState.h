@@ -41,7 +41,7 @@ private:
 	Base *_base;
 	unsigned int _soldier;
 
-	Surface *_bg;
+	Surface *_bg, *_rank;
 	Button *_btnOk, *_btnPrev, *_btnNext, *_btnArmour;
 	Text *_txtArmour, *_txtRank, *_txtMissions, *_txtKills, *_txtCraft;
 	TextEdit *_edtSoldier;

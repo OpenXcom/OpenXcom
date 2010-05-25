@@ -36,10 +36,11 @@ using namespace std;
 
 /**
  * Interactive globe view of the world.
- * Takes a flat world map and renders it as a 3D-looking globe
- * that the player can interact with.
- * @note The globe is still very much in development, so no
- * full documentation yet.
+ * Takes a flat world map made out of land polygons with
+ * polar coordinates and renders it as a 3D-looking globe
+ * with cartesian coordinates that the player can interact with.
+ * @todo Texture rendering, points inside polygons,
+ * converting points with vertical rotation.
  */
 class Globe : public InteractiveSurface
 {
@@ -50,22 +51,38 @@ private:
 	SurfaceSet *_texture;
 	double _testLon, _testLat;
 
+	/// Keeps longitudes between 0 and 2*PI.
 	double longitudeLoop(double lon);
+	/// Checks if a point is behind the globe.
 	bool pointBack(double lon, double lat);
+	/// Checks if a point is inside a polygon.
 	bool insidePolygon(double lon, double lat, Polygon *poly);
 public:
+	/// Creates a new globe at the specified position and size.
 	Globe(int cenX, int cenY, int width, int height, int x = 0, int y = 0);
+	/// Cleans up the globe.
 	~Globe();
+	/// Loads a set of polygons from a DAT file.
 	static void loadDat(string filename, vector<Polygon*> *polygons);
+	/// Converts polar coordinates into cartesian coordinates.
 	void polarToCart(double lon, double lat, Sint16 *x, Sint16 *y);
+	/// Converts cartesian coordinates into polar coordinates.
 	void cartToPolar(Sint16 x, Sint16 y, double *lon, double *lat);
+	/// Sets the texture set for the globe's polygons.
 	void setTexture(SurfaceSet *texture);
+	/// Sets the set of polygons for the globe.
 	void setPolygons(vector<Polygon*> *polygons);
+	/// Rotates the globe a set amount.
 	void rotate(double lon, double lat);
+	/// Zooms the globe a set amount.
 	void zoom(double amount);
+	/// Centers the globe on a point.
 	void center(double lon, double lat);
+	/// Blits the globe onto a surface.
 	void blit(Surface *surface);
+	/// Handles mouse events.
 	void handle(SDL_Event *ev, int scale, State *state);
+	/// Testing the inside-polygon algorithm.
 	void test(double lon, double lat);
 };
 

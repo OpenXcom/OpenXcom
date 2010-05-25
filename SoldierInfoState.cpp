@@ -22,16 +22,18 @@
  * Initializes all the elements in the Base Info screen.
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
+ * @param soldier ID of the selected soldier.
  */
 SoldierInfoState::SoldierInfoState(Game *game, Base *base, unsigned int soldier) : State(game), _base(base), _soldier(soldier)
 {
 	// Create objects
 	_bg = new Surface(320, 200, 0, 0);
+	_rank = new Surface(26, 23, 4, 4);
 	_btnPrev = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 28, 14, 0, 33);
 	_btnOk = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 48, 14, 30, 33);
 	_btnNext = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 28, 14, 80, 33);
 	_btnArmour = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 60, 14, 130, 33);
-	_edtSoldier = new TextEdit(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 270, 16, 40, 10);
+	_edtSoldier = new TextEdit(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 270, 16, 40, 9);
 	_txtArmour = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 120, 9, 194, 38);
 	_txtRank = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 130, 9, 0, 48);
 	_txtMissions = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 100, 9, 130, 48);
@@ -71,6 +73,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, unsigned int soldier)
 	_barStrength = new Bar(170, 7, 149, 166);
 	
 	add(_bg);
+	add(_rank);
 	add(_btnOk);
 	add(_btnPrev);
 	add(_btnNext);
@@ -236,6 +239,8 @@ void SoldierInfoState::init()
 	Soldier *s = _base->getSoldiers()->at(_soldier);
 	_edtSoldier->setText(s->getName());
 
+	_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK")->getFrame(s->getRankSprite())->blit(_rank);
+
 	stringstream ss;
 	ss << s->getTimeUnits();
 	_numTimeUnits->setText(ss.str());		
@@ -287,7 +292,7 @@ void SoldierInfoState::init()
 	_txtArmour->setText(_game->getResourcePack()->getLanguage()->getString(STR_NONE));
 
 	stringstream ss9;
-	ss9 << _game->getResourcePack()->getLanguage()->getString(STR_RANK_) << _game->getResourcePack()->getLanguage()->getString(s->getRank());
+	ss9 << _game->getResourcePack()->getLanguage()->getString(STR_RANK_) << _game->getResourcePack()->getLanguage()->getString(s->getRankString());
 	_txtRank->setText(ss9.str());
 
 	stringstream ss10;

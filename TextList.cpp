@@ -165,7 +165,7 @@ void TextList::setDot(bool dot)
 /**
  * If enabled, the list will respond to player input,
  * highlighting selected rows and receiving clicks.
- * @param select Selectable setting.
+ * @param selectable Selectable setting.
  */
 void TextList::setSelectable(bool selectable)
 {

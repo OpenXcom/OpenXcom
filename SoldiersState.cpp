@@ -90,7 +90,7 @@ void SoldiersState::init()
 	_lstSoldiers->clearList();
 	for (vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); i++)
 	{
-		_lstSoldiers->addRow(3, (*i)->getName().c_str(), _game->getResourcePack()->getLanguage()->getString((*i)->getRank()).c_str(), "SKYRANGER-1");
+		_lstSoldiers->addRow(3, (*i)->getName().c_str(), _game->getResourcePack()->getLanguage()->getString((*i)->getRankString()).c_str(), "SKYRANGER-1");
 	}
 }
 
