@@ -18,10 +18,15 @@
  */
 #include "BaseFacility.h"
 
-BaseFacility::BaseFacility(int x, int y) : _x(x), _y(y)
+BaseFacility::BaseFacility(RuleBaseFacility *rules, int x, int y) : _rules(rules), _x(x), _y(y)
 {
 }
 
 BaseFacility::~BaseFacility()
 {
+}
+
+RuleBaseFacility *BaseFacility::getRules()
+{
+	return _rules;
 }

@@ -18,10 +18,90 @@
  */
 #include "RuleBaseFacility.h"
 
-RuleBaseFacility::RuleBaseFacility()
+RuleBaseFacility::RuleBaseFacility(LangString type) : _type(type), _lift(false), _size(1), _buildCost(0), _buildTime(0), _monthlyCost(0), _storage(0), _personnel(0), _aliens(0), _crafts(0), _labs(0), _workshops(0), _psiLabs(0), _radarRange(0), _radarChance(0), _defence(0)
 {
 }
 
 RuleBaseFacility::~RuleBaseFacility()
 {
+}
+
+void RuleBaseFacility::setLift(bool lift)
+{
+	_lift = lift;
+}
+
+void RuleBaseFacility::setSize(int size)
+{
+	_size = size;
+}
+
+void RuleBaseFacility::setBuildCost(int cost)
+{
+	_buildCost = cost;
+}
+
+void RuleBaseFacility::setBuildTime(int time)
+{
+	_buildTime = time;
+}
+
+void RuleBaseFacility::setMonthlyCost(int cost)
+{
+	_monthlyCost = cost;
+}
+
+void RuleBaseFacility::setStorage(int storage)
+{
+	_storage = storage;
+}
+
+void RuleBaseFacility::setPersonnel(int personnel)
+{
+	_personnel = personnel;
+}
+
+void RuleBaseFacility::setAliens(int aliens)
+{
+	_aliens = aliens;
+}
+
+void RuleBaseFacility::setCrafts(int crafts)
+{
+	_crafts = crafts;
+}
+
+void RuleBaseFacility::setLaboratories(int labs)
+{
+	_labs = labs;
+}
+
+void RuleBaseFacility::setWorkshops(int workshops)
+{
+	_workshops = workshops;
+}
+
+void RuleBaseFacility::setPsiLaboratories(int psi)
+{
+	_psiLabs = psi;
+}
+
+void RuleBaseFacility::setRadarRange(int range)
+{
+	_radarRange = range;
+}
+
+void RuleBaseFacility::setRadarChance(int chance)
+{
+	_radarChance = chance;
+}
+
+void RuleBaseFacility::setDefenceValue(int defence)
+{
+	_defence = defence;
+}
+
+void RuleBaseFacility::setHitRatio(int ratio)
+{
+	_hitRatio = ratio;
 }

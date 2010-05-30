@@ -40,6 +40,7 @@ private:
 	vector<BaseFacility*> _facilities;
 	vector<Soldier*> _soldiers;
 	vector<Craft*> _crafts;
+	int _scientists, _engineers;
 public:
 	/// Creates a base on the specified coordinates.
 	Base(double lat, double lon);
@@ -59,6 +60,29 @@ public:
 	vector<Soldier*> *getSoldiers();
 	/// Gets the base's crafts.
 	vector<Craft*> *getCrafts();
+
+	void setScientists(int scientists);
+	void setEngineers(int engineers);
+
+	int getAvailableSoldiers();
+	int getTotalSoldiers();
+	int getAvailableScientists();
+	int getTotalScientists();
+	int getAvailableEngineers();
+	int getTotalEngineers();
+	int getUsedQuarters();
+	int getAvailableQuarters();
+	int getUsedStores();
+	int getAvailableStores();
+	int getUsedLaboratories();
+	int getAvailableLaboratories();
+	int getUsedWorkshops();
+	int getAvailableWorkshops();
+	int getUsedHangars();
+	int getAvailableHangars();
+	int getDefenceValue();
+	int getShortRangeDetection();
+	int getLongRangeDetection();
 };
 
 #endif

@@ -22,6 +22,8 @@
 #include "Ruleset.h"
 #include "LangString.h"
 #include "Soldier.h"
+#include "Craft.h"
+#include "BaseFacility.h"
 
 /**
  * Rule set for the X-Com: UFO Defense game.

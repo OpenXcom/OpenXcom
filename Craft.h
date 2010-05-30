@@ -19,7 +19,7 @@
 #ifndef OPENXCOM__CRAFT_H
 #define OPENXCOM__CRAFT_H
 
-#include "LangString.h"
+class RuleCraft;
 
 /**
  * Represents a craft stored in a base.
@@ -30,12 +30,13 @@
 class Craft
 {
 private:
-	LangString _type;
+	RuleCraft *_rules;
 	double _lat, _lon;
 	int _id, _fuel, _damage;
 public:
-	Craft(double lat, double lon);
+	Craft(RuleCraft *rules, double lat, double lon);
 	~Craft();
+	RuleCraft *getRules();
 };
 
 #endif

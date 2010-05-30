@@ -18,10 +18,15 @@
  */
 #include "Craft.h"
 
-Craft::Craft(double lat, double lon) : _lat(lat), _lon(lon)
+Craft::Craft(RuleCraft *rules, double lat, double lon) : _rules(rules), _lat(lat), _lon(lon)
 {
 }
 
 Craft::~Craft()
 {
+}
+
+RuleCraft *Craft::getRules()
+{
+	return _rules;
 }

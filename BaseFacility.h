@@ -19,7 +19,7 @@
 #ifndef OPENXCOM__BASEFACILITY_H
 #define OPENXCOM__BASEFACILITY_H
 
-#include "LangString.h"
+class RuleBaseFacility;
 
 /**
  * Represents a base facility placed in a base.
@@ -30,11 +30,12 @@
 class BaseFacility
 {
 private:
-	LangString _type;
+	RuleBaseFacility *_rules;
 	int _x, _y, _buildTime;
 public:
-	BaseFacility(int x, int y);
+	BaseFacility(RuleBaseFacility *rules, int x, int y);
 	~BaseFacility();
+	RuleBaseFacility *getRules();
 };
 
 #endif

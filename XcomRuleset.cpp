@@ -24,6 +24,7 @@
  */
 XcomRuleset::XcomRuleset() : Ruleset()
 {
+	// Add soldier names
 	SoldierNamePool *american = new SoldierNamePool();
 	american->addMaleName("Austin");
 	american->addMaleName("Calvin");
@@ -281,6 +282,73 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	russian->addLastName("Yakubik");
 	russian->addLastName("Zhdanovich");
 	_names.push_back(russian);
+
+	// Add base facilities
+	RuleBaseFacility *lift = new RuleBaseFacility(STR_ACCESS_LIFT);
+	lift->setBuildCost(300000);
+	lift->setBuildTime(1);
+	lift->setMonthlyCost(4000);
+	lift->setLift(true);
+	RuleBaseFacility *quarters = new RuleBaseFacility(STR_LIVING_QUARTERS);
+	quarters->setBuildCost(400000);
+	quarters->setBuildTime(16);
+	quarters->setMonthlyCost(10000);
+	quarters->setPersonnel(50);
+	RuleBaseFacility *lab = new RuleBaseFacility(STR_LABORATORY);
+	lab->setBuildCost(750000);
+	lab->setBuildTime(26);
+	lab->setMonthlyCost(30000);
+	lab->setLaboratories(50);
+	RuleBaseFacility *workshop = new RuleBaseFacility(STR_WORKSHOP);
+	workshop->setBuildCost(800000);
+	workshop->setBuildTime(32);
+	workshop->setMonthlyCost(35000);
+	workshop->setWorkshops(50);
+	RuleBaseFacility *stores = new RuleBaseFacility(STR_GENERAL_STORES);
+	stores->setBuildCost(150000);
+	stores->setBuildTime(10);
+	stores->setMonthlyCost(5000);
+	stores->setStorage(50);
+	RuleBaseFacility *aliens = new RuleBaseFacility(STR_ALIEN_CONTAINMENT);
+	aliens->setBuildCost(400000);
+	aliens->setBuildTime(18);
+	aliens->setMonthlyCost(15000);
+	aliens->setAliens(10);
+	RuleBaseFacility *hangar = new RuleBaseFacility(STR_HANGAR);
+	hangar->setSize(2);
+	hangar->setBuildCost(200000);
+	hangar->setBuildTime(25);
+	hangar->setMonthlyCost(25000);
+	hangar->setCrafts(1);
+	RuleBaseFacility *sRadar = new RuleBaseFacility(STR_SMALL_RADAR_SYSTEM);
+	sRadar->setBuildCost(500000);
+	sRadar->setBuildTime(12);
+	sRadar->setMonthlyCost(10000);
+	sRadar->setRadarRange(2000);
+	sRadar->setRadarChance(10);
+	RuleBaseFacility *lRadar = new RuleBaseFacility(STR_LARGE_RADAR_SYSTEM);
+	lRadar->setBuildCost(800000);
+	lRadar->setBuildTime(25);
+	lRadar->setMonthlyCost(15000);
+	lRadar->setRadarRange(3000);
+	lRadar->setRadarChance(20);
+	RuleBaseFacility *missile = new RuleBaseFacility(STR_MISSILE_DEFENCES);
+	missile->setBuildCost(200000);
+	missile->setBuildTime(16);
+	missile->setMonthlyCost(5000);
+	missile->setDefenceValue(500);
+	missile->setHitRatio(50);
+
+	_facilities.insert(pair<LangString, RuleBaseFacility*>(STR_ACCESS_LIFT, lift));
+	_facilities.insert(pair<LangString, RuleBaseFacility*>(STR_LIVING_QUARTERS, quarters));
+	_facilities.insert(pair<LangString, RuleBaseFacility*>(STR_LABORATORY, lab));
+	_facilities.insert(pair<LangString, RuleBaseFacility*>(STR_WORKSHOP, workshop));
+	_facilities.insert(pair<LangString, RuleBaseFacility*>(STR_GENERAL_STORES, stores));
+	_facilities.insert(pair<LangString, RuleBaseFacility*>(STR_ALIEN_CONTAINMENT, aliens));
+	_facilities.insert(pair<LangString, RuleBaseFacility*>(STR_HANGAR, hangar));
+	_facilities.insert(pair<LangString, RuleBaseFacility*>(STR_SMALL_RADAR_SYSTEM, sRadar));
+	_facilities.insert(pair<LangString, RuleBaseFacility*>(STR_LARGE_RADAR_SYSTEM, lRadar));
+	_facilities.insert(pair<LangString, RuleBaseFacility*>(STR_MISSILE_DEFENCES, missile));
 }
 
 /**
@@ -300,6 +368,7 @@ SavedGame *XcomRuleset::newSave(GameDifficulty diff)
 {
 	SavedGame *save = new SavedGame(diff);
 
+	// Generate countries
 	save->getCountries()->insert(pair<LangString, Country*>(STR_USA, new Country(SavedGame::genRandom(600, 1200)*1000)));
 	save->getCountries()->insert(pair<LangString, Country*>(STR_RUSSIA, new Country(SavedGame::genRandom(230, 460)*1000)));
 	save->getCountries()->insert(pair<LangString, Country*>(STR_UK, new Country(SavedGame::genRandom(240, 480)*1000)));
@@ -318,12 +387,33 @@ SavedGame *XcomRuleset::newSave(GameDifficulty diff)
 	save->getCountries()->insert(pair<LangString, Country*>(STR_CANADA, new Country(SavedGame::genRandom(110, 220)*1000)));
 	save->setFunds(save->getCountryFunding());
 	
+	// Set up craft IDs
+	save->getCraftIds()->insert(pair<LangString, int>(STR_SKYRANGER, 1));
+	save->getCraftIds()->insert(pair<LangString, int>(STR_LIGHTNING, 1));
+	save->getCraftIds()->insert(pair<LangString, int>(STR_AVENGER, 1));
+	save->getCraftIds()->insert(pair<LangString, int>(STR_INTERCEPTOR, 1));
+	save->getCraftIds()->insert(pair<LangString, int>(STR_FIRESTORM, 1));
+
+	// Set up initial base
 	Base *base = new Base(0.0, 0.0);
 	base->setName("X-COM BASE 1");
+
+	// Generate soldiers
 	for (int i = 0; i < 8; i++)
 	{
 		base->getSoldiers()->push_back(new Soldier(&_names));
 	}
+
+	// Add facilities
+	base->getFacilities()->push_back(new BaseFacility(getBaseFacility(STR_ACCESS_LIFT), 2, 2));
+	base->getFacilities()->push_back(new BaseFacility(getBaseFacility(STR_HANGAR), 2, 0));
+	base->getFacilities()->push_back(new BaseFacility(getBaseFacility(STR_HANGAR), 0, 4));
+	base->getFacilities()->push_back(new BaseFacility(getBaseFacility(STR_HANGAR), 4, 4));
+	base->getFacilities()->push_back(new BaseFacility(getBaseFacility(STR_LIVING_QUARTERS), 3, 2));
+	base->getFacilities()->push_back(new BaseFacility(getBaseFacility(STR_GENERAL_STORES), 2, 3));
+	base->getFacilities()->push_back(new BaseFacility(getBaseFacility(STR_LABORATORY), 3, 3));
+	base->getFacilities()->push_back(new BaseFacility(getBaseFacility(STR_WORKSHOP), 3, 4));
+	base->getFacilities()->push_back(new BaseFacility(getBaseFacility(STR_SMALL_RADAR_SYSTEM), 3, 1));
 
 	save->getBases()->push_back(base);
 	

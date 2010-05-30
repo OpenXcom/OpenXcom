@@ -48,6 +48,7 @@ private:
 	int _funds;
 	map<LangString, Country*> _countries;
 	vector<Base*> _bases;
+	map<LangString, int> _craftId;
 public:
 	/// Creates a new save with a certain difficulty.
 	SavedGame(GameDifficulty diff);
@@ -69,6 +70,8 @@ public:
 	int getCountryFunding();
 	/// Gets the list of bases.
 	vector<Base*> *getBases();
+
+	map<LangString, int> *getCraftIds();
 };
 
 #endif

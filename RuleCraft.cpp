@@ -18,7 +18,7 @@
  */
 #include "RuleCraft.h"
 
-RuleCraft::RuleCraft()
+RuleCraft::RuleCraft(LangString type) : _type(type)
 {
 }
 

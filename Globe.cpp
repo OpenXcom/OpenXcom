@@ -52,7 +52,7 @@ void Globe::polarToCart(double lon, double lat, Sint16 *x, Sint16 *y)
 
 	*x = _cenX + (int)floor(_radius * _zoom * sin(lon) * cos(lat));
 	//*y = _cenY + (int)floor(_radius * _zoom * sin(lat));
-	*y = _cenY + (int)floor(_radius * _zoom * (sin(lat) * cos(_rotLat) + cos(lat) * sin(_rotLat) * cos(lon)));	
+	*y = _cenY + (int)floor(_radius * _zoom * (sin(lat) * cos(_rotLat) + cos(lat) * sin(_rotLat) * cos(lon)));
 }
 
 /**

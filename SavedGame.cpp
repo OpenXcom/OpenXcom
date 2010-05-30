@@ -114,3 +114,8 @@ vector<Base*> *SavedGame::getBases()
 {
 	return &_bases;
 }
+
+map<LangString, int> *SavedGame::getCraftIds()
+{
+	return &_craftId;
+}

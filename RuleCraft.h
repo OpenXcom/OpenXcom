@@ -19,6 +19,8 @@
 #ifndef OPENXCOM__RULECRAFT_H
 #define OPENXCOM__RULECRAFT_H
 
+#include "LangString.h"
+
 /**
  * Represents a specific type of craft.
  * Contains constant info about a craft like
@@ -28,10 +30,12 @@
 class RuleCraft
 {
 private:
+	LangString _type;
+	int _sprite;
 	int _fuel, _speed, _accel;
 public:
 	/// Creates a blank craft ruleset.
-	RuleCraft();
+	RuleCraft(LangString type);
 	/// Cleans up the craft ruleset.
 	~RuleCraft();
 };
