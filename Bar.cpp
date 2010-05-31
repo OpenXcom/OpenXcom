@@ -43,6 +43,7 @@ Bar::~Bar()
 void Bar::setColor(Uint8 color)
 {
 	_color = color;
+	draw();
 }
 
 /**
@@ -61,6 +62,7 @@ Uint8 Bar::getColor()
 void Bar::setScale(double scale)
 {
 	_scale = scale;
+	draw();
 }
 
 /**
@@ -79,6 +81,7 @@ double Bar::getScale()
 void Bar::setMax(double max)
 {
 	_max = max;
+	draw();
 }
 
 /**
@@ -97,6 +100,7 @@ double Bar::getMax()
 void Bar::setValue(double value)
 {
 	_value = value;
+	draw();
 }
 
 /**
@@ -116,13 +120,14 @@ double Bar::getValue()
 void Bar::setInvert(bool invert)
 {
 	_invert = invert;
+	draw();
 }
 
 /**
- * Blits the bar graphic onto another surface.
- * @param surface Pointer to surface to blit onto.
+ * Draws the bordered bar filled according
+ * to its values.
  */
-void Bar::blit(Surface *surface)
+void Bar::draw()
 {
 	clear();
 
@@ -151,6 +156,4 @@ void Bar::blit(Surface *surface)
 		SDL_FillRect(_surface, &square, _color + 4);
 	else
 		SDL_FillRect(_surface, &square, _color);
-
-	Surface::blit(surface);
 }

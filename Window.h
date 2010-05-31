@@ -51,6 +51,8 @@ public:
 	void setColor(Uint8 color);
 	/// Gets the border color.
 	Uint8 getColor();
+	/// Draws the window.
+	void draw();
 	/// Blits the window onto another surface.
 	void blit(Surface *surface);
 };

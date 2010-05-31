@@ -45,8 +45,6 @@ public:
 	Uint8 getColor();
 	/// Sets the custom button's group.
 	void setGroup(CustomButton **group);
-	/// Blits the custom button onto a surface.
-	void blit(Surface *surface);
 	/// Handles mouse events.
 	void handle(SDL_Event *ev, int scale, State *state);
 	/// Special handling for mouse presses.

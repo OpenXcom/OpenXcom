@@ -43,9 +43,6 @@ private:
 	bool _wrap, _invert;
 	TextAlign _align;
 	Uint8 _color;
-
-	/// Updates the internal text graphic.
-	void refresh();
 public:
 	/// Creates a new text with the specified size, position and fonts.
 	Text(Font *big, Font *small, int width, int height, int x = 0, int y = 0);
@@ -71,8 +68,8 @@ public:
 	void setColor(Uint8 color);
 	/// Gets the text's color.
 	Uint8 getColor();
-	/// Blits the text onto another surface.
-	void blit(Surface *surface);
+	/// Draws the text.
+	void draw();
 };
 
 #endif

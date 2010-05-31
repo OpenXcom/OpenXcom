@@ -47,6 +47,7 @@ Window::~Window()
 void Window::setBg(Surface *bg)
 {
 	_bg = bg;
+	draw();
 }
 
 /**
@@ -56,6 +57,7 @@ void Window::setBg(Surface *bg)
 void Window::setColor(Uint8 color)
 {
 	_color = color;
+	draw();
 }
 
 /**
@@ -68,13 +70,12 @@ Uint8 Window::getColor()
 }
 
 /**
- * Draws the bordered window on top of another surface.
+ * Draws the bordered window with a graphic background.
  * The background never moves with the window, it's
  * always aligned to the top-left corner of the screen
  * and cropped to fit the inside area.
- * @param surface Pointer to surface to blit onto.
  */
-void Window::blit(Surface *surface)
+void Window::draw()
 {
 	SDL_Rect cropper;
 	SDL_Rect square;
@@ -123,16 +124,29 @@ void Window::blit(Surface *surface)
 		cropper.w = square.w;
 		cropper.h = square.h;
 		
-		_bg->setCrop(&cropper);
-		_bg->setX(square.x);
-		_bg->setY(square.y);
-		_bg->blit(this);
+		if (_bg != 0)
+		{
+			_bg->setCrop(&cropper);
+			_bg->setX(square.x);
+			_bg->setY(square.y);
+			_bg->blit(this);
+		}
 	}
+}
 
+/**
+ * Blits the bordered window on top of another surface.
+ * @param surface Pointer to surface to blit onto.
+ */
+void Window::blit(Surface *surface)
+{
 	if (_popupStep >= 1.0)
 		_popupStep = 1.0;
 	else
+	{
 		_popupStep += 0.1;
+		draw();
+	}
 
 	Surface::blit(surface);
 }

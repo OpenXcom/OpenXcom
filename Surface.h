@@ -55,6 +55,8 @@ public:
 	void offset(int off);
 	/// Inverts the surface's colors.
 	void invert(Uint8 mid);
+	/// Draws the surface's graphic.
+	virtual void draw();
 	/// Blits this surface onto another one.
 	virtual void blit(Surface *surface);
 	/// Copies a portion of another surface into this one.

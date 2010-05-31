@@ -214,6 +214,15 @@ void Surface::invert(Uint8 mid)
 }
 
 /**
+ * Draws the graphic that the surface contains and
+ * gets blitted onto other surfaces.
+ */
+void Surface::draw()
+{
+
+}
+
+/**
  * Blits this surface onto another one, with its position
  * relative to the top-left corner of the target surface.
  * The cropping rectangle controls the portion of the surface

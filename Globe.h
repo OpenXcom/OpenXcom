@@ -78,8 +78,8 @@ public:
 	void zoom(double amount);
 	/// Centers the globe on a point.
 	void center(double lon, double lat);
-	/// Blits the globe onto a surface.
-	void blit(Surface *surface);
+	/// Draws the globe.
+	void draw();
 	/// Handles mouse events.
 	void handle(SDL_Event *ev, int scale, State *state);
 	/// Testing the inside-polygon algorithm.

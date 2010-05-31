@@ -88,7 +88,7 @@ void Text::setText(string text)
 	if (text != _text)
 	{
 		_text = text;
-		refresh();
+		draw();
 	}
 }
 
@@ -110,7 +110,7 @@ string Text::getText()
 void Text::setWordWrap(bool wrap)
 {
 	_wrap = wrap;
-	refresh();
+	draw();
 }
 
 /**
@@ -121,7 +121,7 @@ void Text::setWordWrap(bool wrap)
 void Text::setInvert(bool invert)
 {
 	_invert = invert;
-	refresh();
+	draw();
 }
 
 /**
@@ -132,7 +132,7 @@ void Text::setInvert(bool invert)
 void Text::setAlign(TextAlign align)
 {
 	_align = align;
-	refresh();
+	draw();
 }
 
 /**
@@ -144,7 +144,7 @@ void Text::setAlign(TextAlign align)
 void Text::setColor(Uint8 color)
 {
 	_color = color;
-	refresh();
+	draw();
 }
 
 /**
@@ -157,21 +157,10 @@ Uint8 Text::getColor()
 }
 
 /**
- * Blits the text onto another surface.
- * @param surface Pointer to another surface.
+ * Draws all the characters in the text with a really
+ * nasty complex gritty text rendering algorithm logic stuff.
  */
-void Text::blit(Surface *surface)
-{
-	Surface::blit(surface);
-}
-
-/**
- * All the nasty complex gritty text rendering algorithm logic stuff.
- * @note Unlike other elements, text isn't redrawn every frame.
- * This is because text rendering is very slow, so it's
- * manually redrawn only when an attribute is changed.
- */
-void Text::refresh()
+void Text::draw()
 {
 	clear();
 

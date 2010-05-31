@@ -51,6 +51,7 @@ void Button::setColor(Uint8 color)
 {
 	_color = color;
 	_text->setColor(_color-3);
+	draw();
 }
 
 /**
@@ -69,6 +70,7 @@ Uint8 Button::getColor()
 void Button::setText(string text)
 {
 	_text->setText(text);
+	draw();
 }
 
 /**
@@ -103,11 +105,10 @@ void Button::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 }
 
 /**
- * Blits the labelled button onto another surface.
+ * Draws the labelled button.
  * The colors are inverted if the button is pressed.
- * @param surface Pointer to surface to blit onto.
  */
-void Button::blit(Surface *surface)
+void Button::draw()
 {
 	SDL_Rect square;
 	int color = _color - 2;
@@ -158,9 +159,8 @@ void Button::blit(Surface *surface)
 	}
 	_text->setInvert(press);
 
+	_text->draw();
 	_text->blit(this);
-
-	Surface::blit(surface);
 }
 
 /**
@@ -187,4 +187,17 @@ void Button::mousePress(SDL_Event *ev, int scale, State *state)
 		*_group = this;
 
 	InteractiveSurface::mousePress(ev, scale, state);
+	draw();
+}
+
+/**
+ * Sets the button as the released button.
+ * @param ev Pointer to a SDL_Event.
+ * @param scale Current screen scale (used to correct mouse input).
+ * @param state State that the event handlers belong to.
+ */
+void Button::mouseRelease(SDL_Event *ev, int scale, State *state)
+{
+	InteractiveSurface::mouseRelease(ev, scale, state);
+	draw();
 }

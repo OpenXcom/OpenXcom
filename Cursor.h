@@ -45,8 +45,8 @@ public:
 	void setColor(Uint8 color);
 	/// Gets the cursor's color.
 	Uint8 getColor();
-	/// Blits the cursor onto a surface.
-	void blit(Surface *surface);
+	/// Draws the cursor.
+	void draw();
 };
 
 #endif

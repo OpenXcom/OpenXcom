@@ -56,10 +56,10 @@ public:
 	void setValue(double value);
 	/// Gets the bar's current value.
 	double getValue();
-	/// Sets the text's color invert setting.
+	/// Sets the bar's color invert setting.
 	void setInvert(bool invert);
-	/// Blits the bar onto a surface.
-	void blit(Surface *surface);
+	/// Draws the bar.
+	void draw();
 };
 
 #endif

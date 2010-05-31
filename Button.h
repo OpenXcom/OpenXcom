@@ -54,12 +54,14 @@ public:
 	void setGroup(Button **group);
 	/// Sets the button's palette.
 	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
-	/// Blits the button onto a surface.
-	void blit(Surface *surface);
+	/// Draws the button.
+	void draw();
 	/// Handles mouse events.
 	void handle(SDL_Event *ev, int scale, State *state);
 	/// Special handling for mouse presses.
 	void mousePress(SDL_Event *ev, int scale, State *state);
+	/// Special handling for mouse releases.
+	void mouseRelease(SDL_Event *ev, int scale, State *state);
 };
 
 #endif

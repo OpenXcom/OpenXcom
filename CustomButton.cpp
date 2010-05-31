@@ -68,15 +68,6 @@ void CustomButton::setGroup(CustomButton **group)
 }
 
 /**
- * Blits the custom button onto another surface.
- * @param surface Pointer to surface to blit onto.
- */
-void CustomButton::blit(Surface *surface)
-{
-	Surface::blit(surface);
-}
-
-/**
  * Ignores any mouse clicks that aren't the left mouse button.
  * @param ev Pointer to a SDL_Event.
  * @param scale Current screen scale (used to correct mouse input).

@@ -53,6 +53,7 @@ void Cursor::handle(SDL_Event *ev, int scale)
 	{
 		setX(ev->motion.x / scale);
 		setY(ev->motion.y / scale);
+		draw();
 	}
 }
 
@@ -63,6 +64,7 @@ void Cursor::handle(SDL_Event *ev, int scale)
 void Cursor::setColor(Uint8 color)
 {
 	_color = color;
+	draw();
 }
 
 /**
@@ -75,10 +77,9 @@ Uint8 Cursor::getColor()
 }
 
 /**
- * Blits the bar graphic onto another surface.
- * @param surface Pointer to surface to blit onto.
+ * Draws a pointer-shaped cursor graphic.
  */
-void Cursor::blit(Surface *surface)
+void Cursor::draw()
 {
 	Uint8 color = _color;
 	int x1 = 0, y1 = 0, x2 = _width-1, y2 = _height-1;
@@ -94,6 +95,4 @@ void Cursor::blit(Surface *surface)
 		color++;
 	}
 	pixelColor(getSurface(), 4, 8, Palette::getRGBA(this->getPalette(), --color));
-
-	Surface::blit(surface);
 }

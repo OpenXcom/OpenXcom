@@ -227,6 +227,7 @@ void Globe::loadDat(string filename, vector<Polygon*> *polygons)
 void Globe::setTexture(SurfaceSet *texture)
 {
 	_texture = texture;
+	draw();
 }
 
 /**
@@ -247,6 +248,7 @@ void Globe::rotate(double lon, double lat)
 {
 	_rotLon = longitudeLoop(_rotLon + lon);
 	_rotLat += lat;
+	draw();
 }
 
 /**
@@ -260,6 +262,7 @@ void Globe::zoom(double amount)
 		_zoom = 1.0f;
 	else if (_zoom > 2.5f)
 		_zoom = 2.5f;
+	draw();
 }
 
 /**
@@ -272,16 +275,16 @@ void Globe::center(double lon, double lat)
 {
 	_rotLon = -lon;
 	_rotLat = -lat;
+	draw();
 }
 
 /**
- * Blits the whole globe onto another surface,
+ * Draws the whole globe,
  * rendering the ocean-coloured circle and all the
  * map polygons on top, converting the polar coordinates
  * to cartesian to simulate a 3D globe.
- * @param surface Pointer to surface to blit into.
  */
-void Globe::blit(Surface *surface)
+void Globe::draw()
 {
 	Sint16 x[4], y[4];
 
@@ -328,8 +331,6 @@ void Globe::blit(Surface *surface)
 	}
 	
 	SDL_UnlockSurface(this->getSurface());
-
-	Surface::blit(surface);
 }
 
 /**
@@ -363,4 +364,5 @@ void Globe::test(double lon, double lat)
 		inside = insidePolygon(_testLon, _testLat, *i);
 	}
 	cout << inside << endl;
+	draw();
 }
