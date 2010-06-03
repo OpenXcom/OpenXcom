@@ -36,6 +36,8 @@ public:
 	BaseFacility(RuleBaseFacility *rules, int x, int y);
 	~BaseFacility();
 	RuleBaseFacility *getRules();
+	int getX();
+	int getY();
 };
 
 #endif

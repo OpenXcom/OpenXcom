@@ -19,6 +19,7 @@
 #ifndef OPENXCOM__SOLDIERSSTATE_H
 #define OPENXCOM__SOLDIERSSTATE_H
 
+#include <sstream>
 #include "State_Interactive.h"
 #include "LangString.h"
 #include "Palette.h"
@@ -28,6 +29,8 @@
 #include "TextList.h"
 #include "Soldier.h"
 #include "SoldierInfoState.h"
+
+using namespace std;
 
 /**
  * Soldiers screen that lets the player

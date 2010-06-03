@@ -24,7 +24,10 @@
  */
 BasescapeState::BasescapeState(Game *game) : State(game)
 {
+	_base = _game->getSavedGame()->getBases()->front();
+
 	// Create objects
+	_view = new BaseView(_base, 192, 192, 0, 8);
 	_txtFacility = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 192, 9, 0, 0);
 	_txtBase = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 127, 17, 193, 0);
 	_txtLocation = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 126, 9, 194, 16);
@@ -40,12 +43,11 @@ BasescapeState::BasescapeState(Game *game) : State(game)
 	_btnPurchase = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 128, 12, 192, 162);
 	_btnSell = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 128, 12, 192, 175);
 	_btnGeoscape = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 128, 12, 192, 188);
-
-	_base = _game->getSavedGame()->getBases()->front();
 	
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
 
+	add(_view);
 	add(_txtFacility);
 	add(_txtBase);
 	add(_txtLocation);
@@ -63,6 +65,8 @@ BasescapeState::BasescapeState(Game *game) : State(game)
 	add(_btnGeoscape);
 
 	// Set up objects
+	_view->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
+
 	_txtFacility->setColor(Palette::blockOffset(13)+10);
 	_txtFacility->setText("Some Facility");
 
@@ -165,7 +169,7 @@ void BasescapeState::btnSoldiersClick(SDL_Event *ev, int scale)
  */
 void BasescapeState::btnCraftsClick(SDL_Event *ev, int scale)
 {
-	_game->pushState(new CraftsState(_game));
+	_game->pushState(new CraftsState(_game, _base));
 }
 
 /**

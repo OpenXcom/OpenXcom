@@ -70,7 +70,7 @@ public:
 	int getCountryFunding();
 	/// Gets the list of bases.
 	vector<Base*> *getBases();
-
+	/// Gets the current craft IDs.
 	map<LangString, int> *getCraftIds();
 };
 

@@ -24,6 +24,7 @@
 #include "Palette.h"
 #include "Button.h"
 #include "Text.h"
+#include "BaseView.h"
 #include "GeoscapeState.h"
 #include "BaseInfoState.h"
 #include "SoldiersState.h"
@@ -40,6 +41,7 @@
 class BasescapeState : public State
 {
 private:
+	BaseView *_view;
 	Text *_txtFacility, *_txtBase, *_txtLocation, *_txtFunds;
 	Button *_btnNewBase, *_btnBaseInfo, *_btnSoldiers, *_btnCrafts, *_btnFacilities, *_btnResearch, *_btnManufacture, *_btnTransfer, *_btnPurchase, *_btnSell, *_btnGeoscape;
 	Base *_base;

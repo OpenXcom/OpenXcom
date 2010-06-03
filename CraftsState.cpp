@@ -22,7 +22,7 @@
  * Initializes all the elements in the Equip Craft screen.
  * @param game Pointer to the core game.
  */
-CraftsState::CraftsState(Game *game) : State(game)
+CraftsState::CraftsState(Game *game, Base *base) : State(game), _base(base)
 {
 	// Create objects
 	_window = new Window(320, 200, 0, 0);
@@ -64,13 +64,15 @@ CraftsState::CraftsState(Game *game) : State(game)
 
 	_txtBase->setColor(Palette::blockOffset(15)+1);
 	_txtBase->setBig();
-	_txtBase->setText(_game->getResourcePack()->getLanguage()->getString(STR_BASE_));
+	string baseName = _game->getResourcePack()->getLanguage()->getString(STR_BASE_);
+	baseName += _base->getName();
+	_txtBase->setText(baseName);
 
 	_txtName->setColor(Palette::blockOffset(15)+1);
 	_txtName->setText(_game->getResourcePack()->getLanguage()->getString(STR_NAME));
 
 	_txtStatus->setColor(Palette::blockOffset(15)+1);
-	_txtStatus->setText(_game->getResourcePack()->getLanguage()->getString((LangString)321));
+	_txtStatus->setText(_game->getResourcePack()->getLanguage()->getString(STR_STATUS));
 
 	_txtWeapon->setColor(Palette::blockOffset(15)+1);
 	_txtWeapon->setText(_game->getResourcePack()->getLanguage()->getString(STR_WEAPON_SYSTEMS));
@@ -83,7 +85,12 @@ CraftsState::CraftsState(Game *game) : State(game)
 
 	_lstCrafts->setColor(Palette::blockOffset(13)+10);
 	_lstCrafts->setColumns(5, 94, 66, 47, 46, 45);
-	_lstCrafts->addRow(5, "SKYRANGER-1", _game->getResourcePack()->getLanguage()->getString((LangString)268).c_str(), "0/0", "8", "0");
+	for (vector<Craft*>::iterator i = _base->getCrafts()->begin(); i != _base->getCrafts()->end(); i++)
+	{
+		stringstream ss;
+		ss << _game->getResourcePack()->getLanguage()->getString((*i)->getRules()->getType()) << "-" << (*i)->getId();
+		_lstCrafts->addRow(5, ss.str().c_str(), _game->getResourcePack()->getLanguage()->getString(STR_READY).c_str(), "0/0", "0", "0");
+	}
 }
 
 /**

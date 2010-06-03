@@ -249,6 +249,10 @@ BaseInfoState::BaseInfoState(Game *game, Base *base) : State(game), _base(base)
 
 	_numShortRange->setColor(Palette::blockOffset(13));
 	_numShortRange->setText("0");
+	if (_game->getResourcePack()->getLanguageName() == "GERMAN.DAT")
+	{
+		_numShortRange->setX(137);
+	}
 
 	_barShortRange->setColor(Palette::blockOffset(8));
 	_barShortRange->setScale(25.0);
@@ -260,6 +264,10 @@ BaseInfoState::BaseInfoState(Game *game, Base *base) : State(game), _base(base)
 
 	_numLongRange->setColor(Palette::blockOffset(13));
 	_numLongRange->setText("0");
+	if (_game->getResourcePack()->getLanguageName() == "GERMAN.DAT")
+	{
+		_numLongRange->setX(137);
+	}
 
 	_barLongRange->setColor(Palette::blockOffset(8));
 	_barLongRange->setScale(25.0);

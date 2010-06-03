@@ -18,8 +18,10 @@
  */
 #include "Craft.h"
 
-Craft::Craft(RuleCraft *rules, double lat, double lon) : _rules(rules), _lat(lat), _lon(lon)
+Craft::Craft(RuleCraft *rules, map<LangString, int> *id, double lat, double lon) : _rules(rules), _lat(lat), _lon(lon)
 {
+	_id = id->at(rules->getType());
+	id->at(rules->getType())++;
 }
 
 Craft::~Craft()
@@ -29,4 +31,9 @@ Craft::~Craft()
 RuleCraft *Craft::getRules()
 {
 	return _rules;
+}
+
+int Craft::getId()
+{
+	return _id;
 }

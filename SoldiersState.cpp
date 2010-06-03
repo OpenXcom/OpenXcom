@@ -56,7 +56,7 @@ SoldiersState::SoldiersState(Game *game, Base *base) : State(game), _base(base)
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString((LangString)803));
+	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString(STR_SOLDIER_LIST));
 
 	_txtName->setColor(Palette::blockOffset(15)+1);
 	_txtName->setText(_game->getResourcePack()->getLanguage()->getString(STR_NAME));
@@ -65,7 +65,7 @@ SoldiersState::SoldiersState(Game *game, Base *base) : State(game), _base(base)
 	_txtRank->setText(_game->getResourcePack()->getLanguage()->getString(STR_RANK));
 
 	_txtCraft->setColor(Palette::blockOffset(15)+1);
-	_txtCraft->setText(_game->getResourcePack()->getLanguage()->getString((LangString)337));
+	_txtCraft->setText(_game->getResourcePack()->getLanguage()->getString(STR_CRAFT));
 
 	_lstSoldiers->setColor(Palette::blockOffset(13)+10);
 	_lstSoldiers->setColumns(3, 114, 102, 82);
@@ -90,7 +90,9 @@ void SoldiersState::init()
 	_lstSoldiers->clearList();
 	for (vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); i++)
 	{
-		_lstSoldiers->addRow(3, (*i)->getName().c_str(), _game->getResourcePack()->getLanguage()->getString((*i)->getRankString()).c_str(), "SKYRANGER-1");
+		stringstream ss;
+		ss << _game->getResourcePack()->getLanguage()->getString(STR_SKYRANGER) << "-" << 1;
+		_lstSoldiers->addRow(3, (*i)->getName().c_str(), _game->getResourcePack()->getLanguage()->getString((*i)->getRankString()).c_str(), ss.str().c_str());
 	}
 }
 

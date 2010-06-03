@@ -41,8 +41,14 @@ public:
 	RuleBaseFacility(LangString type);
 	/// Cleans up the facility ruleset.
 	~RuleBaseFacility();
-	void setLift(bool lift);
+	LangString getType();
+	int getSpriteShape();
+	void setSpriteShape(int sprite);
+	int getSpriteFacility();
+	void setSpriteFacility(int sprite);
+	int getSize();
 	void setSize(int size);
+	void setLift(bool lift);
 	void setBuildCost(int cost);
 	void setBuildTime(int time);
 	void setMonthlyCost(int cost);

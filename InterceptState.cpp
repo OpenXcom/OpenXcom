@@ -75,8 +75,17 @@ InterceptState::InterceptState(Game *game) : State(game)
 
 	_lstCrafts->setColor(Palette::blockOffset(15)-1);
 	_lstCrafts->setColumns(4, 86, 65, 85, 64);
-	_lstCrafts->addRow(4, "SKYRANGER-1", _game->getResourcePack()->getLanguage()->getString((LangString)268).c_str(), "Base", "8/0/0");
-	_lstCrafts->getCell(0, 1)->setColor(Palette::blockOffset(8)+10);
+	int row = 0;
+	for (vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); i++)
+	{
+		for (vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); j++)
+		{
+			stringstream ss;
+			ss << _game->getResourcePack()->getLanguage()->getString((*j)->getRules()->getType()) << "-" << (*j)->getId();
+			_lstCrafts->addRow(4, ss.str().c_str(), _game->getResourcePack()->getLanguage()->getString(STR_READY).c_str(), (*i)->getName().c_str() ,"0/0/0");
+			_lstCrafts->getCell(row++, 1)->setColor(Palette::blockOffset(8)+10);
+		}
+	}
 }
 
 /**

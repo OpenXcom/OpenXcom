@@ -115,6 +115,10 @@ vector<Base*> *SavedGame::getBases()
 	return &_bases;
 }
 
+/**
+ * Returns the latest craft IDs for each type.
+ * @return Pointer to ID list.
+ */
 map<LangString, int> *SavedGame::getCraftIds()
 {
 	return &_craftId;

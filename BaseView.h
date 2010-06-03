@@ -16,40 +16,36 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM__CRAFTSSTATE_H
-#define OPENXCOM__CRAFTSSTATE_H
+#ifndef OPENXCOM__BASEVIEW_H
+#define OPENXCOM__BASEVIEW_H
 
-#include <sstream>
 #include "State_Interactive.h"
-#include "LangString.h"
-#include "Palette.h"
-#include "Button.h"
-#include "Window.h"
-#include "Text.h"
-#include "TextList.h"
-#include "Craft.h"
+#include "SurfaceSet.h"
+#include "Base.h"
+#include "BaseFacility.h"
 
-using namespace std;
+#define GRID_SIZE 32
 
 /**
- * Equip Craft screen that lets the player
- * manage all the crafts in a base.
+ * Interactive view of a base.
+ * Takes a certain base and displays all its facilities
+ * and status, allowing players to manage them.
  */
-class CraftsState : public State
+class BaseView : public InteractiveSurface
 {
 private:
-	Button *_btnOk;
-	Window *_window;
-	Text *_txtTitle, *_txtBase, *_txtName, *_txtStatus, *_txtWeapon, *_txtCrew, *_txtHwp;
-	TextList *_lstCrafts;
 	Base *_base;
+	SurfaceSet *_texture;
+
 public:
-	/// Creates the Crafts state.
-	CraftsState(Game *game, Base *base);
-	/// Cleans up the Crafts state.
-	~CraftsState();
-	/// Handler for clicking the OK button.
-	void btnOkClick(SDL_Event *ev, int scale);
+	/// Creates a new base view at the specified position and size.
+	BaseView(Base *base, int width, int height, int x = 0, int y = 0);
+	/// Cleans up the base view.
+	~BaseView();
+
+	void setBase(Base *base);
+	void setTexture(SurfaceSet *texture);
+	void draw();
 };
 
 #endif

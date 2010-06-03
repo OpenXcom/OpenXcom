@@ -18,7 +18,7 @@
  */
 #include "RuleBaseFacility.h"
 
-RuleBaseFacility::RuleBaseFacility(LangString type) : _type(type), _lift(false), _size(1), _buildCost(0), _buildTime(0), _monthlyCost(0), _storage(0), _personnel(0), _aliens(0), _crafts(0), _labs(0), _workshops(0), _psiLabs(0), _radarRange(0), _radarChance(0), _defence(0)
+RuleBaseFacility::RuleBaseFacility(LangString type) : _type(type), _spriteShape(0), _spriteFacility(0), _lift(false), _size(1), _buildCost(0), _buildTime(0), _monthlyCost(0), _storage(0), _personnel(0), _aliens(0), _crafts(0), _labs(0), _workshops(0), _psiLabs(0), _radarRange(0), _radarChance(0), _defence(0)
 {
 }
 
@@ -26,14 +26,44 @@ RuleBaseFacility::~RuleBaseFacility()
 {
 }
 
-void RuleBaseFacility::setLift(bool lift)
+LangString RuleBaseFacility::getType()
 {
-	_lift = lift;
+	return _type;
+}
+
+int RuleBaseFacility::getSpriteShape()
+{
+	return _spriteShape;
+}
+
+void RuleBaseFacility::setSpriteShape(int sprite)
+{
+	_spriteShape = sprite;
+}
+
+int RuleBaseFacility::getSpriteFacility()
+{
+	return _spriteFacility;
+}
+
+void RuleBaseFacility::setSpriteFacility(int sprite)
+{
+	_spriteFacility = sprite;
+}
+
+int RuleBaseFacility::getSize()
+{
+	return _size;
 }
 
 void RuleBaseFacility::setSize(int size)
 {
 	_size = size;
+}
+
+void RuleBaseFacility::setLift(bool lift)
+{
+	_lift = lift;
 }
 
 void RuleBaseFacility::setBuildCost(int cost)

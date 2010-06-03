@@ -30,3 +30,13 @@ RuleBaseFacility *BaseFacility::getRules()
 {
 	return _rules;
 }
+
+int BaseFacility::getX()
+{
+	return _x;
+}
+
+int BaseFacility::getY()
+{
+	return _y;
+}

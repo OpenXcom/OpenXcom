@@ -609,6 +609,14 @@
 				Name="Resource"
 				>
 				<File
+					RelativePath=".\BaseView.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\BaseView.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Globe.cpp"
 					>
 				</File>

@@ -19,7 +19,10 @@
 #ifndef OPENXCOM__CRAFT_H
 #define OPENXCOM__CRAFT_H
 
-class RuleCraft;
+#include <map>
+#include "RuleCraft.h"
+
+using namespace std;
 
 /**
  * Represents a craft stored in a base.
@@ -32,11 +35,12 @@ class Craft
 private:
 	RuleCraft *_rules;
 	double _lat, _lon;
-	int _id, _fuel, _damage;
+	int _id, _fuel, _health;
 public:
-	Craft(RuleCraft *rules, double lat, double lon);
+	Craft(RuleCraft *rules, map<LangString, int> *id, double lat, double lon);
 	~Craft();
 	RuleCraft *getRules();
+	int getId();
 };
 
 #endif

@@ -285,54 +285,83 @@ XcomRuleset::XcomRuleset() : Ruleset()
 
 	// Add base facilities
 	RuleBaseFacility *lift = new RuleBaseFacility(STR_ACCESS_LIFT);
+	lift->setSpriteShape(2);
+	lift->setSpriteFacility(17);
 	lift->setBuildCost(300000);
 	lift->setBuildTime(1);
 	lift->setMonthlyCost(4000);
 	lift->setLift(true);
+
 	RuleBaseFacility *quarters = new RuleBaseFacility(STR_LIVING_QUARTERS);
+	quarters->setSpriteShape(1);
+	quarters->setSpriteFacility(18);
 	quarters->setBuildCost(400000);
 	quarters->setBuildTime(16);
 	quarters->setMonthlyCost(10000);
 	quarters->setPersonnel(50);
+
 	RuleBaseFacility *lab = new RuleBaseFacility(STR_LABORATORY);
+	lab->setSpriteShape(1);
+	lab->setSpriteFacility(19);
 	lab->setBuildCost(750000);
 	lab->setBuildTime(26);
 	lab->setMonthlyCost(30000);
 	lab->setLaboratories(50);
+
 	RuleBaseFacility *workshop = new RuleBaseFacility(STR_WORKSHOP);
+	workshop->setSpriteShape(1);
+	workshop->setSpriteFacility(20);
 	workshop->setBuildCost(800000);
 	workshop->setBuildTime(32);
 	workshop->setMonthlyCost(35000);
 	workshop->setWorkshops(50);
+
 	RuleBaseFacility *stores = new RuleBaseFacility(STR_GENERAL_STORES);
+	stores->setSpriteShape(1);
+	stores->setSpriteFacility(24);
 	stores->setBuildCost(150000);
 	stores->setBuildTime(10);
 	stores->setMonthlyCost(5000);
 	stores->setStorage(50);
+
 	RuleBaseFacility *aliens = new RuleBaseFacility(STR_ALIEN_CONTAINMENT);
+	aliens->setSpriteShape(1);
+	aliens->setSpriteFacility(25);
 	aliens->setBuildCost(400000);
 	aliens->setBuildTime(18);
 	aliens->setMonthlyCost(15000);
 	aliens->setAliens(10);
+
 	RuleBaseFacility *hangar = new RuleBaseFacility(STR_HANGAR);
+	hangar->setSpriteShape(9);
+	hangar->setSpriteFacility(9);
 	hangar->setSize(2);
 	hangar->setBuildCost(200000);
 	hangar->setBuildTime(25);
 	hangar->setMonthlyCost(25000);
 	hangar->setCrafts(1);
+
 	RuleBaseFacility *sRadar = new RuleBaseFacility(STR_SMALL_RADAR_SYSTEM);
+	sRadar->setSpriteShape(2);
+	sRadar->setSpriteFacility(21);
 	sRadar->setBuildCost(500000);
 	sRadar->setBuildTime(12);
 	sRadar->setMonthlyCost(10000);
 	sRadar->setRadarRange(2000);
 	sRadar->setRadarChance(10);
+
 	RuleBaseFacility *lRadar = new RuleBaseFacility(STR_LARGE_RADAR_SYSTEM);
+	lRadar->setSpriteShape(1);
+	lRadar->setSpriteFacility(22);
 	lRadar->setBuildCost(800000);
 	lRadar->setBuildTime(25);
 	lRadar->setMonthlyCost(15000);
 	lRadar->setRadarRange(3000);
 	lRadar->setRadarChance(20);
+
 	RuleBaseFacility *missile = new RuleBaseFacility(STR_MISSILE_DEFENCES);
+	missile->setSpriteShape(2);
+	missile->setSpriteFacility(23);
 	missile->setBuildCost(200000);
 	missile->setBuildTime(16);
 	missile->setMonthlyCost(5000);
@@ -349,6 +378,14 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_facilities.insert(pair<LangString, RuleBaseFacility*>(STR_SMALL_RADAR_SYSTEM, sRadar));
 	_facilities.insert(pair<LangString, RuleBaseFacility*>(STR_LARGE_RADAR_SYSTEM, lRadar));
 	_facilities.insert(pair<LangString, RuleBaseFacility*>(STR_MISSILE_DEFENCES, missile));
+
+	// Add crafts
+	RuleCraft* skyranger = new RuleCraft(STR_SKYRANGER);
+
+	RuleCraft* interceptor = new RuleCraft(STR_INTERCEPTOR);
+
+	_crafts.insert(pair<LangString, RuleCraft*>(STR_SKYRANGER, skyranger));
+	_crafts.insert(pair<LangString, RuleCraft*>(STR_INTERCEPTOR, interceptor));
 }
 
 /**
@@ -412,8 +449,13 @@ SavedGame *XcomRuleset::newSave(GameDifficulty diff)
 	base->getFacilities()->push_back(new BaseFacility(getBaseFacility(STR_LIVING_QUARTERS), 3, 2));
 	base->getFacilities()->push_back(new BaseFacility(getBaseFacility(STR_GENERAL_STORES), 2, 3));
 	base->getFacilities()->push_back(new BaseFacility(getBaseFacility(STR_LABORATORY), 3, 3));
-	base->getFacilities()->push_back(new BaseFacility(getBaseFacility(STR_WORKSHOP), 3, 4));
-	base->getFacilities()->push_back(new BaseFacility(getBaseFacility(STR_SMALL_RADAR_SYSTEM), 3, 1));
+	base->getFacilities()->push_back(new BaseFacility(getBaseFacility(STR_WORKSHOP), 4, 3));
+	base->getFacilities()->push_back(new BaseFacility(getBaseFacility(STR_SMALL_RADAR_SYSTEM), 1, 3));
+
+	// Add crafts
+	base->getCrafts()->push_back(new Craft(getCraft(STR_SKYRANGER), save->getCraftIds(), 0.0, 0.0));
+	base->getCrafts()->push_back(new Craft(getCraft(STR_INTERCEPTOR), save->getCraftIds(), 0.0, 0.0));
+	base->getCrafts()->push_back(new Craft(getCraft(STR_INTERCEPTOR), save->getCraftIds(), 0.0, 0.0));
 
 	save->getBases()->push_back(base);
 	
