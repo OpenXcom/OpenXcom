@@ -20,8 +20,8 @@
 
 Craft::Craft(RuleCraft *rules, map<LangString, int> *id, double lat, double lon) : _rules(rules), _lat(lat), _lon(lon)
 {
-	_id = id->at(rules->getType());
-	id->at(rules->getType())++;
+	_id = (*id)[rules->getType()];
+	(*id)[rules->getType()]++;
 }
 
 Craft::~Craft()
