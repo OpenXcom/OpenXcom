@@ -38,6 +38,8 @@ public:
 	RuleBaseFacility *getRules();
 	int getX();
 	int getY();
+	int getBuildTime();
+	void setBuildTime(int time);
 };
 
 #endif

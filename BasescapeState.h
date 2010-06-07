@@ -25,6 +25,8 @@
 #include "Button.h"
 #include "Text.h"
 #include "BaseView.h"
+#include "BaseFacility.h"
+#include "RuleBaseFacility.h"
 #include "GeoscapeState.h"
 #include "BaseInfoState.h"
 #include "SoldiersState.h"
@@ -52,6 +54,8 @@ public:
 	~BasescapeState();
 	/// Updates the base name and funds.
 	void init();
+	/// Updates the facility name.
+	void think();
 	/// Handler for clicking the Base Information button.
 	void btnBaseInfoClick(SDL_Event *ev, int scale);
 	/// Handler for clicking the Soldiers button.

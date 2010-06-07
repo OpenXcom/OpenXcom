@@ -21,8 +21,9 @@
 
 #include <string>
 #include <vector>
+#include "BaseFacility.h"
+#include "RuleBaseFacility.h"
 
-class BaseFacility;
 class Soldier;
 class Craft;
 
@@ -60,10 +61,11 @@ public:
 	vector<Soldier*> *getSoldiers();
 	/// Gets the base's crafts.
 	vector<Craft*> *getCrafts();
-
+	
+	int getScientists();
 	void setScientists(int scientists);
+	int getEngineers();
 	void setEngineers(int engineers);
-
 	int getAvailableSoldiers();
 	int getTotalSoldiers();
 	int getAvailableScientists();

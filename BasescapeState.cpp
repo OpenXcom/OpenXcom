@@ -27,7 +27,7 @@ BasescapeState::BasescapeState(Game *game) : State(game)
 	_base = _game->getSavedGame()->getBases()->front();
 
 	// Create objects
-	_view = new BaseView(_base, 192, 192, 0, 8);
+	_view = new BaseView(192, 192, 0, 8);
 	_txtFacility = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 192, 9, 0, 0);
 	_txtBase = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 127, 17, 193, 0);
 	_txtLocation = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 126, 9, 194, 16);
@@ -66,9 +66,10 @@ BasescapeState::BasescapeState(Game *game) : State(game)
 
 	// Set up objects
 	_view->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
+	_view->setBase(_base);
 
 	_txtFacility->setColor(Palette::blockOffset(13)+10);
-	_txtFacility->setText("Some Facility");
+	_txtFacility->setText("");
 
 	_txtBase->setColor(Palette::blockOffset(15)+1);
 	_txtBase->setBig();
@@ -140,6 +141,19 @@ void BasescapeState::init()
 	s.erase(s.size()-1, 1);
 	s += Text::formatFunding(_game->getSavedGame()->getFunds());
 	_txtFunds->setText(s);
+}
+
+/**
+ * The facility name and funds can change
+ * whenever the cursor is moved.
+ */
+void BasescapeState::think()
+{
+	BaseFacility *f = _view->getSelectedFacility();
+	if (f == 0)
+		_txtFacility->setText("");
+	else
+		_txtFacility->setText(_game->getResourcePack()->getLanguage()->getString(f->getRules()->getType()));
 }
 
 /**

@@ -18,7 +18,7 @@
  */
 #include "BaseFacility.h"
 
-BaseFacility::BaseFacility(RuleBaseFacility *rules, int x, int y) : _rules(rules), _x(x), _y(y)
+BaseFacility::BaseFacility(RuleBaseFacility *rules, int x, int y) : _rules(rules), _x(x), _y(y), _buildTime(0)
 {
 }
 
@@ -39,4 +39,14 @@ int BaseFacility::getX()
 int BaseFacility::getY()
 {
 	return _y;
+}
+
+int BaseFacility::getBuildTime()
+{
+	return _buildTime;
+}
+
+void BaseFacility::setBuildTime(int time)
+{
+	_buildTime = time;
 }

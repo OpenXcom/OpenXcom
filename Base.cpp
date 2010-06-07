@@ -23,7 +23,7 @@
  * @param lat Latitude in radian.
  * @param lon Longitude in radian.
  */
-Base::Base(double lat, double lon) : _lat(lat), _lon(lon), _name(""), _facilities(), _soldiers(), _crafts()
+Base::Base(double lat, double lon) : _lat(lat), _lon(lon), _name(""), _facilities(), _soldiers(), _crafts(), _scientists(0), _engineers(0)
 {
 }
 
@@ -95,4 +95,169 @@ vector<Soldier*> *Base::getSoldiers()
 vector<Craft*> *Base::getCrafts()
 {
 	return &_crafts;
+}
+
+int Base::getScientists()
+{
+	return _scientists;
+}
+
+void Base::setScientists(int scientists)
+{
+	 _scientists = scientists;
+}
+
+int Base::getEngineers()
+{
+	return _engineers;
+}
+
+void Base::setEngineers(int engineers)
+{
+	 _engineers = engineers;
+}
+
+int Base::getAvailableSoldiers()
+{
+	return 0;
+}
+
+int Base::getTotalSoldiers()
+{
+	return _soldiers.size();
+}
+
+int Base::getAvailableScientists()
+{
+	return 0;
+}
+
+int Base::getTotalScientists()
+{
+	return _scientists;
+}
+
+int Base::getAvailableEngineers()
+{
+	return 0;
+}
+
+int Base::getTotalEngineers()
+{
+	return _engineers;
+}
+
+int Base::getUsedQuarters()
+{
+	return getTotalSoldiers() + getTotalScientists() + getTotalEngineers();
+}
+
+int Base::getAvailableQuarters()
+{
+	int total = 0;
+	for (vector<BaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); i++)
+	{
+		if ((*i)->getBuildTime() == 0)
+			total += (*i)->getRules()->getPersonnel();
+	}
+	return total;
+}
+
+int Base::getUsedStores()
+{
+	return 0;
+}
+
+int Base::getAvailableStores()
+{
+	int total = 0;
+	for (vector<BaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); i++)
+	{
+		if ((*i)->getBuildTime() == 0)
+			total += (*i)->getRules()->getStorage();
+	}
+	return total;
+}
+
+int Base::getUsedLaboratories()
+{
+	return 0;
+}
+
+int Base::getAvailableLaboratories()
+{
+	int total = 0;
+	for (vector<BaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); i++)
+	{
+		if ((*i)->getBuildTime() == 0)
+			total += (*i)->getRules()->getLaboratories();
+	}
+	return total;
+}
+
+int Base::getUsedWorkshops()
+{
+	return 0;
+}
+
+int Base::getAvailableWorkshops()
+{
+	int total = 0;
+	for (vector<BaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); i++)
+	{
+		if ((*i)->getBuildTime() == 0)
+			total += (*i)->getRules()->getWorkshops();
+	}
+	return total;
+}
+
+int Base::getUsedHangars()
+{
+	return _crafts.size();
+}
+
+int Base::getAvailableHangars()
+{
+	int total = 0;
+	for (vector<BaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); i++)
+	{
+		if ((*i)->getBuildTime() == 0)
+			total += (*i)->getRules()->getCrafts();
+	}
+	return total;
+}
+
+int Base::getDefenceValue()
+{
+	int total = 0;
+	for (vector<BaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); i++)
+	{
+		if ((*i)->getBuildTime() == 0)
+			total += (*i)->getRules()->getDefenceValue();
+	}
+	return total;
+}
+
+int Base::getShortRangeDetection()
+{
+	int total = 0;
+	for (vector<BaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); i++)
+	{
+		if ((*i)->getBuildTime() == 0)
+			if ((*i)->getRules()->getRadarRange() == 2000)
+				total++;
+	}
+	return total;
+}
+
+int Base::getLongRangeDetection()
+{
+	int total = 0;
+	for (vector<BaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); i++)
+	{
+		if ((*i)->getBuildTime() == 0)
+			if ((*i)->getRules()->getRadarRange() > 2000)
+				total++;
+	}
+	return total;
 }

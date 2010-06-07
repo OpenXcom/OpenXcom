@@ -61,9 +61,19 @@ void RuleBaseFacility::setSize(int size)
 	_size = size;
 }
 
+bool RuleBaseFacility::getLift()
+{
+	return _lift;
+}
+
 void RuleBaseFacility::setLift(bool lift)
 {
 	_lift = lift;
+}
+
+int RuleBaseFacility::getBuildCost()
+{
+	return _buildCost;
 }
 
 void RuleBaseFacility::setBuildCost(int cost)
@@ -71,9 +81,19 @@ void RuleBaseFacility::setBuildCost(int cost)
 	_buildCost = cost;
 }
 
+int RuleBaseFacility::getBuildTime()
+{
+	return _buildTime;
+}
+
 void RuleBaseFacility::setBuildTime(int time)
 {
 	_buildTime = time;
+}
+
+int RuleBaseFacility::getMonthlyCost()
+{
+	return _monthlyCost;
 }
 
 void RuleBaseFacility::setMonthlyCost(int cost)
@@ -81,9 +101,19 @@ void RuleBaseFacility::setMonthlyCost(int cost)
 	_monthlyCost = cost;
 }
 
+int RuleBaseFacility::getStorage()
+{
+	return _storage;
+}
+
 void RuleBaseFacility::setStorage(int storage)
 {
 	_storage = storage;
+}
+
+int RuleBaseFacility::getPersonnel()
+{
+	return _personnel;
 }
 
 void RuleBaseFacility::setPersonnel(int personnel)
@@ -91,9 +121,19 @@ void RuleBaseFacility::setPersonnel(int personnel)
 	_personnel = personnel;
 }
 
+int RuleBaseFacility::getAliens()
+{
+	return _aliens;
+}
+
 void RuleBaseFacility::setAliens(int aliens)
 {
 	_aliens = aliens;
+}
+
+int RuleBaseFacility::getCrafts()
+{
+	return _crafts;
 }
 
 void RuleBaseFacility::setCrafts(int crafts)
@@ -101,9 +141,19 @@ void RuleBaseFacility::setCrafts(int crafts)
 	_crafts = crafts;
 }
 
+int RuleBaseFacility::getLaboratories()
+{
+	return _labs;
+}
+
 void RuleBaseFacility::setLaboratories(int labs)
 {
 	_labs = labs;
+}
+
+int RuleBaseFacility::getWorkshops()
+{
+	return _workshops;
 }
 
 void RuleBaseFacility::setWorkshops(int workshops)
@@ -111,9 +161,19 @@ void RuleBaseFacility::setWorkshops(int workshops)
 	_workshops = workshops;
 }
 
+int RuleBaseFacility::getPsiLaboratories()
+{
+	return _psiLabs;
+}
+
 void RuleBaseFacility::setPsiLaboratories(int psi)
 {
 	_psiLabs = psi;
+}
+
+int RuleBaseFacility::getRadarRange()
+{
+	return _radarRange;
 }
 
 void RuleBaseFacility::setRadarRange(int range)
@@ -121,14 +181,29 @@ void RuleBaseFacility::setRadarRange(int range)
 	_radarRange = range;
 }
 
+int RuleBaseFacility::getRadarChance()
+{
+	return _radarChance;
+}
+
 void RuleBaseFacility::setRadarChance(int chance)
 {
 	_radarChance = chance;
 }
 
+int RuleBaseFacility::getDefenceValue()
+{
+	return _defence;
+}
+
 void RuleBaseFacility::setDefenceValue(int defence)
 {
 	_defence = defence;
+}
+
+int RuleBaseFacility::getHitRatio()
+{
+	return _hitRatio;
 }
 
 void RuleBaseFacility::setHitRatio(int ratio)

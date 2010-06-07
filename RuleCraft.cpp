@@ -18,7 +18,7 @@
  */
 #include "RuleCraft.h"
 
-RuleCraft::RuleCraft(LangString type) : _type(type), _sprite(0), _fuelMax(0), _healthMax(0), _speed(0), _accel(0), _weapons(0), _soldiers(0), _hwp(0), _monthlyFee(0)
+RuleCraft::RuleCraft(LangString type) : _type(type), _sprite(0), _fuelMax(0), _healthMax(0), _speed(0), _accel(0), _weapons(0), _soldiers(0), _hwp(0), _cost(0), _monthlyFee(0)
 {
 }
 
@@ -29,4 +29,14 @@ RuleCraft::~RuleCraft()
 LangString RuleCraft::getType()
 {
 	return _type;
+}
+
+int RuleCraft::getSprite()
+{
+	return _sprite;
+}
+
+void RuleCraft::setSprite(int sprite)
+{
+	_sprite = sprite;
 }

@@ -32,7 +32,7 @@ class RuleCraft
 private:
 	LangString _type;
 	int _sprite;
-	int _fuelMax, _healthMax, _speed, _accel, _weapons, _soldiers, _hwp, _monthlyFee;
+	int _fuelMax, _healthMax, _speed, _accel, _weapons, _soldiers, _hwp, _cost, _monthlyFee;
 public:
 	/// Creates a blank craft ruleset.
 	RuleCraft(LangString type);
@@ -40,6 +40,8 @@ public:
 	~RuleCraft();
 
 	LangString getType();
+	int getSprite();
+	void setSprite(int sprite);
 };
 
 #endif

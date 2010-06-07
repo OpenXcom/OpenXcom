@@ -381,11 +381,25 @@ XcomRuleset::XcomRuleset() : Ruleset()
 
 	// Add crafts
 	RuleCraft* skyranger = new RuleCraft(STR_SKYRANGER);
+	skyranger->setSprite(33);
+
+	RuleCraft* lightning = new RuleCraft(STR_LIGHTNING);
+	lightning->setSprite(34);
+
+	RuleCraft* avenger = new RuleCraft(STR_AVENGER);
+	avenger->setSprite(35);
 
 	RuleCraft* interceptor = new RuleCraft(STR_INTERCEPTOR);
+	interceptor->setSprite(36);
+
+	RuleCraft* firestorm = new RuleCraft(STR_FIRESTORM);
+	firestorm->setSprite(37);
 
 	_crafts.insert(pair<LangString, RuleCraft*>(STR_SKYRANGER, skyranger));
+	_crafts.insert(pair<LangString, RuleCraft*>(STR_LIGHTNING, lightning));
+	_crafts.insert(pair<LangString, RuleCraft*>(STR_AVENGER, avenger));
 	_crafts.insert(pair<LangString, RuleCraft*>(STR_INTERCEPTOR, interceptor));
+	_crafts.insert(pair<LangString, RuleCraft*>(STR_FIRESTORM, firestorm));
 }
 
 /**
@@ -434,6 +448,8 @@ SavedGame *XcomRuleset::newSave(GameDifficulty diff)
 	// Set up initial base
 	Base *base = new Base(0.0, 0.0);
 	base->setName("X-COM BASE 1");
+	base->setEngineers(10);
+	base->setScientists(10);
 
 	// Generate soldiers
 	for (int i = 0; i < 8; i++)
