@@ -105,6 +105,7 @@
     <ClCompile Include="Craft.cpp" />
     <ClCompile Include="Cursor.cpp" />
     <ClCompile Include="CustomButton.cpp" />
+    <ClCompile Include="MiniBaseView.cpp" />
     <ClCompile Include="Music.cpp" />
     <ClCompile Include="RuleBaseFacility.cpp" />
     <ClCompile Include="RuleCraft.cpp" />
@@ -164,6 +165,7 @@
     <ClInclude Include="Craft.h" />
     <ClInclude Include="Cursor.h" />
     <ClInclude Include="CustomButton.h" />
+    <ClInclude Include="MiniBaseView.h" />
     <ClInclude Include="Music.h" />
     <ClInclude Include="RuleBaseFacility.h" />
     <ClInclude Include="RuleCraft.h" />

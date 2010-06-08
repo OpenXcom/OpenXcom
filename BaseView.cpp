@@ -100,7 +100,10 @@ void BaseView::draw()
 				num++;
 			}
 		}
+	}
 
+	for (vector<BaseFacility*>::iterator i = _base->getFacilities()->begin(); i != _base->getFacilities()->end(); i++)
+	{
 		// Draw connectors
 		if ((*i)->getBuildTime() == 0)
 		{
@@ -134,9 +137,12 @@ void BaseView::draw()
 				}
 			}
 		}
+	}
 
+	for (vector<BaseFacility*>::iterator i = _base->getFacilities()->begin(); i != _base->getFacilities()->end(); i++)
+	{
 		// Draw facility graphic
-		num = 0;
+		int num = 0;
 		for (int y = (*i)->getY(); y < (*i)->getY() + (*i)->getRules()->getSize(); y++)
 		{
 			for (int x = (*i)->getX(); x < (*i)->getX() + (*i)->getRules()->getSize(); x++)

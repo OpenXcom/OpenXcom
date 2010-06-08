@@ -93,6 +93,10 @@ public:
 	void setVisible(bool visible);
 	/// Gets the surface's visibility.
 	bool getVisible();
+	/// Locks the surface.
+	void lock();
+	/// Unlocks the surface.
+	void unlock();
 };
 
 #endif

@@ -84,6 +84,7 @@ void Cursor::draw()
 	Uint8 color = _color;
 	int x1 = 0, y1 = 0, x2 = _width-1, y2 = _height-1;
 
+	lock();
 	for (int i = 0; i < 4; i++)
 	{
 		lineColor(getSurface(), x1, y1, x1, y2, Palette::getRGBA(this->getPalette(), color));
@@ -94,5 +95,6 @@ void Cursor::draw()
 		x2--;
 		color++;
 	}
-	pixelColor(getSurface(), 4, 8, Palette::getRGBA(this->getPalette(), --color));
+	this->setPixel(4, 8, --color);
+	unlock();
 }

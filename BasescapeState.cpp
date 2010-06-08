@@ -28,6 +28,7 @@ BasescapeState::BasescapeState(Game *game) : State(game)
 
 	// Create objects
 	_view = new BaseView(192, 192, 0, 8);
+	_mini = new MiniBaseView(128, 16, 192, 41);
 	_txtFacility = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 192, 9, 0, 0);
 	_txtBase = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 127, 17, 193, 0);
 	_txtLocation = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 126, 9, 194, 16);
@@ -48,6 +49,7 @@ BasescapeState::BasescapeState(Game *game) : State(game)
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
 
 	add(_view);
+	add(_mini);
 	add(_txtFacility);
 	add(_txtBase);
 	add(_txtLocation);
@@ -67,6 +69,9 @@ BasescapeState::BasescapeState(Game *game) : State(game)
 	// Set up objects
 	_view->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
 	_view->setBase(_base);
+
+	_mini->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
+	_mini->setBases(_game->getSavedGame()->getBases());
 
 	_txtFacility->setColor(Palette::blockOffset(13)+10);
 	_txtFacility->setText("");

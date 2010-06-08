@@ -71,7 +71,7 @@ void Surface::loadScr(string filename)
 	}
 
 	// Lock the surface
-	SDL_LockSurface(_surface);
+	lock();
 	
 	char value;
 	int x = 0, y = 0;
@@ -87,7 +87,7 @@ void Surface::loadScr(string filename)
 	}
 
 	// Unlock the surface
-	SDL_UnlockSurface(_surface);
+	unlock();
 
 	imgFile.close();
 }
@@ -109,7 +109,7 @@ void Surface::loadSpk(string filename)
 	}
 
 	// Lock the surface
-	SDL_LockSurface(_surface);
+	lock();
 	
 	Uint16 flag;
 	char value;
@@ -147,7 +147,7 @@ void Surface::loadSpk(string filename)
 	*/
 
 	// Unlock the surface
-	SDL_UnlockSurface(_surface);
+	unlock();
 
 	imgFile.close();
 }
@@ -175,7 +175,7 @@ void Surface::clear()
 void Surface::offset(int off)
 {
 	// Lock the surface
-	SDL_LockSurface(_surface);
+	lock();
 	
 	for (int x = 0, y = 0; x < _surface->w && y < _surface->h;)
 	{
@@ -187,7 +187,7 @@ void Surface::offset(int off)
 	}
 
 	// Unlock the surface
-	SDL_UnlockSurface(_surface);
+	unlock();
 }
 
 /**
@@ -198,7 +198,7 @@ void Surface::offset(int off)
 void Surface::invert(Uint8 mid)
 {
 	// Lock the surface
-	SDL_LockSurface(_surface);
+	lock();
 
 	for (int x = 0, y = 0; x < _surface->w && y < _surface->h;)
 	{
@@ -210,7 +210,7 @@ void Surface::invert(Uint8 mid)
 	}
 
 	// Unlock the surface
-	SDL_UnlockSurface(_surface);
+	unlock();
 }
 
 /**
@@ -436,4 +436,25 @@ void Surface::setVisible(bool visible)
 bool Surface::getVisible()
 {
 	return _visible;
+}
+
+/**
+ * Locks the surface from outside access
+ * for pixel-level access. Must be unlocked
+ * afterwards.
+ * @sa unlock()
+ */
+void Surface::lock()
+{
+	SDL_LockSurface(_surface);
+}
+
+/**
+ * Unlocks the surface after it's been locked
+ * to resume blitting operations.
+ * @sa lock()
+ */
+void Surface::unlock()
+{
+	SDL_UnlockSurface(_surface);
 }

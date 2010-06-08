@@ -25,6 +25,7 @@
 #include "Button.h"
 #include "Text.h"
 #include "BaseView.h"
+#include "MiniBaseView.h"
 #include "BaseFacility.h"
 #include "RuleBaseFacility.h"
 #include "GeoscapeState.h"
@@ -44,6 +45,7 @@ class BasescapeState : public State
 {
 private:
 	BaseView *_view;
+	MiniBaseView *_mini;
 	Text *_txtFacility, *_txtBase, *_txtLocation, *_txtFunds;
 	Button *_btnNewBase, *_btnBaseInfo, *_btnSoldiers, *_btnCrafts, *_btnFacilities, *_btnResearch, *_btnManufacture, *_btnTransfer, *_btnPurchase, *_btnSell, *_btnGeoscape;
 	Base *_base;

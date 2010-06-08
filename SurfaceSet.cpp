@@ -78,7 +78,7 @@ void SurfaceSet::loadPck(string filename)
 	}
 	
 	// Lock the surface
-	SDL_LockSurface(_surface->getSurface());
+	_surface->lock();
 
 	char value;
 	
@@ -125,7 +125,7 @@ void SurfaceSet::loadPck(string filename)
 	*/
 
 	// Unlock the surface
-	SDL_UnlockSurface(_surface->getSurface());
+	_surface->unlock();
 
 	imgFile.close();
 	offsetFile.close();
@@ -165,19 +165,15 @@ void SurfaceSet::loadDat(string filename)
 	}
 
 	_surface = new Surface(_width, _height * _nframe);
-	SDL_Surface *surface = _surface->getSurface();
-	
 	char value;
+	int x = 0, y = 0;
 
 	// Lock the surface
-	SDL_LockSurface(surface);
-
-	Uint8 *index = (Uint8 *)surface->pixels;
+	_surface->lock();
 
 	while (imgFile.read(&value, 1))
 	{
-		*index = Uint8(value);
-		index++;
+		_surface->setPixelIterative(&x, &y, Uint8(value));
 	}
 
 	if (!imgFile.eof())
@@ -186,7 +182,7 @@ void SurfaceSet::loadDat(string filename)
 	}
 
 	// Unlock the surface
-	SDL_UnlockSurface(surface);
+	_surface->unlock();
 
 	imgFile.close();
 }

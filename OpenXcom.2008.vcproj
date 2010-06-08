@@ -629,6 +629,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\MiniBaseView.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\MiniBaseView.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Polygon.cpp"
 					>
 				</File>

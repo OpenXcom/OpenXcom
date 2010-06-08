@@ -239,7 +239,10 @@ void SoldierInfoState::init()
 	Soldier *s = _base->getSoldiers()->at(_soldier);
 	_edtSoldier->setText(s->getName());
 
-	_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK")->getFrame(s->getRankSprite())->blit(_rank);
+	SurfaceSet *texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
+	texture->getSurface()->setX(0);
+	texture->getSurface()->setY(0);
+	texture->getFrame(s->getRankSprite())->blit(_rank);
 
 	stringstream ss;
 	ss << s->getTimeUnits();

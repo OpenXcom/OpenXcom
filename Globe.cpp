@@ -289,7 +289,8 @@ void Globe::draw()
 	Sint16 x[4], y[4];
 
 	clear();
-	SDL_LockSurface(this->getSurface());
+	// Lock the surface
+	lock();
 
 	filledCircleColor(this->getSurface(), _cenX, _cenY, (Sint16)floor(_radius * _zoom), Palette::getRGBA(this->getPalette(), Palette::blockOffset(12)));
 
@@ -330,7 +331,8 @@ void Globe::draw()
 		polygonColor(getSurface(), (Sint16*)&testx, (Sint16*)&testy, 4, Palette::getRGBA(this->getPalette(), 1));
 	}
 	
-	SDL_UnlockSurface(this->getSurface());
+	// Unlock the surface
+	unlock();
 }
 
 /**

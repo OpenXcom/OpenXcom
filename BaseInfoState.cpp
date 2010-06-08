@@ -27,6 +27,7 @@ BaseInfoState::BaseInfoState(Game *game, Base *base) : State(game), _base(base)
 {
 	// Create objects
 	_bg = new Surface(320, 200, 0, 0);
+	_mini = new MiniBaseView(128, 16, 182, 8);
 	_btnOk = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 30, 14, 10, 180);
 	_btnTransfers = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 80, 14, 46, 180);
 	_btnStores = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 80, 14, 132, 180);
@@ -72,6 +73,7 @@ BaseInfoState::BaseInfoState(Game *game, Base *base) : State(game), _base(base)
 	_barLongRange = new Bar(150, 5, 165, 165);
 	
 	add(_bg);
+	add(_mini);
 	add(_btnOk);
 	add(_btnTransfers);
 	add(_btnStores);
@@ -118,6 +120,9 @@ BaseInfoState::BaseInfoState(Game *game, Base *base) : State(game), _base(base)
 	
 	// Set up objects
 	_game->getResourcePack()->getSurface("BACK07.SCR")->blit(_bg);
+
+	_mini->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
+	_mini->setBases(_game->getSavedGame()->getBases());
 
 	_btnOk->setColor(Palette::blockOffset(15)+9);
 	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString(STR_OK));

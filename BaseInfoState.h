@@ -28,6 +28,7 @@
 #include "Text.h"
 #include "TextEdit.h"
 #include "Surface.h"
+#include "MiniBaseView.h"
 
 /**
  * Base Info screen that shows all the 
@@ -39,6 +40,7 @@ private:
 	Base *_base;
 	
 	Surface *_bg;
+	MiniBaseView *_mini;
 	Button *_btnOk, *_btnTransfers, *_btnStores, *_btnMonthlyCosts;
 	TextEdit *_edtBase;
 
