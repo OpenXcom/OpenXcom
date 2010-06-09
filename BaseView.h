@@ -25,6 +25,8 @@
 #include "Base.h"
 #include "BaseFacility.h"
 #include "Craft.h"
+#include "Font.h"
+#include "Text.h"
 
 #define GRID_SIZE 32
 #define BASE_SIZE 6
@@ -40,9 +42,10 @@ private:
 	Base *_base;
 	SurfaceSet *_texture;
 	BaseFacility *_facilities[BASE_SIZE][BASE_SIZE], *_selFacility;
+	Font *_big, *_small;
 public:
 	/// Creates a new base view at the specified position and size.
-	BaseView(int width, int height, int x = 0, int y = 0);
+	BaseView(Font *big, Font *small, int width, int height, int x = 0, int y = 0);
 	/// Cleans up the base view.
 	~BaseView();
 

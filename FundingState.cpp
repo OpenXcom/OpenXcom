@@ -80,6 +80,7 @@ FundingState::FundingState(Game *game) : State(game)
 	_lstCountries->addRow(2, _game->getResourcePack()->getLanguage()->getString(STR_TOTAL).c_str(), Text::formatFunding(_game->getSavedGame()->getCountryFunding()).c_str());
 	_lstCountries->getCell(_game->getSavedGame()->getCountries()->size(), 0)->setColor(Palette::blockOffset(8)+5);
 	_lstCountries->getCell(_game->getSavedGame()->getCountries()->size(), 1)->setColor(Palette::blockOffset(8)+5);
+	_lstCountries->draw();
 }
 
 /**

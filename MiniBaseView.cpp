@@ -99,7 +99,7 @@ void MiniBaseView::draw()
 				SDL_FillRect(this->getSurface(), &r, Palette::blockOffset(pal)+3);
 				r.x--;
 				r.y--;
-				setPixel(r.x, r.y, Palette::blockOffset(3)+1);
+				setPixel(r.x, r.y, Palette::blockOffset(pal)+1);
 			}
 			unlock();
 		}

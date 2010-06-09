@@ -27,7 +27,7 @@ BasescapeState::BasescapeState(Game *game) : State(game)
 	_base = _game->getSavedGame()->getBases()->front();
 
 	// Create objects
-	_view = new BaseView(192, 192, 0, 8);
+	_view = new BaseView(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 192, 192, 0, 8);
 	_mini = new MiniBaseView(128, 16, 192, 41);
 	_txtFacility = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 192, 9, 0, 0);
 	_txtBase = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 127, 17, 193, 0);

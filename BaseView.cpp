@@ -20,12 +20,14 @@
 
 /**
  * Sets up a base view with the specified size and position.
+ * @param big Pointer to the big-size font.
+ * @param small Pointer to the small-size font.
  * @param width Width in pixels.
  * @param height Height in pixels.
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-BaseView::BaseView(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _base(0), _texture(0), _selFacility(0)
+BaseView::BaseView(Font *big, Font *small, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _base(0), _texture(0), _selFacility(0), _big(big), _small(small)
 {
 	for (int x = 0; x < BASE_SIZE; x++)
 		for (int y = 0; y < BASE_SIZE; y++)
@@ -158,13 +160,29 @@ void BaseView::draw()
 		}
 
 		// Draw crafts
-		if ((*i)->getRules()->getCrafts() > 0 && craft != _base->getCrafts()->end())
+		if ((*i)->getBuildTime() == 0 && (*i)->getRules()->getCrafts() > 0 && craft != _base->getCrafts()->end())
 		{
 			_texture->getSurface()->setX((*i)->getX() * GRID_SIZE + ((*i)->getRules()->getSize() - 1) * GRID_SIZE / 2);
 			_texture->getSurface()->setY((*i)->getY() * GRID_SIZE + ((*i)->getRules()->getSize() - 1) * GRID_SIZE / 2);
 
 			_texture->getFrame((*craft)->getRules()->getSprite())->blit(this);
 			craft++;
+		}
+
+		// Draw time remaining
+		if ((*i)->getBuildTime() > 0)
+		{
+			Text *text = new Text(_big, _small, GRID_SIZE * (*i)->getRules()->getSize(), 16, 0, 0);
+			text->setPalette(getPalette());
+			text->setX((*i)->getX() * GRID_SIZE);
+			text->setY((*i)->getY() * GRID_SIZE + (GRID_SIZE * (*i)->getRules()->getSize() - 16) / 2);
+			text->setBig();
+			stringstream ss;
+			ss << (*i)->getBuildTime();
+			text->setAlign(ALIGN_CENTER);
+			text->setColor(Palette::blockOffset(13)+5);
+			text->setText(ss.str());
+			text->blit(this);
 		}
 	}
 }

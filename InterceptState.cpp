@@ -86,6 +86,7 @@ InterceptState::InterceptState(Game *game) : State(game)
 			_lstCrafts->getCell(row++, 1)->setColor(Palette::blockOffset(8)+10);
 		}
 	}
+	_lstCrafts->draw();
 }
 
 /**

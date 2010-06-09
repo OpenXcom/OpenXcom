@@ -47,6 +47,7 @@ TextList::~TextList()
 /**
  * Returns a pointer to a certain Text object in the list.
  * Useful for customizing or getting values off an individual cell.
+ * @note If a Text is changed, a redraw needs to be manually requested.
  * @param row Row number.
  * @param col Column number.
  * @return Pointer to the requested Text.
@@ -101,6 +102,7 @@ void TextList::addRow(int num, ...)
 	}
 	_texts.push_back(temp);
 	_rowY += _small->getHeight() + _small->getSpacing();
+	draw();
 
 	va_end(args);
 }
@@ -198,10 +200,9 @@ void TextList::clearList()
 }
 
 /**
- * Draws the text list and all the text contained within onto another surface.
- * @param surface Pointer to surface to blit onto.
+ * Draws the text list and all the text contained within.
  */
-void TextList::blit(Surface *surface)
+void TextList::draw()
 {
 	clear();
 	for (vector< vector<Text*> >::iterator u = _texts.begin(); u < _texts.end(); u++) {
@@ -209,7 +210,6 @@ void TextList::blit(Surface *surface)
             (*v)->blit(this);
         }
     }
-	Surface::blit(surface);
 }
 
 /**

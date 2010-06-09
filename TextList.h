@@ -64,8 +64,8 @@ public:
 	void clearList();
 	/// Sets the palette of the text list.
 	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
-	/// Blits the text list onto another surface.
-	void blit(Surface *surface);
+	/// Draws the text onto the text list.
+	void draw();
 	/// Handles mouse events.
 	void handle(SDL_Event *ev, int scale, State *state);
 };
