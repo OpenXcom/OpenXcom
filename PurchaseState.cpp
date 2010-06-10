@@ -82,7 +82,7 @@ PurchaseState::PurchaseState(Game *game) : State(game)
 	_txtCost->setText(_game->getResourcePack()->getLanguage()->getString(STR_COST_PER_UNIT_UC));
 
 	_txtQuantity->setColor(Palette::blockOffset(13)+10);
-	_txtQuantity->setText(_game->getResourcePack()->getLanguage()->getString(STR_QUANTITY));
+	_txtQuantity->setText(_game->getResourcePack()->getLanguage()->getString(STR_QUANTITY_UC));
 
 	_lstItems->setColor(Palette::blockOffset(13)+10);
 	_lstItems->setColumns(3, 162, 92, 40);

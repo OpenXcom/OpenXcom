@@ -21,6 +21,7 @@
 
 #include <sstream>
 #include "State_Interactive.h"
+#include "MonthlyCostsState.h"
 #include "LangString.h"
 #include "Palette.h"
 #include "Bar.h"
@@ -60,8 +61,12 @@ public:
 	BaseInfoState(Game *game, Base *base);
 	/// Cleans up the Base Info state.
 	~BaseInfoState();
+	/// Updates the base stats.
+	void init();
 	/// Handler for clicking the OK button.
 	void btnOkClick(SDL_Event *ev, int scale);
+	/// Handler for clicking the Monthly Costs button.
+	void btnMonthlyCostsClick(SDL_Event *ev, int scale);
 };
 
 #endif

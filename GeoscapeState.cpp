@@ -381,7 +381,7 @@ void GeoscapeState::timeMonth()
 {
 	_pause = true;
 	_btn5Secs->mousePress(0, _game->getScreen()->getScale(), this);
-	_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() + _game->getSavedGame()->getCountryFunding());
+	_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() + _game->getSavedGame()->getCountryFunding() - _game->getSavedGame()->getBaseMaintenance());
 	_game->pushState(new MonthlyReportState(_game));
 }
 

@@ -32,6 +32,7 @@
 #include "BaseInfoState.h"
 #include "SoldiersState.h"
 #include "CraftsState.h"
+#include "BuildFacilitiesState.h"
 #include "ResearchState.h"
 #include "ManufactureState.h"
 #include "PurchaseState.h"
@@ -64,6 +65,8 @@ public:
 	void btnSoldiersClick(SDL_Event *ev, int scale);
 	/// Handler for clicking the Equip Craft button.
 	void btnCraftsClick(SDL_Event *ev, int scale);
+	/// Handler for clicking the Build Facilities button.
+	void btnFacilitiesClick(SDL_Event *ev, int scale);
 	/// Handler for clicking the Research button.
 	void btnResearchClick(SDL_Event *ev, int scale);
 	/// Handler for clicking the Manufacture button.

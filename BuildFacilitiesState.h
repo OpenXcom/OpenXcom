@@ -16,35 +16,36 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM__RULECRAFT_H
-#define OPENXCOM__RULECRAFT_H
+#ifndef OPENXCOM__BUILDFACILITIESSTATE_H
+#define OPENXCOM__BUILDFACILITIESSTATE_H
 
+#include <sstream>
+#include "State_Interactive.h"
 #include "LangString.h"
+#include "Palette.h"
+#include "Button.h"
+#include "Window.h"
+#include "Text.h"
+#include "TextList.h"
 
 /**
- * Represents a specific type of craft.
- * Contains constant info about a craft like
- * costs, speed, capacities, consumptions, etc.
- * @sa Craft
+ * Report screen shown monthly to display
+ * changes in the player's performance and funding.
  */
-class RuleCraft
+class BuildFacilitiesState : public State
 {
 private:
-	LangString _type;
-	int _sprite;
-	int _fuelMax, _healthMax, _speed, _accel, _weapons, _soldiers, _hwp, _cost, _monthlyFee;
+	Button *_btnOk;
+	Window *_window;
+	Text *_txtTitle;
+	TextList *_lstFacilities;
 public:
-	/// Creates a blank craft ruleset.
-	RuleCraft(LangString type);
-	/// Cleans up the craft ruleset.
-	~RuleCraft();
-
-	LangString getType();
-	int getSprite();
-	void setSprite(int sprite);
-
-	int getMonthlyFee();
-	void setMonthlyFee(int fee);
+	/// Creates the Monthly Report state.
+	BuildFacilitiesState(Game *game);
+	/// Cleans up the Monthly Report state.
+	~BuildFacilitiesState();
+	/// Handler for clicking the OK button.
+	void btnOkClick(SDL_Event *ev, int scale);
 };
 
 #endif

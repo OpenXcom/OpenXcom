@@ -116,6 +116,20 @@ vector<Base*> *SavedGame::getBases()
 }
 
 /**
+ * Adds up the monthly maintenance of all the bases.
+ * @return Total maintenance.
+ */
+int SavedGame::getBaseMaintenance()
+{
+	int total = 0;
+	for (vector<Base*>::iterator i = _bases.begin(); i != _bases.end(); i++)
+	{
+		total += (*i)->getMonthlyMaintenace();
+	}
+	return total;
+}
+
+/**
  * Returns the latest craft IDs for each type.
  * @return Pointer to ID list.
  */

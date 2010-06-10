@@ -68,7 +68,6 @@ BasescapeState::BasescapeState(Game *game) : State(game)
 
 	// Set up objects
 	_view->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
-	_view->setBase(_base);
 
 	_mini->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
 	_mini->setBases(_game->getSavedGame()->getBases());
@@ -80,7 +79,6 @@ BasescapeState::BasescapeState(Game *game) : State(game)
 	_txtBase->setBig();
 
 	_txtLocation->setColor(Palette::blockOffset(15)+6);
-	_txtLocation->setText("Some Location");
 
 	_txtFunds->setColor(Palette::blockOffset(13)+10);
 	
@@ -101,6 +99,7 @@ BasescapeState::BasescapeState(Game *game) : State(game)
 
 	_btnFacilities->setColor(Palette::blockOffset(13)+8);
 	_btnFacilities->setText(_game->getResourcePack()->getLanguage()->getString(STR_BUILD_FACILITIES));
+	_btnFacilities->onMouseClick((EventHandler)&BasescapeState::btnFacilitiesClick);
 
 	_btnResearch->setColor(Palette::blockOffset(13)+8);
 	_btnResearch->setText(_game->getResourcePack()->getLanguage()->getString(STR_RESEARCH));
@@ -135,12 +134,14 @@ BasescapeState::~BasescapeState()
 }
 
 /**
- * The base name and funds can change
- * after going into other screens.
+ * The player can change the selected base
+ * or change info on other screens.
  */
 void BasescapeState::init()
 {
+	_view->setBase(_base);
 	_txtBase->setText(_base->getName());
+	_txtLocation->setText("Some Location");
 
 	string s = _game->getResourcePack()->getLanguage()->getString(STR_FUNDS_);
 	s.erase(s.size()-1, 1);
@@ -149,7 +150,7 @@ void BasescapeState::init()
 }
 
 /**
- * The facility name and funds can change
+ * The facility name can change
  * whenever the cursor is moved.
  */
 void BasescapeState::think()
@@ -189,6 +190,16 @@ void BasescapeState::btnSoldiersClick(SDL_Event *ev, int scale)
 void BasescapeState::btnCraftsClick(SDL_Event *ev, int scale)
 {
 	_game->pushState(new CraftsState(_game, _base));
+}
+
+/**
+ * Opens the Build Facilities window.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
+void BasescapeState::btnFacilitiesClick(SDL_Event *ev, int scale)
+{
+	_game->pushState(new BuildFacilitiesState(_game));
 }
 
 /**

@@ -40,3 +40,13 @@ void RuleCraft::setSprite(int sprite)
 {
 	_sprite = sprite;
 }
+
+int RuleCraft::getMonthlyFee()
+{
+	return _monthlyFee;
+}
+
+void RuleCraft::setMonthlyFee(int fee)
+{
+	_monthlyFee = fee;
+}

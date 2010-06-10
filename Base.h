@@ -23,9 +23,10 @@
 #include <vector>
 #include "BaseFacility.h"
 #include "RuleBaseFacility.h"
+#include "Craft.h"
+#include "RuleCraft.h"
 
 class Soldier;
-class Craft;
 
 using namespace std;
 
@@ -85,6 +86,11 @@ public:
 	int getDefenceValue();
 	int getShortRangeDetection();
 	int getLongRangeDetection();
+	int getCraftCount(LangString craft);
+	int getCraftMaintenance();
+	int getPersonnelMaintenance();
+	int getFacilityMaintenance();
+	int getMonthlyMaintenace();
 };
 
 #endif

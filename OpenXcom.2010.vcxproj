@@ -101,11 +101,13 @@
     <ClCompile Include="Base.cpp" />
     <ClCompile Include="BaseFacility.cpp" />
     <ClCompile Include="BaseView.cpp" />
+    <ClCompile Include="BuildFacilitiesState.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Craft.cpp" />
     <ClCompile Include="Cursor.cpp" />
     <ClCompile Include="CustomButton.cpp" />
     <ClCompile Include="MiniBaseView.cpp" />
+    <ClCompile Include="MonthlyCostsState.cpp" />
     <ClCompile Include="Music.cpp" />
     <ClCompile Include="RuleBaseFacility.cpp" />
     <ClCompile Include="RuleCraft.cpp" />
@@ -161,11 +163,13 @@
     <ClInclude Include="Base.h" />
     <ClInclude Include="BaseFacility.h" />
     <ClInclude Include="BaseView.h" />
+    <ClInclude Include="BuildFacilitiesState.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Craft.h" />
     <ClInclude Include="Cursor.h" />
     <ClInclude Include="CustomButton.h" />
     <ClInclude Include="MiniBaseView.h" />
+    <ClInclude Include="MonthlyCostsState.h" />
     <ClInclude Include="Music.h" />
     <ClInclude Include="RuleBaseFacility.h" />
     <ClInclude Include="RuleCraft.h" />

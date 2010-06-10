@@ -261,3 +261,49 @@ int Base::getLongRangeDetection()
 	}
 	return total;
 }
+
+int Base::getCraftCount(LangString craft)
+{
+	int total = 0;
+	for (vector<Craft*>::iterator i = _crafts.begin(); i != _crafts.end(); i++)
+	{
+		if ((*i)->getRules()->getType() == craft)
+			total++;
+	}
+	return total;
+}
+
+int Base::getCraftMaintenance()
+{
+	int total = 0;
+	for (vector<Craft*>::iterator i = _crafts.begin(); i != _crafts.end(); i++)
+	{
+		total += (*i)->getRules()->getMonthlyFee();
+	}
+	return total;
+}
+
+int Base::getPersonnelMaintenance()
+{
+	int total = 0;
+	total += _soldiers.size() * 20000;
+	total += _engineers * 25000;
+	total += _scientists * 30000;
+	return total;
+}
+
+int Base::getFacilityMaintenance()
+{
+	int total = 0;
+	for (vector<BaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); i++)
+	{
+		if ((*i)->getBuildTime() == 0)
+			total += (*i)->getRules()->getMonthlyCost();
+	}
+	return total;
+}
+
+int Base::getMonthlyMaintenace()
+{
+	return getCraftMaintenance() + getPersonnelMaintenance() + getFacilityMaintenance();
+}

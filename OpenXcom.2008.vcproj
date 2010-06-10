@@ -362,6 +362,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\BuildFacilitiesState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\BuildFacilities.h"
+				>
+			</File>
+			<File
 				RelativePath=".\CraftsState.cpp"
 				>
 			</File>
@@ -415,6 +423,14 @@
 			</File>
 			<File
 				RelativePath=".\ManufactureState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\MonthlyCostsState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\MonthlyCostsState.h"
 				>
 			</File>
 			<File

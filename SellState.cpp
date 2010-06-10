@@ -81,7 +81,7 @@ SellState::SellState(Game *game) : State(game)
 	_txtItem->setText(_game->getResourcePack()->getLanguage()->getString(STR_ITEM));
 
 	_txtQuantity->setColor(Palette::blockOffset(13)+10);
-	_txtQuantity->setText(_game->getResourcePack()->getLanguage()->getString(STR_QUANTITY));
+	_txtQuantity->setText(_game->getResourcePack()->getLanguage()->getString(STR_QUANTITY_UC));
 
 	_txtSell->setColor(Palette::blockOffset(13)+10);
 	_txtSell->setText(_game->getResourcePack()->getLanguage()->getString(STR_SELL_SACK));

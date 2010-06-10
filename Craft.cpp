@@ -18,7 +18,7 @@
  */
 #include "Craft.h"
 
-Craft::Craft(RuleCraft *rules, map<LangString, int> *id, double lat, double lon) : _rules(rules), _lat(lat), _lon(lon)
+Craft::Craft(RuleCraft *rules, map<LangString, int> *id, double lat, double lon) : _rules(rules), _lat(lat), _lon(lon), _fuel(0), _health(0)
 {
 	_id = (*id)[rules->getType()];
 	(*id)[rules->getType()]++;

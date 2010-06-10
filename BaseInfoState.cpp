@@ -136,10 +136,10 @@ BaseInfoState::BaseInfoState(Game *game, Base *base) : State(game), _base(base)
 
 	_btnMonthlyCosts->setColor(Palette::blockOffset(15)+9);
 	_btnMonthlyCosts->setText(_game->getResourcePack()->getLanguage()->getString(STR_MONTHLY_COSTS));
+	_btnMonthlyCosts->onMouseClick((EventHandler)&BaseInfoState::btnMonthlyCostsClick);
 
 	_edtBase->setColor(Palette::blockOffset(15)+1);
 	_edtBase->setBig();
-	_edtBase->setText(_base->getName());
 
 
 	_txtPersonnel->setColor(Palette::blockOffset(15)+1);
@@ -149,40 +149,25 @@ BaseInfoState::BaseInfoState(Game *game, Base *base) : State(game), _base(base)
 	_txtSoldiers->setText(_game->getResourcePack()->getLanguage()->getString(STR_SOLDIERS));
 
 	_numSoldiers->setColor(Palette::blockOffset(13));
-	stringstream ss;
-	ss << _base->getAvailableSoldiers() << ":" << _base->getTotalSoldiers();
-	_numSoldiers->setText(ss.str());
 
 	_barSoldiers->setColor(Palette::blockOffset(1));
 	_barSoldiers->setScale(1.0);
-	_barSoldiers->setMax(_base->getTotalSoldiers());
-	_barSoldiers->setValue(_base->getAvailableSoldiers());
 
 	_txtEngineers->setColor(Palette::blockOffset(13)+5);
 	_txtEngineers->setText(_game->getResourcePack()->getLanguage()->getString(STR_ENGINEERS));
 
 	_numEngineers->setColor(Palette::blockOffset(13));
-	stringstream ss2;
-	ss2 << _base->getAvailableEngineers() << ":" << _base->getTotalEngineers();
-	_numEngineers->setText(ss2.str());
 
 	_barEngineers->setColor(Palette::blockOffset(1));
 	_barEngineers->setScale(1.0);
-	_barEngineers->setMax(_base->getTotalEngineers());
-	_barEngineers->setValue(_base->getAvailableEngineers());
 
 	_txtScientists->setColor(Palette::blockOffset(13)+5);
 	_txtScientists->setText(_game->getResourcePack()->getLanguage()->getString(STR_SCIENTISTS));
 
 	_numScientists->setColor(Palette::blockOffset(13));
-	stringstream ss3;
-	ss3 << _base->getAvailableScientists() << ":" << _base->getTotalScientists();
-	_numScientists->setText(ss3.str());
 
 	_barScientists->setColor(Palette::blockOffset(1));
 	_barScientists->setScale(1.0);
-	_barScientists->setMax(_base->getTotalScientists());
-	_barScientists->setValue(_base->getAvailableScientists());
 
 
 	_txtSpace->setColor(Palette::blockOffset(15)+1);
@@ -192,88 +177,55 @@ BaseInfoState::BaseInfoState(Game *game, Base *base) : State(game), _base(base)
 	_txtQuarters->setText(_game->getResourcePack()->getLanguage()->getString(STR_LIVING_QUARTERS));
 
 	_numQuarters->setColor(Palette::blockOffset(13));
-	stringstream ss4;
-	ss4 << _base->getUsedQuarters() << ":" << _base->getAvailableQuarters();
-	_numQuarters->setText(ss4.str());
 
 	_barQuarters->setColor(Palette::blockOffset(3));
 	_barQuarters->setScale(0.5);
-	_barQuarters->setMax(_base->getAvailableQuarters());
-	_barQuarters->setValue(_base->getUsedQuarters());
 
 	_txtStores->setColor(Palette::blockOffset(13)+5);
 	_txtStores->setText(_game->getResourcePack()->getLanguage()->getString(STR_STORES));
 
 	_numStores->setColor(Palette::blockOffset(13));
-	stringstream ss5;
-	ss5 << _base->getUsedStores() << ":" << _base->getAvailableStores();
-	_numStores->setText(ss5.str());
 
 	_barStores->setColor(Palette::blockOffset(3));
 	_barStores->setScale(0.5);
-	_barStores->setMax(_base->getAvailableStores());
-	_barStores->setValue(_base->getUsedStores());
 
 	_txtLaboratories->setColor(Palette::blockOffset(13)+5);
 	_txtLaboratories->setText(_game->getResourcePack()->getLanguage()->getString(STR_LABORATORIES));
 
 	_numLaboratories->setColor(Palette::blockOffset(13));
-	stringstream ss6;
-	ss6 << _base->getUsedLaboratories() << ":" << _base->getAvailableLaboratories();
-	_numLaboratories->setText(ss6.str());
 
 	_barLaboratories->setColor(Palette::blockOffset(3));
 	_barLaboratories->setScale(0.5);
-	_barLaboratories->setMax(_base->getAvailableLaboratories());
-	_barLaboratories->setValue(_base->getUsedLaboratories());
 
 	_txtWorkshops->setColor(Palette::blockOffset(13)+5);
 	_txtWorkshops->setText(_game->getResourcePack()->getLanguage()->getString(STR_WORK_SHOPS));
 
 	_numWorkshops->setColor(Palette::blockOffset(13));
-	stringstream ss7;
-	ss7 << _base->getUsedWorkshops() << ":" << _base->getAvailableWorkshops();
-	_numWorkshops->setText(ss7.str());
 
 	_barWorkshops->setColor(Palette::blockOffset(3));
 	_barWorkshops->setScale(0.5);
-	_barWorkshops->setMax(_base->getAvailableWorkshops());
-	_barWorkshops->setValue(_base->getUsedWorkshops());
 
 	_txtHangars->setColor(Palette::blockOffset(13)+5);
 	_txtHangars->setText(_game->getResourcePack()->getLanguage()->getString(STR_HANGARS));
 
 	_numHangars->setColor(Palette::blockOffset(13));
-	stringstream ss8;
-	ss8 << _base->getUsedHangars() << ":" << _base->getAvailableHangars();
-	_numHangars->setText(ss8.str());
 
 	_barHangars->setColor(Palette::blockOffset(3));
 	_barHangars->setScale(18.0);
-	_barHangars->setMax(_base->getAvailableHangars());
-	_barHangars->setValue(_base->getUsedHangars());
 	
 
 	_txtDefence->setColor(Palette::blockOffset(13)+5);
 	_txtDefence->setText(_game->getResourcePack()->getLanguage()->getString(STR_DEFENCE_STRENGTH));
 
 	_numDefence->setColor(Palette::blockOffset(13));
-	stringstream ss9;
-	ss9 << _base->getDefenceValue();
-	_numDefence->setText(ss9.str());
 
 	_barDefence->setColor(Palette::blockOffset(2));
 	_barDefence->setScale(0.125);
-	_barDefence->setMax(_base->getDefenceValue());
-	_barDefence->setValue(_base->getDefenceValue());
 
 	_txtShortRange->setColor(Palette::blockOffset(13)+5);
 	_txtShortRange->setText(_game->getResourcePack()->getLanguage()->getString(STR_SHORT_RANGE_DETECTION));
 
 	_numShortRange->setColor(Palette::blockOffset(13));
-	stringstream ss10;
-	ss10 << _base->getShortRangeDetection();
-	_numShortRange->setText(ss10.str());
 	if (_game->getResourcePack()->getLanguageName() == "GERMAN.DAT")
 	{
 		_numShortRange->setX(137);
@@ -281,16 +233,11 @@ BaseInfoState::BaseInfoState(Game *game, Base *base) : State(game), _base(base)
 
 	_barShortRange->setColor(Palette::blockOffset(8));
 	_barShortRange->setScale(25.0);
-	_barShortRange->setMax(_base->getShortRangeDetection());
-	_barShortRange->setValue(_base->getShortRangeDetection());
 
 	_txtLongRange->setColor(Palette::blockOffset(13)+5);
 	_txtLongRange->setText(_game->getResourcePack()->getLanguage()->getString(STR_LONG_RANGE_DETECTION));
 
 	_numLongRange->setColor(Palette::blockOffset(13));
-	stringstream ss11;
-	ss11 << _base->getLongRangeDetection();
-	_numLongRange->setText(ss11.str());
 	if (_game->getResourcePack()->getLanguageName() == "GERMAN.DAT")
 	{
 		_numLongRange->setX(137);
@@ -298,8 +245,6 @@ BaseInfoState::BaseInfoState(Game *game, Base *base) : State(game), _base(base)
 
 	_barLongRange->setColor(Palette::blockOffset(8));
 	_barLongRange->setScale(25.0);
-	_barLongRange->setMax(_base->getLongRangeDetection());
-	_barLongRange->setValue(_base->getLongRangeDetection());
 }
 
 /**
@@ -311,6 +256,93 @@ BaseInfoState::~BaseInfoState()
 }
 
 /**
+ * The player can change the selected base.
+ */
+void BaseInfoState::init()
+{
+	_edtBase->setText(_base->getName());
+
+	stringstream ss;
+	ss << _base->getAvailableSoldiers() << ":" << _base->getTotalSoldiers();
+	_numSoldiers->setText(ss.str());
+
+	_barSoldiers->setMax(_base->getTotalSoldiers());
+	_barSoldiers->setValue(_base->getAvailableSoldiers());
+
+	stringstream ss2;
+	ss2 << _base->getAvailableEngineers() << ":" << _base->getTotalEngineers();
+	_numEngineers->setText(ss2.str());
+
+	_barEngineers->setMax(_base->getTotalEngineers());
+	_barEngineers->setValue(_base->getAvailableEngineers());
+
+	stringstream ss3;
+	ss3 << _base->getAvailableScientists() << ":" << _base->getTotalScientists();
+	_numScientists->setText(ss3.str());
+
+	_barScientists->setMax(_base->getTotalScientists());
+	_barScientists->setValue(_base->getAvailableScientists());
+
+
+	stringstream ss4;
+	ss4 << _base->getUsedQuarters() << ":" << _base->getAvailableQuarters();
+	_numQuarters->setText(ss4.str());
+
+	_barQuarters->setMax(_base->getAvailableQuarters());
+	_barQuarters->setValue(_base->getUsedQuarters());
+
+	stringstream ss5;
+	ss5 << _base->getUsedStores() << ":" << _base->getAvailableStores();
+	_numStores->setText(ss5.str());
+
+	_barStores->setMax(_base->getAvailableStores());
+	_barStores->setValue(_base->getUsedStores());
+
+	stringstream ss6;
+	ss6 << _base->getUsedLaboratories() << ":" << _base->getAvailableLaboratories();
+	_numLaboratories->setText(ss6.str());
+
+	_barLaboratories->setMax(_base->getAvailableLaboratories());
+	_barLaboratories->setValue(_base->getUsedLaboratories());
+
+	stringstream ss7;
+	ss7 << _base->getUsedWorkshops() << ":" << _base->getAvailableWorkshops();
+	_numWorkshops->setText(ss7.str());
+
+	_barWorkshops->setMax(_base->getAvailableWorkshops());
+	_barWorkshops->setValue(_base->getUsedWorkshops());
+
+	stringstream ss8;
+	ss8 << _base->getUsedHangars() << ":" << _base->getAvailableHangars();
+	_numHangars->setText(ss8.str());
+
+	_barHangars->setMax(_base->getAvailableHangars());
+	_barHangars->setValue(_base->getUsedHangars());
+	
+
+	stringstream ss9;
+	ss9 << _base->getDefenceValue();
+	_numDefence->setText(ss9.str());
+
+	_barDefence->setMax(_base->getDefenceValue());
+	_barDefence->setValue(_base->getDefenceValue());
+
+	stringstream ss10;
+	ss10 << _base->getShortRangeDetection();
+	_numShortRange->setText(ss10.str());
+
+	_barShortRange->setMax(_base->getShortRangeDetection());
+	_barShortRange->setValue(_base->getShortRangeDetection());
+
+	stringstream ss11;
+	ss11 << _base->getLongRangeDetection();
+	_numLongRange->setText(ss11.str());
+
+	_barLongRange->setMax(_base->getLongRangeDetection());
+	_barLongRange->setValue(_base->getLongRangeDetection());
+}
+
+/**
  * Returns to the previous screen.
  * @param ev Pointer to the SDL_Event.
  * @param scale Scale of the screen.
@@ -319,4 +351,15 @@ void BaseInfoState::btnOkClick(SDL_Event *ev, int scale)
 {
 	_base->setName(_edtBase->getText());
 	_game->popState();
+}
+
+/**
+ * Goes to the Monthly Costs screen.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
+void BaseInfoState::btnMonthlyCostsClick(SDL_Event *ev, int scale)
+{
+	_base->setName(_edtBase->getText());
+	_game->pushState(new MonthlyCostsState(_game, _base));
 }

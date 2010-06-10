@@ -101,7 +101,7 @@ ManufactureState::ManufactureState(Game *game) : State(game)
 	_txtTotal->setText(_game->getResourcePack()->getLanguage()->getString(STR_TOTAL_TO_PRODUCE));
 
 	_txtCost->setColor(Palette::blockOffset(15)+1);
-	_txtCost->setText(_game->getResourcePack()->getLanguage()->getString(STR_COST_PER_UNIT));
+	_txtCost->setText(_game->getResourcePack()->getLanguage()->getString(STR_COST__PER__UNIT));
 
 	_txtTimeLeft->setColor(Palette::blockOffset(15)+1);
 	_txtTimeLeft->setText(_game->getResourcePack()->getLanguage()->getString(STR_DAYS_HOURS_LEFT));
