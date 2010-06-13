@@ -362,6 +362,22 @@
 				>
 			</File>
 			<File
+				RelativePath=".\BasescapeDismantleState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\BasescapeDismantleState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\BasescapeErrorState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\BasescapeErrorState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\BuildFacilitiesState.cpp"
 				>
 			</File>

@@ -37,6 +37,8 @@
 #include "ManufactureState.h"
 #include "PurchaseState.h"
 #include "SellState.h"
+#include "BasescapeErrorState.h"
+#include "BasescapeDismantleState.h"
 
 /**
  * Basescape screen that shows a base's layout
@@ -55,7 +57,7 @@ public:
 	BasescapeState(Game *game);
 	/// Cleans up the Basescape state.
 	~BasescapeState();
-	/// Updates the base name and funds.
+	/// Updates the base stats.
 	void init();
 	/// Updates the facility name.
 	void think();

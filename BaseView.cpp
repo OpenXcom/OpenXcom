@@ -49,6 +49,7 @@ BaseView::~BaseView()
 void BaseView::setBase(Base *base)
 {
 	_base = base;
+	_selFacility = 0;
 
 	// Clear grid
 	for (int x = 0; x < BASE_SIZE; x++)

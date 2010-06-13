@@ -141,6 +141,7 @@ BasescapeState::~BasescapeState()
 void BasescapeState::init()
 {
 	_view->setBase(_base);
+	_mini->draw();
 	_txtBase->setText(_base->getName());
 	_txtLocation->setText("Some Location");
 
@@ -260,8 +261,21 @@ void BasescapeState::btnGeoscapeClick(SDL_Event *ev, int scale)
  */
 void BasescapeState::viewClick(SDL_Event *ev, int scale)
 {
-	if (_view->getSelectedFacility() != 0)
+	BaseFacility *fac = _view->getSelectedFacility();
+	if (fac != 0)
 	{
-
+		if (fac->getRules()->getLift() == true ||
+			_base->getAvailableQuarters() - fac->getRules()->getPersonnel() < _base->getUsedQuarters() ||
+			_base->getAvailableStores() - fac->getRules()->getStorage() < _base->getUsedStores() ||
+			_base->getAvailableLaboratories() - fac->getRules()->getLaboratories() < _base->getUsedLaboratories() ||
+			_base->getAvailableWorkshops() - fac->getRules()->getWorkshops() < _base->getUsedWorkshops() ||
+			_base->getAvailableHangars() - fac->getRules()->getCrafts() < _base->getUsedHangars())
+		{
+			_game->pushState(new BasescapeErrorState(_game, STR_FACILITY_IN_USE));
+		}
+		else
+		{
+			_game->pushState(new BasescapeDismantleState(_game, _base, fac));
+		}
 	}
 }

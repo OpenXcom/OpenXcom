@@ -36,6 +36,10 @@ MiniBaseView::~MiniBaseView()
 {
 }
 
+/**
+ * Changes the current list of bases to display.
+ * @param base Pointer to base list to display.
+ */
 void MiniBaseView::setBases(vector<Base*> *bases)
 {
 	_bases = bases;
@@ -43,21 +47,32 @@ void MiniBaseView::setBases(vector<Base*> *bases)
 	draw();
 }
 
+/**
+ * Changes the texture to use for drawing
+ * the various base elements.
+ * @param texture Pointer to SurfaceSet to use.
+ */
 void MiniBaseView::setTexture(SurfaceSet *texture)
 {
 	_texture = texture;
 }
 
-
-
+/**
+ * Returns the base the mouse is currently over.
+ * @return Pointer to base (NULL if none).
+ */
 int MiniBaseView::getSelectedBase()
 {
 	return _selBase;
 }
 
+/**
+ * Draws the view of all the bases with facilities
+ * in varying colors.
+ */
 void MiniBaseView::draw()
 {
-	for (int i = 0; i < MAX_BASES; i++)
+	for (unsigned int i = 0; i < MAX_BASES; i++)
 	{
 		// Draw base squares
 		if (i == _selBase)

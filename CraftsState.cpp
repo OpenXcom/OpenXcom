@@ -21,6 +21,7 @@
 /**
  * Initializes all the elements in the Equip Craft screen.
  * @param game Pointer to the core game.
+ * @param base Pointer to the base to get info from.
  */
 CraftsState::CraftsState(Game *game, Base *base) : State(game), _base(base)
 {
