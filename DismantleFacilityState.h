@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM__BASESCAPEDISMANTLESTATE_H
-#define OPENXCOM__BASESCAPEDISMANTLESTATE_H
+#ifndef OPENXCOM__DISMANTLEFACILITYSTATE_H
+#define OPENXCOM__DISMANTLEFACILITYSTATE_H
 
 #include "State_Interactive.h"
 #include "LangString.h"
@@ -32,7 +32,7 @@
  * Window shown when the player tries to
  * dismantle a facility.
  */
-class BasescapeDismantleState : public State
+class DismantleFacilityState : public State
 {
 private:
 	Base *_base;
@@ -42,10 +42,10 @@ private:
 	Window *_window;
 	Text *_txtTitle, *_txtFacility;
 public:
-	/// Creates the Basescape Dismantle state.
-	BasescapeDismantleState(Game *game, Base *base, BaseFacility *fac);
-	/// Cleans up the Basescape Dismantle state.
-	~BasescapeDismantleState();
+	/// Creates the Dismantle Facility state.
+	DismantleFacilityState(Game *game, Base *base, BaseFacility *fac);
+	/// Cleans up the Dismantle Facility state.
+	~DismantleFacilityState();
 	/// Handler for clicking the OK button.
 	void btnOkClick(SDL_Event *ev, int scale);
 	/// Handler for clicking the Cancel button.

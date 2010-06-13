@@ -16,38 +16,37 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM__BUILDFACILITIESSTATE_H
-#define OPENXCOM__BUILDFACILITIESSTATE_H
+#ifndef OPENXCOM__PLACEFACILITYSTATE_H
+#define OPENXCOM__PLACEFACILITYSTATE_H
 
+#include <sstream>
 #include "State_Interactive.h"
 #include "LangString.h"
 #include "Palette.h"
 #include "Button.h"
 #include "Window.h"
 #include "Text.h"
-#include "TextList.h"
-#include "PlaceFacilityState.h"
+#include "RuleBaseFacility.h"
 
 /**
- * Report screen shown monthly to display
- * changes in the player's performance and funding.
+ * Window shown when the player tries to
+ * build a facility.
  */
-class BuildFacilitiesState : public State
+class PlaceFacilityState : public State
 {
 private:
-	Button *_btnOk;
+	RuleBaseFacility *_rule;
+
+	Button *_btnCancel;
 	Window *_window;
-	Text *_txtTitle;
-	TextList *_lstFacilities;
+	Text *_txtFacility, *_txtCost, *_numCost, *_txtTime, *_numTime, *_txtMaintenance, *_numMaintenance;
 public:
-	/// Creates the Monthly Report state.
-	BuildFacilitiesState(Game *game);
-	/// Cleans up the Monthly Report state.
-	~BuildFacilitiesState();
-	/// Handler for clicking the OK button.
-	void btnOkClick(SDL_Event *ev, int scale);
-	/// Handler for clicking the Facilities list.
-	void lstFacilitiesClick(SDL_Event *ev, int scale);
+	/// Creates the Place Facility state.
+	PlaceFacilityState(Game *game, RuleBaseFacility *rule);
+	/// Cleans up the Place Facility state.
+	~PlaceFacilityState();
+	/// Handler for clicking the Cancel button.
+	void btnCancelClick(SDL_Event *ev, int scale);
 };
 
 #endif

@@ -69,6 +69,8 @@ BasescapeState::BasescapeState(Game *game) : State(game)
 	// Set up objects
 	_view->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
 	_view->onMouseClick((EventHandler)&BasescapeState::viewClick);
+	_view->onMouseOver((EventHandler)&BasescapeState::viewMouseOver);
+	_view->onMouseOut((EventHandler)&BasescapeState::viewMouseOut);
 
 	_mini->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
 	_mini->setBases(_game->getSavedGame()->getBases());
@@ -149,19 +151,6 @@ void BasescapeState::init()
 	s.erase(s.size()-1, 1);
 	s += Text::formatFunding(_game->getSavedGame()->getFunds());
 	_txtFunds->setText(s);
-}
-
-/**
- * The facility name can change
- * whenever the cursor is moved.
- */
-void BasescapeState::think()
-{
-	BaseFacility *f = _view->getSelectedFacility();
-	if (f == 0)
-		_txtFacility->setText("");
-	else
-		_txtFacility->setText(_game->getResourcePack()->getLanguage()->getString(f->getRules()->getType()));
 }
 
 /**
@@ -275,7 +264,31 @@ void BasescapeState::viewClick(SDL_Event *ev, int scale)
 		}
 		else
 		{
-			_game->pushState(new BasescapeDismantleState(_game, _base, fac));
+			_game->pushState(new DismantleFacilityState(_game, _base, fac));
 		}
 	}
+}
+
+/**
+ * Displays the name of the facility the mouse is over.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
+void BasescapeState::viewMouseOver(SDL_Event *ev, int scale)
+{
+	BaseFacility *f = _view->getSelectedFacility();
+	if (f == 0)
+		_txtFacility->setText("");
+	else
+		_txtFacility->setText(_game->getResourcePack()->getLanguage()->getString(f->getRules()->getType()));
+}
+
+/**
+ * Clears the facility name.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
+void BasescapeState::viewMouseOut(SDL_Event *ev, int scale)
+{
+	_txtFacility->setText("");
 }

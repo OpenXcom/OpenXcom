@@ -16,15 +16,15 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "BasescapeDismantleState.h"
+#include "DismantleFacilityState.h"
 
 /**
- * Initializes all the elements in a Basescape Dismantle window.
+ * Initializes all the elements in a Dismantle Facility window.
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  * @param fac Pointer to the facility to dismantle.
  */
-BasescapeDismantleState::BasescapeDismantleState(Game *game, Base *base, BaseFacility *fac) : State(game), _base(base), _fac(fac)
+DismantleFacilityState::DismantleFacilityState(Game *game, Base *base, BaseFacility *fac) : State(game), _base(base), _fac(fac)
 {
 	_screen = false;
 
@@ -50,11 +50,11 @@ BasescapeDismantleState::BasescapeDismantleState(Game *game, Base *base, BaseFac
 
 	_btnOk->setColor(Palette::blockOffset(15)+9);
 	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString(STR_OK));
-	_btnOk->onMouseClick((EventHandler)&BasescapeDismantleState::btnOkClick);
+	_btnOk->onMouseClick((EventHandler)&DismantleFacilityState::btnOkClick);
 
 	_btnCancel->setColor(Palette::blockOffset(15)+9);
 	_btnCancel->setText(_game->getResourcePack()->getLanguage()->getString(STR_CANCEL));
-	_btnCancel->onMouseClick((EventHandler)&BasescapeDismantleState::btnCancelClick);
+	_btnCancel->onMouseClick((EventHandler)&DismantleFacilityState::btnCancelClick);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);
@@ -68,7 +68,7 @@ BasescapeDismantleState::BasescapeDismantleState(Game *game, Base *base, BaseFac
 /**
  *
  */
-BasescapeDismantleState::~BasescapeDismantleState()
+DismantleFacilityState::~DismantleFacilityState()
 {
 	
 }
@@ -79,7 +79,7 @@ BasescapeDismantleState::~BasescapeDismantleState()
  * @param ev Pointer to the SDL_Event.
  * @param scale Scale of the screen.
  */
-void BasescapeDismantleState::btnOkClick(SDL_Event *ev, int scale)
+void DismantleFacilityState::btnOkClick(SDL_Event *ev, int scale)
 {
 	for (vector<BaseFacility*>::iterator i = _base->getFacilities()->begin(); i != _base->getFacilities()->end(); i++)
 	{
@@ -98,7 +98,7 @@ void BasescapeDismantleState::btnOkClick(SDL_Event *ev, int scale)
  * @param ev Pointer to the SDL_Event.
  * @param scale Scale of the screen.
  */
-void BasescapeDismantleState::btnCancelClick(SDL_Event *ev, int scale)
+void DismantleFacilityState::btnCancelClick(SDL_Event *ev, int scale)
 {
 	_game->popState();
 }

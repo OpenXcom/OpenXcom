@@ -58,7 +58,7 @@ BuildFacilitiesState::BuildFacilitiesState(Game *game) : State(game)
 	_lstFacilities->setSelectable(true);
 	for (int i = STR_LIVING_QUARTERS; i <= STR_ALIEN_CONTAINMENT; i++)
 		_lstFacilities->addRow(1, _game->getResourcePack()->getLanguage()->getString((LangString)i).c_str());
-
+	_lstFacilities->onMouseClick((EventHandler)&BuildFacilitiesState::lstFacilitiesClick);
 }
 
 /**
@@ -77,4 +77,14 @@ BuildFacilitiesState::~BuildFacilitiesState()
 void BuildFacilitiesState::btnOkClick(SDL_Event *ev, int scale)
 {
 	_game->popState();
+}
+
+/**
+ * Places the selected facility.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
+void BuildFacilitiesState::lstFacilitiesClick(SDL_Event *ev, int scale)
+{
+	_game->pushState(new PlaceFacilityState(_game, _game->getRuleset()->getBaseFacility((LangString)(STR_LIVING_QUARTERS + _lstFacilities->getSelectedRow()))));
 }

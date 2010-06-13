@@ -38,7 +38,7 @@
 #include "PurchaseState.h"
 #include "SellState.h"
 #include "BasescapeErrorState.h"
-#include "BasescapeDismantleState.h"
+#include "DismantleFacilityState.h"
 
 /**
  * Basescape screen that shows a base's layout
@@ -59,8 +59,6 @@ public:
 	~BasescapeState();
 	/// Updates the base stats.
 	void init();
-	/// Updates the facility name.
-	void think();
 	/// Handler for clicking the Base Information button.
 	void btnBaseInfoClick(SDL_Event *ev, int scale);
 	/// Handler for clicking the Soldiers button.
@@ -81,6 +79,10 @@ public:
 	void btnGeoscapeClick(SDL_Event *ev, int scale);
 	/// Handler for clicking the base view.
 	void viewClick(SDL_Event *ev, int scale);
+	/// Handler for hovering the base view.
+	void viewMouseOver(SDL_Event *ev, int scale);
+	/// Handler for hovering out of the base view.
+	void viewMouseOut(SDL_Event *ev, int scale);
 };
 
 #endif

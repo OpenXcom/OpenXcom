@@ -271,16 +271,7 @@ void BaseView::mouseOver(SDL_Event *ev, int scale, State *state)
 		_selFacility = _facilities[xx][yy];
 	else
 		_selFacility = 0;
-}
 
-/**
- * Deselects the facility when the mouse leaves the area.
- * @param ev Pointer to a SDL_Event.
- * @param scale Current screen scale (used to correct mouse input).
- * @param state State that the event handlers belong to.
- */
-void BaseView::mouseOut(SDL_Event *ev, int scale, State *state)
-{
-	_selFacility = 0;
+	InteractiveSurface::mouseOver(ev, scale, state);
 }
 	

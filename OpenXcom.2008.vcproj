@@ -362,14 +362,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\BasescapeDismantleState.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\BasescapeDismantleState.h"
-				>
-			</File>
-			<File
 				RelativePath=".\BasescapeErrorState.cpp"
 				>
 			</File>
@@ -391,6 +383,14 @@
 			</File>
 			<File
 				RelativePath=".\CraftsState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\DismantleFacilityState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\DismantleFacilityState.h"
 				>
 			</File>
 			<File
@@ -471,6 +471,14 @@
 			</File>
 			<File
 				RelativePath=".\OptionsState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\PlaceFacilityState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\PlaceFacilityState.h"
 				>
 			</File>
 			<File

@@ -64,8 +64,6 @@ public:
 	void mouseClick(SDL_Event *ev, int scale, State *state);
 	/// Special handling for mouse hovers.
 	void mouseOver(SDL_Event *ev, int scale, State *state);
-	/// Special handling for mouse hovering out.
-	void mouseOut(SDL_Event *ev, int scale, State *state);
 };
 
 #endif
