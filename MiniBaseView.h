@@ -45,12 +45,14 @@ public:
 	MiniBaseView(int width, int height, int x = 0, int y = 0);
 	/// Cleans up the mini base view.
 	~MiniBaseView();
-
+	/// Sets the base list to display.
 	void setBases(vector<Base*> *bases);
+	/// Sets the texture for this mini base view.
 	void setTexture(SurfaceSet *texture);
+	/// Gets the currently selected base.
 	int getSelectedBase();
+	/// Draws the mini base view.
 	void draw();
-	void handle(SDL_Event *ev, int scale, State *state);
 };
 
 #endif

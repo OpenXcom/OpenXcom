@@ -68,6 +68,7 @@ BasescapeState::BasescapeState(Game *game) : State(game)
 
 	// Set up objects
 	_view->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
+	_view->onMouseClick((EventHandler)&BasescapeState::viewClick);
 
 	_mini->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
 	_mini->setBases(_game->getSavedGame()->getBases());
@@ -250,4 +251,17 @@ void BasescapeState::btnSellClick(SDL_Event *ev, int scale)
 void BasescapeState::btnGeoscapeClick(SDL_Event *ev, int scale)
 {
 	_game->popState();
+}
+
+/**
+ * Processes clicking on facilities.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
+void BasescapeState::viewClick(SDL_Event *ev, int scale)
+{
+	if (_view->getSelectedFacility() != 0)
+	{
+
+	}
 }

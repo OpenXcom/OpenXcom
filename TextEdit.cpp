@@ -166,18 +166,6 @@ void TextEdit::blit(Surface *surface)
 }
 
 /**
- * Ignores any mouse clicks that aren't the left mouse button.
- * @param ev Pointer to a SDL_Event.
- * @param scale Current screen scale (used to correct mouse input).
- * @param state State that the event handlers belong to.
- */
-void TextEdit::handle(SDL_Event *ev, int scale, State *state)
-{
-	if (ev->button.button == SDL_BUTTON_LEFT)
-		InteractiveSurface::handle(ev, scale, state);
-}
-
-/**
  * Focuses the text when it's pressed on.
  * @param ev Pointer to a SDL_Event.
  * @param scale Current screen scale (used to correct mouse input).
@@ -185,9 +173,40 @@ void TextEdit::handle(SDL_Event *ev, int scale, State *state)
  */
 void TextEdit::mousePress(SDL_Event *ev, int scale, State *state)
 {
-	_isFocused = true;
+	if (ev->button.button == SDL_BUTTON_LEFT)
+	{
+		_isFocused = true;
 
-	InteractiveSurface::mousePress(ev, scale, state);
+		InteractiveSurface::mousePress(ev, scale, state);
+	}
+}
+
+/**
+ * Only accepts left clicks.
+ * @param ev Pointer to a SDL_Event.
+ * @param scale Current screen scale (used to correct mouse input).
+ * @param state State that the event handlers belong to.
+ */
+void TextEdit::mouseRelease(SDL_Event *ev, int scale, State *state)
+{
+	if (ev->button.button == SDL_BUTTON_LEFT)
+	{
+		InteractiveSurface::mouseRelease(ev, scale, state);
+	}
+}
+
+/**
+ * Only accepts left clicks.
+ * @param ev Pointer to a SDL_Event.
+ * @param scale Current screen scale (used to correct mouse input).
+ * @param state State that the event handlers belong to.
+ */
+void TextEdit::mouseClick(SDL_Event *ev, int scale, State *state)
+{
+	if (ev->button.button == SDL_BUTTON_LEFT)
+	{
+		InteractiveSurface::mouseClick(ev, scale, state);
+	}
 }
 
 /**
@@ -210,7 +229,7 @@ void TextEdit::keyboardPress(SDL_Event *ev, int scale, State *state)
 		break;
 	default:
 		if (ev->key.keysym.unicode != 0)
-			_value += ev->key.keysym.unicode;
+			_value += (char)ev->key.keysym.unicode;
 	}
 
 	InteractiveSurface::keyboardPress(ev, scale, state);

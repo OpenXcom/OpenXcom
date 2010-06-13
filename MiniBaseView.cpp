@@ -48,6 +48,13 @@ void MiniBaseView::setTexture(SurfaceSet *texture)
 	_texture = texture;
 }
 
+
+
+int MiniBaseView::getSelectedBase()
+{
+	return _selBase;
+}
+
 void MiniBaseView::draw()
 {
 	for (int i = 0; i < MAX_BASES; i++)
@@ -104,14 +111,4 @@ void MiniBaseView::draw()
 			unlock();
 		}
 	}
-}
-
-int MiniBaseView::getSelectedBase()
-{
-	return _selBase;
-}
-
-void MiniBaseView::handle(SDL_Event *ev, int scale, State *state)
-{
-
 }

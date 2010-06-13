@@ -77,6 +77,8 @@ public:
 	void btnSellClick(SDL_Event *ev, int scale);
 	/// Handler for clicking the Geoscape button.
 	void btnGeoscapeClick(SDL_Event *ev, int scale);
+	/// Handler for clicking the base view.
+	void viewClick(SDL_Event *ev, int scale);
 };
 
 #endif

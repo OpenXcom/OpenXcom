@@ -68,18 +68,6 @@ void CustomButton::setGroup(CustomButton **group)
 }
 
 /**
- * Ignores any mouse clicks that aren't the left mouse button.
- * @param ev Pointer to a SDL_Event.
- * @param scale Current screen scale (used to correct mouse input).
- * @param state State that the event handlers belong to.
- */
-void CustomButton::handle(SDL_Event *ev, int scale, State *state)
-{
-	if (ev->button.button == SDL_BUTTON_LEFT)
-		InteractiveSurface::handle(ev, scale, state);
-}
-
-/**
  * Sets the button as the pressed button if it's part of a group,
  * and inverts the colors when pressed.
  * @param ev Pointer to a SDL_Event.
@@ -88,13 +76,16 @@ void CustomButton::handle(SDL_Event *ev, int scale, State *state)
  */
 void CustomButton::mousePress(SDL_Event *ev, int scale, State *state)
 {
-	if (_group != 0)
+	if (ev->button.button == SDL_BUTTON_LEFT)
 	{
-		(*_group)->invert((*_group)->getColor());
-		*_group = this;
+		if (_group != 0)
+		{
+			(*_group)->invert((*_group)->getColor());
+			*_group = this;
+		}
+		invert(_color);
+		InteractiveSurface::mousePress(ev, scale, state);
 	}
-	invert(_color);
-	InteractiveSurface::mousePress(ev, scale, state);
 }
 
 /*
@@ -105,7 +96,24 @@ void CustomButton::mousePress(SDL_Event *ev, int scale, State *state)
  */
 void CustomButton::mouseRelease(SDL_Event *ev, int scale, State *state)
 {
-	if (_group == 0)
-		invert(_color);
-	InteractiveSurface::mouseRelease(ev, scale, state);
+	if (ev->button.button == SDL_BUTTON_LEFT)
+	{
+		if (_group == 0)
+			invert(_color);
+		InteractiveSurface::mouseRelease(ev, scale, state);
+	}
+}
+
+/**
+ * Only accepts left clicks.
+ * @param ev Pointer to a SDL_Event.
+ * @param scale Current screen scale (used to correct mouse input).
+ * @param state State that the event handlers belong to.
+ */
+void CustomButton::mouseClick(SDL_Event *ev, int scale, State *state)
+{
+	if (ev->button.button == SDL_BUTTON_LEFT)
+	{
+		InteractiveSurface::mouseClick(ev, scale, state);
+	}
 }

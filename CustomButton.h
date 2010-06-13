@@ -45,12 +45,12 @@ public:
 	Uint8 getColor();
 	/// Sets the custom button's group.
 	void setGroup(CustomButton **group);
-	/// Handles mouse events.
-	void handle(SDL_Event *ev, int scale, State *state);
 	/// Special handling for mouse presses.
 	void mousePress(SDL_Event *ev, int scale, State *state);
 	/// Special handling for mouse releases.
 	void mouseRelease(SDL_Event *ev, int scale, State *state);
+
+	void mouseClick(SDL_Event *ev, int scale, State *state);
 };
 
 #endif

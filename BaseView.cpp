@@ -41,14 +41,21 @@ BaseView::~BaseView()
 {
 }
 
+/**
+ * Changes the current base to display and
+ * initalizes the internal base grid.
+ * @param base Pointer to base to display.
+ */
 void BaseView::setBase(Base *base)
 {
 	_base = base;
 
+	// Clear grid
 	for (int x = 0; x < BASE_SIZE; x++)
 		for (int y = 0; y < BASE_SIZE; y++)
 			_facilities[x][y] = 0;
 
+	// Fill grid with base facilities
 	for (vector<BaseFacility*>::iterator i = _base->getFacilities()->begin(); i != _base->getFacilities()->end(); i++)
 	{
 		for (int y = (*i)->getY(); y < (*i)->getY() + (*i)->getRules()->getSize(); y++)
@@ -63,11 +70,29 @@ void BaseView::setBase(Base *base)
 	draw();
 }
 
+/**
+ * Changes the texture to use for drawing
+ * the various base elements.
+ * @param texture Pointer to SurfaceSet to use.
+ */
 void BaseView::setTexture(SurfaceSet *texture)
 {
 	_texture = texture;
 }
 
+/**
+ * Returns the facility the mouse is currently over.
+ * @return Pointer to base facility (NULL if none).
+ */
+BaseFacility *BaseView::getSelectedFacility()
+{
+	return _selFacility;
+}
+
+/**
+ * Draws the view of all the facilities in the base, connectors
+ * between them and crafts landed in hangars.
+ */
 void BaseView::draw()
 {
 	// Draw grid squares
@@ -187,22 +212,74 @@ void BaseView::draw()
 	}
 }
 
-BaseFacility *BaseView::getSelectedFacility()
+/**
+ * Only accepts left clicks.
+ * @param ev Pointer to a SDL_Event.
+ * @param scale Current screen scale (used to correct mouse input).
+ * @param state State that the event handlers belong to.
+ */
+void BaseView::mousePress(SDL_Event *ev, int scale, State *state)
 {
-	return _selFacility;
-}
-
-void BaseView::handle(SDL_Event *ev, int scale, State *state)
-{
-	if (ev->type == SDL_MOUSEMOTION)
+	if (ev->button.button == SDL_BUTTON_LEFT)
 	{
-		double x = ev->button.x - _x * scale;
-		double y = ev->button.y - _y * scale;
-		int xx = (int)floor(x / (GRID_SIZE * scale));
-		int yy = (int)floor(y / (GRID_SIZE * scale));
-		if (xx >= 0 && xx < BASE_SIZE && yy >= 0 && yy < BASE_SIZE)
-			_selFacility = _facilities[xx][yy];
-		else
-			_selFacility = 0;
+		InteractiveSurface::mousePress(ev, scale, state);
 	}
 }
+
+/**
+ * Only accepts left clicks.
+ * @param ev Pointer to a SDL_Event.
+ * @param scale Current screen scale (used to correct mouse input).
+ * @param state State that the event handlers belong to.
+ */
+void BaseView::mouseRelease(SDL_Event *ev, int scale, State *state)
+{
+	if (ev->button.button == SDL_BUTTON_LEFT)
+	{
+		InteractiveSurface::mouseRelease(ev, scale, state);
+	}
+}
+
+/**
+ * Only accepts left clicks.
+ * @param ev Pointer to a SDL_Event.
+ * @param scale Current screen scale (used to correct mouse input).
+ * @param state State that the event handlers belong to.
+ */
+void BaseView::mouseClick(SDL_Event *ev, int scale, State *state)
+{
+	if (ev->button.button == SDL_BUTTON_LEFT)
+	{
+		InteractiveSurface::mouseClick(ev, scale, state);
+	}
+}
+
+/**
+ * Selects the facility the mouse is over.
+ * @param ev Pointer to a SDL_Event.
+ * @param scale Current screen scale (used to correct mouse input).
+ * @param state State that the event handlers belong to.
+ */
+void BaseView::mouseOver(SDL_Event *ev, int scale, State *state)
+{
+	double x = ev->button.x - _x * scale;
+	double y = ev->button.y - _y * scale;
+	int xx = (int)floor(x / (GRID_SIZE * scale));
+	int yy = (int)floor(y / (GRID_SIZE * scale));
+	if (xx >= 0 && xx < BASE_SIZE && yy >= 0 && yy < BASE_SIZE)
+		_selFacility = _facilities[xx][yy];
+	else
+		_selFacility = 0;
+}
+
+/**
+ * Deselects the facility when the mouse leaves the area.
+ * @param ev Pointer to a SDL_Event.
+ * @param scale Current screen scale (used to correct mouse input).
+ * @param state State that the event handlers belong to.
+ */
+void BaseView::mouseOut(SDL_Event *ev, int scale, State *state)
+{
+	_selFacility = 0;
+}
+	

@@ -62,10 +62,12 @@ public:
 	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
 	/// Blits the text onto another surface.
 	void blit(Surface *surface);
-	/// Handles mouse and keyboard events.
-	void handle(SDL_Event *ev, int scale, State *state);
 	/// Special handling for mouse presses.
 	void mousePress(SDL_Event *ev, int scale, State *state);
+	/// Special handling for mouse releases.
+	void mouseRelease(SDL_Event *ev, int scale, State *state);
+	/// Special handling for mouse clicks.
+	void mouseClick(SDL_Event *ev, int scale, State *state);
 	/// Special handling for keyboard presses.
 	void keyboardPress(SDL_Event *ev, int scale, State *state);
 };

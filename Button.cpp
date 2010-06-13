@@ -164,18 +164,6 @@ void Button::draw()
 }
 
 /**
- * Ignores any mouse clicks that aren't the left mouse button.
- * @param ev Pointer to a SDL_Event.
- * @param scale Current screen scale (used to correct mouse input).
- * @param state State that the event handlers belong to.
- */
-void Button::handle(SDL_Event *ev, int scale, State *state)
-{
-	if (ev->button.button == SDL_BUTTON_LEFT)
-		InteractiveSurface::handle(ev, scale, state);
-}
-
-/**
  * Sets the button as the pressed button if it's part of a group.
  * @param ev Pointer to a SDL_Event.
  * @param scale Current screen scale (used to correct mouse input).
@@ -183,11 +171,14 @@ void Button::handle(SDL_Event *ev, int scale, State *state)
  */
 void Button::mousePress(SDL_Event *ev, int scale, State *state)
 {
-	if (_group != 0)
-		*_group = this;
+	if (ev->button.button == SDL_BUTTON_LEFT)
+	{
+		if (_group != 0)
+			*_group = this;
 
-	InteractiveSurface::mousePress(ev, scale, state);
-	draw();
+		InteractiveSurface::mousePress(ev, scale, state);
+		draw();
+	}
 }
 
 /**
@@ -198,6 +189,23 @@ void Button::mousePress(SDL_Event *ev, int scale, State *state)
  */
 void Button::mouseRelease(SDL_Event *ev, int scale, State *state)
 {
-	InteractiveSurface::mouseRelease(ev, scale, state);
-	draw();
+	if (ev->button.button == SDL_BUTTON_LEFT)
+	{
+		InteractiveSurface::mouseRelease(ev, scale, state);
+		draw();
+	}
+}
+
+/**
+ * Only accepts left clicks.
+ * @param ev Pointer to a SDL_Event.
+ * @param scale Current screen scale (used to correct mouse input).
+ * @param state State that the event handlers belong to.
+ */
+void Button::mouseClick(SDL_Event *ev, int scale, State *state)
+{
+	if (ev->button.button == SDL_BUTTON_LEFT)
+	{
+		InteractiveSurface::mouseClick(ev, scale, state);
+	}
 }

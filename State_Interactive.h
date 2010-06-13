@@ -76,7 +76,7 @@ typedef State &(State::*EventHandler)(SDL_Event *, int);
 class InteractiveSurface : public Surface
 {
 protected:
-	EventHandler _click, _press, _release, _in, _out, _keyPress, _keyRelease;
+	EventHandler _click, _press, _release, _in, _over, _out, _keyPress, _keyRelease;
 	bool _isPressed, _isHovered, _isFocused;
 
 public:
@@ -96,6 +96,8 @@ public:
 	void onMouseRelease(EventHandler handler);
 	/// Hooks an event handler to moving the mouse into the surface.
 	void onMouseIn(EventHandler handler);
+	/// Hooks an event handler to moving the mouse over the surface.
+	void onMouseOver(EventHandler handler);
 	/// Hooks an event handler to moving the mouse out of the surface.
 	void onMouseOut(EventHandler handler);
 	/// Hooks an event handler to pressing a key when the surface is focused.
@@ -111,6 +113,8 @@ public:
 	virtual void mouseClick(SDL_Event *ev, int scale, State *state);
 	/// Processes a mouse hover in event.
 	virtual void mouseIn(SDL_Event *ev, int scale, State *state);
+	/// Processes a mouse hover event.
+	virtual void mouseOver(SDL_Event *ev, int scale, State *state);
 	/// Processes a mouse hover out event.
 	virtual void mouseOut(SDL_Event *ev, int scale, State *state);
 	/// Processes a keyboard key press event.

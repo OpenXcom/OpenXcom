@@ -48,12 +48,24 @@ public:
 	BaseView(Font *big, Font *small, int width, int height, int x = 0, int y = 0);
 	/// Cleans up the base view.
 	~BaseView();
-
+	/// Sets the base to display.
 	void setBase(Base *base);
+	/// Sets the texture for this base view.
 	void setTexture(SurfaceSet *texture);
+	/// Gets the currently selected facility.
 	BaseFacility *getSelectedFacility();
+	/// Draws the base view.
 	void draw();
-	void handle(SDL_Event *ev, int scale, State *state);
+	/// Special handling for mouse presses.
+	void mousePress(SDL_Event *ev, int scale, State *state);
+	/// Special handling for mouse releases.
+	void mouseRelease(SDL_Event *ev, int scale, State *state);
+	/// Special handling for mouse clicks.
+	void mouseClick(SDL_Event *ev, int scale, State *state);
+	/// Special handling for mouse hovers.
+	void mouseOver(SDL_Event *ev, int scale, State *state);
+	/// Special handling for mouse hovering out.
+	void mouseOut(SDL_Event *ev, int scale, State *state);
 };
 
 #endif
