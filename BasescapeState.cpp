@@ -190,7 +190,7 @@ void BasescapeState::btnCraftsClick(SDL_Event *ev, int scale)
  */
 void BasescapeState::btnFacilitiesClick(SDL_Event *ev, int scale)
 {
-	_game->pushState(new BuildFacilitiesState(_game));
+	_game->pushState(new BuildFacilitiesState(_game, _base));
 }
 
 /**
@@ -253,12 +253,13 @@ void BasescapeState::viewClick(SDL_Event *ev, int scale)
 	BaseFacility *fac = _view->getSelectedFacility();
 	if (fac != 0)
 	{
-		if (fac->getRules()->getLift() == true ||
+		if (fac->getBuildTime() == 0 &&
+			(fac->getRules()->getLift() == true ||
 			_base->getAvailableQuarters() - fac->getRules()->getPersonnel() < _base->getUsedQuarters() ||
 			_base->getAvailableStores() - fac->getRules()->getStorage() < _base->getUsedStores() ||
 			_base->getAvailableLaboratories() - fac->getRules()->getLaboratories() < _base->getUsedLaboratories() ||
 			_base->getAvailableWorkshops() - fac->getRules()->getWorkshops() < _base->getUsedWorkshops() ||
-			_base->getAvailableHangars() - fac->getRules()->getCrafts() < _base->getUsedHangars())
+			_base->getAvailableHangars() - fac->getRules()->getCrafts() < _base->getUsedHangars()))
 		{
 			_game->pushState(new BasescapeErrorState(_game, STR_FACILITY_IN_USE));
 		}

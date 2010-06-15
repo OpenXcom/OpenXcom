@@ -19,6 +19,7 @@
 #ifndef OPENXCOM__GEOSCAPESTATE_H
 #define OPENXCOM__GEOSCAPESTATE_H
 
+#include <string>
 #include <sstream>
 #include "State_Interactive.h"
 #include "Game.h"
@@ -35,6 +36,7 @@
 #include "GraphsState.h"
 #include "FundingState.h"
 #include "MonthlyReportState.h"
+#include "GeoscapeMessageState.h"
 
 using namespace std;
 
@@ -75,8 +77,8 @@ public:
 	void timeAdvance();
 	/// Trigger whenever a second passes.
 	void timeSecond();
-	/// Trigger whenever an hour passes.
-	void timeHour();
+	/// Trigger whenever a day passes.
+	void timeDay();
 	/// Trigger whenever a month passes.
 	void timeMonth();
 	/// Handler for clicking the globe.

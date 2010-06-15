@@ -43,6 +43,7 @@ private:
 	SurfaceSet *_texture;
 	BaseFacility *_facilities[BASE_SIZE][BASE_SIZE], *_selFacility;
 	Font *_big, *_small;
+	int _gridX, _gridY;
 public:
 	/// Creates a new base view at the specified position and size.
 	BaseView(Font *big, Font *small, int width, int height, int x = 0, int y = 0);
@@ -54,6 +55,10 @@ public:
 	void setTexture(SurfaceSet *texture);
 	/// Gets the currently selected facility.
 	BaseFacility *getSelectedFacility();
+	/// Gets the X position of the currently selected square.
+	int getGridX();
+	/// Gets the Y position of the currently selected square.
+	int getGridY();
 	/// Draws the base view.
 	void draw();
 	/// Special handling for mouse presses.

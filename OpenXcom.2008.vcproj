@@ -410,6 +410,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\GeoscapeMessageState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\GeoscapeMessageState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\GraphsState.cpp"
 				>
 			</File>

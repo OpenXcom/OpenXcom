@@ -28,6 +28,8 @@
 #include "TextList.h"
 #include "PlaceFacilityState.h"
 
+class Base;
+
 /**
  * Report screen shown monthly to display
  * changes in the player's performance and funding.
@@ -35,13 +37,15 @@
 class BuildFacilitiesState : public State
 {
 private:
+	Base *_base;
+
 	Button *_btnOk;
 	Window *_window;
 	Text *_txtTitle;
 	TextList *_lstFacilities;
 public:
 	/// Creates the Monthly Report state.
-	BuildFacilitiesState(Game *game);
+	BuildFacilitiesState(Game *game, Base *base);
 	/// Cleans up the Monthly Report state.
 	~BuildFacilitiesState();
 	/// Handler for clicking the OK button.

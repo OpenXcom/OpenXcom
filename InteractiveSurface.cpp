@@ -48,25 +48,22 @@ InteractiveSurface::~InteractiveSurface()
  */
 void InteractiveSurface::handle(SDL_Event *ev, int scale, State *state)
 {
-	if (ev->type == SDL_MOUSEMOTION)
+	if ((ev->motion.x >= _x * scale && ev->motion.x < (_x + _width) * scale) &&
+		(ev->motion.y >= _y * scale && ev->motion.y < (_y + _height) * scale))
 	{
-		if ((ev->motion.x >= _x * scale && ev->motion.x < (_x + _width) * scale) &&
-			(ev->motion.y >= _y * scale && ev->motion.y < (_y + _height) * scale))
+		if (!_isHovered)
 		{
-			if (!_isHovered)
-			{
-				_isHovered = true;
-				mouseIn(ev, scale, state);
-			}
-			mouseOver(ev, scale, state);
+			_isHovered = true;
+			mouseIn(ev, scale, state);
 		}
-		else
+		mouseOver(ev, scale, state);
+	}
+	else
+	{
+		if (_isHovered)
 		{
-			if (_isHovered)
-			{
-				_isHovered = false;
-				mouseOut(ev, scale, state);
-			}
+			_isHovered = false;
+			mouseOut(ev, scale, state);
 		}
 	}
 

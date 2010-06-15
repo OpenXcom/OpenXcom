@@ -26,7 +26,11 @@
 #include "Button.h"
 #include "Window.h"
 #include "Text.h"
+#include "BaseView.h"
+#include "Base.h"
+#include "BaseFacility.h"
 #include "RuleBaseFacility.h"
+#include "BasescapeErrorState.h"
 
 /**
  * Window shown when the player tries to
@@ -36,17 +40,21 @@ class PlaceFacilityState : public State
 {
 private:
 	RuleBaseFacility *_rule;
+	Base *_base;
 
+	BaseView *_view;
 	Button *_btnCancel;
 	Window *_window;
 	Text *_txtFacility, *_txtCost, *_numCost, *_txtTime, *_numTime, *_txtMaintenance, *_numMaintenance;
 public:
 	/// Creates the Place Facility state.
-	PlaceFacilityState(Game *game, RuleBaseFacility *rule);
+	PlaceFacilityState(Game *game, Base *base, RuleBaseFacility *rule);
 	/// Cleans up the Place Facility state.
 	~PlaceFacilityState();
 	/// Handler for clicking the Cancel button.
 	void btnCancelClick(SDL_Event *ev, int scale);
+	/// Handler for clicking the base view.
+	void viewClick(SDL_Event *ev, int scale);
 };
 
 #endif

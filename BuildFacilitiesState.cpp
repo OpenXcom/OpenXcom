@@ -22,7 +22,7 @@
  * Initializes all the elements in the Monthly Report screen.
  * @param game Pointer to the core game.
  */
-BuildFacilitiesState::BuildFacilitiesState(Game *game) : State(game)
+BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base) : State(game), _base(base)
 {
 	_screen = false;
 
@@ -86,5 +86,5 @@ void BuildFacilitiesState::btnOkClick(SDL_Event *ev, int scale)
  */
 void BuildFacilitiesState::lstFacilitiesClick(SDL_Event *ev, int scale)
 {
-	_game->pushState(new PlaceFacilityState(_game, _game->getRuleset()->getBaseFacility((LangString)(STR_LIVING_QUARTERS + _lstFacilities->getSelectedRow()))));
+	_game->pushState(new PlaceFacilityState(_game, _base, _game->getRuleset()->getBaseFacility((LangString)(STR_LIVING_QUARTERS + _lstFacilities->getSelectedRow()))));
 }

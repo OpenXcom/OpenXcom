@@ -343,8 +343,8 @@ void GeoscapeState::timeAdvance()
 		case TIME_MONTH:
 			timeMonth();
 		case TIME_DAY:
+			timeDay();
 		case TIME_HOUR:
-			timeHour();
 		case TIME_MIN:
 		case TIME_SEC:
 			timeSecond();
@@ -367,10 +367,31 @@ void GeoscapeState::timeSecond()
 
 /**
  * Takes care of any game logic that has to
- * run every game hour, like constructions.
+ * run every game day, like constructions.
  */
-void GeoscapeState::timeHour()
+void GeoscapeState::timeDay()
 {
+	for (vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); i++)
+	{
+		for (vector<BaseFacility*>::iterator j = (*i)->getFacilities()->begin(); j != (*i)->getFacilities()->end(); j++)
+		{
+			if ((*j)->getBuildTime() > 0)
+			{
+				(*j)->setBuildTime((*j)->getBuildTime() - 1);
+				if ((*j)->getBuildTime() == 0)
+				{
+					_pause = true;
+					//_btn5Secs->mousePress(0, _game->getScreen()->getScale(), this);
+					string s = _game->getResourcePack()->getLanguage()->getString(STR_PRODUCTION_OF);
+					s += _game->getResourcePack()->getLanguage()->getString((*j)->getRules()->getType());
+					s += _game->getResourcePack()->getLanguage()->getString(STR_AT);
+					s += (*i)->getName();
+					s += _game->getResourcePack()->getLanguage()->getString(STR_IS_COMPLETE);
+					_game->pushState(new GeoscapeMessageState(_game, s));
+				}
+			}
+		}
+	}
 }
 
 /**
@@ -380,7 +401,7 @@ void GeoscapeState::timeHour()
 void GeoscapeState::timeMonth()
 {
 	_pause = true;
-	_btn5Secs->mousePress(0, _game->getScreen()->getScale(), this);
+	//_btn5Secs->mousePress(0, _game->getScreen()->getScale(), this);
 	_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() + _game->getSavedGame()->getCountryFunding() - _game->getSavedGame()->getBaseMaintenance());
 	_game->pushState(new MonthlyReportState(_game));
 }

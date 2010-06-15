@@ -108,6 +108,7 @@
     <ClCompile Include="Cursor.cpp" />
     <ClCompile Include="CustomButton.cpp" />
     <ClCompile Include="DismantleFacilityState.cpp" />
+    <ClCompile Include="GeoscapeMessageState.cpp" />
     <ClCompile Include="MiniBaseView.cpp" />
     <ClCompile Include="MonthlyCostsState.cpp" />
     <ClCompile Include="Music.cpp" />
@@ -173,6 +174,7 @@
     <ClInclude Include="Cursor.h" />
     <ClInclude Include="CustomButton.h" />
     <ClInclude Include="DismantleFacilityState.h" />
+    <ClInclude Include="GeoscapeMessageState.h" />
     <ClInclude Include="MiniBaseView.h" />
     <ClInclude Include="MonthlyCostsState.h" />
     <ClInclude Include="Music.h" />

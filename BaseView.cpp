@@ -91,6 +91,26 @@ BaseFacility *BaseView::getSelectedFacility()
 }
 
 /**
+ * Returns the X position of the grid square 
+ * the mouse is currently over.
+ * @return X position on the grid.
+ */
+int BaseView::getGridX()
+{
+	return _gridX;
+}
+
+/**
+ * Returns the Y position of the grid square 
+ * the mouse is currently over.
+ * @return Y position on the grid.
+ */
+int BaseView::getGridY()
+{
+	return _gridY;
+}
+
+/**
  * Draws the view of all the facilities in the base, connectors
  * between them and crafts landed in hangars.
  */
@@ -265,10 +285,10 @@ void BaseView::mouseOver(SDL_Event *ev, int scale, State *state)
 {
 	double x = ev->button.x - _x * scale;
 	double y = ev->button.y - _y * scale;
-	int xx = (int)floor(x / (GRID_SIZE * scale));
-	int yy = (int)floor(y / (GRID_SIZE * scale));
-	if (xx >= 0 && xx < BASE_SIZE && yy >= 0 && yy < BASE_SIZE)
-		_selFacility = _facilities[xx][yy];
+	_gridX = (int)floor(x / (GRID_SIZE * scale));
+	_gridY = (int)floor(y / (GRID_SIZE * scale));
+	if (_gridX >= 0 && _gridX < BASE_SIZE && _gridY >= 0 && _gridY < BASE_SIZE)
+		_selFacility = _facilities[_gridX][_gridY];
 	else
 		_selFacility = 0;
 

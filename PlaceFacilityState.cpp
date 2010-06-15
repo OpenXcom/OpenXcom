@@ -23,12 +23,13 @@
  * @param game Pointer to the core game.
  * @param rule Pointer to the facility ruleset to build.
  */
-PlaceFacilityState::PlaceFacilityState(Game *game, RuleBaseFacility *rule) : State(game), _rule(rule)
+PlaceFacilityState::PlaceFacilityState(Game *game, Base *base, RuleBaseFacility *rule) : State(game), _base(base), _rule(rule)
 {
 	_screen = false;
 
 	// Create objects
 	_window = new Window(128, 160, 192, 40);
+	_view = new BaseView(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 192, 192, 0, 8);
 	_btnCancel = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 112, 16, 200, 176);
 	_txtFacility = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 110, 9, 202, 50);
 	_txtCost = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 110, 9, 202, 62);
@@ -42,6 +43,7 @@ PlaceFacilityState::PlaceFacilityState(Game *game, RuleBaseFacility *rule) : Sta
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
 
 	add(_window);
+	add(_view);
 	add(_btnCancel);
 	add(_txtFacility);
 	add(_txtCost);
@@ -54,6 +56,10 @@ PlaceFacilityState::PlaceFacilityState(Game *game, RuleBaseFacility *rule) : Sta
 	// Set up objects
 	_window->setColor(Palette::blockOffset(13)+13);
 	_window->setBg(game->getResourcePack()->getSurface("BACK01.SCR"));
+
+	_view->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
+	_view->setBase(_base);
+	_view->onMouseClick((EventHandler)&PlaceFacilityState::viewClick);
 
 	_btnCancel->setColor(Palette::blockOffset(13)+13);
 	_btnCancel->setText(_game->getResourcePack()->getLanguage()->getString(STR_CANCEL));
@@ -102,4 +108,29 @@ PlaceFacilityState::~PlaceFacilityState()
 void PlaceFacilityState::btnCancelClick(SDL_Event *ev, int scale)
 {
 	_game->popState();
+}
+
+/**
+ * Processes clicking on facilities.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
+void PlaceFacilityState::viewClick(SDL_Event *ev, int scale)
+{
+	if (_view->getSelectedFacility() != 0)
+	{
+		_game->pushState(new BasescapeErrorState(_game, STR_CANNOT_BUILD_HERE));
+	}
+	else if (_game->getSavedGame()->getFunds() < _rule->getBuildCost())
+	{
+		_game->pushState(new BasescapeErrorState(_game, STR_NOT_ENOUGH_MONEY));
+	}
+	else
+	{
+		BaseFacility *fac = new BaseFacility(_rule, _view->getGridX(), _view->getGridY());
+		fac->setBuildTime(_rule->getBuildTime());
+		_base->getFacilities()->push_back(fac);
+		_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() - _rule->getBuildCost());
+		_game->popState();
+	}
 }

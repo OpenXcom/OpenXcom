@@ -16,9 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM__BASESCAPEERRORSTATE_H
-#define OPENXCOM__BASESCAPEERRORSTATE_H
+#ifndef OPENXCOM__GEOSCAPEMESSAGESTATE_H
+#define OPENXCOM__GEOSCAPEMESSAGESTATE_H
 
+#include <string>
 #include "State_Interactive.h"
 #include "LangString.h"
 #include "Palette.h"
@@ -27,20 +28,20 @@
 #include "Text.h"
 
 /**
- * Generic window used to display error messages
- * when the player is on the Basescape.
+ * Generic window used to display information messages
+ * when the player is on the Geoscape.
  */
-class BasescapeErrorState : public State
+class GeoscapeMessageState : public State
 {
 private:
 	Button *_btnOk;
 	Window *_window;
-	Text *_txtError;
+	Text *_txtMessage;
 public:
 	/// Creates the Basescape Error state.
-	BasescapeErrorState(Game *game, LangString str);
+	GeoscapeMessageState(Game *game, string str);
 	/// Cleans up the Basescape Error state.
-	~BasescapeErrorState();
+	~GeoscapeMessageState();
 	/// Handler for clicking the OK button.
 	void btnOkClick(SDL_Event *ev, int scale);
 };

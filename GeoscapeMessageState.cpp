@@ -16,47 +16,47 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "BasescapeErrorState.h"
+#include "GeoscapeMessageState.h"
 
 /**
- * Initializes all the elements in a Basescape error window.
+ * Initializes all the elements in a Geoscape message window.
  * @param game Pointer to the core game.
- * @param str Error message to display.
+ * @param str Message to display.
  */
-BasescapeErrorState::BasescapeErrorState(Game *game, LangString str) : State(game)
+GeoscapeMessageState::GeoscapeMessageState(Game *game, string str) : State(game)
 {
 	_screen = false;
 
 	// Create objects
 	_window = new Window(256, 160, 32, 20, POPUP_BOTH);
 	_btnOk = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 120, 18, 100, 154);
-	_txtError = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 246, 40, 37, 70);
+	_txtMessage = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 246, 80, 37, 50);
 	
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
+	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
 
 	add(_window);
 	add(_btnOk);
-	add(_txtError);
+	add(_txtMessage);
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(15)+4);
-	_window->setBg(game->getResourcePack()->getSurface("BACK13.SCR"));
+	_window->setColor(Palette::blockOffset(15)+2);
+	_window->setBg(game->getResourcePack()->getSurface("BACK17.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(15)+4);
+	_btnOk->setColor(Palette::blockOffset(8)+8);
 	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString(STR_OK));
-	_btnOk->onMouseClick((EventHandler)&BasescapeErrorState::btnOkClick);
+	_btnOk->onMouseClick((EventHandler)&GeoscapeMessageState::btnOkClick);
 
-	_txtError->setColor(Palette::blockOffset(15)+1);
-	_txtError->setAlign(ALIGN_CENTER);
-	_txtError->setBig();
-	_txtError->setText(_game->getResourcePack()->getLanguage()->getString(str));
+	_txtMessage->setColor(Palette::blockOffset(15)-1);
+	_txtMessage->setAlign(ALIGN_CENTER);
+	_txtMessage->setBig();
+	_txtMessage->setText(str);
 }
 
 /**
  *
  */
-BasescapeErrorState::~BasescapeErrorState()
+GeoscapeMessageState::~GeoscapeMessageState()
 {
 	
 }
@@ -66,7 +66,7 @@ BasescapeErrorState::~BasescapeErrorState()
  * @param ev Pointer to the SDL_Event.
  * @param scale Scale of the screen.
  */
-void BasescapeErrorState::btnOkClick(SDL_Event *ev, int scale)
+void GeoscapeMessageState::btnOkClick(SDL_Event *ev, int scale)
 {
 	_game->popState();
 }
