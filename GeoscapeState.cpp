@@ -381,7 +381,7 @@ void GeoscapeState::timeDay()
 				if ((*j)->getBuildTime() == 0)
 				{
 					_pause = true;
-					//_btn5Secs->mousePress(0, _game->getScreen()->getScale(), this);
+					timerReset();
 					string s = _game->getResourcePack()->getLanguage()->getString(STR_PRODUCTION_OF);
 					s += _game->getResourcePack()->getLanguage()->getString((*j)->getRules()->getType());
 					s += _game->getResourcePack()->getLanguage()->getString(STR_AT);
@@ -401,9 +401,20 @@ void GeoscapeState::timeDay()
 void GeoscapeState::timeMonth()
 {
 	_pause = true;
-	//_btn5Secs->mousePress(0, _game->getScreen()->getScale(), this);
+	timerReset();
 	_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() + _game->getSavedGame()->getCountryFunding() - _game->getSavedGame()->getBaseMaintenance());
 	_game->pushState(new MonthlyReportState(_game));
+}
+
+/**
+ * Slows down the timer back to minimum speed,
+ * for when important events occur.
+ */
+void GeoscapeState::timerReset()
+{
+	SDL_Event ev;
+	ev.button.button = SDL_BUTTON_LEFT;
+	_btn5Secs->mousePress(&ev, _game->getScreen()->getScale(), this);
 }
 
 /**

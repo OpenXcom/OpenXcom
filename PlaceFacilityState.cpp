@@ -59,6 +59,7 @@ PlaceFacilityState::PlaceFacilityState(Game *game, Base *base, RuleBaseFacility 
 
 	_view->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
 	_view->setBase(_base);
+	_view->setVisible(false);
 	_view->onMouseClick((EventHandler)&PlaceFacilityState::viewClick);
 
 	_btnCancel->setColor(Palette::blockOffset(13)+13);
@@ -117,12 +118,14 @@ void PlaceFacilityState::btnCancelClick(SDL_Event *ev, int scale)
  */
 void PlaceFacilityState::viewClick(SDL_Event *ev, int scale)
 {
-	if (_view->getSelectedFacility() != 0)
+	if (!_view->isPlaceable(_rule))
 	{
+		_game->popState();
 		_game->pushState(new BasescapeErrorState(_game, STR_CANNOT_BUILD_HERE));
 	}
 	else if (_game->getSavedGame()->getFunds() < _rule->getBuildCost())
 	{
+		_game->popState();
 		_game->pushState(new BasescapeErrorState(_game, STR_NOT_ENOUGH_MONEY));
 	}
 	else

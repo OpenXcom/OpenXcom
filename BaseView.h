@@ -59,6 +59,8 @@ public:
 	int getGridX();
 	/// Gets the Y position of the currently selected square.
 	int getGridY();
+	/// Checks if a facility can be placed.
+	bool isPlaceable(RuleBaseFacility *rule);
 	/// Draws the base view.
 	void draw();
 	/// Special handling for mouse presses.

@@ -38,6 +38,7 @@ class BuildFacilitiesState : public State
 {
 private:
 	Base *_base;
+	State *_state;
 
 	Button *_btnOk;
 	Window *_window;
@@ -45,9 +46,11 @@ private:
 	TextList *_lstFacilities;
 public:
 	/// Creates the Monthly Report state.
-	BuildFacilitiesState(Game *game, Base *base);
+	BuildFacilitiesState(Game *game, Base *base, State *state);
 	/// Cleans up the Monthly Report state.
 	~BuildFacilitiesState();
+	/// Updates the base stats.
+	void init();
 	/// Handler for clicking the OK button.
 	void btnOkClick(SDL_Event *ev, int scale);
 	/// Handler for clicking the Facilities list.

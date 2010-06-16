@@ -190,7 +190,7 @@ void BasescapeState::btnCraftsClick(SDL_Event *ev, int scale)
  */
 void BasescapeState::btnFacilitiesClick(SDL_Event *ev, int scale)
 {
-	_game->pushState(new BuildFacilitiesState(_game, _base));
+	_game->pushState(new BuildFacilitiesState(_game, _base, this));
 }
 
 /**

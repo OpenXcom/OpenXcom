@@ -62,7 +62,7 @@ void BaseView::setBase(Base *base)
 		for (int y = (*i)->getY(); y < (*i)->getY() + (*i)->getRules()->getSize(); y++)
 		{
 			for (int x = (*i)->getX(); x < (*i)->getX() + (*i)->getRules()->getSize(); x++)
-			{				
+			{
 				_facilities[x][y] = *i;
 			}
 		}
@@ -108,6 +108,39 @@ int BaseView::getGridX()
 int BaseView::getGridY()
 {
 	return _gridY;
+}
+
+/**
+ * Returns if a certain facility can be successfully
+ * placed on the currently selected square.
+ * @param rule Facility type.
+ * @return True if placeable, False otherwise.
+ */
+bool BaseView::isPlaceable(RuleBaseFacility *rule)
+{
+	// Check if square isn't occupied
+	for (int y = _gridY; y < _gridY + rule->getSize(); y++)
+	{
+		for (int x = _gridX; x < _gridX + rule->getSize(); x++)
+		{
+			if (x > BASE_SIZE || y > BASE_SIZE)
+				return false;
+			if (_facilities[x][y] != 0)
+				return false;
+		}
+	}
+
+	// Check for another facility to connect to
+	for (int i = 0; i < rule->getSize(); i++)
+	{
+		if ((_gridX > 0 && _facilities[_gridX - 1][_gridY + i] != 0 && _facilities[_gridX - 1][_gridY + i]->getBuildTime() == 0) ||
+			(_gridY > 0 && _facilities[_gridX + i][_gridY - 1] != 0 && _facilities[_gridX + i][_gridY - 1]->getBuildTime() == 0) ||
+			(_gridX + rule->getSize() < BASE_SIZE && _facilities[_gridX + rule->getSize()][_gridY + i] != 0 && _facilities[_gridX + rule->getSize()][_gridY + i]->getBuildTime() == 0) ||
+			(_gridY + rule->getSize() < BASE_SIZE && _facilities[_gridX + i][_gridY + rule->getSize()] != 0 && _facilities[_gridX + i][_gridY + rule->getSize()]->getBuildTime() == 0))
+			return true;
+	}
+
+	return false;
 }
 
 /**

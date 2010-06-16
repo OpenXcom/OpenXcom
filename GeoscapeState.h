@@ -81,6 +81,8 @@ public:
 	void timeDay();
 	/// Trigger whenever a month passes.
 	void timeMonth();
+	/// Resets the timer to minimum speed.
+	void timerReset();
 	/// Handler for clicking the globe.
 	void globeClick(SDL_Event *ev, int scale);
 	/// Handler for clicking the Intercept button.

@@ -22,7 +22,7 @@
  * Initializes all the elements in the Monthly Report screen.
  * @param game Pointer to the core game.
  */
-BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base) : State(game), _base(base)
+BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base, State *state) : State(game), _base(base), _state(state)
 {
 	_screen = false;
 
@@ -67,6 +67,15 @@ BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base) : State(game)
 BuildFacilitiesState::~BuildFacilitiesState()
 {
 	
+}
+
+/**
+ * The player can change the selected base
+ * or change info on other screens.
+ */
+void BuildFacilitiesState::init()
+{
+	_state->init();
 }
 
 /**
