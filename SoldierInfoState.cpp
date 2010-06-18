@@ -307,7 +307,7 @@ void SoldierInfoState::init()
 	_txtKills->setText(ss11.str());
 
 	stringstream ss12;
-	ss12 << _game->getResourcePack()->getLanguage()->getString(STR_CRAFT_) << _game->getResourcePack()->getLanguage()->getString(STR_SKYRANGER) << "-" << 1;
+	ss12 << _game->getResourcePack()->getLanguage()->getString(STR_CRAFT_) << _game->getResourcePack()->getLanguage()->getString(s->getCraft()->getRules()->getType()) << "-" << s->getCraft()->getId();
 	_txtCraft->setText(ss12.str());
 }
 	

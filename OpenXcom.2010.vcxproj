@@ -113,6 +113,7 @@
     <ClCompile Include="MonthlyCostsState.cpp" />
     <ClCompile Include="Music.cpp" />
     <ClCompile Include="PlaceFacilityState.cpp" />
+    <ClCompile Include="RNG.cpp" />
     <ClCompile Include="RuleBaseFacility.cpp" />
     <ClCompile Include="RuleCraft.cpp" />
     <ClCompile Include="Soldier.cpp" />
@@ -179,6 +180,7 @@
     <ClInclude Include="MonthlyCostsState.h" />
     <ClInclude Include="Music.h" />
     <ClInclude Include="PlaceFacilityState.h" />
+    <ClInclude Include="RNG.h" />
     <ClInclude Include="RuleBaseFacility.h" />
     <ClInclude Include="RuleCraft.h" />
     <ClInclude Include="Soldier.h" />

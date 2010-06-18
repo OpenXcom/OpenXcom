@@ -22,6 +22,7 @@
 #include <string>
 #include <sstream>
 #include "State_Interactive.h"
+#include "RNG.h"
 #include "Game.h"
 #include "Palette.h"
 #include "Surface.h"

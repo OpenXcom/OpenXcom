@@ -16,27 +16,21 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM__XCOMRULESET_H
-#define OPENXCOM__XCOMRULESET_H
-
 #include "RNG.h"
-#include "Ruleset.h"
-#include "LangString.h"
-#include "Base.h"
 
 /**
- * Rule set for the X-Com: UFO Defense game.
+ * Defaults to the current time.
  */
-class XcomRuleset : public Ruleset
-{
-private:
-public:
-	/// Creates the X-Com ruleset.
-	XcomRuleset();
-	/// Cleans up the X-Com ruleset.
-	~XcomRuleset();
-	/// Generates a saved game with starting equipment.
-	SavedGame *newSave(GameDifficulty diff);
-};
+int RNG::seed = (int)time(NULL);
 
-#endif
+/**
+ * Generates a random number within a certain range.
+ * @param min Minimum number.
+ * @param max Maximum number.
+ * @return Generated number.
+ */
+int RNG::generate(int min, int max)
+{
+	seed = rand();
+	return (seed % (max - min + 1) + min);
+}

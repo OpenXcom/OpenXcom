@@ -27,6 +27,7 @@
 #include "Window.h"
 #include "Text.h"
 #include "TextList.h"
+#include "Base.h"
 #include "Craft.h"
 
 using namespace std;

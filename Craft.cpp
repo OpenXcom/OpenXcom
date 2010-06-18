@@ -18,21 +18,40 @@
  */
 #include "Craft.h"
 
+/**
+ * Initializes a craft of the specified type and
+ * assigns it the latest craft ID available.
+ * @param rules Pointer to ruleset.
+ * @param id List of craft IDs.
+ * @param lat Latitude in radian.
+ * @param lon Longitude in radian.
+ */
 Craft::Craft(RuleCraft *rules, map<LangString, int> *id, double lat, double lon) : _rules(rules), _lat(lat), _lon(lon), _fuel(0), _health(0)
 {
 	_id = (*id)[rules->getType()];
 	(*id)[rules->getType()]++;
 }
 
+/**
+ *
+ */
 Craft::~Craft()
 {
 }
 
+/**
+ * Returns the ruleset for the craft's type.
+ * @return Pointer to ruleset.
+ */
 RuleCraft *Craft::getRules()
 {
 	return _rules;
 }
 
+/**
+ * Returns the craft's unique ID. Each craft
+ * can be identified by its type and ID.
+ */
 int Craft::getId()
 {
 	return _id;

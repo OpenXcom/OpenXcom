@@ -41,42 +41,79 @@ public:
 	RuleBaseFacility(LangString type);
 	/// Cleans up the facility ruleset.
 	~RuleBaseFacility();
+	/// Gets the facility's type.
 	LangString getType();
+	/// Gets the facility's shape sprite.
 	int getSpriteShape();
+	/// Sets the facility's shape sprite.
 	void setSpriteShape(int sprite);
+	/// Gets the facility's content sprite.
 	int getSpriteFacility();
+	/// Sets the facility's content sprite.
 	void setSpriteFacility(int sprite);
+	/// Gets the facility's size.
 	int getSize();
+	/// Sets the facility's size.
 	void setSize(int size);
+	/// Gets if the facility is a lift.
 	bool getLift();
+	/// Sets if the facility is a lift.
 	void setLift(bool lift);
+	/// Gets the facility's construction cost.
 	int getBuildCost();
+	/// Sets the facility's construction cost.
 	void setBuildCost(int cost);
+	/// Gets the facility's construction time.
 	int getBuildTime();
+	/// Sets the facility's construction time.
 	void setBuildTime(int time);
+	/// Gets the facility's monthly cost.
 	int getMonthlyCost();
+	/// Sets the facility's monthly cost.
 	void setMonthlyCost(int cost);
+	/// Gets the facility's storage capacity.
 	int getStorage();
+	/// Sets the facility's storage capacity.
 	void setStorage(int storage);
+	/// Gets the facility's personnel capacity.
 	int getPersonnel();
+	/// Sets the facility's personnel capacity.
 	void setPersonnel(int personnel);
+	/// Gets the facility's alien capacity.
 	int getAliens();
+	/// Sets the facility's alien capacity.
 	void setAliens(int aliens);
+	/// Gets the facility's craft capacity.
 	int getCrafts();
+	/// Sets the facility's craft capacity.
 	void setCrafts(int crafts);
+	/// Gets the facility's laboratory space.
 	int getLaboratories();
+	/// Sets the facility's laboratory space.
 	void setLaboratories(int laboratories);
+	/// Gets the facility's workshop space.
 	int getWorkshops();
+	/// Sets the facility's workshop space.
 	void setWorkshops(int workshops);
+	/// Gets the facility's psi-training capacity.
 	int getPsiLaboratories();
+	/// Sets the facility's psi-training capacity.
 	void setPsiLaboratories(int psi);
+	/// Gets the facility's radar range.
 	int getRadarRange();
+	/// Sets the facility's radar range.
 	void setRadarRange(int range);
+	/// Gets the facility's detection chance.
 	int getRadarChance();
+	/// Sets the facility's detection chance.
 	void setRadarChance(int chance);
+	/// Gets the facility's defence value.
 	int getDefenceValue();
+	/// Sets the facility's defence value.
 	void setDefenceValue(int defence);
+	/// Gets the facility's weapon hit ratio.
 	int getHitRatio();
+	/// Sets the facility's weapon hit ratio.
 	void setHitRatio(int ratio);
 };
 

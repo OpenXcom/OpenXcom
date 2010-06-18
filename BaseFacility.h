@@ -33,12 +33,19 @@ private:
 	RuleBaseFacility *_rules;
 	int _x, _y, _buildTime;
 public:
+	/// Creates a base facility of the specified type.
 	BaseFacility(RuleBaseFacility *rules, int x, int y);
+	/// Cleans up the base facility.
 	~BaseFacility();
+	/// Gets the facility's ruleset.
 	RuleBaseFacility *getRules();
+	/// Gets the facility's X position.
 	int getX();
+	/// Gets the facility's Y position.
 	int getY();
+	/// Gets the facility's construction time.
 	int getBuildTime();
+	/// Sets the facility's construction time.
 	void setBuildTime(int time);
 };
 

@@ -91,7 +91,7 @@ void SoldiersState::init()
 	for (vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); i++)
 	{
 		stringstream ss;
-		ss << _game->getResourcePack()->getLanguage()->getString(STR_SKYRANGER) << "-" << 1;
+		ss << _game->getResourcePack()->getLanguage()->getString((*i)->getCraft()->getRules()->getType()) << "-" << (*i)->getCraft()->getId();
 		_lstSoldiers->addRow(3, (*i)->getName().c_str(), _game->getResourcePack()->getLanguage()->getString((*i)->getRankString()).c_str(), ss.str().c_str());
 	}
 }

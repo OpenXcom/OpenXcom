@@ -109,11 +109,11 @@ MonthlyCostsState::MonthlyCostsState(Game *game, Base *base) : State(game), _bas
 	ss4 << _base->getSoldiers()->size();
 	_lstSalaries->addRow(4, _game->getResourcePack()->getLanguage()->getString(STR_SOLDIERS).c_str(), Text::formatFunding(20000).c_str(), ss4.str().c_str(), Text::formatFunding(_base->getSoldiers()->size() * 20000).c_str());
 	stringstream ss5;
-	ss5 << _base->getEngineers();
-	_lstSalaries->addRow(4, _game->getResourcePack()->getLanguage()->getString(STR_ENGINEERS).c_str(), Text::formatFunding(25000).c_str(), ss5.str().c_str(), Text::formatFunding(_base->getEngineers() * 25000).c_str());
+	ss5 << _base->getTotalEngineers();
+	_lstSalaries->addRow(4, _game->getResourcePack()->getLanguage()->getString(STR_ENGINEERS).c_str(), Text::formatFunding(25000).c_str(), ss5.str().c_str(), Text::formatFunding(_base->getTotalEngineers() * 25000).c_str());
 	stringstream ss6;
-	ss6 << _base->getScientists();
-	_lstSalaries->addRow(4, _game->getResourcePack()->getLanguage()->getString(STR_SCIENTISTS).c_str(), Text::formatFunding(30000).c_str(), ss6.str().c_str(), Text::formatFunding(_base->getScientists() * 30000).c_str());
+	ss6 << _base->getTotalScientists();
+	_lstSalaries->addRow(4, _game->getResourcePack()->getLanguage()->getString(STR_SCIENTISTS).c_str(), Text::formatFunding(30000).c_str(), ss6.str().c_str(), Text::formatFunding(_base->getTotalScientists() * 30000).c_str());
 
 	_lstMaintenance->setColor(Palette::blockOffset(13)+10);
 	_lstMaintenance->setColumns(2, 240, 60);

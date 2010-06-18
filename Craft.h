@@ -37,9 +37,13 @@ private:
 	double _lat, _lon;
 	int _id, _fuel, _health;
 public:
+	/// Creates a craft of the specified type.
 	Craft(RuleCraft *rules, map<LangString, int> *id, double lat, double lon);
+	/// Cleans up the craft.
 	~Craft();
+	/// Gets the craft's ruleset.
 	RuleCraft *getRules();
+	/// Gets the craft's ID.
 	int getId();
 };
 

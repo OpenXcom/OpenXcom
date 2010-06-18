@@ -21,6 +21,8 @@
 /**
  * Initializes all the elements in the Monthly Report screen.
  * @param game Pointer to the core game.
+ * @param base Pointer to the base to get info from.
+ * @param state Pointer to the base state to refresh.
  */
 BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base, State *state) : State(game), _base(base), _state(state)
 {

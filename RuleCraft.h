@@ -38,12 +38,15 @@ public:
 	RuleCraft(LangString type);
 	/// Cleans up the craft ruleset.
 	~RuleCraft();
-
+	/// Gets the craft's type.
 	LangString getType();
+	/// Gets the craft's sprite.
 	int getSprite();
+	/// Sets the craft's sprite.
 	void setSprite(int sprite);
-
+	/// Gets the craft's monthly fee.
 	int getMonthlyFee();
+	/// Sets the craft's monthly fee.
 	void setMonthlyFee(int fee);
 };
 

@@ -28,6 +28,7 @@
 #include "Text.h"
 #include "TextList.h"
 #include "Craft.h"
+#include "Base.h"
 
 using namespace std;
 

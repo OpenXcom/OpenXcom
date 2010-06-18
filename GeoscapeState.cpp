@@ -231,7 +231,7 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _rotLon(0), _rotLat(0), 
 
 	// Set music
 	stringstream ss;
-	ss << "GMGEO" << SavedGame::genRandom(1, 2);
+	ss << "GMGEO" << RNG::generate(1, 2);
 	_game->getResourcePack()->getMusic(ss.str())->play();
 }
 

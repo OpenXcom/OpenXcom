@@ -25,8 +25,7 @@
 #include "RuleBaseFacility.h"
 #include "Craft.h"
 #include "RuleCraft.h"
-
-class Soldier;
+#include "Soldier.h"
 
 using namespace std;
 
@@ -62,34 +61,57 @@ public:
 	vector<Soldier*> *getSoldiers();
 	/// Gets the base's crafts.
 	vector<Craft*> *getCrafts();
-	
-	int getScientists();
+	/// Sets the base's scientists.
 	void setScientists(int scientists);
-	int getEngineers();
+	/// Sets the base's engineers.
 	void setEngineers(int engineers);
+	/// Gets the base's available soldiers.
 	int getAvailableSoldiers();
+	/// Gets the base's total soldiers.
 	int getTotalSoldiers();
+	/// Gets the base's available scientists.
 	int getAvailableScientists();
+	/// Gets the base's total scientists.
 	int getTotalScientists();
+	/// Gets the base's available engineers.
 	int getAvailableEngineers();
+	/// Gets the base's total engineers.
 	int getTotalEngineers();
+	/// Gets the base's used living quarters.
 	int getUsedQuarters();
+	/// Gets the base's available living quarters.
 	int getAvailableQuarters();
+	/// Gets the base's used storage space.
 	int getUsedStores();
+	/// Gets the base's available storage space.
 	int getAvailableStores();
+	/// Gets the base's used laboratory space.
 	int getUsedLaboratories();
+	/// Gets the base's available laboratory space.
 	int getAvailableLaboratories();
+	/// Gets the base's used workshop space.
 	int getUsedWorkshops();
+	/// Gets the base's available workshop space.
 	int getAvailableWorkshops();
+	/// Gets the base's used hangars.
 	int getUsedHangars();
+	/// Gets the base's available hangars.
 	int getAvailableHangars();
+	/// Gets the base's defence value.
 	int getDefenceValue();
+	/// Gets the base's short range detection.
 	int getShortRangeDetection();
+	/// Gets the base's long range detection.
 	int getLongRangeDetection();
+	/// Gets the base's crafts of a certain type.
 	int getCraftCount(LangString craft);
+	/// Gets the base's craft maintenance.
 	int getCraftMaintenance();
+	/// Gets the base's personnel maintenance.
 	int getPersonnelMaintenance();
+	/// Gets the base's facility maintenance.
 	int getFacilityMaintenance();
+	/// Gets the base's total monthly maintenance.
 	int getMonthlyMaintenace();
 };
 

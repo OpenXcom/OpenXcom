@@ -422,22 +422,22 @@ SavedGame *XcomRuleset::newSave(GameDifficulty diff)
 	SavedGame *save = new SavedGame(diff);
 
 	// Generate countries
-	save->getCountries()->insert(pair<LangString, Country*>(STR_USA, new Country(SavedGame::genRandom(600, 1200)*1000)));
-	save->getCountries()->insert(pair<LangString, Country*>(STR_RUSSIA, new Country(SavedGame::genRandom(230, 460)*1000)));
-	save->getCountries()->insert(pair<LangString, Country*>(STR_UK, new Country(SavedGame::genRandom(240, 480)*1000)));
-	save->getCountries()->insert(pair<LangString, Country*>(STR_FRANCE, new Country(SavedGame::genRandom(320, 640)*1000)));
-	save->getCountries()->insert(pair<LangString, Country*>(STR_GERMANY, new Country(SavedGame::genRandom(250, 500)*1000)));
-	save->getCountries()->insert(pair<LangString, Country*>(STR_ITALY, new Country(SavedGame::genRandom(160, 320)*1000)));
-	save->getCountries()->insert(pair<LangString, Country*>(STR_SPAIN, new Country(SavedGame::genRandom(140, 280)*1000)));
-	save->getCountries()->insert(pair<LangString, Country*>(STR_CHINA, new Country(SavedGame::genRandom(245, 490)*1000)));
-	save->getCountries()->insert(pair<LangString, Country*>(STR_JAPAN, new Country(SavedGame::genRandom(400, 800)*1000)));
-	save->getCountries()->insert(pair<LangString, Country*>(STR_INDIA, new Country(SavedGame::genRandom(150, 300)*1000)));
-	save->getCountries()->insert(pair<LangString, Country*>(STR_BRAZIL, new Country(SavedGame::genRandom(300, 600)*1000)));
-	save->getCountries()->insert(pair<LangString, Country*>(STR_AUSTRALIA, new Country(SavedGame::genRandom(280, 560)*1000)));
-	save->getCountries()->insert(pair<LangString, Country*>(STR_NIGERIA, new Country(SavedGame::genRandom(180, 360)*1000)));
-	save->getCountries()->insert(pair<LangString, Country*>(STR_SOUTH_AFRICA, new Country(SavedGame::genRandom(310, 620)*1000)));
-	save->getCountries()->insert(pair<LangString, Country*>(STR_EGYPT, new Country(SavedGame::genRandom(160, 320)*1000)));
-	save->getCountries()->insert(pair<LangString, Country*>(STR_CANADA, new Country(SavedGame::genRandom(110, 220)*1000)));
+	save->getCountries()->insert(pair<LangString, Country*>(STR_USA, new Country(RNG::generate(600, 1200)*1000)));
+	save->getCountries()->insert(pair<LangString, Country*>(STR_RUSSIA, new Country(RNG::generate(230, 460)*1000)));
+	save->getCountries()->insert(pair<LangString, Country*>(STR_UK, new Country(RNG::generate(240, 480)*1000)));
+	save->getCountries()->insert(pair<LangString, Country*>(STR_FRANCE, new Country(RNG::generate(320, 640)*1000)));
+	save->getCountries()->insert(pair<LangString, Country*>(STR_GERMANY, new Country(RNG::generate(250, 500)*1000)));
+	save->getCountries()->insert(pair<LangString, Country*>(STR_ITALY, new Country(RNG::generate(160, 320)*1000)));
+	save->getCountries()->insert(pair<LangString, Country*>(STR_SPAIN, new Country(RNG::generate(140, 280)*1000)));
+	save->getCountries()->insert(pair<LangString, Country*>(STR_CHINA, new Country(RNG::generate(245, 490)*1000)));
+	save->getCountries()->insert(pair<LangString, Country*>(STR_JAPAN, new Country(RNG::generate(400, 800)*1000)));
+	save->getCountries()->insert(pair<LangString, Country*>(STR_INDIA, new Country(RNG::generate(150, 300)*1000)));
+	save->getCountries()->insert(pair<LangString, Country*>(STR_BRAZIL, new Country(RNG::generate(300, 600)*1000)));
+	save->getCountries()->insert(pair<LangString, Country*>(STR_AUSTRALIA, new Country(RNG::generate(280, 560)*1000)));
+	save->getCountries()->insert(pair<LangString, Country*>(STR_NIGERIA, new Country(RNG::generate(180, 360)*1000)));
+	save->getCountries()->insert(pair<LangString, Country*>(STR_SOUTH_AFRICA, new Country(RNG::generate(310, 620)*1000)));
+	save->getCountries()->insert(pair<LangString, Country*>(STR_EGYPT, new Country(RNG::generate(160, 320)*1000)));
+	save->getCountries()->insert(pair<LangString, Country*>(STR_CANADA, new Country(RNG::generate(110, 220)*1000)));
 	save->setFunds(save->getCountryFunding());
 	
 	// Set up craft IDs
@@ -453,12 +453,6 @@ SavedGame *XcomRuleset::newSave(GameDifficulty diff)
 	base->setEngineers(10);
 	base->setScientists(10);
 
-	// Generate soldiers
-	for (int i = 0; i < 8; i++)
-	{
-		base->getSoldiers()->push_back(new Soldier(&_names));
-	}
-
 	// Add facilities
 	base->getFacilities()->push_back(new BaseFacility(getBaseFacility(STR_ACCESS_LIFT), 2, 2));
 	base->getFacilities()->push_back(new BaseFacility(getBaseFacility(STR_HANGAR), 2, 0));
@@ -471,9 +465,18 @@ SavedGame *XcomRuleset::newSave(GameDifficulty diff)
 	base->getFacilities()->push_back(new BaseFacility(getBaseFacility(STR_SMALL_RADAR_SYSTEM), 1, 3));
 
 	// Add crafts
-	base->getCrafts()->push_back(new Craft(getCraft(STR_SKYRANGER), save->getCraftIds(), 0.0, 0.0));
+	Craft *skyranger = new Craft(getCraft(STR_SKYRANGER), save->getCraftIds(), 0.0, 0.0);
+	base->getCrafts()->push_back(skyranger);
 	base->getCrafts()->push_back(new Craft(getCraft(STR_INTERCEPTOR), save->getCraftIds(), 0.0, 0.0));
 	base->getCrafts()->push_back(new Craft(getCraft(STR_INTERCEPTOR), save->getCraftIds(), 0.0, 0.0));
+
+	// Generate soldiers
+	for (int i = 0; i < 8; i++)
+	{
+		Soldier *soldier = new Soldier(&_names);
+		soldier->setCraft(skyranger);
+		base->getSoldiers()->push_back(soldier);
+	}
 
 	save->getBases()->push_back(base);
 	

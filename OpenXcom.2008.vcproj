@@ -294,6 +294,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\RNG.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\RNG.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Screen.cpp"
 				>
 			</File>

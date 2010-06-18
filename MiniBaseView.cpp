@@ -38,7 +38,7 @@ MiniBaseView::~MiniBaseView()
 
 /**
  * Changes the current list of bases to display.
- * @param base Pointer to base list to display.
+ * @param bases Pointer to base list to display.
  */
 void MiniBaseView::setBases(vector<Base*> *bases)
 {

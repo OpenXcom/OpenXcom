@@ -25,7 +25,7 @@
 SavedGame::SavedGame(GameDifficulty diff) : _diff(diff), _funds(0), _bases()
 {
 	_time = new GameTime(6, 1, 1, 1999, 12, 0, 0);
-	srand(seed);
+	srand(RNG::seed);
 }
 
 /** 
@@ -37,23 +37,6 @@ SavedGame::~SavedGame()
 	{
 		delete *i;
 	}
-}
-
-/**
- * Defaults to the current time.
- */
-int SavedGame::seed = (int)time(NULL);
-
-/**
- * Generates a random number between a certain number.
- * @param min Minimum number.
- * @param max Maximum number.
- * @return Generated number.
- */
-int SavedGame::genRandom(int min, int max)
-{
-	seed = rand();
-	return (seed % (max - min + 1) + min);
 }
 
 /**

@@ -22,7 +22,7 @@
 #include <string>
 #include <sstream>
 #include <vector>
-#include "SavedGame.h"
+#include "RNG.h"
 
 using namespace std;
 

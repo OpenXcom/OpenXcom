@@ -21,8 +21,7 @@
 
 #include <map>
 #include <vector>
-#include <cstdlib>
-#include <ctime>
+#include "RNG.h"
 #include "GameTime.h"
 #include "Country.h"
 #include "LangString.h"
@@ -54,10 +53,6 @@ public:
 	SavedGame(GameDifficulty diff);
 	/// Cleans up the saved game.
 	~SavedGame();
-	/// Seed used for random number generation.
-	static int seed;
-	/// Generates a random number.
-	static int genRandom(int min, int max);
 	/// Gets the current funds.
 	int getFunds();
 	/// Sets new funds.

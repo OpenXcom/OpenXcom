@@ -97,61 +97,105 @@ vector<Craft*> *Base::getCrafts()
 	return &_crafts;
 }
 
-int Base::getScientists()
-{
-	return _scientists;
-}
-
+/**
+ * Changes the amount of scientists in the base.
+ * @param scientists Number of scientists.
+ */
 void Base::setScientists(int scientists)
 {
 	 _scientists = scientists;
 }
 
-int Base::getEngineers()
-{
-	return _engineers;
-}
-
+/**
+ * Changes the amount of engineers in the base.
+ * @param engineers Number of engineers.
+ */
 void Base::setEngineers(int engineers)
 {
 	 _engineers = engineers;
 }
 
+/**
+ * Returns the amount of soldiers contained
+ * in the base without any assignments.
+ * @return Number of soldiers.
+ */
 int Base::getAvailableSoldiers()
 {
-	return 0;
+	int total = 0;
+	for (vector<Soldier*>::iterator i = _soldiers.begin(); i != _soldiers.end(); i++)
+	{
+		if ((*i)->getCraft() == 0)
+			total++;
+	}
+	return total;
 }
 
+/**
+ * Returns the total amount of soldiers contained
+ * in the base.
+ * @return Number of soldiers.
+ */
 int Base::getTotalSoldiers()
 {
 	return _soldiers.size();
 }
 
+/**
+ * Returns the amount of scientists contained
+ * in the base without any assignments.
+ * @return Number of scientists.
+ */
 int Base::getAvailableScientists()
 {
 	return 0;
 }
 
+/**
+ * Returns the total amount of scientists contained
+ * in the base.
+ * @return Number of scientists.
+ */
 int Base::getTotalScientists()
 {
 	return _scientists;
 }
 
+/**
+ * Returns the amount of engineers contained
+ * in the base without any assignments.
+ * @return Number of engineers.
+ */
 int Base::getAvailableEngineers()
 {
 	return 0;
 }
 
+/**
+ * Returns the total amount of engineers contained
+ * in the base.
+ * @return Number of engineers.
+ */
 int Base::getTotalEngineers()
 {
 	return _engineers;
 }
 
+/**
+ * Returns the amount of living quarters used up
+ * by personnel in the base.
+ * @return Living space.
+ */
 int Base::getUsedQuarters()
 {
 	return getTotalSoldiers() + getTotalScientists() + getTotalEngineers();
 }
 
+/**
+ * Returns the total amount of living quarters
+ * available in the base.
+ * @return Living space.
+ */
 int Base::getAvailableQuarters()
 {
 	int total = 0;
@@ -163,11 +207,21 @@ int Base::getAvailableQuarters()
 	return total;
 }
 
+/**
+ * Returns the amount of stores used up
+ * by equipment in the base.
+ * @return Storage space.
+ */
 int Base::getUsedStores()
 {
 	return 0;
 }
 
+/**
+ * Returns the total amount of stores
+ * available in the base.
+ * @return Storage space.
+ */
 int Base::getAvailableStores()
 {
 	int total = 0;
@@ -179,11 +233,21 @@ int Base::getAvailableStores()
 	return total;
 }
 
+/**
+ * Returns the amount of laboratories used up
+ * by research projects in the base.
+ * @return Laboratory space.
+ */
 int Base::getUsedLaboratories()
 {
 	return 0;
 }
 
+/**
+ * Returns the total amount of laboratories
+ * available in the base.
+ * @return Laboratory space.
+ */
 int Base::getAvailableLaboratories()
 {
 	int total = 0;
@@ -195,11 +259,21 @@ int Base::getAvailableLaboratories()
 	return total;
 }
 
+/**
+ * Returns the amount of workshops used up
+ * by manufacturing projects in the base.
+ * @return Storage space.
+ */
 int Base::getUsedWorkshops()
 {
 	return 0;
 }
 
+/**
+ * Returns the total amount of workshops
+ * available in the base.
+ * @return Workshop space.
+ */
 int Base::getAvailableWorkshops()
 {
 	int total = 0;
@@ -211,11 +285,21 @@ int Base::getAvailableWorkshops()
 	return total;
 }
 
+/**
+ * Returns the amount of hangars used up
+ * by crafts in the base.
+ * @return Storage space.
+ */
 int Base::getUsedHangars()
 {
 	return _crafts.size();
 }
 
+/**
+ * Returns the total amount of hangars
+ * available in the base.
+ * @return Number of hangars.
+ */
 int Base::getAvailableHangars()
 {
 	int total = 0;
@@ -227,6 +311,11 @@ int Base::getAvailableHangars()
 	return total;
 }
 
+/**
+ * Returns the total defence value of all
+ * the facilities in the base.
+ * @return Defence value.
+ */
 int Base::getDefenceValue()
 {
 	int total = 0;
@@ -238,6 +327,11 @@ int Base::getDefenceValue()
 	return total;
 }
 
+/**
+ * Returns the total amount of short range
+ * detection facilities in the base.
+ * @return Defence value.
+ */
 int Base::getShortRangeDetection()
 {
 	int total = 0;
@@ -250,6 +344,11 @@ int Base::getShortRangeDetection()
 	return total;
 }
 
+/**
+ * Returns the total amount of long range
+ * detection facilities in the base.
+ * @return Defence value.
+ */
 int Base::getLongRangeDetection()
 {
 	int total = 0;
@@ -262,6 +361,12 @@ int Base::getLongRangeDetection()
 	return total;
 }
 
+/**
+ * Returns the total amount of craft of
+ * a certain type stored in the base.
+ * @param craft Craft type.
+ * @return Number of craft.
+ */
 int Base::getCraftCount(LangString craft)
 {
 	int total = 0;
@@ -273,6 +378,11 @@ int Base::getCraftCount(LangString craft)
 	return total;
 }
 
+/**
+ * Returns the total amount of monthly costs
+ * for maintaining the craft in the base.
+ * @return Maintenance costs.
+ */
 int Base::getCraftMaintenance()
 {
 	int total = 0;
@@ -283,6 +393,11 @@ int Base::getCraftMaintenance()
 	return total;
 }
 
+/**
+ * Returns the total amount of monthly costs
+ * for maintaining the personnel in the base.
+ * @return Maintenance costs.
+ */
 int Base::getPersonnelMaintenance()
 {
 	int total = 0;
@@ -292,6 +407,11 @@ int Base::getPersonnelMaintenance()
 	return total;
 }
 
+/**
+ * Returns the total amount of monthly costs
+ * for maintaining the facilities in the base.
+ * @return Maintenance costs.
+ */
 int Base::getFacilityMaintenance()
 {
 	int total = 0;
@@ -303,6 +423,11 @@ int Base::getFacilityMaintenance()
 	return total;
 }
 
+/**
+ * Returns the total amount of all the maintenance
+ * monthly costs in the base.
+ * @return Maintenance costs.
+ */
 int Base::getMonthlyMaintenace()
 {
 	return getCraftMaintenance() + getPersonnelMaintenance() + getFacilityMaintenance();

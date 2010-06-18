@@ -16,27 +16,28 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM__XCOMRULESET_H
-#define OPENXCOM__XCOMRULESET_H
+#ifndef OPENXCOM__RNG_H
+#define OPENXCOM__RNG_H
 
-#include "RNG.h"
-#include "Ruleset.h"
-#include "LangString.h"
-#include "Base.h"
+#include <cstdlib>
+#include <ctime>
 
 /**
- * Rule set for the X-Com: UFO Defense game.
+ * Random Number Generator used throughout the game
+ * for all your randomness needs. It's really just the
+ * standard C generator, but wrapped in a way that we
+ * can store its seed for later use if necessary.
  */
-class XcomRuleset : public Ruleset
+class RNG
 {
 private:
 public:
-	/// Creates the X-Com ruleset.
-	XcomRuleset();
-	/// Cleans up the X-Com ruleset.
-	~XcomRuleset();
-	/// Generates a saved game with starting equipment.
-	SavedGame *newSave(GameDifficulty diff);
+	RNG();
+	~RNG();
+	/// Seed used for random number generation.
+	static int seed;
+	/// Generates a random number.
+	static int generate(int min, int max);
 };
 
 #endif

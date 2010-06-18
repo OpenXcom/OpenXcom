@@ -41,8 +41,8 @@ SoldierNamePool::~SoldierNamePool()
 string SoldierNamePool::genName(int *gender)
 {
 	stringstream name;
-	unsigned int first = SavedGame::genRandom(1, _maleNames.size() + _femaleNames.size());
-	unsigned int last = SavedGame::genRandom(1, _lastNames.size());
+	unsigned int first = RNG::generate(1, _maleNames.size() + _femaleNames.size());
+	unsigned int last = RNG::generate(1, _lastNames.size());
 	if (first <= _maleNames.size())
 	{
 		*gender = 0;

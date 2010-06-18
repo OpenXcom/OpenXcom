@@ -20,9 +20,11 @@
 #define OPENXCOM__SOLDIER_H
 
 #include <string>
-#include "SavedGame.h"
+#include "RNG.h"
 #include "LangString.h"
 #include "SoldierNamePool.h"
+
+class Craft;
 
 enum SoldierGender { GENDER_MALE, GENDER_FEMALE };
 enum SoldierLook { LOOK_BLONDE, LOOK_BROWNHAIR, LOOK_ORIENTAL, LOOK_AFRICAN };
@@ -40,6 +42,7 @@ private:
 	string _name;
 	int _tu, _stamina, _health, _bravery, _reactions, _firing, _throwing, _strength, _psiStrength, _psiSkill, _melee;
 	int _rank;
+	Craft *_craft;
 	SoldierGender _gender;
 	SoldierLook _look;
 	int _missions, _kills;
@@ -52,6 +55,10 @@ public:
 	string getName();
 	/// Sets the soldier's name.
 	void setName(string name);
+	/// Gets the soldier's craft.
+	Craft *getCraft();
+	/// Sets the soldier's craft.
+	void setCraft(Craft *craft);
 	/// Gets a string version of the soldier's rank.
 	LangString getRankString();
 	/// Gets a sprite version of the soldier's rank.
