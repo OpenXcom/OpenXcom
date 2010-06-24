@@ -54,7 +54,7 @@ SellState::SellState(Game *game) : State(game)
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(13)+13);
-	_window->setBg(game->getResourcePack()->getSurface("BACK13.SCR"));
+	_window->setBackground(game->getResourcePack()->getSurface("BACK13.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(13)+13);
 	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString(STR_SELL_SACK));
@@ -91,6 +91,8 @@ SellState::SellState(Game *game) : State(game)
 
 	_lstItems->setColor(Palette::blockOffset(13)+10);
 	_lstItems->setColumns(4, 156, 62, 28, 54);
+	_lstItems->setSelectable(true);
+	_lstItems->setBackground(_window);
 	_lstItems->addRow(4, "Soldier", "1", "0", "$40 000");
 }
 

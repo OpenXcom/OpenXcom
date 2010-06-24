@@ -24,6 +24,18 @@
 int RNG::seed = (int)time(NULL);
 
 /**
+ * Seeds the random generator with a new number.
+ * @param seed New seed. Defaults to existing seed if none is set.
+ */
+void RNG::init(int seed)
+{
+	if (seed == -1)
+		srand(RNG::seed);
+	else
+		srand(seed);
+}
+
+/**
  * Generates a random number within a certain range.
  * @param min Minimum number.
  * @param max Maximum number.

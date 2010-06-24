@@ -47,7 +47,7 @@ SoldiersState::SoldiersState(Game *game, Base *base) : State(game), _base(base)
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)+4);
-	_window->setBg(game->getResourcePack()->getSurface("BACK02.SCR"));
+	_window->setBackground(game->getResourcePack()->getSurface("BACK02.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(13)+13);
 	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString(STR_OK));
@@ -70,6 +70,7 @@ SoldiersState::SoldiersState(Game *game, Base *base) : State(game), _base(base)
 	_lstSoldiers->setColor(Palette::blockOffset(13)+10);
 	_lstSoldiers->setColumns(3, 114, 102, 82);
 	_lstSoldiers->setSelectable(true);
+	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->onMouseClick((EventHandler)&SoldiersState::lstSoldiersClick);
 }
 

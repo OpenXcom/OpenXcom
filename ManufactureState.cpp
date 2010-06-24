@@ -62,7 +62,7 @@ ManufactureState::ManufactureState(Game *game) : State(game)
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)+9);
-	_window->setBg(game->getResourcePack()->getSurface("BACK17.SCR"));
+	_window->setBackground(game->getResourcePack()->getSurface("BACK17.SCR"));
 	
 	_btnNew->setColor(Palette::blockOffset(13)+13);
 	_btnNew->setText(_game->getResourcePack()->getLanguage()->getString(STR_NEW_PRODUCTION));
@@ -108,6 +108,8 @@ ManufactureState::ManufactureState(Game *game) : State(game)
 	
 	_lstManufacture->setColor(Palette::blockOffset(13)+10);
 	_lstManufacture->setColumns(6, 105, 39, 45, 27, 47, 37);
+	_lstManufacture->setSelectable(true);
+	_lstManufacture->setBackground(_window);
 	_lstManufacture->addRow(6, "Laser Rifle", "30", "2", "8", "$40 000", "5/2");
 }
 

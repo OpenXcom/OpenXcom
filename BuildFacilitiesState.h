@@ -31,8 +31,8 @@
 class Base;
 
 /**
- * Report screen shown monthly to display
- * changes in the player's performance and funding.
+ * Window shown wih all the facilities
+ * available to build.
  */
 class BuildFacilitiesState : public State
 {
@@ -45,9 +45,9 @@ private:
 	Text *_txtTitle;
 	TextList *_lstFacilities;
 public:
-	/// Creates the Monthly Report state.
+	/// Creates the Build Facilities state.
 	BuildFacilitiesState(Game *game, Base *base, State *state);
-	/// Cleans up the Monthly Report state.
+	/// Cleans up the Build Facilities state.
 	~BuildFacilitiesState();
 	/// Updates the base stats.
 	void init();

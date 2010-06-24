@@ -56,7 +56,7 @@ PlaceFacilityState::PlaceFacilityState(Game *game, Base *base, RuleBaseFacility 
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(13)+13);
-	_window->setBg(game->getResourcePack()->getSurface("BACK01.SCR"));
+	_window->setBackground(game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_view->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
 	_view->setBase(_base);

@@ -52,7 +52,7 @@ public:
 	/// Clears the surface's contents.
 	void clear();
 	/// Offsets the surface's colors by a set amount.
-	void offset(int off);
+	void offset(int off, int min = -1, int max = -1);
 	/// Inverts the surface's colors.
 	void invert(Uint8 mid);
 	/// Draws the surface's graphic.

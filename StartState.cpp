@@ -41,7 +41,7 @@ StartState::StartState(Game *game) : State(game)
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(8)+8);
-	_window->setBg(game->getResourcePack()->getSurface("BACK01.SCR"));
+	_window->setBackground(game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_btnEnglish->setColor(Palette::blockOffset(8)+8);
 	_btnEnglish->setText("ENGLISH");

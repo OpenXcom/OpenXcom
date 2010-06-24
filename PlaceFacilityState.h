@@ -39,8 +39,8 @@
 class PlaceFacilityState : public State
 {
 private:
-	RuleBaseFacility *_rule;
 	Base *_base;
+	RuleBaseFacility *_rule;
 
 	BaseView *_view;
 	Button *_btnCancel;

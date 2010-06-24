@@ -59,7 +59,7 @@ MonthlyCostsState::MonthlyCostsState(Game *game, Base *base) : State(game), _bas
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)+4);
-	_window->setBg(game->getResourcePack()->getSurface("BACK13.SCR"));
+	_window->setBackground(game->getResourcePack()->getSurface("BACK13.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(15)+4);
 	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString(STR_OK));

@@ -25,7 +25,7 @@
 SavedGame::SavedGame(GameDifficulty diff) : _diff(diff), _funds(0), _bases()
 {
 	_time = new GameTime(6, 1, 1, 1999, 12, 0, 0);
-	srand(RNG::seed);
+	RNG::init();
 }
 
 /** 

@@ -46,7 +46,7 @@ public:
 	/// Cleans up the window
 	~Window();
 	/// Sets the background surface.
-	void setBg(Surface *bg);
+	void setBackground(Surface *bg);
 	/// Sets the border color.
 	void setColor(Uint8 color);
 	/// Gets the border color.

@@ -54,7 +54,7 @@ ResearchState::ResearchState(Game *game) : State(game)
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(13)+13);
-	_window->setBg(game->getResourcePack()->getSurface("BACK05.SCR"));
+	_window->setBackground(game->getResourcePack()->getSurface("BACK05.SCR"));
 	
 	_btnNew->setColor(Palette::blockOffset(15)+9);
 	_btnNew->setText(_game->getResourcePack()->getLanguage()->getString(STR_NEW_PROJECT));
@@ -88,6 +88,8 @@ ResearchState::ResearchState(Game *game) : State(game)
 
 	_lstResearch->setColor(Palette::blockOffset(15)+6);
 	_lstResearch->setColumns(3, 158, 82, 60);
+	_lstResearch->setSelectable(true);
+	_lstResearch->setBackground(_window);
 	_lstResearch->addRow(3, "Laser Weapons", "30", "Good");
 }
 

@@ -50,7 +50,7 @@ InterceptState::InterceptState(Game *game) : State(game)
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)+2);
-	_window->setBg(game->getResourcePack()->getSurface("BACK12.SCR"));
+	_window->setBackground(game->getResourcePack()->getSurface("BACK12.SCR"));
 
 	_btnCancel->setColor(Palette::blockOffset(8)+8);
 	_btnCancel->setText(_game->getResourcePack()->getLanguage()->getString(STR_CANCEL));
@@ -75,6 +75,8 @@ InterceptState::InterceptState(Game *game) : State(game)
 
 	_lstCrafts->setColor(Palette::blockOffset(15)-1);
 	_lstCrafts->setColumns(4, 86, 65, 85, 64);
+	_lstCrafts->setSelectable(true);
+	_lstCrafts->setBackground(_window);
 	int row = 0;
 	for (vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); i++)
 	{

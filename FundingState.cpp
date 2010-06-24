@@ -46,7 +46,7 @@ FundingState::FundingState(Game *game) : State(game)
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)+2);
-	_window->setBg(game->getResourcePack()->getSurface("BACK13.SCR"));
+	_window->setBackground(game->getResourcePack()->getSurface("BACK13.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(15)+2);
 	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString(STR_OK));

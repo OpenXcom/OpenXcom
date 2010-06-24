@@ -46,7 +46,7 @@ OptionsState::OptionsState(Game *game) : State(game)
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)+2);
-	_window->setBg(game->getResourcePack()->getSurface("BACK01.SCR"));
+	_window->setBackground(game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_btnLoad->setColor(Palette::blockOffset(15)+2);
 	_btnLoad->setText(_game->getResourcePack()->getLanguage()->getString(STR_LOAD_GAME));

@@ -171,8 +171,10 @@ void Surface::clear()
  * This is a common method in 8bpp games to simulate color
  * effects for cheap.
  * @param off Amount to shift.
+ * @param min Minimum color to shift to.
+ * @param Max Maximum color to shift to.
  */
-void Surface::offset(int off)
+void Surface::offset(int off, int min, int max)
 {
 	// Lock the surface
 	lock();
@@ -180,8 +182,14 @@ void Surface::offset(int off)
 	for (int x = 0, y = 0; x < _surface->w && y < _surface->h;)
 	{
 		Uint8 pixel = getPixel(x, y);
+		int p = pixel + off;
+		if (min != -1 && p < min)
+			p = min;
+		else if (max != -1 && p > max)
+			p = max;
+
 		if (pixel > 0)
-			setPixelIterative(&x, &y, pixel + off);
+			setPixelIterative(&x, &y, p);
 		else
 			setPixelIterative(&x, &y, 0);
 	}

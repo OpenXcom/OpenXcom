@@ -19,7 +19,7 @@
 #include "BuildFacilitiesState.h"
 
 /**
- * Initializes all the elements in the Monthly Report screen.
+ * Initializes all the elements in the Build Facilities window.
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  * @param state Pointer to the base state to refresh.
@@ -44,7 +44,7 @@ BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base, State *state)
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(13)+8);
-	_window->setBg(game->getResourcePack()->getSurface("BACK05.SCR"));
+	_window->setBackground(game->getResourcePack()->getSurface("BACK05.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(13)+8);
 	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString(STR_OK));
@@ -58,8 +58,10 @@ BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base, State *state)
 	_lstFacilities->setColor(Palette::blockOffset(13)+5);
 	_lstFacilities->setColumns(1, 110);
 	_lstFacilities->setSelectable(true);
+	_lstFacilities->setBackground(_window);
 	for (int i = STR_LIVING_QUARTERS; i <= STR_ALIEN_CONTAINMENT; i++)
 		_lstFacilities->addRow(1, _game->getResourcePack()->getLanguage()->getString((LangString)i).c_str());
+	_lstFacilities->addRow(1, _game->getResourcePack()->getLanguage()->getString(STR_HANGAR).c_str());
 	_lstFacilities->onMouseClick((EventHandler)&BuildFacilitiesState::lstFacilitiesClick);
 }
 
@@ -97,5 +99,10 @@ void BuildFacilitiesState::btnOkClick(SDL_Event *ev, int scale)
  */
 void BuildFacilitiesState::lstFacilitiesClick(SDL_Event *ev, int scale)
 {
-	_game->pushState(new PlaceFacilityState(_game, _base, _game->getRuleset()->getBaseFacility((LangString)(STR_LIVING_QUARTERS + _lstFacilities->getSelectedRow()))));
+	LangString facilities[9];
+	for (int i = 0; i < 8; i++)
+		facilities[i] = (LangString)(STR_LIVING_QUARTERS + i);
+	facilities[8] = STR_HANGAR;
+
+	_game->pushState(new PlaceFacilityState(_game, _base, _game->getRuleset()->getBaseFacility(facilities[_lstFacilities->getSelectedRow()])));
 }

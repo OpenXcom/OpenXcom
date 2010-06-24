@@ -27,9 +27,10 @@
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-TextList::TextList(Font *big, Font *small, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _texts(), _columns(), _big(big), _small(small), _rowY(0), _color(0), _dot(false), _selectable(false), _selRow(0)
+TextList::TextList(Font *big, Font *small, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _texts(), _columns(), _big(big), _small(small), _rowY(0), _color(0), _dot(false), _selectable(false), _selRow(0), _bg(0)
 {
-
+	_selector = new Surface(width, 8, 0, 0);
+	_selector->setVisible(false);
 }
 
 /**
@@ -187,6 +188,16 @@ int TextList::getSelectedRow()
 }
 
 /**
+ * Changes the surface used to draw the background of the selector.
+ * @param bg New background.
+ */
+void TextList::setBackground(Surface *bg)
+{
+	_bg = bg;
+	_selector->setPalette(_bg->getPalette());
+}
+
+/**
  * Removes all the rows currently stored in the list.
  */
 void TextList::clearList()
@@ -209,6 +220,7 @@ void TextList::clearList()
 void TextList::draw()
 {
 	clear();
+	_selector->blit(this);
 	for (vector< vector<Text*> >::iterator u = _texts.begin(); u < _texts.end(); u++)
 	{
 		for (vector<Text*>::iterator v = (*u).begin(); v < (*u).end(); v++)
@@ -275,5 +287,47 @@ void TextList::mouseOver(SDL_Event *ev, int scale, State *state)
 	{
 		double y = ev->button.y - _y * scale;
 		_selRow = (int)floor(y / (8.0 * scale));
+
+		if (_selRow < _texts.size())
+		{
+			if (!_selector->getVisible() || _selector->getY() != _selRow * 8)
+			{
+				_selector->setX(_x - _bg->getX());
+				_selector->setY(_y - _bg->getY() + _selRow * 8);
+				_selector->copy(_bg);
+				_selector->setX(0);
+				_selector->setY(_selRow * 8);
+				_selector->offset(-10, Palette::backPos);
+				_selector->setVisible(true);
+				draw();
+			}
+		}
+		else
+		{
+			if (_selector->getVisible())
+			{
+				_selector->setVisible(false);
+				draw();
+			}
+		}
 	}
+
+	InteractiveSurface::mouseOver(ev, scale, state);
+}
+
+/**
+ * Deselects the row.
+ * @param ev Pointer to a SDL_Event.
+ * @param scale Current screen scale (used to correct mouse input).
+ * @param state State that the event handlers belong to.
+ */
+void TextList::mouseOut(SDL_Event *ev, int scale, State *state)
+{
+	if (_selectable)
+	{
+		_selector->setVisible(false);
+		draw();
+	}
+
+	InteractiveSurface::mouseOut(ev, scale, state);
 }

@@ -52,7 +52,7 @@ PurchaseState::PurchaseState(Game *game) : State(game)
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(13)+13);
-	_window->setBg(game->getResourcePack()->getSurface("BACK13.SCR"));
+	_window->setBackground(game->getResourcePack()->getSurface("BACK13.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(13)+13);
 	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString(STR_OK));
@@ -86,6 +86,8 @@ PurchaseState::PurchaseState(Game *game) : State(game)
 
 	_lstItems->setColor(Palette::blockOffset(13)+10);
 	_lstItems->setColumns(3, 162, 92, 40);
+	_lstItems->setSelectable(true);
+	_lstItems->setBackground(_window);
 	_lstItems->addRow(3, "Soldier", "40 000", "0");
 }
 

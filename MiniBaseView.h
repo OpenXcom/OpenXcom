@@ -39,7 +39,7 @@ class MiniBaseView : public InteractiveSurface
 private:
 	vector<Base*> *_bases;
 	SurfaceSet *_texture;
-	int _selBase;
+	unsigned int _selBase;
 public:
 	/// Creates a new mini base view at the specified position and size.
 	MiniBaseView(int width, int height, int x = 0, int y = 0);
@@ -50,7 +50,7 @@ public:
 	/// Sets the texture for this mini base view.
 	void setTexture(SurfaceSet *texture);
 	/// Gets the currently selected base.
-	int getSelectedBase();
+	unsigned int getSelectedBase();
 	/// Draws the mini base view.
 	void draw();
 };

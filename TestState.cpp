@@ -43,7 +43,7 @@ TestState::TestState(Game *game) : State(game)
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)+4);
-	_window->setBg(game->getResourcePack()->getSurface("BACK04.SCR"));
+	_window->setBackground(game->getResourcePack()->getSurface("BACK04.SCR"));
 
 	_button->setColor(Palette::blockOffset(15)+4);
 	_button->setText("LOLOLOL");

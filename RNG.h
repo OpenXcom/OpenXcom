@@ -36,6 +36,8 @@ public:
 	~RNG();
 	/// Seed used for random number generation.
 	static int seed;
+	/// Initializes the generator.
+	static void init(int seed = -1);
 	/// Generates a random number.
 	static int generate(int min, int max);
 };

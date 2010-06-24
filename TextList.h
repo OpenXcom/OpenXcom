@@ -41,6 +41,7 @@ private:
 	Uint8 _color;
 	bool _dot, _selectable;
 	unsigned int _selRow;
+	Surface *_bg, *_selector;
 public:
 	/// Creates a text list with the specified size and position.
 	TextList(Font *big, Font *small, int width, int height, int x = 0, int y = 0);
@@ -58,6 +59,8 @@ public:
 	void setDot(bool dot);
 	/// Sets whether the list is selectable.
 	void setSelectable(bool selectable);
+	/// Sets the background for the selector.
+	void setBackground(Surface *bg);
 	/// Gets the selected row in the list.
 	int getSelectedRow();
 	/// Clears the list.
@@ -74,6 +77,8 @@ public:
 	void mouseClick(SDL_Event *ev, int scale, State *state);
 	/// Special handling for mouse hovering.
 	void mouseOver(SDL_Event *ev, int scale, State *state);
+	/// Special handling for mouse hovering out.
+	void mouseOut(SDL_Event *ev, int scale, State *state);
 };
 
 #endif

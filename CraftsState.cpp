@@ -53,7 +53,7 @@ CraftsState::CraftsState(Game *game, Base *base) : State(game), _base(base)
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)+4);
-	_window->setBg(game->getResourcePack()->getSurface("BACK14.SCR"));
+	_window->setBackground(game->getResourcePack()->getSurface("BACK14.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(13)+13);
 	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString(STR_OK));
@@ -86,6 +86,8 @@ CraftsState::CraftsState(Game *game, Base *base) : State(game), _base(base)
 
 	_lstCrafts->setColor(Palette::blockOffset(13)+10);
 	_lstCrafts->setColumns(5, 94, 66, 47, 46, 45);
+	_lstCrafts->setSelectable(true);
+	_lstCrafts->setBackground(_window);
 	for (vector<Craft*>::iterator i = _base->getCrafts()->begin(); i != _base->getCrafts()->end(); i++)
 	{
 		stringstream ss;

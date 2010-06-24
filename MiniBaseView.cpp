@@ -61,7 +61,7 @@ void MiniBaseView::setTexture(SurfaceSet *texture)
  * Returns the base the mouse is currently over.
  * @return Pointer to base (NULL if none).
  */
-int MiniBaseView::getSelectedBase()
+unsigned int MiniBaseView::getSelectedBase()
 {
 	return _selBase;
 }
