@@ -386,6 +386,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\CraftInfoState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\CraftInfoState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\CraftsState.cpp"
 				>
 			</File>

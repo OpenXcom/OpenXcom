@@ -105,6 +105,7 @@
     <ClCompile Include="BuildFacilitiesState.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Craft.cpp" />
+    <ClCompile Include="CraftInfoState.cpp" />
     <ClCompile Include="Cursor.cpp" />
     <ClCompile Include="CustomButton.cpp" />
     <ClCompile Include="DismantleFacilityState.cpp" />
@@ -172,6 +173,7 @@
     <ClInclude Include="BuildFacilitiesState.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Craft.h" />
+    <ClInclude Include="CraftInfoState.h" />
     <ClInclude Include="Cursor.h" />
     <ClInclude Include="CustomButton.h" />
     <ClInclude Include="DismantleFacilityState.h" />

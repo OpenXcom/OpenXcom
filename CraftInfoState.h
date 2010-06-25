@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM__CRAFTSSTATE_H
-#define OPENXCOM__CRAFTSSTATE_H
+#ifndef OPENXCOM__CRAFTINFOSTATE_H
+#define OPENXCOM__CRAFTINFOSTATE_H
 
 #include <sstream>
 #include "State_Interactive.h"
@@ -26,34 +26,35 @@
 #include "Button.h"
 #include "Window.h"
 #include "Text.h"
-#include "TextList.h"
 #include "Craft.h"
 #include "Base.h"
-#include "CraftInfoState.h"
 
 using namespace std;
 
 /**
- * Equip Craft screen that lets the player
- * manage all the crafts in a base.
+ * Craft Info screen that shows all the 
+ * info of a specific craft.
  */
-class CraftsState : public State
+class CraftInfoState : public State
 {
 private:
-	Button *_btnOk;
-	Window *_window;
-	Text *_txtTitle, *_txtBase, *_txtName, *_txtStatus, *_txtWeapon, *_txtCrew, *_txtHwp;
-	TextList *_lstCrafts;
 	Base *_base;
+	unsigned int _craft;
+
+	Button *_btnOk, *_btnW1, *_btnW2, *_btnCrew, *_btnEquip, *_btnArmour;
+	Window *_window;
+	Text *_txtCraft, *_txtDamage, *_txtFuel;
+	Text *_txtW1Name, *_txtW1Ammo, *_txtW1Max, *_txtW2Name, *_txtW2Ammo, *_txtW2Max;
+	Surface *_sprite, *_w1, *_w2, *_crew, *_equip;
 public:
-	/// Creates the Crafts state.
-	CraftsState(Game *game, Base *base);
-	/// Cleans up the Crafts state.
-	~CraftsState();
+	/// Creates the Craft Info state.
+	CraftInfoState(Game *game, Base *base, unsigned int craft);
+	/// Cleans up the Craft Info state.
+	~CraftInfoState();
+	/// Updates the craft info.
+	void init();
 	/// Handler for clicking the OK button.
 	void btnOkClick(SDL_Event *ev, int scale);
-	/// Handler for clicking the Crafts list.
-	void lstCraftsClick(SDL_Event *ev, int scale);
 };
 
 #endif

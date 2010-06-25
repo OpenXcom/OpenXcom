@@ -88,6 +88,7 @@ CraftsState::CraftsState(Game *game, Base *base) : State(game), _base(base)
 	_lstCrafts->setColumns(5, 94, 66, 47, 46, 45);
 	_lstCrafts->setSelectable(true);
 	_lstCrafts->setBackground(_window);
+	_lstCrafts->onMouseClick((EventHandler)&CraftsState::lstCraftsClick);
 	for (vector<Craft*>::iterator i = _base->getCrafts()->begin(); i != _base->getCrafts()->end(); i++)
 	{
 		stringstream ss;
@@ -112,4 +113,14 @@ CraftsState::~CraftsState()
 void CraftsState::btnOkClick(SDL_Event *ev, int scale)
 {
 	_game->popState();
+}
+
+/**
+ * Shows the selected craft's info.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
+void CraftsState::lstCraftsClick(SDL_Event *ev, int scale)
+{
+	_game->pushState(new CraftInfoState(_game, _base, _lstCrafts->getSelectedRow()));
 }

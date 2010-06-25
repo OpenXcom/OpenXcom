@@ -30,8 +30,8 @@
 #include "Base.h"
 
 /**
- * Report screen shown monthly to display
- * changes in the player's performance and funding.
+ * Monthly Costs screen that displays all
+ * the maintenance costs of a particular base.
  */
 class MonthlyCostsState : public State
 {
@@ -43,9 +43,9 @@ private:
 	Text *_txtTitle, *_txtCost, *_txtQuantity, *_txtTotal, *_txtRental, *_txtSalaries, *_txtIncome;
 	TextList *_lstCrafts, *_lstSalaries, *_lstMaintenance, *_lstTotal;
 public:
-	/// Creates the Monthly Report state.
+	/// Creates the Monthly Costs state.
 	MonthlyCostsState(Game *game, Base *base);
-	/// Cleans up the Monthly Report state.
+	/// Cleans up the Monthly Costs state.
 	~MonthlyCostsState();
 	/// Handler for clicking the OK button.
 	void btnOkClick(SDL_Event *ev, int scale);
