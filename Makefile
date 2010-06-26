@@ -1,18 +1,14 @@
-CC = g++
-CFLAGS = -Wall -O2
-COMPILE = $(CC) $(CFLAGS) -c
-OBJFILES := $(patsubst %.cpp,%.o,$(wildcard *.cpp))
-LIBS := `sdl-config --cflags --libs` -lSDL_gfx -lSDL_mixer
+PROG = openxcom
+SRCS = $(wildcard *.cpp)
+OBJS = $(SRCS:.cpp=.o)
 
-all: openxcom
+CXXFLAGS = -Wall -O2 `sdl-config --cflags`
+LDFLAGS = `sdl-config --libs` -lSDL_gfx -lSDL_mixer
 
-openxcom: $(OBJFILES)
-	$(CC) -o OpenXcom $(OBJFILES) $(LIBS)
+$(PROG): $(OBJS)
+	$(CXX) $(LDFLAGS) -o $(PROG) $(OBJS)
 
-%.o: %.cpp
-	$(COMPILE) -o $@ $< $(LIBS)
+clean:
+	rm -f $(PROG) *.o
 
 .PHONY: clean
- 
-clean:
-	rm -f OpenXcom *.o
