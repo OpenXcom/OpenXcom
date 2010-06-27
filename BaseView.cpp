@@ -27,7 +27,7 @@
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-BaseView::BaseView(Font *big, Font *small, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _base(0), _texture(0), _selFacility(0), _big(big), _small(small)
+BaseView::BaseView(Font *big, Font *small, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _base(0), _texture(0), _selFacility(0), _big(big), _small(small), _gridX(0), _gridY(0), _selSize(0), _selector(0), _i(0)
 {
 	for (int x = 0; x < BASE_SIZE; x++)
 		for (int y = 0; y < BASE_SIZE; y++)
@@ -35,10 +35,12 @@ BaseView::BaseView(Font *big, Font *small, int width, int height, int x, int y) 
 }
 
 /**
- *
+ * Deletes the child selector.
  */
 BaseView::~BaseView()
 {
+	if (_selector != 0)
+		delete _selector;
 }
 
 /**
@@ -108,6 +110,37 @@ int BaseView::getGridX()
 int BaseView::getGridY()
 {
 	return _gridY;
+}
+
+/**
+ * If enabled, the base view will respond to player input,
+ * highlighting the selected facility.
+ * @param size Facility length (0 disables it).
+ */
+void BaseView::setSelectable(int size)
+{
+	_selSize = size;
+	if (_selSize > 0)
+	{
+		_selector = new Surface(size * GRID_SIZE, size * GRID_SIZE, _x, _y);
+		_selector->setPalette(getPalette());
+		SDL_Rect r;
+		r.w = _selector->getWidth();
+		r.h = _selector->getHeight();
+		r.x = 0;
+		r.y = 0;
+		SDL_FillRect(_selector->getSurface(), &r, Palette::blockOffset(1));
+		r.w -= 2;
+		r.h -= 2;
+		r.x++;
+		r.y++;
+		SDL_FillRect(_selector->getSurface(), &r, 0);
+		_selector->setVisible(false);
+	}
+	else
+	{
+		delete _selector;
+	}
 }
 
 /**
@@ -267,6 +300,48 @@ void BaseView::draw()
 }
 
 /**
+ * Blits the base view and selector.
+ * @param surface Pointer to surface to blit onto.
+ */
+void BaseView::blit(Surface *surface)
+{
+	if (_selSize > 0)
+		_i = (_i + 1) % 30;
+	else
+		_i = 0;
+
+	if (_selSize > 0)
+	{
+		SDL_Rect r;
+		if (_i < 15)
+		{
+			r.w = _selector->getWidth();
+			r.h = _selector->getHeight();
+			r.x = 0;
+			r.y = 0;
+			SDL_FillRect(_selector->getSurface(), &r, Palette::blockOffset(1));
+			r.w -= 2;
+			r.h -= 2;
+			r.x++;
+			r.y++;
+			SDL_FillRect(_selector->getSurface(), &r, 0);
+		}
+		else
+		{
+			r.w = _selector->getWidth();
+			r.h = _selector->getHeight();
+			r.x = 0;
+			r.y = 0;
+			SDL_FillRect(_selector->getSurface(), &r, 0);
+		}
+	}
+
+	Surface::blit(surface);
+	if (_selector != 0)
+		_selector->blit(surface);
+}
+
+/**
  * Only accepts left clicks.
  * @param ev Pointer to a SDL_Event.
  * @param scale Current screen scale (used to correct mouse input).
@@ -321,10 +396,48 @@ void BaseView::mouseOver(SDL_Event *ev, int scale, State *state)
 	_gridX = (int)floor(x / (GRID_SIZE * scale));
 	_gridY = (int)floor(y / (GRID_SIZE * scale));
 	if (_gridX >= 0 && _gridX < BASE_SIZE && _gridY >= 0 && _gridY < BASE_SIZE)
+	{
 		_selFacility = _facilities[_gridX][_gridY];
+		if (_selSize > 0)
+		{
+			if (_gridX + _selSize - 1 < BASE_SIZE && _gridY + _selSize - 1 < BASE_SIZE)
+			{
+				_selector->setX(_x + _gridX * GRID_SIZE);
+				_selector->setY(_y + _gridY * GRID_SIZE);
+				_selector->setVisible(true);
+			}
+			else
+			{
+				_selector->setVisible(false);
+			}
+		}
+	}
 	else
+	{
 		_selFacility = 0;
+		if (_selSize > 0)
+		{
+			_selector->setVisible(false);
+		}
+	}
 
 	InteractiveSurface::mouseOver(ev, scale, state);
+}
+
+/**
+ * Deselects the facility.
+ * @param ev Pointer to a SDL_Event.
+ * @param scale Current screen scale (used to correct mouse input).
+ * @param state State that the event handlers belong to.
+ */
+void BaseView::mouseOut(SDL_Event *ev, int scale, State *state)
+{
+	_selFacility = 0;
+	if (_selSize > 0)
+	{
+		_selector->setVisible(false);
+	}
+
+	InteractiveSurface::mouseOut(ev, scale, state);
 }
 	

@@ -60,7 +60,7 @@ PlaceFacilityState::PlaceFacilityState(Game *game, Base *base, RuleBaseFacility 
 
 	_view->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
 	_view->setBase(_base);
-	_view->setVisible(false);
+	_view->setSelectable(rule->getSize());
 	_view->onMouseClick((EventHandler)&PlaceFacilityState::viewClick);
 
 	_btnCancel->setColor(Palette::blockOffset(13)+13);

@@ -43,7 +43,9 @@ private:
 	SurfaceSet *_texture;
 	BaseFacility *_facilities[BASE_SIZE][BASE_SIZE], *_selFacility;
 	Font *_big, *_small;
-	int _gridX, _gridY;
+	int _gridX, _gridY, _selSize;
+	Surface *_selector;
+	int _i;
 public:
 	/// Creates a new base view at the specified position and size.
 	BaseView(Font *big, Font *small, int width, int height, int x = 0, int y = 0);
@@ -59,10 +61,14 @@ public:
 	int getGridX();
 	/// Gets the Y position of the currently selected square.
 	int getGridY();
+	/// Sets whether the base view is selectable.
+	void setSelectable(int size);
 	/// Checks if a facility can be placed.
 	bool isPlaceable(RuleBaseFacility *rule);
 	/// Draws the base view.
 	void draw();
+	/// Blits the base view onto another surface.
+	void blit(Surface *surface);
 	/// Special handling for mouse presses.
 	void mousePress(SDL_Event *ev, int scale, State *state);
 	/// Special handling for mouse releases.
@@ -71,6 +77,8 @@ public:
 	void mouseClick(SDL_Event *ev, int scale, State *state);
 	/// Special handling for mouse hovers.
 	void mouseOver(SDL_Event *ev, int scale, State *state);
+	/// Special handling for mouse hovering out.
+	void mouseOut(SDL_Event *ev, int scale, State *state);
 };
 
 #endif

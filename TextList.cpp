@@ -27,14 +27,12 @@
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-TextList::TextList(Font *big, Font *small, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _texts(), _columns(), _big(big), _small(small), _rowY(0), _color(0), _dot(false), _selectable(false), _selRow(0), _bg(0)
+TextList::TextList(Font *big, Font *small, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _texts(), _columns(), _big(big), _small(small), _rowY(0), _color(0), _dot(false), _selectable(false), _selRow(0), _bg(0), _selector(0)
 {
-	_selector = new Surface(width, 8, 0, 0);
-	_selector->setVisible(false);
 }
 
 /**
- * Deletes all the child Text's contained by the list.
+ * Deletes the selector and all the child Text's contained by the list.
  */
 TextList::~TextList()
 {
@@ -43,6 +41,8 @@ TextList::~TextList()
 			delete (*v);
 		}
 	}
+	if (_selector != 0)
+		delete _selector;
 }
 
 /**
@@ -175,6 +175,16 @@ void TextList::setDot(bool dot)
 void TextList::setSelectable(bool selectable)
 {
 	_selectable = selectable;
+	if (_selectable)
+	{
+		_selector = new Surface(_width, 8, _x, _y);
+		_selector->setPalette(getPalette());
+		_selector->setVisible(false);
+	}
+	else
+	{
+		delete _selector;
+	}
 }
 
 /**
@@ -194,7 +204,6 @@ int TextList::getSelectedRow()
 void TextList::setBackground(Surface *bg)
 {
 	_bg = bg;
-	_selector->setPalette(_bg->getPalette());
 }
 
 /**
@@ -220,7 +229,6 @@ void TextList::clearList()
 void TextList::draw()
 {
 	clear();
-	_selector->blit(this);
 	for (vector< vector<Text*> >::iterator u = _texts.begin(); u < _texts.end(); u++)
 	{
 		for (vector<Text*>::iterator v = (*u).begin(); v < (*u).end(); v++)
@@ -228,6 +236,17 @@ void TextList::draw()
             (*v)->blit(this);
         }
     }
+}
+
+/**
+ * Blits the text list and selector.
+ * @param surface Pointer to surface to blit onto.
+ */
+void TextList::blit(Surface *surface)
+{
+	if (_selector != 0)
+		_selector->blit(surface);
+	Surface::blit(surface);
 }
 
 /**
@@ -290,25 +309,17 @@ void TextList::mouseOver(SDL_Event *ev, int scale, State *state)
 
 		if (_selRow < _texts.size())
 		{
-			if (!_selector->getVisible() || _selector->getY() != _selRow * 8)
-			{
-				_selector->setX(_x - _bg->getX());
-				_selector->setY(_y - _bg->getY() + _selRow * 8);
-				_selector->copy(_bg);
-				_selector->setX(0);
-				_selector->setY(_selRow * 8);
-				_selector->offset(-10, Palette::backPos);
-				_selector->setVisible(true);
-				draw();
-			}
+			_selector->setX(_x - _bg->getX());
+			_selector->setY(_y + _selRow * 8 - _bg->getY());
+			_selector->copy(_bg);
+			_selector->setX(_x);
+			_selector->setY(_y + _selRow * 8);
+			_selector->offset(-10, Palette::backPos);
+			_selector->setVisible(true);
 		}
 		else
 		{
-			if (_selector->getVisible())
-			{
-				_selector->setVisible(false);
-				draw();
-			}
+			_selector->setVisible(false);
 		}
 	}
 
@@ -326,7 +337,6 @@ void TextList::mouseOut(SDL_Event *ev, int scale, State *state)
 	if (_selectable)
 	{
 		_selector->setVisible(false);
-		draw();
 	}
 
 	InteractiveSurface::mouseOut(ev, scale, state);

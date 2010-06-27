@@ -69,6 +69,8 @@ public:
 	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
 	/// Draws the text onto the text list.
 	void draw();
+	/// Blits the text list onto another surface.
+	void blit(Surface *surface);
 	/// Special handling for mouse presses.
 	void mousePress(SDL_Event *ev, int scale, State *state);
 	/// Special handling for mouse releases.
