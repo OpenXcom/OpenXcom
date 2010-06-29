@@ -21,7 +21,7 @@
 
 #include "State_Interactive.h"
 #include "Palette.h"
-#include "Button.h"
+#include "TextButton.h"
 #include "Window.h"
 #include "MainMenuState.h"
 
@@ -32,7 +32,7 @@
 class StartState : public State
 {
 private:
-	Button *_btnEnglish, *_btnGerman, *_btnFrench;
+	TextButton *_btnEnglish, *_btnGerman, *_btnFrench;
 	Window *_window;
 public:
 	/// Creates the Start state.

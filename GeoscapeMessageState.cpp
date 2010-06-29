@@ -29,7 +29,7 @@ GeoscapeMessageState::GeoscapeMessageState(Game *game, string str) : State(game)
 
 	// Create objects
 	_window = new Window(256, 160, 32, 20, POPUP_BOTH);
-	_btnOk = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 120, 18, 100, 154);
+	_btnOk = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 120, 18, 100, 154);
 	_txtMessage = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 246, 80, 37, 50);
 	
 	// Set palette

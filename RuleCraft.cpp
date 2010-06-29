@@ -23,7 +23,7 @@
  * type of craft.
  * @param type String defining the type.
  */
-RuleCraft::RuleCraft(LangString type) : _type(type), _sprite(0), _fuelMax(0), _healthMax(0), _speed(0), _accel(0), _weapons(0), _soldiers(0), _hwp(0), _cost(0), _monthlyFee(0)
+RuleCraft::RuleCraft(LangString type) : _type(type), _sprite(0), _fuelMax(0), _healthMax(0), _speed(0), _accel(0), _weapons(0), _soldiers(0), _hwps(0), _monthlyFee(0)
 {
 }
 
@@ -62,6 +62,144 @@ int RuleCraft::getSprite()
 void RuleCraft::setSprite(int sprite)
 {
 	_sprite = sprite;
+}
+
+/**
+ * Returns the maximum fuel the craft can contain.
+ * @return Fuel amount.
+ */
+int RuleCraft::getMaxFuel()
+{
+	return _fuelMax;
+}
+
+/**
+ * Changes the maximum fuel the craft can contain.
+ * @param fuel Fuel amount.
+ */
+void RuleCraft::setMaxFuel(int fuel)
+{
+	_fuelMax = fuel;
+}
+
+/**
+ * Returns the maximum health (damage the craft can take)
+ * of the craft.
+ * @return Health.
+ */
+int RuleCraft::getMaxHealth()
+{
+	return _healthMax;
+}
+
+/**
+ * Changes the maximum health (damage the craft can take)
+ * of the craft.
+ * @param health Health.
+ */
+void RuleCraft::setMaxHealth(int health)
+{
+	_healthMax = health;
+}
+
+/**
+ * Returns the maximum speed of the craft flying
+ * around the Geoscape.
+ * @return Speed.
+ */
+int RuleCraft::getSpeed()
+{
+	return _speed;
+}
+
+/**
+ * Changes the maximum speed of the craft flying
+ * around the Geoscape.
+ * @param speed Speed.
+ */
+void RuleCraft::setSpeed(int speed)
+{
+	_speed = speed;
+}
+
+/**
+ * Returns the acceleration of the craft for
+ * taking off / stopping.
+ * @return Acceleration.
+ */
+int RuleCraft::getAcceleration()
+{
+	return _accel;
+}
+
+/**
+ * Changes the acceleration of the craft for
+ * taking off / stopping.
+ * @param accel Acceleration.
+ */
+void RuleCraft::setAcceleration(int accel)
+{
+	_accel = accel;
+}
+
+/**
+ * Returns the maximum number of weapons that
+ * can be equipped onto the craft.
+ * @return Weapon capacity.
+ */
+int RuleCraft::getWeapons()
+{
+	return _weapons;
+}
+
+/**
+ * Changes the maximum number of weapons that
+ * can be equipped onto the craft.
+ * @param weapons Weapon capacity.
+ */
+void RuleCraft::setWeapons(int weapons)
+{
+	_weapons = weapons;
+}
+
+/**
+ * Returns the maximum number of soldiers that
+ * the craft can carry.
+ * @return Soldier capacity.
+ */
+int RuleCraft::getSoldiers()
+{
+	return _soldiers;
+}
+
+/**
+ * Changes the maximum number of soldiers that
+ * the craft can carry.
+ * @param soldiers Soldier capacity.
+ */
+void RuleCraft::setSoldiers(int soldiers)
+{
+	_soldiers = soldiers;
+}
+
+/**
+ * Returns the maximum number of HWPs that
+ * the craft can carry.
+ * @return HWP capacity.
+ */
+int RuleCraft::getHWPs()
+{
+	return _hwps;
+}
+
+/**
+ * Changes the maximum number of HWPs that
+ * the craft can carry.
+ * @param hwps HWP capacity.
+ */
+void RuleCraft::setHWPs(int hwps)
+{
+	_hwps = hwps;
 }
 
 /**

@@ -23,7 +23,7 @@
 #include "State_Interactive.h"
 #include "LangString.h"
 #include "Palette.h"
-#include "Button.h"
+#include "TextButton.h"
 #include "Window.h"
 #include "Text.h"
 #include "TextList.h"
@@ -40,7 +40,7 @@ using namespace std;
 class CraftsState : public State
 {
 private:
-	Button *_btnOk;
+	TextButton *_btnOk;
 	Window *_window;
 	Text *_txtTitle, *_txtBase, *_txtName, *_txtStatus, *_txtWeapon, *_txtCrew, *_txtHwp;
 	TextList *_lstCrafts;

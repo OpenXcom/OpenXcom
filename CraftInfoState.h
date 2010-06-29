@@ -23,7 +23,7 @@
 #include "State_Interactive.h"
 #include "LangString.h"
 #include "Palette.h"
-#include "Button.h"
+#include "TextButton.h"
 #include "Window.h"
 #include "Text.h"
 #include "Craft.h"
@@ -41,7 +41,7 @@ private:
 	Base *_base;
 	unsigned int _craft;
 
-	Button *_btnOk, *_btnW1, *_btnW2, *_btnCrew, *_btnEquip, *_btnArmour;
+	TextButton *_btnOk, *_btnW1, *_btnW2, *_btnCrew, *_btnEquip, *_btnArmour;
 	Window *_window;
 	Text *_txtCraft, *_txtDamage, *_txtFuel;
 	Text *_txtW1Name, *_txtW1Ammo, *_txtW1Max, *_txtW2Name, *_txtW2Ammo, *_txtW2Max;

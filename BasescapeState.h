@@ -22,7 +22,7 @@
 #include "State_Interactive.h"
 #include "LangString.h"
 #include "Palette.h"
-#include "Button.h"
+#include "TextButton.h"
 #include "Text.h"
 #include "BaseView.h"
 #include "MiniBaseView.h"
@@ -50,7 +50,7 @@ private:
 	BaseView *_view;
 	MiniBaseView *_mini;
 	Text *_txtFacility, *_txtBase, *_txtLocation, *_txtFunds;
-	Button *_btnNewBase, *_btnBaseInfo, *_btnSoldiers, *_btnCrafts, *_btnFacilities, *_btnResearch, *_btnManufacture, *_btnTransfer, *_btnPurchase, *_btnSell, *_btnGeoscape;
+	TextButton *_btnNewBase, *_btnBaseInfo, *_btnSoldiers, *_btnCrafts, *_btnFacilities, *_btnResearch, *_btnManufacture, *_btnTransfer, *_btnPurchase, *_btnSell, *_btnGeoscape;
 	Base *_base;
 public:
 	/// Creates the Basescape state.

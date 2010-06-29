@@ -22,7 +22,7 @@
 #include "State_Interactive.h"
 #include "LangString.h"
 #include "Palette.h"
-#include "Button.h"
+#include "TextButton.h"
 #include "Window.h"
 #include "Text.h"
 #include "GeoscapeState.h"
@@ -35,7 +35,7 @@
 class NewGameState : public State
 {
 private:
-	Button *_btnBeginner, *_btnExperienced, *_btnVeteran, *_btnGenius, *_btnSuperhuman;
+	TextButton *_btnBeginner, *_btnExperienced, *_btnVeteran, *_btnGenius, *_btnSuperhuman;
 	Window *_window;
 	Text *_txtTitle;
 public:

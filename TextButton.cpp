@@ -16,10 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "Button.h"
+#include "TextButton.h"
 
 /**
- * Sets up a button with the specified size and position.
+ * Sets up a text button with the specified size and position.
  * The text is centered on the button.
  * @param big Pointer to the big-size font.
  * @param small Pointer to the small-size font.
@@ -28,7 +28,7 @@
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Button::Button(Font *big, Font *small, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _color(0), _group(0)
+TextButton::TextButton(Font *big, Font *small, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _color(0), _group(0)
 {
 	_text = new Text(big, small, width, small->getHeight(), 0, (int)ceil((double)(height - small->getHeight()) / 2.0));
 	_text->setSmall();
@@ -38,7 +38,7 @@ Button::Button(Font *big, Font *small, int width, int height, int x, int y) : In
 /**
  * Deletes the contained Text.
  */
-Button::~Button()
+TextButton::~TextButton()
 {
 	delete _text;
 }
@@ -47,7 +47,7 @@ Button::~Button()
  * Changes the color for the button and text.
  * @param color Color value.
  */
-void Button::setColor(Uint8 color)
+void TextButton::setColor(Uint8 color)
 {
 	_color = color;
 	_text->setColor(_color-3);
@@ -58,7 +58,7 @@ void Button::setColor(Uint8 color)
  * Returns the color for the button and text.
  * @return Color value.
  */
-Uint8 Button::getColor()
+Uint8 TextButton::getColor()
 {
 	return _color;
 }
@@ -67,7 +67,7 @@ Uint8 Button::getColor()
  * Changes the text of the button label.
  * @param text Text string.
  */
-void Button::setText(string text)
+void TextButton::setText(string text)
 {
 	_text->setText(text);
 	draw();
@@ -77,7 +77,7 @@ void Button::setText(string text)
  * Returns the text of the button label.
  * @return Text string.
  */
-string Button::getText()
+string TextButton::getText()
 {
 	return _text->getText();
 }
@@ -87,7 +87,7 @@ string Button::getText()
  * @param group Pointer to the pressed button pointer in the group.
  * Null makes it a regular button.
  */
-void Button::setGroup(Button **group)
+void TextButton::setGroup(TextButton **group)
 {
 	_group = group;
 }
@@ -98,7 +98,7 @@ void Button::setGroup(Button **group)
  * @param firstcolor Offset of the first color to replace.
  * @param ncolors Amount of colors to replace.
  */
-void Button::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
+void TextButton::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 {
 	Surface::setPalette(colors, firstcolor, ncolors);
 	_text->setPalette(colors, firstcolor, ncolors);
@@ -108,7 +108,7 @@ void Button::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
  * Draws the labelled button.
  * The colors are inverted if the button is pressed.
  */
-void Button::draw()
+void TextButton::draw()
 {
 	SDL_Rect square;
 	int color = _color - 2;
@@ -169,7 +169,7 @@ void Button::draw()
  * @param scale Current screen scale (used to correct mouse input).
  * @param state State that the event handlers belong to.
  */
-void Button::mousePress(SDL_Event *ev, int scale, State *state)
+void TextButton::mousePress(SDL_Event *ev, int scale, State *state)
 {
 	if (ev->button.button == SDL_BUTTON_LEFT)
 	{
@@ -187,7 +187,7 @@ void Button::mousePress(SDL_Event *ev, int scale, State *state)
  * @param scale Current screen scale (used to correct mouse input).
  * @param state State that the event handlers belong to.
  */
-void Button::mouseRelease(SDL_Event *ev, int scale, State *state)
+void TextButton::mouseRelease(SDL_Event *ev, int scale, State *state)
 {
 	if (ev->button.button == SDL_BUTTON_LEFT)
 	{
@@ -202,7 +202,7 @@ void Button::mouseRelease(SDL_Event *ev, int scale, State *state)
  * @param scale Current screen scale (used to correct mouse input).
  * @param state State that the event handlers belong to.
  */
-void Button::mouseClick(SDL_Event *ev, int scale, State *state)
+void TextButton::mouseClick(SDL_Event *ev, int scale, State *state)
 {
 	if (ev->button.button == SDL_BUTTON_LEFT)
 	{

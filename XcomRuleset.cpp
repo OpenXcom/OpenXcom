@@ -382,7 +382,14 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	// Add crafts
 	RuleCraft* skyranger = new RuleCraft(STR_SKYRANGER);
 	skyranger->setSprite(33);
+	skyranger->setSpeed(760);
+	skyranger->setAcceleration(2);
+	skyranger->setMaxFuel(1500);
+	skyranger->setWeapons(0);
+	skyranger->setMaxHealth(150);
+	skyranger->setSoldiers(14);
 	skyranger->setMonthlyFee(500000);
+	skyranger->setHWPs(3);
 
 	RuleCraft* lightning = new RuleCraft(STR_LIGHTNING);
 	lightning->setSprite(34);
@@ -392,7 +399,14 @@ XcomRuleset::XcomRuleset() : Ruleset()
 
 	RuleCraft* interceptor = new RuleCraft(STR_INTERCEPTOR);
 	interceptor->setSprite(36);
+	interceptor->setSpeed(2100);
+	interceptor->setAcceleration(3);
+	interceptor->setMaxFuel(1000);
+	interceptor->setWeapons(2);
+	interceptor->setMaxHealth(100);
+	interceptor->setSoldiers(0);
 	interceptor->setMonthlyFee(600000);
+	interceptor->setHWPs(0);
 
 	RuleCraft* firestorm = new RuleCraft(STR_FIRESTORM);
 	firestorm->setSprite(37);

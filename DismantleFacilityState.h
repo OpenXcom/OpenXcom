@@ -22,7 +22,7 @@
 #include "State_Interactive.h"
 #include "LangString.h"
 #include "Palette.h"
-#include "Button.h"
+#include "TextButton.h"
 #include "Window.h"
 #include "Text.h"
 #include "Base.h"
@@ -38,7 +38,7 @@ private:
 	Base *_base;
 	BaseFacility *_fac;
 
-	Button *_btnOk, *_btnCancel;
+	TextButton *_btnOk, *_btnCancel;
 	Window *_window;
 	Text *_txtTitle, *_txtFacility;
 public:

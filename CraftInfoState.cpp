@@ -28,12 +28,12 @@ CraftInfoState::CraftInfoState(Game *game, Base *base, unsigned int craft) : Sta
 {
 	// Create objects
 	_window = new Window(320, 200, 0, 0, POPUP_BOTH);
-	_btnOk = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 64, 24, 128, 168);
-	_btnW1 = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 24, 32, 24, 48);
-	_btnW2 = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 24, 32, 272, 48);
-	_btnCrew = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 64, 16, 24, 96);
-	_btnEquip = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 64, 16, 24, 120);
-	_btnArmour = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 64, 16, 24, 144);
+	_btnOk = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 64, 24, 128, 168);
+	_btnW1 = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 24, 32, 24, 48);
+	_btnW2 = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 24, 32, 272, 48);
+	_btnCrew = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 64, 16, 24, 96);
+	_btnEquip = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 64, 16, 24, 120);
+	_btnArmour = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 64, 16, 24, 144);
 	_txtCraft = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 310, 13, 5, 8);
 	_txtDamage = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 70, 8, 24, 24);
 	_txtFuel = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 70, 8, 232, 24);
@@ -143,22 +143,6 @@ void CraftInfoState::init()
 	texture->getSurface()->setY(0);
 	texture->getFrame(c->getRules()->getSprite())->blit(_sprite);
 
-	texture->getSurface()->setX(0);
-	texture->getSurface()->setY(0);
-	texture->getFrame(48)->blit(_w1);
-
-	texture->getSurface()->setX(0);
-	texture->getSurface()->setY(0);
-	texture->getFrame(48)->blit(_w2);
-
-	texture->getSurface()->setX(0);
-	texture->getSurface()->setY(0);
-	texture->getFrame(38)->blit(_crew);
-
-	texture->getSurface()->setX(0);
-	texture->getSurface()->setY(0);
-	texture->getFrame(39)->blit(_equip);
-
 	stringstream ss2;
 	ss2 << _game->getResourcePack()->getLanguage()->getString(STR_DAMAGE) << "0%";
 	_txtDamage->setText(ss2.str());
@@ -166,26 +150,75 @@ void CraftInfoState::init()
 	stringstream ss3;
 	ss3 << _game->getResourcePack()->getLanguage()->getString(STR_FUEL) << "0%";
 	_txtFuel->setText(ss3.str());
+	
+	if (c->getRules()->getSoldiers() > 0)
+	{
+		texture->getSurface()->setX(0);
+		texture->getSurface()->setY(0);
+		texture->getFrame(38)->blit(_crew);
 
-	_txtW1Name->setText("STINGRAY");
+		texture->getSurface()->setX(0);
+		texture->getSurface()->setY(0);
+		texture->getFrame(39)->blit(_equip);
+	}
+	else
+	{
+		_crew->setVisible(false);
+		_equip->setVisible(false);
+		_btnCrew->setVisible(false);
+		_btnEquip->setVisible(false);
+		_btnArmour->setVisible(false);
+	}
 
-	stringstream ss4;
-	ss4 << _game->getResourcePack()->getLanguage()->getString(STR_AMMO) << "0";
-	_txtW1Ammo->setText(ss4.str());
+	if (c->getRules()->getWeapons() > 0)
+	{
+		texture->getSurface()->setX(0);
+		texture->getSurface()->setY(0);
+		texture->getFrame(48)->blit(_w1);
 
-	stringstream ss5;
-	ss5 << _game->getResourcePack()->getLanguage()->getString(STR_MAX) << "0";
-	_txtW1Max->setText(ss5.str());
+		_txtW1Name->setText("STINGRAY");
 
-	_txtW2Name->setText("STINGRAY");
+		stringstream ss4;
+		ss4 << _game->getResourcePack()->getLanguage()->getString(STR_AMMO) << "0";
+		_txtW1Ammo->setText(ss4.str());
 
-	stringstream ss6;
-	ss6 << _game->getResourcePack()->getLanguage()->getString(STR_AMMO) << "0";
-	_txtW2Ammo->setText(ss6.str());
+		stringstream ss5;
+		ss5 << _game->getResourcePack()->getLanguage()->getString(STR_MAX) << "0";
+		_txtW1Max->setText(ss5.str());
+	}
+	else
+	{
+		_w1->setVisible(false);
+		_btnW1->setVisible(false);
+		_txtW1Name->setVisible(false);
+		_txtW1Ammo->setVisible(false);
+		_txtW1Max->setVisible(false);
+	}
 
-	stringstream ss7;
-	ss7 << _game->getResourcePack()->getLanguage()->getString(STR_MAX) << "0";
-	_txtW2Max->setText(ss7.str());
+	if (c->getRules()->getWeapons() > 1)
+	{
+		texture->getSurface()->setX(0);
+		texture->getSurface()->setY(0);
+		texture->getFrame(48)->blit(_w2);
+
+		_txtW2Name->setText("STINGRAY");
+
+		stringstream ss6;
+		ss6 << _game->getResourcePack()->getLanguage()->getString(STR_AMMO) << "0";
+		_txtW2Ammo->setText(ss6.str());
+
+		stringstream ss7;
+		ss7 << _game->getResourcePack()->getLanguage()->getString(STR_MAX) << "0";
+		_txtW2Max->setText(ss7.str());
+	}
+	else
+	{
+		_w2->setVisible(false);
+		_btnW2->setVisible(false);
+		_txtW2Name->setVisible(false);
+		_txtW2Ammo->setVisible(false);
+		_txtW2Max->setVisible(false);
+	}
 }
 
 /**

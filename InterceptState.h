@@ -23,7 +23,7 @@
 #include "State_Interactive.h"
 #include "LangString.h"
 #include "Palette.h"
-#include "Button.h"
+#include "TextButton.h"
 #include "Window.h"
 #include "Text.h"
 #include "TextList.h"
@@ -39,7 +39,7 @@ using namespace std;
 class InterceptState : public State
 {
 private:
-	Button *_btnCancel;
+	TextButton *_btnCancel;
 	Window *_window;
 	Text *_txtTitle, *_txtCraft, *_txtStatus, *_txtBase, *_txtWeapons;
 	TextList *_lstCrafts;

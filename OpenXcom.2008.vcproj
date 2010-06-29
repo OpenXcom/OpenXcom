@@ -190,14 +190,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Button.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Button.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Cursor.cpp"
 				>
 			</File>
@@ -206,11 +198,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\CustomButton.cpp"
+				RelativePath=".\ImageButton.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\CustomButton.h"
+				RelativePath=".\ImageButton.h"
 				>
 			</File>
 			<File
@@ -219,6 +211,14 @@
 			</File>
 			<File
 				RelativePath=".\Text.h"
+				>
+			</File>
+			<File
+				RelativePath=".\TextButton.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\TextButton.h"
 				>
 			</File>
 			<File

@@ -28,19 +28,19 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _rotLon(0), _rotLat(0), 
 	_bg = new Surface(320, 200, 0, 0);
 	_globe = new Globe(130, 100, 256, 200, 0, 0);
 
-	_btnIntercept = new CustomButton(63, 11, 257, 0);
-	_btnBases = new CustomButton(63, 11, 257, 12);
-	_btnGraphs = new CustomButton(63, 11, 257, 24);
-	_btnUfopaedia = new CustomButton(63, 11, 257, 36);
-	_btnOptions = new CustomButton(63, 11, 257, 48);
-	_btnFunding = new CustomButton(63, 11, 257, 60);
+	_btnIntercept = new ImageButton(63, 11, 257, 0);
+	_btnBases = new ImageButton(63, 11, 257, 12);
+	_btnGraphs = new ImageButton(63, 11, 257, 24);
+	_btnUfopaedia = new ImageButton(63, 11, 257, 36);
+	_btnOptions = new ImageButton(63, 11, 257, 48);
+	_btnFunding = new ImageButton(63, 11, 257, 60);
 
-	_btn5Secs = new CustomButton(31, 13, 257, 112);
-	_btn1Min = new CustomButton(31, 13, 289, 112);
-	_btn5Mins = new CustomButton(31, 13, 257, 126);
-	_btn30Mins = new CustomButton(31, 13, 289, 126);
-	_btn1Hour = new CustomButton(31, 13, 257, 140);
-	_btn1Day = new CustomButton(31, 13, 289, 140);
+	_btn5Secs = new ImageButton(31, 13, 257, 112);
+	_btn1Min = new ImageButton(31, 13, 289, 112);
+	_btn5Mins = new ImageButton(31, 13, 257, 126);
+	_btn30Mins = new ImageButton(31, 13, 289, 126);
+	_btn1Hour = new ImageButton(31, 13, 257, 140);
+	_btn1Day = new ImageButton(31, 13, 289, 140);
 
 	_btnRotateLeft = new InteractiveSurface(12, 10, 259, 176);
 	_btnRotateRight = new InteractiveSurface(12, 10, 283, 176);

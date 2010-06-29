@@ -22,7 +22,7 @@
 #include "State_Interactive.h"
 #include "LangString.h"
 #include "Palette.h"
-#include "Button.h"
+#include "TextButton.h"
 #include "Window.h"
 #include "Text.h"
 #include "TextList.h"
@@ -34,7 +34,7 @@
 class SellState : public State
 {
 private:
-	Button *_btnOk, *_btnCancel;
+	TextButton *_btnOk, *_btnCancel;
 	Window *_window;
 	Text *_txtTitle, *_txtSales, *_txtFunds, *_txtItem, *_txtQuantity, *_txtSell, *_txtValue;
 	TextList *_lstItems;

@@ -16,40 +16,51 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM__CUSTOMBUTTON_H
-#define OPENXCOM__CUSTOMBUTTON_H
+#ifndef OPENXCOM__TEXTBUTTON_H
+#define OPENXCOM__TEXTBUTTON_H
 
+#include <cmath>
 #include "SDL.h"
 #include "State_Interactive.h"
+#include "Text.h"
 
 /**
- * Regular graphic that works like a button.
- * Unlike the regular Button, this button doesn't draw
- * anything on its own. It takes an existing graphic and
- * treats it as a button, inverting colors when necessary.
- * This is necessary for special buttons like in the Geoscape.
+ * Coloured button with a text label.
+ * Drawn to look like a 3D-shaped box with text on top,
+ * responds to mouse clicks. Can be attached to a group of
+ * buttons to turn it into a radio button (only one button
+ * pushed at a time).
  */
-class CustomButton : public InteractiveSurface
+class TextButton : public InteractiveSurface
 {
 private:
 	Uint8 _color;
-	CustomButton **_group;
+	Text *_text;
+	TextButton **_group;
 public:
-	/// Creates a new custom button with the specified size and position.
-	CustomButton(int width, int height, int x = 0, int y = 0);
-	/// Cleans up the custom button.
-	~CustomButton();
-	/// Sets the custom button's color.
+	/// Creates a new text button with the specified size and position.
+	TextButton(Font *big, Font *small, int width, int height, int x = 0, int y = 0);
+	/// Cleans up the text button.
+	~TextButton();
+	/// Sets the text button's color.
 	void setColor(Uint8 color);
-	/// Gets the custom button's color.
+	/// Gets the text button's color.
 	Uint8 getColor();
-	/// Sets the custom button's group.
-	void setGroup(CustomButton **group);
+	/// Sets the text button's text.
+	void setText(string text);
+	/// Gets the text button's text.
+	string getText();
+	/// Sets the text button's group.
+	void setGroup(TextButton **group);
+	/// Sets the text button's palette.
+	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
+	/// Draws the text button.
+	void draw();
 	/// Special handling for mouse presses.
 	void mousePress(SDL_Event *ev, int scale, State *state);
 	/// Special handling for mouse releases.
 	void mouseRelease(SDL_Event *ev, int scale, State *state);
-
+	/// Special handling for mouse clicks.
 	void mouseClick(SDL_Event *ev, int scale, State *state);
 };
 

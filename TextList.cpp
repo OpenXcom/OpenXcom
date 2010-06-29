@@ -309,11 +309,8 @@ void TextList::mouseOver(SDL_Event *ev, int scale, State *state)
 
 		if (_selRow < _texts.size())
 		{
-			_selector->setX(_x - _bg->getX());
-			_selector->setY(_y + _selRow * 8 - _bg->getY());
-			_selector->copy(_bg);
-			_selector->setX(_x);
 			_selector->setY(_y + _selRow * 8);
+			_selector->copy(_bg);
 			_selector->offset(-10, Palette::backPos);
 			_selector->setVisible(true);
 		}

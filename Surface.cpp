@@ -263,8 +263,8 @@ void Surface::blit(Surface *surface)
 void Surface::copy(Surface *surface)
 {
 	SDL_Rect from;
-	from.x = _x;
-	from.y = _y;
+	from.x = _x - surface->getX();
+	from.y = _y - surface->getY();
 	from.w = _width;
 	from.h = _height;
 	SDL_BlitSurface(surface->getSurface(), &from, _surface, 0);

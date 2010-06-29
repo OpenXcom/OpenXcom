@@ -25,7 +25,7 @@
 #include "LangString.h"
 #include "Palette.h"
 #include "Bar.h"
-#include "Button.h"
+#include "TextButton.h"
 #include "Text.h"
 #include "TextEdit.h"
 #include "Surface.h"
@@ -42,7 +42,7 @@ private:
 	
 	Surface *_bg;
 	MiniBaseView *_mini;
-	Button *_btnOk, *_btnTransfers, *_btnStores, *_btnMonthlyCosts;
+	TextButton *_btnOk, *_btnTransfers, *_btnStores, *_btnMonthlyCosts;
 	TextEdit *_edtBase;
 
 	Text *_txtPersonnel, *_txtSoldiers, *_txtEngineers, *_txtScientists;

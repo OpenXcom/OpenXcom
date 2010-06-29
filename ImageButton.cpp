@@ -16,51 +16,51 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "CustomButton.h"
+#include "ImageButton.h"
 
 /**
- * Sets up a custom button with the specified size and position.
+ * Sets up an image button with the specified size and position.
  * @param width Width in pixels.
  * @param height Height in pixels.
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-CustomButton::CustomButton(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _color(0), _group(0)
+ImageButton::ImageButton(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _color(0), _group(0)
 {
 }
 
 /**
  *
  */
-CustomButton::~CustomButton()
+ImageButton::~ImageButton()
 {
 	
 }
 
 /**
- * Changes the color for the custom button.
+ * Changes the color for the image button.
  * @param color Color value.
  */
-void CustomButton::setColor(Uint8 color)
+void ImageButton::setColor(Uint8 color)
 {
 	_color = color;
 }
 
 /**
- * Returns the color for the custom button.
+ * Returns the color for the image button.
  * @return Color value.
  */
-Uint8 CustomButton::getColor()
+Uint8 ImageButton::getColor()
 {
 	return _color;
 }
 
 /**
- * Changes the button group this button belongs to.
+ * Changes the button group this image button belongs to.
  * @param group Pointer to the pressed button pointer in the group.
  * Null makes it a regular button.
  */
-void CustomButton::setGroup(CustomButton **group)
+void ImageButton::setGroup(ImageButton **group)
 {
 	_group = group;
 	if (_group != 0 && *_group == this)
@@ -74,7 +74,7 @@ void CustomButton::setGroup(CustomButton **group)
  * @param scale Current screen scale (used to correct mouse input).
  * @param state State that the event handlers belong to.
  */
-void CustomButton::mousePress(SDL_Event *ev, int scale, State *state)
+void ImageButton::mousePress(SDL_Event *ev, int scale, State *state)
 {
 	if (ev->button.button == SDL_BUTTON_LEFT)
 	{
@@ -94,7 +94,7 @@ void CustomButton::mousePress(SDL_Event *ev, int scale, State *state)
  * @param scale Current screen scale (used to correct mouse input).
  * @param state State that the event handlers belong to.
  */
-void CustomButton::mouseRelease(SDL_Event *ev, int scale, State *state)
+void ImageButton::mouseRelease(SDL_Event *ev, int scale, State *state)
 {
 	if (ev->button.button == SDL_BUTTON_LEFT)
 	{
@@ -110,7 +110,7 @@ void CustomButton::mouseRelease(SDL_Event *ev, int scale, State *state)
  * @param scale Current screen scale (used to correct mouse input).
  * @param state State that the event handlers belong to.
  */
-void CustomButton::mouseClick(SDL_Event *ev, int scale, State *state)
+void ImageButton::mouseClick(SDL_Event *ev, int scale, State *state)
 {
 	if (ev->button.button == SDL_BUTTON_LEFT)
 	{

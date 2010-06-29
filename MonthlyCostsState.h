@@ -23,7 +23,7 @@
 #include "State_Interactive.h"
 #include "LangString.h"
 #include "Palette.h"
-#include "Button.h"
+#include "TextButton.h"
 #include "Window.h"
 #include "Text.h"
 #include "TextList.h"
@@ -38,7 +38,7 @@ class MonthlyCostsState : public State
 private:
 	Base *_base;
 
-	Button *_btnOk;
+	TextButton *_btnOk;
 	Window *_window;
 	Text *_txtTitle, *_txtCost, *_txtQuantity, *_txtTotal, *_txtRental, *_txtSalaries, *_txtIncome;
 	TextList *_lstCrafts, *_lstSalaries, *_lstMaintenance, *_lstTotal;

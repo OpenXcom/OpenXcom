@@ -22,7 +22,7 @@
 #include "State_Interactive.h"
 #include "LangString.h"
 #include "Palette.h"
-#include "Button.h"
+#include "TextButton.h"
 #include "Window.h"
 #include "Text.h"
 #include "AbandonGameState.h"
@@ -36,7 +36,7 @@
 class OptionsState : public State
 {
 private:
-	Button *_btnLoad, *_btnSave, *_btnAbandon, *_btnCancel;
+	TextButton *_btnLoad, *_btnSave, *_btnAbandon, *_btnCancel;
 	Window *_window;
 	Text *_txtTitle;
 public:

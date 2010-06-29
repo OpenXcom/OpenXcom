@@ -103,11 +103,11 @@
     <ClCompile Include="BasescapeErrorState.cpp" />
     <ClCompile Include="BaseView.cpp" />
     <ClCompile Include="BuildFacilitiesState.cpp" />
-    <ClCompile Include="Button.cpp" />
+    <ClCompile Include="TextButton.cpp" />
     <ClCompile Include="Craft.cpp" />
     <ClCompile Include="CraftInfoState.cpp" />
     <ClCompile Include="Cursor.cpp" />
-    <ClCompile Include="CustomButton.cpp" />
+    <ClCompile Include="ImageButton.cpp" />
     <ClCompile Include="DismantleFacilityState.cpp" />
     <ClCompile Include="GeoscapeMessageState.cpp" />
     <ClCompile Include="MiniBaseView.cpp" />
@@ -171,11 +171,11 @@
     <ClInclude Include="BasescapeErrorState.h" />
     <ClInclude Include="BaseView.h" />
     <ClInclude Include="BuildFacilitiesState.h" />
-    <ClInclude Include="Button.h" />
+    <ClInclude Include="TextButton.h" />
     <ClInclude Include="Craft.h" />
     <ClInclude Include="CraftInfoState.h" />
     <ClInclude Include="Cursor.h" />
-    <ClInclude Include="CustomButton.h" />
+    <ClInclude Include="ImageButton.h" />
     <ClInclude Include="DismantleFacilityState.h" />
     <ClInclude Include="GeoscapeMessageState.h" />
     <ClInclude Include="MiniBaseView.h" />

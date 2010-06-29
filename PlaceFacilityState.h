@@ -23,7 +23,7 @@
 #include "State_Interactive.h"
 #include "LangString.h"
 #include "Palette.h"
-#include "Button.h"
+#include "TextButton.h"
 #include "Window.h"
 #include "Text.h"
 #include "BaseView.h"
@@ -43,7 +43,7 @@ private:
 	RuleBaseFacility *_rule;
 
 	BaseView *_view;
-	Button *_btnCancel;
+	TextButton *_btnCancel;
 	Window *_window;
 	Text *_txtFacility, *_txtCost, *_numCost, *_txtTime, *_numTime, *_txtMaintenance, *_numMaintenance;
 public:

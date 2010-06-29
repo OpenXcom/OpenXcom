@@ -23,7 +23,7 @@
 #include "Palette.h"
 #include "SurfaceSet.h"
 #include "Surface.h"
-#include "Button.h"
+#include "TextButton.h"
 #include "Window.h"
 #include "Text.h"
 #include "TextList.h"
@@ -41,7 +41,7 @@ class TestState : public State
 private:
 	SurfaceSet *_set;
 	Surface *_surf;
-	Button *_button;
+	TextButton *_button;
 	Window *_window;
 	Text *_text;
 	TextList *_list;

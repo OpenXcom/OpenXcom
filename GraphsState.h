@@ -22,7 +22,7 @@
 #include "State_Interactive.h"
 #include "Palette.h"
 #include "Surface.h"
-#include "Button.h"
+#include "TextButton.h"
 #include "Text.h"
 #include "GeoscapeState.h"
 

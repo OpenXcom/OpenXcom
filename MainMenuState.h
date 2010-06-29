@@ -22,7 +22,7 @@
 #include "State_Interactive.h"
 #include "LangString.h"
 #include "Palette.h"
-#include "Button.h"
+#include "TextButton.h"
 #include "Window.h"
 #include "Text.h"
 #include "NewGameState.h"
@@ -34,7 +34,7 @@
 class MainMenuState : public State
 {
 private:
-	Button *_btnNew, *_btnLoad, *_btnQuit;
+	TextButton *_btnNew, *_btnLoad, *_btnQuit;
 	Window *_window;
 	Text *_txtTitle, *_txtVersion;
 public:

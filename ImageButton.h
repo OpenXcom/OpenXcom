@@ -16,46 +16,35 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM__BUTTON_H
-#define OPENXCOM__BUTTON_H
+#ifndef OPENXCOM__IMAGEBUTTON_H
+#define OPENXCOM__IMAGEBUTTON_H
 
-#include <cmath>
 #include "SDL.h"
 #include "State_Interactive.h"
-#include "Text.h"
 
 /**
- * Coloured labelled button.
- * Drawn to look like a 3D-shaped box with text on top,
- * responds to mouse clicks. Can be attached to a group of
- * buttons to turn it into a radio button (only one button
- * pushed at a time). Pretty much the heart of the interface.
+ * Regular image that works like a button.
+ * Unlike the TextButton, this button doesn't draw
+ * anything on its own. It takes an existing graphic and
+ * treats it as a button, inverting colors when necessary.
+ * This is necessary for special buttons like in the Geoscape.
  */
-class Button : public InteractiveSurface
+class ImageButton : public InteractiveSurface
 {
 private:
 	Uint8 _color;
-	Text *_text;
-	Button **_group;
+	ImageButton **_group;
 public:
-	/// Creates a new button with the specified size and position.
-	Button(Font *big, Font *small, int width, int height, int x = 0, int y = 0);
-	/// Cleans up the button.
-	~Button();
-	/// Sets the button's color.
+	/// Creates a new image button with the specified size and position.
+	ImageButton(int width, int height, int x = 0, int y = 0);
+	/// Cleans up the image button.
+	~ImageButton();
+	/// Sets the image button's color.
 	void setColor(Uint8 color);
-	/// Gets the button's color.
+	/// Gets the image button's color.
 	Uint8 getColor();
-	/// Sets the button's text.
-	void setText(string text);
-	/// Gets the button's text.
-	string getText();
-	/// Sets the button's group.
-	void setGroup(Button **group);
-	/// Sets the button's palette.
-	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
-	/// Draws the button.
-	void draw();
+	/// Sets the image button's group.
+	void setGroup(ImageButton **group);
 	/// Special handling for mouse presses.
 	void mousePress(SDL_Event *ev, int scale, State *state);
 	/// Special handling for mouse releases.

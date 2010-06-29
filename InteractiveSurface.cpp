@@ -48,6 +48,9 @@ InteractiveSurface::~InteractiveSurface()
  */
 void InteractiveSurface::handle(SDL_Event *ev, int scale, State *state)
 {
+	if (!_visible)
+		return;
+
 	if ((ev->motion.x >= _x * scale && ev->motion.x < (_x + _width) * scale) &&
 		(ev->motion.y >= _y * scale && ev->motion.y < (_y + _height) * scale))
 	{

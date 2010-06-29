@@ -24,7 +24,7 @@
 #include "LangString.h"
 #include "Palette.h"
 #include "Bar.h"
-#include "Button.h"
+#include "TextButton.h"
 #include "Text.h"
 #include "TextEdit.h"
 #include "Surface.h"
@@ -42,7 +42,7 @@ private:
 	unsigned int _soldier;
 
 	Surface *_bg, *_rank;
-	Button *_btnOk, *_btnPrev, *_btnNext, *_btnArmour;
+	TextButton *_btnOk, *_btnPrev, *_btnNext, *_btnArmour;
 	Text *_txtArmour, *_txtRank, *_txtMissions, *_txtKills, *_txtCraft;
 	TextEdit *_edtSoldier;
 

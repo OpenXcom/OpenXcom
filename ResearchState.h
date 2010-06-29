@@ -22,7 +22,7 @@
 #include "State_Interactive.h"
 #include "LangString.h"
 #include "Palette.h"
-#include "Button.h"
+#include "TextButton.h"
 #include "Window.h"
 #include "Text.h"
 #include "TextList.h"
@@ -34,7 +34,7 @@
 class ResearchState : public State
 {
 private:
-	Button *_btnNew, *_btnOk;
+	TextButton *_btnNew, *_btnOk;
 	Window *_window;
 	Text *_txtTitle, *_txtAvailable, *_txtAllocated, *_txtSpace, *_txtProject, *_txtScientists, *_txtProgress;
 	TextList *_lstResearch;

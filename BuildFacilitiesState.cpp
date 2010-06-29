@@ -30,7 +30,7 @@ BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base, State *state)
 
 	// Create objects
 	_window = new Window(128, 160, 192, 40, POPUP_VERTICAL);
-	_btnOk = new Button(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 112, 16, 200, 176);
+	_btnOk = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 112, 16, 200, 176);
 	_txtTitle = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 118, 16, 197, 48);
 	_lstFacilities = new TextList(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 110, 110, 202, 64);
 	

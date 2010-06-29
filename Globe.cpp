@@ -128,39 +128,24 @@ bool Globe::pointBack(double lon, double lat)
  */
 bool Globe::insidePolygon(double lon, double lat, Polygon *poly)
 {
-	double sign = 0;
-	// Is the point inside terrain?
+	bool c = false;
 	for (int i = 0; i < poly->getPoints(); i++)
 	{
+		if (pointBack(lon, lat) != pointBack(poly->getLongitude(i), poly->getLatitude(i)))
+			break;
+
 		int j = (i + 1) % poly->getPoints();
 
-		double lat_i = poly->getLatitude(i), lat_j = poly->getLatitude(j);
-		double lon_i = poly->getLongitude(i), lon_j = poly->getLongitude(j);
-		/*
-		if (lon_i < PI/6 && lon_j > 11*(PI/6))
-			lon_j -= 2*PI;
-		else if (lon_j < PI/6 && lon_i > 11*(PI/6))
-			lon_i -= 2*PI;
-		*/
-		double d = (lat_j - lat_i) * lon + (lon_i - lon_j) * lat + lat_i * lon_j - lon_i * lat_j;
+		Sint16 x, y, x_i, x_j, y_i, y_j;
+		polarToCart(poly->getLongitude(i), poly->getLatitude(i), &x_i, &y_i);
+		polarToCart(poly->getLongitude(j), poly->getLatitude(j), &x_j, &y_j);
+		polarToCart(lon, lat, &x, &y);
 
-		if ((d < 0 && sign > 0) || (d > 0 && sign < 0))
-			return false;
-		else
-			sign = d;
-	}
-	return true;
-	
-	/*
-	int i, j;
-	bool c = false;
-	for (i = 0, j = nvert-1; i < nvert; j = i++) {
-		if ( ((verty[i]>testy) != (verty[j]>testy)) &&
-			 (testx < (vertx[j]-vertx[i]) * (testy-verty[i]) / (verty[j]-verty[i]) + vertx[i]) )
+		if ( ((y_i > y) != (y_j > y)) &&
+			 (x < (x_j - x_i) * (y - y_i) / (y_j - y_i) + x_i) )
 			c = !c;
 	}
 	return c;
-	*/
 }
 
 /**

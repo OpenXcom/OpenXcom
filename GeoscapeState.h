@@ -28,7 +28,7 @@
 #include "Surface.h"
 #include "Globe.h"
 #include "Text.h"
-#include "CustomButton.h"
+#include "ImageButton.h"
 #include "Timer.h"
 #include "GameTime.h"
 #include "OptionsState.h"
@@ -53,9 +53,9 @@ class GeoscapeState : public State
 private:
 	Surface *_bg;
 	Globe *_globe;
-	CustomButton *_btnIntercept, *_btnBases, *_btnGraphs, *_btnUfopaedia, *_btnOptions, *_btnFunding;
-	CustomButton *_timer;
-	CustomButton *_btn5Secs, *_btn1Min, *_btn5Mins, *_btn30Mins, *_btn1Hour, *_btn1Day;
+	ImageButton *_btnIntercept, *_btnBases, *_btnGraphs, *_btnUfopaedia, *_btnOptions, *_btnFunding;
+	ImageButton *_timer;
+	ImageButton *_btn5Secs, *_btn1Min, *_btn5Mins, *_btn30Mins, *_btn1Hour, *_btn1Day;
 	InteractiveSurface *_btnRotateLeft, *_btnRotateRight, *_btnRotateUp, *_btnRotateDown, *_btnZoomIn, *_btnZoomOut;
 	Text *_txtHour, *_txtHourSep, *_txtMin, *_txtMinSep, *_txtSec, *_txtWeekday, *_txtDay, *_txtMonth, *_txtYear;
 	Timer *_rotTimer, *_gameTimer;

@@ -23,7 +23,7 @@
 #include "State_Interactive.h"
 #include "LangString.h"
 #include "Palette.h"
-#include "Button.h"
+#include "TextButton.h"
 #include "Window.h"
 #include "Text.h"
 
@@ -34,7 +34,7 @@
 class MonthlyReportState : public State
 {
 private:
-	Button *_btnOk;
+	TextButton *_btnOk;
 	Window *_window;
 	Text *_txtTitle, *_txtMonth, *_txtRating, *_txtChange, *_txtDesc;
 public:
