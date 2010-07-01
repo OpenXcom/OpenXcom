@@ -103,6 +103,7 @@
     <ClCompile Include="BasescapeErrorState.cpp" />
     <ClCompile Include="BaseView.cpp" />
     <ClCompile Include="BuildFacilitiesState.cpp" />
+    <ClCompile Include="CraftSoldiersState.cpp" />
     <ClCompile Include="TextButton.cpp" />
     <ClCompile Include="Craft.cpp" />
     <ClCompile Include="CraftInfoState.cpp" />
@@ -171,6 +172,7 @@
     <ClInclude Include="BasescapeErrorState.h" />
     <ClInclude Include="BaseView.h" />
     <ClInclude Include="BuildFacilitiesState.h" />
+    <ClInclude Include="CraftSoldiersState.h" />
     <ClInclude Include="TextButton.h" />
     <ClInclude Include="Craft.h" />
     <ClInclude Include="CraftInfoState.h" />

@@ -46,8 +46,8 @@ CraftInfoState::CraftInfoState(Game *game, Base *base, unsigned int craft) : Sta
 	_sprite = new Surface(32, 32, 144, 52);
 	_w1 = new Surface(15, 17, 121, 63);
 	_w2 = new Surface(15, 17, 184, 63);
-	_crew = new Surface(210, 16, 96, 97);
-	_equip = new Surface(210, 16, 96, 122);
+	_crew = new Surface(210, 16, 95, 96);
+	_equip = new Surface(210, 16, 95, 121);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)), Palette::backPos, 16);
@@ -90,6 +90,7 @@ CraftInfoState::CraftInfoState(Game *game, Base *base, unsigned int craft) : Sta
 
 	_btnCrew->setColor(Palette::blockOffset(13)+13);
 	_btnCrew->setText(_game->getResourcePack()->getLanguage()->getString(STR_CREW));
+	_btnCrew->onMouseClick((EventHandler)&CraftInfoState::btnCrewClick);
 
 	_btnEquip->setColor(Palette::blockOffset(13)+13);
 	_btnEquip->setText(_game->getResourcePack()->getLanguage()->getString(STR_EQUIPMENT));
@@ -127,7 +128,7 @@ CraftInfoState::~CraftInfoState()
 }
 
 /**
- * The craft names can change
+ * The craft info can change
  * after going into other screens.
  */
 void CraftInfoState::init()
@@ -153,13 +154,21 @@ void CraftInfoState::init()
 	
 	if (c->getRules()->getSoldiers() > 0)
 	{
-		texture->getSurface()->setX(0);
-		texture->getSurface()->setY(0);
-		texture->getFrame(38)->blit(_crew);
+		_crew->clear();
+		_equip->clear();
 
+		texture->getSurface()->setY(0);
+		for (int i = 0, x = 0; i < c->getSoldiers(_base->getSoldiers()); i++, x += 10)
+		{
+			texture->getSurface()->setX(x);
+			texture->getFrame(38)->blit(_crew);
+		}
+
+		/*
 		texture->getSurface()->setX(0);
 		texture->getSurface()->setY(0);
 		texture->getFrame(39)->blit(_equip);
+		*/
 	}
 	else
 	{
@@ -229,4 +238,14 @@ void CraftInfoState::init()
 void CraftInfoState::btnOkClick(SDL_Event *ev, int scale)
 {
 	_game->popState();
+}
+
+/**
+ * Goes to the Select Squad screen.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
+void CraftInfoState::btnCrewClick(SDL_Event *ev, int scale)
+{
+	_game->pushState(new CraftSoldiersState(_game, _base, _craft));
 }

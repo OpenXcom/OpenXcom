@@ -394,6 +394,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\CraftSoldiersState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\CraftSoldiersState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\CraftsState.cpp"
 				>
 			</File>

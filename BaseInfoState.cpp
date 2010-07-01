@@ -143,7 +143,7 @@ BaseInfoState::BaseInfoState(Game *game, Base *base) : State(game), _base(base)
 
 
 	_txtPersonnel->setColor(Palette::blockOffset(15)+1);
-	_txtPersonnel->setText(_game->getResourcePack()->getLanguage()->getString(STR_PERSONNEL_AVAILABLE));
+	_txtPersonnel->setText(_game->getResourcePack()->getLanguage()->getString(STR_PERSONNEL_AVAILABLE_TOTAL));
 
 	_txtSoldiers->setColor(Palette::blockOffset(13)+5);
 	_txtSoldiers->setText(_game->getResourcePack()->getLanguage()->getString(STR_SOLDIERS));
@@ -171,7 +171,7 @@ BaseInfoState::BaseInfoState(Game *game, Base *base) : State(game), _base(base)
 
 
 	_txtSpace->setColor(Palette::blockOffset(15)+1);
-	_txtSpace->setText(_game->getResourcePack()->getLanguage()->getString(STR_SPACE_USED));
+	_txtSpace->setText(_game->getResourcePack()->getLanguage()->getString(STR_SPACE_USED_AVAILABLE));
 
 	_txtQuarters->setColor(Palette::blockOffset(13)+5);
 	_txtQuarters->setText(_game->getResourcePack()->getLanguage()->getString(STR_LIVING_QUARTERS));

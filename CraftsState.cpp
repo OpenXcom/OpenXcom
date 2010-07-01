@@ -89,12 +89,6 @@ CraftsState::CraftsState(Game *game, Base *base) : State(game), _base(base)
 	_lstCrafts->setSelectable(true);
 	_lstCrafts->setBackground(_window);
 	_lstCrafts->onMouseClick((EventHandler)&CraftsState::lstCraftsClick);
-	for (vector<Craft*>::iterator i = _base->getCrafts()->begin(); i != _base->getCrafts()->end(); i++)
-	{
-		stringstream ss;
-		ss << _game->getResourcePack()->getLanguage()->getString((*i)->getRules()->getType()) << "-" << (*i)->getId();
-		_lstCrafts->addRow(5, ss.str().c_str(), _game->getResourcePack()->getLanguage()->getString(STR_READY).c_str(), "0/0", "0", "0");
-	}
 }
 
 /**
@@ -103,6 +97,23 @@ CraftsState::CraftsState(Game *game, Base *base) : State(game), _base(base)
 CraftsState::~CraftsState()
 {
 	
+}
+
+/**
+ * The soldier names can change
+ * after going into other screens.
+ */
+void CraftsState::init()
+{
+	_lstCrafts->clearList();
+	for (vector<Craft*>::iterator i = _base->getCrafts()->begin(); i != _base->getCrafts()->end(); i++)
+	{
+		stringstream ss, ss2, ss3;
+		ss << _game->getResourcePack()->getLanguage()->getString((*i)->getRules()->getType()) << "-" << (*i)->getId();
+		ss2 << (*i)->getSoldiers(_base->getSoldiers());
+		ss3 << (*i)->getHWPs();
+		_lstCrafts->addRow(5, ss.str().c_str(), _game->getResourcePack()->getLanguage()->getString(STR_READY).c_str(), "0/0", ss2.str().c_str(), ss3.str().c_str());
+	}
 }
 
 /**

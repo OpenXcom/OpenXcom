@@ -56,3 +56,44 @@ int Craft::getId()
 {
 	return _id;
 }
+
+/**
+ * Returns the amount of weapons currently
+ * equipped on this craft.
+ * @return Number of weapons.
+ */
+int Craft::getWeapons()
+{
+	return 0;
+}
+
+/**
+ * Returns the amount of soldiers from a list
+ * that are currently attached to this craft.
+ * @return Number of soldiers.
+ */
+int Craft::getSoldiers(vector<Soldier*> *soldiers)
+{
+	if (_rules->getSoldiers() == 0)
+		return 0;
+
+	int total = 0;
+
+	for (vector<Soldier*>::iterator i = soldiers->begin(); i != soldiers->end(); i++)
+	{
+		if ((*i)->getCraft() == this)
+			total++;
+	}
+
+	return total;
+}
+
+/**
+ * Returns the amount of HWPs currently
+ * contained in this craft.
+ * @return Number of HWPs.
+ */
+int Craft::getHWPs()
+{
+	return 0;
+}

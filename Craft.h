@@ -20,7 +20,9 @@
 #define OPENXCOM__CRAFT_H
 
 #include <map>
+#include <vector>
 #include "RuleCraft.h"
+#include "Soldier.h"
 
 using namespace std;
 
@@ -45,6 +47,12 @@ public:
 	RuleCraft *getRules();
 	/// Gets the craft's ID.
 	int getId();
+	/// Gets the craft's amount of weapons.
+	int getWeapons();
+	/// Gets the craft's amount of soldiers.
+	int getSoldiers(vector<Soldier*> *soldiers);
+	/// Gets the craft's amount of HWPs.
+	int getHWPs();
 };
 
 #endif

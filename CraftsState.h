@@ -50,6 +50,8 @@ public:
 	CraftsState(Game *game, Base *base);
 	/// Cleans up the Crafts state.
 	~CraftsState();
+	/// Updates the craft info.
+	void init();
 	/// Handler for clicking the OK button.
 	void btnOkClick(SDL_Event *ev, int scale);
 	/// Handler for clicking the Crafts list.

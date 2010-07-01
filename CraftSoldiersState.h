@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM__CRAFTINFOSTATE_H
-#define OPENXCOM__CRAFTINFOSTATE_H
+#ifndef OPENXCOM__CRAFTSOLDIERSSTATE_H
+#define OPENXCOM__CRAFTSOLDIERSSTATE_H
 
 #include <sstream>
 #include "State_Interactive.h"
@@ -26,38 +26,37 @@
 #include "TextButton.h"
 #include "Window.h"
 #include "Text.h"
+#include "TextList.h"
+#include "Soldier.h"
 #include "Craft.h"
-#include "Base.h"
-#include "CraftSoldiersState.h"
 
 using namespace std;
 
 /**
- * Craft Info screen that shows all the 
- * info of a specific craft.
+ * Select Squad screen that lets the player
+ * pick the soldiers to assign to a craft.
  */
-class CraftInfoState : public State
+class CraftSoldiersState : public State
 {
 private:
+	TextButton *_btnOk;
+	Window *_window;
+	Text *_txtTitle, *_txtName, *_txtRank, *_txtCraft, *_txtAvailable, *_txtUsed;
+	TextList *_lstSoldiers;
+
 	Base *_base;
 	unsigned int _craft;
-
-	TextButton *_btnOk, *_btnW1, *_btnW2, *_btnCrew, *_btnEquip, *_btnArmour;
-	Window *_window;
-	Text *_txtCraft, *_txtDamage, *_txtFuel;
-	Text *_txtW1Name, *_txtW1Ammo, *_txtW1Max, *_txtW2Name, *_txtW2Ammo, *_txtW2Max;
-	Surface *_sprite, *_w1, *_w2, *_crew, *_equip;
 public:
-	/// Creates the Craft Info state.
-	CraftInfoState(Game *game, Base *base, unsigned int craft);
-	/// Cleans up the Craft Info state.
-	~CraftInfoState();
-	/// Updates the craft info.
+	/// Creates the Craft Soldiers state.
+	CraftSoldiersState(Game *game, Base *base, unsigned int craft);
+	/// Cleans up the Craft Soldiers state.
+	~CraftSoldiersState();
+	/// Updates the soldier status.
 	void init();
 	/// Handler for clicking the OK button.
 	void btnOkClick(SDL_Event *ev, int scale);
-	/// Handler for clicking the Crew button.
-	void btnCrewClick(SDL_Event *ev, int scale);
+	/// Handler for clicking the Soldiers list.
+	void lstSoldiersClick(SDL_Event *ev, int scale);
 };
 
 #endif
