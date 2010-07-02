@@ -27,8 +27,14 @@
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Globe::Globe(int cenX, int cenY, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _polygons(), _radius(90), _zoom(1), _rotLon(0), _rotLat(0), _cenX(cenX), _cenY(cenY), _testLon(0), _testLat(0)
+Globe::Globe(int cenX, int cenY, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _polygons(), _radius(), _zoom(0), _rotLon(0), _rotLat(0), _cenX(cenX), _cenY(cenY), _testLon(0), _testLat(0)
 {
+	_radius.push_back(90);
+	_radius.push_back(120);
+	_radius.push_back(240);
+	_radius.push_back(360);
+	_radius.push_back(480);
+	_radius.push_back(720);
 }
 
 /**
@@ -48,11 +54,9 @@ Globe::~Globe()
  */
 void Globe::polarToCart(double lon, double lat, Sint16 *x, Sint16 *y)
 {
-	lon = longitudeLoop(lon + _rotLon);
-
-	*x = _cenX + (int)floor(_radius * _zoom * sin(lon) * cos(lat));
-	//*y = _cenY + (int)floor(_radius * _zoom * sin(lat));
-	*y = _cenY + (int)floor(_radius * _zoom * (sin(lat) * cos(_rotLat) + cos(lat) * sin(_rotLat) * cos(lon)));
+	// Orthographic projection
+	*x = _cenX + (int)floor(_radius[_zoom] * cos(lat) * sin(lon + _rotLon));
+	*y = _cenY + (int)floor(_radius[_zoom] * (cos(_rotLat) * sin(lat) + sin(_rotLat) * cos(lat) * cos(lon + _rotLon)));
 }
 
 /**
@@ -67,8 +71,15 @@ void Globe::polarToCart(double lon, double lat, Sint16 *x, Sint16 *y)
  */
 void Globe::cartToPolar(Sint16 x, Sint16 y, double *lon, double *lat)
 {	
-	*lat = asin((y - _cenY) / (_radius * _zoom));
-	*lon = asin((x - _cenX) / (_radius * _zoom * cos(*lat)));
+	// Orthographic projection
+	x -= _cenX;
+	y -= _cenY;
+
+	double rho = sqrt((double)(x*x + y*y));
+	double c = asin(rho / (_radius[_zoom]));
+
+	*lat = asin((y * sin(c) * cos(_rotLat)) / rho - cos(c) * sin(_rotLat));
+	*lon = atan2(x * sin(c), rho * cos(_rotLat) * cos(c) + y * sin(_rotLat) * sin(c)) - _rotLon;
 
 	// Check for errors
 	if (!(*lat == *lat && *lon == *lon))
@@ -76,47 +87,20 @@ void Globe::cartToPolar(Sint16 x, Sint16 y, double *lon, double *lat)
 		*lat = COORD_OUT_OF_BOUNDS;
 		*lon = COORD_OUT_OF_BOUNDS;
 	}
-	else
-	{
-		*lon = longitudeLoop(*lon - _rotLon);
-	}
-}
-
-/**
- * Keeps longitudes within 0 and 2*PI for algorithm's sake.
- * @param lon Longitude.
- * @return Corrected longitude.
- */
-double Globe::longitudeLoop(double lon)
-{
-	while (lon >= 2*PI)
-		lon -= 2*PI;
-	while (lon < 0)
-		lon += 2*PI;
-
-	return lon;
 }
 
 /**
  * Checks if a polar point is on the back-half of the globe,
- * invisible to the player, using Haversine's formula.
+ * invisible to the player.
  * @param lon Longitude of the point.
  * @param lat Latitude of the point.
  * @return True if it's on the back, False if it's on the front.
  */
 bool Globe::pointBack(double lon, double lat)
 {
-	double dLat = -_rotLat - lat;
-	double dLon = -_rotLon - lon;
-
-	// Haversine's formula
-	double a = sin(dLat / 2) * sin(dLat / 2) +
-			cos(lat) * cos(-_rotLat) * 
-			sin(dLon / 2) * sin(dLon / 2); 
-	double c = 2 * atan2(sqrt(a), sqrt(1 - a)); 
+	double c = cos(_rotLat) * cos(lat) * cos(lon + _rotLon) - sin(_rotLat) * sin(lat);
 	
-	// Distance to front center point must be at most PI/2 otherwise it's hidden.
-	return c > PI/2;
+	return c < 0;
 }
 
 /**
@@ -231,22 +215,24 @@ void Globe::setPolygons(vector<Polygon*> *polygons)
  */
 void Globe::rotate(double lon, double lat)
 {
-	_rotLon = longitudeLoop(_rotLon + lon);
+	_rotLon += lon;
 	_rotLat += lat;
 	draw();
 }
 
 /**
- * Zooms the globe by a specified amount.
+ * Increases the zoom level on the globe by a specified amount.
  * @param amount Positive to zoom in, negative to zoom out.
  */
-void Globe::zoom(double amount)
+void Globe::zoom(int amount)
 {
 	_zoom += amount;
-	if (_zoom < 1.0f)
-		_zoom = 1.0f;
-	else if (_zoom > 2.5f)
-		_zoom = 2.5f;
+	
+	if (_zoom < 0)
+		_zoom = 0;
+	else if (_zoom >= _radius.size())
+		_zoom = _radius.size() - 1;
+	
 	draw();
 }
 
@@ -277,7 +263,7 @@ void Globe::draw()
 	// Lock the surface
 	lock();
 
-	filledCircleColor(this->getSurface(), _cenX, _cenY, (Sint16)floor(_radius * _zoom), Palette::getRGBA(this->getPalette(), Palette::blockOffset(12)));
+	filledCircleColor(this->getSurface(), _cenX, _cenY, (Sint16)floor(_radius[_zoom]), Palette::getRGBA(this->getPalette(), Palette::blockOffset(12)));
 
 	for (vector<Polygon*>::iterator i = _polygons->begin(); i < _polygons->end(); i++)
 	{

@@ -39,20 +39,18 @@ using namespace std;
  * Takes a flat world map made out of land polygons with
  * polar coordinates and renders it as a 3D-looking globe
  * with cartesian coordinates that the player can interact with.
- * @todo Texture rendering, points inside polygons,
- * converting points with vertical rotation.
+ * @todo Texture rendering, countries and cities and stuffs.
  */
 class Globe : public InteractiveSurface
 {
 private:
 	vector<Polygon*> *_polygons;
-	double _radius, _zoom, _rotLon, _rotLat;
-	int _cenX, _cenY;
+	vector<double> _radius;
+	double _rotLon, _rotLat;
+	int _cenX, _cenY, _zoom;
 	SurfaceSet *_texture;
 	double _testLon, _testLat;
 
-	/// Keeps longitudes between 0 and 2*PI.
-	double longitudeLoop(double lon);
 	/// Checks if a point is behind the globe.
 	bool pointBack(double lon, double lat);
 	/// Checks if a point is inside a polygon.
@@ -75,7 +73,7 @@ public:
 	/// Rotates the globe a set amount.
 	void rotate(double lon, double lat);
 	/// Zooms the globe a set amount.
-	void zoom(double amount);
+	void zoom(int amount);
 	/// Centers the globe on a point.
 	void center(double lon, double lat);
 	/// Draws the globe.

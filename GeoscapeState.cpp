@@ -594,7 +594,7 @@ void GeoscapeState::btnRotateDownRelease(SDL_Event *ev, int scale)
  */
 void GeoscapeState::btnZoomInClick(SDL_Event *ev, int scale)
 {
-	_globe->zoom(0.3);
+	_globe->zoom(1);
 }
 
 /**
@@ -604,5 +604,5 @@ void GeoscapeState::btnZoomInClick(SDL_Event *ev, int scale)
  */
 void GeoscapeState::btnZoomOutClick(SDL_Event *ev, int scale)
 {
-	_globe->zoom(-0.3);
+	_globe->zoom(-1);
 }

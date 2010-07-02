@@ -21,7 +21,6 @@
 #include "StartState.h"
 #include "XcomResourcePack.h"
 #include "XcomRuleset.h"
-#include "SavedGame.h"
 
 #include <iostream>
 #include <cstring>

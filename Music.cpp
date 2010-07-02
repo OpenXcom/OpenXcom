@@ -34,7 +34,7 @@ Music::~Music()
 }
 
 /**
- * Loads a MID, MP3 or OGG file from a specified filename.
+ * Loads a music file from a specified filename.
  * @param filename Filename of the music file.
  * @return True if the music was loaded successfully, False otherwise.
  */
@@ -59,7 +59,7 @@ bool Music::load(string filename)
  */
 void Music::play()
 {
-	if(Mix_PlayMusic(_music, -1) == -1) 
+	if (Mix_PlayMusic(_music, -1) == -1) 
 	{
 		//throw Mix_GetError();
 	}
