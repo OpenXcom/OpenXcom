@@ -28,11 +28,11 @@
 #include "SurfaceSet.h"
 #include "Polygon.h"
 #include "Palette.h"
+#include "SavedGame.h"
 
 using namespace std;
 
 #define PI 3.141592653589793238461
-#define COORD_OUT_OF_BOUNDS -2.0f
 
 /**
  * Interactive globe view of the world.
@@ -47,9 +47,11 @@ private:
 	vector<Polygon*> *_polygons;
 	vector<double> _radius;
 	double _rotLon, _rotLat;
-	int _cenX, _cenY, _zoom;
+	int _cenX, _cenY;
+	unsigned int _zoom;
 	SurfaceSet *_texture;
-	double _testLon, _testLat;
+	SavedGame *_save;
+	int _i;
 
 	/// Checks if a point is behind the globe.
 	bool pointBack(double lon, double lat);
@@ -70,18 +72,26 @@ public:
 	void setTexture(SurfaceSet *texture);
 	/// Sets the set of polygons for the globe.
 	void setPolygons(vector<Polygon*> *polygons);
+	/// Sets the saved game to draw markers from.
+	void setSavedGame(SavedGame *save);
 	/// Rotates the globe a set amount.
 	void rotate(double lon, double lat);
 	/// Zooms the globe a set amount.
 	void zoom(int amount);
 	/// Centers the globe on a point.
 	void center(double lon, double lat);
+	/// Checks if a point is inside land.
+	bool insideLand(double lon, double lat);
 	/// Draws the globe.
 	void draw();
-	/// Handles mouse events.
-	void handle(SDL_Event *ev, int scale, State *state);
-	/// Testing the inside-polygon algorithm.
-	void test(double lon, double lat);
+	/// Blits the globe onto another surface.
+	void blit(Surface *surface);
+	/// Special handling for mouse presses.
+	void mousePress(SDL_Event *ev, int scale, State *state);
+	/// Special handling for mouse releases.
+	void mouseRelease(SDL_Event *ev, int scale, State *state);
+	/// Special handling for mouse clicks.
+	void mouseClick(SDL_Event *ev, int scale, State *state);
 };
 
 #endif

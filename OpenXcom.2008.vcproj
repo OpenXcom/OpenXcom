@@ -310,6 +310,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Sound.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Sound.h"
+				>
+			</File>
+			<File
 				RelativePath=".\State.cpp"
 				>
 			</File>
@@ -359,6 +367,14 @@
 			</File>
 			<File
 				RelativePath=".\BaseInfoState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\BaseNameState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\BaseNameState.h"
 				>
 			</File>
 			<File
@@ -487,6 +503,14 @@
 			</File>
 			<File
 				RelativePath=".\MonthlyReportState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\NewBaseState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\NewBaseState.h"
 				>
 			</File>
 			<File

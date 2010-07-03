@@ -16,34 +16,32 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM__GEOSCAPEMESSAGESTATE_H
-#define OPENXCOM__GEOSCAPEMESSAGESTATE_H
+#ifndef OPENXCOM__SOUND_H
+#define OPENXCOM__SOUND_H
 
+#include "SDL_mixer.h"
 #include <string>
-#include "State_Interactive.h"
-#include "LangString.h"
-#include "Palette.h"
-#include "TextButton.h"
-#include "Window.h"
-#include "Text.h"
+#include <sys/stat.h>
+
+using namespace std;
 
 /**
- * Generic window used to display information messages
- * when the player is on the Geoscape.
+ * Container for sound effects.
+ * Handles loading and playing various formats through SDL_mixer.
  */
-class GeoscapeMessageState : public State
+class Sound
 {
 private:
-	TextButton *_btnOk;
-	Window *_window;
-	Text *_txtMessage;
+	Mix_Chunk *_sound;
 public:
-	/// Creates the Geoscape Message state.
-	GeoscapeMessageState(Game *game, string str);
-	/// Cleans up the Geoscape Message state.
-	~GeoscapeMessageState();
-	/// Handler for clicking the OK button.
-	void btnOkClick(SDL_Event *ev, int scale);
+	/// Creates a blank sound effect.
+	Sound();
+	/// Cleans up the sound effect.
+	~Sound();
+	/// Loads sound from the specified file.
+	bool load(string filename);
+	/// Plays the sound.
+	void play();
 };
 
 #endif

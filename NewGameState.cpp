@@ -80,6 +80,18 @@ NewGameState::~NewGameState()
 }
 
 /**
+ * Sets up a new saved game and jumps to the Geoscape.
+ * @param diff Difficulty for the saved game.
+ */
+void NewGameState::newGame(GameDifficulty diff)
+{
+	_game->setSavedGame(_game->getRuleset()->newSave(diff));
+	GeoscapeState *gs = new GeoscapeState(_game);
+	_game->setState(gs);
+	_game->pushState(new NewBaseState(_game, _game->getSavedGame()->getBases()->back(), gs->getGlobe(), true));
+}
+
+/**
  * Creates a new game in Beginner difficulty and
  * jumps to the Geoscape screen.
  * @param ev Pointer to the SDL_Event.
@@ -87,8 +99,7 @@ NewGameState::~NewGameState()
  */
 void NewGameState::btnBeginnerClick(SDL_Event *ev, int scale)
 {
-	_game->setSavedGame(_game->getRuleset()->newSave(DIFF_BEGINNER));
-	_game->setState(new GeoscapeState(_game));
+	newGame(DIFF_BEGINNER);
 }
 
 /**
@@ -99,8 +110,7 @@ void NewGameState::btnBeginnerClick(SDL_Event *ev, int scale)
  */
 void NewGameState::btnExperiencedClick(SDL_Event *ev, int scale)
 {
-	_game->setSavedGame(_game->getRuleset()->newSave(DIFF_EXPERIENCED));
-	_game->setState(new GeoscapeState(_game));
+	newGame(DIFF_EXPERIENCED);
 }
 
 /**
@@ -111,8 +121,7 @@ void NewGameState::btnExperiencedClick(SDL_Event *ev, int scale)
  */
 void NewGameState::btnVeteranClick(SDL_Event *ev, int scale)
 {
-	_game->setSavedGame(_game->getRuleset()->newSave(DIFF_VETERAN));
-	_game->setState(new GeoscapeState(_game));
+	newGame(DIFF_VETERAN);
 }
 
 /**
@@ -123,8 +132,7 @@ void NewGameState::btnVeteranClick(SDL_Event *ev, int scale)
  */
 void NewGameState::btnGeniusClick(SDL_Event *ev, int scale)
 {
-	_game->setSavedGame(_game->getRuleset()->newSave(DIFF_GENIUS));
-	_game->setState(new GeoscapeState(_game));
+	newGame(DIFF_GENIUS);
 }
 
 /**
@@ -135,6 +143,5 @@ void NewGameState::btnGeniusClick(SDL_Event *ev, int scale)
  */
 void NewGameState::btnSuperhumanClick(SDL_Event *ev, int scale)
 {
-	_game->setSavedGame(_game->getRuleset()->newSave(DIFF_SUPERHUMAN));
-	_game->setState(new GeoscapeState(_game));
+	newGame(DIFF_SUPERHUMAN);
 }

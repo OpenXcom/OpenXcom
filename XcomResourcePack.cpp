@@ -35,7 +35,7 @@ XcomResourcePack::XcomResourcePack(string folder) : ResourcePack(folder)
 		s2 << "PALETTES.DAT_" << i;
 		_palettes[s2.str()] = new Palette();
 		_palettes[s2.str()]->loadDat(s1.str(), 256, Palette::palOffset(i));
-		cout << s2.str() << endl;
+		//cout << s2.str() << endl;
 	}
 
 	stringstream s1, s2;
@@ -43,7 +43,7 @@ XcomResourcePack::XcomResourcePack(string folder) : ResourcePack(folder)
 	s2 << "BACKPALS.DAT";
 	_palettes[s2.str()] = new Palette();
 	_palettes[s2.str()]->loadDat(s1.str(), 128);
-	cout << s2.str() << endl;
+	//cout << s2.str() << endl;
 	
 	// Load fonts
 	string font[] = {"BIGLETS.DAT",
@@ -59,7 +59,7 @@ XcomResourcePack::XcomResourcePack(string folder) : ResourcePack(folder)
 			_fonts[font[i]] = new Font(8, 9, 173, -1);
 		_fonts[font[i]]->getSurface()->loadScr(s.str());
 		_fonts[font[i]]->load();
-		cout << font[i] << endl;
+		//cout << font[i] << endl;
 	}
 
 	// Load languages
@@ -73,7 +73,7 @@ XcomResourcePack::XcomResourcePack(string folder) : ResourcePack(folder)
 		s << folder << "GEODATA/" << lang[i];
 		_languages[lang[i]] = new Language();
 		_languages[lang[i]]->loadDat(s.str());
-		cout << lang[i] << endl;
+		//cout << lang[i] << endl;
 	}
 
 	_currentLang = _languages["ENGLISH.DAT"];
@@ -89,7 +89,7 @@ XcomResourcePack::XcomResourcePack(string folder) : ResourcePack(folder)
 		s << folder << "GEODATA/" << dats[i];
 		_surfaces[dats[i]] = new Surface(64, 154);
 		_surfaces[dats[i]]->loadScr(s.str());
-		cout << dats[i] << endl;
+		//cout << dats[i] << endl;
 	}
 
 	string scrs[] = {"BACK01.SCR",
@@ -118,7 +118,7 @@ XcomResourcePack::XcomResourcePack(string folder) : ResourcePack(folder)
 		s << folder << "GEOGRAPH/" << scrs[i];
 		_surfaces[scrs[i]] = new Surface(320, 200);
 		_surfaces[scrs[i]]->loadScr(s.str());
-		cout << scrs[i] << endl;
+		//cout << scrs[i] << endl;
 	}
 
 	string spks[] = {"UP001.SPK",
@@ -171,7 +171,7 @@ XcomResourcePack::XcomResourcePack(string folder) : ResourcePack(folder)
 		s << folder << "GEOGRAPH/" << spks[i];
 		_surfaces[spks[i]] = new Surface(320, 200);
 		_surfaces[spks[i]]->loadSpk(s.str());
-		cout << spks[i] << endl;
+		//cout << spks[i] << endl;
 	}
 
 	// Load surface sets
@@ -194,14 +194,14 @@ XcomResourcePack::XcomResourcePack(string folder) : ResourcePack(folder)
 			_sets[pcks[i]] = new SurfaceSet(32, 32);
 			_sets[pcks[i]]->loadDat(s.str());
 		}
-		cout << pcks[i] << endl;
+		//cout << pcks[i] << endl;
 	}
 
 	// Load polygons
 	stringstream s;
 	s << folder << "GEODATA/" << "WORLD.DAT";
 	Globe::loadDat(s.str(), &_polygons);
-	cout << "WORLD.DAT" << endl;
+	//cout << "WORLD.DAT" << endl;
 
 	// Load musics
 	string mus[] = {"GMSTORY",
@@ -219,7 +219,7 @@ XcomResourcePack::XcomResourcePack(string folder) : ResourcePack(folder)
 			if (_musics[mus[i]]->load(s.str()))
 				break;
 		}
-		cout << mus[i] << endl;
+		//cout << mus[i] << endl;
 	}
 }
 

@@ -16,34 +16,35 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM__GEOSCAPEMESSAGESTATE_H
-#define OPENXCOM__GEOSCAPEMESSAGESTATE_H
+#ifndef OPENXCOM__BASENAMESTATE_H
+#define OPENXCOM__BASENAMESTATE_H
 
 #include <string>
 #include "State_Interactive.h"
 #include "LangString.h"
 #include "Palette.h"
-#include "TextButton.h"
 #include "Window.h"
 #include "Text.h"
+#include "TextEdit.h"
 
 /**
- * Generic window used to display information messages
- * when the player is on the Geoscape.
+ * Window used to input a name for a new base.
  */
-class GeoscapeMessageState : public State
+class BaseNameState : public State
 {
 private:
-	TextButton *_btnOk;
+	Base *_base;
 	Window *_window;
-	Text *_txtMessage;
+	Text *_txtTitle;
+	TextEdit *_edtName;
+	bool _first;
 public:
-	/// Creates the Geoscape Message state.
-	GeoscapeMessageState(Game *game, string str);
-	/// Cleans up the Geoscape Message state.
-	~GeoscapeMessageState();
-	/// Handler for clicking the OK button.
-	void btnOkClick(SDL_Event *ev, int scale);
+	/// Creates the Base Name state.
+	BaseNameState(Game *game, Base *base, bool first);
+	/// Cleans up the Base Name state.
+	~BaseNameState();
+	/// Handler for releasing a key on the Name edit.
+	void edtNameKeyPress(SDL_Event *ev, int scale);
 };
 
 #endif

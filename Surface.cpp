@@ -172,7 +172,7 @@ void Surface::clear()
  * effects for cheap.
  * @param off Amount to shift.
  * @param min Minimum color to shift to.
- * @param Max Maximum color to shift to.
+ * @param max Maximum color to shift to.
  */
 void Surface::offset(int off, int min, int max)
 {

@@ -19,11 +19,9 @@
 #include "Base.h"
 
 /**
- * Initializes an empty base at specific globe coordinates.
- * @param lat Latitude in radian.
- * @param lon Longitude in radian.
+ * Initializes an empty base.
  */
-Base::Base(double lat, double lon) : _lat(lat), _lon(lon), _name(""), _facilities(), _soldiers(), _crafts(), _scientists(0), _engineers(0)
+Base::Base() : _lat(0.0), _lon(0.0), _name(""), _facilities(), _soldiers(), _crafts(), _scientists(0), _engineers(0)
 {
 }
 
@@ -62,12 +60,30 @@ double Base::getLatitude()
 }
 
 /**
+ * Changes the latitude coordinate of the base.
+ * @param lat Latitude in radian.
+ */
+void Base::setLatitude(double lat)
+{
+	_lat = lat;
+}
+
+/**
  * Returns the longitude coordinate of the base.
  * @return Longitude in radian.
  */
 double Base::getLongitude()
 {
 	return _lon;
+}
+
+/**
+ * Changes the longitude coordinate of the base.
+ * @param lon Longitude in radian.
+ */
+void Base::setLongitude(double lon)
+{
+	_lon = lon;
 }
 
 /**

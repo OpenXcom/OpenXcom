@@ -27,7 +27,7 @@
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Globe::Globe(int cenX, int cenY, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _polygons(), _radius(), _zoom(0), _rotLon(0), _rotLat(0), _cenX(cenX), _cenY(cenY), _testLon(0), _testLat(0)
+Globe::Globe(int cenX, int cenY, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _polygons(), _radius(), _zoom(0), _rotLon(0), _rotLat(0), _cenX(cenX), _cenY(cenY), _save(0), _i(0)
 {
 	_radius.push_back(90);
 	_radius.push_back(120);
@@ -80,13 +80,6 @@ void Globe::cartToPolar(Sint16 x, Sint16 y, double *lon, double *lat)
 
 	*lat = asin((y * sin(c) * cos(_rotLat)) / rho - cos(c) * sin(_rotLat));
 	*lon = atan2(x * sin(c), rho * cos(_rotLat) * cos(c) + y * sin(_rotLat) * sin(c)) - _rotLon;
-
-	// Check for errors
-	if (!(*lat == *lat && *lon == *lon))
-	{
-		*lat = COORD_OUT_OF_BOUNDS;
-		*lon = COORD_OUT_OF_BOUNDS;
-	}
 }
 
 /**
@@ -209,6 +202,15 @@ void Globe::setPolygons(vector<Polygon*> *polygons)
 }
 
 /**
+ * Changes the set of polygons for the globe to render.
+ * @param save Pointer to the saved game.
+ */
+void Globe::setSavedGame(SavedGame *save)
+{
+	_save = save;
+}
+
+/**
  * Rotates the globe by a specified amount of degrees.
  * @param lon Rotation in longitude.
  * @param lat Rotation in latitude.
@@ -239,14 +241,30 @@ void Globe::zoom(int amount)
 /**
  * Rotates the globe to center on a certain
  * polar point on the world map.
- * @param lon Longitude.
- * @param lat Latitude.
+ * @param lon Longitude of the point.
+ * @param lat Latitude of the point.
  */
 void Globe::center(double lon, double lat)
 {
 	_rotLon = -lon;
 	_rotLat = -lat;
 	draw();
+}
+
+/**
+ * Checks if a polar point is inside the globe's landmass.
+ * @param lon Longitude of the point.
+ * @param lat Latitude of the point.
+ * @return True if it's inside, False if it's outside.
+ */
+bool Globe::insideLand(double lon, double lat)
+{
+	bool inside = false;
+	for (vector<Polygon*>::iterator i = _polygons->begin(); i < _polygons->end() && !inside; i++)
+	{
+		inside = insidePolygon(lon, lat, *i);
+	}
+	return inside;
 }
 
 /**
@@ -281,29 +299,56 @@ void Globe::draw()
 		{
 			polarToCart((*i)->getLongitude(j), (*i)->getLatitude(j), &x[j], &y[j]);
 		}
+
 		//texturedPolygon(getSurface(), (Sint16*)&x, (Sint16*)&y, (*i)->getPoints(), _texture->getSurface()->getSurface(), 0, 0);
 		filledPolygonColor(getSurface(), (Sint16*)&x, (Sint16*)&y, (*i)->getPoints(), Palette::getRGBA(this->getPalette(), _texture->getSurface()->getPixel(0, 32*(*i)->getTexture())));
 		//polygonColor(getSurface(), (Sint16*)&x, (Sint16*)&y, (*i)->getPoints(), _texture->getSurface()->getPixel(0, 32*(*i)->getTexture()));
 	}
 	
-	// Draw the test marker
-	if (!pointBack(_testLon, _testLat))
+	// Draw the base markers
+	for (vector<Base*>::iterator i = _save->getBases()->begin(); i != _save->getBases()->end(); i++)
 	{
-		Sint16 testx[4], testy[4];
-		int xx[4] = {-1, -1, 1, 1};
-		int yy[4] = {-1, 1, 1, -1};
-		for (int i = 0; i < 4; i++)
-		{
-			polarToCart(_testLon, _testLat, &testx[i], &testy[i]);
-			testx[i] += xx[i];
-			testy[i] += yy[i];
-		}
+		// Cheap hack to hide bases when they haven't been placed yet
+		if ((*i)->getLongitude() == 0.0 && (*i)->getLatitude() == 0.0)
+			continue;
 
-		polygonColor(getSurface(), (Sint16*)&testx, (Sint16*)&testy, 4, Palette::getRGBA(this->getPalette(), 1));
+		if (!pointBack((*i)->getLongitude(), (*i)->getLatitude()))
+		{
+			Sint16 x, y;
+			
+			polarToCart((*i)->getLongitude(), (*i)->getLatitude(), &x, &y);
+
+			int color = 9;
+			if (_i < 25)
+				color++;
+
+			setPixel(x-1, y-1, color);
+			setPixel(x, y-1, color);
+			setPixel(x+1, y-1, color);
+			setPixel(x-1, y, color);
+			setPixel(x+1, y, color);
+			setPixel(x-1, y+1, color);
+			setPixel(x, y+1, color);
+			setPixel(x+1, y+1, color);
+		}
 	}
 	
 	// Unlock the surface
 	unlock();
+}
+
+/**
+ * Blits the globe onto another surface. Flashes the
+ * markers to highlight them over the surface.
+ * @param surface Pointer to another surface.
+ */
+void Globe::blit(Surface *surface)
+{
+	_i = (_i + 1) % 50;
+	if (_i == 0 || _i == 25)
+		draw();
+
+	Surface::blit(surface);
 }
 
 /**
@@ -312,30 +357,44 @@ void Globe::draw()
  * @param scale Current screen scale (used to correct mouse input).
  * @param state State that the event handlers belong to.
  */
-void Globe::handle(SDL_Event *ev, int scale, State *state)
+void Globe::mousePress(SDL_Event *ev, int scale, State *state)
 {
-	double pos[2];
-	cartToPolar(ev->button.x / scale, ev->button.y / scale, &pos[0], &pos[1]);
+	double lon, lat;
+	cartToPolar(ev->button.x / scale, ev->button.y / scale, &lon, &lat);
 
-	if (pos[0] != COORD_OUT_OF_BOUNDS)
-		InteractiveSurface::handle(ev, scale, state);
+	// Check for errors
+	if (lat == lat && lon == lon)
+		InteractiveSurface::mousePress(ev, scale, state);
 }
 
 /**
- * Places a test marker on the globe and outputs if
- * it's inside one of the polygons of the map.
- * @param lon Longitude.
- * @param lat Latitude.
+ * Ignores any mouse clicks that are outside the globe.
+ * @param ev Pointer to a SDL_Event.
+ * @param scale Current screen scale (used to correct mouse input).
+ * @param state State that the event handlers belong to.
  */
-void Globe::test(double lon, double lat)
+void Globe::mouseRelease(SDL_Event *ev, int scale, State *state)
 {
-	_testLon = lon;
-	_testLat = lat;
-	bool inside = false;
-	for (vector<Polygon*>::iterator i = _polygons->begin(); i < _polygons->end() && !inside; i++)
-	{
-		inside = insidePolygon(_testLon, _testLat, *i);
-	}
-	cout << inside << endl;
-	draw();
+	double lon, lat;
+	cartToPolar(ev->button.x / scale, ev->button.y / scale, &lon, &lat);
+
+	// Check for errors
+	if (lat == lat && lon == lon)
+		InteractiveSurface::mouseRelease(ev, scale, state);
+}
+
+/**
+ * Ignores any mouse clicks that are outside the globe.
+ * @param ev Pointer to a SDL_Event.
+ * @param scale Current screen scale (used to correct mouse input).
+ * @param state State that the event handlers belong to.
+ */
+void Globe::mouseClick(SDL_Event *ev, int scale, State *state)
+{
+	double lon, lat;
+	cartToPolar(ev->button.x / scale, ev->button.y / scale, &lon, &lat);
+
+	// Check for errors
+	if (lat == lat && lon == lon)
+		InteractiveSurface::mouseClick(ev, scale, state);
 }

@@ -90,7 +90,7 @@ void State::think()
 
 /**
  * Takes care of any events from the core game engine,
- * and passes them on to its InteractiveSurface child elements
+ * and passes them on to its InteractiveSurface child elements.
  * @param ev Pointer to a SDL_Event.
  * @param scale Current screen scale (used to correct mouse input).
  */

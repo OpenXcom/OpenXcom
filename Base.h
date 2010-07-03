@@ -43,8 +43,8 @@ private:
 	vector<Craft*> _crafts;
 	int _scientists, _engineers;
 public:
-	/// Creates a base on the specified coordinates.
-	Base(double lat, double lon);
+	/// Creates a new base.
+	Base();
 	/// Cleans up the base.
 	~Base();
 	/// Gets the base's name.
@@ -53,8 +53,12 @@ public:
 	void setName(string name);
 	/// Gets the base's latitude.
 	double getLatitude();
+	/// Sets the base's latitude.
+	void setLatitude(double lat);
 	/// Gets the base's longitude.
 	double getLongitude();
+	/// Sets the base's longitude.
+	void setLongitude(double lon);
 	/// Gets the base's facilities.
 	vector<BaseFacility*> *getFacilities();
 	/// Gets the base's soldiers.

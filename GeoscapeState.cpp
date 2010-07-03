@@ -115,9 +115,9 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _rotLon(0), _rotLat(0), 
 		sidebar->blit(_bg);
 	}
 	
+	_globe->setSavedGame(game->getSavedGame());
 	_globe->setPolygons(_game->getResourcePack()->getPolygons());
 	_globe->setTexture(game->getResourcePack()->getSurfaceSet("TEXTURE.DAT"));
-	_globe->onMouseClick((EventHandler)&GeoscapeState::globeClick);
 
 	_btnIntercept->copy(_bg);
 	_btnIntercept->setColor(Palette::blockOffset(15)+8);
@@ -249,6 +249,9 @@ GeoscapeState::~GeoscapeState()
  */
 void GeoscapeState::init()
 {
+	_globe->onMouseClick((EventHandler)&GeoscapeState::globeClick);
+	_globe->draw();
+
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
 
@@ -418,6 +421,15 @@ void GeoscapeState::timerReset()
 }
 
 /**
+ * Returns a pointer to the Geoscape globe for
+ * access by other substates.
+ */
+Globe *GeoscapeState::getGlobe()
+{
+	return _globe;
+}
+
+/**
  * Processes any left-clicks on globe markers,
  * or right-clicks to scroll the globe.
  * @note Currently left-clicking is used to move around
@@ -427,16 +439,16 @@ void GeoscapeState::timerReset()
  */
 void GeoscapeState::globeClick(SDL_Event *ev, int scale)
 {
-	double pos[2];
-	_globe->cartToPolar(ev->button.x / scale, ev->button.y / scale, &pos[0], &pos[1]);
+	double lon, lat;
+	_globe->cartToPolar(ev->button.x / scale, ev->button.y / scale, &lon, &lat);
 	
 	if (ev->button.button == SDL_BUTTON_LEFT)
 	{
-		_globe->test(pos[0], pos[1]);
+		
 	}
 	else if (ev->button.button == SDL_BUTTON_RIGHT)
 	{
-		_globe->center(pos[0], pos[1]);
+		_globe->center(lon, lat);
 	}
 }
 

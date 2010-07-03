@@ -165,7 +165,7 @@ void Game::setState(State *state)
 }
 
 /**
- * Pushes a new state into the front of the stack and initializes it.
+ * Pushes a new state into the top of the stack and initializes it.
  * The new state will be used once the next game cycle starts.
  * @param state Pointer to the new state.
  */
@@ -176,7 +176,7 @@ void Game::pushState(State *state)
 }
 
 /**
- * Pops the last state from the front of the stack. Since states
+ * Pops the last state from the top of the stack. Since states
  * can't actually be deleted mid-cycle, it's moved into a separate queue
  * which is cleared at the start of every cycle, so the transition
  * is seamless.

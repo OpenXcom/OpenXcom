@@ -16,28 +16,20 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http:///www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM__GEOSCAPESTATE_H
-#define OPENXCOM__GEOSCAPESTATE_H
+#ifndef OPENXCOM__NEWBASESTATE_H
+#define OPENXCOM__NEWBASESTATE_H
 
 #include <string>
-#include <sstream>
 #include "State_Interactive.h"
-#include "RNG.h"
 #include "Game.h"
 #include "Palette.h"
 #include "Surface.h"
+#include "Window.h"
 #include "Globe.h"
 #include "Text.h"
-#include "ImageButton.h"
+#include "TextButton.h"
 #include "Timer.h"
-#include "GameTime.h"
-#include "OptionsState.h"
-#include "InterceptState.h"
-#include "BasescapeState.h"
-#include "GraphsState.h"
-#include "FundingState.h"
-#include "MonthlyReportState.h"
-#include "GeoscapeMessageState.h"
+#include "BaseNameState.h"
 
 using namespace std;
 
@@ -45,61 +37,36 @@ using namespace std;
 #define LATITUDE_SPEED 0.1
 
 /**
- * Geoscape screen which shows an overview of
- * the world and lets the player manage the game.
+ * Screen that allows the player
+ * to place a new base on the globe.
  */
-class GeoscapeState : public State
+class NewBaseState : public State
 {
 private:
-	Surface *_bg;
+	Base *_base;
 	Globe *_globe;
-	ImageButton *_btnIntercept, *_btnBases, *_btnGraphs, *_btnUfopaedia, *_btnOptions, *_btnFunding;
-	ImageButton *_timer;
-	ImageButton *_btn5Secs, *_btn1Min, *_btn5Mins, *_btn30Mins, *_btn1Hour, *_btn1Day;
 	InteractiveSurface *_btnRotateLeft, *_btnRotateRight, *_btnRotateUp, *_btnRotateDown, *_btnZoomIn, *_btnZoomOut;
-	Text *_txtHour, *_txtHourSep, *_txtMin, *_txtMinSep, *_txtSec, *_txtWeekday, *_txtDay, *_txtMonth, *_txtYear;
-	Timer *_rotTimer, *_gameTimer;
+	Timer *_rotTimer;
 	double _rotLon, _rotLat;
-	bool _pause;
+	Window *_window;
+	Text *_txtTitle;
+	TextButton *_btnCancel;
+	bool _first;
 public:
-	/// Creates the Geoscape state.
-	GeoscapeState(Game *game);
-	/// Cleans up the Geoscape state.
-	~GeoscapeState();
+	/// Creates the New Base state.
+	NewBaseState(Game *game, Base *base, Globe *globe, bool first);
+	/// Cleans up the New Base state.
+	~NewBaseState();
 	/// Updates the palette and timer.
 	void init();
-	/// Runs the timers.
+	/// Runs the timer.
 	void think();
+	/// Handles events.
+	void handle(SDL_Event *ev, int scale);
 	/// Rotates the globe.
 	void globeRotate();
-	/// Displays the game time/date.
-	void timeDisplay();
-	/// Advances the game timer.
-	void timeAdvance();
-	/// Trigger whenever a second passes.
-	void timeSecond();
-	/// Trigger whenever a day passes.
-	void timeDay();
-	/// Trigger whenever a month passes.
-	void timeMonth();
-	/// Resets the timer to minimum speed.
-	void timerReset();
-	/// Gets the Geoscape globe.
-	Globe *getGlobe();
 	/// Handler for clicking the globe.
 	void globeClick(SDL_Event *ev, int scale);
-	/// Handler for clicking the Intercept button.
-	void btnInterceptClick(SDL_Event *ev, int scale);
-	/// Handler for clicking the Bases button.
-	void btnBasesClick(SDL_Event *ev, int scale);
-	/// Handler for clicking the Graph button.
-	void btnGraphsClick(SDL_Event *ev, int scale);
-	/// Handler for clicking the Ufopaedia button.
-	void btnUfopaediaClick(SDL_Event *ev, int scale);
-	/// Handler for clicking the Options button.
-	void btnOptionsClick(SDL_Event *ev, int scale);
-	/// Handler for clicking the Funding button.
-	void btnFundingClick(SDL_Event *ev, int scale);
 	/// Handler for pressing the Rotate Left arrow.
 	void btnRotateLeftPress(SDL_Event *ev, int scale);
 	/// Handler for releasing the Rotate Left arrow.
@@ -120,6 +87,8 @@ public:
 	void btnZoomInClick(SDL_Event *ev, int scale);
 	/// Handler for clicking the Zoom Out icon.
 	void btnZoomOutClick(SDL_Event *ev, int scale);
+	/// Handler for clicking the Cancel button.
+	void btnCancelClick(SDL_Event *ev, int scale);
 };
 
 #endif

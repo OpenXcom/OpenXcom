@@ -26,6 +26,7 @@
 #include "Window.h"
 #include "Text.h"
 #include "GeoscapeState.h"
+#include "NewBaseState.h"
 
 /**
  * New Game window that displays a list
@@ -43,6 +44,8 @@ public:
 	NewGameState(Game *game);
 	/// Cleans up the New Game state.
 	~NewGameState();
+	/// Creates a new game.
+	void newGame(GameDifficulty diff);
 	/// Handler for clicking the Beginner button.
 	void btnBeginnerClick(SDL_Event *ev, int scale);
 	/// Handler for clicking the Experienced button.

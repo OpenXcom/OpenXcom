@@ -29,10 +29,9 @@
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-TextEdit::TextEdit(Font *big, Font *small, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _value("")
+TextEdit::TextEdit(Font *big, Font *small, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _value(""), _i(0)
 {
 	_text = new Text(big, small, width, height, 0, 0);
-	_i = 0;
 }
 
 /**
@@ -141,7 +140,7 @@ void TextEdit::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 }
 
 /**
- * Blits the text onto another surface. Adds a flashing \*
+ * Blits the text onto another surface. Adds a flashing *
  * to the end to show when the text is focused and editable.
  * @param surface Pointer to another surface.
  */

@@ -50,7 +50,7 @@ TestState::TestState(Game *game) : State(game)
 	
 	_text->setColor(Palette::blockOffset(15)+1);
 	_text->setBig();
-	//_text->setWordWrap(false);
+	_text->setWordWrap(true);
 	_text->setAlign(ALIGN_CENTER);
 	//_game->getResourcePack()->setLanguage("GERMAN.DAT");
 	_text->setText(_game->getResourcePack()->getLanguage()->getString(STR_COUNCIL_TERMINATED));
@@ -62,6 +62,10 @@ TestState::TestState(Game *game) : State(game)
 	_list->addRow(1, "0123456789");
 	
 	_i = 0;
+
+	Sound *s = new Sound();
+	cout << s->load("DATA/SOUND/SAMPLE.CAT") << endl;
+	s->play();
 }
 
 TestState::~TestState()

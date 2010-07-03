@@ -27,6 +27,7 @@
 #include "Window.h"
 #include "Text.h"
 #include "TextList.h"
+#include "Sound.h"
 
 /**
  * A state purely for testing game functionality.

@@ -462,8 +462,7 @@ SavedGame *XcomRuleset::newSave(GameDifficulty diff)
 	save->getCraftIds()->insert(pair<LangString, int>(STR_FIRESTORM, 1));
 
 	// Set up initial base
-	Base *base = new Base(0.0, 0.0);
-	base->setName("X-COM BASE 1");
+	Base *base = new Base();
 	base->setEngineers(10);
 	base->setScientists(10);
 
