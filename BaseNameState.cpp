@@ -31,7 +31,7 @@ BaseNameState::BaseNameState(Game *game, Base *base, bool first) : State(game), 
 	// Create objects
 	_window = new Window(192, 80, 32, 60, POPUP_BOTH);
 	_txtTitle = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 182, 16, 37, 76);
-	_edtName = new TextEdit(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 160, 16, 54, 108);
+	_edtName = new TextEdit(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 136, 16, 54, 108);
 	
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());

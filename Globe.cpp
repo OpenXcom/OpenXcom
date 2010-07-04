@@ -62,8 +62,6 @@ void Globe::polarToCart(double lon, double lat, Sint16 *x, Sint16 *y)
 /**
  * Converts a cartesian point into a polar point for
  * mapping a globe click onto the flat world map.
- * If the cartesian point is outside the globe,
- * COORD_OUT_OF_BOUNDS is returned.
  * @param x X position of the cartesian point.
  * @param y Y position of the cartesian point.
  * @param lon Pointer to the output longitude.
@@ -228,12 +226,12 @@ void Globe::rotate(double lon, double lat)
  */
 void Globe::zoom(int amount)
 {
-	_zoom += amount;
-	
-	if (_zoom < 0)
+	if (_zoom == 0 && amount < 0)
 		_zoom = 0;
-	else if (_zoom >= _radius.size())
+	else if (_zoom == _radius.size() - 1 && amount > 0)
 		_zoom = _radius.size() - 1;
+	else
+		_zoom += amount;
 	
 	draw();
 }
@@ -315,7 +313,6 @@ void Globe::draw()
 		if (!pointBack((*i)->getLongitude(), (*i)->getLatitude()))
 		{
 			Sint16 x, y;
-			
 			polarToCart((*i)->getLongitude(), (*i)->getLatitude(), &x, &y);
 
 			int color = 9;

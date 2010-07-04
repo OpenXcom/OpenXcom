@@ -54,6 +54,8 @@ public:
 	void setBig();
 	/// Sets the text size to small.
 	void setSmall();
+	/// Gets the text's font.
+	Font *getFont();
 	/// Sets the text's string.
 	void setText(string text);
 	/// Gets the text's string.

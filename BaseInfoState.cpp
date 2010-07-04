@@ -32,7 +32,7 @@ BaseInfoState::BaseInfoState(Game *game, Base *base) : State(game), _base(base)
 	_btnTransfers = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 80, 14, 46, 180);
 	_btnStores = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 80, 14, 132, 180);
 	_btnMonthlyCosts = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 92, 14, 218, 180);
-	_edtBase = new TextEdit(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 170, 16, 8, 8);
+	_edtBase = new TextEdit(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 136, 16, 8, 8);
 
 	_txtPersonnel = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 300, 9, 8, 30);
 	_txtSoldiers = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 114, 9, 8, 41);

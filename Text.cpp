@@ -80,6 +80,15 @@ void Text::setSmall()
 }
 
 /**
+ * Returns the font currently used by the text.
+ * @return Pointer to font.
+ */
+Font *Text::getFont()
+{
+	return _font;
+}
+
+/**
  * Changes the string displayed on screen.
  * @param text Text string.
  */

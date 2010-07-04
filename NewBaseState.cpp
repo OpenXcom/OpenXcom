@@ -39,7 +39,7 @@ NewBaseState::NewBaseState(Game *game, Base *base, Globe *globe, bool first) : S
 
 	_window = new Window(256, 28, 0, 0);
 	_btnCancel = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 54, 12, 186, 8);
-	_txtTitle = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 200, 8, 8, 10);
+	_txtTitle = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 200, 9, 8, 10);
 
 	_rotTimer = new Timer(25);
 

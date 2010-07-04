@@ -228,7 +228,17 @@ void TextEdit::keyboardPress(SDL_Event *ev, int scale, State *state)
 		break;
 	default:
 		if (ev->key.keysym.unicode != 0)
-			_value += (char)ev->key.keysym.unicode;
+		{
+			int w = 0;
+			string s = _value;
+			s += (char)ev->key.keysym.unicode;
+			s += '*';
+			for (string::iterator c = s.begin(); c < s.end(); c++)
+				w += _text->getFont()->getChar(*c)->getCrop()->w + _text->getFont()->getSpacing();
+
+			if (w <= _width)
+				_value += (char)ev->key.keysym.unicode;
+		}
 	}
 
 	InteractiveSurface::keyboardPress(ev, scale, state);
