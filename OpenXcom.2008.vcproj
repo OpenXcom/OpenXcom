@@ -401,6 +401,24 @@
 				RelativePath=".\BuildFacilities.h"
 				>
 			</File>
+			
+			<File
+				RelativePath=".\BuildNewBaseState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\BuildNewBaseState.h"
+				>
+			</File>
+			
+			<File
+				RelativePath=".\ConfirmNewBaseState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ConfirmNewBaseState.h"
+				>
+			</File>
 			<File
 				RelativePath=".\CraftInfoState.cpp"
 				>
@@ -506,14 +524,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\NewBaseState.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\NewBaseState.h"
-				>
-			</File>
-			<File
 				RelativePath=".\NewGameState.cpp"
 				>
 			</File>
@@ -535,6 +545,14 @@
 			</File>
 			<File
 				RelativePath=".\PlaceFacilityState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\PlaceLiftState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\PlaceLiftState.h"
 				>
 			</File>
 			<File

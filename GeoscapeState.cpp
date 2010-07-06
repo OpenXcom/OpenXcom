@@ -469,7 +469,7 @@ void GeoscapeState::btnInterceptClick(SDL_Event *ev, int scale)
  */
 void GeoscapeState::btnBasesClick(SDL_Event *ev, int scale)
 {
-	_game->pushState(new BasescapeState(_game));
+	_game->pushState(new BasescapeState(_game, _game->getSavedGame()->getBases()->front()));
 }
 
 /**

@@ -17,13 +17,15 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "BaseInfoState.h"
+#include "BasescapeState.h"
 
 /**
  * Initializes all the elements in the Base Info screen.
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
+ * @param state Pointer to the Basescape state.
  */
-BaseInfoState::BaseInfoState(Game *game, Base *base) : State(game), _base(base)
+BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : State(game), _base(base), _state(state)
 {
 	// Create objects
 	_bg = new Surface(320, 200, 0, 0);
@@ -123,6 +125,15 @@ BaseInfoState::BaseInfoState(Game *game, Base *base) : State(game), _base(base)
 
 	_mini->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
 	_mini->setBases(_game->getSavedGame()->getBases());
+	for (unsigned int i = 0; i < _game->getSavedGame()->getBases()->size(); i++)
+	{
+		if (_game->getSavedGame()->getBases()->at(i) == _base)
+		{
+			_mini->setSelectedBase(i);
+			break;
+		}
+	}
+	_mini->onMouseClick((EventHandler)&BaseInfoState::miniClick);
 
 	_btnOk->setColor(Palette::blockOffset(15)+9);
 	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString(STR_OK));
@@ -340,6 +351,23 @@ void BaseInfoState::init()
 
 	_barLongRange->setMax(_base->getLongRangeDetection());
 	_barLongRange->setValue(_base->getLongRangeDetection());
+}
+
+/**
+ * Selects a new base to display.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
+void BaseInfoState::miniClick(SDL_Event *ev, int scale)
+{
+	unsigned int base = _mini->getHoveredBase();
+	if (base >= 0 && base < _game->getSavedGame()->getBases()->size())
+	{
+		_mini->setSelectedBase(base);
+		_base = _game->getSavedGame()->getBases()->at(_mini->getHoveredBase());
+		_state->setBase(_base);
+		init();
+	}
 }
 
 /**

@@ -26,7 +26,7 @@
 #include "Window.h"
 #include "Text.h"
 #include "GeoscapeState.h"
-#include "NewBaseState.h"
+#include "BuildNewBaseState.h"
 
 /**
  * New Game window that displays a list

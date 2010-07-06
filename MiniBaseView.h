@@ -39,7 +39,7 @@ class MiniBaseView : public InteractiveSurface
 private:
 	vector<Base*> *_bases;
 	SurfaceSet *_texture;
-	unsigned int _selBase;
+	unsigned int _base, _hoverBase;
 public:
 	/// Creates a new mini base view at the specified position and size.
 	MiniBaseView(int width, int height, int x = 0, int y = 0);
@@ -47,12 +47,22 @@ public:
 	~MiniBaseView();
 	/// Sets the base list to display.
 	void setBases(vector<Base*> *bases);
-	/// Sets the texture for this mini base view.
+	/// Sets the texture for the mini base view.
 	void setTexture(SurfaceSet *texture);
-	/// Gets the currently selected base.
-	unsigned int getSelectedBase();
+	/// Gets the base the mouse is over.
+	unsigned int getHoveredBase();
+	/// Sets the selected base for the mini base view.
+	void setSelectedBase(unsigned int base);
 	/// Draws the mini base view.
 	void draw();
+	/// Special handling for mouse presses.
+	void mousePress(SDL_Event *ev, int scale, State *state);
+	/// Special handling for mouse releases.
+	void mouseRelease(SDL_Event *ev, int scale, State *state);
+	/// Special handling for mouse clicks.
+	void mouseClick(SDL_Event *ev, int scale, State *state);
+	/// Special handling for mouse hovers.
+	void mouseOver(SDL_Event *ev, int scale, State *state);
 };
 
 #endif

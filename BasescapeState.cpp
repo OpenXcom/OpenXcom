@@ -21,11 +21,10 @@
 /**
  * Initializes all the elements in the Basescape screen.
  * @param game Pointer to the core game.
+ * @param base Pointer to the base to get info from.
  */
-BasescapeState::BasescapeState(Game *game) : State(game)
+BasescapeState::BasescapeState(Game *game, Base *base) : State(game), _base(base)
 {
-	_base = _game->getSavedGame()->getBases()->front();
-
 	// Create objects
 	_view = new BaseView(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 192, 192, 0, 8);
 	_mini = new MiniBaseView(128, 16, 192, 41);
@@ -74,9 +73,17 @@ BasescapeState::BasescapeState(Game *game) : State(game)
 
 	_mini->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
 	_mini->setBases(_game->getSavedGame()->getBases());
+	for (unsigned int i = 0; i < _game->getSavedGame()->getBases()->size(); i++)
+	{
+		if (_game->getSavedGame()->getBases()->at(i) == _base)
+		{
+			_mini->setSelectedBase(i);
+			break;
+		}
+	}
+	_mini->onMouseClick((EventHandler)&BasescapeState::miniClick);
 
 	_txtFacility->setColor(Palette::blockOffset(13)+10);
-	_txtFacility->setText("");
 
 	_txtBase->setColor(Palette::blockOffset(15)+1);
 	_txtBase->setBig();
@@ -87,6 +94,7 @@ BasescapeState::BasescapeState(Game *game) : State(game)
 	
 	_btnNewBase->setColor(Palette::blockOffset(13)+8);
 	_btnNewBase->setText(_game->getResourcePack()->getLanguage()->getString(STR_BUILD_NEW_BASE));
+	_btnNewBase->onMouseClick((EventHandler)&BasescapeState::btnNewBaseClick);
 
 	_btnBaseInfo->setColor(Palette::blockOffset(13)+8);
 	_btnBaseInfo->setText(_game->getResourcePack()->getLanguage()->getString(STR_BASE_INFORMATION));
@@ -154,13 +162,52 @@ void BasescapeState::init()
 }
 
 /**
+ * Changes the base currently displayed on screen.
+ * @param base Pointer to new base to display.
+ */
+void BasescapeState::setBase(Base *base)
+{
+	_base = base;
+	for (unsigned int i = 0; i < _game->getSavedGame()->getBases()->size(); i++)
+	{
+		if (_game->getSavedGame()->getBases()->at(i) == _base)
+		{
+			_mini->setSelectedBase(i);
+			break;
+		}
+	}
+	init();
+}
+
+/**
+ * Goes to the Build New Base screen.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
+void BasescapeState::btnNewBaseClick(SDL_Event *ev, int scale)
+{
+	if (_game->getSavedGame()->getBases()->size() < 8)
+	{
+		// Oh my goodness what is this don't stare at it for too long
+		list<State*>::iterator i = _game->getStates()->end();
+		i--;
+		i--;
+
+		// I am so incredibly cheesing it over here you don't wanna know
+		Base *base = new Base();
+		_game->popState();
+		_game->pushState(new BuildNewBaseState(_game, base, ((GeoscapeState*)(*i))->getGlobe(), false));
+	}
+}
+
+/**
  * Goes to the Base Info screen.
  * @param ev Pointer to the SDL_Event.
  * @param scale Scale of the screen.
  */
 void BasescapeState::btnBaseInfoClick(SDL_Event *ev, int scale)
 {
-	_game->pushState(new BaseInfoState(_game, _base));
+	_game->pushState(new BaseInfoState(_game, _base, this));
 }
 
 /**
@@ -292,4 +339,20 @@ void BasescapeState::viewMouseOver(SDL_Event *ev, int scale)
 void BasescapeState::viewMouseOut(SDL_Event *ev, int scale)
 {
 	_txtFacility->setText("");
+}
+
+/**
+ * Selects a new base to display.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
+void BasescapeState::miniClick(SDL_Event *ev, int scale)
+{
+	unsigned int base = _mini->getHoveredBase();
+	if (base >= 0 && base < _game->getSavedGame()->getBases()->size())
+	{
+		_mini->setSelectedBase(base);
+		_base = _game->getSavedGame()->getBases()->at(_mini->getHoveredBase());
+		init();
+	}
 }

@@ -14,38 +14,43 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
+ * along with OpenXcom.  If not, see <http:///www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM__BASENAMESTATE_H
-#define OPENXCOM__BASENAMESTATE_H
+#ifndef OPENXCOM__CONFIRMNEWBASESTATE_H
+#define OPENXCOM__CONFIRMNEWBASESTATE_H
 
 #include <string>
 #include "State_Interactive.h"
-#include "LangString.h"
+#include "Game.h"
 #include "Palette.h"
+#include "Surface.h"
 #include "Window.h"
 #include "Text.h"
-#include "TextEdit.h"
-#include "PlaceLiftState.h"
+#include "TextButton.h"
+#include "BaseNameState.h"
+
+using namespace std;
 
 /**
- * Window used to input a name for a new base.
+ * Screen that allows the player
+ * to confirm a new base on the globe.
  */
-class BaseNameState : public State
+class ConfirmNewBaseState : public State
 {
 private:
 	Base *_base;
 	Window *_window;
-	Text *_txtTitle;
-	TextEdit *_edtName;
-	bool _first;
+	Text *_txtCost, *_txtArea;
+	TextButton *_btnOk, *_btnCancel;
 public:
-	/// Creates the Base Name state.
-	BaseNameState(Game *game, Base *base, bool first);
-	/// Cleans up the Base Name state.
-	~BaseNameState();
-	/// Handler for releasing a key on the Name edit.
-	void edtNameKeyPress(SDL_Event *ev, int scale);
+	/// Creates the Confirm New Base state.
+	ConfirmNewBaseState(Game *game, Base *base);
+	/// Cleans up the Confirm New Base state.
+	~ConfirmNewBaseState();
+	/// Handler for clicking the OK button.
+	void btnOkClick(SDL_Event *ev, int scale);
+	/// Handler for clicking the Cancel button.
+	void btnCancelClick(SDL_Event *ev, int scale);
 };
 
 #endif

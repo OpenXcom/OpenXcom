@@ -29,6 +29,9 @@
 #include "BaseFacility.h"
 #include "RuleBaseFacility.h"
 #include "GeoscapeState.h"
+#include "BasescapeErrorState.h"
+#include "DismantleFacilityState.h"
+#include "BuildNewBaseState.h"
 #include "BaseInfoState.h"
 #include "SoldiersState.h"
 #include "CraftsState.h"
@@ -37,8 +40,6 @@
 #include "ManufactureState.h"
 #include "PurchaseState.h"
 #include "SellState.h"
-#include "BasescapeErrorState.h"
-#include "DismantleFacilityState.h"
 
 /**
  * Basescape screen that shows a base's layout
@@ -54,11 +55,15 @@ private:
 	Base *_base;
 public:
 	/// Creates the Basescape state.
-	BasescapeState(Game *game);
+	BasescapeState(Game *game, Base *base);
 	/// Cleans up the Basescape state.
 	~BasescapeState();
 	/// Updates the base stats.
 	void init();
+	/// Sets a new base to display.
+	void setBase(Base *base);
+	/// Handler for clicking the Build New Base button.
+	void btnNewBaseClick(SDL_Event *ev, int scale);
 	/// Handler for clicking the Base Information button.
 	void btnBaseInfoClick(SDL_Event *ev, int scale);
 	/// Handler for clicking the Soldiers button.
@@ -83,6 +88,8 @@ public:
 	void viewMouseOver(SDL_Event *ev, int scale);
 	/// Handler for hovering out of the base view.
 	void viewMouseOut(SDL_Event *ev, int scale);
+	/// Handler for clicking the mini base view.
+	void miniClick(SDL_Event *ev, int scale);
 };
 
 #endif

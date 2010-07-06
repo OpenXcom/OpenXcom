@@ -34,7 +34,6 @@ BaseNameState::BaseNameState(Game *game, Base *base, bool first) : State(game), 
 	_edtName = new TextEdit(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 136, 16, 54, 108);
 	
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
 
 	add(_window);
@@ -74,10 +73,12 @@ void BaseNameState::edtNameKeyPress(SDL_Event *ev, int scale)
 	if (ev->key.keysym.sym == SDLK_RETURN)
 	{
 		_base->setName(_edtName->getText());
-		if (_first)
+		_game->popState();
+		_game->popState();
+		if (!_first)
 		{
 			_game->popState();
-			_game->popState();
+			_game->pushState(new PlaceLiftState(_game, _base));
 		}
 	}
 }

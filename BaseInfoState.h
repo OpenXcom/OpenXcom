@@ -21,7 +21,6 @@
 
 #include <sstream>
 #include "State_Interactive.h"
-#include "MonthlyCostsState.h"
 #include "LangString.h"
 #include "Palette.h"
 #include "Bar.h"
@@ -30,6 +29,9 @@
 #include "TextEdit.h"
 #include "Surface.h"
 #include "MiniBaseView.h"
+#include "MonthlyCostsState.h"
+
+class BasescapeState;
 
 /**
  * Base Info screen that shows all the 
@@ -39,6 +41,7 @@ class BaseInfoState : public State
 {
 private:
 	Base *_base;
+	BasescapeState *_state;
 	
 	Surface *_bg;
 	MiniBaseView *_mini;
@@ -58,11 +61,13 @@ private:
 	Bar *_barDefence, *_barShortRange, *_barLongRange;
 public:
 	/// Creates the Base Info state.
-	BaseInfoState(Game *game, Base *base);
+	BaseInfoState(Game *game, Base *base, BasescapeState *state);
 	/// Cleans up the Base Info state.
 	~BaseInfoState();
 	/// Updates the base stats.
 	void init();
+	/// Handler for clicking the mini base view.
+	void miniClick(SDL_Event *ev, int scale);
 	/// Handler for clicking the OK button.
 	void btnOkClick(SDL_Event *ev, int scale);
 	/// Handler for clicking the Monthly Costs button.

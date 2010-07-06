@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http:///www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM__NEWBASESTATE_H
-#define OPENXCOM__NEWBASESTATE_H
+#ifndef OPENXCOM__BUILDNEWBASESTATE_H
+#define OPENXCOM__BUILDNEWBASESTATE_H
 
 #include <string>
 #include "State_Interactive.h"
@@ -30,6 +30,7 @@
 #include "TextButton.h"
 #include "Timer.h"
 #include "BaseNameState.h"
+#include "ConfirmNewBaseState.h"
 
 using namespace std;
 
@@ -40,7 +41,7 @@ using namespace std;
  * Screen that allows the player
  * to place a new base on the globe.
  */
-class NewBaseState : public State
+class BuildNewBaseState : public State
 {
 private:
 	Base *_base;
@@ -53,10 +54,10 @@ private:
 	TextButton *_btnCancel;
 	bool _first;
 public:
-	/// Creates the New Base state.
-	NewBaseState(Game *game, Base *base, Globe *globe, bool first);
-	/// Cleans up the New Base state.
-	~NewBaseState();
+	/// Creates the Build New Base state.
+	BuildNewBaseState(Game *game, Base *base, Globe *globe, bool first);
+	/// Cleans up the Build New Base state.
+	~BuildNewBaseState();
 	/// Updates the palette and timer.
 	void init();
 	/// Runs the timer.

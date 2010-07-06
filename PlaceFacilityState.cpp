@@ -71,7 +71,7 @@ PlaceFacilityState::PlaceFacilityState(Game *game, Base *base, RuleBaseFacility 
 	_txtFacility->setText(_game->getResourcePack()->getLanguage()->getString(_rule->getType()));
 
 	_txtCost->setColor(Palette::blockOffset(13)+10);
-	_txtCost->setText(_game->getResourcePack()->getLanguage()->getString(STR_COST));
+	_txtCost->setText(_game->getResourcePack()->getLanguage()->getString(STR_COST_UC));
 
 	_numCost->setColor(Palette::blockOffset(13));
 	_numCost->setBig();

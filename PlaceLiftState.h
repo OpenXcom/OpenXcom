@@ -16,36 +16,40 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM__BASENAMESTATE_H
-#define OPENXCOM__BASENAMESTATE_H
+#ifndef OPENXCOM__PLACELIFTSTATE_H
+#define OPENXCOM__PLACELIFTSTATE_H
 
-#include <string>
+#include <sstream>
 #include "State_Interactive.h"
 #include "LangString.h"
 #include "Palette.h"
+#include "TextButton.h"
 #include "Window.h"
 #include "Text.h"
-#include "TextEdit.h"
-#include "PlaceLiftState.h"
+#include "BaseView.h"
+#include "Base.h"
+#include "BaseFacility.h"
+#include "RuleBaseFacility.h"
+#include "BasescapeState.h"
 
 /**
- * Window used to input a name for a new base.
+ * Window shown when the player has to
+ * place the access lift of a base.
  */
-class BaseNameState : public State
+class PlaceLiftState : public State
 {
 private:
 	Base *_base;
-	Window *_window;
+
+	BaseView *_view;
 	Text *_txtTitle;
-	TextEdit *_edtName;
-	bool _first;
 public:
-	/// Creates the Base Name state.
-	BaseNameState(Game *game, Base *base, bool first);
-	/// Cleans up the Base Name state.
-	~BaseNameState();
-	/// Handler for releasing a key on the Name edit.
-	void edtNameKeyPress(SDL_Event *ev, int scale);
+	/// Creates the Place Lift state.
+	PlaceLiftState(Game *game, Base *base);
+	/// Cleans up the Place Lift state.
+	~PlaceLiftState();
+	/// Handler for clicking the base view.
+	void viewClick(SDL_Event *ev, int scale);
 };
 
 #endif

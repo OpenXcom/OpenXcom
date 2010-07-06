@@ -25,7 +25,7 @@
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-MiniBaseView::MiniBaseView(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _bases(), _texture(0), _selBase(0)
+MiniBaseView::MiniBaseView(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _bases(), _texture(0), _base(0), _hoverBase(0)
 {
 }
 
@@ -43,7 +43,6 @@ MiniBaseView::~MiniBaseView()
 void MiniBaseView::setBases(vector<Base*> *bases)
 {
 	_bases = bases;
-
 	draw();
 }
 
@@ -58,12 +57,23 @@ void MiniBaseView::setTexture(SurfaceSet *texture)
 }
 
 /**
- * Returns the base the mouse is currently over.
- * @return Pointer to base (NULL if none).
+ * Returns the base the mouse cursor is currently over.
+ * @return ID of the base.
  */
-unsigned int MiniBaseView::getSelectedBase()
+unsigned int MiniBaseView::getHoveredBase()
 {
-	return _selBase;
+	return _hoverBase;
+}
+
+/**
+ * Changes the base that is currently selected on
+ * the mini base view.
+ * @return ID of base.
+ */
+void MiniBaseView::setSelectedBase(unsigned int base)
+{
+	_base = base;
+	draw();
 }
 
 /**
@@ -72,10 +82,11 @@ unsigned int MiniBaseView::getSelectedBase()
  */
 void MiniBaseView::draw()
 {
+	clear();
 	for (unsigned int i = 0; i < MAX_BASES; i++)
 	{
 		// Draw base squares
-		if (i == _selBase)
+		if (i == _base)
 		{
 			SDL_Rect r;
 			r.x = i * (MINI_SIZE + 2);
@@ -126,4 +137,61 @@ void MiniBaseView::draw()
 			unlock();
 		}
 	}
+}
+
+/**
+ * Only accepts left clicks.
+ * @param ev Pointer to a SDL_Event.
+ * @param scale Current screen scale (used to correct mouse input).
+ * @param state State that the event handlers belong to.
+ */
+void MiniBaseView::mousePress(SDL_Event *ev, int scale, State *state)
+{
+	if (ev->button.button == SDL_BUTTON_LEFT)
+	{
+		InteractiveSurface::mousePress(ev, scale, state);
+	}
+}
+
+/**
+ * Only accepts left clicks.
+ * @param ev Pointer to a SDL_Event.
+ * @param scale Current screen scale (used to correct mouse input).
+ * @param state State that the event handlers belong to.
+ */
+void MiniBaseView::mouseRelease(SDL_Event *ev, int scale, State *state)
+{
+	if (ev->button.button == SDL_BUTTON_LEFT)
+	{
+		InteractiveSurface::mouseRelease(ev, scale, state);
+	}
+}
+
+/**
+ * Only accepts left clicks.
+ * @param ev Pointer to a SDL_Event.
+ * @param scale Current screen scale (used to correct mouse input).
+ * @param state State that the event handlers belong to.
+ */
+void MiniBaseView::mouseClick(SDL_Event *ev, int scale, State *state)
+{
+	if (ev->button.button == SDL_BUTTON_LEFT)
+	{
+		InteractiveSurface::mouseClick(ev, scale, state);
+	}
+}
+
+/**
+ * Selects the base the mouse is over.
+ * @param ev Pointer to a SDL_Event.
+ * @param scale Current screen scale (used to correct mouse input).
+ * @param state State that the event handlers belong to.
+ */
+void MiniBaseView::mouseOver(SDL_Event *ev, int scale, State *state)
+{
+	double x = ev->button.x - _x * scale;
+	_hoverBase = (int)floor(x / ((MINI_SIZE + 2) * scale));
+	cout << _hoverBase << endl;
+
+	InteractiveSurface::mouseOver(ev, scale, state);
 }
