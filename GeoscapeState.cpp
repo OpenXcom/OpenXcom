@@ -249,11 +249,11 @@ GeoscapeState::~GeoscapeState()
  */
 void GeoscapeState::init()
 {
-	_globe->onMouseClick((EventHandler)&GeoscapeState::globeClick);
-	_globe->draw();
-
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
+
+	_globe->onMouseClick((EventHandler)&GeoscapeState::globeClick);
+	_globe->draw();
 
 	timeDisplay();
 }

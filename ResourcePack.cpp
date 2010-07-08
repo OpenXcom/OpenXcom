@@ -170,6 +170,6 @@ void ResourcePack::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 	}
 	for (map<string, SurfaceSet*>::iterator i = _sets.begin(); i != _sets.end(); i++)
 	{
-		i->second->getSurface()->setPalette(colors, firstcolor, ncolors);
+		i->second->setPalette(colors, firstcolor, ncolors);
 	}
 }

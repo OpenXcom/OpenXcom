@@ -240,8 +240,8 @@ void SoldierInfoState::init()
 	_edtSoldier->setText(s->getName());
 
 	SurfaceSet *texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
-	texture->getSurface()->setX(0);
-	texture->getSurface()->setY(0);
+	texture->getFrame(s->getRankSprite())->setX(0);
+	texture->getFrame(s->getRankSprite())->setY(0);
 	texture->getFrame(s->getRankSprite())->blit(_rank);
 
 	stringstream ss;

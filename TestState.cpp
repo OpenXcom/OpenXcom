@@ -85,7 +85,7 @@ void TestState::blit()
 {
 	State::blit();
 
-	_set->getSurface()->blit(_game->getScreen()->getSurface());
+	_set->getFrame(0)->blit(_game->getScreen()->getSurface());
 }
 
 /**

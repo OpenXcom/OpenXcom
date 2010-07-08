@@ -38,7 +38,7 @@ Surface::Surface(int width, int height, int x, int y) : _width(width), _height(h
 		throw SDL_GetError();
 	}
 
-	SDL_SetColorKey(_surface, SDL_SRCCOLORKEY|SDL_RLEACCEL, 0);
+	SDL_SetColorKey(_surface, SDL_SRCCOLORKEY, 0);
 
 	_crop.w = 0;
 	_crop.h = 0;

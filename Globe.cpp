@@ -27,7 +27,7 @@
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Globe::Globe(int cenX, int cenY, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _polygons(), _radius(), _zoom(0), _rotLon(0), _rotLat(0), _cenX(cenX), _cenY(cenY), _save(0), _i(0)
+Globe::Globe(int cenX, int cenY, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _polygons(), _radius(), _rotLon(0), _rotLat(0), _cenX(cenX), _cenY(cenY), _zoom(0), _texture(0), _save(0), _i(0)
 {
 	_radius.push_back(90);
 	_radius.push_back(120);
@@ -35,6 +35,8 @@ Globe::Globe(int cenX, int cenY, int width, int height, int x, int y) : Interact
 	_radius.push_back(360);
 	_radius.push_back(480);
 	_radius.push_back(720);
+
+	_markers = new Surface(width, height, x, y);
 }
 
 /**
@@ -103,12 +105,17 @@ bool Globe::pointBack(double lon, double lat)
  */
 bool Globe::insidePolygon(double lon, double lat, Polygon *poly)
 {
+	bool backFace = true;
+	for (int i = 0; i < poly->getPoints(); i++)
+	{
+		backFace = backFace && pointBack(poly->getLongitude(i), poly->getLatitude(i));
+	}
+	if (backFace != pointBack(lon, lat))
+		return false;
+
 	bool c = false;
 	for (int i = 0; i < poly->getPoints(); i++)
 	{
-		if (pointBack(lon, lat) != pointBack(poly->getLongitude(i), poly->getLatitude(i)))
-			break;
-
 		int j = (i + 1) % poly->getPoints();
 
 		Sint16 x, y, x_i, x_j, y_i, y_j;
@@ -266,18 +273,25 @@ bool Globe::insideLand(double lon, double lat)
 }
 
 /**
- * Draws the whole globe,
- * rendering the ocean-coloured circle and all the
- * map polygons on top, converting the polar coordinates
- * to cartesian to simulate a 3D globe.
+ * Replaces a certain amount of colors in the palette of the globe.
+ * @param colors Pointer to the set of colors.
+ * @param firstcolor Offset of the first color to replace.
+ * @param ncolors Amount of colors to replace.
+ */
+void Globe::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
+{
+	Surface::setPalette(colors, firstcolor, ncolors);
+	_markers->setPalette(colors, firstcolor, ncolors);
+}
+
+/**
+ * Draws the whole globe, rendering the ocean-coloured
+ * circle and all the map polygons on top, converting
+ * the polar coordinates to cartesian to simulate a 3D globe.
  */
 void Globe::draw()
 {
-	Sint16 x[4], y[4];
-
 	clear();
-	// Lock the surface
-	lock();
 
 	filledCircleColor(this->getSurface(), _cenX, _cenY, (Sint16)floor(_radius[_zoom]), Palette::getRGBA(this->getPalette(), Palette::blockOffset(12)));
 
@@ -291,6 +305,8 @@ void Globe::draw()
 		}
 		if (backFace)
 			continue;
+
+		Sint16 x[4], y[4];
 		
 		// Convert coordinates
 		for (int j = 0; j < (*i)->getPoints(); j++)
@@ -298,11 +314,23 @@ void Globe::draw()
 			polarToCart((*i)->getLongitude(j), (*i)->getLatitude(j), &x[j], &y[j]);
 		}
 
-		//texturedPolygon(getSurface(), (Sint16*)&x, (Sint16*)&y, (*i)->getPoints(), _texture->getSurface()->getSurface(), 0, 0);
-		filledPolygonColor(getSurface(), (Sint16*)&x, (Sint16*)&y, (*i)->getPoints(), Palette::getRGBA(this->getPalette(), _texture->getSurface()->getPixel(0, 32*(*i)->getTexture())));
-		//polygonColor(getSurface(), (Sint16*)&x, (Sint16*)&y, (*i)->getPoints(), _texture->getSurface()->getPixel(0, 32*(*i)->getTexture()));
+		int zoom = (2 - (int)floor((double)(_zoom) / 2)) * NUM_TEXTURES;
+		texturedPolygon(getSurface(), (Sint16*)&x, (Sint16*)&y, (*i)->getPoints(), _texture->getFrame((*i)->getTexture() + zoom)->getSurface(), 0, 0);
 	}
-	
+
+	drawMarkers();
+}
+
+/**
+ * Draws the markers of all the various things going
+ * on around the world on top of the globe.
+ */
+void Globe::drawMarkers()
+{
+	_markers->clear();
+	// Lock the surface
+	_markers->lock();
+
 	// Draw the base markers
 	for (vector<Base*>::iterator i = _save->getBases()->begin(); i != _save->getBases()->end(); i++)
 	{
@@ -319,19 +347,19 @@ void Globe::draw()
 			if (_i < 25)
 				color++;
 
-			setPixel(x-1, y-1, color);
-			setPixel(x, y-1, color);
-			setPixel(x+1, y-1, color);
-			setPixel(x-1, y, color);
-			setPixel(x+1, y, color);
-			setPixel(x-1, y+1, color);
-			setPixel(x, y+1, color);
-			setPixel(x+1, y+1, color);
+			_markers->setPixel(x-1, y-1, color);
+			_markers->setPixel(x, y-1, color);
+			_markers->setPixel(x+1, y-1, color);
+			_markers->setPixel(x-1, y, color);
+			_markers->setPixel(x+1, y, color);
+			_markers->setPixel(x-1, y+1, color);
+			_markers->setPixel(x, y+1, color);
+			_markers->setPixel(x+1, y+1, color);
 		}
 	}
 	
 	// Unlock the surface
-	unlock();
+	_markers->unlock();
 }
 
 /**
@@ -342,10 +370,11 @@ void Globe::draw()
 void Globe::blit(Surface *surface)
 {
 	_i = (_i + 1) % 50;
-	if (_i == 0 || _i == 25)
-		draw();
+
+	drawMarkers();
 
 	Surface::blit(surface);
+	_markers->blit(surface);
 }
 
 /**

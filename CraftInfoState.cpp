@@ -140,8 +140,8 @@ void CraftInfoState::init()
 	_txtCraft->setText(ss.str());
 
 	SurfaceSet *texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
-	texture->getSurface()->setX(0);
-	texture->getSurface()->setY(0);
+	texture->getFrame(c->getRules()->getSprite())->setX(0);
+	texture->getFrame(c->getRules()->getSprite())->setY(0);
 	texture->getFrame(c->getRules()->getSprite())->blit(_sprite);
 
 	stringstream ss2;
@@ -157,16 +157,16 @@ void CraftInfoState::init()
 		_crew->clear();
 		_equip->clear();
 
-		texture->getSurface()->setY(0);
+		texture->getFrame(38)->setY(0);
 		for (int i = 0, x = 0; i < c->getSoldiers(_base->getSoldiers()); i++, x += 10)
 		{
-			texture->getSurface()->setX(x);
+			texture->getFrame(38)->setX(x);
 			texture->getFrame(38)->blit(_crew);
 		}
 
 		/*
-		texture->getSurface()->setX(0);
-		texture->getSurface()->setY(0);
+		texture->getFrame(39)->setX(0);
+		texture->getFrame(39)->setY(0);
 		texture->getFrame(39)->blit(_equip);
 		*/
 	}
@@ -181,8 +181,8 @@ void CraftInfoState::init()
 
 	if (c->getRules()->getWeapons() > 0)
 	{
-		texture->getSurface()->setX(0);
-		texture->getSurface()->setY(0);
+		texture->getFrame(48)->setX(0);
+		texture->getFrame(48)->setY(0);
 		texture->getFrame(48)->blit(_w1);
 
 		_txtW1Name->setText("STINGRAY");
@@ -206,8 +206,8 @@ void CraftInfoState::init()
 
 	if (c->getRules()->getWeapons() > 1)
 	{
-		texture->getSurface()->setX(0);
-		texture->getSurface()->setY(0);
+		texture->getFrame(48)->setX(0);
+		texture->getFrame(48)->setY(0);
 		texture->getFrame(48)->blit(_w2);
 
 		_txtW2Name->setText("STINGRAY");

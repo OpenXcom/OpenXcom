@@ -95,8 +95,8 @@ void MiniBaseView::draw()
 			r.h = MINI_SIZE + 2;
 			SDL_FillRect(this->getSurface(), &r, 1);
 		}
-		_texture->getSurface()->setX(i * (MINI_SIZE + 2));
-		_texture->getSurface()->setY(0);
+		_texture->getFrame(41)->setX(i * (MINI_SIZE + 2));
+		_texture->getFrame(41)->setY(0);
 		_texture->getFrame(41)->blit(this);
 
 		// Draw facilities

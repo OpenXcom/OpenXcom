@@ -26,10 +26,22 @@ Base::Base() : _lat(0.0), _lon(0.0), _name(""), _facilities(), _soldiers(), _cra
 }
 
 /**
- *
+ * Deletes the contents of the base from memory.
  */
 Base::~Base()
 {
+	for (vector<BaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); i++)
+	{
+		delete *i;
+	}
+	for (vector<Soldier*>::iterator i = _soldiers.begin(); i != _soldiers.end(); i++)
+	{
+		delete *i;
+	}
+	for (vector<Craft*>::iterator i = _crafts.begin(); i != _crafts.end(); i++)
+	{
+		delete *i;
+	}
 }
 
 /**

@@ -18,17 +18,25 @@
  */
 #include "SurfaceSet.h"
 
-SurfaceSet::SurfaceSet(int width, int height) : _width(width), _height(height), _nframe(0), _frames()
+/**
+ * Sets up a new empty surface set for frames of the specified size.
+ * @param width Frame width in pixels.
+ * @param height Frame height in pixels.
+ */
+SurfaceSet::SurfaceSet(int width, int height) : _width(width), _height(height), _nframes(0), _frames()
 {
 
 }
 
 /**
- * Deletes the image from memory.
+ * Deletes the images from memory.
  */
 SurfaceSet::~SurfaceSet()
 {
-	delete _surface;
+	for (vector<Surface*>::iterator i = _frames.begin(); i != _frames.end(); i++)
+	{
+		delete *i;
+	}
 }
 
 /**
@@ -50,7 +58,7 @@ void SurfaceSet::loadPck(string filename)
 	ifstream offsetFile (tab.c_str(), ios::in | ios::binary);
 	if (!offsetFile)
 	{
-		_nframe = 1;
+		_nframes = 1;
 	}
 	else
 	{
@@ -58,41 +66,34 @@ void SurfaceSet::loadPck(string filename)
 
 		while (offsetFile.read((char*)&off, sizeof(off)))
 		{
-			SDL_Rect rect;
-			rect.x = 0;
-			rect.y = _nframe*_height;
-			rect.w = _width;
-			rect.h = _height;
-			_frames[_nframe] = rect;
-			_nframe++;
+			Surface *surface = new Surface(_width, _height);
+			_frames.push_back(surface);
+			_nframes++;
 		}
 	}
 
-	_surface = new Surface(_width, _height * _nframe);
-
-	// Load PCX and put pixels in surface
+	// Load PCX and put pixels in surfaces
     ifstream imgFile (pck.c_str(), ios::in | ios::binary);
 	if (!imgFile)
 	{
 		throw "Failed to load PCK";
 	}
 	
-	// Lock the surface
-	_surface->lock();
-
 	char value;
 	
-	for (int frame = 0; frame < _nframe; frame++)
+	for (int frame = 0; frame < _nframes; frame++)
 	{
-		int x = 0;
-		int y = frame * _height;
+		int x = 0, y = 0;
+
+		// Lock the surface
+		_frames[frame]->lock();
 
 		imgFile.read(&value, 1);
 		for (int i = 0; i < value; i++)
 		{
 			for (int j = 0; j < _width; j++)
 			{
-				_surface->setPixelIterative(&x, &y, 0);
+				_frames[frame]->setPixelIterative(&x, &y, 0);
 			}
 		}
 		
@@ -103,7 +104,7 @@ void SurfaceSet::loadPck(string filename)
 				imgFile.read(&value, 1);
 				for (int i = 0; i < value; i++)
 				{
-					_surface->setPixelIterative(&x, &y, 0);
+					_frames[frame]->setPixelIterative(&x, &y, 0);
 				}
 			}
 			else if (value == -1)
@@ -112,9 +113,12 @@ void SurfaceSet::loadPck(string filename)
 			}
 			else
 			{
-				_surface->setPixelIterative(&x, &y, Uint8(value));
+				_frames[frame]->setPixelIterative(&x, &y, Uint8(value));
 			}
 		}
+
+		// Unlock the surface
+		_frames[frame]->unlock();
 	}
 	
 	/*
@@ -123,9 +127,6 @@ void SurfaceSet::loadPck(string filename)
 		throw "Invalid data from file";
 	}
 	*/
-
-	// Unlock the surface
-	_surface->unlock();
 
 	imgFile.close();
 	offsetFile.close();
@@ -152,37 +153,46 @@ void SurfaceSet::loadDat(string filename)
 	streamoff size = imgFile.tellg();
 	imgFile.seekg(0, ios::beg);
 
-	_nframe = (int)size / (_width * _height);
+	_nframes = (int)size / (_width * _height);
 
-	for (int i = 0; i < _nframe; i++)
+	for (int i = 0; i < _nframes; i++)
 	{
-		SDL_Rect rect;
-		rect.x = 0;
-		rect.y = i*_height;
-		rect.w = _width;
-		rect.h = _height;
-		_frames[i] = rect;
+		Surface *surface = new Surface(_width, _height);
+		_frames.push_back(surface);
 	}
 
-	_surface = new Surface(_width, _height * _nframe);
 	char value;
-	int x = 0, y = 0;
+	int x = 0, y = 0, frame = 0;
 
 	// Lock the surface
-	_surface->lock();
+	_frames[frame]->lock();
 
 	while (imgFile.read(&value, 1))
 	{
-		_surface->setPixelIterative(&x, &y, Uint8(value));
+		_frames[frame]->setPixelIterative(&x, &y, Uint8(value));
+		
+		if (y >= _height)
+		{
+			// Unlock the surface
+			_frames[frame]->unlock();
+
+			frame++;
+			x = 0;
+			y = 0;
+
+			if (frame >= _nframes)
+				break;
+			else
+				_frames[frame]->lock();
+		}
 	}
 
+	/*
 	if (!imgFile.eof())
 	{
 		throw "Invalid data from file";
 	}
-
-	// Unlock the surface
-	_surface->unlock();
+	*/
 
 	imgFile.close();
 }
@@ -195,8 +205,7 @@ void SurfaceSet::loadDat(string filename)
  */
 Surface *SurfaceSet::getFrame(int i)
 {
-	_surface->setCrop(&_frames[i]);
-	return _surface;
+	return _frames[i];
 }
 
 /**
@@ -218,10 +227,15 @@ int SurfaceSet::getHeight()
 }
 
 /**
- * Returns the surface stored within the set.
- * @return Pointer to the internal surface.
+ * Replaces a certain amount of colors in all of the frames.
+ * @param colors Pointer to the set of colors.
+ * @param firstcolor Offset of the first color to replace.
+ * @param ncolors Amount of colors to replace.
  */
-Surface* SurfaceSet::getSurface()
+void SurfaceSet::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 {
-	return _surface;
+	for (vector<Surface*>::iterator i = _frames.begin(); i != _frames.end(); i++)
+	{
+		(*i)->setPalette(colors, firstcolor, ncolors);
+	}
 }

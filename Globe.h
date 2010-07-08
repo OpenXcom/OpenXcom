@@ -33,6 +33,7 @@
 using namespace std;
 
 #define PI 3.141592653589793238461
+#define NUM_TEXTURES 13
 
 /**
  * Interactive globe view of the world.
@@ -52,6 +53,7 @@ private:
 	SurfaceSet *_texture;
 	SavedGame *_save;
 	int _i;
+	Surface *_markers;
 
 	/// Checks if a point is behind the globe.
 	bool pointBack(double lon, double lat);
@@ -82,8 +84,12 @@ public:
 	void center(double lon, double lat);
 	/// Checks if a point is inside land.
 	bool insideLand(double lon, double lat);
+	/// Sets the palette of the globe.
+	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
 	/// Draws the globe.
 	void draw();
+	/// Draws all the markers over the globe.
+	void drawMarkers();
 	/// Blits the globe onto another surface.
 	void blit(Surface *surface);
 	/// Special handling for mouse presses.

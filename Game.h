@@ -63,7 +63,7 @@ public:
 	/// Gets the game's display screen.
 	Screen *getScreen();
 	/// Gets the game's states.
-	list<State*> *Game::getStates();
+	list<State*> *getStates();
 	/// Sets the game's 8bpp palette.
 	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
 	/// Resets the state stack to a new state.

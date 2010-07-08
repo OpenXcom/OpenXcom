@@ -187,8 +187,8 @@ void BaseView::draw()
 	{
 		for (int y = 0; y < 8; y++)
 		{
-			_texture->getSurface()->setX(x * GRID_SIZE);
-			_texture->getSurface()->setY(y * GRID_SIZE);
+			_texture->getFrame(0)->setX(x * GRID_SIZE);
+			_texture->getFrame(0)->setY(y * GRID_SIZE);
 			_texture->getFrame(0)->blit(this);
 		}
 	}
@@ -202,14 +202,17 @@ void BaseView::draw()
 		for (int y = (*i)->getY(); y < (*i)->getY() + (*i)->getRules()->getSize(); y++)
 		{
 			for (int x = (*i)->getX(); x < (*i)->getX() + (*i)->getRules()->getSize(); x++)
-			{				
-				_texture->getSurface()->setX(x * GRID_SIZE);
-				_texture->getSurface()->setY(y * GRID_SIZE);
+			{
+				Surface *frame;
 
 				if ((*i)->getBuildTime() == 0)
-					_texture->getFrame((*i)->getRules()->getSpriteShape() + num)->blit(this);
+					frame = _texture->getFrame((*i)->getRules()->getSpriteShape() + num);
 				else
-					_texture->getFrame((*i)->getRules()->getSpriteShape() + num + 2 + (*i)->getRules()->getSize())->blit(this);
+					frame = _texture->getFrame((*i)->getRules()->getSpriteShape() + num + 2 + (*i)->getRules()->getSize());
+
+				frame->setX(x * GRID_SIZE);
+				frame->setY(y * GRID_SIZE);
+				frame->blit(this);
 
 				num++;
 			}
@@ -229,8 +232,8 @@ void BaseView::draw()
 				{
 					if (_facilities[x][y] != 0 && _facilities[x][y]->getBuildTime() == 0)
 					{
-						_texture->getSurface()->setX(x * GRID_SIZE - GRID_SIZE / 2);
-						_texture->getSurface()->setY(y * GRID_SIZE);
+						_texture->getFrame(7)->setX(x * GRID_SIZE - GRID_SIZE / 2);
+						_texture->getFrame(7)->setY(y * GRID_SIZE);
 						_texture->getFrame(7)->blit(this);
 					}
 				}
@@ -244,8 +247,8 @@ void BaseView::draw()
 				{
 					if (_facilities[x][y] != 0 && _facilities[x][y]->getBuildTime() == 0)
 					{
-						_texture->getSurface()->setX(x * GRID_SIZE);
-						_texture->getSurface()->setY(y * GRID_SIZE - GRID_SIZE / 2);
+						_texture->getFrame(8)->setX(x * GRID_SIZE);
+						_texture->getFrame(8)->setY(y * GRID_SIZE - GRID_SIZE / 2);
 						_texture->getFrame(8)->blit(this);
 					}
 				}
@@ -260,12 +263,13 @@ void BaseView::draw()
 		for (int y = (*i)->getY(); y < (*i)->getY() + (*i)->getRules()->getSize(); y++)
 		{
 			for (int x = (*i)->getX(); x < (*i)->getX() + (*i)->getRules()->getSize(); x++)
-			{				
-				_texture->getSurface()->setX(x * GRID_SIZE);
-				_texture->getSurface()->setY(y * GRID_SIZE);
-
+			{
 				if ((*i)->getRules()->getSize() == 1)
+				{
+					_texture->getFrame((*i)->getRules()->getSpriteFacility() + num)->setX(x * GRID_SIZE);
+					_texture->getFrame((*i)->getRules()->getSpriteFacility() + num)->setY(y * GRID_SIZE);
 					_texture->getFrame((*i)->getRules()->getSpriteFacility() + num)->blit(this);
+				}
 
 				num++;
 			}
@@ -274,9 +278,8 @@ void BaseView::draw()
 		// Draw crafts
 		if ((*i)->getBuildTime() == 0 && (*i)->getRules()->getCrafts() > 0 && craft != _base->getCrafts()->end())
 		{
-			_texture->getSurface()->setX((*i)->getX() * GRID_SIZE + ((*i)->getRules()->getSize() - 1) * GRID_SIZE / 2);
-			_texture->getSurface()->setY((*i)->getY() * GRID_SIZE + ((*i)->getRules()->getSize() - 1) * GRID_SIZE / 2);
-
+			_texture->getFrame((*craft)->getRules()->getSprite())->setX((*i)->getX() * GRID_SIZE + ((*i)->getRules()->getSize() - 1) * GRID_SIZE / 2);
+			_texture->getFrame((*craft)->getRules()->getSprite())->setY((*i)->getY() * GRID_SIZE + ((*i)->getRules()->getSize() - 1) * GRID_SIZE / 2);
 			_texture->getFrame((*craft)->getRules()->getSprite())->blit(this);
 			craft++;
 		}
@@ -440,4 +443,3 @@ void BaseView::mouseOut(SDL_Event *ev, int scale, State *state)
 
 	InteractiveSurface::mouseOut(ev, scale, state);
 }
-	

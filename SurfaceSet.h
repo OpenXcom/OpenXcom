@@ -19,7 +19,7 @@
 #ifndef OPENXCOM__SURFACESET_H
 #define OPENXCOM__SURFACESET_H
 
-#include <map>
+#include <vector>
 #include "SDL.h"
 #include "Surface.h"
 
@@ -34,9 +34,8 @@ using namespace std;
 class SurfaceSet
 {
 private:
-	Surface *_surface;
-	int _width, _height, _nframe;
-	map<int, SDL_Rect> _frames;
+	int _width, _height, _nframes;
+	vector<Surface*> _frames;
 public:
 	/// Crates a surface set with frames of the specified size.
 	SurfaceSet(int width, int height);
@@ -52,8 +51,8 @@ public:
 	int getWidth();
 	/// Gets the height of all frames.
 	int getHeight();
-	/// Gets the internal surface.
-	Surface *getSurface();
+	/// Sets the surface set's palette.
+	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
 };
 
 #endif
