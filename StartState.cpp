@@ -24,6 +24,7 @@
 #include "XcomResourcePack.h"
 #include "XcomRuleset.h"
 #include "Surface.h"
+#include "TestState.h"
 #include "LanguageState.h"
 
 #define DATA_FOLDER "./DATA/"
@@ -92,8 +93,10 @@ void StartState::think()
 		_load = LOADING_STARTED;
 		break;
 	case LOADING_SUCCESSFUL:
+		//game->setState(new TestState(game));
 		_game->setState(new LanguageState(_game));
 		break;
+	default:
 	}
 }
 

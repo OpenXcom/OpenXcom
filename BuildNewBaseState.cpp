@@ -192,6 +192,14 @@ void BuildNewBaseState::globeClick(SDL_Event *ev, int scale)
 	{
 		_globe->center(lon, lat);
 	}
+	else if (ev->button.button == SDL_BUTTON_WHEELUP)
+	{
+		_globe->zoom(1);
+	}
+	else if (ev->button.button == SDL_BUTTON_WHEELDOWN)
+	{
+		_globe->zoom(-1);
+	}
 }
 
 /**

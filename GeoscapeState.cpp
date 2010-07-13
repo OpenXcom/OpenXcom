@@ -82,10 +82,10 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _rotLon(0), _rotLat(0), 
 	_btnZoomIn = new InteractiveSurface(23, 23, 295, 156);
 	_btnZoomOut = new InteractiveSurface(13, 17, 300, 182);
 
-	_txtHour = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 20, 13, 259, 74);
-	_txtHourSep = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 4, 13, 279, 74);
-	_txtMin = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 20, 13, 283, 74);
-	_txtMinSep = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 4, 13, 303, 74);
+	_txtHour = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 20, 16, 259, 74);
+	_txtHourSep = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 4, 16, 279, 74);
+	_txtMin = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 20, 16, 283, 74);
+	_txtMinSep = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 4, 16, 303, 74);
 	_txtSec = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 11, 8, 307, 80);
 	_txtWeekday = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 59, 8, 259, 87);
 	_txtDay = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 29, 8, 259, 94);
@@ -482,6 +482,14 @@ void GeoscapeState::globeClick(SDL_Event *ev, int scale)
 	else if (ev->button.button == SDL_BUTTON_RIGHT)
 	{
 		_globe->center(lon, lat);
+	}
+	else if (ev->button.button == SDL_BUTTON_WHEELUP)
+	{
+		_globe->zoom(1);
+	}
+	else if (ev->button.button == SDL_BUTTON_WHEELDOWN)
+	{
+		_globe->zoom(-1);
 	}
 }
 

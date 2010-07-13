@@ -21,7 +21,6 @@
 
 #include "Game.h"
 #include "Screen.h"
-#include "TestState.h"
 #include "StartState.h"
 
 /** @mainpage
@@ -58,14 +57,12 @@ int main(int argc, char** args)
 				scale = atoi(args[i+1]);
 		}
 		game->getScreen()->setScale(scale);
-		//game->setState(new TestState(game));
 		game->setState(new StartState(game));
 		game->run();
 	}
 	catch (char* c)
 	{
 		cout << "ERROR: " << c << endl;
-		getc(stdin);
 		exit(-1);
 	}
 	

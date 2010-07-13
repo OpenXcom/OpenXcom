@@ -39,7 +39,7 @@
 Game::Game(string title, int width, int height, int bpp) : _screen(0), _cursor(0), _states(), _deleted(), _res(0), _save(0), _rules(0), _quit(false)
 {
 	// Initialize SDL
-	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
 	{
 		throw SDL_GetError();
 	}
