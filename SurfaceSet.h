@@ -20,6 +20,7 @@
 #define OPENXCOM__SURFACESET_H
 
 #include <vector>
+#include <string>
 #include "SDL.h"
 
 class Surface;
