@@ -25,9 +25,24 @@
  * @param width Frame width in pixels.
  * @param height Frame height in pixels.
  */
-SurfaceSet::SurfaceSet(int width, int height) : _width(width), _height(height), _nframes(0), _frames()
+SurfaceSet::SurfaceSet(int width, int height) : _width(width), _height(height), _frames()
 {
 
+}
+
+/**
+ * Performs a deep copy of an existing surface set.
+ * @param other Surface set to copy from.
+ */
+SurfaceSet::SurfaceSet(const SurfaceSet& other)
+{
+	_width = other._width;
+	_height = other._height;
+
+	for (unsigned int f = 0; f < other._frames.size(); f++)
+	{
+		_frames.push_back(new Surface(*other._frames[f]));
+	}
 }
 
 /**
@@ -51,6 +66,8 @@ SurfaceSet::~SurfaceSet()
  */
 void SurfaceSet::loadPck(string filename)
 {
+	int nframes = 0;
+
 	string pck = string();
 	string tab = string();
 	pck = filename.substr(0, filename.length()-4)+".PCK";
@@ -60,7 +77,7 @@ void SurfaceSet::loadPck(string filename)
 	ifstream offsetFile (tab.c_str(), ios::in | ios::binary);
 	if (!offsetFile)
 	{
-		_nframes = 1;
+		nframes = 1;
 	}
 	else
 	{
@@ -70,7 +87,7 @@ void SurfaceSet::loadPck(string filename)
 		{
 			Surface *surface = new Surface(_width, _height);
 			_frames.push_back(surface);
-			_nframes++;
+			nframes++;
 		}
 	}
 
@@ -83,7 +100,7 @@ void SurfaceSet::loadPck(string filename)
 	
 	char value;
 	
-	for (int frame = 0; frame < _nframes; frame++)
+	for (int frame = 0; frame < nframes; frame++)
 	{
 		int x = 0, y = 0;
 
@@ -144,6 +161,8 @@ void SurfaceSet::loadPck(string filename)
  */
 void SurfaceSet::loadDat(string filename)
 {
+	int nframes = 0;
+
 	// Load file and put pixels in surface
 	ifstream imgFile (filename.c_str(), ios::in | ios::binary);
 	if (!imgFile)
@@ -155,9 +174,9 @@ void SurfaceSet::loadDat(string filename)
 	streamoff size = imgFile.tellg();
 	imgFile.seekg(0, ios::beg);
 
-	_nframes = (int)size / (_width * _height);
+	nframes = (int)size / (_width * _height);
 
-	for (int i = 0; i < _nframes; i++)
+	for (int i = 0; i < nframes; i++)
 	{
 		Surface *surface = new Surface(_width, _height);
 		_frames.push_back(surface);
@@ -182,7 +201,7 @@ void SurfaceSet::loadDat(string filename)
 			x = 0;
 			y = 0;
 
-			if (frame >= _nframes)
+			if (frame >= nframes)
 				break;
 			else
 				_frames[frame]->lock();
@@ -200,10 +219,9 @@ void SurfaceSet::loadDat(string filename)
 }
 
 /**
- * Returns a particular frame from the image set.
- * @param i Frame to use for size/position.
- * @return Pointer to the set's surface with the respective
- * cropping rectangle set up.
+ * Returns a particular frame from the surface set.
+ * @param i Frame number in the set.
+ * @return Pointer to the respective surface.
  */
 Surface *SurfaceSet::getFrame(int i)
 {
@@ -226,6 +244,16 @@ int SurfaceSet::getWidth()
 int SurfaceSet::getHeight()
 {
 	return _height;
+}
+
+/**
+ * Returns the total amount of frames currently
+ * stored in the set.
+ * @return Number of frames.
+ */
+int SurfaceSet::getTotalFrames()
+{
+  return _frames.size();
 }
 
 /**

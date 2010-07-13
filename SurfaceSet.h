@@ -36,11 +36,13 @@ using namespace std;
 class SurfaceSet
 {
 private:
-	int _width, _height, _nframes;
+	int _width, _height;
 	vector<Surface*> _frames;
 public:
 	/// Crates a surface set with frames of the specified size.
 	SurfaceSet(int width, int height);
+	/// Creates a surface set from an existing one.
+	SurfaceSet(const SurfaceSet& other);
 	/// Cleans up the surface set.
 	~SurfaceSet();
 	/// Loads an X-Com set of PCK/TAB image files.
@@ -53,6 +55,8 @@ public:
 	int getWidth();
 	/// Gets the height of all frames.
 	int getHeight();
+	/// Gets the total frames in the set.
+	int getTotalFrames();
 	/// Sets the surface set's palette.
 	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
 };

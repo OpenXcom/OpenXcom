@@ -24,6 +24,7 @@
 #include "Polygon.h"
 #include "Palette.h"
 #include "SavedGame.h"
+#include "GameTime.h"
 #include "Base.h"
 
 #define PI 3.141592653589793238461
@@ -38,7 +39,7 @@
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Globe::Globe(int cenX, int cenY, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _polygons(), _radius(), _rotLon(0), _rotLat(0), _cenX(cenX), _cenY(cenY), _zoom(0), _texture(0), _save(0), _i(0)
+Globe::Globe(int cenX, int cenY, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _polygons(), _radius(), _rotLon(0), _rotLat(0), _cenX(cenX), _cenY(cenY), _zoom(0), _save(0), _i(0)
 {
 	_radius.push_back(90);
 	_radius.push_back(120);
@@ -51,10 +52,12 @@ Globe::Globe(int cenX, int cenY, int width, int height, int x, int y) : Interact
 }
 
 /**
- *
+ * Deletes the shaded texture sets.
  */
 Globe::~Globe()
 {
+	for (int i = 1; i < NUM_SHADES; i++)
+		delete _texture[i];
 }
 
 /**
@@ -199,12 +202,18 @@ void Globe::loadDat(string filename, vector<Polygon*> *polygons)
 
 /**
  * Changes the set of textures for the globe to use
- * to fill the polygons.
+ * to fill the polygons and generates shaded sets.
  * @param texture Pointer to the texture surface set.
  */
 void Globe::setTexture(SurfaceSet *texture)
 {
-	_texture = texture;
+	_texture[0] = texture;
+	for (int shade = 1; shade < NUM_SHADES; shade++)
+	{
+		_texture[shade] = new SurfaceSet(*texture);
+		for (int f = 0; f < _texture[shade]->getTotalFrames(); f++)
+			_texture[shade]->getFrame(f)->offset(shade);
+	}
 	draw();
 }
 
@@ -304,6 +313,8 @@ void Globe::draw()
 {
 	clear();
 
+	double curTime = (double)(((((_save->getTime()->getHour() - 6) * 60) + _save->getTime()->getMinute()) * 60) + _save->getTime()->getSecond()) / 86400;
+
 	filledCircleColor(this->getSurface(), _cenX, _cenY, (Sint16)floor(_radius[_zoom]), Palette::getRGBA(this->getPalette(), Palette::blockOffset(12)));
 
 	for (vector<Polygon*>::iterator i = _polygons->begin(); i < _polygons->end(); i++)
@@ -318,15 +329,24 @@ void Globe::draw()
 			continue;
 
 		Sint16 x[4], y[4];
+		double tmpLon, minLon, maxLon;
 		
 		// Convert coordinates
 		for (int j = 0; j < (*i)->getPoints(); j++)
 		{
-			polarToCart((*i)->getLongitude(j), (*i)->getLatitude(j), &x[j], &y[j]);
+			tmpLon = (*i)->getLongitude(j);
+			if (j == 0 || (tmpLon < minLon && tmpLon >= (maxLon - PI)))
+				minLon = tmpLon;
+			if (j == 0 || (tmpLon > maxLon && tmpLon <= (minLon + PI)))
+				maxLon = tmpLon;
+
+			polarToCart(tmpLon, (*i)->getLatitude(j), &x[j], &y[j]);
 		}
 
+		// Apply textures according to zoom and shade
 		int zoom = (2 - (int)floor((double)(_zoom) / 2)) * NUM_TEXTURES;
-		texturedPolygon(getSurface(), (Sint16*)&x, (Sint16*)&y, (*i)->getPoints(), _texture->getFrame((*i)->getTexture() + zoom)->getSurface(), 0, 0);
+		int shade = (int)(( sin( (curTime * 2 * PI) + ((minLon + maxLon) / 2) ) - 1 ) * -4);
+		texturedPolygon(getSurface(), (Sint16*)&x, (Sint16*)&y, (*i)->getPoints(), _texture[shade]->getFrame((*i)->getTexture() + zoom)->getSurface(), 0, 0);
 	}
 
 	drawMarkers();
@@ -382,7 +402,8 @@ void Globe::blit(Surface *surface)
 {
 	_i = (_i + 1) % 50;
 
-	drawMarkers();
+	// drawMarkers();
+  draw();
 
 	Surface::blit(surface);
 	_markers->blit(surface);

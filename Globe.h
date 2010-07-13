@@ -25,6 +25,8 @@
 
 using namespace std;
 
+#define NUM_SHADES 9
+
 class Polygon;
 class SurfaceSet;
 class SavedGame;
@@ -44,7 +46,7 @@ private:
 	double _rotLon, _rotLat;
 	int _cenX, _cenY;
 	unsigned int _zoom;
-	SurfaceSet *_texture;
+	SurfaceSet *_texture[NUM_SHADES];
 	SavedGame *_save;
 	int _i;
 	Surface *_markers;

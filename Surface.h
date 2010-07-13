@@ -41,6 +41,8 @@ protected:
 public:
 	/// Creates a new surface with the specified size and position.
 	Surface(int width, int height, int x = 0, int y = 0);
+	/// Creates a new surface from an existing one.
+	Surface(const Surface& other);
 	/// Cleans up the surface.
 	virtual ~Surface();
 	/// Loads an X-Com SCR graphic.

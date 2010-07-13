@@ -97,6 +97,7 @@ void StartState::think()
 		_game->setState(new LanguageState(_game));
 		break;
 	default:
+		break;
 	}
 }
 
