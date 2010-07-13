@@ -17,52 +17,12 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Prevent cyclic dependency
-#ifndef OPENXCOM__STATE_INTERACTIVE_H
-#define OPENXCOM__STATE_INTERACTIVE_H
+#ifndef OPENXCOM__INTERACTIVE_SURFACE_H
+#define OPENXCOM__INTERACTIVE_SURFACE_H
 
-#include <vector>
 #include "SDL.h"
-#include "Game.h"
 #include "Surface.h"
-
-using namespace std;
-
-class InteractiveSurface;
-
-/**
- * A game state that receives user input and reacts accordingly.
- ª Game states typically represent a whole window or screen that
- * the user interacts with, making the game... well, interactive.
- * They automatically handle child elements used to transmit
- * information from/to the user, and are linked to the core game
- * engine which manages them.
- */
-class State
-{
-protected:
-	Game *_game;
-	vector<Surface*> _surfaces;
-	bool _screen;
-
-public:
-	/// Creates a new state linked to a game.
-	State(Game* game);
-	/// Cleans up the state.
-	virtual ~State();
-	/// Adds a child element to the state.
-	void add(Surface *surface);
-	/// Gets whether the state is a full-screen.
-	bool isScreen();
-	/// Initializes the state.
-	virtual void init();
-	/// Handles any events
-	virtual void handle(SDL_Event* ev, int scale);
-	/// Runs state functionality every cycle.
-	virtual void think();
-	/// Blits the state to the screen.
-	virtual void blit();
-};
+#include "State.h"
 
 typedef State &(State::*EventHandler)(SDL_Event *, int);
 

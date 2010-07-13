@@ -16,8 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "State_Interactive.h"
-
+#include "State.h"
+#include "InteractiveSurface.h"
+#include "Game.h"
+#include "Screen.h"
+#include "Surface.h"
 
 /**
  * Initializes a brand new state with no child elements.

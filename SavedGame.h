@@ -21,13 +21,13 @@
 
 #include <map>
 #include <vector>
-#include "RNG.h"
-#include "GameTime.h"
-#include "Country.h"
 #include "LangString.h"
-#include "Base.h"
 
 using namespace std;
+
+class GameTime;
+class Country;
+class Base;
 
 /**
  * Enumator containing all the possible game difficulties.

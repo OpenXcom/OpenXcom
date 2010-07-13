@@ -17,6 +17,17 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Globe.h"
+#include <cmath>
+#include <fstream>
+#include "SDL_gfxPrimitives.h"
+#include "SurfaceSet.h"
+#include "Polygon.h"
+#include "Palette.h"
+#include "SavedGame.h"
+#include "Base.h"
+
+#define PI 3.141592653589793238461
+#define NUM_TEXTURES 13
 
 /**
  * Sets up a globe with the specified size and position.

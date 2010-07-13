@@ -17,6 +17,11 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "GraphsState.h"
+#include "Game.h"
+#include "ResourcePack.h"
+#include "Palette.h"
+#include "Surface.h"
+#include "InteractiveSurface.h"
 
 /**
  * Initializes all the elements in the Graphs screen.

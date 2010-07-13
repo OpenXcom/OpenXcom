@@ -17,6 +17,8 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Soldier.h"
+#include "RNG.h"
+#include "SoldierNamePool.h"
 
 /**
  * Initializes a new soldier with random stats and a name

@@ -19,32 +19,29 @@
 #ifndef OPENXCOM__STARTSTATE_H
 #define OPENXCOM__STARTSTATE_H
 
-#include "State_Interactive.h"
-#include "Palette.h"
-#include "TextButton.h"
-#include "Window.h"
-#include "MainMenuState.h"
+#include "State.h"
+
+class Surface;
+
+enum LoadingPhase { LOADING_NONE, LOADING_STARTED, LOADING_FAILED, LOADING_SUCCESSFUL };
 
 /**
- * Initializes the game and displays the Language
- * window that lets the player pick a language.
+ * Initializes the game and loads all required content.
  */
 class StartState : public State
 {
 private:
-	TextButton *_btnEnglish, *_btnGerman, *_btnFrench;
-	Window *_window;
+	Surface *_surface;
+	LoadingPhase _load;
 public:
 	/// Creates the Start state.
 	StartState(Game *game);
 	/// Cleans up the Start state.
 	~StartState();
-	/// Handler for clicking the English button.
-	void btnEnglishClick(SDL_Event *ev, int scale);
-	/// Handler for clicking the Deutsche button.
-	void btnGermanClick(SDL_Event *ev, int scale);
-	/// Handler for clicking the Francais button.
-	void btnFrenchClick(SDL_Event *ev, int scale);
+	/// Loads the game resources.
+	void think();
+	/// Handles key clicks.
+	void handle(SDL_Event* ev, int scale);
 };
 
 #endif

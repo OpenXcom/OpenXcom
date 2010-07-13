@@ -20,9 +20,7 @@
 #define OPENXCOM__SOLDIERNAMEPOOL_H
 
 #include <string>
-#include <sstream>
 #include <vector>
-#include "RNG.h"
 
 using namespace std;
 

@@ -19,8 +19,7 @@
 #ifndef OPENXCOM__IMAGEBUTTON_H
 #define OPENXCOM__IMAGEBUTTON_H
 
-#include "SDL.h"
-#include "State_Interactive.h"
+#include "InteractiveSurface.h"
 
 /**
  * Regular image that works like a button.

@@ -21,7 +21,8 @@
 
 #include <vector>
 #include "SDL.h"
-#include "Surface.h"
+
+class Surface;
 
 using namespace std;
 

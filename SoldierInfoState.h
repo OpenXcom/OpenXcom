@@ -19,17 +19,14 @@
 #ifndef OPENXCOM__SOLDIERINFOSTATE_H
 #define OPENXCOM__SOLDIERINFOSTATE_H
 
-#include <sstream>
-#include "State_Interactive.h"
-#include "LangString.h"
-#include "Palette.h"
-#include "Bar.h"
-#include "TextButton.h"
-#include "Text.h"
-#include "TextEdit.h"
-#include "Surface.h"
-#include "Base.h"
-#include "Soldier.h"
+#include "State.h"
+
+class Base;
+class Surface;
+class TextButton;
+class Text;
+class TextEdit;
+class Bar;
 
 /**
  * Soldier Info screen that shows all the 

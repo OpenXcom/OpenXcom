@@ -19,13 +19,12 @@
 #ifndef OPENXCOM__PURCHASESTATE_H
 #define OPENXCOM__PURCHASESTATE_H
 
-#include "State_Interactive.h"
-#include "LangString.h"
-#include "Palette.h"
-#include "TextButton.h"
-#include "Window.h"
-#include "Text.h"
-#include "TextList.h"
+#include "State.h"
+
+class TextButton;
+class Window;
+class Text;
+class TextList;
 
 /**
  * Purchase/Hire screen that lets the player buy

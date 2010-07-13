@@ -22,13 +22,15 @@
 #include <map>
 #include <string>
 #include <vector>
-#include "Language.h"
-#include "Surface.h"
-#include "SurfaceSet.h"
-#include "Font.h"
-#include "Palette.h"
-#include "Polygon.h"
-#include "Music.h"
+#include "SDL.h"
+
+class Language;
+class Surface;
+class SurfaceSet;
+class Font;
+class Palette;
+class Polygon;
+class Music;
 
 using namespace std;
 

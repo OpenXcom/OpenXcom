@@ -19,30 +19,14 @@
 #ifndef OPENXCOM__GEOSCAPESTATE_H
 #define OPENXCOM__GEOSCAPESTATE_H
 
-#include <string>
-#include <sstream>
-#include "State_Interactive.h"
-#include "RNG.h"
-#include "Game.h"
-#include "Palette.h"
-#include "Surface.h"
-#include "Globe.h"
-#include "Text.h"
-#include "ImageButton.h"
-#include "Timer.h"
-#include "GameTime.h"
-#include "OptionsState.h"
-#include "InterceptState.h"
-#include "BasescapeState.h"
-#include "GraphsState.h"
-#include "FundingState.h"
-#include "MonthlyReportState.h"
-#include "GeoscapeMessageState.h"
+#include "State.h"
 
-using namespace std;
-
-#define LONGITUDE_SPEED 0.2
-#define LATITUDE_SPEED 0.1
+class Surface;
+class Globe;
+class ImageButton;
+class InteractiveSurface;
+class Text;
+class Timer;
 
 /**
  * Geoscape screen which shows an overview of

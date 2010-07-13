@@ -17,6 +17,13 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "XcomRuleset.h"
+#include "RNG.h"
+#include "LangString.h"
+#include "Base.h"
+#include "Country.h"
+#include "BaseFacility.h"
+#include "Craft.h"
+#include "Soldier.h"
 
 /**
  * Initializes the X-Com ruleset with all the rules

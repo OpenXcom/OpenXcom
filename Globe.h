@@ -19,21 +19,15 @@
 #ifndef OPENXCOM__GLOBE_H
 #define OPENXCOM__GLOBE_H
 
-#include <cmath>
-#include <fstream>
 #include <vector>
 #include <string>
-#include "SDL_gfxPrimitives.h"
-#include "State_Interactive.h"
-#include "SurfaceSet.h"
-#include "Polygon.h"
-#include "Palette.h"
-#include "SavedGame.h"
+#include "InteractiveSurface.h"
 
 using namespace std;
 
-#define PI 3.141592653589793238461
-#define NUM_TEXTURES 13
+class Polygon;
+class SurfaceSet;
+class SavedGame;
 
 /**
  * Interactive globe view of the world.

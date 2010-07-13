@@ -17,6 +17,32 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "BasescapeState.h"
+#include "Game.h"
+#include "ResourcePack.h"
+#include "Language.h"
+#include "LangString.h"
+#include "Font.h"
+#include "Palette.h"
+#include "TextButton.h"
+#include "Text.h"
+#include "BaseView.h"
+#include "MiniBaseView.h"
+#include "SavedGame.h"
+#include "Base.h"
+#include "BaseFacility.h"
+#include "RuleBaseFacility.h"
+#include "GeoscapeState.h"
+#include "BasescapeErrorState.h"
+#include "DismantleFacilityState.h"
+#include "BuildNewBaseState.h"
+#include "BaseInfoState.h"
+#include "SoldiersState.h"
+#include "CraftsState.h"
+#include "BuildFacilitiesState.h"
+#include "ResearchState.h"
+#include "ManufactureState.h"
+#include "PurchaseState.h"
+#include "SellState.h"
 
 /**
  * Initializes all the elements in the Basescape screen.

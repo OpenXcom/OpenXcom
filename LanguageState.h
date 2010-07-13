@@ -16,34 +16,39 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM__RESEARCHSTATE_H
-#define OPENXCOM__RESEARCHSTATE_H
+#ifndef OPENXCOM__LANGUAGESTATE_H
+#define OPENXCOM__LANGUAGESTATE_H
 
+#include <string>
 #include "State.h"
 
 class TextButton;
 class Window;
-class Text;
-class TextList;
+
+using namespace std;
 
 /**
- * Research screen that lets the player manage
- * all the researching operations of a base.
+ * Language window that lets the player pick a
+ * language at the start of the game.
  */
-class ResearchState : public State
+class LanguageState : public State
 {
 private:
-	TextButton *_btnNew, *_btnOk;
+	TextButton *_btnEnglish, *_btnGerman, *_btnFrench;
 	Window *_window;
-	Text *_txtTitle, *_txtAvailable, *_txtAllocated, *_txtSpace, *_txtProject, *_txtScientists, *_txtProgress;
-	TextList *_lstResearch;
 public:
-	/// Creates the Research state.
-	ResearchState(Game *game);
-	/// Cleans up the Research state.
-	~ResearchState();
-	/// Handler for clicking the OK button.
-	void btnOkClick(SDL_Event *ev, int scale);
+	/// Creates the Start state.
+	LanguageState(Game *game);
+	/// Cleans up the Start state.
+	~LanguageState();
+	/// Changes the game language.
+	void changeLanguage(string lang);
+	/// Handler for clicking the English button.
+	void btnEnglishClick(SDL_Event *ev, int scale);
+	/// Handler for clicking the Deutsche button.
+	void btnGermanClick(SDL_Event *ev, int scale);
+	/// Handler for clicking the Francais button.
+	void btnFrenchClick(SDL_Event *ev, int scale);
 };
 
 #endif

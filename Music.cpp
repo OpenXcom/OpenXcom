@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Music.h"
+#include <sys/stat.h>
 
 /**
  * Initializes a new music track.

@@ -17,6 +17,8 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "RNG.h"
+#include <cstdlib>
+#include <ctime>
 
 /**
  * Defaults to the current time.

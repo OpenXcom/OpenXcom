@@ -19,12 +19,12 @@
 #ifndef OPENXCOM__BASESCAPEERRORSTATE_H
 #define OPENXCOM__BASESCAPEERRORSTATE_H
 
-#include "State_Interactive.h"
+#include "State.h"
 #include "LangString.h"
-#include "Palette.h"
-#include "TextButton.h"
-#include "Window.h"
-#include "Text.h"
+
+class TextButton;
+class Window;
+class Text;
 
 /**
  * Generic window used to display error messages

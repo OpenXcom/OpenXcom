@@ -19,18 +19,12 @@
 #ifndef OPENXCOM__INTERCEPTSTATE_H
 #define OPENXCOM__INTERCEPTSTATE_H
 
-#include <sstream>
-#include "State_Interactive.h"
-#include "LangString.h"
-#include "Palette.h"
-#include "TextButton.h"
-#include "Window.h"
-#include "Text.h"
-#include "TextList.h"
-#include "Base.h"
-#include "Craft.h"
+#include "State.h"
 
-using namespace std;
+class TextButton;
+class Window;
+class Text;
+class TextList;
 
 /**
  * Intercept window that lets the player launch

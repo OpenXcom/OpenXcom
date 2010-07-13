@@ -17,6 +17,11 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Base.h"
+#include "BaseFacility.h"
+#include "RuleBaseFacility.h"
+#include "Craft.h"
+#include "RuleCraft.h"
+#include "Soldier.h"
 
 /**
  * Initializes an empty base.

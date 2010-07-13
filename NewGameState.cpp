@@ -17,6 +17,18 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "NewGameState.h"
+#include "Game.h"
+#include "ResourcePack.h"
+#include "Language.h"
+#include "LangString.h"
+#include "Font.h"
+#include "Palette.h"
+#include "TextButton.h"
+#include "Window.h"
+#include "Text.h"
+#include "Ruleset.h"
+#include "GeoscapeState.h"
+#include "BuildNewBaseState.h"
 
 /**
  * Initializes all the elements in the Difficulty window.

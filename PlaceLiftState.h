@@ -19,21 +19,14 @@
 #ifndef OPENXCOM__PLACELIFTSTATE_H
 #define OPENXCOM__PLACELIFTSTATE_H
 
-#include <sstream>
-#include "State_Interactive.h"
-#include "LangString.h"
-#include "Palette.h"
-#include "TextButton.h"
-#include "Window.h"
-#include "Text.h"
-#include "BaseView.h"
-#include "Base.h"
-#include "BaseFacility.h"
-#include "RuleBaseFacility.h"
-#include "BasescapeState.h"
+#include "State.h"
+
+class Base;
+class BaseView;
+class Text;
 
 /**
- * Window shown when the player has to
+ * Screen shown when the player has to
  * place the access lift of a base.
  */
 class PlaceLiftState : public State

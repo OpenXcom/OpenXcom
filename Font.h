@@ -21,9 +21,10 @@
 
 #include <map>
 #include "SDL.h"
-#include "Surface.h"
 
 using namespace std;
+
+class Surface;
 
 /**
  * Takes care of loading and storing each character in a sprite font.

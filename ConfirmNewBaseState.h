@@ -19,17 +19,12 @@
 #ifndef OPENXCOM__CONFIRMNEWBASESTATE_H
 #define OPENXCOM__CONFIRMNEWBASESTATE_H
 
-#include <string>
-#include "State_Interactive.h"
-#include "Game.h"
-#include "Palette.h"
-#include "Surface.h"
-#include "Window.h"
-#include "Text.h"
-#include "TextButton.h"
-#include "BaseNameState.h"
+#include "State.h"
 
-using namespace std;
+class Base;
+class Window;
+class Text;
+class TextButton;
 
 /**
  * Screen that allows the player

@@ -19,13 +19,11 @@
 #ifndef OPENXCOM__MONTHLYREPORTSTATE_H
 #define OPENXCOM__MONTHLYREPORTSTATE_H
 
-#include <sstream>
-#include "State_Interactive.h"
-#include "LangString.h"
-#include "Palette.h"
-#include "TextButton.h"
-#include "Window.h"
-#include "Text.h"
+#include "State.h"
+
+class TextButton;
+class Window;
+class Text;
 
 /**
  * Report screen shown monthly to display

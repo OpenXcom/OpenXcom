@@ -17,6 +17,17 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "MainMenuState.h"
+#include "Game.h"
+#include "ResourcePack.h"
+#include "Language.h"
+#include "LangString.h"
+#include "Font.h"
+#include "Palette.h"
+#include "TextButton.h"
+#include "Window.h"
+#include "Text.h"
+#include "Music.h"
+#include "NewGameState.h"
 
 /**
  * Initializes all the elements in the Main Menu window.

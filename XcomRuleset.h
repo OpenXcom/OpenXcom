@@ -19,10 +19,7 @@
 #ifndef OPENXCOM__XCOMRULESET_H
 #define OPENXCOM__XCOMRULESET_H
 
-#include "RNG.h"
 #include "Ruleset.h"
-#include "LangString.h"
-#include "Base.h"
 
 /**
  * Rule set for the X-Com: UFO Defense game.

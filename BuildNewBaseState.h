@@ -19,23 +19,15 @@
 #ifndef OPENXCOM__BUILDNEWBASESTATE_H
 #define OPENXCOM__BUILDNEWBASESTATE_H
 
-#include <string>
-#include "State_Interactive.h"
-#include "Game.h"
-#include "Palette.h"
-#include "Surface.h"
-#include "Window.h"
-#include "Globe.h"
-#include "Text.h"
-#include "TextButton.h"
-#include "Timer.h"
-#include "BaseNameState.h"
-#include "ConfirmNewBaseState.h"
+#include "State.h"
 
-using namespace std;
-
-#define LONGITUDE_SPEED 0.2
-#define LATITUDE_SPEED 0.1
+class Base;
+class Globe;
+class InteractiveSurface;
+class Timer;
+class Window;
+class Text;
+class TextButton;
 
 /**
  * Screen that allows the player

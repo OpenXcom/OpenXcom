@@ -17,6 +17,22 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "PlaceLiftState.h"
+#include <sstream>
+#include "Game.h"
+#include "ResourcePack.h"
+#include "Language.h"
+#include "LangString.h"
+#include "Font.h"
+#include "Palette.h"
+#include "TextButton.h"
+#include "Window.h"
+#include "Text.h"
+#include "BaseView.h"
+#include "Base.h"
+#include "BaseFacility.h"
+#include "RuleBaseFacility.h"
+#include "Ruleset.h"
+#include "BasescapeState.h"
 
 /**
  * Initializes all the elements in the Place Lift screen.

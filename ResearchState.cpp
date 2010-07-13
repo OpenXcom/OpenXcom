@@ -17,6 +17,16 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "ResearchState.h"
+#include "Game.h"
+#include "ResourcePack.h"
+#include "Language.h"
+#include "LangString.h"
+#include "Font.h"
+#include "Palette.h"
+#include "TextButton.h"
+#include "Window.h"
+#include "Text.h"
+#include "TextList.h"
 
 /**
  * Initializes all the elements in the Research screen.

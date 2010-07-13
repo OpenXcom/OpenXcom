@@ -19,10 +19,10 @@
 #ifndef OPENXCOM__TEXTEDIT_H
 #define OPENXCOM__TEXTEDIT_H
 
-#include <sstream>
-#include "SDL.h"
-#include "State_Interactive.h"
+#include "InteractiveSurface.h"
 #include "Text.h"
+
+class Font;
 
 /**
  * Editable version of Text.

@@ -17,6 +17,10 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "SavedGame.h"
+#include "RNG.h"
+#include "GameTime.h"
+#include "Country.h"
+#include "Base.h"
 
 /**
  * Initializes a brand new saved game according to the specified difficulty.

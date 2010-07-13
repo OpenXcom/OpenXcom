@@ -19,10 +19,10 @@
 #ifndef OPENXCOM__TEXT_H
 #define OPENXCOM__TEXT_H
 
-#include "Font.h"
 #include "Surface.h"
 #include <string>
-#include <sstream>
+
+class Font;
 
 /**
  * Enumator for the possible text alignments.

@@ -21,7 +21,6 @@
 
 #include "SDL_mixer.h"
 #include <string>
-#include <sys/stat.h>
 
 using namespace std;
 

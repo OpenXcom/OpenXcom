@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Surface.h"
+#include <fstream>
 
 /**
  * Sets up a blank 8bpp surface with the specified size and position,

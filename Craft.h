@@ -21,10 +21,12 @@
 
 #include <map>
 #include <vector>
-#include "RuleCraft.h"
-#include "Soldier.h"
+#include "LangString.h"
 
 using namespace std;
+
+class RuleCraft;
+class Soldier;
 
 /**
  * Represents a craft stored in a base.

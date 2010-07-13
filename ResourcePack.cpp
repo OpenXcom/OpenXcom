@@ -17,6 +17,14 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "ResourcePack.h"
+#include "Palette.h"
+#include "Font.h"
+#include "Surface.h"
+#include "SurfaceSet.h"
+#include "Language.h"
+#include "Music.h"
+#include "Globe.h"
+#include "Polygon.h"
 
 /**
  * Initializes a blank resource set pointing to a folder.

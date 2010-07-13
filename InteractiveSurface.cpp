@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "State_Interactive.h"
+#include "InteractiveSurface.h"
 
 /**
  * Sets up a blank interactive surface with the specified size and position.

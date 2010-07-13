@@ -19,14 +19,12 @@
 #ifndef OPENXCOM__BASENAMESTATE_H
 #define OPENXCOM__BASENAMESTATE_H
 
-#include <string>
-#include "State_Interactive.h"
-#include "LangString.h"
-#include "Palette.h"
-#include "Window.h"
-#include "Text.h"
-#include "TextEdit.h"
-#include "PlaceLiftState.h"
+#include "State.h"
+
+class Base;
+class Window;
+class Text;
+class TextEdit;
 
 /**
  * Window used to input a name for a new base.

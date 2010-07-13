@@ -17,6 +17,21 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "FundingState.h"
+#include <sstream>
+#include "Game.h"
+#include "ResourcePack.h"
+#include "Language.h"
+#include "LangString.h"
+#include "Font.h"
+#include "Palette.h"
+#include "TextButton.h"
+#include "Window.h"
+#include "Text.h"
+#include "TextList.h"
+#include "Country.h"
+#include "SavedGame.h"
+
+using namespace std;
 
 /**
  * Initializes all the elements in the Funding screen.

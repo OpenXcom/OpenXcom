@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Palette.h"
+#include <fstream>
 
 /**
  * Initializes a brand new palette.

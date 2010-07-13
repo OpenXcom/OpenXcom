@@ -17,6 +17,25 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "SoldierInfoState.h"
+#include <sstream>
+#include "Game.h"
+#include "ResourcePack.h"
+#include "Language.h"
+#include "LangString.h"
+#include "Font.h"
+#include "Palette.h"
+#include "Bar.h"
+#include "TextButton.h"
+#include "Text.h"
+#include "TextEdit.h"
+#include "Surface.h"
+#include "Base.h"
+#include "Craft.h"
+#include "RuleCraft.h"
+#include "Soldier.h"
+#include "SurfaceSet.h"
+
+using namespace std;
 
 /**
  * Initializes all the elements in the Soldier Info screen.

@@ -19,19 +19,18 @@
 #ifndef OPENXCOM__GAME_H
 #define OPENXCOM__GAME_H
 
-class State;
-
 #include <list>
 #include <string>
 #include "SDL.h"
-#include "SDL_mixer.h"
-#include "Screen.h"
-#include "Cursor.h"
-#include "ResourcePack.h"
-#include "SavedGame.h"
-#include "Ruleset.h"
 
 using namespace std;
+
+class State;
+class Screen;
+class Cursor;
+class ResourcePack;
+class SavedGame;
+class Ruleset;
 
 /**
  * The core of the game engine, manages the game's entire contents and structure.

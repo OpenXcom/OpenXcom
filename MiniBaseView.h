@@ -19,15 +19,13 @@
 #ifndef OPENXCOM__MINIBASEVIEW_H
 #define OPENXCOM__MINIBASEVIEW_H
 
-#include <cmath>
-#include "State_Interactive.h"
-#include "SurfaceSet.h"
-#include "Base.h"
-#include "BaseFacility.h"
-#include "Craft.h"
+#include <vector>
+#include "InteractiveSurface.h"
 
-#define MAX_BASES 8
-#define MINI_SIZE 14
+using namespace std;
+
+class Base;
+class SurfaceSet;
 
 /**
  * Mini view of a base.

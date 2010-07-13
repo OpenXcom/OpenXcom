@@ -17,6 +17,8 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "SoldierNamePool.h"
+#include <sstream>
+#include "RNG.h"
 
 /**
  * Initializes a new pool with blank lists of names.

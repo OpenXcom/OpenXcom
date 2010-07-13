@@ -19,8 +19,6 @@
 #ifndef OPENXCOM__BAR_H
 #define OPENXCOM__BAR_H
 
-#include <cmath>
-#include "SDL.h"
 #include "Surface.h"
 
 /**

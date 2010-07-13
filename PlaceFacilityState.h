@@ -19,18 +19,14 @@
 #ifndef OPENXCOM__PLACEFACILITYSTATE_H
 #define OPENXCOM__PLACEFACILITYSTATE_H
 
-#include <sstream>
-#include "State_Interactive.h"
-#include "LangString.h"
-#include "Palette.h"
-#include "TextButton.h"
-#include "Window.h"
-#include "Text.h"
-#include "BaseView.h"
-#include "Base.h"
-#include "BaseFacility.h"
-#include "RuleBaseFacility.h"
-#include "BasescapeErrorState.h"
+#include "State.h"
+
+class Base;
+class RuleBaseFacility;
+class BaseView;
+class TextButton;
+class Window;
+class Text;
 
 /**
  * Window shown when the player tries to

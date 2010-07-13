@@ -17,6 +17,18 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "DismantleFacilityState.h"
+#include "Game.h"
+#include "ResourcePack.h"
+#include "Language.h"
+#include "LangString.h"
+#include "Font.h"
+#include "Palette.h"
+#include "TextButton.h"
+#include "Window.h"
+#include "Text.h"
+#include "Base.h"
+#include "BaseFacility.h"
+#include "RuleBaseFacility.h"
 
 /**
  * Initializes all the elements in a Dismantle Facility window.

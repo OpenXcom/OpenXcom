@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Window.h"
+#include "SDL.h"
 
 /**
  * Sets up a blank window with the specified size and position.

@@ -19,9 +19,6 @@
 #ifndef OPENXCOM__RNG_H
 #define OPENXCOM__RNG_H
 
-#include <cstdlib>
-#include <ctime>
-
 /**
  * Random Number Generator used throughout the game
  * for all your randomness needs. It's really just the

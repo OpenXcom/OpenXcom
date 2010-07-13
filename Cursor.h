@@ -19,10 +19,7 @@
 #ifndef OPENXCOM__CURSOR_H
 #define OPENXCOM__CURSOR_H
 
-#include "SDL.h"
-#include "SDL_gfxPrimitives.h"
 #include "Surface.h"
-#include "Palette.h"
 
 /**
  * Mouse cursor that replaces the system cursor.

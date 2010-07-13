@@ -19,9 +19,7 @@
 #ifndef OPENXCOM__XCOMRESOURCEPACK_H
 #define OPENXCOM__XCOMRESOURCEPACK_H
 
-#include <sstream>
 #include "ResourcePack.h"
-#include "Globe.h"
 
 /**
  * Resource pack for the X-Com: UFO Defense game.

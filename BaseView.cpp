@@ -17,6 +17,20 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "BaseView.h"
+#include <sstream>
+#include <cmath>
+#include "SurfaceSet.h"
+#include "Base.h"
+#include "BaseFacility.h"
+#include "RuleBaseFacility.h"
+#include "Craft.h"
+#include "RuleCraft.h"
+#include "Text.h"
+#include "Palette.h"
+
+using namespace std;
+
+#define GRID_SIZE 32
 
 /**
  * Sets up a base view with the specified size and position.

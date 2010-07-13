@@ -19,15 +19,14 @@
 #ifndef OPENXCOM__TESTSTATE_H
 #define OPENXCOM__TESTSTATE_H
 
-#include "State_Interactive.h"
-#include "Palette.h"
-#include "SurfaceSet.h"
-#include "Surface.h"
-#include "TextButton.h"
-#include "Window.h"
-#include "Text.h"
-#include "TextList.h"
-#include "Sound.h"
+#include "State.h"
+
+class SurfaceSet;
+class Surface;
+class TextButton;
+class Window;
+class Text;
+class TextList;
 
 /**
  * A state purely for testing game functionality.

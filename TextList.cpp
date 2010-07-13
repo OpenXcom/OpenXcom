@@ -17,6 +17,11 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "TextList.h"
+#include <cstdarg>
+#include <cmath>
+#include "Text.h"
+#include "Font.h"
+#include "Palette.h"
 
 /**
  * Sets up a blank list with the specified size and position.

@@ -17,6 +17,39 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "GeoscapeState.h"
+#include <string>
+#include <sstream>
+#include "RNG.h"
+#include "Game.h"
+#include "ResourcePack.h"
+#include "Language.h"
+#include "LangString.h"
+#include "Font.h"
+#include "Palette.h"
+#include "Screen.h"
+#include "Surface.h"
+#include "Globe.h"
+#include "Text.h"
+#include "ImageButton.h"
+#include "Timer.h"
+#include "GameTime.h"
+#include "Music.h"
+#include "SavedGame.h"
+#include "Base.h"
+#include "BaseFacility.h"
+#include "RuleBaseFacility.h"
+#include "OptionsState.h"
+#include "InterceptState.h"
+#include "BasescapeState.h"
+#include "GraphsState.h"
+#include "FundingState.h"
+#include "MonthlyReportState.h"
+#include "GeoscapeMessageState.h"
+
+using namespace std;
+
+#define LONGITUDE_SPEED 0.2
+#define LATITUDE_SPEED 0.1
 
 /**
  * Initializes all the elements in the Geoscape screen.

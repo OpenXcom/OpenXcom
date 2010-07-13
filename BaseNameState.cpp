@@ -17,6 +17,17 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "BaseNameState.h"
+#include "Game.h"
+#include "ResourcePack.h"
+#include "Language.h"
+#include "LangString.h"
+#include "Font.h"
+#include "Palette.h"
+#include "Window.h"
+#include "Text.h"
+#include "TextEdit.h"
+#include "Base.h"
+#include "PlaceLiftState.h"
 
 /**
  * Initializes all the elements in a Base Name window.

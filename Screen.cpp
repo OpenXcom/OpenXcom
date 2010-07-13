@@ -17,6 +17,8 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Screen.h"
+#include "SDL_rotozoom.h"
+#include "Surface.h"
 
 /**
  * Initializes a new display screen for the game to render contents to.

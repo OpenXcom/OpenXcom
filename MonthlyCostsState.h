@@ -19,15 +19,13 @@
 #ifndef OPENXCOM__MONTHLYCOSTSSTATE_H
 #define OPENXCOM__MONTHLYCOSTSSTATE_H
 
-#include <sstream>
-#include "State_Interactive.h"
-#include "LangString.h"
-#include "Palette.h"
-#include "TextButton.h"
-#include "Window.h"
-#include "Text.h"
-#include "TextList.h"
-#include "Base.h"
+#include "State.h"
+
+class Base;
+class TextButton;
+class Window;
+class Text;
+class TextList;
 
 /**
  * Monthly Costs screen that displays all

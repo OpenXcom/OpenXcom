@@ -17,6 +17,10 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "TextButton.h"
+#include <cmath>
+#include "SDL.h"
+#include "Text.h"
+#include "Font.h"
 
 /**
  * Sets up a text button with the specified size and position.

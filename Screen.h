@@ -20,8 +20,8 @@
 #define OPENXCOM__SCREEN_H
 
 #include "SDL.h"
-#include "SDL_rotozoom.h"
-#include "Surface.h"
+
+class Surface;
 
 /**
  * A display screen, handles rendering onto the game window.

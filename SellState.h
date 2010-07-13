@@ -19,13 +19,12 @@
 #ifndef OPENXCOM__SELLSTATE_H
 #define OPENXCOM__SELLSTATE_H
 
-#include "State_Interactive.h"
-#include "LangString.h"
-#include "Palette.h"
-#include "TextButton.h"
-#include "Window.h"
-#include "Text.h"
-#include "TextList.h"
+#include "State.h"
+
+class TextButton;
+class Window;
+class Text;
+class TextList;
 
 /**
  * Sell/Sack screen that lets the player sell
@@ -39,7 +38,9 @@ private:
 	Text *_txtTitle, *_txtSales, *_txtFunds, *_txtItem, *_txtQuantity, *_txtSell, *_txtValue;
 	TextList *_lstItems;
 public:
+	/// Creates the Sell state.
 	SellState(Game *game);
+	/// Cleans up the Sell state.
 	~SellState();
 	/// Handler for clicking the OK button.
 	void btnOkClick(SDL_Event *ev, int scale);

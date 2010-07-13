@@ -21,13 +21,13 @@
 
 #include <string>
 #include <vector>
-#include "BaseFacility.h"
-#include "RuleBaseFacility.h"
-#include "Craft.h"
-#include "RuleCraft.h"
-#include "Soldier.h"
+#include "LangString.h"
 
 using namespace std;
+
+class BaseFacility;
+class Soldier;
+class Craft;
 
 /**
  * Represents a player base on the globe.

@@ -20,7 +20,6 @@
 #define OPENXCOM__PALETTE_H
 
 #include <string>
-#include <fstream>
 #include "SDL.h"
 
 using namespace std;

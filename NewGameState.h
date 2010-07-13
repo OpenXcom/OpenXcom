@@ -19,14 +19,12 @@
 #ifndef OPENXCOM__NEWGAMESTATE_H
 #define OPENXCOM__NEWGAMESTATE_H
 
-#include "State_Interactive.h"
-#include "LangString.h"
-#include "Palette.h"
-#include "TextButton.h"
-#include "Window.h"
-#include "Text.h"
-#include "GeoscapeState.h"
-#include "BuildNewBaseState.h"
+#include "State.h"
+#include "SavedGame.h"
+
+class TextButton;
+class Window;
+class Text;
 
 /**
  * New Game window that displays a list

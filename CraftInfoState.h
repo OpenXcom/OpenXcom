@@ -19,18 +19,13 @@
 #ifndef OPENXCOM__CRAFTINFOSTATE_H
 #define OPENXCOM__CRAFTINFOSTATE_H
 
-#include <sstream>
-#include "State_Interactive.h"
-#include "LangString.h"
-#include "Palette.h"
-#include "TextButton.h"
-#include "Window.h"
-#include "Text.h"
-#include "Craft.h"
-#include "Base.h"
-#include "CraftSoldiersState.h"
+#include "State.h"
 
-using namespace std;
+class Base;
+class TextButton;
+class Window;
+class Text;
+class Surface;
 
 /**
  * Craft Info screen that shows all the 

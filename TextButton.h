@@ -19,10 +19,10 @@
 #ifndef OPENXCOM__TEXTBUTTON_H
 #define OPENXCOM__TEXTBUTTON_H
 
-#include <cmath>
-#include "SDL.h"
-#include "State_Interactive.h"
-#include "Text.h"
+#include "InteractiveSurface.h"
+
+class Text;
+class Font;
 
 /**
  * Coloured button with a text label.

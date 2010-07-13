@@ -17,6 +17,18 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "AbandonGameState.h"
+#include <sstream>
+#include "Game.h"
+#include "ResourcePack.h"
+#include "Language.h"
+#include "LangString.h"
+#include "Font.h"
+#include "Palette.h"
+#include "TextButton.h"
+#include "Window.h"
+#include "Text.h"
+#include "SavedGame.h"
+#include "MainMenuState.h"
 
 /**
  * Initializes all the elements in the Abandon Game screen.
@@ -77,6 +89,7 @@ void AbandonGameState::btnYesClick(SDL_Event *ev, int scale)
 {
 	_game->setState(new MainMenuState(_game));
 	delete _game->getSavedGame();
+	_game->setSavedGame(0);
 }
 
 /**

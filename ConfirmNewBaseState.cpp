@@ -17,6 +17,18 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "ConfirmNewBaseState.h"
+#include "Game.h"
+#include "ResourcePack.h"
+#include "Language.h"
+#include "LangString.h"
+#include "Font.h"
+#include "Palette.h"
+#include "Surface.h"
+#include "Window.h"
+#include "Text.h"
+#include "TextButton.h"
+#include "SavedGame.h"
+#include "BaseNameState.h"
 
 /**
  * Initializes all the elements in the Confirm New Base window.

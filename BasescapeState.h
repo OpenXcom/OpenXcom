@@ -19,27 +19,13 @@
 #ifndef OPENXCOM__BASESCAPESTATE_H
 #define OPENXCOM__BASESCAPESTATE_H
 
-#include "State_Interactive.h"
-#include "LangString.h"
-#include "Palette.h"
-#include "TextButton.h"
-#include "Text.h"
-#include "BaseView.h"
-#include "MiniBaseView.h"
-#include "BaseFacility.h"
-#include "RuleBaseFacility.h"
-#include "GeoscapeState.h"
-#include "BasescapeErrorState.h"
-#include "DismantleFacilityState.h"
-#include "BuildNewBaseState.h"
-#include "BaseInfoState.h"
-#include "SoldiersState.h"
-#include "CraftsState.h"
-#include "BuildFacilitiesState.h"
-#include "ResearchState.h"
-#include "ManufactureState.h"
-#include "PurchaseState.h"
-#include "SellState.h"
+#include "State.h"
+
+class BaseView;
+class MiniBaseView;
+class Text;
+class TextButton;
+class Base;
 
 /**
  * Basescape screen that shows a base's layout

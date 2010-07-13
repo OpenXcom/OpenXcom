@@ -17,7 +17,14 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Game.h"
-#include "State_Interactive.h"
+#include "SDL_mixer.h"
+#include "State.h"
+#include "Screen.h"
+#include "Cursor.h"
+#include "ResourcePack.h"
+#include "Ruleset.h"
+#include "SavedGame.h"
+#include "Palette.h"
 
 /**
  * Starts up SDL with all the subsystems and SDL_mixer for audio processing,
@@ -29,7 +36,7 @@
  * @warning Currently the game is designed for 8bpp, so there's no telling what'll
  * happen if you use a different value.
  */
-Game::Game(string title, int width, int height, int bpp) : _states(), _deleted(), _quit(false)
+Game::Game(string title, int width, int height, int bpp) : _screen(0), _cursor(0), _states(), _deleted(), _res(0), _save(0), _rules(0), _quit(false)
 {
 	// Initialize SDL
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
@@ -65,6 +72,15 @@ Game::~Game()
 {
 	delete _screen;
 	delete _cursor;
+	if (_res != 0)
+		delete _res;
+	if (_rules != 0)
+		delete _rules;
+	if (_save != 0)
+		delete _save;
+
+	for (list<State*>::iterator i = _states.begin(); i != _states.end(); i++)
+		delete *i;
 
 	Mix_CloseAudio();
 
@@ -157,7 +173,8 @@ void Game::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 {
 	_screen->setPalette(colors, firstcolor, ncolors);
 	_cursor->setPalette(colors, firstcolor, ncolors);
-	_res->setPalette(colors, firstcolor, ncolors);
+	if (_res != 0)
+		_res->setPalette(colors, firstcolor, ncolors);
 }
 
 /**

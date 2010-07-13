@@ -19,14 +19,11 @@
 #ifndef OPENXCOM__ABANDONGAMESTATE_H
 #define OPENXCOM__ABANDONGAMESTATE_H
 
-#include <sstream>
-#include "State_Interactive.h"
-#include "LangString.h"
-#include "Palette.h"
-#include "TextButton.h"
-#include "Window.h"
-#include "Text.h"
-#include "MainMenuState.h"
+#include "State.h"
+
+class TextButton;
+class Window;
+class Text;
 
 /**
  * Abandon Game window shown before

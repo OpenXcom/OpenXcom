@@ -71,6 +71,8 @@
       <DataExecutionPrevention>
       </DataExecutionPrevention>
       <TargetMachine>MachineX86</TargetMachine>
+      <GenerateMapFile>true</GenerateMapFile>
+      <MapExports>true</MapExports>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -87,7 +89,7 @@
       <AdditionalDependencies>SDL_mixer.lib;SDL_gfx.lib;SDLmain.lib;SDL.lib;SDL_gfx.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>.\SDL\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
@@ -109,6 +111,7 @@
     <ClCompile Include="BuildNewBaseState.cpp" />
     <ClCompile Include="PlaceLiftState.cpp" />
     <ClCompile Include="Sound.cpp" />
+    <ClCompile Include="StartState.cpp" />
     <ClCompile Include="TextButton.cpp" />
     <ClCompile Include="Craft.cpp" />
     <ClCompile Include="CraftInfoState.cpp" />
@@ -157,7 +160,7 @@
     <ClCompile Include="ResearchState.cpp" />
     <ClCompile Include="SellState.cpp" />
     <ClCompile Include="SoldiersState.cpp" />
-    <ClCompile Include="StartState.cpp" />
+    <ClCompile Include="LanguageState.cpp" />
     <ClCompile Include="TestState.cpp" />
     <ClCompile Include="Globe.cpp" />
     <ClCompile Include="Polygon.cpp" />
@@ -181,8 +184,11 @@
     <ClInclude Include="ConfirmNewBaseState.h" />
     <ClInclude Include="CraftSoldiersState.h" />
     <ClInclude Include="BuildNewBaseState.h" />
+    <ClInclude Include="InteractiveSurface.h" />
     <ClInclude Include="PlaceLiftState.h" />
     <ClInclude Include="Sound.h" />
+    <ClInclude Include="StartState.h" />
+    <ClInclude Include="State.h" />
     <ClInclude Include="TextButton.h" />
     <ClInclude Include="Craft.h" />
     <ClInclude Include="CraftInfoState.h" />
@@ -210,7 +216,6 @@
     <ClInclude Include="Language.h" />
     <ClInclude Include="Palette.h" />
     <ClInclude Include="Screen.h" />
-    <ClInclude Include="State_Interactive.h" />
     <ClInclude Include="Surface.h" />
     <ClInclude Include="SurfaceSet.h" />
     <ClInclude Include="Timer.h" />
@@ -231,7 +236,7 @@
     <ClInclude Include="ResearchState.h" />
     <ClInclude Include="SellState.h" />
     <ClInclude Include="SoldiersState.h" />
-    <ClInclude Include="StartState.h" />
+    <ClInclude Include="LanguageState.h" />
     <ClInclude Include="TestState.h" />
     <ClInclude Include="Globe.h" />
     <ClInclude Include="Polygon.h" />

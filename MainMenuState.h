@@ -19,13 +19,11 @@
 #ifndef OPENXCOM__MAINMENUSTATE_H
 #define OPENXCOM__MAINMENUSTATE_H
 
-#include "State_Interactive.h"
-#include "LangString.h"
-#include "Palette.h"
-#include "TextButton.h"
-#include "Window.h"
-#include "Text.h"
-#include "NewGameState.h"
+#include "State.h"
+
+class TextButton;
+class Window;
+class Text;
 
 /**
  * Main Menu window displayed when first

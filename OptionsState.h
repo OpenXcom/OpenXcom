@@ -19,13 +19,11 @@
 #ifndef OPENXCOM__OPTIONSSTATE_H
 #define OPENXCOM__OPTIONSSTATE_H
 
-#include "State_Interactive.h"
-#include "LangString.h"
-#include "Palette.h"
-#include "TextButton.h"
-#include "Window.h"
-#include "Text.h"
-#include "AbandonGameState.h"
+#include "State.h"
+
+class TextButton;
+class Window;
+class Text;
 
 /**
  * Options window shown in the Geoscape for loading/saving

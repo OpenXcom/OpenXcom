@@ -19,10 +19,6 @@
 #ifndef OPENXCOM__POLYGON_H
 #define OPENXCOM__POLYGON_H
 
-#include <string>
-
-using namespace std;
-
 /**
  * Represents a polygon in the world map.
  * Polygons constitute the textured land portions

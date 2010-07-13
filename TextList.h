@@ -20,10 +20,10 @@
 #define OPENXCOM__TEXTLIST_H
 
 #include <vector>
-#include <cstdarg>
-#include <cmath>
-#include "State_Interactive.h"
-#include "Text.h"
+#include "InteractiveSurface.h"
+
+class Text;
+class Font;
 
 /**
  * List of Text's split into columns.

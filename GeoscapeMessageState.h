@@ -20,12 +20,13 @@
 #define OPENXCOM__GEOSCAPEMESSAGESTATE_H
 
 #include <string>
-#include "State_Interactive.h"
-#include "LangString.h"
-#include "Palette.h"
-#include "TextButton.h"
-#include "Window.h"
-#include "Text.h"
+#include "State.h"
+
+using namespace std;
+
+class TextButton;
+class Window;
+class Text;
 
 /**
  * Generic window used to display information messages

@@ -19,19 +19,16 @@
 #ifndef OPENXCOM__BASEINFOSTATE_H
 #define OPENXCOM__BASEINFOSTATE_H
 
-#include <sstream>
-#include "State_Interactive.h"
-#include "LangString.h"
-#include "Palette.h"
-#include "Bar.h"
-#include "TextButton.h"
-#include "Text.h"
-#include "TextEdit.h"
-#include "Surface.h"
-#include "MiniBaseView.h"
-#include "MonthlyCostsState.h"
+#include "State.h"
 
 class BasescapeState;
+class Base;
+class Surface;
+class MiniBaseView;
+class TextButton;
+class TextEdit;
+class Text;
+class Bar;
 
 /**
  * Base Info screen that shows all the 

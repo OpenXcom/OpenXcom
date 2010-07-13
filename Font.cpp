@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Font.h"
+#include "Surface.h"
 
 // Fonts start with this character
 #define FIRST_CHAR '!'
@@ -49,6 +50,7 @@ Font::~Font()
  */
 void Font::load()
 {
+	_surface->lock();
 	for (unsigned char i = FIRST_CHAR; i < FIRST_CHAR + _nchar; i++)
 	{
 		SDL_Rect rect;
@@ -78,6 +80,7 @@ void Font::load()
 
 		_chars[i] = rect;
 	}
+	_surface->unlock();
 }
 
 /**

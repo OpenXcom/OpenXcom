@@ -20,7 +20,7 @@
 #define OPENXCOM__TIMER_H
 
 #include "SDL.h"
-#include "State_Interactive.h"
+#include "State.h"
 
 typedef State &(State::*TimerHandler)();
 

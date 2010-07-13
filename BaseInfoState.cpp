@@ -17,6 +17,22 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "BaseInfoState.h"
+#include <sstream>
+#include "Game.h"
+#include "ResourcePack.h"
+#include "Language.h"
+#include "LangString.h"
+#include "Font.h"
+#include "Palette.h"
+#include "Bar.h"
+#include "TextButton.h"
+#include "Text.h"
+#include "TextEdit.h"
+#include "Surface.h"
+#include "MiniBaseView.h"
+#include "SavedGame.h"
+#include "Base.h"
+#include "MonthlyCostsState.h"
 #include "BasescapeState.h"
 
 /**

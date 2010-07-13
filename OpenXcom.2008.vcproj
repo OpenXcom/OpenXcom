@@ -270,6 +270,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\InteractiveSurface.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Language.cpp"
 				>
 			</File>
@@ -322,7 +326,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\State_Interactive.h"
+				RelativePath=".\State.h"
 				>
 			</File>
 			<File
@@ -492,6 +496,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\LanguageState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LanguageState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\MainMenuState.cpp"
 				>
 			</File>
@@ -616,50 +628,6 @@
 			Name="Xcom"
 			>
 			<Filter
-				Name="Rules"
-				>
-				<File
-					RelativePath=".\RuleBaseFacility.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\RuleBaseFacility.h"
-					>
-				</File>
-				<File
-					RelativePath=".\RuleCraft.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\RuleCraft.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Ruleset.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Ruleset.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SoldierNamePool.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\SoldierNamePool.h"
-					>
-				</File>
-				<File
-					RelativePath=".\XcomRuleset.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\XcomRuleset.h"
-					>
-				</File>
-			</Filter>
-			<Filter
 				Name="Game"
 				>
 				<File
@@ -772,6 +740,50 @@
 				</File>
 				<File
 					RelativePath=".\XcomResourcePack.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Rules"
+				>
+				<File
+					RelativePath=".\RuleBaseFacility.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\RuleBaseFacility.h"
+					>
+				</File>
+				<File
+					RelativePath=".\RuleCraft.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\RuleCraft.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Ruleset.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Ruleset.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SoldierNamePool.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SoldierNamePool.h"
+					>
+				</File>
+				<File
+					RelativePath=".\XcomRuleset.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\XcomRuleset.h"
 					>
 				</File>
 			</Filter>

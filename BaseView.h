@@ -19,16 +19,14 @@
 #ifndef OPENXCOM__BASEVIEW_H
 #define OPENXCOM__BASEVIEW_H
 
-#include <cmath>
-#include "State_Interactive.h"
-#include "SurfaceSet.h"
-#include "Base.h"
-#include "BaseFacility.h"
-#include "Craft.h"
-#include "Font.h"
-#include "Text.h"
+#include "InteractiveSurface.h"
 
-#define GRID_SIZE 32
+class Base;
+class SurfaceSet;
+class BaseFacility;
+class RuleBaseFacility;
+class Font;
+
 #define BASE_SIZE 6
 
 /**

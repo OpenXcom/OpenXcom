@@ -19,16 +19,14 @@
 #ifndef OPENXCOM__BUILDFACILITIESSTATE_H
 #define OPENXCOM__BUILDFACILITIESSTATE_H
 
-#include "State_Interactive.h"
+#include "State.h"
 #include "LangString.h"
-#include "Palette.h"
-#include "TextButton.h"
-#include "Window.h"
-#include "Text.h"
-#include "TextList.h"
-#include "PlaceFacilityState.h"
 
 class Base;
+class TextButton;
+class Window;
+class Text;
+class TextList;
 
 /**
  * Window shown wih all the facilities

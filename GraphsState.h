@@ -19,12 +19,10 @@
 #ifndef OPENXCOM__GRAPHSSTATE_H
 #define OPENXCOM__GRAPHSSTATE_H
 
-#include "State_Interactive.h"
-#include "Palette.h"
-#include "Surface.h"
-#include "TextButton.h"
-#include "Text.h"
-#include "GeoscapeState.h"
+#include "State.h"
+
+class Surface;
+class InteractiveSurface;
 
 /**
  * Graphs screen for displaying graphs of various

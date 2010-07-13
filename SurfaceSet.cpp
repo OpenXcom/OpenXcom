@@ -17,6 +17,8 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "SurfaceSet.h"
+#include <fstream>
+#include "Surface.h"
 
 /**
  * Sets up a new empty surface set for frames of the specified size.

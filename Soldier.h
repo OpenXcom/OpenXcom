@@ -19,17 +19,17 @@
 #ifndef OPENXCOM__SOLDIER_H
 #define OPENXCOM__SOLDIER_H
 
+#include <vector>
 #include <string>
-#include "RNG.h"
 #include "LangString.h"
-#include "SoldierNamePool.h"
-
-class Craft;
 
 enum SoldierGender { GENDER_MALE, GENDER_FEMALE };
 enum SoldierLook { LOOK_BLONDE, LOOK_BROWNHAIR, LOOK_ORIENTAL, LOOK_AFRICAN };
 
 using namespace std;
+
+class Craft;
+class SoldierNamePool;
 
 /**
  * Represents a soldier hired by the player.

@@ -17,6 +17,23 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "CraftSoldiersState.h"
+#include <sstream>
+#include "Game.h"
+#include "ResourcePack.h"
+#include "Language.h"
+#include "LangString.h"
+#include "Font.h"
+#include "Palette.h"
+#include "TextButton.h"
+#include "Window.h"
+#include "Text.h"
+#include "TextList.h"
+#include "Base.h"
+#include "Soldier.h"
+#include "Craft.h"
+#include "RuleCraft.h"
+
+using namespace std;
 
 /**
  * Initializes all the elements in the Craft Soldiers screen.

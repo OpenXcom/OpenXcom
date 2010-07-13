@@ -17,6 +17,16 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "MiniBaseView.h"
+#include <cmath>
+#include "SurfaceSet.h"
+#include "Base.h"
+#include "BaseFacility.h"
+#include "RuleBaseFacility.h"
+#include "Craft.h"
+#include "Palette.h"
+
+#define MAX_BASES 8
+#define MINI_SIZE 14
 
 /**
  * Sets up a mini base view with the specified size and position.
@@ -191,7 +201,6 @@ void MiniBaseView::mouseOver(SDL_Event *ev, int scale, State *state)
 {
 	double x = ev->button.x - _x * scale;
 	_hoverBase = (int)floor(x / ((MINI_SIZE + 2) * scale));
-	cout << _hoverBase << endl;
 
 	InteractiveSurface::mouseOver(ev, scale, state);
 }

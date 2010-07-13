@@ -17,6 +17,9 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Cursor.h"
+#include "SDL.h"
+#include "SDL_gfxPrimitives.h"
+#include "Palette.h"
 
 /**
  * Sets up a cursor with the specified size and position

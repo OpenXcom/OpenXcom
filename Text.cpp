@@ -17,6 +17,10 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Text.h"
+#include <sstream>
+#include "Font.h"
+
+using namespace std;
 
 /**
  * Sets up a blank text with the specified size and position.

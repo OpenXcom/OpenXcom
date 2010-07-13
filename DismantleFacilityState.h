@@ -19,14 +19,13 @@
 #ifndef OPENXCOM__DISMANTLEFACILITYSTATE_H
 #define OPENXCOM__DISMANTLEFACILITYSTATE_H
 
-#include "State_Interactive.h"
-#include "LangString.h"
-#include "Palette.h"
-#include "TextButton.h"
-#include "Window.h"
-#include "Text.h"
-#include "Base.h"
-#include "BaseFacility.h"
+#include "State.h"
+
+class Base;
+class BaseFacility;
+class TextButton;
+class Window;
+class Text;
 
 /**
  * Window shown when the player tries to

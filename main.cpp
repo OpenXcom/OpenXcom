@@ -16,17 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "Game.h"
-#include "TestState.h"
-#include "StartState.h"
-#include "XcomResourcePack.h"
-#include "XcomRuleset.h"
-
 #include <iostream>
 #include <cstring>
-#include <cstdlib>
 
-#define DATA_FOLDER "./DATA/"
+#include "Game.h"
+#include "Screen.h"
+#include "TestState.h"
+#include "StartState.h"
 
 /** @mainpage
  * @author SupSuper
@@ -47,11 +43,10 @@ Game *game;
 // programming license revoked...
 int main(int argc, char** args)
 {
+	//_CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_CHECK_ALWAYS_DF | _CRTDBG_CHECK_CRT_DF | _CRTDBG_LEAK_CHECK_DF );
 	try
 	{
 		game = new Game("OpenXcom", 320, 200, 8);
-		game->setResourcePack(new XcomResourcePack(DATA_FOLDER));
-		game->setRuleset(new XcomRuleset());
 		
 		// Handles command line arguments
 		int scale = 2;
@@ -67,7 +62,7 @@ int main(int argc, char** args)
 		game->setState(new StartState(game));
 		game->run();
 	}
-	catch(char* c)
+	catch (char* c)
 	{
 		cout << "ERROR: " << c << endl;
 		getc(stdin);

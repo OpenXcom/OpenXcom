@@ -17,6 +17,23 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "InterceptState.h"
+#include <sstream>
+#include "Game.h"
+#include "ResourcePack.h"
+#include "Language.h"
+#include "LangString.h"
+#include "Font.h"
+#include "Palette.h"
+#include "TextButton.h"
+#include "Window.h"
+#include "Text.h"
+#include "TextList.h"
+#include "Base.h"
+#include "Craft.h"
+#include "RuleCraft.h"
+#include "SavedGame.h"
+
+using namespace std;
 
 /**
  * Initializes all the elements in the Intercept window.

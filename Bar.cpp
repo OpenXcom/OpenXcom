@@ -17,6 +17,8 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Bar.h"
+#include <cmath>
+#include "SDL.h"
 
 /**
  * Sets up a blank bar with the specified size and position.

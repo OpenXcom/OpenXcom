@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Sound.h"
+#include <sys/stat.h>
 
 /**
  * Initializes a new sound effect.
