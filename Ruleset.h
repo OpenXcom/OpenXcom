@@ -44,7 +44,7 @@ public:
 	/// Creates a blank ruleset.
 	Ruleset();
 	/// Cleans up the ruleset.
-	~Ruleset();
+	virtual ~Ruleset();
 	/// Generates the starting saved game.
 	virtual SavedGame *newSave(GameDifficulty diff);
 	/// Gets the pool list for soldier names.

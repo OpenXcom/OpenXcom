@@ -60,7 +60,7 @@ public:
 	/// Create a new resource pack with a folder's contents.
 	ResourcePack(string folder);
 	/// Cleans up the resource pack.
-	~ResourcePack();
+	virtual ~ResourcePack();
 	/// Gets the current language.
 	Language *getLanguage();
 	/// Gets the name of the current language.
