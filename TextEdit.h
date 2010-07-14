@@ -23,6 +23,7 @@
 #include "Text.h"
 
 class Font;
+class Timer;
 
 /**
  * Editable version of Text.
@@ -34,12 +35,15 @@ class TextEdit : public InteractiveSurface
 private:
 	Text *_text;
 	string _value;
-	int _i;
+	bool _blink;
+	Timer *_timer;
 public:
 	/// Creates a new text with the specified size, position and fonts.
 	TextEdit(Font *big, Font *small, int width, int height, int x = 0, int y = 0);
 	/// Cleans up the text.
 	~TextEdit();
+	/// Sets focus on this text edit.
+	virtual void focus();
 	/// Sets the text size to big.
 	void setBig();
 	/// Sets the text size to small.
@@ -60,8 +64,12 @@ public:
 	Uint8 getColor();
 	/// Sets the surface's palette.
 	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
-	/// Blits the text onto another surface.
-	void blit(Surface *surface);
+	/// Handles the timers.
+	void think();
+	/// Plays the blinking animation.
+	void blink();
+	/// Draws the text edit.
+	void draw();
 	/// Special handling for mouse presses.
 	void mousePress(SDL_Event *ev, int scale, State *state);
 	/// Special handling for mouse releases.

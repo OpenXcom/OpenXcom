@@ -26,6 +26,7 @@ class SurfaceSet;
 class BaseFacility;
 class RuleBaseFacility;
 class Font;
+class Timer;
 
 #define BASE_SIZE 6
 
@@ -43,7 +44,8 @@ private:
 	Font *_big, *_small;
 	int _gridX, _gridY, _selSize;
 	Surface *_selector;
-	int _i;
+	bool _blink;
+	Timer *_timer;
 public:
 	/// Creates a new base view at the specified position and size.
 	BaseView(Font *big, Font *small, int width, int height, int x = 0, int y = 0);
@@ -63,6 +65,10 @@ public:
 	void setSelectable(int size);
 	/// Checks if a facility can be placed.
 	bool isPlaceable(RuleBaseFacility *rule);
+	/// Handles the timers.
+	void think();
+	/// Blinks the selector.
+	void blink();
 	/// Draws the base view.
 	void draw();
 	/// Blits the base view onto another surface.

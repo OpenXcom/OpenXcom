@@ -67,15 +67,17 @@ Uint32 Timer::getTime()
  * calling the respective event handler whenever the set interval passes.
  * @param state State that the event handler belongs to.
  */
-void Timer::think(State* state)
+void Timer::think(State* state, Surface* surface)
 {
 	if (_running)
 	{
 		if (getTime() >= _interval)
 		{
 			_start = SDL_GetTicks();
-			if (_timer != 0)
-				(state->*_timer)();
+			if (state != 0 && _state != 0)
+				(state->*_state)();
+			if (surface != 0 && _surface != 0)
+				(surface->*_surface)();
 		}
 	}
 }
@@ -90,10 +92,19 @@ void Timer::setInterval(Uint32 interval)
 }
 
 /**
- * Sets a function for the timer to call every interval.
+ * Sets a state function for the timer to call every interval.
  * @param handler Event handler.
  */
-void Timer::onTimer(TimerHandler handler)
+void Timer::onTimer(StateHandler handler)
 {
-	_timer = handler;
+	_state = handler;
+}
+
+/**
+ * Sets a surface function for the timer to call every interval.
+ * @param handler Event handler.
+ */
+void Timer::onTimer(SurfaceHandler handler)
+{
+	_surface = handler;
 }

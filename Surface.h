@@ -55,6 +55,8 @@ public:
 	void offset(int off, int min = -1, int max = -1);
 	/// Inverts the surface's colors.
 	void invert(Uint8 mid);
+	/// Runs surface functionality every cycle.
+	virtual void think();
 	/// Draws the surface's graphic.
 	virtual void draw();
 	/// Blits this surface onto another one.

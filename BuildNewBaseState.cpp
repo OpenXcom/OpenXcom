@@ -104,7 +104,7 @@ BuildNewBaseState::BuildNewBaseState(Game *game, Base *base, Globe *globe, bool 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString(STR_SELECT_SITE_FOR_NEW_BASE));
 
-	_rotTimer->onTimer((TimerHandler)&BuildNewBaseState::globeRotate);
+	_rotTimer->onTimer((StateHandler)&BuildNewBaseState::globeRotate);
 
 	if (_first)
 	{
@@ -135,7 +135,9 @@ void BuildNewBaseState::init()
  */
 void BuildNewBaseState::think()
 {
-	_rotTimer->think(this);
+	State::think();
+
+	_rotTimer->think(this, 0);
 }
 
 /**

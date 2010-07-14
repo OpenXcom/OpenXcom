@@ -18,6 +18,7 @@
  */
 #include "Window.h"
 #include "SDL.h"
+#include "Timer.h"
 
 /**
  * Sets up a blank window with the specified size and position.
@@ -29,8 +30,17 @@
  */
 Window::Window(int width, int height, int x, int y, WindowPopup popup) : Surface(width, height, x, y), _bg(0), _color(0), _popup(popup), _popupStep(0.0)
 {
+	_timer = new Timer(10);
+	_timer->onTimer((SurfaceHandler)&Window::popup);
+
 	if (_popup == POPUP_NONE)
+	{
 		_popupStep = 1.0;
+	}
+	else
+	{
+		_timer->start();
+	}
 }
 
 /**
@@ -68,6 +78,31 @@ void Window::setColor(Uint8 color)
 Uint8 Window::getColor()
 {
 	return _color;
+}
+
+/**
+ * Keeps the animation timers running.
+ */
+void Window::think()
+{
+	_timer->think(0, this);
+}
+
+/**
+ * Plays the window popup animation.
+ */
+void Window::popup()
+{
+	if (_popupStep < 1.0)
+	{
+		_popupStep += 0.075;
+		draw();
+	}
+	else
+	{
+		_popupStep = 1.0;
+		_timer->stop();
+	}
 }
 
 /**
@@ -133,21 +168,4 @@ void Window::draw()
 			_bg->blit(this);
 		}
 	}
-}
-
-/**
- * Blits the bordered window on top of another surface.
- * @param surface Pointer to surface to blit onto.
- */
-void Window::blit(Surface *surface)
-{
-	if (_popupStep >= 1.0)
-		_popupStep = 1.0;
-	else
-	{
-		_popupStep += 0.1;
-		draw();
-	}
-
-	Surface::blit(surface);
 }

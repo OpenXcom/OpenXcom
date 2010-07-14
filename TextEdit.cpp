@@ -19,6 +19,7 @@
 #include "TextEdit.h"
 #include <sstream>
 #include "Font.h"
+#include "Timer.h"
 
 using namespace std;
 
@@ -33,9 +34,11 @@ using namespace std;
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-TextEdit::TextEdit(Font *big, Font *small, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _value(""), _i(0)
+TextEdit::TextEdit(Font *big, Font *small, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _value(""), _blink(true)
 {
 	_text = new Text(big, small, width, height, 0, 0);
+	_timer = new Timer(100);
+	_timer->onTimer((SurfaceHandler)&TextEdit::blink);
 }
 
 /**
@@ -44,6 +47,18 @@ TextEdit::TextEdit(Font *big, Font *small, int width, int height, int x, int y) 
 TextEdit::~TextEdit()
 {
 	delete _text;
+}
+
+/**
+ * Starts the blinking animation when
+ * the text is focused.
+ */
+void TextEdit::focus()
+{
+	InteractiveSurface::focus();
+	_blink = true;
+	_timer->start();
+	draw();
 }
 
 /**
@@ -69,6 +84,7 @@ void TextEdit::setSmall()
 void TextEdit::setText(string text)
 {
 	_value = text;
+	draw();
 }
 
 /**
@@ -144,28 +160,38 @@ void TextEdit::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 }
 
 /**
- * Blits the text onto another surface. Adds a flashing *
- * to the end to show when the text is focused and editable.
- * @param surface Pointer to another surface.
+ * Keeps the animation timers running.
  */
-void TextEdit::blit(Surface *surface)
+void TextEdit::think()
 {
-	clear();
+	_timer->think(0, this);
+}
 
-	if (_isFocused)
-		_i = (_i + 1) % 30;
-	else
-		_i = 0;
+/**
+ * Plays the blinking animation when the
+ * text edit is focused.
+ */
+void TextEdit::blink()
+{
+	_blink = !_blink;
+	draw();
+}
 
+/**
+ * Adds a flashing * to the end of the text
+ * to show when it's focused and editable.
+ */
+void TextEdit::draw()
+{
 	stringstream ss;
 	ss << _value << "*";
-	if (_isFocused && _i < 15)
+	if (_isFocused && _blink)
 		_text->setText(ss.str());
 	else
 		_text->setText(_value);
-	_text->blit(this);
 
-	Surface::blit(surface);
+	clear();
+	_text->blit(this);
 }
 
 /**
@@ -178,8 +204,7 @@ void TextEdit::mousePress(SDL_Event *ev, int scale, State *state)
 {
 	if (ev->button.button == SDL_BUTTON_LEFT)
 	{
-		_isFocused = true;
-
+		focus();
 		InteractiveSurface::mousePress(ev, scale, state);
 	}
 }
@@ -225,6 +250,8 @@ void TextEdit::keyboardPress(SDL_Event *ev, int scale, State *state)
 	{
 	case SDLK_RETURN:
 		_isFocused = false;
+		_blink = false;
+		_timer->stop();
 		break;
 	case SDLK_BACKSPACE:
 		if (_value.length() > 0)
@@ -244,6 +271,7 @@ void TextEdit::keyboardPress(SDL_Event *ev, int scale, State *state)
 				_value += (char)ev->key.keysym.unicode;
 		}
 	}
+	draw();
 
 	InteractiveSurface::keyboardPress(ev, scale, state);
 }

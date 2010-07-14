@@ -21,6 +21,7 @@
 #include <fstream>
 #include "SDL_gfxPrimitives.h"
 #include "SurfaceSet.h"
+#include "Timer.h"
 #include "Polygon.h"
 #include "Palette.h"
 #include "SavedGame.h"
@@ -39,7 +40,7 @@
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Globe::Globe(int cenX, int cenY, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _polygons(), _radius(), _rotLon(0), _rotLat(0), _cenX(cenX), _cenY(cenY), _zoom(0), _save(0), _i(0)
+Globe::Globe(int cenX, int cenY, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _polygons(), _radius(), _rotLon(0), _rotLat(0), _cenX(cenX), _cenY(cenY), _zoom(0), _save(0), _blink(true)
 {
 	_radius.push_back(90);
 	_radius.push_back(120);
@@ -49,6 +50,10 @@ Globe::Globe(int cenX, int cenY, int width, int height, int x, int y) : Interact
 	_radius.push_back(720);
 
 	_markers = new Surface(width, height, x, y);
+
+	_timer = new Timer(100);
+	_timer->onTimer((SurfaceHandler)&Globe::blink);
+	_timer->start();
 }
 
 /**
@@ -305,6 +310,23 @@ void Globe::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 }
 
 /**
+ * Keeps the animation timers running.
+ */
+void Globe::think()
+{
+	_timer->think(0, this);
+}
+
+/**
+ * Makes the globe markers blink.
+ */
+void Globe::blink()
+{
+	_blink = !_blink;
+	drawMarkers();
+}
+
+/**
  * Draws the whole globe, rendering the ocean-coloured
  * circle and all the map polygons on top, converting
  * the polar coordinates to cartesian to simulate a 3D globe.
@@ -375,7 +397,7 @@ void Globe::drawMarkers()
 			polarToCart((*i)->getLongitude(), (*i)->getLatitude(), &x, &y);
 
 			int color = 9;
-			if (_i < 25)
+			if (_blink)
 				color++;
 
 			_markers->setPixel(x-1, y-1, color);
@@ -400,11 +422,6 @@ void Globe::drawMarkers()
  */
 void Globe::blit(Surface *surface)
 {
-	_i = (_i + 1) % 50;
-
-	// drawMarkers();
-  draw();
-
 	Surface::blit(surface);
 	_markers->blit(surface);
 }

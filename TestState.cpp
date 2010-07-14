@@ -92,6 +92,8 @@ TestState::~TestState()
 
 void TestState::think()
 {
+	State::think();
+
 	/*
 	_text->setText(_game->getResourcePack()->getLanguage()->getString(_i));
 	_i++;

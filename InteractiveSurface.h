@@ -47,7 +47,7 @@ public:
 	/// Processes any pending events.
 	virtual void handle(SDL_Event *ev, int scale, State *state);
 	/// Sets focus on this surface.
-	void focus();
+	virtual void focus();
 	/// Hooks an event handler to a mouse click on the surface.
 	void onMouseClick(EventHandler handler);
 	/// Hooks an event handler to a mouse press over the surface.

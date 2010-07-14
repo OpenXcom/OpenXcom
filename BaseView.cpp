@@ -27,6 +27,7 @@
 #include "RuleCraft.h"
 #include "Text.h"
 #include "Palette.h"
+#include "Timer.h"
 
 using namespace std;
 
@@ -41,11 +42,15 @@ using namespace std;
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-BaseView::BaseView(Font *big, Font *small, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _base(0), _texture(0), _selFacility(0), _big(big), _small(small), _gridX(0), _gridY(0), _selSize(0), _selector(0), _i(0)
+BaseView::BaseView(Font *big, Font *small, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _base(0), _texture(0), _selFacility(0), _big(big), _small(small), _gridX(0), _gridY(0), _selSize(0), _selector(0), _blink(true)
 {
 	for (int x = 0; x < BASE_SIZE; x++)
 		for (int y = 0; y < BASE_SIZE; y++)
 			_facilities[x][y] = 0;
+
+	_timer = new Timer(100);
+	_timer->onTimer((SurfaceHandler)&BaseView::blink);
+	_timer->start();
 }
 
 /**
@@ -191,6 +196,48 @@ bool BaseView::isPlaceable(RuleBaseFacility *rule)
 }
 
 /**
+ * Keeps the animation timers running.
+ */
+void BaseView::think()
+{
+	_timer->think(0, this);
+}
+
+/**
+ * Makes the facility selector blink.
+ */
+void BaseView::blink()
+{
+	_blink = !_blink;
+
+	if (_selSize > 0)
+	{
+		SDL_Rect r;
+		if (_blink)
+		{
+			r.w = _selector->getWidth();
+			r.h = _selector->getHeight();
+			r.x = 0;
+			r.y = 0;
+			SDL_FillRect(_selector->getSurface(), &r, Palette::blockOffset(1));
+			r.w -= 2;
+			r.h -= 2;
+			r.x++;
+			r.y++;
+			SDL_FillRect(_selector->getSurface(), &r, 0);
+		}
+		else
+		{
+			r.w = _selector->getWidth();
+			r.h = _selector->getHeight();
+			r.x = 0;
+			r.y = 0;
+			SDL_FillRect(_selector->getSurface(), &r, 0);
+		}
+	}
+}
+
+/**
  * Draws the view of all the facilities in the base, connectors
  * between them and crafts landed in hangars.
  */
@@ -322,37 +369,6 @@ void BaseView::draw()
  */
 void BaseView::blit(Surface *surface)
 {
-	if (_selSize > 0)
-		_i = (_i + 1) % 30;
-	else
-		_i = 0;
-
-	if (_selSize > 0)
-	{
-		SDL_Rect r;
-		if (_i < 15)
-		{
-			r.w = _selector->getWidth();
-			r.h = _selector->getHeight();
-			r.x = 0;
-			r.y = 0;
-			SDL_FillRect(_selector->getSurface(), &r, Palette::blockOffset(1));
-			r.w -= 2;
-			r.h -= 2;
-			r.x++;
-			r.y++;
-			SDL_FillRect(_selector->getSurface(), &r, 0);
-		}
-		else
-		{
-			r.w = _selector->getWidth();
-			r.h = _selector->getHeight();
-			r.x = 0;
-			r.y = 0;
-			SDL_FillRect(_selector->getSurface(), &r, 0);
-		}
-	}
-
 	Surface::blit(surface);
 	if (_selector != 0)
 		_selector->blit(surface);

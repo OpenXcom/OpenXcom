@@ -88,7 +88,8 @@ void State::init()
  */
 void State::think()
 {
-
+	for (vector<Surface*>::iterator i = _surfaces.begin(); i < _surfaces.end(); i++)
+		(*i)->think();
 }
 
 /**

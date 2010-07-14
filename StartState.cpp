@@ -70,6 +70,8 @@ StartState::~StartState()
  */
 void StartState::think()
 {
+	State::think();
+
 	switch (_load)
 	{
 	case LOADING_STARTED:

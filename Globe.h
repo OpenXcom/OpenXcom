@@ -30,13 +30,14 @@ using namespace std;
 class Polygon;
 class SurfaceSet;
 class SavedGame;
+class Timer;
 
 /**
  * Interactive globe view of the world.
  * Takes a flat world map made out of land polygons with
  * polar coordinates and renders it as a 3D-looking globe
  * with cartesian coordinates that the player can interact with.
- * @todo Texture rendering, countries and cities and stuffs.
+ * @todo Fix edges, add countries and cities and stuffs.
  */
 class Globe : public InteractiveSurface
 {
@@ -48,8 +49,9 @@ private:
 	unsigned int _zoom;
 	SurfaceSet *_texture[NUM_SHADES];
 	SavedGame *_save;
-	int _i;
 	Surface *_markers;
+	bool _blink;
+	Timer *_timer;
 
 	/// Checks if a point is behind the globe.
 	bool pointBack(double lon, double lat);
@@ -82,6 +84,10 @@ public:
 	bool insideLand(double lon, double lat);
 	/// Sets the palette of the globe.
 	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
+	/// Handles the timers.
+	void think();
+	/// Blinks the markers.
+	void blink();
 	/// Draws the globe.
 	void draw();
 	/// Draws all the markers over the globe.

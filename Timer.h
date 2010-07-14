@@ -21,8 +21,10 @@
 
 #include "SDL.h"
 #include "State.h"
+#include "Surface.h"
 
-typedef State &(State::*TimerHandler)();
+typedef State &(State::*StateHandler)();
+typedef Surface &(Surface::*SurfaceHandler)();
 
 /**
  * Timer used to run code in fixed intervals.
@@ -34,7 +36,8 @@ class Timer
 private:
 	Uint32 _start, _interval;
 	bool _running;
-	TimerHandler _timer;
+	StateHandler _state;
+	SurfaceHandler _surface;
 public:
 	/// Creates a stopped timer.
 	Timer(Uint32 interval);
@@ -47,11 +50,13 @@ public:
 	/// Gets the current time interval.
 	Uint32 getTime();
 	/// Advances the timer.
-	void think(State* state);
+	void think(State* state, Surface* surface);
 	/// Sets the timer's interval.
 	void setInterval(Uint32 interval);
-	/// Hooks an event handler to the timer interval.
-	void onTimer(TimerHandler handler);
+	/// Hooks a state event handler to the timer interval.
+	void onTimer(StateHandler handler);
+	/// Hooks a surface event handler to the timer interval.
+	void onTimer(SurfaceHandler handler);
 };
 
 #endif

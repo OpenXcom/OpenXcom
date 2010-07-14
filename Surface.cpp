@@ -241,6 +241,15 @@ void Surface::invert(Uint8 mid)
 }
 
 /**
+ * Runs any code the surface needs to keep updating every
+ * game cycle, like animations and other real-time elements.
+ */
+void Surface::think()
+{
+
+}
+
+/**
  * Draws the graphic that the surface contains and
  * gets blitted onto other surfaces.
  */

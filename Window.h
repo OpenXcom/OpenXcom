@@ -21,6 +21,8 @@
 
 #include "Surface.h"
 
+class Timer;
+
 /**
  * Enumeration for the type of animation when a window pops up.
  */
@@ -39,6 +41,7 @@ private:
 	Uint8 _color;
 	WindowPopup _popup;
 	double _popupStep;
+	Timer *_timer;
 
 public:
 	/// Creates a new window with the specified size and position
@@ -51,10 +54,12 @@ public:
 	void setColor(Uint8 color);
 	/// Gets the border color.
 	Uint8 getColor();
+	/// Handles the timers.
+	void think();
+	/// Popups the window.
+	void popup();
 	/// Draws the window.
 	void draw();
-	/// Blits the window onto another surface.
-	void blit(Surface *surface);
 };
 
 #endif

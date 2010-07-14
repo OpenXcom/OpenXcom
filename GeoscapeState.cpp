@@ -257,9 +257,9 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _rotLon(0), _rotLat(0), 
 	_txtYear->setText("");
 	_txtYear->setAlign(ALIGN_CENTER);
 
-	_rotTimer->onTimer((TimerHandler)&GeoscapeState::globeRotate);
+	_rotTimer->onTimer((StateHandler)&GeoscapeState::globeRotate);
 
-	_gameTimer->onTimer((TimerHandler)&GeoscapeState::timeAdvance);
+	_gameTimer->onTimer((StateHandler)&GeoscapeState::timeAdvance);
 	_gameTimer->start();
 
 	// Set music
@@ -296,8 +296,10 @@ void GeoscapeState::init()
  */
 void GeoscapeState::think()
 {
-	_rotTimer->think(this);
-	_gameTimer->think(this);
+	State::think();
+
+	_rotTimer->think(this, 0);
+	_gameTimer->think(this, 0);
 }
 
 /**
@@ -391,6 +393,7 @@ void GeoscapeState::timeAdvance()
 	_pause = false;
 
 	timeDisplay();
+	_globe->draw();
 }
 
 /**
