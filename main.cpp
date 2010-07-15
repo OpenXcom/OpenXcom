@@ -62,7 +62,7 @@ int main(int argc, char** args)
 	}
 	catch (char* c)
 	{
-		cout << "ERROR: " << c << endl;
+		cerr << "ERROR: " << c << endl;
 		exit(-1);
 	}
 	
