@@ -163,6 +163,8 @@
 		<Unit filename="SoldiersState.h" />
 		<Unit filename="Sound.cpp" />
 		<Unit filename="Sound.h" />
+		<Unit filename="SoundSet.cpp" />
+		<Unit filename="SoundSet.h" />
 		<Unit filename="StartState.cpp" />
 		<Unit filename="StartState.h" />
 		<Unit filename="State.cpp" />

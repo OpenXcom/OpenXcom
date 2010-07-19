@@ -175,7 +175,7 @@ bool BaseView::isPlaceable(RuleBaseFacility *rule)
 	{
 		for (int x = _gridX; x < _gridX + rule->getSize(); x++)
 		{
-			if (x > BASE_SIZE || y > BASE_SIZE)
+			if (x < 0 || x >= BASE_SIZE || y < 0 || y >= BASE_SIZE)
 				return false;
 			if (_facilities[x][y] != 0)
 				return false;
@@ -193,6 +193,73 @@ bool BaseView::isPlaceable(RuleBaseFacility *rule)
 	}
 
 	return false;
+}
+
+/**
+ * Counts all the occupied squares connected to a certain position in the
+ * grid inclusive, but ignoring facilities under construction.
+ * Mostly used to ensure a base stays connected to the Access Lift.
+ * @param x X position in grid.
+ * @param y Y position in grid.
+ * @param grid Pointer to connection grid (Null to create one from scratch).
+ * @param remove Facility to ignore (in case of facility dismantling).
+ * @return Number of squares connected to the starting position.
+ */
+int BaseView::countConnected(int x, int y, int **grid, BaseFacility *remove)
+{
+	int total = 0;
+
+	// Create connection grid
+	if (grid == 0)
+	{
+		grid = new int*[BASE_SIZE];
+
+		for (int xx = 0; xx < BASE_SIZE; xx++)
+		{
+			grid[xx] = new int[BASE_SIZE];
+			for (int yy = 0; yy < BASE_SIZE; yy++)
+			{
+				if (_facilities[xx][yy] == 0 || _facilities[xx][yy] == remove)
+					grid[xx][yy] = -1;
+				else if (_facilities[xx][yy]->getBuildTime() > 0)
+					grid[xx][yy] = -1;
+				else
+					grid[xx][yy] = 0;
+			}
+		}
+	}
+
+	if (x < 0 || x >= BASE_SIZE || y < 0 || y >= BASE_SIZE)
+		return 0;
+
+	// Add connected facilities to grid
+	if (grid[x][y] == 0)
+	{
+		grid[x][y]++;
+		total++;
+	}
+	if (x > 0 && grid[x - 1][y] == 0)
+	{
+		grid[x - 1][y]++;
+		total += 1 + countConnected(x - 1, y, grid);
+	}
+	if (y > 0 && grid[x][y - 1] == 0)
+	{
+		grid[x][y - 1]++;
+		total += 1 + countConnected(x, y - 1, grid);
+	}
+	if (x + 1 < BASE_SIZE && grid[x + 1][y] == 0)
+	{
+		grid[x + 1][y]++;
+		total += 1 + countConnected(x + 1, y, grid);
+	}
+	if (y + 1 < BASE_SIZE && grid[x][y + 1] == 0)
+	{
+		grid[x][y + 1]++;
+		total += 1 + countConnected(x, y + 1, grid);
+	}
+
+	return total;
 }
 
 /**

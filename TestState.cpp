@@ -31,7 +31,10 @@
 #include "Window.h"
 #include "Text.h"
 #include "TextList.h"
-#include "Sound.h"
+
+#include "SDL_mixer.h"
+#include "SDL.h"
+#include <fstream>
 
 using namespace std;
 
@@ -80,9 +83,50 @@ TestState::TestState(Game *game) : State(game)
 	
 	_i = 0;
 
-	Sound *s = new Sound();
-	cout << s->load("DATA/SOUND/SAMPLE.CAT") << endl;
-	s->play();
+	ifstream sndFile ("DATA/SOUND/SAMPLE.CAT", ios::in | ios::binary);
+	if (!sndFile)
+	{
+		throw "Failed to load CAT";
+	}
+
+	int first;
+	sndFile.read((char*)&first, sizeof(first));
+
+	cout << first << endl;
+	cout << first / sizeof(first) / 2 << endl;
+
+	sndFile.seekg(0, ios::beg);
+
+	int offset, size;
+	sndFile.read((char*)&offset, sizeof(offset));
+	sndFile.read((char*)&size, sizeof(size));
+
+	cout << offset << endl;
+	cout << size << endl;
+
+	sndFile.seekg(offset, ios::beg);
+
+	char namesize;
+	char *name;
+
+	sndFile.read(&namesize, 1);
+	name = new char[namesize];
+	sndFile.read(name, namesize);
+
+	cout << name << endl;
+
+	char *sound = new char[size];
+	sndFile.read(sound, size);
+	
+	SDL_RWops *rw = SDL_RWFromMem(sound, size);
+
+	Mix_Chunk *wav = Mix_LoadWAV_RW(rw, 1);
+	if (wav == 0)
+		cout << Mix_GetError() << endl;
+
+	Mix_PlayChannel(-1, wav, 0);
+
+	sndFile.close();
 }
 
 TestState::~TestState()

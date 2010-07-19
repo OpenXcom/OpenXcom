@@ -19,6 +19,9 @@
 #include "Window.h"
 #include "SDL.h"
 #include "Timer.h"
+#include "Sound.h"
+
+Sound *Window::soundPopup = 0;
 
 /**
  * Sets up a blank window with the specified size and position.
@@ -39,6 +42,8 @@ Window::Window(int width, int height, int x, int y, WindowPopup popup) : Surface
 	}
 	else
 	{
+		if (soundPopup != 0)
+			soundPopup->play();
 		_timer->start();
 	}
 }

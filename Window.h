@@ -22,6 +22,7 @@
 #include "Surface.h"
 
 class Timer;
+class Sound;
 
 /**
  * Enumeration for the type of animation when a window pops up.
@@ -44,6 +45,7 @@ private:
 	Timer *_timer;
 
 public:
+	static Sound *soundPopup;
 	/// Creates a new window with the specified size and position
 	Window(int width, int height, int x = 0, int y = 0, WindowPopup popup = POPUP_NONE);
 	/// Cleans up the window

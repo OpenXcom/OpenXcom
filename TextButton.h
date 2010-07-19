@@ -23,6 +23,7 @@
 
 class Text;
 class Font;
+class Sound;
 
 /**
  * Coloured button with a text label.
@@ -38,6 +39,7 @@ private:
 	Text *_text;
 	TextButton **_group;
 public:
+	static Sound *soundPress;
 	/// Creates a new text button with the specified size and position.
 	TextButton(Font *big, Font *small, int width, int height, int x = 0, int y = 0);
 	/// Cleans up the text button.

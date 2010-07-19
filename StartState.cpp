@@ -95,7 +95,7 @@ void StartState::think()
 		_load = LOADING_STARTED;
 		break;
 	case LOADING_SUCCESSFUL:
-		//game->setState(new TestState(game));
+		//_game->setState(new TestState(_game));
 		_game->setState(new LanguageState(_game));
 		break;
 	default:

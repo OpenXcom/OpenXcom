@@ -27,6 +27,9 @@
 #include "Music.h"
 #include "Globe.h"
 #include "Polygon.h"
+#include "SoundSet.h"
+#include "TextButton.h"
+#include "Window.h"
 
 /**
  * Initializes the resource pack by loading all the resources
@@ -215,8 +218,8 @@ XcomResourcePack::XcomResourcePack(string folder) : ResourcePack(folder)
 
 	// Load musics
 	string mus[] = {"GMSTORY",
-					 "GMGEO1",
-					 "GMGEO2"};
+					"GMGEO1",
+					"GMGEO2"};
 	string exts[] = {"OGG", "MP3", "MID"};
 
 	for (int i = 0; i < 3; i++)
@@ -231,6 +234,23 @@ XcomResourcePack::XcomResourcePack(string folder) : ResourcePack(folder)
 		}
 		cout << mus[i] << endl;
 	}
+
+	// Load sounds
+	string cats[] = {"SAMPLE.CAT",
+					"SAMPLE2.CAT",
+					"SAMPLE3.CAT"};
+
+	for (int i = 0; i < 3; i++)
+	{
+		stringstream s;
+		s << folder << "SOUND/" << cats[i];
+		_sounds[cats[i]] = new SoundSet();
+		_sounds[cats[i]]->loadCat(s.str());
+		cout << cats[i] << endl;
+	}
+
+	TextButton::soundPress = _sounds["SAMPLE.CAT"]->getSound(0);
+	Window::soundPopup = _sounds["SAMPLE.CAT"]->getSound(1);
 }
 
 /**

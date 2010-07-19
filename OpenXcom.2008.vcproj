@@ -322,6 +322,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\SoundSet.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\SoundSet.h"
+				>
+			</File>
+			<File
 				RelativePath=".\State.cpp"
 				>
 			</File>

@@ -68,10 +68,8 @@ void SurfaceSet::loadPck(string filename)
 {
 	int nframes = 0;
 
-	string pck = string();
-	string tab = string();
-	pck = filename.substr(0, filename.length()-4)+".PCK";
-	tab = filename.substr(0, filename.length()-4)+".TAB";
+	string pck = filename.substr(0, filename.length()-4) + ".PCK";
+	string tab = filename.substr(0, filename.length()-4) + ".TAB";
 
 	// Load TAB and get image offsets
 	ifstream offsetFile (tab.c_str(), ios::in | ios::binary);

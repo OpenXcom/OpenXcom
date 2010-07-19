@@ -25,6 +25,7 @@
 #include "Music.h"
 #include "Globe.h"
 #include "Polygon.h"
+#include "SoundSet.h"
 
 /**
  * Initializes a blank resource set pointing to a folder.
@@ -64,6 +65,10 @@ ResourcePack::~ResourcePack()
 		delete i->second;
 	}
 	for (map<string, Music*>::iterator i = _musics.begin(); i != _musics.end(); i++)
+	{
+		delete i->second;
+	}
+	for (map<string, SoundSet*>::iterator i = _sounds.begin(); i != _sounds.end(); i++)
 	{
 		delete i->second;
 	}
@@ -143,11 +148,21 @@ vector<Polygon*> *ResourcePack::getPolygons()
 /**
  * Returns a specific music from the resource set.
  * @param name Name of the music.
- * @return Pointer to the Music.
+ * @return Pointer to the music.
  */
 Music *ResourcePack::getMusic(string name)
 {
 	return _musics[name];
+}
+
+/**
+ * Returns a specific sound set from the resource set.
+ * @param name Name of the sound set.
+ * @return Pointer to the sound set.
+ */
+SoundSet *ResourcePack::getSoundSet(string name)
+{
+	return _sounds[name];
 }
 
 /**

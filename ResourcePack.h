@@ -31,6 +31,7 @@ class Font;
 class Palette;
 class Polygon;
 class Music;
+class SoundSet;
 
 using namespace std;
 
@@ -54,6 +55,7 @@ protected:
 	map<string, Language*> _languages;
 	map<string, Surface*> _surfaces;
 	map<string, SurfaceSet*> _sets;
+	map<string, SoundSet*> _sounds;
 	vector<Polygon*> _polygons;
 	map<string, Music*> _musics;
 public:
@@ -77,6 +79,8 @@ public:
 	vector<Polygon*> *getPolygons();
 	/// Gets a particular music.
 	Music *getMusic(string name);
+	/// Gets a particular sound set.
+	SoundSet *getSoundSet(string name);
 	/// Gets a particular palette.
 	Palette *getPalette(string name);
 	/// Sets a new palette.

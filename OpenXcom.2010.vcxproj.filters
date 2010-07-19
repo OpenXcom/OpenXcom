@@ -218,6 +218,9 @@
     <ClCompile Include="StartState.cpp">
       <Filter>States</Filter>
     </ClCompile>
+    <ClCompile Include="SoundSet.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbandonGameState.h">
@@ -438,6 +441,9 @@
     </ClInclude>
     <ClInclude Include="StartState.h">
       <Filter>States</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundSet.h">
+      <Filter>Engine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

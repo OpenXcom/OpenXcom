@@ -111,6 +111,7 @@
     <ClCompile Include="BuildNewBaseState.cpp" />
     <ClCompile Include="PlaceLiftState.cpp" />
     <ClCompile Include="Sound.cpp" />
+    <ClCompile Include="SoundSet.cpp" />
     <ClCompile Include="StartState.cpp" />
     <ClCompile Include="TextButton.cpp" />
     <ClCompile Include="Craft.cpp" />
@@ -187,6 +188,7 @@
     <ClInclude Include="InteractiveSurface.h" />
     <ClInclude Include="PlaceLiftState.h" />
     <ClInclude Include="Sound.h" />
+    <ClInclude Include="SoundSet.h" />
     <ClInclude Include="StartState.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="TextButton.h" />

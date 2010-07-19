@@ -21,6 +21,9 @@
 #include "SDL.h"
 #include "Text.h"
 #include "Font.h"
+#include "Sound.h"
+
+Sound *TextButton::soundPress = 0;
 
 /**
  * Sets up a text button with the specified size and position.
@@ -177,6 +180,9 @@ void TextButton::mousePress(SDL_Event *ev, int scale, State *state)
 {
 	if (ev->button.button == SDL_BUTTON_LEFT)
 	{
+		if (soundPress != 0)
+			soundPress->play();
+
 		if (_group != 0)
 			*_group = this;
 

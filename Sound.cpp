@@ -17,7 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Sound.h"
-#include <sys/stat.h>
+#include "SDL.h"
 
 /**
  * Initializes a new sound effect.
@@ -41,15 +41,28 @@ Sound::~Sound()
  */
 bool Sound::load(string filename)
 {
-	struct stat info;
-	if (stat(filename.c_str(), &info) != 0) 
-	{
-		return false;
-	}
 	_sound = Mix_LoadWAV(filename.c_str());
 	if (_sound == 0) 
 	{
-		//throw Mix_GetError();
+		throw Mix_GetError();
+		return false;
+	}
+	return true;
+}
+
+/**
+ * Loads a sound file from a specified memory chunk.
+ * @param sound Pointer to the sound file in memory
+ * @param size Size of the sound file in bytes.
+ * @return True if the sound was loaded successfully, False otherwise.
+ */
+bool Sound::load(void *sound, int size)
+{
+	SDL_RWops *rw = SDL_RWFromMem(sound, size);
+	_sound = Mix_LoadWAV_RW(rw, 1);
+	if (_sound == 0) 
+	{
+		throw Mix_GetError();
 		return false;
 	}
 	return true;
@@ -62,6 +75,6 @@ void Sound::play()
 {
 	if (Mix_PlayChannel(-1, _sound, 0) == -1) 
 	{
-		//throw Mix_GetError();
+		throw Mix_GetError();
 	}
 }

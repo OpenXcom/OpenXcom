@@ -66,6 +66,7 @@ Uint32 Timer::getTime()
  * The timer keeps calculating the passed time while it's running,
  * calling the respective event handler whenever the set interval passes.
  * @param state State that the event handler belongs to.
+ * @param surface Surface that the event handler belongs to.
  */
 void Timer::think(State* state, Surface* surface)
 {

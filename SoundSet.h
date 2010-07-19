@@ -16,33 +16,37 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM__SOUND_H
-#define OPENXCOM__SOUND_H
+#ifndef OPENXCOM__SOUNDSET_H
+#define OPENXCOM__SOUNDSET_H
 
-#include "SDL_mixer.h"
+#include <vector>
 #include <string>
+
+class Sound;
 
 using namespace std;
 
 /**
- * Container for sound effects.
- * Handles loading and playing various formats through SDL_mixer.
+ * Container of a set of sounds.
+ * Used to manage file sets that contain a pack
+ * of sounds inside.
  */
-class Sound
+class SoundSet
 {
 private:
-	Mix_Chunk *_sound;
+	int _width, _height;
+	vector<Sound*> _sounds;
 public:
-	/// Creates a blank sound effect.
-	Sound();
-	/// Cleans up the sound effect.
-	~Sound();
-	/// Loads sound from the specified file.
-	bool load(string filename);
-	/// Loads sound from the specified memory.
-	bool load(void *sound, int size);
-	/// Plays the sound.
-	void play();
+	/// Crates a sound set.
+	SoundSet();
+	/// Cleans up the sound set.
+	~SoundSet();
+	/// Loads an X-Com CAT set of sound files.
+	void loadCat(string filename);
+	/// Gets a particular sound from the set.
+	Sound *getSound(int i);
+	/// Gets the total sounds in the set.
+	int getTotalSounds();
 };
 
 #endif

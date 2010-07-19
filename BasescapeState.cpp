@@ -326,8 +326,23 @@ void BasescapeState::viewClick(SDL_Event *ev, int scale)
 	BaseFacility *fac = _view->getSelectedFacility();
 	if (fac != 0)
 	{
+		// Pre-calculate values to ensure base stays connected
+		int x = -1, y = -1, squares = 0;
+		for (vector<BaseFacility*>::iterator i = _base->getFacilities()->begin(); i != _base->getFacilities()->end(); i++)
+		{
+			if ((*i)->getRules()->getLift())
+			{
+				x = (*i)->getX();
+				y = (*i)->getY();
+			}
+			if ((*i)->getBuildTime() == 0)
+				squares += (*i)->getRules()->getSize() * (*i)->getRules()->getSize();
+		}
+		squares -= fac->getRules()->getSize() * fac->getRules()->getSize();
+
+		// Is facility in use?
 		if (fac->getBuildTime() == 0 &&
-			(fac->getRules()->getLift() == true ||
+			(fac->getRules()->getLift() ||
 			_base->getAvailableQuarters() - fac->getRules()->getPersonnel() < _base->getUsedQuarters() ||
 			_base->getAvailableStores() - fac->getRules()->getStorage() < _base->getUsedStores() ||
 			_base->getAvailableLaboratories() - fac->getRules()->getLaboratories() < _base->getUsedLaboratories() ||
@@ -335,6 +350,11 @@ void BasescapeState::viewClick(SDL_Event *ev, int scale)
 			_base->getAvailableHangars() - fac->getRules()->getCrafts() < _base->getUsedHangars()))
 		{
 			_game->pushState(new BasescapeErrorState(_game, STR_FACILITY_IN_USE));
+		}
+		// Would base become disconnected? (ocuppied squares connected to Access Lift < total squares occupied by base)
+		else if (_view->countConnected(x, y, 0, fac) < squares)
+		{
+			_game->pushState(new BasescapeErrorState(_game, STR_CANNOT_DISMANTLE_FACILITY));
 		}
 		else
 		{

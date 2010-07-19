@@ -65,6 +65,8 @@ public:
 	void setSelectable(int size);
 	/// Checks if a facility can be placed.
 	bool isPlaceable(RuleBaseFacility *rule);
+	/// Counts the squares connected to a grid position.
+	int countConnected(int x, int y, int **grid, BaseFacility *remove = 0);
 	/// Handles the timers.
 	void think();
 	/// Blinks the selector.
