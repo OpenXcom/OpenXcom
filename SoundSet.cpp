@@ -70,8 +70,8 @@ void SoundSet::loadCat(string filename)
 
 	for (int i = 0; i < amount; i++)
 	{
-		sndFile.read((char*)&offset[i], sizeof(offset));
-		sndFile.read((char*)&size[i], sizeof(size));
+		sndFile.read((char*)&offset[i], sizeof(*offset));
+		sndFile.read((char*)&size[i], sizeof(*size));
 	}
 	
 	// Load each sound file
@@ -100,6 +100,7 @@ void SoundSet::loadCat(string filename)
 		catch (char* c)
 		{
 			// Ignore junk in the file
+			c = c;
 		}
 		_sounds.push_back(s);
 
@@ -117,7 +118,7 @@ void SoundSet::loadCat(string filename)
  * @param i Sound number in the set.
  * @return Pointer to the respective sound.
  */
-Sound *SoundSet::getSound(int i)
+Sound *SoundSet::getSound(unsigned int i)
 {
 	if (i >= _sounds.size())
 		return 0;

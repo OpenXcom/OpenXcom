@@ -44,7 +44,7 @@ public:
 	/// Loads an X-Com CAT set of sound files.
 	void loadCat(string filename);
 	/// Gets a particular sound from the set.
-	Sound *getSound(int i);
+	Sound *getSound(unsigned int i);
 	/// Gets the total sounds in the set.
 	int getTotalSounds();
 };

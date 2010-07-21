@@ -333,16 +333,44 @@ void Globe::blink()
  */
 void Globe::draw()
 {
+	int _shades[48] = { 3, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3,
+						4, 5, 6, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 6, 5, 4 };
+	Sint16 x[4], y[4];
+	double tmpLon, minLon, maxLon;
+	double tmpLat;
+	int shade;
+	bool backFace;
+	double curTime = (double)((((((_save->getTime()->getHour() + 18) % 24) * 60) + _save->getTime()->getMinute()) * 60) + _save->getTime()->getSecond()) / 86400;
+
 	clear();
 
-	double curTime = (double)(((((_save->getTime()->getHour() - 6) * 60) + _save->getTime()->getMinute()) * 60) + _save->getTime()->getSecond()) / 86400;
+	for (tmpLon = 0.0; tmpLon <= 2 * PI; tmpLon += 0.2)
+	{
+		for (tmpLat = PI / 2; tmpLat <= 3 * (PI / 2); tmpLat += 0.1)
+		{
+			polarToCart(tmpLon, tmpLat, &x[0], &y[0]);
+			polarToCart(tmpLon, tmpLat + 0.1, &x[1], &y[1]);
+			polarToCart(tmpLon + 0.2, tmpLat + 0.1, &x[2], &y[2]);
+			polarToCart(tmpLon + 0.2, tmpLat, &x[3], &y[3]);
 
-	filledCircleColor(this->getSurface(), _cenX, _cenY, (Sint16)floor(_radius[_zoom]), Palette::getRGBA(this->getPalette(), Palette::blockOffset(12)));
+			backFace = true;
+			backFace = backFace && pointBack(tmpLon, tmpLat);
+			backFace = backFace && pointBack(tmpLon, tmpLat + 0.1);
+			backFace = backFace && pointBack(tmpLon + 0.1, tmpLat + 0.1);
+			backFace = backFace && pointBack(tmpLon + 0.1, tmpLat);
+			if (!backFace)
+			{
+				shade = (int)((curTime + (tmpLon/(2*PI))) * 48) + 24;
+				shade = _shades[shade % 48] * 4;
+				filledPolygonColor(getSurface(), (Sint16*)&x, (Sint16*)&y, 4, Palette::getRGBA(this->getPalette(), Palette::blockOffset(12) + shade));
+			}
+		}
+	}
 
-	for (vector<Polygon*>::iterator i = _polygons->begin(); i < _polygons->end(); i++)
+	for (vector<Polygon*>::iterator i = _polygons->begin(); i != _polygons->end(); i++)
 	{
 		// Don't draw if polygon is facing back
-		bool backFace = true;
+		backFace = true;
 		for (int j = 0; j < (*i)->getPoints(); j++)
 		{
 			backFace = backFace && pointBack((*i)->getLongitude(j), (*i)->getLatitude(j));
@@ -350,24 +378,24 @@ void Globe::draw()
 		if (backFace)
 			continue;
 
-		Sint16 x[4], y[4];
-		double tmpLon, minLon, maxLon;
-		
 		// Convert coordinates
 		for (int j = 0; j < (*i)->getPoints(); j++)
 		{
 			tmpLon = (*i)->getLongitude(j);
+			tmpLat = (*i)->getLatitude(j);
+
 			if (j == 0 || (tmpLon < minLon && tmpLon >= (maxLon - PI)))
 				minLon = tmpLon;
 			if (j == 0 || (tmpLon > maxLon && tmpLon <= (minLon + PI)))
 				maxLon = tmpLon;
 
-			polarToCart(tmpLon, (*i)->getLatitude(j), &x[j], &y[j]);
+			polarToCart(tmpLon, tmpLat, &x[j], &y[j]);
 		}
 
 		// Apply textures according to zoom and shade
-		int zoom = (2 - (int)floor((double)(_zoom) / 2)) * NUM_TEXTURES;
-		int shade = (int)(( sin( (curTime * 2 * PI) + ((minLon + maxLon) / 2) ) - 1 ) * -4);
+		int zoom = (2 - (int)floor((double)_zoom / 2)) * NUM_TEXTURES;
+		shade = (int)((curTime + (((minLon + maxLon) / 2) / (2 * PI))) * 48);
+		shade = _shades[shade % 48];
 		texturedPolygon(getSurface(), (Sint16*)&x, (Sint16*)&y, (*i)->getPoints(), _texture[shade]->getFrame((*i)->getTexture() + zoom)->getSurface(), 0, 0);
 	}
 
