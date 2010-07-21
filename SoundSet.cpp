@@ -50,7 +50,7 @@ SoundSet::~SoundSet()
 void SoundSet::loadCat(string filename)
 {
 	// Load CAT file
-	ifstream sndFile ("DATA/SOUND/SAMPLE.CAT", ios::in | ios::binary);
+	ifstream sndFile (filename, ios::in | ios::binary);
 	if (!sndFile)
 	{
 		throw "Failed to load CAT";
@@ -93,7 +93,14 @@ void SoundSet::loadCat(string filename)
 		sndFile.read(sound, size[i]);
 
 		Sound *s = new Sound();
-		s->load(sound, size[i]);
+		try
+		{
+			s->load(sound, size[i]);
+		}
+		catch (char* c)
+		{
+			// Ignore junk in the file
+		}
 		_sounds.push_back(s);
 
 		delete sound;
@@ -112,6 +119,8 @@ void SoundSet::loadCat(string filename)
  */
 Sound *SoundSet::getSound(int i)
 {
+	if (i >= _sounds.size())
+		return 0;
 	return _sounds[i];
 }
 

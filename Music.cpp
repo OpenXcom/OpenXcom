@@ -17,7 +17,6 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Music.h"
-#include <sys/stat.h>
 
 /**
  * Initializes a new music track.
@@ -37,22 +36,12 @@ Music::~Music()
 /**
  * Loads a music file from a specified filename.
  * @param filename Filename of the music file.
- * @return True if the music was loaded successfully, False otherwise.
  */
-bool Music::load(string filename)
+void Music::load(string filename)
 {
-	struct stat info;
-	if (stat(filename.c_str(), &info) != 0) 
-	{
-		return false;
-	}
 	_music = Mix_LoadMUS(filename.c_str());
 	if (_music == 0) 
-	{
-		//throw Mix_GetError();
-		return false;
-	}
-	return true;
+		throw Mix_GetError();
 }
 
 /**
@@ -60,8 +49,6 @@ bool Music::load(string filename)
  */
 void Music::play()
 {
-	if (Mix_PlayMusic(_music, -1) == -1) 
-	{
-		//throw Mix_GetError();
-	}
+	if (_music != 0 && Mix_PlayMusic(_music, -1) == -1) 
+		throw Mix_GetError();
 }

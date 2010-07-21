@@ -37,35 +37,25 @@ Sound::~Sound()
 /**
  * Loads a sound file from a specified filename.
  * @param filename Filename of the sound file.
- * @return True if the sound was loaded successfully, False otherwise.
  */
-bool Sound::load(string filename)
+void Sound::load(string filename)
 {
 	_sound = Mix_LoadWAV(filename.c_str());
 	if (_sound == 0) 
-	{
 		throw Mix_GetError();
-		return false;
-	}
-	return true;
 }
 
 /**
  * Loads a sound file from a specified memory chunk.
  * @param sound Pointer to the sound file in memory
  * @param size Size of the sound file in bytes.
- * @return True if the sound was loaded successfully, False otherwise.
  */
-bool Sound::load(void *sound, int size)
+void Sound::load(void *sound, int size)
 {
 	SDL_RWops *rw = SDL_RWFromMem(sound, size);
 	_sound = Mix_LoadWAV_RW(rw, 1);
-	if (_sound == 0) 
-	{
+	if (_sound == 0)
 		throw Mix_GetError();
-		return false;
-	}
-	return true;
 }
 
 /**
@@ -73,8 +63,6 @@ bool Sound::load(void *sound, int size)
  */
 void Sound::play()
 {
-	if (Mix_PlayChannel(-1, _sound, 0) == -1) 
-	{
+	if (_sound != 0 && Mix_PlayChannel(-1, _sound, 0) == -1) 
 		throw Mix_GetError();
-	}
 }

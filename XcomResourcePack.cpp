@@ -19,6 +19,7 @@
 #include "XcomResourcePack.h"
 #include <iostream>
 #include <sstream>
+#include <sys/stat.h>
 #include "Palette.h"
 #include "Font.h"
 #include "Surface.h"
@@ -229,8 +230,12 @@ XcomResourcePack::XcomResourcePack(string folder) : ResourcePack(folder)
 		{
 			stringstream s;
 			s << folder << "SOUND/" << mus[i] << "." << exts[j];
-			if (_musics[mus[i]]->load(s.str()))
+			struct stat info;
+			if (stat(s.str().c_str(), &info) == 0) 
+			{
+				_musics[mus[i]]->load(s.str());
 				break;
+			}
 		}
 		cout << mus[i] << endl;
 	}
@@ -245,7 +250,11 @@ XcomResourcePack::XcomResourcePack(string folder) : ResourcePack(folder)
 		stringstream s;
 		s << folder << "SOUND/" << cats[i];
 		_sounds[cats[i]] = new SoundSet();
-		_sounds[cats[i]]->loadCat(s.str());
+		struct stat info;
+		if (stat(s.str().c_str(), &info) == 0) 
+		{
+			_sounds[cats[i]]->loadCat(s.str());
+		}
 		cout << cats[i] << endl;
 	}
 

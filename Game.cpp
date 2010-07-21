@@ -45,7 +45,7 @@ Game::Game(string title, int width, int height, int bpp) : _screen(0), _cursor(0
 	}
 
 	// Initialize SDL_mixer
-	if (Mix_OpenAudio(11025, AUDIO_S8, 2, 4096) != 0)
+	if (Mix_OpenAudio(11025, AUDIO_S8, 2, 1024) != 0)
 	{
 		throw Mix_GetError();
 	}

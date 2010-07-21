@@ -38,7 +38,7 @@ public:
 	/// Cleans up the music track.
 	~Music();
 	/// Loads music from the specified file.
-	bool load(string filename);
+	void load(string filename);
 	/// Plays the music.
 	void play();
 };

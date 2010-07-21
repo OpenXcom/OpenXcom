@@ -38,9 +38,9 @@ public:
 	/// Cleans up the sound effect.
 	~Sound();
 	/// Loads sound from the specified file.
-	bool load(string filename);
+	void load(string filename);
 	/// Loads sound from the specified memory.
-	bool load(void *sound, int size);
+	void load(void *sound, int size);
 	/// Plays the sound.
 	void play();
 };
