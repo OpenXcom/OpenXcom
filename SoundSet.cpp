@@ -50,7 +50,7 @@ SoundSet::~SoundSet()
 void SoundSet::loadCat(string filename)
 {
 	// Load CAT file
-	ifstream sndFile (filename, ios::in | ios::binary);
+	ifstream sndFile (filename.c_str(), ios::in | ios::binary);
 	if (!sndFile)
 	{
 		throw "Failed to load CAT";
