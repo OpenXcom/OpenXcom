@@ -37,6 +37,7 @@ private:
 	string _value;
 	bool _blink;
 	Timer *_timer;
+	char _ascii;
 public:
 	/// Creates a new text with the specified size, position and fonts.
 	TextEdit(Font *big, Font *small, int width, int height, int x = 0, int y = 0);
@@ -70,6 +71,8 @@ public:
 	void blink();
 	/// Draws the text edit.
 	void draw();
+	/// Checks if a character will exceed the maximum width.
+	bool exceedsMaxWidth(char c);
 	/// Special handling for mouse presses.
 	void mousePress(SDL_Event *ev, int scale, State *state);
 	/// Special handling for mouse releases.

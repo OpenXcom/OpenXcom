@@ -199,6 +199,7 @@ bool BaseView::isPlaceable(RuleBaseFacility *rule)
  * Counts all the occupied squares connected to a certain position in the
  * grid inclusive, but ignoring facilities under construction.
  * Mostly used to ensure a base stays connected to the Access Lift.
+ * -1 = Unoccupied, 0 = Occupied, 1 = Connected.
  * @param x X position in grid.
  * @param y Y position in grid.
  * @param grid Pointer to connection grid (Null to create one from scratch).
@@ -257,6 +258,16 @@ int BaseView::countConnected(int x, int y, int **grid, BaseFacility *remove)
 	{
 		grid[x][y + 1]++;
 		total += 1 + countConnected(x, y + 1, grid);
+	}
+
+	// Delete connection grid
+	if (grid == 0)
+	{		
+		for (int xx = 0; xx < BASE_SIZE; xx++)
+		{
+			delete grid[xx];
+		}
+		delete grid;
 	}
 
 	return total;

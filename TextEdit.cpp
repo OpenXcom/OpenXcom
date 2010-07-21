@@ -34,7 +34,7 @@ using namespace std;
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-TextEdit::TextEdit(Font *big, Font *small, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _value(""), _blink(true)
+TextEdit::TextEdit(Font *big, Font *small, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _value(""), _blink(true), _ascii('A')
 {
 	_text = new Text(big, small, width, height, 0, 0);
 	_timer = new Timer(100);
@@ -184,7 +184,11 @@ void TextEdit::blink()
 void TextEdit::draw()
 {
 	stringstream ss;
+#ifdef DINGOO
+	ss << _value << _ascii;
+#else
 	ss << _value << "*";
+#endif
 	if (_isFocused && _blink)
 		_text->setText(ss.str());
 	else
@@ -192,6 +196,29 @@ void TextEdit::draw()
 
 	clear();
 	_text->blit(this);
+}
+
+/**
+ * Checks if adding a certain character to
+ * the text will exceed the maximum width.
+ * Used to make sure user input stays within bounds.
+ * @param c Character to add.
+ * @return True if it exceeds, False if it doesn't.
+ */
+bool TextEdit::exceedsMaxWidth(char c)
+{
+	int w = 0;
+	string s = _value;
+
+	s += c;
+	s += '*';
+	for (string::iterator i = s.begin(); i < s.end(); i++)
+		w += _text->getFont()->getChar(*i)->getCrop()->w + _text->getFont()->getSpacing();
+
+	if (w > _width)
+		return true;
+	else
+		return false;
 }
 
 /**
@@ -248,26 +275,36 @@ void TextEdit::keyboardPress(SDL_Event *ev, int scale, State *state)
 {
 	switch (ev->key.keysym.sym)
 	{
+#ifdef DINGOO
+	case SDLK_UP:
+		_ascii++;
+		if (_ascii > '~')
+			_ascii = ' ';
+		break;
+	case SDLK_DOWN:
+		_ascii--;
+		if (_ascii < ' ')
+			_ascii = '~';
+		break;
+	case SDLK_RIGHT:
+		if (!exceedsMaxWidth(_ascii))
+			_value += _ascii;
+		break;
+	case SDLK_LEFT:
+#endif
+	case SDLK_BACKSPACE:
+		if (_value.length() > 0)
+			_value.resize(_value.length() - 1);
+		break;
 	case SDLK_RETURN:
 		_isFocused = false;
 		_blink = false;
 		_timer->stop();
 		break;
-	case SDLK_BACKSPACE:
-		if (_value.length() > 0)
-			_value.resize(_value.length() - 1);
-		break;
 	default:
 		if (ev->key.keysym.unicode != 0)
 		{
-			int w = 0;
-			string s = _value;
-			s += (char)ev->key.keysym.unicode;
-			s += '*';
-			for (string::iterator c = s.begin(); c < s.end(); c++)
-				w += _text->getFont()->getChar(*c)->getCrop()->w + _text->getFont()->getSpacing();
-
-			if (w <= _width)
+			if (!exceedsMaxWidth((char)ev->key.keysym.unicode))
 				_value += (char)ev->key.keysym.unicode;
 		}
 	}
