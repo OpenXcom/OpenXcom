@@ -241,25 +241,56 @@ XcomResourcePack::XcomResourcePack(string folder) : ResourcePack(folder)
 	}
 
 	// Load sounds
-	string cats[] = {"SAMPLE.CAT",
-					"SAMPLE2.CAT",
-					"SAMPLE3.CAT"};
+	string catsId[] = {"GEO.CAT",
+						 "BATTLE.CAT",
+						"INTRO.CAT"};
+	string catsDos[] = {"SOUND2.CAT",
+						"SOUND1.CAT",
+						"INTRO.CAT"};
+	string catsWin[] = {"SAMPLE.CAT",
+						"SAMPLE2.CAT",
+						"SAMPLE3.CAT"};
+
+	// Check which version is available
+	string *cats = 0;
+	bool wav = true;
+
+	stringstream win, dos;
+	win << folder << "SOUND/" << catsWin[0];
+	dos << folder << "SOUND/" << catsDos[0];
+	struct stat info;
+	if (stat(win.str().c_str(), &info) == 0) 
+	{
+		cats = catsWin;
+		wav = true;
+	}
+	else if (stat(dos.str().c_str(), &info) == 0) 
+	{
+		cats = catsDos;
+		wav = false;
+	}
 
 	for (int i = 0; i < 3; i++)
 	{
-		stringstream s;
-		s << folder << "SOUND/" << cats[i];
-		_sounds[cats[i]] = new SoundSet();
-		struct stat info;
-		if (stat(s.str().c_str(), &info) == 0) 
+		if (cats == 0)
 		{
-			_sounds[cats[i]]->loadCat(s.str());
+			_sounds[catsId[i]] = new SoundSet();
 		}
-		cout << cats[i] << endl;
+		else
+		{
+			stringstream s;
+			s << folder << "SOUND/" << cats[i];
+			_sounds[catsId[i]] = new SoundSet();
+			_sounds[catsId[i]]->loadCat(s.str(), wav);
+			cout << cats[i] << endl;
+		}
 	}
 
-	TextButton::soundPress = _sounds["SAMPLE.CAT"]->getSound(0);
-	Window::soundPopup = _sounds["SAMPLE.CAT"]->getSound(1);
+	TextButton::soundPress = _sounds["GEO.CAT"]->getSound(0);
+	Window::soundPopup[0] = _sounds["GEO.CAT"]->getSound(1);
+	Window::soundPopup[1] = _sounds["GEO.CAT"]->getSound(2);
+	Window::soundPopup[2] = _sounds["GEO.CAT"]->getSound(3);
+	
 }
 
 /**

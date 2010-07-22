@@ -265,9 +265,9 @@ int BaseView::countConnected(int x, int y, int **grid, BaseFacility *remove)
 	{		
 		for (int xx = 0; xx < BASE_SIZE; xx++)
 		{
-			delete grid[xx];
+			delete[] grid[xx];
 		}
-		delete grid;
+		delete[] grid;
 	}
 
 	return total;

@@ -42,7 +42,7 @@ public:
 	/// Cleans up the sound set.
 	~SoundSet();
 	/// Loads an X-Com CAT set of sound files.
-	void loadCat(string filename);
+	void loadCat(string filename, bool wav = true);
 	/// Gets a particular sound from the set.
 	Sound *getSound(unsigned int i);
 	/// Gets the total sounds in the set.

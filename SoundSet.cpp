@@ -45,9 +45,10 @@ SoundSet::~SoundSet()
  * and size of every file contained within. Each file consists of a
  * filename followed by its contents.
  * @param filename Filename of the CAT set.
+ * @param wav Are the sounds in WAV format?
  * @sa http://www.ufopaedia.org/index.php?title=SOUND
  */
-void SoundSet::loadCat(string filename)
+void SoundSet::loadCat(string filename, bool wav)
 {
 	// Load CAT file
 	ifstream sndFile (filename.c_str(), ios::in | ios::binary);
@@ -86,16 +87,37 @@ void SoundSet::loadCat(string filename)
 		name = new char[namesize];
 		sndFile.read(name, namesize);
 
-		delete name;
+		delete[] name;
 
 		// Read WAV chunk
 		char *sound = new char[size[i]];
 		sndFile.read(sound, size[i]);
 
+		// If there's no WAV header (44 bytes), add it
+		// Assuming sounds are 8-bit 8000Hz (DOS version)
+		char *newsound = 0;
+		if (!wav)
+		{
+			char header[] = {'R', 'I', 'F', 'F', 0x00, 0x00, 0x00, 0x00, 'W', 'A', 'V', 'E', 'f', 'm', 't', ' ',
+							 0x10, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x40, 0x1f, 0x00, 0x00, 0x40, 0x1f, 0x00, 0x00, 0x01, 0x00, 0x08, 0x00,
+							 'd', 'a', 't', 'a', 0x00, 0x00, 0x00, 0x00};
+			int headersize = size[i] + 36;
+			int soundsize = size[i];
+			memcpy(header + 4, &headersize, sizeof(headersize));
+			memcpy(header + 40, &soundsize, sizeof(soundsize));
+
+			newsound = new char[44 + size[i]];
+			memcpy(newsound, header, 44);
+			memcpy(newsound + 44, sound, size[i]);
+		}
+
 		Sound *s = new Sound();
 		try
 		{
-			s->load(sound, size[i]);
+			if (wav)
+				s->load(sound, size[i]);
+			else
+				s->load(newsound, 44 + size[i]);
 		}
 		catch (char* c)
 		{
@@ -104,7 +126,9 @@ void SoundSet::loadCat(string filename)
 		}
 		_sounds.push_back(s);
 
-		delete sound;
+		delete[] sound;
+		if (!wav)
+			delete[] newsound;
 	}
 
 	delete offset;

@@ -20,8 +20,9 @@
 #include "SDL.h"
 #include "Timer.h"
 #include "Sound.h"
+#include "RNG.h"
 
-Sound *Window::soundPopup = 0;
+Sound *Window::soundPopup[3] = {0, 0, 0};
 
 /**
  * Sets up a blank window with the specified size and position.
@@ -42,8 +43,9 @@ Window::Window(int width, int height, int x, int y, WindowPopup popup) : Surface
 	}
 	else
 	{
-		if (soundPopup != 0)
-			soundPopup->play();
+		int sound = RNG::generate(0, 2);
+		if (soundPopup[sound] != 0)
+			soundPopup[sound]->play();
 		_timer->start();
 	}
 }
