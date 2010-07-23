@@ -110,6 +110,7 @@
     <ClCompile Include="CraftSoldiersState.cpp" />
     <ClCompile Include="BuildNewBaseState.cpp" />
     <ClCompile Include="PlaceLiftState.cpp" />
+    <ClCompile Include="Region.cpp" />
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="SoundSet.cpp" />
     <ClCompile Include="StartState.cpp" />
@@ -187,6 +188,7 @@
     <ClInclude Include="BuildNewBaseState.h" />
     <ClInclude Include="InteractiveSurface.h" />
     <ClInclude Include="PlaceLiftState.h" />
+    <ClInclude Include="Region.h" />
     <ClInclude Include="Sound.h" />
     <ClInclude Include="SoundSet.h" />
     <ClInclude Include="StartState.h" />

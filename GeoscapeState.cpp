@@ -480,7 +480,7 @@ void GeoscapeState::globeClick(SDL_Event *ev, int scale)
 	
 	if (ev->button.button == SDL_BUTTON_LEFT)
 	{
-		
+
 	}
 	else if (ev->button.button == SDL_BUTTON_RIGHT)
 	{

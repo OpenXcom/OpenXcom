@@ -31,6 +31,7 @@
 #include "Base.h"
 #include "SavedGame.h"
 #include "Ruleset.h"
+#include "RuleCraft.h"
 
 using namespace std;
 

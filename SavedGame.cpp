@@ -21,12 +21,13 @@
 #include "GameTime.h"
 #include "Country.h"
 #include "Base.h"
+#include "Region.h"
 
 /**
  * Initializes a brand new saved game according to the specified difficulty.
  * @param diff Game difficulty.
  */
-SavedGame::SavedGame(GameDifficulty diff) : _diff(diff), _funds(0), _bases()
+SavedGame::SavedGame(GameDifficulty diff) : _diff(diff), _funds(0), _countries(), _regions(), _bases()
 {
 	_time = new GameTime(6, 1, 1, 1999, 12, 0, 0);
 	RNG::init();
@@ -37,6 +38,14 @@ SavedGame::SavedGame(GameDifficulty diff) : _diff(diff), _funds(0), _bases()
  */
 SavedGame::~SavedGame()
 {
+	for (map<LangString, Country*>::iterator i = _countries.begin(); i != _countries.end(); i++)
+	{
+		delete i->second;
+	}
+	for (map<LangString, Region*>::iterator i = _regions.begin(); i != _regions.end(); i++)
+	{
+		delete i->second;
+	}
 	for (vector<Base*>::iterator i = _bases.begin(); i != _bases.end(); i++)
 	{
 		delete *i;
@@ -91,6 +100,15 @@ int SavedGame::getCountryFunding()
 		total += i->second->getFunding();
 	}
 	return total;
+}
+
+/**
+ * Returns the list of world regions.
+ * @return Pointer to region list.
+ */
+map<LangString, Region*> *SavedGame::getRegions()
+{
+	return &_regions;
 }
 
 /**

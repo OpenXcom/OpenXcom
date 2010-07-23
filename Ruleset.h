@@ -21,12 +21,14 @@
 
 #include <map>
 #include <vector>
+#include "LangString.h"
 #include "SavedGame.h"
-#include "RuleBaseFacility.h"
-#include "RuleCraft.h"
-#include "SoldierNamePool.h"
 
 using namespace std;
+
+class SoldierNamePool;
+class RuleBaseFacility;
+class RuleCraft;
 
 /**
  * Set of rules and stats for a game.

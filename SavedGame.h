@@ -28,6 +28,7 @@ using namespace std;
 class GameTime;
 class Country;
 class Base;
+class Region;
 
 /**
  * Enumator containing all the possible game difficulties.
@@ -46,6 +47,7 @@ private:
 	GameTime *_time;
 	int _funds;
 	map<LangString, Country*> _countries;
+	map<LangString, Region*> _regions;
 	vector<Base*> _bases;
 	map<LangString, int> _craftId;
 public:
@@ -63,6 +65,8 @@ public:
 	map<LangString, Country*> *getCountries();
 	/// Gets the total country funding.
 	int getCountryFunding();
+	/// Gets the list of regions.
+	map<LangString, Region*> *getRegions();
 	/// Gets the list of bases.
 	vector<Base*> *getBases();
 	/// Gets the total base maintenance.

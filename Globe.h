@@ -25,7 +25,7 @@
 
 using namespace std;
 
-#define NUM_SHADES 9
+#define NUM_SHADES 8
 
 class Polygon;
 class SurfaceSet;

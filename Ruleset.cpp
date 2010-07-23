@@ -17,6 +17,9 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Ruleset.h"
+#include "RuleBaseFacility.h"
+#include "RuleCraft.h"
+#include "SoldierNamePool.h"
 
 /**
  * Creates a ruleset with blank sets of rules.

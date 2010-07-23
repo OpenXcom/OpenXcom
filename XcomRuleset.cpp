@@ -17,6 +17,11 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "XcomRuleset.h"
+#include "SavedGame.h"
+#include "RuleBaseFacility.h"
+#include "RuleCraft.h"
+#include "SoldierNamePool.h"
+#include "Region.h"
 #include "RNG.h"
 #include "LangString.h"
 #include "Base.h"
@@ -460,6 +465,88 @@ SavedGame *XcomRuleset::newSave(GameDifficulty diff)
 	save->getCountries()->insert(pair<LangString, Country*>(STR_EGYPT, new Country(RNG::generate(160, 320)*1000)));
 	save->getCountries()->insert(pair<LangString, Country*>(STR_CANADA, new Country(RNG::generate(110, 220)*1000)));
 	save->setFunds(save->getCountryFunding());
+
+	// Add regions
+	Region* namerica = new Region(800000);
+	namerica->addArea(3.40339, 5.32107, -1.22173, -0.962113);
+	namerica->addArea(4.01426, 5.32107, -0.959931, -0.52578);
+	namerica->addArea(4.18879, 5.23381, -0.523599, -0.176715);
+	
+	Region* arctic = new Region(950000);
+	arctic->addArea(0, 6.281, -1.5708, -1.22391);
+	
+	Region* antarctica = new Region(900000);
+	antarctica->addArea(0, 6.281, 1.0472, 1.5708);
+	
+	Region* samerica = new Region(600000);
+	samerica->addArea(4.71239, 5.49561, -0.174533, -0.00218166);
+	samerica->addArea(4.79966, 5.7574, 0, 0.259618);
+	samerica->addArea(4.79966, 5.67014, 0.261799, 1.04502);
+	
+	Region* europe = new Region(1000000);
+	europe->addArea(5.84685, 1.04502, -1.22173, -0.613047);
+	
+	Region* nafrica = new Region(650000);
+	nafrica->addArea(5.84685, 0.69595, -0.610865, -0.263981);
+	nafrica->addArea(5.84685, 0.957749, -0.261799, -0.00218166);
+	
+	Region* safrica = new Region(550000);
+	safrica->addArea(0.0872665, 0.957749, 0, 0.69595);
+	
+	Region* casia = new Region(500000);
+	casia->addArea(0.698132, 1.21955, -0.610865, -0.263981);
+	casia->addArea(1.0472, 1.56861, -0.872665, -0.613047);
+	casia->addArea(1.22173, 1.56861, -0.610865, -0.0894481);
+	
+	Region* seasia = new Region(750000);
+	seasia->addArea(1.5708, 1.83041, -0.872665, 0.172351);
+	seasia->addArea(1.8326, 2.61581, -0.872665, -0.0894481);
+	
+	Region* siberia = new Region(800000);
+	siberia->addArea(1.0472, 3.13941, -1.22173, -0.874846);
+	
+	Region* australasia = new Region(750000);
+	//australasia->addArea(1.8326, 3.13941, -0.0872665, 0.870483);
+	australasia->addArea(1.8326, 3.13941, -0.0872665, 1.04502);
+	
+	Region* pacific = new Region(600000);
+	pacific->addArea(3.14159, 3.40121, -1.22173, -0.962113);
+	pacific->addArea(3.14159, 4.01208, -0.959931, -0.52578);
+	pacific->addArea(3.14159, 4.18661, -0.523599, -0.176715);
+	pacific->addArea(3.14159, 4.71021, -0.174533, -0.00218166);
+	pacific->addArea(3.14159, 4.79747, 0, 1.04502);
+	pacific->addArea(2.61799, 3.13941, -0.872665, -0.0894481);
+	
+	Region* natlantic = new Region(500000);
+	natlantic->addArea(5.32325, 5.84467, -1.22173, -0.52578);
+	natlantic->addArea(5.23599, 5.84467, -0.523599, -0.176715);
+	natlantic->addArea(5.49779, 5.84467, -0.174533, -0.00218166);
+	
+	Region* satlantic = new Region(500000);
+	satlantic->addArea(5.75959, 0.0850848, 0, 0.259618);
+	satlantic->addArea(5.67232, 0.0850848, 0.261799, 1.04502);
+	satlantic->addArea(0.0872665, 0.959931, 0.698132, 1.04502);
+	
+	Region* indian = new Region(500000);
+	indian->addArea(0.959931, 1.21955, -0.261799, 0.172351);
+	indian->addArea(1.22173, 1.56861, -0.0872665, 0.172351);
+	indian->addArea(0.959931, 1.83041, 0.174533, 1.04502);
+	
+	save->getRegions()->insert(pair<LangString, Region*>(STR_NORTH_AMERICA, namerica));
+	save->getRegions()->insert(pair<LangString, Region*>(STR_ARCTIC, arctic));
+	save->getRegions()->insert(pair<LangString, Region*>(STR_ANTARCTICA, antarctica));
+	save->getRegions()->insert(pair<LangString, Region*>(STR_SOUTH_AMERICA, samerica));
+	save->getRegions()->insert(pair<LangString, Region*>(STR_EUROPE, europe));
+	save->getRegions()->insert(pair<LangString, Region*>(STR_NORTH_AFRICA, nafrica));
+	save->getRegions()->insert(pair<LangString, Region*>(STR_SOUTHERN_AFRICA, safrica));
+	save->getRegions()->insert(pair<LangString, Region*>(STR_CENTRAL_ASIA, casia));
+	save->getRegions()->insert(pair<LangString, Region*>(STR_SOUTH_EAST_ASIA, seasia));
+	save->getRegions()->insert(pair<LangString, Region*>(STR_SIBERIA, siberia));
+	save->getRegions()->insert(pair<LangString, Region*>(STR_AUSTRALASIA, australasia));
+	save->getRegions()->insert(pair<LangString, Region*>(STR_PACIFIC, pacific));
+	save->getRegions()->insert(pair<LangString, Region*>(STR_NORTH_ATLANTIC, natlantic));
+	save->getRegions()->insert(pair<LangString, Region*>(STR_SOUTH_ATLANTIC, satlantic));
+	save->getRegions()->insert(pair<LangString, Region*>(STR_INDIAN_OCEAN, indian));
 	
 	// Set up craft IDs
 	save->getCraftIds()->insert(pair<LangString, int>(STR_SKYRANGER, 1));

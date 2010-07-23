@@ -137,6 +137,8 @@
 		<Unit filename="PurchaseState.h" />
 		<Unit filename="RNG.cpp" />
 		<Unit filename="RNG.h" />
+		<Unit filename="Region.cpp" />
+		<Unit filename="Region.h" />
 		<Unit filename="ResearchState.cpp" />
 		<Unit filename="ResearchState.h" />
 		<Unit filename="ResourcePack.cpp" />

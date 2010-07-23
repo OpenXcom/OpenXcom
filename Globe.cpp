@@ -30,6 +30,8 @@
 
 #define PI 3.141592653589793238461
 #define NUM_TEXTURES 13
+#define NUM_LANDSHADES 48
+#define NUM_SEASHADES 72
 
 /**
  * Sets up a globe with the specified size and position.
@@ -99,6 +101,11 @@ void Globe::cartToPolar(Sint16 x, Sint16 y, double *lon, double *lat)
 
 	*lat = asin((y * sin(c) * cos(_rotLat)) / rho - cos(c) * sin(_rotLat));
 	*lon = atan2(x * sin(c), rho * cos(_rotLat) * cos(c) + y * sin(_rotLat) * sin(c)) - _rotLon;
+
+	while (*lon < 0)
+		*lon += 2 * PI;
+	while (*lon >= 2 * PI)
+		*lon -= 2 * PI;
 }
 
 /**
@@ -327,42 +334,51 @@ void Globe::blink()
 }
 
 /**
- * Draws the whole globe, rendering the ocean-coloured
- * circle and all the map polygons on top, converting
- * the polar coordinates to cartesian to simulate a 3D globe.
+ * Draws the whole globe, rendering the ocean with all the land polygons on top,
+ * converting the polar coordinates to cartesian to simulate a 3D globe and
+ * applying lighting and shading respectively.
  */
 void Globe::draw()
 {
-	int _shades[48] = { 3, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3,
-						4, 5, 6, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 6, 5, 4 };
+	int _shades[] = {3, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3,
+					 4, 5, 6, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 6, 5, 4};
+	int _seashades[] = {12, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4,
+						12, 20, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 20};
 	Sint16 x[4], y[4];
-	double tmpLon, minLon, maxLon;
-	double tmpLat;
-	int shade;
-	bool backFace;
+	double tmpLon = 0.0, tmpLat = 0.0, minLon = 0.0, maxLon = 0.0;
 	double curTime = (double)((((((_save->getTime()->getHour() + 18) % 24) * 60) + _save->getTime()->getMinute()) * 60) + _save->getTime()->getSecond()) / 86400;
 
 	clear();
 
-	for (tmpLon = 0.0; tmpLon <= 2 * PI; tmpLon += 0.2)
+	filledCircleColor(getSurface(), _cenX, _cenY, (Sint16)floor(_radius[_zoom]), Palette::getRGBA(this->getPalette(), Palette::blockOffset(12)+28));
+  
+	// Drawing the globe, segment by segment
+	for (tmpLon = 0; tmpLon <= 2 * PI; tmpLon += 0.05)
 	{
-		for (tmpLat = PI / 2; tmpLat <= 3 * (PI / 2); tmpLat += 0.1)
+		for (tmpLat = PI / 2; tmpLat <= 3 * (PI / 2); tmpLat += 0.2)
 		{
-			polarToCart(tmpLon, tmpLat, &x[0], &y[0]);
-			polarToCart(tmpLon, tmpLat + 0.1, &x[1], &y[1]);
-			polarToCart(tmpLon + 0.2, tmpLat + 0.1, &x[2], &y[2]);
-			polarToCart(tmpLon + 0.2, tmpLat, &x[3], &y[3]);
-
-			backFace = true;
+			// Is quad on the back face?
+			bool backFace = true;
 			backFace = backFace && pointBack(tmpLon, tmpLat);
-			backFace = backFace && pointBack(tmpLon, tmpLat + 0.1);
-			backFace = backFace && pointBack(tmpLon + 0.1, tmpLat + 0.1);
-			backFace = backFace && pointBack(tmpLon + 0.1, tmpLat);
+			backFace = backFace && pointBack(tmpLon, tmpLat + 0.2);
+			backFace = backFace && pointBack(tmpLon + 0.05, tmpLat + 0.2);
+			backFace = backFace && pointBack(tmpLon + 0.05, tmpLat);
+			
 			if (!backFace)
 			{
-				shade = (int)((curTime + (tmpLon/(2*PI))) * 48) + 24;
-				shade = _shades[shade % 48] * 4;
-				filledPolygonColor(getSurface(), (Sint16*)&x, (Sint16*)&y, 4, Palette::getRGBA(this->getPalette(), Palette::blockOffset(12) + shade));
+				// Quad is front facing, calc coordinates
+				polarToCart(tmpLon, tmpLat, &x[0], &y[0]);
+				polarToCart(tmpLon, tmpLat + 0.2, &x[1], &y[1]);
+				polarToCart(tmpLon + 0.05, tmpLat + 0.2, &x[2], &y[2]);
+				polarToCart(tmpLon + 0.05, tmpLat, &x[3], &y[3]);
+
+				// Calculate shade
+				int shade = (int)((curTime + (tmpLon / (2 * PI))) * NUM_SEASHADES) + 36;
+				shade = _seashades[shade % NUM_SEASHADES];
+
+				// Draw the sea
+				if (shade != 28)
+					filledPolygonColor(getSurface(), (Sint16*)&x, (Sint16*)&y, 4, Palette::getRGBA(this->getPalette(), Palette::blockOffset(12) + shade));
 			}
 		}
 	}
@@ -370,7 +386,7 @@ void Globe::draw()
 	for (vector<Polygon*>::iterator i = _polygons->begin(); i != _polygons->end(); i++)
 	{
 		// Don't draw if polygon is facing back
-		backFace = true;
+		bool backFace = true;
 		for (int j = 0; j < (*i)->getPoints(); j++)
 		{
 			backFace = backFace && pointBack((*i)->getLongitude(j), (*i)->getLatitude(j));
@@ -382,20 +398,19 @@ void Globe::draw()
 		for (int j = 0; j < (*i)->getPoints(); j++)
 		{
 			tmpLon = (*i)->getLongitude(j);
-			tmpLat = (*i)->getLatitude(j);
 
 			if (j == 0 || (tmpLon < minLon && tmpLon >= (maxLon - PI)))
 				minLon = tmpLon;
 			if (j == 0 || (tmpLon > maxLon && tmpLon <= (minLon + PI)))
 				maxLon = tmpLon;
 
-			polarToCart(tmpLon, tmpLat, &x[j], &y[j]);
+			polarToCart(tmpLon, (*i)->getLatitude(j), &x[j], &y[j]);
 		}
 
 		// Apply textures according to zoom and shade
-		int zoom = (2 - (int)floor((double)_zoom / 2)) * NUM_TEXTURES;
-		shade = (int)((curTime + (((minLon + maxLon) / 2) / (2 * PI))) * 48);
-		shade = _shades[shade % 48];
+		int zoom = (2 - (int)floor((double)(_zoom) / 2)) * NUM_TEXTURES;
+		int shade = (int)((curTime + (((minLon + maxLon) / 2) / (2 * PI))) * NUM_LANDSHADES);
+		shade = _shades[shade % NUM_LANDSHADES];
 		texturedPolygon(getSurface(), (Sint16*)&x, (Sint16*)&y, (*i)->getPoints(), _texture[shade]->getFrame((*i)->getTexture() + zoom)->getSurface(), 0, 0);
 	}
 

@@ -221,6 +221,9 @@
     <ClCompile Include="SoundSet.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
+    <ClCompile Include="Region.cpp">
+      <Filter>Xcom\Rules</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbandonGameState.h">
@@ -444,6 +447,9 @@
     </ClInclude>
     <ClInclude Include="SoundSet.h">
       <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Region.h">
+      <Filter>Xcom\Rules</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

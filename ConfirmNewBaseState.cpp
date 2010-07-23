@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "ConfirmNewBaseState.h"
+#include <sstream>
 #include "Game.h"
 #include "ResourcePack.h"
 #include "Language.h"
@@ -28,14 +29,18 @@
 #include "Text.h"
 #include "TextButton.h"
 #include "SavedGame.h"
+#include "Region.h"
+#include "Base.h"
 #include "BaseNameState.h"
+
+using namespace std;
 
 /**
  * Initializes all the elements in the Confirm New Base window.
  * @param game Pointer to the core game.
  * @param base Pointer to the base to place.
  */
-ConfirmNewBaseState::ConfirmNewBaseState(Game *game, Base *base) : State(game), _base(base)
+ConfirmNewBaseState::ConfirmNewBaseState(Game *game, Base *base) : State(game), _base(base), _cost(0)
 {
 	_screen = false;
 
@@ -67,11 +72,25 @@ ConfirmNewBaseState::ConfirmNewBaseState(Game *game, Base *base) : State(game), 
 	_btnCancel->setText(_game->getResourcePack()->getLanguage()->getString(STR_CANCEL_UC));
 	_btnCancel->onMouseClick((EventHandler)&ConfirmNewBaseState::btnCancelClick);
 
+	stringstream ss;
+	for (map<LangString, Region*>::iterator i = _game->getSavedGame()->getRegions()->begin(); i != _game->getSavedGame()->getRegions()->end(); i++)
+	{
+		if (i->second->insideRegion(_base->getLongitude(), _base->getLatitude()))
+		{
+			_cost = i->second->getBaseCost();
+			ss << _game->getResourcePack()->getLanguage()->getString(STR_AREA) << _game->getResourcePack()->getLanguage()->getString(i->first);
+			break;
+		}
+	}
+	
+	string s = _game->getResourcePack()->getLanguage()->getString(STR_COST);
+	s.erase(s.size()-1, 1);
+	s += Text::formatFunding(_cost);
 	_txtCost->setColor(Palette::blockOffset(15)-1);
-	_txtCost->setText(_game->getResourcePack()->getLanguage()->getString(STR_COST));
-
+	_txtCost->setText(s);
+	
 	_txtArea->setColor(Palette::blockOffset(15)-1);
-	_txtArea->setText(_game->getResourcePack()->getLanguage()->getString(STR_AREA));
+	_txtArea->setText(ss.str());
 }
 
 /**
@@ -89,6 +108,7 @@ ConfirmNewBaseState::~ConfirmNewBaseState()
  */
 void ConfirmNewBaseState::btnOkClick(SDL_Event *ev, int scale)
 {
+	_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() - _cost);
 	_game->getSavedGame()->getBases()->push_back(_base);
 
 	_game->pushState(new BaseNameState(_game, _base, false));

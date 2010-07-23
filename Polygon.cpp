@@ -33,8 +33,8 @@ Polygon::Polygon(int points) : _points(points), _texture(0)
  */
 Polygon::~Polygon()
 {
-	delete [] _lat;
-	delete [] _lon;
+	delete[] _lat;
+	delete[] _lon;
 }
 
 /**

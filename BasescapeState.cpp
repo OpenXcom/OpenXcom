@@ -31,6 +31,7 @@
 #include "Base.h"
 #include "BaseFacility.h"
 #include "RuleBaseFacility.h"
+#include "Region.h"
 #include "GeoscapeState.h"
 #include "BasescapeErrorState.h"
 #include "DismantleFacilityState.h"
@@ -179,7 +180,15 @@ void BasescapeState::init()
 	_view->setBase(_base);
 	_mini->draw();
 	_txtBase->setText(_base->getName());
-	_txtLocation->setText("Some Location");
+
+	for (map<LangString, Region*>::iterator i = _game->getSavedGame()->getRegions()->begin(); i != _game->getSavedGame()->getRegions()->end(); i++)
+	{
+		if (i->second->insideRegion(_base->getLongitude(), _base->getLatitude()))
+		{
+			_txtLocation->setText(_game->getResourcePack()->getLanguage()->getString(i->first));
+			break;
+		}
+	}
 
 	string s = _game->getResourcePack()->getLanguage()->getString(STR_FUNDS_);
 	s.erase(s.size()-1, 1);

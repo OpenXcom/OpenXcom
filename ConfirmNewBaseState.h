@@ -37,6 +37,7 @@ private:
 	Window *_window;
 	Text *_txtCost, *_txtArea;
 	TextButton *_btnOk, *_btnCancel;
+	int _cost;
 public:
 	/// Creates the Confirm New Base state.
 	ConfirmNewBaseState(Game *game, Base *base);
