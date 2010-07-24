@@ -27,6 +27,7 @@ using namespace std;
 
 #define NUM_SHADES 8
 
+class ResourcePack;
 class Polygon;
 class SurfaceSet;
 class SavedGame;
@@ -42,15 +43,15 @@ class Timer;
 class Globe : public InteractiveSurface
 {
 private:
-	vector<Polygon*> *_polygons;
 	vector<double> _radius;
 	double _rotLon, _rotLat;
 	int _cenX, _cenY;
 	unsigned int _zoom;
 	SurfaceSet *_texture[NUM_SHADES];
+	ResourcePack *_res;
 	SavedGame *_save;
 	Surface *_markers;
-	bool _blink;
+	bool _blink, _detail;
 	Timer *_timer;
 
 	/// Checks if a point is behind the globe.
@@ -70,8 +71,8 @@ public:
 	void cartToPolar(Sint16 x, Sint16 y, double *lon, double *lat);
 	/// Sets the texture set for the globe's polygons.
 	void setTexture(SurfaceSet *texture);
-	/// Sets the set of polygons for the globe.
-	void setPolygons(vector<Polygon*> *polygons);
+	/// Sets the resource pack to pull graphics from.
+	void setResourcePack(ResourcePack *res);
 	/// Sets the saved game to draw markers from.
 	void setSavedGame(SavedGame *save);
 	/// Rotates the globe a set amount.
@@ -82,6 +83,8 @@ public:
 	void center(double lon, double lat);
 	/// Checks if a point is inside land.
 	bool insideLand(double lon, double lat);
+	/// Turns on/off the globe detail.
+	void switchDetail();
 	/// Sets the palette of the globe.
 	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
 	/// Handles the timers.

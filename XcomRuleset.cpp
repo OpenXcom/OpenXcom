@@ -448,22 +448,86 @@ SavedGame *XcomRuleset::newSave(GameDifficulty diff)
 	SavedGame *save = new SavedGame(diff);
 
 	// Generate countries
-	save->getCountries()->insert(pair<LangString, Country*>(STR_USA, new Country(RNG::generate(600, 1200)*1000)));
-	save->getCountries()->insert(pair<LangString, Country*>(STR_RUSSIA, new Country(RNG::generate(230, 460)*1000)));
-	save->getCountries()->insert(pair<LangString, Country*>(STR_UK, new Country(RNG::generate(240, 480)*1000)));
-	save->getCountries()->insert(pair<LangString, Country*>(STR_FRANCE, new Country(RNG::generate(320, 640)*1000)));
-	save->getCountries()->insert(pair<LangString, Country*>(STR_GERMANY, new Country(RNG::generate(250, 500)*1000)));
-	save->getCountries()->insert(pair<LangString, Country*>(STR_ITALY, new Country(RNG::generate(160, 320)*1000)));
-	save->getCountries()->insert(pair<LangString, Country*>(STR_SPAIN, new Country(RNG::generate(140, 280)*1000)));
-	save->getCountries()->insert(pair<LangString, Country*>(STR_CHINA, new Country(RNG::generate(245, 490)*1000)));
-	save->getCountries()->insert(pair<LangString, Country*>(STR_JAPAN, new Country(RNG::generate(400, 800)*1000)));
-	save->getCountries()->insert(pair<LangString, Country*>(STR_INDIA, new Country(RNG::generate(150, 300)*1000)));
-	save->getCountries()->insert(pair<LangString, Country*>(STR_BRAZIL, new Country(RNG::generate(300, 600)*1000)));
-	save->getCountries()->insert(pair<LangString, Country*>(STR_AUSTRALIA, new Country(RNG::generate(280, 560)*1000)));
-	save->getCountries()->insert(pair<LangString, Country*>(STR_NIGERIA, new Country(RNG::generate(180, 360)*1000)));
-	save->getCountries()->insert(pair<LangString, Country*>(STR_SOUTH_AFRICA, new Country(RNG::generate(310, 620)*1000)));
-	save->getCountries()->insert(pair<LangString, Country*>(STR_EGYPT, new Country(RNG::generate(160, 320)*1000)));
-	save->getCountries()->insert(pair<LangString, Country*>(STR_CANADA, new Country(RNG::generate(110, 220)*1000)));
+	Country *usa = new Country(RNG::generate(600, 1200)*1000);
+	usa->setLabelLongitude(4.53786);
+	usa->setLabelLatitude(-0.698132);
+
+	Country *russia = new Country(RNG::generate(230, 460)*1000);
+	russia->setLabelLongitude(1.0472);
+	russia->setLabelLatitude(-1.0472);
+
+	Country *uk = new Country(RNG::generate(240, 480)*1000);
+	uk->setLabelLongitude(6.24828);
+	uk->setLabelLatitude(-0.935933);
+
+	Country *france = new Country(RNG::generate(320, 640)*1000);
+	france->setLabelLongitude(0.0436332);
+	france->setLabelLatitude(-0.811578);
+
+	Country *germany = new Country(RNG::generate(250, 500)*1000);
+	germany->setLabelLongitude(0.200713);
+	germany->setLabelLatitude(-0.872665);
+
+	Country *italy = new Country(RNG::generate(160, 320)*1000);
+	italy->setLabelLongitude(0.218166);
+	italy->setLabelLatitude(-0.765763);
+
+	Country *spain = new Country(RNG::generate(140, 280)*1000);
+	spain->setLabelLongitude(6.23955);
+	spain->setLabelLatitude(-0.743947);
+
+	Country *china = new Country(RNG::generate(245, 490)*1000);
+	china->setLabelLongitude(1.74533);
+	china->setLabelLatitude(-0.610865);
+
+	Country *japan = new Country(RNG::generate(400, 800)*1000);
+	japan->setLabelLongitude(2.40855);
+	japan->setLabelLatitude(-0.667588);
+
+	Country *india = new Country(RNG::generate(150, 300)*1000);
+	india->setLabelLongitude(1.39626);
+	india->setLabelLatitude(-0.418879);
+
+	Country *brazil = new Country(RNG::generate(300, 600)*1000);
+	brazil->setLabelLongitude(5.32325);
+	brazil->setLabelLatitude(0.0872665);
+
+	Country *australia = new Country(RNG::generate(280, 560)*1000);
+	australia->setLabelLongitude(2.35619);
+	australia->setLabelLatitude(0.436332);
+
+	Country *nigeria = new Country(RNG::generate(180, 360)*1000);
+	nigeria->setLabelLongitude(0.1309);
+	nigeria->setLabelLatitude(-0.174533);
+
+	Country *africa = new Country(RNG::generate(310, 620)*1000);
+	africa->setLabelLongitude(0.436332);
+	africa->setLabelLatitude(0.523599);
+
+	Country *egypt = new Country(RNG::generate(160, 320)*1000);
+	egypt->setLabelLongitude(0.506145);
+	egypt->setLabelLatitude(-0.453786);
+
+	Country *canada = new Country(RNG::generate(110, 220)*1000);
+	canada->setLabelLongitude(4.53786);
+	canada->setLabelLatitude(-0.959931);
+
+	save->getCountries()->insert(pair<LangString, Country*>(STR_USA, usa));
+	save->getCountries()->insert(pair<LangString, Country*>(STR_RUSSIA, russia));
+	save->getCountries()->insert(pair<LangString, Country*>(STR_UK, uk));
+	save->getCountries()->insert(pair<LangString, Country*>(STR_FRANCE, france));
+	save->getCountries()->insert(pair<LangString, Country*>(STR_GERMANY, germany));
+	save->getCountries()->insert(pair<LangString, Country*>(STR_ITALY, italy));
+	save->getCountries()->insert(pair<LangString, Country*>(STR_SPAIN, spain));
+	save->getCountries()->insert(pair<LangString, Country*>(STR_CHINA, china));
+	save->getCountries()->insert(pair<LangString, Country*>(STR_JAPAN, japan));
+	save->getCountries()->insert(pair<LangString, Country*>(STR_INDIA, india));
+	save->getCountries()->insert(pair<LangString, Country*>(STR_BRAZIL, brazil));
+	save->getCountries()->insert(pair<LangString, Country*>(STR_AUSTRALIA, australia));
+	save->getCountries()->insert(pair<LangString, Country*>(STR_NIGERIA, nigeria));
+	save->getCountries()->insert(pair<LangString, Country*>(STR_SOUTH_AFRICA, africa));
+	save->getCountries()->insert(pair<LangString, Country*>(STR_EGYPT, egypt));
+	save->getCountries()->insert(pair<LangString, Country*>(STR_CANADA, canada));
 	save->setFunds(save->getCountryFunding());
 
 	// Add regions

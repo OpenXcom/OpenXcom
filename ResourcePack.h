@@ -30,6 +30,7 @@ class SurfaceSet;
 class Font;
 class Palette;
 class Polygon;
+class Polyline;
 class Music;
 class SoundSet;
 
@@ -57,6 +58,7 @@ protected:
 	map<string, SurfaceSet*> _sets;
 	map<string, SoundSet*> _sounds;
 	vector<Polygon*> _polygons;
+	vector<Polyline*> _polylines;
 	map<string, Music*> _musics;
 public:
 	/// Create a new resource pack with a folder's contents.
@@ -77,6 +79,8 @@ public:
 	SurfaceSet *getSurfaceSet(string name);
 	/// Gets the list of world polygons.
 	vector<Polygon*> *getPolygons();
+	/// Gets the list of world polylines.
+	vector<Polyline*> *getPolylines();
 	/// Gets a particular music.
 	Music *getMusic(string name);
 	/// Gets a particular sound set.

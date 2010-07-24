@@ -679,6 +679,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Region.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Region.h"
+					>
+				</File>
+				<File
 					RelativePath=".\SavedGame.cpp"
 					>
 				</File>

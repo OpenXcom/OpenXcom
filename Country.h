@@ -29,6 +29,7 @@ class Country
 {
 private:
 	int _funding, _change;
+	double _labelLon, _labelLat;
 public:
 	/// Creates a new country with a certain funding.
 	Country(int funding);
@@ -40,6 +41,14 @@ public:
 	void setFunding(int funding);
 	/// Gets the country's funding change.
 	int getChange();
+	/// Gets the country's label X position.
+	double getLabelLongitude();
+	/// Sets the country's label position.
+	void setLabelLongitude(double lon);
+	/// Gets the country's label Y position.
+	double getLabelLatitude();
+	/// Sets the country's label position.
+	void setLabelLatitude(double lat);
 };
 
 #endif

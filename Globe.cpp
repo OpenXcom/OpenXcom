@@ -22,11 +22,17 @@
 #include "SDL_gfxPrimitives.h"
 #include "SurfaceSet.h"
 #include "Timer.h"
+#include "ResourcePack.h"
 #include "Polygon.h"
+#include "Polyline.h"
 #include "Palette.h"
 #include "SavedGame.h"
 #include "GameTime.h"
 #include "Base.h"
+#include "Country.h"
+#include "Text.h"
+#include "Font.h"
+#include "Language.h"
 
 #define PI 3.141592653589793238461
 #define NUM_TEXTURES 13
@@ -42,7 +48,7 @@
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Globe::Globe(int cenX, int cenY, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _polygons(), _radius(), _rotLon(0), _rotLat(0), _cenX(cenX), _cenY(cenY), _zoom(0), _save(0), _blink(true)
+Globe::Globe(int cenX, int cenY, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _radius(), _rotLon(0), _rotLat(0), _cenX(cenX), _cenY(cenY), _zoom(0), _res(0), _save(0), _blink(true), _detail(true)
 {
 	_radius.push_back(90);
 	_radius.push_back(120);
@@ -213,33 +219,26 @@ void Globe::loadDat(string filename, vector<Polygon*> *polygons)
 }
 
 /**
- * Changes the set of textures for the globe to use
- * to fill the polygons and generates shaded sets.
- * @param texture Pointer to the texture surface set.
+ * Changes the pack for the globe to get resources for rendering.
+ * @param save Pointer to the resource pack.
  */
-void Globe::setTexture(SurfaceSet *texture)
+void Globe::setResourcePack(ResourcePack *res)
 {
-	_texture[0] = texture;
+	_res = res;
+
+	_texture[0] = _res->getSurfaceSet("TEXTURE.DAT");
 	for (int shade = 1; shade < NUM_SHADES; shade++)
 	{
-		_texture[shade] = new SurfaceSet(*texture);
+		_texture[shade] = new SurfaceSet(*_texture[0]);
 		for (int f = 0; f < _texture[shade]->getTotalFrames(); f++)
 			_texture[shade]->getFrame(f)->offset(shade);
 	}
+
 	draw();
 }
 
 /**
- * Changes the set of polygons for the globe to render.
- * @param polygons Pointer to the set of polygons.
- */
-void Globe::setPolygons(vector<Polygon*> *polygons)
-{
-	_polygons = polygons;
-}
-
-/**
- * Changes the set of polygons for the globe to render.
+ * Changes the saved game content for the globe to render.
  * @param save Pointer to the saved game.
  */
 void Globe::setSavedGame(SavedGame *save)
@@ -297,11 +296,21 @@ void Globe::center(double lon, double lat)
 bool Globe::insideLand(double lon, double lat)
 {
 	bool inside = false;
-	for (vector<Polygon*>::iterator i = _polygons->begin(); i < _polygons->end() && !inside; i++)
+	for (vector<Polygon*>::iterator i = _res->getPolygons()->begin(); i < _res->getPolygons()->end() && !inside; i++)
 	{
 		inside = insidePolygon(lon, lat, *i);
 	}
 	return inside;
+}
+
+/**
+ * Switches the amount of detail shown on the globe.
+ * With detail on, country and city details are shown when zoomed in.
+ */
+void Globe::switchDetail()
+{
+	_detail = !_detail;
+	drawMarkers();
 }
 
 /**
@@ -383,7 +392,7 @@ void Globe::draw()
 		}
 	}
 
-	for (vector<Polygon*>::iterator i = _polygons->begin(); i != _polygons->end(); i++)
+	for (vector<Polygon*>::iterator i = _res->getPolygons()->begin(); i != _res->getPolygons()->end(); i++)
 	{
 		// Don't draw if polygon is facing back
 		bool backFace = true;
@@ -426,6 +435,51 @@ void Globe::drawMarkers()
 	_markers->clear();
 	// Lock the surface
 	_markers->lock();
+
+	if (_detail)
+	{
+		// Draw the country borders
+		if (_zoom >= 1)
+		{
+			for (vector<Polyline*>::iterator i = _res->getPolylines()->begin(); i != _res->getPolylines()->end(); i++)
+			{
+				Sint16 x[2], y[2];
+				for (int j = 0; j < (*i)->getPoints() - 1; j++)
+				{
+					// Don't draw if polyline is facing back
+					if (pointBack((*i)->getLongitude(j), (*i)->getLatitude(j)) || pointBack((*i)->getLongitude(j + 1), (*i)->getLatitude(j + 1)))
+						continue;
+
+					// Convert coordinates
+					polarToCart((*i)->getLongitude(j), (*i)->getLatitude(j), &x[0], &y[0]);
+					polarToCart((*i)->getLongitude(j + 1), (*i)->getLatitude(j + 1), &x[1], &y[1]);
+
+					lineColor(_markers->getSurface(), x[0], y[0], x[1], y[1], Palette::getRGBA(getPalette(), Palette::blockOffset(10)+2));
+				}
+			}
+		}
+
+		// Draw the country names
+		if (_zoom >= 2)
+		{
+			Sint16 x, y;
+			for (map<LangString, Country*>::iterator i = _save->getCountries()->begin(); i != _save->getCountries()->end(); i++)
+			{
+				// Don't draw if label is facing back
+				if (pointBack(i->second->getLabelLongitude(), i->second->getLabelLatitude()))
+					continue;
+
+				// Convert coordinates
+				polarToCart(i->second->getLabelLongitude(), i->second->getLabelLatitude(), &x, &y);
+
+				Text *label = new Text(_res->getFont("BIGLETS.DAT"), _res->getFont("SMALLSET.DAT"), 80, 9, x, y);
+				label->setPalette(getPalette());
+				label->setText(_res->getLanguage()->getString(i->first));
+				label->setColor(Palette::blockOffset(15)-1);
+				label->blit(_markers);
+			}
+		}
+	}
 
 	// Draw the base markers
 	for (vector<Base*>::iterator i = _save->getBases()->begin(); i != _save->getBases()->end(); i++)

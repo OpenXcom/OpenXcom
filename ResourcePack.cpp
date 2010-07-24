@@ -25,6 +25,7 @@
 #include "Music.h"
 #include "Globe.h"
 #include "Polygon.h"
+#include "Polyline.h"
 #include "SoundSet.h"
 
 /**
@@ -57,6 +58,10 @@ ResourcePack::~ResourcePack()
 		delete i->second;
 	}
 	for (vector<Polygon*>::iterator i = _polygons.begin(); i != _polygons.end(); i++)
+	{
+		delete *i;
+	}
+	for (vector<Polyline*>::iterator i = _polylines.begin(); i != _polylines.end(); i++)
 	{
 		delete *i;
 	}
@@ -143,6 +148,15 @@ SurfaceSet *ResourcePack::getSurfaceSet(string name)
 vector<Polygon*> *ResourcePack::getPolygons()
 {
 	return &_polygons;
+}
+
+/**
+ * Returns the list of polylines in the resource set.
+ * @return Pointer to the list of polylines.
+ */
+vector<Polyline*> *ResourcePack::getPolylines()
+{
+	return &_polylines;
 }
 
 /**

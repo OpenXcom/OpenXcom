@@ -59,3 +59,39 @@ int Country::getChange()
 {
 	return _change;
 }
+
+/**
+ * Returns the longitude of the country's label on the globe.
+ * @return Longitude in radians.
+ */
+double Country::getLabelLongitude()
+{
+	return _labelLon;
+}
+
+/**
+ * Changes the longitude of the country's label on the globe.
+ * @param lon Longitude in radians.
+ */
+void Country::setLabelLongitude(double lon)
+{
+	_labelLon = lon;
+}
+
+/**
+ * Returns the latitude of the country's label on the globe.
+ * @return Latitude in radians.
+ */
+double Country::getLabelLatitude()
+{
+	return _labelLat;
+}
+
+/**
+ * Changes the latitude of the country's label on the globe.
+ * @param lat Latitude in radians.
+ */
+void Country::setLabelLatitude(double lat)
+{
+	_labelLat = lat;
+}

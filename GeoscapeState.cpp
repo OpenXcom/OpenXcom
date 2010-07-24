@@ -149,8 +149,7 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _rotLon(0), _rotLat(0), 
 	}
 	
 	_globe->setSavedGame(game->getSavedGame());
-	_globe->setPolygons(_game->getResourcePack()->getPolygons());
-	_globe->setTexture(game->getResourcePack()->getSurfaceSet("TEXTURE.DAT"));
+	_globe->setResourcePack(_game->getResourcePack());
 
 	_btnIntercept->copy(_bg);
 	_btnIntercept->setColor(Palette::blockOffset(15)+8);
@@ -286,6 +285,8 @@ void GeoscapeState::init()
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
 
 	_globe->onMouseClick((EventHandler)&GeoscapeState::globeClick);
+	_globe->onKeyboardPress((EventHandler)&GeoscapeState::globeKeyPress);
+	_globe->focus();
 	_globe->draw();
 
 	timeDisplay();
@@ -468,8 +469,6 @@ Globe *GeoscapeState::getGlobe()
 /**
  * Processes any left-clicks on globe markers,
  * or right-clicks to scroll the globe.
- * @note Currently left-clicking is used to move around
- * a marker for testing globe functionality.
  * @param ev Pointer to the SDL_Event.
  * @param scale Scale of the screen.
  */
@@ -494,6 +493,17 @@ void GeoscapeState::globeClick(SDL_Event *ev, int scale)
 	{
 		_globe->zoom(-1);
 	}
+}
+
+/**
+ * Processes any key presses on the globe.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
+void GeoscapeState::globeKeyPress(SDL_Event *ev, int scale)
+{
+	if (ev->key.keysym.sym == SDLK_TAB)
+		_globe->switchDetail();
 }
 
 /**

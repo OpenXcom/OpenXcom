@@ -133,6 +133,8 @@
 		<Unit filename="PlaceLiftState.h" />
 		<Unit filename="Polygon.cpp" />
 		<Unit filename="Polygon.h" />
+		<Unit filename="Polyline.cpp" />
+		<Unit filename="Polyline.h" />
 		<Unit filename="PurchaseState.cpp" />
 		<Unit filename="PurchaseState.h" />
 		<Unit filename="RNG.cpp" />
