@@ -480,6 +480,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\GeoscapeErrorState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\GeoscapeErrorState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\GeoscapeMessageState.cpp"
 				>
 			</File>

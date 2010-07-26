@@ -39,7 +39,7 @@ BasescapeErrorState::BasescapeErrorState(Game *game, LangString str) : State(gam
 	// Create objects
 	_window = new Window(256, 160, 32, 20, POPUP_BOTH);
 	_btnOk = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 120, 18, 100, 154);
-	_txtError = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 246, 40, 37, 70);
+	_txtError = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 234, 40, 44, 70);
 	
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
@@ -58,7 +58,9 @@ BasescapeErrorState::BasescapeErrorState(Game *game, LangString str) : State(gam
 
 	_txtError->setColor(Palette::blockOffset(15)+1);
 	_txtError->setAlign(ALIGN_CENTER);
+	_txtError->setVerticalAlign(ALIGN_MIDDLE);
 	_txtError->setBig();
+	_txtError->setWordWrap(true);
 	_txtError->setText(_game->getResourcePack()->getLanguage()->getString(str));
 }
 

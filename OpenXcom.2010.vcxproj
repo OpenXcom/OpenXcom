@@ -71,7 +71,7 @@
       <DataExecutionPrevention>
       </DataExecutionPrevention>
       <TargetMachine>MachineX86</TargetMachine>
-      <GenerateMapFile>true</GenerateMapFile>
+      <GenerateMapFile>false</GenerateMapFile>
       <MapExports>true</MapExports>
     </Link>
   </ItemDefinitionGroup>
@@ -109,6 +109,7 @@
     <ClCompile Include="ConfirmNewBaseState.cpp" />
     <ClCompile Include="CraftSoldiersState.cpp" />
     <ClCompile Include="BuildNewBaseState.cpp" />
+    <ClCompile Include="GeoscapeErrorState.cpp" />
     <ClCompile Include="PlaceLiftState.cpp" />
     <ClCompile Include="Polyline.cpp" />
     <ClCompile Include="Region.cpp" />
@@ -187,6 +188,7 @@
     <ClInclude Include="ConfirmNewBaseState.h" />
     <ClInclude Include="CraftSoldiersState.h" />
     <ClInclude Include="BuildNewBaseState.h" />
+    <ClInclude Include="GeoscapeErrorState.h" />
     <ClInclude Include="InteractiveSurface.h" />
     <ClInclude Include="PlaceLiftState.h" />
     <ClInclude Include="Polyline.h" />

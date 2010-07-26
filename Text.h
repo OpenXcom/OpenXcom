@@ -20,14 +20,18 @@
 #define OPENXCOM__TEXT_H
 
 #include "Surface.h"
+#include <vector>
 #include <string>
 
 class Font;
 
+using namespace std;
+
 /**
  * Enumator for the possible text alignments.
  */
-enum TextAlign { ALIGN_LEFT, ALIGN_CENTER, ALIGN_RIGHT };
+enum TextHAlign { ALIGN_LEFT, ALIGN_CENTER, ALIGN_RIGHT };
+enum TextVAlign { ALIGN_TOP, ALIGN_MIDDLE, ALIGN_BOTTOM };
 
 /**
  * Text string displayed on screen.
@@ -39,10 +43,15 @@ class Text : public Surface
 {
 private:
 	Font *_big, *_small, *_font;
-	string _text;
+	string _text, _wrappedText;
+	vector<int> _lineWidth, _lineHeight;
 	bool _wrap, _invert;
-	TextAlign _align;
+	TextHAlign _align;
+	TextVAlign _valign;
 	Uint8 _color;
+
+	/// Processes the contained text.
+	void processText();
 public:
 	/// Creates a new text with the specified size, position and fonts.
 	Text(Font *big, Font *small, int width, int height, int x = 0, int y = 0);
@@ -64,8 +73,10 @@ public:
 	void setWordWrap(bool wrap);
 	/// Sets the text's color invert setting.
 	void setInvert(bool invert);
-	/// Sets the text's alignment.
-	void setAlign(TextAlign align);
+	/// Sets the text's horizontal alignment.
+	void setAlign(TextHAlign align);
+	/// Sets the text's vertical alignment.
+	void setVerticalAlign(TextVAlign valign);
 	/// Sets the text's color.
 	void setColor(Uint8 color);
 	/// Gets the text's color.

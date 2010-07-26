@@ -118,13 +118,23 @@ void TextEdit::setInvert(bool invert)
 }
 
 /**
- * Changes the way the text is aligned relative to the
- * drawing area.
- * @param align Text alignment.
+ * Changes the way the text is aligned horizontally
+ * relative to the drawing area.
+ * @param align Horizontal alignment.
  */
-void TextEdit::setAlign(TextAlign align)
+void TextEdit::setAlign(TextHAlign align)
 {
 	_text->setAlign(align);
+}
+
+/**
+ * Changes the way the text is aligned vertically
+ * relative to the drawing area.
+ * @param valign Vertical alignment.
+ */
+void TextEdit::setVerticalAlign(TextVAlign valign)
+{
+	_text->setVerticalAlign(valign);
 }
 
 /**
@@ -304,7 +314,7 @@ void TextEdit::keyboardPress(SDL_Event *ev, int scale, State *state)
 	default:
 		if (ev->key.keysym.unicode != 0)
 		{
-			if (!exceedsMaxWidth((char)ev->key.keysym.unicode))
+			if (ev->key.keysym.unicode >= ' ' && ev->key.keysym.unicode <= '~' && !exceedsMaxWidth((char)ev->key.keysym.unicode))
 				_value += (char)ev->key.keysym.unicode;
 		}
 	}

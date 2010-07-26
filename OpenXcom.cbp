@@ -90,6 +90,8 @@
 		<Unit filename="Game.h" />
 		<Unit filename="GameTime.cpp" />
 		<Unit filename="GameTime.h" />
+		<Unit filename="GeoscapeErrorState.cpp" />
+		<Unit filename="GeoscapeErrorState.h" />
 		<Unit filename="GeoscapeMessageState.cpp" />
 		<Unit filename="GeoscapeMessageState.h" />
 		<Unit filename="GeoscapeState.cpp" />

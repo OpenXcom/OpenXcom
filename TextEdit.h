@@ -57,8 +57,10 @@ public:
 	void setWordWrap(bool wrap);
 	/// Sets the text's color invert setting.
 	void setInvert(bool invert);
-	/// Sets the text's alignment.
-	void setAlign(TextAlign align);
+	/// Sets the text's horizontal alignment.
+	void setAlign(TextHAlign align);
+	/// Sets the text's vertical alignment.
+	void setVerticalAlign(TextVAlign valign);
 	/// Sets the text's color.
 	void setColor(Uint8 color);
 	/// Gets the text's color.

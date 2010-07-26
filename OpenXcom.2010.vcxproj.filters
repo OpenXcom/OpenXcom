@@ -227,6 +227,9 @@
     <ClCompile Include="Polyline.cpp">
       <Filter>Xcom\Resource</Filter>
     </ClCompile>
+    <ClCompile Include="GeoscapeErrorState.cpp">
+      <Filter>States</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbandonGameState.h">
@@ -456,6 +459,9 @@
     </ClInclude>
     <ClInclude Include="Polyline.h">
       <Filter>Xcom\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="GeoscapeErrorState.h">
+      <Filter>States</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

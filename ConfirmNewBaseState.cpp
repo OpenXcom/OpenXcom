@@ -32,6 +32,7 @@
 #include "Region.h"
 #include "Base.h"
 #include "BaseNameState.h"
+#include "GeoscapeErrorState.h"
 
 using namespace std;
 
@@ -108,10 +109,16 @@ ConfirmNewBaseState::~ConfirmNewBaseState()
  */
 void ConfirmNewBaseState::btnOkClick(SDL_Event *ev, int scale)
 {
-	_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() - _cost);
-	_game->getSavedGame()->getBases()->push_back(_base);
-
-	_game->pushState(new BaseNameState(_game, _base, false));
+	if (_game->getSavedGame()->getFunds() >= _cost)
+	{
+		_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() - _cost);
+		_game->getSavedGame()->getBases()->push_back(_base);
+		_game->pushState(new BaseNameState(_game, _base, false));
+	}
+	else
+	{
+		_game->pushState(new GeoscapeErrorState(_game, STR_NOT_ENOUGH_MONEY));
+	}
 }
 
 /**

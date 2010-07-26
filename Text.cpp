@@ -20,8 +20,6 @@
 #include <sstream>
 #include "Font.h"
 
-using namespace std;
-
 /**
  * Sets up a blank text with the specified size and position.
  * The different fonts need to be passed in advance since the
@@ -33,9 +31,9 @@ using namespace std;
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Text::Text(Font *big, Font *small, int width, int height, int x, int y) : Surface(width, height, x, y), _big(big), _small(small), _font(small), _text(""), _wrap(false), _invert(false), _align(ALIGN_LEFT), _color(0)
+Text::Text(Font *big, Font *small, int width, int height, int x, int y) : Surface(width, height, x, y), _big(big), _small(small), _font(small), _text(""), _wrap(false), _invert(false), _align(ALIGN_LEFT), _valign(ALIGN_TOP), _color(0)
 {
-
+	processText();
 }
 
 /**
@@ -101,7 +99,7 @@ void Text::setText(string text)
 	if (text != _text)
 	{
 		_text = text;
-		draw();
+		processText();
 	}
 }
 
@@ -138,13 +136,24 @@ void Text::setInvert(bool invert)
 }
 
 /**
- * Changes the way the text is aligned relative to the
- * drawing area.
- * @param align Text alignment.
+ * Changes the way the text is aligned horizontally
+ * relative to the drawing area.
+ * @param align Horizontal alignment.
  */
-void Text::setAlign(TextAlign align)
+void Text::setAlign(TextHAlign align)
 {
 	_align = align;
+	draw();
+}
+
+/**
+ * Changes the way the text is aligned vertically
+ * relative to the drawing area.
+ * @param valign Vertical alignment.
+ */
+void Text::setVerticalAlign(TextVAlign valign)
+{
+	_valign = valign;
 	draw();
 }
 
@@ -170,6 +179,72 @@ Uint8 Text::getColor()
 }
 
 /**
+ * Takes care of any text post-processing like calculating
+ * line metrics for alignment and wordwrapping if necessary.
+ */
+void Text::processText()
+{
+	string *s = &_text;
+
+	// Use a separate string for wordwrapping text
+	if (_wrap)
+	{
+		_wrappedText = _text;
+		s = &_wrappedText;
+	}
+
+	_lineWidth.clear();
+	_lineHeight.clear();
+
+	int width = 0, word = 0;
+	string::iterator space = s->begin();
+	Font *font = _font;
+
+	// Go through the text character by character
+	for (string::iterator c = s->begin(); c <= s->end(); c++)
+	{
+		// End of the line
+		if (c == s->end() || *c == '\n' || *c == 2)
+		{
+			// Add line measurements for alignment later
+			_lineWidth.push_back(width);
+			_lineHeight.push_back(font->getHeight() + font->getSpacing());
+			width = 0;
+			word = 0;
+			
+			if (c == s->end())
+				break;
+			else if (*c == 2)
+				font = _small;
+		}
+		// Keep track of spaces for wordwrapping
+		else if (*c == ' ')
+		{
+			width += font->getWidth() / 2;
+			space = c;
+			word = 0;
+		}
+		// Keep track of the width of the last line and word
+		else
+		{
+			width += font->getChar(*c)->getCrop()->w + font->getSpacing();
+			word += font->getChar(*c)->getCrop()->w + font->getSpacing();
+		}
+
+		// Wordwrap if the last word doesn't fit the line
+		if (_wrap && width > _width)
+		{
+			// Go back to the last space and put a linebreak there
+			*space = '\n';
+			c = space - 1;
+			width -= word + font->getWidth() / 2;
+		}
+	}
+
+	draw();
+}
+
+/**
  * Draws all the characters in the text with a really
  * nasty complex gritty text rendering algorithm logic stuff.
  */
@@ -177,106 +252,86 @@ void Text::draw()
 {
 	clear();
 
-	// For drawing each letter
-	int x = 0;
-	int y = 0;
+	/*
+	SDL_Rect r;
+	r.w = _width;
+	r.h = _height;
+	r.x = 0;
+	r.y = 0;
+	SDL_FillRect(_surface, &r, 1);
+	*/
 
-	// For reading each line
-	int w = 0, wf = 0;
-	string::iterator start = _text.begin(), end = _text.end();
-	bool blit = false, small = false;
-	Font* font = _font;
+	int x = 0, y = 0, line = 0, height = 0;
+	Font *font = _font;
+	string *s = &_text;
 
-	for (string::iterator c = _text.begin(); c <= _text.end(); c++)
+	for (vector<int>::iterator i = _lineHeight.begin(); i != _lineHeight.end(); i++)
+		height += *i;
+
+	switch (_valign)
 	{
-		// Check how many characters fit in a line
-		if (!blit)
+	case ALIGN_TOP:
+		y = 0;
+		break;
+	case ALIGN_MIDDLE:
+		y = (_height - height) / 2;
+		break;
+	case ALIGN_BOTTOM:
+		y = _height - height;
+		break;
+	}
+
+	switch (_align)
+	{
+	case ALIGN_LEFT:
+		x = 0;
+		break;
+	case ALIGN_CENTER:
+		x = (_width - _lineWidth[line]) / 2;
+		break;
+	case ALIGN_RIGHT:
+		x = _width - _lineWidth[line];
+		break;
+	}
+
+	if (_wrap)
+		s = &_wrappedText;
+
+	// Draw each letter one by one
+	for (string::iterator c = s->begin(); c != s->end(); c++)
+	{
+		if (*c == ' ')
 		{
-			// Forced linebreak
-			if (c == _text.end() || *c == '\n' || *c == 2)
-			{
-				blit = true;
-				wf = w;
-				if (c != _text.end() && *c == 2)
-					small = true;
-			}
-			else 
-			{
-				// Lines end at blank spots
-				if (*c == ' ')
-				{
-					end = c;
-					wf = w;
-					w += _font->getWidth() / 2;
-				}
-				// Keep on counting the width
-				else
-				{
-					w += _font->getChar(*c)->getCrop()->w + _font->getSpacing();
-				}
-				// Reached the width limit
-				if (_wrap && w > _width)
-				{
-					c = end;
-					blit = true;
-				}
-			}
+			x += font->getWidth() / 2;
 		}
-		// Draw the line
-		if (blit)
+		else if (*c == '\n' || *c == 2)
 		{
+			line++;
+			y += font->getHeight() + font->getSpacing();
 			switch (_align)
 			{
 			case ALIGN_LEFT:
 				x = 0;
 				break;
 			case ALIGN_CENTER:
-				x = (_width - wf) / 2;
+				x = (_width - _lineWidth[line]) / 2;
 				break;
 			case ALIGN_RIGHT:
-				x = _width - wf;
+				x = _width - _lineWidth[line];
+				break;
 			}
-			
-			// Character by character
-			for (; start < c; start++)
-			{
-				if (*start == ' ')
-				{
-					x += _font->getWidth() / 2;
-				}
-				else
-				{
-					Surface* chr = _font->getChar(*start);
-					chr->setX(x);
-					chr->setY(y);
-					chr->blit(this);
-					x += chr->getCrop()->w + _font->getSpacing();
-				}
-			}
-			if (start != _text.end())
-				start++;
-
-			// Go down a line
-			y += _font->getHeight() + _font->getSpacing();
-			x = 0;
-
-			// Reset counters
-			w = 0;
-			blit = false;
-
-			// Switch to small text
-			if (small)
-			{
-				_font = _small;
-				small = false;
-			}
+			if (*c == 2)
+				font = _small;
 		}
-		// Manual override because string iterators don't like going past the end
-		if (c == _text.end())
-			break;
-
+		else
+		{
+			Surface* chr = font->getChar(*c);
+			chr->setX(x);
+			chr->setY(y);
+			chr->blit(this);
+			x += chr->getCrop()->w + font->getSpacing();
+		}
 	}
-	_font = font;
 
 	this->offset(_color);
 	if (_invert)

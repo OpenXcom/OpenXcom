@@ -32,10 +32,6 @@
 #include "Text.h"
 #include "TextList.h"
 
-#include "SDL_mixer.h"
-#include "SDL.h"
-#include <fstream>
-
 using namespace std;
 
 /**
@@ -46,7 +42,7 @@ TestState::TestState(Game *game) : State(game)
 {
 	// Create objects
 	_window = new Window(300, 180, 10, 10);
-	_text = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 280, 160, 20, 50);
+	_text = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 280, 120, 20, 50);
 	_button = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 100, 20, 110, 150);
 	_list = new TextList(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 300, 180, 10, 10);
 	_set = game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
@@ -64,14 +60,15 @@ TestState::TestState(Game *game) : State(game)
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)+4);
 	_window->setBackground(game->getResourcePack()->getSurface("BACK04.SCR"));
-
+	
 	_button->setColor(Palette::blockOffset(15)+4);
 	_button->setText("LOLOLOL");
 	
 	_text->setColor(Palette::blockOffset(15)+1);
-	_text->setBig();
+	//_text->setBig();
 	_text->setWordWrap(true);
 	_text->setAlign(ALIGN_CENTER);
+	_text->setVerticalAlign(ALIGN_MIDDLE);
 	//_game->getResourcePack()->setLanguage("GERMAN.DAT");
 	_text->setText(_game->getResourcePack()->getLanguage()->getString(STR_COUNCIL_TERMINATED));
 
@@ -82,51 +79,6 @@ TestState::TestState(Game *game) : State(game)
 	_list->addRow(1, "0123456789");
 	
 	_i = 0;
-
-	ifstream sndFile ("DATA/SOUND/SAMPLE.CAT", ios::in | ios::binary);
-	if (!sndFile)
-	{
-		throw "Failed to load CAT";
-	}
-
-	int first;
-	sndFile.read((char*)&first, sizeof(first));
-
-	cout << first << endl;
-	cout << first / sizeof(first) / 2 << endl;
-
-	sndFile.seekg(0, ios::beg);
-
-	int offset, size;
-	sndFile.read((char*)&offset, sizeof(offset));
-	sndFile.read((char*)&size, sizeof(size));
-
-	cout << offset << endl;
-	cout << size << endl;
-
-	sndFile.seekg(offset, ios::beg);
-
-	char namesize;
-	char *name;
-
-	sndFile.read(&namesize, 1);
-	name = new char[namesize];
-	sndFile.read(name, namesize);
-
-	cout << name << endl;
-
-	char *sound = new char[size];
-	sndFile.read(sound, size);
-	
-	SDL_RWops *rw = SDL_RWFromMem(sound, size);
-
-	Mix_Chunk *wav = Mix_LoadWAV_RW(rw, 1);
-	if (wav == 0)
-		cout << Mix_GetError() << endl;
-
-	Mix_PlayChannel(-1, wav, 0);
-
-	sndFile.close();
 }
 
 TestState::~TestState()

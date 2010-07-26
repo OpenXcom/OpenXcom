@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "GeoscapeMessageState.h"
+#include "GeoscapeErrorState.h"
 #include "Game.h"
 #include "ResourcePack.h"
 #include "Language.h"
@@ -28,11 +28,11 @@
 #include "Text.h"
 
 /**
- * Initializes all the elements in a Geoscape message window.
+ * Initializes all the elements in a Geoscape error window.
  * @param game Pointer to the core game.
- * @param str Message to display.
+ * @param str Error message to display.
  */
-GeoscapeMessageState::GeoscapeMessageState(Game *game, string str) : State(game)
+GeoscapeErrorState::GeoscapeErrorState(Game *game, LangString str) : State(game)
 {
 	_screen = false;
 
@@ -49,25 +49,25 @@ GeoscapeMessageState::GeoscapeMessageState(Game *game, string str) : State(game)
 	add(_txtMessage);
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(15)+2);
-	_window->setBackground(game->getResourcePack()->getSurface("BACK17.SCR"));
+	_window->setColor(Palette::blockOffset(8)+13);
+	_window->setBackground(game->getResourcePack()->getSurface("BACK01.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(8)+8);
+	_btnOk->setColor(Palette::blockOffset(8)+13);
 	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString(STR_OK));
-	_btnOk->onMouseClick((EventHandler)&GeoscapeMessageState::btnOkClick);
+	_btnOk->onMouseClick((EventHandler)&GeoscapeErrorState::btnOkClick);
 
-	_txtMessage->setColor(Palette::blockOffset(15)-1);
+	_txtMessage->setColor(Palette::blockOffset(8)+10);
 	_txtMessage->setAlign(ALIGN_CENTER);
 	_txtMessage->setVerticalAlign(ALIGN_MIDDLE);
 	_txtMessage->setBig();
 	_txtMessage->setWordWrap(true);
-	_txtMessage->setText(str);
+	_txtMessage->setText(_game->getResourcePack()->getLanguage()->getString(str));
 }
 
 /**
  *
  */
-GeoscapeMessageState::~GeoscapeMessageState()
+GeoscapeErrorState::~GeoscapeErrorState()
 {
 	
 }
@@ -77,7 +77,7 @@ GeoscapeMessageState::~GeoscapeMessageState()
  * @param ev Pointer to the SDL_Event.
  * @param scale Scale of the screen.
  */
-void GeoscapeMessageState::btnOkClick(SDL_Event *ev, int scale)
+void GeoscapeErrorState::btnOkClick(SDL_Event *ev, int scale)
 {
 	_game->popState();
 }

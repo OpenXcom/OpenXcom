@@ -52,9 +52,9 @@ Globe::Globe(int cenX, int cenY, int width, int height, int x, int y) : Interact
 {
 	_radius.push_back(90);
 	_radius.push_back(120);
-	_radius.push_back(240);
-	_radius.push_back(360);
-	_radius.push_back(480);
+	_radius.push_back(180);
+	_radius.push_back(280);
+	_radius.push_back(450);
 	_radius.push_back(720);
 
 	_markers = new Surface(width, height, x, y);
@@ -472,8 +472,9 @@ void Globe::drawMarkers()
 				// Convert coordinates
 				polarToCart(i->second->getLabelLongitude(), i->second->getLabelLatitude(), &x, &y);
 
-				Text *label = new Text(_res->getFont("BIGLETS.DAT"), _res->getFont("SMALLSET.DAT"), 80, 9, x, y);
+				Text *label = new Text(_res->getFont("BIGLETS.DAT"), _res->getFont("SMALLSET.DAT"), 80, 9, x - 40, y);
 				label->setPalette(getPalette());
+				label->setAlign(ALIGN_CENTER);
 				label->setText(_res->getLanguage()->getString(i->first));
 				label->setColor(Palette::blockOffset(15)-1);
 				label->blit(_markers);
