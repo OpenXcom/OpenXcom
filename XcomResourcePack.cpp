@@ -252,8 +252,7 @@ XcomResourcePack::XcomResourcePack(string folder) : ResourcePack(folder)
 					  1.8326, -0.724312, 1.95477, -0.7614, 1.95695, -0.785398, 2.09221, -0.815941, 2.02022, -0.833395, 2.03767, -0.870483, -20};
 
 	Polyline *l = 0;
-	bool lon = true;
-	int start;
+	int start = 0;
 	for (int i = 0; lines[i] > -19.999; i++)
 	{
 		if (lines[i] < -9.999 && lines[i] > -10.001)
