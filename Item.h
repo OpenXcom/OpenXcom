@@ -16,34 +16,34 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM__REGION_H
-#define OPENXCOM__REGION_H
+#ifndef OPENXCOM__ITEM_H
+#define OPENXCOM__ITEM_H
 
-#include <vector>
+#include "LangString.h"
 
-using namespace std;
+class RuleItem;
 
 /**
- * Represents a region of the world.
- * Regions help localize X-Com and alien activity around
- * the globe and also affect base construction costs.
+ * Represents an item stored in a base.
+ * Contains variable info about an item like quantity.
+ * @sa RuleItem
  */
-class Region
+class Item
 {
 private:
-	int _cost;
-	vector<double> _lonMin, _lonMax, _latMin, _latMax;
+	RuleItem *_rules;
+	int _qty;
 public:
-	/// Creates a new region with a base cost.
-	Region(int cost);
-	/// Cleans up the region.
-	~Region();
-	/// Gets the region's base cost.
-	int getBaseCost();
-	/// Adds an area to the region.
-	void addArea(double lonMin, double lonMax, double latMin, double latMax);
-	/// Checks if a point is inside the region.
-	bool insideRegion(double lon, double lat);
+	/// Creates a item of the specified type.
+	Item(RuleItem *rules, int qty);
+	/// Cleans up the item.
+	~Item();
+	/// Gets the item's ruleset.
+	RuleItem *getRules();
+	/// Gets the item's quantity
+	int getQuantity();
+	/// Sets the item's quantity.
+	void setQuantity(int qty);
 };
 
 #endif

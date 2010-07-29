@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Craft.h"
+#include <cmath>
 #include "RuleCraft.h"
 #include "Soldier.h"
 
@@ -28,7 +29,7 @@
  * @param lat Latitude in radian.
  * @param lon Longitude in radian.
  */
-Craft::Craft(RuleCraft *rules, map<LangString, int> *id, double lat, double lon) : _rules(rules), _lat(lat), _lon(lon), _fuel(0), _health(0)
+Craft::Craft(RuleCraft *rules, map<LangString, int> *id, double lat, double lon) : _rules(rules), _lat(lat), _lon(lon), _fuel(0), _damage(0)
 {
 	_id = (*id)[rules->getType()];
 	(*id)[rules->getType()]++;
@@ -98,4 +99,63 @@ int Craft::getSoldiers(vector<Soldier*> *soldiers)
 int Craft::getHWPs()
 {
 	return 0;
+}
+
+/**
+ * Returns the amount of fuel currently contained
+ * in this craft.
+ * @return Amount of fuel.
+ */
+int Craft::getFuel()
+{
+	return _fuel;
+}
+
+/**
+ * Changes the amount of fuel currently contained
+ * in this craft.
+ * @param fuel Amount of fuel.
+ */
+void Craft::setFuel(int fuel)
+{
+	_fuel = fuel;
+}
+
+/**
+ * Returns the ratio between the amount of fuel currently
+ * contained in this craft and the total it can carry.
+ * @return Percentage of fuel.
+ */
+int Craft::getFuelPercentage()
+{
+	return (int)floor((double)_fuel / _rules->getMaxFuel() * 100);
+}
+
+/**
+ * Returns the amount of damage this craft has taken.
+ * @return Amount of damage.
+ */
+int Craft::getDamage()
+{
+	return _damage;
+}
+
+/**
+ * Changes the amount of damage this craft has taken.
+ * @param damage Amount of damage.
+ */
+void Craft::setDamage(int damage)
+{
+	_damage = damage;
+}
+
+/**
+ * Returns the ratio between the amount of damage this
+ * craft can take and the total it can take before it's
+ * destroyed.
+ * @return Percentage of damage.
+ */
+int Craft::getDamagePercentage()
+{
+	return (int)floor((double)_damage / _rules->getMaxDamage() * 100);
 }

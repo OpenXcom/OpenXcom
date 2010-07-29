@@ -220,7 +220,7 @@ void Globe::loadDat(string filename, vector<Polygon*> *polygons)
 
 /**
  * Changes the pack for the globe to get resources for rendering.
- * @param save Pointer to the resource pack.
+ * @param res Pointer to the resource pack.
  */
 void Globe::setResourcePack(ResourcePack *res)
 {
@@ -433,14 +433,15 @@ void Globe::draw()
 void Globe::drawMarkers()
 {
 	_markers->clear();
-	// Lock the surface
-	_markers->lock();
-
+	
 	if (_detail)
 	{
 		// Draw the country borders
 		if (_zoom >= 1)
 		{
+			// Lock the surface
+			_markers->lock();
+
 			for (vector<Polyline*>::iterator i = _res->getPolylines()->begin(); i != _res->getPolylines()->end(); i++)
 			{
 				Sint16 x[2], y[2];
@@ -457,6 +458,9 @@ void Globe::drawMarkers()
 					lineColor(_markers->getSurface(), x[0], y[0], x[1], y[1], Palette::getRGBA(getPalette(), Palette::blockOffset(10)+2));
 				}
 			}
+
+			// Unlock the surface
+			_markers->unlock();
 		}
 
 		// Draw the country names
@@ -481,6 +485,9 @@ void Globe::drawMarkers()
 			}
 		}
 	}
+
+	// Lock the surface
+	_markers->lock();
 
 	// Draw the base markers
 	for (vector<Base*>::iterator i = _save->getBases()->begin(); i != _save->getBases()->end(); i++)
@@ -508,7 +515,7 @@ void Globe::drawMarkers()
 			_markers->setPixel(x+1, y+1, color);
 		}
 	}
-	
+
 	// Unlock the surface
 	_markers->unlock();
 }

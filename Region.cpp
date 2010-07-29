@@ -19,8 +19,8 @@
 #include "Region.h"
 
 /**
- * Initializes a country with a starting amount of monthly funding.
- * @param funding Starting monthly funding.
+ * Initializes a region with a certain construction cost.
+ * @param cost Base building cost.
  */
 Region::Region(int cost): _cost(cost), _lonMin(), _lonMax(), _latMin(), _latMax()
 {

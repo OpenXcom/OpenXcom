@@ -39,7 +39,7 @@ class Craft
 private:
 	RuleCraft *_rules;
 	double _lat, _lon;
-	int _id, _fuel, _health;
+	int _id, _fuel, _damage;
 public:
 	/// Creates a craft of the specified type.
 	Craft(RuleCraft *rules, map<LangString, int> *id, double lat, double lon);
@@ -55,6 +55,18 @@ public:
 	int getSoldiers(vector<Soldier*> *soldiers);
 	/// Gets the craft's amount of HWPs.
 	int getHWPs();
+	/// Gets the craft's amount of fuel.
+	int getFuel();
+	/// Sets the craft's amount of fuel.
+	void setFuel(int fuel);
+	/// Gets the craft's percentage of fuel.
+	int getFuelPercentage();
+	/// Gets the craft's amount of damage.
+	int getDamage();
+	/// Sets the craft's amount of damage.
+	void setDamage(int damage);
+	/// Gets the craft's percentage of damage.
+	int getDamagePercentage();
 };
 
 #endif

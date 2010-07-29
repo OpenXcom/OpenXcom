@@ -398,7 +398,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	skyranger->setAcceleration(2);
 	skyranger->setMaxFuel(1500);
 	skyranger->setWeapons(0);
-	skyranger->setMaxHealth(150);
+	skyranger->setMaxDamage(150);
 	skyranger->setSoldiers(14);
 	skyranger->setMonthlyFee(500000);
 	skyranger->setHWPs(3);
@@ -415,7 +415,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	interceptor->setAcceleration(3);
 	interceptor->setMaxFuel(1000);
 	interceptor->setWeapons(2);
-	interceptor->setMaxHealth(100);
+	interceptor->setMaxDamage(100);
 	interceptor->setSoldiers(0);
 	interceptor->setMonthlyFee(600000);
 	interceptor->setHWPs(0);
@@ -637,9 +637,17 @@ SavedGame *XcomRuleset::newSave(GameDifficulty diff)
 
 	// Add crafts
 	Craft *skyranger = new Craft(getCraft(STR_SKYRANGER), save->getCraftIds(), 0.0, 0.0);
+	skyranger->setFuel(skyranger->getRules()->getMaxFuel());
+
+	Craft *interceptor1 = new Craft(getCraft(STR_INTERCEPTOR), save->getCraftIds(), 0.0, 0.0);
+	interceptor1->setFuel(interceptor1->getRules()->getMaxFuel());
+
+	Craft *interceptor2 = new Craft(getCraft(STR_INTERCEPTOR), save->getCraftIds(), 0.0, 0.0);
+	interceptor2->setFuel(interceptor2->getRules()->getMaxFuel());
+
 	base->getCrafts()->push_back(skyranger);
-	base->getCrafts()->push_back(new Craft(getCraft(STR_INTERCEPTOR), save->getCraftIds(), 0.0, 0.0));
-	base->getCrafts()->push_back(new Craft(getCraft(STR_INTERCEPTOR), save->getCraftIds(), 0.0, 0.0));
+	base->getCrafts()->push_back(interceptor1);
+	base->getCrafts()->push_back(interceptor2);
 
 	// Generate soldiers
 	for (int i = 0; i < 8; i++)

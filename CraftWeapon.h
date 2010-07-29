@@ -16,34 +16,34 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM__REGION_H
-#define OPENXCOM__REGION_H
+#ifndef OPENXCOM__CRAFTWEAPON_H
+#define OPENXCOM__CRAFTWEAPON_H
 
-#include <vector>
+#include "LangString.h"
 
-using namespace std;
+class RuleCraftWeapon;
 
 /**
- * Represents a region of the world.
- * Regions help localize X-Com and alien activity around
- * the globe and also affect base construction costs.
+ * Represents a craft weapon equipped by a craft.
+ * Contains variable info about a craft weapon like ammo.
+ * @sa RuleCraftWeapon
  */
-class Region
+class CraftWeapon
 {
 private:
-	int _cost;
-	vector<double> _lonMin, _lonMax, _latMin, _latMax;
+	RuleCraftWeapon *_rules;
+	int _ammo;
 public:
-	/// Creates a new region with a base cost.
-	Region(int cost);
-	/// Cleans up the region.
-	~Region();
-	/// Gets the region's base cost.
-	int getBaseCost();
-	/// Adds an area to the region.
-	void addArea(double lonMin, double lonMax, double latMin, double latMax);
-	/// Checks if a point is inside the region.
-	bool insideRegion(double lon, double lat);
+	/// Creates a craft weapon of the specified type.
+	CraftWeapon(RuleCraftWeapon *rules, int ammo);
+	/// Cleans up the craft weapon.
+	~CraftWeapon();
+	/// Gets the craft weapon's ruleset.
+	RuleCraftWeapon *getRules();
+	/// Gets the craft weapon's ammo
+	int getAmmo();
+	/// Sets the craft weapon's ammo.
+	void setAmmo(int ammo);
 };
 
 #endif

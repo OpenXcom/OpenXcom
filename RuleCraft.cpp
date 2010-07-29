@@ -23,7 +23,7 @@
  * type of craft.
  * @param type String defining the type.
  */
-RuleCraft::RuleCraft(LangString type) : _type(type), _sprite(0), _fuelMax(0), _healthMax(0), _speed(0), _accel(0), _weapons(0), _soldiers(0), _hwps(0), _monthlyFee(0)
+RuleCraft::RuleCraft(LangString type) : _type(type), _sprite(0), _fuelMax(0), _damageMax(0), _speed(0), _accel(0), _weapons(0), _soldiers(0), _hwps(0), _monthlyFee(0)
 {
 }
 
@@ -83,23 +83,23 @@ void RuleCraft::setMaxFuel(int fuel)
 }
 
 /**
- * Returns the maximum health (damage the craft can take)
+ * Returns the maximum damage (damage the craft can take)
  * of the craft.
- * @return Health.
+ * @return Damage.
  */
-int RuleCraft::getMaxHealth()
+int RuleCraft::getMaxDamage()
 {
-	return _healthMax;
+	return _damageMax;
 }
 
 /**
- * Changes the maximum health (damage the craft can take)
+ * Changes the maximum damage (damage the craft can take)
  * of the craft.
- * @param health Health.
+ * @param damage Damage.
  */
-void RuleCraft::setMaxHealth(int health)
+void RuleCraft::setMaxDamage(int damage)
 {
-	_healthMax = health;
+	_damageMax = damage;
 }
 
 /**

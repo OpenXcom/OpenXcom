@@ -162,11 +162,11 @@ void CraftInfoState::init()
 	texture->getFrame(c->getRules()->getSprite())->blit(_sprite);
 
 	stringstream ss2;
-	ss2 << _game->getResourcePack()->getLanguage()->getString(STR_DAMAGE) << "0%";
+	ss2 << _game->getResourcePack()->getLanguage()->getString(STR_DAMAGE) << c->getDamagePercentage() << "%";
 	_txtDamage->setText(ss2.str());
 
 	stringstream ss3;
-	ss3 << _game->getResourcePack()->getLanguage()->getString(STR_FUEL) << "0%";
+	ss3 << _game->getResourcePack()->getLanguage()->getString(STR_FUEL) << c->getFuelPercentage() << "%";
 	_txtFuel->setText(ss3.str());
 	
 	if (c->getRules()->getSoldiers() > 0)

@@ -679,11 +679,27 @@
 					>
 				</File>
 				<File
+					RelativePath=".\CraftWeapon.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\CraftWeapon.h"
+					>
+				</File>
+				<File
 					RelativePath=".\GameTime.cpp"
 					>
 				</File>
 				<File
 					RelativePath=".\GameTime.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Item.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Item.h"
 					>
 				</File>
 				<File
@@ -792,6 +808,22 @@
 				</File>
 				<File
 					RelativePath=".\RuleCraft.h"
+					>
+				</File>
+				<File
+					RelativePath=".\RuleCraftWeapon.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\RuleCraftWeapon.h"
+					>
+				</File>
+				<File
+					RelativePath=".\RuleItem.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\RuleItem.h"
 					>
 				</File>
 				<File

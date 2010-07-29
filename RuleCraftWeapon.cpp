@@ -16,34 +16,29 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM__REGION_H
-#define OPENXCOM__REGION_H
-
-#include <vector>
-
-using namespace std;
+#include "RuleCraftWeapon.h"
 
 /**
- * Represents a region of the world.
- * Regions help localize X-Com and alien activity around
- * the globe and also affect base construction costs.
+ * Creates a blank ruleset for a certain type of craft weapon.
+ * @param type String defining the type.
  */
-class Region
+RuleCraftWeapon::RuleCraftWeapon(LangString type) : _type(type), _damage(0), _range(0), _accuracy(0), _reload(0), _ammoMax(0), _ammoClip(1)
 {
-private:
-	int _cost;
-	vector<double> _lonMin, _lonMax, _latMin, _latMax;
-public:
-	/// Creates a new region with a base cost.
-	Region(int cost);
-	/// Cleans up the region.
-	~Region();
-	/// Gets the region's base cost.
-	int getBaseCost();
-	/// Adds an area to the region.
-	void addArea(double lonMin, double lonMax, double latMin, double latMax);
-	/// Checks if a point is inside the region.
-	bool insideRegion(double lon, double lat);
-};
+}
 
-#endif
+/**
+ *
+ */
+RuleCraftWeapon::~RuleCraftWeapon()
+{
+}
+
+/**
+ * Returns the language string that names this craft weapon.
+ * Each craft weapon type has a unique name.
+ * @return CraftWeapon name.
+ */
+LangString RuleCraftWeapon::getType()
+{
+	return _type;
+}
