@@ -36,9 +36,187 @@ RuleCraftWeapon::~RuleCraftWeapon()
 /**
  * Returns the language string that names this craft weapon.
  * Each craft weapon type has a unique name.
- * @return CraftWeapon name.
+ * @return Craft weapon name.
  */
 LangString RuleCraftWeapon::getType()
 {
 	return _type;
+}
+
+/**
+ * Returns the ID of the sprite used to draw the craft weapon
+ * in the Equip Craft and Interception screens.
+ * @return Sprite ID.
+ */
+int RuleCraftWeapon::getSprite()
+{
+	return _sprite;
+}
+
+/**
+ * Changes the ID of the sprite used to draw the craft weapon
+ * in the Equip Craft and Interception screens.
+ * @param sprite Sprite ID.
+ */
+void RuleCraftWeapon::setSprite(int sprite)
+{
+	_sprite = sprite;
+}
+
+/**
+ * Returns the amount of damage this craft weapon
+ * inflicts on enemy crafts.
+ * @return Damage amount.
+ */
+int RuleCraftWeapon::getDamage()
+{
+	return _damage;
+}
+
+/**
+ * Changes the amount of damage this craft weapon
+ * inflicts on enemy crafts.
+ * @param damage Damage amount.
+ */
+void RuleCraftWeapon::setDamage(int damage)
+{
+	_damage = damage;
+}
+
+/**
+ * Returns the maximum range of this craft weapon.
+ * @return Range in km.
+ */
+int RuleCraftWeapon::getRange()
+{
+	return _range;
+}
+
+/**
+ * Changes the maximum range of this craft weapon.
+ * @param range Range in km.
+ */
+void RuleCraftWeapon::setRange(int range)
+{
+	_range = range;
+}
+
+/**
+ * Returns the percentage chance of each shot of
+ * this craft weapon hitting an enemy craft.
+ * @return Percentage accuracy.
+ */
+int RuleCraftWeapon::getAccuracy()
+{
+	return _accuracy;
+}
+
+/**
+ * Changes the percentage chance of each shot of
+ * this craft weapon hitting an enemy craft.
+ * @param accuracy Percentage accuracy.
+ */
+void RuleCraftWeapon::setAccuracy(int accuracy)
+{
+	_accuracy = accuracy;
+}
+
+/**
+ * Returns the amount of time the craft weapon takes to
+ * reload after firing a shot.
+ * @return Time in game seconds.
+ */
+int RuleCraftWeapon::getReloadTime()
+{
+	return _reload;
+}
+
+/**
+ * Changes the amount of time the craft weapon takes to
+ * reload after firing a shot.
+ * @param reload Time in game seconds.
+ */
+void RuleCraftWeapon::setReloadTime(int reload)
+{
+	_reload = reload;
+}
+
+/**
+ * Returns the maximum amount of ammo the craft weapon
+ * can carry.
+ * @return Amount of ammo.
+ */
+int RuleCraftWeapon::getAmmoMax()
+{
+	return _ammoMax;
+}
+
+/**
+ * Changes the maximum amount of ammo the craft weapon
+ * can carry.
+ * @param ammo Amount of ammo.
+ */
+void RuleCraftWeapon::setAmmoMax(int ammo)
+{
+	_ammoMax = ammo;
+}
+
+/**
+ * Returns the amount of ammo supplied in each craft weapon's
+ * clip item.
+ * @return Amount of ammo per clip.
+ */
+int RuleCraftWeapon::getAmmoClip()
+{
+	return _ammoClip;
+}
+
+/**
+ * Changes the amount of ammo supplied in each craft weapon's
+ * clip item.
+ * @param clip Amount of ammo per clip.
+ */
+void RuleCraftWeapon::setAmmoClip(int clip)
+{
+	_ammoClip = clip;
+}
+
+/**
+ * Returns the language string of the item used to
+ * equip this craft weapon.
+ * @return Item name.
+ */
+LangString RuleCraftWeapon::getLauncherItem()
+{
+	return _launcher;
+}
+
+/**
+ * Changes the language string of the item used to
+ * equip this craft weapon.
+ * @param launcher Item name.
+ */
+void RuleCraftWeapon::setLauncherItem(LangString launcher)
+{
+	_launcher = launcher;
+}
+
+/**
+ * Returns the language string of the item used to
+ * load this craft weapon with ammo.
+ * @return Item name.
+ */
+LangString RuleCraftWeapon::getClipItem()
+{
+	return _clip;
+}
+
+/**
+ * Changes the language string of the item used to
+ * load this craft weapon with ammo.
+ * @param clip Item name.
+ */
+void RuleCraftWeapon::setClipItem(LangString clip)
+{
+	_clip = clip;
 }

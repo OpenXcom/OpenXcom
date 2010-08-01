@@ -20,6 +20,7 @@
 #include "SavedGame.h"
 #include "RuleBaseFacility.h"
 #include "RuleCraft.h"
+#include "RuleCraftWeapon.h"
 #include "SoldierNamePool.h"
 #include "Region.h"
 #include "RNG.h"
@@ -28,6 +29,7 @@
 #include "Country.h"
 #include "BaseFacility.h"
 #include "Craft.h"
+#include "CraftWeapon.h"
 #include "Soldier.h"
 
 /**
@@ -405,9 +407,23 @@ XcomRuleset::XcomRuleset() : Ruleset()
 
 	RuleCraft* lightning = new RuleCraft(STR_LIGHTNING);
 	lightning->setSprite(34);
+	lightning->setSpeed(3100);
+	lightning->setAcceleration(9);
+	lightning->setMaxFuel(30);
+	lightning->setWeapons(1);
+	lightning->setMaxDamage(800);
+	lightning->setSoldiers(12);
+	lightning->setHWPs(0);
 
 	RuleCraft* avenger = new RuleCraft(STR_AVENGER);
 	avenger->setSprite(35);
+	avenger->setSpeed(5400);
+	avenger->setAcceleration(10);
+	avenger->setMaxFuel(60);
+	avenger->setWeapons(2);
+	avenger->setMaxDamage(1200);
+	avenger->setSoldiers(26);
+	avenger->setHWPs(4);
 
 	RuleCraft* interceptor = new RuleCraft(STR_INTERCEPTOR);
 	interceptor->setSprite(36);
@@ -422,12 +438,85 @@ XcomRuleset::XcomRuleset() : Ruleset()
 
 	RuleCraft* firestorm = new RuleCraft(STR_FIRESTORM);
 	firestorm->setSprite(37);
+	firestorm->setSpeed(4200);
+	firestorm->setAcceleration(9);
+	firestorm->setMaxFuel(20);
+	firestorm->setWeapons(2);
+	firestorm->setMaxDamage(50);
+	firestorm->setSoldiers(0);
+	firestorm->setHWPs(0);
 
 	_crafts.insert(pair<LangString, RuleCraft*>(STR_SKYRANGER, skyranger));
 	_crafts.insert(pair<LangString, RuleCraft*>(STR_LIGHTNING, lightning));
 	_crafts.insert(pair<LangString, RuleCraft*>(STR_AVENGER, avenger));
 	_crafts.insert(pair<LangString, RuleCraft*>(STR_INTERCEPTOR, interceptor));
 	_crafts.insert(pair<LangString, RuleCraft*>(STR_FIRESTORM, firestorm));
+
+	RuleCraftWeapon *stingray = new RuleCraftWeapon(STR_STINGRAY_UC);
+	stingray->setSprite(48);
+	stingray->setDamage(70);
+	stingray->setRange(30);
+	stingray->setAccuracy(70);
+	stingray->setReloadTime(16);
+	stingray->setAmmoMax(6);
+	stingray->setLauncherItem(STR_STINGRAY_LAUNCHER);
+	stingray->setClipItem(STR_STINGRAY_MISSILE);
+
+	RuleCraftWeapon *avalanche = new RuleCraftWeapon(STR_AVALANCHE_UC);
+	avalanche->setSprite(49);
+	avalanche->setDamage(100);
+	avalanche->setRange(60);
+	avalanche->setAccuracy(80);
+	avalanche->setReloadTime(24);
+	avalanche->setAmmoMax(3);
+	avalanche->setLauncherItem(STR_AVALANCHE_LAUNCHER);
+	avalanche->setClipItem(STR_AVALANCHE_MISSILE);
+
+	RuleCraftWeapon *cannon = new RuleCraftWeapon(STR_CANNON_UC);
+	cannon->setSprite(50);
+	cannon->setDamage(10);
+	cannon->setRange(10);
+	cannon->setAccuracy(25);
+	cannon->setReloadTime(2);
+	cannon->setAmmoMax(200);
+	cannon->setAmmoClip(50);
+	cannon->setLauncherItem(STR_CANNON);
+	cannon->setClipItem(STR_CANNON_ROUNDS);
+
+	RuleCraftWeapon *laser = new RuleCraftWeapon(STR_LASER_CANNON_UC);
+	laser->setSprite(52);
+	laser->setDamage(70);
+	laser->setRange(21);
+	laser->setAccuracy(35);
+	laser->setReloadTime(12);
+	laser->setAmmoMax(99);
+	laser->setLauncherItem(STR_LASER_CANNON);
+
+	RuleCraftWeapon *plasma = new RuleCraftWeapon(STR_PLASMA_BEAM_UC);
+	plasma->setSprite(53);
+	plasma->setDamage(140);
+	plasma->setRange(52);
+	plasma->setAccuracy(50);
+	plasma->setReloadTime(12);
+	plasma->setAmmoMax(100);
+	plasma->setLauncherItem(STR_PLASMA_BEAM);
+
+	RuleCraftWeapon *fusion = new RuleCraftWeapon(STR_FUSION_BALL_UC);
+	fusion->setSprite(51);
+	fusion->setDamage(230);
+	fusion->setRange(65);
+	fusion->setAccuracy(100);
+	fusion->setReloadTime(16);
+	fusion->setAmmoMax(2);
+	fusion->setLauncherItem(STR_FUSION_BALL_LAUNCHER);
+	fusion->setClipItem(STR_FUSION_BALL);
+
+	_craftWeapons.insert(pair<LangString, RuleCraftWeapon*>(STR_STINGRAY_UC, stingray));
+	_craftWeapons.insert(pair<LangString, RuleCraftWeapon*>(STR_AVALANCHE_UC, avalanche));
+	_craftWeapons.insert(pair<LangString, RuleCraftWeapon*>(STR_CANNON_UC, cannon));
+	_craftWeapons.insert(pair<LangString, RuleCraftWeapon*>(STR_FUSION_BALL_UC, fusion));
+	_craftWeapons.insert(pair<LangString, RuleCraftWeapon*>(STR_LASER_CANNON_UC, laser));
+	_craftWeapons.insert(pair<LangString, RuleCraftWeapon*>(STR_PLASMA_BEAM_UC, plasma));
 }
 
 /**
@@ -638,16 +727,16 @@ SavedGame *XcomRuleset::newSave(GameDifficulty diff)
 	// Add crafts
 	Craft *skyranger = new Craft(getCraft(STR_SKYRANGER), save->getCraftIds(), 0.0, 0.0);
 	skyranger->setFuel(skyranger->getRules()->getMaxFuel());
-
-	Craft *interceptor1 = new Craft(getCraft(STR_INTERCEPTOR), save->getCraftIds(), 0.0, 0.0);
-	interceptor1->setFuel(interceptor1->getRules()->getMaxFuel());
-
-	Craft *interceptor2 = new Craft(getCraft(STR_INTERCEPTOR), save->getCraftIds(), 0.0, 0.0);
-	interceptor2->setFuel(interceptor2->getRules()->getMaxFuel());
-
 	base->getCrafts()->push_back(skyranger);
-	base->getCrafts()->push_back(interceptor1);
-	base->getCrafts()->push_back(interceptor2);
+
+	for (int i = 0; i < 2; i++)
+	{
+		Craft *interceptor = new Craft(getCraft(STR_INTERCEPTOR), save->getCraftIds(), 0.0, 0.0);
+		interceptor->setFuel(interceptor->getRules()->getMaxFuel());
+		interceptor->getWeapons()->at(0) = new CraftWeapon(getCraftWeapon(STR_STINGRAY_UC), getCraftWeapon(STR_STINGRAY_UC)->getAmmoMax());
+		interceptor->getWeapons()->at(1) = new CraftWeapon(getCraftWeapon(STR_CANNON_UC), getCraftWeapon(STR_CANNON_UC)->getAmmoMax());
+		base->getCrafts()->push_back(interceptor);
+	}
 
 	// Generate soldiers
 	for (int i = 0; i < 8; i++)

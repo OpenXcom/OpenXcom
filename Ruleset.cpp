@@ -19,12 +19,14 @@
 #include "Ruleset.h"
 #include "RuleBaseFacility.h"
 #include "RuleCraft.h"
+#include "RuleCraftWeapon.h"
+#include "RuleItem.h"
 #include "SoldierNamePool.h"
 
 /**
  * Creates a ruleset with blank sets of rules.
  */
-Ruleset::Ruleset() : _names(), _facilities(), _crafts()
+Ruleset::Ruleset() : _names(), _facilities(), _crafts(), _craftWeapons(), _items()
 {
 }
 
@@ -42,6 +44,14 @@ Ruleset::~Ruleset()
 		delete i->second;
 	}
 	for (map<LangString, RuleCraft*>::iterator i = _crafts.begin(); i != _crafts.end(); i++)
+	{
+		delete i->second;
+	}
+	for (map<LangString, RuleCraftWeapon*>::iterator i = _craftWeapons.begin(); i != _craftWeapons.end(); i++)
+	{
+		delete i->second;
+	}
+	for (map<LangString, RuleItem*>::iterator i = _items.begin(); i != _items.end(); i++)
 	{
 		delete i->second;
 	}
@@ -87,3 +97,25 @@ RuleCraft *Ruleset::getCraft(LangString id)
 {
 	return _crafts[id];
 }
+
+/**
+ * Returns the rules for the specified craft weapon.
+ * @param id Craft weapon type.
+ * @return Rules for the craft weapon.
+ */
+RuleCraftWeapon *Ruleset::getCraftWeapon(LangString id)
+{
+	return _craftWeapons[id];
+}
+
+
+/**
+ * Returns the rules for the specified item.
+ * @param id Item type.
+ * @return Rules for the item.
+ */
+RuleItem *Ruleset::getItem(LangString id)
+{
+	return _items[id];
+}
+

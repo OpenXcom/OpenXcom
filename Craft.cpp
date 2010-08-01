@@ -18,6 +18,7 @@
  */
 #include "Craft.h"
 #include <cmath>
+#include "CraftWeapon.h"
 #include "RuleCraft.h"
 #include "Soldier.h"
 
@@ -29,17 +30,21 @@
  * @param lat Latitude in radian.
  * @param lon Longitude in radian.
  */
-Craft::Craft(RuleCraft *rules, map<LangString, int> *id, double lat, double lon) : _rules(rules), _lat(lat), _lon(lon), _fuel(0), _damage(0)
+Craft::Craft(RuleCraft *rules, map<LangString, int> *id, double lat, double lon) : _rules(rules), _lat(lat), _lon(lon), _fuel(0), _damage(0), _weapons()
 {
-	_id = (*id)[rules->getType()];
-	(*id)[rules->getType()]++;
+	_id = (*id)[_rules->getType()];
+	(*id)[_rules->getType()]++;
+	for (int i = 0; i < _rules->getWeapons(); i++)
+		_weapons.push_back(0);
 }
 
 /**
- *
+ * Delete the craft content.
  */
 Craft::~Craft()
 {
+	for (vector<CraftWeapon*>::iterator i = _weapons.begin(); i != _weapons.end(); i++)
+		delete *i;
 }
 
 /**
@@ -65,9 +70,20 @@ int Craft::getId()
  * equipped on this craft.
  * @return Number of weapons.
  */
-int Craft::getWeapons()
+int Craft::getNumWeapons()
 {
-	return 0;
+	if (_rules->getWeapons() == 0)
+		return 0;
+
+	int total = 0;
+
+	for (vector<CraftWeapon*>::iterator i = _weapons.begin(); i != _weapons.end(); i++)
+	{
+		if ((*i) != 0)
+			total++;
+	}
+
+	return total;
 }
 
 /**
@@ -75,7 +91,7 @@ int Craft::getWeapons()
  * that are currently attached to this craft.
  * @return Number of soldiers.
  */
-int Craft::getSoldiers(vector<Soldier*> *soldiers)
+int Craft::getNumSoldiers(vector<Soldier*> *soldiers)
 {
 	if (_rules->getSoldiers() == 0)
 		return 0;
@@ -96,9 +112,19 @@ int Craft::getSoldiers(vector<Soldier*> *soldiers)
  * contained in this craft.
  * @return Number of HWPs.
  */
-int Craft::getHWPs()
+int Craft::getNumHWPs()
 {
 	return 0;
+}
+
+/**
+ * Returns the weapons currently
+ * equipped on this craft.
+ * @return Pointer to weapons
+ */
+vector<CraftWeapon*> *Craft::getWeapons()
+{
+	return &_weapons;
 }
 
 /**

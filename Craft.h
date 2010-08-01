@@ -27,6 +27,7 @@ using namespace std;
 
 class RuleCraft;
 class Soldier;
+class CraftWeapon;
 
 /**
  * Represents a craft stored in a base.
@@ -40,6 +41,7 @@ private:
 	RuleCraft *_rules;
 	double _lat, _lon;
 	int _id, _fuel, _damage;
+	vector<CraftWeapon*> _weapons;
 public:
 	/// Creates a craft of the specified type.
 	Craft(RuleCraft *rules, map<LangString, int> *id, double lat, double lon);
@@ -50,11 +52,13 @@ public:
 	/// Gets the craft's ID.
 	int getId();
 	/// Gets the craft's amount of weapons.
-	int getWeapons();
+	int getNumWeapons();
 	/// Gets the craft's amount of soldiers.
-	int getSoldiers(vector<Soldier*> *soldiers);
+	int getNumSoldiers(vector<Soldier*> *soldiers);
 	/// Gets the craft's amount of HWPs.
-	int getHWPs();
+	int getNumHWPs();
+	/// Gets the craft's weapons.
+	vector<CraftWeapon*> *getWeapons();
 	/// Gets the craft's amount of fuel.
 	int getFuel();
 	/// Sets the craft's amount of fuel.

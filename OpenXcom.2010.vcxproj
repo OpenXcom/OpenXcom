@@ -72,7 +72,7 @@
       </DataExecutionPrevention>
       <TargetMachine>MachineX86</TargetMachine>
       <GenerateMapFile>false</GenerateMapFile>
-      <MapExports>true</MapExports>
+      <MapExports>false</MapExports>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

@@ -29,6 +29,8 @@ using namespace std;
 class SoldierNamePool;
 class RuleBaseFacility;
 class RuleCraft;
+class RuleCraftWeapon;
+class RuleItem;
 
 /**
  * Set of rules and stats for a game.
@@ -42,6 +44,8 @@ protected:
 	vector<SoldierNamePool*> _names;
 	map<LangString, RuleBaseFacility*> _facilities;
 	map<LangString, RuleCraft*> _crafts;
+	map<LangString, RuleCraftWeapon*> _craftWeapons;
+	map<LangString, RuleItem*> _items;
 public:
 	/// Creates a blank ruleset.
 	Ruleset();
@@ -55,6 +59,10 @@ public:
 	RuleBaseFacility *getBaseFacility(LangString id);
 	/// Gets the ruleset for a craft type.
 	RuleCraft *getCraft(LangString id);
+	/// Gets the ruleset for a craft weapon type.
+	RuleCraftWeapon *getCraftWeapon(LangString id);
+	/// Gets the ruleset for a item type.
+	RuleItem *getItem(LangString id);
 };
 
 #endif

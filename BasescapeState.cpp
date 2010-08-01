@@ -344,8 +344,7 @@ void BasescapeState::viewClick(SDL_Event *ev, int scale)
 				x = (*i)->getX();
 				y = (*i)->getY();
 			}
-			if ((*i)->getBuildTime() == 0)
-				squares += (*i)->getRules()->getSize() * (*i)->getRules()->getSize();
+			squares += (*i)->getRules()->getSize() * (*i)->getRules()->getSize();
 		}
 		squares -= fac->getRules()->getSize() * fac->getRules()->getSize();
 

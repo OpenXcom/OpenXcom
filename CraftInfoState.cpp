@@ -30,6 +30,8 @@
 #include "SurfaceSet.h"
 #include "Craft.h"
 #include "RuleCraft.h"
+#include "CraftWeapon.h"
+#include "RuleCraftWeapon.h"
 #include "Base.h"
 #include "CraftSoldiersState.h"
 
@@ -175,7 +177,7 @@ void CraftInfoState::init()
 		_equip->clear();
 
 		texture->getFrame(38)->setY(0);
-		for (int i = 0, x = 0; i < c->getSoldiers(_base->getSoldiers()); i++, x += 10)
+		for (int i = 0, x = 0; i < c->getNumSoldiers(_base->getSoldiers()); i++, x += 10)
 		{
 			texture->getFrame(38)->setX(x);
 			texture->getFrame(38)->blit(_crew);
@@ -198,18 +200,20 @@ void CraftInfoState::init()
 
 	if (c->getRules()->getWeapons() > 0)
 	{
-		texture->getFrame(48)->setX(0);
-		texture->getFrame(48)->setY(0);
-		texture->getFrame(48)->blit(_w1);
+		CraftWeapon *w1 = c->getWeapons()->at(0);
 
-		_txtW1Name->setText("STINGRAY");
+		texture->getFrame(w1->getRules()->getSprite())->setX(0);
+		texture->getFrame(w1->getRules()->getSprite())->setY(0);
+		texture->getFrame(w1->getRules()->getSprite())->blit(_w1);
+
+		_txtW1Name->setText(_game->getResourcePack()->getLanguage()->getString(w1->getRules()->getType()));
 
 		stringstream ss4;
-		ss4 << _game->getResourcePack()->getLanguage()->getString(STR_AMMO) << "0";
+		ss4 << _game->getResourcePack()->getLanguage()->getString(STR_AMMO) << w1->getAmmo();
 		_txtW1Ammo->setText(ss4.str());
 
 		stringstream ss5;
-		ss5 << _game->getResourcePack()->getLanguage()->getString(STR_MAX) << "0";
+		ss5 << _game->getResourcePack()->getLanguage()->getString(STR_MAX) << w1->getRules()->getAmmoMax();
 		_txtW1Max->setText(ss5.str());
 	}
 	else
@@ -223,18 +227,20 @@ void CraftInfoState::init()
 
 	if (c->getRules()->getWeapons() > 1)
 	{
-		texture->getFrame(48)->setX(0);
-		texture->getFrame(48)->setY(0);
-		texture->getFrame(48)->blit(_w2);
+		CraftWeapon *w2 = c->getWeapons()->at(1);
 
-		_txtW2Name->setText("STINGRAY");
+		texture->getFrame(w2->getRules()->getSprite())->setX(0);
+		texture->getFrame(w2->getRules()->getSprite())->setY(0);
+		texture->getFrame(w2->getRules()->getSprite())->blit(_w2);
+
+		_txtW2Name->setText(_game->getResourcePack()->getLanguage()->getString(w2->getRules()->getType()));
 
 		stringstream ss6;
-		ss6 << _game->getResourcePack()->getLanguage()->getString(STR_AMMO) << "0";
+		ss6 << _game->getResourcePack()->getLanguage()->getString(STR_AMMO) << w2->getAmmo();
 		_txtW2Ammo->setText(ss6.str());
 
 		stringstream ss7;
-		ss7 << _game->getResourcePack()->getLanguage()->getString(STR_MAX) << "0";
+		ss7 << _game->getResourcePack()->getLanguage()->getString(STR_MAX) << w2->getRules()->getAmmoMax();
 		_txtW2Max->setText(ss7.str());
 	}
 	else

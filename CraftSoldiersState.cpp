@@ -118,11 +118,11 @@ void CraftSoldiersState::init()
 	Craft *c = _base->getCrafts()->at(_craft);
 
 	stringstream ss;
-	ss << _game->getResourcePack()->getLanguage()->getString(STR_SPACE_AVAILABLE) << c->getRules()->getSoldiers() - c->getSoldiers(_base->getSoldiers());
+	ss << _game->getResourcePack()->getLanguage()->getString(STR_SPACE_AVAILABLE) << c->getRules()->getSoldiers() - c->getNumSoldiers(_base->getSoldiers());
 	_txtAvailable->setText(ss.str());
 
 	stringstream ss2;
-	ss2 << _game->getResourcePack()->getLanguage()->getString(STR_SPACE_USED) << c->getSoldiers(_base->getSoldiers());
+	ss2 << _game->getResourcePack()->getLanguage()->getString(STR_SPACE_USED) << c->getNumSoldiers(_base->getSoldiers());
 	_txtUsed->setText(ss2.str());
 
 	int row = 0;

@@ -104,7 +104,7 @@ void BaseView::setTexture(SurfaceSet *texture)
 
 /**
  * Returns the facility the mouse is currently over.
- * @return Pointer to base facility (NULL if none).
+ * @return Pointer to base facility (0 if none).
  */
 BaseFacility *BaseView::getSelectedFacility()
 {
@@ -208,10 +208,10 @@ bool BaseView::isPlaceable(RuleBaseFacility *rule)
  */
 int BaseView::countConnected(int x, int y, int **grid, BaseFacility *remove)
 {
-	int total = 0;
+	bool newgrid = (grid == 0);
 
 	// Create connection grid
-	if (grid == 0)
+	if (newgrid)
 	{
 		grid = new int*[BASE_SIZE];
 
@@ -222,47 +222,30 @@ int BaseView::countConnected(int x, int y, int **grid, BaseFacility *remove)
 			{
 				if (_facilities[xx][yy] == 0 || _facilities[xx][yy] == remove)
 					grid[xx][yy] = -1;
-				else if (_facilities[xx][yy]->getBuildTime() > 0)
-					grid[xx][yy] = -1;
 				else
 					grid[xx][yy] = 0;
 			}
 		}
 	}
 
-	if (x < 0 || x >= BASE_SIZE || y < 0 || y >= BASE_SIZE)
+	if (x < 0 || x >= BASE_SIZE || y < 0 || y >= BASE_SIZE || grid[x][y] != 0)
 		return 0;
 
 	// Add connected facilities to grid
-	if (grid[x][y] == 0)
-	{
-		grid[x][y]++;
-		total++;
-	}
-	if (x > 0 && grid[x - 1][y] == 0)
-	{
-		grid[x - 1][y]++;
-		total += 1 + countConnected(x - 1, y, grid);
-	}
-	if (y > 0 && grid[x][y - 1] == 0)
-	{
-		grid[x][y - 1]++;
-		total += 1 + countConnected(x, y - 1, grid);
-	}
-	if (x + 1 < BASE_SIZE && grid[x + 1][y] == 0)
-	{
-		grid[x + 1][y]++;
-		total += 1 + countConnected(x + 1, y, grid);
-	}
-	if (y + 1 < BASE_SIZE && grid[x][y + 1] == 0)
-	{
-		grid[x][y + 1]++;
-		total += 1 + countConnected(x, y + 1, grid);
-	}
+	int total = 1;
+	grid[x][y]++;
+
+	if (_facilities[x][y]->getBuildTime() > 0)
+		return total;
+
+	total += countConnected(x - 1, y, grid, remove);
+	total += countConnected(x, y - 1, grid, remove);
+	total += countConnected(x + 1, y, grid, remove);
+	total += countConnected(x, y + 1, grid, remove);
 
 	// Delete connection grid
-	if (grid == 0)
-	{		
+	if (newgrid)
+	{
 		for (int xx = 0; xx < BASE_SIZE; xx++)
 		{
 			delete[] grid[xx];

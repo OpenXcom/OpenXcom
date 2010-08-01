@@ -31,6 +31,7 @@ class RuleCraftWeapon
 {
 private:
 	LangString _type;
+	int _sprite;
 	int _damage, _range, _accuracy, _reload, _ammoMax, _ammoClip;
 	LangString _launcher, _clip;
 public:
@@ -40,6 +41,42 @@ public:
 	~RuleCraftWeapon();
 	/// Gets the craft weapon's type.
 	LangString getType();
+	/// Gets the craft weapon's sprite.
+	int getSprite();
+	/// Sets the craft weapon's sprite.
+	void setSprite(int sprite);
+	/// Gets the craft weapon's damage.
+	int getDamage();
+	/// Sets the craft weapon's damage.
+	void setDamage(int damage);
+	/// Gets the craft weapon's range.
+	int getRange();
+	/// Sets the craft weapon's range.
+	void setRange(int range);
+	/// Gets the craft weapon's accuracy.
+	int getAccuracy();
+	/// Sets the craft weapon's accuracy.
+	void setAccuracy(int accuracy);
+	/// Gets the craft weapon's reload time.
+	int getReloadTime();
+	/// Sets the craft weapon's reload time.
+	void setReloadTime(int reload);
+	/// Gets the craft weapon's maximum ammo.
+	int getAmmoMax();
+	/// Sets the craft weapon's maximum ammo.
+	void setAmmoMax(int ammo);
+	/// Gets the craft weapon's ammo per clip.
+	int getAmmoClip();
+	/// Sets the craft weapon's ammo per clip.
+	void setAmmoClip(int clip);
+	/// Gets the craft weapon's launcher item.
+	LangString getLauncherItem();
+	/// Sets the craft weapon's launcher item.
+	void setLauncherItem(LangString launcher);
+	/// Gets the craft weapon's clip item.
+	LangString getClipItem();
+	/// Sets the craft weapon's clip item.
+	void setClipItem(LangString clip);
 };
 
 #endif
