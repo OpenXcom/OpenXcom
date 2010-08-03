@@ -40,13 +40,14 @@ using namespace std;
  * Initializes all the elements in the Confirm New Base window.
  * @param game Pointer to the core game.
  * @param base Pointer to the base to place.
+ * @param globe Pointer to the Geoscape globe.
  */
-ConfirmNewBaseState::ConfirmNewBaseState(Game *game, Base *base) : State(game), _base(base), _cost(0)
+ConfirmNewBaseState::ConfirmNewBaseState(Game *game, Base *base, Globe *globe) : State(game), _base(base), _globe(globe), _cost(0)
 {
 	_screen = false;
 
 	// Create objects
-	_window = new Window(224, 72, 16, 64);
+	_window = new Window(this, 224, 72, 16, 64);
 	_btnOk = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 54, 12, 68, 104);
 	_btnCancel = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 54, 12, 138, 104);
 	_txtCost = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 120, 9, 68, 80);
@@ -113,7 +114,7 @@ void ConfirmNewBaseState::btnOkClick(SDL_Event *ev, int scale)
 	{
 		_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() - _cost);
 		_game->getSavedGame()->getBases()->push_back(_base);
-		_game->pushState(new BaseNameState(_game, _base, false));
+		_game->pushState(new BaseNameState(_game, _base, _globe, false));
 	}
 	else
 	{

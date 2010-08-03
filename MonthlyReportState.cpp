@@ -39,7 +39,7 @@ using namespace std;
 MonthlyReportState::MonthlyReportState(Game *game) : State(game)
 {
 	// Create objects
-	_window = new Window(320, 200, 0, 0);
+	_window = new Window(this, 320, 200, 0, 0);
 	_btnOk = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 50, 12, 135, 180);
 	_txtTitle = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 280, 16, 16, 8);
 	_txtMonth = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 110, 8, 16, 24);

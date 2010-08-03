@@ -49,8 +49,9 @@
  * Initializes all the elements in the Basescape screen.
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
+ * @param globe Pointer to the Geoscape globe.
  */
-BasescapeState::BasescapeState(Game *game, Base *base) : State(game), _base(base)
+BasescapeState::BasescapeState(Game *game, Base *base, Globe *globe) : State(game), _base(base), _globe(globe)
 {
 	// Create objects
 	_view = new BaseView(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 192, 192, 0, 8);
@@ -223,15 +224,9 @@ void BasescapeState::btnNewBaseClick(SDL_Event *ev, int scale)
 {
 	if (_game->getSavedGame()->getBases()->size() < 8)
 	{
-		// Oh my goodness what is this don't stare at it for too long
-		list<State*>::iterator i = _game->getStates()->end();
-		i--;
-		i--;
-
-		// I am so incredibly cheesing it over here you don't wanna know
 		Base *base = new Base();
 		_game->popState();
-		_game->pushState(new BuildNewBaseState(_game, base, ((GeoscapeState*)(*i))->getGlobe(), false));
+		_game->pushState(new BuildNewBaseState(_game, base, _globe, false));
 	}
 }
 

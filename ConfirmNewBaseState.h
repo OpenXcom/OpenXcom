@@ -25,6 +25,7 @@ class Base;
 class Window;
 class Text;
 class TextButton;
+class Globe;
 
 /**
  * Screen that allows the player
@@ -34,13 +35,14 @@ class ConfirmNewBaseState : public State
 {
 private:
 	Base *_base;
+	Globe *_globe;
 	Window *_window;
 	Text *_txtCost, *_txtArea;
 	TextButton *_btnOk, *_btnCancel;
 	int _cost;
 public:
 	/// Creates the Confirm New Base state.
-	ConfirmNewBaseState(Game *game, Base *base);
+	ConfirmNewBaseState(Game *game, Base *base, Globe *globe);
 	/// Cleans up the Confirm New Base state.
 	~ConfirmNewBaseState();
 	/// Handler for clicking the OK button.

@@ -28,6 +28,7 @@ using namespace std;
 class RuleCraft;
 class Soldier;
 class CraftWeapon;
+class Item;
 
 /**
  * Represents a craft stored in a base.
@@ -42,23 +43,34 @@ private:
 	double _lat, _lon;
 	int _id, _fuel, _damage;
 	vector<CraftWeapon*> _weapons;
+	map<LangString, Item*> _items;
 public:
 	/// Creates a craft of the specified type.
-	Craft(RuleCraft *rules, map<LangString, int> *id, double lat, double lon);
+	Craft(RuleCraft *rules, map<LangString, int> *id);
 	/// Cleans up the craft.
 	~Craft();
 	/// Gets the craft's ruleset.
 	RuleCraft *getRules();
 	/// Gets the craft's ID.
 	int getId();
+	/// Gets the craft's latitude.
+	double getLatitude();
+	/// Sets the craft's latitude.
+	void setLatitude(double lat);
+	/// Gets the craft's longitude.
+	double getLongitude();
+	/// Sets the craft's longitude.
+	void setLongitude(double lon);
 	/// Gets the craft's amount of weapons.
 	int getNumWeapons();
 	/// Gets the craft's amount of soldiers.
 	int getNumSoldiers(vector<Soldier*> *soldiers);
 	/// Gets the craft's amount of HWPs.
 	int getNumHWPs();
-	/// Gets the craft's weapons.
-	vector<CraftWeapon*> *getWeapons();
+	/// Gets the craft's weapon in a certain slot.
+	CraftWeapon* *getWeapon(int i);
+	/// Gets the craft's items.
+	map<LangString, Item*> *getItems();
 	/// Gets the craft's amount of fuel.
 	int getFuel();
 	/// Sets the craft's amount of fuel.

@@ -21,6 +21,7 @@
 #include "RuleBaseFacility.h"
 #include "RuleCraft.h"
 #include "RuleCraftWeapon.h"
+#include "RuleItem.h"
 #include "SoldierNamePool.h"
 #include "Region.h"
 #include "RNG.h"
@@ -31,6 +32,7 @@
 #include "Craft.h"
 #include "CraftWeapon.h"
 #include "Soldier.h"
+#include "Item.h"
 
 /**
  * Initializes the X-Com ruleset with all the rules
@@ -452,6 +454,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_crafts.insert(pair<LangString, RuleCraft*>(STR_INTERCEPTOR, interceptor));
 	_crafts.insert(pair<LangString, RuleCraft*>(STR_FIRESTORM, firestorm));
 
+	// Add craft weapons
 	RuleCraftWeapon *stingray = new RuleCraftWeapon(STR_STINGRAY_UC);
 	stingray->setSprite(48);
 	stingray->setDamage(70);
@@ -517,6 +520,90 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_craftWeapons.insert(pair<LangString, RuleCraftWeapon*>(STR_FUSION_BALL_UC, fusion));
 	_craftWeapons.insert(pair<LangString, RuleCraftWeapon*>(STR_LASER_CANNON_UC, laser));
 	_craftWeapons.insert(pair<LangString, RuleCraftWeapon*>(STR_PLASMA_BEAM_UC, plasma));
+
+	// Add items
+	RuleItem *slauncher = new RuleItem(STR_STINGRAY_LAUNCHER);
+	slauncher->setSize(0.8);
+	slauncher->setEquippable(false);
+
+	RuleItem *alauncher = new RuleItem(STR_AVALANCHE_LAUNCHER);
+	alauncher->setSize(1.0);
+	alauncher->setEquippable(false);
+
+	RuleItem *icannon = new RuleItem(STR_CANNON);
+	icannon->setSize(1.5);
+	icannon->setEquippable(false);
+
+	RuleItem *smissile = new RuleItem(STR_STINGRAY_MISSILE);
+	smissile->setSize(0.4);
+	smissile->setEquippable(false);
+
+	RuleItem *amissile = new RuleItem(STR_AVALANCHE_MISSILE);
+	amissile->setSize(1.5);
+	amissile->setEquippable(false);
+
+	RuleItem *crounds = new RuleItem(STR_CANNON_ROUNDS);
+	crounds->setSize(0.0);
+	crounds->setEquippable(false);
+
+	RuleItem *pistol = new RuleItem(STR_PISTOL);
+	pistol->setSize(0.1);
+
+	RuleItem *pclip = new RuleItem(STR_PISTOL_CLIP);
+	pclip->setSize(0.1);
+
+	RuleItem *rifle = new RuleItem(STR_RIFLE);
+	rifle->setSize(0.2);
+
+	RuleItem *rclip = new RuleItem(STR_RIFLE_CLIP);
+	rclip->setSize(0.1);
+
+	RuleItem *hcannon = new RuleItem(STR_HEAVY_CANNON);
+	hcannon->setSize(0.3);
+
+	RuleItem *hcap = new RuleItem(STR_HC_AP_AMMO);
+	hcap->setSize(0.1);
+
+	RuleItem *hche = new RuleItem(STR_HC_HE_AMMO);
+	hche->setSize(0.1);
+
+	RuleItem *acannon = new RuleItem(STR_AUTO_CANNON);
+	acannon->setSize(0.3);
+
+	RuleItem *acap = new RuleItem(STR_AC_AP_AMMO);
+	acap->setSize(0.1);
+
+	RuleItem *rlauncher = new RuleItem(STR_ROCKET_LAUNCHER);
+	rlauncher->setSize(0.4);
+
+	RuleItem *srocket = new RuleItem(STR_SMALL_ROCKET);
+	srocket->setSize(0.2);
+
+	RuleItem *grenade = new RuleItem(STR_GRENADE);
+	grenade->setSize(0.1);
+
+	RuleItem *sgrenade = new RuleItem(STR_SMOKE_GRENADE);
+	sgrenade->setSize(0.1);
+
+	_items.insert(pair<LangString, RuleItem*>(STR_STINGRAY_LAUNCHER, slauncher));
+	_items.insert(pair<LangString, RuleItem*>(STR_AVALANCHE_LAUNCHER, alauncher));
+	_items.insert(pair<LangString, RuleItem*>(STR_CANNON, icannon));
+	_items.insert(pair<LangString, RuleItem*>(STR_STINGRAY_MISSILE, smissile));
+	_items.insert(pair<LangString, RuleItem*>(STR_AVALANCHE_MISSILE, amissile));
+	_items.insert(pair<LangString, RuleItem*>(STR_CANNON_ROUNDS, crounds));
+	_items.insert(pair<LangString, RuleItem*>(STR_PISTOL, pistol));
+	_items.insert(pair<LangString, RuleItem*>(STR_PISTOL_CLIP, pclip));
+	_items.insert(pair<LangString, RuleItem*>(STR_RIFLE, rifle));
+	_items.insert(pair<LangString, RuleItem*>(STR_RIFLE_CLIP, rclip));
+	_items.insert(pair<LangString, RuleItem*>(STR_HEAVY_CANNON, hcannon));
+	_items.insert(pair<LangString, RuleItem*>(STR_HC_AP_AMMO, hcap));
+	_items.insert(pair<LangString, RuleItem*>(STR_HC_HE_AMMO, hche));
+	_items.insert(pair<LangString, RuleItem*>(STR_AUTO_CANNON, acannon));
+	_items.insert(pair<LangString, RuleItem*>(STR_AC_AP_AMMO, acap));
+	_items.insert(pair<LangString, RuleItem*>(STR_ROCKET_LAUNCHER, rlauncher));
+	_items.insert(pair<LangString, RuleItem*>(STR_SMALL_ROCKET, srocket));
+	_items.insert(pair<LangString, RuleItem*>(STR_GRENADE, grenade));
+	_items.insert(pair<LangString, RuleItem*>(STR_SMOKE_GRENADE, sgrenade));
 }
 
 /**
@@ -724,17 +811,45 @@ SavedGame *XcomRuleset::newSave(GameDifficulty diff)
 	base->getFacilities()->push_back(new BaseFacility(getBaseFacility(STR_WORKSHOP), 4, 3));
 	base->getFacilities()->push_back(new BaseFacility(getBaseFacility(STR_SMALL_RADAR_SYSTEM), 1, 3));
 
+	// Add items
+	base->getItems()->insert(pair<LangString, Item*>(STR_STINGRAY_LAUNCHER, new Item(getItem(STR_STINGRAY_LAUNCHER), 1)));
+	base->getItems()->insert(pair<LangString, Item*>(STR_AVALANCHE_LAUNCHER, new Item(getItem(STR_AVALANCHE_LAUNCHER), 1)));
+	base->getItems()->insert(pair<LangString, Item*>(STR_CANNON, new Item(getItem(STR_CANNON), 2)));
+	base->getItems()->insert(pair<LangString, Item*>(STR_STINGRAY_MISSILE, new Item(getItem(STR_STINGRAY_MISSILE), 25)));
+	base->getItems()->insert(pair<LangString, Item*>(STR_AVALANCHE_MISSILE, new Item(getItem(STR_AVALANCHE_MISSILE), 10)));
+	base->getItems()->insert(pair<LangString, Item*>(STR_CANNON_ROUNDS, new Item(getItem(STR_CANNON_ROUNDS), 1)));
+	base->getItems()->insert(pair<LangString, Item*>(STR_PISTOL, new Item(getItem(STR_PISTOL), 2)));
+	base->getItems()->insert(pair<LangString, Item*>(STR_PISTOL_CLIP, new Item(getItem(STR_PISTOL_CLIP), 8)));
+	base->getItems()->insert(pair<LangString, Item*>(STR_RIFLE, new Item(getItem(STR_RIFLE), 2)));
+	base->getItems()->insert(pair<LangString, Item*>(STR_RIFLE_CLIP, new Item(getItem(STR_RIFLE_CLIP), 8)));
+	base->getItems()->insert(pair<LangString, Item*>(STR_HEAVY_CANNON, new Item(getItem(STR_HEAVY_CANNON), 1)));
+	base->getItems()->insert(pair<LangString, Item*>(STR_HC_AP_AMMO, new Item(getItem(STR_HC_AP_AMMO), 6)));
+	base->getItems()->insert(pair<LangString, Item*>(STR_AUTO_CANNON, new Item(getItem(STR_AUTO_CANNON), 1)));
+	base->getItems()->insert(pair<LangString, Item*>(STR_AC_AP_AMMO, new Item(getItem(STR_AC_AP_AMMO), 6)));
+	base->getItems()->insert(pair<LangString, Item*>(STR_ROCKET_LAUNCHER, new Item(getItem(STR_ROCKET_LAUNCHER), 1)));
+	base->getItems()->insert(pair<LangString, Item*>(STR_SMALL_ROCKET, new Item(getItem(STR_SMALL_ROCKET), 4)));
+	base->getItems()->insert(pair<LangString, Item*>(STR_GRENADE, new Item(getItem(STR_GRENADE), 5)));
+	base->getItems()->insert(pair<LangString, Item*>(STR_SMOKE_GRENADE, new Item(getItem(STR_SMOKE_GRENADE), 5)));
+
 	// Add crafts
-	Craft *skyranger = new Craft(getCraft(STR_SKYRANGER), save->getCraftIds(), 0.0, 0.0);
+	Craft *skyranger = new Craft(getCraft(STR_SKYRANGER), save->getCraftIds());
 	skyranger->setFuel(skyranger->getRules()->getMaxFuel());
+	skyranger->getItems()->insert(pair<LangString, Item*>(STR_PISTOL, new Item(getItem(STR_PISTOL), 3)));
+	skyranger->getItems()->insert(pair<LangString, Item*>(STR_PISTOL_CLIP, new Item(getItem(STR_PISTOL_CLIP), 5)));
+	skyranger->getItems()->insert(pair<LangString, Item*>(STR_RIFLE, new Item(getItem(STR_RIFLE), 6)));
+	skyranger->getItems()->insert(pair<LangString, Item*>(STR_RIFLE_CLIP, new Item(getItem(STR_RIFLE_CLIP), 12)));
+	skyranger->getItems()->insert(pair<LangString, Item*>(STR_HEAVY_CANNON, new Item(getItem(STR_HEAVY_CANNON), 1)));
+	skyranger->getItems()->insert(pair<LangString, Item*>(STR_HC_AP_AMMO, new Item(getItem(STR_HC_AP_AMMO), 2)));
+	skyranger->getItems()->insert(pair<LangString, Item*>(STR_HC_HE_AMMO, new Item(getItem(STR_HC_HE_AMMO), 2)));
+	skyranger->getItems()->insert(pair<LangString, Item*>(STR_GRENADE, new Item(getItem(STR_GRENADE), 8)));
 	base->getCrafts()->push_back(skyranger);
 
 	for (int i = 0; i < 2; i++)
 	{
-		Craft *interceptor = new Craft(getCraft(STR_INTERCEPTOR), save->getCraftIds(), 0.0, 0.0);
+		Craft *interceptor = new Craft(getCraft(STR_INTERCEPTOR), save->getCraftIds());
 		interceptor->setFuel(interceptor->getRules()->getMaxFuel());
-		interceptor->getWeapons()->at(0) = new CraftWeapon(getCraftWeapon(STR_STINGRAY_UC), getCraftWeapon(STR_STINGRAY_UC)->getAmmoMax());
-		interceptor->getWeapons()->at(1) = new CraftWeapon(getCraftWeapon(STR_CANNON_UC), getCraftWeapon(STR_CANNON_UC)->getAmmoMax());
+		*interceptor->getWeapon(0) = new CraftWeapon(getCraftWeapon(STR_STINGRAY_UC), getCraftWeapon(STR_STINGRAY_UC)->getAmmoMax());
+		*interceptor->getWeapon(1) = new CraftWeapon(getCraftWeapon(STR_CANNON_UC), getCraftWeapon(STR_CANNON_UC)->getAmmoMax());
 		base->getCrafts()->push_back(interceptor);
 	}
 

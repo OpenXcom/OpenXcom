@@ -24,7 +24,7 @@
 class RuleItem;
 
 /**
- * Represents an item stored in a base.
+ * Represents a set of a stored item.
  * Contains variable info about an item like quantity.
  * @sa RuleItem
  */
@@ -44,6 +44,8 @@ public:
 	int getQuantity();
 	/// Sets the item's quantity.
 	void setQuantity(int qty);
+	/// Gets the item's total size.
+	double getTotalSize();
 };
 
 #endif

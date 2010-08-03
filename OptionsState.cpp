@@ -37,7 +37,7 @@ OptionsState::OptionsState(Game *game) : State(game)
 	_screen = false;
 
 	// Create objects
-	_window = new Window(216, 160, 20, 20, POPUP_BOTH);
+	_window = new Window(this, 216, 160, 20, 20, POPUP_BOTH);
 	_btnLoad = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 180, 20, 38, 60);
 	_btnSave = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 180, 20, 38, 85);
 	_btnAbandon = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 180, 20, 38, 110);

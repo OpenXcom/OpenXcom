@@ -18,8 +18,9 @@
  */
 #include "Craft.h"
 #include <cmath>
-#include "CraftWeapon.h"
 #include "RuleCraft.h"
+#include "CraftWeapon.h"
+#include "Item.h"
 #include "Soldier.h"
 
 /**
@@ -27,10 +28,8 @@
  * assigns it the latest craft ID available.
  * @param rules Pointer to ruleset.
  * @param id List of craft IDs.
- * @param lat Latitude in radian.
- * @param lon Longitude in radian.
  */
-Craft::Craft(RuleCraft *rules, map<LangString, int> *id, double lat, double lon) : _rules(rules), _lat(lat), _lon(lon), _fuel(0), _damage(0), _weapons()
+Craft::Craft(RuleCraft *rules, map<LangString, int> *id) : _rules(rules), _lat(0.0), _lon(0.0), _fuel(0), _damage(0), _weapons(), _items()
 {
 	_id = (*id)[_rules->getType()];
 	(*id)[_rules->getType()]++;
@@ -39,12 +38,18 @@ Craft::Craft(RuleCraft *rules, map<LangString, int> *id, double lat, double lon)
 }
 
 /**
- * Delete the craft content.
+ * Delete the contents of the craft from memory.
  */
 Craft::~Craft()
 {
 	for (vector<CraftWeapon*>::iterator i = _weapons.begin(); i != _weapons.end(); i++)
+	{
 		delete *i;
+	}
+	for (map<LangString, Item*>::iterator i = _items.begin(); i != _items.end(); i++)
+	{
+		delete i->second;
+	}
 }
 
 /**
@@ -63,6 +68,42 @@ RuleCraft *Craft::getRules()
 int Craft::getId()
 {
 	return _id;
+}
+
+/**
+ * Returns the latitude coordinate of the craft.
+ * @return Latitude in radian.
+ */
+double Craft::getLatitude()
+{
+	return _lat;
+}
+
+/**
+ * Changes the latitude coordinate of the craft.
+ * @param lat Latitude in radian.
+ */
+void Craft::setLatitude(double lat)
+{
+	_lat = lat;
+}
+
+/**
+ * Returns the longitude coordinate of the craft.
+ * @return Longitude in radian.
+ */
+double Craft::getLongitude()
+{
+	return _lon;
+}
+
+/**
+ * Changes the longitude coordinate of the craft.
+ * @param lon Longitude in radian.
+ */
+void Craft::setLongitude(double lon)
+{
+	_lon = lon;
 }
 
 /**
@@ -118,13 +159,23 @@ int Craft::getNumHWPs()
 }
 
 /**
- * Returns the weapons currently
- * equipped on this craft.
- * @return Pointer to weapons
+ * Returns the weapon currently equipped in a
+ * certain slot on this craft.
+ * @param i Weapon slot.
+ * @return Pointer to weapon.
  */
-vector<CraftWeapon*> *Craft::getWeapons()
+CraftWeapon* *Craft::getWeapon(int i)
 {
-	return &_weapons;
+	return &_weapons[i];
+}
+
+/**
+ * Returns the list of items in the craft.
+ * @return Pointer to the item list.
+ */
+map<LangString, Item*> *Craft::getItems()
+{
+	return &_items;
 }
 
 /**

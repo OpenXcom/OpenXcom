@@ -41,7 +41,7 @@ using namespace std;
 TestState::TestState(Game *game) : State(game)
 {
 	// Create objects
-	_window = new Window(300, 180, 10, 10);
+	_window = new Window(this, 300, 180, 10, 10);
 	_text = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 280, 120, 20, 50);
 	_button = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 100, 20, 110, 150);
 	_list = new TextList(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 300, 180, 10, 10);

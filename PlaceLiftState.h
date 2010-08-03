@@ -24,6 +24,7 @@
 class Base;
 class BaseView;
 class Text;
+class Globe;
 
 /**
  * Screen shown when the player has to
@@ -33,12 +34,12 @@ class PlaceLiftState : public State
 {
 private:
 	Base *_base;
-
+	Globe *_globe;
 	BaseView *_view;
 	Text *_txtTitle;
 public:
 	/// Creates the Place Lift state.
-	PlaceLiftState(Game *game, Base *base);
+	PlaceLiftState(Game *game, Base *base, Globe *globe);
 	/// Cleans up the Place Lift state.
 	~PlaceLiftState();
 	/// Handler for clicking the base view.

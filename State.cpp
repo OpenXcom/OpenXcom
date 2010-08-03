@@ -42,6 +42,14 @@ State::~State()
 }
 
 /**
+ * Returns the set of surfaces currently attached to this state.
+ */
+vector<Surface*> *State::getSurfaces()
+{
+	return &_surfaces;
+}
+
+/**
  * Adds a new child surface for the state to take care of,
  * giving it the game's display palette. Once associated,
  * the state handles all of the surface's behaviour

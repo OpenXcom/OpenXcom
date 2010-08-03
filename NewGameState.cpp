@@ -37,7 +37,7 @@
 NewGameState::NewGameState(Game *game) : State(game)
 {
 	// Create objects
-	_window = new Window(192, 180, 64, 10, POPUP_VERTICAL);
+	_window = new Window(this, 192, 180, 64, 10, POPUP_VERTICAL);
 	_btnBeginner = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 160, 18, 80, 55);
 	_btnExperienced = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 160, 18, 80, 80);
 	_btnVeteran = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 160, 18, 80, 105);

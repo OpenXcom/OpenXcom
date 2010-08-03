@@ -46,7 +46,7 @@ using namespace std;
 CraftInfoState::CraftInfoState(Game *game, Base *base, unsigned int craft) : State(game), _base(base), _craft(craft)
 {
 	// Create objects
-	_window = new Window(320, 200, 0, 0, POPUP_BOTH);
+	_window = new Window(this, 320, 200, 0, 0, POPUP_BOTH);
 	_btnOk = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 64, 24, 128, 168);
 	_btnW1 = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 24, 32, 24, 48);
 	_btnW2 = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 24, 32, 272, 48);
@@ -200,7 +200,7 @@ void CraftInfoState::init()
 
 	if (c->getRules()->getWeapons() > 0)
 	{
-		CraftWeapon *w1 = c->getWeapons()->at(0);
+		CraftWeapon *w1 = *c->getWeapon(0);
 
 		texture->getFrame(w1->getRules()->getSprite())->setX(0);
 		texture->getFrame(w1->getRules()->getSprite())->setY(0);
@@ -227,7 +227,7 @@ void CraftInfoState::init()
 
 	if (c->getRules()->getWeapons() > 1)
 	{
-		CraftWeapon *w2 = c->getWeapons()->at(1);
+		CraftWeapon *w2 = *c->getWeapon(1);
 
 		texture->getFrame(w2->getRules()->getSprite())->setX(0);
 		texture->getFrame(w2->getRules()->getSprite())->setY(0);

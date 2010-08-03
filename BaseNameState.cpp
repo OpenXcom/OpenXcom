@@ -33,14 +33,15 @@
  * Initializes all the elements in a Base Name window.
  * @param game Pointer to the core game.
  * @param base Pointer to the base to name.
+ * @param globe Pointer to the Geoscape globe.
  * @param first Is this the first base in the game?
  */
-BaseNameState::BaseNameState(Game *game, Base *base, bool first) : State(game), _base(base), _first(first)
+BaseNameState::BaseNameState(Game *game, Base *base, Globe *globe, bool first) : State(game), _base(base), _globe(globe), _first(first)
 {
 	_screen = false;
 
 	// Create objects
-	_window = new Window(192, 80, 32, 60, POPUP_BOTH);
+	_window = new Window(this, 192, 80, 32, 60, POPUP_BOTH);
 	_txtTitle = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 182, 16, 37, 76);
 	_edtName = new TextEdit(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 136, 16, 54, 108);
 	
@@ -89,7 +90,7 @@ void BaseNameState::edtNameKeyPress(SDL_Event *ev, int scale)
 		if (!_first)
 		{
 			_game->popState();
-			_game->pushState(new PlaceLiftState(_game, _base));
+			_game->pushState(new PlaceLiftState(_game, _base, _globe));
 		}
 	}
 }

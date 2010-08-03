@@ -43,7 +43,7 @@ using namespace std;
 MonthlyCostsState::MonthlyCostsState(Game *game, Base *base) : State(game), _base(base)
 {
 	// Create objects
-	_window = new Window(320, 200, 0, 0);
+	_window = new Window(this, 320, 200, 0, 0);
 	_btnOk = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 300, 20, 10, 170);
 	_txtTitle = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 310, 16, 5, 12);
 	_txtCost = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 80, 9, 115, 32);

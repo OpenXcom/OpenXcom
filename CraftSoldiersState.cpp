@@ -44,7 +44,7 @@ using namespace std;
 CraftSoldiersState::CraftSoldiersState(Game *game, Base *base, unsigned int craft) : State(game), _base(base), _craft(craft)
 {
 	// Create objects
-	_window = new Window(320, 200, 0, 0);
+	_window = new Window(this, 320, 200, 0, 0);
 	_btnOk = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 288, 16, 16, 176);
 	_txtTitle = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 300, 16, 16, 7);
 	_txtName = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 114, 9, 16, 32);

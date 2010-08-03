@@ -26,6 +26,7 @@ class MiniBaseView;
 class Text;
 class TextButton;
 class Base;
+class Globe;
 
 /**
  * Basescape screen that shows a base's layout
@@ -39,9 +40,10 @@ private:
 	Text *_txtFacility, *_txtBase, *_txtLocation, *_txtFunds;
 	TextButton *_btnNewBase, *_btnBaseInfo, *_btnSoldiers, *_btnCrafts, *_btnFacilities, *_btnResearch, *_btnManufacture, *_btnTransfer, *_btnPurchase, *_btnSell, *_btnGeoscape;
 	Base *_base;
+	Globe *_globe;
 public:
 	/// Creates the Basescape state.
-	BasescapeState(Game *game, Base *base);
+	BasescapeState(Game *game, Base *base, Globe *globe);
 	/// Cleans up the Basescape state.
 	~BasescapeState();
 	/// Updates the base stats.

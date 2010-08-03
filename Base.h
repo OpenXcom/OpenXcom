@@ -21,6 +21,7 @@
 
 #include <string>
 #include <vector>
+#include <map>
 #include "LangString.h"
 
 using namespace std;
@@ -28,6 +29,7 @@ using namespace std;
 class BaseFacility;
 class Soldier;
 class Craft;
+class Item;
 
 /**
  * Represents a player base on the globe.
@@ -41,6 +43,7 @@ private:
 	vector<BaseFacility*> _facilities;
 	vector<Soldier*> _soldiers;
 	vector<Craft*> _crafts;
+	map<LangString, Item*> _items;
 	int _scientists, _engineers;
 public:
 	/// Creates a new base.
@@ -65,6 +68,8 @@ public:
 	vector<Soldier*> *getSoldiers();
 	/// Gets the base's crafts.
 	vector<Craft*> *getCrafts();
+	/// Gets the base's items.
+	map<LangString, Item*> *getItems();
 	/// Sets the base's scientists.
 	void setScientists(int scientists);
 	/// Sets the base's engineers.

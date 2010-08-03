@@ -32,8 +32,8 @@ class RuleItem
 private:
 	LangString _type;
 	double _size;
-	int _value, _transferTime;
-	bool _equipment;
+	int _value, _time;
+	bool _equip;
 public:
 	/// Creates a blank item ruleset.
 	RuleItem(LangString type);
@@ -45,6 +45,18 @@ public:
 	double getSize();
 	/// Sets the item's size.
 	void setSize(double size);
+	/// Gets the item's sale value.
+	int getSaleValue();
+	/// Sets the item's sale value.
+	void setSaleValue(int value);
+	/// Gets the item's transfer time.
+	int getTransferTime();
+	/// Sets the item's transfer time.
+	void setTransferTime(int time);
+	/// Gets if the item is equippable.
+	bool getEquippable();
+	/// Sets if the item is equippable.
+	void setEquippable(bool equip);
 };
 
 #endif

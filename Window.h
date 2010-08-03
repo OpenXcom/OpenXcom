@@ -22,6 +22,7 @@
 #include "Surface.h"
 
 class Timer;
+class State;
 class Sound;
 
 /**
@@ -43,11 +44,11 @@ private:
 	WindowPopup _popup;
 	double _popupStep;
 	Timer *_timer;
-
+	State *_state;
 public:
 	static Sound *soundPopup[3];
 	/// Creates a new window with the specified size and position
-	Window(int width, int height, int x = 0, int y = 0, WindowPopup popup = POPUP_NONE);
+	Window(State *state, int width, int height, int x = 0, int y = 0, WindowPopup popup = POPUP_NONE);
 	/// Cleans up the window
 	~Window();
 	/// Sets the background surface.

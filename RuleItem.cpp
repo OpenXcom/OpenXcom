@@ -22,7 +22,7 @@
  * Creates a blank ruleset for a certain type of item.
  * @param type String defining the type.
  */
-RuleItem::RuleItem(LangString type) : _type(type), _size(0.0), _value(0), _transferTime(24), _equipment(true)
+RuleItem::RuleItem(LangString type) : _type(type), _size(0.0), _value(0), _time(24), _equip(true)
 {
 }
 
@@ -61,4 +61,64 @@ double RuleItem::getSize()
 void RuleItem::setSize(double size)
 {
 	_size = size;
+}
+
+/**
+ * Returns the amount of money you get for
+ * selling this item.
+ * @return Sale value.
+ */
+int RuleItem::getSaleValue()
+{
+	return _value;
+}
+
+/**
+ * Changes the amount of money you get for
+ * selling this item.
+ * @param value Sale value.
+ */
+void RuleItem::setSaleValue(int value)
+{
+	_value = value;
+}
+
+/**
+ * Returns the amount of time this item
+ * takes to arrive at a base.
+ * @return Time in hours.
+ */
+int RuleItem::getTransferTime()
+{
+	return _time;
+}
+
+/**
+ * Changes the amount of time this item
+ * takes to arrive at a base.
+ * @param time Time in hours.
+ */
+void RuleItem::setTransferTime(int time)
+{
+	_time = time;
+}
+
+/**
+ * Returns whether this item can be equipped
+ * by soldiers and loaded on transport craft.
+ * @return Is it equippable?
+ */
+bool RuleItem::getEquippable()
+{
+	return _equip;
+}
+
+/**
+ * Changes whether this item can be equipped
+ * by soldiers and loaded on transport craft.
+ * @param equip Is it equippable?
+ */
+void RuleItem::setEquippable(bool equip)
+{
+	_equip = equip;
 }

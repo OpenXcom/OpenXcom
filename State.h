@@ -48,6 +48,8 @@ public:
 	State(Game* game);
 	/// Cleans up the state.
 	virtual ~State();
+	/// Gets the state's surfaces.
+	vector<Surface*> *getSurfaces();
 	/// Adds a child element to the state.
 	void add(Surface *surface);
 	/// Gets whether the state is a full-screen.

@@ -32,7 +32,7 @@
 LanguageState::LanguageState(Game *game) : State(game)
 {
 	// Create objects
-	_window = new Window(256, 160, 32, 20, POPUP_BOTH);
+	_window = new Window(this, 256, 160, 32, 20, POPUP_BOTH);
 	_btnEnglish = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 192, 20, 64, 90);
 	_btnGerman = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 192, 20, 64, 118);
 	_btnFrench = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 192, 20, 64, 146);

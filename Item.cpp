@@ -61,3 +61,13 @@ void Item::setQuantity(int qty)
 {
 	_qty = qty;
 }
+
+/**
+ * Returns the storage size of all the items
+ * totalled up.
+ * @return Item size.
+ */
+double Item::getTotalSize()
+{
+	return _qty * _rules->getSize();
+}

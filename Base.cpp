@@ -17,16 +17,18 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Base.h"
+#include <cmath>
 #include "BaseFacility.h"
 #include "RuleBaseFacility.h"
 #include "Craft.h"
 #include "RuleCraft.h"
+#include "Item.h"
 #include "Soldier.h"
 
 /**
  * Initializes an empty base.
  */
-Base::Base() : _lat(0.0), _lon(0.0), _name(""), _facilities(), _soldiers(), _crafts(), _scientists(0), _engineers(0)
+Base::Base() : _lat(0.0), _lon(0.0), _name(""), _facilities(), _soldiers(), _crafts(), _items(), _scientists(0), _engineers(0)
 {
 }
 
@@ -46,6 +48,10 @@ Base::~Base()
 	for (vector<Craft*>::iterator i = _crafts.begin(); i != _crafts.end(); i++)
 	{
 		delete *i;
+	}
+	for (map<LangString, Item*>::iterator i = _items.begin(); i != _items.end(); i++)
+	{
+		delete i->second;
 	}
 }
 
@@ -128,6 +134,15 @@ vector<Soldier*> *Base::getSoldiers()
 vector<Craft*> *Base::getCrafts()
 {
 	return &_crafts;
+}
+
+/**
+ * Returns the list of items in the base.
+ * @return Pointer to the item list.
+ */
+map<LangString, Item*> *Base::getItems()
+{
+	return &_items;
 }
 
 /**
@@ -247,7 +262,19 @@ int Base::getAvailableQuarters()
  */
 int Base::getUsedStores()
 {
-	return 0;
+	double total = 0;
+	for (map<LangString, Item*>::iterator i = _items.begin(); i != _items.end(); i++)
+	{
+		total += i->second->getTotalSize();
+	}
+	for (vector<Craft*>::iterator i = _crafts.begin(); i != _crafts.end(); i++)
+	{
+		for (map<LangString, Item*>::iterator j = (*i)->getItems()->begin(); j != (*i)->getItems()->end(); j++)
+		{
+			total += j->second->getTotalSize();
+		}
+	}
+	return (int)floor(total);
 }
 
 /**

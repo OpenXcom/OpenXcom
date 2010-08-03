@@ -55,7 +55,7 @@ BuildNewBaseState::BuildNewBaseState(Game *game, Base *base, Globe *globe, bool 
 	_btnZoomIn = new InteractiveSurface(23, 23, 295, 156);
 	_btnZoomOut = new InteractiveSurface(13, 17, 300, 182);
 
-	_window = new Window(256, 28, 0, 0);
+	_window = new Window(this, 256, 28, 0, 0);
 	_btnCancel = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 54, 12, 186, 8);
 	_txtTitle = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 200, 9, 8, 10);
 
@@ -182,11 +182,11 @@ void BuildNewBaseState::globeClick(SDL_Event *ev, int scale)
 			_base->setLatitude(lat);
 			if (_first)
 			{
-				_game->pushState(new BaseNameState(_game, _base, _first));
+				_game->pushState(new BaseNameState(_game, _base, _globe, _first));
 			}
 			else
 			{
-				_game->pushState(new ConfirmNewBaseState(_game, _base));
+				_game->pushState(new ConfirmNewBaseState(_game, _base, _globe));
 			}
 		}
 	}

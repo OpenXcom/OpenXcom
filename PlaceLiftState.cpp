@@ -38,8 +38,9 @@
  * Initializes all the elements in the Place Lift screen.
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
+ * @param globe Pointer to the Geoscape globe.
  */
-PlaceLiftState::PlaceLiftState(Game *game, Base *base) : State(game), _base(base)
+PlaceLiftState::PlaceLiftState(Game *game, Base *base, Globe *globe) : State(game), _base(base), _globe(globe)
 {
 	// Create objects
 	_view = new BaseView(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 192, 192, 0, 8);
@@ -80,5 +81,5 @@ void PlaceLiftState::viewClick(SDL_Event *ev, int scale)
 	fac->setBuildTime(0);
 	_base->getFacilities()->push_back(fac);
 	_game->popState();
-	_game->pushState(new BasescapeState(_game, _base));
+	_game->pushState(new BasescapeState(_game, _base, _globe));
 }

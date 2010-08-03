@@ -25,6 +25,7 @@ class Base;
 class Window;
 class Text;
 class TextEdit;
+class Globe;
 
 /**
  * Window used to input a name for a new base.
@@ -33,13 +34,14 @@ class BaseNameState : public State
 {
 private:
 	Base *_base;
+	Globe *_globe;
 	Window *_window;
 	Text *_txtTitle;
 	TextEdit *_edtName;
 	bool _first;
 public:
 	/// Creates the Base Name state.
-	BaseNameState(Game *game, Base *base, bool first);
+	BaseNameState(Game *game, Base *base, Globe *globe, bool first);
 	/// Cleans up the Base Name state.
 	~BaseNameState();
 	/// Handler for releasing a key on the Name edit.
