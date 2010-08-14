@@ -61,7 +61,7 @@ int main(int argc, char** args)
 		game->setState(new StartState(game));
 		game->run();
 	}
-	catch (char* c)
+	catch (const char* c)
 	{
 		cerr << "ERROR: " << c << endl;
 		exit(-1);

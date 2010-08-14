@@ -22,7 +22,7 @@
  * Creates a blank ruleset for a certain type of craft weapon.
  * @param type String defining the type.
  */
-RuleCraftWeapon::RuleCraftWeapon(LangString type) : _type(type), _damage(0), _range(0), _accuracy(0), _reload(0), _ammoMax(0), _ammoClip(1)
+RuleCraftWeapon::RuleCraftWeapon(LangString type) : _type(type), _damage(0), _range(0), _accuracy(0), _reload(0), _ammoMax(0), _rearm(1)
 {
 }
 
@@ -162,23 +162,23 @@ void RuleCraftWeapon::setAmmoMax(int ammo)
 }
 
 /**
- * Returns the amount of ammo supplied in each craft weapon's
- * clip item.
- * @return Amount of ammo per clip.
+ * Returns how much ammo is added to the craft weapon
+ * while rearming (the amount of ammo in each clip item).
+ * @return Amount of ammo.
  */
-int RuleCraftWeapon::getAmmoClip()
+int RuleCraftWeapon::getRearmRate()
 {
-	return _ammoClip;
+	return _rearm;
 }
 
 /**
- * Changes the amount of ammo supplied in each craft weapon's
- * clip item.
- * @param clip Amount of ammo per clip.
+ * Changes how much ammo is added to the craft weapon
+ * while rearming (the amount of ammo in each clip item).
+ * @param rearm Amount of ammo.
  */
-void RuleCraftWeapon::setAmmoClip(int clip)
+void RuleCraftWeapon::setRearmRate(int rearm)
 {
-	_ammoClip = clip;
+	_rearm = rearm;
 }
 
 /**

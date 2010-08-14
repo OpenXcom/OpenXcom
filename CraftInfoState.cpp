@@ -200,21 +200,32 @@ void CraftInfoState::init()
 
 	if (c->getRules()->getWeapons() > 0)
 	{
-		CraftWeapon *w1 = *c->getWeapon(0);
+		CraftWeapon *w1 = c->getWeapons()->at(0);
 
-		texture->getFrame(w1->getRules()->getSprite())->setX(0);
-		texture->getFrame(w1->getRules()->getSprite())->setY(0);
-		texture->getFrame(w1->getRules()->getSprite())->blit(_w1);
+		if (w1 != 0)
+		{
+			texture->getFrame(w1->getRules()->getSprite())->setX(0);
+			texture->getFrame(w1->getRules()->getSprite())->setY(0);
+			texture->getFrame(w1->getRules()->getSprite())->blit(_w1);
 
-		_txtW1Name->setText(_game->getResourcePack()->getLanguage()->getString(w1->getRules()->getType()));
+			_txtW1Name->setText(_game->getResourcePack()->getLanguage()->getString(w1->getRules()->getType()));
 
-		stringstream ss4;
-		ss4 << _game->getResourcePack()->getLanguage()->getString(STR_AMMO) << w1->getAmmo();
-		_txtW1Ammo->setText(ss4.str());
+			stringstream ss4;
+			ss4 << _game->getResourcePack()->getLanguage()->getString(STR_AMMO) << w1->getAmmo();
+			_txtW1Ammo->setText(ss4.str());
 
-		stringstream ss5;
-		ss5 << _game->getResourcePack()->getLanguage()->getString(STR_MAX) << w1->getRules()->getAmmoMax();
-		_txtW1Max->setText(ss5.str());
+			stringstream ss5;
+			ss5 << _game->getResourcePack()->getLanguage()->getString(STR_MAX) << w1->getRules()->getAmmoMax();
+			_txtW1Max->setText(ss5.str());
+		}
+		else
+		{
+			_w1->clear();
+			_btnW1->setText("");
+			_txtW1Name->setText("");
+			_txtW1Ammo->setText("");
+			_txtW1Max->setText("");
+		}
 	}
 	else
 	{
@@ -227,21 +238,32 @@ void CraftInfoState::init()
 
 	if (c->getRules()->getWeapons() > 1)
 	{
-		CraftWeapon *w2 = *c->getWeapon(1);
+		CraftWeapon *w2 = c->getWeapons()->at(1);
 
-		texture->getFrame(w2->getRules()->getSprite())->setX(0);
-		texture->getFrame(w2->getRules()->getSprite())->setY(0);
-		texture->getFrame(w2->getRules()->getSprite())->blit(_w2);
+		if (w2 != 0)
+		{
+			texture->getFrame(w2->getRules()->getSprite())->setX(0);
+			texture->getFrame(w2->getRules()->getSprite())->setY(0);
+			texture->getFrame(w2->getRules()->getSprite())->blit(_w2);
 
-		_txtW2Name->setText(_game->getResourcePack()->getLanguage()->getString(w2->getRules()->getType()));
+			_txtW2Name->setText(_game->getResourcePack()->getLanguage()->getString(w2->getRules()->getType()));
 
-		stringstream ss6;
-		ss6 << _game->getResourcePack()->getLanguage()->getString(STR_AMMO) << w2->getAmmo();
-		_txtW2Ammo->setText(ss6.str());
+			stringstream ss6;
+			ss6 << _game->getResourcePack()->getLanguage()->getString(STR_AMMO) << w2->getAmmo();
+			_txtW2Ammo->setText(ss6.str());
 
-		stringstream ss7;
-		ss7 << _game->getResourcePack()->getLanguage()->getString(STR_MAX) << w2->getRules()->getAmmoMax();
-		_txtW2Max->setText(ss7.str());
+			stringstream ss7;
+			ss7 << _game->getResourcePack()->getLanguage()->getString(STR_MAX) << w2->getRules()->getAmmoMax();
+			_txtW2Max->setText(ss7.str());
+		}
+		else
+		{
+			_w2->clear();
+			_btnW2->setText("");
+			_txtW2Name->setText("");
+			_txtW2Ammo->setText("");
+			_txtW2Max->setText("");
+		}
 	}
 	else
 	{

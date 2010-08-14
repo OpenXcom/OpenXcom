@@ -235,8 +235,19 @@ int BaseView::countConnected(int x, int y, int **grid, BaseFacility *remove)
 	int total = 1;
 	grid[x][y]++;
 
+	// Check for facilities under construction bigger than a square
 	if (_facilities[x][y]->getBuildTime() > 0)
+	{
+		if (x > 0 && _facilities[x - 1][y] == _facilities[x][y])
+			total += countConnected(x - 1, y, grid, remove);
+		if (y > 0 && _facilities[x][y - 1] == _facilities[x][y])
+			total += countConnected(x, y - 1, grid, remove);
+		if (x < BASE_SIZE - 1 && _facilities[x + 1][y] == _facilities[x][y])
+			total += countConnected(x + 1, y, grid, remove);
+		if (y < BASE_SIZE - 1 && _facilities[x][y + 1] == _facilities[x][y])
+			total += countConnected(x, y + 1, grid, remove);
 		return total;
+	}
 
 	total += countConnected(x - 1, y, grid, remove);
 	total += countConnected(x, y - 1, grid, remove);

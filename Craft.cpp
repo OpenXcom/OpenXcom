@@ -29,7 +29,7 @@
  * @param rules Pointer to ruleset.
  * @param id List of craft IDs.
  */
-Craft::Craft(RuleCraft *rules, map<LangString, int> *id) : _rules(rules), _lat(0.0), _lon(0.0), _fuel(0), _damage(0), _weapons(), _items()
+Craft::Craft(RuleCraft *rules, map<LangString, int> *id) : _rules(rules), _lat(0.0), _lon(0.0), _fuel(0), _damage(0), _weapons(), _items(), _status(STR_READY)
 {
 	_id = (*id)[_rules->getType()];
 	(*id)[_rules->getType()]++;
@@ -107,6 +107,24 @@ void Craft::setLongitude(double lon)
 }
 
 /**
+ * Returns the current status of the craft.
+ * @return Status string.
+ */
+LangString Craft::getStatus()
+{
+	return _status;
+}
+
+/**
+ * Changes the current status of the craft.
+ * @param status Status string.
+ */
+void Craft::setStatus(LangString status)
+{
+	_status = status;
+}
+
+/**
  * Returns the amount of weapons currently
  * equipped on this craft.
  * @return Number of weapons.
@@ -159,14 +177,13 @@ int Craft::getNumHWPs()
 }
 
 /**
- * Returns the weapon currently equipped in a
- * certain slot on this craft.
- * @param i Weapon slot.
- * @return Pointer to weapon.
+ * Returns the list of weapons currently equipped
+ * in the craft.
+ * @return Pointer to weapon list.
  */
-CraftWeapon* *Craft::getWeapon(int i)
+vector<CraftWeapon*> *Craft::getWeapons()
 {
-	return &_weapons[i];
+	return &_weapons;
 }
 
 /**
@@ -196,6 +213,8 @@ int Craft::getFuel()
 void Craft::setFuel(int fuel)
 {
 	_fuel = fuel;
+	if (_fuel > _rules->getMaxFuel())
+		_fuel = _rules->getMaxFuel();
 }
 
 /**
@@ -224,6 +243,8 @@ int Craft::getDamage()
 void Craft::setDamage(int damage)
 {
 	_damage = damage;
+	if (_damage < 0)
+		_damage = 0;
 }
 
 /**

@@ -31,8 +31,7 @@ class RuleCraftWeapon
 {
 private:
 	LangString _type;
-	int _sprite;
-	int _damage, _range, _accuracy, _reload, _ammoMax, _ammoClip;
+	int _sprite, _damage, _range, _accuracy, _reload, _ammoMax, _rearm;
 	LangString _launcher, _clip;
 public:
 	/// Creates a blank craft weapon ruleset.
@@ -65,10 +64,10 @@ public:
 	int getAmmoMax();
 	/// Sets the craft weapon's maximum ammo.
 	void setAmmoMax(int ammo);
-	/// Gets the craft weapon's ammo per clip.
-	int getAmmoClip();
-	/// Sets the craft weapon's ammo per clip.
-	void setAmmoClip(int clip);
+	/// Gets the craft weapon's rearm rate.
+	int getRearmRate();
+	/// Sets the craft weapon's rearm rate.
+	void setRearmRate(int rearm);
 	/// Gets the craft weapon's launcher item.
 	LangString getLauncherItem();
 	/// Sets the craft weapon's launcher item.

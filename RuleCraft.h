@@ -32,7 +32,7 @@ class RuleCraft
 private:
 	LangString _type;
 	int _sprite;
-	int _fuelMax, _damageMax, _speed, _accel, _weapons, _soldiers, _hwps, _monthlyFee;
+	int _fuelMax, _damageMax, _speed, _accel, _weapons, _soldiers, _hwps, _monthlyFee, _repair, _refuel;
 public:
 	/// Creates a blank craft ruleset.
 	RuleCraft(LangString type);
@@ -76,6 +76,14 @@ public:
 	int getMonthlyFee();
 	/// Sets the craft's monthly fee.
 	void setMonthlyFee(int fee);
+	/// Gets the craft's repair rate.
+	int getRepairRate();
+	/// Sets the craft's repair rate.
+	void setRepairRate(int repair);
+	/// Gets the craft's refuel rate.
+	int getRefuelRate();
+	/// Sets the craft's refuel rate.
+	void setRefuelRate(int refuel);
 };
 
 #endif

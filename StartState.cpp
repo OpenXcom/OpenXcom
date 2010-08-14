@@ -81,7 +81,7 @@ void StartState::think()
 			_game->setRuleset(new XcomRuleset());
 			_load = LOADING_SUCCESSFUL;
 		}
-		catch (char* c)
+		catch (const char* c)
 		{
 			cout << c << endl;
 			_load = LOADING_FAILED;

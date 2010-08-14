@@ -37,7 +37,7 @@ private:
 	vector< vector<Text*> > _texts;
 	vector<int> _columns;
 	Font *_big, *_small;
-	int _rowY;
+	unsigned int _scroll, _visibleRows;
 	Uint8 _color;
 	bool _dot, _selectable;
 	unsigned int _selRow;
@@ -55,6 +55,8 @@ public:
 	void setColumns(int num, ...);
 	/// Sets the text color of the text list.
 	void setColor(Uint8 color);
+	/// Sets the palette of the text list.
+	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
 	/// Sets whether to separate columns with dots.
 	void setDot(bool dot);
 	/// Sets whether the list is selectable.
@@ -65,8 +67,10 @@ public:
 	int getSelectedRow();
 	/// Clears the list.
 	void clearList();
-	/// Sets the palette of the text list.
-	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
+	/// Scrolls the list up.
+	void scrollUp();
+	/// Scrolls the list down.
+	void scrollDown();
 	/// Draws the text onto the text list.
 	void draw();
 	/// Blits the text list onto another surface.

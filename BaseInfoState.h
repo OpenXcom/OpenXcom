@@ -67,6 +67,8 @@ public:
 	void miniClick(SDL_Event *ev, int scale);
 	/// Handler for clicking the OK button.
 	void btnOkClick(SDL_Event *ev, int scale);
+	/// Handler for clicking the Stores button.
+	void btnStoresClick(SDL_Event *ev, int scale);
 	/// Handler for clicking the Monthly Costs button.
 	void btnMonthlyCostsClick(SDL_Event *ev, int scale);
 };

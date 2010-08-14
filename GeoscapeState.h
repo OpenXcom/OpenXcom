@@ -60,11 +60,15 @@ public:
 	void timeDisplay();
 	/// Advances the game timer.
 	void timeAdvance();
-	/// Trigger whenever a second passes.
+	/// Trigger whenever 5 seconds pass.
 	void timeSecond();
-	/// Trigger whenever a day passes.
+	/// Trigger whenever 30 minutes pass.
+	void timeMinute();
+	/// Trigger whenever 1 hour passes.
+	void timeHour();
+	/// Trigger whenever 1 day passes.
 	void timeDay();
-	/// Trigger whenever a month passes.
+	/// Trigger whenever 1 month passes.
 	void timeMonth();
 	/// Resets the timer to minimum speed.
 	void timerReset();

@@ -47,7 +47,7 @@ GameTime::~GameTime()
  */
 TimeTrigger GameTime::advance()
 {
-	TimeTrigger trigger = TIME_SEC;
+	TimeTrigger trigger = TIME_5SEC;
 
 	_second += 5;
 
@@ -55,60 +55,32 @@ TimeTrigger GameTime::advance()
 	{
 		_minute++;
 		_second = 0;
-		trigger = TIME_MIN;
+		if (_minute == 30 || _minute == 60)
+			trigger = TIME_30MIN;
 	}
 	if (_minute >= 60)
 	{
 		_hour++;
 		_minute = 0;
-		trigger = TIME_HOUR;
+		trigger = TIME_1HOUR;
 	}
 	if (_hour >= 24)
 	{
 		_day++;
 		_weekday++;
 		_hour = 0;
-		trigger = TIME_DAY;
+		trigger = TIME_1DAY;
 	}
 	if (_weekday > 7)
 	{
 		_weekday = 1;
 	}
-	switch (_month)
+	int monthDays[] = { 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+	if (_day > monthDays[_month - 1])
 	{
-	case 1:
-	case 3:
-	case 5:
-	case 7:
-	case 8:
-	case 10:
-	case 12:
-		if (_day > 31)
-		{
-			_day = 1;
-			_month++;
-			trigger = TIME_MONTH;
-		}
-		break;
-	case 2:
-		if (_day > 29)
-		{
-			_day = 1;
-			_month++;
-			trigger = TIME_MONTH;
-		}
-		break;
-	case 4:
-	case 6:
-	case 9:
-	case 11:
-		if (_day > 30)
-		{
-			_day = 1;
-			_month++;
-			trigger = TIME_MONTH;
-		}
-		break;
+		_day = 1;
+		_month++;
+		trigger = TIME_1MONTH;
 	}
 	if (_month > 12)
 	{

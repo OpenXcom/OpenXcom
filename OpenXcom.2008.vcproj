@@ -632,6 +632,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\StoresState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\StoresState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\TestState.cpp"
 				>
 			</File>

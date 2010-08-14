@@ -33,6 +33,7 @@
 #include "SavedGame.h"
 #include "Base.h"
 #include "MonthlyCostsState.h"
+#include "StoresState.h"
 #include "BasescapeState.h"
 
 /**
@@ -160,6 +161,7 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 
 	_btnStores->setColor(Palette::blockOffset(15)+9);
 	_btnStores->setText(_game->getResourcePack()->getLanguage()->getString(STR_STORES_UC));
+	_btnStores->onMouseClick((EventHandler)&BaseInfoState::btnStoresClick);
 
 	_btnMonthlyCosts->setColor(Palette::blockOffset(15)+9);
 	_btnMonthlyCosts->setText(_game->getResourcePack()->getLanguage()->getString(STR_MONTHLY_COSTS));
@@ -395,6 +397,17 @@ void BaseInfoState::btnOkClick(SDL_Event *ev, int scale)
 {
 	_base->setName(_edtBase->getText());
 	_game->popState();
+}
+
+/**
+ * Goes to the Stores screen.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
+void BaseInfoState::btnStoresClick(SDL_Event *ev, int scale)
+{
+	_base->setName(_edtBase->getText());
+	_game->pushState(new StoresState(_game, _base));
 }
 
 /**

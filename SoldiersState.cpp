@@ -50,7 +50,7 @@ SoldiersState::SoldiersState(Game *game, Base *base) : State(game), _base(base)
 	_txtName = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 114, 9, 16, 32);
 	_txtRank = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 102, 9, 130, 32);
 	_txtCraft = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 82, 9, 232, 32);
-	_lstSoldiers = new TextList(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 298, 136, 16, 40);
+	_lstSoldiers = new TextList(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 298, 128, 16, 40);
 	
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
@@ -106,6 +106,7 @@ SoldiersState::~SoldiersState()
  */
 void SoldiersState::init()
 {
+	int row = 0;
 	_lstSoldiers->clearList();
 	for (vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); i++)
 	{
@@ -115,6 +116,13 @@ void SoldiersState::init()
 		else
 			ss << _game->getResourcePack()->getLanguage()->getString((*i)->getCraft()->getRules()->getType()) << "-" << (*i)->getCraft()->getId();
 		_lstSoldiers->addRow(3, (*i)->getName().c_str(), _game->getResourcePack()->getLanguage()->getString((*i)->getRankString()).c_str(), ss.str().c_str());
+		if ((*i)->getCraft() == 0)
+		{
+			_lstSoldiers->getCell(row, 0)->setColor(Palette::blockOffset(15)+6);
+			_lstSoldiers->getCell(row, 1)->setColor(Palette::blockOffset(15)+6);
+			_lstSoldiers->getCell(row, 2)->setColor(Palette::blockOffset(15)+6);
+		}
+		row++;
 	}
 }
 

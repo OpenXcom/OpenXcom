@@ -406,6 +406,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	skyranger->setSoldiers(14);
 	skyranger->setMonthlyFee(500000);
 	skyranger->setHWPs(3);
+	skyranger->setRefuelRate(50);
 
 	RuleCraft* lightning = new RuleCraft(STR_LIGHTNING);
 	lightning->setSprite(34);
@@ -416,6 +417,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	lightning->setMaxDamage(800);
 	lightning->setSoldiers(12);
 	lightning->setHWPs(0);
+	lightning->setRefuelRate(5);
 
 	RuleCraft* avenger = new RuleCraft(STR_AVENGER);
 	avenger->setSprite(35);
@@ -426,6 +428,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	avenger->setMaxDamage(1200);
 	avenger->setSoldiers(26);
 	avenger->setHWPs(4);
+	avenger->setRefuelRate(5);
 
 	RuleCraft* interceptor = new RuleCraft(STR_INTERCEPTOR);
 	interceptor->setSprite(36);
@@ -437,6 +440,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	interceptor->setSoldiers(0);
 	interceptor->setMonthlyFee(600000);
 	interceptor->setHWPs(0);
+	interceptor->setRefuelRate(50);
 
 	RuleCraft* firestorm = new RuleCraft(STR_FIRESTORM);
 	firestorm->setSprite(37);
@@ -447,6 +451,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	firestorm->setMaxDamage(50);
 	firestorm->setSoldiers(0);
 	firestorm->setHWPs(0);
+	firestorm->setRefuelRate(5);
 
 	_crafts.insert(pair<LangString, RuleCraft*>(STR_SKYRANGER, skyranger));
 	_crafts.insert(pair<LangString, RuleCraft*>(STR_LIGHTNING, lightning));
@@ -482,7 +487,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	cannon->setAccuracy(25);
 	cannon->setReloadTime(2);
 	cannon->setAmmoMax(200);
-	cannon->setAmmoClip(50);
+	cannon->setRearmRate(50);
 	cannon->setLauncherItem(STR_CANNON);
 	cannon->setClipItem(STR_CANNON_ROUNDS);
 
@@ -848,8 +853,8 @@ SavedGame *XcomRuleset::newSave(GameDifficulty diff)
 	{
 		Craft *interceptor = new Craft(getCraft(STR_INTERCEPTOR), save->getCraftIds());
 		interceptor->setFuel(interceptor->getRules()->getMaxFuel());
-		*interceptor->getWeapon(0) = new CraftWeapon(getCraftWeapon(STR_STINGRAY_UC), getCraftWeapon(STR_STINGRAY_UC)->getAmmoMax());
-		*interceptor->getWeapon(1) = new CraftWeapon(getCraftWeapon(STR_CANNON_UC), getCraftWeapon(STR_CANNON_UC)->getAmmoMax());
+		interceptor->getWeapons()->at(0) = new CraftWeapon(getCraftWeapon(STR_STINGRAY_UC), getCraftWeapon(STR_STINGRAY_UC)->getAmmoMax());
+		interceptor->getWeapons()->at(1) = new CraftWeapon(getCraftWeapon(STR_CANNON_UC), getCraftWeapon(STR_CANNON_UC)->getAmmoMax());
 		base->getCrafts()->push_back(interceptor);
 	}
 

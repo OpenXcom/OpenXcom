@@ -120,6 +120,7 @@
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="SoundSet.cpp" />
     <ClCompile Include="StartState.cpp" />
+    <ClCompile Include="StoresState.cpp" />
     <ClCompile Include="TextButton.cpp" />
     <ClCompile Include="Craft.cpp" />
     <ClCompile Include="CraftInfoState.cpp" />
@@ -205,6 +206,7 @@
     <ClInclude Include="SoundSet.h" />
     <ClInclude Include="StartState.h" />
     <ClInclude Include="State.h" />
+    <ClInclude Include="StoresState.h" />
     <ClInclude Include="TextButton.h" />
     <ClInclude Include="Craft.h" />
     <ClInclude Include="CraftInfoState.h" />

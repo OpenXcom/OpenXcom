@@ -22,7 +22,7 @@
 #include "Sound.h"
 #include "RNG.h"
 
-#define POPUP_SPEED 0.05
+#define POPUP_SPEED 0.075
 
 Sound *Window::soundPopup[3] = {0, 0, 0};
 
@@ -71,7 +71,7 @@ void Window::setBackground(Surface *bg)
 	{
 		for (vector<Surface*>::iterator i = _state->getSurfaces()->begin(); i < _state->getSurfaces()->end(); i++)
 			if ((*i) != this)
-				(*i)->setVisible(false);
+				(*i)->hide();
 	}
 
 	_bg = bg;
@@ -88,7 +88,7 @@ void Window::setColor(Uint8 color)
 	{
 		for (vector<Surface*>::iterator i = _state->getSurfaces()->begin(); i < _state->getSurfaces()->end(); i++)
 			if ((*i) != this)
-				(*i)->setVisible(false);
+				(*i)->hide();
 	}
 
 	_color = color;
@@ -125,7 +125,7 @@ void Window::popup()
 	{
 		for (vector<Surface*>::iterator i = _state->getSurfaces()->begin(); i < _state->getSurfaces()->end(); i++)
 			if ((*i) != this)
-				(*i)->setVisible(true);
+				(*i)->show();
 		_popupStep = 1.0;
 		_timer->stop();
 	}

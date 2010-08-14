@@ -32,8 +32,10 @@
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-TextList::TextList(Font *big, Font *small, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _texts(), _columns(), _big(big), _small(small), _rowY(0), _color(0), _dot(false), _selectable(false), _selRow(0), _bg(0), _selector(0)
+TextList::TextList(Font *big, Font *small, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _texts(), _columns(), _big(big), _small(small), _scroll(0), _visibleRows(0), _color(0), _dot(false), _selectable(false), _selRow(0), _bg(0), _selector(0)
 {
+	for (int y = 0; y < _height; y += _small->getHeight() + _small->getSpacing())
+		_visibleRows++;
 }
 
 /**
@@ -78,7 +80,7 @@ void TextList::addRow(int num, ...)
 
 	for (int i = 0; i < num; i++)
 	{
-		Text* txt = new Text(_big, _small, _columns[i], _small->getHeight(), rowX, _rowY);
+		Text* txt = new Text(_big, _small, _columns[i], _small->getHeight(), rowX, _y);
 		txt->setPalette(this->getPalette());
 		
 		string buf = va_arg(args, char*);
@@ -107,7 +109,6 @@ void TextList::addRow(int num, ...)
 		rowX += _columns[i];
 	}
 	_texts.push_back(temp);
-	_rowY += _small->getHeight() + _small->getSpacing();
 	draw();
 
 	va_end(args);
@@ -225,7 +226,30 @@ void TextList::clearList()
 		u->clear();
 	}
 	_texts.clear();
-	_rowY = 0;
+}
+
+/**
+ * Scrolls the text in the list up by one row.
+ */
+void TextList::scrollUp()
+{
+	if (_texts.size() > _visibleRows && _scroll > 0)
+	{
+		_scroll--;
+		draw();
+	}
+}
+
+/**
+ * Scrolls the text in the list down by one row.
+ */
+void TextList::scrollDown()
+{
+	if (_texts.size() > _visibleRows && _scroll < _texts.size() - _visibleRows)
+	{
+		_scroll++;
+		draw();
+	}
 }
 
 /**
@@ -234,11 +258,12 @@ void TextList::clearList()
 void TextList::draw()
 {
 	clear();
-	for (vector< vector<Text*> >::iterator u = _texts.begin(); u < _texts.end(); u++)
+	for (unsigned int i = _scroll; i < _texts.size() && i < _scroll + _visibleRows; i++)
 	{
-		for (vector<Text*>::iterator v = (*u).begin(); v < (*u).end(); v++)
+		for (vector<Text*>::iterator j = _texts[i].begin(); j < _texts[i].end(); j++)
 		{
-            (*v)->blit(this);
+			(*j)->setY((i - _scroll) * (_small->getHeight() + _small->getSpacing()));
+            (*j)->blit(this);
         }
     }
 }
@@ -266,6 +291,14 @@ void TextList::mousePress(SDL_Event *ev, int scale, State *state)
 	{
 		if (_selRow < _texts.size())
 			InteractiveSurface::mousePress(ev, scale, state);
+	}
+	else if (ev->button.button == SDL_BUTTON_WHEELUP)
+	{
+		scrollUp();
+	}
+	else if (ev->button.button == SDL_BUTTON_WHEELDOWN)
+	{
+		scrollDown();
 	}
 }
 
@@ -307,14 +340,15 @@ void TextList::mouseClick(SDL_Event *ev, int scale, State *state)
  */
 void TextList::mouseOver(SDL_Event *ev, int scale, State *state)
 {
+	int h = _small->getHeight() + _small->getSpacing();
 	if (_selectable)
 	{
 		double y = ev->button.y - _y * scale;
-		_selRow = (int)floor(y / (8.0 * scale));
+		_selRow = _scroll + (int)floor(y / (h * scale));
 
 		if (_selRow < _texts.size())
 		{
-			_selector->setY(_y + _selRow * 8);
+			_selector->setY(_y + (_selRow - _scroll) * h);
 			_selector->copy(_bg);
 			_selector->offset(-10, Palette::backPos);
 			_selector->setVisible(true);

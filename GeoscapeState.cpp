@@ -38,6 +38,10 @@
 #include "Base.h"
 #include "BaseFacility.h"
 #include "RuleBaseFacility.h"
+#include "Craft.h"
+#include "RuleCraft.h"
+#include "CraftWeapon.h"
+#include "RuleCraftWeapon.h"
 #include "OptionsState.h"
 #include "InterceptState.h"
 #include "BasescapeState.h"
@@ -379,13 +383,15 @@ void GeoscapeState::timeAdvance()
 		trigger = _game->getSavedGame()->getTime()->advance();
 		switch (trigger)
 		{
-		case TIME_MONTH:
+		case TIME_1MONTH:
 			timeMonth();
-		case TIME_DAY:
+		case TIME_1DAY:
 			timeDay();
-		case TIME_HOUR:
-		case TIME_MIN:
-		case TIME_SEC:
+		case TIME_1HOUR:
+			timeHour();
+		case TIME_30MIN:
+			timeMinute();
+		case TIME_5SEC:
 			timeSecond();
 		}
 
@@ -403,6 +409,66 @@ void GeoscapeState::timeAdvance()
  */
 void GeoscapeState::timeSecond()
 {
+}
+
+/**
+ * Takes care of any game logic that has to
+ * run every game half hour, like reloading.
+ */
+void GeoscapeState::timeMinute()
+{
+	for (vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); i++)
+	{
+		for (vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); j++)
+		{
+			switch ((*j)->getStatus())
+			{
+				case STR_REFUELLING:
+					(*j)->setFuel((*j)->getFuel() + (*j)->getRules()->getRefuelRate());
+					if ((*j)->getFuel() == (*j)->getRules()->getMaxFuel())
+						(*j)->setStatus(STR_REARMING);
+					break;
+			}
+		}
+	}
+}
+
+/**
+ * Takes care of any game logic that has to
+ * run every game second, like transfers.
+ */
+void GeoscapeState::timeHour()
+{
+	for (vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); i++)
+	{
+		for (vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); j++)
+		{
+			switch ((*j)->getStatus())
+			{
+				case STR_REPAIRS:
+					(*j)->setDamage((*j)->getDamage() - (*j)->getRules()->getRepairRate());
+					if ((*j)->getDamage() == 0)
+						(*j)->setStatus(STR_REFUELLING);
+					break;
+				case STR_REARMING:
+					int full = 0;
+					for (vector<CraftWeapon*>::iterator k = (*j)->getWeapons()->begin(); k != (*j)->getWeapons()->end(); j++)
+					{
+						if ((*k) == 0)
+							continue;
+
+						(*k)->setAmmo((*k)->getAmmo() + (*k)->getRules()->getRearmRate());
+
+						if ((*k)->getAmmo() == (*k)->getRules()->getAmmoMax())
+							full++;
+					}
+
+					if (full == (*j)->getWeapons()->size())
+						(*j)->setStatus(STR_READY);
+					break;
+			}
+		}
+	}
 }
 
 /**

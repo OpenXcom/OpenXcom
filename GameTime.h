@@ -24,7 +24,7 @@
 /**
  * Enumator for time periods.
  */
-enum TimeTrigger { TIME_SEC, TIME_MIN, TIME_HOUR, TIME_DAY, TIME_MONTH };
+enum TimeTrigger { TIME_5SEC, TIME_30MIN, TIME_1HOUR, TIME_1DAY, TIME_1MONTH };
 
 /**
  * Stores the current ingame time/date.

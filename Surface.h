@@ -37,7 +37,7 @@ protected:
 	SDL_Surface *_surface;
 	int _width, _height, _x, _y;
 	SDL_Rect _crop;
-	bool _visible;
+	bool _visible, _hidden;
 public:
 	/// Creates a new surface with the specified size and position.
 	Surface(int width, int height, int x = 0, int y = 0);
@@ -95,6 +95,10 @@ public:
 	void setVisible(bool visible);
 	/// Gets the surface's visibility.
 	bool getVisible();
+	/// Hides the surface.
+	void hide();
+	/// Shows the surface.
+	void show();
 	/// Locks the surface.
 	void lock();
 	/// Unlocks the surface.

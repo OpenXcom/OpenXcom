@@ -30,7 +30,7 @@
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Surface::Surface(int width, int height, int x, int y) : _width(width), _height(height), _x(x), _y(y), _visible(true)
+Surface::Surface(int width, int height, int x, int y) : _width(width), _height(height), _x(x), _y(y), _visible(true), _hidden(false)
 {
 	_surface = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, 8, 0, 0, 0, 0);
 
@@ -267,7 +267,7 @@ void Surface::draw()
  */
 void Surface::blit(Surface *surface)
 {
-	if (_visible)
+	if (_visible && !_hidden)
 	{
 		SDL_Rect* cropper;
 		SDL_Rect target;
@@ -474,6 +474,26 @@ void Surface::setVisible(bool visible)
 bool Surface::getVisible()
 {
 	return _visible;
+}
+
+/**
+ * Hides the surface if it's visible. This is a separate
+ * visibility setting intended for temporary effects,
+ * so as to not override the actual visibility setting.
+ */
+void Surface::hide()
+{
+	_hidden = true;
+}
+
+/**
+ * Shows the surface if it's not invisible. This is a separate
+ * visibility setting intended for temporary effects,
+ * so as to not override the actual visibility setting.
+ */
+void Surface::show()
+{
+	_hidden = false;
 }
 
 /**

@@ -23,7 +23,7 @@
  * type of craft.
  * @param type String defining the type.
  */
-RuleCraft::RuleCraft(LangString type) : _type(type), _sprite(0), _fuelMax(0), _damageMax(0), _speed(0), _accel(0), _weapons(0), _soldiers(0), _hwps(0), _monthlyFee(0)
+RuleCraft::RuleCraft(LangString type) : _type(type), _sprite(0), _fuelMax(0), _damageMax(0), _speed(0), _accel(0), _weapons(0), _soldiers(0), _hwps(0), _monthlyFee(0), _repair(1), _refuel(1)
 {
 }
 
@@ -220,4 +220,44 @@ int RuleCraft::getMonthlyFee()
 void RuleCraft::setMonthlyFee(int fee)
 {
 	_monthlyFee = fee;
+}
+
+/**
+ * Returns how much damage is removed from the
+ * craft while repairing.
+ * @return Amount of damage.
+ */
+int RuleCraft::getRepairRate()
+{
+	return _repair;
+}
+
+/**
+ * Changes how much damage is removed from the
+ * craft while repairing.
+ * @param repair Amount of damage.
+ */
+void RuleCraft::setRepairRate(int repair)
+{
+	_repair = repair;
+}
+
+/**
+ * Returns how much fuel is added to the
+ * craft while refuelling.
+ * @return Amount of fuel.
+ */
+int RuleCraft::getRefuelRate()
+{
+	return _refuel;
+}
+
+/**
+ * Changes how much fuel is added to the
+ * craft while refuelling.
+ * @param refuel Amount of fuel.
+ */
+void RuleCraft::setRefuelRate(int refuel)
+{
+	_refuel = refuel;
 }

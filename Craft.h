@@ -44,6 +44,7 @@ private:
 	int _id, _fuel, _damage;
 	vector<CraftWeapon*> _weapons;
 	map<LangString, Item*> _items;
+	LangString _status;
 public:
 	/// Creates a craft of the specified type.
 	Craft(RuleCraft *rules, map<LangString, int> *id);
@@ -61,14 +62,18 @@ public:
 	double getLongitude();
 	/// Sets the craft's longitude.
 	void setLongitude(double lon);
+	/// Gets the craft's status.
+	LangString getStatus();
+	/// Sets the craft's status.
+	void setStatus(LangString status);
 	/// Gets the craft's amount of weapons.
 	int getNumWeapons();
 	/// Gets the craft's amount of soldiers.
 	int getNumSoldiers(vector<Soldier*> *soldiers);
 	/// Gets the craft's amount of HWPs.
 	int getNumHWPs();
-	/// Gets the craft's weapon in a certain slot.
-	CraftWeapon* *getWeapon(int i);
+	/// Gets the craft's weapons.
+	vector<CraftWeapon*> *getWeapons();
 	/// Gets the craft's items.
 	map<LangString, Item*> *getItems();
 	/// Gets the craft's amount of fuel.

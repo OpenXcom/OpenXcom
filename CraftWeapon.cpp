@@ -60,4 +60,6 @@ int CraftWeapon::getAmmo()
 void CraftWeapon::setAmmo(int ammo)
 {
 	_ammo = ammo;
+	if (_ammo > _rules->getAmmoMax())
+		_ammo = _rules->getAmmoMax();
 }

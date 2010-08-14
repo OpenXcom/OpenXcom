@@ -462,6 +462,12 @@
 		<Unit filename="State.h">
 			<Option virtualFolder="Engine\" />
 		</Unit>
+		<Unit filename="StoresState.cpp">
+			<Option virtualFolder="States\" />
+		</Unit>
+		<Unit filename="StoresState.h">
+			<Option virtualFolder="States\" />
+		</Unit>
 		<Unit filename="Surface.cpp">
 			<Option virtualFolder="Engine\" />
 		</Unit>
