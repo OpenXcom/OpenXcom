@@ -448,6 +448,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\CraftWeaponsState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\CraftWeaponsState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\CraftsState.cpp"
 				>
 			</File>

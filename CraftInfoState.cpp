@@ -34,6 +34,7 @@
 #include "RuleCraftWeapon.h"
 #include "Base.h"
 #include "CraftSoldiersState.h"
+#include "CraftWeaponsState.h"
 
 using namespace std;
 
@@ -54,8 +55,8 @@ CraftInfoState::CraftInfoState(Game *game, Base *base, unsigned int craft) : Sta
 	_btnEquip = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 64, 16, 24, 120);
 	_btnArmour = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 64, 16, 24, 144);
 	_txtCraft = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 310, 16, 5, 8);
-	_txtDamage = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 70, 9, 24, 24);
-	_txtFuel = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 70, 9, 232, 24);
+	_txtDamage = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 80, 9, 24, 24);
+	_txtFuel = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 80, 9, 232, 24);
 	_txtW1Name = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 90, 9, 56, 48);
 	_txtW1Ammo = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 60, 9, 56, 64);
 	_txtW1Max = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 60, 9, 56, 72);
@@ -103,9 +104,11 @@ CraftInfoState::CraftInfoState(Game *game, Base *base, unsigned int craft) : Sta
 
 	_btnW1->setColor(Palette::blockOffset(13)+13);
 	_btnW1->setText("1");
+	_btnW1->onMouseClick((EventHandler)&CraftInfoState::btnW1Click);
 
 	_btnW2->setColor(Palette::blockOffset(13)+13);
 	_btnW2->setText("2");
+	_btnW2->onMouseClick((EventHandler)&CraftInfoState::btnW2Click);
 
 	_btnCrew->setColor(Palette::blockOffset(13)+13);
 	_btnCrew->setText(_game->getResourcePack()->getLanguage()->getString(STR_CREW));
@@ -221,7 +224,6 @@ void CraftInfoState::init()
 		else
 		{
 			_w1->clear();
-			_btnW1->setText("");
 			_txtW1Name->setText("");
 			_txtW1Ammo->setText("");
 			_txtW1Max->setText("");
@@ -259,7 +261,6 @@ void CraftInfoState::init()
 		else
 		{
 			_w2->clear();
-			_btnW2->setText("");
 			_txtW2Name->setText("");
 			_txtW2Ammo->setText("");
 			_txtW2Max->setText("");
@@ -283,6 +284,26 @@ void CraftInfoState::init()
 void CraftInfoState::btnOkClick(SDL_Event *ev, int scale)
 {
 	_game->popState();
+}
+
+/**
+ * Goes to the Select Armament window.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
+void CraftInfoState::btnW1Click(SDL_Event *ev, int scale)
+{
+	_game->pushState(new CraftWeaponsState(_game, _base, _craft, 0));
+}
+
+/**
+ * Goes to the Select Armament window.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
+void CraftInfoState::btnW2Click(SDL_Event *ev, int scale)
+{
+	_game->pushState(new CraftWeaponsState(_game, _base, _craft, 1));
 }
 
 /**

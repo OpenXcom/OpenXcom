@@ -74,9 +74,9 @@ TestState::TestState(Game *game) : State(game)
 
 	_list->setColor(Palette::blockOffset(15)+1);
 	_list->setColumns(3, 100, 50, 100);
-	_list->addRow(2, "a", "b");
-	_list->addRow(3, "lol", "welp", "yo");
-	_list->addRow(1, "0123456789");
+	_list->addRow(0, 2, "a", "b");
+	_list->addRow(0, 3, "lol", "welp", "yo");
+	_list->addRow(0, 1, "0123456789");
 	
 	_i = 0;
 }

@@ -130,7 +130,7 @@ void CraftsState::init()
 		ss2 << (*i)->getNumWeapons() << "/" << (*i)->getRules()->getWeapons();
 		ss3 << (*i)->getNumSoldiers(_base->getSoldiers());
 		ss4 << (*i)->getNumHWPs();
-		_lstCrafts->addRow(5, ss.str().c_str(), _game->getResourcePack()->getLanguage()->getString((*i)->getStatus()).c_str(), ss2.str().c_str(), ss3.str().c_str(), ss4.str().c_str());
+		_lstCrafts->addRow(0, 5, ss.str().c_str(), _game->getResourcePack()->getLanguage()->getString((*i)->getStatus()).c_str(), ss2.str().c_str(), ss3.str().c_str(), ss4.str().c_str());
 	}
 }
 

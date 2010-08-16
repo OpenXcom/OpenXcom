@@ -90,9 +90,9 @@ FundingState::FundingState(Game *game) : State(game)
 	{
 		stringstream ss;
 		ss << i->second->getChange();
-		_lstCountries->addRow(3, _game->getResourcePack()->getLanguage()->getString(i->first).c_str(), Text::formatFunding(i->second->getFunding()).c_str(), ss.str().c_str());
+		_lstCountries->addRow(0, 3, _game->getResourcePack()->getLanguage()->getString(i->first).c_str(), Text::formatFunding(i->second->getFunding()).c_str(), ss.str().c_str());
 	}
-	_lstCountries->addRow(2, _game->getResourcePack()->getLanguage()->getString(STR_TOTAL_UC).c_str(), Text::formatFunding(_game->getSavedGame()->getCountryFunding()).c_str());
+	_lstCountries->addRow(0, 2, _game->getResourcePack()->getLanguage()->getString(STR_TOTAL_UC).c_str(), Text::formatFunding(_game->getSavedGame()->getCountryFunding()).c_str());
 	_lstCountries->getCell(_game->getSavedGame()->getCountries()->size(), 0)->setColor(Palette::blockOffset(8)+5);
 	_lstCountries->getCell(_game->getSavedGame()->getCountries()->size(), 1)->setColor(Palette::blockOffset(8)+5);
 	_lstCountries->draw();

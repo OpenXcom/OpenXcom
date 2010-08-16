@@ -100,7 +100,7 @@ ResearchState::ResearchState(Game *game) : State(game)
 	_lstResearch->setColumns(3, 158, 82, 60);
 	_lstResearch->setSelectable(true);
 	_lstResearch->setBackground(_window);
-	_lstResearch->addRow(3, "Laser Weapons", "30", "Good");
+	_lstResearch->addRow(0, 3, "Laser Weapons", "30", "Good");
 }
 
 /**

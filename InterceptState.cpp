@@ -102,9 +102,10 @@ InterceptState::InterceptState(Game *game) : State(game)
 			stringstream ss, ss2;
 			ss << _game->getResourcePack()->getLanguage()->getString((*j)->getRules()->getType()) << "-" << (*j)->getId();
 			ss2 << (*j)->getNumWeapons() << "/" << (*j)->getNumSoldiers((*i)->getSoldiers()) << "/" << (*j)->getNumHWPs();
-			_lstCrafts->addRow(4, ss.str().c_str(), _game->getResourcePack()->getLanguage()->getString((*j)->getStatus()).c_str(), (*i)->getName().c_str(), ss2.str().c_str());
+			_lstCrafts->addRow(0, 4, ss.str().c_str(), _game->getResourcePack()->getLanguage()->getString((*j)->getStatus()).c_str(), (*i)->getName().c_str(), ss2.str().c_str());
 			if ((*j)->getStatus() == STR_READY)
-				_lstCrafts->getCell(row++, 1)->setColor(Palette::blockOffset(8)+10);
+				_lstCrafts->getCell(row, 1)->setColor(Palette::blockOffset(8)+10);
+			row++;
 		}
 	}
 	_lstCrafts->draw();

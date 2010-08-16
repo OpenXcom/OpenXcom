@@ -83,8 +83,8 @@ MonthlyReportState::MonthlyReportState(Game *game) : State(game)
 	_txtChange->setText(_game->getResourcePack()->getLanguage()->getString(STR_FUNDING_CHANGE));
 
 	_txtDesc->setColor(Palette::blockOffset(8)+10);
-	_txtDesc->setText(_game->getResourcePack()->getLanguage()->getString(STR_COUNCIL_SATISFIED));
 	_txtDesc->setWordWrap(true);
+	_txtDesc->setText(_game->getResourcePack()->getLanguage()->getString(STR_COUNCIL_SATISFIED));
 }
 
 /**

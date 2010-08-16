@@ -51,6 +51,10 @@ public:
 	void init();
 	/// Handler for clicking the OK button.
 	void btnOkClick(SDL_Event *ev, int scale);
+	/// Handler for clicking the 1 button.
+	void btnW1Click(SDL_Event *ev, int scale);
+	/// Handler for clicking the 2 button.
+	void btnW2Click(SDL_Event *ev, int scale);
 	/// Handler for clicking the Crew button.
 	void btnCrewClick(SDL_Event *ev, int scale);
 };

@@ -141,6 +141,12 @@
 		<Unit filename="CraftSoldiersState.h">
 			<Option virtualFolder="States\" />
 		</Unit>
+		<Unit filename="CraftWeaponsState.cpp">
+			<Option virtualFolder="States\" />
+		</Unit>
+		<Unit filename="CraftWeaponsState.h">
+			<Option virtualFolder="States\" />
+		</Unit>
 		<Unit filename="CraftWeapon.cpp">
 			<Option virtualFolder="Xcom\Game\" />
 		</Unit>

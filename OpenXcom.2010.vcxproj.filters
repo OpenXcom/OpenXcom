@@ -245,6 +245,9 @@
     <ClCompile Include="StoresState.cpp">
       <Filter>States</Filter>
     </ClCompile>
+    <ClCompile Include="CraftWeaponsState.cpp">
+      <Filter>States</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbandonGameState.h">
@@ -491,6 +494,9 @@
       <Filter>Xcom\Rules</Filter>
     </ClInclude>
     <ClInclude Include="StoresState.h">
+      <Filter>States</Filter>
+    </ClInclude>
+    <ClInclude Include="CraftWeaponsState.h">
       <Filter>States</Filter>
     </ClInclude>
   </ItemGroup>

@@ -451,19 +451,20 @@ void GeoscapeState::timeHour()
 						(*j)->setStatus(STR_REFUELLING);
 					break;
 				case STR_REARMING:
-					int full = 0;
-					for (vector<CraftWeapon*>::iterator k = (*j)->getWeapons()->begin(); k != (*j)->getWeapons()->end(); j++)
+					int available = 0, full = 0;
+					for (vector<CraftWeapon*>::iterator k = (*j)->getWeapons()->begin(); k != (*j)->getWeapons()->end(); k++)
 					{
 						if ((*k) == 0)
 							continue;
 
+						available++;
 						(*k)->setAmmo((*k)->getAmmo() + (*k)->getRules()->getRearmRate());
 
 						if ((*k)->getAmmo() == (*k)->getRules()->getAmmoMax())
 							full++;
 					}
 
-					if (full == (*j)->getWeapons()->size())
+					if (full == available)
 						(*j)->setStatus(STR_READY);
 					break;
 			}

@@ -120,7 +120,7 @@ ManufactureState::ManufactureState(Game *game) : State(game)
 	_lstManufacture->setColumns(6, 105, 39, 45, 27, 47, 37);
 	_lstManufacture->setSelectable(true);
 	_lstManufacture->setBackground(_window);
-	_lstManufacture->addRow(6, "Laser Rifle", "30", "2", "8", "$40 000", "5/2");
+	_lstManufacture->addRow(0, 6, "Laser Rifle", "30", "2", "8", "$40 000", "5/2");
 }
 
 /**

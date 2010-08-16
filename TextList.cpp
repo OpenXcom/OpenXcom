@@ -66,26 +66,48 @@ Text* TextList::getCell(int row, int col)
 }
 
 /**
+ * Returns the value associated with a certain row.
+ * @param row Row number.
+ * @return Stored value.
+ */
+int TextList::getValue(int row)
+{
+	return _values[row];
+}
+
+/**
+ * Returns the value associated with the selected row.
+ * @return Stored value.
+ */
+int TextList::getSelectedValue()
+{
+	return _values[_selRow];
+}
+
+/**
  * Adds a new row of text to the list, automatically creating
  * the required Text objects lined up where they need to be.
- * @param num Number of columns.
+ * @param value Value associated with the row.
+ * @param cols Number of columns.
  * @param ... Text for each cell in the new row.
  */
-void TextList::addRow(int num, ...)
+void TextList::addRow(int value, int cols, ...)
 {
+	_values.push_back(value);
+
 	va_list args;
-	va_start(args, num);
+	va_start(args, cols);
 	vector<Text*> temp;
 	int rowX = 0;
 
-	for (int i = 0; i < num; i++)
+	for (int i = 0; i < cols; i++)
 	{
 		Text* txt = new Text(_big, _small, _columns[i], _small->getHeight(), rowX, _y);
 		txt->setPalette(this->getPalette());
 		
 		string buf = va_arg(args, char*);
 		// Places dots between text
-		if (_dot && i < num - 1)
+		if (_dot && i < cols - 1)
 		{
 			int w = 0;
 			for (string::iterator c = buf.begin(); c < buf.end(); c++)
@@ -115,18 +137,18 @@ void TextList::addRow(int num, ...)
 }
 
 /**
- * Changes the number of columns that the list contains.
+ * Changes the columns that the list contains.
  * While rows can be unlimited, columns need to be specified
- * since they can have variable widths for lining up the text.
- * @param num Number of columns.
+ * since they can have various widths for lining up the text.
+ * @param cols Number of columns.
  * @param ... Width of each column.
  */
-void TextList::setColumns(int num, ...)
+void TextList::setColumns(int cols, ...)
 {
 	va_list args;
-	va_start(args, num);
+	va_start(args, cols);
 
-	for (int i = 0; i < num; i++)
+	for (int i = 0; i < cols; i++)
 	{
 		_columns.push_back(va_arg(args, int));
 	}

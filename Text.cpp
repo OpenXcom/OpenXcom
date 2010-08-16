@@ -120,8 +120,11 @@ string Text::getText()
  */
 void Text::setWordWrap(bool wrap)
 {
-	_wrap = wrap;
-	draw();
+	if (wrap != _wrap)
+	{
+		_wrap = wrap;
+		processText();
+	}
 }
 
 /**

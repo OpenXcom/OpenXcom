@@ -72,8 +72,8 @@ BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base, State *state)
 	_lstFacilities->setSelectable(true);
 	_lstFacilities->setBackground(_window);
 	for (int i = STR_LIVING_QUARTERS; i <= STR_ALIEN_CONTAINMENT; i++)
-		_lstFacilities->addRow(1, _game->getResourcePack()->getLanguage()->getString((LangString)i).c_str());
-	_lstFacilities->addRow(1, _game->getResourcePack()->getLanguage()->getString(STR_HANGAR).c_str());
+		_lstFacilities->addRow(i, 1, _game->getResourcePack()->getLanguage()->getString((LangString)i).c_str());
+	_lstFacilities->addRow(STR_HANGAR, 1, _game->getResourcePack()->getLanguage()->getString(STR_HANGAR).c_str());
 	_lstFacilities->onMouseClick((EventHandler)&BuildFacilitiesState::lstFacilitiesClick);
 }
 
@@ -111,10 +111,5 @@ void BuildFacilitiesState::btnOkClick(SDL_Event *ev, int scale)
  */
 void BuildFacilitiesState::lstFacilitiesClick(SDL_Event *ev, int scale)
 {
-	LangString facilities[9];
-	for (int i = 0; i < 8; i++)
-		facilities[i] = (LangString)(STR_LIVING_QUARTERS + i);
-	facilities[8] = STR_HANGAR;
-
-	_game->pushState(new PlaceFacilityState(_game, _base, _game->getRuleset()->getBaseFacility(facilities[_lstFacilities->getSelectedRow()])));
+	_game->pushState(new PlaceFacilityState(_game, _base, _game->getRuleset()->getBaseFacility((LangString)_lstFacilities->getSelectedValue())));
 }

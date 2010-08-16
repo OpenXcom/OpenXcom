@@ -102,7 +102,7 @@ PurchaseState::PurchaseState(Game *game) : State(game)
 	_lstItems->setColumns(3, 162, 92, 40);
 	_lstItems->setSelectable(true);
 	_lstItems->setBackground(_window);
-	_lstItems->addRow(3, "Soldier", "40 000", "0");
+	_lstItems->addRow(0, 3, "Soldier", "40 000", "0");
 }
 
 /**
