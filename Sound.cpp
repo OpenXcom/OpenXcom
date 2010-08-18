@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Sound.h"
+#include <iostream>
 #include "SDL.h"
 
 /**
@@ -64,5 +65,5 @@ void Sound::load(void *sound, int size)
 void Sound::play()
 {
 	if (_sound != 0 && Mix_PlayChannel(-1, _sound, 0) == -1) 
-		throw Mix_GetError();
+		std::cout << Mix_GetError() << std::endl;
 }

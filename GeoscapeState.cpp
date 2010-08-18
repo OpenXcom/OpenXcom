@@ -394,7 +394,6 @@ void GeoscapeState::timeAdvance()
 		case TIME_5SEC:
 			timeSecond();
 		}
-
 	}
 
 	_pause = false;
@@ -421,13 +420,11 @@ void GeoscapeState::timeMinute()
 	{
 		for (vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); j++)
 		{
-			switch ((*j)->getStatus())
+			if ((*j)->getStatus() == STR_REFUELLING)
 			{
-				case STR_REFUELLING:
-					(*j)->setFuel((*j)->getFuel() + (*j)->getRules()->getRefuelRate());
-					if ((*j)->getFuel() == (*j)->getRules()->getMaxFuel())
-						(*j)->setStatus(STR_REARMING);
-					break;
+				(*j)->setFuel((*j)->getFuel() + (*j)->getRules()->getRefuelRate());
+				if ((*j)->getFuel() == (*j)->getRules()->getMaxFuel())
+					(*j)->setStatus(STR_REARMING);
 			}
 		}
 	}
@@ -443,30 +440,29 @@ void GeoscapeState::timeHour()
 	{
 		for (vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); j++)
 		{
-			switch ((*j)->getStatus())
+			if ((*j)->getStatus() == STR_REPAIRS)
 			{
-				case STR_REPAIRS:
-					(*j)->setDamage((*j)->getDamage() - (*j)->getRules()->getRepairRate());
-					if ((*j)->getDamage() == 0)
-						(*j)->setStatus(STR_REFUELLING);
-					break;
-				case STR_REARMING:
-					int available = 0, full = 0;
-					for (vector<CraftWeapon*>::iterator k = (*j)->getWeapons()->begin(); k != (*j)->getWeapons()->end(); k++)
-					{
-						if ((*k) == 0)
-							continue;
+				(*j)->setDamage((*j)->getDamage() - (*j)->getRules()->getRepairRate());
+				if ((*j)->getDamage() == 0)
+					(*j)->setStatus(STR_REFUELLING);
+			}
+			else if ((*j)->getStatus() == STR_REARMING)
+			{
+				int available = 0, full = 0;
+				for (vector<CraftWeapon*>::iterator k = (*j)->getWeapons()->begin(); k != (*j)->getWeapons()->end(); k++)
+				{
+					if ((*k) == 0)
+						continue;
 
-						available++;
-						(*k)->setAmmo((*k)->getAmmo() + (*k)->getRules()->getRearmRate());
+					available++;
+					(*k)->setAmmo((*k)->getAmmo() + (*k)->getRules()->getRearmRate());
 
-						if ((*k)->getAmmo() == (*k)->getRules()->getAmmoMax())
-							full++;
-					}
+					if ((*k)->getAmmo() == (*k)->getRules()->getAmmoMax())
+						full++;
+				}
 
-					if (full == available)
-						(*j)->setStatus(STR_READY);
-					break;
+				if (full == available)
+					(*j)->setStatus(STR_READY);
 			}
 		}
 	}

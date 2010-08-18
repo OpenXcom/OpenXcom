@@ -40,8 +40,8 @@
  */
 XcomResourcePack::XcomResourcePack(string folder) : ResourcePack(folder)
 {
-	cout << "Loading resources..." << endl;
-	
+	//cout << "Loading resources..." << endl;
+
 	// Load palettes
 	for (int i = 0; i < 5; i++)
 	{
@@ -49,16 +49,16 @@ XcomResourcePack::XcomResourcePack(string folder) : ResourcePack(folder)
 		s1 << folder << "GEODATA/PALETTES.DAT";
 		s2 << "PALETTES.DAT_" << i;
 		_palettes[s2.str()] = new Palette();
-		_palettes[s2.str()]->loadDat(s1.str(), 256, Palette::palOffset(i));
-		cout << s2.str() << endl;
+		_palettes[s2.str()]->loadDat(insensitive(s1.str()), 256, Palette::palOffset(i));
+		//cout << s2.str() << endl;
 	}
 
 	stringstream s1, s2;
 	s1 << folder << "GEODATA/BACKPALS.DAT";
 	s2 << "BACKPALS.DAT";
 	_palettes[s2.str()] = new Palette();
-	_palettes[s2.str()]->loadDat(s1.str(), 128);
-	cout << s2.str() << endl;
+	_palettes[s2.str()]->loadDat(insensitive(s1.str()), 128);
+	//cout << s2.str() << endl;
 	
 	// Load fonts
 	string font[] = {"BIGLETS.DAT",
@@ -72,9 +72,9 @@ XcomResourcePack::XcomResourcePack(string folder) : ResourcePack(folder)
 			_fonts[font[i]] = new Font(16, 16, 173);
 		else if (font[i] == "SMALLSET.DAT")
 			_fonts[font[i]] = new Font(8, 9, 173, -1);
-		_fonts[font[i]]->getSurface()->loadScr(s.str());
+		_fonts[font[i]]->getSurface()->loadScr(insensitive(s.str()));
 		_fonts[font[i]]->load();
-		cout << font[i] << endl;
+		//cout << font[i] << endl;
 	}
 		
 	// Load languages
@@ -87,8 +87,8 @@ XcomResourcePack::XcomResourcePack(string folder) : ResourcePack(folder)
 		stringstream s;
 		s << folder << "GEODATA/" << lang[i];
 		_languages[lang[i]] = new Language();
-		_languages[lang[i]]->loadDat(s.str());
-		cout << lang[i] << endl;
+		_languages[lang[i]]->loadDat(insensitive(s.str()));
+		//cout << lang[i] << endl;
 	}
 
 	_currentLang = _languages["ENGLISH.DAT"];
@@ -103,8 +103,8 @@ XcomResourcePack::XcomResourcePack(string folder) : ResourcePack(folder)
 		stringstream s;
 		s << folder << "GEODATA/" << dats[i];
 		_surfaces[dats[i]] = new Surface(64, 154);
-		_surfaces[dats[i]]->loadScr(s.str());
-		cout << dats[i] << endl;
+		_surfaces[dats[i]]->loadScr(insensitive(s.str()));
+		//cout << dats[i] << endl;
 	}
 
 	string scrs[] = {"BACK01.SCR",
@@ -132,8 +132,8 @@ XcomResourcePack::XcomResourcePack(string folder) : ResourcePack(folder)
 		stringstream s;
 		s << folder << "GEOGRAPH/" << scrs[i];
 		_surfaces[scrs[i]] = new Surface(320, 200);
-		_surfaces[scrs[i]]->loadScr(s.str());
-		cout << scrs[i] << endl;
+		_surfaces[scrs[i]]->loadScr(insensitive(s.str()));
+		//cout << scrs[i] << endl;
 	}
 
 	string spks[] = {"UP001.SPK",
@@ -185,8 +185,8 @@ XcomResourcePack::XcomResourcePack(string folder) : ResourcePack(folder)
 		stringstream s;
 		s << folder << "GEOGRAPH/" << spks[i];
 		_surfaces[spks[i]] = new Surface(320, 200);
-		_surfaces[spks[i]]->loadSpk(s.str());
-		cout << spks[i] << endl;
+		_surfaces[spks[i]]->loadSpk(insensitive(s.str()));
+		//cout << spks[i] << endl;
 	}
 
 	// Load surface sets
@@ -202,21 +202,21 @@ XcomResourcePack::XcomResourcePack(string folder) : ResourcePack(folder)
 		if (ext == "PCK")
 		{
 			_sets[pcks[i]] = new SurfaceSet(32, 40);
-			_sets[pcks[i]]->loadPck(s.str());
+			_sets[pcks[i]]->loadPck(insensitive(s.str()));
 		}
 		else
 		{
 			_sets[pcks[i]] = new SurfaceSet(32, 32);
-			_sets[pcks[i]]->loadDat(s.str());
+			_sets[pcks[i]]->loadDat(insensitive(s.str()));
 		}
-		cout << pcks[i] << endl;
+		//cout << pcks[i] << endl;
 	}
 
 	// Load polygons
 	stringstream s;
 	s << folder << "GEODATA/" << "WORLD.DAT";
-	Globe::loadDat(s.str(), &_polygons);
-	cout << "WORLD.DAT" << endl;
+	Globe::loadDat(insensitive(s.str()), &_polygons);
+	//cout << "WORLD.DAT" << endl;
 
 	// Load polylines (extracted from game)
 	// -10 = Start of line
@@ -294,13 +294,13 @@ XcomResourcePack::XcomResourcePack(string folder) : ResourcePack(folder)
 			stringstream s;
 			s << folder << "SOUND/" << mus[i] << "." << exts[j];
 			struct stat info;
-			if (stat(s.str().c_str(), &info) == 0) 
+			if (stat(insensitive(s.str()).c_str(), &info) == 0) 
 			{
-				_musics[mus[i]]->load(s.str());
+				_musics[mus[i]]->load(insensitive(s.str()));
 				break;
 			}
 		}
-		cout << mus[i] << endl;
+		//cout << mus[i] << endl;
 	}
 
 	// Load sounds
@@ -322,12 +322,12 @@ XcomResourcePack::XcomResourcePack(string folder) : ResourcePack(folder)
 	win << folder << "SOUND/" << catsWin[0];
 	dos << folder << "SOUND/" << catsDos[0];
 	struct stat info;
-	if (stat(win.str().c_str(), &info) == 0) 
+	if (stat(insensitive(win.str()).c_str(), &info) == 0)
 	{
 		cats = catsWin;
 		wav = true;
 	}
-	else if (stat(dos.str().c_str(), &info) == 0) 
+	else if (stat(insensitive(dos.str()).c_str(), &info) == 0)
 	{
 		cats = catsDos;
 		wav = false;
@@ -344,8 +344,8 @@ XcomResourcePack::XcomResourcePack(string folder) : ResourcePack(folder)
 			stringstream s;
 			s << folder << "SOUND/" << cats[i];
 			_sounds[catsId[i]] = new SoundSet();
-			_sounds[catsId[i]]->loadCat(s.str(), wav);
-			cout << cats[i] << endl;
+			_sounds[catsId[i]]->loadCat(insensitive(s.str()), wav);
+			//cout << cats[i] << endl;
 		}
 	}
 

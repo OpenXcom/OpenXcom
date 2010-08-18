@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "ResourcePack.h"
+#include <sys/stat.h>
 #include "Palette.h"
 #include "Font.h"
 #include "Surface.h"
@@ -76,6 +77,53 @@ ResourcePack::~ResourcePack()
 	for (map<string, SoundSet*>::iterator i = _sounds.begin(); i != _sounds.end(); i++)
 	{
 		delete i->second;
+	}
+}
+
+/**
+ * Takes a filename and tries to figure out the existing
+ * case-insensitive filename for it, for file operations.
+ * @param filename Original filename.
+ * @return Correctly-cased filename or "" if it doesn't exist.
+ * @note There's no actual method for figuring out the correct
+ * filename on case-sensitive systems, this is just a workaround.
+ */
+string ResourcePack::insensitive(string filename)
+{
+	// Ignore DATA folder
+	size_t i = filename.find("/DATA/");
+	if (i != string::npos)
+		i += 6;
+	else
+		i = 0;
+
+	// Try lowercase and uppercase names
+	struct stat info;
+	if (stat(filename.c_str(), &info) == 0)
+	{
+		return filename;
+	}
+	else
+	{
+		for (string::iterator c = filename.begin() + i; c != filename.end(); c++)
+			*c = toupper(*c);
+		if (stat(filename.c_str(), &info) == 0)
+		{
+			return filename;
+		}
+		else
+		{
+			for (string::iterator c = filename.begin() + i; c != filename.end(); c++)
+				*c = tolower(*c);
+			if (stat(filename.c_str(), &info) == 0)
+			{
+				return filename;
+			}
+			else
+			{
+				return "";
+			}
+		}
 	}
 }
 

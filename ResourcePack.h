@@ -65,6 +65,8 @@ public:
 	ResourcePack(string folder);
 	/// Cleans up the resource pack.
 	virtual ~ResourcePack();
+	/// Converts a filename to its existing case-insensitive name.
+	string insensitive(string filename);
 	/// Gets the current language.
 	Language *getLanguage();
 	/// Gets the name of the current language.
