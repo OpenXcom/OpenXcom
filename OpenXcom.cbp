@@ -111,6 +111,12 @@
 		<Unit filename="BuildNewBaseState.h">
 			<Option virtualFolder="States\" />
 		</Unit>
+		<Unit filename="City.cpp">
+			<Option virtualFolder="Xcom\Game\" />
+		</Unit>
+		<Unit filename="City.h">
+			<Option virtualFolder="Xcom\Game\" />
+		</Unit>
 		<Unit filename="ConfirmNewBaseState.cpp">
 			<Option virtualFolder="States\" />
 		</Unit>

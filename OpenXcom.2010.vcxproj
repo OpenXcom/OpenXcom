@@ -106,6 +106,7 @@
     <ClCompile Include="BasescapeErrorState.cpp" />
     <ClCompile Include="BaseView.cpp" />
     <ClCompile Include="BuildFacilitiesState.cpp" />
+    <ClCompile Include="City.cpp" />
     <ClCompile Include="ConfirmNewBaseState.cpp" />
     <ClCompile Include="CraftSoldiersState.cpp" />
     <ClCompile Include="BuildNewBaseState.cpp" />
@@ -191,6 +192,7 @@
     <ClInclude Include="BasescapeErrorState.h" />
     <ClInclude Include="BaseView.h" />
     <ClInclude Include="BuildFacilitiesState.h" />
+    <ClInclude Include="City.h" />
     <ClInclude Include="ConfirmNewBaseState.h" />
     <ClInclude Include="CraftSoldiersState.h" />
     <ClInclude Include="BuildNewBaseState.h" />

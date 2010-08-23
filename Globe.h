@@ -50,9 +50,12 @@ private:
 	SurfaceSet *_texture[NUM_SHADES];
 	ResourcePack *_res;
 	SavedGame *_save;
-	Surface *_markers;
+	Surface *_markers, *_countries;
 	bool _blink, _detail;
 	Timer *_timer;
+	vector<Polygon*> _ocean, _cacheOcean, _cacheLand;
+	Surface *_mkXcomBase, *_mkAlienBase, *_mkCraft, *_mkWaypoint, *_mkCity;
+	Surface *_mkFlyingUfo, *_mkLandedUfo, *_mkCrashedUfo, *_mkAlienSite;
 
 	/// Checks if a point is behind the globe.
 	bool pointBack(double lon, double lat);
@@ -77,22 +80,32 @@ public:
 	void setSavedGame(SavedGame *save);
 	/// Rotates the globe a set amount.
 	void rotate(double lon, double lat);
-	/// Zooms the globe a set amount.
-	void zoom(int amount);
+	/// Zooms the globe in.
+	void zoomIn();
+	/// Zooms the globe out.
+	void zoomOut();
 	/// Centers the globe on a point.
 	void center(double lon, double lat);
 	/// Checks if a point is inside land.
 	bool insideLand(double lon, double lat);
 	/// Turns on/off the globe detail.
 	void switchDetail();
+	/// Caches visible globe polygons.
+	void cachePolygons();
 	/// Sets the palette of the globe.
 	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
 	/// Handles the timers.
 	void think();
 	/// Blinks the markers.
 	void blink();
-	/// Draws the globe.
+	/// Draws the whole globe.
 	void draw();
+	/// Draws the ocean of the globe.
+	void drawOcean();
+	/// Draws the land of the globe.
+	void drawLand();
+	/// Draws the country details of the globe.
+	void drawDetail();
 	/// Draws all the markers over the globe.
 	void drawMarkers();
 	/// Blits the globe onto another surface.

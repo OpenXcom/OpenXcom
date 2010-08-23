@@ -49,7 +49,7 @@ Surface::Surface(int width, int height, int x, int y) : _width(width), _height(h
 
 /**
  * Performs a deep copy of an existing surface.
- * @param other Surface set to copy from.
+ * @param other Surface to copy from.
  */
 Surface::Surface(const Surface& other)
 {

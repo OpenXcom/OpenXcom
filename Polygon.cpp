@@ -24,8 +24,38 @@
  */
 Polygon::Polygon(int points) : _points(points), _texture(0)
 {
-	_lat = new double[points];
-	_lon = new double[points];
+	_lat = new double[_points];
+	_lon = new double[_points];
+	_x = new Sint16[_points];
+	_y = new Sint16[_points];
+	for (int i = 0; i < _points; i++)
+	{
+		_lat[i] = 0.0;
+		_lon[i] = 0.0;
+		_x[i] = 0;
+		_y[i] = 0;
+	}
+}
+
+/**
+ * Performs a deep copy of an existing polygon.
+ * @param other Polygon to copy from.
+ */
+Polygon::Polygon(const Polygon& other)
+{
+	_points = other._points;
+	_lat = new double[_points];
+	_lon = new double[_points];
+	_x = new Sint16[_points];
+	_y = new Sint16[_points];
+	for (int i = 0; i < _points; i++)
+	{
+		_lat[i] = other._lat[i];
+		_lon[i] = other._lon[i];
+		_x[i] = other._x[i];
+		_y[i] = other._y[i];
+	}
+	_texture = other._texture;
 }
 
 /**
@@ -35,10 +65,12 @@ Polygon::~Polygon()
 {
 	delete[] _lat;
 	delete[] _lon;
+	delete[] _x;
+	delete[] _y;
 }
 
 /**
- * Returns the latitude (X) of a given point.
+ * Returns the latitude of a given point.
  * @param i Point number (0-max).
  * @return Point's latitude.
  */
@@ -58,7 +90,7 @@ void Polygon::setLatitude(int i, double lat)
 }
 
 /**
- * Returns the longitude (Y) of a given point.
+ * Returns the longitude of a given point.
  * @param i Point number (0-max).
  * @return Point's longitude.
  */
@@ -75,6 +107,46 @@ double Polygon::getLongitude(int i)
 void Polygon::setLongitude(int i, double lon)
 {
 	_lon[i] = lon;
+}
+
+/**
+ * Returns the X coordinate of a given point.
+ * @param i Point number (0-max).
+ * @return Point's X coordinate.
+ */
+Sint16 Polygon::getX(int i)
+{
+	return _x[i];
+}
+
+/**
+ * Changes the X coordinate of a given point.
+ * @param i Point number (0-max).
+ * @param x Point's X coordinate.
+ */
+void Polygon::setX(int i, Sint16 x)
+{
+	_x[i] = x;
+}
+
+/**
+ * Returns the Y coordinate of a given point.
+ * @param i Point number (0-max).
+ * @return Point's Y coordinate.
+ */
+Sint16 Polygon::getY(int i)
+{
+	return _y[i];
+}
+
+/**
+ * Changes the Y coordinate of a given point.
+ * @param i Point number (0-max).
+ * @param y Point's Y coordinate.
+ */
+void Polygon::setY(int i, Sint16 y)
+{
+	_y[i] = y;
 }
 
 /**

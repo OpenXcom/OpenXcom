@@ -33,8 +33,8 @@
 #include "BaseNameState.h"
 #include "ConfirmNewBaseState.h"
 
-#define LONGITUDE_SPEED 0.2
-#define LATITUDE_SPEED 0.1
+#define LONGITUDE_SPEED 0.25
+#define LATITUDE_SPEED 0.15
 
 /**
  * Initializes all the elements in the Build New Base screen.
@@ -59,7 +59,7 @@ BuildNewBaseState::BuildNewBaseState(Game *game, Base *base, Globe *globe, bool 
 	_btnCancel = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 54, 12, 186, 8);
 	_txtTitle = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 200, 9, 8, 10);
 
-	_rotTimer = new Timer(25);
+	_rotTimer = new Timer(50);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
@@ -196,11 +196,11 @@ void BuildNewBaseState::globeClick(SDL_Event *ev, int scale)
 	}
 	else if (ev->button.button == SDL_BUTTON_WHEELUP)
 	{
-		_globe->zoom(1);
+		_globe->zoomIn();
 	}
 	else if (ev->button.button == SDL_BUTTON_WHEELDOWN)
 	{
-		_globe->zoom(-1);
+		_globe->zoomOut();
 	}
 }
 
@@ -303,7 +303,7 @@ void BuildNewBaseState::btnRotateDownRelease(SDL_Event *ev, int scale)
  */
 void BuildNewBaseState::btnZoomInClick(SDL_Event *ev, int scale)
 {
-	_globe->zoom(1);
+	_globe->zoomIn();
 }
 
 /**
@@ -313,7 +313,7 @@ void BuildNewBaseState::btnZoomInClick(SDL_Event *ev, int scale)
  */
 void BuildNewBaseState::btnZoomOutClick(SDL_Event *ev, int scale)
 {
-	_globe->zoom(-1);
+	_globe->zoomOut();
 }
 
 /**

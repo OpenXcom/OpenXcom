@@ -42,8 +42,6 @@ Game *game;
 // programming license revoked...
 int main(int argc, char** args)
 {
-	//_CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_CHECK_ALWAYS_DF | _CRTDBG_CHECK_CRT_DF | _CRTDBG_LEAK_CHECK_DF );
-	
 	try
 	{
 		game = new Game("OpenXcom", 320, 200, 8);

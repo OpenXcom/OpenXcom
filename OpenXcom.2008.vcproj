@@ -679,6 +679,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\City.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\City.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Country.cpp"
 					>
 				</File>

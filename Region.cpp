@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Region.h"
+#include "City.h"
 
 /**
  * Initializes a region with a certain construction cost.
@@ -27,10 +28,14 @@ Region::Region(int cost): _cost(cost), _lonMin(), _lonMax(), _latMin(), _latMax(
 }
 
 /**
- *
+ * Deletes the cities from memory.
  */
 Region::~Region()
 {
+	for (vector<City*>::iterator i = _cities.begin(); i != _cities.end(); i++)
+	{
+		delete *i;
+	}
 }
 
 /**
@@ -80,4 +85,13 @@ bool Region::insideRegion(double lon, double lat)
 			return true;
 	}
 	return false;
+}
+
+/**
+ * Returns the list of cities contained.
+ * @return Pointer to list.
+ */
+vector<City*> *Region::getCities()
+{
+	return &_cities;
 }

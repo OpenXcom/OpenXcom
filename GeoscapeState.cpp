@@ -52,8 +52,8 @@
 
 using namespace std;
 
-#define LONGITUDE_SPEED 0.2
-#define LATITUDE_SPEED 0.1
+#define LONGITUDE_SPEED 0.25
+#define LATITUDE_SPEED 0.15
 
 /**
  * Initializes all the elements in the Geoscape screen.
@@ -98,7 +98,7 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _rotLon(0), _rotLat(0), 
 
 	_timer = _btn5Secs;
 
-	_rotTimer = new Timer(25);
+	_rotTimer = new Timer(50);
 	_gameTimer = new Timer(100);
 
 	// Set palette
@@ -550,11 +550,11 @@ void GeoscapeState::globeClick(SDL_Event *ev, int scale)
 	}
 	else if (ev->button.button == SDL_BUTTON_WHEELUP)
 	{
-		_globe->zoom(1);
+		_globe->zoomIn();
 	}
 	else if (ev->button.button == SDL_BUTTON_WHEELDOWN)
 	{
-		_globe->zoom(-1);
+		_globe->zoomOut();
 	}
 }
 
@@ -723,7 +723,7 @@ void GeoscapeState::btnRotateDownRelease(SDL_Event *ev, int scale)
  */
 void GeoscapeState::btnZoomInClick(SDL_Event *ev, int scale)
 {
-	_globe->zoom(1);
+	_globe->zoomIn();
 }
 
 /**
@@ -733,5 +733,5 @@ void GeoscapeState::btnZoomInClick(SDL_Event *ev, int scale)
  */
 void GeoscapeState::btnZoomOutClick(SDL_Event *ev, int scale)
 {
-	_globe->zoom(-1);
+	_globe->zoomOut();
 }

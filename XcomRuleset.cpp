@@ -33,6 +33,7 @@
 #include "CraftWeapon.h"
 #include "Soldier.h"
 #include "Item.h"
+#include "City.h"
 
 /**
  * Initializes the X-Com ruleset with all the rules
@@ -716,6 +717,15 @@ SavedGame *XcomRuleset::newSave(GameDifficulty diff)
 	namerica->addArea(3.40339, 5.32107, -1.22173, -0.962113);
 	namerica->addArea(4.01426, 5.32107, -0.959931, -0.52578);
 	namerica->addArea(4.18879, 5.23381, -0.523599, -0.176715);
+	namerica->getCities()->push_back(new City(STR_NEW_YORK, 4.99382, -0.711222));
+	namerica->getCities()->push_back(new City(STR_WASHINGTON, 4.9371, -0.676315));
+	namerica->getCities()->push_back(new City(STR_LOS_ANGELES, 4.21933, -0.595594));
+	namerica->getCities()->push_back(new City(STR_MONTREAL, 4.9611, -0.794125));
+	namerica->getCities()->push_back(new City(STR_HAVANA, 4.84547, -0.392699));
+	namerica->getCities()->push_back(new City(STR_MEXICO_CITY, 4.55313, -0.338158));
+	namerica->getCities()->push_back(new City(STR_CHICAGO, 4.75384, -0.730857));
+	namerica->getCities()->push_back(new City(STR_VANCOUVER, 4.13207, -0.861756));
+	namerica->getCities()->push_back(new City(STR_DALLAS, 4.59676, -0.571595));
 	
 	Region* arctic = new Region(950000);
 	arctic->addArea(0, 6.281, -1.5708, -1.22391);
@@ -727,32 +737,74 @@ SavedGame *XcomRuleset::newSave(GameDifficulty diff)
 	samerica->addArea(4.71239, 5.49561, -0.174533, -0.00218166);
 	samerica->addArea(4.79966, 5.7574, 0, 0.259618);
 	samerica->addArea(4.79966, 5.67014, 0.261799, 1.04502);
+	samerica->getCities()->push_back(new City(STR_BRASILIA, 5.44761, 0.274889));
+	samerica->getCities()->push_back(new City(STR_BOGOTA, 4.98946, -0.0785398));
+	samerica->getCities()->push_back(new City(STR_BUENOS_AIRES, 5.27962, 0.602139));
+	samerica->getCities()->push_back(new City(STR_SANTIAGO, 5.05055, 0.582504));
+	samerica->getCities()->push_back(new City(STR_RIO_DE_JANEIRO, 5.53051, 0.399244));
+	samerica->getCities()->push_back(new City(STR_LIMA, 4.93928, 0.20944));
+	samerica->getCities()->push_back(new City(STR_CARACAS, 5.116, -0.18326));
 	
 	Region* europe = new Region(1000000);
 	europe->addArea(5.84685, 1.04502, -1.22173, -0.613047);
+	europe->getCities()->push_back(new City(STR_LONDON, 6.281, -0.898845));
+	europe->getCities()->push_back(new City(STR_PARIS, 0.0414516, -0.850848));
+	europe->getCities()->push_back(new City(STR_BERLIN, 0.233438, -0.916298));
+	europe->getCities()->push_back(new City(STR_MOSCOW, 0.65668, -0.973021));
+	europe->getCities()->push_back(new City(STR_ROME, 0.218166, -0.730857));
+	europe->getCities()->push_back(new City(STR_MADRID, 6.21774, -0.704677));
+	europe->getCities()->push_back(new City(STR_BUDAPEST, 0.333794, -0.829031));
 	
 	Region* nafrica = new Region(650000);
 	nafrica->addArea(5.84685, 0.69595, -0.610865, -0.263981);
 	nafrica->addArea(5.84685, 0.957749, -0.261799, -0.00218166);
+	nafrica->getCities()->push_back(new City(STR_LAGOS, 0.0545415, -0.113446));
+	nafrica->getCities()->push_back(new City(STR_CAIRO, 0.545415, -0.523599));
+	nafrica->getCities()->push_back(new City(STR_CASABLANCA, 6.1501, -0.584685));
 	
 	Region* safrica = new Region(550000);
 	safrica->addArea(0.0872665, 0.957749, 0, 0.69595);
+	safrica->getCities()->push_back(new City(STR_PRETORIA, 0.490874, 0.458149));
+	safrica->getCities()->push_back(new City(STR_NAIROBI, 0.641409, 0.0218166));
+	safrica->getCities()->push_back(new City(STR_CAPE_TOWN, 0.322886, 0.593412));
+	safrica->getCities()->push_back(new City(STR_KINSHASA, 0.268344, 0.0763582));
 	
 	Region* casia = new Region(500000);
 	casia->addArea(0.698132, 1.21955, -0.610865, -0.263981);
 	casia->addArea(1.0472, 1.56861, -0.872665, -0.613047);
 	casia->addArea(1.22173, 1.56861, -0.610865, -0.0894481);
+	casia->getCities()->push_back(new City(STR_ANKARA, 0.571595, -0.69595));
+	casia->getCities()->push_back(new City(STR_DELHI, 1.34827, -0.4996));
+	casia->getCities()->push_back(new City(STR_KARACHI, 1.16937, -0.434151));
+	casia->getCities()->push_back(new City(STR_BAGHDAD, 0.776672, -0.580322));
+	casia->getCities()->push_back(new City(STR_TEHRAN, 0.898845, -0.621774));
+	casia->getCities()->push_back(new City(STR_BOMBAY, 1.27627, -0.329431));
+	casia->getCities()->push_back(new City(STR_CALCUTTA, 1.54243, -0.394881));
 	
 	Region* seasia = new Region(750000);
 	seasia->addArea(1.5708, 1.83041, -0.872665, 0.172351);
 	seasia->addArea(1.8326, 2.61581, -0.872665, -0.0894481);
+	seasia->getCities()->push_back(new City(STR_TOKYO, 2.4391, -0.621774));
+	seasia->getCities()->push_back(new City(STR_BEIJING, 2.03113, -0.69595));
+	seasia->getCities()->push_back(new City(STR_BANGKOK, 1.75624, -0.237801));
+	seasia->getCities()->push_back(new City(STR_MANILA, 2.11185, -0.255254));
+	seasia->getCities()->push_back(new City(STR_SEOUL, 2.21657, -0.654498));
+	seasia->getCities()->push_back(new City(STR_SINGAPORE, 1.81296, -0.0239983));
+	seasia->getCities()->push_back(new City(STR_JAKARTA, 1.86314, 0.109083));
+	seasia->getCities()->push_back(new City(STR_SHANGHAI, 2.12058, -0.545415));
+	seasia->getCities()->push_back(new City(STR_HONG_KONG, 1.99186, -0.388336));
 	
 	Region* siberia = new Region(800000);
 	siberia->addArea(1.0472, 3.13941, -1.22173, -0.874846);
+	siberia->getCities()->push_back(new City(STR_NOVOSIBIRSK, 1.44426, -0.959931));
 	
 	Region* australasia = new Region(750000);
 	//australasia->addArea(1.8326, 3.13941, -0.0872665, 0.870483);
 	australasia->addArea(1.8326, 3.13941, -0.0872665, 1.04502);
+	australasia->getCities()->push_back(new City(STR_CANBERRA, 2.60272, 0.61741));
+	australasia->getCities()->push_back(new City(STR_WELLINGTON, 3.05651, 0.719948));
+	australasia->getCities()->push_back(new City(STR_MELBOURNE, 2.53073, 0.661043));
+	australasia->getCities()->push_back(new City(STR_PERTH, 2.02022, 0.558505));
 	
 	Region* pacific = new Region(600000);
 	pacific->addArea(3.14159, 3.40121, -1.22173, -0.962113);

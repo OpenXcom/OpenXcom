@@ -27,7 +27,7 @@
 enum TimeTrigger { TIME_5SEC, TIME_30MIN, TIME_1HOUR, TIME_1DAY, TIME_1MONTH };
 
 /**
- * Stores the current ingame time/date.
+ * Stores the current ingame time/date according to GMT.
  * Takes care of managing and representing each component,
  * as well as common time operations.
  */
@@ -62,6 +62,8 @@ public:
 	LangString getMonthString();
 	/// Gets the ingame year.
 	int getYear();
+	/// Gets the position of the daylight according to the ingame time.
+	double getDaylight();
 };
 
 #endif

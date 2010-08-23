@@ -19,6 +19,8 @@
 #ifndef OPENXCOM__POLYGON_H
 #define OPENXCOM__POLYGON_H
 
+#include "SDL.h"
+
 /**
  * Represents a polygon in the world map.
  * Polygons constitute the textured land portions
@@ -28,11 +30,14 @@ class Polygon
 {
 private:
 	double *_lat, *_lon;
-	const int _points;
+	Sint16 *_x, *_y;
+	int _points;
 	int _texture;
 public:
 	/// Creates a polygon with a number of points.
 	Polygon(int points);
+	/// Creates a new surface from an existing one.
+	Polygon(const Polygon& other);
 	/// Cleans up the polygon.
 	~Polygon();
 	/// Gets the latitude of a point.
@@ -43,6 +48,14 @@ public:
 	double getLongitude(int i);
 	/// Sets the longitude of a point.
 	void setLongitude(int i, double lon);
+	/// Gets the X coordinate of a point.
+	Sint16 getX(int i);
+	/// Sets the X coordinate of a point.
+	void setX(int i, Sint16 x);
+	/// Gets the Y coordinate of a point.
+	Sint16 getY(int i);
+	/// Sets the Y coordinate of a point.
+	void setY(int i, Sint16 y);
 	/// Gets the texture of the polygon.
 	int getTexture();
 	/// Sets the texture of the polygon.
