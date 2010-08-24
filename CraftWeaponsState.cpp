@@ -103,11 +103,11 @@ CraftWeaponsState::CraftWeaponsState(Game *game, Base *base, unsigned int craft,
 	for (int i = STR_STINGRAY_UC; i <= STR_CANNON_UC; i++)
 	{
 		RuleCraftWeapon *w = _game->getRuleset()->getCraftWeapon((LangString)i);
-		if (_base->getItems()->at(w->getLauncherItem())->getQuantity() > 0)
+		if ((*_base->getItems())[w->getLauncherItem()]->getQuantity() > 0)
 		{
 			stringstream ss, ss2;
-			ss << _base->getItems()->at(w->getLauncherItem())->getQuantity();
-			ss2 << _base->getItems()->at(w->getClipItem())->getQuantity();
+			ss << (*_base->getItems())[w->getLauncherItem()]->getQuantity();
+			ss2 << (*_base->getItems())[w->getClipItem()]->getQuantity();
 			_lstWeapons->addRow(i, 3, _game->getResourcePack()->getLanguage()->getString((LangString)i).c_str(), ss.str().c_str(), ss2.str().c_str());
 		}
 	}
@@ -144,8 +144,8 @@ void CraftWeaponsState::lstWeaponsClick(SDL_Event *ev, int scale)
 	// Remove current weapon
 	if (current != 0)
 	{
-		_base->getItems()->at(current->getRules()->getLauncherItem())->setQuantity(_base->getItems()->at(current->getRules()->getLauncherItem())->getQuantity() + 1);
-		//_base->getItems()->at(current->getRules()->getClipItem())->setQuantity(_base->getItems()->at(current->getRules()->getClipItem())->getQuantity() + current->getAmmo());
+		(*_base->getItems())[current->getRules()->getLauncherItem()]->setQuantity((*_base->getItems())[current->getRules()->getLauncherItem()]->getQuantity() + 1);
+		//(*_base->getItems())[current->getRules()->getClipItem()]->setQuantity((*_base->getItems())[current->getRules()->getClipItem()]->getQuantity() + current->getAmmo());
 		delete current;
 		_base->getCrafts()->at(_craft)->getWeapons()->at(_weapon) = 0;
 	}
@@ -154,7 +154,7 @@ void CraftWeaponsState::lstWeaponsClick(SDL_Event *ev, int scale)
 	if (_lstWeapons->getSelectedValue() != STR_NONE)
 	{
 		CraftWeapon *sel = new CraftWeapon(_game->getRuleset()->getCraftWeapon((LangString)_lstWeapons->getSelectedValue()), 0);
-		_base->getItems()->at(sel->getRules()->getLauncherItem())->setQuantity(_base->getItems()->at(sel->getRules()->getLauncherItem())->getQuantity() - 1);
+		(*_base->getItems())[sel->getRules()->getLauncherItem()]->setQuantity((*_base->getItems())[sel->getRules()->getLauncherItem()]->getQuantity() - 1);
 		_base->getCrafts()->at(_craft)->getWeapons()->at(_weapon) = sel;
 		if (_base->getCrafts()->at(_craft)->getStatus() == STR_READY)
 			_base->getCrafts()->at(_craft)->setStatus(STR_REARMING);

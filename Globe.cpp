@@ -606,6 +606,8 @@ void Globe::drawOcean()
 	double curTime = _save->getTime()->getDaylight();
 	Sint16 x[4], y[4];
 
+	lock();
+
 	filledCircleColor(getSurface(), _cenX, _cenY, (Sint16)floor(_radius[_zoom]), Palette::getRGBA(this->getPalette(), Palette::blockOffset(12)+28));
   
 	for (vector<Polygon*>::iterator i = _cacheOcean.begin(); i != _cacheOcean.end(); i++)
@@ -627,6 +629,8 @@ void Globe::drawOcean()
 		if (shade != 28)
 			filledPolygonColor(getSurface(), (Sint16*)&x, (Sint16*)&y, 4, Palette::getRGBA(this->getPalette(), Palette::blockOffset(12) + shade));
 	}
+
+	unlock();
 }
 
 /**
