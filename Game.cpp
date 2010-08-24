@@ -154,15 +154,6 @@ Screen *Game::getScreen()
 }
 
 /**
- * Returns the state stack currently running
- * @return Pointer to the state stack.
- */
-list<State*> *Game::getStates()
-{
-	return &_states;
-}
-
-/**
  * Replaces a certain amount of colors in the palettes of the game's
  * screen and resources.
  * @param colors Pointer to the set of colors.

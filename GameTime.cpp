@@ -48,6 +48,9 @@ GameTime::~GameTime()
 TimeTrigger GameTime::advance()
 {
 	TimeTrigger trigger = TIME_5SEC;
+	int monthDays[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+	if ((_year % 4 == 0) && !(_year % 100 == 0 && _year % 400 != 0))
+		monthDays[1]++;
 
 	_second += 5;
 
@@ -75,7 +78,6 @@ TimeTrigger GameTime::advance()
 	{
 		_weekday = 1;
 	}
-	int monthDays[] = { 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 	if (_day > monthDays[_month - 1])
 	{
 		_day = 1;

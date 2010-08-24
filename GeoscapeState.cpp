@@ -59,7 +59,7 @@ using namespace std;
  * Initializes all the elements in the Geoscape screen.
  * @param game Pointer to the core game.
  */
-GeoscapeState::GeoscapeState(Game *game) : State(game), _rotLon(0), _rotLat(0), _pause(false)
+GeoscapeState::GeoscapeState(Game *game) : State(game), _rotLon(0), _rotLat(0), _pause(false), _popups()
 {
 	// Create objects
 	_bg = new Surface(320, 200, 0, 0);
@@ -305,6 +305,13 @@ void GeoscapeState::think()
 
 	_rotTimer->think(this, 0);
 	_gameTimer->think(this, 0);
+
+	// Handle popups
+	if (!_popups.empty())
+	{
+		_game->pushState(_popups.back());
+		_popups.pop_back();
+	}
 }
 
 /**
@@ -355,7 +362,7 @@ void GeoscapeState::timeDisplay()
  * Advances the game timer according to
  * the timer speed set, and calls the respective
  * triggers. The timer always advances in "5 secs"
- * cycles regardless of the speed otherwise it might
+ * cycles, regardless of the speed, otherwise it might
  * skip important steps. Instead, it just keeps advancing
  * the timer until the next speed step (eg. the next day
  * on 1 Day speed) or until an event occurs, since updating
@@ -490,7 +497,7 @@ void GeoscapeState::timeDay()
 					s += _game->getResourcePack()->getLanguage()->getString(STR_AT);
 					s += (*i)->getName();
 					s += _game->getResourcePack()->getLanguage()->getString(STR_IS_COMPLETE);
-					_game->pushState(new GeoscapeMessageState(_game, s));
+					_popups.push_back(new GeoscapeMessageState(_game, s));
 				}
 			}
 		}
@@ -506,7 +513,7 @@ void GeoscapeState::timeMonth()
 	_pause = true;
 	timerReset();
 	_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() + _game->getSavedGame()->getCountryFunding() - _game->getSavedGame()->getBaseMaintenance());
-	_game->pushState(new MonthlyReportState(_game));
+	_popups.push_back(new MonthlyReportState(_game));
 }
 
 /**

@@ -46,9 +46,6 @@ Window::Window(State *state, int width, int height, int x, int y, WindowPopup po
 	}
 	else
 	{
-		int sound = RNG::generate(0, 2);
-		if (soundPopup[sound] != 0)
-			soundPopup[sound]->play();
 		_timer->start();
 	}
 }
@@ -109,6 +106,12 @@ Uint8 Window::getColor()
  */
 void Window::think()
 {
+	if (_popupStep == 0)
+	{
+		int sound = RNG::generate(0, 2);
+		if (soundPopup[sound] != 0)
+			soundPopup[sound]->play();
+	}
 	_timer->think(0, this);
 }
 

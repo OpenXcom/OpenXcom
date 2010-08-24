@@ -20,6 +20,7 @@
 #define OPENXCOM__GEOSCAPESTATE_H
 
 #include "State.h"
+#include <vector>
 
 class Surface;
 class Globe;
@@ -27,6 +28,8 @@ class ImageButton;
 class InteractiveSurface;
 class Text;
 class Timer;
+
+using namespace std;
 
 /**
  * Geoscape screen which shows an overview of
@@ -45,6 +48,7 @@ private:
 	Timer *_rotTimer, *_gameTimer;
 	double _rotLon, _rotLat;
 	bool _pause;
+	vector<State*> _popups;
 public:
 	/// Creates the Geoscape state.
 	GeoscapeState(Game *game);

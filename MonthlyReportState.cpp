@@ -70,8 +70,14 @@ MonthlyReportState::MonthlyReportState(Game *game) : State(game)
 	_txtTitle->setBig();
 	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString(STR_XCOM_PROJECT_MONTHLY_REPORT));
 	
+	int month = _game->getSavedGame()->getTime()->getMonth() - 1, year = _game->getSavedGame()->getTime()->getYear();
+	if (month == 0)
+	{
+		month = 12;
+		year--;
+	}
 	stringstream ss;
-	ss << _game->getResourcePack()->getLanguage()->getString(STR_MONTH) << _game->getResourcePack()->getLanguage()->getString(_game->getSavedGame()->getTime()->getMonthString()) << " " << _game->getSavedGame()->getTime()->getYear();
+	ss << _game->getResourcePack()->getLanguage()->getString(STR_MONTH) << _game->getResourcePack()->getLanguage()->getString((LangString)(STR_JAN - 1 + month)) << " " << year;
 
 	_txtMonth->setColor(Palette::blockOffset(15)-1);
 	_txtMonth->setText(ss.str());
@@ -93,6 +99,14 @@ MonthlyReportState::MonthlyReportState(Game *game) : State(game)
 MonthlyReportState::~MonthlyReportState()
 {
 	
+}
+
+/**
+ * Resets the palette.
+ */
+void MonthlyReportState::init()
+{
+	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)), Palette::backPos, 16);
 }
 
 /**
