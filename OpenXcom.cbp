@@ -528,6 +528,12 @@
 		<Unit filename="Timer.h">
 			<Option virtualFolder="Engine\" />
 		</Unit>
+		<Unit filename="Ufo.cpp">
+			<Option virtualFolder="Xcom\Game\" />
+		</Unit>
+		<Unit filename="Ufo.h">
+			<Option virtualFolder="Xcom\Game\" />
+		</Unit>
 		<Unit filename="Window.cpp">
 			<Option virtualFolder="Interface\" />
 		</Unit>

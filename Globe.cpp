@@ -35,6 +35,7 @@
 #include "Language.h"
 #include "Region.h"
 #include "City.h"
+#include "Ufo.h"
 
 #define PI 3.141592653589793238461
 #define NUM_TEXTURES 13
@@ -636,7 +637,7 @@ void Globe::drawLand()
 {
 	int _shades[] = {3, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3,
 					 4, 5, 6, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 6, 5, 4};
-	double tmpLon = 0.0, tmpLat = 0.0, minLon = 0.0, maxLon = 0.0, curTime = _save->getTime()->getDaylight();
+	double minLon = 0.0, maxLon = 0.0, curTime = _save->getTime()->getDaylight();
 	Sint16 x[4], y[4];
 
 	for (vector<Polygon*>::iterator i = _cacheLand.begin(); i != _cacheLand.end(); i++)
@@ -644,7 +645,7 @@ void Globe::drawLand()
 		// Convert coordinates
 		for (int j = 0; j < (*i)->getPoints(); j++)
 		{
-			tmpLon = (*i)->getLongitude(j);
+			double tmpLon = (*i)->getLongitude(j);
 
 			if (j == 0 || (tmpLon < minLon && tmpLon >= (maxLon - PI)))
 				minLon = tmpLon;
@@ -776,6 +777,21 @@ void Globe::drawMarkers()
 		_mkXcomBase->setY(y - 1);
 		_mkXcomBase->setPalette(getPalette());
 		_mkXcomBase->blit(_markers);
+	}
+
+	// Draw the UFO markers
+	for (vector<Ufo*>::iterator i = _save->getUfos()->begin(); i != _save->getUfos()->end(); i++)
+	{
+		if (pointBack((*i)->getLongitude(), (*i)->getLatitude()))
+			continue;
+
+		Sint16 x, y;
+		polarToCart((*i)->getLongitude(), (*i)->getLatitude(), &x, &y);
+
+		_mkFlyingUfo->setX(x - 1);
+		_mkFlyingUfo->setY(y - 1);
+		_mkFlyingUfo->setPalette(getPalette());
+		_mkFlyingUfo->blit(_markers);
 	}
 }
 

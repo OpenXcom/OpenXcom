@@ -23,7 +23,7 @@
  * type of craft.
  * @param type String defining the type.
  */
-RuleCraft::RuleCraft(LangString type) : _type(type), _sprite(0), _fuelMax(0), _damageMax(0), _speed(0), _accel(0), _weapons(0), _soldiers(0), _hwps(0), _monthlyFee(0), _repair(1), _refuel(1)
+RuleCraft::RuleCraft(LangString type) : _type(type), _sprite(0), _fuelMax(0), _damageMax(0), _speedMax(0), _accel(0), _weapons(0), _soldiers(0), _hwps(0), _monthlyFee(0), _repair(1), _refuel(1)
 {
 }
 
@@ -107,9 +107,9 @@ void RuleCraft::setMaxDamage(int damage)
  * around the Geoscape.
  * @return Speed.
  */
-int RuleCraft::getSpeed()
+int RuleCraft::getMaxSpeed()
 {
-	return _speed;
+	return _speedMax;
 }
 
 /**
@@ -117,9 +117,9 @@ int RuleCraft::getSpeed()
  * around the Geoscape.
  * @param speed Speed.
  */
-void RuleCraft::setSpeed(int speed)
+void RuleCraft::setMaxSpeed(int speed)
 {
-	_speed = speed;
+	_speedMax = speed;
 }
 
 /**

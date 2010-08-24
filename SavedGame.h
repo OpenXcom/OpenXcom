@@ -29,6 +29,7 @@ class GameTime;
 class Country;
 class Base;
 class Region;
+class Ufo;
 
 /**
  * Enumator containing all the possible game difficulties.
@@ -49,6 +50,7 @@ private:
 	map<LangString, Country*> _countries;
 	map<LangString, Region*> _regions;
 	vector<Base*> _bases;
+	vector<Ufo*> _ufos;
 	map<LangString, int> _craftId;
 public:
 	/// Creates a new save with a certain difficulty.
@@ -73,6 +75,8 @@ public:
 	int getBaseMaintenance();
 	/// Gets the current craft IDs.
 	map<LangString, int> *getCraftIds();
+	/// Gets the list of UFOs.
+	vector<Ufo*> *getUfos();
 };
 
 #endif

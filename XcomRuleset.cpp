@@ -399,7 +399,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	// Add crafts
 	RuleCraft* skyranger = new RuleCraft(STR_SKYRANGER);
 	skyranger->setSprite(33);
-	skyranger->setSpeed(760);
+	skyranger->setMaxSpeed(760);
 	skyranger->setAcceleration(2);
 	skyranger->setMaxFuel(1500);
 	skyranger->setWeapons(0);
@@ -411,7 +411,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 
 	RuleCraft* lightning = new RuleCraft(STR_LIGHTNING);
 	lightning->setSprite(34);
-	lightning->setSpeed(3100);
+	lightning->setMaxSpeed(3100);
 	lightning->setAcceleration(9);
 	lightning->setMaxFuel(30);
 	lightning->setWeapons(1);
@@ -422,7 +422,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 
 	RuleCraft* avenger = new RuleCraft(STR_AVENGER);
 	avenger->setSprite(35);
-	avenger->setSpeed(5400);
+	avenger->setMaxSpeed(5400);
 	avenger->setAcceleration(10);
 	avenger->setMaxFuel(60);
 	avenger->setWeapons(2);
@@ -433,7 +433,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 
 	RuleCraft* interceptor = new RuleCraft(STR_INTERCEPTOR);
 	interceptor->setSprite(36);
-	interceptor->setSpeed(2100);
+	interceptor->setMaxSpeed(2100);
 	interceptor->setAcceleration(3);
 	interceptor->setMaxFuel(1000);
 	interceptor->setWeapons(2);
@@ -445,7 +445,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 
 	RuleCraft* firestorm = new RuleCraft(STR_FIRESTORM);
 	firestorm->setSprite(37);
-	firestorm->setSpeed(4200);
+	firestorm->setMaxSpeed(4200);
 	firestorm->setAcceleration(9);
 	firestorm->setMaxFuel(20);
 	firestorm->setWeapons(2);

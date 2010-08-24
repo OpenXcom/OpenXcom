@@ -32,7 +32,7 @@ class RuleCraft
 private:
 	LangString _type;
 	int _sprite;
-	int _fuelMax, _damageMax, _speed, _accel, _weapons, _soldiers, _hwps, _monthlyFee, _repair, _refuel;
+	int _fuelMax, _damageMax, _speedMax, _accel, _weapons, _soldiers, _hwps, _monthlyFee, _repair, _refuel;
 public:
 	/// Creates a blank craft ruleset.
 	RuleCraft(LangString type);
@@ -52,10 +52,10 @@ public:
 	int getMaxDamage();
 	/// Sets the craft's maximum damage.
 	void setMaxDamage(int damage);
-	/// Gets the craft's speed.
-	int getSpeed();
-	/// Sets the craft's speed.
-	void setSpeed(int speed);
+	/// Gets the craft's maximum speed.
+	int getMaxSpeed();
+	/// Sets the craft's maximum speed.
+	void setMaxSpeed(int speed);
 	/// Gets the craft's acceleration.
 	int getAcceleration();
 	/// Sets the craft's acceleration.

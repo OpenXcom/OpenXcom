@@ -750,6 +750,14 @@
 					RelativePath=".\Soldier.h"
 					>
 				</File>
+				<File
+					RelativePath=".\Ufo.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Ufo.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="Resource"

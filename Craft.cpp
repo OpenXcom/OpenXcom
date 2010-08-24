@@ -29,7 +29,7 @@
  * @param rules Pointer to ruleset.
  * @param id List of craft IDs.
  */
-Craft::Craft(RuleCraft *rules, map<LangString, int> *id) : _rules(rules), _lat(0.0), _lon(0.0), _fuel(0), _damage(0), _weapons(), _items(), _status(STR_READY)
+Craft::Craft(RuleCraft *rules, map<LangString, int> *id) : _rules(rules), _lat(0.0), _lon(0.0), _fuel(0), _damage(0), _speed(0), _weapons(), _items(), _status(STR_READY)
 {
 	_id = (*id)[_rules->getType()];
 	(*id)[_rules->getType()]++;

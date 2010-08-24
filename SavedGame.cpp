@@ -22,6 +22,7 @@
 #include "Country.h"
 #include "Base.h"
 #include "Region.h"
+#include "Ufo.h"
 
 /**
  * Initializes a brand new saved game according to the specified difficulty.
@@ -47,6 +48,10 @@ SavedGame::~SavedGame()
 		delete i->second;
 	}
 	for (vector<Base*>::iterator i = _bases.begin(); i != _bases.end(); i++)
+	{
+		delete *i;
+	}
+	for (vector<Ufo*>::iterator i = _ufos.begin(); i != _ufos.end(); i++)
 	{
 		delete *i;
 	}
@@ -141,4 +146,13 @@ int SavedGame::getBaseMaintenance()
 map<LangString, int> *SavedGame::getCraftIds()
 {
 	return &_craftId;
+}
+
+/**
+ * Returns the list of alien UFOs.
+ * @return Pointer to UFO list.
+ */
+vector<Ufo*> *SavedGame::getUfos()
+{
+	return &_ufos;
 }

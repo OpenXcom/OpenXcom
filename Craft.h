@@ -41,7 +41,7 @@ class Craft
 private:
 	RuleCraft *_rules;
 	double _lat, _lon;
-	int _id, _fuel, _damage;
+	int _id, _fuel, _damage, _speed;
 	vector<CraftWeapon*> _weapons;
 	map<LangString, Item*> _items;
 	LangString _status;
