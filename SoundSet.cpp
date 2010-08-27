@@ -131,8 +131,8 @@ void SoundSet::loadCat(string filename, bool wav)
 			delete[] newsound;
 	}
 
-	delete offset;
-	delete size;
+	delete[] offset;
+	delete[] size;
 
 	sndFile.close();
 }

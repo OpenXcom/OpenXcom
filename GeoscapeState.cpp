@@ -145,7 +145,7 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _rotLon(0), _rotLat(0), 
 		Surface* sidebar = 0;
 		if (_game->getResourcePack()->getLanguageName() == "GERMAN.DAT")
 			sidebar = _game->getResourcePack()->getSurface("LANG1.DAT");
-		else if (_game->getResourcePack()->getLanguageName() == "FRENCH.DAT")
+		else
 			sidebar = _game->getResourcePack()->getSurface("LANG2.DAT");
 		sidebar->setX(320 - sidebar->getWidth());
 		sidebar->setY(0);
