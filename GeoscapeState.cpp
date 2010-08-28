@@ -303,15 +303,19 @@ void GeoscapeState::think()
 {
 	State::think();
 
-	_rotTimer->think(this, 0);
-	_gameTimer->think(this, 0);
-
-	// Handle popups
-	if (!_popups.empty())
+	if (_popups.empty())
 	{
-		_game->pushState(_popups.back());
-		_popups.pop_back();
+		// Handle timers
+		_rotTimer->think(this, 0);
+		_gameTimer->think(this, 0);
 	}
+	else
+	{
+		// Handle popups
+		_game->pushState(*_popups.begin());
+		_popups.erase(_popups.begin());
+	}
+	
 }
 
 /**

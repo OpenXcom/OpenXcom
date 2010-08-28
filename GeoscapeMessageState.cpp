@@ -41,9 +41,6 @@ GeoscapeMessageState::GeoscapeMessageState(Game *game, string str) : State(game)
 	_btnOk = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 120, 18, 100, 154);
 	_txtMessage = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 246, 80, 37, 50);
 	
-	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
-
 	add(_window);
 	add(_btnOk);
 	add(_txtMessage);
@@ -70,6 +67,14 @@ GeoscapeMessageState::GeoscapeMessageState(Game *game, string str) : State(game)
 GeoscapeMessageState::~GeoscapeMessageState()
 {
 	
+}
+
+/**
+ * Resets the palette.
+ */
+void GeoscapeMessageState::init()
+{
+	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
 }
 
 /**
