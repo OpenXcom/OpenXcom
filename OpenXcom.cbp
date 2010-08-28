@@ -408,6 +408,12 @@
 		<Unit filename="Ruleset.h">
 			<Option virtualFolder="Xcom\Rules\" />
 		</Unit>
+		<Unit filename="RuleUfo.cpp">
+			<Option virtualFolder="Xcom\Rules\" />
+		</Unit>
+		<Unit filename="RuleUfo.h">
+			<Option virtualFolder="Xcom\Rules\" />
+		</Unit>
 		<Unit filename="SavedGame.cpp">
 			<Option virtualFolder="Xcom\Game\" />
 		</Unit>

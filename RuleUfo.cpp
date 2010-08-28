@@ -1,0 +1,183 @@
+/*
+ * Copyright 2010 Daniel Albano
+ *
+ * This file is part of OpenXcom.
+ *
+ * OpenXcom is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * OpenXcom is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
+ */
+#include "RuleUfo.h"
+
+/**
+ * Creates a blank ruleset for a certain
+ * type of UFO.
+ * @param type String defining the type.
+ */
+RuleUfo::RuleUfo(LangString type) : _type(type), _size(SIZE_VERY_SMALL), _damageMax(0), _speedMax(0), _accel(0), _power(0), _range(0), _score(0)
+{
+}
+
+/**
+ *
+ */
+RuleUfo::~RuleUfo()
+{
+}
+
+/**
+ * Returns the language string that names
+ * this UFO. Each UFO type has a unique name.
+ * @return Ufo name.
+ */
+LangString RuleUfo::getType()
+{
+	return _type;
+}
+
+/**
+ * Returns the size of this type of UFO.
+ * @return Size.
+ */
+UfoSize RuleUfo::getSize()
+{
+	return _size;
+}
+
+/**
+ * Changes the size of this type of UFO.
+ * @param size Size.
+ */
+void RuleUfo::setSize(UfoSize size)
+{
+	_size = size;
+}
+
+/**
+ * Returns the maximum damage (damage the UFO can take)
+ * of the UFO.
+ * @return Damage.
+ */
+int RuleUfo::getMaxDamage()
+{
+	return _damageMax;
+}
+
+/**
+ * Changes the maximum damage (damage the UFO can take)
+ * of the UFO.
+ * @param damage Damage.
+ */
+void RuleUfo::setMaxDamage(int damage)
+{
+	_damageMax = damage;
+}
+
+/**
+ * Returns the maximum speed of the UFO flying
+ * around the Geoscape.
+ * @return Speed.
+ */
+int RuleUfo::getMaxSpeed()
+{
+	return _speedMax;
+}
+
+/**
+ * Changes the maximum speed of the UFO flying
+ * around the Geoscape.
+ * @param speed Speed.
+ */
+void RuleUfo::setMaxSpeed(int speed)
+{
+	_speedMax = speed;
+}
+
+/**
+ * Returns the acceleration of the UFO for
+ * taking off / stopping.
+ * @return Acceleration.
+ */
+int RuleUfo::getAcceleration()
+{
+	return _accel;
+}
+
+/**
+ * Changes the acceleration of the UFO for
+ * taking off / stopping.
+ * @param accel Acceleration.
+ */
+void RuleUfo::setAcceleration(int accel)
+{
+	_accel = accel;
+}
+
+/**
+ * Returns the maximum damage done by the
+ * UFO's weapons per shot.
+ * @return Weapon power.
+ */
+int RuleUfo::getWeaponPower()
+{
+	return _power;
+}
+
+/**
+ * Changes the maximum damage done by the
+ * UFO's weapons per shot.
+ * @param power Weapon power.
+ */
+void RuleUfo::setWeaponPower(int power)
+{
+	_power = power;
+}
+
+/**
+ * Returns the maximum range for the
+ * UFO's weapons.
+ * @return Weapon range.
+ */
+int RuleUfo::getWeaponRange()
+{
+	return _range;
+}
+
+/**
+ * Changes the maximum range for the
+ * UFO's weapons.
+ * @param range Weapon range.
+ */
+void RuleUfo::setWeaponRange(int range)
+{
+	_range = range;
+}
+
+/**
+ * Returns the amount of points the player
+ * gets for shooting down the UFO.
+ * @return Score.
+ */
+int RuleUfo::getScore()
+{
+	return _score;
+}
+
+/**
+ * Changes the amount of points the player
+ * gets for shooting down the UFO.
+ * @param score Score.
+ */
+void RuleUfo::setScore(int score)
+{
+	_score = score;
+}

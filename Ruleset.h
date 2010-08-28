@@ -31,6 +31,7 @@ class RuleBaseFacility;
 class RuleCraft;
 class RuleCraftWeapon;
 class RuleItem;
+class RuleUfo;
 
 /**
  * Set of rules and stats for a game.
@@ -46,6 +47,7 @@ protected:
 	map<LangString, RuleCraft*> _crafts;
 	map<LangString, RuleCraftWeapon*> _craftWeapons;
 	map<LangString, RuleItem*> _items;
+	map<LangString, RuleUfo*> _ufos;
 public:
 	/// Creates a blank ruleset.
 	Ruleset();
@@ -61,8 +63,10 @@ public:
 	RuleCraft *getCraft(LangString id);
 	/// Gets the ruleset for a craft weapon type.
 	RuleCraftWeapon *getCraftWeapon(LangString id);
-	/// Gets the ruleset for a item type.
+	/// Gets the ruleset for an item type.
 	RuleItem *getItem(LangString id);
+	/// Gets the ruleset for a UFO type.
+	RuleUfo *getUfo(LangString id);
 };
 
 #endif

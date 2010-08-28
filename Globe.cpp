@@ -425,6 +425,24 @@ void Globe::zoomOut()
 }
 
 /**
+ * Zooms the globe out as far as possible.
+ */
+void Globe::zoomMin()
+{
+	_zoom = 0;
+	cachePolygons();
+}
+
+/**
+ * Zooms the globe in as close as possible.
+ */
+void Globe::zoomMax()
+{
+	_zoom = _radius.size() - 1;
+	cachePolygons();
+}
+
+/**
  * Rotates the globe to center on a certain
  * polar point on the world map.
  * @param lon Longitude of the point.

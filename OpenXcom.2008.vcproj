@@ -867,6 +867,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\RuleUfo.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\RuleUfo.h"
+					>
+				</File>
+				<File
 					RelativePath=".\SoldierNamePool.cpp"
 					>
 				</File>

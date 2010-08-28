@@ -22,6 +22,7 @@
 #include "RuleCraft.h"
 #include "RuleCraftWeapon.h"
 #include "RuleItem.h"
+#include "RuleUfo.h"
 #include "SoldierNamePool.h"
 #include "Region.h"
 #include "RNG.h"
@@ -610,6 +611,86 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_items.insert(pair<LangString, RuleItem*>(STR_SMALL_ROCKET, srocket));
 	_items.insert(pair<LangString, RuleItem*>(STR_GRENADE, grenade));
 	_items.insert(pair<LangString, RuleItem*>(STR_SMOKE_GRENADE, sgrenade));
+
+	// Add UFOs
+	RuleUfo *sscout = new RuleUfo(STR_SMALL_SCOUT);
+	sscout->setSize(SIZE_VERY_SMALL);
+	sscout->setMaxSpeed(2200);
+	sscout->setAcceleration(12);
+	sscout->setMaxDamage(50);
+	sscout->setScore(50);
+
+	RuleUfo *mscout = new RuleUfo(STR_MEDIUM_SCOUT);
+	mscout->setSize(SIZE_SMALL);
+	mscout->setMaxSpeed(2400);
+	mscout->setAcceleration(9);
+	mscout->setWeaponPower(20);
+	mscout->setWeaponRange(15);
+	mscout->setMaxDamage(200);
+	mscout->setScore(75);
+
+	RuleUfo *lscout = new RuleUfo(STR_LARGE_SCOUT);
+	lscout->setSize(SIZE_SMALL);
+	lscout->setMaxSpeed(2700);
+	lscout->setAcceleration(9);
+	lscout->setWeaponPower(20);
+	lscout->setWeaponRange(34);
+	lscout->setMaxDamage(250);
+	lscout->setScore(125);
+
+	RuleUfo *abducter = new RuleUfo(STR_ABDUCTER);
+	abducter->setSize(SIZE_MEDIUM);
+	abducter->setMaxSpeed(4000);
+	abducter->setAcceleration(8);
+	abducter->setWeaponPower(40);
+	abducter->setWeaponRange(22);
+	abducter->setMaxDamage(500);
+	abducter->setScore(250);
+
+	RuleUfo *harvester = new RuleUfo(STR_HARVESTER);
+	harvester->setSize(SIZE_MEDIUM);
+	harvester->setMaxSpeed(4300);
+	harvester->setAcceleration(8);
+	harvester->setWeaponPower(40);
+	harvester->setWeaponRange(20);
+	harvester->setMaxDamage(500);
+	harvester->setScore(250);
+
+	RuleUfo *supply = new RuleUfo(STR_SUPPLY_SHIP);
+	supply->setSize(SIZE_LARGE);
+	supply->setMaxSpeed(3200);
+	supply->setAcceleration(6);
+	supply->setWeaponPower(60);
+	supply->setWeaponRange(36);
+	supply->setMaxDamage(2200);
+	supply->setScore(400);
+
+	RuleUfo *terror = new RuleUfo(STR_TERROR_SHIP);
+	terror->setSize(SIZE_LARGE);
+	terror->setMaxSpeed(4800);
+	terror->setAcceleration(6);
+	terror->setWeaponPower(120);
+	terror->setWeaponRange(42);
+	terror->setMaxDamage(1200);
+	terror->setScore(500);
+
+	RuleUfo *battleship = new RuleUfo(STR_BATTLESHIP);
+	battleship->setSize(SIZE_VERY_LARGE);
+	battleship->setMaxSpeed(5000);
+	battleship->setAcceleration(6);
+	battleship->setWeaponPower(148);
+	battleship->setWeaponRange(65);
+	battleship->setMaxDamage(3200);
+	battleship->setScore(700);
+
+	_ufos.insert(pair<LangString, RuleUfo*>(STR_SMALL_SCOUT, sscout));
+	_ufos.insert(pair<LangString, RuleUfo*>(STR_MEDIUM_SCOUT, mscout));
+	_ufos.insert(pair<LangString, RuleUfo*>(STR_LARGE_SCOUT, lscout));
+	_ufos.insert(pair<LangString, RuleUfo*>(STR_ABDUCTER, abducter));
+	_ufos.insert(pair<LangString, RuleUfo*>(STR_HARVESTER, harvester));
+	_ufos.insert(pair<LangString, RuleUfo*>(STR_SUPPLY_SHIP, supply));
+	_ufos.insert(pair<LangString, RuleUfo*>(STR_TERROR_SHIP, terror));
+	_ufos.insert(pair<LangString, RuleUfo*>(STR_BATTLESHIP, battleship));
 }
 
 /**

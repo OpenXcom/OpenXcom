@@ -730,7 +730,10 @@ void GeoscapeState::btnRotateDownRelease(SDL_Event *ev, int scale)
  */
 void GeoscapeState::btnZoomInClick(SDL_Event *ev, int scale)
 {
-	_globe->zoomIn();
+	if (ev->button.button == SDL_BUTTON_LEFT)
+		_globe->zoomIn();
+	else if (ev->button.button == SDL_BUTTON_RIGHT)
+		_globe->zoomMax();
 }
 
 /**
@@ -740,5 +743,8 @@ void GeoscapeState::btnZoomInClick(SDL_Event *ev, int scale)
  */
 void GeoscapeState::btnZoomOutClick(SDL_Event *ev, int scale)
 {
-	_globe->zoomOut();
+	if (ev->button.button == SDL_BUTTON_LEFT)
+		_globe->zoomOut();
+	else if (ev->button.button == SDL_BUTTON_RIGHT)
+		_globe->zoomMin();
 }

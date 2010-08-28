@@ -84,6 +84,10 @@ public:
 	void zoomIn();
 	/// Zooms the globe out.
 	void zoomOut();
+	/// Zooms the globe minimum.
+	void zoomMin();
+	/// Zooms the globe maximum.
+	void zoomMax();
 	/// Centers the globe on a point.
 	void center(double lon, double lat);
 	/// Checks if a point is inside land.

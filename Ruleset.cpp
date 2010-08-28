@@ -17,16 +17,17 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Ruleset.h"
+#include "SoldierNamePool.h"
 #include "RuleBaseFacility.h"
 #include "RuleCraft.h"
 #include "RuleCraftWeapon.h"
 #include "RuleItem.h"
-#include "SoldierNamePool.h"
+#include "RuleUfo.h"
 
 /**
  * Creates a ruleset with blank sets of rules.
  */
-Ruleset::Ruleset() : _names(), _facilities(), _crafts(), _craftWeapons(), _items()
+Ruleset::Ruleset() : _names(), _facilities(), _crafts(), _craftWeapons(), _items(), _ufos()
 {
 }
 
@@ -52,6 +53,10 @@ Ruleset::~Ruleset()
 		delete i->second;
 	}
 	for (map<LangString, RuleItem*>::iterator i = _items.begin(); i != _items.end(); i++)
+	{
+		delete i->second;
+	}
+	for (map<LangString, RuleUfo*>::iterator i = _ufos.begin(); i != _ufos.end(); i++)
 	{
 		delete i->second;
 	}
@@ -108,7 +113,6 @@ RuleCraftWeapon *Ruleset::getCraftWeapon(LangString id)
 	return _craftWeapons[id];
 }
 
-
 /**
  * Returns the rules for the specified item.
  * @param id Item type.
@@ -119,3 +123,12 @@ RuleItem *Ruleset::getItem(LangString id)
 	return _items[id];
 }
 
+/**
+ * Returns the rules for the specified UFO.
+ * @param id UFO type.
+ * @return Rules for the UFO.
+ */
+RuleUfo *Ruleset::getUfo(LangString id)
+{
+	return _ufos[id];
+}

@@ -119,6 +119,7 @@
     <ClCompile Include="Region.cpp" />
     <ClCompile Include="RuleCraftWeapon.cpp" />
     <ClCompile Include="RuleItem.cpp" />
+    <ClCompile Include="RuleUfo.cpp" />
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="SoundSet.cpp" />
     <ClCompile Include="StartState.cpp" />
@@ -207,6 +208,7 @@
     <ClInclude Include="Region.h" />
     <ClInclude Include="RuleCraftWeapon.h" />
     <ClInclude Include="RuleItem.h" />
+    <ClInclude Include="RuleUfo.h" />
     <ClInclude Include="Sound.h" />
     <ClInclude Include="SoundSet.h" />
     <ClInclude Include="StartState.h" />
