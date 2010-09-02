@@ -35,8 +35,10 @@ public:
 	static int seed;
 	/// Initializes the generator.
 	static void init(int seed = -1);
-	/// Generates a random number.
+	/// Generates a random integer number.
 	static int generate(int min, int max);
+	/// Generates a random decimal number.
+	static double generate(double min, double max);
 };
 
 #endif

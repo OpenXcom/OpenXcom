@@ -31,8 +31,10 @@ class Ufo
 {
 private:
 	RuleUfo *_rules;
-	double _lat, _lon;
+	double _lat, _lon, _targetLat, _targetLon, _speedLon, _speedLat;
 	int _id, _damage, _speed, _altitude;
+	/// Calculates the new speed vector.
+	void calculateSpeed();
 public:
 	/// Creates a UFO of the specified type.
 	Ufo(RuleUfo *rules);
@@ -50,10 +52,24 @@ public:
 	double getLongitude();
 	/// Sets the UFO's longitude.
 	void setLongitude(double lon);
+	/// Gets the UFO's target latitude.
+	double getTargetLatitude();
+	/// Sets the UFO's target latitude.
+	void setTargetLatitude(double lat);
+	/// Gets the UFO's target longitude.
+	double getTargetLongitude();
+	/// Sets the UFO's target longitude.
+	void setTargetLongitude(double lon);
+	/// Gets the UFO's speed.
+	int getSpeed();
+	/// Sets the UFO's speed.
+	void setSpeed(int speed);
 	/// Gets the UFO's amount of damage.
 	int getDamage();
 	/// Sets the UFO's amount of damage.
 	void setDamage(int damage);
+	/// Handles UFO logic.
+	void think();
 };
 
 #endif

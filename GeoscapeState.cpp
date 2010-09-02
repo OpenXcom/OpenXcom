@@ -35,6 +35,7 @@
 #include "GameTime.h"
 #include "Music.h"
 #include "SavedGame.h"
+#include "Ruleset.h"
 #include "Base.h"
 #include "BaseFacility.h"
 #include "RuleBaseFacility.h"
@@ -42,6 +43,8 @@
 #include "RuleCraft.h"
 #include "CraftWeapon.h"
 #include "RuleCraftWeapon.h"
+#include "Ufo.h"
+#include "RuleUfo.h"
 #include "OptionsState.h"
 #include "InterceptState.h"
 #include "BasescapeState.h"
@@ -52,6 +55,7 @@
 
 using namespace std;
 
+#define PI 3.141592653589793238461
 #define LONGITUDE_SPEED 0.25
 #define LATITUDE_SPEED 0.15
 
@@ -419,6 +423,21 @@ void GeoscapeState::timeAdvance()
  */
 void GeoscapeState::timeSecond()
 {
+	for (vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end(); i++)
+	{
+		if (*i == 0)
+			continue;
+
+		if ((*i)->getLatitude() == (*i)->getTargetLatitude() && (*i)->getLongitude() == (*i)->getTargetLongitude())
+		{
+			delete *i;
+			*i = 0;
+		}
+		else
+		{
+			(*i)->think();
+		}
+	}
 }
 
 /**
@@ -427,6 +446,24 @@ void GeoscapeState::timeSecond()
  */
 void GeoscapeState::timeMinute()
 {
+	// Spawn UFOs
+	int chance = RNG::generate(1, 100);
+	if (chance < 10)
+	{
+		Ufo *u = new Ufo(_game->getRuleset()->getUfo(STR_SMALL_SCOUT));
+		double lon, lat, tLon, tLat;
+		lon = RNG::generate(0.0, 2*PI);
+		lat = RNG::generate(-PI, PI);
+		tLon = lon + RNG::generate(-1.0, 1.0);
+		tLat = lat + RNG::generate(-1.0, 1.0);
+		u->setLongitude(lon);
+		u->setLatitude(lat);
+		u->setTargetLongitude(tLon);
+		u->setTargetLatitude(tLat);
+		_game->getSavedGame()->getUfos()->push_back(u);
+	}
+
+	// Handle craft maintenance
 	for (vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); i++)
 	{
 		for (vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); j++)
@@ -443,10 +480,11 @@ void GeoscapeState::timeMinute()
 
 /**
  * Takes care of any game logic that has to
- * run every game second, like transfers.
+ * run every game hour, like transfers.
  */
 void GeoscapeState::timeHour()
 {
+	// Handle craft maintenance
 	for (vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); i++)
 	{
 		for (vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); j++)

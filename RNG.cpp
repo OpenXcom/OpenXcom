@@ -38,7 +38,7 @@ void RNG::init(int seed)
 }
 
 /**
- * Generates a random number within a certain range.
+ * Generates a random integer number within a certain range.
  * @param min Minimum number.
  * @param max Maximum number.
  * @return Generated number.
@@ -47,4 +47,16 @@ int RNG::generate(int min, int max)
 {
 	seed = rand();
 	return (seed % (max - min + 1) + min);
+}
+
+/**
+ * Generates a random decimal number within a certain range.
+ * @param min Minimum number.
+ * @param max Maximum number.
+ * @return Generated number.
+ */
+double RNG::generate(double min, double max)
+{
+	seed = rand();
+	return (seed * (max - min) / RAND_MAX + min);
 }

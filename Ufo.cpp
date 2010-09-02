@@ -17,13 +17,16 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Ufo.h"
+#include "RuleUfo.h"
+#include <cmath>
 
 /**
  * Initializes a UFO of the specified type.
  * @param rules Pointer to ruleset.
  */
-Ufo::Ufo(RuleUfo *rules) : _rules(rules), _lat(0.0), _lon(0.0), _id(0), _damage(0), _speed(0)
+Ufo::Ufo(RuleUfo *rules) : _rules(rules), _lat(0.0), _lon(0.0), _targetLat(0.0), _targetLon(0.0), _id(0), _damage(0), _speed(0)
 {
+	setSpeed(_rules->getMaxSpeed());
 }
 
 /**
@@ -88,6 +91,63 @@ void Ufo::setLongitude(double lon)
 }
 
 /**
+ * Returns the latitude of the target destination of the UFO.
+ * @return Latitude in radian.
+ */
+double Ufo::getTargetLatitude()
+{
+	return _targetLat;
+}
+
+/**
+ * Changes the latitude of the target destination of the UFO.
+ * @param lat Latitude in radian.
+ */
+void Ufo::setTargetLatitude(double lat)
+{
+	_targetLat = lat;
+	calculateSpeed();
+}
+
+/**
+ * Returns the longitude of the target destination of the UFO.
+ * @return Longitude in radian.
+ */
+double Ufo::getTargetLongitude()
+{
+	return _targetLon;
+}
+
+/**
+ * Changes the longitude of the target destination of the UFO.
+ * @param lon Longitude in radian.
+ */
+void Ufo::setTargetLongitude(double lon)
+{
+	_targetLon = lon;
+	calculateSpeed();
+}
+
+/**
+ * Returns the speed of the UFO.
+ * @return Speed in kilometers.
+ */
+int Ufo::getSpeed()
+{
+	return _speed;
+}
+
+/**
+ * Changes the speed of the UFO.
+ * @param speed Speed in kilometers.
+ */
+void Ufo::setSpeed(int speed)
+{
+	_speed = speed;
+	calculateSpeed();
+}
+
+/**
  * Returns the amount of damage this UFO has taken.
  * @return Amount of damage.
  */
@@ -105,4 +165,44 @@ void Ufo::setDamage(int damage)
 	_damage = damage;
 	if (_damage < 0)
 		_damage = 0;
+}
+
+/**
+ * Calculates the speed vector for the UFO based
+ * on the current raw speed and target destination.
+ */
+void Ufo::calculateSpeed()
+{
+	double newspeed = _speed / 1000000.0;
+	double dLon = _targetLon - _lon;
+	double dLat = _targetLat - _lat;
+	double length = sqrt(dLon * dLon + dLat * dLat);
+	if (length > 0)
+	{
+		_speedLon = dLon / length * newspeed;
+		_speedLat = dLat / length * newspeed;
+	}
+	else
+	{
+		_speedLon = 0;
+		_speedLat = 0;
+	}
+}
+
+/**
+ * Moves the UFO to its target.
+ */
+void Ufo::think()
+{
+	_lon += _speedLon;
+	_lat += _speedLat;
+
+	if (((_speedLon > 0 && _lon > _targetLon) || (_speedLon < 0 && _lon < _targetLon)) &&
+		((_speedLat > 0 && _lat > _targetLat) || (_speedLat < 0 && _lon < _targetLat)))
+	{
+		_lon = _targetLon;
+		_lat = _targetLat;
+		_speed = 0;
+		calculateSpeed();
+	}
 }

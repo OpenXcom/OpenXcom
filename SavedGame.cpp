@@ -28,7 +28,7 @@
  * Initializes a brand new saved game according to the specified difficulty.
  * @param diff Game difficulty.
  */
-SavedGame::SavedGame(GameDifficulty diff) : _diff(diff), _funds(0), _countries(), _regions(), _bases()
+SavedGame::SavedGame(GameDifficulty diff) : _diff(diff), _funds(0), _countries(), _regions(), _bases(), _ufos(), _craftId(), _ufoId(1)
 {
 	_time = new GameTime(6, 1, 1, 1999, 12, 0, 0);
 	RNG::init();
@@ -155,4 +155,13 @@ map<LangString, int> *SavedGame::getCraftIds()
 vector<Ufo*> *SavedGame::getUfos()
 {
 	return &_ufos;
+}
+
+/**
+ * Returns the latest ufo ID.
+ * @return ID value.
+ */
+int SavedGame::getUfoId()
+{
+	return _ufoId;
 }

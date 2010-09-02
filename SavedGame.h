@@ -52,6 +52,7 @@ private:
 	vector<Base*> _bases;
 	vector<Ufo*> _ufos;
 	map<LangString, int> _craftId;
+	int _ufoId;
 public:
 	/// Creates a new save with a certain difficulty.
 	SavedGame(GameDifficulty diff);
@@ -77,6 +78,8 @@ public:
 	map<LangString, int> *getCraftIds();
 	/// Gets the list of UFOs.
 	vector<Ufo*> *getUfos();
+	/// Gets the current UFO ID.
+	int getUfoId();
 };
 
 #endif
