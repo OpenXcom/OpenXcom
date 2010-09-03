@@ -17,6 +17,9 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "BaseFacility.h"
+#include "RuleBaseFacility.h"
+
+#define RANGE_FACTOR 0.0003
 
 /**
  * Initializes a base facility of the specified type.
@@ -82,4 +85,23 @@ int BaseFacility::getBuildTime()
 void BaseFacility::setBuildTime(int time)
 {
 	_buildTime = time;
+}
+
+/**
+ * Returns if a certain point is covered by the facility's
+ * radar range, taking in account the positions of both.
+ * @param baseLon Base longitude.
+ * @param baseLat Base latitude.
+ * @param pointLon Point longitude.
+ * @param pointLat Point latitude.
+ * @return True if it's within range, False otherwise.
+ */
+bool BaseFacility::insideRadarRange(double baseLon, double baseLat, double pointLon, double pointLat)
+{
+	if (_rules->getRadarRange() == 0)
+		return false;
+	double newrange = _rules->getRadarRange() * RANGE_FACTOR;
+	double dLon = pointLon - baseLon;
+	double dLat = pointLat - baseLat;
+    return (dLon * dLon + dLat * dLat <= newrange * newrange);
 }

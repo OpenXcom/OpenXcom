@@ -20,11 +20,13 @@
 #include "RuleUfo.h"
 #include <cmath>
 
+#define SPEED_FACTOR 0.0000001
+
 /**
  * Initializes a UFO of the specified type.
  * @param rules Pointer to ruleset.
  */
-Ufo::Ufo(RuleUfo *rules) : _rules(rules), _lat(0.0), _lon(0.0), _targetLat(0.0), _targetLon(0.0), _id(0), _damage(0), _speed(0)
+Ufo::Ufo(RuleUfo *rules) : _rules(rules), _lat(0.0), _lon(0.0), _targetLat(0.0), _targetLon(0.0), _id(0), _damage(0), _speed(0), _altitude(0), _detected(false)
 {
 	setSpeed(_rules->getMaxSpeed());
 }
@@ -46,12 +48,22 @@ RuleUfo *Ufo::getRules()
 }
 
 /**
- * Returns the UFO's unique ID. Each UFO
- * can be identified by its type and ID.
+ * Returns the UFO's unique ID. If it's 0,
+ * this UFO has never been detected.
+ * @return Unique ID.
  */
 int Ufo::getId()
 {
 	return _id;
+}
+
+/**
+ * Changes the UFO's unique ID.
+ * @param id Unique ID.
+ */
+void Ufo::setId(int id)
+{
+	_id = id;
 }
 
 /**
@@ -168,24 +180,102 @@ void Ufo::setDamage(int damage)
 }
 
 /**
- * Calculates the speed vector for the UFO based
- * on the current raw speed and target destination.
+ * Returns whether this UFO has been detected by radars.
+ * @return Detection status.
+ */
+bool Ufo::getDetected()
+{
+	return _detected;
+}
+
+/**
+ * Changes whether this UFO has been detected by radars.
+ * @param detected Detection status.
+ */
+void Ufo::setDetected(bool detected)
+{
+	_detected = detected;
+}
+
+/**
+ * Returns the current direction the UFO is heading in.
+ * @return Direction.
+ */
+LangString Ufo::getDirection()
+{
+	return _direction;
+}
+
+/**
+ * Returns the current altitude of the UFO.
+ * @return Altitude.
+ */
+LangString Ufo::getAltitude()
+{
+	return STR_HIGH;
+}
+
+/**
+ * Calculates the speed vector and direction for the UFO
+ * based on the current raw speed and target destination.
  */
 void Ufo::calculateSpeed()
 {
-	double newspeed = _speed / 1000000.0;
+	double newSpeed = _speed * SPEED_FACTOR;
 	double dLon = _targetLon - _lon;
 	double dLat = _targetLat - _lat;
 	double length = sqrt(dLon * dLon + dLat * dLat);
 	if (length > 0)
 	{
-		_speedLon = dLon / length * newspeed;
-		_speedLat = dLat / length * newspeed;
+		_speedLon = dLon / length * newSpeed;
+		_speedLat = dLat / length * newSpeed;
 	}
 	else
 	{
 		_speedLon = 0;
 		_speedLat = 0;
+	}
+
+	if (_speedLon > 0)
+	{
+		if (_speedLat > 0)
+		{
+			_direction = STR_SOUTH_EAST;
+		}
+		else if (_speedLat < 0)
+		{
+			_direction = STR_NORTH_EAST;
+		}
+		else
+		{
+			_direction = STR_EAST;
+		}
+	}
+	else if (_speedLon < 0)
+	{
+		if (_speedLat > 0)
+		{
+			_direction = STR_SOUTH_WEST;
+		}
+		else if (_speedLat < 0)
+		{
+			_direction = STR_NORTH_WEST;
+		}
+		else
+		{
+			_direction = STR_WEST;
+		}
+	}
+	else
+	{
+		if (_speedLat > 0)
+		{
+			_direction = STR_SOUTH;
+		}
+		else if (_speedLat < 0)
+		{
+			_direction = STR_NORTH;
+		}
 	}
 }
 

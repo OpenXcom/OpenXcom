@@ -19,6 +19,8 @@
 #ifndef OPENXCOM__UFO_H
 #define OPENXCOM__UFO_H
 
+#include "LangString.h"
+
 class RuleUfo;
 
 /**
@@ -33,6 +35,8 @@ private:
 	RuleUfo *_rules;
 	double _lat, _lon, _targetLat, _targetLon, _speedLon, _speedLat;
 	int _id, _damage, _speed, _altitude;
+	LangString _direction;
+	bool _detected;
 	/// Calculates the new speed vector.
 	void calculateSpeed();
 public:
@@ -44,6 +48,8 @@ public:
 	RuleUfo *getRules();
 	/// Gets the UFO's ID.
 	int getId();
+	/// Sets the UFO's ID.
+	void setId(int id);
 	/// Gets the UFO's latitude.
 	double getLatitude();
 	/// Sets the UFO's latitude.
@@ -68,6 +74,14 @@ public:
 	int getDamage();
 	/// Sets the UFO's amount of damage.
 	void setDamage(int damage);
+	/// Sets the UFO's detection status.
+	void setDetected(bool detected);
+	/// Gets the UFO's detection status.
+	bool getDetected();
+	/// Gets the UFO's direction.
+	LangString getDirection();
+	/// Gets the UFO's altitude.
+	LangString getAltitude();
 	/// Handles UFO logic.
 	void think();
 };

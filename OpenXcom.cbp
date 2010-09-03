@@ -540,6 +540,12 @@
 		<Unit filename="Ufo.h">
 			<Option virtualFolder="Xcom\Game\" />
 		</Unit>
+		<Unit filename="UfoDetectedState.cpp">
+			<Option virtualFolder="States\" />
+		</Unit>
+		<Unit filename="UfoDetectedState.h">
+			<Option virtualFolder="States\" />
+		</Unit>
 		<Unit filename="Window.cpp">
 			<Option virtualFolder="Interface\" />
 		</Unit>

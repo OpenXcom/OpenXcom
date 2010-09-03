@@ -79,7 +79,7 @@ public:
 	/// Gets the list of UFOs.
 	vector<Ufo*> *getUfos();
 	/// Gets the current UFO ID.
-	int getUfoId();
+	int *getUfoId();
 };
 
 #endif

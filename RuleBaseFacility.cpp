@@ -324,7 +324,7 @@ void RuleBaseFacility::setPsiLaboratories(int psi)
 /**
  * Returns the radar range this facility provides for the
  * detection of UFOs.
- * @return Range in meters.
+ * @return Range in nanometers.
  */
 int RuleBaseFacility::getRadarRange()
 {
@@ -334,7 +334,7 @@ int RuleBaseFacility::getRadarRange()
 /**
  * Changes the radar range this facility provides for the
  * detection of UFOs.
- * @param range Range in meters.
+ * @param range Range in nanometers.
  */
 void RuleBaseFacility::setRadarRange(int range)
 {

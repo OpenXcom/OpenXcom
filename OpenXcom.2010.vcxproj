@@ -145,6 +145,7 @@
     <ClCompile Include="TextEdit.cpp" />
     <ClCompile Include="TextList.cpp" />
     <ClCompile Include="Ufo.cpp" />
+    <ClCompile Include="UfoDetectedState.cpp" />
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -235,6 +236,7 @@
     <ClInclude Include="TextEdit.h" />
     <ClInclude Include="TextList.h" />
     <ClInclude Include="Ufo.h" />
+    <ClInclude Include="UfoDetectedState.h" />
     <ClInclude Include="Window.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="Game.h" />

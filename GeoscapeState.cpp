@@ -52,6 +52,7 @@
 #include "FundingState.h"
 #include "MonthlyReportState.h"
 #include "GeoscapeMessageState.h"
+#include "UfoDetectedState.h"
 
 using namespace std;
 
@@ -448,15 +449,16 @@ void GeoscapeState::timeSecond()
 
 /**
  * Takes care of any game logic that has to
- * run every game half hour, like reloading.
+ * run every game half hour, like UFO detection.
  */
 void GeoscapeState::timeMinute()
 {
 	// Spawn UFOs
 	int chance = RNG::generate(1, 100);
-	if (chance <= 40)
+	if (chance <= 50)
 	{
-		Ufo *u = new Ufo(_game->getRuleset()->getUfo(STR_SMALL_SCOUT));
+		int type = RNG::generate(STR_SMALL_SCOUT, STR_LARGE_SCOUT);
+		Ufo *u = new Ufo(_game->getRuleset()->getUfo((LangString)type));
 		u->setLongitude(RNG::generate(0.0, 2*PI));
 		u->setLatitude(RNG::generate(-PI/2, PI/2));
 		u->setTargetLongitude(RNG::generate(0.0, 2*PI));
@@ -475,6 +477,44 @@ void GeoscapeState::timeMinute()
 				if ((*j)->getFuel() == (*j)->getRules()->getMaxFuel())
 					(*j)->setStatus(STR_REARMING);
 			}
+		}
+	}
+
+	// Handle UFO detection
+	for (vector<Ufo*>::iterator u = _game->getSavedGame()->getUfos()->begin(); u != _game->getSavedGame()->getUfos()->end(); u++)
+	{
+		if (!(*u)->getDetected())
+		{
+			bool detected = false;
+			for (vector<Base*>::iterator b = _game->getSavedGame()->getBases()->begin(); b != _game->getSavedGame()->getBases()->end() && !detected; b++)
+			{
+				for (vector<BaseFacility*>::iterator f = (*b)->getFacilities()->begin(); f != (*b)->getFacilities()->end() && !detected; f++)
+				{
+					if ((*f)->insideRadarRange((*b)->getLongitude(), (*b)->getLatitude(), (*u)->getLongitude(), (*u)->getLatitude()))
+					{
+						int chance = RNG::generate(1, 100);
+						if (chance <= (*f)->getRules()->getRadarChance())
+						{
+							(*u)->setDetected(true);
+							detected = true;
+							_pause = true;
+							_popups.push_back(new UfoDetectedState(_game, (*u), this));
+						}
+					}
+				}
+			}
+		}
+		else
+		{
+			bool detected = false;
+			for (vector<Base*>::iterator b = _game->getSavedGame()->getBases()->begin(); b != _game->getSavedGame()->getBases()->end() && !detected; b++)
+			{
+				for (vector<BaseFacility*>::iterator f = (*b)->getFacilities()->begin(); f != (*b)->getFacilities()->end() && !detected; f++)
+				{
+					detected = detected || (*f)->insideRadarRange((*b)->getLongitude(), (*b)->getLatitude(), (*u)->getLongitude(), (*u)->getLatitude());
+				}
+			}
+			(*u)->setDetected(detected);
 		}
 	}
 }
@@ -585,6 +625,7 @@ Globe *GeoscapeState::getGlobe()
  * @param ev Pointer to the SDL_Event.
  * @param scale Scale of the screen.
  */
+#include <iostream>
 void GeoscapeState::globeClick(SDL_Event *ev, int scale)
 {
 	double lon, lat;
@@ -592,7 +633,7 @@ void GeoscapeState::globeClick(SDL_Event *ev, int scale)
 	
 	if (ev->button.button == SDL_BUTTON_LEFT)
 	{
-
+		cout << "lon: " << lon << " - lat: " << lat << endl;
 	}
 	else if (ev->button.button == SDL_BUTTON_RIGHT)
 	{

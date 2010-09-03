@@ -64,6 +64,7 @@ RuleCraft *Craft::getRules()
 /**
  * Returns the craft's unique ID. Each craft
  * can be identified by its type and ID.
+ * @return Unique ID.
  */
 int Craft::getId()
 {

@@ -161,7 +161,7 @@ vector<Ufo*> *SavedGame::getUfos()
  * Returns the latest ufo ID.
  * @return ID value.
  */
-int SavedGame::getUfoId()
+int *SavedGame::getUfoId()
 {
-	return _ufoId;
+	return &_ufoId;
 }

@@ -21,8 +21,6 @@
 
 #include "LangString.h"
 
-enum UfoSize { SIZE_VERY_SMALL, SIZE_SMALL, SIZE_MEDIUM, SIZE_LARGE, SIZE_VERY_LARGE };
-
 /**
  * Represents a specific type of UFO.
  * Contains constant info about a UFO like
@@ -32,8 +30,7 @@ enum UfoSize { SIZE_VERY_SMALL, SIZE_SMALL, SIZE_MEDIUM, SIZE_LARGE, SIZE_VERY_L
 class RuleUfo
 {
 private:
-	LangString _type;
-	UfoSize _size;
+	LangString _type, _size;
 	int _damageMax, _speedMax, _accel, _power, _range, _score;
 public:
 	/// Creates a blank UFO ruleset.
@@ -43,9 +40,9 @@ public:
 	/// Gets the UFO's type.
 	LangString getType();
 	/// Gets the UFO's size.
-	UfoSize getSize();
+	LangString getSize();
 	/// Sets the UFO's size.
-	void setSize(UfoSize size);
+	void setSize(LangString size);
 	/// Gets the UFO's maximum damage.
 	int getMaxDamage();
 	/// Sets the UFO's maximum damage.

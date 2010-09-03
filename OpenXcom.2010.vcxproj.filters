@@ -257,6 +257,9 @@
     <ClCompile Include="RuleUfo.cpp">
       <Filter>Xcom\Rules</Filter>
     </ClCompile>
+    <ClCompile Include="UfoDetectedState.cpp">
+      <Filter>States</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbandonGameState.h">
@@ -516,6 +519,9 @@
     </ClInclude>
     <ClInclude Include="RuleUfo.h">
       <Filter>Xcom\Rules</Filter>
+    </ClInclude>
+    <ClInclude Include="UfoDetectedState.h">
+      <Filter>States</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

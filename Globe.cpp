@@ -805,7 +805,7 @@ void Globe::drawMarkers()
 	// Draw the UFO markers
 	for (vector<Ufo*>::iterator i = _save->getUfos()->begin(); i != _save->getUfos()->end(); i++)
 	{
-		if (pointBack((*i)->getLongitude(), (*i)->getLatitude()))
+		if (!(*i)->getDetected() || pointBack((*i)->getLongitude(), (*i)->getLatitude()))
 			continue;
 
 		Sint16 x, y;

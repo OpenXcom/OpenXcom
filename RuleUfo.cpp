@@ -23,7 +23,7 @@
  * type of UFO.
  * @param type String defining the type.
  */
-RuleUfo::RuleUfo(LangString type) : _type(type), _size(SIZE_VERY_SMALL), _damageMax(0), _speedMax(0), _accel(0), _power(0), _range(0), _score(0)
+RuleUfo::RuleUfo(LangString type) : _type(type), _size(STR_VERY_SMALL), _damageMax(0), _speedMax(0), _accel(0), _power(0), _range(0), _score(0)
 {
 }
 
@@ -48,7 +48,7 @@ LangString RuleUfo::getType()
  * Returns the size of this type of UFO.
  * @return Size.
  */
-UfoSize RuleUfo::getSize()
+LangString RuleUfo::getSize()
 {
 	return _size;
 }
@@ -57,7 +57,7 @@ UfoSize RuleUfo::getSize()
  * Changes the size of this type of UFO.
  * @param size Size.
  */
-void RuleUfo::setSize(UfoSize size)
+void RuleUfo::setSize(LangString size)
 {
 	_size = size;
 }

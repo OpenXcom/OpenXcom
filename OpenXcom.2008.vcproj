@@ -655,6 +655,14 @@
 				RelativePath=".\TestState.h"
 				>
 			</File>
+			<File
+				RelativePath=".\UfoDetectedState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UfoDetectedState.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Xcom"

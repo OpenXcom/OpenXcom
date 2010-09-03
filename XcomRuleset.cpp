@@ -365,7 +365,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	sRadar->setBuildCost(500000);
 	sRadar->setBuildTime(12);
 	sRadar->setMonthlyCost(10000);
-	sRadar->setRadarRange(2000);
+	sRadar->setRadarRange(1500);
 	sRadar->setRadarChance(10);
 
 	RuleBaseFacility *lRadar = new RuleBaseFacility(STR_LARGE_RADAR_SYSTEM);
@@ -374,7 +374,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	lRadar->setBuildCost(800000);
 	lRadar->setBuildTime(25);
 	lRadar->setMonthlyCost(15000);
-	lRadar->setRadarRange(3000);
+	lRadar->setRadarRange(2250);
 	lRadar->setRadarChance(20);
 
 	RuleBaseFacility *missile = new RuleBaseFacility(STR_MISSILE_DEFENCES);
@@ -614,14 +614,14 @@ XcomRuleset::XcomRuleset() : Ruleset()
 
 	// Add UFOs
 	RuleUfo *sscout = new RuleUfo(STR_SMALL_SCOUT);
-	sscout->setSize(SIZE_VERY_SMALL);
+	sscout->setSize(STR_VERY_SMALL);
 	sscout->setMaxSpeed(2200);
 	sscout->setAcceleration(12);
 	sscout->setMaxDamage(50);
 	sscout->setScore(50);
 
 	RuleUfo *mscout = new RuleUfo(STR_MEDIUM_SCOUT);
-	mscout->setSize(SIZE_SMALL);
+	mscout->setSize(STR_SMALL);
 	mscout->setMaxSpeed(2400);
 	mscout->setAcceleration(9);
 	mscout->setWeaponPower(20);
@@ -630,7 +630,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	mscout->setScore(75);
 
 	RuleUfo *lscout = new RuleUfo(STR_LARGE_SCOUT);
-	lscout->setSize(SIZE_SMALL);
+	lscout->setSize(STR_SMALL);
 	lscout->setMaxSpeed(2700);
 	lscout->setAcceleration(9);
 	lscout->setWeaponPower(20);
@@ -639,7 +639,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	lscout->setScore(125);
 
 	RuleUfo *abducter = new RuleUfo(STR_ABDUCTER);
-	abducter->setSize(SIZE_MEDIUM);
+	abducter->setSize(STR_MEDIUM);
 	abducter->setMaxSpeed(4000);
 	abducter->setAcceleration(8);
 	abducter->setWeaponPower(40);
@@ -648,7 +648,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	abducter->setScore(250);
 
 	RuleUfo *harvester = new RuleUfo(STR_HARVESTER);
-	harvester->setSize(SIZE_MEDIUM);
+	harvester->setSize(STR_MEDIUM);
 	harvester->setMaxSpeed(4300);
 	harvester->setAcceleration(8);
 	harvester->setWeaponPower(40);
@@ -657,7 +657,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	harvester->setScore(250);
 
 	RuleUfo *supply = new RuleUfo(STR_SUPPLY_SHIP);
-	supply->setSize(SIZE_LARGE);
+	supply->setSize(STR_LARGE);
 	supply->setMaxSpeed(3200);
 	supply->setAcceleration(6);
 	supply->setWeaponPower(60);
@@ -666,7 +666,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	supply->setScore(400);
 
 	RuleUfo *terror = new RuleUfo(STR_TERROR_SHIP);
-	terror->setSize(SIZE_LARGE);
+	terror->setSize(STR_LARGE);
 	terror->setMaxSpeed(4800);
 	terror->setAcceleration(6);
 	terror->setWeaponPower(120);
@@ -675,7 +675,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	terror->setScore(500);
 
 	RuleUfo *battleship = new RuleUfo(STR_BATTLESHIP);
-	battleship->setSize(SIZE_VERY_LARGE);
+	battleship->setSize(STR_VERY_LARGE);
 	battleship->setMaxSpeed(5000);
 	battleship->setAcceleration(6);
 	battleship->setWeaponPower(148);
