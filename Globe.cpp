@@ -789,7 +789,8 @@ void Globe::drawMarkers()
 	for (vector<Base*>::iterator i = _save->getBases()->begin(); i != _save->getBases()->end(); i++)
 	{
 		// Cheap hack to hide bases when they haven't been placed yet
-		if (((*i)->getLongitude() == 0.0 && (*i)->getLatitude() == 0.0) || pointBack((*i)->getLongitude(), (*i)->getLatitude()))
+		if (((*i)->getLongitude() == 0.0 && (*i)->getLatitude() == 0.0) ||
+			pointBack((*i)->getLongitude(), (*i)->getLatitude()))
 			continue;
 
 		Sint16 x, y;
@@ -804,7 +805,7 @@ void Globe::drawMarkers()
 	// Draw the UFO markers
 	for (vector<Ufo*>::iterator i = _save->getUfos()->begin(); i != _save->getUfos()->end(); i++)
 	{
-		if (*i == 0 || pointBack((*i)->getLongitude(), (*i)->getLatitude()))
+		if (pointBack((*i)->getLongitude(), (*i)->getLatitude()))
 			continue;
 
 		Sint16 x, y;

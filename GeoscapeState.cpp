@@ -423,20 +423,26 @@ void GeoscapeState::timeAdvance()
  */
 void GeoscapeState::timeSecond()
 {
+	vector<vector<Ufo*>::iterator> deadUfos;
+
+	// Handle UFO logic
 	for (vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end(); i++)
 	{
-		if (*i == 0)
-			continue;
-
 		if ((*i)->getLatitude() == (*i)->getTargetLatitude() && (*i)->getLongitude() == (*i)->getTargetLongitude())
 		{
 			delete *i;
-			*i = 0;
+			deadUfos.push_back(i);
 		}
 		else
 		{
 			(*i)->think();
 		}
+	}
+
+	// Clean up dead UFOs
+	for (vector<vector<Ufo*>::iterator>::iterator i = deadUfos.begin(); i != deadUfos.end(); i++)
+	{
+		_game->getSavedGame()->getUfos()->erase(*i);
 	}
 }
 
@@ -448,18 +454,13 @@ void GeoscapeState::timeMinute()
 {
 	// Spawn UFOs
 	int chance = RNG::generate(1, 100);
-	if (chance < 10)
+	if (chance <= 40)
 	{
 		Ufo *u = new Ufo(_game->getRuleset()->getUfo(STR_SMALL_SCOUT));
-		double lon, lat, tLon, tLat;
-		lon = RNG::generate(0.0, 2*PI);
-		lat = RNG::generate(-PI, PI);
-		tLon = lon + RNG::generate(-1.0, 1.0);
-		tLat = lat + RNG::generate(-1.0, 1.0);
-		u->setLongitude(lon);
-		u->setLatitude(lat);
-		u->setTargetLongitude(tLon);
-		u->setTargetLatitude(tLat);
+		u->setLongitude(RNG::generate(0.0, 2*PI));
+		u->setLatitude(RNG::generate(-PI/2, PI/2));
+		u->setTargetLongitude(RNG::generate(0.0, 2*PI));
+		u->setTargetLatitude(RNG::generate(-PI/2, PI/2));
 		_game->getSavedGame()->getUfos()->push_back(u);
 	}
 

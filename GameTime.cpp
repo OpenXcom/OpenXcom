@@ -165,6 +165,7 @@ LangString GameTime::getDayString()
 	case 22:
 		return STR_ND;
 	case 3:
+	case 23:
 		return STR_RD;
 	default:
 		return STR_TH;

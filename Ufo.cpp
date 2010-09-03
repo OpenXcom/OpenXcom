@@ -196,13 +196,11 @@ void Ufo::think()
 {
 	_lon += _speedLon;
 	_lat += _speedLat;
-
 	if (((_speedLon > 0 && _lon > _targetLon) || (_speedLon < 0 && _lon < _targetLon)) &&
-		((_speedLat > 0 && _lat > _targetLat) || (_speedLat < 0 && _lon < _targetLat)))
+		((_speedLat > 0 && _lat > _targetLat) || (_speedLat < 0 && _lat < _targetLat)))
 	{
 		_lon = _targetLon;
 		_lat = _targetLat;
-		_speed = 0;
-		calculateSpeed();
+		setSpeed(0);
 	}
 }
