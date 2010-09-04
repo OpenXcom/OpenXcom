@@ -415,7 +415,7 @@ int Base::getLongRangeDetection()
 	for (vector<BaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); i++)
 	{
 		if ((*i)->getBuildTime() == 0)
-			if ((*i)->getRules()->getRadarRange() > 2000)
+			if ((*i)->getRules()->getRadarRange() > 1500)
 				total++;
 	}
 	return total;

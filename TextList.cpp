@@ -22,6 +22,7 @@
 #include "Text.h"
 #include "Font.h"
 #include "Palette.h"
+#include "ArrowButton.h"
 
 /**
  * Sets up a blank list with the specified size and position.
@@ -32,14 +33,24 @@
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-TextList::TextList(Font *big, Font *small, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _texts(), _columns(), _big(big), _small(small), _scroll(0), _visibleRows(0), _color(0), _dot(false), _selectable(false), _selRow(0), _bg(0), _selector(0)
+TextList::TextList(Font *big, Font *small, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _texts(), _columns(), _big(big), _small(small), _scroll(0), _visibleRows(0), _color(0), _dot(false), _selectable(false), _selRow(0), _bg(0)
 {
+	_selector = new Surface(_width, _small->getHeight() + _small->getSpacing(), _x, _y);
+	_selector->setVisible(false);
+
 	for (int y = 0; y < _height; y += _small->getHeight() + _small->getSpacing())
 		_visibleRows++;
+
+	_up = new ArrowButton(ARROW_BIG_UP, 13, 14, _x + _width + 4, _y + 1);
+	_up->setVisible(false);
+	_up->setTextList(this);
+	_down = new ArrowButton(ARROW_BIG_DOWN, 13, 14, _x + _width + 4, _y + _height - 12);
+	_down->setVisible(false);
+	_down->setTextList(this);
 }
 
 /**
- * Deletes the selector and all the child Text's contained by the list.
+ * Deletes all the stuff contained in the list.
  */
 TextList::~TextList()
 {
@@ -48,8 +59,9 @@ TextList::~TextList()
 			delete (*v);
 		}
 	}
-	if (_selector != 0)
-		delete _selector;
+	delete _selector;
+	delete _up;
+	delete _down;
 }
 
 /**
@@ -134,6 +146,8 @@ void TextList::addRow(int value, int cols, ...)
 	draw();
 
 	va_end(args);
+
+	updateArrows();
 }
 
 /**
@@ -173,6 +187,9 @@ void TextList::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 			(*v)->setPalette(colors, firstcolor, ncolors);
 		}
 	}
+	_selector->setPalette(colors, firstcolor, ncolors);
+	_up->setPalette(colors, firstcolor, ncolors);
+	_down->setPalette(colors, firstcolor, ncolors);
 }
 
 /**
@@ -183,6 +200,8 @@ void TextList::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 void TextList::setColor(Uint8 color)
 {
 	_color = color;
+	_up->setColor(color + 3);
+	_down->setColor(color + 3);
 }
 
 /**
@@ -203,16 +222,6 @@ void TextList::setDot(bool dot)
 void TextList::setSelectable(bool selectable)
 {
 	_selectable = selectable;
-	if (_selectable)
-	{
-		_selector = new Surface(_width, 8, _x, _y);
-		_selector->setPalette(getPalette());
-		_selector->setVisible(false);
-	}
-	else
-	{
-		delete _selector;
-	}
 }
 
 /**
@@ -260,6 +269,8 @@ void TextList::scrollUp()
 		_scroll--;
 		draw();
 	}
+
+	updateArrows();
 }
 
 /**
@@ -272,6 +283,18 @@ void TextList::scrollDown()
 		_scroll++;
 		draw();
 	}
+
+	updateArrows();
+}
+
+/**
+ * Updates the visibility of the arrow buttons according to
+ * the current scroll position.
+ */
+void TextList::updateArrows()
+{
+	_up->setVisible((_texts.size() > _visibleRows && _scroll > 0));
+	_down->setVisible((_texts.size() > _visibleRows && _scroll < _texts.size() - _visibleRows));
 }
 
 /**
@@ -296,9 +319,33 @@ void TextList::draw()
  */
 void TextList::blit(Surface *surface)
 {
-	if (_selector != 0)
-		_selector->blit(surface);
+	_selector->blit(surface);
 	Surface::blit(surface);
+	_up->blit(surface);
+	_down->blit(surface);
+}
+
+/**
+ * Passes events to arrow buttons.
+ * @param ev Pointer to a SDL_Event.
+ * @param scale Current screen scale (used to correct mouse input).
+ * @param state State that the event handlers belong to.
+ */
+void TextList::handle(SDL_Event *ev, int scale, State *state)
+{
+	InteractiveSurface::handle(ev, scale, state);
+	_up->handle(ev, scale, state);
+	_down->handle(ev, scale, state);
+}
+
+/**
+ * Passes ticks to arrow buttons.
+ */
+void TextList::think()
+{
+	InteractiveSurface::think();
+	_up->think();
+	_down->think();
 }
 
 /**

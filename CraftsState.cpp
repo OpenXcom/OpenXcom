@@ -52,7 +52,7 @@ CraftsState::CraftsState(Game *game, Base *base) : State(game), _base(base)
 	_txtWeapon = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 50, 16, 160, 40);
 	_txtCrew = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 58, 9, 210, 40);
 	_txtHwp = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 46, 9, 268, 40);
-	_lstCrafts = new TextList(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 298, 118, 16, 58);
+	_lstCrafts = new TextList(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 286, 118, 16, 58);
 	
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)), Palette::backPos, 16);
@@ -102,7 +102,7 @@ CraftsState::CraftsState(Game *game, Base *base) : State(game), _base(base)
 	_txtHwp->setText(_game->getResourcePack()->getLanguage()->getString(STR_HWPS));
 
 	_lstCrafts->setColor(Palette::blockOffset(13)+10);
-	_lstCrafts->setColumns(5, 94, 66, 47, 46, 45);
+	_lstCrafts->setColumns(5, 94, 66, 47, 46, 33);
 	_lstCrafts->setSelectable(true);
 	_lstCrafts->setBackground(_window);
 	_lstCrafts->onMouseClick((EventHandler)&CraftsState::lstCraftsClick);

@@ -182,6 +182,14 @@
 			Name="Interface"
 			>
 			<File
+				RelativePath=".\ArrowButton.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ArrowButton.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Bar.cpp"
 				>
 			</File>

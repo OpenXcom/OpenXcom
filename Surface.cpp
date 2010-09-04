@@ -459,7 +459,7 @@ int Surface::getHeight()
 
 /**
  * Changes the visibility of the surface. A hidden surface
- * isn't blitted.
+ * isn't blitted nor receives events.
  * @param visible New visibility.
  */
 void Surface::setVisible(bool visible)

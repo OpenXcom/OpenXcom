@@ -51,7 +51,7 @@ InterceptState::InterceptState(Game *game) : State(game)
 	_txtStatus = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 65, 9, 100, 70);
 	_txtBase = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 85, 9, 165, 70);
 	_txtWeapons = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 64, 16, 242, 62);
-	_lstCrafts = new TextList(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 300, 64, 14, 78);
+	_lstCrafts = new TextList(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 286, 64, 14, 78);
 	
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
@@ -91,7 +91,7 @@ InterceptState::InterceptState(Game *game) : State(game)
 	_txtWeapons->setText(_game->getResourcePack()->getLanguage()->getString(STR_WEAPONS_CREW_HWPS));
 
 	_lstCrafts->setColor(Palette::blockOffset(15)-1);
-	_lstCrafts->setColumns(4, 86, 65, 85, 64);
+	_lstCrafts->setColumns(4, 86, 65, 85, 50);
 	_lstCrafts->setSelectable(true);
 	_lstCrafts->setBackground(_window);
 	int row = 0;

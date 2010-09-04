@@ -16,40 +16,46 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM__IMAGEBUTTON_H
-#define OPENXCOM__IMAGEBUTTON_H
+#ifndef OPENXCOM__ARROWBUTTON_H
+#define OPENXCOM__ARROWBUTTON_H
 
-#include "InteractiveSurface.h"
+#include "ImageButton.h"
+
+enum ArrowShape { ARROW_BIG_UP, ARROW_BIG_DOWN };
+
+class TextList;
+class Timer;
 
 /**
- * Regular image that works like a button.
- * Unlike the TextButton, this button doesn't draw
- * anything on its own. It takes an existing graphic and
- * treats it as a button, inverting colors when necessary.
- * This is necessary for special buttons like in the Geoscape.
+ * Button with an arrow on it. Can be used for
+ * scrolling lists, spinners, etc. Contains various
+ * arrow shapes.
  */
-class ImageButton : public InteractiveSurface
+class ArrowButton : public ImageButton
 {
-protected:
-	Uint8 _color;
-	ImageButton **_group;
+private:
+	ArrowShape _shape;
+	TextList *_list;
+	Timer *_timer;
 public:
-	/// Creates a new image button with the specified size and position.
-	ImageButton(int width, int height, int x = 0, int y = 0);
-	/// Cleans up the image button.
-	~ImageButton();
-	/// Sets the image button's color.
+	/// Creates a new arrow button with the specified size and position.
+	ArrowButton(ArrowShape shape, int width, int height, int x = 0, int y = 0);
+	/// Cleans up the arrow button.
+	~ArrowButton();
+	/// Sets the arrow button's color.
 	void setColor(Uint8 color);
-	/// Gets the image button's color.
-	Uint8 getColor();
-	/// Sets the image button's group.
-	void setGroup(ImageButton **group);
+	/// Sets the arrow button's list.
+	void setTextList(TextList *list);
+	/// Handles the timers.
+	void think();
+	/// Scrolls the list.
+	void scroll();
+	/// Draws the arrow button.
+	void draw();
 	/// Special handling for mouse presses.
 	void mousePress(SDL_Event *ev, int scale, State *state);
 	/// Special handling for mouse releases.
 	void mouseRelease(SDL_Event *ev, int scale, State *state);
-	/// Special handling for mouse clicks.
-	void mouseClick(SDL_Event *ev, int scale, State *state);
 };
 
 #endif

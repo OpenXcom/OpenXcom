@@ -99,6 +99,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ArrowButton.cpp" />
     <ClCompile Include="Bar.cpp" />
     <ClCompile Include="Base.cpp" />
     <ClCompile Include="BaseFacility.cpp" />
@@ -188,6 +189,7 @@
     <ClCompile Include="XcomRuleset.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ArrowButton.h" />
     <ClInclude Include="Bar.h" />
     <ClInclude Include="Base.h" />
     <ClInclude Include="BaseFacility.h" />

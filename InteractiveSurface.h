@@ -44,6 +44,8 @@ public:
 	InteractiveSurface(int width, int height, int x = 0, int y = 0);
 	/// Cleans up the interactive surface.
 	virtual ~InteractiveSurface();
+	/// Sets the surface's visibility.
+	void setVisible(bool visible);
 	/// Processes any pending events.
 	virtual void handle(SDL_Event *ev, int scale, State *state);
 	/// Sets focus on this surface.

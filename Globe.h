@@ -38,7 +38,6 @@ class Timer;
  * Takes a flat world map made out of land polygons with
  * polar coordinates and renders it as a 3D-looking globe
  * with cartesian coordinates that the player can interact with.
- * @todo Fix edges, add countries and cities and stuffs.
  */
 class Globe : public InteractiveSurface
 {

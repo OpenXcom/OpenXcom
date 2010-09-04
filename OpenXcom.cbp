@@ -51,6 +51,12 @@
 		<Unit filename="AbandonGameState.h">
 			<Option virtualFolder="States\" />
 		</Unit>
+		<Unit filename="ArrowButton.cpp">
+			<Option virtualFolder="Interface\" />
+		</Unit>
+		<Unit filename="ArrowButton.h">
+			<Option virtualFolder="Interface\" />
+		</Unit>
 		<Unit filename="Bar.cpp">
 			<Option virtualFolder="Interface\" />
 		</Unit>

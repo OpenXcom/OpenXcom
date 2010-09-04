@@ -24,6 +24,7 @@
 
 class Text;
 class Font;
+class ArrowButton;
 
 /**
  * List of Text's split into columns.
@@ -42,6 +43,10 @@ private:
 	bool _dot, _selectable;
 	unsigned int _selRow;
 	Surface *_bg, *_selector;
+	ArrowButton *_up, *_down;
+
+	/// Updates the arrow buttons.
+	void updateArrows();
 public:
 	/// Creates a text list with the specified size and position.
 	TextList(Font *big, Font *small, int width, int height, int x = 0, int y = 0);
@@ -79,6 +84,10 @@ public:
 	void draw();
 	/// Blits the text list onto another surface.
 	void blit(Surface *surface);
+	/// Thinks arrow buttons.
+	void think();
+	/// Handles arrow buttons.
+	void handle(SDL_Event *ev, int scale, State *state);
 	/// Special handling for mouse presses.
 	void mousePress(SDL_Event *ev, int scale, State *state);
 	/// Special handling for mouse releases.

@@ -260,6 +260,9 @@
     <ClCompile Include="UfoDetectedState.cpp">
       <Filter>States</Filter>
     </ClCompile>
+    <ClCompile Include="ArrowButton.cpp">
+      <Filter>Interface</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbandonGameState.h">
@@ -522,6 +525,12 @@
     </ClInclude>
     <ClInclude Include="UfoDetectedState.h">
       <Filter>States</Filter>
+    </ClInclude>
+    <ClInclude Include="ArrowButton.cpp">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="ArrowButton.h">
+      <Filter>Interface</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

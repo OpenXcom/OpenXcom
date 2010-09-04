@@ -57,7 +57,7 @@ TextButton::~TextButton()
 void TextButton::setColor(Uint8 color)
 {
 	_color = color;
-	_text->setColor(_color-3);
+	_text->setColor(_color - 3);
 	draw();
 }
 

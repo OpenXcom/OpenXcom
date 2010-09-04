@@ -49,7 +49,7 @@ StoresState::StoresState(Game *game, Base *base) : State(game), _base(base)
 	_txtItem = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 142, 8, 10, 32);
 	_txtQuantity = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 88, 8, 152, 32);
 	_txtSpaceUsed = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 74, 8, 240, 32);
-	_lstStores = new TextList(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 300, 128, 10, 40);
+	_lstStores = new TextList(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 286, 128, 10, 40);
 	
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
@@ -85,7 +85,7 @@ StoresState::StoresState(Game *game, Base *base) : State(game), _base(base)
 	_txtSpaceUsed->setText(_game->getResourcePack()->getLanguage()->getString(STR_SPACE_USED));
 	
 	_lstStores->setColor(Palette::blockOffset(13)+10);
-	_lstStores->setColumns(3, 162, 92, 46);
+	_lstStores->setColumns(3, 162, 92, 32);
 	_lstStores->setSelectable(true);
 	_lstStores->setBackground(_window);
 

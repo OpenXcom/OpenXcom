@@ -38,6 +38,25 @@ InteractiveSurface::~InteractiveSurface()
 }
 
 /**
+ * Changes the visibility of the surface. A hidden surface
+ * isn't blitted nor receives events.
+ * @param visible New visibility.
+ */
+void InteractiveSurface::setVisible(bool visible)
+{
+	Surface::setVisible(visible);
+
+	// Unpress button if it was hidden
+	if (!_visible && _isPressed)
+	{
+		SDL_Event ev;
+		ev.button.button = SDL_BUTTON_LEFT;
+		_isPressed = false;
+		mouseRelease(&ev, 0, 0);
+	}
+}
+
+/**
  * Called whenever an SDL_event occurs, and processes it to
  * check if it's relevant to the surface and convert it into
  * a meaningful interaction like a "click", calling the respective
