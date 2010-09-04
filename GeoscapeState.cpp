@@ -625,7 +625,7 @@ Globe *GeoscapeState::getGlobe()
  * @param ev Pointer to the SDL_Event.
  * @param scale Scale of the screen.
  */
-#include <iostream>
+
 void GeoscapeState::globeClick(SDL_Event *ev, int scale)
 {
 	double lon, lat;
@@ -633,7 +633,7 @@ void GeoscapeState::globeClick(SDL_Event *ev, int scale)
 	
 	if (ev->button.button == SDL_BUTTON_LEFT)
 	{
-		cout << "lon: " << lon << " - lat: " << lat << endl;
+		
 	}
 	else if (ev->button.button == SDL_BUTTON_RIGHT)
 	{
