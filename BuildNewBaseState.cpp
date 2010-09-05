@@ -33,9 +33,6 @@
 #include "BaseNameState.h"
 #include "ConfirmNewBaseState.h"
 
-#define LONGITUDE_SPEED 0.25
-#define LATITUDE_SPEED 0.15
-
 /**
  * Initializes all the elements in the Build New Base screen.
  * @param game Pointer to the core game.
@@ -43,7 +40,7 @@
  * @param globe Pointer to the Geoscape globe.
  * @param first Is this the first base in the game?
  */
-BuildNewBaseState::BuildNewBaseState(Game *game, Base *base, Globe *globe, bool first) : State(game), _base(base), _globe(globe), _rotLon(0), _rotLat(0), _first(first)
+BuildNewBaseState::BuildNewBaseState(Game *game, Base *base, Globe *globe, bool first) : State(game), _base(base), _globe(globe), _first(first)
 {
 	_screen = false;
 
@@ -58,8 +55,6 @@ BuildNewBaseState::BuildNewBaseState(Game *game, Base *base, Globe *globe, bool 
 	_window = new Window(this, 256, 28, 0, 0);
 	_btnCancel = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 54, 12, 186, 8);
 	_txtTitle = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 200, 9, 8, 10);
-
-	_rotTimer = new Timer(50);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
@@ -104,8 +99,6 @@ BuildNewBaseState::BuildNewBaseState(Game *game, Base *base, Globe *globe, bool 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString(STR_SELECT_SITE_FOR_NEW_BASE));
 
-	_rotTimer->onTimer((StateHandler)&BuildNewBaseState::globeRotate);
-
 	if (_first)
 	{
 		_btnCancel->setVisible(false);
@@ -121,8 +114,7 @@ BuildNewBaseState::~BuildNewBaseState()
 }
 
 /**
- * Updates the timer display and resets the palette
- * since it's bound to change on other screens.
+ * Resets the palette since it's bound to change on other screens.
  */
 void BuildNewBaseState::init()
 {
@@ -136,8 +128,7 @@ void BuildNewBaseState::init()
 void BuildNewBaseState::think()
 {
 	State::think();
-
-	_rotTimer->think(this, 0);
+	_globe->think();
 }
 
 /**
@@ -149,16 +140,6 @@ void BuildNewBaseState::handle(SDL_Event *ev, int scale)
 {
 	State::handle(ev, scale);
 	_globe->handle(ev, scale, this);
-}
-
-/**
- * Rotates the globe by a set amount. Necessary
- * since the globe keeps rotating while the button
- * is pressed down.
- */
-void BuildNewBaseState::globeRotate()
-{
-	_globe->rotate(_rotLon, _rotLat);
 }
 
 /**
@@ -211,9 +192,7 @@ void BuildNewBaseState::globeClick(SDL_Event *ev, int scale)
  */
 void BuildNewBaseState::btnRotateLeftPress(SDL_Event *ev, int scale)
 {
-	_rotLon += LONGITUDE_SPEED;
-	_rotTimer->start();
-	globeRotate();
+	_globe->rotateLeft();
 }
 
 /**
@@ -223,8 +202,7 @@ void BuildNewBaseState::btnRotateLeftPress(SDL_Event *ev, int scale)
  */
 void BuildNewBaseState::btnRotateLeftRelease(SDL_Event *ev, int scale)
 {
-	_rotLon -= LONGITUDE_SPEED;
-	_rotTimer->stop();
+	_globe->rotateStop();
 }
 
 /**
@@ -234,9 +212,7 @@ void BuildNewBaseState::btnRotateLeftRelease(SDL_Event *ev, int scale)
  */
 void BuildNewBaseState::btnRotateRightPress(SDL_Event *ev, int scale)
 {
-	_rotLon += -LONGITUDE_SPEED;
-	_rotTimer->start();
-	globeRotate();
+	_globe->rotateRight();
 }
 
 /**
@@ -246,8 +222,7 @@ void BuildNewBaseState::btnRotateRightPress(SDL_Event *ev, int scale)
  */
 void BuildNewBaseState::btnRotateRightRelease(SDL_Event *ev, int scale)
 {
-	_rotLon -= -LONGITUDE_SPEED;
-	_rotTimer->stop();
+	_globe->rotateStop();
 }
 
 /**
@@ -257,9 +232,7 @@ void BuildNewBaseState::btnRotateRightRelease(SDL_Event *ev, int scale)
  */
 void BuildNewBaseState::btnRotateUpPress(SDL_Event *ev, int scale)
 {
-	_rotLat += LATITUDE_SPEED;
-	_rotTimer->start();
-	globeRotate();
+	_globe->rotateUp();
 }
 
 /**
@@ -269,8 +242,7 @@ void BuildNewBaseState::btnRotateUpPress(SDL_Event *ev, int scale)
  */
 void BuildNewBaseState::btnRotateUpRelease(SDL_Event *ev, int scale)
 {
-	_rotLat -= LATITUDE_SPEED;
-	_rotTimer->stop();
+	_globe->rotateStop();
 }
 
 /**
@@ -280,9 +252,7 @@ void BuildNewBaseState::btnRotateUpRelease(SDL_Event *ev, int scale)
  */
 void BuildNewBaseState::btnRotateDownPress(SDL_Event *ev, int scale)
 {
-	_rotLat += -LATITUDE_SPEED;
-	_rotTimer->start();
-	globeRotate();
+	_globe->rotateDown();
 }
 
 /**
@@ -292,8 +262,7 @@ void BuildNewBaseState::btnRotateDownPress(SDL_Event *ev, int scale)
  */
 void BuildNewBaseState::btnRotateDownRelease(SDL_Event *ev, int scale)
 {
-	_rotLat -= -LATITUDE_SPEED;
-	_rotTimer->stop();
+	_globe->rotateStop();
 }
 
 /**
@@ -303,7 +272,10 @@ void BuildNewBaseState::btnRotateDownRelease(SDL_Event *ev, int scale)
  */
 void BuildNewBaseState::btnZoomInClick(SDL_Event *ev, int scale)
 {
-	_globe->zoomIn();
+	if (ev->button.button == SDL_BUTTON_LEFT)
+		_globe->zoomIn();
+	else if (ev->button.button == SDL_BUTTON_RIGHT)
+		_globe->zoomMax();
 }
 
 /**
@@ -313,7 +285,10 @@ void BuildNewBaseState::btnZoomInClick(SDL_Event *ev, int scale)
  */
 void BuildNewBaseState::btnZoomOutClick(SDL_Event *ev, int scale)
 {
-	_globe->zoomOut();
+	if (ev->button.button == SDL_BUTTON_LEFT)
+		_globe->zoomOut();
+	else if (ev->button.button == SDL_BUTTON_RIGHT)
+		_globe->zoomMin();
 }
 
 /**

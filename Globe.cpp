@@ -43,6 +43,8 @@
 #define NUM_SEASHADES 72
 #define	QUAD_LONGITUDE 0.05
 #define QUAD_LATITUDE 0.2
+#define ROTATE_LONGITUDE 0.25
+#define ROTATE_LATITUDE 0.15
 
 /**
  * Sets up a globe with the specified size and position.
@@ -53,7 +55,7 @@
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Globe::Globe(int cenX, int cenY, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _radius(), _rotLon(0), _rotLat(0), _cenX(cenX), _cenY(cenY), _zoom(0), _res(0), _save(0), _blink(true), _detail(true), _ocean(), _cacheOcean(), _cacheLand()
+Globe::Globe(int cenX, int cenY, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _radius(), _cenLon(0.0), _cenLat(0.0), _rotLon(0.0), _rotLat(0.0), _cenX(cenX), _cenY(cenY), _zoom(0), _res(0), _save(0), _blink(true), _detail(true), _ocean(), _cacheOcean(), _cacheLand()
 {
 	_radius.push_back(90);
 	_radius.push_back(120);
@@ -65,9 +67,12 @@ Globe::Globe(int cenX, int cenY, int width, int height, int x, int y) : Interact
 	_countries = new Surface(width, height, x, y);
 	_markers = new Surface(width, height, x, y);
 
-	_timer = new Timer(100);
-	_timer->onTimer((SurfaceHandler)&Globe::blink);
-	_timer->start();
+	// Animation timers
+	_blinkTimer = new Timer(100);
+	_blinkTimer->onTimer((SurfaceHandler)&Globe::blink);
+	_blinkTimer->start();
+	_rotTimer = new Timer(50);
+	_rotTimer->onTimer((SurfaceHandler)&Globe::rotate);
 
 	// Ocean segments
 	for (double tmpLon = 0; tmpLon <= 2 * PI; tmpLon += QUAD_LONGITUDE)
@@ -79,7 +84,7 @@ Globe::Globe(int cenX, int cenY, int width, int height, int x, int y) : Interact
 
 			Polygon* p = new Polygon(4);
 
-			// Quad is front facing, calc coordinates
+			// Quad is front facing, calculate coordinates
 			for (int i = 0; i < 4; i++)
 			{
 				p->setLongitude(i, lon[i]);
@@ -227,8 +232,8 @@ Globe::~Globe()
 void Globe::polarToCart(double lon, double lat, Sint16 *x, Sint16 *y)
 {
 	// Orthographic projection
-	*x = _cenX + (int)floor(_radius[_zoom] * cos(lat) * sin(lon + _rotLon));
-	*y = _cenY + (int)floor(_radius[_zoom] * (cos(_rotLat) * sin(lat) + sin(_rotLat) * cos(lat) * cos(lon + _rotLon)));
+	*x = _cenX + (int)floor(_radius[_zoom] * cos(lat) * sin(lon + _cenLon));
+	*y = _cenY + (int)floor(_radius[_zoom] * (cos(_cenLat) * sin(lat) + sin(_cenLat) * cos(lat) * cos(lon + _cenLon)));
 }
 
 /**
@@ -248,8 +253,8 @@ void Globe::cartToPolar(Sint16 x, Sint16 y, double *lon, double *lat)
 	double rho = sqrt((double)(x*x + y*y));
 	double c = asin(rho / (_radius[_zoom]));
 
-	*lat = asin((y * sin(c) * cos(_rotLat)) / rho - cos(c) * sin(_rotLat));
-	*lon = atan2(x * sin(c), rho * cos(_rotLat) * cos(c) + y * sin(_rotLat) * sin(c)) - _rotLon;
+	*lat = asin((y * sin(c) * cos(_cenLat)) / rho - cos(c) * sin(_cenLat));
+	*lon = atan2(x * sin(c), rho * cos(_cenLat) * cos(c) + y * sin(_cenLat) * sin(c)) - _cenLon;
 
 	while (*lon < 0)
 		*lon += 2 * PI;
@@ -266,7 +271,7 @@ void Globe::cartToPolar(Sint16 x, Sint16 y, double *lon, double *lat)
  */
 bool Globe::pointBack(double lon, double lat)
 {
-	double c = cos(_rotLat) * cos(lat) * cos(lon + _rotLon) - sin(_rotLat) * sin(lat);
+	double c = cos(_cenLat) * cos(lat) * cos(lon + _cenLon) - sin(_cenLat) * sin(lat);
 	
 	return c < 0;
 }
@@ -389,15 +394,49 @@ void Globe::setSavedGame(SavedGame *save)
 }
 
 /**
- * Rotates the globe by a specified amount of degrees.
- * @param lon Rotation in longitude.
- * @param lat Rotation in latitude.
+ * Sets a leftwards rotation speed and starts the timer.
  */
-void Globe::rotate(double lon, double lat)
+void Globe::rotateLeft()
 {
-	_rotLon += lon;
-	_rotLat += lat;
-	cachePolygons();
+	_rotLon = ROTATE_LONGITUDE;
+	_rotTimer->start();
+}
+
+/**
+ * Sets a rightwards rotation speed and starts the timer.
+ */
+void Globe::rotateRight()
+{
+	_rotLon = -ROTATE_LONGITUDE;
+	_rotTimer->start();
+}
+
+/**
+ * Sets a upwards rotation speed and starts the timer.
+ */
+void Globe::rotateUp()
+{
+	_rotLat = ROTATE_LATITUDE;
+	_rotTimer->start();
+}
+
+/**
+ * Sets a downwards rotation speed and starts the timer.
+ */
+void Globe::rotateDown()
+{
+	_rotLat = -ROTATE_LATITUDE;
+	_rotTimer->start();
+}
+
+/**
+ * Resets the rotation speed and timer.
+ */
+void Globe::rotateStop()
+{
+	_rotLon = 0.0;
+	_rotLat = 0.0;
+	_rotTimer->stop();
 }
 
 /**
@@ -450,8 +489,8 @@ void Globe::zoomMax()
  */
 void Globe::center(double lon, double lat)
 {
-	_rotLon = -lon;
-	_rotLat = -lat;
+	_cenLon = -lon;
+	_cenLat = -lat;
 	cachePolygons();
 }
 
@@ -573,7 +612,8 @@ void Globe::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
  */
 void Globe::think()
 {
-	_timer->think(0, this);
+	_blinkTimer->think(0, this);
+	_rotTimer->think(0, this);
 }
 
 /**
@@ -599,6 +639,18 @@ void Globe::blink()
 	_mkAlienSite->offset(off);
 
 	drawMarkers();
+}
+
+/**
+ * Rotates the globe by a set amount. Necessary
+ * since the globe keeps rotating while a button
+ * is pressed down.
+ */
+void Globe::rotate()
+{
+	_cenLon += _rotLon;
+	_cenLat += _rotLat;
+	cachePolygons();
 }
 
 /**

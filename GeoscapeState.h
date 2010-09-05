@@ -41,12 +41,11 @@ private:
 	Surface *_bg;
 	Globe *_globe;
 	ImageButton *_btnIntercept, *_btnBases, *_btnGraphs, *_btnUfopaedia, *_btnOptions, *_btnFunding;
-	ImageButton *_timer;
+	ImageButton *_timeSpeed;
 	ImageButton *_btn5Secs, *_btn1Min, *_btn5Mins, *_btn30Mins, *_btn1Hour, *_btn1Day;
 	InteractiveSurface *_btnRotateLeft, *_btnRotateRight, *_btnRotateUp, *_btnRotateDown, *_btnZoomIn, *_btnZoomOut;
 	Text *_txtHour, *_txtHourSep, *_txtMin, *_txtMinSep, *_txtSec, *_txtWeekday, *_txtDay, *_txtMonth, *_txtYear;
-	Timer *_rotTimer, *_gameTimer;
-	double _rotLon, _rotLat;
+	Timer *_timer;
 	bool _pause;
 	vector<State*> _popups;
 public:
@@ -56,10 +55,8 @@ public:
 	~GeoscapeState();
 	/// Updates the palette and timer.
 	void init();
-	/// Runs the timers.
+	/// Runs the timer.
 	void think();
-	/// Rotates the globe.
-	void globeRotate();
 	/// Displays the game time/date.
 	void timeDisplay();
 	/// Advances the game timer.

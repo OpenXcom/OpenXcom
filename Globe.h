@@ -43,7 +43,7 @@ class Globe : public InteractiveSurface
 {
 private:
 	vector<double> _radius;
-	double _rotLon, _rotLat;
+	double _cenLon, _cenLat, _rotLon, _rotLat;
 	int _cenX, _cenY;
 	unsigned int _zoom;
 	SurfaceSet *_texture[NUM_SHADES];
@@ -51,7 +51,7 @@ private:
 	SavedGame *_save;
 	Surface *_markers, *_countries;
 	bool _blink, _detail;
-	Timer *_timer;
+	Timer *_blinkTimer, *_rotTimer;
 	vector<Polygon*> _ocean, _cacheOcean, _cacheLand;
 	Surface *_mkXcomBase, *_mkAlienBase, *_mkCraft, *_mkWaypoint, *_mkCity;
 	Surface *_mkFlyingUfo, *_mkLandedUfo, *_mkCrashedUfo, *_mkAlienSite;
@@ -77,8 +77,16 @@ public:
 	void setResourcePack(ResourcePack *res);
 	/// Sets the saved game to draw markers from.
 	void setSavedGame(SavedGame *save);
-	/// Rotates the globe a set amount.
-	void rotate(double lon, double lat);
+	/// Starts rotating the globe left.
+	void rotateLeft();
+	/// Starts rotating the globe right.
+	void rotateRight();
+	/// Starts rotating the globe up.
+	void rotateUp();
+	/// Starts rotating the globe down.
+	void rotateDown();
+	/// Stops rotating the globe.
+	void rotateStop();
 	/// Zooms the globe in.
 	void zoomIn();
 	/// Zooms the globe out.
@@ -101,6 +109,8 @@ public:
 	void think();
 	/// Blinks the markers.
 	void blink();
+	/// Rotates the globe.
+	void rotate();
 	/// Draws the whole globe.
 	void draw();
 	/// Draws the ocean of the globe.

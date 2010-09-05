@@ -39,8 +39,6 @@ private:
 	Base *_base;
 	Globe *_globe;
 	InteractiveSurface *_btnRotateLeft, *_btnRotateRight, *_btnRotateUp, *_btnRotateDown, *_btnZoomIn, *_btnZoomOut;
-	Timer *_rotTimer;
-	double _rotLon, _rotLat;
 	Window *_window;
 	Text *_txtTitle;
 	TextButton *_btnCancel;
@@ -50,14 +48,12 @@ public:
 	BuildNewBaseState(Game *game, Base *base, Globe *globe, bool first);
 	/// Cleans up the Build New Base state.
 	~BuildNewBaseState();
-	/// Updates the palette and timer.
+	/// Updates the palette.
 	void init();
 	/// Runs the timer.
 	void think();
 	/// Handles events.
 	void handle(SDL_Event *ev, int scale);
-	/// Rotates the globe.
-	void globeRotate();
 	/// Handler for clicking the globe.
 	void globeClick(SDL_Event *ev, int scale);
 	/// Handler for pressing the Rotate Left arrow.

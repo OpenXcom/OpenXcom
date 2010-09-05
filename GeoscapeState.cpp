@@ -57,14 +57,12 @@
 using namespace std;
 
 #define PI 3.141592653589793238461
-#define LONGITUDE_SPEED 0.25
-#define LATITUDE_SPEED 0.15
 
 /**
  * Initializes all the elements in the Geoscape screen.
  * @param game Pointer to the core game.
  */
-GeoscapeState::GeoscapeState(Game *game) : State(game), _rotLon(0), _rotLat(0), _pause(false), _popups()
+GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _popups()
 {
 	// Create objects
 	_bg = new Surface(320, 200, 0, 0);
@@ -101,10 +99,8 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _rotLon(0), _rotLat(0), 
 	_txtMonth = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 29, 8, 288, 94);
 	_txtYear = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 59, 8, 259, 101);
 
-	_timer = _btn5Secs;
-
-	_rotTimer = new Timer(50);
-	_gameTimer = new Timer(100);
+	_timeSpeed = _btn5Secs;
+	_timer = new Timer(100);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
@@ -186,27 +182,27 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _rotLon(0), _rotLat(0), 
 
 	_btn5Secs->copy(_bg);
 	_btn5Secs->setColor(Palette::blockOffset(15)+8);
-	_btn5Secs->setGroup(&_timer);
+	_btn5Secs->setGroup(&_timeSpeed);
 
 	_btn1Min->copy(_bg);
 	_btn1Min->setColor(Palette::blockOffset(15)+8);
-	_btn1Min->setGroup(&_timer);
+	_btn1Min->setGroup(&_timeSpeed);
 
 	_btn5Mins->copy(_bg);
 	_btn5Mins->setColor(Palette::blockOffset(15)+8);
-	_btn5Mins->setGroup(&_timer);
+	_btn5Mins->setGroup(&_timeSpeed);
 
 	_btn30Mins->copy(_bg);
 	_btn30Mins->setColor(Palette::blockOffset(15)+8);
-	_btn30Mins->setGroup(&_timer);
+	_btn30Mins->setGroup(&_timeSpeed);
 
 	_btn1Hour->copy(_bg);
 	_btn1Hour->setColor(Palette::blockOffset(15)+8);
-	_btn1Hour->setGroup(&_timer);
+	_btn1Hour->setGroup(&_timeSpeed);
 
 	_btn1Day->copy(_bg);
 	_btn1Day->setColor(Palette::blockOffset(15)+8);
-	_btn1Day->setGroup(&_timer);
+	_btn1Day->setGroup(&_timeSpeed);
 	
 	_btnRotateLeft->onMousePress((EventHandler)&GeoscapeState::btnRotateLeftPress);
 	_btnRotateLeft->onMouseRelease((EventHandler)&GeoscapeState::btnRotateLeftRelease);
@@ -265,10 +261,8 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _rotLon(0), _rotLat(0), 
 	_txtYear->setText("");
 	_txtYear->setAlign(ALIGN_CENTER);
 
-	_rotTimer->onTimer((StateHandler)&GeoscapeState::globeRotate);
-
-	_gameTimer->onTimer((StateHandler)&GeoscapeState::timeAdvance);
-	_gameTimer->start();
+	_timer->onTimer((StateHandler)&GeoscapeState::timeAdvance);
+	_timer->start();
 
 	// Set music
 	stringstream ss;
@@ -302,7 +296,7 @@ void GeoscapeState::init()
 }
 
 /**
- * Runs the game timer and globe rotation timer.
+ * Runs the game timer and handles popups.
  */
 void GeoscapeState::think()
 {
@@ -311,8 +305,7 @@ void GeoscapeState::think()
 	if (_popups.empty())
 	{
 		// Handle timers
-		_rotTimer->think(this, 0);
-		_gameTimer->think(this, 0);
+		_timer->think(this, 0);
 	}
 	else
 	{
@@ -321,16 +314,6 @@ void GeoscapeState::think()
 		_popups.erase(_popups.begin());
 	}
 	
-}
-
-/**
- * Rotates the globe by a set amount. Necessary
- * since the globe keeps rotating while the button
- * is pressed down.
- */
-void GeoscapeState::globeRotate()
-{
-	_globe->rotate(_rotLon, _rotLat);
 }
 
 /**
@@ -380,17 +363,17 @@ void GeoscapeState::timeDisplay()
 void GeoscapeState::timeAdvance()
 {
 	int timeSpan = 0;
-	if (_timer == _btn5Secs)
+	if (_timeSpeed == _btn5Secs)
 		timeSpan = 1;
-	else if (_timer == _btn1Min)
+	else if (_timeSpeed == _btn1Min)
 		timeSpan = 12;
-	else if (_timer == _btn5Mins)
+	else if (_timeSpeed == _btn5Mins)
 		timeSpan = 12 * 5;
-	else if (_timer == _btn30Mins)
+	else if (_timeSpeed == _btn30Mins)
 		timeSpan = 12 * 5 * 6;
-	else if (_timer == _btn1Hour)
+	else if (_timeSpeed == _btn1Hour)
 		timeSpan = 12 * 5 * 6 * 2;
-	else if (_timer == _btn1Day)
+	else if (_timeSpeed == _btn1Day)
 		timeSpan = 12 * 5 * 6 * 2 * 24;
 		
 	for (int i = 0; i < timeSpan && !_pause; i++)
@@ -722,9 +705,7 @@ void GeoscapeState::btnFundingClick(SDL_Event *ev, int scale)
  */
 void GeoscapeState::btnRotateLeftPress(SDL_Event *ev, int scale)
 {
-	_rotLon += LONGITUDE_SPEED;
-	_rotTimer->start();
-	globeRotate();
+	_globe->rotateLeft();
 }
 
 /**
@@ -734,8 +715,7 @@ void GeoscapeState::btnRotateLeftPress(SDL_Event *ev, int scale)
  */
 void GeoscapeState::btnRotateLeftRelease(SDL_Event *ev, int scale)
 {
-	_rotLon -= LONGITUDE_SPEED;
-	_rotTimer->stop();
+	_globe->rotateStop();
 }
 
 /**
@@ -745,9 +725,7 @@ void GeoscapeState::btnRotateLeftRelease(SDL_Event *ev, int scale)
  */
 void GeoscapeState::btnRotateRightPress(SDL_Event *ev, int scale)
 {
-	_rotLon += -LONGITUDE_SPEED;
-	_rotTimer->start();
-	globeRotate();
+	_globe->rotateRight();
 }
 
 /**
@@ -757,8 +735,7 @@ void GeoscapeState::btnRotateRightPress(SDL_Event *ev, int scale)
  */
 void GeoscapeState::btnRotateRightRelease(SDL_Event *ev, int scale)
 {
-	_rotLon -= -LONGITUDE_SPEED;
-	_rotTimer->stop();
+	_globe->rotateStop();
 }
 
 /**
@@ -768,9 +745,7 @@ void GeoscapeState::btnRotateRightRelease(SDL_Event *ev, int scale)
  */
 void GeoscapeState::btnRotateUpPress(SDL_Event *ev, int scale)
 {
-	_rotLat += LATITUDE_SPEED;
-	_rotTimer->start();
-	globeRotate();
+	_globe->rotateUp();
 }
 
 /**
@@ -780,8 +755,7 @@ void GeoscapeState::btnRotateUpPress(SDL_Event *ev, int scale)
  */
 void GeoscapeState::btnRotateUpRelease(SDL_Event *ev, int scale)
 {
-	_rotLat -= LATITUDE_SPEED;
-	_rotTimer->stop();
+	_globe->rotateStop();
 }
 
 /**
@@ -791,9 +765,7 @@ void GeoscapeState::btnRotateUpRelease(SDL_Event *ev, int scale)
  */
 void GeoscapeState::btnRotateDownPress(SDL_Event *ev, int scale)
 {
-	_rotLat += -LATITUDE_SPEED;
-	_rotTimer->start();
-	globeRotate();
+	_globe->rotateDown();
 }
 
 /**
@@ -803,8 +775,7 @@ void GeoscapeState::btnRotateDownPress(SDL_Event *ev, int scale)
  */
 void GeoscapeState::btnRotateDownRelease(SDL_Event *ev, int scale)
 {
-	_rotLat -= -LATITUDE_SPEED;
-	_rotTimer->stop();
+	_globe->rotateStop();
 }
 
 /**
