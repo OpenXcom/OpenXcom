@@ -106,12 +106,6 @@ Uint8 Window::getColor()
  */
 void Window::think()
 {
-	if (_popupStep == 0)
-	{
-		int sound = RNG::generate(0, 2);
-		if (soundPopup[sound] != 0)
-			soundPopup[sound]->play();
-	}
 	_timer->think(0, this);
 }
 
@@ -120,6 +114,12 @@ void Window::think()
  */
 void Window::popup()
 {
+	if (_popupStep == 0.0)
+	{
+		int sound = RNG::generate(0, 2);
+		if (soundPopup[sound] != 0)
+			soundPopup[sound]->play();
+	}
 	if (_popupStep < 1.0)
 	{
 		_popupStep += POPUP_SPEED;

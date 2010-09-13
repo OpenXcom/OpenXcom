@@ -64,8 +64,8 @@ CraftInfoState::CraftInfoState(Game *game, Base *base, unsigned int craft) : Sta
 	_txtW2Ammo = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 60, 9, 204, 64);
 	_txtW2Max = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 60, 9, 204, 72);
 	_sprite = new Surface(32, 32, 144, 52);
-	_w1 = new Surface(15, 17, 121, 63);
-	_w2 = new Surface(15, 17, 184, 63);
+	_weapon1 = new Surface(15, 17, 121, 63);
+	_weapon2 = new Surface(15, 17, 184, 63);
 	_crew = new Surface(210, 16, 95, 96);
 	_equip = new Surface(210, 16, 95, 121);
 
@@ -89,8 +89,8 @@ CraftInfoState::CraftInfoState(Game *game, Base *base, unsigned int craft) : Sta
 	add(_txtW2Ammo);
 	add(_txtW2Max);
 	add(_sprite);
-	add(_w1);
-	add(_w2);
+	add(_weapon1);
+	add(_weapon2);
 	add(_crew);
 	add(_equip);
 
@@ -162,9 +162,9 @@ void CraftInfoState::init()
 	_txtCraft->setText(ss.str());
 
 	SurfaceSet *texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
-	texture->getFrame(c->getRules()->getSprite())->setX(0);
-	texture->getFrame(c->getRules()->getSprite())->setY(0);
-	texture->getFrame(c->getRules()->getSprite())->blit(_sprite);
+	texture->getFrame(c->getRules()->getSprite() + 33)->setX(0);
+	texture->getFrame(c->getRules()->getSprite() + 33)->setY(0);
+	texture->getFrame(c->getRules()->getSprite() + 33)->blit(_sprite);
 
 	stringstream ss2;
 	ss2 << _game->getResourcePack()->getLanguage()->getString(STR_DAMAGE) << c->getDamagePercentage() << "%";
@@ -179,18 +179,21 @@ void CraftInfoState::init()
 		_crew->clear();
 		_equip->clear();
 
-		texture->getFrame(38)->setY(0);
+		Surface *frame1 = texture->getFrame(38);
+		frame1->setY(0);
 		for (int i = 0, x = 0; i < c->getNumSoldiers(_base->getSoldiers()); i++, x += 10)
 		{
-			texture->getFrame(38)->setX(x);
-			texture->getFrame(38)->blit(_crew);
+			frame1->setX(x);
+			frame1->blit(_crew);
 		}
 
-		/*
-		texture->getFrame(39)->setX(0);
-		texture->getFrame(39)->setY(0);
-		texture->getFrame(39)->blit(_equip);
-		*/
+		Surface *frame2 = texture->getFrame(39);
+		frame2->setY(0);
+		for (int i = 0, x = 0; i < c->getNumEquipment(); i += 4, x += 10)
+		{
+			frame2->setX(x);
+			frame2->blit(_equip);
+		}
 	}
 	else
 	{
@@ -207,9 +210,10 @@ void CraftInfoState::init()
 
 		if (w1 != 0)
 		{
-			texture->getFrame(w1->getRules()->getSprite())->setX(0);
-			texture->getFrame(w1->getRules()->getSprite())->setY(0);
-			texture->getFrame(w1->getRules()->getSprite())->blit(_w1);
+			Surface *frame = texture->getFrame(w1->getRules()->getSprite() + 48);
+			frame->setX(0);
+			frame->setY(0);
+			frame->blit(_weapon1);
 
 			_txtW1Name->setText(_game->getResourcePack()->getLanguage()->getString(w1->getRules()->getType()));
 
@@ -223,7 +227,7 @@ void CraftInfoState::init()
 		}
 		else
 		{
-			_w1->clear();
+			_weapon1->clear();
 			_txtW1Name->setText("");
 			_txtW1Ammo->setText("");
 			_txtW1Max->setText("");
@@ -231,7 +235,7 @@ void CraftInfoState::init()
 	}
 	else
 	{
-		_w1->setVisible(false);
+		_weapon1->setVisible(false);
 		_btnW1->setVisible(false);
 		_txtW1Name->setVisible(false);
 		_txtW1Ammo->setVisible(false);
@@ -244,9 +248,10 @@ void CraftInfoState::init()
 
 		if (w2 != 0)
 		{
-			texture->getFrame(w2->getRules()->getSprite())->setX(0);
-			texture->getFrame(w2->getRules()->getSprite())->setY(0);
-			texture->getFrame(w2->getRules()->getSprite())->blit(_w2);
+			Surface *frame = texture->getFrame(w2->getRules()->getSprite() + 48);
+			frame->setX(0);
+			frame->setY(0);
+			frame->blit(_weapon2);
 
 			_txtW2Name->setText(_game->getResourcePack()->getLanguage()->getString(w2->getRules()->getType()));
 
@@ -260,7 +265,7 @@ void CraftInfoState::init()
 		}
 		else
 		{
-			_w2->clear();
+			_weapon2->clear();
 			_txtW2Name->setText("");
 			_txtW2Ammo->setText("");
 			_txtW2Max->setText("");
@@ -268,7 +273,7 @@ void CraftInfoState::init()
 	}
 	else
 	{
-		_w2->setVisible(false);
+		_weapon2->setVisible(false);
 		_btnW2->setVisible(false);
 		_txtW2Name->setVisible(false);
 		_txtW2Ammo->setVisible(false);

@@ -17,7 +17,6 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "XcomResourcePack.h"
-#include <iostream>
 #include <sstream>
 #include <sys/stat.h>
 #include "Palette.h"
@@ -40,8 +39,6 @@
  */
 XcomResourcePack::XcomResourcePack(string folder) : ResourcePack(folder)
 {
-	//cout << "Loading resources..." << endl;
-
 	// Load palettes
 	for (int i = 0; i < 5; i++)
 	{
@@ -50,7 +47,6 @@ XcomResourcePack::XcomResourcePack(string folder) : ResourcePack(folder)
 		s2 << "PALETTES.DAT_" << i;
 		_palettes[s2.str()] = new Palette();
 		_palettes[s2.str()]->loadDat(insensitive(s1.str()), 256, Palette::palOffset(i));
-		//cout << s2.str() << endl;
 	}
 
 	stringstream s1, s2;
@@ -58,7 +54,6 @@ XcomResourcePack::XcomResourcePack(string folder) : ResourcePack(folder)
 	s2 << "BACKPALS.DAT";
 	_palettes[s2.str()] = new Palette();
 	_palettes[s2.str()]->loadDat(insensitive(s1.str()), 128);
-	//cout << s2.str() << endl;
 	
 	// Load fonts
 	string font[] = {"BIGLETS.DAT",
@@ -74,7 +69,6 @@ XcomResourcePack::XcomResourcePack(string folder) : ResourcePack(folder)
 			_fonts[font[i]] = new Font(8, 9, 173, -1);
 		_fonts[font[i]]->getSurface()->loadScr(insensitive(s.str()));
 		_fonts[font[i]]->load();
-		//cout << font[i] << endl;
 	}
 		
 	// Load languages
@@ -88,7 +82,6 @@ XcomResourcePack::XcomResourcePack(string folder) : ResourcePack(folder)
 		s << folder << "GEODATA/" << lang[i];
 		_languages[lang[i]] = new Language();
 		_languages[lang[i]]->loadDat(insensitive(s.str()));
-		//cout << lang[i] << endl;
 	}
 
 	_currentLang = _languages["ENGLISH.DAT"];
@@ -104,7 +97,13 @@ XcomResourcePack::XcomResourcePack(string folder) : ResourcePack(folder)
 		s << folder << "GEODATA/" << dats[i];
 		_surfaces[dats[i]] = new Surface(64, 154);
 		_surfaces[dats[i]]->loadScr(insensitive(s.str()));
-		//cout << dats[i] << endl;
+	}
+
+	{
+		stringstream s;
+		s << folder << "GEODATA/" << "INTERWIN.DAT";
+		_surfaces["INTERWIN.DAT"] = new Surface(160, 556);
+		_surfaces["INTERWIN.DAT"]->loadScr(insensitive(s.str()));
 	}
 
 	string scrs[] = {"BACK01.SCR",
@@ -133,7 +132,6 @@ XcomResourcePack::XcomResourcePack(string folder) : ResourcePack(folder)
 		s << folder << "GEOGRAPH/" << scrs[i];
 		_surfaces[scrs[i]] = new Surface(320, 200);
 		_surfaces[scrs[i]]->loadScr(insensitive(s.str()));
-		//cout << scrs[i] << endl;
 	}
 
 	string spks[] = {"UP001.SPK",
@@ -186,37 +184,38 @@ XcomResourcePack::XcomResourcePack(string folder) : ResourcePack(folder)
 		s << folder << "GEOGRAPH/" << spks[i];
 		_surfaces[spks[i]] = new Surface(320, 200);
 		_surfaces[spks[i]]->loadSpk(insensitive(s.str()));
-		//cout << spks[i] << endl;
 	}
 
 	// Load surface sets
-	string pcks[] = {"BASEBITS.PCK",
+	string sets[] = {"BASEBITS.PCK",
 					 "INTICON.PCK",
 					 "TEXTURE.DAT"};
 
 	for (int i = 0; i < 3; i++)
 	{
 		stringstream s;
-		s << folder << "GEOGRAPH/" << pcks[i];
-		string ext = pcks[i].substr(pcks[i].length()-3, pcks[i].length());
+		s << folder << "GEOGRAPH/" << sets[i];
+
+		string ext = sets[i].substr(sets[i].length()-3, sets[i].length());
 		if (ext == "PCK")
 		{
-			_sets[pcks[i]] = new SurfaceSet(32, 40);
-			_sets[pcks[i]]->loadPck(insensitive(s.str()));
+			string tab = sets[i].substr(0, sets[i].length()-4) + ".TAB";
+			stringstream s2;
+			s2 << folder << "GEOGRAPH/" << tab;
+			_sets[sets[i]] = new SurfaceSet(32, 40);
+			_sets[sets[i]]->loadPck(insensitive(s.str()), insensitive(s2.str()));
 		}
 		else
 		{
-			_sets[pcks[i]] = new SurfaceSet(32, 32);
-			_sets[pcks[i]]->loadDat(insensitive(s.str()));
+			_sets[sets[i]] = new SurfaceSet(32, 32);
+			_sets[sets[i]]->loadDat(insensitive(s.str()));
 		}
-		//cout << pcks[i] << endl;
 	}
 
 	// Load polygons
 	stringstream s;
 	s << folder << "GEODATA/" << "WORLD.DAT";
 	Globe::loadDat(insensitive(s.str()), &_polygons);
-	//cout << "WORLD.DAT" << endl;
 
 	// Load polylines (extracted from game)
 	// -10 = Start of line
@@ -281,12 +280,23 @@ XcomResourcePack::XcomResourcePack(string folder) : ResourcePack(folder)
 	_polylines.push_back(l);
 
 	// Load musics
-	string mus[] = {"GMSTORY",
+	string mus[] = {"GMDEFEND",
+					"GMENBASE",
 					"GMGEO1",
-					"GMGEO2"};
+					"GMGEO2",
+					"GMINTER",
+					"GMINTRO1",
+					"GMINTRO2",
+					"GMINTRO3",
+					"GMLOSE",
+					"GMMARS",
+					"GMNEWMAR",
+					"GMSTORY",
+					"GMTACTIC",
+					"GMWIN"};
 	string exts[] = {"OGG", "MP3", "MID"};
 
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 14; i++)
 	{
 		_musics[mus[i]] = new Music();
 		for (int j = 0; j < 3; j++)
@@ -300,7 +310,6 @@ XcomResourcePack::XcomResourcePack(string folder) : ResourcePack(folder)
 				break;
 			}
 		}
-		//cout << mus[i] << endl;
 	}
 
 	// Load sounds
@@ -345,7 +354,6 @@ XcomResourcePack::XcomResourcePack(string folder) : ResourcePack(folder)
 			s << folder << "SOUND/" << cats[i];
 			_sounds[catsId[i]] = new SoundSet();
 			_sounds[catsId[i]]->loadCat(insensitive(s.str()), wav);
-			//cout << cats[i] << endl;
 		}
 	}
 
@@ -353,7 +361,6 @@ XcomResourcePack::XcomResourcePack(string folder) : ResourcePack(folder)
 	Window::soundPopup[0] = _sounds["GEO.CAT"]->getSound(1);
 	Window::soundPopup[1] = _sounds["GEO.CAT"]->getSound(2);
 	Window::soundPopup[2] = _sounds["GEO.CAT"]->getSound(3);
-	
 }
 
 /**

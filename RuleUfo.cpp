@@ -63,6 +63,16 @@ void RuleUfo::setSize(LangString size)
 }
 
 /**
+ * Returns the radius of this type of UFO
+ * on the dogfighting window.
+ * @return Radius in pixels.
+ */
+int RuleUfo::getRadius()
+{
+	return _size - STR_VERY_SMALL + 3;
+}
+
+/**
  * Returns the maximum damage (damage the UFO can take)
  * of the UFO.
  * @return Damage.

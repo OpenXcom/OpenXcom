@@ -46,7 +46,7 @@ public:
 	/// Cleans up the surface set.
 	~SurfaceSet();
 	/// Loads an X-Com set of PCK/TAB image files.
-	void loadPck(string filename);
+	void loadPck(string pck, string tab = "");
 	/// Loads an X-Com DAT image file.
 	void loadDat(string filename);
 	/// Gets a particular frame from the set.

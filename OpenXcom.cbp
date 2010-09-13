@@ -183,6 +183,12 @@
 		<Unit filename="DismantleFacilityState.h">
 			<Option virtualFolder="States\" />
 		</Unit>
+		<Unit filename="DogfightState.cpp">
+			<Option virtualFolder="States\" />
+		</Unit>
+		<Unit filename="DogfightState.h">
+			<Option virtualFolder="States\" />
+		</Unit>
 		<Unit filename="Font.cpp">
 			<Option virtualFolder="Engine\" />
 		</Unit>
@@ -432,6 +438,12 @@
 		<Unit filename="Screen.h">
 			<Option virtualFolder="Engine\" />
 		</Unit>
+		<Unit filename="SelectDestinationState.cpp">
+			<Option virtualFolder="States\" />
+		</Unit>
+		<Unit filename="SelectDestinationState.h">
+			<Option virtualFolder="States\" />
+		</Unit>
 		<Unit filename="SellState.cpp">
 			<Option virtualFolder="States\" />
 		</Unit>
@@ -503,6 +515,12 @@
 		</Unit>
 		<Unit filename="SurfaceSet.h">
 			<Option virtualFolder="Engine\" />
+		</Unit>
+		<Unit filename="Target.cpp">
+			<Option virtualFolder="Xcom\Game\" />
+		</Unit>
+		<Unit filename="Target.h">
+			<Option virtualFolder="Xcom\Game\" />
 		</Unit>
 		<Unit filename="TestState.cpp">
 			<Option virtualFolder="States\" />

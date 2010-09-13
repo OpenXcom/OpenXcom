@@ -320,9 +320,10 @@ void BaseView::draw()
 	{
 		for (int y = 0; y < 8; y++)
 		{
-			_texture->getFrame(0)->setX(x * GRID_SIZE);
-			_texture->getFrame(0)->setY(y * GRID_SIZE);
-			_texture->getFrame(0)->blit(this);
+			Surface *frame = _texture->getFrame(0);
+			frame->setX(x * GRID_SIZE);
+			frame->setY(y * GRID_SIZE);
+			frame->blit(this);
 		}
 	}
 
@@ -365,9 +366,10 @@ void BaseView::draw()
 				{
 					if (_facilities[x][y] != 0 && _facilities[x][y]->getBuildTime() == 0)
 					{
-						_texture->getFrame(7)->setX(x * GRID_SIZE - GRID_SIZE / 2);
-						_texture->getFrame(7)->setY(y * GRID_SIZE);
-						_texture->getFrame(7)->blit(this);
+						Surface *frame = _texture->getFrame(7);
+						frame->setX(x * GRID_SIZE - GRID_SIZE / 2);
+						frame->setY(y * GRID_SIZE);
+						frame->blit(this);
 					}
 				}
 			}
@@ -380,9 +382,10 @@ void BaseView::draw()
 				{
 					if (_facilities[x][y] != 0 && _facilities[x][y]->getBuildTime() == 0)
 					{
-						_texture->getFrame(8)->setX(x * GRID_SIZE);
-						_texture->getFrame(8)->setY(y * GRID_SIZE - GRID_SIZE / 2);
-						_texture->getFrame(8)->blit(this);
+						Surface *frame = _texture->getFrame(8);
+						frame->setX(x * GRID_SIZE);
+						frame->setY(y * GRID_SIZE - GRID_SIZE / 2);
+						frame->blit(this);
 					}
 				}
 			}
@@ -399,9 +402,10 @@ void BaseView::draw()
 			{
 				if ((*i)->getRules()->getSize() == 1)
 				{
-					_texture->getFrame((*i)->getRules()->getSpriteFacility() + num)->setX(x * GRID_SIZE);
-					_texture->getFrame((*i)->getRules()->getSpriteFacility() + num)->setY(y * GRID_SIZE);
-					_texture->getFrame((*i)->getRules()->getSpriteFacility() + num)->blit(this);
+					Surface *frame = _texture->getFrame((*i)->getRules()->getSpriteFacility() + num);
+					frame->setX(x * GRID_SIZE);
+					frame->setY(y * GRID_SIZE);
+					frame->blit(this);
 				}
 
 				num++;
@@ -411,9 +415,10 @@ void BaseView::draw()
 		// Draw crafts
 		if ((*i)->getBuildTime() == 0 && (*i)->getRules()->getCrafts() > 0 && craft != _base->getCrafts()->end())
 		{
-			_texture->getFrame((*craft)->getRules()->getSprite())->setX((*i)->getX() * GRID_SIZE + ((*i)->getRules()->getSize() - 1) * GRID_SIZE / 2);
-			_texture->getFrame((*craft)->getRules()->getSprite())->setY((*i)->getY() * GRID_SIZE + ((*i)->getRules()->getSize() - 1) * GRID_SIZE / 2);
-			_texture->getFrame((*craft)->getRules()->getSprite())->blit(this);
+			Surface *frame = _texture->getFrame((*craft)->getRules()->getSprite() + 33);
+			frame->setX((*i)->getX() * GRID_SIZE + ((*i)->getRules()->getSize() - 1) * GRID_SIZE / 2);
+			frame->setY((*i)->getY() * GRID_SIZE + ((*i)->getRules()->getSize() - 1) * GRID_SIZE / 2);
+			frame->blit(this);
 			craft++;
 		}
 

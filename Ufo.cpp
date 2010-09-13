@@ -17,8 +17,8 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Ufo.h"
-#include "RuleUfo.h"
 #include <cmath>
+#include "RuleUfo.h"
 
 #define SPEED_FACTOR 0.0000001
 
@@ -26,7 +26,7 @@
  * Initializes a UFO of the specified type.
  * @param rules Pointer to ruleset.
  */
-Ufo::Ufo(RuleUfo *rules) : _rules(rules), _lat(0.0), _lon(0.0), _targetLat(0.0), _targetLon(0.0), _id(0), _damage(0), _speed(0), _altitude(0), _detected(false)
+Ufo::Ufo(RuleUfo *rules) : Target(), _rules(rules), _targetLat(0.0), _targetLon(0.0), _speedLon(0.0), _speedLat(0.0), _id(0), _damage(0), _speed(0), _altitude(0), _direction(STR_NORTH), _detected(false)
 {
 	setSpeed(_rules->getMaxSpeed());
 }
@@ -64,42 +64,6 @@ int Ufo::getId()
 void Ufo::setId(int id)
 {
 	_id = id;
-}
-
-/**
- * Returns the latitude coordinate of the UFO.
- * @return Latitude in radian.
- */
-double Ufo::getLatitude()
-{
-	return _lat;
-}
-
-/**
- * Changes the latitude coordinate of the UFO.
- * @param lat Latitude in radian.
- */
-void Ufo::setLatitude(double lat)
-{
-	_lat = lat;
-}
-
-/**
- * Returns the longitude coordinate of the UFO.
- * @return Longitude in radian.
- */
-double Ufo::getLongitude()
-{
-	return _lon;
-}
-
-/**
- * Changes the longitude coordinate of the UFO.
- * @param lon Longitude in radian.
- */
-void Ufo::setLongitude(double lon)
-{
-	_lon = lon;
 }
 
 /**

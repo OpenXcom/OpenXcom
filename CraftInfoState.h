@@ -41,7 +41,7 @@ private:
 	Window *_window;
 	Text *_txtCraft, *_txtDamage, *_txtFuel;
 	Text *_txtW1Name, *_txtW1Ammo, *_txtW1Max, *_txtW2Name, *_txtW2Ammo, *_txtW2Max;
-	Surface *_sprite, *_w1, *_w2, *_crew, *_equip;
+	Surface *_sprite, *_weapon1, *_weapon2, *_crew, *_equip;
 public:
 	/// Creates the Craft Info state.
 	CraftInfoState(Game *game, Base *base, unsigned int craft);

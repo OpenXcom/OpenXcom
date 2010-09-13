@@ -25,6 +25,8 @@ class TextButton;
 class Window;
 class Text;
 class TextList;
+class Base;
+class Globe;
 
 /**
  * Intercept window that lets the player launch
@@ -37,13 +39,17 @@ private:
 	Window *_window;
 	Text *_txtTitle, *_txtCraft, *_txtStatus, *_txtBase, *_txtWeapons;
 	TextList *_lstCrafts;
+	Base *_base;
+	Globe *_globe;
 public:
 	/// Creates the Intercept state.
-	InterceptState(Game *game);
+	InterceptState(Game *game, Globe *globe, Base *base = 0);
 	/// Cleans up the Intercept state.
 	~InterceptState();
 	/// Handler for clicking the Cancel button.
 	void btnCancelClick(SDL_Event *ev, int scale);
+	/// Handler for clicking the Crafts list.
+	void lstCraftsClick(SDL_Event *ev, int scale);
 };
 
 #endif

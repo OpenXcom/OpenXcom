@@ -19,6 +19,7 @@
 #ifndef OPENXCOM__BASE_H
 #define OPENXCOM__BASE_H
 
+#include "Target.h"
 #include <string>
 #include <vector>
 #include <map>
@@ -35,10 +36,9 @@ class Item;
  * Represents a player base on the globe.
  * Bases can contain facilities, personnel, crafts and equipment.
  */
-class Base
+class Base : public Target
 {
 private:
-	double _lat, _lon;
 	string _name;
 	vector<BaseFacility*> _facilities;
 	vector<Soldier*> _soldiers;
@@ -54,14 +54,6 @@ public:
 	string getName();
 	/// Sets the base's name.
 	void setName(string name);
-	/// Gets the base's latitude.
-	double getLatitude();
-	/// Sets the base's latitude.
-	void setLatitude(double lat);
-	/// Gets the base's longitude.
-	double getLongitude();
-	/// Sets the base's longitude.
-	void setLongitude(double lon);
 	/// Gets the base's facilities.
 	vector<BaseFacility*> *getFacilities();
 	/// Gets the base's soldiers.

@@ -61,15 +61,13 @@ SurfaceSet::~SurfaceSet()
  * into the surface. The PCK file contains an RLE compressed
  * image, while the TAB file contains the offsets to each
  * frame in the image.
- * @param filename Filename of the PCK image.
+ * @param pck Filename of the PCK image.
+ * @param tab Filename of the TAB offsets.
  * @sa http://www.ufopaedia.org/index.php?title=Image_Formats#PCK
  */
-void SurfaceSet::loadPck(string filename)
+void SurfaceSet::loadPck(string pck, string tab)
 {
 	int nframes = 0;
-
-	string pck = filename.substr(0, filename.length()-4) + ".PCK";
-	string tab = filename.substr(0, filename.length()-4) + ".TAB";
 
 	// Load TAB and get image offsets
 	ifstream offsetFile (tab.c_str(), ios::in | ios::binary);

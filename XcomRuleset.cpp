@@ -399,7 +399,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 
 	// Add crafts
 	RuleCraft* skyranger = new RuleCraft(STR_SKYRANGER);
-	skyranger->setSprite(33);
+	skyranger->setSprite(0);
 	skyranger->setMaxSpeed(760);
 	skyranger->setAcceleration(2);
 	skyranger->setMaxFuel(1500);
@@ -411,7 +411,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	skyranger->setRefuelRate(50);
 
 	RuleCraft* lightning = new RuleCraft(STR_LIGHTNING);
-	lightning->setSprite(34);
+	lightning->setSprite(1);
 	lightning->setMaxSpeed(3100);
 	lightning->setAcceleration(9);
 	lightning->setMaxFuel(30);
@@ -422,7 +422,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	lightning->setRefuelRate(5);
 
 	RuleCraft* avenger = new RuleCraft(STR_AVENGER);
-	avenger->setSprite(35);
+	avenger->setSprite(2);
 	avenger->setMaxSpeed(5400);
 	avenger->setAcceleration(10);
 	avenger->setMaxFuel(60);
@@ -433,7 +433,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	avenger->setRefuelRate(5);
 
 	RuleCraft* interceptor = new RuleCraft(STR_INTERCEPTOR);
-	interceptor->setSprite(36);
+	interceptor->setSprite(3);
 	interceptor->setMaxSpeed(2100);
 	interceptor->setAcceleration(3);
 	interceptor->setMaxFuel(1000);
@@ -445,7 +445,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	interceptor->setRefuelRate(50);
 
 	RuleCraft* firestorm = new RuleCraft(STR_FIRESTORM);
-	firestorm->setSprite(37);
+	firestorm->setSprite(4);
 	firestorm->setMaxSpeed(4200);
 	firestorm->setAcceleration(9);
 	firestorm->setMaxFuel(20);
@@ -463,7 +463,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 
 	// Add craft weapons
 	RuleCraftWeapon *stingray = new RuleCraftWeapon(STR_STINGRAY_UC);
-	stingray->setSprite(48);
+	stingray->setSprite(0);
 	stingray->setDamage(70);
 	stingray->setRange(30);
 	stingray->setAccuracy(70);
@@ -473,7 +473,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	stingray->setClipItem(STR_STINGRAY_MISSILE);
 
 	RuleCraftWeapon *avalanche = new RuleCraftWeapon(STR_AVALANCHE_UC);
-	avalanche->setSprite(49);
+	avalanche->setSprite(1);
 	avalanche->setDamage(100);
 	avalanche->setRange(60);
 	avalanche->setAccuracy(80);
@@ -483,7 +483,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	avalanche->setClipItem(STR_AVALANCHE_MISSILE);
 
 	RuleCraftWeapon *cannon = new RuleCraftWeapon(STR_CANNON_UC);
-	cannon->setSprite(50);
+	cannon->setSprite(2);
 	cannon->setDamage(10);
 	cannon->setRange(10);
 	cannon->setAccuracy(25);
@@ -494,7 +494,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	cannon->setClipItem(STR_CANNON_ROUNDS);
 
 	RuleCraftWeapon *laser = new RuleCraftWeapon(STR_LASER_CANNON_UC);
-	laser->setSprite(52);
+	laser->setSprite(4);
 	laser->setDamage(70);
 	laser->setRange(21);
 	laser->setAccuracy(35);
@@ -503,7 +503,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	laser->setLauncherItem(STR_LASER_CANNON);
 
 	RuleCraftWeapon *plasma = new RuleCraftWeapon(STR_PLASMA_BEAM_UC);
-	plasma->setSprite(53);
+	plasma->setSprite(5);
 	plasma->setDamage(140);
 	plasma->setRange(52);
 	plasma->setAccuracy(50);
@@ -512,7 +512,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	plasma->setLauncherItem(STR_PLASMA_BEAM);
 
 	RuleCraftWeapon *fusion = new RuleCraftWeapon(STR_FUSION_BALL_UC);
-	fusion->setSprite(51);
+	fusion->setSprite(3);
 	fusion->setDamage(230);
 	fusion->setRange(65);
 	fusion->setAccuracy(100);

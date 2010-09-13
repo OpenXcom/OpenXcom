@@ -19,6 +19,7 @@
 #ifndef OPENXCOM__UFO_H
 #define OPENXCOM__UFO_H
 
+#include "Target.h"
 #include "LangString.h"
 
 class RuleUfo;
@@ -29,11 +30,11 @@ class RuleUfo;
  * position, damage, speed, etc.
  * @sa RuleUfo
  */
-class Ufo
+class Ufo : public Target
 {
 private:
 	RuleUfo *_rules;
-	double _lat, _lon, _targetLat, _targetLon, _speedLon, _speedLat;
+	double _targetLat, _targetLon, _speedLon, _speedLat;
 	int _id, _damage, _speed, _altitude;
 	LangString _direction;
 	bool _detected;
@@ -50,14 +51,6 @@ public:
 	int getId();
 	/// Sets the UFO's ID.
 	void setId(int id);
-	/// Gets the UFO's latitude.
-	double getLatitude();
-	/// Sets the UFO's latitude.
-	void setLatitude(double lat);
-	/// Gets the UFO's longitude.
-	double getLongitude();
-	/// Sets the UFO's longitude.
-	void setLongitude(double lon);
 	/// Gets the UFO's target latitude.
 	double getTargetLatitude();
 	/// Sets the UFO's target latitude.

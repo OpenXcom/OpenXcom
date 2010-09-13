@@ -97,6 +97,7 @@ string TextButton::getText()
 void TextButton::setGroup(TextButton **group)
 {
 	_group = group;
+	draw();
 }
 
 /**
@@ -184,7 +185,11 @@ void TextButton::mousePress(SDL_Event *ev, int scale, State *state)
 			soundPress->play();
 
 		if (_group != 0)
+		{
+			TextButton *old = *_group;
 			*_group = this;
+			old->draw();
+		}
 
 		InteractiveSurface::mousePress(ev, scale, state);
 		draw();

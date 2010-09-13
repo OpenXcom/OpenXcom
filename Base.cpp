@@ -28,7 +28,7 @@
 /**
  * Initializes an empty base.
  */
-Base::Base() : _lat(0.0), _lon(0.0), _name(""), _facilities(), _soldiers(), _crafts(), _items(), _scientists(0), _engineers(0)
+Base::Base() : Target(), _name(""), _facilities(), _soldiers(), _crafts(), _items(), _scientists(0), _engineers(0)
 {
 }
 
@@ -71,42 +71,6 @@ string Base::getName()
 void Base::setName(string name)
 {
 	_name = name;
-}
-
-/**
- * Returns the latitude coordinate of the base.
- * @return Latitude in radian.
- */
-double Base::getLatitude()
-{
-	return _lat;
-}
-
-/**
- * Changes the latitude coordinate of the base.
- * @param lat Latitude in radian.
- */
-void Base::setLatitude(double lat)
-{
-	_lat = lat;
-}
-
-/**
- * Returns the longitude coordinate of the base.
- * @return Longitude in radian.
- */
-double Base::getLongitude()
-{
-	return _lon;
-}
-
-/**
- * Changes the longitude coordinate of the base.
- * @param lon Longitude in radian.
- */
-void Base::setLongitude(double lon)
-{
-	_lon = lon;
 }
 
 /**
@@ -398,7 +362,7 @@ int Base::getShortRangeDetection()
 	for (vector<BaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); i++)
 	{
 		if ((*i)->getBuildTime() == 0)
-			if ((*i)->getRules()->getRadarRange() == 2000)
+			if ((*i)->getRules()->getRadarRange() == 1500)
 				total++;
 	}
 	return total;

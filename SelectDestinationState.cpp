@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "BuildNewBaseState.h"
+#include "SelectDestinationState.h"
 #include "Game.h"
 #include "ResourcePack.h"
 #include "Language.h"
@@ -29,18 +29,15 @@
 #include "Text.h"
 #include "TextButton.h"
 #include "Timer.h"
-#include "Base.h"
-#include "BaseNameState.h"
-#include "ConfirmNewBaseState.h"
+#include "Craft.h"
 
 /**
- * Initializes all the elements in the Build New Base window.
+ * Initializes all the elements in the Select Destination window.
  * @param game Pointer to the core game.
- * @param base Pointer to the base to place.
+ * @param craft Pointer to the craft to target.
  * @param globe Pointer to the Geoscape globe.
- * @param first Is this the first base in the game?
  */
-BuildNewBaseState::BuildNewBaseState(Game *game, Base *base, Globe *globe, bool first) : State(game), _base(base), _globe(globe), _first(first)
+SelectDestinationState::SelectDestinationState(Game *game, Craft *craft, Globe *globe) : State(game), _craft(craft), _globe(globe)
 {
 	_screen = false;
 
@@ -53,8 +50,8 @@ BuildNewBaseState::BuildNewBaseState(Game *game, Base *base, Globe *globe, bool 
 	_btnZoomOut = new InteractiveSurface(13, 17, 300, 182);
 
 	_window = new Window(this, 256, 28, 0, 0);
-	_btnCancel = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 54, 12, 186, 8);
-	_txtTitle = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 200, 9, 8, 10);
+	_btnCancel = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 60, 12, 110, 8);
+	_txtTitle = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 100, 9, 10, 10);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
@@ -71,44 +68,39 @@ BuildNewBaseState::BuildNewBaseState(Game *game, Base *base, Globe *globe, bool 
 	add(_txtTitle);
 	
 	// Set up objects
-	_globe->onMouseClick((EventHandler)&BuildNewBaseState::globeClick);
+	_globe->onMouseClick((EventHandler)&SelectDestinationState::globeClick);
 
-	_btnRotateLeft->onMousePress((EventHandler)&BuildNewBaseState::btnRotateLeftPress);
-	_btnRotateLeft->onMouseRelease((EventHandler)&BuildNewBaseState::btnRotateLeftRelease);
+	_btnRotateLeft->onMousePress((EventHandler)&SelectDestinationState::btnRotateLeftPress);
+	_btnRotateLeft->onMouseRelease((EventHandler)&SelectDestinationState::btnRotateLeftRelease);
 
-	_btnRotateRight->onMousePress((EventHandler)&BuildNewBaseState::btnRotateRightPress);
-	_btnRotateRight->onMouseRelease((EventHandler)&BuildNewBaseState::btnRotateRightRelease);
+	_btnRotateRight->onMousePress((EventHandler)&SelectDestinationState::btnRotateRightPress);
+	_btnRotateRight->onMouseRelease((EventHandler)&SelectDestinationState::btnRotateRightRelease);
 
-	_btnRotateUp->onMousePress((EventHandler)&BuildNewBaseState::btnRotateUpPress);
-	_btnRotateUp->onMouseRelease((EventHandler)&BuildNewBaseState::btnRotateUpRelease);
+	_btnRotateUp->onMousePress((EventHandler)&SelectDestinationState::btnRotateUpPress);
+	_btnRotateUp->onMouseRelease((EventHandler)&SelectDestinationState::btnRotateUpRelease);
 
-	_btnRotateDown->onMousePress((EventHandler)&BuildNewBaseState::btnRotateDownPress);
-	_btnRotateDown->onMouseRelease((EventHandler)&BuildNewBaseState::btnRotateDownRelease);
+	_btnRotateDown->onMousePress((EventHandler)&SelectDestinationState::btnRotateDownPress);
+	_btnRotateDown->onMouseRelease((EventHandler)&SelectDestinationState::btnRotateDownRelease);
 
-	_btnZoomIn->onMouseClick((EventHandler)&BuildNewBaseState::btnZoomInClick);
+	_btnZoomIn->onMouseClick((EventHandler)&SelectDestinationState::btnZoomInClick);
 
-	_btnZoomOut->onMouseClick((EventHandler)&BuildNewBaseState::btnZoomOutClick);
+	_btnZoomOut->onMouseClick((EventHandler)&SelectDestinationState::btnZoomOutClick);
 
 	_window->setColor(Palette::blockOffset(15)+2);
 	_window->setBackground(game->getResourcePack()->getSurface("BACK01.SCR"));
 
-	_btnCancel->setColor(Palette::blockOffset(15)+2);
+	_btnCancel->setColor(Palette::blockOffset(8)+8);
 	_btnCancel->setText(_game->getResourcePack()->getLanguage()->getString(STR_CANCEL_UC));
-	_btnCancel->onMouseClick((EventHandler)&BuildNewBaseState::btnCancelClick);
+	_btnCancel->onMouseClick((EventHandler)&SelectDestinationState::btnCancelClick);
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
-	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString(STR_SELECT_SITE_FOR_NEW_BASE));
-
-	if (_first)
-	{
-		_btnCancel->setVisible(false);
-	}
+	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString(STR_SELECT_DESTINATION));
 }
 
 /**
  *
  */
-BuildNewBaseState::~BuildNewBaseState()
+SelectDestinationState::~SelectDestinationState()
 {
 	
 }
@@ -116,7 +108,7 @@ BuildNewBaseState::~BuildNewBaseState()
 /**
  * Resets the palette since it's bound to change on other screens.
  */
-void BuildNewBaseState::init()
+void SelectDestinationState::init()
 {
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
@@ -125,7 +117,7 @@ void BuildNewBaseState::init()
 /**
  * Runs the globe rotation timer.
  */
-void BuildNewBaseState::think()
+void SelectDestinationState::think()
 {
 	State::think();
 	_globe->think();
@@ -136,38 +128,25 @@ void BuildNewBaseState::think()
  * @param ev Pointer to a SDL_Event.
  * @param scale Current screen scale (used to correct mouse input).
  */
-void BuildNewBaseState::handle(SDL_Event *ev, int scale)
+void SelectDestinationState::handle(SDL_Event *ev, int scale)
 {
 	State::handle(ev, scale);
 	_globe->handle(ev, scale, this);
 }
 
 /**
- * Processes any left-clicks for base placement,
+ * Processes any left-clicks for picking a target,
  * or right-clicks to scroll the globe.
  * @param ev Pointer to the SDL_Event.
  * @param scale Scale of the screen.
  */
-void BuildNewBaseState::globeClick(SDL_Event *ev, int scale)
+void SelectDestinationState::globeClick(SDL_Event *ev, int scale)
 {
 	double lon, lat;
 	_globe->cartToPolar(ev->button.x / scale, ev->button.y / scale, &lon, &lat);
 	
 	if (ev->button.button == SDL_BUTTON_LEFT)
 	{
-		if (_globe->insideLand(lon, lat))
-		{
-			_base->setLongitude(lon);
-			_base->setLatitude(lat);
-			if (_first)
-			{
-				_game->pushState(new BaseNameState(_game, _base, _globe, _first));
-			}
-			else
-			{
-				_game->pushState(new ConfirmNewBaseState(_game, _base, _globe));
-			}
-		}
 	}
 	else if (ev->button.button == SDL_BUTTON_RIGHT)
 	{
@@ -188,7 +167,7 @@ void BuildNewBaseState::globeClick(SDL_Event *ev, int scale)
  * @param ev Pointer to the SDL_Event.
  * @param scale Scale of the screen.
  */
-void BuildNewBaseState::btnRotateLeftPress(SDL_Event *ev, int scale)
+void SelectDestinationState::btnRotateLeftPress(SDL_Event *ev, int scale)
 {
 	_globe->rotateLeft();
 }
@@ -198,7 +177,7 @@ void BuildNewBaseState::btnRotateLeftPress(SDL_Event *ev, int scale)
  * @param ev Pointer to the SDL_Event.
  * @param scale Scale of the screen.
  */
-void BuildNewBaseState::btnRotateLeftRelease(SDL_Event *ev, int scale)
+void SelectDestinationState::btnRotateLeftRelease(SDL_Event *ev, int scale)
 {
 	_globe->rotateStop();
 }
@@ -208,7 +187,7 @@ void BuildNewBaseState::btnRotateLeftRelease(SDL_Event *ev, int scale)
  * @param ev Pointer to the SDL_Event.
  * @param scale Scale of the screen.
  */
-void BuildNewBaseState::btnRotateRightPress(SDL_Event *ev, int scale)
+void SelectDestinationState::btnRotateRightPress(SDL_Event *ev, int scale)
 {
 	_globe->rotateRight();
 }
@@ -218,7 +197,7 @@ void BuildNewBaseState::btnRotateRightPress(SDL_Event *ev, int scale)
  * @param ev Pointer to the SDL_Event.
  * @param scale Scale of the screen.
  */
-void BuildNewBaseState::btnRotateRightRelease(SDL_Event *ev, int scale)
+void SelectDestinationState::btnRotateRightRelease(SDL_Event *ev, int scale)
 {
 	_globe->rotateStop();
 }
@@ -228,7 +207,7 @@ void BuildNewBaseState::btnRotateRightRelease(SDL_Event *ev, int scale)
  * @param ev Pointer to the SDL_Event.
  * @param scale Scale of the screen.
  */
-void BuildNewBaseState::btnRotateUpPress(SDL_Event *ev, int scale)
+void SelectDestinationState::btnRotateUpPress(SDL_Event *ev, int scale)
 {
 	_globe->rotateUp();
 }
@@ -238,7 +217,7 @@ void BuildNewBaseState::btnRotateUpPress(SDL_Event *ev, int scale)
  * @param ev Pointer to the SDL_Event.
  * @param scale Scale of the screen.
  */
-void BuildNewBaseState::btnRotateUpRelease(SDL_Event *ev, int scale)
+void SelectDestinationState::btnRotateUpRelease(SDL_Event *ev, int scale)
 {
 	_globe->rotateStop();
 }
@@ -248,7 +227,7 @@ void BuildNewBaseState::btnRotateUpRelease(SDL_Event *ev, int scale)
  * @param ev Pointer to the SDL_Event.
  * @param scale Scale of the screen.
  */
-void BuildNewBaseState::btnRotateDownPress(SDL_Event *ev, int scale)
+void SelectDestinationState::btnRotateDownPress(SDL_Event *ev, int scale)
 {
 	_globe->rotateDown();
 }
@@ -258,7 +237,7 @@ void BuildNewBaseState::btnRotateDownPress(SDL_Event *ev, int scale)
  * @param ev Pointer to the SDL_Event.
  * @param scale Scale of the screen.
  */
-void BuildNewBaseState::btnRotateDownRelease(SDL_Event *ev, int scale)
+void SelectDestinationState::btnRotateDownRelease(SDL_Event *ev, int scale)
 {
 	_globe->rotateStop();
 }
@@ -268,7 +247,7 @@ void BuildNewBaseState::btnRotateDownRelease(SDL_Event *ev, int scale)
  * @param ev Pointer to the SDL_Event.
  * @param scale Scale of the screen.
  */
-void BuildNewBaseState::btnZoomInClick(SDL_Event *ev, int scale)
+void SelectDestinationState::btnZoomInClick(SDL_Event *ev, int scale)
 {
 	if (ev->button.button == SDL_BUTTON_LEFT)
 		_globe->zoomIn();
@@ -281,7 +260,7 @@ void BuildNewBaseState::btnZoomInClick(SDL_Event *ev, int scale)
  * @param ev Pointer to the SDL_Event.
  * @param scale Scale of the screen.
  */
-void BuildNewBaseState::btnZoomOutClick(SDL_Event *ev, int scale)
+void SelectDestinationState::btnZoomOutClick(SDL_Event *ev, int scale)
 {
 	if (ev->button.button == SDL_BUTTON_LEFT)
 		_globe->zoomOut();
@@ -294,8 +273,7 @@ void BuildNewBaseState::btnZoomOutClick(SDL_Event *ev, int scale)
  * @param ev Pointer to the SDL_Event.
  * @param scale Scale of the screen.
  */
-void BuildNewBaseState::btnCancelClick(SDL_Event *ev, int scale)
+void SelectDestinationState::btnCancelClick(SDL_Event *ev, int scale)
 {
-	delete _base;
 	_game->popState();
 }

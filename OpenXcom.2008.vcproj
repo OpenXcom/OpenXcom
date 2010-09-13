@@ -472,6 +472,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\DogfightState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\DogfightState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\DismantleFacilityState.cpp"
 				>
 			</File>
@@ -613,6 +621,14 @@
 			</File>
 			<File
 				RelativePath=".\ResearchState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\SelectDestinationState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\SelectDestinationState.h"
 				>
 			</File>
 			<File
@@ -764,6 +780,14 @@
 				</File>
 				<File
 					RelativePath=".\Soldier.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Target.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Target.h"
 					>
 				</File>
 				<File

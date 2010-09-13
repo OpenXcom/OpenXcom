@@ -114,6 +114,7 @@
     <ClCompile Include="CraftWeapon.cpp" />
     <ClCompile Include="CraftWeaponsState.cpp" />
     <ClCompile Include="GeoscapeErrorState.cpp" />
+    <ClCompile Include="DogfightState.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="PlaceLiftState.cpp" />
     <ClCompile Include="Polyline.cpp" />
@@ -121,10 +122,12 @@
     <ClCompile Include="RuleCraftWeapon.cpp" />
     <ClCompile Include="RuleItem.cpp" />
     <ClCompile Include="RuleUfo.cpp" />
+    <ClCompile Include="SelectDestinationState.cpp" />
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="SoundSet.cpp" />
     <ClCompile Include="StartState.cpp" />
     <ClCompile Include="StoresState.cpp" />
+    <ClCompile Include="Target.cpp" />
     <ClCompile Include="TextButton.cpp" />
     <ClCompile Include="Craft.cpp" />
     <ClCompile Include="CraftInfoState.cpp" />
@@ -205,6 +208,7 @@
     <ClInclude Include="CraftWeaponsState.h" />
     <ClInclude Include="GeoscapeErrorState.h" />
     <ClInclude Include="InteractiveSurface.h" />
+    <ClInclude Include="DogfightState.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="PlaceLiftState.h" />
     <ClInclude Include="Polyline.h" />
@@ -212,11 +216,13 @@
     <ClInclude Include="RuleCraftWeapon.h" />
     <ClInclude Include="RuleItem.h" />
     <ClInclude Include="RuleUfo.h" />
+    <ClInclude Include="SelectDestinationState.h" />
     <ClInclude Include="Sound.h" />
     <ClInclude Include="SoundSet.h" />
     <ClInclude Include="StartState.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="StoresState.h" />
+    <ClInclude Include="Target.h" />
     <ClInclude Include="TextButton.h" />
     <ClInclude Include="Craft.h" />
     <ClInclude Include="CraftInfoState.h" />

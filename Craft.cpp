@@ -23,13 +23,15 @@
 #include "Item.h"
 #include "Soldier.h"
 
+#define SPEED_FACTOR 0.0000001
+
 /**
  * Initializes a craft of the specified type and
  * assigns it the latest craft ID available.
  * @param rules Pointer to ruleset.
  * @param id List of craft IDs.
  */
-Craft::Craft(RuleCraft *rules, map<LangString, int> *id) : _rules(rules), _lat(0.0), _lon(0.0), _fuel(0), _damage(0), _speed(0), _weapons(), _items(), _status(STR_READY)
+Craft::Craft(RuleCraft *rules, map<LangString, int> *id) : Target(), _rules(rules), _target(0), _speedLon(0.0), _speedLat(0.0), _fuel(0), _damage(0), _speed(0), _weapons(), _items(), _status(STR_READY)
 {
 	_id = (*id)[_rules->getType()];
 	(*id)[_rules->getType()]++;
@@ -62,6 +64,22 @@ RuleCraft *Craft::getRules()
 }
 
 /**
+ * Returns the target the craft is following.
+ */
+Target *Craft::getTarget()
+{
+	return _target;
+}
+
+/**
+ * Changes the target the craft is following.
+ */
+void Craft::setTarget(Target *target)
+{
+	_target = target;
+}
+
+/**
  * Returns the craft's unique ID. Each craft
  * can be identified by its type and ID.
  * @return Unique ID.
@@ -69,42 +87,6 @@ RuleCraft *Craft::getRules()
 int Craft::getId()
 {
 	return _id;
-}
-
-/**
- * Returns the latitude coordinate of the craft.
- * @return Latitude in radian.
- */
-double Craft::getLatitude()
-{
-	return _lat;
-}
-
-/**
- * Changes the latitude coordinate of the craft.
- * @param lat Latitude in radian.
- */
-void Craft::setLatitude(double lat)
-{
-	_lat = lat;
-}
-
-/**
- * Returns the longitude coordinate of the craft.
- * @return Longitude in radian.
- */
-double Craft::getLongitude()
-{
-	return _lon;
-}
-
-/**
- * Changes the longitude coordinate of the craft.
- * @param lon Longitude in radian.
- */
-void Craft::setLongitude(double lon)
-{
-	_lon = lon;
 }
 
 /**
@@ -162,6 +144,23 @@ int Craft::getNumSoldiers(vector<Soldier*> *soldiers)
 	{
 		if ((*i)->getCraft() == this)
 			total++;
+	}
+
+	return total;
+}
+
+/**
+ * Returns the amount of equipment currently
+ * equipped on this craft.
+ * @return Number of items.
+ */
+int Craft::getNumEquipment()
+{
+	int total = 0;
+
+	for (map<LangString, Item*>::iterator i = _items.begin(); i != _items.end(); i++)
+	{
+		total += i->second->getQuantity();
 	}
 
 	return total;
@@ -257,4 +256,61 @@ void Craft::setDamage(int damage)
 int Craft::getDamagePercentage()
 {
 	return (int)floor((double)_damage / _rules->getMaxDamage() * 100);
+}
+
+/**
+ * Returns the speed of the craft.
+ * @return Speed in kilometers.
+ */
+int Craft::getSpeed()
+{
+	return _speed;
+}
+
+/**
+ * Changes the speed of the craft.
+ * @param speed Speed in kilometers.
+ */
+void Craft::setSpeed(int speed)
+{
+	_speed = speed;
+	calculateSpeed();
+}
+
+/**
+ * Calculates the speed vector and direction for the UFO
+ * based on the current raw speed and target destination.
+ */
+void Craft::calculateSpeed()
+{
+	double newSpeed = _speed * SPEED_FACTOR;
+	double dLon = _target->getLongitude() - _lon;
+	double dLat = _target->getLatitude() - _lat;
+	double length = sqrt(dLon * dLon + dLat * dLat);
+	if (length > 0)
+	{
+		_speedLon = dLon / length * newSpeed;
+		_speedLat = dLat / length * newSpeed;
+	}
+	else
+	{
+		_speedLon = 0;
+		_speedLat = 0;
+	}
+}
+
+/**
+ * Moves the craft to its target.
+ */
+void Craft::think()
+{
+	_lon += _speedLon;
+	_lat += _speedLat;
+	if (((_speedLon > 0 && _lon > _target->getLongitude()) || (_speedLon < 0 && _lon < _target->getLongitude())) &&
+		((_speedLat > 0 && _lat > _target->getLatitude()) || (_speedLat < 0 && _lat < _target->getLatitude())))
+	{
+		_lon = _target->getLongitude();
+		_lat = _target->getLatitude();
+		setSpeed(0);
+	}
 }

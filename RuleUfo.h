@@ -43,6 +43,8 @@ public:
 	LangString getSize();
 	/// Sets the UFO's size.
 	void setSize(LangString size);
+	/// Gets the UFO's radius.
+	int getRadius();
 	/// Gets the UFO's maximum damage.
 	int getMaxDamage();
 	/// Sets the UFO's maximum damage.

@@ -19,6 +19,7 @@
 #ifndef OPENXCOM__CRAFT_H
 #define OPENXCOM__CRAFT_H
 
+#include "Target.h"
 #include <map>
 #include <vector>
 #include "LangString.h"
@@ -36,15 +37,18 @@ class Item;
  * position, fuel, damage, etc.
  * @sa RuleCraft
  */
-class Craft
+class Craft : public Target
 {
 private:
 	RuleCraft *_rules;
-	double _lat, _lon;
+	Target *_target;
+	double _speedLon, _speedLat;
 	int _id, _fuel, _damage, _speed;
 	vector<CraftWeapon*> _weapons;
 	map<LangString, Item*> _items;
 	LangString _status;
+	/// Calculates the new speed vector.
+	void calculateSpeed();
 public:
 	/// Creates a craft of the specified type.
 	Craft(RuleCraft *rules, map<LangString, int> *id);
@@ -52,16 +56,12 @@ public:
 	~Craft();
 	/// Gets the craft's ruleset.
 	RuleCraft *getRules();
+	/// Gets the craft's target.
+	Target *getTarget();
+	/// Sets the craft's target.
+	void setTarget(Target *target);
 	/// Gets the craft's ID.
 	int getId();
-	/// Gets the craft's latitude.
-	double getLatitude();
-	/// Sets the craft's latitude.
-	void setLatitude(double lat);
-	/// Gets the craft's longitude.
-	double getLongitude();
-	/// Sets the craft's longitude.
-	void setLongitude(double lon);
 	/// Gets the craft's status.
 	LangString getStatus();
 	/// Sets the craft's status.
@@ -70,6 +70,8 @@ public:
 	int getNumWeapons();
 	/// Gets the craft's amount of soldiers.
 	int getNumSoldiers(vector<Soldier*> *soldiers);
+	/// Gets the craft's amount of equipment.
+	int getNumEquipment();
 	/// Gets the craft's amount of HWPs.
 	int getNumHWPs();
 	/// Gets the craft's weapons.
@@ -88,6 +90,12 @@ public:
 	void setDamage(int damage);
 	/// Gets the craft's percentage of damage.
 	int getDamagePercentage();
+	/// Gets the craft's speed.
+	int getSpeed();
+	/// Sets the craft's speed.
+	void setSpeed(int speed);
+	/// Handles craft logic.
+	void think();
 };
 
 #endif

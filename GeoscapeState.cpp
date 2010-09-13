@@ -53,6 +53,7 @@
 #include "MonthlyReportState.h"
 #include "GeoscapeMessageState.h"
 #include "UfoDetectedState.h"
+#include "DogfightState.h"
 
 using namespace std;
 
@@ -650,7 +651,8 @@ void GeoscapeState::globeKeyPress(SDL_Event *ev, int scale)
  */
 void GeoscapeState::btnInterceptClick(SDL_Event *ev, int scale)
 {
-	_game->pushState(new InterceptState(_game));
+	_game->pushState(new InterceptState(_game, _globe));
+	//_game->pushState(new DogfightState(_game, _game->getSavedGame()->getBases()->front()->getCrafts()->at(1), 0));
 }
 
 /**

@@ -32,6 +32,7 @@
 #include "Craft.h"
 #include "RuleCraft.h"
 #include "SavedGame.h"
+#include "SelectDestinationState.h"
 
 using namespace std;
 
@@ -39,7 +40,7 @@ using namespace std;
  * Initializes all the elements in the Intercept window.
  * @param game Pointer to the core game.
  */
-InterceptState::InterceptState(Game *game) : State(game)
+InterceptState::InterceptState(Game *game, Globe *globe, Base *base) : State(game), _globe(globe), _base(base)
 {
 	_screen = false;
 
@@ -94,6 +95,7 @@ InterceptState::InterceptState(Game *game) : State(game)
 	_lstCrafts->setColumns(4, 86, 65, 85, 50);
 	_lstCrafts->setSelectable(true);
 	_lstCrafts->setBackground(_window);
+	_lstCrafts->onMouseClick((EventHandler)&InterceptState::lstCraftsClick);
 	int row = 0;
 	for (vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); i++)
 	{
@@ -102,7 +104,7 @@ InterceptState::InterceptState(Game *game) : State(game)
 			stringstream ss, ss2;
 			ss << _game->getResourcePack()->getLanguage()->getString((*j)->getRules()->getType()) << "-" << (*j)->getId();
 			ss2 << (*j)->getNumWeapons() << "/" << (*j)->getNumSoldiers((*i)->getSoldiers()) << "/" << (*j)->getNumHWPs();
-			_lstCrafts->addRow(0, 4, ss.str().c_str(), _game->getResourcePack()->getLanguage()->getString((*j)->getStatus()).c_str(), (*i)->getName().c_str(), ss2.str().c_str());
+			_lstCrafts->addRow((int)*j, 4, ss.str().c_str(), _game->getResourcePack()->getLanguage()->getString((*j)->getStatus()).c_str(), (*i)->getName().c_str(), ss2.str().c_str());
 			if ((*j)->getStatus() == STR_READY)
 				_lstCrafts->getCell(row, 1)->setColor(Palette::blockOffset(8)+10);
 			row++;
@@ -127,4 +129,19 @@ InterceptState::~InterceptState()
 void InterceptState::btnCancelClick(SDL_Event *ev, int scale)
 {
 	_game->popState();
+}
+
+/**
+ * Pick a target for the selected craft.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
+void InterceptState::lstCraftsClick(SDL_Event *ev, int scale)
+{
+	Craft* c = (Craft*)_lstCrafts->getSelectedValue();
+	if (c->getStatus() != STR_OUT)
+	{
+		_game->popState();
+		_game->pushState(new SelectDestinationState(_game, c, _globe));
+	}
 }

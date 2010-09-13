@@ -47,9 +47,6 @@
     <ClCompile Include="GraphsState.cpp">
       <Filter>States</Filter>
     </ClCompile>
-    <ClCompile Include="InterceptState.cpp">
-      <Filter>States</Filter>
-    </ClCompile>
     <ClCompile Include="LanguageState.cpp">
       <Filter>States</Filter>
     </ClCompile>
@@ -263,6 +260,18 @@
     <ClCompile Include="ArrowButton.cpp">
       <Filter>Interface</Filter>
     </ClCompile>
+    <ClCompile Include="InterceptState.cpp">
+      <Filter>States</Filter>
+    </ClCompile>
+    <ClCompile Include="DogfightState.cpp">
+      <Filter>States</Filter>
+    </ClCompile>
+    <ClCompile Include="Target.cpp">
+      <Filter>Xcom\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="SelectDestinationState.cpp">
+      <Filter>States</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbandonGameState.h">
@@ -308,9 +317,6 @@
       <Filter>States</Filter>
     </ClInclude>
     <ClInclude Include="GraphsState.h">
-      <Filter>States</Filter>
-    </ClInclude>
-    <ClInclude Include="InterceptState.h">
       <Filter>States</Filter>
     </ClInclude>
     <ClInclude Include="LanguageState.h">
@@ -526,11 +532,20 @@
     <ClInclude Include="UfoDetectedState.h">
       <Filter>States</Filter>
     </ClInclude>
-    <ClInclude Include="ArrowButton.cpp">
-      <Filter>Interface</Filter>
-    </ClInclude>
     <ClInclude Include="ArrowButton.h">
       <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="InterceptState.h">
+      <Filter>States</Filter>
+    </ClInclude>
+    <ClInclude Include="DogfightState.h">
+      <Filter>States</Filter>
+    </ClInclude>
+    <ClInclude Include="Target.h">
+      <Filter>Xcom\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="SelectDestinationState.h">
+      <Filter>States</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
