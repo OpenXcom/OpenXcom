@@ -29,7 +29,10 @@
 #include "Text.h"
 #include "TextButton.h"
 #include "Timer.h"
+#include "SavedGame.h"
 #include "Craft.h"
+#include "Ufo.h"
+#include "ConfirmDestinationState.h"
 
 /**
  * Initializes all the elements in the Select Destination window.
@@ -143,10 +146,27 @@ void SelectDestinationState::handle(SDL_Event *ev, int scale)
 void SelectDestinationState::globeClick(SDL_Event *ev, int scale)
 {
 	double lon, lat;
-	_globe->cartToPolar(ev->button.x / scale, ev->button.y / scale, &lon, &lat);
-	
+	int mouseX = ev->button.x / scale, mouseY = ev->button.y / scale;
+	_globe->cartToPolar(mouseX, mouseY, &lon, &lat);
+
 	if (ev->button.button == SDL_BUTTON_LEFT)
 	{
+		// Check for UFOs
+		for (vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end(); i++)
+		{
+			if ((*i)->getDetected())
+			{
+				Sint16 x, y;
+				_globe->polarToCart((*i)->getLongitude(), (*i)->getLatitude(), &x, &y);
+
+				int dx = mouseX - x;
+				int dy = mouseY - y;
+				if (dx * dx + dy * dy <= 25)
+				{
+					_game->pushState(new ConfirmDestinationState(_game, _craft, (*i)));
+				}
+			}
+		}
 	}
 	else if (ev->button.button == SDL_BUTTON_RIGHT)
 	{

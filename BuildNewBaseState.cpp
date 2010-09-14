@@ -30,6 +30,7 @@
 #include "TextButton.h"
 #include "Timer.h"
 #include "Base.h"
+#include "Craft.h"
 #include "BaseNameState.h"
 #include "ConfirmNewBaseState.h"
 
@@ -159,6 +160,11 @@ void BuildNewBaseState::globeClick(SDL_Event *ev, int scale)
 		{
 			_base->setLongitude(lon);
 			_base->setLatitude(lat);
+			for (vector<Craft*>::iterator i = _base->getCrafts()->begin(); i != _base->getCrafts()->end(); i++)
+			{
+				(*i)->setLongitude(lon);
+				(*i)->setLatitude(lat);
+			}
 			if (_first)
 			{
 				_game->pushState(new BaseNameState(_game, _base, _globe, _first));

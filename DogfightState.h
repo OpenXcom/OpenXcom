@@ -20,6 +20,7 @@
 #define OPENXCOM__DOGFIGHTSTATE_H
 
 #include "State.h"
+#include <string>
 
 class ImageButton;
 class Text;
@@ -28,6 +29,8 @@ class InteractiveSurface;
 class Timer;
 class Craft;
 class Ufo;
+
+using namespace std;
 
 /**
  * Shows a dogfight (interception) between a

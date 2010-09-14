@@ -37,6 +37,7 @@ Craft::Craft(RuleCraft *rules, map<LangString, int> *id) : Target(), _rules(rule
 	(*id)[_rules->getType()]++;
 	for (int i = 0; i < _rules->getWeapons(); i++)
 		_weapons.push_back(0);
+	setSpeed(_rules->getMaxSpeed());
 }
 
 /**
@@ -77,6 +78,7 @@ Target *Craft::getTarget()
 void Craft::setTarget(Target *target)
 {
 	_target = target;
+	calculateSpeed();
 }
 
 /**
@@ -284,11 +286,11 @@ void Craft::setSpeed(int speed)
 void Craft::calculateSpeed()
 {
 	double newSpeed = _speed * SPEED_FACTOR;
-	double dLon = _target->getLongitude() - _lon;
-	double dLat = _target->getLatitude() - _lat;
-	double length = sqrt(dLon * dLon + dLat * dLat);
-	if (length > 0)
+	if (_target != 0)
 	{
+		double dLon = _target->getLongitude() - _lon;
+		double dLat = _target->getLatitude() - _lat;
+		double length = sqrt(dLon * dLon + dLat * dLat);
 		_speedLon = dLon / length * newSpeed;
 		_speedLat = dLat / length * newSpeed;
 	}

@@ -272,6 +272,9 @@
     <ClCompile Include="SelectDestinationState.cpp">
       <Filter>States</Filter>
     </ClCompile>
+    <ClCompile Include="ConfirmDestinationState.cpp">
+      <Filter>States</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbandonGameState.h">
@@ -545,6 +548,9 @@
       <Filter>Xcom\Game</Filter>
     </ClInclude>
     <ClInclude Include="SelectDestinationState.h">
+      <Filter>States</Filter>
+    </ClInclude>
+    <ClInclude Include="ConfirmDestinationState.h">
       <Filter>States</Filter>
     </ClInclude>
   </ItemGroup>

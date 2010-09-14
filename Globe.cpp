@@ -36,6 +36,7 @@
 #include "Region.h"
 #include "City.h"
 #include "Ufo.h"
+#include "Craft.h"
 
 #define PI 3.141592653589793238461
 #define NUM_TEXTURES 13
@@ -605,6 +606,15 @@ void Globe::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 	Surface::setPalette(colors, firstcolor, ncolors);
 	_countries->setPalette(colors, firstcolor, ncolors);
 	_markers->setPalette(colors, firstcolor, ncolors);
+	_mkXcomBase->setPalette(colors, firstcolor, ncolors);
+	_mkAlienBase->setPalette(colors, firstcolor, ncolors);
+	_mkCraft->setPalette(colors, firstcolor, ncolors);
+	_mkWaypoint->setPalette(colors, firstcolor, ncolors);
+	_mkCity->setPalette(colors, firstcolor, ncolors);
+	_mkFlyingUfo->setPalette(colors, firstcolor, ncolors);
+	_mkLandedUfo->setPalette(colors, firstcolor, ncolors);
+	_mkCrashedUfo->setPalette(colors, firstcolor, ncolors);
+	_mkAlienSite->setPalette(colors, firstcolor, ncolors);
 }
 
 /**
@@ -835,6 +845,7 @@ void Globe::drawDetail()
  */
 void Globe::drawMarkers()
 {
+	Sint16 x, y;
 	_markers->clear();
 
 	// Draw the base markers
@@ -845,13 +856,24 @@ void Globe::drawMarkers()
 			pointBack((*i)->getLongitude(), (*i)->getLatitude()))
 			continue;
 
-		Sint16 x, y;
 		polarToCart((*i)->getLongitude(), (*i)->getLatitude(), &x, &y);
 
 		_mkXcomBase->setX(x - 1);
 		_mkXcomBase->setY(y - 1);
-		_mkXcomBase->setPalette(getPalette());
 		_mkXcomBase->blit(_markers);
+
+		// Draw the craft markers
+		for (vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); j++)
+		{
+			if (pointBack((*j)->getLongitude(), (*j)->getLatitude()))
+				continue;
+
+			polarToCart((*j)->getLongitude(), (*j)->getLatitude(), &x, &y);
+
+			_mkCraft->setX(x - 1);
+			_mkCraft->setY(y - 1);
+			_mkCraft->blit(_markers);
+		}
 	}
 
 	// Draw the UFO markers
@@ -860,12 +882,10 @@ void Globe::drawMarkers()
 		if (!(*i)->getDetected() || pointBack((*i)->getLongitude(), (*i)->getLatitude()))
 			continue;
 
-		Sint16 x, y;
 		polarToCart((*i)->getLongitude(), (*i)->getLatitude(), &x, &y);
 
 		_mkFlyingUfo->setX(x - 1);
 		_mkFlyingUfo->setY(y - 1);
-		_mkFlyingUfo->setPalette(getPalette());
 		_mkFlyingUfo->blit(_markers);
 	}
 }

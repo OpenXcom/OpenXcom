@@ -33,13 +33,13 @@ public:
 	/// Cleans up the target.
 	~Target();
 	/// Gets the target's latitude.
-	double getLatitude();
+	double virtual getLatitude();
 	/// Sets the target's latitude.
-	void setLatitude(double lat);
+	void virtual setLatitude(double lat);
 	/// Gets the target's longitude.
-	double getLongitude();
+	double virtual getLongitude();
 	/// Sets the target's longitude.
-	void setLongitude(double lon);
+	void virtual setLongitude(double lon);
 };
 
 #endif
