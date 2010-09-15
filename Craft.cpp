@@ -306,6 +306,10 @@ void Craft::calculateSpeed()
  */
 void Craft::think()
 {
+	if (_target != 0)
+	{
+		calculateSpeed();
+	}
 	_lon += _speedLon;
 	_lat += _speedLat;
 	if (((_speedLon > 0 && _lon > _target->getLongitude()) || (_speedLon < 0 && _lon < _target->getLongitude())) &&

@@ -20,6 +20,7 @@
 #define OPENXCOM__TEXTLIST_H
 
 #include <vector>
+#include <cstdint>
 #include "InteractiveSurface.h"
 
 class Text;
@@ -36,7 +37,8 @@ class TextList : public InteractiveSurface
 {
 private:
 	vector< vector<Text*> > _texts;
-	vector<int> _columns, _values;
+	vector<int> _columns;
+	vector<intptr_t> _values;
 	Font *_big, *_small;
 	unsigned int _scroll, _visibleRows;
 	Uint8 _color;
@@ -54,12 +56,8 @@ public:
 	~TextList();
 	/// Gets a certain cell in the text list.
 	Text* getCell(int row, int col);
-	/// Gets a certain value in the text list.
-	int getValue(int row);
-	/// Gets the selected value in the text list.
-	int getSelectedValue();
 	/// Adds a new row to the text list.
-	void addRow(int value, int cols, ...);
+	void addRow(intptr_t value, int cols, ...);
 	/// Sets the columns in the text list.
 	void setColumns(int cols, ...);
 	/// Sets the text color of the text list.
@@ -74,6 +72,10 @@ public:
 	void setBackground(Surface *bg);
 	/// Gets the selected row in the list.
 	int getSelectedRow();
+	/// Gets a certain value in the text list.
+	intptr_t getValue(int row);
+	/// Gets the selected value in the text list.
+	intptr_t getSelectedValue();
 	/// Clears the list.
 	void clearList();
 	/// Scrolls the list up.

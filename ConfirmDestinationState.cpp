@@ -98,6 +98,7 @@ ConfirmDestinationState::~ConfirmDestinationState()
 void ConfirmDestinationState::btnOkClick(SDL_Event *ev, int scale)
 {
 	_craft->setTarget(_target);
+	_craft->setStatus(STR_OUT);
 	_game->popState();
 	_game->popState();
 }

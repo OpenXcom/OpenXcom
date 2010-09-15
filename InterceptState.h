@@ -39,8 +39,8 @@ private:
 	Window *_window;
 	Text *_txtTitle, *_txtCraft, *_txtStatus, *_txtBase, *_txtWeapons;
 	TextList *_lstCrafts;
-	Base *_base;
 	Globe *_globe;
+	Base *_base;
 public:
 	/// Creates the Intercept state.
 	InterceptState(Game *game, Globe *globe, Base *base = 0);

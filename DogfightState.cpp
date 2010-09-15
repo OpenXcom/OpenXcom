@@ -166,7 +166,7 @@ DogfightState::DogfightState(Game *game, Craft *craft, Ufo *ufo) : State(game), 
 			_range1->setPixel(x, rangeY, color);
 		}
 
-		int minY, maxY;
+		int minY = 0, maxY = 0;
 		if (rangeY < connectY)
 		{
 			minY = rangeY;

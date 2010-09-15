@@ -429,6 +429,15 @@ void GeoscapeState::timeSecond()
 	{
 		_game->getSavedGame()->getUfos()->erase(*i);
 	}
+
+	// Handle craft logic
+	for (vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); i++)
+	{
+		for (vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); j++)
+		{
+			(*j)->think();
+		}
+	}
 }
 
 /**

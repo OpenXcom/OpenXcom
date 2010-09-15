@@ -865,7 +865,9 @@ void Globe::drawMarkers()
 		// Draw the craft markers
 		for (vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); j++)
 		{
-			if (pointBack((*j)->getLongitude(), (*j)->getLatitude()))
+			// Hide crafts docked at base
+			if (((*j)->getLongitude() == (*i)->getLongitude() && (*j)->getLatitude() == (*i)->getLatitude() && (*j)->getTarget() == 0) ||
+				pointBack((*j)->getLongitude(), (*j)->getLatitude()))
 				continue;
 
 			polarToCart((*j)->getLongitude(), (*j)->getLatitude(), &x, &y);
