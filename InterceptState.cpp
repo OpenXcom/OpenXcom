@@ -104,7 +104,7 @@ InterceptState::InterceptState(Game *game, Globe *globe, Base *base) : State(gam
 			stringstream ss, ss2;
 			ss << _game->getResourcePack()->getLanguage()->getString((*j)->getRules()->getType()) << "-" << (*j)->getId();
 			ss2 << (*j)->getNumWeapons() << "/" << (*j)->getNumSoldiers((*i)->getSoldiers()) << "/" << (*j)->getNumHWPs();
-			_lstCrafts->addRow((int)*j, 4, ss.str().c_str(), _game->getResourcePack()->getLanguage()->getString((*j)->getStatus()).c_str(), (*i)->getName().c_str(), ss2.str().c_str());
+			_lstCrafts->addRow((intptr_t)*j, 4, ss.str().c_str(), _game->getResourcePack()->getLanguage()->getString((*j)->getStatus()).c_str(), (*i)->getName().c_str(), ss2.str().c_str());
 			if ((*j)->getStatus() == STR_READY)
 				_lstCrafts->getCell(row, 1)->setColor(Palette::blockOffset(8)+10);
 			row++;
@@ -139,7 +139,7 @@ void InterceptState::btnCancelClick(SDL_Event *ev, int scale)
 void InterceptState::lstCraftsClick(SDL_Event *ev, int scale)
 {
 	Craft* c = (Craft*)_lstCrafts->getSelectedValue();
-	if (c->getStatus() != STR_OUT)
+	if (c->getStatus() == STR_READY)
 	{
 		_game->popState();
 		_game->pushState(new SelectDestinationState(_game, c, _globe));
