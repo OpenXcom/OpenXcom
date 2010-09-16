@@ -123,6 +123,12 @@
 		<Unit filename="City.h">
 			<Option virtualFolder="Xcom\Game\" />
 		</Unit>
+		<Unit filename="ConfirmDestinationState.cpp">
+			<Option virtualFolder="States\" />
+		</Unit>
+		<Unit filename="ConfirmDestinationState.h">
+			<Option virtualFolder="States\" />
+		</Unit>
 		<Unit filename="ConfirmNewBaseState.cpp">
 			<Option virtualFolder="States\" />
 		</Unit>

@@ -424,19 +424,28 @@ void GeoscapeState::timeSecond()
 		}
 	}
 
-	// Clean up dead UFOs
-	for (vector<vector<Ufo*>::iterator>::iterator i = deadUfos.begin(); i != deadUfos.end(); i++)
-	{
-		_game->getSavedGame()->getUfos()->erase(*i);
-	}
-
 	// Handle craft logic
 	for (vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); i++)
 	{
 		for (vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); j++)
 		{
+			// Untarget dead UFOs
+			for (vector<vector<Ufo*>::iterator>::iterator u = deadUfos.begin(); u != deadUfos.end(); u++)
+			{
+				if ((*j)->getTarget() == (**u))
+				{
+					(*j)->setTarget(0);
+					// Craft lost target logic to go here later
+				}
+			}
 			(*j)->think();
 		}
+	}
+
+	// Clean up dead UFOs
+	for (vector<vector<Ufo*>::iterator>::iterator i = deadUfos.begin(); i != deadUfos.end(); i++)
+	{
+		_game->getSavedGame()->getUfos()->erase(*i);
 	}
 }
 

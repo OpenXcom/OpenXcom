@@ -418,10 +418,9 @@
 				>
 			</File>
 			<File
-				RelativePath=".\BuildFacilities.h"
+				RelativePath=".\BuildFacilitiesState.h"
 				>
 			</File>
-			
 			<File
 				RelativePath=".\BuildNewBaseState.cpp"
 				>
@@ -430,7 +429,14 @@
 				RelativePath=".\BuildNewBaseState.h"
 				>
 			</File>
-			
+			<File
+				RelativePath=".\ConfirmDestinationState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ConfirmDestinationState.h"
+				>
+			</File>
 			<File
 				RelativePath=".\ConfirmNewBaseState.cpp"
 				>
