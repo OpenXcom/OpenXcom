@@ -20,9 +20,6 @@
 #define OPENXCOM__TEXTLIST_H
 
 #include <vector>
-#if(_MSC_VER >= 1600)
-#include <cstdint>
-#endif
 #include "InteractiveSurface.h"
 
 class Text;
