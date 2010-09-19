@@ -20,6 +20,7 @@
 #define OPENXCOM__BASEFACILITY_H
 
 class RuleBaseFacility;
+class Base;
 
 /**
  * Represents a base facility placed in a base.
@@ -48,7 +49,7 @@ public:
 	/// Sets the facility's construction time.
 	void setBuildTime(int time);
 	/// Checks if a point is inside the facility's radar.
-	bool insideRadarRange(double baseLon, double baseLat, double pointLon, double pointLat);
+	bool insideRadarRange(Base *base, double pointLon, double pointLat);
 };
 
 #endif

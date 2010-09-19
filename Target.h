@@ -19,6 +19,14 @@
 #ifndef OPENXCOM__TARGET_H
 #define OPENXCOM__TARGET_H
 
+#include <string>
+
+using namespace std;
+
+class Language;
+
+#define SPEED_FACTOR 0.0000001
+
 /**
  * Base class for targets on the globe
  * with a set of radian coordinates.
@@ -33,13 +41,15 @@ public:
 	/// Cleans up the target.
 	~Target();
 	/// Gets the target's latitude.
-	double virtual getLatitude();
+	double getLatitude();
 	/// Sets the target's latitude.
-	void virtual setLatitude(double lat);
+	void setLatitude(double lat);
 	/// Gets the target's longitude.
-	double virtual getLongitude();
+	double getLongitude();
 	/// Sets the target's longitude.
-	void virtual setLongitude(double lon);
+	void setLongitude(double lon);
+	/// Gets the target's name.
+	virtual string getName(Language *lang) = 0;
 };
 
 #endif

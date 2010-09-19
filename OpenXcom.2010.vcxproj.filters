@@ -2,50 +2,8 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="AbandonGameState.cpp">
-      <Filter>States</Filter>
-    </ClCompile>
     <ClCompile Include="Bar.cpp">
       <Filter>Interface</Filter>
-    </ClCompile>
-    <ClCompile Include="BaseInfoState.cpp">
-      <Filter>States</Filter>
-    </ClCompile>
-    <ClCompile Include="BaseNameState.cpp">
-      <Filter>States</Filter>
-    </ClCompile>
-    <ClCompile Include="BasescapeErrorState.cpp">
-      <Filter>States</Filter>
-    </ClCompile>
-    <ClCompile Include="BasescapeState.cpp">
-      <Filter>States</Filter>
-    </ClCompile>
-    <ClCompile Include="BuildFacilitiesState.cpp">
-      <Filter>States</Filter>
-    </ClCompile>
-    <ClCompile Include="BuildNewBaseState.cpp">
-      <Filter>States</Filter>
-    </ClCompile>
-    <ClCompile Include="ConfirmNewBaseState.cpp">
-      <Filter>States</Filter>
-    </ClCompile>
-    <ClCompile Include="CraftInfoState.cpp">
-      <Filter>States</Filter>
-    </ClCompile>
-    <ClCompile Include="CraftSoldiersState.cpp">
-      <Filter>States</Filter>
-    </ClCompile>
-    <ClCompile Include="DismantleFacilityState.cpp">
-      <Filter>States</Filter>
-    </ClCompile>
-    <ClCompile Include="GeoscapeMessageState.cpp">
-      <Filter>States</Filter>
-    </ClCompile>
-    <ClCompile Include="GeoscapeState.cpp">
-      <Filter>States</Filter>
-    </ClCompile>
-    <ClCompile Include="GraphsState.cpp">
-      <Filter>States</Filter>
     </ClCompile>
     <ClCompile Include="LanguageState.cpp">
       <Filter>States</Filter>
@@ -53,43 +11,10 @@
     <ClCompile Include="MainMenuState.cpp">
       <Filter>States</Filter>
     </ClCompile>
-    <ClCompile Include="ManufactureState.cpp">
-      <Filter>States</Filter>
-    </ClCompile>
-    <ClCompile Include="MonthlyCostsState.cpp">
-      <Filter>States</Filter>
-    </ClCompile>
-    <ClCompile Include="MonthlyReportState.cpp">
-      <Filter>States</Filter>
-    </ClCompile>
     <ClCompile Include="NewGameState.cpp">
       <Filter>States</Filter>
     </ClCompile>
-    <ClCompile Include="OptionsState.cpp">
-      <Filter>States</Filter>
-    </ClCompile>
-    <ClCompile Include="PlaceFacilityState.cpp">
-      <Filter>States</Filter>
-    </ClCompile>
-    <ClCompile Include="PlaceLiftState.cpp">
-      <Filter>States</Filter>
-    </ClCompile>
-    <ClCompile Include="PurchaseState.cpp">
-      <Filter>States</Filter>
-    </ClCompile>
-    <ClCompile Include="ResearchState.cpp">
-      <Filter>States</Filter>
-    </ClCompile>
     <ClCompile Include="TestState.cpp">
-      <Filter>States</Filter>
-    </ClCompile>
-    <ClCompile Include="SoldiersState.cpp">
-      <Filter>States</Filter>
-    </ClCompile>
-    <ClCompile Include="SoldierInfoState.cpp">
-      <Filter>States</Filter>
-    </ClCompile>
-    <ClCompile Include="SellState.cpp">
       <Filter>States</Filter>
     </ClCompile>
     <ClCompile Include="Text.cpp">
@@ -139,12 +64,6 @@
     </ClCompile>
     <ClCompile Include="SurfaceSet.cpp">
       <Filter>Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="CraftsState.cpp">
-      <Filter>States</Filter>
-    </ClCompile>
-    <ClCompile Include="FundingState.cpp">
-      <Filter>States</Filter>
     </ClCompile>
     <ClCompile Include="ImageButton.cpp">
       <Filter>Interface</Filter>
@@ -221,9 +140,6 @@
     <ClCompile Include="Polyline.cpp">
       <Filter>Xcom\Resource</Filter>
     </ClCompile>
-    <ClCompile Include="GeoscapeErrorState.cpp">
-      <Filter>States</Filter>
-    </ClCompile>
     <ClCompile Include="RuleItem.cpp">
       <Filter>Xcom\Rules</Filter>
     </ClCompile>
@@ -235,12 +151,6 @@
     </ClCompile>
     <ClCompile Include="RuleCraftWeapon.cpp">
       <Filter>Xcom\Rules</Filter>
-    </ClCompile>
-    <ClCompile Include="StoresState.cpp">
-      <Filter>States</Filter>
-    </ClCompile>
-    <ClCompile Include="CraftWeaponsState.cpp">
-      <Filter>States</Filter>
     </ClCompile>
     <ClCompile Include="Region.cpp">
       <Filter>Xcom\Game</Filter>
@@ -254,73 +164,124 @@
     <ClCompile Include="RuleUfo.cpp">
       <Filter>Xcom\Rules</Filter>
     </ClCompile>
-    <ClCompile Include="UfoDetectedState.cpp">
-      <Filter>States</Filter>
-    </ClCompile>
     <ClCompile Include="ArrowButton.cpp">
       <Filter>Interface</Filter>
-    </ClCompile>
-    <ClCompile Include="InterceptState.cpp">
-      <Filter>States</Filter>
-    </ClCompile>
-    <ClCompile Include="DogfightState.cpp">
-      <Filter>States</Filter>
     </ClCompile>
     <ClCompile Include="Target.cpp">
       <Filter>Xcom\Game</Filter>
     </ClCompile>
-    <ClCompile Include="SelectDestinationState.cpp">
-      <Filter>States</Filter>
+    <ClCompile Include="AbandonGameState.cpp">
+      <Filter>States\Geoscape</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseNameState.cpp">
+      <Filter>States\Geoscape</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseInfoState.cpp">
+      <Filter>States\Basescape</Filter>
+    </ClCompile>
+    <ClCompile Include="BasescapeErrorState.cpp">
+      <Filter>States\Basescape</Filter>
+    </ClCompile>
+    <ClCompile Include="BasescapeState.cpp">
+      <Filter>States\Basescape</Filter>
+    </ClCompile>
+    <ClCompile Include="BuildFacilitiesState.cpp">
+      <Filter>States\Basescape</Filter>
+    </ClCompile>
+    <ClCompile Include="BuildNewBaseState.cpp">
+      <Filter>States\Geoscape</Filter>
     </ClCompile>
     <ClCompile Include="ConfirmDestinationState.cpp">
-      <Filter>States</Filter>
+      <Filter>States\Geoscape</Filter>
+    </ClCompile>
+    <ClCompile Include="ConfirmNewBaseState.cpp">
+      <Filter>States\Geoscape</Filter>
+    </ClCompile>
+    <ClCompile Include="CraftInfoState.cpp">
+      <Filter>States\Basescape</Filter>
+    </ClCompile>
+    <ClCompile Include="CraftSoldiersState.cpp">
+      <Filter>States\Basescape</Filter>
+    </ClCompile>
+    <ClCompile Include="CraftsState.cpp">
+      <Filter>States\Basescape</Filter>
+    </ClCompile>
+    <ClCompile Include="CraftWeaponsState.cpp">
+      <Filter>States\Basescape</Filter>
+    </ClCompile>
+    <ClCompile Include="DismantleFacilityState.cpp">
+      <Filter>States\Basescape</Filter>
+    </ClCompile>
+    <ClCompile Include="DogfightState.cpp">
+      <Filter>States\Geoscape</Filter>
+    </ClCompile>
+    <ClCompile Include="FundingState.cpp">
+      <Filter>States\Geoscape</Filter>
+    </ClCompile>
+    <ClCompile Include="GeoscapeCraftState.cpp">
+      <Filter>States\Geoscape</Filter>
+    </ClCompile>
+    <ClCompile Include="GeoscapeErrorState.cpp">
+      <Filter>States\Geoscape</Filter>
+    </ClCompile>
+    <ClCompile Include="GeoscapeMessageState.cpp">
+      <Filter>States\Geoscape</Filter>
+    </ClCompile>
+    <ClCompile Include="GeoscapeState.cpp">
+      <Filter>States\Geoscape</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphsState.cpp">
+      <Filter>States\Geoscape</Filter>
+    </ClCompile>
+    <ClCompile Include="InterceptState.cpp">
+      <Filter>States\Geoscape</Filter>
+    </ClCompile>
+    <ClCompile Include="PlaceFacilityState.cpp">
+      <Filter>States\Basescape</Filter>
+    </ClCompile>
+    <ClCompile Include="PlaceLiftState.cpp">
+      <Filter>States\Basescape</Filter>
+    </ClCompile>
+    <ClCompile Include="PurchaseState.cpp">
+      <Filter>States\Basescape</Filter>
+    </ClCompile>
+    <ClCompile Include="ResearchState.cpp">
+      <Filter>States\Basescape</Filter>
+    </ClCompile>
+    <ClCompile Include="SellState.cpp">
+      <Filter>States\Basescape</Filter>
+    </ClCompile>
+    <ClCompile Include="SoldierInfoState.cpp">
+      <Filter>States\Basescape</Filter>
+    </ClCompile>
+    <ClCompile Include="SoldiersState.cpp">
+      <Filter>States\Basescape</Filter>
+    </ClCompile>
+    <ClCompile Include="StoresState.cpp">
+      <Filter>States\Basescape</Filter>
+    </ClCompile>
+    <ClCompile Include="MonthlyCostsState.cpp">
+      <Filter>States\Basescape</Filter>
+    </ClCompile>
+    <ClCompile Include="ManufactureState.cpp">
+      <Filter>States\Basescape</Filter>
+    </ClCompile>
+    <ClCompile Include="MonthlyReportState.cpp">
+      <Filter>States\Geoscape</Filter>
+    </ClCompile>
+    <ClCompile Include="OptionsState.cpp">
+      <Filter>States\Geoscape</Filter>
+    </ClCompile>
+    <ClCompile Include="SelectDestinationState.cpp">
+      <Filter>States\Geoscape</Filter>
+    </ClCompile>
+    <ClCompile Include="UfoDetectedState.cpp">
+      <Filter>States\Geoscape</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AbandonGameState.h">
-      <Filter>States</Filter>
-    </ClInclude>
     <ClInclude Include="Bar.h">
       <Filter>Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="BaseInfoState.h">
-      <Filter>States</Filter>
-    </ClInclude>
-    <ClInclude Include="BaseNameState.h">
-      <Filter>States</Filter>
-    </ClInclude>
-    <ClInclude Include="BasescapeErrorState.h">
-      <Filter>States</Filter>
-    </ClInclude>
-    <ClInclude Include="BasescapeState.h">
-      <Filter>States</Filter>
-    </ClInclude>
-    <ClInclude Include="ConfirmNewBaseState.h">
-      <Filter>States</Filter>
-    </ClInclude>
-    <ClInclude Include="BuildFacilitiesState.h">
-      <Filter>States</Filter>
-    </ClInclude>
-    <ClInclude Include="BuildNewBaseState.h">
-      <Filter>States</Filter>
-    </ClInclude>
-    <ClInclude Include="CraftSoldiersState.h">
-      <Filter>States</Filter>
-    </ClInclude>
-    <ClInclude Include="CraftInfoState.h">
-      <Filter>States</Filter>
-    </ClInclude>
-    <ClInclude Include="DismantleFacilityState.h">
-      <Filter>States</Filter>
-    </ClInclude>
-    <ClInclude Include="GeoscapeMessageState.h">
-      <Filter>States</Filter>
-    </ClInclude>
-    <ClInclude Include="GeoscapeState.h">
-      <Filter>States</Filter>
-    </ClInclude>
-    <ClInclude Include="GraphsState.h">
-      <Filter>States</Filter>
     </ClInclude>
     <ClInclude Include="LanguageState.h">
       <Filter>States</Filter>
@@ -328,43 +289,10 @@
     <ClInclude Include="MainMenuState.h">
       <Filter>States</Filter>
     </ClInclude>
-    <ClInclude Include="ManufactureState.h">
-      <Filter>States</Filter>
-    </ClInclude>
-    <ClInclude Include="MonthlyCostsState.h">
-      <Filter>States</Filter>
-    </ClInclude>
-    <ClInclude Include="MonthlyReportState.h">
-      <Filter>States</Filter>
-    </ClInclude>
     <ClInclude Include="NewGameState.h">
       <Filter>States</Filter>
     </ClInclude>
-    <ClInclude Include="OptionsState.h">
-      <Filter>States</Filter>
-    </ClInclude>
-    <ClInclude Include="PlaceFacilityState.h">
-      <Filter>States</Filter>
-    </ClInclude>
-    <ClInclude Include="PlaceLiftState.h">
-      <Filter>States</Filter>
-    </ClInclude>
-    <ClInclude Include="PurchaseState.h">
-      <Filter>States</Filter>
-    </ClInclude>
-    <ClInclude Include="ResearchState.h">
-      <Filter>States</Filter>
-    </ClInclude>
     <ClInclude Include="TestState.h">
-      <Filter>States</Filter>
-    </ClInclude>
-    <ClInclude Include="SoldiersState.h">
-      <Filter>States</Filter>
-    </ClInclude>
-    <ClInclude Include="SoldierInfoState.h">
-      <Filter>States</Filter>
-    </ClInclude>
-    <ClInclude Include="SellState.h">
       <Filter>States</Filter>
     </ClInclude>
     <ClInclude Include="TextList.h">
@@ -414,12 +342,6 @@
     </ClInclude>
     <ClInclude Include="SurfaceSet.h">
       <Filter>Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="CraftsState.h">
-      <Filter>States</Filter>
-    </ClInclude>
-    <ClInclude Include="FundingState.h">
-      <Filter>States</Filter>
     </ClInclude>
     <ClInclude Include="ImageButton.h">
       <Filter>Interface</Filter>
@@ -499,9 +421,6 @@
     <ClInclude Include="Polyline.h">
       <Filter>Xcom\Resource</Filter>
     </ClInclude>
-    <ClInclude Include="GeoscapeErrorState.h">
-      <Filter>States</Filter>
-    </ClInclude>
     <ClInclude Include="RuleItem.h">
       <Filter>Xcom\Rules</Filter>
     </ClInclude>
@@ -513,12 +432,6 @@
     </ClInclude>
     <ClInclude Include="RuleCraftWeapon.h">
       <Filter>Xcom\Rules</Filter>
-    </ClInclude>
-    <ClInclude Include="StoresState.h">
-      <Filter>States</Filter>
-    </ClInclude>
-    <ClInclude Include="CraftWeaponsState.h">
-      <Filter>States</Filter>
     </ClInclude>
     <ClInclude Include="Region.h">
       <Filter>Xcom\Game</Filter>
@@ -532,26 +445,119 @@
     <ClInclude Include="RuleUfo.h">
       <Filter>Xcom\Rules</Filter>
     </ClInclude>
-    <ClInclude Include="UfoDetectedState.h">
-      <Filter>States</Filter>
-    </ClInclude>
     <ClInclude Include="ArrowButton.h">
       <Filter>Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="InterceptState.h">
-      <Filter>States</Filter>
-    </ClInclude>
-    <ClInclude Include="DogfightState.h">
-      <Filter>States</Filter>
     </ClInclude>
     <ClInclude Include="Target.h">
       <Filter>Xcom\Game</Filter>
     </ClInclude>
-    <ClInclude Include="SelectDestinationState.h">
-      <Filter>States</Filter>
+    <ClInclude Include="AbandonGameState.h">
+      <Filter>States\Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseNameState.h">
+      <Filter>States\Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseInfoState.h">
+      <Filter>States\Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="BasescapeErrorState.h">
+      <Filter>States\Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="BasescapeState.h">
+      <Filter>States\Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="BuildFacilitiesState.h">
+      <Filter>States\Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="BuildNewBaseState.h">
+      <Filter>States\Geoscape</Filter>
     </ClInclude>
     <ClInclude Include="ConfirmDestinationState.h">
-      <Filter>States</Filter>
+      <Filter>States\Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="ConfirmNewBaseState.h">
+      <Filter>States\Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="CraftInfoState.h">
+      <Filter>States\Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="CraftSoldiersState.h">
+      <Filter>States\Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="CraftsState.h">
+      <Filter>States\Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="CraftWeaponsState.h">
+      <Filter>States\Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="DismantleFacilityState.h">
+      <Filter>States\Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="DogfightState.h">
+      <Filter>States\Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="FundingState.h">
+      <Filter>States\Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="GeoscapeCraftState.h">
+      <Filter>States\Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="GeoscapeErrorState.h">
+      <Filter>States\Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="GeoscapeMessageState.h">
+      <Filter>States\Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="GeoscapeState.h">
+      <Filter>States\Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphsState.h">
+      <Filter>States\Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="InterceptState.h">
+      <Filter>States\Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="PlaceFacilityState.h">
+      <Filter>States\Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="PlaceLiftState.h">
+      <Filter>States\Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="PurchaseState.h">
+      <Filter>States\Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="ResearchState.h">
+      <Filter>States\Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="SellState.h">
+      <Filter>States\Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="SoldierInfoState.h">
+      <Filter>States\Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="SoldiersState.h">
+      <Filter>States\Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="StoresState.h">
+      <Filter>States\Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="MonthlyCostsState.h">
+      <Filter>States\Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="ManufactureState.h">
+      <Filter>States\Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="MonthlyReportState.h">
+      <Filter>States\Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="OptionsState.h">
+      <Filter>States\Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="SelectDestinationState.h">
+      <Filter>States\Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="UfoDetectedState.h">
+      <Filter>States\Geoscape</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -575,6 +581,15 @@
     </Filter>
     <Filter Include="Engine">
       <UniqueIdentifier>{72813a85-910c-4ea6-b311-9ee329fe649c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="States\Geoscape">
+      <UniqueIdentifier>{c53d3d83-a0a6-4636-851e-fa99e07ca4ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="States\Basescape">
+      <UniqueIdentifier>{90c888ef-cb8f-4c90-b5a5-dc1f099f858d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="States\Battlescape">
+      <UniqueIdentifier>{ee5ecc4b-2b8e-4b69-9db0-e87ee14aeb2d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

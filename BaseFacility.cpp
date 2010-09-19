@@ -18,6 +18,7 @@
  */
 #include "BaseFacility.h"
 #include "RuleBaseFacility.h"
+#include "Base.h"
 
 #define RANGE_FACTOR 0.0003
 
@@ -90,18 +91,17 @@ void BaseFacility::setBuildTime(int time)
 /**
  * Returns if a certain point is covered by the facility's
  * radar range, taking in account the positions of both.
- * @param baseLon Base longitude.
- * @param baseLat Base latitude.
+ * @param base Base the city belongs to.
  * @param pointLon Point longitude.
  * @param pointLat Point latitude.
  * @return True if it's within range, False otherwise.
  */
-bool BaseFacility::insideRadarRange(double baseLon, double baseLat, double pointLon, double pointLat)
+bool BaseFacility::insideRadarRange(Base *base, double pointLon, double pointLat)
 {
 	if (_rules->getRadarRange() == 0)
 		return false;
 	double newrange = _rules->getRadarRange() * RANGE_FACTOR;
-	double dLon = pointLon - baseLon;
-	double dLat = pointLat - baseLat;
+	double dLon = pointLon - base->getLongitude();
+	double dLat = pointLat - base->getLatitude();
     return (dLon * dLon + dLat * dLat <= newrange * newrange);
 }

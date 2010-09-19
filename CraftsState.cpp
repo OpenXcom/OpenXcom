@@ -126,7 +126,7 @@ void CraftsState::init()
 	for (vector<Craft*>::iterator i = _base->getCrafts()->begin(); i != _base->getCrafts()->end(); i++)
 	{
 		stringstream ss, ss2, ss3, ss4;
-		ss << _game->getResourcePack()->getLanguage()->getString((*i)->getRules()->getType()) << "-" << (*i)->getId();
+		ss << (*i)->getName(_game->getResourcePack()->getLanguage());
 		ss2 << (*i)->getNumWeapons() << "/" << (*i)->getRules()->getWeapons();
 		ss3 << (*i)->getNumSoldiers(_base->getSoldiers());
 		ss4 << (*i)->getNumHWPs();

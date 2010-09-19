@@ -22,6 +22,7 @@
 #include "Target.h"
 #include <map>
 #include <vector>
+#include <string>
 #include "LangString.h"
 
 using namespace std;
@@ -56,12 +57,14 @@ public:
 	~Craft();
 	/// Gets the craft's ruleset.
 	RuleCraft *getRules();
+	/// Gets the craft's ID.
+	int getId();
+	/// Gets the craft's name.
+	string getName(Language *lang);
 	/// Gets the craft's target.
 	Target *getTarget();
 	/// Sets the craft's target.
 	void setTarget(Target *target);
-	/// Gets the craft's ID.
-	int getId();
 	/// Gets the craft's status.
 	LangString getStatus();
 	/// Sets the craft's status.
@@ -94,6 +97,8 @@ public:
 	int getSpeed();
 	/// Sets the craft's speed.
 	void setSpeed(int speed);
+	/// Checks if a point is inside the craft's radar.
+	bool insideRadarRange(double pointLon, double pointLat);
 	/// Handles craft logic.
 	void think();
 };

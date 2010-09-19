@@ -18,9 +18,9 @@
  */
 #include "Ufo.h"
 #include <cmath>
+#include <sstream>
+#include "Language.h"
 #include "RuleUfo.h"
-
-#define SPEED_FACTOR 0.0000001
 
 /**
  * Initializes a UFO of the specified type.
@@ -64,6 +64,18 @@ int Ufo::getId()
 void Ufo::setId(int id)
 {
 	_id = id;
+}
+
+/**
+ * Returns the UFO's unique identifying name.
+ * @param Language to get strings from.
+ * @return Full name.
+ */
+string Ufo::getName(Language *lang)
+{
+	stringstream name;
+	name << lang->getString(STR_UFO_) << _id;
+	return name.str();
 }
 
 /**

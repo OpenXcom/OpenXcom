@@ -54,10 +54,12 @@
 #include "GeoscapeMessageState.h"
 #include "UfoDetectedState.h"
 #include "DogfightState.h"
+#include "GeoscapeCraftState.h"
 
 using namespace std;
 
 #define PI 3.141592653589793238461
+#define CLICK_RADIUS 25
 
 /**
  * Initializes all the elements in the Geoscape screen.
@@ -415,7 +417,7 @@ void GeoscapeState::timeSecond()
 	{
 		if ((*i)->getLatitude() == (*i)->getTargetLatitude() && (*i)->getLongitude() == (*i)->getTargetLongitude())
 		{
-			delete *i;
+			(*i)->setDetected(false);
 			deadUfos.push_back(i);
 		}
 		else
@@ -429,14 +431,11 @@ void GeoscapeState::timeSecond()
 	{
 		for (vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); j++)
 		{
-			// Untarget dead UFOs
-			for (vector<vector<Ufo*>::iterator>::iterator u = deadUfos.begin(); u != deadUfos.end(); u++)
+			Ufo* u = dynamic_cast<Ufo*>((*j)->getTarget());
+			if (u != 0 && !u->getDetected())
 			{
-				if ((*j)->getTarget() == (**u))
-				{
-					(*j)->setTarget(0);
-					// Craft lost target logic to go here later
-				}
+				(*j)->setTarget(0);
+				// Craft lost target logic to go here later
 			}
 			(*j)->think();
 		}
@@ -445,6 +444,7 @@ void GeoscapeState::timeSecond()
 	// Clean up dead UFOs
 	for (vector<vector<Ufo*>::iterator>::iterator i = deadUfos.begin(); i != deadUfos.end(); i++)
 	{
+		delete **i;
 		_game->getSavedGame()->getUfos()->erase(*i);
 	}
 }
@@ -492,18 +492,32 @@ void GeoscapeState::timeMinute()
 			{
 				for (vector<BaseFacility*>::iterator f = (*b)->getFacilities()->begin(); f != (*b)->getFacilities()->end() && !detected; f++)
 				{
-					if ((*f)->insideRadarRange((*b)->getLongitude(), (*b)->getLatitude(), (*u)->getLongitude(), (*u)->getLatitude()))
+					if ((*f)->getBuildTime() != 0)
+						continue;
+					if ((*f)->insideRadarRange(*b, (*u)->getLongitude(), (*u)->getLatitude()))
 					{
 						int chance = RNG::generate(1, 100);
 						if (chance <= (*f)->getRules()->getRadarChance())
 						{
-							(*u)->setDetected(true);
 							detected = true;
-							_pause = true;
-							_popups.push_back(new UfoDetectedState(_game, (*u), this));
 						}
 					}
 				}
+				for (vector<Craft*>::iterator c = (*b)->getCrafts()->begin(); c != (*b)->getCrafts()->end() && !detected; c++)
+				{
+					if ((*c)->getLongitude() == (*b)->getLongitude() && (*c)->getLatitude() == (*b)->getLatitude() && (*c)->getTarget() == 0)
+						continue;
+					if ((*c)->insideRadarRange((*u)->getLongitude(), (*u)->getLatitude()))
+					{
+						detected = true;
+					}
+				}
+			}
+			if (detected)
+			{
+				(*u)->setDetected(detected);
+				_pause = true;
+				_popups.push_back(new UfoDetectedState(_game, (*u), this, true));
 			}
 		}
 		else
@@ -513,7 +527,11 @@ void GeoscapeState::timeMinute()
 			{
 				for (vector<BaseFacility*>::iterator f = (*b)->getFacilities()->begin(); f != (*b)->getFacilities()->end() && !detected; f++)
 				{
-					detected = detected || (*f)->insideRadarRange((*b)->getLongitude(), (*b)->getLatitude(), (*u)->getLongitude(), (*u)->getLatitude());
+					detected = detected || (*f)->insideRadarRange(*b, (*u)->getLongitude(), (*u)->getLatitude());
+				}
+				for (vector<Craft*>::iterator c = (*b)->getCrafts()->begin(); c != (*b)->getCrafts()->end() && !detected; c++)
+				{
+					detected = detected || (*c)->insideRadarRange((*u)->getLongitude(), (*u)->getLatitude());
 				}
 			}
 			(*u)->setDetected(detected);
@@ -631,22 +649,69 @@ Globe *GeoscapeState::getGlobe()
 void GeoscapeState::globeClick(SDL_Event *ev, int scale)
 {
 	double lon, lat;
-	_globe->cartToPolar(ev->button.x / scale, ev->button.y / scale, &lon, &lat);
+	int mouseX = ev->button.x / scale, mouseY = ev->button.y / scale;
+	_globe->cartToPolar(mouseX, mouseY, &lon, &lat);
 	
 	if (ev->button.button == SDL_BUTTON_LEFT)
 	{
-		
+		// Clicking markers on the globe
+		for (vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); i++)
+		{
+			if ((*i)->getLongitude() == 0.0 && (*i)->getLatitude() == 0.0)
+				continue;
+			Sint16 x, y;
+			_globe->polarToCart((*i)->getLongitude(), (*i)->getLatitude(), &x, &y);
+
+			int dx = mouseX - x;
+			int dy = mouseY - y;
+			if (dx * dx + dy * dy <= CLICK_RADIUS)
+			{
+				_game->pushState(new InterceptState(_game, _globe, (*i)));
+			}
+
+			for (vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); j++)
+			{
+				if ((*j)->getLongitude() == (*i)->getLongitude() && (*j)->getLatitude() == (*i)->getLatitude() && (*j)->getTarget() == 0)
+					continue;
+				Sint16 x, y;
+				_globe->polarToCart((*j)->getLongitude(), (*j)->getLatitude(), &x, &y);
+
+				int dx = mouseX - x;
+				int dy = mouseY - y;
+				if (dx * dx + dy * dy <= CLICK_RADIUS)
+				{
+					_game->pushState(new GeoscapeCraftState(_game, (*j), _globe));
+				}
+			}
+		}
+		for (vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end(); i++)
+		{
+			if (!(*i)->getDetected())
+				continue;
+			Sint16 x, y;
+			_globe->polarToCart((*i)->getLongitude(), (*i)->getLatitude(), &x, &y);
+
+			int dx = mouseX - x;
+			int dy = mouseY - y;
+			if (dx * dx + dy * dy <= CLICK_RADIUS)
+			{
+				_game->pushState(new UfoDetectedState(_game, (*i), this, false));
+			}
+		}
 	}
 	else if (ev->button.button == SDL_BUTTON_RIGHT)
 	{
+		// Rotating the globe
 		_globe->center(lon, lat);
 	}
 	else if (ev->button.button == SDL_BUTTON_WHEELUP)
 	{
+		// Zooming the globe in
 		_globe->zoomIn();
 	}
 	else if (ev->button.button == SDL_BUTTON_WHEELDOWN)
 	{
+		// Zoomine the globe out
 		_globe->zoomOut();
 	}
 }
@@ -669,6 +734,7 @@ void GeoscapeState::globeKeyPress(SDL_Event *ev, int scale)
  */
 void GeoscapeState::btnInterceptClick(SDL_Event *ev, int scale)
 {
+	//_game->pushState(new GeoscapeCraftState(_game));
 	_game->pushState(new InterceptState(_game, _globe));
 	//_game->pushState(new DogfightState(_game, _game->getSavedGame()->getBases()->front()->getCrafts()->at(1), 0));
 }

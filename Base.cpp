@@ -59,7 +59,7 @@ Base::~Base()
  * Returns the custom name for the base.
  * @return Name.
  */
-string Base::getName()
+string Base::getName(Language *lang)
 {
 	return _name;
 }

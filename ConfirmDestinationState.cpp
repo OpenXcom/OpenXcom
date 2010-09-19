@@ -30,7 +30,7 @@
 #include "TextButton.h"
 #include "SavedGame.h"
 #include "Craft.h"
-#include "Ufo.h"
+#include "Target.h"
 
 using namespace std;
 
@@ -73,13 +73,9 @@ ConfirmDestinationState::ConfirmDestinationState(Game *game, Craft *craft, Targe
 	_txtTarget->setColor(Palette::blockOffset(15)-1);
 	_txtTarget->setBig();
 	_txtTarget->setAlign(ALIGN_CENTER);
-	Ufo* u = dynamic_cast<Ufo*>(_target);
-	if (u)
-	{
-		stringstream ss;
-		ss << _game->getResourcePack()->getLanguage()->getString(STR_TARGET) << _game->getResourcePack()->getLanguage()->getString(STR_UFO_) << u->getId();
-		_txtTarget->setText(ss.str());
-	}
+	stringstream ss;
+	ss << _game->getResourcePack()->getLanguage()->getString(STR_TARGET) << _target->getName(_game->getResourcePack()->getLanguage());
+	_txtTarget->setText(ss.str());
 }
 
 /**

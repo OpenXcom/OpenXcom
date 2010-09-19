@@ -16,39 +16,41 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM__UFODETECTEDSTATE_H
-#define OPENXCOM__UFODETECTEDSTATE_H
+#ifndef OPENXCOM__GEOSCAPECRAFTSTATE_H
+#define OPENXCOM__GEOSCAPECRAFTSTATE_H
 
 #include "State.h"
 
-class Ufo;
 class TextButton;
 class Window;
 class Text;
-class TextList;
-class GeoscapeState;
+class Craft;
+class Globe;
 
 /**
- * Displays info on a detected UFO.
+ * Craft window that displays info about
+ * a specific craft out on the Geoscape.
  */
-class UfoDetectedState : public State
+class GeoscapeCraftState : public State
 {
 private:
-	Ufo *_ufo;
-	GeoscapeState *_state;
-	bool _detected;
+	Craft *_craft;
+	Globe *_globe;
 
-	TextButton *_btnCentre, *_btnCancel;
+	TextButton *_btnBase, *_btnTarget, *_btnPatrol, *_btnCancel;
 	Window *_window;
-	Text *_txtUfo, *_txtDetected;
-	TextList *_lstInfo;
+	Text *_txtTitle, *_txtStatus, *_txtBase, *_txtSpeed, *_txtMaxSpeed, *_txtAltitude, *_txtFuel, *_txtW1Name, *_txtW1Ammo, *_txtW2Name, *_txtW2Ammo;
 public:
-	/// Creates the Stores state.
-	UfoDetectedState(Game *game, Ufo *ufo, GeoscapeState *state, bool detected);
-	/// Cleans up the Stores state.
-	~UfoDetectedState();
-	/// Handler for clicking the Centre on UFO button.
-	void btnCentreClick(SDL_Event *ev, int scale);
+	/// Creates the Geoscape Craft state.
+	GeoscapeCraftState(Game *game, Craft *craft, Globe *globe);
+	/// Cleans up the Geoscape Craft state.
+	~GeoscapeCraftState();
+	/// Handler for clicking the Return To Base button.
+	void btnBaseClick(SDL_Event *ev, int scale);
+	/// Handler for clicking the Select New Target button.
+	void btnTargetClick(SDL_Event *ev, int scale);
+	/// Handler for clicking the Patrol button.
+	void btnPatrolClick(SDL_Event *ev, int scale);
 	/// Handler for clicking the Cancel button.
 	void btnCancelClick(SDL_Event *ev, int scale);
 };

@@ -34,6 +34,8 @@
 #include "Ufo.h"
 #include "ConfirmDestinationState.h"
 
+#define CLICK_RADIUS 25
+
 /**
  * Initializes all the elements in the Select Destination window.
  * @param game Pointer to the core game.
@@ -151,7 +153,7 @@ void SelectDestinationState::globeClick(SDL_Event *ev, int scale)
 
 	if (ev->button.button == SDL_BUTTON_LEFT)
 	{
-		// Check for UFOs
+		// Clicking on UFOs
 		for (vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end(); i++)
 		{
 			if ((*i)->getDetected())
@@ -161,7 +163,7 @@ void SelectDestinationState::globeClick(SDL_Event *ev, int scale)
 
 				int dx = mouseX - x;
 				int dy = mouseY - y;
-				if (dx * dx + dy * dy <= 25)
+				if (dx * dx + dy * dy <= CLICK_RADIUS)
 				{
 					_game->pushState(new ConfirmDestinationState(_game, _craft, (*i)));
 				}
@@ -170,14 +172,17 @@ void SelectDestinationState::globeClick(SDL_Event *ev, int scale)
 	}
 	else if (ev->button.button == SDL_BUTTON_RIGHT)
 	{
+		// Rotating the globe
 		_globe->center(lon, lat);
 	}
 	else if (ev->button.button == SDL_BUTTON_WHEELUP)
 	{
+		// Zooming in the globe
 		_globe->zoomIn();
 	}
 	else if (ev->button.button == SDL_BUTTON_WHEELDOWN)
 	{
+		// Zooming out the globe
 		_globe->zoomOut();
 	}
 }

@@ -157,22 +157,20 @@ void CraftInfoState::init()
 {
 	Craft *c = _base->getCrafts()->at(_craft);
 
-	stringstream ss;
-	ss << _game->getResourcePack()->getLanguage()->getString(c->getRules()->getType()) << "-" << c->getId();
-	_txtCraft->setText(ss.str());
+	_txtCraft->setText(c->getName(_game->getResourcePack()->getLanguage()));
 
 	SurfaceSet *texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
 	texture->getFrame(c->getRules()->getSprite() + 33)->setX(0);
 	texture->getFrame(c->getRules()->getSprite() + 33)->setY(0);
 	texture->getFrame(c->getRules()->getSprite() + 33)->blit(_sprite);
 
-	stringstream ss2;
-	ss2 << _game->getResourcePack()->getLanguage()->getString(STR_DAMAGE) << c->getDamagePercentage() << "%";
-	_txtDamage->setText(ss2.str());
+	stringstream ss;
+	ss << _game->getResourcePack()->getLanguage()->getString(STR_DAMAGE) << c->getDamagePercentage() << "%";
+	_txtDamage->setText(ss.str());
 
-	stringstream ss3;
-	ss3 << _game->getResourcePack()->getLanguage()->getString(STR_FUEL) << c->getFuelPercentage() << "%";
-	_txtFuel->setText(ss3.str());
+	stringstream ss2;
+	ss2 << _game->getResourcePack()->getLanguage()->getString(STR_FUEL) << c->getFuelPercentage() << "%";
+	_txtFuel->setText(ss2.str());
 	
 	if (c->getRules()->getSoldiers() > 0)
 	{
@@ -217,13 +215,13 @@ void CraftInfoState::init()
 
 			_txtW1Name->setText(_game->getResourcePack()->getLanguage()->getString(w1->getRules()->getType()));
 
-			stringstream ss4;
-			ss4 << _game->getResourcePack()->getLanguage()->getString(STR_AMMO) << w1->getAmmo();
-			_txtW1Ammo->setText(ss4.str());
+			stringstream ss3;
+			ss3 << _game->getResourcePack()->getLanguage()->getString(STR_AMMO) << w1->getAmmo();
+			_txtW1Ammo->setText(ss3.str());
 
-			stringstream ss5;
-			ss5 << _game->getResourcePack()->getLanguage()->getString(STR_MAX) << w1->getRules()->getAmmoMax();
-			_txtW1Max->setText(ss5.str());
+			stringstream ss4;
+			ss4 << _game->getResourcePack()->getLanguage()->getString(STR_MAX) << w1->getRules()->getAmmoMax();
+			_txtW1Max->setText(ss4.str());
 		}
 		else
 		{
@@ -255,13 +253,13 @@ void CraftInfoState::init()
 
 			_txtW2Name->setText(_game->getResourcePack()->getLanguage()->getString(w2->getRules()->getType()));
 
-			stringstream ss6;
-			ss6 << _game->getResourcePack()->getLanguage()->getString(STR_AMMO) << w2->getAmmo();
-			_txtW2Ammo->setText(ss6.str());
+			stringstream ss5;
+			ss5 << _game->getResourcePack()->getLanguage()->getString(STR_AMMO) << w2->getAmmo();
+			_txtW2Ammo->setText(ss5.str());
 
-			stringstream ss7;
-			ss7 << _game->getResourcePack()->getLanguage()->getString(STR_MAX) << w2->getRules()->getAmmoMax();
-			_txtW2Max->setText(ss7.str());
+			stringstream ss6;
+			ss6 << _game->getResourcePack()->getLanguage()->getString(STR_MAX) << w2->getRules()->getAmmoMax();
+			_txtW2Max->setText(ss6.str());
 		}
 		else
 		{

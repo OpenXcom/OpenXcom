@@ -326,10 +326,11 @@ void SoldierInfoState::init()
 	_txtKills->setText(ss11.str());
 
 	stringstream ss12;
+	ss12 << _game->getResourcePack()->getLanguage()->getString(STR_CRAFT_);
 	if (s->getCraft() == 0)
-		ss12 << _game->getResourcePack()->getLanguage()->getString(STR_CRAFT_) << _game->getResourcePack()->getLanguage()->getString(STR_NONE);
+		ss12 << _game->getResourcePack()->getLanguage()->getString(STR_NONE);
 	else
-		ss12 << _game->getResourcePack()->getLanguage()->getString(STR_CRAFT_) << _game->getResourcePack()->getLanguage()->getString(s->getCraft()->getRules()->getType()) << "-" << s->getCraft()->getId();
+		ss12 << s->getCraft()->getName(_game->getResourcePack()->getLanguage());
 	_txtCraft->setText(ss12.str());
 }
 	

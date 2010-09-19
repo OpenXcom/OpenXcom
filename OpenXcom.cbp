@@ -5,7 +5,7 @@
 		<Option title="OpenXcom" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
-		<Option virtualFolders="Engine\;Interface\;States\;Xcom\;Xcom\Game\;Xcom\Resource\;Xcom\Rules\;" />
+		<Option virtualFolders="Engine\;Interface\;States\;States\Basescape;States\Battlescape;States\Geoscape;Xcom\;Xcom\Game\;Xcom\Resource\;Xcom\Rules\;" />
 		<Build>
 			<Target title="Debug">
 				<Option output="bin\Debug\OpenXcom" prefix_auto="1" extension_auto="1" />
@@ -46,10 +46,10 @@
 			<Add directory=".\SDL\lib" />
 		</Linker>
 		<Unit filename="AbandonGameState.cpp">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Geoscape\" />
 		</Unit>
 		<Unit filename="AbandonGameState.h">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Geoscape\" />
 		</Unit>
 		<Unit filename="ArrowButton.cpp">
 			<Option virtualFolder="Interface\" />
@@ -76,16 +76,16 @@
 			<Option virtualFolder="Xcom\Game\" />
 		</Unit>
 		<Unit filename="BaseInfoState.cpp">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Basescape\" />
 		</Unit>
 		<Unit filename="BaseInfoState.h">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Basescape\" />
 		</Unit>
 		<Unit filename="BaseNameState.cpp">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Geoscape\" />
 		</Unit>
 		<Unit filename="BaseNameState.h">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Geoscape\" />
 		</Unit>
 		<Unit filename="BaseView.cpp">
 			<Option virtualFolder="Xcom\Resource\" />
@@ -94,28 +94,28 @@
 			<Option virtualFolder="Xcom\Resource\" />
 		</Unit>
 		<Unit filename="BasescapeErrorState.cpp">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Basescape\" />
 		</Unit>
 		<Unit filename="BasescapeErrorState.h">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Basescape\" />
 		</Unit>
 		<Unit filename="BasescapeState.cpp">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Basescape\" />
 		</Unit>
 		<Unit filename="BasescapeState.h">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Basescape\" />
 		</Unit>
 		<Unit filename="BuildFacilitiesState.cpp">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Basescape\" />
 		</Unit>
 		<Unit filename="BuildFacilitiesState.h">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Basescape\" />
 		</Unit>
 		<Unit filename="BuildNewBaseState.cpp">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Geoscape\" />
 		</Unit>
 		<Unit filename="BuildNewBaseState.h">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Geoscape\" />
 		</Unit>
 		<Unit filename="City.cpp">
 			<Option virtualFolder="Xcom\Game\" />
@@ -124,16 +124,16 @@
 			<Option virtualFolder="Xcom\Game\" />
 		</Unit>
 		<Unit filename="ConfirmDestinationState.cpp">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Geoscape\" />
 		</Unit>
 		<Unit filename="ConfirmDestinationState.h">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Geoscape\" />
 		</Unit>
 		<Unit filename="ConfirmNewBaseState.cpp">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Geoscape\" />
 		</Unit>
 		<Unit filename="ConfirmNewBaseState.h">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Geoscape\" />
 		</Unit>
 		<Unit filename="Country.cpp">
 			<Option virtualFolder="Xcom\Game\" />
@@ -148,22 +148,22 @@
 			<Option virtualFolder="Xcom\Game\" />
 		</Unit>
 		<Unit filename="CraftInfoState.cpp">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Basescape\" />
 		</Unit>
 		<Unit filename="CraftInfoState.h">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Basescape\" />
 		</Unit>
 		<Unit filename="CraftSoldiersState.cpp">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Basescape\" />
 		</Unit>
 		<Unit filename="CraftSoldiersState.h">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Basescape\" />
 		</Unit>
 		<Unit filename="CraftWeaponsState.cpp">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Basescape\" />
 		</Unit>
 		<Unit filename="CraftWeaponsState.h">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Basescape\" />
 		</Unit>
 		<Unit filename="CraftWeapon.cpp">
 			<Option virtualFolder="Xcom\Game\" />
@@ -172,10 +172,10 @@
 			<Option virtualFolder="Xcom\Game\" />
 		</Unit>
 		<Unit filename="CraftsState.cpp">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Basescape\" />
 		</Unit>
 		<Unit filename="CraftsState.h">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Basescape\" />
 		</Unit>
 		<Unit filename="Cursor.cpp">
 			<Option virtualFolder="Interface\" />
@@ -184,16 +184,16 @@
 			<Option virtualFolder="Interface\" />
 		</Unit>
 		<Unit filename="DismantleFacilityState.cpp">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Basescape\" />
 		</Unit>
 		<Unit filename="DismantleFacilityState.h">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Basescape\" />
 		</Unit>
 		<Unit filename="DogfightState.cpp">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Geoscape\" />
 		</Unit>
 		<Unit filename="DogfightState.h">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Geoscape\" />
 		</Unit>
 		<Unit filename="Font.cpp">
 			<Option virtualFolder="Engine\" />
@@ -202,10 +202,10 @@
 			<Option virtualFolder="Engine\" />
 		</Unit>
 		<Unit filename="FundingState.cpp">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Geoscape\" />
 		</Unit>
 		<Unit filename="FundingState.h">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Geoscape\" />
 		</Unit>
 		<Unit filename="Game.cpp">
 			<Option virtualFolder="Engine\" />
@@ -219,23 +219,29 @@
 		<Unit filename="GameTime.h">
 			<Option virtualFolder="Xcom\Game\" />
 		</Unit>
+		<Unit filename="GeoscapeCraftState.cpp">
+			<Option virtualFolder="States\Geoscape\" />
+		</Unit>
+		<Unit filename="GeoscapeCraftState.h">
+			<Option virtualFolder="States\Geoscape\" />
+		</Unit>
 		<Unit filename="GeoscapeErrorState.cpp">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Geoscape\" />
 		</Unit>
 		<Unit filename="GeoscapeErrorState.h">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Geoscape\" />
 		</Unit>
 		<Unit filename="GeoscapeMessageState.cpp">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Geoscape\" />
 		</Unit>
 		<Unit filename="GeoscapeMessageState.h">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Geoscape\" />
 		</Unit>
 		<Unit filename="GeoscapeState.cpp">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Geoscape\" />
 		</Unit>
 		<Unit filename="GeoscapeState.h">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Geoscape\" />
 		</Unit>
 		<Unit filename="Globe.cpp">
 			<Option virtualFolder="Xcom\Resource\" />
@@ -244,10 +250,10 @@
 			<Option virtualFolder="Xcom\Resource\" />
 		</Unit>
 		<Unit filename="GraphsState.cpp">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Geoscape\" />
 		</Unit>
 		<Unit filename="GraphsState.h">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Geoscape\" />
 		</Unit>
 		<Unit filename="ImageButton.cpp">
 			<Option virtualFolder="Interface\" />
@@ -262,10 +268,10 @@
 			<Option virtualFolder="Engine\" />
 		</Unit>
 		<Unit filename="InterceptState.cpp">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Geoscape\" />
 		</Unit>
 		<Unit filename="InterceptState.h">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Geoscape\" />
 		</Unit>
 		<Unit filename="Item.cpp">
 			<Option virtualFolder="Xcom\Game\" />
@@ -295,10 +301,10 @@
 			<Option virtualFolder="States\" />
 		</Unit>
 		<Unit filename="ManufactureState.cpp">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Basescape\" />
 		</Unit>
 		<Unit filename="ManufactureState.h">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Basescape\" />
 		</Unit>
 		<Unit filename="MiniBaseView.cpp">
 			<Option virtualFolder="Xcom\Resource\" />
@@ -307,16 +313,16 @@
 			<Option virtualFolder="Xcom\Resource\" />
 		</Unit>
 		<Unit filename="MonthlyCostsState.cpp">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Basescape\" />
 		</Unit>
 		<Unit filename="MonthlyCostsState.h">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Basescape\" />
 		</Unit>
 		<Unit filename="MonthlyReportState.cpp">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Geoscape\" />
 		</Unit>
 		<Unit filename="MonthlyReportState.h">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Geoscape\" />
 		</Unit>
 		<Unit filename="Music.cpp">
 			<Option virtualFolder="Engine\" />
@@ -331,10 +337,10 @@
 			<Option virtualFolder="States\" />
 		</Unit>
 		<Unit filename="OptionsState.cpp">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Geoscape\" />
 		</Unit>
 		<Unit filename="OptionsState.h">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Geoscape\" />
 		</Unit>
 		<Unit filename="Palette.cpp">
 			<Option virtualFolder="Engine\" />
@@ -343,16 +349,16 @@
 			<Option virtualFolder="Engine\" />
 		</Unit>
 		<Unit filename="PlaceFacilityState.cpp">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Basescape\" />
 		</Unit>
 		<Unit filename="PlaceFacilityState.h">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Basescape\" />
 		</Unit>
 		<Unit filename="PlaceLiftState.cpp">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Basescape\" />
 		</Unit>
 		<Unit filename="PlaceLiftState.h">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Basescape\" />
 		</Unit>
 		<Unit filename="Polygon.cpp">
 			<Option virtualFolder="Xcom\Resource\" />
@@ -367,10 +373,10 @@
 			<Option virtualFolder="Xcom\Resource\" />
 		</Unit>
 		<Unit filename="PurchaseState.cpp">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Basescape\" />
 		</Unit>
 		<Unit filename="PurchaseState.h">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Basescape\" />
 		</Unit>
 		<Unit filename="RNG.cpp">
 			<Option virtualFolder="Engine\" />
@@ -385,10 +391,10 @@
 			<Option virtualFolder="Xcom\Game\" />
 		</Unit>
 		<Unit filename="ResearchState.cpp">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Basescape\" />
 		</Unit>
 		<Unit filename="ResearchState.h">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Basescape\" />
 		</Unit>
 		<Unit filename="ResourcePack.cpp">
 			<Option virtualFolder="Xcom\Resource\" />
@@ -445,16 +451,16 @@
 			<Option virtualFolder="Engine\" />
 		</Unit>
 		<Unit filename="SelectDestinationState.cpp">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Geoscape\" />
 		</Unit>
 		<Unit filename="SelectDestinationState.h">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Geoscape\" />
 		</Unit>
 		<Unit filename="SellState.cpp">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Basescape\" />
 		</Unit>
 		<Unit filename="SellState.h">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Basescape\" />
 		</Unit>
 		<Unit filename="Soldier.cpp">
 			<Option virtualFolder="Xcom\Game\" />
@@ -463,10 +469,10 @@
 			<Option virtualFolder="Xcom\Game\" />
 		</Unit>
 		<Unit filename="SoldierInfoState.cpp">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Basescape\" />
 		</Unit>
 		<Unit filename="SoldierInfoState.h">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Basescape\" />
 		</Unit>
 		<Unit filename="SoldierNamePool.cpp">
 			<Option virtualFolder="Xcom\Rules\" />
@@ -475,10 +481,10 @@
 			<Option virtualFolder="Xcom\Rules\" />
 		</Unit>
 		<Unit filename="SoldiersState.cpp">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Basescape\" />
 		</Unit>
 		<Unit filename="SoldiersState.h">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Basescape\" />
 		</Unit>
 		<Unit filename="Sound.cpp">
 			<Option virtualFolder="Engine\" />
@@ -505,10 +511,10 @@
 			<Option virtualFolder="Engine\" />
 		</Unit>
 		<Unit filename="StoresState.cpp">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Basescape\" />
 		</Unit>
 		<Unit filename="StoresState.h">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Basescape\" />
 		</Unit>
 		<Unit filename="Surface.cpp">
 			<Option virtualFolder="Engine\" />
@@ -571,10 +577,10 @@
 			<Option virtualFolder="Xcom\Game\" />
 		</Unit>
 		<Unit filename="UfoDetectedState.cpp">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Geoscape\" />
 		</Unit>
 		<Unit filename="UfoDetectedState.h">
-			<Option virtualFolder="States\" />
+			<Option virtualFolder="States\Geoscape\" />
 		</Unit>
 		<Unit filename="Window.cpp">
 			<Option virtualFolder="Interface\" />

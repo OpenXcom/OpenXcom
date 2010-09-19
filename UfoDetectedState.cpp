@@ -41,9 +41,17 @@ using namespace std;
  * @param game Pointer to the core game.
  * @param ufo Pointer to the UFO to get info from.
  * @param state Pointer to the Geoscape.
+ * @param detected Was the UFO detected?
  */
-UfoDetectedState::UfoDetectedState(Game *game, Ufo *ufo, GeoscapeState *state) : State(game), _ufo(ufo), _state(state)
+UfoDetectedState::UfoDetectedState(Game *game, Ufo *ufo, GeoscapeState *state, bool detected) : State(game), _ufo(ufo), _state(state), _detected(detected)
 {
+	// Generate UFO ID
+	if (_ufo->getId() == 0)
+	{
+		_ufo->setId(*_game->getSavedGame()->getUfoId());
+		(*_game->getSavedGame()->getUfoId())++;
+	}
+
 	_screen = false;
 
 	// Create objects
@@ -77,20 +85,18 @@ UfoDetectedState::UfoDetectedState(Game *game, Ufo *ufo, GeoscapeState *state) :
 	_btnCancel->onMouseClick((EventHandler)&UfoDetectedState::btnCancelClick);
 
 	_txtDetected->setColor(Palette::blockOffset(8)+5);
-	_txtDetected->setText("");
-
-	if (_ufo->getId() == 0)
+	if (_detected)
 	{
-		_ufo->setId(*_game->getSavedGame()->getUfoId());
-		(*_game->getSavedGame()->getUfoId())++;
 		_txtDetected->setText(_game->getResourcePack()->getLanguage()->getString(STR_DETECTED));
+	}
+	else
+	{
+		_txtDetected->setText("");
 	}
 
 	_txtUfo->setColor(Palette::blockOffset(8)+5);
 	_txtUfo->setBig();
-	stringstream ss;
-	ss << _game->getResourcePack()->getLanguage()->getString(STR_UFO_) << _ufo->getId();
-	_txtUfo->setText(ss.str());
+	_txtUfo->setText(_ufo->getName(_game->getResourcePack()->getLanguage()));
 	
 	_lstInfo->setColor(Palette::blockOffset(8)+5);
 	_lstInfo->setColumns(2, 82, 78);
@@ -101,9 +107,9 @@ UfoDetectedState::UfoDetectedState(Game *game, Ufo *ufo, GeoscapeState *state) :
 	_lstInfo->getCell(1, 1)->setColor(Palette::blockOffset(8)+10);
 	_lstInfo->addRow(0, 2, _game->getResourcePack()->getLanguage()->getString(STR_HEADING).c_str(), _game->getResourcePack()->getLanguage()->getString(_ufo->getDirection()).c_str());
 	_lstInfo->getCell(2, 1)->setColor(Palette::blockOffset(8)+10);
-	stringstream ss2;
-	ss2 << _ufo->getSpeed();
-	_lstInfo->addRow(0, 2, _game->getResourcePack()->getLanguage()->getString(STR_SPEED).c_str(), ss2.str().c_str());
+	stringstream ss;
+	ss << _ufo->getSpeed();
+	_lstInfo->addRow(0, 2, _game->getResourcePack()->getLanguage()->getString(STR_SPEED).c_str(), ss.str().c_str());
 	_lstInfo->getCell(3, 1)->setColor(Palette::blockOffset(8)+10);
 	_lstInfo->draw();
 }

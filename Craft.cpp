@@ -18,12 +18,15 @@
  */
 #include "Craft.h"
 #include <cmath>
+#include <sstream>
+#include "Language.h"
 #include "RuleCraft.h"
 #include "CraftWeapon.h"
 #include "Item.h"
 #include "Soldier.h"
 
-#define SPEED_FACTOR 0.0000001
+#define RANGE_FACTOR 0.0003
+#define CRAFT_RANGE 600
 
 /**
  * Initializes a craft of the specified type and
@@ -65,6 +68,28 @@ RuleCraft *Craft::getRules()
 }
 
 /**
+ * Returns the craft's unique ID. Each craft
+ * can be identified by its type and ID.
+ * @return Unique ID.
+ */
+int Craft::getId()
+{
+	return _id;
+}
+
+/**
+ * Returns the craft's unique identifying name.
+ * @param Language to get strings from.
+ * @return Full name.
+ */
+string Craft::getName(Language *lang)
+{
+	stringstream name;
+	name << lang->getString(_rules->getType()) << "-" << _id;
+	return name.str();
+}
+
+/**
  * Returns the target the craft is following.
  */
 Target *Craft::getTarget()
@@ -79,16 +104,6 @@ void Craft::setTarget(Target *target)
 {
 	_target = target;
 	calculateSpeed();
-}
-
-/**
- * Returns the craft's unique ID. Each craft
- * can be identified by its type and ID.
- * @return Unique ID.
- */
-int Craft::getId()
-{
-	return _id;
 }
 
 /**
@@ -319,4 +334,19 @@ void Craft::think()
 		_lat = _target->getLatitude();
 		setSpeed(0);
 	}
+}
+
+/**
+ * Returns if a certain point is covered by the craft's
+ * radar range, taking in account the positions of both.
+ * @param pointLon Point longitude.
+ * @param pointLat Point latitude.
+ * @return True if it's within range, False otherwise.
+ */
+bool Craft::insideRadarRange(double pointLon, double pointLat)
+{
+	double newrange = CRAFT_RANGE * RANGE_FACTOR;
+	double dLon = pointLon - _lon;
+	double dLat = pointLat - _lat;
+    return (dLon * dLon + dLat * dLat <= newrange * newrange);
 }

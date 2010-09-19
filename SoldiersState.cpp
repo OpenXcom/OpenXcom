@@ -114,7 +114,7 @@ void SoldiersState::init()
 		if ((*i)->getCraft() == 0)
 			ss << _game->getResourcePack()->getLanguage()->getString(STR_NONE);
 		else
-			ss << _game->getResourcePack()->getLanguage()->getString((*i)->getCraft()->getRules()->getType()) << "-" << (*i)->getCraft()->getId();
+			ss << (*i)->getCraft()->getName(_game->getResourcePack()->getLanguage());
 		_lstSoldiers->addRow(0, 3, (*i)->getName().c_str(), _game->getResourcePack()->getLanguage()->getString((*i)->getRankString()).c_str(), ss.str().c_str());
 		if ((*i)->getCraft() == 0)
 		{

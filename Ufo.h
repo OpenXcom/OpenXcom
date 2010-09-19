@@ -20,9 +20,12 @@
 #define OPENXCOM__UFO_H
 
 #include "Target.h"
+#include <string>
 #include "LangString.h"
 
 class RuleUfo;
+
+using namespace std;
 
 /**
  * Represents an alien UFO on the map.
@@ -51,6 +54,8 @@ public:
 	int getId();
 	/// Sets the UFO's ID.
 	void setId(int id);
+	/// Gets the UFO's name.
+	string getName(Language *lang);
 	/// Gets the UFO's target latitude.
 	double getTargetLatitude();
 	/// Sets the UFO's target latitude.

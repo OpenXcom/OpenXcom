@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Target.h"
+#include "Language.h"
 
 /**
  * Initializes a target with blank coordinates.

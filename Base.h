@@ -31,6 +31,7 @@ class BaseFacility;
 class Soldier;
 class Craft;
 class Item;
+class Language;
 
 /**
  * Represents a player base on the globe.
@@ -51,7 +52,7 @@ public:
 	/// Cleans up the base.
 	~Base();
 	/// Gets the base's name.
-	string getName();
+	string getName(Language* lang = 0);
 	/// Sets the base's name.
 	void setName(string name);
 	/// Gets the base's facilities.
