@@ -114,6 +114,7 @@
     <ClCompile Include="BuildNewBaseState.cpp" />
     <ClCompile Include="CraftWeapon.cpp" />
     <ClCompile Include="CraftWeaponsState.cpp" />
+    <ClCompile Include="GeoscapeCraftState.cpp" />
     <ClCompile Include="GeoscapeErrorState.cpp" />
     <ClCompile Include="DogfightState.cpp" />
     <ClCompile Include="Item.cpp" />
@@ -208,6 +209,7 @@
     <ClInclude Include="BuildNewBaseState.h" />
     <ClInclude Include="CraftWeapon.h" />
     <ClInclude Include="CraftWeaponsState.h" />
+    <ClInclude Include="GeoscapeCraftState.h" />
     <ClInclude Include="GeoscapeErrorState.h" />
     <ClInclude Include="InteractiveSurface.h" />
     <ClInclude Include="DogfightState.h" />

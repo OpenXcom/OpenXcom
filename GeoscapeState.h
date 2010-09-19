@@ -77,8 +77,6 @@ public:
 	Globe *getGlobe();
 	/// Handler for clicking the globe.
 	void globeClick(SDL_Event *ev, int scale);
-	/// Handler for pressing a key on the globe.
-	void globeKeyPress(SDL_Event *ev, int scale);
 	/// Handler for clicking the Intercept button.
 	void btnInterceptClick(SDL_Event *ev, int scale);
 	/// Handler for clicking the Bases button.

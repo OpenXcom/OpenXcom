@@ -155,9 +155,9 @@ void BuildNewBaseState::globeClick(SDL_Event *ev, int scale)
 	int mouseX = ev->button.x / scale, mouseY = ev->button.y / scale;
 	_globe->cartToPolar(mouseX, mouseY, &lon, &lat);
 	
+	// Clicking on land for a base location
 	if (ev->button.button == SDL_BUTTON_LEFT)
 	{
-		// Clicking on land for a base location
 		if (_globe->insideLand(lon, lat))
 		{
 			_base->setLongitude(lon);
@@ -176,21 +176,6 @@ void BuildNewBaseState::globeClick(SDL_Event *ev, int scale)
 				_game->pushState(new ConfirmNewBaseState(_game, _base, _globe));
 			}
 		}
-	}
-	else if (ev->button.button == SDL_BUTTON_RIGHT)
-	{
-		// Rotating the globe
-		_globe->center(lon, lat);
-	}
-	else if (ev->button.button == SDL_BUTTON_WHEELUP)
-	{
-		// Zooming in the globe
-		_globe->zoomIn();
-	}
-	else if (ev->button.button == SDL_BUTTON_WHEELDOWN)
-	{
-		// Zooming out the globe
-		_globe->zoomOut();
 	}
 }
 

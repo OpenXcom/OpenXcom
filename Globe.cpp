@@ -937,7 +937,8 @@ void Globe::mouseRelease(SDL_Event *ev, int scale, State *state)
 }
 
 /**
- * Ignores any mouse clicks that are outside the globe.
+ * Ignores any mouse clicks that are outside the globe
+ * and handles globe rotation and zooming.
  * @param ev Pointer to a SDL_Event.
  * @param scale Current screen scale (used to correct mouse input).
  * @param state State that the event handlers belong to.
@@ -949,5 +950,36 @@ void Globe::mouseClick(SDL_Event *ev, int scale, State *state)
 
 	// Check for errors
 	if (lat == lat && lon == lon)
+	{
 		InteractiveSurface::mouseClick(ev, scale, state);
+
+		// Handle globe control
+		if (ev->button.button == SDL_BUTTON_RIGHT)
+		{
+			center(lon, lat);
+		}
+		else if (ev->button.button == SDL_BUTTON_WHEELUP)
+		{
+			zoomIn();
+		}
+		else if (ev->button.button == SDL_BUTTON_WHEELDOWN)
+		{
+			zoomOut();
+		}
+	}
+}
+
+/**
+ * Handles globe keyboard shortcuts.
+ * @param ev Pointer to a SDL_Event.
+ * @param scale Current screen scale (used to correct mouse input).
+ * @param state State that the event handlers belong to.
+ */
+void Globe::keyboardPress(SDL_Event *ev, int scale, State *state)
+{
+	InteractiveSurface::keyboardPress(ev, scale, state);
+	if (ev->key.keysym.sym == SDLK_TAB)
+	{
+		switchDetail();
+	}
 }

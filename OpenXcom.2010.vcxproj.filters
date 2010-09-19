@@ -218,9 +218,6 @@
     <ClCompile Include="FundingState.cpp">
       <Filter>States\Geoscape</Filter>
     </ClCompile>
-    <ClCompile Include="GeoscapeCraftState.cpp">
-      <Filter>States\Geoscape</Filter>
-    </ClCompile>
     <ClCompile Include="GeoscapeErrorState.cpp">
       <Filter>States\Geoscape</Filter>
     </ClCompile>
@@ -276,6 +273,9 @@
       <Filter>States\Geoscape</Filter>
     </ClCompile>
     <ClCompile Include="UfoDetectedState.cpp">
+      <Filter>States\Geoscape</Filter>
+    </ClCompile>
+    <ClCompile Include="GeoscapeCraftState.cpp">
       <Filter>States\Geoscape</Filter>
     </ClCompile>
   </ItemGroup>
@@ -499,9 +499,6 @@
     <ClInclude Include="FundingState.h">
       <Filter>States\Geoscape</Filter>
     </ClInclude>
-    <ClInclude Include="GeoscapeCraftState.h">
-      <Filter>States\Geoscape</Filter>
-    </ClInclude>
     <ClInclude Include="GeoscapeErrorState.h">
       <Filter>States\Geoscape</Filter>
     </ClInclude>
@@ -557,6 +554,9 @@
       <Filter>States\Geoscape</Filter>
     </ClInclude>
     <ClInclude Include="UfoDetectedState.h">
+      <Filter>States\Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="GeoscapeCraftState.h">
       <Filter>States\Geoscape</Filter>
     </ClInclude>
   </ItemGroup>

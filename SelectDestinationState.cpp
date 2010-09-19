@@ -150,10 +150,10 @@ void SelectDestinationState::globeClick(SDL_Event *ev, int scale)
 	double lon, lat;
 	int mouseX = ev->button.x / scale, mouseY = ev->button.y / scale;
 	_globe->cartToPolar(mouseX, mouseY, &lon, &lat);
-
+	
+	// Clicking on a valid target
 	if (ev->button.button == SDL_BUTTON_LEFT)
 	{
-		// Clicking on UFOs
 		for (vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end(); i++)
 		{
 			if ((*i)->getDetected())
@@ -169,21 +169,6 @@ void SelectDestinationState::globeClick(SDL_Event *ev, int scale)
 				}
 			}
 		}
-	}
-	else if (ev->button.button == SDL_BUTTON_RIGHT)
-	{
-		// Rotating the globe
-		_globe->center(lon, lat);
-	}
-	else if (ev->button.button == SDL_BUTTON_WHEELUP)
-	{
-		// Zooming in the globe
-		_globe->zoomIn();
-	}
-	else if (ev->button.button == SDL_BUTTON_WHEELDOWN)
-	{
-		// Zooming out the globe
-		_globe->zoomOut();
 	}
 }
 

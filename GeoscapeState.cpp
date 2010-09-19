@@ -291,7 +291,6 @@ void GeoscapeState::init()
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
 
 	_globe->onMouseClick((EventHandler)&GeoscapeState::globeClick);
-	_globe->onKeyboardPress((EventHandler)&GeoscapeState::globeKeyPress);
 	_globe->focus();
 	_globe->draw();
 
@@ -652,9 +651,9 @@ void GeoscapeState::globeClick(SDL_Event *ev, int scale)
 	int mouseX = ev->button.x / scale, mouseY = ev->button.y / scale;
 	_globe->cartToPolar(mouseX, mouseY, &lon, &lat);
 	
+	// Clicking markers on the globe
 	if (ev->button.button == SDL_BUTTON_LEFT)
 	{
-		// Clicking markers on the globe
 		for (vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); i++)
 		{
 			if ((*i)->getLongitude() == 0.0 && (*i)->getLatitude() == 0.0)
@@ -699,32 +698,6 @@ void GeoscapeState::globeClick(SDL_Event *ev, int scale)
 			}
 		}
 	}
-	else if (ev->button.button == SDL_BUTTON_RIGHT)
-	{
-		// Rotating the globe
-		_globe->center(lon, lat);
-	}
-	else if (ev->button.button == SDL_BUTTON_WHEELUP)
-	{
-		// Zooming the globe in
-		_globe->zoomIn();
-	}
-	else if (ev->button.button == SDL_BUTTON_WHEELDOWN)
-	{
-		// Zoomine the globe out
-		_globe->zoomOut();
-	}
-}
-
-/**
- * Processes any key presses on the globe.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
- */
-void GeoscapeState::globeKeyPress(SDL_Event *ev, int scale)
-{
-	if (ev->key.keysym.sym == SDLK_TAB)
-		_globe->switchDetail();
 }
 
 /**
@@ -734,7 +707,6 @@ void GeoscapeState::globeKeyPress(SDL_Event *ev, int scale)
  */
 void GeoscapeState::btnInterceptClick(SDL_Event *ev, int scale)
 {
-	//_game->pushState(new GeoscapeCraftState(_game));
 	_game->pushState(new InterceptState(_game, _globe));
 	//_game->pushState(new DogfightState(_game, _game->getSavedGame()->getBases()->front()->getCrafts()->at(1), 0));
 }
