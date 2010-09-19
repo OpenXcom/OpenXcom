@@ -196,6 +196,8 @@ Globe::~Globe()
 	for (int i = 1; i < NUM_SHADES; i++)
 		delete _texture[i];
 
+    delete _blinkTimer;
+    delete _rotTimer;
 	delete _countries;
 	delete _markers;
 	delete _mkXcomBase;
