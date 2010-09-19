@@ -601,6 +601,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\GeoscapeCraftState.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\GeoscapeCraftState.h"
+					>
+				</File>
+				<File
 					RelativePath=".\GeoscapeErrorState.cpp"
 					>
 				</File>
