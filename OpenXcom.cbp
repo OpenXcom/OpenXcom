@@ -582,6 +582,12 @@
 		<Unit filename="UfoDetectedState.h">
 			<Option virtualFolder="States\Geoscape\" />
 		</Unit>
+		<Unit filename="UfoLostState.cpp">
+			<Option virtualFolder="States\Geoscape\" />
+		</Unit>
+		<Unit filename="UfoLostState.h">
+			<Option virtualFolder="States\Geoscape\" />
+		</Unit>
 		<Unit filename="Window.cpp">
 			<Option virtualFolder="Interface\" />
 		</Unit>

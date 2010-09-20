@@ -16,41 +16,37 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM__UFODETECTEDSTATE_H
-#define OPENXCOM__UFODETECTEDSTATE_H
+#ifndef OPENXCOM__UFOLOSTSTATE_H
+#define OPENXCOM__UFOLOSTSTATE_H
 
 #include "State.h"
+#include <string>
 
-class Ufo;
 class TextButton;
 class Window;
 class Text;
-class TextList;
-class GeoscapeState;
+
+using namespace std;
 
 /**
- * Displays info on a detected UFO.
+ * Notifies the player when a targeted UFO
+ * goes outside radar range.
  */
-class UfoDetectedState : public State
+class UfoLostState : public State
 {
 private:
-	Ufo *_ufo;
-	GeoscapeState *_state;
-	bool _detected;
-
-	TextButton *_btnCentre, *_btnCancel;
+	TextButton *_btnOk;
 	Window *_window;
-	Text *_txtUfo, *_txtDetected;
-	TextList *_lstInfo;
+	Text *_txtTitle;
+	string _id;
+	double _lon, _lat;
 public:
-	/// Creates the Ufo Detected state.
-	UfoDetectedState(Game *game, Ufo *ufo, GeoscapeState *state, bool detected);
-	/// Cleans up the Ufo Detected state.
-	~UfoDetectedState();
-	/// Handler for clicking the Centre on UFO button.
-	void btnCentreClick(SDL_Event *ev, int scale);
-	/// Handler for clicking the Cancel button.
-	void btnCancelClick(SDL_Event *ev, int scale);
+	/// Creates the Ufo Lost state.
+	UfoLostState(Game *game, string id, double lon, double lat);
+	/// Cleans up the Ufo Lost state.
+	~UfoLostState();
+	/// Handler for clicking the OK button.
+	void btnOkClick(SDL_Event *ev, int scale);
 };
 
 #endif

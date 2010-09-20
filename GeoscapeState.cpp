@@ -55,6 +55,7 @@
 #include "UfoDetectedState.h"
 #include "DogfightState.h"
 #include "GeoscapeCraftState.h"
+#include "UfoLostState.h"
 
 using namespace std;
 
@@ -434,7 +435,7 @@ void GeoscapeState::timeSecond()
 			if (u != 0 && !u->getDetected())
 			{
 				(*j)->setTarget(0);
-				// Craft lost target logic to go here later
+				_popups.push_back(new UfoLostState(_game, u->getName(_game->getResourcePack()->getLanguage()), u->getLongitude(), u->getLatitude()));
 			}
 			(*j)->think();
 		}
@@ -476,7 +477,9 @@ void GeoscapeState::timeMinute()
 			{
 				(*j)->setFuel((*j)->getFuel() + (*j)->getRules()->getRefuelRate());
 				if ((*j)->getFuel() == (*j)->getRules()->getMaxFuel())
+				{
 					(*j)->setStatus(STR_REARMING);
+				}
 			}
 		}
 	}
@@ -553,7 +556,9 @@ void GeoscapeState::timeHour()
 			{
 				(*j)->setDamage((*j)->getDamage() - (*j)->getRules()->getRepairRate());
 				if ((*j)->getDamage() == 0)
+				{
 					(*j)->setStatus(STR_REFUELLING);
+				}
 			}
 			else if ((*j)->getStatus() == STR_REARMING)
 			{
@@ -569,9 +574,10 @@ void GeoscapeState::timeHour()
 					if ((*k)->getAmmo() == (*k)->getRules()->getAmmoMax())
 						full++;
 				}
-
 				if (full == available)
+				{
 					(*j)->setStatus(STR_READY);
+				}
 			}
 		}
 	}

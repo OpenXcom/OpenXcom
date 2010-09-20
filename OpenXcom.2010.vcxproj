@@ -152,6 +152,7 @@
     <ClCompile Include="TextList.cpp" />
     <ClCompile Include="Ufo.cpp" />
     <ClCompile Include="UfoDetectedState.cpp" />
+    <ClCompile Include="UfoLostState.cpp" />
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -249,6 +250,7 @@
     <ClInclude Include="TextList.h" />
     <ClInclude Include="Ufo.h" />
     <ClInclude Include="UfoDetectedState.h" />
+    <ClInclude Include="UfoLostState.h" />
     <ClInclude Include="Window.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="Game.h" />

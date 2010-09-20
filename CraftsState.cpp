@@ -125,12 +125,11 @@ void CraftsState::init()
 	_lstCrafts->clearList();
 	for (vector<Craft*>::iterator i = _base->getCrafts()->begin(); i != _base->getCrafts()->end(); i++)
 	{
-		stringstream ss, ss2, ss3, ss4;
-		ss << (*i)->getName(_game->getResourcePack()->getLanguage());
-		ss2 << (*i)->getNumWeapons() << "/" << (*i)->getRules()->getWeapons();
-		ss3 << (*i)->getNumSoldiers(_base->getSoldiers());
-		ss4 << (*i)->getNumHWPs();
-		_lstCrafts->addRow(0, 5, ss.str().c_str(), _game->getResourcePack()->getLanguage()->getString((*i)->getStatus()).c_str(), ss2.str().c_str(), ss3.str().c_str(), ss4.str().c_str());
+		stringstream ss, ss2, ss3;
+		ss << (*i)->getNumWeapons() << "/" << (*i)->getRules()->getWeapons();
+		ss2 << (*i)->getNumSoldiers(_base->getSoldiers());
+		ss3 << (*i)->getNumHWPs();
+		_lstCrafts->addRow(0, 5, (*i)->getName(_game->getResourcePack()->getLanguage()).c_str(), _game->getResourcePack()->getLanguage()->getString((*i)->getStatus()).c_str(), ss.str().c_str(), ss2.str().c_str(), ss3.str().c_str());
 	}
 }
 

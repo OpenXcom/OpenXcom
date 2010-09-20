@@ -34,7 +34,7 @@
  * @param rules Pointer to ruleset.
  * @param id List of craft IDs.
  */
-Craft::Craft(RuleCraft *rules, map<LangString, int> *id) : Target(), _rules(rules), _target(0), _speedLon(0.0), _speedLat(0.0), _fuel(0), _damage(0), _speed(0), _weapons(), _items(), _status(STR_READY)
+Craft::Craft(RuleCraft *rules, map<LangString, int> *id, Base *base) : Target(), _rules(rules), _target(0), _base(base), _speedLon(0.0), _speedLat(0.0), _fuel(0), _damage(0), _speed(0), _weapons(), _items(), _status(STR_READY)
 {
 	_id = (*id)[_rules->getType()];
 	(*id)[_rules->getType()]++;
@@ -104,6 +104,24 @@ void Craft::setTarget(Target *target)
 {
 	_target = target;
 	calculateSpeed();
+}
+
+/**
+ * Returns the base the craft belongs to.
+ * @return Pointer to base.
+ */
+Base *Craft::getBase()
+{
+	return _base;
+}
+
+/**
+ * Changes the base the craft belongs to.
+ * @param base Pointer to base.
+ */
+void Craft::setBase(Base *base)
+{
+	_base = base;
 }
 
 /**
@@ -333,6 +351,22 @@ void Craft::think()
 		_lon = _target->getLongitude();
 		_lat = _target->getLatitude();
 		setSpeed(0);
+		if (_target == (Target*)_base)
+		{
+			setTarget(0);
+			if (_damage > 0)
+			{
+				setStatus(STR_REPAIRS);
+			}
+			else if (_fuel < _rules->getMaxFuel())
+			{
+				setStatus(STR_REFUELLING);
+			}
+			else
+			{
+				setStatus(STR_REARMING);
+			}
+		}
 	}
 }
 

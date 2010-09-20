@@ -119,6 +119,10 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe) :
 	{
 		ss << _game->getResourcePack()->getLanguage()->getString(STR_PATROLLING);
 	}
+	else if (_craft->getTarget() == (Target*)_craft->getBase())
+	{
+		ss << _game->getResourcePack()->getLanguage()->getString(STR_RETURNING_TO_BASE);
+	}
 	else
 	{
 		Ufo *u = dynamic_cast<Ufo*>(_craft->getTarget());
@@ -131,7 +135,7 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe) :
 
 	_txtBase->setColor(Palette::blockOffset(15)-1);
 	stringstream ss2;
-	ss2 << _game->getResourcePack()->getLanguage()->getString(STR_BASE_UC_);
+	ss2 << _game->getResourcePack()->getLanguage()->getString(STR_BASE_UC_) << _craft->getBase()->getName();
 	_txtBase->setText(ss2.str());
 
 	_txtSpeed->setColor(Palette::blockOffset(15)-1);
@@ -220,7 +224,8 @@ GeoscapeCraftState::~GeoscapeCraftState()
  */
 void GeoscapeCraftState::btnBaseClick(SDL_Event *ev, int scale)
 {
-	
+	_game->popState();
+	_craft->setTarget(_craft->getBase());
 }
 
 /**

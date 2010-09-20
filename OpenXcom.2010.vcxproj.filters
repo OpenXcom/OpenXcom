@@ -278,6 +278,9 @@
     <ClCompile Include="GeoscapeCraftState.cpp">
       <Filter>States\Geoscape</Filter>
     </ClCompile>
+    <ClCompile Include="UfoLostState.cpp">
+      <Filter>States\Geoscape</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bar.h">
@@ -557,6 +560,9 @@
       <Filter>States\Geoscape</Filter>
     </ClInclude>
     <ClInclude Include="GeoscapeCraftState.h">
+      <Filter>States\Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="UfoLostState.h">
       <Filter>States\Geoscape</Filter>
     </ClInclude>
   </ItemGroup>

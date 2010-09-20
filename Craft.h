@@ -28,6 +28,7 @@
 using namespace std;
 
 class RuleCraft;
+class Base;
 class Soldier;
 class CraftWeapon;
 class Item;
@@ -43,6 +44,7 @@ class Craft : public Target
 private:
 	RuleCraft *_rules;
 	Target *_target;
+	Base *_base;
 	double _speedLon, _speedLat;
 	int _id, _fuel, _damage, _speed;
 	vector<CraftWeapon*> _weapons;
@@ -52,7 +54,7 @@ private:
 	void calculateSpeed();
 public:
 	/// Creates a craft of the specified type.
-	Craft(RuleCraft *rules, map<LangString, int> *id);
+	Craft(RuleCraft *rules, map<LangString, int> *id, Base *base);
 	/// Cleans up the craft.
 	~Craft();
 	/// Gets the craft's ruleset.
@@ -65,6 +67,10 @@ public:
 	Target *getTarget();
 	/// Sets the craft's target.
 	void setTarget(Target *target);
+	/// Gets the craft's base.
+	Base *getBase();
+	/// Sets the craft's base.
+	void setBase(Base *base);
 	/// Gets the craft's status.
 	LangString getStatus();
 	/// Sets the craft's status.

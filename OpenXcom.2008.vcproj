@@ -672,6 +672,14 @@
 					RelativePath=".\UfoDetectedState.h"
 					>
 				</File>
+				<File
+					RelativePath=".\UfoLostState.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\UfoLostState.h"
+					>
+				</File>
 			</Filter>
 			<File
 				RelativePath=".\LanguageState.cpp"

@@ -79,7 +79,7 @@ CraftSoldiersState::CraftSoldiersState(Game *game, Base *base, unsigned int craf
 	_txtTitle->setBig();
 	Craft *c = _base->getCrafts()->at(_craft);
 	stringstream ss;
-	ss << _game->getResourcePack()->getLanguage()->getString(STR_SELECT_SQUAD_FOR) << _game->getResourcePack()->getLanguage()->getString(c->getRules()->getType()) << "-" << c->getId();
+	ss << _game->getResourcePack()->getLanguage()->getString(STR_SELECT_SQUAD_FOR) << c->getName(_game->getResourcePack()->getLanguage());
 	_txtTitle->setText(ss.str());
 
 	_txtName->setColor(Palette::blockOffset(15)+6);

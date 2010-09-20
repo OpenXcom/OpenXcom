@@ -970,7 +970,7 @@ SavedGame *XcomRuleset::newSave(GameDifficulty diff)
 	base->getItems()->insert(pair<LangString, Item*>(STR_SMOKE_GRENADE, new Item(getItem(STR_SMOKE_GRENADE), 5)));
 
 	// Add crafts
-	Craft *skyranger = new Craft(getCraft(STR_SKYRANGER), save->getCraftIds());
+	Craft *skyranger = new Craft(getCraft(STR_SKYRANGER), save->getCraftIds(), base);
 	skyranger->setFuel(skyranger->getRules()->getMaxFuel());
 	skyranger->getItems()->insert(pair<LangString, Item*>(STR_PISTOL, new Item(getItem(STR_PISTOL), 3)));
 	skyranger->getItems()->insert(pair<LangString, Item*>(STR_PISTOL_CLIP, new Item(getItem(STR_PISTOL_CLIP), 5)));
@@ -984,7 +984,7 @@ SavedGame *XcomRuleset::newSave(GameDifficulty diff)
 
 	for (int i = 0; i < 2; i++)
 	{
-		Craft *interceptor = new Craft(getCraft(STR_INTERCEPTOR), save->getCraftIds());
+		Craft *interceptor = new Craft(getCraft(STR_INTERCEPTOR), save->getCraftIds(), base);
 		interceptor->setFuel(interceptor->getRules()->getMaxFuel());
 		interceptor->getWeapons()->at(0) = new CraftWeapon(getCraftWeapon(STR_STINGRAY_UC), getCraftWeapon(STR_STINGRAY_UC)->getAmmoMax());
 		interceptor->getWeapons()->at(1) = new CraftWeapon(getCraftWeapon(STR_CANNON_UC), getCraftWeapon(STR_CANNON_UC)->getAmmoMax());

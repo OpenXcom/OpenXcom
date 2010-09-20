@@ -854,16 +854,15 @@ void Globe::drawMarkers()
 	for (vector<Base*>::iterator i = _save->getBases()->begin(); i != _save->getBases()->end(); i++)
 	{
 		// Cheap hack to hide bases when they haven't been placed yet
-		if (((*i)->getLongitude() == 0.0 && (*i)->getLatitude() == 0.0) ||
-			pointBack((*i)->getLongitude(), (*i)->getLatitude()))
-			continue;
+		if (((*i)->getLongitude() != 0.0 || (*i)->getLatitude() != 0.0) &&
+			!pointBack((*i)->getLongitude(), (*i)->getLatitude()))
+		{
+			polarToCart((*i)->getLongitude(), (*i)->getLatitude(), &x, &y);
 
-		polarToCart((*i)->getLongitude(), (*i)->getLatitude(), &x, &y);
-
-		_mkXcomBase->setX(x - 1);
-		_mkXcomBase->setY(y - 1);
-		_mkXcomBase->blit(_markers);
-
+			_mkXcomBase->setX(x - 1);
+			_mkXcomBase->setY(y - 1);
+			_mkXcomBase->blit(_markers);
+		}
 		// Draw the craft markers
 		for (vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); j++)
 		{

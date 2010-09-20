@@ -97,30 +97,15 @@ InterceptState::InterceptState(Game *game, Globe *globe, Base *base) : State(gam
 	_lstCrafts->setBackground(_window);
 	_lstCrafts->onMouseClick((EventHandler)&InterceptState::lstCraftsClick);
 	int row = 0;
-	if (_base == 0)
+	for (vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); i++)
 	{
-		for (vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); i++)
+		if (_base != 0 && (*i) != _base)
+			continue;
+		for (vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); j++)
 		{
-			for (vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); j++)
-			{
-				stringstream ss, ss2;
-				ss << (*j)->getName(_game->getResourcePack()->getLanguage());
-				ss2 << (*j)->getNumWeapons() << "/" << (*j)->getNumSoldiers((*i)->getSoldiers()) << "/" << (*j)->getNumHWPs();
-				_lstCrafts->addRow((intptr_t)*j, 4, ss.str().c_str(), _game->getResourcePack()->getLanguage()->getString((*j)->getStatus()).c_str(), (*i)->getName().c_str(), ss2.str().c_str());
-				if ((*j)->getStatus() == STR_READY)
-					_lstCrafts->getCell(row, 1)->setColor(Palette::blockOffset(8)+10);
-				row++;
-			}
-		}
-	}
-	else
-	{
-		for (vector<Craft*>::iterator j = _base->getCrafts()->begin(); j != _base->getCrafts()->end(); j++)
-		{
-			stringstream ss, ss2;
-			ss << _game->getResourcePack()->getLanguage()->getString((*j)->getRules()->getType()) << "-" << (*j)->getId();
-			ss2 << (*j)->getNumWeapons() << "/" << (*j)->getNumSoldiers(_base->getSoldiers()) << "/" << (*j)->getNumHWPs();
-			_lstCrafts->addRow((intptr_t)*j, 4, ss.str().c_str(), _game->getResourcePack()->getLanguage()->getString((*j)->getStatus()).c_str(), _base->getName().c_str(), ss2.str().c_str());
+			stringstream ss;
+			ss << (*j)->getNumWeapons() << "/" << (*j)->getNumSoldiers((*i)->getSoldiers()) << "/" << (*j)->getNumHWPs();
+			_lstCrafts->addRow((intptr_t)*j, 4, (*j)->getName(_game->getResourcePack()->getLanguage()).c_str(), _game->getResourcePack()->getLanguage()->getString((*j)->getStatus()).c_str(), (*i)->getName().c_str(), ss.str().c_str());
 			if ((*j)->getStatus() == STR_READY)
 				_lstCrafts->getCell(row, 1)->setColor(Palette::blockOffset(8)+10);
 			row++;
