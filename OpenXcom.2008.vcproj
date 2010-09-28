@@ -417,6 +417,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\CraftPatrolState.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\CraftPatrolState.h"
+					>
+				</File>
+				<File
 					RelativePath=".\CraftSoldiersState.cpp"
 					>
 				</File>
@@ -446,6 +454,14 @@
 				</File>
 				<File
 					RelativePath=".\DismantleFacilityState.h"
+					>
+				</File>
+				<File
+					RelativePath=".\LowFuelState.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\LowFuelState.h"
 					>
 				</File>
 				<File
@@ -526,6 +542,14 @@
 				</File>
 				<File
 					RelativePath=".\StoresState.h"
+					>
+				</File>
+				<File
+					RelativePath=".\TargetInfoState.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\TargetInfoState.h"
 					>
 				</File>
 			</Filter>
@@ -793,6 +817,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\MovingTarget.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\MovingTarget.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Region.cpp"
 					>
 				</File>
@@ -830,6 +862,14 @@
 				</File>
 				<File
 					RelativePath=".\Ufo.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Waypoint.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Waypoint.h"
 					>
 				</File>
 			</Filter>

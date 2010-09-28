@@ -16,38 +16,41 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM__UFOLOSTSTATE_H
-#define OPENXCOM__UFOLOSTSTATE_H
+#ifndef OPENXCOM__LOWFUELSTATE_H
+#define OPENXCOM__LOWFUELSTATE_H
 
 #include "State.h"
-#include <string>
 
 class TextButton;
 class Window;
 class Text;
-
-using namespace std;
+class Craft;
+class GeoscapeState;
 
 /**
- * Notifies the player when a targeted UFO
- * goes outside radar range.
+ * Window displayed when a craft starts running out of fuel
+ * (only has exactly enough to make it back to base).
  */
-class UfoLostState : public State
+class LowFuelState : public State
 {
 private:
-	TextButton *_btnOk;
+	Craft *_craft;
+	GeoscapeState *_state;
+
+	TextButton *_btnOk, *_btnOk5Secs;
 	Window *_window;
-	Text *_txtTitle;
-	string _id;
+	Text *_txtTitle, *_txtMessage;
 public:
-	/// Creates the Ufo Lost state.
-	UfoLostState(Game *game, string id);
-	/// Cleans up the Ufo Lost state.
-	~UfoLostState();
+	/// Creates the Low Fuel state.
+	LowFuelState(Game *game, Craft *craft, GeoscapeState *state);
+	/// Cleans up the Low Fuel state.
+	~LowFuelState();
 	// Updates the palette.
 	void init();
-	/// Handler for clicking the OK button.
+	/// Handler for clicking the Ok button.
 	void btnOkClick(SDL_Event *ev, int scale);
+	/// Handler for clicking the Ok - 5 Secs button.
+	void btnOk5SecsClick(SDL_Event *ev, int scale);
 };
 
 #endif

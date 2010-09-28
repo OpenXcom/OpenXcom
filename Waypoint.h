@@ -16,42 +16,32 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM__TARGET_H
-#define OPENXCOM__TARGET_H
+#ifndef OPENXCOM__WAYPOINT_H
+#define OPENXCOM__WAYPOINT_H
 
-#include <string>
-#include <vector>
+#include "Target.h"
+#include "LangString.h"
 
 using namespace std;
 
-class Language;
-
 /**
- * Base class for targets on the globe
- * with a set of radian coordinates.
+ * Represents a fixed waypoint on the world.
  */
-class Target
+class Waypoint : public Target
 {
-protected:
-	double _lat, _lon;
-	vector<Target*> _followers;
+private:
+	int _id;
 public:
-	/// Creates a target.
-	Target();
-	/// Cleans up the target.
-	virtual ~Target();
-	/// Gets the target's latitude.
-	double getLatitude();
-	/// Sets the target's latitude.
-	void setLatitude(double lat);
-	/// Gets the target's longitude.
-	double getLongitude();
-	/// Sets the target's longitude.
-	void setLongitude(double lon);
-	/// Gets the target's name.
-	virtual string getName(Language *lang) = 0;
-	/// Gets the target's followers.
-	vector<Target*> *getFollowers();
+	/// Creates a waypoint.
+	Waypoint();
+	/// Cleans up the waypoint.
+	~Waypoint();
+	/// Gets the waypoint's ID.
+	int getId();
+	/// Sets the waypoint's ID.
+	void setId(int id);
+	/// Gets the waypoint's name.
+	string getName(Language *lang);
 };
 
 #endif

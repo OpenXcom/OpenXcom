@@ -81,7 +81,7 @@ void GeoscapeMessageState::init()
 }
 
 /**
- * Returns to the previous screen.
+ * Closes the window.
  * @param ev Pointer to the SDL_Event.
  * @param scale Scale of the screen.
  */

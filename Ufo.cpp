@@ -21,21 +21,23 @@
 #include <sstream>
 #include "Language.h"
 #include "RuleUfo.h"
+#include "RNG.h"
 
 /**
  * Initializes a UFO of the specified type.
  * @param rules Pointer to ruleset.
  */
-Ufo::Ufo(RuleUfo *rules) : Target(), _rules(rules), _targetLat(0.0), _targetLon(0.0), _speedLon(0.0), _speedLat(0.0), _id(0), _damage(0), _speed(0), _altitude(0), _direction(STR_NORTH), _detected(false)
+Ufo::Ufo(RuleUfo *rules) : MovingTarget(), _rules(rules), _id(0), _damage(0), _altitude(0), _direction(STR_NORTH), _detected(false)
 {
-	setSpeed(_rules->getMaxSpeed());
+	setSpeed(RNG::generate(_rules->getMaxSpeed() / 2, _rules->getMaxSpeed()));
 }
 
 /**
- * Delete the contents of the UFO from memory.
+ *
  */
 Ufo::~Ufo()
 {
+	delete _dest;
 }
 
 /**
@@ -68,7 +70,7 @@ void Ufo::setId(int id)
 
 /**
  * Returns the UFO's unique identifying name.
- * @param Language to get strings from.
+ * @param lang Language to get strings from.
  * @return Full name.
  */
 string Ufo::getName(Language *lang)
@@ -76,63 +78,6 @@ string Ufo::getName(Language *lang)
 	stringstream name;
 	name << lang->getString(STR_UFO_) << _id;
 	return name.str();
-}
-
-/**
- * Returns the latitude of the target destination of the UFO.
- * @return Latitude in radian.
- */
-double Ufo::getTargetLatitude()
-{
-	return _targetLat;
-}
-
-/**
- * Changes the latitude of the target destination of the UFO.
- * @param lat Latitude in radian.
- */
-void Ufo::setTargetLatitude(double lat)
-{
-	_targetLat = lat;
-	calculateSpeed();
-}
-
-/**
- * Returns the longitude of the target destination of the UFO.
- * @return Longitude in radian.
- */
-double Ufo::getTargetLongitude()
-{
-	return _targetLon;
-}
-
-/**
- * Changes the longitude of the target destination of the UFO.
- * @param lon Longitude in radian.
- */
-void Ufo::setTargetLongitude(double lon)
-{
-	_targetLon = lon;
-	calculateSpeed();
-}
-
-/**
- * Returns the speed of the UFO.
- * @return Speed in kilometers.
- */
-int Ufo::getSpeed()
-{
-	return _speed;
-}
-
-/**
- * Changes the speed of the UFO.
- * @param speed Speed in kilometers.
- */
-void Ufo::setSpeed(int speed)
-{
-	_speed = speed;
-	calculateSpeed();
 }
 
 /**
@@ -192,26 +137,12 @@ LangString Ufo::getAltitude()
 }
 
 /**
- * Calculates the speed vector and direction for the UFO
- * based on the current raw speed and target destination.
+ * Calculates the direction for the UFO based
+ * on the current raw speed and destination.
  */
 void Ufo::calculateSpeed()
 {
-	double newSpeed = _speed * SPEED_FACTOR;
-	double dLon = _targetLon - _lon;
-	double dLat = _targetLat - _lat;
-	double length = sqrt(dLon * dLon + dLat * dLat);
-	if (length > 0)
-	{
-		_speedLon = dLon / length * newSpeed;
-		_speedLat = dLat / length * newSpeed;
-	}
-	else
-	{
-		_speedLon = 0;
-		_speedLat = 0;
-	}
-
+	MovingTarget::calculateSpeed();
 	if (_speedLon > 0)
 	{
 		if (_speedLat > 0)
@@ -256,17 +187,16 @@ void Ufo::calculateSpeed()
 }
 
 /**
- * Moves the UFO to its target.
+ * Moves the UFO to its destination.
  */
 void Ufo::think()
 {
-	_lon += _speedLon;
-	_lat += _speedLat;
-	if (((_speedLon > 0 && _lon > _targetLon) || (_speedLon < 0 && _lon < _targetLon)) &&
-		((_speedLat > 0 && _lat > _targetLat) || (_speedLat < 0 && _lat < _targetLat)))
+	setLongitude(_lon + _speedLon);
+	setLatitude(_lat + _speedLat);
+	if (reachedDestination())
 	{
-		_lon = _targetLon;
-		_lat = _targetLat;
+		_lon = _dest->getLongitude();
+		_lat = _dest->getLatitude();
 		setSpeed(0);
 	}
 }

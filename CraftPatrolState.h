@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM__GEOSCAPECRAFTSTATE_H
-#define OPENXCOM__GEOSCAPECRAFTSTATE_H
+#ifndef OPENXCOM__CRAFTPATROLSTATE_H
+#define OPENXCOM__CRAFTPATROLSTATE_H
 
 #include "State.h"
 
@@ -26,37 +26,31 @@ class Window;
 class Text;
 class Craft;
 class Globe;
-class Waypoint;
 
 /**
- * Craft window that displays info about
- * a specific craft out on the Geoscape.
+ * Window displayed when a craft
+ * starts patrolling a waypoint.
  */
-class GeoscapeCraftState : public State
+class CraftPatrolState : public State
 {
 private:
 	Craft *_craft;
 	Globe *_globe;
-	Waypoint *_waypoint;
 
-	TextButton *_btnBase, *_btnTarget, *_btnPatrol, *_btnCancel;
+	TextButton *_btnOk, *_btnRedirect;
 	Window *_window;
-	Text *_txtTitle, *_txtStatus, *_txtBase, *_txtSpeed, *_txtMaxSpeed, *_txtAltitude, *_txtFuel, *_txtW1Name, *_txtW1Ammo, *_txtW2Name, *_txtW2Ammo, *_txtRedirect;
+	Text *_txtDestination, *_txtPatrolling;
 public:
 	/// Creates the Geoscape Craft state.
-	GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, Waypoint *waypoint);
+	CraftPatrolState(Game *game, Craft *craft, Globe *globe);
 	/// Cleans up the Geoscape Craft state.
-	~GeoscapeCraftState();
+	~CraftPatrolState();
 	// Updates the palette.
 	void init();
-	/// Handler for clicking the Return To Base button.
-	void btnBaseClick(SDL_Event *ev, int scale);
-	/// Handler for clicking the Select New Target button.
-	void btnTargetClick(SDL_Event *ev, int scale);
-	/// Handler for clicking the Patrol button.
-	void btnPatrolClick(SDL_Event *ev, int scale);
-	/// Handler for clicking the Cancel button.
-	void btnCancelClick(SDL_Event *ev, int scale);
+	/// Handler for clicking the OK button.
+	void btnOkClick(SDL_Event *ev, int scale);
+	/// Handler for clicking the Redirect Craft button.
+	void btnRedirectClick(SDL_Event *ev, int scale);
 };
 
 #endif

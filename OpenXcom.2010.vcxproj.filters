@@ -281,6 +281,21 @@
     <ClCompile Include="UfoLostState.cpp">
       <Filter>States\Geoscape</Filter>
     </ClCompile>
+    <ClCompile Include="Waypoint.cpp">
+      <Filter>Xcom\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="CraftPatrolState.cpp">
+      <Filter>States\Geoscape</Filter>
+    </ClCompile>
+    <ClCompile Include="TargetInfoState.cpp">
+      <Filter>States\Geoscape</Filter>
+    </ClCompile>
+    <ClCompile Include="LowFuelState.cpp">
+      <Filter>States\Geoscape</Filter>
+    </ClCompile>
+    <ClCompile Include="MovingTarget.cpp">
+      <Filter>Xcom\Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bar.h">
@@ -564,6 +579,21 @@
     </ClInclude>
     <ClInclude Include="UfoLostState.h">
       <Filter>States\Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Waypoint.h">
+      <Filter>Xcom\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="CraftPatrolState.h">
+      <Filter>States\Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="TargetInfoState.h">
+      <Filter>States\Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="LowFuelState.h">
+      <Filter>States\Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="MovingTarget.h">
+      <Filter>Xcom\Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

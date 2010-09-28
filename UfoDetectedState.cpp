@@ -123,6 +123,14 @@ UfoDetectedState::~UfoDetectedState()
 }
 
 /**
+ * Resets the palette.
+ */
+void UfoDetectedState::init()
+{
+	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
+}
+
+/**
  * Centers on the UFO and returns to the previous screen.
  * @param ev Pointer to the SDL_Event.
  * @param scale Scale of the screen.

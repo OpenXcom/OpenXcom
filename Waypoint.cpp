@@ -16,38 +16,50 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM__UFOLOSTSTATE_H
-#define OPENXCOM__UFOLOSTSTATE_H
-
-#include "State.h"
-#include <string>
-
-class TextButton;
-class Window;
-class Text;
-
-using namespace std;
+#include "Waypoint.h"
+#include <sstream>
+#include "Language.h"
 
 /**
- * Notifies the player when a targeted UFO
- * goes outside radar range.
+ * Initializes a waypoint.
  */
-class UfoLostState : public State
+Waypoint::Waypoint() : Target(), _id(0)
 {
-private:
-	TextButton *_btnOk;
-	Window *_window;
-	Text *_txtTitle;
-	string _id;
-public:
-	/// Creates the Ufo Lost state.
-	UfoLostState(Game *game, string id);
-	/// Cleans up the Ufo Lost state.
-	~UfoLostState();
-	// Updates the palette.
-	void init();
-	/// Handler for clicking the OK button.
-	void btnOkClick(SDL_Event *ev, int scale);
-};
+}
 
-#endif
+/**
+ *
+ */
+Waypoint::~Waypoint()
+{
+}
+
+/**
+ * Returns the waypoint's unique ID.
+ * @return Unique ID.
+ */
+int Waypoint::getId()
+{
+	return _id;
+}
+
+/**
+ * Changes the waypoint's unique ID.
+ * @param id Unique ID.
+ */
+void Waypoint::setId(int id)
+{
+	_id = id;
+}
+
+/**
+ * Returns the waypoint's unique identifying name.
+ * @param lang Language to get strings from.
+ * @return Full name.
+ */
+string Waypoint::getName(Language *lang)
+{
+	stringstream name;
+	name << lang->getString(STR_WAY_POINT_) << _id;
+	return name.str();
+}

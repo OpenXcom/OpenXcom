@@ -27,7 +27,6 @@
 #include "TextButton.h"
 #include "Window.h"
 #include "Text.h"
-#include "TextList.h"
 #include "Base.h"
 #include "Craft.h"
 #include "RuleCraft.h"
@@ -36,6 +35,7 @@
 #include "Target.h"
 #include "Ufo.h"
 #include "SavedGame.h"
+#include "Waypoint.h"
 #include "SelectDestinationState.h"
 
 using namespace std;
@@ -45,16 +45,26 @@ using namespace std;
  * @param game Pointer to the core game.
  * @param craft Pointer to the craft to display.
  * @param globe Pointer to the Geoscape globe.
+ * @param waypoint Pointer to the last UFO position (if redirecting the craft).
  */
-GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe) : State(game), _craft(craft), _globe(globe)
+GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, Waypoint *waypoint) : State(game), _craft(craft), _globe(globe), _waypoint(waypoint)
 {
 	_screen = false;
 
 	// Create objects
 	_window = new Window(this, 240, 184, 8, 8, POPUP_BOTH);
-	_btnBase = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 192, 12, 32, 116);
-	_btnTarget = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 192, 12, 32, 132);
-	_btnPatrol = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 192, 12, 32, 148);
+	if (_waypoint != 0)
+	{
+		_btnBase = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 224, 12, 16, 132);
+		_btnTarget = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 224, 12, 16, 164);
+		_btnPatrol = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 224, 12, 16, 148);
+	}
+	else
+	{
+		_btnBase = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 192, 12, 32, 116);
+		_btnTarget = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 192, 12, 32, 132);
+		_btnPatrol = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 192, 12, 32, 148);
+	}
 	_btnCancel = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 192, 12, 32, 164);
 	_txtTitle = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 190, 16, 32, 20);
 	_txtStatus = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 190, 9, 32, 36);
@@ -67,6 +77,7 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe) :
 	_txtW1Ammo = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 60, 9, 164, 92);
 	_txtW2Name = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 120, 9, 32, 100);
 	_txtW2Ammo = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 60, 9, 164, 100);
+	_txtRedirect = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 230, 16, 13, 108);
 	
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
@@ -87,6 +98,7 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe) :
 	add(_txtW1Ammo);
 	add(_txtW2Name);
 	add(_txtW2Ammo);
+	add(_txtRedirect);
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)+2);
@@ -115,20 +127,29 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe) :
 	_txtStatus->setColor(Palette::blockOffset(15)-1);
 	stringstream ss;
 	ss << _game->getResourcePack()->getLanguage()->getString(STR_STATUS_);
-	if (_craft->getTarget() == 0)
+	if (_craft->getLowFuel())
+	{
+		ss << _game->getResourcePack()->getLanguage()->getString(STR_LOW_FUEL_RETURNING_TO_BASE);
+	}
+	else if (_craft->getDestination() == 0)
 	{
 		ss << _game->getResourcePack()->getLanguage()->getString(STR_PATROLLING);
 	}
-	else if (_craft->getTarget() == (Target*)_craft->getBase())
+	else if (_craft->getDestination() == (Target*)_craft->getBase())
 	{
 		ss << _game->getResourcePack()->getLanguage()->getString(STR_RETURNING_TO_BASE);
 	}
 	else
 	{
-		Ufo *u = dynamic_cast<Ufo*>(_craft->getTarget());
+		Ufo *u = dynamic_cast<Ufo*>(_craft->getDestination());
+		Waypoint *w = dynamic_cast<Waypoint*>(_craft->getDestination());
 		if (u != 0)
 		{
 			ss << _game->getResourcePack()->getLanguage()->getString(STR_INTERCEPTING_UFO) << u->getId();
+		}
+		else if (w != 0)
+		{
+			ss << _game->getResourcePack()->getLanguage()->getString(STR_DESTINATION_WAY_POINT) << w->getId();
 		}
 	}
 	_txtStatus->setText(ss.str());
@@ -207,6 +228,28 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe) :
 		_txtW2Name->setText(ss9.str());
 		_txtW2Ammo->setVisible(false);
 	}
+
+	_txtRedirect->setColor(Palette::blockOffset(15)-1);
+	_txtRedirect->setBig();
+	_txtRedirect->setAlign(ALIGN_CENTER);
+	_txtRedirect->setText(_game->getResourcePack()->getLanguage()->getString(STR_REDIRECT_CRAFT));
+
+	if (_waypoint == 0)
+	{
+		_txtRedirect->setVisible(false);
+	}
+	else
+	{
+		_btnCancel->setVisible(false);
+		_btnTarget->setText(_game->getResourcePack()->getLanguage()->getString(STR_GO_TO_LAST_KNOWN_UFO_POSITION));
+	}
+
+	if (_craft->getLowFuel())
+	{
+		_btnBase->setVisible(false);
+		_btnTarget->setVisible(false);
+		_btnPatrol->setVisible(false);
+	}
 }
 
 /**
@@ -218,25 +261,46 @@ GeoscapeCraftState::~GeoscapeCraftState()
 }
 
 /**
+ * Resets the palette.
+ */
+void GeoscapeCraftState::init()
+{
+	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
+}
+
+/**
  * Returns the craft back to its base.
  * @param ev Pointer to the SDL_Event.
  * @param scale Scale of the screen.
  */
 void GeoscapeCraftState::btnBaseClick(SDL_Event *ev, int scale)
 {
+	delete _waypoint;
 	_game->popState();
-	_craft->setTarget(_craft->getBase());
+	_craft->setDestination(_craft->getBase());
 }
 
 /**
- * Opens up the Select Destination window.
+ * Changes the craft's target.
  * @param ev Pointer to the SDL_Event.
  * @param scale Scale of the screen.
  */
 void GeoscapeCraftState::btnTargetClick(SDL_Event *ev, int scale)
 {
 	_game->popState();
-	_game->pushState(new SelectDestinationState(_game, _craft, _globe));
+	// Go to the last known UFO position
+	if (_waypoint != 0)
+	{
+		_waypoint->setId(*_game->getSavedGame()->getWaypointId());
+		(*_game->getSavedGame()->getWaypointId())++;
+		_game->getSavedGame()->getWaypoints()->push_back(_waypoint);
+		_craft->setDestination(_waypoint);
+	}
+	// Select a new destination for the craft
+	else
+	{
+		_game->pushState(new SelectDestinationState(_game, _craft, _globe));
+	}
 }
 
 /**
@@ -246,8 +310,9 @@ void GeoscapeCraftState::btnTargetClick(SDL_Event *ev, int scale)
  */
 void GeoscapeCraftState::btnPatrolClick(SDL_Event *ev, int scale)
 {
+	delete _waypoint;
 	_game->popState();
-	_craft->setTarget(0);
+	_craft->setDestination(0);
 }
 
 /**
@@ -257,5 +322,6 @@ void GeoscapeCraftState::btnPatrolClick(SDL_Event *ev, int scale)
  */
 void GeoscapeCraftState::btnCancelClick(SDL_Event *ev, int scale)
 {
+	delete _waypoint;
 	_game->popState();
 }

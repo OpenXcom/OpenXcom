@@ -32,6 +32,7 @@
 #include "SavedGame.h"
 #include "Craft.h"
 #include "Ufo.h"
+#include "Waypoint.h"
 #include "ConfirmDestinationState.h"
 
 #define CLICK_RADIUS 25
@@ -152,6 +153,7 @@ void SelectDestinationState::globeClick(SDL_Event *ev, int scale)
 	_globe->cartToPolar(mouseX, mouseY, &lon, &lat);
 	
 	// Clicking on a valid target
+	Target *t = 0;
 	if (ev->button.button == SDL_BUTTON_LEFT)
 	{
 		for (vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end(); i++)
@@ -165,10 +167,29 @@ void SelectDestinationState::globeClick(SDL_Event *ev, int scale)
 				int dy = mouseY - y;
 				if (dx * dx + dy * dy <= CLICK_RADIUS)
 				{
-					_game->pushState(new ConfirmDestinationState(_game, _craft, (*i)));
+					t = (*i);
 				}
 			}
 		}
+		for (vector<Waypoint*>::iterator i = _game->getSavedGame()->getWaypoints()->begin(); i != _game->getSavedGame()->getWaypoints()->end(); i++)
+		{
+			Sint16 x, y;
+			_globe->polarToCart((*i)->getLongitude(), (*i)->getLatitude(), &x, &y);
+
+			int dx = mouseX - x;
+			int dy = mouseY - y;
+			if (dx * dx + dy * dy <= CLICK_RADIUS)
+			{
+				t = (*i);
+			}
+		}
+		if (t == 0)
+		{
+			t = new Waypoint();
+			t->setLongitude(lon);
+			t->setLatitude(lat);
+		}
+		_game->pushState(new ConfirmDestinationState(_game, _craft, t));
 	}
 }
 

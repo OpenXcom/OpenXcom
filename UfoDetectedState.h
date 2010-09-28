@@ -47,6 +47,8 @@ public:
 	UfoDetectedState(Game *game, Ufo *ufo, GeoscapeState *state, bool detected);
 	/// Cleans up the Ufo Detected state.
 	~UfoDetectedState();
+	// Updates the palette.
+	void init();
 	/// Handler for clicking the Centre on UFO button.
 	void btnCentreClick(SDL_Event *ev, int scale);
 	/// Handler for clicking the Cancel button.

@@ -179,7 +179,7 @@ void CraftInfoState::init()
 
 		Surface *frame1 = texture->getFrame(38);
 		frame1->setY(0);
-		for (int i = 0, x = 0; i < c->getNumSoldiers(_base->getSoldiers()); i++, x += 10)
+		for (int i = 0, x = 0; i < c->getNumSoldiers(); i++, x += 10)
 		{
 			frame1->setX(x);
 			frame1->blit(_crew);

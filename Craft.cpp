@@ -24,8 +24,9 @@
 #include "CraftWeapon.h"
 #include "Item.h"
 #include "Soldier.h"
+#include "Base.h"
 
-#define RANGE_FACTOR 0.0003
+#define PI 3.141592653589793238461
 #define CRAFT_RANGE 600
 
 /**
@@ -33,14 +34,14 @@
  * assigns it the latest craft ID available.
  * @param rules Pointer to ruleset.
  * @param id List of craft IDs.
+ * @param base Pointer to base of origin.
  */
-Craft::Craft(RuleCraft *rules, map<LangString, int> *id, Base *base) : Target(), _rules(rules), _target(0), _base(base), _speedLon(0.0), _speedLat(0.0), _fuel(0), _damage(0), _speed(0), _weapons(), _items(), _status(STR_READY)
+Craft::Craft(RuleCraft *rules, map<LangString, int> *id, Base *base) : MovingTarget(), _rules(rules), _base(base), _fuel(0), _damage(0), _weapons(), _items(), _status(STR_READY), _lowFuel(false)
 {
 	_id = (*id)[_rules->getType()];
 	(*id)[_rules->getType()]++;
 	for (int i = 0; i < _rules->getWeapons(); i++)
 		_weapons.push_back(0);
-	setSpeed(_rules->getMaxSpeed());
 }
 
 /**
@@ -79,7 +80,7 @@ int Craft::getId()
 
 /**
  * Returns the craft's unique identifying name.
- * @param Language to get strings from.
+ * @param lang Language to get strings from.
  * @return Full name.
  */
 string Craft::getName(Language *lang)
@@ -87,23 +88,6 @@ string Craft::getName(Language *lang)
 	stringstream name;
 	name << lang->getString(_rules->getType()) << "-" << _id;
 	return name.str();
-}
-
-/**
- * Returns the target the craft is following.
- */
-Target *Craft::getTarget()
-{
-	return _target;
-}
-
-/**
- * Changes the target the craft is following.
- */
-void Craft::setTarget(Target *target)
-{
-	_target = target;
-	calculateSpeed();
 }
 
 /**
@@ -143,6 +127,15 @@ void Craft::setStatus(LangString status)
 }
 
 /**
+ * Changes the destination the craft is heading to.
+ */
+void Craft::setDestination(Target *dest)
+{
+	MovingTarget::setDestination(dest);
+	setSpeed(_rules->getMaxSpeed());
+}
+
+/**
  * Returns the amount of weapons currently
  * equipped on this craft.
  * @return Number of weapons.
@@ -168,14 +161,14 @@ int Craft::getNumWeapons()
  * that are currently attached to this craft.
  * @return Number of soldiers.
  */
-int Craft::getNumSoldiers(vector<Soldier*> *soldiers)
+int Craft::getNumSoldiers()
 {
 	if (_rules->getSoldiers() == 0)
 		return 0;
 
 	int total = 0;
 
-	for (vector<Soldier*>::iterator i = soldiers->begin(); i != soldiers->end(); i++)
+	for (vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); i++)
 	{
 		if ((*i)->getCraft() == this)
 			total++;
@@ -250,6 +243,8 @@ void Craft::setFuel(int fuel)
 	_fuel = fuel;
 	if (_fuel > _rules->getMaxFuel())
 		_fuel = _rules->getMaxFuel();
+	else if (_fuel < 0)
+		_fuel = 0;
 }
 
 /**
@@ -259,7 +254,7 @@ void Craft::setFuel(int fuel)
  */
 int Craft::getFuelPercentage()
 {
-	return (int)floor((double)_fuel / _rules->getMaxFuel() * 100);
+	return (int)floor((double)_fuel / _rules->getMaxFuel() * 100.0);
 }
 
 /**
@@ -294,66 +289,56 @@ int Craft::getDamagePercentage()
 }
 
 /**
- * Returns the speed of the craft.
- * @return Speed in kilometers.
+ * Returns whether the craft is currently low on fuel
+ * (only has enough to head back to base).
+ * @return True if it's low, false otherwise.
  */
-int Craft::getSpeed()
+bool Craft::getLowFuel()
 {
-	return _speed;
+	return _lowFuel;
 }
 
 /**
- * Changes the speed of the craft.
- * @param speed Speed in kilometers.
+ * Changes whether the craft is currently low on fuel
+ * (only has enough to head back to base).
+ * @param low True if it's low, false otherwise.
  */
-void Craft::setSpeed(int speed)
+void Craft::setLowFuel(bool low)
 {
-	_speed = speed;
-	calculateSpeed();
+	_lowFuel = low;
 }
 
 /**
- * Calculates the speed vector and direction for the UFO
- * based on the current raw speed and target destination.
+ * Returns the current distance between the craft
+ * and the base it belongs to.
+ * @return Distance in radian.
  */
-void Craft::calculateSpeed()
+double Craft::getDistanceFromBase()
 {
-	double newSpeed = _speed * SPEED_FACTOR;
-	if (_target != 0)
-	{
-		double dLon = _target->getLongitude() - _lon;
-		double dLat = _target->getLatitude() - _lat;
-		double length = sqrt(dLon * dLon + dLat * dLat);
-		_speedLon = dLon / length * newSpeed;
-		_speedLat = dLat / length * newSpeed;
-	}
-	else
-	{
-		_speedLon = 0;
-		_speedLat = 0;
-	}
+	double dLon = _base->getLongitude() - _lon;
+	double dLat = _base->getLatitude() - _lat;
+	double length = sqrt(dLon * dLon + dLat * dLat);
+	return length;
 }
 
 /**
- * Moves the craft to its target.
+ * Moves the craft to its destination.
  */
 void Craft::think()
 {
-	if (_target != 0)
+	if (_dest != 0)
 	{
 		calculateSpeed();
 	}
-	_lon += _speedLon;
-	_lat += _speedLat;
-	if (((_speedLon > 0 && _lon > _target->getLongitude()) || (_speedLon < 0 && _lon < _target->getLongitude())) &&
-		((_speedLat > 0 && _lat > _target->getLatitude()) || (_speedLat < 0 && _lat < _target->getLatitude())))
+	setLongitude(_lon + _speedLon);
+	setLatitude(_lat + _speedLat);
+	if (reachedDestination())
 	{
-		_lon = _target->getLongitude();
-		_lat = _target->getLatitude();
-		setSpeed(0);
-		if (_target == (Target*)_base)
+		_lon = _dest->getLongitude();
+		_lat = _dest->getLatitude();
+
+		if (_dest == (Target*)_base)
 		{
-			setTarget(0);
 			if (_damage > 0)
 			{
 				setStatus(STR_REPAIRS);
@@ -366,6 +351,9 @@ void Craft::think()
 			{
 				setStatus(STR_REARMING);
 			}
+			setSpeed(0);
+			setDestination(0);
+			_lowFuel = false;
 		}
 	}
 }
@@ -379,7 +367,7 @@ void Craft::think()
  */
 bool Craft::insideRadarRange(double pointLon, double pointLat)
 {
-	double newrange = CRAFT_RANGE * RANGE_FACTOR;
+	double newrange = CRAFT_RANGE * (1 / 60.0) * (PI / 180);
 	double dLon = pointLon - _lon;
 	double dLat = pointLat - _lat;
     return (dLon * dLon + dLat * dLat <= newrange * newrange);

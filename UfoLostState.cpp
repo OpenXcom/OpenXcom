@@ -30,11 +30,9 @@
 /**
  * Initializes all the elements in the Ufo Lost window.
  * @param game Pointer to the core game.
- * @param ufo Pointer to the UFO to get info from.
- * @param state Pointer to the Geoscape.
- * @param detected Was the UFO detected?
+ * @param id Name of the UFO.
  */
-UfoLostState::UfoLostState(Game *game, string id, double lon, double lat) : State(game), _id(id), _lon(lon), _lat(lat)
+UfoLostState::UfoLostState(Game *game, string id) : State(game), _id(id)
 {
 	_screen = false;
 
@@ -74,6 +72,14 @@ UfoLostState::UfoLostState(Game *game, string id, double lon, double lat) : Stat
 UfoLostState::~UfoLostState()
 {
 	
+}
+
+/**
+ * Resets the palette.
+ */
+void UfoLostState::init()
+{
+	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
 }
 
 /**

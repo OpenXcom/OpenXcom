@@ -19,6 +19,8 @@
 #include "Target.h"
 #include "Language.h"
 
+#define PI 3.141592653589793238461
+
 /**
  * Initializes a target with blank coordinates.
  */
@@ -64,4 +66,20 @@ double Target::getLongitude()
 void Target::setLongitude(double lon)
 {
 	_lon = lon;
+
+	// Keep between 0 and 2xPI
+	while (_lon < 0)
+		_lon += 2 * PI;
+	while (_lon >= 2 * PI)
+		_lon -= 2 * PI;
+}
+
+/**
+ * Returns the list of crafts currently 
+ * following this target.
+ * @return Pointer to list of crafts.
+ */
+vector<Target*> *Target::getFollowers()
+{
+	return &_followers;
 }

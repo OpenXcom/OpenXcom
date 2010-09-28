@@ -49,6 +49,7 @@ TimeTrigger GameTime::advance()
 {
 	TimeTrigger trigger = TIME_5SEC;
 	int monthDays[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+	// Leap year
 	if ((_year % 4 == 0) && !(_year % 100 == 0 && _year % 400 != 0))
 		monthDays[1]++;
 
@@ -58,7 +59,9 @@ TimeTrigger GameTime::advance()
 	{
 		_minute++;
 		_second = 0;
-		if (_minute == 30 || _minute == 60)
+		if (_minute % 10 == 0)
+			trigger = TIME_10MIN;
+		if (_minute % 30 == 0)
 			trigger = TIME_30MIN;
 	}
 	if (_minute >= 60)

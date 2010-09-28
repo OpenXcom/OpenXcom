@@ -42,6 +42,8 @@
 /**
  * Initializes all the elements in the Dogfight window.
  * @param game Pointer to the core game.
+ * @param craft Pointer to the craft intercepting.
+ * @param ufo Pointer to the UFO being intercepted.
  */
 DogfightState::DogfightState(Game *game, Craft *craft, Ufo *ufo) : State(game), _craft(craft), _ufo(ufo), _timeout(40), _currentDist(640), _targetDist(560)
 {
@@ -418,5 +420,6 @@ void DogfightState::btnAgressiveClick(SDL_Event *ev, int scale)
 void DogfightState::btnDisengageClick(SDL_Event *ev, int scale)
 {
 	setStatus(_game->getResourcePack()->getLanguage()->getString(STR_DISENGAGING));
+	_craft->setDestination((Target*)_craft->getBase());
 	_targetDist = 800;
 }

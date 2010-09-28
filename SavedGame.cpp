@@ -23,12 +23,13 @@
 #include "Base.h"
 #include "Region.h"
 #include "Ufo.h"
+#include "Waypoint.h"
 
 /**
  * Initializes a brand new saved game according to the specified difficulty.
  * @param diff Game difficulty.
  */
-SavedGame::SavedGame(GameDifficulty diff) : _diff(diff), _funds(0), _countries(), _regions(), _bases(), _ufos(), _craftId(), _ufoId(1)
+SavedGame::SavedGame(GameDifficulty diff) : _diff(diff), _funds(0), _countries(), _regions(), _bases(), _ufos(), _craftId(), _ufoId(1), _waypoints(), _waypointId(1)
 {
 	_time = new GameTime(6, 1, 1, 1999, 12, 0, 0);
 	RNG::init();
@@ -52,6 +53,10 @@ SavedGame::~SavedGame()
 		delete *i;
 	}
 	for (vector<Ufo*>::iterator i = _ufos.begin(); i != _ufos.end(); i++)
+	{
+		delete *i;
+	}
+	for (vector<Waypoint*>::iterator i = _waypoints.begin(); i != _waypoints.end(); i++)
 	{
 		delete *i;
 	}
@@ -159,9 +164,27 @@ vector<Ufo*> *SavedGame::getUfos()
 
 /**
  * Returns the latest ufo ID.
- * @return ID value.
+ * @return Pointer to ID value.
  */
 int *SavedGame::getUfoId()
 {
 	return &_ufoId;
+}
+
+/**
+ * Returns the latest waypoint ID.
+ * @return Pointer to ID value.
+ */
+int *SavedGame::getWaypointId()
+{
+	return &_waypointId;
+}
+
+/**
+ * Returns the list of craft waypoints.
+ * @return Pointer to waypoint list.
+ */
+vector<Waypoint*> *SavedGame::getWaypoints()
+{
+	return &_waypoints;
 }

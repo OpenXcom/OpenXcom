@@ -20,7 +20,7 @@
 #include "RuleBaseFacility.h"
 #include "Base.h"
 
-#define RANGE_FACTOR 0.0003
+#define PI 3.141592653589793238461
 
 /**
  * Initializes a base facility of the specified type.
@@ -100,7 +100,7 @@ bool BaseFacility::insideRadarRange(Base *base, double pointLon, double pointLat
 {
 	if (_rules->getRadarRange() == 0)
 		return false;
-	double newrange = _rules->getRadarRange() * RANGE_FACTOR;
+	double newrange = _rules->getRadarRange() * (1 / 60.0) * (PI / 180);
 	double dLon = pointLon - base->getLongitude();
 	double dLat = pointLat - base->getLatitude();
     return (dLon * dLon + dLat * dLat <= newrange * newrange);

@@ -16,42 +16,39 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM__TARGET_H
-#define OPENXCOM__TARGET_H
+#ifndef OPENXCOM__TARGETINFOSTATE_H
+#define OPENXCOM__TARGETINFOSTATE_H
 
 #include <string>
-#include <vector>
+#include "State.h"
+#include "LangString.h"
 
 using namespace std;
 
-class Language;
+class TextButton;
+class Window;
+class Text;
+class Target;
 
 /**
- * Base class for targets on the globe
- * with a set of radian coordinates.
+ * Generic window used to display all the
+ * crafts targeting a certain point on the map.
  */
-class Target
+class TargetInfoState : public State
 {
-protected:
-	double _lat, _lon;
-	vector<Target*> _followers;
+private:
+	Target *_target;
+
+	TextButton *_btnOk;
+	Window *_window;
+	Text *_txtTitle, *_txtTargetted, *_txtFollowers;
 public:
-	/// Creates a target.
-	Target();
-	/// Cleans up the target.
-	virtual ~Target();
-	/// Gets the target's latitude.
-	double getLatitude();
-	/// Sets the target's latitude.
-	void setLatitude(double lat);
-	/// Gets the target's longitude.
-	double getLongitude();
-	/// Sets the target's longitude.
-	void setLongitude(double lon);
-	/// Gets the target's name.
-	virtual string getName(Language *lang) = 0;
-	/// Gets the target's followers.
-	vector<Target*> *getFollowers();
+	/// Creates the Target Info state.
+	TargetInfoState(Game *game, Target *target);
+	/// Cleans up the Target Info state.
+	~TargetInfoState();
+	/// Handler for clicking the OK button.
+	void btnOkClick(SDL_Event *ev, int scale);
 };
 
 #endif

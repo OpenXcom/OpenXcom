@@ -22,9 +22,9 @@
 #include "LangString.h"
 
 /**
- * Enumator for time periods.
+ * Enumerator for time periods.
  */
-enum TimeTrigger { TIME_5SEC, TIME_30MIN, TIME_1HOUR, TIME_1DAY, TIME_1MONTH };
+enum TimeTrigger { TIME_5SEC, TIME_10MIN, TIME_30MIN, TIME_1HOUR, TIME_1DAY, TIME_1MONTH };
 
 /**
  * Stores the current ingame time/date according to GMT.

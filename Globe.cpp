@@ -37,6 +37,7 @@
 #include "City.h"
 #include "Ufo.h"
 #include "Craft.h"
+#include "Waypoint.h"
 
 #define PI 3.141592653589793238461
 #define NUM_TEXTURES 13
@@ -259,6 +260,7 @@ void Globe::cartToPolar(Sint16 x, Sint16 y, double *lon, double *lat)
 	*lat = asin((y * sin(c) * cos(_cenLat)) / rho - cos(c) * sin(_cenLat));
 	*lon = atan2(x * sin(c), rho * cos(_cenLat) * cos(c) + y * sin(_cenLat) * sin(c)) - _cenLon;
 
+	// Keep between 0 and 2xPI
 	while (*lon < 0)
 		*lon += 2 * PI;
 	while (*lon >= 2 * PI)
@@ -867,8 +869,7 @@ void Globe::drawMarkers()
 		for (vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); j++)
 		{
 			// Hide crafts docked at base
-			if (((*j)->getLongitude() == (*i)->getLongitude() && (*j)->getLatitude() == (*i)->getLatitude() && (*j)->getTarget() == 0) ||
-				pointBack((*j)->getLongitude(), (*j)->getLatitude()))
+			if ((*j)->getStatus() != STR_OUT || pointBack((*j)->getLongitude(), (*j)->getLatitude()))
 				continue;
 
 			polarToCart((*j)->getLongitude(), (*j)->getLatitude(), &x, &y);
@@ -890,6 +891,19 @@ void Globe::drawMarkers()
 		_mkFlyingUfo->setX(x - 1);
 		_mkFlyingUfo->setY(y - 1);
 		_mkFlyingUfo->blit(_markers);
+	}
+
+	// Draw the waypoint markers
+	for (vector<Waypoint*>::iterator i = _save->getWaypoints()->begin(); i != _save->getWaypoints()->end(); i++)
+	{
+		if (pointBack((*i)->getLongitude(), (*i)->getLatitude()))
+			continue;
+
+		polarToCart((*i)->getLongitude(), (*i)->getLatitude(), &x, &y);
+
+		_mkWaypoint->setX(x - 1);
+		_mkWaypoint->setY(y - 1);
+		_mkWaypoint->blit(_markers);
 	}
 }
 

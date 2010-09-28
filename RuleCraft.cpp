@@ -105,7 +105,7 @@ void RuleCraft::setMaxDamage(int damage)
 /**
  * Returns the maximum speed of the craft flying
  * around the Geoscape.
- * @return Speed.
+ * @return Speed in knots.
  */
 int RuleCraft::getMaxSpeed()
 {
@@ -115,7 +115,7 @@ int RuleCraft::getMaxSpeed()
 /**
  * Changes the maximum speed of the craft flying
  * around the Geoscape.
- * @param speed Speed.
+ * @param speed Speed in knots.
  */
 void RuleCraft::setMaxSpeed(int speed)
 {

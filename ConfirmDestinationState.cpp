@@ -31,17 +31,19 @@
 #include "SavedGame.h"
 #include "Craft.h"
 #include "Target.h"
+#include "Waypoint.h"
 
 using namespace std;
 
 /**
  * Initializes all the elements in the Confirm Destination window.
  * @param game Pointer to the core game.
- * @param base Pointer to the base to place.
- * @param globe Pointer to the Geoscape globe.
+ * @param craft Pointer to the craft to retarget.
+ * @param target Pointer to the selected target (NULL if it's just a point on the globe).
  */
 ConfirmDestinationState::ConfirmDestinationState(Game *game, Craft *craft, Target *target) : State(game), _craft(craft), _target(target)
 {
+	Waypoint *w = dynamic_cast<Waypoint*>(_target);
 	_screen = false;
 
 	// Create objects
@@ -51,7 +53,14 @@ ConfirmDestinationState::ConfirmDestinationState(Game *game, Craft *craft, Targe
 	_txtTarget = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 214, 16, 21, 80);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
+	if (w != 0 && w->getId() == 0)
+	{
+		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
+	}
+	else
+	{
+		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
+	}
 	
 	add(_window);
 	add(_btnOk);
@@ -74,7 +83,14 @@ ConfirmDestinationState::ConfirmDestinationState(Game *game, Craft *craft, Targe
 	_txtTarget->setBig();
 	_txtTarget->setAlign(ALIGN_CENTER);
 	stringstream ss;
-	ss << _game->getResourcePack()->getLanguage()->getString(STR_TARGET) << _target->getName(_game->getResourcePack()->getLanguage());
+	if (w != 0 && w->getId() == 0)
+	{
+		ss << _game->getResourcePack()->getLanguage()->getString(STR_TARGET_WAY_POINT);
+	}
+	else
+	{
+		ss << _game->getResourcePack()->getLanguage()->getString(STR_TARGET) << _target->getName(_game->getResourcePack()->getLanguage());
+	}
 	_txtTarget->setText(ss.str());
 }
 
@@ -93,7 +109,14 @@ ConfirmDestinationState::~ConfirmDestinationState()
  */
 void ConfirmDestinationState::btnOkClick(SDL_Event *ev, int scale)
 {
-	_craft->setTarget(_target);
+	Waypoint *w = dynamic_cast<Waypoint*>(_target);
+	if (w != 0 && w->getId() == 0)
+	{
+		w->setId(*_game->getSavedGame()->getWaypointId());
+		(*_game->getSavedGame()->getWaypointId())++;
+		_game->getSavedGame()->getWaypoints()->push_back(w);
+	}
+	_craft->setDestination(_target);
 	_craft->setStatus(STR_OUT);
 	_game->popState();
 	_game->popState();
@@ -106,5 +129,10 @@ void ConfirmDestinationState::btnOkClick(SDL_Event *ev, int scale)
  */
 void ConfirmDestinationState::btnCancelClick(SDL_Event *ev, int scale)
 {
+	Waypoint *w = dynamic_cast<Waypoint*>(_target);
+	if (w != 0 && w->getId() == 0)
+	{
+		delete w;
+	}
 	_game->popState();
 }

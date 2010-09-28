@@ -39,6 +39,8 @@ using namespace std;
 /**
  * Initializes all the elements in the Intercept window.
  * @param game Pointer to the core game.
+ * @param globe Pointer to the Geoscape globe.
+ * @param base Pointer to base to show contained crafts (NULL to show all crafts).
  */
 InterceptState::InterceptState(Game *game, Globe *globe, Base *base) : State(game), _globe(globe), _base(base)
 {
@@ -104,7 +106,7 @@ InterceptState::InterceptState(Game *game, Globe *globe, Base *base) : State(gam
 		for (vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); j++)
 		{
 			stringstream ss;
-			ss << (*j)->getNumWeapons() << "/" << (*j)->getNumSoldiers((*i)->getSoldiers()) << "/" << (*j)->getNumHWPs();
+			ss << (*j)->getNumWeapons() << "/" << (*j)->getNumSoldiers() << "/" << (*j)->getNumHWPs();
 			_lstCrafts->addRow((intptr_t)*j, 4, (*j)->getName(_game->getResourcePack()->getLanguage()).c_str(), _game->getResourcePack()->getLanguage()->getString((*j)->getStatus()).c_str(), (*i)->getName().c_str(), ss.str().c_str());
 			if ((*j)->getStatus() == STR_READY)
 				_lstCrafts->getCell(row, 1)->setColor(Palette::blockOffset(8)+10);

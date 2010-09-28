@@ -45,6 +45,7 @@
 #include "RuleCraftWeapon.h"
 #include "Ufo.h"
 #include "RuleUfo.h"
+#include "Waypoint.h"
 #include "OptionsState.h"
 #include "InterceptState.h"
 #include "BasescapeState.h"
@@ -56,6 +57,9 @@
 #include "DogfightState.h"
 #include "GeoscapeCraftState.h"
 #include "UfoLostState.h"
+#include "CraftPatrolState.h"
+#include "LowFuelState.h"
+#include "TargetInfoState.h"
 
 using namespace std;
 
@@ -386,15 +390,17 @@ void GeoscapeState::timeAdvance()
 		switch (trigger)
 		{
 		case TIME_1MONTH:
-			timeMonth();
+			time1Month();
 		case TIME_1DAY:
-			timeDay();
+			time1Day();
 		case TIME_1HOUR:
-			timeHour();
+			time1Hour();
 		case TIME_30MIN:
-			timeMinute();
+			time30Minutes();
+		case TIME_10MIN:
+			time10Minutes();
 		case TIME_5SEC:
-			timeSecond();
+			time5Seconds();
 		}
 	}
 
@@ -408,14 +414,14 @@ void GeoscapeState::timeAdvance()
  * Takes care of any game logic that has to
  * run every game second, like craft movement.
  */
-void GeoscapeState::timeSecond()
+void GeoscapeState::time5Seconds()
 {
 	vector<vector<Ufo*>::iterator> deadUfos;
 
 	// Handle UFO logic
 	for (vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end(); i++)
 	{
-		if ((*i)->getLatitude() == (*i)->getTargetLatitude() && (*i)->getLongitude() == (*i)->getTargetLongitude())
+		if ((*i)->getLatitude() == (*i)->getDestination()->getLatitude() && (*i)->getLongitude() == (*i)->getDestination()->getLongitude())
 		{
 			(*i)->setDetected(false);
 			deadUfos.push_back(i);
@@ -431,13 +437,46 @@ void GeoscapeState::timeSecond()
 	{
 		for (vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); j++)
 		{
-			Ufo* u = dynamic_cast<Ufo*>((*j)->getTarget());
+			Ufo* u = dynamic_cast<Ufo*>((*j)->getDestination());
 			if (u != 0 && !u->getDetected())
 			{
-				(*j)->setTarget(0);
-				_popups.push_back(new UfoLostState(_game, u->getName(_game->getResourcePack()->getLanguage()), u->getLongitude(), u->getLatitude()));
+				(*j)->setDestination(0);
+				Waypoint *w = new Waypoint();
+				w->setLongitude(u->getLongitude());
+				w->setLatitude(u->getLatitude());
+				_popups.push_back(new UfoLostState(_game, u->getName(_game->getResourcePack()->getLanguage())));
+				_popups.push_back(new GeoscapeCraftState(_game, (*j), _globe, w));
 			}
 			(*j)->think();
+			if ((*j)->getDestination() != 0 && (*j)->getLatitude() == (*j)->getDestination()->getLatitude() && (*j)->getLongitude() == (*j)->getDestination()->getLongitude())
+			{
+				Ufo *u = dynamic_cast<Ufo*>((*j)->getDestination());
+				Waypoint *w = dynamic_cast<Waypoint*>((*j)->getDestination());
+				if (u != 0)
+				{
+					_popups.push_back(new DogfightState(_game, (*j), u));
+				}
+				else if (w != 0)
+				{
+					_popups.push_back(new CraftPatrolState(_game, (*j), _globe));
+					(*j)->setSpeed((*j)->getRules()->getMaxSpeed() / 2);
+					(*j)->setDestination(0);
+
+					// Remove waypoint if it's no longer being used
+					if (w->getFollowers()->empty())
+					{
+						delete w;
+						for (vector<Waypoint*>::iterator k = _game->getSavedGame()->getWaypoints()->begin(); k != _game->getSavedGame()->getWaypoints()->end(); k++)
+						{
+							if (*k == w)
+							{
+								_game->getSavedGame()->getWaypoints()->erase(k);
+								break;
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 
@@ -451,9 +490,34 @@ void GeoscapeState::timeSecond()
 
 /**
  * Takes care of any game logic that has to
+ * run every game ten minutes, like fuel consumption.
+ */
+#include <iostream>
+void GeoscapeState::time10Minutes()
+{
+	for (vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); i++)
+	{
+		for (vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); j++)
+		{
+			if ((*j)->getStatus() == STR_OUT)
+			{
+				(*j)->setFuel((*j)->getFuel() - (*j)->getSpeed() / 100);
+				if (!(*j)->getLowFuel() && (*j)->getFuel() <= (*j)->getSpeed() / 100 * (*j)->getDistanceFromBase() / ((*j)->getRadianSpeed() * 120))
+				{
+					(*j)->setLowFuel(true);
+					(*j)->setDestination((*j)->getBase());
+					_popups.push_back(new LowFuelState(_game, (*j), this));
+				}
+			}
+		}
+	}
+}
+
+/**
+ * Takes care of any game logic that has to
  * run every game half hour, like UFO detection.
  */
-void GeoscapeState::timeMinute()
+void GeoscapeState::time30Minutes()
 {
 	// Spawn UFOs
 	int chance = RNG::generate(1, 100);
@@ -463,8 +527,10 @@ void GeoscapeState::timeMinute()
 		Ufo *u = new Ufo(_game->getRuleset()->getUfo((LangString)type));
 		u->setLongitude(RNG::generate(0.0, 2*PI));
 		u->setLatitude(RNG::generate(-PI/2, PI/2));
-		u->setTargetLongitude(RNG::generate(0.0, 2*PI));
-		u->setTargetLatitude(RNG::generate(-PI/2, PI/2));
+		Waypoint *w = new Waypoint();
+		w->setLongitude(RNG::generate(0.0, 2*PI));
+		w->setLatitude(RNG::generate(-PI/2, PI/2));
+		u->setDestination(w);
 		_game->getSavedGame()->getUfos()->push_back(u);
 	}
 
@@ -507,7 +573,7 @@ void GeoscapeState::timeMinute()
 				}
 				for (vector<Craft*>::iterator c = (*b)->getCrafts()->begin(); c != (*b)->getCrafts()->end() && !detected; c++)
 				{
-					if ((*c)->getLongitude() == (*b)->getLongitude() && (*c)->getLatitude() == (*b)->getLatitude() && (*c)->getTarget() == 0)
+					if ((*c)->getLongitude() == (*b)->getLongitude() && (*c)->getLatitude() == (*b)->getLatitude() && (*c)->getDestination() == 0)
 						continue;
 					if ((*c)->insideRadarRange((*u)->getLongitude(), (*u)->getLatitude()))
 					{
@@ -545,7 +611,7 @@ void GeoscapeState::timeMinute()
  * Takes care of any game logic that has to
  * run every game hour, like transfers.
  */
-void GeoscapeState::timeHour()
+void GeoscapeState::time1Hour()
 {
 	// Handle craft maintenance
 	for (vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); i++)
@@ -587,7 +653,7 @@ void GeoscapeState::timeHour()
  * Takes care of any game logic that has to
  * run every game day, like constructions.
  */
-void GeoscapeState::timeDay()
+void GeoscapeState::time1Day()
 {
 	for (vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); i++)
 	{
@@ -616,7 +682,7 @@ void GeoscapeState::timeDay()
  * Takes care of any game logic that has to
  * run every game month, like funding.
  */
-void GeoscapeState::timeMonth()
+void GeoscapeState::time1Month()
 {
 	_pause = true;
 	timerReset();
@@ -676,7 +742,7 @@ void GeoscapeState::globeClick(SDL_Event *ev, int scale)
 
 			for (vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); j++)
 			{
-				if ((*j)->getLongitude() == (*i)->getLongitude() && (*j)->getLatitude() == (*i)->getLatitude() && (*j)->getTarget() == 0)
+				if ((*j)->getLongitude() == (*i)->getLongitude() && (*j)->getLatitude() == (*i)->getLatitude() && (*j)->getDestination() == 0)
 					continue;
 				Sint16 x, y;
 				_globe->polarToCart((*j)->getLongitude(), (*j)->getLatitude(), &x, &y);
@@ -685,7 +751,7 @@ void GeoscapeState::globeClick(SDL_Event *ev, int scale)
 				int dy = mouseY - y;
 				if (dx * dx + dy * dy <= CLICK_RADIUS)
 				{
-					_game->pushState(new GeoscapeCraftState(_game, (*j), _globe));
+					_game->pushState(new GeoscapeCraftState(_game, (*j), _globe, 0));
 				}
 			}
 		}
@@ -703,6 +769,18 @@ void GeoscapeState::globeClick(SDL_Event *ev, int scale)
 				_game->pushState(new UfoDetectedState(_game, (*i), this, false));
 			}
 		}
+		for (vector<Waypoint*>::iterator i = _game->getSavedGame()->getWaypoints()->begin(); i != _game->getSavedGame()->getWaypoints()->end(); i++)
+		{
+			Sint16 x, y;
+			_globe->polarToCart((*i)->getLongitude(), (*i)->getLatitude(), &x, &y);
+
+			int dx = mouseX - x;
+			int dy = mouseY - y;
+			if (dx * dx + dy * dy <= CLICK_RADIUS)
+			{
+				_game->pushState(new TargetInfoState(_game, (*i)));
+			}
+		}
 	}
 }
 
@@ -714,7 +792,6 @@ void GeoscapeState::globeClick(SDL_Event *ev, int scale)
 void GeoscapeState::btnInterceptClick(SDL_Event *ev, int scale)
 {
 	_game->pushState(new InterceptState(_game, _globe));
-	//_game->pushState(new DogfightState(_game, _game->getSavedGame()->getBases()->front()->getCrafts()->at(1), 0));
 }
 
 /**

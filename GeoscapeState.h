@@ -62,15 +62,17 @@ public:
 	/// Advances the game timer.
 	void timeAdvance();
 	/// Trigger whenever 5 seconds pass.
-	void timeSecond();
+	void time5Seconds();
+	/// Trigger whenever 10 minutes pass.
+	void time10Minutes();
 	/// Trigger whenever 30 minutes pass.
-	void timeMinute();
+	void time30Minutes();
 	/// Trigger whenever 1 hour passes.
-	void timeHour();
+	void time1Hour();
 	/// Trigger whenever 1 day passes.
-	void timeDay();
+	void time1Day();
 	/// Trigger whenever 1 month passes.
-	void timeMonth();
+	void time1Month();
 	/// Resets the timer to minimum speed.
 	void timerReset();
 	/// Gets the Geoscape globe.

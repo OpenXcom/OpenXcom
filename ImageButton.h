@@ -37,7 +37,7 @@ public:
 	/// Creates a new image button with the specified size and position.
 	ImageButton(int width, int height, int x = 0, int y = 0);
 	/// Cleans up the image button.
-	~ImageButton();
+	virtual ~ImageButton();
 	/// Sets the image button's color.
 	void setColor(Uint8 color);
 	/// Gets the image button's color.

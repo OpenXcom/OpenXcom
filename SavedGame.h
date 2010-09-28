@@ -30,6 +30,7 @@ class Country;
 class Base;
 class Region;
 class Ufo;
+class Waypoint;
 
 /**
  * Enumator containing all the possible game difficulties.
@@ -52,7 +53,8 @@ private:
 	vector<Base*> _bases;
 	vector<Ufo*> _ufos;
 	map<LangString, int> _craftId;
-	int _ufoId;
+	vector<Waypoint*> _waypoints;
+	int _ufoId, _waypointId;
 public:
 	/// Creates a new save with a certain difficulty.
 	SavedGame(GameDifficulty diff);
@@ -80,6 +82,10 @@ public:
 	vector<Ufo*> *getUfos();
 	/// Gets the current UFO ID.
 	int *getUfoId();
+	/// Gets the list of waypoints.
+	vector<Waypoint*> *getWaypoints();
+	/// Gets the current waypoint ID.
+	int *getWaypointId();
 };
 
 #endif

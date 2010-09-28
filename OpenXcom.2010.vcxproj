@@ -110,6 +110,7 @@
     <ClCompile Include="City.cpp" />
     <ClCompile Include="ConfirmDestinationState.cpp" />
     <ClCompile Include="ConfirmNewBaseState.cpp" />
+    <ClCompile Include="CraftPatrolState.cpp" />
     <ClCompile Include="CraftSoldiersState.cpp" />
     <ClCompile Include="BuildNewBaseState.cpp" />
     <ClCompile Include="CraftWeapon.cpp" />
@@ -118,6 +119,8 @@
     <ClCompile Include="GeoscapeErrorState.cpp" />
     <ClCompile Include="DogfightState.cpp" />
     <ClCompile Include="Item.cpp" />
+    <ClCompile Include="LowFuelState.cpp" />
+    <ClCompile Include="MovingTarget.cpp" />
     <ClCompile Include="PlaceLiftState.cpp" />
     <ClCompile Include="Polyline.cpp" />
     <ClCompile Include="Region.cpp" />
@@ -130,6 +133,7 @@
     <ClCompile Include="StartState.cpp" />
     <ClCompile Include="StoresState.cpp" />
     <ClCompile Include="Target.cpp" />
+    <ClCompile Include="TargetInfoState.cpp" />
     <ClCompile Include="TextButton.cpp" />
     <ClCompile Include="Craft.cpp" />
     <ClCompile Include="CraftInfoState.cpp" />
@@ -153,6 +157,7 @@
     <ClCompile Include="Ufo.cpp" />
     <ClCompile Include="UfoDetectedState.cpp" />
     <ClCompile Include="UfoLostState.cpp" />
+    <ClCompile Include="Waypoint.cpp" />
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -206,6 +211,7 @@
     <ClInclude Include="City.h" />
     <ClInclude Include="ConfirmDestinationState.h" />
     <ClInclude Include="ConfirmNewBaseState.h" />
+    <ClInclude Include="CraftPatrolState.h" />
     <ClInclude Include="CraftSoldiersState.h" />
     <ClInclude Include="BuildNewBaseState.h" />
     <ClInclude Include="CraftWeapon.h" />
@@ -215,6 +221,8 @@
     <ClInclude Include="InteractiveSurface.h" />
     <ClInclude Include="DogfightState.h" />
     <ClInclude Include="Item.h" />
+    <ClInclude Include="LowFuelState.h" />
+    <ClInclude Include="MovingTarget.h" />
     <ClInclude Include="PlaceLiftState.h" />
     <ClInclude Include="Polyline.h" />
     <ClInclude Include="Region.h" />
@@ -228,6 +236,7 @@
     <ClInclude Include="State.h" />
     <ClInclude Include="StoresState.h" />
     <ClInclude Include="Target.h" />
+    <ClInclude Include="TargetInfoState.h" />
     <ClInclude Include="TextButton.h" />
     <ClInclude Include="Craft.h" />
     <ClInclude Include="CraftInfoState.h" />
@@ -251,6 +260,7 @@
     <ClInclude Include="Ufo.h" />
     <ClInclude Include="UfoDetectedState.h" />
     <ClInclude Include="UfoLostState.h" />
+    <ClInclude Include="Waypoint.h" />
     <ClInclude Include="Window.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="Game.h" />

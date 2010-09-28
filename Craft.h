@@ -19,7 +19,7 @@
 #ifndef OPENXCOM__CRAFT_H
 #define OPENXCOM__CRAFT_H
 
-#include "Target.h"
+#include "MovingTarget.h"
 #include <map>
 #include <vector>
 #include <string>
@@ -39,19 +39,16 @@ class Item;
  * position, fuel, damage, etc.
  * @sa RuleCraft
  */
-class Craft : public Target
+class Craft : public MovingTarget
 {
 private:
 	RuleCraft *_rules;
-	Target *_target;
 	Base *_base;
-	double _speedLon, _speedLat;
 	int _id, _fuel, _damage, _speed;
 	vector<CraftWeapon*> _weapons;
 	map<LangString, Item*> _items;
 	LangString _status;
-	/// Calculates the new speed vector.
-	void calculateSpeed();
+	bool _lowFuel;
 public:
 	/// Creates a craft of the specified type.
 	Craft(RuleCraft *rules, map<LangString, int> *id, Base *base);
@@ -63,10 +60,6 @@ public:
 	int getId();
 	/// Gets the craft's name.
 	string getName(Language *lang);
-	/// Gets the craft's target.
-	Target *getTarget();
-	/// Sets the craft's target.
-	void setTarget(Target *target);
 	/// Gets the craft's base.
 	Base *getBase();
 	/// Sets the craft's base.
@@ -75,10 +68,12 @@ public:
 	LangString getStatus();
 	/// Sets the craft's status.
 	void setStatus(LangString status);
+	/// Sets the craft's destination.
+	void setDestination(Target *dest);
 	/// Gets the craft's amount of weapons.
 	int getNumWeapons();
 	/// Gets the craft's amount of soldiers.
-	int getNumSoldiers(vector<Soldier*> *soldiers);
+	int getNumSoldiers();
 	/// Gets the craft's amount of equipment.
 	int getNumEquipment();
 	/// Gets the craft's amount of HWPs.
@@ -99,10 +94,12 @@ public:
 	void setDamage(int damage);
 	/// Gets the craft's percentage of damage.
 	int getDamagePercentage();
-	/// Gets the craft's speed.
-	int getSpeed();
-	/// Sets the craft's speed.
-	void setSpeed(int speed);
+	/// Gets whether the craft is running out of fuel.
+	bool getLowFuel();
+	/// Sets whether the craft is running out of fuel.
+	void setLowFuel(bool low);
+	/// Gets the craft's distance from its base.
+	double getDistanceFromBase();
 	/// Checks if a point is inside the craft's radar.
 	bool insideRadarRange(double pointLon, double pointLat);
 	/// Handles craft logic.

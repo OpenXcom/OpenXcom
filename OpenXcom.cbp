@@ -153,6 +153,12 @@
 		<Unit filename="CraftInfoState.h">
 			<Option virtualFolder="States\Basescape\" />
 		</Unit>
+		<Unit filename="CraftPatrolState.cpp">
+			<Option virtualFolder="States\Geoscape\" />
+		</Unit>
+		<Unit filename="CraftPatrolState.h">
+			<Option virtualFolder="States\Geoscape\" />
+		</Unit>
 		<Unit filename="CraftSoldiersState.cpp">
 			<Option virtualFolder="States\Basescape\" />
 		</Unit>
@@ -294,6 +300,12 @@
 		<Unit filename="LanguageState.h">
 			<Option virtualFolder="States\" />
 		</Unit>
+		<Unit filename="LowFuelState.cpp">
+			<Option virtualFolder="States\Geoscape\" />
+		</Unit>
+		<Unit filename="LowFuelState.h">
+			<Option virtualFolder="States\Geoscape\" />
+		</Unit>
 		<Unit filename="MainMenuState.cpp">
 			<Option virtualFolder="States\" />
 		</Unit>
@@ -323,6 +335,12 @@
 		</Unit>
 		<Unit filename="MonthlyReportState.h">
 			<Option virtualFolder="States\Geoscape\" />
+		</Unit>
+		<Unit filename="MovingTarget.cpp">
+			<Option virtualFolder="Xcom\Game\" />
+		</Unit>
+		<Unit filename="MovingTarget.h">
+			<Option virtualFolder="Xcom\Game\" />
 		</Unit>
 		<Unit filename="Music.cpp">
 			<Option virtualFolder="Engine\" />
@@ -534,6 +552,12 @@
 		<Unit filename="Target.h">
 			<Option virtualFolder="Xcom\Game\" />
 		</Unit>
+		<Unit filename="TargetInfoState.cpp">
+			<Option virtualFolder="States\Geoscape\" />
+		</Unit>
+		<Unit filename="TargetInfoState.h">
+			<Option virtualFolder="States\Geoscape\" />
+		</Unit>
 		<Unit filename="TestState.cpp">
 			<Option virtualFolder="States\" />
 		</Unit>
@@ -587,6 +611,12 @@
 		</Unit>
 		<Unit filename="UfoLostState.h">
 			<Option virtualFolder="States\Geoscape\" />
+		</Unit>
+		<Unit filename="Waypoint.cpp">
+			<Option virtualFolder="Xcom\Game\" />
+		</Unit>
+		<Unit filename="Waypoint.h">
+			<Option virtualFolder="Xcom\Game\" />
 		</Unit>
 		<Unit filename="Window.cpp">
 			<Option virtualFolder="Interface\" />

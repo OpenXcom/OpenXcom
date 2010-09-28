@@ -19,7 +19,7 @@
 #ifndef OPENXCOM__UFO_H
 #define OPENXCOM__UFO_H
 
-#include "Target.h"
+#include "MovingTarget.h"
 #include <string>
 #include "LangString.h"
 
@@ -33,16 +33,13 @@ using namespace std;
  * position, damage, speed, etc.
  * @sa RuleUfo
  */
-class Ufo : public Target
+class Ufo : public MovingTarget
 {
 private:
 	RuleUfo *_rules;
-	double _targetLat, _targetLon, _speedLon, _speedLat;
-	int _id, _damage, _speed, _altitude;
+	int _id, _damage, _altitude;
 	LangString _direction;
 	bool _detected;
-	/// Calculates the new speed vector.
-	void calculateSpeed();
 public:
 	/// Creates a UFO of the specified type.
 	Ufo(RuleUfo *rules);
@@ -56,18 +53,6 @@ public:
 	void setId(int id);
 	/// Gets the UFO's name.
 	string getName(Language *lang);
-	/// Gets the UFO's target latitude.
-	double getTargetLatitude();
-	/// Sets the UFO's target latitude.
-	void setTargetLatitude(double lat);
-	/// Gets the UFO's target longitude.
-	double getTargetLongitude();
-	/// Sets the UFO's target longitude.
-	void setTargetLongitude(double lon);
-	/// Gets the UFO's speed.
-	int getSpeed();
-	/// Sets the UFO's speed.
-	void setSpeed(int speed);
 	/// Gets the UFO's amount of damage.
 	int getDamage();
 	/// Sets the UFO's amount of damage.
@@ -80,6 +65,8 @@ public:
 	LangString getDirection();
 	/// Gets the UFO's altitude.
 	LangString getAltitude();
+	/// Calculates a new speed vector to the destination.
+	void calculateSpeed();
 	/// Handles UFO logic.
 	void think();
 };
