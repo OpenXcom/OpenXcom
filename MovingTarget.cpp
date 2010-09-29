@@ -16,9 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+#define _USE_MATH_DEFINES
 #include "MovingTarget.h"
-
-#define PI 3.141592653589793238461
+#include <cmath>
 
 /**
  * Initializes a moving target with blank coordinates.
@@ -95,7 +95,7 @@ double MovingTarget::getRadianSpeed()
 {
 	// Each nautical mile is 1/60th of a degree.
 	// Each hour contains 300 5-seconds.
-	return _speed * (1 / 60.0) * (PI / 180) / 300.0;
+	return _speed * (1 / 60.0) * (M_PI / 180) / 300.0;
 }
 
 /**

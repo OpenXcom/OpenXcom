@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+#define _USE_MATH_DEFINES
 #include "Craft.h"
 #include <cmath>
 #include <sstream>
@@ -26,7 +27,6 @@
 #include "Soldier.h"
 #include "Base.h"
 
-#define PI 3.141592653589793238461
 #define CRAFT_RANGE 600
 
 /**
@@ -367,7 +367,7 @@ void Craft::think()
  */
 bool Craft::insideRadarRange(double pointLon, double pointLat)
 {
-	double newrange = CRAFT_RANGE * (1 / 60.0) * (PI / 180);
+	double newrange = CRAFT_RANGE * (1 / 60.0) * (M_PI / 180);
 	double dLon = pointLon - _lon;
 	double dLat = pointLat - _lat;
     return (dLon * dLon + dLat * dLat <= newrange * newrange);

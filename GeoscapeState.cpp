@@ -16,7 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+#define _USE_MATH_DEFINES
 #include "GeoscapeState.h"
+#include <cmath>
 #include <string>
 #include <sstream>
 #include "RNG.h"
@@ -63,7 +65,6 @@
 
 using namespace std;
 
-#define PI 3.141592653589793238461
 #define CLICK_RADIUS 25
 
 /**
@@ -525,11 +526,11 @@ void GeoscapeState::time30Minutes()
 	{
 		int type = RNG::generate(STR_SMALL_SCOUT, STR_LARGE_SCOUT);
 		Ufo *u = new Ufo(_game->getRuleset()->getUfo((LangString)type));
-		u->setLongitude(RNG::generate(0.0, 2*PI));
-		u->setLatitude(RNG::generate(-PI/2, PI/2));
+		u->setLongitude(RNG::generate(0.0, 2*M_PI));
+		u->setLatitude(RNG::generate(-M_PI/2, M_PI/2));
 		Waypoint *w = new Waypoint();
-		w->setLongitude(RNG::generate(0.0, 2*PI));
-		w->setLatitude(RNG::generate(-PI/2, PI/2));
+		w->setLongitude(RNG::generate(0.0, 2*M_PI));
+		w->setLatitude(RNG::generate(-M_PI/2, M_PI/2));
 		u->setDestination(w);
 		_game->getSavedGame()->getUfos()->push_back(u);
 	}

@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+#define _USE_MATH_DEFINES
 #include "Globe.h"
 #include <cmath>
 #include <fstream>
@@ -39,7 +40,6 @@
 #include "Craft.h"
 #include "Waypoint.h"
 
-#define PI 3.141592653589793238461
 #define NUM_TEXTURES 13
 #define NUM_LANDSHADES 48
 #define NUM_SEASHADES 72
@@ -77,9 +77,9 @@ Globe::Globe(int cenX, int cenY, int width, int height, int x, int y) : Interact
 	_rotTimer->onTimer((SurfaceHandler)&Globe::rotate);
 
 	// Ocean segments
-	for (double tmpLon = 0; tmpLon <= 2 * PI; tmpLon += QUAD_LONGITUDE)
+	for (double tmpLon = 0; tmpLon <= 2 * M_PI; tmpLon += QUAD_LONGITUDE)
 	{
-		for (double tmpLat = PI / 2; tmpLat <= 3 * (PI / 2); tmpLat += QUAD_LATITUDE)
+		for (double tmpLat = M_PI / 2; tmpLat <= 3 * (M_PI / 2); tmpLat += QUAD_LATITUDE)
 		{
 			double lon[] = {tmpLon, tmpLon, tmpLon + QUAD_LONGITUDE, tmpLon + QUAD_LONGITUDE};
 			double lat[] = {tmpLat, tmpLat + QUAD_LATITUDE, tmpLat + QUAD_LATITUDE, tmpLat};
@@ -260,11 +260,11 @@ void Globe::cartToPolar(Sint16 x, Sint16 y, double *lon, double *lat)
 	*lat = asin((y * sin(c) * cos(_cenLat)) / rho - cos(c) * sin(_cenLat));
 	*lon = atan2(x * sin(c), rho * cos(_cenLat) * cos(c) + y * sin(_cenLat) * sin(c)) - _cenLon;
 
-	// Keep between 0 and 2xPI
+	// Keep between 0 and 2xM_PI
 	while (*lon < 0)
-		*lon += 2 * PI;
-	while (*lon >= 2 * PI)
-		*lon -= 2 * PI;
+		*lon += 2 * M_PI;
+	while (*lon >= 2 * M_PI)
+		*lon -= 2 * M_PI;
 }
 
 /**
@@ -351,8 +351,8 @@ void Globe::loadDat(string filename, vector<Polygon*> *polygons)
 		for (int i = 0, j = 0; i < points; i++)
 		{
 			// Correct X-Com degrees and convert to radians
-			double lonRad = value[j++] * 0.125f * PI / 180;
-			double latRad = value[j++] * 0.125f * PI / 180;
+			double lonRad = value[j++] * 0.125f * M_PI / 180;
+			double latRad = value[j++] * 0.125f * M_PI / 180;
 
 			poly->setLongitude(i, lonRad);
 			poly->setLatitude(i, latRad);
@@ -706,7 +706,7 @@ void Globe::drawOcean()
 		}
 
 		// Calculate shade
-		int shade = (int)((curTime + (tmpLon / (2 * PI))) * NUM_SEASHADES) + 36;
+		int shade = (int)((curTime + (tmpLon / (2 * M_PI))) * NUM_SEASHADES) + 36;
 		shade = _seashades[shade % NUM_SEASHADES];
 
 		// Draw the sea
@@ -735,9 +735,9 @@ void Globe::drawLand()
 		{
 			double tmpLon = (*i)->getLongitude(j);
 
-			if (j == 0 || (tmpLon < minLon && tmpLon >= (maxLon - PI)))
+			if (j == 0 || (tmpLon < minLon && tmpLon >= (maxLon - M_PI)))
 				minLon = tmpLon;
-			if (j == 0 || (tmpLon > maxLon && tmpLon <= (minLon + PI)))
+			if (j == 0 || (tmpLon > maxLon && tmpLon <= (minLon + M_PI)))
 				maxLon = tmpLon;
 
 			x[j] = (*i)->getX(j);
@@ -746,7 +746,7 @@ void Globe::drawLand()
 
 		// Apply textures according to zoom and shade
 		int zoom = (2 - (int)floor(_zoom / 2.0)) * NUM_TEXTURES;
-		int shade = (int)((curTime + (((minLon + maxLon) / 2) / (2 * PI))) * NUM_LANDSHADES);
+		int shade = (int)((curTime + (((minLon + maxLon) / 2) / (2 * M_PI))) * NUM_LANDSHADES);
 		shade = _shades[shade % NUM_LANDSHADES];
 		texturedPolygon(getSurface(), (Sint16*)&x, (Sint16*)&y, (*i)->getPoints(), _texture[shade]->getFrame((*i)->getTexture() + zoom)->getSurface(), 0, 0);
 	}

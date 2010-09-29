@@ -16,10 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+#define _USE_MATH_DEFINES
 #include "Target.h"
+#include <cmath>
 #include "Language.h"
-
-#define PI 3.141592653589793238461
 
 /**
  * Initializes a target with blank coordinates.
@@ -67,11 +67,11 @@ void Target::setLongitude(double lon)
 {
 	_lon = lon;
 
-	// Keep between 0 and 2xPI
+	// Keep between 0 and 2xM_PI
 	while (_lon < 0)
-		_lon += 2 * PI;
-	while (_lon >= 2 * PI)
-		_lon -= 2 * PI;
+		_lon += 2 * M_PI;
+	while (_lon >= 2 * M_PI)
+		_lon -= 2 * M_PI;
 }
 
 /**

@@ -16,11 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+#define _USE_MATH_DEFINES
 #include "BaseFacility.h"
+#include <cmath>
 #include "RuleBaseFacility.h"
 #include "Base.h"
-
-#define PI 3.141592653589793238461
 
 /**
  * Initializes a base facility of the specified type.
@@ -100,7 +100,7 @@ bool BaseFacility::insideRadarRange(Base *base, double pointLon, double pointLat
 {
 	if (_rules->getRadarRange() == 0)
 		return false;
-	double newrange = _rules->getRadarRange() * (1 / 60.0) * (PI / 180);
+	double newrange = _rules->getRadarRange() * (1 / 60.0) * (M_PI / 180);
 	double dLon = pointLon - base->getLongitude();
 	double dLat = pointLat - base->getLatitude();
     return (dLon * dLon + dLat * dLat <= newrange * newrange);
