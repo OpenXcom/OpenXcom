@@ -99,6 +99,32 @@ double MovingTarget::getRadianSpeed()
 }
 
 /**
+ * Returns the distance between this moving target and any other
+ * target on the globe, accounting for the wrap-around.
+ * @param target Pointer to other target.
+ * @param dLon Returned longitude difference.
+ * @param dLat Returned latitude difference.
+ * @returns Distance in radian.
+ */
+double MovingTarget::getDistance(Target *target, double *dLon, double *dLat)
+{
+	double minLength = 2*M_PI, lat = target->getLatitude();
+	for (double lon = target->getLongitude() - 2*M_PI; lon <= target->getLongitude() + 2*M_PI; lon += 2*M_PI)
+	{
+		double dx = lon - _lon;
+		double dy = lat - _lat;
+		double length = sqrt(dx * dx + dy * dy);
+		if (length < minLength)
+		{
+			minLength = length;
+			*dLon = dx;
+			*dLat = dy;
+		}
+	}
+	return minLength;
+}
+
+/**
  * Calculates the speed vector for the moving target
  * based on the current raw speed and destination.
  */
@@ -106,9 +132,8 @@ void MovingTarget::calculateSpeed()
 {
 	if (_dest != 0)
 	{
-		double dLon = _dest->getLongitude() - _lon;
-		double dLat = _dest->getLatitude() - _lat;
-		double length = sqrt(dLon * dLon + dLat * dLat);
+		double dLon, dLat;
+		double length = getDistance(_dest, &dLon, &dLat);
 		_speedLon = dLon / length * getRadianSpeed();
 		_speedLat = dLat / length * getRadianSpeed();
 	}

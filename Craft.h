@@ -100,6 +100,8 @@ public:
 	void setLowFuel(bool low);
 	/// Gets the craft's distance from its base.
 	double getDistanceFromBase();
+	/// Returns the craft to its base.
+	void returnToBase();
 	/// Checks if a point is inside the craft's radar.
 	bool insideRadarRange(double pointLon, double pointLat);
 	/// Handles craft logic.

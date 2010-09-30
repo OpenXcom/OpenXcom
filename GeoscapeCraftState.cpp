@@ -277,7 +277,7 @@ void GeoscapeCraftState::btnBaseClick(SDL_Event *ev, int scale)
 {
 	delete _waypoint;
 	_game->popState();
-	_craft->setDestination(_craft->getBase());
+	_craft->returnToBase();
 }
 
 /**

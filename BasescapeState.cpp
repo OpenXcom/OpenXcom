@@ -195,6 +195,11 @@ void BasescapeState::init()
 	s.erase(s.size()-1, 1);
 	s += Text::formatFunding(_game->getSavedGame()->getFunds());
 	_txtFunds->setText(s);
+
+	if (_game->getSavedGame()->getBases()->size() == 8)
+	{
+		_btnNewBase->setVisible(false);
+	}
 }
 
 /**
@@ -222,12 +227,9 @@ void BasescapeState::setBase(Base *base)
  */
 void BasescapeState::btnNewBaseClick(SDL_Event *ev, int scale)
 {
-	if (_game->getSavedGame()->getBases()->size() < 8)
-	{
-		Base *base = new Base();
-		_game->popState();
-		_game->pushState(new BuildNewBaseState(_game, base, _globe, false));
-	}
+	Base *base = new Base();
+	_game->popState();
+	_game->pushState(new BuildNewBaseState(_game, base, _globe, false));
 }
 
 /**

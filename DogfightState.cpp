@@ -321,6 +321,7 @@ void DogfightState::move()
 
 	if (_currentDist > 640 && _mode == _btnDisengage)
 	{
+		_craft->returnToBase();
 		_game->popState();
 		stringstream ss;
 		ss << "GMGEO" << RNG::generate(1, 2);
@@ -420,6 +421,5 @@ void DogfightState::btnAgressiveClick(SDL_Event *ev, int scale)
 void DogfightState::btnDisengageClick(SDL_Event *ev, int scale)
 {
 	setStatus(_game->getResourcePack()->getLanguage()->getString(STR_DISENGAGING));
-	_craft->setDestination((Target*)_craft->getBase());
 	_targetDist = 800;
 }

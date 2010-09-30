@@ -46,6 +46,8 @@ public:
 	void setSpeed(int speed);
 	/// Gets the moving target's speed in radian.
 	double getRadianSpeed();
+	/// Gets the distance to another target.
+	double getDistance(Target *target, double *dLon, double *dLat);
 	/// Calculates a new speed vector to the destination.
 	virtual void calculateSpeed();
 	/// Has the moving target reached its destination?

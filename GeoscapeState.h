@@ -75,6 +75,8 @@ public:
 	void time1Month();
 	/// Resets the timer to minimum speed.
 	void timerReset();
+	/// Displays a popup window.
+	void popup(State *state);
 	/// Gets the Geoscape globe.
 	Globe *getGlobe();
 	/// Handler for clicking the globe.

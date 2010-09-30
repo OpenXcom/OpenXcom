@@ -445,8 +445,8 @@ void GeoscapeState::time5Seconds()
 				Waypoint *w = new Waypoint();
 				w->setLongitude(u->getLongitude());
 				w->setLatitude(u->getLatitude());
-				_popups.push_back(new UfoLostState(_game, u->getName(_game->getResourcePack()->getLanguage())));
-				_popups.push_back(new GeoscapeCraftState(_game, (*j), _globe, w));
+				popup(new UfoLostState(_game, u->getName(_game->getResourcePack()->getLanguage())));
+				popup(new GeoscapeCraftState(_game, (*j), _globe, w));
 			}
 			(*j)->think();
 			if ((*j)->getDestination() != 0 && (*j)->getLatitude() == (*j)->getDestination()->getLatitude() && (*j)->getLongitude() == (*j)->getDestination()->getLongitude())
@@ -455,27 +455,13 @@ void GeoscapeState::time5Seconds()
 				Waypoint *w = dynamic_cast<Waypoint*>((*j)->getDestination());
 				if (u != 0)
 				{
-					_popups.push_back(new DogfightState(_game, (*j), u));
+					popup(new DogfightState(_game, (*j), u));
 				}
 				else if (w != 0)
 				{
-					_popups.push_back(new CraftPatrolState(_game, (*j), _globe));
+					popup(new CraftPatrolState(_game, (*j), _globe));
 					(*j)->setSpeed((*j)->getRules()->getMaxSpeed() / 2);
 					(*j)->setDestination(0);
-
-					// Remove waypoint if it's no longer being used
-					if (w->getFollowers()->empty())
-					{
-						delete w;
-						for (vector<Waypoint*>::iterator k = _game->getSavedGame()->getWaypoints()->begin(); k != _game->getSavedGame()->getWaypoints()->end(); k++)
-						{
-							if (*k == w)
-							{
-								_game->getSavedGame()->getWaypoints()->erase(k);
-								break;
-							}
-						}
-					}
 				}
 			}
 		}
@@ -487,13 +473,23 @@ void GeoscapeState::time5Seconds()
 		delete **i;
 		_game->getSavedGame()->getUfos()->erase(*i);
 	}
+
+	// Clean up unused waypoints
+	for (vector<Waypoint*>::iterator i = _game->getSavedGame()->getWaypoints()->begin(); i != _game->getSavedGame()->getWaypoints()->end(); i++)
+	{
+		if ((*i)->getFollowers()->empty())
+		{
+			delete *i;
+			_game->getSavedGame()->getWaypoints()->erase(i);
+			break;
+		}
+	}
 }
 
 /**
  * Takes care of any game logic that has to
  * run every game ten minutes, like fuel consumption.
  */
-#include <iostream>
 void GeoscapeState::time10Minutes()
 {
 	for (vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); i++)
@@ -506,8 +502,8 @@ void GeoscapeState::time10Minutes()
 				if (!(*j)->getLowFuel() && (*j)->getFuel() <= (*j)->getSpeed() / 100 * (*j)->getDistanceFromBase() / ((*j)->getRadianSpeed() * 120))
 				{
 					(*j)->setLowFuel(true);
-					(*j)->setDestination((*j)->getBase());
-					_popups.push_back(new LowFuelState(_game, (*j), this));
+					(*j)->returnToBase();
+					popup(new LowFuelState(_game, (*j), this));
 				}
 			}
 		}
@@ -585,8 +581,7 @@ void GeoscapeState::time30Minutes()
 			if (detected)
 			{
 				(*u)->setDetected(detected);
-				_pause = true;
-				_popups.push_back(new UfoDetectedState(_game, (*u), this, true));
+				popup(new UfoDetectedState(_game, (*u), this, true));
 			}
 		}
 		else
@@ -665,14 +660,13 @@ void GeoscapeState::time1Day()
 				(*j)->setBuildTime((*j)->getBuildTime() - 1);
 				if ((*j)->getBuildTime() == 0)
 				{
-					_pause = true;
 					timerReset();
 					string s = _game->getResourcePack()->getLanguage()->getString(STR_PRODUCTION_OF);
 					s += _game->getResourcePack()->getLanguage()->getString((*j)->getRules()->getType());
 					s += _game->getResourcePack()->getLanguage()->getString(STR_AT);
 					s += (*i)->getName();
 					s += _game->getResourcePack()->getLanguage()->getString(STR_IS_COMPLETE);
-					_popups.push_back(new GeoscapeMessageState(_game, s));
+					popup(new GeoscapeMessageState(_game, s));
 				}
 			}
 		}
@@ -685,10 +679,9 @@ void GeoscapeState::time1Day()
  */
 void GeoscapeState::time1Month()
 {
-	_pause = true;
 	timerReset();
 	_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() + _game->getSavedGame()->getCountryFunding() - _game->getSavedGame()->getBaseMaintenance());
-	_popups.push_back(new MonthlyReportState(_game));
+	popup(new MonthlyReportState(_game));
 }
 
 /**
@@ -700,6 +693,18 @@ void GeoscapeState::timerReset()
 	SDL_Event ev;
 	ev.button.button = SDL_BUTTON_LEFT;
 	_btn5Secs->mousePress(&ev, _game->getScreen()->getScale(), this);
+}
+
+/**
+ * Adds a new popup window to the queue
+ * (this prevents popups from overlapping)
+ * and pauses the game timer respectively.
+ * @param state Pointer to popup state.
+ */
+void GeoscapeState::popup(State *state)
+{
+	_pause = true;
+	_popups.push_back(state);
 }
 
 /**

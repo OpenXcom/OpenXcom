@@ -315,10 +315,16 @@ void Craft::setLowFuel(bool low)
  */
 double Craft::getDistanceFromBase()
 {
-	double dLon = _base->getLongitude() - _lon;
-	double dLat = _base->getLatitude() - _lat;
-	double length = sqrt(dLon * dLon + dLat * dLat);
-	return length;
+	double dLon, dLat;
+	return getDistance(_base, &dLon, &dLat);
+}
+
+/**
+ * Sends the craft back to its origin base.
+ */
+void Craft::returnToBase()
+{
+	setDestination(_base);
 }
 
 /**
