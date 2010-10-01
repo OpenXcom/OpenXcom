@@ -102,8 +102,8 @@ public:
 	double getDistanceFromBase();
 	/// Returns the craft to its base.
 	void returnToBase();
-	/// Checks if a point is inside the craft's radar.
-	bool insideRadarRange(double pointLon, double pointLat);
+	/// Checks if a target is inside the craft's radar.
+	bool insideRadarRange(Target *target);
 	/// Handles craft logic.
 	void think();
 };

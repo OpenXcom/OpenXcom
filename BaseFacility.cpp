@@ -21,6 +21,7 @@
 #include <cmath>
 #include "RuleBaseFacility.h"
 #include "Base.h"
+#include "Target.h"
 
 /**
  * Initializes a base facility of the specified type.
@@ -89,19 +90,24 @@ void BaseFacility::setBuildTime(int time)
 }
 
 /**
- * Returns if a certain point is covered by the facility's
+ * Returns if a certain target is covered by the facility's
  * radar range, taking in account the positions of both.
- * @param base Base the city belongs to.
- * @param pointLon Point longitude.
- * @param pointLat Point latitude.
+ * @param base Pointer to base the facility belongs to.
+ * @param target Pointer to target to compare.
  * @return True if it's within range, False otherwise.
  */
-bool BaseFacility::insideRadarRange(Base *base, double pointLon, double pointLat)
+bool BaseFacility::insideRadarRange(Base *base, Target *target)
 {
 	if (_rules->getRadarRange() == 0)
 		return false;
+
+	bool inside = false;
 	double newrange = _rules->getRadarRange() * (1 / 60.0) * (M_PI / 180);
-	double dLon = pointLon - base->getLongitude();
-	double dLat = pointLat - base->getLatitude();
-    return (dLon * dLon + dLat * dLat <= newrange * newrange);
+	for (double lon = target->getLongitude() - 2*M_PI; lon <= target->getLongitude() + 2*M_PI; lon += 2*M_PI)
+	{
+		double dLon = lon - base->getLongitude();
+		double dLat = target->getLatitude() - base->getLatitude();
+		inside = inside || (dLon * dLon + dLat * dLat <= newrange * newrange);
+	}
+    return inside;
 }

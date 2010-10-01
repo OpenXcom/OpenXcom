@@ -417,15 +417,12 @@ void GeoscapeState::timeAdvance()
  */
 void GeoscapeState::time5Seconds()
 {
-	vector<vector<Ufo*>::iterator> deadUfos;
-
 	// Handle UFO logic
 	for (vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end(); i++)
 	{
 		if ((*i)->getLatitude() == (*i)->getDestination()->getLatitude() && (*i)->getLongitude() == (*i)->getDestination()->getLongitude())
 		{
 			(*i)->setDetected(false);
-			deadUfos.push_back(i);
 		}
 		else
 		{
@@ -468,10 +465,14 @@ void GeoscapeState::time5Seconds()
 	}
 
 	// Clean up dead UFOs
-	for (vector<vector<Ufo*>::iterator>::iterator i = deadUfos.begin(); i != deadUfos.end(); i++)
+	for (vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end(); i++)
 	{
-		delete **i;
-		_game->getSavedGame()->getUfos()->erase(*i);
+		if ((*i)->getLatitude() == (*i)->getDestination()->getLatitude() && (*i)->getLongitude() == (*i)->getDestination()->getLongitude())
+		{
+			delete *i;
+			_game->getSavedGame()->getUfos()->erase(i);
+			break;
+		}
 	}
 
 	// Clean up unused waypoints
@@ -559,7 +560,7 @@ void GeoscapeState::time30Minutes()
 				{
 					if ((*f)->getBuildTime() != 0)
 						continue;
-					if ((*f)->insideRadarRange(*b, (*u)->getLongitude(), (*u)->getLatitude()))
+					if ((*f)->insideRadarRange(*b, *u))
 					{
 						int chance = RNG::generate(1, 100);
 						if (chance <= (*f)->getRules()->getRadarChance())
@@ -572,7 +573,7 @@ void GeoscapeState::time30Minutes()
 				{
 					if ((*c)->getLongitude() == (*b)->getLongitude() && (*c)->getLatitude() == (*b)->getLatitude() && (*c)->getDestination() == 0)
 						continue;
-					if ((*c)->insideRadarRange((*u)->getLongitude(), (*u)->getLatitude()))
+					if ((*c)->insideRadarRange(*u))
 					{
 						detected = true;
 					}
@@ -591,11 +592,11 @@ void GeoscapeState::time30Minutes()
 			{
 				for (vector<BaseFacility*>::iterator f = (*b)->getFacilities()->begin(); f != (*b)->getFacilities()->end() && !detected; f++)
 				{
-					detected = detected || (*f)->insideRadarRange(*b, (*u)->getLongitude(), (*u)->getLatitude());
+					detected = detected || (*f)->insideRadarRange(*b, *u);
 				}
 				for (vector<Craft*>::iterator c = (*b)->getCrafts()->begin(); c != (*b)->getCrafts()->end() && !detected; c++)
 				{
-					detected = detected || (*c)->insideRadarRange((*u)->getLongitude(), (*u)->getLatitude());
+					detected = detected || (*c)->insideRadarRange(*u);
 				}
 			}
 			(*u)->setDetected(detected);

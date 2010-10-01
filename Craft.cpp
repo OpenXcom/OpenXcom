@@ -367,14 +367,18 @@ void Craft::think()
 /**
  * Returns if a certain point is covered by the craft's
  * radar range, taking in account the positions of both.
- * @param pointLon Point longitude.
- * @param pointLat Point latitude.
+ * @param target Pointer to target to compare.
  * @return True if it's within range, False otherwise.
  */
-bool Craft::insideRadarRange(double pointLon, double pointLat)
+bool Craft::insideRadarRange(Target *target)
 {
+	bool inside = false;
 	double newrange = CRAFT_RANGE * (1 / 60.0) * (M_PI / 180);
-	double dLon = pointLon - _lon;
-	double dLat = pointLat - _lat;
-    return (dLon * dLon + dLat * dLat <= newrange * newrange);
+	for (double lon = target->getLongitude() - 2*M_PI; lon <= target->getLongitude() + 2*M_PI; lon += 2*M_PI)
+	{
+		double dLon = lon - _lon;
+		double dLat = target->getLatitude() - _lat;
+		inside = inside || (dLon * dLon + dLat * dLat <= newrange * newrange);
+	}
+    return inside;
 }

@@ -21,6 +21,7 @@
 
 class RuleBaseFacility;
 class Base;
+class Target;
 
 /**
  * Represents a base facility placed in a base.
@@ -48,8 +49,8 @@ public:
 	int getBuildTime();
 	/// Sets the facility's construction time.
 	void setBuildTime(int time);
-	/// Checks if a point is inside the facility's radar.
-	bool insideRadarRange(Base *base, double pointLon, double pointLat);
+	/// Checks if a target is inside the facility's radar.
+	bool insideRadarRange(Base *base, Target *target);
 };
 
 #endif
