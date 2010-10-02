@@ -21,7 +21,6 @@
 #include <sstream>
 #include "Language.h"
 #include "RuleUfo.h"
-#include "RNG.h"
 
 /**
  * Initializes a UFO of the specified type.
@@ -29,7 +28,6 @@
  */
 Ufo::Ufo(RuleUfo *rules) : MovingTarget(), _rules(rules), _id(0), _damage(0), _altitude(0), _direction(STR_NORTH), _detected(false)
 {
-	setSpeed(RNG::generate(_rules->getMaxSpeed() / 2, _rules->getMaxSpeed()));
 }
 
 /**

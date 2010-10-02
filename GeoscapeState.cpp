@@ -420,13 +420,10 @@ void GeoscapeState::time5Seconds()
 	// Handle UFO logic
 	for (vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end(); i++)
 	{
+		(*i)->think();
 		if ((*i)->getLatitude() == (*i)->getDestination()->getLatitude() && (*i)->getLongitude() == (*i)->getDestination()->getLongitude())
 		{
 			(*i)->setDetected(false);
-		}
-		else
-		{
-			(*i)->think();
 		}
 	}
 
@@ -529,6 +526,7 @@ void GeoscapeState::time30Minutes()
 		w->setLongitude(RNG::generate(0.0, 2*M_PI));
 		w->setLatitude(RNG::generate(-M_PI/2, M_PI/2));
 		u->setDestination(w);
+		u->setSpeed(RNG::generate(u->getRules()->getMaxSpeed() / 4, u->getRules()->getMaxSpeed() / 2));
 		_game->getSavedGame()->getUfos()->push_back(u);
 	}
 
