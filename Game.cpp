@@ -66,11 +66,15 @@ Game::Game(string title, int width, int height, int bpp) : _screen(0), _cursor(0
 }
 
 /**
- * Shuts down all the SDL subsystems and deletes the display screen and cursor.
+ * Deletes the display screen, cursor, states and shuts down all the SDL subsystems.
  */
 Game::~Game()
 {
-	delete _screen;
+	Mix_HaltChannel(-1);
+
+	for (list<State*>::iterator i = _states.begin(); i != _states.end(); i++)
+		delete *i;
+
 	delete _cursor;
 	if (_res != 0)
 		delete _res;
@@ -79,8 +83,7 @@ Game::~Game()
 	if (_save != 0)
 		delete _save;
 
-	for (list<State*>::iterator i = _states.begin(); i != _states.end(); i++)
-		delete *i;
+	delete _screen;
 
 	Mix_CloseAudio();
 

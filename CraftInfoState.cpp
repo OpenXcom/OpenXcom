@@ -66,8 +66,8 @@ CraftInfoState::CraftInfoState(Game *game, Base *base, unsigned int craft) : Sta
 	_sprite = new Surface(32, 32, 144, 52);
 	_weapon1 = new Surface(15, 17, 121, 63);
 	_weapon2 = new Surface(15, 17, 184, 63);
-	_crew = new Surface(210, 16, 95, 96);
-	_equip = new Surface(210, 16, 95, 121);
+	_crew = new Surface(210, 18, 95, 96);
+	_equip = new Surface(210, 18, 95, 121);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)), Palette::backPos, 16);
@@ -155,6 +155,9 @@ CraftInfoState::~CraftInfoState()
  */
 void CraftInfoState::init()
 {
+	// Set palette
+	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)), Palette::backPos, 16);
+
 	Craft *c = _base->getCrafts()->at(_craft);
 
 	_txtCraft->setText(c->getName(_game->getResourcePack()->getLanguage()));

@@ -29,7 +29,7 @@
  * Initializes a brand new saved game according to the specified difficulty.
  * @param diff Game difficulty.
  */
-SavedGame::SavedGame(GameDifficulty diff) : _diff(diff), _funds(0), _countries(), _regions(), _bases(), _ufos(), _craftId(), _ufoId(1), _waypoints(), _waypointId(1)
+SavedGame::SavedGame(GameDifficulty diff) : _diff(diff), _funds(0), _countries(), _regions(), _bases(), _ufos(), _craftId(), _waypoints(), _ufoId(1), _waypointId(1)
 {
 	_time = new GameTime(6, 1, 1, 1999, 12, 0, 0);
 	RNG::init();
