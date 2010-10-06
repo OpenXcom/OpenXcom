@@ -63,6 +63,15 @@ Uint32 Timer::getTime()
 }
 
 /**
+ * Returns if the timer has been started.
+ * @return Running state.
+ */
+bool Timer::isRunning()
+{
+	return _running;
+}
+
+/**
  * The timer keeps calculating the passed time while it's running,
  * calling the respective event handler whenever the set interval passes.
  * @param state State that the event handler belongs to.

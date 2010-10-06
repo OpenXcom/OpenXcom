@@ -47,7 +47,7 @@ private:
 	Text *_txtStatus, *_txtAmmo1, *_txtAmmo2, *_txtDistance;
 	Craft *_craft;
 	Ufo *_ufo;
-	int _timeout, _currentDist, _targetDist;
+	int _timeout, _currentDist, _targetDist, _w1Dist, _w2Dist;
 public:
 	/// Creates the Dogfight state.
 	DogfightState(Game *game, Craft *craft, Ufo *ufo);
@@ -59,6 +59,10 @@ public:
 	void animate();
 	/// Moves the craft.
 	void move();
+
+	void fireWeapon1();
+
+	void fireWeapon2();
 	/// Changes the status text.
 	void setStatus(string status);
 	/// Handler for clicking the Standoff button.

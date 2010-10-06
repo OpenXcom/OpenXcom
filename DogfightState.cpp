@@ -36,6 +36,7 @@
 #include "CraftWeapon.h"
 #include "RuleCraftWeapon.h"
 #include "Ufo.h"
+#include "RuleUfo.h"
 #include "Music.h"
 #include "RNG.h"
 
@@ -45,7 +46,7 @@
  * @param craft Pointer to the craft intercepting.
  * @param ufo Pointer to the UFO being intercepted.
  */
-DogfightState::DogfightState(Game *game, Craft *craft, Ufo *ufo) : State(game), _craft(craft), _ufo(ufo), _timeout(40), _currentDist(640), _targetDist(560)
+DogfightState::DogfightState(Game *game, Craft *craft, Ufo *ufo) : State(game), _craft(craft), _ufo(ufo), _timeout(40), _currentDist(640), _targetDist(560), _w1Dist(0), _w2Dist(0)
 {
 	_screen = false;
 
@@ -71,6 +72,8 @@ DogfightState::DogfightState(Game *game, Craft *craft, Ufo *ufo) : State(game), 
 
 	_animTimer = new Timer(30);
 	_moveTimer = new Timer(20);
+	_w1Timer = new Timer(0);
+	_w2Timer = new Timer(0);
 	_mode = _btnStandoff;
 
 	add(_window);
@@ -260,6 +263,10 @@ DogfightState::DogfightState(Game *game, Craft *craft, Ufo *ufo) : State(game), 
 	_moveTimer->onTimer((StateHandler)&DogfightState::move);
 	_moveTimer->start();
 
+	_w1Timer->onTimer((StateHandler)&DogfightState::fireWeapon1);
+
+	_w2Timer->onTimer((StateHandler)&DogfightState::fireWeapon2);
+
 	// Set music
 	_game->getResourcePack()->getMusic("GMINTER")->play();
 }
@@ -279,6 +286,8 @@ void DogfightState::think()
 {
 	_animTimer->think(this, 0);
 	_moveTimer->think(this, 0);
+	_w1Timer->think(this, 0);
+	_w2Timer->think(this, 0);
 }
 
 /**
@@ -295,10 +304,15 @@ void DogfightState::animate()
 	newpal[15] = pal[Palette::blockOffset(7)];
 	_window->setPalette(newpal, Palette::blockOffset(7), 16);
 
+	// Clears text after a while
 	if (_timeout == 0)
+	{
 		_txtStatus->setText("");
+	}
 	else
+	{
 		_timeout--;
+	}
 }
 
 /**
@@ -307,6 +321,7 @@ void DogfightState::animate()
  */
 void DogfightState::move()
 {
+	// Update distance
 	if (_currentDist < _targetDist)
 	{
 		_currentDist += 4;
@@ -319,6 +334,31 @@ void DogfightState::move()
 	ss << _currentDist;
 	_txtDistance->setText(ss.str());
 
+	// Update weapons
+	if (_w1Dist > 0)
+	{
+		_w1Dist += 4;
+	}
+	if (_w2Dist > 0)
+	{
+		_w2Dist += 4;
+	}
+
+	// Draw battle
+	_battle->clear();
+	for (int r = STR_VERY_SMALL - _ufo->getRules()->getSize() + 2; r >= 0; r--)
+	{
+		filledCircleColor(_battle->getSurface(), _battle->getWidth() / 2, _battle->getHeight() - _currentDist / 8, r, Palette::getRGBA(_window->getPalette(), Palette::blockOffset(7) + 4 + r));
+	}
+	if (_w1Dist > 0)
+	{
+		_battle->setPixel(_battle->getWidth() / 2 - 2, _battle->getHeight() - _w1Dist / 8, 1);
+	}
+	if (_w2Dist > 0)
+	{
+		_battle->setPixel(_battle->getWidth() / 2 + 2, _battle->getHeight() - _w2Dist / 8, 1);
+	}
+
 	if (_currentDist > 640 && _mode == _btnDisengage)
 	{
 		_craft->returnToBase();
@@ -328,12 +368,43 @@ void DogfightState::move()
 		_game->getResourcePack()->getMusic(ss.str())->play();
 	}
 
-	_battle->clear();
-	// Draw UFO
-	for (int r = 4; r >= 1; r--)
+	CraftWeapon *w1 = _craft->getWeapons()->at(0);
+	if (w1 != 0)
 	{
-		filledCircleColor(_battle->getSurface(), _battle->getWidth() / 2, _battle->getHeight() - _currentDist / 8, r, Palette::getRGBA(_window->getPalette(), Palette::blockOffset(7) + 4 + r));
+		if (!_w1Timer->isRunning() && _currentDist <= w1->getRules()->getRange() * 8)
+		{
+			_w1Timer->setInterval(w1->getRules()->getReloadTime() * 100);
+			_w1Timer->start();
+		}
+		else if (_w1Timer->isRunning() && _currentDist > w1->getRules()->getRange() * 8)
+		{
+			_w1Timer->stop();
+		}
 	}
+
+	CraftWeapon *w2 = _craft->getWeapons()->at(1);
+	if (w2 != 0)
+	{
+		if (!_w2Timer->isRunning() && _currentDist <= w2->getRules()->getRange() * 8)
+		{
+			_w2Timer->setInterval(w2->getRules()->getReloadTime() * 100);
+			_w2Timer->start();
+		}
+		else if (_w2Timer->isRunning() && _currentDist > w2->getRules()->getRange() * 8)
+		{
+			_w2Timer->stop();
+		}
+	}
+}
+
+void DogfightState::fireWeapon1()
+{
+	_w1Dist = 64;
+}
+
+void DogfightState::fireWeapon2()
+{
+	_w1Dist = 64;
 }
 
 /**

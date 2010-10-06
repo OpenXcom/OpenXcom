@@ -49,6 +49,8 @@ public:
 	void stop();
 	/// Gets the current time interval.
 	Uint32 getTime();
+	/// Gets if the timer's running.
+	bool isRunning();
 	/// Advances the timer.
 	void think(State* state, Surface* surface);
 	/// Sets the timer's interval.
