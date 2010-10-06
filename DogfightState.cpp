@@ -337,11 +337,21 @@ void DogfightState::move()
 	// Update weapons
 	if (_w1Dist > 0)
 	{
-		_w1Dist += 4;
+		_w1Dist += 8;
 	}
 	if (_w2Dist > 0)
 	{
-		_w2Dist += 4;
+		_w2Dist += 8;
+	}
+
+	// Handle weapon damage
+	if (_w1Dist >= _currentDist)
+	{
+		_w1Dist = 0;
+	}
+	if (_w2Dist >= _currentDist)
+	{
+		_w2Dist = 0;
 	}
 
 	// Draw battle
@@ -352,11 +362,17 @@ void DogfightState::move()
 	}
 	if (_w1Dist > 0)
 	{
-		_battle->setPixel(_battle->getWidth() / 2 - 2, _battle->getHeight() - _w1Dist / 8, 1);
+		for (int i = -2; i <= 0; i++)
+		{
+			_battle->setPixel(_battle->getWidth() / 2 - 2, _battle->getHeight() - _w1Dist / 8 + i, 1);
+		}
 	}
 	if (_w2Dist > 0)
 	{
-		_battle->setPixel(_battle->getWidth() / 2 + 2, _battle->getHeight() - _w2Dist / 8, 1);
+		for (int i = -2; i <= 0; i++)
+		{
+			_battle->setPixel(_battle->getWidth() / 2 + 2, _battle->getHeight() - _w2Dist / 8 + i, 1);
+		}
 	}
 
 	if (_currentDist > 640 && _mode == _btnDisengage)
@@ -399,12 +415,12 @@ void DogfightState::move()
 
 void DogfightState::fireWeapon1()
 {
-	_w1Dist = 64;
+	_w1Dist = 8;
 }
 
 void DogfightState::fireWeapon2()
 {
-	_w1Dist = 64;
+	_w2Dist = 8;
 }
 
 /**
