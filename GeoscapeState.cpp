@@ -318,6 +318,7 @@ void GeoscapeState::think()
 	else
 	{
 		// Handle popups
+		_globe->rotateStop();
 		_game->pushState(*_popups.begin());
 		_popups.erase(_popups.begin());
 	}

@@ -315,6 +315,7 @@ void DogfightState::animate()
 	}
 }
 
+#include <iostream>
 /**
  * Moves the craft towards the UFO according to
  * the current interception mode.
@@ -345,13 +346,29 @@ void DogfightState::move()
 	}
 
 	// Handle weapon damage
+	CraftWeapon *w1 = _craft->getWeapons()->at(0);
+	CraftWeapon *w2 = _craft->getWeapons()->at(1);
 	if (_w1Dist >= _currentDist)
 	{
 		_w1Dist = 0;
+		int acc = RNG::generate(1, 100);
+		if (acc <= w1->getRules()->getAccuracy())
+		{
+			int damage = RNG::generate(w1->getRules()->getDamage() / 2, w1->getRules()->getDamage());
+			_ufo->setDamage(_ufo->getDamage() - damage);
+			setStatus(STR_UFO_HIT);
+		}
 	}
 	if (_w2Dist >= _currentDist)
 	{
 		_w2Dist = 0;
+		int acc = RNG::generate(1, 100);
+		if (acc <= w2->getRules()->getAccuracy())
+		{
+			int damage = RNG::generate(w2->getRules()->getDamage() / 2, w2->getRules()->getDamage());
+			_ufo->setDamage(_ufo->getDamage() - damage);
+			setStatus(STR_UFO_HIT);
+		}
 	}
 
 	// Draw battle
@@ -364,14 +381,14 @@ void DogfightState::move()
 	{
 		for (int i = -2; i <= 0; i++)
 		{
-			_battle->setPixel(_battle->getWidth() / 2 - 2, _battle->getHeight() - _w1Dist / 8 + i, 1);
+			_battle->setPixel(_battle->getWidth() / 2 - 1, _battle->getHeight() - _w1Dist / 8 + i, Palette::blockOffset(7));
 		}
 	}
 	if (_w2Dist > 0)
 	{
 		for (int i = -2; i <= 0; i++)
 		{
-			_battle->setPixel(_battle->getWidth() / 2 + 2, _battle->getHeight() - _w2Dist / 8 + i, 1);
+			_battle->setPixel(_battle->getWidth() / 2 + 1, _battle->getHeight() - _w2Dist / 8 + i, Palette::blockOffset(7));
 		}
 	}
 
@@ -384,13 +401,13 @@ void DogfightState::move()
 		_game->getResourcePack()->getMusic(ss.str())->play();
 	}
 
-	CraftWeapon *w1 = _craft->getWeapons()->at(0);
 	if (w1 != 0)
 	{
 		if (!_w1Timer->isRunning() && _currentDist <= w1->getRules()->getRange() * 8)
 		{
 			_w1Timer->setInterval(w1->getRules()->getReloadTime() * 100);
 			_w1Timer->start();
+			fireWeapon1();
 		}
 		else if (_w1Timer->isRunning() && _currentDist > w1->getRules()->getRange() * 8)
 		{
@@ -398,13 +415,13 @@ void DogfightState::move()
 		}
 	}
 
-	CraftWeapon *w2 = _craft->getWeapons()->at(1);
 	if (w2 != 0)
 	{
 		if (!_w2Timer->isRunning() && _currentDist <= w2->getRules()->getRange() * 8)
 		{
 			_w2Timer->setInterval(w2->getRules()->getReloadTime() * 100);
 			_w2Timer->start();
+			fireWeapon2();
 		}
 		else if (_w2Timer->isRunning() && _currentDist > w2->getRules()->getRange() * 8)
 		{
@@ -416,20 +433,32 @@ void DogfightState::move()
 void DogfightState::fireWeapon1()
 {
 	_w1Dist = 8;
+	CraftWeapon *w1 = _craft->getWeapons()->at(0);
+	w1->setAmmo(w1->getAmmo() - 1);
+
+	stringstream ss;
+	ss << w1->getAmmo();
+	_txtAmmo1->setText(ss.str());
 }
 
 void DogfightState::fireWeapon2()
 {
 	_w2Dist = 8;
+	CraftWeapon *w2= _craft->getWeapons()->at(1);
+	w2->setAmmo(w2->getAmmo() - 1);
+
+	stringstream ss;
+	ss << w2->getAmmo();
+	_txtAmmo2->setText(ss.str());
 }
 
 /**
  * Updates the status text and restarts
  * the text timeout counter.
  */
-void DogfightState::setStatus(string status)
+void DogfightState::setStatus(LangString status)
 {
-	_txtStatus->setText(status);
+	_txtStatus->setText(_game->getResourcePack()->getLanguage()->getString(status));
 	_timeout = 40;
 }
 
@@ -441,7 +470,7 @@ void DogfightState::setStatus(string status)
  */
 void DogfightState::btnStandoffClick(SDL_Event *ev, int scale)
 {
-	setStatus(_game->getResourcePack()->getLanguage()->getString(STR_STANDOFF));
+	setStatus(STR_STANDOFF);
 	_targetDist = 560;
 }
 
@@ -452,7 +481,7 @@ void DogfightState::btnStandoffClick(SDL_Event *ev, int scale)
  */
 void DogfightState::btnCautiousClick(SDL_Event *ev, int scale)
 {
-	setStatus(_game->getResourcePack()->getLanguage()->getString(STR_CAUTIOUS_ATTACK));
+	setStatus(STR_CAUTIOUS_ATTACK);
 	int max = 0;
 	for (vector<CraftWeapon*>::iterator i = _craft->getWeapons()->begin(); i < _craft->getWeapons()->end(); i++)
 	{
@@ -474,7 +503,7 @@ void DogfightState::btnCautiousClick(SDL_Event *ev, int scale)
  */
 void DogfightState::btnStandardClick(SDL_Event *ev, int scale)
 {
-	setStatus(_game->getResourcePack()->getLanguage()->getString(STR_STANDARD_ATTACK));
+	setStatus(STR_STANDARD_ATTACK);
 	int min = 1000;
 	for (vector<CraftWeapon*>::iterator i = _craft->getWeapons()->begin(); i < _craft->getWeapons()->end(); i++)
 	{
@@ -496,7 +525,7 @@ void DogfightState::btnStandardClick(SDL_Event *ev, int scale)
  */
 void DogfightState::btnAgressiveClick(SDL_Event *ev, int scale)
 {
-	setStatus(_game->getResourcePack()->getLanguage()->getString(STR_AGRESSIVE_ATTACK));
+	setStatus(STR_AGRESSIVE_ATTACK);
 	_targetDist = 64;
 }
 
@@ -507,6 +536,6 @@ void DogfightState::btnAgressiveClick(SDL_Event *ev, int scale)
  */
 void DogfightState::btnDisengageClick(SDL_Event *ev, int scale)
 {
-	setStatus(_game->getResourcePack()->getLanguage()->getString(STR_DISENGAGING));
+	setStatus(STR_DISENGAGING);
 	_targetDist = 800;
 }

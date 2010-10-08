@@ -20,7 +20,7 @@
 #define OPENXCOM__DOGFIGHTSTATE_H
 
 #include "State.h"
-#include <string>
+#include "LangString.h"
 
 class ImageButton;
 class Text;
@@ -64,7 +64,7 @@ public:
 
 	void fireWeapon2();
 	/// Changes the status text.
-	void setStatus(string status);
+	void setStatus(LangString status);
 	/// Handler for clicking the Standoff button.
 	void btnStandoffClick(SDL_Event *ev, int scale);
 	/// Handler for clicking the Standoff button.
