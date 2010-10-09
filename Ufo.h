@@ -65,6 +65,10 @@ public:
 	LangString getDirection();
 	/// Gets the UFO's altitude.
 	LangString getAltitude();
+	/// Gets if the UFO has crashed.
+	bool isCrashed();
+	/// Gets if the UFO has been destroyed.
+	bool isDestroyed();
 	/// Calculates a new speed vector to the destination.
 	void calculateSpeed();
 	/// Handles UFO logic.

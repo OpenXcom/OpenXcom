@@ -31,7 +31,7 @@ class RuleCraftWeapon
 {
 private:
 	LangString _type;
-	int _sprite, _damage, _range, _accuracy, _reload, _ammoMax, _rearm;
+	int _sprite, _damage, _range, _accuracy, _reloadCautious, _reloadStandard, _reloadAggressive, _ammoMax, _rearm;
 	LangString _launcher, _clip;
 public:
 	/// Creates a blank craft weapon ruleset.
@@ -56,10 +56,18 @@ public:
 	int getAccuracy();
 	/// Sets the craft weapon's accuracy.
 	void setAccuracy(int accuracy);
-	/// Gets the craft weapon's reload time.
-	int getReloadTime();
-	/// Sets the craft weapon's reload time.
-	void setReloadTime(int reload);
+	/// Gets the craft weapon's cautious reload time.
+	int getCautiousReload();
+	/// Sets the craft weapon's cautious reload time.
+	void setCautiousReload(int reload);
+	/// Gets the craft weapon's standard reload time.
+	int getStandardReload();
+	/// Sets the craft weapon's standard reload time.
+	void setStandardReload(int reload);
+	/// Gets the craft weapon's aggressive reload time.
+	int getAggressiveReload();
+	/// Sets the craft weapon's aggressive reload time.
+	void setAggressiveReload(int reload);
 	/// Gets the craft weapon's maximum ammo.
 	int getAmmoMax();
 	/// Sets the craft weapon's maximum ammo.

@@ -22,7 +22,7 @@
  * Creates a blank ruleset for a certain type of craft weapon.
  * @param type String defining the type.
  */
-RuleCraftWeapon::RuleCraftWeapon(LangString type) : _type(type), _damage(0), _range(0), _accuracy(0), _reload(0), _ammoMax(0), _rearm(1)
+RuleCraftWeapon::RuleCraftWeapon(LangString type) : _type(type), _damage(0), _range(0), _accuracy(0), _reloadCautious(0), _reloadStandard(0), _reloadAggressive(0), _ammoMax(0), _rearm(1)
 {
 }
 
@@ -123,22 +123,62 @@ void RuleCraftWeapon::setAccuracy(int accuracy)
 
 /**
  * Returns the amount of time the craft weapon takes to
- * reload after firing a shot.
+ * reload in cautious mode.
  * @return Time in game seconds.
  */
-int RuleCraftWeapon::getReloadTime()
+int RuleCraftWeapon::getCautiousReload()
 {
-	return _reload;
+	return _reloadCautious;
 }
 
 /**
  * Changes the amount of time the craft weapon takes to
- * reload after firing a shot.
+ * reload in cautious mode.
  * @param reload Time in game seconds.
  */
-void RuleCraftWeapon::setReloadTime(int reload)
+void RuleCraftWeapon::setCautiousReload(int reload)
 {
-	_reload = reload;
+	_reloadCautious = reload;
+}
+
+/**
+ * Returns the amount of time the craft weapon takes to
+ * reload in standard mode.
+ * @return Time in game seconds.
+ */
+int RuleCraftWeapon::getStandardReload()
+{
+	return _reloadStandard;
+}
+
+/**
+ * Changes the amount of time the craft weapon takes to
+ * reload in standard mode.
+ * @param reload Time in game seconds.
+ */
+void RuleCraftWeapon::setStandardReload(int reload)
+{
+	_reloadStandard = reload;
+}
+
+/**
+ * Returns the amount of time the craft weapon takes to
+ * reload in aggressive mode.
+ * @return Time in game seconds.
+ */
+int RuleCraftWeapon::getAggressiveReload()
+{
+	return _reloadAggressive;
+}
+
+/**
+ * Changes the amount of time the craft weapon takes to
+ * reload in aggressive mode.
+ * @param reload Time in game seconds.
+ */
+void RuleCraftWeapon::setAggressiveReload(int reload)
+{
+	_reloadAggressive = reload;
 }
 
 /**

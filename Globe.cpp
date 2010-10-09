@@ -172,11 +172,11 @@ Globe::Globe(int cenX, int cenY, int width, int height, int x, int y) : Interact
 
 	_mkCrashedUfo = new Surface(3, 3);
 	_mkCrashedUfo->lock();
-	_mkCrashedUfo->setPixel(1, 0, 5);
-	_mkCrashedUfo->setPixel(0, 1, 5);
+	_mkCrashedUfo->setPixel(0, 0, 5);
+	_mkCrashedUfo->setPixel(0, 2, 5);
 	_mkCrashedUfo->setPixel(1, 1, 5);
-	_mkCrashedUfo->setPixel(2, 1, 5);
-	_mkCrashedUfo->setPixel(1, 2, 5);
+	_mkCrashedUfo->setPixel(2, 0, 5);
+	_mkCrashedUfo->setPixel(2, 2, 5);
 	_mkCrashedUfo->unlock();
 
 	_mkAlienSite = new Surface(3, 3);
@@ -883,14 +883,23 @@ void Globe::drawMarkers()
 	// Draw the UFO markers
 	for (vector<Ufo*>::iterator i = _save->getUfos()->begin(); i != _save->getUfos()->end(); i++)
 	{
-		if (!(*i)->getDetected() || pointBack((*i)->getLongitude(), (*i)->getLatitude()))
+		if (pointBack((*i)->getLongitude(), (*i)->getLatitude()))
 			continue;
 
 		polarToCart((*i)->getLongitude(), (*i)->getLatitude(), &x, &y);
 
-		_mkFlyingUfo->setX(x - 1);
-		_mkFlyingUfo->setY(y - 1);
-		_mkFlyingUfo->blit(_markers);
+		if (!(*i)->isCrashed() && (*i)->getDetected())
+		{
+			_mkFlyingUfo->setX(x - 1);
+			_mkFlyingUfo->setY(y - 1);
+			_mkFlyingUfo->blit(_markers);
+		}
+		else if ((*i)->isCrashed())
+		{
+			_mkCrashedUfo->setX(x - 1);
+			_mkCrashedUfo->setY(y - 1);
+			_mkCrashedUfo->blit(_markers);
+		}
 	}
 
 	// Draw the waypoint markers

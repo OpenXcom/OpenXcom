@@ -22,7 +22,7 @@
  * Initializes a new timer with a set interval.
  * @param interval Time interval in miliseconds.
  */
-Timer::Timer(Uint32 interval) : _interval(interval), _running(false)
+Timer::Timer(Uint32 interval) : _start(0), _interval(interval), _running(false), _state(0), _surface(0)
 {
 }
 

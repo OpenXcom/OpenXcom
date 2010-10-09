@@ -467,7 +467,9 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	stingray->setDamage(70);
 	stingray->setRange(30);
 	stingray->setAccuracy(70);
-	stingray->setReloadTime(16);
+	stingray->setCautiousReload(32);
+	stingray->setStandardReload(24);
+	stingray->setAggressiveReload(16);
 	stingray->setAmmoMax(6);
 	stingray->setLauncherItem(STR_STINGRAY_LAUNCHER);
 	stingray->setClipItem(STR_STINGRAY_MISSILE);
@@ -477,7 +479,9 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	avalanche->setDamage(100);
 	avalanche->setRange(60);
 	avalanche->setAccuracy(80);
-	avalanche->setReloadTime(24);
+	avalanche->setCautiousReload(48);
+	avalanche->setStandardReload(36);
+	avalanche->setAggressiveReload(24);
 	avalanche->setAmmoMax(3);
 	avalanche->setLauncherItem(STR_AVALANCHE_LAUNCHER);
 	avalanche->setClipItem(STR_AVALANCHE_MISSILE);
@@ -487,7 +491,9 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	cannon->setDamage(10);
 	cannon->setRange(10);
 	cannon->setAccuracy(25);
-	cannon->setReloadTime(2);
+	cannon->setCautiousReload(2);
+	cannon->setStandardReload(2);
+	cannon->setAggressiveReload(2);
 	cannon->setAmmoMax(200);
 	cannon->setRearmRate(50);
 	cannon->setLauncherItem(STR_CANNON);
@@ -498,7 +504,9 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	laser->setDamage(70);
 	laser->setRange(21);
 	laser->setAccuracy(35);
-	laser->setReloadTime(12);
+	laser->setCautiousReload(12);
+	laser->setStandardReload(12);
+	laser->setAggressiveReload(12);
 	laser->setAmmoMax(99);
 	laser->setLauncherItem(STR_LASER_CANNON);
 
@@ -507,7 +515,9 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	plasma->setDamage(140);
 	plasma->setRange(52);
 	plasma->setAccuracy(50);
-	plasma->setReloadTime(12);
+	plasma->setCautiousReload(12);
+	plasma->setStandardReload(12);
+	plasma->setAggressiveReload(12);
 	plasma->setAmmoMax(100);
 	plasma->setLauncherItem(STR_PLASMA_BEAM);
 
@@ -516,7 +526,9 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	fusion->setDamage(230);
 	fusion->setRange(65);
 	fusion->setAccuracy(100);
-	fusion->setReloadTime(16);
+	fusion->setCautiousReload(32);
+	fusion->setStandardReload(24);
+	fusion->setAggressiveReload(16);
 	fusion->setAmmoMax(2);
 	fusion->setLauncherItem(STR_FUSION_BALL_LAUNCHER);
 	fusion->setClipItem(STR_FUSION_BALL);

@@ -42,12 +42,13 @@ private:
 	Timer *_animTimer, *_moveTimer, *_w1Timer, *_w2Timer;
 	Surface *_window, *_battle, *_weapon1, *_range1, *_weapon2, *_range2, *_damage;
 	InteractiveSurface *_btnMinimize;
-	ImageButton *_btnStandoff, *_btnCautious, *_btnStandard, *_btnAgressive, *_btnDisengage, *_btnUfo;
+	ImageButton *_btnStandoff, *_btnCautious, *_btnStandard, *_btnAggressive, *_btnDisengage, *_btnUfo;
 	ImageButton *_mode;
 	Text *_txtStatus, *_txtAmmo1, *_txtAmmo2, *_txtDistance;
 	Craft *_craft;
 	Ufo *_ufo;
-	int _timeout, _currentDist, _targetDist, _w1Dist, _w2Dist;
+	int _timeout, _currentDist, _targetDist, _w1Dist, _w2Dist, _currentRadius, _targetRadius;
+	bool _end;
 public:
 	/// Creates the Dogfight state.
 	DogfightState(Game *game, Craft *craft, Ufo *ufo);
@@ -59,10 +60,14 @@ public:
 	void animate();
 	/// Moves the craft.
 	void move();
-
+	// Fires the first weapon.
 	void fireWeapon1();
-
+	// Fires the second weapon.
 	void fireWeapon2();
+	// Sets the craft to minimum distance.
+	void minimumDistance();
+	// Sets the craft to maximum distance.
+	void maximumDistance();
 	/// Changes the status text.
 	void setStatus(LangString status);
 	/// Handler for clicking the Standoff button.
@@ -72,7 +77,7 @@ public:
 	/// Handler for clicking the Standoff button.
 	void btnStandardClick(SDL_Event *ev, int scale);
 	/// Handler for clicking the Standoff button.
-	void btnAgressiveClick(SDL_Event *ev, int scale);
+	void btnAggressiveClick(SDL_Event *ev, int scale);
 	/// Handler for clicking the Disengage button.
 	void btnDisengageClick(SDL_Event *ev, int scale);
 };

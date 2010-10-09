@@ -74,7 +74,14 @@ void Ufo::setId(int id)
 string Ufo::getName(Language *lang)
 {
 	stringstream name;
-	name << lang->getString(STR_UFO_) << _id;
+	if (!isCrashed())
+	{
+		name << lang->getString(STR_UFO_) << _id;
+	}
+	else
+	{
+		name << lang->getString(STR_CRASH_SITE_) << _id;
+	}
 	return name.str();
 }
 
@@ -135,6 +142,26 @@ LangString Ufo::getAltitude()
 }
 
 /**
+ * Returns if this UFO took enough damage
+ * to cause it to crash.
+ * @return Crashed status.
+ */
+bool Ufo::isCrashed()
+{
+	return (_damage >= _rules->getMaxDamage() / 2);
+}
+
+/**
+ * Returns if this UFO took enough damage
+ * to cause it to crash.
+ * @return Crashed status.
+ */
+bool Ufo::isDestroyed()
+{
+	return (_damage >= _rules->getMaxDamage());
+}
+
+/**
  * Calculates the direction for the UFO based
  * on the current raw speed and destination.
  */
@@ -189,12 +216,15 @@ void Ufo::calculateSpeed()
  */
 void Ufo::think()
 {
-	setLongitude(_lon + _speedLon);
-	setLatitude(_lat + _speedLat);
-	if (reachedDestination())
+	if (!isCrashed())
 	{
-		_lon = _dest->getLongitude();
-		_lat = _dest->getLatitude();
-		setSpeed(0);
+		setLongitude(_lon + _speedLon);
+		setLatitude(_lat + _speedLat);
+		if (reachedDestination())
+		{
+			_lon = _dest->getLongitude();
+			_lat = _dest->getLatitude();
+			setSpeed(0);
+		}
 	}
 }

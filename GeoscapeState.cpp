@@ -450,6 +450,7 @@ void GeoscapeState::time5Seconds()
 				Waypoint *w = dynamic_cast<Waypoint*>((*j)->getDestination());
 				if (u != 0)
 				{
+					timerReset();
 					popup(new DogfightState(_game, (*j), u));
 				}
 				else if (w != 0)
@@ -465,7 +466,9 @@ void GeoscapeState::time5Seconds()
 	// Clean up dead UFOs
 	for (vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end(); i++)
 	{
-		if ((*i)->getLatitude() == (*i)->getDestination()->getLatitude() && (*i)->getLongitude() == (*i)->getDestination()->getLongitude())
+		if (((*i)->getLatitude() == (*i)->getDestination()->getLatitude() && (*i)->getLongitude() == (*i)->getDestination()->getLongitude()) ||
+			(*i)->isDestroyed() ||
+			((*i)->isCrashed() && !_globe->insideLand((*i)->getLongitude(), (*i)->getLatitude())))
 		{
 			delete *i;
 			_game->getSavedGame()->getUfos()->erase(i);
@@ -763,7 +766,7 @@ void GeoscapeState::globeClick(SDL_Event *ev, int scale)
 		}
 		for (vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end(); i++)
 		{
-			if (!(*i)->getDetected())
+			if (!(*i)->getDetected() && !(*i)->isCrashed())
 				continue;
 			Sint16 x, y;
 			_globe->polarToCart((*i)->getLongitude(), (*i)->getLatitude(), &x, &y);
