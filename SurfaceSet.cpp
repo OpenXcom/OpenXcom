@@ -74,6 +74,8 @@ void SurfaceSet::loadPck(string pck, string tab)
 	if (!offsetFile)
 	{
 		nframes = 1;
+		Surface *surface = new Surface(_width, _height);
+		_frames.push_back(surface);
 	}
 	else
 	{

@@ -40,6 +40,7 @@ private:
 	int _id, _damage, _altitude;
 	LangString _direction;
 	bool _detected;
+	int _daysCrashed;
 public:
 	/// Creates a UFO of the specified type.
 	Ufo(RuleUfo *rules);
@@ -57,10 +58,14 @@ public:
 	int getDamage();
 	/// Sets the UFO's amount of damage.
 	void setDamage(int damage);
-	/// Sets the UFO's detection status.
-	void setDetected(bool detected);
 	/// Gets the UFO's detection status.
 	bool getDetected();
+	/// Sets the UFO's detection status.
+	void setDetected(bool detected);
+	/// Gets the UFO's amount of crashed days.
+	int getDaysCrashed();
+	/// Sets the UFO's amount of crashed days.
+	void setDaysCrashed(int days);
 	/// Gets the UFO's direction.
 	LangString getDirection();
 	/// Gets the UFO's altitude.

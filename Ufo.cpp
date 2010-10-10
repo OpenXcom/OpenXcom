@@ -26,7 +26,7 @@
  * Initializes a UFO of the specified type.
  * @param rules Pointer to ruleset.
  */
-Ufo::Ufo(RuleUfo *rules) : MovingTarget(), _rules(rules), _id(0), _damage(0), _altitude(0), _direction(STR_NORTH), _detected(false)
+Ufo::Ufo(RuleUfo *rules) : MovingTarget(), _rules(rules), _id(0), _damage(0), _altitude(0), _direction(STR_NORTH), _detected(false), _daysCrashed(0)
 {
 }
 
@@ -121,6 +121,24 @@ bool Ufo::getDetected()
 void Ufo::setDetected(bool detected)
 {
 	_detected = detected;
+}
+
+/**
+ * Returns the amount of days the UFO has been crashed for.
+ * @return Amount of days.
+ */
+int Ufo::getDaysCrashed()
+{
+	return _daysCrashed;
+}
+
+/**
+ * Changes the amount of days the UFO has been crashed for.
+ * @param days Amount of days.
+ */
+void Ufo::setDaysCrashed(int days)
+{
+	_daysCrashed = days;
 }
 
 /**

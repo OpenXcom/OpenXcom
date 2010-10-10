@@ -464,6 +464,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	// Add craft weapons
 	RuleCraftWeapon *stingray = new RuleCraftWeapon(STR_STINGRAY_UC);
 	stingray->setSprite(0);
+	stingray->setSound(8);
 	stingray->setDamage(70);
 	stingray->setRange(30);
 	stingray->setAccuracy(70);
@@ -476,6 +477,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 
 	RuleCraftWeapon *avalanche = new RuleCraftWeapon(STR_AVALANCHE_UC);
 	avalanche->setSprite(1);
+	avalanche->setSound(8);
 	avalanche->setDamage(100);
 	avalanche->setRange(60);
 	avalanche->setAccuracy(80);
@@ -488,6 +490,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 
 	RuleCraftWeapon *cannon = new RuleCraftWeapon(STR_CANNON_UC);
 	cannon->setSprite(2);
+	cannon->setSound(4);
 	cannon->setDamage(10);
 	cannon->setRange(10);
 	cannon->setAccuracy(25);
@@ -501,6 +504,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 
 	RuleCraftWeapon *laser = new RuleCraftWeapon(STR_LASER_CANNON_UC);
 	laser->setSprite(4);
+	laser->setSound(5);
 	laser->setDamage(70);
 	laser->setRange(21);
 	laser->setAccuracy(35);
@@ -512,6 +516,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 
 	RuleCraftWeapon *plasma = new RuleCraftWeapon(STR_PLASMA_BEAM_UC);
 	plasma->setSprite(5);
+	plasma->setSound(9);
 	plasma->setDamage(140);
 	plasma->setRange(52);
 	plasma->setAccuracy(50);
@@ -523,6 +528,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 
 	RuleCraftWeapon *fusion = new RuleCraftWeapon(STR_FUSION_BALL_UC);
 	fusion->setSprite(3);
+	fusion->setSound(7);
 	fusion->setDamage(230);
 	fusion->setRange(65);
 	fusion->setAccuracy(100);

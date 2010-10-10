@@ -22,7 +22,7 @@
  * Creates a blank ruleset for a certain type of craft weapon.
  * @param type String defining the type.
  */
-RuleCraftWeapon::RuleCraftWeapon(LangString type) : _type(type), _damage(0), _range(0), _accuracy(0), _reloadCautious(0), _reloadStandard(0), _reloadAggressive(0), _ammoMax(0), _rearm(1)
+RuleCraftWeapon::RuleCraftWeapon(LangString type) : _type(type), _sprite(-1), _sound(-1), _damage(0), _range(0), _accuracy(0), _reloadCautious(0), _reloadStandard(0), _reloadAggressive(0), _ammoMax(0), _rearm(1)
 {
 }
 
@@ -61,6 +61,26 @@ int RuleCraftWeapon::getSprite()
 void RuleCraftWeapon::setSprite(int sprite)
 {
 	_sprite = sprite;
+}
+
+/**
+ * Returns the ID of the sound used when firing the weapon
+ * in the Dogfight screen.
+ * @return Sound ID.
+ */
+int RuleCraftWeapon::getSound()
+{
+	return _sound;
+}
+
+/**
+ * Changes the ID of the sound used when firing the weapon
+ * in the Dogfight screen.
+ * @param sound Sound ID.
+ */
+void RuleCraftWeapon::setSound(int sound)
+{
+	_sound = sound;
 }
 
 /**

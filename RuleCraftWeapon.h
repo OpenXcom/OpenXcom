@@ -31,7 +31,7 @@ class RuleCraftWeapon
 {
 private:
 	LangString _type;
-	int _sprite, _damage, _range, _accuracy, _reloadCautious, _reloadStandard, _reloadAggressive, _ammoMax, _rearm;
+	int _sprite, _sound, _damage, _range, _accuracy, _reloadCautious, _reloadStandard, _reloadAggressive, _ammoMax, _rearm;
 	LangString _launcher, _clip;
 public:
 	/// Creates a blank craft weapon ruleset.
@@ -44,6 +44,10 @@ public:
 	int getSprite();
 	/// Sets the craft weapon's sprite.
 	void setSprite(int sprite);
+	/// Gets the craft weapon's sound.
+	int getSound();
+	/// Sets the craft weapon's sound.
+	void setSound(int sound);
 	/// Gets the craft weapon's damage.
 	int getDamage();
 	/// Sets the craft weapon's damage.

@@ -468,7 +468,8 @@ void GeoscapeState::time5Seconds()
 	{
 		if (((*i)->getLatitude() == (*i)->getDestination()->getLatitude() && (*i)->getLongitude() == (*i)->getDestination()->getLongitude()) ||
 			(*i)->isDestroyed() ||
-			((*i)->isCrashed() && !_globe->insideLand((*i)->getLongitude(), (*i)->getLatitude())))
+			((*i)->isCrashed() && !_globe->insideLand((*i)->getLongitude(), (*i)->getLatitude()) ||
+			(*i)->getDaysCrashed() > 4))
 		{
 			delete *i;
 			_game->getSavedGame()->getUfos()->erase(i);
@@ -654,6 +655,7 @@ void GeoscapeState::time1Hour()
  */
 void GeoscapeState::time1Day()
 {
+	// Handle facility construction
 	for (vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); i++)
 	{
 		for (vector<BaseFacility*>::iterator j = (*i)->getFacilities()->begin(); j != (*i)->getFacilities()->end(); j++)
@@ -674,6 +676,15 @@ void GeoscapeState::time1Day()
 			}
 		}
 	}
+
+	// Handle crashed UFOs expiring
+	for (vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end(); i++)
+	{
+		if ((*i)->isCrashed())
+		{
+			(*i)->setDaysCrashed((*i)->getDaysCrashed() + 1);
+		}
+	}
 }
 
 /**
@@ -682,6 +693,7 @@ void GeoscapeState::time1Day()
  */
 void GeoscapeState::time1Month()
 {
+	// Handle funding
 	timerReset();
 	_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() + _game->getSavedGame()->getCountryFunding() - _game->getSavedGame()->getBaseMaintenance());
 	popup(new MonthlyReportState(_game));
