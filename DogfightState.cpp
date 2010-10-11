@@ -351,9 +351,16 @@ void DogfightState::move()
 		_w2Dist += 8;
 	}
 
+	CraftWeapon *w1 = 0, *w2 = 0;
+	if (_craft->getRules()->getWeapons() > 0)
+	{
+		w1 = _craft->getWeapons()->at(0);
+	}
+	if (_craft->getRules()->getWeapons() > 1)
+	{
+		w2 = _craft->getWeapons()->at(1);
+	}
 	// Handle weapon damage
-	CraftWeapon *w1 = _craft->getWeapons()->at(0);
-	CraftWeapon *w2 = _craft->getWeapons()->at(1);
 	if (_w1Dist >= _currentDist)
 	{
 		_w1Dist = 0;
@@ -474,7 +481,7 @@ void DogfightState::move()
 			setStatus(STR_UFO_DESTROYED);
 			_game->getResourcePack()->getSoundSet("GEO.CAT")->getSound(11)->play();
 		}
-		else if (_ufo->isCrashed())
+		else
 		{
 			setStatus(STR_UFO_CRASH_LANDS);
 			_game->getResourcePack()->getSoundSet("GEO.CAT")->getSound(10)->play();
@@ -608,11 +615,11 @@ void DogfightState::btnCautiousClick(SDL_Event *ev, int scale)
 		setStatus(STR_CAUTIOUS_ATTACK);
 		if (_craft->getWeapons()->at(0) != 0)
 		{
-			_w1Timer->setInterval(_craft->getWeapons()->at(0)->getRules()->getCautiousReload() * 75);
+			_w1Timer->setInterval(_craft->getWeapons()->at(0)->getRules()->getCautiousReload() * 80);
 		}
 		if (_craft->getWeapons()->at(1) != 0)
 		{
-			_w2Timer->setInterval(_craft->getWeapons()->at(1)->getRules()->getCautiousReload() * 75);
+			_w2Timer->setInterval(_craft->getWeapons()->at(1)->getRules()->getCautiousReload() * 80);
 		}
 		minimumDistance();
 	}
@@ -630,11 +637,11 @@ void DogfightState::btnStandardClick(SDL_Event *ev, int scale)
 		setStatus(STR_STANDARD_ATTACK);
 		if (_craft->getWeapons()->at(0) != 0)
 		{
-			_w1Timer->setInterval(_craft->getWeapons()->at(0)->getRules()->getStandardReload() * 75);
+			_w1Timer->setInterval(_craft->getWeapons()->at(0)->getRules()->getStandardReload() * 80);
 		}
 		if (_craft->getWeapons()->at(1) != 0)
 		{
-			_w2Timer->setInterval(_craft->getWeapons()->at(1)->getRules()->getStandardReload() * 75);
+			_w2Timer->setInterval(_craft->getWeapons()->at(1)->getRules()->getStandardReload() * 80);
 		}
 		maximumDistance();
 	}
@@ -652,11 +659,11 @@ void DogfightState::btnAggressiveClick(SDL_Event *ev, int scale)
 		setStatus(STR_AGGRESSIVE_ATTACK);
 		if (_craft->getWeapons()->at(0) != 0)
 		{
-			_w1Timer->setInterval(_craft->getWeapons()->at(0)->getRules()->getAggressiveReload() * 75);
+			_w1Timer->setInterval(_craft->getWeapons()->at(0)->getRules()->getAggressiveReload() * 80);
 		}
 		if (_craft->getWeapons()->at(1) != 0)
 		{
-			_w2Timer->setInterval(_craft->getWeapons()->at(1)->getRules()->getAggressiveReload() * 75);
+			_w2Timer->setInterval(_craft->getWeapons()->at(1)->getRules()->getAggressiveReload() * 80);
 		}
 		_targetDist = 64;
 	}

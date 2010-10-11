@@ -450,8 +450,15 @@ void GeoscapeState::time5Seconds()
 				Waypoint *w = dynamic_cast<Waypoint*>((*j)->getDestination());
 				if (u != 0)
 				{
-					timerReset();
-					popup(new DogfightState(_game, (*j), u));
+					if (!u->isCrashed())
+					{
+						timerReset();
+						popup(new DogfightState(_game, (*j), u));
+					}
+					else
+					{
+						(*j)->returnToBase();
+					}
 				}
 				else if (w != 0)
 				{
@@ -554,6 +561,8 @@ void GeoscapeState::time30Minutes()
 	// Handle UFO detection
 	for (vector<Ufo*>::iterator u = _game->getSavedGame()->getUfos()->begin(); u != _game->getSavedGame()->getUfos()->end(); u++)
 	{
+		if ((*u)->isCrashed())
+			continue;
 		if (!(*u)->getDetected())
 		{
 			bool detected = false;

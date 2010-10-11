@@ -888,17 +888,20 @@ void Globe::drawMarkers()
 
 		polarToCart((*i)->getLongitude(), (*i)->getLatitude(), &x, &y);
 
-		if (!(*i)->isCrashed() && (*i)->getDetected())
+		if ((*i)->getDetected())
 		{
-			_mkFlyingUfo->setX(x - 1);
-			_mkFlyingUfo->setY(y - 1);
-			_mkFlyingUfo->blit(_markers);
-		}
-		else if ((*i)->isCrashed())
-		{
-			_mkCrashedUfo->setX(x - 1);
-			_mkCrashedUfo->setY(y - 1);
-			_mkCrashedUfo->blit(_markers);
+			if ((*i)->isCrashed())
+			{
+				_mkCrashedUfo->setX(x - 1);
+				_mkCrashedUfo->setY(y - 1);
+				_mkCrashedUfo->blit(_markers);
+			}
+			else
+			{
+				_mkFlyingUfo->setX(x - 1);
+				_mkFlyingUfo->setY(y - 1);
+				_mkFlyingUfo->blit(_markers);
+			}
 		}
 	}
 
