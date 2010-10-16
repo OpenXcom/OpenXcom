@@ -34,8 +34,8 @@ class GeoscapeState;
 class MultipleTargetsState : public State
 {
 private:
-	Craft *_craft;
 	vector<Target*> _targets;
+	Craft *_craft;
 	GeoscapeState *_state;
 	
 	Window *_window;

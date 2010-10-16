@@ -20,6 +20,7 @@
 #define OPENXCOM__DOGFIGHTSTATE_H
 
 #include "State.h"
+#include <vector>
 #include "LangString.h"
 
 class ImageButton;
@@ -49,7 +50,8 @@ private:
 	Globe *_globe;
 	Craft *_craft;
 	Ufo *_ufo;
-	int _timeout, _currentDist, _targetDist, _w1Dist, _w2Dist, _currentRadius, _targetRadius;
+	int _timeout, _currentDist, _targetDist, _currentRadius, _targetRadius;
+	vector<int> _w1Dist, _w2Dist;
 	bool _end;
 public:
 	/// Creates the Dogfight state.

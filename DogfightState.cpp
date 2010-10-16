@@ -49,7 +49,7 @@
  * @param craft Pointer to the craft intercepting.
  * @param ufo Pointer to the UFO being intercepted.
  */
-DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo) : State(game), _globe(globe), _craft(craft), _ufo(ufo), _timeout(50), _currentDist(640), _targetDist(560), _w1Dist(0), _w2Dist(0), _end(false)
+DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo) : State(game), _globe(globe), _craft(craft), _ufo(ufo), _timeout(50), _currentDist(640), _targetDist(560), _w1Dist(), _w2Dist(), _end(false)
 {
 	_targetRadius = _currentRadius = STR_VERY_SMALL - _ufo->getRules()->getSize() + 2;
 	
@@ -343,13 +343,13 @@ void DogfightState::move()
 	_txtDistance->setText(ss.str());
 
 	// Update weapons
-	if (_w1Dist > 0)
+	for (vector<int>::iterator w = _w1Dist.begin(); w != _w1Dist.end(); w++)
 	{
-		_w1Dist += 8;
+		(*w) += 8;
 	}
-	if (_w2Dist > 0)
+	for (vector<int>::iterator w = _w2Dist.begin(); w != _w2Dist.end(); w++)
 	{
-		_w2Dist += 8;
+		(*w) += 8;
 	}
 
 	CraftWeapon *w1 = 0, *w2 = 0;
@@ -362,30 +362,38 @@ void DogfightState::move()
 		w2 = _craft->getWeapons()->at(1);
 	}
 	// Handle weapon damage
-	if (_w1Dist >= _currentDist)
+	for (vector<int>::iterator w = _w1Dist.begin(); w != _w1Dist.end(); w++)
 	{
-		_w1Dist = 0;
-		int acc = RNG::generate(1, 100);
-		if (acc <= w1->getRules()->getAccuracy())
+		if ((*w) >= _currentDist)
 		{
-			int damage = RNG::generate(w1->getRules()->getDamage() / 2, w1->getRules()->getDamage());
-			_ufo->setDamage(_ufo->getDamage() + damage);
-			setStatus(STR_UFO_HIT);
-			_currentRadius += 4;
-			_game->getResourcePack()->getSoundSet("GEO.CAT")->getSound(12)->play();
+			int acc = RNG::generate(1, 100);
+			if (acc <= w1->getRules()->getAccuracy())
+			{
+				int damage = RNG::generate(w1->getRules()->getDamage() / 2, w1->getRules()->getDamage());
+				_ufo->setDamage(_ufo->getDamage() + damage);
+				setStatus(STR_UFO_HIT);
+				_currentRadius += 4;
+				_game->getResourcePack()->getSoundSet("GEO.CAT")->getSound(12)->play();
+			}
+			_w1Dist.erase(w);
+			break;
 		}
 	}
-	if (_w2Dist >= _currentDist)
+	for (vector<int>::iterator w = _w2Dist.begin(); w != _w2Dist.end(); w++)
 	{
-		_w2Dist = 0;
-		int acc = RNG::generate(1, 100);
-		if (acc <= w2->getRules()->getAccuracy())
+		if ((*w) >= _currentDist)
 		{
-			int damage = RNG::generate(w2->getRules()->getDamage() / 2, w2->getRules()->getDamage());
-			_ufo->setDamage(_ufo->getDamage() + damage);
-			setStatus(STR_UFO_HIT);
-			_currentRadius += 4;
-			_game->getResourcePack()->getSoundSet("GEO.CAT")->getSound(12)->play();
+			int acc = RNG::generate(1, 100);
+			if (acc <= w2->getRules()->getAccuracy())
+			{
+				int damage = RNG::generate(w2->getRules()->getDamage() / 2, w2->getRules()->getDamage());
+				_ufo->setDamage(_ufo->getDamage() + damage);
+				setStatus(STR_UFO_HIT);
+				_currentRadius += 4;
+				_game->getResourcePack()->getSoundSet("GEO.CAT")->getSound(12)->play();
+			}
+			_w2Dist.erase(w);
+			break;
 		}
 	}
 
@@ -450,18 +458,18 @@ void DogfightState::move()
 	}
 
 	// Draw weapon shots
-	if (_w1Dist > 0)
+	for (vector<int>::iterator w = _w1Dist.begin(); w != _w1Dist.end(); w++)
 	{
 		for (int i = -2; i <= 0; i++)
 		{
-			_battle->setPixel(_battle->getWidth() / 2 - 1, _battle->getHeight() - _w1Dist / 8 + i, Palette::blockOffset(7));
+			_battle->setPixel(_battle->getWidth() / 2 - 1, _battle->getHeight() - (*w) / 8 + i, Palette::blockOffset(7));
 		}
 	}
-	if (_w2Dist > 0)
+	for (vector<int>::iterator w = _w2Dist.begin(); w != _w2Dist.end(); w++)
 	{
 		for (int i = -2; i <= 0; i++)
 		{
-			_battle->setPixel(_battle->getWidth() / 2 + 1, _battle->getHeight() - _w2Dist / 8 + i, Palette::blockOffset(7));
+			_battle->setPixel(_battle->getWidth() / 2 + 1, _battle->getHeight() - (*w) / 8 + i, Palette::blockOffset(7));
 		}
 	}
 
@@ -486,7 +494,7 @@ void DogfightState::move()
 		{
 			setStatus(STR_UFO_CRASH_LANDS);
 			_game->getResourcePack()->getSoundSet("GEO.CAT")->getSound(10)->play();
-			if (_globe->insideLand(_ufo->getLongitude(), _ufo->getLatitude()))
+			if (!_globe->insideLand(_ufo->getLongitude(), _ufo->getLatitude()))
 			{
 				_ufo->setDaysCrashed(5);
 			}
@@ -503,7 +511,7 @@ void DogfightState::move()
  */
 void DogfightState::fireWeapon1()
 {
-	_w1Dist = 8;
+	_w1Dist.push_back(8);
 	CraftWeapon *w1 = _craft->getWeapons()->at(0);
 	w1->setAmmo(w1->getAmmo() - 1);
 
@@ -520,7 +528,7 @@ void DogfightState::fireWeapon1()
  */
 void DogfightState::fireWeapon2()
 {
-	_w2Dist = 8;
+	_w2Dist.push_back(8);
 	CraftWeapon *w2= _craft->getWeapons()->at(1);
 	w2->setAmmo(w2->getAmmo() - 1);
 
@@ -620,11 +628,11 @@ void DogfightState::btnCautiousClick(SDL_Event *ev, int scale)
 		setStatus(STR_CAUTIOUS_ATTACK);
 		if (_craft->getWeapons()->at(0) != 0)
 		{
-			_w1Timer->setInterval(_craft->getWeapons()->at(0)->getRules()->getCautiousReload() * 80);
+			_w1Timer->setInterval(_craft->getWeapons()->at(0)->getRules()->getCautiousReload() * 75);
 		}
 		if (_craft->getWeapons()->at(1) != 0)
 		{
-			_w2Timer->setInterval(_craft->getWeapons()->at(1)->getRules()->getCautiousReload() * 80);
+			_w2Timer->setInterval(_craft->getWeapons()->at(1)->getRules()->getCautiousReload() * 75);
 		}
 		minimumDistance();
 	}
@@ -642,11 +650,11 @@ void DogfightState::btnStandardClick(SDL_Event *ev, int scale)
 		setStatus(STR_STANDARD_ATTACK);
 		if (_craft->getWeapons()->at(0) != 0)
 		{
-			_w1Timer->setInterval(_craft->getWeapons()->at(0)->getRules()->getStandardReload() * 80);
+			_w1Timer->setInterval(_craft->getWeapons()->at(0)->getRules()->getStandardReload() * 75);
 		}
 		if (_craft->getWeapons()->at(1) != 0)
 		{
-			_w2Timer->setInterval(_craft->getWeapons()->at(1)->getRules()->getStandardReload() * 80);
+			_w2Timer->setInterval(_craft->getWeapons()->at(1)->getRules()->getStandardReload() * 75);
 		}
 		maximumDistance();
 	}
@@ -664,11 +672,11 @@ void DogfightState::btnAggressiveClick(SDL_Event *ev, int scale)
 		setStatus(STR_AGGRESSIVE_ATTACK);
 		if (_craft->getWeapons()->at(0) != 0)
 		{
-			_w1Timer->setInterval(_craft->getWeapons()->at(0)->getRules()->getAggressiveReload() * 80);
+			_w1Timer->setInterval(_craft->getWeapons()->at(0)->getRules()->getAggressiveReload() * 75);
 		}
 		if (_craft->getWeapons()->at(1) != 0)
 		{
-			_w2Timer->setInterval(_craft->getWeapons()->at(1)->getRules()->getAggressiveReload() * 80);
+			_w2Timer->setInterval(_craft->getWeapons()->at(1)->getRules()->getAggressiveReload() * 75);
 		}
 		_targetDist = 64;
 	}

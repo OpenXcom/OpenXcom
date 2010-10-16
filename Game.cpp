@@ -49,6 +49,7 @@ Game::Game(string title, int width, int height, int bpp) : _screen(0), _cursor(0
 	{
 		throw Mix_GetError();
 	}
+	Mix_AllocateChannels(16);
 
 	// Set the window caption
 	SDL_WM_SetCaption(title.c_str(), 0);

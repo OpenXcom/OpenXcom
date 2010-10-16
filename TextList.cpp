@@ -329,10 +329,13 @@ void TextList::draw()
  */
 void TextList::blit(Surface *surface)
 {
-	if (_visible)
+	if (_visible && !_hidden)
 	{
 		_selector->blit(surface);
-		Surface::blit(surface);
+	}
+	Surface::blit(surface);
+	if (_visible && !_hidden)
+	{
 		_up->blit(surface);
 		_down->blit(surface);
 	}
