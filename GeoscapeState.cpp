@@ -451,7 +451,7 @@ void GeoscapeState::time5Seconds()
 					if (!u->isCrashed())
 					{
 						timerReset();
-						popup(new DogfightState(_game, (*j), u));
+						popup(new DogfightState(_game, _globe, (*j), u));
 					}
 					else
 					{
@@ -473,8 +473,7 @@ void GeoscapeState::time5Seconds()
 	{
 		if (((*i)->getLatitude() == (*i)->getDestination()->getLatitude() && (*i)->getLongitude() == (*i)->getDestination()->getLongitude()) ||
 			(*i)->isDestroyed() ||
-			((*i)->isCrashed() && !_globe->insideLand((*i)->getLongitude(), (*i)->getLatitude()) ||
-			(*i)->getDaysCrashed() > 4))
+			(*i)->getDaysCrashed() > 4)
 		{
 			delete *i;
 			_game->getSavedGame()->getUfos()->erase(i);

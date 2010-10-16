@@ -27,6 +27,7 @@ class Text;
 class Surface;
 class InteractiveSurface;
 class Timer;
+class Globe;
 class Craft;
 class Ufo;
 
@@ -45,13 +46,14 @@ private:
 	ImageButton *_btnStandoff, *_btnCautious, *_btnStandard, *_btnAggressive, *_btnDisengage, *_btnUfo;
 	ImageButton *_mode;
 	Text *_txtStatus, *_txtAmmo1, *_txtAmmo2, *_txtDistance;
+	Globe *_globe;
 	Craft *_craft;
 	Ufo *_ufo;
 	int _timeout, _currentDist, _targetDist, _w1Dist, _w2Dist, _currentRadius, _targetRadius;
 	bool _end;
 public:
 	/// Creates the Dogfight state.
-	DogfightState(Game *game, Craft *craft, Ufo *ufo);
+	DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo);
 	/// Cleans up the Dogfight state.
 	~DogfightState();
 	/// Runs the timers.

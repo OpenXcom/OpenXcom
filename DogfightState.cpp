@@ -31,6 +31,7 @@
 #include "ImageButton.h"
 #include "Text.h"
 #include "Timer.h"
+#include "Globe.h"
 #include "Craft.h"
 #include "RuleCraft.h"
 #include "CraftWeapon.h"
@@ -48,7 +49,7 @@
  * @param craft Pointer to the craft intercepting.
  * @param ufo Pointer to the UFO being intercepted.
  */
-DogfightState::DogfightState(Game *game, Craft *craft, Ufo *ufo) : State(game), _craft(craft), _ufo(ufo), _timeout(50), _currentDist(640), _targetDist(560), _w1Dist(0), _w2Dist(0), _end(false)
+DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo) : State(game), _globe(globe), _craft(craft), _ufo(ufo), _timeout(50), _currentDist(640), _targetDist(560), _w1Dist(0), _w2Dist(0), _end(false)
 {
 	_targetRadius = _currentRadius = STR_VERY_SMALL - _ufo->getRules()->getSize() + 2;
 	
@@ -485,6 +486,10 @@ void DogfightState::move()
 		{
 			setStatus(STR_UFO_CRASH_LANDS);
 			_game->getResourcePack()->getSoundSet("GEO.CAT")->getSound(10)->play();
+			if (_globe->insideLand(_ufo->getLongitude(), _ufo->getLatitude()))
+			{
+				_ufo->setDaysCrashed(5);
+			}
 		}
 		_targetRadius = 0;
 		_end = true;
