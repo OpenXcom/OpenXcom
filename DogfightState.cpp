@@ -46,6 +46,7 @@
 /**
  * Initializes all the elements in the Dogfight window.
  * @param game Pointer to the core game.
+ * @param globe Pointer to the Geoscape globe.
  * @param craft Pointer to the craft intercepting.
  * @param ufo Pointer to the UFO being intercepted.
  */

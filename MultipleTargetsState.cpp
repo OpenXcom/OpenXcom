@@ -42,29 +42,31 @@
 
 using namespace std;
 
+#define OUTER_MARGIN 3
+#define INNER_MARGIN 4
+#define BORDER 5
+#define BUTTON_HEIGHT 16
+
 /**
  * Initializes all the elements in the Multiple Targets window.
  * @param game Pointer to the core game.
  * @param targets List of targets to display.
  * @param craft Pointer to craft to retarget (NULL if none).
+ * @param state Pointer to the Geoscape state.
  */
 MultipleTargetsState::MultipleTargetsState(Game *game, vector<Target*> targets, Craft *craft, GeoscapeState *state) : State(game), _targets(targets), _craft(craft), _state(state)
 {
 	_screen = false;
 
-	int outerMargin = 3;
-	int innerMargin = 4;
-	int border = 5;
-	int btnHeight = 16;
 	int listHeight = _targets.size() * 8;
-	int winHeight = listHeight + btnHeight + outerMargin * 2 + innerMargin + border * 2;
+	int winHeight = listHeight + BUTTON_HEIGHT + OUTER_MARGIN * 2 + INNER_MARGIN + BORDER * 2;
 	int winY = (200 - winHeight) / 2;
-	int listY = winY + border + outerMargin;
-	int btnY = listY + listHeight + innerMargin;
+	int listY = winY + BORDER + OUTER_MARGIN;
+	int btnY = listY + listHeight + INNER_MARGIN;
 
 	// Create objects
-	_window = new Window(this, 136, winHeight, 60, winY, POPUP_VERTICAL);
-	_btnCancel = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 116, btnHeight, 70, btnY);
+	_window = new Window(this, 136, winHeight, 60, winY);
+	_btnCancel = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 116, BUTTON_HEIGHT, 70, btnY);
 	_lstTargets = new TextList(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 116, listHeight, 70, listY);
 	
 	// Set palette

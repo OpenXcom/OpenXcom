@@ -32,7 +32,7 @@
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-TextList::TextList(Font *big, Font *small, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _texts(), _columns(), _big(big), _small(small), _scroll(0), _visibleRows(0), _color(0), _dot(false), _selectable(false), _selRow(0), _bg(0)
+TextList::TextList(Font *big, Font *small, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _texts(), _columns(), _big(big), _small(small), _scroll(0), _visibleRows(0), _color(0), _align(ALIGN_LEFT), _dot(false), _selectable(false), _selRow(0), _bg(0)
 {
 	_selector = new Surface(_width, _small->getHeight() + _small->getSpacing(), _x, _y);
 	_selector->setVisible(false);
