@@ -36,6 +36,7 @@
 #include "Language.h"
 #include "Region.h"
 #include "City.h"
+#include "Target.h"
 #include "Ufo.h"
 #include "Craft.h"
 #include "Waypoint.h"
@@ -47,6 +48,7 @@
 #define QUAD_LATITUDE 0.2
 #define ROTATE_LONGITUDE 0.25
 #define ROTATE_LATITUDE 0.15
+#define NEAR_RADIUS 25
 
 /**
  * Sets up a globe with the specified size and position.
@@ -523,6 +525,79 @@ void Globe::switchDetail()
 {
 	_detail = !_detail;
 	drawDetail();
+}
+
+/**
+ * Checks if a certain target is near a certain cartesian point
+ * (within a circled area around it) over the globe.
+ * @param target Pointer to target.
+ * @param x X coordinate of point.
+ * @param y Y coordinate of point.
+ * @return True if it's near, false otherwise.
+ */
+bool Globe::targetNear(Target* target, int x, int y)
+{
+	Sint16 tx, ty;
+	polarToCart(target->getLongitude(), target->getLatitude(), &tx, &ty);
+
+	int dx = x - tx;
+	int dy = y - ty;
+	return (dx * dx + dy * dy <= NEAR_RADIUS);
+}
+
+/**
+ * Returns a list of all the targets currently near a certain
+ * cartesian point over the globe.
+ * @param x X coordinate of point.
+ * @param y Y coordinate of point.
+ * @param craft Only get craft targets.
+ * @return List of pointers to targets.
+ */
+vector<Target*> Globe::getTargets(int x, int y, bool craft)
+{
+	vector<Target*> v;
+	if (!craft)
+	{
+		for (vector<Base*>::iterator i = _save->getBases()->begin(); i != _save->getBases()->end(); i++)
+		{
+			if ((*i)->getLongitude() == 0.0 && (*i)->getLatitude() == 0.0)
+				continue;
+
+			if (targetNear((*i), x, y))
+			{
+				v.push_back(*i);
+			}
+
+			for (vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); j++)
+			{
+				if ((*j)->getLongitude() == (*i)->getLongitude() && (*j)->getLatitude() == (*i)->getLatitude() && (*j)->getDestination() == 0)
+					continue;
+			
+				if (targetNear((*j), x, y))
+				{
+					v.push_back(*j);
+				}
+			}
+		}
+	}
+	for (vector<Ufo*>::iterator i = _save->getUfos()->begin(); i != _save->getUfos()->end(); i++)
+	{
+		if (!(*i)->getDetected())
+			continue;
+		
+		if (targetNear((*i), x, y))
+		{
+			v.push_back(*i);
+		}
+	}
+	for (vector<Waypoint*>::iterator i = _save->getWaypoints()->begin(); i != _save->getWaypoints()->end(); i++)
+	{
+		if (targetNear((*i), x, y))
+		{
+			v.push_back(*i);
+		}
+	}
+	return v;
 }
 
 /**

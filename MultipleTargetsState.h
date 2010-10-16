@@ -16,37 +16,44 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM__GEOSCAPEMESSAGESTATE_H
-#define OPENXCOM__GEOSCAPEMESSAGESTATE_H
+#ifndef OPENXCOM__MULTIPLETARGETSSTATE_H
+#define OPENXCOM__MULTIPLETARGETSSTATE_H
 
-#include <string>
 #include "State.h"
-
-using namespace std;
 
 class TextButton;
 class Window;
-class Text;
+class TextList;
+class Craft;
+class Target;
+class GeoscapeState;
 
 /**
- * Generic window used to display information messages
- * when the player is on the Geoscape.
+ * Displays a list of possible targets.
  */
-class GeoscapeMessageState : public State
+class MultipleTargetsState : public State
 {
 private:
-	TextButton *_btnOk;
+	Craft *_craft;
+	vector<Target*> _targets;
+	GeoscapeState *_state;
+	
 	Window *_window;
-	Text *_txtMessage;
+	TextButton *_btnCancel;
+	TextList *_lstTargets;
 public:
-	/// Creates the Geoscape Message state.
-	GeoscapeMessageState(Game *game, string str);
-	/// Cleans up the Geoscape Message state.
-	~GeoscapeMessageState();
-	/// Updates the palette.
+	/// Creates the Multiple Targets state.
+	MultipleTargetsState(Game *game, vector<Target*> targets, Craft *craft, GeoscapeState *state);
+	/// Cleans up the Multiple Targets state.
+	~MultipleTargetsState();
+	/// Updates the window.
 	void init();
-	/// Handler for clicking the OK button.
-	void btnOkClick(SDL_Event *ev, int scale);
+	/// Popup for a target.
+	void popupTarget(Target *target);
+	/// Handler for clicking the Cancel button.
+	void btnCancelClick(SDL_Event *ev, int scale);
+	/// Handler for clicking the Targets list.
+	void lstTargetsClick(SDL_Event *ev, int scale);
 };
 
 #endif

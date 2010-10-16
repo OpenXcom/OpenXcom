@@ -45,7 +45,7 @@ public:
 	LowFuelState(Game *game, Craft *craft, GeoscapeState *state);
 	/// Cleans up the Low Fuel state.
 	~LowFuelState();
-	// Updates the palette.
+	/// Updates the palette.
 	void init();
 	/// Handler for clicking the Ok button.
 	void btnOkClick(SDL_Event *ev, int scale);

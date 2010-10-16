@@ -47,7 +47,7 @@ public:
 	GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, Waypoint *waypoint);
 	/// Cleans up the Geoscape Craft state.
 	~GeoscapeCraftState();
-	// Updates the palette.
+	/// Updates the palette.
 	void init();
 	/// Handler for clicking the Return To Base button.
 	void btnBaseClick(SDL_Event *ev, int scale);

@@ -121,6 +121,7 @@
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="LowFuelState.cpp" />
     <ClCompile Include="MovingTarget.cpp" />
+    <ClCompile Include="MultipleTargetsState.cpp" />
     <ClCompile Include="PlaceLiftState.cpp" />
     <ClCompile Include="Polyline.cpp" />
     <ClCompile Include="Region.cpp" />
@@ -223,6 +224,7 @@
     <ClInclude Include="Item.h" />
     <ClInclude Include="LowFuelState.h" />
     <ClInclude Include="MovingTarget.h" />
+    <ClInclude Include="MultipleTargetsState.h" />
     <ClInclude Include="PlaceLiftState.h" />
     <ClInclude Include="Polyline.h" />
     <ClInclude Include="Region.h" />

@@ -32,6 +32,7 @@ class Polygon;
 class SurfaceSet;
 class SavedGame;
 class Timer;
+class Target;
 
 /**
  * Interactive globe view of the world.
@@ -60,6 +61,8 @@ private:
 	bool pointBack(double lon, double lat);
 	/// Checks if a point is inside a polygon.
 	bool insidePolygon(double lon, double lat, Polygon *poly);
+	/// Checks if a target is near a point.
+	bool targetNear(Target* target, int x, int y);
 public:
 	/// Creates a new globe at the specified position and size.
 	Globe(int cenX, int cenY, int width, int height, int x = 0, int y = 0);
@@ -67,9 +70,9 @@ public:
 	~Globe();
 	/// Loads a set of polygons from a DAT file.
 	static void loadDat(string filename, vector<Polygon*> *polygons);
-	/// Converts polar coordinates into cartesian coordinates.
+	/// Converts polar coordinates to cartesian coordinates.
 	void polarToCart(double lon, double lat, Sint16 *x, Sint16 *y);
-	/// Converts cartesian coordinates into polar coordinates.
+	/// Converts cartesian coordinates to polar coordinates.
 	void cartToPolar(Sint16 x, Sint16 y, double *lon, double *lat);
 	/// Sets the texture set for the globe's polygons.
 	void setTexture(SurfaceSet *texture);
@@ -101,6 +104,8 @@ public:
 	bool insideLand(double lon, double lat);
 	/// Turns on/off the globe detail.
 	void switchDetail();
+	/// Gets all the targets near a point on the globe.
+	vector<Target*> getTargets(int x, int y, bool craft);
 	/// Caches visible globe polygons.
 	void cachePolygons();
 	/// Sets the palette of the globe.

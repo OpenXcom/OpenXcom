@@ -296,6 +296,9 @@
     <ClCompile Include="MovingTarget.cpp">
       <Filter>Xcom\Game</Filter>
     </ClCompile>
+    <ClCompile Include="MultipleTargetsState.cpp">
+      <Filter>States\Geoscape</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bar.h">
@@ -594,6 +597,9 @@
     </ClInclude>
     <ClInclude Include="MovingTarget.h">
       <Filter>Xcom\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="MultipleTargetsState.h">
+      <Filter>States\Geoscape</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

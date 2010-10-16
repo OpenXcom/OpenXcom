@@ -21,8 +21,8 @@
 
 #include <vector>
 #include "InteractiveSurface.h"
+#include "Text.h"
 
-class Text;
 class Font;
 class ArrowButton;
 
@@ -41,6 +41,7 @@ private:
 	Font *_big, *_small;
 	unsigned int _scroll, _visibleRows;
 	Uint8 _color;
+	TextHAlign _align;
 	bool _dot, _selectable;
 	unsigned int _selRow;
 	Surface *_bg, *_selector;
@@ -59,10 +60,12 @@ public:
 	void addRow(intptr_t value, int cols, ...);
 	/// Sets the columns in the text list.
 	void setColumns(int cols, ...);
-	/// Sets the text color of the text list.
-	void setColor(Uint8 color);
 	/// Sets the palette of the text list.
 	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
+	/// Sets the text color of the text list.
+	void setColor(Uint8 color);
+	/// Sets the text horizontal alignment of the text list.
+	void setAlign(TextHAlign align);
 	/// Sets whether to separate columns with dots.
 	void setDot(bool dot);
 	/// Sets whether the list is selectable.

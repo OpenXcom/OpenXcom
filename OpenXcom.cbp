@@ -342,6 +342,12 @@
 		<Unit filename="MovingTarget.h">
 			<Option virtualFolder="Xcom\Game\" />
 		</Unit>
+		<Unit filename="MultipleTargetsState.cpp">
+			<Option virtualFolder="States\Geoscape\" />
+		</Unit>
+		<Unit filename="MultipleTargetsState.h">
+			<Option virtualFolder="States\Geoscape\" />
+		</Unit>
 		<Unit filename="Music.cpp">
 			<Option virtualFolder="Engine\" />
 		</Unit>

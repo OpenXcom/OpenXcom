@@ -673,6 +673,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\MultipleTargetsState.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\MultipleTargetsState.h"
+					>
+				</File>
+				<File
 					RelativePath=".\OptionsState.cpp"
 					>
 				</File>

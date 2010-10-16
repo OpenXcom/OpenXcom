@@ -44,7 +44,7 @@ public:
 	UfoLostState(Game *game, string id);
 	/// Cleans up the Ufo Lost state.
 	~UfoLostState();
-	// Updates the palette.
+	/// Updates the palette.
 	void init();
 	/// Handler for clicking the OK button.
 	void btnOkClick(SDL_Event *ev, int scale);

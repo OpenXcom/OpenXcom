@@ -19,7 +19,6 @@
 #include "TextList.h"
 #include <cstdarg>
 #include <cmath>
-#include "Text.h"
 #include "Font.h"
 #include "Palette.h"
 #include "ArrowButton.h"
@@ -119,6 +118,7 @@ void TextList::addRow(intptr_t value, int cols, ...)
 		txt->setText(buf);
 
 		txt->setColor(_color);
+		txt->setAlign(_align);
 		txt->setSmall();
 		temp.push_back(txt);
 		rowX += _columns[i];
@@ -183,6 +183,16 @@ void TextList::setColor(Uint8 color)
 	_color = color;
 	_up->setColor(color + 3);
 	_down->setColor(color + 3);
+}
+
+/**
+ * Changes the horizontal alignment of the text in the list. This doesn't change
+ * the alignment of existing text, just the alignment of text added from then on.
+ * @param align Horizontal alignment.
+ */
+void TextList::setAlign(TextHAlign align)
+{
+	_align = align;
 }
 
 /**
@@ -319,10 +329,13 @@ void TextList::draw()
  */
 void TextList::blit(Surface *surface)
 {
-	_selector->blit(surface);
-	Surface::blit(surface);
-	_up->blit(surface);
-	_down->blit(surface);
+	if (_visible)
+	{
+		_selector->blit(surface);
+		Surface::blit(surface);
+		_up->blit(surface);
+		_down->blit(surface);
+	}
 }
 
 /**
@@ -359,7 +372,9 @@ void TextList::mousePress(SDL_Event *ev, int scale, State *state)
 	if (_selectable && ev->button.button == SDL_BUTTON_LEFT)
 	{
 		if (_selRow < _texts.size())
+		{
 			InteractiveSurface::mousePress(ev, scale, state);
+		}
 	}
 	else if (ev->button.button == SDL_BUTTON_WHEELUP)
 	{
@@ -382,7 +397,9 @@ void TextList::mouseRelease(SDL_Event *ev, int scale, State *state)
 	if (_selectable && ev->button.button == SDL_BUTTON_LEFT)
 	{
 		if (_selRow < _texts.size())
+		{
 			InteractiveSurface::mouseRelease(ev, scale, state);
+		}
 	}
 }
 
@@ -397,7 +414,10 @@ void TextList::mouseClick(SDL_Event *ev, int scale, State *state)
 	if (_selectable && ev->button.button == SDL_BUTTON_LEFT)
 	{
 		if (_selRow < _texts.size())
+		{
 			InteractiveSurface::mouseClick(ev, scale, state);
+			_selector->setVisible(false);
+		}
 	}
 }
 

@@ -29,13 +29,8 @@
 #include "Text.h"
 #include "TextButton.h"
 #include "Timer.h"
-#include "SavedGame.h"
-#include "Craft.h"
-#include "Ufo.h"
 #include "Waypoint.h"
-#include "ConfirmDestinationState.h"
-
-#define CLICK_RADIUS 25
+#include "MultipleTargetsState.h"
 
 /**
  * Initializes all the elements in the Select Destination window.
@@ -153,43 +148,17 @@ void SelectDestinationState::globeClick(SDL_Event *ev, int scale)
 	_globe->cartToPolar(mouseX, mouseY, &lon, &lat);
 	
 	// Clicking on a valid target
-	Target *t = 0;
 	if (ev->button.button == SDL_BUTTON_LEFT)
 	{
-		for (vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end(); i++)
+		vector<Target*> v = _globe->getTargets(mouseX, mouseY, true);
+		if (v.size() == 0)
 		{
-			if ((*i)->getDetected())
-			{
-				Sint16 x, y;
-				_globe->polarToCart((*i)->getLongitude(), (*i)->getLatitude(), &x, &y);
-
-				int dx = mouseX - x;
-				int dy = mouseY - y;
-				if (dx * dx + dy * dy <= CLICK_RADIUS)
-				{
-					t = (*i);
-				}
-			}
+			Waypoint *w = new Waypoint();
+			w->setLongitude(lon);
+			w->setLatitude(lat);
+			v.push_back(w);
 		}
-		for (vector<Waypoint*>::iterator i = _game->getSavedGame()->getWaypoints()->begin(); i != _game->getSavedGame()->getWaypoints()->end(); i++)
-		{
-			Sint16 x, y;
-			_globe->polarToCart((*i)->getLongitude(), (*i)->getLatitude(), &x, &y);
-
-			int dx = mouseX - x;
-			int dy = mouseY - y;
-			if (dx * dx + dy * dy <= CLICK_RADIUS)
-			{
-				t = (*i);
-			}
-		}
-		if (t == 0)
-		{
-			t = new Waypoint();
-			t->setLongitude(lon);
-			t->setLatitude(lat);
-		}
-		_game->pushState(new ConfirmDestinationState(_game, _craft, t));
+		_game->pushState(new MultipleTargetsState(_game, v, _craft, 0));
 	}
 }
 
@@ -281,9 +250,13 @@ void SelectDestinationState::btnRotateDownRelease(SDL_Event *ev, int scale)
 void SelectDestinationState::btnZoomInClick(SDL_Event *ev, int scale)
 {
 	if (ev->button.button == SDL_BUTTON_LEFT)
+	{
 		_globe->zoomIn();
+	}
 	else if (ev->button.button == SDL_BUTTON_RIGHT)
+	{
 		_globe->zoomMax();
+	}
 }
 
 /**
@@ -294,9 +267,13 @@ void SelectDestinationState::btnZoomInClick(SDL_Event *ev, int scale)
 void SelectDestinationState::btnZoomOutClick(SDL_Event *ev, int scale)
 {
 	if (ev->button.button == SDL_BUTTON_LEFT)
+	{
 		_globe->zoomOut();
+	}
 	else if (ev->button.button == SDL_BUTTON_RIGHT)
+	{
 		_globe->zoomMin();
+	}
 }
 
 /**
