@@ -1,8 +1,12 @@
 #########################################
 OpenXcom v0.1
 by SupSuper
-http://openxcom.ninex.info
 #########################################
+
+OpenXcom is an open-source reimplementation of the popular
+UFO: Enemy Unknown (X-Com: UFO Defense in USA) videogame by
+Microprose, licensed under the GPL and written in C++ / SDL.
+See more info at the website: http://openxcom.ninex.info
 
 1. For players
 ================

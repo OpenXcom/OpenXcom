@@ -1,0 +1,1 @@
+Copy all the UFO: Enemy Unknown / X-Com: UFO Defense subfolders in here!
