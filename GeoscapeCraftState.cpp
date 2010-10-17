@@ -145,7 +145,14 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 		Waypoint *w = dynamic_cast<Waypoint*>(_craft->getDestination());
 		if (u != 0)
 		{
-			ss << _game->getResourcePack()->getLanguage()->getString(STR_INTERCEPTING_UFO) << u->getId();
+			if (!u->isCrashed())
+			{
+				ss << _game->getResourcePack()->getLanguage()->getString(STR_INTERCEPTING_UFO) << u->getId();
+			}
+			else
+			{
+				ss << _game->getResourcePack()->getLanguage()->getString(STR_DESTINATION_CRASH_SITE) << u->getId();
+			}
 		}
 		else if (w != 0)
 		{

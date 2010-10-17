@@ -228,6 +228,7 @@
     <ClInclude Include="PlaceLiftState.h" />
     <ClInclude Include="Polyline.h" />
     <ClInclude Include="Region.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="RuleCraftWeapon.h" />
     <ClInclude Include="RuleItem.h" />
     <ClInclude Include="RuleUfo.h" />
@@ -301,6 +302,9 @@
     <ClInclude Include="GameTime.h" />
     <ClInclude Include="SavedGame.h" />
     <ClInclude Include="XcomRuleset.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="OpenXcom.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

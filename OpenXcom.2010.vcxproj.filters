@@ -601,6 +601,7 @@
     <ClInclude Include="MultipleTargetsState.h">
       <Filter>States\Geoscape</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Interface">
@@ -633,5 +634,8 @@
     <Filter Include="States\Battlescape">
       <UniqueIdentifier>{ee5ecc4b-2b8e-4b69-9db0-e87ee14aeb2d}</UniqueIdentifier>
     </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="OpenXcom.rc" />
   </ItemGroup>
 </Project>
