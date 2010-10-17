@@ -53,12 +53,6 @@ public:
 	void setSelectedBase(unsigned int base);
 	/// Draws the mini base view.
 	void draw();
-	/// Special handling for mouse presses.
-	void mousePress(SDL_Event *ev, int scale, State *state);
-	/// Special handling for mouse releases.
-	void mouseRelease(SDL_Event *ev, int scale, State *state);
-	/// Special handling for mouse clicks.
-	void mouseClick(SDL_Event *ev, int scale, State *state);
 	/// Special handling for mouse hovers.
 	void mouseOver(SDL_Event *ev, int scale, State *state);
 };

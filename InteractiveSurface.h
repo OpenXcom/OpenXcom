@@ -38,6 +38,7 @@ class InteractiveSurface : public Surface
 protected:
 	EventHandler _click, _press, _release, _in, _over, _out, _keyPress, _keyRelease;
 	bool _isPressed, _isHovered, _isFocused;
+	int _validButton;
 
 public:
 	/// Creates a new interactive surface with the specified size and position.
@@ -66,7 +67,6 @@ public:
 	void onKeyboardPress(EventHandler handler);
 	/// Hooks an event handler to releasing a key when the surface is focused.
 	void onKeyboardRelease(EventHandler handler);
-	
 	/// Processes a mouse button press event.
 	virtual void mousePress(SDL_Event *ev, int scale, State *state);
 	/// Processes a mouse button release event.

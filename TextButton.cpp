@@ -36,6 +36,8 @@ Sound *TextButton::soundPress = 0;
  */
 TextButton::TextButton(Font *big, Font *small, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _color(0), _group(0)
 {
+	_validButton = SDL_BUTTON_LEFT;
+
 	_text = new Text(big, small, width, height, 0, 0);
 	_text->setSmall();
 	_text->setAlign(ALIGN_CENTER);
@@ -179,21 +181,18 @@ void TextButton::draw()
  */
 void TextButton::mousePress(SDL_Event *ev, int scale, State *state)
 {
-	if (ev->button.button == SDL_BUTTON_LEFT)
+	if (soundPress != 0)
+		soundPress->play();
+
+	if (_group != 0)
 	{
-		if (soundPress != 0)
-			soundPress->play();
-
-		if (_group != 0)
-		{
-			TextButton *old = *_group;
-			*_group = this;
-			old->draw();
-		}
-
-		InteractiveSurface::mousePress(ev, scale, state);
-		draw();
+		TextButton *old = *_group;
+		*_group = this;
+		old->draw();
 	}
+
+	InteractiveSurface::mousePress(ev, scale, state);
+	draw();
 }
 
 /**
@@ -204,23 +203,6 @@ void TextButton::mousePress(SDL_Event *ev, int scale, State *state)
  */
 void TextButton::mouseRelease(SDL_Event *ev, int scale, State *state)
 {
-	if (ev->button.button == SDL_BUTTON_LEFT)
-	{
-		InteractiveSurface::mouseRelease(ev, scale, state);
-		draw();
-	}
-}
-
-/**
- * Only accepts left clicks.
- * @param ev Pointer to a SDL_Event.
- * @param scale Current screen scale (used to correct mouse input).
- * @param state State that the event handlers belong to.
- */
-void TextButton::mouseClick(SDL_Event *ev, int scale, State *state)
-{
-	if (ev->button.button == SDL_BUTTON_LEFT)
-	{
-		InteractiveSurface::mouseClick(ev, scale, state);
-	}
+	InteractiveSurface::mouseRelease(ev, scale, state);
+	draw();
 }

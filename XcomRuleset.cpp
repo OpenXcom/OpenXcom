@@ -633,6 +633,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	// Add UFOs
 	RuleUfo *sscout = new RuleUfo(STR_SMALL_SCOUT);
 	sscout->setSize(STR_VERY_SMALL);
+	sscout->setSprite(0);
 	sscout->setMaxSpeed(2200);
 	sscout->setAcceleration(12);
 	sscout->setMaxDamage(50);
@@ -640,6 +641,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 
 	RuleUfo *mscout = new RuleUfo(STR_MEDIUM_SCOUT);
 	mscout->setSize(STR_SMALL);
+	mscout->setSprite(1);
 	mscout->setMaxSpeed(2400);
 	mscout->setAcceleration(9);
 	mscout->setWeaponPower(20);
@@ -649,6 +651,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 
 	RuleUfo *lscout = new RuleUfo(STR_LARGE_SCOUT);
 	lscout->setSize(STR_SMALL);
+	lscout->setSprite(2);
 	lscout->setMaxSpeed(2700);
 	lscout->setAcceleration(9);
 	lscout->setWeaponPower(20);
@@ -658,6 +661,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 
 	RuleUfo *abducter = new RuleUfo(STR_ABDUCTER);
 	abducter->setSize(STR_MEDIUM);
+	abducter->setSprite(3);
 	abducter->setMaxSpeed(4000);
 	abducter->setAcceleration(8);
 	abducter->setWeaponPower(40);
@@ -667,6 +671,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 
 	RuleUfo *harvester = new RuleUfo(STR_HARVESTER);
 	harvester->setSize(STR_MEDIUM);
+	harvester->setSprite(4);
 	harvester->setMaxSpeed(4300);
 	harvester->setAcceleration(8);
 	harvester->setWeaponPower(40);
@@ -676,6 +681,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 
 	RuleUfo *supply = new RuleUfo(STR_SUPPLY_SHIP);
 	supply->setSize(STR_LARGE);
+	supply->setSprite(5);
 	supply->setMaxSpeed(3200);
 	supply->setAcceleration(6);
 	supply->setWeaponPower(60);
@@ -685,6 +691,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 
 	RuleUfo *terror = new RuleUfo(STR_TERROR_SHIP);
 	terror->setSize(STR_LARGE);
+	terror->setSprite(6);
 	terror->setMaxSpeed(4800);
 	terror->setAcceleration(6);
 	terror->setWeaponPower(120);
@@ -694,6 +701,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 
 	RuleUfo *battleship = new RuleUfo(STR_BATTLESHIP);
 	battleship->setSize(STR_VERY_LARGE);
+	battleship->setSprite(7);
 	battleship->setMaxSpeed(5000);
 	battleship->setAcceleration(6);
 	battleship->setWeaponPower(148);

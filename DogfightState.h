@@ -43,10 +43,10 @@ class DogfightState : public State
 private:
 	Timer *_animTimer, *_moveTimer, *_w1Timer, *_w2Timer;
 	Surface *_window, *_battle, *_weapon1, *_range1, *_weapon2, *_range2, *_damage;
-	InteractiveSurface *_btnMinimize;
+	InteractiveSurface *_btnMinimize, *_preview;
 	ImageButton *_btnStandoff, *_btnCautious, *_btnStandard, *_btnAggressive, *_btnDisengage, *_btnUfo;
 	ImageButton *_mode;
-	Text *_txtStatus, *_txtAmmo1, *_txtAmmo2, *_txtDistance;
+	Text *_txtAmmo1, *_txtAmmo2, *_txtDistance, *_txtStatus;
 	Globe *_globe;
 	Craft *_craft;
 	Ufo *_ufo;
@@ -74,16 +74,22 @@ public:
 	void maximumDistance();
 	/// Changes the status text.
 	void setStatus(LangString status);
+	/// Handler for clicking the Minimize button.
+	void btnMinimizeClick(SDL_Event *ev, int scale);
 	/// Handler for clicking the Standoff button.
 	void btnStandoffClick(SDL_Event *ev, int scale);
-	/// Handler for clicking the Standoff button.
+	/// Handler for clicking the Cautious Attack button.
 	void btnCautiousClick(SDL_Event *ev, int scale);
-	/// Handler for clicking the Standoff button.
+	/// Handler for clicking the Standard Attack button.
 	void btnStandardClick(SDL_Event *ev, int scale);
-	/// Handler for clicking the Standoff button.
+	/// Handler for clicking the Agressive Attack button.
 	void btnAggressiveClick(SDL_Event *ev, int scale);
 	/// Handler for clicking the Disengage button.
 	void btnDisengageClick(SDL_Event *ev, int scale);
+	/// Handler for clicking the Ufo button.
+	void btnUfoClick(SDL_Event *ev, int scale);
+	/// Handler for clicking the Preview graphic.
+	void previewClick(SDL_Event *ev, int scale);
 };
 
 #endif

@@ -31,6 +31,7 @@ class RuleUfo
 {
 private:
 	LangString _type, _size;
+	int _sprite;
 	int _damageMax, _speedMax, _accel, _power, _range, _score;
 public:
 	/// Creates a blank UFO ruleset.
@@ -45,6 +46,10 @@ public:
 	void setSize(LangString size);
 	/// Gets the UFO's radius.
 	int getRadius();
+	/// Gets the UFO's sprite.
+	int getSprite();
+	/// Sets the UFO's sprite.
+	void setSprite(int sprite);
 	/// Gets the UFO's maximum damage.
 	int getMaxDamage();
 	/// Sets the UFO's maximum damage.

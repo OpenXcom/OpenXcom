@@ -36,6 +36,8 @@ using namespace std;
  */
 TextEdit::TextEdit(Font *big, Font *small, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _value(""), _blink(true), _ascii('A')
 {
+	_validButton = SDL_BUTTON_LEFT;
+
 	_text = new Text(big, small, width, height, 0, 0);
 	_timer = new Timer(100);
 	_timer->onTimer((SurfaceHandler)&TextEdit::blink);
@@ -239,39 +241,8 @@ bool TextEdit::exceedsMaxWidth(char c)
  */
 void TextEdit::mousePress(SDL_Event *ev, int scale, State *state)
 {
-	if (ev->button.button == SDL_BUTTON_LEFT)
-	{
-		focus();
-		InteractiveSurface::mousePress(ev, scale, state);
-	}
-}
-
-/**
- * Only accepts left clicks.
- * @param ev Pointer to a SDL_Event.
- * @param scale Current screen scale (used to correct mouse input).
- * @param state State that the event handlers belong to.
- */
-void TextEdit::mouseRelease(SDL_Event *ev, int scale, State *state)
-{
-	if (ev->button.button == SDL_BUTTON_LEFT)
-	{
-		InteractiveSurface::mouseRelease(ev, scale, state);
-	}
-}
-
-/**
- * Only accepts left clicks.
- * @param ev Pointer to a SDL_Event.
- * @param scale Current screen scale (used to correct mouse input).
- * @param state State that the event handlers belong to.
- */
-void TextEdit::mouseClick(SDL_Event *ev, int scale, State *state)
-{
-	if (ev->button.button == SDL_BUTTON_LEFT)
-	{
-		InteractiveSurface::mouseClick(ev, scale, state);
-	}
+	focus();
+	InteractiveSurface::mousePress(ev, scale, state);
 }
 
 /**

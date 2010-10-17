@@ -65,16 +65,17 @@ DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo) :
 	_range2 = new Surface(21, 74, 123, 55);
 	_damage = new Surface(22, 25, 173, 92);
 	_btnMinimize = new InteractiveSurface(12, 12, 80, 52);
+	_preview = new InteractiveSurface(160, 96, 80, 52);
 	_btnStandoff = new ImageButton(36, 15, 163, 56);
 	_btnCautious = new ImageButton(36, 15, 200, 56);
 	_btnStandard = new ImageButton(36, 15, 163, 72);
 	_btnAggressive = new ImageButton(36, 15, 200, 72);
 	_btnDisengage = new ImageButton(36, 15, 200, 88);
 	_btnUfo = new ImageButton(36, 17, 200, 104);
-	_txtStatus = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 150, 9, 84, 137);
 	_txtAmmo1 = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 16, 9, 84, 122);
 	_txtAmmo2 = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 16, 9, 144, 122);
 	_txtDistance = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 40, 9, 196, 124);
+	_txtStatus = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 150, 9, 84, 137);
 
 	_animTimer = new Timer(30);
 	_moveTimer = new Timer(20);
@@ -96,13 +97,16 @@ DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo) :
 	add(_btnAggressive);
 	add(_btnDisengage);
 	add(_btnUfo);
-	add(_txtStatus);
 	add(_txtAmmo1);
 	add(_txtAmmo2);
 	add(_txtDistance);
+	add(_preview);
+	add(_txtStatus);
 	
 	// Set up objects
 	Surface *graphic = _game->getResourcePack()->getSurface("INTERWIN.DAT");
+	graphic->setX(0);
+	graphic->setY(0);
 	SDL_Rect crop;
 	crop.x = 0;
 	crop.y = 0;
@@ -111,6 +115,26 @@ DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo) :
 	SDL_FillRect(_window->getSurface(), &crop, 15);
 	graphic->setCrop(&crop);
 	graphic->blit(_window);
+	
+	SDL_FillRect(_preview->getSurface(), &crop, 15);
+	crop.y = 96;
+	crop.h = 15;
+	graphic->setCrop(&crop);
+	graphic->blit(_preview);
+	graphic->setY(67);
+	crop.y = 111;
+	crop.h = 29;
+	graphic->setCrop(&crop);
+	graphic->blit(_preview);
+	graphic->setY(15);
+	crop.y = 140 + 52 * _ufo->getRules()->getSprite();
+	crop.h = 52;
+	graphic->setCrop(&crop);
+	graphic->blit(_preview);
+	_preview->setVisible(false);
+	_preview->onMouseClick((EventHandler)&DogfightState::previewClick);
+
+	_btnMinimize->onMouseClick((EventHandler)&DogfightState::btnMinimizeClick);
 
 	_btnStandoff->copy(_window);
 	_btnStandoff->setColor(Palette::blockOffset(5)+4);
@@ -139,9 +163,10 @@ DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo) :
 
 	_btnUfo->copy(_window);
 	_btnUfo->setColor(Palette::blockOffset(5)+4);
+	_btnUfo->onMouseClick((EventHandler)&DogfightState::btnUfoClick);
 
-	_txtStatus->setColor(Palette::blockOffset(5)+9);
-	_txtStatus->setText(_game->getResourcePack()->getLanguage()->getString(STR_STANDOFF));
+	_btnUfo->copy(_window);
+	_btnUfo->setColor(Palette::blockOffset(5)+4);
 
 	_txtAmmo1->setColor(Palette::blockOffset(5)+9);
 
@@ -149,6 +174,9 @@ DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo) :
 
 	_txtDistance->setColor(Palette::blockOffset(5)+9);
 	_txtDistance->setText("640");
+
+	_txtStatus->setColor(Palette::blockOffset(5)+9);
+	_txtStatus->setText(_game->getResourcePack()->getLanguage()->getString(STR_STANDOFF));
 
 	SurfaceSet *set = _game->getResourcePack()->getSurfaceSet("INTICON.PCK");
 
@@ -368,7 +396,7 @@ void DogfightState::move()
 		if ((*w) >= _currentDist)
 		{
 			int acc = RNG::generate(1, 100);
-			if (acc <= w1->getRules()->getAccuracy())
+			if (acc <= w1->getRules()->getAccuracy() && !_ufo->isCrashed())
 			{
 				int damage = RNG::generate(w1->getRules()->getDamage() / 2, w1->getRules()->getDamage());
 				_ufo->setDamage(_ufo->getDamage() + damage);
@@ -385,7 +413,7 @@ void DogfightState::move()
 		if ((*w) >= _currentDist)
 		{
 			int acc = RNG::generate(1, 100);
-			if (acc <= w2->getRules()->getAccuracy())
+			if (acc <= w2->getRules()->getAccuracy() && !_ufo->isCrashed())
 			{
 				int damage = RNG::generate(w2->getRules()->getDamage() / 2, w2->getRules()->getDamage());
 				_ufo->setDamage(_ufo->getDamage() + damage);
@@ -453,9 +481,12 @@ void DogfightState::move()
 	{
 		_currentRadius--;
 	}
-	for (int r = _currentRadius; r >= 0; r--)
+	if (_currentRadius > 0)
 	{
-		filledCircleColor(_battle->getSurface(), _battle->getWidth() / 2, _battle->getHeight() - _currentDist / 8, r, Palette::getRGBA(_window->getPalette(), Palette::blockOffset(7) + 4 + r));
+		for (int r = _currentRadius; r >= 0; r--)
+		{
+			filledCircleColor(_battle->getSurface(), _battle->getWidth() / 2, _battle->getHeight() - _currentDist / 8, r, Palette::getRGBA(_window->getPalette(), Palette::blockOffset(7) + 4 + r));
+		}
 	}
 
 	// Draw weapon shots
@@ -602,6 +633,14 @@ void DogfightState::setStatus(LangString status)
 	_timeout = 50;
 }
 
+/**
+ * Minimizes the dogfight window.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
+void DogfightState::btnMinimizeClick(SDL_Event *ev, int scale)
+{
+}
 
 /**
  * Switches to Standoff mode (maximum range).
@@ -695,4 +734,40 @@ void DogfightState::btnDisengageClick(SDL_Event *ev, int scale)
 		setStatus(STR_DISENGAGING);
 		_targetDist = 800;
 	}
+}
+
+/**
+ * Shows a front view of the UFO.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
+void DogfightState::btnUfoClick(SDL_Event *ev, int scale)
+{
+	_preview->setVisible(true);
+	// Disable all other buttons to prevent misclicks
+	_btnStandoff->setVisible(false);
+	_btnCautious->setVisible(false);
+	_btnStandard->setVisible(false);
+	_btnAggressive->setVisible(false);
+	_btnDisengage->setVisible(false);
+	_btnUfo->setVisible(false);
+	_btnMinimize->setVisible(false);
+}
+
+/**
+ * Shows a front view of the UFO.
+ * @param ev Pointer to the SDL_Event.
+ * @param scale Scale of the screen.
+ */
+void DogfightState::previewClick(SDL_Event *ev, int scale)
+{
+	_preview->setVisible(false);
+	// Reenable all other buttons to prevent misclicks
+	_btnStandoff->setVisible(true);
+	_btnCautious->setVisible(true);
+	_btnStandard->setVisible(true);
+	_btnAggressive->setVisible(true);
+	_btnDisengage->setVisible(true);
+	_btnUfo->setVisible(true);
+	_btnMinimize->setVisible(true);
 }

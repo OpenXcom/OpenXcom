@@ -30,6 +30,8 @@
  */
 ArrowButton::ArrowButton(ArrowShape shape, int width, int height, int x, int y) : ImageButton(width, height, x, y), _shape(shape), _list(0)
 {
+	_validButton = SDL_BUTTON_LEFT;
+
 	_timer = new Timer(50);
 	_timer->onTimer((SurfaceHandler)&ArrowButton::scroll);
 }
@@ -182,7 +184,7 @@ void ArrowButton::scroll()
 void ArrowButton::mousePress(SDL_Event *ev, int scale, State *state)
 {
 	ImageButton::mousePress(ev, scale, state);
-	if (ev->button.button == SDL_BUTTON_LEFT && _list != 0)
+	if (_list != 0)
 	{
 		_timer->start();
 	}
@@ -197,7 +199,7 @@ void ArrowButton::mousePress(SDL_Event *ev, int scale, State *state)
 void ArrowButton::mouseRelease(SDL_Event *ev, int scale, State *state)
 {
 	ImageButton::mouseRelease(ev, scale, state);
-	if (ev->button.button == SDL_BUTTON_LEFT && _list != 0)
+	if (_list != 0)
 	{
 		_timer->stop();
 	}

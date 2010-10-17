@@ -23,7 +23,7 @@
  * type of UFO.
  * @param type String defining the type.
  */
-RuleUfo::RuleUfo(LangString type) : _type(type), _size(STR_VERY_SMALL), _damageMax(0), _speedMax(0), _accel(0), _power(0), _range(0), _score(0)
+RuleUfo::RuleUfo(LangString type) : _type(type), _size(STR_VERY_SMALL), _sprite(-1), _damageMax(0), _speedMax(0), _accel(0), _power(0), _range(0), _score(0)
 {
 }
 
@@ -70,6 +70,26 @@ void RuleUfo::setSize(LangString size)
 int RuleUfo::getRadius()
 {
 	return _size - STR_VERY_SMALL + 3;
+}
+
+/*
+ * Returns the ID of the sprite used to draw the UFO
+ * in the Dogfight window.
+ * @return Sprite ID.
+ */
+int RuleUfo::getSprite()
+{
+	return _sprite;
+}
+
+/*
+ * Changes the ID of the sprite used to draw the UFO
+ * in the Dogfight window.
+ * @param sprite Sprite ID.
+ */
+void RuleUfo::setSprite(int sprite)
+{
+	_sprite = sprite;
 }
 
 /**

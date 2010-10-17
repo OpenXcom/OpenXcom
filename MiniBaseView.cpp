@@ -37,6 +37,7 @@
  */
 MiniBaseView::MiniBaseView(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _bases(), _texture(0), _base(0), _hoverBase(0)
 {
+	_validButton = SDL_BUTTON_LEFT;
 }
 
 /**
@@ -146,48 +147,6 @@ void MiniBaseView::draw()
 			}
 			unlock();
 		}
-	}
-}
-
-/**
- * Only accepts left clicks.
- * @param ev Pointer to a SDL_Event.
- * @param scale Current screen scale (used to correct mouse input).
- * @param state State that the event handlers belong to.
- */
-void MiniBaseView::mousePress(SDL_Event *ev, int scale, State *state)
-{
-	if (ev->button.button == SDL_BUTTON_LEFT)
-	{
-		InteractiveSurface::mousePress(ev, scale, state);
-	}
-}
-
-/**
- * Only accepts left clicks.
- * @param ev Pointer to a SDL_Event.
- * @param scale Current screen scale (used to correct mouse input).
- * @param state State that the event handlers belong to.
- */
-void MiniBaseView::mouseRelease(SDL_Event *ev, int scale, State *state)
-{
-	if (ev->button.button == SDL_BUTTON_LEFT)
-	{
-		InteractiveSurface::mouseRelease(ev, scale, state);
-	}
-}
-
-/**
- * Only accepts left clicks.
- * @param ev Pointer to a SDL_Event.
- * @param scale Current screen scale (used to correct mouse input).
- * @param state State that the event handlers belong to.
- */
-void MiniBaseView::mouseClick(SDL_Event *ev, int scale, State *state)
-{
-	if (ev->button.button == SDL_BUTTON_LEFT)
-	{
-		InteractiveSurface::mouseClick(ev, scale, state);
 	}
 }
 

@@ -62,8 +62,6 @@ public:
 	void mousePress(SDL_Event *ev, int scale, State *state);
 	/// Special handling for mouse releases.
 	void mouseRelease(SDL_Event *ev, int scale, State *state);
-	/// Special handling for mouse clicks.
-	void mouseClick(SDL_Event *ev, int scale, State *state);
 };
 
 #endif

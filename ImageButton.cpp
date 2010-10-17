@@ -27,6 +27,7 @@
  */
 ImageButton::ImageButton(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _color(0), _group(0)
 {
+	_validButton = SDL_BUTTON_LEFT;
 }
 
 /**
@@ -76,16 +77,13 @@ void ImageButton::setGroup(ImageButton **group)
  */
 void ImageButton::mousePress(SDL_Event *ev, int scale, State *state)
 {
-	if (ev->button.button == SDL_BUTTON_LEFT)
+	if (_group != 0)
 	{
-		if (_group != 0)
-		{
-			(*_group)->invert((*_group)->getColor());
-			*_group = this;
-		}
-		invert(_color);
-		InteractiveSurface::mousePress(ev, scale, state);
+		(*_group)->invert((*_group)->getColor());
+		*_group = this;
 	}
+	invert(_color);
+	InteractiveSurface::mousePress(ev, scale, state);
 }
 
 /*
@@ -96,24 +94,7 @@ void ImageButton::mousePress(SDL_Event *ev, int scale, State *state)
  */
 void ImageButton::mouseRelease(SDL_Event *ev, int scale, State *state)
 {
-	if (ev->button.button == SDL_BUTTON_LEFT)
-	{
-		if (_group == 0)
-			invert(_color);
-		InteractiveSurface::mouseRelease(ev, scale, state);
-	}
-}
-
-/**
- * Only accepts left clicks.
- * @param ev Pointer to a SDL_Event.
- * @param scale Current screen scale (used to correct mouse input).
- * @param state State that the event handlers belong to.
- */
-void ImageButton::mouseClick(SDL_Event *ev, int scale, State *state)
-{
-	if (ev->button.button == SDL_BUTTON_LEFT)
-	{
-		InteractiveSurface::mouseClick(ev, scale, state);
-	}
+	if (_group == 0)
+		invert(_color);
+	InteractiveSurface::mouseRelease(ev, scale, state);
 }

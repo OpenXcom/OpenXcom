@@ -44,6 +44,8 @@ using namespace std;
  */
 BaseView::BaseView(Font *big, Font *small, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _base(0), _texture(0), _selFacility(0), _big(big), _small(small), _gridX(0), _gridY(0), _selSize(0), _selector(0), _blink(true)
 {
+	_validButton = SDL_BUTTON_LEFT;
+
 	for (int x = 0; x < BASE_SIZE; x++)
 		for (int y = 0; y < BASE_SIZE; y++)
 			_facilities[x][y] = 0;
@@ -449,48 +451,6 @@ void BaseView::blit(Surface *surface)
 	Surface::blit(surface);
 	if (_selector != 0)
 		_selector->blit(surface);
-}
-
-/**
- * Only accepts left clicks.
- * @param ev Pointer to a SDL_Event.
- * @param scale Current screen scale (used to correct mouse input).
- * @param state State that the event handlers belong to.
- */
-void BaseView::mousePress(SDL_Event *ev, int scale, State *state)
-{
-	if (ev->button.button == SDL_BUTTON_LEFT)
-	{
-		InteractiveSurface::mousePress(ev, scale, state);
-	}
-}
-
-/**
- * Only accepts left clicks.
- * @param ev Pointer to a SDL_Event.
- * @param scale Current screen scale (used to correct mouse input).
- * @param state State that the event handlers belong to.
- */
-void BaseView::mouseRelease(SDL_Event *ev, int scale, State *state)
-{
-	if (ev->button.button == SDL_BUTTON_LEFT)
-	{
-		InteractiveSurface::mouseRelease(ev, scale, state);
-	}
-}
-
-/**
- * Only accepts left clicks.
- * @param ev Pointer to a SDL_Event.
- * @param scale Current screen scale (used to correct mouse input).
- * @param state State that the event handlers belong to.
- */
-void BaseView::mouseClick(SDL_Event *ev, int scale, State *state)
-{
-	if (ev->button.button == SDL_BUTTON_LEFT)
-	{
-		InteractiveSurface::mouseClick(ev, scale, state);
-	}
 }
 
 /**

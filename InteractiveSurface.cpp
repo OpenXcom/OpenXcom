@@ -25,7 +25,7 @@
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-InteractiveSurface::InteractiveSurface(int width, int height, int x, int y) : Surface(width, height, x, y), _click(0), _press(0), _release(0), _in(0), _over(0), _out(0), _keyPress(0), _keyRelease(0), _isPressed(false), _isHovered(false), _isFocused(false)
+InteractiveSurface::InteractiveSurface(int width, int height, int x, int y) : Surface(width, height, x, y), _click(0), _press(0), _release(0), _in(0), _over(0), _out(0), _keyPress(0), _keyRelease(0), _isPressed(false), _isHovered(false), _isFocused(false), _validButton(0)
 {
 
 }
@@ -89,15 +89,15 @@ void InteractiveSurface::handle(SDL_Event *ev, int scale, State *state)
 		}
 	}
 
-	if (!_isPressed && ev->type == SDL_MOUSEBUTTONDOWN)
-	{
+	if (!_isPressed && ev->type == SDL_MOUSEBUTTONDOWN && (_validButton == 0 || _validButton == ev->button.button))
+	{		
 		if (_isHovered)
 		{
 			_isPressed = true;
 			mousePress(ev, scale, state);
 		}
 	}
-	else if (_isPressed && ev->type == SDL_MOUSEBUTTONUP)
+	else if (_isPressed && ev->type == SDL_MOUSEBUTTONUP && (_validButton == 0 || _validButton == ev->button.button))
 	{
 		_isPressed = false;
 		mouseRelease(ev, scale, state);
