@@ -7,8 +7,8 @@
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug">
-				<Option output="bin\Debug\OpenXcom" prefix_auto="1" extension_auto="1" />
-				<Option object_output="obj\Debug\" />
+				<Option output="..\bin\Debug\OpenXcom" prefix_auto="1" extension_auto="1" />
+				<Option object_output="..\obj\Debug\" />
 				<Option type="0" />
 				<Option compiler="gcc" />
 				<Compiler>
@@ -16,8 +16,8 @@
 				</Compiler>
 			</Target>
 			<Target title="Release">
-				<Option output="bin\Release\OpenXcom" prefix_auto="1" extension_auto="1" />
-				<Option object_output="obj\Release\" />
+				<Option output="..\bin\Release\OpenXcom" prefix_auto="1" extension_auto="1" />
+				<Option object_output="..\obj\Release\" />
 				<Option type="0" />
 				<Option compiler="gcc" />
 				<Compiler>
@@ -30,7 +30,7 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
-			<Add directory=".\SDL\include" />
+			<Add directory="..\deps\SDL\include" />
 		</Compiler>
 		<Linker>
 			<Add library="mingw32" />
@@ -42,7 +42,7 @@
 			<Add library="dxguid" />
 			<Add library="SDL_gfx" />
 			<Add library="SDL_mixer" />
-			<Add directory=".\SDL\lib" />
+			<Add directory="..\deps\SDL\lib" />
 		</Linker>
 		<Unit filename="Basescape\BaseInfoState.cpp" />
 		<Unit filename="Basescape\BaseInfoState.h" />
