@@ -29,6 +29,9 @@ all: $(BINDIR)$(BIN)
 $(BINDIR)$(BIN): $(OBJS)
 	$(CXX) $(OBJS) $(LDFLAGS) -o $(BINDIR)$(BIN)
 
+$(OBJDIR)%.o: %.cpp
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
+
 $(OBJDIR)%.o: */%.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
