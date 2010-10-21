@@ -2,640 +2,637 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Bar.cpp">
+    <ClCompile Include="Basescape\MiniBaseView.cpp">
+      <Filter>Basescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Basescape\MonthlyCostsState.cpp">
+      <Filter>Basescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Basescape\PlaceFacilityState.cpp">
+      <Filter>Basescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Basescape\PurchaseState.cpp">
+      <Filter>Basescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Basescape\ResearchState.cpp">
+      <Filter>Basescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Basescape\SellState.cpp">
+      <Filter>Basescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Basescape\SoldierInfoState.cpp">
+      <Filter>Basescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Basescape\SoldiersState.cpp">
+      <Filter>Basescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Basescape\StoresState.cpp">
+      <Filter>Basescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Basescape\BaseInfoState.cpp">
+      <Filter>Basescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Basescape\BasescapeErrorState.cpp">
+      <Filter>Basescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Basescape\BasescapeState.cpp">
+      <Filter>Basescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Basescape\BaseView.cpp">
+      <Filter>Basescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Basescape\BuildFacilitiesState.cpp">
+      <Filter>Basescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Basescape\CraftInfoState.cpp">
+      <Filter>Basescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Basescape\CraftSoldiersState.cpp">
+      <Filter>Basescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Basescape\CraftsState.cpp">
+      <Filter>Basescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Basescape\CraftWeaponsState.cpp">
+      <Filter>Basescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Basescape\DismantleFacilityState.cpp">
+      <Filter>Basescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Basescape\ManufactureState.cpp">
+      <Filter>Basescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Screen.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Sound.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\SoundSet.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\State.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Surface.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\SurfaceSet.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Timer.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Font.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Game.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\InteractiveSurface.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Language.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Music.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Palette.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\RNG.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Interface\TextButton.cpp">
       <Filter>Interface</Filter>
     </ClCompile>
-    <ClCompile Include="LanguageState.cpp">
-      <Filter>States</Filter>
-    </ClCompile>
-    <ClCompile Include="MainMenuState.cpp">
-      <Filter>States</Filter>
-    </ClCompile>
-    <ClCompile Include="NewGameState.cpp">
-      <Filter>States</Filter>
-    </ClCompile>
-    <ClCompile Include="TestState.cpp">
-      <Filter>States</Filter>
-    </ClCompile>
-    <ClCompile Include="Text.cpp">
+    <ClCompile Include="Interface\TextEdit.cpp">
       <Filter>Interface</Filter>
     </ClCompile>
-    <ClCompile Include="TextButton.cpp">
+    <ClCompile Include="Interface\TextList.cpp">
       <Filter>Interface</Filter>
     </ClCompile>
-    <ClCompile Include="TextEdit.cpp">
+    <ClCompile Include="Interface\Window.cpp">
       <Filter>Interface</Filter>
     </ClCompile>
-    <ClCompile Include="TextList.cpp">
+    <ClCompile Include="Interface\ArrowButton.cpp">
       <Filter>Interface</Filter>
     </ClCompile>
-    <ClCompile Include="Window.cpp">
+    <ClCompile Include="Interface\Bar.cpp">
       <Filter>Interface</Filter>
     </ClCompile>
-    <ClCompile Include="Cursor.cpp">
+    <ClCompile Include="Interface\Cursor.cpp">
       <Filter>Interface</Filter>
     </ClCompile>
-    <ClCompile Include="Font.cpp">
-      <Filter>Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="Game.cpp">
-      <Filter>Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="InteractiveSurface.cpp">
-      <Filter>Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="Music.cpp">
-      <Filter>Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="Palette.cpp">
-      <Filter>Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="Screen.cpp">
-      <Filter>Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="Sound.cpp">
-      <Filter>Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="State.cpp">
-      <Filter>Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="Surface.cpp">
-      <Filter>Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="SurfaceSet.cpp">
-      <Filter>Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="ImageButton.cpp">
+    <ClCompile Include="Interface\ImageButton.cpp">
       <Filter>Interface</Filter>
     </ClCompile>
-    <ClCompile Include="Language.cpp">
-      <Filter>Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="RNG.cpp">
-      <Filter>Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="Timer.cpp">
-      <Filter>Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="RuleBaseFacility.cpp">
-      <Filter>Xcom\Rules</Filter>
-    </ClCompile>
-    <ClCompile Include="RuleCraft.cpp">
-      <Filter>Xcom\Rules</Filter>
-    </ClCompile>
-    <ClCompile Include="Ruleset.cpp">
-      <Filter>Xcom\Rules</Filter>
-    </ClCompile>
-    <ClCompile Include="XcomRuleset.cpp">
-      <Filter>Xcom\Rules</Filter>
-    </ClCompile>
-    <ClCompile Include="SoldierNamePool.cpp">
-      <Filter>Xcom\Rules</Filter>
-    </ClCompile>
-    <ClCompile Include="Base.cpp">
-      <Filter>Xcom\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="BaseFacility.cpp">
-      <Filter>Xcom\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="Country.cpp">
-      <Filter>Xcom\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="Craft.cpp">
-      <Filter>Xcom\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="GameTime.cpp">
-      <Filter>Xcom\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="SavedGame.cpp">
-      <Filter>Xcom\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="Soldier.cpp">
-      <Filter>Xcom\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="BaseView.cpp">
-      <Filter>Xcom\Resource</Filter>
-    </ClCompile>
-    <ClCompile Include="Globe.cpp">
-      <Filter>Xcom\Resource</Filter>
-    </ClCompile>
-    <ClCompile Include="MiniBaseView.cpp">
-      <Filter>Xcom\Resource</Filter>
-    </ClCompile>
-    <ClCompile Include="Polygon.cpp">
-      <Filter>Xcom\Resource</Filter>
-    </ClCompile>
-    <ClCompile Include="ResourcePack.cpp">
-      <Filter>Xcom\Resource</Filter>
-    </ClCompile>
-    <ClCompile Include="XcomResourcePack.cpp">
-      <Filter>Xcom\Resource</Filter>
-    </ClCompile>
-    <ClCompile Include="StartState.cpp">
-      <Filter>States</Filter>
-    </ClCompile>
-    <ClCompile Include="SoundSet.cpp">
-      <Filter>Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="Polyline.cpp">
-      <Filter>Xcom\Resource</Filter>
-    </ClCompile>
-    <ClCompile Include="RuleItem.cpp">
-      <Filter>Xcom\Rules</Filter>
-    </ClCompile>
-    <ClCompile Include="Item.cpp">
-      <Filter>Xcom\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="CraftWeapon.cpp">
-      <Filter>Xcom\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="RuleCraftWeapon.cpp">
-      <Filter>Xcom\Rules</Filter>
-    </ClCompile>
-    <ClCompile Include="Region.cpp">
-      <Filter>Xcom\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="City.cpp">
-      <Filter>Xcom\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="Ufo.cpp">
-      <Filter>Xcom\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="RuleUfo.cpp">
-      <Filter>Xcom\Rules</Filter>
-    </ClCompile>
-    <ClCompile Include="ArrowButton.cpp">
+    <ClCompile Include="Interface\Text.cpp">
       <Filter>Interface</Filter>
     </ClCompile>
-    <ClCompile Include="Target.cpp">
-      <Filter>Xcom\Game</Filter>
+    <ClCompile Include="Menu\StartState.cpp">
+      <Filter>Menu</Filter>
     </ClCompile>
-    <ClCompile Include="AbandonGameState.cpp">
-      <Filter>States\Geoscape</Filter>
+    <ClCompile Include="Menu\TestState.cpp">
+      <Filter>Menu</Filter>
     </ClCompile>
-    <ClCompile Include="BaseNameState.cpp">
-      <Filter>States\Geoscape</Filter>
+    <ClCompile Include="Menu\LanguageState.cpp">
+      <Filter>Menu</Filter>
     </ClCompile>
-    <ClCompile Include="BaseInfoState.cpp">
-      <Filter>States\Basescape</Filter>
+    <ClCompile Include="Menu\MainMenuState.cpp">
+      <Filter>Menu</Filter>
     </ClCompile>
-    <ClCompile Include="BasescapeErrorState.cpp">
-      <Filter>States\Basescape</Filter>
+    <ClCompile Include="Menu\NewGameState.cpp">
+      <Filter>Menu</Filter>
     </ClCompile>
-    <ClCompile Include="BasescapeState.cpp">
-      <Filter>States\Basescape</Filter>
+    <ClCompile Include="Resource\XcomResourcePack.cpp">
+      <Filter>Resource</Filter>
     </ClCompile>
-    <ClCompile Include="BuildFacilitiesState.cpp">
-      <Filter>States\Basescape</Filter>
+    <ClCompile Include="Resource\ResourcePack.cpp">
+      <Filter>Resource</Filter>
     </ClCompile>
-    <ClCompile Include="BuildNewBaseState.cpp">
-      <Filter>States\Geoscape</Filter>
+    <ClCompile Include="Resource\SoldierNamePool.cpp">
+      <Filter>Resource</Filter>
     </ClCompile>
-    <ClCompile Include="ConfirmDestinationState.cpp">
-      <Filter>States\Geoscape</Filter>
+    <ClCompile Include="Ruleset\Ruleset.cpp">
+      <Filter>Ruleset</Filter>
     </ClCompile>
-    <ClCompile Include="ConfirmNewBaseState.cpp">
-      <Filter>States\Geoscape</Filter>
+    <ClCompile Include="Ruleset\RuleUfo.cpp">
+      <Filter>Ruleset</Filter>
     </ClCompile>
-    <ClCompile Include="CraftInfoState.cpp">
-      <Filter>States\Basescape</Filter>
+    <ClCompile Include="Ruleset\XcomRuleset.cpp">
+      <Filter>Ruleset</Filter>
     </ClCompile>
-    <ClCompile Include="CraftSoldiersState.cpp">
-      <Filter>States\Basescape</Filter>
+    <ClCompile Include="Ruleset\RuleBaseFacility.cpp">
+      <Filter>Ruleset</Filter>
     </ClCompile>
-    <ClCompile Include="CraftsState.cpp">
-      <Filter>States\Basescape</Filter>
+    <ClCompile Include="Ruleset\RuleCraft.cpp">
+      <Filter>Ruleset</Filter>
     </ClCompile>
-    <ClCompile Include="CraftWeaponsState.cpp">
-      <Filter>States\Basescape</Filter>
+    <ClCompile Include="Ruleset\RuleCraftWeapon.cpp">
+      <Filter>Ruleset</Filter>
     </ClCompile>
-    <ClCompile Include="DismantleFacilityState.cpp">
-      <Filter>States\Basescape</Filter>
+    <ClCompile Include="Ruleset\RuleItem.cpp">
+      <Filter>Ruleset</Filter>
     </ClCompile>
-    <ClCompile Include="DogfightState.cpp">
-      <Filter>States\Geoscape</Filter>
+    <ClCompile Include="Savegame\SavedGame.cpp">
+      <Filter>Savegame</Filter>
     </ClCompile>
-    <ClCompile Include="FundingState.cpp">
-      <Filter>States\Geoscape</Filter>
+    <ClCompile Include="Savegame\Soldier.cpp">
+      <Filter>Savegame</Filter>
     </ClCompile>
-    <ClCompile Include="GeoscapeErrorState.cpp">
-      <Filter>States\Geoscape</Filter>
+    <ClCompile Include="Savegame\Target.cpp">
+      <Filter>Savegame</Filter>
     </ClCompile>
-    <ClCompile Include="GeoscapeMessageState.cpp">
-      <Filter>States\Geoscape</Filter>
+    <ClCompile Include="Savegame\Ufo.cpp">
+      <Filter>Savegame</Filter>
     </ClCompile>
-    <ClCompile Include="GeoscapeState.cpp">
-      <Filter>States\Geoscape</Filter>
+    <ClCompile Include="Savegame\Waypoint.cpp">
+      <Filter>Savegame</Filter>
     </ClCompile>
-    <ClCompile Include="GraphsState.cpp">
-      <Filter>States\Geoscape</Filter>
+    <ClCompile Include="Savegame\Base.cpp">
+      <Filter>Savegame</Filter>
     </ClCompile>
-    <ClCompile Include="InterceptState.cpp">
-      <Filter>States\Geoscape</Filter>
+    <ClCompile Include="Savegame\BaseFacility.cpp">
+      <Filter>Savegame</Filter>
     </ClCompile>
-    <ClCompile Include="PlaceFacilityState.cpp">
-      <Filter>States\Basescape</Filter>
+    <ClCompile Include="Savegame\City.cpp">
+      <Filter>Savegame</Filter>
     </ClCompile>
-    <ClCompile Include="PlaceLiftState.cpp">
-      <Filter>States\Basescape</Filter>
+    <ClCompile Include="Savegame\Country.cpp">
+      <Filter>Savegame</Filter>
     </ClCompile>
-    <ClCompile Include="PurchaseState.cpp">
-      <Filter>States\Basescape</Filter>
+    <ClCompile Include="Savegame\Craft.cpp">
+      <Filter>Savegame</Filter>
     </ClCompile>
-    <ClCompile Include="ResearchState.cpp">
-      <Filter>States\Basescape</Filter>
+    <ClCompile Include="Savegame\CraftWeapon.cpp">
+      <Filter>Savegame</Filter>
     </ClCompile>
-    <ClCompile Include="SellState.cpp">
-      <Filter>States\Basescape</Filter>
+    <ClCompile Include="Savegame\GameTime.cpp">
+      <Filter>Savegame</Filter>
     </ClCompile>
-    <ClCompile Include="SoldierInfoState.cpp">
-      <Filter>States\Basescape</Filter>
+    <ClCompile Include="Savegame\Item.cpp">
+      <Filter>Savegame</Filter>
     </ClCompile>
-    <ClCompile Include="SoldiersState.cpp">
-      <Filter>States\Basescape</Filter>
+    <ClCompile Include="Savegame\MovingTarget.cpp">
+      <Filter>Savegame</Filter>
     </ClCompile>
-    <ClCompile Include="StoresState.cpp">
-      <Filter>States\Basescape</Filter>
+    <ClCompile Include="Savegame\Region.cpp">
+      <Filter>Savegame</Filter>
     </ClCompile>
-    <ClCompile Include="MonthlyCostsState.cpp">
-      <Filter>States\Basescape</Filter>
+    <ClCompile Include="Geoscape\ConfirmDestinationState.cpp">
+      <Filter>Geoscape</Filter>
     </ClCompile>
-    <ClCompile Include="ManufactureState.cpp">
-      <Filter>States\Basescape</Filter>
+    <ClCompile Include="Geoscape\ConfirmNewBaseState.cpp">
+      <Filter>Geoscape</Filter>
     </ClCompile>
-    <ClCompile Include="MonthlyReportState.cpp">
-      <Filter>States\Geoscape</Filter>
+    <ClCompile Include="Geoscape\CraftPatrolState.cpp">
+      <Filter>Geoscape</Filter>
     </ClCompile>
-    <ClCompile Include="OptionsState.cpp">
-      <Filter>States\Geoscape</Filter>
+    <ClCompile Include="Geoscape\DogfightState.cpp">
+      <Filter>Geoscape</Filter>
     </ClCompile>
-    <ClCompile Include="SelectDestinationState.cpp">
-      <Filter>States\Geoscape</Filter>
+    <ClCompile Include="Geoscape\FundingState.cpp">
+      <Filter>Geoscape</Filter>
     </ClCompile>
-    <ClCompile Include="UfoDetectedState.cpp">
-      <Filter>States\Geoscape</Filter>
+    <ClCompile Include="Geoscape\GeoscapeCraftState.cpp">
+      <Filter>Geoscape</Filter>
     </ClCompile>
-    <ClCompile Include="GeoscapeCraftState.cpp">
-      <Filter>States\Geoscape</Filter>
+    <ClCompile Include="Geoscape\GeoscapeErrorState.cpp">
+      <Filter>Geoscape</Filter>
     </ClCompile>
-    <ClCompile Include="UfoLostState.cpp">
-      <Filter>States\Geoscape</Filter>
+    <ClCompile Include="Geoscape\GeoscapeMessageState.cpp">
+      <Filter>Geoscape</Filter>
     </ClCompile>
-    <ClCompile Include="Waypoint.cpp">
-      <Filter>Xcom\Game</Filter>
+    <ClCompile Include="Geoscape\GeoscapeState.cpp">
+      <Filter>Geoscape</Filter>
     </ClCompile>
-    <ClCompile Include="CraftPatrolState.cpp">
-      <Filter>States\Geoscape</Filter>
+    <ClCompile Include="Geoscape\Globe.cpp">
+      <Filter>Geoscape</Filter>
     </ClCompile>
-    <ClCompile Include="TargetInfoState.cpp">
-      <Filter>States\Geoscape</Filter>
+    <ClCompile Include="Geoscape\GraphsState.cpp">
+      <Filter>Geoscape</Filter>
     </ClCompile>
-    <ClCompile Include="LowFuelState.cpp">
-      <Filter>States\Geoscape</Filter>
+    <ClCompile Include="Geoscape\InterceptState.cpp">
+      <Filter>Geoscape</Filter>
     </ClCompile>
-    <ClCompile Include="MovingTarget.cpp">
-      <Filter>Xcom\Game</Filter>
+    <ClCompile Include="Geoscape\LowFuelState.cpp">
+      <Filter>Geoscape</Filter>
     </ClCompile>
-    <ClCompile Include="MultipleTargetsState.cpp">
-      <Filter>States\Geoscape</Filter>
+    <ClCompile Include="Geoscape\MonthlyReportState.cpp">
+      <Filter>Geoscape</Filter>
+    </ClCompile>
+    <ClCompile Include="Geoscape\MultipleTargetsState.cpp">
+      <Filter>Geoscape</Filter>
+    </ClCompile>
+    <ClCompile Include="Geoscape\OptionsState.cpp">
+      <Filter>Geoscape</Filter>
+    </ClCompile>
+    <ClCompile Include="Geoscape\Polygon.cpp">
+      <Filter>Geoscape</Filter>
+    </ClCompile>
+    <ClCompile Include="Geoscape\Polyline.cpp">
+      <Filter>Geoscape</Filter>
+    </ClCompile>
+    <ClCompile Include="Geoscape\SelectDestinationState.cpp">
+      <Filter>Geoscape</Filter>
+    </ClCompile>
+    <ClCompile Include="Geoscape\TargetInfoState.cpp">
+      <Filter>Geoscape</Filter>
+    </ClCompile>
+    <ClCompile Include="Geoscape\UfoDetectedState.cpp">
+      <Filter>Geoscape</Filter>
+    </ClCompile>
+    <ClCompile Include="Geoscape\UfoLostState.cpp">
+      <Filter>Geoscape</Filter>
+    </ClCompile>
+    <ClCompile Include="Geoscape\AbandonGameState.cpp">
+      <Filter>Geoscape</Filter>
+    </ClCompile>
+    <ClCompile Include="Geoscape\BaseNameState.cpp">
+      <Filter>Geoscape</Filter>
+    </ClCompile>
+    <ClCompile Include="Geoscape\BuildNewBaseState.cpp">
+      <Filter>Geoscape</Filter>
+    </ClCompile>
+    <ClCompile Include="Basescape\PlaceLiftState.cpp">
+      <Filter>Basescape</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Bar.h">
-      <Filter>Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="LanguageState.h">
-      <Filter>States</Filter>
-    </ClInclude>
-    <ClInclude Include="MainMenuState.h">
-      <Filter>States</Filter>
-    </ClInclude>
-    <ClInclude Include="NewGameState.h">
-      <Filter>States</Filter>
-    </ClInclude>
-    <ClInclude Include="TestState.h">
-      <Filter>States</Filter>
-    </ClInclude>
-    <ClInclude Include="TextList.h">
-      <Filter>Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="Text.h">
-      <Filter>Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="TextButton.h">
-      <Filter>Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="TextEdit.h">
-      <Filter>Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="Window.h">
-      <Filter>Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="Cursor.h">
-      <Filter>Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="Font.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Game.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="InteractiveSurface.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Music.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Palette.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Screen.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Sound.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="State.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Surface.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="SurfaceSet.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="ImageButton.h">
-      <Filter>Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="Language.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="RNG.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Timer.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Ruleset.h">
-      <Filter>Xcom\Rules</Filter>
-    </ClInclude>
-    <ClInclude Include="RuleBaseFacility.h">
-      <Filter>Xcom\Rules</Filter>
-    </ClInclude>
-    <ClInclude Include="RuleCraft.h">
-      <Filter>Xcom\Rules</Filter>
-    </ClInclude>
-    <ClInclude Include="XcomRuleset.h">
-      <Filter>Xcom\Rules</Filter>
-    </ClInclude>
-    <ClInclude Include="SoldierNamePool.h">
-      <Filter>Xcom\Rules</Filter>
-    </ClInclude>
-    <ClInclude Include="Base.h">
-      <Filter>Xcom\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="BaseFacility.h">
-      <Filter>Xcom\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="Country.h">
-      <Filter>Xcom\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="Craft.h">
-      <Filter>Xcom\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="GameTime.h">
-      <Filter>Xcom\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="SavedGame.h">
-      <Filter>Xcom\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="Soldier.h">
-      <Filter>Xcom\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="XcomResourcePack.h">
-      <Filter>Xcom\Resource</Filter>
-    </ClInclude>
-    <ClInclude Include="BaseView.h">
-      <Filter>Xcom\Resource</Filter>
-    </ClInclude>
-    <ClInclude Include="Globe.h">
-      <Filter>Xcom\Resource</Filter>
-    </ClInclude>
-    <ClInclude Include="LangString.h">
-      <Filter>Xcom\Resource</Filter>
-    </ClInclude>
-    <ClInclude Include="MiniBaseView.h">
-      <Filter>Xcom\Resource</Filter>
-    </ClInclude>
-    <ClInclude Include="Polygon.h">
-      <Filter>Xcom\Resource</Filter>
-    </ClInclude>
-    <ClInclude Include="ResourcePack.h">
-      <Filter>Xcom\Resource</Filter>
-    </ClInclude>
-    <ClInclude Include="StartState.h">
-      <Filter>States</Filter>
-    </ClInclude>
-    <ClInclude Include="SoundSet.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Polyline.h">
-      <Filter>Xcom\Resource</Filter>
-    </ClInclude>
-    <ClInclude Include="RuleItem.h">
-      <Filter>Xcom\Rules</Filter>
-    </ClInclude>
-    <ClInclude Include="Item.h">
-      <Filter>Xcom\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="CraftWeapon.h">
-      <Filter>Xcom\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="RuleCraftWeapon.h">
-      <Filter>Xcom\Rules</Filter>
-    </ClInclude>
-    <ClInclude Include="Region.h">
-      <Filter>Xcom\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="City.h">
-      <Filter>Xcom\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="Ufo.h">
-      <Filter>Xcom\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="RuleUfo.h">
-      <Filter>Xcom\Rules</Filter>
-    </ClInclude>
-    <ClInclude Include="ArrowButton.h">
-      <Filter>Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="Target.h">
-      <Filter>Xcom\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="AbandonGameState.h">
-      <Filter>States\Geoscape</Filter>
-    </ClInclude>
-    <ClInclude Include="BaseNameState.h">
-      <Filter>States\Geoscape</Filter>
-    </ClInclude>
-    <ClInclude Include="BaseInfoState.h">
-      <Filter>States\Basescape</Filter>
-    </ClInclude>
-    <ClInclude Include="BasescapeErrorState.h">
-      <Filter>States\Basescape</Filter>
-    </ClInclude>
-    <ClInclude Include="BasescapeState.h">
-      <Filter>States\Basescape</Filter>
-    </ClInclude>
-    <ClInclude Include="BuildFacilitiesState.h">
-      <Filter>States\Basescape</Filter>
-    </ClInclude>
-    <ClInclude Include="BuildNewBaseState.h">
-      <Filter>States\Geoscape</Filter>
-    </ClInclude>
-    <ClInclude Include="ConfirmDestinationState.h">
-      <Filter>States\Geoscape</Filter>
-    </ClInclude>
-    <ClInclude Include="ConfirmNewBaseState.h">
-      <Filter>States\Geoscape</Filter>
-    </ClInclude>
-    <ClInclude Include="CraftInfoState.h">
-      <Filter>States\Basescape</Filter>
-    </ClInclude>
-    <ClInclude Include="CraftSoldiersState.h">
-      <Filter>States\Basescape</Filter>
-    </ClInclude>
-    <ClInclude Include="CraftsState.h">
-      <Filter>States\Basescape</Filter>
-    </ClInclude>
-    <ClInclude Include="CraftWeaponsState.h">
-      <Filter>States\Basescape</Filter>
-    </ClInclude>
-    <ClInclude Include="DismantleFacilityState.h">
-      <Filter>States\Basescape</Filter>
-    </ClInclude>
-    <ClInclude Include="DogfightState.h">
-      <Filter>States\Geoscape</Filter>
-    </ClInclude>
-    <ClInclude Include="FundingState.h">
-      <Filter>States\Geoscape</Filter>
-    </ClInclude>
-    <ClInclude Include="GeoscapeErrorState.h">
-      <Filter>States\Geoscape</Filter>
-    </ClInclude>
-    <ClInclude Include="GeoscapeMessageState.h">
-      <Filter>States\Geoscape</Filter>
-    </ClInclude>
-    <ClInclude Include="GeoscapeState.h">
-      <Filter>States\Geoscape</Filter>
-    </ClInclude>
-    <ClInclude Include="GraphsState.h">
-      <Filter>States\Geoscape</Filter>
-    </ClInclude>
-    <ClInclude Include="InterceptState.h">
-      <Filter>States\Geoscape</Filter>
-    </ClInclude>
-    <ClInclude Include="PlaceFacilityState.h">
-      <Filter>States\Basescape</Filter>
-    </ClInclude>
-    <ClInclude Include="PlaceLiftState.h">
-      <Filter>States\Basescape</Filter>
-    </ClInclude>
-    <ClInclude Include="PurchaseState.h">
-      <Filter>States\Basescape</Filter>
-    </ClInclude>
-    <ClInclude Include="ResearchState.h">
-      <Filter>States\Basescape</Filter>
-    </ClInclude>
-    <ClInclude Include="SellState.h">
-      <Filter>States\Basescape</Filter>
-    </ClInclude>
-    <ClInclude Include="SoldierInfoState.h">
-      <Filter>States\Basescape</Filter>
-    </ClInclude>
-    <ClInclude Include="SoldiersState.h">
-      <Filter>States\Basescape</Filter>
-    </ClInclude>
-    <ClInclude Include="StoresState.h">
-      <Filter>States\Basescape</Filter>
-    </ClInclude>
-    <ClInclude Include="MonthlyCostsState.h">
-      <Filter>States\Basescape</Filter>
-    </ClInclude>
-    <ClInclude Include="ManufactureState.h">
-      <Filter>States\Basescape</Filter>
-    </ClInclude>
-    <ClInclude Include="MonthlyReportState.h">
-      <Filter>States\Geoscape</Filter>
-    </ClInclude>
-    <ClInclude Include="OptionsState.h">
-      <Filter>States\Geoscape</Filter>
-    </ClInclude>
-    <ClInclude Include="SelectDestinationState.h">
-      <Filter>States\Geoscape</Filter>
-    </ClInclude>
-    <ClInclude Include="UfoDetectedState.h">
-      <Filter>States\Geoscape</Filter>
-    </ClInclude>
-    <ClInclude Include="GeoscapeCraftState.h">
-      <Filter>States\Geoscape</Filter>
-    </ClInclude>
-    <ClInclude Include="UfoLostState.h">
-      <Filter>States\Geoscape</Filter>
-    </ClInclude>
-    <ClInclude Include="Waypoint.h">
-      <Filter>Xcom\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="CraftPatrolState.h">
-      <Filter>States\Geoscape</Filter>
-    </ClInclude>
-    <ClInclude Include="TargetInfoState.h">
-      <Filter>States\Geoscape</Filter>
-    </ClInclude>
-    <ClInclude Include="LowFuelState.h">
-      <Filter>States\Geoscape</Filter>
-    </ClInclude>
-    <ClInclude Include="MovingTarget.h">
-      <Filter>Xcom\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="MultipleTargetsState.h">
-      <Filter>States\Geoscape</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <Filter Include="Interface">
-      <UniqueIdentifier>{12bc374b-5ce0-43c8-9a06-622458102572}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="States">
-      <UniqueIdentifier>{085c4d4d-2cc4-495a-8268-c78d3a8896f3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Xcom">
-      <UniqueIdentifier>{57283ece-1539-4750-a50b-0377b63aa9b2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Xcom\Rules">
-      <UniqueIdentifier>{b4b975bb-7e69-4979-8023-f0bd18bdc35b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Xcom\Game">
-      <UniqueIdentifier>{855a8e1f-c05b-4fe2-9b78-8cc58914fe32}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Xcom\Resource">
-      <UniqueIdentifier>{f3b1aafa-aa18-420a-a34c-981f6b6a3ffc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine">
-      <UniqueIdentifier>{72813a85-910c-4ea6-b311-9ee329fe649c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="States\Geoscape">
-      <UniqueIdentifier>{c53d3d83-a0a6-4636-851e-fa99e07ca4ca}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="States\Basescape">
-      <UniqueIdentifier>{90c888ef-cb8f-4c90-b5a5-dc1f099f858d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="States\Battlescape">
-      <UniqueIdentifier>{ee5ecc4b-2b8e-4b69-9db0-e87ee14aeb2d}</UniqueIdentifier>
-    </Filter>
+    <ClInclude Include="Basescape\ManufactureState.h">
+      <Filter>Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Basescape\MiniBaseView.h">
+      <Filter>Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Basescape\MonthlyCostsState.h">
+      <Filter>Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Basescape\PlaceFacilityState.h">
+      <Filter>Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Basescape\PurchaseState.h">
+      <Filter>Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Basescape\ResearchState.h">
+      <Filter>Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Basescape\SellState.h">
+      <Filter>Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Basescape\SoldierInfoState.h">
+      <Filter>Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Basescape\SoldiersState.h">
+      <Filter>Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Basescape\StoresState.h">
+      <Filter>Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Basescape\BaseInfoState.h">
+      <Filter>Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Basescape\BasescapeErrorState.h">
+      <Filter>Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Basescape\BasescapeState.h">
+      <Filter>Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Basescape\BaseView.h">
+      <Filter>Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Basescape\BuildFacilitiesState.h">
+      <Filter>Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Basescape\CraftInfoState.h">
+      <Filter>Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Basescape\CraftSoldiersState.h">
+      <Filter>Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Basescape\CraftsState.h">
+      <Filter>Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Basescape\CraftWeaponsState.h">
+      <Filter>Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Basescape\DismantleFacilityState.h">
+      <Filter>Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\RNG.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Screen.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Sound.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\SoundSet.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\State.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Surface.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\SurfaceSet.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Timer.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Font.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Game.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\InteractiveSurface.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Language.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Music.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Palette.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface\TextButton.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface\TextEdit.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface\TextList.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface\Window.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface\ArrowButton.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface\Bar.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface\Cursor.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface\ImageButton.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface\Text.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\NewGameState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\StartState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\TestState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\LanguageState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\MainMenuState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\SoldierNamePool.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\XcomResourcePack.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\LangString.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\ResourcePack.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\Ruleset.h">
+      <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\RuleUfo.h">
+      <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\XcomRuleset.h">
+      <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\RuleBaseFacility.h">
+      <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\RuleCraft.h">
+      <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\RuleCraftWeapon.h">
+      <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\RuleItem.h">
+      <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Savegame\SavedGame.h">
+      <Filter>Savegame</Filter>
+    </ClInclude>
+    <ClInclude Include="Savegame\Soldier.h">
+      <Filter>Savegame</Filter>
+    </ClInclude>
+    <ClInclude Include="Savegame\Target.h">
+      <Filter>Savegame</Filter>
+    </ClInclude>
+    <ClInclude Include="Savegame\Ufo.h">
+      <Filter>Savegame</Filter>
+    </ClInclude>
+    <ClInclude Include="Savegame\Waypoint.h">
+      <Filter>Savegame</Filter>
+    </ClInclude>
+    <ClInclude Include="Savegame\Base.h">
+      <Filter>Savegame</Filter>
+    </ClInclude>
+    <ClInclude Include="Savegame\BaseFacility.h">
+      <Filter>Savegame</Filter>
+    </ClInclude>
+    <ClInclude Include="Savegame\City.h">
+      <Filter>Savegame</Filter>
+    </ClInclude>
+    <ClInclude Include="Savegame\Country.h">
+      <Filter>Savegame</Filter>
+    </ClInclude>
+    <ClInclude Include="Savegame\Craft.h">
+      <Filter>Savegame</Filter>
+    </ClInclude>
+    <ClInclude Include="Savegame\CraftWeapon.h">
+      <Filter>Savegame</Filter>
+    </ClInclude>
+    <ClInclude Include="Savegame\GameTime.h">
+      <Filter>Savegame</Filter>
+    </ClInclude>
+    <ClInclude Include="Savegame\Item.h">
+      <Filter>Savegame</Filter>
+    </ClInclude>
+    <ClInclude Include="Savegame\MovingTarget.h">
+      <Filter>Savegame</Filter>
+    </ClInclude>
+    <ClInclude Include="Savegame\Region.h">
+      <Filter>Savegame</Filter>
+    </ClInclude>
+    <ClInclude Include="Geoscape\ConfirmDestinationState.h">
+      <Filter>Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Geoscape\ConfirmNewBaseState.h">
+      <Filter>Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Geoscape\CraftPatrolState.h">
+      <Filter>Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Geoscape\DogfightState.h">
+      <Filter>Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Geoscape\FundingState.h">
+      <Filter>Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Geoscape\GeoscapeCraftState.h">
+      <Filter>Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Geoscape\GeoscapeErrorState.h">
+      <Filter>Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Geoscape\GeoscapeMessageState.h">
+      <Filter>Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Geoscape\GeoscapeState.h">
+      <Filter>Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Geoscape\Globe.h">
+      <Filter>Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Geoscape\GraphsState.h">
+      <Filter>Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Geoscape\InterceptState.h">
+      <Filter>Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Geoscape\LowFuelState.h">
+      <Filter>Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Geoscape\MonthlyReportState.h">
+      <Filter>Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Geoscape\MultipleTargetsState.h">
+      <Filter>Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Geoscape\OptionsState.h">
+      <Filter>Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Geoscape\Polygon.h">
+      <Filter>Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Geoscape\Polyline.h">
+      <Filter>Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Geoscape\SelectDestinationState.h">
+      <Filter>Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Geoscape\TargetInfoState.h">
+      <Filter>Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Geoscape\UfoDetectedState.h">
+      <Filter>Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Geoscape\UfoLostState.h">
+      <Filter>Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Geoscape\AbandonGameState.h">
+      <Filter>Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Geoscape\BaseNameState.h">
+      <Filter>Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Geoscape\BuildNewBaseState.h">
+      <Filter>Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Basescape\PlaceLiftState.h">
+      <Filter>Basescape</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="OpenXcom.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Geoscape">
+      <UniqueIdentifier>{f0521223-4515-4155-bf25-5f00373167d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine">
+      <UniqueIdentifier>{8fafa8d9-0283-4082-9361-01ebd937e3bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Interface">
+      <UniqueIdentifier>{e996bc13-2f6a-4a8b-bdd9-7a8621048cea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Basescape">
+      <UniqueIdentifier>{cc069fa8-f772-4dae-be38-87bcd1013fdd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Battlescape">
+      <UniqueIdentifier>{f7e493ce-c074-420c-8b38-40d81b2d0509}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Ruleset">
+      <UniqueIdentifier>{946d193f-60c1-4c59-ad7e-3e17bad77397}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource">
+      <UniqueIdentifier>{ea5b1e9f-9ff1-457d-9a15-5af8773ccb50}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Savegame">
+      <UniqueIdentifier>{3b64dd6e-f151-4246-a211-0c6fec5766c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Menu">
+      <UniqueIdentifier>{4218da2f-b393-45b2-a55f-da7fa4d91fe4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

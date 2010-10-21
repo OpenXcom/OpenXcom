@@ -18,10 +18,9 @@
  */
 #include <iostream>
 #include <cstring>
-
-#include "Game.h"
-#include "Screen.h"
-#include "StartState.h"
+#include "Engine/Game.h"
+#include "Engine/Screen.h"
+#include "Menu/StartState.h"
 
 /** @mainpage
  * @author SupSuper

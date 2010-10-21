@@ -5,7 +5,6 @@
 		<Option title="OpenXcom" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
-		<Option virtualFolders="Engine\;Interface\;States\;States\Basescape;States\Battlescape;States\Geoscape;Xcom\;Xcom\Game\;Xcom\Resource\;Xcom\Rules\;" />
 		<Build>
 			<Target title="Debug">
 				<Option output="bin\Debug\OpenXcom" prefix_auto="1" extension_auto="1" />
@@ -45,604 +44,214 @@
 			<Add library="SDL_mixer" />
 			<Add directory=".\SDL\lib" />
 		</Linker>
-		<Unit filename="AbandonGameState.cpp">
-			<Option virtualFolder="States\Geoscape\" />
-		</Unit>
-		<Unit filename="AbandonGameState.h">
-			<Option virtualFolder="States\Geoscape\" />
-		</Unit>
-		<Unit filename="ArrowButton.cpp">
-			<Option virtualFolder="Interface\" />
-		</Unit>
-		<Unit filename="ArrowButton.h">
-			<Option virtualFolder="Interface\" />
-		</Unit>
-		<Unit filename="Bar.cpp">
-			<Option virtualFolder="Interface\" />
-		</Unit>
-		<Unit filename="Bar.h">
-			<Option virtualFolder="Interface\" />
-		</Unit>
-		<Unit filename="Base.cpp">
-			<Option virtualFolder="Xcom\Game\" />
-		</Unit>
-		<Unit filename="Base.h">
-			<Option virtualFolder="Xcom\Game\" />
-		</Unit>
-		<Unit filename="BaseFacility.cpp">
-			<Option virtualFolder="Xcom\Game\" />
-		</Unit>
-		<Unit filename="BaseFacility.h">
-			<Option virtualFolder="Xcom\Game\" />
-		</Unit>
-		<Unit filename="BaseInfoState.cpp">
-			<Option virtualFolder="States\Basescape\" />
-		</Unit>
-		<Unit filename="BaseInfoState.h">
-			<Option virtualFolder="States\Basescape\" />
-		</Unit>
-		<Unit filename="BaseNameState.cpp">
-			<Option virtualFolder="States\Geoscape\" />
-		</Unit>
-		<Unit filename="BaseNameState.h">
-			<Option virtualFolder="States\Geoscape\" />
-		</Unit>
-		<Unit filename="BaseView.cpp">
-			<Option virtualFolder="Xcom\Resource\" />
-		</Unit>
-		<Unit filename="BaseView.h">
-			<Option virtualFolder="Xcom\Resource\" />
-		</Unit>
-		<Unit filename="BasescapeErrorState.cpp">
-			<Option virtualFolder="States\Basescape\" />
-		</Unit>
-		<Unit filename="BasescapeErrorState.h">
-			<Option virtualFolder="States\Basescape\" />
-		</Unit>
-		<Unit filename="BasescapeState.cpp">
-			<Option virtualFolder="States\Basescape\" />
-		</Unit>
-		<Unit filename="BasescapeState.h">
-			<Option virtualFolder="States\Basescape\" />
-		</Unit>
-		<Unit filename="BuildFacilitiesState.cpp">
-			<Option virtualFolder="States\Basescape\" />
-		</Unit>
-		<Unit filename="BuildFacilitiesState.h">
-			<Option virtualFolder="States\Basescape\" />
-		</Unit>
-		<Unit filename="BuildNewBaseState.cpp">
-			<Option virtualFolder="States\Geoscape\" />
-		</Unit>
-		<Unit filename="BuildNewBaseState.h">
-			<Option virtualFolder="States\Geoscape\" />
-		</Unit>
-		<Unit filename="City.cpp">
-			<Option virtualFolder="Xcom\Game\" />
-		</Unit>
-		<Unit filename="City.h">
-			<Option virtualFolder="Xcom\Game\" />
-		</Unit>
-		<Unit filename="ConfirmDestinationState.cpp">
-			<Option virtualFolder="States\Geoscape\" />
-		</Unit>
-		<Unit filename="ConfirmDestinationState.h">
-			<Option virtualFolder="States\Geoscape\" />
-		</Unit>
-		<Unit filename="ConfirmNewBaseState.cpp">
-			<Option virtualFolder="States\Geoscape\" />
-		</Unit>
-		<Unit filename="ConfirmNewBaseState.h">
-			<Option virtualFolder="States\Geoscape\" />
-		</Unit>
-		<Unit filename="Country.cpp">
-			<Option virtualFolder="Xcom\Game\" />
-		</Unit>
-		<Unit filename="Country.h">
-			<Option virtualFolder="Xcom\Game\" />
-		</Unit>
-		<Unit filename="Craft.cpp">
-			<Option virtualFolder="Xcom\Game\" />
-		</Unit>
-		<Unit filename="Craft.h">
-			<Option virtualFolder="Xcom\Game\" />
-		</Unit>
-		<Unit filename="CraftInfoState.cpp">
-			<Option virtualFolder="States\Basescape\" />
-		</Unit>
-		<Unit filename="CraftInfoState.h">
-			<Option virtualFolder="States\Basescape\" />
-		</Unit>
-		<Unit filename="CraftPatrolState.cpp">
-			<Option virtualFolder="States\Geoscape\" />
-		</Unit>
-		<Unit filename="CraftPatrolState.h">
-			<Option virtualFolder="States\Geoscape\" />
-		</Unit>
-		<Unit filename="CraftSoldiersState.cpp">
-			<Option virtualFolder="States\Basescape\" />
-		</Unit>
-		<Unit filename="CraftSoldiersState.h">
-			<Option virtualFolder="States\Basescape\" />
-		</Unit>
-		<Unit filename="CraftWeaponsState.cpp">
-			<Option virtualFolder="States\Basescape\" />
-		</Unit>
-		<Unit filename="CraftWeaponsState.h">
-			<Option virtualFolder="States\Basescape\" />
-		</Unit>
-		<Unit filename="CraftWeapon.cpp">
-			<Option virtualFolder="Xcom\Game\" />
-		</Unit>
-		<Unit filename="CraftWeapon.h">
-			<Option virtualFolder="Xcom\Game\" />
-		</Unit>
-		<Unit filename="CraftsState.cpp">
-			<Option virtualFolder="States\Basescape\" />
-		</Unit>
-		<Unit filename="CraftsState.h">
-			<Option virtualFolder="States\Basescape\" />
-		</Unit>
-		<Unit filename="Cursor.cpp">
-			<Option virtualFolder="Interface\" />
-		</Unit>
-		<Unit filename="Cursor.h">
-			<Option virtualFolder="Interface\" />
-		</Unit>
-		<Unit filename="DismantleFacilityState.cpp">
-			<Option virtualFolder="States\Basescape\" />
-		</Unit>
-		<Unit filename="DismantleFacilityState.h">
-			<Option virtualFolder="States\Basescape\" />
-		</Unit>
-		<Unit filename="DogfightState.cpp">
-			<Option virtualFolder="States\Geoscape\" />
-		</Unit>
-		<Unit filename="DogfightState.h">
-			<Option virtualFolder="States\Geoscape\" />
-		</Unit>
-		<Unit filename="Font.cpp">
-			<Option virtualFolder="Engine\" />
-		</Unit>
-		<Unit filename="Font.h">
-			<Option virtualFolder="Engine\" />
-		</Unit>
-		<Unit filename="FundingState.cpp">
-			<Option virtualFolder="States\Geoscape\" />
-		</Unit>
-		<Unit filename="FundingState.h">
-			<Option virtualFolder="States\Geoscape\" />
-		</Unit>
-		<Unit filename="Game.cpp">
-			<Option virtualFolder="Engine\" />
-		</Unit>
-		<Unit filename="Game.h">
-			<Option virtualFolder="Engine\" />
-		</Unit>
-		<Unit filename="GameTime.cpp">
-			<Option virtualFolder="Xcom\Game\" />
-		</Unit>
-		<Unit filename="GameTime.h">
-			<Option virtualFolder="Xcom\Game\" />
-		</Unit>
-		<Unit filename="GeoscapeCraftState.cpp">
-			<Option virtualFolder="States\Geoscape\" />
-		</Unit>
-		<Unit filename="GeoscapeCraftState.h">
-			<Option virtualFolder="States\Geoscape\" />
-		</Unit>
-		<Unit filename="GeoscapeErrorState.cpp">
-			<Option virtualFolder="States\Geoscape\" />
-		</Unit>
-		<Unit filename="GeoscapeErrorState.h">
-			<Option virtualFolder="States\Geoscape\" />
-		</Unit>
-		<Unit filename="GeoscapeMessageState.cpp">
-			<Option virtualFolder="States\Geoscape\" />
-		</Unit>
-		<Unit filename="GeoscapeMessageState.h">
-			<Option virtualFolder="States\Geoscape\" />
-		</Unit>
-		<Unit filename="GeoscapeState.cpp">
-			<Option virtualFolder="States\Geoscape\" />
-		</Unit>
-		<Unit filename="GeoscapeState.h">
-			<Option virtualFolder="States\Geoscape\" />
-		</Unit>
-		<Unit filename="Globe.cpp">
-			<Option virtualFolder="Xcom\Resource\" />
-		</Unit>
-		<Unit filename="Globe.h">
-			<Option virtualFolder="Xcom\Resource\" />
-		</Unit>
-		<Unit filename="GraphsState.cpp">
-			<Option virtualFolder="States\Geoscape\" />
-		</Unit>
-		<Unit filename="GraphsState.h">
-			<Option virtualFolder="States\Geoscape\" />
-		</Unit>
-		<Unit filename="ImageButton.cpp">
-			<Option virtualFolder="Interface\" />
-		</Unit>
-		<Unit filename="ImageButton.h">
-			<Option virtualFolder="Interface\" />
-		</Unit>
-		<Unit filename="InteractiveSurface.cpp">
-			<Option virtualFolder="Engine\" />
-		</Unit>
-		<Unit filename="InteractiveSurface.h">
-			<Option virtualFolder="Engine\" />
-		</Unit>
-		<Unit filename="InterceptState.cpp">
-			<Option virtualFolder="States\Geoscape\" />
-		</Unit>
-		<Unit filename="InterceptState.h">
-			<Option virtualFolder="States\Geoscape\" />
-		</Unit>
-		<Unit filename="Item.cpp">
-			<Option virtualFolder="Xcom\Game\" />
-		</Unit>
-		<Unit filename="Item.h">
-			<Option virtualFolder="Xcom\Game\" />
-		</Unit>
-		<Unit filename="LangString.h">
-			<Option virtualFolder="Xcom\Resource\" />
-		</Unit>
-		<Unit filename="Language.cpp">
-			<Option virtualFolder="Engine\" />
-		</Unit>
-		<Unit filename="Language.h">
-			<Option virtualFolder="Engine\" />
-		</Unit>
-		<Unit filename="LanguageState.cpp">
-			<Option virtualFolder="States\" />
-		</Unit>
-		<Unit filename="LanguageState.h">
-			<Option virtualFolder="States\" />
-		</Unit>
-		<Unit filename="LowFuelState.cpp">
-			<Option virtualFolder="States\Geoscape\" />
-		</Unit>
-		<Unit filename="LowFuelState.h">
-			<Option virtualFolder="States\Geoscape\" />
-		</Unit>
-		<Unit filename="MainMenuState.cpp">
-			<Option virtualFolder="States\" />
-		</Unit>
-		<Unit filename="MainMenuState.h">
-			<Option virtualFolder="States\" />
-		</Unit>
-		<Unit filename="ManufactureState.cpp">
-			<Option virtualFolder="States\Basescape\" />
-		</Unit>
-		<Unit filename="ManufactureState.h">
-			<Option virtualFolder="States\Basescape\" />
-		</Unit>
-		<Unit filename="MiniBaseView.cpp">
-			<Option virtualFolder="Xcom\Resource\" />
-		</Unit>
-		<Unit filename="MiniBaseView.h">
-			<Option virtualFolder="Xcom\Resource\" />
-		</Unit>
-		<Unit filename="MonthlyCostsState.cpp">
-			<Option virtualFolder="States\Basescape\" />
-		</Unit>
-		<Unit filename="MonthlyCostsState.h">
-			<Option virtualFolder="States\Basescape\" />
-		</Unit>
-		<Unit filename="MonthlyReportState.cpp">
-			<Option virtualFolder="States\Geoscape\" />
-		</Unit>
-		<Unit filename="MonthlyReportState.h">
-			<Option virtualFolder="States\Geoscape\" />
-		</Unit>
-		<Unit filename="MovingTarget.cpp">
-			<Option virtualFolder="Xcom\Game\" />
-		</Unit>
-		<Unit filename="MovingTarget.h">
-			<Option virtualFolder="Xcom\Game\" />
-		</Unit>
-		<Unit filename="MultipleTargetsState.cpp">
-			<Option virtualFolder="States\Geoscape\" />
-		</Unit>
-		<Unit filename="MultipleTargetsState.h">
-			<Option virtualFolder="States\Geoscape\" />
-		</Unit>
-		<Unit filename="Music.cpp">
-			<Option virtualFolder="Engine\" />
-		</Unit>
-		<Unit filename="Music.h">
-			<Option virtualFolder="Engine\" />
-		</Unit>
-		<Unit filename="NewGameState.cpp">
-			<Option virtualFolder="States\" />
-		</Unit>
-		<Unit filename="NewGameState.h">
-			<Option virtualFolder="States\" />
-		</Unit>
-		<Unit filename="OptionsState.cpp">
-			<Option virtualFolder="States\Geoscape\" />
-		</Unit>
-		<Unit filename="OptionsState.h">
-			<Option virtualFolder="States\Geoscape\" />
-		</Unit>
-		<Unit filename="Palette.cpp">
-			<Option virtualFolder="Engine\" />
-		</Unit>
-		<Unit filename="Palette.h">
-			<Option virtualFolder="Engine\" />
-		</Unit>
-		<Unit filename="PlaceFacilityState.cpp">
-			<Option virtualFolder="States\Basescape\" />
-		</Unit>
-		<Unit filename="PlaceFacilityState.h">
-			<Option virtualFolder="States\Basescape\" />
-		</Unit>
-		<Unit filename="PlaceLiftState.cpp">
-			<Option virtualFolder="States\Basescape\" />
-		</Unit>
-		<Unit filename="PlaceLiftState.h">
-			<Option virtualFolder="States\Basescape\" />
-		</Unit>
-		<Unit filename="Polygon.cpp">
-			<Option virtualFolder="Xcom\Resource\" />
-		</Unit>
-		<Unit filename="Polygon.h">
-			<Option virtualFolder="Xcom\Resource\" />
-		</Unit>
-		<Unit filename="Polyline.cpp">
-			<Option virtualFolder="Xcom\Resource\" />
-		</Unit>
-		<Unit filename="Polyline.h">
-			<Option virtualFolder="Xcom\Resource\" />
-		</Unit>
-		<Unit filename="PurchaseState.cpp">
-			<Option virtualFolder="States\Basescape\" />
-		</Unit>
-		<Unit filename="PurchaseState.h">
-			<Option virtualFolder="States\Basescape\" />
-		</Unit>
-		<Unit filename="RNG.cpp">
-			<Option virtualFolder="Engine\" />
-		</Unit>
-		<Unit filename="RNG.h">
-			<Option virtualFolder="Engine\" />
-		</Unit>
-		<Unit filename="Region.cpp">
-			<Option virtualFolder="Xcom\Game\" />
-		</Unit>
-		<Unit filename="Region.h">
-			<Option virtualFolder="Xcom\Game\" />
-		</Unit>
-		<Unit filename="ResearchState.cpp">
-			<Option virtualFolder="States\Basescape\" />
-		</Unit>
-		<Unit filename="ResearchState.h">
-			<Option virtualFolder="States\Basescape\" />
-		</Unit>
-		<Unit filename="ResourcePack.cpp">
-			<Option virtualFolder="Xcom\Resource\" />
-		</Unit>
-		<Unit filename="ResourcePack.h">
-			<Option virtualFolder="Xcom\Resource\" />
-		</Unit>
-		<Unit filename="RuleBaseFacility.cpp">
-			<Option virtualFolder="Xcom\Rules\" />
-		</Unit>
-		<Unit filename="RuleBaseFacility.h">
-			<Option virtualFolder="Xcom\Rules\" />
-		</Unit>
-		<Unit filename="RuleCraft.cpp">
-			<Option virtualFolder="Xcom\Rules\" />
-		</Unit>
-		<Unit filename="RuleCraft.h">
-			<Option virtualFolder="Xcom\Rules\" />
-		</Unit>
-		<Unit filename="RuleCraftWeapon.cpp">
-			<Option virtualFolder="Xcom\Rules\" />
-		</Unit>
-		<Unit filename="RuleCraftWeapon.h">
-			<Option virtualFolder="Xcom\Rules\" />
-		</Unit>
-		<Unit filename="RuleItem.cpp">
-			<Option virtualFolder="Xcom\Rules\" />
-		</Unit>
-		<Unit filename="RuleItem.h">
-			<Option virtualFolder="Xcom\Rules\" />
-		</Unit>
-		<Unit filename="Ruleset.cpp">
-			<Option virtualFolder="Xcom\Rules\" />
-		</Unit>
-		<Unit filename="Ruleset.h">
-			<Option virtualFolder="Xcom\Rules\" />
-		</Unit>
-		<Unit filename="RuleUfo.cpp">
-			<Option virtualFolder="Xcom\Rules\" />
-		</Unit>
-		<Unit filename="RuleUfo.h">
-			<Option virtualFolder="Xcom\Rules\" />
-		</Unit>
-		<Unit filename="SavedGame.cpp">
-			<Option virtualFolder="Xcom\Game\" />
-		</Unit>
-		<Unit filename="SavedGame.h">
-			<Option virtualFolder="Xcom\Game\" />
-		</Unit>
-		<Unit filename="Screen.cpp">
-			<Option virtualFolder="Engine\" />
-		</Unit>
-		<Unit filename="Screen.h">
-			<Option virtualFolder="Engine\" />
-		</Unit>
-		<Unit filename="SelectDestinationState.cpp">
-			<Option virtualFolder="States\Geoscape\" />
-		</Unit>
-		<Unit filename="SelectDestinationState.h">
-			<Option virtualFolder="States\Geoscape\" />
-		</Unit>
-		<Unit filename="SellState.cpp">
-			<Option virtualFolder="States\Basescape\" />
-		</Unit>
-		<Unit filename="SellState.h">
-			<Option virtualFolder="States\Basescape\" />
-		</Unit>
-		<Unit filename="Soldier.cpp">
-			<Option virtualFolder="Xcom\Game\" />
-		</Unit>
-		<Unit filename="Soldier.h">
-			<Option virtualFolder="Xcom\Game\" />
-		</Unit>
-		<Unit filename="SoldierInfoState.cpp">
-			<Option virtualFolder="States\Basescape\" />
-		</Unit>
-		<Unit filename="SoldierInfoState.h">
-			<Option virtualFolder="States\Basescape\" />
-		</Unit>
-		<Unit filename="SoldierNamePool.cpp">
-			<Option virtualFolder="Xcom\Rules\" />
-		</Unit>
-		<Unit filename="SoldierNamePool.h">
-			<Option virtualFolder="Xcom\Rules\" />
-		</Unit>
-		<Unit filename="SoldiersState.cpp">
-			<Option virtualFolder="States\Basescape\" />
-		</Unit>
-		<Unit filename="SoldiersState.h">
-			<Option virtualFolder="States\Basescape\" />
-		</Unit>
-		<Unit filename="Sound.cpp">
-			<Option virtualFolder="Engine\" />
-		</Unit>
-		<Unit filename="Sound.h">
-			<Option virtualFolder="Engine\" />
-		</Unit>
-		<Unit filename="SoundSet.cpp">
-			<Option virtualFolder="Engine\" />
-		</Unit>
-		<Unit filename="SoundSet.h">
-			<Option virtualFolder="Engine\" />
-		</Unit>
-		<Unit filename="StartState.cpp">
-			<Option virtualFolder="States\" />
-		</Unit>
-		<Unit filename="StartState.h">
-			<Option virtualFolder="States\" />
-		</Unit>
-		<Unit filename="State.cpp">
-			<Option virtualFolder="Engine\" />
-		</Unit>
-		<Unit filename="State.h">
-			<Option virtualFolder="Engine\" />
-		</Unit>
-		<Unit filename="StoresState.cpp">
-			<Option virtualFolder="States\Basescape\" />
-		</Unit>
-		<Unit filename="StoresState.h">
-			<Option virtualFolder="States\Basescape\" />
-		</Unit>
-		<Unit filename="Surface.cpp">
-			<Option virtualFolder="Engine\" />
-		</Unit>
-		<Unit filename="Surface.h">
-			<Option virtualFolder="Engine\" />
-		</Unit>
-		<Unit filename="SurfaceSet.cpp">
-			<Option virtualFolder="Engine\" />
-		</Unit>
-		<Unit filename="SurfaceSet.h">
-			<Option virtualFolder="Engine\" />
-		</Unit>
-		<Unit filename="Target.cpp">
-			<Option virtualFolder="Xcom\Game\" />
-		</Unit>
-		<Unit filename="Target.h">
-			<Option virtualFolder="Xcom\Game\" />
-		</Unit>
-		<Unit filename="TargetInfoState.cpp">
-			<Option virtualFolder="States\Geoscape\" />
-		</Unit>
-		<Unit filename="TargetInfoState.h">
-			<Option virtualFolder="States\Geoscape\" />
-		</Unit>
-		<Unit filename="TestState.cpp">
-			<Option virtualFolder="States\" />
-		</Unit>
-		<Unit filename="TestState.h">
-			<Option virtualFolder="States\" />
-		</Unit>
-		<Unit filename="Text.cpp">
-			<Option virtualFolder="Interface\" />
-		</Unit>
-		<Unit filename="Text.h">
-			<Option virtualFolder="Interface\" />
-		</Unit>
-		<Unit filename="TextButton.cpp">
-			<Option virtualFolder="Interface\" />
-		</Unit>
-		<Unit filename="TextButton.h">
-			<Option virtualFolder="Interface\" />
-		</Unit>
-		<Unit filename="TextEdit.cpp">
-			<Option virtualFolder="Interface\" />
-		</Unit>
-		<Unit filename="TextEdit.h">
-			<Option virtualFolder="Interface\" />
-		</Unit>
-		<Unit filename="TextList.cpp">
-			<Option virtualFolder="Interface\" />
-		</Unit>
-		<Unit filename="TextList.h">
-			<Option virtualFolder="Interface\" />
-		</Unit>
-		<Unit filename="Timer.cpp">
-			<Option virtualFolder="Engine\" />
-		</Unit>
-		<Unit filename="Timer.h">
-			<Option virtualFolder="Engine\" />
-		</Unit>
-		<Unit filename="Ufo.cpp">
-			<Option virtualFolder="Xcom\Game\" />
-		</Unit>
-		<Unit filename="Ufo.h">
-			<Option virtualFolder="Xcom\Game\" />
-		</Unit>
-		<Unit filename="UfoDetectedState.cpp">
-			<Option virtualFolder="States\Geoscape\" />
-		</Unit>
-		<Unit filename="UfoDetectedState.h">
-			<Option virtualFolder="States\Geoscape\" />
-		</Unit>
-		<Unit filename="UfoLostState.cpp">
-			<Option virtualFolder="States\Geoscape\" />
-		</Unit>
-		<Unit filename="UfoLostState.h">
-			<Option virtualFolder="States\Geoscape\" />
-		</Unit>
-		<Unit filename="Waypoint.cpp">
-			<Option virtualFolder="Xcom\Game\" />
-		</Unit>
-		<Unit filename="Waypoint.h">
-			<Option virtualFolder="Xcom\Game\" />
-		</Unit>
-		<Unit filename="Window.cpp">
-			<Option virtualFolder="Interface\" />
-		</Unit>
-		<Unit filename="Window.h">
-			<Option virtualFolder="Interface\" />
-		</Unit>
-		<Unit filename="XcomResourcePack.cpp">
-			<Option virtualFolder="Xcom\Resource\" />
-		</Unit>
-		<Unit filename="XcomResourcePack.h">
-			<Option virtualFolder="Xcom\Resource\" />
-		</Unit>
-		<Unit filename="XcomRuleset.cpp">
-			<Option virtualFolder="Xcom\Rules\" />
-		</Unit>
-		<Unit filename="XcomRuleset.h">
-			<Option virtualFolder="Xcom\Rules\" />
-		</Unit>
+		<Unit filename="Basescape\BaseInfoState.cpp" />
+		<Unit filename="Basescape\BaseInfoState.h" />
+		<Unit filename="Basescape\BaseView.cpp" />
+		<Unit filename="Basescape\BaseView.h" />
+		<Unit filename="Basescape\BasescapeErrorState.cpp" />
+		<Unit filename="Basescape\BasescapeErrorState.h" />
+		<Unit filename="Basescape\BasescapeState.cpp" />
+		<Unit filename="Basescape\BasescapeState.h" />
+		<Unit filename="Basescape\BuildFacilitiesState.cpp" />
+		<Unit filename="Basescape\BuildFacilitiesState.h" />
+		<Unit filename="Basescape\CraftInfoState.cpp" />
+		<Unit filename="Basescape\CraftInfoState.h" />
+		<Unit filename="Basescape\CraftSoldiersState.cpp" />
+		<Unit filename="Basescape\CraftSoldiersState.h" />
+		<Unit filename="Basescape\CraftWeaponsState.cpp" />
+		<Unit filename="Basescape\CraftWeaponsState.h" />
+		<Unit filename="Basescape\CraftsState.cpp" />
+		<Unit filename="Basescape\CraftsState.h" />
+		<Unit filename="Basescape\DismantleFacilityState.cpp" />
+		<Unit filename="Basescape\DismantleFacilityState.h" />
+		<Unit filename="Basescape\ManufactureState.cpp" />
+		<Unit filename="Basescape\ManufactureState.h" />
+		<Unit filename="Basescape\MiniBaseView.cpp" />
+		<Unit filename="Basescape\MiniBaseView.h" />
+		<Unit filename="Basescape\MonthlyCostsState.cpp" />
+		<Unit filename="Basescape\MonthlyCostsState.h" />
+		<Unit filename="Basescape\PlaceFacilityState.cpp" />
+		<Unit filename="Basescape\PlaceFacilityState.h" />
+		<Unit filename="Basescape\PlaceLiftState.cpp" />
+		<Unit filename="Basescape\PlaceLiftState.h" />
+		<Unit filename="Basescape\PurchaseState.cpp" />
+		<Unit filename="Basescape\PurchaseState.h" />
+		<Unit filename="Basescape\ResearchState.cpp" />
+		<Unit filename="Basescape\ResearchState.h" />
+		<Unit filename="Basescape\SellState.cpp" />
+		<Unit filename="Basescape\SellState.h" />
+		<Unit filename="Basescape\SoldierInfoState.cpp" />
+		<Unit filename="Basescape\SoldierInfoState.h" />
+		<Unit filename="Basescape\SoldiersState.cpp" />
+		<Unit filename="Basescape\SoldiersState.h" />
+		<Unit filename="Basescape\StoresState.cpp" />
+		<Unit filename="Basescape\StoresState.h" />
+		<Unit filename="Engine\Font.cpp" />
+		<Unit filename="Engine\Font.h" />
+		<Unit filename="Engine\Game.cpp" />
+		<Unit filename="Engine\Game.h" />
+		<Unit filename="Engine\InteractiveSurface.cpp" />
+		<Unit filename="Engine\InteractiveSurface.h" />
+		<Unit filename="Engine\Language.cpp" />
+		<Unit filename="Engine\Language.h" />
+		<Unit filename="Engine\Music.cpp" />
+		<Unit filename="Engine\Music.h" />
+		<Unit filename="Engine\Palette.cpp" />
+		<Unit filename="Engine\Palette.h" />
+		<Unit filename="Engine\RNG.cpp" />
+		<Unit filename="Engine\RNG.h" />
+		<Unit filename="Engine\Screen.cpp" />
+		<Unit filename="Engine\Screen.h" />
+		<Unit filename="Engine\Sound.cpp" />
+		<Unit filename="Engine\Sound.h" />
+		<Unit filename="Engine\SoundSet.cpp" />
+		<Unit filename="Engine\SoundSet.h" />
+		<Unit filename="Engine\State.cpp" />
+		<Unit filename="Engine\State.h" />
+		<Unit filename="Engine\Surface.cpp" />
+		<Unit filename="Engine\Surface.h" />
+		<Unit filename="Engine\SurfaceSet.cpp" />
+		<Unit filename="Engine\SurfaceSet.h" />
+		<Unit filename="Engine\Timer.cpp" />
+		<Unit filename="Engine\Timer.h" />
+		<Unit filename="Geoscape\AbandonGameState.cpp" />
+		<Unit filename="Geoscape\AbandonGameState.h" />
+		<Unit filename="Geoscape\BaseNameState.cpp" />
+		<Unit filename="Geoscape\BaseNameState.h" />
+		<Unit filename="Geoscape\BuildNewBaseState.cpp" />
+		<Unit filename="Geoscape\BuildNewBaseState.h" />
+		<Unit filename="Geoscape\ConfirmDestinationState.cpp" />
+		<Unit filename="Geoscape\ConfirmDestinationState.h" />
+		<Unit filename="Geoscape\ConfirmNewBaseState.cpp" />
+		<Unit filename="Geoscape\ConfirmNewBaseState.h" />
+		<Unit filename="Geoscape\CraftPatrolState.cpp" />
+		<Unit filename="Geoscape\CraftPatrolState.h" />
+		<Unit filename="Geoscape\DogfightState.cpp" />
+		<Unit filename="Geoscape\DogfightState.h" />
+		<Unit filename="Geoscape\FundingState.cpp" />
+		<Unit filename="Geoscape\FundingState.h" />
+		<Unit filename="Geoscape\GeoscapeCraftState.cpp" />
+		<Unit filename="Geoscape\GeoscapeCraftState.h" />
+		<Unit filename="Geoscape\GeoscapeErrorState.cpp" />
+		<Unit filename="Geoscape\GeoscapeErrorState.h" />
+		<Unit filename="Geoscape\GeoscapeMessageState.cpp" />
+		<Unit filename="Geoscape\GeoscapeMessageState.h" />
+		<Unit filename="Geoscape\GeoscapeState - buttoned.cpp" />
+		<Unit filename="Geoscape\GeoscapeState - buttoned.h" />
+		<Unit filename="Geoscape\GeoscapeState.cpp" />
+		<Unit filename="Geoscape\GeoscapeState.h" />
+		<Unit filename="Geoscape\Globe.cpp" />
+		<Unit filename="Geoscape\Globe.h" />
+		<Unit filename="Geoscape\GraphsState.cpp" />
+		<Unit filename="Geoscape\GraphsState.h" />
+		<Unit filename="Geoscape\InterceptState.cpp" />
+		<Unit filename="Geoscape\InterceptState.h" />
+		<Unit filename="Geoscape\LowFuelState.cpp" />
+		<Unit filename="Geoscape\LowFuelState.h" />
+		<Unit filename="Geoscape\MonthlyReportState.cpp" />
+		<Unit filename="Geoscape\MonthlyReportState.h" />
+		<Unit filename="Geoscape\MultipleTargetsState.cpp" />
+		<Unit filename="Geoscape\MultipleTargetsState.h" />
+		<Unit filename="Geoscape\OptionsState.cpp" />
+		<Unit filename="Geoscape\OptionsState.h" />
+		<Unit filename="Geoscape\Polygon.cpp" />
+		<Unit filename="Geoscape\Polygon.h" />
+		<Unit filename="Geoscape\Polyline.cpp" />
+		<Unit filename="Geoscape\Polyline.h" />
+		<Unit filename="Geoscape\SelectDestinationState.cpp" />
+		<Unit filename="Geoscape\SelectDestinationState.h" />
+		<Unit filename="Geoscape\TargetInfoState.cpp" />
+		<Unit filename="Geoscape\TargetInfoState.h" />
+		<Unit filename="Geoscape\UfoDetectedState.cpp" />
+		<Unit filename="Geoscape\UfoDetectedState.h" />
+		<Unit filename="Geoscape\UfoLostState.cpp" />
+		<Unit filename="Geoscape\UfoLostState.h" />
+		<Unit filename="Interface\ArrowButton.cpp" />
+		<Unit filename="Interface\ArrowButton.h" />
+		<Unit filename="Interface\Bar.cpp" />
+		<Unit filename="Interface\Bar.h" />
+		<Unit filename="Interface\Cursor.cpp" />
+		<Unit filename="Interface\Cursor.h" />
+		<Unit filename="Interface\ImageButton.cpp" />
+		<Unit filename="Interface\ImageButton.h" />
+		<Unit filename="Interface\Text.cpp" />
+		<Unit filename="Interface\Text.h" />
+		<Unit filename="Interface\TextButton.cpp" />
+		<Unit filename="Interface\TextButton.h" />
+		<Unit filename="Interface\TextEdit.cpp" />
+		<Unit filename="Interface\TextEdit.h" />
+		<Unit filename="Interface\TextList.cpp" />
+		<Unit filename="Interface\TextList.h" />
+		<Unit filename="Interface\Window.cpp" />
+		<Unit filename="Interface\Window.h" />
+		<Unit filename="Menu\LanguageState.cpp" />
+		<Unit filename="Menu\LanguageState.h" />
+		<Unit filename="Menu\LoadGameState.cpp" />
+		<Unit filename="Menu\LoadGameState.h" />
+		<Unit filename="Menu\MainMenuState.cpp" />
+		<Unit filename="Menu\MainMenuState.h" />
+		<Unit filename="Menu\NewGameState.cpp" />
+		<Unit filename="Menu\NewGameState.h" />
+		<Unit filename="Menu\StartState.cpp" />
+		<Unit filename="Menu\StartState.h" />
+		<Unit filename="Menu\TestState.cpp" />
+		<Unit filename="Menu\TestState.h" />
+		<Unit filename="OpenXcom.rc">
+			<Option compilerVar="WINDRES" />
+		</Unit>
+		<Unit filename="Resource\LangString.h" />
+		<Unit filename="Resource\ResourcePack.cpp" />
+		<Unit filename="Resource\ResourcePack.h" />
+		<Unit filename="Resource\SoldierNamePool.cpp" />
+		<Unit filename="Resource\SoldierNamePool.h" />
+		<Unit filename="Resource\XcomResourcePack.cpp" />
+		<Unit filename="Resource\XcomResourcePack.h" />
+		<Unit filename="Ruleset\RuleBaseFacility.cpp" />
+		<Unit filename="Ruleset\RuleBaseFacility.h" />
+		<Unit filename="Ruleset\RuleCraft.cpp" />
+		<Unit filename="Ruleset\RuleCraft.h" />
+		<Unit filename="Ruleset\RuleCraftWeapon.cpp" />
+		<Unit filename="Ruleset\RuleCraftWeapon.h" />
+		<Unit filename="Ruleset\RuleItem.cpp" />
+		<Unit filename="Ruleset\RuleItem.h" />
+		<Unit filename="Ruleset\RuleUfo.cpp" />
+		<Unit filename="Ruleset\RuleUfo.h" />
+		<Unit filename="Ruleset\Ruleset.cpp" />
+		<Unit filename="Ruleset\Ruleset.h" />
+		<Unit filename="Ruleset\XcomRuleset.cpp" />
+		<Unit filename="Ruleset\XcomRuleset.h" />
+		<Unit filename="Savegame\Base.cpp" />
+		<Unit filename="Savegame\Base.h" />
+		<Unit filename="Savegame\BaseFacility.cpp" />
+		<Unit filename="Savegame\BaseFacility.h" />
+		<Unit filename="Savegame\City.cpp" />
+		<Unit filename="Savegame\City.h" />
+		<Unit filename="Savegame\Country.cpp" />
+		<Unit filename="Savegame\Country.h" />
+		<Unit filename="Savegame\Craft.cpp" />
+		<Unit filename="Savegame\Craft.h" />
+		<Unit filename="Savegame\CraftWeapon.cpp" />
+		<Unit filename="Savegame\CraftWeapon.h" />
+		<Unit filename="Savegame\GameTime.cpp" />
+		<Unit filename="Savegame\GameTime.h" />
+		<Unit filename="Savegame\Item.cpp" />
+		<Unit filename="Savegame\Item.h" />
+		<Unit filename="Savegame\MovingTarget.cpp" />
+		<Unit filename="Savegame\MovingTarget.h" />
+		<Unit filename="Savegame\Region.cpp" />
+		<Unit filename="Savegame\Region.h" />
+		<Unit filename="Savegame\SavedGame.cpp" />
+		<Unit filename="Savegame\SavedGame.h" />
+		<Unit filename="Savegame\Soldier.cpp" />
+		<Unit filename="Savegame\Soldier.h" />
+		<Unit filename="Savegame\Target.cpp" />
+		<Unit filename="Savegame\Target.h" />
+		<Unit filename="Savegame\Ufo.cpp" />
+		<Unit filename="Savegame\Ufo.h" />
+		<Unit filename="Savegame\Waypoint.cpp" />
+		<Unit filename="Savegame\Waypoint.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="resource.h" />
 		<Extensions>
 			<code_completion />
 			<debugger />

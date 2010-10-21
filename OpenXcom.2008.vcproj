@@ -182,75 +182,75 @@
 			Name="Interface"
 			>
 			<File
-				RelativePath=".\ArrowButton.cpp"
+				RelativePath=".\Interface\ArrowButton.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\ArrowButton.h"
+				RelativePath=".\Interface\ArrowButton.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Bar.cpp"
+				RelativePath=".\Interface\Bar.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Bar.h"
+				RelativePath=".\Interface\Bar.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Cursor.cpp"
+				RelativePath=".\Interface\Cursor.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Cursor.h"
+				RelativePath=".\Interface\Cursor.h"
 				>
 			</File>
 			<File
-				RelativePath=".\ImageButton.cpp"
+				RelativePath=".\Interface\ImageButton.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\ImageButton.h"
+				RelativePath=".\Interface\ImageButton.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Text.cpp"
+				RelativePath=".\Interface\Text.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Text.h"
+				RelativePath=".\Interface\Text.h"
 				>
 			</File>
 			<File
-				RelativePath=".\TextButton.cpp"
+				RelativePath=".\Interface\TextButton.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\TextButton.h"
+				RelativePath=".\Interface\TextButton.h"
 				>
 			</File>
 			<File
-				RelativePath=".\TextEdit.cpp"
+				RelativePath=".\Interface\TextEdit.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\TextEdit.h"
+				RelativePath=".\Interface\TextEdit.h"
 				>
 			</File>
 			<File
-				RelativePath=".\TextList.cpp"
+				RelativePath=".\Interface\TextList.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\TextList.h"
+				RelativePath=".\Interface\TextList.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Window.cpp"
+				RelativePath=".\Interface\Window.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Window.h"
+				RelativePath=".\Interface\Window.h"
 				>
 			</File>
 		</Filter>
@@ -258,761 +258,757 @@
 			Name="Engine"
 			>
 			<File
-				RelativePath=".\Font.cpp"
+				RelativePath=".\Engine\Font.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Font.h"
+				RelativePath=".\Engine\Font.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Game.cpp"
+				RelativePath=".\Engine\Game.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Game.h"
+				RelativePath=".\Engine\Game.h"
 				>
 			</File>
 			<File
-				RelativePath=".\InteractiveSurface.cpp"
+				RelativePath=".\Engine\InteractiveSurface.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\InteractiveSurface.h"
+				RelativePath=".\Engine\InteractiveSurface.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Language.cpp"
+				RelativePath=".\Engine\Language.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Language.h"
+				RelativePath=".\Engine\Language.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Music.cpp"
+				RelativePath=".\Engine\Music.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Music.h"
+				RelativePath=".\Engine\Music.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Palette.cpp"
+				RelativePath=".\Engine\Palette.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Palette.h"
+				RelativePath=".\Engine\Palette.h"
 				>
 			</File>
 			<File
-				RelativePath=".\RNG.cpp"
+				RelativePath=".\Engine\RNG.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\RNG.h"
+				RelativePath=".\Engine\RNG.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Screen.cpp"
+				RelativePath=".\Engine\Screen.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Screen.h"
+				RelativePath=".\Engine\Screen.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Sound.cpp"
+				RelativePath=".\Engine\Sound.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Sound.h"
+				RelativePath=".\Engine\Sound.h"
 				>
 			</File>
 			<File
-				RelativePath=".\SoundSet.cpp"
+				RelativePath=".\Engine\SoundSet.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\SoundSet.h"
+				RelativePath=".\Engine\SoundSet.h"
 				>
 			</File>
 			<File
-				RelativePath=".\State.cpp"
+				RelativePath=".\Engine\State.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\State.h"
+				RelativePath=".\Engine\State.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Surface.cpp"
+				RelativePath=".\Engine\Surface.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Surface.h"
+				RelativePath=".\Engine\Surface.h"
 				>
 			</File>
 			<File
-				RelativePath=".\SurfaceSet.cpp"
+				RelativePath=".\Engine\SurfaceSet.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\SurfaceSet.h"
+				RelativePath=".\Engine\SurfaceSet.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Timer.cpp"
+				RelativePath=".\Engine\Timer.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Timer.h"
+				RelativePath=".\Engine\Timer.h"
 				>
 			</File>
 		</Filter>
 		<Filter
-			Name="States"
+			Name="Basescape"
 			>
-			<Filter
-				Name="Basescape"
-				>
-				<File
-					RelativePath=".\BaseInfoState.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\BaseInfoState.h"
-					>
-				</File>
-				<File
-					RelativePath=".\BasescapeState.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\BasescapeState.h"
-					>
-				</File>
-				<File
-					RelativePath=".\BasescapeErrorState.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\BasescapeErrorState.h"
-					>
-				</File>
-				<File
-					RelativePath=".\BuildFacilitiesState.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\BuildFacilitiesState.h"
-					>
-				</File>
-				<File
-					RelativePath=".\CraftInfoState.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\CraftInfoState.h"
-					>
-				</File>
-				<File
-					RelativePath=".\CraftPatrolState.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\CraftPatrolState.h"
-					>
-				</File>
-				<File
-					RelativePath=".\CraftSoldiersState.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\CraftSoldiersState.h"
-					>
-				</File>
-				<File
-					RelativePath=".\CraftWeaponsState.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\CraftWeaponsState.h"
-					>
-				</File>
-				<File
-					RelativePath=".\CraftsState.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\CraftsState.h"
-					>
-				</File>
-				<File
-					RelativePath=".\DismantleFacilityState.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\DismantleFacilityState.h"
-					>
-				</File>
-				<File
-					RelativePath=".\LowFuelState.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\LowFuelState.h"
-					>
-				</File>
-				<File
-					RelativePath=".\ManufactureState.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\ManufactureState.h"
-					>
-				</File>
-				<File
-					RelativePath=".\MonthlyCostsState.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\MonthlyCostsState.h"
-					>
-				</File>
-				<File
-					RelativePath=".\PlaceFacilityState.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\PlaceFacilityState.h"
-					>
-				</File>
-				<File
-					RelativePath=".\PlaceLiftState.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\PlaceLiftState.h"
-					>
-				</File>
-				<File
-					RelativePath=".\PurchaseState.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\PurchaseState.h"
-					>
-				</File>
-				<File
-					RelativePath=".\ResearchState.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\ResearchState.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SellState.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\SellState.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SoldierInfoState.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\SoldierInfoState.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SoldiersState.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\SoldiersState.h"
-					>
-				</File>
-				<File
-					RelativePath=".\StoresState.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\StoresState.h"
-					>
-				</File>
-				<File
-					RelativePath=".\TargetInfoState.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\TargetInfoState.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="Battlescape"
-				>
-			</Filter>
-			<Filter
-				Name="Geoscape"
-				>
-				<File
-					RelativePath=".\AbandonGameState.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\AbandonGameState.h"
-					>
-				</File>
-				<File
-					RelativePath=".\BaseNameState.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\BaseNameState.h"
-					>
-				</File>
-				<File
-					RelativePath=".\BuildNewBaseState.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\BuildNewBaseState.h"
-					>
-				</File>
-				<File
-					RelativePath=".\ConfirmDestinationState.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\ConfirmDestinationState.h"
-					>
-				</File>
-				<File
-					RelativePath=".\ConfirmNewBaseState.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\ConfirmNewBaseState.h"
-					>
-				</File>
-				<File
-					RelativePath=".\DogfightState.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\DogfightState.h"
-					>
-				</File>
-				<File
-					RelativePath=".\FundingState.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\FundingState.h"
-					>
-				</File>
-				<File
-					RelativePath=".\GeoscapeState.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\GeoscapeState.h"
-					>
-				</File>
-				<File
-					RelativePath=".\GeoscapeCraftState.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\GeoscapeCraftState.h"
-					>
-				</File>
-				<File
-					RelativePath=".\GeoscapeErrorState.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\GeoscapeErrorState.h"
-					>
-				</File>
-				<File
-					RelativePath=".\GeoscapeMessageState.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\GeoscapeMessageState.h"
-					>
-				</File>
-				<File
-					RelativePath=".\GraphsState.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\GraphsState.h"
-					>
-				</File>
-				<File
-					RelativePath=".\InterceptState.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\InterceptState.h"
-					>
-				</File>
-				<File
-					RelativePath=".\MonthlyReportState.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\MonthlyReportState.h"
-					>
-				</File>
-				<File
-					RelativePath=".\MultipleTargetsState.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\MultipleTargetsState.h"
-					>
-				</File>
-				<File
-					RelativePath=".\OptionsState.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\OptionsState.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SelectDestinationState.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\SelectDestinationState.h"
-					>
-				</File>
-				<File
-					RelativePath=".\UfoDetectedState.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\UfoDetectedState.h"
-					>
-				</File>
-				<File
-					RelativePath=".\UfoLostState.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\UfoLostState.h"
-					>
-				</File>
-			</Filter>
 			<File
-				RelativePath=".\LanguageState.cpp"
+				RelativePath=".\Basescape\BaseInfoState.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\LanguageState.h"
+				RelativePath=".\Basescape\BaseInfoState.h"
 				>
 			</File>
 			<File
-				RelativePath=".\MainMenuState.cpp"
+				RelativePath=".\Basescape\BasescapeState.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\MainMenuState.h"
+				RelativePath=".\Basescape\BasescapeState.h"
 				>
 			</File>
 			<File
-				RelativePath=".\NewGameState.cpp"
+				RelativePath=".\Basescape\BasescapeErrorState.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\NewGameState.h"
+				RelativePath=".\Basescape\BasescapeErrorState.h"
 				>
 			</File>
 			<File
-				RelativePath=".\StartState.cpp"
+				RelativePath=".\Basescape\BaseView.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\StartState.h"
+				RelativePath=".\Basescape\BaseView.h"
 				>
 			</File>
 			<File
-				RelativePath=".\TestState.cpp"
+				RelativePath=".\Basescape\BuildFacilitiesState.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\TestState.h"
+				RelativePath=".\Basescape\BuildFacilitiesState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\CraftInfoState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\CraftInfoState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\CraftPatrolState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\CraftPatrolState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\CraftSoldiersState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\CraftSoldiersState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\CraftWeaponsState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\CraftWeaponsState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\CraftsState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\CraftsState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\DismantleFacilityState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\DismantleFacilityState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\LowFuelState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\LowFuelState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\ManufactureState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\ManufactureState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\MiniBaseView.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\MiniBaseView.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\MonthlyCostsState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\MonthlyCostsState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\PlaceFacilityState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\PlaceFacilityState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\PlaceLiftState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\PlaceLiftState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\PurchaseState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\PurchaseState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\ResearchState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\ResearchState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\SellState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\SellState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\SoldierInfoState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\SoldierInfoState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\SoldiersState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\SoldiersState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\StoresState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\StoresState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\TargetInfoState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\TargetInfoState.h"
 				>
 			</File>
 		</Filter>
 		<Filter
-			Name="Xcom"
+			Name="Battlescape"
 			>
-			<Filter
-				Name="Game"
+		</Filter>
+		<Filter
+			Name="Geoscape"
+			>
+			<File
+				RelativePath=".\Geoscape\AbandonGameState.cpp"
 				>
-				<File
-					RelativePath=".\Base.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Base.h"
-					>
-				</File>
-				<File
-					RelativePath=".\BaseFacility.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\BaseFacility.h"
-					>
-				</File>
-				<File
-					RelativePath=".\City.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\City.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Country.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Country.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Craft.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Craft.h"
-					>
-				</File>
-				<File
-					RelativePath=".\CraftWeapon.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\CraftWeapon.h"
-					>
-				</File>
-				<File
-					RelativePath=".\GameTime.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\GameTime.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Item.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Item.h"
-					>
-				</File>
-				<File
-					RelativePath=".\MovingTarget.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\MovingTarget.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Region.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Region.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SavedGame.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\SavedGame.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Soldier.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Soldier.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Target.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Target.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Ufo.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Ufo.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Waypoint.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Waypoint.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="Resource"
+			</File>
+			<File
+				RelativePath=".\Geoscape\AbandonGameState.h"
 				>
-				<File
-					RelativePath=".\BaseView.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\BaseView.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Globe.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Globe.h"
-					>
-				</File>
-				<File
-					RelativePath=".\LangString.h"
-					>
-				</File>
-				<File
-					RelativePath=".\MiniBaseView.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\MiniBaseView.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Polygon.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Polygon.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Polyline.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Polyline.h"
-					>
-				</File>
-				<File
-					RelativePath=".\ResourcePack.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\ResourcePack.h"
-					>
-				</File>
-				<File
-					RelativePath=".\XcomResourcePack.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\XcomResourcePack.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="Rules"
+			</File>
+			<File
+				RelativePath=".\Geoscape\BaseNameState.cpp"
 				>
-				<File
-					RelativePath=".\RuleBaseFacility.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\RuleBaseFacility.h"
-					>
-				</File>
-				<File
-					RelativePath=".\RuleCraft.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\RuleCraft.h"
-					>
-				</File>
-				<File
-					RelativePath=".\RuleCraftWeapon.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\RuleCraftWeapon.h"
-					>
-				</File>
-				<File
-					RelativePath=".\RuleItem.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\RuleItem.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Ruleset.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Ruleset.h"
-					>
-				</File>
-				<File
-					RelativePath=".\RuleUfo.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\RuleUfo.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SoldierNamePool.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\SoldierNamePool.h"
-					>
-				</File>
-				<File
-					RelativePath=".\XcomRuleset.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\XcomRuleset.h"
-					>
-				</File>
-			</Filter>
+			</File>
+			<File
+				RelativePath=".\Geoscape\BaseNameState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\BuildNewBaseState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\BuildNewBaseState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\ConfirmDestinationState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\ConfirmDestinationState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\ConfirmNewBaseState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\ConfirmNewBaseState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\DogfightState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\DogfightState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\FundingState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\FundingState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\GeoscapeState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\GeoscapeState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\Globe.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\Globe.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\GeoscapeCraftState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\GeoscapeCraftState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\GeoscapeErrorState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\GeoscapeErrorState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\GeoscapeMessageState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\GeoscapeMessageState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\GraphsState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\GraphsState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\InterceptState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\InterceptState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\MonthlyReportState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\MonthlyReportState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\MultipleTargetsState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\MultipleTargetsState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\OptionsState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\OptionsState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\Polygon.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\Polygon.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\Polyline.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\Polyline.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\SelectDestinationState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\SelectDestinationState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\UfoDetectedState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\UfoDetectedState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\UfoLostState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\UfoLostState.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="Menu"
+			>
+			<File
+				RelativePath=".\Menu\LanguageState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Menu\LanguageState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Menu\MainMenuState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Menu\MainMenuState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Menu\NewGameState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Menu\NewGameState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Menu\StartState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Menu\StartState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Menu\TestState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Menu\TestState.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="Savegame"
+			>
+			<File
+				RelativePath=".\Savegame\Base.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\Base.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\BaseFacility.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\BaseFacility.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\City.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\City.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\Country.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\Country.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\Craft.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\Craft.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\CraftWeapon.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\CraftWeapon.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\GameTime.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\GameTime.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\Item.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\Item.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\MovingTarget.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\MovingTarget.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\Region.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\Region.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\SavedGame.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\SavedGame.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\Soldier.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\Soldier.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\Target.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\Target.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\Ufo.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\Ufo.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\Waypoint.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\Waypoint.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="Resource"
+			>
+			<File
+				RelativePath=".\Resource\LangString.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Resource\ResourcePack.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Resource\ResourcePack.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Resource\SoldierNamePool.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Resource\SoldierNamePool.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Resource\XcomResourcePack.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Resource\XcomResourcePack.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="Ruleset"
+			>
+			<File
+				RelativePath=".\Ruleset\RuleBaseFacility.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\RuleBaseFacility.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\RuleCraft.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\RuleCraft.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\RuleCraftWeapon.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\RuleCraftWeapon.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\RuleItem.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\RuleItem.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\Ruleset.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\Ruleset.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\RuleUfo.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\RuleUfo.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\XcomRuleset.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\XcomRuleset.h"
+				>
+			</File>
 		</Filter>
 		<File
 			RelativePath=".\main.cpp"
