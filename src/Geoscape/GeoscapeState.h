@@ -29,8 +29,6 @@ class InteractiveSurface;
 class Text;
 class Timer;
 
-using namespace std;
-
 /**
  * Geoscape screen which shows an overview of
  * the world and lets the player manage the game.
@@ -47,7 +45,7 @@ private:
 	Text *_txtHour, *_txtHourSep, *_txtMin, *_txtMinSep, *_txtSec, *_txtWeekday, *_txtDay, *_txtMonth, *_txtYear;
 	Timer *_timer;
 	bool _pause;
-	vector<State*> _popups;
+	std::vector<State*> _popups;
 public:
 	/// Creates the Geoscape state.
 	GeoscapeState(Game *game);

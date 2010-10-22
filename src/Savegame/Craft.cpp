@@ -36,7 +36,7 @@
  * @param id List of craft IDs.
  * @param base Pointer to base of origin.
  */
-Craft::Craft(RuleCraft *rules, map<LangString, int> *id, Base *base) : MovingTarget(), _rules(rules), _base(base), _fuel(0), _damage(0), _weapons(), _items(), _status(STR_READY), _lowFuel(false)
+Craft::Craft(RuleCraft *rules, std::map<LangString, int> *id, Base *base) : MovingTarget(), _rules(rules), _base(base), _fuel(0), _damage(0), _weapons(), _items(), _status(STR_READY), _lowFuel(false)
 {
 	_id = (*id)[_rules->getType()];
 	(*id)[_rules->getType()]++;
@@ -49,11 +49,11 @@ Craft::Craft(RuleCraft *rules, map<LangString, int> *id, Base *base) : MovingTar
  */
 Craft::~Craft()
 {
-	for (vector<CraftWeapon*>::iterator i = _weapons.begin(); i != _weapons.end(); i++)
+	for (std::vector<CraftWeapon*>::iterator i = _weapons.begin(); i != _weapons.end(); i++)
 	{
 		delete *i;
 	}
-	for (map<LangString, Item*>::iterator i = _items.begin(); i != _items.end(); i++)
+	for (std::map<LangString, Item*>::iterator i = _items.begin(); i != _items.end(); i++)
 	{
 		delete i->second;
 	}
@@ -80,12 +80,12 @@ int Craft::getId()
 
 /**
  * Returns the craft's unique identifying name.
- * @param lang Language to get strings from.
+ * @param lang Language to get std::strings from.
  * @return Full name.
  */
-string Craft::getName(Language *lang)
+std::string Craft::getName(Language *lang)
 {
-	stringstream name;
+	std::stringstream name;
 	name << lang->getString(_rules->getType()) << "-" << _id;
 	return name.str();
 }
@@ -110,7 +110,7 @@ void Craft::setBase(Base *base)
 
 /**
  * Returns the current status of the craft.
- * @return Status string.
+ * @return Status std::string.
  */
 LangString Craft::getStatus()
 {
@@ -119,7 +119,7 @@ LangString Craft::getStatus()
 
 /**
  * Changes the current status of the craft.
- * @param status Status string.
+ * @param status Status std::string.
  */
 void Craft::setStatus(LangString status)
 {
@@ -128,6 +128,7 @@ void Craft::setStatus(LangString status)
 
 /**
  * Changes the destination the craft is heading to.
+ * @param dest Pointer to new destination.
  */
 void Craft::setDestination(Target *dest)
 {
@@ -147,7 +148,7 @@ int Craft::getNumWeapons()
 
 	int total = 0;
 
-	for (vector<CraftWeapon*>::iterator i = _weapons.begin(); i != _weapons.end(); i++)
+	for (std::vector<CraftWeapon*>::iterator i = _weapons.begin(); i != _weapons.end(); i++)
 	{
 		if ((*i) != 0)
 			total++;
@@ -168,7 +169,7 @@ int Craft::getNumSoldiers()
 
 	int total = 0;
 
-	for (vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); i++)
+	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); i++)
 	{
 		if ((*i)->getCraft() == this)
 			total++;
@@ -186,7 +187,7 @@ int Craft::getNumEquipment()
 {
 	int total = 0;
 
-	for (map<LangString, Item*>::iterator i = _items.begin(); i != _items.end(); i++)
+	for (std::map<LangString, Item*>::iterator i = _items.begin(); i != _items.end(); i++)
 	{
 		total += i->second->getQuantity();
 	}
@@ -209,7 +210,7 @@ int Craft::getNumHWPs()
  * in the craft.
  * @return Pointer to weapon list.
  */
-vector<CraftWeapon*> *Craft::getWeapons()
+std::vector<CraftWeapon*> *Craft::getWeapons()
 {
 	return &_weapons;
 }
@@ -218,7 +219,7 @@ vector<CraftWeapon*> *Craft::getWeapons()
  * Returns the list of items in the craft.
  * @return Pointer to the item list.
  */
-map<LangString, Item*> *Craft::getItems()
+std::map<LangString, Item*> *Craft::getItems()
 {
 	return &_items;
 }

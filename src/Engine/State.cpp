@@ -37,14 +37,15 @@ State::State(Game *game) : _game(game), _screen(true)
  */
 State::~State()
 {
-	for (vector<Surface*>::iterator i = _surfaces.begin(); i < _surfaces.end(); i++)
+	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i < _surfaces.end(); i++)
 		delete *i;
 }
 
 /**
  * Returns the set of surfaces currently attached to this state.
+ * @return List of surfaces.
  */
-vector<Surface*> *State::getSurfaces()
+std::vector<Surface*> *State::getSurfaces()
 {
 	return &_surfaces;
 }
@@ -71,6 +72,7 @@ void State::add(Surface *surface)
  * states automatically cover the whole screen, (whether they
  * actually use it all or not) so states behind them can be
  * safely ignored since they'd be covered up.
+ * @return True if it's a screen, False otherwise.
  */
 bool State::isScreen()
 {
@@ -96,7 +98,7 @@ void State::init()
  */
 void State::think()
 {
-	for (vector<Surface*>::iterator i = _surfaces.begin(); i < _surfaces.end(); i++)
+	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i < _surfaces.end(); i++)
 		(*i)->think();
 }
 
@@ -108,7 +110,7 @@ void State::think()
  */
 void State::handle(SDL_Event *ev, int scale)
 {
-	for (vector<Surface*>::iterator i = _surfaces.begin(); i < _surfaces.end(); i++)
+	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i < _surfaces.end(); i++)
 	{
 		InteractiveSurface* j = dynamic_cast<InteractiveSurface*>(*i);
 		if (j != 0)
@@ -122,6 +124,6 @@ void State::handle(SDL_Event *ev, int scale)
  */
 void State::blit()
 {
-	for (vector<Surface*>::iterator i = _surfaces.begin(); i < _surfaces.end(); i++)
+	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i < _surfaces.end(); i++)
 		(*i)->blit(_game->getScreen()->getSurface());
 }

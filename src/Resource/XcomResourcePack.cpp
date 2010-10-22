@@ -37,31 +37,31 @@
  * contained in the original game folder.
  * @param folder Subfolder to load resources from.
  */
-XcomResourcePack::XcomResourcePack(string folder) : ResourcePack(folder)
+XcomResourcePack::XcomResourcePack(std::string folder) : ResourcePack(folder)
 {
 	// Load palettes
 	for (int i = 0; i < 5; i++)
 	{
-		stringstream s1, s2;
+		std::stringstream s1, s2;
 		s1 << folder << "GEODATA/PALETTES.DAT";
 		s2 << "PALETTES.DAT_" << i;
 		_palettes[s2.str()] = new Palette();
 		_palettes[s2.str()]->loadDat(insensitive(s1.str()), 256, Palette::palOffset(i));
 	}
 
-	stringstream s1, s2;
+	std::stringstream s1, s2;
 	s1 << folder << "GEODATA/BACKPALS.DAT";
 	s2 << "BACKPALS.DAT";
 	_palettes[s2.str()] = new Palette();
 	_palettes[s2.str()]->loadDat(insensitive(s1.str()), 128);
 	
 	// Load fonts
-	string font[] = {"BIGLETS.DAT",
+	std::string font[] = {"BIGLETS.DAT",
 					 "SMALLSET.DAT"};
 	
 	for (int i = 0; i < 2; i++)
 	{
-		stringstream s;
+		std::stringstream s;
 		s << folder << "GEODATA/" << font[i];
 		if (font[i] == "BIGLETS.DAT")
 			_fonts[font[i]] = new Font(16, 16, 173);
@@ -72,13 +72,13 @@ XcomResourcePack::XcomResourcePack(string folder) : ResourcePack(folder)
 	}
 		
 	// Load languages
-	string lang[] = {"ENGLISH.DAT",
+	std::string lang[] = {"ENGLISH.DAT",
 					 "FRENCH.DAT",
 					 "GERMAN.DAT"};
 
 	for (int i = 0; i < 3; i++)
 	{
-		stringstream s;
+		std::stringstream s;
 		s << folder << "GEODATA/" << lang[i];
 		_languages[lang[i]] = new Language();
 		_languages[lang[i]]->loadDat(insensitive(s.str()));
@@ -88,25 +88,25 @@ XcomResourcePack::XcomResourcePack(string folder) : ResourcePack(folder)
 	_langName = "ENGLISH.DAT";
 
 	// Load surfaces
-	string dats[] = {"LANG1.DAT",
+	std::string dats[] = {"LANG1.DAT",
 					 "LANG2.DAT"};
 
 	for (int i = 0; i < 2; i++)
 	{
-		stringstream s;
+		std::stringstream s;
 		s << folder << "GEODATA/" << dats[i];
 		_surfaces[dats[i]] = new Surface(64, 154);
 		_surfaces[dats[i]]->loadScr(insensitive(s.str()));
 	}
 
 	{
-		stringstream s;
+		std::stringstream s;
 		s << folder << "GEODATA/" << "INTERWIN.DAT";
 		_surfaces["INTERWIN.DAT"] = new Surface(160, 556);
 		_surfaces["INTERWIN.DAT"]->loadScr(insensitive(s.str()));
 	}
 
-	string scrs[] = {"BACK01.SCR",
+	std::string scrs[] = {"BACK01.SCR",
 					 "BACK02.SCR",
 					 "BACK03.SCR",
 					 "BACK04.SCR",
@@ -128,13 +128,13 @@ XcomResourcePack::XcomResourcePack(string folder) : ResourcePack(folder)
 
 	for (int i = 0; i < 19; i++)
 	{
-		stringstream s;
+		std::stringstream s;
 		s << folder << "GEOGRAPH/" << scrs[i];
 		_surfaces[scrs[i]] = new Surface(320, 200);
 		_surfaces[scrs[i]]->loadScr(insensitive(s.str()));
 	}
 
-	string spks[] = {"UP001.SPK",
+	std::string spks[] = {"UP001.SPK",
 					 "UP002.SPK",
 					 "UP003.SPK",
 					 "UP004.SPK",
@@ -180,27 +180,27 @@ XcomResourcePack::XcomResourcePack(string folder) : ResourcePack(folder)
 
 	for (int i = 0; i < 43; i++)
 	{
-		stringstream s;
+		std::stringstream s;
 		s << folder << "GEOGRAPH/" << spks[i];
 		_surfaces[spks[i]] = new Surface(320, 200);
 		_surfaces[spks[i]]->loadSpk(insensitive(s.str()));
 	}
 
 	// Load surface sets
-	string sets[] = {"BASEBITS.PCK",
+	std::string sets[] = {"BASEBITS.PCK",
 					 "INTICON.PCK",
 					 "TEXTURE.DAT"};
 
 	for (int i = 0; i < 3; i++)
 	{
-		stringstream s;
+		std::stringstream s;
 		s << folder << "GEOGRAPH/" << sets[i];
 
-		string ext = sets[i].substr(sets[i].length()-3, sets[i].length());
+		std::string ext = sets[i].substr(sets[i].length()-3, sets[i].length());
 		if (ext == "PCK")
 		{
-			string tab = sets[i].substr(0, sets[i].length()-4) + ".TAB";
-			stringstream s2;
+			std::string tab = sets[i].substr(0, sets[i].length()-4) + ".TAB";
+			std::stringstream s2;
 			s2 << folder << "GEOGRAPH/" << tab;
 			_sets[sets[i]] = new SurfaceSet(32, 40);
 			_sets[sets[i]]->loadPck(insensitive(s.str()), insensitive(s2.str()));
@@ -213,7 +213,7 @@ XcomResourcePack::XcomResourcePack(string folder) : ResourcePack(folder)
 	}
 
 	// Load polygons
-	stringstream s;
+	std::stringstream s;
 	s << folder << "GEODATA/" << "WORLD.DAT";
 	Globe::loadDat(insensitive(s.str()), &_polygons);
 
@@ -280,7 +280,7 @@ XcomResourcePack::XcomResourcePack(string folder) : ResourcePack(folder)
 	_polylines.push_back(l);
 
 	// Load musics
-	string mus[] = {"GMDEFEND",
+	std::string mus[] = {"GMDEFEND",
 					"GMENBASE",
 					"GMGEO1",
 					"GMGEO2",
@@ -294,14 +294,14 @@ XcomResourcePack::XcomResourcePack(string folder) : ResourcePack(folder)
 					"GMSTORY",
 					"GMTACTIC",
 					"GMWIN"};
-	string exts[] = {"OGG", "MP3", "MID"};
+	std::string exts[] = {"OGG", "MP3", "MID"};
 
 	for (int i = 0; i < 14; i++)
 	{
 		_musics[mus[i]] = new Music();
 		for (int j = 0; j < 3; j++)
 		{
-			stringstream s;
+			std::stringstream s;
 			s << folder << "SOUND/" << mus[i] << "." << exts[j];
 			struct stat info;
 			if (stat(insensitive(s.str()).c_str(), &info) == 0) 
@@ -313,21 +313,21 @@ XcomResourcePack::XcomResourcePack(string folder) : ResourcePack(folder)
 	}
 
 	// Load sounds
-	string catsId[] = {"GEO.CAT",
+	std::string catsId[] = {"GEO.CAT",
 						 "BATTLE.CAT",
 						"INTRO.CAT"};
-	string catsDos[] = {"SOUND2.CAT",
+	std::string catsDos[] = {"SOUND2.CAT",
 						"SOUND1.CAT",
 						"INTRO.CAT"};
-	string catsWin[] = {"SAMPLE.CAT",
+	std::string catsWin[] = {"SAMPLE.CAT",
 						"SAMPLE2.CAT",
 						"SAMPLE3.CAT"};
 
 	// Check which version is available
-	string *cats = 0;
+	std::string *cats = 0;
 	bool wav = true;
 
-	stringstream win, dos;
+	std::stringstream win, dos;
 	win << folder << "SOUND/" << catsWin[0];
 	dos << folder << "SOUND/" << catsDos[0];
 	struct stat info;
@@ -350,7 +350,7 @@ XcomResourcePack::XcomResourcePack(string folder) : ResourcePack(folder)
 		}
 		else
 		{
-			stringstream s;
+			std::stringstream s;
 			s << folder << "SOUND/" << cats[i];
 			_sounds[catsId[i]] = new SoundSet();
 			_sounds[catsId[i]]->loadCat(insensitive(s.str()), wav);

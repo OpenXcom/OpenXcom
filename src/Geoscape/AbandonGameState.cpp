@@ -67,7 +67,7 @@ AbandonGameState::AbandonGameState(Game *game) : State(game)
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
-	stringstream ss;
+	std::stringstream ss;
 	ss << _game->getResourcePack()->getLanguage()->getString(STR_ABANDON_GAME) << "?";
 	_txtTitle->setText(ss.str());
 }

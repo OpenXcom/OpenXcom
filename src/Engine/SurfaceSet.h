@@ -25,8 +25,6 @@
 
 class Surface;
 
-using namespace std;
-
 /**
  * Container of a set of surfaces.
  * Used to manage single images that contain series of
@@ -37,7 +35,7 @@ class SurfaceSet
 {
 private:
 	int _width, _height;
-	vector<Surface*> _frames;
+	std::vector<Surface*> _frames;
 public:
 	/// Crates a surface set with frames of the specified size.
 	SurfaceSet(int width, int height);
@@ -46,9 +44,9 @@ public:
 	/// Cleans up the surface set.
 	~SurfaceSet();
 	/// Loads an X-Com set of PCK/TAB image files.
-	void loadPck(string pck, string tab = "");
+	void loadPck(std::string pck, std::string tab = "");
 	/// Loads an X-Com DAT image file.
-	void loadDat(string filename);
+	void loadDat(std::string filename);
 	/// Gets a particular frame from the set.
 	Surface *getFrame(int i);
 	/// Gets the width of all frames.

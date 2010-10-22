@@ -35,7 +35,7 @@ RuleCraft::~RuleCraft()
 }
 
 /**
- * Returns the language string that names
+ * Returns the language std::string that names
  * this craft. Each craft type has a unique name.
  * @return Craft name.
  */

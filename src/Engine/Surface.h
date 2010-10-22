@@ -22,8 +22,6 @@
 #include "SDL.h"
 #include <string>
 
-using namespace std;
-
 /**
  * Element that is blit (rendered) onto the screen.
  * Mainly an encapsulation for SDL's SDL_Surface struct, so it
@@ -46,9 +44,9 @@ public:
 	/// Cleans up the surface.
 	virtual ~Surface();
 	/// Loads an X-Com SCR graphic.
-	void loadScr(string filename);
+	void loadScr(std::string filename);
 	/// Loads an X-Com SPK graphic.
-	void loadSpk(string filename);
+	void loadSpk(std::string filename);
 	/// Clears the surface's contents.
 	void clear();
 	/// Offsets the surface's colors by a set amount.

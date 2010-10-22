@@ -22,8 +22,6 @@
 #include <map>
 #include "SDL.h"
 
-using namespace std;
-
 class Surface;
 
 /**
@@ -38,7 +36,7 @@ class Font
 private:
 	Surface *_surface;
 	int _width, _height, _nchar;
-	map<unsigned char, SDL_Rect> _chars;
+	std::map<unsigned char, SDL_Rect> _chars;
 	// For some reason the X-Com small font is smooshed together by one pixel...
 	int _spacing;
 public:

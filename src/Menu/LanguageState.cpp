@@ -71,7 +71,7 @@ LanguageState::~LanguageState()
 	
 }
 
-void LanguageState::changeLanguage(string lang)
+void LanguageState::changeLanguage(std::string lang)
 {
 	_game->getResourcePack()->setLanguage(lang);
 	_game->setState(new MainMenuState(_game));

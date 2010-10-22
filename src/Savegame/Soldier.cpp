@@ -25,7 +25,7 @@
  * pulled from a set of SoldierNamePool's.
  * @param names List of name pools.
  */
-Soldier::Soldier(vector<SoldierNamePool*> *names)
+Soldier::Soldier(std::vector<SoldierNamePool*> *names)
 {
 	_tu = RNG::generate(50, 60);
 	_stamina = RNG::generate(40, 70);
@@ -59,7 +59,7 @@ Soldier::~Soldier()
  * Returns the soldier's full name.
  * @return Soldier name.
  */
-string Soldier::getName()
+std::string Soldier::getName()
 {
 	return _name;
 }
@@ -68,7 +68,7 @@ string Soldier::getName()
  * Changes the soldier's full name.
  * @param name Soldier name.
  */
-void Soldier::setName(string name)
+void Soldier::setName(std::string name)
 {
 	_name = name;
 }
@@ -92,7 +92,7 @@ void Soldier::setCraft(Craft *craft)
 }
 
 /**
- * Returns a localizable-string representation of
+ * Returns a localizable-std::string representation of
  * the soldier's military rank.
  * @return String ID for rank.
  */

@@ -29,8 +29,6 @@
 #include "../Engine/Palette.h"
 #include "../Engine/Timer.h"
 
-using namespace std;
-
 #define GRID_SIZE 32
 
 /**
@@ -80,7 +78,7 @@ void BaseView::setBase(Base *base)
 			_facilities[x][y] = 0;
 
 	// Fill grid with base facilities
-	for (vector<BaseFacility*>::iterator i = _base->getFacilities()->begin(); i != _base->getFacilities()->end(); i++)
+	for (std::vector<BaseFacility*>::iterator i = _base->getFacilities()->begin(); i != _base->getFacilities()->end(); i++)
 	{
 		for (int y = (*i)->getY(); y < (*i)->getY() + (*i)->getRules()->getSize(); y++)
 		{
@@ -329,9 +327,9 @@ void BaseView::draw()
 		}
 	}
 
-	vector<Craft*>::iterator craft = _base->getCrafts()->begin();
+	std::vector<Craft*>::iterator craft = _base->getCrafts()->begin();
 	
-	for (vector<BaseFacility*>::iterator i = _base->getFacilities()->begin(); i != _base->getFacilities()->end(); i++)
+	for (std::vector<BaseFacility*>::iterator i = _base->getFacilities()->begin(); i != _base->getFacilities()->end(); i++)
 	{
 		// Draw facility shape
 		int num = 0;
@@ -355,7 +353,7 @@ void BaseView::draw()
 		}
 	}
 
-	for (vector<BaseFacility*>::iterator i = _base->getFacilities()->begin(); i != _base->getFacilities()->end(); i++)
+	for (std::vector<BaseFacility*>::iterator i = _base->getFacilities()->begin(); i != _base->getFacilities()->end(); i++)
 	{
 		// Draw connectors
 		if ((*i)->getBuildTime() == 0)
@@ -394,7 +392,7 @@ void BaseView::draw()
 		}
 	}
 
-	for (vector<BaseFacility*>::iterator i = _base->getFacilities()->begin(); i != _base->getFacilities()->end(); i++)
+	for (std::vector<BaseFacility*>::iterator i = _base->getFacilities()->begin(); i != _base->getFacilities()->end(); i++)
 	{
 		// Draw facility graphic
 		int num = 0;
@@ -432,7 +430,7 @@ void BaseView::draw()
 			text->setX((*i)->getX() * GRID_SIZE);
 			text->setY((*i)->getY() * GRID_SIZE + (GRID_SIZE * (*i)->getRules()->getSize() - 16) / 2);
 			text->setBig();
-			stringstream ss;
+			std::stringstream ss;
 			ss << (*i)->getBuildTime();
 			text->setAlign(ALIGN_CENTER);
 			text->setColor(Palette::blockOffset(13)+5);

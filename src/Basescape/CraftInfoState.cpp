@@ -36,8 +36,6 @@
 #include "CraftSoldiersState.h"
 #include "CraftWeaponsState.h"
 
-using namespace std;
-
 /**
  * Initializes all the elements in the Craft Info screen.
  * @param game Pointer to the core game.
@@ -167,11 +165,11 @@ void CraftInfoState::init()
 	texture->getFrame(c->getRules()->getSprite() + 33)->setY(0);
 	texture->getFrame(c->getRules()->getSprite() + 33)->blit(_sprite);
 
-	stringstream ss;
+	std::stringstream ss;
 	ss << _game->getResourcePack()->getLanguage()->getString(STR_DAMAGE) << c->getDamagePercentage() << "%";
 	_txtDamage->setText(ss.str());
 
-	stringstream ss2;
+	std::stringstream ss2;
 	ss2 << _game->getResourcePack()->getLanguage()->getString(STR_FUEL) << c->getFuelPercentage() << "%";
 	_txtFuel->setText(ss2.str());
 	
@@ -218,11 +216,11 @@ void CraftInfoState::init()
 
 			_txtW1Name->setText(_game->getResourcePack()->getLanguage()->getString(w1->getRules()->getType()));
 
-			stringstream ss3;
+			std::stringstream ss3;
 			ss3 << _game->getResourcePack()->getLanguage()->getString(STR_AMMO) << w1->getAmmo();
 			_txtW1Ammo->setText(ss3.str());
 
-			stringstream ss4;
+			std::stringstream ss4;
 			ss4 << _game->getResourcePack()->getLanguage()->getString(STR_MAX) << w1->getRules()->getAmmoMax();
 			_txtW1Max->setText(ss4.str());
 		}
@@ -256,11 +254,11 @@ void CraftInfoState::init()
 
 			_txtW2Name->setText(_game->getResourcePack()->getLanguage()->getString(w2->getRules()->getType()));
 
-			stringstream ss5;
+			std::stringstream ss5;
 			ss5 << _game->getResourcePack()->getLanguage()->getString(STR_AMMO) << w2->getAmmo();
 			_txtW2Ammo->setText(ss5.str());
 
-			stringstream ss6;
+			std::stringstream ss6;
 			ss6 << _game->getResourcePack()->getLanguage()->getString(STR_MAX) << w2->getRules()->getAmmoMax();
 			_txtW2Max->setText(ss6.str());
 		}

@@ -68,12 +68,12 @@ void Ufo::setId(int id)
 
 /**
  * Returns the UFO's unique identifying name.
- * @param lang Language to get strings from.
+ * @param lang Language to get std::strings from.
  * @return Full name.
  */
-string Ufo::getName(Language *lang)
+std::string Ufo::getName(Language *lang)
 {
-	stringstream name;
+	std::stringstream name;
 	if (!isCrashed())
 	{
 		name << lang->getString(STR_UFO_) << _id;

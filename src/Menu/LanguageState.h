@@ -25,8 +25,6 @@
 class TextButton;
 class Window;
 
-using namespace std;
-
 /**
  * Language window that lets the player pick a
  * language at the start of the game.
@@ -42,7 +40,7 @@ public:
 	/// Cleans up the Start state.
 	~LanguageState();
 	/// Changes the game language.
-	void changeLanguage(string lang);
+	void changeLanguage(std::string lang);
 	/// Handler for clicking the English button.
 	void btnEnglishClick(SDL_Event *ev, int scale);
 	/// Handler for clicking the Deutsche button.

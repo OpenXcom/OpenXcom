@@ -63,8 +63,6 @@
 #include "LowFuelState.h"
 #include "MultipleTargetsState.h"
 
-using namespace std;
-
 /**
  * Initializes all the elements in the Geoscape screen.
  * @param game Pointer to the core game.
@@ -272,7 +270,7 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _popups()
 	_timer->start();
 
 	// Set music
-	stringstream ss;
+	std::stringstream ss;
 	ss << "GMGEO" << RNG::generate(1, 2);
 	_game->getResourcePack()->getMusic(ss.str())->play();
 }
@@ -329,7 +327,7 @@ void GeoscapeState::think()
  */
 void GeoscapeState::timeDisplay()
 {
-	stringstream ss, ss2, ss3, ss4, ss5;
+	std::stringstream ss, ss2, ss3, ss4, ss5;
 	
 	if (_game->getSavedGame()->getTime()->getSecond() < 10)
 		ss << "0" << _game->getSavedGame()->getTime()->getSecond();
@@ -417,7 +415,7 @@ void GeoscapeState::timeAdvance()
 void GeoscapeState::time5Seconds()
 {
 	// Handle UFO logic
-	for (vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end(); i++)
+	for (std::vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end(); i++)
 	{
 		(*i)->think();
 		if ((*i)->getLatitude() == (*i)->getDestination()->getLatitude() && (*i)->getLongitude() == (*i)->getDestination()->getLongitude())
@@ -427,9 +425,9 @@ void GeoscapeState::time5Seconds()
 	}
 
 	// Handle craft logic
-	for (vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); i++)
+	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); i++)
 	{
-		for (vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); j++)
+		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); j++)
 		{
 			Ufo* u = dynamic_cast<Ufo*>((*j)->getDestination());
 			if (u != 0 && !u->getDetected())
@@ -469,7 +467,7 @@ void GeoscapeState::time5Seconds()
 	}
 
 	// Clean up dead UFOs
-	for (vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end(); i++)
+	for (std::vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end(); i++)
 	{
 		if (((*i)->getLatitude() == (*i)->getDestination()->getLatitude() && (*i)->getLongitude() == (*i)->getDestination()->getLongitude()) ||
 			(*i)->isDestroyed() ||
@@ -482,7 +480,7 @@ void GeoscapeState::time5Seconds()
 	}
 
 	// Clean up unused waypoints
-	for (vector<Waypoint*>::iterator i = _game->getSavedGame()->getWaypoints()->begin(); i != _game->getSavedGame()->getWaypoints()->end(); i++)
+	for (std::vector<Waypoint*>::iterator i = _game->getSavedGame()->getWaypoints()->begin(); i != _game->getSavedGame()->getWaypoints()->end(); i++)
 	{
 		if ((*i)->getFollowers()->empty())
 		{
@@ -499,9 +497,9 @@ void GeoscapeState::time5Seconds()
  */
 void GeoscapeState::time10Minutes()
 {
-	for (vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); i++)
+	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); i++)
 	{
-		for (vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); j++)
+		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); j++)
 		{
 			if ((*j)->getStatus() == STR_OUT)
 			{
@@ -540,9 +538,9 @@ void GeoscapeState::time30Minutes()
 	}
 
 	// Handle craft maintenance
-	for (vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); i++)
+	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); i++)
 	{
-		for (vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); j++)
+		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); j++)
 		{
 			if ((*j)->getStatus() == STR_REFUELLING)
 			{
@@ -556,16 +554,16 @@ void GeoscapeState::time30Minutes()
 	}
 
 	// Handle UFO detection
-	for (vector<Ufo*>::iterator u = _game->getSavedGame()->getUfos()->begin(); u != _game->getSavedGame()->getUfos()->end(); u++)
+	for (std::vector<Ufo*>::iterator u = _game->getSavedGame()->getUfos()->begin(); u != _game->getSavedGame()->getUfos()->end(); u++)
 	{
 		if ((*u)->isCrashed())
 			continue;
 		if (!(*u)->getDetected())
 		{
 			bool detected = false;
-			for (vector<Base*>::iterator b = _game->getSavedGame()->getBases()->begin(); b != _game->getSavedGame()->getBases()->end() && !detected; b++)
+			for (std::vector<Base*>::iterator b = _game->getSavedGame()->getBases()->begin(); b != _game->getSavedGame()->getBases()->end() && !detected; b++)
 			{
-				for (vector<BaseFacility*>::iterator f = (*b)->getFacilities()->begin(); f != (*b)->getFacilities()->end() && !detected; f++)
+				for (std::vector<BaseFacility*>::iterator f = (*b)->getFacilities()->begin(); f != (*b)->getFacilities()->end() && !detected; f++)
 				{
 					if ((*f)->getBuildTime() != 0)
 						continue;
@@ -578,7 +576,7 @@ void GeoscapeState::time30Minutes()
 						}
 					}
 				}
-				for (vector<Craft*>::iterator c = (*b)->getCrafts()->begin(); c != (*b)->getCrafts()->end() && !detected; c++)
+				for (std::vector<Craft*>::iterator c = (*b)->getCrafts()->begin(); c != (*b)->getCrafts()->end() && !detected; c++)
 				{
 					if ((*c)->getLongitude() == (*b)->getLongitude() && (*c)->getLatitude() == (*b)->getLatitude() && (*c)->getDestination() == 0)
 						continue;
@@ -597,13 +595,13 @@ void GeoscapeState::time30Minutes()
 		else
 		{
 			bool detected = false;
-			for (vector<Base*>::iterator b = _game->getSavedGame()->getBases()->begin(); b != _game->getSavedGame()->getBases()->end() && !detected; b++)
+			for (std::vector<Base*>::iterator b = _game->getSavedGame()->getBases()->begin(); b != _game->getSavedGame()->getBases()->end() && !detected; b++)
 			{
-				for (vector<BaseFacility*>::iterator f = (*b)->getFacilities()->begin(); f != (*b)->getFacilities()->end() && !detected; f++)
+				for (std::vector<BaseFacility*>::iterator f = (*b)->getFacilities()->begin(); f != (*b)->getFacilities()->end() && !detected; f++)
 				{
 					detected = detected || (*f)->insideRadarRange(*b, *u);
 				}
-				for (vector<Craft*>::iterator c = (*b)->getCrafts()->begin(); c != (*b)->getCrafts()->end() && !detected; c++)
+				for (std::vector<Craft*>::iterator c = (*b)->getCrafts()->begin(); c != (*b)->getCrafts()->end() && !detected; c++)
 				{
 					detected = detected || (*c)->insideRadarRange(*u);
 				}
@@ -620,9 +618,9 @@ void GeoscapeState::time30Minutes()
 void GeoscapeState::time1Hour()
 {
 	// Handle craft maintenance
-	for (vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); i++)
+	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); i++)
 	{
-		for (vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); j++)
+		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); j++)
 		{
 			if ((*j)->getStatus() == STR_REPAIRS)
 			{
@@ -635,7 +633,7 @@ void GeoscapeState::time1Hour()
 			else if ((*j)->getStatus() == STR_REARMING)
 			{
 				int available = 0, full = 0;
-				for (vector<CraftWeapon*>::iterator k = (*j)->getWeapons()->begin(); k != (*j)->getWeapons()->end(); k++)
+				for (std::vector<CraftWeapon*>::iterator k = (*j)->getWeapons()->begin(); k != (*j)->getWeapons()->end(); k++)
 				{
 					if ((*k) == 0)
 						continue;
@@ -662,9 +660,9 @@ void GeoscapeState::time1Hour()
 void GeoscapeState::time1Day()
 {
 	// Handle facility construction
-	for (vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); i++)
+	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); i++)
 	{
-		for (vector<BaseFacility*>::iterator j = (*i)->getFacilities()->begin(); j != (*i)->getFacilities()->end(); j++)
+		for (std::vector<BaseFacility*>::iterator j = (*i)->getFacilities()->begin(); j != (*i)->getFacilities()->end(); j++)
 		{
 			if ((*j)->getBuildTime() > 0)
 			{
@@ -672,7 +670,7 @@ void GeoscapeState::time1Day()
 				if ((*j)->getBuildTime() == 0)
 				{
 					timerReset();
-					string s = _game->getResourcePack()->getLanguage()->getString(STR_PRODUCTION_OF);
+					std::string s = _game->getResourcePack()->getLanguage()->getString(STR_PRODUCTION_OF);
 					s += _game->getResourcePack()->getLanguage()->getString((*j)->getRules()->getType());
 					s += _game->getResourcePack()->getLanguage()->getString(STR_AT);
 					s += (*i)->getName();
@@ -684,7 +682,7 @@ void GeoscapeState::time1Day()
 	}
 
 	// Handle crashed UFOs expiring
-	for (vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end(); i++)
+	for (std::vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end(); i++)
 	{
 		if ((*i)->isCrashed())
 		{
@@ -731,6 +729,7 @@ void GeoscapeState::popup(State *state)
 /**
  * Returns a pointer to the Geoscape globe for
  * access by other substates.
+ * @return Pointer to globe.
  */
 Globe *GeoscapeState::getGlobe()
 {
@@ -751,7 +750,7 @@ void GeoscapeState::globeClick(SDL_Event *ev, int scale)
 	// Clicking markers on the globe
 	if (ev->button.button == SDL_BUTTON_LEFT)
 	{
-		vector<Target*> v = _globe->getTargets(mouseX, mouseY, false);
+		std::vector<Target*> v = _globe->getTargets(mouseX, mouseY, false);
 		if (v.size() > 0)
 		{
 			_game->pushState(new MultipleTargetsState(_game, v, 0, this));

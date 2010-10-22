@@ -34,8 +34,6 @@
 #include "Globe.h"
 #include "../Savegame/SavedGame.h"
 
-using namespace std;
-
 /**
  * Initializes all the elements in the Ufo Detected window.
  * @param game Pointer to the core game.
@@ -107,7 +105,7 @@ UfoDetectedState::UfoDetectedState(Game *game, Ufo *ufo, GeoscapeState *state, b
 	_lstInfo->getCell(1, 1)->setColor(Palette::blockOffset(8)+10);
 	_lstInfo->addRow(0, 2, _game->getResourcePack()->getLanguage()->getString(STR_HEADING).c_str(), _game->getResourcePack()->getLanguage()->getString(_ufo->getDirection()).c_str());
 	_lstInfo->getCell(2, 1)->setColor(Palette::blockOffset(8)+10);
-	stringstream ss;
+	std::stringstream ss;
 	ss << _ufo->getSpeed();
 	_lstInfo->addRow(0, 2, _game->getResourcePack()->getLanguage()->getString(STR_SPEED).c_str(), ss.str().c_str());
 	_lstInfo->getCell(3, 1)->setColor(Palette::blockOffset(8)+10);

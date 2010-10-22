@@ -22,8 +22,6 @@
 #include <string>
 #include <vector>
 
-using namespace std;
-
 class Language;
 
 /**
@@ -34,7 +32,7 @@ class Target
 {
 protected:
 	double _lat, _lon;
-	vector<Target*> _followers;
+	std::vector<Target*> _followers;
 public:
 	/// Creates a target.
 	Target();
@@ -49,9 +47,9 @@ public:
 	/// Sets the target's longitude.
 	void setLongitude(double lon);
 	/// Gets the target's name.
-	virtual string getName(Language *lang) = 0;
+	virtual std::string getName(Language *lang) = 0;
 	/// Gets the target's followers.
-	vector<Target*> *getFollowers();
+	std::vector<Target*> *getFollowers();
 };
 
 #endif

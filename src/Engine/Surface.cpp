@@ -80,10 +80,10 @@ Surface::~Surface()
  * @param filename Filename of the SCR image.
  * @sa http://www.ufopaedia.org/index.php?title=Image_Formats#SCR_.26_DAT
  */
-void Surface::loadScr(string filename)
+void Surface::loadScr(std::string filename)
 {
 	// Load file and put pixels in surface
-	ifstream imgFile (filename.c_str(), ios::in | ios::binary);
+	std::ifstream imgFile (filename.c_str(), std::ios::in | std::ios::binary);
 	if (!imgFile)
 	{
 		throw "Failed to load SCR";
@@ -118,10 +118,10 @@ void Surface::loadScr(string filename)
  * @param filename Filename of the SPK image.
  * @sa http://www.ufopaedia.org/index.php?title=Image_Formats#SPK
  */
-void Surface::loadSpk(string filename)
+void Surface::loadSpk(std::string filename)
 {
 	// Load file and put pixels in surface
-	ifstream imgFile (filename.c_str(), ios::in | ios::binary);
+	std::ifstream imgFile (filename.c_str(), std::ios::in | std::ios::binary);
 	if (!imgFile)
 	{
 		throw "Failed to load SPK";
@@ -375,7 +375,6 @@ SDL_Rect *Surface::getCrop()
 void Surface::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 {
 	SDL_SetColors(_surface, colors, firstcolor, ncolors);
-	draw();
 }
 
 /**

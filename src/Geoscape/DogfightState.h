@@ -32,8 +32,6 @@ class Globe;
 class Craft;
 class Ufo;
 
-using namespace std;
-
 /**
  * Shows a dogfight (interception) between a
  * player craft and an UFO.
@@ -51,7 +49,7 @@ private:
 	Craft *_craft;
 	Ufo *_ufo;
 	int _timeout, _currentDist, _targetDist, _currentRadius, _targetRadius;
-	vector<int> _w1Dist, _w2Dist;
+	std::vector<int> _w1Dist, _w2Dist;
 	bool _end;
 public:
 	/// Creates the Dogfight state.

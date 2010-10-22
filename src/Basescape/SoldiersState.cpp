@@ -34,8 +34,6 @@
 #include "../Ruleset/RuleCraft.h"
 #include "SoldierInfoState.h"
 
-using namespace std;
-
 /**
  * Initializes all the elements in the Soldiers screen.
  * @param game Pointer to the core game.
@@ -108,9 +106,9 @@ void SoldiersState::init()
 {
 	int row = 0;
 	_lstSoldiers->clearList();
-	for (vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); i++)
+	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); i++)
 	{
-		stringstream ss;
+		std::stringstream ss;
 		if ((*i)->getCraft() == 0)
 			ss << _game->getResourcePack()->getLanguage()->getString(STR_NONE);
 		else

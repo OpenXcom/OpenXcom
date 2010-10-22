@@ -31,8 +31,6 @@
 #include "../Savegame/Target.h"
 #include "GeoscapeCraftState.h"
 
-using namespace std;
-
 /**
  * Initializes all the elements in the Craft Patrol window.
  * @param game Pointer to the core game.
@@ -75,7 +73,7 @@ CraftPatrolState::CraftPatrolState(Game *game, Craft *craft, Globe *globe) : Sta
 	_txtDestination->setBig();
 	_txtDestination->setAlign(ALIGN_CENTER);
 	_txtDestination->setWordWrap(true);
-	string s = _craft->getName(_game->getResourcePack()->getLanguage()) + '\n';
+	std::string s = _craft->getName(_game->getResourcePack()->getLanguage()) + '\n';
 	s += _game->getResourcePack()->getLanguage()->getString(STR_HAS_REACHED) + '\n';
 	s += _game->getResourcePack()->getLanguage()->getString(STR_DESTINATION) + '\n';
 	s += _craft->getDestination()->getName(_game->getResourcePack()->getLanguage());

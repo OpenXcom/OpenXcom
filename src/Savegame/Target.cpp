@@ -79,7 +79,7 @@ void Target::setLongitude(double lon)
  * following this target.
  * @return Pointer to list of crafts.
  */
-vector<Target*> *Target::getFollowers()
+std::vector<Target*> *Target::getFollowers()
 {
 	return &_followers;
 }

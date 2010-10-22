@@ -33,8 +33,6 @@
 #include "../Savegame/Craft.h"
 #include "../Ruleset/RuleCraft.h"
 
-using namespace std;
-
 /**
  * Initializes all the elements in the Craft Soldiers screen.
  * @param game Pointer to the core game.
@@ -78,7 +76,7 @@ CraftSoldiersState::CraftSoldiersState(Game *game, Base *base, unsigned int craf
 	_txtTitle->setColor(Palette::blockOffset(15)+6);
 	_txtTitle->setBig();
 	Craft *c = _base->getCrafts()->at(_craft);
-	stringstream ss;
+	std::stringstream ss;
 	ss << _game->getResourcePack()->getLanguage()->getString(STR_SELECT_SQUAD_FOR) << c->getName(_game->getResourcePack()->getLanguage());
 	_txtTitle->setText(ss.str());
 
@@ -117,19 +115,19 @@ void CraftSoldiersState::init()
 {
 	Craft *c = _base->getCrafts()->at(_craft);
 
-	stringstream ss;
+	std::stringstream ss;
 	ss << _game->getResourcePack()->getLanguage()->getString(STR_SPACE_AVAILABLE) << c->getRules()->getSoldiers() - c->getNumSoldiers();
 	_txtAvailable->setText(ss.str());
 
-	stringstream ss2;
+	std::stringstream ss2;
 	ss2 << _game->getResourcePack()->getLanguage()->getString(STR_SPACE_USED) << c->getNumSoldiers();
 	_txtUsed->setText(ss2.str());
 
 	int row = 0;
 	_lstSoldiers->clearList();
-	for (vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); i++)
+	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); i++)
 	{
-		stringstream ss3;
+		std::stringstream ss3;
 		if ((*i)->getCraft() == 0)
 			ss3 << _game->getResourcePack()->getLanguage()->getString(STR_NONE);
 		else

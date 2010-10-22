@@ -35,7 +35,7 @@ RuleUfo::~RuleUfo()
 }
 
 /**
- * Returns the language string that names
+ * Returns the language std::string that names
  * this UFO. Each UFO type has a unique name.
  * @return Ufo name.
  */

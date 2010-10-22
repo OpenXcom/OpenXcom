@@ -36,25 +36,25 @@ Language::~Language()
 }
 
 /**
- * Loads a series of null-terminated strings contained in
+ * Loads a series of null-terminated std::strings contained in
  * a raw text file into the Language. IDs are determined
  * automatically.
  * @param filename Filename of the DAT language.
  * @sa http://www.ufopaedia.org/index.php?title=GeoScape_String_Files
  */
-void Language::loadDat(string filename)
+void Language::loadDat(std::string filename)
 {
 	_strings.clear();
 	
 	// Load file and put text in vector
-	ifstream txtFile (filename.c_str(), ios::in | ios::binary);
+	std::ifstream txtFile (filename.c_str(), std::ios::in | std::ios::binary);
 	if (!txtFile)
 	{
 		throw "Failed to load DAT";
 	}
 	
 	char value[1];
-	string buffer;
+	std::string buffer;
 
 	while (txtFile.read(value, 1))
 	{
@@ -76,11 +76,11 @@ void Language::loadDat(string filename)
 }
 
 /**
- * Returns the localizable string with the specified ID.
- * @param id ID of the string.
+ * Returns the localizable std::string with the specified ID.
+ * @param id ID of the std::string.
  * @return String with the request ID.
  */
-string Language::getString(LangString id)
+std::string Language::getString(LangString id)
 {
 	return _strings[id];
 }

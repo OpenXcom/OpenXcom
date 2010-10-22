@@ -25,8 +25,6 @@
 
 class RuleUfo;
 
-using namespace std;
-
 /**
  * Represents an alien UFO on the map.
  * Contains variable info about a UFO like
@@ -53,7 +51,7 @@ public:
 	/// Sets the UFO's ID.
 	void setId(int id);
 	/// Gets the UFO's name.
-	string getName(Language *lang);
+	std::string getName(Language *lang);
 	/// Gets the UFO's amount of damage.
 	int getDamage();
 	/// Sets the UFO's amount of damage.

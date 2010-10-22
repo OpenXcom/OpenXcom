@@ -54,12 +54,12 @@ void Waypoint::setId(int id)
 
 /**
  * Returns the waypoint's unique identifying name.
- * @param lang Language to get strings from.
+ * @param lang Language to get std::strings from.
  * @return Full name.
  */
-string Waypoint::getName(Language *lang)
+std::string Waypoint::getName(Language *lang)
 {
-	stringstream name;
+	std::stringstream name;
 	name << lang->getString(STR_WAY_POINT_) << _id;
 	return name.str();
 }

@@ -23,8 +23,6 @@
 #include "../Engine/State.h"
 #include "../Resource/LangString.h"
 
-using namespace std;
-
 class TextButton;
 class Window;
 class Text;

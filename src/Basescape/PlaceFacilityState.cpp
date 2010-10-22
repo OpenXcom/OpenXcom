@@ -98,7 +98,7 @@ PlaceFacilityState::PlaceFacilityState(Game *game, Base *base, RuleBaseFacility 
 
 	_numTime->setColor(Palette::blockOffset(13));
 	_numTime->setBig();
-	stringstream ss;
+	std::stringstream ss;
 	ss << _rule->getBuildTime() << _game->getResourcePack()->getLanguage()->getString(STR_DAYS);
 	_numTime->setText(ss.str());
 

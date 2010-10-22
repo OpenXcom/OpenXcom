@@ -25,8 +25,6 @@
 
 class Font;
 
-using namespace std;
-
 /**
  * Enumator for the possible text alignments.
  */
@@ -34,17 +32,17 @@ enum TextHAlign { ALIGN_LEFT, ALIGN_CENTER, ALIGN_RIGHT };
 enum TextVAlign { ALIGN_TOP, ALIGN_MIDDLE, ALIGN_BOTTOM };
 
 /**
- * Text string displayed on screen.
+ * Text std::string displayed on screen.
  * Takes the characters from a Font and puts them together on screen
- * to display a string of text, taking care of any required aligning
+ * to display a std::string of text, taking care of any required aligning
  * or wrapping.
  */
 class Text : public Surface
 {
 private:
 	Font *_big, *_small, *_font;
-	string _text, _wrappedText;
-	vector<int> _lineWidth, _lineHeight;
+	std::string _text, _wrappedText;
+	std::vector<int> _lineWidth, _lineHeight;
 	bool _wrap, _invert;
 	TextHAlign _align;
 	TextVAlign _valign;
@@ -58,17 +56,17 @@ public:
 	/// Cleans up the text.
 	~Text();
 	/// Formats an integer value as currency.
-	static string formatFunding(int funds);
+	static std::string formatFunding(int funds);
 	/// Sets the text size to big.
 	void setBig();
 	/// Sets the text size to small.
 	void setSmall();
 	/// Gets the text's font.
 	Font *getFont();
-	/// Sets the text's string.
-	void setText(string text);
-	/// Gets the text's string.
-	string getText();
+	/// Sets the text's std::string.
+	void setText(std::string text);
+	/// Gets the text's std::string.
+	std::string getText();
 	/// Sets the text's wordwrap setting.
 	void setWordWrap(bool wrap);
 	/// Sets the text's color invert setting.

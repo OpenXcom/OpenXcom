@@ -30,7 +30,7 @@ private:
 
 public:
 	/// Creates the X-Com ruleset.
-	XcomResourcePack(string folder);
+	XcomResourcePack(std::string folder);
 	/// Cleans up the X-Com ruleset.
 	~XcomResourcePack();
 };

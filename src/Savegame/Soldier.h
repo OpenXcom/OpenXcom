@@ -26,8 +26,6 @@
 enum SoldierGender { GENDER_MALE, GENDER_FEMALE };
 enum SoldierLook { LOOK_BLONDE, LOOK_BROWNHAIR, LOOK_ORIENTAL, LOOK_AFRICAN };
 
-using namespace std;
-
 class Craft;
 class SoldierNamePool;
 
@@ -39,7 +37,7 @@ class SoldierNamePool;
 class Soldier
 {
 private:
-	string _name;
+	std::string _name;
 	int _tu, _stamina, _health, _bravery, _reactions, _firing, _throwing, _strength, _psiStrength, _psiSkill, _melee;
 	int _rank;
 	Craft *_craft;
@@ -48,18 +46,18 @@ private:
 	int _missions, _kills;
 public:
 	/// Creates a new soldier with a random name.
-	Soldier(vector<SoldierNamePool*> *names);
+	Soldier(std::vector<SoldierNamePool*> *names);
 	/// Cleans up the soldier.
 	~Soldier();
 	/// Gets the soldier's name.
-	string getName();
+	std::string getName();
 	/// Sets the soldier's name.
-	void setName(string name);
+	void setName(std::string name);
 	/// Gets the soldier's craft.
 	Craft *getCraft();
 	/// Sets the soldier's craft.
 	void setCraft(Craft *craft);
-	/// Gets a string version of the soldier's rank.
+	/// Gets a std::string version of the soldier's rank.
 	LangString getRankString();
 	/// Gets a sprite version of the soldier's rank.
 	int getRankSprite();

@@ -34,7 +34,7 @@ class GeoscapeState;
 class MultipleTargetsState : public State
 {
 private:
-	vector<Target*> _targets;
+	std::vector<Target*> _targets;
 	Craft *_craft;
 	GeoscapeState *_state;
 	
@@ -43,7 +43,7 @@ private:
 	TextList *_lstTargets;
 public:
 	/// Creates the Multiple Targets state.
-	MultipleTargetsState(Game *game, vector<Target*> targets, Craft *craft, GeoscapeState *state);
+	MultipleTargetsState(Game *game, std::vector<Target*> targets, Craft *craft, GeoscapeState *state);
 	/// Cleans up the Multiple Targets state.
 	~MultipleTargetsState();
 	/// Updates the window.

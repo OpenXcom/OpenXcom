@@ -83,7 +83,7 @@ void StartState::think()
 		}
 		catch (const char* c)
 		{
-			cout << c << endl;
+			std::cout << c << std::endl;
 			_load = LOADING_FAILED;
 			_surface->clear();
 			stringColor(_surface->getSurface(), 0, 0, c, 0xFFFFFFFF);

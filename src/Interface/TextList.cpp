@@ -53,8 +53,8 @@ TextList::TextList(Font *big, Font *small, int width, int height, int x, int y) 
  */
 TextList::~TextList()
 {
-	for (vector< vector<Text*> >::iterator u = _texts.begin(); u < _texts.end(); u++) {
-		for (vector<Text*>::iterator v = (*u).begin(); v < (*u).end(); v++) {
+	for (std::vector< std::vector<Text*> >::iterator u = _texts.begin(); u < _texts.end(); u++) {
+		for (std::vector<Text*>::iterator v = (*u).begin(); v < (*u).end(); v++) {
 			delete (*v);
 		}
 	}
@@ -89,7 +89,7 @@ void TextList::addRow(intptr_t value, int cols, ...)
 
 	va_list args;
 	va_start(args, cols);
-	vector<Text*> temp;
+	std::vector<Text*> temp;
 	int rowX = 0;
 
 	for (int i = 0; i < cols; i++)
@@ -97,12 +97,12 @@ void TextList::addRow(intptr_t value, int cols, ...)
 		Text* txt = new Text(_big, _small, _columns[i], _small->getHeight(), rowX, _y);
 		txt->setPalette(this->getPalette());
 		
-		string buf = va_arg(args, char*);
+		std::string buf = va_arg(args, char*);
 		// Places dots between text
 		if (_dot && i < cols - 1)
 		{
 			int w = 0;
-			for (string::iterator c = buf.begin(); c < buf.end(); c++)
+			for (std::string::iterator c = buf.begin(); c < buf.end(); c++)
 			{
 				if (*c == ' ')
 					w += _small->getWidth() / 2;
@@ -161,9 +161,9 @@ void TextList::setColumns(int cols, ...)
 void TextList::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 {
 	Surface::setPalette(colors, firstcolor, ncolors);
-	for (vector< vector<Text*> >::iterator u = _texts.begin(); u < _texts.end(); u++)
+	for (std::vector< std::vector<Text*> >::iterator u = _texts.begin(); u < _texts.end(); u++)
 	{
-		for (vector<Text*>::iterator v = u->begin(); v < u->end(); v++)
+		for (std::vector<Text*>::iterator v = u->begin(); v < u->end(); v++)
 		{
 			(*v)->setPalette(colors, firstcolor, ncolors);
 		}
@@ -258,9 +258,9 @@ void TextList::setBackground(Surface *bg)
  */
 void TextList::clearList()
 {
-	for (vector< vector<Text*> >::iterator u = _texts.begin(); u < _texts.end(); u++)
+	for (std::vector< std::vector<Text*> >::iterator u = _texts.begin(); u < _texts.end(); u++)
 	{
-		for (vector<Text*>::iterator v = u->begin(); v < u->end(); v++)
+		for (std::vector<Text*>::iterator v = u->begin(); v < u->end(); v++)
 		{
 			delete (*v);
 		}
@@ -315,7 +315,7 @@ void TextList::draw()
 	clear();
 	for (unsigned int i = _scroll; i < _texts.size() && i < _scroll + _visibleRows; i++)
 	{
-		for (vector<Text*>::iterator j = _texts[i].begin(); j < _texts[i].end(); j++)
+		for (std::vector<Text*>::iterator j = _texts[i].begin(); j < _texts[i].end(); j++)
 		{
 			(*j)->setY((i - _scroll) * (_small->getHeight() + _small->getSpacing()));
             (*j)->blit(this);

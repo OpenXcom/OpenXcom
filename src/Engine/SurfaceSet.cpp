@@ -50,7 +50,7 @@ SurfaceSet::SurfaceSet(const SurfaceSet& other)
  */
 SurfaceSet::~SurfaceSet()
 {
-	for (vector<Surface*>::iterator i = _frames.begin(); i != _frames.end(); i++)
+	for (std::vector<Surface*>::iterator i = _frames.begin(); i != _frames.end(); i++)
 	{
 		delete *i;
 	}
@@ -65,12 +65,12 @@ SurfaceSet::~SurfaceSet()
  * @param tab Filename of the TAB offsets.
  * @sa http://www.ufopaedia.org/index.php?title=Image_Formats#PCK
  */
-void SurfaceSet::loadPck(string pck, string tab)
+void SurfaceSet::loadPck(std::string pck, std::string tab)
 {
 	int nframes = 0;
 
 	// Load TAB and get image offsets
-	ifstream offsetFile (tab.c_str(), ios::in | ios::binary);
+	std::ifstream offsetFile (tab.c_str(), std::ios::in | std::ios::binary);
 	if (!offsetFile)
 	{
 		nframes = 1;
@@ -90,7 +90,7 @@ void SurfaceSet::loadPck(string pck, string tab)
 	}
 
 	// Load PCX and put pixels in surfaces
-    ifstream imgFile (pck.c_str(), ios::in | ios::binary);
+    std::ifstream imgFile (pck.c_str(), std::ios::in | std::ios::binary);
 	if (!imgFile)
 	{
 		throw "Failed to load PCK";
@@ -157,20 +157,20 @@ void SurfaceSet::loadPck(string pck, string tab)
  * @param filename Filename of the DAT image.
  * @sa http://www.ufopaedia.org/index.php?title=Image_Formats#SCR_.26_DAT
  */
-void SurfaceSet::loadDat(string filename)
+void SurfaceSet::loadDat(std::string filename)
 {
 	int nframes = 0;
 
 	// Load file and put pixels in surface
-	ifstream imgFile (filename.c_str(), ios::in | ios::binary);
+	std::ifstream imgFile (filename.c_str(), std::ios::in | std::ios::binary);
 	if (!imgFile)
 	{
 		throw "Failed to load DAT";
 	}
 	
-	imgFile.seekg(0, ios::end);
-	streamoff size = imgFile.tellg();
-	imgFile.seekg(0, ios::beg);
+	imgFile.seekg(0, std::ios::end);
+	std::streamoff size = imgFile.tellg();
+	imgFile.seekg(0, std::ios::beg);
 
 	nframes = (int)size / (_width * _height);
 
@@ -262,7 +262,7 @@ int SurfaceSet::getTotalFrames()
  */
 void SurfaceSet::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 {
-	for (vector<Surface*>::iterator i = _frames.begin(); i != _frames.end(); i++)
+	for (std::vector<Surface*>::iterator i = _frames.begin(); i != _frames.end(); i++)
 	{
 		(*i)->setPalette(colors, firstcolor, ncolors);
 	}

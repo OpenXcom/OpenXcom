@@ -23,8 +23,6 @@
 #include <string>
 #include "../Engine/InteractiveSurface.h"
 
-using namespace std;
-
 #define NUM_SHADES 8
 
 class ResourcePack;
@@ -43,7 +41,7 @@ class Target;
 class Globe : public InteractiveSurface
 {
 private:
-	vector<double> _radius;
+	std::vector<double> _radius;
 	double _cenLon, _cenLat, _rotLon, _rotLat;
 	int _cenX, _cenY;
 	unsigned int _zoom;
@@ -53,7 +51,7 @@ private:
 	Surface *_markers, *_countries;
 	bool _blink, _detail;
 	Timer *_blinkTimer, *_rotTimer;
-	vector<Polygon*> _ocean, _cacheOcean, _cacheLand;
+	std::vector<Polygon*> _ocean, _cacheOcean, _cacheLand;
 	Surface *_mkXcomBase, *_mkAlienBase, *_mkCraft, *_mkWaypoint, *_mkCity;
 	Surface *_mkFlyingUfo, *_mkLandedUfo, *_mkCrashedUfo, *_mkAlienSite;
 
@@ -69,7 +67,7 @@ public:
 	/// Cleans up the globe.
 	~Globe();
 	/// Loads a set of polygons from a DAT file.
-	static void loadDat(string filename, vector<Polygon*> *polygons);
+	static void loadDat(std::string filename, std::vector<Polygon*> *polygons);
 	/// Converts polar coordinates to cartesian coordinates.
 	void polarToCart(double lon, double lat, Sint16 *x, Sint16 *y);
 	/// Converts cartesian coordinates to polar coordinates.
@@ -105,7 +103,7 @@ public:
 	/// Turns on/off the globe detail.
 	void switchDetail();
 	/// Gets all the targets near a point on the globe.
-	vector<Target*> getTargets(int x, int y, bool craft);
+	std::vector<Target*> getTargets(int x, int y, bool craft);
 	/// Caches visible globe polygons.
 	void cachePolygons();
 	/// Sets the palette of the globe.

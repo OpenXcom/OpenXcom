@@ -35,8 +35,6 @@
 #include "../Savegame/Item.h"
 #include "../Savegame/Base.h"
 
-using namespace std;
-
 /**
  * Initializes all the elements in the Craft Weapons window.
  * @param game Pointer to the core game.
@@ -105,7 +103,7 @@ CraftWeaponsState::CraftWeaponsState(Game *game, Base *base, unsigned int craft,
 		RuleCraftWeapon *w = _game->getRuleset()->getCraftWeapon((LangString)i);
 		if ((*_base->getItems())[w->getLauncherItem()]->getQuantity() > 0)
 		{
-			stringstream ss, ss2;
+			std::stringstream ss, ss2;
 			ss << (*_base->getItems())[w->getLauncherItem()]->getQuantity();
 			ss2 << (*_base->getItems())[w->getClipItem()]->getQuantity();
 			_lstWeapons->addRow(i, 3, _game->getResourcePack()->getLanguage()->getString((LangString)i).c_str(), ss.str().c_str(), ss2.str().c_str());

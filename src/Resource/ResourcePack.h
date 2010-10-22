@@ -34,8 +34,6 @@ class Polyline;
 class Music;
 class SoundSet;
 
-using namespace std;
-
 /**
  * Packs of external game media.
  * Resource packs contain all the game media that's
@@ -48,47 +46,47 @@ using namespace std;
 class ResourcePack
 {
 protected:
-	string _folder;
+	std::string _folder;
 	Language *_currentLang;
-	string _langName;
-	map<string, Palette*> _palettes;
-	map<string, Font*> _fonts;
-	map<string, Language*> _languages;
-	map<string, Surface*> _surfaces;
-	map<string, SurfaceSet*> _sets;
-	map<string, SoundSet*> _sounds;
-	vector<Polygon*> _polygons;
-	vector<Polyline*> _polylines;
-	map<string, Music*> _musics;
+	std::string _langName;
+	std::map<std::string, Palette*> _palettes;
+	std::map<std::string, Font*> _fonts;
+	std::map<std::string, Language*> _languages;
+	std::map<std::string, Surface*> _surfaces;
+	std::map<std::string, SurfaceSet*> _sets;
+	std::map<std::string, SoundSet*> _sounds;
+	std::vector<Polygon*> _polygons;
+	std::vector<Polyline*> _polylines;
+	std::map<std::string, Music*> _musics;
 public:
 	/// Create a new resource pack with a folder's contents.
-	ResourcePack(string folder);
+	ResourcePack(std::string folder);
 	/// Cleans up the resource pack.
 	virtual ~ResourcePack();
 	/// Converts a filename to its existing case-insensitive name.
-	string insensitive(string filename);
+	std::string insensitive(std::string filename);
 	/// Gets the current language.
 	Language *getLanguage();
 	/// Gets the name of the current language.
-	string getLanguageName();
+	std::string getLanguageName();
 	/// Sets a new language as current.
-	void setLanguage(string lang);
+	void setLanguage(std::string lang);
 	/// Gets a particular font.
-	Font *getFont(string name);
+	Font *getFont(std::string name);
 	/// Gets a particular surface.
-	Surface *getSurface(string name);
+	Surface *getSurface(std::string name);
 	/// Gets a particular surface set.
-	SurfaceSet *getSurfaceSet(string name);
+	SurfaceSet *getSurfaceSet(std::string name);
 	/// Gets the list of world polygons.
-	vector<Polygon*> *getPolygons();
+	std::vector<Polygon*> *getPolygons();
 	/// Gets the list of world polylines.
-	vector<Polyline*> *getPolylines();
+	std::vector<Polyline*> *getPolylines();
 	/// Gets a particular music.
-	Music *getMusic(string name);
+	Music *getMusic(std::string name);
 	/// Gets a particular sound set.
-	SoundSet *getSoundSet(string name);
+	SoundSet *getSoundSet(std::string name);
 	/// Gets a particular palette.
-	Palette *getPalette(string name);
+	Palette *getPalette(std::string name);
 	/// Sets a new palette.
 	void setPalette(SDL_Color *colors, int firstcolor, int ncolors);
 };

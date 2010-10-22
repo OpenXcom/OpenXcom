@@ -34,8 +34,6 @@
 #include "BaseNameState.h"
 #include "GeoscapeErrorState.h"
 
-using namespace std;
-
 /**
  * Initializes all the elements in the Confirm New Base window.
  * @param game Pointer to the core game.
@@ -74,8 +72,8 @@ ConfirmNewBaseState::ConfirmNewBaseState(Game *game, Base *base, Globe *globe) :
 	_btnCancel->setText(_game->getResourcePack()->getLanguage()->getString(STR_CANCEL_UC));
 	_btnCancel->onMouseClick((EventHandler)&ConfirmNewBaseState::btnCancelClick);
 
-	stringstream ss;
-	for (map<LangString, Region*>::iterator i = _game->getSavedGame()->getRegions()->begin(); i != _game->getSavedGame()->getRegions()->end(); i++)
+	std::stringstream ss;
+	for (std::map<LangString, Region*>::iterator i = _game->getSavedGame()->getRegions()->begin(); i != _game->getSavedGame()->getRegions()->end(); i++)
 	{
 		if (i->second->insideRegion(_base->getLongitude(), _base->getLatitude()))
 		{
@@ -85,7 +83,7 @@ ConfirmNewBaseState::ConfirmNewBaseState(Game *game, Base *base, Globe *globe) :
 		}
 	}
 	
-	string s = _game->getResourcePack()->getLanguage()->getString(STR_COST);
+	std::string s = _game->getResourcePack()->getLanguage()->getString(STR_COST);
 	s.erase(s.size()-1, 1);
 	s += Text::formatFunding(_cost);
 	_txtCost->setColor(Palette::blockOffset(15)-1);

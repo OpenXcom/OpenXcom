@@ -20,21 +20,33 @@
 #include <cstdlib>
 #include <ctime>
 
-/**
- * Defaults to the current time.
- */
-int RNG::seed = (int)time(NULL);
+int RNG::_seed = 0;
 
 /**
  * Seeds the random generator with a new number.
- * @param seed New seed. Defaults to existing seed if none is set.
+ * Defaults to the current time if none is set.
+ * @param seed New seed.
  */
 void RNG::init(int seed)
 {
 	if (seed == -1)
-		srand(RNG::seed);
+	{
+		_seed = (int)time(NULL);
+	}
 	else
-		srand(seed);
+	{
+		_seed = seed;
+	}
+	srand(_seed);
+}
+
+/**
+ * Returns the last seed used by the generator.
+ * @return Generator seed.
+ */
+int RNG::getSeed()
+{
+	return _seed;
 }
 
 /**
@@ -45,8 +57,8 @@ void RNG::init(int seed)
  */
 int RNG::generate(int min, int max)
 {
-	seed = rand();
-	return (seed % (max - min + 1) + min);
+	_seed = rand();
+	return (_seed % (max - min + 1) + min);
 }
 
 /**
@@ -57,6 +69,6 @@ int RNG::generate(int min, int max)
  */
 double RNG::generate(double min, double max)
 {
-	seed = rand();
-	return (seed * (max - min) / RAND_MAX + min);
+	_seed = rand();
+	return (_seed * (max - min) / RAND_MAX + min);
 }

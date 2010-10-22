@@ -35,8 +35,6 @@
 #include "../Savegame/Soldier.h"
 #include "../Engine/SurfaceSet.h"
 
-using namespace std;
-
 /**
  * Initializes all the elements in the Soldier Info screen.
  * @param game Pointer to the core game.
@@ -263,49 +261,49 @@ void SoldierInfoState::init()
 	texture->getFrame(s->getRankSprite())->setY(0);
 	texture->getFrame(s->getRankSprite())->blit(_rank);
 
-	stringstream ss;
+	std::stringstream ss;
 	ss << s->getTimeUnits();
 	_numTimeUnits->setText(ss.str());		
 	_barTimeUnits->setMax(s->getTimeUnits());
 	_barTimeUnits->setValue(s->getTimeUnits());
 
-	stringstream ss2;
+	std::stringstream ss2;
 	ss2 << s->getStamina();
 	_numStamina->setText(ss2.str());		
 	_barStamina->setMax(s->getStamina());
 	_barStamina->setValue(s->getStamina());
 
-	stringstream ss3;
+	std::stringstream ss3;
 	ss3 << s->getHealth();
 	_numHealth->setText(ss3.str());		
 	_barHealth->setMax(s->getHealth());
 	_barHealth->setValue(s->getHealth());
 
-	stringstream ss4;
+	std::stringstream ss4;
 	ss4 << s->getBravery();
 	_numBravery->setText(ss4.str());		
 	_barBravery->setMax(s->getBravery());
 	_barBravery->setValue(s->getBravery());
 
-	stringstream ss5;
+	std::stringstream ss5;
 	ss5 << s->getReactions();
 	_numReactions->setText(ss5.str());		
 	_barReactions->setMax(s->getReactions());
 	_barReactions->setValue(s->getReactions());
 
-	stringstream ss6;
+	std::stringstream ss6;
 	ss6 << s->getFiringAccuracy();
 	_numFiring->setText(ss6.str());		
 	_barFiring->setMax(s->getFiringAccuracy());
 	_barFiring->setValue(s->getFiringAccuracy());
 
-	stringstream ss7;
+	std::stringstream ss7;
 	ss7 << s->getThrowingAccuracy();
 	_numThrowing->setText(ss7.str());		
 	_barThrowing->setMax(s->getThrowingAccuracy());
 	_barThrowing->setValue(s->getThrowingAccuracy());
 
-	stringstream ss8;
+	std::stringstream ss8;
 	ss8 << s->getStrength();
 	_numStrength->setText(ss8.str());		
 	_barStrength->setMax(s->getStrength());
@@ -313,19 +311,19 @@ void SoldierInfoState::init()
 
 	_txtArmour->setText(_game->getResourcePack()->getLanguage()->getString(STR_NONE));
 
-	stringstream ss9;
+	std::stringstream ss9;
 	ss9 << _game->getResourcePack()->getLanguage()->getString(STR_RANK_) << _game->getResourcePack()->getLanguage()->getString(s->getRankString());
 	_txtRank->setText(ss9.str());
 
-	stringstream ss10;
+	std::stringstream ss10;
 	ss10 << _game->getResourcePack()->getLanguage()->getString(STR_MISSIONS) << s->getMissions();
 	_txtMissions->setText(ss10.str());
 
-	stringstream ss11;
+	std::stringstream ss11;
 	ss11 << _game->getResourcePack()->getLanguage()->getString(STR_KILLS) << s->getKills();
 	_txtKills->setText(ss11.str());
 
-	stringstream ss12;
+	std::stringstream ss12;
 	ss12 << _game->getResourcePack()->getLanguage()->getString(STR_CRAFT_);
 	if (s->getCraft() == 0)
 		ss12 << _game->getResourcePack()->getLanguage()->getString(STR_NONE);

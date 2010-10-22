@@ -33,7 +33,7 @@
  * Initializes a blank resource set pointing to a folder.
  * @param folder Subfolder to load resources from.
  */
-ResourcePack::ResourcePack(string folder) : _folder(folder), _currentLang(0), _langName(""), _palettes(), _fonts(), _languages(), _surfaces(), _sets(), _polygons(), _musics()
+ResourcePack::ResourcePack(std::string folder) : _folder(folder), _currentLang(0), _langName(""), _palettes(), _fonts(), _languages(), _surfaces(), _sets(), _polygons(), _musics()
 {
 }
 
@@ -42,39 +42,39 @@ ResourcePack::ResourcePack(string folder) : _folder(folder), _currentLang(0), _l
  */
 ResourcePack::~ResourcePack()
 {
-	for (map<string, Language*>::iterator i = _languages.begin(); i != _languages.end(); i++)
+	for (std::map<std::string, Language*>::iterator i = _languages.begin(); i != _languages.end(); i++)
 	{
 		delete i->second;
 	}
-	for (map<string, Font*>::iterator i = _fonts.begin(); i != _fonts.end(); i++)
+	for (std::map<std::string, Font*>::iterator i = _fonts.begin(); i != _fonts.end(); i++)
 	{
 		delete i->second;
 	}
-	for (map<string, Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); i++)
+	for (std::map<std::string, Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); i++)
 	{
 		delete i->second;
 	}
-	for (map<string, SurfaceSet*>::iterator i = _sets.begin(); i != _sets.end(); i++)
+	for (std::map<std::string, SurfaceSet*>::iterator i = _sets.begin(); i != _sets.end(); i++)
 	{
 		delete i->second;
 	}
-	for (vector<Polygon*>::iterator i = _polygons.begin(); i != _polygons.end(); i++)
+	for (std::vector<Polygon*>::iterator i = _polygons.begin(); i != _polygons.end(); i++)
 	{
 		delete *i;
 	}
-	for (vector<Polyline*>::iterator i = _polylines.begin(); i != _polylines.end(); i++)
+	for (std::vector<Polyline*>::iterator i = _polylines.begin(); i != _polylines.end(); i++)
 	{
 		delete *i;
 	}
-	for (map<string, Palette*>::iterator i = _palettes.begin(); i != _palettes.end(); i++)
+	for (std::map<std::string, Palette*>::iterator i = _palettes.begin(); i != _palettes.end(); i++)
 	{
 		delete i->second;
 	}
-	for (map<string, Music*>::iterator i = _musics.begin(); i != _musics.end(); i++)
+	for (std::map<std::string, Music*>::iterator i = _musics.begin(); i != _musics.end(); i++)
 	{
 		delete i->second;
 	}
-	for (map<string, SoundSet*>::iterator i = _sounds.begin(); i != _sounds.end(); i++)
+	for (std::map<std::string, SoundSet*>::iterator i = _sounds.begin(); i != _sounds.end(); i++)
 	{
 		delete i->second;
 	}
@@ -88,11 +88,11 @@ ResourcePack::~ResourcePack()
  * @note There's no actual method for figuring out the correct
  * filename on case-sensitive systems, this is just a workaround.
  */
-string ResourcePack::insensitive(string filename)
+std::string ResourcePack::insensitive(std::string filename)
 {
 	// Ignore DATA folder
 	size_t i = filename.find("/DATA/");
-	if (i != string::npos)
+	if (i != std::string::npos)
 		i += 6;
 	else
 		i = 0;
@@ -105,7 +105,7 @@ string ResourcePack::insensitive(string filename)
 	}
 	else
 	{
-		for (string::iterator c = filename.begin() + i; c != filename.end(); c++)
+		for (std::string::iterator c = filename.begin() + i; c != filename.end(); c++)
 			*c = toupper(*c);
 		if (stat(filename.c_str(), &info) == 0)
 		{
@@ -113,7 +113,7 @@ string ResourcePack::insensitive(string filename)
 		}
 		else
 		{
-			for (string::iterator c = filename.begin() + i; c != filename.end(); c++)
+			for (std::string::iterator c = filename.begin() + i; c != filename.end(); c++)
 				*c = tolower(*c);
 			if (stat(filename.c_str(), &info) == 0)
 			{
@@ -129,7 +129,7 @@ string ResourcePack::insensitive(string filename)
 
 /**
  * Returns the currently active language.
- * Ensures localizable strings always use the
+ * Ensures localizable std::strings always use the
  * active language without needing to know it.
  * @return Pointer to the language.
  */
@@ -143,7 +143,7 @@ Language *ResourcePack::getLanguage()
  * Necessary for logic specific to certain languages.
  * @return Name of the language.
  */
-string ResourcePack::getLanguageName()
+std::string ResourcePack::getLanguageName()
 {
 	return _langName;
 }
@@ -153,7 +153,7 @@ string ResourcePack::getLanguageName()
  * one in the resource pack.
  * @param lang Name of the language.
  */
-void ResourcePack::setLanguage(string lang)
+void ResourcePack::setLanguage(std::string lang)
 {
 	_currentLang = _languages[lang];
 	_langName = lang;
@@ -164,7 +164,7 @@ void ResourcePack::setLanguage(string lang)
  * @param name Name of the font.
  * @return Pointer to the font.
  */
-Font *ResourcePack::getFont(string name)
+Font *ResourcePack::getFont(std::string name)
 {
 	return _fonts[name];
 }
@@ -174,7 +174,7 @@ Font *ResourcePack::getFont(string name)
  * @param name Name of the surface.
  * @return Pointer to the surface.
  */
-Surface *ResourcePack::getSurface(string name)
+Surface *ResourcePack::getSurface(std::string name)
 {
 	return _surfaces[name];
 }
@@ -184,7 +184,7 @@ Surface *ResourcePack::getSurface(string name)
  * @param name Name of the surface set.
  * @return Pointer to the surface set.
  */
-SurfaceSet *ResourcePack::getSurfaceSet(string name)
+SurfaceSet *ResourcePack::getSurfaceSet(std::string name)
 {
 	return _sets[name];
 }
@@ -193,7 +193,7 @@ SurfaceSet *ResourcePack::getSurfaceSet(string name)
  * Returns the list of polygons in the resource set.
  * @return Pointer to the list of polygons.
  */
-vector<Polygon*> *ResourcePack::getPolygons()
+std::vector<Polygon*> *ResourcePack::getPolygons()
 {
 	return &_polygons;
 }
@@ -202,7 +202,7 @@ vector<Polygon*> *ResourcePack::getPolygons()
  * Returns the list of polylines in the resource set.
  * @return Pointer to the list of polylines.
  */
-vector<Polyline*> *ResourcePack::getPolylines()
+std::vector<Polyline*> *ResourcePack::getPolylines()
 {
 	return &_polylines;
 }
@@ -212,7 +212,7 @@ vector<Polyline*> *ResourcePack::getPolylines()
  * @param name Name of the music.
  * @return Pointer to the music.
  */
-Music *ResourcePack::getMusic(string name)
+Music *ResourcePack::getMusic(std::string name)
 {
 	return _musics[name];
 }
@@ -222,7 +222,7 @@ Music *ResourcePack::getMusic(string name)
  * @param name Name of the sound set.
  * @return Pointer to the sound set.
  */
-SoundSet *ResourcePack::getSoundSet(string name)
+SoundSet *ResourcePack::getSoundSet(std::string name)
 {
 	return _sounds[name];
 }
@@ -232,7 +232,7 @@ SoundSet *ResourcePack::getSoundSet(string name)
  * @param name Name of the palette.
  * @return Pointer to the palette.
  */
-Palette *ResourcePack::getPalette(string name)
+Palette *ResourcePack::getPalette(std::string name)
 {
 	return _palettes[name];
 }
@@ -245,15 +245,15 @@ Palette *ResourcePack::getPalette(string name)
  */
 void ResourcePack::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 {
-	for (map<string, Font*>::iterator i = _fonts.begin(); i != _fonts.end(); i++)
+	for (std::map<std::string, Font*>::iterator i = _fonts.begin(); i != _fonts.end(); i++)
 	{
 		i->second->getSurface()->setPalette(colors, firstcolor, ncolors);
 	}
-	for (map<string, Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); i++)
+	for (std::map<std::string, Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); i++)
 	{
 		i->second->setPalette(colors, firstcolor, ncolors);
 	}
-	for (map<string, SurfaceSet*>::iterator i = _sets.begin(); i != _sets.end(); i++)
+	for (std::map<std::string, SurfaceSet*>::iterator i = _sets.begin(); i != _sets.end(); i++)
 	{
 		i->second->setPalette(colors, firstcolor, ncolors);
 	}

@@ -35,7 +35,7 @@ RuleBaseFacility::~RuleBaseFacility()
 }
 
 /**
- * Returns the language string that names
+ * Returns the language std::string that names
  * this base facility. Each base facility type
  * has a unique name.
  * @return Facility name.
@@ -58,7 +58,7 @@ int RuleBaseFacility::getSpriteShape()
 /**
  * Changes the ID of the sprite used to draw the
  * base structure of the facility that defines its shape.
- * @return Sprite ID.
+ * @param sprite Sprite ID.
  */
 void RuleBaseFacility::setSpriteShape(int sprite)
 {
@@ -157,7 +157,7 @@ int RuleBaseFacility::getBuildTime()
 /**
  * Changes the amount of time that this facility takes
  * to be constructed since placement.
- * @return Time in days.
+ * @param time Time in days.
  */
 void RuleBaseFacility::setBuildTime(int time)
 {
@@ -254,7 +254,7 @@ int RuleBaseFacility::getCrafts()
 
 /**
  * Changes the amount of base craft this facility can contain.
- * @return Amount of craft.
+ * @param crafts Amount of craft.
  */
 void RuleBaseFacility::setCrafts(int crafts)
 {

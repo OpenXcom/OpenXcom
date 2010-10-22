@@ -33,8 +33,6 @@
 #include "../Savegame/Target.h"
 #include "../Savegame/Waypoint.h"
 
-using namespace std;
-
 /**
  * Initializes all the elements in the Confirm Destination window.
  * @param game Pointer to the core game.
@@ -82,7 +80,7 @@ ConfirmDestinationState::ConfirmDestinationState(Game *game, Craft *craft, Targe
 	_txtTarget->setColor(Palette::blockOffset(15)-1);
 	_txtTarget->setBig();
 	_txtTarget->setAlign(ALIGN_CENTER);
-	stringstream ss;
+	std::stringstream ss;
 	if (w != 0 && w->getId() == 0)
 	{
 		ss << _game->getResourcePack()->getLanguage()->getString(STR_TARGET_WAY_POINT);

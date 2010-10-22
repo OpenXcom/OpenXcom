@@ -20,10 +20,10 @@
 #ifndef OPENXCOM_LANGSTRING_H
 #define OPENXCOM_LANGSTRING_H
 
-// When there's two equal strings, _UC denotes the Upper-Case one
+// When there's two equal std::strings, _UC denotes the Upper-Case one
 
 /**
- * Enumerator to make the localizable string IDs
+ * Enumerator to make the localizable std::string IDs
  * more readable.
  */
 enum LangString

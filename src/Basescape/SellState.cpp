@@ -30,8 +30,6 @@
 #include "../Interface/TextList.h"
 #include "../Savegame/SavedGame.h"
 
-using namespace std;
-
 /**
  * Initializes all the elements in the Sell/Sack screen.
  * @param game Pointer to the core game.
@@ -86,7 +84,7 @@ SellState::SellState(Game *game) : State(game)
 	_txtSales->setColor(Palette::blockOffset(13)+10);
 	_txtSales->setText(_game->getResourcePack()->getLanguage()->getString(STR_VALUE_OF_SALES));
 
-	string s = _game->getResourcePack()->getLanguage()->getString(STR_FUNDS);
+	std::string s = _game->getResourcePack()->getLanguage()->getString(STR_FUNDS);
 	s += Text::formatFunding(_game->getSavedGame()->getFunds());
 	_txtFunds->setColor(Palette::blockOffset(13)+10);
 	_txtFunds->setText(s);

@@ -23,8 +23,6 @@
 #include <string>
 #include "SDL.h"
 
-using namespace std;
-
 class State;
 class Screen;
 class Cursor;
@@ -45,14 +43,14 @@ private:
 	Screen *_screen;
 	Cursor *_cursor;
 
-	list<State*> _states, _deleted;
+	std::list<State*> _states, _deleted;
 	ResourcePack *_res;
 	SavedGame *_save;
 	Ruleset *_rules;
 	bool _quit;
 public:
 	/// Creates a new game and initializes SDL.
-	Game(string title, int width, int height, int bpp);
+	Game(std::string title, int width, int height, int bpp);
 	/// Cleans up all the game's resources and shuts down SDL.
 	~Game();
 	/// Starts the game's state machine.

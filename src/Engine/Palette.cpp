@@ -43,19 +43,19 @@ Palette::~Palette()
  * @param offset Position of the palette in the file (in bytes).
  * @sa http://www.ufopaedia.org/index.php?title=PALETTES.DAT
  */
-void Palette::loadDat(string filename, int ncolors, int offset)
+void Palette::loadDat(std::string filename, int ncolors, int offset)
 {
 	_colors = (SDL_Color *)malloc(sizeof(SDL_Color) * ncolors);
 
 	// Load file and put colors in pallete
-	ifstream palFile (filename.c_str(), ios::in | ios::binary);
+	std::ifstream palFile (filename.c_str(), std::ios::in | std::ios::binary);
 	if (!palFile)
 	{
 		throw "Failed to load palette";
 	}
 
 	// Move pointer to proper pallete
-	palFile.seekg(offset, ios::beg);
+	palFile.seekg(offset, std::ios::beg);
 	
 	char value[3];
 

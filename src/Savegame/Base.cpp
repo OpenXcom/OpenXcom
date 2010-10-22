@@ -37,19 +37,19 @@ Base::Base() : Target(), _name(""), _facilities(), _soldiers(), _crafts(), _item
  */
 Base::~Base()
 {
-	for (vector<BaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); i++)
+	for (std::vector<BaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); i++)
 	{
 		delete *i;
 	}
-	for (vector<Soldier*>::iterator i = _soldiers.begin(); i != _soldiers.end(); i++)
+	for (std::vector<Soldier*>::iterator i = _soldiers.begin(); i != _soldiers.end(); i++)
 	{
 		delete *i;
 	}
-	for (vector<Craft*>::iterator i = _crafts.begin(); i != _crafts.end(); i++)
+	for (std::vector<Craft*>::iterator i = _crafts.begin(); i != _crafts.end(); i++)
 	{
 		delete *i;
 	}
-	for (map<LangString, Item*>::iterator i = _items.begin(); i != _items.end(); i++)
+	for (std::map<LangString, Item*>::iterator i = _items.begin(); i != _items.end(); i++)
 	{
 		delete i->second;
 	}
@@ -57,9 +57,10 @@ Base::~Base()
 
 /**
  * Returns the custom name for the base.
+ * @param lang Language to get std::strings from.
  * @return Name.
  */
-string Base::getName(Language *lang)
+std::string Base::getName(Language *lang)
 {
 	return _name;
 }
@@ -68,7 +69,7 @@ string Base::getName(Language *lang)
  * Changes the custom name for the base.
  * @param name Name.
  */
-void Base::setName(string name)
+void Base::setName(std::string name)
 {
 	_name = name;
 }
@@ -77,7 +78,7 @@ void Base::setName(string name)
  * Returns the list of facilities in the base.
  * @return Pointer to the facility list.
  */
-vector<BaseFacility*> *Base::getFacilities()
+std::vector<BaseFacility*> *Base::getFacilities()
 {
 	return &_facilities;
 }
@@ -86,7 +87,7 @@ vector<BaseFacility*> *Base::getFacilities()
  * Returns the list of soldiers in the base.
  * @return Pointer to the soldier list.
  */
-vector<Soldier*> *Base::getSoldiers()
+std::vector<Soldier*> *Base::getSoldiers()
 {
 	return &_soldiers;
 }
@@ -95,7 +96,7 @@ vector<Soldier*> *Base::getSoldiers()
  * Returns the list of crafts in the base.
  * @return Pointer to the craft list.
  */
-vector<Craft*> *Base::getCrafts()
+std::vector<Craft*> *Base::getCrafts()
 {
 	return &_crafts;
 }
@@ -104,7 +105,7 @@ vector<Craft*> *Base::getCrafts()
  * Returns the list of items in the base.
  * @return Pointer to the item list.
  */
-map<LangString, Item*> *Base::getItems()
+std::map<LangString, Item*> *Base::getItems()
 {
 	return &_items;
 }
@@ -135,7 +136,7 @@ void Base::setEngineers(int engineers)
 int Base::getAvailableSoldiers()
 {
 	int total = 0;
-	for (vector<Soldier*>::iterator i = _soldiers.begin(); i != _soldiers.end(); i++)
+	for (std::vector<Soldier*>::iterator i = _soldiers.begin(); i != _soldiers.end(); i++)
 	{
 		if ((*i)->getCraft() == 0)
 			total++;
@@ -211,7 +212,7 @@ int Base::getUsedQuarters()
 int Base::getAvailableQuarters()
 {
 	int total = 0;
-	for (vector<BaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); i++)
+	for (std::vector<BaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); i++)
 	{
 		if ((*i)->getBuildTime() == 0)
 			total += (*i)->getRules()->getPersonnel();
@@ -227,13 +228,13 @@ int Base::getAvailableQuarters()
 int Base::getUsedStores()
 {
 	double total = 0;
-	for (map<LangString, Item*>::iterator i = _items.begin(); i != _items.end(); i++)
+	for (std::map<LangString, Item*>::iterator i = _items.begin(); i != _items.end(); i++)
 	{
 		total += i->second->getTotalSize();
 	}
-	for (vector<Craft*>::iterator i = _crafts.begin(); i != _crafts.end(); i++)
+	for (std::vector<Craft*>::iterator i = _crafts.begin(); i != _crafts.end(); i++)
 	{
-		for (map<LangString, Item*>::iterator j = (*i)->getItems()->begin(); j != (*i)->getItems()->end(); j++)
+		for (std::map<LangString, Item*>::iterator j = (*i)->getItems()->begin(); j != (*i)->getItems()->end(); j++)
 		{
 			total += j->second->getTotalSize();
 		}
@@ -249,7 +250,7 @@ int Base::getUsedStores()
 int Base::getAvailableStores()
 {
 	int total = 0;
-	for (vector<BaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); i++)
+	for (std::vector<BaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); i++)
 	{
 		if ((*i)->getBuildTime() == 0)
 			total += (*i)->getRules()->getStorage();
@@ -275,7 +276,7 @@ int Base::getUsedLaboratories()
 int Base::getAvailableLaboratories()
 {
 	int total = 0;
-	for (vector<BaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); i++)
+	for (std::vector<BaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); i++)
 	{
 		if ((*i)->getBuildTime() == 0)
 			total += (*i)->getRules()->getLaboratories();
@@ -301,7 +302,7 @@ int Base::getUsedWorkshops()
 int Base::getAvailableWorkshops()
 {
 	int total = 0;
-	for (vector<BaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); i++)
+	for (std::vector<BaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); i++)
 	{
 		if ((*i)->getBuildTime() == 0)
 			total += (*i)->getRules()->getWorkshops();
@@ -327,7 +328,7 @@ int Base::getUsedHangars()
 int Base::getAvailableHangars()
 {
 	int total = 0;
-	for (vector<BaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); i++)
+	for (std::vector<BaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); i++)
 	{
 		if ((*i)->getBuildTime() == 0)
 			total += (*i)->getRules()->getCrafts();
@@ -343,7 +344,7 @@ int Base::getAvailableHangars()
 int Base::getDefenceValue()
 {
 	int total = 0;
-	for (vector<BaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); i++)
+	for (std::vector<BaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); i++)
 	{
 		if ((*i)->getBuildTime() == 0)
 			total += (*i)->getRules()->getDefenceValue();
@@ -359,7 +360,7 @@ int Base::getDefenceValue()
 int Base::getShortRangeDetection()
 {
 	int total = 0;
-	for (vector<BaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); i++)
+	for (std::vector<BaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); i++)
 	{
 		if ((*i)->getBuildTime() == 0)
 			if ((*i)->getRules()->getRadarRange() == 1500)
@@ -376,7 +377,7 @@ int Base::getShortRangeDetection()
 int Base::getLongRangeDetection()
 {
 	int total = 0;
-	for (vector<BaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); i++)
+	for (std::vector<BaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); i++)
 	{
 		if ((*i)->getBuildTime() == 0)
 			if ((*i)->getRules()->getRadarRange() > 1500)
@@ -394,7 +395,7 @@ int Base::getLongRangeDetection()
 int Base::getCraftCount(LangString craft)
 {
 	int total = 0;
-	for (vector<Craft*>::iterator i = _crafts.begin(); i != _crafts.end(); i++)
+	for (std::vector<Craft*>::iterator i = _crafts.begin(); i != _crafts.end(); i++)
 	{
 		if ((*i)->getRules()->getType() == craft)
 			total++;
@@ -410,7 +411,7 @@ int Base::getCraftCount(LangString craft)
 int Base::getCraftMaintenance()
 {
 	int total = 0;
-	for (vector<Craft*>::iterator i = _crafts.begin(); i != _crafts.end(); i++)
+	for (std::vector<Craft*>::iterator i = _crafts.begin(); i != _crafts.end(); i++)
 	{
 		total += (*i)->getRules()->getMonthlyFee();
 	}
@@ -439,7 +440,7 @@ int Base::getPersonnelMaintenance()
 int Base::getFacilityMaintenance()
 {
 	int total = 0;
-	for (vector<BaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); i++)
+	for (std::vector<BaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); i++)
 	{
 		if ((*i)->getBuildTime() == 0)
 			total += (*i)->getRules()->getMonthlyCost();

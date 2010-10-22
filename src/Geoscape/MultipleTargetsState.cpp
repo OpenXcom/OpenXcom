@@ -40,8 +40,6 @@
 #include "TargetInfoState.h"
 #include "MultipleTargetsState.h"
 
-using namespace std;
-
 #define OUTER_MARGIN 3
 #define INNER_MARGIN 4
 #define BORDER 5
@@ -54,7 +52,7 @@ using namespace std;
  * @param craft Pointer to craft to retarget (NULL if none).
  * @param state Pointer to the Geoscape state.
  */
-MultipleTargetsState::MultipleTargetsState(Game *game, vector<Target*> targets, Craft *craft, GeoscapeState *state) : State(game), _targets(targets), _craft(craft), _state(state)
+MultipleTargetsState::MultipleTargetsState(Game *game, std::vector<Target*> targets, Craft *craft, GeoscapeState *state) : State(game), _targets(targets), _craft(craft), _state(state)
 {
 	_screen = false;
 
@@ -90,7 +88,7 @@ MultipleTargetsState::MultipleTargetsState(Game *game, vector<Target*> targets, 
 	_lstTargets->setSelectable(true);
 	_lstTargets->setBackground(_window);
 	_lstTargets->onMouseClick((EventHandler)&MultipleTargetsState::lstTargetsClick);
-	for (vector<Target*>::iterator i = _targets.begin(); i != _targets.end(); i++)
+	for (std::vector<Target*>::iterator i = _targets.begin(); i != _targets.end(); i++)
 	{
 		_lstTargets->addRow(0, 1, (*i)->getName(_game->getResourcePack()->getLanguage()).c_str());
 	}

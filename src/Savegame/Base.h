@@ -25,8 +25,6 @@
 #include <map>
 #include "../Resource/LangString.h"
 
-using namespace std;
-
 class BaseFacility;
 class Soldier;
 class Craft;
@@ -40,11 +38,11 @@ class Language;
 class Base : public Target
 {
 private:
-	string _name;
-	vector<BaseFacility*> _facilities;
-	vector<Soldier*> _soldiers;
-	vector<Craft*> _crafts;
-	map<LangString, Item*> _items;
+	std::string _name;
+	std::vector<BaseFacility*> _facilities;
+	std::vector<Soldier*> _soldiers;
+	std::vector<Craft*> _crafts;
+	std::map<LangString, Item*> _items;
 	int _scientists, _engineers;
 public:
 	/// Creates a new base.
@@ -52,17 +50,17 @@ public:
 	/// Cleans up the base.
 	~Base();
 	/// Gets the base's name.
-	string getName(Language* lang = 0);
+	std::string getName(Language* lang = 0);
 	/// Sets the base's name.
-	void setName(string name);
+	void setName(std::string name);
 	/// Gets the base's facilities.
-	vector<BaseFacility*> *getFacilities();
+	std::vector<BaseFacility*> *getFacilities();
 	/// Gets the base's soldiers.
-	vector<Soldier*> *getSoldiers();
+	std::vector<Soldier*> *getSoldiers();
 	/// Gets the base's crafts.
-	vector<Craft*> *getCrafts();
+	std::vector<Craft*> *getCrafts();
 	/// Gets the base's items.
-	map<LangString, Item*> *getItems();
+	std::map<LangString, Item*> *getItems();
 	/// Sets the base's scientists.
 	void setScientists(int scientists);
 	/// Sets the base's engineers.

@@ -30,8 +30,6 @@
 #include "../Savegame/Craft.h"
 #include "GeoscapeState.h"
 
-using namespace std;
-
 /**
  * Initializes all the elements in the Low Fuel window.
  * @param game Pointer to the core game.

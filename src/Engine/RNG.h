@@ -28,13 +28,14 @@
 class RNG
 {
 private:
+	static int _seed;
 public:
 	RNG();
 	~RNG();
-	/// Seed used for random number generation.
-	static int seed;
 	/// Initializes the generator.
 	static void init(int seed = -1);
+	/// Gets the generator's seed.
+	int getSeed();
 	/// Generates a random integer number.
 	static int generate(int min, int max);
 	/// Generates a random decimal number.

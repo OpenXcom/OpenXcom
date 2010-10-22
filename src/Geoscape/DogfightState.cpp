@@ -191,7 +191,7 @@ DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo) :
 		frame->blit(_weapon1);
 
 		// Draw ammo
-		stringstream ss;
+		std::stringstream ss;
 		ss << w1->getAmmo();
 		_txtAmmo1->setText(ss.str());
 
@@ -244,7 +244,7 @@ DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo) :
 		frame->blit(_weapon2);
 
 		// Draw ammo
-		stringstream ss;
+		std::stringstream ss;
 		ss << w2->getAmmo();
 		_txtAmmo2->setText(ss.str());
 
@@ -367,16 +367,16 @@ void DogfightState::move()
 	{
 		_currentDist -= 2;
 	}
-	stringstream ss;
+	std::stringstream ss;
 	ss << _currentDist;
 	_txtDistance->setText(ss.str());
 
 	// Update weapons
-	for (vector<int>::iterator w = _w1Dist.begin(); w != _w1Dist.end(); w++)
+	for (std::vector<int>::iterator w = _w1Dist.begin(); w != _w1Dist.end(); w++)
 	{
 		(*w) += 8;
 	}
-	for (vector<int>::iterator w = _w2Dist.begin(); w != _w2Dist.end(); w++)
+	for (std::vector<int>::iterator w = _w2Dist.begin(); w != _w2Dist.end(); w++)
 	{
 		(*w) += 8;
 	}
@@ -391,7 +391,7 @@ void DogfightState::move()
 		w2 = _craft->getWeapons()->at(1);
 	}
 	// Handle weapon damage
-	for (vector<int>::iterator w = _w1Dist.begin(); w != _w1Dist.end(); w++)
+	for (std::vector<int>::iterator w = _w1Dist.begin(); w != _w1Dist.end(); w++)
 	{
 		if ((*w) >= _currentDist)
 		{
@@ -408,7 +408,7 @@ void DogfightState::move()
 			break;
 		}
 	}
-	for (vector<int>::iterator w = _w2Dist.begin(); w != _w2Dist.end(); w++)
+	for (std::vector<int>::iterator w = _w2Dist.begin(); w != _w2Dist.end(); w++)
 	{
 		if ((*w) >= _currentDist)
 		{
@@ -490,14 +490,14 @@ void DogfightState::move()
 	}
 
 	// Draw weapon shots
-	for (vector<int>::iterator w = _w1Dist.begin(); w != _w1Dist.end(); w++)
+	for (std::vector<int>::iterator w = _w1Dist.begin(); w != _w1Dist.end(); w++)
 	{
 		for (int i = -2; i <= 0; i++)
 		{
 			_battle->setPixel(_battle->getWidth() / 2 - 1, _battle->getHeight() - (*w) / 8 + i, Palette::blockOffset(7));
 		}
 	}
-	for (vector<int>::iterator w = _w2Dist.begin(); w != _w2Dist.end(); w++)
+	for (std::vector<int>::iterator w = _w2Dist.begin(); w != _w2Dist.end(); w++)
 	{
 		for (int i = -2; i <= 0; i++)
 		{
@@ -510,7 +510,7 @@ void DogfightState::move()
 	{
 		_craft->returnToBase();
 		_game->popState();
-		stringstream ss;
+		std::stringstream ss;
 		ss << "GMGEO" << RNG::generate(1, 2);
 		_game->getResourcePack()->getMusic(ss.str())->play();
 	}
@@ -547,7 +547,7 @@ void DogfightState::fireWeapon1()
 	CraftWeapon *w1 = _craft->getWeapons()->at(0);
 	w1->setAmmo(w1->getAmmo() - 1);
 
-	stringstream ss;
+	std::stringstream ss;
 	ss << w1->getAmmo();
 	_txtAmmo1->setText(ss.str());
 
@@ -564,7 +564,7 @@ void DogfightState::fireWeapon2()
 	CraftWeapon *w2= _craft->getWeapons()->at(1);
 	w2->setAmmo(w2->getAmmo() - 1);
 
-	stringstream ss;
+	std::stringstream ss;
 	ss << w2->getAmmo();
 	_txtAmmo2->setText(ss.str());
 
@@ -578,7 +578,7 @@ void DogfightState::fireWeapon2()
 void DogfightState::minimumDistance()
 {
 	int max = 0;
-	for (vector<CraftWeapon*>::iterator i = _craft->getWeapons()->begin(); i < _craft->getWeapons()->end(); i++)
+	for (std::vector<CraftWeapon*>::iterator i = _craft->getWeapons()->begin(); i < _craft->getWeapons()->end(); i++)
 	{
 		if (*i == 0)
 			continue;
@@ -604,7 +604,7 @@ void DogfightState::minimumDistance()
 void DogfightState::maximumDistance()
 {
 	int min = 1000;
-	for (vector<CraftWeapon*>::iterator i = _craft->getWeapons()->begin(); i < _craft->getWeapons()->end(); i++)
+	for (std::vector<CraftWeapon*>::iterator i = _craft->getWeapons()->begin(); i < _craft->getWeapons()->end(); i++)
 	{
 		if (*i == 0)
 			continue;
@@ -626,6 +626,7 @@ void DogfightState::maximumDistance()
 /**
  * Updates the status text and restarts
  * the text timeout counter.
+ * @param status New status text.
  */
 void DogfightState::setStatus(LangString status)
 {
@@ -666,11 +667,11 @@ void DogfightState::btnCautiousClick(SDL_Event *ev, int scale)
 	if (!_ufo->isCrashed())
 	{
 		setStatus(STR_CAUTIOUS_ATTACK);
-		if (_craft->getWeapons()->at(0) != 0)
+		if (_craft->getNumWeapons() > 0 && _craft->getWeapons()->at(0) != 0)
 		{
 			_w1Timer->setInterval(_craft->getWeapons()->at(0)->getRules()->getCautiousReload() * 75);
 		}
-		if (_craft->getWeapons()->at(1) != 0)
+		if (_craft->getNumWeapons() > 1 && _craft->getWeapons()->at(1) != 0)
 		{
 			_w2Timer->setInterval(_craft->getWeapons()->at(1)->getRules()->getCautiousReload() * 75);
 		}
@@ -688,11 +689,11 @@ void DogfightState::btnStandardClick(SDL_Event *ev, int scale)
 	if (!_ufo->isCrashed())
 	{
 		setStatus(STR_STANDARD_ATTACK);
-		if (_craft->getWeapons()->at(0) != 0)
+		if (_craft->getNumWeapons() > 0 && _craft->getWeapons()->at(0) != 0)
 		{
 			_w1Timer->setInterval(_craft->getWeapons()->at(0)->getRules()->getStandardReload() * 75);
 		}
-		if (_craft->getWeapons()->at(1) != 0)
+		if (_craft->getNumWeapons() > 1 && _craft->getWeapons()->at(1) != 0)
 		{
 			_w2Timer->setInterval(_craft->getWeapons()->at(1)->getRules()->getStandardReload() * 75);
 		}
@@ -710,11 +711,11 @@ void DogfightState::btnAggressiveClick(SDL_Event *ev, int scale)
 	if (!_ufo->isCrashed())
 	{
 		setStatus(STR_AGGRESSIVE_ATTACK);
-		if (_craft->getWeapons()->at(0) != 0)
+		if (_craft->getNumWeapons() > 0 && _craft->getWeapons()->at(0) != 0)
 		{
 			_w1Timer->setInterval(_craft->getWeapons()->at(0)->getRules()->getAggressiveReload() * 75);
 		}
-		if (_craft->getWeapons()->at(1) != 0)
+		if (_craft->getNumWeapons() > 1 && _craft->getWeapons()->at(1) != 0)
 		{
 			_w2Timer->setInterval(_craft->getWeapons()->at(1)->getRules()->getAggressiveReload() * 75);
 		}

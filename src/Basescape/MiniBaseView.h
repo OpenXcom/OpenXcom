@@ -22,8 +22,6 @@
 #include <vector>
 #include "../Engine/InteractiveSurface.h"
 
-using namespace std;
-
 class Base;
 class SurfaceSet;
 
@@ -35,7 +33,7 @@ class SurfaceSet;
 class MiniBaseView : public InteractiveSurface
 {
 private:
-	vector<Base*> *_bases;
+	std::vector<Base*> *_bases;
 	SurfaceSet *_texture;
 	unsigned int _base, _hoverBase;
 public:
@@ -44,7 +42,7 @@ public:
 	/// Cleans up the mini base view.
 	~MiniBaseView();
 	/// Sets the base list to display.
-	void setBases(vector<Base*> *bases);
+	void setBases(std::vector<Base*> *bases);
 	/// Sets the texture for the mini base view.
 	void setTexture(SurfaceSet *texture);
 	/// Gets the base the mouse is over.

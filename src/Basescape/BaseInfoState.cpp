@@ -291,21 +291,21 @@ void BaseInfoState::init()
 {
 	_edtBase->setText(_base->getName());
 
-	stringstream ss;
+	std::stringstream ss;
 	ss << _base->getAvailableSoldiers() << ":" << _base->getTotalSoldiers();
 	_numSoldiers->setText(ss.str());
 
 	_barSoldiers->setMax(_base->getTotalSoldiers());
 	_barSoldiers->setValue(_base->getAvailableSoldiers());
 
-	stringstream ss2;
+	std::stringstream ss2;
 	ss2 << _base->getAvailableEngineers() << ":" << _base->getTotalEngineers();
 	_numEngineers->setText(ss2.str());
 
 	_barEngineers->setMax(_base->getTotalEngineers());
 	_barEngineers->setValue(_base->getAvailableEngineers());
 
-	stringstream ss3;
+	std::stringstream ss3;
 	ss3 << _base->getAvailableScientists() << ":" << _base->getTotalScientists();
 	_numScientists->setText(ss3.str());
 
@@ -313,35 +313,35 @@ void BaseInfoState::init()
 	_barScientists->setValue(_base->getAvailableScientists());
 
 
-	stringstream ss4;
+	std::stringstream ss4;
 	ss4 << _base->getUsedQuarters() << ":" << _base->getAvailableQuarters();
 	_numQuarters->setText(ss4.str());
 
 	_barQuarters->setMax(_base->getAvailableQuarters());
 	_barQuarters->setValue(_base->getUsedQuarters());
 
-	stringstream ss5;
+	std::stringstream ss5;
 	ss5 << _base->getUsedStores() << ":" << _base->getAvailableStores();
 	_numStores->setText(ss5.str());
 
 	_barStores->setMax(_base->getAvailableStores());
 	_barStores->setValue(_base->getUsedStores());
 
-	stringstream ss6;
+	std::stringstream ss6;
 	ss6 << _base->getUsedLaboratories() << ":" << _base->getAvailableLaboratories();
 	_numLaboratories->setText(ss6.str());
 
 	_barLaboratories->setMax(_base->getAvailableLaboratories());
 	_barLaboratories->setValue(_base->getUsedLaboratories());
 
-	stringstream ss7;
+	std::stringstream ss7;
 	ss7 << _base->getUsedWorkshops() << ":" << _base->getAvailableWorkshops();
 	_numWorkshops->setText(ss7.str());
 
 	_barWorkshops->setMax(_base->getAvailableWorkshops());
 	_barWorkshops->setValue(_base->getUsedWorkshops());
 
-	stringstream ss8;
+	std::stringstream ss8;
 	ss8 << _base->getUsedHangars() << ":" << _base->getAvailableHangars();
 	_numHangars->setText(ss8.str());
 
@@ -349,21 +349,21 @@ void BaseInfoState::init()
 	_barHangars->setValue(_base->getUsedHangars());
 	
 
-	stringstream ss9;
+	std::stringstream ss9;
 	ss9 << _base->getDefenceValue();
 	_numDefence->setText(ss9.str());
 
 	_barDefence->setMax(_base->getDefenceValue());
 	_barDefence->setValue(_base->getDefenceValue());
 
-	stringstream ss10;
+	std::stringstream ss10;
 	ss10 << _base->getShortRangeDetection();
 	_numShortRange->setText(ss10.str());
 
 	_barShortRange->setMax(_base->getShortRangeDetection());
 	_barShortRange->setValue(_base->getShortRangeDetection());
 
-	stringstream ss11;
+	std::stringstream ss11;
 	ss11 << _base->getLongRangeDetection();
 	_numLongRange->setText(ss11.str());
 

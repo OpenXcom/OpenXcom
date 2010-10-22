@@ -48,13 +48,13 @@ Text::~Text()
  * Takes an integer value and formats it as currency,
  * spacing the thousands and adding a $ sign to the front.
  * @param funds The funding value.
- * @return The formatted string.
+ * @return The formatted std::string.
  */
-string Text::formatFunding(int funds)
+std::string Text::formatFunding(int funds)
 {
-	stringstream ss;
+	std::stringstream ss;
 	ss << funds;
-	string s = ss.str();
+	std::string s = ss.str();
 	size_t spacer = s.size() - 3;
 	while (spacer > 0 && spacer < s.size())
 	{
@@ -91,10 +91,10 @@ Font *Text::getFont()
 }
 
 /**
- * Changes the string displayed on screen.
- * @param text Text string.
+ * Changes the std::string displayed on screen.
+ * @param text Text std::string.
  */
-void Text::setText(string text)
+void Text::setText(std::string text)
 {
 	if (text != _text)
 	{
@@ -104,10 +104,10 @@ void Text::setText(string text)
 }
 
 /**
- * Returns the string displayed on screen.
- * @return Text string.
+ * Returns the std::string displayed on screen.
+ * @return Text std::string.
  */
-string Text::getText()
+std::string Text::getText()
 {
 	return _text;
 }
@@ -187,9 +187,9 @@ Uint8 Text::getColor()
  */
 void Text::processText()
 {
-	string *s = &_text;
+	std::string *s = &_text;
 
-	// Use a separate string for wordwrapping text
+	// Use a separate std::string for wordwrapping text
 	if (_wrap)
 	{
 		_wrappedText = _text;
@@ -200,11 +200,11 @@ void Text::processText()
 	_lineHeight.clear();
 
 	int width = 0, word = 0;
-	string::iterator space = s->begin();
+	std::string::iterator space = s->begin();
 	Font *font = _font;
 
 	// Go through the text character by character
-	for (string::iterator c = s->begin(); c <= s->end(); c++)
+	for (std::string::iterator c = s->begin(); c <= s->end(); c++)
 	{
 		// End of the line
 		if (c == s->end() || *c == '\n' || *c == 2)
@@ -266,9 +266,9 @@ void Text::draw()
 
 	int x = 0, y = 0, line = 0, height = 0;
 	Font *font = _font;
-	string *s = &_text;
+	std::string *s = &_text;
 
-	for (vector<int>::iterator i = _lineHeight.begin(); i != _lineHeight.end(); i++)
+	for (std::vector<int>::iterator i = _lineHeight.begin(); i != _lineHeight.end(); i++)
 		height += *i;
 
 	switch (_valign)
@@ -301,7 +301,7 @@ void Text::draw()
 		s = &_wrappedText;
 
 	// Draw each letter one by one
-	for (string::iterator c = s->begin(); c != s->end(); c++)
+	for (std::string::iterator c = s->begin(); c != s->end(); c++)
 	{
 		if (*c == ' ')
 		{

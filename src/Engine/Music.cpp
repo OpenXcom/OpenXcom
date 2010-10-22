@@ -37,7 +37,7 @@ Music::~Music()
  * Loads a music file from a specified filename.
  * @param filename Filename of the music file.
  */
-void Music::load(string filename)
+void Music::load(std::string filename)
 {
 	_music = Mix_LoadMUS(filename.c_str());
 	if (_music == 0) 

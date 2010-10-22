@@ -33,8 +33,6 @@
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleCraft.h"
 
-using namespace std;
-
 /**
  * Initializes all the elements in the Monthly Costs screen.
  * @param game Pointer to the core game.
@@ -103,7 +101,7 @@ MonthlyCostsState::MonthlyCostsState(Game *game, Base *base) : State(game), _bas
 	_txtSalaries->setText(_game->getResourcePack()->getLanguage()->getString(STR_SALARIES));
 
 	_txtIncome->setColor(Palette::blockOffset(13)+10);
-	stringstream ss;
+	std::stringstream ss;
 	ss << _game->getResourcePack()->getLanguage()->getString(STR_INCOME) << "=" << Text::formatFunding(_game->getSavedGame()->getCountryFunding());
 	_txtIncome->setText(ss.str());
 
@@ -111,10 +109,10 @@ MonthlyCostsState::MonthlyCostsState(Game *game, Base *base) : State(game), _bas
 	_lstCrafts->setColumns(4, 125, 70, 45, 60);
 	_lstCrafts->setDot(true);
 
-	stringstream ss2;
+	std::stringstream ss2;
 	ss2 << _base->getCraftCount(STR_SKYRANGER);
 	_lstCrafts->addRow(0, 4, _game->getResourcePack()->getLanguage()->getString(STR_SKYRANGER).c_str(), Text::formatFunding(_game->getRuleset()->getCraft(STR_SKYRANGER)->getMonthlyFee()).c_str(), ss2.str().c_str(), Text::formatFunding(_base->getCraftCount(STR_SKYRANGER) * _game->getRuleset()->getCraft(STR_SKYRANGER)->getMonthlyFee()).c_str());
-	stringstream ss3;
+	std::stringstream ss3;
 	ss3 << _base->getCraftCount(STR_INTERCEPTOR);
 	_lstCrafts->addRow(0, 4, _game->getResourcePack()->getLanguage()->getString(STR_INTERCEPTOR).c_str(), Text::formatFunding(_game->getRuleset()->getCraft(STR_INTERCEPTOR)->getMonthlyFee()).c_str(), ss3.str().c_str(), Text::formatFunding(_base->getCraftCount(STR_INTERCEPTOR) * _game->getRuleset()->getCraft(STR_INTERCEPTOR)->getMonthlyFee()).c_str());
 
@@ -122,13 +120,13 @@ MonthlyCostsState::MonthlyCostsState(Game *game, Base *base) : State(game), _bas
 	_lstSalaries->setColumns(4, 125, 70, 45, 60);
 	_lstSalaries->setDot(true);
 
-	stringstream ss4;
+	std::stringstream ss4;
 	ss4 << _base->getSoldiers()->size();
 	_lstSalaries->addRow(0, 4, _game->getResourcePack()->getLanguage()->getString(STR_SOLDIERS).c_str(), Text::formatFunding(20000).c_str(), ss4.str().c_str(), Text::formatFunding(_base->getSoldiers()->size() * 20000).c_str());
-	stringstream ss5;
+	std::stringstream ss5;
 	ss5 << _base->getTotalEngineers();
 	_lstSalaries->addRow(0, 4, _game->getResourcePack()->getLanguage()->getString(STR_ENGINEERS).c_str(), Text::formatFunding(25000).c_str(), ss5.str().c_str(), Text::formatFunding(_base->getTotalEngineers() * 25000).c_str());
-	stringstream ss6;
+	std::stringstream ss6;
 	ss6 << _base->getTotalScientists();
 	_lstSalaries->addRow(0, 4, _game->getResourcePack()->getLanguage()->getString(STR_SCIENTISTS).c_str(), Text::formatFunding(30000).c_str(), ss6.str().c_str(), Text::formatFunding(_base->getTotalScientists() * 30000).c_str());
 

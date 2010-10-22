@@ -33,7 +33,7 @@ SoundSet::SoundSet() : _sounds()
  */
 SoundSet::~SoundSet()
 {
-	for (vector<Sound*>::iterator i = _sounds.begin(); i != _sounds.end(); i++)
+	for (std::vector<Sound*>::iterator i = _sounds.begin(); i != _sounds.end(); i++)
 	{
 		delete *i;
 	}
@@ -48,10 +48,10 @@ SoundSet::~SoundSet()
  * @param wav Are the sounds in WAV format?
  * @sa http://www.ufopaedia.org/index.php?title=SOUND
  */
-void SoundSet::loadCat(string filename, bool wav)
+void SoundSet::loadCat(std::string filename, bool wav)
 {
 	// Load CAT file
-	ifstream sndFile (filename.c_str(), ios::in | ios::binary);
+	std::ifstream sndFile (filename.c_str(), std::ios::in | std::ios::binary);
 	if (!sndFile)
 	{
 		throw "Failed to load CAT";
@@ -64,7 +64,7 @@ void SoundSet::loadCat(string filename, bool wav)
 	int amount = first / sizeof(first) / 2;
 
 	// Get sound offsets
-	sndFile.seekg(0, ios::beg);
+	sndFile.seekg(0, std::ios::beg);
 
 	int *offset = new int[amount];
 	int *size = new int[amount];
@@ -78,7 +78,7 @@ void SoundSet::loadCat(string filename, bool wav)
 	// Load each sound file
 	for (int i = 0; i < amount; i++)
 	{
-		sndFile.seekg(offset[i], ios::beg);
+		sndFile.seekg(offset[i], std::ios::beg);
 
 		char namesize, *name;
 

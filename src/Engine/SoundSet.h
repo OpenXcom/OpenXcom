@@ -24,8 +24,6 @@
 
 class Sound;
 
-using namespace std;
-
 /**
  * Container of a set of sounds.
  * Used to manage file sets that contain a pack
@@ -35,14 +33,14 @@ class SoundSet
 {
 private:
 	int _width, _height;
-	vector<Sound*> _sounds;
+	std::vector<Sound*> _sounds;
 public:
 	/// Crates a sound set.
 	SoundSet();
 	/// Cleans up the sound set.
 	~SoundSet();
 	/// Loads an X-Com CAT set of sound files.
-	void loadCat(string filename, bool wav = true);
+	void loadCat(std::string filename, bool wav = true);
 	/// Gets a particular sound from the set.
 	Sound *getSound(unsigned int i);
 	/// Gets the total sounds in the set.

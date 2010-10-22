@@ -35,9 +35,9 @@ class ArrowButton;
 class TextList : public InteractiveSurface
 {
 private:
-	vector< vector<Text*> > _texts;
-	vector<int> _columns;
-	vector<intptr_t> _values;
+	std::vector< std::vector<Text*> > _texts;
+	std::vector<int> _columns;
+	std::vector<intptr_t> _values;
 	Font *_big, *_small;
 	unsigned int _scroll, _visibleRows;
 	Uint8 _color;

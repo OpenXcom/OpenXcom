@@ -34,7 +34,7 @@ class TextEdit : public InteractiveSurface
 {
 private:
 	Text *_text;
-	string _value;
+	std::string _value;
 	bool _blink;
 	Timer *_timer;
 	char _ascii;
@@ -52,10 +52,10 @@ public:
 	void setBig();
 	/// Sets the text size to small.
 	void setSmall();
-	/// Sets the text's string.
-	void setText(string text);
-	/// Gets the text's string.
-	string getText();
+	/// Sets the text's std::string.
+	void setText(std::string text);
+	/// Gets the text's std::string.
+	std::string getText();
 	/// Sets the text's wordwrap setting.
 	void setWordWrap(bool wrap);
 	/// Sets the text's color invert setting.

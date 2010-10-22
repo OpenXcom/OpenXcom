@@ -22,8 +22,6 @@
 #include <string>
 #include "SDL_mixer.h"
 
-using namespace std;
-
 /**
  * Container for music tracks.
  * Handles loading and playing various formats through SDL_mixer.
@@ -38,7 +36,7 @@ public:
 	/// Cleans up the music track.
 	~Music();
 	/// Loads music from the specified file.
-	void load(string filename);
+	void load(std::string filename);
 	/// Plays the music.
 	void play();
 };

@@ -23,8 +23,6 @@
 
 class City;
 
-using namespace std;
-
 /**
  * Represents a region of the world.
  * Regions help localize X-Com and alien activity around
@@ -34,8 +32,8 @@ class Region
 {
 private:
 	int _cost;
-	vector<double> _lonMin, _lonMax, _latMin, _latMax;
-	vector<City*> _cities;
+	std::vector<double> _lonMin, _lonMax, _latMin, _latMax;
+	std::vector<City*> _cities;
 public:
 	/// Creates a new region with a base cost.
 	Region(int cost);
@@ -48,7 +46,7 @@ public:
 	/// Checks if a point is inside the region.
 	bool insideRegion(double lon, double lat);
 	/// Gets the cities in this region.
-	vector<City*> *getCities();
+	std::vector<City*> *getCities();
 };
 
 #endif

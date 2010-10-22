@@ -32,8 +32,6 @@
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
 
-using namespace std;
-
 /**
  * Initializes all the elements in the test screen.
  * @param game Pointer to the core game.

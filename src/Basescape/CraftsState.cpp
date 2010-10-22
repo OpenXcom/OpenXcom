@@ -33,8 +33,6 @@
 #include "../Savegame/Base.h"
 #include "CraftInfoState.h"
 
-using namespace std;
-
 /**
  * Initializes all the elements in the Equip Craft screen.
  * @param game Pointer to the core game.
@@ -82,7 +80,7 @@ CraftsState::CraftsState(Game *game, Base *base) : State(game), _base(base)
 
 	_txtBase->setColor(Palette::blockOffset(15)+1);
 	_txtBase->setBig();
-	string baseName = _game->getResourcePack()->getLanguage()->getString(STR_BASE_);
+	std::string baseName = _game->getResourcePack()->getLanguage()->getString(STR_BASE_);
 	baseName += _base->getName();
 	_txtBase->setText(baseName);
 
@@ -123,9 +121,9 @@ CraftsState::~CraftsState()
 void CraftsState::init()
 {
 	_lstCrafts->clearList();
-	for (vector<Craft*>::iterator i = _base->getCrafts()->begin(); i != _base->getCrafts()->end(); i++)
+	for (std::vector<Craft*>::iterator i = _base->getCrafts()->begin(); i != _base->getCrafts()->end(); i++)
 	{
-		stringstream ss, ss2, ss3;
+		std::stringstream ss, ss2, ss3;
 		ss << (*i)->getNumWeapons() << "/" << (*i)->getRules()->getWeapons();
 		ss2 << (*i)->getNumSoldiers();
 		ss3 << (*i)->getNumHWPs();

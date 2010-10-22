@@ -49,7 +49,7 @@ void MovingTarget::setDestination(Target *dest)
 	// Remove moving target from old destination's followers
 	if (_dest != 0)
 	{
-		for (vector<Target*>::iterator i = _dest->getFollowers()->begin(); i != _dest->getFollowers()->end(); i++)
+		for (std::vector<Target*>::iterator i = _dest->getFollowers()->begin(); i != _dest->getFollowers()->end(); i++)
 		{		
 			if ((*i) == this)
 			{
@@ -147,6 +147,7 @@ void MovingTarget::calculateSpeed()
 /**
  * Checks if the moving target has reached its destination by checking
  * if it has exceeded the destination position based on the speed vector.
+ * @return True if it has, False otherwise.
  */
 bool MovingTarget::reachedDestination()
 {

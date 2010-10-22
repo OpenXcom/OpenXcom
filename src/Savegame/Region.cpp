@@ -32,7 +32,7 @@ Region::Region(int cost): _cost(cost), _lonMin(), _lonMax(), _latMin(), _latMax(
  */
 Region::~Region()
 {
-	for (vector<City*>::iterator i = _cities.begin(); i != _cities.end(); i++)
+	for (std::vector<City*>::iterator i = _cities.begin(); i != _cities.end(); i++)
 	{
 		delete *i;
 	}
@@ -91,7 +91,7 @@ bool Region::insideRegion(double lon, double lat)
  * Returns the list of cities contained.
  * @return Pointer to list.
  */
-vector<City*> *Region::getCities()
+std::vector<City*> *Region::getCities()
 {
 	return &_cities;
 }

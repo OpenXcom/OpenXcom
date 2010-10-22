@@ -161,7 +161,7 @@ void BuildNewBaseState::globeClick(SDL_Event *ev, int scale)
 		{
 			_base->setLongitude(lon);
 			_base->setLatitude(lat);
-			for (vector<Craft*>::iterator i = _base->getCrafts()->begin(); i != _base->getCrafts()->end(); i++)
+			for (std::vector<Craft*>::iterator i = _base->getCrafts()->begin(); i != _base->getCrafts()->end(); i++)
 			{
 				(*i)->setLongitude(lon);
 				(*i)->setLatitude(lat);

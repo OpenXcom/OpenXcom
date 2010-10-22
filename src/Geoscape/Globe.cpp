@@ -213,15 +213,15 @@ Globe::~Globe()
 	delete _mkCrashedUfo;
 	delete _mkAlienSite;
 
-	for (vector<Polygon*>::iterator i = _ocean.begin(); i != _ocean.end(); i++)
+	for (std::vector<Polygon*>::iterator i = _ocean.begin(); i != _ocean.end(); i++)
 	{
 		delete *i;
 	}
-	for (vector<Polygon*>::iterator i = _cacheOcean.begin(); i != _cacheOcean.end(); i++)
+	for (std::vector<Polygon*>::iterator i = _cacheOcean.begin(); i != _cacheOcean.end(); i++)
 	{
 		delete *i;
 	}
-	for (vector<Polygon*>::iterator i = _cacheLand.begin(); i != _cacheLand.end(); i++)
+	for (std::vector<Polygon*>::iterator i = _cacheLand.begin(); i != _cacheLand.end(); i++)
 	{
 		delete *i;
 	}
@@ -324,10 +324,10 @@ bool Globe::insidePolygon(double lon, double lat, Polygon *poly)
  * @param polygons Pointer to the polygon set.
  * @sa http://www.ufopaedia.org/index.php?title=WORLD.DAT
  */
-void Globe::loadDat(string filename, vector<Polygon*> *polygons)
+void Globe::loadDat(std::string filename, std::vector<Polygon*> *polygons)
 {
 	// Load file
-	ifstream mapFile (filename.c_str(), ios::in | ios::binary);
+	std::ifstream mapFile (filename.c_str(), std::ios::in | std::ios::binary);
 	if (!mapFile)
 	{
 		throw "Failed to load DAT";
@@ -510,7 +510,7 @@ void Globe::center(double lon, double lat)
 bool Globe::insideLand(double lon, double lat)
 {
 	bool inside = false;
-	for (vector<Polygon*>::iterator i = _res->getPolygons()->begin(); i < _res->getPolygons()->end() && !inside; i++)
+	for (std::vector<Polygon*>::iterator i = _res->getPolygons()->begin(); i < _res->getPolygons()->end() && !inside; i++)
 	{
 		inside = insidePolygon(lon, lat, *i);
 	}
@@ -553,12 +553,12 @@ bool Globe::targetNear(Target* target, int x, int y)
  * @param craft Only get craft targets.
  * @return List of pointers to targets.
  */
-vector<Target*> Globe::getTargets(int x, int y, bool craft)
+std::vector<Target*> Globe::getTargets(int x, int y, bool craft)
 {
-	vector<Target*> v;
+	std::vector<Target*> v;
 	if (!craft)
 	{
-		for (vector<Base*>::iterator i = _save->getBases()->begin(); i != _save->getBases()->end(); i++)
+		for (std::vector<Base*>::iterator i = _save->getBases()->begin(); i != _save->getBases()->end(); i++)
 		{
 			if ((*i)->getLongitude() == 0.0 && (*i)->getLatitude() == 0.0)
 				continue;
@@ -568,7 +568,7 @@ vector<Target*> Globe::getTargets(int x, int y, bool craft)
 				v.push_back(*i);
 			}
 
-			for (vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); j++)
+			for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); j++)
 			{
 				if ((*j)->getLongitude() == (*i)->getLongitude() && (*j)->getLatitude() == (*i)->getLatitude() && (*j)->getDestination() == 0)
 					continue;
@@ -580,7 +580,7 @@ vector<Target*> Globe::getTargets(int x, int y, bool craft)
 			}
 		}
 	}
-	for (vector<Ufo*>::iterator i = _save->getUfos()->begin(); i != _save->getUfos()->end(); i++)
+	for (std::vector<Ufo*>::iterator i = _save->getUfos()->begin(); i != _save->getUfos()->end(); i++)
 	{
 		if (!(*i)->getDetected())
 			continue;
@@ -590,7 +590,7 @@ vector<Target*> Globe::getTargets(int x, int y, bool craft)
 			v.push_back(*i);
 		}
 	}
-	for (vector<Waypoint*>::iterator i = _save->getWaypoints()->begin(); i != _save->getWaypoints()->end(); i++)
+	for (std::vector<Waypoint*>::iterator i = _save->getWaypoints()->begin(); i != _save->getWaypoints()->end(); i++)
 	{
 		if (targetNear((*i), x, y))
 		{
@@ -608,13 +608,13 @@ vector<Target*> Globe::getTargets(int x, int y, bool craft)
 void Globe::cachePolygons()
 {
 	// Cache ocean
-	for (vector<Polygon*>::iterator i = _cacheOcean.begin(); i != _cacheOcean.end(); i++)
+	for (std::vector<Polygon*>::iterator i = _cacheOcean.begin(); i != _cacheOcean.end(); i++)
 	{
 		delete *i;
 	}	
 	_cacheOcean.clear();
 	
-	for (vector<Polygon*>::iterator i = _ocean.begin(); i != _ocean.end(); i++)
+	for (std::vector<Polygon*>::iterator i = _ocean.begin(); i != _ocean.end(); i++)
 	{
 		// Is quad on the back face?
 		bool backFace = true;
@@ -640,13 +640,13 @@ void Globe::cachePolygons()
 	}
 
 	// Cache land
-	for (vector<Polygon*>::iterator i = _cacheLand.begin(); i != _cacheLand.end(); i++)
+	for (std::vector<Polygon*>::iterator i = _cacheLand.begin(); i != _cacheLand.end(); i++)
 	{
 		delete *i;
 	}	
 	_cacheLand.clear();
 
-	for (vector<Polygon*>::iterator i = _res->getPolygons()->begin(); i != _res->getPolygons()->end(); i++)
+	for (std::vector<Polygon*>::iterator i = _res->getPolygons()->begin(); i != _res->getPolygons()->end(); i++)
 	{
 		// Don't draw if polygon is facing back
 		bool backFace = true;
@@ -769,7 +769,7 @@ void Globe::drawOcean()
 
 	filledCircleColor(getSurface(), _cenX, _cenY, (Sint16)floor(_radius[_zoom]), Palette::getRGBA(this->getPalette(), Palette::blockOffset(12)+28));
   
-	for (vector<Polygon*>::iterator i = _cacheOcean.begin(); i != _cacheOcean.end(); i++)
+	for (std::vector<Polygon*>::iterator i = _cacheOcean.begin(); i != _cacheOcean.end(); i++)
 	{
 		double tmpLon = (*i)->getLongitude(0);
 
@@ -803,7 +803,7 @@ void Globe::drawLand()
 	double minLon = 0.0, maxLon = 0.0, curTime = _save->getTime()->getDaylight();
 	Sint16 x[4], y[4];
 
-	for (vector<Polygon*>::iterator i = _cacheLand.begin(); i != _cacheLand.end(); i++)
+	for (std::vector<Polygon*>::iterator i = _cacheLand.begin(); i != _cacheLand.end(); i++)
 	{
 		// Convert coordinates
 		for (int j = 0; j < (*i)->getPoints(); j++)
@@ -844,7 +844,7 @@ void Globe::drawDetail()
 		// Lock the surface
 		_countries->lock();
 
-		for (vector<Polyline*>::iterator i = _res->getPolylines()->begin(); i != _res->getPolylines()->end(); i++)
+		for (std::vector<Polyline*>::iterator i = _res->getPolylines()->begin(); i != _res->getPolylines()->end(); i++)
 		{
 			Sint16 x[2], y[2];
 			for (int j = 0; j < (*i)->getPoints() - 1; j++)
@@ -869,7 +869,7 @@ void Globe::drawDetail()
 	if (_zoom >= 2)
 	{
 		Sint16 x, y;
-		for (map<LangString, Country*>::iterator i = _save->getCountries()->begin(); i != _save->getCountries()->end(); i++)
+		for (std::map<LangString, Country*>::iterator i = _save->getCountries()->begin(); i != _save->getCountries()->end(); i++)
 		{
 			// Don't draw if label is facing back
 			if (pointBack(i->second->getLabelLongitude(), i->second->getLabelLatitude()))
@@ -891,9 +891,9 @@ void Globe::drawDetail()
 	if (_zoom >= 3)
 	{
 		Sint16 x, y;
-		for (map<LangString, Region*>::iterator i = _save->getRegions()->begin(); i != _save->getRegions()->end(); i++)
+		for (std::map<LangString, Region*>::iterator i = _save->getRegions()->begin(); i != _save->getRegions()->end(); i++)
 		{
-			for (vector<City*>::iterator j = i->second->getCities()->begin(); j != i->second->getCities()->end(); j++)
+			for (std::vector<City*>::iterator j = i->second->getCities()->begin(); j != i->second->getCities()->end(); j++)
 			{
 				// Don't draw if city is facing back
 				if (pointBack((*j)->getLongitude(), (*j)->getLatitude()))
@@ -928,7 +928,7 @@ void Globe::drawMarkers()
 	_markers->clear();
 
 	// Draw the base markers
-	for (vector<Base*>::iterator i = _save->getBases()->begin(); i != _save->getBases()->end(); i++)
+	for (std::vector<Base*>::iterator i = _save->getBases()->begin(); i != _save->getBases()->end(); i++)
 	{
 		// Cheap hack to hide bases when they haven't been placed yet
 		if (((*i)->getLongitude() != 0.0 || (*i)->getLatitude() != 0.0) &&
@@ -941,7 +941,7 @@ void Globe::drawMarkers()
 			_mkXcomBase->blit(_markers);
 		}
 		// Draw the craft markers
-		for (vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); j++)
+		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); j++)
 		{
 			// Hide crafts docked at base
 			if ((*j)->getStatus() != STR_OUT || pointBack((*j)->getLongitude(), (*j)->getLatitude()))
@@ -956,7 +956,7 @@ void Globe::drawMarkers()
 	}
 
 	// Draw the UFO markers
-	for (vector<Ufo*>::iterator i = _save->getUfos()->begin(); i != _save->getUfos()->end(); i++)
+	for (std::vector<Ufo*>::iterator i = _save->getUfos()->begin(); i != _save->getUfos()->end(); i++)
 	{
 		if (pointBack((*i)->getLongitude(), (*i)->getLatitude()))
 			continue;
@@ -981,7 +981,7 @@ void Globe::drawMarkers()
 	}
 
 	// Draw the waypoint markers
-	for (vector<Waypoint*>::iterator i = _save->getWaypoints()->begin(); i != _save->getWaypoints()->end(); i++)
+	for (std::vector<Waypoint*>::iterator i = _save->getWaypoints()->begin(); i != _save->getWaypoints()->end(); i++)
 	{
 		if (pointBack((*i)->getLongitude(), (*i)->getLatitude()))
 			continue;

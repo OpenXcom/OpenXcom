@@ -40,23 +40,23 @@ SavedGame::SavedGame(GameDifficulty diff) : _diff(diff), _funds(0), _countries()
  */
 SavedGame::~SavedGame()
 {
-	for (map<LangString, Country*>::iterator i = _countries.begin(); i != _countries.end(); i++)
+	for (std::map<LangString, Country*>::iterator i = _countries.begin(); i != _countries.end(); i++)
 	{
 		delete i->second;
 	}
-	for (map<LangString, Region*>::iterator i = _regions.begin(); i != _regions.end(); i++)
+	for (std::map<LangString, Region*>::iterator i = _regions.begin(); i != _regions.end(); i++)
 	{
 		delete i->second;
 	}
-	for (vector<Base*>::iterator i = _bases.begin(); i != _bases.end(); i++)
+	for (std::vector<Base*>::iterator i = _bases.begin(); i != _bases.end(); i++)
 	{
 		delete *i;
 	}
-	for (vector<Ufo*>::iterator i = _ufos.begin(); i != _ufos.end(); i++)
+	for (std::vector<Ufo*>::iterator i = _ufos.begin(); i != _ufos.end(); i++)
 	{
 		delete *i;
 	}
-	for (vector<Waypoint*>::iterator i = _waypoints.begin(); i != _waypoints.end(); i++)
+	for (std::vector<Waypoint*>::iterator i = _waypoints.begin(); i != _waypoints.end(); i++)
 	{
 		delete *i;
 	}
@@ -93,7 +93,7 @@ GameTime *SavedGame::getTime()
  * Returns the list of countries in the game world.
  * @return Pointer to country list.
  */
-map<LangString, Country*> *SavedGame::getCountries()
+std::map<LangString, Country*> *SavedGame::getCountries()
 {
 	return &_countries;
 }
@@ -105,7 +105,7 @@ map<LangString, Country*> *SavedGame::getCountries()
 int SavedGame::getCountryFunding()
 {
 	int total = 0;
-	for (map<LangString, Country*>::iterator i = _countries.begin(); i != _countries.end(); i++)
+	for (std::map<LangString, Country*>::iterator i = _countries.begin(); i != _countries.end(); i++)
 	{
 		total += i->second->getFunding();
 	}
@@ -116,7 +116,7 @@ int SavedGame::getCountryFunding()
  * Returns the list of world regions.
  * @return Pointer to region list.
  */
-map<LangString, Region*> *SavedGame::getRegions()
+std::map<LangString, Region*> *SavedGame::getRegions()
 {
 	return &_regions;
 }
@@ -125,7 +125,7 @@ map<LangString, Region*> *SavedGame::getRegions()
  * Returns the list of player bases.
  * @return Pointer to base list.
  */
-vector<Base*> *SavedGame::getBases()
+std::vector<Base*> *SavedGame::getBases()
 {
 	return &_bases;
 }
@@ -137,7 +137,7 @@ vector<Base*> *SavedGame::getBases()
 int SavedGame::getBaseMaintenance()
 {
 	int total = 0;
-	for (vector<Base*>::iterator i = _bases.begin(); i != _bases.end(); i++)
+	for (std::vector<Base*>::iterator i = _bases.begin(); i != _bases.end(); i++)
 	{
 		total += (*i)->getMonthlyMaintenace();
 	}
@@ -148,7 +148,7 @@ int SavedGame::getBaseMaintenance()
  * Returns the latest craft IDs for each type.
  * @return Pointer to ID list.
  */
-map<LangString, int> *SavedGame::getCraftIds()
+std::map<LangString, int> *SavedGame::getCraftIds()
 {
 	return &_craftId;
 }
@@ -157,7 +157,7 @@ map<LangString, int> *SavedGame::getCraftIds()
  * Returns the list of alien UFOs.
  * @return Pointer to UFO list.
  */
-vector<Ufo*> *SavedGame::getUfos()
+std::vector<Ufo*> *SavedGame::getUfos()
 {
 	return &_ufos;
 }
@@ -184,7 +184,7 @@ int *SavedGame::getWaypointId()
  * Returns the list of craft waypoints.
  * @return Pointer to waypoint list.
  */
-vector<Waypoint*> *SavedGame::getWaypoints()
+std::vector<Waypoint*> *SavedGame::getWaypoints()
 {
 	return &_waypoints;
 }

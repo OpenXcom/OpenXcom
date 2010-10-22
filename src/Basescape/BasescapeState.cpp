@@ -182,7 +182,7 @@ void BasescapeState::init()
 	_mini->draw();
 	_txtBase->setText(_base->getName());
 
-	for (map<LangString, Region*>::iterator i = _game->getSavedGame()->getRegions()->begin(); i != _game->getSavedGame()->getRegions()->end(); i++)
+	for (std::map<LangString, Region*>::iterator i = _game->getSavedGame()->getRegions()->begin(); i != _game->getSavedGame()->getRegions()->end(); i++)
 	{
 		if (i->second->insideRegion(_base->getLongitude(), _base->getLatitude()))
 		{
@@ -191,7 +191,7 @@ void BasescapeState::init()
 		}
 	}
 
-	string s = _game->getResourcePack()->getLanguage()->getString(STR_FUNDS_);
+	std::string s = _game->getResourcePack()->getLanguage()->getString(STR_FUNDS_);
 	s.erase(s.size()-1, 1);
 	s += Text::formatFunding(_game->getSavedGame()->getFunds());
 	_txtFunds->setText(s);
@@ -334,7 +334,7 @@ void BasescapeState::viewClick(SDL_Event *ev, int scale)
 	{
 		// Pre-calculate values to ensure base stays connected
 		int x = -1, y = -1, squares = 0;
-		for (vector<BaseFacility*>::iterator i = _base->getFacilities()->begin(); i != _base->getFacilities()->end(); i++)
+		for (std::vector<BaseFacility*>::iterator i = _base->getFacilities()->begin(); i != _base->getFacilities()->end(); i++)
 		{
 			if ((*i)->getRules()->getLift())
 			{

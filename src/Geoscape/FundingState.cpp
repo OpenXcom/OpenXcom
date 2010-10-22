@@ -31,8 +31,6 @@
 #include "../Savegame/Country.h"
 #include "../Savegame/SavedGame.h"
 
-using namespace std;
-
 /**
  * Initializes all the elements in the Funding screen.
  * @param game Pointer to the core game.
@@ -86,9 +84,9 @@ FundingState::FundingState(Game *game) : State(game)
 	_lstCountries->setColor(Palette::blockOffset(15)-1);
 	_lstCountries->setColumns(3, 108, 100, 72);
 	_lstCountries->setDot(true);
-	for (map<LangString, Country*>::iterator i = _game->getSavedGame()->getCountries()->begin(); i != _game->getSavedGame()->getCountries()->end(); i++)
+	for (std::map<LangString, Country*>::iterator i = _game->getSavedGame()->getCountries()->begin(); i != _game->getSavedGame()->getCountries()->end(); i++)
 	{
-		stringstream ss;
+		std::stringstream ss;
 		ss << i->second->getChange();
 		_lstCountries->addRow(0, 3, _game->getResourcePack()->getLanguage()->getString(i->first).c_str(), Text::formatFunding(i->second->getFunding()).c_str(), ss.str().c_str());
 	}

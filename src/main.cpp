@@ -60,7 +60,7 @@ int main(int argc, char** args)
 	}
 	catch (const char* c)
 	{
-		cerr << "ERROR: " << c << endl;
+		std::cerr << "ERROR: " << c << std::endl;
 		exit(-1);
 	}
 	

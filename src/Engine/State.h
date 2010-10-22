@@ -23,8 +23,6 @@
 #include <vector>
 #include "SDL.h"
 
-using namespace std;
-
 class Game;
 class Surface;
 
@@ -40,7 +38,7 @@ class State
 {
 protected:
 	Game *_game;
-	vector<Surface*> _surfaces;
+	std::vector<Surface*> _surfaces;
 	bool _screen;
 
 public:
@@ -49,7 +47,7 @@ public:
 	/// Cleans up the state.
 	virtual ~State();
 	/// Gets the state's surfaces.
-	vector<Surface*> *getSurfaces();
+	std::vector<Surface*> *getSurfaces();
 	/// Adds a child element to the state.
 	void add(Surface *surface);
 	/// Gets whether the state is a full-screen.

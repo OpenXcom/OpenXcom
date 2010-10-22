@@ -30,8 +30,6 @@
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/GameTime.h"
 
-using namespace std;
-
 /**
  * Initializes all the elements in the Monthly Report screen.
  * @param game Pointer to the core game.
@@ -76,7 +74,7 @@ MonthlyReportState::MonthlyReportState(Game *game) : State(game)
 		month = 12;
 		year--;
 	}
-	stringstream ss;
+	std::stringstream ss;
 	ss << _game->getResourcePack()->getLanguage()->getString(STR_MONTH) << _game->getResourcePack()->getLanguage()->getString((LangString)(STR_JAN - 1 + month)) << " " << year;
 
 	_txtMonth->setColor(Palette::blockOffset(15)-1);

@@ -26,8 +26,6 @@ class TextButton;
 class Window;
 class Text;
 
-using namespace std;
-
 /**
  * Notifies the player when a targeted UFO
  * goes outside radar range.
@@ -38,10 +36,10 @@ private:
 	TextButton *_btnOk;
 	Window *_window;
 	Text *_txtTitle;
-	string _id;
+	std::string _id;
 public:
 	/// Creates the Ufo Lost state.
-	UfoLostState(Game *game, string id);
+	UfoLostState(Game *game, std::string id);
 	/// Cleans up the Ufo Lost state.
 	~UfoLostState();
 	/// Updates the palette.

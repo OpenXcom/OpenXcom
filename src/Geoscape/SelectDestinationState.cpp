@@ -149,7 +149,7 @@ void SelectDestinationState::globeClick(SDL_Event *ev, int scale)
 	// Clicking on a valid target
 	if (ev->button.button == SDL_BUTTON_LEFT)
 	{
-		vector<Target*> v = _globe->getTargets(mouseX, mouseY, true);
+		std::vector<Target*> v = _globe->getTargets(mouseX, mouseY, true);
 		if (v.size() == 0)
 		{
 			Waypoint *w = new Waypoint();

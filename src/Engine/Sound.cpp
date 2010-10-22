@@ -39,7 +39,7 @@ Sound::~Sound()
  * Loads a sound file from a specified filename.
  * @param filename Filename of the sound file.
  */
-void Sound::load(string filename)
+void Sound::load(std::string filename)
 {
 	_sound = Mix_LoadWAV(filename.c_str());
 	if (_sound == 0) 

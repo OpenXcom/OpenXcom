@@ -21,8 +21,6 @@
 #include "../Engine/Font.h"
 #include "../Engine/Timer.h"
 
-using namespace std;
-
 /**
  * Sets up a blank text with the specified size and position.
  * The different fonts need to be passed in advance since the
@@ -80,20 +78,20 @@ void TextEdit::setSmall()
 }
 
 /**
- * Changes the string displayed on screen.
- * @param text Text string.
+ * Changes the std::string displayed on screen.
+ * @param text Text std::string.
  */
-void TextEdit::setText(string text)
+void TextEdit::setText(std::string text)
 {
 	_value = text;
 	draw();
 }
 
 /**
- * Returns the string displayed on screen.
- * @return Text string.
+ * Returns the std::string displayed on screen.
+ * @return Text std::string.
  */
-string TextEdit::getText()
+std::string TextEdit::getText()
 {
 	return _value;
 }
@@ -195,7 +193,7 @@ void TextEdit::blink()
  */
 void TextEdit::draw()
 {
-	stringstream ss;
+	std::stringstream ss;
 #ifdef DINGOO
 	ss << _value << _ascii;
 #else
@@ -220,11 +218,11 @@ void TextEdit::draw()
 bool TextEdit::exceedsMaxWidth(char c)
 {
 	int w = 0;
-	string s = _value;
+	std::string s = _value;
 
 	s += c;
 	s += '*';
-	for (string::iterator i = s.begin(); i < s.end(); i++)
+	for (std::string::iterator i = s.begin(); i < s.end(); i++)
 		w += _text->getFont()->getChar(*i)->getCrop()->w + _text->getFont()->getSpacing();
 
 	if (w > _width)

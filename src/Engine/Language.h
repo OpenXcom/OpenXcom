@@ -23,25 +23,23 @@
 #include <string>
 #include "../Resource/LangString.h"
 
-using namespace std;
-
 /**
- * Contains strings used throughout the game for localization.
- * Languages are just a set of strings identified by an ID number.
+ * Contains std::strings used throughout the game for localization.
+ * Languages are just a set of std::strings identified by an ID number.
  */
 class Language
 {
 private:
-	vector<string> _strings;
+	std::vector<std::string> _strings;
 public:
 	/// Creates a blank language.
 	Language();
 	/// Cleans up the language.
 	~Language();
 	/// Loads an X-Com language file.
-	void loadDat(string filename);
-	/// Gets a string from the language.
-	string getString(LangString id);
+	void loadDat(std::string filename);
+	/// Gets a std::string from the language.
+	std::string getString(LangString id);
 };
 
 #endif

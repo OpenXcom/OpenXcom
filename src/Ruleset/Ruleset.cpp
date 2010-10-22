@@ -36,27 +36,27 @@ Ruleset::Ruleset() : _names(), _facilities(), _crafts(), _craftWeapons(), _items
  */
 Ruleset::~Ruleset()
 {
-	for (vector<SoldierNamePool*>::iterator i = _names.begin(); i != _names.end(); i++)
+	for (std::vector<SoldierNamePool*>::iterator i = _names.begin(); i != _names.end(); i++)
 	{
 		delete *i;
 	}
-	for (map<LangString, RuleBaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); i++)
+	for (std::map<LangString, RuleBaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); i++)
 	{
 		delete i->second;
 	}
-	for (map<LangString, RuleCraft*>::iterator i = _crafts.begin(); i != _crafts.end(); i++)
+	for (std::map<LangString, RuleCraft*>::iterator i = _crafts.begin(); i != _crafts.end(); i++)
 	{
 		delete i->second;
 	}
-	for (map<LangString, RuleCraftWeapon*>::iterator i = _craftWeapons.begin(); i != _craftWeapons.end(); i++)
+	for (std::map<LangString, RuleCraftWeapon*>::iterator i = _craftWeapons.begin(); i != _craftWeapons.end(); i++)
 	{
 		delete i->second;
 	}
-	for (map<LangString, RuleItem*>::iterator i = _items.begin(); i != _items.end(); i++)
+	for (std::map<LangString, RuleItem*>::iterator i = _items.begin(); i != _items.end(); i++)
 	{
 		delete i->second;
 	}
-	for (map<LangString, RuleUfo*>::iterator i = _ufos.begin(); i != _ufos.end(); i++)
+	for (std::map<LangString, RuleUfo*>::iterator i = _ufos.begin(); i != _ufos.end(); i++)
 	{
 		delete i->second;
 	}
@@ -78,7 +78,7 @@ SavedGame *Ruleset::newSave(GameDifficulty diff)
  * Returns the list of soldier name pools.
  * @return Pointer to soldier name pool list.
  */
-vector<SoldierNamePool*> *Ruleset::getPools()
+std::vector<SoldierNamePool*> *Ruleset::getPools()
 {
 	return &_names;
 }

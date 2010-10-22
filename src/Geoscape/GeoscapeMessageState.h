@@ -22,8 +22,6 @@
 #include <string>
 #include "../Engine/State.h"
 
-using namespace std;
-
 class TextButton;
 class Window;
 class Text;
@@ -40,7 +38,7 @@ private:
 	Text *_txtMessage;
 public:
 	/// Creates the Geoscape Message state.
-	GeoscapeMessageState(Game *game, string str);
+	GeoscapeMessageState(Game *game, std::string str);
 	/// Cleans up the Geoscape Message state.
 	~GeoscapeMessageState();
 	/// Updates the palette.

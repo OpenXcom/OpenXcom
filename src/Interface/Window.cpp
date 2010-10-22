@@ -66,7 +66,7 @@ void Window::setBackground(Surface *bg)
 {
 	if (_popupStep < 1.0)
 	{
-		for (vector<Surface*>::iterator i = _state->getSurfaces()->begin(); i < _state->getSurfaces()->end(); i++)
+		for (std::vector<Surface*>::iterator i = _state->getSurfaces()->begin(); i < _state->getSurfaces()->end(); i++)
 			if ((*i) != this)
 				(*i)->hide();
 	}
@@ -83,7 +83,7 @@ void Window::setColor(Uint8 color)
 {
 	if (_popupStep < 1.0)
 	{
-		for (vector<Surface*>::iterator i = _state->getSurfaces()->begin(); i < _state->getSurfaces()->end(); i++)
+		for (std::vector<Surface*>::iterator i = _state->getSurfaces()->begin(); i < _state->getSurfaces()->end(); i++)
 			if ((*i) != this)
 				(*i)->hide();
 	}
@@ -126,7 +126,7 @@ void Window::popup()
 	}
 	else
 	{
-		for (vector<Surface*>::iterator i = _state->getSurfaces()->begin(); i < _state->getSurfaces()->end(); i++)
+		for (std::vector<Surface*>::iterator i = _state->getSurfaces()->begin(); i < _state->getSurfaces()->end(); i++)
 			if ((*i) != this)
 				(*i)->show();
 		_popupStep = 1.0;

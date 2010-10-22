@@ -38,8 +38,6 @@
 #include "../Savegame/Waypoint.h"
 #include "SelectDestinationState.h"
 
-using namespace std;
-
 /**
  * Initializes all the elements in the Geoscape Craft window.
  * @param game Pointer to the core game.
@@ -125,7 +123,7 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 	_txtTitle->setText(_craft->getName(_game->getResourcePack()->getLanguage()));
 
 	_txtStatus->setColor(Palette::blockOffset(15)-1);
-	stringstream ss;
+	std::stringstream ss;
 	ss << _game->getResourcePack()->getLanguage()->getString(STR_STATUS_);
 	if (_craft->getLowFuel())
 	{
@@ -162,36 +160,36 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 	_txtStatus->setText(ss.str());
 
 	_txtBase->setColor(Palette::blockOffset(15)-1);
-	stringstream ss2;
+	std::stringstream ss2;
 	ss2 << _game->getResourcePack()->getLanguage()->getString(STR_BASE_UC_) << _craft->getBase()->getName();
 	_txtBase->setText(ss2.str());
 
 	_txtSpeed->setColor(Palette::blockOffset(15)-1);
-	stringstream ss3;
+	std::stringstream ss3;
 	ss3 << _game->getResourcePack()->getLanguage()->getString(STR_SPEED_) << _craft->getSpeed();
 	_txtSpeed->setText(ss3.str());
 
 	_txtMaxSpeed->setColor(Palette::blockOffset(15)-1);
-	stringstream ss4;
+	std::stringstream ss4;
 	ss4 << _game->getResourcePack()->getLanguage()->getString(STR_MAXIMUM_SPEED_) << _craft->getRules()->getMaxSpeed();
 	_txtMaxSpeed->setText(ss4.str());
 
 	_txtAltitude->setColor(Palette::blockOffset(15)-1);
-	stringstream ss5;
+	std::stringstream ss5;
 	ss5 << _game->getResourcePack()->getLanguage()->getString(STR_ALTITUDE_);
 	_txtAltitude->setText(ss5.str());
 
 	_txtFuel->setColor(Palette::blockOffset(15)-1);
-	stringstream ss6;
+	std::stringstream ss6;
 	ss6 << _game->getResourcePack()->getLanguage()->getString(STR_FUEL_) << _craft->getFuelPercentage() << "%";
 	_txtFuel->setText(ss6.str());
 
 	_txtW1Name->setColor(Palette::blockOffset(15)-1);
-	stringstream ss7;
+	std::stringstream ss7;
 	ss7 << _game->getResourcePack()->getLanguage()->getString(STR_WEAPON_1_);
 	
 	_txtW1Ammo->setColor(Palette::blockOffset(15)-1);
-	stringstream ss8;
+	std::stringstream ss8;
 	ss8 << _game->getResourcePack()->getLanguage()->getString(STR_ROUNDS_);
 
 	if (_craft->getRules()->getWeapons() > 0 && _craft->getWeapons()->at(0) != 0)
@@ -212,11 +210,11 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 	}
 
 	_txtW2Name->setColor(Palette::blockOffset(15)-1);
-	stringstream ss9;
+	std::stringstream ss9;
 	ss9 << _game->getResourcePack()->getLanguage()->getString(STR_WEAPON_2_);
 	
 	_txtW2Ammo->setColor(Palette::blockOffset(15)-1);
-	stringstream ss10;
+	std::stringstream ss10;
 	ss10 << _game->getResourcePack()->getLanguage()->getString(STR_ROUNDS_);
 
 	if (_craft->getRules()->getWeapons() > 1 && _craft->getWeapons()->at(1) != 0)

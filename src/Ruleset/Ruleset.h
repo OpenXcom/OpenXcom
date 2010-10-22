@@ -24,8 +24,6 @@
 #include "../Resource/LangString.h"
 #include "../Savegame/SavedGame.h"
 
-using namespace std;
-
 class SoldierNamePool;
 class RuleBaseFacility;
 class RuleCraft;
@@ -42,12 +40,12 @@ class RuleUfo;
 class Ruleset
 {
 protected:
-	vector<SoldierNamePool*> _names;
-	map<LangString, RuleBaseFacility*> _facilities;
-	map<LangString, RuleCraft*> _crafts;
-	map<LangString, RuleCraftWeapon*> _craftWeapons;
-	map<LangString, RuleItem*> _items;
-	map<LangString, RuleUfo*> _ufos;
+	std::vector<SoldierNamePool*> _names;
+	std::map<LangString, RuleBaseFacility*> _facilities;
+	std::map<LangString, RuleCraft*> _crafts;
+	std::map<LangString, RuleCraftWeapon*> _craftWeapons;
+	std::map<LangString, RuleItem*> _items;
+	std::map<LangString, RuleUfo*> _ufos;
 public:
 	/// Creates a blank ruleset.
 	Ruleset();
@@ -56,7 +54,7 @@ public:
 	/// Generates the starting saved game.
 	virtual SavedGame *newSave(GameDifficulty diff);
 	/// Gets the pool list for soldier names.
-	vector<SoldierNamePool*> *getPools();
+	std::vector<SoldierNamePool*> *getPools();
 	/// Gets the ruleset for a facility type.
 	RuleBaseFacility *getBaseFacility(LangString id);
 	/// Gets the ruleset for a craft type.

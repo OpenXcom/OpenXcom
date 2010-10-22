@@ -22,8 +22,6 @@
 #include "SDL_mixer.h"
 #include <string>
 
-using namespace std;
-
 /**
  * Container for sound effects.
  * Handles loading and playing various formats through SDL_mixer.
@@ -38,7 +36,7 @@ public:
 	/// Cleans up the sound effect.
 	~Sound();
 	/// Loads sound from the specified file.
-	void load(string filename);
+	void load(std::string filename);
 	/// Loads sound from the specified memory.
 	void load(void *sound, int size);
 	/// Plays the sound.

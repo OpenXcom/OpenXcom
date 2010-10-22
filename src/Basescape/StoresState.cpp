@@ -33,8 +33,6 @@
 #include "../Ruleset/Ruleset.h"
 #include "../Savegame/Item.h"
 
-using namespace std;
-
 /**
  * Initializes all the elements in the Stores window.
  * @param game Pointer to the core game.
@@ -89,9 +87,9 @@ StoresState::StoresState(Game *game, Base *base) : State(game), _base(base)
 	_lstStores->setSelectable(true);
 	_lstStores->setBackground(_window);
 
-	for (map<LangString, Item*>::iterator i = _base->getItems()->begin(); i != _base->getItems()->end(); i++)
+	for (std::map<LangString, Item*>::iterator i = _base->getItems()->begin(); i != _base->getItems()->end(); i++)
 	{
-		stringstream ss, ss2;
+		std::stringstream ss, ss2;
 		ss << i->second->getQuantity();
 		ss2 << i->second->getTotalSize();
 		_lstStores->addRow(0, 3, _game->getResourcePack()->getLanguage()->getString(i->first).c_str(), ss.str().c_str(), ss2.str().c_str());

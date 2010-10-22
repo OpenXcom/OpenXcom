@@ -22,8 +22,6 @@
 #include <string>
 #include "SDL.h"
 
-using namespace std;
-
 /**
  * Container for palettes (sets of 8bpp colors).
  * Works as an encapsulation for SDL's SDL_Color struct and
@@ -39,7 +37,7 @@ public:
 	/// Cleans up the palette.
 	~Palette();
 	/// Loads the colors from an X-Com palette.
-	void loadDat(string filename, int ncolors, int offset = 0);
+	void loadDat(std::string filename, int ncolors, int offset = 0);
 	// Gets a certain color from the palette.
 	SDL_Color *getColors(int offset = 0);
 

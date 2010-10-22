@@ -36,7 +36,7 @@
  * @warning Currently the game is designed for 8bpp, so there's no telling what'll
  * happen if you use a different value.
  */
-Game::Game(string title, int width, int height, int bpp) : _screen(0), _cursor(0), _states(), _deleted(), _res(0), _save(0), _rules(0), _quit(false)
+Game::Game(std::string title, int width, int height, int bpp) : _screen(0), _cursor(0), _states(), _deleted(), _res(0), _save(0), _rules(0), _quit(false)
 {
 	// Initialize SDL
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
@@ -73,7 +73,7 @@ Game::~Game()
 {
 	Mix_HaltChannel(-1);
 
-	for (list<State*>::iterator i = _states.begin(); i != _states.end(); i++)
+	for (std::list<State*>::iterator i = _states.begin(); i != _states.end(); i++)
 		delete *i;
 
 	delete _cursor;
@@ -126,7 +126,7 @@ void Game::run()
 		
 		// Process rendering
 		_screen->clear();
-		list<State*>::iterator i = _states.end();
+		std::list<State*>::iterator i = _states.end();
 		do
 			i--;
 		while(i != _states.begin() && !(*i)->isScreen());
@@ -168,6 +168,7 @@ void Game::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 {
 	_screen->setPalette(colors, firstcolor, ncolors);
 	_cursor->setPalette(colors, firstcolor, ncolors);
+	_cursor->draw();
 	if (_res != 0)
 		_res->setPalette(colors, firstcolor, ncolors);
 }

@@ -22,8 +22,6 @@
 #include "Target.h"
 #include "../Resource/LangString.h"
 
-using namespace std;
-
 /**
  * Represents a fixed waypoint on the world.
  */
@@ -41,7 +39,7 @@ public:
 	/// Sets the waypoint's ID.
 	void setId(int id);
 	/// Gets the waypoint's name.
-	string getName(Language *lang);
+	std::string getName(Language *lang);
 };
 
 #endif

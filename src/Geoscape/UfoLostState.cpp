@@ -32,7 +32,7 @@
  * @param game Pointer to the core game.
  * @param id Name of the UFO.
  */
-UfoLostState::UfoLostState(Game *game, string id) : State(game), _id(id)
+UfoLostState::UfoLostState(Game *game, std::string id) : State(game), _id(id)
 {
 	_screen = false;
 
@@ -59,7 +59,7 @@ UfoLostState::UfoLostState(Game *game, string id) : State(game), _id(id)
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
-	string s = "";
+	std::string s = "";
 	s += _id;
 	s += '\n';
 	s += _game->getResourcePack()->getLanguage()->getString(STR_TRACKING_LOST);

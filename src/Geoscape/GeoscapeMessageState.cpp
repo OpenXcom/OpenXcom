@@ -32,7 +32,7 @@
  * @param game Pointer to the core game.
  * @param str Message to display.
  */
-GeoscapeMessageState::GeoscapeMessageState(Game *game, string str) : State(game)
+GeoscapeMessageState::GeoscapeMessageState(Game *game, std::string str) : State(game)
 {
 	_screen = false;
 
