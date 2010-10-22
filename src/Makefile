@@ -38,4 +38,4 @@ $(OBJDIR)%.o: */%.cpp
 clean:
 	rm -f $(BINDIR)$(BIN) $(OBJDIR)*.o
 
-.PHONY: clean
+.PHONY: all clean
