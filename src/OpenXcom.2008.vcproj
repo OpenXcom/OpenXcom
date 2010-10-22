@@ -93,7 +93,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy /y ..\deps\SDL\lib\*.dll ..\bin\">
+				CommandLine="copy /y ..\deps\SDL\lib\*.dll ..\bin\"
 			/>
 		</Configuration>
 		<Configuration
@@ -173,7 +173,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy /y ..\deps\SDL\lib\*.dll ..\bin\">
+				CommandLine="copy /y ..\deps\SDL\lib\*.dll ..\bin\"
 			/>
 		</Configuration>
 	</Configurations>
