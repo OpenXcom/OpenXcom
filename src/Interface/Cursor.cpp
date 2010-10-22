@@ -56,7 +56,6 @@ void Cursor::handle(SDL_Event *ev, int scale)
 	{
 		setX(ev->motion.x / scale);
 		setY(ev->motion.y / scale);
-		draw();
 	}
 }
 

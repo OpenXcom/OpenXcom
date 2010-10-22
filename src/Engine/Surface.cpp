@@ -375,6 +375,7 @@ SDL_Rect *Surface::getCrop()
 void Surface::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 {
 	SDL_SetColors(_surface, colors, firstcolor, ncolors);
+	draw();
 }
 
 /**
