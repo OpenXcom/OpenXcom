@@ -80,7 +80,7 @@ int Craft::getId()
 
 /**
  * Returns the craft's unique identifying name.
- * @param lang Language to get std::strings from.
+ * @param lang Language to get strings from.
  * @return Full name.
  */
 std::string Craft::getName(Language *lang)
@@ -110,7 +110,7 @@ void Craft::setBase(Base *base)
 
 /**
  * Returns the current status of the craft.
- * @return Status std::string.
+ * @return Status string.
  */
 LangString Craft::getStatus()
 {
@@ -119,7 +119,7 @@ LangString Craft::getStatus()
 
 /**
  * Changes the current status of the craft.
- * @param status Status std::string.
+ * @param status Status string.
  */
 void Craft::setStatus(LangString status)
 {

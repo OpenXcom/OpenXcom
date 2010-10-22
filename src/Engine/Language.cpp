@@ -36,7 +36,7 @@ Language::~Language()
 }
 
 /**
- * Loads a series of null-terminated std::strings contained in
+ * Loads a series of null-terminated strings contained in
  * a raw text file into the Language. IDs are determined
  * automatically.
  * @param filename Filename of the DAT language.
@@ -76,8 +76,8 @@ void Language::loadDat(std::string filename)
 }
 
 /**
- * Returns the localizable std::string with the specified ID.
- * @param id ID of the std::string.
+ * Returns the localizable string with the specified ID.
+ * @param id ID of the string.
  * @return String with the request ID.
  */
 std::string Language::getString(LangString id)

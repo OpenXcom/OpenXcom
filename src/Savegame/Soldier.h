@@ -57,7 +57,7 @@ public:
 	Craft *getCraft();
 	/// Sets the soldier's craft.
 	void setCraft(Craft *craft);
-	/// Gets a std::string version of the soldier's rank.
+	/// Gets a string version of the soldier's rank.
 	LangString getRankString();
 	/// Gets a sprite version of the soldier's rank.
 	int getRankSprite();

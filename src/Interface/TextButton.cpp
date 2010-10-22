@@ -74,7 +74,7 @@ Uint8 TextButton::getColor()
 
 /**
  * Changes the text of the button label.
- * @param text Text std::string.
+ * @param text Text string.
  */
 void TextButton::setText(std::string text)
 {
@@ -84,7 +84,7 @@ void TextButton::setText(std::string text)
 
 /**
  * Returns the text of the button label.
- * @return Text std::string.
+ * @return Text string.
  */
 std::string TextButton::getText()
 {

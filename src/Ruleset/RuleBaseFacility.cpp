@@ -35,7 +35,7 @@ RuleBaseFacility::~RuleBaseFacility()
 }
 
 /**
- * Returns the language std::string that names
+ * Returns the language string that names
  * this base facility. Each base facility type
  * has a unique name.
  * @return Facility name.

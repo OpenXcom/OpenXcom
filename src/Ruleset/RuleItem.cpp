@@ -34,7 +34,7 @@ RuleItem::~RuleItem()
 }
 
 /**
- * Returns the language std::string that names
+ * Returns the language string that names
  * this item. Each item type has a unique name.
  * @return Item name.
  */

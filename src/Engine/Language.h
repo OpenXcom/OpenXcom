@@ -24,8 +24,8 @@
 #include "../Resource/LangString.h"
 
 /**
- * Contains std::strings used throughout the game for localization.
- * Languages are just a set of std::strings identified by an ID number.
+ * Contains strings used throughout the game for localization.
+ * Languages are just a set of strings identified by an ID number.
  */
 class Language
 {
@@ -38,7 +38,7 @@ public:
 	~Language();
 	/// Loads an X-Com language file.
 	void loadDat(std::string filename);
-	/// Gets a std::string from the language.
+	/// Gets a string from the language.
 	std::string getString(LangString id);
 };
 

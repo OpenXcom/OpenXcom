@@ -48,7 +48,7 @@ Text::~Text()
  * Takes an integer value and formats it as currency,
  * spacing the thousands and adding a $ sign to the front.
  * @param funds The funding value.
- * @return The formatted std::string.
+ * @return The formatted string.
  */
 std::string Text::formatFunding(int funds)
 {
@@ -91,8 +91,8 @@ Font *Text::getFont()
 }
 
 /**
- * Changes the std::string displayed on screen.
- * @param text Text std::string.
+ * Changes the string displayed on screen.
+ * @param text Text string.
  */
 void Text::setText(std::string text)
 {
@@ -104,8 +104,8 @@ void Text::setText(std::string text)
 }
 
 /**
- * Returns the std::string displayed on screen.
- * @return Text std::string.
+ * Returns the string displayed on screen.
+ * @return Text string.
  */
 std::string Text::getText()
 {
@@ -189,7 +189,7 @@ void Text::processText()
 {
 	std::string *s = &_text;
 
-	// Use a separate std::string for wordwrapping text
+	// Use a separate string for wordwrapping text
 	if (_wrap)
 	{
 		_wrappedText = _text;

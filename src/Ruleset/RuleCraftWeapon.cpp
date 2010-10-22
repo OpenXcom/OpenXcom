@@ -34,7 +34,7 @@ RuleCraftWeapon::~RuleCraftWeapon()
 }
 
 /**
- * Returns the language std::string that names this craft weapon.
+ * Returns the language string that names this craft weapon.
  * Each craft weapon type has a unique name.
  * @return Craft weapon name.
  */
@@ -242,7 +242,7 @@ void RuleCraftWeapon::setRearmRate(int rearm)
 }
 
 /**
- * Returns the language std::string of the item used to
+ * Returns the language string of the item used to
  * equip this craft weapon.
  * @return Item name.
  */
@@ -252,7 +252,7 @@ LangString RuleCraftWeapon::getLauncherItem()
 }
 
 /**
- * Changes the language std::string of the item used to
+ * Changes the language string of the item used to
  * equip this craft weapon.
  * @param launcher Item name.
  */
@@ -262,7 +262,7 @@ void RuleCraftWeapon::setLauncherItem(LangString launcher)
 }
 
 /**
- * Returns the language std::string of the item used to
+ * Returns the language string of the item used to
  * load this craft weapon with ammo.
  * @return Item name.
  */
@@ -272,7 +272,7 @@ LangString RuleCraftWeapon::getClipItem()
 }
 
 /**
- * Changes the language std::string of the item used to
+ * Changes the language string of the item used to
  * load this craft weapon with ammo.
  * @param clip Item name.
  */

@@ -78,8 +78,8 @@ void TextEdit::setSmall()
 }
 
 /**
- * Changes the std::string displayed on screen.
- * @param text Text std::string.
+ * Changes the string displayed on screen.
+ * @param text Text string.
  */
 void TextEdit::setText(std::string text)
 {
@@ -88,8 +88,8 @@ void TextEdit::setText(std::string text)
 }
 
 /**
- * Returns the std::string displayed on screen.
- * @return Text std::string.
+ * Returns the string displayed on screen.
+ * @return Text string.
  */
 std::string TextEdit::getText()
 {

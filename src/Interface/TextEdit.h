@@ -52,9 +52,9 @@ public:
 	void setBig();
 	/// Sets the text size to small.
 	void setSmall();
-	/// Sets the text's std::string.
+	/// Sets the text's string.
 	void setText(std::string text);
-	/// Gets the text's std::string.
+	/// Gets the text's string.
 	std::string getText();
 	/// Sets the text's wordwrap setting.
 	void setWordWrap(bool wrap);

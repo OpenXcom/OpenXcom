@@ -50,15 +50,15 @@ public:
 	int getHour();
 	/// Gets the ingame weekday.
 	int getWeekday();
-	// Gets a std::string version of the ingame weekday.
+	// Gets a string version of the ingame weekday.
 	LangString getWeekdayString();
 	/// Gets the ingame day.
 	int getDay();
-	// Gets a std::string version of the ingame day.
+	// Gets a string version of the ingame day.
 	LangString getDayString();
 	/// Gets the ingame month.
 	int getMonth();
-	// Gets a std::string version of the ingame month.
+	// Gets a string version of the ingame month.
 	LangString getMonthString();
 	/// Gets the ingame year.
 	int getYear();

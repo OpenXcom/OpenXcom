@@ -57,7 +57,7 @@ Base::~Base()
 
 /**
  * Returns the custom name for the base.
- * @param lang Language to get std::strings from.
+ * @param lang Language to get strings from.
  * @return Name.
  */
 std::string Base::getName(Language *lang)

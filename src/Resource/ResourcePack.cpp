@@ -129,7 +129,7 @@ std::string ResourcePack::insensitive(std::string filename)
 
 /**
  * Returns the currently active language.
- * Ensures localizable std::strings always use the
+ * Ensures localizable strings always use the
  * active language without needing to know it.
  * @return Pointer to the language.
  */

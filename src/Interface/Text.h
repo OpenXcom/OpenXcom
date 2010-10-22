@@ -25,16 +25,13 @@
 
 class Font;
 
-/**
- * Enumator for the possible text alignments.
- */
 enum TextHAlign { ALIGN_LEFT, ALIGN_CENTER, ALIGN_RIGHT };
 enum TextVAlign { ALIGN_TOP, ALIGN_MIDDLE, ALIGN_BOTTOM };
 
 /**
- * Text std::string displayed on screen.
+ * Text string displayed on screen.
  * Takes the characters from a Font and puts them together on screen
- * to display a std::string of text, taking care of any required aligning
+ * to display a string of text, taking care of any required aligning
  * or wrapping.
  */
 class Text : public Surface
@@ -63,9 +60,9 @@ public:
 	void setSmall();
 	/// Gets the text's font.
 	Font *getFont();
-	/// Sets the text's std::string.
+	/// Sets the text's string.
 	void setText(std::string text);
-	/// Gets the text's std::string.
+	/// Gets the text's string.
 	std::string getText();
 	/// Sets the text's wordwrap setting.
 	void setWordWrap(bool wrap);
