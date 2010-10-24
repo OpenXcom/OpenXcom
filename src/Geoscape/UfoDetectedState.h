@@ -50,9 +50,9 @@ public:
 	/// Updates the palette.
 	void init();
 	/// Handler for clicking the Centre on UFO button.
-	void btnCentreClick(SDL_Event *ev, int scale);
+	void btnCentreClick(Action *action);
 	/// Handler for clicking the Cancel button.
-	void btnCancelClick(SDL_Event *ev, int scale);
+	void btnCancelClick(Action *action);
 };
 
 #endif

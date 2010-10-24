@@ -20,13 +20,16 @@
 #include "SDL_rotozoom.h"
 #include "Surface.h"
 
+#define BASE_WIDTH 320.0
+#define BASE_HEIGHT 200.0
+
 /**
  * Initializes a new display screen for the game to render contents to.
  * @param width Width in pixels.
  * @param height Height in pixels.
  * @param bpp Bits-per-pixel.
  */
-Screen::Screen(int width, int height, int bpp) : _width(width), _height(height), _bpp(bpp), _scale(1)
+Screen::Screen(int width, int height, int bpp) : _width(width), _height(height), _bpp(bpp), _xScale(1.0), _yScale(1.0)
 {
 	_flags = SDL_SWSURFACE|SDL_HWPALETTE;
 
@@ -67,9 +70,9 @@ Surface *Screen::getSurface()
  */
 void Screen::flip()
 {
-	if (_scale != 1)
+	if (_xScale != 1.0 && _yScale != 1.0)
 	{
-		SDL_Surface* zoom = zoomSurface(_surface->getSurface(), _scale, _scale, 0);
+		SDL_Surface* zoom = zoomSurface(_surface->getSurface(), _xScale, _yScale, 0);
 		SDL_BlitSurface(zoom, 0, _screen, 0);
 		SDL_FreeSurface(zoom);
 	}
@@ -127,13 +130,15 @@ SDL_Color* Screen::getPalette()
  */
 void Screen::setResolution(int width, int height)
 {
-	_screen = SDL_SetVideoMode(width, height, _bpp, _flags);
+	_width = width;
+	_height = height;
+	_xScale = _width / BASE_WIDTH;
+	_yScale = _height / BASE_HEIGHT;
+	_screen = SDL_SetVideoMode(_width, _height, _bpp, _flags);
 	if (_screen == 0)
 	{
 		throw SDL_GetError();
 	}
-	_width = width;
-	_height = height;
 	setPalette(_surface->getPalette());
 }
 
@@ -152,23 +157,19 @@ void Screen::setFullscreen(bool full)
 }
 
 /**
- * Returns the scaling factor used by the screen.
- * @return Scaling factor.
+ * Returns the screen's X scale.
+ * @return Scale factor.
  */
-int Screen::getScale()
+double Screen::getXScale()
 {
-	return _scale;
+	return _xScale;
 }
 
 /**
- * Changes the scaling factor used to render the screen,
- * and adapts the resolution respectively.
- * @param amount Scaling factor.
+ * Returns the screen's Y scale.
+ * @return Scale factor.
  */
-void Screen::setScale(int amount)
+double Screen::getYScale()
 {
-	_scale = amount;
-	_width *= amount;
-	_height *= amount;
-	setResolution(_width, _height);
+	return _yScale;
 }

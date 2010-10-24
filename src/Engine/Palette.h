@@ -58,7 +58,7 @@ public:
 	 * @param block Requested block.
 	 * @return Color position.
 	 */
-	static inline int blockOffset(int block) { return block*16; }
+	static inline Uint8 blockOffset(Uint8 block) { return block*16; }
 	/// Position of the background colors block in an X-Com palette (used for background images in screens).
 	static const int backPos = 224;
 };

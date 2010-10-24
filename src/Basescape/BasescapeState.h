@@ -51,33 +51,33 @@ public:
 	/// Sets a new base to display.
 	void setBase(Base *base);
 	/// Handler for clicking the Build New Base button.
-	void btnNewBaseClick(SDL_Event *ev, int scale);
+	void btnNewBaseClick(Action *action);
 	/// Handler for clicking the Base Information button.
-	void btnBaseInfoClick(SDL_Event *ev, int scale);
+	void btnBaseInfoClick(Action *action);
 	/// Handler for clicking the Soldiers button.
-	void btnSoldiersClick(SDL_Event *ev, int scale);
+	void btnSoldiersClick(Action *action);
 	/// Handler for clicking the Equip Craft button.
-	void btnCraftsClick(SDL_Event *ev, int scale);
+	void btnCraftsClick(Action *action);
 	/// Handler for clicking the Build Facilities button.
-	void btnFacilitiesClick(SDL_Event *ev, int scale);
+	void btnFacilitiesClick(Action *action);
 	/// Handler for clicking the Research button.
-	void btnResearchClick(SDL_Event *ev, int scale);
+	void btnResearchClick(Action *action);
 	/// Handler for clicking the Manufacture button.
-	void btnManufactureClick(SDL_Event *ev, int scale);
+	void btnManufactureClick(Action *action);
 	/// Handler for clicking the Purchase/Hire button.
-	void btnPurchaseClick(SDL_Event *ev, int scale);
+	void btnPurchaseClick(Action *action);
 	/// Handler for clicking the Sell/Sack button.
-	void btnSellClick(SDL_Event *ev, int scale);
+	void btnSellClick(Action *action);
 	/// Handler for clicking the Geoscape button.
-	void btnGeoscapeClick(SDL_Event *ev, int scale);
+	void btnGeoscapeClick(Action *action);
 	/// Handler for clicking the base view.
-	void viewClick(SDL_Event *ev, int scale);
+	void viewClick(Action *action);
 	/// Handler for hovering the base view.
-	void viewMouseOver(SDL_Event *ev, int scale);
+	void viewMouseOver(Action *action);
 	/// Handler for hovering out of the base view.
-	void viewMouseOut(SDL_Event *ev, int scale);
+	void viewMouseOut(Action *action);
 	/// Handler for clicking the mini base view.
-	void miniClick(SDL_Event *ev, int scale);
+	void miniClick(Action *action);
 };
 
 #endif

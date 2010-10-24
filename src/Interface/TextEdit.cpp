@@ -18,6 +18,7 @@
  */
 #include "TextEdit.h"
 #include <sstream>
+#include "../Engine/Action.h"
 #include "../Engine/Font.h"
 #include "../Engine/Timer.h"
 
@@ -233,26 +234,26 @@ bool TextEdit::exceedsMaxWidth(char c)
 
 /**
  * Focuses the text when it's pressed on.
- * @param ev Pointer to a SDL_Event.
- * @param scale Current screen scale (used to correct mouse input).
- * @param state State that the event handlers belong to.
+ * @param action Pointer to an action.
+
+ * @param state State that the action handlers belong to.
  */
-void TextEdit::mousePress(SDL_Event *ev, int scale, State *state)
+void TextEdit::mousePress(Action *action, State *state)
 {
 	focus();
-	InteractiveSurface::mousePress(ev, scale, state);
+	InteractiveSurface::mousePress(action, state);
 }
 
 /**
  * Changes the text according to keyboard input, and unfocuses the
  * text if Enter is pressed.
- * @param ev Pointer to a SDL_Event.
- * @param scale Current screen scale (used to correct mouse input).
- * @param state State that the event handlers belong to.
+ * @param action Pointer to an action.
+
+ * @param state State that the action handlers belong to.
  */
-void TextEdit::keyboardPress(SDL_Event *ev, int scale, State *state)
+void TextEdit::keyboardPress(Action *action, State *state)
 {
-	switch (ev->key.keysym.sym)
+	switch (action->getDetails()->key.keysym.sym)
 	{
 #ifdef DINGOO
 	case SDLK_UP:
@@ -281,13 +282,13 @@ void TextEdit::keyboardPress(SDL_Event *ev, int scale, State *state)
 		_timer->stop();
 		break;
 	default:
-		if (ev->key.keysym.unicode != 0)
+		if (action->getDetails()->key.keysym.unicode != 0)
 		{
-			if (ev->key.keysym.unicode >= ' ' && ev->key.keysym.unicode <= '~' && !exceedsMaxWidth((char)ev->key.keysym.unicode))
-				_value += (char)ev->key.keysym.unicode;
+			if (action->getDetails()->key.keysym.unicode >= ' ' && action->getDetails()->key.keysym.unicode <= '~' && !exceedsMaxWidth((char)action->getDetails()->key.keysym.unicode))
+				_value += (char)action->getDetails()->key.keysym.unicode;
 		}
 	}
 	draw();
 
-	InteractiveSurface::keyboardPress(ev, scale, state);
+	InteractiveSurface::keyboardPress(action, state);
 }

@@ -72,7 +72,7 @@ InterceptState::InterceptState(Game *game, Globe *globe, Base *base) : State(gam
 
 	_btnCancel->setColor(Palette::blockOffset(8)+8);
 	_btnCancel->setText(_game->getResourcePack()->getLanguage()->getString(STR_CANCEL));
-	_btnCancel->onMouseClick((EventHandler)&InterceptState::btnCancelClick);
+	_btnCancel->onMouseClick((ActionHandler)&InterceptState::btnCancelClick);
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setAlign(ALIGN_CENTER);
@@ -95,7 +95,7 @@ InterceptState::InterceptState(Game *game, Globe *globe, Base *base) : State(gam
 	_lstCrafts->setColumns(4, 86, 65, 85, 50);
 	_lstCrafts->setSelectable(true);
 	_lstCrafts->setBackground(_window);
-	_lstCrafts->onMouseClick((EventHandler)&InterceptState::lstCraftsClick);
+	_lstCrafts->onMouseClick((ActionHandler)&InterceptState::lstCraftsClick);
 	int row = 0;
 	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); i++)
 	{
@@ -124,20 +124,20 @@ InterceptState::~InterceptState()
 
 /**
  * Closes the window.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void InterceptState::btnCancelClick(SDL_Event *ev, int scale)
+void InterceptState::btnCancelClick(Action *action)
 {
 	_game->popState();
 }
 
 /**
  * Pick a target for the selected craft.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void InterceptState::lstCraftsClick(SDL_Event *ev, int scale)
+void InterceptState::lstCraftsClick(Action *action)
 {
 	Craft* c = (Craft*)_lstCrafts->getSelectedValue();
 	if (c->getStatus() == STR_READY)

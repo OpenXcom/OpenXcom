@@ -60,7 +60,7 @@ BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base, State *state)
 
 	_btnOk->setColor(Palette::blockOffset(13)+8);
 	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString(STR_OK));
-	_btnOk->onMouseClick((EventHandler)&BuildFacilitiesState::btnOkClick);
+	_btnOk->onMouseClick((ActionHandler)&BuildFacilitiesState::btnOkClick);
 
 	_txtTitle->setColor(Palette::blockOffset(13));
 	_txtTitle->setBig();
@@ -74,7 +74,7 @@ BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base, State *state)
 	for (int i = STR_LIVING_QUARTERS; i <= STR_ALIEN_CONTAINMENT; i++)
 		_lstFacilities->addRow(i, 1, _game->getResourcePack()->getLanguage()->getString((LangString)i).c_str());
 	_lstFacilities->addRow(STR_HANGAR, 1, _game->getResourcePack()->getLanguage()->getString(STR_HANGAR).c_str());
-	_lstFacilities->onMouseClick((EventHandler)&BuildFacilitiesState::lstFacilitiesClick);
+	_lstFacilities->onMouseClick((ActionHandler)&BuildFacilitiesState::lstFacilitiesClick);
 }
 
 /**
@@ -96,20 +96,20 @@ void BuildFacilitiesState::init()
 
 /**
  * Returns to the previous screen.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void BuildFacilitiesState::btnOkClick(SDL_Event *ev, int scale)
+void BuildFacilitiesState::btnOkClick(Action *action)
 {
 	_game->popState();
 }
 
 /**
  * Places the selected facility.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void BuildFacilitiesState::lstFacilitiesClick(SDL_Event *ev, int scale)
+void BuildFacilitiesState::lstFacilitiesClick(Action *action)
 {
 	_game->pushState(new PlaceFacilityState(_game, _base, _game->getRuleset()->getBaseFacility((LangString)_lstFacilities->getSelectedValue())));
 }

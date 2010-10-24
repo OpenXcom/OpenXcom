@@ -63,11 +63,11 @@ CraftPatrolState::CraftPatrolState(Game *game, Craft *craft, Globe *globe) : Sta
 
 	_btnOk->setColor(Palette::blockOffset(8)+8);
 	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString(STR_OK));
-	_btnOk->onMouseClick((EventHandler)&CraftPatrolState::btnOkClick);
+	_btnOk->onMouseClick((ActionHandler)&CraftPatrolState::btnOkClick);
 
 	_btnRedirect->setColor(Palette::blockOffset(8)+8);
 	_btnRedirect->setText(_game->getResourcePack()->getLanguage()->getString(STR_REDIRECT_CRAFT));
-	_btnRedirect->onMouseClick((EventHandler)&CraftPatrolState::btnRedirectClick);
+	_btnRedirect->onMouseClick((ActionHandler)&CraftPatrolState::btnRedirectClick);
 
 	_txtDestination->setColor(Palette::blockOffset(15)-1);
 	_txtDestination->setBig();
@@ -103,20 +103,20 @@ void CraftPatrolState::init()
 
 /**
  * Closes the window.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void CraftPatrolState::btnOkClick(SDL_Event *ev, int scale)
+void CraftPatrolState::btnOkClick(Action *action)
 {
 	_game->popState();
 }
 
 /**
  * Opens up the Craft window.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void CraftPatrolState::btnRedirectClick(SDL_Event *ev, int scale)
+void CraftPatrolState::btnRedirectClick(Action *action)
 {
 	_game->popState();
 	_game->pushState(new GeoscapeCraftState(_game, _craft, _globe, 0));

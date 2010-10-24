@@ -77,11 +77,11 @@ PlaceFacilityState::PlaceFacilityState(Game *game, Base *base, RuleBaseFacility 
 	_view->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
 	_view->setBase(_base);
 	_view->setSelectable(rule->getSize());
-	_view->onMouseClick((EventHandler)&PlaceFacilityState::viewClick);
+	_view->onMouseClick((ActionHandler)&PlaceFacilityState::viewClick);
 
 	_btnCancel->setColor(Palette::blockOffset(13)+13);
 	_btnCancel->setText(_game->getResourcePack()->getLanguage()->getString(STR_CANCEL));
-	_btnCancel->onMouseClick((EventHandler)&PlaceFacilityState::btnCancelClick);
+	_btnCancel->onMouseClick((ActionHandler)&PlaceFacilityState::btnCancelClick);
 
 	_txtFacility->setColor(Palette::blockOffset(13)+10);
 	_txtFacility->setText(_game->getResourcePack()->getLanguage()->getString(_rule->getType()));
@@ -120,20 +120,20 @@ PlaceFacilityState::~PlaceFacilityState()
 
 /**
  * Returns to the previous screen.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void PlaceFacilityState::btnCancelClick(SDL_Event *ev, int scale)
+void PlaceFacilityState::btnCancelClick(Action *action)
 {
 	_game->popState();
 }
 
 /**
  * Processes clicking on facilities.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void PlaceFacilityState::viewClick(SDL_Event *ev, int scale)
+void PlaceFacilityState::viewClick(Action *action)
 {
 	if (!_view->isPlaceable(_rule))
 	{

@@ -150,22 +150,22 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 			break;
 		}
 	}
-	_mini->onMouseClick((EventHandler)&BaseInfoState::miniClick);
+	_mini->onMouseClick((ActionHandler)&BaseInfoState::miniClick);
 
 	_btnOk->setColor(Palette::blockOffset(15)+9);
 	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString(STR_OK));
-	_btnOk->onMouseClick((EventHandler)&BaseInfoState::btnOkClick);
+	_btnOk->onMouseClick((ActionHandler)&BaseInfoState::btnOkClick);
 
 	_btnTransfers->setColor(Palette::blockOffset(15)+9);
 	_btnTransfers->setText(_game->getResourcePack()->getLanguage()->getString(STR_TRANSFERS));
 
 	_btnStores->setColor(Palette::blockOffset(15)+9);
 	_btnStores->setText(_game->getResourcePack()->getLanguage()->getString(STR_STORES_UC));
-	_btnStores->onMouseClick((EventHandler)&BaseInfoState::btnStoresClick);
+	_btnStores->onMouseClick((ActionHandler)&BaseInfoState::btnStoresClick);
 
 	_btnMonthlyCosts->setColor(Palette::blockOffset(15)+9);
 	_btnMonthlyCosts->setText(_game->getResourcePack()->getLanguage()->getString(STR_MONTHLY_COSTS));
-	_btnMonthlyCosts->onMouseClick((EventHandler)&BaseInfoState::btnMonthlyCostsClick);
+	_btnMonthlyCosts->onMouseClick((ActionHandler)&BaseInfoState::btnMonthlyCostsClick);
 
 	_edtBase->setColor(Palette::blockOffset(15)+1);
 	_edtBase->setBig();
@@ -373,10 +373,10 @@ void BaseInfoState::init()
 
 /**
  * Selects a new base to display.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void BaseInfoState::miniClick(SDL_Event *ev, int scale)
+void BaseInfoState::miniClick(Action *action)
 {
 	unsigned int base = _mini->getHoveredBase();
 	if (base >= 0 && base < _game->getSavedGame()->getBases()->size())
@@ -390,10 +390,10 @@ void BaseInfoState::miniClick(SDL_Event *ev, int scale)
 
 /**
  * Returns to the previous screen.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void BaseInfoState::btnOkClick(SDL_Event *ev, int scale)
+void BaseInfoState::btnOkClick(Action *action)
 {
 	_base->setName(_edtBase->getText());
 	_game->popState();
@@ -401,10 +401,10 @@ void BaseInfoState::btnOkClick(SDL_Event *ev, int scale)
 
 /**
  * Goes to the Stores screen.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void BaseInfoState::btnStoresClick(SDL_Event *ev, int scale)
+void BaseInfoState::btnStoresClick(Action *action)
 {
 	_base->setName(_edtBase->getText());
 	_game->pushState(new StoresState(_game, _base));
@@ -412,10 +412,10 @@ void BaseInfoState::btnStoresClick(SDL_Event *ev, int scale)
 
 /**
  * Goes to the Monthly Costs screen.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void BaseInfoState::btnMonthlyCostsClick(SDL_Event *ev, int scale)
+void BaseInfoState::btnMonthlyCostsClick(Action *action)
 {
 	_base->setName(_edtBase->getText());
 	_game->pushState(new MonthlyCostsState(_game, _base));

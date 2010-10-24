@@ -76,9 +76,9 @@ public:
 	/// Blits the base view onto another surface.
 	void blit(Surface *surface);
 	/// Special handling for mouse hovers.
-	void mouseOver(SDL_Event *ev, int scale, State *state);
+	void mouseOver(Action *action, State *state);
 	/// Special handling for mouse hovering out.
-	void mouseOut(SDL_Event *ev, int scale, State *state);
+	void mouseOut(Action *action, State *state);
 };
 
 #endif

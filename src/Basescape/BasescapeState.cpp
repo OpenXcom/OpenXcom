@@ -95,9 +95,9 @@ BasescapeState::BasescapeState(Game *game, Base *base, Globe *globe) : State(gam
 
 	// Set up objects
 	_view->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
-	_view->onMouseClick((EventHandler)&BasescapeState::viewClick);
-	_view->onMouseOver((EventHandler)&BasescapeState::viewMouseOver);
-	_view->onMouseOut((EventHandler)&BasescapeState::viewMouseOut);
+	_view->onMouseClick((ActionHandler)&BasescapeState::viewClick);
+	_view->onMouseOver((ActionHandler)&BasescapeState::viewMouseOver);
+	_view->onMouseOut((ActionHandler)&BasescapeState::viewMouseOut);
 
 	_mini->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
 	_mini->setBases(_game->getSavedGame()->getBases());
@@ -109,7 +109,7 @@ BasescapeState::BasescapeState(Game *game, Base *base, Globe *globe) : State(gam
 			break;
 		}
 	}
-	_mini->onMouseClick((EventHandler)&BasescapeState::miniClick);
+	_mini->onMouseClick((ActionHandler)&BasescapeState::miniClick);
 
 	_txtFacility->setColor(Palette::blockOffset(13)+10);
 
@@ -122,46 +122,46 @@ BasescapeState::BasescapeState(Game *game, Base *base, Globe *globe) : State(gam
 	
 	_btnNewBase->setColor(Palette::blockOffset(13)+8);
 	_btnNewBase->setText(_game->getResourcePack()->getLanguage()->getString(STR_BUILD_NEW_BASE));
-	_btnNewBase->onMouseClick((EventHandler)&BasescapeState::btnNewBaseClick);
+	_btnNewBase->onMouseClick((ActionHandler)&BasescapeState::btnNewBaseClick);
 
 	_btnBaseInfo->setColor(Palette::blockOffset(13)+8);
 	_btnBaseInfo->setText(_game->getResourcePack()->getLanguage()->getString(STR_BASE_INFORMATION));
-	_btnBaseInfo->onMouseClick((EventHandler)&BasescapeState::btnBaseInfoClick);
+	_btnBaseInfo->onMouseClick((ActionHandler)&BasescapeState::btnBaseInfoClick);
 
 	_btnSoldiers->setColor(Palette::blockOffset(13)+8);
 	_btnSoldiers->setText(_game->getResourcePack()->getLanguage()->getString(STR_SOLDIERS_UC));
-	_btnSoldiers->onMouseClick((EventHandler)&BasescapeState::btnSoldiersClick);
+	_btnSoldiers->onMouseClick((ActionHandler)&BasescapeState::btnSoldiersClick);
 
 	_btnCrafts->setColor(Palette::blockOffset(13)+8);
 	_btnCrafts->setText(_game->getResourcePack()->getLanguage()->getString(STR_EQUIP_CRAFT));
-	_btnCrafts->onMouseClick((EventHandler)&BasescapeState::btnCraftsClick);
+	_btnCrafts->onMouseClick((ActionHandler)&BasescapeState::btnCraftsClick);
 
 	_btnFacilities->setColor(Palette::blockOffset(13)+8);
 	_btnFacilities->setText(_game->getResourcePack()->getLanguage()->getString(STR_BUILD_FACILITIES));
-	_btnFacilities->onMouseClick((EventHandler)&BasescapeState::btnFacilitiesClick);
+	_btnFacilities->onMouseClick((ActionHandler)&BasescapeState::btnFacilitiesClick);
 
 	_btnResearch->setColor(Palette::blockOffset(13)+8);
 	_btnResearch->setText(_game->getResourcePack()->getLanguage()->getString(STR_RESEARCH));
-	_btnResearch->onMouseClick((EventHandler)&BasescapeState::btnResearchClick);
+	_btnResearch->onMouseClick((ActionHandler)&BasescapeState::btnResearchClick);
 
 	_btnManufacture->setColor(Palette::blockOffset(13)+8);
 	_btnManufacture->setText(_game->getResourcePack()->getLanguage()->getString(STR_MANUFACTURE));
-	_btnManufacture->onMouseClick((EventHandler)&BasescapeState::btnManufactureClick);
+	_btnManufacture->onMouseClick((ActionHandler)&BasescapeState::btnManufactureClick);
 
 	_btnTransfer->setColor(Palette::blockOffset(13)+8);
 	_btnTransfer->setText(_game->getResourcePack()->getLanguage()->getString(STR_TRANSFER));
 
 	_btnPurchase->setColor(Palette::blockOffset(13)+8);
 	_btnPurchase->setText(_game->getResourcePack()->getLanguage()->getString(STR_PURCHASE_RECRUIT));
-	_btnPurchase->onMouseClick((EventHandler)&BasescapeState::btnPurchaseClick);
+	_btnPurchase->onMouseClick((ActionHandler)&BasescapeState::btnPurchaseClick);
 
 	_btnSell->setColor(Palette::blockOffset(13)+8);
 	_btnSell->setText(_game->getResourcePack()->getLanguage()->getString(STR_SELL_SACK_UC));
-	_btnSell->onMouseClick((EventHandler)&BasescapeState::btnSellClick);
+	_btnSell->onMouseClick((ActionHandler)&BasescapeState::btnSellClick);
 
 	_btnGeoscape->setColor(Palette::blockOffset(13)+8);
 	_btnGeoscape->setText(_game->getResourcePack()->getLanguage()->getString(STR_GEOSCAPE));
-	_btnGeoscape->onMouseClick((EventHandler)&BasescapeState::btnGeoscapeClick);
+	_btnGeoscape->onMouseClick((ActionHandler)&BasescapeState::btnGeoscapeClick);
 }
 
 /**
@@ -222,10 +222,10 @@ void BasescapeState::setBase(Base *base)
 
 /**
  * Goes to the Build New Base screen.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void BasescapeState::btnNewBaseClick(SDL_Event *ev, int scale)
+void BasescapeState::btnNewBaseClick(Action *action)
 {
 	Base *base = new Base();
 	_game->popState();
@@ -234,100 +234,100 @@ void BasescapeState::btnNewBaseClick(SDL_Event *ev, int scale)
 
 /**
  * Goes to the Base Info screen.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void BasescapeState::btnBaseInfoClick(SDL_Event *ev, int scale)
+void BasescapeState::btnBaseInfoClick(Action *action)
 {
 	_game->pushState(new BaseInfoState(_game, _base, this));
 }
 
 /**
  * Goes to the Soldiers screen.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void BasescapeState::btnSoldiersClick(SDL_Event *ev, int scale)
+void BasescapeState::btnSoldiersClick(Action *action)
 {
 	_game->pushState(new SoldiersState(_game, _base));
 }
 
 /**
  * Goes to the Crafts screen.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void BasescapeState::btnCraftsClick(SDL_Event *ev, int scale)
+void BasescapeState::btnCraftsClick(Action *action)
 {
 	_game->pushState(new CraftsState(_game, _base));
 }
 
 /**
  * Opens the Build Facilities window.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void BasescapeState::btnFacilitiesClick(SDL_Event *ev, int scale)
+void BasescapeState::btnFacilitiesClick(Action *action)
 {
 	_game->pushState(new BuildFacilitiesState(_game, _base, this));
 }
 
 /**
  * Goes to the Research screen.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void BasescapeState::btnResearchClick(SDL_Event *ev, int scale)
+void BasescapeState::btnResearchClick(Action *action)
 {
 	_game->pushState(new ResearchState(_game));
 }
 
 /**
  * Goes to the Manufacture screen.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void BasescapeState::btnManufactureClick(SDL_Event *ev, int scale)
+void BasescapeState::btnManufactureClick(Action *action)
 {
 	_game->pushState(new ManufactureState(_game));
 }
 
 /**
  * Goes to the Purchase screen.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void BasescapeState::btnPurchaseClick(SDL_Event *ev, int scale)
+void BasescapeState::btnPurchaseClick(Action *action)
 {
 	_game->pushState(new PurchaseState(_game));
 }
 
 /**
  * Goes to the Sell screen.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void BasescapeState::btnSellClick(SDL_Event *ev, int scale)
+void BasescapeState::btnSellClick(Action *action)
 {
 	_game->pushState(new SellState(_game));
 }
 
 /**
  * Returns to the previous screen.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void BasescapeState::btnGeoscapeClick(SDL_Event *ev, int scale)
+void BasescapeState::btnGeoscapeClick(Action *action)
 {
 	_game->popState();
 }
 
 /**
  * Processes clicking on facilities.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void BasescapeState::viewClick(SDL_Event *ev, int scale)
+void BasescapeState::viewClick(Action *action)
 {
 	BaseFacility *fac = _view->getSelectedFacility();
 	if (fac != 0)
@@ -370,10 +370,10 @@ void BasescapeState::viewClick(SDL_Event *ev, int scale)
 
 /**
  * Displays the name of the facility the mouse is over.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void BasescapeState::viewMouseOver(SDL_Event *ev, int scale)
+void BasescapeState::viewMouseOver(Action *action)
 {
 	BaseFacility *f = _view->getSelectedFacility();
 	if (f == 0)
@@ -384,20 +384,20 @@ void BasescapeState::viewMouseOver(SDL_Event *ev, int scale)
 
 /**
  * Clears the facility name.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void BasescapeState::viewMouseOut(SDL_Event *ev, int scale)
+void BasescapeState::viewMouseOut(Action *action)
 {
 	_txtFacility->setText("");
 }
 
 /**
  * Selects a new base to display.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void BasescapeState::miniClick(SDL_Event *ev, int scale)
+void BasescapeState::miniClick(Action *action)
 {
 	unsigned int base = _mini->getHoveredBase();
 	if (base >= 0 && base < _game->getSavedGame()->getBases()->size())

@@ -66,11 +66,11 @@ ConfirmNewBaseState::ConfirmNewBaseState(Game *game, Base *base, Globe *globe) :
 
 	_btnOk->setColor(Palette::blockOffset(15)+2);
 	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString(STR_OK));
-	_btnOk->onMouseClick((EventHandler)&ConfirmNewBaseState::btnOkClick);
+	_btnOk->onMouseClick((ActionHandler)&ConfirmNewBaseState::btnOkClick);
 
 	_btnCancel->setColor(Palette::blockOffset(15)+2);
 	_btnCancel->setText(_game->getResourcePack()->getLanguage()->getString(STR_CANCEL_UC));
-	_btnCancel->onMouseClick((EventHandler)&ConfirmNewBaseState::btnCancelClick);
+	_btnCancel->onMouseClick((ActionHandler)&ConfirmNewBaseState::btnCancelClick);
 
 	std::stringstream ss;
 	for (std::map<LangString, Region*>::iterator i = _game->getSavedGame()->getRegions()->begin(); i != _game->getSavedGame()->getRegions()->end(); i++)
@@ -103,10 +103,10 @@ ConfirmNewBaseState::~ConfirmNewBaseState()
 
 /**
  * Go to the Place Access Lift screen.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void ConfirmNewBaseState::btnOkClick(SDL_Event *ev, int scale)
+void ConfirmNewBaseState::btnOkClick(Action *action)
 {
 	if (_game->getSavedGame()->getFunds() >= _cost)
 	{
@@ -122,10 +122,10 @@ void ConfirmNewBaseState::btnOkClick(SDL_Event *ev, int scale)
 
 /**
  * Returns to the previous screen.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void ConfirmNewBaseState::btnCancelClick(SDL_Event *ev, int scale)
+void ConfirmNewBaseState::btnCancelClick(Action *action)
 {
 	_game->popState();
 }

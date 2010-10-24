@@ -17,8 +17,10 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Cursor.h"
+#include <cmath>
 #include "SDL.h"
 #include "SDL_gfxPrimitives.h"
+#include "../Engine/Action.h"
 #include "../Engine/Palette.h"
 
 /**
@@ -47,15 +49,15 @@ Cursor::~Cursor()
 /**
  * Automatically updates the cursor position
  * when the mouse moves.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void Cursor::handle(SDL_Event *ev, int scale)
+void Cursor::handle(Action *action)
 {
-	if (ev->type == SDL_MOUSEMOTION)
+	if (action->getDetails()->type == SDL_MOUSEMOTION)
 	{
-		setX(ev->motion.x / scale);
-		setY(ev->motion.y / scale);
+		setX((int)floor(action->getDetails()->motion.x / action->getXScale()));
+		setY((int)floor(action->getDetails()->motion.y / action->getYScale()));
 	}
 }
 

@@ -72,7 +72,7 @@ CraftsState::CraftsState(Game *game, Base *base) : State(game), _base(base)
 
 	_btnOk->setColor(Palette::blockOffset(13)+13);
 	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString(STR_OK));
-	_btnOk->onMouseClick((EventHandler)&CraftsState::btnOkClick);
+	_btnOk->onMouseClick((ActionHandler)&CraftsState::btnOkClick);
 
 	_txtTitle->setColor(Palette::blockOffset(15)+1);
 	_txtTitle->setBig();
@@ -103,7 +103,7 @@ CraftsState::CraftsState(Game *game, Base *base) : State(game), _base(base)
 	_lstCrafts->setColumns(5, 94, 66, 47, 46, 33);
 	_lstCrafts->setSelectable(true);
 	_lstCrafts->setBackground(_window);
-	_lstCrafts->onMouseClick((EventHandler)&CraftsState::lstCraftsClick);
+	_lstCrafts->onMouseClick((ActionHandler)&CraftsState::lstCraftsClick);
 }
 
 /**
@@ -133,20 +133,20 @@ void CraftsState::init()
 
 /**
  * Returns to the previous screen.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void CraftsState::btnOkClick(SDL_Event *ev, int scale)
+void CraftsState::btnOkClick(Action *action)
 {
 	_game->popState();
 }
 
 /**
  * Shows the selected craft's info.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void CraftsState::lstCraftsClick(SDL_Event *ev, int scale)
+void CraftsState::lstCraftsClick(Action *action)
 {
 	if (_base->getCrafts()->at(_lstCrafts->getSelectedRow())->getStatus() != STR_OUT)
 		_game->pushState(new CraftInfoState(_game, _base, _lstCrafts->getSelectedRow()));

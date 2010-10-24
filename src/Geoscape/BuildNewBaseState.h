@@ -52,32 +52,32 @@ public:
 	void init();
 	/// Runs the timer.
 	void think();
-	/// Handles events.
-	void handle(SDL_Event *ev, int scale);
+	/// Handles actions.
+	void handle(Action *action);
 	/// Handler for clicking the globe.
-	void globeClick(SDL_Event *ev, int scale);
+	void globeClick(Action *action);
 	/// Handler for pressing the Rotate Left arrow.
-	void btnRotateLeftPress(SDL_Event *ev, int scale);
+	void btnRotateLeftPress(Action *action);
 	/// Handler for releasing the Rotate Left arrow.
-	void btnRotateLeftRelease(SDL_Event *ev, int scale);
+	void btnRotateLeftRelease(Action *action);
 	/// Handler for pressing the Rotate Right arrow.
-	void btnRotateRightPress(SDL_Event *ev, int scale);
+	void btnRotateRightPress(Action *action);
 	/// Handler for releasing the Rotate Right arrow.
-	void btnRotateRightRelease(SDL_Event *ev, int scale);
+	void btnRotateRightRelease(Action *action);
 	/// Handler for pressing the Rotate Up arrow.
-	void btnRotateUpPress(SDL_Event *ev, int scale);
+	void btnRotateUpPress(Action *action);
 	/// Handler for releasing the Rotate Up arrow.
-	void btnRotateUpRelease(SDL_Event *ev, int scale);
+	void btnRotateUpRelease(Action *action);
 	/// Handler for pressing the Rotate Down arrow.
-	void btnRotateDownPress(SDL_Event *ev, int scale);
+	void btnRotateDownPress(Action *action);
 	/// Handler for releasing the Rotate Down arrow.
-	void btnRotateDownRelease(SDL_Event *ev, int scale);
+	void btnRotateDownRelease(Action *action);
 	/// Handler for clicking the Zoom In icon.
-	void btnZoomInClick(SDL_Event *ev, int scale);
+	void btnZoomInClick(Action *action);
 	/// Handler for clicking the Zoom Out icon.
-	void btnZoomOutClick(SDL_Event *ev, int scale);
+	void btnZoomOutClick(Action *action);
 	/// Handler for clicking the Cancel button.
-	void btnCancelClick(SDL_Event *ev, int scale);
+	void btnCancelClick(Action *action);
 };
 
 #endif

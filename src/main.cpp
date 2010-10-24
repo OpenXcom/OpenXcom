@@ -46,15 +46,18 @@ int main(int argc, char** args)
 		game = new Game("OpenXcom", 320, 200, 8);
 		
 		// Handles command line arguments
-		int scale = 2;
+		int width = 640;
+		int height = 400;
 		for (int i = 1; i < argc; i++)
 		{
 			if (strcmp(args[i], "-fullscreen") == 0)
 				game->getScreen()->setFullscreen(true);
-			if (strcmp(args[i], "-scale") == 0 && argc > i + 1)
-				scale = atoi(args[i+1]);
+			if (strcmp(args[i], "-width") == 0 && argc > i + 1)
+				width = atoi(args[i+1]);
+			if (strcmp(args[i], "-height") == 0 && argc > i + 1)
+				height = atoi(args[i+1]);
 		}
-		game->getScreen()->setScale(scale);
+		game->getScreen()->setResolution(width, height);
 		game->setState(new StartState(game));
 		game->run();
 	}

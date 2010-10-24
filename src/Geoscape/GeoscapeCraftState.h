@@ -50,13 +50,13 @@ public:
 	/// Updates the palette.
 	void init();
 	/// Handler for clicking the Return To Base button.
-	void btnBaseClick(SDL_Event *ev, int scale);
+	void btnBaseClick(Action *action);
 	/// Handler for clicking the Select New Target button.
-	void btnTargetClick(SDL_Event *ev, int scale);
+	void btnTargetClick(Action *action);
 	/// Handler for clicking the Patrol button.
-	void btnPatrolClick(SDL_Event *ev, int scale);
+	void btnPatrolClick(Action *action);
 	/// Handler for clicking the Cancel button.
-	void btnCancelClick(SDL_Event *ev, int scale);
+	void btnCancelClick(Action *action);
 };
 
 #endif

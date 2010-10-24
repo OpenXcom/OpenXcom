@@ -73,21 +73,21 @@ public:
 	/// Changes the status text.
 	void setStatus(LangString status);
 	/// Handler for clicking the Minimize button.
-	void btnMinimizeClick(SDL_Event *ev, int scale);
+	void btnMinimizeClick(Action *action);
 	/// Handler for clicking the Standoff button.
-	void btnStandoffClick(SDL_Event *ev, int scale);
+	void btnStandoffClick(Action *action);
 	/// Handler for clicking the Cautious Attack button.
-	void btnCautiousClick(SDL_Event *ev, int scale);
+	void btnCautiousClick(Action *action);
 	/// Handler for clicking the Standard Attack button.
-	void btnStandardClick(SDL_Event *ev, int scale);
+	void btnStandardClick(Action *action);
 	/// Handler for clicking the Agressive Attack button.
-	void btnAggressiveClick(SDL_Event *ev, int scale);
+	void btnAggressiveClick(Action *action);
 	/// Handler for clicking the Disengage button.
-	void btnDisengageClick(SDL_Event *ev, int scale);
+	void btnDisengageClick(Action *action);
 	/// Handler for clicking the Ufo button.
-	void btnUfoClick(SDL_Event *ev, int scale);
+	void btnUfoClick(Action *action);
 	/// Handler for clicking the Preview graphic.
-	void previewClick(SDL_Event *ev, int scale);
+	void previewClick(Action *action);
 };
 
 #endif

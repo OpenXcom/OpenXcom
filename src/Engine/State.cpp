@@ -105,16 +105,16 @@ void State::think()
 /**
  * Takes care of any events from the core game engine,
  * and passes them on to its InteractiveSurface child elements.
- * @param ev Pointer to a SDL_Event.
- * @param scale Current screen scale (used to correct mouse input).
+ * @param action Pointer to an action.
+
  */
-void State::handle(SDL_Event *ev, int scale)
+void State::handle(Action *action)
 {
 	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i < _surfaces.end(); i++)
 	{
 		InteractiveSurface* j = dynamic_cast<InteractiveSurface*>(*i);
 		if (j != 0)
-			j->handle(ev, scale, this);
+			j->handle(action, this);
 	}
 }
 

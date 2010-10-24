@@ -18,6 +18,7 @@
  */
 #include "BaseNameState.h"
 #include "../Engine/Game.h"
+#include "../Engine/Action.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
 #include "../Resource/LangString.h"
@@ -64,7 +65,7 @@ BaseNameState::BaseNameState(Game *game, Base *base, Globe *globe, bool first) :
 	_edtName->setColor(Palette::blockOffset(8)+5);
 	_edtName->setBig();
 	_edtName->focus();
-	_edtName->onKeyboardPress((EventHandler)&BaseNameState::edtNameKeyPress);
+	_edtName->onKeyboardPress((ActionHandler)&BaseNameState::edtNameKeyPress);
 }
 
 /**
@@ -77,12 +78,12 @@ BaseNameState::~BaseNameState()
 
 /**
  * Returns to the previous screen.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void BaseNameState::edtNameKeyPress(SDL_Event *ev, int scale)
+void BaseNameState::edtNameKeyPress(Action *action)
 {
-	if (ev->key.keysym.sym == SDLK_RETURN)
+	if (action->getDetails()->key.keysym.sym == SDLK_RETURN)
 	{
 		_base->setName(_edtName->getText());
 		_game->popState();

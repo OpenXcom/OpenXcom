@@ -59,9 +59,9 @@ public:
 	/// Draws the text button.
 	void draw();
 	/// Special handling for mouse presses.
-	void mousePress(SDL_Event *ev, int scale, State *state);
+	void mousePress(Action *action, State *state);
 	/// Special handling for mouse releases.
-	void mouseRelease(SDL_Event *ev, int scale, State *state);
+	void mouseRelease(Action *action, State *state);
 };
 
 #endif

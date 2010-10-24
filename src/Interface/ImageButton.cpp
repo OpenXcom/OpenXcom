@@ -71,11 +71,11 @@ void ImageButton::setGroup(ImageButton **group)
 /**
  * Sets the button as the pressed button if it's part of a group,
  * and inverts the colors when pressed.
- * @param ev Pointer to a SDL_Event.
- * @param scale Current screen scale (used to correct mouse input).
- * @param state State that the event handlers belong to.
+ * @param action Pointer to an action.
+
+ * @param state State that the action handlers belong to.
  */
-void ImageButton::mousePress(SDL_Event *ev, int scale, State *state)
+void ImageButton::mousePress(Action *action, State *state)
 {
 	if (_group != 0)
 	{
@@ -83,18 +83,18 @@ void ImageButton::mousePress(SDL_Event *ev, int scale, State *state)
 		*_group = this;
 	}
 	invert(_color);
-	InteractiveSurface::mousePress(ev, scale, state);
+	InteractiveSurface::mousePress(action, state);
 }
 
 /*
  * Sets the button as the released button if it's part of a group.
- * @param ev Pointer to a SDL_Event.
- * @param scale Current screen scale (used to correct mouse input).
- * @param state State that the event handlers belong to.
+ * @param action Pointer to an action.
+
+ * @param state State that the action handlers belong to.
  */
-void ImageButton::mouseRelease(SDL_Event *ev, int scale, State *state)
+void ImageButton::mouseRelease(Action *action, State *state)
 {
 	if (_group == 0)
 		invert(_color);
-	InteractiveSurface::mouseRelease(ev, scale, state);
+	InteractiveSurface::mouseRelease(action, state);
 }

@@ -54,7 +54,7 @@ UfoLostState::UfoLostState(Game *game, std::string id) : State(game), _id(id)
 
 	_btnOk->setColor(Palette::blockOffset(8)+8);
 	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString(STR_OK));
-	_btnOk->onMouseClick((EventHandler)&UfoLostState::btnOkClick);
+	_btnOk->onMouseClick((ActionHandler)&UfoLostState::btnOkClick);
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setBig();
@@ -84,10 +84,10 @@ void UfoLostState::init()
 
 /**
  * Returns to the previous screen.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void UfoLostState::btnOkClick(SDL_Event *ev, int scale)
+void UfoLostState::btnOkClick(Action *action)
 {
 	_game->popState();
 }

@@ -80,14 +80,14 @@ MultipleTargetsState::MultipleTargetsState(Game *game, std::vector<Target*> targ
 
 	_btnCancel->setColor(Palette::blockOffset(8)+8);
 	_btnCancel->setText(_game->getResourcePack()->getLanguage()->getString(STR_CANCEL_UC));
-	_btnCancel->onMouseClick((EventHandler)&MultipleTargetsState::btnCancelClick);
+	_btnCancel->onMouseClick((ActionHandler)&MultipleTargetsState::btnCancelClick);
 
 	_lstTargets->setColor(Palette::blockOffset(8)+5);
 	_lstTargets->setAlign(ALIGN_CENTER);
 	_lstTargets->setColumns(1, 116);
 	_lstTargets->setSelectable(true);
 	_lstTargets->setBackground(_window);
-	_lstTargets->onMouseClick((EventHandler)&MultipleTargetsState::lstTargetsClick);
+	_lstTargets->onMouseClick((ActionHandler)&MultipleTargetsState::lstTargetsClick);
 	for (std::vector<Target*>::iterator i = _targets.begin(); i != _targets.end(); i++)
 	{
 		_lstTargets->addRow(0, 1, (*i)->getName(_game->getResourcePack()->getLanguage()).c_str());
@@ -154,20 +154,20 @@ void MultipleTargetsState::popupTarget(Target *target)
 
 /**
  * Returns to the previous screen.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void MultipleTargetsState::btnCancelClick(SDL_Event *ev, int scale)
+void MultipleTargetsState::btnCancelClick(Action *action)
 {
 	_game->popState();
 }
 
 /**
  * Pick a target to display.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void MultipleTargetsState::lstTargetsClick(SDL_Event *ev, int scale)
+void MultipleTargetsState::lstTargetsClick(Action *action)
 {
 	Target* t = _targets.at(_lstTargets->getSelectedRow());
 	popupTarget(t);

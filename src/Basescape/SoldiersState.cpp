@@ -67,7 +67,7 @@ SoldiersState::SoldiersState(Game *game, Base *base) : State(game), _base(base)
 
 	_btnOk->setColor(Palette::blockOffset(13)+13);
 	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString(STR_OK));
-	_btnOk->onMouseClick((EventHandler)&SoldiersState::btnOkClick);
+	_btnOk->onMouseClick((ActionHandler)&SoldiersState::btnOkClick);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
@@ -87,7 +87,7 @@ SoldiersState::SoldiersState(Game *game, Base *base) : State(game), _base(base)
 	_lstSoldiers->setColumns(3, 114, 102, 70);
 	_lstSoldiers->setSelectable(true);
 	_lstSoldiers->setBackground(_window);
-	_lstSoldiers->onMouseClick((EventHandler)&SoldiersState::lstSoldiersClick);
+	_lstSoldiers->onMouseClick((ActionHandler)&SoldiersState::lstSoldiersClick);
 }
 
 /**
@@ -126,20 +126,20 @@ void SoldiersState::init()
 
 /**
  * Returns to the previous screen.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void SoldiersState::btnOkClick(SDL_Event *ev, int scale)
+void SoldiersState::btnOkClick(Action *action)
 {
 	_game->popState();
 }
 
 /**
  * Shows the selected soldier's info.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void SoldiersState::lstSoldiersClick(SDL_Event *ev, int scale)
+void SoldiersState::lstSoldiersClick(Action *action)
 {
 	_game->pushState(new SoldierInfoState(_game, _base, _lstSoldiers->getSelectedRow()));
 }

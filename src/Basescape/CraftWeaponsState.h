@@ -47,9 +47,9 @@ public:
 	/// Cleans up the Craft Weapons state.
 	~CraftWeaponsState();
 	/// Handler for clicking the Cancel button.
-	void btnCancelClick(SDL_Event *ev, int scale);
+	void btnCancelClick(Action *action);
 	/// Handler for clicking the Weapons list.
-	void lstWeaponsClick(SDL_Event *ev, int scale);
+	void lstWeaponsClick(Action *action);
 };
 
 #endif

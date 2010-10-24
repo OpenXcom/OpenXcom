@@ -132,38 +132,38 @@ DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo) :
 	graphic->setCrop(&crop);
 	graphic->blit(_preview);
 	_preview->setVisible(false);
-	_preview->onMouseClick((EventHandler)&DogfightState::previewClick);
+	_preview->onMouseClick((ActionHandler)&DogfightState::previewClick);
 
-	_btnMinimize->onMouseClick((EventHandler)&DogfightState::btnMinimizeClick);
+	_btnMinimize->onMouseClick((ActionHandler)&DogfightState::btnMinimizeClick);
 
 	_btnStandoff->copy(_window);
 	_btnStandoff->setColor(Palette::blockOffset(5)+4);
 	_btnStandoff->setGroup(&_mode);
-	_btnStandoff->onMouseClick((EventHandler)&DogfightState::btnStandoffClick);
+	_btnStandoff->onMouseClick((ActionHandler)&DogfightState::btnStandoffClick);
 
 	_btnCautious->copy(_window);
 	_btnCautious->setColor(Palette::blockOffset(5)+4);
 	_btnCautious->setGroup(&_mode);
-	_btnCautious->onMouseClick((EventHandler)&DogfightState::btnCautiousClick);
+	_btnCautious->onMouseClick((ActionHandler)&DogfightState::btnCautiousClick);
 
 	_btnStandard->copy(_window);
 	_btnStandard->setColor(Palette::blockOffset(5)+4);
 	_btnStandard->setGroup(&_mode);
-	_btnStandard->onMouseClick((EventHandler)&DogfightState::btnStandardClick);
+	_btnStandard->onMouseClick((ActionHandler)&DogfightState::btnStandardClick);
 
 	_btnAggressive->copy(_window);
 	_btnAggressive->setColor(Palette::blockOffset(5)+4);
 	_btnAggressive->setGroup(&_mode);
-	_btnAggressive->onMouseClick((EventHandler)&DogfightState::btnAggressiveClick);
+	_btnAggressive->onMouseClick((ActionHandler)&DogfightState::btnAggressiveClick);
 
 	_btnDisengage->copy(_window);
 	_btnDisengage->setColor(Palette::blockOffset(5)+4);
-	_btnDisengage->onMouseClick((EventHandler)&DogfightState::btnDisengageClick);
+	_btnDisengage->onMouseClick((ActionHandler)&DogfightState::btnDisengageClick);
 	_btnDisengage->setGroup(&_mode);
 
 	_btnUfo->copy(_window);
 	_btnUfo->setColor(Palette::blockOffset(5)+4);
-	_btnUfo->onMouseClick((EventHandler)&DogfightState::btnUfoClick);
+	_btnUfo->onMouseClick((ActionHandler)&DogfightState::btnUfoClick);
 
 	_btnUfo->copy(_window);
 	_btnUfo->setColor(Palette::blockOffset(5)+4);
@@ -636,19 +636,19 @@ void DogfightState::setStatus(LangString status)
 
 /**
  * Minimizes the dogfight window.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void DogfightState::btnMinimizeClick(SDL_Event *ev, int scale)
+void DogfightState::btnMinimizeClick(Action *action)
 {
 }
 
 /**
  * Switches to Standoff mode (maximum range).
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void DogfightState::btnStandoffClick(SDL_Event *ev, int scale)
+void DogfightState::btnStandoffClick(Action *action)
 {
 	if (!_ufo->isCrashed())
 	{
@@ -659,10 +659,10 @@ void DogfightState::btnStandoffClick(SDL_Event *ev, int scale)
 
 /**
  * Switches to Cautious mode (maximum weapon range).
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void DogfightState::btnCautiousClick(SDL_Event *ev, int scale)
+void DogfightState::btnCautiousClick(Action *action)
 {
 	if (!_ufo->isCrashed())
 	{
@@ -681,10 +681,10 @@ void DogfightState::btnCautiousClick(SDL_Event *ev, int scale)
 
 /**
  * Switches to Standard mode (minimum weapon range).
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void DogfightState::btnStandardClick(SDL_Event *ev, int scale)
+void DogfightState::btnStandardClick(Action *action)
 {
 	if (!_ufo->isCrashed())
 	{
@@ -703,10 +703,10 @@ void DogfightState::btnStandardClick(SDL_Event *ev, int scale)
 
 /**
  * Switches to Aggressive mode (minimum range).
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void DogfightState::btnAggressiveClick(SDL_Event *ev, int scale)
+void DogfightState::btnAggressiveClick(Action *action)
 {
 	if (!_ufo->isCrashed())
 	{
@@ -725,10 +725,10 @@ void DogfightState::btnAggressiveClick(SDL_Event *ev, int scale)
 
 /**
  * Disengages from the UFO.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void DogfightState::btnDisengageClick(SDL_Event *ev, int scale)
+void DogfightState::btnDisengageClick(Action *action)
 {
 	if (!_ufo->isCrashed())
 	{
@@ -739,10 +739,10 @@ void DogfightState::btnDisengageClick(SDL_Event *ev, int scale)
 
 /**
  * Shows a front view of the UFO.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void DogfightState::btnUfoClick(SDL_Event *ev, int scale)
+void DogfightState::btnUfoClick(Action *action)
 {
 	_preview->setVisible(true);
 	// Disable all other buttons to prevent misclicks
@@ -757,10 +757,10 @@ void DogfightState::btnUfoClick(SDL_Event *ev, int scale)
 
 /**
  * Shows a front view of the UFO.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void DogfightState::previewClick(SDL_Event *ev, int scale)
+void DogfightState::previewClick(Action *action)
 {
 	_preview->setVisible(false);
 	// Reenable all other buttons to prevent misclicks

@@ -71,7 +71,7 @@ CraftSoldiersState::CraftSoldiersState(Game *game, Base *base, unsigned int craf
 
 	_btnOk->setColor(Palette::blockOffset(13)+13);
 	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString(STR_OK));
-	_btnOk->onMouseClick((EventHandler)&CraftSoldiersState::btnOkClick);
+	_btnOk->onMouseClick((ActionHandler)&CraftSoldiersState::btnOkClick);
 
 	_txtTitle->setColor(Palette::blockOffset(15)+6);
 	_txtTitle->setBig();
@@ -97,7 +97,7 @@ CraftSoldiersState::CraftSoldiersState(Game *game, Base *base, unsigned int craf
 	_lstSoldiers->setColumns(3, 114, 102, 70);
 	_lstSoldiers->setSelectable(true);
 	_lstSoldiers->setBackground(_window);
-	_lstSoldiers->onMouseClick((EventHandler)&CraftSoldiersState::lstSoldiersClick);
+	_lstSoldiers->onMouseClick((ActionHandler)&CraftSoldiersState::lstSoldiersClick);
 }
 
 /**
@@ -152,20 +152,20 @@ void CraftSoldiersState::init()
 
 /**
  * Returns to the previous screen.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void CraftSoldiersState::btnOkClick(SDL_Event *ev, int scale)
+void CraftSoldiersState::btnOkClick(Action *action)
 {
 	_game->popState();
 }
 
 /**
  * Shows the selected soldier's info.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void CraftSoldiersState::lstSoldiersClick(SDL_Event *ev, int scale)
+void CraftSoldiersState::lstSoldiersClick(Action *action)
 {
 	Craft *c = _base->getCrafts()->at(_craft);
 	Soldier *s = _base->getSoldiers()->at(_lstSoldiers->getSelectedRow());

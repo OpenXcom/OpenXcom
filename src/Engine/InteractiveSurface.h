@@ -23,7 +23,7 @@
 #include "Surface.h"
 #include "State.h"
 
-typedef State &(State::*EventHandler)(SDL_Event *, int);
+typedef State &(State::*ActionHandler)(Action*);
 
 /**
  * Surface that the user can interact with.
@@ -35,7 +35,7 @@ typedef State &(State::*EventHandler)(SDL_Event *, int);
 class InteractiveSurface : public Surface
 {
 protected:
-	EventHandler _click, _press, _release, _in, _over, _out, _keyPress, _keyRelease;
+	ActionHandler _click, _press, _release, _in, _over, _out, _keyPress, _keyRelease;
 	bool _isPressed, _isHovered, _isFocused;
 	int _validButton;
 
@@ -47,41 +47,41 @@ public:
 	/// Sets the surface's visibility.
 	void setVisible(bool visible);
 	/// Processes any pending events.
-	virtual void handle(SDL_Event *ev, int scale, State *state);
+	virtual void handle(Action *action, State *state);
 	/// Sets focus on this surface.
 	virtual void focus();
-	/// Hooks an event handler to a mouse click on the surface.
-	void onMouseClick(EventHandler handler);
-	/// Hooks an event handler to a mouse press over the surface.
-	void onMousePress(EventHandler handler);
-	/// Hooks an event handler to a mouse release over the surface.
-	void onMouseRelease(EventHandler handler);
-	/// Hooks an event handler to moving the mouse into the surface.
-	void onMouseIn(EventHandler handler);
-	/// Hooks an event handler to moving the mouse over the surface.
-	void onMouseOver(EventHandler handler);
-	/// Hooks an event handler to moving the mouse out of the surface.
-	void onMouseOut(EventHandler handler);
-	/// Hooks an event handler to pressing a key when the surface is focused.
-	void onKeyboardPress(EventHandler handler);
-	/// Hooks an event handler to releasing a key when the surface is focused.
-	void onKeyboardRelease(EventHandler handler);
+	/// Hooks an action handler to a mouse click on the surface.
+	void onMouseClick(ActionHandler handler);
+	/// Hooks an action handler to a mouse press over the surface.
+	void onMousePress(ActionHandler handler);
+	/// Hooks an action handler to a mouse release over the surface.
+	void onMouseRelease(ActionHandler handler);
+	/// Hooks an action handler to moving the mouse into the surface.
+	void onMouseIn(ActionHandler handler);
+	/// Hooks an action handler to moving the mouse over the surface.
+	void onMouseOver(ActionHandler handler);
+	/// Hooks an action handler to moving the mouse out of the surface.
+	void onMouseOut(ActionHandler handler);
+	/// Hooks an action handler to pressing a key when the surface is focused.
+	void onKeyboardPress(ActionHandler handler);
+	/// Hooks an action handler to releasing a key when the surface is focused.
+	void onKeyboardRelease(ActionHandler handler);
 	/// Processes a mouse button press event.
-	virtual void mousePress(SDL_Event *ev, int scale, State *state);
+	virtual void mousePress(Action *action, State *state);
 	/// Processes a mouse button release event.
-	virtual void mouseRelease(SDL_Event *ev, int scale, State *state);
+	virtual void mouseRelease(Action *action, State *state);
 	/// Processes a mouse click event.
-	virtual void mouseClick(SDL_Event *ev, int scale, State *state);
+	virtual void mouseClick(Action *action, State *state);
 	/// Processes a mouse hover in event.
-	virtual void mouseIn(SDL_Event *ev, int scale, State *state);
+	virtual void mouseIn(Action *action, State *state);
 	/// Processes a mouse hover event.
-	virtual void mouseOver(SDL_Event *ev, int scale, State *state);
+	virtual void mouseOver(Action *action, State *state);
 	/// Processes a mouse hover out event.
-	virtual void mouseOut(SDL_Event *ev, int scale, State *state);
+	virtual void mouseOut(Action *action, State *state);
 	/// Processes a keyboard key press event.
-	virtual void keyboardPress(SDL_Event *ev, int scale, State *state);
+	virtual void keyboardPress(Action *action, State *state);
 	/// Processes a keyboard key release event.
-	virtual void keyboardRelease(SDL_Event *ev, int scale, State *state);
+	virtual void keyboardRelease(Action *action, State *state);
 
 };
 

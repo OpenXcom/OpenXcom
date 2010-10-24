@@ -45,15 +45,15 @@ public:
 	/// Creates a new game.
 	void newGame(GameDifficulty diff);
 	/// Handler for clicking the Beginner button.
-	void btnBeginnerClick(SDL_Event *ev, int scale);
+	void btnBeginnerClick(Action *action);
 	/// Handler for clicking the Experienced button.
-	void btnExperiencedClick(SDL_Event *ev, int scale);
+	void btnExperiencedClick(Action *action);
 	/// Handler for clicking the Veteran button.
-	void btnVeteranClick(SDL_Event *ev, int scale);
+	void btnVeteranClick(Action *action);
 	/// Handler for clicking the Genius button.
-	void btnGeniusClick(SDL_Event *ev, int scale);
+	void btnGeniusClick(Action *action);
 	/// Handler for clicking the Superhuman button.
-	void btnSuperhumanClick(SDL_Event *ev, int scale);
+	void btnSuperhumanClick(Action *action);
 };
 
 #endif

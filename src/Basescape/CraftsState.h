@@ -47,9 +47,9 @@ public:
 	/// Updates the craft info.
 	void init();
 	/// Handler for clicking the OK button.
-	void btnOkClick(SDL_Event *ev, int scale);
+	void btnOkClick(Action *action);
 	/// Handler for clicking the Crafts list.
-	void lstCraftsClick(SDL_Event *ev, int scale);
+	void lstCraftsClick(Action *action);
 };
 
 #endif

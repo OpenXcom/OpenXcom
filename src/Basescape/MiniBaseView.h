@@ -52,7 +52,7 @@ public:
 	/// Draws the mini base view.
 	void draw();
 	/// Special handling for mouse hovers.
-	void mouseOver(SDL_Event *ev, int scale, State *state);
+	void mouseOver(Action *action, State *state);
 };
 
 #endif

@@ -45,7 +45,7 @@ public:
 	/// Cleans up the Base Name state.
 	~BaseNameState();
 	/// Handler for releasing a key on the Name edit.
-	void edtNameKeyPress(SDL_Event *ev, int scale);
+	void edtNameKeyPress(Action *action);
 };
 
 #endif

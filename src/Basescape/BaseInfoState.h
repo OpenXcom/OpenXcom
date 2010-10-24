@@ -64,13 +64,13 @@ public:
 	/// Updates the base stats.
 	void init();
 	/// Handler for clicking the mini base view.
-	void miniClick(SDL_Event *ev, int scale);
+	void miniClick(Action *action);
 	/// Handler for clicking the OK button.
-	void btnOkClick(SDL_Event *ev, int scale);
+	void btnOkClick(Action *action);
 	/// Handler for clicking the Stores button.
-	void btnStoresClick(SDL_Event *ev, int scale);
+	void btnStoresClick(Action *action);
 	/// Handler for clicking the Monthly Costs button.
-	void btnMonthlyCostsClick(SDL_Event *ev, int scale);
+	void btnMonthlyCostsClick(Action *action);
 };
 
 #endif

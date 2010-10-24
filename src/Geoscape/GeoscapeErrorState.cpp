@@ -54,7 +54,7 @@ GeoscapeErrorState::GeoscapeErrorState(Game *game, LangString str) : State(game)
 
 	_btnOk->setColor(Palette::blockOffset(8)+13);
 	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString(STR_OK));
-	_btnOk->onMouseClick((EventHandler)&GeoscapeErrorState::btnOkClick);
+	_btnOk->onMouseClick((ActionHandler)&GeoscapeErrorState::btnOkClick);
 
 	_txtMessage->setColor(Palette::blockOffset(8)+10);
 	_txtMessage->setAlign(ALIGN_CENTER);
@@ -74,10 +74,10 @@ GeoscapeErrorState::~GeoscapeErrorState()
 
 /**
  * Closes the window.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void GeoscapeErrorState::btnOkClick(SDL_Event *ev, int scale)
+void GeoscapeErrorState::btnOkClick(Action *action)
 {
 	_game->popState();
 }

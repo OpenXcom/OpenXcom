@@ -63,7 +63,7 @@ FundingState::FundingState(Game *game) : State(game)
 
 	_btnOk->setColor(Palette::blockOffset(15)+2);
 	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString(STR_OK));
-	_btnOk->onMouseClick((EventHandler)&FundingState::btnOkClick);
+	_btnOk->onMouseClick((ActionHandler)&FundingState::btnOkClick);
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
@@ -106,10 +106,10 @@ FundingState::~FundingState()
 
 /**
  * Returns to the previous screen.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void FundingState::btnOkClick(SDL_Event *ev, int scale)
+void FundingState::btnOkClick(Action *action)
 {
 	_game->popState();
 }

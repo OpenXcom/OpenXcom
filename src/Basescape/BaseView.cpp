@@ -20,6 +20,7 @@
 #include <sstream>
 #include <cmath>
 #include "../Engine/SurfaceSet.h"
+#include "../Engine/Action.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/BaseFacility.h"
 #include "../Ruleset/RuleBaseFacility.h"
@@ -453,16 +454,15 @@ void BaseView::blit(Surface *surface)
 
 /**
  * Selects the facility the mouse is over.
- * @param ev Pointer to a SDL_Event.
- * @param scale Current screen scale (used to correct mouse input).
- * @param state State that the event handlers belong to.
+ * @param action Pointer to an action.
+
+ * @param state State that the action handlers belong to.
  */
-void BaseView::mouseOver(SDL_Event *ev, int scale, State *state)
+void BaseView::mouseOver(Action *action, State *state)
 {
-	double x = ev->button.x - _x * scale;
-	double y = ev->button.y - _y * scale;
-	_gridX = (int)floor(x / (GRID_SIZE * scale));
-	_gridY = (int)floor(y / (GRID_SIZE * scale));
+	double x = action->getDetails()->button.x - _x * action->getXScale(), y = action->getDetails()->button.y - _y * action->getYScale();
+	_gridX = (int)floor(x / (GRID_SIZE * action->getXScale()));
+	_gridY = (int)floor(y / (GRID_SIZE * action->getYScale()));
 	if (_gridX >= 0 && _gridX < BASE_SIZE && _gridY >= 0 && _gridY < BASE_SIZE)
 	{
 		_selFacility = _facilities[_gridX][_gridY];
@@ -489,16 +489,16 @@ void BaseView::mouseOver(SDL_Event *ev, int scale, State *state)
 		}
 	}
 
-	InteractiveSurface::mouseOver(ev, scale, state);
+	InteractiveSurface::mouseOver(action, state);
 }
 
 /**
  * Deselects the facility.
- * @param ev Pointer to a SDL_Event.
- * @param scale Current screen scale (used to correct mouse input).
- * @param state State that the event handlers belong to.
+ * @param action Pointer to an action.
+
+ * @param state State that the action handlers belong to.
  */
-void BaseView::mouseOut(SDL_Event *ev, int scale, State *state)
+void BaseView::mouseOut(Action *action, State *state)
 {
 	_selFacility = 0;
 	if (_selSize > 0)
@@ -506,5 +506,5 @@ void BaseView::mouseOut(SDL_Event *ev, int scale, State *state)
 		_selector->setVisible(false);
 	}
 
-	InteractiveSurface::mouseOut(ev, scale, state);
+	InteractiveSurface::mouseOut(action, state);
 }

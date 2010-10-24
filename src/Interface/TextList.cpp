@@ -19,6 +19,7 @@
 #include "TextList.h"
 #include <cstdarg>
 #include <cmath>
+#include "../Engine/Action.h"
 #include "../Engine/Font.h"
 #include "../Engine/Palette.h"
 #include "ArrowButton.h"
@@ -343,15 +344,15 @@ void TextList::blit(Surface *surface)
 
 /**
  * Passes events to arrow buttons.
- * @param ev Pointer to a SDL_Event.
- * @param scale Current screen scale (used to correct mouse input).
- * @param state State that the event handlers belong to.
+ * @param action Pointer to an action.
+
+ * @param state State that the action handlers belong to.
  */
-void TextList::handle(SDL_Event *ev, int scale, State *state)
+void TextList::handle(Action *action, State *state)
 {
-	InteractiveSurface::handle(ev, scale, state);
-	_up->handle(ev, scale, state);
-	_down->handle(ev, scale, state);
+	InteractiveSurface::handle(action, state);
+	_up->handle(action, state);
+	_down->handle(action, state);
 }
 
 /**
@@ -366,24 +367,24 @@ void TextList::think()
 
 /**
  * Ignores any mouse clicks that aren't on a row with the left mouse button.
- * @param ev Pointer to a SDL_Event.
- * @param scale Current screen scale (used to correct mouse input).
- * @param state State that the event handlers belong to.
+ * @param action Pointer to an action.
+
+ * @param state State that the action handlers belong to.
  */
-void TextList::mousePress(SDL_Event *ev, int scale, State *state)
+void TextList::mousePress(Action *action, State *state)
 {
-	if (_selectable && ev->button.button == SDL_BUTTON_LEFT)
+	if (_selectable && action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
 		if (_selRow < _texts.size())
 		{
-			InteractiveSurface::mousePress(ev, scale, state);
+			InteractiveSurface::mousePress(action, state);
 		}
 	}
-	else if (ev->button.button == SDL_BUTTON_WHEELUP)
+	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
 	{
 		scrollUp();
 	}
-	else if (ev->button.button == SDL_BUTTON_WHEELDOWN)
+	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
 	{
 		scrollDown();
 	}
@@ -391,34 +392,34 @@ void TextList::mousePress(SDL_Event *ev, int scale, State *state)
 
 /*
  * Ignores any mouse clicks that aren't on a row with the left mouse button.
- * @param ev Pointer to a SDL_Event.
- * @param scale Current screen scale (used to correct mouse input).
- * @param state State that the event handlers belong to.
+ * @param action Pointer to an action.
+
+ * @param state State that the action handlers belong to.
  */
-void TextList::mouseRelease(SDL_Event *ev, int scale, State *state)
+void TextList::mouseRelease(Action *action, State *state)
 {
-	if (_selectable && ev->button.button == SDL_BUTTON_LEFT)
+	if (_selectable && action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
 		if (_selRow < _texts.size())
 		{
-			InteractiveSurface::mouseRelease(ev, scale, state);
+			InteractiveSurface::mouseRelease(action, state);
 		}
 	}
 }
 
 /**
  * Ignores any mouse clicks that aren't on a row with the left mouse button.
- * @param ev Pointer to a SDL_Event.
- * @param scale Current screen scale (used to correct mouse input).
- * @param state State that the event handlers belong to.
+ * @param action Pointer to an action.
+
+ * @param state State that the action handlers belong to.
  */
-void TextList::mouseClick(SDL_Event *ev, int scale, State *state)
+void TextList::mouseClick(Action *action, State *state)
 {
-	if (_selectable && ev->button.button == SDL_BUTTON_LEFT)
+	if (_selectable && action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
 		if (_selRow < _texts.size())
 		{
-			InteractiveSurface::mouseClick(ev, scale, state);
+			InteractiveSurface::mouseClick(action, state);
 			_selector->setVisible(false);
 		}
 	}
@@ -426,17 +427,17 @@ void TextList::mouseClick(SDL_Event *ev, int scale, State *state)
 
 /**
  * Selects the row the mouse is over.
- * @param ev Pointer to a SDL_Event.
- * @param scale Current screen scale (used to correct mouse input).
- * @param state State that the event handlers belong to.
+ * @param action Pointer to an action.
+
+ * @param state State that the action handlers belong to.
  */
-void TextList::mouseOver(SDL_Event *ev, int scale, State *state)
+void TextList::mouseOver(Action *action, State *state)
 {
 	int h = _small->getHeight() + _small->getSpacing();
 	if (_selectable)
 	{
-		double y = ev->button.y - _y * scale;
-		_selRow = _scroll + (int)floor(y / (h * scale));
+		double y = action->getDetails()->button.y - _y * action->getYScale();
+		_selRow = _scroll + (int)floor(y / (h * action->getYScale()));
 
 		if (_selRow < _texts.size())
 		{
@@ -451,21 +452,21 @@ void TextList::mouseOver(SDL_Event *ev, int scale, State *state)
 		}
 	}
 
-	InteractiveSurface::mouseOver(ev, scale, state);
+	InteractiveSurface::mouseOver(action, state);
 }
 
 /**
  * Deselects the row.
- * @param ev Pointer to a SDL_Event.
- * @param scale Current screen scale (used to correct mouse input).
- * @param state State that the event handlers belong to.
+ * @param action Pointer to an action.
+
+ * @param state State that the action handlers belong to.
  */
-void TextList::mouseOut(SDL_Event *ev, int scale, State *state)
+void TextList::mouseOut(Action *action, State *state)
 {
 	if (_selectable)
 	{
 		_selector->setVisible(false);
 	}
 
-	InteractiveSurface::mouseOut(ev, scale, state);
+	InteractiveSurface::mouseOut(action, state);
 }

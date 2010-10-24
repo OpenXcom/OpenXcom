@@ -17,7 +17,9 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "BuildNewBaseState.h"
+#include <cmath>
 #include "../Engine/Game.h"
+#include "../Engine/Action.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
 #include "../Resource/LangString.h"
@@ -71,30 +73,30 @@ BuildNewBaseState::BuildNewBaseState(Game *game, Base *base, Globe *globe, bool 
 	add(_txtTitle);
 	
 	// Set up objects
-	_globe->onMouseClick((EventHandler)&BuildNewBaseState::globeClick);
+	_globe->onMouseClick((ActionHandler)&BuildNewBaseState::globeClick);
 
-	_btnRotateLeft->onMousePress((EventHandler)&BuildNewBaseState::btnRotateLeftPress);
-	_btnRotateLeft->onMouseRelease((EventHandler)&BuildNewBaseState::btnRotateLeftRelease);
+	_btnRotateLeft->onMousePress((ActionHandler)&BuildNewBaseState::btnRotateLeftPress);
+	_btnRotateLeft->onMouseRelease((ActionHandler)&BuildNewBaseState::btnRotateLeftRelease);
 
-	_btnRotateRight->onMousePress((EventHandler)&BuildNewBaseState::btnRotateRightPress);
-	_btnRotateRight->onMouseRelease((EventHandler)&BuildNewBaseState::btnRotateRightRelease);
+	_btnRotateRight->onMousePress((ActionHandler)&BuildNewBaseState::btnRotateRightPress);
+	_btnRotateRight->onMouseRelease((ActionHandler)&BuildNewBaseState::btnRotateRightRelease);
 
-	_btnRotateUp->onMousePress((EventHandler)&BuildNewBaseState::btnRotateUpPress);
-	_btnRotateUp->onMouseRelease((EventHandler)&BuildNewBaseState::btnRotateUpRelease);
+	_btnRotateUp->onMousePress((ActionHandler)&BuildNewBaseState::btnRotateUpPress);
+	_btnRotateUp->onMouseRelease((ActionHandler)&BuildNewBaseState::btnRotateUpRelease);
 
-	_btnRotateDown->onMousePress((EventHandler)&BuildNewBaseState::btnRotateDownPress);
-	_btnRotateDown->onMouseRelease((EventHandler)&BuildNewBaseState::btnRotateDownRelease);
+	_btnRotateDown->onMousePress((ActionHandler)&BuildNewBaseState::btnRotateDownPress);
+	_btnRotateDown->onMouseRelease((ActionHandler)&BuildNewBaseState::btnRotateDownRelease);
 
-	_btnZoomIn->onMouseClick((EventHandler)&BuildNewBaseState::btnZoomInClick);
+	_btnZoomIn->onMouseClick((ActionHandler)&BuildNewBaseState::btnZoomInClick);
 
-	_btnZoomOut->onMouseClick((EventHandler)&BuildNewBaseState::btnZoomOutClick);
+	_btnZoomOut->onMouseClick((ActionHandler)&BuildNewBaseState::btnZoomOutClick);
 
 	_window->setColor(Palette::blockOffset(15)+2);
 	_window->setBackground(game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_btnCancel->setColor(Palette::blockOffset(15)+2);
 	_btnCancel->setText(_game->getResourcePack()->getLanguage()->getString(STR_CANCEL_UC));
-	_btnCancel->onMouseClick((EventHandler)&BuildNewBaseState::btnCancelClick);
+	_btnCancel->onMouseClick((ActionHandler)&BuildNewBaseState::btnCancelClick);
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString(STR_SELECT_SITE_FOR_NEW_BASE));
@@ -133,29 +135,29 @@ void BuildNewBaseState::think()
 
 /**
  * Handles the globe.
- * @param ev Pointer to a SDL_Event.
- * @param scale Current screen scale (used to correct mouse input).
+ * @param action Pointer to an action.
+
  */
-void BuildNewBaseState::handle(SDL_Event *ev, int scale)
+void BuildNewBaseState::handle(Action *action)
 {
-	State::handle(ev, scale);
-	_globe->handle(ev, scale, this);
+	State::handle(action);
+	_globe->handle(action, this);
 }
 
 /**
  * Processes any left-clicks for base placement,
  * or right-clicks to scroll the globe.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void BuildNewBaseState::globeClick(SDL_Event *ev, int scale)
+void BuildNewBaseState::globeClick(Action *action)
 {
 	double lon, lat;
-	int mouseX = ev->button.x / scale, mouseY = ev->button.y / scale;
+	int mouseX = (int)floor(action->getDetails()->button.x / action->getXScale()), mouseY = (int)floor(action->getDetails()->button.y / action->getYScale());
 	_globe->cartToPolar(mouseX, mouseY, &lon, &lat);
 	
 	// Clicking on land for a base location
-	if (ev->button.button == SDL_BUTTON_LEFT)
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
 		if (_globe->insideLand(lon, lat))
 		{
@@ -180,116 +182,116 @@ void BuildNewBaseState::globeClick(SDL_Event *ev, int scale)
 
 /**
  * Starts rotating the globe to the left.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void BuildNewBaseState::btnRotateLeftPress(SDL_Event *ev, int scale)
+void BuildNewBaseState::btnRotateLeftPress(Action *action)
 {
 	_globe->rotateLeft();
 }
 
 /**
  * Stops rotating the globe to the left.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void BuildNewBaseState::btnRotateLeftRelease(SDL_Event *ev, int scale)
+void BuildNewBaseState::btnRotateLeftRelease(Action *action)
 {
 	_globe->rotateStop();
 }
 
 /**
  * Starts rotating the globe to the right.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void BuildNewBaseState::btnRotateRightPress(SDL_Event *ev, int scale)
+void BuildNewBaseState::btnRotateRightPress(Action *action)
 {
 	_globe->rotateRight();
 }
 
 /**
  * Stops rotating the globe to the right.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void BuildNewBaseState::btnRotateRightRelease(SDL_Event *ev, int scale)
+void BuildNewBaseState::btnRotateRightRelease(Action *action)
 {
 	_globe->rotateStop();
 }
 
 /**
  * Starts rotating the globe upwards.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void BuildNewBaseState::btnRotateUpPress(SDL_Event *ev, int scale)
+void BuildNewBaseState::btnRotateUpPress(Action *action)
 {
 	_globe->rotateUp();
 }
 
 /**
  * Stops rotating the globe upwards.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void BuildNewBaseState::btnRotateUpRelease(SDL_Event *ev, int scale)
+void BuildNewBaseState::btnRotateUpRelease(Action *action)
 {
 	_globe->rotateStop();
 }
 
 /**
  * Starts rotating the globe downwards.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void BuildNewBaseState::btnRotateDownPress(SDL_Event *ev, int scale)
+void BuildNewBaseState::btnRotateDownPress(Action *action)
 {
 	_globe->rotateDown();
 }
 
 /**
  * Stops rotating the globe downwards.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void BuildNewBaseState::btnRotateDownRelease(SDL_Event *ev, int scale)
+void BuildNewBaseState::btnRotateDownRelease(Action *action)
 {
 	_globe->rotateStop();
 }
 
 /**
  * Zooms into the globe.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void BuildNewBaseState::btnZoomInClick(SDL_Event *ev, int scale)
+void BuildNewBaseState::btnZoomInClick(Action *action)
 {
-	if (ev->button.button == SDL_BUTTON_LEFT)
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 		_globe->zoomIn();
-	else if (ev->button.button == SDL_BUTTON_RIGHT)
+	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 		_globe->zoomMax();
 }
 
 /**
  * Zooms out of the globe.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void BuildNewBaseState::btnZoomOutClick(SDL_Event *ev, int scale)
+void BuildNewBaseState::btnZoomOutClick(Action *action)
 {
-	if (ev->button.button == SDL_BUTTON_LEFT)
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 		_globe->zoomOut();
-	else if (ev->button.button == SDL_BUTTON_RIGHT)
+	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 		_globe->zoomMin();
 }
 
 /**
  * Returns to the previous screen.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void BuildNewBaseState::btnCancelClick(SDL_Event *ev, int scale)
+void BuildNewBaseState::btnCancelClick(Action *action)
 {
 	delete _base;
 	_game->popState();

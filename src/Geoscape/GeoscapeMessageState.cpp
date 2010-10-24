@@ -54,7 +54,7 @@ GeoscapeMessageState::GeoscapeMessageState(Game *game, std::string str) : State(
 
 	_btnOk->setColor(Palette::blockOffset(8)+8);
 	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString(STR_OK));
-	_btnOk->onMouseClick((EventHandler)&GeoscapeMessageState::btnOkClick);
+	_btnOk->onMouseClick((ActionHandler)&GeoscapeMessageState::btnOkClick);
 
 	_txtMessage->setColor(Palette::blockOffset(15)-1);
 	_txtMessage->setAlign(ALIGN_CENTER);
@@ -82,10 +82,10 @@ void GeoscapeMessageState::init()
 
 /**
  * Closes the window.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void GeoscapeMessageState::btnOkClick(SDL_Event *ev, int scale)
+void GeoscapeMessageState::btnOkClick(Action *action)
 {
 	_game->popState();
 }

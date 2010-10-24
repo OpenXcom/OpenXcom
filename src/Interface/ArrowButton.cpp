@@ -177,13 +177,13 @@ void ArrowButton::scroll()
 
 /**
  * Starts scrolling the associated list.
- * @param ev Pointer to a SDL_Event.
- * @param scale Current screen scale (used to correct mouse input).
- * @param state State that the event handlers belong to.
+ * @param action Pointer to an action.
+
+ * @param state State that the action handlers belong to.
  */
-void ArrowButton::mousePress(SDL_Event *ev, int scale, State *state)
+void ArrowButton::mousePress(Action *action, State *state)
 {
-	ImageButton::mousePress(ev, scale, state);
+	ImageButton::mousePress(action, state);
 	if (_list != 0)
 	{
 		_timer->start();
@@ -192,13 +192,13 @@ void ArrowButton::mousePress(SDL_Event *ev, int scale, State *state)
 
 /*
  * Stops scrolling the associated list.
- * @param ev Pointer to a SDL_Event.
- * @param scale Current screen scale (used to correct mouse input).
- * @param state State that the event handlers belong to.
+ * @param action Pointer to an action.
+
+ * @param state State that the action handlers belong to.
  */
-void ArrowButton::mouseRelease(SDL_Event *ev, int scale, State *state)
+void ArrowButton::mouseRelease(Action *action, State *state)
 {
-	ImageButton::mouseRelease(ev, scale, state);
+	ImageButton::mouseRelease(action, state);
 	if (_list != 0)
 	{
 		_timer->stop();

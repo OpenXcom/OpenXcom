@@ -19,6 +19,7 @@
 #include "MiniBaseView.h"
 #include <cmath>
 #include "../Engine/SurfaceSet.h"
+#include "../Engine/Action.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/BaseFacility.h"
 #include "../Ruleset/RuleBaseFacility.h"
@@ -152,14 +153,14 @@ void MiniBaseView::draw()
 
 /**
  * Selects the base the mouse is over.
- * @param ev Pointer to a SDL_Event.
- * @param scale Current screen scale (used to correct mouse input).
- * @param state State that the event handlers belong to.
- */
-void MiniBaseView::mouseOver(SDL_Event *ev, int scale, State *state)
-{
-	double x = ev->button.x - _x * scale;
-	_hoverBase = (int)floor(x / ((MINI_SIZE + 2) * scale));
+ * @param action Pointer to an action.
 
-	InteractiveSurface::mouseOver(ev, scale, state);
+ * @param state State that the action handlers belong to.
+ */
+void MiniBaseView::mouseOver(Action *action, State *state)
+{
+	double x = action->getDetails()->button.x - _x * action->getXScale();
+	_hoverBase = (int)floor(x / ((MINI_SIZE + 2) * action->getXScale()));
+
+	InteractiveSurface::mouseOver(action, state);
 }

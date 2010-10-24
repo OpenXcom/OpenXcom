@@ -41,7 +41,7 @@ public:
 	/// Loads the game resources.
 	void think();
 	/// Handles key clicks.
-	void handle(SDL_Event* ev, int scale);
+	void handle(Action *action);
 };
 
 #endif

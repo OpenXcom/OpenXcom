@@ -79,7 +79,7 @@ ManufactureState::ManufactureState(Game *game) : State(game)
 
 	_btnOk->setColor(Palette::blockOffset(13)+13);
 	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString(STR_OK));
-	_btnOk->onMouseClick((EventHandler)&ManufactureState::btnOkClick);
+	_btnOk->onMouseClick((ActionHandler)&ManufactureState::btnOkClick);
 
 	_txtTitle->setColor(Palette::blockOffset(15)+6);
 	_txtTitle->setBig();
@@ -133,10 +133,10 @@ ManufactureState::~ManufactureState()
 
 /**
  * Returns to the previous screen.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void ManufactureState::btnOkClick(SDL_Event *ev, int scale)
+void ManufactureState::btnOkClick(Action *action)
 {
 	_game->popState();
 }

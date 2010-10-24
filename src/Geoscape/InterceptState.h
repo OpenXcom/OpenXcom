@@ -47,9 +47,9 @@ public:
 	/// Cleans up the Intercept state.
 	~InterceptState();
 	/// Handler for clicking the Cancel button.
-	void btnCancelClick(SDL_Event *ev, int scale);
+	void btnCancelClick(Action *action);
 	/// Handler for clicking the Crafts list.
-	void lstCraftsClick(SDL_Event *ev, int scale);
+	void lstCraftsClick(Action *action);
 };
 
 #endif

@@ -78,7 +78,7 @@ MonthlyCostsState::MonthlyCostsState(Game *game, Base *base) : State(game), _bas
 
 	_btnOk->setColor(Palette::blockOffset(15)+4);
 	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString(STR_OK));
-	_btnOk->onMouseClick((EventHandler)&MonthlyCostsState::btnOkClick);
+	_btnOk->onMouseClick((ActionHandler)&MonthlyCostsState::btnOkClick);
 
 	_txtTitle->setColor(Palette::blockOffset(15)+1);
 	_txtTitle->setBig();
@@ -153,10 +153,10 @@ MonthlyCostsState::~MonthlyCostsState()
 
 /**
  * Returns to the previous screen.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void MonthlyCostsState::btnOkClick(SDL_Event *ev, int scale)
+void MonthlyCostsState::btnOkClick(Action *action)
 {
 	_game->popState();
 }

@@ -21,6 +21,7 @@
 #include "SDL.h"
 #include "SDL_gfxPrimitives.h"
 #include "../Engine/Game.h"
+#include "../Engine/Action.h"
 #include "../Resource/XcomResourcePack.h"
 #include "../Ruleset/XcomRuleset.h"
 #include "../Engine/Surface.h"
@@ -106,14 +107,14 @@ void StartState::think()
 /**
  * The game quits if the player presses any key when an error
  * message is on display.
- * @param ev Pointer to a SDL_Event.
- * @param scale Current screen scale (used to correct mouse input).
+ * @param action Pointer to an action.
+
  */
-void StartState::handle(SDL_Event *ev, int scale)
+void StartState::handle(Action *action)
 {
 	if (_load == LOADING_FAILED)
 	{
-		if (ev->type == SDL_KEYDOWN)
+		if (action->getDetails()->type == SDL_KEYDOWN)
 			_game->quit();
 	}
 }

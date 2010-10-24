@@ -98,19 +98,19 @@ CraftInfoState::CraftInfoState(Game *game, Base *base, unsigned int craft) : Sta
 
 	_btnOk->setColor(Palette::blockOffset(13)+13);
 	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString(STR_OK));
-	_btnOk->onMouseClick((EventHandler)&CraftInfoState::btnOkClick);
+	_btnOk->onMouseClick((ActionHandler)&CraftInfoState::btnOkClick);
 
 	_btnW1->setColor(Palette::blockOffset(13)+13);
 	_btnW1->setText("1");
-	_btnW1->onMouseClick((EventHandler)&CraftInfoState::btnW1Click);
+	_btnW1->onMouseClick((ActionHandler)&CraftInfoState::btnW1Click);
 
 	_btnW2->setColor(Palette::blockOffset(13)+13);
 	_btnW2->setText("2");
-	_btnW2->onMouseClick((EventHandler)&CraftInfoState::btnW2Click);
+	_btnW2->onMouseClick((ActionHandler)&CraftInfoState::btnW2Click);
 
 	_btnCrew->setColor(Palette::blockOffset(13)+13);
 	_btnCrew->setText(_game->getResourcePack()->getLanguage()->getString(STR_CREW));
-	_btnCrew->onMouseClick((EventHandler)&CraftInfoState::btnCrewClick);
+	_btnCrew->onMouseClick((ActionHandler)&CraftInfoState::btnCrewClick);
 
 	_btnEquip->setColor(Palette::blockOffset(13)+13);
 	_btnEquip->setText(_game->getResourcePack()->getLanguage()->getString(STR_EQUIPMENT));
@@ -282,40 +282,40 @@ void CraftInfoState::init()
 
 /**
  * Returns to the previous screen.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void CraftInfoState::btnOkClick(SDL_Event *ev, int scale)
+void CraftInfoState::btnOkClick(Action *action)
 {
 	_game->popState();
 }
 
 /**
  * Goes to the Select Armament window.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void CraftInfoState::btnW1Click(SDL_Event *ev, int scale)
+void CraftInfoState::btnW1Click(Action *action)
 {
 	_game->pushState(new CraftWeaponsState(_game, _base, _craft, 0));
 }
 
 /**
  * Goes to the Select Armament window.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void CraftInfoState::btnW2Click(SDL_Event *ev, int scale)
+void CraftInfoState::btnW2Click(Action *action)
 {
 	_game->pushState(new CraftWeaponsState(_game, _base, _craft, 1));
 }
 
 /**
  * Goes to the Select Squad screen.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void CraftInfoState::btnCrewClick(SDL_Event *ev, int scale)
+void CraftInfoState::btnCrewClick(Action *action)
 {
 	_game->pushState(new CraftSoldiersState(_game, _base, _craft));
 }

@@ -56,7 +56,7 @@ PlaceLiftState::PlaceLiftState(Game *game, Base *base, Globe *globe) : State(gam
 	_view->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
 	_view->setBase(_base);
 	_view->setSelectable(_game->getRuleset()->getBaseFacility(STR_ACCESS_LIFT)->getSize());
-	_view->onMouseClick((EventHandler)&PlaceLiftState::viewClick);
+	_view->onMouseClick((ActionHandler)&PlaceLiftState::viewClick);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString(STR_SELECT_POSITION_FOR_ACCESS_LIFT));
@@ -72,10 +72,10 @@ PlaceLiftState::~PlaceLiftState()
 
 /**
  * Processes clicking on facilities.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void PlaceLiftState::viewClick(SDL_Event *ev, int scale)
+void PlaceLiftState::viewClick(Action *action)
 {
 	BaseFacility *fac = new BaseFacility(_game->getRuleset()->getBaseFacility(STR_ACCESS_LIFT), _view->getGridX(), _view->getGridY());
 	fac->setBuildTime(0);

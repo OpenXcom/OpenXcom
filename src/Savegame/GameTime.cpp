@@ -133,7 +133,7 @@ int GameTime::getWeekday()
 }
 
 /**
- * Returns a localizable-std::string representation of
+ * Returns a localizable-string representation of
  * the current ingame weekday.
  * @return Weekday string ID.
  */
@@ -152,7 +152,7 @@ int GameTime::getDay()
 }
 
 /**
- * Returns a localizable-std::string representation of
+ * Returns a localizable-string representation of
  * the cardinal operator for the current ingame day.
  * @return Day string ID.
  */
@@ -185,7 +185,7 @@ int GameTime::getMonth()
 }
 
 /**
- * Returns a localizable-std::string representation of
+ * Returns a localizable-string representation of
  * the current ingame month.
  * @return Month string ID.
  */

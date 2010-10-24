@@ -68,11 +68,11 @@ PurchaseState::PurchaseState(Game *game) : State(game)
 
 	_btnOk->setColor(Palette::blockOffset(13)+13);
 	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString(STR_OK));
-	_btnOk->onMouseClick((EventHandler)&PurchaseState::btnOkClick);
+	_btnOk->onMouseClick((ActionHandler)&PurchaseState::btnOkClick);
 
 	_btnCancel->setColor(Palette::blockOffset(13)+13);
 	_btnCancel->setText(_game->getResourcePack()->getLanguage()->getString(STR_CANCEL));
-	_btnCancel->onMouseClick((EventHandler)&PurchaseState::btnCancelClick);
+	_btnCancel->onMouseClick((ActionHandler)&PurchaseState::btnCancelClick);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
@@ -111,17 +111,17 @@ PurchaseState::~PurchaseState()
 	
 }
 
-void PurchaseState::btnOkClick(SDL_Event *ev, int scale)
+void PurchaseState::btnOkClick(Action *action)
 {
 	
 }
 
 /**
  * Returns to the previous screen.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void PurchaseState::btnCancelClick(SDL_Event *ev, int scale)
+void PurchaseState::btnCancelClick(Action *action)
 {
 	_game->popState();
 }

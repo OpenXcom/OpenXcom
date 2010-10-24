@@ -46,7 +46,7 @@ public:
 	/// Cleans up the Target Info state.
 	~TargetInfoState();
 	/// Handler for clicking the OK button.
-	void btnOkClick(SDL_Event *ev, int scale);
+	void btnOkClick(Action *action);
 };
 
 #endif

@@ -50,9 +50,9 @@ public:
 	/// Updates the base stats.
 	void init();
 	/// Handler for clicking the OK button.
-	void btnOkClick(SDL_Event *ev, int scale);
+	void btnOkClick(Action *action);
 	/// Handler for clicking the Facilities list.
-	void lstFacilitiesClick(SDL_Event *ev, int scale);
+	void lstFacilitiesClick(Action *action);
 };
 
 #endif

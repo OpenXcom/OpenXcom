@@ -76,11 +76,11 @@ UfoDetectedState::UfoDetectedState(Game *game, Ufo *ufo, GeoscapeState *state, b
 
 	_btnCentre->setColor(Palette::blockOffset(8)+8);
 	_btnCentre->setText(_game->getResourcePack()->getLanguage()->getString(STR_CENTRE_ON_UFO));
-	_btnCentre->onMouseClick((EventHandler)&UfoDetectedState::btnCentreClick);
+	_btnCentre->onMouseClick((ActionHandler)&UfoDetectedState::btnCentreClick);
 
 	_btnCancel->setColor(Palette::blockOffset(8)+8);
 	_btnCancel->setText(_game->getResourcePack()->getLanguage()->getString(STR_CANCEL_UC));
-	_btnCancel->onMouseClick((EventHandler)&UfoDetectedState::btnCancelClick);
+	_btnCancel->onMouseClick((ActionHandler)&UfoDetectedState::btnCancelClick);
 
 	_txtDetected->setColor(Palette::blockOffset(8)+5);
 	if (_detected)
@@ -130,10 +130,10 @@ void UfoDetectedState::init()
 
 /**
  * Centers on the UFO and returns to the previous screen.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void UfoDetectedState::btnCentreClick(SDL_Event *ev, int scale)
+void UfoDetectedState::btnCentreClick(Action *action)
 {
 	_state->timerReset();
 	_state->getGlobe()->center(_ufo->getLongitude(), _ufo->getLatitude());
@@ -142,10 +142,10 @@ void UfoDetectedState::btnCentreClick(SDL_Event *ev, int scale)
 
 /**
  * Returns to the previous screen.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void UfoDetectedState::btnCancelClick(SDL_Event *ev, int scale)
+void UfoDetectedState::btnCancelClick(Action *action)
 {
 	_game->popState();
 }

@@ -66,7 +66,7 @@ StoresState::StoresState(Game *game, Base *base) : State(game), _base(base)
 
 	_btnOk->setColor(Palette::blockOffset(13)+13);
 	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString(STR_OK));
-	_btnOk->onMouseClick((EventHandler)&StoresState::btnOkClick);
+	_btnOk->onMouseClick((ActionHandler)&StoresState::btnOkClick);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
@@ -106,10 +106,10 @@ StoresState::~StoresState()
 
 /**
  * Returns to the previous screen.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void StoresState::btnOkClick(SDL_Event *ev, int scale)
+void StoresState::btnOkClick(Action *action)
 {
 	_game->popState();
 }

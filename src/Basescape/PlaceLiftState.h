@@ -43,7 +43,7 @@ public:
 	/// Cleans up the Place Lift state.
 	~PlaceLiftState();
 	/// Handler for clicking the base view.
-	void viewClick(SDL_Event *ev, int scale);
+	void viewClick(Action *action);
 };
 
 #endif

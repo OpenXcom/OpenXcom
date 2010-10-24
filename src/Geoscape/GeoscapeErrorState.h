@@ -43,7 +43,7 @@ public:
 	/// Cleans up the Geoscape Error state.
 	~GeoscapeErrorState();
 	/// Handler for clicking the OK button.
-	void btnOkClick(SDL_Event *ev, int scale);
+	void btnOkClick(Action *action);
 };
 
 #endif

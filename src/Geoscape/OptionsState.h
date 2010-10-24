@@ -43,13 +43,13 @@ public:
 	/// Cleans up the Options state.
 	~OptionsState();
 	/// Handler for clicking the Load Game button.
-	void btnLoadClick(SDL_Event *ev, int scale);
+	void btnLoadClick(Action *action);
 	/// Handler for clicking the Save Game button.
-	void btnSaveClick(SDL_Event *ev, int scale);
+	void btnSaveClick(Action *action);
 	/// Handler for clicking the Abandon Game button.
-	void btnAbandonClick(SDL_Event *ev, int scale);
+	void btnAbandonClick(Action *action);
 	/// Handler for clicking the Cancel button.
-	void btnCancelClick(SDL_Event *ev, int scale);
+	void btnCancelClick(Action *action);
 };
 
 #endif

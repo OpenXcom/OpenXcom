@@ -54,7 +54,7 @@ BasescapeErrorState::BasescapeErrorState(Game *game, LangString str) : State(gam
 
 	_btnOk->setColor(Palette::blockOffset(15)+4);
 	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString(STR_OK));
-	_btnOk->onMouseClick((EventHandler)&BasescapeErrorState::btnOkClick);
+	_btnOk->onMouseClick((ActionHandler)&BasescapeErrorState::btnOkClick);
 
 	_txtError->setColor(Palette::blockOffset(15)+1);
 	_txtError->setAlign(ALIGN_CENTER);
@@ -74,10 +74,10 @@ BasescapeErrorState::~BasescapeErrorState()
 
 /**
  * Returns to the previous screen.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void BasescapeErrorState::btnOkClick(SDL_Event *ev, int scale)
+void BasescapeErrorState::btnOkClick(Action *action)
 {
 	_game->popState();
 }

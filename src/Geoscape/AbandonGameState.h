@@ -41,9 +41,9 @@ public:
 	/// Cleans up the Abandon Game state.
 	~AbandonGameState();
 	/// Handler for clicking the Yes button.
-	void btnYesClick(SDL_Event *ev, int scale);
+	void btnYesClick(Action *action);
 	/// Handler for clicking the No button.
-	void btnNoClick(SDL_Event *ev, int scale);
+	void btnNoClick(Action *action);
 };
 
 #endif

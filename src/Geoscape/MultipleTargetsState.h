@@ -51,9 +51,9 @@ public:
 	/// Popup for a target.
 	void popupTarget(Target *target);
 	/// Handler for clicking the Cancel button.
-	void btnCancelClick(SDL_Event *ev, int scale);
+	void btnCancelClick(Action *action);
 	/// Handler for clicking the Targets list.
-	void lstTargetsClick(SDL_Event *ev, int scale);
+	void lstTargetsClick(Action *action);
 };
 
 #endif

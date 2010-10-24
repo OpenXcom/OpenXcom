@@ -175,11 +175,11 @@ void TextButton::draw()
 
 /**
  * Sets the button as the pressed button if it's part of a group.
- * @param ev Pointer to a SDL_Event.
- * @param scale Current screen scale (used to correct mouse input).
- * @param state State that the event handlers belong to.
+ * @param action Pointer to an action.
+
+ * @param state State that the action handlers belong to.
  */
-void TextButton::mousePress(SDL_Event *ev, int scale, State *state)
+void TextButton::mousePress(Action *action, State *state)
 {
 	if (soundPress != 0)
 		soundPress->play();
@@ -191,18 +191,18 @@ void TextButton::mousePress(SDL_Event *ev, int scale, State *state)
 		old->draw();
 	}
 
-	InteractiveSurface::mousePress(ev, scale, state);
+	InteractiveSurface::mousePress(action, state);
 	draw();
 }
 
 /**
  * Sets the button as the released button.
- * @param ev Pointer to a SDL_Event.
- * @param scale Current screen scale (used to correct mouse input).
- * @param state State that the event handlers belong to.
+ * @param action Pointer to an action.
+
+ * @param state State that the action handlers belong to.
  */
-void TextButton::mouseRelease(SDL_Event *ev, int scale, State *state)
+void TextButton::mouseRelease(Action *action, State *state)
 {
-	InteractiveSurface::mouseRelease(ev, scale, state);
+	InteractiveSurface::mouseRelease(action, state);
 	draw();
 }

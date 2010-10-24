@@ -48,9 +48,9 @@ public:
 	/// Cleans up the Place Facility state.
 	~PlaceFacilityState();
 	/// Handler for clicking the Cancel button.
-	void btnCancelClick(SDL_Event *ev, int scale);
+	void btnCancelClick(Action *action);
 	/// Handler for clicking the base view.
-	void viewClick(SDL_Event *ev, int scale);
+	void viewClick(Action *action);
 };
 
 #endif

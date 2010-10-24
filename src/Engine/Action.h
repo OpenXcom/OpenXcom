@@ -16,37 +16,32 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_MONTHLYCOSTSSTATE_H
-#define OPENXCOM_MONTHLYCOSTSSTATE_H
+#ifndef OPENXCOM_ACTION_H
+#define OPENXCOM_ACTION_H
 
-#include "../Engine/State.h"
+#include "SDL.h"
 
-class Base;
-class TextButton;
-class Window;
-class Text;
-class TextList;
+class InteractiveSurface;
 
 /**
- * Monthly Costs screen that displays all
- * the maintenance costs of a particular base.
+ * Container for all the information associated with a
+ * given user action, like mouse clicks, key presses, etc.
+ * @note Called action because event is reserved.
  */
-class MonthlyCostsState : public State
+class Action
 {
 private:
-	Base *_base;
-
-	TextButton *_btnOk;
-	Window *_window;
-	Text *_txtTitle, *_txtCost, *_txtQuantity, *_txtTotal, *_txtRental, *_txtSalaries, *_txtIncome;
-	TextList *_lstCrafts, *_lstSalaries, *_lstMaintenance, *_lstTotal;
+	SDL_Event *_ev;
+	double _xScale, _yScale;
+	InteractiveSurface *_sender;
 public:
-	/// Creates the Monthly Costs state.
-	MonthlyCostsState(Game *game, Base *base);
-	/// Cleans up the Monthly Costs state.
-	~MonthlyCostsState();
-	/// Handler for clicking the OK button.
-	void btnOkClick(Action *action);
+	Action(SDL_Event *ev, double xScale, double yScale);
+	~Action();
+	double getXScale();
+	double getYScale();
+	InteractiveSurface *getSender();
+	void setSender(InteractiveSurface *sender);
+	SDL_Event *getDetails();
 };
 
 #endif

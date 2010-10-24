@@ -59,7 +59,7 @@ TargetInfoState::TargetInfoState(Game *game, Target *target) : State(game), _tar
 
 	_btnOk->setColor(Palette::blockOffset(8)+13);
 	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString(STR_OK));
-	_btnOk->onMouseClick((EventHandler)&TargetInfoState::btnOkClick);
+	_btnOk->onMouseClick((ActionHandler)&TargetInfoState::btnOkClick);
 
 	_txtTitle->setColor(Palette::blockOffset(8)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);
@@ -91,10 +91,10 @@ TargetInfoState::~TargetInfoState()
 
 /**
  * Closes the window.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void TargetInfoState::btnOkClick(SDL_Event *ev, int scale)
+void TargetInfoState::btnOkClick(Action *action)
 {
 	_game->popState();
 }

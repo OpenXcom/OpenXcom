@@ -49,9 +49,9 @@ public:
 	/// Updates the soldier status.
 	void init();
 	/// Handler for clicking the OK button.
-	void btnOkClick(SDL_Event *ev, int scale);
+	void btnOkClick(Action *action);
 	/// Handler for clicking the Soldiers list.
-	void lstSoldiersClick(SDL_Event *ev, int scale);
+	void lstSoldiersClick(Action *action);
 };
 
 #endif

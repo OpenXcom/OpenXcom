@@ -58,11 +58,11 @@ AbandonGameState::AbandonGameState(Game *game) : State(game)
 
 	_btnYes->setColor(Palette::blockOffset(15)+2);
 	_btnYes->setText(_game->getResourcePack()->getLanguage()->getString(STR_YES));
-	_btnYes->onMouseClick((EventHandler)&AbandonGameState::btnYesClick);
+	_btnYes->onMouseClick((ActionHandler)&AbandonGameState::btnYesClick);
 
 	_btnNo->setColor(Palette::blockOffset(15)+2);
 	_btnNo->setText(_game->getResourcePack()->getLanguage()->getString(STR_NO));
-	_btnNo->onMouseClick((EventHandler)&AbandonGameState::btnNoClick);
+	_btnNo->onMouseClick((ActionHandler)&AbandonGameState::btnNoClick);
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setAlign(ALIGN_CENTER);
@@ -82,10 +82,10 @@ AbandonGameState::~AbandonGameState()
 
 /**
  * Goes back to the Main Menu.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void AbandonGameState::btnYesClick(SDL_Event *ev, int scale)
+void AbandonGameState::btnYesClick(Action *action)
 {
 	_game->setState(new MainMenuState(_game));
 	delete _game->getSavedGame();
@@ -94,10 +94,10 @@ void AbandonGameState::btnYesClick(SDL_Event *ev, int scale)
 
 /**
  * Closes the window.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void AbandonGameState::btnNoClick(SDL_Event *ev, int scale)
+void AbandonGameState::btnNoClick(Action *action)
 {
 	_game->popState();
 }

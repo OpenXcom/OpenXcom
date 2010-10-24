@@ -299,6 +299,9 @@
     <ClCompile Include="Basescape\PlaceLiftState.cpp">
       <Filter>Basescape</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Action.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -601,6 +604,9 @@
     </ClInclude>
     <ClInclude Include="Basescape\PlaceLiftState.h">
       <Filter>Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Action.h">
+      <Filter>Engine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

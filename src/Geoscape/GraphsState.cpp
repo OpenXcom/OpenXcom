@@ -42,7 +42,7 @@ GraphsState::GraphsState(Game *game) : State(game)
 	// Set up objects
 	_game->getResourcePack()->getSurface("GRAPHS.SPK")->blit(_bg);
 
-	_btnGeoscape->onMouseClick((EventHandler)&GraphsState::btnGeoscapeClick);
+	_btnGeoscape->onMouseClick((ActionHandler)&GraphsState::btnGeoscapeClick);
 }
 
 /**
@@ -55,10 +55,10 @@ GraphsState::~GraphsState()
 
 /**
  * Returns to the previous screen.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void GraphsState::btnGeoscapeClick(SDL_Event *ev, int scale)
+void GraphsState::btnGeoscapeClick(Action *action)
 {
 	_game->popState();
 }

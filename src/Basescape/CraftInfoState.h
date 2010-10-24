@@ -50,13 +50,13 @@ public:
 	/// Updates the craft info.
 	void init();
 	/// Handler for clicking the OK button.
-	void btnOkClick(SDL_Event *ev, int scale);
+	void btnOkClick(Action *action);
 	/// Handler for clicking the 1 button.
-	void btnW1Click(SDL_Event *ev, int scale);
+	void btnW1Click(Action *action);
 	/// Handler for clicking the 2 button.
-	void btnW2Click(SDL_Event *ev, int scale);
+	void btnW2Click(Action *action);
 	/// Handler for clicking the Crew button.
-	void btnCrewClick(SDL_Event *ev, int scale);
+	void btnCrewClick(Action *action);
 };
 
 #endif

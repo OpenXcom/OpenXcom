@@ -78,39 +78,39 @@ public:
 	/// Gets the Geoscape globe.
 	Globe *getGlobe();
 	/// Handler for clicking the globe.
-	void globeClick(SDL_Event *ev, int scale);
+	void globeClick(Action *action);
 	/// Handler for clicking the Intercept button.
-	void btnInterceptClick(SDL_Event *ev, int scale);
+	void btnInterceptClick(Action *action);
 	/// Handler for clicking the Bases button.
-	void btnBasesClick(SDL_Event *ev, int scale);
+	void btnBasesClick(Action *action);
 	/// Handler for clicking the Graph button.
-	void btnGraphsClick(SDL_Event *ev, int scale);
+	void btnGraphsClick(Action *action);
 	/// Handler for clicking the Ufopaedia button.
-	void btnUfopaediaClick(SDL_Event *ev, int scale);
+	void btnUfopaediaClick(Action *action);
 	/// Handler for clicking the Options button.
-	void btnOptionsClick(SDL_Event *ev, int scale);
+	void btnOptionsClick(Action *action);
 	/// Handler for clicking the Funding button.
-	void btnFundingClick(SDL_Event *ev, int scale);
+	void btnFundingClick(Action *action);
 	/// Handler for pressing the Rotate Left arrow.
-	void btnRotateLeftPress(SDL_Event *ev, int scale);
+	void btnRotateLeftPress(Action *action);
 	/// Handler for releasing the Rotate Left arrow.
-	void btnRotateLeftRelease(SDL_Event *ev, int scale);
+	void btnRotateLeftRelease(Action *action);
 	/// Handler for pressing the Rotate Right arrow.
-	void btnRotateRightPress(SDL_Event *ev, int scale);
+	void btnRotateRightPress(Action *action);
 	/// Handler for releasing the Rotate Right arrow.
-	void btnRotateRightRelease(SDL_Event *ev, int scale);
+	void btnRotateRightRelease(Action *action);
 	/// Handler for pressing the Rotate Up arrow.
-	void btnRotateUpPress(SDL_Event *ev, int scale);
+	void btnRotateUpPress(Action *action);
 	/// Handler for releasing the Rotate Up arrow.
-	void btnRotateUpRelease(SDL_Event *ev, int scale);
+	void btnRotateUpRelease(Action *action);
 	/// Handler for pressing the Rotate Down arrow.
-	void btnRotateDownPress(SDL_Event *ev, int scale);
+	void btnRotateDownPress(Action *action);
 	/// Handler for releasing the Rotate Down arrow.
-	void btnRotateDownRelease(SDL_Event *ev, int scale);
+	void btnRotateDownRelease(Action *action);
 	/// Handler for clicking the Zoom In icon.
-	void btnZoomInClick(SDL_Event *ev, int scale);
+	void btnZoomInClick(Action *action);
 	/// Handler for clicking the Zoom Out icon.
-	void btnZoomOutClick(SDL_Event *ev, int scale);
+	void btnZoomOutClick(Action *action);
 };
 
 #endif

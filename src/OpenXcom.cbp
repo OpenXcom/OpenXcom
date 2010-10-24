@@ -86,6 +86,8 @@
 		<Unit filename="Basescape\SoldiersState.h" />
 		<Unit filename="Basescape\StoresState.cpp" />
 		<Unit filename="Basescape\StoresState.h" />
+		<Unit filename="Engine\Action.cpp" />
+		<Unit filename="Engine\Action.h" />
 		<Unit filename="Engine\Font.cpp" />
 		<Unit filename="Engine\Font.h" />
 		<Unit filename="Engine\Game.cpp" />

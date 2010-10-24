@@ -52,15 +52,15 @@ LanguageState::LanguageState(Game *game) : State(game)
 	
 	_btnEnglish->setColor(Palette::blockOffset(8)+8);
 	_btnEnglish->setText("ENGLISH");
-	_btnEnglish->onMouseClick((EventHandler)&LanguageState::btnEnglishClick);
+	_btnEnglish->onMouseClick((ActionHandler)&LanguageState::btnEnglishClick);
 	
 	_btnGerman->setColor(Palette::blockOffset(8)+8);
 	_btnGerman->setText("DEUTSCHE");
-	_btnGerman->onMouseClick((EventHandler)&LanguageState::btnGermanClick);
+	_btnGerman->onMouseClick((ActionHandler)&LanguageState::btnGermanClick);
 
 	_btnFrench->setColor(Palette::blockOffset(8)+8);
 	_btnFrench->setText("FRANCAIS");
-	_btnFrench->onMouseClick((EventHandler)&LanguageState::btnFrenchClick);
+	_btnFrench->onMouseClick((ActionHandler)&LanguageState::btnFrenchClick);
 }
 
 /**
@@ -80,10 +80,10 @@ void LanguageState::changeLanguage(std::string lang)
 /**
  * Sets the language to English and opens
  * the Main Menu window.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void LanguageState::btnEnglishClick(SDL_Event *ev, int scale)
+void LanguageState::btnEnglishClick(Action *action)
 {
 	changeLanguage("ENGLISH.DAT");
 }
@@ -91,10 +91,10 @@ void LanguageState::btnEnglishClick(SDL_Event *ev, int scale)
 /**
  * Sets the language to German and opens
  * the Main Menu window.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void LanguageState::btnGermanClick(SDL_Event *ev, int scale)
+void LanguageState::btnGermanClick(Action *action)
 {
 	changeLanguage("GERMAN.DAT");
 }
@@ -102,10 +102,10 @@ void LanguageState::btnGermanClick(SDL_Event *ev, int scale)
 /**
  * Sets the language to French and opens
  * the Main Menu window.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void LanguageState::btnFrenchClick(SDL_Event *ev, int scale)
+void LanguageState::btnFrenchClick(Action *action)
 {
 	changeLanguage("FRENCH.DAT");
 }

@@ -25,6 +25,7 @@
 #include "../Ruleset/Ruleset.h"
 #include "../Savegame/SavedGame.h"
 #include "Palette.h"
+#include "Action.h"
 
 /**
  * Starts up SDL with all the subsystems and SDL_mixer for audio processing,
@@ -116,8 +117,9 @@ void Game::run()
 			}
 			else
 			{
-				_cursor->handle(&_event, _screen->getScale());
-				_states.back()->handle(&_event, _screen->getScale());
+				Action *action = new Action(&_event, _screen->getXScale(), _screen->getYScale());
+				_cursor->handle(action);
+				_states.back()->handle(action);
 			}
 		}
 		

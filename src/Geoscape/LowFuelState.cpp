@@ -62,11 +62,11 @@ LowFuelState::LowFuelState(Game *game, Craft *craft, GeoscapeState *state) : Sta
 
 	_btnOk->setColor(Palette::blockOffset(8)+8);
 	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString(STR_OK));
-	_btnOk->onMouseClick((EventHandler)&LowFuelState::btnOkClick);
+	_btnOk->onMouseClick((ActionHandler)&LowFuelState::btnOkClick);
 
 	_btnOk5Secs->setColor(Palette::blockOffset(8)+8);
 	_btnOk5Secs->setText(_game->getResourcePack()->getLanguage()->getString(STR_OK_5_SECS));
-	_btnOk5Secs->onMouseClick((EventHandler)&LowFuelState::btnOk5SecsClick);
+	_btnOk5Secs->onMouseClick((ActionHandler)&LowFuelState::btnOk5SecsClick);
 
 	_txtTitle->setColor(Palette::blockOffset(8)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);
@@ -98,20 +98,20 @@ void LowFuelState::init()
 
 /**
  * Closes the window.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void LowFuelState::btnOkClick(SDL_Event *ev, int scale)
+void LowFuelState::btnOkClick(Action *action)
 {
 	_game->popState();
 }
 
 /**
  * Closes the window and sets the timer to 5 Secs.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void LowFuelState::btnOk5SecsClick(SDL_Event *ev, int scale)
+void LowFuelState::btnOk5SecsClick(Action *action)
 {
 	_state->timerReset();
 	_game->popState();

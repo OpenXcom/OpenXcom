@@ -59,23 +59,23 @@ NewGameState::NewGameState(Game *game) : State(game)
 
 	_btnBeginner->setColor(Palette::blockOffset(8)+8);
 	_btnBeginner->setText(_game->getResourcePack()->getLanguage()->getString(STR_BEGINNER));
-	_btnBeginner->onMouseClick((EventHandler)&NewGameState::btnBeginnerClick);
+	_btnBeginner->onMouseClick((ActionHandler)&NewGameState::btnBeginnerClick);
 
 	_btnExperienced->setColor(Palette::blockOffset(8)+8);
 	_btnExperienced->setText(_game->getResourcePack()->getLanguage()->getString(STR_EXPERIENCED));
-	_btnExperienced->onMouseClick((EventHandler)&NewGameState::btnExperiencedClick);
+	_btnExperienced->onMouseClick((ActionHandler)&NewGameState::btnExperiencedClick);
 
 	_btnVeteran->setColor(Palette::blockOffset(8)+8);
 	_btnVeteran->setText(_game->getResourcePack()->getLanguage()->getString(STR_VETERAN));
-	_btnVeteran->onMouseClick((EventHandler)&NewGameState::btnVeteranClick);
+	_btnVeteran->onMouseClick((ActionHandler)&NewGameState::btnVeteranClick);
 
 	_btnGenius->setColor(Palette::blockOffset(8)+8);
 	_btnGenius->setText(_game->getResourcePack()->getLanguage()->getString(STR_GENIUS));
-	_btnGenius->onMouseClick((EventHandler)&NewGameState::btnGeniusClick);
+	_btnGenius->onMouseClick((ActionHandler)&NewGameState::btnGeniusClick);
 
 	_btnSuperhuman->setColor(Palette::blockOffset(8)+8);
 	_btnSuperhuman->setText(_game->getResourcePack()->getLanguage()->getString(STR_SUPERHUMAN));
-	_btnSuperhuman->onMouseClick((EventHandler)&NewGameState::btnSuperhumanClick);
+	_btnSuperhuman->onMouseClick((ActionHandler)&NewGameState::btnSuperhumanClick);
 
 	_txtTitle->setColor(Palette::blockOffset(8)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);
@@ -106,10 +106,10 @@ void NewGameState::newGame(GameDifficulty diff)
 /**
  * Creates a new game in Beginner difficulty and
  * jumps to the Geoscape screen.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void NewGameState::btnBeginnerClick(SDL_Event *ev, int scale)
+void NewGameState::btnBeginnerClick(Action *action)
 {
 	newGame(DIFF_BEGINNER);
 }
@@ -117,10 +117,10 @@ void NewGameState::btnBeginnerClick(SDL_Event *ev, int scale)
 /**
  * Creates a new game in Experienced difficulty and
  * jumps to the Geoscape screen.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void NewGameState::btnExperiencedClick(SDL_Event *ev, int scale)
+void NewGameState::btnExperiencedClick(Action *action)
 {
 	newGame(DIFF_EXPERIENCED);
 }
@@ -128,10 +128,10 @@ void NewGameState::btnExperiencedClick(SDL_Event *ev, int scale)
 /**
  * Creates a new game in Veteran difficulty and
  * jumps to the Geoscape screen.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void NewGameState::btnVeteranClick(SDL_Event *ev, int scale)
+void NewGameState::btnVeteranClick(Action *action)
 {
 	newGame(DIFF_VETERAN);
 }
@@ -139,10 +139,10 @@ void NewGameState::btnVeteranClick(SDL_Event *ev, int scale)
 /**
  * Creates a new game in Genius difficulty and
  * jumps to the Geoscape screen.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void NewGameState::btnGeniusClick(SDL_Event *ev, int scale)
+void NewGameState::btnGeniusClick(Action *action)
 {
 	newGame(DIFF_GENIUS);
 }
@@ -150,10 +150,10 @@ void NewGameState::btnGeniusClick(SDL_Event *ev, int scale)
 /**
  * Creates a new game in Superhuman difficulty and
  * jumps to the Geoscape screen.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void NewGameState::btnSuperhumanClick(SDL_Event *ev, int scale)
+void NewGameState::btnSuperhumanClick(Action *action)
 {
 	newGame(DIFF_SUPERHUMAN);
 }

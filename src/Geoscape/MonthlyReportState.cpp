@@ -62,7 +62,7 @@ MonthlyReportState::MonthlyReportState(Game *game) : State(game)
 
 	_btnOk->setColor(Palette::blockOffset(8)+13);
 	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString(STR_OK));
-	_btnOk->onMouseClick((EventHandler)&MonthlyReportState::btnOkClick);
+	_btnOk->onMouseClick((ActionHandler)&MonthlyReportState::btnOkClick);
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
@@ -109,10 +109,10 @@ void MonthlyReportState::init()
 
 /**
  * Returns to the previous screen.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void MonthlyReportState::btnOkClick(SDL_Event *ev, int scale)
+void MonthlyReportState::btnOkClick(Action *action)
 {
 	_game->popState();
 }

@@ -60,19 +60,19 @@ OptionsState::OptionsState(Game *game) : State(game)
 
 	_btnLoad->setColor(Palette::blockOffset(15)+2);
 	_btnLoad->setText(_game->getResourcePack()->getLanguage()->getString(STR_LOAD_GAME));
-	_btnLoad->onMouseClick((EventHandler)&OptionsState::btnLoadClick);
+	_btnLoad->onMouseClick((ActionHandler)&OptionsState::btnLoadClick);
 
 	_btnSave->setColor(Palette::blockOffset(15)+2);
 	_btnSave->setText(_game->getResourcePack()->getLanguage()->getString(STR_SAVE_GAME));
-	_btnSave->onMouseClick((EventHandler)&OptionsState::btnSaveClick);
+	_btnSave->onMouseClick((ActionHandler)&OptionsState::btnSaveClick);
 
 	_btnAbandon->setColor(Palette::blockOffset(15)+2);
 	_btnAbandon->setText(_game->getResourcePack()->getLanguage()->getString(STR_ABANDON_GAME));
-	_btnAbandon->onMouseClick((EventHandler)&OptionsState::btnAbandonClick);
+	_btnAbandon->onMouseClick((ActionHandler)&OptionsState::btnAbandonClick);
 
 	_btnCancel->setColor(Palette::blockOffset(15)+2);
 	_btnCancel->setText(_game->getResourcePack()->getLanguage()->getString(STR_CANCEL_UC));
-	_btnCancel->onMouseClick((EventHandler)&OptionsState::btnCancelClick);
+	_btnCancel->onMouseClick((ActionHandler)&OptionsState::btnCancelClick);
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setAlign(ALIGN_CENTER);
@@ -88,32 +88,32 @@ OptionsState::~OptionsState()
 	
 }
 
-void OptionsState::btnLoadClick(SDL_Event *ev, int scale)
+void OptionsState::btnLoadClick(Action *action)
 {
 	
 }
 
-void OptionsState::btnSaveClick(SDL_Event *ev, int scale)
+void OptionsState::btnSaveClick(Action *action)
 {
 	
 }
 
 /**
  * Opens the Abandon Game window.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void OptionsState::btnAbandonClick(SDL_Event *ev, int scale)
+void OptionsState::btnAbandonClick(Action *action)
 {
 	_game->pushState(new AbandonGameState(_game));
 }
 
 /**
  * Returns to the previous screen.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void OptionsState::btnCancelClick(SDL_Event *ev, int scale)
+void OptionsState::btnCancelClick(Action *action)
 {
 	_game->popState();
 }

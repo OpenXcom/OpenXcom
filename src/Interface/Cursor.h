@@ -21,6 +21,8 @@
 
 #include "../Engine/Surface.h"
 
+class Action;
+
 /**
  * Mouse cursor that replaces the system cursor.
  * Drawn as a shaded triangle-like shape, automatically
@@ -37,7 +39,7 @@ public:
 	/// Cleans up the cursor.
 	~Cursor();
 	/// Handles mouse events.
-	void handle(SDL_Event *ev, int scale);
+	void handle(Action *action);
 	/// Sets the cursor's color.
 	void setColor(Uint8 color);
 	/// Gets the cursor's color.

@@ -73,9 +73,9 @@ bool Timer::isRunning()
 
 /**
  * The timer keeps calculating the passed time while it's running,
- * calling the respective event handler whenever the set interval passes.
- * @param state State that the event handler belongs to.
- * @param surface Surface that the event handler belongs to.
+ * calling the respective action handler whenever the set interval passes.
+ * @param state State that the action handler belongs to.
+ * @param surface Surface that the action handler belongs to.
  */
 void Timer::think(State* state, Surface* surface)
 {

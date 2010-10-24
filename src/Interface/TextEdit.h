@@ -77,9 +77,9 @@ public:
 	/// Draws the text edit.
 	void draw();
 	/// Special handling for mouse presses.
-	void mousePress(SDL_Event *ev, int scale, State *state);
+	void mousePress(Action *action, State *state);
 	/// Special handling for keyboard presses.
-	void keyboardPress(SDL_Event *ev, int scale, State *state);
+	void keyboardPress(Action *action, State *state);
 };
 
 #endif

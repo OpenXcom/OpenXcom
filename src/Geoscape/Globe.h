@@ -43,7 +43,7 @@ class Globe : public InteractiveSurface
 private:
 	std::vector<double> _radius;
 	double _cenLon, _cenLat, _rotLon, _rotLat;
-	int _cenX, _cenY;
+	Sint16 _cenX, _cenY;
 	unsigned int _zoom;
 	SurfaceSet *_texture[NUM_SHADES];
 	ResourcePack *_res;
@@ -127,13 +127,13 @@ public:
 	/// Blits the globe onto another surface.
 	void blit(Surface *surface);
 	/// Special handling for mouse presses.
-	void mousePress(SDL_Event *ev, int scale, State *state);
+	void mousePress(Action *action, State *state);
 	/// Special handling for mouse releases.
-	void mouseRelease(SDL_Event *ev, int scale, State *state);
+	void mouseRelease(Action *action, State *state);
 	/// Special handling for mouse clicks.
-	void mouseClick(SDL_Event *ev, int scale, State *state);
+	void mouseClick(Action *action, State *state);
 	/// Special handling for key presses.
-	void keyboardPress(SDL_Event *ev, int scale, State *state);
+	void keyboardPress(Action *action, State *state);
 };
 
 #endif

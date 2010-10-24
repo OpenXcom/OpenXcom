@@ -54,11 +54,11 @@ public:
 	/// Updates the soldier info.
 	void init();
 	/// Handler for clicking the OK button.
-	void btnOkClick(SDL_Event *ev, int scale);
+	void btnOkClick(Action *action);
 	/// Handler for clicking the Previous button.
-	void btnPrevClick(SDL_Event *ev, int scale);
+	void btnPrevClick(Action *action);
 	/// Handler for clicking the Next button.
-	void btnNextClick(SDL_Event *ev, int scale);
+	void btnNextClick(Action *action);
 };
 
 #endif

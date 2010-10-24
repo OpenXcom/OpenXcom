@@ -23,6 +23,7 @@
 #include <sstream>
 #include "../Engine/RNG.h"
 #include "../Engine/Game.h"
+#include "../Engine/Action.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
 #include "../Resource/LangString.h"
@@ -163,27 +164,27 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _popups()
 
 	_btnIntercept->copy(_bg);
 	_btnIntercept->setColor(Palette::blockOffset(15)+8);
-	_btnIntercept->onMouseClick((EventHandler)&GeoscapeState::btnInterceptClick);
+	_btnIntercept->onMouseClick((ActionHandler)&GeoscapeState::btnInterceptClick);
 
 	_btnBases->copy(_bg);
 	_btnBases->setColor(Palette::blockOffset(15)+8);
-	_btnBases->onMouseClick((EventHandler)&GeoscapeState::btnBasesClick);
+	_btnBases->onMouseClick((ActionHandler)&GeoscapeState::btnBasesClick);
 
 	_btnGraphs->copy(_bg);
 	_btnGraphs->setColor(Palette::blockOffset(15)+8);
-	_btnGraphs->onMouseClick((EventHandler)&GeoscapeState::btnGraphsClick);
+	_btnGraphs->onMouseClick((ActionHandler)&GeoscapeState::btnGraphsClick);
 
 	_btnUfopaedia->copy(_bg);
 	_btnUfopaedia->setColor(Palette::blockOffset(15)+8);
-	_btnUfopaedia->onMouseClick((EventHandler)&GeoscapeState::btnUfopaediaClick);
+	_btnUfopaedia->onMouseClick((ActionHandler)&GeoscapeState::btnUfopaediaClick);
 
 	_btnOptions->copy(_bg);
 	_btnOptions->setColor(Palette::blockOffset(15)+8);
-	_btnOptions->onMouseClick((EventHandler)&GeoscapeState::btnOptionsClick);
+	_btnOptions->onMouseClick((ActionHandler)&GeoscapeState::btnOptionsClick);
 
 	_btnFunding->copy(_bg);
 	_btnFunding->setColor(Palette::blockOffset(15)+8);
-	_btnFunding->onMouseClick((EventHandler)&GeoscapeState::btnFundingClick);
+	_btnFunding->onMouseClick((ActionHandler)&GeoscapeState::btnFundingClick);
 
 	_btn5Secs->copy(_bg);
 	_btn5Secs->setColor(Palette::blockOffset(15)+8);
@@ -209,21 +210,21 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _popups()
 	_btn1Day->setColor(Palette::blockOffset(15)+8);
 	_btn1Day->setGroup(&_timeSpeed);
 	
-	_btnRotateLeft->onMousePress((EventHandler)&GeoscapeState::btnRotateLeftPress);
-	_btnRotateLeft->onMouseRelease((EventHandler)&GeoscapeState::btnRotateLeftRelease);
+	_btnRotateLeft->onMousePress((ActionHandler)&GeoscapeState::btnRotateLeftPress);
+	_btnRotateLeft->onMouseRelease((ActionHandler)&GeoscapeState::btnRotateLeftRelease);
 
-	_btnRotateRight->onMousePress((EventHandler)&GeoscapeState::btnRotateRightPress);
-	_btnRotateRight->onMouseRelease((EventHandler)&GeoscapeState::btnRotateRightRelease);
+	_btnRotateRight->onMousePress((ActionHandler)&GeoscapeState::btnRotateRightPress);
+	_btnRotateRight->onMouseRelease((ActionHandler)&GeoscapeState::btnRotateRightRelease);
 
-	_btnRotateUp->onMousePress((EventHandler)&GeoscapeState::btnRotateUpPress);
-	_btnRotateUp->onMouseRelease((EventHandler)&GeoscapeState::btnRotateUpRelease);
+	_btnRotateUp->onMousePress((ActionHandler)&GeoscapeState::btnRotateUpPress);
+	_btnRotateUp->onMouseRelease((ActionHandler)&GeoscapeState::btnRotateUpRelease);
 
-	_btnRotateDown->onMousePress((EventHandler)&GeoscapeState::btnRotateDownPress);
-	_btnRotateDown->onMouseRelease((EventHandler)&GeoscapeState::btnRotateDownRelease);
+	_btnRotateDown->onMousePress((ActionHandler)&GeoscapeState::btnRotateDownPress);
+	_btnRotateDown->onMouseRelease((ActionHandler)&GeoscapeState::btnRotateDownRelease);
 
-	_btnZoomIn->onMouseClick((EventHandler)&GeoscapeState::btnZoomInClick);
+	_btnZoomIn->onMouseClick((ActionHandler)&GeoscapeState::btnZoomInClick);
 
-	_btnZoomOut->onMouseClick((EventHandler)&GeoscapeState::btnZoomOutClick);
+	_btnZoomOut->onMouseClick((ActionHandler)&GeoscapeState::btnZoomOutClick);
 
 	_txtHour->setBig();
 	_txtHour->setColor(Palette::blockOffset(15)+4);
@@ -292,7 +293,7 @@ void GeoscapeState::init()
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
 
-	_globe->onMouseClick((EventHandler)&GeoscapeState::globeClick);
+	_globe->onMouseClick((ActionHandler)&GeoscapeState::globeClick);
 	_globe->focus();
 	_globe->draw();
 
@@ -711,7 +712,7 @@ void GeoscapeState::timerReset()
 {
 	SDL_Event ev;
 	ev.button.button = SDL_BUTTON_LEFT;
-	_btn5Secs->mousePress(&ev, _game->getScreen()->getScale(), this);
+	_btn5Secs->mousePress(new Action(&ev, _game->getScreen()->getXScale(), _game->getScreen()->getYScale()), this);
 }
 
 /**
@@ -739,16 +740,16 @@ Globe *GeoscapeState::getGlobe()
 /**
  * Processes any left-clicks on globe markers,
  * or right-clicks to scroll the globe.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
 
-void GeoscapeState::globeClick(SDL_Event *ev, int scale)
+void GeoscapeState::globeClick(Action *action)
 {
-	int mouseX = ev->button.x / scale, mouseY = ev->button.y / scale;
+	int mouseX = (int)floor(action->getDetails()->button.x / action->getXScale()), mouseY = (int)floor(action->getDetails()->button.y / action->getYScale());
 	
 	// Clicking markers on the globe
-	if (ev->button.button == SDL_BUTTON_LEFT)
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
 		std::vector<Target*> v = _globe->getTargets(mouseX, mouseY, false);
 		if (v.size() > 0)
@@ -760,151 +761,151 @@ void GeoscapeState::globeClick(SDL_Event *ev, int scale)
 
 /**
  * Opens the Intercept window.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void GeoscapeState::btnInterceptClick(SDL_Event *ev, int scale)
+void GeoscapeState::btnInterceptClick(Action *action)
 {
 	_game->pushState(new InterceptState(_game, _globe));
 }
 
 /**
  * Goes to the Basescape screen.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void GeoscapeState::btnBasesClick(SDL_Event *ev, int scale)
+void GeoscapeState::btnBasesClick(Action *action)
 {
 	_game->pushState(new BasescapeState(_game, _game->getSavedGame()->getBases()->front(), _globe));
 }
 
 /**
  * Goes to the Graphs screen.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void GeoscapeState::btnGraphsClick(SDL_Event *ev, int scale)
+void GeoscapeState::btnGraphsClick(Action *action)
 {
 	_game->pushState(new GraphsState(_game));
 }
 
-void GeoscapeState::btnUfopaediaClick(SDL_Event *ev, int scale)
+void GeoscapeState::btnUfopaediaClick(Action *action)
 {
 
 }
 
 /**
  * Opens the Options window.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void GeoscapeState::btnOptionsClick(SDL_Event *ev, int scale)
+void GeoscapeState::btnOptionsClick(Action *action)
 {
 	_game->pushState(new OptionsState(_game));
 }
 
 /**
  * Goes to the Funding screen.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void GeoscapeState::btnFundingClick(SDL_Event *ev, int scale)
+void GeoscapeState::btnFundingClick(Action *action)
 {
 	_game->pushState(new FundingState(_game));
 }
 
 /**
  * Starts rotating the globe to the left.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void GeoscapeState::btnRotateLeftPress(SDL_Event *ev, int scale)
+void GeoscapeState::btnRotateLeftPress(Action *action)
 {
 	_globe->rotateLeft();
 }
 
 /**
  * Stops rotating the globe to the left.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void GeoscapeState::btnRotateLeftRelease(SDL_Event *ev, int scale)
+void GeoscapeState::btnRotateLeftRelease(Action *action)
 {
 	_globe->rotateStop();
 }
 
 /**
  * Starts rotating the globe to the right.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void GeoscapeState::btnRotateRightPress(SDL_Event *ev, int scale)
+void GeoscapeState::btnRotateRightPress(Action *action)
 {
 	_globe->rotateRight();
 }
 
 /**
  * Stops rotating the globe to the right.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void GeoscapeState::btnRotateRightRelease(SDL_Event *ev, int scale)
+void GeoscapeState::btnRotateRightRelease(Action *action)
 {
 	_globe->rotateStop();
 }
 
 /**
  * Starts rotating the globe upwards.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void GeoscapeState::btnRotateUpPress(SDL_Event *ev, int scale)
+void GeoscapeState::btnRotateUpPress(Action *action)
 {
 	_globe->rotateUp();
 }
 
 /**
  * Stops rotating the globe upwards.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void GeoscapeState::btnRotateUpRelease(SDL_Event *ev, int scale)
+void GeoscapeState::btnRotateUpRelease(Action *action)
 {
 	_globe->rotateStop();
 }
 
 /**
  * Starts rotating the globe downwards.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void GeoscapeState::btnRotateDownPress(SDL_Event *ev, int scale)
+void GeoscapeState::btnRotateDownPress(Action *action)
 {
 	_globe->rotateDown();
 }
 
 /**
  * Stops rotating the globe downwards.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void GeoscapeState::btnRotateDownRelease(SDL_Event *ev, int scale)
+void GeoscapeState::btnRotateDownRelease(Action *action)
 {
 	_globe->rotateStop();
 }
 
 /**
  * Zooms into the globe.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void GeoscapeState::btnZoomInClick(SDL_Event *ev, int scale)
+void GeoscapeState::btnZoomInClick(Action *action)
 {
-	if (ev->button.button == SDL_BUTTON_LEFT)
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
 		_globe->zoomIn();
 	}
-	else if (ev->button.button == SDL_BUTTON_RIGHT)
+	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
 		_globe->zoomMax();
 	}
@@ -912,16 +913,16 @@ void GeoscapeState::btnZoomInClick(SDL_Event *ev, int scale)
 
 /**
  * Zooms out of the globe.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void GeoscapeState::btnZoomOutClick(SDL_Event *ev, int scale)
+void GeoscapeState::btnZoomOutClick(Action *action)
 {
-	if (ev->button.button == SDL_BUTTON_LEFT)
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
 		_globe->zoomOut();
 	}
-	else if (ev->button.button == SDL_BUTTON_RIGHT)
+	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
 		_globe->zoomMin();
 	}

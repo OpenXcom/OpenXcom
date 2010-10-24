@@ -41,7 +41,6 @@ MainMenuState::MainMenuState(Game *game) : State(game)
 	_btnLoad = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 192, 20, 64, 118);
 	_btnQuit = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 192, 20, 64, 146);
 	_txtTitle = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 256, 30, 32, 45);
-	_txtVersion = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 160, 10, 160, 190);
 	
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
@@ -51,7 +50,6 @@ MainMenuState::MainMenuState(Game *game) : State(game)
 	add(_btnLoad);
 	add(_btnQuit);
 	add(_txtTitle);
-	add(_txtVersion);
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(8)+8);
@@ -59,25 +57,20 @@ MainMenuState::MainMenuState(Game *game) : State(game)
 
 	_btnNew->setColor(Palette::blockOffset(8)+8);
 	_btnNew->setText(_game->getResourcePack()->getLanguage()->getString(STR_NEW_GAME));
-	_btnNew->onMouseClick((EventHandler)&MainMenuState::btnNewClick);
+	_btnNew->onMouseClick((ActionHandler)&MainMenuState::btnNewClick);
 
 	_btnLoad->setColor(Palette::blockOffset(8)+8);
 	_btnLoad->setText(_game->getResourcePack()->getLanguage()->getString(STR_LOAD_SAVED_GAME));
-	_btnLoad->onMouseClick((EventHandler)&MainMenuState::btnLoadClick);
+	_btnLoad->onMouseClick((ActionHandler)&MainMenuState::btnLoadClick);
 
 	_btnQuit->setColor(Palette::blockOffset(8)+8);
 	_btnQuit->setText(_game->getResourcePack()->getLanguage()->getString(STR_QUIT));
-	_btnQuit->onMouseClick((EventHandler)&MainMenuState::btnQuitClick);
+	_btnQuit->onMouseClick((ActionHandler)&MainMenuState::btnQuitClick);
 
 	_txtTitle->setColor(Palette::blockOffset(8)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
-	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString(STR_UFO_ENEMY_UNKNOWN));
-	
-	_txtVersion->setColor(Palette::blockOffset(8)+10);
-	_txtVersion->setAlign(ALIGN_RIGHT);
-	_txtVersion->setSmall();
-	_txtVersion->setText("OpenXcom v0.1");
+	_txtTitle->setText("OpenXcom\x02v0.2");
 
 	// Set music
 	_game->getResourcePack()->getMusic("GMSTORY")->play();
@@ -93,25 +86,25 @@ MainMenuState::~MainMenuState()
 
 /**
  * Opens the New Game window.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void MainMenuState::btnNewClick(SDL_Event *ev, int scale)
+void MainMenuState::btnNewClick(Action *action)
 {
 	_game->setState(new NewGameState(_game));
 }
 
-void MainMenuState::btnLoadClick(SDL_Event *ev, int scale)
+void MainMenuState::btnLoadClick(Action *action)
 {
 	
 }
 
 /**
  * Quits the game.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void MainMenuState::btnQuitClick(SDL_Event *ev, int scale)
+void MainMenuState::btnQuitClick(Action *action)
 {
 	_game->quit();
 }

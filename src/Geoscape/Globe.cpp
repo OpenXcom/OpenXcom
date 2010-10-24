@@ -21,6 +21,7 @@
 #include <cmath>
 #include <fstream>
 #include "SDL_gfxPrimitives.h"
+#include "../Engine/Action.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Timer.h"
 #include "../Resource/ResourcePack.h"
@@ -238,8 +239,8 @@ Globe::~Globe()
 void Globe::polarToCart(double lon, double lat, Sint16 *x, Sint16 *y)
 {
 	// Orthographic projection
-	*x = _cenX + (int)floor(_radius[_zoom] * cos(lat) * sin(lon + _cenLon));
-	*y = _cenY + (int)floor(_radius[_zoom] * (cos(_cenLat) * sin(lat) + sin(_cenLat) * cos(lat) * cos(lon + _cenLon)));
+	*x = _cenX + (Sint16)floor(_radius[_zoom] * cos(lat) * sin(lon + _cenLon));
+	*y = _cenY + (Sint16)floor(_radius[_zoom] * (cos(_cenLat) * sin(lat) + sin(_cenLat) * cos(lat) * cos(lon + _cenLon)));
 }
 
 /**
@@ -1008,63 +1009,63 @@ void Globe::blit(Surface *surface)
 
 /**
  * Ignores any mouse clicks that are outside the globe.
- * @param ev Pointer to a SDL_Event.
- * @param scale Current screen scale (used to correct mouse input).
- * @param state State that the event handlers belong to.
+ * @param action Pointer to an action.
+
+ * @param state State that the action handlers belong to.
  */
-void Globe::mousePress(SDL_Event *ev, int scale, State *state)
+void Globe::mousePress(Action *action, State *state)
 {
 	double lon, lat;
-	cartToPolar(ev->button.x / scale, ev->button.y / scale, &lon, &lat);
+	cartToPolar((Sint16)floor(action->getDetails()->button.x / action->getXScale()), (Sint16)floor(action->getDetails()->button.y / action->getYScale()), &lon, &lat);
 
 	// Check for errors
 	if (lat == lat && lon == lon)
-		InteractiveSurface::mousePress(ev, scale, state);
+		InteractiveSurface::mousePress(action, state);
 }
 
 /**
  * Ignores any mouse clicks that are outside the globe.
- * @param ev Pointer to a SDL_Event.
- * @param scale Current screen scale (used to correct mouse input).
- * @param state State that the event handlers belong to.
+ * @param action Pointer to an action.
+
+ * @param state State that the action handlers belong to.
  */
-void Globe::mouseRelease(SDL_Event *ev, int scale, State *state)
+void Globe::mouseRelease(Action *action, State *state)
 {
 	double lon, lat;
-	cartToPolar(ev->button.x / scale, ev->button.y / scale, &lon, &lat);
+	cartToPolar((Sint16)floor(action->getDetails()->button.x / action->getXScale()), (Sint16)floor(action->getDetails()->button.y / action->getYScale()), &lon, &lat);
 
 	// Check for errors
 	if (lat == lat && lon == lon)
-		InteractiveSurface::mouseRelease(ev, scale, state);
+		InteractiveSurface::mouseRelease(action, state);
 }
 
 /**
  * Ignores any mouse clicks that are outside the globe
  * and handles globe rotation and zooming.
- * @param ev Pointer to a SDL_Event.
- * @param scale Current screen scale (used to correct mouse input).
- * @param state State that the event handlers belong to.
+ * @param action Pointer to an action.
+
+ * @param state State that the action handlers belong to.
  */
-void Globe::mouseClick(SDL_Event *ev, int scale, State *state)
+void Globe::mouseClick(Action *action, State *state)
 {
 	double lon, lat;
-	cartToPolar(ev->button.x / scale, ev->button.y / scale, &lon, &lat);
+	cartToPolar((Sint16)floor(action->getDetails()->button.x / action->getXScale()), (Sint16)floor(action->getDetails()->button.y / action->getYScale()), &lon, &lat);
 
 	// Check for errors
 	if (lat == lat && lon == lon)
 	{
-		InteractiveSurface::mouseClick(ev, scale, state);
+		InteractiveSurface::mouseClick(action, state);
 
 		// Handle globe control
-		if (ev->button.button == SDL_BUTTON_RIGHT)
+		if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 		{
 			center(lon, lat);
 		}
-		else if (ev->button.button == SDL_BUTTON_WHEELUP)
+		else if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
 		{
 			zoomIn();
 		}
-		else if (ev->button.button == SDL_BUTTON_WHEELDOWN)
+		else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
 		{
 			zoomOut();
 		}
@@ -1073,14 +1074,14 @@ void Globe::mouseClick(SDL_Event *ev, int scale, State *state)
 
 /**
  * Handles globe keyboard shortcuts.
- * @param ev Pointer to a SDL_Event.
- * @param scale Current screen scale (used to correct mouse input).
- * @param state State that the event handlers belong to.
+ * @param action Pointer to an action.
+
+ * @param state State that the action handlers belong to.
  */
-void Globe::keyboardPress(SDL_Event *ev, int scale, State *state)
+void Globe::keyboardPress(Action *action, State *state)
 {
-	InteractiveSurface::keyboardPress(ev, scale, state);
-	if (ev->key.keysym.sym == SDLK_TAB)
+	InteractiveSurface::keyboardPress(action, state);
+	if (action->getDetails()->key.keysym.sym == SDLK_TAB)
 	{
 		switchDetail();
 	}

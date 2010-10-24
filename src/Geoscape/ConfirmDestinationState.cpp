@@ -71,11 +71,11 @@ ConfirmDestinationState::ConfirmDestinationState(Game *game, Craft *craft, Targe
 
 	_btnOk->setColor(Palette::blockOffset(8)+8);
 	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString(STR_OK));
-	_btnOk->onMouseClick((EventHandler)&ConfirmDestinationState::btnOkClick);
+	_btnOk->onMouseClick((ActionHandler)&ConfirmDestinationState::btnOkClick);
 
 	_btnCancel->setColor(Palette::blockOffset(8)+8);
 	_btnCancel->setText(_game->getResourcePack()->getLanguage()->getString(STR_CANCEL_UC));
-	_btnCancel->onMouseClick((EventHandler)&ConfirmDestinationState::btnCancelClick);
+	_btnCancel->onMouseClick((ActionHandler)&ConfirmDestinationState::btnCancelClick);
 
 	_txtTarget->setColor(Palette::blockOffset(15)-1);
 	_txtTarget->setBig();
@@ -102,10 +102,10 @@ ConfirmDestinationState::~ConfirmDestinationState()
 
 /**
  * Confirms the selected target for the craft.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void ConfirmDestinationState::btnOkClick(SDL_Event *ev, int scale)
+void ConfirmDestinationState::btnOkClick(Action *action)
 {
 	Waypoint *w = dynamic_cast<Waypoint*>(_target);
 	if (w != 0 && w->getId() == 0)
@@ -122,10 +122,10 @@ void ConfirmDestinationState::btnOkClick(SDL_Event *ev, int scale)
 
 /**
  * Returns to the previous screen.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void ConfirmDestinationState::btnCancelClick(SDL_Event *ev, int scale)
+void ConfirmDestinationState::btnCancelClick(Action *action)
 {
 	Waypoint *w = dynamic_cast<Waypoint*>(_target);
 	if (w != 0 && w->getId() == 0)

@@ -17,7 +17,9 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "SelectDestinationState.h"
+#include <cmath>
 #include "../Engine/Game.h"
+#include "../Engine/Action.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
 #include "../Resource/LangString.h"
@@ -68,30 +70,30 @@ SelectDestinationState::SelectDestinationState(Game *game, Craft *craft, Globe *
 	add(_txtTitle);
 	
 	// Set up objects
-	_globe->onMouseClick((EventHandler)&SelectDestinationState::globeClick);
+	_globe->onMouseClick((ActionHandler)&SelectDestinationState::globeClick);
 
-	_btnRotateLeft->onMousePress((EventHandler)&SelectDestinationState::btnRotateLeftPress);
-	_btnRotateLeft->onMouseRelease((EventHandler)&SelectDestinationState::btnRotateLeftRelease);
+	_btnRotateLeft->onMousePress((ActionHandler)&SelectDestinationState::btnRotateLeftPress);
+	_btnRotateLeft->onMouseRelease((ActionHandler)&SelectDestinationState::btnRotateLeftRelease);
 
-	_btnRotateRight->onMousePress((EventHandler)&SelectDestinationState::btnRotateRightPress);
-	_btnRotateRight->onMouseRelease((EventHandler)&SelectDestinationState::btnRotateRightRelease);
+	_btnRotateRight->onMousePress((ActionHandler)&SelectDestinationState::btnRotateRightPress);
+	_btnRotateRight->onMouseRelease((ActionHandler)&SelectDestinationState::btnRotateRightRelease);
 
-	_btnRotateUp->onMousePress((EventHandler)&SelectDestinationState::btnRotateUpPress);
-	_btnRotateUp->onMouseRelease((EventHandler)&SelectDestinationState::btnRotateUpRelease);
+	_btnRotateUp->onMousePress((ActionHandler)&SelectDestinationState::btnRotateUpPress);
+	_btnRotateUp->onMouseRelease((ActionHandler)&SelectDestinationState::btnRotateUpRelease);
 
-	_btnRotateDown->onMousePress((EventHandler)&SelectDestinationState::btnRotateDownPress);
-	_btnRotateDown->onMouseRelease((EventHandler)&SelectDestinationState::btnRotateDownRelease);
+	_btnRotateDown->onMousePress((ActionHandler)&SelectDestinationState::btnRotateDownPress);
+	_btnRotateDown->onMouseRelease((ActionHandler)&SelectDestinationState::btnRotateDownRelease);
 
-	_btnZoomIn->onMouseClick((EventHandler)&SelectDestinationState::btnZoomInClick);
+	_btnZoomIn->onMouseClick((ActionHandler)&SelectDestinationState::btnZoomInClick);
 
-	_btnZoomOut->onMouseClick((EventHandler)&SelectDestinationState::btnZoomOutClick);
+	_btnZoomOut->onMouseClick((ActionHandler)&SelectDestinationState::btnZoomOutClick);
 
 	_window->setColor(Palette::blockOffset(15)+2);
 	_window->setBackground(game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_btnCancel->setColor(Palette::blockOffset(8)+8);
 	_btnCancel->setText(_game->getResourcePack()->getLanguage()->getString(STR_CANCEL_UC));
-	_btnCancel->onMouseClick((EventHandler)&SelectDestinationState::btnCancelClick);
+	_btnCancel->onMouseClick((ActionHandler)&SelectDestinationState::btnCancelClick);
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString(STR_SELECT_DESTINATION));
@@ -125,29 +127,29 @@ void SelectDestinationState::think()
 
 /**
  * Handles the globe.
- * @param ev Pointer to a SDL_Event.
- * @param scale Current screen scale (used to correct mouse input).
+ * @param action Pointer to an action.
+
  */
-void SelectDestinationState::handle(SDL_Event *ev, int scale)
+void SelectDestinationState::handle(Action *action)
 {
-	State::handle(ev, scale);
-	_globe->handle(ev, scale, this);
+	State::handle(action);
+	_globe->handle(action, this);
 }
 
 /**
  * Processes any left-clicks for picking a target,
  * or right-clicks to scroll the globe.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void SelectDestinationState::globeClick(SDL_Event *ev, int scale)
+void SelectDestinationState::globeClick(Action *action)
 {
 	double lon, lat;
-	int mouseX = ev->button.x / scale, mouseY = ev->button.y / scale;
+	int mouseX = (int)floor(action->getDetails()->button.x / action->getXScale()), mouseY = (int)floor(action->getDetails()->button.y / action->getYScale());
 	_globe->cartToPolar(mouseX, mouseY, &lon, &lat);
 	
 	// Clicking on a valid target
-	if (ev->button.button == SDL_BUTTON_LEFT)
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
 		std::vector<Target*> v = _globe->getTargets(mouseX, mouseY, true);
 		if (v.size() == 0)
@@ -163,96 +165,96 @@ void SelectDestinationState::globeClick(SDL_Event *ev, int scale)
 
 /**
  * Starts rotating the globe to the left.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void SelectDestinationState::btnRotateLeftPress(SDL_Event *ev, int scale)
+void SelectDestinationState::btnRotateLeftPress(Action *action)
 {
 	_globe->rotateLeft();
 }
 
 /**
  * Stops rotating the globe to the left.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void SelectDestinationState::btnRotateLeftRelease(SDL_Event *ev, int scale)
+void SelectDestinationState::btnRotateLeftRelease(Action *action)
 {
 	_globe->rotateStop();
 }
 
 /**
  * Starts rotating the globe to the right.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void SelectDestinationState::btnRotateRightPress(SDL_Event *ev, int scale)
+void SelectDestinationState::btnRotateRightPress(Action *action)
 {
 	_globe->rotateRight();
 }
 
 /**
  * Stops rotating the globe to the right.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void SelectDestinationState::btnRotateRightRelease(SDL_Event *ev, int scale)
+void SelectDestinationState::btnRotateRightRelease(Action *action)
 {
 	_globe->rotateStop();
 }
 
 /**
  * Starts rotating the globe upwards.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void SelectDestinationState::btnRotateUpPress(SDL_Event *ev, int scale)
+void SelectDestinationState::btnRotateUpPress(Action *action)
 {
 	_globe->rotateUp();
 }
 
 /**
  * Stops rotating the globe upwards.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void SelectDestinationState::btnRotateUpRelease(SDL_Event *ev, int scale)
+void SelectDestinationState::btnRotateUpRelease(Action *action)
 {
 	_globe->rotateStop();
 }
 
 /**
  * Starts rotating the globe downwards.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void SelectDestinationState::btnRotateDownPress(SDL_Event *ev, int scale)
+void SelectDestinationState::btnRotateDownPress(Action *action)
 {
 	_globe->rotateDown();
 }
 
 /**
  * Stops rotating the globe downwards.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void SelectDestinationState::btnRotateDownRelease(SDL_Event *ev, int scale)
+void SelectDestinationState::btnRotateDownRelease(Action *action)
 {
 	_globe->rotateStop();
 }
 
 /**
  * Zooms into the globe.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void SelectDestinationState::btnZoomInClick(SDL_Event *ev, int scale)
+void SelectDestinationState::btnZoomInClick(Action *action)
 {
-	if (ev->button.button == SDL_BUTTON_LEFT)
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
 		_globe->zoomIn();
 	}
-	else if (ev->button.button == SDL_BUTTON_RIGHT)
+	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
 		_globe->zoomMax();
 	}
@@ -260,16 +262,16 @@ void SelectDestinationState::btnZoomInClick(SDL_Event *ev, int scale)
 
 /**
  * Zooms out of the globe.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void SelectDestinationState::btnZoomOutClick(SDL_Event *ev, int scale)
+void SelectDestinationState::btnZoomOutClick(Action *action)
 {
-	if (ev->button.button == SDL_BUTTON_LEFT)
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
 		_globe->zoomOut();
 	}
-	else if (ev->button.button == SDL_BUTTON_RIGHT)
+	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
 		_globe->zoomMin();
 	}
@@ -277,10 +279,10 @@ void SelectDestinationState::btnZoomOutClick(SDL_Event *ev, int scale)
 
 /**
  * Returns to the previous screen.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void SelectDestinationState::btnCancelClick(SDL_Event *ev, int scale)
+void SelectDestinationState::btnCancelClick(Action *action)
 {
 	_game->popState();
 }

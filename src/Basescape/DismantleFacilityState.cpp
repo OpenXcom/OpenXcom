@@ -62,11 +62,11 @@ DismantleFacilityState::DismantleFacilityState(Game *game, Base *base, BaseFacil
 
 	_btnOk->setColor(Palette::blockOffset(15)+9);
 	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString(STR_OK));
-	_btnOk->onMouseClick((EventHandler)&DismantleFacilityState::btnOkClick);
+	_btnOk->onMouseClick((ActionHandler)&DismantleFacilityState::btnOkClick);
 
 	_btnCancel->setColor(Palette::blockOffset(15)+9);
 	_btnCancel->setText(_game->getResourcePack()->getLanguage()->getString(STR_CANCEL));
-	_btnCancel->onMouseClick((EventHandler)&DismantleFacilityState::btnCancelClick);
+	_btnCancel->onMouseClick((ActionHandler)&DismantleFacilityState::btnCancelClick);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);
@@ -88,10 +88,10 @@ DismantleFacilityState::~DismantleFacilityState()
 /**
  * Dismantles the facility and returns
  * to the previous screen.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void DismantleFacilityState::btnOkClick(SDL_Event *ev, int scale)
+void DismantleFacilityState::btnOkClick(Action *action)
 {
 	for (std::vector<BaseFacility*>::iterator i = _base->getFacilities()->begin(); i != _base->getFacilities()->end(); i++)
 	{
@@ -107,10 +107,10 @@ void DismantleFacilityState::btnOkClick(SDL_Event *ev, int scale)
 
 /**
  * Returns to the previous screen.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void DismantleFacilityState::btnCancelClick(SDL_Event *ev, int scale)
+void DismantleFacilityState::btnCancelClick(Action *action)
 {
 	_game->popState();
 }

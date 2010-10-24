@@ -25,6 +25,7 @@
 
 class Game;
 class Surface;
+class Action;
 
 /**
  * A game state that receives user input and reacts accordingly.
@@ -55,7 +56,7 @@ public:
 	/// Initializes the state.
 	virtual void init();
 	/// Handles any events.
-	virtual void handle(SDL_Event* ev, int scale);
+	virtual void handle(Action *action);
 	/// Runs state functionality every cycle.
 	virtual void think();
 	/// Blits the state to the screen.

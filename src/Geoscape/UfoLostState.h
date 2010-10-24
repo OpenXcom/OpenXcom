@@ -45,7 +45,7 @@ public:
 	/// Updates the palette.
 	void init();
 	/// Handler for clicking the OK button.
-	void btnOkClick(SDL_Event *ev, int scale);
+	void btnOkClick(Action *action);
 };
 
 #endif

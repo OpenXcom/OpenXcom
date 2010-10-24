@@ -91,17 +91,17 @@ public:
 	/// Thinks arrow buttons.
 	void think();
 	/// Handles arrow buttons.
-	void handle(SDL_Event *ev, int scale, State *state);
+	void handle(Action *action, State *state);
 	/// Special handling for mouse presses.
-	void mousePress(SDL_Event *ev, int scale, State *state);
+	void mousePress(Action *action, State *state);
 	/// Special handling for mouse releases.
-	void mouseRelease(SDL_Event *ev, int scale, State *state);
+	void mouseRelease(Action *action, State *state);
 	/// Special handling for mouse clicks.
-	void mouseClick(SDL_Event *ev, int scale, State *state);
+	void mouseClick(Action *action, State *state);
 	/// Special handling for mouse hovering.
-	void mouseOver(SDL_Event *ev, int scale, State *state);
+	void mouseOver(Action *action, State *state);
 	/// Special handling for mouse hovering out.
-	void mouseOut(SDL_Event *ev, int scale, State *state);
+	void mouseOut(Action *action, State *state);
 };
 
 #endif

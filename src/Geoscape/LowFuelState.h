@@ -48,9 +48,9 @@ public:
 	/// Updates the palette.
 	void init();
 	/// Handler for clicking the Ok button.
-	void btnOkClick(SDL_Event *ev, int scale);
+	void btnOkClick(Action *action);
 	/// Handler for clicking the Ok - 5 Secs button.
-	void btnOk5SecsClick(SDL_Event *ev, int scale);
+	void btnOk5SecsClick(Action *action);
 };
 
 #endif

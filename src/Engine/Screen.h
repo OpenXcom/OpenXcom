@@ -1,4 +1,4 @@
-/*
+	/*
  * Copyright 2010 Daniel Albano
  *
  * This file is part of OpenXcom.
@@ -38,6 +38,7 @@ private:
 	SDL_Surface *_screen;
 	int _width, _height, _bpp;
 	int _scale;
+	double _xScale, _yScale;
 	Uint32 _flags;
 public:
 	/// Creates a new display screen with the specified resolution.
@@ -58,10 +59,10 @@ public:
 	void setResolution(int width, int height);
 	/// Sets whether the screen is full-screen or windowed.
 	void setFullscreen(bool full);
-	/// Gets the current scaling factor.
-	int getScale();
-	/// Sets a new scaling factor.
-	void setScale(int amount);
+	/// Gets the screen's X scale;
+	double getXScale();
+	/// Gets the screen's Y scale;
+	double getYScale();
 };
 
 #endif

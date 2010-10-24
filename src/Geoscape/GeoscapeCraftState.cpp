@@ -104,19 +104,19 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 
 	_btnBase->setColor(Palette::blockOffset(8)+8);
 	_btnBase->setText(_game->getResourcePack()->getLanguage()->getString(STR_RETURN_TO_BASE));
-	_btnBase->onMouseClick((EventHandler)&GeoscapeCraftState::btnBaseClick);
+	_btnBase->onMouseClick((ActionHandler)&GeoscapeCraftState::btnBaseClick);
 
 	_btnTarget->setColor(Palette::blockOffset(8)+8);
 	_btnTarget->setText(_game->getResourcePack()->getLanguage()->getString(STR_SELECT_NEW_TARGET));
-	_btnTarget->onMouseClick((EventHandler)&GeoscapeCraftState::btnTargetClick);
+	_btnTarget->onMouseClick((ActionHandler)&GeoscapeCraftState::btnTargetClick);
 
 	_btnPatrol->setColor(Palette::blockOffset(8)+8);
 	_btnPatrol->setText(_game->getResourcePack()->getLanguage()->getString(STR_PATROL));
-	_btnPatrol->onMouseClick((EventHandler)&GeoscapeCraftState::btnPatrolClick);
+	_btnPatrol->onMouseClick((ActionHandler)&GeoscapeCraftState::btnPatrolClick);
 
 	_btnCancel->setColor(Palette::blockOffset(8)+8);
 	_btnCancel->setText(_game->getResourcePack()->getLanguage()->getString(STR_CANCEL_UC));
-	_btnCancel->onMouseClick((EventHandler)&GeoscapeCraftState::btnCancelClick);
+	_btnCancel->onMouseClick((ActionHandler)&GeoscapeCraftState::btnCancelClick);
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
@@ -275,10 +275,10 @@ void GeoscapeCraftState::init()
 
 /**
  * Returns the craft back to its base.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void GeoscapeCraftState::btnBaseClick(SDL_Event *ev, int scale)
+void GeoscapeCraftState::btnBaseClick(Action *action)
 {
 	delete _waypoint;
 	_game->popState();
@@ -287,10 +287,10 @@ void GeoscapeCraftState::btnBaseClick(SDL_Event *ev, int scale)
 
 /**
  * Changes the craft's target.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void GeoscapeCraftState::btnTargetClick(SDL_Event *ev, int scale)
+void GeoscapeCraftState::btnTargetClick(Action *action)
 {
 	_game->popState();
 	// Go to the last known UFO position
@@ -310,10 +310,10 @@ void GeoscapeCraftState::btnTargetClick(SDL_Event *ev, int scale)
 
 /**
  * Sets the craft to patrol the current location.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void GeoscapeCraftState::btnPatrolClick(SDL_Event *ev, int scale)
+void GeoscapeCraftState::btnPatrolClick(Action *action)
 {
 	delete _waypoint;
 	_game->popState();
@@ -322,10 +322,10 @@ void GeoscapeCraftState::btnPatrolClick(SDL_Event *ev, int scale)
 
 /**
  * Closes the window.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void GeoscapeCraftState::btnCancelClick(SDL_Event *ev, int scale)
+void GeoscapeCraftState::btnCancelClick(Action *action)
 {
 	delete _waypoint;
 	_game->popState();

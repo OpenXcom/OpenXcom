@@ -42,11 +42,11 @@ public:
 	/// Changes the game language.
 	void changeLanguage(std::string lang);
 	/// Handler for clicking the English button.
-	void btnEnglishClick(SDL_Event *ev, int scale);
+	void btnEnglishClick(Action *action);
 	/// Handler for clicking the Deutsche button.
-	void btnGermanClick(SDL_Event *ev, int scale);
+	void btnGermanClick(Action *action);
 	/// Handler for clicking the Francais button.
-	void btnFrenchClick(SDL_Event *ev, int scale);
+	void btnFrenchClick(Action *action);
 };
 
 #endif

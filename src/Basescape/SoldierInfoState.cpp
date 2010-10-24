@@ -139,15 +139,15 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, unsigned int soldier)
 
 	_btnOk->setColor(Palette::blockOffset(15)+9);
 	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString(STR_OK));
-	_btnOk->onMouseClick((EventHandler)&SoldierInfoState::btnOkClick);
+	_btnOk->onMouseClick((ActionHandler)&SoldierInfoState::btnOkClick);
 
 	_btnPrev->setColor(Palette::blockOffset(15)+9);
 	_btnPrev->setText("<<");
-	_btnPrev->onMouseClick((EventHandler)&SoldierInfoState::btnPrevClick);
+	_btnPrev->onMouseClick((ActionHandler)&SoldierInfoState::btnPrevClick);
 
 	_btnNext->setColor(Palette::blockOffset(15)+9);
 	_btnNext->setText(">>");
-	_btnNext->onMouseClick((EventHandler)&SoldierInfoState::btnNextClick);
+	_btnNext->onMouseClick((ActionHandler)&SoldierInfoState::btnNextClick);
 
 	_btnArmour->setColor(Palette::blockOffset(15)+9);
 	_btnArmour->setText(_game->getResourcePack()->getLanguage()->getString(STR_ARMOUR));
@@ -334,10 +334,10 @@ void SoldierInfoState::init()
 	
 /**
  * Returns to the previous screen.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void SoldierInfoState::btnOkClick(SDL_Event *ev, int scale)
+void SoldierInfoState::btnOkClick(Action *action)
 {
 	_base->getSoldiers()->at(_soldier)->setName(_edtSoldier->getText());
 	_game->popState();
@@ -345,10 +345,10 @@ void SoldierInfoState::btnOkClick(SDL_Event *ev, int scale)
 
 /**
  * Goes to the previous soldier.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void SoldierInfoState::btnPrevClick(SDL_Event *ev, int scale)
+void SoldierInfoState::btnPrevClick(Action *action)
 {
 	_base->getSoldiers()->at(_soldier)->setName(_edtSoldier->getText());
 	if (_soldier == 0)
@@ -360,10 +360,10 @@ void SoldierInfoState::btnPrevClick(SDL_Event *ev, int scale)
 
 /**
  * Goes to the next soldier.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void SoldierInfoState::btnNextClick(SDL_Event *ev, int scale)
+void SoldierInfoState::btnNextClick(Action *action)
 {
 	_base->getSoldiers()->at(_soldier)->setName(_edtSoldier->getText());
 	_soldier++;

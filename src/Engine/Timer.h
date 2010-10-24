@@ -55,9 +55,9 @@ public:
 	void think(State* state, Surface* surface);
 	/// Sets the timer's interval.
 	void setInterval(Uint32 interval);
-	/// Hooks a state event handler to the timer interval.
+	/// Hooks a state action handler to the timer interval.
 	void onTimer(StateHandler handler);
-	/// Hooks a surface event handler to the timer interval.
+	/// Hooks a surface action handler to the timer interval.
 	void onTimer(SurfaceHandler handler);
 };
 

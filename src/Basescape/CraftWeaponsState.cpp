@@ -74,7 +74,7 @@ CraftWeaponsState::CraftWeaponsState(Game *game, Base *base, unsigned int craft,
 
 	_btnCancel->setColor(Palette::blockOffset(15)+9);
 	_btnCancel->setText(_game->getResourcePack()->getLanguage()->getString(STR_CANCEL_UC));
-	_btnCancel->onMouseClick((EventHandler)&CraftWeaponsState::btnCancelClick);
+	_btnCancel->onMouseClick((ActionHandler)&CraftWeaponsState::btnCancelClick);
 
 	_txtTitle->setColor(Palette::blockOffset(15)+6);
 	_txtTitle->setBig();
@@ -109,7 +109,7 @@ CraftWeaponsState::CraftWeaponsState(Game *game, Base *base, unsigned int craft,
 			_lstWeapons->addRow(i, 3, _game->getResourcePack()->getLanguage()->getString((LangString)i).c_str(), ss.str().c_str(), ss2.str().c_str());
 		}
 	}
-	_lstWeapons->onMouseClick((EventHandler)&CraftWeaponsState::lstWeaponsClick);
+	_lstWeapons->onMouseClick((ActionHandler)&CraftWeaponsState::lstWeaponsClick);
 }
 
 /**
@@ -122,10 +122,10 @@ CraftWeaponsState::~CraftWeaponsState()
 
 /**
  * Returns to the previous screen.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void CraftWeaponsState::btnCancelClick(SDL_Event *ev, int scale)
+void CraftWeaponsState::btnCancelClick(Action *action)
 {
 	_game->popState();
 }
@@ -133,10 +133,10 @@ void CraftWeaponsState::btnCancelClick(SDL_Event *ev, int scale)
 /**
  * Equips the weapon on the craft and returns to the previous screen.
  * @note Ammo consumption currently disabled for testing purposes.
- * @param ev Pointer to the SDL_Event.
- * @param scale Scale of the screen.
+ * @param action Pointer to an action.
+
  */
-void CraftWeaponsState::lstWeaponsClick(SDL_Event *ev, int scale)
+void CraftWeaponsState::lstWeaponsClick(Action *action)
 {
 	CraftWeapon *current = _base->getCrafts()->at(_craft)->getWeapons()->at(_weapon);
 	// Remove current weapon

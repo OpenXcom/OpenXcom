@@ -46,9 +46,9 @@ public:
 	/// Cleans up the Confirm New Base state.
 	~ConfirmNewBaseState();
 	/// Handler for clicking the OK button.
-	void btnOkClick(SDL_Event *ev, int scale);
+	void btnOkClick(Action *action);
 	/// Handler for clicking the Cancel button.
-	void btnCancelClick(SDL_Event *ev, int scale);
+	void btnCancelClick(Action *action);
 };
 
 #endif

@@ -34,18 +34,18 @@ class MainMenuState : public State
 private:
 	TextButton *_btnNew, *_btnLoad, *_btnQuit;
 	Window *_window;
-	Text *_txtTitle, *_txtVersion;
+	Text *_txtTitle;
 public:
 	/// Creates the Main Menu state.
 	MainMenuState(Game *game);
 	/// Cleans up the Main Menu state.
 	~MainMenuState();
 	/// Handler for clicking the New Game button.
-	void btnNewClick(SDL_Event *ev, int scale);
+	void btnNewClick(Action *action);
 	/// Handler for clicking the Load Saved Game button.
-	void btnLoadClick(SDL_Event *ev, int scale);
+	void btnLoadClick(Action *action);
 	/// Handler for clicking the Quit button.
-	void btnQuitClick(SDL_Event *ev, int scale);
+	void btnQuitClick(Action *action);
 };
 
 #endif

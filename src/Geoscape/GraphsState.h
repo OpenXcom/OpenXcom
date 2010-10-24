@@ -39,7 +39,7 @@ public:
 	/// Cleans up the Graphs state.
 	~GraphsState();
 	/// Handler for clicking the Geoscape icon.
-	void btnGeoscapeClick(SDL_Event *ev, int scale);
+	void btnGeoscapeClick(Action *action);
 };
 
 #endif

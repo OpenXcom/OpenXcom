@@ -92,7 +92,7 @@ void Soldier::setCraft(Craft *craft)
 }
 
 /**
- * Returns a localizable-std::string representation of
+ * Returns a localizable-string representation of
  * the soldier's military rank.
  * @return String ID for rank.
  */
