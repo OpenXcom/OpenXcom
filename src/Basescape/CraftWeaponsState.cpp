@@ -54,7 +54,7 @@ CraftWeaponsState::CraftWeaponsState(Game *game, Base *base, unsigned int craft,
 	_txtQuantity = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 50, 8, 145, 52);
 	_txtAmmunition = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 68, 8, 195, 44);
 	_txtAvailable = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 68, 8, 195, 52);
-	_lstWeapons = new TextList(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 180, 80, 66, 68);
+	_lstWeapons = new TextList(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 188, 80, 58, 68);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
@@ -94,9 +94,12 @@ CraftWeaponsState::CraftWeaponsState(Game *game, Base *base, unsigned int craft,
 	_txtAvailable->setText(_game->getResourcePack()->getLanguage()->getString(STR_AVAILABLE));
 
 	_lstWeapons->setColor(Palette::blockOffset(13)+10);
+	_lstWeapons->setArrowColor(Palette::blockOffset(15)+9);
 	_lstWeapons->setColumns(3, 94, 50, 36);
 	_lstWeapons->setSelectable(true);
 	_lstWeapons->setBackground(_window);
+	_lstWeapons->setMargin(8);
+
 	_lstWeapons->addRow(STR_NONE, 3, _game->getResourcePack()->getLanguage()->getString(STR_NONE).c_str(), "", "");
 	for (int i = STR_STINGRAY_UC; i <= STR_CANNON_UC; i++)
 	{

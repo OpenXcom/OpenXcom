@@ -47,7 +47,7 @@ SellState::SellState(Game *game) : State(game)
 	_txtQuantity = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 44, 9, 140, 32);
 	_txtSell = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 96, 9, 184, 32);
 	_txtValue = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 34, 9, 280, 32);
-	_lstItems = new TextList(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 286, 120, 10, 44);
+	_lstItems = new TextList(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 288, 120, 8, 44);
 	
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
@@ -102,9 +102,11 @@ SellState::SellState(Game *game) : State(game)
 	_txtValue->setText(_game->getResourcePack()->getLanguage()->getString(STR_VALUE));
 
 	_lstItems->setColor(Palette::blockOffset(13)+10);
+	_lstItems->setArrowColor(Palette::blockOffset(13)+13);
 	_lstItems->setColumns(4, 156, 62, 28, 40);
 	_lstItems->setSelectable(true);
 	_lstItems->setBackground(_window);
+	_lstItems->setMargin(2);
 	_lstItems->addRow(0, 4, "Soldier", "1", "0", "$40 000");
 }
 

@@ -45,7 +45,7 @@ ResearchState::ResearchState(Game *game) : State(game)
 	_txtProject = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 106, 9, 8, 44);
 	_txtScientists = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 144, 9, 115, 44);
 	_txtProgress = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 64, 9, 250, 44);
-	_lstResearch = new TextList(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 286, 120, 10, 54);
+	_lstResearch = new TextList(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 288, 120, 8, 54);
 	
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(1)), Palette::backPos, 16);
@@ -97,9 +97,11 @@ ResearchState::ResearchState(Game *game) : State(game)
 	_txtProgress->setText(_game->getResourcePack()->getLanguage()->getString(STR_PROGRESS));
 
 	_lstResearch->setColor(Palette::blockOffset(15)+6);
+	_lstResearch->setArrowColor(Palette::blockOffset(13)+13);
 	_lstResearch->setColumns(3, 158, 82, 46);
 	_lstResearch->setSelectable(true);
 	_lstResearch->setBackground(_window);
+	_lstResearch->setMargin(2);
 	_lstResearch->addRow(0, 3, "Laser Weapons", "30", "Good");
 }
 

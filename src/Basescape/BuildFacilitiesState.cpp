@@ -44,7 +44,7 @@ BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base, State *state)
 	_window = new Window(this, 128, 160, 192, 40, POPUP_VERTICAL);
 	_btnOk = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 112, 16, 200, 176);
 	_txtTitle = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 118, 16, 197, 48);
-	_lstFacilities = new TextList(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 110, 110, 202, 64);
+	_lstFacilities = new TextList(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 96, 110, 200, 64);
 	
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
@@ -68,9 +68,12 @@ BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base, State *state)
 	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString(STR_INSTALLATION));
 
 	_lstFacilities->setColor(Palette::blockOffset(13)+5);
-	_lstFacilities->setColumns(1, 110);
+	_lstFacilities->setArrowColor(Palette::blockOffset(13)+8);
+	_lstFacilities->setColumns(1, 94);
 	_lstFacilities->setSelectable(true);
 	_lstFacilities->setBackground(_window);
+	_lstFacilities->setMargin(2);
+
 	for (int i = STR_LIVING_QUARTERS; i <= STR_ALIEN_CONTAINMENT; i++)
 		_lstFacilities->addRow(i, 1, _game->getResourcePack()->getLanguage()->getString((LangString)i).c_str());
 	_lstFacilities->addRow(STR_HANGAR, 1, _game->getResourcePack()->getLanguage()->getString(STR_HANGAR).c_str());

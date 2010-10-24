@@ -33,7 +33,7 @@
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-TextList::TextList(Font *big, Font *small, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _texts(), _columns(), _big(big), _small(small), _scroll(0), _visibleRows(0), _color(0), _align(ALIGN_LEFT), _dot(false), _selectable(false), _selRow(0), _bg(0)
+TextList::TextList(Font *big, Font *small, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _texts(), _columns(), _big(big), _small(small), _scroll(0), _visibleRows(0), _color(0), _align(ALIGN_LEFT), _dot(false), _selectable(false), _selRow(0), _bg(0), _margin(0)
 {
 	_selector = new Surface(_width, _small->getHeight() + _small->getSpacing(), _x, _y);
 	_selector->setVisible(false);
@@ -95,7 +95,7 @@ void TextList::addRow(intptr_t value, int cols, ...)
 
 	for (int i = 0; i < cols; i++)
 	{
-		Text* txt = new Text(_big, _small, _columns[i], _small->getHeight(), rowX, _y);
+		Text* txt = new Text(_big, _small, _columns[i], _small->getHeight(), _margin + rowX, _y);
 		txt->setPalette(this->getPalette());
 		
 		std::string buf = va_arg(args, char*);
@@ -182,8 +182,6 @@ void TextList::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 void TextList::setColor(Uint8 color)
 {
 	_color = color;
-	_up->setColor(color + 3);
-	_down->setColor(color + 3);
 }
 
 /**
@@ -252,6 +250,25 @@ intptr_t TextList::getSelectedValue()
 void TextList::setBackground(Surface *bg)
 {
 	_bg = bg;
+}
+
+/**
+ * Changes the horizontal margin placed around the text.
+ * @param margin Margin in pixels.
+ */
+void TextList::setMargin(int margin)
+{
+	_margin = margin;
+}
+
+/**
+ * Changes the color of the arrow buttons in the list.
+ * @param color Color value.
+ */
+void TextList::setArrowColor(Uint8 color)
+{
+	_up->setColor(color);
+	_down->setColor(color);
 }
 
 /**

@@ -49,7 +49,7 @@ ManufactureState::ManufactureState(Game *game) : State(game)
 	_txtTotal = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 42, 18, 180, 44);
 	_txtCost = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 42, 27, 223, 44);
 	_txtTimeLeft = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 54, 18, 265, 44);
-	_lstManufacture = new TextList(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 286, 100, 9, 80);
+	_lstManufacture = new TextList(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 288, 100, 8, 80);
 	
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
@@ -117,9 +117,11 @@ ManufactureState::ManufactureState(Game *game) : State(game)
 	_txtTimeLeft->setText(_game->getResourcePack()->getLanguage()->getString(STR_DAYS_HOURS_LEFT));
 	
 	_lstManufacture->setColor(Palette::blockOffset(13)+10);
-	_lstManufacture->setColumns(6, 105, 39, 45, 27, 47, 23);
+	_lstManufacture->setArrowColor(Palette::blockOffset(15)+9);
+	_lstManufacture->setColumns(6, 105, 39, 45, 27, 47, 24);
 	_lstManufacture->setSelectable(true);
 	_lstManufacture->setBackground(_window);
+	_lstManufacture->setMargin(1);
 	_lstManufacture->addRow(0, 6, "Laser Rifle", "30", "2", "8", "$40 000", "5/2");
 }
 

@@ -46,7 +46,7 @@ PurchaseState::PurchaseState(Game *game) : State(game)
 	_txtItem = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 140, 9, 10, 32);
 	_txtCost = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 102, 9, 152, 32);
 	_txtQuantity = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 60, 9, 256, 32);
-	_lstItems = new TextList(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 286, 128, 10, 40);
+	_lstItems = new TextList(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 288, 128, 8, 40);
 	
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
@@ -97,9 +97,11 @@ PurchaseState::PurchaseState(Game *game) : State(game)
 	_txtQuantity->setText(_game->getResourcePack()->getLanguage()->getString(STR_QUANTITY_UC));
 
 	_lstItems->setColor(Palette::blockOffset(13)+10);
+	_lstItems->setArrowColor(Palette::blockOffset(13)+13);
 	_lstItems->setColumns(3, 162, 92, 32);
 	_lstItems->setSelectable(true);
 	_lstItems->setBackground(_window);
+	_lstItems->setMargin(2);
 	_lstItems->addRow(0, 3, "Soldier", "40 000", "0");
 }
 

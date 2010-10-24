@@ -52,7 +52,7 @@ InterceptState::InterceptState(Game *game, Globe *globe, Base *base) : State(gam
 	_txtStatus = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 65, 9, 100, 70);
 	_txtBase = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 85, 9, 165, 70);
 	_txtWeapons = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 64, 16, 242, 62);
-	_lstCrafts = new TextList(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 286, 64, 14, 78);
+	_lstCrafts = new TextList(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 288, 64, 8, 78);
 	
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
@@ -92,10 +92,13 @@ InterceptState::InterceptState(Game *game, Globe *globe, Base *base) : State(gam
 	_txtWeapons->setText(_game->getResourcePack()->getLanguage()->getString(STR_WEAPONS_CREW_HWPS));
 
 	_lstCrafts->setColor(Palette::blockOffset(15)-1);
-	_lstCrafts->setColumns(4, 86, 65, 85, 50);
+	_lstCrafts->setArrowColor(Palette::blockOffset(15)+2);
+	_lstCrafts->setColumns(4, 86, 65, 85, 46);
 	_lstCrafts->setSelectable(true);
 	_lstCrafts->setBackground(_window);
+	_lstCrafts->setMargin(6);
 	_lstCrafts->onMouseClick((ActionHandler)&InterceptState::lstCraftsClick);
+
 	int row = 0;
 	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); i++)
 	{

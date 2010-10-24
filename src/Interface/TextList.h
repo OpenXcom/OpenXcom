@@ -46,6 +46,7 @@ private:
 	unsigned int _selRow;
 	Surface *_bg, *_selector;
 	ArrowButton *_up, *_down;
+	int _margin;
 
 	/// Updates the arrow buttons.
 	void updateArrows();
@@ -78,6 +79,10 @@ public:
 	intptr_t getValue(int row);
 	/// Gets the selected value in the text list.
 	intptr_t getSelectedValue();
+	/// Sets the margin of the text list.
+	void setMargin(int margin);
+	/// Sets the arrow color of the text list.
+	void setArrowColor(Uint8 color);
 	/// Clears the list.
 	void clearList();
 	/// Scrolls the list up.
