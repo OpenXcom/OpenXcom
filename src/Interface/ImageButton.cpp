@@ -72,7 +72,6 @@ void ImageButton::setGroup(ImageButton **group)
  * Sets the button as the pressed button if it's part of a group,
  * and inverts the colors when pressed.
  * @param action Pointer to an action.
-
  * @param state State that the action handlers belong to.
  */
 void ImageButton::mousePress(Action *action, State *state)
@@ -89,7 +88,6 @@ void ImageButton::mousePress(Action *action, State *state)
 /*
  * Sets the button as the released button if it's part of a group.
  * @param action Pointer to an action.
-
  * @param state State that the action handlers belong to.
  */
 void ImageButton::mouseRelease(Action *action, State *state)

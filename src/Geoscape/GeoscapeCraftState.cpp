@@ -276,7 +276,6 @@ void GeoscapeCraftState::init()
 /**
  * Returns the craft back to its base.
  * @param action Pointer to an action.
-
  */
 void GeoscapeCraftState::btnBaseClick(Action *action)
 {
@@ -288,7 +287,6 @@ void GeoscapeCraftState::btnBaseClick(Action *action)
 /**
  * Changes the craft's target.
  * @param action Pointer to an action.
-
  */
 void GeoscapeCraftState::btnTargetClick(Action *action)
 {
@@ -311,7 +309,6 @@ void GeoscapeCraftState::btnTargetClick(Action *action)
 /**
  * Sets the craft to patrol the current location.
  * @param action Pointer to an action.
-
  */
 void GeoscapeCraftState::btnPatrolClick(Action *action)
 {
@@ -323,7 +320,6 @@ void GeoscapeCraftState::btnPatrolClick(Action *action)
 /**
  * Closes the window.
  * @param action Pointer to an action.
-
  */
 void GeoscapeCraftState::btnCancelClick(Action *action)
 {

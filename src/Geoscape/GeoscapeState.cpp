@@ -44,8 +44,6 @@
 #include "../Ruleset/RuleBaseFacility.h"
 #include "../Savegame/Craft.h"
 #include "../Ruleset/RuleCraft.h"
-#include "../Savegame/CraftWeapon.h"
-#include "../Ruleset/RuleCraftWeapon.h"
 #include "../Savegame/Ufo.h"
 #include "../Ruleset/RuleUfo.h"
 #include "../Savegame/Waypoint.h"
@@ -419,7 +417,7 @@ void GeoscapeState::time5Seconds()
 	for (std::vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end(); i++)
 	{
 		(*i)->think();
-		if ((*i)->getLatitude() == (*i)->getDestination()->getLatitude() && (*i)->getLongitude() == (*i)->getDestination()->getLongitude())
+		if ((*i)->reachedDestination())
 		{
 			(*i)->setDetected(false);
 		}
@@ -430,20 +428,23 @@ void GeoscapeState::time5Seconds()
 	{
 		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); j++)
 		{
-			Ufo* u = dynamic_cast<Ufo*>((*j)->getDestination());
-			if (u != 0 && !u->getDetected())
+			if ((*j)->getDestination() != 0)
 			{
-				(*j)->setDestination(0);
-				Waypoint *w = new Waypoint();
-				w->setLongitude(u->getLongitude());
-				w->setLatitude(u->getLatitude());
-				popup(new UfoLostState(_game, u->getName(_game->getResourcePack()->getLanguage())));
-				popup(new GeoscapeCraftState(_game, (*j), _globe, w));
+				Ufo* u = dynamic_cast<Ufo*>((*j)->getDestination());
+				if (u != 0 && !u->getDetected())
+				{
+					(*j)->setDestination(0);
+					Waypoint *w = new Waypoint();
+					w->setLongitude(u->getLongitude());
+					w->setLatitude(u->getLatitude());
+					popup(new UfoLostState(_game, u->getName(_game->getResourcePack()->getLanguage())));
+					popup(new GeoscapeCraftState(_game, (*j), _globe, w));
+				}
 			}
 			(*j)->think();
-			if ((*j)->getDestination() != 0 && (*j)->getLatitude() == (*j)->getDestination()->getLatitude() && (*j)->getLongitude() == (*j)->getDestination()->getLongitude())
+			if ((*j)->reachedDestination())
 			{
-				Ufo *u = dynamic_cast<Ufo*>((*j)->getDestination());
+				Ufo* u = dynamic_cast<Ufo*>((*j)->getDestination());
 				Waypoint *w = dynamic_cast<Waypoint*>((*j)->getDestination());
 				if (u != 0)
 				{
@@ -470,9 +471,7 @@ void GeoscapeState::time5Seconds()
 	// Clean up dead UFOs
 	for (std::vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end(); i++)
 	{
-		if (((*i)->getLatitude() == (*i)->getDestination()->getLatitude() && (*i)->getLongitude() == (*i)->getDestination()->getLongitude()) ||
-			(*i)->isDestroyed() ||
-			(*i)->getDaysCrashed() > 4)
+		if ((*i)->reachedDestination() || (*i)->getDaysCrashed() > 4)
 		{
 			delete *i;
 			_game->getSavedGame()->getUfos()->erase(i);
@@ -504,7 +503,7 @@ void GeoscapeState::time10Minutes()
 		{
 			if ((*j)->getStatus() == STR_OUT)
 			{
-				(*j)->setFuel((*j)->getFuel() - (*j)->getSpeed() / 100);
+				(*j)->consumeFuel();
 				if (!(*j)->getLowFuel() && (*j)->getFuel() <= (*j)->getSpeed() / 100 * (*j)->getDistanceFromBase() / ((*j)->getRadianSpeed() * 120))
 				{
 					(*j)->setLowFuel(true);
@@ -545,11 +544,7 @@ void GeoscapeState::time30Minutes()
 		{
 			if ((*j)->getStatus() == STR_REFUELLING)
 			{
-				(*j)->setFuel((*j)->getFuel() + (*j)->getRules()->getRefuelRate());
-				if ((*j)->getFuel() == (*j)->getRules()->getMaxFuel())
-				{
-					(*j)->setStatus(STR_REARMING);
-				}
+				(*j)->refuel();
 			}
 		}
 	}
@@ -625,30 +620,11 @@ void GeoscapeState::time1Hour()
 		{
 			if ((*j)->getStatus() == STR_REPAIRS)
 			{
-				(*j)->setDamage((*j)->getDamage() - (*j)->getRules()->getRepairRate());
-				if ((*j)->getDamage() == 0)
-				{
-					(*j)->setStatus(STR_REFUELLING);
-				}
+				(*j)->repair();
 			}
 			else if ((*j)->getStatus() == STR_REARMING)
 			{
-				int available = 0, full = 0;
-				for (std::vector<CraftWeapon*>::iterator k = (*j)->getWeapons()->begin(); k != (*j)->getWeapons()->end(); k++)
-				{
-					if ((*k) == 0)
-						continue;
-
-					available++;
-					(*k)->setAmmo((*k)->getAmmo() + (*k)->getRules()->getRearmRate());
-
-					if ((*k)->getAmmo() == (*k)->getRules()->getAmmoMax())
-						full++;
-				}
-				if (full == available)
-				{
-					(*j)->setStatus(STR_READY);
-				}
+				(*j)->rearm();
 			}
 		}
 	}
@@ -667,7 +643,7 @@ void GeoscapeState::time1Day()
 		{
 			if ((*j)->getBuildTime() > 0)
 			{
-				(*j)->setBuildTime((*j)->getBuildTime() - 1);
+				(*j)->build();
 				if ((*j)->getBuildTime() == 0)
 				{
 					timerReset();
@@ -700,7 +676,7 @@ void GeoscapeState::time1Month()
 {
 	// Handle funding
 	timerReset();
-	_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() + _game->getSavedGame()->getCountryFunding() - _game->getSavedGame()->getBaseMaintenance());
+	_game->getSavedGame()->monthlyFunding();
 	popup(new MonthlyReportState(_game));
 }
 
@@ -741,7 +717,6 @@ Globe *GeoscapeState::getGlobe()
  * Processes any left-clicks on globe markers,
  * or right-clicks to scroll the globe.
  * @param action Pointer to an action.
-
  */
 
 void GeoscapeState::globeClick(Action *action)
@@ -762,7 +737,6 @@ void GeoscapeState::globeClick(Action *action)
 /**
  * Opens the Intercept window.
  * @param action Pointer to an action.
-
  */
 void GeoscapeState::btnInterceptClick(Action *action)
 {
@@ -772,7 +746,6 @@ void GeoscapeState::btnInterceptClick(Action *action)
 /**
  * Goes to the Basescape screen.
  * @param action Pointer to an action.
-
  */
 void GeoscapeState::btnBasesClick(Action *action)
 {
@@ -782,13 +755,16 @@ void GeoscapeState::btnBasesClick(Action *action)
 /**
  * Goes to the Graphs screen.
  * @param action Pointer to an action.
-
  */
 void GeoscapeState::btnGraphsClick(Action *action)
 {
 	_game->pushState(new GraphsState(_game));
 }
 
+/**
+ * Goes to the Ufopaedia screen.
+ * @param action Pointer to an action.
+ */
 void GeoscapeState::btnUfopaediaClick(Action *action)
 {
 
@@ -797,7 +773,6 @@ void GeoscapeState::btnUfopaediaClick(Action *action)
 /**
  * Opens the Options window.
  * @param action Pointer to an action.
-
  */
 void GeoscapeState::btnOptionsClick(Action *action)
 {
@@ -807,7 +782,6 @@ void GeoscapeState::btnOptionsClick(Action *action)
 /**
  * Goes to the Funding screen.
  * @param action Pointer to an action.
-
  */
 void GeoscapeState::btnFundingClick(Action *action)
 {
@@ -817,7 +791,6 @@ void GeoscapeState::btnFundingClick(Action *action)
 /**
  * Starts rotating the globe to the left.
  * @param action Pointer to an action.
-
  */
 void GeoscapeState::btnRotateLeftPress(Action *action)
 {
@@ -827,7 +800,6 @@ void GeoscapeState::btnRotateLeftPress(Action *action)
 /**
  * Stops rotating the globe to the left.
  * @param action Pointer to an action.
-
  */
 void GeoscapeState::btnRotateLeftRelease(Action *action)
 {
@@ -837,7 +809,6 @@ void GeoscapeState::btnRotateLeftRelease(Action *action)
 /**
  * Starts rotating the globe to the right.
  * @param action Pointer to an action.
-
  */
 void GeoscapeState::btnRotateRightPress(Action *action)
 {
@@ -847,7 +818,6 @@ void GeoscapeState::btnRotateRightPress(Action *action)
 /**
  * Stops rotating the globe to the right.
  * @param action Pointer to an action.
-
  */
 void GeoscapeState::btnRotateRightRelease(Action *action)
 {
@@ -857,7 +827,6 @@ void GeoscapeState::btnRotateRightRelease(Action *action)
 /**
  * Starts rotating the globe upwards.
  * @param action Pointer to an action.
-
  */
 void GeoscapeState::btnRotateUpPress(Action *action)
 {
@@ -867,7 +836,6 @@ void GeoscapeState::btnRotateUpPress(Action *action)
 /**
  * Stops rotating the globe upwards.
  * @param action Pointer to an action.
-
  */
 void GeoscapeState::btnRotateUpRelease(Action *action)
 {
@@ -877,7 +845,6 @@ void GeoscapeState::btnRotateUpRelease(Action *action)
 /**
  * Starts rotating the globe downwards.
  * @param action Pointer to an action.
-
  */
 void GeoscapeState::btnRotateDownPress(Action *action)
 {
@@ -887,7 +854,6 @@ void GeoscapeState::btnRotateDownPress(Action *action)
 /**
  * Stops rotating the globe downwards.
  * @param action Pointer to an action.
-
  */
 void GeoscapeState::btnRotateDownRelease(Action *action)
 {
@@ -897,7 +863,6 @@ void GeoscapeState::btnRotateDownRelease(Action *action)
 /**
  * Zooms into the globe.
  * @param action Pointer to an action.
-
  */
 void GeoscapeState::btnZoomInClick(Action *action)
 {
@@ -914,7 +879,6 @@ void GeoscapeState::btnZoomInClick(Action *action)
 /**
  * Zooms out of the globe.
  * @param action Pointer to an action.
-
  */
 void GeoscapeState::btnZoomOutClick(Action *action)
 {

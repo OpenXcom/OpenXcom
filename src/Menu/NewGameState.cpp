@@ -107,7 +107,6 @@ void NewGameState::newGame(GameDifficulty diff)
  * Creates a new game in Beginner difficulty and
  * jumps to the Geoscape screen.
  * @param action Pointer to an action.
-
  */
 void NewGameState::btnBeginnerClick(Action *action)
 {
@@ -118,7 +117,6 @@ void NewGameState::btnBeginnerClick(Action *action)
  * Creates a new game in Experienced difficulty and
  * jumps to the Geoscape screen.
  * @param action Pointer to an action.
-
  */
 void NewGameState::btnExperiencedClick(Action *action)
 {
@@ -129,7 +127,6 @@ void NewGameState::btnExperiencedClick(Action *action)
  * Creates a new game in Veteran difficulty and
  * jumps to the Geoscape screen.
  * @param action Pointer to an action.
-
  */
 void NewGameState::btnVeteranClick(Action *action)
 {
@@ -140,7 +137,6 @@ void NewGameState::btnVeteranClick(Action *action)
  * Creates a new game in Genius difficulty and
  * jumps to the Geoscape screen.
  * @param action Pointer to an action.
-
  */
 void NewGameState::btnGeniusClick(Action *action)
 {
@@ -151,7 +147,6 @@ void NewGameState::btnGeniusClick(Action *action)
  * Creates a new game in Superhuman difficulty and
  * jumps to the Geoscape screen.
  * @param action Pointer to an action.
-
  */
 void NewGameState::btnSuperhumanClick(Action *action)
 {

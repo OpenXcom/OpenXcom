@@ -49,6 +49,8 @@ public:
 	int getBuildTime();
 	/// Sets the facility's construction time.
 	void setBuildTime(int time);
+	/// Builds up the facility.
+	void build();
 	/// Checks if a target is inside the facility's radar.
 	bool insideRadarRange(Base *base, Target *target);
 };

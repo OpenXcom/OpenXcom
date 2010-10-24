@@ -90,6 +90,14 @@ void BaseFacility::setBuildTime(int time)
 }
 
 /**
+ * Handles the facility building every day.
+ */
+void BaseFacility::build()
+{
+	_buildTime--;
+}
+
+/**
  * Returns if a certain target is covered by the facility's
  * radar range, taking in account the positions of both.
  * @param base Pointer to base the facility belongs to.

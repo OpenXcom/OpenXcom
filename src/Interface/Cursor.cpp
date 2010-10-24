@@ -50,7 +50,6 @@ Cursor::~Cursor()
  * Automatically updates the cursor position
  * when the mouse moves.
  * @param action Pointer to an action.
-
  */
 void Cursor::handle(Action *action)
 {

@@ -106,7 +106,6 @@ void State::think()
  * Takes care of any events from the core game engine,
  * and passes them on to its InteractiveSurface child elements.
  * @param action Pointer to an action.
-
  */
 void State::handle(Action *action)
 {

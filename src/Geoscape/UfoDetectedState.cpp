@@ -131,7 +131,6 @@ void UfoDetectedState::init()
 /**
  * Centers on the UFO and returns to the previous screen.
  * @param action Pointer to an action.
-
  */
 void UfoDetectedState::btnCentreClick(Action *action)
 {
@@ -143,7 +142,6 @@ void UfoDetectedState::btnCentreClick(Action *action)
 /**
  * Returns to the previous screen.
  * @param action Pointer to an action.
-
  */
 void UfoDetectedState::btnCancelClick(Action *action)
 {

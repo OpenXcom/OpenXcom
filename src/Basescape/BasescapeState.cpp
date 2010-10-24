@@ -223,7 +223,6 @@ void BasescapeState::setBase(Base *base)
 /**
  * Goes to the Build New Base screen.
  * @param action Pointer to an action.
-
  */
 void BasescapeState::btnNewBaseClick(Action *action)
 {
@@ -235,7 +234,6 @@ void BasescapeState::btnNewBaseClick(Action *action)
 /**
  * Goes to the Base Info screen.
  * @param action Pointer to an action.
-
  */
 void BasescapeState::btnBaseInfoClick(Action *action)
 {
@@ -245,7 +243,6 @@ void BasescapeState::btnBaseInfoClick(Action *action)
 /**
  * Goes to the Soldiers screen.
  * @param action Pointer to an action.
-
  */
 void BasescapeState::btnSoldiersClick(Action *action)
 {
@@ -255,7 +252,6 @@ void BasescapeState::btnSoldiersClick(Action *action)
 /**
  * Goes to the Crafts screen.
  * @param action Pointer to an action.
-
  */
 void BasescapeState::btnCraftsClick(Action *action)
 {
@@ -265,7 +261,6 @@ void BasescapeState::btnCraftsClick(Action *action)
 /**
  * Opens the Build Facilities window.
  * @param action Pointer to an action.
-
  */
 void BasescapeState::btnFacilitiesClick(Action *action)
 {
@@ -275,7 +270,6 @@ void BasescapeState::btnFacilitiesClick(Action *action)
 /**
  * Goes to the Research screen.
  * @param action Pointer to an action.
-
  */
 void BasescapeState::btnResearchClick(Action *action)
 {
@@ -285,7 +279,6 @@ void BasescapeState::btnResearchClick(Action *action)
 /**
  * Goes to the Manufacture screen.
  * @param action Pointer to an action.
-
  */
 void BasescapeState::btnManufactureClick(Action *action)
 {
@@ -295,7 +288,6 @@ void BasescapeState::btnManufactureClick(Action *action)
 /**
  * Goes to the Purchase screen.
  * @param action Pointer to an action.
-
  */
 void BasescapeState::btnPurchaseClick(Action *action)
 {
@@ -305,7 +297,6 @@ void BasescapeState::btnPurchaseClick(Action *action)
 /**
  * Goes to the Sell screen.
  * @param action Pointer to an action.
-
  */
 void BasescapeState::btnSellClick(Action *action)
 {
@@ -315,7 +306,6 @@ void BasescapeState::btnSellClick(Action *action)
 /**
  * Returns to the previous screen.
  * @param action Pointer to an action.
-
  */
 void BasescapeState::btnGeoscapeClick(Action *action)
 {
@@ -325,7 +315,6 @@ void BasescapeState::btnGeoscapeClick(Action *action)
 /**
  * Processes clicking on facilities.
  * @param action Pointer to an action.
-
  */
 void BasescapeState::viewClick(Action *action)
 {
@@ -371,7 +360,6 @@ void BasescapeState::viewClick(Action *action)
 /**
  * Displays the name of the facility the mouse is over.
  * @param action Pointer to an action.
-
  */
 void BasescapeState::viewMouseOver(Action *action)
 {
@@ -385,7 +373,6 @@ void BasescapeState::viewMouseOver(Action *action)
 /**
  * Clears the facility name.
  * @param action Pointer to an action.
-
  */
 void BasescapeState::viewMouseOut(Action *action)
 {
@@ -395,7 +382,6 @@ void BasescapeState::viewMouseOut(Action *action)
 /**
  * Selects a new base to display.
  * @param action Pointer to an action.
-
  */
 void BasescapeState::miniClick(Action *action)
 {

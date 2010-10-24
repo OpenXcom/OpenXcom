@@ -283,7 +283,6 @@ void CraftInfoState::init()
 /**
  * Returns to the previous screen.
  * @param action Pointer to an action.
-
  */
 void CraftInfoState::btnOkClick(Action *action)
 {
@@ -291,9 +290,9 @@ void CraftInfoState::btnOkClick(Action *action)
 }
 
 /**
- * Goes to the Select Armament window.
+ * Goes to the Select Armament window for
+ * the first weapon.
  * @param action Pointer to an action.
-
  */
 void CraftInfoState::btnW1Click(Action *action)
 {
@@ -301,9 +300,9 @@ void CraftInfoState::btnW1Click(Action *action)
 }
 
 /**
- * Goes to the Select Armament window.
+ * Goes to the Select Armament window for
+ * the second weapon.
  * @param action Pointer to an action.
-
  */
 void CraftInfoState::btnW2Click(Action *action)
 {
@@ -313,7 +312,6 @@ void CraftInfoState::btnW2Click(Action *action)
 /**
  * Goes to the Select Squad screen.
  * @param action Pointer to an action.
-
  */
 void CraftInfoState::btnCrewClick(Action *action)
 {

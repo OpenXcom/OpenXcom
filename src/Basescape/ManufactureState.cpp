@@ -134,7 +134,6 @@ ManufactureState::~ManufactureState()
 /**
  * Returns to the previous screen.
  * @param action Pointer to an action.
-
  */
 void ManufactureState::btnOkClick(Action *action)
 {

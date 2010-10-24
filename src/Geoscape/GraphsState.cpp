@@ -56,7 +56,6 @@ GraphsState::~GraphsState()
 /**
  * Returns to the previous screen.
  * @param action Pointer to an action.
-
  */
 void GraphsState::btnGeoscapeClick(Action *action)
 {

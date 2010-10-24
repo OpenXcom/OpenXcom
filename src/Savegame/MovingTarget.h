@@ -31,6 +31,9 @@ protected:
 	Target *_dest;
 	double _speedLon, _speedLat;
 	int _speed;
+	
+	/// Has the moving target finished its route?
+	bool finishedRoute();
 public:
 	/// Creates a moving target.
 	MovingTarget();

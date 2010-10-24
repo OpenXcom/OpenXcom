@@ -63,3 +63,11 @@ void CraftWeapon::setAmmo(int ammo)
 	if (_ammo > _rules->getAmmoMax())
 		_ammo = _rules->getAmmoMax();
 }
+
+/**
+ * Rearms this craft weapon's ammo.
+ */
+void CraftWeapon::rearm()
+{
+	_ammo += _rules->getRearmRate();
+}

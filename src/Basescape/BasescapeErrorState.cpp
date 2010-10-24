@@ -75,7 +75,6 @@ BasescapeErrorState::~BasescapeErrorState()
 /**
  * Returns to the previous screen.
  * @param action Pointer to an action.
-
  */
 void BasescapeErrorState::btnOkClick(Action *action)
 {

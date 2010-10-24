@@ -104,6 +104,14 @@ public:
 	bool insideRadarRange(Target *target);
 	/// Handles craft logic.
 	void think();
+	/// Consumes the craft's fuel.
+	void consumeFuel();
+	/// Repairs the craft.
+	void repair();
+	/// Refuels the craft.
+	void refuel();
+	/// Rearms the craft.
+	void rearm();
 };
 
 #endif

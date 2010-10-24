@@ -127,7 +127,6 @@ void SoldiersState::init()
 /**
  * Returns to the previous screen.
  * @param action Pointer to an action.
-
  */
 void SoldiersState::btnOkClick(Action *action)
 {
@@ -137,7 +136,6 @@ void SoldiersState::btnOkClick(Action *action)
 /**
  * Shows the selected soldier's info.
  * @param action Pointer to an action.
-
  */
 void SoldiersState::lstSoldiersClick(Action *action)
 {

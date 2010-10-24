@@ -154,7 +154,6 @@ void MiniBaseView::draw()
 /**
  * Selects the base the mouse is over.
  * @param action Pointer to an action.
-
  * @param state State that the action handlers belong to.
  */
 void MiniBaseView::mouseOver(Action *action, State *state)

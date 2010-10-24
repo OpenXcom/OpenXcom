@@ -178,7 +178,6 @@ void ArrowButton::scroll()
 /**
  * Starts scrolling the associated list.
  * @param action Pointer to an action.
-
  * @param state State that the action handlers belong to.
  */
 void ArrowButton::mousePress(Action *action, State *state)
@@ -193,7 +192,6 @@ void ArrowButton::mousePress(Action *action, State *state)
 /*
  * Stops scrolling the associated list.
  * @param action Pointer to an action.
-
  * @param state State that the action handlers belong to.
  */
 void ArrowButton::mouseRelease(Action *action, State *state)

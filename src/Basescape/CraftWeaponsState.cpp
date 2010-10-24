@@ -123,7 +123,6 @@ CraftWeaponsState::~CraftWeaponsState()
 /**
  * Returns to the previous screen.
  * @param action Pointer to an action.
-
  */
 void CraftWeaponsState::btnCancelClick(Action *action)
 {
@@ -134,7 +133,6 @@ void CraftWeaponsState::btnCancelClick(Action *action)
  * Equips the weapon on the craft and returns to the previous screen.
  * @note Ammo consumption currently disabled for testing purposes.
  * @param action Pointer to an action.
-
  */
 void CraftWeaponsState::lstWeaponsClick(Action *action)
 {

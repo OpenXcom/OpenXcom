@@ -145,12 +145,23 @@ void MovingTarget::calculateSpeed()
 }
 
 /**
- * Checks if the moving target has reached its destination by checking
+ * Checks if the moving target has finished its route by checking
  * if it has exceeded the destination position based on the speed vector.
+ * @return True if it has, False otherwise.
+ */
+bool MovingTarget::finishedRoute()
+{
+	return (((_speedLon > 0 && _lon >= _dest->getLongitude()) || (_speedLon < 0 && _lon <= _dest->getLongitude())) &&
+			((_speedLat > 0 && _lat >= _dest->getLatitude()) || (_speedLat < 0 && _lat <= _dest->getLatitude())));
+}
+
+/**
+ * Checks if the moving target has reached its destination.
  * @return True if it has, False otherwise.
  */
 bool MovingTarget::reachedDestination()
 {
-	return (((_speedLon > 0 && _lon >= _dest->getLongitude()) || (_speedLon < 0 && _lon <= _dest->getLongitude())) &&
-			((_speedLat > 0 && _lat >= _dest->getLatitude()) || (_speedLat < 0 && _lat <= _dest->getLatitude())));
+	if (_dest == 0)
+		return false;
+	return (_lon == _dest->getLongitude() && _lat == _dest->getLatitude());
 }

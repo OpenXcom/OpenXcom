@@ -1010,7 +1010,6 @@ void Globe::blit(Surface *surface)
 /**
  * Ignores any mouse clicks that are outside the globe.
  * @param action Pointer to an action.
-
  * @param state State that the action handlers belong to.
  */
 void Globe::mousePress(Action *action, State *state)
@@ -1026,7 +1025,6 @@ void Globe::mousePress(Action *action, State *state)
 /**
  * Ignores any mouse clicks that are outside the globe.
  * @param action Pointer to an action.
-
  * @param state State that the action handlers belong to.
  */
 void Globe::mouseRelease(Action *action, State *state)
@@ -1043,7 +1041,6 @@ void Globe::mouseRelease(Action *action, State *state)
  * Ignores any mouse clicks that are outside the globe
  * and handles globe rotation and zooming.
  * @param action Pointer to an action.
-
  * @param state State that the action handlers belong to.
  */
 void Globe::mouseClick(Action *action, State *state)
@@ -1075,7 +1072,6 @@ void Globe::mouseClick(Action *action, State *state)
 /**
  * Handles globe keyboard shortcuts.
  * @param action Pointer to an action.
-
  * @param state State that the action handlers belong to.
  */
 void Globe::keyboardPress(Action *action, State *state)

@@ -50,7 +50,7 @@ private:
 	Ufo *_ufo;
 	int _timeout, _currentDist, _targetDist, _currentRadius, _targetRadius;
 	std::vector<int> _w1Dist, _w2Dist;
-	bool _end;
+	bool _end, _destroy;
 public:
 	/// Creates the Dogfight state.
 	DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo);

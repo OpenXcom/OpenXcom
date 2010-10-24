@@ -101,7 +101,6 @@ void OptionsState::btnSaveClick(Action *action)
 /**
  * Opens the Abandon Game window.
  * @param action Pointer to an action.
-
  */
 void OptionsState::btnAbandonClick(Action *action)
 {
@@ -111,7 +110,6 @@ void OptionsState::btnAbandonClick(Action *action)
 /**
  * Returns to the previous screen.
  * @param action Pointer to an action.
-
  */
 void OptionsState::btnCancelClick(Action *action)
 {

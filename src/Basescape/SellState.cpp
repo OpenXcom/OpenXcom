@@ -124,7 +124,6 @@ void SellState::btnOkClick(Action *action)
 /**
  * Returns to the previous screen.
  * @param action Pointer to an action.
-
  */
 void SellState::btnCancelClick(Action *action)
 {

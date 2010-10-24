@@ -83,7 +83,6 @@ AbandonGameState::~AbandonGameState()
 /**
  * Goes back to the Main Menu.
  * @param action Pointer to an action.
-
  */
 void AbandonGameState::btnYesClick(Action *action)
 {
@@ -95,7 +94,6 @@ void AbandonGameState::btnYesClick(Action *action)
 /**
  * Closes the window.
  * @param action Pointer to an action.
-
  */
 void AbandonGameState::btnNoClick(Action *action)
 {

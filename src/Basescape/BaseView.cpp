@@ -455,7 +455,6 @@ void BaseView::blit(Surface *surface)
 /**
  * Selects the facility the mouse is over.
  * @param action Pointer to an action.
-
  * @param state State that the action handlers belong to.
  */
 void BaseView::mouseOver(Action *action, State *state)
@@ -495,7 +494,6 @@ void BaseView::mouseOver(Action *action, State *state)
 /**
  * Deselects the facility.
  * @param action Pointer to an action.
-
  * @param state State that the action handlers belong to.
  */
 void BaseView::mouseOut(Action *action, State *state)

@@ -83,7 +83,6 @@ void GeoscapeMessageState::init()
 /**
  * Closes the window.
  * @param action Pointer to an action.
-
  */
 void GeoscapeMessageState::btnOkClick(Action *action)
 {

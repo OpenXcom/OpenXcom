@@ -136,7 +136,6 @@ void BuildNewBaseState::think()
 /**
  * Handles the globe.
  * @param action Pointer to an action.
-
  */
 void BuildNewBaseState::handle(Action *action)
 {
@@ -148,7 +147,6 @@ void BuildNewBaseState::handle(Action *action)
  * Processes any left-clicks for base placement,
  * or right-clicks to scroll the globe.
  * @param action Pointer to an action.
-
  */
 void BuildNewBaseState::globeClick(Action *action)
 {
@@ -183,7 +181,6 @@ void BuildNewBaseState::globeClick(Action *action)
 /**
  * Starts rotating the globe to the left.
  * @param action Pointer to an action.
-
  */
 void BuildNewBaseState::btnRotateLeftPress(Action *action)
 {
@@ -193,7 +190,6 @@ void BuildNewBaseState::btnRotateLeftPress(Action *action)
 /**
  * Stops rotating the globe to the left.
  * @param action Pointer to an action.
-
  */
 void BuildNewBaseState::btnRotateLeftRelease(Action *action)
 {
@@ -203,7 +199,6 @@ void BuildNewBaseState::btnRotateLeftRelease(Action *action)
 /**
  * Starts rotating the globe to the right.
  * @param action Pointer to an action.
-
  */
 void BuildNewBaseState::btnRotateRightPress(Action *action)
 {
@@ -213,7 +208,6 @@ void BuildNewBaseState::btnRotateRightPress(Action *action)
 /**
  * Stops rotating the globe to the right.
  * @param action Pointer to an action.
-
  */
 void BuildNewBaseState::btnRotateRightRelease(Action *action)
 {
@@ -223,7 +217,6 @@ void BuildNewBaseState::btnRotateRightRelease(Action *action)
 /**
  * Starts rotating the globe upwards.
  * @param action Pointer to an action.
-
  */
 void BuildNewBaseState::btnRotateUpPress(Action *action)
 {
@@ -233,7 +226,6 @@ void BuildNewBaseState::btnRotateUpPress(Action *action)
 /**
  * Stops rotating the globe upwards.
  * @param action Pointer to an action.
-
  */
 void BuildNewBaseState::btnRotateUpRelease(Action *action)
 {
@@ -243,7 +235,6 @@ void BuildNewBaseState::btnRotateUpRelease(Action *action)
 /**
  * Starts rotating the globe downwards.
  * @param action Pointer to an action.
-
  */
 void BuildNewBaseState::btnRotateDownPress(Action *action)
 {
@@ -253,7 +244,6 @@ void BuildNewBaseState::btnRotateDownPress(Action *action)
 /**
  * Stops rotating the globe downwards.
  * @param action Pointer to an action.
-
  */
 void BuildNewBaseState::btnRotateDownRelease(Action *action)
 {
@@ -263,7 +253,6 @@ void BuildNewBaseState::btnRotateDownRelease(Action *action)
 /**
  * Zooms into the globe.
  * @param action Pointer to an action.
-
  */
 void BuildNewBaseState::btnZoomInClick(Action *action)
 {
@@ -276,7 +265,6 @@ void BuildNewBaseState::btnZoomInClick(Action *action)
 /**
  * Zooms out of the globe.
  * @param action Pointer to an action.
-
  */
 void BuildNewBaseState::btnZoomOutClick(Action *action)
 {
@@ -289,7 +277,6 @@ void BuildNewBaseState::btnZoomOutClick(Action *action)
 /**
  * Returns to the previous screen.
  * @param action Pointer to an action.
-
  */
 void BuildNewBaseState::btnCancelClick(Action *action)
 {

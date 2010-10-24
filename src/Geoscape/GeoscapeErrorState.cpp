@@ -75,7 +75,6 @@ GeoscapeErrorState::~GeoscapeErrorState()
 /**
  * Closes the window.
  * @param action Pointer to an action.
-
  */
 void GeoscapeErrorState::btnOkClick(Action *action)
 {

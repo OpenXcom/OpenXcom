@@ -62,6 +62,8 @@ public:
 	int getFunds();
 	/// Sets new funds.
 	void setFunds(int funds);
+	/// Handles monthly funding.
+	void monthlyFunding();
 	/// Gets the current game time.
 	GameTime *getTime();
 	/// Gets the list of countries.

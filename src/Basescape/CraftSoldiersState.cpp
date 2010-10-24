@@ -153,7 +153,6 @@ void CraftSoldiersState::init()
 /**
  * Returns to the previous screen.
  * @param action Pointer to an action.
-
  */
 void CraftSoldiersState::btnOkClick(Action *action)
 {
@@ -163,7 +162,6 @@ void CraftSoldiersState::btnOkClick(Action *action)
 /**
  * Shows the selected soldier's info.
  * @param action Pointer to an action.
-
  */
 void CraftSoldiersState::lstSoldiersClick(Action *action)
 {

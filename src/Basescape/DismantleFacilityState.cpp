@@ -89,7 +89,6 @@ DismantleFacilityState::~DismantleFacilityState()
  * Dismantles the facility and returns
  * to the previous screen.
  * @param action Pointer to an action.
-
  */
 void DismantleFacilityState::btnOkClick(Action *action)
 {
@@ -108,7 +107,6 @@ void DismantleFacilityState::btnOkClick(Action *action)
 /**
  * Returns to the previous screen.
  * @param action Pointer to an action.
-
  */
 void DismantleFacilityState::btnCancelClick(Action *action)
 {

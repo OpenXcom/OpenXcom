@@ -23,6 +23,7 @@
 #include "../Engine/Language.h"
 #include "../Ruleset/RuleCraft.h"
 #include "CraftWeapon.h"
+#include "../Ruleset/RuleCraftWeapon.h"
 #include "Item.h"
 #include "Soldier.h"
 #include "Base.h"
@@ -339,7 +340,7 @@ void Craft::think()
 	}
 	setLongitude(_lon + _speedLon);
 	setLatitude(_lat + _speedLat);
-	if (reachedDestination())
+	if (finishedRoute())
 	{
 		_lon = _dest->getLongitude();
 		_lat = _dest->getLatitude();
@@ -382,4 +383,61 @@ bool Craft::insideRadarRange(Target *target)
 		inside = inside || (dLon * dLon + dLat * dLat <= newrange * newrange);
 	}
     return inside;
+}
+
+/**
+ * Consumes the craft's fuel every 10 minutes based
+ * on its current speed while it's on the air.
+ */
+void Craft::consumeFuel()
+{
+	_fuel -= _speed / 100;
+}
+
+/**
+ * Repairs the craft's damage every hour
+ * while it's docked in the base.
+ */
+void Craft::repair()
+{
+	_damage -= _rules->getRepairRate();
+	if (_damage == 0)
+	{
+		_status = STR_REFUELLING;
+	}
+}
+
+/**
+ * Refuels the craft every 30 minutes
+ * while it's docked in the base.
+ */
+void Craft::refuel()
+{
+	_fuel += _rules->getRefuelRate();
+	if (_fuel == _rules->getMaxFuel())
+	{
+		_status = STR_REARMING;
+	}
+}
+
+/**
+ * Rearms the craft's weapons by adding ammo every hour
+ * while it's docked in the base.
+ */
+void Craft::rearm()
+{
+	int available = 0, full = 0;
+	for (std::vector<CraftWeapon*>::iterator i = _weapons.begin(); i != _weapons.end(); i++)
+	{
+		if ((*i) == 0)
+			continue;
+		available++;
+		(*i)->rearm();
+		if ((*i)->getAmmo() == (*i)->getRules()->getAmmoMax())
+			full++;
+	}
+	if (full == available)
+	{
+		_status = STR_READY;
+	}
 }

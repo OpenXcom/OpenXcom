@@ -62,9 +62,9 @@ void Palette::loadDat(std::string filename, int ncolors, int offset)
 	for (int j = 0; j < ncolors && palFile.read(value, 3); j++)
 	{
 		// Correct X-Com colors to RGB colors
-		_colors[j].r = Uint8(value[0])*4;
-		_colors[j].g = Uint8(value[1])*4;
-		_colors[j].b = Uint8(value[2])*4;
+		_colors[j].r = Uint8(value[0]) * 4;
+		_colors[j].g = Uint8(value[1]) * 4;
+		_colors[j].b = Uint8(value[2]) * 4;
 	}
 
 	/*

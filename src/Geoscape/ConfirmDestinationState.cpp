@@ -103,7 +103,6 @@ ConfirmDestinationState::~ConfirmDestinationState()
 /**
  * Confirms the selected target for the craft.
  * @param action Pointer to an action.
-
  */
 void ConfirmDestinationState::btnOkClick(Action *action)
 {
@@ -123,7 +122,6 @@ void ConfirmDestinationState::btnOkClick(Action *action)
 /**
  * Returns to the previous screen.
  * @param action Pointer to an action.
-
  */
 void ConfirmDestinationState::btnCancelClick(Action *action)
 {

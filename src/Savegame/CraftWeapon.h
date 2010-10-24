@@ -44,6 +44,8 @@ public:
 	int getAmmo();
 	/// Sets the craft weapon's ammo.
 	void setAmmo(int ammo);
+	/// Rearms the craft weapon.
+	void rearm();
 };
 
 #endif

@@ -81,6 +81,15 @@ void SavedGame::setFunds(int funds)
 }
 
 /**
+ * Gives the player his monthly funds, taking in account
+ * all maintenance and profit costs.
+ */
+void SavedGame::monthlyFunding()
+{
+	_funds += getCountryFunding() - getBaseMaintenance();
+}
+
+/**
  * Returns the current time of the game.
  * @return Pointer to the game time.
  */

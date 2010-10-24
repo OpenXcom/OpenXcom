@@ -125,7 +125,6 @@ InterceptState::~InterceptState()
 /**
  * Closes the window.
  * @param action Pointer to an action.
-
  */
 void InterceptState::btnCancelClick(Action *action)
 {
@@ -135,7 +134,6 @@ void InterceptState::btnCancelClick(Action *action)
 /**
  * Pick a target for the selected craft.
  * @param action Pointer to an action.
-
  */
 void InterceptState::lstCraftsClick(Action *action)
 {

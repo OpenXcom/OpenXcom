@@ -335,7 +335,6 @@ void SoldierInfoState::init()
 /**
  * Returns to the previous screen.
  * @param action Pointer to an action.
-
  */
 void SoldierInfoState::btnOkClick(Action *action)
 {
@@ -346,7 +345,6 @@ void SoldierInfoState::btnOkClick(Action *action)
 /**
  * Goes to the previous soldier.
  * @param action Pointer to an action.
-
  */
 void SoldierInfoState::btnPrevClick(Action *action)
 {
@@ -361,7 +359,6 @@ void SoldierInfoState::btnPrevClick(Action *action)
 /**
  * Goes to the next soldier.
  * @param action Pointer to an action.
-
  */
 void SoldierInfoState::btnNextClick(Action *action)
 {

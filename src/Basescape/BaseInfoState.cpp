@@ -374,7 +374,6 @@ void BaseInfoState::init()
 /**
  * Selects a new base to display.
  * @param action Pointer to an action.
-
  */
 void BaseInfoState::miniClick(Action *action)
 {
@@ -391,7 +390,6 @@ void BaseInfoState::miniClick(Action *action)
 /**
  * Returns to the previous screen.
  * @param action Pointer to an action.
-
  */
 void BaseInfoState::btnOkClick(Action *action)
 {
@@ -402,7 +400,6 @@ void BaseInfoState::btnOkClick(Action *action)
 /**
  * Goes to the Stores screen.
  * @param action Pointer to an action.
-
  */
 void BaseInfoState::btnStoresClick(Action *action)
 {
@@ -413,7 +410,6 @@ void BaseInfoState::btnStoresClick(Action *action)
 /**
  * Goes to the Monthly Costs screen.
  * @param action Pointer to an action.
-
  */
 void BaseInfoState::btnMonthlyCostsClick(Action *action)
 {

@@ -145,7 +145,7 @@ void Window::draw()
 {
 	SDL_Rect cropper;
 	SDL_Rect square;
-	int color = _color;
+	Uint8 color = _color;
 	
 	clear();
 	

@@ -32,6 +32,7 @@
 #include "../Interface/Text.h"
 #include "../Engine/Timer.h"
 #include "Globe.h"
+#include "../Savegame/SavedGame.h"
 #include "../Savegame/Craft.h"
 #include "../Ruleset/RuleCraft.h"
 #include "../Savegame/CraftWeapon.h"
@@ -50,7 +51,7 @@
  * @param craft Pointer to the craft intercepting.
  * @param ufo Pointer to the UFO being intercepted.
  */
-DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo) : State(game), _globe(globe), _craft(craft), _ufo(ufo), _timeout(50), _currentDist(640), _targetDist(560), _w1Dist(), _w2Dist(), _end(false)
+DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo) : State(game), _globe(globe), _craft(craft), _ufo(ufo), _timeout(50), _currentDist(640), _targetDist(560), _w1Dist(), _w2Dist(), _end(false), _destroy(false)
 {
 	_targetRadius = _currentRadius = STR_VERY_SMALL - _ufo->getRules()->getSize() + 2;
 	
@@ -180,29 +181,51 @@ DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo) :
 
 	SurfaceSet *set = _game->getResourcePack()->getSurfaceSet("INTICON.PCK");
 
-	if (_craft->getRules()->getWeapons() > 0 && _craft->getWeapons()->at(0) != 0)
+	for (int i = 0; i < _craft->getRules()->getWeapons(); i++)
 	{
-		// Draw weapon icon
-		CraftWeapon *w1 = _craft->getWeapons()->at(0);
+		CraftWeapon *w = _craft->getWeapons()->at(i);
+		if (w == 0)
+			continue;
 
-		Surface *frame = set->getFrame(w1->getRules()->getSprite() + 5);
+		Surface *weapon = 0, *range = 0;
+		Text *ammo = 0;
+		int x1, x2;
+		if (i == 0)
+		{
+			weapon = _weapon1;
+			range = _range1;
+			ammo = _txtAmmo1;
+			x1 = 2;
+			x2 = 0;
+		}
+		else
+		{
+			weapon = _weapon2;
+			range = _range2;
+			ammo = _txtAmmo2;
+			x1 = 0;
+			x2 = 18;
+		}
+
+		// Draw weapon icon
+		Surface *frame = set->getFrame(w->getRules()->getSprite() + 5);
 		frame->setX(0);
 		frame->setY(0);
-		frame->blit(_weapon1);
+		frame->blit(weapon);
 
 		// Draw ammo
 		std::stringstream ss;
-		ss << w1->getAmmo();
-		_txtAmmo1->setText(ss.str());
+		ss << w->getAmmo();
+		ammo->setText(ss.str());
 
 		// Draw range (1 km = 1 pixel)
 		Uint8 color = Palette::blockOffset(7) - 1;
-		_range1->lock();
+		range->lock();
 
-		int rangeY = _range1->getHeight() - w1->getRules()->getRange(), connectY = 57;
-		for (int x = 2; x <= 20; x += 2)
+		int rangeY = range->getHeight() - w->getRules()->getRange(), connectY = 57;
+		for (int x = x1; x <= x1 + 18; x += 2)
 		{
-			_range1->setPixel(x, rangeY, color);
+			range->setPixel(x, rangeY, color);
 		}
 
 		int minY = 0, maxY = 0;
@@ -218,68 +241,22 @@ DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo) :
 		}
 		for (int y = minY; y <= maxY; y++)
 		{
-			_range1->setPixel(2, y, color);
+			range->setPixel(x1 + x2, y, color);
 		}
-		for (int x = 0; x <= 2; x++)
+		for (int x = x2; x <= x2 + 2; x++)
 		{
-			_range1->setPixel(x, connectY, color);
+			range->setPixel(x, connectY, color);
 		}
-		_range1->unlock();
+		range->unlock();
 	}
-	else
+
+	if (!(_craft->getRules()->getWeapons() > 0 && _craft->getWeapons()->at(0) != 0))
 	{
 		_weapon1->setVisible(false);
 		_range1->setVisible(false);
 		_txtAmmo1->setVisible(false);
 	}
-
-	if (_craft->getRules()->getWeapons() > 1 && _craft->getWeapons()->at(1) != 0)
-	{
-		CraftWeapon *w2 = _craft->getWeapons()->at(1);
-
-		// Draw weapon icon
-		Surface *frame = set->getFrame(w2->getRules()->getSprite() + 5);
-		frame->setX(0);
-		frame->setY(0);
-		frame->blit(_weapon2);
-
-		// Draw ammo
-		std::stringstream ss;
-		ss << w2->getAmmo();
-		_txtAmmo2->setText(ss.str());
-
-		// Draw range (1 km = 1 pixel)
-		Uint8 color = Palette::blockOffset(7) - 1;
-		_range2->lock();
-
-		int rangeY = _range2->getHeight() - w2->getRules()->getRange(), connectY = 57;
-		for (int x = 0; x <= 18; x += 2)
-		{
-			_range2->setPixel(x, rangeY, color);
-		}
-
-		int minY = 0, maxY = 0;
-		if (rangeY < connectY)
-		{
-			minY = rangeY;
-			maxY = connectY;
-		}
-		else if (rangeY > connectY)
-		{
-			minY = connectY;
-			maxY = rangeY;
-		}
-		for (int y = minY; y <= maxY; y++)
-		{
-			_range2->setPixel(18, y, color);
-		}
-		for (int x = 18; x <= 20; x++)
-		{
-			_range2->setPixel(x, connectY, color);
-		}
-		_range2->unlock();
-	}
-	else
+	if (!(_craft->getRules()->getWeapons() > 1 && _craft->getWeapons()->at(1) != 0))
 	{
 		_weapon2->setVisible(false);
 		_range2->setVisible(false);
@@ -371,96 +348,63 @@ void DogfightState::move()
 	ss << _currentDist;
 	_txtDistance->setText(ss.str());
 
-	// Update weapons
-	for (std::vector<int>::iterator w = _w1Dist.begin(); w != _w1Dist.end(); w++)
+	for (int i = 0; i < _craft->getRules()->getWeapons(); i++)
 	{
-		(*w) += 8;
-	}
-	for (std::vector<int>::iterator w = _w2Dist.begin(); w != _w2Dist.end(); w++)
-	{
-		(*w) += 8;
-	}
+		CraftWeapon *w = _craft->getWeapons()->at(i);
+		if (w == 0)
+			continue;
+		std::vector<int> *wDist = 0;
+		Timer *wTimer = 0;
+		if (i == 0)
+		{
+			wDist = &_w1Dist;
+			wTimer = _w1Timer;
+		}
+		else
+		{
+			wDist = &_w2Dist;
+			wTimer = _w2Timer;
+		}
 
-	CraftWeapon *w1 = 0, *w2 = 0;
-	if (_craft->getRules()->getWeapons() > 0)
-	{
-		w1 = _craft->getWeapons()->at(0);
-	}
-	if (_craft->getRules()->getWeapons() > 1)
-	{
-		w2 = _craft->getWeapons()->at(1);
-	}
-	// Handle weapon damage
-	for (std::vector<int>::iterator w = _w1Dist.begin(); w != _w1Dist.end(); w++)
-	{
-		if ((*w) >= _currentDist)
+		for (std::vector<int>::iterator d = wDist->begin(); d != wDist->end(); d++)
 		{
-			int acc = RNG::generate(1, 100);
-			if (acc <= w1->getRules()->getAccuracy() && !_ufo->isCrashed())
-			{
-				int damage = RNG::generate(w1->getRules()->getDamage() / 2, w1->getRules()->getDamage());
-				_ufo->setDamage(_ufo->getDamage() + damage);
-				setStatus(STR_UFO_HIT);
-				_currentRadius += 4;
-				_game->getResourcePack()->getSoundSet("GEO.CAT")->getSound(12)->play();
-			}
-			_w1Dist.erase(w);
-			break;
-		}
-	}
-	for (std::vector<int>::iterator w = _w2Dist.begin(); w != _w2Dist.end(); w++)
-	{
-		if ((*w) >= _currentDist)
-		{
-			int acc = RNG::generate(1, 100);
-			if (acc <= w2->getRules()->getAccuracy() && !_ufo->isCrashed())
-			{
-				int damage = RNG::generate(w2->getRules()->getDamage() / 2, w2->getRules()->getDamage());
-				_ufo->setDamage(_ufo->getDamage() + damage);
-				setStatus(STR_UFO_HIT);
-				_currentRadius += 4;
-				_game->getResourcePack()->getSoundSet("GEO.CAT")->getSound(12)->play();
-			}
-			_w2Dist.erase(w);
-			break;
-		}
-	}
+			// Update weapons
+			(*d) += 8;
 
-	// Handle weapon firing
-	if (w1 != 0)
-	{
-		if (!_w1Timer->isRunning() && _currentDist <= w1->getRules()->getRange() * 8 && w1->getAmmo() > 0 && _mode != _btnStandoff && _mode != _btnDisengage && !_ufo->isCrashed())
-		{
-			_w1Timer->start();
-			fireWeapon1();
-		}
-		else if (_w1Timer->isRunning() && (_currentDist > w1->getRules()->getRange() * 8 || w1->getAmmo() == 0 || _mode == _btnStandoff || _mode == _btnDisengage || _ufo->isCrashed()))
-		{
-			_w1Timer->stop();
-			if (w1->getAmmo() == 0)
+			// Handle weapon damage
+			if ((*d) >= _currentDist)
 			{
-				if (_mode == _btnCautious)
+				int acc = RNG::generate(1, 100);
+				if (acc <= w->getRules()->getAccuracy() && !_ufo->isCrashed())
 				{
-					minimumDistance();
+					int damage = RNG::generate(w->getRules()->getDamage() / 2, w->getRules()->getDamage());
+					_ufo->setDamage(_ufo->getDamage() + damage);
+					setStatus(STR_UFO_HIT);
+					_currentRadius += 4;
+					_game->getResourcePack()->getSoundSet("GEO.CAT")->getSound(12)->play();
 				}
-				else if (_mode == _btnStandard)
-				{
-					maximumDistance();
-				}
+				wDist->erase(d);
+				break;
 			}
 		}
-	}
-	if (w2 != 0)
-	{
-		if (!_w2Timer->isRunning() && _currentDist <= w2->getRules()->getRange() * 8 && w2->getAmmo() > 0 && _mode != _btnStandoff && _mode != _btnDisengage && !_ufo->isCrashed())
+
+		// Handle weapon firing
+		if (!wTimer->isRunning() && _currentDist <= w->getRules()->getRange() * 8 && w->getAmmo() > 0 && _mode != _btnStandoff && _mode != _btnDisengage && !_ufo->isCrashed())
 		{
-			_w2Timer->start();
-			fireWeapon2();
+			wTimer->start();
+			if (i == 0)
+			{
+				fireWeapon1();
+			}
+			else
+			{
+				fireWeapon2();
+			}
 		}
-		else if (_w2Timer->isRunning() && (_currentDist > w2->getRules()->getRange() * 8 || w2->getAmmo() == 0 || _mode == _btnStandoff || _mode == _btnDisengage || _ufo->isCrashed()))
+		else if (wTimer->isRunning() && (_currentDist > w->getRules()->getRange() * 8 || w->getAmmo() == 0 || _mode == _btnStandoff || _mode == _btnDisengage || _ufo->isCrashed()))
 		{
-			_w2Timer->stop();
-			if (w2->getAmmo() == 0)
+			wTimer->stop();
+			if (w->getAmmo() == 0)
 			{
 				if (_mode == _btnCautious)
 				{
@@ -490,29 +434,49 @@ void DogfightState::move()
 	}
 
 	// Draw weapon shots
-	for (std::vector<int>::iterator w = _w1Dist.begin(); w != _w1Dist.end(); w++)
+	for (int i = 0; i < _craft->getRules()->getWeapons(); i++)
 	{
-		for (int i = -2; i <= 0; i++)
+		std::vector<int> *wDist = 0;
+		int off = 0;
+		if (i == 0)
 		{
-			_battle->setPixel(_battle->getWidth() / 2 - 1, _battle->getHeight() - (*w) / 8 + i, Palette::blockOffset(7));
+			wDist = &_w1Dist;
+			off = -1;
 		}
-	}
-	for (std::vector<int>::iterator w = _w2Dist.begin(); w != _w2Dist.end(); w++)
-	{
-		for (int i = -2; i <= 0; i++)
+		else
 		{
-			_battle->setPixel(_battle->getWidth() / 2 + 1, _battle->getHeight() - (*w) / 8 + i, Palette::blockOffset(7));
+			wDist = &_w2Dist;
+			off = 1;
+		}
+		for (std::vector<int>::iterator d = wDist->begin(); d != wDist->end(); d++)
+		{
+			for (int j = -2; j <= 0; j++)
+			{
+				_battle->setPixel(_battle->getWidth() / 2 + off, _battle->getHeight() - (*d) / 8 + j, Palette::blockOffset(7));
+			}
 		}
 	}
 
 	// Check when battle is over
-	if ((_currentDist > 640 && _mode == _btnDisengage) || (_timeout == 0 && _ufo->getDamage() >= _ufo->getRules()->getMaxDamage() / 2))
+	if ((_currentDist > 640 && _mode == _btnDisengage) || (_timeout == 0 && _ufo->isCrashed()))
 	{
 		_craft->returnToBase();
 		_game->popState();
 		std::stringstream ss;
 		ss << "GMGEO" << RNG::generate(1, 2);
 		_game->getResourcePack()->getMusic(ss.str())->play();
+		if (_destroy)
+		{
+			for (std::vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end(); i++)
+			{
+				if (*i == _ufo)
+				{
+					delete *i;
+					_game->getSavedGame()->getUfos()->erase(i);
+					break;
+				}
+			}
+		}
 	}
 
 	if (!_end && _ufo->isCrashed())
@@ -521,6 +485,7 @@ void DogfightState::move()
 		{
 			setStatus(STR_UFO_DESTROYED);
 			_game->getResourcePack()->getSoundSet("GEO.CAT")->getSound(11)->play();
+			_destroy = true;
 		}
 		else
 		{
@@ -528,7 +493,7 @@ void DogfightState::move()
 			_game->getResourcePack()->getSoundSet("GEO.CAT")->getSound(10)->play();
 			if (!_globe->insideLand(_ufo->getLongitude(), _ufo->getLatitude()))
 			{
-				_ufo->setDaysCrashed(5);
+				_destroy = true;
 			}
 		}
 		_targetRadius = 0;
@@ -637,7 +602,6 @@ void DogfightState::setStatus(LangString status)
 /**
  * Minimizes the dogfight window.
  * @param action Pointer to an action.
-
  */
 void DogfightState::btnMinimizeClick(Action *action)
 {
@@ -646,7 +610,6 @@ void DogfightState::btnMinimizeClick(Action *action)
 /**
  * Switches to Standoff mode (maximum range).
  * @param action Pointer to an action.
-
  */
 void DogfightState::btnStandoffClick(Action *action)
 {
@@ -660,7 +623,6 @@ void DogfightState::btnStandoffClick(Action *action)
 /**
  * Switches to Cautious mode (maximum weapon range).
  * @param action Pointer to an action.
-
  */
 void DogfightState::btnCautiousClick(Action *action)
 {
@@ -682,7 +644,6 @@ void DogfightState::btnCautiousClick(Action *action)
 /**
  * Switches to Standard mode (minimum weapon range).
  * @param action Pointer to an action.
-
  */
 void DogfightState::btnStandardClick(Action *action)
 {
@@ -704,7 +665,6 @@ void DogfightState::btnStandardClick(Action *action)
 /**
  * Switches to Aggressive mode (minimum range).
  * @param action Pointer to an action.
-
  */
 void DogfightState::btnAggressiveClick(Action *action)
 {
@@ -726,7 +686,6 @@ void DogfightState::btnAggressiveClick(Action *action)
 /**
  * Disengages from the UFO.
  * @param action Pointer to an action.
-
  */
 void DogfightState::btnDisengageClick(Action *action)
 {
@@ -740,7 +699,6 @@ void DogfightState::btnDisengageClick(Action *action)
 /**
  * Shows a front view of the UFO.
  * @param action Pointer to an action.
-
  */
 void DogfightState::btnUfoClick(Action *action)
 {
@@ -758,7 +716,6 @@ void DogfightState::btnUfoClick(Action *action)
 /**
  * Shows a front view of the UFO.
  * @param action Pointer to an action.
-
  */
 void DogfightState::previewClick(Action *action)
 {

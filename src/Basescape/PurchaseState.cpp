@@ -119,7 +119,6 @@ void PurchaseState::btnOkClick(Action *action)
 /**
  * Returns to the previous screen.
  * @param action Pointer to an action.
-
  */
 void PurchaseState::btnCancelClick(Action *action)
 {

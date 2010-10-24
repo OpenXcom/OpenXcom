@@ -79,7 +79,6 @@ BaseNameState::~BaseNameState()
 /**
  * Returns to the previous screen.
  * @param action Pointer to an action.
-
  */
 void BaseNameState::edtNameKeyPress(Action *action)
 {

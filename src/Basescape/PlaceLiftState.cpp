@@ -73,7 +73,6 @@ PlaceLiftState::~PlaceLiftState()
 /**
  * Processes clicking on facilities.
  * @param action Pointer to an action.
-
  */
 void PlaceLiftState::viewClick(Action *action)
 {

@@ -87,13 +87,16 @@ MainMenuState::~MainMenuState()
 /**
  * Opens the New Game window.
  * @param action Pointer to an action.
-
  */
 void MainMenuState::btnNewClick(Action *action)
 {
 	_game->setState(new NewGameState(_game));
 }
 
+/**
+ * Opens the Load Saved Game window.
+ * @param action Pointer to an action.
+ */
 void MainMenuState::btnLoadClick(Action *action)
 {
 	
@@ -102,7 +105,6 @@ void MainMenuState::btnLoadClick(Action *action)
 /**
  * Quits the game.
  * @param action Pointer to an action.
-
  */
 void MainMenuState::btnQuitClick(Action *action)
 {

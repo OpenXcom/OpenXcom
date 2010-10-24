@@ -104,7 +104,6 @@ void CraftPatrolState::init()
 /**
  * Closes the window.
  * @param action Pointer to an action.
-
  */
 void CraftPatrolState::btnOkClick(Action *action)
 {
@@ -114,7 +113,6 @@ void CraftPatrolState::btnOkClick(Action *action)
 /**
  * Opens up the Craft window.
  * @param action Pointer to an action.
-
  */
 void CraftPatrolState::btnRedirectClick(Action *action)
 {

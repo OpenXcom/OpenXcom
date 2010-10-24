@@ -114,7 +114,6 @@ ResearchState::~ResearchState()
 /**
  * Returns to the previous screen.
  * @param action Pointer to an action.
-
  */
 void ResearchState::btnOkClick(Action *action)
 {

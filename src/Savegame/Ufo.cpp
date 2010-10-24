@@ -238,7 +238,7 @@ void Ufo::think()
 	{
 		setLongitude(_lon + _speedLon);
 		setLatitude(_lat + _speedLat);
-		if (reachedDestination())
+		if (finishedRoute())
 		{
 			_lon = _dest->getLongitude();
 			_lat = _dest->getLatitude();

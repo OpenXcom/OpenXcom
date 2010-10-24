@@ -81,7 +81,6 @@ void LanguageState::changeLanguage(std::string lang)
  * Sets the language to English and opens
  * the Main Menu window.
  * @param action Pointer to an action.
-
  */
 void LanguageState::btnEnglishClick(Action *action)
 {
@@ -92,7 +91,6 @@ void LanguageState::btnEnglishClick(Action *action)
  * Sets the language to German and opens
  * the Main Menu window.
  * @param action Pointer to an action.
-
  */
 void LanguageState::btnGermanClick(Action *action)
 {
@@ -103,7 +101,6 @@ void LanguageState::btnGermanClick(Action *action)
  * Sets the language to French and opens
  * the Main Menu window.
  * @param action Pointer to an action.
-
  */
 void LanguageState::btnFrenchClick(Action *action)
 {
