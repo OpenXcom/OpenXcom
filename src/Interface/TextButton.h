@@ -49,7 +49,7 @@ public:
 	/// Gets the text button's color.
 	Uint8 getColor();
 	/// Sets the text button's text.
-	void setText(std::string text);
+	void setText(const std::string &text);
 	/// Gets the text button's text.
 	std::string getText();
 	/// Sets the text button's group.

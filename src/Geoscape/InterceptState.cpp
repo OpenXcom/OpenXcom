@@ -40,7 +40,7 @@
  * @param globe Pointer to the Geoscape globe.
  * @param base Pointer to base to show contained crafts (NULL to show all crafts).
  */
-InterceptState::InterceptState(Game *game, Globe *globe, Base *base) : State(game), _globe(globe), _base(base)
+InterceptState::InterceptState(Game *game, Globe *globe, Base *base) : State(game), _globe(globe), _base(base), _crafts()
 {
 	_screen = false;
 
@@ -108,7 +108,8 @@ InterceptState::InterceptState(Game *game, Globe *globe, Base *base) : State(gam
 		{
 			std::stringstream ss;
 			ss << (*j)->getNumWeapons() << "/" << (*j)->getNumSoldiers() << "/" << (*j)->getNumHWPs();
-			_lstCrafts->addRow((intptr_t)*j, 4, (*j)->getName(_game->getResourcePack()->getLanguage()).c_str(), _game->getResourcePack()->getLanguage()->getString((*j)->getStatus()).c_str(), (*i)->getName().c_str(), ss.str().c_str());
+			_crafts.push_back(*j);
+			_lstCrafts->addRow(4, (*j)->getName(_game->getResourcePack()->getLanguage()).c_str(), _game->getResourcePack()->getLanguage()->getString((*j)->getStatus()).c_str(), (*i)->getName().c_str(), ss.str().c_str());
 			if ((*j)->getStatus() == STR_READY)
 				_lstCrafts->getCell(row, 1)->setColor(Palette::blockOffset(8)+10);
 			row++;
@@ -140,7 +141,7 @@ void InterceptState::btnCancelClick(Action *action)
  */
 void InterceptState::lstCraftsClick(Action *action)
 {
-	Craft* c = (Craft*)_lstCrafts->getSelectedValue();
+	Craft* c = _crafts[_lstCrafts->getSelectedRow()];
 	if (c->getStatus() == STR_READY)
 	{
 		_game->popState();

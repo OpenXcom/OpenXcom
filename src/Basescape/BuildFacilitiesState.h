@@ -19,6 +19,7 @@
 #ifndef OPENXCOM_BUILDFACILITIESSTATE_H
 #define OPENXCOM_BUILDFACILITIESSTATE_H
 
+#include <vector>
 #include "../Engine/State.h"
 #include "../Resource/LangString.h"
 
@@ -27,6 +28,7 @@ class TextButton;
 class Window;
 class Text;
 class TextList;
+class RuleBaseFacility;
 
 /**
  * Window shown wih all the facilities
@@ -37,6 +39,7 @@ class BuildFacilitiesState : public State
 private:
 	Base *_base;
 	State *_state;
+	std::vector<RuleBaseFacility*> _facilities;
 
 	TextButton *_btnOk;
 	Window *_window;

@@ -504,7 +504,7 @@ void GeoscapeState::time10Minutes()
 			if ((*j)->getStatus() == STR_OUT)
 			{
 				(*j)->consumeFuel();
-				if (!(*j)->getLowFuel() && (*j)->getFuel() <= (*j)->getSpeed() / 100 * (*j)->getDistanceFromBase() / ((*j)->getRadianSpeed() * 120))
+				if (!(*j)->getLowFuel() && (*j)->getFuel() <= (*j)->getFuelLimit())
 				{
 					(*j)->setLowFuel(true);
 					(*j)->returnToBase();

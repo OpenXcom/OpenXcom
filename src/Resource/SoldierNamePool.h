@@ -40,11 +40,11 @@ public:
 	/// Generates a new name from the pool.
 	std::string genName(int *gender);
 	/// Adds a male first name.
-	void addMaleName(std::string name);
+	void addMaleName(const std::string &name);
 	/// Adds a female first name.
-	void addFemaleName(std::string name);
+	void addFemaleName(const std::string &name);
 	/// Adds a last name.
-	void addLastName(std::string name);
+	void addLastName(const std::string &name);
 };
 
 #endif

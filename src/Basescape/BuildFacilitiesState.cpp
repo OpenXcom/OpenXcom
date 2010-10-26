@@ -36,7 +36,7 @@
  * @param base Pointer to the base to get info from.
  * @param state Pointer to the base state to refresh.
  */
-BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base, State *state) : State(game), _base(base), _state(state)
+BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base, State *state) : State(game), _base(base), _state(state), _facilities()
 {
 	_screen = false;
 
@@ -75,8 +75,12 @@ BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base, State *state)
 	_lstFacilities->setMargin(2);
 
 	for (int i = STR_LIVING_QUARTERS; i <= STR_ALIEN_CONTAINMENT; i++)
-		_lstFacilities->addRow(i, 1, _game->getResourcePack()->getLanguage()->getString((LangString)i).c_str());
-	_lstFacilities->addRow(STR_HANGAR, 1, _game->getResourcePack()->getLanguage()->getString(STR_HANGAR).c_str());
+	{
+		_lstFacilities->addRow(1, _game->getResourcePack()->getLanguage()->getString((LangString)i).c_str());
+		_facilities.push_back(_game->getRuleset()->getBaseFacility((LangString)i));
+	}
+	_lstFacilities->addRow(1, _game->getResourcePack()->getLanguage()->getString(STR_HANGAR).c_str());
+	_facilities.push_back(_game->getRuleset()->getBaseFacility((LangString)STR_HANGAR));
 	_lstFacilities->onMouseClick((ActionHandler)&BuildFacilitiesState::lstFacilitiesClick);
 }
 
@@ -112,5 +116,5 @@ void BuildFacilitiesState::btnOkClick(Action *action)
  */
 void BuildFacilitiesState::lstFacilitiesClick(Action *action)
 {
-	_game->pushState(new PlaceFacilityState(_game, _base, _game->getRuleset()->getBaseFacility((LangString)_lstFacilities->getSelectedValue())));
+	_game->pushState(new PlaceFacilityState(_game, _base, _facilities[_lstFacilities->getSelectedRow()]));
 }

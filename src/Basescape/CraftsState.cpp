@@ -129,7 +129,7 @@ void CraftsState::init()
 		ss << (*i)->getNumWeapons() << "/" << (*i)->getRules()->getWeapons();
 		ss2 << (*i)->getNumSoldiers();
 		ss3 << (*i)->getNumHWPs();
-		_lstCrafts->addRow(0, 5, (*i)->getName(_game->getResourcePack()->getLanguage()).c_str(), _game->getResourcePack()->getLanguage()->getString((*i)->getStatus()).c_str(), ss.str().c_str(), ss2.str().c_str(), ss3.str().c_str());
+		_lstCrafts->addRow(5, (*i)->getName(_game->getResourcePack()->getLanguage()).c_str(), _game->getResourcePack()->getLanguage()->getString((*i)->getStatus()).c_str(), ss.str().c_str(), ss2.str().c_str(), ss3.str().c_str());
 	}
 }
 
@@ -149,5 +149,7 @@ void CraftsState::btnOkClick(Action *action)
 void CraftsState::lstCraftsClick(Action *action)
 {
 	if (_base->getCrafts()->at(_lstCrafts->getSelectedRow())->getStatus() != STR_OUT)
+	{
 		_game->pushState(new CraftInfoState(_game, _base, _lstCrafts->getSelectedRow()));
+	}
 }

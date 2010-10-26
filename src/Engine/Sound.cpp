@@ -39,11 +39,13 @@ Sound::~Sound()
  * Loads a sound file from a specified filename.
  * @param filename Filename of the sound file.
  */
-void Sound::load(std::string filename)
+void Sound::load(const std::string &filename)
 {
 	_sound = Mix_LoadWAV(filename.c_str());
 	if (_sound == 0) 
+	{
 		throw Mix_GetError();
+	}
 }
 
 /**
@@ -56,7 +58,9 @@ void Sound::load(void *sound, int size)
 	SDL_RWops *rw = SDL_RWFromMem(sound, size);
 	_sound = Mix_LoadWAV_RW(rw, 1);
 	if (_sound == 0)
+	{
 		throw Mix_GetError();
+	}
 }
 
 /**

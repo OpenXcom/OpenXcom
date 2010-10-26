@@ -52,7 +52,7 @@ public:
 	/// Gets the base's name.
 	std::string getName(Language* lang = 0);
 	/// Sets the base's name.
-	void setName(std::string name);
+	void setName(const std::string &name);
 	/// Gets the base's facilities.
 	std::vector<BaseFacility*> *getFacilities();
 	/// Gets the base's soldiers.

@@ -80,7 +80,7 @@ Surface::~Surface()
  * @param filename Filename of the SCR image.
  * @sa http://www.ufopaedia.org/index.php?title=Image_Formats#SCR_.26_DAT
  */
-void Surface::loadScr(std::string filename)
+void Surface::loadScr(const std::string &filename)
 {
 	// Load file and put pixels in surface
 	std::ifstream imgFile (filename.c_str(), std::ios::in | std::ios::binary);
@@ -118,7 +118,7 @@ void Surface::loadScr(std::string filename)
  * @param filename Filename of the SPK image.
  * @sa http://www.ufopaedia.org/index.php?title=Image_Formats#SPK
  */
-void Surface::loadSpk(std::string filename)
+void Surface::loadSpk(const std::string &filename)
 {
 	// Load file and put pixels in surface
 	std::ifstream imgFile (filename.c_str(), std::ios::in | std::ios::binary);

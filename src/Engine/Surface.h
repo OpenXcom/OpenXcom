@@ -44,9 +44,9 @@ public:
 	/// Cleans up the surface.
 	virtual ~Surface();
 	/// Loads an X-Com SCR graphic.
-	void loadScr(std::string filename);
+	void loadScr(const std::string &filename);
 	/// Loads an X-Com SPK graphic.
-	void loadSpk(std::string filename);
+	void loadSpk(const std::string &filename);
 	/// Clears the surface's contents.
 	void clear();
 	/// Offsets the surface's colors by a set amount.

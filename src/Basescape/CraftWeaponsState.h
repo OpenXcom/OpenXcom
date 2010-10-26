@@ -19,6 +19,7 @@
 #ifndef OPENXCOM_CRAFTWEAPONSSTATE_H
 #define OPENXCOM_CRAFTWEAPONSSTATE_H
 
+#include <vector>
 #include "../Engine/State.h"
 
 class Base;
@@ -26,6 +27,7 @@ class TextButton;
 class Window;
 class Text;
 class TextList;
+class RuleCraftWeapon;
 
 /**
  * Select Armament window that allows to
@@ -41,6 +43,7 @@ private:
 	Window *_window;
 	Text *_txtTitle, *_txtArmament, *_txtQuantity, *_txtAmmunition, *_txtAvailable;
 	TextList *_lstWeapons;
+	std::vector<RuleCraftWeapon*> _weapons;
 public:
 	/// Creates the Craft Weapons state.
 	CraftWeaponsState(Game *game, Base *base, unsigned int craft, unsigned int weapon);

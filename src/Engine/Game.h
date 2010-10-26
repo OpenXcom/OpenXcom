@@ -50,7 +50,7 @@ private:
 	bool _quit;
 public:
 	/// Creates a new game and initializes SDL.
-	Game(std::string title, int width, int height, int bpp);
+	Game(const std::string &title, int width, int height, int bpp);
 	/// Cleans up all the game's resources and shuts down SDL.
 	~Game();
 	/// Starts the game's state machine.

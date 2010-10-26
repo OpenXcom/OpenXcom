@@ -134,7 +134,7 @@ void CraftSoldiersState::init()
 			ss3 << _game->getResourcePack()->getLanguage()->getString(STR_NONE);
 		else
 			ss3 << (*i)->getCraft()->getName(_game->getResourcePack()->getLanguage());
-		_lstSoldiers->addRow(0, 3, (*i)->getName().c_str(), _game->getResourcePack()->getLanguage()->getString((*i)->getRankString()).c_str(), ss3.str().c_str());
+		_lstSoldiers->addRow(3, (*i)->getName().c_str(), _game->getResourcePack()->getLanguage()->getString((*i)->getRankString()).c_str(), ss3.str().c_str());
 		if ((*i)->getCraft() == c)
 		{
 			_lstSoldiers->getCell(row, 0)->setColor(Palette::blockOffset(13));
@@ -170,8 +170,12 @@ void CraftSoldiersState::lstSoldiersClick(Action *action)
 	Craft *c = _base->getCrafts()->at(_craft);
 	Soldier *s = _base->getSoldiers()->at(_lstSoldiers->getSelectedRow());
 	if (s->getCraft() == c)
+	{
 		s->setCraft(0);
+	}
 	else
+	{
 		s->setCraft(c);
+	}
 	init();
 }

@@ -82,7 +82,7 @@ void TextEdit::setSmall()
  * Changes the string displayed on screen.
  * @param text Text string.
  */
-void TextEdit::setText(std::string text)
+void TextEdit::setText(const std::string &text)
 {
 	_value = text;
 	draw();

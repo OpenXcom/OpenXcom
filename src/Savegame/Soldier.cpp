@@ -68,7 +68,7 @@ std::string Soldier::getName()
  * Changes the soldier's full name.
  * @param name Soldier name.
  */
-void Soldier::setName(std::string name)
+void Soldier::setName(const std::string &name)
 {
 	_name = name;
 }

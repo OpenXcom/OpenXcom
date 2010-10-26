@@ -94,7 +94,7 @@ Font *Text::getFont()
  * Changes the string displayed on screen.
  * @param text Text string.
  */
-void Text::setText(std::string text)
+void Text::setText(const std::string &text)
 {
 	if (text != _text)
 	{

@@ -37,7 +37,7 @@
  * @warning Currently the game is designed for 8bpp, so there's no telling what'll
  * happen if you use a different value.
  */
-Game::Game(std::string title, int width, int height, int bpp) : _screen(0), _cursor(0), _states(), _deleted(), _res(0), _save(0), _rules(0), _quit(false)
+Game::Game(const std::string &title, int width, int height, int bpp) : _screen(0), _cursor(0), _states(), _deleted(), _res(0), _save(0), _rules(0), _quit(false)
 {
 	// Initialize SDL
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)

@@ -37,7 +37,7 @@
  * contained in the original game folder.
  * @param folder Subfolder to load resources from.
  */
-XcomResourcePack::XcomResourcePack(std::string folder) : ResourcePack(folder)
+XcomResourcePack::XcomResourcePack(const std::string &folder) : ResourcePack(folder)
 {
 	// Load palettes
 	for (int i = 0; i < 5; i++)

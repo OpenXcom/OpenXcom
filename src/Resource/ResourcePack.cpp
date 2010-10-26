@@ -33,7 +33,7 @@
  * Initializes a blank resource set pointing to a folder.
  * @param folder Subfolder to load resources from.
  */
-ResourcePack::ResourcePack(std::string folder) : _folder(folder), _currentLang(0), _langName(""), _palettes(), _fonts(), _languages(), _surfaces(), _sets(), _polygons(), _musics()
+ResourcePack::ResourcePack(const std::string &folder) : _folder(folder), _currentLang(0), _langName(""), _palettes(), _fonts(), _languages(), _surfaces(), _sets(), _polygons(), _musics()
 {
 }
 
@@ -88,10 +88,12 @@ ResourcePack::~ResourcePack()
  * @note There's no actual method for figuring out the correct
  * filename on case-sensitive systems, this is just a workaround.
  */
-std::string ResourcePack::insensitive(std::string filename)
+std::string ResourcePack::insensitive(const std::string &filename)
 {
+	std::string newName = filename;
+
 	// Ignore DATA folder
-	size_t i = filename.find("/DATA/");
+	size_t i = newName.find("/DATA/");
 	if (i != std::string::npos)
 		i += 6;
 	else
@@ -99,25 +101,25 @@ std::string ResourcePack::insensitive(std::string filename)
 
 	// Try lowercase and uppercase names
 	struct stat info;
-	if (stat(filename.c_str(), &info) == 0)
+	if (stat(newName.c_str(), &info) == 0)
 	{
-		return filename;
+		return newName;
 	}
 	else
 	{
-		for (std::string::iterator c = filename.begin() + i; c != filename.end(); c++)
+		for (std::string::iterator c = newName.begin() + i; c != newName.end(); c++)
 			*c = toupper(*c);
-		if (stat(filename.c_str(), &info) == 0)
+		if (stat(newName.c_str(), &info) == 0)
 		{
-			return filename;
+			return newName;
 		}
 		else
 		{
-			for (std::string::iterator c = filename.begin() + i; c != filename.end(); c++)
+			for (std::string::iterator c = newName.begin() + i; c != newName.end(); c++)
 				*c = tolower(*c);
-			if (stat(filename.c_str(), &info) == 0)
+			if (stat(newName.c_str(), &info) == 0)
 			{
-				return filename;
+				return newName;
 			}
 			else
 			{
@@ -153,7 +155,7 @@ std::string ResourcePack::getLanguageName()
  * one in the resource pack.
  * @param lang Name of the language.
  */
-void ResourcePack::setLanguage(std::string lang)
+void ResourcePack::setLanguage(const std::string &lang)
 {
 	_currentLang = _languages[lang];
 	_langName = lang;
@@ -164,7 +166,7 @@ void ResourcePack::setLanguage(std::string lang)
  * @param name Name of the font.
  * @return Pointer to the font.
  */
-Font *ResourcePack::getFont(std::string name)
+Font *ResourcePack::getFont(const std::string &name)
 {
 	return _fonts[name];
 }
@@ -174,7 +176,7 @@ Font *ResourcePack::getFont(std::string name)
  * @param name Name of the surface.
  * @return Pointer to the surface.
  */
-Surface *ResourcePack::getSurface(std::string name)
+Surface *ResourcePack::getSurface(const std::string &name)
 {
 	return _surfaces[name];
 }
@@ -184,7 +186,7 @@ Surface *ResourcePack::getSurface(std::string name)
  * @param name Name of the surface set.
  * @return Pointer to the surface set.
  */
-SurfaceSet *ResourcePack::getSurfaceSet(std::string name)
+SurfaceSet *ResourcePack::getSurfaceSet(const std::string &name)
 {
 	return _sets[name];
 }
@@ -212,7 +214,7 @@ std::vector<Polyline*> *ResourcePack::getPolylines()
  * @param name Name of the music.
  * @return Pointer to the music.
  */
-Music *ResourcePack::getMusic(std::string name)
+Music *ResourcePack::getMusic(const std::string &name)
 {
 	return _musics[name];
 }
@@ -222,7 +224,7 @@ Music *ResourcePack::getMusic(std::string name)
  * @param name Name of the sound set.
  * @return Pointer to the sound set.
  */
-SoundSet *ResourcePack::getSoundSet(std::string name)
+SoundSet *ResourcePack::getSoundSet(const std::string &name)
 {
 	return _sounds[name];
 }
@@ -232,7 +234,7 @@ SoundSet *ResourcePack::getSoundSet(std::string name)
  * @param name Name of the palette.
  * @return Pointer to the palette.
  */
-Palette *ResourcePack::getPalette(std::string name)
+Palette *ResourcePack::getPalette(const std::string &name)
 {
 	return _palettes[name];
 }

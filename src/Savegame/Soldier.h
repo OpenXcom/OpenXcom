@@ -52,7 +52,7 @@ public:
 	/// Gets the soldier's name.
 	std::string getName();
 	/// Sets the soldier's name.
-	void setName(std::string name);
+	void setName(const std::string &name);
 	/// Gets the soldier's craft.
 	Craft *getCraft();
 	/// Sets the soldier's craft.

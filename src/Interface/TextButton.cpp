@@ -76,7 +76,7 @@ Uint8 TextButton::getColor()
  * Changes the text of the button label.
  * @param text Text string.
  */
-void TextButton::setText(std::string text)
+void TextButton::setText(const std::string &text)
 {
 	_text->setText(text);
 	draw();

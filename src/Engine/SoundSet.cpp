@@ -48,7 +48,7 @@ SoundSet::~SoundSet()
  * @param wav Are the sounds in WAV format?
  * @sa http://www.ufopaedia.org/index.php?title=SOUND
  */
-void SoundSet::loadCat(std::string filename, bool wav)
+void SoundSet::loadCat(const std::string &filename, bool wav)
 {
 	// Load CAT file
 	std::ifstream sndFile (filename.c_str(), std::ios::in | std::ios::binary);

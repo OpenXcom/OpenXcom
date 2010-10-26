@@ -325,7 +325,7 @@ bool Globe::insidePolygon(double lon, double lat, Polygon *poly)
  * @param polygons Pointer to the polygon set.
  * @sa http://www.ufopaedia.org/index.php?title=WORLD.DAT
  */
-void Globe::loadDat(std::string filename, std::vector<Polygon*> *polygons)
+void Globe::loadDat(const std::string &filename, std::vector<Polygon*> *polygons)
 {
 	// Load file
 	std::ifstream mapFile (filename.c_str(), std::ios::in | std::ios::binary);

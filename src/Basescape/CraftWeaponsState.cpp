@@ -100,7 +100,8 @@ CraftWeaponsState::CraftWeaponsState(Game *game, Base *base, unsigned int craft,
 	_lstWeapons->setBackground(_window);
 	_lstWeapons->setMargin(8);
 
-	_lstWeapons->addRow(STR_NONE, 3, _game->getResourcePack()->getLanguage()->getString(STR_NONE).c_str(), "", "");
+	_lstWeapons->addRow(3, _game->getResourcePack()->getLanguage()->getString(STR_NONE).c_str(), "", "");
+	_weapons.push_back(0);
 	for (int i = STR_STINGRAY_UC; i <= STR_CANNON_UC; i++)
 	{
 		RuleCraftWeapon *w = _game->getRuleset()->getCraftWeapon((LangString)i);
@@ -109,7 +110,8 @@ CraftWeaponsState::CraftWeaponsState(Game *game, Base *base, unsigned int craft,
 			std::stringstream ss, ss2;
 			ss << (*_base->getItems())[w->getLauncherItem()]->getQuantity();
 			ss2 << (*_base->getItems())[w->getClipItem()]->getQuantity();
-			_lstWeapons->addRow(i, 3, _game->getResourcePack()->getLanguage()->getString((LangString)i).c_str(), ss.str().c_str(), ss2.str().c_str());
+			_lstWeapons->addRow(3, _game->getResourcePack()->getLanguage()->getString((LangString)i).c_str(), ss.str().c_str(), ss2.str().c_str());
+			_weapons.push_back(w);
 		}
 	}
 	_lstWeapons->onMouseClick((ActionHandler)&CraftWeaponsState::lstWeaponsClick);
@@ -150,13 +152,15 @@ void CraftWeaponsState::lstWeaponsClick(Action *action)
 	}
 
 	// Equip new weapon
-	if (_lstWeapons->getSelectedValue() != STR_NONE)
+	if (_weapons[_lstWeapons->getSelectedRow()] != 0)
 	{
-		CraftWeapon *sel = new CraftWeapon(_game->getRuleset()->getCraftWeapon((LangString)_lstWeapons->getSelectedValue()), 0);
+		CraftWeapon *sel = new CraftWeapon(_weapons[_lstWeapons->getSelectedRow()], 0);
 		(*_base->getItems())[sel->getRules()->getLauncherItem()]->setQuantity((*_base->getItems())[sel->getRules()->getLauncherItem()]->getQuantity() - 1);
 		_base->getCrafts()->at(_craft)->getWeapons()->at(_weapon) = sel;
 		if (_base->getCrafts()->at(_craft)->getStatus() == STR_READY)
+		{
 			_base->getCrafts()->at(_craft)->setStatus(STR_REARMING);
+		}
 	}
 
 	_game->popState();

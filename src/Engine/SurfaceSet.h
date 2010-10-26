@@ -44,9 +44,9 @@ public:
 	/// Cleans up the surface set.
 	~SurfaceSet();
 	/// Loads an X-Com set of PCK/TAB image files.
-	void loadPck(std::string pck, std::string tab = "");
+	void loadPck(const std::string &pck, const std::string &tab = "");
 	/// Loads an X-Com DAT image file.
-	void loadDat(std::string filename);
+	void loadDat(const std::string &filename);
 	/// Gets a particular frame from the set.
 	Surface *getFrame(int i);
 	/// Gets the width of all frames.

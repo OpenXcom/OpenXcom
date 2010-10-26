@@ -94,7 +94,7 @@ StoresState::StoresState(Game *game, Base *base) : State(game), _base(base)
 		std::stringstream ss, ss2;
 		ss << i->second->getQuantity();
 		ss2 << i->second->getTotalSize();
-		_lstStores->addRow(0, 3, _game->getResourcePack()->getLanguage()->getString(i->first).c_str(), ss.str().c_str(), ss2.str().c_str());
+		_lstStores->addRow(3, _game->getResourcePack()->getLanguage()->getString(i->first).c_str(), ss.str().c_str(), ss2.str().c_str());
 	}
 }
 

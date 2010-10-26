@@ -99,15 +99,15 @@ UfoDetectedState::UfoDetectedState(Game *game, Ufo *ufo, GeoscapeState *state, b
 	_lstInfo->setColor(Palette::blockOffset(8)+5);
 	_lstInfo->setColumns(2, 82, 78);
 	_lstInfo->setDot(true);
-	_lstInfo->addRow(0, 2, _game->getResourcePack()->getLanguage()->getString(STR_SIZE).c_str(), _game->getResourcePack()->getLanguage()->getString(_ufo->getRules()->getSize()).c_str());
+	_lstInfo->addRow(2, _game->getResourcePack()->getLanguage()->getString(STR_SIZE).c_str(), _game->getResourcePack()->getLanguage()->getString(_ufo->getRules()->getSize()).c_str());
 	_lstInfo->getCell(0, 1)->setColor(Palette::blockOffset(8)+10);
-	_lstInfo->addRow(0, 2, _game->getResourcePack()->getLanguage()->getString(STR_ALTITUDE).c_str(), _game->getResourcePack()->getLanguage()->getString(_ufo->getAltitude()).c_str());
+	_lstInfo->addRow(2, _game->getResourcePack()->getLanguage()->getString(STR_ALTITUDE).c_str(), _game->getResourcePack()->getLanguage()->getString(_ufo->getAltitude()).c_str());
 	_lstInfo->getCell(1, 1)->setColor(Palette::blockOffset(8)+10);
-	_lstInfo->addRow(0, 2, _game->getResourcePack()->getLanguage()->getString(STR_HEADING).c_str(), _game->getResourcePack()->getLanguage()->getString(_ufo->getDirection()).c_str());
+	_lstInfo->addRow(2, _game->getResourcePack()->getLanguage()->getString(STR_HEADING).c_str(), _game->getResourcePack()->getLanguage()->getString(_ufo->getDirection()).c_str());
 	_lstInfo->getCell(2, 1)->setColor(Palette::blockOffset(8)+10);
 	std::stringstream ss;
 	ss << _ufo->getSpeed();
-	_lstInfo->addRow(0, 2, _game->getResourcePack()->getLanguage()->getString(STR_SPEED).c_str(), ss.str().c_str());
+	_lstInfo->addRow(2, _game->getResourcePack()->getLanguage()->getString(STR_SPEED).c_str(), ss.str().c_str());
 	_lstInfo->getCell(3, 1)->setColor(Palette::blockOffset(8)+10);
 	_lstInfo->draw();
 }

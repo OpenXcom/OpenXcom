@@ -42,7 +42,7 @@ Language::~Language()
  * @param filename Filename of the DAT language.
  * @sa http://www.ufopaedia.org/index.php?title=GeoScape_String_Files
  */
-void Language::loadDat(std::string filename)
+void Language::loadDat(const std::string &filename)
 {
 	_strings.clear();
 	

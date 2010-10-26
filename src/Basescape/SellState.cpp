@@ -107,7 +107,7 @@ SellState::SellState(Game *game) : State(game)
 	_lstItems->setSelectable(true);
 	_lstItems->setBackground(_window);
 	_lstItems->setMargin(2);
-	_lstItems->addRow(0, 4, "Soldier", "1", "0", "$40 000");
+	_lstItems->addRow(4, "Soldier", "1", "0", "$40 000");
 }
 
 /**

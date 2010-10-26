@@ -322,6 +322,26 @@ double Craft::getDistanceFromBase()
 }
 
 /**
+ * Returns the amount of fuel the craft uses up
+ * while it's on the air, based on its speed.
+ * @return Fuel amount.
+ */
+int Craft::getFuelConsumption()
+{
+	return (int)floor(_speed / 100.0);
+}
+
+/**
+ * Returns the minimum required fuel for the
+ * craft to make it back to base.
+ * @return Fuel amount.
+ */
+int Craft::getFuelLimit()
+{
+	return (int)floor(getFuelConsumption() * getDistanceFromBase() / (getRadianSpeed() * 120));
+}
+
+/**
  * Sends the craft back to its origin base.
  */
 void Craft::returnToBase()
@@ -386,12 +406,12 @@ bool Craft::insideRadarRange(Target *target)
 }
 
 /**
- * Consumes the craft's fuel every 10 minutes based
- * on its current speed while it's on the air.
+ * Consumes the craft's fuel every 10 minutes
+ * while it's on the air.
  */
 void Craft::consumeFuel()
 {
-	_fuel -= _speed / 100;
+	setFuel(_fuel - getFuelConsumption());
 }
 
 /**
@@ -400,8 +420,8 @@ void Craft::consumeFuel()
  */
 void Craft::repair()
 {
-	_damage -= _rules->getRepairRate();
-	if (_damage == 0)
+	setDamage(_damage - _rules->getRepairRate());
+	if (_damage <= 0)
 	{
 		_status = STR_REFUELLING;
 	}
@@ -413,8 +433,8 @@ void Craft::repair()
  */
 void Craft::refuel()
 {
-	_fuel += _rules->getRefuelRate();
-	if (_fuel == _rules->getMaxFuel())
+	setFuel(_fuel + _rules->getRefuelRate());
+	if (_fuel >= _rules->getMaxFuel())
 	{
 		_status = STR_REARMING;
 	}
@@ -433,7 +453,7 @@ void Craft::rearm()
 			continue;
 		available++;
 		(*i)->rearm();
-		if ((*i)->getAmmo() == (*i)->getRules()->getAmmoMax())
+		if ((*i)->getAmmo() >= (*i)->getRules()->getAmmoMax())
 			full++;
 	}
 	if (full == available)

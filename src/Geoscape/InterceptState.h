@@ -19,6 +19,7 @@
 #ifndef OPENXCOM_INTERCEPTSTATE_H
 #define OPENXCOM_INTERCEPTSTATE_H
 
+#include <vector>
 #include "../Engine/State.h"
 
 class TextButton;
@@ -27,6 +28,7 @@ class Text;
 class TextList;
 class Base;
 class Globe;
+class Craft;
 
 /**
  * Intercept window that lets the player launch
@@ -41,6 +43,7 @@ private:
 	TextList *_lstCrafts;
 	Globe *_globe;
 	Base *_base;
+	std::vector<Craft*> _crafts;
 public:
 	/// Creates the Intercept state.
 	InterceptState(Game *game, Globe *globe, Base *base = 0);

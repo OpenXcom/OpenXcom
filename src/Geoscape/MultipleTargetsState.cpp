@@ -90,7 +90,7 @@ MultipleTargetsState::MultipleTargetsState(Game *game, std::vector<Target*> targ
 	_lstTargets->onMouseClick((ActionHandler)&MultipleTargetsState::lstTargetsClick);
 	for (std::vector<Target*>::iterator i = _targets.begin(); i != _targets.end(); i++)
 	{
-		_lstTargets->addRow(0, 1, (*i)->getName(_game->getResourcePack()->getLanguage()).c_str());
+		_lstTargets->addRow(1, (*i)->getName(_game->getResourcePack()->getLanguage()).c_str());
 	}
 }
 
@@ -167,6 +167,6 @@ void MultipleTargetsState::btnCancelClick(Action *action)
  */
 void MultipleTargetsState::lstTargetsClick(Action *action)
 {
-	Target* t = _targets.at(_lstTargets->getSelectedRow());
+	Target* t = _targets[_lstTargets->getSelectedRow()];
 	popupTarget(t);
 }

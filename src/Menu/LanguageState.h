@@ -40,7 +40,7 @@ public:
 	/// Cleans up the Start state.
 	~LanguageState();
 	/// Changes the game language.
-	void changeLanguage(std::string lang);
+	void changeLanguage(const std::string &lang);
 	/// Handler for clicking the English button.
 	void btnEnglishClick(Action *action);
 	/// Handler for clicking the Deutsche button.

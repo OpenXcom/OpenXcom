@@ -65,7 +65,7 @@ SurfaceSet::~SurfaceSet()
  * @param tab Filename of the TAB offsets.
  * @sa http://www.ufopaedia.org/index.php?title=Image_Formats#PCK
  */
-void SurfaceSet::loadPck(std::string pck, std::string tab)
+void SurfaceSet::loadPck(const std::string &pck, const std::string &tab)
 {
 	int nframes = 0;
 
@@ -157,7 +157,7 @@ void SurfaceSet::loadPck(std::string pck, std::string tab)
  * @param filename Filename of the DAT image.
  * @sa http://www.ufopaedia.org/index.php?title=Image_Formats#SCR_.26_DAT
  */
-void SurfaceSet::loadDat(std::string filename)
+void SurfaceSet::loadDat(const std::string &filename)
 {
 	int nframes = 0;
 

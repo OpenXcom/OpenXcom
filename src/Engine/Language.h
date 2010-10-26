@@ -37,7 +37,7 @@ public:
 	/// Cleans up the language.
 	~Language();
 	/// Loads an X-Com language file.
-	void loadDat(std::string filename);
+	void loadDat(const std::string &filename);
 	/// Gets a string from the language.
 	std::string getString(LangString id);
 };

@@ -36,7 +36,7 @@ public:
 	/// Cleans up the sound effect.
 	~Sound();
 	/// Loads sound from the specified file.
-	void load(std::string filename);
+	void load(const std::string &filename);
 	/// Loads sound from the specified memory.
 	void load(void *sound, int size);
 	/// Plays the sound.

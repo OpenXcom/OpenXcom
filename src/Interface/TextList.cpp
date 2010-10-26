@@ -80,14 +80,11 @@ Text* TextList::getCell(int row, int col)
 /**
  * Adds a new row of text to the list, automatically creating
  * the required Text objects lined up where they need to be.
- * @param value Value associated with the row.
  * @param cols Number of columns.
  * @param ... Text for each cell in the new row.
  */
-void TextList::addRow(intptr_t value, int cols, ...)
+void TextList::addRow(int cols, ...)
 {
-	_values.push_back(value);
-
 	va_list args;
 	va_start(args, cols);
 	std::vector<Text*> temp;
@@ -222,25 +219,6 @@ void TextList::setSelectable(bool selectable)
 int TextList::getSelectedRow()
 {
 	return _selRow;
-}
-
-/**
- * Returns the value associated with a certain row.
- * @param row Row number.
- * @return Stored value.
- */
-intptr_t TextList::getValue(int row)
-{
-	return _values[row];
-}
-
-/**
- * Returns the value associated with the selected row.
- * @return Stored value.
- */
-intptr_t TextList::getSelectedValue()
-{
-	return _values[_selRow];
 }
 
 /**

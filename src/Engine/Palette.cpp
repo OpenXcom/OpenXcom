@@ -43,7 +43,7 @@ Palette::~Palette()
  * @param offset Position of the palette in the file (in bytes).
  * @sa http://www.ufopaedia.org/index.php?title=PALETTES.DAT
  */
-void Palette::loadDat(std::string filename, int ncolors, int offset)
+void Palette::loadDat(const std::string &filename, int ncolors, int offset)
 {
 	_colors = (SDL_Color *)malloc(sizeof(SDL_Color) * ncolors);
 

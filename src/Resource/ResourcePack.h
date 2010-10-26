@@ -60,33 +60,33 @@ protected:
 	std::map<std::string, Music*> _musics;
 public:
 	/// Create a new resource pack with a folder's contents.
-	ResourcePack(std::string folder);
+	ResourcePack(const std::string &folder);
 	/// Cleans up the resource pack.
 	virtual ~ResourcePack();
 	/// Converts a filename to its existing case-insensitive name.
-	std::string insensitive(std::string filename);
+	std::string insensitive(const std::string &filename);
 	/// Gets the current language.
 	Language *getLanguage();
 	/// Gets the name of the current language.
 	std::string getLanguageName();
 	/// Sets a new language as current.
-	void setLanguage(std::string lang);
+	void setLanguage(const std::string &lang);
 	/// Gets a particular font.
-	Font *getFont(std::string name);
+	Font *getFont(const std::string &name);
 	/// Gets a particular surface.
-	Surface *getSurface(std::string name);
+	Surface *getSurface(const std::string &name);
 	/// Gets a particular surface set.
-	SurfaceSet *getSurfaceSet(std::string name);
+	SurfaceSet *getSurfaceSet(const std::string &name);
 	/// Gets the list of world polygons.
 	std::vector<Polygon*> *getPolygons();
 	/// Gets the list of world polylines.
 	std::vector<Polyline*> *getPolylines();
 	/// Gets a particular music.
-	Music *getMusic(std::string name);
+	Music *getMusic(const std::string &name);
 	/// Gets a particular sound set.
-	SoundSet *getSoundSet(std::string name);
+	SoundSet *getSoundSet(const std::string &name);
 	/// Gets a particular palette.
-	Palette *getPalette(std::string name);
+	Palette *getPalette(const std::string &name);
 	/// Sets a new palette.
 	void setPalette(SDL_Color *colors, int firstcolor, int ncolors);
 };

@@ -69,7 +69,7 @@ std::string Base::getName(Language *lang)
  * Changes the custom name for the base.
  * @param name Name.
  */
-void Base::setName(std::string name)
+void Base::setName(const std::string &name)
 {
 	_name = name;
 }

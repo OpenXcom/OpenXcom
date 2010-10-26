@@ -30,14 +30,13 @@ class ArrowButton;
  * List of Text's split into columns.
  * Contains a set of Text's that are automatically lined up by
  * rows and columns, like a big table, making it easy to manage
- * them together. Can also store related values for each row.
+ * them together.
  */
 class TextList : public InteractiveSurface
 {
 private:
 	std::vector< std::vector<Text*> > _texts;
 	std::vector<int> _columns;
-	std::vector<intptr_t> _values;
 	Font *_big, *_small;
 	unsigned int _scroll, _visibleRows;
 	Uint8 _color;
@@ -58,7 +57,7 @@ public:
 	/// Gets a certain cell in the text list.
 	Text* getCell(int row, int col);
 	/// Adds a new row to the text list.
-	void addRow(intptr_t value, int cols, ...);
+	void addRow(int cols, ...);
 	/// Sets the columns in the text list.
 	void setColumns(int cols, ...);
 	/// Sets the palette of the text list.
@@ -75,10 +74,6 @@ public:
 	void setBackground(Surface *bg);
 	/// Gets the selected row in the list.
 	int getSelectedRow();
-	/// Gets a certain value in the text list.
-	intptr_t getValue(int row);
-	/// Gets the selected value in the text list.
-	intptr_t getSelectedValue();
 	/// Sets the margin of the text list.
 	void setMargin(int margin);
 	/// Sets the arrow color of the text list.

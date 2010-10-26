@@ -69,5 +69,5 @@ void CraftWeapon::setAmmo(int ammo)
  */
 void CraftWeapon::rearm()
 {
-	_ammo += _rules->getRearmRate();
+	setAmmo(_ammo + _rules->getRearmRate());
 }

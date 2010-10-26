@@ -61,7 +61,7 @@ public:
 	/// Gets the text's font.
 	Font *getFont();
 	/// Sets the text's string.
-	void setText(std::string text);
+	void setText(const std::string &text);
 	/// Gets the text's string.
 	std::string getText();
 	/// Sets the text's wordwrap setting.

@@ -42,7 +42,7 @@ class Craft : public MovingTarget
 private:
 	RuleCraft *_rules;
 	Base *_base;
-	int _id, _fuel, _damage, _speed;
+	int _id, _fuel, _damage;
 	std::vector<CraftWeapon*> _weapons;
 	std::map<LangString, Item*> _items;
 	LangString _status;
@@ -98,6 +98,10 @@ public:
 	void setLowFuel(bool low);
 	/// Gets the craft's distance from its base.
 	double getDistanceFromBase();
+	/// Gets the craft's fuel consumption.
+	int getFuelConsumption();
+	/// Gets the craft's minimum fuel limit.
+	int getFuelLimit();
 	/// Returns the craft to its base.
 	void returnToBase();
 	/// Checks if a target is inside the craft's radar.

@@ -36,7 +36,7 @@ public:
 	/// Cleans up the music track.
 	~Music();
 	/// Loads music from the specified file.
-	void load(std::string filename);
+	void load(const std::string &filename);
 	/// Plays the music.
 	void play();
 };

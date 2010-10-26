@@ -67,7 +67,7 @@ public:
 	/// Cleans up the globe.
 	~Globe();
 	/// Loads a set of polygons from a DAT file.
-	static void loadDat(std::string filename, std::vector<Polygon*> *polygons);
+	static void loadDat(const std::string &filename, std::vector<Polygon*> *polygons);
 	/// Converts polar coordinates to cartesian coordinates.
 	void polarToCart(double lon, double lat, Sint16 *x, Sint16 *y);
 	/// Converts cartesian coordinates to polar coordinates.

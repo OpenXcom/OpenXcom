@@ -111,10 +111,10 @@ MonthlyCostsState::MonthlyCostsState(Game *game, Base *base) : State(game), _bas
 
 	std::stringstream ss2;
 	ss2 << _base->getCraftCount(STR_SKYRANGER);
-	_lstCrafts->addRow(0, 4, _game->getResourcePack()->getLanguage()->getString(STR_SKYRANGER).c_str(), Text::formatFunding(_game->getRuleset()->getCraft(STR_SKYRANGER)->getMonthlyFee()).c_str(), ss2.str().c_str(), Text::formatFunding(_base->getCraftCount(STR_SKYRANGER) * _game->getRuleset()->getCraft(STR_SKYRANGER)->getMonthlyFee()).c_str());
+	_lstCrafts->addRow(4, _game->getResourcePack()->getLanguage()->getString(STR_SKYRANGER).c_str(), Text::formatFunding(_game->getRuleset()->getCraft(STR_SKYRANGER)->getMonthlyFee()).c_str(), ss2.str().c_str(), Text::formatFunding(_base->getCraftCount(STR_SKYRANGER) * _game->getRuleset()->getCraft(STR_SKYRANGER)->getMonthlyFee()).c_str());
 	std::stringstream ss3;
 	ss3 << _base->getCraftCount(STR_INTERCEPTOR);
-	_lstCrafts->addRow(0, 4, _game->getResourcePack()->getLanguage()->getString(STR_INTERCEPTOR).c_str(), Text::formatFunding(_game->getRuleset()->getCraft(STR_INTERCEPTOR)->getMonthlyFee()).c_str(), ss3.str().c_str(), Text::formatFunding(_base->getCraftCount(STR_INTERCEPTOR) * _game->getRuleset()->getCraft(STR_INTERCEPTOR)->getMonthlyFee()).c_str());
+	_lstCrafts->addRow(4, _game->getResourcePack()->getLanguage()->getString(STR_INTERCEPTOR).c_str(), Text::formatFunding(_game->getRuleset()->getCraft(STR_INTERCEPTOR)->getMonthlyFee()).c_str(), ss3.str().c_str(), Text::formatFunding(_base->getCraftCount(STR_INTERCEPTOR) * _game->getRuleset()->getCraft(STR_INTERCEPTOR)->getMonthlyFee()).c_str());
 
 	_lstSalaries->setColor(Palette::blockOffset(13)+10);
 	_lstSalaries->setColumns(4, 125, 70, 45, 60);
@@ -122,25 +122,25 @@ MonthlyCostsState::MonthlyCostsState(Game *game, Base *base) : State(game), _bas
 
 	std::stringstream ss4;
 	ss4 << _base->getSoldiers()->size();
-	_lstSalaries->addRow(0, 4, _game->getResourcePack()->getLanguage()->getString(STR_SOLDIERS).c_str(), Text::formatFunding(20000).c_str(), ss4.str().c_str(), Text::formatFunding(_base->getSoldiers()->size() * 20000).c_str());
+	_lstSalaries->addRow(4, _game->getResourcePack()->getLanguage()->getString(STR_SOLDIERS).c_str(), Text::formatFunding(20000).c_str(), ss4.str().c_str(), Text::formatFunding(_base->getSoldiers()->size() * 20000).c_str());
 	std::stringstream ss5;
 	ss5 << _base->getTotalEngineers();
-	_lstSalaries->addRow(0, 4, _game->getResourcePack()->getLanguage()->getString(STR_ENGINEERS).c_str(), Text::formatFunding(25000).c_str(), ss5.str().c_str(), Text::formatFunding(_base->getTotalEngineers() * 25000).c_str());
+	_lstSalaries->addRow(4, _game->getResourcePack()->getLanguage()->getString(STR_ENGINEERS).c_str(), Text::formatFunding(25000).c_str(), ss5.str().c_str(), Text::formatFunding(_base->getTotalEngineers() * 25000).c_str());
 	std::stringstream ss6;
 	ss6 << _base->getTotalScientists();
-	_lstSalaries->addRow(0, 4, _game->getResourcePack()->getLanguage()->getString(STR_SCIENTISTS).c_str(), Text::formatFunding(30000).c_str(), ss6.str().c_str(), Text::formatFunding(_base->getTotalScientists() * 30000).c_str());
+	_lstSalaries->addRow(4, _game->getResourcePack()->getLanguage()->getString(STR_SCIENTISTS).c_str(), Text::formatFunding(30000).c_str(), ss6.str().c_str(), Text::formatFunding(_base->getTotalScientists() * 30000).c_str());
 
 	_lstMaintenance->setColor(Palette::blockOffset(13)+10);
 	_lstMaintenance->setColumns(2, 240, 60);
 	_lstMaintenance->setDot(true);
-	_lstMaintenance->addRow(0, 2, _game->getResourcePack()->getLanguage()->getString(STR_BASE_MAINTENANCE).c_str(), Text::formatFunding(_base->getFacilityMaintenance()).c_str());
+	_lstMaintenance->addRow(2, _game->getResourcePack()->getLanguage()->getString(STR_BASE_MAINTENANCE).c_str(), Text::formatFunding(_base->getFacilityMaintenance()).c_str());
 	_lstMaintenance->getCell(0, 0)->setColor(Palette::blockOffset(15)+1);
 	_lstMaintenance->draw();
 
 	_lstTotal->setColor(Palette::blockOffset(13));
 	_lstTotal->setColumns(2, 45, 55);
 	_lstTotal->setDot(true);
-	_lstTotal->addRow(0, 2, _game->getResourcePack()->getLanguage()->getString(STR_TOTAL).c_str(), Text::formatFunding(_base->getMonthlyMaintenace()).c_str());
+	_lstTotal->addRow(2, _game->getResourcePack()->getLanguage()->getString(STR_TOTAL).c_str(), Text::formatFunding(_base->getMonthlyMaintenace()).c_str());
 }
 
 /**

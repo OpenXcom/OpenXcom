@@ -63,7 +63,7 @@ std::string SoldierNamePool::genName(int *gender)
  * Adds a new male first name to the pool.
  * @param name New name.
  */
-void SoldierNamePool::addMaleName(std::string name)
+void SoldierNamePool::addMaleName(const std::string &name)
 {
 	_maleNames.push_back(name);
 }
@@ -72,7 +72,7 @@ void SoldierNamePool::addMaleName(std::string name)
  * Adds a new female first name to the pool.
  * @param name New name.
  */
-void SoldierNamePool::addFemaleName(std::string name)
+void SoldierNamePool::addFemaleName(const std::string &name)
 {
 	_femaleNames.push_back(name);
 }
@@ -81,7 +81,7 @@ void SoldierNamePool::addFemaleName(std::string name)
  * Adds a new last name to the pool.
  * @param name New name.
  */
-void SoldierNamePool::addLastName(std::string name)
+void SoldierNamePool::addLastName(const std::string &name)
 {
 	_lastNames.push_back(name);
 }
