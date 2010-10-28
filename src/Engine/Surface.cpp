@@ -62,6 +62,7 @@ Surface::Surface(const Surface& other)
 	_crop.x = other._crop.x;
 	_crop.y = other._crop.y;
 	_visible = other._visible;
+	_hidden = other._hidden;
 	_surface = SDL_DisplayFormat(other._surface);
 }
 
