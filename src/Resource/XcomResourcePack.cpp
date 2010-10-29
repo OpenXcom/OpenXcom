@@ -25,10 +25,11 @@
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Language.h"
 #include "../Engine/Music.h"
+#include "../Engine/GMCat.h"
+#include "../Engine/SoundSet.h"
 #include "../Geoscape/Globe.h"
 #include "../Geoscape/Polygon.h"
 #include "../Geoscape/Polyline.h"
-#include "../Engine/SoundSet.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 
@@ -257,10 +258,14 @@ XcomResourcePack::XcomResourcePack(const std::string &folder) : ResourcePack(fol
 		if (lines[i] < -9.999 && lines[i] > -10.001)
 		{
 			if (l != 0)
+			{
 				_polylines.push_back(l);
+			}
 			int points = 0;
 			for (int j = i + 1; lines[j] > -9.999; j++)
+			{
 				points++;
+			}
 			points /= 2;
 			l = new Polyline(points);
 			start = i + 1;
@@ -295,22 +300,48 @@ XcomResourcePack::XcomResourcePack(const std::string &folder) : ResourcePack(fol
 					"GMTACTIC",
 					"GMWIN"};
 	std::string exts[] = {"OGG", "MP3", "MID"};
+	int tracks[] = {3, 6, 0, 18, 2, 19, 20, 21, 10, 8, 9, 12, 17, 11};
+
+	// Check which music version is available
+	bool cat = true;
+	GMCatFile *gmcat = 0;
+
+	std::stringstream musDos;
+	musDos << folder << "SOUND/GM.CAT";
+	struct stat musInfo;
+	if (stat(insensitive(musDos.str()).c_str(), &musInfo) == 0)
+	{
+		cat = true;
+		gmcat = new GMCatFile(insensitive(musDos.str()).c_str());
+	}
+	else
+	{
+		cat = false;
+	}
 
 	for (int i = 0; i < 14; i++)
 	{
-		_musics[mus[i]] = new Music();
-		for (int j = 0; j < 3; j++)
+		if (cat)
 		{
-			std::stringstream s;
-			s << folder << "SOUND/" << mus[i] << "." << exts[j];
-			struct stat info;
-			if (stat(insensitive(s.str()).c_str(), &info) == 0) 
+			_musics[mus[i]] = gmcat->loadMIDI(tracks[i]);
+		}
+		else
+		{
+			_musics[mus[i]] = new Music();
+			for (int j = 0; j < 3; j++)
 			{
-				_musics[mus[i]]->load(insensitive(s.str()));
-				break;
+				std::stringstream s;
+				s << folder << "SOUND/" << mus[i] << "." << exts[j];
+				struct stat info;
+				if (stat(insensitive(s.str()).c_str(), &info) == 0) 
+				{
+					_musics[mus[i]]->load(insensitive(s.str()));
+					break;
+				}
 			}
 		}
 	}
+	delete gmcat;
 
 	// Load sounds
 	std::string catsId[] = {"GEO.CAT",
@@ -323,20 +354,20 @@ XcomResourcePack::XcomResourcePack(const std::string &folder) : ResourcePack(fol
 						"SAMPLE2.CAT",
 						"SAMPLE3.CAT"};
 
-	// Check which version is available
+	// Check which sound version is available
 	std::string *cats = 0;
 	bool wav = true;
 
 	std::stringstream win, dos;
 	win << folder << "SOUND/" << catsWin[0];
 	dos << folder << "SOUND/" << catsDos[0];
-	struct stat info;
-	if (stat(insensitive(win.str()).c_str(), &info) == 0)
+	struct stat sndInfo;
+	if (stat(insensitive(win.str()).c_str(), &sndInfo) == 0)
 	{
 		cats = catsWin;
 		wav = true;
 	}
-	else if (stat(insensitive(dos.str()).c_str(), &info) == 0)
+	else if (stat(insensitive(dos.str()).c_str(), &sndInfo) == 0)
 	{
 		cats = catsDos;
 		wav = false;

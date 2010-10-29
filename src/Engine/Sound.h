@@ -37,8 +37,8 @@ public:
 	~Sound();
 	/// Loads sound from the specified file.
 	void load(const std::string &filename);
-	/// Loads sound from the specified memory.
-	void load(void *sound, int size);
+	/// Loads sound from a chunk of memory.
+	void load(const void *data, unsigned int size);
 	/// Plays the sound.
 	void play();
 };

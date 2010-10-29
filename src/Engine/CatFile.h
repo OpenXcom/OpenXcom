@@ -16,31 +16,42 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_MUSIC_H
-#define OPENXCOM_MUSIC_H
 
+#ifndef OPENXCOM_CATFILE_H
+#define OPENXCOM_CATFILE_H
+
+#include <fstream>
 #include <string>
-#include "SDL_mixer.h"
 
 /**
- * Container for music tracks.
- * Handles loading and playing various formats through SDL_mixer.
+ * Subclass of std::ifstream to handle CAT files
  */
-class Music
+class CatFile : protected std::ifstream
 {
 private:
-	Mix_Music *_music;
+	unsigned int _amount, *_offset, *_size;
 public:
-	/// Creates a blank music track.
-	Music();
-	/// Cleans up the music track.
-	~Music();
-	/// Loads music from the specified file.
-	void load(const std::string &filename);
-	/// Loads music from a chunk of memory.
-	void load(const void *data, unsigned int size);
-	/// Plays the music.
-	void play();
+	/// Creates a CAT file stream
+	CatFile(const char *path);
+	/// Cleans up
+	~CatFile();
+	/// Inherit operator
+	bool operator !() const
+	{
+		return std::ifstream::operator!();
+	}
+	/// Get amount of objects
+	int getAmount() const
+	{
+		return _amount;
+	}
+	/// Get object size
+	unsigned int getObjectSize(unsigned int i) const
+	{
+		return (i < _amount) ? _size[i] : 0;
+	}
+	/// Load an object into memory
+	char *load(unsigned int i);
 };
 
 #endif

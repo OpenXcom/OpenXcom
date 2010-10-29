@@ -47,6 +47,22 @@ void Music::load(const std::string &filename)
 }
 
 /**
+ * Loads a music file from a specified memory chunk.
+ * @param data Pointer to the music file in memory
+ * @param size Size of the music file in bytes.
+ */
+void Music::load(const void *data, unsigned int size)
+{
+	SDL_RWops *rwops = SDL_RWFromConstMem(data, size);
+	_music = Mix_LoadMUS_RW(rwops);
+	SDL_FreeRW(rwops);
+	if (_music == 0)
+	{
+		throw Mix_GetError();
+	}
+}
+
+/**
  * Plays the contained music track.
  */
 void Music::play()

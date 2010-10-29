@@ -17,7 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "SoundSet.h"
-#include <fstream>
+#include "CatFile.h"
 #include "Sound.h"
 
 /**
@@ -51,47 +51,18 @@ SoundSet::~SoundSet()
 void SoundSet::loadCat(const std::string &filename, bool wav)
 {
 	// Load CAT file
-	std::ifstream sndFile (filename.c_str(), std::ios::in | std::ios::binary);
+	CatFile sndFile (filename.c_str());
 	if (!sndFile)
 	{
 		throw "Failed to load CAT";
 	}
 
-	// Get amount of files
-	int first;
-	sndFile.read((char*)&first, sizeof(first));
-
-	int amount = first / sizeof(first) / 2;
-
-	// Get sound offsets
-	sndFile.seekg(0, std::ios::beg);
-
-	int *offset = new int[amount];
-	int *size = new int[amount];
-
-	for (int i = 0; i < amount; i++)
-	{
-		sndFile.read((char*)&offset[i], sizeof(*offset));
-		sndFile.read((char*)&size[i], sizeof(*size));
-	}
-	
 	// Load each sound file
-	for (int i = 0; i < amount; i++)
+	for (int i = 0; i < sndFile.getAmount(); i++)
 	{
-		sndFile.seekg(offset[i], std::ios::beg);
-
-		char namesize, *name;
-
-		// Read filename
-		sndFile.read(&namesize, 1);
-		name = new char[namesize];
-		sndFile.read(name, namesize);
-
-		delete[] name;
-
 		// Read WAV chunk
-		char *sound = new char[size[i]];
-		sndFile.read(sound, size[i]);
+		char *sound = sndFile.load(i);
+		unsigned int size = sndFile.getObjectSize(i);
 
 		// If there's no WAV header (44 bytes), add it
 		// Assuming sounds are 8-bit 8000Hz (DOS version)
@@ -101,23 +72,23 @@ void SoundSet::loadCat(const std::string &filename, bool wav)
 			char header[] = {'R', 'I', 'F', 'F', 0x00, 0x00, 0x00, 0x00, 'W', 'A', 'V', 'E', 'f', 'm', 't', ' ',
 							 0x10, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x40, 0x1f, 0x00, 0x00, 0x40, 0x1f, 0x00, 0x00, 0x01, 0x00, 0x08, 0x00,
 							 'd', 'a', 't', 'a', 0x00, 0x00, 0x00, 0x00};
-			int headersize = size[i] + 36;
-			int soundsize = size[i];
+			int headersize = size + 36;
+			int soundsize = size;
 			memcpy(header + 4, &headersize, sizeof(headersize));
 			memcpy(header + 40, &soundsize, sizeof(soundsize));
 
-			newsound = new char[44 + size[i]];
+			newsound = new char[44 + size];
 			memcpy(newsound, header, 44);
-			memcpy(newsound + 44, sound, size[i]);
+			memcpy(newsound + 44, sound, size);
 		}
 
 		Sound *s = new Sound();
 		try
 		{
 			if (wav)
-				s->load(sound, size[i]);
+				s->load(sound, size);
 			else
-				s->load(newsound, 44 + size[i]);
+				s->load(newsound, 44 + size);
 		}
 		catch (char* c)
 		{
@@ -130,11 +101,6 @@ void SoundSet::loadCat(const std::string &filename, bool wav)
 		if (!wav)
 			delete[] newsound;
 	}
-
-	delete[] offset;
-	delete[] size;
-
-	sndFile.close();
 }
 
 /**

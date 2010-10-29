@@ -61,6 +61,8 @@ public:
 	virtual void blit(Surface *surface);
 	/// Copies a portion of another surface into this one.
 	void copy(Surface *surface);
+	/// Copies a portion of another surface according to a mask.
+	void maskedCopy(Surface *surface, Uint8 mask);
 	/// Sets the surface's palette.
 	virtual void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
 	/// Gets the surface's palette.

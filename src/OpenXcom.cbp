@@ -88,10 +88,14 @@
 		<Unit filename="Basescape\StoresState.h" />
 		<Unit filename="Engine\Action.cpp" />
 		<Unit filename="Engine\Action.h" />
+		<Unit filename="Engine\CatFile.cpp" />
+		<Unit filename="Engine\CatFile.h" />
 		<Unit filename="Engine\Font.cpp" />
 		<Unit filename="Engine\Font.h" />
 		<Unit filename="Engine\Game.cpp" />
 		<Unit filename="Engine\Game.h" />
+		<Unit filename="Engine\GMCat.cpp" />
+		<Unit filename="Engine\GMCat.h" />
 		<Unit filename="Engine\InteractiveSurface.cpp" />
 		<Unit filename="Engine\InteractiveSurface.h" />
 		<Unit filename="Engine\Language.cpp" />

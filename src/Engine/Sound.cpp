@@ -50,12 +50,12 @@ void Sound::load(const std::string &filename)
 
 /**
  * Loads a sound file from a specified memory chunk.
- * @param sound Pointer to the sound file in memory
+ * @param data Pointer to the sound file in memory
  * @param size Size of the sound file in bytes.
  */
-void Sound::load(void *sound, int size)
+void Sound::load(const void *data, unsigned int size)
 {
-	SDL_RWops *rw = SDL_RWFromMem(sound, size);
+	SDL_RWops *rw = SDL_RWFromConstMem(data, size);
 	_sound = Mix_LoadWAV_RW(rw, 1);
 	if (_sound == 0)
 	{
@@ -68,6 +68,8 @@ void Sound::load(void *sound, int size)
  */
 void Sound::play()
 {
-	if (_sound != 0 && Mix_PlayChannel(-1, _sound, 0) == -1) 
+	if (_sound != 0 && Mix_PlayChannel(-1, _sound, 0) == -1)
+	{
 		std::cout << Mix_GetError() << std::endl;
+	}
 }

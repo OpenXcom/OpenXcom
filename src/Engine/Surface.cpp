@@ -204,14 +204,22 @@ void Surface::offset(int off, int min, int max)
 		Uint8 pixel = getPixel(x, y);
 		int p = pixel + off;
 		if (min != -1 && p < min)
+		{
 			p = min;
+		}
 		else if (max != -1 && p > max)
+		{
 			p = max;
+		}
 
 		if (pixel > 0)
+		{
 			setPixelIterative(&x, &y, p);
+		}
 		else
+		{
 			setPixelIterative(&x, &y, 0);
+		}
 	}
 
 	// Unlock the surface
@@ -232,9 +240,13 @@ void Surface::invert(Uint8 mid)
 	{
 		Uint8 pixel = getPixel(x, y);
 		if (pixel > 0)
+		{
 			setPixelIterative(&x, &y, pixel + 2 * (mid - pixel));
+		}
 		else
+		{
 			setPixelIterative(&x, &y, 0);
+		}
 	}
 
 	// Unlock the surface
@@ -297,6 +309,34 @@ void Surface::copy(Surface *surface)
 	from.w = _width;
 	from.h = _height;
 	SDL_BlitSurface(surface->getSurface(), &from, _surface, 0);
+}
+
+/**
+ * Copies the exact contents of another surface onto the areas that
+ * match a certain color, like a mask. Surface sizes must match.
+ * @param surface Pointer to surface to copy from.
+ * @param mask Color mask to replace with the other surface.
+ */
+void Surface::maskedCopy(Surface *surface, Uint8 mask)
+{
+	if (surface->getWidth() != _surface->w || surface->getHeight() != _surface->h)
+	{
+		return;
+	}
+
+	// Lock the surface
+	lock();
+
+	for (int x = 0, y = 0; x < _surface->w && y < _surface->h;)
+	{
+		if (getPixel(x, y) == mask)
+		{
+			setPixelIterative(&x, &y, surface->getPixel(x, y));
+		}
+	}
+
+	// Unlock the surface
+	unlock();
 }
 
 /**
@@ -397,7 +437,9 @@ SDL_Color* Surface::getPalette()
 void Surface::setPixel(int x, int y, Uint8 pixel)
 {
 	if (x < 0 || x > _width || y < 0 || y > _height)
+	{
 		return;
+	}
     ((Uint8 *)_surface->pixels)[y * _surface->pitch + x * _surface->format->BytesPerPixel] = pixel;
 }
 

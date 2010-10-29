@@ -302,6 +302,12 @@
     <ClCompile Include="Engine\Action.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\GMCat.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\CatFile.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -606,6 +612,12 @@
       <Filter>Basescape</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Action.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\GMCat.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\CatFile.h">
       <Filter>Engine</Filter>
     </ClInclude>
   </ItemGroup>

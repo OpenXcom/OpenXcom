@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright (C) 2010 J. Pello
  *
  * This file is part of OpenXcom.
  *
@@ -16,31 +16,23 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_MUSIC_H
-#define OPENXCOM_MUSIC_H
 
-#include <string>
-#include "SDL_mixer.h"
+#ifndef OPENXCOM_GMCAT_H
+#define OPENXCOM_GMCAT_H
+
+#include "CatFile.h"
+#include "Music.h"
 
 /**
- * Container for music tracks.
- * Handles loading and playing various formats through SDL_mixer.
+ * Subclass of CatFile to handle gm.cat files
  */
-class Music
+class GMCatFile : public CatFile
 {
-private:
-	Mix_Music *_music;
 public:
-	/// Creates a blank music track.
-	Music();
-	/// Cleans up the music track.
-	~Music();
-	/// Loads music from the specified file.
-	void load(const std::string &filename);
-	/// Loads music from a chunk of memory.
-	void load(const void *data, unsigned int size);
-	/// Plays the music.
-	void play();
+	/// Inherit constructor
+	GMCatFile(const char *path) : CatFile(path) { }
+	/// Load a stream as a MIDI file
+	Music *loadMIDI(unsigned int i);
 };
 
 #endif

@@ -268,6 +268,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Engine\CatFile.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Engine\CatFile.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Engine\Font.cpp"
 				>
 			</File>
@@ -281,6 +289,14 @@
 			</File>
 			<File
 				RelativePath=".\Engine\Game.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Engine\GMCat.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Engine\GMCat.h"
 				>
 			</File>
 			<File
