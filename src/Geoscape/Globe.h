@@ -20,6 +20,7 @@
 #define OPENXCOM_GLOBE_H
 
 #include <vector>
+#include <list>
 #include <string>
 #include "../Engine/InteractiveSurface.h"
 
@@ -51,7 +52,7 @@ private:
 	Surface *_markers, *_countries;
 	bool _blink, _detail;
 	Timer *_blinkTimer, *_rotTimer;
-	std::vector<Polygon*> _ocean, _cacheOcean, _cacheLand;
+	std::list<Polygon*> _ocean, _cacheOcean, _cacheLand;
 	Surface *_mkXcomBase, *_mkAlienBase, *_mkCraft, *_mkWaypoint, *_mkCity;
 	Surface *_mkFlyingUfo, *_mkLandedUfo, *_mkCrashedUfo, *_mkAlienSite;
 
@@ -61,13 +62,15 @@ private:
 	bool insidePolygon(double lon, double lat, Polygon *poly) const;
 	/// Checks if a target is near a point.
 	bool targetNear(Target* target, int x, int y) const;
+	/// Caches a set of polygons.
+	void cache(std::list<Polygon*> *polygons, std::list<Polygon*> *cache);
 public:
 	/// Creates a new globe at the specified position and size.
 	Globe(int cenX, int cenY, int width, int height, int x = 0, int y = 0);
 	/// Cleans up the globe.
 	~Globe();
 	/// Loads a set of polygons from a DAT file.
-	static void loadDat(const std::string &filename, std::vector<Polygon*> *polygons);
+	static void loadDat(const std::string &filename, std::list<Polygon*> *polygons);
 	/// Converts polar coordinates to cartesian coordinates.
 	void polarToCart(double lon, double lat, Sint16 *x, Sint16 *y) const;
 	/// Converts cartesian coordinates to polar coordinates.

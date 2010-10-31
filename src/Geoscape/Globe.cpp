@@ -214,15 +214,15 @@ Globe::~Globe()
 	delete _mkCrashedUfo;
 	delete _mkAlienSite;
 
-	for (std::vector<Polygon*>::iterator i = _ocean.begin(); i != _ocean.end(); i++)
+	for (std::list<Polygon*>::iterator i = _ocean.begin(); i != _ocean.end(); i++)
 	{
 		delete *i;
 	}
-	for (std::vector<Polygon*>::iterator i = _cacheOcean.begin(); i != _cacheOcean.end(); i++)
+	for (std::list<Polygon*>::iterator i = _cacheOcean.begin(); i != _cacheOcean.end(); i++)
 	{
 		delete *i;
 	}
-	for (std::vector<Polygon*>::iterator i = _cacheLand.begin(); i != _cacheLand.end(); i++)
+	for (std::list<Polygon*>::iterator i = _cacheLand.begin(); i != _cacheLand.end(); i++)
 	{
 		delete *i;
 	}
@@ -327,7 +327,7 @@ bool Globe::insidePolygon(double lon, double lat, Polygon *poly) const
  * @param polygons Pointer to the polygon set.
  * @sa http://www.ufopaedia.org/index.php?title=WORLD.DAT
  */
-void Globe::loadDat(const std::string &filename, std::vector<Polygon*> *polygons)
+void Globe::loadDat(const std::string &filename, std::list<Polygon*> *polygons)
 {
 	// Load file
 	std::ifstream mapFile (filename.c_str(), std::ios::in | std::ios::binary);
@@ -513,7 +513,7 @@ void Globe::center(double lon, double lat)
 bool Globe::insideLand(double lon, double lat) const
 {
 	bool inside = false;
-	for (std::vector<Polygon*>::iterator i = _res->getPolygons()->begin(); i < _res->getPolygons()->end() && !inside; i++)
+	for (std::list<Polygon*>::iterator i = _res->getPolygons()->begin(); i != _res->getPolygons()->end() && !inside; i++)
 	{
 		inside = insidePolygon(lon, lat, *i);
 	}
@@ -610,14 +610,27 @@ std::vector<Target*> Globe::getTargets(int x, int y, bool craft) const
  */
 void Globe::cachePolygons()
 {
-	// Cache ocean
-	for (std::vector<Polygon*>::iterator i = _cacheOcean.begin(); i != _cacheOcean.end(); i++)
+	cache(&_ocean, &_cacheOcean);
+	cache(_res->getPolygons(), &_cacheLand);
+	draw();
+}
+
+/**
+ * Caches a set of polygons.
+ * @param polygons Pointer to list of polygons.
+ * @param cache Pointer to cache.
+ */
+void Globe::cache(std::list<Polygon*> *polygons, std::list<Polygon*> *cache)
+{
+	// Clear existing cache
+	for (std::list<Polygon*>::iterator i = cache->begin(); i != cache->end(); i++)
 	{
 		delete *i;
 	}	
-	_cacheOcean.clear();
+	cache->clear();
 	
-	for (std::vector<Polygon*>::iterator i = _ocean.begin(); i != _ocean.end(); i++)
+	// Pre-calculate values to cache
+	for (std::list<Polygon*>::iterator i = polygons->begin(); i != polygons->end(); i++)
 	{
 		// Is quad on the back face?
 		bool backFace = true;
@@ -639,42 +652,8 @@ void Globe::cachePolygons()
 			p->setY(j, y);
 		}
 
-		_cacheOcean.push_back(p);
+		cache->push_back(p);
 	}
-
-	// Cache land
-	for (std::vector<Polygon*>::iterator i = _cacheLand.begin(); i != _cacheLand.end(); i++)
-	{
-		delete *i;
-	}	
-	_cacheLand.clear();
-
-	for (std::vector<Polygon*>::iterator i = _res->getPolygons()->begin(); i != _res->getPolygons()->end(); i++)
-	{
-		// Don't draw if polygon is facing back
-		bool backFace = true;
-		for (int j = 0; j < (*i)->getPoints(); j++)
-		{
-			backFace = backFace && pointBack((*i)->getLongitude(j), (*i)->getLatitude(j));
-		}
-		if (backFace)
-			continue;
-
-		Polygon* p = new Polygon(**i);
-
-		// Convert coordinates
-		for (int j = 0; j < p->getPoints(); j++)
-		{
-			Sint16 x, y;
-			polarToCart(p->getLongitude(j), p->getLatitude(j), &x, &y);
-			p->setX(j, x);
-			p->setY(j, y);
-		}
-
-		_cacheLand.push_back(p);
-	}
-
-	draw();
 }
 
 /**
@@ -772,7 +751,7 @@ void Globe::drawOcean()
 
 	filledCircleColor(getSurface(), _cenX, _cenY, (Sint16)floor(_radius[_zoom]), Palette::getRGBA(this->getPalette(), Palette::blockOffset(12)+28));
   
-	for (std::vector<Polygon*>::iterator i = _cacheOcean.begin(); i != _cacheOcean.end(); i++)
+	for (std::list<Polygon*>::iterator i = _cacheOcean.begin(); i != _cacheOcean.end(); i++)
 	{
 		double tmpLon = (*i)->getLongitude(0);
 
@@ -806,7 +785,7 @@ void Globe::drawLand()
 	double minLon = 0.0, maxLon = 0.0, curTime = _save->getTime()->getDaylight();
 	Sint16 x[4], y[4];
 
-	for (std::vector<Polygon*>::iterator i = _cacheLand.begin(); i != _cacheLand.end(); i++)
+	for (std::list<Polygon*>::iterator i = _cacheLand.begin(); i != _cacheLand.end(); i++)
 	{
 		// Convert coordinates
 		for (int j = 0; j < (*i)->getPoints(); j++)
@@ -847,7 +826,7 @@ void Globe::drawDetail()
 		// Lock the surface
 		_countries->lock();
 
-		for (std::vector<Polyline*>::iterator i = _res->getPolylines()->begin(); i != _res->getPolylines()->end(); i++)
+		for (std::list<Polyline*>::iterator i = _res->getPolylines()->begin(); i != _res->getPolylines()->end(); i++)
 		{
 			Sint16 x[2], y[2];
 			for (int j = 0; j < (*i)->getPoints() - 1; j++)
@@ -871,6 +850,11 @@ void Globe::drawDetail()
 	// Draw the country names
 	if (_zoom >= 2)
 	{
+		Text *label = new Text(_res->getFont("BIGLETS.DAT"), _res->getFont("SMALLSET.DAT"), 80, 9, 0, 0);
+		label->setPalette(getPalette());
+		label->setAlign(ALIGN_CENTER);
+		label->setColor(Palette::blockOffset(15)-1);
+
 		Sint16 x, y;
 		for (std::map<LangString, Country*>::iterator i = _save->getCountries()->begin(); i != _save->getCountries()->end(); i++)
 		{
@@ -881,18 +865,23 @@ void Globe::drawDetail()
 			// Convert coordinates
 			polarToCart(i->second->getLabelLongitude(), i->second->getLabelLatitude(), &x, &y);
 
-			Text *label = new Text(_res->getFont("BIGLETS.DAT"), _res->getFont("SMALLSET.DAT"), 80, 9, x - 40, y);
-			label->setPalette(getPalette());
-			label->setAlign(ALIGN_CENTER);
+			label->setX(x - 40);
+			label->setY(y);
 			label->setText(_res->getLanguage()->getString(i->first));
-			label->setColor(Palette::blockOffset(15)-1);
 			label->blit(_countries);
 		}
+
+		delete label;
 	}
 
 	// Draw the city markers
 	if (_zoom >= 3)
 	{
+		Text *label = new Text(_res->getFont("BIGLETS.DAT"), _res->getFont("SMALLSET.DAT"), 80, 9, 0, 0);
+		label->setPalette(getPalette());
+		label->setAlign(ALIGN_CENTER);
+		label->setColor(Palette::blockOffset(8)+10);
+
 		Sint16 x, y;
 		for (std::map<LangString, Region*>::iterator i = _save->getRegions()->begin(); i != _save->getRegions()->end(); i++)
 		{
@@ -910,14 +899,14 @@ void Globe::drawDetail()
 				_mkCity->setPalette(getPalette());
 				_mkCity->blit(_countries);
 
-				Text *label = new Text(_res->getFont("BIGLETS.DAT"), _res->getFont("SMALLSET.DAT"), 80, 9, x - 40, y + 2);
-				label->setPalette(getPalette());
-				label->setAlign(ALIGN_CENTER);
+				label->setX(x - 40);
+				label->setY(y + 2);
 				label->setText(_res->getLanguage()->getString((*j)->getName()));
-				label->setColor(Palette::blockOffset(8)+10);
 				label->blit(_countries);
 			}
 		}
+
+		delete label;
 	}
 }
 

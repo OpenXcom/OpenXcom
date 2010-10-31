@@ -58,11 +58,11 @@ ResourcePack::~ResourcePack()
 	{
 		delete i->second;
 	}
-	for (std::vector<Polygon*>::iterator i = _polygons.begin(); i != _polygons.end(); i++)
+	for (std::list<Polygon*>::iterator i = _polygons.begin(); i != _polygons.end(); i++)
 	{
 		delete *i;
 	}
-	for (std::vector<Polyline*>::iterator i = _polylines.begin(); i != _polylines.end(); i++)
+	for (std::list<Polyline*>::iterator i = _polylines.begin(); i != _polylines.end(); i++)
 	{
 		delete *i;
 	}
@@ -195,7 +195,7 @@ SurfaceSet *const ResourcePack::getSurfaceSet(const std::string &name)
  * Returns the list of polygons in the resource set.
  * @return Pointer to the list of polygons.
  */
-std::vector<Polygon*> *const ResourcePack::getPolygons()
+std::list<Polygon*> *const ResourcePack::getPolygons()
 {
 	return &_polygons;
 }
@@ -204,7 +204,7 @@ std::vector<Polygon*> *const ResourcePack::getPolygons()
  * Returns the list of polylines in the resource set.
  * @return Pointer to the list of polylines.
  */
-std::vector<Polyline*> *const ResourcePack::getPolylines()
+std::list<Polyline*> *const ResourcePack::getPolylines()
 {
 	return &_polylines;
 }

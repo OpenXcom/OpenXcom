@@ -21,7 +21,7 @@
 
 #include <map>
 #include <string>
-#include <vector>
+#include <list>
 #include "SDL.h"
 
 class Language;
@@ -55,8 +55,8 @@ protected:
 	std::map<std::string, Surface*> _surfaces;
 	std::map<std::string, SurfaceSet*> _sets;
 	std::map<std::string, SoundSet*> _sounds;
-	std::vector<Polygon*> _polygons;
-	std::vector<Polyline*> _polylines;
+	std::list<Polygon*> _polygons;
+	std::list<Polyline*> _polylines;
 	std::map<std::string, Music*> _musics;
 
 	/// Converts a filename to its existing case-insensitive name.
@@ -79,9 +79,9 @@ public:
 	/// Gets a particular surface set.
 	SurfaceSet *const getSurfaceSet(const std::string &name);
 	/// Gets the list of world polygons.
-	std::vector<Polygon*> *const getPolygons();
+	std::list<Polygon*> *const getPolygons();
 	/// Gets the list of world polylines.
-	std::vector<Polyline*> *const getPolylines();
+	std::list<Polyline*> *const getPolylines();
 	/// Gets a particular music.
 	Music *const getMusic(const std::string &name);
 	/// Gets a particular sound set.

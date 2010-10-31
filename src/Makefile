@@ -20,7 +20,7 @@ BIN = openxcom
 endif
 
 # Compiler settings
-CXXFLAGS = -Wall -O2 `$(SDL-CONFIG) --cflags` $(addprefix -d,$(TARGET))
+CXXFLAGS = -Wall -O2 `$(SDL-CONFIG) --cflags` $(addprefix -D,$(TARGET))
 LDFLAGS = `$(SDL-CONFIG) --libs` -lSDL_gfx -lSDL_mixer
 
 # Rules
