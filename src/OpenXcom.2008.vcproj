@@ -448,14 +448,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Basescape\CraftPatrolState.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Basescape\CraftPatrolState.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Basescape\CraftSoldiersState.cpp"
 				>
 			</File>
@@ -485,14 +477,6 @@
 			</File>
 			<File
 				RelativePath=".\Basescape\DismantleFacilityState.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Basescape\LowFuelState.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Basescape\LowFuelState.h"
 				>
 			</File>
 			<File
@@ -583,14 +567,6 @@
 				RelativePath=".\Basescape\StoresState.h"
 				>
 			</File>
-			<File
-				RelativePath=".\Basescape\TargetInfoState.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Basescape\TargetInfoState.h"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="Battlescape"
@@ -637,6 +613,14 @@
 			</File>
 			<File
 				RelativePath=".\Geoscape\ConfirmNewBaseState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\CraftPatrolState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\CraftPatrolState.h"
 				>
 			</File>
 			<File
@@ -710,6 +694,14 @@
 			<File
 				RelativePath=".\Geoscape\InterceptState.h"
 				>
+			</File>			
+			<File
+				RelativePath=".\Geoscape\LowFuelState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\LowFuelState.h"
+				>
 			</File>
 			<File
 				RelativePath=".\Geoscape\MonthlyReportState.cpp"
@@ -757,6 +749,14 @@
 			</File>
 			<File
 				RelativePath=".\Geoscape\SelectDestinationState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\TargetInfoState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\TargetInfoState.h"
 				>
 			</File>
 			<File
