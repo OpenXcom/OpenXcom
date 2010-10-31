@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -24,6 +24,10 @@
 #include "../Ruleset/RuleCraft.h"
 #include "Item.h"
 #include "Soldier.h"
+
+#define SOLDIER_MAINT 20000
+#define ENGINEER_MAINT 25000
+#define SCIENTIST_MAINT 30000
 
 /**
  * Initializes an empty base.
@@ -60,7 +64,7 @@ Base::~Base()
  * @param lang Language to get strings from.
  * @return Name.
  */
-std::string Base::getName(Language *lang)
+std::string Base::getName(Language *lang) const
 {
 	return _name;
 }
@@ -133,10 +137,10 @@ void Base::setEngineers(int engineers)
  * in the base without any assignments.
  * @return Number of soldiers.
  */
-int Base::getAvailableSoldiers()
+int Base::getAvailableSoldiers() const
 {
 	int total = 0;
-	for (std::vector<Soldier*>::iterator i = _soldiers.begin(); i != _soldiers.end(); i++)
+	for (std::vector<Soldier*>::const_iterator i = _soldiers.begin(); i != _soldiers.end(); i++)
 	{
 		if ((*i)->getCraft() == 0)
 			total++;
@@ -149,7 +153,7 @@ int Base::getAvailableSoldiers()
  * in the base.
  * @return Number of soldiers.
  */
-int Base::getTotalSoldiers()
+int Base::getTotalSoldiers() const
 {
 	return _soldiers.size();
 }
@@ -159,7 +163,7 @@ int Base::getTotalSoldiers()
  * in the base without any assignments.
  * @return Number of scientists.
  */
-int Base::getAvailableScientists()
+int Base::getAvailableScientists() const
 {
 	return 0;
 }
@@ -169,7 +173,7 @@ int Base::getAvailableScientists()
  * in the base.
  * @return Number of scientists.
  */
-int Base::getTotalScientists()
+int Base::getTotalScientists() const
 {
 	return _scientists;
 }
@@ -179,7 +183,7 @@ int Base::getTotalScientists()
  * in the base without any assignments.
  * @return Number of engineers.
  */
-int Base::getAvailableEngineers()
+int Base::getAvailableEngineers() const
 {
 	return 0;
 }
@@ -189,7 +193,7 @@ int Base::getAvailableEngineers()
  * in the base.
  * @return Number of engineers.
  */
-int Base::getTotalEngineers()
+int Base::getTotalEngineers() const
 {
 	return _engineers;
 }
@@ -199,7 +203,7 @@ int Base::getTotalEngineers()
  * by personnel in the base.
  * @return Living space.
  */
-int Base::getUsedQuarters()
+int Base::getUsedQuarters() const
 {
 	return getTotalSoldiers() + getTotalScientists() + getTotalEngineers();
 }
@@ -209,13 +213,15 @@ int Base::getUsedQuarters()
  * available in the base.
  * @return Living space.
  */
-int Base::getAvailableQuarters()
+int Base::getAvailableQuarters() const
 {
 	int total = 0;
-	for (std::vector<BaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); i++)
+	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); i++)
 	{
 		if ((*i)->getBuildTime() == 0)
+		{
 			total += (*i)->getRules()->getPersonnel();
+		}
 	}
 	return total;
 }
@@ -225,16 +231,16 @@ int Base::getAvailableQuarters()
  * by equipment in the base.
  * @return Storage space.
  */
-int Base::getUsedStores()
+int Base::getUsedStores() const
 {
 	double total = 0;
-	for (std::map<LangString, Item*>::iterator i = _items.begin(); i != _items.end(); i++)
+	for (std::map<LangString, Item*>::const_iterator i = _items.begin(); i != _items.end(); i++)
 	{
 		total += i->second->getTotalSize();
 	}
-	for (std::vector<Craft*>::iterator i = _crafts.begin(); i != _crafts.end(); i++)
+	for (std::vector<Craft*>::const_iterator i = _crafts.begin(); i != _crafts.end(); i++)
 	{
-		for (std::map<LangString, Item*>::iterator j = (*i)->getItems()->begin(); j != (*i)->getItems()->end(); j++)
+		for (std::map<LangString, Item*>::const_iterator j = (*i)->getItems()->begin(); j != (*i)->getItems()->end(); j++)
 		{
 			total += j->second->getTotalSize();
 		}
@@ -247,13 +253,15 @@ int Base::getUsedStores()
  * available in the base.
  * @return Storage space.
  */
-int Base::getAvailableStores()
+int Base::getAvailableStores() const
 {
 	int total = 0;
-	for (std::vector<BaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); i++)
+	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); i++)
 	{
 		if ((*i)->getBuildTime() == 0)
+		{
 			total += (*i)->getRules()->getStorage();
+		}
 	}
 	return total;
 }
@@ -263,7 +271,7 @@ int Base::getAvailableStores()
  * by research projects in the base.
  * @return Laboratory space.
  */
-int Base::getUsedLaboratories()
+int Base::getUsedLaboratories() const
 {
 	return 0;
 }
@@ -273,13 +281,15 @@ int Base::getUsedLaboratories()
  * available in the base.
  * @return Laboratory space.
  */
-int Base::getAvailableLaboratories()
+int Base::getAvailableLaboratories() const
 {
 	int total = 0;
-	for (std::vector<BaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); i++)
+	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); i++)
 	{
 		if ((*i)->getBuildTime() == 0)
+		{
 			total += (*i)->getRules()->getLaboratories();
+		}
 	}
 	return total;
 }
@@ -289,7 +299,7 @@ int Base::getAvailableLaboratories()
  * by manufacturing projects in the base.
  * @return Storage space.
  */
-int Base::getUsedWorkshops()
+int Base::getUsedWorkshops() const
 {
 	return 0;
 }
@@ -299,13 +309,15 @@ int Base::getUsedWorkshops()
  * available in the base.
  * @return Workshop space.
  */
-int Base::getAvailableWorkshops()
+int Base::getAvailableWorkshops() const
 {
 	int total = 0;
-	for (std::vector<BaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); i++)
+	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); i++)
 	{
 		if ((*i)->getBuildTime() == 0)
+		{
 			total += (*i)->getRules()->getWorkshops();
+		}
 	}
 	return total;
 }
@@ -315,7 +327,7 @@ int Base::getAvailableWorkshops()
  * by crafts in the base.
  * @return Storage space.
  */
-int Base::getUsedHangars()
+int Base::getUsedHangars() const
 {
 	return _crafts.size();
 }
@@ -325,13 +337,15 @@ int Base::getUsedHangars()
  * available in the base.
  * @return Number of hangars.
  */
-int Base::getAvailableHangars()
+int Base::getAvailableHangars() const
 {
 	int total = 0;
-	for (std::vector<BaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); i++)
+	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); i++)
 	{
 		if ((*i)->getBuildTime() == 0)
+		{
 			total += (*i)->getRules()->getCrafts();
+		}
 	}
 	return total;
 }
@@ -341,13 +355,15 @@ int Base::getAvailableHangars()
  * the facilities in the base.
  * @return Defence value.
  */
-int Base::getDefenceValue()
+int Base::getDefenceValue() const
 {
 	int total = 0;
-	for (std::vector<BaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); i++)
+	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); i++)
 	{
 		if ((*i)->getBuildTime() == 0)
+		{
 			total += (*i)->getRules()->getDefenceValue();
+		}
 	}
 	return total;
 }
@@ -357,14 +373,15 @@ int Base::getDefenceValue()
  * detection facilities in the base.
  * @return Defence value.
  */
-int Base::getShortRangeDetection()
+int Base::getShortRangeDetection() const
 {
 	int total = 0;
-	for (std::vector<BaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); i++)
+	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); i++)
 	{
-		if ((*i)->getBuildTime() == 0)
-			if ((*i)->getRules()->getRadarRange() == 1500)
-				total++;
+		if ((*i)->getBuildTime() == 0 && (*i)->getRules()->getRadarRange() == 1500)
+		{
+			total++;
+		}
 	}
 	return total;
 }
@@ -374,14 +391,15 @@ int Base::getShortRangeDetection()
  * detection facilities in the base.
  * @return Defence value.
  */
-int Base::getLongRangeDetection()
+int Base::getLongRangeDetection() const
 {
 	int total = 0;
-	for (std::vector<BaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); i++)
+	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); i++)
 	{
-		if ((*i)->getBuildTime() == 0)
-			if ((*i)->getRules()->getRadarRange() > 1500)
-				total++;
+		if ((*i)->getBuildTime() == 0 && (*i)->getRules()->getRadarRange() > 1500)
+		{
+			total++;
+		}
 	}
 	return total;
 }
@@ -392,13 +410,15 @@ int Base::getLongRangeDetection()
  * @param craft Craft type.
  * @return Number of craft.
  */
-int Base::getCraftCount(LangString craft)
+int Base::getCraftCount(LangString craft) const
 {
 	int total = 0;
-	for (std::vector<Craft*>::iterator i = _crafts.begin(); i != _crafts.end(); i++)
+	for (std::vector<Craft*>::const_iterator i = _crafts.begin(); i != _crafts.end(); i++)
 	{
 		if ((*i)->getRules()->getType() == craft)
+		{
 			total++;
+		}
 	}
 	return total;
 }
@@ -408,10 +428,10 @@ int Base::getCraftCount(LangString craft)
  * for maintaining the craft in the base.
  * @return Maintenance costs.
  */
-int Base::getCraftMaintenance()
+int Base::getCraftMaintenance() const
 {
 	int total = 0;
-	for (std::vector<Craft*>::iterator i = _crafts.begin(); i != _crafts.end(); i++)
+	for (std::vector<Craft*>::const_iterator i = _crafts.begin(); i != _crafts.end(); i++)
 	{
 		total += (*i)->getRules()->getMonthlyFee();
 	}
@@ -423,12 +443,12 @@ int Base::getCraftMaintenance()
  * for maintaining the personnel in the base.
  * @return Maintenance costs.
  */
-int Base::getPersonnelMaintenance()
+int Base::getPersonnelMaintenance() const
 {
 	int total = 0;
-	total += _soldiers.size() * 20000;
-	total += _engineers * 25000;
-	total += _scientists * 30000;
+	total += _soldiers.size() * SOLDIER_MAINT;
+	total += _engineers * ENGINEER_MAINT;
+	total += _scientists * SCIENTIST_MAINT;
 	return total;
 }
 
@@ -437,13 +457,15 @@ int Base::getPersonnelMaintenance()
  * for maintaining the facilities in the base.
  * @return Maintenance costs.
  */
-int Base::getFacilityMaintenance()
+int Base::getFacilityMaintenance() const
 {
 	int total = 0;
-	for (std::vector<BaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); i++)
+	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); i++)
 	{
 		if ((*i)->getBuildTime() == 0)
+		{
 			total += (*i)->getRules()->getMonthlyCost();
+		}
 	}
 	return total;
 }
@@ -453,7 +475,7 @@ int Base::getFacilityMaintenance()
  * monthly costs in the base.
  * @return Maintenance costs.
  */
-int Base::getMonthlyMaintenace()
+int Base::getMonthlyMaintenace() const
 {
 	return getCraftMaintenance() + getPersonnelMaintenance() + getFacilityMaintenance();
 }

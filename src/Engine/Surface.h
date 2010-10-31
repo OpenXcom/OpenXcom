@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -66,17 +66,17 @@ public:
 	/// Sets the surface's palette.
 	virtual void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
 	/// Gets the surface's palette.
-	SDL_Color* getPalette();
+	SDL_Color *const getPalette() const;
 	/// Sets the X position of the surface.
 	void setX(int x);
 	/// Gets the X position of the surface.
-	int getX();
+	int getX() const;
 	/// Sets the Y position of the surface.
 	void setY(int y);
 	/// Gets the Y position of the surface.
-	int getY();
-	/// Sets the cropping rectangle for the surface.
-	void setCrop(SDL_Rect *crop);
+	int getY() const;
+	/// Resets the cropping rectangle for the surface.
+	void resetCrop();
 	/// Gets the cropping rectangle for the surface.
 	SDL_Rect *getCrop();
 	/// Changes a pixel in the surface.
@@ -84,17 +84,17 @@ public:
 	/// Changes a pixel in the surface and returns the next one.
 	void setPixelIterative(int *x, int *y, Uint8 pixel);
 	/// Gets a pixel of the surface.
-	Uint8 getPixel(int x, int y);
+	Uint8 getPixel(int x, int y) const;
 	/// Gets the internal SDL surface.
-	SDL_Surface* getSurface();
+	SDL_Surface *const getSurface() const;
 	/// Gets the surface's width.
-	int getWidth();
+	int getWidth() const;
 	/// Gets the surface's height.
-	int getHeight();
+	int getHeight() const;
 	/// Sets the surface's visibility.
 	void setVisible(bool visible);
 	/// Gets the surface's visibility.
-	bool getVisible();
+	bool getVisible() const;
 	/// Hides the surface.
 	void hide();
 	/// Shows the surface.

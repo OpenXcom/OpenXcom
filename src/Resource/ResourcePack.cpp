@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -88,7 +88,7 @@ ResourcePack::~ResourcePack()
  * @note There's no actual method for figuring out the correct
  * filename on case-sensitive systems, this is just a workaround.
  */
-std::string ResourcePack::insensitive(const std::string &filename)
+std::string ResourcePack::insensitive(const std::string &filename) const
 {
 	std::string newName = filename;
 
@@ -135,7 +135,7 @@ std::string ResourcePack::insensitive(const std::string &filename)
  * active language without needing to know it.
  * @return Pointer to the language.
  */
-Language *ResourcePack::getLanguage()
+Language *const ResourcePack::getLanguage() const
 {
 	return _currentLang;
 }
@@ -145,7 +145,7 @@ Language *ResourcePack::getLanguage()
  * Necessary for logic specific to certain languages.
  * @return Name of the language.
  */
-std::string ResourcePack::getLanguageName()
+std::string ResourcePack::getLanguageName() const
 {
 	return _langName;
 }
@@ -166,7 +166,7 @@ void ResourcePack::setLanguage(const std::string &lang)
  * @param name Name of the font.
  * @return Pointer to the font.
  */
-Font *ResourcePack::getFont(const std::string &name)
+Font *const ResourcePack::getFont(const std::string &name)
 {
 	return _fonts[name];
 }
@@ -176,7 +176,7 @@ Font *ResourcePack::getFont(const std::string &name)
  * @param name Name of the surface.
  * @return Pointer to the surface.
  */
-Surface *ResourcePack::getSurface(const std::string &name)
+Surface *const ResourcePack::getSurface(const std::string &name)
 {
 	return _surfaces[name];
 }
@@ -186,7 +186,7 @@ Surface *ResourcePack::getSurface(const std::string &name)
  * @param name Name of the surface set.
  * @return Pointer to the surface set.
  */
-SurfaceSet *ResourcePack::getSurfaceSet(const std::string &name)
+SurfaceSet *const ResourcePack::getSurfaceSet(const std::string &name)
 {
 	return _sets[name];
 }
@@ -195,7 +195,7 @@ SurfaceSet *ResourcePack::getSurfaceSet(const std::string &name)
  * Returns the list of polygons in the resource set.
  * @return Pointer to the list of polygons.
  */
-std::vector<Polygon*> *ResourcePack::getPolygons()
+std::vector<Polygon*> *const ResourcePack::getPolygons()
 {
 	return &_polygons;
 }
@@ -204,7 +204,7 @@ std::vector<Polygon*> *ResourcePack::getPolygons()
  * Returns the list of polylines in the resource set.
  * @return Pointer to the list of polylines.
  */
-std::vector<Polyline*> *ResourcePack::getPolylines()
+std::vector<Polyline*> *const ResourcePack::getPolylines()
 {
 	return &_polylines;
 }
@@ -214,7 +214,7 @@ std::vector<Polyline*> *ResourcePack::getPolylines()
  * @param name Name of the music.
  * @return Pointer to the music.
  */
-Music *ResourcePack::getMusic(const std::string &name)
+Music *const ResourcePack::getMusic(const std::string &name)
 {
 	return _musics[name];
 }
@@ -224,7 +224,7 @@ Music *ResourcePack::getMusic(const std::string &name)
  * @param name Name of the sound set.
  * @return Pointer to the sound set.
  */
-SoundSet *ResourcePack::getSoundSet(const std::string &name)
+SoundSet *const ResourcePack::getSoundSet(const std::string &name)
 {
 	return _sounds[name];
 }
@@ -234,7 +234,7 @@ SoundSet *ResourcePack::getSoundSet(const std::string &name)
  * @param name Name of the palette.
  * @return Pointer to the palette.
  */
-Palette *ResourcePack::getPalette(const std::string &name)
+Palette *const ResourcePack::getPalette(const std::string &name)
 {
 	return _palettes[name];
 }

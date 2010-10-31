@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -36,7 +36,7 @@ Target::~Target()
  * Returns the latitude coordinate of the target.
  * @return Latitude in radian.
  */
-double Target::getLatitude()
+double Target::getLatitude() const
 {
 	return _lat;
 }
@@ -54,7 +54,7 @@ void Target::setLatitude(double lat)
  * Returns the longitude coordinate of the target.
  * @return Longitude in radian.
  */
-double Target::getLongitude()
+double Target::getLongitude() const
 {
 	return _lon;
 }

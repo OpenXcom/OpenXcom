@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -236,7 +236,7 @@ Globe::~Globe()
  * @param x Pointer to the output X position.
  * @param y Pointer to the output Y position.
  */
-void Globe::polarToCart(double lon, double lat, Sint16 *x, Sint16 *y)
+void Globe::polarToCart(double lon, double lat, Sint16 *x, Sint16 *y) const
 {
 	// Orthographic projection
 	*x = _cenX + (Sint16)floor(_radius[_zoom] * cos(lat) * sin(lon + _cenLon));
@@ -251,7 +251,7 @@ void Globe::polarToCart(double lon, double lat, Sint16 *x, Sint16 *y)
  * @param lon Pointer to the output longitude.
  * @param lat Pointer to the output latitude.
  */
-void Globe::cartToPolar(Sint16 x, Sint16 y, double *lon, double *lat)
+void Globe::cartToPolar(Sint16 x, Sint16 y, double *lon, double *lat) const
 {	
 	// Orthographic projection
 	x -= _cenX;
@@ -277,7 +277,7 @@ void Globe::cartToPolar(Sint16 x, Sint16 y, double *lon, double *lat)
  * @param lat Latitude of the point.
  * @return True if it's on the back, False if it's on the front.
  */
-bool Globe::pointBack(double lon, double lat)
+bool Globe::pointBack(double lon, double lat) const
 {
 	double c = cos(_cenLat) * cos(lat) * cos(lon + _cenLon) - sin(_cenLat) * sin(lat);
 	
@@ -291,7 +291,7 @@ bool Globe::pointBack(double lon, double lat)
  * @param poly Pointer to the polygon.
  * @return True if it's inside, False if it's outside.
  */
-bool Globe::insidePolygon(double lon, double lat, Polygon *poly)
+bool Globe::insidePolygon(double lon, double lat, Polygon *poly) const
 {
 	bool backFace = true;
 	for (int i = 0; i < poly->getPoints(); i++)
@@ -313,7 +313,9 @@ bool Globe::insidePolygon(double lon, double lat, Polygon *poly)
 
 		if ( ((y_i > y) != (y_j > y)) &&
 			 (x < (x_j - x_i) * (y - y_i) / (y_j - y_i) + x_i) )
+		{
 			c = !c;
+		}
 	}
 	return c;
 }
@@ -508,7 +510,7 @@ void Globe::center(double lon, double lat)
  * @param lat Latitude of the point.
  * @return True if it's inside, False if it's outside.
  */
-bool Globe::insideLand(double lon, double lat)
+bool Globe::insideLand(double lon, double lat) const
 {
 	bool inside = false;
 	for (std::vector<Polygon*>::iterator i = _res->getPolygons()->begin(); i < _res->getPolygons()->end() && !inside; i++)
@@ -536,7 +538,7 @@ void Globe::switchDetail()
  * @param y Y coordinate of point.
  * @return True if it's near, false otherwise.
  */
-bool Globe::targetNear(Target* target, int x, int y)
+bool Globe::targetNear(Target* target, int x, int y) const
 {
 	Sint16 tx, ty;
 	polarToCart(target->getLongitude(), target->getLatitude(), &tx, &ty);
@@ -554,7 +556,7 @@ bool Globe::targetNear(Target* target, int x, int y)
  * @param craft Only get craft targets.
  * @return List of pointers to targets.
  */
-std::vector<Target*> Globe::getTargets(int x, int y, bool craft)
+std::vector<Target*> Globe::getTargets(int x, int y, bool craft) const
 {
 	std::vector<Target*> v;
 	if (!craft)

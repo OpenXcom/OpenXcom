@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -39,39 +39,39 @@ public:
 	/// Cleans up the UFO ruleset.
 	~RuleUfo();
 	/// Gets the UFO's type.
-	LangString getType();
+	LangString getType() const;
 	/// Gets the UFO's size.
-	LangString getSize();
+	LangString getSize() const;
 	/// Sets the UFO's size.
 	void setSize(LangString size);
 	/// Gets the UFO's radius.
-	int getRadius();
+	int getRadius() const;
 	/// Gets the UFO's sprite.
-	int getSprite();
+	int getSprite() const;
 	/// Sets the UFO's sprite.
 	void setSprite(int sprite);
 	/// Gets the UFO's maximum damage.
-	int getMaxDamage();
+	int getMaxDamage() const;
 	/// Sets the UFO's maximum damage.
 	void setMaxDamage(int damage);
 	/// Gets the UFO's maximum speed.
-	int getMaxSpeed();
+	int getMaxSpeed() const;
 	/// Sets the UFO's maximum speed.
 	void setMaxSpeed(int speed);
 	/// Gets the UFO's acceleration.
-	int getAcceleration();
+	int getAcceleration() const;
 	/// Sets the UFO's acceleration.
 	void setAcceleration(int accel);
 	/// Gets the UFO's weapon power.
-	int getWeaponPower();
+	int getWeaponPower() const;
 	/// Sets the UFO's weapon power.
 	void setWeaponPower(int power);
 	/// Gets the UFO's weapon range.
-	int getWeaponRange();
+	int getWeaponRange() const;
 	/// Sets the UFO's weapon range.
 	void setWeaponRange(int range);
 	/// Gets the UFO's score.
-	int getScore();
+	int getScore() const;
 	/// Sets the UFO's score.
 	void setScore(int score);
 };

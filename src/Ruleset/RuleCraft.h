@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -39,49 +39,49 @@ public:
 	/// Cleans up the craft ruleset.
 	~RuleCraft();
 	/// Gets the craft's type.
-	LangString getType();
+	LangString getType() const;
 	/// Gets the craft's sprite.
-	int getSprite();
+	int getSprite() const;
 	/// Sets the craft's sprite.
 	void setSprite(int sprite);
 	/// Gets the craft's maximum fuel.
-	int getMaxFuel();
+	int getMaxFuel() const;
 	/// Sets the craft's maximum fuel.
 	void setMaxFuel(int fuel);
 	/// Gets the craft's maximum damage.
-	int getMaxDamage();
+	int getMaxDamage() const;
 	/// Sets the craft's maximum damage.
 	void setMaxDamage(int damage);
 	/// Gets the craft's maximum speed.
-	int getMaxSpeed();
+	int getMaxSpeed() const;
 	/// Sets the craft's maximum speed.
 	void setMaxSpeed(int speed);
 	/// Gets the craft's acceleration.
-	int getAcceleration();
+	int getAcceleration() const;
 	/// Sets the craft's acceleration.
 	void setAcceleration(int accel);
 	/// Gets the craft's weapon capacity.
-	int getWeapons();
+	int getWeapons() const;
 	/// Sets the craft's weapon capacity.
 	void setWeapons(int weapons);
 	/// Gets the craft's soldier capacity.
-	int getSoldiers();
+	int getSoldiers() const;
 	/// Sets the craft's soldier capacity.
 	void setSoldiers(int soldiers);
 	/// Gets the craft's HWP capacity.
-	int getHWPs();
+	int getHWPs() const;
 	/// Sets the craft's HWP capacity.
 	void setHWPs(int hwps);
 	/// Gets the craft's monthly fee.
-	int getMonthlyFee();
+	int getMonthlyFee() const;
 	/// Sets the craft's monthly fee.
 	void setMonthlyFee(int fee);
 	/// Gets the craft's repair rate.
-	int getRepairRate();
+	int getRepairRate() const;
 	/// Sets the craft's repair rate.
 	void setRepairRate(int repair);
 	/// Gets the craft's refuel rate.
-	int getRefuelRate();
+	int getRefuelRate() const;
 	/// Sets the craft's refuel rate.
 	void setRefuelRate(int refuel);
 };

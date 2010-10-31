@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -31,26 +31,26 @@ class CatFile : protected std::ifstream
 private:
 	unsigned int _amount, *_offset, *_size;
 public:
-	/// Creates a CAT file stream
+	/// Creates a CAT file stream.
 	CatFile(const char *path);
-	/// Cleans up
+	/// Cleans up the stream.
 	~CatFile();
-	/// Inherit operator
+	/// Inherit operator.
 	bool operator !() const
 	{
 		return std::ifstream::operator!();
 	}
-	/// Get amount of objects
+	/// Get amount of objects.
 	int getAmount() const
 	{
 		return _amount;
 	}
-	/// Get object size
+	/// Get object size.
 	unsigned int getObjectSize(unsigned int i) const
 	{
 		return (i < _amount) ? _size[i] : 0;
 	}
-	/// Load an object into memory
+	/// Load an object into memory.
 	char *load(unsigned int i);
 };
 

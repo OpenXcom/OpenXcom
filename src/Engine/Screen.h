@@ -1,5 +1,5 @@
 	/*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -46,7 +46,7 @@ public:
 	/// Cleans up the display screen.
 	~Screen();
 	/// Gets the internal buffer.
-	Surface *getSurface();
+	Surface *const getSurface() const;
 	/// Renders the screen onto the game window.
 	void flip();
 	/// Clears the screen.
@@ -54,15 +54,15 @@ public:
 	/// Sets the screen's 8bpp palette.
 	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
 	/// Gets the screen's 8bpp palette.
-	SDL_Color* getPalette();
+	SDL_Color *const getPalette() const;
 	/// Sets the screen's display resolution.
 	void setResolution(int width, int height);
 	/// Sets whether the screen is full-screen or windowed.
 	void setFullscreen(bool full);
 	/// Gets the screen's X scale;
-	double getXScale();
+	double getXScale() const;
 	/// Gets the screen's Y scale;
-	double getYScale();
+	double getYScale() const;
 };
 
 #endif

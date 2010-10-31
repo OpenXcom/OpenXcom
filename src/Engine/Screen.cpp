@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -56,7 +56,7 @@ Screen::~Screen()
  * contents that need to be shown will be blitted to this.
  * @return Pointer to the buffer surface.
  */
-Surface *Screen::getSurface()
+Surface *const Screen::getSurface() const
 {
 	return _surface;
 }
@@ -117,7 +117,7 @@ void Screen::setPalette(SDL_Color* colors, int firstcolor, int ncolors)
  * Returns the screen's 8bpp palette.
  * @return Pointer to the palette's colors.
  */
-SDL_Color* Screen::getPalette()
+SDL_Color *const Screen::getPalette() const
 {
 	return _surface->getPalette();
 }
@@ -150,9 +150,13 @@ void Screen::setResolution(int width, int height)
 void Screen::setFullscreen(bool full)
 {
 	if (full)
+	{
 		_flags |= SDL_FULLSCREEN;
+	}
 	else
+	{
 		_flags &= ~SDL_FULLSCREEN;
+	}
 	setResolution(_width, _height);
 }
 
@@ -160,7 +164,7 @@ void Screen::setFullscreen(bool full)
  * Returns the screen's X scale.
  * @return Scale factor.
  */
-double Screen::getXScale()
+double Screen::getXScale() const
 {
 	return _xScale;
 }
@@ -169,7 +173,7 @@ double Screen::getXScale()
  * Returns the screen's Y scale.
  * @return Scale factor.
  */
-double Screen::getYScale()
+double Screen::getYScale() const
 {
 	return _yScale;
 }

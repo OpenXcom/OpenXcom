@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -35,15 +35,15 @@ public:
 	/// Cleans up the polyline.
 	~Polyline();
 	/// Gets the latitude of a point.
-	double getLatitude(int i);
+	double getLatitude(int i) const;
 	/// Sets the latitude of a point.
 	void setLatitude(int i, double lat);
 	/// Gets the longitude of a point.
-	double getLongitude(int i);
+	double getLongitude(int i) const;
 	/// Sets the longitude of a point.
 	void setLongitude(int i, double lon);
 	/// Gets the number of points of the polyline.
-	int getPoints();
+	int getPoints() const;
 };
 
 #endif

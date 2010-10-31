@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -33,28 +33,28 @@ protected:
 	int _speed;
 	
 	/// Has the moving target finished its route?
-	bool finishedRoute();
+	bool finishedRoute() const;
+	/// Calculates a new speed vector to the destination.
+	virtual void calculateSpeed();
 public:
 	/// Creates a moving target.
 	MovingTarget();
 	/// Cleans up the moving target.
 	virtual ~MovingTarget();
 	/// Gets the moving target's destination.
-	Target *getDestination();
+	Target *const getDestination() const;
 	/// Sets the moving target's destination.
 	virtual void setDestination(Target *dest);
 	/// Gets the moving target's speed.
-	int getSpeed();
+	int getSpeed() const;
 	/// Sets the moving target's speed.
 	void setSpeed(int speed);
 	/// Gets the moving target's speed in radian.
-	double getRadianSpeed();
+	double getRadianSpeed() const;
 	/// Gets the distance to another target.
-	double getDistance(Target *target, double *dLon, double *dLat);
-	/// Calculates a new speed vector to the destination.
-	virtual void calculateSpeed();
+	double getDistance(Target *target, double *dLon, double *dLat) const;
 	/// Has the moving target reached its destination?
-	bool reachedDestination();
+	bool reachedDestination() const;
 };
 
 #endif

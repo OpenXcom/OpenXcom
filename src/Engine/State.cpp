@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -45,7 +45,7 @@ State::~State()
  * Returns the set of surfaces currently attached to this state.
  * @return List of surfaces.
  */
-std::vector<Surface*> *State::getSurfaces()
+std::vector<Surface*> *const State::getSurfaces()
 {
 	return &_surfaces;
 }
@@ -74,7 +74,7 @@ void State::add(Surface *surface)
  * safely ignored since they'd be covered up.
  * @return True if it's a screen, False otherwise.
  */
-bool State::isScreen()
+bool State::isScreen() const
 {
 	return _screen;
 }

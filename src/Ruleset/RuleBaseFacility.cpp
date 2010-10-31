@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -40,7 +40,7 @@ RuleBaseFacility::~RuleBaseFacility()
  * has a unique name.
  * @return Facility name.
  */
-LangString RuleBaseFacility::getType()
+LangString RuleBaseFacility::getType() const
 {
 	return _type;
 }
@@ -50,7 +50,7 @@ LangString RuleBaseFacility::getType()
  * base structure of the facility that defines its shape.
  * @return Sprite ID.
  */
-int RuleBaseFacility::getSpriteShape()
+int RuleBaseFacility::getSpriteShape() const
 {
 	return _spriteShape;
 }
@@ -70,7 +70,7 @@ void RuleBaseFacility::setSpriteShape(int sprite)
  * facility's contents inside the base shape.
  * @return Sprite ID.
  */
-int RuleBaseFacility::getSpriteFacility()
+int RuleBaseFacility::getSpriteFacility() const
 {
 	return _spriteFacility;
 }
@@ -89,7 +89,7 @@ void RuleBaseFacility::setSpriteFacility(int sprite)
  * Returns the size of the facility on the base grid.
  * @return Length in grid squares.
  */
-int RuleBaseFacility::getSize()
+int RuleBaseFacility::getSize() const
 {
 	return _size;
 }
@@ -109,7 +109,7 @@ void RuleBaseFacility::setSize(int size)
  * facilities have to be connected to it.
  * @return True if it's a lift, False otherwise.
  */
-bool RuleBaseFacility::getLift()
+bool RuleBaseFacility::getLift() const
 {
 	return _lift;
 }
@@ -129,7 +129,7 @@ void RuleBaseFacility::setLift(bool lift)
  * to build on a base.
  * @return Building cost.
  */
-int RuleBaseFacility::getBuildCost()
+int RuleBaseFacility::getBuildCost() const
 {
 	return _buildCost;
 }
@@ -149,7 +149,7 @@ void RuleBaseFacility::setBuildCost(int cost)
  * to be constructed since placement.
  * @return Time in days.
  */
-int RuleBaseFacility::getBuildTime()
+int RuleBaseFacility::getBuildTime() const
 {
 	return _buildTime;
 }
@@ -169,7 +169,7 @@ void RuleBaseFacility::setBuildTime(int time)
  * to maintain once it's fully built.
  * @return Monthly cost.
  */
-int RuleBaseFacility::getMonthlyCost()
+int RuleBaseFacility::getMonthlyCost() const
 {
 	return _monthlyCost;
 }
@@ -189,7 +189,7 @@ void RuleBaseFacility::setMonthlyCost(int cost)
  * for base equipment.
  * @return Storage space.
  */
-int RuleBaseFacility::getStorage()
+int RuleBaseFacility::getStorage() const
 {
 	return _storage;
 }
@@ -206,10 +206,10 @@ void RuleBaseFacility::setStorage(int storage)
 
 /**
  * Returns the amount of base personnel (soldiers, scientists,
- * engineers) this facility can contain.
+ * engineers) const this facility can contain.
  * @return Amount of personnel.
  */
-int RuleBaseFacility::getPersonnel()
+int RuleBaseFacility::getPersonnel() const
 {
 	return _personnel;
 }
@@ -228,7 +228,7 @@ void RuleBaseFacility::setPersonnel(int personnel)
  * can contain.
  * @return Amount of aliens.
  */
-int RuleBaseFacility::getAliens()
+int RuleBaseFacility::getAliens() const
 {
 	return _aliens;
 }
@@ -247,7 +247,7 @@ void RuleBaseFacility::setAliens(int aliens)
  * Returns the amount of base craft this facility can contain.
  * @return Amount of craft.
  */
-int RuleBaseFacility::getCrafts()
+int RuleBaseFacility::getCrafts() const
 {
 	return _crafts;
 }
@@ -266,7 +266,7 @@ void RuleBaseFacility::setCrafts(int crafts)
  * for research projects.
  * @return Laboratory space.
  */
-int RuleBaseFacility::getLaboratories()
+int RuleBaseFacility::getLaboratories() const
 {
 	return _labs;
 }
@@ -286,7 +286,7 @@ void RuleBaseFacility::setLaboratories(int labs)
  * for manufacturing projects.
  * @return Workshop space.
  */
-int RuleBaseFacility::getWorkshops()
+int RuleBaseFacility::getWorkshops() const
 {
 	return _workshops;
 }
@@ -306,7 +306,7 @@ void RuleBaseFacility::setWorkshops(int workshops)
  * for monthly psi-training.
  * @return Amount of soldiers.
  */
-int RuleBaseFacility::getPsiLaboratories()
+int RuleBaseFacility::getPsiLaboratories() const
 {
 	return _psiLabs;
 }
@@ -326,7 +326,7 @@ void RuleBaseFacility::setPsiLaboratories(int psi)
  * detection of UFOs.
  * @return Range in nanometers.
  */
-int RuleBaseFacility::getRadarRange()
+int RuleBaseFacility::getRadarRange() const
 {
 	return _radarRange;
 }
@@ -346,7 +346,7 @@ void RuleBaseFacility::setRadarRange(int range)
  * radar range to be detected.
  * @return Chance in percentage.
  */
-int RuleBaseFacility::getRadarChance()
+int RuleBaseFacility::getRadarChance() const
 {
 	return _radarChance;
 }
@@ -366,7 +366,7 @@ void RuleBaseFacility::setRadarChance(int chance)
  * against UFO invasions on the base.
  * @return Defence value.
  */
-int RuleBaseFacility::getDefenceValue()
+int RuleBaseFacility::getDefenceValue() const
 {
 	return _defence;
 }
@@ -386,7 +386,7 @@ void RuleBaseFacility::setDefenceValue(int defence)
  * against UFO invasions on the base.
  * @return Ratio in percentage.
  */
-int RuleBaseFacility::getHitRatio()
+int RuleBaseFacility::getHitRatio() const
 {
 	return _hitRatio;
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -55,7 +55,7 @@ public:
 	/// Cleans up the text list.
 	~TextList();
 	/// Gets a certain cell in the text list.
-	Text* getCell(int row, int col);
+	Text *const getCell(int row, int col) const;
 	/// Adds a new row to the text list.
 	void addRow(int cols, ...);
 	/// Sets the columns in the text list.
@@ -64,6 +64,8 @@ public:
 	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
 	/// Sets the text color of the text list.
 	void setColor(Uint8 color);
+	/// Gets the text color of the text list.
+	Uint8 getColor() const;
 	/// Sets the text horizontal alignment of the text list.
 	void setAlign(TextHAlign align);
 	/// Sets whether to separate columns with dots.
@@ -73,7 +75,7 @@ public:
 	/// Sets the background for the selector.
 	void setBackground(Surface *bg);
 	/// Gets the selected row in the list.
-	int getSelectedRow();
+	int getSelectedRow() const;
 	/// Sets the margin of the text list.
 	void setMargin(int margin);
 	/// Sets the arrow color of the text list.

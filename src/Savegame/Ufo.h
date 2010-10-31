@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -39,41 +39,42 @@ private:
 	LangString _direction;
 	bool _detected;
 	int _daysCrashed;
+	
+	/// Calculates a new speed vector to the destination.
+	void calculateSpeed();
 public:
 	/// Creates a UFO of the specified type.
 	Ufo(RuleUfo *rules);
 	/// Cleans up the UFO.
 	~Ufo();
 	/// Gets the UFO's ruleset.
-	RuleUfo *getRules();
+	RuleUfo *const getRules() const;
 	/// Gets the UFO's ID.
-	int getId();
+	int getId() const;
 	/// Sets the UFO's ID.
 	void setId(int id);
 	/// Gets the UFO's name.
-	std::string getName(Language *lang);
+	std::string getName(Language *lang) const;
 	/// Gets the UFO's amount of damage.
-	int getDamage();
+	int getDamage() const;
 	/// Sets the UFO's amount of damage.
 	void setDamage(int damage);
 	/// Gets the UFO's detection status.
-	bool getDetected();
+	bool getDetected() const;
 	/// Sets the UFO's detection status.
 	void setDetected(bool detected);
 	/// Gets the UFO's amount of crashed days.
-	int getDaysCrashed();
+	int getDaysCrashed() const;
 	/// Sets the UFO's amount of crashed days.
 	void setDaysCrashed(int days);
 	/// Gets the UFO's direction.
-	LangString getDirection();
+	LangString getDirection() const;
 	/// Gets the UFO's altitude.
-	LangString getAltitude();
+	LangString getAltitude() const;
 	/// Gets if the UFO has crashed.
-	bool isCrashed();
+	bool isCrashed() const;
 	/// Gets if the UFO has been destroyed.
-	bool isDestroyed();
-	/// Calculates a new speed vector to the destination.
-	void calculateSpeed();
+	bool isDestroyed() const;
 	/// Handles UFO logic.
 	void think();
 };

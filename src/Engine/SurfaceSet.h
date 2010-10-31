@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -48,13 +48,13 @@ public:
 	/// Loads an X-Com DAT image file.
 	void loadDat(const std::string &filename);
 	/// Gets a particular frame from the set.
-	Surface *getFrame(int i);
+	Surface *const getFrame(int i) const;
 	/// Gets the width of all frames.
-	int getWidth();
+	int getWidth() const;
 	/// Gets the height of all frames.
-	int getHeight();
+	int getHeight() const;
 	/// Gets the total frames in the set.
-	int getTotalFrames();
+	int getTotalFrames() const;
 	/// Sets the surface set's palette.
 	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
 };

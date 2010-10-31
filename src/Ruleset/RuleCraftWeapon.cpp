@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -38,7 +38,7 @@ RuleCraftWeapon::~RuleCraftWeapon()
  * Each craft weapon type has a unique name.
  * @return Craft weapon name.
  */
-LangString RuleCraftWeapon::getType()
+LangString RuleCraftWeapon::getType() const
 {
 	return _type;
 }
@@ -48,7 +48,7 @@ LangString RuleCraftWeapon::getType()
  * in the Equip Craft and Interception screens.
  * @return Sprite ID.
  */
-int RuleCraftWeapon::getSprite()
+int RuleCraftWeapon::getSprite() const
 {
 	return _sprite;
 }
@@ -68,7 +68,7 @@ void RuleCraftWeapon::setSprite(int sprite)
  * in the Dogfight screen.
  * @return Sound ID.
  */
-int RuleCraftWeapon::getSound()
+int RuleCraftWeapon::getSound() const
 {
 	return _sound;
 }
@@ -88,7 +88,7 @@ void RuleCraftWeapon::setSound(int sound)
  * inflicts on enemy crafts.
  * @return Damage amount.
  */
-int RuleCraftWeapon::getDamage()
+int RuleCraftWeapon::getDamage() const
 {
 	return _damage;
 }
@@ -107,7 +107,7 @@ void RuleCraftWeapon::setDamage(int damage)
  * Returns the maximum range of this craft weapon.
  * @return Range in km.
  */
-int RuleCraftWeapon::getRange()
+int RuleCraftWeapon::getRange() const
 {
 	return _range;
 }
@@ -126,7 +126,7 @@ void RuleCraftWeapon::setRange(int range)
  * this craft weapon hitting an enemy craft.
  * @return Percentage accuracy.
  */
-int RuleCraftWeapon::getAccuracy()
+int RuleCraftWeapon::getAccuracy() const
 {
 	return _accuracy;
 }
@@ -146,7 +146,7 @@ void RuleCraftWeapon::setAccuracy(int accuracy)
  * reload in cautious mode.
  * @return Time in game seconds.
  */
-int RuleCraftWeapon::getCautiousReload()
+int RuleCraftWeapon::getCautiousReload() const
 {
 	return _reloadCautious;
 }
@@ -166,7 +166,7 @@ void RuleCraftWeapon::setCautiousReload(int reload)
  * reload in standard mode.
  * @return Time in game seconds.
  */
-int RuleCraftWeapon::getStandardReload()
+int RuleCraftWeapon::getStandardReload() const
 {
 	return _reloadStandard;
 }
@@ -186,7 +186,7 @@ void RuleCraftWeapon::setStandardReload(int reload)
  * reload in aggressive mode.
  * @return Time in game seconds.
  */
-int RuleCraftWeapon::getAggressiveReload()
+int RuleCraftWeapon::getAggressiveReload() const
 {
 	return _reloadAggressive;
 }
@@ -206,7 +206,7 @@ void RuleCraftWeapon::setAggressiveReload(int reload)
  * can carry.
  * @return Amount of ammo.
  */
-int RuleCraftWeapon::getAmmoMax()
+int RuleCraftWeapon::getAmmoMax() const
 {
 	return _ammoMax;
 }
@@ -226,7 +226,7 @@ void RuleCraftWeapon::setAmmoMax(int ammo)
  * while rearming (the amount of ammo in each clip item).
  * @return Amount of ammo.
  */
-int RuleCraftWeapon::getRearmRate()
+int RuleCraftWeapon::getRearmRate() const
 {
 	return _rearm;
 }
@@ -246,7 +246,7 @@ void RuleCraftWeapon::setRearmRate(int rearm)
  * equip this craft weapon.
  * @return Item name.
  */
-LangString RuleCraftWeapon::getLauncherItem()
+LangString RuleCraftWeapon::getLauncherItem() const
 {
 	return _launcher;
 }
@@ -266,7 +266,7 @@ void RuleCraftWeapon::setLauncherItem(LangString launcher)
  * load this craft weapon with ammo.
  * @return Item name.
  */
-LangString RuleCraftWeapon::getClipItem()
+LangString RuleCraftWeapon::getClipItem() const
 {
 	return _clip;
 }

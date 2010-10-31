@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -35,13 +35,20 @@ private:
 	double _xScale, _yScale;
 	InteractiveSurface *_sender;
 public:
+	/// Creates an action with given event data.
 	Action(SDL_Event *ev, double xScale, double yScale);
+	/// Cleans up the action.
 	~Action();
-	double getXScale();
-	double getYScale();
-	InteractiveSurface *getSender();
+	/// Gets the screen's X scale.
+	double getXScale() const;
+	/// Gets the screen's Y scale.
+	double getYScale() const;
+	/// Gets the sender of the action.
+	InteractiveSurface *const getSender() const;
+	/// Sets the sender of the action.
 	void setSender(InteractiveSurface *sender);
-	SDL_Event *getDetails();
+	/// Gets the details of the action.
+	SDL_Event *const getDetails() const;
 };
 
 #endif

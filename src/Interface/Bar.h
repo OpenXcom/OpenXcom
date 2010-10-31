@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -41,19 +41,19 @@ public:
 	/// Sets the bar's color.
 	void setColor(Uint8 color);
 	/// Gets the bar's color.
-	Uint8 getColor();
+	Uint8 getColor() const;
 	/// Sets the bar's scale.
 	void setScale(double scale);
 	/// Gets the bar's scale.
-	double getScale();
+	double getScale() const;
 	/// Sets the bar's maximum value.
 	void setMax(double max);
 	/// Gets the bar's maximum value.
-	double getMax();
+	double getMax() const;
 	/// Sets the bar's current value.
 	void setValue(double value);
 	/// Gets the bar's current value.
-	double getValue();
+	double getValue() const;
 	/// Sets the bar's color invert setting.
 	void setInvert(bool invert);
 	/// Draws the bar.

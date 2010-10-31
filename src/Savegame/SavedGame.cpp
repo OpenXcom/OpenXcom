@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -66,7 +66,7 @@ SavedGame::~SavedGame()
  * Returns the player's current funds.
  * @return Current funds.
  */
-int SavedGame::getFunds()
+int SavedGame::getFunds() const
 {
 	return _funds;
 }
@@ -93,7 +93,7 @@ void SavedGame::monthlyFunding()
  * Returns the current time of the game.
  * @return Pointer to the game time.
  */
-GameTime *SavedGame::getTime()
+GameTime *const SavedGame::getTime() const
 {
 	return _time;
 }
@@ -102,7 +102,7 @@ GameTime *SavedGame::getTime()
  * Returns the list of countries in the game world.
  * @return Pointer to country list.
  */
-std::map<LangString, Country*> *SavedGame::getCountries()
+std::map<LangString, Country*> *const SavedGame::getCountries()
 {
 	return &_countries;
 }
@@ -111,10 +111,10 @@ std::map<LangString, Country*> *SavedGame::getCountries()
  * Adds up the monthly funding of all the countries.
  * @return Total funding.
  */
-int SavedGame::getCountryFunding()
+int SavedGame::getCountryFunding() const
 {
 	int total = 0;
-	for (std::map<LangString, Country*>::iterator i = _countries.begin(); i != _countries.end(); i++)
+	for (std::map<LangString, Country*>::const_iterator i = _countries.begin(); i != _countries.end(); i++)
 	{
 		total += i->second->getFunding();
 	}
@@ -125,7 +125,7 @@ int SavedGame::getCountryFunding()
  * Returns the list of world regions.
  * @return Pointer to region list.
  */
-std::map<LangString, Region*> *SavedGame::getRegions()
+std::map<LangString, Region*> *const SavedGame::getRegions()
 {
 	return &_regions;
 }
@@ -134,7 +134,7 @@ std::map<LangString, Region*> *SavedGame::getRegions()
  * Returns the list of player bases.
  * @return Pointer to base list.
  */
-std::vector<Base*> *SavedGame::getBases()
+std::vector<Base*> *const SavedGame::getBases()
 {
 	return &_bases;
 }
@@ -143,10 +143,10 @@ std::vector<Base*> *SavedGame::getBases()
  * Adds up the monthly maintenance of all the bases.
  * @return Total maintenance.
  */
-int SavedGame::getBaseMaintenance()
+int SavedGame::getBaseMaintenance() const
 {
 	int total = 0;
-	for (std::vector<Base*>::iterator i = _bases.begin(); i != _bases.end(); i++)
+	for (std::vector<Base*>::const_iterator i = _bases.begin(); i != _bases.end(); i++)
 	{
 		total += (*i)->getMonthlyMaintenace();
 	}
@@ -157,7 +157,7 @@ int SavedGame::getBaseMaintenance()
  * Returns the latest craft IDs for each type.
  * @return Pointer to ID list.
  */
-std::map<LangString, int> *SavedGame::getCraftIds()
+std::map<LangString, int> *const SavedGame::getCraftIds()
 {
 	return &_craftId;
 }
@@ -166,7 +166,7 @@ std::map<LangString, int> *SavedGame::getCraftIds()
  * Returns the list of alien UFOs.
  * @return Pointer to UFO list.
  */
-std::vector<Ufo*> *SavedGame::getUfos()
+std::vector<Ufo*> *const SavedGame::getUfos()
 {
 	return &_ufos;
 }
@@ -175,7 +175,7 @@ std::vector<Ufo*> *SavedGame::getUfos()
  * Returns the latest ufo ID.
  * @return Pointer to ID value.
  */
-int *SavedGame::getUfoId()
+int *const SavedGame::getUfoId()
 {
 	return &_ufoId;
 }
@@ -184,7 +184,7 @@ int *SavedGame::getUfoId()
  * Returns the latest waypoint ID.
  * @return Pointer to ID value.
  */
-int *SavedGame::getWaypointId()
+int *const SavedGame::getWaypointId()
 {
 	return &_waypointId;
 }
@@ -193,7 +193,7 @@ int *SavedGame::getWaypointId()
  * Returns the list of craft waypoints.
  * @return Pointer to waypoint list.
  */
-std::vector<Waypoint*> *SavedGame::getWaypoints()
+std::vector<Waypoint*> *const SavedGame::getWaypoints()
 {
 	return &_waypoints;
 }

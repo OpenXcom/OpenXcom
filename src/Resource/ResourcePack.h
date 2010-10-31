@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -58,35 +58,36 @@ protected:
 	std::vector<Polygon*> _polygons;
 	std::vector<Polyline*> _polylines;
 	std::map<std::string, Music*> _musics;
+
+	/// Converts a filename to its existing case-insensitive name.
+	std::string insensitive(const std::string &filename) const;
 public:
 	/// Create a new resource pack with a folder's contents.
 	ResourcePack(const std::string &folder);
 	/// Cleans up the resource pack.
 	virtual ~ResourcePack();
-	/// Converts a filename to its existing case-insensitive name.
-	std::string insensitive(const std::string &filename);
 	/// Gets the current language.
-	Language *getLanguage();
+	Language *const getLanguage() const;
 	/// Gets the name of the current language.
-	std::string getLanguageName();
+	std::string getLanguageName() const;
 	/// Sets a new language as current.
 	void setLanguage(const std::string &lang);
 	/// Gets a particular font.
-	Font *getFont(const std::string &name);
+	Font *const getFont(const std::string &name);
 	/// Gets a particular surface.
-	Surface *getSurface(const std::string &name);
+	Surface *const getSurface(const std::string &name);
 	/// Gets a particular surface set.
-	SurfaceSet *getSurfaceSet(const std::string &name);
+	SurfaceSet *const getSurfaceSet(const std::string &name);
 	/// Gets the list of world polygons.
-	std::vector<Polygon*> *getPolygons();
+	std::vector<Polygon*> *const getPolygons();
 	/// Gets the list of world polylines.
-	std::vector<Polyline*> *getPolylines();
+	std::vector<Polyline*> *const getPolylines();
 	/// Gets a particular music.
-	Music *getMusic(const std::string &name);
+	Music *const getMusic(const std::string &name);
 	/// Gets a particular sound set.
-	SoundSet *getSoundSet(const std::string &name);
+	SoundSet *const getSoundSet(const std::string &name);
 	/// Gets a particular palette.
-	Palette *getPalette(const std::string &name);
+	Palette *const getPalette(const std::string &name);
 	/// Sets a new palette.
 	void setPalette(SDL_Color *colors, int firstcolor, int ncolors);
 };

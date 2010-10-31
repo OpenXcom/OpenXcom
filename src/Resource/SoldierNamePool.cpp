@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -40,7 +40,7 @@ SoldierNamePool::~SoldierNamePool()
  * @param gender Returned gender of the name.
  * @return Soldier name.
  */
-std::string SoldierNamePool::genName(int *gender)
+std::string SoldierNamePool::genName(int *gender) const
 {
 	std::stringstream name;
 	unsigned int first = RNG::generate(1, _maleNames.size() + _femaleNames.size());

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -55,7 +55,7 @@ public:
 	/// Sets the text's string.
 	void setText(const std::string &text);
 	/// Gets the text's string.
-	std::string getText();
+	std::string getText() const;
 	/// Sets the text's wordwrap setting.
 	void setWordWrap(bool wrap);
 	/// Sets the text's color invert setting.
@@ -67,7 +67,7 @@ public:
 	/// Sets the text's color.
 	void setColor(Uint8 color);
 	/// Gets the text's color.
-	Uint8 getColor();
+	Uint8 getColor() const;
 	/// Sets the surface's palette.
 	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
 	/// Handles the timers.

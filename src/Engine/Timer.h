@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -48,9 +48,9 @@ public:
 	/// Stops the timer.
 	void stop();
 	/// Gets the current time interval.
-	Uint32 getTime();
+	Uint32 getTime() const;
 	/// Gets if the timer's running.
-	bool isRunning();
+	bool isRunning() const;
 	/// Advances the timer.
 	void think(State* state, Surface* surface);
 	/// Sets the timer's interval.

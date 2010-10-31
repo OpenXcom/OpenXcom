@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -43,7 +43,7 @@ public:
 	/// Sets the cursor's color.
 	void setColor(Uint8 color);
 	/// Gets the cursor's color.
-	Uint8 getColor();
+	Uint8 getColor() const;
 	/// Draws the cursor.
 	void draw();
 };

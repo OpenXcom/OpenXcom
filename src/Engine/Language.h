@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -39,7 +39,7 @@ public:
 	/// Loads an X-Com language file.
 	void loadDat(const std::string &filename);
 	/// Gets a string from the language.
-	std::string getString(LangString id);
+	std::string getString(LangString id) const;
 };
 
 #endif

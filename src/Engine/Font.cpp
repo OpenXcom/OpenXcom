@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -89,16 +89,19 @@ void Font::load()
  * @return Pointer to the font's surface with the respective
  * cropping rectangle set up.
  */
-Surface *Font::getChar(char c)
+Surface *const Font::getChar(char c)
 {
-	_surface->setCrop(&_chars[c]);
+	_surface->getCrop()->x = _chars[c].x;
+	_surface->getCrop()->y = _chars[c].y;
+	_surface->getCrop()->w = _chars[c].w;
+	_surface->getCrop()->h = _chars[c].h;
 	return _surface;
 }
 /**
  * Returns the maximum width for any character in the font.
  * @return Width in pixels.
  */
-int Font::getWidth()
+int Font::getWidth() const
 {
 	return _width;
 }
@@ -107,7 +110,7 @@ int Font::getWidth()
  * Returns the maximum height for any character in the font.
  * @return Height in pixels.
  */
-int Font::getHeight()
+int Font::getHeight() const
 {
 	return _height;
 }
@@ -118,7 +121,7 @@ int Font::getHeight()
  * @note This does not refer to character spacing within the surface,
  * but to the spacing used when drawing a series of characters.
  */
-int Font::getSpacing()
+int Font::getSpacing() const
 {
 	return _spacing;
 }
@@ -128,7 +131,7 @@ int Font::getSpacing()
  * actual graphic into the font.
  * @return Pointer to the internal surface.
  */
-Surface* Font::getSurface()
+Surface *const Font::getSurface() const
 {
 	return _surface;
 }

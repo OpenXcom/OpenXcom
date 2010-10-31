@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -108,29 +108,24 @@ DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo) :
 	Surface *graphic = _game->getResourcePack()->getSurface("INTERWIN.DAT");
 	graphic->setX(0);
 	graphic->setY(0);
-	SDL_Rect crop;
-	crop.x = 0;
-	crop.y = 0;
-	crop.w = 160;
-	crop.h = 96;
-	SDL_FillRect(_window->getSurface(), &crop, 15);
-	graphic->setCrop(&crop);
+	graphic->getCrop()->x = 0;
+	graphic->getCrop()->y = 0;
+	graphic->getCrop()->w = 160;
+	graphic->getCrop()->h = 96;
+	SDL_FillRect(_window->getSurface(), graphic->getCrop(), 15);
 	graphic->blit(_window);
 	
-	SDL_FillRect(_preview->getSurface(), &crop, 15);
-	crop.y = 96;
-	crop.h = 15;
-	graphic->setCrop(&crop);
+	SDL_FillRect(_preview->getSurface(), graphic->getCrop(), 15);
+	graphic->getCrop()->y = 96;
+	graphic->getCrop()->h = 15;
 	graphic->blit(_preview);
 	graphic->setY(67);
-	crop.y = 111;
-	crop.h = 29;
-	graphic->setCrop(&crop);
+	graphic->getCrop()->y = 111;
+	graphic->getCrop()->h = 29;
 	graphic->blit(_preview);
 	graphic->setY(15);
-	crop.y = 140 + 52 * _ufo->getRules()->getSprite();
-	crop.h = 52;
-	graphic->setCrop(&crop);
+	graphic->getCrop()->y = 140 + 52 * _ufo->getRules()->getSprite();
+	graphic->getCrop()->h = 52;
 	graphic->blit(_preview);
 	_preview->setVisible(false);
 	_preview->onMouseClick((ActionHandler)&DogfightState::previewClick);

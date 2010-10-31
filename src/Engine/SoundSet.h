@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -42,9 +42,9 @@ public:
 	/// Loads an X-Com CAT set of sound files.
 	void loadCat(const std::string &filename, bool wav = true);
 	/// Gets a particular sound from the set.
-	Sound *getSound(unsigned int i);
+	Sound *const getSound(unsigned int i) const;
 	/// Gets the total sounds in the set.
-	int getTotalSounds();
+	int getTotalSounds() const;
 };
 
 #endif

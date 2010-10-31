@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -38,7 +38,7 @@ public:
 	/// Cleans up the pool.
 	~SoldierNamePool();
 	/// Generates a new name from the pool.
-	std::string genName(int *gender);
+	std::string genName(int *gender) const;
 	/// Adds a male first name.
 	void addMaleName(const std::string &name);
 	/// Adds a female first name.

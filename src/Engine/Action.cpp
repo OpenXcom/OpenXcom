@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -38,7 +38,7 @@ Action::~Action()
  * when this action was fired (used to correct mouse input).
  * @return Screen's X scaling factor.
  */
-double Action::getXScale()
+double Action::getXScale() const
 {
 	return _xScale;
 }
@@ -48,7 +48,7 @@ double Action::getXScale()
  * when this action was fired (used to correct mouse input).
  * @return Screen's Y scaling factor.
  */
-double Action::getYScale()
+double Action::getYScale() const
 {
 	return _yScale;
 }
@@ -58,7 +58,7 @@ double Action::getYScale()
  * this action (the sender).
  * @return Pointer to interactive surface.
  */
-InteractiveSurface *Action::getSender()
+InteractiveSurface *const Action::getSender() const
 {
 	return _sender;
 }
@@ -77,7 +77,7 @@ void Action::setSender(InteractiveSurface *sender)
  * Returns the details about this action.
  * @return Pointer to SDL_event.
  */
-SDL_Event *Action::getDetails()
+SDL_Event *const Action::getDetails() const
 {
 	return _ev;
 }

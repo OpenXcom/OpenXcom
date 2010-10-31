@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -74,7 +74,7 @@ void Cursor::setColor(Uint8 color)
  * Returns the cursor's base color.
  * @return Color value.
  */
-Uint8 Cursor::getColor()
+Uint8 Cursor::getColor() const
 {
 	return _color;
 }

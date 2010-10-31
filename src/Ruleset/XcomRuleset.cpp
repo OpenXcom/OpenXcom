@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -548,67 +548,67 @@ XcomRuleset::XcomRuleset() : Ruleset()
 
 	// Add items
 	RuleItem *slauncher = new RuleItem(STR_STINGRAY_LAUNCHER);
-	slauncher->setSize(0.8);
+	slauncher->setSize(0.8f);
 	slauncher->setEquippable(false);
 
 	RuleItem *alauncher = new RuleItem(STR_AVALANCHE_LAUNCHER);
-	alauncher->setSize(1.0);
+	alauncher->setSize(1.0f);
 	alauncher->setEquippable(false);
 
 	RuleItem *icannon = new RuleItem(STR_CANNON);
-	icannon->setSize(1.5);
+	icannon->setSize(1.5f);
 	icannon->setEquippable(false);
 
 	RuleItem *smissile = new RuleItem(STR_STINGRAY_MISSILE);
-	smissile->setSize(0.4);
+	smissile->setSize(0.4f);
 	smissile->setEquippable(false);
 
 	RuleItem *amissile = new RuleItem(STR_AVALANCHE_MISSILE);
-	amissile->setSize(1.5);
+	amissile->setSize(1.5f);
 	amissile->setEquippable(false);
 
 	RuleItem *crounds = new RuleItem(STR_CANNON_ROUNDS);
-	crounds->setSize(0.0);
+	crounds->setSize(0.0f);
 	crounds->setEquippable(false);
 
 	RuleItem *pistol = new RuleItem(STR_PISTOL);
-	pistol->setSize(0.1);
+	pistol->setSize(0.1f);
 
 	RuleItem *pclip = new RuleItem(STR_PISTOL_CLIP);
-	pclip->setSize(0.1);
+	pclip->setSize(0.1f);
 
 	RuleItem *rifle = new RuleItem(STR_RIFLE);
-	rifle->setSize(0.2);
+	rifle->setSize(0.2f);
 
 	RuleItem *rclip = new RuleItem(STR_RIFLE_CLIP);
-	rclip->setSize(0.1);
+	rclip->setSize(0.1f);
 
 	RuleItem *hcannon = new RuleItem(STR_HEAVY_CANNON);
-	hcannon->setSize(0.3);
+	hcannon->setSize(0.3f);
 
 	RuleItem *hcap = new RuleItem(STR_HC_AP_AMMO);
-	hcap->setSize(0.1);
+	hcap->setSize(0.1f);
 
 	RuleItem *hche = new RuleItem(STR_HC_HE_AMMO);
-	hche->setSize(0.1);
+	hche->setSize(0.1f);
 
 	RuleItem *acannon = new RuleItem(STR_AUTO_CANNON);
-	acannon->setSize(0.3);
+	acannon->setSize(0.3f);
 
 	RuleItem *acap = new RuleItem(STR_AC_AP_AMMO);
-	acap->setSize(0.1);
+	acap->setSize(0.1f);
 
 	RuleItem *rlauncher = new RuleItem(STR_ROCKET_LAUNCHER);
-	rlauncher->setSize(0.4);
+	rlauncher->setSize(0.4f);
 
 	RuleItem *srocket = new RuleItem(STR_SMALL_ROCKET);
-	srocket->setSize(0.2);
+	srocket->setSize(0.2f);
 
 	RuleItem *grenade = new RuleItem(STR_GRENADE);
-	grenade->setSize(0.1);
+	grenade->setSize(0.1f);
 
 	RuleItem *sgrenade = new RuleItem(STR_SMOKE_GRENADE);
-	sgrenade->setSize(0.1);
+	sgrenade->setSize(0.1f);
 
 	_items.insert(std::pair<LangString, RuleItem*>(STR_STINGRAY_LAUNCHER, slauncher));
 	_items.insert(std::pair<LangString, RuleItem*>(STR_AVALANCHE_LAUNCHER, alauncher));

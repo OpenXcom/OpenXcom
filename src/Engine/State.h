@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -48,11 +48,11 @@ public:
 	/// Cleans up the state.
 	virtual ~State();
 	/// Gets the state's surfaces.
-	std::vector<Surface*> *getSurfaces();
+	std::vector<Surface*> *const getSurfaces();
 	/// Adds a child element to the state.
 	void add(Surface *surface);
 	/// Gets whether the state is a full-screen.
-	bool isScreen();
+	bool isScreen() const;
 	/// Initializes the state.
 	virtual void init();
 	/// Handles any events.

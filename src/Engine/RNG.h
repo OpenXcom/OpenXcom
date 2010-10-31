@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -35,7 +35,7 @@ public:
 	/// Initializes the generator.
 	static void init(int seed = -1);
 	/// Gets the generator's seed.
-	int getSeed();
+	static int getSeed();
 	/// Generates a random integer number.
 	static int generate(int min, int max);
 	/// Generates a random decimal number.

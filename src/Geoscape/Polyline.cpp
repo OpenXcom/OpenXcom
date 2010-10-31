@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -42,7 +42,7 @@ Polyline::~Polyline()
  * @param i Point number (0-max).
  * @return Point's latitude.
  */
-double Polyline::getLatitude(int i)
+double Polyline::getLatitude(int i) const
 {
 	return _lat[i];
 }
@@ -62,7 +62,7 @@ void Polyline::setLatitude(int i, double lat)
  * @param i Point number (0-max).
  * @return Point's longitude.
  */
-double Polyline::getLongitude(int i)
+double Polyline::getLongitude(int i) const
 {
 	return _lon[i];
 }
@@ -81,7 +81,7 @@ void Polyline::setLongitude(int i, double lon)
  * Returns the number of points (vertexes) that make up the polyline.
  * @return Number of points.
  */
-int Polyline::getPoints()
+int Polyline::getPoints() const
 {
 	return _points;
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -42,7 +42,7 @@ Region::~Region()
  * Returns the cost of building a base inside this region.
  * @return Construction cost.
  */
-int Region::getBaseCost()
+int Region::getBaseCost() const
 {
 	return _cost;
 }
@@ -68,7 +68,7 @@ void Region::addArea(double lonMin, double lonMax, double latMin, double latMax)
  * @param lat Latitude in radians.
  * @return True if it's inside, False if it's outside.
  */
-bool Region::insideRegion(double lon, double lat)
+bool Region::insideRegion(double lon, double lat) const
 {
 	for (unsigned int i = 0; i < _lonMin.size(); i++)
 	{
@@ -91,7 +91,7 @@ bool Region::insideRegion(double lon, double lat)
  * Returns the list of cities contained.
  * @return Pointer to list.
  */
-std::vector<City*> *Region::getCities()
+std::vector<City*> *const Region::getCities()
 {
 	return &_cities;
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -47,11 +47,11 @@ public:
 	/// Sets the text button's color.
 	void setColor(Uint8 color);
 	/// Gets the text button's color.
-	Uint8 getColor();
+	Uint8 getColor() const;
 	/// Sets the text button's text.
 	void setText(const std::string &text);
 	/// Gets the text button's text.
-	std::string getText();
+	std::string getText() const;
 	/// Sets the text button's group.
 	void setGroup(TextButton **group);
 	/// Sets the text button's palette.

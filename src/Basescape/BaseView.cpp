@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -107,7 +107,7 @@ void BaseView::setTexture(SurfaceSet *texture)
  * Returns the facility the mouse is currently over.
  * @return Pointer to base facility (0 if none).
  */
-BaseFacility *BaseView::getSelectedFacility()
+BaseFacility *BaseView::getSelectedFacility() const
 {
 	return _selFacility;
 }
@@ -117,7 +117,7 @@ BaseFacility *BaseView::getSelectedFacility()
  * the mouse is currently over.
  * @return X position on the grid.
  */
-int BaseView::getGridX()
+int BaseView::getGridX() const
 {
 	return _gridX;
 }
@@ -127,7 +127,7 @@ int BaseView::getGridX()
  * the mouse is currently over.
  * @return Y position on the grid.
  */
-int BaseView::getGridY()
+int BaseView::getGridY() const
 {
 	return _gridY;
 }
@@ -169,7 +169,7 @@ void BaseView::setSelectable(int size)
  * @param rule Facility type.
  * @return True if placeable, False otherwise.
  */
-bool BaseView::isPlaceable(RuleBaseFacility *rule)
+bool BaseView::isPlaceable(RuleBaseFacility *rule) const
 {
 	// Check if square isn't occupied
 	for (int y = _gridY; y < _gridY + rule->getSize(); y++)
@@ -177,9 +177,13 @@ bool BaseView::isPlaceable(RuleBaseFacility *rule)
 		for (int x = _gridX; x < _gridX + rule->getSize(); x++)
 		{
 			if (x < 0 || x >= BASE_SIZE || y < 0 || y >= BASE_SIZE)
+			{
 				return false;
+			}
 			if (_facilities[x][y] != 0)
+			{
 				return false;
+			}
 		}
 	}
 
@@ -190,7 +194,9 @@ bool BaseView::isPlaceable(RuleBaseFacility *rule)
 			(_gridY > 0 && _facilities[_gridX + i][_gridY - 1] != 0 && _facilities[_gridX + i][_gridY - 1]->getBuildTime() == 0) ||
 			(_gridX + rule->getSize() < BASE_SIZE && _facilities[_gridX + rule->getSize()][_gridY + i] != 0 && _facilities[_gridX + rule->getSize()][_gridY + i]->getBuildTime() == 0) ||
 			(_gridY + rule->getSize() < BASE_SIZE && _facilities[_gridX + i][_gridY + rule->getSize()] != 0 && _facilities[_gridX + i][_gridY + rule->getSize()]->getBuildTime() == 0))
+		{
 			return true;
+		}
 	}
 
 	return false;
@@ -207,7 +213,7 @@ bool BaseView::isPlaceable(RuleBaseFacility *rule)
  * @param remove Facility to ignore (in case of facility dismantling).
  * @return Number of squares connected to the starting position.
  */
-int BaseView::countConnected(int x, int y, int **grid, BaseFacility *remove)
+int BaseView::countConnected(int x, int y, int **grid, BaseFacility *remove) const
 {
 	bool newgrid = (grid == 0);
 
@@ -222,15 +228,21 @@ int BaseView::countConnected(int x, int y, int **grid, BaseFacility *remove)
 			for (int yy = 0; yy < BASE_SIZE; yy++)
 			{
 				if (_facilities[xx][yy] == 0 || _facilities[xx][yy] == remove)
+				{
 					grid[xx][yy] = -1;
+				}
 				else
+				{
 					grid[xx][yy] = 0;
+				}
 			}
 		}
 	}
 
 	if (x < 0 || x >= BASE_SIZE || y < 0 || y >= BASE_SIZE || grid[x][y] != 0)
+	{
 		return 0;
+	}
 
 	// Add connected facilities to grid
 	int total = 1;
@@ -240,13 +252,21 @@ int BaseView::countConnected(int x, int y, int **grid, BaseFacility *remove)
 	if (_facilities[x][y]->getBuildTime() > 0)
 	{
 		if (x > 0 && _facilities[x - 1][y] == _facilities[x][y])
+		{
 			total += countConnected(x - 1, y, grid, remove);
+		}
 		if (y > 0 && _facilities[x][y - 1] == _facilities[x][y])
+		{
 			total += countConnected(x, y - 1, grid, remove);
+		}
 		if (x < BASE_SIZE - 1 && _facilities[x + 1][y] == _facilities[x][y])
+		{
 			total += countConnected(x + 1, y, grid, remove);
+		}
 		if (y < BASE_SIZE - 1 && _facilities[x][y + 1] == _facilities[x][y])
+		{
 			total += countConnected(x, y + 1, grid, remove);
+		}
 		return total;
 	}
 
@@ -449,7 +469,9 @@ void BaseView::blit(Surface *surface)
 {
 	Surface::blit(surface);
 	if (_selector != 0)
+	{
 		_selector->blit(surface);
+	}
 }
 
 /**

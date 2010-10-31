@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -39,13 +39,13 @@ public:
 	/// Cleans up the item.
 	~Item();
 	/// Gets the item's ruleset.
-	RuleItem *getRules();
+	RuleItem *const getRules() const;
 	/// Gets the item's quantity
-	int getQuantity();
+	int getQuantity() const;
 	/// Sets the item's quantity.
 	void setQuantity(int qty);
 	/// Gets the item's total size.
-	double getTotalSize();
+	double getTotalSize() const;
 };
 
 #endif

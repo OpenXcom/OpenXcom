@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -39,7 +39,7 @@ CraftWeapon::~CraftWeapon()
  * Returns the ruleset for the craft weapon's type.
  * @return Pointer to ruleset.
  */
-RuleCraftWeapon *CraftWeapon::getRules()
+RuleCraftWeapon *const CraftWeapon::getRules() const
 {
 	return _rules;
 }
@@ -48,7 +48,7 @@ RuleCraftWeapon *CraftWeapon::getRules()
  * Returns the ammo contained in this craft weapon.
  * @return Weapon ammo.
  */
-int CraftWeapon::getAmmo()
+int CraftWeapon::getAmmo() const
 {
 	return _ammo;
 }
@@ -61,7 +61,9 @@ void CraftWeapon::setAmmo(int ammo)
 {
 	_ammo = ammo;
 	if (_ammo > _rules->getAmmoMax())
+	{
 		_ammo = _rules->getAmmoMax();
+	}
 }
 
 /**

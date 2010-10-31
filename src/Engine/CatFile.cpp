@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -23,6 +23,7 @@
  * Creates a CAT file stream. A CAT file starts with an index of the
  * offset and size of every file contained within. Each file consists
  * of a filename followed by its contents.
+ * @param path Full path to CAT file.
  */
 CatFile::CatFile(const char *path) :
 	std::ifstream(path, std::ios::in | std::ios::binary),
@@ -60,7 +61,9 @@ CatFile::~CatFile()
 }
 
 /**
- * Load an object into memory.
+ * Loads an object into memory.
+ * @param i Object number to load.
+ * @return Pointer to the loaded object.
  */
 char *CatFile::load(unsigned int i)
 {

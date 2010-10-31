@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -39,7 +39,7 @@ City::~City()
  * Returns the name of the city.
  * @return City name.
  */
-LangString City::getName()
+LangString City::getName() const
 {
 	return _name;
 }
@@ -48,7 +48,7 @@ LangString City::getName()
  * Returns the latitude coordinate of the city.
  * @return Latitude in radian.
  */
-double City::getLatitude()
+double City::getLatitude() const
 {
 	return _lat;
 }
@@ -66,7 +66,7 @@ void City::setLatitude(double lat)
  * Returns the longitude coordinate of the city.
  * @return Longitude in radian.
  */
-double City::getLongitude()
+double City::getLongitude() const
 {
 	return _lon;
 }

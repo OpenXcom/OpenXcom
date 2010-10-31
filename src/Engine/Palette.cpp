@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -82,7 +82,7 @@ void Palette::loadDat(const std::string &filename, int ncolors, int offset)
  * @param offset Offset to a specific color.
  * @return Pointer to the requested SDL_Color.
  */
-SDL_Color *Palette::getColors(int offset)
+SDL_Color *const Palette::getColors(int offset) const
 {
 	return _colors + offset;
 }

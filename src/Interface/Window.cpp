@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -96,7 +96,7 @@ void Window::setColor(Uint8 color)
  * Returns the color used to draw the shaded border.
  * @return Color value.
  */
-Uint8 Window::getColor()
+Uint8 Window::getColor() const
 {
 	return _color;
 }
@@ -143,7 +143,6 @@ void Window::popup()
  */
 void Window::draw()
 {
-	SDL_Rect cropper;
 	SDL_Rect square;
 	Uint8 color = _color;
 	
@@ -189,15 +188,13 @@ void Window::draw()
 		else
 			square.h = 1;
 	}
-
-	cropper.x = _x + square.x;
-	cropper.y = _y + square.y;
-	cropper.w = square.w;
-	cropper.h = square.h;
 		
 	if (_bg != 0)
 	{
-		_bg->setCrop(&cropper);
+		_bg->getCrop()->x = _x + square.x;
+		_bg->getCrop()->y = _y + square.y;
+		_bg->getCrop()->w = square.w;
+		_bg->getCrop()->h = square.h;
 		_bg->setX(square.x);
 		_bg->setY(square.y);
 		_bg->blit(this);

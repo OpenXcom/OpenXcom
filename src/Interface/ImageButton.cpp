@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -51,7 +51,7 @@ void ImageButton::setColor(Uint8 color)
  * Returns the color for the image button.
  * @return Color value.
  */
-Uint8 ImageButton::getColor()
+Uint8 ImageButton::getColor() const
 {
 	return _color;
 }

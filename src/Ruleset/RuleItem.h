@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -31,7 +31,7 @@ class RuleItem
 {
 private:
 	LangString _type;
-	double _size;
+	float _size;
 	int _value, _time;
 	bool _equip;
 public:
@@ -40,21 +40,21 @@ public:
 	/// Cleans up the item ruleset.
 	~RuleItem();
 	/// Gets the item's type.
-	LangString getType();
+	LangString getType() const;
 	/// Gets the item's size.
-	double getSize();
+	float getSize() const;
 	/// Sets the item's size.
-	void setSize(double size);
+	void setSize(float size);
 	/// Gets the item's sale value.
-	int getSaleValue();
+	int getSaleValue() const;
 	/// Sets the item's sale value.
 	void setSaleValue(int value);
 	/// Gets the item's transfer time.
-	int getTransferTime();
+	int getTransferTime() const;
 	/// Sets the item's transfer time.
 	void setTransferTime(int time);
 	/// Gets if the item is equippable.
-	bool getEquippable();
+	bool getEquippable() const;
 	/// Sets if the item is equippable.
 	void setEquippable(bool equip);
 };

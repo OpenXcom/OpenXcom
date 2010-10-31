@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -36,13 +36,13 @@ public:
 	/// Cleans up the city.
 	~City();
 	/// Gets the city's name.
-	LangString getName();
+	LangString getName() const;
 	/// Gets the city's latitude.
-	double getLatitude();
+	double getLatitude() const;
 	/// Sets the city's latitude.
 	void setLatitude(double lat);
 	/// Gets the city's longitude.
-	double getLongitude();
+	double getLongitude() const;
 	/// Sets the city's longitude.
 	void setLongitude(double lon);
 };

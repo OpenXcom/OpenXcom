@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -39,15 +39,15 @@ public:
 	/// Cleans up the target.
 	virtual ~Target();
 	/// Gets the target's latitude.
-	double getLatitude();
+	double getLatitude() const;
 	/// Sets the target's latitude.
 	void setLatitude(double lat);
 	/// Gets the target's longitude.
-	double getLongitude();
+	double getLongitude() const;
 	/// Sets the target's longitude.
 	void setLongitude(double lon);
 	/// Gets the target's name.
-	virtual std::string getName(Language *lang) = 0;
+	virtual std::string getName(Language *lang) const = 0;
 	/// Gets the target's followers.
 	std::vector<Target*> *getFollowers();
 };

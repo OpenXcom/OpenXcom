@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -92,7 +92,7 @@ void TextEdit::setText(const std::string &text)
  * Returns the string displayed on screen.
  * @return Text string.
  */
-std::string TextEdit::getText()
+std::string TextEdit::getText() const
 {
 	return _value;
 }
@@ -153,7 +153,7 @@ void TextEdit::setColor(Uint8 color)
  * Returns the color used to render the text.
  * @return Color value.
  */
-Uint8 TextEdit::getColor()
+Uint8 TextEdit::getColor() const
 {
 	return _text->getColor();
 }

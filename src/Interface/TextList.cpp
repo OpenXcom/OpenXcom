@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -72,7 +72,7 @@ TextList::~TextList()
  * @param col Column number.
  * @return Pointer to the requested Text.
  */
-Text* TextList::getCell(int row, int col)
+Text *const TextList::getCell(int row, int col) const
 {
 	return _texts[row][col];
 }
@@ -182,6 +182,15 @@ void TextList::setColor(Uint8 color)
 }
 
 /**
+ * Returns the color of the text in the list.
+ * @return Color value.
+ */
+Uint8 TextList::getColor() const
+{
+	return _color;
+}
+
+/**
  * Changes the horizontal alignment of the text in the list. This doesn't change
  * the alignment of existing text, just the alignment of text added from then on.
  * @param align Horizontal alignment.
@@ -216,7 +225,7 @@ void TextList::setSelectable(bool selectable)
  * list is selectable.
  * @return Selected row.
  */
-int TextList::getSelectedRow()
+int TextList::getSelectedRow() const
 {
 	return _selRow;
 }

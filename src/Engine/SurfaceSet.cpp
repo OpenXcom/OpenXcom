@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -221,7 +221,7 @@ void SurfaceSet::loadDat(const std::string &filename)
  * @param i Frame number in the set.
  * @return Pointer to the respective surface.
  */
-Surface *SurfaceSet::getFrame(int i)
+Surface *const SurfaceSet::getFrame(int i) const
 {
 	return _frames[i];
 }
@@ -230,7 +230,7 @@ Surface *SurfaceSet::getFrame(int i)
  * Returns the full width of a frame in the set.
  * @return Width in pixels.
  */
-int SurfaceSet::getWidth()
+int SurfaceSet::getWidth() const
 {
 	return _width;
 }
@@ -239,7 +239,7 @@ int SurfaceSet::getWidth()
  * Returns the full height of a frame in the set.
  * @return Height in pixels.
  */
-int SurfaceSet::getHeight()
+int SurfaceSet::getHeight() const
 {
 	return _height;
 }
@@ -249,9 +249,9 @@ int SurfaceSet::getHeight()
  * stored in the set.
  * @return Number of frames.
  */
-int SurfaceSet::getTotalFrames()
+int SurfaceSet::getTotalFrames() const
 {
-  return _frames.size();
+	return _frames.size();
 }
 
 /**

@@ -25,13 +25,14 @@
 
 /**
  * Subclass of CatFile to handle gm.cat files
+ * that contain MIDI music streams.
  */
 class GMCatFile : public CatFile
 {
 public:
-	/// Inherit constructor
+	/// Inherit constructor.
 	GMCatFile(const char *path) : CatFile(path) { }
-	/// Load a stream as a MIDI file
+	/// Loads a stream as a MIDI file.
 	Music *loadMIDI(unsigned int i);
 };
 

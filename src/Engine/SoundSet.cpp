@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -99,7 +99,9 @@ void SoundSet::loadCat(const std::string &filename, bool wav)
 
 		delete[] sound;
 		if (!wav)
+		{
 			delete[] newsound;
+		}
 	}
 }
 
@@ -108,10 +110,12 @@ void SoundSet::loadCat(const std::string &filename, bool wav)
  * @param i Sound number in the set.
  * @return Pointer to the respective sound.
  */
-Sound *SoundSet::getSound(unsigned int i)
+Sound *const SoundSet::getSound(unsigned int i) const
 {
 	if (i >= _sounds.size())
+	{
 		return 0;
+	}
 	return _sounds[i];
 }
 
@@ -120,7 +124,7 @@ Sound *SoundSet::getSound(unsigned int i)
  * stored in the set.
  * @return Number of sounds.
  */
-int SoundSet::getTotalSounds()
+int SoundSet::getTotalSounds() const
 {
-  return _sounds.size();
+	return _sounds.size();
 }

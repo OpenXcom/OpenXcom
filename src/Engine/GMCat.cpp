@@ -342,6 +342,11 @@ static int gmext_write_midi (const struct gmstream *stream,
 	return 0;
 }
 
+/**
+ * Loads a MIDI object into memory.
+ * @param i Music number to load.
+ * @return Pointer to the loaded music.
+ */
 Music *GMCatFile::loadMIDI(unsigned int i)
 {
 	Music *music = new Music;

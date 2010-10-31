@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -708,7 +708,7 @@ void GeoscapeState::popup(State *state)
  * access by other substates.
  * @return Pointer to globe.
  */
-Globe *GeoscapeState::getGlobe()
+Globe *const GeoscapeState::getGlobe() const
 {
 	return _globe;
 }

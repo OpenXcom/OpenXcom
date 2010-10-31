@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -39,53 +39,53 @@ public:
 	/// Cleans up the craft weapon ruleset.
 	~RuleCraftWeapon();
 	/// Gets the craft weapon's type.
-	LangString getType();
+	LangString getType() const;
 	/// Gets the craft weapon's sprite.
-	int getSprite();
+	int getSprite() const;
 	/// Sets the craft weapon's sprite.
 	void setSprite(int sprite);
 	/// Gets the craft weapon's sound.
-	int getSound();
+	int getSound() const;
 	/// Sets the craft weapon's sound.
 	void setSound(int sound);
 	/// Gets the craft weapon's damage.
-	int getDamage();
+	int getDamage() const;
 	/// Sets the craft weapon's damage.
 	void setDamage(int damage);
 	/// Gets the craft weapon's range.
-	int getRange();
+	int getRange() const;
 	/// Sets the craft weapon's range.
 	void setRange(int range);
 	/// Gets the craft weapon's accuracy.
-	int getAccuracy();
+	int getAccuracy() const;
 	/// Sets the craft weapon's accuracy.
 	void setAccuracy(int accuracy);
 	/// Gets the craft weapon's cautious reload time.
-	int getCautiousReload();
+	int getCautiousReload() const;
 	/// Sets the craft weapon's cautious reload time.
 	void setCautiousReload(int reload);
 	/// Gets the craft weapon's standard reload time.
-	int getStandardReload();
+	int getStandardReload() const;
 	/// Sets the craft weapon's standard reload time.
 	void setStandardReload(int reload);
 	/// Gets the craft weapon's aggressive reload time.
-	int getAggressiveReload();
+	int getAggressiveReload() const;
 	/// Sets the craft weapon's aggressive reload time.
 	void setAggressiveReload(int reload);
 	/// Gets the craft weapon's maximum ammo.
-	int getAmmoMax();
+	int getAmmoMax() const;
 	/// Sets the craft weapon's maximum ammo.
 	void setAmmoMax(int ammo);
 	/// Gets the craft weapon's rearm rate.
-	int getRearmRate();
+	int getRearmRate() const;
 	/// Sets the craft weapon's rearm rate.
 	void setRearmRate(int rearm);
 	/// Gets the craft weapon's launcher item.
-	LangString getLauncherItem();
+	LangString getLauncherItem() const;
 	/// Sets the craft weapon's launcher item.
 	void setLauncherItem(LangString launcher);
 	/// Gets the craft weapon's clip item.
-	LangString getClipItem();
+	LangString getClipItem() const;
 	/// Sets the craft weapon's clip item.
 	void setClipItem(LangString clip);
 };

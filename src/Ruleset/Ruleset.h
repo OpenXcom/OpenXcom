@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -54,17 +54,17 @@ public:
 	/// Generates the starting saved game.
 	virtual SavedGame *newSave(GameDifficulty diff);
 	/// Gets the pool list for soldier names.
-	std::vector<SoldierNamePool*> *getPools();
+	std::vector<SoldierNamePool*> *const getPools();
 	/// Gets the ruleset for a facility type.
-	RuleBaseFacility *getBaseFacility(LangString id);
+	RuleBaseFacility *const getBaseFacility(LangString id);
 	/// Gets the ruleset for a craft type.
-	RuleCraft *getCraft(LangString id);
+	RuleCraft *const getCraft(LangString id);
 	/// Gets the ruleset for a craft weapon type.
-	RuleCraftWeapon *getCraftWeapon(LangString id);
+	RuleCraftWeapon *const getCraftWeapon(LangString id);
 	/// Gets the ruleset for an item type.
-	RuleItem *getItem(LangString id);
+	RuleItem *const getItem(LangString id);
 	/// Gets the ruleset for a UFO type.
-	RuleUfo *getUfo(LangString id);
+	RuleUfo *const getUfo(LangString id);
 };
 
 #endif

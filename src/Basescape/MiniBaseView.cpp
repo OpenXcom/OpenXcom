@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -72,7 +72,7 @@ void MiniBaseView::setTexture(SurfaceSet *texture)
  * Returns the base the mouse cursor is currently over.
  * @return ID of the base.
  */
-unsigned int MiniBaseView::getHoveredBase()
+unsigned int MiniBaseView::getHoveredBase() const
 {
 	return _hoverBase;
 }

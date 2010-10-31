@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -76,7 +76,7 @@ public:
 	/// Displays a popup window.
 	void popup(State *state);
 	/// Gets the Geoscape globe.
-	Globe *getGlobe();
+	Globe *const getGlobe() const;
 	/// Handler for clicking the globe.
 	void globeClick(Action *action);
 	/// Handler for clicking the Intercept button.

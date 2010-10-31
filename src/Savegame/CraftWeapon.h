@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -39,9 +39,9 @@ public:
 	/// Cleans up the craft weapon.
 	~CraftWeapon();
 	/// Gets the craft weapon's ruleset.
-	RuleCraftWeapon *getRules();
+	RuleCraftWeapon *const getRules() const;
 	/// Gets the craft weapon's ammo
-	int getAmmo();
+	int getAmmo() const;
 	/// Sets the craft weapon's ammo.
 	void setAmmo(int ammo);
 	/// Rearms the craft weapon.

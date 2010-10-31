@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -35,11 +35,11 @@ public:
 	/// Cleans up the waypoint.
 	~Waypoint();
 	/// Gets the waypoint's ID.
-	int getId();
+	int getId() const;
 	/// Sets the waypoint's ID.
 	void setId(int id);
 	/// Gets the waypoint's name.
-	std::string getName(Language *lang);
+	std::string getName(Language *lang) const;
 };
 
 #endif

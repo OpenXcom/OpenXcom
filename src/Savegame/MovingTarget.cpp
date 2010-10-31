@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -35,7 +35,7 @@ MovingTarget::~MovingTarget()
  * Returns the destination the moving target is heading to.
  * @return Pointer to destination.
  */
-Target *MovingTarget::getDestination()
+Target *const MovingTarget::getDestination() const
 {
 	return _dest;
 }
@@ -71,7 +71,7 @@ void MovingTarget::setDestination(Target *dest)
  * Returns the speed of the moving target.
  * @return Speed in knots.
  */
-int MovingTarget::getSpeed()
+int MovingTarget::getSpeed() const
 {
 	return _speed;
 }
@@ -91,7 +91,7 @@ void MovingTarget::setSpeed(int speed)
  * and converts it into radians per 5 in-game seconds.
  * @return Speed in radians.
  */
-double MovingTarget::getRadianSpeed()
+double MovingTarget::getRadianSpeed() const
 {
 	// Each nautical mile is 1/60th of a degree.
 	// Each hour contains 300 5-seconds.
@@ -106,7 +106,7 @@ double MovingTarget::getRadianSpeed()
  * @param dLat Returned latitude difference.
  * @returns Distance in radian.
  */
-double MovingTarget::getDistance(Target *target, double *dLon, double *dLat)
+double MovingTarget::getDistance(Target *target, double *dLon, double *dLat) const
 {
 	double minLength = 2*M_PI, lat = target->getLatitude();
 	for (double lon = target->getLongitude() - 2*M_PI; lon <= target->getLongitude() + 2*M_PI; lon += 2*M_PI)
@@ -149,7 +149,7 @@ void MovingTarget::calculateSpeed()
  * if it has exceeded the destination position based on the speed vector.
  * @return True if it has, False otherwise.
  */
-bool MovingTarget::finishedRoute()
+bool MovingTarget::finishedRoute() const
 {
 	return (((_speedLon > 0 && _lon >= _dest->getLongitude()) || (_speedLon < 0 && _lon <= _dest->getLongitude())) &&
 			((_speedLat > 0 && _lat >= _dest->getLatitude()) || (_speedLat < 0 && _lat <= _dest->getLatitude())));
@@ -159,9 +159,11 @@ bool MovingTarget::finishedRoute()
  * Checks if the moving target has reached its destination.
  * @return True if it has, False otherwise.
  */
-bool MovingTarget::reachedDestination()
+bool MovingTarget::reachedDestination() const
 {
 	if (_dest == 0)
+	{
 		return false;
+	}
 	return (_lon == _dest->getLongitude() && _lat == _dest->getLatitude());
 }

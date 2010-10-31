@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -41,7 +41,7 @@ public:
 	/// Sets the image button's color.
 	void setColor(Uint8 color);
 	/// Gets the image button's color.
-	Uint8 getColor();
+	Uint8 getColor() const;
 	/// Sets the image button's group.
 	void setGroup(ImageButton **group);
 	/// Special handling for mouse presses.

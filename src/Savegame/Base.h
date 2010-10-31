@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -50,7 +50,7 @@ public:
 	/// Cleans up the base.
 	~Base();
 	/// Gets the base's name.
-	std::string getName(Language* lang = 0);
+	std::string getName(Language* lang = 0) const;
 	/// Sets the base's name.
 	void setName(const std::string &name);
 	/// Gets the base's facilities.
@@ -66,53 +66,53 @@ public:
 	/// Sets the base's engineers.
 	void setEngineers(int engineers);
 	/// Gets the base's available soldiers.
-	int getAvailableSoldiers();
+	int getAvailableSoldiers() const;
 	/// Gets the base's total soldiers.
-	int getTotalSoldiers();
+	int getTotalSoldiers() const;
 	/// Gets the base's available scientists.
-	int getAvailableScientists();
+	int getAvailableScientists() const;
 	/// Gets the base's total scientists.
-	int getTotalScientists();
+	int getTotalScientists() const;
 	/// Gets the base's available engineers.
-	int getAvailableEngineers();
+	int getAvailableEngineers() const;
 	/// Gets the base's total engineers.
-	int getTotalEngineers();
+	int getTotalEngineers() const;
 	/// Gets the base's used living quarters.
-	int getUsedQuarters();
+	int getUsedQuarters() const;
 	/// Gets the base's available living quarters.
-	int getAvailableQuarters();
+	int getAvailableQuarters() const;
 	/// Gets the base's used storage space.
-	int getUsedStores();
+	int getUsedStores() const;
 	/// Gets the base's available storage space.
-	int getAvailableStores();
+	int getAvailableStores() const;
 	/// Gets the base's used laboratory space.
-	int getUsedLaboratories();
+	int getUsedLaboratories() const;
 	/// Gets the base's available laboratory space.
-	int getAvailableLaboratories();
+	int getAvailableLaboratories() const;
 	/// Gets the base's used workshop space.
-	int getUsedWorkshops();
+	int getUsedWorkshops() const;
 	/// Gets the base's available workshop space.
-	int getAvailableWorkshops();
+	int getAvailableWorkshops() const;
 	/// Gets the base's used hangars.
-	int getUsedHangars();
+	int getUsedHangars() const;
 	/// Gets the base's available hangars.
-	int getAvailableHangars();
+	int getAvailableHangars() const;
 	/// Gets the base's defence value.
-	int getDefenceValue();
+	int getDefenceValue() const;
 	/// Gets the base's short range detection.
-	int getShortRangeDetection();
+	int getShortRangeDetection() const;
 	/// Gets the base's long range detection.
-	int getLongRangeDetection();
+	int getLongRangeDetection() const;
 	/// Gets the base's crafts of a certain type.
-	int getCraftCount(LangString craft);
+	int getCraftCount(LangString craft) const;
 	/// Gets the base's craft maintenance.
-	int getCraftMaintenance();
+	int getCraftMaintenance() const;
 	/// Gets the base's personnel maintenance.
-	int getPersonnelMaintenance();
+	int getPersonnelMaintenance() const;
 	/// Gets the base's facility maintenance.
-	int getFacilityMaintenance();
+	int getFacilityMaintenance() const;
 	/// Gets the base's total monthly maintenance.
-	int getMonthlyMaintenace();
+	int getMonthlyMaintenace() const;
 };
 
 #endif

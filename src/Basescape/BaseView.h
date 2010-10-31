@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -56,17 +56,17 @@ public:
 	/// Sets the texture for this base view.
 	void setTexture(SurfaceSet *texture);
 	/// Gets the currently selected facility.
-	BaseFacility *getSelectedFacility();
+	BaseFacility *getSelectedFacility() const;
 	/// Gets the X position of the currently selected square.
-	int getGridX();
+	int getGridX() const;
 	/// Gets the Y position of the currently selected square.
-	int getGridY();
+	int getGridY() const;
 	/// Sets whether the base view is selectable.
 	void setSelectable(int size);
 	/// Checks if a facility can be placed.
-	bool isPlaceable(RuleBaseFacility *rule);
+	bool isPlaceable(RuleBaseFacility *rule) const;
 	/// Counts the squares connected to a grid position.
-	int countConnected(int x, int y, int **grid, BaseFacility *remove = 0);
+	int countConnected(int x, int y, int **grid, BaseFacility *remove = 0) const;
 	/// Handles the timers.
 	void think();
 	/// Blinks the selector.

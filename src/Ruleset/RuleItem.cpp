@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -38,7 +38,7 @@ RuleItem::~RuleItem()
  * this item. Each item type has a unique name.
  * @return Item name.
  */
-LangString RuleItem::getType()
+LangString RuleItem::getType() const
 {
 	return _type;
 }
@@ -48,7 +48,7 @@ LangString RuleItem::getType()
  * takes up in a storage facility.
  * @return Storage size.
  */
-double RuleItem::getSize()
+float RuleItem::getSize() const
 {
 	return _size;
 }
@@ -58,7 +58,7 @@ double RuleItem::getSize()
  * takes up in a storage facility.
  * @param size Storage size.
  */
-void RuleItem::setSize(double size)
+void RuleItem::setSize(float size)
 {
 	_size = size;
 }
@@ -68,7 +68,7 @@ void RuleItem::setSize(double size)
  * selling this item.
  * @return Sale value.
  */
-int RuleItem::getSaleValue()
+int RuleItem::getSaleValue() const
 {
 	return _value;
 }
@@ -88,7 +88,7 @@ void RuleItem::setSaleValue(int value)
  * takes to arrive at a base.
  * @return Time in hours.
  */
-int RuleItem::getTransferTime()
+int RuleItem::getTransferTime() const
 {
 	return _time;
 }
@@ -108,7 +108,7 @@ void RuleItem::setTransferTime(int time)
  * by soldiers and loaded on transport craft.
  * @return Is it equippable?
  */
-bool RuleItem::getEquippable()
+bool RuleItem::getEquippable() const
 {
 	return _equip;
 }

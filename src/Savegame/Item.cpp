@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -39,7 +39,7 @@ Item::~Item()
  * Returns the ruleset for the item's type.
  * @return Pointer to ruleset.
  */
-RuleItem *Item::getRules()
+RuleItem *const Item::getRules() const
 {
 	return _rules;
 }
@@ -48,7 +48,7 @@ RuleItem *Item::getRules()
  * Returns the quantity stored of this item.
  * @return Item quantity.
  */
-int Item::getQuantity()
+int Item::getQuantity() const
 {
 	return _qty;
 }
@@ -67,7 +67,7 @@ void Item::setQuantity(int qty)
  * totalled up.
  * @return Item size.
  */
-double Item::getTotalSize()
+double Item::getTotalSize() const
 {
 	return _qty * _rules->getSize();
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -44,7 +44,7 @@ BaseFacility::~BaseFacility()
  * Returns the ruleset for the base facility's type.
  * @return Pointer to ruleset.
  */
-RuleBaseFacility *BaseFacility::getRules()
+RuleBaseFacility *const BaseFacility::getRules() const
 {
 	return _rules;
 }
@@ -54,7 +54,7 @@ RuleBaseFacility *BaseFacility::getRules()
  * base grid that it's placed on.
  * @return X position in grid squares.
  */
-int BaseFacility::getX()
+int BaseFacility::getX() const
 {
 	return _x;
 }
@@ -64,7 +64,7 @@ int BaseFacility::getX()
  * base grid that it's placed on.
  * @return Y position in grid squares.
  */
-int BaseFacility::getY()
+int BaseFacility::getY() const
 {
 	return _y;
 }
@@ -74,7 +74,7 @@ int BaseFacility::getY()
  * until it's finished building (0 = complete).
  * @return Time left in days.
  */
-int BaseFacility::getBuildTime()
+int BaseFacility::getBuildTime() const
 {
 	return _buildTime;
 }
@@ -104,7 +104,7 @@ void BaseFacility::build()
  * @param target Pointer to target to compare.
  * @return True if it's within range, False otherwise.
  */
-bool BaseFacility::insideRadarRange(Base *base, Target *target)
+bool BaseFacility::insideRadarRange(Base *base, Target *target) const
 {
 	if (_rules->getRadarRange() == 0)
 		return false;

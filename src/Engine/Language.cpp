@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -80,7 +80,7 @@ void Language::loadDat(const std::string &filename)
  * @param id ID of the string.
  * @return String with the request ID.
  */
-std::string Language::getString(LangString id)
+std::string Language::getString(LangString id) const
 {
 	return _strings[id];
 }

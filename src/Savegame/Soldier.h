@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -50,37 +50,37 @@ public:
 	/// Cleans up the soldier.
 	~Soldier();
 	/// Gets the soldier's name.
-	std::string getName();
+	std::string getName() const;
 	/// Sets the soldier's name.
 	void setName(const std::string &name);
 	/// Gets the soldier's craft.
-	Craft *getCraft();
+	Craft *const getCraft() const;
 	/// Sets the soldier's craft.
 	void setCraft(Craft *craft);
 	/// Gets a string version of the soldier's rank.
-	LangString getRankString();
+	LangString getRankString() const;
 	/// Gets a sprite version of the soldier's rank.
-	int getRankSprite();
+	int getRankSprite() const;
 	/// Gets the soldier's time units.
-	int getTimeUnits();
+	int getTimeUnits() const;
 	/// Gets the soldier's stamina.
-	int getStamina();
+	int getStamina() const;
 	/// Gets the soldier's health.
-	int getHealth();
+	int getHealth() const;
 	/// Gets the soldier's bravery.
-	int getBravery();
+	int getBravery() const;
 	/// Gets the soldier's reactions.
-	int getReactions();
+	int getReactions() const;
 	/// Gets the soldier's firing accuracy.
-	int getFiringAccuracy();
+	int getFiringAccuracy() const;
 	/// Gets the soldier's throwing accuracy.
-	int getThrowingAccuracy();
+	int getThrowingAccuracy() const;
 	/// Gets the soldier's strength.
-	int getStrength();
+	int getStrength() const;
 	/// Gets the soldier's missions.
-	int getMissions();
+	int getMissions() const;
 	/// Gets the soldier's kills.
-	int getKills();
+	int getKills() const;
 };
 
 #endif

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -46,7 +46,7 @@ public:
 	/// Sets the texture for the mini base view.
 	void setTexture(SurfaceSet *texture);
 	/// Gets the base the mouse is over.
-	unsigned int getHoveredBase();
+	unsigned int getHoveredBase() const;
 	/// Sets the selected base for the mini base view.
 	void setSelectedBase(unsigned int base);
 	/// Draws the mini base view.

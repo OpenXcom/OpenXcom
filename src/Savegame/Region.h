@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -40,13 +40,13 @@ public:
 	/// Cleans up the region.
 	~Region();
 	/// Gets the region's base cost.
-	int getBaseCost();
+	int getBaseCost() const;
 	/// Adds an area to the region.
 	void addArea(double lonMin, double lonMax, double latMin, double latMax);
 	/// Checks if a point is inside the region.
-	bool insideRegion(double lon, double lat);
+	bool insideRegion(double lon, double lat) const;
 	/// Gets the cities in this region.
-	std::vector<City*> *getCities();
+	std::vector<City*> *const getCities();
 };
 
 #endif

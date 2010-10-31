@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -56,7 +56,7 @@ public:
 	/// Sets the border color.
 	void setColor(Uint8 color);
 	/// Gets the border color.
-	Uint8 getColor();
+	Uint8 getColor() const;
 	/// Handles the timers.
 	void think();
 	/// Popups the window.

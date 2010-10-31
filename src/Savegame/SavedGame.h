@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -59,33 +59,33 @@ public:
 	/// Cleans up the saved game.
 	~SavedGame();
 	/// Gets the current funds.
-	int getFunds();
+	int getFunds() const;
 	/// Sets new funds.
 	void setFunds(int funds);
 	/// Handles monthly funding.
 	void monthlyFunding();
 	/// Gets the current game time.
-	GameTime *getTime();
+	GameTime *const getTime() const;
 	/// Gets the list of countries.
-	std::map<LangString, Country*> *getCountries();
+	std::map<LangString, Country*> *const getCountries();
 	/// Gets the total country funding.
-	int getCountryFunding();
+	int getCountryFunding() const;
 	/// Gets the list of regions.
-	std::map<LangString, Region*> *getRegions();
+	std::map<LangString, Region*> *const getRegions();
 	/// Gets the list of bases.
-	std::vector<Base*> *getBases();
+	std::vector<Base*> *const getBases();
 	/// Gets the total base maintenance.
-	int getBaseMaintenance();
+	int getBaseMaintenance() const;
 	/// Gets the current craft IDs.
-	std::map<LangString, int> *getCraftIds();
+	std::map<LangString, int> *const getCraftIds();
 	/// Gets the list of UFOs.
-	std::vector<Ufo*> *getUfos();
+	std::vector<Ufo*> *const getUfos();
 	/// Gets the current UFO ID.
-	int *getUfoId();
+	int *const getUfoId();
 	/// Gets the list of waypoints.
-	std::vector<Waypoint*> *getWaypoints();
+	std::vector<Waypoint*> *const getWaypoints();
 	/// Gets the current waypoint ID.
-	int *getWaypointId();
+	int *const getWaypointId();
 };
 
 #endif

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -74,7 +74,7 @@ Polygon::~Polygon()
  * @param i Point number (0-max).
  * @return Point's latitude.
  */
-double Polygon::getLatitude(int i)
+double Polygon::getLatitude(int i) const
 {
 	return _lat[i];
 }
@@ -94,7 +94,7 @@ void Polygon::setLatitude(int i, double lat)
  * @param i Point number (0-max).
  * @return Point's longitude.
  */
-double Polygon::getLongitude(int i)
+double Polygon::getLongitude(int i) const
 {
 	return _lon[i];
 }
@@ -114,7 +114,7 @@ void Polygon::setLongitude(int i, double lon)
  * @param i Point number (0-max).
  * @return Point's X coordinate.
  */
-Sint16 Polygon::getX(int i)
+Sint16 Polygon::getX(int i) const
 {
 	return _x[i];
 }
@@ -134,7 +134,7 @@ void Polygon::setX(int i, Sint16 x)
  * @param i Point number (0-max).
  * @return Point's Y coordinate.
  */
-Sint16 Polygon::getY(int i)
+Sint16 Polygon::getY(int i) const
 {
 	return _y[i];
 }
@@ -154,7 +154,7 @@ void Polygon::setY(int i, Sint16 y)
  * (textures are stored in a set).
  * @return Texture sprite number.
  */
-int Polygon::getTexture()
+int Polygon::getTexture() const
 {
 	return _texture;
 }
@@ -172,7 +172,7 @@ void Polygon::setTexture(int tex)
  * Returns the number of points (vertexes) that make up the polygon.
  * @return Number of points.
  */
-int Polygon::getPoints()
+int Polygon::getPoints() const
 {
 	return _points;
 }

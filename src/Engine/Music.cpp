@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -65,7 +65,7 @@ void Music::load(const void *data, unsigned int size)
 /**
  * Plays the contained music track.
  */
-void Music::play()
+void Music::play() const
 {
 	if (_music != 0 && Mix_PlayMusic(_music, -1) == -1)
 	{

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -52,7 +52,7 @@ void Bar::setColor(Uint8 color)
  * Returns the color used to draw the bar.
  * @return Color value.
  */
-Uint8 Bar::getColor()
+Uint8 Bar::getColor() const
 {
 	return _color;
 }
@@ -71,7 +71,7 @@ void Bar::setScale(double scale)
  * Returns the scale factor used to draw the bar values.
  * @return Scale in pixels/unit.
  */
-double Bar::getScale()
+double Bar::getScale() const
 {
 	return _scale;
 }
@@ -90,7 +90,7 @@ void Bar::setMax(double max)
  * Returns the maximum value used to draw the outer border.
  * @return Maximum value.
  */
-double Bar::getMax()
+double Bar::getMax() const
 {
 	return _max;
 }
@@ -109,7 +109,7 @@ void Bar::setValue(double value)
  * Returns the value used to draw the inner contents.
  * @return Current value.
  */
-double Bar::getValue()
+double Bar::getValue() const
 {
 	return _value;
 }

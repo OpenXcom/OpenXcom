@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -40,19 +40,19 @@ public:
 	/// Cleans up the base facility.
 	~BaseFacility();
 	/// Gets the facility's ruleset.
-	RuleBaseFacility *getRules();
+	RuleBaseFacility *const getRules() const;
 	/// Gets the facility's X position.
-	int getX();
+	int getX() const;
 	/// Gets the facility's Y position.
-	int getY();
+	int getY() const;
 	/// Gets the facility's construction time.
-	int getBuildTime();
+	int getBuildTime() const;
 	/// Sets the facility's construction time.
 	void setBuildTime(int time);
 	/// Builds up the facility.
 	void build();
 	/// Checks if a target is inside the facility's radar.
-	bool insideRadarRange(Base *base, Target *target);
+	bool insideRadarRange(Base *base, Target *target) const;
 };
 
 #endif

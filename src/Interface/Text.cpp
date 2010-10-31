@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -85,7 +85,7 @@ void Text::setSmall()
  * Returns the font currently used by the text.
  * @return Pointer to font.
  */
-Font *Text::getFont()
+Font *const Text::getFont() const
 {
 	return _font;
 }
@@ -107,7 +107,7 @@ void Text::setText(const std::string &text)
  * Returns the string displayed on screen.
  * @return Text string.
  */
-std::string Text::getText()
+std::string Text::getText() const
 {
 	return _text;
 }
@@ -176,7 +176,7 @@ void Text::setColor(Uint8 color)
  * Returns the color used to render the text.
  * @return Color value.
  */
-Uint8 Text::getColor()
+Uint8 Text::getColor() const
 {
 	return _color;
 }

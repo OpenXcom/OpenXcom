@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -67,7 +67,7 @@ void TextButton::setColor(Uint8 color)
  * Returns the color for the button and text.
  * @return Color value.
  */
-Uint8 TextButton::getColor()
+Uint8 TextButton::getColor() const
 {
 	return _color;
 }
@@ -86,7 +86,7 @@ void TextButton::setText(const std::string &text)
  * Returns the text of the button label.
  * @return Text string.
  */
-std::string TextButton::getText()
+std::string TextButton::getText() const
 {
 	return _text->getText();
 }

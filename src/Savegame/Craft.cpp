@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -64,7 +64,7 @@ Craft::~Craft()
  * Returns the ruleset for the craft's type.
  * @return Pointer to ruleset.
  */
-RuleCraft *Craft::getRules()
+RuleCraft *const Craft::getRules() const
 {
 	return _rules;
 }
@@ -74,7 +74,7 @@ RuleCraft *Craft::getRules()
  * can be identified by its type and ID.
  * @return Unique ID.
  */
-int Craft::getId()
+int Craft::getId() const
 {
 	return _id;
 }
@@ -84,7 +84,7 @@ int Craft::getId()
  * @param lang Language to get strings from.
  * @return Full name.
  */
-std::string Craft::getName(Language *lang)
+std::string Craft::getName(Language *lang) const
 {
 	std::stringstream name;
 	name << lang->getString(_rules->getType()) << "-" << _id;
@@ -95,7 +95,7 @@ std::string Craft::getName(Language *lang)
  * Returns the base the craft belongs to.
  * @return Pointer to base.
  */
-Base *Craft::getBase()
+Base *const Craft::getBase() const
 {
 	return _base;
 }
@@ -113,7 +113,7 @@ void Craft::setBase(Base *base)
  * Returns the current status of the craft.
  * @return Status string.
  */
-LangString Craft::getStatus()
+LangString Craft::getStatus() const
 {
 	return _status;
 }
@@ -142,17 +142,19 @@ void Craft::setDestination(Target *dest)
  * equipped on this craft.
  * @return Number of weapons.
  */
-int Craft::getNumWeapons()
+int Craft::getNumWeapons() const
 {
 	if (_rules->getWeapons() == 0)
 		return 0;
 
 	int total = 0;
 
-	for (std::vector<CraftWeapon*>::iterator i = _weapons.begin(); i != _weapons.end(); i++)
+	for (std::vector<CraftWeapon*>::const_iterator i = _weapons.begin(); i != _weapons.end(); i++)
 	{
 		if ((*i) != 0)
+		{
 			total++;
+		}
 	}
 
 	return total;
@@ -163,7 +165,7 @@ int Craft::getNumWeapons()
  * that are currently attached to this craft.
  * @return Number of soldiers.
  */
-int Craft::getNumSoldiers()
+int Craft::getNumSoldiers() const
 {
 	if (_rules->getSoldiers() == 0)
 		return 0;
@@ -184,11 +186,11 @@ int Craft::getNumSoldiers()
  * equipped on this craft.
  * @return Number of items.
  */
-int Craft::getNumEquipment()
+int Craft::getNumEquipment() const
 {
 	int total = 0;
 
-	for (std::map<LangString, Item*>::iterator i = _items.begin(); i != _items.end(); i++)
+	for (std::map<LangString, Item*>::const_iterator i = _items.begin(); i != _items.end(); i++)
 	{
 		total += i->second->getQuantity();
 	}
@@ -201,7 +203,7 @@ int Craft::getNumEquipment()
  * contained in this craft.
  * @return Number of HWPs.
  */
-int Craft::getNumHWPs()
+int Craft::getNumHWPs() const
 {
 	return 0;
 }
@@ -230,7 +232,7 @@ std::map<LangString, Item*> *Craft::getItems()
  * in this craft.
  * @return Amount of fuel.
  */
-int Craft::getFuel()
+int Craft::getFuel() const
 {
 	return _fuel;
 }
@@ -244,9 +246,13 @@ void Craft::setFuel(int fuel)
 {
 	_fuel = fuel;
 	if (_fuel > _rules->getMaxFuel())
+	{
 		_fuel = _rules->getMaxFuel();
+	}
 	else if (_fuel < 0)
+	{
 		_fuel = 0;
+	}
 }
 
 /**
@@ -254,7 +260,7 @@ void Craft::setFuel(int fuel)
  * contained in this craft and the total it can carry.
  * @return Percentage of fuel.
  */
-int Craft::getFuelPercentage()
+int Craft::getFuelPercentage() const
 {
 	return (int)floor((double)_fuel / _rules->getMaxFuel() * 100.0);
 }
@@ -263,7 +269,7 @@ int Craft::getFuelPercentage()
  * Returns the amount of damage this craft has taken.
  * @return Amount of damage.
  */
-int Craft::getDamage()
+int Craft::getDamage() const
 {
 	return _damage;
 }
@@ -276,7 +282,9 @@ void Craft::setDamage(int damage)
 {
 	_damage = damage;
 	if (_damage < 0)
+	{
 		_damage = 0;
+	}
 }
 
 /**
@@ -285,7 +293,7 @@ void Craft::setDamage(int damage)
  * destroyed.
  * @return Percentage of damage.
  */
-int Craft::getDamagePercentage()
+int Craft::getDamagePercentage() const
 {
 	return (int)floor((double)_damage / _rules->getMaxDamage() * 100);
 }
@@ -295,7 +303,7 @@ int Craft::getDamagePercentage()
  * (only has enough to head back to base).
  * @return True if it's low, false otherwise.
  */
-bool Craft::getLowFuel()
+bool Craft::getLowFuel() const
 {
 	return _lowFuel;
 }
@@ -315,7 +323,7 @@ void Craft::setLowFuel(bool low)
  * and the base it belongs to.
  * @return Distance in radian.
  */
-double Craft::getDistanceFromBase()
+double Craft::getDistanceFromBase() const
 {
 	double dLon, dLat;
 	return getDistance(_base, &dLon, &dLat);
@@ -326,7 +334,7 @@ double Craft::getDistanceFromBase()
  * while it's on the air, based on its speed.
  * @return Fuel amount.
  */
-int Craft::getFuelConsumption()
+int Craft::getFuelConsumption() const
 {
 	return (int)floor(_speed / 100.0);
 }
@@ -336,7 +344,7 @@ int Craft::getFuelConsumption()
  * craft to make it back to base.
  * @return Fuel amount.
  */
-int Craft::getFuelLimit()
+int Craft::getFuelLimit() const
 {
 	return (int)floor(getFuelConsumption() * getDistanceFromBase() / (getRadianSpeed() * 120));
 }
@@ -392,7 +400,7 @@ void Craft::think()
  * @param target Pointer to target to compare.
  * @return True if it's within range, False otherwise.
  */
-bool Craft::insideRadarRange(Target *target)
+bool Craft::insideRadarRange(Target *target) const
 {
 	bool inside = false;
 	double newrange = CRAFT_RANGE * (1 / 60.0) * (M_PI / 180);
@@ -454,7 +462,9 @@ void Craft::rearm()
 		available++;
 		(*i)->rearm();
 		if ((*i)->getAmmo() >= (*i)->getRules()->getAmmoMax())
+		{
 			full++;
+		}
 	}
 	if (full == available)
 	{

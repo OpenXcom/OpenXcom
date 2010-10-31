@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -78,7 +78,7 @@ SavedGame *Ruleset::newSave(GameDifficulty diff)
  * Returns the list of soldier name pools.
  * @return Pointer to soldier name pool list.
  */
-std::vector<SoldierNamePool*> *Ruleset::getPools()
+std::vector<SoldierNamePool*> *const Ruleset::getPools()
 {
 	return &_names;
 }
@@ -88,7 +88,7 @@ std::vector<SoldierNamePool*> *Ruleset::getPools()
  * @param id Facility type.
  * @return Rules for the facility.
  */
-RuleBaseFacility *Ruleset::getBaseFacility(LangString id)
+RuleBaseFacility *const Ruleset::getBaseFacility(LangString id)
 {
 	return _facilities[id];
 }
@@ -98,7 +98,7 @@ RuleBaseFacility *Ruleset::getBaseFacility(LangString id)
  * @param id Craft type.
  * @return Rules for the craft.
  */
-RuleCraft *Ruleset::getCraft(LangString id)
+RuleCraft *const Ruleset::getCraft(LangString id)
 {
 	return _crafts[id];
 }
@@ -108,7 +108,7 @@ RuleCraft *Ruleset::getCraft(LangString id)
  * @param id Craft weapon type.
  * @return Rules for the craft weapon.
  */
-RuleCraftWeapon *Ruleset::getCraftWeapon(LangString id)
+RuleCraftWeapon *const Ruleset::getCraftWeapon(LangString id)
 {
 	return _craftWeapons[id];
 }
@@ -118,7 +118,7 @@ RuleCraftWeapon *Ruleset::getCraftWeapon(LangString id)
  * @param id Item type.
  * @return Rules for the item.
  */
-RuleItem *Ruleset::getItem(LangString id)
+RuleItem *const Ruleset::getItem(LangString id)
 {
 	return _items[id];
 }
@@ -128,7 +128,7 @@ RuleItem *Ruleset::getItem(LangString id)
  * @param id UFO type.
  * @return Rules for the UFO.
  */
-RuleUfo *Ruleset::getUfo(LangString id)
+RuleUfo *const Ruleset::getUfo(LangString id)
 {
 	return _ufos[id];
 }

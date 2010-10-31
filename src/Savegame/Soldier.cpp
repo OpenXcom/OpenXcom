@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -59,7 +59,7 @@ Soldier::~Soldier()
  * Returns the soldier's full name.
  * @return Soldier name.
  */
-std::string Soldier::getName()
+std::string Soldier::getName() const
 {
 	return _name;
 }
@@ -77,7 +77,7 @@ void Soldier::setName(const std::string &name)
  * Returns the craft the soldier is assigned to.
  * @return Pointer to craft.
  */
-Craft *Soldier::getCraft()
+Craft *const Soldier::getCraft() const
 {
 	return _craft;
 }
@@ -96,7 +96,7 @@ void Soldier::setCraft(Craft *craft)
  * the soldier's military rank.
  * @return String ID for rank.
  */
-LangString Soldier::getRankString()
+LangString Soldier::getRankString() const
 {
 	return (LangString)(STR_ROOKIE + _rank);
 }
@@ -106,7 +106,7 @@ LangString Soldier::getRankString()
  * the soldier's military rank.
  * @return Sprite ID for rank.
  */
-int Soldier::getRankSprite()
+int Soldier::getRankSprite() const
 {
 	return 42 + _rank;
 }
@@ -115,7 +115,7 @@ int Soldier::getRankSprite()
  * Returns the soldier's amount of time units.
  * @return Time units.
  */
-int Soldier::getTimeUnits()
+int Soldier::getTimeUnits() const
 {
 	return _tu;
 }
@@ -124,7 +124,7 @@ int Soldier::getTimeUnits()
  * Returns the soldier's amount of stamina.
  * @return Stamina.
  */
-int Soldier::getStamina()
+int Soldier::getStamina() const
 {
 	return _stamina;
 }
@@ -133,7 +133,7 @@ int Soldier::getStamina()
  * Returns the soldier's amount of health.
  * @return Health.
  */
-int Soldier::getHealth()
+int Soldier::getHealth() const
 {
 	return _health;
 }
@@ -142,7 +142,7 @@ int Soldier::getHealth()
  * Returns the soldier's amount of bravery.
  * @return Bravery.
  */
-int Soldier::getBravery()
+int Soldier::getBravery() const
 {
 	return _bravery;
 }
@@ -151,7 +151,7 @@ int Soldier::getBravery()
  * Returns the soldier's amount of reactions.
  * @return Reactions.
  */
-int Soldier::getReactions()
+int Soldier::getReactions() const
 {
 	return _reactions;
 }
@@ -160,7 +160,7 @@ int Soldier::getReactions()
  * Returns the soldier's amount of firing accuracy.
  * @return Firing accuracy.
  */
-int Soldier::getFiringAccuracy()
+int Soldier::getFiringAccuracy() const
 {
 	return _firing;
 }
@@ -169,7 +169,7 @@ int Soldier::getFiringAccuracy()
  * Returns the soldier's amount of throwing accuracy.
  * @return Throwing accuracy.
  */
-int Soldier::getThrowingAccuracy()
+int Soldier::getThrowingAccuracy() const
 {
 	return _throwing;
 }
@@ -178,7 +178,7 @@ int Soldier::getThrowingAccuracy()
  * Returns the soldier's amount of strength.
  * @return Strength.
  */
-int Soldier::getStrength()
+int Soldier::getStrength() const
 {
 	return _strength;
 }
@@ -187,7 +187,7 @@ int Soldier::getStrength()
  * Returns the soldier's amount of missions.
  * @return Missions.
  */
-int Soldier::getMissions()
+int Soldier::getMissions() const
 {
 	return _missions;
 }
@@ -196,7 +196,7 @@ int Soldier::getMissions()
  * Returns the soldier's amount of kills.
  * @return Kills.
  */
-int Soldier::getKills()
+int Soldier::getKills() const
 {
 	return _kills;
 }

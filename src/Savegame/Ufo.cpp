@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -42,7 +42,7 @@ Ufo::~Ufo()
  * Returns the ruleset for the UFO's type.
  * @return Pointer to ruleset.
  */
-RuleUfo *Ufo::getRules()
+RuleUfo *const Ufo::getRules() const
 {
 	return _rules;
 }
@@ -52,7 +52,7 @@ RuleUfo *Ufo::getRules()
  * this UFO has never been detected.
  * @return Unique ID.
  */
-int Ufo::getId()
+int Ufo::getId() const
 {
 	return _id;
 }
@@ -71,7 +71,7 @@ void Ufo::setId(int id)
  * @param lang Language to get strings from.
  * @return Full name.
  */
-std::string Ufo::getName(Language *lang)
+std::string Ufo::getName(Language *lang) const
 {
 	std::stringstream name;
 	if (!isCrashed())
@@ -89,7 +89,7 @@ std::string Ufo::getName(Language *lang)
  * Returns the amount of damage this UFO has taken.
  * @return Amount of damage.
  */
-int Ufo::getDamage()
+int Ufo::getDamage() const
 {
 	return _damage;
 }
@@ -102,14 +102,16 @@ void Ufo::setDamage(int damage)
 {
 	_damage = damage;
 	if (_damage < 0)
+	{
 		_damage = 0;
+	}
 }
 
 /**
  * Returns whether this UFO has been detected by radars.
  * @return Detection status.
  */
-bool Ufo::getDetected()
+bool Ufo::getDetected() const
 {
 	return _detected;
 }
@@ -127,7 +129,7 @@ void Ufo::setDetected(bool detected)
  * Returns the amount of days the UFO has been crashed for.
  * @return Amount of days.
  */
-int Ufo::getDaysCrashed()
+int Ufo::getDaysCrashed() const
 {
 	return _daysCrashed;
 }
@@ -145,7 +147,7 @@ void Ufo::setDaysCrashed(int days)
  * Returns the current direction the UFO is heading in.
  * @return Direction.
  */
-LangString Ufo::getDirection()
+LangString Ufo::getDirection() const
 {
 	return _direction;
 }
@@ -154,7 +156,7 @@ LangString Ufo::getDirection()
  * Returns the current altitude of the UFO.
  * @return Altitude.
  */
-LangString Ufo::getAltitude()
+LangString Ufo::getAltitude() const
 {
 	return STR_HIGH;
 }
@@ -164,7 +166,7 @@ LangString Ufo::getAltitude()
  * to cause it to crash.
  * @return Crashed status.
  */
-bool Ufo::isCrashed()
+bool Ufo::isCrashed() const
 {
 	return (_damage >= _rules->getMaxDamage() / 2);
 }
@@ -174,7 +176,7 @@ bool Ufo::isCrashed()
  * to cause it to crash.
  * @return Crashed status.
  */
-bool Ufo::isDestroyed()
+bool Ufo::isDestroyed() const
 {
 	return (_damage >= _rules->getMaxDamage());
 }

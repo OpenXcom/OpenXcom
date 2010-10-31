@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -36,17 +36,17 @@ public:
 	/// Cleans up the country.
 	~Country();
 	/// Gets the country's funding.
-	int getFunding();
+	int getFunding() const;
 	/// Sets the country's funding.
 	void setFunding(int funding);
 	/// Gets the country's funding change.
-	int getChange();
+	int getChange() const;
 	/// Gets the country's label X position.
-	double getLabelLongitude();
+	double getLabelLongitude() const;
 	/// Sets the country's label position.
 	void setLabelLongitude(double lon);
 	/// Gets the country's label Y position.
-	double getLabelLatitude();
+	double getLabelLatitude() const;
 	/// Sets the country's label position.
 	void setLabelLatitude(double lat);
 };

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -58,7 +58,7 @@ public:
 	/// Quits the game.
 	void quit();
 	/// Gets the game's display screen.
-	Screen *getScreen();
+	Screen *const getScreen() const;
 	/// Sets the game's 8bpp palette.
 	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
 	/// Resets the state stack to a new state.
@@ -68,15 +68,15 @@ public:
 	/// Pops the last state from the state stack.
 	void popState();
 	/// Gets the currently loaded resource pack.
-	ResourcePack *getResourcePack();
+	ResourcePack *const getResourcePack() const;
 	/// Sets a new resource pack for the game.
 	void setResourcePack(ResourcePack *res);
 	/// Gets the currently loaded saved game.
-	SavedGame *getSavedGame();
+	SavedGame *const getSavedGame() const;
 	/// Sets a new saved game for the game
 	void setSavedGame(SavedGame *save);
 	/// Gets the currently loaded ruleset
-	Ruleset *getRuleset();
+	Ruleset *const getRuleset() const;
 	/// Sets a new ruleset for the game
 	void setRuleset(Ruleset *rules);
 };

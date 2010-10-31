@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -39,7 +39,7 @@ RuleUfo::~RuleUfo()
  * this UFO. Each UFO type has a unique name.
  * @return Ufo name.
  */
-LangString RuleUfo::getType()
+LangString RuleUfo::getType() const
 {
 	return _type;
 }
@@ -48,7 +48,7 @@ LangString RuleUfo::getType()
  * Returns the size of this type of UFO.
  * @return Size.
  */
-LangString RuleUfo::getSize()
+LangString RuleUfo::getSize() const
 {
 	return _size;
 }
@@ -67,7 +67,7 @@ void RuleUfo::setSize(LangString size)
  * on the dogfighting window.
  * @return Radius in pixels.
  */
-int RuleUfo::getRadius()
+int RuleUfo::getRadius() const
 {
 	return _size - STR_VERY_SMALL + 3;
 }
@@ -77,7 +77,7 @@ int RuleUfo::getRadius()
  * in the Dogfight window.
  * @return Sprite ID.
  */
-int RuleUfo::getSprite()
+int RuleUfo::getSprite() const
 {
 	return _sprite;
 }
@@ -97,7 +97,7 @@ void RuleUfo::setSprite(int sprite)
  * of the UFO.
  * @return Damage.
  */
-int RuleUfo::getMaxDamage()
+int RuleUfo::getMaxDamage() const
 {
 	return _damageMax;
 }
@@ -117,7 +117,7 @@ void RuleUfo::setMaxDamage(int damage)
  * around the Geoscape.
  * @return Speed.
  */
-int RuleUfo::getMaxSpeed()
+int RuleUfo::getMaxSpeed() const
 {
 	return _speedMax;
 }
@@ -137,7 +137,7 @@ void RuleUfo::setMaxSpeed(int speed)
  * taking off / stopping.
  * @return Acceleration.
  */
-int RuleUfo::getAcceleration()
+int RuleUfo::getAcceleration() const
 {
 	return _accel;
 }
@@ -157,7 +157,7 @@ void RuleUfo::setAcceleration(int accel)
  * UFO's weapons per shot.
  * @return Weapon power.
  */
-int RuleUfo::getWeaponPower()
+int RuleUfo::getWeaponPower() const
 {
 	return _power;
 }
@@ -177,7 +177,7 @@ void RuleUfo::setWeaponPower(int power)
  * UFO's weapons.
  * @return Weapon range.
  */
-int RuleUfo::getWeaponRange()
+int RuleUfo::getWeaponRange() const
 {
 	return _range;
 }
@@ -197,7 +197,7 @@ void RuleUfo::setWeaponRange(int range)
  * gets for shooting down the UFO.
  * @return Score.
  */
-int RuleUfo::getScore()
+int RuleUfo::getScore() const
 {
 	return _score;
 }

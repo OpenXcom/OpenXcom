@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -53,59 +53,59 @@ public:
 	/// Cleans up the craft.
 	~Craft();
 	/// Gets the craft's ruleset.
-	RuleCraft *getRules();
+	RuleCraft *const getRules() const;
 	/// Gets the craft's ID.
-	int getId();
+	int getId() const;
 	/// Gets the craft's name.
-	std::string getName(Language *lang);
+	std::string getName(Language *lang) const;
 	/// Gets the craft's base.
-	Base *getBase();
+	Base *const getBase() const;
 	/// Sets the craft's base.
 	void setBase(Base *base);
 	/// Gets the craft's status.
-	LangString getStatus();
+	LangString getStatus() const;
 	/// Sets the craft's status.
 	void setStatus(LangString status);
 	/// Sets the craft's destination.
 	void setDestination(Target *dest);
 	/// Gets the craft's amount of weapons.
-	int getNumWeapons();
+	int getNumWeapons() const;
 	/// Gets the craft's amount of soldiers.
-	int getNumSoldiers();
+	int getNumSoldiers() const;
 	/// Gets the craft's amount of equipment.
-	int getNumEquipment();
+	int getNumEquipment() const;
 	/// Gets the craft's amount of HWPs.
-	int getNumHWPs();
+	int getNumHWPs() const;
 	/// Gets the craft's weapons.
 	std::vector<CraftWeapon*> *getWeapons();
 	/// Gets the craft's items.
 	std::map<LangString, Item*> *getItems();
 	/// Gets the craft's amount of fuel.
-	int getFuel();
+	int getFuel() const;
 	/// Sets the craft's amount of fuel.
 	void setFuel(int fuel);
 	/// Gets the craft's percentage of fuel.
-	int getFuelPercentage();
+	int getFuelPercentage() const;
 	/// Gets the craft's amount of damage.
-	int getDamage();
+	int getDamage() const;
 	/// Sets the craft's amount of damage.
 	void setDamage(int damage);
 	/// Gets the craft's percentage of damage.
-	int getDamagePercentage();
+	int getDamagePercentage() const;
 	/// Gets whether the craft is running out of fuel.
-	bool getLowFuel();
+	bool getLowFuel() const;
 	/// Sets whether the craft is running out of fuel.
 	void setLowFuel(bool low);
 	/// Gets the craft's distance from its base.
-	double getDistanceFromBase();
+	double getDistanceFromBase() const;
 	/// Gets the craft's fuel consumption.
-	int getFuelConsumption();
+	int getFuelConsumption() const;
 	/// Gets the craft's minimum fuel limit.
-	int getFuelLimit();
+	int getFuelLimit() const;
 	/// Returns the craft to its base.
 	void returnToBase();
 	/// Checks if a target is inside the craft's radar.
-	bool insideRadarRange(Target *target);
+	bool insideRadarRange(Target *target) const;
 	/// Handles craft logic.
 	void think();
 	/// Consumes the craft's fuel.

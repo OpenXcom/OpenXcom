@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -55,10 +55,12 @@ void Timer::stop()
  * Returns the time passed since the last interval.
  * @return Time in miliseconds.
  */
-Uint32 Timer::getTime()
+Uint32 Timer::getTime() const
 {
 	if (_running)
+	{
 		return SDL_GetTicks() - _start;
+	}
 	return 0;
 }
 
@@ -66,7 +68,7 @@ Uint32 Timer::getTime()
  * Returns if the timer has been started.
  * @return Running state.
  */
-bool Timer::isRunning()
+bool Timer::isRunning() const
 {
 	return _running;
 }
@@ -85,9 +87,13 @@ void Timer::think(State* state, Surface* surface)
 		{
 			_start = SDL_GetTicks();
 			if (state != 0 && _state != 0)
+			{
 				(state->*_state)();
+			}
 			if (surface != 0 && _surface != 0)
+			{
 				(surface->*_surface)();
+			}
 		}
 	}
 }

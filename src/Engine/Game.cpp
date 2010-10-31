@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -154,7 +154,7 @@ void Game::quit()
  * Returns the display screen used by the game.
  * @return Pointer to the screen.
  */
-Screen *Game::getScreen()
+Screen *const Game::getScreen() const
 {
 	return _screen;
 }
@@ -217,7 +217,7 @@ void Game::popState()
  * Returns the resource pack currently in use by the game.
  * @return Pointer to the resource pack.
  */
-ResourcePack *Game::getResourcePack()
+ResourcePack *const Game::getResourcePack() const
 {
 	return _res;
 }
@@ -235,7 +235,7 @@ void Game::setResourcePack(ResourcePack *res)
  * Returns the saved game currently in use by the game.
  * @return Pointer to the saved game.
  */
-SavedGame *Game::getSavedGame()
+SavedGame *const Game::getSavedGame() const
 {
 	return _save;
 }
@@ -253,7 +253,7 @@ void Game::setSavedGame(SavedGame *save)
  * Returns the ruleset currently in use by the game.
  * @return Pointer to the ruleset.
  */
-Ruleset *Game::getRuleset()
+Ruleset *const Game::getRuleset() const
 {
 	return _rules;
 }

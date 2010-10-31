@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -59,11 +59,11 @@ public:
 	/// Sets the text size to small.
 	void setSmall();
 	/// Gets the text's font.
-	Font *getFont();
+	Font *const getFont() const;
 	/// Sets the text's string.
 	void setText(const std::string &text);
 	/// Gets the text's string.
-	std::string getText();
+	std::string getText() const;
 	/// Sets the text's wordwrap setting.
 	void setWordWrap(bool wrap);
 	/// Sets the text's color invert setting.
@@ -75,7 +75,7 @@ public:
 	/// Sets the text's color.
 	void setColor(Uint8 color);
 	/// Gets the text's color.
-	Uint8 getColor();
+	Uint8 getColor() const;
 	/// Draws the text.
 	void draw();
 };

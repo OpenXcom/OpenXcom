@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -39,7 +39,7 @@ RuleCraft::~RuleCraft()
  * this craft. Each craft type has a unique name.
  * @return Craft name.
  */
-LangString RuleCraft::getType()
+LangString RuleCraft::getType() const
 {
 	return _type;
 }
@@ -49,7 +49,7 @@ LangString RuleCraft::getType()
  * in the Basescape and Equip Craft screens.
  * @return Sprite ID.
  */
-int RuleCraft::getSprite()
+int RuleCraft::getSprite() const
 {
 	return _sprite;
 }
@@ -68,7 +68,7 @@ void RuleCraft::setSprite(int sprite)
  * Returns the maximum fuel the craft can contain.
  * @return Fuel amount.
  */
-int RuleCraft::getMaxFuel()
+int RuleCraft::getMaxFuel() const
 {
 	return _fuelMax;
 }
@@ -83,11 +83,11 @@ void RuleCraft::setMaxFuel(int fuel)
 }
 
 /**
- * Returns the maximum damage (damage the craft can take)
+ * Returns the maximum damage (damage the craft can take) const
  * of the craft.
  * @return Damage.
  */
-int RuleCraft::getMaxDamage()
+int RuleCraft::getMaxDamage() const
 {
 	return _damageMax;
 }
@@ -107,7 +107,7 @@ void RuleCraft::setMaxDamage(int damage)
  * around the Geoscape.
  * @return Speed in knots.
  */
-int RuleCraft::getMaxSpeed()
+int RuleCraft::getMaxSpeed() const
 {
 	return _speedMax;
 }
@@ -127,7 +127,7 @@ void RuleCraft::setMaxSpeed(int speed)
  * taking off / stopping.
  * @return Acceleration.
  */
-int RuleCraft::getAcceleration()
+int RuleCraft::getAcceleration() const
 {
 	return _accel;
 }
@@ -147,7 +147,7 @@ void RuleCraft::setAcceleration(int accel)
  * can be equipped onto the craft.
  * @return Weapon capacity.
  */
-int RuleCraft::getWeapons()
+int RuleCraft::getWeapons() const
 {
 	return _weapons;
 }
@@ -167,7 +167,7 @@ void RuleCraft::setWeapons(int weapons)
  * the craft can carry.
  * @return Soldier capacity.
  */
-int RuleCraft::getSoldiers()
+int RuleCraft::getSoldiers() const
 {
 	return _soldiers;
 }
@@ -187,7 +187,7 @@ void RuleCraft::setSoldiers(int soldiers)
  * the craft can carry.
  * @return HWP capacity.
  */
-int RuleCraft::getHWPs()
+int RuleCraft::getHWPs() const
 {
 	return _hwps;
 }
@@ -207,7 +207,7 @@ void RuleCraft::setHWPs(int hwps)
  * paid as long as this craft is owned (0 = no rental).
  * @return Monthly fee.
  */
-int RuleCraft::getMonthlyFee()
+int RuleCraft::getMonthlyFee() const
 {
 	return _fee;
 }
@@ -227,7 +227,7 @@ void RuleCraft::setMonthlyFee(int fee)
  * craft while repairing.
  * @return Amount of damage.
  */
-int RuleCraft::getRepairRate()
+int RuleCraft::getRepairRate() const
 {
 	return _repair;
 }
@@ -247,7 +247,7 @@ void RuleCraft::setRepairRate(int repair)
  * craft while refuelling.
  * @return Amount of fuel.
  */
-int RuleCraft::getRefuelRate()
+int RuleCraft::getRefuelRate() const
 {
 	return _refuel;
 }

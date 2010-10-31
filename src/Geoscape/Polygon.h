@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -36,32 +36,32 @@ private:
 public:
 	/// Creates a polygon with a number of points.
 	Polygon(int points);
-	/// Creates a new surface from an existing one.
+	/// Creates a new polygon from an existing one.
 	Polygon(const Polygon& other);
 	/// Cleans up the polygon.
 	~Polygon();
 	/// Gets the latitude of a point.
-	double getLatitude(int i);
+	double getLatitude(int i) const;
 	/// Sets the latitude of a point.
 	void setLatitude(int i, double lat);
 	/// Gets the longitude of a point.
-	double getLongitude(int i);
+	double getLongitude(int i) const;
 	/// Sets the longitude of a point.
 	void setLongitude(int i, double lon);
 	/// Gets the X coordinate of a point.
-	Sint16 getX(int i);
+	Sint16 getX(int i) const;
 	/// Sets the X coordinate of a point.
 	void setX(int i, Sint16 x);
 	/// Gets the Y coordinate of a point.
-	Sint16 getY(int i);
+	Sint16 getY(int i) const;
 	/// Sets the Y coordinate of a point.
 	void setY(int i, Sint16 y);
 	/// Gets the texture of the polygon.
-	int getTexture();
+	int getTexture() const;
 	/// Sets the texture of the polygon.
 	void setTexture(int tex);
 	/// Gets the number of points of the polygon.
-	int getPoints();
+	int getPoints() const;
 };
 
 #endif

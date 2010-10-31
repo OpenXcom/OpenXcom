@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -141,7 +141,9 @@ void InteractiveSurface::focus()
 void InteractiveSurface::mousePress(Action *action, State *state)
 {
 	if (_press != 0)
+	{
 		(state->*_press)(action);
+	}
 }
 
 /**
@@ -154,7 +156,9 @@ void InteractiveSurface::mousePress(Action *action, State *state)
 void InteractiveSurface::mouseRelease(Action *action, State *state)
 {
 	if (_release != 0)
+	{
 		(state->*_release)(action);
+	}
 }
 
 /**
@@ -167,7 +171,9 @@ void InteractiveSurface::mouseRelease(Action *action, State *state)
 void InteractiveSurface::mouseClick(Action *action, State *state)
 {
 	if (_click != 0)
+	{
 		(state->*_click)(action);
+	}
 }
 
 /**
@@ -180,7 +186,9 @@ void InteractiveSurface::mouseClick(Action *action, State *state)
 void InteractiveSurface::mouseIn(Action *action, State *state)
 {
 	if (_in != 0)
+	{
 		(state->*_in)(action);
+	}
 }
 
 /**
@@ -193,7 +201,9 @@ void InteractiveSurface::mouseIn(Action *action, State *state)
 void InteractiveSurface::mouseOver(Action *action, State *state)
 {
 	if (_over != 0)
+	{
 		(state->*_over)(action);
+	}
 }
 
 /**
@@ -206,7 +216,9 @@ void InteractiveSurface::mouseOver(Action *action, State *state)
 void InteractiveSurface::mouseOut(Action *action, State *state)
 {
 	if (_out != 0)
+	{
 		(state->*_out)(action);
+	}
 }
 
 /**
@@ -219,7 +231,9 @@ void InteractiveSurface::mouseOut(Action *action, State *state)
 void InteractiveSurface::keyboardPress(Action *action, State *state)
 {
 	if (_keyPress != 0)
+	{
 		(state->*_keyPress)(action);
+	}
 }
 
 /**
@@ -232,7 +246,9 @@ void InteractiveSurface::keyboardPress(Action *action, State *state)
 void InteractiveSurface::keyboardRelease(Action *action, State *state)
 {
 	if (_keyRelease != 0)
+	{
 		(state->*_keyRelease)(action);
+	}
 }
 
 /**

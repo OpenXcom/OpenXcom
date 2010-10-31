@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -352,7 +352,7 @@ void Surface::setX(int x)
  * Returns the position of the surface in the X axis.
  * @return X position in pixels.
  */
-int Surface::getX()
+int Surface::getX() const
 {
 	return _x;
 }
@@ -370,32 +370,21 @@ void Surface::setY(int y)
  * Returns the position of the surface in the Y axis.
  * @return Y position in pixels.
  */
-int Surface::getY()
+int Surface::getY() const
 {
 	return _y;
 }
 
 /**
- * Changes the cropping rectangle set for this surface.
- * @param crop Pointer to the cropping rectangle. Null
- * removes the cropping rectangle (the whole surface is blitted).
+ * Resets the cropping rectangle set for this surface,
+ * so the whole surface is blitted.
  */
-void Surface::setCrop(SDL_Rect *crop)
+void Surface::resetCrop()
 {
-	if (crop == 0)
-	{
-		_crop.w = 0;
-		_crop.h = 0;
-		_crop.x = 0;
-		_crop.y = 0;
-	}
-	else
-	{
-		_crop.w = crop->w;
-		_crop.h = crop->h;
-		_crop.x = crop->x;
-		_crop.y = crop->y;
-	}
+	_crop.w = 0;
+	_crop.h = 0;
+	_crop.x = 0;
+	_crop.y = 0;
 }
 
 /**
@@ -422,7 +411,7 @@ void Surface::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
  * Returns the surface's 8bpp palette.
  * @return Pointer to the palette's colors.
  */
-SDL_Color* Surface::getPalette()
+SDL_Color *const Surface::getPalette() const
 {
 	return _surface->format->palette->colors;
 }
@@ -468,7 +457,7 @@ void Surface::setPixelIterative(int *x, int *y, Uint8 pixel)
  * @param y Y position of the pixel.
  * @return Color of the pixel.
  */
-Uint8 Surface::getPixel(int x, int y)
+Uint8 Surface::getPixel(int x, int y) const
 {
     return ((Uint8 *)_surface->pixels)[y * _surface->pitch + x * _surface->format->BytesPerPixel];
 }
@@ -477,7 +466,7 @@ Uint8 Surface::getPixel(int x, int y)
  * Returns the internal SDL_Surface for SDL calls.
  * @return Pointer to the surface.
  */
-SDL_Surface* Surface::getSurface()
+SDL_Surface *const Surface::getSurface() const
 {
 	return _surface;
 }
@@ -486,7 +475,7 @@ SDL_Surface* Surface::getSurface()
  * Returns the width of the surface.
  * @return Width in pixels.
  */
-int Surface::getWidth()
+int Surface::getWidth() const
 {
 	return _width;
 }
@@ -495,7 +484,7 @@ int Surface::getWidth()
  * Returns the height of the surface.
  * @return Height in pixels
  */
-int Surface::getHeight()
+int Surface::getHeight() const
 {
 	return _height;
 }
@@ -514,7 +503,7 @@ void Surface::setVisible(bool visible)
  * Returns the visible state of the surface.
  * @return Current visibility.
  */
-bool Surface::getVisible()
+bool Surface::getVisible() const
 {
 	return _visible;
 }

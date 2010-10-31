@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -37,7 +37,7 @@ Country::~Country()
  * Returns the country's current monthly funding.
  * @return Monthly funding.
  */
-int Country::getFunding()
+int Country::getFunding() const
 {
 	return _funding;
 }
@@ -55,7 +55,7 @@ void Country::setFunding(int funding)
  * Returns the country's funding change since last month.
  * @return Funding change.
  */
-int Country::getChange()
+int Country::getChange() const
 {
 	return _change;
 }
@@ -64,7 +64,7 @@ int Country::getChange()
  * Returns the longitude of the country's label on the globe.
  * @return Longitude in radians.
  */
-double Country::getLabelLongitude()
+double Country::getLabelLongitude() const
 {
 	return _labelLon;
 }
@@ -82,7 +82,7 @@ void Country::setLabelLongitude(double lon)
  * Returns the latitude of the country's label on the globe.
  * @return Latitude in radians.
  */
-double Country::getLabelLatitude()
+double Country::getLabelLatitude() const
 {
 	return _labelLat;
 }

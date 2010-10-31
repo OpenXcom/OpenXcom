@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -56,11 +56,11 @@ private:
 	Surface *_mkFlyingUfo, *_mkLandedUfo, *_mkCrashedUfo, *_mkAlienSite;
 
 	/// Checks if a point is behind the globe.
-	bool pointBack(double lon, double lat);
+	bool pointBack(double lon, double lat) const;
 	/// Checks if a point is inside a polygon.
-	bool insidePolygon(double lon, double lat, Polygon *poly);
+	bool insidePolygon(double lon, double lat, Polygon *poly) const;
 	/// Checks if a target is near a point.
-	bool targetNear(Target* target, int x, int y);
+	bool targetNear(Target* target, int x, int y) const;
 public:
 	/// Creates a new globe at the specified position and size.
 	Globe(int cenX, int cenY, int width, int height, int x = 0, int y = 0);
@@ -69,9 +69,9 @@ public:
 	/// Loads a set of polygons from a DAT file.
 	static void loadDat(const std::string &filename, std::vector<Polygon*> *polygons);
 	/// Converts polar coordinates to cartesian coordinates.
-	void polarToCart(double lon, double lat, Sint16 *x, Sint16 *y);
+	void polarToCart(double lon, double lat, Sint16 *x, Sint16 *y) const;
 	/// Converts cartesian coordinates to polar coordinates.
-	void cartToPolar(Sint16 x, Sint16 y, double *lon, double *lat);
+	void cartToPolar(Sint16 x, Sint16 y, double *lon, double *lat) const;
 	/// Sets the texture set for the globe's polygons.
 	void setTexture(SurfaceSet *texture);
 	/// Sets the resource pack to pull graphics from.
@@ -99,11 +99,11 @@ public:
 	/// Centers the globe on a point.
 	void center(double lon, double lat);
 	/// Checks if a point is inside land.
-	bool insideLand(double lon, double lat);
+	bool insideLand(double lon, double lat) const;
 	/// Turns on/off the globe detail.
 	void switchDetail();
 	/// Gets all the targets near a point on the globe.
-	std::vector<Target*> getTargets(int x, int y, bool craft);
+	std::vector<Target*> getTargets(int x, int y, bool craft) const;
 	/// Caches visible globe polygons.
 	void cachePolygons();
 	/// Sets the palette of the globe.

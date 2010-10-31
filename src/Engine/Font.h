@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -47,15 +47,15 @@ public:
 	/// Determines the size and position of each character in the font.
 	void load();
 	/// Gets a particular character from the font, with its real size.
-	Surface *getChar(char c);
+	Surface *const getChar(char c);
 	/// Gets the font's character width.
-	int getWidth();
+	int getWidth() const;
 	/// Gets the font's character height.
-	int getHeight();
+	int getHeight() const;
 	/// Gets the horizontal spacing between characters.
-	int getSpacing();
+	int getSpacing() const;
 	/// Gets the font's surface.
-	Surface *getSurface();
+	Surface *const getSurface() const;
 };
 
 #endif
