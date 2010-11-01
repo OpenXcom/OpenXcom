@@ -86,7 +86,7 @@ Map::Map(int width, int height, int x, int y) : InteractiveSurface(width, height
 }
 
 /**
- * Deletes the map
+ * Deletes the map.
  */
 Map::~Map()
 {
@@ -360,9 +360,9 @@ void Map::mouseOver(Action *action, State *state)
 }
 
 /**
- * Sets the selector to a cerain tile on the map
- * @param x mouse x position
- * @param y mouse y position
+ * Sets the selector to a certain tile on the map.
+ * @param mx mouse x position
+ * @param my mouse y position
  */
 void Map::setSelectorPosition(int mx, int my)
 {
@@ -437,7 +437,6 @@ void Map::down()
 * This function compiles a list of pointers to surfaces and data needed for the terrain
 * into one big set of surfaces and data. 
 * by convention xcom craft starts at offset 250 and ufo at 350
-* @param res pointer to the resourcepack
 */
 void Map::concatinateSheets()
 {

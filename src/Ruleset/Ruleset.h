@@ -56,8 +56,9 @@ public:
 	virtual ~Ruleset();
 	/// Generates the starting saved game.
 	virtual SavedGame *newSave(GameDifficulty diff);
-	/// Generates the starting saved game.
+	/// Generates a battlescape saved game.
 	virtual SavedBattleGame *newBattleSave(SavedGame *save, int texture, Craft *craft, Ufo* ufo);
+	/// Handles the end battle stuff.
 	virtual void endBattle(SavedBattleGame *bsave, SavedGame *save);
 	/// Gets the pool list for soldier names.
 	std::vector<SoldierNamePool*> *const getPools();

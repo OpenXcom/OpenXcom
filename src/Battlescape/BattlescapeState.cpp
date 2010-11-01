@@ -26,6 +26,7 @@
 #include "../Engine/Screen.h"
 #include "../Resource/ResourcePack.h"
 #include "../Resource/LangString.h"
+#include "../Interface/Cursor.h"
 #include "../Interface/Text.h"
 #include "../Interface/ImageButton.h"
 #include "../Savegame/SavedGame.h"
@@ -61,7 +62,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_4")->getColors());
 
-	// last 16 colors is a grey gradient
+	// Last 16 colors are a grey gradient
 	SDL_Color color[16];
 	for (int i = 0; i < 16; i++)
 	{
@@ -69,10 +70,10 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 		color[i].g = 128 - (i + 1) * 8;
 		color[i].b = 128 - (i + 1) * 8;
 	}
+	_game->setPalette(color, Palette::backPos+16, 16);
 
-	// leave cursor palette alone
-	_game->getScreen()->setPalette(color, Palette::backPos+16, 16);
-	_game->getResourcePack()->setPalette(color, Palette::backPos+16, 16);
+	// Fix cursor
+	_game->getCursor()->setColor(Palette::blockOffset(9));
 
 	add(_map);
 	add(_icons);
@@ -100,19 +101,19 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	_txtName->setText("");
 
 	_btnReserveNone->copy(_icons);
-	_btnReserveNone->setColor(Palette::blockOffset(4)+8);
+	_btnReserveNone->setColor(Palette::blockOffset(4)+6);
 	_btnReserveNone->setGroup(&_reserve);
 
 	_btnReserveSnap->copy(_icons);
-	_btnReserveSnap->setColor(Palette::blockOffset(2)+8);
+	_btnReserveSnap->setColor(Palette::blockOffset(2)+6);
 	_btnReserveSnap->setGroup(&_reserve);
 
 	_btnReserveAimed->copy(_icons);
-	_btnReserveAimed->setColor(Palette::blockOffset(2)+8);
+	_btnReserveAimed->setColor(Palette::blockOffset(2)+6);
 	_btnReserveAimed->setGroup(&_reserve);
 
 	_btnReserveAuto->copy(_icons);
-	_btnReserveAuto->setColor(Palette::blockOffset(2)+8);
+	_btnReserveAuto->setColor(Palette::blockOffset(2)+6);
 	_btnReserveAuto->setGroup(&_reserve);
 
 	// Set music
@@ -128,31 +129,29 @@ BattlescapeState::~BattlescapeState()
 }
 
 /**
- * Processes any left-clicks on globe markers,
- * or right-clicks to scroll the globe.
+ * Processes any clicks on the map to
+ * command units.
  * @param action Pointer to an action.
  */
-
 void BattlescapeState::mapClick(Action *action)
-{
-}
+{}
 
 /**
- * Move unit up
+ * Move unit up.
  * @param action Pointer to an action.
  */
 void BattlescapeState::btnUnitUpClick(Action *action)
 {}
 
 /**
- * Move unit down
+ * Move unit down.
  * @param action Pointer to an action.
  */
 void BattlescapeState::btnUnitDownClick(Action *action)
 {}
 
 /**
- * Show next map layer
+ * Show next map layer.
  * @param action Pointer to an action.
  */
 void BattlescapeState::btnMapUpClick(Action *action)
@@ -161,7 +160,7 @@ void BattlescapeState::btnMapUpClick(Action *action)
 }
 
 /**
- * Show previous map layer
+ * Show previous map layer.
  * @param action Pointer to an action.
  */
 void BattlescapeState::btnMapDownClick(Action *action)
@@ -170,63 +169,63 @@ void BattlescapeState::btnMapDownClick(Action *action)
 }
 
 /**
- * Show minimap
+ * Show minimap.
  * @param action Pointer to an action.
  */
 void BattlescapeState::btnShowMapClick(Action *action)
 {}
 
 /**
- * Kneel/Standup 
+ * Kneel/Standup.
  * @param action Pointer to an action.
  */
 void BattlescapeState::btnKneelClick(Action *action)
 {}
 
 /**
- * Go to soldier info screen
+ * Go to soldier info screen.
  * @param action Pointer to an action.
  */
 void BattlescapeState::btnSoldierClick(Action *action)
 {}
 
 /**
- * Center on current selected soldier
+ * Center on currently selected soldier.
  * @param action Pointer to an action.
  */
 void BattlescapeState::btnCenterClick(Action *action)
 {}
 
 /**
- * Select next soldier
+ * Select next soldier.
  * @param action Pointer to an action.
  */
 void BattlescapeState::btnNextSoldierClick(Action *action)
 {}
 
 /**
- * Select next soldier and ...
+ * Don't select current soldier and select next soldier.
  * @param action Pointer to an action.
  */
 void BattlescapeState::btnNextStopClick(Action *action)
 {}
 
 /**
- * Show/hide all map layers
+ * Show/hide all map layers.
  * @param action Pointer to an action.
  */
 void BattlescapeState::btnShowLayersClick(Action *action)
 {}
 
 /**
- * Show help screen
+ * Show options.
  * @param action Pointer to an action.
  */
 void BattlescapeState::btnHelpClick(Action *action)
 {}
 
 /**
- * End turn
+ * End turn.
  * @param action Pointer to an action.
  */
 void BattlescapeState::btnEndTurnClick(Action *action)
@@ -239,5 +238,6 @@ void BattlescapeState::btnEndTurnClick(Action *action)
 void BattlescapeState::btnAbortClick(Action *action)
 {
 	_game->getRuleset()->endBattle(_game->getSavedGame()->getBattleGame(), _game->getSavedGame());
+	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
 	_game->popState();
 }

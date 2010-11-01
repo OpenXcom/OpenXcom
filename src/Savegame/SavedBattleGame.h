@@ -30,9 +30,9 @@ class Ufo;
 class Spawnpoint;
 
 /**
- * The game data that gets written to disk when the game is saved.
+ * The battlescape data that gets written to disk when the game is saved.
  * A saved game holds all the variable info in a game like terrain
- * soldiers, items,...
+ * soldiers, items, etc.
  */
 class SavedBattleGame
 {

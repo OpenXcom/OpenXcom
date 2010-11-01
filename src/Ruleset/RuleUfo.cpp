@@ -224,8 +224,8 @@ Terrain* RuleUfo::getBattlescapeTerrainData()
 }
 
 /**
- * set the terrain data needed to draw the UFO in the battlescape.
- * @return Terrain.
+ * Changes the terrain data needed to draw the UFO in the battlescape.
+ * @param t Terrain.
  */
 void RuleUfo::setBattlescapeTerrainData(Terrain *t)
 {

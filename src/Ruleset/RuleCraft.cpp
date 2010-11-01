@@ -276,8 +276,8 @@ Terrain* RuleCraft::getBattlescapeTerrainData()
 }
 
 /**
- * set the terrain data needed to draw the Craft in the battlescape.
- * @return Terrain.
+ * Changes the terrain data needed to draw the Craft in the battlescape.
+ * @param t Terrain.
  */
 void RuleCraft::setBattlescapeTerrainData(Terrain *t)
 {

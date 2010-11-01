@@ -79,7 +79,7 @@ bool MapBlock::isLandingZone()
  * Loads a X-Com format MAP file into the tiles of the battlegame
  * @param xoff mapblock offset in X direction
  * @param yoff mapblock offset in Y direction
- * @param SavedBattleGame* pointer to the current battle game
+ * @param save pointer to the current battle game
  * @param TerrainObjectIDoff offset of the TerrainObjectID values (loading of craft)
  * @sa http://www.ufopaedia.org/index.php?title=MAPS
  * @return the size of the map loaded 1 or 2

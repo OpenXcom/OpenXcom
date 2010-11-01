@@ -1137,9 +1137,11 @@ SavedGame *XcomRuleset::newSave(GameDifficulty diff)
 }
 
 /**
- * Generates a brand new saved game based on terrain type, mission type, time of day, place on earth
+ * Generates a battlescape saved game based on terrain type, mission type, time of day, place on earth.
  * @param save The base saved game.
- * @param texture The texture of the globe polygon we are on
+ * @param texture The texture of the globe polygon we are on.
+ * @param craft The XCom craft.
+ * @param ufo The UFO.
  * @return New saved game.
  */
 SavedBattleGame *XcomRuleset::newBattleSave(SavedGame *save, int texture, Craft* craft, Ufo* ufo)

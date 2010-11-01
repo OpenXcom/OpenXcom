@@ -32,11 +32,12 @@
 #include "../Battlescape/Map.h"
 
 /**
- * Initializes a brand new saved game according to the specified difficulty.
- * @param save
- * @param width = number of tiles on x-axis
- * @param length = number of tiles on y-axis
- * @param height = number of layers (z)
+ * Initializes a brand new battlescape saved game.
+ * @param save Pointer to saved game.
+ * @param width Number of tiles on x-axis.
+ * @param length Number of tiles on y-axis.
+ * @param height Number of layers (z).
+ * @param terrain Pointer to terrain set to use.
  */
 SavedBattleGame::SavedBattleGame(SavedGame *save, int width, int length, int height, Terrain* terrain) : _width(width), _length(length), _height(height), _viewheight(1), _terrain(terrain), _tiles(), _craft(0), _ufo(0), _spawnpoints()
 {
@@ -60,8 +61,8 @@ SavedBattleGame::~SavedBattleGame()
 }
 
 /** 
- * gets a pointer to the array of tiles
- * @return a pointer to Tile array
+ * Gets a pointer to the array of tiles.
+ * @return A pointer to Tile array.
  */
 Tile** SavedBattleGame::getTiles()
 {
@@ -69,8 +70,8 @@ Tile** SavedBattleGame::getTiles()
 }
 
 /** 
- * get the currently assigned terrain
- * @return pointer to Terrain
+ * Gets the currently assigned terrain.
+ * @return Pointer to Terrain.
  */
 Terrain *SavedBattleGame::getTerrain()
 {
@@ -78,9 +79,8 @@ Terrain *SavedBattleGame::getTerrain()
 }
 
 /** 
- * method
- * @param
- * @return
+ * Gets the map width.
+ * @return Width in tiles.
  */
 int SavedBattleGame::getWidth()
 {
@@ -88,9 +88,8 @@ int SavedBattleGame::getWidth()
 }
 
 /** 
- * method
- * @param
- * @return
+ * Gets the map length.
+ * @return Length in tiles.
  */
 int SavedBattleGame::getLength()
 {
@@ -98,9 +97,8 @@ int SavedBattleGame::getLength()
 }
 
 /** 
- * method
- * @param
- * @return
+ * Gets the map height.
+ * @return Height in layers.
  */
 int SavedBattleGame::getHeight()
 {
@@ -108,9 +106,9 @@ int SavedBattleGame::getHeight()
 }
 
 /** 
- * Viewheight is the level on the map that is currently in focus
- * @param
- * @return
+ * Gets the current viewheight, which is the level on the map
+ * that is currently in focus.
+ * @return Current level.
  */
 int SavedBattleGame::getViewHeight()
 {
@@ -118,32 +116,35 @@ int SavedBattleGame::getViewHeight()
 }
 
 /** 
- * moves the viewheigt one up or down
- * @param height relative movement
- * @return
+ * Moves the viewheigt one up or down.
+ * @param height Relative movement.
  */
 void SavedBattleGame::setRelativeViewHeight(int height)
 {
-	_viewheight+=height;
-	if (_viewheight>_height)
-		_viewheight=_height;
-	if (_viewheight<1)
-		_viewheight=1;
+	_viewheight += height;
+	if (_viewheight > _height)
+		_viewheight = _height;
+	else if (_viewheight < 1)
+		_viewheight = 1;
 }
 
 /** 
- * this method converts coordinates into a unique index
- * @param
- * @return
+ * This method converts coordinates into a unique index.
+ * @param x X coordinate.
+ * @param y Y coordinate.
+ * @param z Z coordinate.
+ * @return Unique index.
  */
 int SavedBattleGame::getTileIndex(int x, int y, int z)
 {
 	return z*_length*_width+y*_width+x;
 }
 /** 
- * get the Tile on a given position on the map
- * @param
- * @return
+ * Gets the Tile on a given position on the map.
+ * @param x X coordinate.
+ * @param y Y coordinate.
+ * @param z Z coordinate.
+ * @return Pointer to tile.
  */
 Tile *SavedBattleGame::getTile(int x, int y, int z)
 {
@@ -154,32 +155,34 @@ Tile *SavedBattleGame::getTile(int x, int y, int z)
 }
 
 /**
- * Sets the crafts for a crash site or ufo assault
- **/
+ * Sets the crafts for a crash site or UFO assault.
+ * @param craft Pointer to XCom craft.
+ * @param ufo Pointer to UFO.
+ */
 void SavedBattleGame::setCrafts(Craft *craft, Ufo* ufo)
 {
 	_craft = craft;
 	_ufo = ufo;
 }
 /**
- * Get the XCom craft 
- **/
+ * Gets the XCom craft on the map.
+ * @return Pointer to craft.
+ */
 Craft *SavedBattleGame::getCraft()
 {
 	return _craft;
 }
 /**
- * Get the UFO
- **/
+ * Gets the UFO on the map.
+ * @param Pointer to UFO.
+ */
 Ufo *SavedBattleGame::getUfo()
 {
 	return _ufo;
 }
 
 /** 
- * generates a map(set of tiles) for a new battlescape game
- * @param
- * @return
+ * Generates a map (set of tiles) for a new battlescape game.
  */
 void SavedBattleGame::generateMap()
 {
@@ -317,4 +320,3 @@ void SavedBattleGame::generateMap()
 
 	delete dummy;
 }
-

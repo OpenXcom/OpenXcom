@@ -80,8 +80,11 @@ SavedGame *Ruleset::newSave(GameDifficulty diff)
 }
 
 /**
- * Generates a brand new blank saved game.
- * @param diff Difficulty for the save.
+ * Generates a battlescape saved game based on terrain type, mission type, time of day, place on earth.
+ * @param save The base saved game.
+ * @param texture The texture of the globe polygon we are on.
+ * @param craft The XCom craft.
+ * @param ufo The UFO.
  * @return New saved game.
  */
 SavedBattleGame *Ruleset::newBattleSave(SavedGame *save, int texture, Craft *craft, Ufo* ufo)
@@ -91,11 +94,15 @@ SavedBattleGame *Ruleset::newBattleSave(SavedGame *save, int texture, Craft *cra
 	return bsave;
 }
 
+/**
+ * Handles the end battle stuff
+ */
 void Ruleset::endBattle(SavedBattleGame *bsave, SavedGame *save)
 {
 	delete bsave;
 	save->setBattleGame(NULL);
 }
+
 /**
  * Returns the list of soldier name pools.
  * @return Pointer to soldier name pool list.

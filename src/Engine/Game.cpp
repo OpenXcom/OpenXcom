@@ -158,6 +158,15 @@ Screen *const Game::getScreen() const
 }
 
 /**
+ * Returns the mouse cursor used by the game.
+ * @return Pointer to the cursor.
+ */
+Cursor *const Game::getCursor() const
+{
+	return _cursor;
+}
+
+/**
  * Replaces a certain amount of colors in the palettes of the game's
  * screen and resources.
  * @param colors Pointer to the set of colors.
