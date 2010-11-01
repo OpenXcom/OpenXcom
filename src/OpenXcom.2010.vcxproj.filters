@@ -308,6 +308,33 @@
     <ClCompile Include="Engine\CatFile.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
+    <ClCompile Include="Battlescape\BattlescapeState.cpp">
+      <Filter>Battlescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Battlescape\Map.cpp">
+      <Filter>Battlescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Battlescape\Terraindata.cpp">
+      <Filter>Battlescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Battlescape\TerrainObject.cpp">
+      <Filter>Battlescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Savegame\SavedBattleGame.cpp">
+      <Filter>Savegame</Filter>
+    </ClCompile>
+    <ClCompile Include="Savegame\Spawnpoint.cpp">
+      <Filter>Savegame</Filter>
+    </ClCompile>
+    <ClCompile Include="Savegame\Tile.cpp">
+      <Filter>Savegame</Filter>
+    </ClCompile>
+    <ClCompile Include="Ruleset\MapBlock.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
+    <ClCompile Include="Ruleset\Terrain.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -619,6 +646,33 @@
     </ClInclude>
     <ClInclude Include="Engine\CatFile.h">
       <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Battlescape\BattlescapeState.h">
+      <Filter>Battlescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Battlescape\Map.h">
+      <Filter>Battlescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Battlescape\Terraindata.h">
+      <Filter>Battlescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Battlescape\TerrainObject.h">
+      <Filter>Battlescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Savegame\Spawnpoint.h">
+      <Filter>Savegame</Filter>
+    </ClInclude>
+    <ClInclude Include="Savegame\SavedBattleGame.h">
+      <Filter>Savegame</Filter>
+    </ClInclude>
+    <ClInclude Include="Savegame\Tile.h">
+      <Filter>Savegame</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\MapBlock.h">
+      <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\Terrain.h">
+      <Filter>Ruleset</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

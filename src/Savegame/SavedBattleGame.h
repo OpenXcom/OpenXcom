@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -19,9 +19,7 @@
 #ifndef OPENXCOM__SAVEDBATTLEGAME_H
 #define OPENXCOM__SAVEDBATTLEGAME_H
 
-#include <map>
 #include <vector>
-#include <string>
 
 class Tile;
 class SavedGame;
@@ -55,35 +53,35 @@ private:
 
 
 public:
-	/// Creates a new battle save, based on current generic save
+	/// Creates a new battle save, based on current generic save.
 	SavedBattleGame(SavedGame *save, int width, int length, int height, Terrain* terrain);
 	/// Cleans up the saved game.
 	~SavedBattleGame();
-	/// get pointer to the tiles, a tile is the smallest component of battlescape
+	/// Gets pointer to the tiles, a tile is the smallest component of battlescape.
 	Tile** getTiles();
-	/// get pointer to the terrain
+	/// Gets pointer to the terrain.
 	Terrain *getTerrain();
-	/// the terrain width
+	/// Gets terrain width.
 	int getWidth();
-	/// the terrain length
+	/// Gets terrain length.
 	int getLength();
-	/// the terrain height
+	/// Gets terrain height.
 	int getHeight();
-	/// the height we are currently viewing
+	/// Gets the height player is currently viewing.
 	int getViewHeight();
-	/// set relative viewheight
+	/// Gets relative viewheight.
 	void setRelativeViewHeight(int height);
-	/// conversion between coordinates and the tile index
+	/// Conversion between coordinates and the tile index.
 	int getTileIndex(int x, int y, int z);
-	/// get a tile at certain coordinates
+	/// Gets the tile at certain coordinates.
 	Tile *getTile(int x, int y, int z);
-	/// sets the xcom craft and ufo for this battle game
+	/// Sets the xcom craft and ufo for this battle game.
 	void setCrafts(Craft *craft, Ufo* ufo);
-	/// get the xcom craft in the battle game
+	/// Get the xcom craft in the battle game.
 	Craft *getCraft();
-	/// get the ufo in the battle game (returns NULL when no ufo)
+	/// Gets the ufo in the battle game (returns NULL when no ufo).
 	Ufo *getUfo();
-	/// generate a new battlescape map
+	/// Generate a new battlescape map.
 	void generateMap();
 
 };

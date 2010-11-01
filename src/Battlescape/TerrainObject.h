@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -16,13 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_MAPOBJECT_H
-#define OPENXCOM_MAPOBJECT_H
+#ifndef OPENXCOM_TERRAINOBJECT_H
+#define OPENXCOM_TERRAINOBJECT_H
 
-#include <vector>
-#include <string>
-
-// struct to easely read MCD files
+// struct to easily read MCD files
 
 // credits to ufo 2000 development team
 // this struct is copied from terrapck.h of the ufo2k project

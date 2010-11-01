@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -17,9 +17,6 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "TerrainObject.h"
-#include <fstream>
-#include <sstream>
-
 
 /**
 *
@@ -28,7 +25,6 @@ TerrainObject::TerrainObject(MCD* data): _data(data)
 {
 	
 }
-
 
 /**
 *

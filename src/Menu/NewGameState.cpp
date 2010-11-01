@@ -38,12 +38,12 @@ NewGameState::NewGameState(Game *game) : State(game)
 {
 	// Create objects
 	_window = new Window(this, 192, 180, 64, 10, POPUP_VERTICAL);
-	_btnBeginner = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 160, 18, 80, 55);
-	_btnExperienced = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 160, 18, 80, 80);
-	_btnVeteran = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 160, 18, 80, 105);
-	_btnGenius = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 160, 18, 80, 130);
-	_btnSuperhuman = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 160, 18, 80, 155);
-	_txtTitle = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 192, 10, 64, 30);
+	_btnBeginner = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 160, 18, 80, 55);
+	_btnExperienced = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 160, 18, 80, 80);
+	_btnVeteran = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 160, 18, 80, 105);
+	_btnGenius = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 160, 18, 80, 130);
+	_btnSuperhuman = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 160, 18, 80, 155);
+	_txtTitle = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 192, 10, 64, 30);
 	
 	add(_window);
 	add(_btnBeginner);
@@ -55,7 +55,7 @@ NewGameState::NewGameState(Game *game) : State(game)
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(8)+8);
-	_window->setBackground(game->getResourcePack()->getSurface("BACK01.SCR"));
+	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_btnBeginner->setColor(Palette::blockOffset(8)+8);
 	_btnBeginner->setText(_game->getResourcePack()->getLanguage()->getString(STR_BEGINNER));

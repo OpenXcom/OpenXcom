@@ -42,12 +42,12 @@ StoresState::StoresState(Game *game, Base *base) : State(game), _base(base)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
-	_btnOk = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 300, 16, 10, 176);
-	_txtTitle = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 310, 16, 5, 8);
-	_txtItem = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 142, 8, 10, 32);
-	_txtQuantity = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 88, 8, 152, 32);
-	_txtSpaceUsed = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 74, 8, 240, 32);
-	_lstStores = new TextList(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 288, 128, 8, 40);
+	_btnOk = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 300, 16, 10, 176);
+	_txtTitle = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 310, 16, 5, 8);
+	_txtItem = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 142, 8, 10, 32);
+	_txtQuantity = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 88, 8, 152, 32);
+	_txtSpaceUsed = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 74, 8, 240, 32);
+	_lstStores = new TextList(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 288, 128, 8, 40);
 	
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
@@ -62,7 +62,7 @@ StoresState::StoresState(Game *game, Base *base) : State(game), _base(base)
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(13)+13);
-	_window->setBackground(game->getResourcePack()->getSurface("BACK13.SCR"));
+	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(13)+13);
 	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString(STR_OK));

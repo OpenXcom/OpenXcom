@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -19,17 +19,13 @@
 #include "Terraindata.h"
 #include "TerrainObject.h"
 #include <fstream>
-#include <sstream>
-
 
 /**
 *
 */
-Terraindata::Terraindata(std::string name)
+Terraindata::Terraindata(const std::string &name) : _name(name)
 {
-	_name = name;
 }
-
 
 /**
 *
@@ -43,7 +39,6 @@ Terraindata::~Terraindata()
 
 }
 
-
 /**
 * @return pointer to an array of MCD objects
 */
@@ -51,7 +46,6 @@ std::vector<TerrainObject*> *Terraindata::getTerrainObjects()
 {
 	return &_terrainObjects;
 }
-
 
 /**
  * Loads terraindata in X-Com format directly into a
@@ -61,7 +55,7 @@ std::vector<TerrainObject*> *Terraindata::getTerrainObjects()
  * @param yoff mapblock offset in Y direction
  * @sa http://www.ufopaedia.org/index.php?title=MCD
  */
-void Terraindata::load(std::string filename)
+void Terraindata::load(const std::string &filename)
 {
 	MCD* mcd;
 

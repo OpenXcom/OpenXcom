@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -38,9 +38,8 @@
  * @param length = number of tiles on y-axis
  * @param height = number of layers (z)
  */
-SavedBattleGame::SavedBattleGame(SavedGame *save, int width, int length, int height, Terrain* terrain) : _tiles(),_spawnpoints(),_width(width),_length(length),_height(height),_terrain(terrain)
+SavedBattleGame::SavedBattleGame(SavedGame *save, int width, int length, int height, Terrain* terrain) : _width(width), _length(length), _height(height), _viewheight(1), _terrain(terrain), _tiles(), _craft(0), _ufo(0), _spawnpoints()
 {
-	_viewheight = 1;
 }
 
 /** 
@@ -48,15 +47,16 @@ SavedBattleGame::SavedBattleGame(SavedGame *save, int width, int length, int hei
  */
 SavedBattleGame::~SavedBattleGame()
 {
-	for (int i=0;i<_height*_length*_width;i++)
+	for (int i = 0; i < _height * _length * _width; i++)
+	{
 		delete _tiles[i];
+	}
 	delete _tiles;
 
 	for (std::vector<Spawnpoint*>::iterator i = _spawnpoints.begin(); i != _spawnpoints.end(); i++)
 	{
 		delete *i;
 	}
-
 }
 
 /** 

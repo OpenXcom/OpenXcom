@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -36,7 +36,7 @@ private:
 	std::vector<MapBlock*> _mapblocks;
 	std::string _name;
 public:
-	Terrain(std::string name);
+	Terrain(const std::string &name);
 	~Terrain();
 	/// gets the list of sheetnames, without their extensions
 	std::vector<std::string*> *getSheetnames();

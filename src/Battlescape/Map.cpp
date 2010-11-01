@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -241,7 +241,8 @@ void Map::drawTerrain()
 						if ((_save->getViewHeight()-1)==itZ)
 						{
 							objectID=3;
-						}else if ((_save->getViewHeight()-1)>itZ)
+						}
+						else if ((_save->getViewHeight()-1)>itZ)
 						{
 							objectID=5;
 						}
@@ -349,7 +350,8 @@ void Map::mouseOver(Action *action, State *state)
 	if ((_ScrollX || _ScrollY) && !_scrollTimer->isRunning())
 	{
 		_scrollTimer->start();
-	}else if ((!_ScrollX && !_ScrollY) &&_scrollTimer->isRunning())
+	}
+	else if ((!_ScrollX && !_ScrollY) &&_scrollTimer->isRunning())
 	{
 		_scrollTimer->stop();
 	}
@@ -527,6 +529,4 @@ void Map::concatinateSheets()
 			offset_d += _res->getTerraindata(MCDname)->getTerrainObjects()->size();
 		}
 	}
-
-
 }

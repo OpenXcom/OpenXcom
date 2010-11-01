@@ -43,8 +43,8 @@ BaseNameState::BaseNameState(Game *game, Base *base, Globe *globe, bool first) :
 
 	// Create objects
 	_window = new Window(this, 192, 80, 32, 60, POPUP_BOTH);
-	_txtTitle = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 182, 16, 37, 76);
-	_edtName = new TextEdit(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 136, 16, 54, 108);
+	_txtTitle = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 182, 16, 37, 76);
+	_edtName = new TextEdit(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 136, 16, 54, 108);
 	
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
@@ -55,7 +55,7 @@ BaseNameState::BaseNameState(Game *game, Base *base, Globe *globe, bool first) :
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(8)+8);
-	_window->setBackground(game->getResourcePack()->getSurface("BACK01.SCR"));
+	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setAlign(ALIGN_CENTER);

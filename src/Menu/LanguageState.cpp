@@ -33,9 +33,9 @@ LanguageState::LanguageState(Game *game) : State(game)
 {
 	// Create objects
 	_window = new Window(this, 256, 160, 32, 20, POPUP_BOTH);
-	_btnEnglish = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 192, 20, 64, 90);
-	_btnGerman = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 192, 20, 64, 118);
-	_btnFrench = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 192, 20, 64, 146);
+	_btnEnglish = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 192, 20, 64, 90);
+	_btnGerman = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 192, 20, 64, 118);
+	_btnFrench = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 192, 20, 64, 146);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
@@ -48,7 +48,7 @@ LanguageState::LanguageState(Game *game) : State(game)
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(8)+8);
-	_window->setBackground(game->getResourcePack()->getSurface("BACK01.SCR"));
+	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 	
 	_btnEnglish->setColor(Palette::blockOffset(8)+8);
 	_btnEnglish->setText("ENGLISH");

@@ -39,10 +39,10 @@ TargetInfoState::TargetInfoState(Game *game, Target *target) : State(game), _tar
 
 	// Create objects
 	_window = new Window(this, 192, 120, 32, 40, POPUP_BOTH);
-	_btnOk = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 160, 16, 48, 135);
-	_txtTitle = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 182, 16, 37, 54);
-	_txtTargetted = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 182, 8, 37, 74);
-	_txtFollowers = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 182, 48, 37, 84);
+	_btnOk = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 160, 16, 48, 135);
+	_txtTitle = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 182, 16, 37, 54);
+	_txtTargetted = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 182, 8, 37, 74);
+	_txtFollowers = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 182, 48, 37, 84);
 	
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
@@ -55,7 +55,7 @@ TargetInfoState::TargetInfoState(Game *game, Target *target) : State(game), _tar
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(8)+13);
-	_window->setBackground(game->getResourcePack()->getSurface("BACK01.SCR"));
+	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(8)+13);
 	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString(STR_OK));

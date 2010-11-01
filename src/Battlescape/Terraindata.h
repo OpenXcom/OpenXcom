@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_MAPDATA_H
-#define OPENXCOM_MAPDATA_H
+#ifndef OPENXCOM_TERRAINDATA_H
+#define OPENXCOM_TERRAINDATA_H
 
 #include <vector>
 #include <string>
@@ -31,12 +31,12 @@ private:
 	std::string _name;
 public:
 	/// create a set of MCD records under a certain name
-	Terraindata(std::string name);
+	Terraindata(const std::string &name);
 	~Terraindata();
 	/// get pointer to the set of MCD records
 	std::vector<TerrainObject*> *getTerrainObjects();
 	/// load the set of MCD records from an MCD file
-	void load(std::string filename);
+	void load(const std::string &filename);
 };
 
 #endif

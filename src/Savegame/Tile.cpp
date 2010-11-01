@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -16,13 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include <fstream>
 #include "Tile.h"
 
 /**
 *
 */
-Tile::Tile(): _visible(true),_light(255)
+Tile::Tile(): _visible(true), _light(255)
 {
 	_TerrainObjectID[0] = 0;
 	_TerrainObjectID[1] = 0;
@@ -44,8 +43,10 @@ Tile::~Tile()
  */
 int Tile::getTerrainObjectID(int part)
 {
-	if (part<0 || part>3)
+	if (part < 0 || part > 3)
+	{
 		throw "unkown TerrainObjectID part";
+	}
 	return _TerrainObjectID[part];
 }
 

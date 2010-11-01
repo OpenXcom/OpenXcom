@@ -42,9 +42,9 @@ BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base, State *state)
 
 	// Create objects
 	_window = new Window(this, 128, 160, 192, 40, POPUP_VERTICAL);
-	_btnOk = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 112, 16, 200, 176);
-	_txtTitle = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 118, 16, 197, 48);
-	_lstFacilities = new TextList(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 96, 110, 200, 64);
+	_btnOk = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 112, 16, 200, 176);
+	_txtTitle = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 118, 16, 197, 48);
+	_lstFacilities = new TextList(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 96, 110, 200, 64);
 	
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
@@ -56,7 +56,7 @@ BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base, State *state)
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(13)+8);
-	_window->setBackground(game->getResourcePack()->getSurface("BACK05.SCR"));
+	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(13)+8);
 	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString(STR_OK));

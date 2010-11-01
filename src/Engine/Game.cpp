@@ -75,16 +75,14 @@ Game::~Game()
 	Mix_HaltChannel(-1);
 
 	for (std::list<State*>::iterator i = _states.begin(); i != _states.end(); i++)
+	{
 		delete *i;
+	}
 
 	delete _cursor;
-	if (_res != 0)
-		delete _res;
-	if (_rules != 0)
-		delete _rules;
-	if (_save != 0)
-		delete _save;
-
+	delete _res;
+	delete _rules;
+	delete _save;
 	delete _screen;
 
 	Mix_CloseAudio();
@@ -172,7 +170,9 @@ void Game::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 	_cursor->setPalette(colors, firstcolor, ncolors);
 	_cursor->draw();
 	if (_res != 0)
+	{
 		_res->setPalette(colors, firstcolor, ncolors);
+	}
 }
 
 /**

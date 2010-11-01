@@ -571,6 +571,38 @@
 		<Filter
 			Name="Battlescape"
 			>
+			<File
+				RelativePath=".\Battlescape\BattlescapeState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\BattlescapeState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\Map.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\Map.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\Terraindata.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\Terraindata.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\TerrainObject.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\TerrainObject.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Geoscape"
@@ -904,6 +936,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Savegame\SavedBattleGame.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\SavedBattleGame.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Savegame\SavedGame.cpp"
 				>
 			</File>
@@ -920,11 +960,27 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Savegame\Spawnpoint.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\Spawnpoint.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Savegame\Target.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\Savegame\Target.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\Tile.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\Tile.h"
 				>
 			</File>
 			<File
@@ -980,6 +1036,14 @@
 			Name="Ruleset"
 			>
 			<File
+				RelativePath=".\Ruleset\MapBlock.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\MapBlock.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Ruleset\RuleBaseFacility.cpp"
 				>
 			</File>
@@ -1025,6 +1089,14 @@
 			</File>
 			<File
 				RelativePath=".\Ruleset\RuleUfo.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\Terrain.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\Terrain.h"
 				>
 			</File>
 			<File

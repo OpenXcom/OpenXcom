@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -20,7 +20,6 @@
 #define OPENXCOM_BATTLESCAPESTATE_H
 
 #include "../Engine/State.h"
-#include <vector>
 
 class Surface;
 class Map;
@@ -39,31 +38,25 @@ private:
 	InteractiveSurface *_btnUnitUp, *_btnUnitDown, *_btnMapUp, *_btnMapDown, *_btnShowMap, *_btnKneel;
 	InteractiveSurface *_btnSoldier, *_btnCenter, *_btnNextSoldier, *_btnNextStop, *_btnShowLayers, *_btnHelp;
 	InteractiveSurface *_btnEndTurn, *_btnAbort;
+	ImageButton *_reserve;
+	ImageButton *_btnReserveNone, *_btnReserveSnap, *_btnReserveAimed, *_btnReserveAuto;
 	Text *_txtName;
-	bool _pause;
-	std::vector<State*> _popups;
 public:
 	/// Creates the Battlescape state.
 	BattlescapeState(Game *game);
 	/// Cleans up the Battlescape state.
 	~BattlescapeState();
-	/// Updates the palette and timer.
-	void init();
-	/// Runs the timer.
-	void think();
-	/// Gets the Battlescap map.
-	Map *getMap();
 	/// Handler for clicking the map.
 	void mapClick(Action *action);
-	/// Handler for clicking the UnitUp button.
+	/// Handler for clicking the Unit Up button.
 	void btnUnitUpClick(Action *action);
-	/// Handler for clicking the UnitDown button.
+	/// Handler for clicking the Unit Down button.
 	void btnUnitDownClick(Action *action);
-	/// Handler for clicking the MapUp button.
+	/// Handler for clicking the Map Up button.
 	void btnMapUpClick(Action *action);
-	/// Handler for clicking the MapDown button.
+	/// Handler for clicking the Map Down button.
 	void btnMapDownClick(Action *action);
-	/// Handler for clicking the ShowMap button.
+	/// Handler for clicking the Show Map button.
 	void btnShowMapClick(Action *action);
 	/// Handler for clicking the Kneel button.
 	void btnKneelClick(Action *action);
@@ -71,17 +64,17 @@ public:
 	void btnSoldierClick(Action *action);
 	/// Handler for clicking the Center button.
 	void btnCenterClick(Action *action);
-	/// Handler for clicking the NextSoldier button.
+	/// Handler for clicking the Next Soldier button.
 	void btnNextSoldierClick(Action *action);
-	/// Handler for clicking the NextStop button.
+	/// Handler for clicking the Next Stop button.
 	void btnNextStopClick(Action *action);
-	/// Handler for clicking the ShowLayers button.
+	/// Handler for clicking the Show Layers button.
 	void btnShowLayersClick(Action *action);
 	/// Handler for clicking the Help button.
 	void btnHelpClick(Action *action);
-	/// Handler for clicking the EndTurn button.
+	/// Handler for clicking the End Turn button.
 	void btnEndTurnClick(Action *action);
-	/// Handler for clicking the EndGame button.
+	/// Handler for clicking the Abort button.
 	void btnAbortClick(Action *action);
 };
 

@@ -61,7 +61,9 @@ void Font::load()
 			{
 				Uint8 pixel = _surface->getPixel(x, y);
 				if (pixel != 0)
+				{
 					left = x;
+				}
 			}
 		}
 		for (int x = _width - 1; x >= 0; x--)
@@ -70,7 +72,9 @@ void Font::load()
 			{
 				Uint8 pixel = _surface->getPixel(x, y);
 				if (pixel != 0)
+				{
 					right = x;
+				}
 			}
 		}
 		rect.x = left;

@@ -54,11 +54,11 @@ UfoDetectedState::UfoDetectedState(Game *game, Ufo *ufo, GeoscapeState *state, b
 
 	// Create objects
 	_window = new Window(this, 208, 120, 24, 48, POPUP_BOTH);
-	_btnCentre = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 160, 12, 48, 128);
-	_btnCancel = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 160, 12, 48, 144);
-	_txtUfo = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 160, 16, 48, 56);
-	_txtDetected = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 80, 8, 48, 72);
-	_lstInfo = new TextList(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 160, 32, 48, 82);
+	_btnCentre = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 160, 12, 48, 128);
+	_btnCancel = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 160, 12, 48, 144);
+	_txtUfo = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 160, 16, 48, 56);
+	_txtDetected = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 80, 8, 48, 72);
+	_lstInfo = new TextList(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 160, 32, 48, 82);
 	
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
@@ -72,7 +72,7 @@ UfoDetectedState::UfoDetectedState(Game *game, Ufo *ufo, GeoscapeState *state, b
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(8)+8);
-	_window->setBackground(game->getResourcePack()->getSurface("BACK15.SCR"));
+	_window->setBackground(_game->getResourcePack()->getSurface("BACK15.SCR"));
 
 	_btnCentre->setColor(Palette::blockOffset(8)+8);
 	_btnCentre->setText(_game->getResourcePack()->getLanguage()->getString(STR_CENTRE_ON_UFO));

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -19,7 +19,6 @@
 #ifndef OPENXCOM_TILE_H
 #define OPENXCOM_TILE_H
 
-#include "SDL.h"
 #include <string>
 
 /**
@@ -35,13 +34,13 @@ protected:
 	int _framenumber[4]; // the framenumber within the frameset to draw this part of the tile
 
 public:
-	/// creates a tile 
+	/// Creates a tile.
 	Tile();
-	/// destructor
+	/// Cleans up a tile.
 	~Tile();
-	/// gets a reference to the map control data for a specific part of the tile
+	/// Gets a reference to the map control data for a specific part of the tile.
 	int getTerrainObjectID(int part);
-	/// sets the 4 terrain object references for this tile
+	/// Sets the 4 terrain object references for this tile.
 	void setTerrainObjectID(int TerrainObjectID[]);
 
 };

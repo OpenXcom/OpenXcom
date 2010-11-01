@@ -46,9 +46,9 @@ ConfirmDestinationState::ConfirmDestinationState(Game *game, Craft *craft, Targe
 
 	// Create objects
 	_window = new Window(this, 224, 72, 16, 64);
-	_btnOk = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 50, 12, 68, 104);
-	_btnCancel = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 50, 12, 138, 104);
-	_txtTarget = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 214, 16, 21, 80);
+	_btnOk = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 50, 12, 68, 104);
+	_btnCancel = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 50, 12, 138, 104);
+	_txtTarget = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 214, 16, 21, 80);
 
 	// Set palette
 	if (w != 0 && w->getId() == 0)
@@ -67,7 +67,7 @@ ConfirmDestinationState::ConfirmDestinationState(Game *game, Craft *craft, Targe
 	
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)+2);
-	_window->setBackground(game->getResourcePack()->getSurface("BACK12.SCR"));
+	_window->setBackground(_game->getResourcePack()->getSurface("BACK12.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(8)+8);
 	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString(STR_OK));

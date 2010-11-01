@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -16,25 +16,16 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#define _USE_MATH_DEFINES
 #include "BattlescapeState.h"
-#include <cmath>
-#include <string>
-#include <sstream>
 #include "../Engine/Game.h"
-#include "../Engine/Timer.h"
 #include "../Engine/Music.h"
 #include "../Engine/Language.h"
 #include "../Engine/Font.h"
 #include "../Engine/Palette.h"
-#include "../Engine/RNG.h"
 #include "../Engine/Surface.h"
-#include "../Engine/SurfaceSet.h"
 #include "../Engine/Screen.h"
 #include "../Resource/ResourcePack.h"
 #include "../Resource/LangString.h"
-#include "../Interface/TextButton.h"
-#include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Interface/ImageButton.h"
 #include "../Savegame/SavedGame.h"
@@ -45,22 +36,27 @@
  * Initializes all the elements in the Battlescape screen.
  * @param game Pointer to the core game.
  */
-BattlescapeState::BattlescapeState(Game *game) : State(game), _pause(false), _popups()
+BattlescapeState::BattlescapeState(Game *game) : State(game)
 {
-
 	// Create the battlemap view
-	_map = new Map(320,200,0,0);
+	_map = new Map(320, 200, 0, 0);
 
 	// Create buttonbar
 	_icons = new Surface(320, 200, 0, 0);
 
 	// Create buttons
-	_btnAbort = new InteractiveSurface(30, 15, 240, 160);
-	_btnMapUp = new InteractiveSurface(30, 15, 80, 144);
-	_btnMapDown = new InteractiveSurface(30, 15, 80, 160);
+	_btnAbort = new InteractiveSurface(32, 16, 240, 160);
+	_btnMapUp = new InteractiveSurface(32, 16, 80, 144);
+	_btnMapDown = new InteractiveSurface(32, 16, 80, 160);
+	_btnReserveNone = new ImageButton(28, 11, 49, 177);
+	_btnReserveSnap = new ImageButton(28, 11, 78, 177);
+	_btnReserveAimed = new ImageButton(28, 11, 49, 189);
+	_btnReserveAuto = new ImageButton(28, 11, 78, 189);
 
 	// Create soldier stats summary
-	_txtName = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 120, 10, 135, 176);
+	_txtName = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 120, 10, 135, 176);
+
+	_reserve = _btnReserveNone;
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_4")->getColors());
@@ -69,9 +65,9 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _pause(false), _po
 	SDL_Color color[16];
 	for (int i = 0; i < 16; i++)
 	{
-	color[i].r = 128 - (i + 1) * 8;
-	color[i].g = 128 - (i + 1) * 8;
-	color[i].b = 128 - (i + 1) * 8;
+		color[i].r = 128 - (i + 1) * 8;
+		color[i].g = 128 - (i + 1) * 8;
+		color[i].b = 128 - (i + 1) * 8;
 	}
 
 	// leave cursor palette alone
@@ -84,6 +80,10 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _pause(false), _po
 	add(_btnMapUp);
 	add(_btnMapDown);
 	add(_txtName);
+	add(_btnReserveNone);
+	add(_btnReserveSnap);
+	add(_btnReserveAimed);
+	add(_btnReserveAuto);
 
 	// Set up objects
 	_game->getResourcePack()->getSurface("ICONS.PCK")->blit(_icons);
@@ -98,7 +98,22 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _pause(false), _po
 
 	_txtName->setColor(Palette::blockOffset(15)+4);
 	_txtName->setText("");
-	_txtName->setAlign(ALIGN_LEFT);
+
+	_btnReserveNone->copy(_icons);
+	_btnReserveNone->setColor(Palette::blockOffset(4)+8);
+	_btnReserveNone->setGroup(&_reserve);
+
+	_btnReserveSnap->copy(_icons);
+	_btnReserveSnap->setColor(Palette::blockOffset(2)+8);
+	_btnReserveSnap->setGroup(&_reserve);
+
+	_btnReserveAimed->copy(_icons);
+	_btnReserveAimed->setColor(Palette::blockOffset(2)+8);
+	_btnReserveAimed->setGroup(&_reserve);
+
+	_btnReserveAuto->copy(_icons);
+	_btnReserveAuto->setColor(Palette::blockOffset(2)+8);
+	_btnReserveAuto->setGroup(&_reserve);
 
 	// Set music
 	_game->getResourcePack()->getMusic("GMTACTIC")->play();
@@ -110,36 +125,6 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _pause(false), _po
 BattlescapeState::~BattlescapeState()
 {
 
-}
-
-/**
- * Updates the timer display and resets the palette
- * since it's bound to change on other screens.
- */
-void BattlescapeState::init()
-{
-	_map->onMouseClick((ActionHandler)&BattlescapeState::mapClick);
-	_map->focus();
-	_map->draw();
-}
-
-/**
- * Runs the game timers
- */
-void BattlescapeState::think()
-{
-	State::think();
-	_map->think();
-}
-
-
-/**
- * Returns a pointer to the map for
- * access by other substates.
- */
-Map *BattlescapeState::getMap()
-{
-	return _map;
 }
 
 /**
@@ -253,11 +238,6 @@ void BattlescapeState::btnEndTurnClick(Action *action)
  */
 void BattlescapeState::btnAbortClick(Action *action)
 {
-	_game->getRuleset()->endBattle(_game->getSavedGame()->getBattleGame(),_game->getSavedGame());
+	_game->getRuleset()->endBattle(_game->getSavedGame()->getBattleGame(), _game->getSavedGame());
 	_game->popState();
-
-	// Set music
-	std::stringstream ss;
-	ss << "GMGEO" << RNG::generate(1, 2);
-	_game->getResourcePack()->getMusic(ss.str())->play();
 }

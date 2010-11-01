@@ -22,6 +22,7 @@
 #include <vector>
 #include <string>
 #include "../Resource/LangString.h"
+
 class Terrain;
 
 /**

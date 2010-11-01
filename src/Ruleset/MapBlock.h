@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -19,9 +19,8 @@
 #ifndef OPENXCOM__MAPBLOCK_H
 #define OPENXCOM__MAPBLOCK_H
 
-#include <map>
-#include <vector>
 #include <string>
+
 class SavedBattleGame;
 
 class MapBlock

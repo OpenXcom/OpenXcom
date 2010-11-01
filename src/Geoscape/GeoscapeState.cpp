@@ -19,7 +19,6 @@
 #define _USE_MATH_DEFINES
 #include "GeoscapeState.h"
 #include <cmath>
-#include <string>
 #include <sstream>
 #include "../Engine/RNG.h"
 #include "../Engine/Game.h"
@@ -67,7 +66,7 @@
  * Initializes all the elements in the Geoscape screen.
  * @param game Pointer to the core game.
  */
-GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _popups()
+GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(false), _popups()
 {
 	// Create objects
 	_bg = new Surface(320, 200, 0, 0);
@@ -94,15 +93,15 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _popups()
 	_btnZoomIn = new InteractiveSurface(23, 23, 295, 156);
 	_btnZoomOut = new InteractiveSurface(13, 17, 300, 182);
 
-	_txtHour = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 20, 16, 259, 74);
-	_txtHourSep = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 4, 16, 279, 74);
-	_txtMin = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 20, 16, 283, 74);
-	_txtMinSep = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 4, 16, 303, 74);
-	_txtSec = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 11, 8, 307, 80);
-	_txtWeekday = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 59, 8, 259, 87);
-	_txtDay = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 29, 8, 259, 94);
-	_txtMonth = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 29, 8, 288, 94);
-	_txtYear = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 59, 8, 259, 101);
+	_txtHour = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 20, 16, 259, 74);
+	_txtHourSep = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 4, 16, 279, 74);
+	_txtMin = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 20, 16, 283, 74);
+	_txtMinSep = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 4, 16, 303, 74);
+	_txtSec = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 11, 8, 307, 80);
+	_txtWeekday = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 59, 8, 259, 87);
+	_txtDay = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 29, 8, 259, 94);
+	_txtMonth = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 29, 8, 288, 94);
+	_txtYear = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 59, 8, 259, 101);
 
 	_timeSpeed = _btn5Secs;
 	_timer = new Timer(100);
@@ -268,11 +267,6 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _popups()
 
 	_timer->onTimer((StateHandler)&GeoscapeState::timeAdvance);
 	_timer->start();
-
-	// Set music
-	std::stringstream ss;
-	ss << "GMGEO" << RNG::generate(1, 2);
-	_game->getResourcePack()->getMusic(ss.str())->play();
 }
 
 /**
@@ -297,6 +291,15 @@ void GeoscapeState::init()
 	_globe->draw();
 
 	timeDisplay();
+
+	// Set music if it's not already playing
+	if (!_music)
+	{
+		std::stringstream ss;
+		ss << "GMGEO" << RNG::generate(1, 2);
+		_game->getResourcePack()->getMusic(ss.str())->play();
+		_music = true;
+	}
 }
 
 /**
@@ -330,15 +333,23 @@ void GeoscapeState::timeDisplay()
 	std::stringstream ss, ss2, ss3, ss4, ss5;
 	
 	if (_game->getSavedGame()->getTime()->getSecond() < 10)
+	{
 		ss << "0" << _game->getSavedGame()->getTime()->getSecond();
+	}
 	else
+	{
 		ss << _game->getSavedGame()->getTime()->getSecond();
+	}
 	_txtSec->setText(ss.str());
 
 	if (_game->getSavedGame()->getTime()->getMinute() < 10)
+	{
 		ss2 << "0" << _game->getSavedGame()->getTime()->getMinute();
+	}
 	else
+	{
 		ss2 << _game->getSavedGame()->getTime()->getMinute();
+	}
 	_txtMin->setText(ss2.str());
 
 	ss3 << _game->getSavedGame()->getTime()->getHour();
@@ -369,17 +380,29 @@ void GeoscapeState::timeAdvance()
 {
 	int timeSpan = 0;
 	if (_timeSpeed == _btn5Secs)
+	{
 		timeSpan = 1;
+	}
 	else if (_timeSpeed == _btn1Min)
+	{
 		timeSpan = 12;
+	}
 	else if (_timeSpeed == _btn5Mins)
+	{
 		timeSpan = 12 * 5;
+	}
 	else if (_timeSpeed == _btn30Mins)
+	{
 		timeSpan = 12 * 5 * 6;
+	}
 	else if (_timeSpeed == _btn1Hour)
+	{
 		timeSpan = 12 * 5 * 6 * 2;
+	}
 	else if (_timeSpeed == _btn1Day)
+	{
 		timeSpan = 12 * 5 * 6 * 2 * 24;
+	}
 		
 	for (int i = 0; i < timeSpan && !_pause; i++)
 	{
@@ -452,22 +475,20 @@ void GeoscapeState::time5Seconds()
 					if (!u->isCrashed())
 					{
 						timerReset();
+						_music = false;
 						popup(new DogfightState(_game, _globe, (*j), u));
 					}
 					else
 					{
-						if ((*j)->getNumSoldiers()>0)
+						if ((*j)->getNumSoldiers() > 0)
 						{
 							// look up polygons texture
 							int texture = _globe->getPolygonTexture(u->getLongitude(),u->getLatitude());
 							_game->getRuleset()->newBattleSave(_game->getSavedGame(), texture, (*j), u);
+							_music = false;
 							_game->pushState(new BattlescapeState(_game));
-							(*j)->returnToBase();
 						}
-						else
-						{
-							(*j)->returnToBase();
-						}
+						(*j)->returnToBase();
 					}
 				}
 				else if (w != 0)

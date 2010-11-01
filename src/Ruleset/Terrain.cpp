@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -31,9 +31,8 @@
 /**
 * Terrain construction
 */
-Terrain::Terrain(std::string name)
+Terrain::Terrain(const std::string &name) : _name(name)
 {
-	_name = name;
 }
 
 

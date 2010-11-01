@@ -48,13 +48,13 @@ CraftWeaponsState::CraftWeaponsState(Game *game, Base *base, unsigned int craft,
 
 	// Create objects
 	_window = new Window(this, 220, 160, 50, 20, POPUP_BOTH);
-	_btnCancel = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 140, 16, 90, 156);
-	_txtTitle = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 208, 16, 56, 28);
-	_txtArmament = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 76, 8, 66, 52);
-	_txtQuantity = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 50, 8, 145, 52);
-	_txtAmmunition = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 68, 8, 195, 44);
-	_txtAvailable = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 68, 8, 195, 52);
-	_lstWeapons = new TextList(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 188, 80, 58, 68);
+	_btnCancel = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 140, 16, 90, 156);
+	_txtTitle = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 208, 16, 56, 28);
+	_txtArmament = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 76, 8, 66, 52);
+	_txtQuantity = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 50, 8, 145, 52);
+	_txtAmmunition = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 68, 8, 195, 44);
+	_txtAvailable = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 68, 8, 195, 52);
+	_lstWeapons = new TextList(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 188, 80, 58, 68);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
@@ -70,7 +70,7 @@ CraftWeaponsState::CraftWeaponsState(Game *game, Base *base, unsigned int craft,
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)+9);
-	_window->setBackground(game->getResourcePack()->getSurface("BACK14.SCR"));
+	_window->setBackground(_game->getResourcePack()->getSurface("BACK14.SCR"));
 
 	_btnCancel->setColor(Palette::blockOffset(15)+9);
 	_btnCancel->setText(_game->getResourcePack()->getLanguage()->getString(STR_CANCEL_UC));

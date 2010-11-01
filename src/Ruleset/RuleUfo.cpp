@@ -17,15 +17,15 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "RuleUfo.h"
+#include "Terrain.h"
 
 /**
  * Creates a blank ruleset for a certain
  * type of UFO.
  * @param type String defining the type.
  */
-RuleUfo::RuleUfo(LangString type) : _type(type), _size(STR_VERY_SMALL), _sprite(-1), _damageMax(0), _speedMax(0), _accel(0), _power(0), _range(0), _score(0)
+RuleUfo::RuleUfo(LangString type) : _type(type), _size(STR_VERY_SMALL), _sprite(-1), _damageMax(0), _speedMax(0), _accel(0), _power(0), _range(0), _score(0), _battlescapeTerrainData(0)
 {
-	_battlescapeTerrainData = NULL;
 }
 
 /**
@@ -33,8 +33,7 @@ RuleUfo::RuleUfo(LangString type) : _type(type), _size(STR_VERY_SMALL), _sprite(
  */
 RuleUfo::~RuleUfo()
 {
-	if (_battlescapeTerrainData != NULL)
-		delete _battlescapeTerrainData;
+	delete _battlescapeTerrainData;
 }
 
 /**

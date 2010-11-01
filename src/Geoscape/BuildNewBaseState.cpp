@@ -55,8 +55,8 @@ BuildNewBaseState::BuildNewBaseState(Game *game, Base *base, Globe *globe, bool 
 	_btnZoomOut = new InteractiveSurface(13, 17, 300, 182);
 
 	_window = new Window(this, 256, 28, 0, 0);
-	_btnCancel = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 54, 12, 186, 8);
-	_txtTitle = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 200, 9, 8, 10);
+	_btnCancel = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 54, 12, 186, 8);
+	_txtTitle = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 200, 9, 8, 10);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
@@ -92,7 +92,7 @@ BuildNewBaseState::BuildNewBaseState(Game *game, Base *base, Globe *globe, bool 
 	_btnZoomOut->onMouseClick((ActionHandler)&BuildNewBaseState::btnZoomOutClick);
 
 	_window->setColor(Palette::blockOffset(15)+2);
-	_window->setBackground(game->getResourcePack()->getSurface("BACK01.SCR"));
+	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_btnCancel->setColor(Palette::blockOffset(15)+2);
 	_btnCancel->setText(_game->getResourcePack()->getLanguage()->getString(STR_CANCEL_UC));

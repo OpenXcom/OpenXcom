@@ -44,7 +44,7 @@ private:
 	InteractiveSurface *_btnRotateLeft, *_btnRotateRight, *_btnRotateUp, *_btnRotateDown, *_btnZoomIn, *_btnZoomOut;
 	Text *_txtHour, *_txtHourSep, *_txtMin, *_txtMinSep, *_txtSec, *_txtWeekday, *_txtDay, *_txtMonth, *_txtYear;
 	Timer *_timer;
-	bool _pause;
+	bool _pause, _music;
 	std::vector<State*> _popups;
 public:
 	/// Creates the Geoscape state.

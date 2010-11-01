@@ -73,10 +73,10 @@ DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo) :
 	_btnAggressive = new ImageButton(36, 15, 200, 72);
 	_btnDisengage = new ImageButton(36, 15, 200, 88);
 	_btnUfo = new ImageButton(36, 17, 200, 104);
-	_txtAmmo1 = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 16, 9, 84, 122);
-	_txtAmmo2 = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 16, 9, 144, 122);
-	_txtDistance = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 40, 9, 196, 124);
-	_txtStatus = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 150, 9, 84, 137);
+	_txtAmmo1 = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 16, 9, 84, 122);
+	_txtAmmo2 = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 16, 9, 144, 122);
+	_txtDistance = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 40, 9, 196, 124);
+	_txtStatus = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 150, 9, 84, 137);
 
 	_animTimer = new Timer(30);
 	_moveTimer = new Timer(20);
@@ -457,9 +457,6 @@ void DogfightState::move()
 	{
 		_craft->returnToBase();
 		_game->popState();
-		std::stringstream ss;
-		ss << "GMGEO" << RNG::generate(1, 2);
-		_game->getResourcePack()->getMusic(ss.str())->play();
 		if (_destroy)
 		{
 			for (std::vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end(); i++)

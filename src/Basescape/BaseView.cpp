@@ -59,8 +59,7 @@ BaseView::BaseView(Font *big, Font *small, int width, int height, int x, int y) 
  */
 BaseView::~BaseView()
 {
-	if (_selector != 0)
-		delete _selector;
+	delete _selector;
 }
 
 /**

@@ -40,10 +40,10 @@ TestState::TestState(Game *game) : State(game)
 {
 	// Create objects
 	_window = new Window(this, 300, 180, 10, 10);
-	_text = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 280, 120, 20, 50);
-	_button = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 100, 20, 110, 150);
-	_list = new TextList(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 300, 180, 10, 10);
-	_set = game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
+	_text = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 280, 120, 20, 50);
+	_button = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 100, 20, 110, 150);
+	_list = new TextList(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 300, 180, 10, 10);
+	_set = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
 	_set->getFrame(1);
 	
 	// Set palette
@@ -57,7 +57,7 @@ TestState::TestState(Game *game) : State(game)
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)+4);
-	_window->setBackground(game->getResourcePack()->getSurface("BACK04.SCR"));
+	_window->setBackground(_game->getResourcePack()->getSurface("BACK04.SCR"));
 	
 	_button->setColor(Palette::blockOffset(15)+4);
 	_button->setText("LOLOLOL");

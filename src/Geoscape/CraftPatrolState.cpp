@@ -43,10 +43,10 @@ CraftPatrolState::CraftPatrolState(Game *game, Craft *craft, Globe *globe) : Sta
 
 	// Create objects
 	_window = new Window(this, 224, 168, 16, 16, POPUP_BOTH);
-	_btnOk = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 140, 12, 58, 144);
-	_btnRedirect = new TextButton(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 140, 12, 58, 160);
-	_txtDestination = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 140, 64, 58, 48);
-	_txtPatrolling = new Text(game->getResourcePack()->getFont("BIGLETS.DAT"), game->getResourcePack()->getFont("SMALLSET.DAT"), 140, 16, 58, 120);
+	_btnOk = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 140, 12, 58, 144);
+	_btnRedirect = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 140, 12, 58, 160);
+	_txtDestination = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 140, 64, 58, 48);
+	_txtPatrolling = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 140, 16, 58, 120);
 	
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
@@ -59,7 +59,7 @@ CraftPatrolState::CraftPatrolState(Game *game, Craft *craft, Globe *globe) : Sta
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)+2);
-	_window->setBackground(game->getResourcePack()->getSurface("BACK12.SCR"));
+	_window->setBackground(_game->getResourcePack()->getSurface("BACK12.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(8)+8);
 	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString(STR_OK));
