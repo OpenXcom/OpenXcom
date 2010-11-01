@@ -1073,3 +1073,21 @@ void Globe::keyboardPress(Action *action, State *state)
 		switchDetail();
 	}
 }
+
+/**
+ * Get the polygons texture at a given point
+ * @param lon Longitude of the point.
+ * @param lat Latitude of the point.
+ * @return texture ID returns -1 when polygon not found
+ */
+int Globe::getPolygonTexture(double lon, double lat)
+{
+	for (std::list<Polygon*>::iterator i = _res->getPolygons()->begin(); i != _res->getPolygons()->end(); i++)
+	{
+		if(insidePolygon(lon, lat, *i))
+		{
+			return ((Polygon*)(*i))->getTexture();
+		}
+	}
+	return -1;
+}

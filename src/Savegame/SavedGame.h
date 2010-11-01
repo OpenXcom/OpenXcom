@@ -29,6 +29,7 @@ class Base;
 class Region;
 class Ufo;
 class Waypoint;
+class SavedBattleGame;
 
 /**
  * Enumator containing all the possible game difficulties.
@@ -53,6 +54,7 @@ private:
 	std::map<LangString, int> _craftId;
 	std::vector<Waypoint*> _waypoints;
 	int _ufoId, _waypointId;
+	SavedBattleGame *_battlegame;
 public:
 	/// Creates a new save with a certain difficulty.
 	SavedGame(GameDifficulty diff);
@@ -86,6 +88,9 @@ public:
 	std::vector<Waypoint*> *const getWaypoints();
 	/// Gets the current waypoint ID.
 	int *const getWaypointId();
+	
+	void setBattleGame(SavedBattleGame *battlegame);
+	SavedBattleGame *getBattleGame();
 };
 
 #endif

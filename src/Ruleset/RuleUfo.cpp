@@ -25,6 +25,7 @@
  */
 RuleUfo::RuleUfo(LangString type) : _type(type), _size(STR_VERY_SMALL), _sprite(-1), _damageMax(0), _speedMax(0), _accel(0), _power(0), _range(0), _score(0)
 {
+	_battlescapeTerrainData = NULL;
 }
 
 /**
@@ -32,6 +33,8 @@ RuleUfo::RuleUfo(LangString type) : _type(type), _size(STR_VERY_SMALL), _sprite(
  */
 RuleUfo::~RuleUfo()
 {
+	if (_battlescapeTerrainData != NULL)
+		delete _battlescapeTerrainData;
 }
 
 /**
@@ -210,4 +213,22 @@ int RuleUfo::getScore() const
 void RuleUfo::setScore(int score)
 {
 	_score = score;
+}
+
+/**
+ * Returns the terrain data needed to draw the UFO in the battlescape.
+ * @return Terrain.
+ */
+Terrain* RuleUfo::getBattlescapeTerrainData()
+{
+	return _battlescapeTerrainData;
+}
+
+/**
+ * set the terrain data needed to draw the UFO in the battlescape.
+ * @return Terrain.
+ */
+void RuleUfo::setBattlescapeTerrainData(Terrain *t)
+{
+	_battlescapeTerrainData = t;
 }

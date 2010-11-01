@@ -23,11 +23,12 @@
 #include "RuleCraftWeapon.h"
 #include "RuleItem.h"
 #include "RuleUfo.h"
+#include "../Ruleset/Terrain.h"
 
 /**
  * Creates a ruleset with blank sets of rules.
  */
-Ruleset::Ruleset() : _names(), _facilities(), _crafts(), _craftWeapons(), _items(), _ufos()
+Ruleset::Ruleset() : _names(), _facilities(), _crafts(), _craftWeapons(), _items(), _ufos(), _terrains()
 {
 }
 
@@ -60,6 +61,10 @@ Ruleset::~Ruleset()
 	{
 		delete i->second;
 	}
+	for (std::map<std::string, Terrain*>::iterator i = _terrains.begin(); i != _terrains.end(); i++)
+	{
+		delete i->second;
+	}
 }
 
 /**
@@ -74,6 +79,23 @@ SavedGame *Ruleset::newSave(GameDifficulty diff)
 	return save;
 }
 
+/**
+ * Generates a brand new blank saved game.
+ * @param diff Difficulty for the save.
+ * @return New saved game.
+ */
+SavedBattleGame *Ruleset::newBattleSave(SavedGame *save, int texture, Craft *craft, Ufo* ufo)
+{
+	SavedBattleGame *bsave = NULL;
+
+	return bsave;
+}
+
+void Ruleset::endBattle(SavedBattleGame *bsave, SavedGame *save)
+{
+	delete bsave;
+	save->setBattleGame(NULL);
+}
 /**
  * Returns the list of soldier name pools.
  * @return Pointer to soldier name pool list.
@@ -131,4 +153,14 @@ RuleItem *const Ruleset::getItem(LangString id)
 RuleUfo *const Ruleset::getUfo(LangString id)
 {
 	return _ufos[id];
+}
+
+/**
+ * Returns the rules for the specified terrain.
+ * @param terrain name.
+ * @return Rules for the terrain.
+ */
+Terrain *Ruleset::getTerrain(std::string name)
+{
+	return _terrains[name];
 }

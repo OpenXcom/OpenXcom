@@ -28,12 +28,13 @@
 #include "../Geoscape/Polygon.h"
 #include "../Geoscape/Polyline.h"
 #include "../Engine/SoundSet.h"
+#include "../Battlescape/Terraindata.h"
 
 /**
  * Initializes a blank resource set pointing to a folder.
  * @param folder Subfolder to load resources from.
  */
-ResourcePack::ResourcePack(const std::string &folder) : _folder(folder), _currentLang(0), _langName(""), _palettes(), _fonts(), _languages(), _surfaces(), _sets(), _polygons(), _musics()
+ResourcePack::ResourcePack(const std::string &folder) : _folder(folder), _currentLang(0), _langName(""), _palettes(), _fonts(), _languages(), _surfaces(), _sets(), _polygons(), _musics(), _terraindata()
 {
 }
 
@@ -75,6 +76,10 @@ ResourcePack::~ResourcePack()
 		delete i->second;
 	}
 	for (std::map<std::string, SoundSet*>::iterator i = _sounds.begin(); i != _sounds.end(); i++)
+	{
+		delete i->second;
+	}
+	for (std::map<std::string, Terraindata*>::iterator i = _terraindata.begin(); i != _terraindata.end(); i++)
 	{
 		delete i->second;
 	}
@@ -259,4 +264,14 @@ void ResourcePack::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 	{
 		i->second->setPalette(colors, firstcolor, ncolors);
 	}
+}
+
+/**
+ * Returns a specific palette from the resource set.
+ * @param name Name of the palette.
+ * @return Pointer to the palette.
+ */
+Terraindata *ResourcePack::getTerraindata(std::string name)
+{
+	return _terraindata[name];
 }

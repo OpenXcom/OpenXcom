@@ -19,7 +19,10 @@
 #ifndef OPENXCOM_RULECRAFT_H
 #define OPENXCOM_RULECRAFT_H
 
+#include <vector>
+#include <string>
 #include "../Resource/LangString.h"
+class Terrain;
 
 /**
  * Represents a specific type of craft.
@@ -33,6 +36,8 @@ private:
 	LangString _type;
 	int _sprite;
 	int _fuelMax, _damageMax, _speedMax, _accel, _weapons, _soldiers, _hwps, _fee, _repair, _refuel;
+	// battlescape:
+	Terrain* _battlescapeTerrainData;
 public:
 	/// Creates a blank craft ruleset.
 	RuleCraft(LangString type);
@@ -84,6 +89,9 @@ public:
 	int getRefuelRate() const;
 	/// Sets the craft's refuel rate.
 	void setRefuelRate(int refuel);
+	/// stuff needed to draw this UFO on the battlescape
+	Terrain* getBattlescapeTerrainData();
+	void setBattlescapeTerrainData(Terrain *t);
 };
 
 #endif

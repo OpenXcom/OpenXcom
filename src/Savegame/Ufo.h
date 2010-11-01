@@ -42,6 +42,9 @@ private:
 	
 	/// Calculates a new speed vector to the destination.
 	void calculateSpeed();
+	// battlescape:
+	std::vector<std::string*> _sheetnames;
+	int _width,_length;
 public:
 	/// Creates a UFO of the specified type.
 	Ufo(RuleUfo *rules);

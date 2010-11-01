@@ -16,8 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+#include <sstream>
 #include "XcomRuleset.h"
 #include "../Savegame/SavedGame.h"
+#include "../Savegame/SavedBattleGame.h"
 #include "RuleBaseFacility.h"
 #include "RuleCraft.h"
 #include "RuleCraftWeapon.h"
@@ -31,10 +34,15 @@
 #include "../Savegame/Country.h"
 #include "../Savegame/BaseFacility.h"
 #include "../Savegame/Craft.h"
+#include "../Savegame/Ufo.h"
 #include "../Savegame/CraftWeapon.h"
 #include "../Savegame/Soldier.h"
 #include "../Savegame/Item.h"
 #include "../Savegame/City.h"
+#include "../Savegame/Tile.h"
+#include "Terrain.h"
+#include "MapBlock.h"
+
 
 /**
  * Initializes the X-Com ruleset with all the rules
@@ -409,6 +417,9 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	skyranger->setMonthlyFee(500000);
 	skyranger->setHWPs(3);
 	skyranger->setRefuelRate(50);
+	skyranger->setBattlescapeTerrainData(new Terrain("PLANE"));
+	skyranger->getBattlescapeTerrainData()->getSheetnames()->push_back(new std::string("PLANE"));
+	skyranger->getBattlescapeTerrainData()->getMapBlocks()->push_back(new MapBlock("PLANE",10,20,true));
 
 	RuleCraft* lightning = new RuleCraft(STR_LIGHTNING);
 	lightning->setSprite(1);
@@ -638,6 +649,9 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	sscout->setAcceleration(12);
 	sscout->setMaxDamage(50);
 	sscout->setScore(50);
+	sscout->setBattlescapeTerrainData(new Terrain("UFO1A"));
+	sscout->getBattlescapeTerrainData()->getSheetnames()->push_back(new std::string("UFO1"));
+	sscout->getBattlescapeTerrainData()->getMapBlocks()->push_back(new MapBlock("UFO1A",10,10,true));
 
 	RuleUfo *mscout = new RuleUfo(STR_MEDIUM_SCOUT);
 	mscout->setSize(STR_SMALL);
@@ -648,6 +662,14 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	mscout->setWeaponRange(15);
 	mscout->setMaxDamage(200);
 	mscout->setScore(75);
+	mscout->setBattlescapeTerrainData(new Terrain("UFO_110"));
+	mscout->getBattlescapeTerrainData()->getSheetnames()->push_back(new std::string("U_EXT02"));
+	mscout->getBattlescapeTerrainData()->getSheetnames()->push_back(new std::string("U_WALL02"));
+	mscout->getBattlescapeTerrainData()->getSheetnames()->push_back(new std::string("U_BITS"));
+//	mscout->getBattlescapeTerrainData()->getSheetnames()->push_back(new std::string("U_DISEC2"));
+//	mscout->getBattlescapeTerrainData()->getSheetnames()->push_back(new std::string("U_OPER2"));
+//  mscout->getBattlescapeTerrainData()->getSheetnames()->push_back(new std::string("U_PODS"));
+	mscout->getBattlescapeTerrainData()->getMapBlocks()->push_back(new MapBlock("UFO_110",10,10,true));
 
 	RuleUfo *lscout = new RuleUfo(STR_LARGE_SCOUT);
 	lscout->setSize(STR_SMALL);
@@ -658,6 +680,11 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	lscout->setWeaponRange(34);
 	lscout->setMaxDamage(250);
 	lscout->setScore(125);
+	lscout->setBattlescapeTerrainData(new Terrain("UFO_120"));
+	lscout->getBattlescapeTerrainData()->getSheetnames()->push_back(new std::string("U_EXT02"));
+	lscout->getBattlescapeTerrainData()->getSheetnames()->push_back(new std::string("U_WALL02"));
+	lscout->getBattlescapeTerrainData()->getSheetnames()->push_back(new std::string("U_BITS"));
+	lscout->getBattlescapeTerrainData()->getMapBlocks()->push_back(new MapBlock("UFO_120",20,20,true));
 
 	RuleUfo *abducter = new RuleUfo(STR_ABDUCTER);
 	abducter->setSize(STR_MEDIUM);
@@ -717,6 +744,85 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_ufos.insert(std::pair<LangString, RuleUfo*>(STR_SUPPLY_SHIP, supply));
 	_ufos.insert(std::pair<LangString, RuleUfo*>(STR_TERROR_SHIP, terror));
 	_ufos.insert(std::pair<LangString, RuleUfo*>(STR_BATTLESHIP, battleship));
+
+	Terrain *culta = new Terrain("CULTA");
+	culta->getSheetnames()->push_back(new std::string("BLANKS"));
+	culta->getSheetnames()->push_back(new std::string("CULTIVAT"));
+	culta->getSheetnames()->push_back(new std::string("BARN"));
+	culta->getMapBlocks()->push_back(new MapBlock("CULTA00",10,10,true));
+	culta->getMapBlocks()->push_back(new MapBlock("CULTA01",10,10,false));
+	culta->getMapBlocks()->push_back(new MapBlock("CULTA02",10,10,false));
+	culta->getMapBlocks()->push_back(new MapBlock("CULTA03",10,10,false));
+	culta->getMapBlocks()->push_back(new MapBlock("CULTA04",10,10,false));
+	culta->getMapBlocks()->push_back(new MapBlock("CULTA05",10,10,false));
+	culta->getMapBlocks()->push_back(new MapBlock("CULTA06",10,10,false));
+	culta->getMapBlocks()->push_back(new MapBlock("CULTA07",10,10,true));
+	culta->getMapBlocks()->push_back(new MapBlock("CULTA08",10,10,false));
+	culta->getMapBlocks()->push_back(new MapBlock("CULTA09",10,10,false));
+	culta->getMapBlocks()->push_back(new MapBlock("CULTA10",10,10,false));
+	culta->getMapBlocks()->push_back(new MapBlock("CULTA11",10,10,true));
+	culta->getMapBlocks()->push_back(new MapBlock("CULTA12",10,10,false));
+	culta->getMapBlocks()->push_back(new MapBlock("CULTA13",10,10,false));
+	culta->getMapBlocks()->push_back(new MapBlock("CULTA14",10,10,false));
+	culta->getMapBlocks()->push_back(new MapBlock("CULTA15",10,10,false));
+	culta->getMapBlocks()->push_back(new MapBlock("CULTA16",10,10,false));
+	culta->getMapBlocks()->push_back(new MapBlock("CULTA17",10,10,false));
+	culta->getMapBlocks()->push_back(new MapBlock("CULTA18",10,10,false));
+	Terrain *jungle = new Terrain("JUNGLE");
+	jungle->getSheetnames()->push_back(new std::string("BLANKS"));
+	jungle->getSheetnames()->push_back(new std::string("JUNGLE"));
+	jungle->getMapBlocks()->push_back(new MapBlock("JUNGLE00",10,10,true));
+	jungle->getMapBlocks()->push_back(new MapBlock("JUNGLE01",10,10,true));
+	jungle->getMapBlocks()->push_back(new MapBlock("JUNGLE02",10,10,true));
+	jungle->getMapBlocks()->push_back(new MapBlock("JUNGLE03",10,10,false));
+	jungle->getMapBlocks()->push_back(new MapBlock("JUNGLE04",10,10,false));
+	jungle->getMapBlocks()->push_back(new MapBlock("JUNGLE05",10,10,false));
+	jungle->getMapBlocks()->push_back(new MapBlock("JUNGLE06",10,10,false));
+	jungle->getMapBlocks()->push_back(new MapBlock("JUNGLE07",10,10,false));
+	jungle->getMapBlocks()->push_back(new MapBlock("JUNGLE08",10,10,false));
+	jungle->getMapBlocks()->push_back(new MapBlock("JUNGLE09",10,10,false));
+	jungle->getMapBlocks()->push_back(new MapBlock("JUNGLE10",10,10,false));
+	jungle->getMapBlocks()->push_back(new MapBlock("JUNGLE11",10,10,false));
+	Terrain *forest = new Terrain("FOREST");
+	forest->getSheetnames()->push_back(new std::string("BLANKS"));
+	forest->getSheetnames()->push_back(new std::string("FOREST"));
+	forest->getMapBlocks()->push_back(new MapBlock("FOREST00",10,10,true));
+	forest->getMapBlocks()->push_back(new MapBlock("FOREST01",10,10,true));
+	forest->getMapBlocks()->push_back(new MapBlock("FOREST02",10,10,false));
+	forest->getMapBlocks()->push_back(new MapBlock("FOREST03",10,10,false));
+	forest->getMapBlocks()->push_back(new MapBlock("FOREST04",10,10,false));
+	forest->getMapBlocks()->push_back(new MapBlock("FOREST05",10,10,false));
+	forest->getMapBlocks()->push_back(new MapBlock("FOREST06",10,10,false));
+	forest->getMapBlocks()->push_back(new MapBlock("FOREST07",10,10,false));
+	forest->getMapBlocks()->push_back(new MapBlock("FOREST08",10,10,false));
+	forest->getMapBlocks()->push_back(new MapBlock("FOREST09",10,10,false));
+	forest->getMapBlocks()->push_back(new MapBlock("FOREST10",20,20,false));
+	forest->getMapBlocks()->push_back(new MapBlock("FOREST11",20,20,false));
+	Terrain *desert = new Terrain("DESERT");
+	desert->getSheetnames()->push_back(new std::string("BLANKS"));
+	desert->getSheetnames()->push_back(new std::string("DESERT"));
+	desert->getMapBlocks()->push_back(new MapBlock("DESERT00",10,10,true));
+	Terrain *mount = new Terrain("MOUNT");
+	mount->getSheetnames()->push_back(new std::string("BLANKS"));
+	mount->getSheetnames()->push_back(new std::string("MOUNT"));
+	mount->getMapBlocks()->push_back(new MapBlock("MOUNT00",10,10,true));
+	Terrain *polar = new Terrain("POLAR");
+	polar->getSheetnames()->push_back(new std::string("BLANKS"));
+	polar->getSheetnames()->push_back(new std::string("POLAR"));
+	polar->getMapBlocks()->push_back(new MapBlock("POLAR00",10,10,true));
+	Terrain *mars = new Terrain("MARS");
+	mars->getSheetnames()->push_back(new std::string("BLANKS"));
+	mars->getSheetnames()->push_back(new std::string("MARS"));
+	mars->getSheetnames()->push_back(new std::string("U_WALL02"));
+	mars->getMapBlocks()->push_back(new MapBlock("MARS00",10,10,true));
+
+	_terrains.insert(std::pair<std::string, Terrain*>("CULTA",culta));
+	_terrains.insert(std::pair<std::string, Terrain*>("JUNGLE",jungle));
+	_terrains.insert(std::pair<std::string, Terrain*>("FOREST",forest));
+	_terrains.insert(std::pair<std::string, Terrain*>("DESERT",desert));
+	_terrains.insert(std::pair<std::string, Terrain*>("MOUNT",mount));
+	_terrains.insert(std::pair<std::string, Terrain*>("POLAR",polar));
+	_terrains.insert(std::pair<std::string, Terrain*>("MARS",mars));
 }
 
 /**
@@ -1028,4 +1134,117 @@ SavedGame *XcomRuleset::newSave(GameDifficulty diff)
 	save->getBases()->push_back(base);
 	
 	return save;
+}
+
+/**
+ * Generates a brand new saved game based on terrain type, mission type, time of day, place on earth
+ * @param save The base saved game.
+ * @param texture The texture of the globe polygon we are on
+ * @return New saved game.
+ */
+SavedBattleGame *XcomRuleset::newBattleSave(SavedGame *save, int texture, Craft* craft, Ufo* ufo)
+{
+	// first decide the terrain
+	Terrain *terrain = NULL;
+	int rows, cols, levs;
+
+	switch (texture)
+	{
+	case 0:	
+	case 6:
+	case 10:
+	case 11:	
+		{
+			if (ufo != NULL)
+			{
+				if (ufo->getLatitude()<0)
+				{ // northern hemisphere
+					terrain = getTerrain("FOREST");
+				}else
+				{ // southern hemisphere
+					terrain = getTerrain("JUNGLE");
+				}
+			}
+			else
+			{
+				terrain = getTerrain("FOREST");
+			}
+			break;
+		}
+	case 1:
+	case 2:
+	case 3:
+	case 4:
+		{
+			terrain = getTerrain("CULTA");
+			break;
+		}
+	case 5:
+		{
+			terrain = getTerrain("MOUNT");
+			break;
+		}
+	case 7:
+	case 8:
+		{
+			terrain = getTerrain("DESERT");
+			break;
+		}
+	case 9:
+	case 12:
+		{
+			terrain = getTerrain("POLAR");
+			break;
+		}
+	}
+
+	// depending on mission type, set a map size
+	rows=50;
+	cols=50;
+	levs=4;
+
+	// create a savedgame
+	SavedBattleGame *bsave = new SavedBattleGame(save,rows,cols,levs,terrain);
+	save->setBattleGame(bsave);
+	
+	// add the crafts
+	bsave->setCrafts(craft, ufo);
+
+	// lets generate the map now and store it inside the tiles
+	bsave->generateMap();
+
+	// add soldiers
+	//bsave->addSoldier()
+
+	// add items
+
+	// add aliens
+
+	return bsave;
+}
+
+/**
+ * Handles the end battle stuff
+ */
+void XcomRuleset::endBattle(SavedBattleGame *bsave, SavedGame *save)
+{
+	// UFO crash/landing site disappears
+	Ufo* ufo = bsave->getUfo();
+	if (ufo!=NULL)
+	{
+		for (std::vector<Ufo*>::iterator i = save->getUfos()->begin(); i != save->getUfos()->end(); i++)
+		{
+			if ((*i)==ufo)
+			{
+				delete *i;
+				save->getUfos()->erase(i);
+				break;
+			}
+		}
+	}
+
+	// bye save game, battle is over
+	delete bsave;
+	save->setBattleGame(NULL);
+
 }

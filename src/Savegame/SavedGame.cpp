@@ -197,3 +197,13 @@ std::vector<Waypoint*> *const SavedGame::getWaypoints()
 {
 	return &_waypoints;
 }
+
+void SavedGame::setBattleGame(SavedBattleGame *battlegame)
+{
+	_battlegame = battlegame;
+}
+
+SavedBattleGame *SavedGame::getBattleGame()
+{
+	return _battlegame;
+}

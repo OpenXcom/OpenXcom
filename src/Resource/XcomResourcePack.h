@@ -33,6 +33,8 @@ public:
 	XcomResourcePack(const std::string &folder);
 	/// Cleans up the X-Com ruleset.
 	~XcomResourcePack();
+	/// Loads battlescape specific resources
+	void loadBattlescapeResources(std::string folder);
 };
 
 #endif

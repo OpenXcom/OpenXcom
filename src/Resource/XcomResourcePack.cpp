@@ -32,6 +32,7 @@
 #include "../Geoscape/Polyline.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
+#include "../Battlescape/Terraindata.h"
 
 /**
  * Initializes the resource pack by loading all the resources
@@ -392,6 +393,8 @@ XcomResourcePack::XcomResourcePack(const std::string &folder) : ResourcePack(fol
 	Window::soundPopup[0] = _sounds["GEO.CAT"]->getSound(1);
 	Window::soundPopup[1] = _sounds["GEO.CAT"]->getSound(2);
 	Window::soundPopup[2] = _sounds["GEO.CAT"]->getSound(3);
+
+	loadBattlescapeResources(folder);
 }
 
 /**
@@ -399,4 +402,123 @@ XcomResourcePack::XcomResourcePack(const std::string &folder) : ResourcePack(fol
  */
 XcomResourcePack::~XcomResourcePack()
 {
+}
+
+
+void XcomResourcePack::loadBattlescapeResources(std::string folder)
+{
+	// Load Battlescape ICONS
+	std::stringstream s;
+	s << folder << "UFOGRAPH/" << "ICONS.PCK";
+	_surfaces["ICONS.PCK"] = new Surface(320, 200);
+	_surfaces["ICONS.PCK"]->loadSpk(insensitive(s.str()));
+
+	s.str("");
+	std::stringstream s2;
+	s << folder << "UFOGRAPH/" << "CURSOR.PCK";
+	s2 << folder << "UFOGRAPH/" << "CURSOR.TAB";
+	_sets["CURSOR.PCK"] = new SurfaceSet(32, 40);
+	_sets["CURSOR.PCK"]->loadPck(insensitive(s.str()),insensitive(s2.str()));
+
+	// Load Batltescape terrain
+	std::string bsets[] = {"AVENGER.PCK",
+					  "BARN.PCK",
+					  "BLANKS.PCK",
+					 "BRAIN.PCK",
+					 "CULTIVAT.PCK",
+					 "DESERT.PCK",
+					 "FOREST.PCK",
+					 "FRNITURE.PCK",
+					 "JUNGLE.PCK",
+					 "LIGHTNIN.PCK",
+					 "MARS.PCK",
+					 "MOUNT.PCK",
+					 "PLANE.PCK",
+					 "POLAR.PCK",
+					 "ROADS.PCK",
+					 "U_BASE.PCK",
+					 "U_BITS.PCK",
+					 "U_DISEC2.PCK",
+					 "U_EXT02.PCK",
+					 "U_OPER2.PCK",
+					 "U_PODS.PCK",
+					 "U_WALL02.PCK",
+					 "UFO1.PCK",
+					 "URBAN.PCK",
+					 "URBITS.PCK",
+					 "XBASE1.PCK",
+					 "XBASE2.PCK"
+					 };
+
+	for (int i = 0; i < 27; i++)
+	{
+		std::stringstream s;
+		s << folder << "TERRAIN/" << bsets[i];
+
+		std::string ext = bsets[i].substr(bsets[i].length()-3, bsets[i].length());
+		if (ext == "PCK")
+		{
+			std::string tab = bsets[i].substr(0, bsets[i].length()-4) + ".TAB";
+			std::string mcd = bsets[i].substr(0, bsets[i].length()-4) + ".MCD";
+			std::stringstream s2;
+			s2 << folder << "TERRAIN/" << tab;
+			std::stringstream s3;
+			s3 << folder << "TERRAIN/" << mcd;
+			_sets[bsets[i]] = new SurfaceSet(32, 40);
+			_sets[bsets[i]]->loadPck(insensitive(s.str()), insensitive(s2.str()));
+			_terraindata[mcd] = new Terraindata(bsets[i].substr(0, bsets[i].length()-4));
+			_terraindata[mcd]->load(s3.str());
+		}
+		else
+		{
+			_sets[bsets[i]] = new SurfaceSet(32, 32);
+			_sets[bsets[i]]->loadDat(insensitive(s.str()));
+		}
+	}
+
+		// Load Batltescape units
+	std::string usets[] = {"SILACOID.PCK",
+					  "CELATID.PCK",
+					  "HANDOB.PCK",
+					 "CYBER.PCK",
+					 "FLOOROB.PCK",
+					 "SECTOID.PCK",
+					 "CIVF.PCK",
+					 "CIVM.PCK",
+					 "XCOM_1.PCK",
+					 "SNAKEMAN.PCK",
+					 "XCOM_0.PCK",
+					 "CHRYS.PCK",
+					 "TANKS.PCK",
+					 "FLOATER.PCK",
+					 "XCOM_2.PCK",
+					 "ZOMBIE.PCK",
+					 "MUTON.PCK",
+					 "X_REAP.PCK",
+					 "ETHEREAL.PCK",
+					 "X_ROB.PCK"
+					 };
+
+	for (int i = 0; i < 20; i++)
+	{
+		std::stringstream s;
+		s << folder << "UNITS/" << usets[i];
+
+		std::string ext = usets[i].substr(usets[i].length()-3, usets[i].length());
+		if (ext == "PCK")
+		{
+			std::string tab = usets[i].substr(0, usets[i].length()-4) + ".TAB";
+			std::stringstream s2;
+			s2 << folder << "UNITS/" << tab;
+			_sets[usets[i]] = new SurfaceSet(32, 40);
+			_sets[usets[i]]->loadPck(insensitive(s.str()), insensitive(s2.str()));
+		}
+		else
+		{
+			_sets[usets[i]] = new SurfaceSet(32, 32);
+			_sets[usets[i]]->loadDat(insensitive(s.str()));
+		}
+	}
+
+
 }

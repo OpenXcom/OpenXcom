@@ -61,6 +61,7 @@
 #include "CraftPatrolState.h"
 #include "LowFuelState.h"
 #include "MultipleTargetsState.h"
+#include "../Battlescape/BattlescapeState.h"
 
 /**
  * Initializes all the elements in the Geoscape screen.
@@ -455,7 +456,18 @@ void GeoscapeState::time5Seconds()
 					}
 					else
 					{
-						(*j)->returnToBase();
+						if ((*j)->getNumSoldiers()>0)
+						{
+							// look up polygons texture
+							int texture = _globe->getPolygonTexture(u->getLongitude(),u->getLatitude());
+							_game->getRuleset()->newBattleSave(_game->getSavedGame(), texture, (*j), u);
+							_game->pushState(new BattlescapeState(_game));
+							(*j)->returnToBase();
+						}
+						else
+						{
+							(*j)->returnToBase();
+						}
 					}
 				}
 				else if (w != 0)
@@ -767,7 +779,10 @@ void GeoscapeState::btnGraphsClick(Action *action)
  */
 void GeoscapeState::btnUfopaediaClick(Action *action)
 {
-
+	// for easy debugging of the battlescape
+	// change the texture parameter to test other terrains
+	_game->getRuleset()->newBattleSave(_game->getSavedGame(), 6, NULL, NULL);
+	_game->pushState(new BattlescapeState(_game));
 }
 
 /**

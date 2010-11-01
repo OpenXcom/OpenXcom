@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010 OpenXcom Developers
  *
  * This file is part of OpenXcom.
  *
@@ -16,28 +16,43 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_XCOMRULESET_H
-#define OPENXCOM_XCOMRULESET_H
+#ifndef OPENXCOM_SPAWNPOINT_H
+#define OPENXCOM_SPAWNPOINT_H
 
-#include "Ruleset.h"
+
+class Spawnpoint;
+
+struct SpawnPointConnection
+{
+	int _connectedNodeID;
+	int _distance;
+	int _travelType;
+	Spawnpoint *_connectedNode;
+};
 
 /**
- * Rule set for the X-Com: UFO Defense game.
+ * Represents a spawnpoint in the battlescape.
  */
-class XcomRuleset : public Ruleset
+class Spawnpoint
 {
 private:
+	int _id,_x,_y,_z;
+	int _segment;
+	SpawnPointConnection _connections[5];
+	int _type;
+	int _rank;
+	int _flags;
+	int _reserved;
+	int _priority;
 public:
-	/// Creates the X-Com ruleset.
-	XcomRuleset();
-	/// Cleans up the X-Com ruleset.
-	~XcomRuleset();
-	/// Generates a saved game with starting equipment.
-	SavedGame *newSave(GameDifficulty diff);
-	/// Generates a saved game with starting equipment.
-	SavedBattleGame *newBattleSave(SavedGame *save, int texture, Craft* craft, Ufo* ufo);
-	/// Handles the end battle stuff
-	void endBattle(SavedBattleGame *bsave, SavedGame *save);
+	/// Creates a spawnpoint.
+	Spawnpoint();
+	/// Cleans up the spawnpoint.
+	~Spawnpoint();
+	/// Gets the spawnpoint's ID.
+	int getId();
+	/// Sets the spawnpoint's ID.
+	void setId(int id);
 };
 
 #endif

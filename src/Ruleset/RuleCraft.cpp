@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "RuleCraft.h"
+#include "Terrain.h"
 
 /**
  * Creates a blank ruleset for a certain
@@ -25,6 +26,7 @@
  */
 RuleCraft::RuleCraft(LangString type) : _type(type), _sprite(-1), _fuelMax(0), _damageMax(0), _speedMax(0), _accel(0), _weapons(0), _soldiers(0), _hwps(0), _fee(0), _repair(1), _refuel(1)
 {
+	_battlescapeTerrainData = NULL;
 }
 
 /**
@@ -32,6 +34,8 @@ RuleCraft::RuleCraft(LangString type) : _type(type), _sprite(-1), _fuelMax(0), _
  */
 RuleCraft::~RuleCraft()
 {
+	if (_battlescapeTerrainData != NULL)
+		delete _battlescapeTerrainData;
 }
 
 /**
@@ -260,4 +264,22 @@ int RuleCraft::getRefuelRate() const
 void RuleCraft::setRefuelRate(int refuel)
 {
 	_refuel = refuel;
+}
+
+/**
+ * Returns the terrain data needed to draw the Craft in the battlescape.
+ * @return Terrain.
+ */
+Terrain* RuleCraft::getBattlescapeTerrainData()
+{
+	return _battlescapeTerrainData;
+}
+
+/**
+ * set the terrain data needed to draw the Craft in the battlescape.
+ * @return Terrain.
+ */
+void RuleCraft::setBattlescapeTerrainData(Terrain *t)
+{
+	_battlescapeTerrainData = t;
 }

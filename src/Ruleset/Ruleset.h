@@ -23,6 +23,7 @@
 #include <vector>
 #include "../Resource/LangString.h"
 #include "../Savegame/SavedGame.h"
+#include "../Savegame/SavedBattleGame.h"
 
 class SoldierNamePool;
 class RuleBaseFacility;
@@ -30,6 +31,7 @@ class RuleCraft;
 class RuleCraftWeapon;
 class RuleItem;
 class RuleUfo;
+class Terrain;
 
 /**
  * Set of rules and stats for a game.
@@ -46,6 +48,7 @@ protected:
 	std::map<LangString, RuleCraftWeapon*> _craftWeapons;
 	std::map<LangString, RuleItem*> _items;
 	std::map<LangString, RuleUfo*> _ufos;
+	std::map<std::string, Terrain*> _terrains;
 public:
 	/// Creates a blank ruleset.
 	Ruleset();
@@ -53,6 +56,9 @@ public:
 	virtual ~Ruleset();
 	/// Generates the starting saved game.
 	virtual SavedGame *newSave(GameDifficulty diff);
+	/// Generates the starting saved game.
+	virtual SavedBattleGame *newBattleSave(SavedGame *save, int texture, Craft *craft, Ufo* ufo);
+	virtual void endBattle(SavedBattleGame *bsave, SavedGame *save);
 	/// Gets the pool list for soldier names.
 	std::vector<SoldierNamePool*> *const getPools();
 	/// Gets the ruleset for a facility type.
@@ -65,6 +71,8 @@ public:
 	RuleItem *const getItem(LangString id);
 	/// Gets the ruleset for a UFO type.
 	RuleUfo *const getUfo(LangString id);
+	/// Gets terrains for battlescape games
+	Terrain *getTerrain(std::string name);
 };
 
 #endif

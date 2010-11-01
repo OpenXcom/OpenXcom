@@ -19,7 +19,10 @@
 #ifndef OPENXCOM_RULEUFO_H
 #define OPENXCOM_RULEUFO_H
 
+#include <vector>
+#include <string>
 #include "../Resource/LangString.h"
+class Terrain;
 
 /**
  * Represents a specific type of UFO.
@@ -33,6 +36,7 @@ private:
 	LangString _type, _size;
 	int _sprite;
 	int _damageMax, _speedMax, _accel, _power, _range, _score;
+	Terrain* _battlescapeTerrainData;
 public:
 	/// Creates a blank UFO ruleset.
 	RuleUfo(LangString type);
@@ -74,6 +78,9 @@ public:
 	int getScore() const;
 	/// Sets the UFO's score.
 	void setScore(int score);
+	/// stuff needed to draw this UFO on the battlescape
+	Terrain* getBattlescapeTerrainData();
+	void setBattlescapeTerrainData(Terrain *t);
 };
 
 #endif

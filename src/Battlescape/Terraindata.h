@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010 OpenXcom Developers
  *
  * This file is part of OpenXcom.
  *
@@ -16,28 +16,27 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_XCOMRULESET_H
-#define OPENXCOM_XCOMRULESET_H
+#ifndef OPENXCOM_MAPDATA_H
+#define OPENXCOM_MAPDATA_H
 
-#include "Ruleset.h"
+#include <vector>
+#include <string>
 
-/**
- * Rule set for the X-Com: UFO Defense game.
- */
-class XcomRuleset : public Ruleset
+class TerrainObject;
+
+class Terraindata
 {
 private:
+	std::vector<TerrainObject*> _terrainObjects;
+	std::string _name;
 public:
-	/// Creates the X-Com ruleset.
-	XcomRuleset();
-	/// Cleans up the X-Com ruleset.
-	~XcomRuleset();
-	/// Generates a saved game with starting equipment.
-	SavedGame *newSave(GameDifficulty diff);
-	/// Generates a saved game with starting equipment.
-	SavedBattleGame *newBattleSave(SavedGame *save, int texture, Craft* craft, Ufo* ufo);
-	/// Handles the end battle stuff
-	void endBattle(SavedBattleGame *bsave, SavedGame *save);
+	/// create a set of MCD records under a certain name
+	Terraindata(std::string name);
+	~Terraindata();
+	/// get pointer to the set of MCD records
+	std::vector<TerrainObject*> *getTerrainObjects();
+	/// load the set of MCD records from an MCD file
+	void load(std::string filename);
 };
 
 #endif

@@ -332,6 +332,9 @@ void Surface::maskedCopy(Surface *surface, Uint8 mask)
 		if (getPixel(x, y) == mask)
 		{
 			setPixelIterative(&x, &y, surface->getPixel(x, y));
+		}else
+		{
+			setPixelIterative(&x, &y, this->getPixel(x, y));
 		}
 	}
 

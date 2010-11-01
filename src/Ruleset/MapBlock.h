@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010 OpenXcom Developers
  *
  * This file is part of OpenXcom.
  *
@@ -16,28 +16,33 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_XCOMRULESET_H
-#define OPENXCOM_XCOMRULESET_H
+#ifndef OPENXCOM__MAPBLOCK_H
+#define OPENXCOM__MAPBLOCK_H
 
-#include "Ruleset.h"
+#include <map>
+#include <vector>
+#include <string>
+class SavedBattleGame;
 
-/**
- * Rule set for the X-Com: UFO Defense game.
- */
-class XcomRuleset : public Ruleset
+class MapBlock
 {
 private:
+	std::string _name;
+	int _width, _length;
+	bool _landingZone;
 public:
-	/// Creates the X-Com ruleset.
-	XcomRuleset();
-	/// Cleans up the X-Com ruleset.
-	~XcomRuleset();
-	/// Generates a saved game with starting equipment.
-	SavedGame *newSave(GameDifficulty diff);
-	/// Generates a saved game with starting equipment.
-	SavedBattleGame *newBattleSave(SavedGame *save, int texture, Craft* craft, Ufo* ufo);
-	/// Handles the end battle stuff
-	void endBattle(SavedBattleGame *bsave, SavedGame *save);
+	MapBlock(std::string name, int width, int length, bool landingZone);
+	~MapBlock();
+	/// get the mapblock name (used for MAP generation)
+	std::string getName();
+	/// get width
+	int getWidth();
+	/// get width
+	int getLength();
+	/// is landingzoneable?
+	bool isLandingZone();
+	/// loads an XCOM MAP file
+	void loadMAP(int xoff, int yoff, SavedBattleGame* save, int TerrainObjectIDoff);
 };
 
 #endif
