@@ -16,29 +16,36 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_MAPDATAFILE_H
-#define OPENXCOM_MAPDATAFILE_H
-
-#include <string>
+#include "BattleUnit.h"
 
 /**
- * Represents a Terrain Map Datafile.
- * It contains constant info about this mapblock, like it's name and size
- * Map datafiles are stored in RuleSet
- * @sa MapBlock
+ * Initializes a BattleUnit.
  */
-class MapDataFile
+BattleUnit::BattleUnit() : _id(0)
 {
-private:
-	std::string _name;
-	int _size;
-public:
-	MapDataFile(std::string name, int size);
-	~MapDataFile();
-	/// get the datafile name (used for MAP generation)
-	std::string getName();
-	/// get size
-	int getSize();
-};
+}
 
-#endif
+/**
+ *
+ */
+BattleUnit::~BattleUnit()
+{
+}
+
+/**
+ * Returns the BattleUnit's unique ID.
+ * @return Unique ID.
+ */
+int BattleUnit::getId()
+{
+	return _id;
+}
+
+/**
+ * Changes the BattleUnit's unique ID.
+ * @param id Unique ID.
+ */
+void BattleUnit::setId(int id)
+{
+	_id = id;
+}

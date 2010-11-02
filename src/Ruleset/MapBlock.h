@@ -34,10 +34,10 @@ class TerrainObjectSet;
 class MapBlock
 {
 private:
+	RuleTerrain *_terrain;
 	std::string _name;
 	int _width, _length;
 	bool _landingZone;
-	RuleTerrain *_terrain;
 public:
 	MapBlock(RuleTerrain *terrain, std::string name, int width, int length, bool landingZone);
 	~MapBlock();

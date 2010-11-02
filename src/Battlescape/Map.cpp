@@ -147,8 +147,10 @@ void Map::draw()
 Surface *Map::getSurface(TerrainObject *tob, int frame)
 {
 	// UFO doors are only animated when walked through
-	if (tob->isUFODoor()) 
+	if (tob->isUFODoor())
+	{
 		frame = 0;
+	}
 
 	return tob->getSprite(frame);
 }
@@ -158,13 +160,13 @@ Surface *Map::getSurface(TerrainObject *tob, int frame)
 */
 void Map::drawTerrain()
 {
-	int screenX, screenY;
+	int screenX, screenY, frameNumber = 0;
 	TerrainObject *object = 0;
 	Surface *frame;
 	Tile *tile;
 	int beginX = 0, endX = _save->getWidth() - 1;
     int beginY = 0, endY = _save->getLength() - 1;
-    int beginZ = 0, endZ = _save->getViewHeight() -1;
+    int beginZ = 0, endZ = _save->getViewHeight() - 1;
 
     for (int itZ = beginZ; itZ <= endZ; itZ++) 
 	{
@@ -191,7 +193,7 @@ void Map::drawTerrain()
 							{
 								frame = getSurface(object, _animFrame);
 								frame->setX(screenX);
-								frame->setY(screenY - object->getPLevel());
+								frame->setY(screenY - object->getYOffset());
 								frame->blit(this);
 							}
 						}
@@ -200,7 +202,6 @@ void Map::drawTerrain()
 					// Draw cursor back
 					if (_selectorX==itY && _selectorY == itX)
 					{
-						int frameNumber;
 						if ((_save->getViewHeight() - 1) == itZ)
 						{
 							frameNumber = 0;
@@ -227,7 +228,7 @@ void Map::drawTerrain()
 							{
 								frame = getSurface(object, _animFrame);
 								frame->setX(screenX);
-								frame->setY(screenY - object->getPLevel());
+								frame->setY(screenY - object->getYOffset());
 								frame->blit(this);
 							}
 						}
@@ -240,7 +241,6 @@ void Map::drawTerrain()
 					// Draw cursor front
 					if (_selectorX == itY && _selectorY == itX)
 					{
-						int frameNumber;
 						if ((_save->getViewHeight() - 1) == itZ)
 						{
 							frameNumber = 3;

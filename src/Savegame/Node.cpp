@@ -19,7 +19,7 @@
 #include "Node.h"
 
 /**
- * Initializes a spawnpoint.
+ * Initializes a Node.
  */
 Node::Node() : _id(0)
 {

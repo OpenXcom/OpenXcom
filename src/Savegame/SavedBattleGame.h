@@ -38,29 +38,27 @@ class ResourcePack;
 class SavedBattleGame
 {
 private:
-	RuleTerrain *_terrain;
-
 	int _width, _length, _height; // dimensions of the battlemap, origin is topright edge
 	int _viewheight; // the layer we are on
 
 	// using a oldskool array here, because the size is static and a little faster than vector
-	Tile** _tiles; 
+	Tile **_tiles; 
 
-	Craft* _craft;
-	Ufo* _ufo;
+	Craft *_craft;
+	Ufo *_ufo;
 
 	std::vector<Node*> _nodes;
 	//std::vector<BattleSoldier*> _soldiers;
 	//std::vector<BattleItem*> _items;
 
-
+	RuleTerrain *_terrain;
 public:
 	/// Creates a new battle save, based on current generic save.
-	SavedBattleGame(SavedGame *save, int width, int length, int height, RuleTerrain* terrain);
+	SavedBattleGame(SavedGame *save, int width, int length, int height, RuleTerrain *terrain);
 	/// Cleans up the saved game.
 	~SavedBattleGame();
 	/// Gets pointer to the tiles, a tile is the smallest component of battlescape.
-	Tile** getTiles();
+	Tile **getTiles();
 	/// Gets pointer to the terrain.
 	RuleTerrain *getTerrain();
 	/// Gets terrain width.

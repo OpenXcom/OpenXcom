@@ -16,29 +16,27 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_MAPDATAFILE_H
-#define OPENXCOM_MAPDATAFILE_H
+#ifndef OPENXCOM_BATTLESOLDIER_H
+#define OPENXCOM_BATTLESOLDIER_H
 
-#include <string>
+#include "BattleUnit.h"
+
+class Soldier;
 
 /**
- * Represents a Terrain Map Datafile.
- * It contains constant info about this mapblock, like it's name and size
- * Map datafiles are stored in RuleSet
- * @sa MapBlock
+ * Represents a Soldier in the battlescape.
+ * it holds the pointer to the basic "geoscape Soldier"
  */
-class MapDataFile
+class BattleSoldier : public BattleUnit
 {
 private:
-	std::string _name;
-	int _size;
+	Soldier *_soldier;
 public:
-	MapDataFile(std::string name, int size);
-	~MapDataFile();
-	/// get the datafile name (used for MAP generation)
-	std::string getName();
-	/// get size
-	int getSize();
+	/// Creates a BattleSoldier.
+	BattleSoldier(Soldier *soldier);
+	/// Cleans up the BattleSoldier.
+	~BattleSoldier();
+
 };
 
 #endif

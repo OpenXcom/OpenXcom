@@ -32,7 +32,6 @@ MapBlock::MapBlock(RuleTerrain *terrain, std::string name, int width, int length
 {
 }
 
-
 /**
 * MapBlock DESTRUCTION !
 */
@@ -151,6 +150,8 @@ int MapBlock::loadMAP(int xoff, int yoff, SavedBattleGame *save, RuleTerrain *te
 }
 
 /**
+ *  UNDER CONSTRUCTION
+ *
  * Loads a X-Com format RMP file into the spawnpoints of the battlegame
  * @param xoff mapblock offset in X direction
  * @param yoff mapblock offset in Y direction
@@ -159,7 +160,7 @@ int MapBlock::loadMAP(int xoff, int yoff, SavedBattleGame *save, RuleTerrain *te
  */
 void MapBlock::loadRMP(int xoff, int yoff, int height, SavedBattleGame* save)
 {
-	char value[24];
+	//char value[24];
 	std::stringstream filename;
 	filename << "./DATA/" << "ROUTES/" << _name << ".RMP";
 

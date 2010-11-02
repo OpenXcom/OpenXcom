@@ -450,6 +450,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 
 	RuleTerrain *ruleTerrain = new RuleTerrain("PLANE");
 	skyranger->setBattlescapeTerrainData(ruleTerrain);
+	ruleTerrain->getMapDataFiles()->push_back(getMapDataFile("BLANKS"));
 	ruleTerrain->getMapDataFiles()->push_back(getMapDataFile("PLANE"));
 	ruleTerrain->getMapBlocks()->push_back(new MapBlock(ruleTerrain,"PLANE",10,20,true));
 
@@ -683,6 +684,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	sscout->setScore(50);
 	ruleTerrain = new RuleTerrain("UFO1A");
 	sscout->setBattlescapeTerrainData(ruleTerrain);
+	ruleTerrain->getMapDataFiles()->push_back(getMapDataFile("BLANKS"));
 	ruleTerrain->getMapDataFiles()->push_back(getMapDataFile("UFO1"));
 	ruleTerrain->getMapBlocks()->push_back(new MapBlock(ruleTerrain,"UFO1A",10,10,true));
 
@@ -697,6 +699,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	mscout->setScore(75);
 	ruleTerrain = new RuleTerrain("UFO_110");
 	mscout->setBattlescapeTerrainData(ruleTerrain);
+	ruleTerrain->getMapDataFiles()->push_back(getMapDataFile("BLANKS"));
 	ruleTerrain->getMapDataFiles()->push_back(getMapDataFile("U_EXT02"));
 	ruleTerrain->getMapDataFiles()->push_back(getMapDataFile("U_WALL02"));
 	ruleTerrain->getMapDataFiles()->push_back(getMapDataFile("U_BITS"));
@@ -716,6 +719,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	lscout->setScore(125);
 	ruleTerrain = new RuleTerrain("UFO_120");
 	lscout->setBattlescapeTerrainData(ruleTerrain);
+	ruleTerrain->getMapDataFiles()->push_back(getMapDataFile("BLANKS"));
 	ruleTerrain->getMapDataFiles()->push_back(getMapDataFile("U_EXT02"));
 	ruleTerrain->getMapDataFiles()->push_back(getMapDataFile("U_WALL02"));
 	ruleTerrain->getMapDataFiles()->push_back(getMapDataFile("U_BITS"));
@@ -837,14 +841,50 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	desert->getMapDataFiles()->push_back(getMapDataFile("BLANKS"));
 	desert->getMapDataFiles()->push_back(getMapDataFile("DESERT"));
 	desert->getMapBlocks()->push_back(new MapBlock(desert,"DESERT00",10,10,true));
+	desert->getMapBlocks()->push_back(new MapBlock(desert,"DESERT01",10,10,true));
+	desert->getMapBlocks()->push_back(new MapBlock(desert,"DESERT02",10,10,true));
+	desert->getMapBlocks()->push_back(new MapBlock(desert,"DESERT03",10,10,false));
+	desert->getMapBlocks()->push_back(new MapBlock(desert,"DESERT04",10,10,false));
+	desert->getMapBlocks()->push_back(new MapBlock(desert,"DESERT05",10,10,false));
+	desert->getMapBlocks()->push_back(new MapBlock(desert,"DESERT06",10,10,false));
+	desert->getMapBlocks()->push_back(new MapBlock(desert,"DESERT07",10,10,false));
+	desert->getMapBlocks()->push_back(new MapBlock(desert,"DESERT08",10,10,false));
+	desert->getMapBlocks()->push_back(new MapBlock(desert,"DESERT09",20,20,false));
+	desert->getMapBlocks()->push_back(new MapBlock(desert,"DESERT10",20,20,false));
+	desert->getMapBlocks()->push_back(new MapBlock(desert,"DESERT11",20,20,false));
 	RuleTerrain *mount = new RuleTerrain("MOUNT");
 	mount->getMapDataFiles()->push_back(getMapDataFile("BLANKS"));
 	mount->getMapDataFiles()->push_back(getMapDataFile("MOUNT"));
 	mount->getMapBlocks()->push_back(new MapBlock(mount,"MOUNT00",10,10,true));
+	mount->getMapBlocks()->push_back(new MapBlock(mount,"MOUNT01",10,10,true));
+	mount->getMapBlocks()->push_back(new MapBlock(mount,"MOUNT02",10,10,true));
+	mount->getMapBlocks()->push_back(new MapBlock(mount,"MOUNT03",10,10,false));
+	mount->getMapBlocks()->push_back(new MapBlock(mount,"MOUNT04",10,10,false));
+	mount->getMapBlocks()->push_back(new MapBlock(mount,"MOUNT05",10,10,false));
+	mount->getMapBlocks()->push_back(new MapBlock(mount,"MOUNT06",10,10,false));
+	mount->getMapBlocks()->push_back(new MapBlock(mount,"MOUNT07",10,10,false));
+	mount->getMapBlocks()->push_back(new MapBlock(mount,"MOUNT08",10,10,false));
+	mount->getMapBlocks()->push_back(new MapBlock(mount,"MOUNT09",10,10,false));
+	mount->getMapBlocks()->push_back(new MapBlock(mount,"MOUNT10",10,10,false));
+	mount->getMapBlocks()->push_back(new MapBlock(mount,"MOUNT11",20,20,false));
+	mount->getMapBlocks()->push_back(new MapBlock(mount,"MOUNT12",20,20,false));
 	RuleTerrain *polar = new RuleTerrain("POLAR");
 	polar->getMapDataFiles()->push_back(getMapDataFile("BLANKS"));
 	polar->getMapDataFiles()->push_back(getMapDataFile("POLAR"));
 	polar->getMapBlocks()->push_back(new MapBlock(polar,"POLAR00",10,10,true));
+	polar->getMapBlocks()->push_back(new MapBlock(polar,"POLAR01",10,10,true));
+	polar->getMapBlocks()->push_back(new MapBlock(polar,"POLAR02",10,10,true));
+	polar->getMapBlocks()->push_back(new MapBlock(polar,"POLAR03",10,10,false));
+	polar->getMapBlocks()->push_back(new MapBlock(polar,"POLAR04",10,10,false));
+	polar->getMapBlocks()->push_back(new MapBlock(polar,"POLAR05",10,10,false));
+	polar->getMapBlocks()->push_back(new MapBlock(polar,"POLAR06",10,10,false));
+	polar->getMapBlocks()->push_back(new MapBlock(polar,"POLAR07",10,10,false));
+	polar->getMapBlocks()->push_back(new MapBlock(polar,"POLAR08",10,10,false));
+	polar->getMapBlocks()->push_back(new MapBlock(polar,"POLAR09",10,10,false));
+	polar->getMapBlocks()->push_back(new MapBlock(polar,"POLAR10",10,10,false));
+	polar->getMapBlocks()->push_back(new MapBlock(polar,"POLAR11",10,10,false));
+	polar->getMapBlocks()->push_back(new MapBlock(polar,"POLAR12",20,20,false));
+	polar->getMapBlocks()->push_back(new MapBlock(polar,"POLAR13",20,20,false));
 	RuleTerrain *mars = new RuleTerrain("MARS");
 	mars->getMapDataFiles()->push_back(getMapDataFile("BLANKS"));
 	mars->getMapDataFiles()->push_back(getMapDataFile("MARS"));

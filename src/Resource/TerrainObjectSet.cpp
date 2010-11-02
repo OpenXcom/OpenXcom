@@ -58,7 +58,55 @@ std::vector<TerrainObject*> *TerrainObjectSet::getTerrainObjects()
  */
 void TerrainObjectSet::load(const std::string &filename)
 {
-	MCD* mcd;
+	// the struct below helps to read the xcom file format
+	struct MCD
+	{
+    unsigned char Frame[8];
+    unsigned char LOFT[12];      
+    unsigned short ScanG;
+    unsigned char u23;
+    unsigned char u24;
+    unsigned char u25;
+    unsigned char u26;
+    unsigned char u27;
+    unsigned char u28;
+    unsigned char u29;
+    unsigned char u30;
+    unsigned char UFO_Door;
+    unsigned char Stop_LOS;
+    unsigned char No_Floor;
+    unsigned char Big_Wall;      
+    unsigned char Gravlift;
+    unsigned char Door;
+    unsigned char Block_Fire;
+    unsigned char Block_Smoke;
+    unsigned char u39;
+    unsigned char TU_Walk;
+    unsigned char TU_Fly;
+    unsigned char TU_Slide;
+    unsigned char Armour;
+    unsigned char HE_Block;
+    unsigned char Die_MCD;
+    unsigned char Flammable;
+    unsigned char Alt_MCD;       
+    unsigned char u48;
+    signed char T_Level;      
+    unsigned char P_Level;
+    unsigned char u51;
+    unsigned char Light_Block;     
+    unsigned char Footstep;         
+    unsigned char Tile_Type;
+    unsigned char HE_Type;         
+    unsigned char HE_Strength;
+    unsigned char Smoke_Blockage;      
+    unsigned char Fuel;
+    unsigned char Light_Source;
+    unsigned char Target_Type;
+    unsigned char u61;
+    unsigned char u62;
+	};
+
+	MCD mcd;
 
 	// Load file
 	std::ifstream mapFile (filename.c_str(), std::ios::in | std::ios::binary);
@@ -67,13 +115,19 @@ void TerrainObjectSet::load(const std::string &filename)
 		throw "Failed to load MCD";
 	}
 	
-	mcd = new MCD();
-	while (mapFile.read((char*)mcd, sizeof(MCD)))
+	while (mapFile.read((char*)&mcd, sizeof(MCD)))
 	{
-		_terrainObjects.push_back(new TerrainObject(mcd));
-		mcd = new MCD();
+		TerrainObject *to = new TerrainObject();
+		_terrainObjects.push_back(to);
+
+		// set all the terrainobject properties:
+		for (int frame = 0; frame < 8; frame++)
+			to->setOriginalSpriteIndex(frame,(int)mcd.Frame[frame]);
+		to->setUfoDoor(mcd.UFO_Door == 1);
+		to->setYOffset((int)mcd.P_Level);
+		to->setSpecialType((int)mcd.Tile_Type);
+
 	}
-	delete mcd;
 
 	if (!mapFile.eof())
 	{
@@ -94,7 +148,7 @@ void TerrainObjectSet::linkSprites(SurfaceSet *sprites)
 		TerrainObject *tob = (TerrainObject*)*i;
 		for (int frame = 0; frame < 8; frame++)
 		{
-			tob->setSprite(sprites->getFrame(tob->getSpriteIndex(frame)),frame);
+			tob->setSprite(sprites->getFrame(tob->getOriginalSpriteIndex(frame)),frame);
 		}
 	}
 }

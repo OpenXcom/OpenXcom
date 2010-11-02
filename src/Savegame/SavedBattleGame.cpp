@@ -21,7 +21,6 @@
 #include "Craft.h"
 #include "Tile.h"
 #include "Ufo.h"
-#include "Spawnpoint.h"
 #include <fstream>
 #include <sstream>
 #include "../Engine/RNG.h"
@@ -43,7 +42,7 @@
  * @param height Number of layers (z).
  * @param terrain Pointer to terrain set to use.
  */
-SavedBattleGame::SavedBattleGame(SavedGame *save, int width, int length, int height, RuleTerrain* terrain) : _width(width), _length(length), _height(height), _viewheight(1), _terrain(terrain), _tiles(), _craft(0), _ufo(0), _nodes()
+SavedBattleGame::SavedBattleGame(SavedGame *save, int width, int length, int height, RuleTerrain *terrain) : _width(width), _length(length), _height(height), _viewheight(1), _terrain(terrain), _tiles(), _craft(0), _ufo(0), _nodes()
 {
 
 }
@@ -70,7 +69,7 @@ SavedBattleGame::~SavedBattleGame()
  * Gets a pointer to the array of tiles.
  * @return A pointer to Tile array.
  */
-Tile** SavedBattleGame::getTiles()
+Tile **SavedBattleGame::getTiles()
 {
 	return _tiles;
 }
@@ -129,9 +128,13 @@ void SavedBattleGame::setRelativeViewHeight(int height)
 {
 	_viewheight += height;
 	if (_viewheight > _height)
+	{
 		_viewheight = _height;
+	}
 	else if (_viewheight < 1)
+	{
 		_viewheight = 1;
+	}
 }
 
 /** 
@@ -143,7 +146,7 @@ void SavedBattleGame::setRelativeViewHeight(int height)
  */
 int SavedBattleGame::getTileIndex(int x, int y, int z)
 {
-	return z*_length*_width+y*_width+x;
+	return z * _length * _width + y * _width + x;
 }
 /** 
  * Gets the Tile on a given position on the map.
@@ -154,10 +157,10 @@ int SavedBattleGame::getTileIndex(int x, int y, int z)
  */
 Tile *SavedBattleGame::getTile(int x, int y, int z)
 {
-	if (getTileIndex(x,y,z) > _height*_length*_width)
+	if (getTileIndex(x,y,z) > _height * _length * _width)
 		throw "Cannot access Tile: index out of bounds";
 
-	return _tiles[getTileIndex(x,y,z)];
+	return _tiles[getTileIndex(x, y, z)];
 }
 
 /**
@@ -165,7 +168,7 @@ Tile *SavedBattleGame::getTile(int x, int y, int z)
  * @param craft Pointer to XCom craft.
  * @param ufo Pointer to UFO.
  */
-void SavedBattleGame::setCrafts(Craft *craft, Ufo* ufo)
+void SavedBattleGame::setCrafts(Craft *craft, Ufo *ufo)
 {
 	_craft = craft;
 	_ufo = ufo;
@@ -350,7 +353,7 @@ void SavedBattleGame::linkTilesWithTerrainObjects(ResourcePack *res)
 	Tile *tile;
 	int beginX = 0, endX = _width - 1;
     int beginY = 0, endY = _length - 1;
-    int beginZ = 0, endZ = _height -1;
+    int beginZ = 0, endZ = _height - 1;
 
     for (int itZ = beginZ; itZ <= endZ; itZ++) 
 	{
@@ -358,10 +361,10 @@ void SavedBattleGame::linkTilesWithTerrainObjects(ResourcePack *res)
 		{
             for (int itY = endY; itY >= beginY; itY--) 
 			{
-				tile = getTile(itX,itY,itZ);
+				tile = getTile(itX, itY, itZ);
 				if (tile)
 				{
-					for (int part=0;part<4;part++)
+					for (int part = 0; part < 4; part++)
 					{
 						if (tile->getTerrainObjectID(part) != -1)
 						{

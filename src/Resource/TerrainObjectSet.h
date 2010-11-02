@@ -45,8 +45,6 @@ public:
 	void load(const std::string &filename);
 	/// link the terrain objects with corresponding sprites
 	void linkSprites(SurfaceSet *sprites);
-
-
 };
 
 #endif

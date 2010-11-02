@@ -21,7 +21,7 @@
 /**
 *
 */
-TerrainObject::TerrainObject(MCD* data): _data(data)
+TerrainObject::TerrainObject()
 {
 	
 }
@@ -31,7 +31,7 @@ TerrainObject::TerrainObject(MCD* data): _data(data)
 */
 TerrainObject::~TerrainObject()
 {
-	delete _data;
+
 }
 
 /**
@@ -46,9 +46,9 @@ void TerrainObject::setSprite(Surface *surface, int frameID)
 /**
 * get the sprite index
 */
-int TerrainObject::getSpriteIndex(int frameID)
+int TerrainObject::getOriginalSpriteIndex(int frameID)
 {
-	return (int)_data->Frame[frameID];
+	return _originalSpriteIndex[frameID];
 }
 
 /**
@@ -65,14 +65,55 @@ Surface *TerrainObject::getSprite(int frameID)
   */
 bool TerrainObject::isUFODoor()
 {
-	return _data->UFO_Door == 1;
+	return _isUfoDoor;
 }
 
 /**
-  * gets the P-Level for drawing
+  * gets the Y offset for drawing
   * @return int height in pixels
   */
-int TerrainObject::getPLevel()
+int TerrainObject::getYOffset()
 {
-	return (int)_data->P_Level;
+	return _yOffset;
+}
+
+/**
+  * gets the Y offset for drawing
+  * @return int height in pixels
+  */
+SpecialTileType TerrainObject::getSpecialType()
+{
+	return _specialType;
+}
+
+/**
+* setter
+*/
+void TerrainObject::setOriginalSpriteIndex(int frameID, int value)
+{
+	_originalSpriteIndex[frameID] = value;
+}
+
+/**
+  * setter
+  */
+void TerrainObject::setUfoDoor(bool flag)
+{
+	_isUfoDoor = flag;
+}
+
+/**
+  * setter
+  */
+void TerrainObject::setYOffset(int value)
+{
+	_yOffset = value;
+}
+
+/**
+  * setter
+  */
+void TerrainObject::setSpecialType(int value)
+{
+	_specialType = (SpecialTileType)value;
 }
