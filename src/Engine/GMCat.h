@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010 J. Pello
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *

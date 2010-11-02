@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010 J. Pello
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -26,16 +26,19 @@ return ((unsigned) p[0]) + (((unsigned) p[1]) << 8)
     + (((unsigned) p[2]) << 16) + (((unsigned) p[3]) << 24);
 }
 
+/// MIDI sequence.
 struct seq {
 	unsigned size;
 	const unsigned char *data;
 };
 
+/// MIDI track.
 struct track {
 	struct seq seq;
 	unsigned channel;
 };
 
+/// MIDI stream.
 struct gmstream {
 	int tempo, nsubs, ntracks;
 	struct seq subs [256];
@@ -142,6 +145,7 @@ static const unsigned int volume [0x80] = {
 	100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,
 };
 
+/// Output status.
 struct output_status {
 	unsigned int delta;
 	unsigned int patch;
