@@ -314,26 +314,38 @@
     <ClCompile Include="Battlescape\Map.cpp">
       <Filter>Battlescape</Filter>
     </ClCompile>
-    <ClCompile Include="Battlescape\Terraindata.cpp">
-      <Filter>Battlescape</Filter>
-    </ClCompile>
-    <ClCompile Include="Battlescape\TerrainObject.cpp">
-      <Filter>Battlescape</Filter>
-    </ClCompile>
     <ClCompile Include="Savegame\SavedBattleGame.cpp">
-      <Filter>Savegame</Filter>
-    </ClCompile>
-    <ClCompile Include="Savegame\Spawnpoint.cpp">
       <Filter>Savegame</Filter>
     </ClCompile>
     <ClCompile Include="Savegame\Tile.cpp">
       <Filter>Savegame</Filter>
     </ClCompile>
+    <ClCompile Include="Savegame\Node.cpp">
+      <Filter>Savegame</Filter>
+    </ClCompile>
+    <ClCompile Include="Savegame\NodeLink.cpp">
+      <Filter>Savegame</Filter>
+    </ClCompile>
+    <ClCompile Include="Ruleset\RuleTerrain.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
     <ClCompile Include="Ruleset\MapBlock.cpp">
       <Filter>Ruleset</Filter>
     </ClCompile>
-    <ClCompile Include="Ruleset\Terrain.cpp">
+    <ClCompile Include="Resource\TerrainObject.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\TerrainObjectSet.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="Ruleset\MapDataFile.cpp">
       <Filter>Ruleset</Filter>
+    </ClCompile>
+    <ClCompile Include="Savegame\BattleSoldier.cpp">
+      <Filter>Savegame</Filter>
+    </ClCompile>
+    <ClCompile Include="Savegame\BattleUnit.cpp">
+      <Filter>Savegame</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -653,26 +665,38 @@
     <ClInclude Include="Battlescape\Map.h">
       <Filter>Battlescape</Filter>
     </ClInclude>
-    <ClInclude Include="Battlescape\Terraindata.h">
-      <Filter>Battlescape</Filter>
-    </ClInclude>
-    <ClInclude Include="Battlescape\TerrainObject.h">
-      <Filter>Battlescape</Filter>
-    </ClInclude>
-    <ClInclude Include="Savegame\Spawnpoint.h">
-      <Filter>Savegame</Filter>
-    </ClInclude>
     <ClInclude Include="Savegame\SavedBattleGame.h">
       <Filter>Savegame</Filter>
     </ClInclude>
     <ClInclude Include="Savegame\Tile.h">
       <Filter>Savegame</Filter>
     </ClInclude>
+    <ClInclude Include="Savegame\Node.h">
+      <Filter>Savegame</Filter>
+    </ClInclude>
+    <ClInclude Include="Savegame\NodeLink.h">
+      <Filter>Savegame</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\RuleTerrain.h">
+      <Filter>Ruleset</Filter>
+    </ClInclude>
     <ClInclude Include="Ruleset\MapBlock.h">
       <Filter>Ruleset</Filter>
     </ClInclude>
-    <ClInclude Include="Ruleset\Terrain.h">
+    <ClInclude Include="Resource\TerrainObject.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\TerrainObjectSet.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\MapDataFile.h">
       <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Savegame\BattleSoldier.h">
+      <Filter>Savegame</Filter>
+    </ClInclude>
+    <ClInclude Include="Savegame\BattleUnit.h">
+      <Filter>Savegame</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
