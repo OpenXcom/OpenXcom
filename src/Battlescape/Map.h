@@ -19,16 +19,11 @@
 #ifndef OPENXCOM_MAP_H
 #define OPENXCOM_MAP_H
 
-#include <vector>
-#include <string>
 #include "../Engine/InteractiveSurface.h"
 
 class ResourcePack;
-class Polygon;
-class SurfaceSet;
 class SavedBattleGame;
 class Timer;
-class Tile;
 class Surface;
 class TerrainObject;
 
@@ -42,19 +37,16 @@ private:
 	ResourcePack *_res;
 	Timer *_scrollTimer, *_animTimer;
 
-	int _MapOffsetX,_MapOffsetY;
-	int _RMBClickX,_RMBClickY;
+	int _MapOffsetX, _MapOffsetY;
+	int _RMBClickX, _RMBClickY;
 	bool _RMBDragging;
-	int _TileSizeX,_TileSizeY,_TileSizeZ;
-	int _selectorX,_selectorY;
-	int _ScrollX,_ScrollY;
+	int _TileSizeX, _TileSizeY, _TileSizeZ;
+	int _selectorX, _selectorY;
+	int _ScrollX, _ScrollY;
 	int _animFrame;
 
-	// following pointers point to resourcepack surfaces
-	std::vector<Surface*> _surfaces;
-	std::vector<TerrainObject*> _terrainObjects;
-	Surface* getSurface(int tobID, int frame);
-
+	Surface* getSurface(TerrainObject *tob, int frame);
+	void minMaxInt(int *value, const int minValue, const int maxValue);
 public:
 	/// Creates a new map at the specified position and size.
 	Map(int width, int height, int x, int y);
@@ -70,6 +62,7 @@ public:
 	void think();
 	/// draw the surface
 	void draw();
+	/// draws the terrain
 	void drawTerrain();
 	/// blit the surface
 	void blit(Surface *surface);
@@ -93,11 +86,6 @@ public:
 	void down();
 	/// sets the battlescape selector position relative to mouseposition
 	void setSelectorPosition(int mx, int my);
-	/// this is a magic method that puts surfaces and data of different sets together in one set
-	void concatinateSheets();
-	/// starting positions of xcom craft and ufo tilesheets
-	static const int craftPos = 250;
-	static const int ufoPos = 350;
 };
 
 #endif

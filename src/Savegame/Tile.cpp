@@ -17,16 +17,21 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Tile.h"
+#include "../Resource/TerrainObject.h"
 
 /**
 *
 */
 Tile::Tile(): _visible(true), _light(255)
 {
-	_TerrainObjectID[0] = 0;
-	_TerrainObjectID[1] = 0;
-	_TerrainObjectID[2] = 0;
-	_TerrainObjectID[3] = 0;
+	_terrainObjects[0] = 0;
+	_terrainObjects[1] = 0;
+	_terrainObjects[2] = 0;
+	_terrainObjects[3] = 0;
+	_terrainObjectID[0] = -1;
+	_terrainObjectID[1] = -1;
+	_terrainObjectID[2] = -1;
+	_terrainObjectID[3] = -1;
 }
 
 /**
@@ -38,7 +43,30 @@ Tile::~Tile()
 }
 
 /**
- * Get the TerrainObjectID reference of a part of the tile.
+ * Get the TerrainObject pointer of a part of the tile.
+ * @param part the part 0-3.
+ */
+TerrainObject *Tile::getTerrainObject(int part)
+{
+	if (part < 0 || part > 3)
+	{
+		throw "unkown TerrainObjectID part";
+	}
+	return _terrainObjects[part];
+}
+
+/**
+ * Set the TerrainObject references of part 0 to 3
+ * @param tob pointer to the terrain object
+ * @param part the part number
+ */
+void Tile::setTerrainObject(TerrainObject *tob, int part)
+{
+	_terrainObjects[part] = tob;
+}
+
+/**
+ * Get the TerrainObject pointer of a part of the tile.
  * @param part the part 0-3.
  */
 int Tile::getTerrainObjectID(int part)
@@ -47,17 +75,31 @@ int Tile::getTerrainObjectID(int part)
 	{
 		throw "unkown TerrainObjectID part";
 	}
-	return _TerrainObjectID[part];
+	return _terrainObjectID[part];
 }
 
 /**
- * Set the TerrainObjectID references of part 0 to 3
- * @param TerrainObjectID an array of 4 int's that hold the references
+ * Set the TerrainObject references of part 0 to 3
+ * @param tob pointer to the terrain object
+ * @param part the part number
  */
-void Tile::setTerrainObjectID(int TerrainObjectID[])
+void Tile::setTerrainObjectID(int objectID, int part)
 {
-	_TerrainObjectID[0] = TerrainObjectID[0];
-	_TerrainObjectID[1] = TerrainObjectID[1];
-	_TerrainObjectID[2] = TerrainObjectID[2];
-	_TerrainObjectID[3] = TerrainObjectID[3];
+	_terrainObjectID[part] = objectID;
+}
+
+/**
+ * get mapdatafilename
+ */
+std::string Tile::getMapDataFileName(int part)
+{
+	return _mapDataFileName[part] + ".MCD";
+}
+
+/**
+ * set mapdatafilename
+ */
+void Tile::setMapDataFileName(std::string name, int part)
+{
+	_mapDataFileName[part] = name;
 }

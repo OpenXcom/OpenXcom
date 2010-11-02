@@ -19,8 +19,9 @@
 #ifndef OPENXCOM_TERRAINOBJECT_H
 #define OPENXCOM_TERRAINOBJECT_H
 
-// struct to easily read MCD files
+class Surface;
 
+// struct to easily read MCD files
 // credits to ufo 2000 development team
 // this struct is copied from terrapck.h of the ufo2k project
 
@@ -107,18 +108,26 @@ struct MCD
     unsigned char u62;
 };
 
+/**
+ * A TerrainObject is the smallest piece of a Battlescape terrain
+ * @sa TerrainObject
+ */
 class TerrainObject
 {
 private:
 	MCD *_data;
-	int _sprites[8];
+	Surface *_surfaces[8];
+	TerrainObject *deadObject;
+	TerrainObject *alternativeObject;
 public:
 	TerrainObject(MCD* data);
 	~TerrainObject();
 	/// set the sprite id for a certain frame
-	void setSpriteOffset(int offset);
-	/// get the sprite id for a certain frame
-	int getSpriteID(int frameID);
+	void setSprite(Surface *surface, int frameID);
+	/// get the sprite index for a certain frame
+	int getSpriteIndex(int frameID);
+	/// get the sprite for a certain frame
+	Surface *getSprite(int frameID);
 	/// whether this is an animated ufo door
 	bool isUFODoor();
 	/// gets the P-Level for drawing

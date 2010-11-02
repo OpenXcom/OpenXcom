@@ -17,7 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "RuleUfo.h"
-#include "Terrain.h"
+#include "RuleTerrain.h"
 
 /**
  * Creates a blank ruleset for a certain
@@ -216,9 +216,9 @@ void RuleUfo::setScore(int score)
 
 /**
  * Returns the terrain data needed to draw the UFO in the battlescape.
- * @return Terrain.
+ * @return RuleTerrain.
  */
-Terrain* RuleUfo::getBattlescapeTerrainData()
+RuleTerrain *RuleUfo::getBattlescapeTerrainData()
 {
 	return _battlescapeTerrainData;
 }
@@ -227,7 +227,7 @@ Terrain* RuleUfo::getBattlescapeTerrainData()
  * Changes the terrain data needed to draw the UFO in the battlescape.
  * @param t Terrain.
  */
-void RuleUfo::setBattlescapeTerrainData(Terrain *t)
+void RuleUfo::setBattlescapeTerrainData(RuleTerrain *t)
 {
 	_battlescapeTerrainData = t;
 }

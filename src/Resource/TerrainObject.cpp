@@ -37,27 +37,41 @@ TerrainObject::~TerrainObject()
 /**
 * set the sprite offset
 */
-void TerrainObject::setSpriteOffset(int offset)
+void TerrainObject::setSprite(Surface *surface, int frameID)
 {
-	for (int j=0;j<8;j++)
-		_sprites[j] = _data->Frame[j] + offset;
+	_surfaces[frameID] = surface;
 
 }
+
 /**
-* get the sprite frame
+* get the sprite index
 */
-int TerrainObject::getSpriteID(int frameID)
+int TerrainObject::getSpriteIndex(int frameID)
 {
-	return _sprites[frameID];
+	return (int)_data->Frame[frameID];
 }
 
-/// whether this is an animated ufo door
+/**
+* get the sprite 
+*/
+Surface *TerrainObject::getSprite(int frameID)
+{
+	return _surfaces[frameID];
+}
+
+/**
+  * whether this is an animated ufo door
+  * @return bool 
+  */
 bool TerrainObject::isUFODoor()
 {
 	return _data->UFO_Door == 1;
 }
 
-/// gets the P-Level for drawing
+/**
+  * gets the P-Level for drawing
+  * @return int height in pixels
+  */
 int TerrainObject::getPLevel()
 {
 	return (int)_data->P_Level;

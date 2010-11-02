@@ -16,21 +16,30 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM__MAPBLOCK_H
-#define OPENXCOM__MAPBLOCK_H
+#ifndef OPENXCOM_MAPBLOCK_H
+#define OPENXCOM_MAPBLOCK_H
 
 #include <string>
 
 class SavedBattleGame;
+class RuleTerrain;
+class TerrainObjectSet;
 
+/**
+ * Represents a Terrain Map Block.
+ * It contains constant info about this mapblock, like it's name, dimensions, attributes...
+ * Map blocks are stored in RuleTerrain objects
+ * @sa MapBlock
+ */
 class MapBlock
 {
 private:
 	std::string _name;
 	int _width, _length;
 	bool _landingZone;
+	RuleTerrain *_terrain;
 public:
-	MapBlock(std::string name, int width, int length, bool landingZone);
+	MapBlock(RuleTerrain *terrain, std::string name, int width, int length, bool landingZone);
 	~MapBlock();
 	/// get the mapblock name (used for MAP generation)
 	std::string getName();
@@ -41,7 +50,9 @@ public:
 	/// is landingzoneable?
 	bool isLandingZone();
 	/// loads an XCOM MAP file
-	void loadMAP(int xoff, int yoff, SavedBattleGame* save, int TerrainObjectIDoff);
+	int loadMAP(int xoff, int yoff, SavedBattleGame *save, RuleTerrain *terrain);
+	/// loads an XCOM RMP file
+	void loadRMP(int xoff, int yoff, int height, SavedBattleGame *save);
 };
 
 #endif

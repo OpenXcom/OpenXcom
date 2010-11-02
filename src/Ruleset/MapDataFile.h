@@ -16,43 +16,31 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_SPAWNPOINT_H
-#define OPENXCOM_SPAWNPOINT_H
+#ifndef OPENXCOM_MAPDATAFILE_H
+#define OPENXCOM_MAPDATAFILE_H
 
+#include <string>
 
-class Spawnpoint;
-
-struct SpawnPointConnection
-{
-	int _connectedNodeID;
-	int _distance;
-	int _travelType;
-	Spawnpoint *_connectedNode;
-};
+class RuleTerrain;
 
 /**
- * Represents a spawnpoint in the battlescape.
+ * Represents a Terrain Map Datafile.
+ * It contains constant info about this mapblock, like it's name and size
+ * Map datafiles are stored in RuleSet
+ * @sa MapBlock
  */
-class Spawnpoint
+class MapDataFile
 {
 private:
-	int _id,_x,_y,_z;
-	int _segment;
-	SpawnPointConnection _connections[5];
-	int _type;
-	int _rank;
-	int _flags;
-	int _reserved;
-	int _priority;
+	std::string _name;
+	int _size;
 public:
-	/// Creates a spawnpoint.
-	Spawnpoint();
-	/// Cleans up the spawnpoint.
-	~Spawnpoint();
-	/// Gets the spawnpoint's ID.
-	int getId();
-	/// Sets the spawnpoint's ID.
-	void setId(int id);
+	MapDataFile(std::string name, int size);
+	~MapDataFile();
+	/// get the datafile name (used for MAP generation)
+	std::string getName();
+	/// get size
+	int getSize();
 };
 
 #endif

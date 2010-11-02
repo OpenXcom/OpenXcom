@@ -32,7 +32,7 @@
 #include "../Geoscape/Polyline.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
-#include "../Battlescape/Terraindata.h"
+#include "TerrainObjectSet.h"
 
 /**
  * Initializes the resource pack by loading all the resources
@@ -466,8 +466,9 @@ void XcomResourcePack::loadBattlescapeResources(std::string folder)
 			s3 << folder << "TERRAIN/" << mcd;
 			_sets[bsets[i]] = new SurfaceSet(32, 40);
 			_sets[bsets[i]]->loadPck(insensitive(s.str()), insensitive(s2.str()));
-			_terraindata[mcd] = new Terraindata(bsets[i].substr(0, bsets[i].length()-4));
-			_terraindata[mcd]->load(s3.str());
+			_terrainSets[mcd] = new TerrainObjectSet(bsets[i].substr(0, bsets[i].length()-4));
+			_terrainSets[mcd]->load(insensitive(s3.str()));
+			_terrainSets[mcd]->linkSprites(_sets[bsets[i]]);
 		}
 		else
 		{

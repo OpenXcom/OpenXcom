@@ -16,21 +16,22 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "Terraindata.h"
+#include "TerrainObjectSet.h"
 #include "TerrainObject.h"
+#include "../Engine/SurfaceSet.h"
 #include <fstream>
 
 /**
 *
 */
-Terraindata::Terraindata(const std::string &name) : _name(name)
+TerrainObjectSet::TerrainObjectSet(const std::string &name) : _name(name)
 {
 }
 
 /**
 *
 */
-Terraindata::~Terraindata()
+TerrainObjectSet::~TerrainObjectSet()
 {
 	for (std::vector<TerrainObject*>::iterator i = _terrainObjects.begin(); i != _terrainObjects.end(); i++)
 	{
@@ -42,7 +43,7 @@ Terraindata::~Terraindata()
 /**
 * @return pointer to an array of MCD objects
 */
-std::vector<TerrainObject*> *Terraindata::getTerrainObjects()
+std::vector<TerrainObject*> *TerrainObjectSet::getTerrainObjects()
 {
 	return &_terrainObjects;
 }
@@ -55,7 +56,7 @@ std::vector<TerrainObject*> *Terraindata::getTerrainObjects()
  * @param yoff mapblock offset in Y direction
  * @sa http://www.ufopaedia.org/index.php?title=MCD
  */
-void Terraindata::load(const std::string &filename)
+void TerrainObjectSet::load(const std::string &filename)
 {
 	MCD* mcd;
 
@@ -80,4 +81,20 @@ void Terraindata::load(const std::string &filename)
 	}
 
 	mapFile.close();
+}
+
+/**
+ * Links the terrain objects with corresponding sprites
+ * @param sprites pointer to the surfaceset to link with
+ */
+void TerrainObjectSet::linkSprites(SurfaceSet *sprites)
+{
+	for (std::vector<TerrainObject*>::iterator i = _terrainObjects.begin(); i != _terrainObjects.end(); i++)
+	{
+		TerrainObject *tob = (TerrainObject*)*i;
+		for (int frame = 0; frame < 8; frame++)
+		{
+			tob->setSprite(sprites->getFrame(tob->getSpriteIndex(frame)),frame);
+		}
+	}
 }

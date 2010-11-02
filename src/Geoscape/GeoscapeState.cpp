@@ -802,7 +802,7 @@ void GeoscapeState::btnUfopaediaClick(Action *action)
 {
 	// for easy debugging of the battlescape
 	// change the texture parameter to test other terrains
-	_game->getRuleset()->newBattleSave(_game->getSavedGame(), 6, NULL, NULL);
+	_game->getRuleset()->newBattleSave(_game->getSavedGame(), 6, 0, 0);
 	_game->pushState(new BattlescapeState(_game));
 }
 

@@ -21,28 +21,38 @@
 
 #include <string>
 
+class Surface;
+class TerrainObject;
+
 /**
  * basic element of which a battle map is build
  */
 class Tile
 {
 protected:
-	int _TerrainObjectID[4]; // floor, west-wall, north-wall, object
+	int _terrainObjectID[4]; 
+	TerrainObject *_terrainObjects[4];
 	bool _visible; // is this tile seen by the XCom team
 	int _light; // the amount of light on this tile
-	std::string _frameset[4]; // holds the identifier of the frameset to draw this part of the tile
-	int _framenumber[4]; // the framenumber within the frameset to draw this part of the tile
+	std::string _mapDataFileName[4];
 
 public:
 	/// Creates a tile.
 	Tile();
 	/// Cleans up a tile.
 	~Tile();
-	/// Gets a reference to the map control data for a specific part of the tile.
+	/// Gets a pointer to the terrainobject for a specific part of the tile.
+	TerrainObject *getTerrainObject(int part);
+	/// Gets an ID of the terrainobject for a specific part of the tile.
 	int getTerrainObjectID(int part);
-	/// Sets the 4 terrain object references for this tile.
-	void setTerrainObjectID(int TerrainObjectID[]);
-
+	/// Sets the pointer to the terrainobject for a specific part of the tile
+	void setTerrainObject(TerrainObject *tob, int part);
+	/// Sets the object ID for specific part of the tile
+	void setTerrainObjectID(int objectID, int part);
+	/// Gets the map data filename for the part
+	std::string getMapDataFileName(int part);
+	/// sets the map data filename for the part
+	void setMapDataFileName(std::string name, int part);
 };
 
 #endif

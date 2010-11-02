@@ -17,27 +17,27 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #define _USE_MATH_DEFINES
-#include "Map.h"
 #include <cmath>
 #include <fstream>
+#include "Map.h"
+#include "../Resource/TerrainObjectSet.h"
+#include "../Resource/TerrainObject.h"
+#include "../Engine/Action.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Timer.h"
-#include "../Resource/ResourcePack.h"
+#include "../Engine/Font.h"
+#include "../Engine/Language.h"
 #include "../Engine/Palette.h"
+#include "../Resource/ResourcePack.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/GameTime.h"
 #include "../Savegame/Craft.h"
 #include "../Savegame/Ufo.h"
-#include "../Interface/Text.h"
-#include "../Engine/Font.h"
-#include "../Engine/Language.h"
 #include "../Savegame/Tile.h"
-#include "../Ruleset/Terrain.h"
+#include "../Ruleset/RuleTerrain.h"
 #include "../Ruleset/RuleCraft.h"
 #include "../Ruleset/RuleUfo.h"
-#include "Terraindata.h"
-#include "TerrainObject.h"
-#include "../Engine/Action.h"
+#include "../Interface/Text.h"
 
 #define SCROLL_AMOUNT 8
 #define SCROLL_BORDER 20
@@ -117,7 +117,7 @@ void Map::setSavedGame(SavedBattleGame *save)
  */
 void Map::init()
 {
-	concatinateSheets();
+	_save->linkTilesWithTerrainObjects(_res);
 }
 
 /**
@@ -139,27 +139,27 @@ void Map::draw()
 }
 
 /**
-* gets one single surface
+* Gets one single surface of the compiled list of surfaces.
 * @param tobID the TerrainObjectID index of the object
 * @param frame the animation frame (0-7)
-* @return pointer a surface
+* @return pointer to a surface
 */
-Surface* Map::getSurface(int tobID, int frame)
+Surface *Map::getSurface(TerrainObject *tob, int frame)
 {
 	// UFO doors are only animated when walked through
-	if ((int)_terrainObjects[tobID]->isUFODoor()) 
+	if (tob->isUFODoor()) 
 		frame = 0;
 
-	return _surfaces[(int)_terrainObjects[tobID]->getSpriteID(frame)];
+	return tob->getSprite(frame);
 }
 
 /**
-* draw the terrain
-* note that the Y axis is drawn in reverse order, to get the proper depthsorting
+* Draw the terrain.
 */
 void Map::drawTerrain()
 {
-	int screenX,screenY,objectID=0;
+	int screenX, screenY;
+	TerrainObject *object = 0;
 	Surface *frame;
 	Tile *tile;
 	int beginX = 0, endX = _save->getWidth() - 1;
@@ -186,28 +186,30 @@ void Map::drawTerrain()
 					{
 						for (int part=0;part<1;part++)
 						{
-							objectID = tile->getTerrainObjectID(part);
-							if (objectID)
+							object = tile->getTerrainObject(part);
+							if (object)
 							{
-								frame = getSurface(objectID,_animFrame);
+								frame = getSurface(object, _animFrame);
 								frame->setX(screenX);
-								frame->setY(screenY - _terrainObjects[objectID]->getPLevel());
+								frame->setY(screenY - object->getPLevel());
 								frame->blit(this);
 							}
 						}
 					}
 
 					// Draw cursor back
-					if (_selectorX==itY && _selectorY==itX)
+					if (_selectorX==itY && _selectorY == itX)
 					{
-						if ((_save->getViewHeight()-1)==itZ)
+						int frameNumber;
+						if ((_save->getViewHeight() - 1) == itZ)
 						{
-							objectID=0;
-						}else if ((_save->getViewHeight()-1)>itZ)
-						{
-							objectID=2;
+							frameNumber = 0;
 						}
-						frame = _res->getSurfaceSet("CURSOR.PCK")->getFrame(objectID); // red
+						else if ((_save->getViewHeight() - 1) > itZ)
+						{
+							frameNumber = 2;
+						}
+						frame = _res->getSurfaceSet("CURSOR.PCK")->getFrame(frameNumber);
 						frame->setX(screenX);
 						frame->setY(screenY);
 						frame->blit(this);
@@ -215,17 +217,17 @@ void Map::drawTerrain()
 
 
 					// Draw walls and objects
-					tile = _save->getTile(itX,itY,itZ);
+					tile = _save->getTile(itX, itY, itZ);
 					if (tile)
 					{
-						for (int part=1;part<4;part++)
+						for (int part = 1; part < 4; part++)
 						{
-							objectID = tile->getTerrainObjectID(part);
-							if (objectID)
+							object = tile->getTerrainObject(part);
+							if (object)
 							{
-								frame = getSurface(objectID,_animFrame);
+								frame = getSurface(object, _animFrame);
 								frame->setX(screenX);
-								frame->setY(screenY - _terrainObjects[objectID]->getPLevel());
+								frame->setY(screenY - object->getPLevel());
 								frame->blit(this);
 							}
 						}
@@ -236,22 +238,22 @@ void Map::drawTerrain()
 					// Draw soldier
 
 					// Draw cursor front
-					if (_selectorX==itY && _selectorY==itX)
+					if (_selectorX == itY && _selectorY == itX)
 					{
-						if ((_save->getViewHeight()-1)==itZ)
+						int frameNumber;
+						if ((_save->getViewHeight() - 1) == itZ)
 						{
-							objectID=3;
+							frameNumber = 3;
 						}
-						else if ((_save->getViewHeight()-1)>itZ)
+						else if ((_save->getViewHeight() - 1) > itZ)
 						{
-							objectID=5;
+							frameNumber = 5;
 						}
-						frame = _res->getSurfaceSet("CURSOR.PCK")->getFrame(objectID); // red
+						frame = _res->getSurfaceSet("CURSOR.PCK")->getFrame(frameNumber);
 						frame->setX(screenX);
 						frame->setY(screenY);
 						frame->blit(this);
 					}
-
 
 					// Draw smoke/fire
 				}
@@ -311,7 +313,7 @@ void Map::keyboardPress(Action *action, State *state)
 }
 
 /**
- * Handles mouse over events
+ * Handles mouse over events.
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
  */
@@ -324,8 +326,8 @@ void Map::mouseOver(Action *action, State *state)
 	if (action->getDetails()->motion.state & SDL_BUTTON(SDL_BUTTON_RIGHT))
 	{
 		_RMBDragging = true;
-		_ScrollX = (int)(-(double)(_RMBClickX - posX)*(action->getXScale()*2));
-		_ScrollY = (int)(-(double)(_RMBClickY - posY)*(action->getYScale()*2));
+		_ScrollX = (int)(-(double)(_RMBClickX - posX) * (action->getXScale() * 2));
+		_ScrollY = (int)(-(double)(_RMBClickY - posY) * (action->getYScale() * 2));
 		_RMBClickX = posX;
 		_RMBClickY = posY;
 	}
@@ -333,30 +335,61 @@ void Map::mouseOver(Action *action, State *state)
 	{
 		// handle scrolling with mouse at edge of screen
 		if (posX < SCROLL_BORDER && posX > 0)
-			_ScrollX=SCROLL_AMOUNT;
-		else if (posX > (getWidth()-SCROLL_BORDER)*action->getXScale())
-			_ScrollX=-SCROLL_AMOUNT;
+		{
+			_ScrollX = SCROLL_AMOUNT;
+		}
+		else if (posX > (getWidth() - SCROLL_BORDER) * action->getXScale())
+		{
+			_ScrollX = -SCROLL_AMOUNT;
+		}
 		else if (posX)
-			_ScrollX=0;
+		{
+			_ScrollX = 0;
+		}
 
 		if (posY < SCROLL_BORDER && posY > 0)
-			_ScrollY=SCROLL_AMOUNT;
-		else if (posY > (getHeight()-SCROLL_BORDER)*action->getYScale())
-			_ScrollY=-SCROLL_AMOUNT;
+		{
+			_ScrollY = SCROLL_AMOUNT;
+		}
+		else if (posY > (getHeight() - SCROLL_BORDER) * action->getYScale())
+		{
+			_ScrollY = -SCROLL_AMOUNT;
+		}
 		else if (posY)
-			_ScrollY=0;
+		{
+			_ScrollY = 0;
+		}
 	}
 
 	if ((_ScrollX || _ScrollY) && !_scrollTimer->isRunning())
 	{
 		_scrollTimer->start();
 	}
-	else if ((!_ScrollX && !_ScrollY) &&_scrollTimer->isRunning())
+	else if ((!_ScrollX && !_ScrollY) && _scrollTimer->isRunning())
 	{
 		_scrollTimer->stop();
 	}
 
-	setSelectorPosition((int)((double)posX/action->getXScale()),(int)((double)posY/action->getYScale()));
+	setSelectorPosition((int)((double)posX / action->getXScale()), (int)((double)posY / action->getYScale()));
+}
+
+
+/**
+ * Sets the value to min if it is below min, sets value to max if above max.
+ * @param value pointer to the value
+ * @param minimum value
+ * @param maximum value
+ */
+void Map::minMaxInt(int *value, const int minValue, const int maxValue)
+{
+	if (*value < minValue)
+	{
+		*value = minValue;
+	}
+	else if (*value > maxValue)
+	{
+		*value = maxValue;
+	}
 }
 
 /**
@@ -369,38 +402,34 @@ void Map::setSelectorPosition(int mx, int my)
 	if (!mx && !my) return; // cursor is offscreen
 
 	// add half a tileheight to the mouseposition per layer we are above the floor
-    my += -_TileSizeZ + _save->getViewHeight() * (_TileSizeZ/2);
+    my += -_TileSizeZ + _save->getViewHeight() * (_TileSizeZ / 2);
+
 	// calculate the actual x/y pixelposition on a diamond shaped map 
 	// taking the view offset into account
     _selectorX = mx - _MapOffsetX - 2 * my + 2 * _MapOffsetY;
     _selectorY = my - _MapOffsetY + _selectorX / 4;
+
 	// to get the row&col itself, divide by the size of a tile
-    _selectorY /= (_TileSizeX/2);
+    _selectorY /= (_TileSizeX / 2);
 	_selectorX /= _TileSizeY;
-	// bounds checking
-    if (_selectorX < 0) _selectorX = 0;
-    if (_selectorY < 0) _selectorY = 0;
-    if (_selectorX >= _save->getWidth()) _selectorX = _save->getWidth() - 1;
-    if (_selectorY >= _save->getLength()) _selectorY = _save->getLength() - 1;
+
+	minMaxInt(&_selectorX, 0, _save->getWidth() - 1);
+	minMaxInt(&_selectorY, 0, _save->getLength() - 1);
 }
 
 
 /**
- * handle scrolling
+ * Handle scrolling.
  */
 void Map::scroll()
 {
 	_MapOffsetX += _ScrollX;
 	_MapOffsetY += _ScrollY;
+
 	// don't scroll outside the map
-	if (_MapOffsetX<-(_save->getWidth()-1)*_TileSizeY) 
-		_MapOffsetX = -((_save->getWidth()-1)*_TileSizeY);
-	if (_MapOffsetY<-(_save->getLength()-1)*(_TileSizeX/2)) 
-		_MapOffsetY = -((_save->getLength()-1)*(_TileSizeX/2));
-	if (_MapOffsetX>0) 
-		_MapOffsetX = 0;
-	if (_MapOffsetY>_save->getLength()*(_TileSizeX/2)) 
-		_MapOffsetY = _save->getLength()*(_TileSizeX/2);
+	minMaxInt(&_MapOffsetX, -(_save->getWidth() - 1) * _TileSizeY, 0);
+	minMaxInt(&_MapOffsetY, -(_save->getLength() - 1) * (_TileSizeX / 2), _save->getLength() * (_TileSizeX / 2));
+
 	if (_RMBDragging)
 	{
 		_RMBDragging = false;
@@ -411,121 +440,31 @@ void Map::scroll()
 	draw();
 }
 
-
 /**
- * handle animating tiles
+ * Handle animating tiles. 8 Frames per animation.
  */
 void Map::animate()
 {
-	_animFrame = _animFrame==7?0:_animFrame+1;
+	_animFrame = _animFrame == 7 ? 0 : _animFrame + 1;
 	draw();
 }
 
+/**
+ * Go one level up.
+ */
 void Map::up()
 {
 	_save->setRelativeViewHeight(+1);
 	draw();
 }
 
+/**
+ * Go one level down.
+ */
 void Map::down()
 {
 	_save->setRelativeViewHeight(-1);
 	draw();
 }
 
-/**
-* This function compiles a list of pointers to surfaces and data needed for the terrain
-* into one big set of surfaces and data. 
-* by convention xcom craft starts at offset 250 and ufo at 350
-*/
-void Map::concatinateSheets()
-{
-	int offset_s=0,offset_d=0;
-	
-	for (std::vector<std::string*>::iterator i = _save->getTerrain()->getSheetnames()->begin(); i != _save->getTerrain()->getSheetnames()->end(); i++)
-	{
-		std::string PCKname = **i;
-		std::string MCDname = **i;
-		PCKname.append(".PCK");
-		MCDname.append(".MCD");
-		for (int f=0;f < _res->getSurfaceSet(PCKname)->getTotalFrames();f++)
-		{
-			_surfaces.push_back(_res->getSurfaceSet(PCKname)->getFrame(f));
-		}
-		for (int f=0;f < (int)_res->getTerraindata(MCDname)->getTerrainObjects()->size();f++)
-		{
-			TerrainObject* tob = _res->getTerraindata(MCDname)->getTerrainObjects()->at(f);
-			tob->setSpriteOffset(offset_s);
-			_terrainObjects.push_back(tob);
-		}
-		offset_s += _res->getSurfaceSet(PCKname)->getTotalFrames();
-		offset_d += _res->getTerraindata(MCDname)->getTerrainObjects()->size();
-	}
-	if (_save->getCraft() != NULL)
-	{
-		// add dummies to fill up until 250
-		while (offset_s<craftPos)
-		{
-			_surfaces.push_back(NULL);
-			offset_s++;
-		}
-		while (offset_d<craftPos)
-		{
-			_terrainObjects.push_back(NULL);
-			offset_d++;
-		}
 
-		for (std::vector<std::string*>::iterator i = _save->getCraft()->getRules()->getBattlescapeTerrainData()->getSheetnames()->begin(); i != _save->getCraft()->getRules()->getBattlescapeTerrainData()->getSheetnames()->end(); i++)
-		{
-			std::string PCKname = **i;
-			std::string MCDname = **i;
-			PCKname.append(".PCK");
-			MCDname.append(".MCD");
-			for (int f=0;f < _res->getSurfaceSet(PCKname)->getTotalFrames();f++)
-			{
-				_surfaces.push_back(_res->getSurfaceSet(PCKname)->getFrame(f));
-			}
-			for (int f=0;f < (int)_res->getTerraindata(MCDname)->getTerrainObjects()->size();f++)
-			{
-				TerrainObject* tob = _res->getTerraindata(MCDname)->getTerrainObjects()->at(f);
-				tob->setSpriteOffset(offset_s);
-				_terrainObjects.push_back(tob);
-			}
-			offset_s += _res->getSurfaceSet(PCKname)->getTotalFrames();
-			offset_d += _res->getTerraindata(MCDname)->getTerrainObjects()->size();
-		}
-	}
-	if (_save->getUfo() != NULL)
-	{
-		// add dummies to fill up until 350
-		while (offset_s<ufoPos)
-		{
-			_surfaces.push_back(NULL);
-			offset_s++;
-			if (offset_d<ufoPos)
-			{
-				_terrainObjects.push_back(NULL);
-				offset_d++;
-			}
-		}
-		for (std::vector<std::string*>::iterator i = _save->getUfo()->getRules()->getBattlescapeTerrainData()->getSheetnames()->begin(); i != _save->getUfo()->getRules()->getBattlescapeTerrainData()->getSheetnames()->end(); i++)
-		{
-			std::string PCKname = **i;
-			std::string MCDname = **i;
-			PCKname.append(".PCK");
-			MCDname.append(".MCD");
-			for (int f=0;f < _res->getSurfaceSet(PCKname)->getTotalFrames();f++)
-			{
-				_surfaces.push_back(_res->getSurfaceSet(PCKname)->getFrame(f));
-			}
-			for (int f=0;f < (int)_res->getTerraindata(MCDname)->getTerrainObjects()->size();f++)
-			{
-				TerrainObject* tob = _res->getTerraindata(MCDname)->getTerrainObjects()->at(f);
-				tob->setSpriteOffset(offset_s);
-				_terrainObjects.push_back(tob);
-			}
-			offset_s += _res->getSurfaceSet(PCKname)->getTotalFrames();
-			offset_d += _res->getTerraindata(MCDname)->getTerrainObjects()->size();
-		}
-	}
-}

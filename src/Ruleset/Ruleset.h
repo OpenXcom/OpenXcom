@@ -21,6 +21,7 @@
 
 #include <map>
 #include <vector>
+#include <string>
 #include "../Resource/LangString.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
@@ -31,7 +32,8 @@ class RuleCraft;
 class RuleCraftWeapon;
 class RuleItem;
 class RuleUfo;
-class Terrain;
+class RuleTerrain;
+class MapDataFile;
 
 /**
  * Set of rules and stats for a game.
@@ -48,7 +50,8 @@ protected:
 	std::map<LangString, RuleCraftWeapon*> _craftWeapons;
 	std::map<LangString, RuleItem*> _items;
 	std::map<LangString, RuleUfo*> _ufos;
-	std::map<std::string, Terrain*> _terrains;
+	std::map<std::string, RuleTerrain*> _terrains;
+	std::map<std::string, MapDataFile*> _mapDataFiles;
 public:
 	/// Creates a blank ruleset.
 	Ruleset();
@@ -73,7 +76,9 @@ public:
 	/// Gets the ruleset for a UFO type.
 	RuleUfo *const getUfo(LangString id);
 	/// Gets terrains for battlescape games
-	Terrain *getTerrain(std::string name);
+	RuleTerrain *getTerrain(std::string name);
+	/// Gets mapdatafile for battlescape games
+	MapDataFile *getMapDataFile(std::string name);
 };
 
 #endif

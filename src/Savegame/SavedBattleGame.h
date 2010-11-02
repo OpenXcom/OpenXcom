@@ -16,18 +16,19 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM__SAVEDBATTLEGAME_H
-#define OPENXCOM__SAVEDBATTLEGAME_H
+#ifndef OPENXCOM_SAVEDBATTLEGAME_H
+#define OPENXCOM_SAVEDBATTLEGAME_H
 
 #include <vector>
 
 class Tile;
 class SavedGame;
-class Terrain;
+class RuleTerrain;
 class MapBlock;
 class Craft;
 class Ufo;
-class Spawnpoint;
+class Node;
+class ResourcePack;
 
 /**
  * The battlescape data that gets written to disk when the game is saved.
@@ -37,9 +38,9 @@ class Spawnpoint;
 class SavedBattleGame
 {
 private:
-	Terrain* _terrain;
-	int _width, _length, _height; // dimensions of the battlemap, origin is topright edge
+	RuleTerrain *_terrain;
 
+	int _width, _length, _height; // dimensions of the battlemap, origin is topright edge
 	int _viewheight; // the layer we are on
 
 	// using a oldskool array here, because the size is static and a little faster than vector
@@ -47,20 +48,21 @@ private:
 
 	Craft* _craft;
 	Ufo* _ufo;
-	std::vector<Spawnpoint*> _spawnpoints;
+
+	std::vector<Node*> _nodes;
 	//std::vector<BattleSoldier*> _soldiers;
 	//std::vector<BattleItem*> _items;
 
 
 public:
 	/// Creates a new battle save, based on current generic save.
-	SavedBattleGame(SavedGame *save, int width, int length, int height, Terrain* terrain);
+	SavedBattleGame(SavedGame *save, int width, int length, int height, RuleTerrain* terrain);
 	/// Cleans up the saved game.
 	~SavedBattleGame();
 	/// Gets pointer to the tiles, a tile is the smallest component of battlescape.
 	Tile** getTiles();
 	/// Gets pointer to the terrain.
-	Terrain *getTerrain();
+	RuleTerrain *getTerrain();
 	/// Gets terrain width.
 	int getWidth();
 	/// Gets terrain length.
@@ -83,6 +85,8 @@ public:
 	Ufo *getUfo();
 	/// Generate a new battlescape map.
 	void generateMap();
+	/// links tiles with terrainobjects, for easier/faster lookup
+	void linkTilesWithTerrainObjects(ResourcePack *res);
 
 };
 

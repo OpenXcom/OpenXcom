@@ -16,27 +16,20 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_TERRAINDATA_H
-#define OPENXCOM_TERRAINDATA_H
+#include "NodeLink.h"
 
-#include <vector>
-#include <string>
-
-class TerrainObject;
-
-class Terraindata
+/**
+ * Initializes a NodeLink.
+ */
+NodeLink::NodeLink()
 {
-private:
-	std::vector<TerrainObject*> _terrainObjects;
-	std::string _name;
-public:
-	/// create a set of MCD records under a certain name
-	Terraindata(const std::string &name);
-	~Terraindata();
-	/// get pointer to the set of MCD records
-	std::vector<TerrainObject*> *getTerrainObjects();
-	/// load the set of MCD records from an MCD file
-	void load(const std::string &filename);
-};
+}
 
-#endif
+/**
+ *
+ */
+NodeLink::~NodeLink()
+{
+}
+
+

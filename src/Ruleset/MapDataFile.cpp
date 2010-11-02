@@ -16,36 +16,41 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "Spawnpoint.h"
+#include "MapDataFile.h"
+#include <fstream>
+#include <sstream>
+
 
 /**
- * Initializes a spawnpoint.
- */
-Spawnpoint::Spawnpoint() : _id(0)
+* MapDataFile construction
+*/
+MapDataFile::MapDataFile(std::string name, int size):_name(name), _size(size)
+{
+}
+
+
+/**
+* MapDataFile DESTRUCTION !
+*/
+MapDataFile::~MapDataFile()
 {
 }
 
 /**
- *
- */
-Spawnpoint::~Spawnpoint()
+* gets the MapDataFile name (string)
+* @return name
+*/
+std::string MapDataFile::getName()
 {
+	return _name;
 }
 
 /**
- * Returns the Spawnpoint's unique ID.
- * @return Unique ID.
- */
-int Spawnpoint::getId()
+* gets the MapDataFile width
+* @return size in number of records
+*/
+int MapDataFile::getSize()
 {
-	return _id;
+	return _size;
 }
 
-/**
- * Changes the Spawnpoint's unique ID.
- * @param id Unique ID.
- */
-void Spawnpoint::setId(int id)
-{
-	_id = id;
-}

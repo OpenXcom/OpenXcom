@@ -23,12 +23,13 @@
 #include "RuleCraftWeapon.h"
 #include "RuleItem.h"
 #include "RuleUfo.h"
-#include "../Ruleset/Terrain.h"
+#include "RuleTerrain.h"
+#include "MapDataFile.h"
 
 /**
  * Creates a ruleset with blank sets of rules.
  */
-Ruleset::Ruleset() : _names(), _facilities(), _crafts(), _craftWeapons(), _items(), _ufos(), _terrains()
+Ruleset::Ruleset() : _names(), _facilities(), _crafts(), _craftWeapons(), _items(), _ufos(), _terrains(), _mapDataFiles()
 {
 }
 
@@ -61,7 +62,11 @@ Ruleset::~Ruleset()
 	{
 		delete i->second;
 	}
-	for (std::map<std::string, Terrain*>::iterator i = _terrains.begin(); i != _terrains.end(); i++)
+	for (std::map<std::string, RuleTerrain*>::iterator i = _terrains.begin(); i != _terrains.end(); i++)
+	{
+		delete i->second;
+	}
+	for (std::map<std::string, MapDataFile*>::iterator i = _mapDataFiles.begin(); i != _mapDataFiles.end(); i++)
 	{
 		delete i->second;
 	}
@@ -89,7 +94,7 @@ SavedGame *Ruleset::newSave(GameDifficulty diff)
  */
 SavedBattleGame *Ruleset::newBattleSave(SavedGame *save, int texture, Craft *craft, Ufo* ufo)
 {
-	SavedBattleGame *bsave = NULL;
+	SavedBattleGame *bsave = 0;
 
 	return bsave;
 }
@@ -100,7 +105,7 @@ SavedBattleGame *Ruleset::newBattleSave(SavedGame *save, int texture, Craft *cra
 void Ruleset::endBattle(SavedBattleGame *bsave, SavedGame *save)
 {
 	delete bsave;
-	save->setBattleGame(NULL);
+	save->setBattleGame(0);
 }
 
 /**
@@ -167,7 +172,17 @@ RuleUfo *const Ruleset::getUfo(LangString id)
  * @param terrain name.
  * @return Rules for the terrain.
  */
-Terrain *Ruleset::getTerrain(std::string name)
+RuleTerrain *Ruleset::getTerrain(std::string name)
 {
 	return _terrains[name];
+}
+
+/**
+ * Returns the info about a specific map data file
+ * @param datafile name.
+ * @return Rules for the datafile.
+ */
+MapDataFile *Ruleset::getMapDataFile(std::string name)
+{
+	return _mapDataFiles[name];
 }

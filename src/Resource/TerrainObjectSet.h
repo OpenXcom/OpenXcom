@@ -16,38 +16,37 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_TERRAIN_H
-#define OPENXCOM_TERRAIN_H
+#ifndef OPENXCOM_TERRAINOBJECTSET_H
+#define OPENXCOM_TERRAINOBJECTSET_H
 
-#include <map>
 #include <vector>
 #include <string>
 
-class Surface;
-class Tile;
-class ResourcePack;
-class SavedBattleGame;
-class MapBlock;
+class TerrainObject;
+class SurfaceSet;
 
-class Terrain
+/**
+ * Represents a Terrain Object Set.
+ * It contains a set of terrain objects.
+ * @sa TerrainObjectSet
+ */
+class TerrainObjectSet
 {
 private:
-	std::vector<std::string*> _sheetnames;
-	std::vector<MapBlock*> _mapblocks;
+	std::vector<TerrainObject*> _terrainObjects;
 	std::string _name;
 public:
-	Terrain(const std::string &name);
-	~Terrain();
-	/// gets the list of sheetnames, without their extensions
-	std::vector<std::string*> *getSheetnames();
-	/// gets a surface given their absolute index and frame number
-	Surface* getSurface(int i, int frame);
-	/// get the terrain name (used for MAP generation)
-	std::string getName();
-	/// gets the list of mapblocks
-	std::vector<MapBlock*> *getMapBlocks();
-	/// get a random mapblock
-	MapBlock* getRandomMapBlock(int maxsize, bool landingzone);
+	/// create a set of MCD records under a certain name
+	TerrainObjectSet(const std::string &name);
+	~TerrainObjectSet();
+	/// get pointer to the set of MCD records
+	std::vector<TerrainObject*> *getTerrainObjects();
+	/// load the set of MCD records from an MCD file
+	void load(const std::string &filename);
+	/// link the terrain objects with corresponding sprites
+	void linkSprites(SurfaceSet *sprites);
+
+
 };
 
 #endif

@@ -23,7 +23,7 @@
 #include <string>
 #include "../Resource/LangString.h"
 
-class Terrain;
+class RuleTerrain;
 
 /**
  * Represents a specific type of UFO.
@@ -37,7 +37,7 @@ private:
 	LangString _type, _size;
 	int _sprite;
 	int _damageMax, _speedMax, _accel, _power, _range, _score;
-	Terrain* _battlescapeTerrainData;
+	RuleTerrain *_battlescapeTerrainData;
 public:
 	/// Creates a blank UFO ruleset.
 	RuleUfo(LangString type);
@@ -80,8 +80,8 @@ public:
 	/// Sets the UFO's score.
 	void setScore(int score);
 	/// stuff needed to draw this UFO on the battlescape
-	Terrain* getBattlescapeTerrainData();
-	void setBattlescapeTerrainData(Terrain *t);
+	RuleTerrain *getBattlescapeTerrainData();
+	void setBattlescapeTerrainData(RuleTerrain *t);
 };
 
 #endif

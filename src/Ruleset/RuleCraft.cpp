@@ -17,16 +17,16 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "RuleCraft.h"
-#include "Terrain.h"
+#include "RuleTerrain.h"
 
 /**
  * Creates a blank ruleset for a certain
  * type of craft.
  * @param type String defining the type.
  */
-RuleCraft::RuleCraft(LangString type) : _type(type), _sprite(-1), _fuelMax(0), _damageMax(0), _speedMax(0), _accel(0), _weapons(0), _soldiers(0), _hwps(0), _fee(0), _repair(1), _refuel(1)
+RuleCraft::RuleCraft(LangString type) : _type(type), _sprite(-1), _fuelMax(0), _damageMax(0), _speedMax(0), _accel(0), _weapons(0), _soldiers(0), _hwps(0), _fee(0), _repair(1), _refuel(1), _battlescapeTerrainData(0)
 {
-	_battlescapeTerrainData = NULL;
+
 }
 
 /**
@@ -34,8 +34,7 @@ RuleCraft::RuleCraft(LangString type) : _type(type), _sprite(-1), _fuelMax(0), _
  */
 RuleCraft::~RuleCraft()
 {
-	if (_battlescapeTerrainData != NULL)
-		delete _battlescapeTerrainData;
+	delete _battlescapeTerrainData;
 }
 
 /**
@@ -270,7 +269,7 @@ void RuleCraft::setRefuelRate(int refuel)
  * Returns the terrain data needed to draw the Craft in the battlescape.
  * @return Terrain.
  */
-Terrain* RuleCraft::getBattlescapeTerrainData()
+RuleTerrain *RuleCraft::getBattlescapeTerrainData()
 {
 	return _battlescapeTerrainData;
 }
@@ -279,7 +278,7 @@ Terrain* RuleCraft::getBattlescapeTerrainData()
  * Changes the terrain data needed to draw the Craft in the battlescape.
  * @param t Terrain.
  */
-void RuleCraft::setBattlescapeTerrainData(Terrain *t)
+void RuleCraft::setBattlescapeTerrainData(RuleTerrain *t)
 {
 	_battlescapeTerrainData = t;
 }

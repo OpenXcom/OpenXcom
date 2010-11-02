@@ -33,7 +33,7 @@ class Polygon;
 class Polyline;
 class Music;
 class SoundSet;
-class Terraindata;
+class TerrainObjectSet;
 
 /**
  * Packs of external game media.
@@ -62,7 +62,7 @@ protected:
 
 	/// Converts a filename to its existing case-insensitive name.
 	std::string insensitive(const std::string &filename) const;
-	std::map<std::string, Terraindata*> _terraindata;
+	std::map<std::string, TerrainObjectSet*> _terrainSets;
 public:
 	/// Create a new resource pack with a folder's contents.
 	ResourcePack(const std::string &folder);
@@ -92,8 +92,8 @@ public:
 	Palette *const getPalette(const std::string &name);
 	/// Sets a new palette.
 	void setPalette(SDL_Color *colors, int firstcolor, int ncolors);
-	/// Gets the list of terraindata.
-	Terraindata* getTerraindata(std::string name);
+	/// Get a terrain object set, using it's name
+	TerrainObjectSet* getTerrainObjectSet(std::string name);
 
 };
 

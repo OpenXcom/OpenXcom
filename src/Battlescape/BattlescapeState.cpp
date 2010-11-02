@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include "Map.h"
 #include "BattlescapeState.h"
 #include "../Engine/Game.h"
 #include "../Engine/Music.h"
@@ -31,7 +32,6 @@
 #include "../Interface/ImageButton.h"
 #include "../Savegame/SavedGame.h"
 #include "../Ruleset/Ruleset.h"
-#include "Map.h"
 
 /**
  * Initializes all the elements in the Battlescape screen.
@@ -238,6 +238,6 @@ void BattlescapeState::btnEndTurnClick(Action *action)
 void BattlescapeState::btnAbortClick(Action *action)
 {
 	_game->getRuleset()->endBattle(_game->getSavedGame()->getBattleGame(), _game->getSavedGame());
-	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
+	_game->getCursor()->setColor(Palette::blockOffset(15) + 12);
 	_game->popState();
 }
