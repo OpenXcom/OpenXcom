@@ -50,7 +50,7 @@ public:
 	/// get a random mapblock
 	MapBlock* getRandomMapBlock(int maxsize, bool landingzone);
 	/// generates a corresponding unique terrain object name
-	std::string RuleTerrain::getTerrainObjectName(int absoluteID);
+	std::string getTerrainObjectName(int absoluteID);
 	/// parse the terrain object name to get the datafilename and the relative ID in that file
 	void parseTerrainObjectName(std::string objectName, std::string *dataFileName, int *relativeID);
 };

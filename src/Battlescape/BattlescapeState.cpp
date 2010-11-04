@@ -102,7 +102,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	_btnMapDown->onMouseClick((ActionHandler)&BattlescapeState::btnMapDownClick);
 	_btnNextSoldier->onMouseClick((ActionHandler)&BattlescapeState::btnNextSoldierClick);
 
-	_txtName->setColor(Palette::blockOffset(15)+4);
+	_txtName->setColor(Palette::blockOffset(8)+3);
 	_txtName->setText(_game->getSavedGame()->getBattleGame()->getSelectedSoldier()->getSoldier()->getName());
 
 	_btnReserveNone->copy(_icons);
