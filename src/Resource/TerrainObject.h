@@ -20,6 +20,7 @@
 #define OPENXCOM_TERRAINOBJECT_H
 
 class Surface;
+#include <string>
 
 enum SpecialTileType{TILE=0,
 					START_POINT,
@@ -43,6 +44,7 @@ enum SpecialTileType{TILE=0,
 class TerrainObject
 {
 private:
+	std::string _mapDataFileName;
 	Surface *_surfaces[8];
 	TerrainObject *deadObject;
 	TerrainObject *alternativeObject;

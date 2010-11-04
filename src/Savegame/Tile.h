@@ -30,29 +30,24 @@ class TerrainObject;
 class Tile
 {
 protected:
-	int _terrainObjectID[4]; 
+	std::string _name[4];
 	TerrainObject *_terrainObjects[4];
 	bool _visible; // is this tile seen by the XCom team
 	int _light; // the amount of light on this tile
-	std::string _mapDataFileName[4];
 
 public:
 	/// Creates a tile.
 	Tile();
 	/// Cleans up a tile.
 	~Tile();
+	/// Gets name for the part
+	std::string getName(int part);
+	/// sets name for the part
+	void setName(std::string name, int part);
 	/// Gets a pointer to the terrainobject for a specific part of the tile.
 	TerrainObject *getTerrainObject(int part);
-	/// Gets an ID of the terrainobject for a specific part of the tile.
-	int getTerrainObjectID(int part);
 	/// Sets the pointer to the terrainobject for a specific part of the tile
 	void setTerrainObject(TerrainObject *tob, int part);
-	/// Sets the object ID for specific part of the tile
-	void setTerrainObjectID(int objectID, int part);
-	/// Gets the map data filename for the part
-	std::string getMapDataFileName(int part);
-	/// sets the map data filename for the part
-	void setMapDataFileName(std::string name, int part);
 };
 
 #endif

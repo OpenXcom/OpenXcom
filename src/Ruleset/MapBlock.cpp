@@ -82,7 +82,7 @@ bool MapBlock::isLandingZone()
  * @param xoff mapblock offset in X direction
  * @param yoff mapblock offset in Y direction
  * @param save pointer to the current battle game
- * @param tos pointer to the terrain object set to get the terrain object pointers from
+ * @param terrain pointer to the terrain rule
  * @return int Height of the loaded mapblock (this is needed for spawpoint calculation...)
  * @sa http://www.ufopaedia.org/index.php?title=MAPS
  * NOTE that Y-axis is in reverse order
@@ -119,9 +119,7 @@ int MapBlock::loadMAP(int xoff, int yoff, SavedBattleGame *save, RuleTerrain *te
 			terrainObjectID = (int)value[part];
 			if (terrainObjectID>0)
 			{
-				terrain->getMapDatafile(&terrainObjectID, &mapDataFileName);
-				save->getTile(x, y, z)->setTerrainObjectID(terrainObjectID,part);
-				save->getTile(x, y, z)->setMapDataFileName(mapDataFileName,part);
+				save->getTile(x, y, z)->setName(terrain->getTerrainObjectName(terrainObjectID),part);
 			}
 		}
 
@@ -155,10 +153,10 @@ int MapBlock::loadMAP(int xoff, int yoff, SavedBattleGame *save, RuleTerrain *te
  * Loads a X-Com format RMP file into the spawnpoints of the battlegame
  * @param xoff mapblock offset in X direction
  * @param yoff mapblock offset in Y direction
- * @param SavedBattleGame* pointer to the current battle game
+ * @param save pointer to the current battle game
  * @sa http://www.ufopaedia.org/index.php?title=ROUTES
  */
-void MapBlock::loadRMP(int xoff, int yoff, int height, SavedBattleGame* save)
+void MapBlock::loadRMP(int xoff, int yoff, SavedBattleGame* save)
 {
 	//char value[24];
 	std::stringstream filename;

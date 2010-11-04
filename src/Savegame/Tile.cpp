@@ -28,10 +28,6 @@ Tile::Tile(): _visible(true), _light(255)
 	_terrainObjects[1] = 0;
 	_terrainObjects[2] = 0;
 	_terrainObjects[3] = 0;
-	_terrainObjectID[0] = -1;
-	_terrainObjectID[1] = -1;
-	_terrainObjectID[2] = -1;
-	_terrainObjectID[3] = -1;
 }
 
 /**
@@ -45,6 +41,7 @@ Tile::~Tile()
 /**
  * Get the TerrainObject pointer of a part of the tile.
  * @param part the part 0-3.
+ * @return pointer to terrainobject
  */
 TerrainObject *Tile::getTerrainObject(int part)
 {
@@ -66,40 +63,21 @@ void Tile::setTerrainObject(TerrainObject *tob, int part)
 }
 
 /**
- * Get the TerrainObject pointer of a part of the tile.
- * @param part the part 0-3.
+ * Get mapdatafilename
+ * @param part the part number 0-3
+ * @return a string which contains the MCD filename
  */
-int Tile::getTerrainObjectID(int part)
+std::string Tile::getName(int part)
 {
-	if (part < 0 || part > 3)
-	{
-		throw "unkown TerrainObjectID part";
-	}
-	return _terrainObjectID[part];
-}
-
-/**
- * Set the TerrainObject references of part 0 to 3
- * @param tob pointer to the terrain object
- * @param part the part number
- */
-void Tile::setTerrainObjectID(int objectID, int part)
-{
-	_terrainObjectID[part] = objectID;
-}
-
-/**
- * get mapdatafilename
- */
-std::string Tile::getMapDataFileName(int part)
-{
-	return _mapDataFileName[part] + ".MCD";
+	return _name[part];
 }
 
 /**
  * set mapdatafilename
+ * @param name the name of the specific MCD file
+ * @param part the part number 0-3
  */
-void Tile::setMapDataFileName(std::string name, int part)
+void Tile::setName(std::string name, int part)
 {
-	_mapDataFileName[part] = name;
+	_name[part] = name;
 }

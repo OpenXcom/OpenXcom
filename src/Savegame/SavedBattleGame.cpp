@@ -21,6 +21,7 @@
 #include "Craft.h"
 #include "Tile.h"
 #include "Ufo.h"
+#include "BattleSoldier.h"
 #include <fstream>
 #include <sstream>
 #include "../Engine/RNG.h"
@@ -42,7 +43,7 @@
  * @param height Number of layers (z).
  * @param terrain Pointer to terrain set to use.
  */
-SavedBattleGame::SavedBattleGame(SavedGame *save, int width, int length, int height, RuleTerrain *terrain) : _width(width), _length(length), _height(height), _viewheight(1), _terrain(terrain), _tiles(), _craft(0), _ufo(0), _nodes()
+SavedBattleGame::SavedBattleGame(SavedGame *save, int width, int length, int height, RuleTerrain *terrain) : _width(width), _length(length), _height(height), _viewheight(1), _terrain(terrain), _tiles(), _craft(0), _ufo(0), _nodes(), _soldiers()
 {
 
 }
@@ -63,6 +64,10 @@ SavedBattleGame::~SavedBattleGame()
 		delete *i;
 	}
 
+	for (std::vector<BattleSoldier*>::iterator i = _soldiers.begin(); i != _soldiers.end(); i++)
+	{
+		delete *i;
+	}
 }
 
 /** 
@@ -183,11 +188,56 @@ Craft *SavedBattleGame::getCraft()
 }
 /**
  * Gets the UFO on the map.
- * @param Pointer to UFO.
+ * @return Pointer to UFO.
  */
 Ufo *SavedBattleGame::getUfo()
 {
 	return _ufo;
+}
+
+/**
+ * Adds a soldier to the game
+ * @param soldier pointer to the soldier
+ */
+void SavedBattleGame::addSoldier(Soldier *soldier)
+{
+	BattleSoldier *bs = new BattleSoldier(soldier);
+	_soldiers.push_back(bs);
+	_selectedSoldier = bs;
+}
+
+/**
+ * Gets the currently selected soldier
+ */
+BattleSoldier *SavedBattleGame::getSelectedSoldier()
+{
+	return _selectedSoldier;
+}
+
+/**
+ * Select the next soldier
+ */
+BattleSoldier *SavedBattleGame::selectNextSoldier()
+{
+
+	for (std::vector<BattleSoldier*>::iterator i = _soldiers.begin(); i != _soldiers.end(); i++)
+	{
+		if ((*i) == _selectedSoldier)
+		{
+			i++;
+			if (i == _soldiers.end())
+			{
+				_selectedSoldier = (*_soldiers.begin());
+				break;
+			}else
+			{
+				_selectedSoldier =  *i;
+				break;
+			}
+		}
+	}
+
+	return _selectedSoldier;
 }
 
 /** 
@@ -346,11 +396,15 @@ void SavedBattleGame::generateMap()
 }
 
 /**
- * This function will link the tiles, with the actual object pointers
+ * This function will link the tiles with the actual objects in the resourcepack
+ * using their object names.
+ * @param res pointer to resourcepack
  */
 void SavedBattleGame::linkTilesWithTerrainObjects(ResourcePack *res)
 {
 	Tile *tile;
+	std::string dataFilename;
+	int objectID;
 	int beginX = 0, endX = _width - 1;
     int beginY = 0, endY = _length - 1;
     int beginZ = 0, endZ = _height - 1;
@@ -366,9 +420,10 @@ void SavedBattleGame::linkTilesWithTerrainObjects(ResourcePack *res)
 				{
 					for (int part = 0; part < 4; part++)
 					{
-						if (tile->getTerrainObjectID(part) != -1)
+						if (!tile->getName(part).empty())
 						{
-							tile->setTerrainObject(res->getTerrainObjectSet(tile->getMapDataFileName(part))->getTerrainObjects()->at(tile->getTerrainObjectID(part)), part);
+							_terrain->parseTerrainObjectName(tile->getName(part),&dataFilename,&objectID);
+							tile->setTerrainObject(res->getTerrainObjectSet(dataFilename)->getTerrainObjects()->at(objectID), part);
 						}
 					}
 				}

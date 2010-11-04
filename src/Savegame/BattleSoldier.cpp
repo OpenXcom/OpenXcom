@@ -20,8 +20,9 @@
 
 /**
  * Initializes a BattleSoldier.
+ * @param soldier pointer to the geoscape soldier object
  */
-BattleSoldier::BattleSoldier(Soldier *soldier): _soldier(soldier)
+BattleSoldier::BattleSoldier(Soldier *soldier): BattleUnit(), _soldier(soldier)
 {
 }
 
@@ -32,3 +33,11 @@ BattleSoldier::~BattleSoldier()
 {
 }
 
+/**
+ * gets the underlying soldier object
+ * @return pointer to soldier
+ */
+Soldier *BattleSoldier::getSoldier()
+{
+	return _soldier;
+}

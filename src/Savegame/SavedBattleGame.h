@@ -29,6 +29,8 @@ class Craft;
 class Ufo;
 class Node;
 class ResourcePack;
+class BattleSoldier;
+class Soldier;
 
 /**
  * The battlescape data that gets written to disk when the game is saved.
@@ -46,9 +48,10 @@ private:
 
 	Craft *_craft;
 	Ufo *_ufo;
+	BattleSoldier *_selectedSoldier;
 
 	std::vector<Node*> _nodes;
-	//std::vector<BattleSoldier*> _soldiers;
+	std::vector<BattleSoldier*> _soldiers;
 	//std::vector<BattleItem*> _items;
 
 	RuleTerrain *_terrain;
@@ -85,6 +88,12 @@ public:
 	void generateMap();
 	/// links tiles with terrainobjects, for easier/faster lookup
 	void linkTilesWithTerrainObjects(ResourcePack *res);
+	/// Add a soldier to the game
+	void addSoldier(Soldier *soldier);
+	/// get the currently selected soldier
+	BattleSoldier *getSelectedSoldier();
+	/// select next soldier
+	BattleSoldier *selectNextSoldier();
 
 };
 

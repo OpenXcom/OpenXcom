@@ -36,6 +36,8 @@ TerrainObject::~TerrainObject()
 
 /**
 * set the sprite offset
+* @param surface pointer to surface
+* @param frameID frame 0-7
 */
 void TerrainObject::setSprite(Surface *surface, int frameID)
 {
@@ -45,6 +47,8 @@ void TerrainObject::setSprite(Surface *surface, int frameID)
 
 /**
 * get the sprite index
+* @param frameID frame 0-7
+* @return the original sprite index
 */
 int TerrainObject::getOriginalSpriteIndex(int frameID)
 {
@@ -53,6 +57,8 @@ int TerrainObject::getOriginalSpriteIndex(int frameID)
 
 /**
 * get the sprite 
+* @param frameID frame 0-7
+* @return pointer to surface
 */
 Surface *TerrainObject::getSprite(int frameID)
 {

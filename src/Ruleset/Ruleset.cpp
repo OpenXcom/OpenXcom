@@ -169,7 +169,7 @@ RuleUfo *const Ruleset::getUfo(LangString id)
 
 /**
  * Returns the rules for the specified terrain.
- * @param terrain name.
+ * @param name terrain name.
  * @return Rules for the terrain.
  */
 RuleTerrain *Ruleset::getTerrain(std::string name)
@@ -179,7 +179,7 @@ RuleTerrain *Ruleset::getTerrain(std::string name)
 
 /**
  * Returns the info about a specific map data file
- * @param datafile name.
+ * @param name datafile name.
  * @return Rules for the datafile.
  */
 MapDataFile *Ruleset::getMapDataFile(std::string name)

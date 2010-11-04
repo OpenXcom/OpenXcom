@@ -16,6 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+#include <sstream>
+#include <iostream>
 #include "RuleTerrain.h"
 #include "MapBlock.h"
 #include "MapDataFile.h"
@@ -94,23 +97,47 @@ MapBlock* RuleTerrain::getRandomMapBlock(int maxsize, bool landingzone)
 }
 
 /**
-* gets a the corresponding map data filename where to find a certain terrainobject
-* @param terrainObjectID pointer to the terrain object ID
-* @param mapDataFileName pointer to the filename
+* generates a corresponding unique terrain object name, consisting of:
+* the MCD filename + the relative position in that file
+* eg "CULTA.MCD:8"
+* @param absoluteID the absolute ID as found in the MAP file
+* @return unique terrain object name
 */
-void RuleTerrain::getMapDatafile(int *terrainObjectID, std::string *mapDataFileName)
+std::string RuleTerrain::getTerrainObjectName(int absoluteID)
 {
 	MapDataFile* mdf = 0;
+	int relativeID = absoluteID;
+	std::stringstream name;
 	
 	for (std::vector<MapDataFile*>::iterator i = _mapDataFiles.begin(); i != _mapDataFiles.end(); i++)
 	{
 		mdf = *i;
-		*mapDataFileName = mdf->getName();
-		if (*terrainObjectID - mdf->getSize() < 0)
+		if (relativeID- mdf->getSize() < 0)
 		{
 			break;
 		}
-		*terrainObjectID -= mdf->getSize();
+		relativeID -= mdf->getSize();
 	}
 
+	name << mdf->getName();
+	name << ":";
+	name << relativeID;
+
+	return name.str();
+}
+
+/**
+* parse the terrain object name to get the datafilename and the relative ID in that file
+* eg "CULTA.MCD:8" -> file CULTA.MCD , position 8
+* @param objectBame the name of the object
+* @param dataFileName pointer to the datafile where the object can be found
+* @param relativeID pointer to the relative ID where the object is inside the file
+*/
+void RuleTerrain::parseTerrainObjectName(std::string objectName, std::string *dataFileName, int *relativeID)
+{
+	size_t  pos = objectName.find(":", 0); //store the position of the delimiter
+	*dataFileName = objectName.substr(0, pos);      //get the filename
+	objectName.erase(0, pos + 1);          //erase it from the source 
+	std::istringstream issID(objectName); // convert leftover to istringstream
+	issID >> *relativeID;				// to int
 }

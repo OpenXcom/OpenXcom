@@ -49,8 +49,10 @@ public:
 	std::vector<MapDataFile*> *getMapDataFiles();
 	/// get a random mapblock
 	MapBlock* getRandomMapBlock(int maxsize, bool landingzone);
-	/// gets the corresponding map datafilename, and relative terrainObjectID
-	void getMapDatafile(int *terrainObjectID, std::string *mapDataFileName);
+	/// generates a corresponding unique terrain object name
+	std::string RuleTerrain::getTerrainObjectName(int absoluteID);
+	/// parse the terrain object name to get the datafilename and the relative ID in that file
+	void parseTerrainObjectName(std::string objectName, std::string *dataFileName, int *relativeID);
 };
 
 #endif

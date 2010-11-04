@@ -36,7 +36,8 @@ public:
 	BattleSoldier(Soldier *soldier);
 	/// Cleans up the BattleSoldier.
 	~BattleSoldier();
-
+	/// gets the geoscape soldier boject
+	Soldier *getSoldier();
 };
 
 #endif

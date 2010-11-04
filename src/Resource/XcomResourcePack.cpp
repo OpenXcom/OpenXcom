@@ -466,7 +466,7 @@ void XcomResourcePack::loadBattlescapeResources(std::string folder)
 			s3 << folder << "TERRAIN/" << mcd;
 			_sets[bsets[i]] = new SurfaceSet(32, 40);
 			_sets[bsets[i]]->loadPck(insensitive(s.str()), insensitive(s2.str()));
-			_terrainSets[mcd] = new TerrainObjectSet(bsets[i].substr(0, bsets[i].length()-4));
+			_terrainSets[mcd] = new TerrainObjectSet(s3.str());
 			_terrainSets[mcd]->load(insensitive(s3.str()));
 			_terrainSets[mcd]->linkSprites(_sets[bsets[i]]);
 		}

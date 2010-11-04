@@ -40,7 +40,7 @@
 #include "../Interface/Text.h"
 
 #define SCROLL_AMOUNT 8
-#define SCROLL_BORDER 20
+#define SCROLL_BORDER 10
 #define DEFAULT_ANIM_SPEED 100
 
 /*

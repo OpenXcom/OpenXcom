@@ -407,33 +407,33 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_facilities.insert(std::pair<LangString, RuleBaseFacility*>(STR_MISSILE_DEFENCES, missile));
 
 	// Add mapdatafiles
-	_mapDataFiles.insert(std::pair<std::string, MapDataFile*>("AVENGER",new MapDataFile("AVENGER",59)));
-	_mapDataFiles.insert(std::pair<std::string, MapDataFile*>("BARN",new MapDataFile("BARN",29)));
-	_mapDataFiles.insert(std::pair<std::string, MapDataFile*>("BLANKS",new MapDataFile("BLANKS",2)));
-	_mapDataFiles.insert(std::pair<std::string, MapDataFile*>("BRAIN",new MapDataFile("BRAIN",4)));
-	_mapDataFiles.insert(std::pair<std::string, MapDataFile*>("CULTIVAT",new MapDataFile("CULTIVAT",37)));
-	_mapDataFiles.insert(std::pair<std::string, MapDataFile*>("DESERT",new MapDataFile("DESERT",66)));
-	_mapDataFiles.insert(std::pair<std::string, MapDataFile*>("FOREST",new MapDataFile("FOREST",83)));
-	_mapDataFiles.insert(std::pair<std::string, MapDataFile*>("FRNITURE",new MapDataFile("FRNITURE",26)));
-	_mapDataFiles.insert(std::pair<std::string, MapDataFile*>("JUNGLE",new MapDataFile("JUNGLE",82)));
-	_mapDataFiles.insert(std::pair<std::string, MapDataFile*>("LIGHTNIN",new MapDataFile("LIGHTNIN",42)));
-	_mapDataFiles.insert(std::pair<std::string, MapDataFile*>("MARS",new MapDataFile("MARS",36)));
-	_mapDataFiles.insert(std::pair<std::string, MapDataFile*>("MOUNT",new MapDataFile("MOUNT",78)));
-	_mapDataFiles.insert(std::pair<std::string, MapDataFile*>("PLANE",new MapDataFile("PLANE",65)));
-	_mapDataFiles.insert(std::pair<std::string, MapDataFile*>("POLAR",new MapDataFile("POLAR",81)));
-	_mapDataFiles.insert(std::pair<std::string, MapDataFile*>("ROADS",new MapDataFile("ROADS",23)));
-	_mapDataFiles.insert(std::pair<std::string, MapDataFile*>("UFO1",new MapDataFile("UFO1",20)));
-	_mapDataFiles.insert(std::pair<std::string, MapDataFile*>("URBAN",new MapDataFile("URBAN",112)));
-	_mapDataFiles.insert(std::pair<std::string, MapDataFile*>("URBITS",new MapDataFile("URBITS",25)));
-	_mapDataFiles.insert(std::pair<std::string, MapDataFile*>("U_BASE",new MapDataFile("U_BASE",67)));
-	_mapDataFiles.insert(std::pair<std::string, MapDataFile*>("U_BITS",new MapDataFile("U_BITS",8)));
-	_mapDataFiles.insert(std::pair<std::string, MapDataFile*>("U_DISEC2",new MapDataFile("U_DISEC2",17)));
-	_mapDataFiles.insert(std::pair<std::string, MapDataFile*>("U_EXT02",new MapDataFile("U_EXT02",34)));
-	_mapDataFiles.insert(std::pair<std::string, MapDataFile*>("U_OPER2",new MapDataFile("U_OPER2",15)));
-	_mapDataFiles.insert(std::pair<std::string, MapDataFile*>("U_PODS",new MapDataFile("U_PODS",11)));
-	_mapDataFiles.insert(std::pair<std::string, MapDataFile*>("U_WALL02",new MapDataFile("U_WALL02",47)));
-	_mapDataFiles.insert(std::pair<std::string, MapDataFile*>("XBASE1",new MapDataFile("XBASE1",97)));
-	_mapDataFiles.insert(std::pair<std::string, MapDataFile*>("XBASE2",new MapDataFile("XBASE2",62)));
+	_mapDataFiles.insert(std::pair<std::string, MapDataFile*>("AVENGER.MCD",new MapDataFile("AVENGER.MCD",59)));
+	_mapDataFiles.insert(std::pair<std::string, MapDataFile*>("BARN.MCD",new MapDataFile("BARN.MCD",29)));
+	_mapDataFiles.insert(std::pair<std::string, MapDataFile*>("BLANKS.MCD",new MapDataFile("BLANKS.MCD",2)));
+	_mapDataFiles.insert(std::pair<std::string, MapDataFile*>("BRAIN.MCD",new MapDataFile("BRAIN.MCD",4)));
+	_mapDataFiles.insert(std::pair<std::string, MapDataFile*>("CULTIVAT.MCD",new MapDataFile("CULTIVAT.MCD",37)));
+	_mapDataFiles.insert(std::pair<std::string, MapDataFile*>("DESERT.MCD",new MapDataFile("DESERT.MCD",66)));
+	_mapDataFiles.insert(std::pair<std::string, MapDataFile*>("FOREST.MCD",new MapDataFile("FOREST.MCD",83)));
+	_mapDataFiles.insert(std::pair<std::string, MapDataFile*>("FRNITURE.MCD",new MapDataFile("FRNITURE.MCD",26)));
+	_mapDataFiles.insert(std::pair<std::string, MapDataFile*>("JUNGLE.MCD",new MapDataFile("JUNGLE.MCD",82)));
+	_mapDataFiles.insert(std::pair<std::string, MapDataFile*>("LIGHTNIN.MCD",new MapDataFile("LIGHTNIN.MCD",42)));
+	_mapDataFiles.insert(std::pair<std::string, MapDataFile*>("MARS.MCD",new MapDataFile("MARS.MCD",36)));
+	_mapDataFiles.insert(std::pair<std::string, MapDataFile*>("MOUNT.MCD",new MapDataFile("MOUNT.MCD",78)));
+	_mapDataFiles.insert(std::pair<std::string, MapDataFile*>("PLANE.MCD",new MapDataFile("PLANE.MCD",65)));
+	_mapDataFiles.insert(std::pair<std::string, MapDataFile*>("POLAR.MCD",new MapDataFile("POLAR.MCD",81)));
+	_mapDataFiles.insert(std::pair<std::string, MapDataFile*>("ROADS.MCD",new MapDataFile("ROADS.MCD",23)));
+	_mapDataFiles.insert(std::pair<std::string, MapDataFile*>("UFO1.MCD",new MapDataFile("UFO1.MCD",20)));
+	_mapDataFiles.insert(std::pair<std::string, MapDataFile*>("URBAN.MCD",new MapDataFile("URBAN.MCD",112)));
+	_mapDataFiles.insert(std::pair<std::string, MapDataFile*>("URBITS.MCD",new MapDataFile("URBITS.MCD",25)));
+	_mapDataFiles.insert(std::pair<std::string, MapDataFile*>("U_BASE.MCD",new MapDataFile("U_BASE.MCD",67)));
+	_mapDataFiles.insert(std::pair<std::string, MapDataFile*>("U_BITS.MCD",new MapDataFile("U_BITS.MCD",8)));
+	_mapDataFiles.insert(std::pair<std::string, MapDataFile*>("U_DISEC2.MCD",new MapDataFile("U_DISEC2.MCD",17)));
+	_mapDataFiles.insert(std::pair<std::string, MapDataFile*>("U_EXT02.MCD",new MapDataFile("U_EXT02.MCD",34)));
+	_mapDataFiles.insert(std::pair<std::string, MapDataFile*>("U_OPER2.MCD",new MapDataFile("U_OPER2.MCD",15)));
+	_mapDataFiles.insert(std::pair<std::string, MapDataFile*>("U_PODS.MCD",new MapDataFile("U_PODS.MCD",11)));
+	_mapDataFiles.insert(std::pair<std::string, MapDataFile*>("U_WALL02.MCD",new MapDataFile("U_WALL02.MCD",47)));
+	_mapDataFiles.insert(std::pair<std::string, MapDataFile*>("XBASE1.MCD",new MapDataFile("XBASE1.MCD",97)));
+	_mapDataFiles.insert(std::pair<std::string, MapDataFile*>("XBASE2.MCD",new MapDataFile("XBASE2.MCD",62)));
 
 	// Add crafts
 	RuleCraft* skyranger = new RuleCraft(STR_SKYRANGER);
@@ -450,8 +450,8 @@ XcomRuleset::XcomRuleset() : Ruleset()
 
 	RuleTerrain *ruleTerrain = new RuleTerrain("PLANE");
 	skyranger->setBattlescapeTerrainData(ruleTerrain);
-	ruleTerrain->getMapDataFiles()->push_back(getMapDataFile("BLANKS"));
-	ruleTerrain->getMapDataFiles()->push_back(getMapDataFile("PLANE"));
+	ruleTerrain->getMapDataFiles()->push_back(getMapDataFile("BLANKS.MCD"));
+	ruleTerrain->getMapDataFiles()->push_back(getMapDataFile("PLANE.MCD"));
 	ruleTerrain->getMapBlocks()->push_back(new MapBlock(ruleTerrain,"PLANE",10,20,true));
 
 	RuleCraft* lightning = new RuleCraft(STR_LIGHTNING);
@@ -684,8 +684,8 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	sscout->setScore(50);
 	ruleTerrain = new RuleTerrain("UFO1A");
 	sscout->setBattlescapeTerrainData(ruleTerrain);
-	ruleTerrain->getMapDataFiles()->push_back(getMapDataFile("BLANKS"));
-	ruleTerrain->getMapDataFiles()->push_back(getMapDataFile("UFO1"));
+	ruleTerrain->getMapDataFiles()->push_back(getMapDataFile("BLANKS.MCD"));
+	ruleTerrain->getMapDataFiles()->push_back(getMapDataFile("UFO1.MCD"));
 	ruleTerrain->getMapBlocks()->push_back(new MapBlock(ruleTerrain,"UFO1A",10,10,true));
 
 	RuleUfo *mscout = new RuleUfo(STR_MEDIUM_SCOUT);
@@ -699,13 +699,13 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	mscout->setScore(75);
 	ruleTerrain = new RuleTerrain("UFO_110");
 	mscout->setBattlescapeTerrainData(ruleTerrain);
-	ruleTerrain->getMapDataFiles()->push_back(getMapDataFile("BLANKS"));
-	ruleTerrain->getMapDataFiles()->push_back(getMapDataFile("U_EXT02"));
-	ruleTerrain->getMapDataFiles()->push_back(getMapDataFile("U_WALL02"));
-	ruleTerrain->getMapDataFiles()->push_back(getMapDataFile("U_BITS"));
-//  ruleTerrain->getMapDataFiles()->push_back(getMapDataFile("U_DISEC2"));
-//	ruleTerrain->getMapDataFiles()->push_back(getMapDataFile("U_OPER2"));
-//  ruleTerrain->getMapDataFiles()->push_back(getMapDataFile("U_PODS"));
+	ruleTerrain->getMapDataFiles()->push_back(getMapDataFile("BLANKS.MCD"));
+	ruleTerrain->getMapDataFiles()->push_back(getMapDataFile("U_EXT02.MCD"));
+	ruleTerrain->getMapDataFiles()->push_back(getMapDataFile("U_WALL02.MCD"));
+	ruleTerrain->getMapDataFiles()->push_back(getMapDataFile("U_BITS.MCD"));
+//  ruleTerrain->getMapDataFiles()->push_back(getMapDataFile("U_DISEC2.MCD"));
+//	ruleTerrain->getMapDataFiles()->push_back(getMapDataFile("U_OPER2.MCD"));
+//  ruleTerrain->getMapDataFiles()->push_back(getMapDataFile("U_PODS.MCD"));
 	ruleTerrain->getMapBlocks()->push_back(new MapBlock(ruleTerrain,"UFO_110",10,10,true));
 
 	RuleUfo *lscout = new RuleUfo(STR_LARGE_SCOUT);
@@ -719,10 +719,10 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	lscout->setScore(125);
 	ruleTerrain = new RuleTerrain("UFO_120");
 	lscout->setBattlescapeTerrainData(ruleTerrain);
-	ruleTerrain->getMapDataFiles()->push_back(getMapDataFile("BLANKS"));
-	ruleTerrain->getMapDataFiles()->push_back(getMapDataFile("U_EXT02"));
-	ruleTerrain->getMapDataFiles()->push_back(getMapDataFile("U_WALL02"));
-	ruleTerrain->getMapDataFiles()->push_back(getMapDataFile("U_BITS"));
+	ruleTerrain->getMapDataFiles()->push_back(getMapDataFile("BLANKS.MCD"));
+	ruleTerrain->getMapDataFiles()->push_back(getMapDataFile("U_EXT02.MCD"));
+	ruleTerrain->getMapDataFiles()->push_back(getMapDataFile("U_WALL02.MCD"));
+	ruleTerrain->getMapDataFiles()->push_back(getMapDataFile("U_BITS.MCD"));
 	ruleTerrain->getMapBlocks()->push_back(new MapBlock(ruleTerrain,"UFO_120",20,20,true));
 
 	RuleUfo *abducter = new RuleUfo(STR_ABDUCTER);
@@ -785,9 +785,9 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_ufos.insert(std::pair<LangString, RuleUfo*>(STR_BATTLESHIP, battleship));
 
 	RuleTerrain *culta = new RuleTerrain("CULTA");
-	culta->getMapDataFiles()->push_back(getMapDataFile("BLANKS"));
-	culta->getMapDataFiles()->push_back(getMapDataFile("CULTIVAT"));
-	culta->getMapDataFiles()->push_back(getMapDataFile("BARN"));
+	culta->getMapDataFiles()->push_back(getMapDataFile("BLANKS.MCD"));
+	culta->getMapDataFiles()->push_back(getMapDataFile("CULTIVAT.MCD"));
+	culta->getMapDataFiles()->push_back(getMapDataFile("BARN.MCD"));
 	culta->getMapBlocks()->push_back(new MapBlock(culta,"CULTA00",10,10,true));
 	culta->getMapBlocks()->push_back(new MapBlock(culta,"CULTA01",10,10,false));
 	culta->getMapBlocks()->push_back(new MapBlock(culta,"CULTA02",10,10,false));
@@ -808,8 +808,8 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	culta->getMapBlocks()->push_back(new MapBlock(culta,"CULTA17",10,10,false));
 	culta->getMapBlocks()->push_back(new MapBlock(culta,"CULTA18",10,10,false));
 	RuleTerrain *jungle = new RuleTerrain("JUNGLE");
-	jungle->getMapDataFiles()->push_back(getMapDataFile("BLANKS"));
-	jungle->getMapDataFiles()->push_back(getMapDataFile("JUNGLE"));
+	jungle->getMapDataFiles()->push_back(getMapDataFile("BLANKS.MCD"));
+	jungle->getMapDataFiles()->push_back(getMapDataFile("JUNGLE.MCD"));
 	jungle->getMapBlocks()->push_back(new MapBlock(jungle,"JUNGLE00",10,10,true));
 	jungle->getMapBlocks()->push_back(new MapBlock(jungle,"JUNGLE01",10,10,true));
 	jungle->getMapBlocks()->push_back(new MapBlock(jungle,"JUNGLE02",10,10,true));
@@ -823,8 +823,8 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	jungle->getMapBlocks()->push_back(new MapBlock(jungle,"JUNGLE10",10,10,false));
 	jungle->getMapBlocks()->push_back(new MapBlock(jungle,"JUNGLE11",10,10,false));
 	RuleTerrain *forest = new RuleTerrain("FOREST");
-	forest->getMapDataFiles()->push_back(getMapDataFile("BLANKS"));
-	forest->getMapDataFiles()->push_back(getMapDataFile("FOREST"));
+	forest->getMapDataFiles()->push_back(getMapDataFile("BLANKS.MCD"));
+	forest->getMapDataFiles()->push_back(getMapDataFile("FOREST.MCD"));
 	forest->getMapBlocks()->push_back(new MapBlock(forest,"FOREST00",10,10,true));
 	forest->getMapBlocks()->push_back(new MapBlock(forest,"FOREST01",10,10,true));
 	forest->getMapBlocks()->push_back(new MapBlock(forest,"FOREST02",10,10,false));
@@ -838,8 +838,8 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	forest->getMapBlocks()->push_back(new MapBlock(forest,"FOREST10",20,20,false));
 	forest->getMapBlocks()->push_back(new MapBlock(forest,"FOREST11",20,20,false));
 	RuleTerrain *desert = new RuleTerrain("DESERT");
-	desert->getMapDataFiles()->push_back(getMapDataFile("BLANKS"));
-	desert->getMapDataFiles()->push_back(getMapDataFile("DESERT"));
+	desert->getMapDataFiles()->push_back(getMapDataFile("BLANKS.MCD"));
+	desert->getMapDataFiles()->push_back(getMapDataFile("DESERT.MCD"));
 	desert->getMapBlocks()->push_back(new MapBlock(desert,"DESERT00",10,10,true));
 	desert->getMapBlocks()->push_back(new MapBlock(desert,"DESERT01",10,10,true));
 	desert->getMapBlocks()->push_back(new MapBlock(desert,"DESERT02",10,10,true));
@@ -853,8 +853,8 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	desert->getMapBlocks()->push_back(new MapBlock(desert,"DESERT10",20,20,false));
 	desert->getMapBlocks()->push_back(new MapBlock(desert,"DESERT11",20,20,false));
 	RuleTerrain *mount = new RuleTerrain("MOUNT");
-	mount->getMapDataFiles()->push_back(getMapDataFile("BLANKS"));
-	mount->getMapDataFiles()->push_back(getMapDataFile("MOUNT"));
+	mount->getMapDataFiles()->push_back(getMapDataFile("BLANKS.MCD"));
+	mount->getMapDataFiles()->push_back(getMapDataFile("MOUNT.MCD"));
 	mount->getMapBlocks()->push_back(new MapBlock(mount,"MOUNT00",10,10,true));
 	mount->getMapBlocks()->push_back(new MapBlock(mount,"MOUNT01",10,10,true));
 	mount->getMapBlocks()->push_back(new MapBlock(mount,"MOUNT02",10,10,true));
@@ -869,8 +869,8 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	mount->getMapBlocks()->push_back(new MapBlock(mount,"MOUNT11",20,20,false));
 	mount->getMapBlocks()->push_back(new MapBlock(mount,"MOUNT12",20,20,false));
 	RuleTerrain *polar = new RuleTerrain("POLAR");
-	polar->getMapDataFiles()->push_back(getMapDataFile("BLANKS"));
-	polar->getMapDataFiles()->push_back(getMapDataFile("POLAR"));
+	polar->getMapDataFiles()->push_back(getMapDataFile("BLANKS.MCD"));
+	polar->getMapDataFiles()->push_back(getMapDataFile("POLAR.MCD"));
 	polar->getMapBlocks()->push_back(new MapBlock(polar,"POLAR00",10,10,true));
 	polar->getMapBlocks()->push_back(new MapBlock(polar,"POLAR01",10,10,true));
 	polar->getMapBlocks()->push_back(new MapBlock(polar,"POLAR02",10,10,true));
@@ -886,9 +886,9 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	polar->getMapBlocks()->push_back(new MapBlock(polar,"POLAR12",20,20,false));
 	polar->getMapBlocks()->push_back(new MapBlock(polar,"POLAR13",20,20,false));
 	RuleTerrain *mars = new RuleTerrain("MARS");
-	mars->getMapDataFiles()->push_back(getMapDataFile("BLANKS"));
-	mars->getMapDataFiles()->push_back(getMapDataFile("MARS"));
-	mars->getMapDataFiles()->push_back(getMapDataFile("U_WALL02"));
+	mars->getMapDataFiles()->push_back(getMapDataFile("BLANKS.MCD"));
+	mars->getMapDataFiles()->push_back(getMapDataFile("MARS.MCD"));
+	mars->getMapDataFiles()->push_back(getMapDataFile("U_WALL02.MCD"));
 	mars->getMapBlocks()->push_back(new MapBlock(mars,"MARS00",10,10,true));
 
 	_terrains.insert(std::pair<std::string, RuleTerrain*>("CULTA",culta));
@@ -1293,8 +1293,15 @@ SavedBattleGame *XcomRuleset::newBattleSave(SavedGame *save, int texture, Craft 
 	// lets generate the map now and store it inside the tiles
 	bsave->generateMap();
 
-	// add soldiers
-	//bsave->addSoldier()
+	// add soldiers that are in the craft
+	if (craft != 0)
+	{
+		for (std::vector<Soldier*>::iterator i = craft->getBase()->getSoldiers()->begin(); i != craft->getBase()->getSoldiers()->end(); i++)
+		{
+			if ((*i)->getCraft() == craft)
+				bsave->addSoldier((*i));
+		}
+	}
 
 	// add items
 

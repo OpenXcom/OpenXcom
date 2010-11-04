@@ -49,11 +49,8 @@ std::vector<TerrainObject*> *TerrainObjectSet::getTerrainObjects()
 }
 
 /**
- * Loads terraindata in X-Com format directly into a
- * @param filename Filename of the MAP file.
- * @param tiles Pointer to the tile set.
- * @param xoff mapblock offset in X direction
- * @param yoff mapblock offset in Y direction
+ * Loads terraindata in X-Com format (MCD files)
+ * @param filename Filename of the MCD file.
  * @sa http://www.ufopaedia.org/index.php?title=MCD
  */
 void TerrainObjectSet::load(const std::string &filename)

@@ -31,6 +31,8 @@
 #include "../Interface/Text.h"
 #include "../Interface/ImageButton.h"
 #include "../Savegame/SavedGame.h"
+#include "../Savegame/BattleSoldier.h"
+#include "../Savegame/Soldier.h"
 #include "../Ruleset/Ruleset.h"
 
 /**
@@ -49,6 +51,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	_btnAbort = new InteractiveSurface(32, 16, 240, 160);
 	_btnMapUp = new InteractiveSurface(32, 16, 80, 144);
 	_btnMapDown = new InteractiveSurface(32, 16, 80, 160);
+	_btnNextSoldier = new InteractiveSurface(32, 16, 176, 144);
 	_btnReserveNone = new ImageButton(28, 11, 49, 177);
 	_btnReserveSnap = new ImageButton(28, 11, 78, 177);
 	_btnReserveAimed = new ImageButton(28, 11, 49, 189);
@@ -80,6 +83,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	add(_btnAbort);
 	add(_btnMapUp);
 	add(_btnMapDown);
+	add(_btnNextSoldier);
 	add(_txtName);
 	add(_btnReserveNone);
 	add(_btnReserveSnap);
@@ -96,9 +100,10 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	_btnAbort->onMouseClick((ActionHandler)&BattlescapeState::btnAbortClick);
 	_btnMapUp->onMouseClick((ActionHandler)&BattlescapeState::btnMapUpClick);
 	_btnMapDown->onMouseClick((ActionHandler)&BattlescapeState::btnMapDownClick);
+	_btnNextSoldier->onMouseClick((ActionHandler)&BattlescapeState::btnNextSoldierClick);
 
 	_txtName->setColor(Palette::blockOffset(15)+4);
-	_txtName->setText("");
+	_txtName->setText(_game->getSavedGame()->getBattleGame()->getSelectedSoldier()->getSoldier()->getName());
 
 	_btnReserveNone->copy(_icons);
 	_btnReserveNone->setColor(Palette::blockOffset(4)+6);
@@ -201,7 +206,9 @@ void BattlescapeState::btnCenterClick(Action *action)
  * @param action Pointer to an action.
  */
 void BattlescapeState::btnNextSoldierClick(Action *action)
-{}
+{
+	_txtName->setText(_game->getSavedGame()->getBattleGame()->selectNextSoldier()->getSoldier()->getName());
+}
 
 /**
  * Don't select current soldier and select next soldier.

@@ -52,7 +52,7 @@ public:
 	/// loads an XCOM MAP file
 	int loadMAP(int xoff, int yoff, SavedBattleGame *save, RuleTerrain *terrain);
 	/// loads an XCOM RMP file
-	void loadRMP(int xoff, int yoff, int height, SavedBattleGame *save);
+	void loadRMP(int xoff, int yoff, SavedBattleGame *save);
 };
 
 #endif
