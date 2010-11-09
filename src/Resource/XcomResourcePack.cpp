@@ -35,10 +35,10 @@
 #include "TerrainObjectSet.h"
 #include "../Ruleset/MapBlock.h"
 #include "../Ruleset/RuleTerrain.h"
-#include "../SaveGame/SavedBattleGame.h"
-#include "../SaveGame/Tile.h"
-#include "../SaveGame/Node.h"
-#include "../SaveGame/NodeLink.h"
+#include "../Savegame/SavedBattleGame.h"
+#include "../Savegame/Tile.h"
+#include "../Savegame/Node.h"
+#include "../Savegame/NodeLink.h"
 
 /**
  * Initializes the resource pack by loading all the resources
