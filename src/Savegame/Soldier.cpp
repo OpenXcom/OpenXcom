@@ -200,3 +200,12 @@ int Soldier::getKills() const
 {
 	return _kills;
 }
+
+/**
+ * Returns the soldier's gender.
+ * @return Gender.
+ */
+SoldierGender Soldier::getGender() const
+{
+	return _gender;
+}

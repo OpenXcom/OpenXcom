@@ -34,6 +34,9 @@ class Polyline;
 class Music;
 class SoundSet;
 class TerrainObjectSet;
+class SavedBattleGame;
+class RuleTerrain;
+class MapBlock;
 
 /**
  * Packs of external game media.
@@ -94,7 +97,10 @@ public:
 	void setPalette(SDL_Color *colors, int firstcolor, int ncolors);
 	/// Get a terrain object set, using it's name
 	TerrainObjectSet* getTerrainObjectSet(std::string name);
-
+	/// loads an XCOM MAP file
+	virtual int loadMAP(MapBlock *mapblock, int xoff, int yoff, SavedBattleGame *save, RuleTerrain *terrain);
+	/// loads an XCOM RMP file
+	virtual void loadRMP(MapBlock *mapblock, int xoff, int yoff, SavedBattleGame *save);
 };
 
 #endif

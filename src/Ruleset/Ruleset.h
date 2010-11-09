@@ -34,6 +34,8 @@ class RuleItem;
 class RuleUfo;
 class RuleTerrain;
 class MapDataFile;
+class ResourcePack;
+class RuleUnitSprite;
 
 /**
  * Set of rules and stats for a game.
@@ -52,6 +54,7 @@ protected:
 	std::map<LangString, RuleUfo*> _ufos;
 	std::map<std::string, RuleTerrain*> _terrains;
 	std::map<std::string, MapDataFile*> _mapDataFiles;
+	std::map<std::string, RuleUnitSprite*> _unitSprites;
 public:
 	/// Creates a blank ruleset.
 	Ruleset();
@@ -60,9 +63,9 @@ public:
 	/// Generates the starting saved game.
 	virtual SavedGame *newSave(GameDifficulty diff);
 	/// Generates a battlescape saved game.
-	virtual SavedBattleGame *newBattleSave(SavedGame *save, int texture, Craft *craft, Ufo* ufo);
+	virtual SavedBattleGame *newBattleSave(ResourcePack *res, SavedGame *save, int texture, Craft *craft, Ufo* ufo);
 	/// Handles the end battle stuff.
-	virtual void endBattle(SavedBattleGame *bsave, SavedGame *save);
+	virtual void endBattle(SavedGame *save);
 	/// Gets the pool list for soldier names.
 	std::vector<SoldierNamePool*> *const getPools();
 	/// Gets the ruleset for a facility type.
@@ -79,6 +82,8 @@ public:
 	RuleTerrain *getTerrain(std::string name);
 	/// Gets mapdatafile for battlescape games
 	MapDataFile *getMapDataFile(std::string name);
+	/// Gets unitsprite rules
+	RuleUnitSprite *getUnitSprites(std::string name);
 };
 
 #endif

@@ -26,6 +26,8 @@ class Map;
 class ImageButton;
 class InteractiveSurface;
 class Text;
+class Bar;
+class BattleSoldier;
 
 /**
  * Battlescape screen which shows the tactical battle
@@ -41,6 +43,8 @@ private:
 	ImageButton *_reserve;
 	ImageButton *_btnReserveNone, *_btnReserveSnap, *_btnReserveAimed, *_btnReserveAuto;
 	Text *_txtName;
+	Text *_numTimeUnits, *_numEnergy, *_numHealth, *_numMorale;
+	Bar *_barTimeUnits, *_barEnergy, *_barHealth, *_barMorale;
 public:
 	/// Creates the Battlescape state.
 	BattlescapeState(Game *game);
@@ -76,6 +80,8 @@ public:
 	void btnEndTurnClick(Action *action);
 	/// Handler for clicking the Abort button.
 	void btnAbortClick(Action *action);
+	/// updates soldier name/rank/tu/energy/health/morale
+	void updateSoldierInfo(BattleSoldier *soldier);
 };
 
 #endif

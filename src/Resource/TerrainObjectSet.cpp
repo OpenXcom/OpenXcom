@@ -122,7 +122,7 @@ void TerrainObjectSet::load(const std::string &filename)
 			to->setOriginalSpriteIndex(frame,(int)mcd.Frame[frame]);
 		to->setUfoDoor(mcd.UFO_Door == 1);
 		to->setYOffset((int)mcd.P_Level);
-		to->setSpecialType((int)mcd.Tile_Type);
+		to->setSpecialType((int)mcd.Target_Type);
 
 	}
 

@@ -22,7 +22,7 @@
 
 
 /**
-* MapDataFile construction
+* MapDataFile construction.
 */
 MapDataFile::MapDataFile(std::string name, int size):_name(name), _size(size)
 {
@@ -30,15 +30,15 @@ MapDataFile::MapDataFile(std::string name, int size):_name(name), _size(size)
 
 
 /**
-* MapDataFile DESTRUCTION !
+* MapDataFile DESTRUCTION.
 */
 MapDataFile::~MapDataFile()
 {
 }
 
 /**
-* gets the MapDataFile name (string)
-* @return name
+* Gets the MapDataFile name (string).
+* @return name.
 */
 std::string MapDataFile::getName()
 {
@@ -46,8 +46,8 @@ std::string MapDataFile::getName()
 }
 
 /**
-* gets the MapDataFile width
-* @return size in number of records
+* Gets the MapDataFile size.
+* @return size in number of records.
 */
 int MapDataFile::getSize()
 {

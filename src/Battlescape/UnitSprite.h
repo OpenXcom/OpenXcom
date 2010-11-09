@@ -16,29 +16,36 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_BATTLESOLDIER_H
-#define OPENXCOM_BATTLESOLDIER_H
+#ifndef OPENXCOM_UnitSprite_H
+#define OPENXCOM_UnitSprite_H
 
-#include "BattleUnit.h"
+#include "../Engine/Surface.h"
 
-class Soldier;
+class ResourcePack;
+class BattleUnit;
 
 /**
- * Represents a Soldier in the battlescape.
- * it holds the pointer to the basic "geoscape Soldier"
+ * A class that renders a specific unit, given its render rules
+ * combining the right frames from the surfaceset.
  */
-class BattleSoldier : public BattleUnit
+class UnitSprite : public Surface
 {
 private:
-	Soldier *_soldier;
-	int _tu, _energy, _health, _morale;
+	ResourcePack *_res;
+	BattleUnit *_unit;
 public:
-	/// Creates a BattleSoldier.
-	BattleSoldier(Soldier *soldier, RuleUnitSprite *renderRules);
-	/// Cleans up the BattleSoldier.
-	~BattleSoldier();
-	/// gets the geoscape soldier boject
-	Soldier *getSoldier();
+	/// Creates a new UnitSprite at the specified position and size.
+	UnitSprite(int width, int height, int x, int y);
+	/// Cleans up the UnitSprite.
+	~UnitSprite();
+	/// Resourcepack contains surfaceset for rendering.
+	void setResourcePack(ResourcePack *res);
+	/// Sets the battleunit to be rendered.
+	void setBattleUnit(BattleUnit *unit);
+	/// Draw the surface.
+	void draw();
+	/// Blit the surface.
+	void blit(Surface *surface);
 };
 
 #endif

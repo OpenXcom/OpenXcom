@@ -19,6 +19,9 @@
 #ifndef OPENXCOM_BATTLEUNIT_H
 #define OPENXCOM_BATTLEUNIT_H
 
+class RuleUnitSprite;
+class Position;
+
 /**
  * Represents a moving unit in the battlescape, player controlled or AI controlled
  * it holds info about it's position, items carrying, stats, etc
@@ -26,16 +29,30 @@
 class BattleUnit
 {
 private:
-	int _id, _x, _y, _z;
+	RuleUnitSprite *_renderRules;
+	int _id;
+	Position *_pos;
+	int _direction;
 public:
 	/// Creates a BattleUnit.
-	BattleUnit();
+	BattleUnit(RuleUnitSprite *renderRules);
 	/// Cleans up the BattleUnit.
 	~BattleUnit();
 	/// Gets the BattleUnit's ID.
 	int getId();
 	/// Sets the BattleUnit's ID.
 	void setId(int id);
+	/// Gets the unit's rendering ruleset.
+	RuleUnitSprite *const getRenderRules() const;
+	/// Sets the unit's position X, Y, Z
+	void setPosition(Position *pos);
+	/// gets the unit's position
+	Position *getPosition();
+	/// Sets the unit's direction 0-7
+	void setDirection(int direction);
+	/// gets the unit's direction
+	int getDirection();
+
 };
 
 #endif

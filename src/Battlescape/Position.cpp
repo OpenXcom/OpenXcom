@@ -16,28 +16,68 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "BattleSoldier.h"
+
+#include "Position.h"
 
 /**
- * Initializes a BattleSoldier.
- * @param soldier pointer to the geoscape soldier object
+ * Initializes a new position.
  */
-BattleSoldier::BattleSoldier(Soldier *soldier, RuleUnitSprite *renderRules): BattleUnit(renderRules), _soldier(soldier)
+Position::Position(int x, int y, int z) : _x(x), _y(y), _z(z)
 {
+
 }
 
 /**
- *
+ * Deletes the position.
  */
-BattleSoldier::~BattleSoldier()
+Position::~Position()
 {
+	
 }
 
 /**
- * gets the underlying soldier object
- * @return pointer to soldier
+ * Gets X coordinate.
+ * @return X coordinate
  */
-Soldier *BattleSoldier::getSoldier()
+int Position::getX()
 {
-	return _soldier;
+	return _x;
+}
+
+/**
+ * Gets Y coordinate.
+ * @return Y coordinate
+ */
+int Position::getY()
+{
+	return _y;
+}
+
+/**
+ * Gets Z coordinate.
+ * @return Z coordinate
+ */
+int Position::getZ()
+{
+	return _z;
+}
+
+/**
+ * == operator
+ * @param pos
+ * @return bool
+ */
+bool Position::operator== (const Position& pos)
+{
+	return _x == pos._x && _y == pos._y && _z == pos._z;
+}
+
+/**
+ * != operator
+ * @param pos
+ * @return bool
+ */
+bool Position::operator!= (const Position& pos)
+{
+	return _x != pos._x || _y != pos._y || _z != pos._z;
 }

@@ -29,6 +29,7 @@
 #include "../Resource/LangString.h"
 #include "../Interface/Cursor.h"
 #include "../Interface/Text.h"
+#include "../Interface/Bar.h"
 #include "../Interface/ImageButton.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/BattleSoldier.h"
@@ -60,6 +61,18 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	// Create soldier stats summary
 	_txtName = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 120, 10, 135, 176);
 
+	_numTimeUnits = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 15, 10, 135, 185);
+	_barTimeUnits = new Bar(100, 3, 170, 185);
+
+	_numEnergy = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 15, 10, 153, 185);
+	_barEnergy = new Bar(100, 3, 170, 189);
+
+	_numHealth = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 15, 10, 135, 193);
+	_barHealth= new Bar(100, 3, 170, 193);
+
+	_numMorale = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 15, 10, 153, 193);
+	_barMorale = new Bar(100, 3, 170, 197);
+
 	_reserve = _btnReserveNone;
 
 	// Set palette
@@ -84,7 +97,15 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	add(_btnMapUp);
 	add(_btnMapDown);
 	add(_btnNextSoldier);
-	add(_txtName);
+	/*add(_txtName);
+	add(_numTimeUnits);
+	add(_numEnergy);
+	add(_numHealth);
+	add(_numMorale);
+	add(_barTimeUnits);
+	add(_barEnergy);
+	add(_barHealth);
+	add(_barMorale);*/
 	add(_btnReserveNone);
 	add(_btnReserveSnap);
 	add(_btnReserveAimed);
@@ -102,8 +123,13 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	_btnMapDown->onMouseClick((ActionHandler)&BattlescapeState::btnMapDownClick);
 	_btnNextSoldier->onMouseClick((ActionHandler)&BattlescapeState::btnNextSoldierClick);
 
-	_txtName->setColor(Palette::blockOffset(8)+3);
-	_txtName->setText(_game->getSavedGame()->getBattleGame()->getSelectedSoldier()->getSoldier()->getName());
+	_txtName->setColor(Palette::blockOffset(8)+2);
+	_numTimeUnits->setSmall();
+	_numEnergy->setSmall();
+	_numHealth->setSmall();
+	_numMorale->setSmall();
+
+	updateSoldierInfo(_game->getSavedGame()->getBattleGame()->getSelectedSoldier());
 
 	_btnReserveNone->copy(_icons);
 	_btnReserveNone->setColor(Palette::blockOffset(4)+6);
@@ -207,7 +233,7 @@ void BattlescapeState::btnCenterClick(Action *action)
  */
 void BattlescapeState::btnNextSoldierClick(Action *action)
 {
-	_txtName->setText(_game->getSavedGame()->getBattleGame()->selectNextSoldier()->getSoldier()->getName());
+	updateSoldierInfo(_game->getSavedGame()->getBattleGame()->selectNextSoldier());
 }
 
 /**
@@ -244,7 +270,32 @@ void BattlescapeState::btnEndTurnClick(Action *action)
  */
 void BattlescapeState::btnAbortClick(Action *action)
 {
-	_game->getRuleset()->endBattle(_game->getSavedGame()->getBattleGame(), _game->getSavedGame());
+	_game->getRuleset()->endBattle(_game->getSavedGame());
 	_game->getCursor()->setColor(Palette::blockOffset(15) + 12);
 	_game->popState();
+}
+
+/**
+ * Updates soldier name/rank/tu/energy/health/morale.
+ * @param soldier Pointer to current battlesoldier.
+ */
+void BattlescapeState::updateSoldierInfo(BattleSoldier *soldier)
+{
+	_txtName->setText(soldier->getSoldier()->getName());
+	_numTimeUnits->setText("65");
+	_barTimeUnits->setMax(65);
+	_barTimeUnits->setValue(65);
+	_barTimeUnits->setScale(0.9);
+	_numEnergy->setText("65");
+	_barEnergy->setMax(165);
+	_barEnergy->setValue(65);
+	_barTimeUnits->setScale(1.0);
+	_numHealth->setText("65");
+	_barHealth->setMax(65);
+	_barHealth->setValue(65);
+	_barTimeUnits->setScale(1.0);
+	_numMorale->setText("100");
+	_barMorale->setMax(100);
+	_barMorale->setValue(100);
+	_barTimeUnits->setScale(1.0);
 }

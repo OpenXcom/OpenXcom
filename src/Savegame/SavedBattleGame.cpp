@@ -29,7 +29,11 @@
 #include "../Ruleset/MapBlock.h"
 #include "../Ruleset/RuleCraft.h"
 #include "../Ruleset/RuleUfo.h"
+#include "../Ruleset/RuleUnitSprite.h"
+#include "../Ruleset/Ruleset.h"
+#include "../Ruleset/XcomRuleset.h"
 #include "../Battlescape/Map.h"
+#include "../Battlescape/Position.h"
 #include "../Savegame/Node.h"
 #include "../Resource/TerrainObject.h"
 #include "../Resource/TerrainObjectSet.h"
@@ -153,6 +157,22 @@ int SavedBattleGame::getTileIndex(int x, int y, int z)
 {
 	return z * _length * _width + y * _width + x;
 }
+
+/** 
+ * This method converts an index to coords.
+ * @param index tileindex
+ * @param x pointer to X coordinate.
+ * @param y pointer to Y coordinate.
+ * @param z pointer to Z coordinate.
+ * @return Unique index.
+ */
+void SavedBattleGame::getTileCoords(int index, int *x, int *y, int *z)
+{
+	*z = index / (_length * _width);
+	*y = (index % (_length * _width)) / _width;
+	*x = (index % (_length * _width)) % _width;
+}
+
 /** 
  * Gets the Tile on a given position on the map.
  * @param x X coordinate.
@@ -162,7 +182,7 @@ int SavedBattleGame::getTileIndex(int x, int y, int z)
  */
 Tile *SavedBattleGame::getTile(int x, int y, int z)
 {
-	if (getTileIndex(x,y,z) > _height * _length * _width)
+	if (getTileIndex(x, y, z) > _height * _length * _width)
 		throw "Cannot access Tile: index out of bounds";
 
 	return _tiles[getTileIndex(x, y, z)];
@@ -178,6 +198,7 @@ void SavedBattleGame::setCrafts(Craft *craft, Ufo *ufo)
 	_craft = craft;
 	_ufo = ufo;
 }
+
 /**
  * Gets the XCom craft on the map.
  * @return Pointer to craft.
@@ -186,6 +207,7 @@ Craft *SavedBattleGame::getCraft()
 {
 	return _craft;
 }
+
 /**
  * Gets the UFO on the map.
  * @return Pointer to UFO.
@@ -196,12 +218,35 @@ Ufo *SavedBattleGame::getUfo()
 }
 
 /**
- * Adds a soldier to the game
+ * Adds a soldier to the game and place him on a free spawnpoint
  * @param soldier pointer to the soldier
  */
-void SavedBattleGame::addSoldier(Soldier *soldier)
+void SavedBattleGame::addSoldier(Soldier *soldier, RuleUnitSprite *rules)
 {
-	BattleSoldier *bs = new BattleSoldier(soldier);
+	BattleSoldier *bs = new BattleSoldier(soldier, rules);
+
+	Position *pos;
+	int x, y, z;
+
+	for (int i = 0; i < _height * _length * _width; i++)
+	{
+		// to spawn an xcom soldier, there has to be a tile, with a floor, with the starting point attribute and no object in the way
+		if (_tiles[i] && _tiles[i]->getTerrainObject(0) && _tiles[i]->getTerrainObject(0)->getSpecialType() == START_POINT && !_tiles[i]->getTerrainObject(3))
+		{
+			getTileCoords(i, &x, &y, &z);
+			pos = new Position(x, y, z);
+			if (selectUnit(pos) == 0)
+			{
+				bs->setPosition(pos);
+				break;
+			}
+			else
+			{
+				delete pos;
+			}
+		}
+	}
+
 	_soldiers.push_back(bs);
 	_selectedSoldier = bs;
 }
@@ -229,7 +274,8 @@ BattleSoldier *SavedBattleGame::selectNextSoldier()
 			{
 				_selectedSoldier = (*_soldiers.begin());
 				break;
-			}else
+			}
+			else
 			{
 				_selectedSoldier =  *i;
 				break;
@@ -240,10 +286,33 @@ BattleSoldier *SavedBattleGame::selectNextSoldier()
 	return _selectedSoldier;
 }
 
+/**
+ * Select unit with position on map.
+ * @param x 
+ * @param y
+ * @param z 
+ * @return pointer to BattleUnit - 0 when nothing found
+ */
+BattleUnit *SavedBattleGame::selectUnit(Position *pos)
+{
+	BattleUnit *bu = 0;
+
+	for (std::vector<BattleSoldier*>::iterator i = _soldiers.begin(); i != _soldiers.end(); i++)
+	{
+		if (*(*i)->getPosition() == *pos)
+		{
+			bu = *i;
+			break;
+		}
+	}
+
+	return bu;
+}
+
 /** 
  * Generates a map (set of tiles) for a new battlescape game.
  */
-void SavedBattleGame::generateMap()
+void SavedBattleGame::generateMap(ResourcePack *res)
 {
 	int x = 0, y = 0;
 	int blocksToDo = 0;
@@ -259,18 +328,22 @@ void SavedBattleGame::generateMap()
 
 
 	for (int i = 0; i < 10; i++)
+	{
 		for (int j = 0; j < 10; j++)
 		{
 			blocks[i][j] = 0;
 			landingzone[i][j] = false;
 		}
+	}
 
 	blocksToDo = (_width / 10) * (_length / 10);
 
 	/* allocate the array and the objects in it */
 	_tiles = new Tile*[_height * _length * _width];
 	for (int i = 0; i < _height * _length * _width; i++)
+	{
 		_tiles[i] = new Tile();
+	}
 
 	/* Determine UFO landingzone (do this first because ufo is generally bigger) */
 	if (_ufo != 0)
@@ -289,6 +362,7 @@ void SavedBattleGame::generateMap()
 			}
 		}
 	}
+
 	/* Determine Craft landingzone */
 	if (_craft != 0)
 	{
@@ -366,24 +440,30 @@ void SavedBattleGame::generateMap()
 
 	/* now load them up */
 	for (int itY = 0; itY < 10; itY++)
+	{
 		for (int itX = 0; itX < 10; itX++)
 		{
 			if (blocks[itX][itY] != 0 && blocks[itX][itY] != dummy)
 			{
-				blocks[itX][itY]->loadMAP(itX * 10, itY * 10, this, _terrain);
+				res->loadMAP(blocks[itX][itY], itX * 10, itY * 10, this, _terrain);
+				if (!landingzone[itX][itY])
+				{
+					res->loadRMP(blocks[itX][itY], itX * 10, itY * 10, this);
+				}
 			}
 		}
+	}
 
 	if (_ufo != 0)
 	{
-		// the offset is minus 2 for craft mapblocks
-		ufoMap->loadMAP(ufoX * 10, ufoY * 10, this, _ufo->getRules()->getBattlescapeTerrainData());
+		res->loadMAP(ufoMap, ufoX * 10, ufoY * 10, this, _ufo->getRules()->getBattlescapeTerrainData());
+		res->loadRMP(ufoMap, ufoX * 10, ufoY * 10, this);
 	}
 
 	if (_craft != 0)
 	{
-		// the offset is minus 2 for craft mapblocks
-		craftMap->loadMAP(craftX * 10, craftY * 10, this, _craft->getRules()->getBattlescapeTerrainData());
+		res->loadMAP(craftMap, craftX * 10, craftY * 10, this, _craft->getRules()->getBattlescapeTerrainData());
+		res->loadRMP(craftMap, craftX * 10, craftY * 10, this);
 	}
 
 	/* TODO: map generation for terror sites */
@@ -393,6 +473,8 @@ void SavedBattleGame::generateMap()
 	/* TODO: map generation for alien base assault */
 
 	delete dummy;
+
+	linkTilesWithTerrainObjects(res);
 }
 
 /**
@@ -430,4 +512,13 @@ void SavedBattleGame::linkTilesWithTerrainObjects(ResourcePack *res)
 			}
 		}
 	}
+}
+
+/**
+ * Gets the list of nodes.
+ * @return pointer to the list of nodes
+ */
+std::vector<Node*> *SavedBattleGame::getNodes()
+{
+	return &_nodes;
 }

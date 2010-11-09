@@ -17,13 +17,6 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "MapBlock.h"
-#include "RuleTerrain.h"
-#include <fstream>
-#include <sstream>
-#include "../Savegame/SavedBattleGame.h"
-#include "../Savegame/Tile.h"
-#include "../Resource/TerrainObject.h"
-#include "../Resource/TerrainObjectSet.h"
 
 /**
 * MapBlock construction
@@ -33,14 +26,14 @@ MapBlock::MapBlock(RuleTerrain *terrain, std::string name, int width, int length
 }
 
 /**
-* MapBlock DESTRUCTION !
+* MapBlock DESTRUCTION.
 */
 MapBlock::~MapBlock()
 {
 }
 
 /**
-* gets the MapBlock name (string)
+* Gets the MapBlock name (string).
 * @return name
 */
 std::string MapBlock::getName()
@@ -49,8 +42,8 @@ std::string MapBlock::getName()
 }
 
 /**
-* gets the MapBlock width
-* @return width in tiles
+* Gets the MapBlock width.
+* @return width in tiles.
 */
 int MapBlock::getWidth()
 {
@@ -58,8 +51,8 @@ int MapBlock::getWidth()
 }
 
 /**
-* gets the MapBlock length
-* @return length in tiles
+* Gets the MapBlock length.
+* @return length in tiles.
 */
 int MapBlock::getLength()
 {
@@ -67,117 +60,30 @@ int MapBlock::getLength()
 }
 
 /**
-* Is this mapblock usable as a landingzone?
-* You don't want to land your Skyranger into a house,
-*  it tends to upset civilians
-* @return bool whether you want to land here or not
+* Sets the MapBlock height.
+* @param height
+*/
+void MapBlock::setHeight(int height)
+{
+	_height = height;
+}
+
+/**
+* Gets the MapBlock height.
+* @return height
+*/
+int MapBlock::getHeight()
+{
+	return _height;
+}
+
+/**
+* Is this mapblock usable as a landingzone.
+* @return bool whether usable as landingzone.
 */
 bool MapBlock::isLandingZone()
 {
 	return _landingZone;
 }
 
-/**
- * Loads a X-Com format MAP file into the tiles of the battlegame
- * @param xoff mapblock offset in X direction
- * @param yoff mapblock offset in Y direction
- * @param save pointer to the current battle game
- * @param terrain pointer to the terrain rule
- * @return int Height of the loaded mapblock (this is needed for spawpoint calculation...)
- * @sa http://www.ufopaedia.org/index.php?title=MAPS
- * NOTE that Y-axis is in reverse order
- */
-int MapBlock::loadMAP(int xoff, int yoff, SavedBattleGame *save, RuleTerrain *terrain)
-{
-	int width, length, height;
-	int x = xoff, y = yoff, z = 0;
-	char size[3];
-	char value[4];
-	std::stringstream filename;
-	filename << "./DATA/" << "MAPS/" << _name << ".MAP";
-	std::string mapDataFileName;
-	int terrainObjectID;
 
-	// Load file
-	std::ifstream mapFile (filename.str().c_str(), std::ios::in| std::ios::binary);
-	if (!mapFile)
-	{
-		throw "Failed to load MAP";
-	}
-	
-	mapFile.read((char*)&size, sizeof(size));
-	length = (int)size[0];
-	width = (int)size[1];
-	height = (int)size[2];
-	z += height - 1;
-	y += length - 1;
-
-	while (mapFile.read((char*)&value, sizeof(value)))
-	{
-		for (int part = 0; part < 4; part++)
-		{
-			terrainObjectID = (int)value[part];
-			if (terrainObjectID>0)
-			{
-				save->getTile(x, y, z)->setName(terrain->getTerrainObjectName(terrainObjectID),part);
-			}
-		}
-
-		x++;
-
-		if (x == (width + xoff))
-		{
-			x = xoff;
-			y--;
-		}
-		if (y == yoff - 1)
-		{
-			y = length - 1 + yoff;
-			z--;
-		}
-	}
-
-	if (!mapFile.eof())
-	{
-		throw "Invalid data from file";
-	}
-
-	mapFile.close();
-
-	return height;
-}
-
-/**
- *  UNDER CONSTRUCTION
- *
- * Loads a X-Com format RMP file into the spawnpoints of the battlegame
- * @param xoff mapblock offset in X direction
- * @param yoff mapblock offset in Y direction
- * @param save pointer to the current battle game
- * @sa http://www.ufopaedia.org/index.php?title=ROUTES
- */
-void MapBlock::loadRMP(int xoff, int yoff, SavedBattleGame* save)
-{
-	//char value[24];
-	std::stringstream filename;
-	filename << "./DATA/" << "ROUTES/" << _name << ".RMP";
-
-	// Load file
-	std::ifstream mapFile (filename.str().c_str(), std::ios::in| std::ios::binary);
-	if (!mapFile)
-	{
-		throw "Failed to load RMP";
-	}
-	
-/*	while (mapFile.read((char*)&value, sizeof(value)))
-	{
-
-	}*/
-
-	if (!mapFile.eof())
-	{
-		throw "Invalid data from file";
-	}
-
-	mapFile.close();
-}

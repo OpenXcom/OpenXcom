@@ -24,13 +24,16 @@
 class Tile;
 class SavedGame;
 class RuleTerrain;
+class RuleUnitSprite;
 class MapBlock;
 class Craft;
 class Ufo;
 class Node;
 class ResourcePack;
 class BattleSoldier;
+class BattleUnit;
 class Soldier;
+class Position;
 
 /**
  * The battlescape data that gets written to disk when the game is saved.
@@ -76,6 +79,8 @@ public:
 	void setRelativeViewHeight(int height);
 	/// Conversion between coordinates and the tile index.
 	int getTileIndex(int x, int y, int z);
+	/// Conversion between tile index and coordinates.
+	void getTileCoords(int index, int *x, int *y, int *z);
 	/// Gets the tile at certain coordinates.
 	Tile *getTile(int x, int y, int z);
 	/// Sets the xcom craft and ufo for this battle game.
@@ -85,15 +90,19 @@ public:
 	/// Gets the ufo in the battle game (returns NULL when no ufo).
 	Ufo *getUfo();
 	/// Generate a new battlescape map.
-	void generateMap();
+	void generateMap(ResourcePack *res);
 	/// links tiles with terrainobjects, for easier/faster lookup
 	void linkTilesWithTerrainObjects(ResourcePack *res);
 	/// Add a soldier to the game
-	void addSoldier(Soldier *soldier);
+	void addSoldier(Soldier *soldier, RuleUnitSprite *rules);
 	/// get the currently selected soldier
 	BattleSoldier *getSelectedSoldier();
 	/// select next soldier
 	BattleSoldier *selectNextSoldier();
+	/// select unit with position on map
+	BattleUnit *selectUnit(Position *pos);
+	/// get pointer to the list of nodes
+	std::vector<Node*> *getNodes();
 
 };
 

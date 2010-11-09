@@ -25,7 +25,7 @@ class Surface;
 enum SpecialTileType{TILE=0,
 					START_POINT,
 					ION_BEAM_ACCEL,
-					DESTORY_OBJECTIVE,
+					DESTROY_OBJECTIVE,
 					MAGNETIC_NAV,
 					ALIEN_CRYO,
 					ALIEN_CLON,

@@ -20,7 +20,7 @@
 #include "../Resource/TerrainObject.h"
 
 /**
-*
+* constructor
 */
 Tile::Tile(): _visible(true), _light(255)
 {
@@ -31,7 +31,7 @@ Tile::Tile(): _visible(true), _light(255)
 }
 
 /**
- * 
+ * destructor
  */
 Tile::~Tile()
 {
@@ -53,7 +53,7 @@ TerrainObject *Tile::getTerrainObject(int part)
 }
 
 /**
- * Set the TerrainObject references of part 0 to 3
+ * Set the TerrainObject references of part 0 to 3.
  * @param tob pointer to the terrain object
  * @param part the part number
  */
@@ -63,7 +63,7 @@ void Tile::setTerrainObject(TerrainObject *tob, int part)
 }
 
 /**
- * Get mapdatafilename
+ * Get mapdatafilename.
  * @param part the part number 0-3
  * @return a string which contains the MCD filename
  */
@@ -73,7 +73,7 @@ std::string Tile::getName(int part)
 }
 
 /**
- * set mapdatafilename
+ * Sets mapdatafilename.
  * @param name the name of the specific MCD file
  * @param part the part number 0-3
  */

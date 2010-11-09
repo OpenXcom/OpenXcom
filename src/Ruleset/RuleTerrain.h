@@ -41,17 +41,17 @@ private:
 public:
 	RuleTerrain(const std::string &name);
 	~RuleTerrain();
-	/// get the terrain name (used for MAP generation)
+	/// Gets the terrain's name (used for MAP generation).
 	std::string getName();
-	/// gets the list of mapblocks
+	/// Gets the terrain's mapblocks.
 	std::vector<MapBlock*> *getMapBlocks();
-	/// gets the list of mapdatafiles
+	/// Gets the terrain's mapdatafiles.
 	std::vector<MapDataFile*> *getMapDataFiles();
-	/// get a random mapblock
+	/// Gets a random mapblock.
 	MapBlock* getRandomMapBlock(int maxsize, bool landingzone);
-	/// generates a corresponding unique terrain object name
+	/// Generates a corresponding unique terrain object name.
 	std::string getTerrainObjectName(int absoluteID);
-	/// parse the terrain object name to get the datafilename and the relative ID in that file
+	/// Parses the terrain object name to get the datafilename and the relative ID in that file.
 	void parseTerrainObjectName(std::string objectName, std::string *dataFileName, int *relativeID);
 };
 

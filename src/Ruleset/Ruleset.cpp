@@ -70,6 +70,10 @@ Ruleset::~Ruleset()
 	{
 		delete i->second;
 	}
+	for (std::map<std::string, RuleUnitSprite*>::iterator i = _unitSprites.begin(); i != _unitSprites.end(); i++)
+	{
+		delete i->second;
+	}
 }
 
 /**
@@ -92,7 +96,7 @@ SavedGame *Ruleset::newSave(GameDifficulty diff)
  * @param ufo The UFO.
  * @return New saved game.
  */
-SavedBattleGame *Ruleset::newBattleSave(SavedGame *save, int texture, Craft *craft, Ufo* ufo)
+SavedBattleGame *Ruleset::newBattleSave(ResourcePack *res, SavedGame *save, int texture, Craft *craft, Ufo* ufo)
 {
 	SavedBattleGame *bsave = 0;
 
@@ -102,9 +106,9 @@ SavedBattleGame *Ruleset::newBattleSave(SavedGame *save, int texture, Craft *cra
 /**
  * Handles the end battle stuff
  */
-void Ruleset::endBattle(SavedBattleGame *bsave, SavedGame *save)
+void Ruleset::endBattle(SavedGame *save)
 {
-	delete bsave;
+	delete save->getBattleGame();
 	save->setBattleGame(0);
 }
 
@@ -185,4 +189,14 @@ RuleTerrain *Ruleset::getTerrain(std::string name)
 MapDataFile *Ruleset::getMapDataFile(std::string name)
 {
 	return _mapDataFiles[name];
+}
+
+/**
+ * Returns the info about a specific unit to draw it
+ * @param name datafile name.
+ * @return Rules for the datafile.
+ */
+RuleUnitSprite *Ruleset::getUnitSprites(std::string name)
+{
+	return _unitSprites[name];
 }

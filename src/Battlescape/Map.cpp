@@ -20,6 +20,7 @@
 #include <cmath>
 #include <fstream>
 #include "Map.h"
+#include "UnitSprite.h"
 #include "../Resource/TerrainObjectSet.h"
 #include "../Resource/TerrainObject.h"
 #include "../Engine/Action.h"
@@ -28,6 +29,7 @@
 #include "../Engine/Font.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
+#include "Position.h"
 #include "../Resource/ResourcePack.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/GameTime.h"
@@ -40,7 +42,7 @@
 #include "../Interface/Text.h"
 
 #define SCROLL_AMOUNT 8
-#define SCROLL_BORDER 10
+#define SCROLL_BORDER 5
 #define DEFAULT_ANIM_SPEED 100
 
 /*
@@ -117,7 +119,7 @@ void Map::setSavedGame(SavedBattleGame *save)
  */
 void Map::init()
 {
-	_save->linkTilesWithTerrainObjects(_res);
+	
 }
 
 /**
@@ -167,6 +169,9 @@ void Map::drawTerrain()
 	int beginX = 0, endX = _save->getWidth() - 1;
     int beginY = 0, endY = _save->getLength() - 1;
     int beginZ = 0, endZ = _save->getViewHeight() - 1;
+	UnitSprite *unitSprite = new UnitSprite(32, 40, 0, 0);
+	unitSprite->setResourcePack(_res);
+	unitSprite->setPalette(this->getPalette());
 
     for (int itZ = beginZ; itZ <= endZ; itZ++) 
 	{
@@ -182,6 +187,8 @@ void Map::drawTerrain()
 				if (screenX > -_TileSizeY && screenX < getWidth() + _TileSizeY &&
 					screenY > -_TileSizeZ && screenY < getHeight() + _TileSizeZ )
 				{
+					Position *position = new Position(itX, itY, itZ);
+
 					// Draw floor
 					tile = _save->getTile(itX,itY,itZ);
 					if (tile)
@@ -218,7 +225,6 @@ void Map::drawTerrain()
 
 
 					// Draw walls and objects
-					tile = _save->getTile(itX, itY, itZ);
 					if (tile)
 					{
 						for (int part = 1; part < 4; part++)
@@ -237,6 +243,15 @@ void Map::drawTerrain()
 					// Draw items
 
 					// Draw soldier
+					BattleUnit *unit = _save->selectUnit(position);
+					if (unit != 0)
+					{
+						unitSprite->setBattleUnit(unit);
+						unitSprite->setX(screenX);
+						unitSprite->setY(screenY);
+						unitSprite->draw();
+						unitSprite->blit(this);
+					}
 
 					// Draw cursor front
 					if (_selectorX == itY && _selectorY == itX)
@@ -256,10 +271,14 @@ void Map::drawTerrain()
 					}
 
 					// Draw smoke/fire
+
+					delete position;
 				}
 			}
 		}
 	}
+
+	delete unitSprite;
 }
 
 /**

@@ -89,8 +89,9 @@ public:
 	int getRefuelRate() const;
 	/// Sets the craft's refuel rate.
 	void setRefuelRate(int refuel);
-	/// stuff needed to draw this UFO on the battlescape
+	/// Gets the craft's terrain data.
 	RuleTerrain *getBattlescapeTerrainData();
+	/// Sets the craft's terrain data.
 	void setBattlescapeTerrainData(RuleTerrain *t);
 };
 

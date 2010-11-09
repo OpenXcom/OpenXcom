@@ -484,7 +484,7 @@ void GeoscapeState::time5Seconds()
 						{
 							// look up polygons texture
 							int texture = _globe->getPolygonTexture(u->getLongitude(),u->getLatitude());
-							_game->getRuleset()->newBattleSave(_game->getSavedGame(), texture, (*j), u);
+							_game->getRuleset()->newBattleSave(_game->getResourcePack(), _game->getSavedGame(), texture, (*j), u);
 							_music = false;
 							_game->pushState(new BattlescapeState(_game));
 						}
@@ -800,7 +800,10 @@ void GeoscapeState::btnGraphsClick(Action *action)
  */
 void GeoscapeState::btnUfopaediaClick(Action *action)
 {
-
+	_game->getRuleset()->newBattleSave(_game->getResourcePack(), _game->getSavedGame(),
+		RNG::generate(0,12), _game->getSavedGame()->getBases()->at(0)->getCrafts()->at(0), 0);
+	_music = false;
+	_game->pushState(new BattlescapeState(_game));
 }
 
 /**

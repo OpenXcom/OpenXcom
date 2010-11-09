@@ -81,6 +81,8 @@ public:
 	int getMissions() const;
 	/// Gets the soldier's kills.
 	int getKills() const;
+	/// Gets the soldier's gender.
+	SoldierGender getGender() const;
 };
 
 #endif

@@ -267,9 +267,9 @@ void ResourcePack::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 }
 
 /**
- * Returns a specific palette from the resource set.
- * @param name Name of the palette.
- * @return Pointer to the palette.
+ * Returns a specific terrainobject set from the resource set.
+ * @param name Name of the terrainobject set.
+ * @return Pointer to the terrainobject set.
  */
 TerrainObjectSet *ResourcePack::getTerrainObjectSet(std::string name)
 {

@@ -22,7 +22,7 @@
 class Node;
 
 /**
- * Represents a link between two nodes in the battlescape.
+ * Represents a link to another node on the map.
  */
 class NodeLink
 {
@@ -33,7 +33,7 @@ private:
 	Node *_connectedNode;
 public:
 	/// Creates a nodelink.
-	NodeLink();
+	NodeLink(int connectedNodeID, int distance, int travelType);
 	/// Cleans up the nodelink.
 	~NodeLink();
 };

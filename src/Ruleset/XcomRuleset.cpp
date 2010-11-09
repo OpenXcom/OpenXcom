@@ -29,6 +29,7 @@
 #include "RuleTerrain.h"
 #include "MapBlock.h"
 #include "MapDataFile.h"
+#include "RuleUnitSprite.h"
 #include "../Resource/SoldierNamePool.h"
 #include "../Savegame/Region.h"
 #include "../Engine/RNG.h"
@@ -898,6 +899,14 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_terrains.insert(std::pair<std::string, RuleTerrain*>("MOUNT",mount));
 	_terrains.insert(std::pair<std::string, RuleTerrain*>("POLAR",polar));
 	_terrains.insert(std::pair<std::string, RuleTerrain*>("MARS",mars));
+
+	RuleUnitSprite *xcom_0 = new RuleUnitSprite();
+	xcom_0->setSpriteSheet("XCOM_0.PCK");
+	xcom_0->setTorso(32);
+	xcom_0->setFemaleTorso(267);
+	_unitSprites.insert(std::pair<std::string, RuleUnitSprite*>("XCOM_0",xcom_0));
+
+
 }
 
 /**
@@ -1221,7 +1230,7 @@ SavedGame *XcomRuleset::newSave(GameDifficulty diff)
  * @param ufo pointer to the ufo involved (if non it's NULL)
  * @return New saved game.
  */
-SavedBattleGame *XcomRuleset::newBattleSave(SavedGame *save, int texture, Craft *craft, Ufo *ufo)
+SavedBattleGame *XcomRuleset::newBattleSave(ResourcePack *res, SavedGame *save, int texture, Craft *craft, Ufo *ufo)
 {
 	// first decide the terrain
 	RuleTerrain *terrain = 0;
@@ -1291,7 +1300,7 @@ SavedBattleGame *XcomRuleset::newBattleSave(SavedGame *save, int texture, Craft 
 	bsave->setCrafts(craft, ufo);
 
 	// lets generate the map now and store it inside the tiles
-	bsave->generateMap();
+	bsave->generateMap(res);
 
 	// add soldiers that are in the craft
 	if (craft != 0)
@@ -1299,7 +1308,7 @@ SavedBattleGame *XcomRuleset::newBattleSave(SavedGame *save, int texture, Craft 
 		for (std::vector<Soldier*>::iterator i = craft->getBase()->getSoldiers()->begin(); i != craft->getBase()->getSoldiers()->end(); i++)
 		{
 			if ((*i)->getCraft() == craft)
-				bsave->addSoldier((*i));
+				bsave->addSoldier((*i), getUnitSprites("XCOM_0"));
 		}
 	}
 
@@ -1313,10 +1322,10 @@ SavedBattleGame *XcomRuleset::newBattleSave(SavedGame *save, int texture, Craft 
 /**
  * Handles the end battle stuff
  */
-void XcomRuleset::endBattle(SavedBattleGame *bsave, SavedGame *save)
+void XcomRuleset::endBattle(SavedGame *save)
 {
 	// UFO crash/landing site disappears
-	Ufo* ufo = bsave->getUfo();
+	Ufo* ufo = save->getBattleGame()->getUfo();
 	if (ufo != 0)
 	{
 		for (std::vector<Ufo*>::iterator i = save->getUfos()->begin(); i != save->getUfos()->end(); i++)
@@ -1331,7 +1340,7 @@ void XcomRuleset::endBattle(SavedBattleGame *bsave, SavedGame *save)
 	}
 
 	// bye save game, battle is over
-	delete bsave;
+	delete save->getBattleGame();
 	save->setBattleGame(0);
 
 }

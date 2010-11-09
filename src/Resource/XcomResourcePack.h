@@ -35,6 +35,10 @@ public:
 	~XcomResourcePack();
 	/// Loads battlescape specific resources
 	void loadBattlescapeResources(std::string folder);
+	/// loads an XCOM MAP file
+	int loadMAP(MapBlock *mapblock, int xoff, int yoff, SavedBattleGame *save, RuleTerrain *terrain);
+	/// loads an XCOM RMP file
+	void loadRMP(MapBlock *mapblock, int xoff, int yoff, SavedBattleGame *save);
 };
 
 #endif

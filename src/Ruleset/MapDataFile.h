@@ -35,9 +35,9 @@ private:
 public:
 	MapDataFile(std::string name, int size);
 	~MapDataFile();
-	/// get the datafile name (used for MAP generation)
+	/// Get the datafile's name (used for MAP generation).
 	std::string getName();
-	/// get size
+	/// Get the datafile's size.
 	int getSize();
 };
 

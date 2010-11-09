@@ -21,31 +21,70 @@
 /**
  * Initializes a Node.
  */
-Node::Node() : _id(0)
+Node::Node(int id, int x, int y, int z, int segment, int type, int rank, int flags, int reserved, int priority) : _id(id), _x(x), _y(y), _z(z), _segment(segment), _type(type), _rank(rank), _flags(flags), _reserved(reserved), _priority(priority)
 {
+	_nodeLinks[0] = 0;
+	_nodeLinks[1] = 0;
+	_nodeLinks[2] = 0;
+	_nodeLinks[3] = 0;
+	_nodeLinks[4] = 0;
 }
 
 /**
- *
+ * clean up node.
  */
 Node::~Node()
 {
+	delete _nodeLinks[0];
+	delete _nodeLinks[1];
+	delete _nodeLinks[2];
+	delete _nodeLinks[3];
+	delete _nodeLinks[4];
 }
 
 /**
- * Returns the Node's unique ID.
- * @return Unique ID.
+ * Assign a node link to this node.
+ * @param link pointer to the link
+ * @param index 0-4
  */
-int Node::getId()
+void Node::assignNodeLink(NodeLink *link, int index)
 {
-	return _id;
+	_nodeLinks[index] = link;
 }
 
 /**
- * Changes the Node's unique ID.
- * @param id Unique ID.
+ * Get the rank of units that can spawn on this node.
+ * @return noderank
  */
-void Node::setId(int id)
+NodeRank Node::getNodeRank()
 {
-	_id = id;
+	return (NodeRank)_rank;
+}
+
+
+/**
+ * Get X.
+ * @return X
+ */
+int Node::getX()
+{
+	return _x;
+}
+
+/**
+ * Get Y.
+ * @return Y
+ */
+int Node::getY()
+{
+	return _y;
+}
+
+/**
+ * Get Z.
+ * @return Z
+ */
+int Node::getZ()
+{
+	return _z;
 }

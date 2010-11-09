@@ -97,7 +97,7 @@ MapBlock* RuleTerrain::getRandomMapBlock(int maxsize, bool landingzone)
 }
 
 /**
-* generates a corresponding unique terrain object name, consisting of:
+* Generates a corresponding unique terrain object name, consisting of:
 * the MCD filename + the relative position in that file
 * eg "CULTA.MCD:8"
 * @param absoluteID the absolute ID as found in the MAP file
@@ -127,17 +127,17 @@ std::string RuleTerrain::getTerrainObjectName(int absoluteID)
 }
 
 /**
-* parse the terrain object name to get the datafilename and the relative ID in that file
+* Parses the terrain object name to get the datafilename and the relative ID in that file
 * eg "CULTA.MCD:8" -> file CULTA.MCD , position 8
-* @param objectBame the name of the object
+* @param objectName the name of the object
 * @param dataFileName pointer to the datafile where the object can be found
 * @param relativeID pointer to the relative ID where the object is inside the file
 */
 void RuleTerrain::parseTerrainObjectName(std::string objectName, std::string *dataFileName, int *relativeID)
 {
-	size_t  pos = objectName.find(":", 0); //store the position of the delimiter
+	size_t  pos = objectName.find(":", 0);			//store the position of the delimiter
 	*dataFileName = objectName.substr(0, pos);      //get the filename
-	objectName.erase(0, pos + 1);          //erase it from the source 
-	std::istringstream issID(objectName); // convert leftover to istringstream
-	issID >> *relativeID;				// to int
+	objectName.erase(0, pos + 1);					//erase it from the source 
+	std::istringstream issID(objectName);			// convert leftover to istringstream
+	issID >> *relativeID;							// to int
 }

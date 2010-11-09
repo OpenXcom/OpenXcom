@@ -33,6 +33,12 @@
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "TerrainObjectSet.h"
+#include "../Ruleset/MapBlock.h"
+#include "../Ruleset/RuleTerrain.h"
+#include "../SaveGame/SavedBattleGame.h"
+#include "../SaveGame/Tile.h"
+#include "../SaveGame/Node.h"
+#include "../SaveGame/NodeLink.h"
 
 /**
  * Initializes the resource pack by loading all the resources
@@ -477,7 +483,7 @@ void XcomResourcePack::loadBattlescapeResources(std::string folder)
 		}
 	}
 
-		// Load Batltescape units
+		// Load Battlescape units
 	std::string usets[] = {"SILACOID.PCK",
 					  "CELATID.PCK",
 					  "HANDOB.PCK",
@@ -522,4 +528,129 @@ void XcomResourcePack::loadBattlescapeResources(std::string folder)
 	}
 
 
+}
+
+
+/**
+ * Loads a X-Com format MAP file into the tiles of the battlegame.
+ * @param xoff mapblock offset in X direction
+ * @param yoff mapblock offset in Y direction
+ * @param save pointer to the current battle game
+ * @param terrain pointer to the terrain rule
+ * @return int Height of the loaded mapblock (this is needed for spawpoint calculation...)
+ * @sa http://www.ufopaedia.org/index.php?title=MAPS
+ * NOTE that Y-axis is in reverse order
+ */
+int XcomResourcePack::loadMAP(MapBlock *mapblock, int xoff, int yoff, SavedBattleGame *save, RuleTerrain *terrain)
+{
+	int width, length, height;
+	int x = xoff, y = yoff, z = 0;
+	char size[3];
+	char value[4];
+	std::stringstream filename;
+	filename << _folder << "MAPS/" << mapblock->getName() << ".MAP";
+	std::string mapDataFileName;
+	int terrainObjectID;
+
+	// Load file
+	std::ifstream mapFile (insensitive(filename.str()).c_str(), std::ios::in| std::ios::binary);
+	if (!mapFile)
+	{
+		throw "Failed to load MAP";
+	}
+	
+	mapFile.read((char*)&size, sizeof(size));
+	length = (int)size[0];
+	width = (int)size[1];
+	height = (int)size[2];
+	z += height - 1;
+	y += length - 1;
+	mapblock->setHeight(height);
+
+	while (mapFile.read((char*)&value, sizeof(value)))
+	{
+		for (int part = 0; part < 4; part++)
+		{
+			terrainObjectID = (int)value[part];
+			if (terrainObjectID>0)
+			{
+				save->getTile(x, y, z)->setName(terrain->getTerrainObjectName(terrainObjectID),part);
+			}
+			// if the part is empty and it's not a floor, remove it
+			// it prevents growing grass in UFOs
+			if (terrainObjectID == 0 && part > 0)
+			{
+				save->getTile(x, y, z)->setName("",part);
+			}
+		}
+
+		x++;
+
+		if (x == (width + xoff))
+		{
+			x = xoff;
+			y--;
+		}
+		if (y == yoff - 1)
+		{
+			y = length - 1 + yoff;
+			z--;
+		}
+	}
+
+	if (!mapFile.eof())
+	{
+		throw "Invalid data from file";
+	}
+
+	mapFile.close();
+
+	return height;
+}
+
+/**
+ * Loads a X-Com format RMP file into the spawnpoints of the battlegame
+ * @param xoff mapblock offset in X direction
+ * @param yoff mapblock offset in Y direction
+ * @param save pointer to the current battle game
+ * @sa http://www.ufopaedia.org/index.php?title=ROUTES
+ */
+void XcomResourcePack::loadRMP(MapBlock *mapblock, int xoff, int yoff, SavedBattleGame* save)
+{
+	int id = 0;
+	char value[24];
+	std::stringstream filename;
+	filename << _folder << "ROUTES/" << mapblock->getName() << ".RMP";
+
+	// Load file
+	std::ifstream mapFile (insensitive(filename.str()).c_str(), std::ios::in| std::ios::binary);
+	if (!mapFile)
+	{
+		throw "Failed to load RMP";
+	}
+
+	int nodeOffset = save->getNodes()->size();
+
+	while (mapFile.read((char*)&value, sizeof(value)))
+	{
+		Node *node = new Node(nodeOffset + id, xoff + (int)value[1], yoff + (mapblock->getLength() - (int)value[0]), mapblock->getHeight() - 1 - (int)value[2], (int)value[3], (int)value[19], (int)value[20], (int)value[21], (int)value[22], (int)value[23]);
+		for (int j=0;j<5;j++)
+		{
+			int connectID = (int)((signed char)value[4 + j*3]);
+			if (connectID > -1)
+			{
+				connectID += nodeOffset;
+			}
+			node->assignNodeLink(new NodeLink(connectID, (int)value[5 + j*3], (int)value[6 + j*3]), j);
+		}
+		save->getNodes()->push_back(node);
+		id++;
+	}
+
+	if (!mapFile.eof())
+	{
+		throw "Invalid data from file";
+	}
+
+	mapFile.close();
 }

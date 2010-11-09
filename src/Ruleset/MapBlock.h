@@ -21,9 +21,7 @@
 
 #include <string>
 
-class SavedBattleGame;
 class RuleTerrain;
-class TerrainObjectSet;
 
 /**
  * Represents a Terrain Map Block.
@@ -36,23 +34,23 @@ class MapBlock
 private:
 	RuleTerrain *_terrain;
 	std::string _name;
-	int _width, _length;
+	int _width, _length, _height;
 	bool _landingZone;
 public:
 	MapBlock(RuleTerrain *terrain, std::string name, int width, int length, bool landingZone);
 	~MapBlock();
-	/// get the mapblock name (used for MAP generation)
+	/// Gets the mapblock's name (used for MAP generation).
 	std::string getName();
-	/// get width
+	/// Gets the mapblock's width.
 	int getWidth();
-	/// get width
+	/// Get the mapblock's length.
 	int getLength();
-	/// is landingzoneable?
+	/// Get the mapblock's height.
+	int getHeight();
+	/// Set the mapblock's height.
+	void setHeight(int height);
+	/// Returns whether this mapblock is a landingzone.
 	bool isLandingZone();
-	/// loads an XCOM MAP file
-	int loadMAP(int xoff, int yoff, SavedBattleGame *save, RuleTerrain *terrain);
-	/// loads an XCOM RMP file
-	void loadRMP(int xoff, int yoff, SavedBattleGame *save);
 };
 
 #endif

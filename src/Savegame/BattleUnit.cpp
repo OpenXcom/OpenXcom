@@ -17,11 +17,13 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "BattleUnit.h"
+#include "../Engine/Palette.h"
+#include "../Battlescape/Position.h"
 
 /**
  * Initializes a BattleUnit.
  */
-BattleUnit::BattleUnit() : _id(0)
+BattleUnit::BattleUnit(RuleUnitSprite *renderRules) : _renderRules(renderRules), _id(0), _pos(0), _direction(0)
 {
 }
 
@@ -30,6 +32,7 @@ BattleUnit::BattleUnit() : _id(0)
  */
 BattleUnit::~BattleUnit()
 {
+	delete _pos;
 }
 
 /**
@@ -48,4 +51,49 @@ int BattleUnit::getId()
 void BattleUnit::setId(int id)
 {
 	_id = id;
+}
+
+/**
+ * Returns the ruleset for the unit's type.
+ * @return Pointer to ruleset.
+ */
+RuleUnitSprite *const BattleUnit::getRenderRules() const
+{
+	return _renderRules;
+}
+
+/**
+ * Changes the BattleUnit's position.
+ * @param pos position
+ */
+void BattleUnit::setPosition(Position *pos)
+{
+	_pos = pos;
+}
+
+/**
+ * Changes the BattleUnit's position.
+ * @return pointer to position
+ */
+Position *BattleUnit::getPosition()
+{
+	return _pos;
+}
+
+/**
+ * Changes the BattleUnit's direction.
+ * @param direction
+ */
+void BattleUnit::setDirection(int direction)
+{
+	_direction = direction;
+}
+
+/**
+ * Changes the BattleUnit's direction.
+ * @return direction
+ */
+int BattleUnit::getDirection()
+{
+	return _direction;
 }

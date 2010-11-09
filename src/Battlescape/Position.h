@@ -16,20 +16,32 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "NodeLink.h"
+#ifndef OPENXCOM_POSITION_H
+#define OPENXCOM_POSITION_H
 
 /**
- * Initializes a NodeLink.
+ * Easy handling of X-Y-Z coordinates.
  */
-NodeLink::NodeLink(int connectedNodeID, int distance, int travelType): _connectedNodeID(connectedNodeID), _distance(distance), _travelType(travelType)
+class Position
 {
-}
+private:
+	int _x, _y, _z;
+public:
+	/// Creates a position.
+	Position(int x, int y, int z);
+	/// Cleans up the position.
+	~Position();
+	/// gets X coord
+	int getX();
+	/// gets Y coord
+	int getY();
+	/// gets Z coord
+	int getZ();
+	/// == operator
+    bool operator== (const Position& pos);
+	/// != operator
+    bool operator!= (const Position& pos);
 
-/**
- *
- */
-NodeLink::~NodeLink()
-{
-}
+};
 
-
+#endif

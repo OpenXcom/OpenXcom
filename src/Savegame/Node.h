@@ -21,6 +21,9 @@
 
 class NodeLink;
 
+enum NodeRank{CIVILIAN=0, XCOM, SOLDIER, NAVIGATOR, LEADER, ENGINEER, MISC1, MEDIC, MISC2};
+			
+
 /**
  * Represents a node/spawnpoint in the battlescape.
  */
@@ -37,15 +40,21 @@ private:
 	int _priority;
 public:
 	/// Creates a Node.
-	Node();
+	Node(int id, int x, int y, int z, int segment, int type, int rank, int flags, int reserved, int priority);
 	/// Cleans up the Node.
 	~Node();
-	/// Gets the Node's ID.
-	int getId();
-	/// Sets the Node's ID.
-	void setId(int id);
 	/// get the node's paths
-	//NodeLink getNodeLink(int i);
+	//NodeLink *getNodeLink(int index);
+	/// Assigns a link to this node
+	void assignNodeLink(NodeLink *link, int index);
+	/// get noderank
+	NodeRank getNodeRank();
+	/// get X
+	int getX();
+	/// get Y
+	int getY();
+	/// get Z
+	int getZ();
 };
 
 #endif
