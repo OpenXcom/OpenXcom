@@ -95,11 +95,11 @@ public:
 	Palette *const getPalette(const std::string &name);
 	/// Sets a new palette.
 	void setPalette(SDL_Color *colors, int firstcolor, int ncolors);
-	/// Get a terrain object set, using it's name
+	/// Get a terrain object set, using it's name.
 	TerrainObjectSet* getTerrainObjectSet(std::string name);
-	/// loads an XCOM MAP file
+	/// Loads an XCOM MAP file.
 	virtual int loadMAP(MapBlock *mapblock, int xoff, int yoff, SavedBattleGame *save, RuleTerrain *terrain);
-	/// loads an XCOM RMP file
+	/// Loads an XCOM RMP file.
 	virtual void loadRMP(MapBlock *mapblock, int xoff, int yoff, SavedBattleGame *save);
 };
 

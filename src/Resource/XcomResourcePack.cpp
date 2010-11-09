@@ -609,7 +609,7 @@ int XcomResourcePack::loadMAP(MapBlock *mapblock, int xoff, int yoff, SavedBattl
 }
 
 /**
- * Loads a X-Com format RMP file into the spawnpoints of the battlegame
+ * Loads a X-Com format RMP file into the spawnpoints of the battlegame.
  * @param xoff mapblock offset in X direction
  * @param yoff mapblock offset in Y direction
  * @param save pointer to the current battle game

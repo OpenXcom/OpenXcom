@@ -25,6 +25,7 @@
 #include "RuleUfo.h"
 #include "RuleTerrain.h"
 #include "MapDataFile.h"
+#include "RuleUnitSprite.h"
 
 /**
  * Creates a ruleset with blank sets of rules.

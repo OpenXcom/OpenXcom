@@ -38,6 +38,7 @@
 #include "../Resource/TerrainObject.h"
 #include "../Resource/TerrainObjectSet.h"
 #include "../Resource/ResourcePack.h"
+#include "../Resource/XcomResourcePack.h"
 
 /**
  * Initializes a brand new battlescape saved game.
@@ -445,10 +446,10 @@ void SavedBattleGame::generateMap(ResourcePack *res)
 		{
 			if (blocks[itX][itY] != 0 && blocks[itX][itY] != dummy)
 			{
-				res->loadMAP(blocks[itX][itY], itX * 10, itY * 10, this, _terrain);
+				((XcomResourcePack*)res)->loadMAP(blocks[itX][itY], itX * 10, itY * 10, this, _terrain);
 				if (!landingzone[itX][itY])
 				{
-					res->loadRMP(blocks[itX][itY], itX * 10, itY * 10, this);
+					((XcomResourcePack*)res)->loadRMP(blocks[itX][itY], itX * 10, itY * 10, this);
 				}
 			}
 		}
@@ -456,14 +457,14 @@ void SavedBattleGame::generateMap(ResourcePack *res)
 
 	if (_ufo != 0)
 	{
-		res->loadMAP(ufoMap, ufoX * 10, ufoY * 10, this, _ufo->getRules()->getBattlescapeTerrainData());
-		res->loadRMP(ufoMap, ufoX * 10, ufoY * 10, this);
+		((XcomResourcePack*)res)->loadMAP(ufoMap, ufoX * 10, ufoY * 10, this, _ufo->getRules()->getBattlescapeTerrainData());
+		((XcomResourcePack*)res)->loadRMP(ufoMap, ufoX * 10, ufoY * 10, this);
 	}
 
 	if (_craft != 0)
 	{
-		res->loadMAP(craftMap, craftX * 10, craftY * 10, this, _craft->getRules()->getBattlescapeTerrainData());
-		res->loadRMP(craftMap, craftX * 10, craftY * 10, this);
+		((XcomResourcePack*)res)->loadMAP(craftMap, craftX * 10, craftY * 10, this, _craft->getRules()->getBattlescapeTerrainData());
+		((XcomResourcePack*)res)->loadRMP(craftMap, craftX * 10, craftY * 10, this);
 	}
 
 	/* TODO: map generation for terror sites */

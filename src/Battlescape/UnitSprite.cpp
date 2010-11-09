@@ -23,9 +23,9 @@
 #include "../Battlescape/Position.h"
 #include "../Resource/ResourcePack.h"
 #include "../Ruleset/RuleUnitSprite.h"
-#include "../SaveGame/BattleUnit.h"
-#include "../SaveGame/BattleSoldier.h"
-#include "../SaveGame/Soldier.h"
+#include "../Savegame/BattleUnit.h"
+#include "../Savegame/BattleSoldier.h"
+#include "../Savegame/Soldier.h"
 
 /**
  * Sets up a UnitSprite with the specified size and position.
