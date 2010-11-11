@@ -16,42 +16,38 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#ifndef OPENXCOM_FPSCOUNTER_H
-#define OPENXCOM_FPSCOUNTER_H
+#ifndef OPENXCOM_NUMBERTEXT_H
+#define OPENXCOM_NUMBERTEXT_H
 
 #include "../Engine/Surface.h"
 
-class NumberText;
-class Timer;
-class Font;
-class Action;
-
 /**
- * Counts the amount of frames each second
- * and displays them in a NumberText surface.
+ * Number digits displayed on the screen.
+ * Takes a number and displays it using a simple hard-coded font.
  */
-class FpsCounter : public Surface
+class NumberText : public Surface
 {
 private:
-	NumberText *_text;
-	Timer *_timer;
-	int _frames;
+	unsigned int _value;
+	Surface *_chars[10];
+	Uint8 _color;
 public:
-	/// Creates a new FPS counter linked to a game.
-	FpsCounter(int width, int height, int x, int y);
-	/// Cleans up all the FPS counter resources.
-	~FpsCounter();
-	/// Sets the FPS counter's palette.
+	/// Creates a new number text with the specified size, position and fonts.
+	NumberText(int width, int height, int x = 0, int y = 0);
+	/// Cleans up the number text.
+	~NumberText();
+	/// Sets the number text's value.
+	void setValue(unsigned int value);
+	/// Gets the number text's value.
+	unsigned int getValue() const;
+	/// Sets the number text's color.
+	void setColor(Uint8 color);
+	/// Gets the number text's color.
+	Uint8 getColor() const;
+	/// Sets the number text's palette.
 	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
-	/// Handles keyboard events.
-	void handle(Action *action);
-	/// Advances frame counter.
-	void think();
-	// Updates FPS counter.
-	void update();
-	/// Blits the FPS counter to the screen.
-	void blit(Surface *surface);
+	/// Draws the number text.
+	void draw();
 };
 
 #endif

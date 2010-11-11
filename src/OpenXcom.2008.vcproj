@@ -208,11 +208,27 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Interface\FpsCounter.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Interface\FpsCounter.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Interface\ImageButton.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\Interface\ImageButton.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Interface\NumberText.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Interface\NumberText.h"
 				>
 			</File>
 			<File
@@ -408,19 +424,19 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Basescape\BasescapeState.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Basescape\BasescapeState.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Basescape\BasescapeErrorState.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\Basescape\BasescapeErrorState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\BasescapeState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\BasescapeState.h"
 				>
 			</File>
 			<File
@@ -456,19 +472,19 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Basescape\CraftWeaponsState.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Basescape\CraftWeaponsState.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Basescape\CraftsState.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\Basescape\CraftsState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\CraftWeaponsState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\CraftWeaponsState.h"
 				>
 			</File>
 			<File
@@ -587,6 +603,22 @@
 				RelativePath=".\Battlescape\Map.h"
 				>
 			</File>
+			<File
+				RelativePath=".\Battlescape\Position.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\Position.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\UnitSprite.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\UnitSprite.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Geoscape"
@@ -656,22 +688,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Geoscape\GeoscapeState.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Geoscape\GeoscapeState.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Geoscape\Globe.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Geoscape\Globe.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Geoscape\GeoscapeCraftState.cpp"
 				>
 			</File>
@@ -696,6 +712,22 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Geoscape\GeoscapeState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\GeoscapeState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\Globe.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\Globe.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Geoscape\GraphsState.cpp"
 				>
 			</File>
@@ -710,7 +742,7 @@
 			<File
 				RelativePath=".\Geoscape\InterceptState.h"
 				>
-			</File>			
+			</File>
 			<File
 				RelativePath=".\Geoscape\LowFuelState.cpp"
 				>
@@ -1129,6 +1161,14 @@
 			</File>
 			<File
 				RelativePath=".\Ruleset\RuleUfo.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\RuleUnitSprite.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\RuleUnitSprite.h"
 				>
 			</File>
 			<File

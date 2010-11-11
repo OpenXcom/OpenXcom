@@ -18,11 +18,11 @@
  */
 
 #include "FpsCounter.h"
-#include <sstream>
+#include <cmath>
 #include "../Engine/Palette.h"
 #include "../Engine/Action.h"
 #include "../Engine/Timer.h"
-#include "Text.h"
+#include "NumberText.h"
 
 /**
  * Creates a FPS counter of the specified size.
@@ -39,12 +39,8 @@ FpsCounter::FpsCounter(int width, int height, int x, int y) : Surface(width, hei
 	_timer->onTimer((SurfaceHandler)&FpsCounter::update);
 	_timer->start();
 
-	
-	_text = new Text(0, 0, width, height, x, y);
-	_text->setColor(Palette::blockOffset(15)+9);
-	_text->setSmall();
-	_text->setInvert(true);
-	
+	_text = new NumberText(width, height, x, y);
+	_text->setColor(10);
 }
 
 /**
@@ -65,11 +61,6 @@ FpsCounter::~FpsCounter()
 void FpsCounter::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 {
 	_text->setPalette(colors, firstcolor, ncolors);
-}
-
-void FpsCounter::setFonts(Font* big, Font* small)
-{
-	_text->setFonts(big, small);
 }
 
 /**
@@ -95,13 +86,8 @@ void FpsCounter::think()
 
 void FpsCounter::update()
 {
-	double fps = (double)_frames / _timer->getTime() * 1000;
-		
-	std::stringstream ss;
-	ss.precision(2);
-	ss << std::fixed << fps;
-	_text->setText(ss.str());
-	
+	int fps = (int)floor((double)_frames / _timer->getTime() * 1000);
+	_text->setValue(fps);
 	_frames = 0;
 }
 

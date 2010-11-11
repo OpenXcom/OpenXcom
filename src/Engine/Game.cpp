@@ -257,7 +257,6 @@ ResourcePack *const Game::getResourcePack() const
 void Game::setResourcePack(ResourcePack *res)
 {
 	_res = res;
-	_fpsCounter->setFonts(_res->getFont("BIGLETS.DAT"), _res->getFont("SMALLSET.DAT"));
 }
 
 /**
