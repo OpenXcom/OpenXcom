@@ -359,6 +359,9 @@
     <ClCompile Include="Battlescape\Position.cpp">
       <Filter>Battlescape</Filter>
     </ClCompile>
+	<ClCompile Include="Interface\NumberText.cpp">
+      <Filter>Interface</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -721,6 +724,9 @@
     </ClInclude>
     <ClInclude Include="Battlescape\Position.h">
       <Filter>Battlescape</Filter>
+    </ClInclude>
+	<ClInclude Include="Interface\NumberText.h">
+      <Filter>Interface</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
