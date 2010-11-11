@@ -24,7 +24,6 @@
 
 class NumberText;
 class Timer;
-class Font;
 class Action;
 
 /**
@@ -50,8 +49,8 @@ public:
 	void think();
 	// Updates FPS counter.
 	void update();
-	/// Blits the FPS counter to the screen.
-	void blit(Surface *surface);
+	/// Draws the FPS counter.
+	void draw();
 };
 
 #endif

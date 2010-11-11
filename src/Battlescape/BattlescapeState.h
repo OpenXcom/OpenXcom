@@ -27,6 +27,7 @@ class ImageButton;
 class InteractiveSurface;
 class Text;
 class Bar;
+class NumberText;
 class BattleSoldier;
 
 /**
@@ -43,7 +44,7 @@ private:
 	ImageButton *_reserve;
 	ImageButton *_btnReserveNone, *_btnReserveSnap, *_btnReserveAimed, *_btnReserveAuto;
 	Text *_txtName;
-	Text *_numTimeUnits, *_numEnergy, *_numHealth, *_numMorale;
+	NumberText *_numTimeUnits, *_numEnergy, *_numHealth, *_numMorale, *_numLayers;
 	Bar *_barTimeUnits, *_barEnergy, *_barHealth, *_barMorale;
 public:
 	/// Creates the Battlescape state.

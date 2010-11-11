@@ -22,6 +22,7 @@
 #include "SDL.h"
 
 class Surface;
+class Action;
 
 /**
  * A display screen, handles rendering onto the game window.
@@ -37,9 +38,9 @@ private:
 	Surface *_surface;
 	SDL_Surface *_screen;
 	int _width, _height, _bpp;
-	int _scale;
 	double _xScale, _yScale;
 	Uint32 _flags;
+	bool _fullscreen;
 public:
 	/// Creates a new display screen with the specified resolution.
 	Screen(int width, int height, int bpp);
@@ -47,6 +48,8 @@ public:
 	~Screen();
 	/// Gets the internal buffer.
 	Surface *const getSurface() const;
+	/// Handles keyboard events.
+	void handle(Action *action);
 	/// Renders the screen onto the game window.
 	void flip();
 	/// Clears the screen.

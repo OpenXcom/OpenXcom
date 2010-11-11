@@ -68,7 +68,7 @@ Game::Game(const std::string &title, int width, int height, int bpp) : _screen(0
 	_cursor->setColor(Palette::blockOffset(15)+12);
 	
 	// Create fps counter
-	_fpsCounter = new FpsCounter(50, 20, 0, 0);
+	_fpsCounter = new FpsCounter(15, 5, 0, 0);
 }
 
 /**
@@ -120,6 +120,7 @@ void Game::run()
 			else
 			{
 				Action *action = new Action(&_event, _screen->getXScale(), _screen->getYScale());
+				_screen->handle(action);
 				_cursor->handle(action);
 				_fpsCounter->handle(action);
 				_states.back()->handle(action);

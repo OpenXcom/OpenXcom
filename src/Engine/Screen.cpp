@@ -19,6 +19,7 @@
 #include "Screen.h"
 #include "SDL_rotozoom.h"
 #include "Surface.h"
+#include "Action.h"
 
 #define BASE_WIDTH 320.0
 #define BASE_HEIGHT 200.0
@@ -29,7 +30,7 @@
  * @param height Height in pixels.
  * @param bpp Bits-per-pixel.
  */
-Screen::Screen(int width, int height, int bpp) : _width(width), _height(height), _bpp(bpp), _xScale(1.0), _yScale(1.0)
+Screen::Screen(int width, int height, int bpp) : _width(width), _height(height), _bpp(bpp), _xScale(1.0), _yScale(1.0), _fullscreen(false)
 {
 	_flags = SDL_SWSURFACE|SDL_HWPALETTE;
 
@@ -59,6 +60,18 @@ Screen::~Screen()
 Surface *const Screen::getSurface() const
 {
 	return _surface;
+}
+
+/**
+ * Switches fullscreen mode.
+ * @param action Pointer to an action.
+ */
+void Screen::handle(Action *action)
+{
+	if (action->getDetails()->type == SDL_KEYDOWN && action->getDetails()->key.keysym.sym == SDLK_RETURN && action->getDetails()->key.keysym.mod == KMOD_ALT)
+	{
+		setFullscreen(!_fullscreen);
+	}
 }
 
 /**
@@ -149,7 +162,8 @@ void Screen::setResolution(int width, int height)
  */
 void Screen::setFullscreen(bool full)
 {
-	if (full)
+	_fullscreen = full;
+	if (_fullscreen)
 	{
 		_flags |= SDL_FULLSCREEN;
 	}

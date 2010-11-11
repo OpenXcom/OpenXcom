@@ -59,35 +59,35 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, unsigned int soldier)
 
 	_txtTimeUnits = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 120, 9, 6, 82);
 	_numTimeUnits = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 18, 9, 131, 82);
-	_barTimeUnits = new Bar(170, 7, 149, 82);
+	_barTimeUnits = new Bar(170, 7, 150, 82);
 
 	_txtStamina = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 120, 9, 6, 94);
 	_numStamina = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 18, 9, 131, 94);
-	_barStamina = new Bar(170, 7, 149, 94);
+	_barStamina = new Bar(170, 7, 150, 94);
 
 	_txtHealth = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 120, 9, 6, 106);
 	_numHealth = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 18, 9, 131, 106);
-	_barHealth = new Bar(170, 7, 149, 106);
+	_barHealth = new Bar(170, 7, 150, 106);
 
 	_txtBravery = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 120, 9, 6, 118);
 	_numBravery = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 18, 9, 131, 118);
-	_barBravery = new Bar(170, 7, 149, 118);
+	_barBravery = new Bar(170, 7, 150, 118);
 
 	_txtReactions = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 120, 9, 6, 130);
 	_numReactions = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 18, 9, 131, 130);
-	_barReactions = new Bar(170, 7, 149, 130);
+	_barReactions = new Bar(170, 7, 150, 130);
 
 	_txtFiring = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 120, 9, 6, 142);
 	_numFiring = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 18, 9, 131, 142);
-	_barFiring = new Bar(170, 7, 149, 142);
+	_barFiring = new Bar(170, 7, 150, 142);
 
 	_txtThrowing = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 120, 9, 6, 154);
 	_numThrowing = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 18, 9, 131, 154);
-	_barThrowing = new Bar(170, 7, 149, 154);
+	_barThrowing = new Bar(170, 7, 150, 154);
 
 	_txtStrength = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 120, 9, 6, 166);
 	_numStrength = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 18, 9, 131, 166);
-	_barStrength = new Bar(170, 7, 149, 166);
+	_barStrength = new Bar(170, 7, 150, 166);
 	
 	add(_bg);
 	add(_rank);

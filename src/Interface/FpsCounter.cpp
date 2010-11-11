@@ -35,12 +35,14 @@
  */
 FpsCounter::FpsCounter(int width, int height, int x, int y) : Surface(width, height, x, y), _frames(0)
 {
+	_visible = false;
+
 	_timer = new Timer(1000);
 	_timer->onTimer((SurfaceHandler)&FpsCounter::update);
 	_timer->start();
 
 	_text = new NumberText(width, height, x, y);
-	_text->setColor(10);
+	_text->setColor(Palette::blockOffset(15)+12);
 }
 
 /**
@@ -60,11 +62,12 @@ FpsCounter::~FpsCounter()
  */
 void FpsCounter::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 {
+	Surface::setPalette(colors, firstcolor, ncolors);
 	_text->setPalette(colors, firstcolor, ncolors);
 }
 
 /**
- * Show / hide FPS counter.
+ * Shows / hides the FPS counter.
  * @param action Pointer to an action.
  */
 void FpsCounter::handle(Action *action)
@@ -76,7 +79,7 @@ void FpsCounter::handle(Action *action)
 }
 
 /**
- * Advance frame counter.
+ * Advances frame counter.
  */
 void FpsCounter::think()
 {
@@ -84,22 +87,22 @@ void FpsCounter::think()
 	_timer->think(0, this);
 }
 
+/**
+ * Updates the amount of Frames per Second.
+ */
 void FpsCounter::update()
 {
 	int fps = (int)floor((double)_frames / _timer->getTime() * 1000);
 	_text->setValue(fps);
 	_frames = 0;
+	draw();
 }
 
 /**
- * Blits the FPS counter onto another surface.
- * @param surface Pointer to another surface.
+ * Draws the FPS counter.
  */
-void FpsCounter::blit(Surface *surface)
+void FpsCounter::draw()
 {
-	Surface::blit(surface);
-	if (_visible && !_hidden)
-	{
-		_text->blit(surface);
-	}
+	clear();
+	_text->blit(this);
 }

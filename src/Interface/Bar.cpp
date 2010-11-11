@@ -137,17 +137,20 @@ void Bar::draw()
 
 	square.x = 0;
 	square.y = 0;
-	square.w = (Uint16)(_scale * _max) + 2;
+	square.w = (Uint16)(_scale * _max) + 1;
 	square.h = _height;
 
 	if (_invert)
+	{
 		SDL_FillRect(_surface, &square, _color);
+	}
 	else
+	{
 		SDL_FillRect(_surface, &square, _color + 4);
+	}
 
-	square.x++;
 	square.y++;
-	square.w -= 2;
+	square.w--;
 	square.h -= 2;
 
 	SDL_FillRect(_surface, &square, 0);

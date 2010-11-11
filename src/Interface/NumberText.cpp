@@ -136,10 +136,10 @@ NumberText::NumberText(int width, int height, int x, int y) : Surface(width, hei
 	_chars[7]->setPixel(0, 0, 1);
 	_chars[7]->setPixel(1, 0, 1);
 	_chars[7]->setPixel(2, 0, 1);
-	_chars[7]->setPixel(0, 1, 1);
-	_chars[7]->setPixel(0, 2, 1);
-	_chars[7]->setPixel(0, 3, 1);
-	_chars[7]->setPixel(0, 4, 1);
+	_chars[7]->setPixel(2, 1, 1);
+	_chars[7]->setPixel(2, 2, 1);
+	_chars[7]->setPixel(2, 3, 1);
+	_chars[7]->setPixel(2, 4, 1);
 	_chars[7]->unlock();
 
 	_chars[8] = new Surface(3, 5);
@@ -169,7 +169,7 @@ NumberText::NumberText(int width, int height, int x, int y) : Surface(width, hei
 	_chars[9]->setPixel(2, 1, 1);
 	_chars[9]->setPixel(2, 2, 1);
 	_chars[9]->setPixel(2, 3, 1);
-	_chars[8]->setPixel(1, 2, 1);
+	_chars[9]->setPixel(1, 2, 1);
 	_chars[9]->setPixel(0, 4, 1);
 	_chars[9]->setPixel(1, 4, 1);
 	_chars[9]->setPixel(2, 4, 1);
@@ -233,6 +233,7 @@ Uint8 NumberText::getColor() const
  */
 void NumberText::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 {
+	Surface::setPalette(colors, firstcolor, ncolors);
 	for (int i = 0; i < 10; i++)
 	{
 		_chars[i]->setPalette(colors, firstcolor, ncolors);

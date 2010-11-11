@@ -90,6 +90,10 @@
 		<Unit filename="Battlescape\BattlescapeState.h" />
 		<Unit filename="Battlescape\Map.cpp" />
 		<Unit filename="Battlescape\Map.h" />
+		<Unit filename="Battlescape\Position.cpp" />
+		<Unit filename="Battlescape\Position.h" />
+		<Unit filename="Battlescape\UnitSprite.cpp" />
+		<Unit filename="Battlescape\UnitSprite.h" />
 		<Unit filename="Engine\Action.cpp" />
 		<Unit filename="Engine\Action.h" />
 		<Unit filename="Engine\CatFile.cpp" />
@@ -180,8 +184,12 @@
 		<Unit filename="Interface\Bar.h" />
 		<Unit filename="Interface\Cursor.cpp" />
 		<Unit filename="Interface\Cursor.h" />
+		<Unit filename="Interface\FpsCounter.cpp" />
+		<Unit filename="Interface\FpsCounter.h" />
 		<Unit filename="Interface\ImageButton.cpp" />
 		<Unit filename="Interface\ImageButton.h" />
+		<Unit filename="Interface\NumberText.cpp" />
+		<Unit filename="Interface\NumberText.h" />
 		<Unit filename="Interface\Text.cpp" />
 		<Unit filename="Interface\Text.h" />
 		<Unit filename="Interface\TextButton.cpp" />
@@ -236,6 +244,8 @@
 		<Unit filename="Ruleset\RuleTerrain.h" />
 		<Unit filename="Ruleset\RuleUfo.cpp" />
 		<Unit filename="Ruleset\RuleUfo.h" />
+		<Unit filename="Ruleset\RuleUnitSprite.cpp" />
+		<Unit filename="Ruleset\RuleUnitSprite.h" />
 		<Unit filename="Ruleset\XcomRuleset.cpp" />
 		<Unit filename="Ruleset\XcomRuleset.h" />
 		<Unit filename="Savegame\Base.cpp" />
