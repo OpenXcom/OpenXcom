@@ -21,12 +21,12 @@
 #include "State.h"
 #include "Screen.h"
 #include "../Interface/Cursor.h"
+#include "../Interface/FpsCounter.h"
 #include "../Resource/ResourcePack.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Savegame/SavedGame.h"
 #include "Palette.h"
 #include "Action.h"
-#include "FpsCounter.h"
 
 /**
  * Starts up SDL with all the subsystems and SDL_mixer for audio processing,
