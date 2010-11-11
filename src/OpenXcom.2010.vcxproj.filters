@@ -347,6 +347,9 @@
     <ClCompile Include="Savegame\BattleUnit.cpp">
       <Filter>Savegame</Filter>
     </ClCompile>
+    <ClCompile Include="Interface\FpsCounter.cpp">
+      <Filter>Interface</Filter>
+    </ClCompile>
     <ClCompile Include="Ruleset\RuleUnitSprite.cpp">
       <Filter>Ruleset</Filter>
     </ClCompile>
@@ -706,6 +709,9 @@
     </ClInclude>
     <ClInclude Include="Savegame\BattleUnit.h">
       <Filter>Savegame</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface\FpsCounter.h">
+      <Filter>Interface</Filter>
     </ClInclude>
     <ClInclude Include="Ruleset\RuleUnitSprite.h">
       <Filter>Ruleset</Filter>

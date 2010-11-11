@@ -33,7 +33,6 @@
  */
 Text::Text(Font *big, Font *small, int width, int height, int x, int y) : Surface(width, height, x, y), _big(big), _small(small), _font(small), _text(""), _wrap(false), _invert(false), _align(ALIGN_LEFT), _valign(ALIGN_TOP), _color(0)
 {
-	processText();
 }
 
 /**
@@ -78,6 +77,17 @@ void Text::setBig()
  */
 void Text::setSmall()
 {
+	_font = _small;
+}
+
+/**
+ * Changes the fonts currently used by the text.
+ * @return Pointer to font.
+ */
+void Text::setFonts(Font *big, Font *small)
+{
+	_big = big;
+	_small = small;
 	_font = _small;
 }
 
@@ -187,6 +197,11 @@ Uint8 Text::getColor() const
  */
 void Text::processText()
 {
+	if (_text == "" || _font == 0)
+	{
+		return;
+	}
+
 	std::string *s = &_text;
 
 	// Use a separate string for wordwrapping text
@@ -255,21 +270,19 @@ void Text::draw()
 {
 	clear();
 
-	/*
-	SDL_Rect r;
-	r.w = _width;
-	r.h = _height;
-	r.x = 0;
-	r.y = 0;
-	SDL_FillRect(_surface, &r, 1);
-	*/
+	if (_text == "" || _font == 0)
+	{
+		return;
+	}
 
 	int x = 0, y = 0, line = 0, height = 0;
 	Font *font = _font;
 	std::string *s = &_text;
 
 	for (std::vector<int>::iterator i = _lineHeight.begin(); i != _lineHeight.end(); i++)
+	{
 		height += *i;
+	}
 
 	switch (_valign)
 	{
@@ -338,5 +351,7 @@ void Text::draw()
 
 	this->offset(_color);
 	if (_invert)
-		this->invert(_color+3);
+	{
+		this->invert(_color + 3);
+	}
 }

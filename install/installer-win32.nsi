@@ -11,6 +11,7 @@
 
 	!define GAME_NAME "OpenXcom"
 	!define GAME_VERSION "0.2"
+	!define GAME_AUTHOR "OpenXcom Developers"
 
 	;Name and file
 	Name "${GAME_NAME} ${GAME_VERSION}"
@@ -20,10 +21,10 @@
 	InstallDir "$PROGRAMFILES\${GAME_NAME}"
 
 	;Get installation folder from registry if available
-	InstallDirRegKey HKCU "Software\${GAME_NAME}" ""
+	InstallDirRegKey HKLM "Software\${GAME_NAME}" ""
 
 	;Request application privileges for Windows Vista
-	RequestExecutionLevel user
+	RequestExecutionLevel admin
 	
 ;--------------------------------
 ;Variables
@@ -34,52 +35,11 @@
 ;--------------------------------
 ;Get UFO folder from Steam
 
-; Push $filenamestring (e.g. 'c:\this\and\that\filename.htm')
-; Push "\"
-; Call StrSlash
-; Pop $R0
-; ;Now $R0 contains 'c:/this/and/that/filename.htm'
-Function StrSlash
-	Exch $R3 ; $R3 = needle ("\" or "/")
-	Exch
-	Exch $R1 ; $R1 = String to replacement in (haystack)
-	Push $R2 ; Replaced haystack
-	Push $R4 ; $R4 = not $R3 ("/" or "\")
-	Push $R6
-	Push $R7 ; Scratch reg
-	StrCpy $R2 ""
-	StrLen $R6 $R1
-	StrCpy $R4 "\"
-	StrCmp $R3 "/" loop
-	StrCpy $R4 "/"  
-loop:
-	StrCpy $R7 $R1 1
-	StrCpy $R1 $R1 $R6 1
-	StrCmp $R7 $R3 found
-	StrCpy $R2 "$R2$R7"
-	StrCmp $R1 "" done loop
-found:
-	StrCpy $R2 "$R2$R4"
-	StrCmp $R1 "" done loop
-done:
-	StrCpy $R3 $R2
-	Pop $R7
-	Pop $R6
-	Pop $R4
-	Pop $R2
-	Pop $R1
-	Exch $R3
-FunctionEnd
-
 Function .onInit
 	StrCpy $StartMenuFolder "${GAME_NAME}"
 	StrCpy $UFODIR ""
-	ReadRegStr $R0 HKCU "Software\Valve\Steam" "SteamPath"
+	ReadRegStr $R0 HKLM "Software\Valve\Steam" "InstallPath"
 	IfErrors ufo_no
-	Push $R0
-	Push "/"
-	Call StrSlash
-	Pop $R0
 	StrCpy $R0 "$R0\steamapps\common\xcom ufo defense\XCOM"
 	${DirState} $R0 $R1
 	IntCmp $R1 -1 ufo_no
@@ -96,7 +56,7 @@ FunctionEnd
 ;Pages
 	
 	;Language strings
-	LangString PAGE_UfoFolder ${LANG_ENGLISH} "${GAME_NAME} requires a copy of UFO: Enemy Unknown / X-Com: UFO Defense. Setup will copy the required files from the following folder. To copy from a different folder, click Browse and select another folder. Click Next to continue."
+	LangString PAGE_UfoFolder ${LANG_ENGLISH} "${GAME_NAME} requires a copy of UFO: Enemy Unknown / X-Com: UFO Defense. You can skip this step if you're upgrading an existing installation.$\n$\nSetup will copy the required files from the following folder. To copy from a different folder, click Browse and select another folder. Click Next to continue."
 	LangString PAGE_UfoFolder_TITLE ${LANG_ENGLISH} "Choose UFO Location"
 	LangString PAGE_UfoFolder_SUBTITLE ${LANG_ENGLISH} "Choose the folder where you have UFO installed."
 	LangString DEST_UfoFolder ${LANG_ENGLISH} "UFO Folder"
@@ -112,10 +72,11 @@ FunctionEnd
 	!define MUI_DIRECTORYPAGE_TEXT_TOP $(PAGE_UfoFolder)
 	!define MUI_DIRECTORYPAGE_TEXT_DESTINATION $(DEST_UfoFolder)
 	!define MUI_DIRECTORYPAGE_VARIABLE $UFODIR
+	!define MUI_DIRECTORYPAGE_VERIFYONLEAVE
 	!insertmacro MUI_PAGE_DIRECTORY
 	
 	;Start Menu Folder Page Configuration
-	!define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKCU" 
+	!define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKLM" 
 	!define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\${GAME_NAME}" 
 	!define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "Start Menu Folder"
 
@@ -167,6 +128,9 @@ Section "Game Files" SecMain
 	File "..\bin\DATA\README.txt"
 	
 	;Copy UFO files
+	${DirState} $UFODIR $R1
+	IntCmp $R1 -1 ufo_no
+	
 	CreateDirectory "$INSTDIR\DATA\GEODATA"
 	CopyFiles /SILENT "$UFODIR\GEODATA\*.*" "$INSTDIR\DATA\GEODATA" 361
 	CreateDirectory "$INSTDIR\DATA\GEOGRAPH"
@@ -185,18 +149,21 @@ Section "Game Files" SecMain
 	CopyFiles /SILENT "$UFODIR\UFOINTRO\*.*" "$INSTDIR\DATA\UFOINTRO" 2736
 	CreateDirectory "$INSTDIR\DATA\UNITS"
 	CopyFiles /SILENT "$UFODIR\UNITS\*.*" "$INSTDIR\DATA\UNITS" 467
+	
+	ufo_no:
 
 	;Store installation folder
-	WriteRegStr HKCU "Software\${GAME_NAME}" "" $INSTDIR
+	WriteRegStr HKLM "Software\${GAME_NAME}" "" $INSTDIR
 	
 	;Write the uninstall keys for Windows
-	WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GAME_NAME}" "DisplayName" "${GAME_NAME}"
-	WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GAME_NAME}" "DisplayVersion" "${GAME_VERSION}.0.0"
-	WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GAME_NAME}" "InstallLocation" "$INSTDIR"
-	WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GAME_NAME}" "UninstallString" '"$INSTDIR\Uninstall.exe"'
-	WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GAME_NAME}" "URLInfoAbout" "http://openxcom.ninex.info"
-	WriteRegDWORD HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GAME_NAME}" "NoModify" 1
-	WriteRegDWORD HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GAME_NAME}" "NoRepair" 1
+	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GAME_NAME}" "DisplayName" "${GAME_NAME} ${GAME_VERSION}"
+	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GAME_NAME}" "DisplayVersion" "${GAME_VERSION}.0.0"
+	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GAME_NAME}" "InstallLocation" "$INSTDIR"
+	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GAME_NAME}" "Publisher" "${GAME_AUTHOR}"
+	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GAME_NAME}" "UninstallString" '"$INSTDIR\Uninstall.exe"'
+	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GAME_NAME}" "URLInfoAbout" "http://openxcom.ninex.info"
+	WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GAME_NAME}" "NoModify" 1
+	WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GAME_NAME}" "NoRepair" 1
 
 	;Create uninstaller
 	WriteUninstaller "$INSTDIR\Uninstall.exe"
@@ -270,8 +237,8 @@ Section "Uninstall"
 	
 	Delete "$DESKTOP\OpenXcom.lnk"
 	
-	DeleteRegKey HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GAME_NAME}"
-	DeleteRegKey /ifempty HKCU "Software\${GAME_NAME}"
+	DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GAME_NAME}"
+	DeleteRegKey /ifempty HKLM "Software\${GAME_NAME}"
 
 SectionEnd
 
@@ -281,7 +248,7 @@ SectionEnd
 	VIProductVersion "${GAME_VERSION}.0.0"
 	VIAddVersionKey /LANG=${LANG_ENGLISH} "ProductName" "${GAME_NAME} Installer"
 	VIAddVersionKey /LANG=${LANG_ENGLISH} "ProductVersion" "${GAME_VERSION}.0.0"
-	VIAddVersionKey /LANG=${LANG_ENGLISH} "CompanyName" "OpenXcom Developers"
-	VIAddVersionKey /LANG=${LANG_ENGLISH} "LegalCopyright" "Copyright 2010 OpenXcom Developers"
+	VIAddVersionKey /LANG=${LANG_ENGLISH} "CompanyName" "${GAME_AUTHOR}"
+	VIAddVersionKey /LANG=${LANG_ENGLISH} "LegalCopyright" "Copyright 2010 ${GAME_AUTHOR}"
 	VIAddVersionKey /LANG=${LANG_ENGLISH} "FileDescription" "${GAME_NAME} Installer"
 	VIAddVersionKey /LANG=${LANG_ENGLISH} "FileVersion" "${GAME_VERSION}.0.0"

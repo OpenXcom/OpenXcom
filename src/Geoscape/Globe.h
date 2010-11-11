@@ -104,7 +104,7 @@ public:
 	/// Checks if a point is inside land.
 	bool insideLand(double lon, double lat) const;
 	/// Turns on/off the globe detail.
-	void switchDetail();
+	void toggleDetail();
 	/// Gets all the targets near a point on the globe.
 	std::vector<Target*> getTargets(int x, int y, bool craft) const;
 	/// Caches visible globe polygons.

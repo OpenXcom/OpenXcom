@@ -60,6 +60,8 @@ public:
 	void setSmall();
 	/// Gets the text's font.
 	Font *const getFont() const;
+
+	void setFonts(Font *big, Font *small);
 	/// Sets the text's string.
 	void setText(const std::string &text);
 	/// Gets the text's string.

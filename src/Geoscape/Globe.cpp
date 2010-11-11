@@ -524,7 +524,7 @@ bool Globe::insideLand(double lon, double lat) const
  * Switches the amount of detail shown on the globe.
  * With detail on, country and city details are shown when zoomed in.
  */
-void Globe::switchDetail()
+void Globe::toggleDetail()
 {
 	_detail = !_detail;
 	drawDetail();
@@ -987,8 +987,7 @@ void Globe::drawMarkers()
 }
 
 /**
- * Blits the globe onto another surface. Flashes the
- * markers to highlight them over the surface.
+ * Blits the globe onto another surface.
  * @param surface Pointer to another surface.
  */
 void Globe::blit(Surface *surface)
@@ -1070,7 +1069,7 @@ void Globe::keyboardPress(Action *action, State *state)
 	InteractiveSurface::keyboardPress(action, state);
 	if (action->getDetails()->key.keysym.sym == SDLK_TAB)
 	{
-		switchDetail();
+		toggleDetail();
 	}
 }
 

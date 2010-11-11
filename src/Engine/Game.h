@@ -29,6 +29,7 @@ class Cursor;
 class ResourcePack;
 class SavedGame;
 class Ruleset;
+class FpsCounter;
 
 /**
  * The core of the game engine, manages the game's entire contents and structure.
@@ -48,6 +49,8 @@ private:
 	SavedGame *_save;
 	Ruleset *_rules;
 	bool _quit;
+	
+	FpsCounter *_fpsCounter;
 public:
 	/// Creates a new game and initializes SDL.
 	Game(const std::string &title, int width, int height, int bpp);

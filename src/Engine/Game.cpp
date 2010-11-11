@@ -26,6 +26,7 @@
 #include "../Savegame/SavedGame.h"
 #include "Palette.h"
 #include "Action.h"
+#include "FpsCounter.h"
 
 /**
  * Starts up SDL with all the subsystems and SDL_mixer for audio processing,
@@ -65,6 +66,9 @@ Game::Game(const std::string &title, int width, int height, int bpp) : _screen(0
 	// Create cursor
 	_cursor = new Cursor(9, 13);
 	_cursor->setColor(Palette::blockOffset(15)+12);
+	
+	// Create fps counter
+	_fpsCounter = new FpsCounter(50, 20, 0, 0);
 }
 
 /**
@@ -117,22 +121,30 @@ void Game::run()
 			{
 				Action *action = new Action(&_event, _screen->getXScale(), _screen->getYScale());
 				_cursor->handle(action);
+				_fpsCounter->handle(action);
 				_states.back()->handle(action);
 			}
 		}
 		
 		// Process logic
+		_fpsCounter->think();
 		_states.back()->think();
 		
 		// Process rendering
 		_screen->clear();
 		std::list<State*>::iterator i = _states.end();
 		do
+		{
 			i--;
+		}
 		while(i != _states.begin() && !(*i)->isScreen());
 
 		for (; i != _states.end(); i++)
+		{
 			(*i)->blit();
+		}
+		
+		_fpsCounter->blit(_screen->getSurface());
 		_cursor->blit(_screen->getSurface());
 		_screen->flip();
 
@@ -178,6 +190,9 @@ void Game::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 	_screen->setPalette(colors, firstcolor, ncolors);
 	_cursor->setPalette(colors, firstcolor, ncolors);
 	_cursor->draw();
+
+	_fpsCounter->setPalette(colors, firstcolor, ncolors);
+	
 	if (_res != 0)
 	{
 		_res->setPalette(colors, firstcolor, ncolors);
@@ -193,7 +208,9 @@ void Game::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 void Game::setState(State *state)
 {
 	while (!_states.empty())
+	{
 		popState();
+	}
 	pushState(state);
 }
 
@@ -219,7 +236,9 @@ void Game::popState()
 	_deleted.push_back(_states.back());
 	_states.pop_back();
 	if (!_states.empty())
+	{
 		_states.back()->init();
+	}
 }
 
 /**
@@ -238,6 +257,7 @@ ResourcePack *const Game::getResourcePack() const
 void Game::setResourcePack(ResourcePack *res)
 {
 	_res = res;
+	_fpsCounter->setFonts(_res->getFont("BIGLETS.DAT"), _res->getFont("SMALLSET.DAT"));
 }
 
 /**
