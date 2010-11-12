@@ -24,23 +24,28 @@
  */
 class Position
 {
-private:
-	int _x, _y, _z;
 public:
-	/// Creates a position.
-	Position(int x, int y, int z);
-	/// Cleans up the position.
-	~Position();
-	/// gets X coord
-	int getX();
-	/// gets Y coord
-	int getY();
-	/// gets Z coord
-	int getZ();
+	int x, y, z;
+
+	/// Null position constructor.
+	Position() : x(0), y(0), z(0) {};
+	/// X Y Z position constructor.
+	Position(int x_, int y_, int z_) : x(x_), y(y_), z(z_) {};
+	/// Copy constructor.
+	Position(const Position& pos) : x(pos.x), y(pos.y), z(pos.z) {};
+
+	Position& operator=(const Position& pos) { x = pos.x; y = pos.y; z = pos.z; return *this; }
+
 	/// == operator
-    bool operator== (const Position& pos);
+    bool operator== (const Position& pos) const
+	{
+		return x == pos.x && y == pos.y && z == pos.z;
+	}
 	/// != operator
-    bool operator!= (const Position& pos);
+    bool operator!= (const Position& pos) const
+	{
+		return x != pos.x || y != pos.y || z != pos.z;
+	}
 
 };
 

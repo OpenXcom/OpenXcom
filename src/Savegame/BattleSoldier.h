@@ -37,7 +37,7 @@ public:
 	BattleSoldier(Soldier *soldier, RuleUnitSprite *renderRules);
 	/// Cleans up the BattleSoldier.
 	~BattleSoldier();
-	/// gets the geoscape soldier boject
+	/// gets the geoscape soldier object
 	Soldier *getSoldier();
 };
 

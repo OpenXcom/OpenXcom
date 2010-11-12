@@ -145,6 +145,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	_barMorale->setScale(1.0);
 
 	updateSoldierInfo(_game->getSavedGame()->getBattleGame()->getSelectedSoldier());
+	_map->centerOnPosition(_game->getSavedGame()->getBattleGame()->getSelectedSoldier()->getPosition());
 
 	_btnReserveNone->copy(_icons);
 	_btnReserveNone->setColor(Palette::blockOffset(4)+6);
@@ -240,7 +241,9 @@ void BattlescapeState::btnSoldierClick(Action *action)
  * @param action Pointer to an action.
  */
 void BattlescapeState::btnCenterClick(Action *action)
-{}
+{
+	_map->centerOnPosition(_game->getSavedGame()->getBattleGame()->getSelectedSoldier()->getPosition());
+}
 
 /**
  * Select next soldier.
@@ -248,7 +251,9 @@ void BattlescapeState::btnCenterClick(Action *action)
  */
 void BattlescapeState::btnNextSoldierClick(Action *action)
 {
-	updateSoldierInfo(_game->getSavedGame()->getBattleGame()->selectNextSoldier());
+	BattleSoldier *soldier = _game->getSavedGame()->getBattleGame()->selectNextSoldier();
+	updateSoldierInfo(soldier);
+	_map->centerOnPosition(soldier->getPosition());
 }
 
 /**

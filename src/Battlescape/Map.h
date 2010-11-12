@@ -26,6 +26,8 @@ class SavedBattleGame;
 class Timer;
 class Surface;
 class TerrainObject;
+class Position;
+
 
 /**
  * Interactive map of the battlescape
@@ -36,11 +38,12 @@ private:
 	SavedBattleGame *_save;
 	ResourcePack *_res;
 	Timer *_scrollTimer, *_animTimer;
+	Surface *_arrow;
 
-	int _MapOffsetX, _MapOffsetY;
+	int _MapOffsetX, _MapOffsetY, _viewHeight;
 	int _RMBClickX, _RMBClickY;
 	bool _RMBDragging;
-	int _TileSizeX, _TileSizeY, _TileSizeZ;
+	int _SpriteWidth, _SpriteHeight;
 	int _selectorX, _selectorY;
 	int _ScrollX, _ScrollY;
 	int _animFrame;
@@ -84,8 +87,15 @@ public:
 	void up();
 	/// move map layer down
 	void down();
+	/// Center map on a unit.
+	void centerOnPosition(const Position &pos);
+	/// Converts map coordinates to screen coordinates.
+	void convertMapToScreen(const Position &mapPos, Position *screenPos);
 	/// sets the battlescape selector position relative to mouseposition
 	void setSelectorPosition(int mx, int my);
+	/// draws the small arrow above the selected soldier
+	void drawArrow(const Position &pos);
+
 };
 
 #endif

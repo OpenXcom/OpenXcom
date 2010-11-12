@@ -48,7 +48,7 @@
  * @param height Number of layers (z).
  * @param terrain Pointer to terrain set to use.
  */
-SavedBattleGame::SavedBattleGame(SavedGame *save, int width, int length, int height, RuleTerrain *terrain) : _width(width), _length(length), _height(height), _viewheight(1), _terrain(terrain), _tiles(), _craft(0), _ufo(0), _nodes(), _soldiers()
+SavedBattleGame::SavedBattleGame(SavedGame *save, int width, int length, int height, RuleTerrain *terrain) : _width(width), _length(length), _height(height), _terrain(terrain), _tiles(), _craft(0), _ufo(0), _nodes(), _soldiers()
 {
 
 }
@@ -118,33 +118,6 @@ int SavedBattleGame::getLength()
 int SavedBattleGame::getHeight()
 {
 	return _height;
-}
-
-/** 
- * Gets the current viewheight, which is the level on the map
- * that is currently in focus.
- * @return Current level.
- */
-int SavedBattleGame::getViewHeight()
-{
-	return _viewheight;
-}
-
-/** 
- * Moves the viewheigt one up or down.
- * @param height Relative movement.
- */
-void SavedBattleGame::setRelativeViewHeight(int height)
-{
-	_viewheight += height;
-	if (_viewheight > _height)
-	{
-		_viewheight = _height;
-	}
-	else if (_viewheight < 1)
-	{
-		_viewheight = 1;
-	}
 }
 
 /** 
@@ -226,7 +199,7 @@ void SavedBattleGame::addSoldier(Soldier *soldier, RuleUnitSprite *rules)
 {
 	BattleSoldier *bs = new BattleSoldier(soldier, rules);
 
-	Position *pos;
+	Position pos;
 	int x, y, z;
 
 	for (int i = 0; i < _height * _length * _width; i++)
@@ -235,15 +208,11 @@ void SavedBattleGame::addSoldier(Soldier *soldier, RuleUnitSprite *rules)
 		if (_tiles[i] && _tiles[i]->getTerrainObject(0) && _tiles[i]->getTerrainObject(0)->getSpecialType() == START_POINT && !_tiles[i]->getTerrainObject(3))
 		{
 			getTileCoords(i, &x, &y, &z);
-			pos = new Position(x, y, z);
+			pos = Position(x, y, z);
 			if (selectUnit(pos) == 0)
 			{
 				bs->setPosition(pos);
 				break;
-			}
-			else
-			{
-				delete pos;
 			}
 		}
 	}
@@ -294,13 +263,13 @@ BattleSoldier *SavedBattleGame::selectNextSoldier()
  * @param z 
  * @return pointer to BattleUnit - 0 when nothing found
  */
-BattleUnit *SavedBattleGame::selectUnit(Position *pos)
+BattleUnit *SavedBattleGame::selectUnit(const Position& pos)
 {
 	BattleUnit *bu = 0;
 
 	for (std::vector<BattleSoldier*>::iterator i = _soldiers.begin(); i != _soldiers.end(); i++)
 	{
-		if (*(*i)->getPosition() == *pos)
+		if ((*i)->getPosition() == pos)
 		{
 			bu = *i;
 			break;

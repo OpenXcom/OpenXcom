@@ -44,7 +44,6 @@ class SavedBattleGame
 {
 private:
 	int _width, _length, _height; // dimensions of the battlemap, origin is topright edge
-	int _viewheight; // the layer we are on
 
 	// using a oldskool array here, because the size is static and a little faster than vector
 	Tile **_tiles; 
@@ -73,10 +72,6 @@ public:
 	int getLength();
 	/// Gets terrain height.
 	int getHeight();
-	/// Gets the height player is currently viewing.
-	int getViewHeight();
-	/// Gets relative viewheight.
-	void setRelativeViewHeight(int height);
 	/// Conversion between coordinates and the tile index.
 	int getTileIndex(int x, int y, int z);
 	/// Conversion between tile index and coordinates.
@@ -100,7 +95,7 @@ public:
 	/// select next soldier
 	BattleSoldier *selectNextSoldier();
 	/// select unit with position on map
-	BattleUnit *selectUnit(Position *pos);
+	BattleUnit *selectUnit(const Position& pos);
 	/// get pointer to the list of nodes
 	std::vector<Node*> *getNodes();
 

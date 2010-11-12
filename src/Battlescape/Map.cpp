@@ -21,21 +21,22 @@
 #include <fstream>
 #include "Map.h"
 #include "UnitSprite.h"
+#include "Position.h"
 #include "../Resource/TerrainObjectSet.h"
 #include "../Resource/TerrainObject.h"
+#include "../Resource/ResourcePack.h"
 #include "../Engine/Action.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Timer.h"
 #include "../Engine/Font.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
-#include "Position.h"
-#include "../Resource/ResourcePack.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/GameTime.h"
 #include "../Savegame/Craft.h"
 #include "../Savegame/Ufo.h"
 #include "../Savegame/Tile.h"
+#include "../Savegame/BattleUnit.h"
 #include "../Ruleset/RuleTerrain.h"
 #include "../Ruleset/RuleCraft.h"
 #include "../Ruleset/RuleUfo.h"
@@ -66,13 +67,8 @@
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Map::Map(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _MapOffsetX(-250), _MapOffsetY(250)
+Map::Map(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _MapOffsetX(-250), _MapOffsetY(250), _viewHeight(0)
 {
-
-	// hardcoded atm to the resolution of original xcom sprites
-	_TileSizeY = 32;
-	_TileSizeX = 16;
-	_TileSizeZ = 48;
 
 	_scrollTimer = new Timer(50);
 	_scrollTimer->onTimer((SurfaceHandler)&Map::scroll);
@@ -103,6 +99,9 @@ Map::~Map()
 void Map::setResourcePack(ResourcePack *res)
 {
 	_res = res;
+
+	_SpriteWidth = res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getWidth();
+	_SpriteHeight = res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getHeight();
 }
 
 /**
@@ -119,7 +118,27 @@ void Map::setSavedGame(SavedBattleGame *save)
  */
 void Map::init()
 {
-	
+	// load the tiny arrow into a surface
+	int f = Palette::blockOffset(1)+1; // yellow
+	int b = 15; // black
+	int pixels[81] = { 0, 0, b, b, b, b, b, 0, 0, 
+					   0, 0, b, f, f, f, b, 0, 0,
+				       0, 0, b, f, f, f, b, 0, 0, 
+					   b, b, b, f, f, f, b, b, b,
+					   b, f, f, f, f, f, f, f, b,
+					   0, b, f, f, f, f, f, b, 0,
+					   0, 0, b, f, f, f, b, 0, 0,
+					   0, 0, 0, b, f, b, 0, 0, 0,
+					   0, 0, 0, 0, b, 0, 0, 0, 0 };
+
+	_arrow = new Surface(9, 9);
+	_arrow->setPalette(this->getPalette());
+	_arrow->lock();
+	for (int y = 0; y < 9;y++)
+		for (int x = 0; x < 9; x++)
+			_arrow->setPixel(x, y, pixels[x+(y*9)]);
+	_arrow->unlock();
+
 }
 
 /**
@@ -162,16 +181,17 @@ Surface *Map::getSurface(TerrainObject *tob, int frame)
 */
 void Map::drawTerrain()
 {
-	int screenX, screenY, frameNumber = 0;
+	int frameNumber = 0;
 	TerrainObject *object = 0;
 	Surface *frame;
 	Tile *tile;
 	int beginX = 0, endX = _save->getWidth() - 1;
     int beginY = 0, endY = _save->getLength() - 1;
-    int beginZ = 0, endZ = _save->getViewHeight() - 1;
+    int beginZ = 0, endZ = _viewHeight;
 	UnitSprite *unitSprite = new UnitSprite(32, 40, 0, 0);
 	unitSprite->setResourcePack(_res);
 	unitSprite->setPalette(this->getPalette());
+	Position mapPosition, screenPosition;
 
     for (int itZ = beginZ; itZ <= endZ; itZ++) 
 	{
@@ -180,14 +200,15 @@ void Map::drawTerrain()
 		{
             for (int itY = endY; itY >= beginY; itY--) 
 			{
-				screenX = _MapOffsetX + (_TileSizeY/2) * itY + (_TileSizeY/2) * itX;
-				screenY = _MapOffsetY - itY * (_TileSizeX/2) + (_TileSizeX/2) * itX - itZ * (_TileSizeZ/2);
+				mapPosition = Position(itX, itY, itZ);
+				convertMapToScreen(mapPosition, &screenPosition);
+				screenPosition.x = _MapOffsetX + screenPosition.x;
+				screenPosition.y = _MapOffsetY + screenPosition.y;
 
 				// only render cells that are inside the viewport
-				if (screenX > -_TileSizeY && screenX < getWidth() + _TileSizeY &&
-					screenY > -_TileSizeZ && screenY < getHeight() + _TileSizeZ )
+				if (screenPosition.x > -_SpriteWidth && screenPosition.x < getWidth() + _SpriteWidth &&
+					screenPosition.y > -_SpriteHeight && screenPosition.y < getHeight() + _SpriteHeight )
 				{
-					Position *position = new Position(itX, itY, itZ);
 
 					// Draw floor
 					tile = _save->getTile(itX,itY,itZ);
@@ -199,8 +220,8 @@ void Map::drawTerrain()
 							if (object)
 							{
 								frame = getSurface(object, _animFrame);
-								frame->setX(screenX);
-								frame->setY(screenY - object->getYOffset());
+								frame->setX(screenPosition.x);
+								frame->setY(screenPosition.y - object->getYOffset());
 								frame->blit(this);
 							}
 						}
@@ -209,17 +230,17 @@ void Map::drawTerrain()
 					// Draw cursor back
 					if (_selectorX==itY && _selectorY == itX)
 					{
-						if ((_save->getViewHeight() - 1) == itZ)
+						if (_viewHeight == itZ)
 						{
 							frameNumber = 0;
 						}
-						else if ((_save->getViewHeight() - 1) > itZ)
+						else if (_viewHeight > itZ)
 						{
 							frameNumber = 2;
 						}
 						frame = _res->getSurfaceSet("CURSOR.PCK")->getFrame(frameNumber);
-						frame->setX(screenX);
-						frame->setY(screenY);
+						frame->setX(screenPosition.x);
+						frame->setY(screenPosition.y);
 						frame->blit(this);
 					}
 
@@ -233,8 +254,8 @@ void Map::drawTerrain()
 							if (object)
 							{
 								frame = getSurface(object, _animFrame);
-								frame->setX(screenX);
-								frame->setY(screenY - object->getYOffset());
+								frame->setX(screenPosition.x);
+								frame->setY(screenPosition.y - object->getYOffset());
 								frame->blit(this);
 							}
 						}
@@ -243,36 +264,39 @@ void Map::drawTerrain()
 					// Draw items
 
 					// Draw soldier
-					BattleUnit *unit = _save->selectUnit(position);
+					BattleUnit *unit = _save->selectUnit(mapPosition);
 					if (unit != 0)
 					{
 						unitSprite->setBattleUnit(unit);
-						unitSprite->setX(screenX);
-						unitSprite->setY(screenY);
+						unitSprite->setX(screenPosition.x);
+						unitSprite->setY(screenPosition.y);
 						unitSprite->draw();
 						unitSprite->blit(this);
-					}
+						if (unit == (BattleUnit*)_save->getSelectedSoldier())
+						{
+							drawArrow(screenPosition);
+						}
+					}	
 
 					// Draw cursor front
 					if (_selectorX == itY && _selectorY == itX)
 					{
-						if ((_save->getViewHeight() - 1) == itZ)
+						if (_viewHeight == itZ)
 						{
 							frameNumber = 3;
 						}
-						else if ((_save->getViewHeight() - 1) > itZ)
+						else if (_viewHeight > itZ)
 						{
 							frameNumber = 5;
 						}
 						frame = _res->getSurfaceSet("CURSOR.PCK")->getFrame(frameNumber);
-						frame->setX(screenX);
-						frame->setY(screenY);
+						frame->setX(screenPosition.x);
+						frame->setY(screenPosition.y);
 						frame->blit(this);
 					}
 
 					// Draw smoke/fire
 
-					delete position;
 				}
 			}
 		}
@@ -421,7 +445,7 @@ void Map::setSelectorPosition(int mx, int my)
 	if (!mx && !my) return; // cursor is offscreen
 
 	// add half a tileheight to the mouseposition per layer we are above the floor
-    my += -_TileSizeZ + _save->getViewHeight() * (_TileSizeZ / 2);
+    my += -_SpriteHeight + (_viewHeight + 1) * (_SpriteHeight / 2);
 
 	// calculate the actual x/y pixelposition on a diamond shaped map 
 	// taking the view offset into account
@@ -429,8 +453,8 @@ void Map::setSelectorPosition(int mx, int my)
     _selectorY = my - _MapOffsetY + _selectorX / 4;
 
 	// to get the row&col itself, divide by the size of a tile
-    _selectorY /= (_TileSizeX / 2);
-	_selectorX /= _TileSizeY;
+    _selectorY /= (_SpriteWidth/4);
+	_selectorX /= _SpriteWidth;
 
 	minMaxInt(&_selectorX, 0, _save->getWidth() - 1);
 	minMaxInt(&_selectorY, 0, _save->getLength() - 1);
@@ -446,8 +470,8 @@ void Map::scroll()
 	_MapOffsetY += _ScrollY;
 
 	// don't scroll outside the map
-	minMaxInt(&_MapOffsetX, -(_save->getWidth() - 1) * _TileSizeY, 0);
-	minMaxInt(&_MapOffsetY, -(_save->getLength() - 1) * (_TileSizeX / 2), _save->getLength() * (_TileSizeX / 2));
+	minMaxInt(&_MapOffsetX, -(_save->getWidth() - 1) * _SpriteWidth, 0);
+	minMaxInt(&_MapOffsetY, -(_save->getLength() - 1) * (_SpriteWidth/4), _save->getLength() * (_SpriteWidth/4));
 
 	if (_RMBDragging)
 	{
@@ -473,7 +497,8 @@ void Map::animate()
  */
 void Map::up()
 {
-	_save->setRelativeViewHeight(+1);
+	_viewHeight++;
+	minMaxInt(&_viewHeight, 0, _save->getHeight()-1);
 	draw();
 }
 
@@ -482,8 +507,47 @@ void Map::up()
  */
 void Map::down()
 {
-	_save->setRelativeViewHeight(-1);
+	_viewHeight--;
+	minMaxInt(&_viewHeight, 0, _save->getHeight()-1);
 	draw();
 }
 
+/**
+ * Center map on a certain position.
+ * @param pos
+ */
+void Map::centerOnPosition(const Position &mapPos)
+{
+	Position screenPos;
 
+	convertMapToScreen(mapPos, &screenPos);
+
+	_MapOffsetX = -(screenPos.x - (getWidth() / 2));
+	_MapOffsetY = -(screenPos.y - (getHeight() / 2));
+
+	_viewHeight = mapPos.z;
+}
+
+/**
+ * Convert map coordinates X,Y,Z to screen positions X, Y.
+ * @param mapPos
+ * @param pointer to screen position
+ */
+void Map::convertMapToScreen(const Position &mapPos, Position *screenPos)
+{
+	screenPos->z = 0; // not used
+	screenPos->x = mapPos.x * (_SpriteWidth / 2) + mapPos.y * (_SpriteWidth / 2);
+	screenPos->y = mapPos.x * (_SpriteWidth / 4) - mapPos.y * (_SpriteWidth / 4) - mapPos.z * ((_SpriteHeight + _SpriteWidth / 4) / 2);
+}
+
+
+/**
+ * Draws the small arrow above the selected soldier.
+ */
+void Map::drawArrow(const Position &screenPos)
+{
+	_arrow->setX(screenPos.x + (_SpriteWidth / 2) - (_arrow->getWidth() / 2));
+	_arrow->setY(screenPos.y - _arrow->getHeight() + _animFrame);
+	_arrow->blit(this);
+
+}

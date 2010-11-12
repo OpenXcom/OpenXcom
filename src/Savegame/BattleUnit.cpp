@@ -18,12 +18,11 @@
  */
 #include "BattleUnit.h"
 #include "../Engine/Palette.h"
-#include "../Battlescape/Position.h"
 
 /**
  * Initializes a BattleUnit.
  */
-BattleUnit::BattleUnit(RuleUnitSprite *renderRules) : _renderRules(renderRules), _id(0), _pos(0), _direction(0)
+BattleUnit::BattleUnit(RuleUnitSprite *renderRules) : _renderRules(renderRules), _id(0), _pos(Position()), _direction(0)
 {
 }
 
@@ -32,14 +31,14 @@ BattleUnit::BattleUnit(RuleUnitSprite *renderRules) : _renderRules(renderRules),
  */
 BattleUnit::~BattleUnit()
 {
-	delete _pos;
+	
 }
 
 /**
  * Returns the BattleUnit's unique ID.
  * @return Unique ID.
  */
-int BattleUnit::getId()
+int BattleUnit::getId() const
 {
 	return _id;
 }
@@ -66,7 +65,7 @@ RuleUnitSprite *const BattleUnit::getRenderRules() const
  * Changes the BattleUnit's position.
  * @param pos position
  */
-void BattleUnit::setPosition(Position *pos)
+void BattleUnit::setPosition(const Position& pos)
 {
 	_pos = pos;
 }
@@ -75,7 +74,7 @@ void BattleUnit::setPosition(Position *pos)
  * Changes the BattleUnit's position.
  * @return pointer to position
  */
-Position *BattleUnit::getPosition()
+const Position& BattleUnit::getPosition() const
 {
 	return _pos;
 }
@@ -93,7 +92,7 @@ void BattleUnit::setDirection(int direction)
  * Changes the BattleUnit's direction.
  * @return direction
  */
-int BattleUnit::getDirection()
+int BattleUnit::getDirection() const
 {
 	return _direction;
 }
