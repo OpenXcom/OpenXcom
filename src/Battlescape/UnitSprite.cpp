@@ -86,9 +86,20 @@ void UnitSprite::draw()
 	{
 		sprite = _res->getSurfaceSet(sheet)->getFrame(rules->getTorso() + _unit->getDirection());
 	}
-
-
 	sprite->blit(this);
+
+	// Render the legs
+	if (_unit->getStatus() == STATUS_STANDING)
+	{
+		sprite = _res->getSurfaceSet(sheet)->getFrame(rules->getLegsStand() + _unit->getDirection());
+	}
+	else
+	{
+		sprite = _res->getSurfaceSet(sheet)->getFrame(rules->getLegsWalk(_unit->getDirection()) + _unit->getWalkingPhase());
+		sprite->setY(rules->getLegsWalkOffset(_unit->getWalkingPhase()));
+	}
+	sprite->blit(this);
+
 }
 
 /**

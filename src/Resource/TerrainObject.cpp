@@ -92,6 +92,33 @@ SpecialTileType TerrainObject::getSpecialType()
 	return _specialType;
 }
 
+/*
+ * Gets the TU cost to walk over the object.
+ * @return TU cost
+ */
+int TerrainObject::getWalkTUCost()
+{
+	return _TUWalk;
+}
+
+/**
+  * whether this is a floor
+  * @return bool 
+  */
+bool TerrainObject::isNoFloor()
+{
+	return _isNoFloor;
+}
+
+/**
+  * Add this to the graphical Y offset of units or objects on this tile.
+  * @return Y offset
+  */
+int TerrainObject::getTerrainLevel()
+{
+	return _terrainLevel;
+}
+
 /**
 * setter
 */
@@ -103,9 +130,16 @@ void TerrainObject::setOriginalSpriteIndex(int frameID, int value)
 /**
   * setter
   */
-void TerrainObject::setUfoDoor(bool flag)
+void TerrainObject::setFlags(bool isUfoDoor, bool stopLOS, bool isNoFloor, bool isBigWall, bool isGravLift, bool isDoor, bool blockFire, bool blockSmoke)
 {
-	_isUfoDoor = flag;
+	_isUfoDoor = isUfoDoor;
+	_stopLOS = stopLOS;
+	_isNoFloor = isNoFloor;
+	_isBigWall = isBigWall;
+	_isGravLift = isGravLift;
+	_isDoor = isDoor;
+	_blockFire = blockFire;
+	_blockSmoke = blockSmoke;
 }
 
 /**
@@ -122,4 +156,22 @@ void TerrainObject::setYOffset(int value)
 void TerrainObject::setSpecialType(int value)
 {
 	_specialType = (SpecialTileType)value;
+}
+
+/**
+  * setter
+  */
+void TerrainObject::setTUCosts(int walk, int fly, int slide)
+{
+	_TUWalk = walk;
+	_TUFly = fly;
+	_TUSlide = slide;
+}
+
+/**
+  * setter
+  */
+void TerrainObject::setTerrainLevel(int value)
+{
+	_terrainLevel = value;
 }

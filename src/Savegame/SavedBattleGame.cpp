@@ -33,6 +33,7 @@
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/XcomRuleset.h"
 #include "../Battlescape/Map.h"
+#include "../Battlescape/Pathfinding.h"
 #include "../Battlescape/Position.h"
 #include "../Savegame/Node.h"
 #include "../Resource/TerrainObject.h"
@@ -48,9 +49,9 @@
  * @param height Number of layers (z).
  * @param terrain Pointer to terrain set to use.
  */
-SavedBattleGame::SavedBattleGame(SavedGame *save, int width, int length, int height, RuleTerrain *terrain) : _width(width), _length(length), _height(height), _terrain(terrain), _tiles(), _craft(0), _ufo(0), _nodes(), _soldiers()
+SavedBattleGame::SavedBattleGame(SavedGame *save, int width, int length, int height, RuleTerrain *terrain) : _width(width), _length(length), _height(height), _tiles(), _craft(0), _ufo(0), _nodes(), _soldiers(), _terrain(terrain)
 {
-
+	_pathfinding = new Pathfinding(this);
 }
 
 /** 
@@ -73,6 +74,8 @@ SavedBattleGame::~SavedBattleGame()
 	{
 		delete *i;
 	}
+
+	delete _pathfinding;
 }
 
 /** 
@@ -122,14 +125,12 @@ int SavedBattleGame::getHeight()
 
 /** 
  * This method converts coordinates into a unique index.
- * @param x X coordinate.
- * @param y Y coordinate.
- * @param z Z coordinate.
+ * @param pos position
  * @return Unique index.
  */
-int SavedBattleGame::getTileIndex(int x, int y, int z)
+int SavedBattleGame::getTileIndex(const Position& pos)
 {
-	return z * _length * _width + y * _width + x;
+	return pos.z * _length * _width + pos.y * _width + pos.x;
 }
 
 /** 
@@ -149,17 +150,19 @@ void SavedBattleGame::getTileCoords(int index, int *x, int *y, int *z)
 
 /** 
  * Gets the Tile on a given position on the map.
- * @param x X coordinate.
- * @param y Y coordinate.
- * @param z Z coordinate.
+ * @param pos position
  * @return Pointer to tile.
  */
-Tile *SavedBattleGame::getTile(int x, int y, int z)
+Tile *SavedBattleGame::getTile(const Position& pos)
 {
-	if (getTileIndex(x, y, z) > _height * _length * _width)
-		throw "Cannot access Tile: index out of bounds";
+	if (pos.x < 0 || pos.y < 0 || pos.z < 0
+		|| pos.x >= _width || pos.y >= _length || pos.z >= _height)
+		return 0;
 
-	return _tiles[getTileIndex(x, y, z)];
+	if (getTileIndex(pos) > _height * _length * _width)
+		return 0;
+
+	return _tiles[getTileIndex(pos)];
 }
 
 /**
@@ -227,6 +230,14 @@ void SavedBattleGame::addSoldier(Soldier *soldier, RuleUnitSprite *rules)
 BattleSoldier *SavedBattleGame::getSelectedSoldier()
 {
 	return _selectedSoldier;
+}
+
+/**
+ * Sets the currently selected soldier
+ */
+void SavedBattleGame::setSelectedSoldier(BattleSoldier *soldier)
+{
+	_selectedSoldier = soldier;
 }
 
 /**
@@ -467,7 +478,7 @@ void SavedBattleGame::linkTilesWithTerrainObjects(ResourcePack *res)
 		{
             for (int itY = endY; itY >= beginY; itY--) 
 			{
-				tile = getTile(itX, itY, itZ);
+				tile = getTile(Position(itX, itY, itZ));
 				if (tile)
 				{
 					for (int part = 0; part < 4; part++)
@@ -491,4 +502,13 @@ void SavedBattleGame::linkTilesWithTerrainObjects(ResourcePack *res)
 std::vector<Node*> *SavedBattleGame::getNodes()
 {
 	return &_nodes;
+}
+
+/**
+ * Get the pathfinding object.
+ * @return pointer to the pathfinding object
+ */
+Pathfinding *SavedBattleGame::getPathfinding()
+{
+	return _pathfinding;
 }

@@ -904,6 +904,11 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	xcom_0->setSpriteSheet("XCOM_0.PCK");
 	xcom_0->setTorso(32);
 	xcom_0->setFemaleTorso(267);
+	xcom_0->setLegsStand(16);
+	for (int i=0; i<8; i++)
+		xcom_0->setLegsWalk(56 + 24 * i, i);
+	for (int i=0; i<8; i++)
+		xcom_0->setLegsWalkOffset((i%4)?0:-2, i);
 	_unitSprites.insert(std::pair<std::string, RuleUnitSprite*>("XCOM_0",xcom_0));
 
 

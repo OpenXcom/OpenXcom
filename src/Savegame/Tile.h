@@ -48,6 +48,10 @@ public:
 	TerrainObject *getTerrainObject(int part);
 	/// Sets the pointer to the terrainobject for a specific part of the tile
 	void setTerrainObject(TerrainObject *tob, int part);
+	/// Get the TU cost to walk over a certain part of the tile.
+	int getTUWalk(int part);
+	/// Checks if this tile has a floor.
+	bool hasNoFloor();
 };
 
 #endif

@@ -23,6 +23,8 @@
 
 class RuleUnitSprite;
 
+enum UnitStatus {STATUS_STANDING, STATUS_SITTING, STATUS_WALKING, STATUS_FALLING, STATUS_DEAD};
+
 /**
  * Represents a moving unit in the battlescape, player controlled or AI controlled
  * it holds info about it's position, items carrying, stats, etc
@@ -34,6 +36,8 @@ private:
 	int _id;
 	Position _pos;
 	int _direction;
+	UnitStatus _status;
+	int _walkPhase;
 public:
 	/// Creates a BattleUnit.
 	BattleUnit(RuleUnitSprite *renderRules);
@@ -47,12 +51,20 @@ public:
 	RuleUnitSprite *const getRenderRules() const;
 	/// Sets the unit's position X, Y, Z
 	void setPosition(const Position& pos);
-	/// gets the unit's position
+	/// Gets the unit's position.
 	const Position& getPosition() const;
-	/// Sets the unit's direction 0-7
+	/// Sets the unit's direction 0-7.
 	void setDirection(int direction);
-	/// gets the unit's direction
+	/// Gets the unit's direction.
 	int getDirection() const;
+	/// Gets the unit's status.
+	UnitStatus getStatus();
+	/// Start the walkingPhase
+	void startWalking(int direction);
+	/// Increase the walkingPhase
+	void keepWalking();
+	/// Gets the walking phase
+	int getWalkingPhase();
 
 };
 

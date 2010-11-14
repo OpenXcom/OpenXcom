@@ -128,6 +128,8 @@
     <ClCompile Include="Basescape\StoresState.cpp" />
     <ClCompile Include="Battlescape\BattlescapeState.cpp" />
     <ClCompile Include="Battlescape\Map.cpp" />
+    <ClCompile Include="Battlescape\Pathfinding.cpp" />
+    <ClCompile Include="Battlescape\PathfindingNode.cpp" />
     <ClCompile Include="Battlescape\Position.cpp" />
     <ClCompile Include="Battlescape\UnitSprite.cpp" />
     <ClCompile Include="Engine\Action.cpp" />
@@ -177,7 +179,7 @@
     <ClCompile Include="Interface\Cursor.cpp" />
     <ClCompile Include="Interface\FpsCounter.cpp" />
     <ClCompile Include="Interface\ImageButton.cpp" />
-	<ClCompile Include="Interface\NumberText.cpp" />
+    <ClCompile Include="Interface\NumberText.cpp" />
     <ClCompile Include="Interface\Text.cpp" />
     <ClCompile Include="Interface\TextButton.cpp" />
     <ClCompile Include="Interface\TextEdit.cpp" />
@@ -251,6 +253,8 @@
     <ClInclude Include="Basescape\StoresState.h" />
     <ClInclude Include="Battlescape\BattlescapeState.h" />
     <ClInclude Include="Battlescape\Map.h" />
+    <ClInclude Include="Battlescape\Pathfinding.h" />
+    <ClInclude Include="Battlescape\PathfindingNode.h" />
     <ClInclude Include="Battlescape\Position.h" />
     <ClInclude Include="Battlescape\UnitSprite.h" />
     <ClInclude Include="Engine\Action.h" />
@@ -300,7 +304,7 @@
     <ClInclude Include="Interface\Cursor.h" />
     <ClInclude Include="Interface\FpsCounter.h" />
     <ClInclude Include="Interface\ImageButton.h" />
-	<ClInclude Include="Interface\NumberText.h" />
+    <ClInclude Include="Interface\NumberText.h" />
     <ClInclude Include="Interface\Text.h" />
     <ClInclude Include="Interface\TextButton.h" />
     <ClInclude Include="Interface\TextEdit.h" />

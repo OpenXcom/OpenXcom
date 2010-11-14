@@ -18,12 +18,14 @@
  */
 #include "BattleUnit.h"
 #include "../Engine/Palette.h"
+#include "../Battlescape/Pathfinding.h"
 
 /**
  * Initializes a BattleUnit.
  */
-BattleUnit::BattleUnit(RuleUnitSprite *renderRules) : _renderRules(renderRules), _id(0), _pos(Position()), _direction(0)
+BattleUnit::BattleUnit(RuleUnitSprite *renderRules) : _renderRules(renderRules), _id(0), _pos(Position()), _direction(0), _status(STATUS_STANDING), _walkPhase(0)
 {
+
 }
 
 /**
@@ -95,4 +97,43 @@ void BattleUnit::setDirection(int direction)
 int BattleUnit::getDirection() const
 {
 	return _direction;
+}
+
+/*
+ * Gets the unit's status.
+ */
+UnitStatus BattleUnit::getStatus()
+{
+	return _status;
+}
+
+void BattleUnit::startWalking(int direction)
+{
+	_direction = direction;
+	_status = STATUS_WALKING;
+	_walkPhase = 0;
+}
+
+void BattleUnit::keepWalking()
+{
+	_walkPhase++;
+	if (_walkPhase == 4)
+	{
+		// we assume we reached our destination tile
+		// this is a drawing hack, so soldiers are not overlapped by floortiles
+		Position vector;
+		Pathfinding::directionToVector(_direction, &vector);
+		_pos += vector;
+	}
+	if (_walkPhase == 8)
+	{
+		// we officially reached our destination tile
+		_status = STATUS_STANDING;
+		_walkPhase = 0;
+	}
+}
+
+int BattleUnit::getWalkingPhase()
+{
+	return _walkPhase;
 }

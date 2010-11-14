@@ -39,6 +39,7 @@
 #include "../Savegame/Tile.h"
 #include "../Savegame/Node.h"
 #include "../Savegame/NodeLink.h"
+#include "../Battlescape/Position.h"
 
 /**
  * Initializes the resource pack by loading all the resources
@@ -574,13 +575,13 @@ int XcomResourcePack::loadMAP(MapBlock *mapblock, int xoff, int yoff, SavedBattl
 			terrainObjectID = (int)value[part];
 			if (terrainObjectID>0)
 			{
-				save->getTile(x, y, z)->setName(terrain->getTerrainObjectName(terrainObjectID),part);
+				save->getTile(Position(x, y, z))->setName(terrain->getTerrainObjectName(terrainObjectID),part);
 			}
 			// if the part is empty and it's not a floor, remove it
 			// it prevents growing grass in UFOs
 			if (terrainObjectID == 0 && part > 0)
 			{
-				save->getTile(x, y, z)->setName("",part);
+				save->getTile(Position(x, y, z))->setName("",part);
 			}
 		}
 

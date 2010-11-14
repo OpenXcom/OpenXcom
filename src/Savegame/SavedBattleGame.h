@@ -34,6 +34,7 @@ class BattleSoldier;
 class BattleUnit;
 class Soldier;
 class Position;
+class Pathfinding;
 
 /**
  * The battlescape data that gets written to disk when the game is saved.
@@ -57,6 +58,7 @@ private:
 	//std::vector<BattleItem*> _items;
 
 	RuleTerrain *_terrain;
+	Pathfinding *_pathfinding;
 public:
 	/// Creates a new battle save, based on current generic save.
 	SavedBattleGame(SavedGame *save, int width, int length, int height, RuleTerrain *terrain);
@@ -73,11 +75,11 @@ public:
 	/// Gets terrain height.
 	int getHeight();
 	/// Conversion between coordinates and the tile index.
-	int getTileIndex(int x, int y, int z);
+	int getTileIndex(const Position& pos);
 	/// Conversion between tile index and coordinates.
 	void getTileCoords(int index, int *x, int *y, int *z);
-	/// Gets the tile at certain coordinates.
-	Tile *getTile(int x, int y, int z);
+	/// Gets the tile at certain position.
+	Tile *getTile(const Position& pos);
 	/// Sets the xcom craft and ufo for this battle game.
 	void setCrafts(Craft *craft, Ufo* ufo);
 	/// Get the xcom craft in the battle game.
@@ -92,12 +94,16 @@ public:
 	void addSoldier(Soldier *soldier, RuleUnitSprite *rules);
 	/// get the currently selected soldier
 	BattleSoldier *getSelectedSoldier();
+	/// set the currently selected soldier
+	void setSelectedSoldier(BattleSoldier *soldier);
 	/// select next soldier
 	BattleSoldier *selectNextSoldier();
 	/// select unit with position on map
 	BattleUnit *selectUnit(const Position& pos);
 	/// get pointer to the list of nodes
 	std::vector<Node*> *getNodes();
+	/// get the pathfinding object
+	Pathfinding *getPathfinding();
 
 };
 

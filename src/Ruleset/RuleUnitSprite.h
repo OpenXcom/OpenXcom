@@ -46,7 +46,6 @@ private:
 	int _femaleTorso;
 
 	// some bodyparts wobble up and down when walking
-	int _walkTorsoYOffset[8];
 	int _walkArmsYOffset[8];
 	int _walkLegsYOffset[8];
 
@@ -74,6 +73,18 @@ public:
 	void setFemaleTorso(int torso);
 	/// Gets the female torso start frame.
 	int getFemaleTorso();
+	/// Sets the legs stand start frame.
+	void setLegsStand(int id);
+	/// Gets the legs stand start frame.
+	int getLegsStand();
+	/// Sets the legs walk start frame.
+	void setLegsWalk(int id, int dir);
+	/// Gets the legs walk start frame.
+	int getLegsWalk(int dir);
+	/// Sets the legs walk offset.
+	void setLegsWalkOffset(int offset, int phase);
+	/// Gets the legs walk offset.
+	int getLegsWalkOffset(int phase);
 };
 
 #endif

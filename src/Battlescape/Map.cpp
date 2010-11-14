@@ -22,6 +22,7 @@
 #include "Map.h"
 #include "UnitSprite.h"
 #include "Position.h"
+#include "Pathfinding.h"
 #include "../Resource/TerrainObjectSet.h"
 #include "../Resource/TerrainObject.h"
 #include "../Resource/ResourcePack.h"
@@ -31,20 +32,25 @@
 #include "../Engine/Font.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
+#include "../Engine/Game.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/GameTime.h"
 #include "../Savegame/Craft.h"
 #include "../Savegame/Ufo.h"
 #include "../Savegame/Tile.h"
 #include "../Savegame/BattleUnit.h"
+#include "../Savegame/BattleSoldier.h"
 #include "../Ruleset/RuleTerrain.h"
 #include "../Ruleset/RuleCraft.h"
 #include "../Ruleset/RuleUfo.h"
 #include "../Interface/Text.h"
+#include "../Interface/Cursor.h"
 
 #define SCROLL_AMOUNT 8
 #define SCROLL_BORDER 5
 #define DEFAULT_ANIM_SPEED 100
+#define DEFAULT_WALK_SPEED 50
+#define DEFAULT_BULLET_SPEED 20
 
 /*
   1) Map origin is left corner. 
@@ -67,14 +73,23 @@
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Map::Map(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _MapOffsetX(-250), _MapOffsetY(250), _viewHeight(0)
+Map::Map(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _MapOffsetX(-250), _MapOffsetY(250), _viewHeight(0), _hideCursor(false)
 {
 
 	_scrollTimer = new Timer(50);
 	_scrollTimer->onTimer((SurfaceHandler)&Map::scroll);
+
 	_animTimer = new Timer(DEFAULT_ANIM_SPEED);
 	_animTimer->onTimer((SurfaceHandler)&Map::animate);
 	_animTimer->start();
+
+	_walkingTimer = new Timer(DEFAULT_WALK_SPEED);
+	_walkingTimer->onTimer((SurfaceHandler)&Map::moveUnit);
+	_walkingTimer->start();
+
+	_bulletTimer = new Timer(DEFAULT_BULLET_SPEED);
+	_bulletTimer->onTimer((SurfaceHandler)&Map::moveBullet);
+	_bulletTimer->start();
 
 	_animFrame = 0;
 	_ScrollX = 0;
@@ -90,6 +105,8 @@ Map::~Map()
 {
 	delete _scrollTimer;
 	delete _animTimer;
+	delete _walkingTimer;
+	delete _bulletTimer;
 }
 
 /**
@@ -108,9 +125,10 @@ void Map::setResourcePack(ResourcePack *res)
  * Changes the saved game content for the map to render.
  * @param save Pointer to the saved game.
  */
-void Map::setSavedGame(SavedBattleGame *save)
+void Map::setSavedGame(SavedBattleGame *save, Game *game)
 {
 	_save = save;
+	_game = game;
 }
 
 /**
@@ -148,6 +166,8 @@ void Map::think()
 {
 	_scrollTimer->think(0, this);
 	_animTimer->think(0, this);
+	_walkingTimer->think(0, this);
+	_bulletTimer->think(0, this);
 }
 
 /**
@@ -209,9 +229,10 @@ void Map::drawTerrain()
 				if (screenPosition.x > -_SpriteWidth && screenPosition.x < getWidth() + _SpriteWidth &&
 					screenPosition.y > -_SpriteHeight && screenPosition.y < getHeight() + _SpriteHeight )
 				{
+					BattleUnit *unit = _save->selectUnit(mapPosition);
 
 					// Draw floor
-					tile = _save->getTile(itX,itY,itZ);
+					tile = _save->getTile(mapPosition);
 					if (tile)
 					{
 						for (int part=0;part<1;part++)
@@ -228,15 +249,18 @@ void Map::drawTerrain()
 					}
 
 					// Draw cursor back
-					if (_selectorX==itY && _selectorY == itX)
+					if (_selectorX == itY && _selectorY == itX && !_hideCursor)
 					{
 						if (_viewHeight == itZ)
 						{
-							frameNumber = 0;
+							if (unit)
+								frameNumber = 1; // yellow box
+							else
+								frameNumber = 0; // red box
 						}
 						else if (_viewHeight > itZ)
 						{
-							frameNumber = 2;
+							frameNumber = 2; // blue box
 						}
 						frame = _res->getSurfaceSet("CURSOR.PCK")->getFrame(frameNumber);
 						frame->setX(screenPosition.x);
@@ -264,30 +288,35 @@ void Map::drawTerrain()
 					// Draw items
 
 					// Draw soldier
-					BattleUnit *unit = _save->selectUnit(mapPosition);
-					if (unit != 0)
+					if (unit)
 					{
+						Position offset;
+						calculateWalkingOffset(unit->getDirection(), unit->getWalkingPhase(), mapPosition, &offset);
+
 						unitSprite->setBattleUnit(unit);
-						unitSprite->setX(screenPosition.x);
-						unitSprite->setY(screenPosition.y);
+						unitSprite->setX(screenPosition.x + offset.x);
+						unitSprite->setY(screenPosition.y + offset.y);
 						unitSprite->draw();
 						unitSprite->blit(this);
-						if (unit == (BattleUnit*)_save->getSelectedSoldier())
+						if (unit == (BattleUnit*)_save->getSelectedSoldier() && !_hideCursor)
 						{
-							drawArrow(screenPosition);
+							drawArrow(screenPosition + offset);
 						}
 					}	
 
 					// Draw cursor front
-					if (_selectorX == itY && _selectorY == itX)
+					if (_selectorX == itY && _selectorY == itX && !_hideCursor)
 					{
 						if (_viewHeight == itZ)
 						{
-							frameNumber = 3;
+							if (unit)
+								frameNumber = 4; // yellow box
+							else
+								frameNumber = 3; // red box
 						}
 						else if (_viewHeight > itZ)
 						{
-							frameNumber = 5;
+							frameNumber = 5; // blue box
 						}
 						frame = _res->getSurfaceSet("CURSOR.PCK")->getFrame(frameNumber);
 						frame->setX(screenPosition.x);
@@ -336,14 +365,13 @@ void Map::mouseRelease(Action *action, State *state)
 
 /**
  * Ignores any mouse clicks that are outside the map
- * and handles globe rotation and zooming.
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
  */
-void Map::mouseClick(Action *action, State *state)
+/*void Map::mouseClick(Action *action, State *state)
 {
-
-}
+	int test=0;
+}*/
 
 /**
  * Handles map keyboard shortcuts.
@@ -484,7 +512,7 @@ void Map::scroll()
 }
 
 /**
- * Handle animating tiles. 8 Frames per animation.
+ * Handle animating tiles/units/bullets. 8 Frames per animation.
  */
 void Map::animate()
 {
@@ -543,11 +571,134 @@ void Map::convertMapToScreen(const Position &mapPos, Position *screenPos)
 
 /**
  * Draws the small arrow above the selected soldier.
+ * @param screenPos
  */
 void Map::drawArrow(const Position &screenPos)
 {
 	_arrow->setX(screenPos.x + (_SpriteWidth / 2) - (_arrow->getWidth() / 2));
 	_arrow->setY(screenPos.y - _arrow->getHeight() + _animFrame);
 	_arrow->blit(this);
+
+}
+
+/**
+ * Draws the small arrow above the selected soldier.
+ * @param pointer to a position
+ */
+void Map::getSelectorPosition(Position *pos)
+{
+	// don't know why X and Y are inverted here...
+	pos->x = _selectorY;
+	pos->y = _selectorX;
+	pos->z = _viewHeight;
+}
+
+/**
+ * Calculate the offset of a soldier, when it is walking in the middle of 2 tiles.
+ * @param dir direction the soldier is heading.
+ * @param phase walking phase.
+ * @param position current position of the soldier
+ * @param offset pointer to the offset to return the calculation.
+ */
+void Map::calculateWalkingOffset(const int dir, const int phase, const Position &position, Position *offset)
+{
+	int offsetX[8] = { 1, 2, 1, 0, -1, -2, -1, 0 };
+	int offsetY[8] = { 1, 0, -1, -2, -1, 0, 1, 2 };
+	Tile *fromTile = _save->getTile(position);
+	int fromLevel = 0;
+
+	if (phase)
+	{
+		if (phase < 4)
+		{
+			offset->x = phase * 2 * offsetX[dir];
+			offset->y = - phase * offsetY[dir];
+		}
+		else
+		{
+			offset->x = (phase - 8) * 2 * offsetX[dir];
+			offset->y = - (phase - 8) * offsetY[dir];
+		}
+
+	}
+
+	// Terrain level is the height of a soldier when it stands on that tile
+	if (fromTile->getTerrainObject(0))
+		fromLevel = fromTile->getTerrainObject(0)->getTerrainLevel();
+	if (fromTile->getTerrainObject(3))
+		fromLevel += fromTile->getTerrainObject(3)->getTerrainLevel();
+
+	// If we are walking in between tiles, interpolate it's terrain level.
+	if (phase)
+	{
+		Position vector;
+		Pathfinding::directionToVector(dir, &vector);
+		if (phase >= 4)
+		{
+			vector *= Position(-1, -1, -1);
+		}
+		Tile *toTile = _save->getTile(position + vector);
+		int toLevel = 0;
+
+		if (toTile->getTerrainObject(0))
+			toLevel = toTile->getTerrainObject(0)->getTerrainLevel();
+		if (toTile->getTerrainObject(3))
+			toLevel += toTile->getTerrainObject(3)->getTerrainLevel();
+		if (phase < 4)
+		{
+			offset->y += ((fromLevel * (8 - phase)) / 8) + ((toLevel * (phase)) / 8);
+		}
+		else
+		{
+			offset->y += ((toLevel * (8 - phase)) / 8) + ((fromLevel * (phase)) / 8);
+		}
+	}
+	else
+	{
+		offset->y += fromLevel;
+	}
+
+}
+
+/**
+ * Animate walking unit.
+ */
+void Map::moveUnit()
+{
+	if (_save->getSelectedSoldier()->getStatus() == STATUS_WALKING)
+	{
+		_save->getSelectedSoldier()->keepWalking();
+	}
+
+	if (_save->getSelectedSoldier()->getStatus() == STATUS_STANDING)
+	{
+		// check if the soldier has floor, else fall down
+		if (_save->getTile(_save->getSelectedSoldier()->getPosition())->hasNoFloor() && 
+			_save->getSelectedSoldier()->getPosition().z > 0)
+		{
+			_save->getSelectedSoldier()->setPosition(_save->getSelectedSoldier()->getPosition() + Position(0, 0, -1));
+		}
+
+		int dir = _save->getPathfinding()->dequeuePath();
+		if (dir != -1)
+		{
+			_save->getSelectedSoldier()->startWalking(dir);
+			_hideCursor = true; // hide cursor while walking
+			_game->getCursor()->setVisible(false);
+		}else if (_hideCursor)
+		{
+			_hideCursor = false; // show cursor again
+			_game->getCursor()->setVisible(true);
+		}
+	}
+
+	draw();
+}
+
+/**
+ * Animate flying bullet.
+ */
+void Map::moveBullet()
+{
 
 }

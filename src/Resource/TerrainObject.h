@@ -49,9 +49,11 @@ private:
 	TerrainObject *deadObject;
 	TerrainObject *alternativeObject;
 	int _originalSpriteIndex[8];
-	bool _isUfoDoor;
+	bool _isUfoDoor, _stopLOS, _isNoFloor, _isBigWall, _isGravLift, _isDoor, _blockFire, _blockSmoke;
 	int _yOffset;
 	SpecialTileType _specialType;
+	int _TUWalk, _TUFly, _TUSlide;
+	int _terrainLevel;
 public:
 	TerrainObject();
 	~TerrainObject();
@@ -67,12 +69,20 @@ public:
 	int getYOffset();
 	/// info about special tile types
 	SpecialTileType getSpecialType();
+	/// TU cost to walk over the object.
+	int getWalkTUCost();
+	/// Can we walk over it.
+	bool isNoFloor();
+	/// Add this to the graphical Y offset of units or objects on this tile.
+	int getTerrainLevel();
 	
 	// below are setter functions for the properties
-	void setUfoDoor(bool flag);
+	void setFlags(bool isUfoDoor, bool stopLOS, bool isNoFloor, bool isBigWall, bool isGravLift, bool isDoor, bool blockFire, bool blockSmoke);
 	void setYOffset(int value);
 	void setOriginalSpriteIndex(int frameID, int value);
 	void setSpecialType(int value);
+	void setTUCosts(int walk, int fly, int slide);
+	void setTerrainLevel(int value);
 };
 
 #endif

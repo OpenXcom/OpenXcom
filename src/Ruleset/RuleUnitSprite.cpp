@@ -88,3 +88,61 @@ int RuleUnitSprite::getFemaleTorso()
 {
 	return _femaleTorso;
 }
+
+/**
+ * Sets the legs stand start frame.
+ * @param id framenumber.
+ */
+void RuleUnitSprite::setLegsStand(int id)
+{
+	_legsStand = id;
+}
+
+/**
+ * Gets the legs stand frame.
+ * @return Start frame.
+ */
+int RuleUnitSprite::getLegsStand()
+{
+	return _legsStand;
+}
+
+/**
+ * Sets the legs walk start frame.
+ * @param id framenumber.
+ * @param dir direction.
+ */
+void RuleUnitSprite::setLegsWalk(int id, int dir)
+{
+	_legsWalk[dir] = id;
+}
+
+/**
+ * Gets the legs stand frame.
+ * @param dir
+ * @return Start frame.
+ */
+int RuleUnitSprite::getLegsWalk(int dir)
+{
+	return _legsWalk[dir];
+}
+
+/**
+ * Sets the legs walk offset.
+ * @param offset Y.
+ * @param phase 
+ */
+void RuleUnitSprite::setLegsWalkOffset(int offset, int phase)
+{
+	_walkLegsYOffset[phase] = offset;
+}
+
+/**
+ * Gets the legs stand frame.
+ * @param phase
+ * @return Y offset.
+ */
+int RuleUnitSprite::getLegsWalkOffset(int phase)
+{
+	return _walkLegsYOffset[phase];
+}

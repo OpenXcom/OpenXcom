@@ -81,3 +81,24 @@ void Tile::setName(std::string name, int part)
 {
 	_name[part] = name;
 }
+
+/**
+ * Get the TU cost to walk over a certain part of the tile.
+ * @param part
+ * @return TU cost
+ */
+int Tile::getTUWalk(int part)
+{
+	if (_terrainObjects[part])
+		return _terrainObjects[part]->getWalkTUCost();
+	else
+		return 0;
+}
+
+bool Tile::hasNoFloor()
+{
+	if (_terrainObjects[0])
+		return _terrainObjects[0]->isNoFloor();
+	else
+		return true;
+}

@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_UnitSprite_H
-#define OPENXCOM_UnitSprite_H
+#ifndef OPENXCOM_UNITSPRITE_H
+#define OPENXCOM_UNITSPRITE_H
 
 #include "../Engine/Surface.h"
 

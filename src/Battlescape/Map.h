@@ -27,7 +27,7 @@ class Timer;
 class Surface;
 class TerrainObject;
 class Position;
-
+class Tile;
 
 /**
  * Interactive map of the battlescape
@@ -37,8 +37,9 @@ class Map : public InteractiveSurface
 private:
 	SavedBattleGame *_save;
 	ResourcePack *_res;
-	Timer *_scrollTimer, *_animTimer;
+	Timer *_scrollTimer, *_animTimer, *_walkingTimer, *_bulletTimer;
 	Surface *_arrow;
+	Game *_game;
 
 	int _MapOffsetX, _MapOffsetY, _viewHeight;
 	int _RMBClickX, _RMBClickY;
@@ -47,6 +48,7 @@ private:
 	int _selectorX, _selectorY;
 	int _ScrollX, _ScrollY;
 	int _animFrame;
+	bool _hideCursor;
 
 	Surface* getSurface(TerrainObject *tob, int frame);
 	void minMaxInt(int *value, const int minValue, const int maxValue);
@@ -56,7 +58,7 @@ public:
 	/// Cleans up the map.
 	~Map();
 	/// savedbattlegame contains all game content like Tiles, Soldiers, Items,...
-	void setSavedGame(SavedBattleGame *save);
+	void setSavedGame(SavedBattleGame *save, Game *game);
 	/// resourcepack contains tilesheets for terrain and units,... for rendering
 	void setResourcePack(ResourcePack *res);
 	/// sets stuff up
@@ -74,7 +76,7 @@ public:
 	/// Special handling for mouse releases.
 	void mouseRelease(Action *action, State *state);
 	/// Special handling for mouse clicks.
-	void mouseClick(Action *action, State *state);
+	//void mouseClick(Action *action, State *state);
 	/// Special handling for mous over
 	void mouseOver(Action *action, State *state);
 	/// Special handling for key presses.
@@ -91,10 +93,19 @@ public:
 	void centerOnPosition(const Position &pos);
 	/// Converts map coordinates to screen coordinates.
 	void convertMapToScreen(const Position &mapPos, Position *screenPos);
-	/// sets the battlescape selector position relative to mouseposition
+	/// Sets the battlescape selector position relative to mouseposition.
 	void setSelectorPosition(int mx, int my);
-	/// draws the small arrow above the selected soldier
+	/// Draws the small arrow above the selected soldier.
 	void drawArrow(const Position &pos);
+	/// Get the currently selected position.
+	void getSelectorPosition(Position *pos);
+	/// Calculate the offset of a soldier, when it is walking in the middle of 2 tiles.
+	void calculateWalkingOffset(const int dir, const int phase, const Position &position, Position *offset);
+	/// Animate walking unit.
+	void moveUnit();
+	/// Animate flying bullet.
+	void moveBullet();
+
 
 };
 

@@ -18,6 +18,7 @@
  */
 #include "Map.h"
 #include "BattlescapeState.h"
+#include "Pathfinding.h"
 #include "../Engine/Game.h"
 #include "../Engine/Music.h"
 #include "../Engine/Language.h"
@@ -25,6 +26,7 @@
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
 #include "../Engine/Screen.h"
+#include "../Engine/Action.h"
 #include "../Resource/ResourcePack.h"
 #include "../Resource/LangString.h"
 #include "../Interface/Cursor.h"
@@ -118,7 +120,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	// Set up objects
 	_game->getResourcePack()->getSurface("ICONS.PCK")->blit(_icons);
 	
-	_map->setSavedGame(_game->getSavedGame()->getBattleGame());
+	_map->setSavedGame(_game->getSavedGame()->getBattleGame(), _game);
 	_map->setResourcePack(_game->getResourcePack());
 	_map->init();
 
@@ -129,6 +131,8 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	_btnMapUp->onMouseClick((ActionHandler)&BattlescapeState::btnMapUpClick);
 	_btnMapDown->onMouseClick((ActionHandler)&BattlescapeState::btnMapDownClick);
 	_btnNextSoldier->onMouseClick((ActionHandler)&BattlescapeState::btnNextSoldierClick);
+
+	_map->onMouseClick((ActionHandler)&BattlescapeState::mapClick);
 
 	_txtName->setColor(Palette::blockOffset(8));
 	_numTimeUnits->setColor(Palette::blockOffset(4));
@@ -181,21 +185,51 @@ BattlescapeState::~BattlescapeState()
  * @param action Pointer to an action.
  */
 void BattlescapeState::mapClick(Action *action)
-{}
+{
+	// don't handle mouseclicks below Y160, because they are in the buttons area (it overlaps with map surface)
+	if (action->getDetails()->motion.y/action->getYScale() > 140) return;
+
+	Position pos;
+	_map->getSelectorPosition(&pos);
+
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	{
+		BattleUnit *unit = _game->getSavedGame()->getBattleGame()->selectUnit(pos);
+		if (unit)
+		{
+			_game->getSavedGame()->getBattleGame()->setSelectedSoldier((BattleSoldier*)unit);
+			updateSoldierInfo((BattleSoldier*)unit);
+			return;
+		}
+		Pathfinding *pf = _game->getSavedGame()->getBattleGame()->getPathfinding();
+		pf->calculate(_game->getSavedGame()->getBattleGame()->getSelectedSoldier()->getPosition(), pos);
+	}
+	
+}
 
 /**
  * Move unit up.
  * @param action Pointer to an action.
  */
 void BattlescapeState::btnUnitUpClick(Action *action)
-{}
+{
+	Pathfinding *pf = _game->getSavedGame()->getBattleGame()->getPathfinding();
+	Position start = _game->getSavedGame()->getBattleGame()->getSelectedSoldier()->getPosition();
+	Position end = start + Position(0, 0, +1);
+	pf->calculate(start, end);
+}
 
 /**
  * Move unit down.
  * @param action Pointer to an action.
  */
 void BattlescapeState::btnUnitDownClick(Action *action)
-{}
+{
+	Pathfinding *pf = _game->getSavedGame()->getBattleGame()->getPathfinding();
+	Position start = _game->getSavedGame()->getBattleGame()->getSelectedSoldier()->getPosition();
+	Position end = start + Position(0, 0, -1);
+	pf->calculate(start, end);
+}
 
 /**
  * Show next map layer.
