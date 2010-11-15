@@ -28,6 +28,11 @@ class Surface;
 class TerrainObject;
 class Position;
 class Tile;
+class BattleUnit;
+
+// below Y 140 the buttons area starts
+#define BUTTONS_AREA 140
+
 
 /**
  * Interactive map of the battlescape
@@ -100,7 +105,7 @@ public:
 	/// Get the currently selected position.
 	void getSelectorPosition(Position *pos);
 	/// Calculate the offset of a soldier, when it is walking in the middle of 2 tiles.
-	void calculateWalkingOffset(const int dir, const int phase, const Position &position, Position *offset);
+	void calculateWalkingOffset(BattleUnit *unit, Position *offset);
 	/// Animate walking unit.
 	void moveUnit();
 	/// Animate flying bullet.

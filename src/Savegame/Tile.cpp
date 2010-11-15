@@ -102,3 +102,15 @@ bool Tile::hasNoFloor()
 	else
 		return true;
 }
+
+int Tile::getTerrainLevel()
+{
+	int level = 0;
+
+	if (_terrainObjects[0])
+		level = _terrainObjects[0]->getTerrainLevel();
+	if (_terrainObjects[3])
+		level += _terrainObjects[3]->getTerrainLevel();
+
+	return level;
+}

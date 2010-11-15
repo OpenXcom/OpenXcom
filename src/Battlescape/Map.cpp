@@ -291,7 +291,7 @@ void Map::drawTerrain()
 					if (unit)
 					{
 						Position offset;
-						calculateWalkingOffset(unit->getDirection(), unit->getWalkingPhase(), mapPosition, &offset);
+						calculateWalkingOffset(unit, &offset);
 
 						unitSprite->setBattleUnit(unit);
 						unitSprite->setX(screenPosition.x + offset.x);
@@ -551,7 +551,7 @@ void Map::centerOnPosition(const Position &mapPos)
 	convertMapToScreen(mapPos, &screenPos);
 
 	_MapOffsetX = -(screenPos.x - (getWidth() / 2));
-	_MapOffsetY = -(screenPos.y - (getHeight() / 2));
+	_MapOffsetY = -(screenPos.y - (BUTTONS_AREA / 2));
 
 	_viewHeight = mapPos.z;
 }
@@ -600,12 +600,12 @@ void Map::getSelectorPosition(Position *pos)
  * @param position current position of the soldier
  * @param offset pointer to the offset to return the calculation.
  */
-void Map::calculateWalkingOffset(const int dir, const int phase, const Position &position, Position *offset)
+void Map::calculateWalkingOffset(BattleUnit *unit, Position *offset)
 {
 	int offsetX[8] = { 1, 2, 1, 0, -1, -2, -1, 0 };
 	int offsetY[8] = { 1, 0, -1, -2, -1, 0, 1, 2 };
-	Tile *fromTile = _save->getTile(position);
-	int fromLevel = 0;
+	int phase = unit->getWalkingPhase();
+	int dir = unit->getDirection();
 
 	if (phase)
 	{
@@ -622,40 +622,45 @@ void Map::calculateWalkingOffset(const int dir, const int phase, const Position 
 
 	}
 
-	// Terrain level is the height of a soldier when it stands on that tile
-	if (fromTile->getTerrainObject(0))
-		fromLevel = fromTile->getTerrainObject(0)->getTerrainLevel();
-	if (fromTile->getTerrainObject(3))
-		fromLevel += fromTile->getTerrainObject(3)->getTerrainLevel();
-
 	// If we are walking in between tiles, interpolate it's terrain level.
 	if (phase)
 	{
-		Position vector;
-		Pathfinding::directionToVector(dir, &vector);
-		if (phase >= 4)
-		{
-			vector *= Position(-1, -1, -1);
-		}
-		Tile *toTile = _save->getTile(position + vector);
-		int toLevel = 0;
-
-		if (toTile->getTerrainObject(0))
-			toLevel = toTile->getTerrainObject(0)->getTerrainLevel();
-		if (toTile->getTerrainObject(3))
-			toLevel += toTile->getTerrainObject(3)->getTerrainLevel();
 		if (phase < 4)
 		{
+			int fromLevel = _save->getTile(unit->getPosition())->getTerrainLevel();
+			int toLevel = _save->getTile(unit->getDestination())->getTerrainLevel();
+			if (unit->getPosition().z > unit->getDestination().z)
+			{
+				// going down a level, so toLevel 0 becomes +24, -8 becomes  16
+				toLevel += 24*(unit->getPosition().z - unit->getDestination().z);
+			}else if (unit->getPosition().z < unit->getDestination().z)
+			{
+				// going up a level, so toLevel 0 becomes -24, -8 becomes -16
+				toLevel = -24*(unit->getDestination().z - unit->getPosition().z) + abs(toLevel);
+			}
 			offset->y += ((fromLevel * (8 - phase)) / 8) + ((toLevel * (phase)) / 8);
 		}
 		else
 		{
-			offset->y += ((toLevel * (8 - phase)) / 8) + ((fromLevel * (phase)) / 8);
+			// from phase 4 onwards the unit behind the scenes already is on the destination tile
+			// we have to get it's last position to calculate the correct offset
+			int fromLevel = _save->getTile(unit->getLastPosition())->getTerrainLevel();
+			int toLevel = _save->getTile(unit->getDestination())->getTerrainLevel();
+			if (unit->getLastPosition().z > unit->getDestination().z)
+			{
+				// going down a level, so fromLevel 0 becomes -24, -8 becomes -32
+				fromLevel -= 24*(unit->getLastPosition().z - unit->getDestination().z);
+			}else if (unit->getLastPosition().z < unit->getDestination().z)
+			{
+				// going up a level, so fromLevel 0 becomes +24, -8 becomes 16
+				fromLevel = -24*(unit->getDestination().z - unit->getLastPosition().z) + abs(fromLevel);
+			}
+			offset->y += ((fromLevel * (8 - phase)) / 8) + ((toLevel * (phase)) / 8);
 		}
 	}
 	else
 	{
-		offset->y += fromLevel;
+		offset->y += _save->getTile(unit->getPosition())->getTerrainLevel();
 	}
 
 }
@@ -672,17 +677,12 @@ void Map::moveUnit()
 
 	if (_save->getSelectedSoldier()->getStatus() == STATUS_STANDING)
 	{
-		// check if the soldier has floor, else fall down
-		if (_save->getTile(_save->getSelectedSoldier()->getPosition())->hasNoFloor() && 
-			_save->getSelectedSoldier()->getPosition().z > 0)
-		{
-			_save->getSelectedSoldier()->setPosition(_save->getSelectedSoldier()->getPosition() + Position(0, 0, -1));
-		}
-
 		int dir = _save->getPathfinding()->dequeuePath();
 		if (dir != -1)
 		{
-			_save->getSelectedSoldier()->startWalking(dir);
+			Position destination;
+			int tu = _save->getPathfinding()->getTUCost(_save->getSelectedSoldier()->getPosition(), dir, &destination);
+			_save->getSelectedSoldier()->startWalking(dir, destination);
 			_hideCursor = true; // hide cursor while walking
 			_game->getCursor()->setVisible(false);
 		}else if (_hideCursor)

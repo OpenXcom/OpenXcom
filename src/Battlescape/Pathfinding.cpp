@@ -22,6 +22,7 @@
 #include "Position.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
+#include "../Resource/TerrainObject.h"
 
 /**
  * Sets up a Pathfinding.
@@ -98,6 +99,7 @@ void Pathfinding::calculate(const Position &startPosition, Position &endPosition
 	// if the open list is empty, we've reached the end
     while(!openList.empty())
 	{
+		// this algorithm expands in all directions
         for (int direction = 0; direction < 8; direction++)
 		{
 			currentPos = openList.front()->getPosition();
@@ -134,46 +136,101 @@ void Pathfinding::calculate(const Position &startPosition, Position &endPosition
 }
 
 /*
- * Get's the TU cost to move from 1 tile to the other.
+ * Get's the TU cost to move from 1 tile to the other(ONE STEP ONLY). But also updates the endPosition, because it is possible
+ * the unit goes upstairs or falls down while walking.
  * @param startPosition
  * @param direction
- * @param endPosition
- * @return TU cost or 255 if movement impossible
+ * @param endPosition pointer
+ * @return TU cost - 255 if movement impossible
  */
 int Pathfinding::getTUCost(const Position &startPosition, int direction, Position *endPosition)
 {
 	directionToVector(direction, endPosition);
 	*endPosition += startPosition;
 
-	// check if destination is inside the map
-
+	Tile *startTile = _save->getTile(startPosition);
 	Tile *destinationTile = _save->getTile(*endPosition);
-	// check if the difference in height between start and destination is not too high
 
+	// if we are on high ground, it is possible to go a level up, so let's try
+	// high ground in xcom is typically -20 or -16
+	if (startTile->getTerrainLevel() < -15)
+	{
+		endPosition->z++;
+		destinationTile = _save->getTile(*endPosition);
+	}
 
-	// check if we have floor, else fall down
-	while ( (!destinationTile || destinationTile->hasNoFloor()) && endPosition->z > 0)
+	// check if we have floor, else fall down (again)
+	while ( (!destinationTile || destinationTile->hasNoFloor()) && endPosition->z > 0 && (!destinationTile || destinationTile->getTUWalk(3) < 255))
 	{
 		endPosition->z--;
 		destinationTile = _save->getTile(*endPosition);
 	}
-	if (!destinationTile) return 255;
+
+	// this means the destination is probably outside the map
+	if (!destinationTile)
+		return 255;
+
+	// check if the difference in height between start and destination is not too high
+	// so we can not jump to the highest part of the stairs from the floor
+	// stairs terrainlevel goes typically -8 -16 (2 steps) or -4 -12 -20 (3 steps)
+	// this "maximum jump height" is therefore set to 8
+	if ((startPosition.z == endPosition->z) &&
+		(startTile->getTerrainLevel() - destinationTile->getTerrainLevel() > 8))
+		return 255;
 
 	// check if the destination tile can be walked upon
-	if (destinationTile->getTUWalk(0)==255 || destinationTile->getTUWalk(3)==255) return 255;
+	if (destinationTile->getTUWalk(0) == 255 || destinationTile->getTUWalk(3) == 255)
+		return 255;
 
 	// check if the destination tile is not occupied by a unit
-	if (_save->selectUnit(*endPosition) != 0) return 255;
+	if (_save->selectUnit(*endPosition) != 0)
+		return 255;
 
-	// check if we are not blocked by walls or objects on adjacent tiles
+	// check if we are not blocked by walls on adjacent tiles
+	// remember: part 1 is west wall, part 2 is north wall, direction 0 is north
+	switch(direction)
+	{
+	case 0:	// north
+		if (startTile->getTUWalk(2) == 255) return 255;
+		break;
+	case 1: // north east
+		if (startTile->getTUWalk(2) == 255) return 255;
+		if (destinationTile->getTUWalk(1) == 255) return 255;
+		break;
+	case 2: // east
+		if (destinationTile->getTUWalk(1) == 255) return 255;
+		break;
+	case 3: // south east
+		if (destinationTile->getTUWalk(1) == 255) return 255;
+		if (destinationTile->getTUWalk(2) == 255) return 255;
+		if (_save->getTile(startPosition + Position(1, 0, 0))->getTUWalk(1) == 255) return 255;
+		break;
+	case 4: // south
+		if (destinationTile->getTUWalk(2) == 255) return 255;
+		break;
+	case 5: // south west
+		if (destinationTile->getTUWalk(2) == 255) return 255;
+		if (startTile->getTUWalk(1) == 255) return 255;
+		break;
+	case 6: // west
+		if (startTile->getTUWalk(1) == 255) return 255;
+		break;
+	case 7: // north west
+		if (startTile->getTUWalk(1) == 255) return 255;
+		if (startTile->getTUWalk(2) == 255) return 255;
+		if (_save->getTile(startPosition + Position(0, 1, 0))->getTUWalk(1) == 255) return 255;
+		break;
+	}
 
+	// calculate the cost by adding floor walk cost and object walk cost
 	int cost = destinationTile->getTUWalk(0) + destinationTile->getTUWalk(3);
 	
 	// diagonal walking (uneven directions) costs 50% more tu's
 	if (direction & 1)
 	{
-		cost *= 1.5;
+		cost = (int)((double)cost * 1.5);
 	}
+
 	return cost;
 }
 

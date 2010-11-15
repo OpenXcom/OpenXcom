@@ -35,7 +35,9 @@ private:
 	RuleUnitSprite *_renderRules;
 	int _id;
 	Position _pos;
+	Position _lastPos;
 	int _direction;
+	Position _destination;
 	UnitStatus _status;
 	int _walkPhase;
 public:
@@ -53,6 +55,8 @@ public:
 	void setPosition(const Position& pos);
 	/// Gets the unit's position.
 	const Position& getPosition() const;
+	/// Gets the unit's position.
+	const Position& getLastPosition() const;
 	/// Sets the unit's direction 0-7.
 	void setDirection(int direction);
 	/// Gets the unit's direction.
@@ -60,11 +64,13 @@ public:
 	/// Gets the unit's status.
 	UnitStatus getStatus();
 	/// Start the walkingPhase
-	void startWalking(int direction);
+	void startWalking(int direction, const Position &destination);
 	/// Increase the walkingPhase
 	void keepWalking();
 	/// Gets the walking phase
 	int getWalkingPhase();
+	/// Gets the unit's destination when walking
+	const Position &getDestination() const;
 
 };
 

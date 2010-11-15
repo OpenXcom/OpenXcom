@@ -910,8 +910,6 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	for (int i=0; i<8; i++)
 		xcom_0->setLegsWalkOffset((i%4)?0:-2, i);
 	_unitSprites.insert(std::pair<std::string, RuleUnitSprite*>("XCOM_0",xcom_0));
-
-
 }
 
 /**

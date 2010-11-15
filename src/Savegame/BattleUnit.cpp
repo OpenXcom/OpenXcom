@@ -23,7 +23,7 @@
 /**
  * Initializes a BattleUnit.
  */
-BattleUnit::BattleUnit(RuleUnitSprite *renderRules) : _renderRules(renderRules), _id(0), _pos(Position()), _direction(0), _status(STATUS_STANDING), _walkPhase(0)
+BattleUnit::BattleUnit(RuleUnitSprite *renderRules) : _renderRules(renderRules), _id(0), _pos(Position()), _lastPos(Position()), _direction(0), _status(STATUS_STANDING), _walkPhase(0)
 {
 
 }
@@ -69,16 +69,34 @@ RuleUnitSprite *const BattleUnit::getRenderRules() const
  */
 void BattleUnit::setPosition(const Position& pos)
 {
+	_lastPos = _pos;
 	_pos = pos;
 }
 
 /**
- * Changes the BattleUnit's position.
- * @return pointer to position
+ * Gets the BattleUnit's position.
+ * @return position
  */
 const Position& BattleUnit::getPosition() const
 {
 	return _pos;
+}
+
+/**
+ * Gets the BattleUnit's position.
+ * @return position
+ */
+const Position& BattleUnit::getLastPosition() const
+{
+	return _lastPos;
+}
+/**
+ * Gets the BattleUnit's destination.
+ * @return destination
+ */
+const Position& BattleUnit::getDestination() const
+{
+	return _destination;
 }
 
 /**
@@ -107,11 +125,12 @@ UnitStatus BattleUnit::getStatus()
 	return _status;
 }
 
-void BattleUnit::startWalking(int direction)
+void BattleUnit::startWalking(int direction, const Position &destination)
 {
 	_direction = direction;
 	_status = STATUS_WALKING;
 	_walkPhase = 0;
+	_destination = destination;
 }
 
 void BattleUnit::keepWalking()
@@ -120,10 +139,9 @@ void BattleUnit::keepWalking()
 	if (_walkPhase == 4)
 	{
 		// we assume we reached our destination tile
-		// this is a drawing hack, so soldiers are not overlapped by floortiles
-		Position vector;
-		Pathfinding::directionToVector(_direction, &vector);
-		_pos += vector;
+		// this is actually a drawing hack, so soldiers are not overlapped by floortiles
+		_lastPos = _pos;
+		_pos = _destination;
 	}
 	if (_walkPhase == 8)
 	{

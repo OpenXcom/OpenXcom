@@ -58,6 +58,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	_btnMapUp = new InteractiveSurface(32, 16, 80, 144);
 	_btnMapDown = new InteractiveSurface(32, 16, 80, 160);
 	_btnNextSoldier = new InteractiveSurface(32, 16, 176, 144);
+	_btnCenter = new InteractiveSurface(32, 16, 145, 160);
 	_btnReserveNone = new ImageButton(28, 11, 49, 177);
 	_btnReserveSnap = new ImageButton(28, 11, 78, 177);
 	_btnReserveAimed = new ImageButton(28, 11, 49, 189);
@@ -103,6 +104,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	add(_btnMapUp);
 	add(_btnMapDown);
 	add(_btnNextSoldier);
+	add(_btnCenter);
 	add(_txtName);
 	add(_numTimeUnits);
 	add(_numEnergy);
@@ -131,6 +133,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	_btnMapUp->onMouseClick((ActionHandler)&BattlescapeState::btnMapUpClick);
 	_btnMapDown->onMouseClick((ActionHandler)&BattlescapeState::btnMapDownClick);
 	_btnNextSoldier->onMouseClick((ActionHandler)&BattlescapeState::btnNextSoldierClick);
+	_btnCenter->onMouseClick((ActionHandler)&BattlescapeState::btnCenterClick);
 
 	_map->onMouseClick((ActionHandler)&BattlescapeState::mapClick);
 
@@ -186,8 +189,8 @@ BattlescapeState::~BattlescapeState()
  */
 void BattlescapeState::mapClick(Action *action)
 {
-	// don't handle mouseclicks below Y160, because they are in the buttons area (it overlaps with map surface)
-	if (action->getDetails()->motion.y/action->getYScale() > 140) return;
+	// don't handle mouseclicks below 140, because they are in the buttons area (it overlaps with map surface)
+	if (action->getDetails()->motion.y/action->getYScale() > BUTTONS_AREA) return;
 
 	Position pos;
 	_map->getSelectorPosition(&pos);

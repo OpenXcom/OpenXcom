@@ -42,7 +42,7 @@ public:
 	/// Reset node.
 	void reset();
 	/// Check node.
-	void check(int tuCost, int stepsNum, PathfindingNode* _prevNode, int prevDir);
+	void check(int tuCost, int stepsNum, PathfindingNode* prevNode, int prevDir);
 	/// is checked?
 	bool isChecked();
 	/// get TU cost

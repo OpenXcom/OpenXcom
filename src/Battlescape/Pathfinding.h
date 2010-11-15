@@ -37,8 +37,6 @@ private:
 	std::vector<int> _path;
 	/// Gets the node at certain position.
 	PathfindingNode *getNode(const Position& pos);
-	/// Get's the TU cost to move from 1 tile to the other.
-	int getTUCost(const Position &startPosition, const int direction, Position *endPosition);
 public:
 	/// Creates a new Pathfinding class
 	Pathfinding(SavedBattleGame *save);
@@ -50,6 +48,8 @@ public:
 	static void directionToVector(const int direction, Position *vector);
 	/// Check whether a path is ready and dequeue it.
 	int dequeuePath();
+	/// Get's the TU cost to move from 1 tile to the other.
+	int getTUCost(const Position &startPosition, const int direction, Position *endPosition);
 };
 
 #endif

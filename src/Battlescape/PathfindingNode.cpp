@@ -103,8 +103,8 @@ PathfindingNode* PathfindingNode::getPrevNode()
 }
 
 /**
- * Get previous walking direction;
- * @return previous node
+ * Get previous walking direction how we got on this node.
+ * @return previous vector
  */
 int PathfindingNode::getPrevDir()
 {

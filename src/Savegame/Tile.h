@@ -52,6 +52,8 @@ public:
 	int getTUWalk(int part);
 	/// Checks if this tile has a floor.
 	bool hasNoFloor();
+	/// Get terrain level.
+	int getTerrainLevel();
 };
 
 #endif
