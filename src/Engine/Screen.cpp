@@ -68,7 +68,7 @@ Surface *const Screen::getSurface() const
  */
 void Screen::handle(Action *action)
 {
-	if (action->getDetails()->type == SDL_KEYDOWN && action->getDetails()->key.keysym.sym == SDLK_RETURN && action->getDetails()->key.keysym.mod == KMOD_ALT)
+	if (action->getDetails()->type == SDL_KEYDOWN && action->getDetails()->key.keysym.sym == SDLK_RETURN && (SDL_GetModState() & KMOD_ALT) != 0)
 	{
 		setFullscreen(!_fullscreen);
 	}

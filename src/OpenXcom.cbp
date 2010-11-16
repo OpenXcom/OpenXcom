@@ -90,6 +90,10 @@
 		<Unit filename="Battlescape\BattlescapeState.h" />
 		<Unit filename="Battlescape\Map.cpp" />
 		<Unit filename="Battlescape\Map.h" />
+		<Unit filename="Battlescape\Pathfinding.cpp" />
+		<Unit filename="Battlescape\Pathfinding.h" />
+		<Unit filename="Battlescape\PathfindingNode.cpp" />
+		<Unit filename="Battlescape\PathfindingNode.h" />
 		<Unit filename="Battlescape\Position.cpp" />
 		<Unit filename="Battlescape\Position.h" />
 		<Unit filename="Battlescape\UnitSprite.cpp" />

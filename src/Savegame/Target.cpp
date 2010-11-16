@@ -24,7 +24,7 @@
 /**
  * Initializes a target with blank coordinates.
  */
-Target::Target() : _lat(0.0), _lon(0.0)
+Target::Target() : _lat(0.0), _lon(0.0), _followers()
 {
 }
 
@@ -67,7 +67,7 @@ void Target::setLongitude(double lon)
 {
 	_lon = lon;
 
-	// Keep between 0 and 2xM_PI
+	// Keep between 0 and 2xPI
 	while (_lon < 0)
 		_lon += 2 * M_PI;
 	while (_lon >= 2 * M_PI)

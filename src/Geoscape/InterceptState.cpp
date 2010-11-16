@@ -111,7 +111,9 @@ InterceptState::InterceptState(Game *game, Globe *globe, Base *base) : State(gam
 			_crafts.push_back(*j);
 			_lstCrafts->addRow(4, (*j)->getName(_game->getResourcePack()->getLanguage()).c_str(), _game->getResourcePack()->getLanguage()->getString((*j)->getStatus()).c_str(), (*i)->getName().c_str(), ss.str().c_str());
 			if ((*j)->getStatus() == STR_READY)
+			{
 				_lstCrafts->getCell(row, 1)->setColor(Palette::blockOffset(8)+10);
+			}
 			row++;
 		}
 	}

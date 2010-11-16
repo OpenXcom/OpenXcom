@@ -604,6 +604,22 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Battlescape\Pathfinding.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\Pathfinding.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\PathfindingNode.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\PathfindingNode.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Battlescape\Position.cpp"
 				>
 			</File>

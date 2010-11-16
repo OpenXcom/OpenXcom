@@ -459,6 +459,17 @@ void DogfightState::move()
 		_game->popState();
 		if (_destroy)
 		{
+			// Disengage any other craft
+			for (std::vector<Target*>::iterator i = _ufo->getFollowers()->begin(); i != _ufo->getFollowers()->end(); i++)
+			{
+				Craft *c = dynamic_cast<Craft*>(*i);
+				if (c)
+				{
+					c->returnToBase();
+				}
+			}
+			
+			// Clear UFO
 			for (std::vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end(); i++)
 			{
 				if (*i == _ufo)
