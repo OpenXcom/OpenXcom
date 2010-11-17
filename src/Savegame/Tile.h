@@ -20,9 +20,11 @@
 #define OPENXCOM_TILE_H
 
 #include <string>
+#include "../Battlescape/Position.h"
 
 class Surface;
 class TerrainObject;
+enum MovementType;
 
 /**
  * basic element of which a battle map is build
@@ -34,10 +36,11 @@ protected:
 	TerrainObject *_terrainObjects[4];
 	bool _visible; // is this tile seen by the XCom team
 	int _light; // the amount of light on this tile
+	Position _pos;
 
 public:
 	/// Creates a tile.
-	Tile();
+	Tile(const Position& pos);
 	/// Cleans up a tile.
 	~Tile();
 	/// Gets name for the part
@@ -49,11 +52,16 @@ public:
 	/// Sets the pointer to the terrainobject for a specific part of the tile
 	void setTerrainObject(TerrainObject *tob, int part);
 	/// Get the TU cost to walk over a certain part of the tile.
-	int getTUWalk(int part);
+	int getTUCost(int part, MovementType movementType);
 	/// Checks if this tile has a floor.
 	bool hasNoFloor();
+	/// Checks if this tile is a big wall.
+	bool isBigWall();
 	/// Get terrain level.
 	int getTerrainLevel();
+	/// Gets the tile's position.
+	const Position& getPosition() const;
+
 };
 
 #endif

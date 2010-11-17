@@ -90,6 +90,7 @@ const Position& BattleUnit::getLastPosition() const
 {
 	return _lastPos;
 }
+
 /**
  * Gets the BattleUnit's destination.
  * @return destination

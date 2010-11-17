@@ -20,10 +20,14 @@
 #define OPENXCOM_PATHFINDING_H
 
 #include <vector>
+#include "Position.h"
+
 
 class Position;
 class SavedBattleGame;
 class PathfindingNode;
+class Tile;
+enum MovementType;
 
 /**
  * A class that calculates the shortest path between two points on the battlescape map
@@ -35,8 +39,12 @@ private:
 	PathfindingNode **_nodes;
 	int _size;
 	std::vector<int> _path;
+	MovementType _movementType;
 	/// Gets the node at certain position.
 	PathfindingNode *getNode(const Position& pos);
+	/// whether a tile blocks a certain movementType
+	bool isBlocked(Tile *tile, const int part);
+	Position _startingPosition;
 public:
 	/// Creates a new Pathfinding class
 	Pathfinding(SavedBattleGame *save);

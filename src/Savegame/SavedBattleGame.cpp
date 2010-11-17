@@ -323,7 +323,9 @@ void SavedBattleGame::generateMap(ResourcePack *res)
 	_tiles = new Tile*[_height * _length * _width];
 	for (int i = 0; i < _height * _length * _width; i++)
 	{
-		_tiles[i] = new Tile();
+		Position pos;
+		getTileCoords(i, &pos.x, &pos.y, &pos.z);
+		_tiles[i] = new Tile(pos);
 	}
 
 	/* Determine UFO landingzone (do this first because ufo is generally bigger) */

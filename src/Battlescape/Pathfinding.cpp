@@ -19,7 +19,6 @@
 #include <list>
 #include "Pathfinding.h"
 #include "PathfindingNode.h"
-#include "Position.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
 #include "../Resource/TerrainObject.h"
@@ -38,6 +37,7 @@ Pathfinding::Pathfinding(SavedBattleGame *save) : _save(save), _nodes()
 		_save->getTileCoords(i, &x, &y, &z);
 		_nodes[i] = new PathfindingNode(Position(x, y, z));
 	}
+
 }
 
 /**
@@ -76,9 +76,14 @@ void Pathfinding::calculate(const Position &startPosition, Position &endPosition
 	Position currentPos, nextPos;
 	int tuCost;
 
-	// check if our destination is valid
+	_movementType = WALK; // should be parameter
+	_startingPosition = startPosition;
 
 	Tile *destinationTile = _save->getTile(endPosition);
+
+	// check if destination is not blocked
+	if (isBlocked(destinationTile, O_FLOOR) || isBlocked(destinationTile, O_OBJECT)) return;
+
 	// check if we have floor, else fall down
 	while ( (!destinationTile || destinationTile->hasNoFloor()) && endPosition.z > 0)
 	{
@@ -159,8 +164,13 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 		destinationTile = _save->getTile(*endPosition);
 	}
 
+	// check if the destination tile can be walked over
+	if (isBlocked(destinationTile, O_FLOOR) || isBlocked(destinationTile, O_OBJECT))
+		return 255;
+
+
 	// check if we have floor, else fall down (again)
-	while ( (!destinationTile || destinationTile->hasNoFloor()) && endPosition->z > 0 && (!destinationTile || destinationTile->getTUWalk(3) < 255))
+	while ( destinationTile->hasNoFloor() && endPosition->z > 0 )
 	{
 		endPosition->z--;
 		destinationTile = _save->getTile(*endPosition);
@@ -178,52 +188,50 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 		(startTile->getTerrainLevel() - destinationTile->getTerrainLevel() > 8))
 		return 255;
 
-	// check if the destination tile can be walked upon
-	if (destinationTile->getTUWalk(0) == 255 || destinationTile->getTUWalk(3) == 255)
-		return 255;
-
-	// check if the destination tile is not occupied by a unit
-	if (_save->selectUnit(*endPosition) != 0)
-		return 255;
-
 	// check if we are not blocked by walls on adjacent tiles
 	// remember: part 1 is west wall, part 2 is north wall, direction 0 is north
 	switch(direction)
 	{
 	case 0:	// north
-		if (startTile->getTUWalk(2) == 255) return 255;
+		if (isBlocked(startTile, O_NORTHWALL)) return 255;
 		break;
 	case 1: // north east
-		if (startTile->getTUWalk(2) == 255) return 255;
-		if (destinationTile->getTUWalk(1) == 255) return 255;
+		if (isBlocked(startTile,O_NORTHWALL)) return 255;
+		if (isBlocked(destinationTile,O_WESTWALL)) return 255;
+		if (isBlocked(_save->getTile(startPosition + Position(1, 0, 0)),O_WESTWALL)) return 255;
+		if (isBlocked(_save->getTile(startPosition + Position(1, 0, 0)),O_NORTHWALL)) return 255;
 		break;
 	case 2: // east
-		if (destinationTile->getTUWalk(1) == 255) return 255;
+		if (isBlocked(destinationTile,O_WESTWALL)) return 255;
 		break;
 	case 3: // south east
-		if (destinationTile->getTUWalk(1) == 255) return 255;
-		if (destinationTile->getTUWalk(2) == 255) return 255;
-		if (_save->getTile(startPosition + Position(1, 0, 0))->getTUWalk(1) == 255) return 255;
+		if (isBlocked(destinationTile,O_WESTWALL)) return 255;
+		if (isBlocked(destinationTile,O_NORTHWALL)) return 255;
+		if (isBlocked(_save->getTile(startPosition + Position(1, 0, 0)),O_WESTWALL)) return 255;
+		if (isBlocked(_save->getTile(startPosition + Position(0, -1, 0)),O_NORTHWALL)) return 255;
 		break;
 	case 4: // south
-		if (destinationTile->getTUWalk(2) == 255) return 255;
+		if (isBlocked(destinationTile,O_NORTHWALL)) return 255;
 		break;
 	case 5: // south west
-		if (destinationTile->getTUWalk(2) == 255) return 255;
-		if (startTile->getTUWalk(1) == 255) return 255;
+		if (isBlocked(destinationTile,O_NORTHWALL)) return 255;
+		if (isBlocked(startTile,O_WESTWALL)) return 255;
+		if (isBlocked(_save->getTile(startPosition + Position(0, -1, 0)),O_WESTWALL)) return 255;
+		if (isBlocked(_save->getTile(startPosition + Position(0, -1, 0)),O_NORTHWALL)) return 255;
 		break;
 	case 6: // west
-		if (startTile->getTUWalk(1) == 255) return 255;
+		if (isBlocked(startTile,O_WESTWALL)) return 255;
 		break;
 	case 7: // north west
-		if (startTile->getTUWalk(1) == 255) return 255;
-		if (startTile->getTUWalk(2) == 255) return 255;
-		if (_save->getTile(startPosition + Position(0, 1, 0))->getTUWalk(1) == 255) return 255;
+		if (isBlocked(startTile,O_WESTWALL)) return 255;
+		if (isBlocked(startTile,O_NORTHWALL)) return 255;
+		if (isBlocked(_save->getTile(startPosition + Position(0, 1, 0)),O_WESTWALL)) return 255;
+		if (isBlocked(_save->getTile(startPosition + Position(-1, 0, 0)),O_NORTHWALL)) return 255;
 		break;
 	}
 
 	// calculate the cost by adding floor walk cost and object walk cost
-	int cost = destinationTile->getTUWalk(0) + destinationTile->getTUWalk(3);
+	int cost = destinationTile->getTUCost(O_FLOOR, _movementType) + destinationTile->getTUCost(O_OBJECT, _movementType);
 	
 	// diagonal walking (uneven directions) costs 50% more tu's
 	if (direction & 1)
@@ -258,4 +266,26 @@ int Pathfinding::dequeuePath()
 	int last_element = _path.back();
 	_path.pop_back();
 	return last_element;
+}
+
+
+/*
+ * Whether a tile blocks a certain movementType.
+ * @param tile can be null pointer
+ * @param movementType
+ * @return true/false
+ */
+bool Pathfinding::isBlocked(Tile *tile, const int part)
+{
+	if (tile == 0) return true; // probably outside the map here
+
+	if (tile->getTUCost(part, _movementType) == 255) return true; // blocking part
+
+	if (tile->getPosition() == _startingPosition) return false; // never block the start position
+
+	if (_save->selectUnit(tile->getPosition()) != 0) return true; // other units block every part
+
+	if (tile->isBigWall()) return true; // big walls block every part
+
+	return false;
 }

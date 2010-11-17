@@ -96,9 +96,21 @@ SpecialTileType TerrainObject::getSpecialType()
  * Gets the TU cost to walk over the object.
  * @return TU cost
  */
-int TerrainObject::getWalkTUCost()
+int TerrainObject::getTUCost(MovementType movementType)
 {
-	return _TUWalk;
+	switch (movementType)
+	{
+	case WALK:
+		return _TUWalk;
+		break;
+	case FLY:
+		return _TUFly;
+		break;
+	case SLIDE:
+		return _TUSlide;
+		break;
+	}
+	return 0;
 }
 
 /**
@@ -108,6 +120,16 @@ int TerrainObject::getWalkTUCost()
 bool TerrainObject::isNoFloor()
 {
 	return _isNoFloor;
+}
+
+/**
+  * whether this is a big wall, which blocks all surrounding paths
+  * @return bool 
+  */
+bool TerrainObject::isBigWall()
+{
+	if (_terrainLevel < 0) return false; // this is a hack for eg. Skyranger Ramps
+	return _isBigWall;
 }
 
 /**

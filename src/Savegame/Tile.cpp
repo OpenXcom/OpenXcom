@@ -22,7 +22,7 @@
 /**
 * constructor
 */
-Tile::Tile(): _visible(true), _light(255)
+Tile::Tile(const Position& pos): _visible(true), _light(255), _pos(pos)
 {
 	_terrainObjects[0] = 0;
 	_terrainObjects[1] = 0;
@@ -87,30 +87,59 @@ void Tile::setName(std::string name, int part)
  * @param part
  * @return TU cost
  */
-int Tile::getTUWalk(int part)
+int Tile::getTUCost(int part, MovementType movementType)
 {
 	if (_terrainObjects[part])
-		return _terrainObjects[part]->getWalkTUCost();
+		return _terrainObjects[part]->getTUCost(movementType);
 	else
 		return 0;
 }
 
+/**
+ * Whether this tile has a floor or not. If no object defined as floor, it has no floor.
+ * @return bool
+ */
 bool Tile::hasNoFloor()
 {
-	if (_terrainObjects[0])
-		return _terrainObjects[0]->isNoFloor();
+	if (_terrainObjects[O_FLOOR])
+		return _terrainObjects[O_FLOOR]->isNoFloor();
 	else
 		return true;
 }
 
+/**
+ * Whether this tile has a big wall.
+ * @return bool
+ */
+bool Tile::isBigWall()
+{
+	if (_terrainObjects[O_OBJECT])
+		return _terrainObjects[O_OBJECT]->isBigWall();
+	else
+		return false;
+}
+
+/**
+ * If an object stand on this tile, how high is it standing.
+ * @return the level in pixels
+ */
 int Tile::getTerrainLevel()
 {
 	int level = 0;
 
-	if (_terrainObjects[0])
-		level = _terrainObjects[0]->getTerrainLevel();
-	if (_terrainObjects[3])
-		level += _terrainObjects[3]->getTerrainLevel();
+	if (_terrainObjects[O_FLOOR])
+		level = _terrainObjects[O_FLOOR]->getTerrainLevel();
+	if (_terrainObjects[O_OBJECT])
+		level += _terrainObjects[O_OBJECT]->getTerrainLevel();
 
 	return level;
+}
+
+/**
+ * Gets the tile's position.
+ * @return position
+ */
+const Position& Tile::getPosition() const
+{
+	return _pos;
 }

@@ -22,6 +22,11 @@
 class Surface;
 #include <string>
 
+#define O_FLOOR 0
+#define O_WESTWALL 1
+#define O_NORTHWALL 2
+#define O_OBJECT 3
+
 enum SpecialTileType{TILE=0,
 					START_POINT,
 					ION_BEAM_ACCEL,
@@ -37,6 +42,9 @@ enum SpecialTileType{TILE=0,
 					DEAD_TILE,
 					END_POINT,
 					MUST_DESTROY};
+
+enum MovementType{WALK=0, FLY, SLIDE};
+
 /**
  * A TerrainObject is the smallest piece of a Battlescape terrain
  * @sa TerrainObject
@@ -70,11 +78,13 @@ public:
 	/// info about special tile types
 	SpecialTileType getSpecialType();
 	/// TU cost to walk over the object.
-	int getWalkTUCost();
+	int getTUCost(MovementType movementType);
 	/// Can we walk over it.
 	bool isNoFloor();
 	/// Add this to the graphical Y offset of units or objects on this tile.
 	int getTerrainLevel();
+	/// Can we walk over it.
+	bool isBigWall();
 	
 	// below are setter functions for the properties
 	void setFlags(bool isUfoDoor, bool stopLOS, bool isNoFloor, bool isBigWall, bool isGravLift, bool isDoor, bool blockFire, bool blockSmoke);

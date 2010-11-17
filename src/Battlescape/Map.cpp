@@ -292,7 +292,6 @@ void Map::drawTerrain()
 					{
 						Position offset;
 						calculateWalkingOffset(unit, &offset);
-
 						unitSprite->setBattleUnit(unit);
 						unitSprite->setX(screenPosition.x + offset.x);
 						unitSprite->setY(screenPosition.y + offset.y);
@@ -302,7 +301,29 @@ void Map::drawTerrain()
 						{
 							drawArrow(screenPosition + offset);
 						}
-					}	
+					}
+					// if we can see through the floor, draw the soldier below it if it is on stairs
+					if (itZ > 0 && tile->hasNoFloor()) 
+					{
+						unit = _save->selectUnit(mapPosition + Position(0, 0, -1));
+						tile = _save->getTile(mapPosition + Position(0, 0, -1));
+						if (unit && tile->getTerrainLevel() < 0)
+						{
+							Position offset;
+							calculateWalkingOffset(unit, &offset);
+							offset.y += 24;
+							unitSprite->setBattleUnit(unit);
+							unitSprite->setX(screenPosition.x + offset.x);
+							unitSprite->setY(screenPosition.y + offset.y);
+							unitSprite->draw();
+							unitSprite->blit(this);
+							if (unit == (BattleUnit*)_save->getSelectedSoldier() && !_hideCursor)
+							{
+								drawArrow(screenPosition + offset);
+							}
+						}
+					}
+
 
 					// Draw cursor front
 					if (_selectorX == itY && _selectorY == itX && !_hideCursor)

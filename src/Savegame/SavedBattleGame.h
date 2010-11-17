@@ -100,6 +100,8 @@ public:
 	BattleSoldier *selectNextSoldier();
 	/// select unit with position on map
 	BattleUnit *selectUnit(const Position& pos);
+	/// select unit with position on map
+	BattleUnit *selectUnit(Tile *tile);
 	/// get pointer to the list of nodes
 	std::vector<Node*> *getNodes();
 	/// get the pathfinding object
