@@ -21,10 +21,10 @@
 
 #include <string>
 #include "../Battlescape/Position.h"
+#include "../Resource/TerrainObject.h"
 
 class Surface;
 class TerrainObject;
-enum MovementType;
 
 /**
  * basic element of which a battle map is build

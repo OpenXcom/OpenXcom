@@ -21,13 +21,13 @@
 
 #include <vector>
 #include "Position.h"
+#include "../Resource/TerrainObject.h"
 
 
 class Position;
 class SavedBattleGame;
 class PathfindingNode;
 class Tile;
-enum MovementType;
 
 /**
  * A class that calculates the shortest path between two points on the battlescape map
