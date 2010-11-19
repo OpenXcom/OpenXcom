@@ -42,7 +42,7 @@ class Map : public InteractiveSurface
 private:
 	SavedBattleGame *_save;
 	ResourcePack *_res;
-	Timer *_scrollTimer, *_animTimer, *_walkingTimer, *_bulletTimer;
+	Timer *_scrollTimer, *_animTimer;
 	Surface *_arrow;
 	Game *_game;
 
@@ -106,11 +106,10 @@ public:
 	void getSelectorPosition(Position *pos);
 	/// Calculate the offset of a soldier, when it is walking in the middle of 2 tiles.
 	void calculateWalkingOffset(BattleUnit *unit, Position *offset);
-	/// Animate walking unit.
-	void moveUnit();
-	/// Animate flying bullet.
-	void moveBullet();
-
+	/// Hide cursor.
+	void hideCursor(bool flag);
+	/// is cursor hidden.
+	bool isCursorHidden();
 
 };
 

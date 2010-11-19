@@ -50,8 +50,6 @@
 #define SCROLL_BORDER 5
 #define SCROLL_DIAGONAL_EDGE 60
 #define DEFAULT_ANIM_SPEED 100
-#define DEFAULT_WALK_SPEED 50
-#define DEFAULT_BULLET_SPEED 20
 #define RMB_SCROLL false
 
 /*
@@ -85,14 +83,6 @@ Map::Map(int width, int height, int x, int y) : InteractiveSurface(width, height
 	_animTimer->onTimer((SurfaceHandler)&Map::animate);
 	_animTimer->start();
 
-	_walkingTimer = new Timer(DEFAULT_WALK_SPEED);
-	_walkingTimer->onTimer((SurfaceHandler)&Map::moveUnit);
-	_walkingTimer->start();
-
-	_bulletTimer = new Timer(DEFAULT_BULLET_SPEED);
-	_bulletTimer->onTimer((SurfaceHandler)&Map::moveBullet);
-	_bulletTimer->start();
-
 	_animFrame = 0;
 	_ScrollX = 0;
 	_ScrollY = 0;
@@ -107,8 +97,6 @@ Map::~Map()
 {
 	delete _scrollTimer;
 	delete _animTimer;
-	delete _walkingTimer;
-	delete _bulletTimer;
 }
 
 /**
@@ -169,8 +157,6 @@ void Map::think()
 {
 	_scrollTimer->think(0, this);
 	_animTimer->think(0, this);
-	_walkingTimer->think(0, this);
-	_bulletTimer->think(0, this);
 }
 
 /**
@@ -724,48 +710,20 @@ void Map::calculateWalkingOffset(BattleUnit *unit, Position *offset)
 }
 
 /**
- * Animate walking unit.
+ * This removes the selection caret and soldier selection arrow.
+ * @param flag
  */
-void Map::moveUnit()
+void Map::hideCursor(bool flag)
 {
-	int tu = 0;
-
-	if (_save->getSelectedSoldier()->getStatus() == STATUS_WALKING)
-	{
-		_save->getSelectedSoldier()->keepWalking();
-	}
-
-	if (_save->getSelectedSoldier()->getStatus() == STATUS_TURNING)
-	{
-		_save->getSelectedSoldier()->turn();
-	}
-
-	if (_save->getSelectedSoldier()->getStatus() == STATUS_STANDING)
-	{
-		int dir = _save->getPathfinding()->dequeuePath();
-		if (dir != -1)
-		{
-			Position destination;
-			tu = _save->getPathfinding()->getTUCost(_save->getSelectedSoldier()->getPosition(), dir, &destination, (BattleUnit*)_save->getSelectedSoldier());
-			_save->getSelectedSoldier()->startWalking(dir, destination);
-			_hideCursor = true; // hide cursor while walking
-			_game->getCursor()->setVisible(false);
-		}
-		else if (_hideCursor)
-		{
-			_viewHeight = _save->getSelectedSoldier()->getPosition().z;
-			_hideCursor = false; // show cursor again
-			_game->getCursor()->setVisible(true);
-		}
-	}
-
-	draw();
+	_hideCursor = flag;
 }
 
 /**
- * Animate flying bullet.
+ * Check if cursor is hidden.
+ * @return flag
  */
-void Map::moveBullet()
+bool Map::isCursorHidden()
 {
-
+	return _hideCursor;
 }
+

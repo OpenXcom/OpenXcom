@@ -165,6 +165,11 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 	if (!destinationTile)
 		return 255;
 
+	// check if the destination tile can be walked over
+	if (isBlocked(destinationTile, O_FLOOR) || isBlocked(destinationTile, O_OBJECT))
+		return 255;
+
+
 	// check if we can go this way
 	if (isBlocked(startTile, destinationTile, direction))
 		return 255;
@@ -219,7 +224,17 @@ void Pathfinding::directionToVector(const int direction, Position *vector)
 }
 
 /*
- * Check whether a path is ready and dequeue it.
+ * Check whether a path is ready and gives first direction.
+ * @return direction where the unit needs to go next, -1 if it's the end of the path.
+ */
+int Pathfinding::getStartDirection()
+{
+	if (_path.size() == 0) return -1;
+	return _path.back();
+}
+
+/*
+ * Dequeue next path direction.
  * @return direction where the unit needs to go next, -1 if it's the end of the path.
  */
 int Pathfinding::dequeuePath()

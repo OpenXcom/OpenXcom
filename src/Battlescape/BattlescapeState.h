@@ -46,11 +46,14 @@ private:
 	Text *_txtName;
 	NumberText *_numTimeUnits, *_numEnergy, *_numHealth, *_numMorale, *_numLayers;
 	Bar *_barTimeUnits, *_barEnergy, *_barHealth, *_barMorale;
+	Timer *_walkingTimer, *_bulletTimer;
 public:
 	/// Creates the Battlescape state.
 	BattlescapeState(Game *game);
 	/// Cleans up the Battlescape state.
 	~BattlescapeState();
+	/// think
+	void think();
 	/// Handler for clicking the map.
 	void mapClick(Action *action);
 	/// Handler for clicking the Unit Up button.
@@ -83,6 +86,10 @@ public:
 	void btnAbortClick(Action *action);
 	/// updates soldier name/rank/tu/energy/health/morale
 	void updateSoldierInfo(BattleSoldier *soldier);
+	/// Animate walking unit.
+	void moveUnit();
+	/// Animate flying bullet.
+	void moveBullet();
 };
 
 #endif

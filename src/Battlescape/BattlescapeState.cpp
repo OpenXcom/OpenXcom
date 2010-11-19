@@ -38,6 +38,10 @@
 #include "../Savegame/BattleSoldier.h"
 #include "../Savegame/Soldier.h"
 #include "../Ruleset/Ruleset.h"
+#include "../Engine/Timer.h"
+
+#define DEFAULT_WALK_SPEED 50
+#define DEFAULT_BULLET_SPEED 20
 
 /**
  * Initializes all the elements in the Battlescape screen.
@@ -172,6 +176,16 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 
 	// Set music
 	_game->getResourcePack()->getMusic("GMTACTIC")->play();
+
+	_walkingTimer = new Timer(DEFAULT_WALK_SPEED);
+	_walkingTimer->onTimer((StateHandler)&BattlescapeState::moveUnit);
+	_walkingTimer->start();
+
+	_bulletTimer = new Timer(DEFAULT_BULLET_SPEED);
+	_bulletTimer->onTimer((StateHandler)&BattlescapeState::moveBullet);
+	_bulletTimer->start();
+
+
 }
 
 /**
@@ -179,7 +193,18 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
  */
 BattlescapeState::~BattlescapeState()
 {
+	delete _walkingTimer;
+	delete _bulletTimer;
+}
 
+/**
+  * think
+  */
+void BattlescapeState::think()
+{
+	_walkingTimer->think(this, 0);
+	_bulletTimer->think(this, 0);
+	_map->think();
 }
 
 /**
@@ -356,4 +381,63 @@ void BattlescapeState::updateSoldierInfo(BattleSoldier *soldier)
 	_numMorale->setValue(100);
 	_barMorale->setMax(100);
 	_barMorale->setValue(100);
+}
+
+/**
+ * Animate walking unit.
+ */
+void BattlescapeState::moveUnit()
+{
+	int tu = 0;
+	BattleSoldier *soldier = _game->getSavedGame()->getBattleGame()->getSelectedSoldier();
+	Pathfinding *pf = _game->getSavedGame()->getBattleGame()->getPathfinding();
+
+	if (soldier->getStatus() == STATUS_WALKING)
+	{
+		soldier->keepWalking();
+		_map->draw();
+	}
+
+	if (soldier->getStatus() == STATUS_TURNING)
+	{
+		soldier->turn();
+		_map->draw();
+	}
+
+	if (soldier->getStatus() == STATUS_STANDING)
+	{
+		int dir = pf->getStartDirection();
+		if (dir != -1)
+		{
+			if (dir != soldier->getDirection()) 
+			{
+				// we are looking in the wrong way, turn first
+				soldier->lookAt(dir);
+			}
+			else
+			{
+				// now we can move
+				dir = pf->dequeuePath();
+				Position destination;
+				tu = pf->getTUCost(soldier->getPosition(), dir, &destination, (BattleUnit*)soldier);
+				soldier->startWalking(dir, destination);
+				_map->hideCursor(true); // hide cursor while walking
+				_game->getCursor()->setVisible(false);
+			}
+		}
+		else if (_map->isCursorHidden())
+		{
+			_map->centerOnPosition(soldier->getPosition());
+			_map->hideCursor(false); // show cursor again
+			_game->getCursor()->setVisible(true);
+		}
+	}
+}
+
+/**
+ * Animate flying bullet.
+ */
+void BattlescapeState::moveBullet()
+{
+
 }

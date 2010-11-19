@@ -76,6 +76,8 @@ public:
 	const Position &getDestination() const;
 	/// Look at a certain point.
 	void lookAt(const Position &point);
+	/// Look at a certain direction.
+	void lookAt(int direction);
 	/// Turn to the destination direction.
 	void turn();
 

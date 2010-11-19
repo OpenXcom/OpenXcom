@@ -176,6 +176,12 @@ void BattleUnit::lookAt(const Position &point)
 	}
 }
 
+void BattleUnit::lookAt(int direction)
+{
+	_toDirection = direction;
+	_status = STATUS_TURNING;
+}
+
 void BattleUnit::turn()
 {
     int a = _toDirection - _direction;

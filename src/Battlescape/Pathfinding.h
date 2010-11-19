@@ -57,7 +57,9 @@ public:
 	void calculate(BattleUnit *unit, Position &endPosition);
 	/// Converts direction to a vector.
 	static void directionToVector(const int direction, Position *vector);
-	/// Check whether a path is ready and dequeue it.
+	/// Check whether a path is ready gives the first direction.
+	int getStartDirection();
+	/// Dequeue a direction.
 	int dequeuePath();
 	/// Get's the TU cost to move from 1 tile to the other.
 	int getTUCost(const Position &startPosition, const int direction, Position *endPosition, BattleUnit *unit);
