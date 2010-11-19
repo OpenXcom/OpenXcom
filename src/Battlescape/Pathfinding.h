@@ -28,9 +28,10 @@ class Position;
 class SavedBattleGame;
 class PathfindingNode;
 class Tile;
+class BattleUnit;
 
 /**
- * A class that calculates the shortest path between two points on the battlescape map
+ * A utility class that calculates the shortest path between two points on the battlescape map.
  */
 class Pathfinding
 {
@@ -44,20 +45,22 @@ private:
 	PathfindingNode *getNode(const Position& pos);
 	/// whether a tile blocks a certain movementType
 	bool isBlocked(Tile *tile, const int part);
-	Position _startingPosition;
+	bool isBlocked(Tile *startTile, Tile *endTile, const int direction);
+	bool canFallDown(Tile *destinationTile);
+	BattleUnit *_unit;
 public:
 	/// Creates a new Pathfinding class
 	Pathfinding(SavedBattleGame *save);
 	/// Cleans up the Pathfinding.
 	~Pathfinding();
 	/// Calculate the shortest path.
-	void calculate(const Position &startPosition, Position &endPosition);
+	void calculate(BattleUnit *unit, Position &endPosition);
 	/// Converts direction to a vector.
 	static void directionToVector(const int direction, Position *vector);
 	/// Check whether a path is ready and dequeue it.
 	int dequeuePath();
 	/// Get's the TU cost to move from 1 tile to the other.
-	int getTUCost(const Position &startPosition, const int direction, Position *endPosition);
+	int getTUCost(const Position &startPosition, const int direction, Position *endPosition, BattleUnit *unit);
 };
 
 #endif

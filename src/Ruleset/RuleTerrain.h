@@ -30,7 +30,7 @@ class MapDataFile;
  * Represents a specific type of Battlescape Terrain.
  * - the names of the objectsets needed in this specific terrain
  * - the mapblocks that can be used to build this terrain
- * @sa Terrain
+ * @sa http://www.ufopaedia.org/index.php?title=TERRAIN
  */
 class RuleTerrain
 {

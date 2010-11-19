@@ -16,23 +16,30 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "NodeLink.h"
+#ifndef OPENXCOM_TERRAINMODIFIER_H
+#define OPENXCOM_TERRAINMODIFIER_H
+
+
+#include "Position.h"
+class SavedBattleGame;
+class BattleUnit;
 
 /**
- * Initializes a NodeLink.
- * @param connectedNodeID
- * @param distance
- * @param travelType
+ * A utility class that modifies tile properties on a battlescape map. This includes terrain destruction, smoke, fire, fog of war.
  */
-NodeLink::NodeLink(int connectedNodeID, int distance, int travelType): _connectedNodeID(connectedNodeID), _distance(distance), _travelType(travelType)
+class TerrainModifier
 {
-}
+private:
+	SavedBattleGame *_save;
+public:
+	/// Creates a new TerrainModifier class
+	TerrainModifier(SavedBattleGame *save);
+	/// Cleans up the TerrainModifier.
+	~TerrainModifier();
+	/// Clear fog of war around an xcom unit.
+	void clearFogOfWar(BattleUnit *unit);
+	/// Restore fog of war from an xcom unit (when it leaves a certain position, or he dies).
+	void restoreFogOfWar(BattleUnit *unit);
+};
 
-/**
- *
- */
-NodeLink::~NodeLink()
-{
-}
-
-
+#endif

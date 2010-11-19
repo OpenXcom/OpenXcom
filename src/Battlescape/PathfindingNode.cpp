@@ -21,6 +21,7 @@
 
 /**
  * Sets up a PathfindingNode.
+ * @param pos Position.
  */
 PathfindingNode::PathfindingNode(Position pos) : _pos(pos)
 {

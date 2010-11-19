@@ -278,6 +278,7 @@ TerrainObjectSet *ResourcePack::getTerrainObjectSet(std::string name)
 
 /**
  * Loads a X-Com format MAP file into the tiles of the battlegame.
+ * @param mapblock pointer to MapBlock.
  * @param xoff mapblock offset in X direction
  * @param yoff mapblock offset in Y direction
  * @param save pointer to the current battle game
@@ -293,6 +294,7 @@ int ResourcePack::loadMAP(MapBlock *mapblock, int xoff, int yoff, SavedBattleGam
 
 /**
  * Loads a X-Com format RMP file into the spawnpoints of the battlegame.
+ * @param mapblock pointer to MapBlock.
  * @param xoff mapblock offset in X direction
  * @param yoff mapblock offset in Y direction
  * @param save pointer to the current battle game

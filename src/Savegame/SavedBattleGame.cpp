@@ -195,8 +195,9 @@ Ufo *SavedBattleGame::getUfo()
 }
 
 /**
- * Adds a soldier to the game and place him on a free spawnpoint
- * @param soldier pointer to the soldier
+ * Adds a soldier to the game and place him on a free spawnpoint.
+ * @param soldier pointer to the Soldier
+ * @param rules pointer to the RuleUnitSprite which holds info about unit drawing.
  */
 void SavedBattleGame::addSoldier(Soldier *soldier, RuleUnitSprite *rules)
 {
@@ -226,6 +227,7 @@ void SavedBattleGame::addSoldier(Soldier *soldier, RuleUnitSprite *rules)
 
 /**
  * Gets the currently selected soldier
+ * @return pointer to BattleSoldier.
  */
 BattleSoldier *SavedBattleGame::getSelectedSoldier()
 {
@@ -233,7 +235,8 @@ BattleSoldier *SavedBattleGame::getSelectedSoldier()
 }
 
 /**
- * Sets the currently selected soldier
+ * Sets the currently selected soldier.
+ * @param soldier pointer to BattleSoldier.
  */
 void SavedBattleGame::setSelectedSoldier(BattleSoldier *soldier)
 {
@@ -242,6 +245,7 @@ void SavedBattleGame::setSelectedSoldier(BattleSoldier *soldier)
 
 /**
  * Select the next soldier
+ * @return pointer to BattleSoldier.
  */
 BattleSoldier *SavedBattleGame::selectNextSoldier()
 {
@@ -269,9 +273,7 @@ BattleSoldier *SavedBattleGame::selectNextSoldier()
 
 /**
  * Select unit with position on map.
- * @param x 
- * @param y
- * @param z 
+ * @param pos Position
  * @return pointer to BattleUnit - 0 when nothing found
  */
 BattleUnit *SavedBattleGame::selectUnit(const Position& pos)
@@ -292,6 +294,7 @@ BattleUnit *SavedBattleGame::selectUnit(const Position& pos)
 
 /** 
  * Generates a map (set of tiles) for a new battlescape game.
+ * @param res pointer to ResourcePack.
  */
 void SavedBattleGame::generateMap(ResourcePack *res)
 {

@@ -23,9 +23,9 @@
 
 /**
  * Represents a Terrain Map Datafile.
- * It contains constant info about this mapblock, like it's name and size
- * Map datafiles are stored in RuleSet
- * @sa MapBlock
+ * It contains constant info about this MCD file, like it's name and size
+ * The list of map datafiles is stored in RuleSet, but referenced in RuleTerrain.
+ * @sa http://www.ufopaedia.org/index.php?title=MCD
  */
 class MapDataFile
 {

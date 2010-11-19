@@ -64,27 +64,57 @@ public:
 	/// Sets the spritesheet name.
 	void setSpriteSheet(std::string spriteSheet);
 	/// Gets the sprite sheet.
-	std::string getSpriteSheet();
+	std::string getSpriteSheet() const;
 	/// Sets the torso sprite start frame.
 	void setTorso(int torso);
 	/// Gets the torso sprite start frame.
-	int getTorso();
+	int getTorso() const;
 	/// Sets the female torso start frame.
 	void setFemaleTorso(int torso);
 	/// Gets the female torso start frame.
-	int getFemaleTorso();
+	int getFemaleTorso() const;
 	/// Sets the legs stand start frame.
 	void setLegsStand(int id);
 	/// Gets the legs stand start frame.
-	int getLegsStand();
+	int getLegsStand() const;
 	/// Sets the legs walk start frame.
 	void setLegsWalk(int id, int dir);
 	/// Gets the legs walk start frame.
-	int getLegsWalk(int dir);
+	int getLegsWalk(int dir) const;
 	/// Sets the legs walk offset.
 	void setLegsWalkOffset(int offset, int phase);
 	/// Gets the legs walk offset.
 	int getLegsWalkOffset(int phase);
+    int getDie() const;
+    int getLeftArm1HWeapon() const;
+    int getLeftArm2HWeapon() const;
+    int getLeftArmStand() const;
+    int getLeftArmWalk(int phase) const;
+    int getRightArm1HWeapon() const;
+    int getRightArm2HWeapon() const;
+    int getRightArmStand() const;
+    int getRightArmWalk(int phase) const;
+    int getSitArmsYOffset() const;
+    int getSitLegsYOffset() const;
+    int getSitTorsoYOffset() const;
+    int getSitWeaponYOffset() const;
+    int getStandWeaponYOffset() const;
+    int getWalkArmsOffset(int phase) const;
+    void setDie(int die);
+    void setLeftArm1HWeapon(int leftArm1HWeapon);
+    void setLeftArm2HWeapon(int leftArm2HWeapon);
+    void setLeftArmStand(int leftArmStand);
+    void setLeftArmWalk(int leftArmWalk, int phase);
+    void setRightArm1HWeapon(int rightArm1HWeapon);
+    void setRightArm2HWeapon(int rightArm2HWeapon);
+    void setRightArmStand(int rightArmStand);
+    void setRightArmWalk(int rightArmWalk, int phase);
+    void setSitArmsYOffset(int sitArmsYOffset);
+    void setSitLegsYOffset(int sitLegsYOffset);
+    void setSitTorsoYOffset(int sitTorsoYOffset);
+    void setSitWeaponYOffset(int sitWeaponYOffset);
+    void setStandWeaponYOffset(int standWeaponYOffset);
+    void setWalkArmsYOffset(int walkArmsYOffset, int phase);
 };
 
 #endif

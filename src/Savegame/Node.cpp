@@ -21,6 +21,16 @@
 
 /**
  * Initializes a Node.
+ * @param id
+ * @param x
+ * @param y
+ * @param z
+ * @param segment
+ * @param type
+ * @param rank
+ * @param flags
+ * @param reserved
+ * @param priority
  */
 Node::Node(int id, int x, int y, int z, int segment, int type, int rank, int flags, int reserved, int priority) : _id(id), _x(x), _y(y), _z(z), _segment(segment), _type(type), _rank(rank), _flags(flags), _reserved(reserved), _priority(priority)
 {

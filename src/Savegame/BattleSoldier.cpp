@@ -21,6 +21,7 @@
 /**
  * Initializes a BattleSoldier.
  * @param soldier pointer to the geoscape soldier object
+ * @param renderRules pointer to RuleUnitSprite
  */
 BattleSoldier::BattleSoldier(Soldier *soldier, RuleUnitSprite *renderRules): BattleUnit(renderRules), _soldier(soldier)
 {

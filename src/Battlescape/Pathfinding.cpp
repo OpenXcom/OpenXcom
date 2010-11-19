@@ -22,9 +22,11 @@
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
 #include "../Resource/TerrainObject.h"
+#include "../Savegame//BattleUnit.h"
 
 /**
  * Sets up a Pathfinding.
+ * @param save pointer to SavedBattleGame object.
  */
 Pathfinding::Pathfinding(SavedBattleGame *save) : _save(save), _nodes()
 {
@@ -66,26 +68,26 @@ PathfindingNode *Pathfinding::getNode(const Position& pos)
 /**
  * Calculate the shortest path using a simple brute force algorithm. 
  * Which works okay with small maps.
- * @param startPosition
+ * @param unit
  * @param endPosition
  */
 
-void Pathfinding::calculate(const Position &startPosition, Position &endPosition)
+void Pathfinding::calculate(BattleUnit *unit, Position &endPosition)
 {
 	std::list<PathfindingNode*> openList;
-	Position currentPos, nextPos;
+	Position currentPos, nextPos, startPosition = unit->getPosition();
 	int tuCost;
 
 	_movementType = WALK; // should be parameter
-	_startingPosition = startPosition;
+	_unit = unit;
 
 	Tile *destinationTile = _save->getTile(endPosition);
 
 	// check if destination is not blocked
 	if (isBlocked(destinationTile, O_FLOOR) || isBlocked(destinationTile, O_OBJECT)) return;
 
-	// check if we have floor, else fall down
-	while ( (!destinationTile || destinationTile->hasNoFloor()) && endPosition.z > 0)
+	// check if we have floor, else lower destination (for non flying units only, because otherwise they never reached this place)
+	while (canFallDown(destinationTile))
 	{
 		endPosition.z--;
 		destinationTile = _save->getTile(endPosition);
@@ -108,7 +110,7 @@ void Pathfinding::calculate(const Position &startPosition, Position &endPosition
         for (int direction = 0; direction < 8; direction++)
 		{
 			currentPos = openList.front()->getPosition();
-            tuCost = getTUCost(currentPos, direction, &nextPos);
+            tuCost = getTUCost(currentPos, direction, &nextPos, unit);
             if(tuCost < 255)
 			{
 				if( (!getNode(nextPos)->isChecked() ||
@@ -140,39 +142,37 @@ void Pathfinding::calculate(const Position &startPosition, Position &endPosition
 
 }
 
-/*
+/**
  * Get's the TU cost to move from 1 tile to the other(ONE STEP ONLY). But also updates the endPosition, because it is possible
  * the unit goes upstairs or falls down while walking.
  * @param startPosition
  * @param direction
  * @param endPosition pointer
+ * @param unit
  * @return TU cost - 255 if movement impossible
  */
-int Pathfinding::getTUCost(const Position &startPosition, int direction, Position *endPosition)
+int Pathfinding::getTUCost(const Position &startPosition, int direction, Position *endPosition, BattleUnit *unit)
 {
+	_unit = unit;
 	directionToVector(direction, endPosition);
 	*endPosition += startPosition;
+	bool fellDown = false;
 
 	Tile *startTile = _save->getTile(startPosition);
 	Tile *destinationTile = _save->getTile(*endPosition);
 
-	// if we are on high ground, it is possible to go a level up, so let's try
-	// high ground in xcom is typically -20 or -16
-	if (startTile->getTerrainLevel() < -15)
-	{
-		endPosition->z++;
-		destinationTile = _save->getTile(*endPosition);
-	}
-
-	// check if the destination tile can be walked over
-	if (isBlocked(destinationTile, O_FLOOR) || isBlocked(destinationTile, O_OBJECT))
+	// this means the destination is probably outside the map
+	if (!destinationTile)
 		return 255;
 
+	// check if we can go this way
+	if (isBlocked(startTile, destinationTile, direction))
+		return 255;
 
-	// check if we have floor, else fall down (again)
-	while ( destinationTile->hasNoFloor() && endPosition->z > 0 )
+	// if we are on a stairs try to go up a level
+	if (startTile->getTerrainLevel() < -12)
 	{
-		endPosition->z--;
+		endPosition->z++;
 		destinationTile = _save->getTile(*endPosition);
 	}
 
@@ -180,55 +180,17 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 	if (!destinationTile)
 		return 255;
 
-	// check if the difference in height between start and destination is not too high
-	// so we can not jump to the highest part of the stairs from the floor
-	// stairs terrainlevel goes typically -8 -16 (2 steps) or -4 -12 -20 (3 steps)
-	// this "maximum jump height" is therefore set to 8
-	if ((startPosition.z == endPosition->z) &&
-		(startTile->getTerrainLevel() - destinationTile->getTerrainLevel() > 8))
-		return 255;
-
-	// check if we are not blocked by walls on adjacent tiles
-	// remember: part 1 is west wall, part 2 is north wall, direction 0 is north
-	switch(direction)
+	// check if we have floor, else fall down
+	while (canFallDown(destinationTile))
 	{
-	case 0:	// north
-		if (isBlocked(startTile, O_NORTHWALL)) return 255;
-		break;
-	case 1: // north east
-		if (isBlocked(startTile,O_NORTHWALL)) return 255;
-		if (isBlocked(destinationTile,O_WESTWALL)) return 255;
-		if (isBlocked(_save->getTile(startPosition + Position(1, 0, 0)),O_WESTWALL)) return 255;
-		if (isBlocked(_save->getTile(startPosition + Position(1, 0, 0)),O_NORTHWALL)) return 255;
-		break;
-	case 2: // east
-		if (isBlocked(destinationTile,O_WESTWALL)) return 255;
-		break;
-	case 3: // south east
-		if (isBlocked(destinationTile,O_WESTWALL)) return 255;
-		if (isBlocked(destinationTile,O_NORTHWALL)) return 255;
-		if (isBlocked(_save->getTile(startPosition + Position(1, 0, 0)),O_WESTWALL)) return 255;
-		if (isBlocked(_save->getTile(startPosition + Position(0, -1, 0)),O_NORTHWALL)) return 255;
-		break;
-	case 4: // south
-		if (isBlocked(destinationTile,O_NORTHWALL)) return 255;
-		break;
-	case 5: // south west
-		if (isBlocked(destinationTile,O_NORTHWALL)) return 255;
-		if (isBlocked(startTile,O_WESTWALL)) return 255;
-		if (isBlocked(_save->getTile(startPosition + Position(0, -1, 0)),O_WESTWALL)) return 255;
-		if (isBlocked(_save->getTile(startPosition + Position(0, -1, 0)),O_NORTHWALL)) return 255;
-		break;
-	case 6: // west
-		if (isBlocked(startTile,O_WESTWALL)) return 255;
-		break;
-	case 7: // north west
-		if (isBlocked(startTile,O_WESTWALL)) return 255;
-		if (isBlocked(startTile,O_NORTHWALL)) return 255;
-		if (isBlocked(_save->getTile(startPosition + Position(0, 1, 0)),O_WESTWALL)) return 255;
-		if (isBlocked(_save->getTile(startPosition + Position(-1, 0, 0)),O_NORTHWALL)) return 255;
-		break;
+		endPosition->z--;
+		destinationTile = _save->getTile(*endPosition);
+		fellDown = true;
 	}
+
+	// check if the destination tile can be walked over
+	if ((isBlocked(destinationTile, O_FLOOR) || isBlocked(destinationTile, O_OBJECT)) && !fellDown)
+		return 255;
 
 	// calculate the cost by adding floor walk cost and object walk cost
 	int cost = destinationTile->getTUCost(O_FLOOR, _movementType) + destinationTile->getTUCost(O_OBJECT, _movementType);
@@ -270,7 +232,7 @@ int Pathfinding::dequeuePath()
 
 
 /*
- * Whether a tile blocks a certain movementType.
+ * Whether a certain part of a tile blocks movement.
  * @param tile can be null pointer
  * @param movementType
  * @return true/false
@@ -281,11 +243,81 @@ bool Pathfinding::isBlocked(Tile *tile, const int part)
 
 	if (tile->getTUCost(part, _movementType) == 255) return true; // blocking part
 
-	if (tile->getPosition() == _startingPosition) return false; // never block the start position
-
-	if (_save->selectUnit(tile->getPosition()) != 0) return true; // other units block every part
+	BattleUnit *unit = _save->selectUnit(tile->getPosition());
+	if (unit != 0 && unit != _unit && (part==0 || part==3)) return true;
 
 	if (tile->isBigWall()) return true; // big walls block every part
 
 	return false;
+}
+
+/**
+ * Whether going from one tile to another blocks movement.
+ * @param startTile
+ * @param endTile
+ * @param direction
+ * @return true/false
+ */
+bool Pathfinding::isBlocked(Tile *startTile, Tile *endTile, const int direction)
+{
+
+	// check if the difference in height between start and destination is not too high
+	// so we can not jump to the highest part of the stairs from the floor
+	// stairs terrainlevel goes typically -8 -16 (2 steps) or -4 -12 -20 (3 steps)
+	// this "maximum jump height" is therefore set to 8
+	if (startTile->getTerrainLevel() - endTile->getTerrainLevel() > 8)
+		return true;
+
+	switch(direction)
+	{
+	case 0:	// north
+		if (isBlocked(startTile, O_NORTHWALL)) return true;
+		break;
+	case 1: // north east
+		if (isBlocked(startTile,O_NORTHWALL)) return true;
+		if (isBlocked(endTile,O_WESTWALL)) return true;
+		if (isBlocked(_save->getTile(startTile->getPosition() + Position(1, 0, 0)),O_WESTWALL)) return true;
+		if (isBlocked(_save->getTile(startTile->getPosition() + Position(1, 0, 0)),O_NORTHWALL)) return true;
+		break;
+	case 2: // east
+		if (isBlocked(endTile,O_WESTWALL)) return true;
+		break;
+	case 3: // south east
+		if (isBlocked(endTile,O_WESTWALL)) return true;
+		if (isBlocked(endTile,O_NORTHWALL)) return true;
+		if (isBlocked(_save->getTile(startTile->getPosition() + Position(1, 0, 0)),O_WESTWALL)) return true;
+		if (isBlocked(_save->getTile(startTile->getPosition() + Position(0, -1, 0)),O_NORTHWALL)) return true;
+		break;
+	case 4: // south
+		if (isBlocked(endTile,O_NORTHWALL)) return true;
+		break;
+	case 5: // south west
+		if (isBlocked(endTile,O_NORTHWALL)) return true;
+		if (isBlocked(startTile,O_WESTWALL)) return true;
+		if (isBlocked(_save->getTile(startTile->getPosition() + Position(0, -1, 0)),O_WESTWALL)) return true;
+		if (isBlocked(_save->getTile(startTile->getPosition() + Position(0, -1, 0)),O_NORTHWALL)) return true;
+		break;
+	case 6: // west
+		if (isBlocked(startTile,O_WESTWALL)) return true;
+		break;
+	case 7: // north west
+		if (isBlocked(startTile,O_WESTWALL)) return true;
+		if (isBlocked(startTile,O_NORTHWALL)) return true;
+		if (isBlocked(_save->getTile(startTile->getPosition() + Position(0, 1, 0)),O_WESTWALL)) return true;
+		if (isBlocked(_save->getTile(startTile->getPosition() + Position(-1, 0, 0)),O_NORTHWALL)) return true;
+		break;
+	}
+
+	return false;
+}
+
+/**
+ * We can fall down here, if the tile does not exist, the tile has no floor
+ * the current position is higher than 0
+ * @param here
+ * @return bool
+ */
+bool Pathfinding::canFallDown(Tile *here)
+{
+	return (!here || here->hasNoFloor()) && here->getPosition().z > 0;
 }

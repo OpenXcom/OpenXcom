@@ -205,8 +205,13 @@ void BattlescapeState::mapClick(Action *action)
 			return;
 		}
 		Pathfinding *pf = _game->getSavedGame()->getBattleGame()->getPathfinding();
-		pf->calculate(_game->getSavedGame()->getBattleGame()->getSelectedSoldier()->getPosition(), pos);
+		pf->calculate(_game->getSavedGame()->getBattleGame()->getSelectedSoldier(), pos);
 	}
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	{
+		_game->getSavedGame()->getBattleGame()->getSelectedSoldier()->lookAt(pos);
+	}
+
 	
 }
 
@@ -219,7 +224,7 @@ void BattlescapeState::btnUnitUpClick(Action *action)
 	Pathfinding *pf = _game->getSavedGame()->getBattleGame()->getPathfinding();
 	Position start = _game->getSavedGame()->getBattleGame()->getSelectedSoldier()->getPosition();
 	Position end = start + Position(0, 0, +1);
-	pf->calculate(start, end);
+	pf->calculate((BattleUnit*)_game->getSavedGame()->getBattleGame()->getSelectedSoldier(), end);
 }
 
 /**
@@ -231,7 +236,7 @@ void BattlescapeState::btnUnitDownClick(Action *action)
 	Pathfinding *pf = _game->getSavedGame()->getBattleGame()->getPathfinding();
 	Position start = _game->getSavedGame()->getBattleGame()->getSelectedSoldier()->getPosition();
 	Position end = start + Position(0, 0, -1);
-	pf->calculate(start, end);
+	pf->calculate((BattleUnit*)_game->getSavedGame()->getBattleGame()->getSelectedSoldier(), end);
 }
 
 /**
@@ -339,15 +344,15 @@ void BattlescapeState::btnAbortClick(Action *action)
 void BattlescapeState::updateSoldierInfo(BattleSoldier *soldier)
 {
 	_txtName->setText(soldier->getSoldier()->getName());
-	_numTimeUnits->setValue(65);
-	_barTimeUnits->setMax(65);
-	_barTimeUnits->setValue(65);
-	_numEnergy->setValue(65);
-	_barEnergy->setMax(65);
-	_barEnergy->setValue(65);
-	_numHealth->setValue(65);
-	_barHealth->setMax(65);
-	_barHealth->setValue(65);
+	_numTimeUnits->setValue(soldier->getSoldier()->getTimeUnits());
+	_barTimeUnits->setMax(soldier->getSoldier()->getTimeUnits());
+	_barTimeUnits->setValue(soldier->getSoldier()->getTimeUnits());
+	_numEnergy->setValue(soldier->getSoldier()->getStamina());
+	_barEnergy->setMax(soldier->getSoldier()->getStamina());
+	_barEnergy->setValue(soldier->getSoldier()->getStamina());
+	_numHealth->setValue(soldier->getSoldier()->getHealth());
+	_barHealth->setMax(soldier->getSoldier()->getHealth());
+	_barHealth->setValue(soldier->getSoldier()->getHealth());
 	_numMorale->setValue(100);
 	_barMorale->setMax(100);
 	_barMorale->setValue(100);

@@ -58,8 +58,8 @@ void UnitSprite::setResourcePack(ResourcePack *res)
 }
 
 /**
- * Changes the battleunit for the UnitSprite to get the data for rendering.
- * @param res Pointer to the battle unit pack.
+ * Links this sprite to a BattleUnit to get the data for rendering.
+ * @param unit Pointer to the BattleUnit.
  */
 void UnitSprite::setBattleUnit(BattleUnit *unit)
 {
@@ -74,31 +74,59 @@ void UnitSprite::draw()
 {
 	RuleUnitSprite *rules = _unit->getRenderRules();
 	std::string sheet = rules->getSpriteSheet();
-	Surface *sprite;
+	Surface *torso = 0, *legs = 0, *bottomArm = 0, *topArm = 0;
 	clear();
+	BattleSoldier *soldier = dynamic_cast<BattleSoldier*>(_unit);
 	
-	// Render the torso
-	if (((BattleSoldier*)_unit)->getSoldier()->getGender() == GENDER_FEMALE)
+	if (rules->getTorso() > -1)
 	{
-		sprite = _res->getSurfaceSet(sheet)->getFrame(rules->getFemaleTorso() + _unit->getDirection());
+		if (soldier != 0 && soldier->getSoldier()->getGender() == GENDER_FEMALE)
+		{
+			torso = _res->getSurfaceSet(sheet)->getFrame(rules->getFemaleTorso() + _unit->getDirection());
+		}
+		else
+		{
+			torso = _res->getSurfaceSet(sheet)->getFrame(rules->getTorso() + _unit->getDirection());
+		}
 	}
-	else
-	{
-		sprite = _res->getSurfaceSet(sheet)->getFrame(rules->getTorso() + _unit->getDirection());
-	}
-	sprite->blit(this);
 
-	// Render the legs
 	if (_unit->getStatus() == STATUS_STANDING)
 	{
-		sprite = _res->getSurfaceSet(sheet)->getFrame(rules->getLegsStand() + _unit->getDirection());
+		legs = _res->getSurfaceSet(sheet)->getFrame(rules->getLegsStand() + _unit->getDirection());
+		if (_unit->getDirection() < 4)
+		{
+			bottomArm = _res->getSurfaceSet(sheet)->getFrame(rules->getLeftArmStand() + _unit->getDirection());
+			topArm = _res->getSurfaceSet(sheet)->getFrame(rules->getRightArmStand() + _unit->getDirection());
+		}
+		else
+		{
+			topArm = _res->getSurfaceSet(sheet)->getFrame(rules->getLeftArmStand() + _unit->getDirection());
+			bottomArm = _res->getSurfaceSet(sheet)->getFrame(rules->getRightArmStand() + _unit->getDirection());
+		}
 	}
 	else
 	{
-		sprite = _res->getSurfaceSet(sheet)->getFrame(rules->getLegsWalk(_unit->getDirection()) + _unit->getWalkingPhase());
-		sprite->setY(rules->getLegsWalkOffset(_unit->getWalkingPhase()));
+		legs = _res->getSurfaceSet(sheet)->getFrame(rules->getLegsWalk(_unit->getDirection()) + _unit->getWalkingPhase());
+		legs->setY(rules->getLegsWalkOffset(_unit->getWalkingPhase()));
+		if (_unit->getDirection() < 4)
+		{
+			bottomArm = _res->getSurfaceSet(sheet)->getFrame(rules->getLeftArmWalk(_unit->getDirection()) + _unit->getWalkingPhase());
+			topArm = _res->getSurfaceSet(sheet)->getFrame(rules->getRightArmWalk(_unit->getDirection()) + _unit->getWalkingPhase());
+		}
+		else
+		{
+			topArm = _res->getSurfaceSet(sheet)->getFrame(rules->getLeftArmWalk(_unit->getDirection()) + _unit->getWalkingPhase());
+			bottomArm = _res->getSurfaceSet(sheet)->getFrame(rules->getRightArmWalk(_unit->getDirection()) + _unit->getWalkingPhase());
+		}
+		topArm->setY(rules->getWalkArmsOffset(_unit->getWalkingPhase()));
+		bottomArm->setY(rules->getWalkArmsOffset(_unit->getWalkingPhase()));		
 	}
-	sprite->blit(this);
+
+
+	if (bottomArm) bottomArm->blit(this);
+	if (torso) torso->blit(this);
+	if (legs) legs->blit(this);
+	if (topArm) topArm->blit(this);
 
 }
 

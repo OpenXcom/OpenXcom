@@ -909,7 +909,36 @@ XcomRuleset::XcomRuleset() : Ruleset()
 		xcom_0->setLegsWalk(56 + 24 * i, i);
 	for (int i=0; i<8; i++)
 		xcom_0->setLegsWalkOffset((i%4)?0:-2, i);
+	xcom_0->setLeftArmStand(0);
+	xcom_0->setRightArmStand(8);
+	for (int i=0; i<8; i++)
+		xcom_0->setLeftArmWalk(40 + 24 * i, i);
+	for (int i=0; i<8; i++)
+		xcom_0->setRightArmWalk(48 + 24 * i, i);
+	int o[8] = {2, 0, 2, 0, -1, 2, 0, 2};
+	for (int i=0; i<8; i++)
+		xcom_0->setWalkArmsYOffset(o[i], i);
+
+	RuleUnitSprite *floater = new RuleUnitSprite();
+	floater->setSpriteSheet("FLOATER.PCK");
+	floater->setTorso(-1);
+	floater->setFemaleTorso(-1);
+	floater->setLegsStand(16);
+	for (int i=0; i<8; i++)
+		floater->setLegsWalk(24 + 8 * i, i);
+	for (int i=0; i<8; i++)
+		floater->setLegsWalkOffset(0, i);
+	floater->setLeftArmStand(0);
+	floater->setRightArmStand(8);
+	for (int i=0; i<8; i++)
+		floater->setLeftArmWalk(67+i,i);
+	for (int i=0; i<8; i++)
+		floater->setRightArmWalk(67+i,i);
+	for (int i=0; i<8; i++)
+		floater->setWalkArmsYOffset(0, i);
+
 	_unitSprites.insert(std::pair<std::string, RuleUnitSprite*>("XCOM_0",xcom_0));
+	_unitSprites.insert(std::pair<std::string, RuleUnitSprite*>("FLOATER",floater));
 }
 
 /**
@@ -1225,7 +1254,8 @@ SavedGame *XcomRuleset::newSave(GameDifficulty diff)
 
 /**
  * Generates a battlescape saved game based on terrain type, mission type, time of day, place on earth.
- * @param save The base saved game.
+ * @param res The ResourcePack.
+ * @param save The base SavedGame.
  * @param texture The texture of the globe polygon we are on.
  * @param craft The XCom craft.
  * @param ufo The UFO.

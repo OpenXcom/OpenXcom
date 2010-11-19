@@ -27,7 +27,7 @@ class RuleTerrain;
  * Represents a Terrain Map Block.
  * It contains constant info about this mapblock, like it's name, dimensions, attributes...
  * Map blocks are stored in RuleTerrain objects
- * @sa MapBlock
+ * @sa http://www.ufopaedia.org/index.php?title=MAPS_Terrain
  */
 class MapBlock
 {

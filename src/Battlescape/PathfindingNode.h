@@ -22,7 +22,7 @@
 #include "Position.h"
 
 /**
- * A class that holds pathfinding info for a certain node on the map
+ * A class that holds pathfinding info for a certain node on the map.
  */
 class PathfindingNode
 {

@@ -32,7 +32,7 @@ RuleTerrain::RuleTerrain(const std::string &name) : _name(name)
 }
 
 /**
-* RuleTerrain DESTRUCTION !
+* Ruleterrain only holds mapblocks. Map datafiles are referenced.
 */
 RuleTerrain::~RuleTerrain()
 {

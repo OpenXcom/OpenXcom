@@ -25,7 +25,8 @@ enum NodeRank{CIVILIAN=0, XCOM, SOLDIER, NAVIGATOR, LEADER, ENGINEER, MISC1, MED
 			
 
 /**
- * Represents a node/spawnpoint in the battlescape.
+ * Represents a node/spawnpoint in the battlescape, loaded from RMP files.
+ * @sa http://www.ufopaedia.org/index.php?title=ROUTES
  */
 class Node
 {

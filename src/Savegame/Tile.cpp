@@ -21,8 +21,9 @@
 
 /**
 * constructor
+* @param pos Position.
 */
-Tile::Tile(const Position& pos): _visible(true), _light(255), _pos(pos)
+Tile::Tile(const Position& pos): _discovered(true), _light(255), _pos(pos)
 {
 	_terrainObjects[0] = 0;
 	_terrainObjects[1] = 0;
@@ -85,6 +86,7 @@ void Tile::setName(std::string name, int part)
 /**
  * Get the TU cost to walk over a certain part of the tile.
  * @param part
+ * @param movementType
  * @return TU cost
  */
 int Tile::getTUCost(int part, MovementType movementType)

@@ -534,10 +534,11 @@ void XcomResourcePack::loadBattlescapeResources(std::string folder)
 
 /**
  * Loads a X-Com format MAP file into the tiles of the battlegame.
+ * @param mapblock pointer to MapBlock.
  * @param xoff mapblock offset in X direction
  * @param yoff mapblock offset in Y direction
- * @param save pointer to the current battle game
- * @param terrain pointer to the terrain rule
+ * @param save pointer to the current SavedBattleGame
+ * @param terrain pointer to the Terrain rule
  * @return int Height of the loaded mapblock (this is needed for spawpoint calculation...)
  * @sa http://www.ufopaedia.org/index.php?title=MAPS
  * NOTE that Y-axis is in reverse order
@@ -611,6 +612,7 @@ int XcomResourcePack::loadMAP(MapBlock *mapblock, int xoff, int yoff, SavedBattl
 
 /**
  * Loads a X-Com format RMP file into the spawnpoints of the battlegame.
+ * @param mapblock pointer to MapBlock.
  * @param xoff mapblock offset in X direction
  * @param yoff mapblock offset in Y direction
  * @param save pointer to the current battle game

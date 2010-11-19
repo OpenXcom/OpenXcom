@@ -20,23 +20,28 @@
 #define OPENXCOM_TILE_H
 
 #include <string>
+#include <vector>
 #include "../Battlescape/Position.h"
 #include "../Resource/TerrainObject.h"
 
 class Surface;
 class TerrainObject;
+class BattleUnit;
 
 /**
- * basic element of which a battle map is build
+ * Basic element of which a battle map is build.
+ * @sa http://www.ufopaedia.org/index.php?title=MAPS
  */
 class Tile
 {
 protected:
 	std::string _name[4];
 	TerrainObject *_terrainObjects[4];
-	bool _visible; // is this tile seen by the XCom team
-	int _light; // the amount of light on this tile
+	bool _discovered; // tile has been seen in the past
+	std::vector<BattleUnit *> _visibleByUnit; // units this tile is now seen by 
+	int _light, _smoke, _fire;
 	Position _pos;
+	BattleUnit *_unit;
 
 public:
 	/// Creates a tile.

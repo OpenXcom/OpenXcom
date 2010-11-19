@@ -16,23 +16,42 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "NodeLink.h"
+#include "TerrainModifier.h"
+#include "../Savegame/SavedBattleGame.h"
+#include "../Savegame/Tile.h"
+#include "../Savegame/BattleUnit.h"
 
 /**
- * Initializes a NodeLink.
- * @param connectedNodeID
- * @param distance
- * @param travelType
+ * Sets up a TerrainModifier.
+ * @param save pointer to SavedBattleGame object.
  */
-NodeLink::NodeLink(int connectedNodeID, int distance, int travelType): _connectedNodeID(connectedNodeID), _distance(distance), _travelType(travelType)
+TerrainModifier::TerrainModifier(SavedBattleGame *save) : _save(save)
 {
+
 }
 
 /**
- *
+ * Deletes the TerrainModifier.
  */
-NodeLink::~NodeLink()
+TerrainModifier::~TerrainModifier()
 {
+
 }
 
+/**
+  * Clear fog of war around an xcom unit. It is possible it discovers aliens.
+  * @param unit 
+  */
+void TerrainModifier::clearFogOfWar(BattleUnit *unit)
+{
 
+}
+
+/**
+  * Restore fog of war from an xcom unit (when it leaves a certain position, or he dies).
+  * @param unit 
+  */
+void TerrainModifier::restoreFogOfWar(BattleUnit *unit)
+{
+
+}

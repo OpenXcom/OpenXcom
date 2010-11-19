@@ -16,12 +16,15 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+#define _USE_MATH_DEFINES
 #include "BattleUnit.h"
+#include <cmath>
 #include "../Engine/Palette.h"
 #include "../Battlescape/Pathfinding.h"
 
 /**
  * Initializes a BattleUnit.
+ * @param renderRules pointer to RuleUnitSprite object.
  */
 BattleUnit::BattleUnit(RuleUnitSprite *renderRules) : _renderRules(renderRules), _id(0), _pos(Position()), _lastPos(Position()), _direction(0), _status(STATUS_STANDING), _walkPhase(0)
 {
@@ -107,6 +110,7 @@ const Position& BattleUnit::getDestination() const
 void BattleUnit::setDirection(int direction)
 {
 	_direction = direction;
+	_toDirection = direction;
 }
 
 /**
@@ -155,4 +159,47 @@ void BattleUnit::keepWalking()
 int BattleUnit::getWalkingPhase()
 {
 	return _walkPhase;
+}
+
+void BattleUnit::lookAt(const Position &point)
+{
+	double ox = point.x - _pos.x;
+	double oy = point.y - _pos.y;
+	double angle = atan2(ox, oy);
+	if (angle < 0) angle += (M_PI*2); // convert to a range from 0 to M_PI*2
+	_toDirection = (int)((angle/(M_PI_4))+M_PI_4/2.0); // convert to 8 directions, somewhat rounded
+	if (_toDirection > 7) _toDirection = 7;
+
+	if (_toDirection != _direction)
+	{
+		_status = STATUS_TURNING;
+	}
+}
+
+void BattleUnit::turn()
+{
+    int a = _toDirection - _direction;
+    if (a != 0) {
+        if (a > 0) {
+            if (a <= 4) {
+                _direction++;
+            } else {
+                _direction--;
+            }
+        } else {
+            if (a > -4) {
+                _direction--;
+            } else {
+                _direction++;
+            }
+        }
+        if (_direction < 0) _direction = 7;
+        if (_direction > 7) _direction = 0;
+    }
+
+	if (_toDirection == _direction)
+	{
+		// we officially reached our destination
+		_status = STATUS_STANDING;
+	}
 }

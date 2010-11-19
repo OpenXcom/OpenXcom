@@ -19,11 +19,13 @@
 #ifndef OPENXCOM_BATTLEUNIT_H
 #define OPENXCOM_BATTLEUNIT_H
 
+#include <vector>
 #include "../Battlescape/Position.h"
 
 class RuleUnitSprite;
+class Tile;
 
-enum UnitStatus {STATUS_STANDING, STATUS_SITTING, STATUS_WALKING, STATUS_FALLING, STATUS_DEAD};
+enum UnitStatus {STATUS_STANDING, STATUS_SITTING, STATUS_WALKING, STATUS_TURNING, STATUS_FALLING, STATUS_DEAD};
 
 /**
  * Represents a moving unit in the battlescape, player controlled or AI controlled
@@ -36,15 +38,16 @@ private:
 	int _id;
 	Position _pos;
 	Position _lastPos;
-	int _direction;
+	int _direction, _toDirection;
 	Position _destination;
 	UnitStatus _status;
 	int _walkPhase;
+	std::vector<Tile *> _visibleTiles;
 public:
 	/// Creates a BattleUnit.
 	BattleUnit(RuleUnitSprite *renderRules);
 	/// Cleans up the BattleUnit.
-	~BattleUnit();
+	virtual ~BattleUnit();
 	/// Gets the BattleUnit's ID.
 	int getId() const;
 	/// Sets the BattleUnit's ID.
@@ -71,6 +74,10 @@ public:
 	int getWalkingPhase();
 	/// Gets the unit's destination when walking
 	const Position &getDestination() const;
+	/// Look at a certain point.
+	void lookAt(const Position &point);
+	/// Turn to the destination direction.
+	void turn();
 
 };
 

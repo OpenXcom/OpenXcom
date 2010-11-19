@@ -368,6 +368,9 @@
     <ClCompile Include="Battlescape\PathfindingNode.cpp">
       <Filter>Battlescape</Filter>
     </ClCompile>
+    <ClCompile Include="Battlescape\TerrainModifier.cpp">
+      <Filter>Battlescape</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -738,6 +741,9 @@
       <Filter>Battlescape</Filter>
     </ClInclude>
     <ClInclude Include="Battlescape\PathfindingNode.h">
+      <Filter>Battlescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Battlescape\TerrainModifier.h">
       <Filter>Battlescape</Filter>
     </ClInclude>
   </ItemGroup>

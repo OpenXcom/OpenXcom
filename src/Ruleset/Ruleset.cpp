@@ -91,7 +91,8 @@ SavedGame *Ruleset::newSave(GameDifficulty diff)
 
 /**
  * Generates a battlescape saved game based on terrain type, mission type, time of day, place on earth.
- * @param save The base saved game.
+ * @param res the ResourcePack.
+ * @param save The base SavedGame.
  * @param texture The texture of the globe polygon we are on.
  * @param craft The XCom craft.
  * @param ufo The UFO.

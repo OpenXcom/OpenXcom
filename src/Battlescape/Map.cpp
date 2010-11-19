@@ -48,9 +48,11 @@
 
 #define SCROLL_AMOUNT 8
 #define SCROLL_BORDER 5
+#define SCROLL_DIAGONAL_EDGE 60
 #define DEFAULT_ANIM_SPEED 100
 #define DEFAULT_WALK_SPEED 50
 #define DEFAULT_BULLET_SPEED 20
+#define RMB_SCROLL false
 
 /*
   1) Map origin is left corner. 
@@ -124,6 +126,7 @@ void Map::setResourcePack(ResourcePack *res)
 /**
  * Changes the saved game content for the map to render.
  * @param save Pointer to the saved game.
+ * @param game Pointer to the Game.
  */
 void Map::setSavedGame(SavedBattleGame *save, Game *game)
 {
@@ -415,7 +418,7 @@ void Map::mouseOver(Action *action, State *state)
 	int posY = action->getDetails()->motion.y;
 
 	// handle RMB dragging
-	if (action->getDetails()->motion.state & SDL_BUTTON(SDL_BUTTON_RIGHT))
+	if ((action->getDetails()->motion.state & SDL_BUTTON(SDL_BUTTON_RIGHT)) && RMB_SCROLL)
 	{
 		_RMBDragging = true;
 		_ScrollX = (int)(-(double)(_RMBClickX - posX) * (action->getXScale() * 2));
@@ -426,28 +429,64 @@ void Map::mouseOver(Action *action, State *state)
 	else
 	{
 		// handle scrolling with mouse at edge of screen
-		if (posX < SCROLL_BORDER && posX > 0)
+		if (posX < (SCROLL_BORDER * action->getXScale()) && posX > 0)
 		{
 			_ScrollX = SCROLL_AMOUNT;
+			// if close to top or bottom, also scroll diagonally
+			if (posY < (SCROLL_DIAGONAL_EDGE * action->getYScale()) && posY > 0)
+			{
+				_ScrollY = SCROLL_AMOUNT;
+			}
+			else if (posY > (getHeight() - SCROLL_DIAGONAL_EDGE) * action->getYScale())
+			{
+				_ScrollY = -SCROLL_AMOUNT;
+			}
 		}
 		else if (posX > (getWidth() - SCROLL_BORDER) * action->getXScale())
 		{
 			_ScrollX = -SCROLL_AMOUNT;
+			// if close to top or bottom, also scroll diagonally
+			if (posY < (SCROLL_DIAGONAL_EDGE * action->getYScale()) && posY > 0)
+			{
+				_ScrollY = SCROLL_AMOUNT;
+			}
+			else if (posY > (getHeight() - SCROLL_DIAGONAL_EDGE) * action->getYScale())
+			{
+				_ScrollY = -SCROLL_AMOUNT;
+			}
 		}
 		else if (posX)
 		{
 			_ScrollX = 0;
 		}
 
-		if (posY < SCROLL_BORDER && posY > 0)
+		if (posY < (SCROLL_BORDER * action->getYScale()) && posY > 0)
 		{
 			_ScrollY = SCROLL_AMOUNT;
+			// if close to left or right edge, also scroll diagonally
+			if (posX < (SCROLL_DIAGONAL_EDGE * action->getXScale()) && posX > 0)
+			{
+				_ScrollX = SCROLL_AMOUNT;
+			}
+			else if (posX > (getWidth() - SCROLL_DIAGONAL_EDGE) * action->getXScale())
+			{
+				_ScrollX = -SCROLL_AMOUNT;
+			}
 		}
 		else if (posY > (getHeight() - SCROLL_BORDER) * action->getYScale())
 		{
 			_ScrollY = -SCROLL_AMOUNT;
+			// if close to left or right edge, also scroll diagonally
+			if (posX < (SCROLL_DIAGONAL_EDGE * action->getXScale()) && posX > 0)
+			{
+				_ScrollX = SCROLL_AMOUNT;
+			}
+			else if (posX > (getWidth() - SCROLL_DIAGONAL_EDGE) * action->getXScale())
+			{
+				_ScrollX = -SCROLL_AMOUNT;
+			}
 		}
-		else if (posY)
+		else if (posY && _ScrollX == 0)
 		{
 			_ScrollY = 0;
 		}
@@ -563,7 +602,7 @@ void Map::down()
 
 /**
  * Center map on a certain position.
- * @param pos
+ * @param mapPos Position to center on.
  */
 void Map::centerOnPosition(const Position &mapPos)
 {
@@ -579,8 +618,8 @@ void Map::centerOnPosition(const Position &mapPos)
 
 /**
  * Convert map coordinates X,Y,Z to screen positions X, Y.
- * @param mapPos
- * @param pointer to screen position
+ * @param mapPos X,Y,Z coordinates on the map.
+ * @param screenPos to screen position.
  */
 void Map::convertMapToScreen(const Position &mapPos, Position *screenPos)
 {
@@ -604,7 +643,7 @@ void Map::drawArrow(const Position &screenPos)
 
 /**
  * Draws the small arrow above the selected soldier.
- * @param pointer to a position
+ * @param pos pointer to a position
  */
 void Map::getSelectorPosition(Position *pos)
 {
@@ -616,9 +655,7 @@ void Map::getSelectorPosition(Position *pos)
 
 /**
  * Calculate the offset of a soldier, when it is walking in the middle of 2 tiles.
- * @param dir direction the soldier is heading.
- * @param phase walking phase.
- * @param position current position of the soldier
+ * @param unit pointer to BattleUnit
  * @param offset pointer to the offset to return the calculation.
  */
 void Map::calculateWalkingOffset(BattleUnit *unit, Position *offset)
@@ -691,9 +728,16 @@ void Map::calculateWalkingOffset(BattleUnit *unit, Position *offset)
  */
 void Map::moveUnit()
 {
+	int tu = 0;
+
 	if (_save->getSelectedSoldier()->getStatus() == STATUS_WALKING)
 	{
 		_save->getSelectedSoldier()->keepWalking();
+	}
+
+	if (_save->getSelectedSoldier()->getStatus() == STATUS_TURNING)
+	{
+		_save->getSelectedSoldier()->turn();
 	}
 
 	if (_save->getSelectedSoldier()->getStatus() == STATUS_STANDING)
@@ -702,12 +746,14 @@ void Map::moveUnit()
 		if (dir != -1)
 		{
 			Position destination;
-			int tu = _save->getPathfinding()->getTUCost(_save->getSelectedSoldier()->getPosition(), dir, &destination);
+			tu = _save->getPathfinding()->getTUCost(_save->getSelectedSoldier()->getPosition(), dir, &destination, (BattleUnit*)_save->getSelectedSoldier());
 			_save->getSelectedSoldier()->startWalking(dir, destination);
 			_hideCursor = true; // hide cursor while walking
 			_game->getCursor()->setVisible(false);
-		}else if (_hideCursor)
+		}
+		else if (_hideCursor)
 		{
+			_viewHeight = _save->getSelectedSoldier()->getPosition().z;
 			_hideCursor = false; // show cursor again
 			_game->getCursor()->setVisible(true);
 		}

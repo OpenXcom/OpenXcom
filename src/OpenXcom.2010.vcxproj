@@ -131,6 +131,7 @@
     <ClCompile Include="Battlescape\Pathfinding.cpp" />
     <ClCompile Include="Battlescape\PathfindingNode.cpp" />
     <ClCompile Include="Battlescape\Position.cpp" />
+    <ClCompile Include="Battlescape\TerrainModifier.cpp" />
     <ClCompile Include="Battlescape\UnitSprite.cpp" />
     <ClCompile Include="Engine\Action.cpp" />
     <ClCompile Include="Engine\CatFile.cpp" />
@@ -256,6 +257,7 @@
     <ClInclude Include="Battlescape\Pathfinding.h" />
     <ClInclude Include="Battlescape\PathfindingNode.h" />
     <ClInclude Include="Battlescape\Position.h" />
+    <ClInclude Include="Battlescape\TerrainModifier.h" />
     <ClInclude Include="Battlescape\UnitSprite.h" />
     <ClInclude Include="Engine\Action.h" />
     <ClInclude Include="Engine\CatFile.h" />
