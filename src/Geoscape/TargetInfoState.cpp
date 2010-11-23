@@ -39,10 +39,10 @@ TargetInfoState::TargetInfoState(Game *game, Target *target) : State(game), _tar
 
 	// Create objects
 	_window = new Window(this, 192, 120, 32, 40, POPUP_BOTH);
-	_btnOk = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 160, 16, 48, 135);
-	_txtTitle = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 182, 16, 37, 54);
-	_txtTargetted = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 182, 8, 37, 74);
-	_txtFollowers = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 182, 48, 37, 84);
+	_btnOk = new TextButton(160, 16, 48, 135);
+	_txtTitle = new Text(182, 16, 37, 54);
+	_txtTargetted = new Text(182, 8, 37, 74);
+	_txtFollowers = new Text(182, 48, 37, 84);
 	
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);

@@ -42,9 +42,9 @@ BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base, State *state)
 
 	// Create objects
 	_window = new Window(this, 128, 160, 192, 40, POPUP_VERTICAL);
-	_btnOk = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 112, 16, 200, 176);
-	_txtTitle = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 118, 16, 197, 48);
-	_lstFacilities = new TextList(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 96, 110, 200, 64);
+	_btnOk = new TextButton(112, 16, 200, 176);
+	_txtTitle = new Text(118, 16, 197, 48);
+	_lstFacilities = new TextList(96, 110, 200, 64);
 	
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);

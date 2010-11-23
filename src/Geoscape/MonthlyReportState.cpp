@@ -38,12 +38,12 @@ MonthlyReportState::MonthlyReportState(Game *game) : State(game)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
-	_btnOk = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 50, 12, 135, 180);
-	_txtTitle = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 280, 16, 16, 8);
-	_txtMonth = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 110, 8, 16, 24);
-	_txtRating = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 180, 8, 125, 24);
-	_txtChange = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 300, 8, 16, 32);
-	_txtDesc = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 300, 140, 16, 40);
+	_btnOk = new TextButton(50, 12, 135, 180);
+	_txtTitle = new Text(280, 16, 16, 8);
+	_txtMonth = new Text(110, 8, 16, 24);
+	_txtRating = new Text(180, 8, 125, 24);
+	_txtChange = new Text(300, 8, 16, 32);
+	_txtDesc = new Text(300, 140, 16, 40);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)), Palette::backPos, 16);

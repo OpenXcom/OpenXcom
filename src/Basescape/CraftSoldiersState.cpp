@@ -43,14 +43,14 @@ CraftSoldiersState::CraftSoldiersState(Game *game, Base *base, unsigned int craf
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
-	_btnOk = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 288, 16, 16, 176);
-	_txtTitle = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 300, 16, 16, 7);
-	_txtName = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 114, 9, 16, 32);
-	_txtRank = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 102, 9, 130, 32);
-	_txtCraft = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 82, 9, 232, 32);
-	_txtAvailable = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 110, 9, 16, 24);
-	_txtUsed = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 110, 9, 130, 24);
-	_lstSoldiers = new TextList(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 288, 128, 8, 40);
+	_btnOk = new TextButton(288, 16, 16, 176);
+	_txtTitle = new Text(300, 16, 16, 7);
+	_txtName = new Text(114, 9, 16, 32);
+	_txtRank = new Text(102, 9, 130, 32);
+	_txtCraft = new Text(82, 9, 232, 32);
+	_txtAvailable = new Text(110, 9, 16, 24);
+	_txtUsed = new Text(110, 9, 130, 24);
+	_lstSoldiers = new TextList(288, 128, 8, 40);
 	
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);

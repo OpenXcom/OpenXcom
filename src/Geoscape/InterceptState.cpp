@@ -46,13 +46,13 @@ InterceptState::InterceptState(Game *game, Globe *globe, Base *base) : State(gam
 
 	// Create objects
 	_window = new Window(this, 320, 140, 0, 30, POPUP_HORIZONTAL);
-	_btnCancel = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 288, 16, 16, 146);
-	_txtTitle = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 300, 16, 10, 46);
-	_txtCraft = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 86, 9, 14, 70);
-	_txtStatus = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 65, 9, 100, 70);
-	_txtBase = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 85, 9, 165, 70);
-	_txtWeapons = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 64, 16, 242, 62);
-	_lstCrafts = new TextList(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 288, 64, 8, 78);
+	_btnCancel = new TextButton(288, 16, 16, 146);
+	_txtTitle = new Text(300, 16, 10, 46);
+	_txtCraft = new Text(86, 9, 14, 70);
+	_txtStatus = new Text(65, 9, 100, 70);
+	_txtBase = new Text(85, 9, 165, 70);
+	_txtWeapons = new Text(64, 16, 242, 62);
+	_lstCrafts = new TextList(288, 64, 8, 78);
 	
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);

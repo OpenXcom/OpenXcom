@@ -43,8 +43,8 @@ BaseNameState::BaseNameState(Game *game, Base *base, Globe *globe, bool first) :
 
 	// Create objects
 	_window = new Window(this, 192, 80, 32, 60, POPUP_BOTH);
-	_txtTitle = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 182, 16, 37, 76);
-	_edtName = new TextEdit(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 136, 16, 54, 108);
+	_txtTitle = new Text(182, 16, 37, 76);
+	_edtName = new TextEdit(136, 16, 54, 108);
 	
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);

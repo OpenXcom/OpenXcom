@@ -69,7 +69,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	_btnReserveAuto = new ImageButton(28, 11, 78, 189);
 
 	// Create soldier stats summary
-	_txtName = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 120, 10, 135, 176);
+	_txtName = new Text(120, 10, 135, 176);
 
 	_numTimeUnits = new NumberText(15, 5, 136, 186);
 	_barTimeUnits = new Bar(102, 3, 170, 185);
@@ -140,7 +140,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	_btnCenter->onMouseClick((ActionHandler)&BattlescapeState::btnCenterClick);
 
 	_map->onMouseClick((ActionHandler)&BattlescapeState::mapClick);
-
+	
 	_txtName->setColor(Palette::blockOffset(8));
 	_numTimeUnits->setColor(Palette::blockOffset(4));
 	_numEnergy->setColor(Palette::blockOffset(1));

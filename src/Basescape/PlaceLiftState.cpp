@@ -43,8 +43,8 @@
 PlaceLiftState::PlaceLiftState(Game *game, Base *base, Globe *globe) : State(game), _base(base), _globe(globe)
 {
 	// Create objects
-	_view = new BaseView(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 192, 192, 0, 8);
-	_txtTitle = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 180, 9, 10, 0);
+	_view = new BaseView(192, 192, 0, 8);
+	_txtTitle = new Text(180, 9, 10, 0);
 	
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
@@ -53,6 +53,7 @@ PlaceLiftState::PlaceLiftState(Game *game, Base *base, Globe *globe) : State(gam
 	add(_txtTitle);
 
 	// Set up objects
+	_view->setFonts(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"));
 	_view->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
 	_view->setBase(_base);
 	_view->setSelectable(_game->getRuleset()->getBaseFacility(STR_ACCESS_LIFT)->getSize());

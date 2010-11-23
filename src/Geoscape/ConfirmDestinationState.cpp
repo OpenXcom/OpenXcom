@@ -46,9 +46,9 @@ ConfirmDestinationState::ConfirmDestinationState(Game *game, Craft *craft, Targe
 
 	// Create objects
 	_window = new Window(this, 224, 72, 16, 64);
-	_btnOk = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 50, 12, 68, 104);
-	_btnCancel = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 50, 12, 138, 104);
-	_txtTarget = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 214, 16, 21, 80);
+	_btnOk = new TextButton(50, 12, 68, 104);
+	_btnCancel = new TextButton(50, 12, 138, 104);
+	_txtTarget = new Text(214, 16, 21, 80);
 
 	// Set palette
 	if (w != 0 && w->getId() == 0)

@@ -38,11 +38,11 @@ OptionsState::OptionsState(Game *game) : State(game)
 
 	// Create objects
 	_window = new Window(this, 216, 160, 20, 20, POPUP_BOTH);
-	_btnLoad = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 180, 20, 38, 60);
-	_btnSave = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 180, 20, 38, 85);
-	_btnAbandon = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 180, 20, 38, 110);
-	_btnCancel = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 180, 20, 38, 140);
-	_txtTitle = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 206, 15, 25, 32);
+	_btnLoad = new TextButton(180, 20, 38, 60);
+	_btnSave = new TextButton(180, 20, 38, 85);
+	_btnAbandon = new TextButton(180, 20, 38, 110);
+	_btnCancel = new TextButton(180, 20, 38, 140);
+	_txtTitle = new Text(206, 15, 25, 32);
 	
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);

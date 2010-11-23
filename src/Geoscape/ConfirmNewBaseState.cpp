@@ -46,10 +46,10 @@ ConfirmNewBaseState::ConfirmNewBaseState(Game *game, Base *base, Globe *globe) :
 
 	// Create objects
 	_window = new Window(this, 224, 72, 16, 64);
-	_btnOk = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 54, 12, 68, 104);
-	_btnCancel = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 54, 12, 138, 104);
-	_txtCost = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 120, 9, 68, 80);
-	_txtArea = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 120, 9, 68, 90);
+	_btnOk = new TextButton(54, 12, 68, 104);
+	_btnCancel = new TextButton(54, 12, 138, 104);
+	_txtCost = new Text(120, 9, 68, 80);
+	_txtArea = new Text(120, 9, 68, 90);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);

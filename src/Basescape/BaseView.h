@@ -48,9 +48,11 @@ private:
 	Timer *_timer;
 public:
 	/// Creates a new base view at the specified position and size.
-	BaseView(Font *big, Font *small, int width, int height, int x = 0, int y = 0);
+	BaseView(int width, int height, int x = 0, int y = 0);
 	/// Cleans up the base view.
 	~BaseView();
+	/// Sets the base view's various fonts.
+	void setFonts(Font *big, Font *small);
 	/// Sets the base to display.
 	void setBase(Base *base);
 	/// Sets the texture for this base view.

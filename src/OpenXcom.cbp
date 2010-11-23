@@ -96,6 +96,8 @@
 		<Unit filename="Battlescape\PathfindingNode.h" />
 		<Unit filename="Battlescape\Position.cpp" />
 		<Unit filename="Battlescape\Position.h" />
+		<Unit filename="Battlescape\TerrainModifier.cpp" />
+		<Unit filename="Battlescape\TerrainModifier.h" />
 		<Unit filename="Battlescape\UnitSprite.cpp" />
 		<Unit filename="Battlescape\UnitSprite.h" />
 		<Unit filename="Engine\Action.cpp" />
@@ -232,7 +234,7 @@
 		<Unit filename="Resource\XcomResourcePack.h" />
 		<Unit filename="Ruleset\MapBlock.cpp" />
 		<Unit filename="Ruleset\MapBlock.h" />
-		<Unit filename="Ruleset\MapDataFilecpp" />
+		<Unit filename="Ruleset\MapDataFile.cpp" />
 		<Unit filename="Ruleset\MapDataFile.h" />
 		<Unit filename="Ruleset\RuleBaseFacility.cpp" />
 		<Unit filename="Ruleset\RuleBaseFacility.h" />

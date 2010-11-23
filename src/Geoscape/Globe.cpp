@@ -850,8 +850,9 @@ void Globe::drawDetail()
 	// Draw the country names
 	if (_zoom >= 2)
 	{
-		Text *label = new Text(_res->getFont("BIGLETS.DAT"), _res->getFont("SMALLSET.DAT"), 80, 9, 0, 0);
+		Text *label = new Text(80, 9, 0, 0);
 		label->setPalette(getPalette());
+		label->setFonts(_res->getFont("BIGLETS.DAT"), _res->getFont("SMALLSET.DAT"));
 		label->setAlign(ALIGN_CENTER);
 		label->setColor(Palette::blockOffset(15)-1);
 
@@ -877,8 +878,9 @@ void Globe::drawDetail()
 	// Draw the city markers
 	if (_zoom >= 3)
 	{
-		Text *label = new Text(_res->getFont("BIGLETS.DAT"), _res->getFont("SMALLSET.DAT"), 80, 9, 0, 0);
+		Text *label = new Text(80, 9, 0, 0);
 		label->setPalette(getPalette());
+		label->setFonts(_res->getFont("BIGLETS.DAT"), _res->getFont("SMALLSET.DAT"));
 		label->setAlign(ALIGN_CENTER);
 		label->setColor(Palette::blockOffset(8)+10);
 

@@ -38,8 +38,8 @@ BasescapeErrorState::BasescapeErrorState(Game *game, LangString str) : State(gam
 
 	// Create objects
 	_window = new Window(this, 256, 160, 32, 20, POPUP_BOTH);
-	_btnOk = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 120, 18, 100, 154);
-	_txtError = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 234, 80, 44, 50);
+	_btnOk = new TextButton(120, 18, 100, 154);
+	_txtError = new Text(234, 80, 44, 50);
 	
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);

@@ -48,8 +48,8 @@ private:
 	/// Processes the contained text.
 	void processText();
 public:
-	/// Creates a new text with the specified size, position and fonts.
-	Text(Font *big, Font *small, int width, int height, int x = 0, int y = 0);
+	/// Creates a new text with the specified size and position.
+	Text(int width, int height, int x = 0, int y = 0);
 	/// Cleans up the text.
 	~Text();
 	/// Formats an integer value as currency.
@@ -58,9 +58,9 @@ public:
 	void setBig();
 	/// Sets the text size to small.
 	void setSmall();
-	/// Gets the text's font.
+	/// Gets the text's current font.
 	Font *const getFont() const;
-
+	/// Sets the text's various fonts.
 	void setFonts(Font *big, Font *small);
 	/// Sets the text's string.
 	void setText(const std::string &text);

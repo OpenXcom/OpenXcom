@@ -43,10 +43,10 @@ CraftPatrolState::CraftPatrolState(Game *game, Craft *craft, Globe *globe) : Sta
 
 	// Create objects
 	_window = new Window(this, 224, 168, 16, 16, POPUP_BOTH);
-	_btnOk = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 140, 12, 58, 144);
-	_btnRedirect = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 140, 12, 58, 160);
-	_txtDestination = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 140, 64, 58, 48);
-	_txtPatrolling = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 140, 16, 58, 120);
+	_btnOk = new TextButton(140, 12, 58, 144);
+	_btnRedirect = new TextButton(140, 12, 58, 160);
+	_txtDestination = new Text(140, 64, 58, 48);
+	_txtPatrolling = new Text(140, 16, 58, 120);
 	
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);

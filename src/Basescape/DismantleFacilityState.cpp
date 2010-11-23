@@ -42,10 +42,10 @@ DismantleFacilityState::DismantleFacilityState(Game *game, Base *base, BaseFacil
 
 	// Create objects
 	_window = new Window(this, 152, 80, 20, 60);
-	_btnOk = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 44, 16, 36, 115);
-	_btnCancel = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 44, 16, 112, 115);
-	_txtTitle = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 142, 9, 25, 75);
-	_txtFacility = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 142, 9, 25, 85);
+	_btnOk = new TextButton(44, 16, 36, 115);
+	_btnCancel = new TextButton(44, 16, 112, 115);
+	_txtTitle = new Text(142, 9, 25, 75);
+	_txtFacility = new Text(142, 9, 25, 85);
 	
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);

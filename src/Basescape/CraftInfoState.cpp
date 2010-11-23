@@ -46,21 +46,21 @@ CraftInfoState::CraftInfoState(Game *game, Base *base, unsigned int craft) : Sta
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0, POPUP_BOTH);
-	_btnOk = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 64, 24, 128, 168);
-	_btnW1 = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 24, 32, 24, 48);
-	_btnW2 = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 24, 32, 272, 48);
-	_btnCrew = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 64, 16, 24, 96);
-	_btnEquip = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 64, 16, 24, 120);
-	_btnArmour = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 64, 16, 24, 144);
-	_txtCraft = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 310, 16, 5, 8);
-	_txtDamage = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 80, 9, 24, 24);
-	_txtFuel = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 80, 9, 232, 24);
-	_txtW1Name = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 90, 9, 56, 48);
-	_txtW1Ammo = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 60, 9, 56, 64);
-	_txtW1Max = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 60, 9, 56, 72);
-	_txtW2Name = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 90, 9, 204, 48);
-	_txtW2Ammo = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 60, 9, 204, 64);
-	_txtW2Max = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 60, 9, 204, 72);
+	_btnOk = new TextButton(64, 24, 128, 168);
+	_btnW1 = new TextButton(24, 32, 24, 48);
+	_btnW2 = new TextButton(24, 32, 272, 48);
+	_btnCrew = new TextButton(64, 16, 24, 96);
+	_btnEquip = new TextButton(64, 16, 24, 120);
+	_btnArmour = new TextButton(64, 16, 24, 144);
+	_txtCraft = new Text(310, 16, 5, 8);
+	_txtDamage = new Text(80, 9, 24, 24);
+	_txtFuel = new Text(80, 9, 232, 24);
+	_txtW1Name = new Text(90, 9, 56, 48);
+	_txtW1Ammo = new Text(60, 9, 56, 64);
+	_txtW1Max = new Text(60, 9, 56, 72);
+	_txtW2Name = new Text(90, 9, 204, 48);
+	_txtW2Ammo = new Text(60, 9, 204, 64);
+	_txtW2Max = new Text(60, 9, 204, 72);
 	_sprite = new Surface(32, 32, 144, 52);
 	_weapon1 = new Surface(15, 17, 121, 63);
 	_weapon2 = new Surface(15, 17, 184, 63);

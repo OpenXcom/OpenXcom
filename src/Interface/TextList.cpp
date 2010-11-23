@@ -26,21 +26,13 @@
 
 /**
  * Sets up a blank list with the specified size and position.
- * @param big Pointer to the big-size font.
- * @param small Pointer to the small-size font.
  * @param width Width in pixels.
  * @param height Height in pixels.
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-TextList::TextList(Font *big, Font *small, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _texts(), _columns(), _big(big), _small(small), _scroll(0), _visibleRows(0), _color(0), _align(ALIGN_LEFT), _dot(false), _selectable(false), _selRow(0), _bg(0), _margin(0)
+TextList::TextList(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _texts(), _columns(), _big(0), _small(0), _scroll(0), _visibleRows(0), _color(0), _align(ALIGN_LEFT), _dot(false), _selectable(false), _selRow(0), _bg(0), _selector(0), _margin(0)
 {
-	_selector = new Surface(_width, _small->getHeight() + _small->getSpacing(), _x, _y);
-	_selector->setVisible(false);
-
-	for (int y = 0; y < _height; y += _small->getHeight() + _small->getSpacing())
-		_visibleRows++;
-
 	_up = new ArrowButton(ARROW_BIG_UP, 13, 14, _x + _width + 4, _y + 1);
 	_up->setVisible(false);
 	_up->setTextList(this);
@@ -92,8 +84,9 @@ void TextList::addRow(int cols, ...)
 
 	for (int i = 0; i < cols; i++)
 	{
-		Text* txt = new Text(_big, _small, _columns[i], _small->getHeight(), _margin + rowX, _y);
+		Text* txt = new Text(_columns[i], _small->getHeight(), _margin + rowX, _y);
 		txt->setPalette(this->getPalette());
+		txt->setFonts(_big, _small);
 		
 		std::string buf = va_arg(args, char*);
 		// Places dots between text
@@ -166,9 +159,30 @@ void TextList::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 			(*v)->setPalette(colors, firstcolor, ncolors);
 		}
 	}
-	_selector->setPalette(colors, firstcolor, ncolors);
+	if (_selector != 0)
+		_selector->setPalette(colors, firstcolor, ncolors);
 	_up->setPalette(colors, firstcolor, ncolors);
 	_down->setPalette(colors, firstcolor, ncolors);
+}
+
+/**
+ * Changes the various fonts of the text in the list
+ * and calculates the selector and visible amount of rows.
+ * @param big Pointer to large-size font.
+ * @param small Pointer to small-size font.
+ */
+void TextList::setFonts(Font *big, Font *small)
+{
+	_big = big;
+	_small = small;
+	
+	delete _selector;
+	_selector = new Surface(_width, _small->getHeight() + _small->getSpacing(), _x, _y);
+	_selector->setPalette(getPalette());
+	_selector->setVisible(false);
+
+	for (int y = 0; y < _height; y += _small->getHeight() + _small->getSpacing())
+		_visibleRows++;
 }
 
 /**

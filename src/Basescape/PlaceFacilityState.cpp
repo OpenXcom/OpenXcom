@@ -46,15 +46,15 @@ PlaceFacilityState::PlaceFacilityState(Game *game, Base *base, RuleBaseFacility 
 
 	// Create objects
 	_window = new Window(this, 128, 160, 192, 40);
-	_view = new BaseView(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 192, 192, 0, 8);
-	_btnCancel = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 112, 16, 200, 176);
-	_txtFacility = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 110, 9, 202, 50);
-	_txtCost = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 110, 9, 202, 62);
-	_numCost = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 110, 16, 202, 70);
-	_txtTime = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 110, 9, 202, 90);
-	_numTime = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 110, 16, 202, 98);
-	_txtMaintenance = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 110, 9, 202, 118);
-	_numMaintenance = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 110, 16, 202, 126);
+	_view = new BaseView(192, 192, 0, 8);
+	_btnCancel = new TextButton(112, 16, 200, 176);
+	_txtFacility = new Text(110, 9, 202, 50);
+	_txtCost = new Text(110, 9, 202, 62);
+	_numCost = new Text(110, 16, 202, 70);
+	_txtTime = new Text(110, 9, 202, 90);
+	_numTime = new Text(110, 16, 202, 98);
+	_txtMaintenance = new Text(110, 9, 202, 118);
+	_numMaintenance = new Text(110, 16, 202, 126);
 	
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
@@ -73,7 +73,8 @@ PlaceFacilityState::PlaceFacilityState(Game *game, Base *base, RuleBaseFacility 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(13)+13);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
-
+	
+	_view->setFonts(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"));
 	_view->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
 	_view->setBase(_base);
 	_view->setSelectable(rule->getSize());

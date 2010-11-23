@@ -38,12 +38,12 @@ NewGameState::NewGameState(Game *game) : State(game)
 {
 	// Create objects
 	_window = new Window(this, 192, 180, 64, 10, POPUP_VERTICAL);
-	_btnBeginner = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 160, 18, 80, 55);
-	_btnExperienced = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 160, 18, 80, 80);
-	_btnVeteran = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 160, 18, 80, 105);
-	_btnGenius = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 160, 18, 80, 130);
-	_btnSuperhuman = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 160, 18, 80, 155);
-	_txtTitle = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 192, 10, 64, 30);
+	_btnBeginner = new TextButton(160, 18, 80, 55);
+	_btnExperienced = new TextButton(160, 18, 80, 80);
+	_btnVeteran = new TextButton(160, 18, 80, 105);
+	_btnGenius = new TextButton(160, 18, 80, 130);
+	_btnSuperhuman = new TextButton(160, 18, 80, 155);
+	_txtTitle = new Text(192, 10, 64, 30);
 	
 	add(_window);
 	add(_btnBeginner);

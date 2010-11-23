@@ -41,13 +41,15 @@ private:
 public:
 	static Sound *soundPress;
 	/// Creates a new text button with the specified size and position.
-	TextButton(Font *big, Font *small, int width, int height, int x = 0, int y = 0);
+	TextButton(int width, int height, int x = 0, int y = 0);
 	/// Cleans up the text button.
 	~TextButton();
 	/// Sets the text button's color.
 	void setColor(Uint8 color);
 	/// Gets the text button's color.
 	Uint8 getColor() const;
+	/// Sets the text button's various fonts.
+	void setFonts(Font *big, Font *small);
 	/// Sets the text button's text.
 	void setText(const std::string &text);
 	/// Gets the text button's text.

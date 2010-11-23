@@ -54,23 +54,23 @@
 BasescapeState::BasescapeState(Game *game, Base *base, Globe *globe) : State(game), _base(base), _globe(globe)
 {
 	// Create objects
-	_view = new BaseView(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 192, 192, 0, 8);
+	_view = new BaseView(192, 192, 0, 8);
 	_mini = new MiniBaseView(128, 16, 192, 41);
-	_txtFacility = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 192, 9, 0, 0);
-	_txtBase = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 127, 17, 193, 0);
-	_txtLocation = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 126, 9, 194, 16);
-	_txtFunds = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 126, 9, 194, 24);
-	_btnNewBase = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 128, 12, 192, 58);
-	_btnBaseInfo = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 128, 12, 192, 71);
-	_btnSoldiers = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 128, 12, 192, 84);
-	_btnCrafts = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 128, 12, 192, 97);
-	_btnFacilities = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 128, 12, 192, 110);
-	_btnResearch = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 128, 12, 192, 123);
-	_btnManufacture = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 128, 12, 192, 136);
-	_btnTransfer = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 128, 12, 192, 149);
-	_btnPurchase = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 128, 12, 192, 162);
-	_btnSell = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 128, 12, 192, 175);
-	_btnGeoscape = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 128, 12, 192, 188);
+	_txtFacility = new Text(192, 9, 0, 0);
+	_txtBase = new Text(127, 17, 193, 0);
+	_txtLocation = new Text(126, 9, 194, 16);
+	_txtFunds = new Text(126, 9, 194, 24);
+	_btnNewBase = new TextButton(128, 12, 192, 58);
+	_btnBaseInfo = new TextButton(128, 12, 192, 71);
+	_btnSoldiers = new TextButton(128, 12, 192, 84);
+	_btnCrafts = new TextButton(128, 12, 192, 97);
+	_btnFacilities = new TextButton(128, 12, 192, 110);
+	_btnResearch = new TextButton(128, 12, 192, 123);
+	_btnManufacture = new TextButton(128, 12, 192, 136);
+	_btnTransfer = new TextButton(128, 12, 192, 149);
+	_btnPurchase = new TextButton(128, 12, 192, 162);
+	_btnSell = new TextButton(128, 12, 192, 175);
+	_btnGeoscape = new TextButton(128, 12, 192, 188);
 	
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
@@ -94,6 +94,7 @@ BasescapeState::BasescapeState(Game *game, Base *base, Globe *globe) : State(gam
 	add(_btnGeoscape);
 
 	// Set up objects
+	_view->setFonts(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"));
 	_view->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
 	_view->onMouseClick((ActionHandler)&BasescapeState::viewClick);
 	_view->onMouseOver((ActionHandler)&BasescapeState::viewMouseOver);

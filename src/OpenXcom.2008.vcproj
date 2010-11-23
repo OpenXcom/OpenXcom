@@ -628,6 +628,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Battlescape\TerrainModifier.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\TerrainModifier.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Battlescape\UnitSprite.cpp"
 				>
 			</File>

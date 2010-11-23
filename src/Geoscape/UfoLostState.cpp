@@ -38,8 +38,8 @@ UfoLostState::UfoLostState(Game *game, std::string id) : State(game), _id(id)
 
 	// Create objects
 	_window = new Window(this, 192, 104, 32, 48, POPUP_BOTH);
-	_btnOk = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 60, 12, 98, 112);
-	_txtTitle = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 160, 30, 48, 72);
+	_btnOk = new TextButton(60, 12, 98, 112);
+	_txtTitle = new Text(160, 30, 48, 72);
 	
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);

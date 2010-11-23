@@ -54,11 +54,11 @@ UfoDetectedState::UfoDetectedState(Game *game, Ufo *ufo, GeoscapeState *state, b
 
 	// Create objects
 	_window = new Window(this, 208, 120, 24, 48, POPUP_BOTH);
-	_btnCentre = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 160, 12, 48, 128);
-	_btnCancel = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 160, 12, 48, 144);
-	_txtUfo = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 160, 16, 48, 56);
-	_txtDetected = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 80, 8, 48, 72);
-	_lstInfo = new TextList(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 160, 32, 48, 82);
+	_btnCentre = new TextButton(160, 12, 48, 128);
+	_btnCancel = new TextButton(160, 12, 48, 144);
+	_txtUfo = new Text(160, 16, 48, 56);
+	_txtDetected = new Text(80, 8, 48, 72);
+	_lstInfo = new TextList(160, 32, 48, 82);
 	
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);

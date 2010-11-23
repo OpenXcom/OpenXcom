@@ -40,9 +40,9 @@ AbandonGameState::AbandonGameState(Game *game) : State(game)
 
 	// Create objects
 	_window = new Window(this, 216, 160, 20, 20, POPUP_BOTH);
-	_btnYes = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 50, 20, 38, 140);
-	_btnNo = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 50, 20, 168, 140);
-	_txtTitle = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 206, 15, 25, 70);
+	_btnYes = new TextButton(50, 20, 38, 140);
+	_btnNo = new TextButton(50, 20, 168, 140);
+	_txtTitle = new Text(206, 15, 25, 70);
 	
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);

@@ -41,7 +41,7 @@
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-BaseView::BaseView(Font *big, Font *small, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _base(0), _texture(0), _selFacility(0), _big(big), _small(small), _gridX(0), _gridY(0), _selSize(0), _selector(0), _blink(true)
+BaseView::BaseView(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _base(0), _texture(0), _selFacility(0), _big(0), _small(0), _gridX(0), _gridY(0), _selSize(0), _selector(0), _blink(true)
 {
 	_validButton = SDL_BUTTON_LEFT;
 
@@ -60,6 +60,19 @@ BaseView::BaseView(Font *big, Font *small, int width, int height, int x, int y) 
 BaseView::~BaseView()
 {
 	delete _selector;
+}
+
+/**
+ * Changes the various fonts for the text to use.
+ * The different fonts need to be passed in advance since the
+ * text size can change mid-text.
+ * @param big Pointer to large-size font.
+ * @param small Pointer to small-size font.
+ */
+void BaseView::setFonts(Font *big, Font *small)
+{
+	_big = big;
+	_small = small;
 }
 
 /**
@@ -445,8 +458,9 @@ void BaseView::draw()
 		// Draw time remaining
 		if ((*i)->getBuildTime() > 0)
 		{
-			Text *text = new Text(_big, _small, GRID_SIZE * (*i)->getRules()->getSize(), 16, 0, 0);
+			Text *text = new Text(GRID_SIZE * (*i)->getRules()->getSize(), 16, 0, 0);
 			text->setPalette(getPalette());
+			text->setFonts(_big, _small);
 			text->setX((*i)->getX() * GRID_SIZE);
 			text->setY((*i)->getY() * GRID_SIZE + (GRID_SIZE * (*i)->getRules()->getSize() - 16) / 2);
 			text->setBig();

@@ -22,16 +22,12 @@
 
 /**
  * Sets up a blank text with the specified size and position.
- * The different fonts need to be passed in advance since the
- * text size can change mid-text.
- * @param big Pointer to the big-size font.
- * @param small Pointer to the small-size font.
  * @param width Width in pixels.
  * @param height Height in pixels.
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Text::Text(Font *big, Font *small, int width, int height, int x, int y) : Surface(width, height, x, y), _big(big), _small(small), _font(small), _text(""), _wrap(false), _invert(false), _align(ALIGN_LEFT), _valign(ALIGN_TOP), _color(0)
+Text::Text(int width, int height, int x, int y) : Surface(width, height, x, y), _big(0), _small(0), _font(0), _text(""), _wrap(false), _invert(false), _align(ALIGN_LEFT), _valign(ALIGN_TOP), _color(0)
 {
 }
 
@@ -81,23 +77,26 @@ void Text::setSmall()
 }
 
 /**
- * Changes the fonts currently used by the text.
- * @return Pointer to font.
- */
-void Text::setFonts(Font *big, Font *small)
-{
-	_big = big;
-	_small = small;
-	_font = _small;
-}
-
-/**
  * Returns the font currently used by the text.
  * @return Pointer to font.
  */
 Font *const Text::getFont() const
 {
 	return _font;
+}
+
+/**
+ * Changes the various fonts for the text to use.
+ * The different fonts need to be passed in advance since the
+ * text size can change mid-text.
+ * @param big Pointer to large-size font.
+ * @param small Pointer to small-size font.
+ */
+void Text::setFonts(Font *big, Font *small)
+{
+	_big = big;
+	_small = small;
+	_font = _small;
 }
 
 /**

@@ -38,15 +38,15 @@ PurchaseState::PurchaseState(Game *game) : State(game)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
-	_btnOk = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 148, 16, 8, 176);
-	_btnCancel = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 148, 16, 164, 176);
-	_txtTitle = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 310, 16, 5, 8);
-	_txtFunds = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 150, 9, 10, 24);
-	_txtPurchases = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 150, 9, 160, 24);
-	_txtItem = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 140, 9, 10, 32);
-	_txtCost = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 102, 9, 152, 32);
-	_txtQuantity = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 60, 9, 256, 32);
-	_lstItems = new TextList(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 288, 128, 8, 40);
+	_btnOk = new TextButton(148, 16, 8, 176);
+	_btnCancel = new TextButton(148, 16, 164, 176);
+	_txtTitle = new Text(310, 16, 5, 8);
+	_txtFunds = new Text(150, 9, 10, 24);
+	_txtPurchases = new Text(150, 9, 160, 24);
+	_txtItem = new Text(140, 9, 10, 32);
+	_txtCost = new Text(102, 9, 152, 32);
+	_txtQuantity = new Text(60, 9, 256, 32);
+	_lstItems = new TextList(288, 128, 8, 40);
 	
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);

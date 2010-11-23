@@ -36,20 +36,20 @@ ManufactureState::ManufactureState(Game *game) : State(game)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
-	_btnNew = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 148, 16, 8, 176);
-	_btnOk = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 148, 16, 164, 176);
-	_txtTitle = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 310, 16, 5, 8);
-	_txtAvailable = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 150, 9, 8, 24);
-	_txtAllocated = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 150, 9, 160, 24);
-	_txtSpace = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 150, 9, 8, 34);
-	_txtFunds = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 150, 9, 160, 34);
-	_txtItem = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 80, 9, 10, 52);
-	_txtEngineers = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 46, 18, 90, 44);
-	_txtProduced = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 42, 18, 137, 44);
-	_txtTotal = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 42, 18, 180, 44);
-	_txtCost = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 42, 27, 223, 44);
-	_txtTimeLeft = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 54, 18, 265, 44);
-	_lstManufacture = new TextList(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 288, 100, 8, 80);
+	_btnNew = new TextButton(148, 16, 8, 176);
+	_btnOk = new TextButton(148, 16, 164, 176);
+	_txtTitle = new Text(310, 16, 5, 8);
+	_txtAvailable = new Text(150, 9, 8, 24);
+	_txtAllocated = new Text(150, 9, 160, 24);
+	_txtSpace = new Text(150, 9, 8, 34);
+	_txtFunds = new Text(150, 9, 160, 34);
+	_txtItem = new Text(80, 9, 10, 52);
+	_txtEngineers = new Text(46, 18, 90, 44);
+	_txtProduced = new Text(42, 18, 137, 44);
+	_txtTotal = new Text(42, 18, 180, 44);
+	_txtCost = new Text(42, 27, 223, 44);
+	_txtTimeLeft = new Text(54, 18, 265, 44);
+	_lstManufacture = new TextList(288, 100, 8, 80);
 	
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);

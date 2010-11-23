@@ -93,15 +93,15 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(fa
 	_btnZoomIn = new InteractiveSurface(23, 23, 295, 156);
 	_btnZoomOut = new InteractiveSurface(13, 17, 300, 182);
 
-	_txtHour = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 20, 16, 259, 74);
-	_txtHourSep = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 4, 16, 279, 74);
-	_txtMin = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 20, 16, 283, 74);
-	_txtMinSep = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 4, 16, 303, 74);
-	_txtSec = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 11, 8, 307, 80);
-	_txtWeekday = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 59, 8, 259, 87);
-	_txtDay = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 29, 8, 259, 94);
-	_txtMonth = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 29, 8, 288, 94);
-	_txtYear = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 59, 8, 259, 101);
+	_txtHour = new Text(20, 16, 259, 74);
+	_txtHourSep = new Text(4, 16, 279, 74);
+	_txtMin = new Text(20, 16, 283, 74);
+	_txtMinSep = new Text(4, 16, 303, 74);
+	_txtSec = new Text(11, 8, 307, 80);
+	_txtWeekday = new Text(59, 8, 259, 87);
+	_txtDay = new Text(29, 8, 259, 94);
+	_txtMonth = new Text(29, 8, 288, 94);
+	_txtYear = new Text(59, 8, 259, 101);
 
 	_timeSpeed = _btn5Secs;
 	_timer = new Timer(100);
@@ -507,8 +507,9 @@ void GeoscapeState::time5Seconds()
 		if ((*i)->reachedDestination() || (*i)->getDaysCrashed() > 4)
 		{
 			delete *i;
-			_game->getSavedGame()->getUfos()->erase(i);
-			break;
+			i = _game->getSavedGame()->getUfos()->erase(i);
+			if (i == _game->getSavedGame()->getUfos()->end())
+				break;
 		}
 	}
 
@@ -518,8 +519,9 @@ void GeoscapeState::time5Seconds()
 		if ((*i)->getFollowers()->empty())
 		{
 			delete *i;
-			_game->getSavedGame()->getWaypoints()->erase(i);
-			break;
+			i = _game->getSavedGame()->getWaypoints()->erase(i);
+			if (i == _game->getSavedGame()->getWaypoints()->end())
+				break;
 		}
 	}
 }

@@ -42,18 +42,18 @@ MonthlyCostsState::MonthlyCostsState(Game *game, Base *base) : State(game), _bas
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
-	_btnOk = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 300, 20, 10, 170);
-	_txtTitle = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 310, 16, 5, 12);
-	_txtCost = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 80, 9, 115, 32);
-	_txtQuantity = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 55, 9, 195, 32);
-	_txtTotal = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 60, 9, 250, 32);
-	_txtRental = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 80, 9, 10, 48);
-	_txtSalaries = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 80, 9, 10, 80);
-	_txtIncome = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 100, 9, 10, 136);
-	_lstCrafts = new TextList(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 300, 20, 10, 56);
-	_lstSalaries = new TextList(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 300, 30, 10, 88);
-	_lstMaintenance = new TextList(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 300, 9, 10, 120);
-	_lstTotal = new TextList(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 100, 9, 205, 136);
+	_btnOk = new TextButton(300, 20, 10, 170);
+	_txtTitle = new Text(310, 16, 5, 12);
+	_txtCost = new Text(80, 9, 115, 32);
+	_txtQuantity = new Text(55, 9, 195, 32);
+	_txtTotal = new Text(60, 9, 250, 32);
+	_txtRental = new Text(80, 9, 10, 48);
+	_txtSalaries = new Text(80, 9, 10, 80);
+	_txtIncome = new Text(100, 9, 10, 136);
+	_lstCrafts = new TextList(300, 20, 10, 56);
+	_lstSalaries = new TextList(300, 30, 10, 88);
+	_lstMaintenance = new TextList(300, 9, 10, 120);
+	_lstTotal = new TextList(100, 9, 205, 136);
 	
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);

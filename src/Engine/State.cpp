@@ -21,6 +21,12 @@
 #include "Game.h"
 #include "Screen.h"
 #include "Surface.h"
+#include "Font.h"
+#include "../Resource/ResourcePack.h"
+#include "../Interface/Text.h"
+#include "../Interface/TextButton.h"
+#include "../Interface/TextEdit.h"
+#include "../Interface/TextList.h"
 
 /**
  * Initializes a brand new state with no child elements.
@@ -62,7 +68,31 @@ std::vector<Surface*> *const State::getSurfaces()
  */
 void State::add(Surface *surface)
 {
+	// Set palette
 	surface->setPalette(_game->getScreen()->getPalette());
+
+	// Set default fonts
+	Text *t = dynamic_cast<Text*>(surface);
+	TextButton *tb = dynamic_cast<TextButton*>(surface);
+	TextEdit *te = dynamic_cast<TextEdit*>(surface);
+	TextList *tl = dynamic_cast<TextList*>(surface);
+	if (t)
+	{
+		t->setFonts(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"));
+	}
+	else if (tb)
+	{
+		tb->setFonts(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"));
+	}
+	else if (te)
+	{
+		te->setFonts(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"));
+	}
+	else if (tl)
+	{
+		tl->setFonts(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"));
+	}
+
 	_surfaces.push_back(surface);
 }
 

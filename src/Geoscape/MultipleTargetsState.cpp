@@ -64,8 +64,8 @@ MultipleTargetsState::MultipleTargetsState(Game *game, std::vector<Target*> targ
 
 	// Create objects
 	_window = new Window(this, 136, winHeight, 60, winY);
-	_btnCancel = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 116, BUTTON_HEIGHT, 70, btnY);
-	_lstTargets = new TextList(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 116, listHeight, 70, listY);
+	_btnCancel = new TextButton(116, BUTTON_HEIGHT, 70, btnY);
+	_lstTargets = new TextList(116, listHeight, 70, listY);
 	
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);

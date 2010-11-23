@@ -52,8 +52,8 @@ SelectDestinationState::SelectDestinationState(Game *game, Craft *craft, Globe *
 	_btnZoomOut = new InteractiveSurface(13, 17, 300, 182);
 
 	_window = new Window(this, 256, 28, 0, 0);
-	_btnCancel = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 60, 12, 110, 8);
-	_txtTitle = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 100, 9, 10, 10);
+	_btnCancel = new TextButton(60, 12, 110, 8);
+	_txtTitle = new Text(100, 9, 10, 10);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);

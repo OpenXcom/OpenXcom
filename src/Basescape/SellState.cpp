@@ -38,16 +38,16 @@ SellState::SellState(Game *game) : State(game)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
-	_btnOk = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 148, 16, 8, 176);
-	_btnCancel = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 148, 16, 164, 176);
-	_txtTitle = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 310, 16, 5, 8);
-	_txtSales = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 190, 9, 10, 24);
-	_txtFunds = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 114, 9, 200, 24);
-	_txtItem = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 130, 9, 10, 32);
-	_txtQuantity = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 44, 9, 140, 32);
-	_txtSell = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 96, 9, 184, 32);
-	_txtValue = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 34, 9, 280, 32);
-	_lstItems = new TextList(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 288, 120, 8, 44);
+	_btnOk = new TextButton(148, 16, 8, 176);
+	_btnCancel = new TextButton(148, 16, 164, 176);
+	_txtTitle = new Text(310, 16, 5, 8);
+	_txtSales = new Text(190, 9, 10, 24);
+	_txtFunds = new Text(114, 9, 200, 24);
+	_txtItem = new Text(130, 9, 10, 32);
+	_txtQuantity = new Text(44, 9, 140, 32);
+	_txtSell = new Text(96, 9, 184, 32);
+	_txtValue = new Text(34, 9, 280, 32);
+	_lstItems = new TextList(288, 120, 8, 44);
 	
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);

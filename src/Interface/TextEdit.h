@@ -42,9 +42,9 @@ private:
 	/// Checks if a character will exceed the maximum width.
 	bool exceedsMaxWidth(char c);
 public:
-	/// Creates a new text with the specified size, position and fonts.
-	TextEdit(Font *big, Font *small, int width, int height, int x = 0, int y = 0);
-	/// Cleans up the text.
+	/// Creates a new text edit with the specified size, position and fonts.
+	TextEdit(int width, int height, int x = 0, int y = 0);
+	/// Cleans up the text edit.
 	~TextEdit();
 	/// Sets focus on this text edit.
 	virtual void focus();
@@ -52,23 +52,25 @@ public:
 	void setBig();
 	/// Sets the text size to small.
 	void setSmall();
+	/// Sets the text edit's various fonts.
+	void setFonts(Font *big, Font *small);
 	/// Sets the text's string.
 	void setText(const std::string &text);
-	/// Gets the text's string.
+	/// Gets the text edit's string.
 	std::string getText() const;
-	/// Sets the text's wordwrap setting.
+	/// Sets the text edit's wordwrap setting.
 	void setWordWrap(bool wrap);
-	/// Sets the text's color invert setting.
+	/// Sets the text edit's color invert setting.
 	void setInvert(bool invert);
-	/// Sets the text's horizontal alignment.
+	/// Sets the text edit's horizontal alignment.
 	void setAlign(TextHAlign align);
-	/// Sets the text's vertical alignment.
+	/// Sets the text edit's vertical alignment.
 	void setVerticalAlign(TextVAlign valign);
-	/// Sets the text's color.
+	/// Sets the text edit's color.
 	void setColor(Uint8 color);
-	/// Gets the text's color.
+	/// Gets the text edit's color.
 	Uint8 getColor() const;
-	/// Sets the surface's palette.
+	/// Sets the text edit's palette.
 	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
 	/// Handles the timers.
 	void think();

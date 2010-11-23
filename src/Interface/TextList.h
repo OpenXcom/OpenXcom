@@ -51,7 +51,7 @@ private:
 	void updateArrows();
 public:
 	/// Creates a text list with the specified size and position.
-	TextList(Font *big, Font *small, int width, int height, int x = 0, int y = 0);
+	TextList(int width, int height, int x = 0, int y = 0);
 	/// Cleans up the text list.
 	~TextList();
 	/// Gets a certain cell in the text list.
@@ -62,6 +62,8 @@ public:
 	void setColumns(int cols, ...);
 	/// Sets the palette of the text list.
 	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
+	/// Sets the fonts of the text list.
+	void setFonts(Font *big, Font *small);
 	/// Sets the text color of the text list.
 	void setColor(Uint8 color);
 	/// Gets the text color of the text list.

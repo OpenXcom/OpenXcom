@@ -39,12 +39,12 @@ FundingState::FundingState(Game *game) : State(game)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
-	_btnOk = new TextButton(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 50, 12, 135, 180);
-	_txtTitle = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 280, 16, 32, 8);
-	_txtCountry = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 100, 16, 32, 24);
-	_txtFunding = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 60, 16, 140, 24);
-	_txtChange = new Text(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 120, 16, 200, 24);
-	_lstCountries = new TextList(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"), 280, 136, 32, 40);
+	_btnOk = new TextButton(50, 12, 135, 180);
+	_txtTitle = new Text(280, 16, 32, 8);
+	_txtCountry = new Text(100, 16, 32, 24);
+	_txtFunding = new Text(60, 16, 140, 24);
+	_txtChange = new Text(120, 16, 200, 24);
+	_lstCountries = new TextList(280, 136, 32, 40);
 	
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);

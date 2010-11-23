@@ -23,21 +23,17 @@
 #include "../Engine/Timer.h"
 
 /**
- * Sets up a blank text with the specified size and position.
- * The different fonts need to be passed in advance since the
- * text size can change mid-text.
- * @param big Pointer to the big-size font.
- * @param small Pointer to the small-size font.
+ * Sets up a blank text edit with the specified size and position.
  * @param width Width in pixels.
  * @param height Height in pixels.
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-TextEdit::TextEdit(Font *big, Font *small, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _value(""), _blink(true), _ascii('A')
+TextEdit::TextEdit(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _value(""), _blink(true), _ascii('A')
 {
 	_validButton = SDL_BUTTON_LEFT;
 
-	_text = new Text(big, small, width, height, 0, 0);
+	_text = new Text(width, height, 0, 0);
 	_timer = new Timer(100);
 	_timer->onTimer((SurfaceHandler)&TextEdit::blink);
 }
@@ -52,7 +48,7 @@ TextEdit::~TextEdit()
 
 /**
  * Starts the blinking animation when
- * the text is focused.
+ * the text edit is focused.
  */
 void TextEdit::focus()
 {
@@ -63,7 +59,7 @@ void TextEdit::focus()
 }
 
 /**
- * Changes the text to use the big-size font.
+ * Changes the text edit to use the big-size font.
  */
 void TextEdit::setBig()
 {
@@ -71,11 +67,23 @@ void TextEdit::setBig()
 }
 
 /**
- * Changes the text to use the small-size font.
+ * Changes the text edit to use the small-size font.
  */
 void TextEdit::setSmall()
 {
 	_text->setSmall();
+}
+
+/**
+ * Changes the various fonts for the text edit to use.
+ * The different fonts need to be passed in advance since the
+ * text size can change mid-text.
+ * @param big Pointer to large-size font.
+ * @param small Pointer to small-size font.
+ */
+void TextEdit::setFonts(Font *big, Font *small)
+{
+	_text->setFonts(big, small);
 }
 
 /**
@@ -159,7 +167,7 @@ Uint8 TextEdit::getColor() const
 }
 
 /**
- * Replaces a certain amount of colors in the surface's palette.
+ * Replaces a certain amount of colors in the text edit's palette.
  * @param colors Pointer to the set of colors.
  * @param firstcolor Offset of the first color to replace.
  * @param ncolors Amount of colors to replace.
@@ -211,7 +219,7 @@ void TextEdit::draw()
 
 /**
  * Checks if adding a certain character to
- * the text will exceed the maximum width.
+ * the text edit will exceed the maximum width.
  * Used to make sure user input stays within bounds.
  * @param c Character to add.
  * @return True if it exceeds, False if it doesn't.
@@ -233,7 +241,7 @@ bool TextEdit::exceedsMaxWidth(char c)
 }
 
 /**
- * Focuses the text when it's pressed on.
+ * Focuses the text edit when it's pressed on.
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
  */
@@ -244,8 +252,8 @@ void TextEdit::mousePress(Action *action, State *state)
 }
 
 /**
- * Changes the text according to keyboard input, and unfocuses the
- * text if Enter is pressed.
+ * Changes the text edit according to keyboard input, and
+ * unfocuses the text if Enter is pressed.
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
  */

@@ -27,18 +27,16 @@ Sound *TextButton::soundPress = 0;
 /**
  * Sets up a text button with the specified size and position.
  * The text is centered on the button.
- * @param big Pointer to the big-size font.
- * @param small Pointer to the small-size font.
  * @param width Width in pixels.
  * @param height Height in pixels.
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-TextButton::TextButton(Font *big, Font *small, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _color(0), _group(0)
+TextButton::TextButton(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _color(0), _group(0)
 {
 	_validButton = SDL_BUTTON_LEFT;
 
-	_text = new Text(big, small, width, height, 0, 0);
+	_text = new Text(width, height, 0, 0);
 	_text->setSmall();
 	_text->setAlign(ALIGN_CENTER);
 	_text->setVerticalAlign(ALIGN_MIDDLE);
@@ -70,6 +68,18 @@ void TextButton::setColor(Uint8 color)
 Uint8 TextButton::getColor() const
 {
 	return _color;
+}
+
+/**
+ * Changes the various fonts for the text label to use.
+ * The different fonts need to be passed in advance since the
+ * text size can change mid-text.
+ * @param big Pointer to large-size font.
+ * @param small Pointer to small-size font.
+ */
+void TextButton::setFonts(Font *big, Font *small)
+{
+	_text->setFonts(big, small);
 }
 
 /**
