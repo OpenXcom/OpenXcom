@@ -208,8 +208,6 @@
 		<Unit filename="Interface\Window.h" />
 		<Unit filename="Menu\LanguageState.cpp" />
 		<Unit filename="Menu\LanguageState.h" />
-		<Unit filename="Menu\LoadGameState.cpp" />
-		<Unit filename="Menu\LoadGameState.h" />
 		<Unit filename="Menu\MainMenuState.cpp" />
 		<Unit filename="Menu\MainMenuState.h" />
 		<Unit filename="Menu\NewGameState.cpp" />
