@@ -21,7 +21,7 @@
 
 #include <map>
 #include <vector>
-#include "../Resource/LangString.h"
+#include <string>
 
 class GameTime;
 class Country;
@@ -47,11 +47,11 @@ private:
 	GameDifficulty _diff;
 	GameTime *_time;
 	int _funds;
-	std::map<LangString, Country*> _countries;
-	std::map<LangString, Region*> _regions;
+	std::map<std::string, Country*> _countries;
+	std::map<std::string, Region*> _regions;
 	std::vector<Base*> _bases;
 	std::vector<Ufo*> _ufos;
-	std::map<LangString, int> _craftId;
+	std::map<std::string, int> _craftId;
 	std::vector<Waypoint*> _waypoints;
 	int _ufoId, _waypointId;
 	SavedBattleGame *_battlegame;
@@ -69,17 +69,17 @@ public:
 	/// Gets the current game time.
 	GameTime *const getTime() const;
 	/// Gets the list of countries.
-	std::map<LangString, Country*> *const getCountries();
+	std::map<std::string, Country*> *const getCountries();
 	/// Gets the total country funding.
 	int getCountryFunding() const;
 	/// Gets the list of regions.
-	std::map<LangString, Region*> *const getRegions();
+	std::map<std::string, Region*> *const getRegions();
 	/// Gets the list of bases.
 	std::vector<Base*> *const getBases();
 	/// Gets the total base maintenance.
 	int getBaseMaintenance() const;
 	/// Gets the current craft IDs.
-	std::map<LangString, int> *const getCraftIds();
+	std::map<std::string, int> *const getCraftIds();
 	/// Gets the list of UFOs.
 	std::vector<Ufo*> *const getUfos();
 	/// Gets the current UFO ID.

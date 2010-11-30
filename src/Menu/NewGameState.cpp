@@ -20,7 +20,7 @@
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
-#include "../Resource/LangString.h"
+#include <string>
 #include "../Engine/Font.h"
 #include "../Engine/Palette.h"
 #include "../Interface/TextButton.h"
@@ -58,29 +58,29 @@ NewGameState::NewGameState(Game *game) : State(game)
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_btnBeginner->setColor(Palette::blockOffset(8)+8);
-	_btnBeginner->setText(_game->getResourcePack()->getLanguage()->getString(STR_BEGINNER));
+	_btnBeginner->setText(_game->getResourcePack()->getLanguage()->getString("STR_1_BEGINNER"));
 	_btnBeginner->onMouseClick((ActionHandler)&NewGameState::btnBeginnerClick);
 
 	_btnExperienced->setColor(Palette::blockOffset(8)+8);
-	_btnExperienced->setText(_game->getResourcePack()->getLanguage()->getString(STR_EXPERIENCED));
+	_btnExperienced->setText(_game->getResourcePack()->getLanguage()->getString("STR_2_EXPERIENCED"));
 	_btnExperienced->onMouseClick((ActionHandler)&NewGameState::btnExperiencedClick);
 
 	_btnVeteran->setColor(Palette::blockOffset(8)+8);
-	_btnVeteran->setText(_game->getResourcePack()->getLanguage()->getString(STR_VETERAN));
+	_btnVeteran->setText(_game->getResourcePack()->getLanguage()->getString("STR_3_VETERAN"));
 	_btnVeteran->onMouseClick((ActionHandler)&NewGameState::btnVeteranClick);
 
 	_btnGenius->setColor(Palette::blockOffset(8)+8);
-	_btnGenius->setText(_game->getResourcePack()->getLanguage()->getString(STR_GENIUS));
+	_btnGenius->setText(_game->getResourcePack()->getLanguage()->getString("STR_4_GENIUS"));
 	_btnGenius->onMouseClick((ActionHandler)&NewGameState::btnGeniusClick);
 
 	_btnSuperhuman->setColor(Palette::blockOffset(8)+8);
-	_btnSuperhuman->setText(_game->getResourcePack()->getLanguage()->getString(STR_SUPERHUMAN));
+	_btnSuperhuman->setText(_game->getResourcePack()->getLanguage()->getString("STR_5_SUPERHUMAN"));
 	_btnSuperhuman->onMouseClick((ActionHandler)&NewGameState::btnSuperhumanClick);
 
 	_txtTitle->setColor(Palette::blockOffset(8)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setSmall();
-	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString(STR_SELECT_DIFFICULTY_LEVEL));
+	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString("STR_SELECT_DIFFICULTY_LEVEL"));
 }
 
 /**

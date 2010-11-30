@@ -40,11 +40,11 @@ SavedGame::SavedGame(GameDifficulty diff) : _diff(diff), _funds(0), _countries()
  */
 SavedGame::~SavedGame()
 {
-	for (std::map<LangString, Country*>::iterator i = _countries.begin(); i != _countries.end(); i++)
+	for (std::map<std::string, Country*>::iterator i = _countries.begin(); i != _countries.end(); i++)
 	{
 		delete i->second;
 	}
-	for (std::map<LangString, Region*>::iterator i = _regions.begin(); i != _regions.end(); i++)
+	for (std::map<std::string, Region*>::iterator i = _regions.begin(); i != _regions.end(); i++)
 	{
 		delete i->second;
 	}
@@ -102,7 +102,7 @@ GameTime *const SavedGame::getTime() const
  * Returns the list of countries in the game world.
  * @return Pointer to country list.
  */
-std::map<LangString, Country*> *const SavedGame::getCountries()
+std::map<std::string, Country*> *const SavedGame::getCountries()
 {
 	return &_countries;
 }
@@ -114,7 +114,7 @@ std::map<LangString, Country*> *const SavedGame::getCountries()
 int SavedGame::getCountryFunding() const
 {
 	int total = 0;
-	for (std::map<LangString, Country*>::const_iterator i = _countries.begin(); i != _countries.end(); i++)
+	for (std::map<std::string, Country*>::const_iterator i = _countries.begin(); i != _countries.end(); i++)
 	{
 		total += i->second->getFunding();
 	}
@@ -125,7 +125,7 @@ int SavedGame::getCountryFunding() const
  * Returns the list of world regions.
  * @return Pointer to region list.
  */
-std::map<LangString, Region*> *const SavedGame::getRegions()
+std::map<std::string, Region*> *const SavedGame::getRegions()
 {
 	return &_regions;
 }
@@ -157,7 +157,7 @@ int SavedGame::getBaseMaintenance() const
  * Returns the latest craft IDs for each type.
  * @return Pointer to ID list.
  */
-std::map<LangString, int> *const SavedGame::getCraftIds()
+std::map<std::string, int> *const SavedGame::getCraftIds()
 {
 	return &_craftId;
 }

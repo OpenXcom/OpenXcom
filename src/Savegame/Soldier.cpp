@@ -96,9 +96,9 @@ void Soldier::setCraft(Craft *craft)
  * the soldier's military rank.
  * @return String ID for rank.
  */
-LangString Soldier::getRankString() const
+std::string Soldier::getRankString() const
 {
-	return (LangString)(STR_ROOKIE + _rank);
+	return (std::string)("STR_ROOKIE" + _rank);
 }
 
 /**

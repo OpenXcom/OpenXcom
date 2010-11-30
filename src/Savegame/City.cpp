@@ -24,7 +24,7 @@
  * @param lon Longitude of the city.
  * @param lat Latitude of the city.
  */
-City::City(LangString name, double lon, double lat): _name(name), _lon(lon), _lat(lat)
+City::City(std::string name, double lon, double lat): _name(name), _lon(lon), _lat(lat)
 {
 }
 
@@ -39,7 +39,7 @@ City::~City()
  * Returns the name of the city.
  * @return City name.
  */
-LangString City::getName() const
+std::string City::getName() const
 {
 	return _name;
 }

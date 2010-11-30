@@ -33,9 +33,11 @@ LanguageState::LanguageState(Game *game) : State(game)
 {
 	// Create objects
 	_window = new Window(this, 256, 160, 32, 20, POPUP_BOTH);
-	_btnEnglish = new TextButton(192, 20, 64, 90);
-	_btnGerman = new TextButton(192, 20, 64, 118);
-	_btnFrench = new TextButton(192, 20, 64, 146);
+	_btnEnglish = new TextButton(192, 20, 64, 34);
+	_btnGerman = new TextButton(192, 20, 64, 62);
+	_btnFrench = new TextButton(192, 20, 64, 90);
+	_btnItalian = new TextButton(192, 20, 64, 118);
+	_btnSpanish = new TextButton(192, 20, 64, 146);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
@@ -45,6 +47,8 @@ LanguageState::LanguageState(Game *game) : State(game)
 	add(_btnEnglish);
 	add(_btnGerman);
 	add(_btnFrench);
+	add(_btnItalian);
+	add(_btnSpanish);
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(8)+8);
@@ -61,6 +65,14 @@ LanguageState::LanguageState(Game *game) : State(game)
 	_btnFrench->setColor(Palette::blockOffset(8)+8);
 	_btnFrench->setText("FRANCAIS");
 	_btnFrench->onMouseClick((ActionHandler)&LanguageState::btnFrenchClick);
+
+	_btnItalian->setColor(Palette::blockOffset(8)+8);
+	_btnItalian->setText("ITALIANO");
+	_btnItalian->onMouseClick((ActionHandler)&LanguageState::btnItalianClick);
+
+	_btnSpanish->setColor(Palette::blockOffset(8)+8);
+	_btnSpanish->setText("ESPANOL");
+	_btnSpanish->onMouseClick((ActionHandler)&LanguageState::btnSpanishClick);
 }
 
 /**
@@ -84,7 +96,7 @@ void LanguageState::changeLanguage(const std::string &lang)
  */
 void LanguageState::btnEnglishClick(Action *action)
 {
-	changeLanguage("ENGLISH.DAT");
+	changeLanguage("ENGLISH.LNG");
 }
 
 /**
@@ -94,7 +106,7 @@ void LanguageState::btnEnglishClick(Action *action)
  */
 void LanguageState::btnGermanClick(Action *action)
 {
-	changeLanguage("GERMAN.DAT");
+	changeLanguage("GERMAN.LNG");
 }
 
 /**
@@ -104,5 +116,25 @@ void LanguageState::btnGermanClick(Action *action)
  */
 void LanguageState::btnFrenchClick(Action *action)
 {
-	changeLanguage("FRENCH.DAT");
+	changeLanguage("FRENCH.LNG");
+}
+
+/**
+ * Sets the language to Italian and opens
+ * the Main Menu window.
+ * @param action Pointer to an action.
+ */
+void LanguageState::btnItalianClick(Action *action)
+{
+	changeLanguage("ITALIAN.LNG");
+}
+
+/**
+ * Sets the language to Spanish and opens
+ * the Main Menu window.
+ * @param action Pointer to an action.
+ */
+void LanguageState::btnSpanishClick(Action *action)
+{
+	changeLanguage("SPANISH.LNG");
 }

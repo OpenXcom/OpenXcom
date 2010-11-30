@@ -24,7 +24,7 @@
 #include "../Engine/Palette.h"
 #include "../Engine/Screen.h"
 #include "../Engine/Language.h"
-#include "../Resource/LangString.h"
+#include <string>
 #include "../Engine/Font.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Surface.h"
@@ -53,7 +53,7 @@
  */
 DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo) : State(game), _globe(globe), _craft(craft), _ufo(ufo), _timeout(50), _currentDist(640), _targetDist(560), _w1Dist(), _w2Dist(), _end(false), _destroy(false)
 {
-	_targetRadius = _currentRadius = STR_VERY_SMALL - _ufo->getRules()->getSize() + 2;
+	_targetRadius = _currentRadius = _ufo->getRules()->getRadius();
 	
 	_screen = false;
 
@@ -172,7 +172,7 @@ DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo) :
 	_txtDistance->setText("640");
 
 	_txtStatus->setColor(Palette::blockOffset(5)+9);
-	_txtStatus->setText(_game->getResourcePack()->getLanguage()->getString(STR_STANDOFF));
+	_txtStatus->setText(_game->getResourcePack()->getLanguage()->getString("STR_STANDOFF"));
 
 	SurfaceSet *set = _game->getResourcePack()->getSurfaceSet("INTICON.PCK");
 
@@ -374,7 +374,7 @@ void DogfightState::move()
 				{
 					int damage = RNG::generate(w->getRules()->getDamage() / 2, w->getRules()->getDamage());
 					_ufo->setDamage(_ufo->getDamage() + damage);
-					setStatus(STR_UFO_HIT);
+					setStatus("STR_UFO_HIT");
 					_currentRadius += 4;
 					_game->getResourcePack()->getSoundSet("GEO.CAT")->getSound(12)->play();
 				}
@@ -487,13 +487,13 @@ void DogfightState::move()
 	{
 		if (_ufo->isDestroyed())
 		{
-			setStatus(STR_UFO_DESTROYED);
+			setStatus("STR_UFO_DESTROYED");
 			_game->getResourcePack()->getSoundSet("GEO.CAT")->getSound(11)->play();
 			_destroy = true;
 		}
 		else
 		{
-			setStatus(STR_UFO_CRASH_LANDS);
+			setStatus("STR_UFO_CRASH_LANDS");
 			_game->getResourcePack()->getSoundSet("GEO.CAT")->getSound(10)->play();
 			if (!_globe->insideLand(_ufo->getLongitude(), _ufo->getLatitude()))
 			{
@@ -597,7 +597,7 @@ void DogfightState::maximumDistance()
  * the text timeout counter.
  * @param status New status text.
  */
-void DogfightState::setStatus(LangString status)
+void DogfightState::setStatus(std::string status)
 {
 	_txtStatus->setText(_game->getResourcePack()->getLanguage()->getString(status));
 	_timeout = 50;
@@ -619,7 +619,7 @@ void DogfightState::btnStandoffClick(Action *action)
 {
 	if (!_ufo->isCrashed())
 	{
-		setStatus(STR_STANDOFF);
+		setStatus("STR_STANDOFF");
 		_targetDist = 560;
 	}
 }
@@ -632,7 +632,7 @@ void DogfightState::btnCautiousClick(Action *action)
 {
 	if (!_ufo->isCrashed())
 	{
-		setStatus(STR_CAUTIOUS_ATTACK);
+		setStatus("STR_CAUTIOUS_ATTACK");
 		if (_craft->getNumWeapons() > 0 && _craft->getWeapons()->at(0) != 0)
 		{
 			_w1Timer->setInterval(_craft->getWeapons()->at(0)->getRules()->getCautiousReload() * 75);
@@ -653,7 +653,7 @@ void DogfightState::btnStandardClick(Action *action)
 {
 	if (!_ufo->isCrashed())
 	{
-		setStatus(STR_STANDARD_ATTACK);
+		setStatus("STR_STANDARD_ATTACK");
 		if (_craft->getNumWeapons() > 0 && _craft->getWeapons()->at(0) != 0)
 		{
 			_w1Timer->setInterval(_craft->getWeapons()->at(0)->getRules()->getStandardReload() * 75);
@@ -674,7 +674,7 @@ void DogfightState::btnAggressiveClick(Action *action)
 {
 	if (!_ufo->isCrashed())
 	{
-		setStatus(STR_AGGRESSIVE_ATTACK);
+		setStatus("STR_AGGRESSIVE_ATTACK");
 		if (_craft->getNumWeapons() > 0 && _craft->getWeapons()->at(0) != 0)
 		{
 			_w1Timer->setInterval(_craft->getWeapons()->at(0)->getRules()->getAggressiveReload() * 75);
@@ -695,7 +695,7 @@ void DogfightState::btnDisengageClick(Action *action)
 {
 	if (!_ufo->isCrashed())
 	{
-		setStatus(STR_DISENGAGING);
+		setStatus("STR_DISENGAGING");
 		_targetDist = 800;
 	}
 }

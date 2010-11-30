@@ -19,7 +19,7 @@
 #ifndef OPENXCOM_GAMETIME_H
 #define OPENXCOM_GAMETIME_H
 
-#include "../Resource/LangString.h"
+#include <string>
 
 /**
  * Enumerator for time periods.
@@ -43,27 +43,27 @@ public:
 	/// Advances the time by 5 seconds.
 	TimeTrigger advance();
 	/// Gets the ingame second.
-	int getSecond();
+	int getSecond() const;
 	/// Gets the ingame minute.
-	int getMinute();
+	int getMinute() const;
 	/// Gets the ingame hour.
-	int getHour();
+	int getHour() const;
 	/// Gets the ingame weekday.
-	int getWeekday();
+	int getWeekday() const;
 	// Gets a string version of the ingame weekday.
-	LangString getWeekdayString();
+	std::string getWeekdayString() const;
 	/// Gets the ingame day.
-	int getDay();
+	int getDay() const;
 	// Gets a string version of the ingame day.
-	LangString getDayString();
+	std::string getDayString() const;
 	/// Gets the ingame month.
-	int getMonth();
+	int getMonth() const;
 	// Gets a string version of the ingame month.
-	LangString getMonthString();
+	std::string getMonthString() const;
 	/// Gets the ingame year.
-	int getYear();
+	int getYear() const;
 	/// Gets the position of the daylight according to the ingame time.
-	double getDaylight();
+	double getDaylight() const;
 };
 
 #endif

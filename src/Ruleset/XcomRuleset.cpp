@@ -33,7 +33,7 @@
 #include "../Resource/SoldierNamePool.h"
 #include "../Savegame/Region.h"
 #include "../Engine/RNG.h"
-#include "../Resource/LangString.h"
+#include <string>
 #include "../Savegame/Base.h"
 #include "../Savegame/Country.h"
 #include "../Savegame/BaseFacility.h"
@@ -44,7 +44,6 @@
 #include "../Savegame/Item.h"
 #include "../Savegame/City.h"
 #include "../Savegame/Tile.h"
-
 
 /**
  * Initializes the X-Com ruleset with all the rules
@@ -312,7 +311,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_names.push_back(russian);
 
 	// Add base facilities
-	RuleBaseFacility *lift = new RuleBaseFacility(STR_ACCESS_LIFT);
+	RuleBaseFacility *lift = new RuleBaseFacility("STR_ACCESS_LIFT");
 	lift->setSpriteShape(2);
 	lift->setSpriteFacility(17);
 	lift->setBuildCost(300000);
@@ -320,7 +319,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	lift->setMonthlyCost(4000);
 	lift->setLift(true);
 
-	RuleBaseFacility *quarters = new RuleBaseFacility(STR_LIVING_QUARTERS);
+	RuleBaseFacility *quarters = new RuleBaseFacility("STR_LIVING_QUARTERS");
 	quarters->setSpriteShape(1);
 	quarters->setSpriteFacility(18);
 	quarters->setBuildCost(400000);
@@ -328,7 +327,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	quarters->setMonthlyCost(10000);
 	quarters->setPersonnel(50);
 
-	RuleBaseFacility *lab = new RuleBaseFacility(STR_LABORATORY);
+	RuleBaseFacility *lab = new RuleBaseFacility("STR_LABORATORY");
 	lab->setSpriteShape(1);
 	lab->setSpriteFacility(19);
 	lab->setBuildCost(750000);
@@ -336,7 +335,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	lab->setMonthlyCost(30000);
 	lab->setLaboratories(50);
 
-	RuleBaseFacility *workshop = new RuleBaseFacility(STR_WORKSHOP);
+	RuleBaseFacility *workshop = new RuleBaseFacility("STR_WORKSHOP");
 	workshop->setSpriteShape(1);
 	workshop->setSpriteFacility(20);
 	workshop->setBuildCost(800000);
@@ -344,7 +343,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	workshop->setMonthlyCost(35000);
 	workshop->setWorkshops(50);
 
-	RuleBaseFacility *stores = new RuleBaseFacility(STR_GENERAL_STORES);
+	RuleBaseFacility *stores = new RuleBaseFacility("STR_GENERAL_STORES");
 	stores->setSpriteShape(1);
 	stores->setSpriteFacility(24);
 	stores->setBuildCost(150000);
@@ -352,7 +351,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	stores->setMonthlyCost(5000);
 	stores->setStorage(50);
 
-	RuleBaseFacility *aliens = new RuleBaseFacility(STR_ALIEN_CONTAINMENT);
+	RuleBaseFacility *aliens = new RuleBaseFacility("STR_ALIEN_CONTAINMENT");
 	aliens->setSpriteShape(1);
 	aliens->setSpriteFacility(25);
 	aliens->setBuildCost(400000);
@@ -360,7 +359,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	aliens->setMonthlyCost(15000);
 	aliens->setAliens(10);
 
-	RuleBaseFacility *hangar = new RuleBaseFacility(STR_HANGAR);
+	RuleBaseFacility *hangar = new RuleBaseFacility("STR_HANGAR");
 	hangar->setSpriteShape(9);
 	hangar->setSpriteFacility(9);
 	hangar->setSize(2);
@@ -369,7 +368,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	hangar->setMonthlyCost(25000);
 	hangar->setCrafts(1);
 
-	RuleBaseFacility *sRadar = new RuleBaseFacility(STR_SMALL_RADAR_SYSTEM);
+	RuleBaseFacility *sRadar = new RuleBaseFacility("STR_SMALL_RADAR_SYSTEM");
 	sRadar->setSpriteShape(2);
 	sRadar->setSpriteFacility(21);
 	sRadar->setBuildCost(500000);
@@ -378,7 +377,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	sRadar->setRadarRange(1500);
 	sRadar->setRadarChance(10);
 
-	RuleBaseFacility *lRadar = new RuleBaseFacility(STR_LARGE_RADAR_SYSTEM);
+	RuleBaseFacility *lRadar = new RuleBaseFacility("STR_LARGE_RADAR_SYSTEM");
 	lRadar->setSpriteShape(1);
 	lRadar->setSpriteFacility(22);
 	lRadar->setBuildCost(800000);
@@ -387,7 +386,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	lRadar->setRadarRange(2250);
 	lRadar->setRadarChance(20);
 
-	RuleBaseFacility *missile = new RuleBaseFacility(STR_MISSILE_DEFENCES);
+	RuleBaseFacility *missile = new RuleBaseFacility("STR_MISSILE_DEFENSES");
 	missile->setSpriteShape(2);
 	missile->setSpriteFacility(23);
 	missile->setBuildCost(200000);
@@ -396,16 +395,16 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	missile->setDefenceValue(500);
 	missile->setHitRatio(50);
 
-	_facilities.insert(std::pair<LangString, RuleBaseFacility*>(STR_ACCESS_LIFT, lift));
-	_facilities.insert(std::pair<LangString, RuleBaseFacility*>(STR_LIVING_QUARTERS, quarters));
-	_facilities.insert(std::pair<LangString, RuleBaseFacility*>(STR_LABORATORY, lab));
-	_facilities.insert(std::pair<LangString, RuleBaseFacility*>(STR_WORKSHOP, workshop));
-	_facilities.insert(std::pair<LangString, RuleBaseFacility*>(STR_GENERAL_STORES, stores));
-	_facilities.insert(std::pair<LangString, RuleBaseFacility*>(STR_ALIEN_CONTAINMENT, aliens));
-	_facilities.insert(std::pair<LangString, RuleBaseFacility*>(STR_HANGAR, hangar));
-	_facilities.insert(std::pair<LangString, RuleBaseFacility*>(STR_SMALL_RADAR_SYSTEM, sRadar));
-	_facilities.insert(std::pair<LangString, RuleBaseFacility*>(STR_LARGE_RADAR_SYSTEM, lRadar));
-	_facilities.insert(std::pair<LangString, RuleBaseFacility*>(STR_MISSILE_DEFENCES, missile));
+	_facilities.insert(std::pair<std::string, RuleBaseFacility*>("STR_ACCESS_LIFT", lift));
+	_facilities.insert(std::pair<std::string, RuleBaseFacility*>("STR_LIVING_QUARTERS", quarters));
+	_facilities.insert(std::pair<std::string, RuleBaseFacility*>("STR_LABORATORY", lab));
+	_facilities.insert(std::pair<std::string, RuleBaseFacility*>("STR_WORKSHOP", workshop));
+	_facilities.insert(std::pair<std::string, RuleBaseFacility*>("STR_GENERAL_STORES", stores));
+	_facilities.insert(std::pair<std::string, RuleBaseFacility*>("STR_ALIEN_CONTAINMENT", aliens));
+	_facilities.insert(std::pair<std::string, RuleBaseFacility*>("STR_HANGAR", hangar));
+	_facilities.insert(std::pair<std::string, RuleBaseFacility*>("STR_SMALL_RADAR_SYSTEM", sRadar));
+	_facilities.insert(std::pair<std::string, RuleBaseFacility*>("STR_LARGE_RADAR_SYSTEM", lRadar));
+	_facilities.insert(std::pair<std::string, RuleBaseFacility*>("STR_MISSILE_DEFENSES", missile));
 
 	// Add mapdatafiles
 	_mapDataFiles.insert(std::pair<std::string, MapDataFile*>("AVENGER.MCD",new MapDataFile("AVENGER.MCD",59)));
@@ -437,7 +436,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_mapDataFiles.insert(std::pair<std::string, MapDataFile*>("XBASE2.MCD",new MapDataFile("XBASE2.MCD",62)));
 
 	// Add crafts
-	RuleCraft* skyranger = new RuleCraft(STR_SKYRANGER);
+	RuleCraft* skyranger = new RuleCraft("STR_SKYRANGER");
 	skyranger->setSprite(0);
 	skyranger->setMaxSpeed(760);
 	skyranger->setAcceleration(2);
@@ -455,7 +454,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	ruleTerrain->getMapDataFiles()->push_back(getMapDataFile("PLANE.MCD"));
 	ruleTerrain->getMapBlocks()->push_back(new MapBlock(ruleTerrain,"PLANE",10,20,true));
 
-	RuleCraft* lightning = new RuleCraft(STR_LIGHTNING);
+	RuleCraft* lightning = new RuleCraft("STR_LIGHTNING");
 	lightning->setSprite(1);
 	lightning->setMaxSpeed(3100);
 	lightning->setAcceleration(9);
@@ -466,7 +465,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	lightning->setHWPs(0);
 	lightning->setRefuelRate(5);
 
-	RuleCraft* avenger = new RuleCraft(STR_AVENGER);
+	RuleCraft* avenger = new RuleCraft("STR_AVENGER");
 	avenger->setSprite(2);
 	avenger->setMaxSpeed(5400);
 	avenger->setAcceleration(10);
@@ -477,7 +476,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	avenger->setHWPs(4);
 	avenger->setRefuelRate(5);
 
-	RuleCraft* interceptor = new RuleCraft(STR_INTERCEPTOR);
+	RuleCraft* interceptor = new RuleCraft("STR_INTERCEPTOR");
 	interceptor->setSprite(3);
 	interceptor->setMaxSpeed(2100);
 	interceptor->setAcceleration(3);
@@ -489,7 +488,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	interceptor->setHWPs(0);
 	interceptor->setRefuelRate(50);
 
-	RuleCraft* firestorm = new RuleCraft(STR_FIRESTORM);
+	RuleCraft* firestorm = new RuleCraft("STR_FIRESTORM");
 	firestorm->setSprite(4);
 	firestorm->setMaxSpeed(4200);
 	firestorm->setAcceleration(9);
@@ -500,14 +499,14 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	firestorm->setHWPs(0);
 	firestorm->setRefuelRate(5);
 
-	_crafts.insert(std::pair<LangString, RuleCraft*>(STR_SKYRANGER, skyranger));
-	_crafts.insert(std::pair<LangString, RuleCraft*>(STR_LIGHTNING, lightning));
-	_crafts.insert(std::pair<LangString, RuleCraft*>(STR_AVENGER, avenger));
-	_crafts.insert(std::pair<LangString, RuleCraft*>(STR_INTERCEPTOR, interceptor));
-	_crafts.insert(std::pair<LangString, RuleCraft*>(STR_FIRESTORM, firestorm));
+	_crafts.insert(std::pair<std::string, RuleCraft*>("STR_SKYRANGER", skyranger));
+	_crafts.insert(std::pair<std::string, RuleCraft*>("STR_LIGHTNING", lightning));
+	_crafts.insert(std::pair<std::string, RuleCraft*>("STR_AVENGER", avenger));
+	_crafts.insert(std::pair<std::string, RuleCraft*>("STR_INTERCEPTOR", interceptor));
+	_crafts.insert(std::pair<std::string, RuleCraft*>("STR_FIRESTORM", firestorm));
 
 	// Add craft weapons
-	RuleCraftWeapon *stingray = new RuleCraftWeapon(STR_STINGRAY_UC);
+	RuleCraftWeapon *stingray = new RuleCraftWeapon("STR_STINGRAY");
 	stingray->setSprite(0);
 	stingray->setSound(8);
 	stingray->setDamage(70);
@@ -517,10 +516,10 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	stingray->setStandardReload(24);
 	stingray->setAggressiveReload(16);
 	stingray->setAmmoMax(6);
-	stingray->setLauncherItem(STR_STINGRAY_LAUNCHER);
-	stingray->setClipItem(STR_STINGRAY_MISSILE);
+	stingray->setLauncherItem("STR_STINGRAY_LAUNCHER");
+	stingray->setClipItem("STR_STINGRAY_MISSILES");
 
-	RuleCraftWeapon *avalanche = new RuleCraftWeapon(STR_AVALANCHE_UC);
+	RuleCraftWeapon *avalanche = new RuleCraftWeapon("STR_AVALANCHE");
 	avalanche->setSprite(1);
 	avalanche->setSound(8);
 	avalanche->setDamage(100);
@@ -530,10 +529,10 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	avalanche->setStandardReload(36);
 	avalanche->setAggressiveReload(24);
 	avalanche->setAmmoMax(3);
-	avalanche->setLauncherItem(STR_AVALANCHE_LAUNCHER);
-	avalanche->setClipItem(STR_AVALANCHE_MISSILE);
+	avalanche->setLauncherItem("STR_AVALANCHE_LAUNCHER");
+	avalanche->setClipItem("STR_AVALANCHE_MISSILES");
 
-	RuleCraftWeapon *cannon = new RuleCraftWeapon(STR_CANNON_UC);
+	RuleCraftWeapon *cannon = new RuleCraftWeapon("STR_CANNON_UC");
 	cannon->setSprite(2);
 	cannon->setSound(4);
 	cannon->setDamage(10);
@@ -544,10 +543,10 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	cannon->setAggressiveReload(2);
 	cannon->setAmmoMax(200);
 	cannon->setRearmRate(50);
-	cannon->setLauncherItem(STR_CANNON);
-	cannon->setClipItem(STR_CANNON_ROUNDS);
+	cannon->setLauncherItem("STR_CANNON");
+	cannon->setClipItem("STR_CANNON_ROUNDS_X50");
 
-	RuleCraftWeapon *laser = new RuleCraftWeapon(STR_LASER_CANNON_UC);
+	RuleCraftWeapon *laser = new RuleCraftWeapon("STR_LASER_CANNON_UC");
 	laser->setSprite(4);
 	laser->setSound(5);
 	laser->setDamage(70);
@@ -557,9 +556,9 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	laser->setStandardReload(12);
 	laser->setAggressiveReload(12);
 	laser->setAmmoMax(99);
-	laser->setLauncherItem(STR_LASER_CANNON);
+	laser->setLauncherItem("STR_LASER_CANNON");
 
-	RuleCraftWeapon *plasma = new RuleCraftWeapon(STR_PLASMA_BEAM_UC);
+	RuleCraftWeapon *plasma = new RuleCraftWeapon("STR_PLASMA_BEAM_UC");
 	plasma->setSprite(5);
 	plasma->setSound(9);
 	plasma->setDamage(140);
@@ -569,9 +568,9 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	plasma->setStandardReload(12);
 	plasma->setAggressiveReload(12);
 	plasma->setAmmoMax(100);
-	plasma->setLauncherItem(STR_PLASMA_BEAM);
+	plasma->setLauncherItem("STR_PLASMA_BEAM");
 
-	RuleCraftWeapon *fusion = new RuleCraftWeapon(STR_FUSION_BALL_UC);
+	RuleCraftWeapon *fusion = new RuleCraftWeapon("STR_FUSION_BALL_UC");
 	fusion->setSprite(3);
 	fusion->setSound(7);
 	fusion->setDamage(230);
@@ -581,103 +580,103 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	fusion->setStandardReload(24);
 	fusion->setAggressiveReload(16);
 	fusion->setAmmoMax(2);
-	fusion->setLauncherItem(STR_FUSION_BALL_LAUNCHER);
-	fusion->setClipItem(STR_FUSION_BALL);
+	fusion->setLauncherItem("STR_FUSION_BALL_LAUNCHER");
+	fusion->setClipItem("STR_FUSION_BALL");
 
-	_craftWeapons.insert(std::pair<LangString, RuleCraftWeapon*>(STR_STINGRAY_UC, stingray));
-	_craftWeapons.insert(std::pair<LangString, RuleCraftWeapon*>(STR_AVALANCHE_UC, avalanche));
-	_craftWeapons.insert(std::pair<LangString, RuleCraftWeapon*>(STR_CANNON_UC, cannon));
-	_craftWeapons.insert(std::pair<LangString, RuleCraftWeapon*>(STR_FUSION_BALL_UC, fusion));
-	_craftWeapons.insert(std::pair<LangString, RuleCraftWeapon*>(STR_LASER_CANNON_UC, laser));
-	_craftWeapons.insert(std::pair<LangString, RuleCraftWeapon*>(STR_PLASMA_BEAM_UC, plasma));
+	_craftWeapons.insert(std::pair<std::string, RuleCraftWeapon*>("STR_STINGRAY", stingray));
+	_craftWeapons.insert(std::pair<std::string, RuleCraftWeapon*>("STR_AVALANCHE", avalanche));
+	_craftWeapons.insert(std::pair<std::string, RuleCraftWeapon*>("STR_CANNON_UC", cannon));
+	_craftWeapons.insert(std::pair<std::string, RuleCraftWeapon*>("STR_FUSION_BALL_UC", fusion));
+	_craftWeapons.insert(std::pair<std::string, RuleCraftWeapon*>("STR_LASER_CANNON_UC", laser));
+	_craftWeapons.insert(std::pair<std::string, RuleCraftWeapon*>("STR_PLASMA_BEAM_UC", plasma));
 
 	// Add items
-	RuleItem *slauncher = new RuleItem(STR_STINGRAY_LAUNCHER);
+	RuleItem *slauncher = new RuleItem("STR_STINGRAY_LAUNCHER");
 	slauncher->setSize(0.8f);
 	slauncher->setEquippable(false);
 
-	RuleItem *alauncher = new RuleItem(STR_AVALANCHE_LAUNCHER);
+	RuleItem *alauncher = new RuleItem("STR_AVALANCHE_LAUNCHER");
 	alauncher->setSize(1.0f);
 	alauncher->setEquippable(false);
 
-	RuleItem *icannon = new RuleItem(STR_CANNON);
+	RuleItem *icannon = new RuleItem("STR_CANNON");
 	icannon->setSize(1.5f);
 	icannon->setEquippable(false);
 
-	RuleItem *smissile = new RuleItem(STR_STINGRAY_MISSILE);
+	RuleItem *smissile = new RuleItem("STR_STINGRAY_MISSILES");
 	smissile->setSize(0.4f);
 	smissile->setEquippable(false);
 
-	RuleItem *amissile = new RuleItem(STR_AVALANCHE_MISSILE);
+	RuleItem *amissile = new RuleItem("STR_AVALANCHE_MISSILES");
 	amissile->setSize(1.5f);
 	amissile->setEquippable(false);
 
-	RuleItem *crounds = new RuleItem(STR_CANNON_ROUNDS);
+	RuleItem *crounds = new RuleItem("STR_CANNON_ROUNDS_X50");
 	crounds->setSize(0.0f);
 	crounds->setEquippable(false);
 
-	RuleItem *pistol = new RuleItem(STR_PISTOL);
+	RuleItem *pistol = new RuleItem("STR_PISTOL");
 	pistol->setSize(0.1f);
 
-	RuleItem *pclip = new RuleItem(STR_PISTOL_CLIP);
+	RuleItem *pclip = new RuleItem("STR_PISTOL_CLIP");
 	pclip->setSize(0.1f);
 
-	RuleItem *rifle = new RuleItem(STR_RIFLE);
+	RuleItem *rifle = new RuleItem("STR_RIFLE");
 	rifle->setSize(0.2f);
 
-	RuleItem *rclip = new RuleItem(STR_RIFLE_CLIP);
+	RuleItem *rclip = new RuleItem("STR_RIFLE_CLIP");
 	rclip->setSize(0.1f);
 
-	RuleItem *hcannon = new RuleItem(STR_HEAVY_CANNON);
+	RuleItem *hcannon = new RuleItem("STR_HEAVY_CANNON");
 	hcannon->setSize(0.3f);
 
-	RuleItem *hcap = new RuleItem(STR_HC_AP_AMMO);
+	RuleItem *hcap = new RuleItem("STR_HC_AP_AMMO");
 	hcap->setSize(0.1f);
 
-	RuleItem *hche = new RuleItem(STR_HC_HE_AMMO);
+	RuleItem *hche = new RuleItem("STR_HC_HE_AMMO");
 	hche->setSize(0.1f);
 
-	RuleItem *acannon = new RuleItem(STR_AUTO_CANNON);
+	RuleItem *acannon = new RuleItem("STR_AUTO_CANNON");
 	acannon->setSize(0.3f);
 
-	RuleItem *acap = new RuleItem(STR_AC_AP_AMMO);
+	RuleItem *acap = new RuleItem("STR_AC_AP_AMMO");
 	acap->setSize(0.1f);
 
-	RuleItem *rlauncher = new RuleItem(STR_ROCKET_LAUNCHER);
+	RuleItem *rlauncher = new RuleItem("STR_ROCKET_LAUNCHER");
 	rlauncher->setSize(0.4f);
 
-	RuleItem *srocket = new RuleItem(STR_SMALL_ROCKET);
+	RuleItem *srocket = new RuleItem("STR_SMALL_ROCKET");
 	srocket->setSize(0.2f);
 
-	RuleItem *grenade = new RuleItem(STR_GRENADE);
+	RuleItem *grenade = new RuleItem("STR_GRENADE");
 	grenade->setSize(0.1f);
 
-	RuleItem *sgrenade = new RuleItem(STR_SMOKE_GRENADE);
+	RuleItem *sgrenade = new RuleItem("STR_SMOKE_GRENADE");
 	sgrenade->setSize(0.1f);
 
-	_items.insert(std::pair<LangString, RuleItem*>(STR_STINGRAY_LAUNCHER, slauncher));
-	_items.insert(std::pair<LangString, RuleItem*>(STR_AVALANCHE_LAUNCHER, alauncher));
-	_items.insert(std::pair<LangString, RuleItem*>(STR_CANNON, icannon));
-	_items.insert(std::pair<LangString, RuleItem*>(STR_STINGRAY_MISSILE, smissile));
-	_items.insert(std::pair<LangString, RuleItem*>(STR_AVALANCHE_MISSILE, amissile));
-	_items.insert(std::pair<LangString, RuleItem*>(STR_CANNON_ROUNDS, crounds));
-	_items.insert(std::pair<LangString, RuleItem*>(STR_PISTOL, pistol));
-	_items.insert(std::pair<LangString, RuleItem*>(STR_PISTOL_CLIP, pclip));
-	_items.insert(std::pair<LangString, RuleItem*>(STR_RIFLE, rifle));
-	_items.insert(std::pair<LangString, RuleItem*>(STR_RIFLE_CLIP, rclip));
-	_items.insert(std::pair<LangString, RuleItem*>(STR_HEAVY_CANNON, hcannon));
-	_items.insert(std::pair<LangString, RuleItem*>(STR_HC_AP_AMMO, hcap));
-	_items.insert(std::pair<LangString, RuleItem*>(STR_HC_HE_AMMO, hche));
-	_items.insert(std::pair<LangString, RuleItem*>(STR_AUTO_CANNON, acannon));
-	_items.insert(std::pair<LangString, RuleItem*>(STR_AC_AP_AMMO, acap));
-	_items.insert(std::pair<LangString, RuleItem*>(STR_ROCKET_LAUNCHER, rlauncher));
-	_items.insert(std::pair<LangString, RuleItem*>(STR_SMALL_ROCKET, srocket));
-	_items.insert(std::pair<LangString, RuleItem*>(STR_GRENADE, grenade));
-	_items.insert(std::pair<LangString, RuleItem*>(STR_SMOKE_GRENADE, sgrenade));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_STINGRAY_LAUNCHER", slauncher));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_AVALANCHE_LAUNCHER", alauncher));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_CANNON", icannon));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_STINGRAY_MISSILES", smissile));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_AVALANCHE_MISSILES", amissile));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_CANNON_ROUNDS_X50", crounds));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_PISTOL", pistol));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_PISTOL_CLIP", pclip));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_RIFLE", rifle));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_RIFLE_CLIP", rclip));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_HEAVY_CANNON", hcannon));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_HC_AP_AMMO", hcap));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_HC_HE_AMMO", hche));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_AUTO_CANNON", acannon));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_AC_AP_AMMO", acap));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_ROCKET_LAUNCHER", rlauncher));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_SMALL_ROCKET", srocket));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_GRENADE", grenade));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_SMOKE_GRENADE", sgrenade));
 
 	// Add UFOs
-	RuleUfo *sscout = new RuleUfo(STR_SMALL_SCOUT);
-	sscout->setSize(STR_VERY_SMALL);
+	RuleUfo *sscout = new RuleUfo("STR_SMALL_SCOUT");
+	sscout->setSize("STR_VERY_SMALL");
 	sscout->setSprite(0);
 	sscout->setMaxSpeed(2200);
 	sscout->setAcceleration(12);
@@ -689,8 +688,8 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	ruleTerrain->getMapDataFiles()->push_back(getMapDataFile("UFO1.MCD"));
 	ruleTerrain->getMapBlocks()->push_back(new MapBlock(ruleTerrain,"UFO1A",10,10,true));
 
-	RuleUfo *mscout = new RuleUfo(STR_MEDIUM_SCOUT);
-	mscout->setSize(STR_SMALL);
+	RuleUfo *mscout = new RuleUfo("STR_MEDIUM_SCOUT");
+	mscout->setSize("STR_SMALL");
 	mscout->setSprite(1);
 	mscout->setMaxSpeed(2400);
 	mscout->setAcceleration(9);
@@ -709,8 +708,8 @@ XcomRuleset::XcomRuleset() : Ruleset()
 //  ruleTerrain->getMapDataFiles()->push_back(getMapDataFile("U_PODS.MCD"));
 	ruleTerrain->getMapBlocks()->push_back(new MapBlock(ruleTerrain,"UFO_110",10,10,true));
 
-	RuleUfo *lscout = new RuleUfo(STR_LARGE_SCOUT);
-	lscout->setSize(STR_SMALL);
+	RuleUfo *lscout = new RuleUfo("STR_LARGE_SCOUT");
+	lscout->setSize("STR_SMALL");
 	lscout->setSprite(2);
 	lscout->setMaxSpeed(2700);
 	lscout->setAcceleration(9);
@@ -726,8 +725,8 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	ruleTerrain->getMapDataFiles()->push_back(getMapDataFile("U_BITS.MCD"));
 	ruleTerrain->getMapBlocks()->push_back(new MapBlock(ruleTerrain,"UFO_120",20,20,true));
 
-	RuleUfo *abducter = new RuleUfo(STR_ABDUCTER);
-	abducter->setSize(STR_MEDIUM);
+	RuleUfo *abducter = new RuleUfo("STR_ABDUCTER");
+	abducter->setSize("STR_MEDIUM");
 	abducter->setSprite(3);
 	abducter->setMaxSpeed(4000);
 	abducter->setAcceleration(8);
@@ -736,8 +735,8 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	abducter->setMaxDamage(500);
 	abducter->setScore(250);
 
-	RuleUfo *harvester = new RuleUfo(STR_HARVESTER);
-	harvester->setSize(STR_MEDIUM);
+	RuleUfo *harvester = new RuleUfo("STR_HARVESTER");
+	harvester->setSize("STR_MEDIUM");
 	harvester->setSprite(4);
 	harvester->setMaxSpeed(4300);
 	harvester->setAcceleration(8);
@@ -746,8 +745,8 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	harvester->setMaxDamage(500);
 	harvester->setScore(250);
 
-	RuleUfo *supply = new RuleUfo(STR_SUPPLY_SHIP);
-	supply->setSize(STR_LARGE);
+	RuleUfo *supply = new RuleUfo("STR_SUPPLY_SHIP");
+	supply->setSize("STR_LARGE");
 	supply->setSprite(5);
 	supply->setMaxSpeed(3200);
 	supply->setAcceleration(6);
@@ -756,8 +755,8 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	supply->setMaxDamage(2200);
 	supply->setScore(400);
 
-	RuleUfo *terror = new RuleUfo(STR_TERROR_SHIP);
-	terror->setSize(STR_LARGE);
+	RuleUfo *terror = new RuleUfo("STR_TERROR_SHIP");
+	terror->setSize("STR_LARGE");
 	terror->setSprite(6);
 	terror->setMaxSpeed(4800);
 	terror->setAcceleration(6);
@@ -766,8 +765,8 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	terror->setMaxDamage(1200);
 	terror->setScore(500);
 
-	RuleUfo *battleship = new RuleUfo(STR_BATTLESHIP);
-	battleship->setSize(STR_VERY_LARGE);
+	RuleUfo *battleship = new RuleUfo("STR_BATTLESHIP");
+	battleship->setSize("STR_VERY_LARGE");
 	battleship->setSprite(7);
 	battleship->setMaxSpeed(5000);
 	battleship->setAcceleration(6);
@@ -776,14 +775,14 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	battleship->setMaxDamage(3200);
 	battleship->setScore(700);
 
-	_ufos.insert(std::pair<LangString, RuleUfo*>(STR_SMALL_SCOUT, sscout));
-	_ufos.insert(std::pair<LangString, RuleUfo*>(STR_MEDIUM_SCOUT, mscout));
-	_ufos.insert(std::pair<LangString, RuleUfo*>(STR_LARGE_SCOUT, lscout));
-	_ufos.insert(std::pair<LangString, RuleUfo*>(STR_ABDUCTER, abducter));
-	_ufos.insert(std::pair<LangString, RuleUfo*>(STR_HARVESTER, harvester));
-	_ufos.insert(std::pair<LangString, RuleUfo*>(STR_SUPPLY_SHIP, supply));
-	_ufos.insert(std::pair<LangString, RuleUfo*>(STR_TERROR_SHIP, terror));
-	_ufos.insert(std::pair<LangString, RuleUfo*>(STR_BATTLESHIP, battleship));
+	_ufos.insert(std::pair<std::string, RuleUfo*>("STR_SMALL_SCOUT", sscout));
+	_ufos.insert(std::pair<std::string, RuleUfo*>("STR_MEDIUM_SCOUT", mscout));
+	_ufos.insert(std::pair<std::string, RuleUfo*>("STR_LARGE_SCOUT", lscout));
+	_ufos.insert(std::pair<std::string, RuleUfo*>("STR_ABDUCTER", abducter));
+	_ufos.insert(std::pair<std::string, RuleUfo*>("STR_HARVESTER", harvester));
+	_ufos.insert(std::pair<std::string, RuleUfo*>("STR_SUPPLY_SHIP", supply));
+	_ufos.insert(std::pair<std::string, RuleUfo*>("STR_TERROR_SHIP", terror));
+	_ufos.insert(std::pair<std::string, RuleUfo*>("STR_BATTLESHIP", battleship));
 
 	RuleTerrain *culta = new RuleTerrain("CULTA");
 	culta->getMapDataFiles()->push_back(getMapDataFile("BLANKS.MCD"));
@@ -1023,22 +1022,22 @@ SavedGame *XcomRuleset::newSave(GameDifficulty diff)
 	canada->setLabelLongitude(4.53786);
 	canada->setLabelLatitude(-0.959931);
 
-	save->getCountries()->insert(std::pair<LangString, Country*>(STR_USA, usa));
-	save->getCountries()->insert(std::pair<LangString, Country*>(STR_RUSSIA, russia));
-	save->getCountries()->insert(std::pair<LangString, Country*>(STR_UK, uk));
-	save->getCountries()->insert(std::pair<LangString, Country*>(STR_FRANCE, france));
-	save->getCountries()->insert(std::pair<LangString, Country*>(STR_GERMANY, germany));
-	save->getCountries()->insert(std::pair<LangString, Country*>(STR_ITALY, italy));
-	save->getCountries()->insert(std::pair<LangString, Country*>(STR_SPAIN, spain));
-	save->getCountries()->insert(std::pair<LangString, Country*>(STR_CHINA, china));
-	save->getCountries()->insert(std::pair<LangString, Country*>(STR_JAPAN, japan));
-	save->getCountries()->insert(std::pair<LangString, Country*>(STR_INDIA, india));
-	save->getCountries()->insert(std::pair<LangString, Country*>(STR_BRAZIL, brazil));
-	save->getCountries()->insert(std::pair<LangString, Country*>(STR_AUSTRALIA, australia));
-	save->getCountries()->insert(std::pair<LangString, Country*>(STR_NIGERIA, nigeria));
-	save->getCountries()->insert(std::pair<LangString, Country*>(STR_SOUTH_AFRICA, africa));
-	save->getCountries()->insert(std::pair<LangString, Country*>(STR_EGYPT, egypt));
-	save->getCountries()->insert(std::pair<LangString, Country*>(STR_CANADA, canada));
+	save->getCountries()->insert(std::pair<std::string, Country*>("STR_USA", usa));
+	save->getCountries()->insert(std::pair<std::string, Country*>("STR_RUSSIA", russia));
+	save->getCountries()->insert(std::pair<std::string, Country*>("STR_UK", uk));
+	save->getCountries()->insert(std::pair<std::string, Country*>("STR_FRANCE", france));
+	save->getCountries()->insert(std::pair<std::string, Country*>("STR_GERMANY", germany));
+	save->getCountries()->insert(std::pair<std::string, Country*>("STR_ITALY", italy));
+	save->getCountries()->insert(std::pair<std::string, Country*>("STR_SPAIN", spain));
+	save->getCountries()->insert(std::pair<std::string, Country*>("STR_CHINA", china));
+	save->getCountries()->insert(std::pair<std::string, Country*>("STR_JAPAN", japan));
+	save->getCountries()->insert(std::pair<std::string, Country*>("STR_INDIA", india));
+	save->getCountries()->insert(std::pair<std::string, Country*>("STR_BRAZIL", brazil));
+	save->getCountries()->insert(std::pair<std::string, Country*>("STR_AUSTRALIA", australia));
+	save->getCountries()->insert(std::pair<std::string, Country*>("STR_NIGERIA", nigeria));
+	save->getCountries()->insert(std::pair<std::string, Country*>("STR_SOUTH_AFRICA", africa));
+	save->getCountries()->insert(std::pair<std::string, Country*>("STR_EGYPT", egypt));
+	save->getCountries()->insert(std::pair<std::string, Country*>("STR_CANADA", canada));
 	save->setFunds(save->getCountryFunding());
 
 	// Add regions
@@ -1046,15 +1045,15 @@ SavedGame *XcomRuleset::newSave(GameDifficulty diff)
 	namerica->addArea(3.40339, 5.32107, -1.22173, -0.962113);
 	namerica->addArea(4.01426, 5.32107, -0.959931, -0.52578);
 	namerica->addArea(4.18879, 5.23381, -0.523599, -0.176715);
-	namerica->getCities()->push_back(new City(STR_NEW_YORK, 4.99382, -0.711222));
-	namerica->getCities()->push_back(new City(STR_WASHINGTON, 4.9371, -0.676315));
-	namerica->getCities()->push_back(new City(STR_LOS_ANGELES, 4.21933, -0.595594));
-	namerica->getCities()->push_back(new City(STR_MONTREAL, 4.9611, -0.794125));
-	namerica->getCities()->push_back(new City(STR_HAVANA, 4.84547, -0.392699));
-	namerica->getCities()->push_back(new City(STR_MEXICO_CITY, 4.55313, -0.338158));
-	namerica->getCities()->push_back(new City(STR_CHICAGO, 4.75384, -0.730857));
-	namerica->getCities()->push_back(new City(STR_VANCOUVER, 4.13207, -0.861756));
-	namerica->getCities()->push_back(new City(STR_DALLAS, 4.59676, -0.571595));
+	namerica->getCities()->push_back(new City("STR_NEW_YORK", 4.99382, -0.711222));
+	namerica->getCities()->push_back(new City("STR_WASHINGTON", 4.9371, -0.676315));
+	namerica->getCities()->push_back(new City("STR_LOS_ANGELES", 4.21933, -0.595594));
+	namerica->getCities()->push_back(new City("STR_MONTREAL", 4.9611, -0.794125));
+	namerica->getCities()->push_back(new City("STR_HAVANA", 4.84547, -0.392699));
+	namerica->getCities()->push_back(new City("STR_MEXICO_CITY", 4.55313, -0.338158));
+	namerica->getCities()->push_back(new City("STR_CHICAGO", 4.75384, -0.730857));
+	namerica->getCities()->push_back(new City("STR_VANCOUVER", 4.13207, -0.861756));
+	namerica->getCities()->push_back(new City("STR_DALLAS", 4.59676, -0.571595));
 	
 	Region* arctic = new Region(950000);
 	arctic->addArea(0, 6.281, -1.5708, -1.22391);
@@ -1066,74 +1065,74 @@ SavedGame *XcomRuleset::newSave(GameDifficulty diff)
 	samerica->addArea(4.71239, 5.49561, -0.174533, -0.00218166);
 	samerica->addArea(4.79966, 5.7574, 0, 0.259618);
 	samerica->addArea(4.79966, 5.67014, 0.261799, 1.04502);
-	samerica->getCities()->push_back(new City(STR_BRASILIA, 5.44761, 0.274889));
-	samerica->getCities()->push_back(new City(STR_BOGOTA, 4.98946, -0.0785398));
-	samerica->getCities()->push_back(new City(STR_BUENOS_AIRES, 5.27962, 0.602139));
-	samerica->getCities()->push_back(new City(STR_SANTIAGO, 5.05055, 0.582504));
-	samerica->getCities()->push_back(new City(STR_RIO_DE_JANEIRO, 5.53051, 0.399244));
-	samerica->getCities()->push_back(new City(STR_LIMA, 4.93928, 0.20944));
-	samerica->getCities()->push_back(new City(STR_CARACAS, 5.116, -0.18326));
+	samerica->getCities()->push_back(new City("STR_BRASILIA", 5.44761, 0.274889));
+	samerica->getCities()->push_back(new City("STR_BOGOTA", 4.98946, -0.0785398));
+	samerica->getCities()->push_back(new City("STR_BUENOS_AIRES", 5.27962, 0.602139));
+	samerica->getCities()->push_back(new City("STR_SANTIAGO", 5.05055, 0.582504));
+	samerica->getCities()->push_back(new City("STR_RIO_DE_JANEIRO", 5.53051, 0.399244));
+	samerica->getCities()->push_back(new City("STR_LIMA", 4.93928, 0.20944));
+	samerica->getCities()->push_back(new City("STR_CARACAS", 5.116, -0.18326));
 	
 	Region* europe = new Region(1000000);
 	europe->addArea(5.84685, 1.04502, -1.22173, -0.613047);
-	europe->getCities()->push_back(new City(STR_LONDON, 6.281, -0.898845));
-	europe->getCities()->push_back(new City(STR_PARIS, 0.0414516, -0.850848));
-	europe->getCities()->push_back(new City(STR_BERLIN, 0.233438, -0.916298));
-	europe->getCities()->push_back(new City(STR_MOSCOW, 0.65668, -0.973021));
-	europe->getCities()->push_back(new City(STR_ROME, 0.218166, -0.730857));
-	europe->getCities()->push_back(new City(STR_MADRID, 6.21774, -0.704677));
-	europe->getCities()->push_back(new City(STR_BUDAPEST, 0.333794, -0.829031));
+	europe->getCities()->push_back(new City("STR_LONDON", 6.281, -0.898845));
+	europe->getCities()->push_back(new City("STR_PARIS", 0.0414516, -0.850848));
+	europe->getCities()->push_back(new City("STR_BERLIN", 0.233438, -0.916298));
+	europe->getCities()->push_back(new City("STR_MOSCOW", 0.65668, -0.973021));
+	europe->getCities()->push_back(new City("STR_ROME", 0.218166, -0.730857));
+	europe->getCities()->push_back(new City("STR_MADRID", 6.21774, -0.704677));
+	europe->getCities()->push_back(new City("STR_BUDAPEST", 0.333794, -0.829031));
 	
 	Region* nafrica = new Region(650000);
 	nafrica->addArea(5.84685, 0.69595, -0.610865, -0.263981);
 	nafrica->addArea(5.84685, 0.957749, -0.261799, -0.00218166);
-	nafrica->getCities()->push_back(new City(STR_LAGOS, 0.0545415, -0.113446));
-	nafrica->getCities()->push_back(new City(STR_CAIRO, 0.545415, -0.523599));
-	nafrica->getCities()->push_back(new City(STR_CASABLANCA, 6.1501, -0.584685));
+	nafrica->getCities()->push_back(new City("STR_LAGOS", 0.0545415, -0.113446));
+	nafrica->getCities()->push_back(new City("STR_CAIRO", 0.545415, -0.523599));
+	nafrica->getCities()->push_back(new City("STR_CASABLANCA", 6.1501, -0.584685));
 	
 	Region* safrica = new Region(550000);
 	safrica->addArea(0.0872665, 0.957749, 0, 0.69595);
-	safrica->getCities()->push_back(new City(STR_PRETORIA, 0.490874, 0.458149));
-	safrica->getCities()->push_back(new City(STR_NAIROBI, 0.641409, 0.0218166));
-	safrica->getCities()->push_back(new City(STR_CAPE_TOWN, 0.322886, 0.593412));
-	safrica->getCities()->push_back(new City(STR_KINSHASA, 0.268344, 0.0763582));
+	safrica->getCities()->push_back(new City("STR_PRETORIA", 0.490874, 0.458149));
+	safrica->getCities()->push_back(new City("STR_NAIROBI", 0.641409, 0.0218166));
+	safrica->getCities()->push_back(new City("STR_CAPE_TOWN", 0.322886, 0.593412));
+	safrica->getCities()->push_back(new City("STR_KINSHASA", 0.268344, 0.0763582));
 	
 	Region* casia = new Region(500000);
 	casia->addArea(0.698132, 1.21955, -0.610865, -0.263981);
 	casia->addArea(1.0472, 1.56861, -0.872665, -0.613047);
 	casia->addArea(1.22173, 1.56861, -0.610865, -0.0894481);
-	casia->getCities()->push_back(new City(STR_ANKARA, 0.571595, -0.69595));
-	casia->getCities()->push_back(new City(STR_DELHI, 1.34827, -0.4996));
-	casia->getCities()->push_back(new City(STR_KARACHI, 1.16937, -0.434151));
-	casia->getCities()->push_back(new City(STR_BAGHDAD, 0.776672, -0.580322));
-	casia->getCities()->push_back(new City(STR_TEHRAN, 0.898845, -0.621774));
-	casia->getCities()->push_back(new City(STR_BOMBAY, 1.27627, -0.329431));
-	casia->getCities()->push_back(new City(STR_CALCUTTA, 1.54243, -0.394881));
+	casia->getCities()->push_back(new City("STR_ANKARA", 0.571595, -0.69595));
+	casia->getCities()->push_back(new City("STR_DELHI", 1.34827, -0.4996));
+	casia->getCities()->push_back(new City("STR_KARACHI", 1.16937, -0.434151));
+	casia->getCities()->push_back(new City("STR_BAGHDAD", 0.776672, -0.580322));
+	casia->getCities()->push_back(new City("STR_TEHRAN", 0.898845, -0.621774));
+	casia->getCities()->push_back(new City("STR_BOMBAY", 1.27627, -0.329431));
+	casia->getCities()->push_back(new City("STR_CALCUTTA", 1.54243, -0.394881));
 	
 	Region* seasia = new Region(750000);
 	seasia->addArea(1.5708, 1.83041, -0.872665, 0.172351);
 	seasia->addArea(1.8326, 2.61581, -0.872665, -0.0894481);
-	seasia->getCities()->push_back(new City(STR_TOKYO, 2.4391, -0.621774));
-	seasia->getCities()->push_back(new City(STR_BEIJING, 2.03113, -0.69595));
-	seasia->getCities()->push_back(new City(STR_BANGKOK, 1.75624, -0.237801));
-	seasia->getCities()->push_back(new City(STR_MANILA, 2.11185, -0.255254));
-	seasia->getCities()->push_back(new City(STR_SEOUL, 2.21657, -0.654498));
-	seasia->getCities()->push_back(new City(STR_SINGAPORE, 1.81296, -0.0239983));
-	seasia->getCities()->push_back(new City(STR_JAKARTA, 1.86314, 0.109083));
-	seasia->getCities()->push_back(new City(STR_SHANGHAI, 2.12058, -0.545415));
-	seasia->getCities()->push_back(new City(STR_HONG_KONG, 1.99186, -0.388336));
+	seasia->getCities()->push_back(new City("STR_TOKYO", 2.4391, -0.621774));
+	seasia->getCities()->push_back(new City("STR_BEIJING", 2.03113, -0.69595));
+	seasia->getCities()->push_back(new City("STR_BANGKOK", 1.75624, -0.237801));
+	seasia->getCities()->push_back(new City("STR_MANILA", 2.11185, -0.255254));
+	seasia->getCities()->push_back(new City("STR_SEOUL", 2.21657, -0.654498));
+	seasia->getCities()->push_back(new City("STR_SINGAPORE", 1.81296, -0.0239983));
+	seasia->getCities()->push_back(new City("STR_JAKARTA", 1.86314, 0.109083));
+	seasia->getCities()->push_back(new City("STR_SHANGHAI", 2.12058, -0.545415));
+	seasia->getCities()->push_back(new City("STR_HONG_KONG", 1.99186, -0.388336));
 	
 	Region* siberia = new Region(800000);
 	siberia->addArea(1.0472, 3.13941, -1.22173, -0.874846);
-	siberia->getCities()->push_back(new City(STR_NOVOSIBIRSK, 1.44426, -0.959931));
+	siberia->getCities()->push_back(new City("STR_NOVOSIBIRSK", 1.44426, -0.959931));
 	
 	Region* australasia = new Region(750000);
 	//australasia->addArea(1.8326, 3.13941, -0.0872665, 0.870483);
 	australasia->addArea(1.8326, 3.13941, -0.0872665, 1.04502);
-	australasia->getCities()->push_back(new City(STR_CANBERRA, 2.60272, 0.61741));
-	australasia->getCities()->push_back(new City(STR_WELLINGTON, 3.05651, 0.719948));
-	australasia->getCities()->push_back(new City(STR_MELBOURNE, 2.53073, 0.661043));
-	australasia->getCities()->push_back(new City(STR_PERTH, 2.02022, 0.558505));
+	australasia->getCities()->push_back(new City("STR_CANBERRA", 2.60272, 0.61741));
+	australasia->getCities()->push_back(new City("STR_WELLINGTON", 3.05651, 0.719948));
+	australasia->getCities()->push_back(new City("STR_MELBOURNE", 2.53073, 0.661043));
+	australasia->getCities()->push_back(new City("STR_PERTH", 2.02022, 0.558505));
 	
 	Region* pacific = new Region(600000);
 	pacific->addArea(3.14159, 3.40121, -1.22173, -0.962113);
@@ -1158,28 +1157,28 @@ SavedGame *XcomRuleset::newSave(GameDifficulty diff)
 	indian->addArea(1.22173, 1.56861, -0.0872665, 0.172351);
 	indian->addArea(0.959931, 1.83041, 0.174533, 1.04502);
 	
-	save->getRegions()->insert(std::pair<LangString, Region*>(STR_NORTH_AMERICA, namerica));
-	save->getRegions()->insert(std::pair<LangString, Region*>(STR_ARCTIC, arctic));
-	save->getRegions()->insert(std::pair<LangString, Region*>(STR_ANTARCTICA, antarctica));
-	save->getRegions()->insert(std::pair<LangString, Region*>(STR_SOUTH_AMERICA, samerica));
-	save->getRegions()->insert(std::pair<LangString, Region*>(STR_EUROPE, europe));
-	save->getRegions()->insert(std::pair<LangString, Region*>(STR_NORTH_AFRICA, nafrica));
-	save->getRegions()->insert(std::pair<LangString, Region*>(STR_SOUTHERN_AFRICA, safrica));
-	save->getRegions()->insert(std::pair<LangString, Region*>(STR_CENTRAL_ASIA, casia));
-	save->getRegions()->insert(std::pair<LangString, Region*>(STR_SOUTH_EAST_ASIA, seasia));
-	save->getRegions()->insert(std::pair<LangString, Region*>(STR_SIBERIA, siberia));
-	save->getRegions()->insert(std::pair<LangString, Region*>(STR_AUSTRALASIA, australasia));
-	save->getRegions()->insert(std::pair<LangString, Region*>(STR_PACIFIC, pacific));
-	save->getRegions()->insert(std::pair<LangString, Region*>(STR_NORTH_ATLANTIC, natlantic));
-	save->getRegions()->insert(std::pair<LangString, Region*>(STR_SOUTH_ATLANTIC, satlantic));
-	save->getRegions()->insert(std::pair<LangString, Region*>(STR_INDIAN_OCEAN, indian));
+	save->getRegions()->insert(std::pair<std::string, Region*>("STR_NORTH_AMERICA", namerica));
+	save->getRegions()->insert(std::pair<std::string, Region*>("STR_ARCTIC", arctic));
+	save->getRegions()->insert(std::pair<std::string, Region*>("STR_ANTARCTICA", antarctica));
+	save->getRegions()->insert(std::pair<std::string, Region*>("STR_SOUTH_AMERICA", samerica));
+	save->getRegions()->insert(std::pair<std::string, Region*>("STR_EUROPE", europe));
+	save->getRegions()->insert(std::pair<std::string, Region*>("STR_NORTH_AFRICA", nafrica));
+	save->getRegions()->insert(std::pair<std::string, Region*>("STR_SOUTHERN_AFRICA", safrica));
+	save->getRegions()->insert(std::pair<std::string, Region*>("STR_CENTRAL_ASIA", casia));
+	save->getRegions()->insert(std::pair<std::string, Region*>("STR_SOUTH_EAST_ASIA", seasia));
+	save->getRegions()->insert(std::pair<std::string, Region*>("STR_SIBERIA", siberia));
+	save->getRegions()->insert(std::pair<std::string, Region*>("STR_AUSTRALASIA", australasia));
+	save->getRegions()->insert(std::pair<std::string, Region*>("STR_PACIFIC", pacific));
+	save->getRegions()->insert(std::pair<std::string, Region*>("STR_NORTH_ATLANTIC", natlantic));
+	save->getRegions()->insert(std::pair<std::string, Region*>("STR_SOUTH_ATLANTIC", satlantic));
+	save->getRegions()->insert(std::pair<std::string, Region*>("STR_INDIAN_OCEAN", indian));
 	
 	// Set up craft IDs
-	save->getCraftIds()->insert(std::pair<LangString, int>(STR_SKYRANGER, 1));
-	save->getCraftIds()->insert(std::pair<LangString, int>(STR_LIGHTNING, 1));
-	save->getCraftIds()->insert(std::pair<LangString, int>(STR_AVENGER, 1));
-	save->getCraftIds()->insert(std::pair<LangString, int>(STR_INTERCEPTOR, 1));
-	save->getCraftIds()->insert(std::pair<LangString, int>(STR_FIRESTORM, 1));
+	save->getCraftIds()->insert(std::pair<std::string, int>("STR_SKYRANGER", 1));
+	save->getCraftIds()->insert(std::pair<std::string, int>("STR_LIGHTNING", 1));
+	save->getCraftIds()->insert(std::pair<std::string, int>("STR_AVENGER", 1));
+	save->getCraftIds()->insert(std::pair<std::string, int>("STR_INTERCEPTOR", 1));
+	save->getCraftIds()->insert(std::pair<std::string, int>("STR_FIRESTORM", 1));
 
 	// Set up initial base
 	Base *base = new Base();
@@ -1187,55 +1186,55 @@ SavedGame *XcomRuleset::newSave(GameDifficulty diff)
 	base->setScientists(10);
 
 	// Add facilities
-	base->getFacilities()->push_back(new BaseFacility(getBaseFacility(STR_ACCESS_LIFT), 2, 2));
-	base->getFacilities()->push_back(new BaseFacility(getBaseFacility(STR_HANGAR), 2, 0));
-	base->getFacilities()->push_back(new BaseFacility(getBaseFacility(STR_HANGAR), 0, 4));
-	base->getFacilities()->push_back(new BaseFacility(getBaseFacility(STR_HANGAR), 4, 4));
-	base->getFacilities()->push_back(new BaseFacility(getBaseFacility(STR_LIVING_QUARTERS), 3, 2));
-	base->getFacilities()->push_back(new BaseFacility(getBaseFacility(STR_GENERAL_STORES), 2, 3));
-	base->getFacilities()->push_back(new BaseFacility(getBaseFacility(STR_LABORATORY), 3, 3));
-	base->getFacilities()->push_back(new BaseFacility(getBaseFacility(STR_WORKSHOP), 4, 3));
-	base->getFacilities()->push_back(new BaseFacility(getBaseFacility(STR_SMALL_RADAR_SYSTEM), 1, 3));
+	base->getFacilities()->push_back(new BaseFacility(getBaseFacility("STR_ACCESS_LIFT"), 2, 2));
+	base->getFacilities()->push_back(new BaseFacility(getBaseFacility("STR_HANGAR"), 2, 0));
+	base->getFacilities()->push_back(new BaseFacility(getBaseFacility("STR_HANGAR"), 0, 4));
+	base->getFacilities()->push_back(new BaseFacility(getBaseFacility("STR_HANGAR"), 4, 4));
+	base->getFacilities()->push_back(new BaseFacility(getBaseFacility("STR_LIVING_QUARTERS"), 3, 2));
+	base->getFacilities()->push_back(new BaseFacility(getBaseFacility("STR_GENERAL_STORES"), 2, 3));
+	base->getFacilities()->push_back(new BaseFacility(getBaseFacility("STR_LABORATORY"), 3, 3));
+	base->getFacilities()->push_back(new BaseFacility(getBaseFacility("STR_WORKSHOP"), 4, 3));
+	base->getFacilities()->push_back(new BaseFacility(getBaseFacility("STR_SMALL_RADAR_SYSTEM"), 1, 3));
 
 	// Add items
-	base->getItems()->insert(std::pair<LangString, Item*>(STR_STINGRAY_LAUNCHER, new Item(getItem(STR_STINGRAY_LAUNCHER), 1)));
-	base->getItems()->insert(std::pair<LangString, Item*>(STR_AVALANCHE_LAUNCHER, new Item(getItem(STR_AVALANCHE_LAUNCHER), 1)));
-	base->getItems()->insert(std::pair<LangString, Item*>(STR_CANNON, new Item(getItem(STR_CANNON), 2)));
-	base->getItems()->insert(std::pair<LangString, Item*>(STR_STINGRAY_MISSILE, new Item(getItem(STR_STINGRAY_MISSILE), 25)));
-	base->getItems()->insert(std::pair<LangString, Item*>(STR_AVALANCHE_MISSILE, new Item(getItem(STR_AVALANCHE_MISSILE), 10)));
-	base->getItems()->insert(std::pair<LangString, Item*>(STR_CANNON_ROUNDS, new Item(getItem(STR_CANNON_ROUNDS), 1)));
-	base->getItems()->insert(std::pair<LangString, Item*>(STR_PISTOL, new Item(getItem(STR_PISTOL), 2)));
-	base->getItems()->insert(std::pair<LangString, Item*>(STR_PISTOL_CLIP, new Item(getItem(STR_PISTOL_CLIP), 8)));
-	base->getItems()->insert(std::pair<LangString, Item*>(STR_RIFLE, new Item(getItem(STR_RIFLE), 2)));
-	base->getItems()->insert(std::pair<LangString, Item*>(STR_RIFLE_CLIP, new Item(getItem(STR_RIFLE_CLIP), 8)));
-	base->getItems()->insert(std::pair<LangString, Item*>(STR_HEAVY_CANNON, new Item(getItem(STR_HEAVY_CANNON), 1)));
-	base->getItems()->insert(std::pair<LangString, Item*>(STR_HC_AP_AMMO, new Item(getItem(STR_HC_AP_AMMO), 6)));
-	base->getItems()->insert(std::pair<LangString, Item*>(STR_AUTO_CANNON, new Item(getItem(STR_AUTO_CANNON), 1)));
-	base->getItems()->insert(std::pair<LangString, Item*>(STR_AC_AP_AMMO, new Item(getItem(STR_AC_AP_AMMO), 6)));
-	base->getItems()->insert(std::pair<LangString, Item*>(STR_ROCKET_LAUNCHER, new Item(getItem(STR_ROCKET_LAUNCHER), 1)));
-	base->getItems()->insert(std::pair<LangString, Item*>(STR_SMALL_ROCKET, new Item(getItem(STR_SMALL_ROCKET), 4)));
-	base->getItems()->insert(std::pair<LangString, Item*>(STR_GRENADE, new Item(getItem(STR_GRENADE), 5)));
-	base->getItems()->insert(std::pair<LangString, Item*>(STR_SMOKE_GRENADE, new Item(getItem(STR_SMOKE_GRENADE), 5)));
+	base->getItems()->insert(std::pair<std::string, Item*>("STR_STINGRAY_LAUNCHER", new Item(getItem("STR_STINGRAY_LAUNCHER"), 1)));
+	base->getItems()->insert(std::pair<std::string, Item*>("STR_AVALANCHE_LAUNCHER", new Item(getItem("STR_AVALANCHE_LAUNCHER"), 1)));
+	base->getItems()->insert(std::pair<std::string, Item*>("STR_CANNON", new Item(getItem("STR_CANNON"), 2)));
+	base->getItems()->insert(std::pair<std::string, Item*>("STR_STINGRAY_MISSILES", new Item(getItem("STR_STINGRAY_MISSILES"), 25)));
+	base->getItems()->insert(std::pair<std::string, Item*>("STR_AVALANCHE_MISSILES", new Item(getItem("STR_AVALANCHE_MISSILES"), 10)));
+	base->getItems()->insert(std::pair<std::string, Item*>("STR_CANNON_ROUNDS_X50", new Item(getItem("STR_CANNON_ROUNDS_X50"), 1)));
+	base->getItems()->insert(std::pair<std::string, Item*>("STR_PISTOL", new Item(getItem("STR_PISTOL"), 2)));
+	base->getItems()->insert(std::pair<std::string, Item*>("STR_PISTOL_CLIP", new Item(getItem("STR_PISTOL_CLIP"), 8)));
+	base->getItems()->insert(std::pair<std::string, Item*>("STR_RIFLE", new Item(getItem("STR_RIFLE"), 2)));
+	base->getItems()->insert(std::pair<std::string, Item*>("STR_RIFLE_CLIP", new Item(getItem("STR_RIFLE_CLIP"), 8)));
+	base->getItems()->insert(std::pair<std::string, Item*>("STR_HEAVY_CANNON", new Item(getItem("STR_HEAVY_CANNON"), 1)));
+	base->getItems()->insert(std::pair<std::string, Item*>("STR_HC_AP_AMMO", new Item(getItem("STR_HC_AP_AMMO"), 6)));
+	base->getItems()->insert(std::pair<std::string, Item*>("STR_AUTO_CANNON", new Item(getItem("STR_AUTO_CANNON"), 1)));
+	base->getItems()->insert(std::pair<std::string, Item*>("STR_AC_AP_AMMO", new Item(getItem("STR_AC_AP_AMMO"), 6)));
+	base->getItems()->insert(std::pair<std::string, Item*>("STR_ROCKET_LAUNCHER", new Item(getItem("STR_ROCKET_LAUNCHER"), 1)));
+	base->getItems()->insert(std::pair<std::string, Item*>("STR_SMALL_ROCKET", new Item(getItem("STR_SMALL_ROCKET"), 4)));
+	base->getItems()->insert(std::pair<std::string, Item*>("STR_GRENADE", new Item(getItem("STR_GRENADE"), 5)));
+	base->getItems()->insert(std::pair<std::string, Item*>("STR_SMOKE_GRENADE", new Item(getItem("STR_SMOKE_GRENADE"), 5)));
 
 	// Add crafts
-	Craft *skyranger = new Craft(getCraft(STR_SKYRANGER), save->getCraftIds(), base);
+	Craft *skyranger = new Craft(getCraft("STR_SKYRANGER"), save->getCraftIds(), base);
 	skyranger->setFuel(skyranger->getRules()->getMaxFuel());
-	skyranger->getItems()->insert(std::pair<LangString, Item*>(STR_PISTOL, new Item(getItem(STR_PISTOL), 3)));
-	skyranger->getItems()->insert(std::pair<LangString, Item*>(STR_PISTOL_CLIP, new Item(getItem(STR_PISTOL_CLIP), 5)));
-	skyranger->getItems()->insert(std::pair<LangString, Item*>(STR_RIFLE, new Item(getItem(STR_RIFLE), 6)));
-	skyranger->getItems()->insert(std::pair<LangString, Item*>(STR_RIFLE_CLIP, new Item(getItem(STR_RIFLE_CLIP), 12)));
-	skyranger->getItems()->insert(std::pair<LangString, Item*>(STR_HEAVY_CANNON, new Item(getItem(STR_HEAVY_CANNON), 1)));
-	skyranger->getItems()->insert(std::pair<LangString, Item*>(STR_HC_AP_AMMO, new Item(getItem(STR_HC_AP_AMMO), 2)));
-	skyranger->getItems()->insert(std::pair<LangString, Item*>(STR_HC_HE_AMMO, new Item(getItem(STR_HC_HE_AMMO), 2)));
-	skyranger->getItems()->insert(std::pair<LangString, Item*>(STR_GRENADE, new Item(getItem(STR_GRENADE), 8)));
+	skyranger->getItems()->insert(std::pair<std::string, Item*>("STR_PISTOL", new Item(getItem("STR_PISTOL"), 3)));
+	skyranger->getItems()->insert(std::pair<std::string, Item*>("STR_PISTOL_CLIP", new Item(getItem("STR_PISTOL_CLIP"), 5)));
+	skyranger->getItems()->insert(std::pair<std::string, Item*>("STR_RIFLE", new Item(getItem("STR_RIFLE"), 6)));
+	skyranger->getItems()->insert(std::pair<std::string, Item*>("STR_RIFLE_CLIP", new Item(getItem("STR_RIFLE_CLIP"), 12)));
+	skyranger->getItems()->insert(std::pair<std::string, Item*>("STR_HEAVY_CANNON", new Item(getItem("STR_HEAVY_CANNON"), 1)));
+	skyranger->getItems()->insert(std::pair<std::string, Item*>("STR_HC_AP_AMMO", new Item(getItem("STR_HC_AP_AMMO"), 2)));
+	skyranger->getItems()->insert(std::pair<std::string, Item*>("STR_HC_HE_AMMO", new Item(getItem("STR_HC_HE_AMMO"), 2)));
+	skyranger->getItems()->insert(std::pair<std::string, Item*>("STR_GRENADE", new Item(getItem("STR_GRENADE"), 8)));
 	base->getCrafts()->push_back(skyranger);
 
 	for (int i = 0; i < 2; i++)
 	{
-		Craft *interceptor = new Craft(getCraft(STR_INTERCEPTOR), save->getCraftIds(), base);
+		Craft *interceptor = new Craft(getCraft("STR_INTERCEPTOR"), save->getCraftIds(), base);
 		interceptor->setFuel(interceptor->getRules()->getMaxFuel());
-		interceptor->getWeapons()->at(0) = new CraftWeapon(getCraftWeapon(STR_STINGRAY_UC), getCraftWeapon(STR_STINGRAY_UC)->getAmmoMax());
-		interceptor->getWeapons()->at(1) = new CraftWeapon(getCraftWeapon(STR_CANNON_UC), getCraftWeapon(STR_CANNON_UC)->getAmmoMax());
+		interceptor->getWeapons()->at(0) = new CraftWeapon(getCraftWeapon("STR_STINGRAY"), getCraftWeapon("STR_STINGRAY")->getAmmoMax());
+		interceptor->getWeapons()->at(1) = new CraftWeapon(getCraftWeapon("STR_CANNON_UC"), getCraftWeapon("STR_CANNON_UC")->getAmmoMax());
 		base->getCrafts()->push_back(interceptor);
 	}
 

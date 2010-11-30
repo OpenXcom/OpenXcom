@@ -53,7 +53,7 @@ Base::~Base()
 	{
 		delete *i;
 	}
-	for (std::map<LangString, Item*>::iterator i = _items.begin(); i != _items.end(); i++)
+	for (std::map<std::string, Item*>::iterator i = _items.begin(); i != _items.end(); i++)
 	{
 		delete i->second;
 	}
@@ -109,7 +109,7 @@ std::vector<Craft*> *Base::getCrafts()
  * Returns the list of items in the base.
  * @return Pointer to the item list.
  */
-std::map<LangString, Item*> *Base::getItems()
+std::map<std::string, Item*> *Base::getItems()
 {
 	return &_items;
 }
@@ -234,13 +234,13 @@ int Base::getAvailableQuarters() const
 int Base::getUsedStores() const
 {
 	double total = 0;
-	for (std::map<LangString, Item*>::const_iterator i = _items.begin(); i != _items.end(); i++)
+	for (std::map<std::string, Item*>::const_iterator i = _items.begin(); i != _items.end(); i++)
 	{
 		total += i->second->getTotalSize();
 	}
 	for (std::vector<Craft*>::const_iterator i = _crafts.begin(); i != _crafts.end(); i++)
 	{
-		for (std::map<LangString, Item*>::const_iterator j = (*i)->getItems()->begin(); j != (*i)->getItems()->end(); j++)
+		for (std::map<std::string, Item*>::const_iterator j = (*i)->getItems()->begin(); j != (*i)->getItems()->end(); j++)
 		{
 			total += j->second->getTotalSize();
 		}
@@ -410,7 +410,7 @@ int Base::getLongRangeDetection() const
  * @param craft Craft type.
  * @return Number of craft.
  */
-int Base::getCraftCount(LangString craft) const
+int Base::getCraftCount(std::string craft) const
 {
 	int total = 0;
 	for (std::vector<Craft*>::const_iterator i = _crafts.begin(); i != _crafts.end(); i++)

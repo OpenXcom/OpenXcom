@@ -21,7 +21,7 @@
 
 #include "MovingTarget.h"
 #include <string>
-#include "../Resource/LangString.h"
+#include <string>
 
 class RuleUfo;
 
@@ -36,7 +36,7 @@ class Ufo : public MovingTarget
 private:
 	RuleUfo *_rules;
 	int _id, _damage, _altitude;
-	LangString _direction;
+	std::string _direction;
 	bool _detected;
 	int _daysCrashed;
 	
@@ -71,9 +71,9 @@ public:
 	/// Sets the UFO's amount of crashed days.
 	void setDaysCrashed(int days);
 	/// Gets the UFO's direction.
-	LangString getDirection() const;
+	std::string getDirection() const;
 	/// Gets the UFO's altitude.
-	LangString getAltitude() const;
+	std::string getAltitude() const;
 	/// Gets if the UFO has crashed.
 	bool isCrashed() const;
 	/// Gets if the UFO has been destroyed.

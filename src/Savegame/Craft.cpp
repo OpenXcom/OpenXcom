@@ -37,12 +37,14 @@
  * @param id List of craft IDs.
  * @param base Pointer to base of origin.
  */
-Craft::Craft(RuleCraft *rules, std::map<LangString, int> *id, Base *base) : MovingTarget(), _rules(rules), _base(base), _fuel(0), _damage(0), _weapons(), _items(), _status(STR_READY), _lowFuel(false)
+Craft::Craft(RuleCraft *rules, std::map<std::string, int> *id, Base *base) : MovingTarget(), _rules(rules), _base(base), _fuel(0), _damage(0), _weapons(), _items(), _status("STR_READY"), _lowFuel(false)
 {
 	_id = (*id)[_rules->getType()];
 	(*id)[_rules->getType()]++;
 	for (int i = 0; i < _rules->getWeapons(); i++)
+	{
 		_weapons.push_back(0);
+	}
 }
 
 /**
@@ -54,7 +56,7 @@ Craft::~Craft()
 	{
 		delete *i;
 	}
-	for (std::map<LangString, Item*>::iterator i = _items.begin(); i != _items.end(); i++)
+	for (std::map<std::string, Item*>::iterator i = _items.begin(); i != _items.end(); i++)
 	{
 		delete i->second;
 	}
@@ -113,7 +115,7 @@ void Craft::setBase(Base *base)
  * Returns the current status of the craft.
  * @return Status string.
  */
-LangString Craft::getStatus() const
+std::string Craft::getStatus() const
 {
 	return _status;
 }
@@ -122,7 +124,7 @@ LangString Craft::getStatus() const
  * Changes the current status of the craft.
  * @param status Status string.
  */
-void Craft::setStatus(LangString status)
+void Craft::setStatus(std::string status)
 {
 	_status = status;
 }
@@ -190,7 +192,7 @@ int Craft::getNumEquipment() const
 {
 	int total = 0;
 
-	for (std::map<LangString, Item*>::const_iterator i = _items.begin(); i != _items.end(); i++)
+	for (std::map<std::string, Item*>::const_iterator i = _items.begin(); i != _items.end(); i++)
 	{
 		total += i->second->getQuantity();
 	}
@@ -222,7 +224,7 @@ std::vector<CraftWeapon*> *Craft::getWeapons()
  * Returns the list of items in the craft.
  * @return Pointer to the item list.
  */
-std::map<LangString, Item*> *Craft::getItems()
+std::map<std::string, Item*> *Craft::getItems()
 {
 	return &_items;
 }
@@ -377,15 +379,15 @@ void Craft::think()
 		{
 			if (_damage > 0)
 			{
-				setStatus(STR_REPAIRS);
+				setStatus("STR_REPAIRS");
 			}
 			else if (_fuel < _rules->getMaxFuel())
 			{
-				setStatus(STR_REFUELLING);
+				setStatus("STR_REFUELLING");
 			}
 			else
 			{
-				setStatus(STR_REARMING);
+				setStatus("STR_REARMING");
 			}
 			setSpeed(0);
 			setDestination(0);
@@ -431,7 +433,7 @@ void Craft::repair()
 	setDamage(_damage - _rules->getRepairRate());
 	if (_damage <= 0)
 	{
-		_status = STR_REFUELLING;
+		_status = "STR_REFUELLING";
 	}
 }
 
@@ -444,7 +446,7 @@ void Craft::refuel()
 	setFuel(_fuel + _rules->getRefuelRate());
 	if (_fuel >= _rules->getMaxFuel())
 	{
-		_status = STR_REARMING;
+		_status = "STR_REARMING";
 	}
 }
 
@@ -468,6 +470,6 @@ void Craft::rearm()
 	}
 	if (full == available)
 	{
-		_status = STR_READY;
+		_status = "STR_READY";
 	}
 }

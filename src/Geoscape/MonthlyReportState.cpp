@@ -21,7 +21,7 @@
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
-#include "../Resource/LangString.h"
+#include <string>
 #include "../Engine/Font.h"
 #include "../Engine/Palette.h"
 #include "../Interface/TextButton.h"
@@ -61,12 +61,12 @@ MonthlyReportState::MonthlyReportState(Game *game) : State(game)
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(8)+13);
-	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString(STR_OK));
+	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&MonthlyReportState::btnOkClick);
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
-	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString(STR_XCOM_PROJECT_MONTHLY_REPORT));
+	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString("STR_XCOM_PROJECT_MONTHLY_REPORT"));
 	
 	int month = _game->getSavedGame()->getTime()->getMonth() - 1, year = _game->getSavedGame()->getTime()->getYear();
 	if (month == 0)
@@ -75,20 +75,20 @@ MonthlyReportState::MonthlyReportState(Game *game) : State(game)
 		year--;
 	}
 	std::stringstream ss;
-	ss << _game->getResourcePack()->getLanguage()->getString(STR_MONTH) << _game->getResourcePack()->getLanguage()->getString((LangString)(STR_JAN - 1 + month)) << " " << year;
+	ss << _game->getResourcePack()->getLanguage()->getString("STR_MONTH") << _game->getResourcePack()->getLanguage()->getString((std::string)("STR_JAN" - 1 + month)) << " " << year;
 
 	_txtMonth->setColor(Palette::blockOffset(15)-1);
 	_txtMonth->setText(ss.str());
 
 	_txtRating->setColor(Palette::blockOffset(15)-1);
-	_txtRating->setText(_game->getResourcePack()->getLanguage()->getString(STR_MONTHLY_RATING));
+	_txtRating->setText(_game->getResourcePack()->getLanguage()->getString("STR_MONTHLY_RATING"));
 
 	_txtChange->setColor(Palette::blockOffset(15)-1);
-	_txtChange->setText(_game->getResourcePack()->getLanguage()->getString(STR_FUNDING_CHANGE));
+	_txtChange->setText(_game->getResourcePack()->getLanguage()->getString("STR_FUNDING_CHANGE"));
 
 	_txtDesc->setColor(Palette::blockOffset(8)+10);
 	_txtDesc->setWordWrap(true);
-	_txtDesc->setText(_game->getResourcePack()->getLanguage()->getString(STR_COUNCIL_SATISFIED));
+	_txtDesc->setText(_game->getResourcePack()->getLanguage()->getString("STR_COUNCIL_SATISFIED"));
 }
 
 /**

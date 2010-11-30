@@ -21,7 +21,7 @@
 
 #include <vector>
 #include "../Engine/State.h"
-#include "../Resource/LangString.h"
+#include <string>
 
 class Base;
 class TextButton;

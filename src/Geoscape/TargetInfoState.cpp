@@ -20,7 +20,7 @@
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
-#include "../Resource/LangString.h"
+#include <string>
 #include "../Engine/Font.h"
 #include "../Engine/Palette.h"
 #include "../Interface/TextButton.h"
@@ -58,7 +58,7 @@ TargetInfoState::TargetInfoState(Game *game, Target *target) : State(game), _tar
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(8)+13);
-	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString(STR_OK));
+	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&TargetInfoState::btnOkClick);
 
 	_txtTitle->setColor(Palette::blockOffset(8)+10);
@@ -68,7 +68,7 @@ TargetInfoState::TargetInfoState(Game *game, Target *target) : State(game), _tar
 
 	_txtTargetted->setColor(Palette::blockOffset(15)-1);
 	_txtTargetted->setAlign(ALIGN_CENTER);
-	_txtTargetted->setText(_game->getResourcePack()->getLanguage()->getString(STR_TARGETTED_BY));
+	_txtTargetted->setText(_game->getResourcePack()->getLanguage()->getString("STR_TARGETTED_BY"));
 
 	_txtFollowers->setColor(Palette::blockOffset(15)-1);
 	_txtFollowers->setAlign(ALIGN_CENTER);

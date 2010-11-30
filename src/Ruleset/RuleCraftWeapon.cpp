@@ -22,7 +22,7 @@
  * Creates a blank ruleset for a certain type of craft weapon.
  * @param type String defining the type.
  */
-RuleCraftWeapon::RuleCraftWeapon(LangString type) : _type(type), _sprite(-1), _sound(-1), _damage(0), _range(0), _accuracy(0), _reloadCautious(0), _reloadStandard(0), _reloadAggressive(0), _ammoMax(0), _rearm(1)
+RuleCraftWeapon::RuleCraftWeapon(std::string type) : _type(type), _sprite(-1), _sound(-1), _damage(0), _range(0), _accuracy(0), _reloadCautious(0), _reloadStandard(0), _reloadAggressive(0), _ammoMax(0), _rearm(1)
 {
 }
 
@@ -38,7 +38,7 @@ RuleCraftWeapon::~RuleCraftWeapon()
  * Each craft weapon type has a unique name.
  * @return Craft weapon name.
  */
-LangString RuleCraftWeapon::getType() const
+std::string RuleCraftWeapon::getType() const
 {
 	return _type;
 }
@@ -246,7 +246,7 @@ void RuleCraftWeapon::setRearmRate(int rearm)
  * equip this craft weapon.
  * @return Item name.
  */
-LangString RuleCraftWeapon::getLauncherItem() const
+std::string RuleCraftWeapon::getLauncherItem() const
 {
 	return _launcher;
 }
@@ -256,7 +256,7 @@ LangString RuleCraftWeapon::getLauncherItem() const
  * equip this craft weapon.
  * @param launcher Item name.
  */
-void RuleCraftWeapon::setLauncherItem(LangString launcher)
+void RuleCraftWeapon::setLauncherItem(std::string launcher)
 {
 	_launcher = launcher;
 }
@@ -266,7 +266,7 @@ void RuleCraftWeapon::setLauncherItem(LangString launcher)
  * load this craft weapon with ammo.
  * @return Item name.
  */
-LangString RuleCraftWeapon::getClipItem() const
+std::string RuleCraftWeapon::getClipItem() const
 {
 	return _clip;
 }
@@ -276,7 +276,7 @@ LangString RuleCraftWeapon::getClipItem() const
  * load this craft weapon with ammo.
  * @param clip Item name.
  */
-void RuleCraftWeapon::setClipItem(LangString clip)
+void RuleCraftWeapon::setClipItem(std::string clip)
 {
 	_clip = clip;
 }

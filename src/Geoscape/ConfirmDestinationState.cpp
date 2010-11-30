@@ -21,7 +21,7 @@
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
-#include "../Resource/LangString.h"
+#include <string>
 #include "../Engine/Font.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
@@ -70,11 +70,11 @@ ConfirmDestinationState::ConfirmDestinationState(Game *game, Craft *craft, Targe
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK12.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(8)+8);
-	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString(STR_OK));
+	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ConfirmDestinationState::btnOkClick);
 
 	_btnCancel->setColor(Palette::blockOffset(8)+8);
-	_btnCancel->setText(_game->getResourcePack()->getLanguage()->getString(STR_CANCEL_UC));
+	_btnCancel->setText(_game->getResourcePack()->getLanguage()->getString("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&ConfirmDestinationState::btnCancelClick);
 
 	_txtTarget->setColor(Palette::blockOffset(15)-1);
@@ -83,11 +83,11 @@ ConfirmDestinationState::ConfirmDestinationState(Game *game, Craft *craft, Targe
 	std::stringstream ss;
 	if (w != 0 && w->getId() == 0)
 	{
-		ss << _game->getResourcePack()->getLanguage()->getString(STR_TARGET_WAY_POINT);
+		ss << _game->getResourcePack()->getLanguage()->getString("STR_TARGET_WAY_POINT");
 	}
 	else
 	{
-		ss << _game->getResourcePack()->getLanguage()->getString(STR_TARGET) << _target->getName(_game->getResourcePack()->getLanguage());
+		ss << _game->getResourcePack()->getLanguage()->getString("STR_TARGET") << _target->getName(_game->getResourcePack()->getLanguage());
 	}
 	_txtTarget->setText(ss.str());
 }
@@ -114,7 +114,7 @@ void ConfirmDestinationState::btnOkClick(Action *action)
 		_game->getSavedGame()->getWaypoints()->push_back(w);
 	}
 	_craft->setDestination(_target);
-	_craft->setStatus(STR_OUT);
+	_craft->setStatus("STR_OUT");
 	_game->popState();
 	_game->popState();
 }

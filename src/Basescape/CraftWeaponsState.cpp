@@ -21,7 +21,7 @@
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
-#include "../Resource/LangString.h"
+#include <string>
 #include "../Engine/Font.h"
 #include "../Engine/Palette.h"
 #include "../Interface/TextButton.h"
@@ -73,25 +73,25 @@ CraftWeaponsState::CraftWeaponsState(Game *game, Base *base, unsigned int craft,
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK14.SCR"));
 
 	_btnCancel->setColor(Palette::blockOffset(15)+9);
-	_btnCancel->setText(_game->getResourcePack()->getLanguage()->getString(STR_CANCEL_UC));
+	_btnCancel->setText(_game->getResourcePack()->getLanguage()->getString("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&CraftWeaponsState::btnCancelClick);
 
 	_txtTitle->setColor(Palette::blockOffset(15)+6);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString(STR_SELECT_ARMAMENT));
+	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString("STR_SELECT_ARMAMENT"));
 
 	_txtArmament->setColor(Palette::blockOffset(15)+6);
-	_txtArmament->setText(_game->getResourcePack()->getLanguage()->getString(STR_ARMAMENT));
+	_txtArmament->setText(_game->getResourcePack()->getLanguage()->getString("STR_ARMAMENT"));
 
 	_txtQuantity->setColor(Palette::blockOffset(15)+6);
-	_txtQuantity->setText(_game->getResourcePack()->getLanguage()->getString(STR_QUANTITY_UC));
+	_txtQuantity->setText(_game->getResourcePack()->getLanguage()->getString("STR_QUANTITY_UC"));
 
 	_txtAmmunition->setColor(Palette::blockOffset(15)+6);
-	_txtAmmunition->setText(_game->getResourcePack()->getLanguage()->getString(STR_AMMUNITION));
+	_txtAmmunition->setText(_game->getResourcePack()->getLanguage()->getString("STR_AMMUNITION"));
 
 	_txtAvailable->setColor(Palette::blockOffset(15)+6);
-	_txtAvailable->setText(_game->getResourcePack()->getLanguage()->getString(STR_AVAILABLE));
+	_txtAvailable->setText(_game->getResourcePack()->getLanguage()->getString("STR_AVAILABLE"));
 
 	_lstWeapons->setColor(Palette::blockOffset(13)+10);
 	_lstWeapons->setArrowColor(Palette::blockOffset(15)+9);
@@ -100,17 +100,22 @@ CraftWeaponsState::CraftWeaponsState(Game *game, Base *base, unsigned int craft,
 	_lstWeapons->setBackground(_window);
 	_lstWeapons->setMargin(8);
 
-	_lstWeapons->addRow(3, _game->getResourcePack()->getLanguage()->getString(STR_NONE).c_str(), "", "");
+	_lstWeapons->addRow(3, _game->getResourcePack()->getLanguage()->getString("STR_NONE_UC").c_str(), "", "");
+
 	_weapons.push_back(0);
-	for (int i = STR_STINGRAY_UC; i <= STR_CANNON_UC; i++)
+	_weapons.push_back(_game->getRuleset()->getCraftWeapon("STR_STINGRAY"));
+	_weapons.push_back(_game->getRuleset()->getCraftWeapon("STR_AVALANCHE"));
+	_weapons.push_back(_game->getRuleset()->getCraftWeapon("STR_CANNON_UC"));
+
+	for (std::vector<RuleCraftWeapon*>::iterator i = _weapons.begin(); i != _weapons.end(); i++)
 	{
-		RuleCraftWeapon *w = _game->getRuleset()->getCraftWeapon((LangString)i);
+		RuleCraftWeapon *w = _game->getRuleset()->getCraftWeapon((*i)->getType());
 		if ((*_base->getItems())[w->getLauncherItem()]->getQuantity() > 0)
 		{
 			std::stringstream ss, ss2;
 			ss << (*_base->getItems())[w->getLauncherItem()]->getQuantity();
 			ss2 << (*_base->getItems())[w->getClipItem()]->getQuantity();
-			_lstWeapons->addRow(3, _game->getResourcePack()->getLanguage()->getString((LangString)i).c_str(), ss.str().c_str(), ss2.str().c_str());
+			_lstWeapons->addRow(3, _game->getResourcePack()->getLanguage()->getString((*i)->getType()).c_str(), ss.str().c_str(), ss2.str().c_str());
 			_weapons.push_back(w);
 		}
 	}
@@ -157,9 +162,9 @@ void CraftWeaponsState::lstWeaponsClick(Action *action)
 		CraftWeapon *sel = new CraftWeapon(_weapons[_lstWeapons->getSelectedRow()], 0);
 		(*_base->getItems())[sel->getRules()->getLauncherItem()]->setQuantity((*_base->getItems())[sel->getRules()->getLauncherItem()]->getQuantity() - 1);
 		_base->getCrafts()->at(_craft)->getWeapons()->at(_weapon) = sel;
-		if (_base->getCrafts()->at(_craft)->getStatus() == STR_READY)
+		if (_base->getCrafts()->at(_craft)->getStatus() == "STR_READY")
 		{
-			_base->getCrafts()->at(_craft)->setStatus(STR_REARMING);
+			_base->getCrafts()->at(_craft)->setStatus("STR_REARMING");
 		}
 	}
 

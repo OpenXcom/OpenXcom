@@ -19,27 +19,30 @@
 #ifndef OPENXCOM_LANGUAGE_H
 #define OPENXCOM_LANGUAGE_H
 
-#include <vector>
+#include <map>
 #include <string>
-#include "../Resource/LangString.h"
+#include <string>
 
 /**
  * Contains strings used throughout the game for localization.
- * Languages are just a set of strings identified by an ID number.
+ * Languages are just a set of strings identified by an ID string.
  */
 class Language
 {
 private:
-	std::vector<std::string> _strings;
+	std::string _name;
+	std::map<std::string, std::string> _strings;
 public:
 	/// Creates a blank language.
 	Language();
 	/// Cleans up the language.
 	~Language();
-	/// Loads an X-Com language file.
-	void loadDat(const std::string &filename);
+	/// Loads an OpenXcom language file.
+	void loadLng(const std::string &filename);
+	/// Gets the language's name.
+	std::string getName() const;
 	/// Gets a string from the language.
-	std::string getString(LangString id) const;
+	std::string getString(const std::string &id) const;
 };
 
 #endif

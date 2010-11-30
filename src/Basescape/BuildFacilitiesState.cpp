@@ -20,7 +20,7 @@
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
-#include "../Resource/LangString.h"
+#include <string>
 #include "../Engine/Font.h"
 #include "../Engine/Palette.h"
 #include "../Interface/TextButton.h"
@@ -28,6 +28,7 @@
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
 #include "../Ruleset/Ruleset.h"
+#include "../Ruleset/RuleBaseFacility.h"
 #include "PlaceFacilityState.h"
 
 /**
@@ -44,7 +45,7 @@ BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base, State *state)
 	_window = new Window(this, 128, 160, 192, 40, POPUP_VERTICAL);
 	_btnOk = new TextButton(112, 16, 200, 176);
 	_txtTitle = new Text(118, 16, 197, 48);
-	_lstFacilities = new TextList(96, 110, 200, 64);
+	_lstFacilities = new TextList(105, 110, 200, 64);
 	
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
@@ -59,28 +60,35 @@ BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base, State *state)
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(13)+8);
-	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString(STR_OK));
+	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&BuildFacilitiesState::btnOkClick);
 
 	_txtTitle->setColor(Palette::blockOffset(13));
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString(STR_INSTALLATION));
+	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString("STR_INSTALLATION"));
 
 	_lstFacilities->setColor(Palette::blockOffset(13)+5);
 	_lstFacilities->setArrowColor(Palette::blockOffset(13)+8);
-	_lstFacilities->setColumns(1, 94);
+	_lstFacilities->setColumns(1, 105);
 	_lstFacilities->setSelectable(true);
 	_lstFacilities->setBackground(_window);
 	_lstFacilities->setMargin(2);
 
-	for (int i = STR_LIVING_QUARTERS; i <= STR_ALIEN_CONTAINMENT; i++)
+	_facilities.push_back(_game->getRuleset()->getBaseFacility("STR_LIVING_QUARTERS"));
+	_facilities.push_back(_game->getRuleset()->getBaseFacility("STR_LABORATORY"));
+	_facilities.push_back(_game->getRuleset()->getBaseFacility("STR_WORKSHOP"));
+	_facilities.push_back(_game->getRuleset()->getBaseFacility("STR_GENERAL_STORES"));
+	_facilities.push_back(_game->getRuleset()->getBaseFacility("STR_ALIEN_CONTAINMENT"));
+	_facilities.push_back(_game->getRuleset()->getBaseFacility("STR_SMALL_RADAR_SYSTEM"));
+	_facilities.push_back(_game->getRuleset()->getBaseFacility("STR_LARGE_RADAR_SYSTEM"));
+	_facilities.push_back(_game->getRuleset()->getBaseFacility("STR_MISSILE_DEFENSES"));
+	_facilities.push_back(_game->getRuleset()->getBaseFacility("STR_HANGAR"));
+
+	for (std::vector<RuleBaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); i++)
 	{
-		_lstFacilities->addRow(1, _game->getResourcePack()->getLanguage()->getString((LangString)i).c_str());
-		_facilities.push_back(_game->getRuleset()->getBaseFacility((LangString)i));
+		_lstFacilities->addRow(1, _game->getResourcePack()->getLanguage()->getString((*i)->getType()).c_str());
 	}
-	_lstFacilities->addRow(1, _game->getResourcePack()->getLanguage()->getString(STR_HANGAR).c_str());
-	_facilities.push_back(_game->getRuleset()->getBaseFacility((LangString)STR_HANGAR));
 	_lstFacilities->onMouseClick((ActionHandler)&BuildFacilitiesState::lstFacilitiesClick);
 }
 

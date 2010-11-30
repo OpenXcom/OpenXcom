@@ -20,7 +20,7 @@
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
-#include "../Resource/LangString.h"
+#include <string>
 #include "../Engine/Font.h"
 #include "../Engine/Palette.h"
 #include "../Interface/TextButton.h"
@@ -32,7 +32,7 @@
  * @param game Pointer to the core game.
  * @param str Error message to display.
  */
-GeoscapeErrorState::GeoscapeErrorState(Game *game, LangString str) : State(game)
+GeoscapeErrorState::GeoscapeErrorState(Game *game, std::string str) : State(game)
 {
 	_screen = false;
 
@@ -53,7 +53,7 @@ GeoscapeErrorState::GeoscapeErrorState(Game *game, LangString str) : State(game)
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(8)+13);
-	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString(STR_OK));
+	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&GeoscapeErrorState::btnOkClick);
 
 	_txtMessage->setColor(Palette::blockOffset(8)+10);

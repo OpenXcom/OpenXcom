@@ -21,7 +21,7 @@
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
-#include "../Resource/LangString.h"
+#include <string>
 #include "../Engine/Font.h"
 #include "../Engine/Palette.h"
 #include "../Interface/TextButton.h"
@@ -51,7 +51,7 @@ InterceptState::InterceptState(Game *game, Globe *globe, Base *base) : State(gam
 	_txtCraft = new Text(86, 9, 14, 70);
 	_txtStatus = new Text(65, 9, 100, 70);
 	_txtBase = new Text(85, 9, 165, 70);
-	_txtWeapons = new Text(64, 16, 242, 62);
+	_txtWeapons = new Text(80, 16, 238, 62);
 	_lstCrafts = new TextList(288, 64, 8, 78);
 	
 	// Set palette
@@ -71,25 +71,25 @@ InterceptState::InterceptState(Game *game, Globe *globe, Base *base) : State(gam
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK12.SCR"));
 
 	_btnCancel->setColor(Palette::blockOffset(8)+8);
-	_btnCancel->setText(_game->getResourcePack()->getLanguage()->getString(STR_CANCEL));
+	_btnCancel->setText(_game->getResourcePack()->getLanguage()->getString("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)&InterceptState::btnCancelClick);
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
-	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString(STR_LAUNCH_INTERCEPTION));
+	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString("STR_LAUNCH_INTERCEPTION"));
 
 	_txtCraft->setColor(Palette::blockOffset(8)+5);
-	_txtCraft->setText(_game->getResourcePack()->getLanguage()->getString(STR_CRAFT));
+	_txtCraft->setText(_game->getResourcePack()->getLanguage()->getString("STR_CRAFT"));
 
 	_txtStatus->setColor(Palette::blockOffset(8)+5);
-	_txtStatus->setText(_game->getResourcePack()->getLanguage()->getString(STR_STATUS));
+	_txtStatus->setText(_game->getResourcePack()->getLanguage()->getString("STR_STATUS"));
 
 	_txtBase->setColor(Palette::blockOffset(8)+5);
-	_txtBase->setText(_game->getResourcePack()->getLanguage()->getString(STR_BASE));
+	_txtBase->setText(_game->getResourcePack()->getLanguage()->getString("STR_BASE"));
 
 	_txtWeapons->setColor(Palette::blockOffset(8)+5);
-	_txtWeapons->setText(_game->getResourcePack()->getLanguage()->getString(STR_WEAPONS_CREW_HWPS));
+	_txtWeapons->setText(_game->getResourcePack()->getLanguage()->getString("STR_WEAPONS_CREW_HWPS"));
 
 	_lstCrafts->setColor(Palette::blockOffset(15)-1);
 	_lstCrafts->setArrowColor(Palette::blockOffset(15)+2);
@@ -110,7 +110,7 @@ InterceptState::InterceptState(Game *game, Globe *globe, Base *base) : State(gam
 			ss << (*j)->getNumWeapons() << "/" << (*j)->getNumSoldiers() << "/" << (*j)->getNumHWPs();
 			_crafts.push_back(*j);
 			_lstCrafts->addRow(4, (*j)->getName(_game->getResourcePack()->getLanguage()).c_str(), _game->getResourcePack()->getLanguage()->getString((*j)->getStatus()).c_str(), (*i)->getName().c_str(), ss.str().c_str());
-			if ((*j)->getStatus() == STR_READY)
+			if ((*j)->getStatus() == "STR_READY")
 			{
 				_lstCrafts->getCell(row, 1)->setColor(Palette::blockOffset(8)+10);
 			}
@@ -144,7 +144,7 @@ void InterceptState::btnCancelClick(Action *action)
 void InterceptState::lstCraftsClick(Action *action)
 {
 	Craft* c = _crafts[_lstCrafts->getSelectedRow()];
-	if (c->getStatus() == STR_READY)
+	if (c->getStatus() == "STR_READY")
 	{
 		_game->popState();
 		_game->pushState(new SelectDestinationState(_game, c, _globe));

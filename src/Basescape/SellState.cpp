@@ -21,7 +21,7 @@
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
-#include "../Resource/LangString.h"
+#include <string>
 #include "../Engine/Font.h"
 #include "../Engine/Palette.h"
 #include "../Interface/TextButton.h"
@@ -69,37 +69,37 @@ SellState::SellState(Game *game) : State(game)
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(13)+13);
-	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString(STR_SELL_SACK));
+	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString("STR_SELL_SACK"));
 	_btnOk->onMouseClick((ActionHandler)&SellState::btnOkClick);
 
 	_btnCancel->setColor(Palette::blockOffset(13)+13);
-	_btnCancel->setText(_game->getResourcePack()->getLanguage()->getString(STR_CANCEL));
+	_btnCancel->setText(_game->getResourcePack()->getLanguage()->getString("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)&SellState::btnCancelClick);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString(STR_SELL_ITEMS_SACK_PERSONNEL));
+	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString("STR_SELL_ITEMS_SACK_PERSONNEL"));
 
 	_txtSales->setColor(Palette::blockOffset(13)+10);
-	_txtSales->setText(_game->getResourcePack()->getLanguage()->getString(STR_VALUE_OF_SALES));
+	_txtSales->setText(_game->getResourcePack()->getLanguage()->getString("STR_VALUE_OF_SALES"));
 
-	std::string s = _game->getResourcePack()->getLanguage()->getString(STR_FUNDS);
+	std::string s = _game->getResourcePack()->getLanguage()->getString("STR_FUNDS");
 	s += Text::formatFunding(_game->getSavedGame()->getFunds());
 	_txtFunds->setColor(Palette::blockOffset(13)+10);
 	_txtFunds->setText(s);
 
 	_txtItem->setColor(Palette::blockOffset(13)+10);
-	_txtItem->setText(_game->getResourcePack()->getLanguage()->getString(STR_ITEM));
+	_txtItem->setText(_game->getResourcePack()->getLanguage()->getString("STR_ITEM"));
 
 	_txtQuantity->setColor(Palette::blockOffset(13)+10);
-	_txtQuantity->setText(_game->getResourcePack()->getLanguage()->getString(STR_QUANTITY_UC));
+	_txtQuantity->setText(_game->getResourcePack()->getLanguage()->getString("STR_QUANTITY_UC"));
 
 	_txtSell->setColor(Palette::blockOffset(13)+10);
-	_txtSell->setText(_game->getResourcePack()->getLanguage()->getString(STR_SELL_SACK));
+	_txtSell->setText(_game->getResourcePack()->getLanguage()->getString("STR_SELL_SACK"));
 
 	_txtValue->setColor(Palette::blockOffset(13)+10);
-	_txtValue->setText(_game->getResourcePack()->getLanguage()->getString(STR_VALUE));
+	_txtValue->setText(_game->getResourcePack()->getLanguage()->getString("STR_VALUE"));
 
 	_lstItems->setColor(Palette::blockOffset(13)+10);
 	_lstItems->setArrowColor(Palette::blockOffset(13)+13);

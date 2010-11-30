@@ -25,7 +25,7 @@
 #include "../Engine/Action.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
-#include "../Resource/LangString.h"
+#include <string>
 #include "../Engine/Font.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Screen.h"
@@ -145,10 +145,10 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(fa
 	
 	// Set up objects
 	_game->getResourcePack()->getSurface("GEOBORD.SCR")->blit(_bg);
-	if (_game->getResourcePack()->getLanguageName() != "ENGLISH.DAT")
+	if (_game->getResourcePack()->getLanguage()->getName() != "ENGLISH")
 	{
 		Surface* sidebar = 0;
-		if (_game->getResourcePack()->getLanguageName() == "GERMAN.DAT")
+		if (_game->getResourcePack()->getLanguage()->getName() == "DEUTSCHE")
 			sidebar = _game->getResourcePack()->getSurface("LANG1.DAT");
 		else
 			sidebar = _game->getResourcePack()->getSurface("LANG2.DAT");
@@ -536,7 +536,7 @@ void GeoscapeState::time10Minutes()
 	{
 		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); j++)
 		{
-			if ((*j)->getStatus() == STR_OUT)
+			if ((*j)->getStatus() == "STR_OUT")
 			{
 				(*j)->consumeFuel();
 				if (!(*j)->getLowFuel() && (*j)->getFuel() <= (*j)->getFuelLimit())
@@ -560,8 +560,20 @@ void GeoscapeState::time30Minutes()
 	int chance = RNG::generate(1, 100);
 	if (chance <= 50)
 	{
-		int type = RNG::generate(STR_SMALL_SCOUT, STR_LARGE_SCOUT);
-		Ufo *u = new Ufo(_game->getRuleset()->getUfo((LangString)type));
+		int type = RNG::generate(1, 3);
+		Ufo *u;
+		switch (type)
+		{
+		case 1:
+			u = new Ufo(_game->getRuleset()->getUfo("STR_SMALL_SCOUT"));
+			break;
+		case 2:
+			u = new Ufo(_game->getRuleset()->getUfo("STR_MEDIUM_SCOUT"));
+			break;
+		case 3:
+			u = new Ufo(_game->getRuleset()->getUfo("STR_LARGE_SCOUT"));
+			break;
+		}
 		u->setLongitude(RNG::generate(0.0, 2*M_PI));
 		u->setLatitude(RNG::generate(-M_PI/2, M_PI/2));
 		Waypoint *w = new Waypoint();
@@ -577,7 +589,7 @@ void GeoscapeState::time30Minutes()
 	{
 		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); j++)
 		{
-			if ((*j)->getStatus() == STR_REFUELLING)
+			if ((*j)->getStatus() == "STR_REFUELLING")
 			{
 				(*j)->refuel();
 			}
@@ -653,11 +665,11 @@ void GeoscapeState::time1Hour()
 	{
 		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); j++)
 		{
-			if ((*j)->getStatus() == STR_REPAIRS)
+			if ((*j)->getStatus() == "STR_REPAIRS")
 			{
 				(*j)->repair();
 			}
-			else if ((*j)->getStatus() == STR_REARMING)
+			else if ((*j)->getStatus() == "STR_REARMING")
 			{
 				(*j)->rearm();
 			}
@@ -682,11 +694,11 @@ void GeoscapeState::time1Day()
 				if ((*j)->getBuildTime() == 0)
 				{
 					timerReset();
-					std::string s = _game->getResourcePack()->getLanguage()->getString(STR_PRODUCTION_OF);
+					std::string s = _game->getResourcePack()->getLanguage()->getString("STR_PRODUCTION_OF");
 					s += _game->getResourcePack()->getLanguage()->getString((*j)->getRules()->getType());
-					s += _game->getResourcePack()->getLanguage()->getString(STR_AT);
+					s += _game->getResourcePack()->getLanguage()->getString("STR_AT");
 					s += (*i)->getName();
-					s += _game->getResourcePack()->getLanguage()->getString(STR_IS_COMPLETE);
+					s += _game->getResourcePack()->getLanguage()->getString("STR_IS_COMPLETE");
 					popup(new GeoscapeMessageState(_game, s));
 				}
 			}

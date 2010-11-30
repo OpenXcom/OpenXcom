@@ -32,7 +32,7 @@ class Window;
 class LanguageState : public State
 {
 private:
-	TextButton *_btnEnglish, *_btnGerman, *_btnFrench;
+	TextButton *_btnEnglish, *_btnGerman, *_btnFrench, *_btnItalian, *_btnSpanish;
 	Window *_window;
 public:
 	/// Creates the Start state.
@@ -47,6 +47,10 @@ public:
 	void btnGermanClick(Action *action);
 	/// Handler for clicking the Francais button.
 	void btnFrenchClick(Action *action);
+	/// Handler for clicking the Italiano button.
+	void btnItalianClick(Action *action);
+	/// Handler for clicking the Espanol button.
+	void btnSpanishClick(Action *action);
 };
 
 #endif

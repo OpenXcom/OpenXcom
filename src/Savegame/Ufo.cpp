@@ -26,7 +26,7 @@
  * Initializes a UFO of the specified type.
  * @param rules Pointer to ruleset.
  */
-Ufo::Ufo(RuleUfo *rules) : MovingTarget(), _rules(rules), _id(0), _damage(0), _altitude(0), _direction(STR_NORTH), _detected(false), _daysCrashed(0)
+Ufo::Ufo(RuleUfo *rules) : MovingTarget(), _rules(rules), _id(0), _damage(0), _altitude(0), _direction("STR_NORTH"), _detected(false), _daysCrashed(0)
 {
 }
 
@@ -76,11 +76,11 @@ std::string Ufo::getName(Language *lang) const
 	std::stringstream name;
 	if (!isCrashed())
 	{
-		name << lang->getString(STR_UFO_) << _id;
+		name << lang->getString("STR_UFO_") << _id;
 	}
 	else
 	{
-		name << lang->getString(STR_CRASH_SITE_) << _id;
+		name << lang->getString("STR_CRASH_SITE_") << _id;
 	}
 	return name.str();
 }
@@ -147,7 +147,7 @@ void Ufo::setDaysCrashed(int days)
  * Returns the current direction the UFO is heading in.
  * @return Direction.
  */
-LangString Ufo::getDirection() const
+std::string Ufo::getDirection() const
 {
 	return _direction;
 }
@@ -156,9 +156,9 @@ LangString Ufo::getDirection() const
  * Returns the current altitude of the UFO.
  * @return Altitude.
  */
-LangString Ufo::getAltitude() const
+std::string Ufo::getAltitude() const
 {
-	return STR_HIGH;
+	return "STR_HIGH_UC";
 }
 
 /**
@@ -192,41 +192,41 @@ void Ufo::calculateSpeed()
 	{
 		if (_speedLat > 0)
 		{
-			_direction = STR_SOUTH_EAST;
+			_direction = "STR_SOUTH_EAST";
 		}
 		else if (_speedLat < 0)
 		{
-			_direction = STR_NORTH_EAST;
+			_direction = "STR_NORTH_EAST";
 		}
 		else
 		{
-			_direction = STR_EAST;
+			_direction = "STR_EAST";
 		}
 	}
 	else if (_speedLon < 0)
 	{
 		if (_speedLat > 0)
 		{
-			_direction = STR_SOUTH_WEST;
+			_direction = "STR_SOUTH_WEST";
 		}
 		else if (_speedLat < 0)
 		{
-			_direction = STR_NORTH_WEST;
+			_direction = "STR_NORTH_WEST";
 		}
 		else
 		{
-			_direction = STR_WEST;
+			_direction = "STR_WEST";
 		}
 	}
 	else
 	{
 		if (_speedLat > 0)
 		{
-			_direction = STR_SOUTH;
+			_direction = "STR_SOUTH";
 		}
 		else if (_speedLat < 0)
 		{
-			_direction = STR_NORTH;
+			_direction = "STR_NORTH";
 		}
 	}
 }

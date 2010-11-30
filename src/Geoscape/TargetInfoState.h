@@ -21,7 +21,7 @@
 
 #include <string>
 #include "../Engine/State.h"
-#include "../Resource/LangString.h"
+#include <string>
 
 class TextButton;
 class Window;

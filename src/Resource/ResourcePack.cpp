@@ -34,7 +34,7 @@
  * Initializes a blank resource set pointing to a folder.
  * @param folder Subfolder to load resources from.
  */
-ResourcePack::ResourcePack(const std::string &folder) : _folder(folder), _currentLang(0), _langName(""), _palettes(), _fonts(), _languages(), _surfaces(), _sets(), _polygons(), _musics(), _terrainSets()
+ResourcePack::ResourcePack(const std::string &folder) : _folder(folder), _currentLang(0), _palettes(), _fonts(), _languages(), _surfaces(), _sets(), _polygons(), _musics(), _terrainSets()
 {
 }
 
@@ -146,16 +146,6 @@ Language *const ResourcePack::getLanguage() const
 }
 
 /**
- * Returns the name of the currently active language.
- * Necessary for logic specific to certain languages.
- * @return Name of the language.
- */
-std::string ResourcePack::getLanguageName() const
-{
-	return _langName;
-}
-
-/**
  * Changes the currently active language to another
  * one in the resource pack.
  * @param lang Name of the language.
@@ -163,7 +153,6 @@ std::string ResourcePack::getLanguageName() const
 void ResourcePack::setLanguage(const std::string &lang)
 {
 	_currentLang = _languages[lang];
-	_langName = lang;
 }
 
 /**

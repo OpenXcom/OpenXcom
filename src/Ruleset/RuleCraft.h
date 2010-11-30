@@ -21,7 +21,7 @@
 
 #include <vector>
 #include <string>
-#include "../Resource/LangString.h"
+#include <string>
 class RuleTerrain;
 
 /**
@@ -33,18 +33,18 @@ class RuleTerrain;
 class RuleCraft
 {
 private:
-	LangString _type;
+	std::string _type;
 	int _sprite;
 	int _fuelMax, _damageMax, _speedMax, _accel, _weapons, _soldiers, _hwps, _fee, _repair, _refuel;
 	// battlescape:
 	RuleTerrain *_battlescapeTerrainData;
 public:
 	/// Creates a blank craft ruleset.
-	RuleCraft(LangString type);
+	RuleCraft(std::string type);
 	/// Cleans up the craft ruleset.
 	~RuleCraft();
 	/// Gets the craft's type.
-	LangString getType() const;
+	std::string getType() const;
 	/// Gets the craft's sprite.
 	int getSprite() const;
 	/// Sets the craft's sprite.

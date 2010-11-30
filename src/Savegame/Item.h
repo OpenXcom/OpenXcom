@@ -19,7 +19,7 @@
 #ifndef OPENXCOM_ITEM_H
 #define OPENXCOM_ITEM_H
 
-#include "../Resource/LangString.h"
+#include <string>
 
 class RuleItem;
 

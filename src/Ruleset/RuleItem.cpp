@@ -22,7 +22,7 @@
  * Creates a blank ruleset for a certain type of item.
  * @param type String defining the type.
  */
-RuleItem::RuleItem(LangString type) : _type(type), _size(0.0), _value(0), _time(24), _equip(true)
+RuleItem::RuleItem(std::string type) : _type(type), _size(0.0), _value(0), _time(24), _equip(true)
 {
 }
 
@@ -38,7 +38,7 @@ RuleItem::~RuleItem()
  * this item. Each item type has a unique name.
  * @return Item name.
  */
-LangString RuleItem::getType() const
+std::string RuleItem::getType() const
 {
 	return _type;
 }

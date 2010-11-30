@@ -22,7 +22,7 @@
 #include <map>
 #include <vector>
 #include <string>
-#include "../Resource/LangString.h"
+#include <string>
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
 
@@ -47,11 +47,11 @@ class Ruleset
 {
 protected:
 	std::vector<SoldierNamePool*> _names;
-	std::map<LangString, RuleBaseFacility*> _facilities;
-	std::map<LangString, RuleCraft*> _crafts;
-	std::map<LangString, RuleCraftWeapon*> _craftWeapons;
-	std::map<LangString, RuleItem*> _items;
-	std::map<LangString, RuleUfo*> _ufos;
+	std::map<std::string, RuleBaseFacility*> _facilities;
+	std::map<std::string, RuleCraft*> _crafts;
+	std::map<std::string, RuleCraftWeapon*> _craftWeapons;
+	std::map<std::string, RuleItem*> _items;
+	std::map<std::string, RuleUfo*> _ufos;
 	std::map<std::string, RuleTerrain*> _terrains;
 	std::map<std::string, MapDataFile*> _mapDataFiles;
 	std::map<std::string, RuleUnitSprite*> _unitSprites;
@@ -69,15 +69,15 @@ public:
 	/// Gets the pool list for soldier names.
 	std::vector<SoldierNamePool*> *const getPools();
 	/// Gets the ruleset for a facility type.
-	RuleBaseFacility *const getBaseFacility(LangString id);
+	RuleBaseFacility *const getBaseFacility(std::string id);
 	/// Gets the ruleset for a craft type.
-	RuleCraft *const getCraft(LangString id);
+	RuleCraft *const getCraft(std::string id);
 	/// Gets the ruleset for a craft weapon type.
-	RuleCraftWeapon *const getCraftWeapon(LangString id);
+	RuleCraftWeapon *const getCraftWeapon(std::string id);
 	/// Gets the ruleset for an item type.
-	RuleItem *const getItem(LangString id);
+	RuleItem *const getItem(std::string id);
 	/// Gets the ruleset for a UFO type.
-	RuleUfo *const getUfo(LangString id);
+	RuleUfo *const getUfo(std::string id);
 	/// Gets terrains for battlescape games
 	RuleTerrain *getTerrain(std::string name);
 	/// Gets mapdatafile for battlescape games

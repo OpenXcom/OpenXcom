@@ -20,7 +20,7 @@
 #define OPENXCOM_WAYPOINT_H
 
 #include "Target.h"
-#include "../Resource/LangString.h"
+#include <string>
 
 /**
  * Represents a fixed waypoint on the world.

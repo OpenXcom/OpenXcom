@@ -20,7 +20,7 @@
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
-#include "../Resource/LangString.h"
+#include <string>
 #include "../Engine/Font.h"
 #include "../Engine/Palette.h"
 #include "../Interface/TextButton.h"
@@ -75,46 +75,46 @@ ManufactureState::ManufactureState(Game *game) : State(game)
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
 	
 	_btnNew->setColor(Palette::blockOffset(13)+13);
-	_btnNew->setText(_game->getResourcePack()->getLanguage()->getString(STR_NEW_PRODUCTION));
+	_btnNew->setText(_game->getResourcePack()->getLanguage()->getString("STR_NEW_PRODUCTION"));
 
 	_btnOk->setColor(Palette::blockOffset(13)+13);
-	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString(STR_OK));
+	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ManufactureState::btnOkClick);
 
 	_txtTitle->setColor(Palette::blockOffset(15)+6);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString(STR_CURRENT_PRODUCTION));
+	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString("STR_CURRENT_PRODUCTION"));
 
 	_txtAvailable->setColor(Palette::blockOffset(15)+6);
-	_txtAvailable->setText(_game->getResourcePack()->getLanguage()->getString(STR_ENGINEERS_AVAILABLE));
+	_txtAvailable->setText(_game->getResourcePack()->getLanguage()->getString("STR_ENGINEERS_AVAILABLE"));
 
 	_txtAllocated->setColor(Palette::blockOffset(15)+6);
-	_txtAllocated->setText(_game->getResourcePack()->getLanguage()->getString(STR_ENGINEERS_ALLOCATED_UC));
+	_txtAllocated->setText(_game->getResourcePack()->getLanguage()->getString("STR_ENGINEERS_ALLOCATED"));
 
 	_txtSpace->setColor(Palette::blockOffset(15)+6);
-	_txtSpace->setText(_game->getResourcePack()->getLanguage()->getString(STR_WORKSHOP_SPACE_AVAILABLE));
+	_txtSpace->setText(_game->getResourcePack()->getLanguage()->getString("STR_WORKSHOP_SPACE_AVAILABLE"));
 
 	_txtFunds->setColor(Palette::blockOffset(15)+6);
-	_txtFunds->setText(_game->getResourcePack()->getLanguage()->getString(STR_CURRENT_FUNDS));
+	_txtFunds->setText(_game->getResourcePack()->getLanguage()->getString("STR_CURRENT_FUNDS"));
 
 	_txtItem->setColor(Palette::blockOffset(15)+1);
-	_txtItem->setText(_game->getResourcePack()->getLanguage()->getString(STR_ITEM));
+	_txtItem->setText(_game->getResourcePack()->getLanguage()->getString("STR_ITEM"));
 
 	_txtEngineers->setColor(Palette::blockOffset(15)+1);
-	_txtEngineers->setText(_game->getResourcePack()->getLanguage()->getString(STR_ENGINEERS_ALLOCATED));
+	_txtEngineers->setText(_game->getResourcePack()->getLanguage()->getString("STR_ENGINEERS__ALLOCATED"));
 
 	_txtProduced->setColor(Palette::blockOffset(15)+1);
-	_txtProduced->setText(_game->getResourcePack()->getLanguage()->getString(STR_UNITS_PRODUCED));
+	_txtProduced->setText(_game->getResourcePack()->getLanguage()->getString("STR_UNITS_PRODUCED"));
 
 	_txtTotal->setColor(Palette::blockOffset(15)+1);
-	_txtTotal->setText(_game->getResourcePack()->getLanguage()->getString(STR_TOTAL_TO_PRODUCE));
+	_txtTotal->setText(_game->getResourcePack()->getLanguage()->getString("STR_TOTAL_TO_PRODUCE"));
 
 	_txtCost->setColor(Palette::blockOffset(15)+1);
-	_txtCost->setText(_game->getResourcePack()->getLanguage()->getString(STR_COST__PER__UNIT));
+	_txtCost->setText(_game->getResourcePack()->getLanguage()->getString("STR_COST__PER__UNIT"));
 
 	_txtTimeLeft->setColor(Palette::blockOffset(15)+1);
-	_txtTimeLeft->setText(_game->getResourcePack()->getLanguage()->getString(STR_DAYS_HOURS_LEFT));
+	_txtTimeLeft->setText(_game->getResourcePack()->getLanguage()->getString("STR_DAYS_HOURS_LEFT"));
 	
 	_lstManufacture->setColor(Palette::blockOffset(13)+10);
 	_lstManufacture->setArrowColor(Palette::blockOffset(15)+9);

@@ -23,7 +23,7 @@
 #include <string>
 #include <vector>
 #include <map>
-#include "../Resource/LangString.h"
+#include <string>
 
 class BaseFacility;
 class Soldier;
@@ -42,7 +42,7 @@ private:
 	std::vector<BaseFacility*> _facilities;
 	std::vector<Soldier*> _soldiers;
 	std::vector<Craft*> _crafts;
-	std::map<LangString, Item*> _items;
+	std::map<std::string, Item*> _items;
 	int _scientists, _engineers;
 public:
 	/// Creates a new base.
@@ -60,7 +60,7 @@ public:
 	/// Gets the base's crafts.
 	std::vector<Craft*> *getCrafts();
 	/// Gets the base's items.
-	std::map<LangString, Item*> *getItems();
+	std::map<std::string, Item*> *getItems();
 	/// Sets the base's scientists.
 	void setScientists(int scientists);
 	/// Sets the base's engineers.
@@ -104,7 +104,7 @@ public:
 	/// Gets the base's long range detection.
 	int getLongRangeDetection() const;
 	/// Gets the base's crafts of a certain type.
-	int getCraftCount(LangString craft) const;
+	int getCraftCount(std::string craft) const;
 	/// Gets the base's craft maintenance.
 	int getCraftMaintenance() const;
 	/// Gets the base's personnel maintenance.

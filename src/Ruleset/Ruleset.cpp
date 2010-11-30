@@ -43,23 +43,23 @@ Ruleset::~Ruleset()
 	{
 		delete *i;
 	}
-	for (std::map<LangString, RuleBaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); i++)
+	for (std::map<std::string, RuleBaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); i++)
 	{
 		delete i->second;
 	}
-	for (std::map<LangString, RuleCraft*>::iterator i = _crafts.begin(); i != _crafts.end(); i++)
+	for (std::map<std::string, RuleCraft*>::iterator i = _crafts.begin(); i != _crafts.end(); i++)
 	{
 		delete i->second;
 	}
-	for (std::map<LangString, RuleCraftWeapon*>::iterator i = _craftWeapons.begin(); i != _craftWeapons.end(); i++)
+	for (std::map<std::string, RuleCraftWeapon*>::iterator i = _craftWeapons.begin(); i != _craftWeapons.end(); i++)
 	{
 		delete i->second;
 	}
-	for (std::map<LangString, RuleItem*>::iterator i = _items.begin(); i != _items.end(); i++)
+	for (std::map<std::string, RuleItem*>::iterator i = _items.begin(); i != _items.end(); i++)
 	{
 		delete i->second;
 	}
-	for (std::map<LangString, RuleUfo*>::iterator i = _ufos.begin(); i != _ufos.end(); i++)
+	for (std::map<std::string, RuleUfo*>::iterator i = _ufos.begin(); i != _ufos.end(); i++)
 	{
 		delete i->second;
 	}
@@ -128,7 +128,7 @@ std::vector<SoldierNamePool*> *const Ruleset::getPools()
  * @param id Facility type.
  * @return Rules for the facility.
  */
-RuleBaseFacility *const Ruleset::getBaseFacility(LangString id)
+RuleBaseFacility *const Ruleset::getBaseFacility(std::string id)
 {
 	return _facilities[id];
 }
@@ -138,7 +138,7 @@ RuleBaseFacility *const Ruleset::getBaseFacility(LangString id)
  * @param id Craft type.
  * @return Rules for the craft.
  */
-RuleCraft *const Ruleset::getCraft(LangString id)
+RuleCraft *const Ruleset::getCraft(std::string id)
 {
 	return _crafts[id];
 }
@@ -148,19 +148,18 @@ RuleCraft *const Ruleset::getCraft(LangString id)
  * @param id Craft weapon type.
  * @return Rules for the craft weapon.
  */
-RuleCraftWeapon *const Ruleset::getCraftWeapon(LangString id)
+RuleCraftWeapon *const Ruleset::getCraftWeapon(std::string id)
 {
 	return _craftWeapons[id];
 }
-
 /**
  * Returns the rules for the specified item.
  * @param id Item type.
  * @return Rules for the item.
  */
-RuleItem *const Ruleset::getItem(LangString id)
+RuleItem *const Ruleset::getItem(std::string id)
 {
-	return _items[id];
+	return _items.at(id);
 }
 
 /**
@@ -168,7 +167,7 @@ RuleItem *const Ruleset::getItem(LangString id)
  * @param id UFO type.
  * @return Rules for the UFO.
  */
-RuleUfo *const Ruleset::getUfo(LangString id)
+RuleUfo *const Ruleset::getUfo(std::string id)
 {
 	return _ufos[id];
 }

@@ -28,7 +28,7 @@
 #include "../Engine/Screen.h"
 #include "../Engine/Action.h"
 #include "../Resource/ResourcePack.h"
-#include "../Resource/LangString.h"
+#include <string>
 #include "../Interface/Cursor.h"
 #include "../Interface/Text.h"
 #include "../Interface/Bar.h"

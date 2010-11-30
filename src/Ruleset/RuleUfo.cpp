@@ -24,7 +24,7 @@
  * type of UFO.
  * @param type String defining the type.
  */
-RuleUfo::RuleUfo(LangString type) : _type(type), _size(STR_VERY_SMALL), _sprite(-1), _damageMax(0), _speedMax(0), _accel(0), _power(0), _range(0), _score(0), _battlescapeTerrainData(0)
+RuleUfo::RuleUfo(std::string type) : _type(type), _size("STR_VERY_SMALL"), _sprite(-1), _damageMax(0), _speedMax(0), _accel(0), _power(0), _range(0), _score(0), _battlescapeTerrainData(0)
 {
 }
 
@@ -41,7 +41,7 @@ RuleUfo::~RuleUfo()
  * this UFO. Each UFO type has a unique name.
  * @return Ufo name.
  */
-LangString RuleUfo::getType() const
+std::string RuleUfo::getType() const
 {
 	return _type;
 }
@@ -50,7 +50,7 @@ LangString RuleUfo::getType() const
  * Returns the size of this type of UFO.
  * @return Size.
  */
-LangString RuleUfo::getSize() const
+std::string RuleUfo::getSize() const
 {
 	return _size;
 }
@@ -59,7 +59,7 @@ LangString RuleUfo::getSize() const
  * Changes the size of this type of UFO.
  * @param size Size.
  */
-void RuleUfo::setSize(LangString size)
+void RuleUfo::setSize(std::string size)
 {
 	_size = size;
 }
@@ -71,7 +71,27 @@ void RuleUfo::setSize(LangString size)
  */
 int RuleUfo::getRadius() const
 {
-	return _size - STR_VERY_SMALL + 3;
+	if (_size == "STR_VERY_SMALL")
+	{
+		return 2;
+	}
+	else if (_size == "STR_SMALL")
+	{
+		return 3;
+	}
+	else if (_size == "STR_MEDIUM")
+	{
+		return 4;
+	}
+	else if (_size == "STR_LARGE")
+	{
+		return 5;
+	}
+	else if (_size == "STR_VERY_LARGE")
+	{
+		return 6;
+	}
+	return 0;
 }
 
 /*

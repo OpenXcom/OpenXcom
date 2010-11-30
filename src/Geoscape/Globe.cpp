@@ -857,7 +857,7 @@ void Globe::drawDetail()
 		label->setColor(Palette::blockOffset(15)-1);
 
 		Sint16 x, y;
-		for (std::map<LangString, Country*>::iterator i = _save->getCountries()->begin(); i != _save->getCountries()->end(); i++)
+		for (std::map<std::string, Country*>::iterator i = _save->getCountries()->begin(); i != _save->getCountries()->end(); i++)
 		{
 			// Don't draw if label is facing back
 			if (pointBack(i->second->getLabelLongitude(), i->second->getLabelLatitude()))
@@ -885,7 +885,7 @@ void Globe::drawDetail()
 		label->setColor(Palette::blockOffset(8)+10);
 
 		Sint16 x, y;
-		for (std::map<LangString, Region*>::iterator i = _save->getRegions()->begin(); i != _save->getRegions()->end(); i++)
+		for (std::map<std::string, Region*>::iterator i = _save->getRegions()->begin(); i != _save->getRegions()->end(); i++)
 		{
 			for (std::vector<City*>::iterator j = i->second->getCities()->begin(); j != i->second->getCities()->end(); j++)
 			{
@@ -938,7 +938,7 @@ void Globe::drawMarkers()
 		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); j++)
 		{
 			// Hide crafts docked at base
-			if ((*j)->getStatus() != STR_OUT || pointBack((*j)->getLongitude(), (*j)->getLatitude()))
+			if ((*j)->getStatus() != "STR_OUT" || pointBack((*j)->getLongitude(), (*j)->getLatitude()))
 				continue;
 
 			polarToCart((*j)->getLongitude(), (*j)->getLatitude(), &x, &y);

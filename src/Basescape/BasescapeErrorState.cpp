@@ -20,7 +20,7 @@
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
-#include "../Resource/LangString.h"
+#include <string>
 #include "../Engine/Font.h"
 #include "../Engine/Palette.h"
 #include "../Interface/TextButton.h"
@@ -32,7 +32,7 @@
  * @param game Pointer to the core game.
  * @param str Error message to display.
  */
-BasescapeErrorState::BasescapeErrorState(Game *game, LangString str) : State(game)
+BasescapeErrorState::BasescapeErrorState(Game *game, std::string str) : State(game)
 {
 	_screen = false;
 
@@ -53,7 +53,7 @@ BasescapeErrorState::BasescapeErrorState(Game *game, LangString str) : State(gam
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(15)+4);
-	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString(STR_OK));
+	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&BasescapeErrorState::btnOkClick);
 
 	_txtError->setColor(Palette::blockOffset(15)+1);

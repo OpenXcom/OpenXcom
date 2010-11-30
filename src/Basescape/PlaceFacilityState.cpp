@@ -21,7 +21,7 @@
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
-#include "../Resource/LangString.h"
+#include <string>
 #include "../Engine/Font.h"
 #include "../Engine/Palette.h"
 #include "../Interface/TextButton.h"
@@ -81,30 +81,30 @@ PlaceFacilityState::PlaceFacilityState(Game *game, Base *base, RuleBaseFacility 
 	_view->onMouseClick((ActionHandler)&PlaceFacilityState::viewClick);
 
 	_btnCancel->setColor(Palette::blockOffset(13)+13);
-	_btnCancel->setText(_game->getResourcePack()->getLanguage()->getString(STR_CANCEL));
+	_btnCancel->setText(_game->getResourcePack()->getLanguage()->getString("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)&PlaceFacilityState::btnCancelClick);
 
 	_txtFacility->setColor(Palette::blockOffset(13)+10);
 	_txtFacility->setText(_game->getResourcePack()->getLanguage()->getString(_rule->getType()));
 
 	_txtCost->setColor(Palette::blockOffset(13)+10);
-	_txtCost->setText(_game->getResourcePack()->getLanguage()->getString(STR_COST_UC));
+	_txtCost->setText(_game->getResourcePack()->getLanguage()->getString("STR_COST_UC"));
 
 	_numCost->setColor(Palette::blockOffset(13));
 	_numCost->setBig();
 	_numCost->setText(Text::formatFunding(_rule->getBuildCost()));
 
 	_txtTime->setColor(Palette::blockOffset(13)+10);
-	_txtTime->setText(_game->getResourcePack()->getLanguage()->getString(STR_CONSTRUCTION_TIME));
+	_txtTime->setText(_game->getResourcePack()->getLanguage()->getString("STR_CONSTRUCTION_TIME_UC"));
 
 	_numTime->setColor(Palette::blockOffset(13));
 	_numTime->setBig();
 	std::stringstream ss;
-	ss << _rule->getBuildTime() << _game->getResourcePack()->getLanguage()->getString(STR_DAYS);
+	ss << _rule->getBuildTime() << _game->getResourcePack()->getLanguage()->getString("STR_DAYS");
 	_numTime->setText(ss.str());
 
 	_txtMaintenance->setColor(Palette::blockOffset(13)+10);
-	_txtMaintenance->setText(_game->getResourcePack()->getLanguage()->getString(STR_MAINTENANCE));
+	_txtMaintenance->setText(_game->getResourcePack()->getLanguage()->getString("STR_MAINTENANCE_UC"));
 
 	_numMaintenance->setColor(Palette::blockOffset(13));
 	_numMaintenance->setBig();
@@ -137,12 +137,12 @@ void PlaceFacilityState::viewClick(Action *action)
 	if (!_view->isPlaceable(_rule))
 	{
 		_game->popState();
-		_game->pushState(new BasescapeErrorState(_game, STR_CANNOT_BUILD_HERE));
+		_game->pushState(new BasescapeErrorState(_game, "STR_CANNOT_BUILD_HERE"));
 	}
 	else if (_game->getSavedGame()->getFunds() < _rule->getBuildCost())
 	{
 		_game->popState();
-		_game->pushState(new BasescapeErrorState(_game, STR_NOT_ENOUGH_MONEY));
+		_game->pushState(new BasescapeErrorState(_game, "STR_NOT_ENOUGH_MONEY"));
 	}
 	else
 	{

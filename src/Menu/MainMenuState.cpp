@@ -20,7 +20,7 @@
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
-#include "../Resource/LangString.h"
+#include <string>
 #include "../Engine/Font.h"
 #include "../Engine/Palette.h"
 #include "../Interface/TextButton.h"
@@ -56,15 +56,15 @@ MainMenuState::MainMenuState(Game *game) : State(game)
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_btnNew->setColor(Palette::blockOffset(8)+8);
-	_btnNew->setText(_game->getResourcePack()->getLanguage()->getString(STR_NEW_GAME));
+	_btnNew->setText(_game->getResourcePack()->getLanguage()->getString("STR_NEW_GAME"));
 	_btnNew->onMouseClick((ActionHandler)&MainMenuState::btnNewClick);
 
 	_btnLoad->setColor(Palette::blockOffset(8)+8);
-	_btnLoad->setText(_game->getResourcePack()->getLanguage()->getString(STR_LOAD_SAVED_GAME));
+	_btnLoad->setText(_game->getResourcePack()->getLanguage()->getString("STR_LOAD_SAVED_GAME"));
 	_btnLoad->onMouseClick((ActionHandler)&MainMenuState::btnLoadClick);
 
 	_btnQuit->setColor(Palette::blockOffset(8)+8);
-	_btnQuit->setText(_game->getResourcePack()->getLanguage()->getString(STR_QUIT));
+	_btnQuit->setText(_game->getResourcePack()->getLanguage()->getString("STR_QUIT"));
 	_btnQuit->onMouseClick((ActionHandler)&MainMenuState::btnQuitClick);
 
 	_txtTitle->setColor(Palette::blockOffset(8)+10);

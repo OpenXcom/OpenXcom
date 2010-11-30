@@ -19,7 +19,7 @@
 #ifndef OPENXCOM_RULEITEM_H
 #define OPENXCOM_RULEITEM_H
 
-#include "../Resource/LangString.h"
+#include <string>
 
 /**
  * Represents a specific type of item.
@@ -30,17 +30,17 @@
 class RuleItem
 {
 private:
-	LangString _type;
+	std::string _type;
 	float _size;
 	int _value, _time;
 	bool _equip;
 public:
 	/// Creates a blank item ruleset.
-	RuleItem(LangString type);
+	RuleItem(std::string type);
 	/// Cleans up the item ruleset.
 	~RuleItem();
 	/// Gets the item's type.
-	LangString getType() const;
+	std::string getType() const;
 	/// Gets the item's size.
 	float getSize() const;
 	/// Sets the item's size.

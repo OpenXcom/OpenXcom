@@ -60,9 +60,13 @@ TimeTrigger GameTime::advance()
 		_minute++;
 		_second = 0;
 		if (_minute % 10 == 0)
+		{
 			trigger = TIME_10MIN;
+		}
 		if (_minute % 30 == 0)
+		{
 			trigger = TIME_30MIN;
+		}
 	}
 	if (_minute >= 60)
 	{
@@ -100,7 +104,7 @@ TimeTrigger GameTime::advance()
  * Returns the current ingame second.
  * @return Second (0-59).
  */
-int GameTime::getSecond()
+int GameTime::getSecond() const
 {
 	return _second;
 }
@@ -109,7 +113,7 @@ int GameTime::getSecond()
  * Returns the current ingame minute.
  * @return Minute (0-59).
  */
-int GameTime::getMinute()
+int GameTime::getMinute() const
 {
 	return _minute;
 }
@@ -118,7 +122,7 @@ int GameTime::getMinute()
  * Returns the current ingame hour.
  * @return Hour (0-23).
  */
-int GameTime::getHour()
+int GameTime::getHour() const
 {
 	return _hour;
 }
@@ -127,7 +131,7 @@ int GameTime::getHour()
  * Returns the current ingame weekday.
  * @return Weekday (1-7), starts on Sunday.
  */
-int GameTime::getWeekday()
+int GameTime::getWeekday() const
 {
 	return _weekday;
 }
@@ -137,16 +141,17 @@ int GameTime::getWeekday()
  * the current ingame weekday.
  * @return Weekday string ID.
  */
-LangString GameTime::getWeekdayString()
+std::string GameTime::getWeekdayString() const
 {
-	return (LangString)(STR_SUNDAY - 1 + _weekday);
+	std::string weekdays[] = {"STR_SUNDAY", "STR_MONDAY", "STR_TUESDAY", "STR_WEDNESDAY", "STR_THURSDAY", "STR_FRIDAY", "STR_SATURDAY"};
+	return weekdays[_weekday - 1];
 }
 
 /**
  * Returns the current ingame day.
  * @return Day (1-31).
  */
-int GameTime::getDay()
+int GameTime::getDay() const
 {
 	return _day;
 }
@@ -156,22 +161,22 @@ int GameTime::getDay()
  * the cardinal operator for the current ingame day.
  * @return Day string ID.
  */
-LangString GameTime::getDayString()
+std::string GameTime::getDayString() const
 {
 	switch (_day)
 	{
 	case 1:
 	case 21:
 	case 31:
-		return STR_ST;
+		return "STR_ST";
 	case 2:
 	case 22:
-		return STR_ND;
+		return "STR_ND";
 	case 3:
 	case 23:
-		return STR_RD;
+		return "STR_RD";
 	default:
-		return STR_TH;
+		return "STR_TH";
 	}
 }
 
@@ -179,7 +184,7 @@ LangString GameTime::getDayString()
  * Returns the current ingame month.
  * @return Month (1-12).
  */
-int GameTime::getMonth()
+int GameTime::getMonth() const
 {
 	return _month;
 }
@@ -189,16 +194,17 @@ int GameTime::getMonth()
  * the current ingame month.
  * @return Month string ID.
  */
-LangString GameTime::getMonthString()
+std::string GameTime::getMonthString() const
 {
-	return (LangString)(STR_JAN - 1 + _month);
+	std::string months[] = {"STR_JAN", "STR_FEB", "STR_MAR", "STR_APR", "STR_MAY", "STR_JUN", "STR_JUL", "STR_AUG", "STR_SEP", "STR_OCT", "STR_NOV", "STR_DEC"};
+	return months[_month - 1];
 }
 
 /**
  * Returns the current ingame year.
  * @return Year.
  */
-int GameTime::getYear()
+int GameTime::getYear() const
 {
 	return _year;
 }
@@ -209,7 +215,7 @@ int GameTime::getYear()
  * starts at 0º longitude (6h) and 1 when the light ends at 0º longitude (18h).
  * @return Daylight position (0-1).
  */
-double GameTime::getDaylight()
+double GameTime::getDaylight() const
 {
 	return (double)((((((_hour + 18) % 24) * 60) + _minute) * 60) + _second) / (60 * 60 * 24);
 }

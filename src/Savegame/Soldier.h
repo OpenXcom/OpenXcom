@@ -21,7 +21,7 @@
 
 #include <vector>
 #include <string>
-#include "../Resource/LangString.h"
+#include <string>
 
 enum SoldierGender { GENDER_MALE, GENDER_FEMALE };
 enum SoldierLook { LOOK_BLONDE, LOOK_BROWNHAIR, LOOK_ORIENTAL, LOOK_AFRICAN };
@@ -58,7 +58,7 @@ public:
 	/// Sets the soldier's craft.
 	void setCraft(Craft *craft);
 	/// Gets a string version of the soldier's rank.
-	LangString getRankString() const;
+	std::string getRankString() const;
 	/// Gets a sprite version of the soldier's rank.
 	int getRankSprite() const;
 	/// Gets the soldier's time units.

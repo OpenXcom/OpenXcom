@@ -19,7 +19,7 @@
 #ifndef OPENXCOM_CITY_H
 #define OPENXCOM_CITY_H
 
-#include "../Resource/LangString.h"
+#include <string>
 
 /**
  * Represents a city of the world.
@@ -28,15 +28,15 @@
 class City
 {
 private:
-	LangString _name;
+	std::string _name;
 	double _lon, _lat;
 public:
 	/// Creates a new city at a certain position.
-	City(LangString name, double lon, double lat);
+	City(std::string name, double lon, double lat);
 	/// Cleans up the city.
 	~City();
 	/// Gets the city's name.
-	LangString getName() const;
+	std::string getName() const;
 	/// Gets the city's latitude.
 	double getLatitude() const;
 	/// Sets the city's latitude.

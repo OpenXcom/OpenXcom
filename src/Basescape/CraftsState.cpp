@@ -21,7 +21,7 @@
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
-#include "../Resource/LangString.h"
+#include <string>
 #include "../Engine/Font.h"
 #include "../Engine/Palette.h"
 #include "../Interface/TextButton.h"
@@ -71,33 +71,33 @@ CraftsState::CraftsState(Game *game, Base *base) : State(game), _base(base)
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK14.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(13)+13);
-	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString(STR_OK));
+	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&CraftsState::btnOkClick);
 
 	_txtTitle->setColor(Palette::blockOffset(15)+1);
 	_txtTitle->setBig();
-	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString(STR_INTERCEPTION_CRAFT));
+	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString("STR_INTERCEPTION_CRAFT"));
 
 	_txtBase->setColor(Palette::blockOffset(15)+1);
 	_txtBase->setBig();
-	std::string baseName = _game->getResourcePack()->getLanguage()->getString(STR_BASE_);
+	std::string baseName = _game->getResourcePack()->getLanguage()->getString("STR_BASE_");
 	baseName += _base->getName();
 	_txtBase->setText(baseName);
 
 	_txtName->setColor(Palette::blockOffset(15)+1);
-	_txtName->setText(_game->getResourcePack()->getLanguage()->getString(STR_NAME));
+	_txtName->setText(_game->getResourcePack()->getLanguage()->getString("STR_NAME"));
 
 	_txtStatus->setColor(Palette::blockOffset(15)+1);
-	_txtStatus->setText(_game->getResourcePack()->getLanguage()->getString(STR_STATUS));
+	_txtStatus->setText(_game->getResourcePack()->getLanguage()->getString("STR_STATUS"));
 
 	_txtWeapon->setColor(Palette::blockOffset(15)+1);
-	_txtWeapon->setText(_game->getResourcePack()->getLanguage()->getString(STR_WEAPON_SYSTEMS));
+	_txtWeapon->setText(_game->getResourcePack()->getLanguage()->getString("STR_WEAPON_SYSTEMS"));
 
 	_txtCrew->setColor(Palette::blockOffset(15)+1);
-	_txtCrew->setText(_game->getResourcePack()->getLanguage()->getString(STR_CREW));
+	_txtCrew->setText(_game->getResourcePack()->getLanguage()->getString("STR_CREW"));
 
 	_txtHwp->setColor(Palette::blockOffset(15)+1);
-	_txtHwp->setText(_game->getResourcePack()->getLanguage()->getString(STR_HWPS));
+	_txtHwp->setText(_game->getResourcePack()->getLanguage()->getString("STR_HWPS"));
 
 	_lstCrafts->setColor(Palette::blockOffset(13)+10);
 	_lstCrafts->setArrowColor(Palette::blockOffset(15)+4);
@@ -148,7 +148,7 @@ void CraftsState::btnOkClick(Action *action)
  */
 void CraftsState::lstCraftsClick(Action *action)
 {
-	if (_base->getCrafts()->at(_lstCrafts->getSelectedRow())->getStatus() != STR_OUT)
+	if (_base->getCrafts()->at(_lstCrafts->getSelectedRow())->getStatus() != "STR_OUT")
 	{
 		_game->pushState(new CraftInfoState(_game, _base, _lstCrafts->getSelectedRow()));
 	}

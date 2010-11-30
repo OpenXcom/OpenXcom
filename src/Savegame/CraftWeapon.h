@@ -19,7 +19,7 @@
 #ifndef OPENXCOM_CRAFTWEAPON_H
 #define OPENXCOM_CRAFTWEAPON_H
 
-#include "../Resource/LangString.h"
+#include <string>
 
 class RuleCraftWeapon;
 

@@ -23,7 +23,7 @@
 #include <map>
 #include <vector>
 #include <string>
-#include "../Resource/LangString.h"
+#include <string>
 
 class RuleCraft;
 class Base;
@@ -44,12 +44,12 @@ private:
 	Base *_base;
 	int _id, _fuel, _damage;
 	std::vector<CraftWeapon*> _weapons;
-	std::map<LangString, Item*> _items;
-	LangString _status;
+	std::map<std::string, Item*> _items;
+	std::string _status;
 	bool _lowFuel;
 public:
 	/// Creates a craft of the specified type.
-	Craft(RuleCraft *rules, std::map<LangString, int> *id, Base *base);
+	Craft(RuleCraft *rules, std::map<std::string, int> *id, Base *base);
 	/// Cleans up the craft.
 	~Craft();
 	/// Gets the craft's ruleset.
@@ -63,9 +63,9 @@ public:
 	/// Sets the craft's base.
 	void setBase(Base *base);
 	/// Gets the craft's status.
-	LangString getStatus() const;
+	std::string getStatus() const;
 	/// Sets the craft's status.
-	void setStatus(LangString status);
+	void setStatus(std::string status);
 	/// Sets the craft's destination.
 	void setDestination(Target *dest);
 	/// Gets the craft's amount of weapons.
@@ -79,7 +79,7 @@ public:
 	/// Gets the craft's weapons.
 	std::vector<CraftWeapon*> *getWeapons();
 	/// Gets the craft's items.
-	std::map<LangString, Item*> *getItems();
+	std::map<std::string, Item*> *getItems();
 	/// Gets the craft's amount of fuel.
 	int getFuel() const;
 	/// Sets the craft's amount of fuel.

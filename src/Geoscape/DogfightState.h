@@ -21,7 +21,7 @@
 
 #include "../Engine/State.h"
 #include <vector>
-#include "../Resource/LangString.h"
+#include <string>
 
 class ImageButton;
 class Text;
@@ -71,7 +71,7 @@ public:
 	// Sets the craft to maximum distance.
 	void maximumDistance();
 	/// Changes the status text.
-	void setStatus(LangString status);
+	void setStatus(std::string status);
 	/// Handler for clicking the Minimize button.
 	void btnMinimizeClick(Action *action);
 	/// Handler for clicking the Standoff button.

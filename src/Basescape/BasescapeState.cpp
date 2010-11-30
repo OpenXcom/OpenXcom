@@ -20,7 +20,7 @@
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
-#include "../Resource/LangString.h"
+#include <string>
 #include "../Engine/Font.h"
 #include "../Engine/Palette.h"
 #include "../Interface/TextButton.h"
@@ -122,46 +122,46 @@ BasescapeState::BasescapeState(Game *game, Base *base, Globe *globe) : State(gam
 	_txtFunds->setColor(Palette::blockOffset(13)+10);
 	
 	_btnNewBase->setColor(Palette::blockOffset(13)+8);
-	_btnNewBase->setText(_game->getResourcePack()->getLanguage()->getString(STR_BUILD_NEW_BASE));
+	_btnNewBase->setText(_game->getResourcePack()->getLanguage()->getString("STR_BUILD_NEW_BASE_UC"));
 	_btnNewBase->onMouseClick((ActionHandler)&BasescapeState::btnNewBaseClick);
 
 	_btnBaseInfo->setColor(Palette::blockOffset(13)+8);
-	_btnBaseInfo->setText(_game->getResourcePack()->getLanguage()->getString(STR_BASE_INFORMATION));
+	_btnBaseInfo->setText(_game->getResourcePack()->getLanguage()->getString("STR_BASE_INFORMATION"));
 	_btnBaseInfo->onMouseClick((ActionHandler)&BasescapeState::btnBaseInfoClick);
 
 	_btnSoldiers->setColor(Palette::blockOffset(13)+8);
-	_btnSoldiers->setText(_game->getResourcePack()->getLanguage()->getString(STR_SOLDIERS_UC));
+	_btnSoldiers->setText(_game->getResourcePack()->getLanguage()->getString("STR_SOLDIERS_UC"));
 	_btnSoldiers->onMouseClick((ActionHandler)&BasescapeState::btnSoldiersClick);
 
 	_btnCrafts->setColor(Palette::blockOffset(13)+8);
-	_btnCrafts->setText(_game->getResourcePack()->getLanguage()->getString(STR_EQUIP_CRAFT));
+	_btnCrafts->setText(_game->getResourcePack()->getLanguage()->getString("STR_EQUIP_CRAFT"));
 	_btnCrafts->onMouseClick((ActionHandler)&BasescapeState::btnCraftsClick);
 
 	_btnFacilities->setColor(Palette::blockOffset(13)+8);
-	_btnFacilities->setText(_game->getResourcePack()->getLanguage()->getString(STR_BUILD_FACILITIES));
+	_btnFacilities->setText(_game->getResourcePack()->getLanguage()->getString("STR_BUILD_FACILITIES"));
 	_btnFacilities->onMouseClick((ActionHandler)&BasescapeState::btnFacilitiesClick);
 
 	_btnResearch->setColor(Palette::blockOffset(13)+8);
-	_btnResearch->setText(_game->getResourcePack()->getLanguage()->getString(STR_RESEARCH));
+	_btnResearch->setText(_game->getResourcePack()->getLanguage()->getString("STR_RESEARCH"));
 	_btnResearch->onMouseClick((ActionHandler)&BasescapeState::btnResearchClick);
 
 	_btnManufacture->setColor(Palette::blockOffset(13)+8);
-	_btnManufacture->setText(_game->getResourcePack()->getLanguage()->getString(STR_MANUFACTURE));
+	_btnManufacture->setText(_game->getResourcePack()->getLanguage()->getString("STR_MANUFACTURE"));
 	_btnManufacture->onMouseClick((ActionHandler)&BasescapeState::btnManufactureClick);
 
 	_btnTransfer->setColor(Palette::blockOffset(13)+8);
-	_btnTransfer->setText(_game->getResourcePack()->getLanguage()->getString(STR_TRANSFER));
+	_btnTransfer->setText(_game->getResourcePack()->getLanguage()->getString("STR_TRANSFER_UC"));
 
 	_btnPurchase->setColor(Palette::blockOffset(13)+8);
-	_btnPurchase->setText(_game->getResourcePack()->getLanguage()->getString(STR_PURCHASE_RECRUIT));
+	_btnPurchase->setText(_game->getResourcePack()->getLanguage()->getString("STR_PURCHASE_RECRUIT"));
 	_btnPurchase->onMouseClick((ActionHandler)&BasescapeState::btnPurchaseClick);
 
 	_btnSell->setColor(Palette::blockOffset(13)+8);
-	_btnSell->setText(_game->getResourcePack()->getLanguage()->getString(STR_SELL_SACK_UC));
+	_btnSell->setText(_game->getResourcePack()->getLanguage()->getString("STR_SELL_SACK_UC"));
 	_btnSell->onMouseClick((ActionHandler)&BasescapeState::btnSellClick);
 
 	_btnGeoscape->setColor(Palette::blockOffset(13)+8);
-	_btnGeoscape->setText(_game->getResourcePack()->getLanguage()->getString(STR_GEOSCAPE));
+	_btnGeoscape->setText(_game->getResourcePack()->getLanguage()->getString("STR_GEOSCAPE"));
 	_btnGeoscape->onMouseClick((ActionHandler)&BasescapeState::btnGeoscapeClick);
 }
 
@@ -183,7 +183,7 @@ void BasescapeState::init()
 	_mini->draw();
 	_txtBase->setText(_base->getName());
 
-	for (std::map<LangString, Region*>::iterator i = _game->getSavedGame()->getRegions()->begin(); i != _game->getSavedGame()->getRegions()->end(); i++)
+	for (std::map<std::string, Region*>::iterator i = _game->getSavedGame()->getRegions()->begin(); i != _game->getSavedGame()->getRegions()->end(); i++)
 	{
 		if (i->second->insideRegion(_base->getLongitude(), _base->getLatitude()))
 		{
@@ -192,8 +192,7 @@ void BasescapeState::init()
 		}
 	}
 
-	std::string s = _game->getResourcePack()->getLanguage()->getString(STR_FUNDS_);
-	s.erase(s.size()-1, 1);
+	std::string s = _game->getResourcePack()->getLanguage()->getString("STR_FUNDS");
 	s += Text::formatFunding(_game->getSavedGame()->getFunds());
 	_txtFunds->setText(s);
 
@@ -344,12 +343,12 @@ void BasescapeState::viewClick(Action *action)
 			_base->getAvailableWorkshops() - fac->getRules()->getWorkshops() < _base->getUsedWorkshops() ||
 			_base->getAvailableHangars() - fac->getRules()->getCrafts() < _base->getUsedHangars()))
 		{
-			_game->pushState(new BasescapeErrorState(_game, STR_FACILITY_IN_USE));
+			_game->pushState(new BasescapeErrorState(_game, "STR_FACILITY_IN_USE"));
 		}
 		// Would base become disconnected? (ocuppied squares connected to Access Lift < total squares occupied by base)
 		else if (_view->countConnected(x, y, 0, fac) < squares)
 		{
-			_game->pushState(new BasescapeErrorState(_game, STR_CANNOT_DISMANTLE_FACILITY));
+			_game->pushState(new BasescapeErrorState(_game, "STR_CANNOT_DISMANTLE_FACILITY"));
 		}
 		else
 		{

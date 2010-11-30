@@ -20,7 +20,7 @@
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
-#include "../Resource/LangString.h"
+#include <string>
 #include "../Engine/Font.h"
 #include "../Engine/Palette.h"
 #include "../Interface/TextButton.h"
@@ -53,7 +53,7 @@ UfoLostState::UfoLostState(Game *game, std::string id) : State(game), _id(id)
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK15.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(8)+8);
-	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString(STR_OK));
+	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&UfoLostState::btnOkClick);
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
@@ -62,7 +62,7 @@ UfoLostState::UfoLostState(Game *game, std::string id) : State(game), _id(id)
 	std::string s = "";
 	s += _id;
 	s += '\n';
-	s += _game->getResourcePack()->getLanguage()->getString(STR_TRACKING_LOST);
+	s += _game->getResourcePack()->getLanguage()->getString("STR_TRACKING_LOST");
 	_txtTitle->setText(s);
 }
 

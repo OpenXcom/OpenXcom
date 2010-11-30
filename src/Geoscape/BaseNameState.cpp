@@ -21,7 +21,7 @@
 #include "../Engine/Action.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
-#include "../Resource/LangString.h"
+#include <string>
 #include "../Engine/Font.h"
 #include "../Engine/Palette.h"
 #include "../Interface/Window.h"
@@ -60,7 +60,7 @@ BaseNameState::BaseNameState(Game *game, Base *base, Globe *globe, bool first) :
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
-	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString(STR_BASE_NAME));
+	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString("STR_BASE_NAME"));
 
 	_edtName->setColor(Palette::blockOffset(8)+5);
 	_edtName->setBig();

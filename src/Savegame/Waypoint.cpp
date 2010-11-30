@@ -60,6 +60,6 @@ void Waypoint::setId(int id)
 std::string Waypoint::getName(Language *lang) const
 {
 	std::stringstream name;
-	name << lang->getString(STR_WAY_POINT_) << _id;
+	name << lang->getString("STR_WAY_POINT_") << _id;
 	return name.str();
 }

@@ -21,7 +21,7 @@
 
 #include <string>
 #include "../Engine/State.h"
-#include "../Resource/LangString.h"
+#include <string>
 
 class TextButton;
 class Window;
@@ -39,7 +39,7 @@ private:
 	Text *_txtMessage;
 public:
 	/// Creates the Geoscape Error state.
-	GeoscapeErrorState(Game *game, LangString str);
+	GeoscapeErrorState(Game *game, std::string str);
 	/// Cleans up the Geoscape Error state.
 	~GeoscapeErrorState();
 	/// Handler for clicking the OK button.

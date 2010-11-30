@@ -21,7 +21,7 @@
 
 #include <vector>
 #include <string>
-#include "../Resource/LangString.h"
+#include <string>
 
 class RuleTerrain;
 
@@ -34,21 +34,21 @@ class RuleTerrain;
 class RuleUfo
 {
 private:
-	LangString _type, _size;
+	std::string _type, _size;
 	int _sprite;
 	int _damageMax, _speedMax, _accel, _power, _range, _score;
 	RuleTerrain *_battlescapeTerrainData;
 public:
 	/// Creates a blank UFO ruleset.
-	RuleUfo(LangString type);
+	RuleUfo(std::string type);
 	/// Cleans up the UFO ruleset.
 	~RuleUfo();
 	/// Gets the UFO's type.
-	LangString getType() const;
+	std::string getType() const;
 	/// Gets the UFO's size.
-	LangString getSize() const;
+	std::string getSize() const;
 	/// Sets the UFO's size.
-	void setSize(LangString size);
+	void setSize(std::string size);
 	/// Gets the UFO's radius.
 	int getRadius() const;
 	/// Gets the UFO's sprite.

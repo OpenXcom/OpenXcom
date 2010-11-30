@@ -21,7 +21,7 @@
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
-#include "../Resource/LangString.h"
+#include <string>
 #include "../Engine/Font.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Screen.h"
@@ -68,7 +68,7 @@ TestState::TestState(Game *game) : State(game)
 	_text->setAlign(ALIGN_CENTER);
 	_text->setVerticalAlign(ALIGN_MIDDLE);
 	//_game->getResourcePack()->setLanguage("GERMAN.DAT");
-	_text->setText(_game->getResourcePack()->getLanguage()->getString(STR_COUNCIL_TERMINATED));
+	_text->setText(_game->getResourcePack()->getLanguage()->getString("STR_COUNCIL_TERMINATED"));
 
 	_list->setColor(Palette::blockOffset(15)+1);
 	_list->setColumns(3, 100, 50, 100);

@@ -20,7 +20,7 @@
 #define OPENXCOM_BASESCAPEERRORSTATE_H
 
 #include "../Engine/State.h"
-#include "../Resource/LangString.h"
+#include <string>
 
 class TextButton;
 class Window;
@@ -38,7 +38,7 @@ private:
 	Text *_txtError;
 public:
 	/// Creates the Basescape Error state.
-	BasescapeErrorState(Game *game, LangString str);
+	BasescapeErrorState(Game *game, std::string str);
 	/// Cleans up the Basescape Error state.
 	~BasescapeErrorState();
 	/// Handler for clicking the OK button.

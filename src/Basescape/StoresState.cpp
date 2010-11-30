@@ -21,7 +21,7 @@
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
-#include "../Resource/LangString.h"
+#include <string>
 #include "../Engine/Font.h"
 #include "../Engine/Palette.h"
 #include "../Interface/TextButton.h"
@@ -65,22 +65,22 @@ StoresState::StoresState(Game *game, Base *base) : State(game), _base(base)
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(13)+13);
-	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString(STR_OK));
+	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&StoresState::btnOkClick);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString(STR_STORES));
+	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString("STR_STORES"));
 
 	_txtItem->setColor(Palette::blockOffset(13)+10);
-	_txtItem->setText(_game->getResourcePack()->getLanguage()->getString(STR_ITEM));
+	_txtItem->setText(_game->getResourcePack()->getLanguage()->getString("STR_ITEM"));
 
 	_txtQuantity->setColor(Palette::blockOffset(13)+10);
-	_txtQuantity->setText(_game->getResourcePack()->getLanguage()->getString(STR_QUANTITY_UC));
+	_txtQuantity->setText(_game->getResourcePack()->getLanguage()->getString("STR_QUANTITY_UC"));
 
 	_txtSpaceUsed->setColor(Palette::blockOffset(13)+10);
-	_txtSpaceUsed->setText(_game->getResourcePack()->getLanguage()->getString(STR_SPACE_USED));
+	_txtSpaceUsed->setText(_game->getResourcePack()->getLanguage()->getString("STR_SPACE_USED"));
 	
 	_lstStores->setColor(Palette::blockOffset(13)+10);
 	_lstStores->setArrowColor(Palette::blockOffset(13)+13);
@@ -89,7 +89,7 @@ StoresState::StoresState(Game *game, Base *base) : State(game), _base(base)
 	_lstStores->setBackground(_window);
 	_lstStores->setMargin(2);
 
-	for (std::map<LangString, Item*>::iterator i = _base->getItems()->begin(); i != _base->getItems()->end(); i++)
+	for (std::map<std::string, Item*>::iterator i = _base->getItems()->begin(); i != _base->getItems()->end(); i++)
 	{
 		std::stringstream ss, ss2;
 		ss << i->second->getQuantity();

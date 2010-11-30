@@ -52,7 +52,6 @@ class ResourcePack
 protected:
 	std::string _folder;
 	Language *_currentLang;
-	std::string _langName;
 	std::map<std::string, Palette*> _palettes;
 	std::map<std::string, Font*> _fonts;
 	std::map<std::string, Language*> _languages;
@@ -73,8 +72,6 @@ public:
 	virtual ~ResourcePack();
 	/// Gets the current language.
 	Language *const getLanguage() const;
-	/// Gets the name of the current language.
-	std::string getLanguageName() const;
 	/// Sets a new language as current.
 	void setLanguage(const std::string &lang);
 	/// Gets a particular font.

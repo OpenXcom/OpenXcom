@@ -21,7 +21,7 @@
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
-#include "../Resource/LangString.h"
+#include <string>
 #include "../Engine/Font.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
@@ -65,25 +65,25 @@ ConfirmNewBaseState::ConfirmNewBaseState(Game *game, Base *base, Globe *globe) :
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(15)+2);
-	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString(STR_OK));
+	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ConfirmNewBaseState::btnOkClick);
 
 	_btnCancel->setColor(Palette::blockOffset(15)+2);
-	_btnCancel->setText(_game->getResourcePack()->getLanguage()->getString(STR_CANCEL_UC));
+	_btnCancel->setText(_game->getResourcePack()->getLanguage()->getString("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&ConfirmNewBaseState::btnCancelClick);
 
 	std::stringstream ss;
-	for (std::map<LangString, Region*>::iterator i = _game->getSavedGame()->getRegions()->begin(); i != _game->getSavedGame()->getRegions()->end(); i++)
+	for (std::map<std::string, Region*>::iterator i = _game->getSavedGame()->getRegions()->begin(); i != _game->getSavedGame()->getRegions()->end(); i++)
 	{
 		if (i->second->insideRegion(_base->getLongitude(), _base->getLatitude()))
 		{
 			_cost = i->second->getBaseCost();
-			ss << _game->getResourcePack()->getLanguage()->getString(STR_AREA) << _game->getResourcePack()->getLanguage()->getString(i->first);
+			ss << _game->getResourcePack()->getLanguage()->getString("STR_AREA") << _game->getResourcePack()->getLanguage()->getString(i->first);
 			break;
 		}
 	}
 	
-	std::string s = _game->getResourcePack()->getLanguage()->getString(STR_COST);
+	std::string s = _game->getResourcePack()->getLanguage()->getString("STR_COST");
 	s.erase(s.size()-1, 1);
 	s += Text::formatFunding(_cost);
 	_txtCost->setColor(Palette::blockOffset(15)-1);
@@ -115,7 +115,7 @@ void ConfirmNewBaseState::btnOkClick(Action *action)
 	}
 	else
 	{
-		_game->pushState(new GeoscapeErrorState(_game, STR_NOT_ENOUGH_MONEY));
+		_game->pushState(new GeoscapeErrorState(_game, "STR_NOT_ENOUGH_MONEY"));
 	}
 }
 

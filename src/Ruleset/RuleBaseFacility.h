@@ -19,7 +19,7 @@
 #ifndef OPENXCOM_RULEBASEFACILITY_H
 #define OPENXCOM_RULEBASEFACILITY_H
 
-#include "../Resource/LangString.h"
+#include <string>
 
 /**
  * Represents a specific type of base facility.
@@ -30,7 +30,7 @@
 class RuleBaseFacility
 {
 private:
-	LangString _type;
+	std::string _type;
 	int _spriteShape, _spriteFacility;
 	bool _lift;
 	int _size, _buildCost, _buildTime, _monthlyCost;
@@ -38,11 +38,11 @@ private:
 	int _radarRange, _radarChance, _defence, _hitRatio;
 public:
 	/// Creates a blank facility ruleset.
-	RuleBaseFacility(LangString type);
+	RuleBaseFacility(std::string type);
 	/// Cleans up the facility ruleset.
 	~RuleBaseFacility();
 	/// Gets the facility's type.
-	LangString getType() const;
+	std::string getType() const;
 	/// Gets the facility's shape sprite.
 	int getSpriteShape() const;
 	/// Sets the facility's shape sprite.

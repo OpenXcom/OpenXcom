@@ -81,20 +81,21 @@ XcomResourcePack::XcomResourcePack(const std::string &folder) : ResourcePack(fol
 	}
 		
 	// Load languages
-	std::string lang[] = {"ENGLISH.DAT",
-					 "FRENCH.DAT",
-					 "GERMAN.DAT"};
+	std::string lang[] = {"ENGLISH.LNG",
+					 "FRENCH.LNG",
+					 "GERMAN.LNG",
+					 "ITALIAN.LNG",
+					 "SPANISH.LNG"};
 
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 5; i++)
 	{
 		std::stringstream s;
-		s << folder << "GEODATA/" << lang[i];
+		s << folder << lang[i];
 		_languages[lang[i]] = new Language();
-		_languages[lang[i]]->loadDat(insensitive(s.str()));
+		_languages[lang[i]]->loadLng(insensitive(s.str()));
 	}
 
-	_currentLang = _languages["ENGLISH.DAT"];
-	_langName = "ENGLISH.DAT";
+	_currentLang = _languages["ENGLISH.LNG"];
 
 	// Load surfaces
 	std::string dats[] = {"LANG1.DAT",

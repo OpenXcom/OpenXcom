@@ -19,7 +19,7 @@
 #ifndef OPENXCOM_RULECRAFTWEAPON_H
 #define OPENXCOM_RULECRAFTWEAPON_H
 
-#include "../Resource/LangString.h"
+#include <string>
 
 /**
  * Represents a specific type of craft weapon.
@@ -30,16 +30,16 @@
 class RuleCraftWeapon
 {
 private:
-	LangString _type;
+	std::string _type;
 	int _sprite, _sound, _damage, _range, _accuracy, _reloadCautious, _reloadStandard, _reloadAggressive, _ammoMax, _rearm;
-	LangString _launcher, _clip;
+	std::string _launcher, _clip;
 public:
 	/// Creates a blank craft weapon ruleset.
-	RuleCraftWeapon(LangString type);
+	RuleCraftWeapon(std::string type);
 	/// Cleans up the craft weapon ruleset.
 	~RuleCraftWeapon();
 	/// Gets the craft weapon's type.
-	LangString getType() const;
+	std::string getType() const;
 	/// Gets the craft weapon's sprite.
 	int getSprite() const;
 	/// Sets the craft weapon's sprite.
@@ -81,13 +81,13 @@ public:
 	/// Sets the craft weapon's rearm rate.
 	void setRearmRate(int rearm);
 	/// Gets the craft weapon's launcher item.
-	LangString getLauncherItem() const;
+	std::string getLauncherItem() const;
 	/// Sets the craft weapon's launcher item.
-	void setLauncherItem(LangString launcher);
+	void setLauncherItem(std::string launcher);
 	/// Gets the craft weapon's clip item.
-	LangString getClipItem() const;
+	std::string getClipItem() const;
 	/// Sets the craft weapon's clip item.
-	void setClipItem(LangString clip);
+	void setClipItem(std::string clip);
 };
 
 #endif

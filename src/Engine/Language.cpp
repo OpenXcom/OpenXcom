@@ -17,12 +17,13 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Language.h"
+#include <iostream>
 #include <fstream>
 
 /**
  * Initializes an empty language file.
  */
-Language::Language() : _strings()
+Language::Language() : _name(""), _strings()
 {
 
 }
@@ -36,35 +37,56 @@ Language::~Language()
 }
 
 /**
- * Loads a series of null-terminated strings contained in
- * a raw text file into the Language. IDs are determined
- * automatically.
- * @param filename Filename of the DAT language.
- * @sa http://www.ufopaedia.org/index.php?title=GeoScape_String_Files
+ * Loads pairs of null-terminated strings contained in
+ * a raw text file into the Language. Each pair is made of
+ * an ID and a localized string. For duplicate strings, _UC denotes
+ * the uppercase string and __ denotes a linebreak in the string.
+ * @param filename Filename of the LNG file.
  */
-void Language::loadDat(const std::string &filename)
+void Language::loadLng(const std::string &filename)
 {
 	_strings.clear();
 	
-	// Load file and put text in vector
+	// Load file and put text in map
 	std::ifstream txtFile (filename.c_str(), std::ios::in | std::ios::binary);
 	if (!txtFile)
 	{
-		throw "Failed to load DAT";
+		throw "Failed to load LNG";
 	}
 	
-	char value[1];
-	std::string buffer;
+	char value;
+	std::string buffer, bufid, bufstr;
+	bool first = true, id = true;
 
-	while (txtFile.read(value, 1))
+	while (txtFile.read(&value, 1))
 	{
-		if (value[0] != '\0')
+		if (value != '\0')
 		{
-			buffer += value[0];
+			buffer += value;
 		}
 		else
 		{
-			_strings.push_back(buffer);
+			// Get language name
+			if (first)
+			{
+				_name = buffer;
+				first = false;
+			}
+			else
+			{
+				// Get ID
+				if (id)
+				{
+					bufid = buffer;
+				}
+				// Get string
+				else
+				{
+					bufstr = buffer;
+					_strings[bufid] = bufstr;
+				}
+				id = !id;
+			}
 			buffer.clear();
 		}
 	}
@@ -76,11 +98,30 @@ void Language::loadDat(const std::string &filename)
 }
 
 /**
- * Returns the localizable string with the specified ID.
- * @param id ID of the string.
- * @return String with the request ID.
+ * Returns the language's name in its native language.
+ * @return Language name.
  */
-std::string Language::getString(LangString id) const
+std::string Language::getName() const
 {
-	return _strings[id];
+	return _name;
+}
+
+/**
+ * Returns the localizable string with the specified ID.
+ * If it's not found, just returns the ID.
+ * @param id ID of the string.
+ * @return String with the requested ID.
+ */
+std::string Language::getString(const std::string &id) const
+{
+	std::map<std::string, std::string>::const_iterator s = _strings.find(id);
+	if (s == _strings.end())
+	{
+		std::cout << "WARNING: " << id << " not found in " << _name << std::endl;
+		return id;
+	}
+	else
+	{
+		return s->second;
+	}
 }
