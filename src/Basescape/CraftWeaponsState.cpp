@@ -42,7 +42,7 @@
  * @param craft ID of the selected craft.
  * @param weapon ID of the selected weapon.
  */
-CraftWeaponsState::CraftWeaponsState(Game *game, Base *base, unsigned int craft, unsigned int weapon) : State(game), _base(base), _craft(craft), _weapon(weapon)
+CraftWeaponsState::CraftWeaponsState(Game *game, Base *base, unsigned int craft, unsigned int weapon) : State(game), _base(base), _craft(craft), _weapon(weapon), _weapons()
 {
 	_screen = false;
 
@@ -109,14 +109,15 @@ CraftWeaponsState::CraftWeaponsState(Game *game, Base *base, unsigned int craft,
 
 	for (std::vector<RuleCraftWeapon*>::iterator i = _weapons.begin(); i != _weapons.end(); i++)
 	{
-		RuleCraftWeapon *w = _game->getRuleset()->getCraftWeapon((*i)->getType());
-		if ((*_base->getItems())[w->getLauncherItem()]->getQuantity() > 0)
+		if (*i == 0)
+			continue;
+
+		if ((*_base->getItems())[(*i)->getLauncherItem()]->getQuantity() > 0)
 		{
 			std::stringstream ss, ss2;
-			ss << (*_base->getItems())[w->getLauncherItem()]->getQuantity();
-			ss2 << (*_base->getItems())[w->getClipItem()]->getQuantity();
+			ss << (*_base->getItems())[(*i)->getLauncherItem()]->getQuantity();
+			ss2 << (*_base->getItems())[(*i)->getClipItem()]->getQuantity();
 			_lstWeapons->addRow(3, _game->getResourcePack()->getLanguage()->getString((*i)->getType()).c_str(), ss.str().c_str(), ss2.str().c_str());
-			_weapons.push_back(w);
 		}
 	}
 	_lstWeapons->onMouseClick((ActionHandler)&CraftWeaponsState::lstWeaponsClick);
