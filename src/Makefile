@@ -29,10 +29,34 @@ all: $(BINDIR)$(BIN)
 $(BINDIR)$(BIN): $(OBJS)
 	$(CXX) $(OBJS) $(LDFLAGS) -o $(BINDIR)$(BIN)
 
-$(OBJDIR)%.o: %.cpp
+$(OBJDIR)%.o:: %.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
-$(OBJDIR)%.o: */%.cpp
+$(OBJDIR)%.o:: Basescape/%.cpp
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
+	
+$(OBJDIR)%.o:: Battlescape/%.cpp
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
+
+$(OBJDIR)%.o:: Engine/%.cpp
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
+
+$(OBJDIR)%.o:: Geoscape/%.cpp
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
+
+$(OBJDIR)%.o:: Interface/%.cpp
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
+
+$(OBJDIR)%.o:: Menu/%.cpp
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
+	
+$(OBJDIR)%.o:: Resource/%.cpp
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
+	
+$(OBJDIR)%.o:: Ruleset/%.cpp
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
+	
+$(OBJDIR)%.o:: Savegame/%.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 clean:
