@@ -196,7 +196,7 @@ Uint8 Text::getColor() const
  */
 void Text::processText()
 {
-	if (_text == "" || _font == 0)
+	if (_font == 0)
 	{
 		return;
 	}
