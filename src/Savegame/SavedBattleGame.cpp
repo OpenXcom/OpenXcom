@@ -22,6 +22,7 @@
 #include "Tile.h"
 #include "Ufo.h"
 #include "BattleSoldier.h"
+#include "BattleItem.h"
 #include <fstream>
 #include <sstream>
 #include "../Engine/RNG.h"
@@ -71,6 +72,11 @@ SavedBattleGame::~SavedBattleGame()
 	}
 
 	for (std::vector<BattleSoldier*>::iterator i = _soldiers.begin(); i != _soldiers.end(); i++)
+	{
+		delete *i;
+	}
+
+	for (std::vector<BattleItem*>::iterator i = _inventory.begin(); i != _inventory.end(); i++)
 	{
 		delete *i;
 	}
@@ -223,6 +229,17 @@ void SavedBattleGame::addSoldier(Soldier *soldier, RuleUnitSprite *rules)
 
 	_soldiers.push_back(bs);
 	_selectedSoldier = bs;
+}
+
+/**
+ * Adds an item to the game and assign it to a soldier?.
+ * @param item pointer to the Item
+ */
+void SavedBattleGame::addItem(Item *item)
+{
+	BattleItem *bi = new BattleItem(item);
+
+	_inventory.push_back(bi);
 }
 
 /**

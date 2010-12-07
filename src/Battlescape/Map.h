@@ -94,6 +94,8 @@ public:
 	void up();
 	/// move map layer down
 	void down();
+	/// set view height
+	void setViewHeight(int viewheight);
 	/// Center map on a unit.
 	void centerOnPosition(const Position &pos);
 	/// Converts map coordinates to screen coordinates.

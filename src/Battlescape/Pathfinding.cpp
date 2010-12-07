@@ -93,6 +93,9 @@ void Pathfinding::calculate(BattleUnit *unit, Position &endPosition)
 		destinationTile = _save->getTile(endPosition);
 	}
 
+	// TODO : check if the user wants the unit to go upstairs (click behind stairs)
+
+
 	_path.clear();
 
 	// reset every node, so we have to check them all

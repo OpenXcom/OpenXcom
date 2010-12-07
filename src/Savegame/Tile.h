@@ -27,6 +27,7 @@
 class Surface;
 class TerrainObject;
 class BattleUnit;
+class BattleItem;
 
 /**
  * Basic element of which a battle map is build.
@@ -41,7 +42,8 @@ protected:
 	std::vector<BattleUnit *> _visibleByUnit; // units this tile is now seen by 
 	int _light, _smoke, _fire;
 	Position _pos;
-	BattleUnit *_unit;
+	BattleUnit *_unit; // unit on this tile
+	std::vector<BattleItem *> _inventory; // items on this tile
 
 public:
 	/// Creates a tile.
@@ -66,6 +68,9 @@ public:
 	int getTerrainLevel();
 	/// Gets the tile's position.
 	const Position& getPosition() const;
+	/// gets the floor object footstep sound
+	int getFootstepSound();
+
 
 };
 

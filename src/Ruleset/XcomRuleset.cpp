@@ -1345,6 +1345,13 @@ SavedBattleGame *XcomRuleset::newBattleSave(ResourcePack *res, SavedGame *save, 
 	}
 
 	// add items
+	if (craft != 0)
+	{
+		for (std::map<std::string, Item*>::iterator i = craft->getItems()->begin(); i != craft->getItems()->end(); i++)
+		{
+				bsave->addItem((*i).second);
+		}
+	}
 
 	// add aliens
 

@@ -62,6 +62,7 @@ private:
 	SpecialTileType _specialType;
 	int _TUWalk, _TUFly, _TUSlide;
 	int _terrainLevel;
+	int _footstepSound;
 public:
 	TerrainObject();
 	~TerrainObject();
@@ -85,6 +86,8 @@ public:
 	int getTerrainLevel();
 	/// Can we walk over it.
 	bool isBigWall();
+	/// Get the index to the footstep sound
+	int getFootstepSound();
 	
 	// below are setter functions for the properties
 	void setFlags(bool isUfoDoor, bool stopLOS, bool isNoFloor, bool isBigWall, bool isGravLift, bool isDoor, bool blockFire, bool blockSmoke);
@@ -93,6 +96,7 @@ public:
 	void setSpecialType(int value);
 	void setTUCosts(int walk, int fly, int slide);
 	void setTerrainLevel(int value);
+	void setFootstepSound(int value);
 };
 
 #endif

@@ -145,3 +145,20 @@ const Position& Tile::getPosition() const
 {
 	return _pos;
 }
+
+
+/**
+ * Gets the tile's position.
+ * @return position
+ */
+int Tile::getFootstepSound()
+{
+	int sound = 0;
+
+	if (_terrainObjects[O_FLOOR])
+		sound = _terrainObjects[O_FLOOR]->getFootstepSound();
+	if (_terrainObjects[O_OBJECT])
+		sound = _terrainObjects[O_OBJECT]->getFootstepSound();
+
+	return sound;
+}

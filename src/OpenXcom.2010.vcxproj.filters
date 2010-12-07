@@ -371,6 +371,9 @@
     <ClCompile Include="Battlescape\TerrainModifier.cpp">
       <Filter>Battlescape</Filter>
     </ClCompile>
+    <ClCompile Include="Savegame\BattleItem.cpp">
+      <Filter>Savegame</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -745,6 +748,9 @@
     </ClInclude>
     <ClInclude Include="Battlescape\TerrainModifier.h">
       <Filter>Battlescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Savegame\BattleItem.h">
+      <Filter>Savegame</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

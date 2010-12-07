@@ -24,6 +24,7 @@
 
 class RuleUnitSprite;
 class Tile;
+class BattleItem;
 
 enum UnitStatus {STATUS_STANDING, STATUS_SITTING, STATUS_WALKING, STATUS_TURNING, STATUS_FALLING, STATUS_DEAD};
 
@@ -43,6 +44,7 @@ private:
 	UnitStatus _status;
 	int _walkPhase;
 	std::vector<Tile *> _visibleTiles;
+	std::vector<BattleItem *> _inventory;
 public:
 	/// Creates a BattleUnit.
 	BattleUnit(RuleUnitSprite *renderRules);

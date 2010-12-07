@@ -224,16 +224,13 @@ void Map::drawTerrain()
 					tile = _save->getTile(mapPosition);
 					if (tile)
 					{
-						for (int part=0;part<1;part++)
+						object = tile->getTerrainObject(O_FLOOR);
+						if (object)
 						{
-							object = tile->getTerrainObject(part);
-							if (object)
-							{
-								frame = getSurface(object, _animFrame);
-								frame->setX(screenPosition.x);
-								frame->setY(screenPosition.y - object->getYOffset());
-								frame->blit(this);
-							}
+							frame = getSurface(object, _animFrame);
+							frame->setX(screenPosition.x);
+							frame->setY(screenPosition.y - object->getYOffset());
+							frame->blit(this);
 						}
 					}
 
@@ -258,19 +255,46 @@ void Map::drawTerrain()
 					}
 
 
-					// Draw walls and objects
 					if (tile)
 					{
-						for (int part = 1; part < 4; part++)
+						// Draw west wall
+						object = tile->getTerrainObject(O_WESTWALL);
+						if (object)
 						{
-							object = tile->getTerrainObject(part);
-							if (object)
+							frame = getSurface(object, _animFrame);
+							frame->setX(screenPosition.x);
+							frame->setY(screenPosition.y - object->getYOffset());
+							frame->blit(this);
+						}
+						// Draw north wall
+						object = tile->getTerrainObject(O_NORTHWALL);
+						if (object)
+						{
+							frame = getSurface(object, _animFrame);
+							frame->setX(screenPosition.x);
+							frame->setY(screenPosition.y - object->getYOffset());
+							// if there is a westwall, cut off some of the north wall (otherwise it will overlap)
+							if (tile->getTerrainObject(O_WESTWALL))
 							{
-								frame = getSurface(object, _animFrame);
-								frame->setX(screenPosition.x);
-								frame->setY(screenPosition.y - object->getYOffset());
-								frame->blit(this);
+								frame->setX(frame->getX() + frame->getWidth() / 2);
+								frame->getCrop()->x = frame->getWidth() / 2;
+								frame->getCrop()->w = frame->getWidth() / 2;
+								frame->getCrop()->h = frame->getHeight();
+							}else
+							{
+								frame->getCrop()->w = 0;
+								frame->getCrop()->h = 0;
 							}
+							frame->blit(this);
+						}
+						// Draw object
+						object = tile->getTerrainObject(O_OBJECT);
+						if (object)
+						{
+							frame = getSurface(object, _animFrame);
+							frame->setX(screenPosition.x);
+							frame->setY(screenPosition.y - object->getYOffset());
+							frame->blit(this);
 						}
 					}
 
@@ -585,6 +609,17 @@ void Map::down()
 	minMaxInt(&_viewHeight, 0, _save->getHeight()-1);
 	draw();
 }
+
+/**
+ * Set viewheight.
+ * @param viewheight
+ */
+void Map::setViewHeight(int viewheight)
+{
+	_viewHeight = viewheight;
+	draw();
+}
+
 
 /**
  * Center map on a certain position.

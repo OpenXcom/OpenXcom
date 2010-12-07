@@ -142,6 +142,15 @@ int TerrainObject::getTerrainLevel()
 }
 
 /**
+  * Get index to the footstep sound.
+  * @return sound ID
+  */
+int TerrainObject::getFootstepSound()
+{
+	return _footstepSound;
+}
+
+/**
 * setter
 */
 void TerrainObject::setOriginalSpriteIndex(int frameID, int value)
@@ -196,4 +205,12 @@ void TerrainObject::setTUCosts(int walk, int fly, int slide)
 void TerrainObject::setTerrainLevel(int value)
 {
 	_terrainLevel = value;
+}
+
+/**
+  * setter
+  */
+void TerrainObject::setFootstepSound(int value)
+{
+	_footstepSound = value;
 }

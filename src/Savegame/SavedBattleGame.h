@@ -35,6 +35,8 @@ class BattleUnit;
 class Soldier;
 class Position;
 class Pathfinding;
+class BattleItem;
+class Item;
 
 /**
  * The battlescape data that gets written to disk when the game is saved.
@@ -55,7 +57,7 @@ private:
 
 	std::vector<Node*> _nodes;
 	std::vector<BattleSoldier*> _soldiers;
-	//std::vector<BattleItem*> _items;
+	std::vector<BattleItem*> _inventory;
 
 	RuleTerrain *_terrain;
 	Pathfinding *_pathfinding;
@@ -92,6 +94,8 @@ public:
 	void linkTilesWithTerrainObjects(ResourcePack *res);
 	/// Add a soldier to the game
 	void addSoldier(Soldier *soldier, RuleUnitSprite *rules);
+	/// Add an item to the game
+	void addItem(Item *item);
 	/// get the currently selected soldier
 	BattleSoldier *getSelectedSoldier();
 	/// set the currently selected soldier

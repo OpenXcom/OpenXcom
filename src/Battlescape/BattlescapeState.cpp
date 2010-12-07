@@ -35,10 +35,14 @@
 #include "../Interface/ImageButton.h"
 #include "../Interface/NumberText.h"
 #include "../Savegame/SavedGame.h"
+#include "../Savegame/SavedBattleGame.h"
+#include "../Savegame/Tile.h"
 #include "../Savegame/BattleSoldier.h"
 #include "../Savegame/Soldier.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Engine/Timer.h"
+#include "../Engine/SoundSet.h"
+#include "../Engine/Sound.h"
 
 #define DEFAULT_WALK_SPEED 50
 #define DEFAULT_BULLET_SPEED 20
@@ -391,10 +395,25 @@ void BattlescapeState::moveUnit()
 	int tu = 0;
 	BattleSoldier *soldier = _game->getSavedGame()->getBattleGame()->getSelectedSoldier();
 	Pathfinding *pf = _game->getSavedGame()->getBattleGame()->getPathfinding();
+	static bool moved = false;
 
 	if (soldier->getStatus() == STATUS_WALKING)
 	{
 		soldier->keepWalking();
+
+		// play footstep sound every step = two steps between two tiles
+		if (soldier->getWalkingPhase() == 3)
+		{
+			Tile *tile = _game->getSavedGame()->getBattleGame()->getTile(soldier->getPosition());
+			if (tile->getFootstepSound())
+				_game->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(22 + (tile->getFootstepSound()*2))->play();
+		}
+		if (soldier->getWalkingPhase() == 7)
+		{
+			Tile *tile = _game->getSavedGame()->getBattleGame()->getTile(soldier->getPosition());
+			if (tile->getFootstepSound())
+				_game->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(23 + (tile->getFootstepSound()*2))->play();
+		}
 		_map->draw();
 	}
 
@@ -406,6 +425,11 @@ void BattlescapeState::moveUnit()
 
 	if (soldier->getStatus() == STATUS_STANDING)
 	{
+		if (moved)
+		{
+			moved = false;
+			_map->setViewHeight(soldier->getPosition().z);
+		}
 		int dir = pf->getStartDirection();
 		if (dir != -1)
 		{
@@ -423,11 +447,11 @@ void BattlescapeState::moveUnit()
 				soldier->startWalking(dir, destination);
 				_map->hideCursor(true); // hide cursor while walking
 				_game->getCursor()->setVisible(false);
+				moved = true;
 			}
 		}
 		else if (_map->isCursorHidden())
 		{
-			_map->centerOnPosition(soldier->getPosition());
 			_map->hideCursor(false); // show cursor again
 			_game->getCursor()->setVisible(true);
 		}
