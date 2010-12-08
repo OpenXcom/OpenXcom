@@ -38,7 +38,7 @@
  * @warning Currently the game is designed for 8bpp, so there's no telling what'll
  * happen if you use a different value.
  */
-Game::Game(const std::string &title, int width, int height, int bpp) : _screen(0), _cursor(0), _states(), _deleted(), _res(0), _save(0), _rules(0), _quit(false)
+Game::Game(const std::string &title, int width, int height, int bpp) : _screen(0), _cursor(0), _states(), _deleted(), _res(0), _save(0), _rules(0), _quit(false), _init(false)
 {
 	// Initialize SDL
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
@@ -108,6 +108,13 @@ void Game::run()
 		{
 			delete _deleted.back();
 			_deleted.pop_back();
+		}		
+
+		// Initialize active state
+		if (!_init)
+		{
+			_states.back()->init();
+			_init = true;
 		}
 
 		// Process events
@@ -213,6 +220,7 @@ void Game::setState(State *state)
 		popState();
 	}
 	pushState(state);
+	_init = false;
 }
 
 /**
@@ -223,7 +231,7 @@ void Game::setState(State *state)
 void Game::pushState(State *state)
 {
 	_states.push_back(state);
-	state->init();
+	_init = false;
 }
 
 /**
@@ -236,10 +244,7 @@ void Game::popState()
 {
 	_deleted.push_back(_states.back());
 	_states.pop_back();
-	if (!_states.empty())
-	{
-		_states.back()->init();
-	}
+	_init = false;
 }
 
 /**

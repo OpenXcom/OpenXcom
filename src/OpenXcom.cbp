@@ -30,7 +30,8 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
-			<Add directory="..\deps\SDL\include" />
+			<Add directory="..\deps\include\SDL" />
+			<Add directory="..\deps\include\yaml-cpp" />
 		</Compiler>
 		<Linker>
 			<Add library="mingw32" />
@@ -42,7 +43,7 @@
 			<Add library="dxguid" />
 			<Add library="SDL_gfx" />
 			<Add library="SDL_mixer" />
-			<Add directory="..\deps\SDL\lib" />
+			<Add directory="..\deps\lib" />
 		</Linker>
 		<Unit filename="Basescape\BaseInfoState.cpp" />
 		<Unit filename="Basescape\BaseInfoState.h" />
@@ -88,6 +89,8 @@
 		<Unit filename="Basescape\StoresState.h" />
 		<Unit filename="Battlescape\BattlescapeState.cpp" />
 		<Unit filename="Battlescape\BattlescapeState.h" />
+		<Unit filename="Battlescape\BriefingCrashState.cpp" />
+		<Unit filename="Battlescape\BriefingCrashState.h" />
 		<Unit filename="Battlescape\Map.cpp" />
 		<Unit filename="Battlescape\Map.h" />
 		<Unit filename="Battlescape\Pathfinding.cpp" />
@@ -142,6 +145,8 @@
 		<Unit filename="Geoscape\BuildNewBaseState.h" />
 		<Unit filename="Geoscape\ConfirmDestinationState.cpp" />
 		<Unit filename="Geoscape\ConfirmDestinationState.h" />
+		<Unit filename="Geoscape\ConfirmLandingState.cpp" />
+		<Unit filename="Geoscape\ConfirmLandingState.h" />
 		<Unit filename="Geoscape\ConfirmNewBaseState.cpp" />
 		<Unit filename="Geoscape\ConfirmNewBaseState.h" />
 		<Unit filename="Geoscape\CraftPatrolState.cpp" />
@@ -219,7 +224,6 @@
 		<Unit filename="OpenXcom.rc">
 			<Option compilerVar="WINDRES" />
 		</Unit>
-		<Unit filename="Resource\LangString.h" />
 		<Unit filename="Resource\ResourcePack.cpp" />
 		<Unit filename="Resource\ResourcePack.h" />
 		<Unit filename="Resource\SoldierNamePool.cpp" />
@@ -256,6 +260,8 @@
 		<Unit filename="Savegame\Base.h" />
 		<Unit filename="Savegame\BaseFacility.cpp" />
 		<Unit filename="Savegame\BaseFacility.h" />
+		<Unit filename="Savegame\BattleItem.cpp" />
+		<Unit filename="Savegame\BattleItem.h" />
 		<Unit filename="Savegame\BattleSoldier.cpp" />
 		<Unit filename="Savegame\BattleSoldier.h" />
 		<Unit filename="Savegame\BattleUnit.cpp" />

@@ -16,35 +16,38 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_LANGUAGE_H
-#define OPENXCOM_LANGUAGE_H
+#ifndef OPENXCOM_BRIEFINGCRASHSTATE_H
+#define OPENXCOM_BRIEFINGCRASHSTATE_H
 
-#include <map>
-#include <string>
-#include <string>
+#include <vector>
+#include "../Engine/State.h"
+
+class TextButton;
+class Window;
+class Text;
+class TextList;
+class Base;
+class Globe;
+class Craft;
 
 /**
- * Contains strings used throughout the game for localization.
- * Languages are just a set of strings identified by an ID string.
+ * Briefing screen which displays info
+ * about a Crash Site mission.
  */
-class Language
+class BriefingCrashState : public State
 {
 private:
-	std::string _name;
-	std::map<std::string, std::string> _strings;
+	TextButton *_btnOk;
+	Window *_window;
+	Text *_txtTitle, *_txtUfo, *_txtCraft, *_txtBriefing;
+	Craft *_craft;
 public:
-	/// Creates a blank language.
-	Language();
-	/// Cleans up the language.
-	~Language();
-	/// Loads an OpenXcom language file.
-	void loadLng(const std::string &filename);
-	/// Gets the language's name.
-	std::string getName() const;
-	/// Gets a string from the language.
-	std::string getString(const std::string &id) const;
-	/// Outputs the language to a HTML file.
-	void toHtml() const;
+	/// Creates the Crash Briefing state.
+	BriefingCrashState(Game *game, Craft *craft);
+	/// Cleans up the Crash Briefing state.
+	~BriefingCrashState();
+	/// Handler for clicking the Ok button.
+	void btnOkClick(Action *action);
 };
 
 #endif

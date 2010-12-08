@@ -94,6 +94,7 @@ XcomResourcePack::XcomResourcePack(const std::string &folder) : ResourcePack(fol
 		_languages[lang[i]] = new Language();
 		_languages[lang[i]]->loadLng(insensitive(s.str()));
 	}
+	//_languages["ENGLISH.LNG"]->toHtml();
 
 	// Load surfaces
 	std::string dats[] = {"LANG1.DAT",

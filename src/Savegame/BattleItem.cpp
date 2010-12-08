@@ -22,7 +22,7 @@
 
 /**
  * Initializes a item of the specified type.
- * @param rules Pointer to item.
+ * @param item Pointer to item.
  * @param qty Initial ammo quantity.
  */
 BattleItem::BattleItem(Item *item, int qty) : _item(item), _ammoQty(qty)

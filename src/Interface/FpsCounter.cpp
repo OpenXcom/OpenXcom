@@ -26,8 +26,6 @@
 
 /**
  * Creates a FPS counter of the specified size.
- * @param big Pointer to the big-size font.
- * @param small Pointer to the small-size font.
  * @param width Width in pixels.
  * @param height Height in pixels.
  * @param x X position in pixels.

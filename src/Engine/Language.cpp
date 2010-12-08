@@ -39,9 +39,9 @@ Language::~Language()
 /**
  * Loads pairs of null-terminated strings contained in
  * a raw text file into the Language. Each pair is made of
- * an ID and a localized string. For duplicate strings, _UC denotes
- * the uppercase string and __ denotes a linebreak in the string.
+ * an ID and a localized string.
  * @param filename Filename of the LNG file.
+ * @sa <a href="../language_id.html">Reference Table</a>
  */
 void Language::loadLng(const std::string &filename)
 {
@@ -124,4 +124,33 @@ std::string Language::getString(const std::string &id) const
 	{
 		return s->second;
 	}
+}
+
+/**
+ * Outputs all the language IDs and strings
+ * to an HTML table.
+ */
+void Language::toHtml() const
+{
+	std::ofstream htmlFile ("lang.html", std::ios::out);
+	htmlFile << "<table border=\"1\" width=\"100%\">" << std::endl;
+	htmlFile << "<tr><th>ID String</th><th>English String</th></tr>" << std::endl;
+	for (std::map<std::string, std::string>::const_iterator i = _strings.begin(); i != _strings.end(); i++)
+	{
+		htmlFile << "<tr><td>" << i->first << "</td><td>";
+		for (std::string::const_iterator j = i->second.begin(); j != i->second.end(); j++)
+		{
+			if (*j == 2 || *j == '\n')
+			{
+				htmlFile << "<br />";
+			}
+			else
+			{
+				htmlFile << *j;
+			}
+		}
+		htmlFile << "</td></tr>" << std::endl;
+	}
+	htmlFile << "</table>" << std::endl;
+	htmlFile.close();
 }

@@ -52,7 +52,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\deps\SDL\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\deps\include\SDL;..\deps\include\yaml-cpp%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -63,8 +63,8 @@
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>SDL_mixer.lib;SDL_gfx.lib;SDLmain.lib;SDL.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\deps\SDL\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>yamlcppd.lib;SDL_mixer.lib;SDL_gfx.lib;SDLmain.lib;SDL.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\deps\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
@@ -75,12 +75,12 @@
       <MapExports>false</MapExports>
     </Link>
     <PostBuildEvent>
-      <Command>copy /y ..\deps\SDL\lib\*.dll ..\bin\</Command>
+      <Command>copy /y ..\deps\lib\*.dll ..\bin\</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\deps\SDL\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\deps\include\SDL;..\deps\include\yaml-cpp%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>
@@ -89,8 +89,8 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>SDL_mixer.lib;SDL_gfx.lib;SDLmain.lib;SDL.lib;SDL_gfx.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\deps\SDL\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>yamlcpp.lib;SDL_mixer.lib;SDL_gfx.lib;SDLmain.lib;SDL.lib;SDL_gfx.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\deps\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
@@ -101,7 +101,7 @@
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
     <PostBuildEvent>
-      <Command>copy /y ..\deps\SDL\lib\*.dll ..\bin\</Command>
+      <Command>copy /y ..\deps\lib\*.dll ..\bin\</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -127,6 +127,7 @@
     <ClCompile Include="Basescape\SoldiersState.cpp" />
     <ClCompile Include="Basescape\StoresState.cpp" />
     <ClCompile Include="Battlescape\BattlescapeState.cpp" />
+    <ClCompile Include="Battlescape\BriefingCrashState.cpp" />
     <ClCompile Include="Battlescape\Map.cpp" />
     <ClCompile Include="Battlescape\Pathfinding.cpp" />
     <ClCompile Include="Battlescape\PathfindingNode.cpp" />
@@ -154,6 +155,7 @@
     <ClCompile Include="Geoscape\BaseNameState.cpp" />
     <ClCompile Include="Geoscape\BuildNewBaseState.cpp" />
     <ClCompile Include="Geoscape\ConfirmDestinationState.cpp" />
+    <ClCompile Include="Geoscape\ConfirmLandingState.cpp" />
     <ClCompile Include="Geoscape\ConfirmNewBaseState.cpp" />
     <ClCompile Include="Geoscape\CraftPatrolState.cpp" />
     <ClCompile Include="Geoscape\DogfightState.cpp" />
@@ -254,6 +256,7 @@
     <ClInclude Include="Basescape\SoldiersState.h" />
     <ClInclude Include="Basescape\StoresState.h" />
     <ClInclude Include="Battlescape\BattlescapeState.h" />
+    <ClInclude Include="Battlescape\BriefingCrashState.h" />
     <ClInclude Include="Battlescape\Map.h" />
     <ClInclude Include="Battlescape\Pathfinding.h" />
     <ClInclude Include="Battlescape\PathfindingNode.h" />
@@ -281,6 +284,7 @@
     <ClInclude Include="Geoscape\BaseNameState.h" />
     <ClInclude Include="Geoscape\BuildNewBaseState.h" />
     <ClInclude Include="Geoscape\ConfirmDestinationState.h" />
+    <ClInclude Include="Geoscape\ConfirmLandingState.h" />
     <ClInclude Include="Geoscape\ConfirmNewBaseState.h" />
     <ClInclude Include="Geoscape\CraftPatrolState.h" />
     <ClInclude Include="Geoscape\DogfightState.h" />
@@ -319,7 +323,6 @@
     <ClInclude Include="Menu\StartState.h" />
     <ClInclude Include="Menu\TestState.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="Resource\LangString.h" />
     <ClInclude Include="Resource\ResourcePack.h" />
     <ClInclude Include="Resource\SoldierNamePool.h" />
     <ClInclude Include="Resource\TerrainObject.h" />

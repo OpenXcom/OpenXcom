@@ -48,7 +48,7 @@ private:
 	ResourcePack *_res;
 	SavedGame *_save;
 	Ruleset *_rules;
-	bool _quit;
+	bool _quit, _init;
 	
 	FpsCounter *_fpsCounter;
 public:

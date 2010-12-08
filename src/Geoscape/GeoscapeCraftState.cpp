@@ -204,7 +204,7 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 	}
 	else
 	{
-		ss7 << _game->getResourcePack()->getLanguage()->getString("STR_NONE");
+		ss7 << _game->getResourcePack()->getLanguage()->getString("STR_NONE_UC");
 		_txtW1Name->setText(ss7.str());
 		_txtW1Ammo->setVisible(false);
 	}
@@ -229,7 +229,7 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 	}
 	else
 	{
-		ss9 << _game->getResourcePack()->getLanguage()->getString("STR_NONE");
+		ss9 << _game->getResourcePack()->getLanguage()->getString("STR_NONE_UC");
 		_txtW2Name->setText(ss9.str());
 		_txtW2Ammo->setVisible(false);
 	}

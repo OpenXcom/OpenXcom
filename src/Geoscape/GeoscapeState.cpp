@@ -60,6 +60,7 @@
 #include "CraftPatrolState.h"
 #include "LowFuelState.h"
 #include "MultipleTargetsState.h"
+#include "ConfirmLandingState.h"
 #include "../Battlescape/BattlescapeState.h"
 
 /**
@@ -484,11 +485,14 @@ void GeoscapeState::time5Seconds()
 						{
 							// look up polygons texture
 							int texture = _globe->getPolygonTexture(u->getLongitude(),u->getLatitude());
-							_game->getRuleset()->newBattleSave(_game->getResourcePack(), _game->getSavedGame(), texture, (*j), u);
 							_music = false;
-							_game->pushState(new BattlescapeState(_game));
+							timerReset();
+							popup(new ConfirmLandingState(_game, *j, texture));
 						}
-						(*j)->returnToBase();
+						else
+						{
+							(*j)->returnToBase();
+						}
 					}
 				}
 				else if (w != 0)

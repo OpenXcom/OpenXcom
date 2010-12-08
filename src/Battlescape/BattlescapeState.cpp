@@ -43,6 +43,7 @@
 #include "../Engine/Timer.h"
 #include "../Engine/SoundSet.h"
 #include "../Engine/Sound.h"
+#include "../Savegame/Craft.h"
 
 #define DEFAULT_WALK_SPEED 50
 #define DEFAULT_BULLET_SPEED 20
@@ -51,7 +52,6 @@
  * Initializes all the elements in the Battlescape screen.
  * @param game Pointer to the core game.
  */
-#include <iostream>
 BattlescapeState::BattlescapeState(Game *game) : State(game)
 {
 	// Create the battlemap view
@@ -96,9 +96,9 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	SDL_Color color[16];
 	for (int i = 0; i < 16; i++)
 	{
-		color[i].r = 128 - (i + 1) * 8;
-		color[i].g = 128 - (i + 1) * 8;
-		color[i].b = 128 - (i + 1) * 8;
+		color[i].r = 128 - (i + 1) * 4;
+		color[i].g = 128 - (i + 2) * 4;
+		color[i].b = 128 - (i + 3) * 4;
 	}
 	_game->setPalette(color, Palette::backPos+16, 16);
 
@@ -133,6 +133,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	_map->setSavedGame(_game->getSavedGame()->getBattleGame(), _game);
 	_map->setResourcePack(_game->getResourcePack());
 	_map->init();
+	_map->onMouseClick((ActionHandler)&BattlescapeState::mapClick);
 
 	_numLayers->setColor(Palette::blockOffset(1)-2);
 	_numLayers->setValue(1);
@@ -142,8 +143,6 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	_btnMapDown->onMouseClick((ActionHandler)&BattlescapeState::btnMapDownClick);
 	_btnNextSoldier->onMouseClick((ActionHandler)&BattlescapeState::btnNextSoldierClick);
 	_btnCenter->onMouseClick((ActionHandler)&BattlescapeState::btnCenterClick);
-
-	_map->onMouseClick((ActionHandler)&BattlescapeState::mapClick);
 	
 	_txtName->setColor(Palette::blockOffset(8));
 	_numTimeUnits->setColor(Palette::blockOffset(4));
@@ -188,8 +187,6 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	_bulletTimer = new Timer(DEFAULT_BULLET_SPEED);
 	_bulletTimer->onTimer((StateHandler)&BattlescapeState::moveBullet);
 	_bulletTimer->start();
-
-
 }
 
 /**
@@ -361,6 +358,7 @@ void BattlescapeState::btnEndTurnClick(Action *action)
  */
 void BattlescapeState::btnAbortClick(Action *action)
 {
+	_game->getSavedGame()->getBattleGame()->getCraft()->returnToBase();
 	_game->getRuleset()->endBattle(_game->getSavedGame());
 	_game->getCursor()->setColor(Palette::blockOffset(15) + 12);
 	_game->popState();

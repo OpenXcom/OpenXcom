@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;..\deps\SDL\include&quot;"
+				AdditionalIncludeDirectories="&quot;..\deps\include\SDL&quot;;&quot;..\deps\include\yaml-cpp&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -64,7 +64,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="SDLmain.lib SDL.lib SDL_gfx.lib SDL_mixer.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;..\deps\SDL\lib&quot;"
+				AdditionalLibraryDirectories="&quot;..\deps\lib&quot;"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
 				SubSystem="1"
@@ -93,7 +93,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy /y ..\deps\SDL\lib\*.dll ..\bin\"
+				CommandLine="copy /y ..\deps\lib\*.dll ..\bin\"
 			/>
 		</Configuration>
 		<Configuration
@@ -121,7 +121,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;..\deps\SDL\include&quot;"
+				AdditionalIncludeDirectories="&quot;..\deps\include\SDL&quot;;&quot;..\deps\include\yaml-cpp&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -142,7 +142,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="SDLmain.lib SDL.lib SDL_gfx.lib SDL_mixer.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;..\deps\SDL\lib&quot;"
+				AdditionalLibraryDirectories="&quot;..\deps\lib&quot;"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
 				SubSystem="1"
@@ -173,7 +173,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy /y ..\deps\SDL\lib\*.dll ..\bin\"
+				CommandLine="copy /y ..\deps\lib\*.dll ..\bin\"
 			/>
 		</Configuration>
 	</Configurations>
@@ -596,6 +596,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Battlescape\BriefingCrashState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\BriefingCrashState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Battlescape\Map.cpp"
 				>
 			</File>
@@ -677,6 +685,14 @@
 			</File>
 			<File
 				RelativePath=".\Geoscape\ConfirmDestinationState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\ConfirmLandingState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\ConfirmLandingState.h"
 				>
 			</File>
 			<File
@@ -912,6 +928,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Savegame\BattleItem.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\BattleItem.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Savegame\BattleSoldier.cpp"
 				>
 			</File>
@@ -1067,10 +1091,6 @@
 		<Filter
 			Name="Resource"
 			>
-			<File
-				RelativePath=".\Resource\LangString.h"
-				>
-			</File>
 			<File
 				RelativePath=".\Resource\ResourcePack.cpp"
 				>

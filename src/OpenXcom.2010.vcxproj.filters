@@ -374,6 +374,12 @@
     <ClCompile Include="Savegame\BattleItem.cpp">
       <Filter>Savegame</Filter>
     </ClCompile>
+    <ClCompile Include="Geoscape\ConfirmLandingState.cpp">
+      <Filter>Geoscape</Filter>
+    </ClCompile>
+    <ClCompile Include="Battlescape\BriefingCrashState.cpp">
+      <Filter>Battlescape</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -525,9 +531,6 @@
       <Filter>Resource</Filter>
     </ClInclude>
     <ClInclude Include="Resource\XcomResourcePack.h">
-      <Filter>Resource</Filter>
-    </ClInclude>
-    <ClInclude Include="Resource\LangString.h">
       <Filter>Resource</Filter>
     </ClInclude>
     <ClInclude Include="Resource\ResourcePack.h">
@@ -751,6 +754,12 @@
     </ClInclude>
     <ClInclude Include="Savegame\BattleItem.h">
       <Filter>Savegame</Filter>
+    </ClInclude>
+    <ClInclude Include="Geoscape\ConfirmLandingState.h">
+      <Filter>Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Battlescape\BriefingCrashState.h">
+      <Filter>Battlescape</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

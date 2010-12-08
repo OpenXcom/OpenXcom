@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http:///www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_CONFIRMDESTINATIONSTATE_H
-#define OPENXCOM_CONFIRMDESTINATIONSTATE_H
+#ifndef OPENXCOM_CONFIRMLANDINGSTATE_H
+#define OPENXCOM_CONFIRMLANDINGSTATE_H
 
 #include "../Engine/State.h"
 
@@ -25,29 +25,28 @@ class Window;
 class Text;
 class TextButton;
 class Craft;
-class Target;
 
 /**
  * Window that allows the player
- * to confirm a craft's new destination.
+ * to confirm a craft landing at its destination.
  */
-class ConfirmDestinationState : public State
+class ConfirmLandingState : public State
 {
 private:
 	Craft *_craft;
-	Target *_target;
 	Window *_window;
-	Text *_txtTarget;
-	TextButton *_btnOk, *_btnCancel;
+	int _texture;
+	Text *_txtCraft, *_txtTarget, *_txtReady, *_txtBegin;
+	TextButton *_btnYes, *_btnNo;
 public:
-	/// Creates the Confirm Destination state.
-	ConfirmDestinationState(Game *game, Craft *craft, Target *target);
-	/// Cleans up the Confirm Destination state.
-	~ConfirmDestinationState();
-	/// Handler for clicking the OK button.
-	void btnOkClick(Action *action);
-	/// Handler for clicking the Cancel button.
-	void btnCancelClick(Action *action);
+	/// Creates the Confirm Landing state.
+	ConfirmLandingState(Game *game, Craft *craft, int texture);
+	/// Cleans up the Confirm Landing state.
+	~ConfirmLandingState();
+	/// Handler for clicking the Yes button.
+	void btnYesClick(Action *action);
+	/// Handler for clicking the No button.
+	void btnNoClick(Action *action);
 };
 
 #endif
