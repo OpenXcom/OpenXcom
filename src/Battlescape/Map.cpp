@@ -66,6 +66,9 @@
           x+  
 */
 
+namespace OpenXcom
+{
+
 /**
  * Sets up a map with the specified size and position.
  * @param width Width in pixels.
@@ -762,3 +765,4 @@ bool Map::isCursorHidden()
 	return _hideCursor;
 }
 
+}

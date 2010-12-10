@@ -22,6 +22,9 @@
 #include <vector>
 #include "../Battlescape/Position.h"
 
+namespace OpenXcom
+{
+
 class RuleUnitSprite;
 class Tile;
 class BattleItem;
@@ -84,5 +87,7 @@ public:
 	void turn();
 
 };
+
+}
 
 #endif

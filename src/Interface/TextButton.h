@@ -21,6 +21,9 @@
 
 #include "../Engine/InteractiveSurface.h"
 
+namespace OpenXcom
+{
+
 class Text;
 class Font;
 class Sound;
@@ -65,5 +68,7 @@ public:
 	/// Special handling for mouse releases.
 	void mouseRelease(Action *action, State *state);
 };
+
+}
 
 #endif

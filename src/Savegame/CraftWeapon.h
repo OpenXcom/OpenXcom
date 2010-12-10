@@ -21,6 +21,9 @@
 
 #include <string>
 
+namespace OpenXcom
+{
+
 class RuleCraftWeapon;
 
 /**
@@ -47,5 +50,7 @@ public:
 	/// Rearms the craft weapon.
 	void rearm();
 };
+
+}
 
 #endif

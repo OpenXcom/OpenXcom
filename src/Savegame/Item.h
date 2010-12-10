@@ -21,6 +21,9 @@
 
 #include <string>
 
+namespace OpenXcom
+{
+
 class RuleItem;
 
 /**
@@ -47,5 +50,7 @@ public:
 	/// Gets the item's total size.
 	double getTotalSize() const;
 };
+
+}
 
 #endif

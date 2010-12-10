@@ -23,6 +23,9 @@
 #include <vector>
 #include <string>
 
+namespace OpenXcom
+{
+
 class ImageButton;
 class Text;
 class Surface;
@@ -89,5 +92,7 @@ public:
 	/// Handler for clicking the Preview graphic.
 	void previewClick(Action *action);
 };
+
+}
 
 #endif

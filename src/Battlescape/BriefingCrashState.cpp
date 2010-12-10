@@ -31,6 +31,9 @@
 #include "../Engine/Music.h"
 #include "../Battlescape/BattlescapeState.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes all the elements in the Crash Briefing screen.
  * @param game Pointer to the core game.
@@ -102,4 +105,6 @@ void BriefingCrashState::btnOkClick(Action *action)
 {
 	_game->popState();
 	_game->pushState(new BattlescapeState(_game));
+}
+
 }

@@ -27,6 +27,9 @@
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes all the elements in the Ufo Lost window.
  * @param game Pointer to the core game.
@@ -89,4 +92,6 @@ void UfoLostState::init()
 void UfoLostState::btnOkClick(Action *action)
 {
 	_game->popState();
+}
+
 }

@@ -20,6 +20,9 @@
 #include <sstream>
 #include <string>
 
+namespace OpenXcom
+{
+
 /**
  * Sets up a blank number text.
  * @param width Width in pixels.
@@ -260,4 +263,6 @@ void NumberText::draw()
 	}
 
 	this->offset(_color);
+}
+
 }

@@ -22,6 +22,10 @@
 #include <vector>
 #include <string>
 #include <string>
+
+namespace OpenXcom
+{
+
 class RuleTerrain;
 
 /**
@@ -94,5 +98,7 @@ public:
 	/// Sets the craft's terrain data.
 	void setBattlescapeTerrainData(RuleTerrain *t);
 };
+
+}
 
 #endif

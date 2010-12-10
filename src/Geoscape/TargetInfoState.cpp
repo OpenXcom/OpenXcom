@@ -28,6 +28,9 @@
 #include "../Interface/Text.h"
 #include "../Savegame/Target.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes all the elements in the Target Info window.
  * @param game Pointer to the core game.
@@ -96,4 +99,6 @@ TargetInfoState::~TargetInfoState()
 void TargetInfoState::btnOkClick(Action *action)
 {
 	_game->popState();
+}
+
 }

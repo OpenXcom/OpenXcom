@@ -20,6 +20,9 @@
 #include "TextList.h"
 #include "../Engine/Timer.h"
 
+namespace OpenXcom
+{
+
 /**
  * Sets up an arrow button with the specified size and position.
  * @param shape Shape of the arrow.
@@ -77,26 +80,26 @@ void ArrowButton::draw()
 
 	square.x = 0;
 	square.y = 0;
-	square.w = _width - 1;
-	square.h = _height - 1;
+	square.w = getWidth() - 1;
+	square.h = getHeight() - 1;
 
-	SDL_FillRect(_surface, &square, color);
+	drawRect(&square, color);
 
 	square.x++;
 	square.y++;
 	color = _color + 2;
 
-	SDL_FillRect(_surface, &square, color);
+	drawRect(&square, color);
 
 	square.w--;
 	square.h--;
 	color = _color + 1;
 
-	SDL_FillRect(_surface, &square, color);
+	drawRect(&square, color);
 
 	setPixel(0, 0, _color - 2);
-	setPixel(0, _height - 1, _color + 1);
-	setPixel(_width - 1, 0, _color + 1);
+	setPixel(0, getHeight() - 1, _color + 1);
+	setPixel(getWidth() - 1, 0, _color + 1);
 
 	color = _color - 2;
 
@@ -108,7 +111,7 @@ void ArrowButton::draw()
 		square.w = 3;
 		square.h = 3;
 
-		SDL_FillRect(_surface, &square, color);
+		drawRect(&square, color);
 
 		// Draw arrow triangle
 		square.x = 2;
@@ -118,11 +121,11 @@ void ArrowButton::draw()
 
 		for (; square.w > 1; square.w -= 2)
 		{
-			SDL_FillRect(_surface, &square, color);
+			drawRect(&square, color);
 			square.x++;
 			square.y--;
 		}
-		SDL_FillRect(_surface, &square, color);
+		drawRect(&square, color);
 	}
 	else if (_shape == ARROW_BIG_DOWN)
 	{
@@ -132,7 +135,7 @@ void ArrowButton::draw()
 		square.w = 3;
 		square.h = 3;
 
-		SDL_FillRect(_surface, &square, color);
+		drawRect(&square, color);
 
 		// Draw arrow triangle
 		square.x = 2;
@@ -142,11 +145,11 @@ void ArrowButton::draw()
 
 		for (; square.w > 1; square.w -= 2)
 		{
-			SDL_FillRect(_surface, &square, color);
+			drawRect(&square, color);
 			square.x++;
 			square.y++;
 		}
-		SDL_FillRect(_surface, &square, color);
+		drawRect(&square, color);
 	}
 
 	unlock();
@@ -201,4 +204,6 @@ void ArrowButton::mouseRelease(Action *action, State *state)
 	{
 		_timer->stop();
 	}
+}
+
 }

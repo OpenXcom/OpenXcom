@@ -33,6 +33,9 @@
 #include "../Ruleset/Ruleset.h"
 #include "../Savegame/Item.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes all the elements in the Stores window.
  * @param game Pointer to the core game.
@@ -113,4 +116,6 @@ StoresState::~StoresState()
 void StoresState::btnOkClick(Action *action)
 {
 	_game->popState();
+}
+
 }

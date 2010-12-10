@@ -21,6 +21,9 @@
 
 #include "BattleUnit.h"
 
+namespace OpenXcom
+{
+
 class Soldier;
 
 /**
@@ -40,5 +43,7 @@ public:
 	/// gets the geoscape soldier object
 	Soldier *getSoldier();
 };
+
+}
 
 #endif

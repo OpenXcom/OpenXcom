@@ -20,6 +20,9 @@
 #include "Item.h"
 #include "../Ruleset/RuleItem.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes a item of the specified type.
  * @param item Pointer to item.
@@ -61,4 +64,6 @@ int BattleItem::getAmmoQuantity() const
 void BattleItem::setAmmoQuantity(int qty)
 {
 	_ammoQty = qty;
+}
+
 }

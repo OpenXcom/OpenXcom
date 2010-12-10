@@ -30,6 +30,9 @@
 #include "../Savegame/Base.h"
 #include "../Basescape/PlaceLiftState.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes all the elements in a Base Name window.
  * @param game Pointer to the core game.
@@ -93,4 +96,6 @@ void BaseNameState::edtNameKeyPress(Action *action)
 			_game->pushState(new PlaceLiftState(_game, _base, _globe));
 		}
 	}
+}
+
 }

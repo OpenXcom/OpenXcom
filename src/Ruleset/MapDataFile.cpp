@@ -17,9 +17,9 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "MapDataFile.h"
-#include <fstream>
-#include <sstream>
 
+namespace OpenXcom
+{
 
 /**
 * MapDataFile construction.
@@ -54,3 +54,4 @@ int MapDataFile::getSize()
 	return _size;
 }
 
+}

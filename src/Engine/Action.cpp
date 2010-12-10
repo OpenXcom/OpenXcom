@@ -19,6 +19,9 @@
 
 #include "Action.h"
 
+namespace OpenXcom
+{
+
 /**
  * Creates a new action.
  * @param xScale Screen's X scaling factor.
@@ -80,4 +83,6 @@ void Action::setSender(InteractiveSurface *sender)
 SDL_Event *const Action::getDetails() const
 {
 	return _ev;
+}
+
 }

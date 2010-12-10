@@ -23,6 +23,9 @@
 #include "State.h"
 #include "Surface.h"
 
+namespace OpenXcom
+{
+
 typedef State &(State::*StateHandler)();
 typedef Surface &(Surface::*SurfaceHandler)();
 
@@ -60,5 +63,7 @@ public:
 	/// Hooks a surface action handler to the timer interval.
 	void onTimer(SurfaceHandler handler);
 };
+
+}
 
 #endif

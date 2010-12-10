@@ -21,6 +21,9 @@
 
 #include <vector>
 
+namespace OpenXcom
+{
+
 class City;
 
 /**
@@ -48,5 +51,7 @@ public:
 	/// Gets the cities in this region.
 	std::vector<City*> *const getCities();
 };
+
+}
 
 #endif

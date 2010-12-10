@@ -35,6 +35,9 @@
 #include "BaseNameState.h"
 #include "ConfirmNewBaseState.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes all the elements in the Build New Base window.
  * @param game Pointer to the core game.
@@ -59,8 +62,8 @@ BuildNewBaseState::BuildNewBaseState(Game *game, Base *base, Globe *globe, bool 
 	_txtTitle = new Text(200, 9, 8, 10);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
-	
+	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
+
 	add(_btnRotateLeft);
 	add(_btnRotateRight);
 	add(_btnRotateUp);
@@ -71,7 +74,7 @@ BuildNewBaseState::BuildNewBaseState(Game *game, Base *base, Globe *globe, bool 
 	add(_window);
 	add(_btnCancel);
 	add(_txtTitle);
-	
+
 	// Set up objects
 	_globe->onMouseClick((ActionHandler)&BuildNewBaseState::globeClick);
 
@@ -282,4 +285,6 @@ void BuildNewBaseState::btnCancelClick(Action *action)
 {
 	delete _base;
 	_game->popState();
+}
+
 }

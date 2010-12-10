@@ -18,6 +18,9 @@
  */
 #include "Music.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes a new music track.
  */
@@ -71,4 +74,6 @@ void Music::play() const
 	{
 		throw Mix_GetError();
 	}
+}
+
 }

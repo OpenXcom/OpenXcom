@@ -22,6 +22,9 @@
 #include "../Engine/State.h"
 #include "../Savegame/SavedGame.h"
 
+namespace OpenXcom
+{
+
 class TextButton;
 class Window;
 class Text;
@@ -55,5 +58,7 @@ public:
 	/// Handler for clicking the Superhuman button.
 	void btnSuperhumanClick(Action *action);
 };
+
+}
 
 #endif

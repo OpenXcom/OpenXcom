@@ -19,6 +19,9 @@
 #ifndef OPENXCOM_COUNTRY_H
 #define OPENXCOM_COUNTRY_H
 
+namespace OpenXcom
+{
+
 /**
  * Represents a country who funds the player.
  * Countries provide an amount of monthly funding that
@@ -50,5 +53,7 @@ public:
 	/// Sets the country's label position.
 	void setLabelLatitude(double lat);
 };
+
+}
 
 #endif

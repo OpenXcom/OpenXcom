@@ -23,6 +23,9 @@
 #include <vector>
 #include <string>
 
+namespace OpenXcom
+{
+
 class MapBlock;
 class MapDataFile;
 
@@ -54,5 +57,7 @@ public:
 	/// Parses the terrain object name to get the datafilename and the relative ID in that file.
 	void parseTerrainObjectName(std::string objectName, std::string *dataFileName, int *relativeID);
 };
+
+}
 
 #endif

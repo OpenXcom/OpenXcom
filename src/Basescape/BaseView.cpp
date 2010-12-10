@@ -30,6 +30,9 @@
 #include "../Engine/Palette.h"
 #include "../Engine/Timer.h"
 
+namespace OpenXcom
+{
+
 #define GRID_SIZE 32
 
 /**
@@ -159,12 +162,12 @@ void BaseView::setSelectable(int size)
 		r.h = _selector->getHeight();
 		r.x = 0;
 		r.y = 0;
-		SDL_FillRect(_selector->getSurface(), &r, Palette::blockOffset(1));
+        _selector->drawRect(&r, Palette::blockOffset(1)); 
 		r.w -= 2;
 		r.h -= 2;
 		r.x++;
 		r.y++;
-		SDL_FillRect(_selector->getSurface(), &r, 0);
+        _selector->drawRect(&r, 0);
 		_selector->setVisible(false);
 	}
 	else
@@ -322,12 +325,12 @@ void BaseView::blink()
 			r.h = _selector->getHeight();
 			r.x = 0;
 			r.y = 0;
-			SDL_FillRect(_selector->getSurface(), &r, Palette::blockOffset(1));
+            _selector->drawRect(&r, Palette::blockOffset(1)); 
 			r.w -= 2;
 			r.h -= 2;
 			r.x++;
 			r.y++;
-			SDL_FillRect(_selector->getSurface(), &r, 0);
+            _selector->drawRect(&r, 0);
 		}
 		else
 		{
@@ -335,7 +338,7 @@ void BaseView::blink()
 			r.h = _selector->getHeight();
 			r.x = 0;
 			r.y = 0;
-			SDL_FillRect(_selector->getSurface(), &r, 0);
+            _selector->drawRect(&r, 0); 
 		}
 	}
 }
@@ -538,4 +541,6 @@ void BaseView::mouseOut(Action *action, State *state)
 	}
 
 	InteractiveSurface::mouseOut(action, state);
+}
+
 }

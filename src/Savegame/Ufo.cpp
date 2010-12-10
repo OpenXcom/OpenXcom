@@ -22,6 +22,9 @@
 #include "../Engine/Language.h"
 #include "../Ruleset/RuleUfo.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes a UFO of the specified type.
  * @param rules Pointer to ruleset.
@@ -247,4 +250,6 @@ void Ufo::think()
 			setSpeed(0);
 		}
 	}
+}
+
 }

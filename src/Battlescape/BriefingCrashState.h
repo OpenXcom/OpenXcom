@@ -22,12 +22,12 @@
 #include <vector>
 #include "../Engine/State.h"
 
+namespace OpenXcom
+{
+
 class TextButton;
 class Window;
 class Text;
-class TextList;
-class Base;
-class Globe;
 class Craft;
 
 /**
@@ -49,5 +49,7 @@ public:
 	/// Handler for clicking the Ok button.
 	void btnOkClick(Action *action);
 };
+
+}
 
 #endif

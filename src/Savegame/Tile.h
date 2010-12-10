@@ -24,6 +24,9 @@
 #include "../Battlescape/Position.h"
 #include "../Resource/TerrainObject.h"
 
+namespace OpenXcom
+{
+
 class Surface;
 class TerrainObject;
 class BattleUnit;
@@ -71,7 +74,8 @@ public:
 	/// gets the floor object footstep sound
 	int getFootstepSound();
 
-
 };
+
+}
 
 #endif

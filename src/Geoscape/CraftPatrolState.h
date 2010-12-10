@@ -21,6 +21,9 @@
 
 #include "../Engine/State.h"
 
+namespace OpenXcom
+{
+
 class TextButton;
 class Window;
 class Text;
@@ -52,5 +55,7 @@ public:
 	/// Handler for clicking the Redirect Craft button.
 	void btnRedirectClick(Action *action);
 };
+
+}
 
 #endif

@@ -28,6 +28,9 @@
 #include "../Interface/TextEdit.h"
 #include "../Interface/TextList.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes a brand new state with no child elements.
  * By default states are full-screen.
@@ -155,4 +158,6 @@ void State::blit()
 {
 	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i < _surfaces.end(); i++)
 		(*i)->blit(_game->getScreen()->getSurface());
+}
+
 }

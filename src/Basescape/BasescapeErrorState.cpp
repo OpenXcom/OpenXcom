@@ -27,6 +27,9 @@
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes all the elements in a Basescape error window.
  * @param game Pointer to the core game.
@@ -79,4 +82,6 @@ BasescapeErrorState::~BasescapeErrorState()
 void BasescapeErrorState::btnOkClick(Action *action)
 {
 	_game->popState();
+}
+
 }

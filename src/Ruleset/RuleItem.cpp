@@ -18,6 +18,9 @@
  */
 #include "RuleItem.h"
 
+namespace OpenXcom
+{
+
 /**
  * Creates a blank ruleset for a certain type of item.
  * @param type String defining the type.
@@ -121,4 +124,6 @@ bool RuleItem::getEquippable() const
 void RuleItem::setEquippable(bool equip)
 {
 	_equip = equip;
+}
+
 }

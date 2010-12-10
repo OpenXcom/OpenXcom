@@ -45,6 +45,9 @@
 #include "../Savegame/City.h"
 #include "../Savegame/Tile.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes the X-Com ruleset with all the rules
  * mimicking the original game.
@@ -1381,5 +1384,7 @@ void XcomRuleset::endBattle(SavedGame *save)
 	// bye save game, battle is over
 	delete save->getBattleGame();
 	save->setBattleGame(0);
+
+}
 
 }

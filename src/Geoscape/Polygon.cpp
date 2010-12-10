@@ -18,6 +18,9 @@
  */
 #include "Polygon.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes the polygon with arrays to store each point's coordinates.
  * @param points Number of points.
@@ -175,4 +178,6 @@ void Polygon::setTexture(int tex)
 int Polygon::getPoints() const
 {
 	return _points;
+}
+
 }

@@ -21,6 +21,9 @@
 
 #include "../Engine/State.h"
 
+namespace OpenXcom
+{
+
 class Base;
 class BaseFacility;
 class TextButton;
@@ -50,5 +53,7 @@ public:
 	/// Handler for clicking the Cancel button.
 	void btnCancelClick(Action *action);
 };
+
+}
 
 #endif

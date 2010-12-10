@@ -22,6 +22,9 @@
 #include <string>
 #include <vector>
 
+namespace OpenXcom
+{
+
 class Language;
 
 /**
@@ -51,5 +54,7 @@ public:
 	/// Gets the target's followers.
 	std::vector<Target*> *getFollowers();
 };
+
+}
 
 #endif

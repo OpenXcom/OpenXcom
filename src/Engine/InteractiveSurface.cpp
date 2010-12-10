@@ -19,6 +19,9 @@
 #include "InteractiveSurface.h"
 #include "Action.h"
 
+namespace OpenXcom
+{
+
 /**
  * Sets up a blank interactive surface with the specified size and position.
  * @param width Width in pixels.
@@ -72,8 +75,8 @@ void InteractiveSurface::handle(Action *action, State *state)
 
 	action->setSender(this);
 
-	if ((action->getDetails()->motion.x >= _x * action->getXScale() && action->getDetails()->motion.x < (_x + _width) * action->getXScale()) &&
-		(action->getDetails()->motion.y >= _y * action->getYScale() && action->getDetails()->motion.y < (_y + _height) * action->getYScale()))
+	if ((action->getDetails()->motion.x >= getX() * action->getXScale() && action->getDetails()->motion.x < (getX() + getWidth()) * action->getXScale()) &&
+		(action->getDetails()->motion.y >= getY() * action->getYScale() && action->getDetails()->motion.y < (getY() + getHeight()) * action->getYScale()))
 	{
 		if (!_isHovered)
 		{
@@ -321,4 +324,6 @@ void InteractiveSurface::onKeyboardPress(ActionHandler handler)
 void InteractiveSurface::onKeyboardRelease(ActionHandler handler)
 {
 	_keyRelease = handler;
+}
+
 }

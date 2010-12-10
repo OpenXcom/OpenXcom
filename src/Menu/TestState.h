@@ -21,6 +21,9 @@
 
 #include "../Engine/State.h"
 
+namespace OpenXcom
+{
+
 class SurfaceSet;
 class Surface;
 class TextButton;
@@ -57,5 +60,7 @@ public:
 	void think();
 	void blit();
 };
+
+}
 
 #endif

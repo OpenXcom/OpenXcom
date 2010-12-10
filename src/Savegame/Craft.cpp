@@ -28,6 +28,9 @@
 #include "Soldier.h"
 #include "Base.h"
 
+namespace OpenXcom
+{
+
 #define CRAFT_RANGE 600
 
 /**
@@ -472,4 +475,6 @@ void Craft::rearm()
 	{
 		_status = "STR_READY";
 	}
+}
+
 }

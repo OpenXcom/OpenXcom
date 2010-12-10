@@ -19,6 +19,9 @@
 
 #include "CatFile.h"
 
+namespace OpenXcom
+{
+
 /**
  * Creates a CAT file stream. A CAT file starts with an index of the
  * offset and size of every file contained within. Each file consists
@@ -82,4 +85,6 @@ char *CatFile::load(unsigned int i)
 	read(object, _size[i]);
 
 	return object;
+}
+
 }

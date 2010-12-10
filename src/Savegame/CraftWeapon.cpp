@@ -19,6 +19,9 @@
 #include "CraftWeapon.h"
 #include "../Ruleset/RuleCraftWeapon.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes a craft weapon of the specified type.
  * @param rules Pointer to ruleset.
@@ -72,4 +75,6 @@ void CraftWeapon::setAmmo(int ammo)
 void CraftWeapon::rearm()
 {
 	setAmmo(_ammo + _rules->getRearmRate());
+}
+
 }

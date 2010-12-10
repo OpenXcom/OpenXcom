@@ -24,6 +24,9 @@
 #include "../Engine/Palette.h"
 #include "ArrowButton.h"
 
+namespace OpenXcom
+{
+
 /**
  * Sets up a blank list with the specified size and position.
  * @param width Width in pixels.
@@ -33,10 +36,10 @@
  */
 TextList::TextList(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _texts(), _columns(), _big(0), _small(0), _scroll(0), _visibleRows(0), _color(0), _align(ALIGN_LEFT), _dot(false), _selectable(false), _selRow(0), _bg(0), _selector(0), _margin(0)
 {
-	_up = new ArrowButton(ARROW_BIG_UP, 13, 14, _x + _width + 4, _y + 1);
+	_up = new ArrowButton(ARROW_BIG_UP, 13, 14, getX() + getWidth() + 4, getY() + 1);
 	_up->setVisible(false);
 	_up->setTextList(this);
-	_down = new ArrowButton(ARROW_BIG_DOWN, 13, 14, _x + _width + 4, _y + _height - 12);
+	_down = new ArrowButton(ARROW_BIG_DOWN, 13, 14, getX() + getWidth() + 4, getY() + getHeight() - 12);
 	_down->setVisible(false);
 	_down->setTextList(this);
 }
@@ -84,7 +87,7 @@ void TextList::addRow(int cols, ...)
 
 	for (int i = 0; i < cols; i++)
 	{
-		Text* txt = new Text(_columns[i], _small->getHeight(), _margin + rowX, _y);
+		Text* txt = new Text(_columns[i], _small->getHeight(), _margin + rowX, getY());
 		txt->setPalette(this->getPalette());
 		txt->setFonts(_big, _small);
 		
@@ -177,11 +180,11 @@ void TextList::setFonts(Font *big, Font *small)
 	_small = small;
 	
 	delete _selector;
-	_selector = new Surface(_width, _small->getHeight() + _small->getSpacing(), _x, _y);
+	_selector = new Surface(getWidth(), _small->getHeight() + _small->getSpacing(), getX(), getY());
 	_selector->setPalette(getPalette());
 	_selector->setVisible(false);
 
-	for (int y = 0; y < _height; y += _small->getHeight() + _small->getSpacing())
+	for (int y = 0; y < getHeight(); y += _small->getHeight() + _small->getSpacing())
 		_visibleRows++;
 }
 
@@ -449,12 +452,12 @@ void TextList::mouseOver(Action *action, State *state)
 	int h = _small->getHeight() + _small->getSpacing();
 	if (_selectable)
 	{
-		double y = action->getDetails()->button.y - _y * action->getYScale();
+		double y = action->getDetails()->button.y - getY() * action->getYScale();
 		_selRow = _scroll + (int)floor(y / (h * action->getYScale()));
 
 		if (_selRow < _texts.size())
 		{
-			_selector->setY(_y + (_selRow - _scroll) * h);
+			_selector->setY(getY() + (_selRow - _scroll) * h);
 			_selector->copy(_bg);
 			_selector->offset(-10, Palette::backPos);
 			_selector->setVisible(true);
@@ -481,4 +484,6 @@ void TextList::mouseOut(Action *action, State *state)
 	}
 
 	InteractiveSurface::mouseOut(action, state);
+}
+
 }

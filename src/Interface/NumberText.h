@@ -21,6 +21,9 @@
 
 #include "../Engine/Surface.h"
 
+namespace OpenXcom
+{
+
 /**
  * Number digits displayed on the screen.
  * Takes a number and displays it using a simple hard-coded font.
@@ -49,5 +52,7 @@ public:
 	/// Draws the number text.
 	void draw();
 };
+
+}
 
 #endif

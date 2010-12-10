@@ -34,6 +34,9 @@
 #include "Globe.h"
 #include "../Savegame/SavedGame.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes all the elements in the Ufo Detected window.
  * @param game Pointer to the core game.
@@ -146,4 +149,6 @@ void UfoDetectedState::btnCentreClick(Action *action)
 void UfoDetectedState::btnCancelClick(Action *action)
 {
 	_game->popState();
+}
+
 }

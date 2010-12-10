@@ -21,6 +21,9 @@
 
 #include "ImageButton.h"
 
+namespace OpenXcom
+{
+
 enum ArrowShape { ARROW_BIG_UP, ARROW_BIG_DOWN };
 
 class TextList;
@@ -57,5 +60,7 @@ public:
 	/// Special handling for mouse releases.
 	void mouseRelease(Action *action, State *state);
 };
+
+}
 
 #endif

@@ -45,6 +45,9 @@
 #include "PurchaseState.h"
 #include "SellState.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes all the elements in the Basescape screen.
  * @param game Pointer to the core game.
@@ -392,4 +395,6 @@ void BasescapeState::miniClick(Action *action)
 		_base = _game->getSavedGame()->getBases()->at(_mini->getHoveredBase());
 		init();
 	}
+}
+
 }

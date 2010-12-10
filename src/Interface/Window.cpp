@@ -24,6 +24,9 @@
 
 #define POPUP_SPEED 0.075
 
+namespace OpenXcom
+{
+
 Sound *Window::soundPopup[3] = {0, 0, 0};
 
 /**
@@ -150,28 +153,28 @@ void Window::draw()
 	
 	if (_popup == POPUP_HORIZONTAL || _popup == POPUP_BOTH)
 	{
-		square.x = (int)((_width - _width * _popupStep) / 2);
-		square.w = (int)(_width * _popupStep);
+		square.x = (int)((getWidth() - getWidth() * _popupStep) / 2);
+		square.w = (int)(getWidth() * _popupStep);
 	}
 	else
 	{
 		square.x = 0;
-		square.w = _width;
+		square.w = getWidth();
 	}
 	if (_popup == POPUP_VERTICAL || _popup == POPUP_BOTH)
 	{
-		square.y = (int)((_height - _height * _popupStep) / 2);
-		square.h = (int)(_height * _popupStep);
+		square.y = (int)((getHeight() - getHeight() * _popupStep) / 2);
+		square.h = (int)(getHeight() * _popupStep);
 	}
 	else
 	{
 		square.y = 0;
-		square.h = _height;
+		square.h = getHeight();
 	}
 
 	for (int i = 0; i < 5; i++)
 	{
-		SDL_FillRect(_surface, &square, color);
+		drawRect(&square, color);
 		if (i < 2)
 			color--;
 		else
@@ -191,12 +194,14 @@ void Window::draw()
 		
 	if (_bg != 0)
 	{
-		_bg->getCrop()->x = _x + square.x;
-		_bg->getCrop()->y = _y + square.y;
+		_bg->getCrop()->x = getX() + square.x;
+		_bg->getCrop()->y = getY() + square.y;
 		_bg->getCrop()->w = square.w;
 		_bg->getCrop()->h = square.h;
 		_bg->setX(square.x);
 		_bg->setY(square.y);
 		_bg->blit(this);
 	}
+}
+
 }

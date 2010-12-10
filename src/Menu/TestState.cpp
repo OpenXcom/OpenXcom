@@ -32,6 +32,9 @@
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes all the elements in the test screen.
  * @param game Pointer to the core game.
@@ -132,4 +135,6 @@ SDL_Surface *TestState::testSurface()
 	SDL_UnlockSurface(surface);
 
 	return surface;
+}
+
 }

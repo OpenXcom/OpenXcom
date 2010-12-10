@@ -23,6 +23,8 @@
 #include "Position.h"
 #include "../Resource/TerrainObject.h"
 
+namespace OpenXcom
+{
 
 class Position;
 class SavedBattleGame;
@@ -64,5 +66,7 @@ public:
 	/// Get's the TU cost to move from 1 tile to the other.
 	int getTUCost(const Position &startPosition, const int direction, Position *endPosition, BattleUnit *unit);
 };
+
+}
 
 #endif

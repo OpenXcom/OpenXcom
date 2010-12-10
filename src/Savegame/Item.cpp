@@ -19,6 +19,9 @@
 #include "Item.h"
 #include "../Ruleset/RuleItem.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes a item of the specified type.
  * @param rules Pointer to ruleset.
@@ -70,4 +73,6 @@ void Item::setQuantity(int qty)
 double Item::getTotalSize() const
 {
 	return _qty * _rules->getSize();
+}
+
 }

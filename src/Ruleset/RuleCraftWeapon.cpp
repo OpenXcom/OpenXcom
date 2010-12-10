@@ -18,6 +18,9 @@
  */
 #include "RuleCraftWeapon.h"
 
+namespace OpenXcom
+{
+
 /**
  * Creates a blank ruleset for a certain type of craft weapon.
  * @param type String defining the type.
@@ -279,4 +282,6 @@ std::string RuleCraftWeapon::getClipItem() const
 void RuleCraftWeapon::setClipItem(std::string clip)
 {
 	_clip = clip;
+}
+
 }

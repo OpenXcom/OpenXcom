@@ -17,7 +17,12 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Surface.h"
+#include "SDL_gfxPrimitives.h"
+#include "Palette.h"
 #include <fstream>
+
+namespace OpenXcom
+{
 
 /**
  * Sets up a blank 8bpp surface with the specified size and position,
@@ -30,7 +35,7 @@
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Surface::Surface(int width, int height, int x, int y) : _width(width), _height(height), _x(x), _y(y), _visible(true), _hidden(false)
+Surface::Surface(int width, int height, int x, int y) : _x(x), _y(y), _visible(true), _hidden(false)
 {
 	_surface = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, 8, 0, 0, 0, 0);
 
@@ -53,10 +58,8 @@ Surface::Surface(int width, int height, int x, int y) : _width(width), _height(h
  */
 Surface::Surface(const Surface& other)
 {
-	_width = other._width;
-	_height = other._height;
-	_x = other._x;
-	_y = other._y;
+	_x = other.getX();
+	_y = other.getY();
 	_crop.w = other._crop.w;
 	_crop.h = other._crop.h;
 	_crop.x = other._crop.x;
@@ -181,8 +184,8 @@ void Surface::clear()
 	SDL_Rect square;
 	square.x = 0;
 	square.y = 0;
-	square.w = _width;
-	square.h = _height;
+	square.w = getWidth();
+	square.h = getHeight();
 	SDL_FillRect(_surface, &square, 0);
 }
 
@@ -285,11 +288,15 @@ void Surface::blit(Surface *surface)
 		SDL_Rect* cropper;
 		SDL_Rect target;
 		if (_crop.w == 0 && _crop.h == 0)
+		{
 			cropper = 0;
+		}
 		else
+		{
 			cropper = &_crop;
-		target.x = _x;
-		target.y = _y;
+		}
+		target.x = getX();
+		target.y = getY();
 		SDL_BlitSurface(_surface, cropper, surface->getSurface(), &target);
 	}
 }
@@ -304,10 +311,10 @@ void Surface::blit(Surface *surface)
 void Surface::copy(Surface *surface)
 {
 	SDL_Rect from;
-	from.x = _x - surface->getX();
-	from.y = _y - surface->getY();
-	from.w = _width;
-	from.h = _height;
+	from.x = getX() - surface->getX();
+	from.y = getY() - surface->getY();
+	from.w = getWidth();
+	from.h = getHeight();
 	SDL_BlitSurface(surface->getSurface(), &from, _surface, 0);
 }
 
@@ -340,6 +347,79 @@ void Surface::maskedCopy(Surface *surface, Uint8 mask)
 
 	// Unlock the surface
 	unlock();
+}
+
+/**
+ * Draws a filled rectangle on the surface.
+ * @param rect Pointer to Rect.
+ * @param color Color of the rectangle.
+ */
+void Surface::drawRect(SDL_Rect *rect, Uint8 color)
+{
+    SDL_FillRect(_surface, rect, color);
+}
+
+/**
+ * Draws a line on the surface.
+ * @param x1 Start x coordinate in pixels.
+ * @param y1 Start y coordinate in pixels.
+ * @param x2 End x coordinate in pixels.
+ * @param y2 End y coordinate in pixels.
+ * @param color Color of the line.
+ */
+void Surface::drawLine(Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, Uint8 color)
+{
+    lineColor(_surface, x1, y1, x2, y2, Palette::getRGBA(getPalette(), color));
+}
+
+/**
+ * Draws a filled circle on the surface.
+ * @param x X coordinate in pixels.
+ * @param y Y coordinate in pixels.
+ * @param r Radius in pixels.
+ * @param color Color of the circle.
+ */
+void Surface::drawCircle(Sint16 x, Sint16 y, Sint16 r, Uint8 color)
+{
+    filledCircleColor(_surface, x, y, r, Palette::getRGBA(getPalette(), color));
+}
+
+/**
+ * Draws a filled polygon on the surface.
+ * @param x Array of x coordinates.
+ * @param y Array of y coordinates.
+ * @param n Number of points.
+ * @param color Color of the polygon.
+ */
+void Surface::drawPolygon(Sint16 *x, Sint16 *y, int n, Uint8 color)
+{
+    filledPolygonColor(_surface, x, y, n, Palette::getRGBA(getPalette(), color));
+}
+
+/**
+ * Draws a textured polygon on the surface.
+ * @param x Array of x coordinates.
+ * @param y Array of y coordinates.
+ * @param n Number of points.
+ * @param texture Texture for polygon.
+ * @param dx X offset of texture relative to the screen.
+ * @param dy Y offset of texture relative to the screen.
+ */
+void Surface::drawTexturedPolygon(Sint16 *x, Sint16 *y, int n, Surface *texture, int dx, int dy)
+{
+    texturedPolygon(_surface, x, y, n, texture->getSurface(), dx, dy);
+}
+
+/**
+ * Draws a text string on the surface.
+ * @param x X coordinate in pixels.
+ * @param y Y coordinate in pixels.
+ * @param c Character string to draw.
+ * @param color Color of string.
+ */
+void Surface::drawString(Sint16 x, Sint16 y, const char *c, Uint8 color)
+{
+    stringColor(_surface, x, y, c, Palette::getRGBA(getPalette(), color));
 }
 
 /**
@@ -428,7 +508,7 @@ SDL_Color *const Surface::getPalette() const
  */
 void Surface::setPixel(int x, int y, Uint8 pixel)
 {
-	if (x < 0 || x > _width || y < 0 || y > _height)
+	if (x < 0 || x > getWidth() || y < 0 || y > getHeight())
 	{
 		return;
 	}
@@ -447,7 +527,7 @@ void Surface::setPixelIterative(int *x, int *y, Uint8 pixel)
 {
     setPixel(*x, *y, pixel);
 	(*x)++;
-	if (*x == _width)
+	if (*x == getWidth())
 	{
 		(*y)++;
 		*x = 0;
@@ -480,7 +560,7 @@ SDL_Surface *const Surface::getSurface() const
  */
 int Surface::getWidth() const
 {
-	return _width;
+	return _surface->w;
 }
 
 /**
@@ -489,7 +569,7 @@ int Surface::getWidth() const
  */
 int Surface::getHeight() const
 {
-	return _height;
+	return _surface->h;
 }
 
 /**
@@ -550,4 +630,6 @@ void Surface::lock()
 void Surface::unlock()
 {
 	SDL_UnlockSurface(_surface);
+}
+
 }

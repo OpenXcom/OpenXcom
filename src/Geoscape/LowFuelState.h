@@ -21,6 +21,9 @@
 
 #include "../Engine/State.h"
 
+namespace OpenXcom
+{
+
 class TextButton;
 class Window;
 class Text;
@@ -52,5 +55,7 @@ public:
 	/// Handler for clicking the Ok - 5 Secs button.
 	void btnOk5SecsClick(Action *action);
 };
+
+}
 
 #endif

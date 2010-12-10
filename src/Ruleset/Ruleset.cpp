@@ -27,6 +27,9 @@
 #include "MapDataFile.h"
 #include "RuleUnitSprite.h"
 
+namespace OpenXcom
+{
+
 /**
  * Creates a ruleset with blank sets of rules.
  */
@@ -200,4 +203,6 @@ MapDataFile *Ruleset::getMapDataFile(std::string name)
 RuleUnitSprite *Ruleset::getUnitSprites(std::string name)
 {
 	return _unitSprites[name];
+}
+
 }

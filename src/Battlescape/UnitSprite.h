@@ -21,6 +21,9 @@
 
 #include "../Engine/Surface.h"
 
+namespace OpenXcom
+{
+
 class ResourcePack;
 class BattleUnit;
 
@@ -47,5 +50,7 @@ public:
 	/// Blit the surface.
 	void blit(Surface *surface);
 };
+
+}
 
 #endif

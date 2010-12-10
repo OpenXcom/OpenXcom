@@ -21,6 +21,9 @@
 
 #include "Target.h"
 
+namespace OpenXcom
+{
+
 /**
  * Base class for moving targets on the globe
  * with a certain speed and destination.
@@ -56,5 +59,7 @@ public:
 	/// Has the moving target reached its destination?
 	bool reachedDestination() const;
 };
+
+}
 
 #endif

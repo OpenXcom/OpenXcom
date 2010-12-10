@@ -36,6 +36,9 @@
 #include "StoresState.h"
 #include "BasescapeState.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes all the elements in the Base Info screen.
  * @param game Pointer to the core game.
@@ -415,4 +418,6 @@ void BaseInfoState::btnMonthlyCostsClick(Action *action)
 {
 	_base->setName(_edtBase->getText());
 	_game->pushState(new MonthlyCostsState(_game, _base));
+}
+
 }

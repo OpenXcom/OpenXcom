@@ -24,6 +24,9 @@
 #include "../Resource/TerrainObject.h"
 #include "../Savegame//BattleUnit.h"
 
+namespace OpenXcom
+{
+
 /**
  * Sets up a Pathfinding.
  * @param save pointer to SavedBattleGame object.
@@ -338,4 +341,6 @@ bool Pathfinding::isBlocked(Tile *startTile, Tile *endTile, const int direction)
 bool Pathfinding::canFallDown(Tile *here)
 {
 	return (!here || here->hasNoFloor()) && here->getPosition().z > 0;
+}
+
 }

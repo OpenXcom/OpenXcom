@@ -33,6 +33,9 @@
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleCraft.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes all the elements in the Monthly Costs screen.
  * @param game Pointer to the core game.
@@ -158,4 +161,6 @@ MonthlyCostsState::~MonthlyCostsState()
 void MonthlyCostsState::btnOkClick(Action *action)
 {
 	_game->popState();
+}
+
 }

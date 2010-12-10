@@ -21,6 +21,9 @@
 
 #include "SDL.h"
 
+namespace OpenXcom
+{
+
 /**
  * Represents a polygon in the world map.
  * Polygons constitute the textured land portions
@@ -63,5 +66,7 @@ public:
 	/// Gets the number of points of the polygon.
 	int getPoints() const;
 };
+
+}
 
 #endif

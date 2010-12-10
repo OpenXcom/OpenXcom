@@ -22,6 +22,9 @@
 #include "../Engine/Palette.h"
 #include "../Battlescape/Pathfinding.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes a BattleUnit.
  * @param renderRules pointer to RuleUnitSprite object.
@@ -208,4 +211,6 @@ void BattleUnit::turn()
 		// we officially reached our destination
 		_status = STATUS_STANDING;
 	}
+}
+
 }

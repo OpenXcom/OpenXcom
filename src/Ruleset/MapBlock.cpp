@@ -18,6 +18,9 @@
  */
 #include "MapBlock.h"
 
+namespace OpenXcom
+{
+
 /**
 * MapBlock construction
 */
@@ -86,4 +89,4 @@ bool MapBlock::isLandingZone()
 	return _landingZone;
 }
 
-
+}

@@ -20,7 +20,6 @@
 #include "Globe.h"
 #include <cmath>
 #include <fstream>
-#include "SDL_gfxPrimitives.h"
 #include "../Engine/Action.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Timer.h"
@@ -41,6 +40,9 @@
 #include "../Savegame/Ufo.h"
 #include "../Savegame/Craft.h"
 #include "../Savegame/Waypoint.h"
+
+namespace OpenXcom
+{
 
 #define NUM_TEXTURES 13
 #define NUM_LANDSHADES 48
@@ -749,7 +751,7 @@ void Globe::drawOcean()
 
 	lock();
 
-	filledCircleColor(getSurface(), _cenX, _cenY, (Sint16)floor(_radius[_zoom]), Palette::getRGBA(this->getPalette(), Palette::blockOffset(12)+28));
+	drawCircle(_cenX, _cenY, (Sint16)floor(_radius[_zoom]), Palette::blockOffset(12)+28);
   
 	for (std::list<Polygon*>::iterator i = _cacheOcean.begin(); i != _cacheOcean.end(); i++)
 	{
@@ -768,7 +770,7 @@ void Globe::drawOcean()
 
 		// Draw the sea
 		if (shade != 28)
-			filledPolygonColor(getSurface(), (Sint16*)&x, (Sint16*)&y, 4, Palette::getRGBA(this->getPalette(), Palette::blockOffset(12) + shade));
+			drawPolygon(x, y, 4, Palette::blockOffset(12) + shade);
 	}
 
 	unlock();
@@ -805,7 +807,7 @@ void Globe::drawLand()
 		int zoom = (2 - (int)floor(_zoom / 2.0)) * NUM_TEXTURES;
 		int shade = (int)((curTime + (((minLon + maxLon) / 2) / (2 * M_PI))) * NUM_LANDSHADES);
 		shade = _shades[shade % NUM_LANDSHADES];
-		texturedPolygon(getSurface(), (Sint16*)&x, (Sint16*)&y, (*i)->getPoints(), _texture[shade]->getFrame((*i)->getTexture() + zoom)->getSurface(), 0, 0);
+		drawTexturedPolygon(x, y, (*i)->getPoints(), _texture[shade]->getFrame((*i)->getTexture() + zoom), 0, 0);
 	}
 }
 
@@ -839,7 +841,7 @@ void Globe::drawDetail()
 				polarToCart((*i)->getLongitude(j), (*i)->getLatitude(j), &x[0], &y[0]);
 				polarToCart((*i)->getLongitude(j + 1), (*i)->getLatitude(j + 1), &x[1], &y[1]);
 
-				lineColor(_countries->getSurface(), x[0], y[0], x[1], y[1], Palette::getRGBA(getPalette(), Palette::blockOffset(10)+2));
+				_countries->drawLine(x[0], y[0], x[1], y[1], Palette::blockOffset(10)+2);
 			}
 		}
 
@@ -1091,4 +1093,6 @@ int Globe::getPolygonTexture(double lon, double lat)
 		}
 	}
 	return -1;
+}
+
 }

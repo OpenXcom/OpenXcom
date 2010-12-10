@@ -19,6 +19,9 @@
 #ifndef OPENXCOM_POLYLINE_H
 #define OPENXCOM_POLYLINE_H
 
+namespace OpenXcom
+{
+
 /**
  * Represents a polyline in the world map.
  * Polylines constitute the textured land portions
@@ -45,5 +48,7 @@ public:
 	/// Gets the number of points of the polyline.
 	int getPoints() const;
 };
+
+}
 
 #endif

@@ -21,6 +21,9 @@
 
 #include "../Engine/Surface.h"
 
+namespace OpenXcom
+{
+
 class Timer;
 class State;
 class Sound;
@@ -64,5 +67,7 @@ public:
 	/// Draws the window.
 	void draw();
 };
+
+}
 
 #endif

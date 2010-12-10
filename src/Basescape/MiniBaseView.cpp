@@ -29,6 +29,9 @@
 #define MAX_BASES 8
 #define MINI_SIZE 14
 
+namespace OpenXcom
+{
+
 /**
  * Sets up a mini base view with the specified size and position.
  * @param width Width in pixels.
@@ -105,7 +108,7 @@ void MiniBaseView::draw()
 			r.y = 0;
 			r.w = MINI_SIZE + 2;
 			r.h = MINI_SIZE + 2;
-			SDL_FillRect(this->getSurface(), &r, 1);
+            drawRect(&r, 1);
 		}
 		_texture->getFrame(41)->setX(i * (MINI_SIZE + 2));
 		_texture->getFrame(41)->setY(0);
@@ -128,20 +131,20 @@ void MiniBaseView::draw()
 				r.y = 2 + (*f)->getY() * 2;
 				r.w = (*f)->getRules()->getSize() * 2;
 				r.h = (*f)->getRules()->getSize() * 2;
-				SDL_FillRect(this->getSurface(), &r, Palette::blockOffset(pal)+3);
+                drawRect(&r, Palette::blockOffset(pal)+3);
 				r.x++;
 				r.y++;
 				r.w--;
 				r.h--;
-				SDL_FillRect(this->getSurface(), &r, Palette::blockOffset(pal)+5);
+                drawRect(&r, Palette::blockOffset(pal)+5); 
 				r.x--;
 				r.y--;
-				SDL_FillRect(this->getSurface(), &r, Palette::blockOffset(pal)+2);
+                drawRect(&r, Palette::blockOffset(pal)+2); 
 				r.x++;
 				r.y++;
 				r.w--;
 				r.h--;
-				SDL_FillRect(this->getSurface(), &r, Palette::blockOffset(pal)+3);
+                drawRect(&r, Palette::blockOffset(pal)+3); 
 				r.x--;
 				r.y--;
 				setPixel(r.x, r.y, Palette::blockOffset(pal)+1);
@@ -158,8 +161,10 @@ void MiniBaseView::draw()
  */
 void MiniBaseView::mouseOver(Action *action, State *state)
 {
-	double x = action->getDetails()->button.x - _x * action->getXScale();
+	double x = action->getDetails()->button.x - getX() * action->getXScale();
 	_hoverBase = (int)floor(x / ((MINI_SIZE + 2) * action->getXScale()));
 
 	InteractiveSurface::mouseOver(action, state);
+}
+
 }

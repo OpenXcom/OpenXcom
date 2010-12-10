@@ -21,6 +21,9 @@
 #include "../Savegame/Tile.h"
 #include "../Savegame/BattleUnit.h"
 
+namespace OpenXcom
+{
+
 /**
  * Sets up a TerrainModifier.
  * @param save pointer to SavedBattleGame object.
@@ -53,5 +56,7 @@ void TerrainModifier::clearFogOfWar(BattleUnit *unit)
   */
 void TerrainModifier::restoreFogOfWar(BattleUnit *unit)
 {
+
+}
 
 }

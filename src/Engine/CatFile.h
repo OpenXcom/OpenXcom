@@ -23,6 +23,9 @@
 #include <fstream>
 #include <string>
 
+namespace OpenXcom
+{
+
 /**
  * Subclass of std::ifstream to handle CAT files
  */
@@ -53,5 +56,7 @@ public:
 	/// Load an object into memory.
 	char *load(unsigned int i);
 };
+
+}
 
 #endif

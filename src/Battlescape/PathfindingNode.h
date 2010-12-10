@@ -21,6 +21,9 @@
 
 #include "Position.h"
 
+namespace OpenXcom
+{
+
 /**
  * A class that holds pathfinding info for a certain node on the map.
  */
@@ -54,5 +57,7 @@ public:
 	/// get previous walking direction
 	int getPrevDir();
 };
+
+}
 
 #endif

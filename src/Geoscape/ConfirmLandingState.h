@@ -21,6 +21,9 @@
 
 #include "../Engine/State.h"
 
+namespace OpenXcom
+{
+
 class Window;
 class Text;
 class TextButton;
@@ -48,5 +51,7 @@ public:
 	/// Handler for clicking the No button.
 	void btnNoClick(Action *action);
 };
+
+}
 
 #endif

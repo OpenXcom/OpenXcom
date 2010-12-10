@@ -23,6 +23,9 @@
 #include "Surface.h"
 #include "State.h"
 
+namespace OpenXcom
+{
+
 typedef State &(State::*ActionHandler)(Action*);
 
 /**
@@ -84,5 +87,7 @@ public:
 	virtual void keyboardRelease(Action *action, State *state);
 
 };
+
+}
 
 #endif

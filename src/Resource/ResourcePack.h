@@ -24,6 +24,9 @@
 #include <list>
 #include "SDL.h"
 
+namespace OpenXcom
+{
+
 class Language;
 class Surface;
 class SurfaceSet;
@@ -99,5 +102,7 @@ public:
 	/// Loads an XCOM RMP file.
 	virtual void loadRMP(MapBlock *mapblock, int xoff, int yoff, SavedBattleGame *save);
 };
+
+}
 
 #endif

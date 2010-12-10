@@ -18,6 +18,9 @@
  */
 #include "Country.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes a country with a starting amount of monthly funding.
  * @param funding Starting monthly funding.
@@ -94,4 +97,6 @@ double Country::getLabelLatitude() const
 void Country::setLabelLatitude(double lat)
 {
 	_labelLat = lat;
+}
+
 }

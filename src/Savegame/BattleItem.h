@@ -21,6 +21,9 @@
 
 #include "../Battlescape/Position.h"
 
+namespace OpenXcom
+{
+
 class Item;
 class RuleItem;
 
@@ -52,5 +55,7 @@ public:
 	/// Sets the item's ammo quantity.
 	void setAmmoQuantity(int qty);
 };
+
+}
 
 #endif

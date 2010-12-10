@@ -27,6 +27,9 @@
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes all the elements in a Geoscape message window.
  * @param game Pointer to the core game.
@@ -87,4 +90,6 @@ void GeoscapeMessageState::init()
 void GeoscapeMessageState::btnOkClick(Action *action)
 {
 	_game->popState();
+}
+
 }

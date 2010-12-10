@@ -42,6 +42,9 @@
 #include "../Resource/ResourcePack.h"
 #include "../Resource/XcomResourcePack.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes a brand new battlescape saved game.
  * @param save Pointer to saved game.
@@ -533,4 +536,6 @@ std::vector<Node*> *SavedBattleGame::getNodes()
 Pathfinding *SavedBattleGame::getPathfinding()
 {
 	return _pathfinding;
+}
+
 }

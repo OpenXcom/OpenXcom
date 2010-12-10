@@ -28,6 +28,9 @@
 #include "Palette.h"
 #include "Action.h"
 
+namespace OpenXcom
+{
+
 /**
  * Starts up SDL with all the subsystems and SDL_mixer for audio processing,
  * creates the display screen and sets up the cursor.
@@ -299,4 +302,6 @@ Ruleset *const Game::getRuleset() const
 void Game::setRuleset(Ruleset *rules)
 {
 	_rules = rules;
+}
+
 }

@@ -21,7 +21,7 @@ endif
 
 # Compiler settings
 CXXFLAGS = -Wall -O2 `$(SDL-CONFIG) --cflags` $(addprefix -D,$(TARGET))
-LDFLAGS = `$(SDL-CONFIG) --libs` -lSDL_gfx -lSDL_mixer
+LDFLAGS = `$(SDL-CONFIG) --libs` -lSDL_gfx -lSDL_mixer -lyaml-cpp
 
 # Rules
 all: $(BINDIR)$(BIN)

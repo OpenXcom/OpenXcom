@@ -21,6 +21,9 @@
 
 #include <vector>
 
+namespace OpenXcom
+{
+
 class Tile;
 class SavedGame;
 class RuleTerrain;
@@ -112,5 +115,7 @@ public:
 	Pathfinding *getPathfinding();
 
 };
+
+}
 
 #endif

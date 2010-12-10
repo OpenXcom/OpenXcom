@@ -17,7 +17,9 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "RuleUfo.h"
-#include "RuleTerrain.h"
+
+namespace OpenXcom
+{
 
 /**
  * Creates a blank ruleset for a certain
@@ -250,4 +252,6 @@ RuleTerrain *RuleUfo::getBattlescapeTerrainData()
 void RuleUfo::setBattlescapeTerrainData(RuleTerrain *t)
 {
 	_battlescapeTerrainData = t;
+}
+
 }

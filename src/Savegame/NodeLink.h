@@ -19,6 +19,9 @@
 #ifndef OPENXCOM_NODELINK_H
 #define OPENXCOM_NODELINK_H
 
+namespace OpenXcom
+{
+
 class Node;
 
 /**
@@ -37,5 +40,7 @@ public:
 	/// Cleans up the nodelink.
 	~NodeLink();
 };
+
+}
 
 #endif

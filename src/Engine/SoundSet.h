@@ -22,6 +22,9 @@
 #include <vector>
 #include <string>
 
+namespace OpenXcom
+{
+
 class Sound;
 
 /**
@@ -46,5 +49,7 @@ public:
 	/// Gets the total sounds in the set.
 	int getTotalSounds() const;
 };
+
+}
 
 #endif

@@ -19,6 +19,9 @@
 #ifndef OPENXCOM_RNG_H
 #define OPENXCOM_RNG_H
 
+namespace OpenXcom
+{
+
 /**
  * Random Number Generator used throughout the game
  * for all your randomness needs. It's really just the
@@ -41,5 +44,7 @@ public:
 	/// Generates a random decimal number.
 	static double generate(double min, double max);
 };
+
+}
 
 #endif

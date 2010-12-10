@@ -21,6 +21,9 @@
 #include "Surface.h"
 #include "Action.h"
 
+namespace OpenXcom
+{
+
 #define BASE_WIDTH 320.0
 #define BASE_HEIGHT 200.0
 
@@ -190,4 +193,6 @@ double Screen::getXScale() const
 double Screen::getYScale() const
 {
 	return _yScale;
+}
+
 }

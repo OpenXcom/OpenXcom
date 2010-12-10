@@ -21,6 +21,9 @@
 
 #include "ResourcePack.h"
 
+namespace OpenXcom
+{
+
 /**
  * Resource pack for the X-Com: UFO Defense game.
  */
@@ -40,5 +43,7 @@ public:
 	/// loads an XCOM RMP file
 	void loadRMP(MapBlock *mapblock, int xoff, int yoff, SavedBattleGame *save);
 };
+
+}
 
 #endif

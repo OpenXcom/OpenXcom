@@ -21,6 +21,9 @@
 
 #include <string>
 
+namespace OpenXcom
+{
+
 class RuleTerrain;
 
 /**
@@ -52,5 +55,7 @@ public:
 	/// Returns whether this mapblock is a landingzone.
 	bool isLandingZone();
 };
+
+}
 
 #endif

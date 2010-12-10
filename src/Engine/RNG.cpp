@@ -20,6 +20,9 @@
 #include <cstdlib>
 #include <ctime>
 
+namespace OpenXcom
+{
+
 int RNG::_seed = 0;
 
 /**
@@ -71,4 +74,6 @@ double RNG::generate(double min, double max)
 {
 	_seed = rand();
 	return (_seed * (max - min) / RAND_MAX + min);
+}
+
 }

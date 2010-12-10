@@ -34,6 +34,9 @@
 #include "../Ruleset/RuleCraft.h"
 #include "SoldierInfoState.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes all the elements in the Soldiers screen.
  * @param game Pointer to the core game.
@@ -142,4 +145,6 @@ void SoldiersState::btnOkClick(Action *action)
 void SoldiersState::lstSoldiersClick(Action *action)
 {
 	_game->pushState(new SoldierInfoState(_game, _base, _lstSoldiers->getSelectedRow()));
+}
+
 }

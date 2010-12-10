@@ -18,6 +18,9 @@
  */
 #include "Timer.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes a new timer with a set interval.
  * @param interval Time interval in miliseconds.
@@ -123,4 +126,6 @@ void Timer::onTimer(StateHandler handler)
 void Timer::onTimer(SurfaceHandler handler)
 {
 	_surface = handler;
+}
+
 }

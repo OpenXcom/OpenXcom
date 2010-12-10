@@ -18,6 +18,9 @@
  */
 #include "GameTime.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes a new ingame time with a certain starting point.
  * @param weekday Starting weekday.
@@ -218,4 +221,6 @@ int GameTime::getYear() const
 double GameTime::getDaylight() const
 {
 	return (double)((((((_hour + 18) % 24) * 60) + _minute) * 60) + _second) / (60 * 60 * 24);
+}
+
 }

@@ -20,6 +20,9 @@
 #include "../Engine/RNG.h"
 #include "../Resource/SoldierNamePool.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes a new soldier with random stats and a name
  * pulled from a set of SoldierNamePool's.
@@ -208,4 +211,6 @@ int Soldier::getKills() const
 SoldierGender Soldier::getGender() const
 {
 	return _gender;
+}
+
 }

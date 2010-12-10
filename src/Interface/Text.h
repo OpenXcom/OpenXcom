@@ -23,6 +23,9 @@
 #include <vector>
 #include <string>
 
+namespace OpenXcom
+{
+
 class Font;
 
 enum TextHAlign { ALIGN_LEFT, ALIGN_CENTER, ALIGN_RIGHT };
@@ -81,5 +84,7 @@ public:
 	/// Draws the text.
 	void draw();
 };
+
+}
 
 #endif

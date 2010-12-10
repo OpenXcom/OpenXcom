@@ -22,6 +22,9 @@
 #include <map>
 #include "SDL.h"
 
+namespace OpenXcom
+{
+
 class Surface;
 
 /**
@@ -57,5 +60,7 @@ public:
 	/// Gets the font's surface.
 	Surface *const getSurface() const;
 };
+
+}
 
 #endif

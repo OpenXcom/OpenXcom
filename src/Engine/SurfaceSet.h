@@ -23,6 +23,9 @@
 #include <string>
 #include "SDL.h"
 
+namespace OpenXcom
+{
+
 class Surface;
 
 /**
@@ -58,5 +61,7 @@ public:
 	/// Sets the surface set's palette.
 	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
 };
+
+}
 
 #endif

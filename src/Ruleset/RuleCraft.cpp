@@ -17,7 +17,9 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "RuleCraft.h"
-#include "RuleTerrain.h"
+
+namespace OpenXcom
+{
 
 /**
  * Creates a blank ruleset for a certain
@@ -281,4 +283,6 @@ RuleTerrain *RuleCraft::getBattlescapeTerrainData()
 void RuleCraft::setBattlescapeTerrainData(RuleTerrain *terrain)
 {
 	_battlescapeTerrainData = terrain;
+}
+
 }

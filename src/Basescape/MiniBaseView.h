@@ -22,6 +22,9 @@
 #include <vector>
 #include "../Engine/InteractiveSurface.h"
 
+namespace OpenXcom
+{
+
 class Base;
 class SurfaceSet;
 
@@ -54,5 +57,7 @@ public:
 	/// Special handling for mouse hovers.
 	void mouseOver(Action *action, State *state);
 };
+
+}
 
 #endif

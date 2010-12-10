@@ -21,6 +21,9 @@
 
 #include "../Engine/State.h"
 
+namespace OpenXcom
+{
+
 class Base;
 class BaseView;
 class Text;
@@ -45,5 +48,7 @@ public:
 	/// Handler for clicking the base view.
 	void viewClick(Action *action);
 };
+
+}
 
 #endif

@@ -23,6 +23,9 @@
 #include <vector>
 #include "SDL.h"
 
+namespace OpenXcom
+{
+
 class Game;
 class Surface;
 class Action;
@@ -62,5 +65,7 @@ public:
 	/// Blits the state to the screen.
 	virtual void blit();
 };
+
+}
 
 #endif

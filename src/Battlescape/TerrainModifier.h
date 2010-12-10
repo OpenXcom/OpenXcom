@@ -19,8 +19,11 @@
 #ifndef OPENXCOM_TERRAINMODIFIER_H
 #define OPENXCOM_TERRAINMODIFIER_H
 
-
 #include "Position.h"
+
+namespace OpenXcom
+{
+
 class SavedBattleGame;
 class BattleUnit;
 
@@ -41,5 +44,7 @@ public:
 	/// Restore fog of war from an xcom unit (when it leaves a certain position, or he dies).
 	void restoreFogOfWar(BattleUnit *unit);
 };
+
+}
 
 #endif

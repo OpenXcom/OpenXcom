@@ -18,6 +18,9 @@
  */
 #include "ImageButton.h"
 
+namespace OpenXcom
+{
+
 /**
  * Sets up an image button with the specified size and position.
  * @param width Width in pixels.
@@ -95,4 +98,6 @@ void ImageButton::mouseRelease(Action *action, State *state)
 	if (_group == 0)
 		invert(_color);
 	InteractiveSurface::mouseRelease(action, state);
+}
+
 }

@@ -21,6 +21,9 @@
 
 #include "../Engine/State.h"
 
+namespace OpenXcom
+{
+
 class Base;
 class Surface;
 class TextButton;
@@ -60,5 +63,7 @@ public:
 	/// Handler for clicking the Next button.
 	void btnNextClick(Action *action);
 };
+
+}
 
 #endif

@@ -30,6 +30,9 @@
 #include "../Interface/TextList.h"
 #include "../Savegame/SavedGame.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes all the elements in the Purchase/Hire screen.
  * @param game Pointer to the core game.
@@ -125,4 +128,6 @@ void PurchaseState::btnOkClick(Action *action)
 void PurchaseState::btnCancelClick(Action *action)
 {
 	_game->popState();
+}
+
 }

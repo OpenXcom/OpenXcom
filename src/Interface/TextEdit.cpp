@@ -22,6 +22,9 @@
 #include "../Engine/Font.h"
 #include "../Engine/Timer.h"
 
+namespace OpenXcom
+{
+
 /**
  * Sets up a blank text edit with the specified size and position.
  * @param width Width in pixels.
@@ -234,7 +237,7 @@ bool TextEdit::exceedsMaxWidth(char c)
 	for (std::string::iterator i = s.begin(); i < s.end(); i++)
 		w += _text->getFont()->getChar(*i)->getCrop()->w + _text->getFont()->getSpacing();
 
-	if (w > _width)
+	if (w > getWidth())
 		return true;
 	else
 		return false;
@@ -297,4 +300,6 @@ void TextEdit::keyboardPress(Action *action, State *state)
 	draw();
 
 	InteractiveSurface::keyboardPress(action, state);
+}
+
 }

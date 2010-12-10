@@ -31,6 +31,9 @@
 #include "../Ruleset/RuleBaseFacility.h"
 #include "PlaceFacilityState.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes all the elements in the Build Facilities window.
  * @param game Pointer to the core game.
@@ -125,4 +128,6 @@ void BuildFacilitiesState::btnOkClick(Action *action)
 void BuildFacilitiesState::lstFacilitiesClick(Action *action)
 {
 	_game->pushState(new PlaceFacilityState(_game, _base, _facilities[_lstFacilities->getSelectedRow()]));
+}
+
 }

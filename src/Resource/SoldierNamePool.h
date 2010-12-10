@@ -22,6 +22,9 @@
 #include <string>
 #include <vector>
 
+namespace OpenXcom
+{
+
 /**
  * Pool of soldier names to generate random names.
  * Each pool contains a set of first names (male or female) and last names.
@@ -46,5 +49,7 @@ public:
 	/// Adds a last name.
 	void addLastName(const std::string &name);
 };
+
+}
 
 #endif

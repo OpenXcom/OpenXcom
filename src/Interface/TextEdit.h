@@ -22,6 +22,9 @@
 #include "../Engine/InteractiveSurface.h"
 #include "Text.h"
 
+namespace OpenXcom
+{
+
 class Font;
 class Timer;
 
@@ -83,5 +86,7 @@ public:
 	/// Special handling for keyboard presses.
 	void keyboardPress(Action *action, State *state);
 };
+
+}
 
 #endif

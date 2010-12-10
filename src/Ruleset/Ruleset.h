@@ -22,9 +22,11 @@
 #include <map>
 #include <vector>
 #include <string>
-#include <string>
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
+
+namespace OpenXcom
+{
 
 class SoldierNamePool;
 class RuleBaseFacility;
@@ -85,5 +87,7 @@ public:
 	/// Gets unitsprite rules
 	RuleUnitSprite *getUnitSprites(std::string name);
 };
+
+}
 
 #endif

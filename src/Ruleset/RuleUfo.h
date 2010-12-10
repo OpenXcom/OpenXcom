@@ -21,7 +21,9 @@
 
 #include <vector>
 #include <string>
-#include <string>
+
+namespace OpenXcom
+{
 
 class RuleTerrain;
 
@@ -83,5 +85,7 @@ public:
 	RuleTerrain *getBattlescapeTerrainData();
 	void setBattlescapeTerrainData(RuleTerrain *t);
 };
+
+}
 
 #endif

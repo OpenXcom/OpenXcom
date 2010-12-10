@@ -21,6 +21,9 @@
 
 #include "../Engine/State.h"
 
+namespace OpenXcom
+{
+
 class Base;
 class TextButton;
 class Window;
@@ -58,5 +61,7 @@ public:
 	/// Handler for clicking the Crew button.
 	void btnCrewClick(Action *action);
 };
+
+}
 
 #endif

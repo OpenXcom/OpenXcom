@@ -18,6 +18,9 @@
  */
 #include "BattleSoldier.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes a BattleSoldier.
  * @param soldier pointer to the geoscape soldier object
@@ -41,4 +44,6 @@ BattleSoldier::~BattleSoldier()
 Soldier *BattleSoldier::getSoldier()
 {
 	return _soldier;
+}
+
 }

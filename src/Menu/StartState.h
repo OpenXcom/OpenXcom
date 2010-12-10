@@ -21,6 +21,9 @@
 
 #include "../Engine/State.h"
 
+namespace OpenXcom
+{
+
 class Surface;
 
 enum LoadingPhase { LOADING_NONE, LOADING_STARTED, LOADING_FAILED, LOADING_SUCCESSFUL };
@@ -43,5 +46,7 @@ public:
 	/// Handles key clicks.
 	void handle(Action *action);
 };
+
+}
 
 #endif

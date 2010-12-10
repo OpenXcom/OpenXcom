@@ -21,6 +21,9 @@
 
 #include "SDL.h"
 
+namespace OpenXcom
+{
+
 class Surface;
 class Action;
 
@@ -67,5 +70,7 @@ public:
 	/// Gets the screen's Y scale;
 	double getYScale() const;
 };
+
+}
 
 #endif

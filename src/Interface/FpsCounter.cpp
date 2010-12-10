@@ -24,6 +24,9 @@
 #include "../Engine/Timer.h"
 #include "NumberText.h"
 
+namespace OpenXcom
+{
+
 /**
  * Creates a FPS counter of the specified size.
  * @param width Width in pixels.
@@ -103,4 +106,6 @@ void FpsCounter::draw()
 {
 	clear();
 	_text->blit(this);
+}
+
 }

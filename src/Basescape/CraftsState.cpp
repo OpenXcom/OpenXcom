@@ -33,6 +33,9 @@
 #include "../Savegame/Base.h"
 #include "CraftInfoState.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes all the elements in the Equip Craft screen.
  * @param game Pointer to the core game.
@@ -152,4 +155,6 @@ void CraftsState::lstCraftsClick(Action *action)
 	{
 		_game->pushState(new CraftInfoState(_game, _base, _lstCrafts->getSelectedRow()));
 	}
+}
+
 }

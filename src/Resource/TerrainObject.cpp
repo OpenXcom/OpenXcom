@@ -18,6 +18,9 @@
  */
 #include "TerrainObject.h"
 
+namespace OpenXcom
+{
+
 /**
 *
 */
@@ -213,4 +216,6 @@ void TerrainObject::setTerrainLevel(int value)
 void TerrainObject::setFootstepSound(int value)
 {
 	_footstepSound = value;
+}
+
 }

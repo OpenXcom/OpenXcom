@@ -20,6 +20,9 @@
 #include "CatFile.h"
 #include "Sound.h"
 
+namespace OpenXcom
+{
+
 /**
  * Sets up a new empty sound set.
  */
@@ -127,4 +130,6 @@ Sound *const SoundSet::getSound(unsigned int i) const
 int SoundSet::getTotalSounds() const
 {
 	return _sounds.size();
+}
+
 }

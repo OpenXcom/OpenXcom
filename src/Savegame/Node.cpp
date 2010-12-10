@@ -19,6 +19,9 @@
 #include "Node.h"
 #include "NodeLink.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes a Node.
  * @param id
@@ -98,4 +101,6 @@ int Node::getY()
 int Node::getZ()
 {
 	return _z;
+}
+
 }

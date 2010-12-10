@@ -21,6 +21,9 @@
 
 #include "../Engine/State.h"
 
+namespace OpenXcom
+{
+
 class Craft;
 class Globe;
 class InteractiveSurface;
@@ -78,5 +81,7 @@ public:
 	/// Handler for clicking the Cancel button.
 	void btnCancelClick(Action *action);
 };
+
+}
 
 #endif

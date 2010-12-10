@@ -20,6 +20,9 @@
 #include <sstream>
 #include "../Engine/Font.h"
 
+namespace OpenXcom
+{
+
 /**
  * Sets up a blank text with the specified size and position.
  * @param width Width in pixels.
@@ -249,7 +252,7 @@ void Text::processText()
 		}
 
 		// Wordwrap if the last word doesn't fit the line
-		if (_wrap && width > _width)
+		if (_wrap && width > getWidth())
 		{
 			// Go back to the last space and put a linebreak there
 			*space = '\n';
@@ -289,10 +292,10 @@ void Text::draw()
 		y = 0;
 		break;
 	case ALIGN_MIDDLE:
-		y = (_height - height) / 2;
+		y = (getHeight() - height) / 2;
 		break;
 	case ALIGN_BOTTOM:
-		y = _height - height;
+		y = getHeight() - height;
 		break;
 	}
 
@@ -302,10 +305,10 @@ void Text::draw()
 		x = 0;
 		break;
 	case ALIGN_CENTER:
-		x = (_width - _lineWidth[line]) / 2;
+		x = (getWidth() - _lineWidth[line]) / 2;
 		break;
 	case ALIGN_RIGHT:
-		x = _width - _lineWidth[line];
+		x = getWidth() - _lineWidth[line];
 		break;
 	}
 
@@ -329,10 +332,10 @@ void Text::draw()
 				x = 0;
 				break;
 			case ALIGN_CENTER:
-				x = (_width - _lineWidth[line]) / 2;
+				x = (getWidth() - _lineWidth[line]) / 2;
 				break;
 			case ALIGN_RIGHT:
-				x = _width - _lineWidth[line];
+				x = getWidth() - _lineWidth[line];
 				break;
 			}
 			if (*c == 2)
@@ -353,4 +356,6 @@ void Text::draw()
 	{
 		this->invert(_color + 3);
 	}
+}
+
 }

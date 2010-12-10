@@ -19,6 +19,9 @@
 #ifndef OPENXCOM_POSITION_H
 #define OPENXCOM_POSITION_H
 
+namespace OpenXcom
+{
+
 /**
  * Easy handling of X-Y-Z coordinates.
  */
@@ -56,5 +59,7 @@ public:
 	}
 
 };
+
+}
 
 #endif

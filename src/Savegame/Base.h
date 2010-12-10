@@ -25,6 +25,9 @@
 #include <map>
 #include <string>
 
+namespace OpenXcom
+{
+
 class BaseFacility;
 class Soldier;
 class Craft;
@@ -114,5 +117,7 @@ public:
 	/// Gets the base's total monthly maintenance.
 	int getMonthlyMaintenace() const;
 };
+
+}
 
 #endif

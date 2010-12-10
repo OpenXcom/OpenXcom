@@ -34,6 +34,9 @@
 #include "BaseNameState.h"
 #include "GeoscapeErrorState.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes all the elements in the Confirm New Base window.
  * @param game Pointer to the core game.
@@ -126,4 +129,6 @@ void ConfirmNewBaseState::btnOkClick(Action *action)
 void ConfirmNewBaseState::btnCancelClick(Action *action)
 {
 	_game->popState();
+}
+
 }

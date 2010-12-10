@@ -19,7 +19,6 @@
 #include "StartState.h"
 #include <iostream>
 #include "SDL.h"
-#include "SDL_gfxPrimitives.h"
 #include "../Engine/Game.h"
 #include "../Engine/Action.h"
 #include "../Resource/XcomResourcePack.h"
@@ -27,6 +26,9 @@
 #include "../Engine/Surface.h"
 #include "TestState.h"
 #include "LanguageState.h"
+
+namespace OpenXcom
+{
 
 #define DATA_FOLDER "./DATA/"
 
@@ -54,7 +56,7 @@ StartState::StartState(Game *game) : State(game), _load(LOADING_NONE)
 	add(_surface);
 
 	// Set up objects
-	stringColor(_surface->getSurface(), 120, 96, "Loading...", 0xFFFFFFFF);
+	_surface->drawString(120, 96, "Loading...", 1);
 }
 
 /**
@@ -87,9 +89,9 @@ void StartState::think()
 			std::cout << c << std::endl;
 			_load = LOADING_FAILED;
 			_surface->clear();
-			stringColor(_surface->getSurface(), 0, 0, c, 0xFFFFFFFF);
-			stringColor(_surface->getSurface(), 0, 16, "Make sure X-Com is in the DATA subfolder", 0xFFFFFFFF);
-			stringColor(_surface->getSurface(), 0, 192, "Press any key to quit", 0xFFFFFFFF);
+			_surface->drawString(0, 0, c, 0);
+			_surface->drawString(0, 16, "Make sure X-Com is in the DATA subfolder", 1);
+			_surface->drawString(0, 192, "Press any key to quit", 1);
 		}
 		break;
 	case LOADING_NONE:
@@ -116,4 +118,6 @@ void StartState::handle(Action *action)
 		if (action->getDetails()->type == SDL_KEYDOWN)
 			_game->quit();
 	}
+}
+
 }

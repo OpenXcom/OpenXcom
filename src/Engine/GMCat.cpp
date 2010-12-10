@@ -20,6 +20,9 @@
 #include "GMCat.h"
 #include <vector>
 
+namespace OpenXcom
+{
+
 static inline unsigned read_uint32_le (const unsigned char *p)
 {
 return ((unsigned) p[0]) + (((unsigned) p[1]) << 8)
@@ -381,4 +384,6 @@ Music *GMCatFile::loadMIDI(unsigned int i)
 	music->load(&midi[0], midi.size());
 
 	return music;
+}
+
 }

@@ -21,6 +21,9 @@
 
 #include "../Engine/State.h"
 
+namespace OpenXcom
+{
+
 class Surface;
 class Map;
 class ImageButton;
@@ -91,5 +94,7 @@ public:
 	/// Animate flying bullet.
 	void moveBullet();
 };
+
+}
 
 #endif

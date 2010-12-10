@@ -33,6 +33,9 @@
 #include "../Savegame/Craft.h"
 #include "../Ruleset/RuleCraft.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes all the elements in the Craft Soldiers screen.
  * @param game Pointer to the core game.
@@ -178,4 +181,6 @@ void CraftSoldiersState::lstSoldiersClick(Action *action)
 		s->setCraft(c);
 	}
 	init();
+}
+
 }

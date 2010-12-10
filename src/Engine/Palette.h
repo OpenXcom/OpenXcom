@@ -22,6 +22,9 @@
 #include <string>
 #include "SDL.h"
 
+namespace OpenXcom
+{
+
 /**
  * Container for palettes (sets of 8bpp colors).
  * Works as an encapsulation for SDL's SDL_Color struct and
@@ -62,5 +65,7 @@ public:
 	/// Position of the background colors block in an X-Com palette (used for background images in screens).
 	static const int backPos = 224;
 };
+
+}
 
 #endif

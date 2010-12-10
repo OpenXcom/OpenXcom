@@ -21,6 +21,9 @@
 
 #include <string>
 
+namespace OpenXcom
+{
+
 /**
  * Represents a Terrain Map Datafile.
  * It contains constant info about this MCD file, like it's name and size
@@ -40,5 +43,7 @@ public:
 	/// Get the datafile's size.
 	int getSize();
 };
+
+}
 
 #endif

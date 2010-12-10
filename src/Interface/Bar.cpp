@@ -20,6 +20,9 @@
 #include <cmath>
 #include "SDL.h"
 
+namespace OpenXcom
+{
+
 /**
  * Sets up a blank bar with the specified size and position.
  * @param width Width in pixels.
@@ -138,27 +141,33 @@ void Bar::draw()
 	square.x = 0;
 	square.y = 0;
 	square.w = (Uint16)(_scale * _max) + 1;
-	square.h = _height;
+	square.h = getHeight();
 
 	if (_invert)
 	{
-		SDL_FillRect(_surface, &square, _color);
+        drawRect(&square, _color); 
 	}
 	else
 	{
-		SDL_FillRect(_surface, &square, _color + 4);
+        drawRect(&square, _color + 4);
 	}
 
 	square.y++;
 	square.w--;
 	square.h -= 2;
 
-	SDL_FillRect(_surface, &square, 0);
+	drawRect(&square, 0);
 	
 	square.w = (Uint16)(_scale * _value);
 
 	if (_invert)
-		SDL_FillRect(_surface, &square, _color + 4);
+    {
+		drawRect(&square, _color + 4);
+    }
 	else
-		SDL_FillRect(_surface, &square, _color);
+    {
+		drawRect(&square, _color);
+    }
+}
+
 }

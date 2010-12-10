@@ -21,9 +21,12 @@
 
 #include <string>
 
+namespace OpenXcom
+{
+
 /**
  * Represents all variables needed to render a certain type of unit on screen.
- * @sa RuleUnitSprite
+ * @sa BattleUnit
  */
 class RuleUnitSprite
 {
@@ -116,5 +119,7 @@ public:
     void setStandWeaponYOffset(int standWeaponYOffset);
     void setWalkArmsYOffset(int walkArmsYOffset, int phase);
 };
+
+}
 
 #endif

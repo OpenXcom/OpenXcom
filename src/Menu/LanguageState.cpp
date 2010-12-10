@@ -25,6 +25,9 @@
 #include "../Interface/Window.h"
 #include "MainMenuState.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes all the elements in the Language window.
  * @param game Pointer to the core game.
@@ -137,4 +140,6 @@ void LanguageState::btnItalianClick(Action *action)
 void LanguageState::btnSpanishClick(Action *action)
 {
 	changeLanguage("SPANISH.LNG");
+}
+
 }

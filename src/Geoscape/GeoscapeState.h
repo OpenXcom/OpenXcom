@@ -22,6 +22,9 @@
 #include "../Engine/State.h"
 #include <vector>
 
+namespace OpenXcom
+{
+
 class Surface;
 class Globe;
 class ImageButton;
@@ -112,5 +115,7 @@ public:
 	/// Handler for clicking the Zoom Out icon.
 	void btnZoomOutClick(Action *action);
 };
+
+}
 
 #endif

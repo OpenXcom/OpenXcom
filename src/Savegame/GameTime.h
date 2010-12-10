@@ -21,6 +21,9 @@
 
 #include <string>
 
+namespace OpenXcom
+{
+
 /**
  * Enumerator for time periods.
  */
@@ -65,5 +68,7 @@ public:
 	/// Gets the position of the daylight according to the ingame time.
 	double getDaylight() const;
 };
+
+}
 
 #endif

@@ -21,6 +21,9 @@
 
 #include "../Engine/State.h"
 
+namespace OpenXcom
+{
+
 class BaseView;
 class MiniBaseView;
 class Text;
@@ -79,5 +82,7 @@ public:
 	/// Handler for clicking the mini base view.
 	void miniClick(Action *action);
 };
+
+}
 
 #endif

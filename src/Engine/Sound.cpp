@@ -20,6 +20,9 @@
 #include <iostream>
 #include "SDL.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes a new sound effect.
  */
@@ -72,4 +75,6 @@ void Sound::play() const
 	{
 		std::cout << Mix_GetError() << std::endl;
 	}
+}
+
 }

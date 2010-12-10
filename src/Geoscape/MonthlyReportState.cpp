@@ -30,6 +30,9 @@
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/GameTime.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes all the elements in the Monthly Report screen.
  * @param game Pointer to the core game.
@@ -114,4 +117,6 @@ void MonthlyReportState::init()
 void MonthlyReportState::btnOkClick(Action *action)
 {
 	_game->popState();
+}
+
 }

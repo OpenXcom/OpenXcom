@@ -21,6 +21,9 @@
 #include "../Engine/SurfaceSet.h"
 #include <fstream>
 
+namespace OpenXcom
+{
+
 /**
 *
 */
@@ -151,4 +154,6 @@ void TerrainObjectSet::linkSprites(SurfaceSet *sprites)
 			tob->setSprite(sprites->getFrame(tob->getOriginalSpriteIndex(frame)),frame);
 		}
 	}
+}
+
 }

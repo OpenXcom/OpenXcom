@@ -45,6 +45,9 @@
 #include "../Engine/Sound.h"
 #include "../Savegame/Craft.h"
 
+namespace OpenXcom
+{
+
 #define DEFAULT_WALK_SPEED 50
 #define DEFAULT_BULLET_SPEED 20
 
@@ -461,5 +464,7 @@ void BattlescapeState::moveUnit()
  */
 void BattlescapeState::moveBullet()
 {
+
+}
 
 }

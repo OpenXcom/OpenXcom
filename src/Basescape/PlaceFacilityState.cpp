@@ -34,6 +34,9 @@
 #include "../Savegame/SavedGame.h"
 #include "BasescapeErrorState.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes all the elements in the Place Facility window.
  * @param game Pointer to the core game.
@@ -152,4 +155,6 @@ void PlaceFacilityState::viewClick(Action *action)
 		_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() - _rule->getBuildCost());
 		_game->popState();
 	}
+}
+
 }

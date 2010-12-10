@@ -22,6 +22,9 @@
 #include "../Engine/Font.h"
 #include "../Engine/Sound.h"
 
+namespace OpenXcom
+{
+
 Sound *TextButton::soundPress = 0;
 
 /**
@@ -135,12 +138,12 @@ void TextButton::draw()
 
 	square.x = 0;
 	square.y = 0;
-	square.w = _width;
-	square.h = _height;
+	square.w = getWidth();
+	square.h = getHeight();
 
 	for (int i = 0; i < 5; i++)
 	{
-		SDL_FillRect(_surface, &square, color);
+		drawRect(&square, color);
 		
 		if (i % 2 == 0)
 		{
@@ -213,4 +216,6 @@ void TextButton::mouseRelease(Action *action, State *state)
 {
 	InteractiveSurface::mouseRelease(action, state);
 	draw();
+}
+
 }

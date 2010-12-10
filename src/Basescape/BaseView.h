@@ -21,6 +21,9 @@
 
 #include "../Engine/InteractiveSurface.h"
 
+namespace OpenXcom
+{
+
 class Base;
 class SurfaceSet;
 class BaseFacility;
@@ -82,5 +85,7 @@ public:
 	/// Special handling for mouse hovering out.
 	void mouseOut(Action *action, State *state);
 };
+
+}
 
 #endif

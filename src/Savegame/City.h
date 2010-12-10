@@ -21,6 +21,9 @@
 
 #include <string>
 
+namespace OpenXcom
+{
+
 /**
  * Represents a city of the world.
  * Aliens target cities for certain missions.
@@ -46,5 +49,7 @@ public:
 	/// Sets the city's longitude.
 	void setLongitude(double lon);
 };
+
+}
 
 #endif

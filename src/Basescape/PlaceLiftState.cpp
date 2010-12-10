@@ -34,6 +34,9 @@
 #include "../Ruleset/Ruleset.h"
 #include "BasescapeState.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes all the elements in the Place Lift screen.
  * @param game Pointer to the core game.
@@ -82,4 +85,6 @@ void PlaceLiftState::viewClick(Action *action)
 	_base->getFacilities()->push_back(fac);
 	_game->popState();
 	_game->pushState(new BasescapeState(_game, _base, _globe));
+}
+
 }

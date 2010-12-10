@@ -23,6 +23,9 @@
 #include "Base.h"
 #include "Target.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes a base facility of the specified type.
  * @param rules Pointer to ruleset.
@@ -118,4 +121,6 @@ bool BaseFacility::insideRadarRange(Base *base, Target *target) const
 		inside = inside || (dLon * dLon + dLat * dLat <= newrange * newrange);
 	}
     return inside;
+}
+
 }

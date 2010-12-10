@@ -21,6 +21,9 @@
 
 #include "SDL.h"
 
+namespace OpenXcom
+{
+
 class InteractiveSurface;
 
 /**
@@ -50,5 +53,7 @@ public:
 	/// Gets the details of the action.
 	SDL_Event *const getDetails() const;
 };
+
+}
 
 #endif

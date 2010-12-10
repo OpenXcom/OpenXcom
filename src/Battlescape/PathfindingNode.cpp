@@ -19,6 +19,9 @@
 #include "PathfindingNode.h"
 #include "Position.h"
 
+namespace OpenXcom
+{
+
 /**
  * Sets up a PathfindingNode.
  * @param pos Position.
@@ -110,4 +113,6 @@ PathfindingNode* PathfindingNode::getPrevNode()
 int PathfindingNode::getPrevDir()
 {
 	return _prevDir;
+}
+
 }

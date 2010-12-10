@@ -34,6 +34,9 @@
 #include "../Savegame/SavedGame.h"
 #include "SelectDestinationState.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes all the elements in the Intercept window.
  * @param game Pointer to the core game.
@@ -149,4 +152,6 @@ void InterceptState::lstCraftsClick(Action *action)
 		_game->popState();
 		_game->pushState(new SelectDestinationState(_game, c, _globe));
 	}
+}
+
 }

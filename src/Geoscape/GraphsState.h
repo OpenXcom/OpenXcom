@@ -21,6 +21,9 @@
 
 #include "../Engine/State.h"
 
+namespace OpenXcom
+{
+
 class Surface;
 class InteractiveSurface;
 
@@ -41,5 +44,7 @@ public:
 	/// Handler for clicking the Geoscape icon.
 	void btnGeoscapeClick(Action *action);
 };
+
+}
 
 #endif

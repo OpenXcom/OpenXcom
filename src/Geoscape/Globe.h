@@ -24,6 +24,9 @@
 #include <string>
 #include "../Engine/InteractiveSurface.h"
 
+namespace OpenXcom
+{
+
 #define NUM_SHADES 8
 
 class ResourcePack;
@@ -141,5 +144,7 @@ public:
 	int getPolygonTexture(double lon, double lat);
 
 };
+
+}
 
 #endif

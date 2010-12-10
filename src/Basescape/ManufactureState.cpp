@@ -28,6 +28,9 @@
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes all the elements in the Manufacture screen.
  * @param game Pointer to the core game.
@@ -140,4 +143,6 @@ ManufactureState::~ManufactureState()
 void ManufactureState::btnOkClick(Action *action)
 {
 	_game->popState();
+}
+
 }

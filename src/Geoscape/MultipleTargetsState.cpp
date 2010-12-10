@@ -40,6 +40,9 @@
 #include "TargetInfoState.h"
 #include "MultipleTargetsState.h"
 
+namespace OpenXcom
+{
+
 #define OUTER_MARGIN 3
 #define INNER_MARGIN 4
 #define BORDER 5
@@ -169,4 +172,6 @@ void MultipleTargetsState::lstTargetsClick(Action *action)
 {
 	Target* t = _targets[_lstTargets->getSelectedRow()];
 	popupTarget(t);
+}
+
 }

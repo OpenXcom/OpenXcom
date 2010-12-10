@@ -21,6 +21,9 @@
 
 #include "../Engine/Surface.h"
 
+namespace OpenXcom
+{
+
 class Action;
 
 /**
@@ -47,5 +50,7 @@ public:
 	/// Draws the cursor.
 	void draw();
 };
+
+}
 
 #endif

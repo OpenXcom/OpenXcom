@@ -23,6 +23,9 @@
 #include <string>
 #include "SDL.h"
 
+namespace OpenXcom
+{
+
 class State;
 class Screen;
 class Cursor;
@@ -49,7 +52,6 @@ private:
 	SavedGame *_save;
 	Ruleset *_rules;
 	bool _quit, _init;
-	
 	FpsCounter *_fpsCounter;
 public:
 	/// Creates a new game and initializes SDL.
@@ -85,5 +87,7 @@ public:
 	/// Sets a new ruleset for the game
 	void setRuleset(Ruleset *rules);
 };
+
+}
 
 #endif

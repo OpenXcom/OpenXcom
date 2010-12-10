@@ -24,6 +24,9 @@
 #include "MapDataFile.h"
 #include "../Engine/RNG.h"
 
+namespace OpenXcom
+{
+
 /**
 * RuleTerrain construction
 */
@@ -140,4 +143,6 @@ void RuleTerrain::parseTerrainObjectName(std::string objectName, std::string *da
 	objectName.erase(0, pos + 1);					//erase it from the source 
 	std::istringstream issID(objectName);			// convert leftover to istringstream
 	issID >> *relativeID;							// to int
+}
+
 }

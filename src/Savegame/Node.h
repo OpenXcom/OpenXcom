@@ -19,6 +19,9 @@
 #ifndef OPENXCOM_NODE_H
 #define OPENXCOM_NODE_H
 
+namespace OpenXcom
+{
+
 class NodeLink;
 
 enum NodeRank{CIVILIAN=0, XCOM, SOLDIER, NAVIGATOR, LEADER, ENGINEER, MISC1, MEDIC, MISC2};
@@ -57,5 +60,7 @@ public:
 	/// get Z
 	int getZ();
 };
+
+}
 
 #endif

@@ -20,6 +20,9 @@
 #include <sstream>
 #include "../Engine/Language.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes a waypoint.
  */
@@ -62,4 +65,6 @@ std::string Waypoint::getName(Language *lang) const
 	std::stringstream name;
 	name << lang->getString("STR_WAY_POINT_") << _id;
 	return name.str();
+}
+
 }

@@ -30,6 +30,9 @@
 #include "../Geoscape/GeoscapeState.h"
 #include "../Geoscape/BuildNewBaseState.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes all the elements in the Difficulty window.
  * @param game Pointer to the core game.
@@ -152,4 +155,6 @@ void NewGameState::btnGeniusClick(Action *action)
 void NewGameState::btnSuperhumanClick(Action *action)
 {
 	newGame(DIFF_SUPERHUMAN);
+}
+
 }

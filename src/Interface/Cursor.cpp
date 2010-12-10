@@ -19,9 +19,10 @@
 #include "Cursor.h"
 #include <cmath>
 #include "SDL.h"
-#include "SDL_gfxPrimitives.h"
 #include "../Engine/Action.h"
-#include "../Engine/Palette.h"
+
+namespace OpenXcom
+{
 
 /**
  * Sets up a cursor with the specified size and position
@@ -85,13 +86,13 @@ Uint8 Cursor::getColor() const
 void Cursor::draw()
 {
 	Uint8 color = _color;
-	int x1 = 0, y1 = 0, x2 = _width-1, y2 = _height-1;
+	int x1 = 0, y1 = 0, x2 = getWidth() - 1, y2 = getHeight() - 1;
 
 	lock();
 	for (int i = 0; i < 4; i++)
 	{
-		lineColor(getSurface(), x1, y1, x1, y2, Palette::getRGBA(this->getPalette(), color));
-		lineColor(getSurface(), x1, y1, x2, _width-1, Palette::getRGBA(this->getPalette(), color));
+		drawLine(x1, y1, x1, y2, color);
+		drawLine(x1, y1, x2, getWidth() - 1, color);
 		x1++;
 		y1 += 2;
 		y2--;
@@ -100,4 +101,6 @@ void Cursor::draw()
 	}
 	this->setPixel(4, 8, --color);
 	unlock();
+}
+
 }

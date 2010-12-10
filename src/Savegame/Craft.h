@@ -23,7 +23,9 @@
 #include <map>
 #include <vector>
 #include <string>
-#include <string>
+
+namespace OpenXcom
+{
 
 class RuleCraft;
 class Base;
@@ -117,5 +119,7 @@ public:
 	/// Rearms the craft.
 	void rearm();
 };
+
+}
 
 #endif

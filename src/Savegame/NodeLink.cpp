@@ -18,6 +18,9 @@
  */
 #include "NodeLink.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes a NodeLink.
  * @param connectedNodeID
@@ -35,4 +38,4 @@ NodeLink::~NodeLink()
 {
 }
 
-
+}

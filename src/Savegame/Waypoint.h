@@ -22,6 +22,9 @@
 #include "Target.h"
 #include <string>
 
+namespace OpenXcom
+{
+
 /**
  * Represents a fixed waypoint on the world.
  */
@@ -41,5 +44,7 @@ public:
 	/// Gets the waypoint's name.
 	std::string getName(Language *lang) const;
 };
+
+}
 
 #endif

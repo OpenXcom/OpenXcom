@@ -19,6 +19,9 @@
 #include "Tile.h"
 #include "../Resource/TerrainObject.h"
 
+namespace OpenXcom
+{
+
 /**
 * constructor
 * @param pos Position.
@@ -161,4 +164,6 @@ int Tile::getFootstepSound()
 		sound = _terrainObjects[O_OBJECT]->getFootstepSound();
 
 	return sound;
+}
+
 }

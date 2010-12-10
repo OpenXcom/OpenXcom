@@ -28,6 +28,9 @@
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes all the elements in the Research screen.
  * @param game Pointer to the core game.
@@ -120,4 +123,6 @@ ResearchState::~ResearchState()
 void ResearchState::btnOkClick(Action *action)
 {
 	_game->popState();
+}
+
 }

@@ -21,6 +21,9 @@
 
 #include "Ruleset.h"
 
+namespace OpenXcom
+{
+
 /**
  * Rule set for the X-Com: UFO Defense game.
  */
@@ -39,5 +42,7 @@ public:
 	/// Handles the end battle stuff.
 	void endBattle(SavedGame *save);
 };
+
+}
 
 #endif

@@ -33,6 +33,9 @@
 #include "../Savegame/Target.h"
 #include "../Savegame/Waypoint.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes all the elements in the Confirm Destination window.
  * @param game Pointer to the core game.
@@ -131,4 +134,6 @@ void ConfirmDestinationState::btnCancelClick(Action *action)
 		delete w;
 	}
 	_game->popState();
+}
+
 }

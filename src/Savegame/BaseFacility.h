@@ -19,6 +19,9 @@
 #ifndef OPENXCOM_BASEFACILITY_H
 #define OPENXCOM_BASEFACILITY_H
 
+namespace OpenXcom
+{
+
 class RuleBaseFacility;
 class Base;
 class Target;
@@ -54,5 +57,7 @@ public:
 	/// Checks if a target is inside the facility's radar.
 	bool insideRadarRange(Base *base, Target *target) const;
 };
+
+}
 
 #endif

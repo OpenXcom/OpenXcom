@@ -20,6 +20,9 @@
 #include <fstream>
 #include "Surface.h"
 
+namespace OpenXcom
+{
+
 /**
  * Sets up a new empty surface set for frames of the specified size.
  * @param width Frame width in pixels.
@@ -266,4 +269,6 @@ void SurfaceSet::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 	{
 		(*i)->setPalette(colors, firstcolor, ncolors);
 	}
+}
+
 }

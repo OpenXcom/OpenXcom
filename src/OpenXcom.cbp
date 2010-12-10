@@ -43,6 +43,7 @@
 			<Add library="dxguid" />
 			<Add library="SDL_gfx" />
 			<Add library="SDL_mixer" />
+			<Add library="yaml-cpp" />
 			<Add directory="..\deps\lib" />
 		</Linker>
 		<Unit filename="Basescape\BaseInfoState.cpp" />

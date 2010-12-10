@@ -19,6 +19,9 @@
 #include "Region.h"
 #include "City.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes a region with a certain construction cost.
  * @param cost Base building cost.
@@ -94,4 +97,6 @@ bool Region::insideRegion(double lon, double lat) const
 std::vector<City*> *const Region::getCities()
 {
 	return &_cities;
+}
+
 }

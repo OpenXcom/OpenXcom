@@ -18,6 +18,9 @@
  */
 #include "City.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes a city with certain data.
  * @param name Name of the city.
@@ -78,4 +81,6 @@ double City::getLongitude() const
 void City::setLongitude(double lon)
 {
 	_lon = lon;
+}
+
 }

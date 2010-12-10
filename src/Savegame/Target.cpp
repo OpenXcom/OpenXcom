@@ -21,6 +21,9 @@
 #include <cmath>
 #include "../Engine/Language.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes a target with blank coordinates.
  */
@@ -82,4 +85,6 @@ void Target::setLongitude(double lon)
 std::vector<Target*> *Target::getFollowers()
 {
 	return &_followers;
+}
+
 }

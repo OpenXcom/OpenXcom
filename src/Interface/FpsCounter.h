@@ -22,6 +22,9 @@
 
 #include "../Engine/Surface.h"
 
+namespace OpenXcom
+{
+
 class NumberText;
 class Timer;
 class Action;
@@ -52,5 +55,7 @@ public:
 	/// Draws the FPS counter.
 	void draw();
 };
+
+}
 
 #endif

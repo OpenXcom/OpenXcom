@@ -22,6 +22,9 @@
 #include <string>
 #include "SDL_mixer.h"
 
+namespace OpenXcom
+{
+
 /**
  * Container for music tracks.
  * Handles loading and playing various formats through SDL_mixer.
@@ -42,5 +45,7 @@ public:
 	/// Plays the music.
 	void play() const;
 };
+
+}
 
 #endif

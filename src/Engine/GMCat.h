@@ -23,6 +23,9 @@
 #include "CatFile.h"
 #include "Music.h"
 
+namespace OpenXcom
+{
+
 /**
  * Subclass of CatFile to handle gm.cat files
  * that contain MIDI music streams.
@@ -35,5 +38,7 @@ public:
 	/// Loads a stream as a MIDI file.
 	Music *loadMIDI(unsigned int i);
 };
+
+}
 
 #endif

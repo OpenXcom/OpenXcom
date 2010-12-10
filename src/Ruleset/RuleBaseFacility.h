@@ -21,6 +21,9 @@
 
 #include <string>
 
+namespace OpenXcom
+{
+
 /**
  * Represents a specific type of base facility.
  * Contains constant info about a facility like
@@ -116,5 +119,7 @@ public:
 	/// Sets the facility's weapon hit ratio.
 	void setHitRatio(int ratio);
 };
+
+}
 
 #endif

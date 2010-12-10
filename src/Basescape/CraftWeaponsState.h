@@ -22,6 +22,9 @@
 #include <vector>
 #include "../Engine/State.h"
 
+namespace OpenXcom
+{
+
 class Base;
 class TextButton;
 class Window;
@@ -54,5 +57,7 @@ public:
 	/// Handler for clicking the Weapons list.
 	void lstWeaponsClick(Action *action);
 };
+
+}
 
 #endif

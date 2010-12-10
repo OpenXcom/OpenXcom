@@ -35,6 +35,9 @@
 #include "../Savegame/Item.h"
 #include "../Savegame/Base.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes all the elements in the Craft Weapons window.
  * @param game Pointer to the core game.
@@ -170,4 +173,6 @@ void CraftWeaponsState::lstWeaponsClick(Action *action)
 	}
 
 	_game->popState();
+}
+
 }

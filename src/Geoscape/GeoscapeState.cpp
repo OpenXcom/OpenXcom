@@ -63,6 +63,9 @@
 #include "ConfirmLandingState.h"
 #include "../Battlescape/BattlescapeState.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes all the elements in the Geoscape screen.
  * @param game Pointer to the core game.
@@ -944,4 +947,6 @@ void GeoscapeState::btnZoomOutClick(Action *action)
 	{
 		_globe->zoomMin();
 	}
+}
+
 }

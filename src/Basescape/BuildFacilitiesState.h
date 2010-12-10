@@ -23,6 +23,9 @@
 #include "../Engine/State.h"
 #include <string>
 
+namespace OpenXcom
+{
+
 class Base;
 class TextButton;
 class Window;
@@ -57,5 +60,7 @@ public:
 	/// Handler for clicking the Facilities list.
 	void lstFacilitiesClick(Action *action);
 };
+
+}
 
 #endif

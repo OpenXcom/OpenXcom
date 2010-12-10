@@ -22,6 +22,9 @@
 #include "SDL.h"
 #include <string>
 
+namespace OpenXcom
+{
+
 /**
  * Element that is blit (rendered) onto the screen.
  * Mainly an encapsulation for SDL's SDL_Surface struct, so it
@@ -33,7 +36,7 @@ class Surface
 {
 protected:
 	SDL_Surface *_surface;
-	int _width, _height, _x, _y;
+	int _x, _y;
 	SDL_Rect _crop;
 	bool _visible, _hidden;
 public:
@@ -63,6 +66,18 @@ public:
 	void copy(Surface *surface);
 	/// Copies a portion of another surface according to a mask.
 	void maskedCopy(Surface *surface, Uint8 mask);
+    /// Draws a filled rectangle on the surface.
+    void drawRect(SDL_Rect *rect, Uint8 color);
+    /// Draws a line on the surface.
+    void drawLine(Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, Uint8 color);
+    /// Draws a filled circle on the surface.
+    void drawCircle(Sint16 x, Sint16 y, Sint16 r, Uint8 color);
+    /// Draws a filled polygon on the surface.
+    void drawPolygon(Sint16 *x, Sint16 *y, int n, Uint8 color);
+    /// Draws a textured polygon on the surface.
+    void drawTexturedPolygon(Sint16 *x, Sint16 *y, int n, Surface *texture, int dx, int dy);
+    /// Draws a string on the surface.
+    void drawString(Sint16 x, Sint16 y, const char *c, Uint8 color);
 	/// Sets the surface's palette.
 	virtual void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
 	/// Gets the surface's palette.
@@ -104,5 +119,7 @@ public:
 	/// Unlocks the surface.
 	void unlock();
 };
+
+}
 
 #endif

@@ -19,8 +19,12 @@
 #ifndef OPENXCOM_TERRAINOBJECT_H
 #define OPENXCOM_TERRAINOBJECT_H
 
-class Surface;
 #include <string>
+
+namespace OpenXcom
+{
+
+class Surface;
 
 #define O_FLOOR 0
 #define O_WESTWALL 1
@@ -47,7 +51,7 @@ enum MovementType{WALK=0, FLY, SLIDE};
 
 /**
  * A TerrainObject is the smallest piece of a Battlescape terrain
- * @sa TerrainObject
+ * @sa TerrainObjectSet
  */
 class TerrainObject
 {
@@ -98,5 +102,7 @@ public:
 	void setTerrainLevel(int value);
 	void setFootstepSound(int value);
 };
+
+}
 
 #endif

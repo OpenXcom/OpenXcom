@@ -29,6 +29,9 @@
 #include "../Engine/Music.h"
 #include "NewGameState.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes all the elements in the Main Menu window.
  * @param game Pointer to the core game.
@@ -109,4 +112,6 @@ void MainMenuState::btnLoadClick(Action *action)
 void MainMenuState::btnQuitClick(Action *action)
 {
 	_game->quit();
+}
+
 }

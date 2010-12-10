@@ -23,6 +23,9 @@
 #include <string>
 #include <string>
 
+namespace OpenXcom
+{
+
 enum SoldierGender { GENDER_MALE, GENDER_FEMALE };
 enum SoldierLook { LOOK_BLONDE, LOOK_BROWNHAIR, LOOK_ORIENTAL, LOOK_AFRICAN };
 
@@ -84,5 +87,7 @@ public:
 	/// Gets the soldier's gender.
 	SoldierGender getGender() const;
 };
+
+}
 
 #endif

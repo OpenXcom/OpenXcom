@@ -30,6 +30,9 @@
 #include "../Savegame/SavedGame.h"
 #include "../Menu/MainMenuState.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes all the elements in the Abandon Game screen.
  * @param game Pointer to the core game.
@@ -98,4 +101,6 @@ void AbandonGameState::btnYesClick(Action *action)
 void AbandonGameState::btnNoClick(Action *action)
 {
 	_game->popState();
+}
+
 }

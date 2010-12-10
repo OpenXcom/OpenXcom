@@ -18,6 +18,9 @@
  */
 #include "Polyline.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes the polyline with arrays to store each point's coordinates.
  * @param points Number of points.
@@ -84,4 +87,6 @@ void Polyline::setLongitude(int i, double lon)
 int Polyline::getPoints() const
 {
 	return _points;
+}
+
 }

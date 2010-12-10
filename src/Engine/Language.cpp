@@ -20,6 +20,9 @@
 #include <iostream>
 #include <fstream>
 
+namespace OpenXcom
+{
+
 /**
  * Initializes an empty language file.
  */
@@ -153,4 +156,6 @@ void Language::toHtml() const
 	}
 	htmlFile << "</table>" << std::endl;
 	htmlFile.close();
+}
+
 }

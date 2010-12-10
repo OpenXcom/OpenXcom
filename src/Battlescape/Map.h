@@ -21,6 +21,9 @@
 
 #include "../Engine/InteractiveSurface.h"
 
+namespace OpenXcom
+{
+
 class ResourcePack;
 class SavedBattleGame;
 class Timer;
@@ -32,7 +35,6 @@ class BattleUnit;
 
 // below Y 140 the buttons area starts
 #define BUTTONS_AREA 140
-
 
 /**
  * Interactive map of the battlescape
@@ -114,5 +116,7 @@ public:
 	bool isCursorHidden();
 
 };
+
+}
 
 #endif

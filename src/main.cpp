@@ -35,7 +35,7 @@
  * under the GNU General Public License. Enjoy!
  */
 
-Game *game;
+OpenXcom::Game *game;
 
 // If you can't tell what the main() is for you should have your
 // programming license revoked...
@@ -43,7 +43,7 @@ int main(int argc, char** args)
 {
 	try
 	{
-		game = new Game("OpenXcom", 320, 200, 8);
+		game = new OpenXcom::Game("OpenXcom", 320, 200, 8);
 		
 		// Handles command line arguments
 		int width = 640;
@@ -58,7 +58,7 @@ int main(int argc, char** args)
 				height = atoi(args[i+1]);
 		}
 		game->getScreen()->setResolution(width, height);
-		game->setState(new StartState(game));
+		game->setState(new OpenXcom::StartState(game));
 		game->run();
 	}
 	catch (const char* c)

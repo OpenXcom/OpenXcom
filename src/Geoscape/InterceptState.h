@@ -22,6 +22,9 @@
 #include <vector>
 #include "../Engine/State.h"
 
+namespace OpenXcom
+{
+
 class TextButton;
 class Window;
 class Text;
@@ -54,5 +57,7 @@ public:
 	/// Handler for clicking the Crafts list.
 	void lstCraftsClick(Action *action);
 };
+
+}
 
 #endif

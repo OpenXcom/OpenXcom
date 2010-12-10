@@ -22,6 +22,9 @@
 #include <vector>
 #include <string>
 
+namespace OpenXcom
+{
+
 class TerrainObject;
 class SurfaceSet;
 
@@ -46,5 +49,7 @@ public:
 	/// link the terrain objects with corresponding sprites
 	void linkSprites(SurfaceSet *sprites);
 };
+
+}
 
 #endif

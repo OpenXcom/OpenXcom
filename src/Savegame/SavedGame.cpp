@@ -25,6 +25,9 @@
 #include "Ufo.h"
 #include "Waypoint.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes a brand new saved game according to the specified difficulty.
  * @param diff Game difficulty.
@@ -206,4 +209,6 @@ void SavedGame::setBattleGame(SavedBattleGame *battlegame)
 SavedBattleGame *SavedGame::getBattleGame()
 {
 	return _battlegame;
+}
+
 }

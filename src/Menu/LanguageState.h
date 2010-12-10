@@ -22,6 +22,9 @@
 #include <string>
 #include "../Engine/State.h"
 
+namespace OpenXcom
+{
+
 class TextButton;
 class Window;
 
@@ -52,5 +55,7 @@ public:
 	/// Handler for clicking the Espanol button.
 	void btnSpanishClick(Action *action);
 };
+
+}
 
 #endif

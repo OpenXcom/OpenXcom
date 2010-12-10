@@ -41,6 +41,9 @@
 #include "../Savegame/NodeLink.h"
 #include "../Battlescape/Position.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes the resource pack by loading all the resources
  * contained in the original game folder.
@@ -81,31 +84,30 @@ XcomResourcePack::XcomResourcePack(const std::string &folder) : ResourcePack(fol
 	}
 		
 	// Load languages
-	std::string lang[] = {"ENGLISH.LNG",
-					 "FRENCH.LNG",
-					 "GERMAN.LNG",
-					 "ITALIAN.LNG",
-					 "SPANISH.LNG"};
+	std::string lang[] = {"ENGLISH",
+					 "FRENCH",
+					 "GERMAN",
+					 "ITALIAN",
+					 "SPANISH"};
 
 	for (int i = 0; i < 5; i++)
 	{
-		std::stringstream s;
-		s << folder << lang[i];
-		_languages[lang[i]] = new Language();
-		_languages[lang[i]]->loadLng(insensitive(s.str()));
+		std::stringstream s1, s2;
+		s1 << folder << lang[i] << ".LNG";
+		s2 << lang[i] << ".LNG";
+		_languages[s2.str()] = new Language();
+		_languages[s2.str()]->loadLng(insensitive(s1.str()));
 	}
 	//_languages["ENGLISH.LNG"]->toHtml();
 
 	// Load surfaces
-	std::string dats[] = {"LANG1.DAT",
-					 "LANG2.DAT"};
-
-	for (int i = 0; i < 2; i++)
+	for (int i = 1; i < 5; i++)
 	{
-		std::stringstream s;
-		s << folder << "GEODATA/" << dats[i];
-		_surfaces[dats[i]] = new Surface(64, 154);
-		_surfaces[dats[i]]->loadScr(insensitive(s.str()));
+		std::stringstream s1, s2;
+		s1 << folder << lang[i] << ".GEO";
+		s2 << lang[i] << ".GEO";
+		_surfaces[s2.str()] = new Surface(64, 256);
+		_surfaces[s2.str()]->loadScr(insensitive(s1.str()));
 	}
 
 	{
@@ -541,7 +543,7 @@ void XcomResourcePack::loadBattlescapeResources(std::string folder)
  * @param terrain pointer to the Terrain rule
  * @return int Height of the loaded mapblock (this is needed for spawpoint calculation...)
  * @sa http://www.ufopaedia.org/index.php?title=MAPS
- * NOTE that Y-axis is in reverse order
+ * @note Y-axis is in reverse order
  */
 int XcomResourcePack::loadMAP(MapBlock *mapblock, int xoff, int yoff, SavedBattleGame *save, RuleTerrain *terrain)
 {
@@ -656,4 +658,6 @@ void XcomResourcePack::loadRMP(MapBlock *mapblock, int xoff, int yoff, SavedBatt
 	}
 
 	mapFile.close();
+}
+
 }

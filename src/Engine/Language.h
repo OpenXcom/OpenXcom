@@ -23,6 +23,9 @@
 #include <string>
 #include <string>
 
+namespace OpenXcom
+{
+
 /**
  * Contains strings used throughout the game for localization.
  * Languages are just a set of strings identified by an ID string.
@@ -46,5 +49,7 @@ public:
 	/// Outputs the language to a HTML file.
 	void toHtml() const;
 };
+
+}
 
 #endif

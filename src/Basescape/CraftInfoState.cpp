@@ -36,6 +36,9 @@
 #include "CraftSoldiersState.h"
 #include "CraftWeaponsState.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes all the elements in the Craft Info screen.
  * @param game Pointer to the core game.
@@ -316,4 +319,6 @@ void CraftInfoState::btnW2Click(Action *action)
 void CraftInfoState::btnCrewClick(Action *action)
 {
 	_game->pushState(new CraftSoldiersState(_game, _base, _craft));
+}
+
 }

@@ -21,6 +21,9 @@
 
 #include "../Engine/InteractiveSurface.h"
 
+namespace OpenXcom
+{
+
 /**
  * Regular image that works like a button.
  * Unlike the TextButton, this button doesn't draw
@@ -49,5 +52,7 @@ public:
 	/// Special handling for mouse releases.
 	void mouseRelease(Action *action, State *state);
 };
+
+}
 
 #endif

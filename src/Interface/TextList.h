@@ -23,6 +23,9 @@
 #include "../Engine/InteractiveSurface.h"
 #include "Text.h"
 
+namespace OpenXcom
+{
+
 class Font;
 class ArrowButton;
 
@@ -107,5 +110,7 @@ public:
 	/// Special handling for mouse hovering out.
 	void mouseOut(Action *action, State *state);
 };
+
+}
 
 #endif

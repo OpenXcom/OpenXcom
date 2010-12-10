@@ -21,6 +21,9 @@
 
 #include "../Engine/State.h"
 
+namespace OpenXcom
+{
+
 class BasescapeState;
 class Base;
 class Surface;
@@ -72,5 +75,7 @@ public:
 	/// Handler for clicking the Monthly Costs button.
 	void btnMonthlyCostsClick(Action *action);
 };
+
+}
 
 #endif

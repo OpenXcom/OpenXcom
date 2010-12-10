@@ -21,6 +21,9 @@
 
 #include "../Engine/State.h"
 
+namespace OpenXcom
+{
+
 class Ufo;
 class TextButton;
 class Window;
@@ -54,5 +57,7 @@ public:
 	/// Handler for clicking the Cancel button.
 	void btnCancelClick(Action *action);
 };
+
+}
 
 #endif

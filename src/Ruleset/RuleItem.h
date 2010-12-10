@@ -21,6 +21,9 @@
 
 #include <string>
 
+namespace OpenXcom
+{
+
 /**
  * Represents a specific type of item.
  * Contains constant info about an item like
@@ -58,5 +61,7 @@ public:
 	/// Sets if the item is equippable.
 	void setEquippable(bool equip);
 };
+
+}
 
 #endif

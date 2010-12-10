@@ -27,6 +27,9 @@
 #include "../Savegame/BattleSoldier.h"
 #include "../Savegame/Soldier.h"
 
+namespace OpenXcom
+{
+
 /**
  * Sets up a UnitSprite with the specified size and position.
  * @param width Width in pixels.
@@ -137,4 +140,6 @@ void UnitSprite::draw()
 void UnitSprite::blit(Surface *surface)
 {
 	Surface::blit(surface);
+}
+
 }

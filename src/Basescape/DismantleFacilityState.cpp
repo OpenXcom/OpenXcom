@@ -30,6 +30,9 @@
 #include "../Savegame/BaseFacility.h"
 #include "../Ruleset/RuleBaseFacility.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes all the elements in a Dismantle Facility window.
  * @param game Pointer to the core game.
@@ -111,4 +114,6 @@ void DismantleFacilityState::btnOkClick(Action *action)
 void DismantleFacilityState::btnCancelClick(Action *action)
 {
 	_game->popState();
+}
+
 }

@@ -20,6 +20,9 @@
 #include <sstream>
 #include "../Engine/RNG.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes a new pool with blank lists of names.
  */
@@ -84,4 +87,6 @@ void SoldierNamePool::addFemaleName(const std::string &name)
 void SoldierNamePool::addLastName(const std::string &name)
 {
 	_lastNames.push_back(name);
+}
+
 }

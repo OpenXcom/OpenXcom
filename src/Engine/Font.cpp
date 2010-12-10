@@ -19,6 +19,9 @@
 #include "Font.h"
 #include "Surface.h"
 
+namespace OpenXcom
+{
+
 // Fonts start with this character
 #define FIRST_CHAR '!'
 
@@ -138,4 +141,6 @@ int Font::getSpacing() const
 Surface *const Font::getSurface() const
 {
 	return _surface;
+}
+
 }

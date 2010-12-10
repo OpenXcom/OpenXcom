@@ -20,6 +20,9 @@
 #include "MovingTarget.h"
 #include <cmath>
 
+namespace OpenXcom
+{
+
 /**
  * Initializes a moving target with blank coordinates.
  */
@@ -166,4 +169,6 @@ bool MovingTarget::reachedDestination() const
 		return false;
 	}
 	return (_lon == _dest->getLongitude() && _lat == _dest->getLatitude());
+}
+
 }

@@ -30,6 +30,9 @@
 #include "../Engine/SoundSet.h"
 #include "TerrainObjectSet.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes a blank resource set pointing to a folder.
  * @param folder Subfolder to load resources from.
@@ -274,7 +277,7 @@ TerrainObjectSet *ResourcePack::getTerrainObjectSet(std::string name)
  * @param terrain pointer to the terrain rule
  * @return int Height of the loaded mapblock (this is needed for spawpoint calculation...)
  * @sa http://www.ufopaedia.org/index.php?title=MAPS
- * NOTE that Y-axis is in reverse order
+ * @note Y-axis is in reverse order
  */
 int ResourcePack::loadMAP(MapBlock *mapblock, int xoff, int yoff, SavedBattleGame *save, RuleTerrain *terrain)
 {
@@ -292,4 +295,6 @@ int ResourcePack::loadMAP(MapBlock *mapblock, int xoff, int yoff, SavedBattleGam
 void ResourcePack::loadRMP(MapBlock *mapblock, int xoff, int yoff, SavedBattleGame* save)
 {
 	return;
+}
+
 }

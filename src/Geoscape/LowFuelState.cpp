@@ -30,6 +30,9 @@
 #include "../Savegame/Craft.h"
 #include "GeoscapeState.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes all the elements in the Low Fuel window.
  * @param game Pointer to the core game.
@@ -113,4 +116,6 @@ void LowFuelState::btnOk5SecsClick(Action *action)
 {
 	_state->timerReset();
 	_game->popState();
+}
+
 }

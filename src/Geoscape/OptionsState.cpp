@@ -28,6 +28,9 @@
 #include "../Interface/Text.h"
 #include "AbandonGameState.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes all the elements in the Game Options window.
  * @param game Pointer to the core game.
@@ -114,4 +117,6 @@ void OptionsState::btnAbandonClick(Action *action)
 void OptionsState::btnCancelClick(Action *action)
 {
 	_game->popState();
+}
+
 }

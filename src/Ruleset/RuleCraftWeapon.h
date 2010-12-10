@@ -21,6 +21,9 @@
 
 #include <string>
 
+namespace OpenXcom
+{
+
 /**
  * Represents a specific type of craft weapon.
  * Contains constant info about a craft weapon like
@@ -89,5 +92,7 @@ public:
 	/// Sets the craft weapon's clip item.
 	void setClipItem(std::string clip);
 };
+
+}
 
 #endif

@@ -18,6 +18,8 @@
  */
 #include "RuleUnitSprite.h"
 
+namespace OpenXcom
+{
 
 /**
 * RuleUnitSprite construction.
@@ -295,4 +297,6 @@ void RuleUnitSprite::setWalkArmsYOffset(int walkArmsYOffset, int phase)
 int RuleUnitSprite::getLegsWalkOffset(int phase)
 {
 	return _walkLegsYOffset[phase];
+}
+
 }

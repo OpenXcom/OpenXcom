@@ -18,7 +18,6 @@
  */
 #include "DogfightState.h"
 #include <sstream>
-#include "SDL_gfxPrimitives.h"
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Palette.h"
@@ -43,6 +42,9 @@
 #include "../Engine/RNG.h"
 #include "../Engine/SoundSet.h"
 #include "../Engine/Sound.h"
+
+namespace OpenXcom
+{
 
 /**
  * Initializes all the elements in the Dogfight window.
@@ -112,10 +114,10 @@ DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo) :
 	graphic->getCrop()->y = 0;
 	graphic->getCrop()->w = 160;
 	graphic->getCrop()->h = 96;
-	SDL_FillRect(_window->getSurface(), graphic->getCrop(), 15);
+    _window->drawRect(graphic->getCrop(), 15);
 	graphic->blit(_window);
 	
-	SDL_FillRect(_preview->getSurface(), graphic->getCrop(), 15);
+    _preview->drawRect(graphic->getCrop(), 15);
 	graphic->getCrop()->y = 96;
 	graphic->getCrop()->h = 15;
 	graphic->blit(_preview);
@@ -425,7 +427,7 @@ void DogfightState::move()
 	{
 		for (int r = _currentRadius; r >= 0; r--)
 		{
-			filledCircleColor(_battle->getSurface(), _battle->getWidth() / 2, _battle->getHeight() - _currentDist / 8, r, Palette::getRGBA(_window->getPalette(), Palette::blockOffset(7) + 4 + r));
+			_battle->drawCircle(_battle->getWidth() / 2, _battle->getHeight() - _currentDist / 8, r, Palette::blockOffset(7) + 4 + r);
 		}
 	}
 
@@ -732,4 +734,6 @@ void DogfightState::previewClick(Action *action)
 	_btnDisengage->setVisible(true);
 	_btnUfo->setVisible(true);
 	_btnMinimize->setVisible(true);
+}
+
 }

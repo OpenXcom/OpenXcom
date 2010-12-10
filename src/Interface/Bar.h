@@ -21,6 +21,9 @@
 
 #include "../Engine/Surface.h"
 
+namespace OpenXcom
+{
+
 /**
  * Bar graphic that represents a certain value.
  * Drawn with a coloured border and partially
@@ -59,5 +62,7 @@ public:
 	/// Draws the bar.
 	void draw();
 };
+
+}
 
 #endif

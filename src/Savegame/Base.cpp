@@ -25,6 +25,9 @@
 #include "Item.h"
 #include "Soldier.h"
 
+namespace OpenXcom
+{
+
 #define SOLDIER_MAINT 20000
 #define ENGINEER_MAINT 25000
 #define SCIENTIST_MAINT 30000
@@ -478,4 +481,6 @@ int Base::getFacilityMaintenance() const
 int Base::getMonthlyMaintenace() const
 {
 	return getCraftMaintenance() + getPersonnelMaintenance() + getFacilityMaintenance();
+}
+
 }

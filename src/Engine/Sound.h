@@ -22,6 +22,9 @@
 #include "SDL_mixer.h"
 #include <string>
 
+namespace OpenXcom
+{
+
 /**
  * Container for sound effects.
  * Handles loading and playing various formats through SDL_mixer.
@@ -42,5 +45,7 @@ public:
 	/// Plays the sound.
 	void play() const;
 };
+
+}
 
 #endif

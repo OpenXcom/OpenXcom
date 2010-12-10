@@ -21,6 +21,9 @@
 
 #include "../Engine/State.h"
 
+namespace OpenXcom
+{
+
 class TextButton;
 class Window;
 class Text;
@@ -53,5 +56,7 @@ public:
 	/// Handler for clicking the Soldiers list.
 	void lstSoldiersClick(Action *action);
 };
+
+}
 
 #endif

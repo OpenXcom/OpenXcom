@@ -38,6 +38,9 @@
 #include "../Savegame/Waypoint.h"
 #include "SelectDestinationState.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes all the elements in the Geoscape Craft window.
  * @param game Pointer to the core game.
@@ -325,4 +328,6 @@ void GeoscapeCraftState::btnCancelClick(Action *action)
 {
 	delete _waypoint;
 	_game->popState();
+}
+
 }

@@ -21,6 +21,9 @@
 
 #include "../Engine/State.h"
 
+namespace OpenXcom
+{
+
 class Base;
 class Window;
 class Text;
@@ -47,5 +50,7 @@ public:
 	/// Handler for releasing a key on the Name edit.
 	void edtNameKeyPress(Action *action);
 };
+
+}
 
 #endif

@@ -21,6 +21,9 @@
 
 #include "../Engine/State.h"
 
+namespace OpenXcom
+{
+
 class TextButton;
 class Window;
 class Text;
@@ -45,5 +48,7 @@ public:
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
 };
+
+}
 
 #endif

@@ -18,6 +18,9 @@
  */
 #include "RuleBaseFacility.h"
 
+namespace OpenXcom
+{
+
 /**
  * Creates a blank ruleset for a certain
  * type of base facility.
@@ -399,4 +402,6 @@ int RuleBaseFacility::getHitRatio() const
 void RuleBaseFacility::setHitRatio(int ratio)
 {
 	_hitRatio = ratio;
+}
+
 }

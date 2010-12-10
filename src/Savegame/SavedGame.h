@@ -23,6 +23,9 @@
 #include <vector>
 #include <string>
 
+namespace OpenXcom
+{
+
 class GameTime;
 class Country;
 class Base;
@@ -92,5 +95,7 @@ public:
 	void setBattleGame(SavedBattleGame *battlegame);
 	SavedBattleGame *getBattleGame();
 };
+
+}
 
 #endif

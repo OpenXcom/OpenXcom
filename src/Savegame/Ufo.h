@@ -23,6 +23,9 @@
 #include <string>
 #include <string>
 
+namespace OpenXcom
+{
+
 class RuleUfo;
 
 /**
@@ -81,5 +84,7 @@ public:
 	/// Handles UFO logic.
 	void think();
 };
+
+}
 
 #endif

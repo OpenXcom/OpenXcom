@@ -35,6 +35,9 @@
 #include "../Savegame/Soldier.h"
 #include "../Engine/SurfaceSet.h"
 
+namespace OpenXcom
+{
+
 /**
  * Initializes all the elements in the Soldier Info screen.
  * @param game Pointer to the core game.
@@ -367,4 +370,6 @@ void SoldierInfoState::btnNextClick(Action *action)
 	if (_soldier >= _base->getSoldiers()->size())
 		_soldier = 0;
 	init();
+}
+
 }
