@@ -100,8 +100,8 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	for (int i = 0; i < 16; i++)
 	{
 		color[i].r = 128 - (i + 1) * 4;
-		color[i].g = 128 - (i + 2) * 4;
-		color[i].b = 128 - (i + 3) * 4;
+		color[i].g = 128 - (i + 1) * 4;
+		color[i].b = 128 - (i + 1) * 4;
 	}
 	_game->setPalette(color, Palette::backPos+16, 16);
 

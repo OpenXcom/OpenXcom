@@ -149,13 +149,26 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(fa
 	
 	// Set up objects
 	_game->getResourcePack()->getSurface("GEOBORD.SCR")->blit(_bg);
-	if (_game->getResourcePack()->getLanguage()->getName() != "ENGLISH")
+
+	Surface* sidebar = 0;
+	if (_game->getResourcePack()->getLanguage()->getName() == "DEUTSCHE")
 	{
-		Surface* sidebar = 0;
-		if (_game->getResourcePack()->getLanguage()->getName() == "DEUTSCHE")
-			sidebar = _game->getResourcePack()->getSurface("LANG1.DAT");
-		else
-			sidebar = _game->getResourcePack()->getSurface("LANG2.DAT");
+		sidebar = _game->getResourcePack()->getSurface("German.geo");
+	}
+	else if (_game->getResourcePack()->getLanguage()->getName() == "FRANCAIS")
+	{
+		sidebar = _game->getResourcePack()->getSurface("French.geo");
+	}
+	else if (_game->getResourcePack()->getLanguage()->getName() == "ITALIANO")
+	{
+		sidebar = _game->getResourcePack()->getSurface("Italian.geo");
+	}
+	else if (_game->getResourcePack()->getLanguage()->getName() == "ESPANOL")
+	{
+		sidebar = _game->getResourcePack()->getSurface("Spanish.geo");
+	}
+	if (sidebar != 0)
+	{
 		sidebar->setX(320 - sidebar->getWidth());
 		sidebar->setY(0);
 		sidebar->blit(_bg);

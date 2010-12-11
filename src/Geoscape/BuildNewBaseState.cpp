@@ -59,7 +59,7 @@ BuildNewBaseState::BuildNewBaseState(Game *game, Base *base, Globe *globe, bool 
 
 	_window = new Window(this, 256, 28, 0, 0);
 	_btnCancel = new TextButton(54, 12, 186, 8);
-	_txtTitle = new Text(200, 9, 8, 10);
+	_txtTitle = new Text(200, 16, 8, 10);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
@@ -103,6 +103,11 @@ BuildNewBaseState::BuildNewBaseState(Game *game, Base *base, Globe *globe, bool 
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString("STR_SELECT_SITE_FOR_NEW_BASE"));
+
+	if (_game->getResourcePack()->getLanguage()->getName() == "ESPANOL")
+	{
+		_txtTitle->setY(6);
+	}
 
 	if (_first)
 	{

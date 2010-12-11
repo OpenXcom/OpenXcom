@@ -88,7 +88,7 @@ CraftsState::CraftsState(Game *game, Base *base) : State(game), _base(base)
 	_txtBase->setText(baseName);
 
 	_txtName->setColor(Palette::blockOffset(15)+1);
-	_txtName->setText(_game->getResourcePack()->getLanguage()->getString("STR_NAME"));
+	_txtName->setText(_game->getResourcePack()->getLanguage()->getString("STR_NAME_UC"));
 
 	_txtStatus->setColor(Palette::blockOffset(15)+1);
 	_txtStatus->setText(_game->getResourcePack()->getLanguage()->getString("STR_STATUS"));

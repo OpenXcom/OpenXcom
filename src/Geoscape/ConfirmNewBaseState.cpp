@@ -81,12 +81,12 @@ ConfirmNewBaseState::ConfirmNewBaseState(Game *game, Base *base, Globe *globe) :
 		if (i->second->insideRegion(_base->getLongitude(), _base->getLatitude()))
 		{
 			_cost = i->second->getBaseCost();
-			ss << _game->getResourcePack()->getLanguage()->getString("STR_AREA") << _game->getResourcePack()->getLanguage()->getString(i->first);
+			ss << _game->getResourcePack()->getLanguage()->getString("STR_AREA_") << _game->getResourcePack()->getLanguage()->getString(i->first);
 			break;
 		}
 	}
 	
-	std::string s = _game->getResourcePack()->getLanguage()->getString("STR_COST");
+	std::string s = _game->getResourcePack()->getLanguage()->getString("STR_COST_");
 	s.erase(s.size()-1, 1);
 	s += Text::formatFunding(_cost);
 	_txtCost->setColor(Palette::blockOffset(15)-1);

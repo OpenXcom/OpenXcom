@@ -99,7 +99,7 @@ void LanguageState::changeLanguage(const std::string &lang)
  */
 void LanguageState::btnEnglishClick(Action *action)
 {
-	changeLanguage("ENGLISH.LNG");
+	changeLanguage("English.lng");
 }
 
 /**
@@ -109,7 +109,7 @@ void LanguageState::btnEnglishClick(Action *action)
  */
 void LanguageState::btnGermanClick(Action *action)
 {
-	changeLanguage("GERMAN.LNG");
+	changeLanguage("German.lng");
 }
 
 /**
@@ -119,7 +119,7 @@ void LanguageState::btnGermanClick(Action *action)
  */
 void LanguageState::btnFrenchClick(Action *action)
 {
-	changeLanguage("FRENCH.LNG");
+	changeLanguage("French.lng");
 }
 
 /**
@@ -129,7 +129,7 @@ void LanguageState::btnFrenchClick(Action *action)
  */
 void LanguageState::btnItalianClick(Action *action)
 {
-	changeLanguage("ITALIAN.LNG");
+	changeLanguage("Italian.lng");
 }
 
 /**
@@ -139,7 +139,7 @@ void LanguageState::btnItalianClick(Action *action)
  */
 void LanguageState::btnSpanishClick(Action *action)
 {
-	changeLanguage("SPANISH.LNG");
+	changeLanguage("Spanish.lng");
 }
 
 }
