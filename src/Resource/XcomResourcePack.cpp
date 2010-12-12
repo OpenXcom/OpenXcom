@@ -69,7 +69,7 @@ XcomResourcePack::XcomResourcePack(const std::string &folder) : ResourcePack(fol
 	
 	// Load fonts
 	std::string font[] = {"BIGLETS.DAT",
-					 "SMALLSET.DAT"};
+						  "SMALLSET.DAT"};
 	
 	for (int i = 0; i < 2; i++)
 	{
@@ -85,10 +85,10 @@ XcomResourcePack::XcomResourcePack(const std::string &folder) : ResourcePack(fol
 		
 	// Load languages
 	std::string lang[] = {"English",
-					 "French",
-					 "German",
-					 "Italian",
-					 "Spanish"};
+						  "French",
+						  "German",
+						  "Italian",
+						  "Spanish"};
 
 	for (int i = 0; i < 5; i++)
 	{
@@ -118,24 +118,24 @@ XcomResourcePack::XcomResourcePack(const std::string &folder) : ResourcePack(fol
 	}
 
 	std::string scrs[] = {"BACK01.SCR",
-					 "BACK02.SCR",
-					 "BACK03.SCR",
-					 "BACK04.SCR",
-					 "BACK05.SCR",
-					 "BACK06.SCR",
-					 "BACK07.SCR",
-					 "BACK08.SCR",
-					 "BACK09.SCR",
-					 "BACK10.SCR",
-					 "BACK11.SCR",
-					 "BACK12.SCR",
-					 "BACK13.SCR",
-					 "BACK14.SCR",
-					 "BACK15.SCR",
-					 "BACK16.SCR",
-					 "BACK17.SCR",
-					 "GEOBORD.SCR",
-					 "UP_BORD2.SCR"};
+						  "BACK02.SCR",
+						  "BACK03.SCR",
+						  "BACK04.SCR",
+						  "BACK05.SCR",
+						  "BACK06.SCR",
+						  "BACK07.SCR",
+						  "BACK08.SCR",
+						  "BACK09.SCR",
+						  "BACK10.SCR",
+						  "BACK11.SCR",
+						  "BACK12.SCR",
+						  "BACK13.SCR",
+						  "BACK14.SCR",
+						  "BACK15.SCR",
+						  "BACK16.SCR",
+						  "BACK17.SCR",
+						  "GEOBORD.SCR",
+						  "UP_BORD2.SCR"};
 
 	for (int i = 0; i < 19; i++)
 	{
@@ -146,48 +146,48 @@ XcomResourcePack::XcomResourcePack(const std::string &folder) : ResourcePack(fol
 	}
 
 	std::string spks[] = {"UP001.SPK",
-					 "UP002.SPK",
-					 "UP003.SPK",
-					 "UP004.SPK",
-					 "UP005.SPK",
-					 "UP006.SPK",
-					 "UP007.SPK",
-					 "UP008.SPK",
-					 "UP009.SPK",
-					 "UP010.SPK",
-					 "UP011.SPK",
-					 "UP012.SPK",
-					 "UP013.SPK",
-					 "UP014.SPK",
-					 "UP015.SPK",
-					 "UP016.SPK",
-					 "UP017.SPK",
-					 "UP018.SPK",
-					 "UP019.SPK",
-					 "UP020.SPK",
-					 "UP021.SPK",
-					 "UP022.SPK",
-					 "UP023.SPK",
-					 "UP024.SPK",
-					 "UP025.SPK",
-					 "UP026.SPK",
-					 "UP027.SPK",
-					 "UP028.SPK",
-					 "UP029.SPK",
-					 "UP030.SPK",
-					 "UP031.SPK",
-					 "UP032.SPK",
-					 "UP033.SPK",
-					 "UP034.SPK",
-					 "UP035.SPK",
-					 "UP036.SPK",
-					 "UP037.SPK",
-					 "UP038.SPK",
-					 "UP039.SPK",
-					 "UP040.SPK",
-					 "UP041.SPK",
-					 "UP042.SPK",
-					 "GRAPHS.SPK"};
+						  "UP002.SPK",
+						  "UP003.SPK",
+						  "UP004.SPK",
+						  "UP005.SPK",
+						  "UP006.SPK",
+						  "UP007.SPK",
+						  "UP008.SPK",
+						  "UP009.SPK",
+						  "UP010.SPK",
+						  "UP011.SPK",
+						  "UP012.SPK",
+						  "UP013.SPK",
+						  "UP014.SPK",
+						  "UP015.SPK",
+						  "UP016.SPK",
+						  "UP017.SPK",
+						  "UP018.SPK",
+						  "UP019.SPK",
+						  "UP020.SPK",
+						  "UP021.SPK",
+						  "UP022.SPK",
+						  "UP023.SPK",
+						  "UP024.SPK",
+						  "UP025.SPK",
+						  "UP026.SPK",
+						  "UP027.SPK",
+						  "UP028.SPK",
+						  "UP029.SPK",
+						  "UP030.SPK",
+						  "UP031.SPK",
+						  "UP032.SPK",
+						  "UP033.SPK",
+						  "UP034.SPK",
+						  "UP035.SPK",
+						  "UP036.SPK",
+						  "UP037.SPK",
+						  "UP038.SPK",
+						  "UP039.SPK",
+						  "UP040.SPK",
+						  "UP041.SPK",
+						  "UP042.SPK",
+						  "GRAPHS.SPK"};
 
 	for (int i = 0; i < 43; i++)
 	{
@@ -199,8 +199,8 @@ XcomResourcePack::XcomResourcePack(const std::string &folder) : ResourcePack(fol
 
 	// Load surface sets
 	std::string sets[] = {"BASEBITS.PCK",
-					 "INTICON.PCK",
-					 "TEXTURE.DAT"};
+						  "INTICON.PCK",
+						  "TEXTURE.DAT"};
 
 	for (int i = 0; i < 3; i++)
 	{
@@ -296,19 +296,19 @@ XcomResourcePack::XcomResourcePack(const std::string &folder) : ResourcePack(fol
 
 	// Load musics
 	std::string mus[] = {"GMDEFEND",
-					"GMENBASE",
-					"GMGEO1",
-					"GMGEO2",
-					"GMINTER",
-					"GMINTRO1",
-					"GMINTRO2",
-					"GMINTRO3",
-					"GMLOSE",
-					"GMMARS",
-					"GMNEWMAR",
-					"GMSTORY",
-					"GMTACTIC",
-					"GMWIN"};
+						 "GMENBASE",
+						 "GMGEO1",
+						 "GMGEO2",
+						 "GMINTER",
+						 "GMINTRO1",
+						 "GMINTRO2",
+						 "GMINTRO3",
+						 "GMLOSE",
+						 "GMMARS",
+						 "GMNEWMAR",
+						 "GMSTORY",
+						 "GMTACTIC",
+						 "GMWIN"};
 	std::string exts[] = {"OGG", "MP3", "MID"};
 	int tracks[] = {3, 6, 0, 18, 2, 19, 20, 21, 10, 8, 9, 12, 17, 11};
 
@@ -355,14 +355,14 @@ XcomResourcePack::XcomResourcePack(const std::string &folder) : ResourcePack(fol
 
 	// Load sounds
 	std::string catsId[] = {"GEO.CAT",
-						 "BATTLE.CAT",
-						"INTRO.CAT"};
+							"BATTLE.CAT",
+							"INTRO.CAT"};
 	std::string catsDos[] = {"SOUND2.CAT",
-						"SOUND1.CAT",
-						"INTRO.CAT"};
+							 "SOUND1.CAT",
+							 "INTRO.CAT"};
 	std::string catsWin[] = {"SAMPLE.CAT",
-						"SAMPLE2.CAT",
-						"SAMPLE3.CAT"};
+							 "SAMPLE2.CAT",
+							 "SAMPLE3.CAT"};
 
 	// Check which sound version is available
 	std::string *cats = 0;
@@ -431,33 +431,32 @@ void XcomResourcePack::loadBattlescapeResources(std::string folder)
 
 	// Load Batltescape terrain
 	std::string bsets[] = {"AVENGER.PCK",
-					  "BARN.PCK",
-					  "BLANKS.PCK",
-					 "BRAIN.PCK",
-					 "CULTIVAT.PCK",
-					 "DESERT.PCK",
-					 "FOREST.PCK",
-					 "FRNITURE.PCK",
-					 "JUNGLE.PCK",
-					 "LIGHTNIN.PCK",
-					 "MARS.PCK",
-					 "MOUNT.PCK",
-					 "PLANE.PCK",
-					 "POLAR.PCK",
-					 "ROADS.PCK",
-					 "U_BASE.PCK",
-					 "U_BITS.PCK",
-					 "U_DISEC2.PCK",
-					 "U_EXT02.PCK",
-					 "U_OPER2.PCK",
-					 "U_PODS.PCK",
-					 "U_WALL02.PCK",
-					 "UFO1.PCK",
-					 "URBAN.PCK",
-					 "URBITS.PCK",
-					 "XBASE1.PCK",
-					 "XBASE2.PCK"
-					 };
+							"BARN.PCK",
+							"BLANKS.PCK",
+							"BRAIN.PCK",
+							"CULTIVAT.PCK",
+							"DESERT.PCK",
+							"FOREST.PCK",
+							"FRNITURE.PCK",
+							"JUNGLE.PCK",
+							"LIGHTNIN.PCK",
+							"MARS.PCK",
+							"MOUNT.PCK",
+							"PLANE.PCK",
+							"POLAR.PCK",
+							"ROADS.PCK",
+							"U_BASE.PCK",
+							"U_BITS.PCK",
+							"U_DISEC2.PCK",
+							"U_EXT02.PCK",
+							"U_OPER2.PCK",
+							"U_PODS.PCK",
+							"U_WALL02.PCK",
+							"UFO1.PCK",
+							"URBAN.PCK",
+							"URBITS.PCK",
+							"XBASE1.PCK",
+							"XBASE2.PCK"};
 
 	for (int i = 0; i < 27; i++)
 	{
@@ -488,25 +487,25 @@ void XcomResourcePack::loadBattlescapeResources(std::string folder)
 
 		// Load Battlescape units
 	std::string usets[] = {"SILACOID.PCK",
-					  "CELATID.PCK",
-					  "HANDOB.PCK",
-					 "CYBER.PCK",
-					 "FLOOROB.PCK",
-					 "SECTOID.PCK",
-					 "CIVF.PCK",
-					 "CIVM.PCK",
-					 "XCOM_1.PCK",
-					 "SNAKEMAN.PCK",
-					 "XCOM_0.PCK",
-					 "CHRYS.PCK",
-					 "TANKS.PCK",
-					 "FLOATER.PCK",
-					 "XCOM_2.PCK",
-					 "ZOMBIE.PCK",
-					 "MUTON.PCK",
-					 "X_REAP.PCK",
-					 "ETHEREAL.PCK",
-					 "X_ROB.PCK"
+							"CELATID.PCK",
+							"HANDOB.PCK",
+							"CYBER.PCK",
+							"FLOOROB.PCK",
+							"SECTOID.PCK",
+							"CIVF.PCK",
+							"CIVM.PCK",
+							"XCOM_1.PCK",
+							"SNAKEMAN.PCK",
+							"XCOM_0.PCK",
+							"CHRYS.PCK",
+							"TANKS.PCK",
+							"FLOATER.PCK",
+							"XCOM_2.PCK",
+							"ZOMBIE.PCK",
+							"MUTON.PCK",
+							"X_REAP.PCK",
+							"ETHEREAL.PCK",
+							"X_ROB.PCK"
 					 };
 
 	for (int i = 0; i < 20; i++)

@@ -44,6 +44,7 @@
 #include "../Engine/SoundSet.h"
 #include "../Engine/Sound.h"
 #include "../Savegame/Craft.h"
+#include <iostream>
 
 namespace OpenXcom
 {
@@ -95,14 +96,23 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_4")->getColors());
 
-	// Last 16 colors are a grey gradient
-	SDL_Color color[16];
-	for (int i = 0; i < 16; i++)
-	{
-		color[i].r = 128 - (i + 1) * 4;
-		color[i].g = 128 - (i + 1) * 4;
-		color[i].b = 128 - (i + 1) * 4;
-	}
+	// Last 16 colors are a greyish gradient
+	SDL_Color color[] = {{140, 152, 148},
+						 {132, 136, 140},
+						 {116, 124, 132},
+						 {108, 116, 124},
+						 {92, 104, 108},
+						 {84, 92, 100},
+						 {76, 80, 92},
+						 {56, 68, 84},
+						 {48, 56, 68},
+						 {40, 48, 56},
+						 {32, 36, 48},
+						 {24, 28, 32},
+						 {16, 20, 24},
+						 {8, 12, 16},
+						 {0, 4, 8},
+						 {0, 0, 0}};
 	_game->setPalette(color, Palette::backPos+16, 16);
 
 	// Fix cursor
