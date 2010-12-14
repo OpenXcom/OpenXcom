@@ -284,6 +284,8 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(fa
 
 	_timer->onTimer((StateHandler)&GeoscapeState::timeAdvance);
 	_timer->start();
+
+	timeDisplay();
 }
 
 /**
@@ -300,14 +302,16 @@ GeoscapeState::~GeoscapeState()
  */
 void GeoscapeState::init()
 {
+	//_game->getSavedGame()->save("test");
+
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
+
+	timeDisplay();
 
 	_globe->onMouseClick((ActionHandler)&GeoscapeState::globeClick);
 	_globe->focus();
 	_globe->draw();
-
-	timeDisplay();
 
 	// Set music if it's not already playing
 	if (!_music)

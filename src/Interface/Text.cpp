@@ -108,11 +108,8 @@ void Text::setFonts(Font *big, Font *small)
  */
 void Text::setText(const std::string &text)
 {
-	if (text != _text)
-	{
-		_text = text;
-		processText();
-	}
+	_text = text;
+	processText();
 }
 
 /**

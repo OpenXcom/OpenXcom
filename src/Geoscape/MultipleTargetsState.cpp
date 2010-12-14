@@ -59,41 +59,44 @@ MultipleTargetsState::MultipleTargetsState(Game *game, std::vector<Target*> targ
 {
 	_screen = false;
 
-	int listHeight = _targets.size() * 8;
-	int winHeight = listHeight + BUTTON_HEIGHT + OUTER_MARGIN * 2 + INNER_MARGIN + BORDER * 2;
-	int winY = (200 - winHeight) / 2;
-	int listY = winY + BORDER + OUTER_MARGIN;
-	int btnY = listY + listHeight + INNER_MARGIN;
-
-	// Create objects
-	_window = new Window(this, 136, winHeight, 60, winY);
-	_btnCancel = new TextButton(116, BUTTON_HEIGHT, 70, btnY);
-	_lstTargets = new TextList(116, listHeight, 70, listY);
-	
-	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
-
-	add(_window);
-	add(_btnCancel);
-	add(_lstTargets);
-
-	// Set up objects
-	_window->setColor(Palette::blockOffset(8)+8);
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK15.SCR"));
-
-	_btnCancel->setColor(Palette::blockOffset(8)+8);
-	_btnCancel->setText(_game->getResourcePack()->getLanguage()->getString("STR_CANCEL_UC"));
-	_btnCancel->onMouseClick((ActionHandler)&MultipleTargetsState::btnCancelClick);
-
-	_lstTargets->setColor(Palette::blockOffset(8)+5);
-	_lstTargets->setAlign(ALIGN_CENTER);
-	_lstTargets->setColumns(1, 116);
-	_lstTargets->setSelectable(true);
-	_lstTargets->setBackground(_window);
-	_lstTargets->onMouseClick((ActionHandler)&MultipleTargetsState::lstTargetsClick);
-	for (std::vector<Target*>::iterator i = _targets.begin(); i != _targets.end(); i++)
+	if (_targets.size() > 1)
 	{
-		_lstTargets->addRow(1, (*i)->getName(_game->getResourcePack()->getLanguage()).c_str());
+		int listHeight = _targets.size() * 8;
+		int winHeight = listHeight + BUTTON_HEIGHT + OUTER_MARGIN * 2 + INNER_MARGIN + BORDER * 2;
+		int winY = (200 - winHeight) / 2;
+		int listY = winY + BORDER + OUTER_MARGIN;
+		int btnY = listY + listHeight + INNER_MARGIN;
+
+		// Create objects
+		_window = new Window(this, 136, winHeight, 60, winY);
+		_btnCancel = new TextButton(116, BUTTON_HEIGHT, 70, btnY);
+		_lstTargets = new TextList(116, listHeight, 70, listY);
+	
+		// Set palette
+		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
+
+		add(_window);
+		add(_btnCancel);
+		add(_lstTargets);
+
+		// Set up objects
+		_window->setColor(Palette::blockOffset(8)+8);
+		_window->setBackground(_game->getResourcePack()->getSurface("BACK15.SCR"));
+
+		_btnCancel->setColor(Palette::blockOffset(8)+8);
+		_btnCancel->setText(_game->getResourcePack()->getLanguage()->getString("STR_CANCEL_UC"));
+		_btnCancel->onMouseClick((ActionHandler)&MultipleTargetsState::btnCancelClick);
+
+		_lstTargets->setColor(Palette::blockOffset(8)+5);
+		_lstTargets->setAlign(ALIGN_CENTER);
+		_lstTargets->setColumns(1, 116);
+		_lstTargets->setSelectable(true);
+		_lstTargets->setBackground(_window);
+		_lstTargets->onMouseClick((ActionHandler)&MultipleTargetsState::lstTargetsClick);
+		for (std::vector<Target*>::iterator i = _targets.begin(); i != _targets.end(); i++)
+		{
+			_lstTargets->addRow(1, (*i)->getName(_game->getResourcePack()->getLanguage()).c_str());
+		}
 	}
 }
 
