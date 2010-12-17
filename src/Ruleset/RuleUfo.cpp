@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "RuleUfo.h"
+#include "RuleTerrain.h"
 
 namespace OpenXcom
 {

@@ -22,7 +22,7 @@
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
 #include "../Resource/TerrainObject.h"
-#include "../Savegame//BattleUnit.h"
+#include "../Savegame/BattleUnit.h"
 
 namespace OpenXcom
 {
@@ -89,14 +89,20 @@ void Pathfinding::calculate(BattleUnit *unit, Position &endPosition)
 	// check if destination is not blocked
 	if (isBlocked(destinationTile, O_FLOOR) || isBlocked(destinationTile, O_OBJECT)) return;
 
+	// the following check avoids that the unit walks behind the stairs if we click behind the stairs to make it go up the stairs.
+	// it only works if the unit is on one of the 2 tiles on the stairs, or on the tile right in front of the stairs.
+	if (isOnStairs(startPosition, endPosition))
+	{
+		endPosition.z++;
+		destinationTile = _save->getTile(endPosition);
+	}
+
 	// check if we have floor, else lower destination (for non flying units only, because otherwise they never reached this place)
 	while (canFallDown(destinationTile))
 	{
 		endPosition.z--;
 		destinationTile = _save->getTile(endPosition);
 	}
-
-	// TODO : check if the user wants the unit to go upstairs (click behind stairs)
 
 
 	_path.clear();
@@ -204,7 +210,11 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 		return 255;
 
 	// calculate the cost by adding floor walk cost and object walk cost
-	int cost = destinationTile->getTUCost(O_FLOOR, _movementType) + destinationTile->getTUCost(O_OBJECT, _movementType);
+	int cost = destinationTile->getTUCost(O_FLOOR, _movementType);
+	if (!fellDown)
+	{
+		cost += destinationTile->getTUCost(O_OBJECT, _movementType);
+	}
 	
 	// diagonal walking (uneven directions) costs 50% more tu's
 	if (direction & 1)
@@ -334,13 +344,62 @@ bool Pathfinding::isBlocked(Tile *startTile, Tile *endTile, const int direction)
 
 /**
  * We can fall down here, if the tile does not exist, the tile has no floor
- * the current position is higher than 0
+ * the current position is higher than 0, if there is no unit standing below us
  * @param here
  * @return bool
  */
 bool Pathfinding::canFallDown(Tile *here)
 {
-	return (!here || here->hasNoFloor()) && here->getPosition().z > 0;
+	if (here->getPosition().z == 0)
+		return false;
+
+	if (_save->selectUnit(here->getPosition() + Position(0, 0, -1)))
+		return false;
+
+	if (!here || here->hasNoFloor())
+		return true;
+	else
+		return false;
 }
+
+/**
+ * We are going upstairs here?
+ * @param startPosition
+ * @param endPosition
+ * @return bool
+ */
+bool Pathfinding::isOnStairs(const Position &startPosition, const Position &endPosition)
+{
+	//condition 1 : endposition has to the south a terrainlevel -16 object (upper part of the stairs)
+	if (_save->getTile(endPosition + Position(0, -1, 0)) && _save->getTile(endPosition + Position(0, -1, 0))->getTerrainLevel() == -16)
+	{
+		// condition 2 : one position further to the south there has to be a terrainlevel -8 object (lower part of the stairs)
+		if (_save->getTile(endPosition + Position(0, -2, 0)) && _save->getTile(endPosition + Position(0, -2, 0))->getTerrainLevel() != -8)
+		{
+			return false;
+		}
+
+		// condition 3 : the start position has to be on either of the 3 tiles to the south of the endposition
+		if (startPosition == endPosition + Position(0, -1, 0) || startPosition == endPosition + Position(0, -2, 0) || startPosition == endPosition + Position(0, -3, 0))
+		{
+			return true;
+		}
+	}
+
+	// same for the east-west oriented stairs.
+	if (_save->getTile(endPosition + Position(1, 0, 0)) && _save->getTile(endPosition + Position(1, 0, 0))->getTerrainLevel() == -16)
+	{
+		if (_save->getTile(endPosition + Position(2, 0, 0)) && _save->getTile(endPosition + Position(2, 0, 0))->getTerrainLevel() != -8)
+		{
+			return false;
+		}
+		if (startPosition == endPosition + Position(1, 0, 0) || startPosition == endPosition + Position(2, 0, 0) || startPosition == endPosition + Position(3, 0, 0))
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
 
 }

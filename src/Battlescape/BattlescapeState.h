@@ -31,7 +31,8 @@ class InteractiveSurface;
 class Text;
 class Bar;
 class NumberText;
-class BattleSoldier;
+class BattleUnit;
+class SavedBattleGame;
 
 /**
  * Battlescape screen which shows the tactical battle
@@ -39,7 +40,7 @@ class BattleSoldier;
 class BattlescapeState : public State
 {
 private:
-	Surface *_icons;
+	Surface *_icons, *_rank;
 	Map *_map;
 	InteractiveSurface *_btnUnitUp, *_btnUnitDown, *_btnMapUp, *_btnMapDown, *_btnShowMap, *_btnKneel;
 	InteractiveSurface *_btnSoldier, *_btnCenter, *_btnNextSoldier, *_btnNextStop, *_btnShowLayers, *_btnHelp;
@@ -50,6 +51,8 @@ private:
 	NumberText *_numTimeUnits, *_numEnergy, *_numHealth, *_numMorale, *_numLayers;
 	Bar *_barTimeUnits, *_barEnergy, *_barHealth, *_barMorale;
 	Timer *_walkingTimer, *_bulletTimer;
+	SavedBattleGame *_battleGame;
+	void unitOpensDoor(BattleUnit *unit);
 public:
 	/// Creates the Battlescape state.
 	BattlescapeState(Game *game);
@@ -88,7 +91,7 @@ public:
 	/// Handler for clicking the Abort button.
 	void btnAbortClick(Action *action);
 	/// updates soldier name/rank/tu/energy/health/morale
-	void updateSoldierInfo(BattleSoldier *soldier);
+	void updateSoldierInfo(BattleUnit *unit);
 	/// Animate walking unit.
 	void moveUnit();
 	/// Animate flying bullet.

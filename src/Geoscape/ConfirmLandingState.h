@@ -38,12 +38,12 @@ class ConfirmLandingState : public State
 private:
 	Craft *_craft;
 	Window *_window;
-	int _texture;
+	int _texture, _shade;
 	Text *_txtCraft, *_txtTarget, *_txtReady, *_txtBegin;
 	TextButton *_btnYes, *_btnNo;
 public:
 	/// Creates the Confirm Landing state.
-	ConfirmLandingState(Game *game, Craft *craft, int texture);
+	ConfirmLandingState(Game *game, Craft *craft, int texture, int shade);
 	/// Cleans up the Confirm Landing state.
 	~ConfirmLandingState();
 	/// Handler for clicking the Yes button.

@@ -91,8 +91,9 @@ public:
 	std::vector<Waypoint*> *const getWaypoints();
 	/// Gets the current waypoint ID.
 	int *const getWaypointId();
-	
+	/// Sets the battlegame object.
 	void setBattleGame(SavedBattleGame *battlegame);
+	/// Gets the battlegame object.
 	SavedBattleGame *getBattleGame();
 };
 

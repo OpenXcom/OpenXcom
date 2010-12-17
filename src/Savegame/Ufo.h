@@ -42,12 +42,10 @@ private:
 	std::string _direction;
 	bool _detected;
 	int _daysCrashed;
+	bool _inBattlescape;
 	
 	/// Calculates a new speed vector to the destination.
 	void calculateSpeed();
-	// battlescape:
-	std::vector<std::string*> _sheetnames;
-	int _width,_length;
 public:
 	/// Creates a UFO of the specified type.
 	Ufo(RuleUfo *rules);
@@ -83,6 +81,10 @@ public:
 	bool isDestroyed() const;
 	/// Handles UFO logic.
 	void think();
+	/// Sets the UFO's battlescape status.
+	void setInBattlescape(bool inbattle);
+	/// Gets if the UFO is in battlescape.
+	bool isInBattlescape() const;
 };
 
 }

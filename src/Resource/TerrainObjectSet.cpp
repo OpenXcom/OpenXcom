@@ -124,11 +124,13 @@ void TerrainObjectSet::load(const std::string &filename)
 		for (int frame = 0; frame < 8; frame++)
 			to->setOriginalSpriteIndex(frame,(int)mcd.Frame[frame]);
 		to->setYOffset((int)mcd.P_Level);
-		to->setSpecialType((int)mcd.Target_Type);
+		to->setSpecialType((int)mcd.Target_Type, (int)mcd.Tile_Type);
 		to->setTUCosts((int)mcd.TU_Walk, (int)mcd.TU_Fly, (int)mcd.TU_Slide);
 		to->setFlags(mcd.UFO_Door == 1, mcd.Stop_LOS == 1, mcd.No_Floor == 1, mcd.Big_Wall == 1, mcd.Gravlift == 1, mcd.Door == 1, mcd.Block_Fire == 1, mcd.Block_Smoke == 1);
 		to->setTerrainLevel((int)mcd.T_Level);
 		to->setFootstepSound((int)mcd.Footstep);
+		to->setAltMCD((int)mcd.Alt_MCD);
+		to->setDieMCD((int)mcd.Die_MCD);
 
 	}
 

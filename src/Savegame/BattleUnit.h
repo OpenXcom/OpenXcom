@@ -21,6 +21,7 @@
 
 #include <vector>
 #include "../Battlescape/Position.h"
+#include "Soldier.h"
 
 namespace OpenXcom
 {
@@ -28,8 +29,10 @@ namespace OpenXcom
 class RuleUnitSprite;
 class Tile;
 class BattleItem;
+class Soldier;
 
 enum UnitStatus {STATUS_STANDING, STATUS_SITTING, STATUS_WALKING, STATUS_TURNING, STATUS_FALLING, STATUS_DEAD};
+enum UnitFaction {FACTION_PLAYER, FACTION_HOSTILE, FACTION_NEUTRAL, FACTION_FRIENDLY};
 
 /**
  * Represents a moving unit in the battlescape, player controlled or AI controlled
@@ -39,6 +42,7 @@ class BattleUnit
 {
 private:
 	RuleUnitSprite *_renderRules;
+	UnitFaction _faction;
 	int _id;
 	Position _pos;
 	Position _lastPos;
@@ -48,11 +52,20 @@ private:
 	int _walkPhase;
 	std::vector<Tile *> _visibleTiles;
 	std::vector<BattleItem *> _inventory;
+	int _tu, _energy, _health, _morale;
+	Soldier *_soldier;
+	//BattleAI *_ai;
+	//RuleNPC *_NPCRule;
+	std::string _name;
 public:
 	/// Creates a BattleUnit.
-	BattleUnit(RuleUnitSprite *renderRules);
+	BattleUnit(RuleUnitSprite *renderRules, UnitFaction faction);
 	/// Cleans up the BattleUnit.
 	virtual ~BattleUnit();
+	/// Assigns a geoscape soldier.
+	void setSoldier(Soldier *soldier);
+	/// Assigns an NPC rule and Battle AI.
+	//void setNPC(RuleNPC *NPCRule, BattleAI *ai);
 	/// Gets the BattleUnit's ID.
 	int getId() const;
 	/// Sets the BattleUnit's ID.
@@ -76,7 +89,7 @@ public:
 	/// Increase the walkingPhase
 	void keepWalking();
 	/// Gets the walking phase
-	int getWalkingPhase();
+	int getWalkingPhase() const;
 	/// Gets the unit's destination when walking
 	const Position &getDestination() const;
 	/// Look at a certain point.
@@ -85,6 +98,22 @@ public:
 	void lookAt(int direction);
 	/// Turn to the destination direction.
 	void turn();
+	/// Gets the unit's maximum time units.
+	int getMaxTimeUnits() const;
+	/// Gets the unit's maximum stamina.
+	int getMaxStamina() const;
+	/// Gets the unit's maximum health.
+	int getMaxHealth() const;
+	/// Gets the soldier's name.
+	std::string getName() const;
+	/// Gets the soldier's gender.
+	SoldierGender getGender() const;
+	/// Gets the unit's faction.
+	UnitFaction getFaction() const;
+	/// Sets the unit's name. Only for aliens.
+	void setName(const std::string &name);
+	/// Gets a sprite version of the soldier's rank.
+	int getRankSprite() const;
 
 };
 

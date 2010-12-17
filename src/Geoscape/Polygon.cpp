@@ -180,4 +180,22 @@ int Polygon::getPoints() const
 	return _points;
 }
 
+/**
+ * Returns the shade on this polygon.
+ * @return Shade.
+ */
+int Polygon::getShade() const
+{
+	return _shade;
+}
+
+/**
+ * Sets the shade on this polygon.
+ * @param shade Shade.
+ */
+void Polygon::setShade(int shade)
+{
+	_shade = shade;
+}
+
 }

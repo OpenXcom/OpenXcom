@@ -126,6 +126,7 @@
     <ClCompile Include="Basescape\SoldierInfoState.cpp" />
     <ClCompile Include="Basescape\SoldiersState.cpp" />
     <ClCompile Include="Basescape\StoresState.cpp" />
+    <ClCompile Include="Battlescape\BattlescapeGenerator.cpp" />
     <ClCompile Include="Battlescape\BattlescapeState.cpp" />
     <ClCompile Include="Battlescape\BriefingCrashState.cpp" />
     <ClCompile Include="Battlescape\Map.cpp" />
@@ -213,7 +214,6 @@
     <ClCompile Include="Savegame\Base.cpp" />
     <ClCompile Include="Savegame\BaseFacility.cpp" />
     <ClCompile Include="Savegame\BattleItem.cpp" />
-    <ClCompile Include="Savegame\BattleSoldier.cpp" />
     <ClCompile Include="Savegame\BattleUnit.cpp" />
     <ClCompile Include="Savegame\City.cpp" />
     <ClCompile Include="Savegame\Country.cpp" />
@@ -255,6 +255,7 @@
     <ClInclude Include="Basescape\SoldierInfoState.h" />
     <ClInclude Include="Basescape\SoldiersState.h" />
     <ClInclude Include="Basescape\StoresState.h" />
+    <ClInclude Include="Battlescape\BattlescapeGenerator.h" />
     <ClInclude Include="Battlescape\BattlescapeState.h" />
     <ClInclude Include="Battlescape\BriefingCrashState.h" />
     <ClInclude Include="Battlescape\Map.h" />
@@ -342,7 +343,6 @@
     <ClInclude Include="Savegame\Base.h" />
     <ClInclude Include="Savegame\BaseFacility.h" />
     <ClInclude Include="Savegame\BattleItem.h" />
-    <ClInclude Include="Savegame\BattleSoldier.h" />
     <ClInclude Include="Savegame\BattleUnit.h" />
     <ClInclude Include="Savegame\City.h" />
     <ClInclude Include="Savegame\Country.h" />

@@ -596,6 +596,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Battlescape\BattlescapeGenerator.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\BattlescapeGenerator.h"
+				>
+			</File>			
+			<File
 				RelativePath=".\Battlescape\BriefingCrashState.cpp"
 				>
 			</File>
@@ -933,14 +941,6 @@
 			</File>
 			<File
 				RelativePath=".\Savegame\BattleItem.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Savegame\BattleSoldier.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Savegame\BattleSoldier.h"
 				>
 			</File>
 			<File

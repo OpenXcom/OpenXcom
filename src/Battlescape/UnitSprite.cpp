@@ -24,7 +24,6 @@
 #include "../Resource/ResourcePack.h"
 #include "../Ruleset/RuleUnitSprite.h"
 #include "../Savegame/BattleUnit.h"
-#include "../Savegame/BattleSoldier.h"
 #include "../Savegame/Soldier.h"
 
 namespace OpenXcom
@@ -79,11 +78,10 @@ void UnitSprite::draw()
 	std::string sheet = rules->getSpriteSheet();
 	Surface *torso = 0, *legs = 0, *bottomArm = 0, *topArm = 0;
 	clear();
-	BattleSoldier *soldier = dynamic_cast<BattleSoldier*>(_unit);
 	
 	if (rules->getTorso() > -1)
 	{
-		if (soldier != 0 && soldier->getSoldier()->getGender() == GENDER_FEMALE)
+		if (_unit != 0 && _unit->getGender() == GENDER_FEMALE)
 		{
 			torso = _res->getSurfaceSet(sheet)->getFrame(rules->getFemaleTorso() + _unit->getDirection());
 		}

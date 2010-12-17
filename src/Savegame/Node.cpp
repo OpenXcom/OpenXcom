@@ -35,7 +35,7 @@ namespace OpenXcom
  * @param reserved
  * @param priority
  */
-Node::Node(int id, int x, int y, int z, int segment, int type, int rank, int flags, int reserved, int priority) : _id(id), _x(x), _y(y), _z(z), _segment(segment), _type(type), _rank(rank), _flags(flags), _reserved(reserved), _priority(priority)
+Node::Node(int id, Position pos, int segment, int type, int rank, int flags, int reserved, int priority) : _id(id), _pos(pos), _segment(segment), _type(type), _rank(rank), _flags(flags), _reserved(reserved), _priority(priority)
 {
 	_nodeLinks[0] = 0;
 	_nodeLinks[1] = 0;
@@ -70,37 +70,27 @@ void Node::assignNodeLink(NodeLink *link, int index)
  * Get the rank of units that can spawn on this node.
  * @return noderank
  */
-NodeRank Node::getNodeRank()
+NodeRank Node::getRank() const
 {
 	return (NodeRank)_rank;
 }
 
-
 /**
- * Get X.
- * @return X
+ * Get the priority of this spawnpoint.
+ * @return priority
  */
-int Node::getX()
+int Node::getPriority() const
 {
-	return _x;
+	return _priority;
 }
 
 /**
- * Get Y.
- * @return Y
+ * Gets the Node's position.
+ * @return position
  */
-int Node::getY()
+const Position& Node::getPosition() const
 {
-	return _y;
-}
-
-/**
- * Get Z.
- * @return Z
- */
-int Node::getZ()
-{
-	return _z;
+	return _pos;
 }
 
 }

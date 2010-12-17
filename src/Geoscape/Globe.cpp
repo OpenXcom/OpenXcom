@@ -808,6 +808,7 @@ void Globe::drawLand()
 		int shade = (int)((curTime + (((minLon + maxLon) / 2) / (2 * M_PI))) * NUM_LANDSHADES);
 		shade = _shades[shade % NUM_LANDSHADES];
 		drawTexturedPolygon(x, y, (*i)->getPoints(), _texture[shade]->getFrame((*i)->getTexture() + zoom), 0, 0);
+		(*i)->setShade(shade);
 	}
 }
 
@@ -1081,18 +1082,21 @@ void Globe::keyboardPress(Action *action, State *state)
  * Get the polygons texture at a given point
  * @param lon Longitude of the point.
  * @param lat Latitude of the point.
- * @return texture ID returns -1 when polygon not found
+ * @param texture pointer to texture ID returns -1 when polygon not found
+ * @param shade pointer to shade
  */
-int Globe::getPolygonTexture(double lon, double lat)
+void Globe::getPolygonTextureAndShade(double lon, double lat, int *texture, int *shade)
 {
-	for (std::list<Polygon*>::iterator i = _res->getPolygons()->begin(); i != _res->getPolygons()->end(); i++)
+	*texture = -1;
+	for (std::list<Polygon*>::iterator i = _cacheLand.begin(); i != _cacheLand.end(); i++)
 	{
 		if(insidePolygon(lon, lat, *i))
 		{
-			return ((Polygon*)(*i))->getTexture();
+			*texture = ((Polygon*)(*i))->getTexture();
+			*shade = ((Polygon*)(*i))->getShade();
+			return;
 		}
 	}
-	return -1;
 }
 
 }

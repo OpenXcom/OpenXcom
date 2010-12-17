@@ -38,7 +38,7 @@ public:
 	/// Generates a saved game with starting equipment.
 	SavedGame *newSave(GameDifficulty diff);
 	/// Generates a battlescape saved game.
-	SavedBattleGame *newBattleSave(ResourcePack *res, SavedGame *save, int texture, Craft* craft, Ufo* ufo);
+	SavedBattleGame *newBattleSave(SavedGame *save);
 	/// Handles the end battle stuff.
 	void endBattle(SavedGame *save);
 };

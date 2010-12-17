@@ -201,11 +201,19 @@ std::vector<Waypoint*> *const SavedGame::getWaypoints()
 	return &_waypoints;
 }
 
+/**
+ * Set battlegame object.
+ * @param Pointer to the battlegame object.
+ */
 void SavedGame::setBattleGame(SavedBattleGame *battlegame)
 {
 	_battlegame = battlegame;
 }
 
+/**
+ * Get pointer to the battlegame object.
+ * @param Pointer to the battlegame object.
+ */
 SavedBattleGame *SavedGame::getBattleGame()
 {
 	return _battlegame;

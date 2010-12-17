@@ -39,14 +39,13 @@
 #include "../Savegame/Ufo.h"
 #include "../Savegame/Tile.h"
 #include "../Savegame/BattleUnit.h"
-#include "../Savegame/BattleSoldier.h"
 #include "../Ruleset/RuleTerrain.h"
 #include "../Ruleset/RuleCraft.h"
 #include "../Ruleset/RuleUfo.h"
 #include "../Interface/Text.h"
 #include "../Interface/Cursor.h"
 
-#define SCROLL_AMOUNT 8
+#define SCROLL_AMOUNT 20
 #define SCROLL_BORDER 5
 #define SCROLL_DIAGONAL_EDGE 60
 #define DEFAULT_ANIM_SPEED 100
@@ -87,9 +86,11 @@ Map::Map(int width, int height, int x, int y) : InteractiveSurface(width, height
 	_animTimer->start();
 
 	_animFrame = 0;
+	_ufoDoorFrame = 0;
 	_ScrollX = 0;
 	_ScrollY = 0;
 	_RMBDragging = false;
+	_openingDoorTile = 0;
 
 }
 
@@ -109,7 +110,6 @@ Map::~Map()
 void Map::setResourcePack(ResourcePack *res)
 {
 	_res = res;
-
 	_SpriteWidth = res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getWidth();
 	_SpriteHeight = res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getHeight();
 }
@@ -150,7 +150,6 @@ void Map::init()
 		for (int x = 0; x < 9; x++)
 			_arrow->setPixel(x, y, pixels[x+(y*9)]);
 	_arrow->unlock();
-
 }
 
 /**
@@ -172,20 +171,106 @@ void Map::draw()
 }
 
 /**
-* Gets one single surface of the compiled list of surfaces.
-* @param tobID the TerrainObjectID index of the object
-* @param frame the animation frame (0-7)
-* @return pointer to a surface
+* Draws the floor of a tile.
+* @param tile pointer to the tile
+* @param pos position on the surface
 */
-Surface *Map::getSurface(TerrainObject *tob, int frame)
+void Map::drawFloor(Tile *tile, const Position &pos)
 {
-	// UFO doors are only animated when walked through
-	if (tob->isUFODoor())
+	TerrainObject *object = 0;
+	object = tile->getTerrainObject(O_FLOOR);
+	if (object)
 	{
-		frame = 0;
+		Surface *frame = object->getSprite(_animFrame);
+		frame->setX(pos.x);
+		frame->setY(pos.y - object->getYOffset());
+		frame->blit(this);
+	}
+	return;
+}
+
+/**
+* Draws the objects/walls on a tile.
+* @param tile pointer to the tile
+* @param pos position on the surface
+*/
+void Map::drawObjects(Tile *tile, const Position &pos)
+{
+	TerrainObject *object = 0;
+	Surface *frame = 0;
+	int animFrame = _animFrame;
+
+	// Draw west wall
+	object = tile->getTerrainObject(O_WESTWALL);
+	if (object)
+	{
+		if (object->isUFODoor())
+		{
+			if (tile == _openingDoorTile)
+			{
+				animFrame = _ufoDoorFrame; // ufo door is animating
+			}
+			else if (tile->isUfoDoorOpen())
+			{
+				animFrame = 7; // ufo door is open
+			}
+			else
+			{
+				animFrame = 0; // ufo door is closed
+			}
+		}
+		frame = object->getSprite(animFrame);
+		frame->setX(pos.x);
+		frame->setY(pos.y - object->getYOffset());
+		frame->blit(this);
+	}
+	// Draw north wall
+	object = tile->getTerrainObject(O_NORTHWALL);
+	if (object)
+	{
+		if (object->isUFODoor())
+		{
+			if (tile == _openingDoorTile)
+			{
+				animFrame = _ufoDoorFrame; // ufo door is animating
+			}
+			else if (tile->isUfoDoorOpen())
+			{
+				animFrame = 7; // ufo door is open
+			}
+			else
+			{
+				animFrame = 0; // ufo door is closed
+			}
+		}
+		frame = object->getSprite(animFrame);
+		frame->setX(pos.x);
+		frame->setY(pos.y - object->getYOffset());
+		// if there is a westwall, cut off some of the north wall (otherwise it will overlap)
+		if (tile->getTerrainObject(O_WESTWALL))
+		{
+			frame->setX(frame->getX() + frame->getWidth() / 2);
+			frame->getCrop()->x = frame->getWidth() / 2;
+			frame->getCrop()->w = frame->getWidth() / 2;
+			frame->getCrop()->h = frame->getHeight();
+		}else
+		{
+			frame->getCrop()->w = 0;
+			frame->getCrop()->h = 0;
+		}
+		frame->blit(this);
+	}
+	// Draw object
+	object = tile->getTerrainObject(O_OBJECT);
+	if (object)
+	{
+		frame = object->getSprite(animFrame);
+		frame->setX(pos.x);
+		frame->setY(pos.y - object->getYOffset());
+		frame->blit(this);
 	}
 
-	return tob->getSprite(frame);
+	return;
 }
 
 /**
@@ -194,7 +279,6 @@ Surface *Map::getSurface(TerrainObject *tob, int frame)
 void Map::drawTerrain()
 {
 	int frameNumber = 0;
-	TerrainObject *object = 0;
 	Surface *frame;
 	Tile *tile;
 	int beginX = 0, endX = _save->getWidth() - 1;
@@ -227,14 +311,7 @@ void Map::drawTerrain()
 					tile = _save->getTile(mapPosition);
 					if (tile)
 					{
-						object = tile->getTerrainObject(O_FLOOR);
-						if (object)
-						{
-							frame = getSurface(object, _animFrame);
-							frame->setX(screenPosition.x);
-							frame->setY(screenPosition.y - object->getYOffset());
-							frame->blit(this);
-						}
+						drawFloor(tile, screenPosition);
 					}
 
 					// Draw cursor back
@@ -260,45 +337,7 @@ void Map::drawTerrain()
 
 					if (tile)
 					{
-						// Draw west wall
-						object = tile->getTerrainObject(O_WESTWALL);
-						if (object)
-						{
-							frame = getSurface(object, _animFrame);
-							frame->setX(screenPosition.x);
-							frame->setY(screenPosition.y - object->getYOffset());
-							frame->blit(this);
-						}
-						// Draw north wall
-						object = tile->getTerrainObject(O_NORTHWALL);
-						if (object)
-						{
-							frame = getSurface(object, _animFrame);
-							frame->setX(screenPosition.x);
-							frame->setY(screenPosition.y - object->getYOffset());
-							// if there is a westwall, cut off some of the north wall (otherwise it will overlap)
-							if (tile->getTerrainObject(O_WESTWALL))
-							{
-								frame->setX(frame->getX() + frame->getWidth() / 2);
-								frame->getCrop()->x = frame->getWidth() / 2;
-								frame->getCrop()->w = frame->getWidth() / 2;
-								frame->getCrop()->h = frame->getHeight();
-							}else
-							{
-								frame->getCrop()->w = 0;
-								frame->getCrop()->h = 0;
-							}
-							frame->blit(this);
-						}
-						// Draw object
-						object = tile->getTerrainObject(O_OBJECT);
-						if (object)
-						{
-							frame = getSurface(object, _animFrame);
-							frame->setX(screenPosition.x);
-							frame->setY(screenPosition.y - object->getYOffset());
-							frame->blit(this);
-						}
+						drawObjects(tile, screenPosition);
 					}
 
 					// Draw items
@@ -313,7 +352,7 @@ void Map::drawTerrain()
 						unitSprite->setY(screenPosition.y + offset.y);
 						unitSprite->draw();
 						unitSprite->blit(this);
-						if (unit == (BattleUnit*)_save->getSelectedSoldier() && !_hideCursor)
+						if (unit == (BattleUnit*)_save->getSelectedUnit() && !_hideCursor)
 						{
 							drawArrow(screenPosition + offset);
 						}
@@ -333,7 +372,7 @@ void Map::drawTerrain()
 							unitSprite->setY(screenPosition.y + offset.y);
 							unitSprite->draw();
 							unitSprite->blit(this);
-							if (unit == (BattleUnit*)_save->getSelectedSoldier() && !_hideCursor)
+							if (unit == (BattleUnit*)_save->getSelectedUnit() && !_hideCursor)
 							{
 								drawArrow(screenPosition + offset);
 							}
@@ -590,7 +629,32 @@ void Map::scroll()
 void Map::animate()
 {
 	_animFrame = _animFrame == 7 ? 0 : _animFrame + 1;
+	if (_openingDoorTile != 0)
+	{
+		_ufoDoorFrame++;
+		if (_ufoDoorFrame == 8)
+		{
+			_openingDoorTile = 0;
+			_ufoDoorFrame = 0;
+		}
+	}
 	draw();
+}
+
+/**
+ * Give the order to start animating opening a UFO door.
+ */
+void Map::openUFODoor(Tile *tile)
+{
+	_openingDoorTile = tile;
+}
+
+/*
+ * Check if the animation for opening the UFO door is still running.
+ */
+bool Map::isOpeningUFODoor()
+{
+	return _openingDoorTile != 0;
 }
 
 /**

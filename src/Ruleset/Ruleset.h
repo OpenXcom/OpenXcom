@@ -39,6 +39,7 @@ class MapDataFile;
 class ResourcePack;
 class RuleUnitSprite;
 
+
 /**
  * Set of rules and stats for a game.
  * A ruleset holds all the constant info that never changes
@@ -64,8 +65,8 @@ public:
 	virtual ~Ruleset();
 	/// Generates the starting saved game.
 	virtual SavedGame *newSave(GameDifficulty diff);
-	/// Generates a battlescape saved game.
-	virtual SavedBattleGame *newBattleSave(ResourcePack *res, SavedGame *save, int texture, Craft *craft, Ufo* ufo);
+	/// Creates a battlescape saved game.
+	virtual SavedBattleGame *newBattleSave(SavedGame *save);
 	/// Handles the end battle stuff.
 	virtual void endBattle(SavedGame *save);
 	/// Gets the pool list for soldier names.

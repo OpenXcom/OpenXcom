@@ -54,10 +54,12 @@ private:
 	int _SpriteWidth, _SpriteHeight;
 	int _selectorX, _selectorY;
 	int _ScrollX, _ScrollY;
-	int _animFrame;
+	int _animFrame, _ufoDoorFrame;
 	bool _hideCursor;
+	Tile *_openingDoorTile;
 
-	Surface* getSurface(TerrainObject *tob, int frame);
+	void drawFloor(Tile *tile, const Position &pos);
+	void drawObjects(Tile *tile, const Position &pos);
 	void minMaxInt(int *value, const int minValue, const int maxValue);
 public:
 	/// Creates a new map at the specified position and size.
@@ -114,6 +116,10 @@ public:
 	void hideCursor(bool flag);
 	/// is cursor hidden.
 	bool isCursorHidden();
+	/// Give the order to start animating opening a UFO door
+	void openUFODoor(Tile *tile);
+	/// Check if the animation for opening the UFO door is still running.
+	bool isOpeningUFODoor();
 
 };
 

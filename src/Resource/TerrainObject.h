@@ -58,8 +58,8 @@ class TerrainObject
 private:
 	std::string _mapDataFileName;
 	Surface *_surfaces[8];
-	TerrainObject *deadObject;
-	TerrainObject *alternativeObject;
+	TerrainObject *_dieObject;
+	TerrainObject *_altObject;
 	int _originalSpriteIndex[8];
 	bool _isUfoDoor, _stopLOS, _isNoFloor, _isBigWall, _isGravLift, _isDoor, _blockFire, _blockSmoke;
 	int _yOffset;
@@ -67,6 +67,8 @@ private:
 	int _TUWalk, _TUFly, _TUSlide;
 	int _terrainLevel;
 	int _footstepSound;
+	int _dieMCD, _altMCD;
+	int _objectType;
 public:
 	TerrainObject();
 	~TerrainObject();
@@ -92,15 +94,28 @@ public:
 	bool isBigWall();
 	/// Get the index to the footstep sound
 	int getFootstepSound();
+	/// Is a normal door.
+	bool isDoor();
+	/// Get the alternative object ID 0=death mcd, 1=alt mcd
+	int getAltMCD(int type);
+	/// Get the alternative object pointer
+	TerrainObject *getAltObject(int type);
+	/// Set the alternative object pointer
+	void setAltObject(TerrainObject *obj, int type);
+	/// Get the type of tile
+	int getObjectType();
+
 	
 	// below are setter functions for the properties
 	void setFlags(bool isUfoDoor, bool stopLOS, bool isNoFloor, bool isBigWall, bool isGravLift, bool isDoor, bool blockFire, bool blockSmoke);
 	void setYOffset(int value);
 	void setOriginalSpriteIndex(int frameID, int value);
-	void setSpecialType(int value);
+	void setSpecialType(int value, int otype);
 	void setTUCosts(int walk, int fly, int slide);
 	void setTerrainLevel(int value);
 	void setFootstepSound(int value);
+	void setAltMCD(int value);
+	void setDieMCD(int value);
 };
 
 }

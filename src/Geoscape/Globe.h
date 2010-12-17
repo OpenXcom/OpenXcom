@@ -140,8 +140,8 @@ public:
 	void mouseClick(Action *action, State *state);
 	/// Special handling for key presses.
 	void keyboardPress(Action *action, State *state);
-	/// Get the polygons texture at the given point.
-	int getPolygonTexture(double lon, double lat);
+	/// Get the polygons texture and shade at the given point.
+	void getPolygonTextureAndShade(double lon, double lat, int *texture, int *shade);
 
 };
 

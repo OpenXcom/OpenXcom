@@ -19,12 +19,14 @@
 #include "Map.h"
 #include "BattlescapeState.h"
 #include "Pathfinding.h"
+#include "../Engine/RNG.h"
 #include "../Engine/Game.h"
 #include "../Engine/Music.h"
 #include "../Engine/Language.h"
 #include "../Engine/Font.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
+#include "../Engine/SurfaceSet.h"
 #include "../Engine/Screen.h"
 #include "../Engine/Action.h"
 #include "../Resource/ResourcePack.h"
@@ -37,7 +39,7 @@
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
-#include "../Savegame/BattleSoldier.h"
+#include "../Savegame/BattleUnit.h"
 #include "../Savegame/Soldier.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Engine/Timer.h"
@@ -46,10 +48,11 @@
 #include "../Savegame/Craft.h"
 #include <iostream>
 
+
 namespace OpenXcom
 {
 
-#define DEFAULT_WALK_SPEED 50
+#define DEFAULT_WALK_SPEED 40
 #define DEFAULT_BULLET_SPEED 20
 
 /**
@@ -64,6 +67,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	// Create buttonbar
 	_icons = new Surface(320, 200, 0, 0);
 	_numLayers = new NumberText(3, 5, 232, 150);
+	_rank = new Surface(26,23,107,177);
 
 	// Create buttons
 	_btnAbort = new InteractiveSurface(32, 16, 240, 160);
@@ -121,6 +125,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	add(_map);
 	add(_icons);
 	add(_numLayers);
+	add(_rank);
 	add(_btnAbort);
 	add(_btnMapUp);
 	add(_btnMapDown);
@@ -143,7 +148,8 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	// Set up objects
 	_game->getResourcePack()->getSurface("ICONS.PCK")->blit(_icons);
 	
-	_map->setSavedGame(_game->getSavedGame()->getBattleGame(), _game);
+	_battleGame = _game->getSavedGame()->getBattleGame();
+	_map->setSavedGame(_battleGame, _game);
 	_map->setResourcePack(_game->getResourcePack());
 	_map->init();
 	_map->onMouseClick((ActionHandler)&BattlescapeState::mapClick);
@@ -171,8 +177,8 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	_barMorale->setColor(Palette::blockOffset(12));
 	_barMorale->setScale(1.0);
 
-	updateSoldierInfo(_game->getSavedGame()->getBattleGame()->getSelectedSoldier());
-	_map->centerOnPosition(_game->getSavedGame()->getBattleGame()->getSelectedSoldier()->getPosition());
+	updateSoldierInfo(_battleGame->getSelectedUnit());
+	_map->centerOnPosition(_battleGame->getSelectedUnit()->getPosition());
 
 	_btnReserveNone->copy(_icons);
 	_btnReserveNone->setColor(Palette::blockOffset(4)+6);
@@ -236,19 +242,24 @@ void BattlescapeState::mapClick(Action *action)
 
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		BattleUnit *unit = _game->getSavedGame()->getBattleGame()->selectUnit(pos);
+		BattleUnit *unit = _battleGame->selectUnit(pos);
 		if (unit)
 		{
-			_game->getSavedGame()->getBattleGame()->setSelectedSoldier((BattleSoldier*)unit);
-			updateSoldierInfo((BattleSoldier*)unit);
+			_battleGame->setSelectedUnit(unit);
+			updateSoldierInfo(unit);
 			return;
 		}
-		Pathfinding *pf = _game->getSavedGame()->getBattleGame()->getPathfinding();
-		pf->calculate(_game->getSavedGame()->getBattleGame()->getSelectedSoldier(), pos);
+		Pathfinding *pf = _battleGame->getPathfinding();
+		pf->calculate(_battleGame->getSelectedUnit(), pos);
 	}
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
-		_game->getSavedGame()->getBattleGame()->getSelectedSoldier()->lookAt(pos);
+		BattleUnit *unit = _battleGame->getSelectedUnit();
+		unit->lookAt(pos);
+		if (unit->getStatus() != STATUS_TURNING)
+		{
+			unitOpensDoor(unit);
+		}
 	}
 
 	
@@ -260,10 +271,10 @@ void BattlescapeState::mapClick(Action *action)
  */
 void BattlescapeState::btnUnitUpClick(Action *action)
 {
-	Pathfinding *pf = _game->getSavedGame()->getBattleGame()->getPathfinding();
-	Position start = _game->getSavedGame()->getBattleGame()->getSelectedSoldier()->getPosition();
+	Pathfinding *pf = _battleGame->getPathfinding();
+	Position start = _battleGame->getSelectedUnit()->getPosition();
 	Position end = start + Position(0, 0, +1);
-	pf->calculate((BattleUnit*)_game->getSavedGame()->getBattleGame()->getSelectedSoldier(), end);
+	pf->calculate(_battleGame->getSelectedUnit(), end);
 }
 
 /**
@@ -272,10 +283,10 @@ void BattlescapeState::btnUnitUpClick(Action *action)
  */
 void BattlescapeState::btnUnitDownClick(Action *action)
 {
-	Pathfinding *pf = _game->getSavedGame()->getBattleGame()->getPathfinding();
-	Position start = _game->getSavedGame()->getBattleGame()->getSelectedSoldier()->getPosition();
+	Pathfinding *pf = _battleGame->getPathfinding();
+	Position start = _battleGame->getSelectedUnit()->getPosition();
 	Position end = start + Position(0, 0, -1);
-	pf->calculate((BattleUnit*)_game->getSavedGame()->getBattleGame()->getSelectedSoldier(), end);
+	pf->calculate((BattleUnit*)_battleGame->getSelectedUnit(), end);
 }
 
 /**
@@ -323,7 +334,7 @@ void BattlescapeState::btnSoldierClick(Action *action)
  */
 void BattlescapeState::btnCenterClick(Action *action)
 {
-	_map->centerOnPosition(_game->getSavedGame()->getBattleGame()->getSelectedSoldier()->getPosition());
+	_map->centerOnPosition(_battleGame->getSelectedUnit()->getPosition());
 }
 
 /**
@@ -332,9 +343,9 @@ void BattlescapeState::btnCenterClick(Action *action)
  */
 void BattlescapeState::btnNextSoldierClick(Action *action)
 {
-	BattleSoldier *soldier = _game->getSavedGame()->getBattleGame()->selectNextSoldier();
-	updateSoldierInfo(soldier);
-	_map->centerOnPosition(soldier->getPosition());
+	BattleUnit *unit = _battleGame->selectNextPlayerUnit();
+	updateSoldierInfo(unit);
+	_map->centerOnPosition(unit->getPosition());
 }
 
 /**
@@ -371,7 +382,6 @@ void BattlescapeState::btnEndTurnClick(Action *action)
  */
 void BattlescapeState::btnAbortClick(Action *action)
 {
-	_game->getSavedGame()->getBattleGame()->getCraft()->returnToBase();
 	_game->getRuleset()->endBattle(_game->getSavedGame());
 	_game->getCursor()->setColor(Palette::blockOffset(15) + 12);
 	_game->popState();
@@ -379,20 +389,25 @@ void BattlescapeState::btnAbortClick(Action *action)
 
 /**
  * Updates soldier name/rank/tu/energy/health/morale.
- * @param soldier Pointer to current battlesoldier.
+ * @param soldier Pointer to current unit.
  */
-void BattlescapeState::updateSoldierInfo(BattleSoldier *soldier)
+void BattlescapeState::updateSoldierInfo(BattleUnit *unit)
 {
-	_txtName->setText(soldier->getSoldier()->getName());
-	_numTimeUnits->setValue(soldier->getSoldier()->getTimeUnits());
-	_barTimeUnits->setMax(soldier->getSoldier()->getTimeUnits());
-	_barTimeUnits->setValue(soldier->getSoldier()->getTimeUnits());
-	_numEnergy->setValue(soldier->getSoldier()->getStamina());
-	_barEnergy->setMax(soldier->getSoldier()->getStamina());
-	_barEnergy->setValue(soldier->getSoldier()->getStamina());
-	_numHealth->setValue(soldier->getSoldier()->getHealth());
-	_barHealth->setMax(soldier->getSoldier()->getHealth());
-	_barHealth->setValue(soldier->getSoldier()->getHealth());
+	_txtName->setText(unit->getName());
+	if (unit->getRankSprite())
+	{
+		SurfaceSet *texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
+		texture->getFrame(unit->getRankSprite())->blit(_rank);
+	}
+	_numTimeUnits->setValue(unit->getMaxTimeUnits());
+	_barTimeUnits->setMax(unit->getMaxTimeUnits());
+	_barTimeUnits->setValue(unit->getMaxTimeUnits());
+	_numEnergy->setValue(unit->getMaxStamina());
+	_barEnergy->setMax(unit->getMaxStamina());
+	_barEnergy->setValue(unit->getMaxStamina());
+	_numHealth->setValue(unit->getMaxHealth());
+	_barHealth->setMax(unit->getMaxHealth());
+	_barHealth->setValue(unit->getMaxHealth());
 	_numMorale->setValue(100);
 	_barMorale->setMax(100);
 	_barMorale->setValue(100);
@@ -404,58 +419,71 @@ void BattlescapeState::updateSoldierInfo(BattleSoldier *soldier)
 void BattlescapeState::moveUnit()
 {
 	int tu = 0;
-	BattleSoldier *soldier = _game->getSavedGame()->getBattleGame()->getSelectedSoldier();
-	Pathfinding *pf = _game->getSavedGame()->getBattleGame()->getPathfinding();
+	BattleUnit *unit = _battleGame->getSelectedUnit();
+	Pathfinding *pf = _battleGame->getPathfinding();
 	static bool moved = false;
 
-	if (soldier->getStatus() == STATUS_WALKING)
+	// if the UFO-door-opening-animation is running, don't allow any unit movement
+	if (_map->isOpeningUFODoor())
 	{
-		soldier->keepWalking();
+		return;
+	}
+
+	if (unit->getStatus() == STATUS_WALKING)
+	{
+		unit->keepWalking();
 
 		// play footstep sound every step = two steps between two tiles
-		if (soldier->getWalkingPhase() == 3)
+		if (unit->getWalkingPhase() == 3)
 		{
-			Tile *tile = _game->getSavedGame()->getBattleGame()->getTile(soldier->getPosition());
+			Tile *tile = _battleGame->getTile(unit->getPosition());
 			if (tile->getFootstepSound())
 				_game->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(22 + (tile->getFootstepSound()*2))->play();
 		}
-		if (soldier->getWalkingPhase() == 7)
+		if (unit->getWalkingPhase() == 7)
 		{
-			Tile *tile = _game->getSavedGame()->getBattleGame()->getTile(soldier->getPosition());
+			Tile *tile = _battleGame->getTile(unit->getPosition());
 			if (tile->getFootstepSound())
 				_game->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(23 + (tile->getFootstepSound()*2))->play();
 		}
 		_map->draw();
 	}
 
-	if (soldier->getStatus() == STATUS_TURNING)
+	if (unit->getStatus() == STATUS_TURNING)
 	{
-		soldier->turn();
+		unit->turn();
 		_map->draw();
 	}
 
-	if (soldier->getStatus() == STATUS_STANDING)
+	if (unit->getStatus() == STATUS_STANDING)
 	{
 		if (moved)
 		{
 			moved = false;
-			_map->setViewHeight(soldier->getPosition().z);
+			_map->setViewHeight(unit->getPosition().z);
 		}
 		int dir = pf->getStartDirection();
 		if (dir != -1)
 		{
-			if (dir != soldier->getDirection()) 
+			if (dir != unit->getDirection()) 
 			{
 				// we are looking in the wrong way, turn first
-				soldier->lookAt(dir);
+				unit->lookAt(dir);
 			}
 			else
 			{
-				// now we can move
+				// ok, we are looking the right way
+				// first open doors (if any)
+				unitOpensDoor(unit);
+				if (_map->isOpeningUFODoor())
+				{
+					return; // don't start walking yet, wait for the ufo door to completly open
+				}
+				// now start moving
 				dir = pf->dequeuePath();
 				Position destination;
-				tu = pf->getTUCost(soldier->getPosition(), dir, &destination, (BattleUnit*)soldier);
-				soldier->startWalking(dir, destination);
+				tu = pf->getTUCost(unit->getPosition(), dir, &destination, unit);
+				unit->startWalking(dir, destination);
 				_map->hideCursor(true); // hide cursor while walking
 				_game->getCursor()->setVisible(false);
 				moved = true;
@@ -466,6 +494,44 @@ void BattlescapeState::moveUnit()
 			_map->hideCursor(false); // show cursor again
 			_game->getCursor()->setVisible(true);
 		}
+	}
+}
+
+/**
+ * Soldier opens a door (if any) by rightclick, or by walking through it.
+ * Normal door changes the tile objects. We need to make a sound 3 here.
+ * Ufo door updates the ufodooropened flag of the tile. We need to make a sound 20 or 21 and start the animation.
+ */
+void BattlescapeState::unitOpensDoor(BattleUnit *unit)
+{
+	int door = -1;
+	Tile *tile = _battleGame->getTile(unit->getPosition());
+	switch(unit->getDirection())
+	{
+	case 0:	// north
+		door = tile->openDoor(O_NORTHWALL);
+		break;
+	case 2: // east
+		tile = _battleGame->getTile(tile->getPosition() + Position(1, 0, 0));
+		if (tile) door = tile->openDoor(O_WESTWALL);
+		break;
+	case 4: // south
+		tile = _battleGame->getTile(tile->getPosition() + Position(0, -1, 0));
+		if (tile) door = tile->openDoor(O_NORTHWALL);
+		break;
+	case 6: // west
+		door = tile->openDoor(O_WESTWALL);
+		break;
+	}
+
+	if (door == 0) //normal door
+	{
+		_game->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(3)->play();
+	}
+	if (door == 1) // ufo door
+	{
+		_game->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(RNG::generate(20,21))->play();
+		_map->openUFODoor(tile); // ufo doors are animated
 	}
 }
 

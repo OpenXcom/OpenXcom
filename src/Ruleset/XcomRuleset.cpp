@@ -917,30 +917,31 @@ XcomRuleset::XcomRuleset() : Ruleset()
 		xcom_0->setLeftArmWalk(40 + 24 * i, i);
 	for (int i=0; i<8; i++)
 		xcom_0->setRightArmWalk(48 + 24 * i, i);
-	int o[8] = {2, 0, 2, 0, -1, 2, 0, 2};
+	int o[8] = {-1, 0, 1, 0, -1, 0, 1, 0};
 	for (int i=0; i<8; i++)
 		xcom_0->setWalkArmsYOffset(o[i], i);
 
-	RuleUnitSprite *floater = new RuleUnitSprite();
-	floater->setSpriteSheet("FLOATER.PCK");
-	floater->setTorso(-1);
-	floater->setFemaleTorso(-1);
-	floater->setLegsStand(16);
+	RuleUnitSprite *sectoid = new RuleUnitSprite();
+	sectoid->setSpriteSheet("SECTOID.PCK");
+	sectoid->setTorso(32);
+	sectoid->setFemaleTorso(267);
+	sectoid->setLegsStand(16);
 	for (int i=0; i<8; i++)
-		floater->setLegsWalk(24 + 8 * i, i);
+		sectoid->setLegsWalk(56 + 24 * i, i);
 	for (int i=0; i<8; i++)
-		floater->setLegsWalkOffset(0, i);
-	floater->setLeftArmStand(0);
-	floater->setRightArmStand(8);
+		sectoid->setLegsWalkOffset((i%4)?0:-2, i);
+	sectoid->setLeftArmStand(0);
+	sectoid->setRightArmStand(8);
 	for (int i=0; i<8; i++)
-		floater->setLeftArmWalk(67+i,i);
+		sectoid->setLeftArmWalk(40 + 24 * i, i);
 	for (int i=0; i<8; i++)
-		floater->setRightArmWalk(67+i,i);
+		sectoid->setRightArmWalk(48 + 24 * i, i);
+	//int o[8] = {2, 0, 2, 0, -1, 2, 0, 2};
 	for (int i=0; i<8; i++)
-		floater->setWalkArmsYOffset(0, i);
+		sectoid->setWalkArmsYOffset(o[i], i);
 
 	_unitSprites.insert(std::pair<std::string, RuleUnitSprite*>("XCOM_0",xcom_0));
-	_unitSprites.insert(std::pair<std::string, RuleUnitSprite*>("FLOATER",floater));
+	_unitSprites.insert(std::pair<std::string, RuleUnitSprite*>("SECTOID",sectoid));
 }
 
 /**
@@ -1255,109 +1256,14 @@ SavedGame *XcomRuleset::newSave(GameDifficulty diff)
 }
 
 /**
- * Generates a battlescape saved game based on terrain type, mission type, time of day, place on earth.
- * @param res The ResourcePack.
+ * Creates a battlescape saved game.
  * @param save The base SavedGame.
- * @param texture The texture of the globe polygon we are on.
- * @param craft The XCom craft.
- * @param ufo The UFO.
- * @param craft pointer to the xcom craft involved (if none it's NULL)
- * @param ufo pointer to the ufo involved (if non it's NULL)
- * @return New saved game.
+ * @return New saved battle game.
  */
-SavedBattleGame *XcomRuleset::newBattleSave(ResourcePack *res, SavedGame *save, int texture, Craft *craft, Ufo *ufo)
+SavedBattleGame *XcomRuleset::newBattleSave(SavedGame *save)
 {
-	// first decide the terrain
-	RuleTerrain *terrain = 0;
-	int rows, cols, levs;
-
-	switch (texture)
-	{
-	case 0:	
-	case 6:
-	case 10:
-	case 11:	
-		{
-			if (ufo != 0)
-			{
-				if (ufo->getLatitude() < 0)
-				{ // northern hemisphere
-					terrain = getTerrain("FOREST");
-				}else
-				{ // southern hemisphere
-					terrain = getTerrain("JUNGLE");
-				}
-			}
-			else
-			{
-				terrain = getTerrain("FOREST");
-			}
-			break;
-		}
-	case 1:
-	case 2:
-	case 3:
-	case 4:
-		{
-			terrain = getTerrain("CULTA");
-			break;
-		}
-	case 5:
-		{
-			terrain = getTerrain("MOUNT");
-			break;
-		}
-	case 7:
-	case 8:
-		{
-			terrain = getTerrain("DESERT");
-			break;
-		}
-	case 9:
-	case 12:
-		{
-			terrain = getTerrain("POLAR");
-			break;
-		}
-	}
-
-	// depending on mission type, set a map size
-	// temporarly hardcoded
-	rows = 50;
-	cols = 50;
-	levs = 4;
-
-	// create a savedgame
-	SavedBattleGame *bsave = new SavedBattleGame(save, rows, cols, levs, terrain);
+	SavedBattleGame *bsave = new SavedBattleGame();
 	save->setBattleGame(bsave);
-	
-	// add the crafts
-	bsave->setCrafts(craft, ufo);
-
-	// lets generate the map now and store it inside the tiles
-	bsave->generateMap(res);
-
-	// add soldiers that are in the craft
-	if (craft != 0)
-	{
-		for (std::vector<Soldier*>::iterator i = craft->getBase()->getSoldiers()->begin(); i != craft->getBase()->getSoldiers()->end(); i++)
-		{
-			if ((*i)->getCraft() == craft)
-				bsave->addSoldier((*i), getUnitSprites("XCOM_0"));
-		}
-	}
-
-	// add items
-	if (craft != 0)
-	{
-		for (std::map<std::string, Item*>::iterator i = craft->getItems()->begin(); i != craft->getItems()->end(); i++)
-		{
-				bsave->addItem((*i).second);
-		}
-	}
-
-	// add aliens
-
 	return bsave;
 }
 
@@ -1366,18 +1272,28 @@ SavedBattleGame *XcomRuleset::newBattleSave(ResourcePack *res, SavedGame *save, 
  */
 void XcomRuleset::endBattle(SavedGame *save)
 {
-	// UFO crash/landing site disappears
-	Ufo* ufo = save->getBattleGame()->getUfo();
-	if (ufo != 0)
+
+	// craft goes back home
+	for (std::vector<Base*>::iterator i = save->getBases()->begin(); i != save->getBases()->end(); i++)
 	{
-		for (std::vector<Ufo*>::iterator i = save->getUfos()->begin(); i != save->getUfos()->end(); i++)
+		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); j++)
 		{
-			if ((*i) == ufo)
+			if ((*j)->isInBattlescape())
 			{
-				delete *i;
-				save->getUfos()->erase(i);
-				break;
+				(*j)->returnToBase();
+				(*j)->setInBattlescape(false);
 			}
+		}
+	}
+
+	// UFO crash/landing site disappears
+	for (std::vector<Ufo*>::iterator i = save->getUfos()->begin(); i != save->getUfos()->end(); i++)
+	{
+		if ((*i)->isInBattlescape())
+		{
+			delete *i;
+			save->getUfos()->erase(i);
+			break;
 		}
 	}
 

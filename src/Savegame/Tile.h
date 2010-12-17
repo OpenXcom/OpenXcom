@@ -47,6 +47,7 @@ protected:
 	Position _pos;
 	BattleUnit *_unit; // unit on this tile
 	std::vector<BattleItem *> _inventory; // items on this tile
+	bool _ufoDoorOpen;
 
 public:
 	/// Creates a tile.
@@ -71,8 +72,13 @@ public:
 	int getTerrainLevel();
 	/// Gets the tile's position.
 	const Position& getPosition() const;
-	/// gets the floor object footstep sound
+	/// Gets the floor object footstep sound.
 	int getFootstepSound();
+	/// Open a door, returns the ID, 0(normal), 1(ufo) or -1 if no door opened.
+	int openDoor(int part);
+	/// Check if ufo door is open.
+	bool isUfoDoorOpen();
+
 
 };
 

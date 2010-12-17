@@ -31,7 +31,7 @@ enum Location {LOC_GROUND, LOC_LEFT_ARM, LOC_RIGHT_ARM, LOC_LEFT_LEG, LOC_RIGHT_
 
 /**
  * Represents a single item in the battlescape.
- * Contains variable info about an item like the ammo quantity.
+ * Contains battle-related info about an item like the position, ammo quantity, ...
  * @sa RuleItem
  * @sa Item
  */

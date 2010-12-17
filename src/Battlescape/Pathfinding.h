@@ -49,6 +49,7 @@ private:
 	bool isBlocked(Tile *tile, const int part);
 	bool isBlocked(Tile *startTile, Tile *endTile, const int direction);
 	bool canFallDown(Tile *destinationTile);
+	bool isOnStairs(const Position &startPosition, const Position &endPosition);
 	BattleUnit *_unit;
 public:
 	/// Creates a new Pathfinding class

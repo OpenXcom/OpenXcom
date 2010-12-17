@@ -49,6 +49,7 @@ private:
 	std::map<std::string, Item*> _items;
 	std::string _status;
 	bool _lowFuel;
+	bool _inBattlescape;
 public:
 	/// Creates a craft of the specified type.
 	Craft(RuleCraft *rules, std::map<std::string, int> *id, Base *base);
@@ -118,6 +119,10 @@ public:
 	void refuel();
 	/// Rearms the craft.
 	void rearm();
+	/// Sets the craft's battlescape status.
+	void setInBattlescape(bool inbattle);
+	/// Gets if the craft is in battlescape.
+	bool isInBattlescape() const;
 };
 
 }

@@ -34,6 +34,7 @@
 #include "../Savegame/Ufo.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Battlescape/BriefingCrashState.h"
+#include "../Battlescape/BattlescapeGenerator.h"
 
 namespace OpenXcom
 {
@@ -44,7 +45,7 @@ namespace OpenXcom
  * @param craft Pointer to the craft to confirm.
  * @param texture Texture of the landing site.
  */
-ConfirmLandingState::ConfirmLandingState(Game *game, Craft *craft, int texture) : State(game), _craft(craft), _texture(texture)
+ConfirmLandingState::ConfirmLandingState(Game *game, Craft *craft, int texture, int shade) : State(game), _craft(craft), _texture(texture), _shade(shade)
 {
 	_screen = false;
 
@@ -118,8 +119,18 @@ void ConfirmLandingState::btnYesClick(Action *action)
 	_game->popState();
 	Ufo* u = dynamic_cast<Ufo*>(_craft->getDestination());
 	if (u != 0)
-		{
-		_game->getRuleset()->newBattleSave(_game->getResourcePack(), _game->getSavedGame(), _texture, _craft, u);
+	{
+		_game->getRuleset()->newBattleSave(_game->getSavedGame());
+
+		BattlescapeGenerator *bgen = new BattlescapeGenerator(_game);
+		bgen->setMissionType(MISS_UFORECOVERY);
+		bgen->setWorldTexture(_texture);
+		bgen->setWorldShade(_shade);
+		bgen->setCraft(_craft);
+		bgen->setUfo(u);
+		bgen->run();
+		delete bgen;
+
 		_game->pushState(new BriefingCrashState(_game, _craft));
 	}
 }

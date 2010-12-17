@@ -22,6 +22,7 @@
 namespace OpenXcom
 {
 
+
 /**
 * constructor
 * @param pos Position.
@@ -32,6 +33,7 @@ Tile::Tile(const Position& pos): _discovered(true), _light(255), _pos(pos)
 	_terrainObjects[1] = 0;
 	_terrainObjects[2] = 0;
 	_terrainObjects[3] = 0;
+	_ufoDoorOpen = false;
 }
 
 /**
@@ -151,7 +153,7 @@ const Position& Tile::getPosition() const
 
 
 /**
- * Gets the tile's position.
+ * Gets the tile's footstep sound.
  * @return position
  */
 int Tile::getFootstepSound()
@@ -164,6 +166,40 @@ int Tile::getFootstepSound()
 		sound = _terrainObjects[O_OBJECT]->getFootstepSound();
 
 	return sound;
+}
+
+
+/**
+ * Open a door on this tile.
+ * @return an ID, 0(normal), 1(ufo) or -1 if no door opened
+ */
+int Tile::openDoor(int part)
+{
+	if (!_terrainObjects[part]) return -1;
+
+	if (_terrainObjects[part]->isDoor())
+	{
+		TerrainObject *alt = _terrainObjects[part]->getAltObject(1);
+		_terrainObjects[part] = 0;
+		_terrainObjects[alt->getObjectType()] = alt;
+		return 0;
+	}
+	if (_terrainObjects[part]->isUFODoor() && !_ufoDoorOpen)
+	{
+		_ufoDoorOpen = true;
+		return 1;
+	}
+	return -1;
+}
+
+/**
+ * Check if the ufo door is open. (to know which frame to draw)
+ * We assume here by the way that there always is just one ufo door per tile.
+ * @return bool
+ */
+bool Tile::isUfoDoorOpen()
+{
+	return _ufoDoorOpen;
 }
 
 }

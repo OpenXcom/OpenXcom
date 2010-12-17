@@ -154,6 +154,60 @@ int TerrainObject::getFootstepSound()
 }
 
 /**
+  * whether this is a normal door
+  * @return bool 
+  */
+bool TerrainObject::isDoor()
+{
+	return _isDoor;
+}
+
+/**
+  * Get the alternative object ID 
+  * @param type 0=death mcd, 1=alt mcd
+  * @return object ID 
+  */
+int TerrainObject::getAltMCD(int type)
+{
+	return type==0?_dieMCD:_altMCD;
+}
+
+/**
+  * Get the alternative object pointer
+  * @param type 0=death mcd, 1=alt mcd
+  * @return object pointer 
+  */
+TerrainObject *TerrainObject::getAltObject(int type)
+{
+	return type==0?_dieObject:_altObject;
+}
+
+/**
+  * Set the alternative object pointer
+  * @param obj pointer 
+  * @param type 0=death mcd, 1=alt mcd
+  */
+void TerrainObject::setAltObject(TerrainObject *obj, int type)
+{
+	if (type == 0)
+	{
+		_dieObject = obj;
+	}else
+	{
+		_altObject = obj;
+	}
+}
+
+/**
+  * Get the type of object
+  * @return 0-3
+  */
+int TerrainObject::getObjectType()
+{
+	return _objectType;
+}
+
+/**
 * setter
 */
 void TerrainObject::setOriginalSpriteIndex(int frameID, int value)
@@ -187,9 +241,10 @@ void TerrainObject::setYOffset(int value)
 /**
   * setter
   */
-void TerrainObject::setSpecialType(int value)
+void TerrainObject::setSpecialType(int value, int otype)
 {
 	_specialType = (SpecialTileType)value;
+	_objectType = otype;
 }
 
 /**
@@ -216,6 +271,22 @@ void TerrainObject::setTerrainLevel(int value)
 void TerrainObject::setFootstepSound(int value)
 {
 	_footstepSound = value;
+}
+
+/**
+  * setter
+  */
+void TerrainObject::setAltMCD(int value)
+{
+	_altMCD = value;
+}
+
+/**
+  * setter
+  */
+void TerrainObject::setDieMCD(int value)
+{
+	_dieMCD = value;
 }
 
 }

@@ -341,9 +341,6 @@
     <ClCompile Include="Ruleset\MapDataFile.cpp">
       <Filter>Ruleset</Filter>
     </ClCompile>
-    <ClCompile Include="Savegame\BattleSoldier.cpp">
-      <Filter>Savegame</Filter>
-    </ClCompile>
     <ClCompile Include="Savegame\BattleUnit.cpp">
       <Filter>Savegame</Filter>
     </ClCompile>
@@ -378,6 +375,9 @@
       <Filter>Geoscape</Filter>
     </ClCompile>
     <ClCompile Include="Battlescape\BriefingCrashState.cpp">
+      <Filter>Battlescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Battlescape\BattlescapeGenerator.cpp">
       <Filter>Battlescape</Filter>
     </ClCompile>
   </ItemGroup>
@@ -722,9 +722,6 @@
     <ClInclude Include="Ruleset\MapDataFile.h">
       <Filter>Ruleset</Filter>
     </ClInclude>
-    <ClInclude Include="Savegame\BattleSoldier.h">
-      <Filter>Savegame</Filter>
-    </ClInclude>
     <ClInclude Include="Savegame\BattleUnit.h">
       <Filter>Savegame</Filter>
     </ClInclude>
@@ -759,6 +756,9 @@
       <Filter>Geoscape</Filter>
     </ClInclude>
     <ClInclude Include="Battlescape\BriefingCrashState.h">
+      <Filter>Battlescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Battlescape\BattlescapeGenerator.h">
       <Filter>Battlescape</Filter>
     </ClInclude>
   </ItemGroup>

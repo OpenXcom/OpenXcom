@@ -19,12 +19,14 @@
 #ifndef OPENXCOM_NODE_H
 #define OPENXCOM_NODE_H
 
+#include "../Battlescape/Position.h"
+
 namespace OpenXcom
 {
 
 class NodeLink;
 
-enum NodeRank{CIVILIAN=0, XCOM, SOLDIER, NAVIGATOR, LEADER, ENGINEER, MISC1, MEDIC, MISC2};
+enum NodeRank{SCOUT=0, XCOM, SOLDIER, NAVIGATOR, LEADER, ENGINEER, MISC1, MEDIC, MISC2};
 			
 
 /**
@@ -34,7 +36,8 @@ enum NodeRank{CIVILIAN=0, XCOM, SOLDIER, NAVIGATOR, LEADER, ENGINEER, MISC1, MED
 class Node
 {
 private:
-	int _id, _x, _y, _z;
+	int _id;
+	Position _pos;
 	int _segment;
 	NodeLink *_nodeLinks[5];
 	int _type;
@@ -44,21 +47,20 @@ private:
 	int _priority;
 public:
 	/// Creates a Node.
-	Node(int id, int x, int y, int z, int segment, int type, int rank, int flags, int reserved, int priority);
+	Node(int id, Position pos, int segment, int type, int rank, int flags, int reserved, int priority);
 	/// Cleans up the Node.
 	~Node();
 	/// get the node's paths
 	//NodeLink *getNodeLink(int index);
 	/// Assigns a link to this node
 	void assignNodeLink(NodeLink *link, int index);
-	/// get noderank
-	NodeRank getNodeRank();
-	/// get X
-	int getX();
-	/// get Y
-	int getY();
-	/// get Z
-	int getZ();
+	/// Gets node's rank.
+	NodeRank getRank() const;
+	/// Gets node's priorty.
+	int getPriority() const;
+	/// Gets the node's position.
+	const Position& getPosition() const;
+
 };
 
 }

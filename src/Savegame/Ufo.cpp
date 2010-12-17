@@ -29,7 +29,7 @@ namespace OpenXcom
  * Initializes a UFO of the specified type.
  * @param rules Pointer to ruleset.
  */
-Ufo::Ufo(RuleUfo *rules) : MovingTarget(), _rules(rules), _id(0), _damage(0), _altitude(0), _direction("STR_NORTH"), _detected(false), _daysCrashed(0)
+Ufo::Ufo(RuleUfo *rules) : MovingTarget(), _rules(rules), _id(0), _damage(0), _altitude(0), _direction("STR_NORTH"), _detected(false), _daysCrashed(0), _inBattlescape(false)
 {
 }
 
@@ -250,6 +250,24 @@ void Ufo::think()
 			setSpeed(0);
 		}
 	}
+}
+
+/**
+ * Gets the UFO's battlescape status.
+ * @return bool
+ */
+bool Ufo::isInBattlescape() const
+{
+	return _inBattlescape;
+}
+
+/**
+ * Sets the UFO's battlescape status.
+ * @param inbattle .
+ */
+void Ufo::setInBattlescape(bool inbattle)
+{
+	_inBattlescape = inbattle;
 }
 
 }

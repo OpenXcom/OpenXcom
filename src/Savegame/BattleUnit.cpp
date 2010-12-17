@@ -29,7 +29,7 @@ namespace OpenXcom
  * Initializes a BattleUnit.
  * @param renderRules pointer to RuleUnitSprite object.
  */
-BattleUnit::BattleUnit(RuleUnitSprite *renderRules) : _renderRules(renderRules), _id(0), _pos(Position()), _lastPos(Position()), _direction(0), _status(STATUS_STANDING), _walkPhase(0)
+BattleUnit::BattleUnit(RuleUnitSprite *renderRules, UnitFaction faction) : _renderRules(renderRules), _faction(faction), _id(0), _pos(Position()), _lastPos(Position()), _direction(0), _status(STATUS_STANDING), _walkPhase(0), _soldier(0), _name("Civilian")
 {
 
 }
@@ -40,6 +40,15 @@ BattleUnit::BattleUnit(RuleUnitSprite *renderRules) : _renderRules(renderRules),
 BattleUnit::~BattleUnit()
 {
 	
+}
+
+/**
+ * Attach a geoscape soldier.
+ * @soldier pointer to Soldier.
+ */
+void BattleUnit::setSoldier(Soldier *soldier)
+{
+	_soldier = soldier;
 }
 
 /**
@@ -159,7 +168,7 @@ void BattleUnit::keepWalking()
 	}
 }
 
-int BattleUnit::getWalkingPhase()
+int BattleUnit::getWalkingPhase() const
 {
 	return _walkPhase;
 }
@@ -211,6 +220,79 @@ void BattleUnit::turn()
 		// we officially reached our destination
 		_status = STATUS_STANDING;
 	}
+}
+
+/**
+ * Returns the soldier's maximum amount of time units.
+ * @return Time units.
+ */
+int BattleUnit::getMaxTimeUnits() const
+{
+	return _soldier?_soldier->getTimeUnits():100;
+}
+
+/**
+ * Returns the soldier's maximum amount of stamina.
+ * @return Stamina.
+ */
+int BattleUnit::getMaxStamina() const
+{
+	return _soldier?_soldier->getStamina():100;
+}
+
+/**
+ * Returns the soldier's maximum amount of health.
+ * @return Health.
+ */
+int BattleUnit::getMaxHealth() const
+{
+	return _soldier?_soldier->getHealth():100;
+}
+
+/**
+ * Returns the soldier's full name.
+ * @return Soldier name.
+ */
+std::string BattleUnit::getName() const
+{
+	return _soldier?_soldier->getName():_name;
+}
+
+/**
+ * Returns the soldier's gender.
+ * @return Gender.
+ */
+SoldierGender BattleUnit::getGender() const
+{
+	return _soldier?_soldier->getGender():GENDER_MALE;
+}
+
+/**
+ * Returns the unit's faction.
+ * @return Faction.
+ */
+UnitFaction BattleUnit::getFaction() const
+{
+	return _faction;
+}
+
+/**
+ * Changes the unit's full name. (only for aliens)
+ * @param name unit's name.
+ */
+void BattleUnit::setName(const std::string &name)
+{
+	_name = name;
+}
+
+/**
+ * Returns a graphic representation of
+ * the soldier's military rank.
+ * @return Sprite ID for rank.
+ */
+int BattleUnit::getRankSprite() const
+{
+	return _soldier?_soldier->getRankSprite():0;
 }
 
 }

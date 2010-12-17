@@ -637,7 +637,7 @@ void XcomResourcePack::loadRMP(MapBlock *mapblock, int xoff, int yoff, SavedBatt
 
 	while (mapFile.read((char*)&value, sizeof(value)))
 	{
-		Node *node = new Node(nodeOffset + id, xoff + (int)value[1], yoff + (mapblock->getLength() - (int)value[0]), mapblock->getHeight() - 1 - (int)value[2], (int)value[3], (int)value[19], (int)value[20], (int)value[21], (int)value[22], (int)value[23]);
+		Node *node = new Node(nodeOffset + id, Position(xoff + (int)value[1], yoff + (mapblock->getLength() - 1 - (int)value[0]), mapblock->getHeight() - 1 - (int)value[2]), (int)value[3], (int)value[19], (int)value[20], (int)value[21], (int)value[22], (int)value[23]);
 		for (int j=0;j<5;j++)
 		{
 			int connectID = (int)((signed char)value[4 + j*3]);

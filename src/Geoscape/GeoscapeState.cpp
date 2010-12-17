@@ -61,7 +61,6 @@
 #include "LowFuelState.h"
 #include "MultipleTargetsState.h"
 #include "ConfirmLandingState.h"
-#include "../Battlescape/BattlescapeState.h"
 
 namespace OpenXcom
 {
@@ -504,10 +503,11 @@ void GeoscapeState::time5Seconds()
 						if ((*j)->getNumSoldiers() > 0)
 						{
 							// look up polygons texture
-							int texture = _globe->getPolygonTexture(u->getLongitude(),u->getLatitude());
+							int texture, shade; 
+							_globe->getPolygonTextureAndShade(u->getLongitude(),u->getLatitude(), &texture, &shade);
 							_music = false;
 							timerReset();
-							popup(new ConfirmLandingState(_game, *j, texture));
+							popup(new ConfirmLandingState(_game, *j, texture, shade));
 						}
 						else
 						{
@@ -838,10 +838,7 @@ void GeoscapeState::btnGraphsClick(Action *action)
  */
 void GeoscapeState::btnUfopaediaClick(Action *action)
 {
-	_game->getRuleset()->newBattleSave(_game->getResourcePack(), _game->getSavedGame(),
-		RNG::generate(0,12), _game->getSavedGame()->getBases()->at(0)->getCrafts()->at(0), 0);
-	_music = false;
-	_game->pushState(new BattlescapeState(_game));
+
 }
 
 /**

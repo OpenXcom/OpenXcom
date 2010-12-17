@@ -40,7 +40,7 @@ namespace OpenXcom
  * @param id List of craft IDs.
  * @param base Pointer to base of origin.
  */
-Craft::Craft(RuleCraft *rules, std::map<std::string, int> *id, Base *base) : MovingTarget(), _rules(rules), _base(base), _fuel(0), _damage(0), _weapons(), _items(), _status("STR_READY"), _lowFuel(false)
+Craft::Craft(RuleCraft *rules, std::map<std::string, int> *id, Base *base) : MovingTarget(), _rules(rules), _base(base), _fuel(0), _damage(0), _weapons(), _items(), _status("STR_READY"), _lowFuel(false), _inBattlescape(false)
 {
 	_id = (*id)[_rules->getType()];
 	(*id)[_rules->getType()]++;
@@ -475,6 +475,24 @@ void Craft::rearm()
 	{
 		_status = "STR_READY";
 	}
+}
+
+/**
+ * Gets the craft's battlescape status.
+ * @return bool
+ */
+bool Craft::isInBattlescape() const
+{
+	return _inBattlescape;
+}
+
+/**
+ * Sets the craft's battlescape status.
+ * @param inbattle .
+ */
+void Craft::setInBattlescape(bool inbattle)
+{
+	_inBattlescape = inbattle;
 }
 
 }

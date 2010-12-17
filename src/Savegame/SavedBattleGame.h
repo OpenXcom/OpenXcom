@@ -29,17 +29,19 @@ class SavedGame;
 class RuleTerrain;
 class RuleUnitSprite;
 class MapBlock;
-class Craft;
-class Ufo;
 class Node;
 class ResourcePack;
-class BattleSoldier;
 class BattleUnit;
 class Soldier;
 class Position;
 class Pathfinding;
 class BattleItem;
 class Item;
+
+/**
+ * Enumator containing all the possible mission types.
+ */
+enum MissionType { MISS_UFORECOVERY, MISS_UFOASSAULT, MISS_TERROR, MISS_ALIENBASE, MISS_BASEDEFENSE, MISS_CYDONIA };
 
 /**
  * The battlescape data that gets written to disk when the game is saved.
@@ -49,30 +51,33 @@ class Item;
 class SavedBattleGame
 {
 private:
-	int _width, _length, _height; // dimensions of the battlemap, origin is topright edge
-
-	// using a oldskool array here, because the size is static and a little faster than vector
+	int _width, _length, _height;
 	Tile **_tiles; 
-
-	Craft *_craft;
-	Ufo *_ufo;
-	BattleSoldier *_selectedSoldier;
-
+	BattleUnit *_selectedUnit;
 	std::vector<Node*> _nodes;
-	std::vector<BattleSoldier*> _soldiers;
-	std::vector<BattleItem*> _inventory;
-
-	RuleTerrain *_terrain;
+	std::vector<BattleUnit*> _units;
+	std::vector<BattleItem*> _items;
 	Pathfinding *_pathfinding;
+	MissionType _missionType;
 public:
 	/// Creates a new battle save, based on current generic save.
-	SavedBattleGame(SavedGame *save, int width, int length, int height, RuleTerrain *terrain);
+	SavedBattleGame();
 	/// Cleans up the saved game.
 	~SavedBattleGame();
+	/// Set the dimensions of the map and initializes it.
+	void initMap(int width, int length, int height);
+	/// Set the mission type.
+	void setMissionType(MissionType missionType);
+	/// Get the mission type.
+	MissionType getMissionType() const;
 	/// Gets pointer to the tiles, a tile is the smallest component of battlescape.
 	Tile **getTiles();
-	/// Gets pointer to the terrain.
-	RuleTerrain *getTerrain();
+	/// Get pointer to the list of nodes.
+	std::vector<Node*> *getNodes();
+	/// Get pointer to the list of items.
+	std::vector<BattleItem*> *getItems();
+	/// Get pointer to the list of units.
+	std::vector<BattleUnit*> *getUnits();
 	/// Gets terrain width.
 	int getWidth();
 	/// Gets terrain length.
@@ -85,35 +90,18 @@ public:
 	void getTileCoords(int index, int *x, int *y, int *z);
 	/// Gets the tile at certain position.
 	Tile *getTile(const Position& pos);
-	/// Sets the xcom craft and ufo for this battle game.
-	void setCrafts(Craft *craft, Ufo* ufo);
-	/// Get the xcom craft in the battle game.
-	Craft *getCraft();
-	/// Gets the ufo in the battle game (returns NULL when no ufo).
-	Ufo *getUfo();
-	/// Generate a new battlescape map.
-	void generateMap(ResourcePack *res);
-	/// links tiles with terrainobjects, for easier/faster lookup
-	void linkTilesWithTerrainObjects(ResourcePack *res);
-	/// Add a soldier to the game
-	void addSoldier(Soldier *soldier, RuleUnitSprite *rules);
-	/// Add an item to the game
-	void addItem(Item *item);
-	/// get the currently selected soldier
-	BattleSoldier *getSelectedSoldier();
-	/// set the currently selected soldier
-	void setSelectedSoldier(BattleSoldier *soldier);
+	/// get the currently selected unit
+	BattleUnit *getSelectedUnit();
+	/// set the currently selected unit
+	void setSelectedUnit(BattleUnit *unit);
 	/// select next soldier
-	BattleSoldier *selectNextSoldier();
+	BattleUnit *selectNextPlayerUnit();
 	/// select unit with position on map
 	BattleUnit *selectUnit(const Position& pos);
 	/// select unit with position on map
 	BattleUnit *selectUnit(Tile *tile);
-	/// get pointer to the list of nodes
-	std::vector<Node*> *getNodes();
 	/// get the pathfinding object
 	Pathfinding *getPathfinding();
-
 };
 
 }
