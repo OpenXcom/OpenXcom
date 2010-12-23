@@ -55,7 +55,7 @@ private:
 	Surface *_markers, *_countries;
 	bool _blink, _detail;
 	Timer *_blinkTimer, *_rotTimer;
-	std::list<Polygon*> _ocean, _cacheOcean, _cacheLand;
+	std::list<Polygon*> _cacheLand;
 	Surface *_mkXcomBase, *_mkAlienBase, *_mkCraft, *_mkWaypoint, *_mkCity;
 	Surface *_mkFlyingUfo, *_mkLandedUfo, *_mkCrashedUfo, *_mkAlienSite;
 
@@ -67,6 +67,8 @@ private:
 	bool targetNear(Target* target, int x, int y) const;
 	/// Caches a set of polygons.
 	void cache(std::list<Polygon*> *polygons, std::list<Polygon*> *cache);
+	/// Fills the ocean longitude segments.
+	void fillLongitudeSegments(double startLon, double endLon, int colourShift);
 public:
 	/// Creates a new globe at the specified position and size.
 	Globe(int cenX, int cenY, int width, int height, int x = 0, int y = 0);

@@ -62,7 +62,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Globe::Globe(int cenX, int cenY, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _radius(), _cenLon(0.0), _cenLat(0.0), _rotLon(0.0), _rotLat(0.0), _cenX(cenX), _cenY(cenY), _zoom(0), _res(0), _save(0), _blink(true), _detail(true), _ocean(), _cacheOcean(), _cacheLand()
+Globe::Globe(int cenX, int cenY, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _radius(), _cenLon(0.0), _cenLat(0.0), _rotLon(0.0), _rotLat(0.0), _cenX(cenX), _cenY(cenY), _zoom(0), _res(0), _save(0), _blink(true), _detail(true), _cacheLand()
 {
 	_radius.push_back(90);
 	_radius.push_back(120);
@@ -80,28 +80,7 @@ Globe::Globe(int cenX, int cenY, int width, int height, int x, int y) : Interact
 	_blinkTimer->start();
 	_rotTimer = new Timer(50);
 	_rotTimer->onTimer((SurfaceHandler)&Globe::rotate);
-
-	// Ocean segments
-	for (double tmpLon = 0; tmpLon <= 2 * M_PI; tmpLon += QUAD_LONGITUDE)
-	{
-		for (double tmpLat = M_PI / 2; tmpLat <= 3 * (M_PI / 2); tmpLat += QUAD_LATITUDE)
-		{
-			double lon[] = {tmpLon, tmpLon, tmpLon + QUAD_LONGITUDE, tmpLon + QUAD_LONGITUDE};
-			double lat[] = {tmpLat, tmpLat + QUAD_LATITUDE, tmpLat + QUAD_LATITUDE, tmpLat};
-
-			Polygon* p = new Polygon(4);
-
-			// Quad is front facing, calculate coordinates
-			for (int i = 0; i < 4; i++)
-			{
-				p->setLongitude(i, lon[i]);
-				p->setLatitude(i, lat[i]);
-			}
-
-			_ocean.push_back(p);
-		}
-	}
-
+	
 	// Globe markers
 	_mkXcomBase = new Surface(3, 3);
 	_mkXcomBase->lock();
@@ -216,14 +195,6 @@ Globe::~Globe()
 	delete _mkCrashedUfo;
 	delete _mkAlienSite;
 
-	for (std::list<Polygon*>::iterator i = _ocean.begin(); i != _ocean.end(); i++)
-	{
-		delete *i;
-	}
-	for (std::list<Polygon*>::iterator i = _cacheOcean.begin(); i != _cacheOcean.end(); i++)
-	{
-		delete *i;
-	}
 	for (std::list<Polygon*>::iterator i = _cacheLand.begin(); i != _cacheLand.end(); i++)
 	{
 		delete *i;
@@ -265,7 +236,7 @@ void Globe::cartToPolar(Sint16 x, Sint16 y, double *lon, double *lat) const
 	*lat = asin((y * sin(c) * cos(_cenLat)) / rho - cos(c) * sin(_cenLat));
 	*lon = atan2(x * sin(c), rho * cos(_cenLat) * cos(c) + y * sin(_cenLat) * sin(c)) - _cenLon;
 
-	// Keep between 0 and 2xM_PI
+	// Keep between 0 and 2xPI
 	while (*lon < 0)
 		*lon += 2 * M_PI;
 	while (*lon >= 2 * M_PI)
@@ -612,7 +583,6 @@ std::vector<Target*> Globe::getTargets(int x, int y, bool craft) const
  */
 void Globe::cachePolygons()
 {
-	cache(&_ocean, &_cacheOcean);
 	cache(_res->getPolygons(), &_cacheLand);
 	draw();
 }
@@ -739,39 +709,154 @@ void Globe::draw()
 }
 
 /**
- * Renders the ocean, splitting it into polygons and shading it
- * according to the time of day.
+ * Draws a segment of the ocean shade along the longitude.
+ * @param startLon Starting longitude.
+ * @param endLon Ending longitude.
+ * @param colourShift Colour shade.
+ */
+void Globe::fillLongitudeSegments(double startLon, double endLon, int colourShift)
+{
+	double traceLon, traceLat, destLon;
+	Sint16 direction, x, y;
+	std::vector<Sint16> polyPointsX, polyPointsY, polyPointsX2, polyPointsY2;
+	Sint16 *dx, *dy;
+
+	// Make sure we only go forwards
+	traceLon = startLon;
+	if (startLon > endLon)
+		destLon = endLon + 2 * M_PI;
+	else
+		destLon = endLon;
+
+	// If North pole visible, we want to head south (+1), if South pole, head North (-1)
+	if (!pointBack(traceLon, -M_PI / 2))
+		direction = 1;
+	else
+		direction = -1;
+
+	// Start at pole
+	traceLat = (M_PI / 2) * (-1 * direction);
+
+	if (_cenLat != 0)
+	{
+		// Trace the longitude down to vanishing point
+		while (!pointBack(traceLon, traceLat))
+		{
+			polarToCart(traceLon, traceLat, &x, &y);
+			polyPointsX.push_back(x);
+			polyPointsY.push_back(y);
+			traceLat += (QUAD_LATITUDE * direction);
+		}
+
+		// Circle from start long to end long
+		while (traceLon < endLon)
+		{
+			traceLon += QUAD_LONGITUDE;
+			traceLat = (M_PI / 2) * direction;
+			// Reverse trace until point is visible
+			while(pointBack(traceLon, traceLat))
+				traceLat -= (QUAD_LATITUDE * direction);
+
+			// Store traced point
+			polarToCart(traceLon, traceLat, &x, &y);
+			polyPointsX.push_back(x);
+			polyPointsY.push_back(y);
+		}
+
+		// Reverse trace our end longitude
+		traceLon = endLon;
+		while (abs(traceLat) < abs(M_PI / 2))
+		{
+			polarToCart(traceLon, traceLat, &x, &y);
+			polyPointsX.push_back(x);
+			polyPointsY.push_back(y);
+			traceLat -= (QUAD_LATITUDE * direction);
+		}
+	}
+	else
+	{
+		double dayLon = startLon, hackDay = startLon;
+		double nightLon = endLon, hackNight = endLon;
+		double hackDayLat, hackNightLat;
+		for (double idx = -M_PI / 2; idx < M_PI / 2; idx += QUAD_LATITUDE)
+		{
+			hackDayLat = idx;
+			hackNightLat = idx;
+			if (pointBack(hackDay, 0) && !pointBack(hackNight, 0))
+			{
+				while(pointBack(hackDay, hackDayLat) && hackDay < hackNight)
+					hackDay += QUAD_LONGITUDE;
+			}
+
+			if (!pointBack(hackDay, 0) && pointBack(hackNight, 0))
+			{
+				while(pointBack(hackNight, hackNightLat) && hackNight > dayLon)
+					hackNight -= QUAD_LONGITUDE;
+			}
+
+			if (!pointBack(hackDay, hackDayLat) || !pointBack(hackNight, hackNightLat))
+			{
+				if (!pointBack(hackDay, hackDayLat))
+				{
+					polarToCart(hackDay, hackDayLat, &x, &y);
+					polyPointsX.push_back(x);
+					polyPointsY.push_back(y);
+					//drawPolygon(dx, dy, polyPointsX.size(), Palette::blockOffset(12) + colourShift);
+				}
+
+				if (!pointBack(hackNight, hackNightLat))
+				{
+					polarToCart(hackNight, hackNightLat, &x, &y);
+					polyPointsX2.push_back(x);
+					polyPointsY2.push_back(y);
+				}
+			}
+		}
+		if (polyPointsX2.size() > 0)
+		{
+			for (int i = polyPointsX2.size() - 1; i >= 0; i--)
+			{
+				polyPointsX.push_back(polyPointsX2.at(i));
+				polyPointsY.push_back(polyPointsY2.at(i));
+			}
+		}
+	}
+
+	dx = new Sint16[polyPointsX.size()];
+	dy = new Sint16[polyPointsX.size()];
+	
+	if (polyPointsX.size() > 0)
+	{
+		for (int i = 0; i < polyPointsX.size(); i++)
+		{
+			dx[i] = polyPointsX.at(i);
+			dy[i] = polyPointsY.at(i);
+		}
+		drawPolygon(dx, dy, polyPointsX.size(), Palette::blockOffset(12) + colourShift);
+	}
+
+	delete[] dx;
+	delete[] dy;
+}
+
+/**
+ * Renders the ocean, shading it according to the time of day.
  */
 void Globe::drawOcean()
 {
-	int _seashades[] = {12, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 12, 20, 28, 28,
-						28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 20};
 	double curTime = _save->getTime()->getDaylight();
-	Sint16 x[4], y[4];
+	double dayLon = -curTime * 2*M_PI;
+	double nightLon = dayLon + M_PI;
 
 	lock();
 
 	drawCircle(_cenX, _cenY, (Sint16)floor(_radius[_zoom]), Palette::blockOffset(12)+28);
-  
-	for (std::list<Polygon*>::iterator i = _cacheOcean.begin(); i != _cacheOcean.end(); i++)
-	{
-		double tmpLon = (*i)->getLongitude(0);
 
-		// Convert coordinates
-		for (int j = 0; j < (*i)->getPoints(); j++)
-		{
-			x[j] = (*i)->getX(j);
-			y[j] = (*i)->getY(j);
-		}
-
-		// Calculate shade
-		int shade = (int)((curTime + (tmpLon / (2 * M_PI))) * NUM_SEASHADES) + 36;
-		shade = _seashades[shade % NUM_SEASHADES];
-
-		// Draw the sea
-		if (shade != 28)
-			drawPolygon(x, y, 4, Palette::blockOffset(12) + shade);
-	}
+	fillLongitudeSegments(dayLon + QUAD_LONGITUDE, nightLon - QUAD_LONGITUDE, 0);
+	fillLongitudeSegments(dayLon - QUAD_LONGITUDE, dayLon, 16);
+	fillLongitudeSegments(dayLon, dayLon + QUAD_LONGITUDE, 8);
+	fillLongitudeSegments(nightLon - QUAD_LONGITUDE, nightLon, 8);
+	fillLongitudeSegments(nightLon, nightLon + QUAD_LONGITUDE, 16);
 
 	unlock();
 }
