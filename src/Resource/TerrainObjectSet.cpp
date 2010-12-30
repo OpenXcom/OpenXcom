@@ -129,9 +129,10 @@ void TerrainObjectSet::load(const std::string &filename)
 		to->setFlags(mcd.UFO_Door == 1, mcd.Stop_LOS == 1, mcd.No_Floor == 1, mcd.Big_Wall == 1, mcd.Gravlift == 1, mcd.Door == 1, mcd.Block_Fire == 1, mcd.Block_Smoke == 1);
 		to->setTerrainLevel((int)mcd.T_Level);
 		to->setFootstepSound((int)mcd.Footstep);
-		to->setAltMCD((int)mcd.Alt_MCD);
-		to->setDieMCD((int)mcd.Die_MCD);
-
+		to->setAltMCD((int)(mcd.Alt_MCD));
+		to->setDieMCD((int)(mcd.Die_MCD));
+		to->setBlockValue((int)mcd.Light_Block, (int)mcd.Stop_LOS, (int)mcd.HE_Block, (int)mcd.Block_Smoke, (int)mcd.Block_Fire, (int)mcd.Block_Smoke);
+		to->setLightSource((int)mcd.Light_Source);
 	}
 
 	if (!mapFile.eof())

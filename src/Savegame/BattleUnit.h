@@ -57,6 +57,7 @@ private:
 	//BattleAI *_ai;
 	//RuleNPC *_NPCRule;
 	std::string _name;
+	bool _cached;
 public:
 	/// Creates a BattleUnit.
 	BattleUnit(RuleUnitSprite *renderRules, UnitFaction faction);
@@ -114,6 +115,11 @@ public:
 	void setName(const std::string &name);
 	/// Gets a sprite version of the soldier's rank.
 	int getRankSprite() const;
+	/// Set the cached flag.
+	void setCached(bool cached);
+	/// If this unit is cached on the battlescape.
+	bool isCached() const;
+
 
 };
 

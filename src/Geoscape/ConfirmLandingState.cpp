@@ -44,6 +44,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param craft Pointer to the craft to confirm.
  * @param texture Texture of the landing site.
+ * @param shade Shade of the landing site.
  */
 ConfirmLandingState::ConfirmLandingState(Game *game, Craft *craft, int texture, int shade) : State(game), _craft(craft), _texture(texture), _shade(shade)
 {

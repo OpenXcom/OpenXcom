@@ -27,9 +27,10 @@ namespace OpenXcom
 
 /**
  * Initializes a BattleUnit.
- * @param renderRules pointer to RuleUnitSprite object.
+ * @param renderRules Pointer to RuleUnitSprite object.
+ * @param faction Which faction the units belongs to.
  */
-BattleUnit::BattleUnit(RuleUnitSprite *renderRules, UnitFaction faction) : _renderRules(renderRules), _faction(faction), _id(0), _pos(Position()), _lastPos(Position()), _direction(0), _status(STATUS_STANDING), _walkPhase(0), _soldier(0), _name("Civilian")
+BattleUnit::BattleUnit(RuleUnitSprite *renderRules, UnitFaction faction) : _renderRules(renderRules), _faction(faction), _id(0), _pos(Position()), _lastPos(Position()), _direction(0), _status(STATUS_STANDING), _walkPhase(0), _soldier(0), _name("Civilian"), _cached(false)
 {
 
 }
@@ -44,7 +45,7 @@ BattleUnit::~BattleUnit()
 
 /**
  * Attach a geoscape soldier.
- * @soldier pointer to Soldier.
+ * @param soldier Pointer to Soldier.
  */
 void BattleUnit::setSoldier(Soldier *soldier)
 {
@@ -166,6 +167,7 @@ void BattleUnit::keepWalking()
 		_status = STATUS_STANDING;
 		_walkPhase = 0;
 	}
+	_cached = false;
 }
 
 int BattleUnit::getWalkingPhase() const
@@ -213,6 +215,7 @@ void BattleUnit::turn()
         }
         if (_direction < 0) _direction = 7;
         if (_direction > 7) _direction = 0;
+		_cached = false;
     }
 
 	if (_toDirection == _direction)
@@ -293,6 +296,25 @@ void BattleUnit::setName(const std::string &name)
 int BattleUnit::getRankSprite() const
 {
 	return _soldier?_soldier->getRankSprite():0;
+}
+
+/**
+ * Sets the unit's cache flag.
+ * @param cached
+ */
+void BattleUnit::setCached(bool cached)
+{
+	_cached = cached;
+}
+
+/**
+ * Check if the unit is still cached in the Map cache.
+ * When the unit changes it needs to be re-cached.
+ * @return bool
+ */
+bool BattleUnit::isCached() const
+{
+	return _cached;
 }
 
 }

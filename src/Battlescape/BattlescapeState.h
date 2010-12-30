@@ -52,12 +52,14 @@ private:
 	Bar *_barTimeUnits, *_barEnergy, *_barHealth, *_barMorale;
 	Timer *_walkingTimer, *_bulletTimer;
 	SavedBattleGame *_battleGame;
-	void unitOpensDoor(BattleUnit *unit);
+	bool unitOpensDoor(BattleUnit *unit);
 public:
 	/// Creates the Battlescape state.
 	BattlescapeState(Game *game);
 	/// Cleans up the Battlescape state.
 	~BattlescapeState();
+	/// init
+	void init();
 	/// think
 	void think();
 	/// Handler for clicking the map.

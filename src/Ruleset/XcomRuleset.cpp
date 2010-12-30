@@ -893,6 +893,27 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	mars->getMapDataFiles()->push_back(getMapDataFile("MARS.MCD"));
 	mars->getMapDataFiles()->push_back(getMapDataFile("U_WALL02.MCD"));
 	mars->getMapBlocks()->push_back(new MapBlock(mars,"MARS00",10,10,true));
+	RuleTerrain *urban = new RuleTerrain("URBAN");
+	urban->getMapDataFiles()->push_back(getMapDataFile("BLANKS.MCD"));
+	urban->getMapDataFiles()->push_back(getMapDataFile("ROADS.MCD"));
+	urban->getMapDataFiles()->push_back(getMapDataFile("URBITS.MCD"));
+	urban->getMapDataFiles()->push_back(getMapDataFile("URBAN.MCD"));
+	urban->getMapDataFiles()->push_back(getMapDataFile("FRNITURE.MCD"));
+	//urban->getMapBlocks()->push_back(new MapBlock(urban,"URBAN00",10,10,false));
+	//urban->getMapBlocks()->push_back(new MapBlock(urban,"URBAN01",10,10,false));
+	//urban->getMapBlocks()->push_back(new MapBlock(urban,"URBAN02",10,10,false));
+	urban->getMapBlocks()->push_back(new MapBlock(urban,"URBAN03",10,10,true));
+	urban->getMapBlocks()->push_back(new MapBlock(urban,"URBAN04",10,10,true));
+	urban->getMapBlocks()->push_back(new MapBlock(urban,"URBAN05",20,20,false));
+	urban->getMapBlocks()->push_back(new MapBlock(urban,"URBAN06",20,20,false));
+	urban->getMapBlocks()->push_back(new MapBlock(urban,"URBAN07",20,20,false));
+	urban->getMapBlocks()->push_back(new MapBlock(urban,"URBAN08",20,20,false));
+	urban->getMapBlocks()->push_back(new MapBlock(urban,"URBAN09",20,20,false));
+	urban->getMapBlocks()->push_back(new MapBlock(urban,"URBAN14",10,10,false));
+	urban->getMapBlocks()->push_back(new MapBlock(urban,"URBAN15",10,10,false));
+	urban->getMapBlocks()->push_back(new MapBlock(urban,"URBAN16",10,10,false));
+	urban->getMapBlocks()->push_back(new MapBlock(urban,"URBAN17",10,10,false));
+	urban->getMapBlocks()->push_back(new MapBlock(urban,"URBAN18",10,10,false));
 
 	_terrains.insert(std::pair<std::string, RuleTerrain*>("CULTA",culta));
 	_terrains.insert(std::pair<std::string, RuleTerrain*>("JUNGLE",jungle));
@@ -901,6 +922,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_terrains.insert(std::pair<std::string, RuleTerrain*>("MOUNT",mount));
 	_terrains.insert(std::pair<std::string, RuleTerrain*>("POLAR",polar));
 	_terrains.insert(std::pair<std::string, RuleTerrain*>("MARS",mars));
+	_terrains.insert(std::pair<std::string, RuleTerrain*>("URBAN",urban));
 
 	RuleUnitSprite *xcom_0 = new RuleUnitSprite();
 	xcom_0->setSpriteSheet("XCOM_0.PCK");

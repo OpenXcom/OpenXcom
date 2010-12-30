@@ -35,6 +35,7 @@ class BattleUnit;
 class Soldier;
 class Position;
 class Pathfinding;
+class TerrainModifier;
 class BattleItem;
 class Item;
 
@@ -58,7 +59,9 @@ private:
 	std::vector<BattleUnit*> _units;
 	std::vector<BattleItem*> _items;
 	Pathfinding *_pathfinding;
+	TerrainModifier *_terrainModifier;
 	MissionType _missionType;
+	int _globalShade;
 public:
 	/// Creates a new battle save, based on current generic save.
 	SavedBattleGame();
@@ -70,6 +73,10 @@ public:
 	void setMissionType(MissionType missionType);
 	/// Get the mission type.
 	MissionType getMissionType() const;
+	/// Set the global shade.
+	void setGlobalShade(int shade);
+	/// Get the global shade.
+	int getGlobalShade() const;
 	/// Gets pointer to the tiles, a tile is the smallest component of battlescape.
 	Tile **getTiles();
 	/// Get pointer to the list of nodes.
@@ -102,6 +109,8 @@ public:
 	BattleUnit *selectUnit(Tile *tile);
 	/// get the pathfinding object
 	Pathfinding *getPathfinding();
+	/// get the terrainmodifier object
+	TerrainModifier *getTerrainModifier();
 };
 
 }

@@ -56,7 +56,9 @@ public:
 	void offset(int off, int min = -1, int max = -1);
 	/// Inverts the surface's colors.
 	void invert(Uint8 mid);
-	/// Runs surface functionality every cycle.
+	/// Sets the surface's shade level.
+	void setShade(int shade);
+	/// Runs surface functionality every cycle
 	virtual void think();
 	/// Draws the surface's graphic.
 	virtual void draw();

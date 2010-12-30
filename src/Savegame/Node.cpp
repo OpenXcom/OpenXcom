@@ -25,9 +25,7 @@ namespace OpenXcom
 /**
  * Initializes a Node.
  * @param id
- * @param x
- * @param y
- * @param z
+ * @param pos
  * @param segment
  * @param type
  * @param rank

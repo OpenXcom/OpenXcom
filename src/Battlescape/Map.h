@@ -47,20 +47,24 @@ private:
 	Timer *_scrollTimer, *_animTimer;
 	Surface *_arrow;
 	Game *_game;
-
-	int _MapOffsetX, _MapOffsetY, _viewHeight;
+	Surface **_tileFloorCache;
+	Surface **_tileWallsCache;
+	int _tileCount;
+	std::vector<Surface *> _unitCache;
+	int _mapOffsetX, _mapOffsetY, _viewHeight;
 	int _RMBClickX, _RMBClickY;
-	bool _RMBDragging;
-	int _SpriteWidth, _SpriteHeight;
+	int _spriteWidth, _spriteHeight;
 	int _selectorX, _selectorY;
-	int _ScrollX, _ScrollY;
-	int _animFrame, _ufoDoorFrame;
 	bool _hideCursor;
-	Tile *_openingDoorTile;
+	int _animFrame;
+	int _scrollX, _scrollY;
+	bool _RMBDragging;
+	int _centerX, _centerY;
 
-	void drawFloor(Tile *tile, const Position &pos);
-	void drawObjects(Tile *tile, const Position &pos);
 	void minMaxInt(int *value, const int minValue, const int maxValue);
+	void cacheTileSprites();
+	bool cacheTileSprites(int i);
+	void convertScreenToMap(int screenX, int screenY, int *mapX, int *mapY);
 public:
 	/// Creates a new map at the specified position and size.
 	Map(int width, int height, int x, int y);
@@ -116,11 +120,7 @@ public:
 	void hideCursor(bool flag);
 	/// is cursor hidden.
 	bool isCursorHidden();
-	/// Give the order to start animating opening a UFO door
-	void openUFODoor(Tile *tile);
-	/// Check if the animation for opening the UFO door is still running.
-	bool isOpeningUFODoor();
-
+	void cacheUnits();
 };
 
 }

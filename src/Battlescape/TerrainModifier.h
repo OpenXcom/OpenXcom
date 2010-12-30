@@ -24,25 +24,39 @@
 namespace OpenXcom
 {
 
+enum Affector { AFFECT_LIGHT, AFFECT_VISION, AFFECT_HE, AFFECT_SMOKE, AFFECT_FIRE, AFFECT_GAS };
+
 class SavedBattleGame;
 class BattleUnit;
+class Tile;
 
 /**
- * A utility class that modifies tile properties on a battlescape map. This includes terrain destruction, smoke, fire, fog of war.
+ * A utility class that modifies tile properties on a battlescape map. This includes lighting, destruction, smoke, fire, fog of war.
  */
 class TerrainModifier
 {
 private:
 	SavedBattleGame *_save;
+	int blockage(Tile *tile, const int part, Affector affector);
+	int blockage(Tile *startTile, Tile *endTile, Affector affector);
+	int vectorToDirection(const Position &vector);
 public:
-	/// Creates a new TerrainModifier class
+	/// Creates a new TerrainModifier class.
 	TerrainModifier(SavedBattleGame *save);
 	/// Cleans up the TerrainModifier.
 	~TerrainModifier();
-	/// Clear fog of war around an xcom unit.
-	void clearFogOfWar(BattleUnit *unit);
-	/// Restore fog of war from an xcom unit (when it leaves a certain position, or he dies).
-	void restoreFogOfWar(BattleUnit *unit);
+	/// Calculate sun shading of the whole map.
+	void calculateSunShading();
+	/// Calculate sun shading of a single tile.
+	void calculateSunShading(Tile *tile);
+	/// Calculate the visible tiles of a unit.
+	void calculateLineOfSight(BattleUnit *unit);
+	/// Recalculate lighting of the battlescape.
+	void calculateLighting();
+	/// Tile destruction. (for testing purposes)
+	void destroyTile(Tile *tile);
+	/// Affect tiles in a circular pattern.
+	void circularAffector(const Position &pointOfImpact, Affector affector, int power);
 };
 
 }

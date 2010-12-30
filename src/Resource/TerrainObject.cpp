@@ -26,7 +26,8 @@ namespace OpenXcom
 */
 TerrainObject::TerrainObject()
 {
-	
+	_dieObject = 0;
+	_altObject = 0;
 }
 
 /**
@@ -208,6 +209,25 @@ int TerrainObject::getObjectType()
 }
 
 /**
+  * Get the lightblock of object.
+  * @param type
+  * @return lightblock
+  */
+int TerrainObject::getBlock(int type)
+{
+	return _block[type]; 
+}
+
+/**
+  * Get the lightsource of object.
+  * @return lightsource
+  */
+int TerrainObject::getLightSource()
+{
+	return _lightSource;
+}
+
+/**
 * setter
 */
 void TerrainObject::setOriginalSpriteIndex(int frameID, int value)
@@ -287,6 +307,27 @@ void TerrainObject::setAltMCD(int value)
 void TerrainObject::setDieMCD(int value)
 {
 	_dieMCD = value;
+}
+
+/**
+  * setter
+  */
+void TerrainObject::setBlockValue(int lightBlock, int visionBlock, int HEBlock, int smokeBlock, int fireBlock, int gasBlock)
+{
+	_block[0] = lightBlock==10?16:lightBlock; // small tweak to make sure 10 blocks all light...
+	_block[1] = visionBlock==1?255:0;
+	_block[2] = HEBlock;
+	_block[3] = smokeBlock==1?255:0;
+	_block[4] = fireBlock==1?255:0;
+	_block[5] = gasBlock==1?255:0;
+}
+
+/**
+  * setter
+  */
+void TerrainObject::setLightSource(int value)
+{
+	_lightSource = value;
 }
 
 }

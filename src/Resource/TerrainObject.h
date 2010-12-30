@@ -69,6 +69,8 @@ private:
 	int _footstepSound;
 	int _dieMCD, _altMCD;
 	int _objectType;
+	int _block[6];
+	int _lightSource;
 public:
 	TerrainObject();
 	~TerrainObject();
@@ -98,12 +100,16 @@ public:
 	bool isDoor();
 	/// Get the alternative object ID 0=death mcd, 1=alt mcd
 	int getAltMCD(int type);
-	/// Get the alternative object pointer
+	/// Get the alternative object pointer.
 	TerrainObject *getAltObject(int type);
-	/// Set the alternative object pointer
+	/// Set the alternative object pointer.
 	void setAltObject(TerrainObject *obj, int type);
-	/// Get the type of tile
+	/// Get the type of tile.
 	int getObjectType();
+	/// 
+	int getBlock(int type);
+	/// 
+	int getLightSource();
 
 	
 	// below are setter functions for the properties
@@ -116,6 +122,8 @@ public:
 	void setFootstepSound(int value);
 	void setAltMCD(int value);
 	void setDieMCD(int value);
+	void setBlockValue(int lightBlock, int visionBlock, int HEBlock, int smokeBlock, int fireBlock, int gasBlock);
+	void setLightSource(int value);
 };
 
 }

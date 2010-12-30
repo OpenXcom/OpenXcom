@@ -50,6 +50,7 @@ private:
 	int _width, _length, _height;
 	int _worldTexture, _worldShade;
 	MissionType _missionType;
+	int _unitCount;
 
 	/// Generate a new battlescape map.
 	void generateMap(ResourcePack *res);

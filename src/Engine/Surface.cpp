@@ -257,6 +257,46 @@ void Surface::invert(Uint8 mid)
 }
 
 /**
+ * Sets the shade level of the surface.
+ * Shade 0 is original color, 16 is black.
+ * @param shade Amount to shade.
+ */
+void Surface::setShade(int shade)
+{
+	// Lock the surface
+	lock();
+	for (int x = 0, y = 0; x < _surface->w && y < _surface->h;)
+	{
+		Uint8 pixel = getPixel(x, y);
+		if (pixel)
+		{
+			int baseColor = pixel/16;
+			int originalShade = pixel%16;
+			int newShade = originalShade + shade;
+			if (newShade > 15)
+			{
+				baseColor = 0;
+				newShade = 15;
+			}
+			if (originalShade != newShade || baseColor == 0)
+			{
+				pixel = (baseColor*16) + newShade;
+				setPixel(x, y, pixel);
+			}
+		}
+		x++;
+		if (x == getWidth())
+		{
+			y++;
+			x = 0;
+		}
+	}
+
+	// Unlock the surface
+	unlock();
+}
+
+/**
  * Runs any code the surface needs to keep updating every
  * game cycle, like animations and other real-time elements.
  */

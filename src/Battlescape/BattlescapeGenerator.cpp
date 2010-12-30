@@ -19,6 +19,7 @@
 #include <fstream>
 #include <sstream>
 #include "BattlescapeGenerator.h"
+#include "TerrainModifier.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
@@ -111,7 +112,6 @@ void BattlescapeGenerator::setMissionType(MissionType missionType)
 	_save->setMissionType(missionType);
 }
 
-
 /**
  * This will start the generator: it will fill up the battlescapesavegame with data.
  */
@@ -120,57 +120,67 @@ void BattlescapeGenerator::run()
 	_width = 50;
 	_length = 50;
 	_height = 4;
+	_unitCount = 0;
+
+	if (_missionType == MISS_TERROR)
+	{
+		_terrain = _game->getRuleset()->getTerrain("URBAN");
+	}
+	else
+	{
+		switch (_worldTexture)
+		{
+		case 0:	
+		case 6:
+		case 10:
+		case 11:	
+			{
+				if (_ufo != 0)
+				{
+					if (_ufo->getLatitude() < 0)
+					{ // northern hemisphere
+						_terrain = _game->getRuleset()->getTerrain("FOREST");
+					}else
+					{ // southern hemisphere
+						_terrain = _game->getRuleset()->getTerrain("JUNGLE");
+					}
+				}
+				else
+				{
+					_terrain = _game->getRuleset()->getTerrain("FOREST");
+				}
+				break;
+			}
+		case 1:
+		case 2:
+		case 3:
+		case 4:
+			{
+				_terrain = _game->getRuleset()->getTerrain("CULTA");
+				break;
+			}
+		case 5:
+			{
+				_terrain = _game->getRuleset()->getTerrain("MOUNT");
+				break;
+			}
+		case 7:
+		case 8:
+			{
+				_terrain = _game->getRuleset()->getTerrain("DESERT");
+				break;
+			}
+		case 9:
+		case 12:
+			{
+				_terrain = _game->getRuleset()->getTerrain("POLAR");
+				break;
+			}
+		}	
+	}
+
 	_save->initMap(_width, _length, _height);
 
-	switch (_worldTexture)
-	{
-	case 0:	
-	case 6:
-	case 10:
-	case 11:	
-		{
-			if (_ufo != 0)
-			{
-				if (_ufo->getLatitude() < 0)
-				{ // northern hemisphere
-					_terrain = _game->getRuleset()->getTerrain("FOREST");
-				}else
-				{ // southern hemisphere
-					_terrain = _game->getRuleset()->getTerrain("JUNGLE");
-				}
-			}
-			else
-			{
-				_terrain = _game->getRuleset()->getTerrain("FOREST");
-			}
-			break;
-		}
-	case 1:
-	case 2:
-	case 3:
-	case 4:
-		{
-			_terrain = _game->getRuleset()->getTerrain("CULTA");
-			break;
-		}
-	case 5:
-		{
-			_terrain = _game->getRuleset()->getTerrain("MOUNT");
-			break;
-		}
-	case 7:
-	case 8:
-		{
-			_terrain = _game->getRuleset()->getTerrain("DESERT");
-			break;
-		}
-	case 9:
-	case 12:
-		{
-			_terrain = _game->getRuleset()->getTerrain("POLAR");
-			break;
-		}
-	}	
 	// lets generate the map now and store it inside the tiles
 	generateMap(_game->getResourcePack());
 	if (_craft != 0)
@@ -188,13 +198,24 @@ void BattlescapeGenerator::run()
 				addItem((*i).second);
 		}
 	}
-	// add aliens (should depend on mission type)
-	addAlien(_game->getRuleset()->getUnitSprites("SECTOID"), ENGINEER, "Sectoid Engineer");
-	addAlien(_game->getRuleset()->getUnitSprites("SECTOID"), NAVIGATOR, "Sectoid Navigator");
-	addAlien(_game->getRuleset()->getUnitSprites("SECTOID"), SOLDIER, "Sectoid Soldier");
-	addAlien(_game->getRuleset()->getUnitSprites("SECTOID"), SCOUT, "Sectoid Soldier");
-	addAlien(_game->getRuleset()->getUnitSprites("SECTOID"), SCOUT, "Sectoid Soldier");
-	addAlien(_game->getRuleset()->getUnitSprites("SECTOID"), SCOUT, "Sectoid Soldier");
+
+	if (_missionType == MISS_UFORECOVERY)
+	{
+		// add aliens (should depend on mission type & difficulty level)
+		addAlien(_game->getRuleset()->getUnitSprites("SECTOID"), ENGINEER, "Sectoid Engineer");
+		addAlien(_game->getRuleset()->getUnitSprites("SECTOID"), NAVIGATOR, "Sectoid Navigator");
+		addAlien(_game->getRuleset()->getUnitSprites("SECTOID"), SOLDIER, "Sectoid Soldier");
+		addAlien(_game->getRuleset()->getUnitSprites("SECTOID"), SCOUT, "Sectoid Soldier");
+		addAlien(_game->getRuleset()->getUnitSprites("SECTOID"), SCOUT, "Sectoid Soldier");
+		addAlien(_game->getRuleset()->getUnitSprites("SECTOID"), SCOUT, "Sectoid Soldier");
+	}
+
+	// set shade (alien bases are a little darker, sites depend on worldshade)
+	int worldshades[8] = { 0, 1, 2, 3, 5, 7, 9 , 15 };
+	_save->setGlobalShade(worldshades[_worldShade]);
+
+	_save->getTerrainModifier()->calculateSunShading();
+	_save->getTerrainModifier()->calculateLighting();
 }
 
 /**
@@ -206,6 +227,7 @@ void BattlescapeGenerator::addSoldier(Soldier *soldier, RuleUnitSprite *rules)
 {
 	BattleUnit *unit = new BattleUnit(rules, FACTION_PLAYER);
 	unit->setSoldier(soldier);
+	unit->setId(_unitCount++);
 
 	Position pos;
 	int x, y, z;
@@ -213,13 +235,14 @@ void BattlescapeGenerator::addSoldier(Soldier *soldier, RuleUnitSprite *rules)
 	for (int i = 0; i < _height * _length * _width; i++)
 	{
 		// to spawn an xcom soldier, there has to be a tile, with a floor, with the starting point attribute and no object in the way
-		if (_save->getTiles()[i] && _save->getTiles()[i]->getTerrainObject(0) && _save->getTiles()[i]->getTerrainObject(0)->getSpecialType() == START_POINT && !_save->getTiles()[i]->getTerrainObject(3))
+		if (_save->getTiles()[i] && _save->getTiles()[i]->getTerrainObject(O_FLOOR) && _save->getTiles()[i]->getTerrainObject(O_FLOOR)->getSpecialType() == START_POINT && !_save->getTiles()[i]->getTerrainObject(O_OBJECT))
 		{
 			_save->getTileCoords(i, &x, &y, &z);
 			pos = Position(x, y, z);
 			if (_save->selectUnit(pos) == 0)
 			{
 				unit->setPosition(pos);
+				_save->getTiles()[i]->setUnit(unit);
 				break;
 			}
 		}
@@ -240,6 +263,8 @@ void BattlescapeGenerator::addAlien(RuleUnitSprite *rules, NodeRank rank, const 
 	BattleUnit *unit = new BattleUnit(rules, FACTION_HOSTILE);
 	Node *node;
 	bool bFound = false;
+	unit->setId(_unitCount++);
+
 
 	// find a place to spawn, going from highest priority to lowest
 	// some randomness is added
@@ -254,6 +279,7 @@ void BattlescapeGenerator::addAlien(RuleUnitSprite *rules, NodeRank rank, const 
 				&& (RNG::generate(0,2) == 1))
 			{
 				unit->setPosition(node->getPosition());
+				_save->getTile(node->getPosition())->setUnit(unit);
 				bFound = true;
 			}
 		}
@@ -272,6 +298,7 @@ void BattlescapeGenerator::addAlien(RuleUnitSprite *rules, NodeRank rank, const 
 				)
 			{
 				unit->setPosition(node->getPosition());
+				_save->getTile(node->getPosition())->setUnit(unit);
 				bFound = true;
 				break;
 			}
@@ -292,7 +319,6 @@ void BattlescapeGenerator::addItem(Item *item)
 	BattleItem *bi = new BattleItem(item);
 
 	// todo: define position
-
 	_save->getItems()->push_back(bi);
 }
 
@@ -313,7 +339,6 @@ void BattlescapeGenerator::generateMap(ResourcePack *res)
 	MapBlock* dummy = new MapBlock(_terrain, "dummy", 0, 0, false);
 	MapBlock* craftMap = 0;
 	MapBlock* ufoMap = 0;
-
 
 	for (int i = 0; i < 10; i++)
 	{
@@ -451,7 +476,7 @@ void BattlescapeGenerator::generateMap(ResourcePack *res)
 
 	if (_craft != 0)
 	{
-		((XcomResourcePack*)res)->loadMAP(craftMap, craftX * 10, craftY * 10, _save, _craft->getRules()->getBattlescapeTerrainData());
+		((XcomResourcePack*)res)->loadMAP(craftMap, craftX * 10, craftY * 10, _save, _craft->getRules()->getBattlescapeTerrainData(), true);
 		((XcomResourcePack*)res)->loadRMP(craftMap, craftX * 10, craftY * 10, _save);
 	}
 
@@ -512,13 +537,23 @@ void BattlescapeGenerator::linkTilesWithTerrainObjects(ResourcePack *res)
 		for (std::vector<TerrainObject*>::iterator j = res->getTerrainObjectSet(mdf->getName())->getTerrainObjects()->begin(); j != res->getTerrainObjectSet(mdf->getName())->getTerrainObjects()->end(); j++)
 		{
 			tob = *j;
-			altObject = res->getTerrainObjectSet(mdf->getName())->getTerrainObjects()->at(tob->getAltMCD(0));
-			tob->setAltObject(altObject, 0);
-			altObject = res->getTerrainObjectSet(mdf->getName())->getTerrainObjects()->at(tob->getAltMCD(1));
-			tob->setAltObject(altObject, 1);
+			if (tob->getAltMCD(0) == 0 && tob->getObjectType() == O_FLOOR)
+			{
+				altObject = res->getTerrainObjectSet("BLANKS.MCD")->getTerrainObjects()->at(1);
+				tob->setAltObject(altObject, 0);
+			}
+			else if (tob->getAltMCD(0))
+			{
+				altObject = res->getTerrainObjectSet(mdf->getName())->getTerrainObjects()->at(tob->getAltMCD(0));
+				tob->setAltObject(altObject, 0);
+			}
+			if (tob->getAltMCD(1))
+			{
+				altObject = res->getTerrainObjectSet(mdf->getName())->getTerrainObjects()->at(tob->getAltMCD(1));
+				tob->setAltObject(altObject, 1);
+			}
 		}
 	}
-
 }
 
 

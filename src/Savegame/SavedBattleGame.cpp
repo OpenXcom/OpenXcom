@@ -23,6 +23,7 @@
 #include "BattleItem.h"
 #include "Node.h"
 #include "../Battlescape/Pathfinding.h"
+#include "../Battlescape/TerrainModifier.h"
 #include "../Battlescape/Position.h"
 
 namespace OpenXcom
@@ -63,6 +64,7 @@ SavedBattleGame::~SavedBattleGame()
 	}
 
 	delete _pathfinding;
+	delete _terrainModifier;
 }
 
 /** 
@@ -87,6 +89,7 @@ void SavedBattleGame::initMap(int width, int length, int height)
 	_height = height;
 	_tiles = new Tile*[_height * _length * _width];
 	_pathfinding = new Pathfinding(this);
+	_terrainModifier = new TerrainModifier(this);
 }
 
 /** 
@@ -105,6 +108,24 @@ void SavedBattleGame::setMissionType(MissionType missionType)
 MissionType SavedBattleGame::getMissionType() const
 {
 	return _missionType;
+}
+
+/** 
+ * Sets the global shade.
+ * @param shade
+ */
+void SavedBattleGame::setGlobalShade(int shade)
+{
+	_globalShade = shade;
+}
+
+/** 
+ * Gets the global shade.
+ * @return int
+ */
+int SavedBattleGame::getGlobalShade() const
+{
+	return _globalShade;
 }
 
 /** 
@@ -170,9 +191,6 @@ Tile *SavedBattleGame::getTile(const Position& pos)
 		|| pos.x >= _width || pos.y >= _length || pos.z >= _height)
 		return 0;
 
-	if (getTileIndex(pos) > _height * _length * _width)
-		return 0;
-
 	return _tiles[getTileIndex(pos)];
 }
 
@@ -187,7 +205,7 @@ BattleUnit *SavedBattleGame::getSelectedUnit()
 
 /**
  * Sets the currently selected unit.
- * @param soldier pointer to BattleUnit.
+ * @param unit pointer to BattleUnit.
  */
 void SavedBattleGame::setSelectedUnit(BattleUnit *unit)
 {
@@ -200,30 +218,28 @@ void SavedBattleGame::setSelectedUnit(BattleUnit *unit)
  */
 BattleUnit *SavedBattleGame::selectNextPlayerUnit()
 {
+	std::vector<BattleUnit*>::iterator i = _units.begin();
+	bool bNext = false;
 
-	for (std::vector<BattleUnit*>::iterator i = _units.begin(); i != _units.end(); i++)
+	do
 	{
+		if (bNext && (*i)->getFaction() == FACTION_PLAYER)
+		{
+			break;
+		}
 		if ((*i) == _selectedUnit)
 		{
-			i++;
-			if (i == _units.end())
-			{
-				if ((*_units.begin())->getFaction() == FACTION_PLAYER)
-				{
-					_selectedUnit = (*_units.begin());
-				}
-				break;
-			}
-			else
-			{
-				if ((*i)->getFaction() == FACTION_PLAYER)
-				{
-					_selectedUnit =  *i;
-					break;
-				}
-			}
+			bNext = true;
+		}
+		i++;
+		if (i == _units.end())
+		{
+			i = _units.begin();
 		}
 	}
+	while (true);
+
+	_selectedUnit = (*i);
 
 	return _selectedUnit;
 }
@@ -283,6 +299,15 @@ std::vector<BattleItem*> *SavedBattleGame::getItems()
 Pathfinding *SavedBattleGame::getPathfinding()
 {
 	return _pathfinding;
+}
+
+/**
+ * Get the terrain modifier object.
+ * @return pointer to the terrain modifier object
+ */
+TerrainModifier *SavedBattleGame::getTerrainModifier()
+{
+	return _terrainModifier;
 }
 
 }

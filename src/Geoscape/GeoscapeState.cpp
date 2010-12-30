@@ -61,6 +61,8 @@
 #include "LowFuelState.h"
 #include "MultipleTargetsState.h"
 #include "ConfirmLandingState.h"
+#include "../Battlescape/BattlescapeState.h"
+#include "../Battlescape/BattlescapeGenerator.h"
 
 namespace OpenXcom
 {
@@ -838,7 +840,18 @@ void GeoscapeState::btnGraphsClick(Action *action)
  */
 void GeoscapeState::btnUfopaediaClick(Action *action)
 {
-
+	/* Daiky: uncomment this bit to start a terror mission */
+	/*
+	_game->getRuleset()->newBattleSave(_game->getSavedGame());
+	BattlescapeGenerator *bgen = new BattlescapeGenerator(_game);
+	bgen->setMissionType(MISS_TERROR);
+	bgen->setWorldTexture(1);
+	bgen->setWorldShade(0);
+	bgen->setCraft(_game->getSavedGame()->getBases()->at(0)->getCrafts()->at(0));
+	bgen->run();
+	delete bgen;
+	_game->pushState(new BattlescapeState(_game));
+	*/
 }
 
 /**

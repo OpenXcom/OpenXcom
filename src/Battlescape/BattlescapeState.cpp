@@ -19,6 +19,7 @@
 #include "Map.h"
 #include "BattlescapeState.h"
 #include "Pathfinding.h"
+#include "TerrainModifier.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Game.h"
 #include "../Engine/Music.h"
@@ -149,8 +150,8 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	_game->getResourcePack()->getSurface("ICONS.PCK")->blit(_icons);
 	
 	_battleGame = _game->getSavedGame()->getBattleGame();
-	_map->setSavedGame(_battleGame, _game);
 	_map->setResourcePack(_game->getResourcePack());
+	_map->setSavedGame(_battleGame, _game);
 	_map->init();
 	_map->onMouseClick((ActionHandler)&BattlescapeState::mapClick);
 
@@ -163,7 +164,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	_btnNextSoldier->onMouseClick((ActionHandler)&BattlescapeState::btnNextSoldierClick);
 	_btnCenter->onMouseClick((ActionHandler)&BattlescapeState::btnCenterClick);
 	
-	_txtName->setColor(Palette::blockOffset(8));
+	_txtName->setColor(Palette::blockOffset(13));
 	_numTimeUnits->setColor(Palette::blockOffset(4));
 	_numEnergy->setColor(Palette::blockOffset(1));
 	_numHealth->setColor(Palette::blockOffset(2));
@@ -217,6 +218,14 @@ BattlescapeState::~BattlescapeState()
 	delete _bulletTimer;
 }
 
+
+void BattlescapeState::init()
+{
+	_map->focus();
+	_map->cacheUnits();
+	_map->draw();
+}
+
 /**
   * think
   */
@@ -236,6 +245,9 @@ void BattlescapeState::mapClick(Action *action)
 {
 	// don't handle mouseclicks below 140, because they are in the buttons area (it overlaps with map surface)
 	if (action->getDetails()->motion.y/action->getYScale() > BUTTONS_AREA) return;
+
+	// don't accept clicks if there is no cursor
+	if (_map->isCursorHidden()) return;
 
 	Position pos;
 	_map->getSelectorPosition(&pos);
@@ -261,7 +273,6 @@ void BattlescapeState::mapClick(Action *action)
 			unitOpensDoor(unit);
 		}
 	}
-
 	
 }
 
@@ -389,7 +400,7 @@ void BattlescapeState::btnAbortClick(Action *action)
 
 /**
  * Updates soldier name/rank/tu/energy/health/morale.
- * @param soldier Pointer to current unit.
+ * @param unit Pointer to current unit.
  */
 void BattlescapeState::updateSoldierInfo(BattleUnit *unit)
 {
@@ -423,12 +434,6 @@ void BattlescapeState::moveUnit()
 	Pathfinding *pf = _battleGame->getPathfinding();
 	static bool moved = false;
 
-	// if the UFO-door-opening-animation is running, don't allow any unit movement
-	if (_map->isOpeningUFODoor())
-	{
-		return;
-	}
-
 	if (unit->getStatus() == STATUS_WALKING)
 	{
 		unit->keepWalking();
@@ -440,18 +445,30 @@ void BattlescapeState::moveUnit()
 			if (tile->getFootstepSound())
 				_game->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(22 + (tile->getFootstepSound()*2))->play();
 		}
+		// at walking phase 4 the unit moved from one tile to the other
+		if (unit->getWalkingPhase() == 4)
+		{
+			_battleGame->getTile(unit->getLastPosition())->setUnit(0);
+			_battleGame->getTile(unit->getPosition())->setUnit(unit);
+		}
+		// play footstep sound every step = two steps between two tiles
 		if (unit->getWalkingPhase() == 7)
 		{
 			Tile *tile = _battleGame->getTile(unit->getPosition());
 			if (tile->getFootstepSound())
 				_game->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(23 + (tile->getFootstepSound()*2))->play();
+			tile->setUnit(unit); // unit is now on this tile
 		}
+
+		_map->cacheUnits();
 		_map->draw();
 	}
 
 	if (unit->getStatus() == STATUS_TURNING)
 	{
 		unit->turn();
+		_battleGame->getTerrainModifier()->calculateLighting();
+		_map->cacheUnits();
 		_map->draw();
 	}
 
@@ -461,6 +478,7 @@ void BattlescapeState::moveUnit()
 		{
 			moved = false;
 			_map->setViewHeight(unit->getPosition().z);
+			_battleGame->getTerrainModifier()->calculateLighting();
 		}
 		int dir = pf->getStartDirection();
 		if (dir != -1)
@@ -474,10 +492,9 @@ void BattlescapeState::moveUnit()
 			{
 				// ok, we are looking the right way
 				// first open doors (if any)
-				unitOpensDoor(unit);
-				if (_map->isOpeningUFODoor())
+				if (unitOpensDoor(unit))
 				{
-					return; // don't start walking yet, wait for the ufo door to completly open
+					return; // don't start walking yet, wait for the ufo door to open
 				}
 				// now start moving
 				dir = pf->dequeuePath();
@@ -495,6 +512,7 @@ void BattlescapeState::moveUnit()
 			_game->getCursor()->setVisible(true);
 		}
 	}
+
 }
 
 /**
@@ -502,7 +520,7 @@ void BattlescapeState::moveUnit()
  * Normal door changes the tile objects. We need to make a sound 3 here.
  * Ufo door updates the ufodooropened flag of the tile. We need to make a sound 20 or 21 and start the animation.
  */
-void BattlescapeState::unitOpensDoor(BattleUnit *unit)
+bool BattlescapeState::unitOpensDoor(BattleUnit *unit)
 {
 	int door = -1;
 	Tile *tile = _battleGame->getTile(unit->getPosition());
@@ -527,12 +545,21 @@ void BattlescapeState::unitOpensDoor(BattleUnit *unit)
 	if (door == 0) //normal door
 	{
 		_game->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(3)->play();
+		_battleGame->getTerrainModifier()->calculateLighting();
+		return true;
 	}
 	if (door == 1) // ufo door
 	{
 		_game->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(RNG::generate(20,21))->play();
-		_map->openUFODoor(tile); // ufo doors are animated
+		_battleGame->getTerrainModifier()->calculateLighting();
+		return true;
 	}
+	if (door == 3) // ufo door opening
+	{
+		return true;
+	}
+
+	return false;
 }
 
 /**

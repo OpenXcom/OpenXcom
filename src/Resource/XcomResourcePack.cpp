@@ -535,21 +535,22 @@ void XcomResourcePack::loadBattlescapeResources(std::string folder)
 
 /**
  * Loads a X-Com format MAP file into the tiles of the battlegame.
- * @param mapblock pointer to MapBlock.
- * @param xoff mapblock offset in X direction
- * @param yoff mapblock offset in Y direction
- * @param save pointer to the current SavedBattleGame
- * @param terrain pointer to the Terrain rule
+ * @param mapblock Pointer to MapBlock.
+ * @param xoff Mapblock offset in X direction.
+ * @param yoff Mapblock offset in Y direction.
+ * @param save Pointer to the current SavedBattleGame.
+ * @param terrain Pointer to the Terrain rule.
+ * @param discovered Whether or not this mapblock is discovered (eg. landingsite of the x-com plane)
  * @return int Height of the loaded mapblock (this is needed for spawpoint calculation...)
  * @sa http://www.ufopaedia.org/index.php?title=MAPS
  * @note Y-axis is in reverse order
  */
-int XcomResourcePack::loadMAP(MapBlock *mapblock, int xoff, int yoff, SavedBattleGame *save, RuleTerrain *terrain)
+int XcomResourcePack::loadMAP(MapBlock *mapblock, int xoff, int yoff, SavedBattleGame *save, RuleTerrain *terrain, bool discovered)
 {
 	int width, length, height;
 	int x = xoff, y = yoff, z = 0;
 	char size[3];
-	char value[4];
+	unsigned char value[4];
 	std::stringstream filename;
 	filename << _folder << "MAPS/" << mapblock->getName() << ".MAP";
 	std::string mapDataFileName;
@@ -574,7 +575,7 @@ int XcomResourcePack::loadMAP(MapBlock *mapblock, int xoff, int yoff, SavedBattl
 	{
 		for (int part = 0; part < 4; part++)
 		{
-			terrainObjectID = (int)value[part];
+			terrainObjectID = (int)((unsigned char)value[part]);
 			if (terrainObjectID>0)
 			{
 				save->getTile(Position(x, y, z))->setName(terrain->getTerrainObjectName(terrainObjectID),part);
@@ -586,6 +587,7 @@ int XcomResourcePack::loadMAP(MapBlock *mapblock, int xoff, int yoff, SavedBattl
 				save->getTile(Position(x, y, z))->setName("",part);
 			}
 		}
+		save->getTile(Position(x, y, z))->setDiscovered(discovered);
 
 		x++;
 

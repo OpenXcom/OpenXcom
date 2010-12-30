@@ -41,13 +41,15 @@ class Tile
 protected:
 	std::string _name[4];
 	TerrainObject *_terrainObjects[4];
+	int _currentFrame[4];
 	bool _discovered; // tile has been seen in the past
 	std::vector<BattleUnit *> _visibleByUnit; // units this tile is now seen by 
-	int _light, _smoke, _fire;
+	int _shadeSun;
+	int _light, _lastLight, _smoke, _fire, _sessionID;
 	Position _pos;
+	bool _cached;
 	BattleUnit *_unit; // unit on this tile
 	std::vector<BattleItem *> _inventory; // items on this tile
-	bool _ufoDoorOpen;
 
 public:
 	/// Creates a tile.
@@ -77,9 +79,30 @@ public:
 	/// Open a door, returns the ID, 0(normal), 1(ufo) or -1 if no door opened.
 	int openDoor(int part);
 	/// Check if ufo door is open.
-	bool isUfoDoorOpen();
-
-
+	bool isUfoDoorOpen(int part);
+	/// Set the cached flag.
+	void setCached(bool cached);
+	/// Check if tile is cached.
+	bool isCached();
+	void setDiscovered(bool flag);
+	bool isDiscovered();
+	/// Set the shade amount.
+	void setShadeSun(int shade);
+	/// Change a light amount (+ ligther / - dimmer).
+	void resetLight();
+	void addLight(int light, int sessionID);
+	void isSeenBy(BattleUnit *unit, int sessionID);
+	void setLight();
+	/// Get the shade amount.
+	int getShade();
+	/// Destroy a tile part.
+	void destroy(int part);
+	/// Animated the tile parts.
+	void animate();
+	/// Get surfaces.
+	Surface *getSprite(int part);
+	void setUnit(BattleUnit *unit);
+	BattleUnit *getUnit();
 };
 
 }
