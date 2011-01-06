@@ -39,6 +39,27 @@ CraftWeapon::~CraftWeapon()
 }
 
 /**
+ * Loads the craft weapon from a YAML file.
+ * @param node YAML node.
+ */
+void CraftWeapon::load(const YAML::Node &node)
+{
+	node["ammo"] >> _ammo;
+}
+
+/**
+ * Saves the base to a YAML file.
+ * @param out YAML emitter.
+ */
+void CraftWeapon::save(YAML::Emitter &out) const
+{
+	out << YAML::BeginMap;
+	out << YAML::Key << "type" << YAML::Value << _rules->getType();
+	out << YAML::Key << "ammo" << YAML::Value << _ammo;
+	out << YAML::EndMap;
+}
+
+/**
  * Returns the ruleset for the craft weapon's type.
  * @return Pointer to ruleset.
  */

@@ -39,6 +39,30 @@ City::~City()
 }
 
 /**
+ * Loads the city from a YAML file.
+ * @param node YAML node.
+ */
+void City::load(const YAML::Node &node)
+{
+	node["name"] >> _name;
+	node["lon"] >> _lon;
+	node["lat"] >> _lat;
+}
+
+/**
+ * Saves the city to a YAML file.
+ * @param out YAML emitter.
+ */
+void City::save(YAML::Emitter &out) const
+{
+	out << YAML::BeginMap;
+	out << YAML::Key << "name" << YAML::Value << _name;
+	out << YAML::Key << "lon" << YAML::Value << _lon;
+	out << YAML::Key << "lat" << YAML::Value << _lat;
+	out << YAML::EndMap;
+}
+
+/**
  * Returns the name of the city.
  * @return City name.
  */

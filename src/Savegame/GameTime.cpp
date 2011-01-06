@@ -43,6 +43,39 @@ GameTime::~GameTime()
 }
 
 /**
+ * Loads the time from a YAML file.
+ * @param node YAML node.
+ */
+void GameTime::load(const YAML::Node &node)
+{
+	node["second"] >> _second;
+	node["second"] >> _second;
+	node["minute"] >> _minute;
+	node["hour"] >> _hour;
+	node["weekday"] >> _weekday;
+	node["day"] >> _day;
+	node["month"] >> _month;
+	node["year"] >> _year;
+}
+
+/**
+ * Saves the time to a YAML file.
+ * @param out YAML emitter.
+ */
+void GameTime::save(YAML::Emitter &out) const
+{
+	out << YAML::BeginMap;
+	out << YAML::Key << "second" << YAML::Value << _second;
+	out << YAML::Key << "minute" << YAML::Value << _minute;
+	out << YAML::Key << "hour" << YAML::Value << _hour;
+	out << YAML::Key << "weekday" << YAML::Value << _weekday;
+	out << YAML::Key << "day" << YAML::Value << _day;
+	out << YAML::Key << "month" << YAML::Value << _month;
+	out << YAML::Key << "year" << YAML::Value << _year;
+	out << YAML::EndMap;
+}
+
+/**
  * Advances the ingame time by 5 seconds, automatically correcting
  * the other components when necessary and sending out a trigger when
  * a certain time span has elapsed for time-dependent events.

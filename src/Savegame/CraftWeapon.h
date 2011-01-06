@@ -20,6 +20,7 @@
 #define OPENXCOM_CRAFTWEAPON_H
 
 #include <string>
+#include "yaml.h"
 
 namespace OpenXcom
 {
@@ -41,6 +42,10 @@ public:
 	CraftWeapon(RuleCraftWeapon *rules, int ammo);
 	/// Cleans up the craft weapon.
 	~CraftWeapon();
+	/// Loads the craft weapon from YAML.
+	void load(const YAML::Node& node);
+	/// Saves the craft weapon to YAML.
+	void save(YAML::Emitter& out) const;
 	/// Gets the craft weapon's ruleset.
 	RuleCraftWeapon *const getRules() const;
 	/// Gets the craft weapon's ammo

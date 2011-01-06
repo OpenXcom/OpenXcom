@@ -1303,6 +1303,7 @@ void XcomRuleset::endBattle(SavedGame *save)
 			if ((*j)->isInBattlescape())
 			{
 				(*j)->returnToBase();
+				(*j)->setLowFuel(true);
 				(*j)->setInBattlescape(false);
 			}
 		}

@@ -21,6 +21,7 @@
 #include <sstream>
 #include "../Engine/Language.h"
 #include "../Ruleset/RuleUfo.h"
+#include "../Savegame/Waypoint.h"
 
 namespace OpenXcom
 {
@@ -39,6 +40,58 @@ Ufo::Ufo(RuleUfo *rules) : MovingTarget(), _rules(rules), _id(0), _damage(0), _a
 Ufo::~Ufo()
 {
 	delete _dest;
+}
+
+/**
+ * Loads the UFO from a YAML file.
+ * @param node YAML node.
+ */
+void Ufo::load(const YAML::Node &node)
+{
+	node["id"] >> _id;
+	node["damage"] >> _damage;
+	node["altitude"] >> _altitude;
+	node["direction"] >> _direction;
+	node["detected"] >> _detected;
+	node["daysCrashed"] >> _daysCrashed;
+	node["inBattlescape"] >> _inBattlescape;
+
+	double lon, lat;
+	node["dest"]["lon"] >> lon;
+	node["dest"]["lat"] >> lat;
+	_dest = new Waypoint();
+	_dest->setLongitude(lon);
+	_dest->setLatitude(lat);
+}
+
+/**
+ * Saves the UFO to a YAML file.
+ * @param out YAML emitter.
+ */
+void Ufo::save(YAML::Emitter &out) const
+{
+	MovingTarget::save(out);
+	out << YAML::Key << "type" << YAML::Value << _rules->getType();
+	out << YAML::Key << "id" << YAML::Value << _id;
+	out << YAML::Key << "damage" << YAML::Value << _damage;
+	out << YAML::Key << "altitude" << YAML::Value << _altitude;
+	out << YAML::Key << "direction" << YAML::Value << _direction;
+	out << YAML::Key << "detected" << YAML::Value << _detected;
+	out << YAML::Key << "daysCrashed" << YAML::Value << _daysCrashed;
+	out << YAML::Key << "inBattlescape" << YAML::Value << _inBattlescape;
+	out << YAML::EndMap;
+}
+
+/**
+ * Saves the UFO's unique identifiers to a YAML file.
+ * @param out YAML emitter.
+ */
+void Ufo::saveId(YAML::Emitter &out) const
+{
+	Target::saveId(out);
+	out << YAML::Key << "type" << YAML::Value << "STR_UFO";
+	out << YAML::Key << "id" << YAML::Value << _id;
+	out << YAML::EndMap;
 }
 
 /**
@@ -243,7 +296,7 @@ void Ufo::think()
 	{
 		setLongitude(_lon + _speedLon);
 		setLatitude(_lat + _speedLat);
-		if (finishedRoute())
+		if (_dest != 0 && finishedRoute())
 		{
 			_lon = _dest->getLongitude();
 			_lat = _dest->getLatitude();

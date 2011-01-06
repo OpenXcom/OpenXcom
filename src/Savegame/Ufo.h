@@ -21,7 +21,7 @@
 
 #include "MovingTarget.h"
 #include <string>
-#include <string>
+#include "yaml.h"
 
 namespace OpenXcom
 {
@@ -51,6 +51,12 @@ public:
 	Ufo(RuleUfo *rules);
 	/// Cleans up the UFO.
 	~Ufo();
+	/// Loads the UFO from YAML.
+	void load(const YAML::Node& node);
+	/// Saves the UFO to YAML.
+	void save(YAML::Emitter& out) const;
+	/// Saves the UFO's ID to YAML.
+	void saveId(YAML::Emitter& out) const;
 	/// Gets the UFO's ruleset.
 	RuleUfo *const getRules() const;
 	/// Gets the UFO's ID.

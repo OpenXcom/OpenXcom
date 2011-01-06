@@ -21,6 +21,7 @@
 
 #include "Target.h"
 #include <string>
+#include "yaml.h"
 
 namespace OpenXcom
 {
@@ -37,6 +38,12 @@ public:
 	Waypoint();
 	/// Cleans up the waypoint.
 	~Waypoint();
+	/// Loads the waypoint from YAML.
+	void load(const YAML::Node& node);
+	/// Saves the waypoint to YAML.
+	void save(YAML::Emitter& out) const;
+	/// Saves the waypoint's ID to YAML.
+	void saveId(YAML::Emitter& out) const;
 	/// Gets the waypoint's ID.
 	int getId() const;
 	/// Sets the waypoint's ID.

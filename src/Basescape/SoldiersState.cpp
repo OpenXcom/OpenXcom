@@ -127,6 +127,7 @@ void SoldiersState::init()
 		}
 		row++;
 	}
+	_lstSoldiers->draw();
 }
 
 /**

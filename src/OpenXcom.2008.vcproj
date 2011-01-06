@@ -181,98 +181,6 @@
 	</References>
 	<Files>
 		<Filter
-			Name="Interface"
-			>
-			<File
-				RelativePath=".\Interface\ArrowButton.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Interface\ArrowButton.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Interface\Bar.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Interface\Bar.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Interface\Cursor.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Interface\Cursor.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Interface\FpsCounter.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Interface\FpsCounter.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Interface\ImageButton.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Interface\ImageButton.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Interface\NumberText.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Interface\NumberText.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Interface\Text.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Interface\Text.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Interface\TextButton.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Interface\TextButton.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Interface\TextEdit.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Interface\TextEdit.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Interface\TextList.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Interface\TextList.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Interface\Window.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Interface\Window.h"
-				>
-			</File>
-		</Filter>
-		<Filter
 			Name="Engine"
 			>
 			<File
@@ -409,6 +317,98 @@
 			</File>
 			<File
 				RelativePath=".\Engine\Timer.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="Interface"
+			>
+			<File
+				RelativePath=".\Interface\ArrowButton.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Interface\ArrowButton.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Interface\Bar.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Interface\Bar.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Interface\Cursor.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Interface\Cursor.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Interface\FpsCounter.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Interface\FpsCounter.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Interface\ImageButton.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Interface\ImageButton.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Interface\NumberText.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Interface\NumberText.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Interface\Text.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Interface\Text.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Interface\TextButton.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Interface\TextButton.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Interface\TextEdit.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Interface\TextEdit.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Interface\TextList.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Interface\TextList.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Interface\Window.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Interface\Window.h"
 				>
 			</File>
 		</Filter>
@@ -587,14 +587,7 @@
 		<Filter
 			Name="Battlescape"
 			>
-			<File
-				RelativePath=".\Battlescape\BattlescapeState.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Battlescape\BattlescapeState.h"
-				>
-			</File>
+			
 			<File
 				RelativePath=".\Battlescape\BattlescapeGenerator.cpp"
 				>
@@ -602,7 +595,15 @@
 			<File
 				RelativePath=".\Battlescape\BattlescapeGenerator.h"
 				>
-			</File>			
+			</File>	
+			<File
+				RelativePath=".\Battlescape\BattlescapeState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\BattlescapeState.h"
+				>
+			</File>		
 			<File
 				RelativePath=".\Battlescape\BriefingCrashState.cpp"
 				>

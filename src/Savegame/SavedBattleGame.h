@@ -20,6 +20,7 @@
 #define OPENXCOM_SAVEDBATTLEGAME_H
 
 #include <vector>
+#include "yaml.h"
 
 namespace OpenXcom
 {
@@ -67,6 +68,10 @@ public:
 	SavedBattleGame();
 	/// Cleans up the saved game.
 	~SavedBattleGame();
+	/// Loads a saved battle game from YAML.
+	void load(const YAML::Node& node);
+	/// Saves a saved battle game to YAML.
+	void save(YAML::Emitter& out) const;
 	/// Set the dimensions of the map and initializes it.
 	void initMap(int width, int length, int height);
 	/// Set the mission type.

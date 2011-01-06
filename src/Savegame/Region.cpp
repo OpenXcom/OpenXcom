@@ -42,6 +42,52 @@ Region::~Region()
 }
 
 /**
+ * Loads the region from a YAML file.
+ * @param node YAML node.
+ */
+void Region::load(const YAML::Node &node)
+{
+	unsigned int size = 0;
+
+	node["cost"] >> _cost;
+	node["lonMin"] >> _lonMin;
+	node["lonMax"] >> _lonMax;
+	node["latMin"] >> _latMin;
+	node["latMax"] >> _latMax;
+
+	size = node["cities"].size();
+	for (unsigned i = 0; i < size; i++)
+	{
+		City *c = new City("", 0, 0);
+		c->load(node["cities"][i]);
+		_cities.push_back(c);
+	}
+}
+
+/**
+ * Saves the region to a YAML file.
+ * @param out YAML emitter.
+ */
+void Region::save(YAML::Emitter &out, std::string name) const
+{
+	out << YAML::BeginMap;
+	out << YAML::Key << "name" << YAML::Value << name;
+	out << YAML::Key << "cost" << YAML::Value << _cost;
+	out << YAML::Key << "lonMin" << YAML::Value << YAML::Flow << _lonMin;
+	out << YAML::Key << "lonMax" << YAML::Value << YAML::Flow << _lonMax;
+	out << YAML::Key << "latMin" << YAML::Value << YAML::Flow << _latMin;
+	out << YAML::Key << "latMax" << YAML::Value << YAML::Flow << _latMax;
+	out << YAML::Key << "cities" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::vector<City*>::const_iterator i = _cities.begin(); i != _cities.end(); i++)
+	{
+		(*i)->save(out);
+	}
+	out << YAML::EndSeq;
+	out << YAML::EndMap;
+}
+
+/**
  * Returns the cost of building a base inside this region.
  * @return Construction cost.
  */

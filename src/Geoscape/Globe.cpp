@@ -827,7 +827,7 @@ void Globe::fillLongitudeSegments(double startLon, double endLon, int colourShif
 	
 	if (polyPointsX.size() > 0)
 	{
-		for (int i = 0; i < polyPointsX.size(); i++)
+		for (unsigned int i = 0; i < polyPointsX.size(); i++)
 		{
 			dx[i] = polyPointsX.at(i);
 			dy[i] = polyPointsY.at(i);

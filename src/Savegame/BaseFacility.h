@@ -19,6 +19,8 @@
 #ifndef OPENXCOM_BASEFACILITY_H
 #define OPENXCOM_BASEFACILITY_H
 
+#include "yaml.h"
+
 namespace OpenXcom
 {
 
@@ -42,6 +44,10 @@ public:
 	BaseFacility(RuleBaseFacility *rules, int x, int y);
 	/// Cleans up the base facility.
 	~BaseFacility();
+	/// Loads the base facility from YAML.
+	void load(const YAML::Node& node);
+	/// Saves the base facility to YAML.
+	void save(YAML::Emitter& out) const;
 	/// Gets the facility's ruleset.
 	RuleBaseFacility *const getRules() const;
 	/// Gets the facility's X position.

@@ -303,8 +303,6 @@ GeoscapeState::~GeoscapeState()
  */
 void GeoscapeState::init()
 {
-	//_game->getSavedGame()->save("test");
-
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
 
@@ -312,6 +310,7 @@ void GeoscapeState::init()
 
 	_globe->onMouseClick((ActionHandler)&GeoscapeState::globeClick);
 	_globe->focus();
+	_globe->setSavedGame(_game->getSavedGame());
 	_globe->draw();
 
 	// Set music if it's not already playing
@@ -822,7 +821,14 @@ void GeoscapeState::btnInterceptClick(Action *action)
  */
 void GeoscapeState::btnBasesClick(Action *action)
 {
-	_game->pushState(new BasescapeState(_game, _game->getSavedGame()->getBases()->front(), _globe));
+	if (_game->getSavedGame()->getBases()->size() > 0)
+	{
+		_game->pushState(new BasescapeState(_game, _game->getSavedGame()->getBases()->front(), _globe));
+	}
+	else
+	{
+		_game->pushState(new BasescapeState(_game, 0, _globe));
+	}
 }
 
 /**

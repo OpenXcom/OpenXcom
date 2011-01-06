@@ -24,6 +24,7 @@
 #include "../Ruleset/RuleCraft.h"
 #include "CraftWeapon.h"
 #include "../Ruleset/RuleCraftWeapon.h"
+#include "../Ruleset/Ruleset.h"
 #include "Item.h"
 #include "Soldier.h"
 #include "Base.h"
@@ -32,6 +33,16 @@ namespace OpenXcom
 {
 
 #define CRAFT_RANGE 600
+
+/**
+ * Initializes a craft of the specified type with no ID.
+ * @param rules Pointer to ruleset.
+ * @param base Pointer to base of origin.
+ */
+Craft::Craft(RuleCraft *rules, Base *base) : MovingTarget(), _rules(rules), _base(base), _id(0), _fuel(0), _damage(0), _weapons(), _items(), _status("STR_READY"), _lowFuel(false), _inBattlescape(false)
+{
+
+}
 
 /**
  * Initializes a craft of the specified type and
@@ -63,6 +74,105 @@ Craft::~Craft()
 	{
 		delete i->second;
 	}
+}
+
+/**
+ * Loads the craft from a YAML file.
+ * @param node YAML node.
+ */
+void Craft::load(const YAML::Node &node, Ruleset *rule)
+{
+	unsigned int size = 0;
+
+	MovingTarget::load(node);
+	node["id"] >> _id;
+	node["fuel"] >> _fuel;
+	node["damage"] >> _damage;
+
+	size = node["weapons"].size();
+	for (unsigned i = 0; i < size; i++)
+	{
+		std::string type;
+		node["weapons"][i]["type"] >> type;
+		if (type == "0")
+		{
+			_weapons.push_back(0);
+		}
+		else
+		{
+			CraftWeapon *w = new CraftWeapon(rule->getCraftWeapon(type), 0);
+			w->load(node["weapons"][i]);
+			_weapons.push_back(w);
+		}
+	}
+
+	size = node["items"].size();
+	for (unsigned i = 0; i < size; i++)
+	{
+		int qty;
+		node["items"][i]["qty"] >> qty;
+		std::string type;
+		node["items"][i]["type"] >> type;
+		Item *it = new Item(rule->getItem(type), qty);
+		it->load(node["items"][i]);
+		_items.insert(std::pair<std::string, Item*>(type, it));
+	}
+
+	node["status"] >> _status;
+	node["lowFuel"] >> _lowFuel;
+	node["inBattlescape"] >> _inBattlescape;
+}
+
+/**
+ * Saves the craft to a YAML file.
+ * @param out YAML emitter.
+ */
+void Craft::save(YAML::Emitter &out) const
+{
+	MovingTarget::save(out);
+	out << YAML::Key << "type" << YAML::Value << _rules->getType();
+	out << YAML::Key << "id" << YAML::Value << _id;
+	out << YAML::Key << "fuel" << YAML::Value << _fuel;
+	out << YAML::Key << "damage" << YAML::Value << _damage;
+	out << YAML::Key << "weapons" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::vector<CraftWeapon*>::const_iterator i = _weapons.begin(); i != _weapons.end(); i++)
+	{
+		if (*i != 0)
+		{
+			(*i)->save(out);
+		}
+		else
+		{
+			out << YAML::BeginMap;
+			out << YAML::Key << "type" << YAML::Value << "0";
+			out << YAML::EndMap;
+		}
+	}
+	out << YAML::EndSeq;
+	out << YAML::Key << "items" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::map<std::string, Item*>::const_iterator i = _items.begin(); i != _items.end(); i++)
+	{
+		(*i).second->save(out);
+	}
+	out << YAML::EndSeq;
+	out << YAML::Key << "status" << YAML::Value << _status;
+	out << YAML::Key << "lowFuel" << YAML::Value << _lowFuel;
+	out << YAML::Key << "inBattlescape" << YAML::Value << _inBattlescape;
+	out << YAML::EndMap;
+}
+
+/**
+ * Saves the craft's unique identifiers to a YAML file.
+ * @param out YAML emitter.
+ */
+void Craft::saveId(YAML::Emitter &out) const
+{
+	Target::saveId(out);
+	out << YAML::Key << "type" << YAML::Value << _rules->getType();
+	out << YAML::Key << "id" << YAML::Value << _id;
+	out << YAML::EndMap;
 }
 
 /**
@@ -373,24 +483,36 @@ void Craft::think()
 	}
 	setLongitude(_lon + _speedLon);
 	setLatitude(_lat + _speedLat);
-	if (finishedRoute())
+	if (_dest != 0 && finishedRoute())
 	{
 		_lon = _dest->getLongitude();
 		_lat = _dest->getLatitude();
 
 		if (_dest == (Target*)_base)
 		{
+			int available = 0, full = 0;
+			for (std::vector<CraftWeapon*>::iterator i = _weapons.begin(); i != _weapons.end(); i++)
+			{
+				if ((*i) == 0)
+					continue;
+				available++;
+				if ((*i)->getAmmo() >= (*i)->getRules()->getAmmoMax())
+				{
+					full++;
+				}
+			}
+
 			if (_damage > 0)
 			{
 				setStatus("STR_REPAIRS");
 			}
-			else if (_fuel < _rules->getMaxFuel())
+			else if (available != full)
 			{
-				setStatus("STR_REFUELLING");
+				setStatus("STR_REARMING");
 			}
 			else
 			{
-				setStatus("STR_REARMING");
+				setStatus("STR_REFUELLING");
 			}
 			setSpeed(0);
 			setDestination(0);
@@ -436,7 +558,7 @@ void Craft::repair()
 	setDamage(_damage - _rules->getRepairRate());
 	if (_damage <= 0)
 	{
-		_status = "STR_REFUELLING";
+		_status = "STR_REARMING";
 	}
 }
 
@@ -449,7 +571,7 @@ void Craft::refuel()
 	setFuel(_fuel + _rules->getRefuelRate());
 	if (_fuel >= _rules->getMaxFuel())
 	{
-		_status = "STR_REARMING";
+		_status = "STR_READY";
 	}
 }
 
@@ -473,7 +595,7 @@ void Craft::rearm()
 	}
 	if (full == available)
 	{
-		_status = "STR_READY";
+		_status = "STR_REFUELLING";
 	}
 }
 

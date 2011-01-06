@@ -18,17 +18,26 @@
  */
 #include "Soldier.h"
 #include "../Engine/RNG.h"
+#include "../Savegame/Craft.h"
 #include "../Resource/SoldierNamePool.h"
 
 namespace OpenXcom
 {
 
 /**
+ * Initializes a new blank soldier.
+ */
+Soldier::Soldier() : _name(""), _tu(0), _stamina(0), _health(0), _bravery(0), _reactions(0), _firing(0), _throwing(0), _strength(0), _psiStrength(0), _psiSkill(0), _melee(0), _rank(RANK_ROOKIE), _craft(0), _gender(GENDER_MALE), _look(LOOK_BLONDE), _missions(0), _kills(0)
+{
+
+}
+
+/**
  * Initializes a new soldier with random stats and a name
  * pulled from a set of SoldierNamePool's.
  * @param names List of name pools.
  */
-Soldier::Soldier(std::vector<SoldierNamePool*> *names)
+Soldier::Soldier(std::vector<SoldierNamePool*> *names) : _craft(0), _psiSkill(0), _rank(RANK_ROOKIE), _missions(0), _kills(0)
 {
 	_tu = RNG::generate(50, 60);
 	_stamina = RNG::generate(40, 70);
@@ -39,11 +48,7 @@ Soldier::Soldier(std::vector<SoldierNamePool*> *names)
 	_throwing = RNG::generate(50, 80);
 	_strength = RNG::generate(20, 40);
 	_psiStrength = RNG::generate(0, 100);
-	_psiSkill = 0;
 	_melee = RNG::generate(20, 40);
-	_rank = 0;
-	_missions = 0;
-	_kills = 0;
 
 	int gender;
 	_name = names->at(RNG::generate(0, names->size()-1))->genName(&gender);
@@ -56,6 +61,67 @@ Soldier::Soldier(std::vector<SoldierNamePool*> *names)
  */
 Soldier::~Soldier()
 {
+}
+
+/**
+ * Loads the soldier from a YAML file.
+ * @param node YAML node.
+ */
+void Soldier::load(const YAML::Node &node)
+{
+	int a;
+	node["name"] >> _name;
+	node["tu"] >> _tu;
+	node["stamina"] >> _stamina;
+	node["health"] >> _health;
+	node["bravery"] >> _bravery;
+	node["reactions"] >> _reactions;
+	node["firing"] >> _firing;
+	node["throwing"] >> _throwing;
+	node["strength"] >> _strength;
+	node["psiStrength"] >> _psiStrength;
+	node["psiSkill"] >> _psiSkill;
+	node["melee"] >> _melee;
+	node["rank"] >> a;
+	_rank = (SoldierRank)a;
+	node["gender"] >> a;
+	_gender = (SoldierGender)a;
+	node["look"] >> a;
+	_look = (SoldierLook)a;
+	node["missions"] >> _missions;
+	node["kills"] >> _kills;
+}
+
+/**
+ * Saves the soldier to a YAML file.
+ * @param out YAML emitter.
+ */
+void Soldier::save(YAML::Emitter &out) const
+{
+	out << YAML::BeginMap;
+	out << YAML::Key << "name" << YAML::Value << _name;
+	out << YAML::Key << "tu" << YAML::Value << _tu;
+	out << YAML::Key << "stamina" << YAML::Value << _stamina;
+	out << YAML::Key << "health" << YAML::Value << _health;
+	out << YAML::Key << "bravery" << YAML::Value << _bravery;
+	out << YAML::Key << "reactions" << YAML::Value << _reactions;
+	out << YAML::Key << "firing" << YAML::Value << _firing;
+	out << YAML::Key << "throwing" << YAML::Value << _throwing;
+	out << YAML::Key << "strength" << YAML::Value << _strength;
+	out << YAML::Key << "psiStrength" << YAML::Value << _psiStrength;
+	out << YAML::Key << "psiSkill" << YAML::Value << _psiSkill;
+	out << YAML::Key << "melee" << YAML::Value << _melee;
+	out << YAML::Key << "rank" << YAML::Value << _rank;
+	if (_craft != 0)
+	{
+		out << YAML::Key << "craft" << YAML::Value;
+		_craft->saveId(out);
+	}
+	out << YAML::Key << "gender" << YAML::Value << _gender;
+	out << YAML::Key << "look" << YAML::Value << _look;
+	out << YAML::Key << "missions" << YAML::Value << _missions;
+	out << YAML::Key << "kills" << YAML::Value << _kills;
+	out << YAML::EndMap;
 }
 
 /**
@@ -101,7 +167,28 @@ void Soldier::setCraft(Craft *craft)
  */
 std::string Soldier::getRankString() const
 {
-	return (std::string)("STR_ROOKIE" + _rank);
+	switch (_rank)
+	{
+	case RANK_ROOKIE:
+		return "STR_ROOKIE";
+		break;
+	case RANK_SQUADDIE:
+		return "STR_SQUADDIE";
+		break;
+	case RANK_SERGEANT:
+		return "STR_SERGEANT";
+		break;
+	case RANK_CAPTAIN:
+		return "STR_CAPTAIN";
+		break;
+	case RANK_COLONEL:
+		return "STR_COLONEL";
+		break;
+	case RANK_COMMANDER:
+		return "STR_COMMANDER";
+		break;
+	}
+	return "";
 }
 
 /**

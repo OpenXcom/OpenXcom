@@ -24,6 +24,7 @@
 #include <vector>
 #include <map>
 #include <string>
+#include "yaml.h"
 
 namespace OpenXcom
 {
@@ -33,6 +34,8 @@ class Soldier;
 class Craft;
 class Item;
 class Language;
+class Ruleset;
+class SavedGame;
 
 /**
  * Represents a player base on the globe.
@@ -52,6 +55,12 @@ public:
 	Base();
 	/// Cleans up the base.
 	~Base();
+	/// Loads the base from YAML.
+	void load(const YAML::Node& node, Ruleset *rule, SavedGame *save);
+	/// Saves the base to YAML.
+	void save(YAML::Emitter& out) const;
+	/// Saves the base's ID to YAML.
+	void saveId(YAML::Emitter& out) const;
 	/// Gets the base's name.
 	std::string getName(Language* lang = 0) const;
 	/// Sets the base's name.

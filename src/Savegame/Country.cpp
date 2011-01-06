@@ -37,6 +37,33 @@ Country::~Country()
 }
 
 /**
+ * Loads the country from a YAML file.
+ * @param node YAML node.
+ */
+void Country::load(const YAML::Node &node)
+{
+	node["funding"] >> _funding;
+	node["change"] >> _change;
+	node["labelLon"] >> _labelLon;
+	node["labelLat"] >> _labelLat;
+}
+
+/**
+ * Saves the country to a YAML file.
+ * @param out YAML emitter.
+ */
+void Country::save(YAML::Emitter &out, std::string name) const
+{
+	out << YAML::BeginMap;
+	out << YAML::Key << "name" << YAML::Value << name;
+	out << YAML::Key << "funding" << YAML::Value << _funding;
+	out << YAML::Key << "change" << YAML::Value << _change;
+	out << YAML::Key << "labelLon" << YAML::Value << _labelLon;
+	out << YAML::Key << "labelLat" << YAML::Value << _labelLat;
+	out << YAML::EndMap;
+}
+
+/**
  * Returns the country's current monthly funding.
  * @return Monthly funding.
  */

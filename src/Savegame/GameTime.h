@@ -20,6 +20,7 @@
 #define OPENXCOM_GAMETIME_H
 
 #include <string>
+#include "yaml.h"
 
 namespace OpenXcom
 {
@@ -43,6 +44,10 @@ public:
 	GameTime(int weekday, int day, int month, int year, int hour, int minute, int second);
 	/// Cleans up the ingame time.
 	~GameTime();
+	/// Loads the time from YAML.
+	void load(const YAML::Node& node);
+	/// Saves the time to YAML.
+	void save(YAML::Emitter& out) const;
 	/// Advances the time by 5 seconds.
 	TimeTrigger advance();
 	/// Gets the ingame second.

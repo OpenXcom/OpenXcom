@@ -173,7 +173,19 @@ BasescapeState::BasescapeState(Game *game, Base *base, Globe *globe) : State(gam
  */
 BasescapeState::~BasescapeState()
 {
-	
+	// Clean up any temporary bases
+	bool exists = false;
+	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end() && !exists; i++)
+	{
+		if (*i == _base)
+		{
+			exists = true;
+		}
+	}
+	if (!exists)
+	{
+		delete _base;
+	}
 }
 
 /**
@@ -182,6 +194,29 @@ BasescapeState::~BasescapeState()
  */
 void BasescapeState::init()
 {
+	if (_game->getSavedGame()->getBases()->size() > 0)
+	{
+		bool exists = false;
+		for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end() && !exists; i++)
+		{
+			if (*i == _base)
+			{
+				exists = true;
+			}
+		}
+		// If base was removed, select first one
+		if (!exists)
+		{
+			_base = _game->getSavedGame()->getBases()->front();
+			_mini->setSelectedBase(0);
+		}
+	}
+	else
+	{
+		// Use a blank base for special case when player has no bases
+		_base = new Base();
+	}
+
 	_view->setBase(_base);
 	_mini->draw();
 	_txtBase->setText(_base->getName());
@@ -339,8 +374,7 @@ void BasescapeState::viewClick(Action *action)
 
 		// Is facility in use?
 		if (fac->getBuildTime() == 0 &&
-			(fac->getRules()->getLift() ||
-			_base->getAvailableQuarters() - fac->getRules()->getPersonnel() < _base->getUsedQuarters() ||
+		   (_base->getAvailableQuarters() - fac->getRules()->getPersonnel() < _base->getUsedQuarters() ||
 			_base->getAvailableStores() - fac->getRules()->getStorage() < _base->getUsedStores() ||
 			_base->getAvailableLaboratories() - fac->getRules()->getLaboratories() < _base->getUsedLaboratories() ||
 			_base->getAvailableWorkshops() - fac->getRules()->getWorkshops() < _base->getUsedWorkshops() ||

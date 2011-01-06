@@ -21,11 +21,12 @@
 
 #include <vector>
 #include <string>
-#include <string>
+#include "yaml.h"
 
 namespace OpenXcom
 {
 
+enum SoldierRank { RANK_ROOKIE, RANK_SQUADDIE, RANK_SERGEANT, RANK_CAPTAIN, RANK_COLONEL, RANK_COMMANDER};
 enum SoldierGender { GENDER_MALE, GENDER_FEMALE };
 enum SoldierLook { LOOK_BLONDE, LOOK_BROWNHAIR, LOOK_ORIENTAL, LOOK_AFRICAN };
 
@@ -42,16 +43,22 @@ class Soldier
 private:
 	std::string _name;
 	int _tu, _stamina, _health, _bravery, _reactions, _firing, _throwing, _strength, _psiStrength, _psiSkill, _melee;
-	int _rank;
+	SoldierRank _rank;
 	Craft *_craft;
 	SoldierGender _gender;
 	SoldierLook _look;
 	int _missions, _kills;
 public:
-	/// Creates a new soldier with a random name.
+	/// Creates a new soldier.
+	Soldier();
+	/// Creates a new soldier with random stats.
 	Soldier(std::vector<SoldierNamePool*> *names);
 	/// Cleans up the soldier.
 	~Soldier();
+	/// Loads the soldier from YAML.
+	void load(const YAML::Node& node);
+	/// Saves the soldier to YAML.
+	void save(YAML::Emitter& out) const;
 	/// Gets the soldier's name.
 	std::string getName() const;
 	/// Sets the soldier's name.

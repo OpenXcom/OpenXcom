@@ -202,7 +202,7 @@ void Surface::offset(int off, int min, int max)
 	// Lock the surface
 	lock();
 	
-	for (int x = 0, y = 0; x < _surface->w && y < _surface->h;)
+	for (int x = 0, y = 0; x < getWidth() && y < getHeight();)
 	{
 		Uint8 pixel = getPixel(x, y);
 		int p = pixel + off;
@@ -239,7 +239,7 @@ void Surface::invert(Uint8 mid)
 	// Lock the surface
 	lock();
 
-	for (int x = 0, y = 0; x < _surface->w && y < _surface->h;)
+	for (int x = 0, y = 0; x < getWidth() && y < getHeight();)
 	{
 		Uint8 pixel = getPixel(x, y);
 		if (pixel > 0)
@@ -366,7 +366,7 @@ void Surface::copy(Surface *surface)
  */
 void Surface::maskedCopy(Surface *surface, Uint8 mask)
 {
-	if (surface->getWidth() != _surface->w || surface->getHeight() != _surface->h)
+	if (surface->getWidth() != getWidth() || surface->getHeight() != getHeight())
 	{
 		return;
 	}
@@ -374,12 +374,13 @@ void Surface::maskedCopy(Surface *surface, Uint8 mask)
 	// Lock the surface
 	lock();
 
-	for (int x = 0, y = 0; x < _surface->w && y < _surface->h;)
+	for (int x = 0, y = 0; x < getWidth() && y < getHeight();)
 	{
 		if (getPixel(x, y) == mask)
 		{
 			setPixelIterative(&x, &y, surface->getPixel(x, y));
-		}else
+		}
+		else
 		{
 			setPixelIterative(&x, &y, this->getPixel(x, y));
 		}

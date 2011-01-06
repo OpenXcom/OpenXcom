@@ -20,6 +20,7 @@
 #define OPENXCOM_ITEM_H
 
 #include <string>
+#include "yaml.h"
 
 namespace OpenXcom
 {
@@ -41,6 +42,10 @@ public:
 	Item(RuleItem *rules, int qty);
 	/// Cleans up the item.
 	~Item();
+	/// Loads the item from YAML.
+	void load(const YAML::Node& node);
+	/// Saves the item to YAML.
+	void save(YAML::Emitter& out) const;
 	/// Gets the item's ruleset.
 	RuleItem *const getRules() const;
 	/// Gets the item's quantity

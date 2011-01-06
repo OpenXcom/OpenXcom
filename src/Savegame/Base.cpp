@@ -22,8 +22,12 @@
 #include "../Ruleset/RuleBaseFacility.h"
 #include "Craft.h"
 #include "../Ruleset/RuleCraft.h"
+#include "../Ruleset/Ruleset.h"
 #include "Item.h"
 #include "Soldier.h"
+#include "SavedGame.h"
+#include "Ufo.h"
+#include "Waypoint.h"
 
 namespace OpenXcom
 {
@@ -60,6 +64,166 @@ Base::~Base()
 	{
 		delete i->second;
 	}
+}
+
+/**
+ * Loads the base from a YAML file.
+ * @param node YAML node.
+ * @param rule Ruleset for the saved game.
+ * @param save Pointer to saved game.
+ */
+void Base::load(const YAML::Node &node, Ruleset *rule, SavedGame *save)
+{
+	unsigned int size = 0;
+
+	Target::load(node);
+	node["name"] >> _name;
+
+	size = node["facilities"].size();
+	for (unsigned i = 0; i < size; i++)
+	{
+		int x, y;
+		node["facilities"][i]["x"] >> x;
+		node["facilities"][i]["y"] >> y;
+		std::string type;
+		node["facilities"][i]["type"] >> type;
+		BaseFacility *f = new BaseFacility(rule->getBaseFacility(type), x, y);
+		f->load(node["facilities"][i]);
+		_facilities.push_back(f);
+	}
+
+	size = node["crafts"].size();
+	for (unsigned i = 0; i < size; i++)
+	{
+		std::string type;
+		node["crafts"][i]["type"] >> type;
+		Craft *c = new Craft(rule->getCraft(type), this);
+		c->load(node["crafts"][i], rule);
+		if (const YAML::Node *pName = node["crafts"][i].FindValue("dest"))
+		{
+			std::string type;
+			int id;
+			(*pName)["type"] >> type;
+			(*pName)["id"] >> id;
+			if (type == "STR_BASE")
+			{
+				c->returnToBase();
+			}
+			else if (type == "STR_UFO")
+			{
+				for (std::vector<Ufo*>::iterator i = save->getUfos()->begin(); i != save->getUfos()->end(); i++)
+				{
+					if ((*i)->getId() == id)
+					{
+						c->setDestination(*i);
+						break;
+					}
+				}
+			}
+			else if (type == "STR_WAYPOINT")
+			{
+				for (std::vector<Waypoint*>::iterator i = save->getWaypoints()->begin(); i != save->getWaypoints()->end(); i++)
+				{
+					if ((*i)->getId() == id)
+					{
+						c->setDestination(*i);
+						break;
+					}
+				}
+			}
+		}
+		_crafts.push_back(c);
+	}
+
+	size = node["soldiers"].size();
+	for (unsigned i = 0; i < size; i++)
+	{
+		Soldier *s = new Soldier();
+		s->load(node["soldiers"][i]);
+		if (const YAML::Node *pName = node["soldiers"][i].FindValue("craft"))
+		{
+			std::string type;
+			int id;
+			(*pName)["type"] >> type;
+			(*pName)["id"] >> id;
+			for (std::vector<Craft*>::iterator i = _crafts.begin(); i != _crafts.end(); i++)
+			{
+				if ((*i)->getRules()->getType() == type && (*i)->getId() == id)
+				{
+					s->setCraft(*i);
+					break;
+				}
+			}
+		}
+		_soldiers.push_back(s);
+	}
+
+	size = node["items"].size();
+	for (unsigned i = 0; i < size; i++)
+	{
+		int qty;
+		node["items"][i]["qty"] >> qty;
+		std::string type;
+		node["items"][i]["type"] >> type;
+		Item *it = new Item(rule->getItem(type), qty);
+		it->load(node["items"][i]);
+		_items.insert(std::pair<std::string, Item*>(type, it));
+	}
+
+	node["scientists"] >> _scientists;
+	node["engineers"] >> _engineers;
+}
+
+/**
+ * Saves the base to a YAML file.
+ * @param out YAML emitter.
+ */
+void Base::save(YAML::Emitter &out) const
+{
+	Target::save(out);
+	out << YAML::Key << "name" << YAML::Value << _name;
+	out << YAML::Key << "facilities" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); i++)
+	{
+		(*i)->save(out);
+	}
+	out << YAML::EndSeq;
+	out << YAML::Key << "soldiers" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::vector<Soldier*>::const_iterator i = _soldiers.begin(); i != _soldiers.end(); i++)
+	{
+		(*i)->save(out);
+	}
+	out << YAML::EndSeq;
+	out << YAML::Key << "crafts" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::vector<Craft*>::const_iterator i = _crafts.begin(); i != _crafts.end(); i++)
+	{
+		(*i)->save(out);
+	}
+	out << YAML::EndSeq;
+	out << YAML::Key << "items" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::map<std::string, Item*>::const_iterator i = _items.begin(); i != _items.end(); i++)
+	{
+		(*i).second->save(out);
+	}
+	out << YAML::EndSeq;
+	out << YAML::Key << "scientists" << YAML::Value << _scientists;
+	out << YAML::Key << "engineers" << YAML::Value << _engineers;
+	out << YAML::EndMap;
+}
+
+/**
+ * Saves the base's unique identifiers to a YAML file.
+ * @param out YAML emitter.
+ */
+void Base::saveId(YAML::Emitter &out) const
+{
+	Target::saveId(out);
+	out << YAML::Key << "type" << YAML::Value << "STR_BASE";
+	out << YAML::EndMap;
 }
 
 /**

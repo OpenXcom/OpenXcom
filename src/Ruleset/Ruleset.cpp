@@ -158,7 +158,7 @@ RuleCraftWeapon *const Ruleset::getCraftWeapon(std::string id)
  */
 RuleItem *const Ruleset::getItem(std::string id)
 {
-	return _items.at(id);
+	return _items[id];
 }
 
 /**

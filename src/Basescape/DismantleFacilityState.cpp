@@ -29,6 +29,7 @@
 #include "../Savegame/Base.h"
 #include "../Savegame/BaseFacility.h"
 #include "../Ruleset/RuleBaseFacility.h"
+#include "../Savegame/SavedGame.h"
 
 namespace OpenXcom
 {
@@ -95,13 +96,29 @@ DismantleFacilityState::~DismantleFacilityState()
  */
 void DismantleFacilityState::btnOkClick(Action *action)
 {
-	for (std::vector<BaseFacility*>::iterator i = _base->getFacilities()->begin(); i != _base->getFacilities()->end(); i++)
+	if (!_fac->getRules()->getLift())
 	{
-		if (*i == _fac)
+		for (std::vector<BaseFacility*>::iterator i = _base->getFacilities()->begin(); i != _base->getFacilities()->end(); i++)
 		{
-			_base->getFacilities()->erase(i);
-			delete _fac;
-			break;
+			if (*i == _fac)
+			{
+				_base->getFacilities()->erase(i);
+				delete _fac;
+				break;
+			}
+		}
+	}
+	// Remove whole base if it's the access lift
+	else
+	{
+		for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); i++)
+		{
+			if (*i == _base)
+			{
+				_game->getSavedGame()->getBases()->erase(i);
+				delete _base;
+				break;
+			}
 		}
 	}
 	_game->popState();

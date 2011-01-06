@@ -20,6 +20,7 @@
 #define OPENXCOM_REGION_H
 
 #include <vector>
+#include "yaml.h"
 
 namespace OpenXcom
 {
@@ -42,6 +43,10 @@ public:
 	Region(int cost);
 	/// Cleans up the region.
 	~Region();
+	/// Loads the region from YAML.
+	void load(const YAML::Node& node);
+	/// Saves the region to YAML.
+	void save(YAML::Emitter& out, std::string name) const;
 	/// Gets the region's base cost.
 	int getBaseCost() const;
 	/// Adds an area to the region.

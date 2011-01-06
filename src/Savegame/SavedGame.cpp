@@ -17,6 +17,9 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "SavedGame.h"
+#include <fstream>
+#include "yaml.h"
+#include "../Ruleset/Ruleset.h"
 #include "../Engine/RNG.h"
 #include "GameTime.h"
 #include "Country.h"
@@ -30,9 +33,9 @@ namespace OpenXcom
 
 /**
  * Initializes a brand new saved game according to the specified difficulty.
- * @param diff Game difficulty.
+ * @param difficulty Game difficulty.
  */
-SavedGame::SavedGame(GameDifficulty diff) : _diff(diff), _funds(0), _countries(), _regions(), _bases(), _ufos(), _craftId(), _waypoints(), _ufoId(1), _waypointId(1)
+SavedGame::SavedGame(GameDifficulty difficulty) : _difficulty(difficulty), _funds(0), _countries(), _regions(), _bases(), _ufos(), _craftId(), _waypoints(), _ufoId(1), _waypointId(1), _battleGame(0)
 {
 	_time = new GameTime(6, 1, 1, 1999, 12, 0, 0);
 	RNG::init();
@@ -63,6 +66,156 @@ SavedGame::~SavedGame()
 	{
 		delete *i;
 	}
+}
+
+/**
+ * Loads a saved game's contents from a YAML file.
+ * @note Assumes the saved game is blank.
+ * @param filename YAML filename.
+ * @param rule Ruleset for the saved game.
+ */
+void SavedGame::load(const std::string &filename, Ruleset *rule)
+{
+	unsigned int size = 0;
+
+	std::string s = "./USER/" + filename + ".sav";
+	std::ifstream fin(s);
+    YAML::Parser parser(fin);
+	YAML::Node doc;
+    parser.GetNextDocument(doc);
+
+	int a;
+	doc["difficulty"] >> a;
+	_difficulty = (GameDifficulty)a;
+	_time->load(doc["time"]);
+	doc["funds"] >> _funds;
+
+	size = doc["countries"].size();
+	for (unsigned i = 0; i < size; i++)
+	{
+		int funding;
+		doc["countries"][i]["funding"] >> funding;
+		Country *c = new Country(funding);
+		c->load(doc["countries"][i]);
+		std::string name;
+		doc["countries"][i]["name"] >> name;
+		_countries.insert(std::pair<std::string, Country*>(name, c));
+	}
+
+	size = doc["regions"].size();
+	for (unsigned i = 0; i < size; i++)
+	{
+		int cost;
+		doc["regions"][i]["cost"] >> cost;
+		Region *r = new Region(cost);
+		r->load(doc["regions"][i]);
+		std::string name;
+		doc["regions"][i]["name"] >> name;
+		_regions.insert(std::pair<std::string, Region*>(name, r));
+	}
+	
+	size = doc["ufos"].size();
+	for (unsigned i = 0; i < size; i++)
+	{
+		std::string type;
+		doc["ufos"][i]["type"] >> type;
+		Ufo *u = new Ufo(rule->getUfo(type));
+		u->load(doc["ufos"][i]);
+		_ufos.push_back(u);
+	}
+
+	doc["craftId"] >> _craftId;
+
+	size = doc["waypoints"].size();
+	for (unsigned i = 0; i < size; i++)
+	{
+		Waypoint *w = new Waypoint();
+		w->load(doc["waypoints"][i]);
+		_waypoints.push_back(w);
+	}
+
+	doc["ufoId"] >> _ufoId;
+	doc["waypointId"] >> _waypointId;
+
+	size = doc["bases"].size();
+	for (unsigned i = 0; i < size; i++)
+	{
+		Base *b = new Base();
+		b->load(doc["bases"][i], rule, this);
+		_bases.push_back(b);
+	}
+
+	if (const YAML::Node *pName = doc.FindValue("battleGame"))
+	{
+		_battleGame = new SavedBattleGame();
+		_battleGame->load(*pName);
+	}
+	
+	fin.close();
+}
+
+/**
+ * Saves a saved game's contents from a YAML file.
+ * @param filename YAML filename.
+ */
+void SavedGame::save(const std::string &filename) const
+{
+	YAML::Emitter out;
+	out << YAML::BeginMap;
+	out << YAML::Key << "version" << YAML::Value << "0.2";
+	out << YAML::Key << "difficulty" << YAML::Value << _difficulty;
+	out << YAML::Key << "time" << YAML::Value;
+	_time->save(out);
+	out << YAML::Key << "funds" << YAML::Value << _funds;
+	out << YAML::Key << "countries" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::map<std::string, Country*>::const_iterator i = _countries.begin(); i != _countries.end(); i++)
+	{
+		(*i).second->save(out, (*i).first);
+	}
+	out << YAML::EndSeq;
+	out << YAML::Key << "regions" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::map<std::string, Region*>::const_iterator i = _regions.begin(); i != _regions.end(); i++)
+	{
+		(*i).second->save(out, (*i).first);
+	}
+	out << YAML::EndSeq;
+	out << YAML::Key << "bases" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::vector<Base*>::const_iterator i = _bases.begin(); i != _bases.end(); i++)
+	{
+		(*i)->save(out);
+	}
+	out << YAML::EndSeq;
+	out << YAML::Key << "ufos" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::vector<Ufo*>::const_iterator i = _ufos.begin(); i != _ufos.end(); i++)
+	{
+		(*i)->save(out);
+	}
+	out << YAML::EndSeq;
+	out << YAML::Key << "craftId" << YAML::Value << _craftId;
+	out << YAML::Key << "waypoints" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::vector<Waypoint*>::const_iterator i = _waypoints.begin(); i != _waypoints.end(); i++)
+	{
+		(*i)->save(out);
+	}
+	out << YAML::EndSeq;
+	out << YAML::Key << "ufoId" << YAML::Value << _ufoId;
+	out << YAML::Key << "waypointId" << YAML::Value << _waypointId;
+	if (_battleGame != 0)
+	{
+		out << YAML::Key << "battleGame" << YAML::Value;
+		_battleGame->save(out);
+	}
+	out << YAML::EndMap;
+
+	std::string s = "./USER/" + filename + ".sav";
+	std::ofstream sav(s);
+	sav << out.c_str();
+	sav.close();
 }
 
 /**
@@ -202,21 +355,21 @@ std::vector<Waypoint*> *const SavedGame::getWaypoints()
 }
 
 /**
- * Set battlegame object.
- * @param battlegame Pointer to the battlegame object.
+ * Set battleGame object.
+ * @param battleGame Pointer to the battleGame object.
  */
-void SavedGame::setBattleGame(SavedBattleGame *battlegame)
+void SavedGame::setBattleGame(SavedBattleGame *battleGame)
 {
-	_battlegame = battlegame;
+	_battleGame = battleGame;
 }
 
 /**
- * Get pointer to the battlegame object.
- * @return Pointer to the battlegame object.
+ * Get pointer to the battleGame object.
+ * @return Pointer to the battleGame object.
  */
 SavedBattleGame *SavedGame::getBattleGame()
 {
-	return _battlegame;
+	return _battleGame;
 }
 
 }

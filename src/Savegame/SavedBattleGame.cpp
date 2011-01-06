@@ -37,6 +37,26 @@ SavedBattleGame::SavedBattleGame() : _tiles(), _nodes(), _units()
 
 }
 
+/**
+ * Loads the saved battle game from a YAML file.
+ * @param node YAML node.
+ */
+void SavedBattleGame::load(const YAML::Node &node)
+{
+	//TODO: Daiky
+}
+
+/**
+ * Saves the saved battle game to a YAML file.
+ * @param out YAML emitter.
+ */
+void SavedBattleGame::save(YAML::Emitter &out) const
+{
+	out << YAML::BeginMap;
+	//TODO: Daiky
+	out << YAML::EndMap;
+}
+
 /** 
  * Deletes the game content from memory.
  */

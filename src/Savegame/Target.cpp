@@ -27,7 +27,7 @@ namespace OpenXcom
 /**
  * Initializes a target with blank coordinates.
  */
-Target::Target() : _lat(0.0), _lon(0.0), _followers()
+Target::Target() : _lon(0.0), _lat(0.0), _followers()
 {
 }
 
@@ -36,21 +36,35 @@ Target::~Target()
 }
 
 /**
- * Returns the latitude coordinate of the target.
- * @return Latitude in radian.
+ * Loads the target from a YAML file.
+ * @param node YAML node.
  */
-double Target::getLatitude() const
+void Target::load(const YAML::Node &node)
 {
-	return _lat;
+	node["lon"] >> _lon;
+	node["lat"] >> _lat;
 }
 
 /**
- * Changes the latitude coordinate of the target.
- * @param lat Latitude in radian.
+ * Saves the target to a YAML file.
+ * @param out YAML emitter.
  */
-void Target::setLatitude(double lat)
+void Target::save(YAML::Emitter &out) const
 {
-	_lat = lat;
+	out << YAML::BeginMap;
+	out << YAML::Key << "lon" << YAML::Value << _lon;
+	out << YAML::Key << "lat" << YAML::Value << _lat;
+}
+
+/**
+ * Saves the target's unique identifiers to a YAML file.
+ * @param out YAML emitter.
+ */
+void Target::saveId(YAML::Emitter &out) const
+{
+	out << YAML::BeginMap;
+	out << YAML::Key << "lon" << YAML::Value << _lon;
+	out << YAML::Key << "lat" << YAML::Value << _lat;
 }
 
 /**
@@ -75,6 +89,24 @@ void Target::setLongitude(double lon)
 		_lon += 2 * M_PI;
 	while (_lon >= 2 * M_PI)
 		_lon -= 2 * M_PI;
+}
+
+/**
+ * Returns the latitude coordinate of the target.
+ * @return Latitude in radian.
+ */
+double Target::getLatitude() const
+{
+	return _lat;
+}
+
+/**
+ * Changes the latitude coordinate of the target.
+ * @param lat Latitude in radian.
+ */
+void Target::setLatitude(double lat)
+{
+	_lat = lat;
 }
 
 /**

@@ -35,6 +35,35 @@ MovingTarget::~MovingTarget()
 }
 
 /**
+ * Loads the moving target from a YAML file.
+ * @param node YAML node.
+ */
+void MovingTarget::load(const YAML::Node &node)
+{
+	Target::load(node);
+	node["speedLon"] >> _speedLon;
+	node["speedLat"] >> _speedLat;
+	node["speed"] >> _speed;
+}
+
+/**
+ * Saves the moving target to a YAML file.
+ * @param out YAML emitter.
+ */
+void MovingTarget::save(YAML::Emitter &out) const
+{
+	Target::save(out);
+	if (_dest != 0)
+	{
+		out << YAML::Key << "dest" << YAML::Value;
+		_dest->saveId(out);
+	}
+	out << YAML::Key << "speedLon" << YAML::Value << _speedLon;
+	out << YAML::Key << "speedLat" << YAML::Value << _speedLat;
+	out << YAML::Key << "speed" << YAML::Value << _speed;
+}
+
+/**
  * Returns the destination the moving target is heading to.
  * @return Pointer to destination.
  */
@@ -154,8 +183,8 @@ void MovingTarget::calculateSpeed()
  */
 bool MovingTarget::finishedRoute() const
 {
-	return (((_speedLon > 0 && _lon >= _dest->getLongitude()) || (_speedLon < 0 && _lon <= _dest->getLongitude())) &&
-			((_speedLat > 0 && _lat >= _dest->getLatitude()) || (_speedLat < 0 && _lat <= _dest->getLatitude())));
+	return (((_speedLon > 0 && _lon >= _dest->getLongitude()) || (_speedLon < 0 && _lon <= _dest->getLongitude()) || _speedLon == 0) &&
+			((_speedLat > 0 && _lat >= _dest->getLatitude()) || (_speedLat < 0 && _lat <= _dest->getLatitude()) || _speedLat == 0));
 }
 
 /**

@@ -19,6 +19,8 @@
 #ifndef OPENXCOM_COUNTRY_H
 #define OPENXCOM_COUNTRY_H
 
+#include "yaml.h"
+
 namespace OpenXcom
 {
 
@@ -38,6 +40,10 @@ public:
 	Country(int funding);
 	/// Cleans up the country.
 	~Country();
+	/// Loads the country from YAML.
+	void load(const YAML::Node& node);
+	/// Saves the country to YAML.
+	void save(YAML::Emitter& out, std::string name) const;
 	/// Gets the country's funding.
 	int getFunding() const;
 	/// Sets the country's funding.

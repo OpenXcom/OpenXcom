@@ -39,6 +39,27 @@ Item::~Item()
 }
 
 /**
+ * Loads the item from a YAML file.
+ * @param node YAML node.
+ */
+void Item::load(const YAML::Node &node)
+{
+	node["qty"] >> _qty;
+}
+
+/**
+ * Saves the item to a YAML file.
+ * @param out YAML emitter.
+ */
+void Item::save(YAML::Emitter &out) const
+{
+	out << YAML::BeginMap;
+	out << YAML::Key << "type" << YAML::Value << _rules->getType();
+	out << YAML::Key << "qty" << YAML::Value << _qty;
+	out << YAML::EndMap;
+}
+
+/**
  * Returns the ruleset for the item's type.
  * @return Pointer to ruleset.
  */

@@ -26,6 +26,7 @@
 namespace OpenXcom
 {
 
+class Ruleset;
 class GameTime;
 class Country;
 class Base;
@@ -47,7 +48,7 @@ enum GameDifficulty { DIFF_BEGINNER, DIFF_EXPERIENCED, DIFF_VETERAN, DIFF_GENIUS
 class SavedGame
 {
 private:
-	GameDifficulty _diff;
+	GameDifficulty _difficulty;
 	GameTime *_time;
 	int _funds;
 	std::map<std::string, Country*> _countries;
@@ -57,12 +58,16 @@ private:
 	std::map<std::string, int> _craftId;
 	std::vector<Waypoint*> _waypoints;
 	int _ufoId, _waypointId;
-	SavedBattleGame *_battlegame;
+	SavedBattleGame *_battleGame;
 public:
-	/// Creates a new save with a certain difficulty.
-	SavedGame(GameDifficulty diff);
+	/// Creates a new save with a certain difficultyiculty.
+	SavedGame(GameDifficulty difficulty);
 	/// Cleans up the saved game.
 	~SavedGame();
+	/// Loads a saved game from YAML.
+	void load(const std::string &filename, Ruleset *rule);
+	/// Saves a saved game to YAML.
+	void save(const std::string &filename) const;
 	/// Gets the current funds.
 	int getFunds() const;
 	/// Sets new funds.
@@ -91,9 +96,8 @@ public:
 	std::vector<Waypoint*> *const getWaypoints();
 	/// Gets the current waypoint ID.
 	int *const getWaypointId();
-	/// Sets the battlegame object.
-	void setBattleGame(SavedBattleGame *battlegame);
-	/// Gets the battlegame object.
+	
+	void setBattleGame(SavedBattleGame *battleGame);
 	SavedBattleGame *getBattleGame();
 };
 

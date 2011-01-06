@@ -21,6 +21,7 @@
 
 #include <string>
 #include <vector>
+#include "yaml.h"
 
 namespace OpenXcom
 {
@@ -34,21 +35,27 @@ class Language;
 class Target
 {
 protected:
-	double _lat, _lon;
+	double _lon, _lat;
 	std::vector<Target*> _followers;
 public:
 	/// Creates a target.
 	Target();
 	/// Cleans up the target.
 	virtual ~Target();
-	/// Gets the target's latitude.
-	double getLatitude() const;
-	/// Sets the target's latitude.
-	void setLatitude(double lat);
+	/// Loads the target from YAML.
+	virtual void load(const YAML::Node& node);
+	/// Saves the target to YAML.
+	virtual void save(YAML::Emitter& out) const;
+	/// Saves the target's ID to YAML.
+	virtual void saveId(YAML::Emitter& out) const;
 	/// Gets the target's longitude.
 	double getLongitude() const;
 	/// Sets the target's longitude.
 	void setLongitude(double lon);
+	/// Gets the target's latitude.
+	double getLatitude() const;
+	/// Sets the target's latitude.
+	void setLatitude(double lat);
 	/// Gets the target's name.
 	virtual std::string getName(Language *lang) const = 0;
 	/// Gets the target's followers.

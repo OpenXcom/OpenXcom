@@ -32,6 +32,7 @@ class Base;
 class Soldier;
 class CraftWeapon;
 class Item;
+class Ruleset;
 
 /**
  * Represents a craft stored in a base.
@@ -52,9 +53,17 @@ private:
 	bool _inBattlescape;
 public:
 	/// Creates a craft of the specified type.
+	Craft(RuleCraft *rules, Base *base);
+	/// Creates a craft of the specified type.
 	Craft(RuleCraft *rules, std::map<std::string, int> *id, Base *base);
 	/// Cleans up the craft.
 	~Craft();
+	/// Loads the craft from YAML.
+	void load(const YAML::Node& node, Ruleset *rule);
+	/// Saves the craft to YAML.
+	void save(YAML::Emitter& out) const;
+	/// Saves the craft's ID to YAML.
+	void saveId(YAML::Emitter& out) const;
 	/// Gets the craft's ruleset.
 	RuleCraft *const getRules() const;
 	/// Gets the craft's ID.
