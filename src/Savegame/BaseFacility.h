@@ -19,7 +19,7 @@
 #ifndef OPENXCOM_BASEFACILITY_H
 #define OPENXCOM_BASEFACILITY_H
 
-#include "yaml.h"
+#include "yaml-cpp/yaml.h"
 
 namespace OpenXcom
 {

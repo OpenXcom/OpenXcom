@@ -31,7 +31,7 @@
 		<Compiler>
 			<Add option="-Wall" />
 			<Add directory="..\deps\include\SDL" />
-			<Add directory="..\deps\include\yaml-cpp" />
+			<Add directory="..\deps\include" />
 		</Compiler>
 		<Linker>
 			<Add library="mingw32" />

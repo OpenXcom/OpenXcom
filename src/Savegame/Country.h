@@ -19,7 +19,7 @@
 #ifndef OPENXCOM_COUNTRY_H
 #define OPENXCOM_COUNTRY_H
 
-#include "yaml.h"
+#include "yaml-cpp/yaml.h"
 
 namespace OpenXcom
 {

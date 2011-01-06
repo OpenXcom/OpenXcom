@@ -20,7 +20,7 @@
 #define OPENXCOM_GAMETIME_H
 
 #include <string>
-#include "yaml.h"
+#include "yaml-cpp/yaml.h"
 
 namespace OpenXcom
 {

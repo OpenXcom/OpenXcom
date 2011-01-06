@@ -20,7 +20,7 @@
 #define OPENXCOM_ITEM_H
 
 #include <string>
-#include "yaml.h"
+#include "yaml-cpp/yaml.h"
 
 namespace OpenXcom
 {

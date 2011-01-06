@@ -190,6 +190,20 @@ Uint8 Text::getColor() const
 	return _color;
 }
 
+	/**
+	 * Returns the rendered text's height. Useful to check if wordwrap applies.
+	 * @return height value.
+	 */
+	int Text::getTextHeight()
+	{
+		int height = 0;
+		for (std::vector<int>::iterator i = _lineHeight.begin(); i != _lineHeight.end(); i++)
+		{
+			height += *i;
+		}
+		return height;
+	}
+	
 /**
  * Takes care of any text post-processing like calculating
  * line metrics for alignment and wordwrapping if necessary.
@@ -237,8 +251,8 @@ void Text::processText()
 		// Keep track of spaces for wordwrapping
 		else if (*c == ' ')
 		{
-			width += font->getWidth() / 2;
 			space = c;
+			width += font->getWidth() / 2;
 			word = 0;
 		}
 		// Keep track of the width of the last line and word
@@ -274,7 +288,7 @@ void Text::draw()
 		return;
 	}
 
-	int x = 0, y = 0, line = 0, height = 0;
+	int x = 0, y = 0, line = 0, height = 0, pos = 0;
 	Font *font = _font;
 	std::string *s = &_text;
 
@@ -317,11 +331,16 @@ void Text::draw()
 	{
 		if (*c == ' ')
 		{
-			x += font->getWidth() / 2;
+			// panther: trim spaces on line begins
+			if (pos>0)
+			{
+				x += font->getWidth() / 2;
+			}
 		}
 		else if (*c == '\n' || *c == 2)
 		{
 			line++;
+			pos = 0;
 			y += font->getHeight() + font->getSpacing();
 			switch (_align)
 			{
@@ -345,6 +364,7 @@ void Text::draw()
 			chr->setY(y);
 			chr->blit(this);
 			x += chr->getCrop()->w + font->getSpacing();
+			pos += 1;
 		}
 	}
 

@@ -18,7 +18,7 @@
  */
 #include "SavedGame.h"
 #include <fstream>
-#include "yaml.h"
+#include "yaml-cpp/yaml.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Engine/RNG.h"
 #include "GameTime.h"
@@ -79,7 +79,7 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	unsigned int size = 0;
 
 	std::string s = "./USER/" + filename + ".sav";
-	std::ifstream fin(s);
+	std::ifstream fin(s.c_str());
     YAML::Parser parser(fin);
 	YAML::Node doc;
     parser.GetNextDocument(doc);
@@ -213,7 +213,7 @@ void SavedGame::save(const std::string &filename) const
 	out << YAML::EndMap;
 
 	std::string s = "./USER/" + filename + ".sav";
-	std::ofstream sav(s);
+	std::ofstream sav(s.c_str());
 	sav << out.c_str();
 	sav.close();
 }
