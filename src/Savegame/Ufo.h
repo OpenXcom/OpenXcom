@@ -21,7 +21,7 @@
 
 #include "MovingTarget.h"
 #include <string>
-#include "yaml.h"
+#include "yaml-cpp/yaml.h"
 
 namespace OpenXcom
 {
