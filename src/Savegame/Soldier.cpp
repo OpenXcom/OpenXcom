@@ -37,7 +37,7 @@ Soldier::Soldier() : _name(""), _tu(0), _stamina(0), _health(0), _bravery(0), _r
  * pulled from a set of SoldierNamePool's.
  * @param names List of name pools.
  */
-Soldier::Soldier(std::vector<SoldierNamePool*> *names) : _craft(0), _psiSkill(0), _rank(RANK_ROOKIE), _missions(0), _kills(0)
+Soldier::Soldier(std::vector<SoldierNamePool*> *names) : _psiSkill(0), _rank(RANK_ROOKIE), _craft(0), _missions(0), _kills(0)
 {
 	_tu = RNG::generate(50, 60);
 	_stamina = RNG::generate(40, 70);

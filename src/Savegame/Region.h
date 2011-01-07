@@ -20,7 +20,7 @@
 #define OPENXCOM_REGION_H
 
 #include <vector>
-#include "yaml-cpp/yaml.h"
+#include "yaml.h"
 
 namespace OpenXcom
 {

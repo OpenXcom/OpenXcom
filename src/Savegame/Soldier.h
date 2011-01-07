@@ -21,7 +21,7 @@
 
 #include <vector>
 #include <string>
-#include "yaml-cpp/yaml.h"
+#include "yaml.h"
 
 namespace OpenXcom
 {

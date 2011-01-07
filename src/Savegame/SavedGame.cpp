@@ -18,7 +18,7 @@
  */
 #include "SavedGame.h"
 #include <fstream>
-#include "yaml-cpp/yaml.h"
+#include "yaml.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Engine/RNG.h"
 #include "GameTime.h"

@@ -24,7 +24,7 @@
 #include <vector>
 #include <map>
 #include <string>
-#include "yaml-cpp/yaml.h"
+#include "yaml.h"
 
 namespace OpenXcom
 {

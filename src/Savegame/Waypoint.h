@@ -21,7 +21,7 @@
 
 #include "Target.h"
 #include <string>
-#include "yaml-cpp/yaml.h"
+#include "yaml.h"
 
 namespace OpenXcom
 {

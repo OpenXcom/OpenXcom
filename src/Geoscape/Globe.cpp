@@ -777,8 +777,7 @@ void Globe::fillLongitudeSegments(double startLon, double endLon, int colourShif
 	}
 	else
 	{
-		double dayLon = startLon, hackDay = startLon;
-		double nightLon = endLon, hackNight = endLon;
+		double dayLon = startLon, hackDay = startLon, hackNight = endLon;
 		double hackDayLat, hackNightLat;
 		for (double idx = -M_PI / 2; idx < M_PI / 2; idx += QUAD_LATITUDE)
 		{

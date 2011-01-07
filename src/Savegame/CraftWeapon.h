@@ -20,7 +20,7 @@
 #define OPENXCOM_CRAFTWEAPON_H
 
 #include <string>
-#include "yaml-cpp/yaml.h"
+#include "yaml.h"
 
 namespace OpenXcom
 {
