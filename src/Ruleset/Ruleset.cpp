@@ -16,8 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "../Ruleset/Ruleset.h"
-#include "../Resource/SoldierNamePool.h"
+#include "Ruleset.h"
+#include "SoldierNamePool.h"
+#include "RuleCountry.h"
+#include "RuleRegion.h"
 #include "RuleBaseFacility.h"
 #include "RuleCraft.h"
 #include "RuleCraftWeapon.h"
@@ -33,7 +35,7 @@ namespace OpenXcom
 /**
  * Creates a ruleset with blank sets of rules.
  */
-Ruleset::Ruleset() : _names(), _facilities(), _crafts(), _craftWeapons(), _items(), _ufos(), _terrains(), _mapDataFiles()
+Ruleset::Ruleset() : _names(), _countries(), _regions(), _facilities(), _crafts(), _craftWeapons(), _items(), _ufos(), _terrains(), _mapDataFiles(), _unitSprites()
 {
 }
 
@@ -45,6 +47,14 @@ Ruleset::~Ruleset()
 	for (std::vector<SoldierNamePool*>::iterator i = _names.begin(); i != _names.end(); i++)
 	{
 		delete *i;
+	}
+	for (std::map<std::string, RuleCountry*>::iterator i = _countries.begin(); i != _countries.end(); i++)
+	{
+		delete i->second;
+	}
+	for (std::map<std::string, RuleRegion*>::iterator i = _regions.begin(); i != _regions.end(); i++)
+	{
+		delete i->second;
 	}
 	for (std::map<std::string, RuleBaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); i++)
 	{
@@ -120,6 +130,26 @@ void Ruleset::endBattle(SavedGame *save)
 std::vector<SoldierNamePool*> *const Ruleset::getPools()
 {
 	return &_names;
+}
+
+/**
+ * Returns the rules for the specified country.
+ * @param id Country type.
+ * @return Rules for the country.
+ */
+RuleCountry *const Ruleset::getCountry(std::string id)
+{
+	return _countries[id];
+}
+
+/**
+ * Returns the rules for the specified region.
+ * @param id Region type.
+ * @return Rules for the region.
+ */
+RuleRegion *const Ruleset::getRegion(std::string id)
+{
+	return _regions[id];
 }
 
 /**

@@ -31,11 +31,13 @@
 #include "../Savegame/GameTime.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/Country.h"
+#include "../Ruleset/RuleCountry.h"
 #include "../Interface/Text.h"
 #include "../Engine/Font.h"
 #include "../Engine/Language.h"
+#include "../Ruleset/RuleRegion.h"
 #include "../Savegame/Region.h"
-#include "../Savegame/City.h"
+#include "../Ruleset/City.h"
 #include "../Savegame/Target.h"
 #include "../Savegame/Ufo.h"
 #include "../Savegame/Craft.h"
@@ -945,18 +947,18 @@ void Globe::drawDetail()
 		label->setColor(Palette::blockOffset(15)-1);
 
 		Sint16 x, y;
-		for (std::map<std::string, Country*>::iterator i = _save->getCountries()->begin(); i != _save->getCountries()->end(); i++)
+		for (std::vector<Country*>::iterator i = _save->getCountries()->begin(); i != _save->getCountries()->end(); i++)
 		{
 			// Don't draw if label is facing back
-			if (pointBack(i->second->getLabelLongitude(), i->second->getLabelLatitude()))
+			if (pointBack((*i)->getRules()->getLabelLongitude(), (*i)->getRules()->getLabelLatitude()))
 				continue;
 
 			// Convert coordinates
-			polarToCart(i->second->getLabelLongitude(), i->second->getLabelLatitude(), &x, &y);
+			polarToCart((*i)->getRules()->getLabelLongitude(), (*i)->getRules()->getLabelLatitude(), &x, &y);
 
 			label->setX(x - 40);
 			label->setY(y);
-			label->setText(_res->getLanguage()->getString(i->first));
+			label->setText(_res->getLanguage()->getString((*i)->getRules()->getType()));
 			label->blit(_countries);
 		}
 
@@ -973,9 +975,9 @@ void Globe::drawDetail()
 		label->setColor(Palette::blockOffset(8)+10);
 
 		Sint16 x, y;
-		for (std::map<std::string, Region*>::iterator i = _save->getRegions()->begin(); i != _save->getRegions()->end(); i++)
+		for (std::vector<Region*>::iterator i = _save->getRegions()->begin(); i != _save->getRegions()->end(); i++)
 		{
-			for (std::vector<City*>::iterator j = i->second->getCities()->begin(); j != i->second->getCities()->end(); j++)
+			for (std::vector<City*>::iterator j = (*i)->getRules()->getCities()->begin(); j != (*i)->getRules()->getCities()->end(); j++)
 			{
 				// Don't draw if city is facing back
 				if (pointBack((*j)->getLongitude(), (*j)->getLatitude()))

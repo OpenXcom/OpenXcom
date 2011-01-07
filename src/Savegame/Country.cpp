@@ -17,16 +17,19 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Country.h"
+#include "../Ruleset/RuleCountry.h"
+#include "../Engine/RNG.h"
 
 namespace OpenXcom
 {
 
 /**
- * Initializes a country with a starting amount of monthly funding.
- * @param funding Starting monthly funding.
+ * Initializes a country of the specified type.
+ * @param rules Pointer to ruleset.
  */
-Country::Country(int funding) : _funding(funding), _change(0)
+Country::Country(RuleCountry *rules) : _rules(rules), _funding(0), _change(0), _activityXcom(0), _activityAlien(0)
 {
+	_funding = RNG::generate(rules->getMinFunding(), rules->getMaxFunding()) * 1000;
 }
 
 /**
@@ -44,23 +47,32 @@ void Country::load(const YAML::Node &node)
 {
 	node["funding"] >> _funding;
 	node["change"] >> _change;
-	node["labelLon"] >> _labelLon;
-	node["labelLat"] >> _labelLat;
+	node["activityXcom"] >> _activityXcom;
+	node["activityAlien"] >> _activityAlien;
 }
 
 /**
  * Saves the country to a YAML file.
  * @param out YAML emitter.
  */
-void Country::save(YAML::Emitter &out, std::string name) const
+void Country::save(YAML::Emitter &out) const
 {
 	out << YAML::BeginMap;
-	out << YAML::Key << "name" << YAML::Value << name;
+	out << YAML::Key << "type" << YAML::Value << _rules->getType();
 	out << YAML::Key << "funding" << YAML::Value << _funding;
 	out << YAML::Key << "change" << YAML::Value << _change;
-	out << YAML::Key << "labelLon" << YAML::Value << _labelLon;
-	out << YAML::Key << "labelLat" << YAML::Value << _labelLat;
+	out << YAML::Key << "activityXcom" << YAML::Value << _activityXcom;
+	out << YAML::Key << "activityAlien" << YAML::Value << _activityAlien;
 	out << YAML::EndMap;
+}
+
+/**
+ * Returns the ruleset for the country's type.
+ * @return Pointer to ruleset.
+ */
+RuleCountry *const Country::getRules() const
+{
+	return _rules;
 }
 
 /**
@@ -88,42 +100,6 @@ void Country::setFunding(int funding)
 int Country::getChange() const
 {
 	return _change;
-}
-
-/**
- * Returns the longitude of the country's label on the globe.
- * @return Longitude in radians.
- */
-double Country::getLabelLongitude() const
-{
-	return _labelLon;
-}
-
-/**
- * Changes the longitude of the country's label on the globe.
- * @param lon Longitude in radians.
- */
-void Country::setLabelLongitude(double lon)
-{
-	_labelLon = lon;
-}
-
-/**
- * Returns the latitude of the country's label on the globe.
- * @return Latitude in radians.
- */
-double Country::getLabelLatitude() const
-{
-	return _labelLat;
-}
-
-/**
- * Changes the latitude of the country's label on the globe.
- * @param lat Latitude in radians.
- */
-void Country::setLabelLatitude(double lat)
-{
-	_labelLat = lat;
 }
 
 }

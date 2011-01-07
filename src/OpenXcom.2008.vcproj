@@ -953,14 +953,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Savegame\City.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Savegame\City.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Savegame\Country.cpp"
 				>
 			</File>
@@ -1101,14 +1093,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Resource\SoldierNamePool.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Resource\SoldierNamePool.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Resource\TerrainObject.cpp"
 				>
 			</File>
@@ -1137,6 +1121,14 @@
 			Name="Ruleset"
 			>
 			<File
+				RelativePath=".\Ruleset\City.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\City.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Ruleset\MapBlock.cpp"
 				>
 			</File>
@@ -1161,6 +1153,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Ruleset\RuleCountry.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\RuleCountry.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Ruleset\RuleCraft.cpp"
 				>
 			</File>
@@ -1182,6 +1182,14 @@
 			</File>
 			<File
 				RelativePath=".\Ruleset\RuleItem.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\RuleRegion.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\RuleRegion.h"
 				>
 			</File>
 			<File
@@ -1214,6 +1222,14 @@
 			</File>
 			<File
 				RelativePath=".\Ruleset\RuleUnitSprite.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\SoldierNamePool.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\SoldierNamePool.h"
 				>
 			</File>
 			<File

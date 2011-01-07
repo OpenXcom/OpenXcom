@@ -29,6 +29,8 @@ namespace OpenXcom
 {
 
 class SoldierNamePool;
+class RuleCountry;
+class RuleRegion;
 class RuleBaseFacility;
 class RuleCraft;
 class RuleCraftWeapon;
@@ -38,7 +40,6 @@ class RuleTerrain;
 class MapDataFile;
 class ResourcePack;
 class RuleUnitSprite;
-
 
 /**
  * Set of rules and stats for a game.
@@ -50,6 +51,8 @@ class Ruleset
 {
 protected:
 	std::vector<SoldierNamePool*> _names;
+	std::map<std::string, RuleCountry*> _countries;
+	std::map<std::string, RuleRegion*> _regions;
 	std::map<std::string, RuleBaseFacility*> _facilities;
 	std::map<std::string, RuleCraft*> _crafts;
 	std::map<std::string, RuleCraftWeapon*> _craftWeapons;
@@ -71,6 +74,10 @@ public:
 	virtual void endBattle(SavedGame *save);
 	/// Gets the pool list for soldier names.
 	std::vector<SoldierNamePool*> *const getPools();
+	/// Gets the ruleset for a country type.
+	RuleCountry *const getCountry(std::string id);
+	/// Gets the ruleset for a region type.
+	RuleRegion *const getRegion(std::string id);
 	/// Gets the ruleset for a facility type.
 	RuleBaseFacility *const getBaseFacility(std::string id);
 	/// Gets the ruleset for a craft type.

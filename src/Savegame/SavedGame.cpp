@@ -46,13 +46,13 @@ SavedGame::SavedGame(GameDifficulty difficulty) : _difficulty(difficulty), _fund
  */
 SavedGame::~SavedGame()
 {
-	for (std::map<std::string, Country*>::iterator i = _countries.begin(); i != _countries.end(); i++)
+	for (std::vector<Country*>::iterator i = _countries.begin(); i != _countries.end(); i++)
 	{
-		delete i->second;
+		delete *i;
 	}
-	for (std::map<std::string, Region*>::iterator i = _regions.begin(); i != _regions.end(); i++)
+	for (std::vector<Region*>::iterator i = _regions.begin(); i != _regions.end(); i++)
 	{
-		delete i->second;
+		delete *i;
 	}
 	for (std::vector<Base*>::iterator i = _bases.begin(); i != _bases.end(); i++)
 	{
@@ -93,25 +93,21 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	size = doc["countries"].size();
 	for (unsigned i = 0; i < size; i++)
 	{
-		int funding;
-		doc["countries"][i]["funding"] >> funding;
-		Country *c = new Country(funding);
+		std::string type;
+		doc["countries"][i]["type"] >> type;
+		Country *c = new Country(rule->getCountry(type));
 		c->load(doc["countries"][i]);
-		std::string name;
-		doc["countries"][i]["name"] >> name;
-		_countries.insert(std::pair<std::string, Country*>(name, c));
+		_countries.push_back(c);
 	}
 
 	size = doc["regions"].size();
 	for (unsigned i = 0; i < size; i++)
 	{
-		int cost;
-		doc["regions"][i]["cost"] >> cost;
-		Region *r = new Region(cost);
+		std::string type;
+		doc["regions"][i]["type"] >> type;
+		Region *r = new Region(rule->getRegion(type));
 		r->load(doc["regions"][i]);
-		std::string name;
-		doc["regions"][i]["name"] >> name;
-		_regions.insert(std::pair<std::string, Region*>(name, r));
+		_regions.push_back(r);
 	}
 	
 	size = doc["ufos"].size();
@@ -169,16 +165,16 @@ void SavedGame::save(const std::string &filename) const
 	out << YAML::Key << "funds" << YAML::Value << _funds;
 	out << YAML::Key << "countries" << YAML::Value;
 	out << YAML::BeginSeq;
-	for (std::map<std::string, Country*>::const_iterator i = _countries.begin(); i != _countries.end(); i++)
+	for (std::vector<Country*>::const_iterator i = _countries.begin(); i != _countries.end(); i++)
 	{
-		(*i).second->save(out, (*i).first);
+		(*i)->save(out);
 	}
 	out << YAML::EndSeq;
 	out << YAML::Key << "regions" << YAML::Value;
 	out << YAML::BeginSeq;
-	for (std::map<std::string, Region*>::const_iterator i = _regions.begin(); i != _regions.end(); i++)
+	for (std::vector<Region*>::const_iterator i = _regions.begin(); i != _regions.end(); i++)
 	{
-		(*i).second->save(out, (*i).first);
+		(*i)->save(out);
 	}
 	out << YAML::EndSeq;
 	out << YAML::Key << "bases" << YAML::Value;
@@ -258,7 +254,7 @@ GameTime *const SavedGame::getTime() const
  * Returns the list of countries in the game world.
  * @return Pointer to country list.
  */
-std::map<std::string, Country*> *const SavedGame::getCountries()
+std::vector<Country*> *const SavedGame::getCountries()
 {
 	return &_countries;
 }
@@ -270,9 +266,9 @@ std::map<std::string, Country*> *const SavedGame::getCountries()
 int SavedGame::getCountryFunding() const
 {
 	int total = 0;
-	for (std::map<std::string, Country*>::const_iterator i = _countries.begin(); i != _countries.end(); i++)
+	for (std::vector<Country*>::const_iterator i = _countries.begin(); i != _countries.end(); i++)
 	{
-		total += i->second->getFunding();
+		total += (*i)->getFunding();
 	}
 	return total;
 }
@@ -281,7 +277,7 @@ int SavedGame::getCountryFunding() const
  * Returns the list of world regions.
  * @return Pointer to region list.
  */
-std::map<std::string, Region*> *const SavedGame::getRegions()
+std::vector<Region*> *const SavedGame::getRegions()
 {
 	return &_regions;
 }

@@ -29,7 +29,6 @@ namespace OpenXcom
  */
 class XcomRuleset : public Ruleset
 {
-private:
 public:
 	/// Creates the X-Com ruleset.
 	XcomRuleset();

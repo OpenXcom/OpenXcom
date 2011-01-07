@@ -152,9 +152,6 @@
     <ClCompile Include="Resource\ResourcePack.cpp">
       <Filter>Resource</Filter>
     </ClCompile>
-    <ClCompile Include="Resource\SoldierNamePool.cpp">
-      <Filter>Resource</Filter>
-    </ClCompile>
     <ClCompile Include="Ruleset\Ruleset.cpp">
       <Filter>Ruleset</Filter>
     </ClCompile>
@@ -195,9 +192,6 @@
       <Filter>Savegame</Filter>
     </ClCompile>
     <ClCompile Include="Savegame\BaseFacility.cpp">
-      <Filter>Savegame</Filter>
-    </ClCompile>
-    <ClCompile Include="Savegame\City.cpp">
       <Filter>Savegame</Filter>
     </ClCompile>
     <ClCompile Include="Savegame\Country.cpp">
@@ -380,6 +374,18 @@
     <ClCompile Include="Battlescape\BattlescapeGenerator.cpp">
       <Filter>Battlescape</Filter>
     </ClCompile>
+    <ClCompile Include="Ruleset\RuleRegion.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
+    <ClCompile Include="Ruleset\RuleCountry.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
+    <ClCompile Include="Ruleset\City.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
+    <ClCompile Include="Ruleset\SoldierNamePool.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -527,9 +533,6 @@
     <ClInclude Include="Menu\MainMenuState.h">
       <Filter>Menu</Filter>
     </ClInclude>
-    <ClInclude Include="Resource\SoldierNamePool.h">
-      <Filter>Resource</Filter>
-    </ClInclude>
     <ClInclude Include="Resource\XcomResourcePack.h">
       <Filter>Resource</Filter>
     </ClInclude>
@@ -576,9 +579,6 @@
       <Filter>Savegame</Filter>
     </ClInclude>
     <ClInclude Include="Savegame\BaseFacility.h">
-      <Filter>Savegame</Filter>
-    </ClInclude>
-    <ClInclude Include="Savegame\City.h">
       <Filter>Savegame</Filter>
     </ClInclude>
     <ClInclude Include="Savegame\Country.h">
@@ -760,6 +760,18 @@
     </ClInclude>
     <ClInclude Include="Battlescape\BattlescapeGenerator.h">
       <Filter>Battlescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\RuleRegion.h">
+      <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\RuleCountry.h">
+      <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\City.h">
+      <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\SoldierNamePool.h">
+      <Filter>Ruleset</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

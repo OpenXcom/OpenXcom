@@ -48,6 +48,7 @@ Ufo::~Ufo()
  */
 void Ufo::load(const YAML::Node &node)
 {
+	MovingTarget::load(node);
 	node["id"] >> _id;
 	node["damage"] >> _damage;
 	node["altitude"] >> _altitude;
@@ -88,7 +89,7 @@ void Ufo::save(YAML::Emitter &out) const
  */
 void Ufo::saveId(YAML::Emitter &out) const
 {
-	Target::saveId(out);
+	MovingTarget::saveId(out);
 	out << YAML::Key << "type" << YAML::Value << "STR_UFO";
 	out << YAML::Key << "id" << YAML::Value << _id;
 	out << YAML::EndMap;

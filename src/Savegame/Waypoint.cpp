@@ -43,6 +43,7 @@ Waypoint::~Waypoint()
  */
 void Waypoint::load(const YAML::Node &node)
 {
+	Target::load(node);
 	node["id"] >> _id;
 }
 

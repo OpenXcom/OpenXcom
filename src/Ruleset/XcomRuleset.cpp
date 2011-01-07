@@ -18,9 +18,12 @@
  */
 
 #include <sstream>
+#include <string>
 #include "XcomRuleset.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
+#include "RuleCountry.h"
+#include "RuleRegion.h"
 #include "RuleBaseFacility.h"
 #include "RuleCraft.h"
 #include "RuleCraftWeapon.h"
@@ -30,10 +33,9 @@
 #include "MapBlock.h"
 #include "MapDataFile.h"
 #include "RuleUnitSprite.h"
-#include "../Resource/SoldierNamePool.h"
+#include "SoldierNamePool.h"
 #include "../Savegame/Region.h"
 #include "../Engine/RNG.h"
-#include <string>
 #include "../Savegame/Base.h"
 #include "../Savegame/Country.h"
 #include "../Savegame/BaseFacility.h"
@@ -42,7 +44,7 @@
 #include "../Savegame/CraftWeapon.h"
 #include "../Savegame/Soldier.h"
 #include "../Savegame/Item.h"
-#include "../Savegame/City.h"
+#include "City.h"
 #include "../Savegame/Tile.h"
 
 namespace OpenXcom
@@ -312,6 +314,268 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	russian->addLastName("Yakubik");
 	russian->addLastName("Zhdanovich");
 	_names.push_back(russian);
+
+	// Add countries
+	RuleCountry *usa = new RuleCountry("STR_USA");
+	usa->setMinFunding(600);
+	usa->setMaxFunding(1200);
+	usa->setLabelLongitude(4.53786);
+	usa->setLabelLatitude(-0.698132);
+
+	RuleCountry *russia = new RuleCountry("STR_RUSSIA");
+	russia->setMinFunding(230);
+	russia->setMaxFunding(460);
+	russia->setLabelLongitude(1.0472);
+	russia->setLabelLatitude(-1.0472);
+
+	RuleCountry *uk = new RuleCountry("STR_UK");
+	uk->setMinFunding(240);
+	uk->setMaxFunding(480);
+	uk->setLabelLongitude(6.24828);
+	uk->setLabelLatitude(-0.935933);
+
+	RuleCountry *france = new RuleCountry("STR_FRANCE");
+	france->setMinFunding(320);
+	france->setMaxFunding(640);
+	france->setLabelLongitude(0.0436332);
+	france->setLabelLatitude(-0.811578);
+
+	RuleCountry *germany = new RuleCountry("STR_GERMANY");
+	germany->setMinFunding(250);
+	germany->setMaxFunding(500);
+	germany->setLabelLongitude(0.200713);
+	germany->setLabelLatitude(-0.872665);
+
+	RuleCountry *italy = new RuleCountry("STR_ITALY");
+	italy->setMinFunding(160);
+	italy->setMaxFunding(320);
+	italy->setLabelLongitude(0.218166);
+	italy->setLabelLatitude(-0.765763);
+
+	RuleCountry *spain = new RuleCountry("STR_SPAIN");
+	spain->setMinFunding(140);
+	spain->setMaxFunding(280);
+	spain->setLabelLongitude(6.23955);
+	spain->setLabelLatitude(-0.743947);
+
+	RuleCountry *china = new RuleCountry("STR_CHINA");
+	china->setMinFunding(245);
+	china->setMaxFunding(490);
+	china->setLabelLongitude(1.74533);
+	china->setLabelLatitude(-0.610865);
+
+	RuleCountry *japan = new RuleCountry("STR_JAPAN");
+	japan->setMinFunding(400);
+	japan->setMaxFunding(800);
+	japan->setLabelLongitude(2.40855);
+	japan->setLabelLatitude(-0.667588);
+
+	RuleCountry *india = new RuleCountry("STR_INDIA");
+	india->setMinFunding(150);
+	india->setMaxFunding(300);
+	india->setLabelLongitude(1.39626);
+	india->setLabelLatitude(-0.418879);
+
+	RuleCountry *brazil = new RuleCountry("STR_BRAZIL");
+	brazil->setMinFunding(300);
+	brazil->setMaxFunding(600);
+	brazil->setLabelLongitude(5.32325);
+	brazil->setLabelLatitude(0.0872665);
+
+	RuleCountry *australia = new RuleCountry("STR_AUSTRALIA");
+	australia->setMinFunding(280);
+	australia->setMaxFunding(560);
+	australia->setLabelLongitude(2.35619);
+	australia->setLabelLatitude(0.436332);
+
+	RuleCountry *nigeria = new RuleCountry("STR_NIGERIA");
+	nigeria->setMinFunding(180);
+	nigeria->setMaxFunding(360);
+	nigeria->setLabelLongitude(0.1309);
+	nigeria->setLabelLatitude(-0.174533);
+
+	RuleCountry *africa = new RuleCountry("STR_SOUTH_AFRICA");
+	africa->setMinFunding(230);
+	africa->setMaxFunding(460);
+	africa->setLabelLongitude(0.436332);
+	africa->setLabelLatitude(0.523599);
+
+	RuleCountry *egypt = new RuleCountry("STR_EGYPT");
+	egypt->setMinFunding(230);
+	egypt->setMaxFunding(460);
+	egypt->setLabelLongitude(0.506145);
+	egypt->setLabelLatitude(-0.453786);
+
+	RuleCountry *canada = new RuleCountry("STR_CANADA");
+	canada->setMinFunding(230);
+	canada->setMaxFunding(460);
+	canada->setLabelLongitude(4.53786);
+	canada->setLabelLatitude(-0.959931);
+
+	_countries.insert(std::pair<std::string, RuleCountry*>("STR_USA", usa));
+	_countries.insert(std::pair<std::string, RuleCountry*>("STR_RUSSIA", russia));
+	_countries.insert(std::pair<std::string, RuleCountry*>("STR_UK", uk));
+	_countries.insert(std::pair<std::string, RuleCountry*>("STR_FRANCE", france));
+	_countries.insert(std::pair<std::string, RuleCountry*>("STR_GERMANY", germany));
+	_countries.insert(std::pair<std::string, RuleCountry*>("STR_ITALY", italy));
+	_countries.insert(std::pair<std::string, RuleCountry*>("STR_SPAIN", spain));
+	_countries.insert(std::pair<std::string, RuleCountry*>("STR_CHINA", china));
+	_countries.insert(std::pair<std::string, RuleCountry*>("STR_JAPAN", japan));
+	_countries.insert(std::pair<std::string, RuleCountry*>("STR_INDIA", india));
+	_countries.insert(std::pair<std::string, RuleCountry*>("STR_BRAZIL", brazil));
+	_countries.insert(std::pair<std::string, RuleCountry*>("STR_AUSTRALIA", australia));
+	_countries.insert(std::pair<std::string, RuleCountry*>("STR_NIGERIA", nigeria));
+	_countries.insert(std::pair<std::string, RuleCountry*>("STR_SOUTH_AFRICA", africa));
+	_countries.insert(std::pair<std::string, RuleCountry*>("STR_EGYPT", egypt));
+	_countries.insert(std::pair<std::string, RuleCountry*>("STR_CANADA", canada));
+
+	// Add regions
+	RuleRegion* namerica = new RuleRegion("STR_NORTH_AMERICA");
+	namerica->setBaseCost(800000);
+	namerica->addArea(3.40339, 5.32107, -1.22173, -0.962113);
+	namerica->addArea(4.01426, 5.32107, -0.959931, -0.52578);
+	namerica->addArea(4.18879, 5.23381, -0.523599, -0.176715);
+	namerica->getCities()->push_back(new City("STR_NEW_YORK", 4.99382, -0.711222));
+	namerica->getCities()->push_back(new City("STR_WASHINGTON", 4.9371, -0.676315));
+	namerica->getCities()->push_back(new City("STR_LOS_ANGELES", 4.21933, -0.595594));
+	namerica->getCities()->push_back(new City("STR_MONTREAL", 4.9611, -0.794125));
+	namerica->getCities()->push_back(new City("STR_HAVANA", 4.84547, -0.392699));
+	namerica->getCities()->push_back(new City("STR_MEXICO_CITY", 4.55313, -0.338158));
+	namerica->getCities()->push_back(new City("STR_CHICAGO", 4.75384, -0.730857));
+	namerica->getCities()->push_back(new City("STR_VANCOUVER", 4.13207, -0.861756));
+	namerica->getCities()->push_back(new City("STR_DALLAS", 4.59676, -0.571595));
+	
+	RuleRegion* arctic = new RuleRegion("STR_ARCTIC");
+	arctic->setBaseCost(950000);
+	arctic->addArea(0, 6.281, -1.5708, -1.22391);
+	
+	RuleRegion* antarctica = new RuleRegion("STR_ANTARCTICA");
+	antarctica->setBaseCost(900000);
+	antarctica->addArea(0, 6.281, 1.0472, 1.5708);
+	
+	RuleRegion* samerica = new RuleRegion("STR_SOUTH_AMERICA");
+	samerica->setBaseCost(600000);
+	samerica->addArea(4.71239, 5.49561, -0.174533, -0.00218166);
+	samerica->addArea(4.79966, 5.7574, 0, 0.259618);
+	samerica->addArea(4.79966, 5.67014, 0.261799, 1.04502);
+	samerica->getCities()->push_back(new City("STR_BRASILIA", 5.44761, 0.274889));
+	samerica->getCities()->push_back(new City("STR_BOGOTA", 4.98946, -0.0785398));
+	samerica->getCities()->push_back(new City("STR_BUENOS_AIRES", 5.27962, 0.602139));
+	samerica->getCities()->push_back(new City("STR_SANTIAGO", 5.05055, 0.582504));
+	samerica->getCities()->push_back(new City("STR_RIO_DE_JANEIRO", 5.53051, 0.399244));
+	samerica->getCities()->push_back(new City("STR_LIMA", 4.93928, 0.20944));
+	samerica->getCities()->push_back(new City("STR_CARACAS", 5.116, -0.18326));
+	
+	RuleRegion* europe = new RuleRegion("STR_EUROPE");
+	europe->setBaseCost(1000000);
+	europe->addArea(5.84685, 1.04502, -1.22173, -0.613047);
+	europe->getCities()->push_back(new City("STR_LONDON", 6.281, -0.898845));
+	europe->getCities()->push_back(new City("STR_PARIS", 0.0414516, -0.850848));
+	europe->getCities()->push_back(new City("STR_BERLIN", 0.233438, -0.916298));
+	europe->getCities()->push_back(new City("STR_MOSCOW", 0.65668, -0.973021));
+	europe->getCities()->push_back(new City("STR_ROME", 0.218166, -0.730857));
+	europe->getCities()->push_back(new City("STR_MADRID", 6.21774, -0.704677));
+	europe->getCities()->push_back(new City("STR_BUDAPEST", 0.333794, -0.829031));
+	
+	RuleRegion* nafrica = new RuleRegion("STR_NORTH_AFRICA");
+	nafrica->setBaseCost(650000);
+	nafrica->addArea(5.84685, 0.69595, -0.610865, -0.263981);
+	nafrica->addArea(5.84685, 0.957749, -0.261799, -0.00218166);
+	nafrica->getCities()->push_back(new City("STR_LAGOS", 0.0545415, -0.113446));
+	nafrica->getCities()->push_back(new City("STR_CAIRO", 0.545415, -0.523599));
+	nafrica->getCities()->push_back(new City("STR_CASABLANCA", 6.1501, -0.584685));
+	
+	RuleRegion* safrica = new RuleRegion("STR_SOUTH_AFRICA");
+	safrica->setBaseCost(550000);
+	safrica->addArea(0.0872665, 0.957749, 0, 0.69595);
+	safrica->getCities()->push_back(new City("STR_PRETORIA", 0.490874, 0.458149));
+	safrica->getCities()->push_back(new City("STR_NAIROBI", 0.641409, 0.0218166));
+	safrica->getCities()->push_back(new City("STR_CAPE_TOWN", 0.322886, 0.593412));
+	safrica->getCities()->push_back(new City("STR_KINSHASA", 0.268344, 0.0763582));
+	
+	RuleRegion* casia = new RuleRegion("STR_CENTRAL_ASIA");
+	casia->setBaseCost(500000);
+	casia->addArea(0.698132, 1.21955, -0.610865, -0.263981);
+	casia->addArea(1.0472, 1.56861, -0.872665, -0.613047);
+	casia->addArea(1.22173, 1.56861, -0.610865, -0.0894481);
+	casia->getCities()->push_back(new City("STR_ANKARA", 0.571595, -0.69595));
+	casia->getCities()->push_back(new City("STR_DELHI", 1.34827, -0.4996));
+	casia->getCities()->push_back(new City("STR_KARACHI", 1.16937, -0.434151));
+	casia->getCities()->push_back(new City("STR_BAGHDAD", 0.776672, -0.580322));
+	casia->getCities()->push_back(new City("STR_TEHRAN", 0.898845, -0.621774));
+	casia->getCities()->push_back(new City("STR_BOMBAY", 1.27627, -0.329431));
+	casia->getCities()->push_back(new City("STR_CALCUTTA", 1.54243, -0.394881));
+	
+	RuleRegion* seasia = new RuleRegion("STR_SOUTH_EAST_ASIA");
+	seasia->setBaseCost(750000);
+	seasia->addArea(1.5708, 1.83041, -0.872665, 0.172351);
+	seasia->addArea(1.8326, 2.61581, -0.872665, -0.0894481);
+	seasia->getCities()->push_back(new City("STR_TOKYO", 2.4391, -0.621774));
+	seasia->getCities()->push_back(new City("STR_BEIJING", 2.03113, -0.69595));
+	seasia->getCities()->push_back(new City("STR_BANGKOK", 1.75624, -0.237801));
+	seasia->getCities()->push_back(new City("STR_MANILA", 2.11185, -0.255254));
+	seasia->getCities()->push_back(new City("STR_SEOUL", 2.21657, -0.654498));
+	seasia->getCities()->push_back(new City("STR_SINGAPORE", 1.81296, -0.0239983));
+	seasia->getCities()->push_back(new City("STR_JAKARTA", 1.86314, 0.109083));
+	seasia->getCities()->push_back(new City("STR_SHANGHAI", 2.12058, -0.545415));
+	seasia->getCities()->push_back(new City("STR_HONG_KONG", 1.99186, -0.388336));
+	
+	RuleRegion* siberia = new RuleRegion("STR_SIBERIA");
+	siberia->setBaseCost(800000);
+	siberia->addArea(1.0472, 3.13941, -1.22173, -0.874846);
+	siberia->getCities()->push_back(new City("STR_NOVOSIBIRSK", 1.44426, -0.959931));
+	
+	RuleRegion* australasia = new RuleRegion("STR_AUSTRALASIA");
+	australasia->setBaseCost(750000);
+	//australasia->addArea(1.8326, 3.13941, -0.0872665, 0.870483);
+	australasia->addArea(1.8326, 3.13941, -0.0872665, 1.04502);
+	australasia->getCities()->push_back(new City("STR_CANBERRA", 2.60272, 0.61741));
+	australasia->getCities()->push_back(new City("STR_WELLINGTON", 3.05651, 0.719948));
+	australasia->getCities()->push_back(new City("STR_MELBOURNE", 2.53073, 0.661043));
+	australasia->getCities()->push_back(new City("STR_PERTH", 2.02022, 0.558505));
+	
+	RuleRegion* pacific = new RuleRegion("STR_PACIFIC");
+	pacific->setBaseCost(600000);
+	pacific->addArea(3.14159, 3.40121, -1.22173, -0.962113);
+	pacific->addArea(3.14159, 4.01208, -0.959931, -0.52578);
+	pacific->addArea(3.14159, 4.18661, -0.523599, -0.176715);
+	pacific->addArea(3.14159, 4.71021, -0.174533, -0.00218166);
+	pacific->addArea(3.14159, 4.79747, 0, 1.04502);
+	pacific->addArea(2.61799, 3.13941, -0.872665, -0.0894481);
+	
+	RuleRegion* natlantic = new RuleRegion("STR_NORTH_ATLANTIC");
+	natlantic->setBaseCost(500000);
+	natlantic->addArea(5.32325, 5.84467, -1.22173, -0.52578);
+	natlantic->addArea(5.23599, 5.84467, -0.523599, -0.176715);
+	natlantic->addArea(5.49779, 5.84467, -0.174533, -0.00218166);
+	
+	RuleRegion* satlantic = new RuleRegion("STR_SOUTH_ATLANTIC");
+	satlantic->setBaseCost(500000);
+	satlantic->addArea(5.75959, 0.0850848, 0, 0.259618);
+	satlantic->addArea(5.67232, 0.0850848, 0.261799, 1.04502);
+	satlantic->addArea(0.0872665, 0.959931, 0.698132, 1.04502);
+	
+	RuleRegion* indian = new RuleRegion("STR_INDIAN_OCEAN");
+	indian->setBaseCost(500000);
+	indian->addArea(0.959931, 1.21955, -0.261799, 0.172351);
+	indian->addArea(1.22173, 1.56861, -0.0872665, 0.172351);
+	indian->addArea(0.959931, 1.83041, 0.174533, 1.04502);
+	
+	_regions.insert(std::pair<std::string, RuleRegion*>("STR_NORTH_AMERICA", namerica));
+	_regions.insert(std::pair<std::string, RuleRegion*>("STR_ARCTIC", arctic));
+	_regions.insert(std::pair<std::string, RuleRegion*>("STR_ANTARCTICA", antarctica));
+	_regions.insert(std::pair<std::string, RuleRegion*>("STR_SOUTH_AMERICA", samerica));
+	_regions.insert(std::pair<std::string, RuleRegion*>("STR_EUROPE", europe));
+	_regions.insert(std::pair<std::string, RuleRegion*>("STR_NORTH_AFRICA", nafrica));
+	_regions.insert(std::pair<std::string, RuleRegion*>("STR_SOUTHERN_AFRICA", safrica));
+	_regions.insert(std::pair<std::string, RuleRegion*>("STR_CENTRAL_ASIA", casia));
+	_regions.insert(std::pair<std::string, RuleRegion*>("STR_SOUTH_EAST_ASIA", seasia));
+	_regions.insert(std::pair<std::string, RuleRegion*>("STR_SIBERIA", siberia));
+	_regions.insert(std::pair<std::string, RuleRegion*>("STR_AUSTRALASIA", australasia));
+	_regions.insert(std::pair<std::string, RuleRegion*>("STR_PACIFIC", pacific));
+	_regions.insert(std::pair<std::string, RuleRegion*>("STR_NORTH_ATLANTIC", natlantic));
+	_regions.insert(std::pair<std::string, RuleRegion*>("STR_SOUTH_ATLANTIC", satlantic));
+	_regions.insert(std::pair<std::string, RuleRegion*>("STR_INDIAN_OCEAN", indian));
 
 	// Add base facilities
 	RuleBaseFacility *lift = new RuleBaseFacility("STR_ACCESS_LIFT");
@@ -983,221 +1247,41 @@ SavedGame *XcomRuleset::newSave(GameDifficulty diff)
 {
 	SavedGame *save = new SavedGame(diff);
 
-	// Generate countries
-	Country *usa = new Country(RNG::generate(600, 1200)*1000);
-	usa->setLabelLongitude(4.53786);
-	usa->setLabelLatitude(-0.698132);
-
-	Country *russia = new Country(RNG::generate(230, 460)*1000);
-	russia->setLabelLongitude(1.0472);
-	russia->setLabelLatitude(-1.0472);
-
-	Country *uk = new Country(RNG::generate(240, 480)*1000);
-	uk->setLabelLongitude(6.24828);
-	uk->setLabelLatitude(-0.935933);
-
-	Country *france = new Country(RNG::generate(320, 640)*1000);
-	france->setLabelLongitude(0.0436332);
-	france->setLabelLatitude(-0.811578);
-
-	Country *germany = new Country(RNG::generate(250, 500)*1000);
-	germany->setLabelLongitude(0.200713);
-	germany->setLabelLatitude(-0.872665);
-
-	Country *italy = new Country(RNG::generate(160, 320)*1000);
-	italy->setLabelLongitude(0.218166);
-	italy->setLabelLatitude(-0.765763);
-
-	Country *spain = new Country(RNG::generate(140, 280)*1000);
-	spain->setLabelLongitude(6.23955);
-	spain->setLabelLatitude(-0.743947);
-
-	Country *china = new Country(RNG::generate(245, 490)*1000);
-	china->setLabelLongitude(1.74533);
-	china->setLabelLatitude(-0.610865);
-
-	Country *japan = new Country(RNG::generate(400, 800)*1000);
-	japan->setLabelLongitude(2.40855);
-	japan->setLabelLatitude(-0.667588);
-
-	Country *india = new Country(RNG::generate(150, 300)*1000);
-	india->setLabelLongitude(1.39626);
-	india->setLabelLatitude(-0.418879);
-
-	Country *brazil = new Country(RNG::generate(300, 600)*1000);
-	brazil->setLabelLongitude(5.32325);
-	brazil->setLabelLatitude(0.0872665);
-
-	Country *australia = new Country(RNG::generate(280, 560)*1000);
-	australia->setLabelLongitude(2.35619);
-	australia->setLabelLatitude(0.436332);
-
-	Country *nigeria = new Country(RNG::generate(180, 360)*1000);
-	nigeria->setLabelLongitude(0.1309);
-	nigeria->setLabelLatitude(-0.174533);
-
-	Country *africa = new Country(RNG::generate(310, 620)*1000);
-	africa->setLabelLongitude(0.436332);
-	africa->setLabelLatitude(0.523599);
-
-	Country *egypt = new Country(RNG::generate(160, 320)*1000);
-	egypt->setLabelLongitude(0.506145);
-	egypt->setLabelLatitude(-0.453786);
-
-	Country *canada = new Country(RNG::generate(110, 220)*1000);
-	canada->setLabelLongitude(4.53786);
-	canada->setLabelLatitude(-0.959931);
-
-	save->getCountries()->insert(std::pair<std::string, Country*>("STR_USA", usa));
-	save->getCountries()->insert(std::pair<std::string, Country*>("STR_RUSSIA", russia));
-	save->getCountries()->insert(std::pair<std::string, Country*>("STR_UK", uk));
-	save->getCountries()->insert(std::pair<std::string, Country*>("STR_FRANCE", france));
-	save->getCountries()->insert(std::pair<std::string, Country*>("STR_GERMANY", germany));
-	save->getCountries()->insert(std::pair<std::string, Country*>("STR_ITALY", italy));
-	save->getCountries()->insert(std::pair<std::string, Country*>("STR_SPAIN", spain));
-	save->getCountries()->insert(std::pair<std::string, Country*>("STR_CHINA", china));
-	save->getCountries()->insert(std::pair<std::string, Country*>("STR_JAPAN", japan));
-	save->getCountries()->insert(std::pair<std::string, Country*>("STR_INDIA", india));
-	save->getCountries()->insert(std::pair<std::string, Country*>("STR_BRAZIL", brazil));
-	save->getCountries()->insert(std::pair<std::string, Country*>("STR_AUSTRALIA", australia));
-	save->getCountries()->insert(std::pair<std::string, Country*>("STR_NIGERIA", nigeria));
-	save->getCountries()->insert(std::pair<std::string, Country*>("STR_SOUTH_AFRICA", africa));
-	save->getCountries()->insert(std::pair<std::string, Country*>("STR_EGYPT", egypt));
-	save->getCountries()->insert(std::pair<std::string, Country*>("STR_CANADA", canada));
+	// Add countries
+	save->getCountries()->push_back(new Country(getCountry("STR_USA")));
+	save->getCountries()->push_back(new Country(getCountry("STR_RUSSIA")));
+	save->getCountries()->push_back(new Country(getCountry("STR_UK")));
+	save->getCountries()->push_back(new Country(getCountry("STR_FRANCE")));
+	save->getCountries()->push_back(new Country(getCountry("STR_GERMANY")));
+	save->getCountries()->push_back(new Country(getCountry("STR_ITALY")));
+	save->getCountries()->push_back(new Country(getCountry("STR_SPAIN")));
+	save->getCountries()->push_back(new Country(getCountry("STR_CHINA")));
+	save->getCountries()->push_back(new Country(getCountry("STR_JAPAN")));
+	save->getCountries()->push_back(new Country(getCountry("STR_INDIA")));
+	save->getCountries()->push_back(new Country(getCountry("STR_BRAZIL")));
+	save->getCountries()->push_back(new Country(getCountry("STR_AUSTRALIA")));
+	save->getCountries()->push_back(new Country(getCountry("STR_NIGERIA")));
+	save->getCountries()->push_back(new Country(getCountry("STR_SOUTH_AFRICA")));
+	save->getCountries()->push_back(new Country(getCountry("STR_EGYPT")));
+	save->getCountries()->push_back(new Country(getCountry("STR_CANADA")));
 	save->setFunds(save->getCountryFunding());
 
 	// Add regions
-	Region* namerica = new Region(800000);
-	namerica->addArea(3.40339, 5.32107, -1.22173, -0.962113);
-	namerica->addArea(4.01426, 5.32107, -0.959931, -0.52578);
-	namerica->addArea(4.18879, 5.23381, -0.523599, -0.176715);
-	namerica->getCities()->push_back(new City("STR_NEW_YORK", 4.99382, -0.711222));
-	namerica->getCities()->push_back(new City("STR_WASHINGTON", 4.9371, -0.676315));
-	namerica->getCities()->push_back(new City("STR_LOS_ANGELES", 4.21933, -0.595594));
-	namerica->getCities()->push_back(new City("STR_MONTREAL", 4.9611, -0.794125));
-	namerica->getCities()->push_back(new City("STR_HAVANA", 4.84547, -0.392699));
-	namerica->getCities()->push_back(new City("STR_MEXICO_CITY", 4.55313, -0.338158));
-	namerica->getCities()->push_back(new City("STR_CHICAGO", 4.75384, -0.730857));
-	namerica->getCities()->push_back(new City("STR_VANCOUVER", 4.13207, -0.861756));
-	namerica->getCities()->push_back(new City("STR_DALLAS", 4.59676, -0.571595));
-	
-	Region* arctic = new Region(950000);
-	arctic->addArea(0, 6.281, -1.5708, -1.22391);
-	
-	Region* antarctica = new Region(900000);
-	antarctica->addArea(0, 6.281, 1.0472, 1.5708);
-	
-	Region* samerica = new Region(600000);
-	samerica->addArea(4.71239, 5.49561, -0.174533, -0.00218166);
-	samerica->addArea(4.79966, 5.7574, 0, 0.259618);
-	samerica->addArea(4.79966, 5.67014, 0.261799, 1.04502);
-	samerica->getCities()->push_back(new City("STR_BRASILIA", 5.44761, 0.274889));
-	samerica->getCities()->push_back(new City("STR_BOGOTA", 4.98946, -0.0785398));
-	samerica->getCities()->push_back(new City("STR_BUENOS_AIRES", 5.27962, 0.602139));
-	samerica->getCities()->push_back(new City("STR_SANTIAGO", 5.05055, 0.582504));
-	samerica->getCities()->push_back(new City("STR_RIO_DE_JANEIRO", 5.53051, 0.399244));
-	samerica->getCities()->push_back(new City("STR_LIMA", 4.93928, 0.20944));
-	samerica->getCities()->push_back(new City("STR_CARACAS", 5.116, -0.18326));
-	
-	Region* europe = new Region(1000000);
-	europe->addArea(5.84685, 1.04502, -1.22173, -0.613047);
-	europe->getCities()->push_back(new City("STR_LONDON", 6.281, -0.898845));
-	europe->getCities()->push_back(new City("STR_PARIS", 0.0414516, -0.850848));
-	europe->getCities()->push_back(new City("STR_BERLIN", 0.233438, -0.916298));
-	europe->getCities()->push_back(new City("STR_MOSCOW", 0.65668, -0.973021));
-	europe->getCities()->push_back(new City("STR_ROME", 0.218166, -0.730857));
-	europe->getCities()->push_back(new City("STR_MADRID", 6.21774, -0.704677));
-	europe->getCities()->push_back(new City("STR_BUDAPEST", 0.333794, -0.829031));
-	
-	Region* nafrica = new Region(650000);
-	nafrica->addArea(5.84685, 0.69595, -0.610865, -0.263981);
-	nafrica->addArea(5.84685, 0.957749, -0.261799, -0.00218166);
-	nafrica->getCities()->push_back(new City("STR_LAGOS", 0.0545415, -0.113446));
-	nafrica->getCities()->push_back(new City("STR_CAIRO", 0.545415, -0.523599));
-	nafrica->getCities()->push_back(new City("STR_CASABLANCA", 6.1501, -0.584685));
-	
-	Region* safrica = new Region(550000);
-	safrica->addArea(0.0872665, 0.957749, 0, 0.69595);
-	safrica->getCities()->push_back(new City("STR_PRETORIA", 0.490874, 0.458149));
-	safrica->getCities()->push_back(new City("STR_NAIROBI", 0.641409, 0.0218166));
-	safrica->getCities()->push_back(new City("STR_CAPE_TOWN", 0.322886, 0.593412));
-	safrica->getCities()->push_back(new City("STR_KINSHASA", 0.268344, 0.0763582));
-	
-	Region* casia = new Region(500000);
-	casia->addArea(0.698132, 1.21955, -0.610865, -0.263981);
-	casia->addArea(1.0472, 1.56861, -0.872665, -0.613047);
-	casia->addArea(1.22173, 1.56861, -0.610865, -0.0894481);
-	casia->getCities()->push_back(new City("STR_ANKARA", 0.571595, -0.69595));
-	casia->getCities()->push_back(new City("STR_DELHI", 1.34827, -0.4996));
-	casia->getCities()->push_back(new City("STR_KARACHI", 1.16937, -0.434151));
-	casia->getCities()->push_back(new City("STR_BAGHDAD", 0.776672, -0.580322));
-	casia->getCities()->push_back(new City("STR_TEHRAN", 0.898845, -0.621774));
-	casia->getCities()->push_back(new City("STR_BOMBAY", 1.27627, -0.329431));
-	casia->getCities()->push_back(new City("STR_CALCUTTA", 1.54243, -0.394881));
-	
-	Region* seasia = new Region(750000);
-	seasia->addArea(1.5708, 1.83041, -0.872665, 0.172351);
-	seasia->addArea(1.8326, 2.61581, -0.872665, -0.0894481);
-	seasia->getCities()->push_back(new City("STR_TOKYO", 2.4391, -0.621774));
-	seasia->getCities()->push_back(new City("STR_BEIJING", 2.03113, -0.69595));
-	seasia->getCities()->push_back(new City("STR_BANGKOK", 1.75624, -0.237801));
-	seasia->getCities()->push_back(new City("STR_MANILA", 2.11185, -0.255254));
-	seasia->getCities()->push_back(new City("STR_SEOUL", 2.21657, -0.654498));
-	seasia->getCities()->push_back(new City("STR_SINGAPORE", 1.81296, -0.0239983));
-	seasia->getCities()->push_back(new City("STR_JAKARTA", 1.86314, 0.109083));
-	seasia->getCities()->push_back(new City("STR_SHANGHAI", 2.12058, -0.545415));
-	seasia->getCities()->push_back(new City("STR_HONG_KONG", 1.99186, -0.388336));
-	
-	Region* siberia = new Region(800000);
-	siberia->addArea(1.0472, 3.13941, -1.22173, -0.874846);
-	siberia->getCities()->push_back(new City("STR_NOVOSIBIRSK", 1.44426, -0.959931));
-	
-	Region* australasia = new Region(750000);
-	//australasia->addArea(1.8326, 3.13941, -0.0872665, 0.870483);
-	australasia->addArea(1.8326, 3.13941, -0.0872665, 1.04502);
-	australasia->getCities()->push_back(new City("STR_CANBERRA", 2.60272, 0.61741));
-	australasia->getCities()->push_back(new City("STR_WELLINGTON", 3.05651, 0.719948));
-	australasia->getCities()->push_back(new City("STR_MELBOURNE", 2.53073, 0.661043));
-	australasia->getCities()->push_back(new City("STR_PERTH", 2.02022, 0.558505));
-	
-	Region* pacific = new Region(600000);
-	pacific->addArea(3.14159, 3.40121, -1.22173, -0.962113);
-	pacific->addArea(3.14159, 4.01208, -0.959931, -0.52578);
-	pacific->addArea(3.14159, 4.18661, -0.523599, -0.176715);
-	pacific->addArea(3.14159, 4.71021, -0.174533, -0.00218166);
-	pacific->addArea(3.14159, 4.79747, 0, 1.04502);
-	pacific->addArea(2.61799, 3.13941, -0.872665, -0.0894481);
-	
-	Region* natlantic = new Region(500000);
-	natlantic->addArea(5.32325, 5.84467, -1.22173, -0.52578);
-	natlantic->addArea(5.23599, 5.84467, -0.523599, -0.176715);
-	natlantic->addArea(5.49779, 5.84467, -0.174533, -0.00218166);
-	
-	Region* satlantic = new Region(500000);
-	satlantic->addArea(5.75959, 0.0850848, 0, 0.259618);
-	satlantic->addArea(5.67232, 0.0850848, 0.261799, 1.04502);
-	satlantic->addArea(0.0872665, 0.959931, 0.698132, 1.04502);
-	
-	Region* indian = new Region(500000);
-	indian->addArea(0.959931, 1.21955, -0.261799, 0.172351);
-	indian->addArea(1.22173, 1.56861, -0.0872665, 0.172351);
-	indian->addArea(0.959931, 1.83041, 0.174533, 1.04502);
-	
-	save->getRegions()->insert(std::pair<std::string, Region*>("STR_NORTH_AMERICA", namerica));
-	save->getRegions()->insert(std::pair<std::string, Region*>("STR_ARCTIC", arctic));
-	save->getRegions()->insert(std::pair<std::string, Region*>("STR_ANTARCTICA", antarctica));
-	save->getRegions()->insert(std::pair<std::string, Region*>("STR_SOUTH_AMERICA", samerica));
-	save->getRegions()->insert(std::pair<std::string, Region*>("STR_EUROPE", europe));
-	save->getRegions()->insert(std::pair<std::string, Region*>("STR_NORTH_AFRICA", nafrica));
-	save->getRegions()->insert(std::pair<std::string, Region*>("STR_SOUTHERN_AFRICA", safrica));
-	save->getRegions()->insert(std::pair<std::string, Region*>("STR_CENTRAL_ASIA", casia));
-	save->getRegions()->insert(std::pair<std::string, Region*>("STR_SOUTH_EAST_ASIA", seasia));
-	save->getRegions()->insert(std::pair<std::string, Region*>("STR_SIBERIA", siberia));
-	save->getRegions()->insert(std::pair<std::string, Region*>("STR_AUSTRALASIA", australasia));
-	save->getRegions()->insert(std::pair<std::string, Region*>("STR_PACIFIC", pacific));
-	save->getRegions()->insert(std::pair<std::string, Region*>("STR_NORTH_ATLANTIC", natlantic));
-	save->getRegions()->insert(std::pair<std::string, Region*>("STR_SOUTH_ATLANTIC", satlantic));
-	save->getRegions()->insert(std::pair<std::string, Region*>("STR_INDIAN_OCEAN", indian));
+	save->getRegions()->push_back(new Region(getRegion("STR_NORTH_AMERICA")));
+	save->getRegions()->push_back(new Region(getRegion("STR_ARCTIC")));
+	save->getRegions()->push_back(new Region(getRegion("STR_ANTARCTICA")));
+	save->getRegions()->push_back(new Region(getRegion("STR_SOUTH_AMERICA")));
+	save->getRegions()->push_back(new Region(getRegion("STR_EUROPE")));
+	save->getRegions()->push_back(new Region(getRegion("STR_NORTH_AFRICA")));
+	save->getRegions()->push_back(new Region(getRegion("STR_SOUTHERN_AFRICA")));
+	save->getRegions()->push_back(new Region(getRegion("STR_CENTRAL_ASIA")));
+	save->getRegions()->push_back(new Region(getRegion("STR_SOUTH_EAST_ASIA")));
+	save->getRegions()->push_back(new Region(getRegion("STR_SIBERIA")));
+	save->getRegions()->push_back(new Region(getRegion("STR_AUSTRALASIA")));
+	save->getRegions()->push_back(new Region(getRegion("STR_PACIFIC")));
+	save->getRegions()->push_back(new Region(getRegion("STR_NORTH_ATLANTIC")));
+	save->getRegions()->push_back(new Region(getRegion("STR_SOUTH_ATLANTIC")));
+	save->getRegions()->push_back(new Region(getRegion("STR_INDIAN_OCEAN")));
 	
 	// Set up craft IDs
 	save->getCraftIds()->insert(std::pair<std::string, int>("STR_SKYRANGER", 1));

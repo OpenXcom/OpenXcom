@@ -24,40 +24,36 @@
 namespace OpenXcom
 {
 
+class RuleCountry;
+
 /**
- * Represents a country who funds the player.
- * Countries provide an amount of monthly funding that
- * changes based on X-Com's or alien's actions in their
- * area.
+ * Represents a country that funds the player.
+ * Contains variable info about a country like
+ * monthly funding and various activities.
  */
 class Country
 {
 private:
+	RuleCountry *_rules;
 	int _funding, _change;
-	double _labelLon, _labelLat;
+	int _activityXcom, _activityAlien;
 public:
-	/// Creates a new country with a certain funding.
-	Country(int funding);
+	/// Creates a new country of the specified type.
+	Country(RuleCountry *rules);
 	/// Cleans up the country.
 	~Country();
 	/// Loads the country from YAML.
 	void load(const YAML::Node& node);
 	/// Saves the country to YAML.
-	void save(YAML::Emitter& out, std::string name) const;
+	void save(YAML::Emitter& out) const;
+	/// Gets the country's ruleset.
+	RuleCountry *const getRules() const;
 	/// Gets the country's funding.
 	int getFunding() const;
 	/// Sets the country's funding.
 	void setFunding(int funding);
 	/// Gets the country's funding change.
 	int getChange() const;
-	/// Gets the country's label X position.
-	double getLabelLongitude() const;
-	/// Sets the country's label position.
-	void setLabelLongitude(double lon);
-	/// Gets the country's label Y position.
-	double getLabelLatitude() const;
-	/// Sets the country's label position.
-	void setLabelLatitude(double lat);
 };
 
 }

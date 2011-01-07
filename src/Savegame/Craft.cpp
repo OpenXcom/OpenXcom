@@ -79,6 +79,7 @@ Craft::~Craft()
 /**
  * Loads the craft from a YAML file.
  * @param node YAML node.
+ * @param rule Ruleset for the saved game.
  */
 void Craft::load(const YAML::Node &node, Ruleset *rule)
 {
@@ -169,7 +170,7 @@ void Craft::save(YAML::Emitter &out) const
  */
 void Craft::saveId(YAML::Emitter &out) const
 {
-	Target::saveId(out);
+	MovingTarget::saveId(out);
 	out << YAML::Key << "type" << YAML::Value << _rules->getType();
 	out << YAML::Key << "id" << YAML::Value << _id;
 	out << YAML::EndMap;

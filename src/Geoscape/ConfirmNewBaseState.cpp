@@ -30,6 +30,7 @@
 #include "../Interface/TextButton.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Region.h"
+#include "../Ruleset/RuleRegion.h"
 #include "../Savegame/Base.h"
 #include "BaseNameState.h"
 #include "GeoscapeErrorState.h"
@@ -76,12 +77,12 @@ ConfirmNewBaseState::ConfirmNewBaseState(Game *game, Base *base, Globe *globe) :
 	_btnCancel->onMouseClick((ActionHandler)&ConfirmNewBaseState::btnCancelClick);
 
 	std::stringstream ss;
-	for (std::map<std::string, Region*>::iterator i = _game->getSavedGame()->getRegions()->begin(); i != _game->getSavedGame()->getRegions()->end(); i++)
+	for (std::vector<Region*>::iterator i = _game->getSavedGame()->getRegions()->begin(); i != _game->getSavedGame()->getRegions()->end(); i++)
 	{
-		if (i->second->insideRegion(_base->getLongitude(), _base->getLatitude()))
+		if ((*i)->getRules()->insideRegion(_base->getLongitude(), _base->getLatitude()))
 		{
-			_cost = i->second->getBaseCost();
-			ss << _game->getResourcePack()->getLanguage()->getString("STR_AREA_") << _game->getResourcePack()->getLanguage()->getString(i->first);
+			_cost = (*i)->getRules()->getBaseCost();
+			ss << _game->getResourcePack()->getLanguage()->getString("STR_AREA_") << _game->getResourcePack()->getLanguage()->getString((*i)->getRules()->getType());
 			break;
 		}
 	}

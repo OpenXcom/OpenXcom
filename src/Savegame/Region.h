@@ -25,36 +25,29 @@
 namespace OpenXcom
 {
 
-class City;
+class RuleRegion;
 
 /**
  * Represents a region of the world.
- * Regions help localize X-Com and alien activity around
- * the globe and also affect base construction costs.
+ * Contains variable info about a region like
+ * X-Com and alien activity in it.
  */
 class Region
 {
 private:
-	int _cost;
-	std::vector<double> _lonMin, _lonMax, _latMin, _latMax;
-	std::vector<City*> _cities;
+	RuleRegion *_rules;
+	int _activityXcom, _activityAlien;
 public:
-	/// Creates a new region with a base cost.
-	Region(int cost);
+	/// Creates a new region of the specified type.
+	Region(RuleRegion *rules);
 	/// Cleans up the region.
 	~Region();
 	/// Loads the region from YAML.
 	void load(const YAML::Node& node);
 	/// Saves the region to YAML.
-	void save(YAML::Emitter& out, std::string name) const;
-	/// Gets the region's base cost.
-	int getBaseCost() const;
-	/// Adds an area to the region.
-	void addArea(double lonMin, double lonMax, double latMin, double latMax);
-	/// Checks if a point is inside the region.
-	bool insideRegion(double lon, double lat) const;
-	/// Gets the cities in this region.
-	std::vector<City*> *const getCities();
+	void save(YAML::Emitter& out) const;
+	/// Gets the region's ruleset.
+	RuleRegion *const getRules() const;
 };
 
 }

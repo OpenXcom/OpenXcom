@@ -32,6 +32,7 @@
 #include "../Savegame/BaseFacility.h"
 #include "../Ruleset/RuleBaseFacility.h"
 #include "../Savegame/Region.h"
+#include "../Ruleset/RuleRegion.h"
 #include "../Geoscape/GeoscapeState.h"
 #include "BasescapeErrorState.h"
 #include "DismantleFacilityState.h"
@@ -221,11 +222,11 @@ void BasescapeState::init()
 	_mini->draw();
 	_txtBase->setText(_base->getName());
 
-	for (std::map<std::string, Region*>::iterator i = _game->getSavedGame()->getRegions()->begin(); i != _game->getSavedGame()->getRegions()->end(); i++)
+	for (std::vector<Region*>::iterator i = _game->getSavedGame()->getRegions()->begin(); i != _game->getSavedGame()->getRegions()->end(); i++)
 	{
-		if (i->second->insideRegion(_base->getLongitude(), _base->getLatitude()))
+		if ((*i)->getRules()->insideRegion(_base->getLongitude(), _base->getLatitude()))
 		{
-			_txtLocation->setText(_game->getResourcePack()->getLanguage()->getString(i->first));
+			_txtLocation->setText(_game->getResourcePack()->getLanguage()->getString((*i)->getRules()->getType()));
 			break;
 		}
 	}

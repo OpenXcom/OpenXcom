@@ -19,7 +19,7 @@
 #include "Soldier.h"
 #include "../Engine/RNG.h"
 #include "../Savegame/Craft.h"
-#include "../Resource/SoldierNamePool.h"
+#include "../Ruleset/SoldierNamePool.h"
 
 namespace OpenXcom
 {

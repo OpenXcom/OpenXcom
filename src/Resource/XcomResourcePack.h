@@ -29,8 +29,6 @@ namespace OpenXcom
  */
 class XcomResourcePack : public ResourcePack
 {
-private:
-
 public:
 	/// Creates the X-Com ruleset.
 	XcomResourcePack(const std::string &folder);

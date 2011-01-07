@@ -29,6 +29,7 @@
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
 #include "../Savegame/Country.h"
+#include "../Ruleset/RuleCountry.h"
 #include "../Savegame/SavedGame.h"
 
 namespace OpenXcom
@@ -91,11 +92,11 @@ FundingState::FundingState(Game *game) : State(game)
 	_lstCountries->setColor(Palette::blockOffset(15)-1);
 	_lstCountries->setColumns(3, 108, 100, 72);
 	_lstCountries->setDot(true);
-	for (std::map<std::string, Country*>::iterator i = _game->getSavedGame()->getCountries()->begin(); i != _game->getSavedGame()->getCountries()->end(); i++)
+	for (std::vector<Country*>::iterator i = _game->getSavedGame()->getCountries()->begin(); i != _game->getSavedGame()->getCountries()->end(); i++)
 	{
 		std::stringstream ss;
-		ss << i->second->getChange();
-		_lstCountries->addRow(3, _game->getResourcePack()->getLanguage()->getString(i->first).c_str(), Text::formatFunding(i->second->getFunding()).c_str(), ss.str().c_str());
+		ss << (*i)->getChange();
+		_lstCountries->addRow(3, _game->getResourcePack()->getLanguage()->getString((*i)->getRules()->getType()).c_str(), Text::formatFunding((*i)->getFunding()).c_str(), ss.str().c_str());
 	}
 	_lstCountries->addRow(2, _game->getResourcePack()->getLanguage()->getString("STR_TOTAL_UC").c_str(), Text::formatFunding(_game->getSavedGame()->getCountryFunding()).c_str());
 	_lstCountries->getCell(_game->getSavedGame()->getCountries()->size(), 0)->setColor(Palette::blockOffset(8)+5);

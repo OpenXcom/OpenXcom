@@ -51,8 +51,8 @@ private:
 	GameDifficulty _difficulty;
 	GameTime *_time;
 	int _funds;
-	std::map<std::string, Country*> _countries;
-	std::map<std::string, Region*> _regions;
+	std::vector<Country*> _countries;
+	std::vector<Region*> _regions;
 	std::vector<Base*> _bases;
 	std::vector<Ufo*> _ufos;
 	std::map<std::string, int> _craftId;
@@ -77,11 +77,11 @@ public:
 	/// Gets the current game time.
 	GameTime *const getTime() const;
 	/// Gets the list of countries.
-	std::map<std::string, Country*> *const getCountries();
+	std::vector<Country*> *const getCountries();
 	/// Gets the total country funding.
 	int getCountryFunding() const;
 	/// Gets the list of regions.
-	std::map<std::string, Region*> *const getRegions();
+	std::vector<Region*> *const getRegions();
 	/// Gets the list of bases.
 	std::vector<Base*> *const getBases();
 	/// Gets the total base maintenance.
