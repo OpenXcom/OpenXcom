@@ -485,7 +485,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	nafrica->getCities()->push_back(new City("STR_CAIRO", 0.545415, -0.523599));
 	nafrica->getCities()->push_back(new City("STR_CASABLANCA", 6.1501, -0.584685));
 	
-	RuleRegion* safrica = new RuleRegion("STR_SOUTH_AFRICA");
+	RuleRegion* safrica = new RuleRegion("STR_SOUTHERN_AFRICA");
 	safrica->setBaseCost(550000);
 	safrica->addArea(0.0872665, 0.957749, 0, 0.69595);
 	safrica->getCities()->push_back(new City("STR_PRETORIA", 0.490874, 0.458149));
