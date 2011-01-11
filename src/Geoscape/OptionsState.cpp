@@ -27,8 +27,7 @@
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "AbandonGameState.h"
-#include "GeoscapeState.h"
-#include "../Savegame/SavedGame.h"
+#include "../Menu/LoadGameState.h"
 
 namespace OpenXcom
 {
@@ -93,20 +92,21 @@ OptionsState::~OptionsState()
 	
 }
 
+/**
+ * Opens the Load Game screen.
+ * @param action Pointer to an action.
+ */
 void OptionsState::btnLoadClick(Action *action)
 {
-	// Test load
-	SavedGame *s = new SavedGame(DIFF_BEGINNER);
-	s->load("test", _game->getRuleset());
-	delete _game->getSavedGame();
-	_game->setSavedGame(s);
-	_game->setState(new GeoscapeState(_game));
+	_game->pushState(new LoadGameState(_game));
 }
 
 void OptionsState::btnSaveClick(Action *action)
 {
 	// Test save
+	/*
 	_game->getSavedGame()->save("test");
+	*/
 }
 
 /**

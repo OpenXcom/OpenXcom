@@ -28,6 +28,7 @@
 #include "../Interface/Text.h"
 #include "../Engine/Music.h"
 #include "NewGameState.h"
+#include "LoadGameState.h"
 
 namespace OpenXcom
 {
@@ -88,6 +89,16 @@ MainMenuState::~MainMenuState()
 }
 
 /**
+ * Resets the palette
+ * since it's bound to change on other screens.
+ */
+void MainMenuState::init()
+{
+	// Set palette
+	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+}
+
+/**
  * Opens the New Game window.
  * @param action Pointer to an action.
  */
@@ -97,12 +108,12 @@ void MainMenuState::btnNewClick(Action *action)
 }
 
 /**
- * Opens the Load Saved Game window.
+ * Opens the Load Game screen.
  * @param action Pointer to an action.
  */
 void MainMenuState::btnLoadClick(Action *action)
 {
-	
+	_game->pushState(new LoadGameState(_game));
 }
 
 /**

@@ -98,6 +98,10 @@ void Font::load()
  */
 Surface *const Font::getChar(char c)
 {
+	if (_chars.find(c) == _chars.end())
+	{
+		c = '?';
+	}
 	_surface->getCrop()->x = _chars[c].x;
 	_surface->getCrop()->y = _chars[c].y;
 	_surface->getCrop()->w = _chars[c].w;

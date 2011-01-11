@@ -386,6 +386,9 @@
     <ClCompile Include="Ruleset\SoldierNamePool.cpp">
       <Filter>Ruleset</Filter>
     </ClCompile>
+    <ClCompile Include="Menu\LoadGameState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -772,6 +775,12 @@
     </ClInclude>
     <ClInclude Include="Ruleset\SoldierNamePool.h">
       <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\LoadGameState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\dirent.h">
+      <Filter>Menu</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -64,10 +64,10 @@ int main(int argc, char** args)
 	catch (const char* c)
 	{
 		std::cerr << "ERROR: " << c << std::endl;
-		exit(-1);
+		exit(EXIT_FAILURE);
 	}
 	
 	delete game;
 
-	return 0;
+	return EXIT_SUCCESS;
 }

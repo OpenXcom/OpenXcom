@@ -427,7 +427,7 @@ void XcomResourcePack::loadBattlescapeResources(std::string folder)
 	s << folder << "UFOGRAPH/" << "CURSOR.PCK";
 	s2 << folder << "UFOGRAPH/" << "CURSOR.TAB";
 	_sets["CURSOR.PCK"] = new SurfaceSet(32, 40);
-	_sets["CURSOR.PCK"]->loadPck(insensitive(s.str()),insensitive(s2.str()));
+	_sets["CURSOR.PCK"]->loadPck(insensitive(s.str()), insensitive(s2.str()));
 
 	// Load Batltescape terrain
 	std::string bsets[] = {"AVENGER.PCK",
@@ -463,29 +463,19 @@ void XcomResourcePack::loadBattlescapeResources(std::string folder)
 		std::stringstream s;
 		s << folder << "TERRAIN/" << bsets[i];
 
-		std::string ext = bsets[i].substr(bsets[i].length()-3, bsets[i].length());
-		if (ext == "PCK")
-		{
-			std::string tab = bsets[i].substr(0, bsets[i].length()-4) + ".TAB";
-			std::string mcd = bsets[i].substr(0, bsets[i].length()-4) + ".MCD";
-			std::stringstream s2;
-			s2 << folder << "TERRAIN/" << tab;
-			std::stringstream s3;
-			s3 << folder << "TERRAIN/" << mcd;
-			_sets[bsets[i]] = new SurfaceSet(32, 40);
-			_sets[bsets[i]]->loadPck(insensitive(s.str()), insensitive(s2.str()));
-			_terrainSets[mcd] = new TerrainObjectSet(s3.str());
-			_terrainSets[mcd]->load(insensitive(s3.str()));
-			_terrainSets[mcd]->linkSprites(_sets[bsets[i]]);
-		}
-		else
-		{
-			_sets[bsets[i]] = new SurfaceSet(32, 32);
-			_sets[bsets[i]]->loadDat(insensitive(s.str()));
-		}
+		std::string tab = bsets[i].substr(0, bsets[i].length()-4) + ".TAB";
+		std::string mcd = bsets[i].substr(0, bsets[i].length()-4) + ".MCD";
+		std::stringstream s2, s3;
+		s2 << folder << "TERRAIN/" << tab;
+		s3 << folder << "TERRAIN/" << mcd;
+		_sets[bsets[i]] = new SurfaceSet(32, 40);
+		_sets[bsets[i]]->loadPck(insensitive(s.str()), insensitive(s2.str()));
+		_terrainSets[mcd] = new TerrainObjectSet(s3.str());
+		_terrainSets[mcd]->load(insensitive(s3.str()));
+		_terrainSets[mcd]->linkSprites(_sets[bsets[i]]);
 	}
 
-		// Load Battlescape units
+	// Load Battlescape units
 	std::string usets[] = {"SILACOID.PCK",
 							"CELATID.PCK",
 							"HANDOB.PCK",
@@ -513,20 +503,12 @@ void XcomResourcePack::loadBattlescapeResources(std::string folder)
 		std::stringstream s;
 		s << folder << "UNITS/" << usets[i];
 
-		std::string ext = usets[i].substr(usets[i].length()-3, usets[i].length());
-		if (ext == "PCK")
-		{
-			std::string tab = usets[i].substr(0, usets[i].length()-4) + ".TAB";
-			std::stringstream s2;
-			s2 << folder << "UNITS/" << tab;
-			_sets[usets[i]] = new SurfaceSet(32, 40);
-			_sets[usets[i]]->loadPck(insensitive(s.str()), insensitive(s2.str()));
-		}
-		else
-		{
-			_sets[usets[i]] = new SurfaceSet(32, 32);
-			_sets[usets[i]]->loadDat(insensitive(s.str()));
-		}
+		std::string tab = usets[i].substr(0, usets[i].length()-4) + ".TAB";
+		std::stringstream s2;
+		s2 << folder << "UNITS/" << tab;
+		_sets[usets[i]] = new SurfaceSet(32, 40);
+		_sets[usets[i]]->loadPck(insensitive(s.str()), insensitive(s2.str()));
+		
 	}
 
 

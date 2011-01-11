@@ -885,6 +885,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Menu\LoadGameState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Menu\LoadGameState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Menu\MainMenuState.cpp"
 				>
 			</File>

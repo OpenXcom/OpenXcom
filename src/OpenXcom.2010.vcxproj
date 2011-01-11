@@ -92,7 +92,7 @@
       <AdditionalDependencies>yaml-cpp.lib;SDL_mixer.lib;SDL_gfx.lib;SDLmain.lib;SDL.lib;SDL_gfx.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\deps\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
@@ -191,6 +191,7 @@
     <ClCompile Include="Interface\Window.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Menu\LanguageState.cpp" />
+    <ClCompile Include="Menu\LoadGameState.cpp" />
     <ClCompile Include="Menu\MainMenuState.cpp" />
     <ClCompile Include="Menu\NewGameState.cpp" />
     <ClCompile Include="Menu\StartState.cpp" />
@@ -320,7 +321,9 @@
     <ClInclude Include="Interface\TextEdit.h" />
     <ClInclude Include="Interface\TextList.h" />
     <ClInclude Include="Interface\Window.h" />
+    <ClInclude Include="Menu\dirent.h" />
     <ClInclude Include="Menu\LanguageState.h" />
+    <ClInclude Include="Menu\LoadGameState.h" />
     <ClInclude Include="Menu\MainMenuState.h" />
     <ClInclude Include="Menu\NewGameState.h" />
     <ClInclude Include="Menu\StartState.h" />

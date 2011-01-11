@@ -20,6 +20,7 @@
 #include "GeoscapeState.h"
 #include <cmath>
 #include <sstream>
+#include <iomanip>
 #include "../Engine/RNG.h"
 #include "../Engine/Game.h"
 #include "../Engine/Action.h"
@@ -353,24 +354,10 @@ void GeoscapeState::timeDisplay()
 {
 	std::stringstream ss, ss2, ss3, ss4, ss5;
 	
-	if (_game->getSavedGame()->getTime()->getSecond() < 10)
-	{
-		ss << "0" << _game->getSavedGame()->getTime()->getSecond();
-	}
-	else
-	{
-		ss << _game->getSavedGame()->getTime()->getSecond();
-	}
+	ss << std::setfill('0') << std::setw(2) << _game->getSavedGame()->getTime()->getSecond();
 	_txtSec->setText(ss.str());
 
-	if (_game->getSavedGame()->getTime()->getMinute() < 10)
-	{
-		ss2 << "0" << _game->getSavedGame()->getTime()->getMinute();
-	}
-	else
-	{
-		ss2 << _game->getSavedGame()->getTime()->getMinute();
-	}
+	ss2 << std::setfill('0') << std::setw(2) << _game->getSavedGame()->getTime()->getMinute();
 	_txtMin->setText(ss2.str());
 
 	ss3 << _game->getSavedGame()->getTime()->getHour();

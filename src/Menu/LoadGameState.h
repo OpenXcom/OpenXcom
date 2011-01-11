@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010 Daniel Albano
  *
  * This file is part of OpenXcom.
  *
@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_MAINMENUSTATE_H
-#define OPENXCOM_MAINMENUSTATE_H
+#ifndef OPENXCOM__LOADGAMESTATE_H
+#define OPENXCOM__LOADGAMESTATE_H
 
 #include "../Engine/State.h"
 
@@ -27,30 +27,30 @@ namespace OpenXcom
 class TextButton;
 class Window;
 class Text;
+class TextList;
 
 /**
- * Main Menu window displayed when first
- * starting the game.
+ * Load Game screen for listing info on available
+ * saved games and loading them.
  */
-class MainMenuState : public State
+class LoadGameState : public State
 {
 private:
-	TextButton *_btnNew, *_btnLoad, *_btnQuit;
+	TextButton *_btnCancel;
 	Window *_window;
-	Text *_txtTitle;
+	Text *_txtTitle, *_txtName, *_txtTime, *_txtDate;
+	TextList *_lstSaves;
 public:
-	/// Creates the Main Menu state.
-	MainMenuState(Game *game);
-	/// Cleans up the Main Menu state.
-	~MainMenuState();
-	/// Updates the palette.
-	void init();
-	/// Handler for clicking the New Game button.
-	void btnNewClick(Action *action);
-	/// Handler for clicking the Load Saved Game button.
-	void btnLoadClick(Action *action);
-	/// Handler for clicking the Quit button.
-	void btnQuitClick(Action *action);
+	/// Creates the Load Game state.
+	LoadGameState(Game *game);
+	/// Cleans up the Load Game state.
+	~LoadGameState();
+	/// Gets all the saves in a folder.
+	void getSavesList(const std::string &dir);
+	/// Handler for clicking the Cancel button.
+	void btnCancelClick(Action *action);
+	/// Handler for clicking the Soldiers list.
+	void lstSavesClick(Action *action);
 };
 
 }

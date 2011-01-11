@@ -33,17 +33,15 @@ namespace OpenXcom
  * @param height Height in pixels.
  * @param bpp Bits-per-pixel.
  */
-Screen::Screen(int width, int height, int bpp) : _width(width), _height(height), _bpp(bpp), _xScale(1.0), _yScale(1.0), _fullscreen(false)
+Screen::Screen(int width, int height, int bpp) : _xScale(1.0), _yScale(1.0), _fullscreen(false)
 {
 	_flags = SDL_SWSURFACE|SDL_HWPALETTE;
-
-	_screen = SDL_SetVideoMode(_width, _height, _bpp, _flags);
+	_screen = SDL_SetVideoMode(width, height, bpp, _flags);
 	if (_screen == 0)
 	{
 		throw SDL_GetError();
 	}
-
-	_surface = new Surface(_width, _height);
+	_surface = new Surface(width, height);
 }
 
 /**
@@ -86,7 +84,7 @@ void Screen::handle(Action *action)
  */
 void Screen::flip()
 {
-	if (_xScale != 1.0 && _yScale != 1.0)
+	if (getWidth() != BASE_WIDTH || getHeight() != BASE_HEIGHT)
 	{
 		SDL_Surface* zoom = zoomSurface(_surface->getSurface(), _xScale, _yScale, 0);
 		SDL_BlitSurface(zoom, 0, _screen, 0);
@@ -112,8 +110,8 @@ void Screen::clear()
 	SDL_Rect square;
 	square.x = 0;
 	square.y = 0;
-	square.w = _width;
-	square.h = _height;
+	square.w = getWidth();
+	square.h = getHeight();
 	SDL_FillRect(_screen, &square, 0);
 }
 
@@ -139,6 +137,24 @@ SDL_Color *const Screen::getPalette() const
 }
 
 /**
+ * Returns the width of the screen.
+ * @return Width in pixels.
+ */
+int Screen::getWidth() const
+{
+	return _screen->w;
+}
+
+/**
+ * Returns the height of the screen.
+ * @return Height in pixels
+ */
+int Screen::getHeight() const
+{
+	return _screen->h;
+}
+
+/**
  * Changes the screen's resolution. The display surface
  * and palette have to be reset for this to happen properly.
  * @param width Width in pixels.
@@ -146,11 +162,9 @@ SDL_Color *const Screen::getPalette() const
  */
 void Screen::setResolution(int width, int height)
 {
-	_width = width;
-	_height = height;
-	_xScale = _width / BASE_WIDTH;
-	_yScale = _height / BASE_HEIGHT;
-	_screen = SDL_SetVideoMode(_width, _height, _bpp, _flags);
+	_xScale = width / BASE_WIDTH;
+	_yScale = height / BASE_HEIGHT;
+	_screen = SDL_SetVideoMode(width, height, _screen->format->BitsPerPixel, _flags);
 	if (_screen == 0)
 	{
 		throw SDL_GetError();
@@ -174,7 +188,7 @@ void Screen::setFullscreen(bool full)
 	{
 		_flags &= ~SDL_FULLSCREEN;
 	}
-	setResolution(_width, _height);
+	setResolution(getWidth(), getHeight());
 }
 
 /**

@@ -40,7 +40,6 @@ class Screen
 private:
 	Surface *_surface;
 	SDL_Surface *_screen;
-	int _width, _height, _bpp;
 	double _xScale, _yScale;
 	Uint32 _flags;
 	bool _fullscreen;
@@ -61,6 +60,10 @@ public:
 	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
 	/// Gets the screen's 8bpp palette.
 	SDL_Color *const getPalette() const;
+	/// Gets the screen's width.
+	int getWidth() const;
+	/// Gets the screen's height.
+	int getHeight() const;
 	/// Sets the screen's display resolution.
 	void setResolution(int width, int height);
 	/// Sets whether the screen is full-screen or windowed.

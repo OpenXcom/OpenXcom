@@ -80,6 +80,10 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 
 	std::string s = "./USER/" + filename + ".sav";
 	std::ifstream fin(s.c_str());
+	if (!fin)
+	{
+		throw "Failed to load savegame";
+	}
     YAML::Parser parser(fin);
 	YAML::Node doc;
     parser.GetNextDocument(doc);
@@ -151,11 +155,18 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 }
 
 /**
- * Saves a saved game's contents from a YAML file.
+ * Saves a saved game's contents to a YAML file.
  * @param filename YAML filename.
  */
 void SavedGame::save(const std::string &filename) const
 {
+	std::string s = "./USER/" + filename + ".sav";
+	std::ofstream sav(s.c_str());
+	if (!sav)
+	{
+		throw "Failed to save savegame";
+	}
+
 	YAML::Emitter out;
 	out << YAML::BeginMap;
 	out << YAML::Key << "version" << YAML::Value << "0.2";
@@ -208,8 +219,6 @@ void SavedGame::save(const std::string &filename) const
 	}
 	out << YAML::EndMap;
 
-	std::string s = "./USER/" + filename + ".sav";
-	std::ofstream sav(s.c_str());
 	sav << out.c_str();
 	sav.close();
 }
