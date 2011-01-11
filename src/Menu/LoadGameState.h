@@ -19,6 +19,7 @@
 #ifndef OPENXCOM__LOADGAMESTATE_H
 #define OPENXCOM__LOADGAMESTATE_H
 
+#include <string>
 #include "../Engine/State.h"
 
 namespace OpenXcom
