@@ -214,6 +214,7 @@
 		<Unit filename="Interface\TextList.h" />
 		<Unit filename="Interface\Window.cpp" />
 		<Unit filename="Interface\Window.h" />
+		<Unit filename="Menu\dirent.h" />
 		<Unit filename="Menu\LanguageState.cpp" />
 		<Unit filename="Menu\LanguageState.h" />
 		<Unit filename="Menu\LoadGameState.cpp" />
