@@ -64,7 +64,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Globe::Globe(int cenX, int cenY, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _radius(), _cenLon(0.0), _cenLat(0.0), _rotLon(0.0), _rotLat(0.0), _cenX(cenX), _cenY(cenY), _zoom(0), _res(0), _save(0), _blink(true), _detail(true), _cacheLand()
+Globe::Globe(int cenX, int cenY, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _radius(), _cenLon(-0.01), _cenLat(-0.1), _rotLon(0.0), _rotLat(0.0), _cenX(cenX), _cenY(cenY), _zoom(0), _res(0), _save(0), _blink(true), _detail(true), _cacheLand()
 {
 	_radius.push_back(90);
 	_radius.push_back(120);
@@ -214,8 +214,8 @@ Globe::~Globe()
 void Globe::polarToCart(double lon, double lat, Sint16 *x, Sint16 *y) const
 {
 	// Orthographic projection
-	*x = _cenX + (Sint16)floor(_radius[_zoom] * cos(lat) * sin(lon + _cenLon));
-	*y = _cenY + (Sint16)floor(_radius[_zoom] * (cos(_cenLat) * sin(lat) + sin(_cenLat) * cos(lat) * cos(lon + _cenLon)));
+	*x = _cenX + (Sint16)floor(_radius[_zoom] * cos(lat) * sin(lon - _cenLon));
+	*y = _cenY + (Sint16)floor(_radius[_zoom] * (cos(_cenLat) * sin(lat) - sin(_cenLat) * cos(lat) * cos(lon - _cenLon)));
 }
 
 /**
@@ -235,8 +235,8 @@ void Globe::cartToPolar(Sint16 x, Sint16 y, double *lon, double *lat) const
 	double rho = sqrt((double)(x*x + y*y));
 	double c = asin(rho / (_radius[_zoom]));
 
-	*lat = asin((y * sin(c) * cos(_cenLat)) / rho - cos(c) * sin(_cenLat));
-	*lon = atan2(x * sin(c), rho * cos(_cenLat) * cos(c) + y * sin(_cenLat) * sin(c)) - _cenLon;
+	*lat = asin((y * sin(c) * cos(_cenLat)) / rho + cos(c) * sin(_cenLat));
+	*lon = atan2(x * sin(c),(rho * cos(_cenLat) * cos(c) - y * sin(_cenLat) * sin(c))) + _cenLon;
 
 	// Keep between 0 and 2xPI
 	while (*lon < 0)
@@ -254,9 +254,21 @@ void Globe::cartToPolar(Sint16 x, Sint16 y, double *lon, double *lat) const
  */
 bool Globe::pointBack(double lon, double lat) const
 {
-	double c = cos(_cenLat) * cos(lat) * cos(lon + _cenLon) - sin(_cenLat) * sin(lat);
+	double c = cos(_cenLat) * cos(lat) * cos(lon - _cenLon) + sin(_cenLat) * sin(lat);
 	
 	return c < 0;
+}
+
+
+/** Return latitude of last visible to player point on given longitude.
+ * @param lon Longitude of the point.
+ * @return Longitude of last visible point.
+ */
+double Globe::lastVisibleLat(double lon) const
+{
+//	double c = cos(_cenLat) * cos(lat) * cos(lon - _cenLon) + sin(_cenLat) * sin(lat);
+//        tan(lat) = -cos(_cenLat) * cos(lon - _cenLon)/sin(_cenLat) ;
+	return atan(-cos(_cenLat) * cos(lon - _cenLon)/sin(_cenLat));
 }
 
 /**
@@ -383,7 +395,7 @@ void Globe::setSavedGame(SavedGame *save)
  */
 void Globe::rotateLeft()
 {
-	_rotLon = ROTATE_LONGITUDE;
+	_rotLon = -ROTATE_LONGITUDE;
 	_rotTimer->start();
 }
 
@@ -392,7 +404,7 @@ void Globe::rotateLeft()
  */
 void Globe::rotateRight()
 {
-	_rotLon = -ROTATE_LONGITUDE;
+	_rotLon = ROTATE_LONGITUDE;
 	_rotTimer->start();
 }
 
@@ -401,7 +413,7 @@ void Globe::rotateRight()
  */
 void Globe::rotateUp()
 {
-	_rotLat = ROTATE_LATITUDE;
+	_rotLat = -ROTATE_LATITUDE;
 	_rotTimer->start();
 }
 
@@ -410,7 +422,7 @@ void Globe::rotateUp()
  */
 void Globe::rotateDown()
 {
-	_rotLat = -ROTATE_LATITUDE;
+	_rotLat = ROTATE_LATITUDE;
 	_rotTimer->start();
 }
 
@@ -474,8 +486,17 @@ void Globe::zoomMax()
  */
 void Globe::center(double lon, double lat)
 {
-	_cenLon = -lon;
-	_cenLat = -lat;
+	_cenLon = lon;
+	_cenLat = lat;
+	// HORRIBLE HORRORS CONTAINED WITHIN
+	if (_cenLon > -0.01 && _cenLon < 0.01)
+	{
+		_cenLon = -0.01;
+	}
+	if (_cenLat > -0.01 && _cenLat < 0.01)
+	{
+		_cenLat = -0.1;
+	}
 	cachePolygons();
 }
 
@@ -695,6 +716,15 @@ void Globe::rotate()
 {
 	_cenLon += _rotLon;
 	_cenLat += _rotLat;
+	// DON'T UNLEASH THE TERRORS
+	if (_cenLon > -0.01 && _cenLon < 0.01)
+	{
+		_cenLon = -0.01;
+	}
+	if (_cenLat > -0.01 && _cenLat < 0.01)
+	{
+		_cenLat = -0.1;
+	}
 	cachePolygons();
 }
 
@@ -718,17 +748,25 @@ void Globe::draw()
  */
 void Globe::fillLongitudeSegments(double startLon, double endLon, int colourShift)
 {
-	double traceLon, traceLat, destLon;
+	double traceLon, traceLat, endLan, startLan;
+	double dL ; // dL - delta of Latitude and used as delta of pie
 	Sint16 direction, x, y;
 	std::vector<Sint16> polyPointsX, polyPointsY, polyPointsX2, polyPointsY2;
 	Sint16 *dx, *dy;
+	double sx, sy;    
+	double angle1, angle2;
+	bool bigLonAperture = 0;
 
-	// Make sure we only go forwards
+	if (abs(startLon-endLon) > 1)
+	{
+		bigLonAperture=1; 
+	}
+                
+    // find two latitudes where        
+	startLan = lastVisibleLat(startLon);
+	endLan   = lastVisibleLat(endLon);
+
 	traceLon = startLon;
-	if (startLon > endLon)
-		destLon = endLon + 2 * M_PI;
-	else
-		destLon = endLon;
 
 	// If North pole visible, we want to head south (+1), if South pole, head North (-1)
 	if (!pointBack(traceLon, -M_PI / 2))
@@ -736,104 +774,159 @@ void Globe::fillLongitudeSegments(double startLon, double endLon, int colourShif
 	else
 		direction = -1;
 
-	// Start at pole
-	traceLat = (M_PI / 2) * (-1 * direction);
-
-	if (_cenLat != 0)
+	// Draw globe depending on the direction
+	if (direction == 1)
 	{
-		// Trace the longitude down to vanishing point
-		while (!pointBack(traceLon, traceLat))
+	    // draw fisrt longtitude line from pole
+		traceLon = startLon;
+		dL = (startLan+M_PI/2)/20;
+		for (traceLat = -M_PI/2; traceLat < startLan; traceLat += dL)
 		{
 			polarToCart(traceLon, traceLat, &x, &y);
 			polyPointsX.push_back(x);
-			polyPointsY.push_back(y);
-			traceLat += (QUAD_LATITUDE * direction);
+			polyPointsY.push_back(y);				
 		}
-
-		// Circle from start long to end long
-		while (traceLon < endLon)
-		{
-			traceLon += QUAD_LONGITUDE;
-			traceLat = (M_PI / 2) * direction;
-			// Reverse trace until point is visible
-			while(pointBack(traceLon, traceLat))
-				traceLat -= (QUAD_LATITUDE * direction);
-
-			// Store traced point
-			polarToCart(traceLon, traceLat, &x, &y);
-			polyPointsX.push_back(x);
-			polyPointsY.push_back(y);
+        
+        // if aperture of longtitude is big then we need find first angle of sector
+		if (bigLonAperture) 
+		{  
+			sx = x-_cenX; 
+			sy = y-_cenY;
+			angle1 = atan(sy/sx);
+			if (sx < 0) angle1 += M_PI; 
 		}
-
-		// Reverse trace our end longitude
+        
+	    // draw second longtitude line from pole
 		traceLon = endLon;
-		while (abs(traceLat) < abs(M_PI / 2))
+		dL = (endLan + M_PI/2)/20;
+		for (traceLat = -M_PI/2; traceLat < endLan; traceLat += dL)
 		{
 			polarToCart(traceLon, traceLat, &x, &y);
-			polyPointsX.push_back(x);
-			polyPointsY.push_back(y);
-			traceLat -= (QUAD_LATITUDE * direction);
+			polyPointsX2.push_back(x);
+			polyPointsY2.push_back(y);				
+		}
+        
+        // if aperture of longtitudes is big we need find second angle of sector and draw pie of circle between two longtitudes
+		if (bigLonAperture) 
+		{  
+			sx = x-_cenX;
+			sy = y-_cenY;
+			angle2 = atan(sy/sx);
+			if (sx<0)
+			{
+				angle2 += M_PI;
+			}
+		         
+		    // draw sector part of circle
+            if (angle1>angle2)
+		    { 
+                dL = (angle1-angle2)/20;
+				for (double a = angle2+dL/2; a < angle1; a += dL)
+				{
+					x = _cenX + (Sint16)floor(_radius[_zoom] * cos(a));
+					y = _cenY + (Sint16)floor(_radius[_zoom] * sin(a));
+					polyPointsX2.push_back(x);
+					polyPointsY2.push_back(y);				
+				}
+		    }
+			else 
+            {
+				dL = (2*M_PI+angle1-angle2)/20;
+				for (double a = angle2+dL/2; a < 2*M_PI+angle1; a += dL)
+				{
+					x = _cenX + (Sint16)floor(_radius[_zoom] * cos(a));
+					y = _cenY + (Sint16)floor(_radius[_zoom] * sin(a));
+					polyPointsX2.push_back(x);
+					polyPointsY2.push_back(y);				
+				}
+			}
 		}
 	}
 	else
 	{
-		double dayLon = startLon, hackDay = startLon, hackNight = endLon;
-		double hackDayLat, hackNightLat;
-		for (double idx = -M_PI / 2; idx < M_PI / 2; idx += QUAD_LATITUDE)
+	// another direction
+
+	    // draw fisrt longtitude line from pole
+		traceLon = startLon;
+		dL = (startLan - M_PI/2) / 20;
+		for (traceLat = M_PI/2; traceLat > startLan; traceLat += dL)
 		{
-			hackDayLat = idx;
-			hackNightLat = idx;
-			if (pointBack(hackDay, 0) && !pointBack(hackNight, 0))
+			polarToCart(traceLon, traceLat, &x, &y);
+			polyPointsX.push_back(x);
+			polyPointsY.push_back(y);				
+		}
+        
+        // if aperture of longtitude is big then we need find first angle of sector of pie between longtitudes
+		if (bigLonAperture)
+		{  
+			sx = x-_cenX;
+			sy = y-_cenY;
+			angle1 = atan(sy/sx);
+			if (sx<0) angle1 += M_PI; 
+		}
+        
+	    // draw second longtitude line from pole
+		traceLon = endLon;
+		dL = (endLan-M_PI/2)/20;
+		for (traceLat = M_PI/2; traceLat > endLan; traceLat += dL)
+		{
+			polarToCart(traceLon, traceLat, &x, &y);
+			polyPointsX2.push_back(x);
+			polyPointsY2.push_back(y);				
+		}
+                
+        // if aperture of longtitudes is big we need find second angle of sector and draw pie of circle between two longtitudes
+		if (bigLonAperture)
+		{  
+			sx = x-_cenX;
+			sy = y-_cenY;
+			angle2 = atan(sy/sx);
+			if (sx<0)
 			{
-				while(pointBack(hackDay, hackDayLat) && hackDay < hackNight)
-					hackDay += QUAD_LONGITUDE;
+				angle2 += M_PI;
 			}
-
-			if (!pointBack(hackDay, 0) && pointBack(hackNight, 0))
-			{
-				while(pointBack(hackNight, hackNightLat) && hackNight > dayLon)
-					hackNight -= QUAD_LONGITUDE;
-			}
-
-			if (!pointBack(hackDay, hackDayLat) || !pointBack(hackNight, hackNightLat))
-			{
-				if (!pointBack(hackDay, hackDayLat))
+			if (angle2>angle1)
+			{ 
+				dL = (angle2-angle1)/20;
+				for (double a = angle1+dL/2; a < angle2; a += dL)
 				{
-					polarToCart(hackDay, hackDayLat, &x, &y);
+					x = _cenX + (Sint16)floor(_radius[_zoom] * cos(a));
+					y = _cenY + (Sint16)floor(_radius[_zoom] * sin(a));
 					polyPointsX.push_back(x);
-					polyPointsY.push_back(y);
-					//drawPolygon(dx, dy, polyPointsX.size(), Palette::blockOffset(12) + colourShift);
+					polyPointsY.push_back(y);				
 				}
-
-				if (!pointBack(hackNight, hackNightLat))
+		    }
+			else 
+            {
+				dL = (2*M_PI+angle2-angle1)/20;
+				for (double a=angle1+dL/2; a < 2*M_PI+angle2; a += dL)
 				{
-					polarToCart(hackNight, hackNightLat, &x, &y);
-					polyPointsX2.push_back(x);
-					polyPointsY2.push_back(y);
+					x = _cenX + (Sint16)floor(_radius[_zoom] * cos(a));
+					y = _cenY + (Sint16)floor(_radius[_zoom] * sin(a));
+					polyPointsX.push_back(x);
+					polyPointsY.push_back(y);				
 				}
 			}
-		}
-		if (polyPointsX2.size() > 0)
-		{
-			for (int i = polyPointsX2.size() - 1; i >= 0; i--)
-			{
-				polyPointsX.push_back(polyPointsX2.at(i));
-				polyPointsY.push_back(polyPointsY2.at(i));
-			}
-		}
+		}                 
 	}
-
-	dx = new Sint16[polyPointsX.size()];
-	dy = new Sint16[polyPointsX.size()];
 	
-	if (polyPointsX.size() > 0)
+	dx = new Sint16[polyPointsX.size()+polyPointsX2.size()];
+	dy = new Sint16[polyPointsX.size()+polyPointsX2.size()];
+	
+	if (polyPointsX.size()+polyPointsX2.size() > 0)
 	{
 		for (unsigned int i = 0; i < polyPointsX.size(); i++)
 		{
 			dx[i] = polyPointsX.at(i);
 			dy[i] = polyPointsY.at(i);
 		}
-		drawPolygon(dx, dy, polyPointsX.size(), Palette::blockOffset(12) + colourShift);
+
+		for (unsigned int i = 0 ; i < polyPointsX2.size() ; i++)
+		{
+			dx[i+polyPointsX.size()] = polyPointsX2.at(polyPointsX2.size()-1-i);
+			dy[i+polyPointsX.size()] = polyPointsY2.at(polyPointsX2.size()-1-i);
+		}
+		drawPolygon(dx, dy, polyPointsX.size()+polyPointsX2.size(), Palette::blockOffset(12) + colourShift);
 	}
 
 	delete[] dx;
@@ -853,7 +946,7 @@ void Globe::drawOcean()
 
 	drawCircle(_cenX, _cenY, (Sint16)floor(_radius[_zoom]), Palette::blockOffset(12)+28);
 
-	fillLongitudeSegments(dayLon + QUAD_LONGITUDE, nightLon - QUAD_LONGITUDE, 0);
+	fillLongitudeSegments(dayLon   + QUAD_LONGITUDE, nightLon - QUAD_LONGITUDE, 0);
 	fillLongitudeSegments(dayLon - QUAD_LONGITUDE, dayLon, 16);
 	fillLongitudeSegments(dayLon, dayLon + QUAD_LONGITUDE, 8);
 	fillLongitudeSegments(nightLon - QUAD_LONGITUDE, nightLon, 8);

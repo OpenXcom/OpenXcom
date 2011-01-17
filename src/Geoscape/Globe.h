@@ -61,6 +61,8 @@ private:
 
 	/// Checks if a point is behind the globe.
 	bool pointBack(double lon, double lat) const;
+	/// Return latitude of last visible to player point on given longitude.
+	double lastVisibleLat(double lon) const;
 	/// Checks if a point is inside a polygon.
 	bool insidePolygon(double lon, double lat, Polygon *poly) const;
 	/// Checks if a target is near a point.
