@@ -32,9 +32,6 @@
 #include "../Geoscape/Polyline.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
-#include "TerrainObjectSet.h"
-#include "../Ruleset/MapBlock.h"
-#include "../Ruleset/RuleTerrain.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
 #include "../Savegame/Node.h"
@@ -403,7 +400,7 @@ XcomResourcePack::XcomResourcePack(const std::string &folder) : ResourcePack(fol
 	Window::soundPopup[1] = _sounds["GEO.CAT"]->getSound(2);
 	Window::soundPopup[2] = _sounds["GEO.CAT"]->getSound(3);
 
-	loadBattlescapeResources(folder);
+	loadBattlescapeResources(); // TODO load this at battlescape start, unload at battlescape end?
 }
 
 /**
@@ -414,65 +411,33 @@ XcomResourcePack::~XcomResourcePack()
 }
 
 
-void XcomResourcePack::loadBattlescapeResources(std::string folder)
+void XcomResourcePack::loadBattlescapeResources()
 {
 	// Load Battlescape ICONS
 	std::stringstream s;
-	s << folder << "UFOGRAPH/" << "ICONS.PCK";
+	s << _folder << "UFOGRAPH/" << "ICONS.PCK";
 	_surfaces["ICONS.PCK"] = new Surface(320, 200);
 	_surfaces["ICONS.PCK"]->loadSpk(insensitive(s.str()));
 
 	s.str("");
 	std::stringstream s2;
-	s << folder << "UFOGRAPH/" << "CURSOR.PCK";
-	s2 << folder << "UFOGRAPH/" << "CURSOR.TAB";
+	s << _folder << "UFOGRAPH/" << "CURSOR.PCK";
+	s2 << _folder << "UFOGRAPH/" << "CURSOR.TAB";
 	_sets["CURSOR.PCK"] = new SurfaceSet(32, 40);
 	_sets["CURSOR.PCK"]->loadPck(insensitive(s.str()), insensitive(s2.str()));
 
-	// Load Batltescape terrain
-	std::string bsets[] = {"AVENGER.PCK",
-							"BARN.PCK",
-							"BLANKS.PCK",
-							"BRAIN.PCK",
-							"CULTIVAT.PCK",
-							"DESERT.PCK",
-							"FOREST.PCK",
-							"FRNITURE.PCK",
-							"JUNGLE.PCK",
-							"LIGHTNIN.PCK",
-							"MARS.PCK",
-							"MOUNT.PCK",
-							"PLANE.PCK",
-							"POLAR.PCK",
-							"ROADS.PCK",
-							"U_BASE.PCK",
-							"U_BITS.PCK",
-							"U_DISEC2.PCK",
-							"U_EXT02.PCK",
-							"U_OPER2.PCK",
-							"U_PODS.PCK",
-							"U_WALL02.PCK",
-							"UFO1.PCK",
-							"URBAN.PCK",
-							"URBITS.PCK",
-							"XBASE1.PCK",
-							"XBASE2.PCK"};
+	// Load Battlescape Terrain (only blacks are loaded, others are loaded at runtime)
+	std::string bsets[] = {"BLANKS.PCK"};
 
-	for (int i = 0; i < 27; i++)
+	for (int i = 0; i < 1; i++)
 	{
 		std::stringstream s;
-		s << folder << "TERRAIN/" << bsets[i];
-
+		s << _folder << "TERRAIN/" << bsets[i];
 		std::string tab = bsets[i].substr(0, bsets[i].length()-4) + ".TAB";
-		std::string mcd = bsets[i].substr(0, bsets[i].length()-4) + ".MCD";
-		std::stringstream s2, s3;
-		s2 << folder << "TERRAIN/" << tab;
-		s3 << folder << "TERRAIN/" << mcd;
+		std::stringstream s2;
+		s2 << _folder << "TERRAIN/" << tab;
 		_sets[bsets[i]] = new SurfaceSet(32, 40);
 		_sets[bsets[i]]->loadPck(insensitive(s.str()), insensitive(s2.str()));
-		_terrainSets[mcd] = new TerrainObjectSet(s3.str());
-		_terrainSets[mcd]->load(insensitive(s3.str()));
-		_terrainSets[mcd]->linkSprites(_sets[bsets[i]]);
 	}
 
 	// Load Battlescape units
@@ -501,146 +466,14 @@ void XcomResourcePack::loadBattlescapeResources(std::string folder)
 	for (int i = 0; i < 20; i++)
 	{
 		std::stringstream s;
-		s << folder << "UNITS/" << usets[i];
-
+		s << _folder << "UNITS/" << usets[i];
 		std::string tab = usets[i].substr(0, usets[i].length()-4) + ".TAB";
 		std::stringstream s2;
-		s2 << folder << "UNITS/" << tab;
+		s2 << _folder << "UNITS/" << tab;
 		_sets[usets[i]] = new SurfaceSet(32, 40);
 		_sets[usets[i]]->loadPck(insensitive(s.str()), insensitive(s2.str()));
-		
 	}
 
-
-}
-
-
-/**
- * Loads a X-Com format MAP file into the tiles of the battlegame.
- * @param mapblock Pointer to MapBlock.
- * @param xoff Mapblock offset in X direction.
- * @param yoff Mapblock offset in Y direction.
- * @param save Pointer to the current SavedBattleGame.
- * @param terrain Pointer to the Terrain rule.
- * @param discovered Whether or not this mapblock is discovered (eg. landingsite of the x-com plane)
- * @return int Height of the loaded mapblock (this is needed for spawpoint calculation...)
- * @sa http://www.ufopaedia.org/index.php?title=MAPS
- * @note Y-axis is in reverse order
- */
-int XcomResourcePack::loadMAP(MapBlock *mapblock, int xoff, int yoff, SavedBattleGame *save, RuleTerrain *terrain, bool discovered)
-{
-	int width, length, height;
-	int x = xoff, y = yoff, z = 0;
-	char size[3];
-	unsigned char value[4];
-	std::stringstream filename;
-	filename << _folder << "MAPS/" << mapblock->getName() << ".MAP";
-	std::string mapDataFileName;
-	int terrainObjectID;
-
-	// Load file
-	std::ifstream mapFile (insensitive(filename.str()).c_str(), std::ios::in| std::ios::binary);
-	if (!mapFile)
-	{
-		throw "Failed to load MAP";
-	}
-	
-	mapFile.read((char*)&size, sizeof(size));
-	length = (int)size[0];
-	width = (int)size[1];
-	height = (int)size[2];
-	z += height - 1;
-	y += length - 1;
-	mapblock->setHeight(height);
-
-	while (mapFile.read((char*)&value, sizeof(value)))
-	{
-		for (int part = 0; part < 4; part++)
-		{
-			terrainObjectID = (int)((unsigned char)value[part]);
-			if (terrainObjectID>0)
-			{
-				save->getTile(Position(x, y, z))->setName(terrain->getTerrainObjectName(terrainObjectID),part);
-			}
-			// if the part is empty and it's not a floor, remove it
-			// it prevents growing grass in UFOs
-			if (terrainObjectID == 0 && part > 0)
-			{
-				save->getTile(Position(x, y, z))->setName("",part);
-			}
-		}
-		save->getTile(Position(x, y, z))->setDiscovered(discovered);
-
-		x++;
-
-		if (x == (width + xoff))
-		{
-			x = xoff;
-			y--;
-		}
-		if (y == yoff - 1)
-		{
-			y = length - 1 + yoff;
-			z--;
-		}
-	}
-
-	if (!mapFile.eof())
-	{
-		throw "Invalid data from file";
-	}
-
-	mapFile.close();
-
-	return height;
-}
-
-/**
- * Loads a X-Com format RMP file into the spawnpoints of the battlegame.
- * @param mapblock pointer to MapBlock.
- * @param xoff mapblock offset in X direction
- * @param yoff mapblock offset in Y direction
- * @param save pointer to the current battle game
- * @sa http://www.ufopaedia.org/index.php?title=ROUTES
- */
-void XcomResourcePack::loadRMP(MapBlock *mapblock, int xoff, int yoff, SavedBattleGame* save)
-{
-	int id = 0;
-	char value[24];
-	std::stringstream filename;
-	filename << _folder << "ROUTES/" << mapblock->getName() << ".RMP";
-
-	// Load file
-	std::ifstream mapFile (insensitive(filename.str()).c_str(), std::ios::in| std::ios::binary);
-	if (!mapFile)
-	{
-		throw "Failed to load RMP";
-	}
-
-	int nodeOffset = save->getNodes()->size();
-
-	while (mapFile.read((char*)&value, sizeof(value)))
-	{
-		Node *node = new Node(nodeOffset + id, Position(xoff + (int)value[1], yoff + (mapblock->getLength() - 1 - (int)value[0]), mapblock->getHeight() - 1 - (int)value[2]), (int)value[3], (int)value[19], (int)value[20], (int)value[21], (int)value[22], (int)value[23]);
-		for (int j=0;j<5;j++)
-		{
-			int connectID = (int)((signed char)value[4 + j*3]);
-			if (connectID > -1)
-			{
-				connectID += nodeOffset;
-			}
-			node->assignNodeLink(new NodeLink(connectID, (int)value[5 + j*3], (int)value[6 + j*3]), j);
-		}
-		save->getNodes()->push_back(node);
-		id++;
-	}
-
-	if (!mapFile.eof())
-	{
-		throw "Invalid data from file";
-	}
-
-	mapFile.close();
 }
 
 }

@@ -36,7 +36,6 @@ class Polygon;
 class Polyline;
 class Music;
 class SoundSet;
-class TerrainObjectSet;
 class SavedBattleGame;
 class RuleTerrain;
 class MapBlock;
@@ -65,14 +64,13 @@ protected:
 	std::list<Polyline*> _polylines;
 	std::map<std::string, Music*> _musics;
 
-	/// Converts a filename to its existing case-insensitive name.
-	std::string insensitive(const std::string &filename) const;
-	std::map<std::string, TerrainObjectSet*> _terrainSets;
 public:
 	/// Create a new resource pack with a folder's contents.
 	ResourcePack(const std::string &folder);
 	/// Cleans up the resource pack.
 	virtual ~ResourcePack();
+	/// Gets the data folder name.
+	std::string getFolder() const;
 	/// Gets the current language.
 	Language *const getLanguage() const;
 	/// Sets a new language as current.
@@ -95,12 +93,8 @@ public:
 	Palette *const getPalette(const std::string &name);
 	/// Sets a new palette.
 	void setPalette(SDL_Color *colors, int firstcolor, int ncolors);
-	/// Get a terrain object set, using it's name.
-	TerrainObjectSet* getTerrainObjectSet(std::string name);
-	/// Loads an XCOM MAP file.
-	virtual int loadMAP(MapBlock *mapblock, int xoff, int yoff, SavedBattleGame *save, RuleTerrain *terrain);
-	/// Loads an XCOM RMP file.
-	virtual void loadRMP(MapBlock *mapblock, int xoff, int yoff, SavedBattleGame *save);
+	/// Converts a filename to its existing case-insensitive name.
+	std::string insensitive(const std::string &filename) const;
 };
 
 }

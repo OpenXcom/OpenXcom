@@ -44,6 +44,30 @@ BattleUnit::~BattleUnit()
 }
 
 /**
+ * Loads the unit from a YAML file.
+ * @param node YAML node.
+ */
+void BattleUnit::load(const YAML::Node &node)
+{
+	node["name"] >> _name;
+	node["tu"] >> _tu;
+	node["health"] >> _health;
+}
+
+/**
+ * Saves the soldier to a YAML file.
+ * @param out YAML emitter.
+ */
+void BattleUnit::save(YAML::Emitter &out) const
+{
+	out << YAML::BeginMap;
+	out << YAML::Key << "name" << YAML::Value << _name;
+	out << YAML::Key << "tu" << YAML::Value << _tu;
+	out << YAML::Key << "health" << YAML::Value << _health;
+	out << YAML::EndMap;
+}
+
+/**
  * Attach a geoscape soldier.
  * @param soldier Pointer to Soldier.
  */

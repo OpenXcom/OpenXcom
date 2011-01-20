@@ -63,6 +63,10 @@ public:
 	BattleUnit(RuleUnitSprite *renderRules, UnitFaction faction);
 	/// Cleans up the BattleUnit.
 	virtual ~BattleUnit();
+	/// Loads the unit from YAML.
+	void load(const YAML::Node& node);
+	/// Saves the unit to YAML.
+	void save(YAML::Emitter& out) const;
 	/// Assigns a geoscape soldier.
 	void setSoldier(Soldier *soldier);
 	/// Assigns an NPC rule and Battle AI.

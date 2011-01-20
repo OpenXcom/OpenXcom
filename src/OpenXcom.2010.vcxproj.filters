@@ -326,15 +326,6 @@
     <ClCompile Include="Ruleset\MapBlock.cpp">
       <Filter>Ruleset</Filter>
     </ClCompile>
-    <ClCompile Include="Resource\TerrainObject.cpp">
-      <Filter>Resource</Filter>
-    </ClCompile>
-    <ClCompile Include="Resource\TerrainObjectSet.cpp">
-      <Filter>Resource</Filter>
-    </ClCompile>
-    <ClCompile Include="Ruleset\MapDataFile.cpp">
-      <Filter>Ruleset</Filter>
-    </ClCompile>
     <ClCompile Include="Savegame\BattleUnit.cpp">
       <Filter>Savegame</Filter>
     </ClCompile>
@@ -391,6 +382,12 @@
     </ClCompile>
     <ClCompile Include="Menu\SaveGameState.cpp">
       <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Ruleset\MapDataSet.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
+    <ClCompile Include="Ruleset\MapData.cpp">
+      <Filter>Ruleset</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -719,15 +716,6 @@
     <ClInclude Include="Ruleset\MapBlock.h">
       <Filter>Ruleset</Filter>
     </ClInclude>
-    <ClInclude Include="Resource\TerrainObject.h">
-      <Filter>Resource</Filter>
-    </ClInclude>
-    <ClInclude Include="Resource\TerrainObjectSet.h">
-      <Filter>Resource</Filter>
-    </ClInclude>
-    <ClInclude Include="Ruleset\MapDataFile.h">
-      <Filter>Ruleset</Filter>
-    </ClInclude>
     <ClInclude Include="Savegame\BattleUnit.h">
       <Filter>Savegame</Filter>
     </ClInclude>
@@ -787,6 +775,12 @@
     </ClInclude>
     <ClInclude Include="Menu\SaveGameState.h">
       <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\MapDataSet.h">
+      <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\MapData.h">
+      <Filter>Ruleset</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

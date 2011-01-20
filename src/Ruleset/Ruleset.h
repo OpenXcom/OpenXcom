@@ -37,7 +37,7 @@ class RuleCraftWeapon;
 class RuleItem;
 class RuleUfo;
 class RuleTerrain;
-class MapDataFile;
+class MapDataSet;
 class ResourcePack;
 class RuleUnitSprite;
 
@@ -59,7 +59,7 @@ protected:
 	std::map<std::string, RuleItem*> _items;
 	std::map<std::string, RuleUfo*> _ufos;
 	std::map<std::string, RuleTerrain*> _terrains;
-	std::map<std::string, MapDataFile*> _mapDataFiles;
+	std::map<std::string, MapDataSet*> _mapDataFiles;
 	std::map<std::string, RuleUnitSprite*> _unitSprites;
 public:
 	/// Creates a blank ruleset.
@@ -91,7 +91,7 @@ public:
 	/// Gets terrains for battlescape games
 	RuleTerrain *getTerrain(std::string name);
 	/// Gets mapdatafile for battlescape games
-	MapDataFile *getMapDataFile(std::string name);
+	MapDataSet *getMapDataSet(std::string name);
 	/// Gets unitsprite rules
 	RuleUnitSprite *getUnitSprites(std::string name);
 };

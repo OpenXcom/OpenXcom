@@ -27,7 +27,8 @@ namespace OpenXcom
 {
 
 class MapBlock;
-class MapDataFile;
+class MapDataSet;
+class MapData;
 
 /**
  * Represents a specific type of Battlescape Terrain.
@@ -38,7 +39,7 @@ class MapDataFile;
 class RuleTerrain
 {
 private:
-	std::vector<MapDataFile*> _mapDataFiles;
+	std::vector<MapDataSet*> _mapDataFiles;
 	std::vector<MapBlock*> _mapBlocks;
 	std::string _name;
 public:
@@ -49,13 +50,11 @@ public:
 	/// Gets the terrain's mapblocks.
 	std::vector<MapBlock*> *getMapBlocks();
 	/// Gets the terrain's mapdatafiles.
-	std::vector<MapDataFile*> *getMapDataFiles();
+	std::vector<MapDataSet*> *getMapDataSets();
 	/// Gets a random mapblock.
-	MapBlock* getRandomMapBlock(int maxsize, bool landingzone);
-	/// Generates a corresponding unique terrain object name.
-	std::string getTerrainObjectName(int absoluteID);
-	/// Parses the terrain object name to get the datafilename and the relative ID in that file.
-	void parseTerrainObjectName(std::string objectName, std::string *dataFileName, int *relativeID);
+	MapBlock *getRandomMapBlock(int maxsize, bool landingzone);
+	/// Get the mapdata object.
+	MapData *getMapData(int id);
 };
 
 }

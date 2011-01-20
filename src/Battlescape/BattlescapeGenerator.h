@@ -44,6 +44,7 @@ class BattlescapeGenerator
 private:
 	Game *_game;
 	SavedBattleGame *_save;
+	ResourcePack *_res;
 	Craft *_craft;
 	Ufo *_ufo;
 	RuleTerrain *_terrain;
@@ -53,15 +54,19 @@ private:
 	int _unitCount;
 
 	/// Generate a new battlescape map.
-	void generateMap(ResourcePack *res);
+	void generateMap();
 	/// links tiles with terrainobjects, for easier/faster lookup
-	void linkTilesWithTerrainObjects(ResourcePack *res);
+	void linkTilesWithMapDatas();
 	/// Add a soldier to the game
 	void addSoldier(Soldier *soldier, RuleUnitSprite *rules);
 	/// Add an alien to the game
 	void addAlien(RuleUnitSprite *rules, NodeRank rank, const std::string &name);
 	/// Add an item to the game
 	void addItem(Item *item);
+	/// loads an XCOM MAP file
+	int loadMAP(MapBlock *mapblock, int xoff, int yoff, RuleTerrain *terrain, bool discovered = false);
+	/// loads an XCOM RMP file
+	void loadRMP(MapBlock *mapblock, int xoff, int yoff);
 public:
 	/// Creates a new BattlescapeGenerator class
 	BattlescapeGenerator(Game *game);
@@ -79,6 +84,7 @@ public:
 	void setMissionType(MissionType missionType);
 	/// Runs the generator.
 	void run();
+
 };
 
 }

@@ -26,7 +26,7 @@
 #include "RuleItem.h"
 #include "RuleUfo.h"
 #include "RuleTerrain.h"
-#include "MapDataFile.h"
+#include "MapDataSet.h"
 #include "RuleUnitSprite.h"
 
 namespace OpenXcom
@@ -80,7 +80,7 @@ Ruleset::~Ruleset()
 	{
 		delete i->second;
 	}
-	for (std::map<std::string, MapDataFile*>::iterator i = _mapDataFiles.begin(); i != _mapDataFiles.end(); i++)
+	for (std::map<std::string, MapDataSet*>::iterator i = _mapDataFiles.begin(); i != _mapDataFiles.end(); i++)
 	{
 		delete i->second;
 	}
@@ -216,7 +216,7 @@ RuleTerrain *Ruleset::getTerrain(std::string name)
  * @param name datafile name.
  * @return Rules for the datafile.
  */
-MapDataFile *Ruleset::getMapDataFile(std::string name)
+MapDataSet *Ruleset::getMapDataSet(std::string name)
 {
 	return _mapDataFiles[name];
 }

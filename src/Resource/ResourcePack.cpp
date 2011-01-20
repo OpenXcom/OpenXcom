@@ -28,7 +28,6 @@
 #include "../Geoscape/Polygon.h"
 #include "../Geoscape/Polyline.h"
 #include "../Engine/SoundSet.h"
-#include "TerrainObjectSet.h"
 
 namespace OpenXcom
 {
@@ -37,7 +36,7 @@ namespace OpenXcom
  * Initializes a blank resource set pointing to a folder.
  * @param folder Subfolder to load resources from.
  */
-ResourcePack::ResourcePack(const std::string &folder) : _folder(folder), _currentLang(0), _palettes(), _fonts(), _languages(), _surfaces(), _sets(), _polygons(), _musics(), _terrainSets()
+ResourcePack::ResourcePack(const std::string &folder) : _folder(folder), _currentLang(0), _palettes(), _fonts(), _languages(), _surfaces(), _sets(), _polygons(), _musics()
 {
 }
 
@@ -79,10 +78,6 @@ ResourcePack::~ResourcePack()
 		delete i->second;
 	}
 	for (std::map<std::string, SoundSet*>::iterator i = _sounds.begin(); i != _sounds.end(); i++)
-	{
-		delete i->second;
-	}
-	for (std::map<std::string, TerrainObjectSet*>::iterator i = _terrainSets.begin(); i != _terrainSets.end(); i++)
 	{
 		delete i->second;
 	}
@@ -136,6 +131,18 @@ std::string ResourcePack::insensitive(const std::string &filename) const
 		}
 	}
 }
+
+/**
+ * Gets the data folder name.
+ * Certain battlescape data is loaded on-the-fly
+ * it needs to know the folder where to load it.
+ * @return the data folder name.
+ */
+std::string ResourcePack::getFolder() const
+{
+	return _folder;
+}
+
 
 /**
  * Returns the currently active language.
@@ -256,45 +263,6 @@ void ResourcePack::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 	{
 		i->second->setPalette(colors, firstcolor, ncolors);
 	}
-}
-
-/**
- * Returns a specific terrainobject set from the resource set.
- * @param name Name of the terrainobject set.
- * @return Pointer to the terrainobject set.
- */
-TerrainObjectSet *ResourcePack::getTerrainObjectSet(std::string name)
-{
-	return _terrainSets[name];
-}
-
-/**
- * Loads a X-Com format MAP file into the tiles of the battlegame.
- * @param mapblock pointer to MapBlock.
- * @param xoff mapblock offset in X direction
- * @param yoff mapblock offset in Y direction
- * @param save pointer to the current battle game
- * @param terrain pointer to the terrain rule
- * @return int Height of the loaded mapblock (this is needed for spawpoint calculation...)
- * @sa http://www.ufopaedia.org/index.php?title=MAPS
- * @note Y-axis is in reverse order
- */
-int ResourcePack::loadMAP(MapBlock *mapblock, int xoff, int yoff, SavedBattleGame *save, RuleTerrain *terrain)
-{
-	return 0;
-}
-
-/**
- * Loads a X-Com format RMP file into the spawnpoints of the battlegame.
- * @param mapblock pointer to MapBlock.
- * @param xoff mapblock offset in X direction
- * @param yoff mapblock offset in Y direction
- * @param save pointer to the current battle game
- * @sa http://www.ufopaedia.org/index.php?title=ROUTES
- */
-void ResourcePack::loadRMP(MapBlock *mapblock, int xoff, int yoff, SavedBattleGame* save)
-{
-	return;
 }
 
 }

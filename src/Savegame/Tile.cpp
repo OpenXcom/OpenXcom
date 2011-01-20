@@ -17,7 +17,9 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Tile.h"
-#include "../Resource/TerrainObject.h"
+#include "../Ruleset/MapData.h"
+#include "../Ruleset/MapDataSet.h"
+#include "../Engine/SurfaceSet.h"
 
 namespace OpenXcom
 {
@@ -30,7 +32,7 @@ Tile::Tile(const Position& pos): _discovered(false), _shadeSun(0), _light(0), _p
 {
 	for (int i = 0; i < 4; i++)
 	{
-		_terrainObjects[i] = 0;
+		_objects[i] = 0;
 		_currentFrame[i] = 0;
 	}
 }
@@ -44,48 +46,37 @@ Tile::~Tile()
 }
 
 /**
- * Get the TerrainObject pointer of a part of the tile.
+ * Get the MapData pointer of a part of the tile.
  * @param part the part 0-3.
  * @return pointer to terrainobject
  */
-TerrainObject *Tile::getTerrainObject(int part)
+MapData *Tile::getMapData(int part)
 {
 	if (part < 0 || part > 3)
 	{
-		throw "unkown TerrainObjectID part";
+		throw "unkown MapDataID part";
 	}
-	return _terrainObjects[part];
+	return _objects[part];
 }
 
 /**
- * Set the TerrainObject references of part 0 to 3.
+ * Set the MapData references of part 0 to 3.
  * @param tob pointer to the terrain object
  * @param part the part number
  */
-void Tile::setTerrainObject(TerrainObject *tob, int part)
+void Tile::setMapData(MapData *dat, int part)
 {
-	_terrainObjects[part] = tob;
+	_objects[part] = dat;
 	setCached(false);
 }
 
 /**
- * Get mapdatafilename.
- * @param part the part number 0-3
- * @return a string which contains the MCD filename
+ * Gets wether this tile has no objects.
+ * @return bool
  */
-std::string Tile::getName(int part)
+bool Tile::isVoid()
 {
-	return _name[part];
-}
-
-/**
- * Sets mapdatafilename.
- * @param name the name of the specific MCD file
- * @param part the part number 0-3
- */
-void Tile::setName(std::string name, int part)
-{
-	_name[part] = name;
+	return _objects[0] == 0 && _objects[1] == 0 && _objects[2] == 0 && _objects[3] == 0;
 }
 
 /**
@@ -96,8 +87,8 @@ void Tile::setName(std::string name, int part)
  */
 int Tile::getTUCost(int part, MovementType movementType)
 {
-	if (_terrainObjects[part])
-		return _terrainObjects[part]->getTUCost(movementType);
+	if (_objects[part])
+		return _objects[part]->getTUCost(movementType);
 	else 
 		return 0;
 }
@@ -108,8 +99,8 @@ int Tile::getTUCost(int part, MovementType movementType)
  */
 bool Tile::hasNoFloor()
 {
-	if (_terrainObjects[O_FLOOR])
-		return _terrainObjects[O_FLOOR]->isNoFloor();
+	if (_objects[O_FLOOR])
+		return _objects[O_FLOOR]->isNoFloor();
 	else
 		return true;
 }
@@ -120,8 +111,8 @@ bool Tile::hasNoFloor()
  */
 bool Tile::isBigWall()
 {
-	if (_terrainObjects[O_OBJECT])
-		return _terrainObjects[O_OBJECT]->isBigWall();
+	if (_objects[O_OBJECT])
+		return _objects[O_OBJECT]->isBigWall();
 	else
 		return false;
 }
@@ -134,10 +125,10 @@ int Tile::getTerrainLevel()
 {
 	int level = 0;
 
-	if (_terrainObjects[O_FLOOR])
-		level = _terrainObjects[O_FLOOR]->getTerrainLevel();
-	if (_terrainObjects[O_OBJECT])
-		level += _terrainObjects[O_OBJECT]->getTerrainLevel();
+	if (_objects[O_FLOOR])
+		level = _objects[O_FLOOR]->getTerrainLevel();
+	if (_objects[O_OBJECT])
+		level += _objects[O_OBJECT]->getTerrainLevel();
 
 	return level;
 }
@@ -160,10 +151,10 @@ int Tile::getFootstepSound()
 {
 	int sound = 0;
 
-	if (_terrainObjects[O_FLOOR])
-		sound = _terrainObjects[O_FLOOR]->getFootstepSound();
-	if (_terrainObjects[O_OBJECT])
-		sound = _terrainObjects[O_OBJECT]->getFootstepSound();
+	if (_objects[O_FLOOR])
+		sound = _objects[O_FLOOR]->getFootstepSound();
+	if (_objects[O_OBJECT])
+		sound = _objects[O_OBJECT]->getFootstepSound();
 
 	return sound;
 }
@@ -176,20 +167,21 @@ int Tile::getFootstepSound()
  */
 int Tile::openDoor(int part)
 {
-	if (!_terrainObjects[part]) return -1;
+	if (!_objects[part]) return -1;
 
-	if (_terrainObjects[part]->isDoor())
+	if (_objects[part]->isDoor())
 	{
-		setTerrainObject(_terrainObjects[part]->getAltObject(1), _terrainObjects[part]->getAltObject(1)->getObjectType());
-		setTerrainObject(0, part);
+		setMapData(_objects[part]->getDataset()->getObjects()->at(_objects[part]->getAltMCD()),
+				   _objects[part]->getDataset()->getObjects()->at(_objects[part]->getAltMCD())->getObjectType());
+		setMapData(0, part);
 		return 0;
 	}
-	if (_terrainObjects[part]->isUFODoor() && _currentFrame[part] == 0) // ufo door part 0 - door is closed
+	if (_objects[part]->isUFODoor() && _currentFrame[part] == 0) // ufo door part 0 - door is closed
 	{
 		_currentFrame[part] = 1; // start opening door
 		return 1;
 	}
-	if (_terrainObjects[part]->isUFODoor() && _currentFrame[part] != 7) // ufo door != part 7 - door is still opening
+	if (_objects[part]->isUFODoor() && _currentFrame[part] != 7) // ufo door != part 7 - door is still opening
 	{
 		return 3;
 	}
@@ -203,7 +195,7 @@ int Tile::openDoor(int part)
  */
 bool Tile::isUfoDoorOpen(int part)
 {
-	if (_terrainObjects[part] && _terrainObjects[part]->isUFODoor() && _currentFrame[part] != 0)
+	if (_objects[part] && _objects[part]->isUFODoor() && _currentFrame[part] != 0)
 	{
 		return true;
 	}
@@ -268,10 +260,16 @@ void Tile::addLight(int light, int sessionID)
 	if (sessionID == _sessionID) return;
 	_sessionID = sessionID;
 
+	if (_light < light)
+		_light = light;
+
+	// uncomment following and comment previous to have additive lighting (which is more realistic)
+	/*
 	if (light != 0)
 	{
 		_light += light;
 	}
+	*/
 }
 
 void Tile::isSeenBy(BattleUnit *unit, int sessionID)
@@ -319,12 +317,13 @@ int Tile::getShade()
  */
 void Tile::destroy(int part)
 {
-	if (_terrainObjects[part])
+	if (_objects[part])
 	{
-		TerrainObject *tob = _terrainObjects[part];
-		setTerrainObject(0, part);
-		if (tob->getAltObject(0))
-			setTerrainObject(tob->getAltObject(0), tob->getAltObject(0)->getObjectType());
+		MapData *current = _objects[part];
+		setMapData(0, part);
+		MapData *dead = _objects[part]->getDataset()->getObjects()->at(_objects[part]->getDieMCD());
+		if (dead)
+			setMapData(dead, dead->getObjectType());
 	}
 }
 
@@ -336,9 +335,9 @@ void Tile::animate()
 	int newframe;
 	for (int i=0; i < 4; i++)
 	{
-		if (_terrainObjects[i])
+		if (_objects[i])
 		{
-			if (_terrainObjects[i]->isUFODoor() && (_currentFrame[i] == 0 || _currentFrame[i] == 7)) // ufo door is static
+			if (_objects[i]->isUFODoor() && (_currentFrame[i] == 0 || _currentFrame[i] == 7)) // ufo door is static
 			{
 				continue;
 			}
@@ -347,7 +346,7 @@ void Tile::animate()
 			{
 				newframe = 0;
 			}
-			if (_terrainObjects[i]->getSprite(_currentFrame[i]) != _terrainObjects[i]->getSprite(newframe))
+			if (_objects[i]->getSprite(_currentFrame[i]) != _objects[i]->getSprite(newframe))
 			{
 				setCached(false);
 			}
@@ -363,7 +362,7 @@ void Tile::animate()
  */
 Surface *Tile::getSprite(int part)
 {
-	return _terrainObjects[part]->getSprite(_currentFrame[part]);
+	return _objects[part]->getDataset()->getSurfaceset()->getFrame(_objects[part]->getSprite(_currentFrame[part]));
 }
 
 /**

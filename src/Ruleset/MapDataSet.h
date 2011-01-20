@@ -16,32 +16,48 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_MAPDATAFILE_H
-#define OPENXCOM_MAPDATAFILE_H
+#ifndef OPENXCOM_MAPDATASET_H
+#define OPENXCOM_MAPDATASET_H
 
 #include <string>
+#include <vector>
 
 namespace OpenXcom
 {
 
+class MapData;
+class SurfaceSet;
+class ResourcePack;
+
 /**
  * Represents a Terrain Map Datafile.
- * It contains constant info about this MCD file, like it's name and size
+ * Which corresponds to an Xcom MCD & PCK file.
  * The list of map datafiles is stored in RuleSet, but referenced in RuleTerrain.
  * @sa http://www.ufopaedia.org/index.php?title=MCD
  */
-class MapDataFile
+class MapDataSet
 {
 private:
 	std::string _name;
 	int _size;
+	std::vector<MapData*> _objects;
+	SurfaceSet *_surfaceSet;
+	bool _loaded;
 public:
-	MapDataFile(std::string name, int size);
-	~MapDataFile();
-	/// Get the datafile's name (used for MAP generation).
+	MapDataSet(std::string name, int size);
+	~MapDataSet();
+	/// Get the dataset name (used for MAP generation).
 	std::string getName();
-	/// Get the datafile's size.
+	/// Get the dataset size.
 	int getSize();
+	/// Get objects in this dataset.
+	std::vector<MapData*> *getObjects();
+	/// Get surfaces in this dataset.
+	SurfaceSet *getSurfaceset();
+	/// Load the objects from an MCD file.
+	void load(ResourcePack *res);
+	///	Unload to free memory.
+	void unload();
 };
 
 }

@@ -22,13 +22,13 @@
 #include <string>
 #include <vector>
 #include "../Battlescape/Position.h"
-#include "../Resource/TerrainObject.h"
+#include "../Ruleset/MapData.h"
 
 namespace OpenXcom
 {
 
 class Surface;
-class TerrainObject;
+class MapData;
 class BattleUnit;
 class BattleItem;
 
@@ -39,8 +39,7 @@ class BattleItem;
 class Tile
 {
 protected:
-	std::string _name[4];
-	TerrainObject *_terrainObjects[4];
+	MapData *_objects[4];
 	int _currentFrame[4];
 	bool _discovered; // tile has been seen in the past
 	std::vector<BattleUnit *> _visibleByUnit; // units this tile is now seen by 
@@ -56,14 +55,12 @@ public:
 	Tile(const Position& pos);
 	/// Cleans up a tile.
 	~Tile();
-	/// Gets name for the part
-	std::string getName(int part);
-	/// sets name for the part
-	void setName(std::string name, int part);
-	/// Gets a pointer to the terrainobject for a specific part of the tile.
-	TerrainObject *getTerrainObject(int part);
-	/// Sets the pointer to the terrainobject for a specific part of the tile
-	void setTerrainObject(TerrainObject *tob, int part);
+	/// Gets a pointer to the mapdata for a specific part of the tile.
+	MapData *getMapData(int part);
+	/// Sets the pointer to the mapdata for a specific part of the tile
+	void setMapData(MapData *dat, int part);
+	/// Gets wether this tile has no objects
+	bool isVoid();
 	/// Get the TU cost to walk over a certain part of the tile.
 	int getTUCost(int part, MovementType movementType);
 	/// Checks if this tile has a floor.

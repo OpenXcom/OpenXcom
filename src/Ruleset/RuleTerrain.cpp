@@ -21,7 +21,7 @@
 #include <iostream>
 #include "RuleTerrain.h"
 #include "MapBlock.h"
-#include "MapDataFile.h"
+#include "MapDataSet.h"
 #include "../Engine/RNG.h"
 
 namespace OpenXcom
@@ -55,10 +55,10 @@ std::vector<MapBlock*> *RuleTerrain::getMapBlocks()
 }
 
 /**
-* gets a pointer to the array of mapblock
-* @return pointer to the array of mapblocks
+* gets a pointer to the array of mapdatafiles
+* @return pointer to the array of mapdatafiles
 */
-std::vector<MapDataFile*> *RuleTerrain::getMapDataFiles()
+std::vector<MapDataSet*> *RuleTerrain::getMapDataSets()
 {
 	return &_mapDataFiles;
 }
@@ -100,19 +100,16 @@ MapBlock* RuleTerrain::getRandomMapBlock(int maxsize, bool landingzone)
 }
 
 /**
-* Generates a corresponding unique terrain object name, consisting of:
-* the MCD filename + the relative position in that file
-* eg "CULTA.MCD:8"
-* @param absoluteID the absolute ID as found in the MAP file
-* @return unique terrain object name
+* Gets a mapdata object.
+* @param id the id in the terrain
+* @return pointer to object
 */
-std::string RuleTerrain::getTerrainObjectName(int absoluteID)
+MapData *RuleTerrain::getMapData(int id)
 {
-	MapDataFile* mdf = 0;
-	int relativeID = absoluteID;
-	std::stringstream name;
+	MapDataSet* mdf = 0;
+	int relativeID = id;
 	
-	for (std::vector<MapDataFile*>::iterator i = _mapDataFiles.begin(); i != _mapDataFiles.end(); i++)
+	for (std::vector<MapDataSet*>::iterator i = _mapDataFiles.begin(); i != _mapDataFiles.end(); i++)
 	{
 		mdf = *i;
 		if (relativeID- mdf->getSize() < 0)
@@ -122,27 +119,7 @@ std::string RuleTerrain::getTerrainObjectName(int absoluteID)
 		relativeID -= mdf->getSize();
 	}
 
-	name << mdf->getName();
-	name << ":";
-	name << relativeID;
-
-	return name.str();
-}
-
-/**
-* Parses the terrain object name to get the datafilename and the relative ID in that file
-* eg "CULTA.MCD:8" -> file CULTA.MCD , position 8
-* @param objectName the name of the object
-* @param dataFileName pointer to the datafile where the object can be found
-* @param relativeID pointer to the relative ID where the object is inside the file
-*/
-void RuleTerrain::parseTerrainObjectName(std::string objectName, std::string *dataFileName, int *relativeID)
-{
-	size_t  pos = objectName.find(":", 0);			//store the position of the delimiter
-	*dataFileName = objectName.substr(0, pos);      //get the filename
-	objectName.erase(0, pos + 1);					//erase it from the source 
-	std::istringstream issID(objectName);			// convert leftover to istringstream
-	issID >> *relativeID;							// to int
+	return mdf->getObjects()->at(relativeID);
 }
 
 }

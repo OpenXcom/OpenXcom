@@ -21,7 +21,7 @@
 
 #include <vector>
 #include "Position.h"
-#include "../Resource/TerrainObject.h"
+#include "../Ruleset/MapData.h"
 
 namespace OpenXcom
 {

@@ -16,48 +16,78 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "TerrainObjectSet.h"
-#include "TerrainObject.h"
-#include "../Engine/SurfaceSet.h"
+#include "MapDataSet.h"
+#include "MapData.h"
 #include <fstream>
+#include <sstream>
+#include "..\Engine\SurfaceSet.h"
+#include "..\Resource\ResourcePack.h"
 
 namespace OpenXcom
 {
 
 /**
-*
+* MapDataSet construction.
 */
-TerrainObjectSet::TerrainObjectSet(const std::string &name) : _name(name)
+MapDataSet::MapDataSet(std::string name, int size):_name(name), _size(size), _objects(), _loaded(false)
 {
 }
 
-/**
-*
-*/
-TerrainObjectSet::~TerrainObjectSet()
-{
-	for (std::vector<TerrainObject*>::iterator i = _terrainObjects.begin(); i != _terrainObjects.end(); i++)
-	{
-		delete *i;
-	}
 
+/**
+* MapDataSet DESTRUCTION.
+*/
+MapDataSet::~MapDataSet()
+{
+	unload();
 }
 
 /**
-* @return pointer to an array of MCD objects
+* Gets the MapDataSet name (string).
+* @return name.
 */
-std::vector<TerrainObject*> *TerrainObjectSet::getTerrainObjects()
+std::string MapDataSet::getName()
 {
-	return &_terrainObjects;
+	return _name;
 }
 
 /**
- * Loads terraindata in X-Com format (MCD files)
- * @param filename Filename of the MCD file.
+* Gets the MapDataSet size.
+* @return size in number of records.
+*/
+int MapDataSet::getSize()
+{
+	return _size;
+}
+
+
+/**
+* @return pointer to the objects
+*/
+std::vector<MapData*> *MapDataSet::getObjects()
+{
+	return &_objects;
+}
+
+/**
+* @return pointer to the surfaceset
+*/
+SurfaceSet *MapDataSet::getSurfaceset()
+{
+	return _surfaceSet;
+}
+
+/**
+ * Loads terraindata in X-Com format (MCD & PCK files)
+ * @param res The resourcepack.
  * @sa http://www.ufopaedia.org/index.php?title=MCD
  */
-void TerrainObjectSet::load(const std::string &filename)
+void MapDataSet::load(ResourcePack *res)
 {
+	// prevents loading twice
+	if (_loaded) return;
+	_loaded = true;
+
 	// the struct below helps to read the xcom file format
 	struct MCD
 	{
@@ -108,21 +138,26 @@ void TerrainObjectSet::load(const std::string &filename)
 
 	MCD mcd;
 
+
+	// Load Terrain Data from MCD file
+	std::stringstream s;
+	s << res->getFolder() << "TERRAIN/" << _name << ".MCD";
+
 	// Load file
-	std::ifstream mapFile (filename.c_str(), std::ios::in | std::ios::binary);
+	std::ifstream mapFile (res->insensitive(s.str()), std::ios::in | std::ios::binary);
 	if (!mapFile)
 	{
 		throw "Failed to load MCD";
 	}
-	
+
 	while (mapFile.read((char*)&mcd, sizeof(MCD)))
 	{
-		TerrainObject *to = new TerrainObject();
-		_terrainObjects.push_back(to);
+		MapData *to = new MapData(this);
+		_objects.push_back(to);
 
 		// set all the terrainobject properties:
 		for (int frame = 0; frame < 8; frame++)
-			to->setOriginalSpriteIndex(frame,(int)mcd.Frame[frame]);
+			to->setSprite(frame,(int)mcd.Frame[frame]);
 		to->setYOffset((int)mcd.P_Level);
 		to->setSpecialType((int)mcd.Target_Type, (int)mcd.Tile_Type);
 		to->setTUCosts((int)mcd.TU_Walk, (int)mcd.TU_Fly, (int)mcd.TU_Slide);
@@ -141,21 +176,25 @@ void TerrainObjectSet::load(const std::string &filename)
 	}
 
 	mapFile.close();
+
+	// Load terrain sprites/surfaces/PCK files into a surfaceset
+	std::stringstream s1,s2;
+	s1 << res->getFolder() << "TERRAIN/" << _name << ".PCK";
+	s2 << res->getFolder() << "TERRAIN/" << _name << ".TAB";
+	_surfaceSet = new SurfaceSet(32, 40);
+	_surfaceSet->loadPck(res->insensitive(s1.str()), res->insensitive(s2.str()));
+
 }
 
-/**
- * Links the terrain objects with corresponding sprites
- * @param sprites pointer to the surfaceset to link with
- */
-void TerrainObjectSet::linkSprites(SurfaceSet *sprites)
+void MapDataSet::unload()
 {
-	for (std::vector<TerrainObject*>::iterator i = _terrainObjects.begin(); i != _terrainObjects.end(); i++)
+	if (_loaded)
 	{
-		TerrainObject *tob = (TerrainObject*)*i;
-		for (int frame = 0; frame < 8; frame++)
+		for (std::vector<MapData*>::iterator i = _objects.begin(); i != _objects.end(); i++)
 		{
-			tob->setSprite(sprites->getFrame(tob->getOriginalSpriteIndex(frame)),frame);
+			delete *i;
 		}
+		delete _surfaceSet;
 	}
 }
 

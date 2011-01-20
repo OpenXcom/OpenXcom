@@ -28,7 +28,7 @@ class ResourcePack;
 class SavedBattleGame;
 class Timer;
 class Surface;
-class TerrainObject;
+class MapData;
 class Position;
 class Tile;
 class BattleUnit;

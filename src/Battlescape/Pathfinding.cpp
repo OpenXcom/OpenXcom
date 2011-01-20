@@ -21,7 +21,7 @@
 #include "PathfindingNode.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
-#include "../Resource/TerrainObject.h"
+#include "../Ruleset/MapData.h"
 #include "../Savegame/BattleUnit.h"
 
 namespace OpenXcom

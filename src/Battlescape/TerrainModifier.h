@@ -20,11 +20,10 @@
 #define OPENXCOM_TERRAINMODIFIER_H
 
 #include "Position.h"
+#include "../Ruleset/MapData.h"
 
 namespace OpenXcom
 {
-
-enum Affector { AFFECT_LIGHT, AFFECT_VISION, AFFECT_HE, AFFECT_SMOKE, AFFECT_FIRE, AFFECT_GAS };
 
 class SavedBattleGame;
 class BattleUnit;

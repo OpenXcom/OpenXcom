@@ -29,18 +29,19 @@
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/Ufo.h"
 #include "../Savegame/Craft.h"
+#include "../Savegame/Node.h"
+#include "../Savegame/NodeLink.h"
 #include "../Engine/RNG.h"
 #include "../Ruleset/MapBlock.h"
-#include "../Ruleset/MapDataFile.h"
+#include "../Ruleset/MapDataSet.h"
 #include "../Ruleset/RuleUfo.h"
 #include "../Ruleset/RuleCraft.h"
 #include "../Ruleset/RuleTerrain.h"
 #include "../Ruleset/Ruleset.h"
-#include "../Resource/TerrainObjectSet.h"
-#include "../Resource/TerrainObject.h"
+#include "../Ruleset/MapDataSet.h"
+#include "../Ruleset/MapData.h"
 #include "../Resource/XcomResourcePack.h"
 #include "../Engine/Game.h"
-
 
 namespace OpenXcom
 {
@@ -52,6 +53,7 @@ namespace OpenXcom
 BattlescapeGenerator::BattlescapeGenerator(Game *game) : _game(game)
 {
 	_save = _game->getSavedGame()->getBattleGame();
+	_res = _game->getResourcePack();
 	_ufo = 0;
 	_craft = 0;
 }
@@ -182,7 +184,8 @@ void BattlescapeGenerator::run()
 	_save->initMap(_width, _length, _height);
 
 	// lets generate the map now and store it inside the tiles
-	generateMap(_game->getResourcePack());
+	generateMap();
+
 	if (_craft != 0)
 	{
 		// add soldiers that are in the craft
@@ -235,7 +238,7 @@ void BattlescapeGenerator::addSoldier(Soldier *soldier, RuleUnitSprite *rules)
 	for (int i = 0; i < _height * _length * _width; i++)
 	{
 		// to spawn an xcom soldier, there has to be a tile, with a floor, with the starting point attribute and no object in the way
-		if (_save->getTiles()[i] && _save->getTiles()[i]->getTerrainObject(O_FLOOR) && _save->getTiles()[i]->getTerrainObject(O_FLOOR)->getSpecialType() == START_POINT && !_save->getTiles()[i]->getTerrainObject(O_OBJECT))
+		if (_save->getTiles()[i] && _save->getTiles()[i]->getMapData(O_FLOOR) && _save->getTiles()[i]->getMapData(O_FLOOR)->getSpecialType() == START_POINT && !_save->getTiles()[i]->getMapData(O_OBJECT))
 		{
 			_save->getTileCoords(i, &x, &y, &z);
 			pos = Position(x, y, z);
@@ -326,7 +329,7 @@ void BattlescapeGenerator::addItem(Item *item)
  * Generates a map (set of tiles) for a new battlescape game.
  * @param res pointer to ResourcePack.
  */
-void BattlescapeGenerator::generateMap(ResourcePack *res)
+void BattlescapeGenerator::generateMap()
 {
 	int x = 0, y = 0;
 	int blocksToDo = 0;
@@ -452,6 +455,12 @@ void BattlescapeGenerator::generateMap(ResourcePack *res)
 		}
 	}
 
+	for (std::vector<MapDataSet*>::iterator i = _terrain->getMapDataSets()->begin(); i != _terrain->getMapDataSets()->end(); i++)
+	{
+		(*i)->load(_res);
+		_save->getMapDataSets()->push_back(*i);
+	}
+
 	/* now load them up */
 	for (int itY = 0; itY < 10; itY++)
 	{
@@ -459,10 +468,10 @@ void BattlescapeGenerator::generateMap(ResourcePack *res)
 		{
 			if (blocks[itX][itY] != 0 && blocks[itX][itY] != dummy)
 			{
-				((XcomResourcePack*)res)->loadMAP(blocks[itX][itY], itX * 10, itY * 10, _save, _terrain);
+				loadMAP(blocks[itX][itY], itX * 10, itY * 10, _terrain);
 				if (!landingzone[itX][itY])
 				{
-					((XcomResourcePack*)res)->loadRMP(blocks[itX][itY], itX * 10, itY * 10, _save);
+					loadRMP(blocks[itX][itY], itX * 10, itY * 10);
 				}
 			}
 		}
@@ -470,14 +479,24 @@ void BattlescapeGenerator::generateMap(ResourcePack *res)
 
 	if (_ufo != 0)
 	{
-		((XcomResourcePack*)res)->loadMAP(ufoMap, ufoX * 10, ufoY * 10, _save, _ufo->getRules()->getBattlescapeTerrainData());
-		((XcomResourcePack*)res)->loadRMP(ufoMap, ufoX * 10, ufoY * 10, _save);
+		for (std::vector<MapDataSet*>::iterator i = _ufo->getRules()->getBattlescapeTerrainData()->getMapDataSets()->begin(); i != _ufo->getRules()->getBattlescapeTerrainData()->getMapDataSets()->end(); i++)
+		{
+			(*i)->load(_res);
+			_save->getMapDataSets()->push_back(*i);
+		}
+		loadMAP(ufoMap, ufoX * 10, ufoY * 10, _ufo->getRules()->getBattlescapeTerrainData());
+		loadRMP(ufoMap, ufoX * 10, ufoY * 10);
 	}
 
 	if (_craft != 0)
 	{
-		((XcomResourcePack*)res)->loadMAP(craftMap, craftX * 10, craftY * 10, _save, _craft->getRules()->getBattlescapeTerrainData(), true);
-		((XcomResourcePack*)res)->loadRMP(craftMap, craftX * 10, craftY * 10, _save);
+		for (std::vector<MapDataSet*>::iterator i = _craft->getRules()->getBattlescapeTerrainData()->getMapDataSets()->begin(); i != _craft->getRules()->getBattlescapeTerrainData()->getMapDataSets()->end(); i++)
+		{
+			(*i)->load(_res);
+			_save->getMapDataSets()->push_back(*i);
+		}
+		loadMAP(craftMap, craftX * 10, craftY * 10, _craft->getRules()->getBattlescapeTerrainData(), true);
+		loadRMP(craftMap, craftX * 10, craftY * 10);
 	}
 
 	/* TODO: map generation for terror sites */
@@ -487,74 +506,135 @@ void BattlescapeGenerator::generateMap(ResourcePack *res)
 	/* TODO: map generation for alien base assault */
 
 	delete dummy;
+}
 
-	linkTilesWithTerrainObjects(res);
+
+/**
+ * Loads a X-Com format MAP file into the tiles of the battlegame.
+ * @param mapblock Pointer to MapBlock.
+ * @param xoff Mapblock offset in X direction.
+ * @param yoff Mapblock offset in Y direction.
+ * @param save Pointer to the current SavedBattleGame.
+ * @param terrain Pointer to the Terrain rule.
+ * @param discovered Whether or not this mapblock is discovered (eg. landingsite of the x-com plane)
+ * @return int Height of the loaded mapblock (this is needed for spawpoint calculation...)
+ * @sa http://www.ufopaedia.org/index.php?title=MAPS
+ * @note Y-axis is in reverse order
+ */
+int BattlescapeGenerator::loadMAP(MapBlock *mapblock, int xoff, int yoff, RuleTerrain *terrain, bool discovered)
+{
+	int width, length, height;
+	int x = xoff, y = yoff, z = 0;
+	char size[3];
+	unsigned char value[4];
+	std::stringstream filename;
+	filename << _res->getFolder() << "MAPS/" << mapblock->getName() << ".MAP";
+	std::string mapDataFileName;
+	int terrainObjectID;
+
+	// Load file
+	std::ifstream mapFile (_res->insensitive(filename.str()).c_str(), std::ios::in| std::ios::binary);
+	if (!mapFile)
+	{
+		throw "Failed to load MAP";
+	}
+	
+	mapFile.read((char*)&size, sizeof(size));
+	length = (int)size[0];
+	width = (int)size[1];
+	height = (int)size[2];
+	z += height - 1;
+	y += length - 1;
+	mapblock->setHeight(height);
+
+	while (mapFile.read((char*)&value, sizeof(value)))
+	{
+		for (int part = 0; part < 4; part++)
+		{
+			terrainObjectID = (int)((unsigned char)value[part]);
+			if (terrainObjectID>0)
+			{
+				_save->getTile(Position(x, y, z))->setMapData(terrain->getMapData(terrainObjectID),part);
+			}
+			// if the part is empty and it's not a floor, remove it
+			// it prevents growing grass in UFOs
+			if (terrainObjectID == 0 && part > 0)
+			{
+				_save->getTile(Position(x, y, z))->setMapData(0,part);
+			}
+		}
+		_save->getTile(Position(x, y, z))->setDiscovered(discovered);
+
+		x++;
+
+		if (x == (width + xoff))
+		{
+			x = xoff;
+			y--;
+		}
+		if (y == yoff - 1)
+		{
+			y = length - 1 + yoff;
+			z--;
+		}
+	}
+
+	if (!mapFile.eof())
+	{
+		throw "Invalid data from file";
+	}
+
+	mapFile.close();
+
+	return height;
 }
 
 /**
- * This function will link the tiles with the actual objects in the resourcepack
- * using their object names.
- * @param res pointer to resourcepack
+ * Loads a X-Com format RMP file into the spawnpoints of the battlegame.
+ * @param mapblock pointer to MapBlock.
+ * @param xoff mapblock offset in X direction
+ * @param yoff mapblock offset in Y direction
+ * @param save pointer to the current battle game
+ * @sa http://www.ufopaedia.org/index.php?title=ROUTES
  */
-void BattlescapeGenerator::linkTilesWithTerrainObjects(ResourcePack *res)
+void BattlescapeGenerator::loadRMP(MapBlock *mapblock, int xoff, int yoff)
 {
-	Tile *tile;
-	std::string dataFilename;
-	int objectID;
-	int beginX = 0, endX = _width - 1;
-    int beginY = 0, endY = _length - 1;
-    int beginZ = 0, endZ = _height - 1;
+	int id = 0;
+	char value[24];
+	std::stringstream filename;
+	filename << _res->getFolder() << "ROUTES/" << mapblock->getName() << ".RMP";
 
-    for (int itZ = beginZ; itZ <= endZ; itZ++) 
+	// Load file
+	std::ifstream mapFile (_res->insensitive(filename.str()).c_str(), std::ios::in| std::ios::binary);
+	if (!mapFile)
 	{
-        for (int itX = beginX; itX <= endX; itX++) 
-		{
-            for (int itY = endY; itY >= beginY; itY--) 
-			{
-				tile = _save->getTile(Position(itX, itY, itZ));
-				if (tile)
-				{
-					for (int part = 0; part < 4; part++)
-					{
-						if (!tile->getName(part).empty())
-						{
-							_terrain->parseTerrainObjectName(tile->getName(part),&dataFilename,&objectID);
-							tile->setTerrainObject(res->getTerrainObjectSet(dataFilename)->getTerrainObjects()->at(objectID), part);
-						}
-					}
-				}
-			}
-		}
+		throw "Failed to load RMP";
 	}
 
-	// now also link the alt&die terrainobjects to real objects
-	MapDataFile* mdf = 0;
-	TerrainObject* tob = 0;
-	TerrainObject* altObject = 0;
-	for (std::vector<MapDataFile*>::iterator i = _terrain->getMapDataFiles()->begin(); i != _terrain->getMapDataFiles()->end(); i++)
+	int nodeOffset = _save->getNodes()->size();
+
+	while (mapFile.read((char*)&value, sizeof(value)))
 	{
-		mdf = *i;
-		for (std::vector<TerrainObject*>::iterator j = res->getTerrainObjectSet(mdf->getName())->getTerrainObjects()->begin(); j != res->getTerrainObjectSet(mdf->getName())->getTerrainObjects()->end(); j++)
+		Node *node = new Node(nodeOffset + id, Position(xoff + (int)value[1], yoff + (mapblock->getLength() - 1 - (int)value[0]), mapblock->getHeight() - 1 - (int)value[2]), (int)value[3], (int)value[19], (int)value[20], (int)value[21], (int)value[22], (int)value[23]);
+		for (int j=0;j<5;j++)
 		{
-			tob = *j;
-			if (tob->getAltMCD(0) == 0 && tob->getObjectType() == O_FLOOR)
+			int connectID = (int)((signed char)value[4 + j*3]);
+			if (connectID > -1)
 			{
-				altObject = res->getTerrainObjectSet("BLANKS.MCD")->getTerrainObjects()->at(1);
-				tob->setAltObject(altObject, 0);
+				connectID += nodeOffset;
 			}
-			else if (tob->getAltMCD(0))
-			{
-				altObject = res->getTerrainObjectSet(mdf->getName())->getTerrainObjects()->at(tob->getAltMCD(0));
-				tob->setAltObject(altObject, 0);
-			}
-			if (tob->getAltMCD(1))
-			{
-				altObject = res->getTerrainObjectSet(mdf->getName())->getTerrainObjects()->at(tob->getAltMCD(1));
-				tob->setAltObject(altObject, 1);
-			}
+			node->assignNodeLink(new NodeLink(connectID, (int)value[5 + j*3], (int)value[6 + j*3]), j);
 		}
+		_save->getNodes()->push_back(node);
+		id++;
 	}
+
+	if (!mapFile.eof())
+	{
+		throw "Invalid data from file";
+	}
+
+	mapFile.close();
 }
-
 
 }

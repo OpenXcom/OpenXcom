@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "TerrainObject.h"
+#include "MapData.h"
 
 namespace OpenXcom
 {
@@ -24,29 +24,23 @@ namespace OpenXcom
 /**
 *
 */
-TerrainObject::TerrainObject()
+MapData::MapData(MapDataSet *dataset) : _dataset(dataset)
 {
-	_dieObject = 0;
-	_altObject = 0;
+
 }
 
 /**
 *
 */
-TerrainObject::~TerrainObject()
+MapData::~MapData()
 {
 
 }
 
-/**
-* set the sprite offset
-* @param surface pointer to surface
-* @param frameID frame 0-7
-*/
-void TerrainObject::setSprite(Surface *surface, int frameID)
+/// Get the dataset this object belongs to.
+MapDataSet *MapData::getDataset()
 {
-	_surfaces[frameID] = surface;
-
+	return _dataset;
 }
 
 /**
@@ -54,26 +48,16 @@ void TerrainObject::setSprite(Surface *surface, int frameID)
 * @param frameID frame 0-7
 * @return the original sprite index
 */
-int TerrainObject::getOriginalSpriteIndex(int frameID)
+int MapData::getSprite(int frameID)
 {
-	return _originalSpriteIndex[frameID];
-}
-
-/**
-* get the sprite 
-* @param frameID frame 0-7
-* @return pointer to surface
-*/
-Surface *TerrainObject::getSprite(int frameID)
-{
-	return _surfaces[frameID];
+	return _sprite[frameID];
 }
 
 /**
   * whether this is an animated ufo door
   * @return bool 
   */
-bool TerrainObject::isUFODoor()
+bool MapData::isUFODoor()
 {
 	return _isUfoDoor;
 }
@@ -82,7 +66,7 @@ bool TerrainObject::isUFODoor()
   * gets the Y offset for drawing
   * @return int height in pixels
   */
-int TerrainObject::getYOffset()
+int MapData::getYOffset()
 {
 	return _yOffset;
 }
@@ -91,7 +75,7 @@ int TerrainObject::getYOffset()
   * gets the Y offset for drawing
   * @return int height in pixels
   */
-SpecialTileType TerrainObject::getSpecialType()
+SpecialTileType MapData::getSpecialType()
 {
 	return _specialType;
 }
@@ -100,7 +84,7 @@ SpecialTileType TerrainObject::getSpecialType()
  * Gets the TU cost to walk over the object.
  * @return TU cost
  */
-int TerrainObject::getTUCost(MovementType movementType)
+int MapData::getTUCost(MovementType movementType)
 {
 	switch (movementType)
 	{
@@ -121,7 +105,7 @@ int TerrainObject::getTUCost(MovementType movementType)
   * whether this is a floor
   * @return bool 
   */
-bool TerrainObject::isNoFloor()
+bool MapData::isNoFloor()
 {
 	return _isNoFloor;
 }
@@ -130,7 +114,7 @@ bool TerrainObject::isNoFloor()
   * whether this is a big wall, which blocks all surrounding paths
   * @return bool 
   */
-bool TerrainObject::isBigWall()
+bool MapData::isBigWall()
 {
 	if (_terrainLevel < 0) return false; // this is a hack for eg. Skyranger Ramps
 	return _isBigWall;
@@ -140,7 +124,7 @@ bool TerrainObject::isBigWall()
   * Add this to the graphical Y offset of units or objects on this tile.
   * @return Y offset
   */
-int TerrainObject::getTerrainLevel()
+int MapData::getTerrainLevel()
 {
 	return _terrainLevel;
 }
@@ -149,7 +133,7 @@ int TerrainObject::getTerrainLevel()
   * Get index to the footstep sound.
   * @return sound ID
   */
-int TerrainObject::getFootstepSound()
+int MapData::getFootstepSound()
 {
 	return _footstepSound;
 }
@@ -158,71 +142,53 @@ int TerrainObject::getFootstepSound()
   * whether this is a normal door
   * @return bool 
   */
-bool TerrainObject::isDoor()
+bool MapData::isDoor()
 {
 	return _isDoor;
 }
 
 /**
   * Get the alternative object ID 
-  * @param type 0=death mcd, 1=alt mcd
   * @return object ID 
   */
-int TerrainObject::getAltMCD(int type)
+int MapData::getAltMCD()
 {
-	return type==0?_dieMCD:_altMCD;
+	return _altMCD;
 }
 
 /**
-  * Get the alternative object pointer
-  * @param type 0=death mcd, 1=alt mcd
-  * @return object pointer 
+  * Get the dead object ID 
+  * @return object ID 
   */
-TerrainObject *TerrainObject::getAltObject(int type)
+int MapData::getDieMCD()
 {
-	return type==0?_dieObject:_altObject;
-}
-
-/**
-  * Set the alternative object pointer
-  * @param obj pointer 
-  * @param type 0=death mcd, 1=alt mcd
-  */
-void TerrainObject::setAltObject(TerrainObject *obj, int type)
-{
-	if (type == 0)
-	{
-		_dieObject = obj;
-	}else
-	{
-		_altObject = obj;
-	}
+	return _dieMCD;
 }
 
 /**
   * Get the type of object
   * @return 0-3
   */
-int TerrainObject::getObjectType()
+int MapData::getObjectType()
 {
 	return _objectType;
 }
 
 /**
-  * Get the lightblock of object.
+  * Get the amount of blockage of a certain type.
   * @param type
-  * @return lightblock
+  * @return blockage (0-255)
   */
-int TerrainObject::getBlock(int type)
+int MapData::getBlock(Affector type)
 {
-	return _block[type]; 
+	return _block[(int)type]; 
 }
 
 /**
   * Get the lightsource of object.
   * @return lightsource
   */
-int TerrainObject::getLightSource()
+int MapData::getLightSource()
 {
 	return _lightSource;
 }
@@ -230,15 +196,15 @@ int TerrainObject::getLightSource()
 /**
 * setter
 */
-void TerrainObject::setOriginalSpriteIndex(int frameID, int value)
+void MapData::setSprite(int frameID, int value)
 {
-	_originalSpriteIndex[frameID] = value;
+	_sprite[frameID] = value;
 }
 
 /**
   * setter
   */
-void TerrainObject::setFlags(bool isUfoDoor, bool stopLOS, bool isNoFloor, bool isBigWall, bool isGravLift, bool isDoor, bool blockFire, bool blockSmoke)
+void MapData::setFlags(bool isUfoDoor, bool stopLOS, bool isNoFloor, bool isBigWall, bool isGravLift, bool isDoor, bool blockFire, bool blockSmoke)
 {
 	_isUfoDoor = isUfoDoor;
 	_stopLOS = stopLOS;
@@ -253,7 +219,7 @@ void TerrainObject::setFlags(bool isUfoDoor, bool stopLOS, bool isNoFloor, bool 
 /**
   * setter
   */
-void TerrainObject::setYOffset(int value)
+void MapData::setYOffset(int value)
 {
 	_yOffset = value;
 }
@@ -261,7 +227,7 @@ void TerrainObject::setYOffset(int value)
 /**
   * setter
   */
-void TerrainObject::setSpecialType(int value, int otype)
+void MapData::setSpecialType(int value, int otype)
 {
 	_specialType = (SpecialTileType)value;
 	_objectType = otype;
@@ -270,7 +236,7 @@ void TerrainObject::setSpecialType(int value, int otype)
 /**
   * setter
   */
-void TerrainObject::setTUCosts(int walk, int fly, int slide)
+void MapData::setTUCosts(int walk, int fly, int slide)
 {
 	_TUWalk = walk;
 	_TUFly = fly;
@@ -280,7 +246,7 @@ void TerrainObject::setTUCosts(int walk, int fly, int slide)
 /**
   * setter
   */
-void TerrainObject::setTerrainLevel(int value)
+void MapData::setTerrainLevel(int value)
 {
 	_terrainLevel = value;
 }
@@ -288,7 +254,7 @@ void TerrainObject::setTerrainLevel(int value)
 /**
   * setter
   */
-void TerrainObject::setFootstepSound(int value)
+void MapData::setFootstepSound(int value)
 {
 	_footstepSound = value;
 }
@@ -296,7 +262,7 @@ void TerrainObject::setFootstepSound(int value)
 /**
   * setter
   */
-void TerrainObject::setAltMCD(int value)
+void MapData::setAltMCD(int value)
 {
 	_altMCD = value;
 }
@@ -304,7 +270,7 @@ void TerrainObject::setAltMCD(int value)
 /**
   * setter
   */
-void TerrainObject::setDieMCD(int value)
+void MapData::setDieMCD(int value)
 {
 	_dieMCD = value;
 }
@@ -312,7 +278,7 @@ void TerrainObject::setDieMCD(int value)
 /**
   * setter
   */
-void TerrainObject::setBlockValue(int lightBlock, int visionBlock, int HEBlock, int smokeBlock, int fireBlock, int gasBlock)
+void MapData::setBlockValue(int lightBlock, int visionBlock, int HEBlock, int smokeBlock, int fireBlock, int gasBlock)
 {
 	_block[0] = lightBlock==10?16:lightBlock; // small tweak to make sure 10 blocks all light...
 	_block[1] = visionBlock==1?255:0;
@@ -325,7 +291,7 @@ void TerrainObject::setBlockValue(int lightBlock, int visionBlock, int HEBlock, 
 /**
   * setter
   */
-void TerrainObject::setLightSource(int value)
+void MapData::setLightSource(int value)
 {
 	_lightSource = value;
 }

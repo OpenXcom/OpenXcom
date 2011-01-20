@@ -24,8 +24,6 @@
 #include "Position.h"
 #include "Pathfinding.h"
 #include "TerrainModifier.h"
-#include "../Resource/TerrainObjectSet.h"
-#include "../Resource/TerrainObject.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Action.h"
 #include "../Engine/SurfaceSet.h"
@@ -35,14 +33,10 @@
 #include "../Engine/Palette.h"
 #include "../Engine/Game.h"
 #include "../Savegame/SavedBattleGame.h"
-#include "../Savegame/GameTime.h"
-#include "../Savegame/Craft.h"
-#include "../Savegame/Ufo.h"
 #include "../Savegame/Tile.h"
 #include "../Savegame/BattleUnit.h"
-#include "../Ruleset/RuleTerrain.h"
-#include "../Ruleset/RuleCraft.h"
-#include "../Ruleset/RuleUfo.h"
+#include "../Ruleset/MapDataSet.h"
+#include "../Ruleset/MapData.h"
 #include "../Interface/Text.h"
 #include "../Interface/Cursor.h"
 
@@ -137,6 +131,12 @@ void Map::setSavedGame(SavedBattleGame *save, Game *game)
 	{
 		_unitCache.push_back(0);
 	}
+
+	for (std::vector<MapDataSet*>::const_iterator i = _save->getMapDataSets()->begin(); i != _save->getMapDataSets()->end(); i++)
+	{
+		(*i)->getSurfaceset()->setPalette(this->getPalette());
+	}
+
 }
 
 /**
@@ -771,7 +771,7 @@ void Map::cacheTileSprites()
  */
 bool Map::cacheTileSprites(int i)
 {
-	TerrainObject *object = 0;
+	MapData *object = 0;
 	Surface *frame = 0;
 	Tile *tile = _save->getTiles()[i];
 	bool door = false;
@@ -780,7 +780,7 @@ bool Map::cacheTileSprites(int i)
 	{
 
 		/* draw a floor object on the cache (if any) */
-		object = tile->getTerrainObject(O_FLOOR);
+		object = tile->getMapData(O_FLOOR);
 		if (object)
 		{
 			if (_tileFloorCache[i] == 0)
@@ -806,7 +806,7 @@ bool Map::cacheTileSprites(int i)
 		}
 
 		/* draw terrain objects on the cache (if any) */
-		if (tile->getTerrainObject(O_WESTWALL) != 0 || tile->getTerrainObject(O_NORTHWALL) != 0 || tile->getTerrainObject(O_OBJECT) != 0)
+		if (tile->getMapData(O_WESTWALL) != 0 || tile->getMapData(O_NORTHWALL) != 0 || tile->getMapData(O_OBJECT) != 0)
 		{
 			if (_tileWallsCache[i] == 0)
 			{
@@ -819,7 +819,7 @@ bool Map::cacheTileSprites(int i)
 			}
 
 			// Draw west wall
-			object = tile->getTerrainObject(O_WESTWALL);
+			object = tile->getMapData(O_WESTWALL);
 			if (object)
 			{
 				frame = tile->getSprite(O_WESTWALL);
@@ -829,14 +829,14 @@ bool Map::cacheTileSprites(int i)
 				door = object->isDoor() || object->isUFODoor();
 			}
 			// Draw north wall
-			object = tile->getTerrainObject(O_NORTHWALL);
+			object = tile->getMapData(O_NORTHWALL);
 			if (object)
 			{
 				frame = tile->getSprite(O_NORTHWALL);
 				frame->setX(0);
 				frame->setY(-object->getYOffset());
 				// if there is a westwall, cut off some of the north wall (otherwise it will overlap)
-				if (tile->getTerrainObject(O_WESTWALL))
+				if (tile->getMapData(O_WESTWALL))
 				{
 					frame->setX(frame->getWidth() / 2);
 					frame->getCrop()->x = frame->getWidth() / 2;
@@ -851,7 +851,7 @@ bool Map::cacheTileSprites(int i)
 				door = object->isDoor() || object->isUFODoor();
 			}
 			// Draw object
-			object = tile->getTerrainObject(O_OBJECT);
+			object = tile->getMapData(O_OBJECT);
 			if (object)
 			{
 				frame = tile->getSprite(O_OBJECT);

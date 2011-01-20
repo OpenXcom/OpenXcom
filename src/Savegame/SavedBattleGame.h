@@ -27,7 +27,7 @@ namespace OpenXcom
 
 class Tile;
 class SavedGame;
-class RuleTerrain;
+class MapDataSet;
 class RuleUnitSprite;
 class MapBlock;
 class Node;
@@ -47,13 +47,14 @@ enum MissionType { MISS_UFORECOVERY, MISS_UFOASSAULT, MISS_TERROR, MISS_ALIENBAS
 
 /**
  * The battlescape data that gets written to disk when the game is saved.
- * A saved game holds all the variable info in a game like terrain
+ * A saved game holds all the variable info in a game like mapdata
  * soldiers, items, etc.
  */
 class SavedBattleGame
 {
 private:
 	int _width, _length, _height;
+	std::vector<MapDataSet*> _mapDataFiles;
 	Tile **_tiles; 
 	BattleUnit *_selectedUnit;
 	std::vector<Node*> _nodes;
@@ -74,6 +75,8 @@ public:
 	void save(YAML::Emitter& out) const;
 	/// Set the dimensions of the map and initializes it.
 	void initMap(int width, int length, int height);
+	/// Gets the game's mapdatafiles.
+	std::vector<MapDataSet*> *getMapDataSets();
 	/// Set the mission type.
 	void setMissionType(MissionType missionType);
 	/// Get the mission type.
