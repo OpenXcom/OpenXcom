@@ -389,6 +389,9 @@
     <ClCompile Include="Menu\LoadGameState.cpp">
       <Filter>Menu</Filter>
     </ClCompile>
+    <ClCompile Include="Menu\SaveGameState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -780,6 +783,9 @@
       <Filter>Menu</Filter>
     </ClInclude>
     <ClInclude Include="Menu\dirent.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\SaveGameState.h">
       <Filter>Menu</Filter>
     </ClInclude>
   </ItemGroup>

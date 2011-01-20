@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -50,7 +50,7 @@ public:
 	void getSavesList(const std::string &dir);
 	/// Handler for clicking the Cancel button.
 	void btnCancelClick(Action *action);
-	/// Handler for clicking the Soldiers list.
+	/// Handler for clicking the Saves list.
 	void lstSavesClick(Action *action);
 };
 

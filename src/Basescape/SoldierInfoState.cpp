@@ -19,9 +19,9 @@
 #include "SoldierInfoState.h"
 #include <sstream>
 #include "../Engine/Game.h"
+#include "../Engine/Action.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
-#include <string>
 #include "../Engine/Font.h"
 #include "../Engine/Palette.h"
 #include "../Interface/Bar.h"
@@ -157,6 +157,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, unsigned int soldier)
 
 	_edtSoldier->setColor(Palette::blockOffset(13)+10);
 	_edtSoldier->setBig();
+	_edtSoldier->onKeyboardPress((ActionHandler)&SoldierInfoState::edtSoldierKeyPress);
 
 	_txtArmour->setColor(Palette::blockOffset(13));
 
@@ -334,14 +335,25 @@ void SoldierInfoState::init()
 		ss12 << s->getCraft()->getName(_game->getResourcePack()->getLanguage());
 	_txtCraft->setText(ss12.str());
 }
-	
+
+/**
+ * Changes the soldier name.
+ * @param action Pointer to an action.
+ */
+void SoldierInfoState::edtSoldierKeyPress(Action *action)
+{
+	if (action->getDetails()->key.keysym.sym == SDLK_RETURN)
+	{
+		_base->getSoldiers()->at(_soldier)->setName(_edtSoldier->getText());
+	}
+}
+
 /**
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
 void SoldierInfoState::btnOkClick(Action *action)
 {
-	_base->getSoldiers()->at(_soldier)->setName(_edtSoldier->getText());
 	_game->popState();
 }
 
@@ -351,7 +363,6 @@ void SoldierInfoState::btnOkClick(Action *action)
  */
 void SoldierInfoState::btnPrevClick(Action *action)
 {
-	_base->getSoldiers()->at(_soldier)->setName(_edtSoldier->getText());
 	if (_soldier == 0)
 		_soldier = _base->getSoldiers()->size() - 1;
 	else
@@ -365,7 +376,6 @@ void SoldierInfoState::btnPrevClick(Action *action)
  */
 void SoldierInfoState::btnNextClick(Action *action)
 {
-	_base->getSoldiers()->at(_soldier)->setName(_edtSoldier->getText());
 	_soldier++;
 	if (_soldier >= _base->getSoldiers()->size())
 		_soldier = 0;

@@ -913,6 +913,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Menu\SaveGameState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Menu\SaveGameState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Menu\StartState.cpp"
 				>
 			</File>

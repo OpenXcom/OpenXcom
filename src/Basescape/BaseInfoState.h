@@ -66,6 +66,8 @@ public:
 	~BaseInfoState();
 	/// Updates the base stats.
 	void init();
+	/// Handler for pressing a key on the Name edit.
+	void edtBaseKeyPress(Action *action);
 	/// Handler for clicking the mini base view.
 	void miniClick(Action *action);
 	/// Handler for clicking the OK button.

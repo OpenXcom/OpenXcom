@@ -21,7 +21,6 @@
 
 #include <map>
 #include <string>
-#include <string>
 
 namespace OpenXcom
 {

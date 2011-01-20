@@ -86,12 +86,16 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	}
     YAML::Parser parser(fin);
 	YAML::Node doc;
-    parser.GetNextDocument(doc);
 
+	// Get brief save info
+    parser.GetNextDocument(doc);
+	_time->load(doc["time"]);
+
+	// Get full save data
+	parser.GetNextDocument(doc);
 	int a;
 	doc["difficulty"] >> a;
 	_difficulty = (GameDifficulty)a;
-	_time->load(doc["time"]);
 	doc["funds"] >> _funds;
 
 	size = doc["countries"].size();
@@ -167,59 +171,65 @@ void SavedGame::save(const std::string &filename) const
 		throw "Failed to save savegame";
 	}
 
-	YAML::Emitter out;
-	out << YAML::BeginMap;
-	out << YAML::Key << "version" << YAML::Value << "0.2";
-	out << YAML::Key << "difficulty" << YAML::Value << _difficulty;
-	out << YAML::Key << "time" << YAML::Value;
-	_time->save(out);
-	out << YAML::Key << "funds" << YAML::Value << _funds;
-	out << YAML::Key << "countries" << YAML::Value;
-	out << YAML::BeginSeq;
+	YAML::Emitter outBrief, outSave;
+
+	// Saves the brief game info used in the saves list
+	outBrief << YAML::BeginMap;
+	outBrief << YAML::Key << "version" << YAML::Value << "0.2";
+	outBrief << YAML::Key << "time" << YAML::Value;
+	_time->save(outBrief);
+	outBrief << YAML::EndMap;
+
+	// Saves the full game data to the save
+	outSave << YAML::BeginMap;
+	outSave << YAML::Key << "difficulty" << YAML::Value << _difficulty;
+	outSave << YAML::Key << "funds" << YAML::Value << _funds;
+	outSave << YAML::Key << "countries" << YAML::Value;
+	outSave << YAML::BeginSeq;
 	for (std::vector<Country*>::const_iterator i = _countries.begin(); i != _countries.end(); i++)
 	{
-		(*i)->save(out);
+		(*i)->save(outSave);
 	}
-	out << YAML::EndSeq;
-	out << YAML::Key << "regions" << YAML::Value;
-	out << YAML::BeginSeq;
+	outSave << YAML::EndSeq;
+	outSave << YAML::Key << "regions" << YAML::Value;
+	outSave << YAML::BeginSeq;
 	for (std::vector<Region*>::const_iterator i = _regions.begin(); i != _regions.end(); i++)
 	{
-		(*i)->save(out);
+		(*i)->save(outSave);
 	}
-	out << YAML::EndSeq;
-	out << YAML::Key << "bases" << YAML::Value;
-	out << YAML::BeginSeq;
+	outSave << YAML::EndSeq;
+	outSave << YAML::Key << "bases" << YAML::Value;
+	outSave << YAML::BeginSeq;
 	for (std::vector<Base*>::const_iterator i = _bases.begin(); i != _bases.end(); i++)
 	{
-		(*i)->save(out);
+		(*i)->save(outSave);
 	}
-	out << YAML::EndSeq;
-	out << YAML::Key << "ufos" << YAML::Value;
-	out << YAML::BeginSeq;
+	outSave << YAML::EndSeq;
+	outSave << YAML::Key << "ufos" << YAML::Value;
+	outSave << YAML::BeginSeq;
 	for (std::vector<Ufo*>::const_iterator i = _ufos.begin(); i != _ufos.end(); i++)
 	{
-		(*i)->save(out);
+		(*i)->save(outSave);
 	}
-	out << YAML::EndSeq;
-	out << YAML::Key << "craftId" << YAML::Value << _craftId;
-	out << YAML::Key << "waypoints" << YAML::Value;
-	out << YAML::BeginSeq;
+	outSave << YAML::EndSeq;
+	outSave << YAML::Key << "craftId" << YAML::Value << _craftId;
+	outSave << YAML::Key << "waypoints" << YAML::Value;
+	outSave << YAML::BeginSeq;
 	for (std::vector<Waypoint*>::const_iterator i = _waypoints.begin(); i != _waypoints.end(); i++)
 	{
-		(*i)->save(out);
+		(*i)->save(outSave);
 	}
-	out << YAML::EndSeq;
-	out << YAML::Key << "ufoId" << YAML::Value << _ufoId;
-	out << YAML::Key << "waypointId" << YAML::Value << _waypointId;
+	outSave << YAML::EndSeq;
+	outSave << YAML::Key << "ufoId" << YAML::Value << _ufoId;
+	outSave << YAML::Key << "waypointId" << YAML::Value << _waypointId;
 	if (_battleGame != 0)
 	{
-		out << YAML::Key << "battleGame" << YAML::Value;
-		_battleGame->save(out);
+		outSave << YAML::Key << "battleGame" << YAML::Value;
+		_battleGame->save(outSave);
 	}
-	out << YAML::EndMap;
+	outSave << YAML::EndMap;
 
-	sav << out.c_str();
+	sav << outBrief.c_str() << std::endl << outSave.c_str();
 	sav.close();
 }
 

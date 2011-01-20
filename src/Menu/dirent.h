@@ -365,6 +365,7 @@ static void rewinddir(DIR* dirp)
 #endif
 
 #else
+#include <sys/types.h>
 #include <dirent.h>
 #endif
 

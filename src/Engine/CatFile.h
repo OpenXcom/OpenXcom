@@ -21,7 +21,6 @@
 #define OPENXCOM_CATFILE_H
 
 #include <fstream>
-#include <string>
 
 namespace OpenXcom
 {

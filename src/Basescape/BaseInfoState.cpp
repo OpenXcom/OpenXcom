@@ -19,9 +19,9 @@
 #include "BaseInfoState.h"
 #include <sstream>
 #include "../Engine/Game.h"
+#include "../Engine/Action.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
-#include <string>
 #include "../Engine/Font.h"
 #include "../Engine/Palette.h"
 #include "../Interface/Bar.h"
@@ -172,6 +172,7 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 
 	_edtBase->setColor(Palette::blockOffset(15)+1);
 	_edtBase->setBig();
+	_edtBase->onKeyboardPress((ActionHandler)&BaseInfoState::edtBaseKeyPress);
 
 
 	_txtPersonnel->setColor(Palette::blockOffset(15)+1);
@@ -375,6 +376,18 @@ void BaseInfoState::init()
 }
 
 /**
+ * Changes the base name.
+ * @param action Pointer to an action.
+ */
+void BaseInfoState::edtBaseKeyPress(Action *action)
+{
+	if (action->getDetails()->key.keysym.sym == SDLK_RETURN)
+	{
+		_base->setName(_edtBase->getText());
+	}
+}
+
+/**
  * Selects a new base to display.
  * @param action Pointer to an action.
  */
@@ -396,7 +409,6 @@ void BaseInfoState::miniClick(Action *action)
  */
 void BaseInfoState::btnOkClick(Action *action)
 {
-	_base->setName(_edtBase->getText());
 	_game->popState();
 }
 
@@ -406,7 +418,6 @@ void BaseInfoState::btnOkClick(Action *action)
  */
 void BaseInfoState::btnStoresClick(Action *action)
 {
-	_base->setName(_edtBase->getText());
 	_game->pushState(new StoresState(_game, _base));
 }
 
@@ -416,7 +427,6 @@ void BaseInfoState::btnStoresClick(Action *action)
  */
 void BaseInfoState::btnMonthlyCostsClick(Action *action)
 {
-	_base->setName(_edtBase->getText());
 	_game->pushState(new MonthlyCostsState(_game, _base));
 }
 

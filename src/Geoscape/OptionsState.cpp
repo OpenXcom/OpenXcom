@@ -20,7 +20,6 @@
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
-#include <string>
 #include "../Engine/Font.h"
 #include "../Engine/Palette.h"
 #include "../Interface/TextButton.h"
@@ -28,6 +27,7 @@
 #include "../Interface/Text.h"
 #include "AbandonGameState.h"
 #include "../Menu/LoadGameState.h"
+#include "../Menu/SaveGameState.h"
 
 namespace OpenXcom
 {
@@ -93,6 +93,16 @@ OptionsState::~OptionsState()
 }
 
 /**
+ * Resets the palette
+ * since it's bound to change on other screens.
+ */
+void OptionsState::init()
+{
+	// Set palette
+	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+}
+
+/**
  * Opens the Load Game screen.
  * @param action Pointer to an action.
  */
@@ -101,12 +111,13 @@ void OptionsState::btnLoadClick(Action *action)
 	_game->pushState(new LoadGameState(_game));
 }
 
+/**
+ * Opens the Save Game screen.
+ * @param action Pointer to an action.
+ */
 void OptionsState::btnSaveClick(Action *action)
 {
-	// Test save
-	/*
-	_game->getSavedGame()->save("test");
-	*/
+	_game->pushState(new SaveGameState(_game));
 }
 
 /**

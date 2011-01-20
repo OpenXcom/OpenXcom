@@ -31,7 +31,6 @@
 #include "../Engine/Screen.h"
 #include "../Engine/Action.h"
 #include "../Resource/ResourcePack.h"
-#include <string>
 #include "../Interface/Cursor.h"
 #include "../Interface/Text.h"
 #include "../Interface/Bar.h"
@@ -47,8 +46,6 @@
 #include "../Engine/SoundSet.h"
 #include "../Engine/Sound.h"
 #include "../Savegame/Craft.h"
-#include <iostream>
-
 
 namespace OpenXcom
 {

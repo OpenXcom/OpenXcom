@@ -19,9 +19,7 @@
 #ifndef OPENXCOM_TARGETINFOSTATE_H
 #define OPENXCOM_TARGETINFOSTATE_H
 
-#include <string>
 #include "../Engine/State.h"
-#include <string>
 
 namespace OpenXcom
 {

@@ -223,6 +223,8 @@
 		<Unit filename="Menu\MainMenuState.h" />
 		<Unit filename="Menu\NewGameState.cpp" />
 		<Unit filename="Menu\NewGameState.h" />
+		<Unit filename="Menu\SaveGameState.cpp" />
+		<Unit filename="Menu\SaveGameState.h" />
 		<Unit filename="Menu\StartState.cpp" />
 		<Unit filename="Menu\StartState.h" />
 		<Unit filename="Menu\TestState.cpp" />

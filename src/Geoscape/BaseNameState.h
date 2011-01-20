@@ -47,7 +47,7 @@ public:
 	BaseNameState(Game *game, Base *base, Globe *globe, bool first);
 	/// Cleans up the Base Name state.
 	~BaseNameState();
-	/// Handler for releasing a key on the Name edit.
+	/// Handler for pressing a key on the Name edit.
 	void edtNameKeyPress(Action *action);
 };
 

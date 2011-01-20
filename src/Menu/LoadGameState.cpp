@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Daniel Albano
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -18,7 +18,7 @@
  */
 #include "LoadGameState.h"
 #include <sstream>
-#include <sys/types.h>
+#include <iomanip>
 #include <fstream>
 #include "dirent.h"
 #include "yaml.h"
@@ -107,7 +107,7 @@ LoadGameState::~LoadGameState()
 
 /**
  * Gets all the saves found in a certain folder
- * and adds them to the Load Game list.
+ * and adds them to the Saves list.
  * @param dir Save directory.
  */
 void LoadGameState::getSavesList(const std::string &dir)
@@ -135,17 +135,16 @@ void LoadGameState::getSavesList(const std::string &dir)
 		}
 		YAML::Parser parser(fin);
 		YAML::Node doc;
+		
 		parser.GetNextDocument(doc);
-
 		GameTime time = GameTime(6, 1, 1, 1999, 12, 0, 0);
 		time.load(doc["time"]);
 		std::stringstream saveTime, saveDay, saveMonth, saveYear;
-		saveTime << time.getHour() << ":" << time.getMinute();
+		saveTime << time.getHour() << ":" << std::setfill('0') << std::setw(2) << time.getMinute();
 		saveDay << time.getDay() << _game->getResourcePack()->getLanguage()->getString(time.getDayString());
 		saveMonth << _game->getResourcePack()->getLanguage()->getString(time.getMonthString());
 		saveYear << time.getYear();
 		_lstSaves->addRow(5, file.substr(0, file.length()-4).c_str(), saveTime.str().c_str(), saveDay.str().c_str(), saveMonth.str().c_str(), saveYear.str().c_str());
-
 		fin.close();
     }
     closedir(dp);

@@ -21,7 +21,6 @@
 
 #include <vector>
 #include <list>
-#include <string>
 #include "../Engine/InteractiveSurface.h"
 
 namespace OpenXcom
