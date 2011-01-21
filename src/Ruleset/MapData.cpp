@@ -22,7 +22,7 @@ namespace OpenXcom
 {
 
 /**
-*
+*  TODO: Daiky to organise and document the functions here
 */
 MapData::MapData(MapDataSet *dataset) : _dataset(dataset)
 {

@@ -20,8 +20,8 @@
 #include "MapData.h"
 #include <fstream>
 #include <sstream>
-#include "..\Engine\SurfaceSet.h"
-#include "..\Resource\ResourcePack.h"
+#include "../Engine/SurfaceSet.h"
+#include "../Resource/ResourcePack.h"
 
 namespace OpenXcom
 {
@@ -144,7 +144,7 @@ void MapDataSet::load(ResourcePack *res)
 	s << res->getFolder() << "TERRAIN/" << _name << ".MCD";
 
 	// Load file
-	std::ifstream mapFile (res->insensitive(s.str()), std::ios::in | std::ios::binary);
+	std::ifstream mapFile (res->insensitive(s.str()).c_str(), std::ios::in | std::ios::binary);
 	if (!mapFile)
 	{
 		throw "Failed to load MCD";

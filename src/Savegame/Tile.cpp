@@ -61,7 +61,7 @@ MapData *Tile::getMapData(int part)
 
 /**
  * Set the MapData references of part 0 to 3.
- * @param tob pointer to the terrain object
+ * @param dat pointer to the data object
  * @param part the part number
  */
 void Tile::setMapData(MapData *dat, int part)
@@ -319,7 +319,6 @@ void Tile::destroy(int part)
 {
 	if (_objects[part])
 	{
-		MapData *current = _objects[part];
 		setMapData(0, part);
 		MapData *dead = _objects[part]->getDataset()->getObjects()->at(_objects[part]->getDieMCD());
 		if (dead)
