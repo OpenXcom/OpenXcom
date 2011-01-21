@@ -16,45 +16,34 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_BASENAMESTATE_H
-#define OPENXCOM_BASENAMESTATE_H
+#ifndef OPENXCOM_NOTESTATE_H
+#define OPENXCOM_NOTESTATE_H
 
 #include "../Engine/State.h"
 
 namespace OpenXcom
 {
 
-class Base;
+class TextButton;
 class Window;
 class Text;
-class TextEdit;
-class TextButton;
-class Globe;
 
 /**
- * Window used to input a name for a new base.
+ * Note displayed regarding early build
  */
-class BaseNameState : public State
+class NoteState : public State
 {
 private:
-	Base *_base;
-	Globe *_globe;
+	TextButton *_btnOk;
 	Window *_window;
 	Text *_txtTitle;
-	TextEdit *_edtName;
-	TextButton *_btnOk;
-	bool _first;
 public:
-	/// Creates the Base Name state.
-	BaseNameState(Game *game, Base *base, Globe *globe, bool first);
-	/// Cleans up the Base Name state.
-	~BaseNameState();
-	/// Names the base.
-	void nameBase();
+	/// Creates the Note state.
+	NoteState(Game *game);
+	/// Cleans up the Note state.
+	~NoteState();
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
-	/// Handler for pressing a key on the Name edit.
-	void edtNameKeyPress(Action *action);
 };
 
 }

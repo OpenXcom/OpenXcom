@@ -145,22 +145,22 @@ BasescapeState::BasescapeState(Game *game, Base *base, Globe *globe) : State(gam
 	_btnFacilities->onMouseClick((ActionHandler)&BasescapeState::btnFacilitiesClick);
 
 	_btnResearch->setColor(Palette::blockOffset(13)+8);
-	_btnResearch->setText(_game->getResourcePack()->getLanguage()->getString("STR_RESEARCH"));
+	_btnResearch->setText(_game->getResourcePack()->getLanguage()->getString("STR_NOT_AVAILABLE"));
 	_btnResearch->onMouseClick((ActionHandler)&BasescapeState::btnResearchClick);
 
 	_btnManufacture->setColor(Palette::blockOffset(13)+8);
-	_btnManufacture->setText(_game->getResourcePack()->getLanguage()->getString("STR_MANUFACTURE"));
+	_btnManufacture->setText(_game->getResourcePack()->getLanguage()->getString("STR_NOT_AVAILABLE"));
 	_btnManufacture->onMouseClick((ActionHandler)&BasescapeState::btnManufactureClick);
 
 	_btnTransfer->setColor(Palette::blockOffset(13)+8);
-	_btnTransfer->setText(_game->getResourcePack()->getLanguage()->getString("STR_TRANSFER_UC"));
+	_btnTransfer->setText(_game->getResourcePack()->getLanguage()->getString("STR_NOT_AVAILABLE"));
 
 	_btnPurchase->setColor(Palette::blockOffset(13)+8);
-	_btnPurchase->setText(_game->getResourcePack()->getLanguage()->getString("STR_PURCHASE_RECRUIT"));
+	_btnPurchase->setText(_game->getResourcePack()->getLanguage()->getString("STR_NOT_AVAILABLE"));
 	_btnPurchase->onMouseClick((ActionHandler)&BasescapeState::btnPurchaseClick);
 
 	_btnSell->setColor(Palette::blockOffset(13)+8);
-	_btnSell->setText(_game->getResourcePack()->getLanguage()->getString("STR_SELL_SACK_UC"));
+	_btnSell->setText(_game->getResourcePack()->getLanguage()->getString("STR_NOT_AVAILABLE"));
 	_btnSell->onMouseClick((ActionHandler)&BasescapeState::btnSellClick);
 
 	_btnGeoscape->setColor(Palette::blockOffset(13)+8);
@@ -311,7 +311,7 @@ void BasescapeState::btnFacilitiesClick(Action *action)
  */
 void BasescapeState::btnResearchClick(Action *action)
 {
-	_game->pushState(new ResearchState(_game));
+	//_game->pushState(new ResearchState(_game));
 }
 
 /**
@@ -320,7 +320,7 @@ void BasescapeState::btnResearchClick(Action *action)
  */
 void BasescapeState::btnManufactureClick(Action *action)
 {
-	_game->pushState(new ManufactureState(_game));
+	//_game->pushState(new ManufactureState(_game));
 }
 
 /**
@@ -329,7 +329,7 @@ void BasescapeState::btnManufactureClick(Action *action)
  */
 void BasescapeState::btnPurchaseClick(Action *action)
 {
-	_game->pushState(new PurchaseState(_game));
+	//_game->pushState(new PurchaseState(_game));
 }
 
 /**
@@ -338,7 +338,7 @@ void BasescapeState::btnPurchaseClick(Action *action)
  */
 void BasescapeState::btnSellClick(Action *action)
 {
-	_game->pushState(new SellState(_game));
+	//_game->pushState(new SellState(_game));
 }
 
 /**

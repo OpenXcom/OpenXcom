@@ -22,10 +22,9 @@
 #include "../Engine/Game.h"
 #include "../Engine/Action.h"
 #include "../Resource/XcomResourcePack.h"
-#include "../Ruleset/XcomRuleset.h"
 #include "../Engine/Surface.h"
 #include "TestState.h"
-#include "LanguageState.h"
+#include "NoteState.h"
 
 namespace OpenXcom
 {
@@ -81,7 +80,6 @@ void StartState::think()
 		try
 		{
 			_game->setResourcePack(new XcomResourcePack(DATA_FOLDER));
-			_game->setRuleset(new XcomRuleset());
 			_load = LOADING_SUCCESSFUL;
 		}
 		catch (const char* c)
@@ -99,7 +97,7 @@ void StartState::think()
 		break;
 	case LOADING_SUCCESSFUL:
 		//_game->setState(new TestState(_game));
-		_game->setState(new LanguageState(_game));
+		_game->setState(new NoteState(_game));
 		break;
 	default:
 		break;

@@ -115,10 +115,10 @@ CraftInfoState::CraftInfoState(Game *game, Base *base, unsigned int craft) : Sta
 	_btnCrew->onMouseClick((ActionHandler)&CraftInfoState::btnCrewClick);
 
 	_btnEquip->setColor(Palette::blockOffset(13)+13);
-	_btnEquip->setText(_game->getResourcePack()->getLanguage()->getString("STR_EQUIPMENT_UC"));
+	_btnEquip->setText(_game->getResourcePack()->getLanguage()->getString("STR_NOT_AVAILABLE"));
 
 	_btnArmour->setColor(Palette::blockOffset(13)+13);
-	_btnArmour->setText(_game->getResourcePack()->getLanguage()->getString("STR_ARMOR"));
+	_btnArmour->setText(_game->getResourcePack()->getLanguage()->getString("STR_NOT_AVAILABLE"));
 
 	_txtCraft->setColor(Palette::blockOffset(13)+10);
 	_txtCraft->setBig();

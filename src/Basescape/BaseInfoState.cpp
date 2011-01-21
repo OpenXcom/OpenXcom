@@ -160,7 +160,7 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 	_btnOk->onMouseClick((ActionHandler)&BaseInfoState::btnOkClick);
 
 	_btnTransfers->setColor(Palette::blockOffset(15)+9);
-	_btnTransfers->setText(_game->getResourcePack()->getLanguage()->getString("STR_TRANSFERS_UC"));
+	_btnTransfers->setText(_game->getResourcePack()->getLanguage()->getString("STR_NOT_AVAILABLE"));
 
 	_btnStores->setColor(Palette::blockOffset(15)+9);
 	_btnStores->setText(_game->getResourcePack()->getLanguage()->getString("STR_STORES_UC"));

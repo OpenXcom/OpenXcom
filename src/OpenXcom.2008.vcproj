@@ -913,6 +913,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Menu\NoteState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Menu\NoteState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Menu\SaveGameState.cpp"
 				>
 			</File>
@@ -1113,22 +1121,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Resource\TerrainObject.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Resource\TerrainObject.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Resource\TerrainObjectSet.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Resource\TerrainObjectSet.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Resource\XcomResourcePack.cpp"
 				>
 			</File>
@@ -1157,11 +1149,19 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Ruleset\MapDataFile.cpp"
+				RelativePath=".\Ruleset\MapData.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Ruleset\MapDataFile.h"
+				RelativePath=".\Ruleset\MapData.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\MapDataSet.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\MapDataSet.h"
 				>
 			</File>
 			<File

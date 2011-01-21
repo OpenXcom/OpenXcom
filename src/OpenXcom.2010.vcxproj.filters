@@ -383,6 +383,9 @@
     <ClCompile Include="Menu\SaveGameState.cpp">
       <Filter>Menu</Filter>
     </ClCompile>
+    <ClCompile Include="Menu\NoteState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
     <ClCompile Include="Ruleset\MapDataSet.cpp">
       <Filter>Ruleset</Filter>
     </ClCompile>
@@ -774,6 +777,9 @@
       <Filter>Menu</Filter>
     </ClInclude>
     <ClInclude Include="Menu\SaveGameState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\NoteState.h">
       <Filter>Menu</Filter>
     </ClInclude>
     <ClInclude Include="Ruleset\MapDataSet.h">

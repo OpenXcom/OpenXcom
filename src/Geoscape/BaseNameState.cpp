@@ -26,6 +26,7 @@
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextEdit.h"
+#include "../Interface/TextButton.h"
 #include "../Savegame/Base.h"
 #include "../Basescape/PlaceLiftState.h"
 
@@ -45,19 +46,25 @@ BaseNameState::BaseNameState(Game *game, Base *base, Globe *globe, bool first) :
 
 	// Create objects
 	_window = new Window(this, 192, 80, 32, 60, POPUP_BOTH);
-	_txtTitle = new Text(182, 16, 37, 76);
-	_edtName = new TextEdit(136, 16, 54, 108);
+	_btnOk = new TextButton(162, 12, 47, 118);
+	_txtTitle = new Text(182, 16, 37, 70);
+	_edtName = new TextEdit(136, 16, 54, 94);
 	
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
 
 	add(_window);
+	add(_btnOk);
 	add(_txtTitle);
 	add(_edtName);
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(8)+8);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
+
+	_btnOk->setColor(Palette::blockOffset(8)+8);
+	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString("STR_OK"));
+	_btnOk->onMouseClick((ActionHandler)&BaseNameState::btnOkClick);
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setAlign(ALIGN_CENTER);
@@ -79,6 +86,21 @@ BaseNameState::~BaseNameState()
 }
 
 /**
+ *
+ */
+void BaseNameState::nameBase()
+{
+	_base->setName(_edtName->getText());
+	_game->popState();
+	_game->popState();
+	if (!_first)
+	{
+		_game->popState();
+		_game->pushState(new PlaceLiftState(_game, _base, _globe));
+	}
+}
+
+/**
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
@@ -86,15 +108,17 @@ void BaseNameState::edtNameKeyPress(Action *action)
 {
 	if (action->getDetails()->key.keysym.sym == SDLK_RETURN)
 	{
-		_base->setName(_edtName->getText());
-		_game->popState();
-		_game->popState();
-		if (!_first)
-		{
-			_game->popState();
-			_game->pushState(new PlaceLiftState(_game, _base, _globe));
-		}
+		nameBase();
 	}
+}
+
+/**
+ * Returns to the previous screen
+ * @param action Pointer to an action.
+ */
+void BaseNameState::btnOkClick(Action *action)
+{
+	nameBase();
 }
 
 }

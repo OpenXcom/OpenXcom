@@ -194,6 +194,7 @@
     <ClCompile Include="Menu\LoadGameState.cpp" />
     <ClCompile Include="Menu\MainMenuState.cpp" />
     <ClCompile Include="Menu\NewGameState.cpp" />
+    <ClCompile Include="Menu\NoteState.cpp" />
     <ClCompile Include="Menu\SaveGameState.cpp" />
     <ClCompile Include="Menu\StartState.cpp" />
     <ClCompile Include="Menu\TestState.cpp" />
@@ -326,6 +327,7 @@
     <ClInclude Include="Menu\LoadGameState.h" />
     <ClInclude Include="Menu\MainMenuState.h" />
     <ClInclude Include="Menu\NewGameState.h" />
+    <ClInclude Include="Menu\NoteState.h" />
     <ClInclude Include="Menu\SaveGameState.h" />
     <ClInclude Include="Menu\StartState.h" />
     <ClInclude Include="Menu\TestState.h" />

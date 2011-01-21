@@ -160,6 +160,12 @@ void BuildNewBaseState::globeClick(Action *action)
 	double lon, lat;
 	int mouseX = (int)floor(action->getDetails()->button.x / action->getXScale()), mouseY = (int)floor(action->getDetails()->button.y / action->getYScale());
 	_globe->cartToPolar(mouseX, mouseY, &lon, &lat);
+
+	// Ignore window clicks
+	if (mouseY < 28)
+	{
+		return;
+	}
 	
 	// Clicking on land for a base location
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)

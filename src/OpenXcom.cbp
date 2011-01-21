@@ -223,6 +223,8 @@
 		<Unit filename="Menu\MainMenuState.h" />
 		<Unit filename="Menu\NewGameState.cpp" />
 		<Unit filename="Menu\NewGameState.h" />
+		<Unit filename="Menu\NoteState.cpp" />
+		<Unit filename="Menu\NoteState.h" />
 		<Unit filename="Menu\SaveGameState.cpp" />
 		<Unit filename="Menu\SaveGameState.h" />
 		<Unit filename="Menu\StartState.cpp" />
@@ -234,18 +236,16 @@
 		</Unit>
 		<Unit filename="Resource\ResourcePack.cpp" />
 		<Unit filename="Resource\ResourcePack.h" />
-		<Unit filename="Resource\TerrainObject.cpp" />
-		<Unit filename="Resource\TerrainObject.h" />
-		<Unit filename="Resource\TerrainObjectSet.cpp" />
-		<Unit filename="Resource\TerrainObjectSet.h" />
 		<Unit filename="Resource\XcomResourcePack.cpp" />
 		<Unit filename="Resource\XcomResourcePack.h" />
 		<Unit filename="Ruleset\City.cpp" />
 		<Unit filename="Ruleset\City.h" />
 		<Unit filename="Ruleset\MapBlock.cpp" />
 		<Unit filename="Ruleset\MapBlock.h" />
-		<Unit filename="Ruleset\MapDataFile.cpp" />
-		<Unit filename="Ruleset\MapDataFile.h" />
+		<Unit filename="Ruleset\MapData.cpp" />
+		<Unit filename="Ruleset\MapData.h" />
+		<Unit filename="Ruleset\MapDataSet.cpp" />
+		<Unit filename="Ruleset\MapDataSet.h" />
 		<Unit filename="Ruleset\RuleBaseFacility.cpp" />
 		<Unit filename="Ruleset\RuleBaseFacility.h" />
 		<Unit filename="Ruleset\RuleCountry.cpp" />
