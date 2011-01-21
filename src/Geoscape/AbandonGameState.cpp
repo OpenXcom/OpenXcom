@@ -89,8 +89,8 @@ AbandonGameState::~AbandonGameState()
 void AbandonGameState::btnYesClick(Action *action)
 {
 	_game->setState(new MainMenuState(_game));
-	delete _game->getSavedGame();
 	_game->setSavedGame(0);
+	_game->setRuleset(0);
 }
 
 /**

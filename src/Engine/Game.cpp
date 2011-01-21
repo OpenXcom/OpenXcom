@@ -283,6 +283,7 @@ SavedGame *const Game::getSavedGame() const
  */
 void Game::setSavedGame(SavedGame *save)
 {
+	delete _save;
 	_save = save;
 }
 
@@ -301,6 +302,7 @@ Ruleset *const Game::getRuleset() const
  */
 void Game::setRuleset(Ruleset *rules)
 {
+	delete _rules;
 	_rules = rules;
 }
 

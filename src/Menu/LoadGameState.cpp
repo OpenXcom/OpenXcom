@@ -26,6 +26,7 @@
 #include "../Savegame/GameTime.h"
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
+#include "../Ruleset/XcomRuleset.h"
 #include "../Engine/Language.h"
 #include "../Engine/Font.h"
 #include "../Engine/Palette.h"
@@ -165,9 +166,9 @@ void LoadGameState::btnCancelClick(Action *action)
  */
 void LoadGameState::lstSavesClick(Action *action)
 {
+	_game->setRuleset(new XcomRuleset());
 	SavedGame *s = new SavedGame(DIFF_BEGINNER);
 	s->load(_lstSaves->getCell(_lstSaves->getSelectedRow(), 0)->getText(), _game->getRuleset());
-	delete _game->getSavedGame();
 	_game->setSavedGame(s);
 	if (_game->getSavedGame()->getBattleGame() == 0)
 	{
