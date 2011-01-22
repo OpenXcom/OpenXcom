@@ -260,6 +260,7 @@ void Tile::addLight(int light, int sessionID)
 	if (sessionID == _sessionID) return;
 	_sessionID = sessionID;
 
+	// highest light wins
 	if (_light < light)
 		_light = light;
 
@@ -319,10 +320,13 @@ void Tile::destroy(int part)
 {
 	if (_objects[part])
 	{
+		MapData *originalPart = _objects[part];
 		setMapData(0, part);
-		MapData *dead = _objects[part]->getDataset()->getObjects()->at(_objects[part]->getDieMCD());
-		if (dead)
+		if (originalPart->getDieMCD())
+		{
+			MapData *dead = originalPart->getDataset()->getObjects()->at(originalPart->getDieMCD());
 			setMapData(dead, dead->getObjectType());
+		}
 	}
 }
 

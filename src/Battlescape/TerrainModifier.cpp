@@ -161,51 +161,51 @@ void TerrainModifier::destroyTile(Tile *tile)
  */
 void TerrainModifier::calculateLineOfSight(BattleUnit *unit)
 {
-	int impactz = unit->getPosition().z;
-	int impactx = unit->getPosition().x;
-	int impacty = unit->getPosition().y;
+	double impactz = unit->getPosition().z + 0.5;
+	double impactx = unit->getPosition().x + 0.5;
+	double impacty = unit->getPosition().y + 0.5;
 	int visibility, maxVisibility = 20; // ideally 20 tiles of visibility
 
 	double startAngle[8] = { 45, 0, -45, 270, 225, 180, 135, 90 };
 	double endAngle[8] = { 135, 90, 45, 360, 315, 270, 225, 180 };
-	Tile *t = _save->getTile(Position(impactx, impacty, impactz));
+	Tile *t = _save->getTile(Position(int(floor(impactx)), int(floor(impacty)), int(floor(impactz))));
 
 	// a unique ID for this session, used to avoid tiles to be affected more than once.
 	int sessionID = RNG::generate(1, 65000);
 
 	t->isSeenBy(unit, sessionID); // the tile we are on, is already certainly seen
 
-	// raytrace every 2 degrees and affect tiles on our way
-	for (double te = startAngle[unit->getDirection()]-1; te <= endAngle[unit->getDirection()]+1; te += 1)
+	// raytrace every 3 degrees and affect tiles on our way
+	for (double te = startAngle[unit->getDirection()]-1; te <= endAngle[unit->getDirection()]+1; te += 3)
 	{
 		double cos_te = cos(te * M_PI / 180);
 		double sin_te = sin(te * M_PI / 180);
 
-		int oz = impactz, ox = impactx, oy = impacty;
+		double oz = impactz, ox = impactx, oy = impacty;
 		int l = 0;
-		int vz, vx, vy;
+		double vz, vx, vy;
 		visibility = maxVisibility;
 		while (visibility > 0)
 		{
 			l++;
 			vz = impactz;
-			vx = impactx +(int)((double)l*cos_te+0.5);
-			vy = impacty +(int)((double)l*sin_te+0.5);
+			vx = impactx + l * cos_te;
+			vy = impacty + l * sin_te;
 
-			t = _save->getTile(Position(vx,vy,vz));
+			t = _save->getTile(Position(int(floor(vx)), int(floor(vy)), int(floor(vz))));
 			if (!t) break;
-			visibility -= blockage(_save->getTile(Position(ox,oy,oz)), t, AFFECT_VISION);
+			visibility -= blockage(_save->getTile(Position(int(floor(ox)), int(floor(oy)), int(floor(oz)))), t, AFFECT_VISION);
 			visibility--; // visibility drops by 1 each tile by default
 			if (visibility > 0) 
 			{
 				t->isSeenBy(unit, sessionID);
 				// if there is a door to the east or south, we see it too
-				t = _save->getTile(Position(vx+1,vy,vz));
+				t = _save->getTile(Position(int(floor(vx) + 1), int(floor(vy)), int(floor(vz))));
 				if (t && t->getMapData(O_WESTWALL) && (t->getMapData(O_WESTWALL)->isDoor() || t->getMapData(O_WESTWALL)->isUFODoor()))
 				{
 					t->isSeenBy(unit, sessionID);
 				}
-				t = _save->getTile(Position(vx,vy-1,vz));
+				t = _save->getTile(Position(int(floor(vx)), int(floor(vy) - 1), int(floor(vz))));
 				if (t && t->getMapData(O_NORTHWALL) && (t->getMapData(O_NORTHWALL)->isDoor() || t->getMapData(O_NORTHWALL)->isUFODoor()))
 				{
 					t->isSeenBy(unit, sessionID);
@@ -225,8 +225,8 @@ void TerrainModifier::calculateLineOfSight(BattleUnit *unit)
 void TerrainModifier::circularAffector(const Position &pointOfImpact, Affector affector, int power)
 {
 	//int impactz = pointOfImpact.z;
-	int impactx = pointOfImpact.x;
-	int impacty = pointOfImpact.y;
+	double impactx = pointOfImpact.x + 0.5;
+	double impacty = pointOfImpact.y + 0.5;
 	int power_;
 
 	// a unique ID for this session, used to avoid tiles to be affected more than once.
@@ -235,31 +235,33 @@ void TerrainModifier::circularAffector(const Position &pointOfImpact, Affector a
 	// commenting the for loop will shine light only on current layer
 	for (int impactz = 0; impactz < _save->getHeight(); impactz++)
 	{
-		// the tile we are on gets full power
+		// the tile we are on gets full power, tiles around us -1 power
 		if (affector == AFFECT_LIGHT)
-			_save->getTile(Position(impactx,impacty,impactz))->addLight(power, sessionID);
-
-		// raytrace every 2 degrees and affect tiles on our way
-		for (double te = 0; te <= 360; te += 2)
 		{
-			double cos_te = cos(te * M_PI / 180);
-			double sin_te = sin(te * M_PI / 180);
+			_save->getTile(Position(pointOfImpact.x,pointOfImpact.y,impactz))->addLight(power, sessionID);
+		}
 
-			int oz = impactz, ox = impactx, oy = impacty;
+		// raytrace every 3 degrees and affect tiles on our way
+		for (double te = 0; te <= 360; te += 3)
+		{
+			double cos_te = cos(te * M_PI / 180.0);
+			double sin_te = sin(te * M_PI / 180.0);
+
+			double oz = impactz, ox = impactx, oy = impacty;
 			int l = 0;
-			int vz, vx, vy;
+			double vz, vx, vy;
 			power_ = power;
 			while (power_ > 0)
 			{
 				l++;
 				vz = impactz;
-				vx = impactx +(int)((double)l*cos_te+0.5);
-				vy = impacty +(int)((double)l*sin_te+0.5);
+				vx = impactx + l * cos_te;
+				vy = impacty + l * sin_te;
 
-				Tile *t = _save->getTile(Position(vx,vy,vz));
+				Tile *t = _save->getTile(Position(int(floor(vx)),int(floor(vy)),int(floor(vz))));
 				if (!t) break;
 				// uncomment following line to have light blocked by objects
-				//power_ -= blockage(_save->getTile(Position(ox,oy,oz)), t, affector);
+				//power_ -= blockage(_save->getTile(Position(int(floor(ox)),int(floor(oy)),int(floor(oz)))), t, affector);
 				power_--;
 				if (power_ > 0)
 				{

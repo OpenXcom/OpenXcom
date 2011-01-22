@@ -49,9 +49,24 @@ BattleUnit::~BattleUnit()
  */
 void BattleUnit::load(const YAML::Node &node)
 {
+	int a;
+
+	node["id"] >> _id;
 	node["name"] >> _name;
+	node["faction"] >> a;
+	_faction = (UnitFaction)a;
+	node["status"] >> a;
+	_status = (UnitStatus)a;
+
+	node["X"] >> _pos.x;
+	node["Y"] >> _pos.y;
+	node["Z"] >> _pos.z;
+	node["direction"] >> _direction;
+
 	node["tu"] >> _tu;
 	node["health"] >> _health;
+	node["energy"] >> _energy;
+	node["morale"] >> _morale;
 }
 
 /**
@@ -61,9 +76,22 @@ void BattleUnit::load(const YAML::Node &node)
 void BattleUnit::save(YAML::Emitter &out) const
 {
 	out << YAML::BeginMap;
+
+	out << YAML::Key << "id" << YAML::Value << _id;
 	out << YAML::Key << "name" << YAML::Value << _name;
+	out << YAML::Key << "faction" << YAML::Value << _faction;
+	out << YAML::Key << "status" << YAML::Value << _status;
+
+	out << YAML::Key << "X" << YAML::Value << _pos.x;
+	out << YAML::Key << "Y" << YAML::Value << _pos.y;
+	out << YAML::Key << "Z" << YAML::Value << _pos.z;
+	out << YAML::Key << "direction" << YAML::Value << _direction;
+
 	out << YAML::Key << "tu" << YAML::Value << _tu;
 	out << YAML::Key << "health" << YAML::Value << _health;
+	out << YAML::Key << "energy" << YAML::Value << _energy;
+	out << YAML::Key << "morale" << YAML::Value << _morale;
+
 	out << YAML::EndMap;
 }
 

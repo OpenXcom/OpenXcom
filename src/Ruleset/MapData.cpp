@@ -22,7 +22,8 @@ namespace OpenXcom
 {
 
 /**
-*  TODO: Daiky to organise and document the functions here
+*  Creates a new Map Data Object.
+* @param dataset The dataset this object belongs to.
 */
 MapData::MapData(MapDataSet *dataset) : _dataset(dataset)
 {
@@ -30,22 +31,25 @@ MapData::MapData(MapDataSet *dataset) : _dataset(dataset)
 }
 
 /**
-*
+* Destroy the object.
 */
 MapData::~MapData()
 {
 
 }
 
-/// Get the dataset this object belongs to.
+/**
+* Get the dataset this object belongs to.
+* @return Pointer to MapDataSet.
+*/
 MapDataSet *MapData::getDataset()
 {
 	return _dataset;
 }
 
 /**
-* get the sprite index
-* @param frameID frame 0-7
+* Get the sprite index.
+* @param frameID Animation frame 0-7
 * @return the original sprite index
 */
 int MapData::getSprite(int frameID)
@@ -54,7 +58,17 @@ int MapData::getSprite(int frameID)
 }
 
 /**
-  * whether this is an animated ufo door
+* Set the sprite index for a certain frame.
+* @param frameID Animation frame
+* @param value The sprite index in the surfaceset of the mapdataset.
+*/
+void MapData::setSprite(int frameID, int value)
+{
+	_sprite[frameID] = value;
+}
+
+/**
+  * Get whether this is an animated ufo door.
   * @return bool 
   */
 bool MapData::isUFODoor()
@@ -63,7 +77,87 @@ bool MapData::isUFODoor()
 }
 
 /**
-  * gets the Y offset for drawing
+  * Get whether this is a floor.
+  * @return bool 
+  */
+bool MapData::isNoFloor()
+{
+	return _isNoFloor;
+}
+
+/**
+  * Get whether this is a big wall, which blocks all surrounding paths.
+  * @return bool 
+  */
+bool MapData::isBigWall()
+{
+	if (_terrainLevel < 0) return false; // this is a hack for eg. Skyranger Ramps
+	return _isBigWall;
+}
+
+/**
+  * Get whether this is a normal door.
+  * @return bool 
+  */
+bool MapData::isDoor()
+{
+	return _isDoor;
+}
+
+/**
+  * Set all kinds of flags.
+  * @param isUfoDoor
+  * @param stopLOS
+  * @param isNoFloor
+  * @param isBigWall
+  * @param isGravLift
+  * @param isDoor
+  * @param blockFire
+  * @param blockSmoke
+  */
+void MapData::setFlags(bool isUfoDoor, bool stopLOS, bool isNoFloor, bool isBigWall, bool isGravLift, bool isDoor, bool blockFire, bool blockSmoke)
+{
+	_isUfoDoor = isUfoDoor;
+	_stopLOS = stopLOS;
+	_isNoFloor = isNoFloor;
+	_isBigWall = isBigWall;
+	_isGravLift = isGravLift;
+	_isDoor = isDoor;
+	_blockFire = blockFire;
+	_blockSmoke = blockSmoke;
+}
+
+/**
+  * Get the amount of blockage of a certain type.
+  * @param type
+  * @return blockage (0-255)
+  */
+int MapData::getBlock(Affector type)
+{
+	return _block[(int)type]; 
+}
+
+/**
+  * Sets the amount of blockage for all types.
+  * @param lightBlock
+  * @param visionBlock
+  * @param HEBlock
+  * @param smokeBlock
+  * @param fireBlock
+  * @param gasBlock
+  */
+void MapData::setBlockValue(int lightBlock, int visionBlock, int HEBlock, int smokeBlock, int fireBlock, int gasBlock)
+{
+	_block[0] = lightBlock==10?16:lightBlock; // small tweak to make sure 10 blocks all light...
+	_block[1] = visionBlock==1?255:0;
+	_block[2] = HEBlock;
+	_block[3] = smokeBlock==1?255:0;
+	_block[4] = fireBlock==1?255:0;
+	_block[5] = gasBlock==1?255:0;
+}
+
+/**
+  * Get the Y offset for drawing.
   * @return int height in pixels
   */
 int MapData::getYOffset()
@@ -72,7 +166,16 @@ int MapData::getYOffset()
 }
 
 /**
-  * gets the Y offset for drawing
+  * Sets the offset on the Y axis for drawing this object.
+  * @param value
+  */
+void MapData::setYOffset(int value)
+{
+	_yOffset = value;
+}
+
+/**
+  * Gets the Y offset for drawing.
   * @return int height in pixels
   */
 SpecialTileType MapData::getSpecialType()
@@ -80,8 +183,29 @@ SpecialTileType MapData::getSpecialType()
 	return _specialType;
 }
 
+/**
+  * Get the type of object.
+  * @return 0-3
+  */
+int MapData::getObjectType()
+{
+	return _objectType;
+}
+
+/**
+  * Sets a special tile type and object type.
+  * @param value Special tile type.
+  * @param otype Object type.
+  */
+void MapData::setSpecialType(int value, int otype)
+{
+	_specialType = (SpecialTileType)value;
+	_objectType = otype;
+}
+
 /*
  * Gets the TU cost to walk over the object.
+ * @param movementType
  * @return TU cost
  */
 int MapData::getTUCost(MovementType movementType)
@@ -102,22 +226,16 @@ int MapData::getTUCost(MovementType movementType)
 }
 
 /**
-  * whether this is a floor
-  * @return bool 
+  * Set TU cost to move over the object.
+  * @param walk
+  * @param fly
+  * @param slide
   */
-bool MapData::isNoFloor()
+void MapData::setTUCosts(int walk, int fly, int slide)
 {
-	return _isNoFloor;
-}
-
-/**
-  * whether this is a big wall, which blocks all surrounding paths
-  * @return bool 
-  */
-bool MapData::isBigWall()
-{
-	if (_terrainLevel < 0) return false; // this is a hack for eg. Skyranger Ramps
-	return _isBigWall;
+	_TUWalk = walk;
+	_TUFly = fly;
+	_TUSlide = slide;
 }
 
 /**
@@ -130,6 +248,15 @@ int MapData::getTerrainLevel()
 }
 
 /**
+  * Sets Y offset for units/objects on this tile.
+  * @param value
+  */
+void MapData::setTerrainLevel(int value)
+{
+	_terrainLevel = value;
+}
+
+/**
   * Get index to the footstep sound.
   * @return sound ID
   */
@@ -139,16 +266,16 @@ int MapData::getFootstepSound()
 }
 
 /**
-  * whether this is a normal door
-  * @return bool 
+  * Set the index to the footstep sound.
+  * @param value
   */
-bool MapData::isDoor()
+void MapData::setFootstepSound(int value)
 {
-	return _isDoor;
+	_footstepSound = value;
 }
 
 /**
-  * Get the alternative object ID 
+  * Get the alternative object ID.
   * @return object ID 
   */
 int MapData::getAltMCD()
@@ -157,7 +284,16 @@ int MapData::getAltMCD()
 }
 
 /**
-  * Get the dead object ID 
+  * Set the alternative object ID.
+  * @param value
+  */
+void MapData::setAltMCD(int value)
+{
+	_altMCD = value;
+}
+
+/**
+  * Get the dead object ID.
   * @return object ID 
   */
 int MapData::getDieMCD()
@@ -166,26 +302,16 @@ int MapData::getDieMCD()
 }
 
 /**
-  * Get the type of object
-  * @return 0-3
+  * Set the dead object ID.
+  * @param value
   */
-int MapData::getObjectType()
+void MapData::setDieMCD(int value)
 {
-	return _objectType;
+	_dieMCD = value;
 }
 
 /**
-  * Get the amount of blockage of a certain type.
-  * @param type
-  * @return blockage (0-255)
-  */
-int MapData::getBlock(Affector type)
-{
-	return _block[(int)type]; 
-}
-
-/**
-  * Get the lightsource of object.
+  * Get the amount of light the object is emitting.
   * @return lightsource
   */
 int MapData::getLightSource()
@@ -194,102 +320,8 @@ int MapData::getLightSource()
 }
 
 /**
-* setter
-*/
-void MapData::setSprite(int frameID, int value)
-{
-	_sprite[frameID] = value;
-}
-
-/**
-  * setter
-  */
-void MapData::setFlags(bool isUfoDoor, bool stopLOS, bool isNoFloor, bool isBigWall, bool isGravLift, bool isDoor, bool blockFire, bool blockSmoke)
-{
-	_isUfoDoor = isUfoDoor;
-	_stopLOS = stopLOS;
-	_isNoFloor = isNoFloor;
-	_isBigWall = isBigWall;
-	_isGravLift = isGravLift;
-	_isDoor = isDoor;
-	_blockFire = blockFire;
-	_blockSmoke = blockSmoke;
-}
-
-/**
-  * setter
-  */
-void MapData::setYOffset(int value)
-{
-	_yOffset = value;
-}
-
-/**
-  * setter
-  */
-void MapData::setSpecialType(int value, int otype)
-{
-	_specialType = (SpecialTileType)value;
-	_objectType = otype;
-}
-
-/**
-  * setter
-  */
-void MapData::setTUCosts(int walk, int fly, int slide)
-{
-	_TUWalk = walk;
-	_TUFly = fly;
-	_TUSlide = slide;
-}
-
-/**
-  * setter
-  */
-void MapData::setTerrainLevel(int value)
-{
-	_terrainLevel = value;
-}
-
-/**
-  * setter
-  */
-void MapData::setFootstepSound(int value)
-{
-	_footstepSound = value;
-}
-
-/**
-  * setter
-  */
-void MapData::setAltMCD(int value)
-{
-	_altMCD = value;
-}
-
-/**
-  * setter
-  */
-void MapData::setDieMCD(int value)
-{
-	_dieMCD = value;
-}
-
-/**
-  * setter
-  */
-void MapData::setBlockValue(int lightBlock, int visionBlock, int HEBlock, int smokeBlock, int fireBlock, int gasBlock)
-{
-	_block[0] = lightBlock==10?16:lightBlock; // small tweak to make sure 10 blocks all light...
-	_block[1] = visionBlock==1?255:0;
-	_block[2] = HEBlock;
-	_block[3] = smokeBlock==1?255:0;
-	_block[4] = fireBlock==1?255:0;
-	_block[5] = gasBlock==1?255:0;
-}
-
-/**
-  * setter
+  * Set the amount of light the object is emitting.
+  * @param value
   */
 void MapData::setLightSource(int value)
 {

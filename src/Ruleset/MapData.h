@@ -105,9 +105,9 @@ public:
 	int getTerrainLevel();
 	/// Sets Y offset for units/objects on this tile.
 	void setTerrainLevel(int value);
-	/// Get the index to the footstep sound
+	/// Get the index to the footstep sound.
 	int getFootstepSound();
-	/// Set the index to the footstep sound
+	/// Set the index to the footstep sound.
 	void setFootstepSound(int value);
 	/// Get the alternative object ID
 	int getAltMCD();
