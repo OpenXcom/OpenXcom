@@ -522,10 +522,17 @@ void Map::minMaxInt(int *value, const int minValue, const int maxValue)
  */
 void Map::setSelectorPosition(int mx, int my)
 {
+	int oldX = _selectorX, oldY = _selectorY;
+
 	if (!mx && !my) return; // cursor is offscreen
 	convertScreenToMap(mx, my, &_selectorX, &_selectorY);
 	minMaxInt(&_selectorX, 0, _save->getWidth() - 1);
 	minMaxInt(&_selectorY, 0, _save->getLength() - 1);
+
+	if (oldX != _selectorX || oldY != _selectorY)
+	{
+		draw();
+	}
 }
 
 void Map::convertScreenToMap(int screenX, int screenY, int *mapX, int *mapY)
@@ -567,7 +574,6 @@ void Map::scroll()
 		_scrollX = 0;
 		_scrollY = 0;
 	}
-
 	draw();
 }
 
@@ -633,6 +639,8 @@ void Map::centerOnPosition(const Position &mapPos)
 	convertScreenToMap((getWidth() / 2), (BUTTONS_AREA / 2), &_centerX, &_centerY);
 
 	_viewHeight = mapPos.z;
+	
+	draw();
 }
 
 /**

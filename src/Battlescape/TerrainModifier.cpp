@@ -104,12 +104,12 @@ void TerrainModifier::calculateLighting()
 		if (_save->getTiles()[i]->getMapData(O_FLOOR)
 			&& _save->getTiles()[i]->getMapData(O_FLOOR)->getLightSource())
 		{
-			circularAffector(_save->getTiles()[i]->getPosition(), AFFECT_LIGHT, _save->getTiles()[i]->getMapData(O_FLOOR)->getLightSource());
+			circularRaytracing(_save->getTiles()[i]->getPosition(), AFFECT_LIGHT, _save->getTiles()[i]->getMapData(O_FLOOR)->getLightSource());
 		}
 		if (_save->getTiles()[i]->getMapData(O_OBJECT)
 			&& _save->getTiles()[i]->getMapData(O_OBJECT)->getLightSource())
 		{
-			circularAffector(_save->getTiles()[i]->getPosition(), AFFECT_LIGHT, _save->getTiles()[i]->getMapData(O_OBJECT)->getLightSource());
+			circularRaytracing(_save->getTiles()[i]->getPosition(), AFFECT_LIGHT, _save->getTiles()[i]->getMapData(O_OBJECT)->getLightSource());
 		}
 	}
 
@@ -122,7 +122,7 @@ void TerrainModifier::calculateLighting()
 	{
 		if ((*i)->getFaction() == FACTION_PLAYER)
 		{
-			circularAffector((*i)->getPosition(), AFFECT_LIGHT, 15);
+			circularRaytracing((*i)->getPosition(), AFFECT_LIGHT, 15);
 			calculateLineOfSight(*i);
 		}
 	}
@@ -161,112 +161,88 @@ void TerrainModifier::destroyTile(Tile *tile)
  */
 void TerrainModifier::calculateLineOfSight(BattleUnit *unit)
 {
-	double impactz = unit->getPosition().z + 0.5;
-	double impactx = unit->getPosition().x + 0.5;
-	double impacty = unit->getPosition().y + 0.5;
-	int visibility, maxVisibility = 20; // ideally 20 tiles of visibility
-
 	double startAngle[8] = { 45, 0, -45, 270, 225, 180, 135, 90 };
 	double endAngle[8] = { 135, 90, 45, 360, 315, 270, 225, 180 };
-	Tile *t = _save->getTile(Position(int(floor(impactx)), int(floor(impacty)), int(floor(impactz))));
-
-	// a unique ID for this session, used to avoid tiles to be affected more than once.
-	int sessionID = RNG::generate(1, 65000);
-
-	t->isSeenBy(unit, sessionID); // the tile we are on, is already certainly seen
-
-	// raytrace every 3 degrees and affect tiles on our way
-	for (double te = startAngle[unit->getDirection()]-1; te <= endAngle[unit->getDirection()]+1; te += 3)
-	{
-		double cos_te = cos(te * M_PI / 180);
-		double sin_te = sin(te * M_PI / 180);
-
-		double oz = impactz, ox = impactx, oy = impacty;
-		int l = 0;
-		double vz, vx, vy;
-		visibility = maxVisibility;
-		while (visibility > 0)
-		{
-			l++;
-			vz = impactz;
-			vx = impactx + l * cos_te;
-			vy = impacty + l * sin_te;
-
-			t = _save->getTile(Position(int(floor(vx)), int(floor(vy)), int(floor(vz))));
-			if (!t) break;
-			visibility -= blockage(_save->getTile(Position(int(floor(ox)), int(floor(oy)), int(floor(oz)))), t, AFFECT_VISION);
-			visibility--; // visibility drops by 1 each tile by default
-			if (visibility > 0) 
-			{
-				t->isSeenBy(unit, sessionID);
-				// if there is a door to the east or south, we see it too
-				t = _save->getTile(Position(int(floor(vx) + 1), int(floor(vy)), int(floor(vz))));
-				if (t && t->getMapData(O_WESTWALL) && (t->getMapData(O_WESTWALL)->isDoor() || t->getMapData(O_WESTWALL)->isUFODoor()))
-				{
-					t->isSeenBy(unit, sessionID);
-				}
-				t = _save->getTile(Position(int(floor(vx)), int(floor(vy) - 1), int(floor(vz))));
-				if (t && t->getMapData(O_NORTHWALL) && (t->getMapData(O_NORTHWALL)->isDoor() || t->getMapData(O_NORTHWALL)->isUFODoor()))
-				{
-					t->isSeenBy(unit, sessionID);
-				}
-			}
-			oz=vz;ox=vx;oy=vy;
-		}
-	}
+	circularRaytracing(unit->getPosition(), AFFECT_VISION, 20, startAngle[unit->getDirection()], endAngle[unit->getDirection()], unit);
 }
 
 /**
- * Affect tiles in a circular pattern. Can be used for light and all kinds of explosions (HE,smoke,fire,stun).
- * @param pointOfImpact The position where the circular pattern starts.
- * @param affector The kind of affector.
+ * Traces tiles following rays in a circular pattern. Can be used for light and all kinds of explosions (HE,smoke,fire,stun).
+ * @param center The position where the circular pattern starts.
+ * @param affector The kind of affector that affects the tiles.
  * @param power The initial power at the point of impact.
+ * @param startAngle The angle at wich the circle starts.
+ * @param stopAngle The angle at wich the circle stops.
+ * @param unit The unit causing this effect.
  */
-void TerrainModifier::circularAffector(const Position &pointOfImpact, Affector affector, int power)
+void TerrainModifier::circularRaytracing(const Position &center, Affector affector, int power, double startAngle, double stopAngle, BattleUnit *unit)
 {
-	//int impactz = pointOfImpact.z;
-	double impactx = pointOfImpact.x + 0.5;
-	double impacty = pointOfImpact.y + 0.5;
+	double centerX = center.x + 0.5;
+	double centerY = center.y + 0.5;
 	int power_;
 
 	// a unique ID for this session, used to avoid tiles to be affected more than once.
 	int sessionID = RNG::generate(1,65000);
 	
 	// commenting the for loop will shine light only on current layer
-	for (int impactz = 0; impactz < _save->getHeight(); impactz++)
+	for (int centerZ = 0; centerZ < _save->getHeight(); centerZ++)
 	{
-		// the tile we are on gets full power, tiles around us -1 power
-		if (affector == AFFECT_LIGHT)
-		{
-			_save->getTile(Position(pointOfImpact.x,pointOfImpact.y,impactz))->addLight(power, sessionID);
-		}
+		// We can not see on this level, because a floor above it is blocking it. Continue to next level.
+		if (centerZ < center.z && affector != AFFECT_LIGHT && !_save->getTile(Position(center.x,center.y,centerZ + 1))->hasNoFloor())
+			continue;
+		// We can not see on this level, because the tile above us has a floor. No need to check further - break here.
+		if (centerZ > center.z && affector != AFFECT_LIGHT && !_save->getTile(Position(center.x,center.y,centerZ))->hasNoFloor())
+			break;
 
-		// raytrace every 3 degrees and affect tiles on our way
-		for (double te = 0; te <= 360; te += 3)
+		// the center is affected for sure
+		if (affector == AFFECT_LIGHT)
+			_save->getTile(Position(center.x,center.y,centerZ))->addLight(power, sessionID);
+		if (affector == AFFECT_VISION) 
+			_save->getTile(Position(center.x,center.y,centerZ))->isSeenBy(unit, sessionID);
+
+		// raytrace every 3 degrees makes sure we cover all tiles in a circle.
+		for (double te = startAngle; te <= stopAngle; te += 3)
 		{
 			double cos_te = cos(te * M_PI / 180.0);
 			double sin_te = sin(te * M_PI / 180.0);
 
-			double oz = impactz, ox = impactx, oy = impacty;
+			double oz = centerZ, ox = centerX, oy = centerY;
 			int l = 0;
 			double vz, vx, vy;
 			power_ = power;
 			while (power_ > 0)
 			{
 				l++;
-				vz = impactz;
-				vx = impactx + l * cos_te;
-				vy = impacty + l * sin_te;
+				vz = centerZ;
+				vx = centerX + l * cos_te;
+				vy = centerY + l * sin_te;
 
 				Tile *t = _save->getTile(Position(int(floor(vx)),int(floor(vy)),int(floor(vz))));
 				if (!t) break;
-				// uncomment following line to have light blocked by objects
-				//power_ -= blockage(_save->getTile(Position(int(floor(ox)),int(floor(oy)),int(floor(oz)))), t, affector);
+				// light is not blocked by objects in xcom... strange :)
+				if (affector != AFFECT_LIGHT)
+					power_ -= blockage(_save->getTile(Position(int(floor(ox)),int(floor(oy)),int(floor(oz)))), t, affector);
 				power_--;
 				if (power_ > 0)
 				{
 					if (affector == AFFECT_LIGHT)
 						t->addLight(power_, sessionID);
+					if (affector == AFFECT_VISION) 
+					{
+						t->isSeenBy(unit, sessionID);
+						// if there is a door to the east or south of a visible tile, we see that too
+						t = _save->getTile(Position(int(floor(vx) + 1), int(floor(vy)), int(floor(vz))));
+						if (t && t->getMapData(O_WESTWALL) && (t->getMapData(O_WESTWALL)->isDoor() || t->getMapData(O_WESTWALL)->isUFODoor()))
+						{
+							t->isSeenBy(unit, sessionID);
+						}
+						t = _save->getTile(Position(int(floor(vx)), int(floor(vy) - 1), int(floor(vz))));
+						if (t && t->getMapData(O_NORTHWALL) && (t->getMapData(O_NORTHWALL)->isDoor() || t->getMapData(O_NORTHWALL)->isUFODoor()))
+						{
+							t->isSeenBy(unit, sessionID);
+						}
+					}
+
 				}
 				oz=vz;ox=vx;oy=vy;
 			}

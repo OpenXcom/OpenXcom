@@ -55,7 +55,7 @@ public:
 	/// Tile destruction. (for testing purposes)
 	void destroyTile(Tile *tile);
 	/// Affect tiles in a circular pattern.
-	void circularAffector(const Position &pointOfImpact, Affector affector, int power);
+	void circularRaytracing(const Position &center, Affector affector, int power, double startAngle = 0, double stopAngle = 360, BattleUnit *unit = 0);
 };
 
 }
