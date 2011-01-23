@@ -457,28 +457,26 @@ void BattlescapeState::moveUnit()
 			tile->setUnit(unit); // unit is now on this tile
 		}
 
-		_map->cacheUnits();
-		_map->draw();
+		if (unit->getStatus() != STATUS_STANDING)
+		{
+			_map->cacheUnits();
+			_map->draw();
+		}
 	}
 
 	if (unit->getStatus() == STATUS_TURNING)
 	{
 		unit->turn();
 		_battleGame->getTerrainModifier()->calculateLighting();
-		_map->cacheUnits();
-		_map->draw();
+		if (unit->getStatus() != STATUS_STANDING)
+		{
+			_map->cacheUnits();
+			_map->draw();
+		}
 	}
 
 	if (unit->getStatus() == STATUS_STANDING)
 	{
-		if (moved)
-		{
-			moved = false;
-			_map->setViewHeight(unit->getPosition().z);
-			_battleGame->getTerrainModifier()->calculateLineOfSight(unit);
-			// if you want lighting to be calculated every step, uncomment next line
-			//_battleGame->getTerrainModifier()->calculateLighting();
-		}
 		int dir = pf->getStartDirection();
 		if (dir != -1)
 		{
@@ -502,7 +500,6 @@ void BattlescapeState::moveUnit()
 				unit->startWalking(dir, destination);
 				_map->hideCursor(true); // hide cursor while walking
 				_game->getCursor()->setVisible(false);
-				moved = true;
 			}
 		}
 		else if (_map->isCursorHidden())
@@ -510,6 +507,25 @@ void BattlescapeState::moveUnit()
 			_battleGame->getTerrainModifier()->calculateLighting();
 			_map->hideCursor(false); // show cursor again
 			_game->getCursor()->setVisible(true);
+		}
+
+		if (moved)
+		{
+			moved = false;
+			_map->setViewHeight(unit->getPosition().z);
+			_battleGame->getTerrainModifier()->calculateLineOfSight(unit);
+			// if you want lighting to be calculated every step, uncomment next line
+			//_battleGame->getTerrainModifier()->calculateLighting();
+			if (unit->getStatus() == STATUS_STANDING)
+			{
+				_map->cacheUnits();
+				_map->draw();
+			}
+		}
+
+		if (unit->getStatus() == STATUS_WALKING)
+		{
+			moved = true;
 		}
 	}
 
