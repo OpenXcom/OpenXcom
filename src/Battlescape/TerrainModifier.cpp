@@ -188,10 +188,10 @@ void TerrainModifier::circularRaytracing(const Position &center, Affector affect
 	for (int centerZ = 0; centerZ < _save->getHeight(); centerZ++)
 	{
 		// We can not see on this level, because a floor above it is blocking it. Continue to next level.
-		if (centerZ < center.z && affector != AFFECT_LIGHT && !_save->getTile(Position(center.x,center.y,centerZ + 1))->hasNoFloor())
+		if (centerZ < center.z /*&& affector != AFFECT_LIGHT*/ && !_save->getTile(Position(center.x,center.y,centerZ + 1))->hasNoFloor())
 			continue;
 		// We can not see on this level, because the tile above us has a floor. No need to check further - break here.
-		if (centerZ > center.z && affector != AFFECT_LIGHT && !_save->getTile(Position(center.x,center.y,centerZ))->hasNoFloor())
+		if (centerZ > center.z /*&& affector != AFFECT_LIGHT*/ && !_save->getTile(Position(center.x,center.y,centerZ))->hasNoFloor())
 			break;
 
 		// the center is affected for sure
@@ -219,8 +219,7 @@ void TerrainModifier::circularRaytracing(const Position &center, Affector affect
 
 				Tile *t = _save->getTile(Position(int(floor(vx)),int(floor(vy)),int(floor(vz))));
 				if (!t) break;
-				// light is not blocked by objects in xcom... strange :)
-				if (affector != AFFECT_LIGHT)
+//				if (affector != AFFECT_LIGHT)
 					power_ -= blockage(_save->getTile(Position(int(floor(ox)),int(floor(oy)),int(floor(oz)))), t, affector);
 				power_--;
 				if (power_ > 0)
