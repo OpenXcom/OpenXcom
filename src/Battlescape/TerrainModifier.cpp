@@ -17,8 +17,9 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #define _USE_MATH_DEFINES
-#include "TerrainModifier.h"
 #include <cmath>
+#include "TerrainModifier.h"
+#include "SDL.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
 #include "../Savegame/BattleUnit.h"
