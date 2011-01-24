@@ -467,7 +467,7 @@ void BattlescapeState::moveUnit()
 	if (unit->getStatus() == STATUS_TURNING)
 	{
 		unit->turn();
-		_battleGame->getTerrainModifier()->calculateLighting();
+		_battleGame->getTerrainModifier()->calculateLineOfSight(unit);
 		_map->cacheUnits();
 		_map->draw();
 	}
