@@ -68,7 +68,7 @@ BriefingCrashState::BriefingCrashState(Game *game, Craft *craft) : State(game), 
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setBig();
-	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString("STR_UFO_GROUND_ASSAULT"));
+	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString("STR_UFO_CRASH_RECOVERY"));
 
 	_txtUfo->setColor(Palette::blockOffset(8)+5);
 	_txtUfo->setBig();
@@ -82,7 +82,7 @@ BriefingCrashState::BriefingCrashState(Game *game, Craft *craft) : State(game), 
 
 	_txtBriefing->setColor(Palette::blockOffset(8)+5);
 	_txtBriefing->setWordWrap(true);
-	_txtBriefing->setText(_game->getResourcePack()->getLanguage()->getString("STR_UFO_GROUND_ASSAULT_BRIEFING"));
+	_txtBriefing->setText(_game->getResourcePack()->getLanguage()->getString("STR_UFO_CRASH_RECOVERY_BRIEFING"));
 
 	// Set music
 	_game->getResourcePack()->getMusic("GMDEFEND")->play();

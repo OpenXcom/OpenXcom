@@ -335,6 +335,14 @@ void Map::drawTerrain()
 					}
 
 					// Draw smoke/fire
+					if (tile->getFire() && tile->isDiscovered())
+					{
+						frameNumber = 0; // see http://www.ufopaedia.org/images/c/cb/Smoke.gif
+						frame = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frameNumber + (_animFrame / 2));
+						frame->setX(screenPosition.x);
+						frame->setY(screenPosition.y);
+						frame->blit(this);
+					}
 
 				}
 			}
@@ -396,6 +404,12 @@ void Map::keyboardPress(Action *action, State *state)
 	if (action->getDetails()->key.keysym.sym == SDLK_d)
 	{
 		_save->getTerrainModifier()->destroyTile(_save->getTile(pos));
+	}
+	// "f" - puts a tile on fire (for testing purposes)
+	if (action->getDetails()->key.keysym.sym == SDLK_f)
+	{
+		_save->getTile(pos)->setFire(1);
+		_save->getTerrainModifier()->calculateLighting();
 	}
 }
 

@@ -100,6 +100,10 @@ public:
 	Surface *getSprite(int part);
 	void setUnit(BattleUnit *unit);
 	BattleUnit *getUnit();
+	/// Set fire.
+	void setFire(int fire);
+	/// Get fire.
+	int getFire();
 };
 
 }

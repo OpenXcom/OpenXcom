@@ -111,11 +111,16 @@ void TerrainModifier::calculateLighting()
 		{
 			circularRaytracing(_save->getTiles()[i]->getPosition(), AFFECT_LIGHT, _save->getTiles()[i]->getMapData(O_OBJECT)->getLightSource());
 		}
+
+		// fire
+		if (_save->getTiles()[i]->getFire() > 0)
+		{
+			circularRaytracing(_save->getTiles()[i]->getPosition(), AFFECT_LIGHT, 15);
+		}
+
 	}
 
 	// add lighting of items (flares)
-
-	// add lighting of fire
 
 	// add lighting of soldiers + recalculate line of sight
 	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); i++)
@@ -193,6 +198,8 @@ void TerrainModifier::circularRaytracing(const Position &center, Affector affect
 		// We can not see on this level, because the tile above us has a floor. No need to check further - break here.
 		if (centerZ > center.z /*&& affector != AFFECT_LIGHT*/ && !_save->getTile(Position(center.x,center.y,centerZ))->hasNoFloor())
 			break;
+
+		power -= abs(centerZ - center.z) * 2;
 
 		// the center is affected for sure
 		if (affector == AFFECT_LIGHT)
