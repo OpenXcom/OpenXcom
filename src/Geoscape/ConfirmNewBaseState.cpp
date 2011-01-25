@@ -68,11 +68,11 @@ ConfirmNewBaseState::ConfirmNewBaseState(Game *game, Base *base, Globe *globe) :
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(15)+2);
-	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ConfirmNewBaseState::btnOkClick);
 
 	_btnCancel->setColor(Palette::blockOffset(15)+2);
-	_btnCancel->setText(_game->getResourcePack()->getLanguage()->getString("STR_CANCEL_UC"));
+	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&ConfirmNewBaseState::btnCancelClick);
 
 	std::stringstream ss;
@@ -81,12 +81,12 @@ ConfirmNewBaseState::ConfirmNewBaseState(Game *game, Base *base, Globe *globe) :
 		if ((*i)->getRules()->insideRegion(_base->getLongitude(), _base->getLatitude()))
 		{
 			_cost = (*i)->getRules()->getBaseCost();
-			ss << _game->getResourcePack()->getLanguage()->getString("STR_AREA_") << _game->getResourcePack()->getLanguage()->getString((*i)->getRules()->getType());
+			ss << _game->getLanguage()->getString("STR_AREA_") << _game->getLanguage()->getString((*i)->getRules()->getType());
 			break;
 		}
 	}
 	
-	std::string s = _game->getResourcePack()->getLanguage()->getString("STR_COST_");
+	std::string s = _game->getLanguage()->getString("STR_COST_");
 	s.erase(s.size()-1, 1);
 	s += Text::formatFunding(_cost);
 	_txtCost->setColor(Palette::blockOffset(15)-1);

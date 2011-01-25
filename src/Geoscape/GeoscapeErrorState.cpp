@@ -55,7 +55,7 @@ GeoscapeErrorState::GeoscapeErrorState(Game *game, std::string str) : State(game
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(8)+13);
-	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&GeoscapeErrorState::btnOkClick);
 
 	_txtMessage->setColor(Palette::blockOffset(8)+10);
@@ -63,7 +63,7 @@ GeoscapeErrorState::GeoscapeErrorState(Game *game, std::string str) : State(game
 	_txtMessage->setVerticalAlign(ALIGN_MIDDLE);
 	_txtMessage->setBig();
 	_txtMessage->setWordWrap(true);
-	_txtMessage->setText(_game->getResourcePack()->getLanguage()->getString(str));
+	_txtMessage->setText(_game->getLanguage()->getString(str));
 }
 
 /**

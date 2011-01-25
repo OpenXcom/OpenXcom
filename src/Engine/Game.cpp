@@ -20,6 +20,7 @@
 #include "SDL_mixer.h"
 #include "State.h"
 #include "Screen.h"
+#include "Language.h"
 #include "../Interface/Cursor.h"
 #include "../Interface/FpsCounter.h"
 #include "../Resource/ResourcePack.h"
@@ -41,7 +42,7 @@ namespace OpenXcom
  * @warning Currently the game is designed for 8bpp, so there's no telling what'll
  * happen if you use a different value.
  */
-Game::Game(const std::string &title, int width, int height, int bpp) : _screen(0), _cursor(0), _states(), _deleted(), _res(0), _save(0), _rules(0), _quit(false), _init(false)
+Game::Game(const std::string &title, int width, int height, int bpp) : _screen(0), _cursor(0), _lang(0), _states(), _deleted(), _res(0), _save(0), _rules(0), _quit(false), _init(false)
 {
 	// Initialize SDL
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
@@ -87,10 +88,12 @@ Game::~Game()
 	}
 
 	delete _cursor;
+	delete _lang;
 	delete _res;
 	delete _rules;
 	delete _save;
 	delete _screen;
+	delete _fpsCounter;
 
 	Mix_CloseAudio();
 
@@ -248,6 +251,25 @@ void Game::popState()
 	_deleted.push_back(_states.back());
 	_states.pop_back();
 	_init = false;
+}
+
+/**
+ * Returns the language currently in use by the game.
+ * @return Pointer to the language.
+ */
+Language *const Game::getLanguage() const
+{
+	return _lang;
+}
+
+/**
+ * Sets a new saved game for the game to use.
+ * @param save Pointer to the saved game.
+ */
+void Game::setLanguage(Language *lang)
+{
+	delete _lang;
+	_lang = lang;
 }
 
 /**

@@ -73,25 +73,25 @@ InterceptState::InterceptState(Game *game, Globe *globe, Base *base) : State(gam
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK12.SCR"));
 
 	_btnCancel->setColor(Palette::blockOffset(8)+8);
-	_btnCancel->setText(_game->getResourcePack()->getLanguage()->getString("STR_CANCEL"));
+	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)&InterceptState::btnCancelClick);
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
-	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString("STR_LAUNCH_INTERCEPTION"));
+	_txtTitle->setText(_game->getLanguage()->getString("STR_LAUNCH_INTERCEPTION"));
 
 	_txtCraft->setColor(Palette::blockOffset(8)+5);
-	_txtCraft->setText(_game->getResourcePack()->getLanguage()->getString("STR_CRAFT"));
+	_txtCraft->setText(_game->getLanguage()->getString("STR_CRAFT"));
 
 	_txtStatus->setColor(Palette::blockOffset(8)+5);
-	_txtStatus->setText(_game->getResourcePack()->getLanguage()->getString("STR_STATUS"));
+	_txtStatus->setText(_game->getLanguage()->getString("STR_STATUS"));
 
 	_txtBase->setColor(Palette::blockOffset(8)+5);
-	_txtBase->setText(_game->getResourcePack()->getLanguage()->getString("STR_BASE"));
+	_txtBase->setText(_game->getLanguage()->getString("STR_BASE"));
 
 	_txtWeapons->setColor(Palette::blockOffset(8)+5);
-	_txtWeapons->setText(_game->getResourcePack()->getLanguage()->getString("STR_WEAPONS_CREW_HWPS"));
+	_txtWeapons->setText(_game->getLanguage()->getString("STR_WEAPONS_CREW_HWPS"));
 
 	_lstCrafts->setColor(Palette::blockOffset(15)-1);
 	_lstCrafts->setArrowColor(Palette::blockOffset(15)+2);
@@ -111,7 +111,7 @@ InterceptState::InterceptState(Game *game, Globe *globe, Base *base) : State(gam
 			std::stringstream ss;
 			ss << (*j)->getNumWeapons() << "/" << (*j)->getNumSoldiers() << "/" << (*j)->getNumHWPs();
 			_crafts.push_back(*j);
-			_lstCrafts->addRow(4, (*j)->getName(_game->getResourcePack()->getLanguage()).c_str(), _game->getResourcePack()->getLanguage()->getString((*j)->getStatus()).c_str(), (*i)->getName().c_str(), ss.str().c_str());
+			_lstCrafts->addRow(4, (*j)->getName(_game->getLanguage()).c_str(), _game->getLanguage()->getString((*j)->getStatus()).c_str(), (*i)->getName().c_str(), ss.str().c_str());
 			if ((*j)->getStatus() == "STR_READY")
 			{
 				_lstCrafts->getCell(row, 1)->setColor(Palette::blockOffset(8)+10);

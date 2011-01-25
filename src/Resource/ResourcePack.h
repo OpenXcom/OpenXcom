@@ -27,7 +27,6 @@
 namespace OpenXcom
 {
 
-class Language;
 class Surface;
 class SurfaceSet;
 class Font;
@@ -53,28 +52,23 @@ class ResourcePack
 {
 protected:
 	std::string _folder;
-	Language *_currentLang;
 	std::map<std::string, Palette*> _palettes;
 	std::map<std::string, Font*> _fonts;
-	std::map<std::string, Language*> _languages;
 	std::map<std::string, Surface*> _surfaces;
 	std::map<std::string, SurfaceSet*> _sets;
 	std::map<std::string, SoundSet*> _sounds;
 	std::list<Polygon*> _polygons;
 	std::list<Polyline*> _polylines;
 	std::map<std::string, Music*> _musics;
-
 public:
 	/// Create a new resource pack with a folder's contents.
 	ResourcePack(const std::string &folder);
 	/// Cleans up the resource pack.
 	virtual ~ResourcePack();
+	/// Converts a filename to its existing case-insensitive name.
+	std::string insensitive(const std::string &filename) const;
 	/// Gets the data folder name.
 	std::string getFolder() const;
-	/// Gets the current language.
-	Language *const getLanguage() const;
-	/// Sets a new language as current.
-	void setLanguage(const std::string &lang);
 	/// Gets a particular font.
 	Font *const getFont(const std::string &name);
 	/// Gets a particular surface.
@@ -93,8 +87,6 @@ public:
 	Palette *const getPalette(const std::string &name);
 	/// Sets a new palette.
 	void setPalette(SDL_Color *colors, int firstcolor, int ncolors);
-	/// Converts a filename to its existing case-insensitive name.
-	std::string insensitive(const std::string &filename) const;
 };
 
 }

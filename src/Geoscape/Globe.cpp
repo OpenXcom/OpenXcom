@@ -27,6 +27,7 @@
 #include "Polygon.h"
 #include "Polyline.h"
 #include "../Engine/Palette.h"
+#include "../Engine/Game.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/GameTime.h"
 #include "../Savegame/Base.h"
@@ -64,8 +65,16 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Globe::Globe(int cenX, int cenY, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _radius(), _cenLon(-0.01), _cenLat(-0.1), _rotLon(0.0), _rotLat(0.0), _cenX(cenX), _cenY(cenY), _zoom(0), _res(0), _save(0), _blink(true), _detail(true), _cacheLand()
+Globe::Globe(Game *game, int cenX, int cenY, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _radius(), _cenLon(-0.01), _cenLat(-0.1), _rotLon(0.0), _rotLat(0.0), _cenX(cenX), _cenY(cenY), _zoom(0), _game(game), _blink(true), _detail(true), _cacheLand()
 {
+	_texture[0] = _game->getResourcePack()->getSurfaceSet("TEXTURE.DAT");
+	for (int shade = 1; shade < NUM_SHADES; shade++)
+	{
+		_texture[shade] = new SurfaceSet(*_texture[0]);
+		for (int f = 0; f < _texture[shade]->getTotalFrames(); f++)
+			_texture[shade]->getFrame(f)->offset(shade);
+	}
+
 	_radius.push_back(90);
 	_radius.push_back(120);
 	_radius.push_back(180);
@@ -173,6 +182,8 @@ Globe::Globe(int cenX, int cenY, int width, int height, int x, int y) : Interact
 	_mkAlienSite->setPixel(2, 1, 1);
 	_mkAlienSite->setPixel(1, 2, 1);
 	_mkAlienSite->unlock();
+
+	cachePolygons();
 }
 
 /**
@@ -363,34 +374,6 @@ void Globe::loadDat(const std::string &filename, std::list<Polygon*> *polygons)
 }
 
 /**
- * Changes the pack for the globe to get resources for rendering.
- * @param res Pointer to the resource pack.
- */
-void Globe::setResourcePack(ResourcePack *res)
-{
-	_res = res;
-
-	_texture[0] = _res->getSurfaceSet("TEXTURE.DAT");
-	for (int shade = 1; shade < NUM_SHADES; shade++)
-	{
-		_texture[shade] = new SurfaceSet(*_texture[0]);
-		for (int f = 0; f < _texture[shade]->getTotalFrames(); f++)
-			_texture[shade]->getFrame(f)->offset(shade);
-	}
-
-	cachePolygons();
-}
-
-/**
- * Changes the saved game content for the globe to render.
- * @param save Pointer to the saved game.
- */
-void Globe::setSavedGame(SavedGame *save)
-{
-	_save = save;
-}
-
-/**
  * Sets a leftwards rotation speed and starts the timer.
  */
 void Globe::rotateLeft()
@@ -509,7 +492,7 @@ void Globe::center(double lon, double lat)
 bool Globe::insideLand(double lon, double lat) const
 {
 	bool inside = false;
-	for (std::list<Polygon*>::iterator i = _res->getPolygons()->begin(); i != _res->getPolygons()->end() && !inside; i++)
+	for (std::list<Polygon*>::iterator i = _game->getResourcePack()->getPolygons()->begin(); i != _game->getResourcePack()->getPolygons()->end() && !inside; i++)
 	{
 		inside = insidePolygon(lon, lat, *i);
 	}
@@ -557,7 +540,7 @@ std::vector<Target*> Globe::getTargets(int x, int y, bool craft) const
 	std::vector<Target*> v;
 	if (!craft)
 	{
-		for (std::vector<Base*>::iterator i = _save->getBases()->begin(); i != _save->getBases()->end(); i++)
+		for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); i++)
 		{
 			if ((*i)->getLongitude() == 0.0 && (*i)->getLatitude() == 0.0)
 				continue;
@@ -579,7 +562,7 @@ std::vector<Target*> Globe::getTargets(int x, int y, bool craft) const
 			}
 		}
 	}
-	for (std::vector<Ufo*>::iterator i = _save->getUfos()->begin(); i != _save->getUfos()->end(); i++)
+	for (std::vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end(); i++)
 	{
 		if (!(*i)->getDetected())
 			continue;
@@ -589,7 +572,7 @@ std::vector<Target*> Globe::getTargets(int x, int y, bool craft) const
 			v.push_back(*i);
 		}
 	}
-	for (std::vector<Waypoint*>::iterator i = _save->getWaypoints()->begin(); i != _save->getWaypoints()->end(); i++)
+	for (std::vector<Waypoint*>::iterator i = _game->getSavedGame()->getWaypoints()->begin(); i != _game->getSavedGame()->getWaypoints()->end(); i++)
 	{
 		if (targetNear((*i), x, y))
 		{
@@ -606,7 +589,7 @@ std::vector<Target*> Globe::getTargets(int x, int y, bool craft) const
  */
 void Globe::cachePolygons()
 {
-	cache(_res->getPolygons(), &_cacheLand);
+	cache(_game->getResourcePack()->getPolygons(), &_cacheLand);
 	draw();
 }
 
@@ -938,7 +921,7 @@ void Globe::fillLongitudeSegments(double startLon, double endLon, int colourShif
  */
 void Globe::drawOcean()
 {
-	double curTime = _save->getTime()->getDaylight();
+	double curTime = _game->getSavedGame()->getTime()->getDaylight();
 	double dayLon = -curTime * 2*M_PI;
 	double nightLon = dayLon + M_PI;
 
@@ -963,7 +946,7 @@ void Globe::drawLand()
 {
 	int _shades[] = {3, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3,
 					 4, 5, 6, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 6, 5, 4};
-	double minLon = 0.0, maxLon = 0.0, curTime = _save->getTime()->getDaylight();
+	double minLon = 0.0, maxLon = 0.0, curTime = _game->getSavedGame()->getTime()->getDaylight();
 	Sint16 x[4], y[4];
 
 	for (std::list<Polygon*>::iterator i = _cacheLand.begin(); i != _cacheLand.end(); i++)
@@ -1008,7 +991,7 @@ void Globe::drawDetail()
 		// Lock the surface
 		_countries->lock();
 
-		for (std::list<Polyline*>::iterator i = _res->getPolylines()->begin(); i != _res->getPolylines()->end(); i++)
+		for (std::list<Polyline*>::iterator i = _game->getResourcePack()->getPolylines()->begin(); i != _game->getResourcePack()->getPolylines()->end(); i++)
 		{
 			Sint16 x[2], y[2];
 			for (int j = 0; j < (*i)->getPoints() - 1; j++)
@@ -1034,12 +1017,12 @@ void Globe::drawDetail()
 	{
 		Text *label = new Text(80, 9, 0, 0);
 		label->setPalette(getPalette());
-		label->setFonts(_res->getFont("BIGLETS.DAT"), _res->getFont("SMALLSET.DAT"));
+		label->setFonts(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"));
 		label->setAlign(ALIGN_CENTER);
 		label->setColor(Palette::blockOffset(15)-1);
 
 		Sint16 x, y;
-		for (std::vector<Country*>::iterator i = _save->getCountries()->begin(); i != _save->getCountries()->end(); i++)
+		for (std::vector<Country*>::iterator i = _game->getSavedGame()->getCountries()->begin(); i != _game->getSavedGame()->getCountries()->end(); i++)
 		{
 			// Don't draw if label is facing back
 			if (pointBack((*i)->getRules()->getLabelLongitude(), (*i)->getRules()->getLabelLatitude()))
@@ -1050,7 +1033,7 @@ void Globe::drawDetail()
 
 			label->setX(x - 40);
 			label->setY(y);
-			label->setText(_res->getLanguage()->getString((*i)->getRules()->getType()));
+			label->setText(_game->getLanguage()->getString((*i)->getRules()->getType()));
 			label->blit(_countries);
 		}
 
@@ -1062,12 +1045,12 @@ void Globe::drawDetail()
 	{
 		Text *label = new Text(80, 9, 0, 0);
 		label->setPalette(getPalette());
-		label->setFonts(_res->getFont("BIGLETS.DAT"), _res->getFont("SMALLSET.DAT"));
+		label->setFonts(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"));
 		label->setAlign(ALIGN_CENTER);
 		label->setColor(Palette::blockOffset(8)+10);
 
 		Sint16 x, y;
-		for (std::vector<Region*>::iterator i = _save->getRegions()->begin(); i != _save->getRegions()->end(); i++)
+		for (std::vector<Region*>::iterator i = _game->getSavedGame()->getRegions()->begin(); i != _game->getSavedGame()->getRegions()->end(); i++)
 		{
 			for (std::vector<City*>::iterator j = (*i)->getRules()->getCities()->begin(); j != (*i)->getRules()->getCities()->end(); j++)
 			{
@@ -1085,7 +1068,7 @@ void Globe::drawDetail()
 
 				label->setX(x - 40);
 				label->setY(y + 2);
-				label->setText(_res->getLanguage()->getString((*j)->getName()));
+				label->setText(_game->getLanguage()->getString((*j)->getName()));
 				label->blit(_countries);
 			}
 		}
@@ -1104,7 +1087,7 @@ void Globe::drawMarkers()
 	_markers->clear();
 
 	// Draw the base markers
-	for (std::vector<Base*>::iterator i = _save->getBases()->begin(); i != _save->getBases()->end(); i++)
+	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); i++)
 	{
 		// Cheap hack to hide bases when they haven't been placed yet
 		if (((*i)->getLongitude() != 0.0 || (*i)->getLatitude() != 0.0) &&
@@ -1132,7 +1115,7 @@ void Globe::drawMarkers()
 	}
 
 	// Draw the UFO markers
-	for (std::vector<Ufo*>::iterator i = _save->getUfos()->begin(); i != _save->getUfos()->end(); i++)
+	for (std::vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end(); i++)
 	{
 		if (pointBack((*i)->getLongitude(), (*i)->getLatitude()))
 			continue;
@@ -1157,7 +1140,7 @@ void Globe::drawMarkers()
 	}
 
 	// Draw the waypoint markers
-	for (std::vector<Waypoint*>::iterator i = _save->getWaypoints()->begin(); i != _save->getWaypoints()->end(); i++)
+	for (std::vector<Waypoint*>::iterator i = _game->getSavedGame()->getWaypoints()->begin(); i != _game->getSavedGame()->getWaypoints()->end(); i++)
 	{
 		if (pointBack((*i)->getLongitude(), (*i)->getLatitude()))
 			continue;

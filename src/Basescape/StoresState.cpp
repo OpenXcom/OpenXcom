@@ -67,22 +67,22 @@ StoresState::StoresState(Game *game, Base *base) : State(game), _base(base)
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(13)+13);
-	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&StoresState::btnOkClick);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString("STR_STORES"));
+	_txtTitle->setText(_game->getLanguage()->getString("STR_STORES"));
 
 	_txtItem->setColor(Palette::blockOffset(13)+10);
-	_txtItem->setText(_game->getResourcePack()->getLanguage()->getString("STR_ITEM"));
+	_txtItem->setText(_game->getLanguage()->getString("STR_ITEM"));
 
 	_txtQuantity->setColor(Palette::blockOffset(13)+10);
-	_txtQuantity->setText(_game->getResourcePack()->getLanguage()->getString("STR_QUANTITY_UC"));
+	_txtQuantity->setText(_game->getLanguage()->getString("STR_QUANTITY_UC"));
 
 	_txtSpaceUsed->setColor(Palette::blockOffset(13)+10);
-	_txtSpaceUsed->setText(_game->getResourcePack()->getLanguage()->getString("STR_SPACE_USED"));
+	_txtSpaceUsed->setText(_game->getLanguage()->getString("STR_SPACE_USED"));
 	
 	_lstStores->setColor(Palette::blockOffset(13)+10);
 	_lstStores->setArrowColor(Palette::blockOffset(13)+13);
@@ -96,7 +96,7 @@ StoresState::StoresState(Game *game, Base *base) : State(game), _base(base)
 		std::stringstream ss, ss2;
 		ss << i->second->getQuantity();
 		ss2 << i->second->getTotalSize();
-		_lstStores->addRow(3, _game->getResourcePack()->getLanguage()->getString(i->first).c_str(), ss.str().c_str(), ss2.str().c_str());
+		_lstStores->addRow(3, _game->getLanguage()->getString(i->first).c_str(), ss.str().c_str(), ss2.str().c_str());
 	}
 }
 

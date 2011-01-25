@@ -17,8 +17,10 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "LanguageState.h"
+#include <sstream>
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
+#include "../Engine/Language.h"
 #include "../Engine/Font.h"
 #include "../Engine/Palette.h"
 #include "../Interface/TextButton.h"
@@ -88,7 +90,11 @@ LanguageState::~LanguageState()
 
 void LanguageState::changeLanguage(const std::string &lang)
 {
-	_game->getResourcePack()->setLanguage(lang);
+	std::stringstream ss;
+	ss << _game->getResourcePack()->getFolder() << "Language/" << lang;
+	Language *l = new Language();
+	l->loadLng(ss.str());
+	_game->setLanguage(l);
 	_game->setState(new MainMenuState(_game));
 }
 

@@ -125,46 +125,46 @@ BasescapeState::BasescapeState(Game *game, Base *base, Globe *globe) : State(gam
 	_txtFunds->setColor(Palette::blockOffset(13)+10);
 	
 	_btnNewBase->setColor(Palette::blockOffset(13)+8);
-	_btnNewBase->setText(_game->getResourcePack()->getLanguage()->getString("STR_BUILD_NEW_BASE_UC"));
+	_btnNewBase->setText(_game->getLanguage()->getString("STR_BUILD_NEW_BASE_UC"));
 	_btnNewBase->onMouseClick((ActionHandler)&BasescapeState::btnNewBaseClick);
 
 	_btnBaseInfo->setColor(Palette::blockOffset(13)+8);
-	_btnBaseInfo->setText(_game->getResourcePack()->getLanguage()->getString("STR_BASE_INFORMATION"));
+	_btnBaseInfo->setText(_game->getLanguage()->getString("STR_BASE_INFORMATION"));
 	_btnBaseInfo->onMouseClick((ActionHandler)&BasescapeState::btnBaseInfoClick);
 
 	_btnSoldiers->setColor(Palette::blockOffset(13)+8);
-	_btnSoldiers->setText(_game->getResourcePack()->getLanguage()->getString("STR_SOLDIERS_UC"));
+	_btnSoldiers->setText(_game->getLanguage()->getString("STR_SOLDIERS_UC"));
 	_btnSoldiers->onMouseClick((ActionHandler)&BasescapeState::btnSoldiersClick);
 
 	_btnCrafts->setColor(Palette::blockOffset(13)+8);
-	_btnCrafts->setText(_game->getResourcePack()->getLanguage()->getString("STR_EQUIP_CRAFT"));
+	_btnCrafts->setText(_game->getLanguage()->getString("STR_EQUIP_CRAFT"));
 	_btnCrafts->onMouseClick((ActionHandler)&BasescapeState::btnCraftsClick);
 
 	_btnFacilities->setColor(Palette::blockOffset(13)+8);
-	_btnFacilities->setText(_game->getResourcePack()->getLanguage()->getString("STR_BUILD_FACILITIES"));
+	_btnFacilities->setText(_game->getLanguage()->getString("STR_BUILD_FACILITIES"));
 	_btnFacilities->onMouseClick((ActionHandler)&BasescapeState::btnFacilitiesClick);
 
 	_btnResearch->setColor(Palette::blockOffset(13)+8);
-	_btnResearch->setText(_game->getResourcePack()->getLanguage()->getString("STR_NOT_AVAILABLE"));
+	_btnResearch->setText(_game->getLanguage()->getString("STR_NOT_AVAILABLE"));
 	_btnResearch->onMouseClick((ActionHandler)&BasescapeState::btnResearchClick);
 
 	_btnManufacture->setColor(Palette::blockOffset(13)+8);
-	_btnManufacture->setText(_game->getResourcePack()->getLanguage()->getString("STR_NOT_AVAILABLE"));
+	_btnManufacture->setText(_game->getLanguage()->getString("STR_NOT_AVAILABLE"));
 	_btnManufacture->onMouseClick((ActionHandler)&BasescapeState::btnManufactureClick);
 
 	_btnTransfer->setColor(Palette::blockOffset(13)+8);
-	_btnTransfer->setText(_game->getResourcePack()->getLanguage()->getString("STR_NOT_AVAILABLE"));
+	_btnTransfer->setText(_game->getLanguage()->getString("STR_NOT_AVAILABLE"));
 
 	_btnPurchase->setColor(Palette::blockOffset(13)+8);
-	_btnPurchase->setText(_game->getResourcePack()->getLanguage()->getString("STR_NOT_AVAILABLE"));
+	_btnPurchase->setText(_game->getLanguage()->getString("STR_NOT_AVAILABLE"));
 	_btnPurchase->onMouseClick((ActionHandler)&BasescapeState::btnPurchaseClick);
 
 	_btnSell->setColor(Palette::blockOffset(13)+8);
-	_btnSell->setText(_game->getResourcePack()->getLanguage()->getString("STR_NOT_AVAILABLE"));
+	_btnSell->setText(_game->getLanguage()->getString("STR_NOT_AVAILABLE"));
 	_btnSell->onMouseClick((ActionHandler)&BasescapeState::btnSellClick);
 
 	_btnGeoscape->setColor(Palette::blockOffset(13)+8);
-	_btnGeoscape->setText(_game->getResourcePack()->getLanguage()->getString("STR_GEOSCAPE"));
+	_btnGeoscape->setText(_game->getLanguage()->getString("STR_GEOSCAPE"));
 	_btnGeoscape->onMouseClick((ActionHandler)&BasescapeState::btnGeoscapeClick);
 }
 
@@ -225,12 +225,12 @@ void BasescapeState::init()
 	{
 		if ((*i)->getRules()->insideRegion(_base->getLongitude(), _base->getLatitude()))
 		{
-			_txtLocation->setText(_game->getResourcePack()->getLanguage()->getString((*i)->getRules()->getType()));
+			_txtLocation->setText(_game->getLanguage()->getString((*i)->getRules()->getType()));
 			break;
 		}
 	}
 
-	std::string s = _game->getResourcePack()->getLanguage()->getString("STR_FUNDS");
+	std::string s = _game->getLanguage()->getString("STR_FUNDS");
 	s += Text::formatFunding(_game->getSavedGame()->getFunds());
 	_txtFunds->setText(s);
 
@@ -404,7 +404,7 @@ void BasescapeState::viewMouseOver(Action *action)
 	if (f == 0)
 		_txtFacility->setText("");
 	else
-		_txtFacility->setText(_game->getResourcePack()->getLanguage()->getString(f->getRules()->getType()));
+		_txtFacility->setText(_game->getLanguage()->getString(f->getRules()->getType()));
 }
 
 /**

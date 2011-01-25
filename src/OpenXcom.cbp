@@ -214,7 +214,6 @@
 		<Unit filename="Interface\TextList.h" />
 		<Unit filename="Interface\Window.cpp" />
 		<Unit filename="Interface\Window.h" />
-		<Unit filename="Menu\dirent.h" />
 		<Unit filename="Menu\LanguageState.cpp" />
 		<Unit filename="Menu\LanguageState.h" />
 		<Unit filename="Menu\LoadGameState.cpp" />
@@ -312,6 +311,7 @@
 		<Unit filename="Savegame\Ufo.h" />
 		<Unit filename="Savegame\Waypoint.cpp" />
 		<Unit filename="Savegame\Waypoint.h" />
+		<Unit filename="dirent.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="resource.h" />
 		<Extensions>

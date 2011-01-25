@@ -63,21 +63,21 @@ LowFuelState::LowFuelState(Game *game, Craft *craft, GeoscapeState *state) : Sta
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK12.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(8)+8);
-	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&LowFuelState::btnOkClick);
 
 	_btnOk5Secs->setColor(Palette::blockOffset(8)+8);
-	_btnOk5Secs->setText(_game->getResourcePack()->getLanguage()->getString("STR_OK_5_SECS"));
+	_btnOk5Secs->setText(_game->getLanguage()->getString("STR_OK_5_SECS"));
 	_btnOk5Secs->onMouseClick((ActionHandler)&LowFuelState::btnOk5SecsClick);
 
 	_txtTitle->setColor(Palette::blockOffset(8)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
-	_txtTitle->setText(_craft->getName(_game->getResourcePack()->getLanguage()));
+	_txtTitle->setText(_craft->getName(_game->getLanguage()));
 
 	_txtMessage->setColor(Palette::blockOffset(8)+10);
 	_txtMessage->setAlign(ALIGN_CENTER);
-	_txtMessage->setText(_game->getResourcePack()->getLanguage()->getString("STR_IS_LOW_ON_FUEL_RETURNING_TO_BASE"));
+	_txtMessage->setText(_game->getLanguage()->getString("STR_IS_LOW_ON_FUEL_RETURNING_TO_BASE"));
 
 	
 }

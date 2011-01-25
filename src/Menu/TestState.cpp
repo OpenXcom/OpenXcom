@@ -69,8 +69,7 @@ TestState::TestState(Game *game) : State(game)
 	_text->setWordWrap(true);
 	_text->setAlign(ALIGN_CENTER);
 	_text->setVerticalAlign(ALIGN_MIDDLE);
-	//_game->getResourcePack()->setLanguage("GERMAN.DAT");
-	_text->setText(_game->getResourcePack()->getLanguage()->getString("STR_COUNCIL_TERMINATED"));
+	_text->setText(_game->getLanguage()->getString("STR_COUNCIL_TERMINATED"));
 
 	_list->setColor(Palette::blockOffset(15)+1);
 	_list->setColumns(3, 100, 50, 100);
@@ -91,7 +90,7 @@ void TestState::think()
 	State::think();
 
 	/*
-	_text->setText(_game->getResourcePack()->getLanguage()->getString(_i));
+	_text->setText(_game->getLanguage()->getString(_i));
 	_i++;
 	*/
 }

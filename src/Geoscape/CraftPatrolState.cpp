@@ -64,27 +64,27 @@ CraftPatrolState::CraftPatrolState(Game *game, Craft *craft, Globe *globe) : Sta
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK12.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(8)+8);
-	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&CraftPatrolState::btnOkClick);
 
 	_btnRedirect->setColor(Palette::blockOffset(8)+8);
-	_btnRedirect->setText(_game->getResourcePack()->getLanguage()->getString("STR_REDIRECT_CRAFT"));
+	_btnRedirect->setText(_game->getLanguage()->getString("STR_REDIRECT_CRAFT"));
 	_btnRedirect->onMouseClick((ActionHandler)&CraftPatrolState::btnRedirectClick);
 
 	_txtDestination->setColor(Palette::blockOffset(15)-1);
 	_txtDestination->setBig();
 	_txtDestination->setAlign(ALIGN_CENTER);
 	_txtDestination->setWordWrap(true);
-	std::string s = _craft->getName(_game->getResourcePack()->getLanguage()) + '\n';
-	s += _game->getResourcePack()->getLanguage()->getString("STR_HAS_REACHED") + '\n';
-	s += _game->getResourcePack()->getLanguage()->getString("STR_DESTINATION") + '\n';
-	s += _craft->getDestination()->getName(_game->getResourcePack()->getLanguage());
+	std::string s = _craft->getName(_game->getLanguage()) + '\n';
+	s += _game->getLanguage()->getString("STR_HAS_REACHED") + '\n';
+	s += _game->getLanguage()->getString("STR_DESTINATION") + '\n';
+	s += _craft->getDestination()->getName(_game->getLanguage());
 	_txtDestination->setText(s);
 
 	_txtPatrolling->setColor(Palette::blockOffset(15)-1);
 	_txtPatrolling->setBig();
 	_txtPatrolling->setAlign(ALIGN_CENTER);
-	_txtPatrolling->setText(_game->getResourcePack()->getLanguage()->getString("STR_NOW_PATROLLING"));
+	_txtPatrolling->setText(_game->getLanguage()->getString("STR_NOW_PATROLLING"));
 }
 
 /**

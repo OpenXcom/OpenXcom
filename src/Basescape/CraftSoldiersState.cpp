@@ -72,24 +72,24 @@ CraftSoldiersState::CraftSoldiersState(Game *game, Base *base, unsigned int craf
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK02.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(13)+13);
-	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&CraftSoldiersState::btnOkClick);
 
 	_txtTitle->setColor(Palette::blockOffset(15)+6);
 	_txtTitle->setBig();
 	Craft *c = _base->getCrafts()->at(_craft);
 	std::stringstream ss;
-	ss << _game->getResourcePack()->getLanguage()->getString("STR_SELECT_SQUAD_FOR") << c->getName(_game->getResourcePack()->getLanguage());
+	ss << _game->getLanguage()->getString("STR_SELECT_SQUAD_FOR") << c->getName(_game->getLanguage());
 	_txtTitle->setText(ss.str());
 
 	_txtName->setColor(Palette::blockOffset(15)+6);
-	_txtName->setText(_game->getResourcePack()->getLanguage()->getString("STR_NAME_UC"));
+	_txtName->setText(_game->getLanguage()->getString("STR_NAME_UC"));
 
 	_txtRank->setColor(Palette::blockOffset(15)+6);
-	_txtRank->setText(_game->getResourcePack()->getLanguage()->getString("STR_RANK"));
+	_txtRank->setText(_game->getLanguage()->getString("STR_RANK"));
 
 	_txtCraft->setColor(Palette::blockOffset(15)+6);
-	_txtCraft->setText(_game->getResourcePack()->getLanguage()->getString("STR_CRAFT"));
+	_txtCraft->setText(_game->getLanguage()->getString("STR_CRAFT"));
 
 	_txtAvailable->setColor(Palette::blockOffset(15)+6);
 
@@ -120,11 +120,11 @@ void CraftSoldiersState::init()
 	Craft *c = _base->getCrafts()->at(_craft);
 
 	std::stringstream ss;
-	ss << _game->getResourcePack()->getLanguage()->getString("STR_SPACE_AVAILABLE") << c->getRules()->getSoldiers() - c->getNumSoldiers();
+	ss << _game->getLanguage()->getString("STR_SPACE_AVAILABLE") << c->getRules()->getSoldiers() - c->getNumSoldiers();
 	_txtAvailable->setText(ss.str());
 
 	std::stringstream ss2;
-	ss2 << _game->getResourcePack()->getLanguage()->getString("STR_SPACE_USED") << c->getNumSoldiers();
+	ss2 << _game->getLanguage()->getString("STR_SPACE_USED") << c->getNumSoldiers();
 	_txtUsed->setText(ss2.str());
 
 	int row = 0;
@@ -133,10 +133,10 @@ void CraftSoldiersState::init()
 	{
 		std::stringstream ss3;
 		if ((*i)->getCraft() == 0)
-			ss3 << _game->getResourcePack()->getLanguage()->getString("STR_NONE_UC");
+			ss3 << _game->getLanguage()->getString("STR_NONE_UC");
 		else
-			ss3 << (*i)->getCraft()->getName(_game->getResourcePack()->getLanguage());
-		_lstSoldiers->addRow(3, (*i)->getName().c_str(), _game->getResourcePack()->getLanguage()->getString((*i)->getRankString()).c_str(), ss3.str().c_str());
+			ss3 << (*i)->getCraft()->getName(_game->getLanguage());
+		_lstSoldiers->addRow(3, (*i)->getName().c_str(), _game->getLanguage()->getString((*i)->getRankString()).c_str(), ss3.str().c_str());
 		if ((*i)->getCraft() == c)
 		{
 			_lstSoldiers->getCell(row, 0)->setColor(Palette::blockOffset(13));

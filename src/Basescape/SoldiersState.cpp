@@ -68,22 +68,22 @@ SoldiersState::SoldiersState(Game *game, Base *base) : State(game), _base(base)
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK02.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(13)+13);
-	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&SoldiersState::btnOkClick);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString("STR_SOLDIER_LIST"));
+	_txtTitle->setText(_game->getLanguage()->getString("STR_SOLDIER_LIST"));
 
 	_txtName->setColor(Palette::blockOffset(15)+1);
-	_txtName->setText(_game->getResourcePack()->getLanguage()->getString("STR_NAME_UC"));
+	_txtName->setText(_game->getLanguage()->getString("STR_NAME_UC"));
 
 	_txtRank->setColor(Palette::blockOffset(15)+1);
-	_txtRank->setText(_game->getResourcePack()->getLanguage()->getString("STR_RANK"));
+	_txtRank->setText(_game->getLanguage()->getString("STR_RANK"));
 
 	_txtCraft->setColor(Palette::blockOffset(15)+1);
-	_txtCraft->setText(_game->getResourcePack()->getLanguage()->getString("STR_CRAFT"));
+	_txtCraft->setText(_game->getLanguage()->getString("STR_CRAFT"));
 
 	_lstSoldiers->setColor(Palette::blockOffset(13)+10);
 	_lstSoldiers->setArrowColor(Palette::blockOffset(15)+4);
@@ -114,10 +114,10 @@ void SoldiersState::init()
 	{
 		std::stringstream ss;
 		if ((*i)->getCraft() == 0)
-			ss << _game->getResourcePack()->getLanguage()->getString("STR_NONE_UC");
+			ss << _game->getLanguage()->getString("STR_NONE_UC");
 		else
-			ss << (*i)->getCraft()->getName(_game->getResourcePack()->getLanguage());
-		_lstSoldiers->addRow(3, (*i)->getName().c_str(), _game->getResourcePack()->getLanguage()->getString((*i)->getRankString()).c_str(), ss.str().c_str());
+			ss << (*i)->getCraft()->getName(_game->getLanguage());
+		_lstSoldiers->addRow(3, (*i)->getName().c_str(), _game->getLanguage()->getString((*i)->getRankString()).c_str(), ss.str().c_str());
 		if ((*i)->getCraft() == 0)
 		{
 			_lstSoldiers->getCell(row, 0)->setColor(Palette::blockOffset(15)+6);

@@ -20,7 +20,7 @@
 #include <sstream>
 #include <iomanip>
 #include <fstream>
-#include "dirent.h"
+#include "../dirent.h"
 #include "yaml.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/GameTime.h"
@@ -71,22 +71,22 @@ LoadGameState::LoadGameState(Game *game) : State(game)
 	_window->setBackground(game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_btnCancel->setColor(Palette::blockOffset(8)+8);
-	_btnCancel->setText(_game->getResourcePack()->getLanguage()->getString("STR_CANCEL_UC"));
+	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&LoadGameState::btnCancelClick);
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString("STR_SELECT_GAME_TO_LOAD"));
+	_txtTitle->setText(_game->getLanguage()->getString("STR_SELECT_GAME_TO_LOAD"));
 
 	_txtName->setColor(Palette::blockOffset(15)-1);
-	_txtName->setText(_game->getResourcePack()->getLanguage()->getString("STR_NAME"));
+	_txtName->setText(_game->getLanguage()->getString("STR_NAME"));
 
 	_txtTime->setColor(Palette::blockOffset(15)-1);
-	_txtTime->setText(_game->getResourcePack()->getLanguage()->getString("STR_TIME"));
+	_txtTime->setText(_game->getLanguage()->getString("STR_TIME"));
 
 	_txtDate->setColor(Palette::blockOffset(15)-1);
-	_txtDate->setText(_game->getResourcePack()->getLanguage()->getString("STR_DATE"));
+	_txtDate->setText(_game->getLanguage()->getString("STR_DATE"));
 	
 	_lstSaves->setColor(Palette::blockOffset(8)+10);
 	_lstSaves->setArrowColor(Palette::blockOffset(8)+8);
@@ -142,8 +142,8 @@ void LoadGameState::getSavesList(const std::string &dir)
 		time.load(doc["time"]);
 		std::stringstream saveTime, saveDay, saveMonth, saveYear;
 		saveTime << time.getHour() << ":" << std::setfill('0') << std::setw(2) << time.getMinute();
-		saveDay << time.getDay() << _game->getResourcePack()->getLanguage()->getString(time.getDayString());
-		saveMonth << _game->getResourcePack()->getLanguage()->getString(time.getMonthString());
+		saveDay << time.getDay() << _game->getLanguage()->getString(time.getDayString());
+		saveMonth << _game->getLanguage()->getString(time.getMonthString());
 		saveYear << time.getYear();
 		_lstSaves->addRow(5, file.substr(0, file.length()-4).c_str(), saveTime.str().c_str(), saveDay.str().c_str(), saveMonth.str().c_str(), saveYear.str().c_str());
 		fin.close();

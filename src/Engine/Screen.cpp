@@ -73,6 +73,10 @@ void Screen::handle(Action *action)
 	{
 		setFullscreen(!_fullscreen);
 	}
+	else if (action->getDetails()->type == SDL_KEYDOWN && action->getDetails()->key.keysym.sym == SDLK_F5)
+	{
+		SDL_SaveBMP(_screen, "./USER/screen.bmp");
+	}
 }
 
 /**

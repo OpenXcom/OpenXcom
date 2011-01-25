@@ -63,13 +63,13 @@ BaseNameState::BaseNameState(Game *game, Base *base, Globe *globe, bool first) :
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(8)+8);
-	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&BaseNameState::btnOkClick);
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
-	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString("STR_BASE_NAME"));
+	_txtTitle->setText(_game->getLanguage()->getString("STR_BASE_NAME"));
 
 	_edtName->setColor(Palette::blockOffset(8)+5);
 	_edtName->setBig();

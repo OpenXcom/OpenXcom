@@ -63,26 +63,26 @@ BriefingCrashState::BriefingCrashState(Game *game, Craft *craft) : State(game), 
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK16.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(8)+8);
-	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&BriefingCrashState::btnOkClick);
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setBig();
-	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString("STR_UFO_CRASH_RECOVERY"));
+	_txtTitle->setText(_game->getLanguage()->getString("STR_UFO_CRASH_RECOVERY"));
 
 	_txtUfo->setColor(Palette::blockOffset(8)+5);
 	_txtUfo->setBig();
-	_txtUfo->setText(_craft->getDestination()->getName(_game->getResourcePack()->getLanguage()));
+	_txtUfo->setText(_craft->getDestination()->getName(_game->getLanguage()));
 
 	_txtCraft->setColor(Palette::blockOffset(8)+5);
 	_txtCraft->setBig();
 	std::stringstream ss;
-	ss << _game->getResourcePack()->getLanguage()->getString("STR_CRAFT_") << _craft->getName(_game->getResourcePack()->getLanguage());
+	ss << _game->getLanguage()->getString("STR_CRAFT_") << _craft->getName(_game->getLanguage());
 	_txtCraft->setText(ss.str());
 
 	_txtBriefing->setColor(Palette::blockOffset(8)+5);
 	_txtBriefing->setWordWrap(true);
-	_txtBriefing->setText(_game->getResourcePack()->getLanguage()->getString("STR_UFO_CRASH_RECOVERY_BRIEFING"));
+	_txtBriefing->setText(_game->getLanguage()->getString("STR_UFO_CRASH_RECOVERY_BRIEFING"));
 
 	// Set music
 	_game->getResourcePack()->getMusic("GMDEFEND")->play();

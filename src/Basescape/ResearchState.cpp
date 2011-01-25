@@ -69,34 +69,34 @@ ResearchState::ResearchState(Game *game) : State(game)
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
 	
 	_btnNew->setColor(Palette::blockOffset(15)+9);
-	_btnNew->setText(_game->getResourcePack()->getLanguage()->getString("STR_NEW_PROJECT"));
+	_btnNew->setText(_game->getLanguage()->getString("STR_NEW_PROJECT"));
 
 	_btnOk->setColor(Palette::blockOffset(15)+9);
-	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ResearchState::btnOkClick);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString("STR_CURRENT_RESEARCH"));
+	_txtTitle->setText(_game->getLanguage()->getString("STR_CURRENT_RESEARCH"));
 
 	_txtAvailable->setColor(Palette::blockOffset(13)+10);
-	_txtAvailable->setText(_game->getResourcePack()->getLanguage()->getString("STR_SCIENTISTS_AVAILABLE"));
+	_txtAvailable->setText(_game->getLanguage()->getString("STR_SCIENTISTS_AVAILABLE"));
 
 	_txtAllocated->setColor(Palette::blockOffset(13)+10);
-	_txtAllocated->setText(_game->getResourcePack()->getLanguage()->getString("STR_SCIENTISTS_ALLOCATED"));
+	_txtAllocated->setText(_game->getLanguage()->getString("STR_SCIENTISTS_ALLOCATED"));
 
 	_txtSpace->setColor(Palette::blockOffset(13)+10);
-	_txtSpace->setText(_game->getResourcePack()->getLanguage()->getString("STR_LABORATORY_SPACE_AVAILABLE"));
+	_txtSpace->setText(_game->getLanguage()->getString("STR_LABORATORY_SPACE_AVAILABLE"));
 
 	_txtProject->setColor(Palette::blockOffset(13)+10);
-	_txtProject->setText(_game->getResourcePack()->getLanguage()->getString("STR_RESEARCH_PROJECT"));
+	_txtProject->setText(_game->getLanguage()->getString("STR_RESEARCH_PROJECT"));
 
 	_txtScientists->setColor(Palette::blockOffset(13)+10);
-	_txtScientists->setText(_game->getResourcePack()->getLanguage()->getString("STR_SCIENTISTS_ALLOCATED_UC"));
+	_txtScientists->setText(_game->getLanguage()->getString("STR_SCIENTISTS_ALLOCATED_UC"));
 
 	_txtProgress->setColor(Palette::blockOffset(13)+10);
-	_txtProgress->setText(_game->getResourcePack()->getLanguage()->getString("STR_PROGRESS"));
+	_txtProgress->setText(_game->getLanguage()->getString("STR_PROGRESS"));
 
 	_lstResearch->setColor(Palette::blockOffset(15)+6);
 	_lstResearch->setArrowColor(Palette::blockOffset(13)+13);

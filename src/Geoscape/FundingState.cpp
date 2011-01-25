@@ -65,28 +65,28 @@ FundingState::FundingState(Game *game) : State(game)
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(15)+2);
-	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&FundingState::btnOkClick);
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
-	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString("STR_INTERNATIONAL_RELATIONS"));
+	_txtTitle->setText(_game->getLanguage()->getString("STR_INTERNATIONAL_RELATIONS"));
 
 	_txtCountry->setColor(Palette::blockOffset(15)-1);
 	_txtCountry->setBig();
-	_txtCountry->setText(_game->getResourcePack()->getLanguage()->getString("STR_COUNTRY"));
+	_txtCountry->setText(_game->getLanguage()->getString("STR_COUNTRY"));
 
 	_txtFunding->setColor(Palette::blockOffset(15)-1);
 	_txtFunding->setBig();
-	_txtFunding->setText(_game->getResourcePack()->getLanguage()->getString("STR_FUNDING"));
-	if (_game->getResourcePack()->getLanguage()->getName() == "ITALIANO")
+	_txtFunding->setText(_game->getLanguage()->getString("STR_FUNDING"));
+	if (_game->getLanguage()->getName() == "ITALIANO")
 	{
 		_txtFunding->setX(125);
 	}
 
 	_txtChange->setColor(Palette::blockOffset(15)-1);
 	_txtChange->setBig();
-	_txtChange->setText(_game->getResourcePack()->getLanguage()->getString("STR_CHANGE"));
+	_txtChange->setText(_game->getLanguage()->getString("STR_CHANGE"));
 
 	_lstCountries->setColor(Palette::blockOffset(15)-1);
 	_lstCountries->setColumns(3, 108, 100, 72);
@@ -95,9 +95,9 @@ FundingState::FundingState(Game *game) : State(game)
 	{
 		std::stringstream ss;
 		ss << (*i)->getChange();
-		_lstCountries->addRow(3, _game->getResourcePack()->getLanguage()->getString((*i)->getRules()->getType()).c_str(), Text::formatFunding((*i)->getFunding()).c_str(), ss.str().c_str());
+		_lstCountries->addRow(3, _game->getLanguage()->getString((*i)->getRules()->getType()).c_str(), Text::formatFunding((*i)->getFunding()).c_str(), ss.str().c_str());
 	}
-	_lstCountries->addRow(2, _game->getResourcePack()->getLanguage()->getString("STR_TOTAL_UC").c_str(), Text::formatFunding(_game->getSavedGame()->getCountryFunding()).c_str());
+	_lstCountries->addRow(2, _game->getLanguage()->getString("STR_TOTAL_UC").c_str(), Text::formatFunding(_game->getSavedGame()->getCountryFunding()).c_str());
 	_lstCountries->getCell(_game->getSavedGame()->getCountries()->size(), 0)->setColor(Palette::blockOffset(8)+5);
 	_lstCountries->getCell(_game->getSavedGame()->getCountries()->size(), 1)->setColor(Palette::blockOffset(8)+5);
 	_lstCountries->draw();

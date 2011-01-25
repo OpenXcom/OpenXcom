@@ -62,13 +62,13 @@ BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base, State *state)
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(13)+8);
-	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&BuildFacilitiesState::btnOkClick);
 
 	_txtTitle->setColor(Palette::blockOffset(13));
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString("STR_INSTALLATION"));
+	_txtTitle->setText(_game->getLanguage()->getString("STR_INSTALLATION"));
 
 	_lstFacilities->setColor(Palette::blockOffset(13)+5);
 	_lstFacilities->setArrowColor(Palette::blockOffset(13)+8);
@@ -89,7 +89,7 @@ BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base, State *state)
 
 	for (std::vector<RuleBaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); i++)
 	{
-		_lstFacilities->addRow(1, _game->getResourcePack()->getLanguage()->getString((*i)->getType()).c_str());
+		_lstFacilities->addRow(1, _game->getLanguage()->getString((*i)->getType()).c_str());
 	}
 	_lstFacilities->onMouseClick((ActionHandler)&BuildFacilitiesState::lstFacilitiesClick);
 }

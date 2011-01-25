@@ -773,9 +773,6 @@
     <ClInclude Include="Menu\LoadGameState.h">
       <Filter>Menu</Filter>
     </ClInclude>
-    <ClInclude Include="Menu\dirent.h">
-      <Filter>Menu</Filter>
-    </ClInclude>
     <ClInclude Include="Menu\SaveGameState.h">
       <Filter>Menu</Filter>
     </ClInclude>
@@ -788,6 +785,7 @@
     <ClInclude Include="Ruleset\MapData.h">
       <Filter>Ruleset</Filter>
     </ClInclude>
+    <ClInclude Include="dirent.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="OpenXcom.rc" />

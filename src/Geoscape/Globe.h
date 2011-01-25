@@ -28,10 +28,9 @@ namespace OpenXcom
 
 #define NUM_SHADES 8
 
-class ResourcePack;
+class Game;
 class Polygon;
 class SurfaceSet;
-class SavedGame;
 class Timer;
 class Target;
 
@@ -49,8 +48,7 @@ private:
 	Sint16 _cenX, _cenY;
 	unsigned int _zoom;
 	SurfaceSet *_texture[NUM_SHADES];
-	ResourcePack *_res;
-	SavedGame *_save;
+	Game *_game;
 	Surface *_markers, *_countries;
 	bool _blink, _detail;
 	Timer *_blinkTimer, *_rotTimer;
@@ -72,7 +70,7 @@ private:
 	void fillLongitudeSegments(double startLon, double endLon, int colourShift);
 public:
 	/// Creates a new globe at the specified position and size.
-	Globe(int cenX, int cenY, int width, int height, int x = 0, int y = 0);
+	Globe(Game *game, int cenX, int cenY, int width, int height, int x = 0, int y = 0);
 	/// Cleans up the globe.
 	~Globe();
 	/// Loads a set of polygons from a DAT file.
@@ -83,10 +81,6 @@ public:
 	void cartToPolar(Sint16 x, Sint16 y, double *lon, double *lat) const;
 	/// Sets the texture set for the globe's polygons.
 	void setTexture(SurfaceSet *texture);
-	/// Sets the resource pack to pull graphics from.
-	void setResourcePack(ResourcePack *res);
-	/// Sets the saved game to draw markers from.
-	void setSavedGame(SavedGame *save);
 	/// Starts rotating the globe left.
 	void rotateLeft();
 	/// Starts rotating the globe right.

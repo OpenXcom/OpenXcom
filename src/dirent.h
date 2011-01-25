@@ -178,7 +178,7 @@ static void rewinddir(DIR* dirp);
 #endif
 
 /* Set errno variable */
-#if defined(_MSC_VER)
+#if defined(_MSC_VER) && _MSC_VER >= 1400
 #define DIRENT_SET_ERRNO(x) _set_errno (x)
 #else
 #define DIRENT_SET_ERRNO(x) (errno = (x))

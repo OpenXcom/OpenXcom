@@ -55,7 +55,7 @@ BasescapeErrorState::BasescapeErrorState(Game *game, std::string str) : State(ga
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(15)+4);
-	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&BasescapeErrorState::btnOkClick);
 
 	_txtError->setColor(Palette::blockOffset(15)+1);
@@ -63,7 +63,7 @@ BasescapeErrorState::BasescapeErrorState(Game *game, std::string str) : State(ga
 	_txtError->setVerticalAlign(ALIGN_MIDDLE);
 	_txtError->setBig();
 	_txtError->setWordWrap(true);
-	_txtError->setText(_game->getResourcePack()->getLanguage()->getString(str));
+	_txtError->setText(_game->getLanguage()->getString(str));
 }
 
 /**

@@ -69,34 +69,34 @@ PurchaseState::PurchaseState(Game *game) : State(game)
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(13)+13);
-	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&PurchaseState::btnOkClick);
 
 	_btnCancel->setColor(Palette::blockOffset(13)+13);
-	_btnCancel->setText(_game->getResourcePack()->getLanguage()->getString("STR_CANCEL"));
+	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)&PurchaseState::btnCancelClick);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString("STR_PURCHASE_HIRE_PERSONNEL"));
+	_txtTitle->setText(_game->getLanguage()->getString("STR_PURCHASE_HIRE_PERSONNEL"));
 
-	std::string s = _game->getResourcePack()->getLanguage()->getString("STR_CURRENT_FUNDS");
+	std::string s = _game->getLanguage()->getString("STR_CURRENT_FUNDS");
 	s += Text::formatFunding(_game->getSavedGame()->getFunds());
 	_txtFunds->setColor(Palette::blockOffset(13)+10);
 	_txtFunds->setText(s);
 
 	_txtPurchases->setColor(Palette::blockOffset(13)+10);
-	_txtPurchases->setText(_game->getResourcePack()->getLanguage()->getString("STR_COST_OF_PURCHASES"));
+	_txtPurchases->setText(_game->getLanguage()->getString("STR_COST_OF_PURCHASES"));
 
 	_txtItem->setColor(Palette::blockOffset(13)+10);
-	_txtItem->setText(_game->getResourcePack()->getLanguage()->getString("STR_ITEM"));
+	_txtItem->setText(_game->getLanguage()->getString("STR_ITEM"));
 
 	_txtCost->setColor(Palette::blockOffset(13)+10);
-	_txtCost->setText(_game->getResourcePack()->getLanguage()->getString("STR_COST_PER_UNIT_UC"));
+	_txtCost->setText(_game->getLanguage()->getString("STR_COST_PER_UNIT_UC"));
 
 	_txtQuantity->setColor(Palette::blockOffset(13)+10);
-	_txtQuantity->setText(_game->getResourcePack()->getLanguage()->getString("STR_QUANTITY_UC"));
+	_txtQuantity->setText(_game->getLanguage()->getString("STR_QUANTITY_UC"));
 
 	_lstItems->setColor(Palette::blockOffset(13)+10);
 	_lstItems->setArrowColor(Palette::blockOffset(13)+13);

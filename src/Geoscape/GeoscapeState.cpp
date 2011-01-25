@@ -75,7 +75,7 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(fa
 {
 	// Create objects
 	_bg = new Surface(320, 200, 0, 0);
-	_globe = new Globe(130, 100, 256, 200, 0, 0);
+	_globe = new Globe(_game, 130, 100, 256, 200, 0, 0);
 
 	_btnIntercept = new ImageButton(63, 11, 257, 0);
 	_btnBases = new ImageButton(63, 11, 257, 12);
@@ -152,19 +152,19 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(fa
 	_game->getResourcePack()->getSurface("GEOBORD.SCR")->blit(_bg);
 
 	Surface* sidebar = 0;
-	if (_game->getResourcePack()->getLanguage()->getName() == "DEUTSCHE")
+	if (_game->getLanguage()->getName() == "DEUTSCHE")
 	{
 		sidebar = _game->getResourcePack()->getSurface("German.geo");
 	}
-	else if (_game->getResourcePack()->getLanguage()->getName() == "FRANCAIS")
+	else if (_game->getLanguage()->getName() == "FRANCAIS")
 	{
 		sidebar = _game->getResourcePack()->getSurface("French.geo");
 	}
-	else if (_game->getResourcePack()->getLanguage()->getName() == "ITALIANO")
+	else if (_game->getLanguage()->getName() == "ITALIANO")
 	{
 		sidebar = _game->getResourcePack()->getSurface("Italian.geo");
 	}
-	else if (_game->getResourcePack()->getLanguage()->getName() == "ESPANOL")
+	else if (_game->getLanguage()->getName() == "ESPANOL")
 	{
 		sidebar = _game->getResourcePack()->getSurface("Spanish.geo");
 	}
@@ -174,9 +174,6 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(fa
 		sidebar->setY(0);
 		sidebar->blit(_bg);
 	}
-	
-	_globe->setSavedGame(game->getSavedGame());
-	_globe->setResourcePack(_game->getResourcePack());
 
 	_btnIntercept->copy(_bg);
 	_btnIntercept->setColor(Palette::blockOffset(15)+8);
@@ -310,7 +307,6 @@ void GeoscapeState::init()
 
 	_globe->onMouseClick((ActionHandler)&GeoscapeState::globeClick);
 	_globe->focus();
-	_globe->setSavedGame(_game->getSavedGame());
 	_globe->draw();
 
 	// Set music if it's not already playing
@@ -362,12 +358,12 @@ void GeoscapeState::timeDisplay()
 	ss3 << _game->getSavedGame()->getTime()->getHour();
 	_txtHour->setText(ss3.str());
 
-	ss4 << _game->getSavedGame()->getTime()->getDay() << _game->getResourcePack()->getLanguage()->getString(_game->getSavedGame()->getTime()->getDayString());
+	ss4 << _game->getSavedGame()->getTime()->getDay() << _game->getLanguage()->getString(_game->getSavedGame()->getTime()->getDayString());
 	_txtDay->setText(ss4.str());
 
-	_txtWeekday->setText(_game->getResourcePack()->getLanguage()->getString(_game->getSavedGame()->getTime()->getWeekdayString()));
+	_txtWeekday->setText(_game->getLanguage()->getString(_game->getSavedGame()->getTime()->getWeekdayString()));
 
-	_txtMonth->setText(_game->getResourcePack()->getLanguage()->getString(_game->getSavedGame()->getTime()->getMonthString()));
+	_txtMonth->setText(_game->getLanguage()->getString(_game->getSavedGame()->getTime()->getMonthString()));
 
 	ss5 << _game->getSavedGame()->getTime()->getYear();
 	_txtYear->setText(ss5.str());
@@ -468,7 +464,7 @@ void GeoscapeState::time5Seconds()
 					Waypoint *w = new Waypoint();
 					w->setLongitude(u->getLongitude());
 					w->setLatitude(u->getLatitude());
-					popup(new UfoLostState(_game, u->getName(_game->getResourcePack()->getLanguage())));
+					popup(new UfoLostState(_game, u->getName(_game->getLanguage())));
 					popup(new GeoscapeCraftState(_game, (*j), _globe, w));
 				}
 			}
@@ -705,11 +701,11 @@ void GeoscapeState::time1Day()
 				if ((*j)->getBuildTime() == 0)
 				{
 					timerReset();
-					std::string s = _game->getResourcePack()->getLanguage()->getString("STR_PRODUCTION_OF");
-					s += _game->getResourcePack()->getLanguage()->getString((*j)->getRules()->getType());
-					s += _game->getResourcePack()->getLanguage()->getString("STR_AT");
+					std::string s = _game->getLanguage()->getString("STR_PRODUCTION_OF");
+					s += _game->getLanguage()->getString((*j)->getRules()->getType());
+					s += _game->getLanguage()->getString("STR_AT");
 					s += (*i)->getName();
-					s += _game->getResourcePack()->getLanguage()->getString("STR_IS_COMPLETE");
+					s += _game->getLanguage()->getString("STR_IS_COMPLETE");
 					popup(new GeoscapeMessageState(_game, s));
 				}
 			}

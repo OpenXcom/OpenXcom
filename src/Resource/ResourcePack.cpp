@@ -22,7 +22,6 @@
 #include "../Engine/Font.h"
 #include "../Engine/Surface.h"
 #include "../Engine/SurfaceSet.h"
-#include "../Engine/Language.h"
 #include "../Engine/Music.h"
 #include "../Geoscape/Globe.h"
 #include "../Geoscape/Polygon.h"
@@ -36,7 +35,7 @@ namespace OpenXcom
  * Initializes a blank resource set pointing to a folder.
  * @param folder Subfolder to load resources from.
  */
-ResourcePack::ResourcePack(const std::string &folder) : _folder(folder), _currentLang(0), _palettes(), _fonts(), _languages(), _surfaces(), _sets(), _polygons(), _musics()
+ResourcePack::ResourcePack(const std::string &folder) : _folder(folder), _palettes(), _fonts(), _surfaces(), _sets(), _polygons(), _musics()
 {
 }
 
@@ -45,10 +44,6 @@ ResourcePack::ResourcePack(const std::string &folder) : _folder(folder), _curren
  */
 ResourcePack::~ResourcePack()
 {
-	for (std::map<std::string, Language*>::iterator i = _languages.begin(); i != _languages.end(); i++)
-	{
-		delete i->second;
-	}
 	for (std::map<std::string, Font*>::iterator i = _fonts.begin(); i != _fonts.end(); i++)
 	{
 		delete i->second;
@@ -141,28 +136,6 @@ std::string ResourcePack::insensitive(const std::string &filename) const
 std::string ResourcePack::getFolder() const
 {
 	return _folder;
-}
-
-
-/**
- * Returns the currently active language.
- * Ensures localizable strings always use the
- * active language without needing to know it.
- * @return Pointer to the language.
- */
-Language *const ResourcePack::getLanguage() const
-{
-	return _currentLang;
-}
-
-/**
- * Changes the currently active language to another
- * one in the resource pack.
- * @param lang Name of the language.
- */
-void ResourcePack::setLanguage(const std::string &lang)
-{
-	_currentLang = _languages[lang];
 }
 
 /**

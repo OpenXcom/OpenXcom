@@ -29,6 +29,7 @@ namespace OpenXcom
 class State;
 class Screen;
 class Cursor;
+class Language;
 class ResourcePack;
 class SavedGame;
 class Ruleset;
@@ -46,7 +47,7 @@ private:
 	SDL_Event _event;
 	Screen *_screen;
 	Cursor *_cursor;
-
+	Language *_lang;
 	std::list<State*> _states, _deleted;
 	ResourcePack *_res;
 	SavedGame *_save;
@@ -74,6 +75,10 @@ public:
 	void pushState(State *state);
 	/// Pops the last state from the state stack.
 	void popState();
+	/// Gets the currently loaded language.
+	Language *const getLanguage() const;
+	/// Sets a new language for the game.
+	void setLanguage(Language *lang);
 	/// Gets the currently loaded resource pack.
 	ResourcePack *const getResourcePack() const;
 	/// Sets a new resource pack for the game.

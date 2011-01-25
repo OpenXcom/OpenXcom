@@ -156,18 +156,18 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 	_mini->onMouseClick((ActionHandler)&BaseInfoState::miniClick);
 
 	_btnOk->setColor(Palette::blockOffset(15)+9);
-	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&BaseInfoState::btnOkClick);
 
 	_btnTransfers->setColor(Palette::blockOffset(15)+9);
-	_btnTransfers->setText(_game->getResourcePack()->getLanguage()->getString("STR_NOT_AVAILABLE"));
+	_btnTransfers->setText(_game->getLanguage()->getString("STR_NOT_AVAILABLE"));
 
 	_btnStores->setColor(Palette::blockOffset(15)+9);
-	_btnStores->setText(_game->getResourcePack()->getLanguage()->getString("STR_STORES_UC"));
+	_btnStores->setText(_game->getLanguage()->getString("STR_STORES_UC"));
 	_btnStores->onMouseClick((ActionHandler)&BaseInfoState::btnStoresClick);
 
 	_btnMonthlyCosts->setColor(Palette::blockOffset(15)+9);
-	_btnMonthlyCosts->setText(_game->getResourcePack()->getLanguage()->getString("STR_MONTHLY_COSTS"));
+	_btnMonthlyCosts->setText(_game->getLanguage()->getString("STR_MONTHLY_COSTS"));
 	_btnMonthlyCosts->onMouseClick((ActionHandler)&BaseInfoState::btnMonthlyCostsClick);
 
 	_edtBase->setColor(Palette::blockOffset(15)+1);
@@ -176,10 +176,10 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 
 
 	_txtPersonnel->setColor(Palette::blockOffset(15)+1);
-	_txtPersonnel->setText(_game->getResourcePack()->getLanguage()->getString("STR_PERSONNEL_AVAILABLE_PERSONNEL_TOTAL"));
+	_txtPersonnel->setText(_game->getLanguage()->getString("STR_PERSONNEL_AVAILABLE_PERSONNEL_TOTAL"));
 
 	_txtSoldiers->setColor(Palette::blockOffset(13)+5);
-	_txtSoldiers->setText(_game->getResourcePack()->getLanguage()->getString("STR_SOLDIERS"));
+	_txtSoldiers->setText(_game->getLanguage()->getString("STR_SOLDIERS"));
 
 	_numSoldiers->setColor(Palette::blockOffset(13));
 
@@ -187,7 +187,7 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 	_barSoldiers->setScale(1.0);
 
 	_txtEngineers->setColor(Palette::blockOffset(13)+5);
-	_txtEngineers->setText(_game->getResourcePack()->getLanguage()->getString("STR_ENGINEERS"));
+	_txtEngineers->setText(_game->getLanguage()->getString("STR_ENGINEERS"));
 
 	_numEngineers->setColor(Palette::blockOffset(13));
 
@@ -195,7 +195,7 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 	_barEngineers->setScale(1.0);
 
 	_txtScientists->setColor(Palette::blockOffset(13)+5);
-	_txtScientists->setText(_game->getResourcePack()->getLanguage()->getString("STR_SCIENTISTS"));
+	_txtScientists->setText(_game->getLanguage()->getString("STR_SCIENTISTS"));
 
 	_numScientists->setColor(Palette::blockOffset(13));
 
@@ -204,10 +204,10 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 
 
 	_txtSpace->setColor(Palette::blockOffset(15)+1);
-	_txtSpace->setText(_game->getResourcePack()->getLanguage()->getString("STR_SPACE_USED_SPACE_AVAILABLE"));
+	_txtSpace->setText(_game->getLanguage()->getString("STR_SPACE_USED_SPACE_AVAILABLE"));
 
 	_txtQuarters->setColor(Palette::blockOffset(13)+5);
-	_txtQuarters->setText(_game->getResourcePack()->getLanguage()->getString("STR_LIVING_QUARTERS"));
+	_txtQuarters->setText(_game->getLanguage()->getString("STR_LIVING_QUARTERS"));
 
 	_numQuarters->setColor(Palette::blockOffset(13));
 
@@ -215,7 +215,7 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 	_barQuarters->setScale(0.5);
 
 	_txtStores->setColor(Palette::blockOffset(13)+5);
-	_txtStores->setText(_game->getResourcePack()->getLanguage()->getString("STR_STORES"));
+	_txtStores->setText(_game->getLanguage()->getString("STR_STORES"));
 
 	_numStores->setColor(Palette::blockOffset(13));
 
@@ -223,7 +223,7 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 	_barStores->setScale(0.5);
 
 	_txtLaboratories->setColor(Palette::blockOffset(13)+5);
-	_txtLaboratories->setText(_game->getResourcePack()->getLanguage()->getString("STR_LABORATORIES"));
+	_txtLaboratories->setText(_game->getLanguage()->getString("STR_LABORATORIES"));
 
 	_numLaboratories->setColor(Palette::blockOffset(13));
 
@@ -231,7 +231,7 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 	_barLaboratories->setScale(0.5);
 
 	_txtWorkshops->setColor(Palette::blockOffset(13)+5);
-	_txtWorkshops->setText(_game->getResourcePack()->getLanguage()->getString("STR_WORK_SHOPS"));
+	_txtWorkshops->setText(_game->getLanguage()->getString("STR_WORK_SHOPS"));
 
 	_numWorkshops->setColor(Palette::blockOffset(13));
 
@@ -239,7 +239,7 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 	_barWorkshops->setScale(0.5);
 
 	_txtHangars->setColor(Palette::blockOffset(13)+5);
-	_txtHangars->setText(_game->getResourcePack()->getLanguage()->getString("STR_HANGARS"));
+	_txtHangars->setText(_game->getLanguage()->getString("STR_HANGARS"));
 
 	_numHangars->setColor(Palette::blockOffset(13));
 
@@ -248,7 +248,7 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 	
 
 	_txtDefence->setColor(Palette::blockOffset(13)+5);
-	_txtDefence->setText(_game->getResourcePack()->getLanguage()->getString("STR_DEFENCE_STRENGTH"));
+	_txtDefence->setText(_game->getLanguage()->getString("STR_DEFENCE_STRENGTH"));
 
 	_numDefence->setColor(Palette::blockOffset(13));
 
@@ -256,10 +256,10 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 	_barDefence->setScale(0.125);
 
 	_txtShortRange->setColor(Palette::blockOffset(13)+5);
-	_txtShortRange->setText(_game->getResourcePack()->getLanguage()->getString("STR_SHORT_RANGE_DETECTION"));
+	_txtShortRange->setText(_game->getLanguage()->getString("STR_SHORT_RANGE_DETECTION"));
 
 	_numShortRange->setColor(Palette::blockOffset(13));
-	if (_game->getResourcePack()->getLanguage()->getName() == "DEUTSCHE")
+	if (_game->getLanguage()->getName() == "DEUTSCHE")
 	{
 		_numShortRange->setX(137);
 	}
@@ -268,10 +268,10 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 	_barShortRange->setScale(25.0);
 
 	_txtLongRange->setColor(Palette::blockOffset(13)+5);
-	_txtLongRange->setText(_game->getResourcePack()->getLanguage()->getString("STR_LONG_RANGE_DETECTION"));
+	_txtLongRange->setText(_game->getLanguage()->getString("STR_LONG_RANGE_DETECTION"));
 
 	_numLongRange->setColor(Palette::blockOffset(13));
-	if (_game->getResourcePack()->getLanguage()->getName() == "DEUTSCHE")
+	if (_game->getLanguage()->getName() == "DEUTSCHE")
 	{
 		_numLongRange->setX(137);
 	}

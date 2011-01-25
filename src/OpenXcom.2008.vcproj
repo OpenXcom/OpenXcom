@@ -877,10 +877,6 @@
 			Name="Menu"
 			>
 			<File
-				RelativePath=".\Menu\dirent.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Menu\LanguageState.cpp"
 				>
 			</File>
@@ -1261,6 +1257,10 @@
 				>
 			</File>
 		</Filter>
+		<File
+			RelativePath=".\dirent.h"
+			>
+		</File>
 		<File
 			RelativePath=".\main.cpp"
 			>

@@ -99,7 +99,7 @@ CraftInfoState::CraftInfoState(Game *game, Base *base, unsigned int craft) : Sta
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK14.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(13)+13);
-	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&CraftInfoState::btnOkClick);
 
 	_btnW1->setColor(Palette::blockOffset(13)+13);
@@ -111,14 +111,14 @@ CraftInfoState::CraftInfoState(Game *game, Base *base, unsigned int craft) : Sta
 	_btnW2->onMouseClick((ActionHandler)&CraftInfoState::btnW2Click);
 
 	_btnCrew->setColor(Palette::blockOffset(13)+13);
-	_btnCrew->setText(_game->getResourcePack()->getLanguage()->getString("STR_CREW"));
+	_btnCrew->setText(_game->getLanguage()->getString("STR_CREW"));
 	_btnCrew->onMouseClick((ActionHandler)&CraftInfoState::btnCrewClick);
 
 	_btnEquip->setColor(Palette::blockOffset(13)+13);
-	_btnEquip->setText(_game->getResourcePack()->getLanguage()->getString("STR_NOT_AVAILABLE"));
+	_btnEquip->setText(_game->getLanguage()->getString("STR_NOT_AVAILABLE"));
 
 	_btnArmour->setColor(Palette::blockOffset(13)+13);
-	_btnArmour->setText(_game->getResourcePack()->getLanguage()->getString("STR_NOT_AVAILABLE"));
+	_btnArmour->setText(_game->getLanguage()->getString("STR_NOT_AVAILABLE"));
 
 	_txtCraft->setColor(Palette::blockOffset(13)+10);
 	_txtCraft->setBig();
@@ -160,7 +160,7 @@ void CraftInfoState::init()
 
 	Craft *c = _base->getCrafts()->at(_craft);
 
-	_txtCraft->setText(c->getName(_game->getResourcePack()->getLanguage()));
+	_txtCraft->setText(c->getName(_game->getLanguage()));
 
 	SurfaceSet *texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
 	texture->getFrame(c->getRules()->getSprite() + 33)->setX(0);
@@ -168,11 +168,11 @@ void CraftInfoState::init()
 	texture->getFrame(c->getRules()->getSprite() + 33)->blit(_sprite);
 
 	std::stringstream ss;
-	ss << _game->getResourcePack()->getLanguage()->getString("STR_DAMAGE_UC_") << c->getDamagePercentage() << "%";
+	ss << _game->getLanguage()->getString("STR_DAMAGE_UC_") << c->getDamagePercentage() << "%";
 	_txtDamage->setText(ss.str());
 
 	std::stringstream ss2;
-	ss2 << _game->getResourcePack()->getLanguage()->getString("STR_FUEL") << c->getFuelPercentage() << "%";
+	ss2 << _game->getLanguage()->getString("STR_FUEL") << c->getFuelPercentage() << "%";
 	_txtFuel->setText(ss2.str());
 	
 	if (c->getRules()->getSoldiers() > 0)
@@ -216,14 +216,14 @@ void CraftInfoState::init()
 			frame->setY(0);
 			frame->blit(_weapon1);
 
-			_txtW1Name->setText(_game->getResourcePack()->getLanguage()->getString(w1->getRules()->getType()));
+			_txtW1Name->setText(_game->getLanguage()->getString(w1->getRules()->getType()));
 
 			std::stringstream ss3;
-			ss3 << _game->getResourcePack()->getLanguage()->getString("STR_AMMO_") << w1->getAmmo();
+			ss3 << _game->getLanguage()->getString("STR_AMMO_") << w1->getAmmo();
 			_txtW1Ammo->setText(ss3.str());
 
 			std::stringstream ss4;
-			ss4 << _game->getResourcePack()->getLanguage()->getString("STR_MAX") << w1->getRules()->getAmmoMax();
+			ss4 << _game->getLanguage()->getString("STR_MAX") << w1->getRules()->getAmmoMax();
 			_txtW1Max->setText(ss4.str());
 		}
 		else
@@ -254,14 +254,14 @@ void CraftInfoState::init()
 			frame->setY(0);
 			frame->blit(_weapon2);
 
-			_txtW2Name->setText(_game->getResourcePack()->getLanguage()->getString(w2->getRules()->getType()));
+			_txtW2Name->setText(_game->getLanguage()->getString(w2->getRules()->getType()));
 
 			std::stringstream ss5;
-			ss5 << _game->getResourcePack()->getLanguage()->getString("STR_AMMO_") << w2->getAmmo();
+			ss5 << _game->getLanguage()->getString("STR_AMMO_") << w2->getAmmo();
 			_txtW2Ammo->setText(ss5.str());
 
 			std::stringstream ss6;
-			ss6 << _game->getResourcePack()->getLanguage()->getString("STR_MAX") << w2->getRules()->getAmmoMax();
+			ss6 << _game->getLanguage()->getString("STR_MAX") << w2->getRules()->getAmmoMax();
 			_txtW2Max->setText(ss6.str());
 		}
 		else

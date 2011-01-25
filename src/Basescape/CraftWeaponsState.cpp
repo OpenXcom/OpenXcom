@@ -75,25 +75,25 @@ CraftWeaponsState::CraftWeaponsState(Game *game, Base *base, unsigned int craft,
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK14.SCR"));
 
 	_btnCancel->setColor(Palette::blockOffset(15)+9);
-	_btnCancel->setText(_game->getResourcePack()->getLanguage()->getString("STR_CANCEL_UC"));
+	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&CraftWeaponsState::btnCancelClick);
 
 	_txtTitle->setColor(Palette::blockOffset(15)+6);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString("STR_SELECT_ARMAMENT"));
+	_txtTitle->setText(_game->getLanguage()->getString("STR_SELECT_ARMAMENT"));
 
 	_txtArmament->setColor(Palette::blockOffset(15)+6);
-	_txtArmament->setText(_game->getResourcePack()->getLanguage()->getString("STR_ARMAMENT"));
+	_txtArmament->setText(_game->getLanguage()->getString("STR_ARMAMENT"));
 
 	_txtQuantity->setColor(Palette::blockOffset(15)+6);
-	_txtQuantity->setText(_game->getResourcePack()->getLanguage()->getString("STR_QUANTITY_UC"));
+	_txtQuantity->setText(_game->getLanguage()->getString("STR_QUANTITY_UC"));
 
 	_txtAmmunition->setColor(Palette::blockOffset(15)+6);
-	_txtAmmunition->setText(_game->getResourcePack()->getLanguage()->getString("STR_AMMUNITION"));
+	_txtAmmunition->setText(_game->getLanguage()->getString("STR_AMMUNITION"));
 
 	_txtAvailable->setColor(Palette::blockOffset(15)+6);
-	_txtAvailable->setText(_game->getResourcePack()->getLanguage()->getString("STR_AVAILABLE"));
+	_txtAvailable->setText(_game->getLanguage()->getString("STR_AVAILABLE"));
 
 	_lstWeapons->setColor(Palette::blockOffset(13)+10);
 	_lstWeapons->setArrowColor(Palette::blockOffset(15)+9);
@@ -102,7 +102,7 @@ CraftWeaponsState::CraftWeaponsState(Game *game, Base *base, unsigned int craft,
 	_lstWeapons->setBackground(_window);
 	_lstWeapons->setMargin(8);
 
-	_lstWeapons->addRow(3, _game->getResourcePack()->getLanguage()->getString("STR_NONE_UC").c_str(), "", "");
+	_lstWeapons->addRow(3, _game->getLanguage()->getString("STR_NONE_UC").c_str(), "", "");
 
 	_weapons.push_back(0);
 	_weapons.push_back(_game->getRuleset()->getCraftWeapon("STR_STINGRAY"));
@@ -119,7 +119,7 @@ CraftWeaponsState::CraftWeaponsState(Game *game, Base *base, unsigned int craft,
 			std::stringstream ss, ss2;
 			ss << (*_base->getItems())[(*i)->getLauncherItem()]->getQuantity();
 			ss2 << (*_base->getItems())[(*i)->getClipItem()]->getQuantity();
-			_lstWeapons->addRow(3, _game->getResourcePack()->getLanguage()->getString((*i)->getType()).c_str(), ss.str().c_str(), ss2.str().c_str());
+			_lstWeapons->addRow(3, _game->getLanguage()->getString((*i)->getType()).c_str(), ss.str().c_str(), ss2.str().c_str());
 		}
 	}
 	_lstWeapons->onMouseClick((ActionHandler)&CraftWeaponsState::lstWeaponsClick);

@@ -58,7 +58,7 @@ BuildNewBaseState::BuildNewBaseState(Game *game, Base *base, Globe *globe, bool 
 
 	_window = new Window(this, 256, 28, 0, 0);
 	_btnCancel = new TextButton(54, 12, 186, 8);
-	_txtTitle = new Text(200, 16, 8, 10);
+	_txtTitle = new Text(200, 16, 8, 6);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
@@ -97,16 +97,12 @@ BuildNewBaseState::BuildNewBaseState(Game *game, Base *base, Globe *globe, bool 
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_btnCancel->setColor(Palette::blockOffset(15)+2);
-	_btnCancel->setText(_game->getResourcePack()->getLanguage()->getString("STR_CANCEL_UC"));
+	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&BuildNewBaseState::btnCancelClick);
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
-	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString("STR_SELECT_SITE_FOR_NEW_BASE"));
-
-	if (_game->getResourcePack()->getLanguage()->getName() == "ESPANOL")
-	{
-		_txtTitle->setY(6);
-	}
+	_txtTitle->setText(_game->getLanguage()->getString("STR_SELECT_SITE_FOR_NEW_BASE"));
+	_txtTitle->setVerticalAlign(ALIGN_MIDDLE);
 
 	if (_first)
 	{

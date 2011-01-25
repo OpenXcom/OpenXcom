@@ -80,24 +80,13 @@ XcomResourcePack::XcomResourcePack(const std::string &folder) : ResourcePack(fol
 		_fonts[font[i]]->load();
 	}
 		
-	// Load languages
+	// Load language graphics
 	std::string lang[] = {"English",
 						  "French",
 						  "German",
 						  "Italian",
 						  "Spanish"};
 
-	for (int i = 0; i < 5; i++)
-	{
-		std::stringstream s1, s2;
-		s1 << folder << "Language/" << lang[i] << ".lng";
-		s2 << lang[i] << ".lng";
-		_languages[s2.str()] = new Language();
-		_languages[s2.str()]->loadLng(insensitive(s1.str()));
-	}
-	//_languages["English.lng"]->toHtml();
-
-	// Load surfaces
 	for (int i = 1; i < 5; i++)
 	{
 		std::stringstream s1, s2;
@@ -107,6 +96,7 @@ XcomResourcePack::XcomResourcePack(const std::string &folder) : ResourcePack(fol
 		_surfaces[s2.str()]->loadScr(insensitive(s1.str()));
 	}
 
+	// Load surfaces
 	{
 		std::stringstream s;
 		s << folder << "GEODATA/" << "INTERWIN.DAT";

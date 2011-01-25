@@ -268,6 +268,7 @@
     <ClInclude Include="Battlescape\Position.h" />
     <ClInclude Include="Battlescape\TerrainModifier.h" />
     <ClInclude Include="Battlescape\UnitSprite.h" />
+    <ClInclude Include="dirent.h" />
     <ClInclude Include="Engine\Action.h" />
     <ClInclude Include="Engine\CatFile.h" />
     <ClInclude Include="Engine\Font.h" />
@@ -322,7 +323,6 @@
     <ClInclude Include="Interface\TextEdit.h" />
     <ClInclude Include="Interface\TextList.h" />
     <ClInclude Include="Interface\Window.h" />
-    <ClInclude Include="Menu\dirent.h" />
     <ClInclude Include="Menu\LanguageState.h" />
     <ClInclude Include="Menu\LoadGameState.h" />
     <ClInclude Include="Menu\MainMenuState.h" />

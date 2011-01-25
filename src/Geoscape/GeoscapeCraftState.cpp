@@ -105,39 +105,39 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK12.SCR"));
 
 	_btnBase->setColor(Palette::blockOffset(8)+8);
-	_btnBase->setText(_game->getResourcePack()->getLanguage()->getString("STR_RETURN_TO_BASE"));
+	_btnBase->setText(_game->getLanguage()->getString("STR_RETURN_TO_BASE"));
 	_btnBase->onMouseClick((ActionHandler)&GeoscapeCraftState::btnBaseClick);
 
 	_btnTarget->setColor(Palette::blockOffset(8)+8);
-	_btnTarget->setText(_game->getResourcePack()->getLanguage()->getString("STR_SELECT_NEW_TARGET"));
+	_btnTarget->setText(_game->getLanguage()->getString("STR_SELECT_NEW_TARGET"));
 	_btnTarget->onMouseClick((ActionHandler)&GeoscapeCraftState::btnTargetClick);
 
 	_btnPatrol->setColor(Palette::blockOffset(8)+8);
-	_btnPatrol->setText(_game->getResourcePack()->getLanguage()->getString("STR_PATROL"));
+	_btnPatrol->setText(_game->getLanguage()->getString("STR_PATROL"));
 	_btnPatrol->onMouseClick((ActionHandler)&GeoscapeCraftState::btnPatrolClick);
 
 	_btnCancel->setColor(Palette::blockOffset(8)+8);
-	_btnCancel->setText(_game->getResourcePack()->getLanguage()->getString("STR_CANCEL_UC"));
+	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&GeoscapeCraftState::btnCancelClick);
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
-	_txtTitle->setText(_craft->getName(_game->getResourcePack()->getLanguage()));
+	_txtTitle->setText(_craft->getName(_game->getLanguage()));
 
 	_txtStatus->setColor(Palette::blockOffset(15)-1);
 	std::stringstream ss;
-	ss << _game->getResourcePack()->getLanguage()->getString("STR_STATUS_");
+	ss << _game->getLanguage()->getString("STR_STATUS_");
 	if (_craft->getLowFuel())
 	{
-		ss << _game->getResourcePack()->getLanguage()->getString("STR_LOW_FUEL_RETURNING_TO_BASE");
+		ss << _game->getLanguage()->getString("STR_LOW_FUEL_RETURNING_TO_BASE");
 	}
 	else if (_craft->getDestination() == 0)
 	{
-		ss << _game->getResourcePack()->getLanguage()->getString("STR_PATROLLING");
+		ss << _game->getLanguage()->getString("STR_PATROLLING");
 	}
 	else if (_craft->getDestination() == (Target*)_craft->getBase())
 	{
-		ss << _game->getResourcePack()->getLanguage()->getString("STR_RETURNING_TO_BASE");
+		ss << _game->getLanguage()->getString("STR_RETURNING_TO_BASE");
 	}
 	else
 	{
@@ -147,58 +147,58 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 		{
 			if (!u->isCrashed())
 			{
-				ss << _game->getResourcePack()->getLanguage()->getString("STR_INTERCEPTING_UFO") << u->getId();
+				ss << _game->getLanguage()->getString("STR_INTERCEPTING_UFO") << u->getId();
 			}
 			else
 			{
-				ss << _game->getResourcePack()->getLanguage()->getString("STR_DESTINATION_CRASH_SITE") << u->getId();
+				ss << _game->getLanguage()->getString("STR_DESTINATION_CRASH_SITE") << u->getId();
 			}
 		}
 		else if (w != 0)
 		{
-			ss << _game->getResourcePack()->getLanguage()->getString("STR_DESTINATION_WAY_POINT") << w->getId();
+			ss << _game->getLanguage()->getString("STR_DESTINATION_WAY_POINT") << w->getId();
 		}
 	}
 	_txtStatus->setText(ss.str());
 
 	_txtBase->setColor(Palette::blockOffset(15)-1);
 	std::stringstream ss2;
-	ss2 << _game->getResourcePack()->getLanguage()->getString("STR_BASE_UC_") << _craft->getBase()->getName();
+	ss2 << _game->getLanguage()->getString("STR_BASE_UC_") << _craft->getBase()->getName();
 	_txtBase->setText(ss2.str());
 
 	_txtSpeed->setColor(Palette::blockOffset(15)-1);
 	std::stringstream ss3;
-	ss3 << _game->getResourcePack()->getLanguage()->getString("STR_SPEED_") << _craft->getSpeed();
+	ss3 << _game->getLanguage()->getString("STR_SPEED_") << _craft->getSpeed();
 	_txtSpeed->setText(ss3.str());
 
 	_txtMaxSpeed->setColor(Palette::blockOffset(15)-1);
 	std::stringstream ss4;
-	ss4 << _game->getResourcePack()->getLanguage()->getString("STR_MAXIMUM_SPEED_UC") << _craft->getRules()->getMaxSpeed();
+	ss4 << _game->getLanguage()->getString("STR_MAXIMUM_SPEED_UC") << _craft->getRules()->getMaxSpeed();
 	_txtMaxSpeed->setText(ss4.str());
 
 	_txtAltitude->setColor(Palette::blockOffset(15)-1);
 	std::stringstream ss5;
-	ss5 << _game->getResourcePack()->getLanguage()->getString("STR_ALTITUDE_");
+	ss5 << _game->getLanguage()->getString("STR_ALTITUDE_");
 	_txtAltitude->setText(ss5.str());
 
 	_txtFuel->setColor(Palette::blockOffset(15)-1);
 	std::stringstream ss6;
-	ss6 << _game->getResourcePack()->getLanguage()->getString("STR_FUEL") << _craft->getFuelPercentage() << "%";
+	ss6 << _game->getLanguage()->getString("STR_FUEL") << _craft->getFuelPercentage() << "%";
 	_txtFuel->setText(ss6.str());
 
 	_txtW1Name->setColor(Palette::blockOffset(15)-1);
 	std::stringstream ss7;
-	ss7 << _game->getResourcePack()->getLanguage()->getString("STR_WEAPON_1");
+	ss7 << _game->getLanguage()->getString("STR_WEAPON_1");
 	
 	_txtW1Ammo->setColor(Palette::blockOffset(15)-1);
 	std::stringstream ss8;
-	ss8 << _game->getResourcePack()->getLanguage()->getString("STR_ROUNDS_");
+	ss8 << _game->getLanguage()->getString("STR_ROUNDS_");
 
 	if (_craft->getRules()->getWeapons() > 0 && _craft->getWeapons()->at(0) != 0)
 	{
 		CraftWeapon *w1 = _craft->getWeapons()->at(0);
 
-		ss7 << _game->getResourcePack()->getLanguage()->getString(w1->getRules()->getType());
+		ss7 << _game->getLanguage()->getString(w1->getRules()->getType());
 		_txtW1Name->setText(ss7.str());
 		
 		ss8 << w1->getAmmo();
@@ -206,24 +206,24 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 	}
 	else
 	{
-		ss7 << _game->getResourcePack()->getLanguage()->getString("STR_NONE_UC");
+		ss7 << _game->getLanguage()->getString("STR_NONE_UC");
 		_txtW1Name->setText(ss7.str());
 		_txtW1Ammo->setVisible(false);
 	}
 
 	_txtW2Name->setColor(Palette::blockOffset(15)-1);
 	std::stringstream ss9;
-	ss9 << _game->getResourcePack()->getLanguage()->getString("STR_WEAPON_2");
+	ss9 << _game->getLanguage()->getString("STR_WEAPON_2");
 	
 	_txtW2Ammo->setColor(Palette::blockOffset(15)-1);
 	std::stringstream ss10;
-	ss10 << _game->getResourcePack()->getLanguage()->getString("STR_ROUNDS_");
+	ss10 << _game->getLanguage()->getString("STR_ROUNDS_");
 
 	if (_craft->getRules()->getWeapons() > 1 && _craft->getWeapons()->at(1) != 0)
 	{
 		CraftWeapon *w2 = _craft->getWeapons()->at(1);
 
-		ss9 << _game->getResourcePack()->getLanguage()->getString(w2->getRules()->getType());
+		ss9 << _game->getLanguage()->getString(w2->getRules()->getType());
 		_txtW2Name->setText(ss9.str());
 		
 		ss10 << w2->getAmmo();
@@ -231,7 +231,7 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 	}
 	else
 	{
-		ss9 << _game->getResourcePack()->getLanguage()->getString("STR_NONE_UC");
+		ss9 << _game->getLanguage()->getString("STR_NONE_UC");
 		_txtW2Name->setText(ss9.str());
 		_txtW2Ammo->setVisible(false);
 	}
@@ -239,7 +239,7 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 	_txtRedirect->setColor(Palette::blockOffset(15)-1);
 	_txtRedirect->setBig();
 	_txtRedirect->setAlign(ALIGN_CENTER);
-	_txtRedirect->setText(_game->getResourcePack()->getLanguage()->getString("STR_REDIRECT_CRAFT"));
+	_txtRedirect->setText(_game->getLanguage()->getString("STR_REDIRECT_CRAFT"));
 
 	if (_waypoint == 0)
 	{
@@ -248,7 +248,7 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 	else
 	{
 		_btnCancel->setVisible(false);
-		_btnTarget->setText(_game->getResourcePack()->getLanguage()->getString("STR_GO_TO_LAST_KNOWN_UFO_POSITION"));
+		_btnTarget->setText(_game->getLanguage()->getString("STR_GO_TO_LAST_KNOWN_UFO_POSITION"));
 	}
 
 	if (_craft->getLowFuel())

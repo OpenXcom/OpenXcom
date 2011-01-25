@@ -79,32 +79,32 @@ MonthlyCostsState::MonthlyCostsState(Game *game, Base *base) : State(game), _bas
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(15)+4);
-	_btnOk->setText(_game->getResourcePack()->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&MonthlyCostsState::btnOkClick);
 
 	_txtTitle->setColor(Palette::blockOffset(15)+1);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setText(_game->getResourcePack()->getLanguage()->getString("STR_MONTHLY_COSTS"));
+	_txtTitle->setText(_game->getLanguage()->getString("STR_MONTHLY_COSTS"));
 	
 	_txtCost->setColor(Palette::blockOffset(15)+1);
-	_txtCost->setText(_game->getResourcePack()->getLanguage()->getString("STR_COST_PER_UNIT"));
+	_txtCost->setText(_game->getLanguage()->getString("STR_COST_PER_UNIT"));
 
 	_txtQuantity->setColor(Palette::blockOffset(15)+1);
-	_txtQuantity->setText(_game->getResourcePack()->getLanguage()->getString("STR_QUANTITY"));
+	_txtQuantity->setText(_game->getLanguage()->getString("STR_QUANTITY"));
 
 	_txtTotal->setColor(Palette::blockOffset(15)+1);
-	_txtTotal->setText(_game->getResourcePack()->getLanguage()->getString("STR_TOTAL"));
+	_txtTotal->setText(_game->getLanguage()->getString("STR_TOTAL"));
 
 	_txtRental->setColor(Palette::blockOffset(15)+1);
-	_txtRental->setText(_game->getResourcePack()->getLanguage()->getString("STR_CRAFT_RENTAL"));
+	_txtRental->setText(_game->getLanguage()->getString("STR_CRAFT_RENTAL"));
 
 	_txtSalaries->setColor(Palette::blockOffset(15)+1);
-	_txtSalaries->setText(_game->getResourcePack()->getLanguage()->getString("STR_SALARIES"));
+	_txtSalaries->setText(_game->getLanguage()->getString("STR_SALARIES"));
 
 	_txtIncome->setColor(Palette::blockOffset(13)+10);
 	std::stringstream ss;
-	ss << _game->getResourcePack()->getLanguage()->getString("STR_INCOME") << "=" << Text::formatFunding(_game->getSavedGame()->getCountryFunding());
+	ss << _game->getLanguage()->getString("STR_INCOME") << "=" << Text::formatFunding(_game->getSavedGame()->getCountryFunding());
 	_txtIncome->setText(ss.str());
 
 	_lstCrafts->setColor(Palette::blockOffset(13)+10);
@@ -113,10 +113,10 @@ MonthlyCostsState::MonthlyCostsState(Game *game, Base *base) : State(game), _bas
 
 	std::stringstream ss2;
 	ss2 << _base->getCraftCount("STR_SKYRANGER");
-	_lstCrafts->addRow(4, _game->getResourcePack()->getLanguage()->getString("STR_SKYRANGER").c_str(), Text::formatFunding(_game->getRuleset()->getCraft("STR_SKYRANGER")->getMonthlyFee()).c_str(), ss2.str().c_str(), Text::formatFunding(_base->getCraftCount("STR_SKYRANGER") * _game->getRuleset()->getCraft("STR_SKYRANGER")->getMonthlyFee()).c_str());
+	_lstCrafts->addRow(4, _game->getLanguage()->getString("STR_SKYRANGER").c_str(), Text::formatFunding(_game->getRuleset()->getCraft("STR_SKYRANGER")->getMonthlyFee()).c_str(), ss2.str().c_str(), Text::formatFunding(_base->getCraftCount("STR_SKYRANGER") * _game->getRuleset()->getCraft("STR_SKYRANGER")->getMonthlyFee()).c_str());
 	std::stringstream ss3;
 	ss3 << _base->getCraftCount("STR_INTERCEPTOR");
-	_lstCrafts->addRow(4, _game->getResourcePack()->getLanguage()->getString("STR_INTERCEPTOR").c_str(), Text::formatFunding(_game->getRuleset()->getCraft("STR_INTERCEPTOR")->getMonthlyFee()).c_str(), ss3.str().c_str(), Text::formatFunding(_base->getCraftCount("STR_INTERCEPTOR") * _game->getRuleset()->getCraft("STR_INTERCEPTOR")->getMonthlyFee()).c_str());
+	_lstCrafts->addRow(4, _game->getLanguage()->getString("STR_INTERCEPTOR").c_str(), Text::formatFunding(_game->getRuleset()->getCraft("STR_INTERCEPTOR")->getMonthlyFee()).c_str(), ss3.str().c_str(), Text::formatFunding(_base->getCraftCount("STR_INTERCEPTOR") * _game->getRuleset()->getCraft("STR_INTERCEPTOR")->getMonthlyFee()).c_str());
 
 	_lstSalaries->setColor(Palette::blockOffset(13)+10);
 	_lstSalaries->setColumns(4, 125, 70, 45, 60);
@@ -124,25 +124,25 @@ MonthlyCostsState::MonthlyCostsState(Game *game, Base *base) : State(game), _bas
 
 	std::stringstream ss4;
 	ss4 << _base->getSoldiers()->size();
-	_lstSalaries->addRow(4, _game->getResourcePack()->getLanguage()->getString("STR_SOLDIERS").c_str(), Text::formatFunding(20000).c_str(), ss4.str().c_str(), Text::formatFunding(_base->getSoldiers()->size() * 20000).c_str());
+	_lstSalaries->addRow(4, _game->getLanguage()->getString("STR_SOLDIERS").c_str(), Text::formatFunding(20000).c_str(), ss4.str().c_str(), Text::formatFunding(_base->getSoldiers()->size() * 20000).c_str());
 	std::stringstream ss5;
 	ss5 << _base->getTotalEngineers();
-	_lstSalaries->addRow(4, _game->getResourcePack()->getLanguage()->getString("STR_ENGINEERS").c_str(), Text::formatFunding(25000).c_str(), ss5.str().c_str(), Text::formatFunding(_base->getTotalEngineers() * 25000).c_str());
+	_lstSalaries->addRow(4, _game->getLanguage()->getString("STR_ENGINEERS").c_str(), Text::formatFunding(25000).c_str(), ss5.str().c_str(), Text::formatFunding(_base->getTotalEngineers() * 25000).c_str());
 	std::stringstream ss6;
 	ss6 << _base->getTotalScientists();
-	_lstSalaries->addRow(4, _game->getResourcePack()->getLanguage()->getString("STR_SCIENTISTS").c_str(), Text::formatFunding(30000).c_str(), ss6.str().c_str(), Text::formatFunding(_base->getTotalScientists() * 30000).c_str());
+	_lstSalaries->addRow(4, _game->getLanguage()->getString("STR_SCIENTISTS").c_str(), Text::formatFunding(30000).c_str(), ss6.str().c_str(), Text::formatFunding(_base->getTotalScientists() * 30000).c_str());
 
 	_lstMaintenance->setColor(Palette::blockOffset(13)+10);
 	_lstMaintenance->setColumns(2, 240, 60);
 	_lstMaintenance->setDot(true);
-	_lstMaintenance->addRow(2, _game->getResourcePack()->getLanguage()->getString("STR_BASE_MAINTENANCE").c_str(), Text::formatFunding(_base->getFacilityMaintenance()).c_str());
+	_lstMaintenance->addRow(2, _game->getLanguage()->getString("STR_BASE_MAINTENANCE").c_str(), Text::formatFunding(_base->getFacilityMaintenance()).c_str());
 	_lstMaintenance->getCell(0, 0)->setColor(Palette::blockOffset(15)+1);
 	_lstMaintenance->draw();
 
 	_lstTotal->setColor(Palette::blockOffset(13));
 	_lstTotal->setColumns(2, 45, 55);
 	_lstTotal->setDot(true);
-	_lstTotal->addRow(2, _game->getResourcePack()->getLanguage()->getString("STR_TOTAL").c_str(), Text::formatFunding(_base->getMonthlyMaintenace()).c_str());
+	_lstTotal->addRow(2, _game->getLanguage()->getString("STR_TOTAL").c_str(), Text::formatFunding(_base->getMonthlyMaintenace()).c_str());
 }
 
 /**
