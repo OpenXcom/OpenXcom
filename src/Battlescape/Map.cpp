@@ -88,14 +88,18 @@ Map::~Map()
 	delete _scrollTimer;
 	delete _animTimer;
 
-
 	for (int i = 0; i < _tileCount; i++)
 	{
 		delete _tileFloorCache[i];
 		delete _tileWallsCache[i];
 	}
-	delete _tileFloorCache;
-	delete _tileWallsCache;
+	delete[] _tileFloorCache;
+	delete[] _tileWallsCache;
+
+	for (std::vector<Surface*>::iterator i = _unitCache.begin(); i != _unitCache.end(); i++)
+	{
+		delete *i;
+	}
 }
 
 /**
@@ -940,7 +944,7 @@ void Map::cacheUnits()
 			}
 		}
 	}
-
+	delete unitSprite;
 }
 
 

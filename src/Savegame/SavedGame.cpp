@@ -46,6 +46,7 @@ SavedGame::SavedGame(GameDifficulty difficulty) : _difficulty(difficulty), _fund
  */
 SavedGame::~SavedGame()
 {
+	delete _time;
 	for (std::vector<Country*>::iterator i = _countries.begin(); i != _countries.end(); i++)
 	{
 		delete *i;

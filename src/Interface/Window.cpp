@@ -54,11 +54,11 @@ Window::Window(State *state, int width, int height, int x, int y, WindowPopup po
 }
 
 /**
- *
+ * Deletes timers.
  */
 Window::~Window()
 {
-	
+	delete _timer;
 }
 
 /**

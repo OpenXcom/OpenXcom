@@ -56,11 +56,12 @@ BaseView::BaseView(int width, int height, int x, int y) : InteractiveSurface(wid
 }
 
 /**
- * Deletes the child selector.
+ * Deletes contents.
  */
 BaseView::~BaseView()
 {
 	delete _selector;
+	delete _timer;
 }
 
 /**
@@ -471,6 +472,7 @@ void BaseView::draw()
 			text->setColor(Palette::blockOffset(13)+5);
 			text->setText(ss.str());
 			text->blit(this);
+			delete text;
 		}
 	}
 }

@@ -40,11 +40,11 @@ ArrowButton::ArrowButton(ArrowShape shape, int width, int height, int x, int y) 
 }
 
 /**
- *
+ * Deletes timers.
  */
 ArrowButton::~ArrowButton()
 {
-	
+	delete _timer;
 }
 
 /**

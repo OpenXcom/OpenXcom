@@ -79,7 +79,7 @@ public:
     /// Draws a textured polygon on the surface.
     void drawTexturedPolygon(Sint16 *x, Sint16 *y, int n, Surface *texture, int dx, int dy);
     /// Draws a string on the surface.
-    void drawString(Sint16 x, Sint16 y, const char *c, Uint8 color);
+    void drawString(Sint16 x, Sint16 y, const char *s, Uint8 color);
 	/// Sets the surface's palette.
 	virtual void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
 	/// Gets the surface's palette.

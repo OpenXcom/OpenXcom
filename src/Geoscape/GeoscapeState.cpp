@@ -287,11 +287,11 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(fa
 }
 
 /**
- *
+ * Deletes timers.
  */
 GeoscapeState::~GeoscapeState()
 {
-	
+	delete _timer;
 }
 
 /**
@@ -742,7 +742,8 @@ void GeoscapeState::timerReset()
 {
 	SDL_Event ev;
 	ev.button.button = SDL_BUTTON_LEFT;
-	_btn5Secs->mousePress(new Action(&ev, _game->getScreen()->getXScale(), _game->getScreen()->getYScale()), this);
+	Action act(&ev, _game->getScreen()->getXScale(), _game->getScreen()->getYScale());
+	_btn5Secs->mousePress(&act, this);
 }
 
 /**

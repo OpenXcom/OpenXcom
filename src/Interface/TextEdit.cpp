@@ -42,11 +42,12 @@ TextEdit::TextEdit(int width, int height, int x, int y) : InteractiveSurface(wid
 }
 
 /**
- *
+ * Deletes contents.
  */
 TextEdit::~TextEdit()
 {
 	delete _text;
+	delete _timer;
 }
 
 /**

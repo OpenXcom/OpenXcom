@@ -455,12 +455,12 @@ void Surface::drawTexturedPolygon(Sint16 *x, Sint16 *y, int n, Surface *texture,
  * Draws a text string on the surface.
  * @param x X coordinate in pixels.
  * @param y Y coordinate in pixels.
- * @param c Character string to draw.
+ * @param s Character string to draw.
  * @param color Color of string.
  */
-void Surface::drawString(Sint16 x, Sint16 y, const char *c, Uint8 color)
+void Surface::drawString(Sint16 x, Sint16 y, const char *s, Uint8 color)
 {
-    stringColor(_surface, x, y, c, Palette::getRGBA(getPalette(), color));
+    stringColor(_surface, x, y, s, Palette::getRGBA(getPalette(), color));
 }
 
 /**
@@ -549,7 +549,7 @@ SDL_Color *const Surface::getPalette() const
  */
 void Surface::setPixel(int x, int y, Uint8 pixel)
 {
-	if (x < 0 || x > getWidth() || y < 0 || y > getHeight())
+	if (x < 0 || x >= getWidth() || y < 0 || y >= getHeight())
 	{
 		return;
 	}

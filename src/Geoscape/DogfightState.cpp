@@ -279,7 +279,7 @@ DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo) :
 }
 
 /**
- *
+ * Deletes timers.
  */
 DogfightState::~DogfightState()
 {

@@ -132,11 +132,11 @@ void Game::run()
 			}
 			else
 			{
-				Action *action = new Action(&_event, _screen->getXScale(), _screen->getYScale());
-				_screen->handle(action);
-				_cursor->handle(action);
-				_fpsCounter->handle(action);
-				_states.back()->handle(action);
+				Action action = Action(&_event, _screen->getXScale(), _screen->getYScale());
+				_screen->handle(&action);
+				_cursor->handle(&action);
+				_fpsCounter->handle(&action);
+				_states.back()->handle(&action);
 			}
 		}
 		

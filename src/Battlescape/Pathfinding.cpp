@@ -54,7 +54,7 @@ Pathfinding::~Pathfinding()
 	{
 		delete _nodes[i];
 	}
-	delete _nodes;
+	delete[] _nodes;
 
 }
 

@@ -39,6 +39,36 @@ SavedBattleGame::SavedBattleGame() : _tiles(), _nodes(), _units()
 
 }
 
+/** 
+ * Deletes the game content from memory.
+ */
+SavedBattleGame::~SavedBattleGame()
+{
+	for (int i = 0; i < _height * _length * _width; i++)
+	{
+		delete _tiles[i];
+	}
+	delete[] _tiles;
+
+	for (std::vector<Node*>::iterator i = _nodes.begin(); i != _nodes.end(); i++)
+	{
+		delete *i;
+	}
+
+	for (std::vector<BattleUnit*>::iterator i = _units.begin(); i != _units.end(); i++)
+	{
+		delete *i;
+	}
+
+	for (std::vector<BattleItem*>::iterator i = _items.begin(); i != _items.end(); i++)
+	{
+		delete *i;
+	}
+
+	delete _pathfinding;
+	delete _terrainModifier;
+}
+
 /**
  * Loads the saved battle game from a YAML file.
  * @param node YAML node.
@@ -110,36 +140,6 @@ void SavedBattleGame::save(YAML::Emitter &out) const
 	out << YAML::EndSeq;
 
 	out << YAML::EndMap;
-}
-
-/** 
- * Deletes the game content from memory.
- */
-SavedBattleGame::~SavedBattleGame()
-{
-	for (int i = 0; i < _height * _length * _width; i++)
-	{
-		delete _tiles[i];
-	}
-	delete _tiles;
-
-	for (std::vector<Node*>::iterator i = _nodes.begin(); i != _nodes.end(); i++)
-	{
-		delete *i;
-	}
-
-	for (std::vector<BattleUnit*>::iterator i = _units.begin(); i != _units.end(); i++)
-	{
-		delete *i;
-	}
-
-	for (std::vector<BattleItem*>::iterator i = _items.begin(); i != _items.end(); i++)
-	{
-		delete *i;
-	}
-
-	delete _pathfinding;
-	delete _terrainModifier;
 }
 
 /** 

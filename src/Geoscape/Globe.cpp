@@ -58,6 +58,7 @@ namespace OpenXcom
 
 /**
  * Sets up a globe with the specified size and position.
+ * @param game Pointer to core game.
  * @param cenX X position of the center of the globe.
  * @param cenY Y position of the center of the globe.
  * @param width Width in pixels.
