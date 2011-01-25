@@ -100,6 +100,8 @@ Map::~Map()
 	{
 		delete *i;
 	}
+
+	delete _arrow;
 }
 
 /**

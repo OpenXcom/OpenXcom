@@ -67,6 +67,7 @@ SavedGame::~SavedGame()
 	{
 		delete *i;
 	}
+	delete _battleGame;
 }
 
 /**
