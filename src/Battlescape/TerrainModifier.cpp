@@ -185,7 +185,7 @@ void TerrainModifier::circularRaytracing(const Position &center, Affector affect
 {
 	double centerX = center.x + 0.5;
 	double centerY = center.y + 0.5;
-	int power_;
+	int power_, startPower;
 
 	// a unique ID for this session, used to avoid tiles to be affected more than once.
 	int sessionID = RNG::generate(1,65000);
@@ -193,18 +193,20 @@ void TerrainModifier::circularRaytracing(const Position &center, Affector affect
 	// commenting the for loop will shine light only on current layer
 	for (int centerZ = 0; centerZ < _save->getHeight(); centerZ++)
 	{
+		startPower = power;
+
 		// We can not see on this level, because a floor above it is blocking it. Continue to next level.
-		if (centerZ < center.z /*&& affector != AFFECT_LIGHT*/ && !_save->getTile(Position(center.x,center.y,centerZ + 1))->hasNoFloor())
+		if (centerZ < center.z && affector != AFFECT_LIGHT && !_save->getTile(Position(center.x,center.y,centerZ + 1))->hasNoFloor())
 			continue;
 		// We can not see on this level, because the tile above us has a floor. No need to check further - break here.
-		if (centerZ > center.z /*&& affector != AFFECT_LIGHT*/ && !_save->getTile(Position(center.x,center.y,centerZ))->hasNoFloor())
+		if (centerZ > center.z && affector != AFFECT_LIGHT && !_save->getTile(Position(center.x,center.y,centerZ))->hasNoFloor())
 			break;
 
-		power -= abs(centerZ - center.z) * 2;
+		startPower -= abs(centerZ - center.z) * 2;
 
 		// the center is affected for sure
 		if (affector == AFFECT_LIGHT)
-			_save->getTile(Position(center.x,center.y,centerZ))->addLight(power, sessionID);
+			_save->getTile(Position(center.x,center.y,centerZ))->addLight(startPower, sessionID);
 		if (affector == AFFECT_VISION) 
 			_save->getTile(Position(center.x,center.y,centerZ))->isSeenBy(unit, sessionID);
 
@@ -217,7 +219,7 @@ void TerrainModifier::circularRaytracing(const Position &center, Affector affect
 			double oz = centerZ, ox = centerX, oy = centerY;
 			int l = 0;
 			double vz, vx, vy;
-			power_ = power;
+			power_ = startPower;
 			while (power_ > 0)
 			{
 				l++;
@@ -227,7 +229,7 @@ void TerrainModifier::circularRaytracing(const Position &center, Affector affect
 
 				Tile *t = _save->getTile(Position(int(floor(vx)),int(floor(vy)),int(floor(vz))));
 				if (!t) break;
-//				if (affector != AFFECT_LIGHT)
+				if (affector != AFFECT_LIGHT)
 					power_ -= blockage(_save->getTile(Position(int(floor(ox)),int(floor(oy)),int(floor(oz)))), t, affector);
 				power_--;
 				if (power_ > 0)
