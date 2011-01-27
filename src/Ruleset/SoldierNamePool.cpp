@@ -43,9 +43,9 @@ SoldierNamePool::~SoldierNamePool()
  * @param gender Returned gender of the name.
  * @return Soldier name.
  */
-std::string SoldierNamePool::genName(int *gender) const
+std::wstring SoldierNamePool::genName(int *gender) const
 {
-	std::stringstream name;
+	std::wstringstream name;
 	unsigned int first = RNG::generate(1, _maleNames.size() + _femaleNames.size());
 	unsigned int last = RNG::generate(1, _lastNames.size());
 	if (first <= _maleNames.size())
@@ -66,7 +66,7 @@ std::string SoldierNamePool::genName(int *gender) const
  * Adds a new male first name to the pool.
  * @param name New name.
  */
-void SoldierNamePool::addMaleName(const std::string &name)
+void SoldierNamePool::addMaleName(const std::wstring &name)
 {
 	_maleNames.push_back(name);
 }
@@ -75,7 +75,7 @@ void SoldierNamePool::addMaleName(const std::string &name)
  * Adds a new female first name to the pool.
  * @param name New name.
  */
-void SoldierNamePool::addFemaleName(const std::string &name)
+void SoldierNamePool::addFemaleName(const std::wstring &name)
 {
 	_femaleNames.push_back(name);
 }
@@ -84,7 +84,7 @@ void SoldierNamePool::addFemaleName(const std::string &name)
  * Adds a new last name to the pool.
  * @param name New name.
  */
-void SoldierNamePool::addLastName(const std::string &name)
+void SoldierNamePool::addLastName(const std::wstring &name)
 {
 	_lastNames.push_back(name);
 }

@@ -57,7 +57,7 @@ public:
 	/// Sets the target's latitude.
 	void setLatitude(double lat);
 	/// Gets the target's name.
-	virtual std::string getName(Language *lang) const = 0;
+	virtual std::wstring getName(Language *lang) const = 0;
 	/// Gets the target's followers.
 	std::vector<Target*> *getFollowers();
 };

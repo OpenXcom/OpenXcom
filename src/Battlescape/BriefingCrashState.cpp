@@ -76,7 +76,7 @@ BriefingCrashState::BriefingCrashState(Game *game, Craft *craft) : State(game), 
 
 	_txtCraft->setColor(Palette::blockOffset(8)+5);
 	_txtCraft->setBig();
-	std::stringstream ss;
+	std::wstringstream ss;
 	ss << _game->getLanguage()->getString("STR_CRAFT_") << _craft->getName(_game->getLanguage());
 	_txtCraft->setText(ss.str());
 

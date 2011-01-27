@@ -108,7 +108,7 @@ InterceptState::InterceptState(Game *game, Globe *globe, Base *base) : State(gam
 			continue;
 		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); j++)
 		{
-			std::stringstream ss;
+			std::wstringstream ss;
 			ss << (*j)->getNumWeapons() << "/" << (*j)->getNumSoldiers() << "/" << (*j)->getNumHWPs();
 			_crafts.push_back(*j);
 			_lstCrafts->addRow(4, (*j)->getName(_game->getLanguage()).c_str(), _game->getLanguage()->getString((*j)->getStatus()).c_str(), (*i)->getName().c_str(), ss.str().c_str());

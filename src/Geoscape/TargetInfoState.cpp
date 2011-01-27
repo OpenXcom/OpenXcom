@@ -74,11 +74,11 @@ TargetInfoState::TargetInfoState(Game *game, Target *target) : State(game), _tar
 
 	_txtFollowers->setColor(Palette::blockOffset(15)-1);
 	_txtFollowers->setAlign(ALIGN_CENTER);
-	std::string s = "";
+	std::wstring s = L"";
 	for (std::vector<Target*>::iterator i = _target->getFollowers()->begin(); i != _target->getFollowers()->end(); i++)
 	{
 		s += (*i)->getName(_game->getLanguage());
-		s += '\n';
+		s += L'\n';
 	}
 	_txtFollowers->setText(s);
 }

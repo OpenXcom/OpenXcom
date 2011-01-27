@@ -54,9 +54,9 @@ public:
 	/// Sets the text button's various fonts.
 	void setFonts(Font *big, Font *small);
 	/// Sets the text button's text.
-	void setText(const std::string &text);
+	void setText(const std::wstring &text);
 	/// Gets the text button's text.
-	std::string getText() const;
+	std::wstring getText() const;
 	/// Sets the text button's group.
 	void setGroup(TextButton **group);
 	/// Sets the text button's palette.

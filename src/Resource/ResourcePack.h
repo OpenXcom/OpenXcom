@@ -66,7 +66,7 @@ public:
 	/// Cleans up the resource pack.
 	virtual ~ResourcePack();
 	/// Converts a filename to its existing case-insensitive name.
-	std::string insensitive(const std::string &filename) const;
+	static std::string insensitive(const std::string &filename);
 	/// Gets the data folder name.
 	std::string getFolder() const;
 	/// Gets a particular font.

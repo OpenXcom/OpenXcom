@@ -91,7 +91,7 @@ UfoDetectedState::UfoDetectedState(Game *game, Ufo *ufo, GeoscapeState *state, b
 	}
 	else
 	{
-		_txtDetected->setText("");
+		_txtDetected->setText(L"");
 	}
 
 	_txtUfo->setColor(Palette::blockOffset(8)+5);
@@ -107,7 +107,7 @@ UfoDetectedState::UfoDetectedState(Game *game, Ufo *ufo, GeoscapeState *state, b
 	_lstInfo->getCell(1, 1)->setColor(Palette::blockOffset(8)+10);
 	_lstInfo->addRow(2, _game->getLanguage()->getString("STR_HEADING").c_str(), _game->getLanguage()->getString(_ufo->getDirection()).c_str());
 	_lstInfo->getCell(2, 1)->setColor(Palette::blockOffset(8)+10);
-	std::stringstream ss;
+	std::wstringstream ss;
 	ss << _ufo->getSpeed();
 	_lstInfo->addRow(2, _game->getLanguage()->getString("STR_SPEED").c_str(), ss.str().c_str());
 	_lstInfo->getCell(3, 1)->setColor(Palette::blockOffset(8)+10);

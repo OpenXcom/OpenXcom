@@ -32,7 +32,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-TextEdit::TextEdit(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _value(""), _blink(true), _ascii('A')
+TextEdit::TextEdit(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _value(L""), _blink(true), _ascii('A')
 {
 	_validButton = SDL_BUTTON_LEFT;
 
@@ -94,7 +94,7 @@ void TextEdit::setFonts(Font *big, Font *small)
  * Changes the string displayed on screen.
  * @param text Text string.
  */
-void TextEdit::setText(const std::string &text)
+void TextEdit::setText(const std::wstring &text)
 {
 	_value = text;
 	draw();
@@ -104,7 +104,7 @@ void TextEdit::setText(const std::string &text)
  * Returns the string displayed on screen.
  * @return Text string.
  */
-std::string TextEdit::getText() const
+std::wstring TextEdit::getText() const
 {
 	return _value;
 }
@@ -206,7 +206,7 @@ void TextEdit::blink()
  */
 void TextEdit::draw()
 {
-	std::stringstream ss;
+	std::wstringstream ss;
 #ifdef DINGOO
 	ss << _value << _ascii;
 #else
@@ -228,14 +228,14 @@ void TextEdit::draw()
  * @param c Character to add.
  * @return True if it exceeds, False if it doesn't.
  */
-bool TextEdit::exceedsMaxWidth(char c)
+bool TextEdit::exceedsMaxWidth(wchar_t c)
 {
 	int w = 0;
-	std::string s = _value;
+	std::wstring s = _value;
 
 	s += c;
 	s += '*';
-	for (std::string::iterator i = s.begin(); i < s.end(); i++)
+	for (std::wstring::iterator i = s.begin(); i < s.end(); i++)
 		w += _text->getFont()->getChar(*i)->getCrop()->w + _text->getFont()->getSpacing();
 
 	if (w > getWidth())
@@ -294,8 +294,8 @@ void TextEdit::keyboardPress(Action *action, State *state)
 	default:
 		if (action->getDetails()->key.keysym.unicode != 0)
 		{
-			if (action->getDetails()->key.keysym.unicode >= ' ' && action->getDetails()->key.keysym.unicode <= '~' && !exceedsMaxWidth((char)action->getDetails()->key.keysym.unicode))
-				_value += (char)action->getDetails()->key.keysym.unicode;
+			if (action->getDetails()->key.keysym.unicode >= ' ' && action->getDetails()->key.keysym.unicode <= '~' && !exceedsMaxWidth((wchar_t)action->getDetails()->key.keysym.unicode))
+				_value += (wchar_t)action->getDetails()->key.keysym.unicode;
 		}
 	}
 	draw();

@@ -96,7 +96,7 @@ void Font::load()
  * @return Pointer to the font's surface with the respective
  * cropping rectangle set up.
  */
-Surface *const Font::getChar(char c)
+Surface *const Font::getChar(wchar_t c)
 {
 	if (_chars.find(c) == _chars.end())
 	{

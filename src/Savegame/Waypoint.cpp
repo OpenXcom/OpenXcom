@@ -93,9 +93,9 @@ void Waypoint::setId(int id)
  * @param lang Language to get strings from.
  * @return Full name.
  */
-std::string Waypoint::getName(Language *lang) const
+std::wstring Waypoint::getName(Language *lang) const
 {
-	std::stringstream name;
+	std::wstringstream name;
 	name << lang->getString("STR_WAY_POINT_") << _id;
 	return name.str();
 }

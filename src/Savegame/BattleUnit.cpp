@@ -20,6 +20,7 @@
 #include "BattleUnit.h"
 #include <cmath>
 #include "../Engine/Palette.h"
+#include "../Engine/Language.h"
 #include "../Battlescape/Pathfinding.h"
 
 namespace OpenXcom
@@ -30,7 +31,7 @@ namespace OpenXcom
  * @param renderRules Pointer to RuleUnitSprite object.
  * @param faction Which faction the units belongs to.
  */
-BattleUnit::BattleUnit(RuleUnitSprite *renderRules, UnitFaction faction) : _renderRules(renderRules), _faction(faction), _id(0), _pos(Position()), _lastPos(Position()), _direction(0), _status(STATUS_STANDING), _walkPhase(0), _soldier(0), _name("Civilian"), _cached(false)
+BattleUnit::BattleUnit(RuleUnitSprite *renderRules, UnitFaction faction) : _renderRules(renderRules), _faction(faction), _id(0), _pos(Position()), _lastPos(Position()), _direction(0), _status(STATUS_STANDING), _walkPhase(0), _soldier(0), _name(L"Civilian"), _cached(false)
 {
 
 }
@@ -52,7 +53,9 @@ void BattleUnit::load(const YAML::Node &node)
 	int a;
 
 	node["id"] >> _id;
-	node["name"] >> _name;
+	std::string name;
+	node["name"] >> name;
+	_name = Language::utf8ToWstr(name);
 	node["faction"] >> a;
 	_faction = (UnitFaction)a;
 	node["status"] >> a;
@@ -78,7 +81,7 @@ void BattleUnit::save(YAML::Emitter &out) const
 	out << YAML::BeginMap;
 
 	out << YAML::Key << "id" << YAML::Value << _id;
-	out << YAML::Key << "name" << YAML::Value << _name;
+	out << YAML::Key << "name" << YAML::Value << Language::wstrToUtf8(_name);
 	out << YAML::Key << "faction" << YAML::Value << _faction;
 	out << YAML::Key << "status" << YAML::Value << _status;
 
@@ -308,7 +311,7 @@ int BattleUnit::getMaxHealth() const
  * Returns the soldier's full name.
  * @return Soldier name.
  */
-std::string BattleUnit::getName() const
+std::wstring BattleUnit::getName() const
 {
 	return _soldier?_soldier->getName():_name;
 }
@@ -335,7 +338,7 @@ UnitFaction BattleUnit::getFaction() const
  * Changes the unit's full name. (only for aliens)
  * @param name unit's name.
  */
-void BattleUnit::setName(const std::string &name)
+void BattleUnit::setName(const std::wstring &name)
 {
 	_name = name;
 }

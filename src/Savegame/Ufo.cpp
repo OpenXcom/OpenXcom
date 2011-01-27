@@ -128,9 +128,9 @@ void Ufo::setId(int id)
  * @param lang Language to get strings from.
  * @return Full name.
  */
-std::string Ufo::getName(Language *lang) const
+std::wstring Ufo::getName(Language *lang) const
 {
-	std::stringstream name;
+	std::wstringstream name;
 	if (!isCrashed())
 	{
 		name << lang->getString("STR_UFO_") << _id;

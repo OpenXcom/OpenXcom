@@ -73,7 +73,7 @@ MainMenuState::MainMenuState(Game *game) : State(game)
 	_txtTitle->setColor(Palette::blockOffset(8)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
-	_txtTitle->setText("OpenXcom\x02v0.2");
+	_txtTitle->setText(L"OpenXcom\x02v0.2");
 
 	// Set music
 	_game->getResourcePack()->getMusic("GMSTORY")->play();

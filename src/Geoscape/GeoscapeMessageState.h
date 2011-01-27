@@ -41,7 +41,7 @@ private:
 	Text *_txtMessage;
 public:
 	/// Creates the Geoscape Message state.
-	GeoscapeMessageState(Game *game, std::string str);
+	GeoscapeMessageState(Game *game, std::wstring str);
 	/// Cleans up the Geoscape Message state.
 	~GeoscapeMessageState();
 	/// Updates the palette.

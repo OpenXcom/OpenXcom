@@ -144,7 +144,7 @@ void MapDataSet::load(ResourcePack *res)
 	s << res->getFolder() << "TERRAIN/" << _name << ".MCD";
 
 	// Load file
-	std::ifstream mapFile (res->insensitive(s.str()).c_str(), std::ios::in | std::ios::binary);
+	std::ifstream mapFile (ResourcePack::insensitive(s.str()).c_str(), std::ios::in | std::ios::binary);
 	if (!mapFile)
 	{
 		throw "Failed to load MCD";
@@ -182,7 +182,7 @@ void MapDataSet::load(ResourcePack *res)
 	s1 << res->getFolder() << "TERRAIN/" << _name << ".PCK";
 	s2 << res->getFolder() << "TERRAIN/" << _name << ".TAB";
 	_surfaceSet = new SurfaceSet(32, 40);
-	_surfaceSet->loadPck(res->insensitive(s1.str()), res->insensitive(s2.str()));
+	_surfaceSet->loadPck(ResourcePack::insensitive(s1.str()), ResourcePack::insensitive(s2.str()));
 
 }
 

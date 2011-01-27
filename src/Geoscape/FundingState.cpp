@@ -79,7 +79,7 @@ FundingState::FundingState(Game *game) : State(game)
 	_txtFunding->setColor(Palette::blockOffset(15)-1);
 	_txtFunding->setBig();
 	_txtFunding->setText(_game->getLanguage()->getString("STR_FUNDING"));
-	if (_game->getLanguage()->getName() == "ITALIANO")
+	if (_game->getLanguage()->getName() == L"ITALIANO")
 	{
 		_txtFunding->setX(125);
 	}
@@ -93,7 +93,7 @@ FundingState::FundingState(Game *game) : State(game)
 	_lstCountries->setDot(true);
 	for (std::vector<Country*>::iterator i = _game->getSavedGame()->getCountries()->begin(); i != _game->getSavedGame()->getCountries()->end(); i++)
 	{
-		std::stringstream ss;
+		std::wstringstream ss;
 		ss << (*i)->getChange();
 		_lstCountries->addRow(3, _game->getLanguage()->getString((*i)->getRules()->getType()).c_str(), Text::formatFunding((*i)->getFunding()).c_str(), ss.str().c_str());
 	}

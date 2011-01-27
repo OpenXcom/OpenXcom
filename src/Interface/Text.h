@@ -41,7 +41,7 @@ class Text : public Surface
 {
 private:
 	Font *_big, *_small, *_font;
-	std::string _text, _wrappedText;
+	std::wstring _text, _wrappedText;
 	std::vector<int> _lineWidth, _lineHeight;
 	bool _wrap, _invert;
 	TextHAlign _align;
@@ -56,7 +56,7 @@ public:
 	/// Cleans up the text.
 	~Text();
 	/// Formats an integer value as currency.
-	static std::string formatFunding(int funds);
+	static std::wstring formatFunding(int funds);
 	/// Sets the text size to big.
 	void setBig();
 	/// Sets the text size to small.
@@ -66,9 +66,9 @@ public:
 	/// Sets the text's various fonts.
 	void setFonts(Font *big, Font *small);
 	/// Sets the text's string.
-	void setText(const std::string &text);
+	void setText(const std::wstring &text);
 	/// Gets the text's string.
-	std::string getText() const;
+	std::wstring getText() const;
 	/// Sets the text's wordwrap setting.
 	void setWordWrap(bool wrap);
 	/// Sets the text's color invert setting.

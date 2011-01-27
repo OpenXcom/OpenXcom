@@ -34,20 +34,20 @@ namespace OpenXcom
 class SoldierNamePool
 {
 private:
-	std::vector<std::string> _maleNames, _femaleNames, _lastNames;
+	std::vector<std::wstring> _maleNames, _femaleNames, _lastNames;
 public:
 	/// Creates a blank pool.
 	SoldierNamePool();
 	/// Cleans up the pool.
 	~SoldierNamePool();
 	/// Generates a new name from the pool.
-	std::string genName(int *gender) const;
+	std::wstring genName(int *gender) const;
 	/// Adds a male first name.
-	void addMaleName(const std::string &name);
+	void addMaleName(const std::wstring &name);
 	/// Adds a female first name.
-	void addFemaleName(const std::string &name);
+	void addFemaleName(const std::wstring &name);
 	/// Adds a last name.
-	void addLastName(const std::string &name);
+	void addLastName(const std::wstring &name);
 };
 
 }

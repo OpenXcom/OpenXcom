@@ -54,14 +54,14 @@ NoteState::NoteState(Game *game) : State(game)
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(8)+8);
-	_btnOk->setText("OK");
+	_btnOk->setText(L"OK");
 	_btnOk->onMouseClick((ActionHandler)&NoteState::btnOkClick);
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
 	_txtTitle->setWordWrap(true);
-	_txtTitle->setText("NOTE\x02This is an early development build of OpenXcom!\n\nThe project is still work-in-progress, so a lot of features are incomplete or completely missing.\n\nDo not be alarmed, this is completely normal!");
+	_txtTitle->setText(L"NOTE\x02This is an early development build of OpenXcom!\n\nThe project is still work-in-progress, so a lot of features are incomplete or completely missing.\n\nDo not be alarmed, this is completely normal!");
 }
 
 /**

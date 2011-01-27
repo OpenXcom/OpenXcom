@@ -44,7 +44,7 @@ class SavedGame;
 class Base : public Target
 {
 private:
-	std::string _name;
+	std::wstring _name;
 	std::vector<BaseFacility*> _facilities;
 	std::vector<Soldier*> _soldiers;
 	std::vector<Craft*> _crafts;
@@ -62,9 +62,9 @@ public:
 	/// Saves the base's ID to YAML.
 	void saveId(YAML::Emitter& out) const;
 	/// Gets the base's name.
-	std::string getName(Language* lang = 0) const;
+	std::wstring getName(Language* lang = 0) const;
 	/// Sets the base's name.
-	void setName(const std::string &name);
+	void setName(const std::wstring &name);
 	/// Gets the base's facilities.
 	std::vector<BaseFacility*> *getFacilities();
 	/// Gets the base's soldiers.

@@ -91,12 +91,12 @@ void TextList::addRow(int cols, ...)
 		txt->setPalette(this->getPalette());
 		txt->setFonts(_big, _small);
 		
-		std::string buf = va_arg(args, char*);
+		std::wstring buf = va_arg(args, wchar_t*);
 		// Places dots between text
 		if (_dot && i < cols - 1)
 		{
 			int w = 0;
-			for (std::string::iterator c = buf.begin(); c < buf.end(); c++)
+			for (std::wstring::iterator c = buf.begin(); c < buf.end(); c++)
 			{
 				if (*c == ' ')
 					w += _small->getWidth() / 2;

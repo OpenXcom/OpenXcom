@@ -170,7 +170,7 @@ DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo) :
 	_txtAmmo2->setColor(Palette::blockOffset(5)+9);
 
 	_txtDistance->setColor(Palette::blockOffset(5)+9);
-	_txtDistance->setText("640");
+	_txtDistance->setText(L"640");
 
 	_txtStatus->setColor(Palette::blockOffset(5)+9);
 	_txtStatus->setText(_game->getLanguage()->getString("STR_STANDOFF"));
@@ -210,7 +210,7 @@ DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo) :
 		frame->blit(weapon);
 
 		// Draw ammo
-		std::stringstream ss;
+		std::wstringstream ss;
 		ss << w->getAmmo();
 		ammo->setText(ss.str());
 
@@ -317,7 +317,7 @@ void DogfightState::animate()
 	// Clears text after a while
 	if (_timeout == 0)
 	{
-		_txtStatus->setText("");
+		_txtStatus->setText(L"");
 	}
 	else
 	{
@@ -340,7 +340,7 @@ void DogfightState::move()
 	{
 		_currentDist -= 2;
 	}
-	std::stringstream ss;
+	std::wstringstream ss;
 	ss << _currentDist;
 	_txtDistance->setText(ss.str());
 
@@ -517,7 +517,7 @@ void DogfightState::fireWeapon1()
 	CraftWeapon *w1 = _craft->getWeapons()->at(0);
 	w1->setAmmo(w1->getAmmo() - 1);
 
-	std::stringstream ss;
+	std::wstringstream ss;
 	ss << w1->getAmmo();
 	_txtAmmo1->setText(ss.str());
 
@@ -534,7 +534,7 @@ void DogfightState::fireWeapon2()
 	CraftWeapon *w2= _craft->getWeapons()->at(1);
 	w2->setAmmo(w2->getAmmo() - 1);
 
-	std::stringstream ss;
+	std::wstringstream ss;
 	ss << w2->getAmmo();
 	_txtAmmo2->setText(ss.str());
 

@@ -41,7 +41,7 @@ class SoldierNamePool;
 class Soldier
 {
 private:
-	std::string _name;
+	std::wstring _name;
 	int _tu, _stamina, _health, _bravery, _reactions, _firing, _throwing, _strength, _psiStrength, _psiSkill, _melee;
 	SoldierRank _rank;
 	Craft *_craft;
@@ -60,9 +60,9 @@ public:
 	/// Saves the soldier to YAML.
 	void save(YAML::Emitter& out) const;
 	/// Gets the soldier's name.
-	std::string getName() const;
+	std::wstring getName() const;
 	/// Sets the soldier's name.
-	void setName(const std::string &name);
+	void setName(const std::wstring &name);
 	/// Gets the soldier's craft.
 	Craft *const getCraft() const;
 	/// Sets the soldier's craft.

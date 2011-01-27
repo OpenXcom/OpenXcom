@@ -152,19 +152,19 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(fa
 	_game->getResourcePack()->getSurface("GEOBORD.SCR")->blit(_bg);
 
 	Surface* sidebar = 0;
-	if (_game->getLanguage()->getName() == "DEUTSCHE")
+	if (_game->getLanguage()->getName() == L"DEUTSCHE")
 	{
 		sidebar = _game->getResourcePack()->getSurface("German.geo");
 	}
-	else if (_game->getLanguage()->getName() == "FRANCAIS")
+	else if (_game->getLanguage()->getName() == L"FRANCAIS")
 	{
 		sidebar = _game->getResourcePack()->getSurface("French.geo");
 	}
-	else if (_game->getLanguage()->getName() == "ITALIANO")
+	else if (_game->getLanguage()->getName() == L"ITALIANO")
 	{
 		sidebar = _game->getResourcePack()->getSurface("Italian.geo");
 	}
-	else if (_game->getLanguage()->getName() == "ESPANOL")
+	else if (_game->getLanguage()->getName() == L"ESPANOL")
 	{
 		sidebar = _game->getResourcePack()->getSurface("Spanish.geo");
 	}
@@ -242,42 +242,42 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(fa
 	_txtHour->setBig();
 	_txtHour->setColor(Palette::blockOffset(15)+4);
 	_txtHour->setAlign(ALIGN_RIGHT);
-	_txtHour->setText("");
+	_txtHour->setText(L"");
 
 	_txtHourSep->setBig();
 	_txtHourSep->setColor(Palette::blockOffset(15)+4);
-	_txtHourSep->setText(":");
+	_txtHourSep->setText(L":");
 
 	_txtMin->setBig();
 	_txtMin->setColor(Palette::blockOffset(15)+4);
-	_txtMin->setText("");
+	_txtMin->setText(L"");
 
 	_txtMinSep->setBig();
 	_txtMinSep->setColor(Palette::blockOffset(15)+4);
-	_txtMinSep->setText(":");
+	_txtMinSep->setText(L":");
 
 	_txtSec->setSmall();
 	_txtSec->setColor(Palette::blockOffset(15)+4);
-	_txtSec->setText("");
+	_txtSec->setText(L"");
 
 	_txtWeekday->setSmall();
 	_txtWeekday->setColor(Palette::blockOffset(15)+4);
-	_txtWeekday->setText("");
+	_txtWeekday->setText(L"");
 	_txtWeekday->setAlign(ALIGN_CENTER);
 
 	_txtDay->setSmall();
 	_txtDay->setColor(Palette::blockOffset(15)+4);
-	_txtDay->setText("");
+	_txtDay->setText(L"");
 	_txtDay->setAlign(ALIGN_CENTER);
 
 	_txtMonth->setSmall();
 	_txtMonth->setColor(Palette::blockOffset(15)+4);
-	_txtMonth->setText("");
+	_txtMonth->setText(L"");
 	_txtMonth->setAlign(ALIGN_CENTER);
 
 	_txtYear->setSmall();
 	_txtYear->setColor(Palette::blockOffset(15)+4);
-	_txtYear->setText("");
+	_txtYear->setText(L"");
 	_txtYear->setAlign(ALIGN_CENTER);
 
 	_timer->onTimer((StateHandler)&GeoscapeState::timeAdvance);
@@ -347,13 +347,14 @@ void GeoscapeState::think()
  */
 void GeoscapeState::timeDisplay()
 {
-	std::stringstream ss, ss2, ss3, ss4, ss5;
+	std::stringstream ss, ss2;
+	std::wstringstream ss3, ss4, ss5;
 	
 	ss << std::setfill('0') << std::setw(2) << _game->getSavedGame()->getTime()->getSecond();
-	_txtSec->setText(ss.str());
+	_txtSec->setText(Language::utf8ToWstr(ss.str()));
 
 	ss2 << std::setfill('0') << std::setw(2) << _game->getSavedGame()->getTime()->getMinute();
-	_txtMin->setText(ss2.str());
+	_txtMin->setText(Language::utf8ToWstr(ss2.str()));
 
 	ss3 << _game->getSavedGame()->getTime()->getHour();
 	_txtHour->setText(ss3.str());
@@ -701,7 +702,7 @@ void GeoscapeState::time1Day()
 				if ((*j)->getBuildTime() == 0)
 				{
 					timerReset();
-					std::string s = _game->getLanguage()->getString("STR_PRODUCTION_OF");
+					std::wstring s = _game->getLanguage()->getString("STR_PRODUCTION_OF");
 					s += _game->getLanguage()->getString((*j)->getRules()->getType());
 					s += _game->getLanguage()->getString("STR_AT");
 					s += (*i)->getName();

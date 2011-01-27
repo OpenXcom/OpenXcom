@@ -30,9 +30,39 @@
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
+#include "SDL.h"
 
 namespace OpenXcom
 {
+
+void FontToBmp(const std::string &font, int w, int h)
+{
+	std::string dat = "./DATA/GEODATA/" + font + ".DAT";
+	std::string bmp = "./" + font + ".BMP";
+	Surface *s = new Surface(w, h*173);
+	s->loadScr(dat);
+
+	SDL_Color clr[8];
+	clr[0].r = 0;
+	clr[0].g = 0;
+	clr[0].b = 0;
+	for (int i = 1; i < 8; i++)
+	{
+		clr[i].r = 256-i*32;
+		clr[i].g = 256-i*32;
+		clr[i].b = 256-i*32;
+	}
+	s->setPalette(clr, 0, 8);
+
+	SDL_SaveBMP(s->getSurface(), bmp.c_str());
+}
+
+void BmpToFont(const std::string &font)
+{
+	std::string dat = "./DATA/GEODATA/" + font + ".DAT";
+	std::string bmp = "./" + font + ".BMP";
+	SDL_Surface *s = SDL_LoadBMP(bmp.c_str());
+}
 
 /**
  * Initializes all the elements in the test screen.
@@ -62,22 +92,25 @@ TestState::TestState(Game *game) : State(game)
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK04.SCR"));
 	
 	_button->setColor(Palette::blockOffset(15)+4);
-	_button->setText("LOLOLOL");
+	_button->setText(L"LOLOLOL");
 	
 	_text->setColor(Palette::blockOffset(15)+1);
 	//_text->setBig();
 	_text->setWordWrap(true);
 	_text->setAlign(ALIGN_CENTER);
 	_text->setVerticalAlign(ALIGN_MIDDLE);
-	_text->setText(_game->getLanguage()->getString("STR_COUNCIL_TERMINATED"));
+	//_text->setText(_game->getLanguage()->getString("STR_COUNCIL_TERMINATED"));
 
 	_list->setColor(Palette::blockOffset(15)+1);
 	_list->setColumns(3, 100, 50, 100);
-	_list->addRow(2, "a", "b");
-	_list->addRow(3, "lol", "welp", "yo");
-	_list->addRow(1, "0123456789");
+	_list->addRow(2, L"a", L"b");
+	_list->addRow(3, L"lol", L"welp", L"yo");
+	_list->addRow(1, L"0123456789");
 	
 	_i = 0;
+
+	FontToBmp("BIGLETS", 16, 16);
+	FontToBmp("SMALLSET", 8, 9);
 }
 
 TestState::~TestState()

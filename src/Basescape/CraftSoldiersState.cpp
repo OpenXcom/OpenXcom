@@ -78,7 +78,7 @@ CraftSoldiersState::CraftSoldiersState(Game *game, Base *base, unsigned int craf
 	_txtTitle->setColor(Palette::blockOffset(15)+6);
 	_txtTitle->setBig();
 	Craft *c = _base->getCrafts()->at(_craft);
-	std::stringstream ss;
+	std::wstringstream ss;
 	ss << _game->getLanguage()->getString("STR_SELECT_SQUAD_FOR") << c->getName(_game->getLanguage());
 	_txtTitle->setText(ss.str());
 
@@ -119,11 +119,11 @@ void CraftSoldiersState::init()
 {
 	Craft *c = _base->getCrafts()->at(_craft);
 
-	std::stringstream ss;
+	std::wstringstream ss;
 	ss << _game->getLanguage()->getString("STR_SPACE_AVAILABLE") << c->getRules()->getSoldiers() - c->getNumSoldiers();
 	_txtAvailable->setText(ss.str());
 
-	std::stringstream ss2;
+	std::wstringstream ss2;
 	ss2 << _game->getLanguage()->getString("STR_SPACE_USED") << c->getNumSoldiers();
 	_txtUsed->setText(ss2.str());
 
@@ -131,7 +131,7 @@ void CraftSoldiersState::init()
 	_lstSoldiers->clearList();
 	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); i++)
 	{
-		std::stringstream ss3;
+		std::wstringstream ss3;
 		if ((*i)->getCraft() == 0)
 			ss3 << _game->getLanguage()->getString("STR_NONE_UC");
 		else

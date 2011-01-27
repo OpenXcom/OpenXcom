@@ -60,23 +60,23 @@ LanguageState::LanguageState(Game *game) : State(game)
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 	
 	_btnEnglish->setColor(Palette::blockOffset(8)+8);
-	_btnEnglish->setText("ENGLISH");
+	_btnEnglish->setText(L"ENGLISH");
 	_btnEnglish->onMouseClick((ActionHandler)&LanguageState::btnEnglishClick);
 	
 	_btnGerman->setColor(Palette::blockOffset(8)+8);
-	_btnGerman->setText("DEUTSCHE");
+	_btnGerman->setText(L"DEUTSCHE");
 	_btnGerman->onMouseClick((ActionHandler)&LanguageState::btnGermanClick);
 
 	_btnFrench->setColor(Palette::blockOffset(8)+8);
-	_btnFrench->setText("FRANCAIS");
+	_btnFrench->setText(L"FRANCAIS");
 	_btnFrench->onMouseClick((ActionHandler)&LanguageState::btnFrenchClick);
 
 	_btnItalian->setColor(Palette::blockOffset(8)+8);
-	_btnItalian->setText("ITALIANO");
+	_btnItalian->setText(L"ITALIANO");
 	_btnItalian->onMouseClick((ActionHandler)&LanguageState::btnItalianClick);
 
 	_btnSpanish->setColor(Palette::blockOffset(8)+8);
-	_btnSpanish->setText("ESPANOL");
+	_btnSpanish->setText(L"ESPANOL");
 	_btnSpanish->onMouseClick((ActionHandler)&LanguageState::btnSpanishClick);
 }
 

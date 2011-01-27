@@ -116,7 +116,7 @@ CraftWeaponsState::CraftWeaponsState(Game *game, Base *base, unsigned int craft,
 
 		if ((*_base->getItems())[(*i)->getLauncherItem()]->getQuantity() > 0)
 		{
-			std::stringstream ss, ss2;
+			std::wstringstream ss, ss2;
 			ss << (*_base->getItems())[(*i)->getLauncherItem()]->getQuantity();
 			ss2 << (*_base->getItems())[(*i)->getClipItem()]->getQuantity();
 			_lstWeapons->addRow(3, _game->getLanguage()->getString((*i)->getType()).c_str(), ss.str().c_str(), ss2.str().c_str());

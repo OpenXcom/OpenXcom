@@ -37,13 +37,13 @@ class TextEdit : public InteractiveSurface
 {
 private:
 	Text *_text;
-	std::string _value;
+	std::wstring _value;
 	bool _blink;
 	Timer *_timer;
-	char _ascii;
+	wchar_t _ascii;
 
 	/// Checks if a character will exceed the maximum width.
-	bool exceedsMaxWidth(char c);
+	bool exceedsMaxWidth(wchar_t c);
 public:
 	/// Creates a new text edit with the specified size, position and fonts.
 	TextEdit(int width, int height, int x = 0, int y = 0);
@@ -58,9 +58,9 @@ public:
 	/// Sets the text edit's various fonts.
 	void setFonts(Font *big, Font *small);
 	/// Sets the text's string.
-	void setText(const std::string &text);
+	void setText(const std::wstring &text);
 	/// Gets the text edit's string.
-	std::string getText() const;
+	std::wstring getText() const;
 	/// Sets the text edit's wordwrap setting.
 	void setWordWrap(bool wrap);
 	/// Sets the text edit's color invert setting.

@@ -259,7 +259,7 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 	_txtShortRange->setText(_game->getLanguage()->getString("STR_SHORT_RANGE_DETECTION"));
 
 	_numShortRange->setColor(Palette::blockOffset(13));
-	if (_game->getLanguage()->getName() == "DEUTSCHE")
+	if (_game->getLanguage()->getName() == L"DEUTSCHE")
 	{
 		_numShortRange->setX(137);
 	}
@@ -271,7 +271,7 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 	_txtLongRange->setText(_game->getLanguage()->getString("STR_LONG_RANGE_DETECTION"));
 
 	_numLongRange->setColor(Palette::blockOffset(13));
-	if (_game->getLanguage()->getName() == "DEUTSCHE")
+	if (_game->getLanguage()->getName() == L"DEUTSCHE")
 	{
 		_numLongRange->setX(137);
 	}
@@ -295,21 +295,21 @@ void BaseInfoState::init()
 {
 	_edtBase->setText(_base->getName());
 
-	std::stringstream ss;
+	std::wstringstream ss;
 	ss << _base->getAvailableSoldiers() << ":" << _base->getTotalSoldiers();
 	_numSoldiers->setText(ss.str());
 
 	_barSoldiers->setMax(_base->getTotalSoldiers());
 	_barSoldiers->setValue(_base->getAvailableSoldiers());
 
-	std::stringstream ss2;
+	std::wstringstream ss2;
 	ss2 << _base->getAvailableEngineers() << ":" << _base->getTotalEngineers();
 	_numEngineers->setText(ss2.str());
 
 	_barEngineers->setMax(_base->getTotalEngineers());
 	_barEngineers->setValue(_base->getAvailableEngineers());
 
-	std::stringstream ss3;
+	std::wstringstream ss3;
 	ss3 << _base->getAvailableScientists() << ":" << _base->getTotalScientists();
 	_numScientists->setText(ss3.str());
 
@@ -317,35 +317,35 @@ void BaseInfoState::init()
 	_barScientists->setValue(_base->getAvailableScientists());
 
 
-	std::stringstream ss4;
+	std::wstringstream ss4;
 	ss4 << _base->getUsedQuarters() << ":" << _base->getAvailableQuarters();
 	_numQuarters->setText(ss4.str());
 
 	_barQuarters->setMax(_base->getAvailableQuarters());
 	_barQuarters->setValue(_base->getUsedQuarters());
 
-	std::stringstream ss5;
+	std::wstringstream ss5;
 	ss5 << _base->getUsedStores() << ":" << _base->getAvailableStores();
 	_numStores->setText(ss5.str());
 
 	_barStores->setMax(_base->getAvailableStores());
 	_barStores->setValue(_base->getUsedStores());
 
-	std::stringstream ss6;
+	std::wstringstream ss6;
 	ss6 << _base->getUsedLaboratories() << ":" << _base->getAvailableLaboratories();
 	_numLaboratories->setText(ss6.str());
 
 	_barLaboratories->setMax(_base->getAvailableLaboratories());
 	_barLaboratories->setValue(_base->getUsedLaboratories());
 
-	std::stringstream ss7;
+	std::wstringstream ss7;
 	ss7 << _base->getUsedWorkshops() << ":" << _base->getAvailableWorkshops();
 	_numWorkshops->setText(ss7.str());
 
 	_barWorkshops->setMax(_base->getAvailableWorkshops());
 	_barWorkshops->setValue(_base->getUsedWorkshops());
 
-	std::stringstream ss8;
+	std::wstringstream ss8;
 	ss8 << _base->getUsedHangars() << ":" << _base->getAvailableHangars();
 	_numHangars->setText(ss8.str());
 
@@ -353,21 +353,21 @@ void BaseInfoState::init()
 	_barHangars->setValue(_base->getUsedHangars());
 	
 
-	std::stringstream ss9;
+	std::wstringstream ss9;
 	ss9 << _base->getDefenceValue();
 	_numDefence->setText(ss9.str());
 
 	_barDefence->setMax(_base->getDefenceValue());
 	_barDefence->setValue(_base->getDefenceValue());
 
-	std::stringstream ss10;
+	std::wstringstream ss10;
 	ss10 << _base->getShortRangeDetection();
 	_numShortRange->setText(ss10.str());
 
 	_barShortRange->setMax(_base->getShortRangeDetection());
 	_barShortRange->setValue(_base->getShortRangeDetection());
 
-	std::stringstream ss11;
+	std::wstringstream ss11;
 	ss11 << _base->getLongRangeDetection();
 	_numLongRange->setText(ss11.str());
 

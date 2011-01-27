@@ -230,7 +230,7 @@ void BasescapeState::init()
 		}
 	}
 
-	std::string s = _game->getLanguage()->getString("STR_FUNDS");
+	std::wstring s = _game->getLanguage()->getString("STR_FUNDS");
 	s += Text::formatFunding(_game->getSavedGame()->getFunds());
 	_txtFunds->setText(s);
 
@@ -402,7 +402,7 @@ void BasescapeState::viewMouseOver(Action *action)
 {
 	BaseFacility *f = _view->getSelectedFacility();
 	if (f == 0)
-		_txtFacility->setText("");
+		_txtFacility->setText(L"");
 	else
 		_txtFacility->setText(_game->getLanguage()->getString(f->getRules()->getType()));
 }
@@ -413,7 +413,7 @@ void BasescapeState::viewMouseOver(Action *action)
  */
 void BasescapeState::viewMouseOut(Action *action)
 {
-	_txtFacility->setText("");
+	_txtFacility->setText(L"");
 }
 
 /**

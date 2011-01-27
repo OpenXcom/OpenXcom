@@ -20,6 +20,7 @@
 #define OPENXCOM_BATTLEUNIT_H
 
 #include <vector>
+#include <string>
 #include "../Battlescape/Position.h"
 #include "Soldier.h"
 
@@ -56,7 +57,7 @@ private:
 	Soldier *_soldier;
 	//BattleAI *_ai;
 	//RuleNPC *_NPCRule;
-	std::string _name;
+	std::wstring _name;
 	bool _cached;
 public:
 	/// Creates a BattleUnit.
@@ -110,13 +111,13 @@ public:
 	/// Gets the unit's maximum health.
 	int getMaxHealth() const;
 	/// Gets the soldier's name.
-	std::string getName() const;
+	std::wstring getName() const;
 	/// Gets the soldier's gender.
 	SoldierGender getGender() const;
 	/// Gets the unit's faction.
 	UnitFaction getFaction() const;
 	/// Sets the unit's name. Only for aliens.
-	void setName(const std::string &name);
+	void setName(const std::wstring &name);
 	/// Gets a sprite version of the soldier's rank.
 	int getRankSprite() const;
 	/// Set the cached flag.

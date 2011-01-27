@@ -49,7 +49,7 @@ public:
 	/// Sets the waypoint's ID.
 	void setId(int id);
 	/// Gets the waypoint's name.
-	std::string getName(Language *lang) const;
+	std::wstring getName(Language *lang) const;
 };
 
 }

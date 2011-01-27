@@ -93,7 +93,7 @@ StoresState::StoresState(Game *game, Base *base) : State(game), _base(base)
 
 	for (std::map<std::string, Item*>::iterator i = _base->getItems()->begin(); i != _base->getItems()->end(); i++)
 	{
-		std::stringstream ss, ss2;
+		std::wstringstream ss, ss2;
 		ss << i->second->getQuantity();
 		ss2 << i->second->getTotalSize();
 		_lstStores->addRow(3, _game->getLanguage()->getString(i->first).c_str(), ss.str().c_str(), ss2.str().c_str());

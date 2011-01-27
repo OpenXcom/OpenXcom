@@ -30,7 +30,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Text::Text(int width, int height, int x, int y) : Surface(width, height, x, y), _big(0), _small(0), _font(0), _text(""), _wrap(false), _invert(false), _align(ALIGN_LEFT), _valign(ALIGN_TOP), _color(0)
+Text::Text(int width, int height, int x, int y) : Surface(width, height, x, y), _big(0), _small(0), _font(0), _text(L""), _wrap(false), _invert(false), _align(ALIGN_LEFT), _valign(ALIGN_TOP), _color(0)
 {
 }
 
@@ -48,18 +48,18 @@ Text::~Text()
  * @param funds The funding value.
  * @return The formatted string.
  */
-std::string Text::formatFunding(int funds)
+std::wstring Text::formatFunding(int funds)
 {
-	std::stringstream ss;
+	std::wstringstream ss;
 	ss << funds;
-	std::string s = ss.str();
+	std::wstring s = ss.str();
 	size_t spacer = s.size() - 3;
 	while (spacer > 0 && spacer < s.size())
 	{
-		s.insert(spacer, " ");
+		s.insert(spacer, L" ");
 		spacer -= 3;
 	}
-	s.insert(0, "$");
+	s.insert(0, L"$");
 	return s;
 }
 
@@ -106,7 +106,7 @@ void Text::setFonts(Font *big, Font *small)
  * Changes the string displayed on screen.
  * @param text Text string.
  */
-void Text::setText(const std::string &text)
+void Text::setText(const std::wstring &text)
 {
 	_text = text;
 	processText();
@@ -116,7 +116,7 @@ void Text::setText(const std::string &text)
  * Returns the string displayed on screen.
  * @return Text string.
  */
-std::string Text::getText() const
+std::wstring Text::getText() const
 {
 	return _text;
 }
@@ -190,19 +190,19 @@ Uint8 Text::getColor() const
 	return _color;
 }
 
-	/**
-	 * Returns the rendered text's height. Useful to check if wordwrap applies.
-	 * @return height value.
-	 */
-	int Text::getTextHeight()
+/**
+ * Returns the rendered text's height. Useful to check if wordwrap applies.
+ * @return height value.
+ */
+int Text::getTextHeight()
+{
+	int height = 0;
+	for (std::vector<int>::iterator i = _lineHeight.begin(); i != _lineHeight.end(); i++)
 	{
-		int height = 0;
-		for (std::vector<int>::iterator i = _lineHeight.begin(); i != _lineHeight.end(); i++)
-		{
-			height += *i;
-		}
-		return height;
+		height += *i;
 	}
+	return height;
+}
 	
 /**
  * Takes care of any text post-processing like calculating
@@ -215,7 +215,7 @@ void Text::processText()
 		return;
 	}
 
-	std::string *s = &_text;
+	std::wstring *s = &_text;
 
 	// Use a separate string for wordwrapping text
 	if (_wrap)
@@ -228,11 +228,11 @@ void Text::processText()
 	_lineHeight.clear();
 
 	int width = 0, word = 0;
-	std::string::iterator space = s->begin();
+	std::wstring::iterator space = s->begin();
 	Font *font = _font;
 
 	// Go through the text character by character
-	for (std::string::iterator c = s->begin(); c <= s->end(); c++)
+	for (std::wstring::iterator c = s->begin(); c <= s->end(); c++)
 	{
 		// End of the line
 		if (c == s->end() || *c == '\n' || *c == 2)
@@ -283,14 +283,14 @@ void Text::draw()
 {
 	clear();
 
-	if (_text == "" || _font == 0)
+	if (_text.empty() || _font == 0)
 	{
 		return;
 	}
 
 	int x = 0, y = 0, line = 0, height = 0, pos = 0;
 	Font *font = _font;
-	std::string *s = &_text;
+	std::wstring *s = &_text;
 
 	for (std::vector<int>::iterator i = _lineHeight.begin(); i != _lineHeight.end(); i++)
 	{
@@ -327,7 +327,7 @@ void Text::draw()
 		s = &_wrappedText;
 
 	// Draw each letter one by one
-	for (std::string::iterator c = s->begin(); c != s->end(); c++)
+	for (std::wstring::iterator c = s->begin(); c != s->end(); c++)
 	{
 		if (*c == ' ')
 		{

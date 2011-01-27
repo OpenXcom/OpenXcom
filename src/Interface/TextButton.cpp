@@ -89,7 +89,7 @@ void TextButton::setFonts(Font *big, Font *small)
  * Changes the text of the button label.
  * @param text Text string.
  */
-void TextButton::setText(const std::string &text)
+void TextButton::setText(const std::wstring &text)
 {
 	_text->setText(text);
 	draw();
@@ -99,7 +99,7 @@ void TextButton::setText(const std::string &text)
  * Returns the text of the button label.
  * @return Text string.
  */
-std::string TextButton::getText() const
+std::wstring TextButton::getText() const
 {
 	return _text->getText();
 }

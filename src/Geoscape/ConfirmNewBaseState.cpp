@@ -75,7 +75,7 @@ ConfirmNewBaseState::ConfirmNewBaseState(Game *game, Base *base, Globe *globe) :
 	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&ConfirmNewBaseState::btnCancelClick);
 
-	std::stringstream ss;
+	std::wstringstream ss;
 	for (std::vector<Region*>::iterator i = _game->getSavedGame()->getRegions()->begin(); i != _game->getSavedGame()->getRegions()->end(); i++)
 	{
 		if ((*i)->getRules()->insideRegion(_base->getLongitude(), _base->getLatitude()))
@@ -86,7 +86,7 @@ ConfirmNewBaseState::ConfirmNewBaseState(Game *game, Base *base, Globe *globe) :
 		}
 	}
 	
-	std::string s = _game->getLanguage()->getString("STR_COST_");
+	std::wstring s = _game->getLanguage()->getString("STR_COST_");
 	s.erase(s.size()-1, 1);
 	s += Text::formatFunding(_cost);
 	_txtCost->setColor(Palette::blockOffset(15)-1);

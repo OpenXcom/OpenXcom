@@ -76,7 +76,7 @@ MonthlyReportState::MonthlyReportState(Game *game) : State(game)
 		month = 12;
 		year--;
 	}
-	std::stringstream ss;
+	std::wstringstream ss;
 	ss << _game->getLanguage()->getString("STR_MONTH") << _game->getLanguage()->getString((std::string)("STR_JAN" - 1 + month)) << " " << year;
 
 	_txtMonth->setColor(Palette::blockOffset(15)-1);

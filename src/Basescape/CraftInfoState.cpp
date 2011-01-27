@@ -103,11 +103,11 @@ CraftInfoState::CraftInfoState(Game *game, Base *base, unsigned int craft) : Sta
 	_btnOk->onMouseClick((ActionHandler)&CraftInfoState::btnOkClick);
 
 	_btnW1->setColor(Palette::blockOffset(13)+13);
-	_btnW1->setText("1");
+	_btnW1->setText(L"1");
 	_btnW1->onMouseClick((ActionHandler)&CraftInfoState::btnW1Click);
 
 	_btnW2->setColor(Palette::blockOffset(13)+13);
-	_btnW2->setText("2");
+	_btnW2->setText(L"2");
 	_btnW2->onMouseClick((ActionHandler)&CraftInfoState::btnW2Click);
 
 	_btnCrew->setColor(Palette::blockOffset(13)+13);
@@ -167,11 +167,11 @@ void CraftInfoState::init()
 	texture->getFrame(c->getRules()->getSprite() + 33)->setY(0);
 	texture->getFrame(c->getRules()->getSprite() + 33)->blit(_sprite);
 
-	std::stringstream ss;
+	std::wstringstream ss;
 	ss << _game->getLanguage()->getString("STR_DAMAGE_UC_") << c->getDamagePercentage() << "%";
 	_txtDamage->setText(ss.str());
 
-	std::stringstream ss2;
+	std::wstringstream ss2;
 	ss2 << _game->getLanguage()->getString("STR_FUEL") << c->getFuelPercentage() << "%";
 	_txtFuel->setText(ss2.str());
 	
@@ -218,20 +218,20 @@ void CraftInfoState::init()
 
 			_txtW1Name->setText(_game->getLanguage()->getString(w1->getRules()->getType()));
 
-			std::stringstream ss3;
+			std::wstringstream ss3;
 			ss3 << _game->getLanguage()->getString("STR_AMMO_") << w1->getAmmo();
 			_txtW1Ammo->setText(ss3.str());
 
-			std::stringstream ss4;
+			std::wstringstream ss4;
 			ss4 << _game->getLanguage()->getString("STR_MAX") << w1->getRules()->getAmmoMax();
 			_txtW1Max->setText(ss4.str());
 		}
 		else
 		{
 			_weapon1->clear();
-			_txtW1Name->setText("");
-			_txtW1Ammo->setText("");
-			_txtW1Max->setText("");
+			_txtW1Name->setText(L"");
+			_txtW1Ammo->setText(L"");
+			_txtW1Max->setText(L"");
 		}
 	}
 	else
@@ -256,20 +256,20 @@ void CraftInfoState::init()
 
 			_txtW2Name->setText(_game->getLanguage()->getString(w2->getRules()->getType()));
 
-			std::stringstream ss5;
+			std::wstringstream ss5;
 			ss5 << _game->getLanguage()->getString("STR_AMMO_") << w2->getAmmo();
 			_txtW2Ammo->setText(ss5.str());
 
-			std::stringstream ss6;
+			std::wstringstream ss6;
 			ss6 << _game->getLanguage()->getString("STR_MAX") << w2->getRules()->getAmmoMax();
 			_txtW2Max->setText(ss6.str());
 		}
 		else
 		{
 			_weapon2->clear();
-			_txtW2Name->setText("");
-			_txtW2Ammo->setText("");
-			_txtW2Max->setText("");
+			_txtW2Name->setText(L"");
+			_txtW2Ammo->setText(L"");
+			_txtW2Max->setText(L"");
 		}
 	}
 	else

@@ -69,7 +69,7 @@ public:
 	/// Gets the craft's ID.
 	int getId() const;
 	/// Gets the craft's name.
-	std::string getName(Language *lang) const;
+	std::wstring getName(Language *lang) const;
 	/// Gets the craft's base.
 	Base *const getBase() const;
 	/// Sets the craft's base.

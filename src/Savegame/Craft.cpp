@@ -200,9 +200,9 @@ int Craft::getId() const
  * @param lang Language to get strings from.
  * @return Full name.
  */
-std::string Craft::getName(Language *lang) const
+std::wstring Craft::getName(Language *lang) const
 {
-	std::stringstream name;
+	std::wstringstream name;
 	name << lang->getString(_rules->getType()) << "-" << _id;
 	return name.str();
 }

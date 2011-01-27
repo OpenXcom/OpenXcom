@@ -60,7 +60,7 @@ private:
 	/// Add a soldier to the game
 	void addSoldier(Soldier *soldier, RuleUnitSprite *rules);
 	/// Add an alien to the game
-	void addAlien(RuleUnitSprite *rules, NodeRank rank, const std::string &name);
+	void addAlien(RuleUnitSprite *rules, NodeRank rank, const std::wstring &name);
 	/// Add an item to the game
 	void addItem(Item *item);
 	/// loads an XCOM MAP file

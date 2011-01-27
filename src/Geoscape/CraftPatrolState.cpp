@@ -75,9 +75,9 @@ CraftPatrolState::CraftPatrolState(Game *game, Craft *craft, Globe *globe) : Sta
 	_txtDestination->setBig();
 	_txtDestination->setAlign(ALIGN_CENTER);
 	_txtDestination->setWordWrap(true);
-	std::string s = _craft->getName(_game->getLanguage()) + '\n';
-	s += _game->getLanguage()->getString("STR_HAS_REACHED") + '\n';
-	s += _game->getLanguage()->getString("STR_DESTINATION") + '\n';
+	std::wstring s = _craft->getName(_game->getLanguage()) + L'\n';
+	s += _game->getLanguage()->getString("STR_HAS_REACHED") + L'\n';
+	s += _game->getLanguage()->getString("STR_DESTINATION") + L'\n';
 	s += _craft->getDestination()->getName(_game->getLanguage());
 	_txtDestination->setText(s);
 

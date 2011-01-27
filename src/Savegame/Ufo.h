@@ -64,7 +64,7 @@ public:
 	/// Sets the UFO's ID.
 	void setId(int id);
 	/// Gets the UFO's name.
-	std::string getName(Language *lang) const;
+	std::wstring getName(Language *lang) const;
 	/// Gets the UFO's amount of damage.
 	int getDamage() const;
 	/// Sets the UFO's amount of damage.

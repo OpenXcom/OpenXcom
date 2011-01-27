@@ -145,11 +145,11 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, unsigned int soldier)
 	_btnOk->onMouseClick((ActionHandler)&SoldierInfoState::btnOkClick);
 
 	_btnPrev->setColor(Palette::blockOffset(15)+9);
-	_btnPrev->setText("<<");
+	_btnPrev->setText(L"<<");
 	_btnPrev->onMouseClick((ActionHandler)&SoldierInfoState::btnPrevClick);
 
 	_btnNext->setColor(Palette::blockOffset(15)+9);
-	_btnNext->setText(">>");
+	_btnNext->setText(L">>");
 	_btnNext->onMouseClick((ActionHandler)&SoldierInfoState::btnNextClick);
 
 	_btnArmour->setColor(Palette::blockOffset(15)+9);
@@ -265,49 +265,49 @@ void SoldierInfoState::init()
 	texture->getFrame(s->getRankSprite())->setY(0);
 	texture->getFrame(s->getRankSprite())->blit(_rank);
 
-	std::stringstream ss;
+	std::wstringstream ss;
 	ss << s->getTimeUnits();
 	_numTimeUnits->setText(ss.str());		
 	_barTimeUnits->setMax(s->getTimeUnits());
 	_barTimeUnits->setValue(s->getTimeUnits());
 
-	std::stringstream ss2;
+	std::wstringstream ss2;
 	ss2 << s->getStamina();
 	_numStamina->setText(ss2.str());		
 	_barStamina->setMax(s->getStamina());
 	_barStamina->setValue(s->getStamina());
 
-	std::stringstream ss3;
+	std::wstringstream ss3;
 	ss3 << s->getHealth();
 	_numHealth->setText(ss3.str());		
 	_barHealth->setMax(s->getHealth());
 	_barHealth->setValue(s->getHealth());
 
-	std::stringstream ss4;
+	std::wstringstream ss4;
 	ss4 << s->getBravery();
 	_numBravery->setText(ss4.str());		
 	_barBravery->setMax(s->getBravery());
 	_barBravery->setValue(s->getBravery());
 
-	std::stringstream ss5;
+	std::wstringstream ss5;
 	ss5 << s->getReactions();
 	_numReactions->setText(ss5.str());		
 	_barReactions->setMax(s->getReactions());
 	_barReactions->setValue(s->getReactions());
 
-	std::stringstream ss6;
+	std::wstringstream ss6;
 	ss6 << s->getFiringAccuracy();
 	_numFiring->setText(ss6.str());		
 	_barFiring->setMax(s->getFiringAccuracy());
 	_barFiring->setValue(s->getFiringAccuracy());
 
-	std::stringstream ss7;
+	std::wstringstream ss7;
 	ss7 << s->getThrowingAccuracy();
 	_numThrowing->setText(ss7.str());		
 	_barThrowing->setMax(s->getThrowingAccuracy());
 	_barThrowing->setValue(s->getThrowingAccuracy());
 
-	std::stringstream ss8;
+	std::wstringstream ss8;
 	ss8 << s->getStrength();
 	_numStrength->setText(ss8.str());		
 	_barStrength->setMax(s->getStrength());
@@ -315,19 +315,19 @@ void SoldierInfoState::init()
 
 	_txtArmour->setText(_game->getLanguage()->getString("STR_NONE_UC"));
 
-	std::stringstream ss9;
+	std::wstringstream ss9;
 	ss9 << _game->getLanguage()->getString("STR_RANK_") << _game->getLanguage()->getString(s->getRankString());
 	_txtRank->setText(ss9.str());
 
-	std::stringstream ss10;
+	std::wstringstream ss10;
 	ss10 << _game->getLanguage()->getString("STR_MISSIONS") << s->getMissions();
 	_txtMissions->setText(ss10.str());
 
-	std::stringstream ss11;
+	std::wstringstream ss11;
 	ss11 << _game->getLanguage()->getString("STR_KILLS") << s->getKills();
 	_txtKills->setText(ss11.str());
 
-	std::stringstream ss12;
+	std::wstringstream ss12;
 	ss12 << _game->getLanguage()->getString("STR_CRAFT_");
 	if (s->getCraft() == 0)
 		ss12 << _game->getLanguage()->getString("STR_NONE");

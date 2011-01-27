@@ -86,7 +86,7 @@ ResourcePack::~ResourcePack()
  * @note There's no actual method for figuring out the correct
  * filename on case-sensitive systems, this is just a workaround.
  */
-std::string ResourcePack::insensitive(const std::string &filename) const
+std::string ResourcePack::insensitive(const std::string &filename)
 {
 	std::string newName = filename;
 

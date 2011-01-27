@@ -82,7 +82,7 @@ CraftsState::CraftsState(Game *game, Base *base) : State(game), _base(base)
 
 	_txtBase->setColor(Palette::blockOffset(15)+1);
 	_txtBase->setBig();
-	std::string baseName = _game->getLanguage()->getString("STR_BASE_");
+	std::wstring baseName = _game->getLanguage()->getString("STR_BASE_");
 	baseName += _base->getName();
 	_txtBase->setText(baseName);
 
@@ -127,7 +127,7 @@ void CraftsState::init()
 	_lstCrafts->clearList();
 	for (std::vector<Craft*>::iterator i = _base->getCrafts()->begin(); i != _base->getCrafts()->end(); i++)
 	{
-		std::stringstream ss, ss2, ss3;
+		std::wstringstream ss, ss2, ss3;
 		ss << (*i)->getNumWeapons() << "/" << (*i)->getRules()->getWeapons();
 		ss2 << (*i)->getNumSoldiers();
 		ss3 << (*i)->getNumHWPs();

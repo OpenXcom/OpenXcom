@@ -26,7 +26,7 @@ namespace OpenXcom
 /**
  * Initializes an empty language file.
  */
-Language::Language() : _name(""), _strings()
+Language::Language() : _name(L""), _strings()
 {
 
 }
@@ -37,6 +37,106 @@ Language::Language() : _name(""), _strings()
 Language::~Language()
 {
 	
+}
+
+/**
+ * Takes an 8-bit string encoded in UTF-8 and converts it
+ * to a wide-character string.
+ * @note Adapted from http://www.linuxquestions.org/questions/programming-9/wstring-utf8-conversion-in-pure-c-701084/
+ * @param src UTF-8 string.
+ */
+std::wstring Language::utf8ToWstr(const std::string& src)
+{
+	std::wstring dest;
+	wchar_t w = 0;
+	int bytes = 0;
+	wchar_t err = 0xfffd;
+	for (size_t i = 0; i < src.size(); i++)
+	{
+		unsigned char c = (unsigned char)src[i];
+		if (c <= 0x7f) //first byte
+		{
+			if (bytes){
+				dest.push_back(err);
+				bytes = 0;
+			}
+			dest.push_back((wchar_t)c);
+		}
+		else if (c <= 0xbf) //second/third/etc byte
+		{
+			if (bytes)
+			{
+				w = ((w << 6)|(c & 0x3f));
+				bytes--;
+				if (bytes == 0)
+					dest.push_back(w);
+			}
+			else
+				dest.push_back(err);
+		}
+		else if (c <= 0xdf) //2byte sequence start
+		{
+			bytes = 1;
+			w = c & 0x1f;
+		}
+		else if (c <= 0xef) //3byte sequence start
+		{
+			bytes = 2;
+			w = c & 0x0f;
+		}
+		else if (c <= 0xf7) //4byte sequence start
+		{
+			bytes = 3;
+			w = c & 0x07;
+		}
+		else{
+			dest.push_back(err);
+			bytes = 0;
+		}
+	}
+	if (bytes)
+		dest.push_back(err);
+	return dest;
+}
+
+/**
+ * Takes a wide-character string and converts it
+ * to a 8-bit string encoded in UTF-8.
+ * @note Adapted from http://www.linuxquestions.org/questions/programming-9/wstring-utf8-conversion-in-pure-c-701084/
+ * @param src Wide-character string.
+ */
+std::string Language::wstrToUtf8(const std::wstring& src)
+{
+	std::string dest;
+	for (size_t i = 0; i < src.size(); i++)
+	{
+		wchar_t w = src[i];
+		if (w <= 0x7f)
+		{
+			dest.push_back((char)w);
+		}
+		else if (w <= 0x7ff)
+		{
+			dest.push_back(0xc0 | ((w >> 6)& 0x1f));
+			dest.push_back(0x80| (w & 0x3f));
+		}
+		else if (w <= 0xffff)
+		{
+			dest.push_back(0xe0 | ((w >> 12)& 0x0f));
+			dest.push_back(0x80| ((w >> 6) & 0x3f));
+			dest.push_back(0x80| (w & 0x3f));
+		}
+		else if (w <= 0x10ffff)
+		{
+			dest.push_back(0xf0 | ((w >> 18)& 0x07));
+			dest.push_back(0x80| ((w >> 12) & 0x3f));
+			dest.push_back(0x80| ((w >> 6) & 0x3f));
+			dest.push_back(0x80| (w & 0x3f));
+		}
+		else
+			dest.push_back('?');
+	}
+	return dest;
 }
 
 /**
@@ -58,7 +158,8 @@ void Language::loadLng(const std::string &filename)
 	}
 	
 	char value;
-	std::string buffer, bufid, bufstr;
+	std::string buffer, bufid;
+	std::wstring bufstr;
 	bool first = true, id = true;
 
 	while (txtFile.read(&value, 1))
@@ -72,7 +173,7 @@ void Language::loadLng(const std::string &filename)
 			// Get language name
 			if (first)
 			{
-				_name = buffer;
+				_name = utf8ToWstr(buffer);
 				first = false;
 			}
 			else
@@ -85,7 +186,7 @@ void Language::loadLng(const std::string &filename)
 				// Get string
 				else
 				{
-					bufstr = buffer;
+					bufstr = utf8ToWstr(buffer);
 					_strings[bufid] = bufstr;
 				}
 				id = !id;
@@ -104,7 +205,7 @@ void Language::loadLng(const std::string &filename)
  * Returns the language's name in its native language.
  * @return Language name.
  */
-std::string Language::getName() const
+std::wstring Language::getName() const
 {
 	return _name;
 }
@@ -115,13 +216,13 @@ std::string Language::getName() const
  * @param id ID of the string.
  * @return String with the requested ID.
  */
-std::string Language::getString(const std::string &id) const
+std::wstring Language::getString(const std::string &id) const
 {
-	std::map<std::string, std::string>::const_iterator s = _strings.find(id);
+	std::map<std::string, std::wstring>::const_iterator s = _strings.find(id);
 	if (s == _strings.end())
 	{
-		std::cout << "WARNING: " << id << " not found in " << _name << std::endl;
-		return id;
+		std::wcout << "WARNING: " << utf8ToWstr(id) << " not found in " << _name << std::endl;
+		return utf8ToWstr(id);
 	}
 	else
 	{
@@ -138,10 +239,10 @@ void Language::toHtml() const
 	std::ofstream htmlFile ("lang.html", std::ios::out);
 	htmlFile << "<table border=\"1\" width=\"100%\">" << std::endl;
 	htmlFile << "<tr><th>ID String</th><th>English String</th></tr>" << std::endl;
-	for (std::map<std::string, std::string>::const_iterator i = _strings.begin(); i != _strings.end(); i++)
+	for (std::map<std::string, std::wstring>::const_iterator i = _strings.begin(); i != _strings.end(); i++)
 	{
 		htmlFile << "<tr><td>" << i->first << "</td><td>";
-		for (std::string::const_iterator j = i->second.begin(); j != i->second.end(); j++)
+		for (std::wstring::const_iterator j = i->second.begin(); j != i->second.end(); j++)
 		{
 			if (*j == 2 || *j == '\n')
 			{

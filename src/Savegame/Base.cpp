@@ -28,6 +28,7 @@
 #include "SavedGame.h"
 #include "Ufo.h"
 #include "Waypoint.h"
+#include "../Engine/Language.h"
 
 namespace OpenXcom
 {
@@ -39,7 +40,7 @@ namespace OpenXcom
 /**
  * Initializes an empty base.
  */
-Base::Base() : Target(), _name(""), _facilities(), _soldiers(), _crafts(), _items(), _scientists(0), _engineers(0)
+Base::Base() : Target(), _name(L""), _facilities(), _soldiers(), _crafts(), _items(), _scientists(0), _engineers(0)
 {
 }
 
@@ -77,7 +78,9 @@ void Base::load(const YAML::Node &node, Ruleset *rule, SavedGame *save)
 	unsigned int size = 0;
 
 	Target::load(node);
-	node["name"] >> _name;
+	std::string name;
+	node["name"] >> name;
+	_name = Language::utf8ToWstr(name);
 
 	size = node["facilities"].size();
 	for (unsigned i = 0; i < size; i++)
@@ -181,7 +184,7 @@ void Base::load(const YAML::Node &node, Ruleset *rule, SavedGame *save)
 void Base::save(YAML::Emitter &out) const
 {
 	Target::save(out);
-	out << YAML::Key << "name" << YAML::Value << _name;
+	out << YAML::Key << "name" << YAML::Value << Language::wstrToUtf8(_name);
 	out << YAML::Key << "facilities" << YAML::Value;
 	out << YAML::BeginSeq;
 	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); i++)
@@ -231,7 +234,7 @@ void Base::saveId(YAML::Emitter &out) const
  * @param lang Language to get strings from.
  * @return Name.
  */
-std::string Base::getName(Language *lang) const
+std::wstring Base::getName(Language *lang) const
 {
 	return _name;
 }
@@ -240,7 +243,7 @@ std::string Base::getName(Language *lang) const
  * Changes the custom name for the base.
  * @param name Name.
  */
-void Base::setName(const std::string &name)
+void Base::setName(const std::wstring &name)
 {
 	_name = name;
 }

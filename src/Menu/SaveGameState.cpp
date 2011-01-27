@@ -146,7 +146,8 @@ void SaveGameState::getSavesList(const std::string &dir)
 		parser.GetNextDocument(doc);
 		GameTime time = GameTime(6, 1, 1, 1999, 12, 0, 0);
 		time.load(doc["time"]);
-		std::stringstream saveTime, saveDay, saveMonth, saveYear;
+		std::stringstream saveTime;
+		std::wstringstream saveDay, saveMonth, saveYear;
 		saveTime << time.getHour() << ":" << std::setfill('0') << std::setw(2) << time.getMinute();
 		saveDay << time.getDay() << _game->getLanguage()->getString(time.getDayString());
 		saveMonth << _game->getLanguage()->getString(time.getMonthString());
@@ -173,17 +174,17 @@ void SaveGameState::btnCancelClick(Action *action)
 void SaveGameState::lstSavesClick(Action *action)
 {
 	Text *t = _lstSaves->getCell(_lstSaves->getSelectedRow(), 0);
-	_selected = t->getText();
-	t->setText("");
+	_selected = Language::wstrToUtf8(t->getText());
+	t->setText(L"");
 	_lstSaves->draw();
 	if (_lstSaves->getSelectedRow() == 0)
 	{
-		_edtSave->setText("");
+		_edtSave->setText(L"");
 		_selected = "";
 	}
 	else
 	{
-		_edtSave->setText(_selected);
+		_edtSave->setText(Language::utf8ToWstr(_selected));
 	}
 	_edtSave->setX(_lstSaves->getX() + t->getX());
 	_edtSave->setY(_lstSaves->getY() + t->getY());
@@ -202,13 +203,13 @@ void SaveGameState::edtSaveKeyPress(Action *action)
 		if (_selected != "")
 		{
 			std::string oldName = "./USER/" + _selected + ".sav";
-			std::string newName = "./USER/" + _edtSave->getText() + ".sav";
+			std::string newName = "./USER/" + Language::wstrToUtf8(_edtSave->getText()) + ".sav";
 			if (rename(oldName.c_str(), newName.c_str()) != 0)
 			{
 				throw "Failed to overwrite save";
 			}
 		}
-		_game->getSavedGame()->save(_edtSave->getText());
+		_game->getSavedGame()->save(Language::wstrToUtf8(_edtSave->getText()));
 		_game->popState();
 	}
 }

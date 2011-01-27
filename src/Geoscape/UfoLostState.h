@@ -39,10 +39,10 @@ private:
 	TextButton *_btnOk;
 	Window *_window;
 	Text *_txtTitle;
-	std::string _id;
+	std::wstring _id;
 public:
 	/// Creates the Ufo Lost state.
-	UfoLostState(Game *game, std::string id);
+	UfoLostState(Game *game, std::wstring id);
 	/// Cleans up the Ufo Lost state.
 	~UfoLostState();
 	/// Updates the palette.

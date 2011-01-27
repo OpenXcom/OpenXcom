@@ -112,7 +112,7 @@ void SoldiersState::init()
 	_lstSoldiers->clearList();
 	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); i++)
 	{
-		std::stringstream ss;
+		std::wstringstream ss;
 		if ((*i)->getCraft() == 0)
 			ss << _game->getLanguage()->getString("STR_NONE_UC");
 		else

@@ -18,6 +18,7 @@
  */
 #include "Soldier.h"
 #include "../Engine/RNG.h"
+#include "../Engine/Language.h"
 #include "../Savegame/Craft.h"
 #include "../Ruleset/SoldierNamePool.h"
 
@@ -27,7 +28,7 @@ namespace OpenXcom
 /**
  * Initializes a new blank soldier.
  */
-Soldier::Soldier() : _name(""), _tu(0), _stamina(0), _health(0), _bravery(0), _reactions(0), _firing(0), _throwing(0), _strength(0), _psiStrength(0), _psiSkill(0), _melee(0), _rank(RANK_ROOKIE), _craft(0), _gender(GENDER_MALE), _look(LOOK_BLONDE), _missions(0), _kills(0)
+Soldier::Soldier() : _name(L""), _tu(0), _stamina(0), _health(0), _bravery(0), _reactions(0), _firing(0), _throwing(0), _strength(0), _psiStrength(0), _psiSkill(0), _melee(0), _rank(RANK_ROOKIE), _craft(0), _gender(GENDER_MALE), _look(LOOK_BLONDE), _missions(0), _kills(0)
 {
 
 }
@@ -70,7 +71,9 @@ Soldier::~Soldier()
 void Soldier::load(const YAML::Node &node)
 {
 	int a;
-	node["name"] >> _name;
+	std::string name;
+	node["name"] >> name;
+	_name = Language::utf8ToWstr(name);
 	node["tu"] >> _tu;
 	node["stamina"] >> _stamina;
 	node["health"] >> _health;
@@ -99,7 +102,7 @@ void Soldier::load(const YAML::Node &node)
 void Soldier::save(YAML::Emitter &out) const
 {
 	out << YAML::BeginMap;
-	out << YAML::Key << "name" << YAML::Value << _name;
+	out << YAML::Key << "name" << YAML::Value << Language::wstrToUtf8(_name);
 	out << YAML::Key << "tu" << YAML::Value << _tu;
 	out << YAML::Key << "stamina" << YAML::Value << _stamina;
 	out << YAML::Key << "health" << YAML::Value << _health;
@@ -128,7 +131,7 @@ void Soldier::save(YAML::Emitter &out) const
  * Returns the soldier's full name.
  * @return Soldier name.
  */
-std::string Soldier::getName() const
+std::wstring Soldier::getName() const
 {
 	return _name;
 }
@@ -137,7 +140,7 @@ std::string Soldier::getName() const
  * Changes the soldier's full name.
  * @param name Soldier name.
  */
-void Soldier::setName(const std::string &name)
+void Soldier::setName(const std::wstring &name)
 {
 	_name = name;
 }

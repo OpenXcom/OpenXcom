@@ -12,7 +12,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ *e
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -32,19 +32,23 @@ namespace OpenXcom
 class Language
 {
 private:
-	std::string _name;
-	std::map<std::string, std::string> _strings;
+	std::wstring _name;
+	std::map<std::string, std::wstring> _strings;
 public:
 	/// Creates a blank language.
 	Language();
 	/// Cleans up the language.
 	~Language();
+	/// Converts a wide-string to UTF-8.
+	static std::string wstrToUtf8(const std::wstring& src);
+	/// Converts a UTF-8 string to wide-string.
+	static std::wstring utf8ToWstr(const std::string& src);
 	/// Loads an OpenXcom language file.
 	void loadLng(const std::string &filename);
 	/// Gets the language's name.
-	std::string getName() const;
+	std::wstring getName() const;
 	/// Gets a string from the language.
-	std::string getString(const std::string &id) const;
+	std::wstring getString(const std::string &id) const;
 	/// Outputs the language to a HTML file.
 	void toHtml() const;
 };

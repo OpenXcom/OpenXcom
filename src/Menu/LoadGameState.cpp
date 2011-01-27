@@ -140,7 +140,8 @@ void LoadGameState::getSavesList(const std::string &dir)
 		parser.GetNextDocument(doc);
 		GameTime time = GameTime(6, 1, 1, 1999, 12, 0, 0);
 		time.load(doc["time"]);
-		std::stringstream saveTime, saveDay, saveMonth, saveYear;
+		std::stringstream saveTime;
+		std::wstringstream saveDay, saveMonth, saveYear;
 		saveTime << time.getHour() << ":" << std::setfill('0') << std::setw(2) << time.getMinute();
 		saveDay << time.getDay() << _game->getLanguage()->getString(time.getDayString());
 		saveMonth << _game->getLanguage()->getString(time.getMonthString());
@@ -168,7 +169,7 @@ void LoadGameState::lstSavesClick(Action *action)
 {
 	_game->setRuleset(new XcomRuleset());
 	SavedGame *s = new SavedGame(DIFF_BEGINNER);
-	s->load(_lstSaves->getCell(_lstSaves->getSelectedRow(), 0)->getText(), _game->getRuleset());
+	s->load(Language::wstrToUtf8(_lstSaves->getCell(_lstSaves->getSelectedRow(), 0)->getText()), _game->getRuleset());
 	_game->setSavedGame(s);
 	if (_game->getSavedGame()->getBattleGame() == 0)
 	{

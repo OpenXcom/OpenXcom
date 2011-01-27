@@ -39,7 +39,7 @@ class Font
 private:
 	Surface *_surface;
 	int _width, _height, _nchar;
-	std::map<unsigned char, SDL_Rect> _chars;
+	std::map<wchar_t, SDL_Rect> _chars;
 	// For some reason the X-Com small font is smooshed together by one pixel...
 	int _spacing;
 public:
@@ -50,7 +50,7 @@ public:
 	/// Determines the size and position of each character in the font.
 	void load();
 	/// Gets a particular character from the font, with its real size.
-	Surface *const getChar(char c);
+	Surface *const getChar(wchar_t c);
 	/// Gets the font's character width.
 	int getWidth() const;
 	/// Gets the font's character height.

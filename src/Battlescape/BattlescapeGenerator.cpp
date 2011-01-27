@@ -205,12 +205,12 @@ void BattlescapeGenerator::run()
 	if (_missionType == MISS_UFORECOVERY)
 	{
 		// add aliens (should depend on mission type & difficulty level)
-		addAlien(_game->getRuleset()->getUnitSprites("SECTOID"), ENGINEER, "Sectoid Engineer");
-		addAlien(_game->getRuleset()->getUnitSprites("SECTOID"), NAVIGATOR, "Sectoid Navigator");
-		addAlien(_game->getRuleset()->getUnitSprites("SECTOID"), SOLDIER, "Sectoid Soldier");
-		addAlien(_game->getRuleset()->getUnitSprites("SECTOID"), SCOUT, "Sectoid Soldier");
-		addAlien(_game->getRuleset()->getUnitSprites("SECTOID"), SCOUT, "Sectoid Soldier");
-		addAlien(_game->getRuleset()->getUnitSprites("SECTOID"), SCOUT, "Sectoid Soldier");
+		addAlien(_game->getRuleset()->getUnitSprites("SECTOID"), ENGINEER, L"Sectoid Engineer");
+		addAlien(_game->getRuleset()->getUnitSprites("SECTOID"), NAVIGATOR, L"Sectoid Navigator");
+		addAlien(_game->getRuleset()->getUnitSprites("SECTOID"), SOLDIER, L"Sectoid Soldier");
+		addAlien(_game->getRuleset()->getUnitSprites("SECTOID"), SCOUT, L"Sectoid Soldier");
+		addAlien(_game->getRuleset()->getUnitSprites("SECTOID"), SCOUT, L"Sectoid Soldier");
+		addAlien(_game->getRuleset()->getUnitSprites("SECTOID"), SCOUT, L"Sectoid Soldier");
 	}
 
 	// set shade (alien bases are a little darker, sites depend on worldshade)
@@ -261,7 +261,7 @@ void BattlescapeGenerator::addSoldier(Soldier *soldier, RuleUnitSprite *rules)
  * @param rank The rank of the alien.
  * @param name The name of the alien.
  */
-void BattlescapeGenerator::addAlien(RuleUnitSprite *rules, NodeRank rank, const std::string &name)
+void BattlescapeGenerator::addAlien(RuleUnitSprite *rules, NodeRank rank, const std::wstring &name)
 {
 	BattleUnit *unit = new BattleUnit(rules, FACTION_HOSTILE);
 	Node *node;
@@ -533,7 +533,7 @@ int BattlescapeGenerator::loadMAP(MapBlock *mapblock, int xoff, int yoff, RuleTe
 	int terrainObjectID;
 
 	// Load file
-	std::ifstream mapFile (_res->insensitive(filename.str()).c_str(), std::ios::in| std::ios::binary);
+	std::ifstream mapFile (ResourcePack::insensitive(filename.str()).c_str(), std::ios::in| std::ios::binary);
 	if (!mapFile)
 	{
 		throw "Failed to load MAP";
@@ -605,7 +605,7 @@ void BattlescapeGenerator::loadRMP(MapBlock *mapblock, int xoff, int yoff)
 	filename << _res->getFolder() << "ROUTES/" << mapblock->getName() << ".RMP";
 
 	// Load file
-	std::ifstream mapFile (_res->insensitive(filename.str()).c_str(), std::ios::in| std::ios::binary);
+	std::ifstream mapFile (ResourcePack::insensitive(filename.str()).c_str(), std::ios::in| std::ios::binary);
 	if (!mapFile)
 	{
 		throw "Failed to load RMP";
