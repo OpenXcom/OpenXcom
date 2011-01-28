@@ -46,8 +46,6 @@ public:
 	LoadGameState(Game *game);
 	/// Cleans up the Load Game state.
 	~LoadGameState();
-	/// Gets all the saves in a folder.
-	void getSavesList(const std::string &dir);
 	/// Handler for clicking the Cancel button.
 	void btnCancelClick(Action *action);
 	/// Handler for clicking the Saves list.

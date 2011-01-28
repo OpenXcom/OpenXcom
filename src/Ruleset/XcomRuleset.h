@@ -36,10 +36,6 @@ public:
 	~XcomRuleset();
 	/// Generates a saved game with starting equipment.
 	SavedGame *newSave(GameDifficulty diff);
-	/// Generates a battlescape saved game.
-	SavedBattleGame *newBattleSave(SavedGame *save);
-	/// Handles the end battle stuff.
-	void endBattle(SavedGame *save);
 };
 
 }

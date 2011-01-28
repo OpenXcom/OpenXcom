@@ -103,27 +103,6 @@ SavedGame *Ruleset::newSave(GameDifficulty diff)
 }
 
 /**
- * Creates a battlescape saved game.
- * @param save The base SavedGame.
- * @return New saved game.
- */
-SavedBattleGame *Ruleset::newBattleSave(SavedGame *save)
-{
-	SavedBattleGame *bsave = new SavedBattleGame();
-	save->setBattleGame(bsave);
-	return bsave;
-}
-
-/**
- * Handles the end battle stuff
- */
-void Ruleset::endBattle(SavedGame *save)
-{
-	delete save->getBattleGame();
-	save->setBattleGame(0);
-}
-
-/**
  * Returns the list of soldier name pools.
  * @return Pointer to soldier name pool list.
  */

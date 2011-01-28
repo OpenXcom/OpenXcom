@@ -28,7 +28,7 @@ namespace OpenXcom
 * constructor
 * @param pos Position.
 */
-Tile::Tile(const Position& pos): _discovered(false), _shadeSun(0), _light(0), _fire(0), _smoke(0), _pos(pos), _cached(false), _unit(0)
+Tile::Tile(const Position& pos): _discovered(false), _shadeSun(0), _light(0), _lastLight(0), _smoke(0), _fire(0), _pos(pos), _cached(false), _unit(0)
 {
 	for (int i = 0; i < 4; i++)
 	{

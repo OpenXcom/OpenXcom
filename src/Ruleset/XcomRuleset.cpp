@@ -21,7 +21,6 @@
 #include <string>
 #include "XcomRuleset.h"
 #include "../Savegame/SavedGame.h"
-#include "../Savegame/SavedBattleGame.h"
 #include "RuleCountry.h"
 #include "RuleRegion.h"
 #include "RuleBaseFacility.h"
@@ -1359,55 +1358,6 @@ SavedGame *XcomRuleset::newSave(GameDifficulty diff)
 	save->getBases()->push_back(base);
 	
 	return save;
-}
-
-/**
- * Creates a battlescape saved game.
- * @param save The base SavedGame.
- * @return New saved battle game.
- */
-SavedBattleGame *XcomRuleset::newBattleSave(SavedGame *save)
-{
-	SavedBattleGame *bsave = new SavedBattleGame();
-	save->setBattleGame(bsave);
-	return bsave;
-}
-
-/**
- * Handles the end battle stuff
- */
-void XcomRuleset::endBattle(SavedGame *save)
-{
-
-	// craft goes back home
-	for (std::vector<Base*>::iterator i = save->getBases()->begin(); i != save->getBases()->end(); i++)
-	{
-		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); j++)
-		{
-			if ((*j)->isInBattlescape())
-			{
-				(*j)->returnToBase();
-				(*j)->setLowFuel(true);
-				(*j)->setInBattlescape(false);
-			}
-		}
-	}
-
-	// UFO crash/landing site disappears
-	for (std::vector<Ufo*>::iterator i = save->getUfos()->begin(); i != save->getUfos()->end(); i++)
-	{
-		if ((*i)->isInBattlescape())
-		{
-			delete *i;
-			save->getUfos()->erase(i);
-			break;
-		}
-	}
-
-	// bye save game, battle is over
-	delete save->getBattleGame();
-	save->setBattleGame(0);
-
 }
 
 }

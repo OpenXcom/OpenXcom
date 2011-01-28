@@ -733,17 +733,17 @@ void Globe::draw()
 void Globe::fillLongitudeSegments(double startLon, double endLon, int colourShift)
 {
 	double traceLon, traceLat, endLan, startLan;
-	double dL ; // dL - delta of Latitude and used as delta of pie
+	double dL; // dL - delta of Latitude and used as delta of pie
 	Sint16 direction, x, y;
 	std::vector<Sint16> polyPointsX, polyPointsY, polyPointsX2, polyPointsY2;
 	Sint16 *dx, *dy;
-	double sx, sy;    
-	double angle1, angle2;
-	bool bigLonAperture = 0;
+	double sx, sy;
+	double angle1 = 0.0, angle2 = 0.0;
+	bool bigLonAperture = false;
 
 	if (abs(startLon-endLon) > 1)
 	{
-		bigLonAperture=1; 
+		bigLonAperture = 1; 
 	}
                 
     // find two latitudes where        
@@ -754,16 +754,20 @@ void Globe::fillLongitudeSegments(double startLon, double endLon, int colourShif
 
 	// If North pole visible, we want to head south (+1), if South pole, head North (-1)
 	if (!pointBack(traceLon, -M_PI / 2))
+	{
 		direction = 1;
+	}
 	else
+	{
 		direction = -1;
+	}
 
 	// Draw globe depending on the direction
 	if (direction == 1)
 	{
 	    // draw fisrt longtitude line from pole
 		traceLon = startLon;
-		dL = (startLan+M_PI/2)/20;
+		dL = (startLan + M_PI/2) / 20;
 		for (traceLat = -M_PI/2; traceLat < startLan; traceLat += dL)
 		{
 			polarToCart(traceLon, traceLat, &x, &y);
@@ -774,15 +778,15 @@ void Globe::fillLongitudeSegments(double startLon, double endLon, int colourShif
         // if aperture of longtitude is big then we need find first angle of sector
 		if (bigLonAperture) 
 		{  
-			sx = x-_cenX; 
-			sy = y-_cenY;
-			angle1 = atan(sy/sx);
+			sx = x - _cenX; 
+			sy = y - _cenY;
+			angle1 = atan(sy / sx);
 			if (sx < 0) angle1 += M_PI; 
 		}
         
 	    // draw second longtitude line from pole
 		traceLon = endLon;
-		dL = (endLan + M_PI/2)/20;
+		dL = (endLan + M_PI/2) / 20;
 		for (traceLat = -M_PI/2; traceLat < endLan; traceLat += dL)
 		{
 			polarToCart(traceLon, traceLat, &x, &y);
@@ -793,19 +797,19 @@ void Globe::fillLongitudeSegments(double startLon, double endLon, int colourShif
         // if aperture of longtitudes is big we need find second angle of sector and draw pie of circle between two longtitudes
 		if (bigLonAperture) 
 		{  
-			sx = x-_cenX;
-			sy = y-_cenY;
+			sx = x - _cenX;
+			sy = y - _cenY;
 			angle2 = atan(sy/sx);
-			if (sx<0)
+			if (sx < 0)
 			{
 				angle2 += M_PI;
 			}
 		         
 		    // draw sector part of circle
-            if (angle1>angle2)
+            if (angle1 > angle2)
 		    { 
-                dL = (angle1-angle2)/20;
-				for (double a = angle2+dL/2; a < angle1; a += dL)
+                dL = (angle1 - angle2) / 20;
+				for (double a = angle2 + dL / 2; a < angle1; a += dL)
 				{
 					x = _cenX + (Sint16)floor(_radius[_zoom] * cos(a));
 					y = _cenY + (Sint16)floor(_radius[_zoom] * sin(a));
@@ -815,8 +819,8 @@ void Globe::fillLongitudeSegments(double startLon, double endLon, int colourShif
 		    }
 			else 
             {
-				dL = (2*M_PI+angle1-angle2)/20;
-				for (double a = angle2+dL/2; a < 2*M_PI+angle1; a += dL)
+				dL = (2*M_PI + angle1 - angle2) / 20;
+				for (double a = angle2 + dL / 2; a < 2*M_PI + angle1; a += dL)
 				{
 					x = _cenX + (Sint16)floor(_radius[_zoom] * cos(a));
 					y = _cenY + (Sint16)floor(_radius[_zoom] * sin(a));
@@ -826,10 +830,8 @@ void Globe::fillLongitudeSegments(double startLon, double endLon, int colourShif
 			}
 		}
 	}
-	else
+	else // another direction
 	{
-	// another direction
-
 	    // draw fisrt longtitude line from pole
 		traceLon = startLon;
 		dL = (startLan - M_PI/2) / 20;
@@ -843,15 +845,18 @@ void Globe::fillLongitudeSegments(double startLon, double endLon, int colourShif
         // if aperture of longtitude is big then we need find first angle of sector of pie between longtitudes
 		if (bigLonAperture)
 		{  
-			sx = x-_cenX;
-			sy = y-_cenY;
-			angle1 = atan(sy/sx);
-			if (sx<0) angle1 += M_PI; 
+			sx = x - _cenX;
+			sy = y - _cenY;
+			angle1 = atan(sy / sx);
+			if (sx < 0)
+			{
+				angle1 += M_PI;
+			}
 		}
         
 	    // draw second longtitude line from pole
 		traceLon = endLon;
-		dL = (endLan-M_PI/2)/20;
+		dL = (endLan - M_PI/2) / 20;
 		for (traceLat = M_PI/2; traceLat > endLan; traceLat += dL)
 		{
 			polarToCart(traceLon, traceLat, &x, &y);
@@ -862,17 +867,17 @@ void Globe::fillLongitudeSegments(double startLon, double endLon, int colourShif
         // if aperture of longtitudes is big we need find second angle of sector and draw pie of circle between two longtitudes
 		if (bigLonAperture)
 		{  
-			sx = x-_cenX;
-			sy = y-_cenY;
-			angle2 = atan(sy/sx);
-			if (sx<0)
+			sx = x - _cenX;
+			sy = y - _cenY;
+			angle2 = atan(sy / sx);
+			if (sx < 0)
 			{
 				angle2 += M_PI;
 			}
-			if (angle2>angle1)
+			if (angle2 > angle1)
 			{ 
-				dL = (angle2-angle1)/20;
-				for (double a = angle1+dL/2; a < angle2; a += dL)
+				dL = (angle2 - angle1) / 20;
+				for (double a = angle1 + dL / 2; a < angle2; a += dL)
 				{
 					x = _cenX + (Sint16)floor(_radius[_zoom] * cos(a));
 					y = _cenY + (Sint16)floor(_radius[_zoom] * sin(a));
@@ -882,8 +887,8 @@ void Globe::fillLongitudeSegments(double startLon, double endLon, int colourShif
 		    }
 			else 
             {
-				dL = (2*M_PI+angle2-angle1)/20;
-				for (double a=angle1+dL/2; a < 2*M_PI+angle2; a += dL)
+				dL = (2*M_PI + angle2 - angle1) / 20;
+				for (double a = angle1 + dL / 2; a < 2*M_PI + angle2; a += dL)
 				{
 					x = _cenX + (Sint16)floor(_radius[_zoom] * cos(a));
 					y = _cenY + (Sint16)floor(_radius[_zoom] * sin(a));
@@ -947,20 +952,32 @@ void Globe::drawLand()
 {
 	int _shades[] = {3, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3,
 					 4, 5, 6, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 6, 5, 4};
-	double minLon = 0.0, maxLon = 0.0, curTime = _game->getSavedGame()->getTime()->getDaylight();
+	double minLon = 100.0, maxLon = -100.0, curTime = _game->getSavedGame()->getTime()->getDaylight();
 	Sint16 x[4], y[4];
+	bool pole;
 
 	for (std::list<Polygon*>::iterator i = _cacheLand.begin(); i != _cacheLand.end(); i++)
 	{
+		minLon = 100.0;
+		maxLon = -100.0;
+		pole = false;
 		// Convert coordinates
 		for (int j = 0; j < (*i)->getPoints(); j++)
 		{
 			double tmpLon = (*i)->getLongitude(j);
+			double tmpLat = (*i)->getLatitude(j);
 
-			if (j == 0 || (tmpLon < minLon && tmpLon >= (maxLon - M_PI)))
-				minLon = tmpLon;
-			if (j == 0 || (tmpLon > maxLon && tmpLon <= (minLon + M_PI)))
-				maxLon = tmpLon;
+			if (abs(tmpLat) < (M_PI/2 - 0.0001)) //pole vertexes have no longitude
+			{
+				if (tmpLon < minLon && tmpLon >= (maxLon - M_PI))
+					minLon = tmpLon;
+				if (tmpLon > maxLon && tmpLon <= (minLon + M_PI))
+					maxLon = tmpLon;
+			}
+			else
+			{
+				pole = true;
+			}
 
 			x[j] = (*i)->getX(j);
 			y[j] = (*i)->getY(j);
@@ -970,6 +987,10 @@ void Globe::drawLand()
 		int zoom = (2 - (int)floor(_zoom / 2.0)) * NUM_TEXTURES;
 		int shade = (int)((curTime + (((minLon + maxLon) / 2) / (2 * M_PI))) * NUM_LANDSHADES);
 		shade = _shades[shade % NUM_LANDSHADES];
+		if (pole)
+		{
+			shade = (int)(shade * 0.6 + 4 * (1 - 0.6)); // twilight zone
+		}
 		drawTexturedPolygon(x, y, (*i)->getPoints(), _texture[shade]->getFrame((*i)->getTexture() + zoom), 0, 0);
 		(*i)->setShade(shade);
 	}

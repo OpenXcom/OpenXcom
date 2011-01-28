@@ -23,6 +23,8 @@
 #include <vector>
 #include <string>
 
+#define USER_DIR "./USER/"
+
 namespace OpenXcom
 {
 
@@ -34,6 +36,8 @@ class Region;
 class Ufo;
 class Waypoint;
 class SavedBattleGame;
+class TextList;
+class Language;
 
 /**
  * Enumator containing all the possible game difficulties.
@@ -64,6 +68,8 @@ public:
 	SavedGame(GameDifficulty difficulty);
 	/// Cleans up the saved game.
 	~SavedGame();
+	/// Gets list of saves in the user directory.
+	static void getList(TextList *list, Language *lang);
 	/// Loads a saved game from YAML.
 	void load(const std::string &filename, Ruleset *rule);
 	/// Saves a saved game to YAML.
@@ -96,9 +102,12 @@ public:
 	std::vector<Waypoint*> *const getWaypoints();
 	/// Gets the current waypoint ID.
 	int *const getWaypointId();
-	
-	void setBattleGame(SavedBattleGame *battleGame);
+	/// Gets the current battle game.
 	SavedBattleGame *getBattleGame();
+	/// Sets the current battle game.
+	void setBattleGame(SavedBattleGame *battleGame);
+	/// Handles the end battle stuff.
+	void endBattle();
 };
 
 }

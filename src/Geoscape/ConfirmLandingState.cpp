@@ -120,7 +120,7 @@ void ConfirmLandingState::btnYesClick(Action *action)
 	Ufo* u = dynamic_cast<Ufo*>(_craft->getDestination());
 	if (u != 0)
 	{
-		_game->getRuleset()->newBattleSave(_game->getSavedGame());
+		_game->getSavedGame()->setBattleGame(new SavedBattleGame());
 
 		BattlescapeGenerator *bgen = new BattlescapeGenerator(_game);
 		bgen->setMissionType(MISS_UFORECOVERY);

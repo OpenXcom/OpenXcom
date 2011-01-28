@@ -18,15 +18,22 @@
  */
 #include "SavedGame.h"
 #include <fstream>
+#include <sstream>
+#include <iomanip>
+#include "../dirent.h"
 #include "yaml.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Engine/RNG.h"
+#include "SavedBattleGame.h"
 #include "GameTime.h"
 #include "Country.h"
 #include "Base.h"
+#include "Craft.h"
 #include "Region.h"
 #include "Ufo.h"
 #include "Waypoint.h"
+#include "../Engine/Language.h"
+#include "../Interface/TextList.h"
 
 namespace OpenXcom
 {
@@ -71,6 +78,53 @@ SavedGame::~SavedGame()
 }
 
 /**
+ * Gets all the saves found in the user folder
+ * and adds them to a text list.
+ * @param list Text list.
+ * @param lang Loaded language.
+ */
+void SavedGame::getList(TextList *list, Language *lang)
+{
+	DIR *dp = opendir(USER_DIR);
+    if (dp == 0)
+	{
+        throw "Failed to open saves directory";
+    }
+	
+    struct dirent *dirp;
+    while ((dirp = readdir(dp)) != 0)
+	{
+		std::string file = dirp->d_name;
+		// Check if it's a valid save
+		if (file.find(".sav") == std::string::npos)
+		{
+			continue;
+		}
+		std::string fullname = USER_DIR + file;
+		std::ifstream fin(fullname.c_str());
+		if (!fin)
+		{
+			throw "Failed to load savegame";
+		}
+		YAML::Parser parser(fin);
+		YAML::Node doc;
+		
+		parser.GetNextDocument(doc);
+		GameTime time = GameTime(6, 1, 1, 1999, 12, 0, 0);
+		time.load(doc["time"]);
+		std::stringstream saveTime;
+		std::wstringstream saveDay, saveMonth, saveYear;
+		saveTime << time.getHour() << ":" << std::setfill('0') << std::setw(2) << time.getMinute();
+		saveDay << time.getDay() << lang->getString(time.getDayString());
+		saveMonth << lang->getString(time.getMonthString());
+		saveYear << time.getYear();
+		list->addRow(5, Language::utf8ToWstr(file.substr(0, file.length()-4)).c_str(), Language::utf8ToWstr(saveTime.str()).c_str(), saveDay.str().c_str(), saveMonth.str().c_str(), saveYear.str().c_str());
+		fin.close();
+    }
+    closedir(dp);
+}
+
+/**
  * Loads a saved game's contents from a YAML file.
  * @note Assumes the saved game is blank.
  * @param filename YAML filename.
@@ -80,7 +134,7 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 {
 	unsigned int size = 0;
 
-	std::string s = "./USER/" + filename + ".sav";
+	std::string s = USER_DIR + filename + ".sav";
 	std::ifstream fin(s.c_str());
 	if (!fin)
 	{
@@ -91,6 +145,12 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 
 	// Get brief save info
     parser.GetNextDocument(doc);
+	std::string v;
+	doc["version"] >> v;
+	if (v != "0.2")
+	{
+		throw "Version mismatch";
+	}
 	_time->load(doc["time"]);
 
 	// Get full save data
@@ -166,7 +226,7 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
  */
 void SavedGame::save(const std::string &filename) const
 {
-	std::string s = "./USER/" + filename + ".sav";
+	std::string s = USER_DIR + filename + ".sav";
 	std::ofstream sav(s.c_str());
 	if (!sav)
 	{
@@ -372,21 +432,56 @@ std::vector<Waypoint*> *const SavedGame::getWaypoints()
 }
 
 /**
- * Set battleGame object.
- * @param battleGame Pointer to the battleGame object.
- */
-void SavedGame::setBattleGame(SavedBattleGame *battleGame)
-{
-	_battleGame = battleGame;
-}
-
-/**
  * Get pointer to the battleGame object.
  * @return Pointer to the battleGame object.
  */
 SavedBattleGame *SavedGame::getBattleGame()
 {
 	return _battleGame;
+}
+
+/**
+ * Set battleGame object.
+ * @param battleGame Pointer to the battleGame object.
+ */
+void SavedGame::setBattleGame(SavedBattleGame *battleGame)
+{
+	delete _battleGame;
+	_battleGame = battleGame;
+}
+
+/**
+ * Handles the end battle stuff.
+ */
+void SavedGame::endBattle()
+{
+	// craft goes back home
+	for (std::vector<Base*>::iterator i = _bases.begin(); i != _bases.end(); i++)
+	{
+		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); j++)
+		{
+			if ((*j)->isInBattlescape())
+			{
+				(*j)->returnToBase();
+				(*j)->setLowFuel(true);
+				(*j)->setInBattlescape(false);
+			}
+		}
+	}
+
+	// UFO crash/landing site disappears
+	for (std::vector<Ufo*>::iterator i = _ufos.begin(); i != _ufos.end(); i++)
+	{
+		if ((*i)->isInBattlescape())
+		{
+			delete *i;
+			_ufos.erase(i);
+			break;
+		}
+	}
+
+	// bye save game, battle is over
+	setBattleGame(0);
 }
 
 }

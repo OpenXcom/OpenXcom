@@ -226,6 +226,7 @@ void Base::saveId(YAML::Emitter &out) const
 {
 	Target::saveId(out);
 	out << YAML::Key << "type" << YAML::Value << "STR_BASE";
+	out << YAML::Key << "id" << YAML::Value << 0;
 	out << YAML::EndMap;
 }
 

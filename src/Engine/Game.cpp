@@ -145,21 +145,23 @@ void Game::run()
 		_states.back()->think();
 		
 		// Process rendering
-		_screen->clear();
-		std::list<State*>::iterator i = _states.end();
-		do
+		if (_init)
 		{
-			i--;
-		}
-		while(i != _states.begin() && !(*i)->isScreen());
+			_screen->clear();
+			std::list<State*>::iterator i = _states.end();
+			do
+			{
+				i--;
+			}
+			while(i != _states.begin() && !(*i)->isScreen());
 
-		for (; i != _states.end(); i++)
-		{
-			(*i)->blit();
+			for (; i != _states.end(); i++)
+			{
+				(*i)->blit();
+			}
+			_fpsCounter->blit(_screen->getSurface());
+			_cursor->blit(_screen->getSurface());
 		}
-		
-		_fpsCounter->blit(_screen->getSurface());
-		_cursor->blit(_screen->getSurface());
 		_screen->flip();
 
 		SDL_Delay(0);

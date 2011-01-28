@@ -23,7 +23,6 @@
 #include <vector>
 #include <string>
 #include "../Savegame/SavedGame.h"
-#include "../Savegame/SavedBattleGame.h"
 
 namespace OpenXcom
 {
@@ -68,10 +67,6 @@ public:
 	virtual ~Ruleset();
 	/// Generates the starting saved game.
 	virtual SavedGame *newSave(GameDifficulty diff);
-	/// Creates a battlescape saved game.
-	virtual SavedBattleGame *newBattleSave(SavedGame *save);
-	/// Handles the end battle stuff.
-	virtual void endBattle(SavedGame *save);
 	/// Gets the pool list for soldier names.
 	std::vector<SoldierNamePool*> *const getPools();
 	/// Gets the ruleset for a country type.
@@ -88,11 +83,11 @@ public:
 	RuleItem *const getItem(std::string id);
 	/// Gets the ruleset for a UFO type.
 	RuleUfo *const getUfo(std::string id);
-	/// Gets terrains for battlescape games
+	/// Gets terrains for battlescape games.
 	RuleTerrain *getTerrain(std::string name);
-	/// Gets mapdatafile for battlescape games
+	/// Gets mapdatafile for battlescape games.
 	MapDataSet *getMapDataSet(std::string name);
-	/// Gets unitsprite rules
+	/// Gets unitsprite rules.
 	RuleUnitSprite *getUnitSprites(std::string name);
 };
 

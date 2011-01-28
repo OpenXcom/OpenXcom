@@ -390,7 +390,7 @@ void BattlescapeState::btnEndTurnClick(Action *action)
  */
 void BattlescapeState::btnAbortClick(Action *action)
 {
-	_game->getRuleset()->endBattle(_game->getSavedGame());
+	_game->getSavedGame()->endBattle();
 	_game->getCursor()->setColor(Palette::blockOffset(15) + 12);
 	_game->popState();
 }

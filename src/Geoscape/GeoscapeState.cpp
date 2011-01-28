@@ -445,7 +445,7 @@ void GeoscapeState::time5Seconds()
 	for (std::vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end(); i++)
 	{
 		(*i)->think();
-		if ((*i)->reachedDestination())
+		if ((*i)->reachedDestination() || (*i)->getDaysCrashed() > 4)
 		{
 			(*i)->setDetected(false);
 		}

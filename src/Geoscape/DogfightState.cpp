@@ -458,16 +458,19 @@ void DogfightState::move()
 	if ((_currentDist > 640 && _mode == _btnDisengage) || (_timeout == 0 && _ufo->isCrashed()))
 	{
 		_craft->returnToBase();
-		_game->popState();
 		if (_destroy)
 		{
 			// Disengage any other craft
-			for (std::vector<Target*>::iterator i = _ufo->getFollowers()->begin(); i != _ufo->getFollowers()->end(); i++)
+			while (_ufo->getFollowers()->size() > 0)
 			{
-				Craft *c = dynamic_cast<Craft*>(*i);
-				if (c)
+				for (std::vector<Target*>::iterator i = _ufo->getFollowers()->begin(); i != _ufo->getFollowers()->end(); i++)
 				{
-					c->returnToBase();
+					Craft *c = dynamic_cast<Craft*>(*i);
+					if (c)
+					{
+						c->returnToBase();
+						break;
+					}
 				}
 			}
 			
@@ -482,6 +485,7 @@ void DogfightState::move()
 				}
 			}
 		}
+		_game->popState();
 	}
 
 	if (!_end && _ufo->isCrashed())

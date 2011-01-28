@@ -66,6 +66,11 @@ int main(int argc, char** args)
 		std::cerr << "ERROR: " << c << std::endl;
 		exit(EXIT_FAILURE);
 	}
+	catch (std::exception e)
+	{
+		std::cerr << "EXCEPTION: " << e.what() << std::endl;
+		exit(EXIT_FAILURE);
+	}
 	
 	delete game;
 

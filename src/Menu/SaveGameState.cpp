@@ -17,13 +17,9 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "SaveGameState.h"
-#include <sstream>
-#include <iomanip>
-#include <fstream>
-#include "../dirent.h"
+#include <iostream>
 #include "yaml.h"
 #include "../Savegame/SavedGame.h"
-#include "../Savegame/GameTime.h"
 #include "../Engine/Game.h"
 #include "../Engine/Action.h"
 #include "../Resource/ResourcePack.h"
@@ -35,6 +31,7 @@
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
 #include "../Interface/TextEdit.h"
+#include "../Geoscape/GeoscapeErrorState.h"
 
 namespace OpenXcom
 {
@@ -100,8 +97,8 @@ SaveGameState::SaveGameState(Game *game) : State(game), _selected("")
 	_lstSaves->setBackground(_window);
 	_lstSaves->setMargin(8);
 	_lstSaves->onMouseClick((ActionHandler)&SaveGameState::lstSavesClick);
-	_lstSaves->addRow(1, "<NEW SAVED GAME>");
-	getSavesList("./USER/");
+	_lstSaves->addRow(1, L"<NEW SAVED GAME>");
+	SavedGame::getList(_lstSaves, _game->getLanguage());
 }
 
 /**
@@ -110,52 +107,6 @@ SaveGameState::SaveGameState(Game *game) : State(game), _selected("")
 SaveGameState::~SaveGameState()
 {
 	
-}
-
-/**
- * Gets all the saves found in a certain folder
- * and adds them to the Saves list.
- * @param dir Save directory.
- */
-void SaveGameState::getSavesList(const std::string &dir)
-{
-	DIR *dp = opendir(dir.c_str());
-    if (dp == 0)
-	{
-        throw "Failed to open saves directory";
-    }
-	
-    struct dirent *dirp;
-    while ((dirp = readdir(dp)) != 0)
-	{
-		std::string file = dirp->d_name;
-		// Check if it's a valid save
-		if (file.find(".sav") == std::string::npos)
-		{
-			continue;
-		}
-		std::string fullname = dir + file;
-		std::ifstream fin(fullname.c_str());
-		if (!fin)
-		{
-			throw "Failed to load savegame";
-		}
-		YAML::Parser parser(fin);
-		YAML::Node doc;
-		
-		parser.GetNextDocument(doc);
-		GameTime time = GameTime(6, 1, 1, 1999, 12, 0, 0);
-		time.load(doc["time"]);
-		std::stringstream saveTime;
-		std::wstringstream saveDay, saveMonth, saveYear;
-		saveTime << time.getHour() << ":" << std::setfill('0') << std::setw(2) << time.getMinute();
-		saveDay << time.getDay() << _game->getLanguage()->getString(time.getDayString());
-		saveMonth << _game->getLanguage()->getString(time.getMonthString());
-		saveYear << time.getYear();
-		_lstSaves->addRow(5, file.substr(0, file.length()-4).c_str(), saveTime.str().c_str(), saveDay.str().c_str(), saveMonth.str().c_str(), saveYear.str().c_str());
-		fin.close();
-    }
-    closedir(dp);
 }
 
 /**
@@ -200,16 +151,29 @@ void SaveGameState::edtSaveKeyPress(Action *action)
 {
 	if (action->getDetails()->key.keysym.sym == SDLK_RETURN)
 	{
-		if (_selected != "")
+		try
 		{
-			std::string oldName = "./USER/" + _selected + ".sav";
-			std::string newName = "./USER/" + Language::wstrToUtf8(_edtSave->getText()) + ".sav";
-			if (rename(oldName.c_str(), newName.c_str()) != 0)
+			if (_selected != "")
 			{
-				throw "Failed to overwrite save";
+				std::string oldName = USER_DIR + _selected + ".sav";
+				std::string newName = USER_DIR + Language::wstrToUtf8(_edtSave->getText()) + ".sav";
+				if (rename(oldName.c_str(), newName.c_str()) != 0)
+				{
+					throw "Failed to overwrite save";
+				}
 			}
+			_game->getSavedGame()->save(Language::wstrToUtf8(_edtSave->getText()));
 		}
-		_game->getSavedGame()->save(Language::wstrToUtf8(_edtSave->getText()));
+		catch (const char *c)
+		{
+			std::cout << "ERROR: " << c << std::endl;
+			_game->pushState(new GeoscapeErrorState(_game, "STR_SAVE_UNSUCCESSFUL"));
+		}
+		catch (YAML::Exception e)
+		{
+			std::cout << "ERROR: " << e.what() << std::endl;
+			_game->pushState(new GeoscapeErrorState(_game, "STR_SAVE_UNSUCCESSFUL"));
+		}
 		_game->popState();
 	}
 }
