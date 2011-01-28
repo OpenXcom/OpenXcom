@@ -17,6 +17,9 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Screen.h"
+#include <sstream>
+#include <iomanip>
+#include <sys/stat.h>
 #include "SDL_rotozoom.h"
 #include "Surface.h"
 #include "Action.h"
@@ -75,7 +78,17 @@ void Screen::handle(Action *action)
 	}
 	else if (action->getDetails()->type == SDL_KEYDOWN && action->getDetails()->key.keysym.sym == SDLK_F5)
 	{
-		SDL_SaveBMP(_screen, "./USER/screen.bmp");
+		std::stringstream ss;
+		int i = 0;
+		struct stat info;
+		do
+		{
+			ss.str("");
+			ss << "./USER/" << "screen" << std::setfill('0') << std::setw(3) << i << ".bmp";
+			i++;
+		}
+		while (stat(ss.str().c_str(), &info) == 0);
+		SDL_SaveBMP(_screen, ss.str().c_str());
 	}
 }
 
