@@ -261,7 +261,7 @@ void BattlescapeState::mapClick(Action *action)
 		Pathfinding *pf = _battleGame->getPathfinding();
 		pf->calculate(_battleGame->getSelectedUnit(), pos);
 	}
-	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
 		BattleUnit *unit = _battleGame->getSelectedUnit();
 		unit->lookAt(pos);

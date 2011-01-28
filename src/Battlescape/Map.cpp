@@ -357,43 +357,22 @@ void Map::drawTerrain()
 }
 
 /**
- * Blits the map onto another surface. 
- * @param surface Pointer to another surface.
- */
-void Map::blit(Surface *surface)
-{
-	Surface::blit(surface);
-}
-
-/**
- * Ignores any mouse clicks that are outside the map.
+ * Handles map mouse shortcuts.
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
  */
-void Map::mousePress(Action *action, State *state)
+void Map::mouseClick(Action *action, State *state)
 {
-
+	InteractiveSurface::mouseClick(action, state);
+	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
+	{
+		up();
+	}
+	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
+	{
+		down();
+	}
 }
-
-/**
- * Ignores any mouse clicks that are outside the map.
- * @param action Pointer to an action.
- * @param state State that the action handlers belong to.
- */
-void Map::mouseRelease(Action *action, State *state)
-{
-
-}
-
-/**
- * Ignores any mouse clicks that are outside the map
- * @param action Pointer to an action.
- * @param state State that the action handlers belong to.
- */
-/*void Map::mouseClick(Action *action, State *state)
-{
-	int test=0;
-}*/
 
 /**
  * Handles map keyboard shortcuts.
@@ -617,9 +596,12 @@ void Map::animate()
  */
 void Map::up()
 {
-	_viewHeight++;
-	minMaxInt(&_viewHeight, 0, _save->getHeight()-1);
-	draw();
+	if (_viewHeight < _save->getHeight() - 1)
+	{
+		_viewHeight++;
+		_mapOffsetY += _spriteHeight / 2;
+		draw();
+	}
 }
 
 /**
@@ -627,9 +609,12 @@ void Map::up()
  */
 void Map::down()
 {
-	_viewHeight--;
-	minMaxInt(&_viewHeight, 0, _save->getHeight()-1);
-	draw();
+	if (_viewHeight > 0)
+	{
+		_viewHeight--;
+		_mapOffsetY -= _spriteHeight / 2;
+		draw();
+	}
 }
 
 /**
@@ -639,6 +624,7 @@ void Map::down()
 void Map::setViewHeight(int viewheight)
 {
 	_viewHeight = viewheight;
+	minMaxInt(&_viewHeight, 0, _save->getHeight()-1);
 	draw();
 }
 

@@ -265,8 +265,8 @@ Language *const Game::getLanguage() const
 }
 
 /**
- * Sets a new saved game for the game to use.
- * @param save Pointer to the saved game.
+ * Changes the language currently in use by the game.
+ * @param lang Pointer to the language.
  */
 void Game::setLanguage(Language *lang)
 {

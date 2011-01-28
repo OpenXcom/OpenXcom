@@ -82,14 +82,8 @@ public:
 	void draw();
 	/// draws the terrain
 	void drawTerrain();
-	/// blit the surface
-	void blit(Surface *surface);
-	/// Special handling for mouse presses.
-	void mousePress(Action *action, State *state);
-	/// Special handling for mouse releases.
-	void mouseRelease(Action *action, State *state);
 	/// Special handling for mouse clicks.
-	//void mouseClick(Action *action, State *state);
+	void mouseClick(Action *action, State *state);
 	/// Special handling for mous over
 	void mouseOver(Action *action, State *state);
 	/// Special handling for key presses.

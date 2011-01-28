@@ -393,11 +393,13 @@ void BaseInfoState::edtBaseKeyPress(Action *action)
  */
 void BaseInfoState::miniClick(Action *action)
 {
+	if (_mini->getHoveredBase() < 0)
+		return;
 	unsigned int base = _mini->getHoveredBase();
-	if (base >= 0 && base < _game->getSavedGame()->getBases()->size())
+	if (base < _game->getSavedGame()->getBases()->size())
 	{
 		_mini->setSelectedBase(base);
-		_base = _game->getSavedGame()->getBases()->at(_mini->getHoveredBase());
+		_base = _game->getSavedGame()->getBases()->at(base);
 		_state->setBase(_base);
 		init();
 	}

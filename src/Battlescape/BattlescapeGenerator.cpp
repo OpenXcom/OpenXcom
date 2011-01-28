@@ -235,7 +235,7 @@ void BattlescapeGenerator::addSoldier(Soldier *soldier, RuleUnitSprite *rules)
 	Position pos;
 	int x, y, z;
 
-	for (int i = 0; i < _height * _length * _width; i++)
+	for (int i = _height * _length * _width - 1; i >= 0; i--)
 	{
 		// to spawn an xcom soldier, there has to be a tile, with a floor, with the starting point attribute and no object in the way
 		if (_save->getTiles()[i] && _save->getTiles()[i]->getMapData(O_FLOOR) && _save->getTiles()[i]->getMapData(O_FLOOR)->getSpecialType() == START_POINT && !_save->getTiles()[i]->getMapData(O_OBJECT))

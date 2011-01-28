@@ -91,6 +91,7 @@ FunctionEnd
 	!insertmacro MUI_PAGE_FINISH
 
 	!insertmacro MUI_UNPAGE_WELCOME
+	!insertmacro MUI_UNPAGE_COMPONENTS
 	!insertmacro MUI_UNPAGE_CONFIRM
 	!insertmacro MUI_UNPAGE_INSTFILES
 	!insertmacro MUI_UNPAGE_FINISH
@@ -151,6 +152,22 @@ Section "Game Files" SecMain
 	CopyFiles /SILENT "$UFODIR\UNITS\*.*" "$INSTDIR\DATA\UNITS" 467
 	
 	ufo_no:
+	
+	SetOutPath "$INSTDIR\DATA\Language"
+	
+	File "..\bin\DATA\Language\English.lng"
+	File "..\bin\DATA\Language\French.geo"
+	File "..\bin\DATA\Language\French.lng"
+	File "..\bin\DATA\Language\German.geo"
+	File "..\bin\DATA\Language\German.lng"
+	File "..\bin\DATA\Language\Italian.geo"
+	File "..\bin\DATA\Language\Italian.lng"
+	File "..\bin\DATA\Language\Spanish.geo"
+	File "..\bin\DATA\Language\Spanish.lng"
+	
+	SetOutPath "$INSTDIR\USER"
+	
+	File "..\bin\USER\README.txt"
 
 	;Store installation folder
 	WriteRegStr HKLM "Software\${GAME_NAME}" "" $INSTDIR
@@ -204,10 +221,20 @@ SectionEnd
 	!insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 ;--------------------------------
-;Uninstaller Section
+;Uninstaller Sections
 
-Section "Uninstall"
+Section /o "un.Delete User Files" UnUser
+	Delete "$INSTDIR\USER\*.*"
+SectionEnd
 
+Section "un.Delete X-Com Data" UnData
+	RMDir /r "$INSTDIR\DATA"
+SectionEnd
+
+Section "-un.Main"
+	
+	SetOutPath "$TEMP"
+	
 	Delete "$INSTDIR\OpenXcom.exe"
 	Delete "$INSTDIR\libogg-0.dll"
 	Delete "$INSTDIR\libvorbis-0.dll"
@@ -221,11 +248,24 @@ Section "Uninstall"
 	Delete "$INSTDIR\msvcr100.dll"
 	Delete "$INSTDIR\COPYING"
 	Delete "$INSTDIR\README.txt"
+	
 	Delete "$INSTDIR\DATA\README.txt"
+	Delete "$INSTDIR\DATA\Language\English.lng"
+	Delete "$INSTDIR\DATA\Language\French.geo"
+	Delete "$INSTDIR\DATA\Language\French.lng"
+	Delete "$INSTDIR\DATA\Language\German.geo"
+	Delete "$INSTDIR\DATA\Language\German.lng"
+	Delete "$INSTDIR\DATA\Language\Italian.geo"
+	Delete "$INSTDIR\DATA\Language\Italian.lng"
+	Delete "$INSTDIR\DATA\Language\Spanish.geo"
+	Delete "$INSTDIR\DATA\Language\Spanish.lng"
+	RMDir "$INSTDIR\DATA\Language"
+	RMDir "$INSTDIR\DATA"
+	
+	Delete "$INSTDIR\USER\README.txt"
+	RMDir "$INSTDIR\USER"
 
 	Delete "$INSTDIR\Uninstall.exe"
-	
-	RMDir /r "$INSTDIR\DATA"
 	RMDir "$INSTDIR"
 	
 	!insertmacro MUI_STARTMENU_GETFOLDER Application $StartMenuFolder
@@ -241,6 +281,19 @@ Section "Uninstall"
 	DeleteRegKey /ifempty HKLM "Software\${GAME_NAME}"
 
 SectionEnd
+
+;--------------------------------
+;Uninstaller Descriptions
+
+	;Language strings
+	LangString DESC_UnUser ${LANG_ENGLISH} "Deletes all savegames, screenshots, options, etc."
+	LangString DESC_UnData ${LANG_ENGLISH} "Deletes the copied X-Com resources."
+
+	;Assign language strings to sections
+	!insertmacro MUI_UNFUNCTION_DESCRIPTION_BEGIN
+		!insertmacro MUI_DESCRIPTION_TEXT ${UnUser} $(DESC_UnUser)
+		!insertmacro MUI_DESCRIPTION_TEXT ${UnData} $(DESC_UnData)
+	!insertmacro MUI_UNFUNCTION_DESCRIPTION_END
 
 ;--------------------------------
 ;Version Information

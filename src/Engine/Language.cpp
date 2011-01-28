@@ -44,6 +44,7 @@ Language::~Language()
  * to a wide-character string.
  * @note Adapted from http://www.linuxquestions.org/questions/programming-9/wstring-utf8-conversion-in-pure-c-701084/
  * @param src UTF-8 string.
+ * @return Wide-character string.
  */
 std::wstring Language::utf8ToWstr(const std::string& src)
 {
@@ -104,6 +105,7 @@ std::wstring Language::utf8ToWstr(const std::string& src)
  * to a 8-bit string encoded in UTF-8.
  * @note Adapted from http://www.linuxquestions.org/questions/programming-9/wstring-utf8-conversion-in-pure-c-701084/
  * @param src Wide-character string.
+ * @return UTF-8 string.
  */
 std::string Language::wstrToUtf8(const std::wstring& src)
 {
