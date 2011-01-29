@@ -12,16 +12,19 @@ OBJS = $(patsubst %.cpp, $(OBJDIR)%.o, $(notdir $(SRCS)))
 # Target-specific settings
 ifeq ($(TARGET),DINGOO)
 CXX = mipsel-linux-g++
-SDL-CONFIG = /opt/mipsel-linux-uclibc/usr/bin/sdl-config
+PKG-CONFIG = /opt/mipsel-linux-uclibc/usr/bin/pkg-config
 BIN = openxcom.dge
 else
-SDL-CONFIG = sdl-config
+PKG-CONFIG = pkg-config
 BIN = openxcom
 endif
 
 # Compiler settings
-CXXFLAGS = -Wall -O2 `$(SDL-CONFIG) --cflags` -I/usr/local/include/yaml-cpp $(addprefix -D,$(TARGET))
-LDFLAGS = `$(SDL-CONFIG) --libs` -lSDL_gfx -lSDL_mixer -lyaml-cpp
+CXXFLAGS = -Wall -O2 $(addprefix -D,$(TARGET))
+CXXFLAGS += `$(PKG-CONFIG) --cflags sdl yaml-cpp`
+
+LDFLAGS = -lSDL_gfx -lSDL_mixer
+LDFLAGS += `$(PKG-CONFIG) --libs sdl yaml-cpp`
 
 # Rules
 all: $(BINDIR)$(BIN)

@@ -64,7 +64,7 @@ LanguageState::LanguageState(Game *game) : State(game)
 	_btnEnglish->onMouseClick((ActionHandler)&LanguageState::btnEnglishClick);
 	
 	_btnGerman->setColor(Palette::blockOffset(8)+8);
-	_btnGerman->setText(L"DEUTSCHE");
+	_btnGerman->setText(L"DEUTSCH");
 	_btnGerman->onMouseClick((ActionHandler)&LanguageState::btnGermanClick);
 
 	_btnFrench->setColor(Palette::blockOffset(8)+8);

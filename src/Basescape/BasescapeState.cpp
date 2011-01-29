@@ -422,8 +422,6 @@ void BasescapeState::viewMouseOut(Action *action)
  */
 void BasescapeState::miniClick(Action *action)
 {
-	if (_mini->getHoveredBase() < 0)
-		return;
 	unsigned int base = _mini->getHoveredBase();
 	if (base < _game->getSavedGame()->getBases()->size())
 	{
