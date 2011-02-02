@@ -261,6 +261,14 @@ int Pathfinding::dequeuePath()
 	return last_element;
 }
 
+/*
+ * Abort path clears the path vector.
+ */
+void Pathfinding::abortPath()
+{
+	_path.clear();
+}
+
 
 /*
  * Whether a certain part of a tile blocks movement.

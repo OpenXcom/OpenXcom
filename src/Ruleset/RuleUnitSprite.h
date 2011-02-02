@@ -48,9 +48,8 @@ private:
 	int _die;
 	int _femaleTorso;
 
-	// some bodyparts wobble up and down when walking
-	int _walkArmsYOffset[8];
-	int _walkLegsYOffset[8];
+	// torso bobs up and down when walking
+	int _walkTorsoYOffset[8];
 
 	// offset parts when sitting
 	int _sitTorsoYOffset;
@@ -103,6 +102,7 @@ public:
     int getSitWeaponYOffset() const;
     int getStandWeaponYOffset() const;
     int getWalkArmsOffset(int phase) const;
+    int getWalkTorsoOffset(int phase) const;
     void setDie(int die);
     void setLeftArm1HWeapon(int leftArm1HWeapon);
     void setLeftArm2HWeapon(int leftArm2HWeapon);
@@ -118,6 +118,7 @@ public:
     void setSitWeaponYOffset(int sitWeaponYOffset);
     void setStandWeaponYOffset(int standWeaponYOffset);
     void setWalkArmsYOffset(int walkArmsYOffset, int phase);
+    void setWalkTorsoYOffset(int walkArmsYOffset, int phase);
 };
 
 }

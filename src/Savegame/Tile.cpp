@@ -28,7 +28,7 @@ namespace OpenXcom
 * constructor
 * @param pos Position.
 */
-Tile::Tile(const Position& pos): _discovered(false), _shadeSun(0), _light(0), _lastLight(0), _smoke(0), _fire(0), _pos(pos), _cached(false), _unit(0)
+Tile::Tile(const Position& pos): _discovered(false), _sunLight(0), _light(0), _lastLight(0), _smoke(0), _fire(0), _pos(pos), _cached(false), _unit(0)
 {
 	for (int i = 0; i < 4; i++)
 	{
@@ -239,19 +239,17 @@ bool Tile::isDiscovered()
  * Determined by the sun. Absolute amount.
  * @param shade
  */
-void Tile::setShadeSun(int shade)
+void Tile::setSunLight(int sun)
 {
-	if (_shadeSun != shade)
+	if (_sunLight != sun)
 	{
-		_shadeSun = shade;
+		_sunLight = sun;
 		setCached(false);
 	}
 }
 
 /**
- * Change a light amount (+ ligther / - dimmer). Relative to the existing light amount.
- * Can be caused by adding/removing objects, fire, personal light.
- * Normally resulting light level should not go below 0. (lights normally can not darken a place...)
+ * Add a light amount to the tile. If it was already lit more, it is ignored.
  * @param light Amount of light to add.
  * @param sessionID Unique number to avoid tiles are lit only once in a session.
  */
@@ -260,18 +258,16 @@ void Tile::addLight(int light, int sessionID)
 	if (sessionID == _sessionID) return;
 	_sessionID = sessionID;
 
-	// highest light wins
 	if (_light < light)
 		_light = light;
-
-	// uncomment following and comment previous to have additive lighting (which is more realistic)
-	/*
-	if (light != 0)
-	{
-		_light += light;
-	}
-	*/
 }
+
+bool Tile::isChecked(int sessionID)
+{
+	if (sessionID == _sessionID) return true;
+	return false;
+}
+
 
 void Tile::isSeenBy(BattleUnit *unit, int sessionID)
 {
@@ -307,9 +303,14 @@ void Tile::setLight()
  */
 int Tile::getShade()
 {
-	int shade = _shadeSun - _light;
-	if (shade < 0) shade = 0;
-	return shade;
+	int light = 0;
+
+	if (_sunLight > _light)
+		light = _sunLight;
+	else
+		light = _light;
+
+	return 15 - light;
 }
 
 /**
@@ -389,10 +390,24 @@ BattleUnit *Tile::getUnit()
 void Tile::setFire(int fire)
 {
 	_fire = fire;
+	_smoke = 0;
 }
+
 int Tile::getFire()
 {
 	return _fire;
+}
+
+void Tile::setSmoke(int smoke)
+{
+	if (smoke > 40) smoke = 40;
+	_smoke = smoke;
+	_fire = 0;
+}
+
+int Tile::getSmoke()
+{
+	return _smoke;
 }
 
 }

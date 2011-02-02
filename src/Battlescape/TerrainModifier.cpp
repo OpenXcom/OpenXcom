@@ -34,7 +34,15 @@ namespace OpenXcom
  */
 TerrainModifier::TerrainModifier(SavedBattleGame *save) : _save(save)
 {
-
+	distances.resize(16);
+	for (int x = 0; x < 16; x++)
+	{
+	    distances[x].resize(16);
+		for (int y = 0; y < 16; y++)
+		{
+			distances[x][y] = int(floor(sqrt(float(x*x + y*y)) + 0.5));
+		}
+	}
 }
 
 /**
@@ -44,6 +52,7 @@ TerrainModifier::~TerrainModifier()
 {
 
 }
+
 
 /**
   * Calculate sun shading for the whole terrain.
@@ -63,28 +72,18 @@ void TerrainModifier::calculateSunShading()
 void TerrainModifier::calculateSunShading(Tile *tile)
 {
 
-	// At night don't check for sun shading.
-	if (_save->getGlobalShade() > 5)
+	int power = 15 - _save->getGlobalShade();
+
+	// At night/dusk sun isn't dropping shades
+	if (_save->getGlobalShade() <= 5)
 	{
-		tile->setShadeSun(_save->getGlobalShade());
-		return;
+		if (verticalBlockage(_save->getTile(Position(tile->getPosition().x, tile->getPosition().y, _save->getHeight() - 1)), tile, AFFECT_LIGHT))
+		{
+			power-=2;
+		}
 	}
 
-	if (tile->getPosition().z < _save->getHeight() - 1
-		&& ((_save->getTile(tile->getPosition() + Position(0,0,1))
-		&& (_save->getTile(tile->getPosition() + Position(0,0,1))->getMapData(O_FLOOR)
-		|| _save->getTile(tile->getPosition() + Position(0,0,1))->getMapData(O_OBJECT)))
-			|| (_save->getTile(tile->getPosition() + Position(0,0,2))
-		&& (_save->getTile(tile->getPosition() + Position(0,0,2))->getMapData(O_FLOOR)
-		|| _save->getTile(tile->getPosition() + Position(0,0,2))->getMapData(O_OBJECT))))
-		)
-	{
-		tile->setShadeSun(_save->getGlobalShade() + (4 - (_save->getGlobalShade()/2)));
-	}
-	else
-	{
-		tile->setShadeSun(_save->getGlobalShade());
-	}
+	tile->setSunLight(power);
 }
 
 /**
@@ -92,6 +91,10 @@ void TerrainModifier::calculateSunShading(Tile *tile)
   */
 void TerrainModifier::calculateLighting()
 {
+	// during daytime don't calculate lighting
+	if (_save->getGlobalShade() < 1)
+		return;
+
 	// reset all light to 0 first
 	for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); i++)
 	{
@@ -105,18 +108,18 @@ void TerrainModifier::calculateLighting()
 		if (_save->getTiles()[i]->getMapData(O_FLOOR)
 			&& _save->getTiles()[i]->getMapData(O_FLOOR)->getLightSource())
 		{
-			circularRaytracing(_save->getTiles()[i]->getPosition(), AFFECT_LIGHT, _save->getTiles()[i]->getMapData(O_FLOOR)->getLightSource());
+			addLight(_save->getTiles()[i]->getPosition(), _save->getTiles()[i]->getMapData(O_FLOOR)->getLightSource());
 		}
 		if (_save->getTiles()[i]->getMapData(O_OBJECT)
 			&& _save->getTiles()[i]->getMapData(O_OBJECT)->getLightSource())
 		{
-			circularRaytracing(_save->getTiles()[i]->getPosition(), AFFECT_LIGHT, _save->getTiles()[i]->getMapData(O_OBJECT)->getLightSource());
+			addLight(_save->getTiles()[i]->getPosition(), _save->getTiles()[i]->getMapData(O_OBJECT)->getLightSource());
 		}
 
-		// fire
-		if (_save->getTiles()[i]->getFire() > 0)
+		// not sure yet how much lighting power fire has
+		if (_save->getTiles()[i]->getFire())
 		{
-			circularRaytracing(_save->getTiles()[i]->getPosition(), AFFECT_LIGHT, 15);
+			addLight(_save->getTiles()[i]->getPosition(), 13);
 		}
 
 	}
@@ -128,8 +131,8 @@ void TerrainModifier::calculateLighting()
 	{
 		if ((*i)->getFaction() == FACTION_PLAYER)
 		{
-			circularRaytracing((*i)->getPosition(), AFFECT_LIGHT, 15);
-			calculateLineOfSight(*i);
+			addLight((*i)->getPosition(), 15);
+			calculateFOV(*i);
 		}
 	}
 
@@ -158,6 +161,7 @@ void TerrainModifier::destroyTile(Tile *tile)
 	{
 		calculateSunShading(_save->getTile(Position(tile->getPosition().x, tile->getPosition().y, i)));
 	}
+
 	calculateLighting();
 }
 
@@ -165,101 +169,135 @@ void TerrainModifier::destroyTile(Tile *tile)
  * Calculates line of sight of a soldier. Every visible tile is marked + fog of war is removed.
  * @param unit
  */
-void TerrainModifier::calculateLineOfSight(BattleUnit *unit)
+void TerrainModifier::calculateFOV(BattleUnit *unit)
 {
 	double startAngle[8] = { 45, 0, -45, 270, 225, 180, 135, 90 };
 	double endAngle[8] = { 135, 90, 45, 360, 315, 270, 225, 180 };
-	circularRaytracing(unit->getPosition(), AFFECT_VISION, 20, startAngle[unit->getDirection()], endAngle[unit->getDirection()], unit);
-}
 
-/**
- * Traces tiles following rays in a circular pattern. Can be used for light and all kinds of explosions (HE,smoke,fire,stun).
- * @param center The position where the circular pattern starts.
- * @param affector The kind of affector that affects the tiles.
- * @param power The initial power at the point of impact.
- * @param startAngle The angle at wich the circle starts.
- * @param stopAngle The angle at wich the circle stops.
- * @param unit The unit causing this effect.
- */
-void TerrainModifier::circularRaytracing(const Position &center, Affector affector, int power, double startAngle, double stopAngle, BattleUnit *unit)
-{
-	double centerX = center.x + 0.5;
-	double centerY = center.y + 0.5;
-	int power_, startPower;
+	double centerZ = (unit->getPosition().z * 2) + 1.5;
+	double centerX = unit->getPosition().x + 0.5;
+	double centerY = unit->getPosition().y + 0.5;
+	int power_, objectFalloff;
+	double startFi = -90;
+	double endFi = 60;
+
+	if (unit->getPosition().z == 0)
+	{
+		startFi = 0;
+	}
 
 	// a unique ID for this session, used to avoid tiles to be affected more than once.
 	int sessionID = RNG::generate(1,65000);
-	
-	// commenting the for loop will shine light only on current layer
-	for (int centerZ = 0; centerZ < _save->getHeight(); centerZ++)
+
+	// obviously
+	_save->getTile(unit->getPosition())->isSeenBy(unit, sessionID);
+
+	// raytrace up and down
+	for (double fi = startFi; fi <= endFi; fi += 6)
 	{
-		startPower = power;
-
-		// We can not see on this level, because a floor above it is blocking it. Continue to next level.
-		if (centerZ < center.z && affector != AFFECT_LIGHT && !_save->getTile(Position(center.x,center.y,centerZ + 1))->hasNoFloor())
-			continue;
-		// We can not see on this level, because the tile above us has a floor. No need to check further - break here.
-		if (centerZ > center.z && affector != AFFECT_LIGHT && !_save->getTile(Position(center.x,center.y,centerZ))->hasNoFloor())
-			break;
-
-		startPower -= abs(centerZ - center.z) * 2;
-
-		// the center is affected for sure
-		if (affector == AFFECT_LIGHT)
-			_save->getTile(Position(center.x,center.y,centerZ))->addLight(startPower, sessionID);
-		if (affector == AFFECT_VISION) 
-			_save->getTile(Position(center.x,center.y,centerZ))->isSeenBy(unit, sessionID);
+		double cos_fi = cos(fi * M_PI / 180.0);
+		double sin_fi = sin(fi * M_PI / 180.0);
 
 		// raytrace every 3 degrees makes sure we cover all tiles in a circle.
-		for (double te = startAngle; te <= stopAngle; te += 3)
+		for (double te = startAngle[unit->getDirection()]; te <= endAngle[unit->getDirection()]; te += 3)
 		{
 			double cos_te = cos(te * M_PI / 180.0);
 			double sin_te = sin(te * M_PI / 180.0);
+			//double cos_te = _cosTable[(int)te/3];
+			//double sin_te = _sinTable[(int)te/3];
 
-			double oz = centerZ, ox = centerX, oy = centerY;
-			int l = 0;
-			double vz, vx, vy;
-			power_ = startPower;
+			Tile *origin = _save->getTile(unit->getPosition());
+			double l = 0;
+			double vx, vy, vz;
+			int tileX, tileY, tileZ;
+			power_ = 20;
+
 			while (power_ > 0)
 			{
 				l++;
-				vz = centerZ;
-				vx = centerX + l * cos_te;
-				vy = centerY + l * sin_te;
+				vx = centerX + l * cos_te * cos_fi;
+				vy = centerY + l * sin_te * cos_fi;
+				vz = centerZ + l * sin_fi;
 
-				Tile *t = _save->getTile(Position(int(floor(vx)),int(floor(vy)),int(floor(vz))));
-				if (!t) break;
-				if (affector != AFFECT_LIGHT)
-					power_ -= blockage(_save->getTile(Position(int(floor(ox)),int(floor(oy)),int(floor(oz)))), t, affector);
+				tileZ = int(floor(vz / 2.0));
+				tileX = int(floor(vx));
+				tileY = int(floor(vy));
+
 				power_--;
-				if (power_ > 0)
+
+				Tile *dest = _save->getTile(Position(tileX, tileY, tileZ));
+				if (!dest) break; // out of map!
+
+				// horizontal blockage by walls
+				power_ -= horizontalBlockage(origin, dest, AFFECT_VISION);
+
+				// vertical blockage by ceilings/floors
+				power_ -= verticalBlockage(origin, dest, AFFECT_VISION);
+
+				// objects on destination tile affect the ray after it has crossed this tile
+				// but it has to be calculated before we affect the tile (it could have been blown up)
+				if (dest->getMapData(O_OBJECT))
 				{
-					if (affector == AFFECT_LIGHT)
-						t->addLight(power_, sessionID);
-					if (affector == AFFECT_VISION) 
+					objectFalloff = dest->getMapData(O_OBJECT)->getBlock(AFFECT_VISION);
+				}
+				else
+				{
+					objectFalloff = 0;
+				}
+
+				// smoke decreases visibility
+				if (dest->getSmoke())
+				{
+					objectFalloff += int(dest->getSmoke() / 3);
+				}
+
+				if (power_ > 0 && !dest->isChecked(sessionID) && dest->getShade() < 10)
+				{
+					dest->isSeenBy(unit, sessionID);
+					// if there is a door to the east or south of a visible tile, we see that too
+					Tile* t = _save->getTile(Position(tileX + 1, tileY, tileZ));
+					if (t && t->getMapData(O_WESTWALL) && (t->getMapData(O_WESTWALL)->isDoor() || t->getMapData(O_WESTWALL)->isUFODoor()))
 					{
 						t->isSeenBy(unit, sessionID);
-						// if there is a door to the east or south of a visible tile, we see that too
-						t = _save->getTile(Position(int(floor(vx) + 1), int(floor(vy)), int(floor(vz))));
-						if (t && t->getMapData(O_WESTWALL) && (t->getMapData(O_WESTWALL)->isDoor() || t->getMapData(O_WESTWALL)->isUFODoor()))
-						{
-							t->isSeenBy(unit, sessionID);
-						}
-						t = _save->getTile(Position(int(floor(vx)), int(floor(vy) - 1), int(floor(vz))));
-						if (t && t->getMapData(O_NORTHWALL) && (t->getMapData(O_NORTHWALL)->isDoor() || t->getMapData(O_NORTHWALL)->isUFODoor()))
-						{
-							t->isSeenBy(unit, sessionID);
-						}
 					}
-
+					t = _save->getTile(Position(tileX, tileY - 1, tileZ));
+					if (t && t->getMapData(O_NORTHWALL) && (t->getMapData(O_NORTHWALL)->isDoor() || t->getMapData(O_NORTHWALL)->isUFODoor()))
+					{
+						t->isSeenBy(unit, sessionID);
+					}
 				}
-				oz=vz;ox=vx;oy=vy;
+				power_ -= objectFalloff;
+				origin = dest;
 			}
 		}
 	}
 }
+
+void TerrainModifier::addLight(const Position &center, int power)
+{
+	int sessionID = RNG::generate(1,65000);
+	for (int x = 0; x <= power; x++)
+	{
+		for (int y = 0; y <= power; y++)
+		{
+			for (int z = 0; z < _save->getHeight(); z++)
+			{
+				//int distance = sqrt(float(x*x + y*y));
+				if (_save->getTile(Position(center.x + x,center.y + y, z)))
+				_save->getTile(Position(center.x + x,center.y + y, z))->addLight(power - distances[x][y], sessionID);
+				if (_save->getTile(Position(center.x - x,center.y - y, z)))
+				_save->getTile(Position(center.x - x,center.y - y, z))->addLight(power - distances[x][y], sessionID);
+				if (_save->getTile(Position(center.x - x,center.y + y, z)))
+				_save->getTile(Position(center.x - x,center.y + y, z))->addLight(power - distances[x][y], sessionID);
+				if (_save->getTile(Position(center.x + x,center.y - y, z)))
+				_save->getTile(Position(center.x + x,center.y - y, z))->addLight(power - distances[x][y], sessionID);
+			}
+		}
+	}
+}
+
 /*
- * The amount this part of the tile blocks.
+ * The amount this certain wall or floor-part of the tile blocks.
  * @param tile
  * @param part
  * @param affector
@@ -268,29 +306,80 @@ void TerrainModifier::circularRaytracing(const Position &center, Affector affect
 int TerrainModifier::blockage(Tile *tile, const int part, Affector affector)
 {
 	int blockage = 0;
+	
 	if (tile == 0) return 0; // probably outside the map here
-	if (tile->getMapData(part))
-		blockage += tile->getMapData(part)->getBlock(affector);
 
-	// open ufo doors are actually still closed behind the scenes
-	// so a special trick is needed to see if they are open, if they are, they obviously don't block anything
-	if (tile->isUfoDoorOpen(part)) 
-		blockage = 0;
+	if (part == O_FLOOR && tile->getMapData(O_FLOOR))
+	{
+		// blockage modifiers of floors in ufo only counted for horizontal stuff, so this is kind of an experiment
+		if (affector == AFFECT_LIGHT)
+			blockage += 2;	
+		else if (affector == AFFECT_HE)
+			blockage += 15;	
+		else
+			blockage += 255;
+	}
+	else
+	{
+		if (tile->getMapData(part))
+			blockage += tile->getMapData(part)->getBlock(affector);
 
-	if (tile->getMapData(O_OBJECT))
-		blockage += tile->getMapData(O_OBJECT)->getBlock(affector);
+		// open ufo doors are actually still closed behind the scenes
+		// so a special trick is needed to see if they are open, if they are, they obviously don't block anything
+		if (tile->isUfoDoorOpen(part)) 
+			blockage = 0;
+	}
+
 	return blockage;
 }
 
 /**
- * The amount of power that is blocked going from one tile to another.
+ * The amount of power that is blocked going from one tile to another on a different level.
+ * Can cross more than one level.
  * @param startTile
  * @param endTile
  * @param affector
  * @return amount of blockage
  */
-int TerrainModifier::blockage(Tile *startTile, Tile *endTile, Affector affector)
+int TerrainModifier::verticalBlockage(Tile *startTile, Tile *endTile, Affector affector)
 {
+	int block = 0;
+
+	// safety check
+	if (startTile == 0 || endTile == 0) return 0;
+
+	int direction = endTile->getPosition().z - startTile->getPosition().z;
+	int x = startTile->getPosition().x;
+	int y = startTile->getPosition().y;
+
+	if (direction < 0) // down
+	{
+		for (int z = startTile->getPosition().z; z > endTile->getPosition().z; z--)
+		{
+			block += blockage(_save->getTile(Position(x, y, z)), O_FLOOR, affector);
+		}
+	}
+	else if (direction > 0) // up
+	{
+		for (int z = startTile->getPosition().z + 1; z <= endTile->getPosition().z; z++)
+		{
+			block += blockage(_save->getTile(Position(x, y, z)), O_FLOOR, affector);
+		}
+	}
+
+	return block;
+}
+
+/**
+ * The amount of power that is blocked going from one tile to another on the same level.
+ * @param startTile
+ * @param endTile
+ * @param affector
+ * @return amount of blockage
+ */
+int TerrainModifier::horizontalBlockage(Tile *startTile, Tile *endTile, Affector affector)
+{
+	// safety check
 	if (startTile == 0 || endTile == 0) return 0;
 
 	int direction = vectorToDirection(endTile->getPosition() - startTile->getPosition());

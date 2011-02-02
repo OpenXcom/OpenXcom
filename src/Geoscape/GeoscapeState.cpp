@@ -831,8 +831,7 @@ void GeoscapeState::btnGraphsClick(Action *action)
 void GeoscapeState::btnUfopaediaClick(Action *action)
 {
 	/* Daiky: uncomment this bit to start a terror mission */
-	/*
-	_game->getRuleset()->newBattleSave(_game->getSavedGame());
+	_game->getSavedGame()->setBattleGame(new SavedBattleGame());	
 	BattlescapeGenerator *bgen = new BattlescapeGenerator(_game);
 	bgen->setMissionType(MISS_TERROR);
 	bgen->setWorldTexture(1);
@@ -841,7 +840,7 @@ void GeoscapeState::btnUfopaediaClick(Action *action)
 	bgen->run();
 	delete bgen;
 	_game->pushState(new BattlescapeState(_game));
-	*/
+	
 }
 
 /**

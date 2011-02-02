@@ -148,7 +148,7 @@ int MapData::getBlock(Affector type)
   */
 void MapData::setBlockValue(int lightBlock, int visionBlock, int HEBlock, int smokeBlock, int fireBlock, int gasBlock)
 {
-	_block[0] = lightBlock==10?16:lightBlock; // small tweak to make sure 10 blocks all light...
+	_block[0] = lightBlock; // not used...
 	_block[1] = visionBlock==1?255:0;
 	_block[2] = HEBlock;
 	_block[3] = smokeBlock==1?255:0;

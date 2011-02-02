@@ -31,6 +31,7 @@
 #include "../Engine/Font.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
+#include "../Engine/RNG.h"
 #include "../Engine/Game.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
@@ -319,7 +320,6 @@ void Map::drawTerrain()
 						}
 					}
 
-
 					// Draw cursor front
 					if (_selectorX == itY && _selectorY == itX && !_hideCursor)
 					{
@@ -339,11 +339,20 @@ void Map::drawTerrain()
 						frame->setY(screenPosition.y);
 						frame->blit(this);
 					}
-
+					
+					tile = _save->getTile(mapPosition);
 					// Draw smoke/fire
 					if (tile->getFire() && tile->isDiscovered())
 					{
 						frameNumber = 0; // see http://www.ufopaedia.org/images/c/cb/Smoke.gif
+						frame = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frameNumber + (_animFrame / 2));
+						frame->setX(screenPosition.x);
+						frame->setY(screenPosition.y);
+						frame->blit(this);
+					}
+					if (tile->getSmoke() && tile->isDiscovered())
+					{
+						frameNumber = 8 + int(floor((tile->getSmoke() / 5.0) - 0.1)); // see http://www.ufopaedia.org/images/c/cb/Smoke.gif
 						frame = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frameNumber + (_animFrame / 2));
 						frame->setX(screenPosition.x);
 						frame->setY(screenPosition.y);
@@ -393,8 +402,14 @@ void Map::keyboardPress(Action *action, State *state)
 	// "f" - puts a tile on fire (for testing purposes)
 	if (action->getDetails()->key.keysym.sym == SDLK_f)
 	{
-		_save->getTile(pos)->setFire(1);
+		_save->getTile(pos)->setFire(RNG::generate(1,5));
 		_save->getTerrainModifier()->calculateLighting();
+	}
+	// "s" - puts a tile on smoke (for testing purposes)
+	if (action->getDetails()->key.keysym.sym == SDLK_s)
+	{
+		_save->getTile(pos)->setSmoke(RNG::generate(1,50));
+		//_save->getTerrainModifier()->calculateLighting();
 	}
 }
 
@@ -581,7 +596,8 @@ void Map::scroll()
  */
 void Map::animate()
 {
-	_animFrame = _animFrame == 7 ? 0 : _animFrame+1;
+	_animFrame++;
+	if (_animFrame == 8) _animFrame = 0;
 
 	for (int i = 0; i < _tileCount; i++)
 	{
@@ -691,29 +707,31 @@ void Map::getSelectorPosition(Position *pos)
  */
 void Map::calculateWalkingOffset(BattleUnit *unit, Position *offset)
 {
-	int offsetX[8] = { 1, 2, 1, 0, -1, -2, -1, 0 };
-	int offsetY[8] = { 1, 0, -1, -2, -1, 0, 1, 2 };
-	int phase = unit->getWalkingPhase();
+	int offsetX[8] = { 1, 1, 1, 0, -1, -1, -1, 0 };
+	int offsetY[8] = { 1, 0, -1, -1, -1, 0, 1, 1 };
+	int phase = unit->getWalkingPhase() + unit->getDiagonalWalkingPhase();
 	int dir = unit->getDirection();
+	int midphase = 4 + 4 * (dir % 2);
+	int endphase = 8 + 8 * (dir % 2);
 
-	if (phase)
+	if (unit->getStatus() == STATUS_WALKING)
 	{
-		if (phase < 4)
+		if (phase < midphase)
 		{
 			offset->x = phase * 2 * offsetX[dir];
 			offset->y = - phase * offsetY[dir];
 		}
 		else
 		{
-			offset->x = (phase - 8) * 2 * offsetX[dir];
-			offset->y = - (phase - 8) * offsetY[dir];
+			offset->x = (phase - endphase) * 2 * offsetX[dir];
+			offset->y = - (phase - endphase) * offsetY[dir];
 		}
 	}
 
 	// If we are walking in between tiles, interpolate it's terrain level.
-	if (phase)
+	if (unit->getStatus() == STATUS_WALKING)
 	{
-		if (phase < 4)
+		if (phase < midphase)
 		{
 			int fromLevel = _save->getTile(unit->getPosition())->getTerrainLevel();
 			int toLevel = _save->getTile(unit->getDestination())->getTerrainLevel();
@@ -726,7 +744,7 @@ void Map::calculateWalkingOffset(BattleUnit *unit, Position *offset)
 				// going up a level, so toLevel 0 becomes -24, -8 becomes -16
 				toLevel = -24*(unit->getDestination().z - unit->getPosition().z) + abs(toLevel);
 			}
-			offset->y += ((fromLevel * (8 - phase)) / 8) + ((toLevel * (phase)) / 8);
+			offset->y += ((fromLevel * (endphase - phase)) / endphase) + ((toLevel * (phase)) / endphase);
 		}
 		else
 		{
@@ -743,7 +761,7 @@ void Map::calculateWalkingOffset(BattleUnit *unit, Position *offset)
 				// going up a level, so fromLevel 0 becomes +24, -8 becomes 16
 				fromLevel = -24*(unit->getDestination().z - unit->getLastPosition().z) + abs(fromLevel);
 			}
-			offset->y += ((fromLevel * (8 - phase)) / 8) + ((toLevel * (phase)) / 8);
+			offset->y += ((fromLevel * (endphase - phase)) / endphase) + ((toLevel * (phase)) / endphase);
 		}
 	}
 	else
@@ -925,16 +943,11 @@ void Map::cacheUnits()
 			unitSprite->draw();
 			unitSprite->blit(_unitCache.at((*i)->getId()));
 
-			// non player units get shaded according to the tile's shade
-			if ((*i)->getFaction() != FACTION_PLAYER)
-			{
-				_unitCache.at((*i)->getId())->setShade(_save->getTile((*i)->getPosition())->getShade());
-			}
+			_unitCache.at((*i)->getId())->setShade(_save->getTile((*i)->getPosition())->getShade());
+			(*i)->setCached(true);
 		}
 	}
 	delete unitSprite;
 }
-
-
 
 }

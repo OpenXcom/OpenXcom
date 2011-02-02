@@ -204,30 +204,52 @@ void BattleUnit::startWalking(int direction, const Position &destination)
 	_status = STATUS_WALKING;
 	_walkPhase = 0;
 	_destination = destination;
+	_lastPos = _pos;
+	_cached = false;
 }
 
 void BattleUnit::keepWalking()
 {
+	int middle, end;
+	// diagonal walking takes double the steps
+	middle = 4 + 4 * (_direction % 2);
+	end = 8 + 8 * (_direction % 2);
+
 	_walkPhase++;
-	if (_walkPhase == 4)
+
+	if (_walkPhase == middle)
 	{
 		// we assume we reached our destination tile
 		// this is actually a drawing hack, so soldiers are not overlapped by floortiles
-		_lastPos = _pos;
 		_pos = _destination;
 	}
-	if (_walkPhase == 8)
+
+	if (_walkPhase == end)
 	{
 		// we officially reached our destination tile
 		_status = STATUS_STANDING;
 		_walkPhase = 0;
 	}
+
 	_cached = false;
 }
 
+/*
+ * Gets the walking phase for animation and sound.
+ * return phase will always go from 0-7
+ */
 int BattleUnit::getWalkingPhase() const
 {
-	return _walkPhase;
+	return _walkPhase % 8;
+}
+
+/*
+ * Gets the walking phase for diagonal walking.
+ * return phase this will be 0 or 8
+ */
+int BattleUnit::getDiagonalWalkingPhase() const
+{
+	return (_walkPhase / 8) * 8;
 }
 
 void BattleUnit::lookAt(const Position &point)

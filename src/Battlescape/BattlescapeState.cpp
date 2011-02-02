@@ -240,10 +240,21 @@ void BattlescapeState::think()
  */
 void BattlescapeState::mapClick(Action *action)
 {
+	// right-click abort walking
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	{
+		BattleUnit *unit = _battleGame->getSelectedUnit();
+		if (unit->getStatus() == STATUS_WALKING)
+		{
+			_battleGame->getPathfinding()->abortPath();
+			return;
+		}
+	}
+
 	// don't handle mouseclicks below 140, because they are in the buttons area (it overlaps with map surface)
 	if (action->getDetails()->motion.y/action->getYScale() > BUTTONS_AREA) return;
 
-	// don't accept clicks if there is no cursor
+	// don't accept below clicks if there is no cursor
 	if (_map->isCursorHidden()) return;
 
 	Position pos;
@@ -433,31 +444,31 @@ void BattlescapeState::moveUnit()
 
 	if (unit->getStatus() == STATUS_WALKING)
 	{
-		unit->keepWalking();
-
-		// play footstep sound every step = two steps between two tiles
+		// play footstep sound 1
 		if (unit->getWalkingPhase() == 3)
 		{
 			Tile *tile = _battleGame->getTile(unit->getPosition());
 			if (tile->getFootstepSound())
 				_game->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(22 + (tile->getFootstepSound()*2))->play();
 		}
-		// at walking phase 4 the unit moved from one tile to the other
-		if (unit->getWalkingPhase() == 4)
-		{
-			_battleGame->getTile(unit->getLastPosition())->setUnit(0);
-			_battleGame->getTile(unit->getPosition())->setUnit(unit);
-		}
-		// play footstep sound every step = two steps between two tiles
+		// play footstep sound 2
 		if (unit->getWalkingPhase() == 7)
 		{
 			Tile *tile = _battleGame->getTile(unit->getPosition());
 			if (tile->getFootstepSound())
 				_game->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(23 + (tile->getFootstepSound()*2))->play();
-			tile->setUnit(unit); // unit is now on this tile
 		}
 
-		if (unit->getStatus() != STATUS_STANDING)
+		unit->keepWalking(); // advances the phase
+
+		// unit moved from one tile to the other, update the tiles
+		if (unit->getPosition() != unit->getLastPosition())
+		{
+			_battleGame->getTile(unit->getLastPosition())->setUnit(0);
+			_battleGame->getTile(unit->getPosition())->setUnit(unit);
+		}
+
+		if (unit->getStatus() != STATUS_STANDING) // we handle the standing part below
 		{
 			_map->cacheUnits();
 			_map->draw();
@@ -467,7 +478,7 @@ void BattlescapeState::moveUnit()
 	if (unit->getStatus() == STATUS_TURNING)
 	{
 		unit->turn();
-		_battleGame->getTerrainModifier()->calculateLineOfSight(unit);
+		_battleGame->getTerrainModifier()->calculateFOV(unit);
 		_map->cacheUnits();
 		_map->draw();
 	}
@@ -497,24 +508,24 @@ void BattlescapeState::moveUnit()
 				unit->startWalking(dir, destination);
 				_map->hideCursor(true); // hide cursor while walking
 				_game->getCursor()->setVisible(false);
+
+				_map->cacheUnits();
+				_map->draw(); // draws phase 0
 			}
 		}
-		else if (_map->isCursorHidden())
-		{
-			_battleGame->getTerrainModifier()->calculateLighting();
-			_map->hideCursor(false); // show cursor again
-			_game->getCursor()->setVisible(true);
-		}
 
-		if (moved)
+		if (moved) // we have moved one tile: the walking cycle is finished
 		{
 			moved = false;
 			_map->setViewHeight(unit->getPosition().z);
-			_battleGame->getTerrainModifier()->calculateLineOfSight(unit);
+			_battleGame->getTerrainModifier()->calculateFOV(unit);
 			// if you want lighting to be calculated every step, uncomment next line
 			//_battleGame->getTerrainModifier()->calculateLighting();
-			if (unit->getStatus() == STATUS_STANDING)
+			if (unit->getStatus() == STATUS_STANDING) // we finished walking
 			{
+				_battleGame->getTerrainModifier()->calculateLighting();
+				_map->hideCursor(false); // show cursor again
+				_game->getCursor()->setVisible(true);
 				_map->cacheUnits();
 				_map->draw();
 			}

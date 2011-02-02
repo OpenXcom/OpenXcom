@@ -91,7 +91,12 @@ void UnitSprite::draw()
 		}
 	}
 
-	if (_unit->getStatus() == STATUS_STANDING)
+	if (torso && _unit->getStatus() == STATUS_WALKING)
+	{
+		torso->setY(rules->getWalkTorsoOffset(_unit->getWalkingPhase()));
+	}
+
+	if (_unit->getStatus() == STATUS_STANDING || _unit->getStatus() == STATUS_TURNING)
 	{
 		legs = _res->getSurfaceSet(sheet)->getFrame(rules->getLegsStand() + _unit->getDirection());
 		if (_unit->getDirection() < 4)
@@ -105,10 +110,9 @@ void UnitSprite::draw()
 			bottomArm = _res->getSurfaceSet(sheet)->getFrame(rules->getRightArmStand() + _unit->getDirection());
 		}
 	}
-	else
+	if (_unit->getStatus() == STATUS_WALKING)
 	{
 		legs = _res->getSurfaceSet(sheet)->getFrame(rules->getLegsWalk(_unit->getDirection()) + _unit->getWalkingPhase());
-		legs->setY(rules->getLegsWalkOffset(_unit->getWalkingPhase()));
 		if (_unit->getDirection() < 4)
 		{
 			bottomArm = _res->getSurfaceSet(sheet)->getFrame(rules->getLeftArmWalk(_unit->getDirection()) + _unit->getWalkingPhase());
@@ -119,10 +123,7 @@ void UnitSprite::draw()
 			topArm = _res->getSurfaceSet(sheet)->getFrame(rules->getLeftArmWalk(_unit->getDirection()) + _unit->getWalkingPhase());
 			bottomArm = _res->getSurfaceSet(sheet)->getFrame(rules->getRightArmWalk(_unit->getDirection()) + _unit->getWalkingPhase());
 		}
-		topArm->setY(rules->getWalkArmsOffset(_unit->getWalkingPhase()));
-		bottomArm->setY(rules->getWalkArmsOffset(_unit->getWalkingPhase()));		
 	}
-
 
 	if (bottomArm) bottomArm->blit(this);
 	if (torso) torso->blit(this);

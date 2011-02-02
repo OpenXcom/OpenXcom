@@ -129,16 +129,6 @@ int RuleUnitSprite::getLegsWalk(int dir) const
 	return _legsWalk[dir];
 }
 
-/**
- * Sets the legs walk offset.
- * @param offset Y.
- * @param phase 
- */
-void RuleUnitSprite::setLegsWalkOffset(int offset, int phase)
-{
-	_walkLegsYOffset[phase] = offset;
-}
-
 int RuleUnitSprite::getDie() const
 {
     return _die;
@@ -209,9 +199,10 @@ int RuleUnitSprite::getStandWeaponYOffset() const
     return _standWeaponYOffset;
 }
 
-int RuleUnitSprite::getWalkArmsOffset(int phase) const
+
+int RuleUnitSprite::getWalkTorsoOffset(int phase) const
 {
-    return _walkArmsYOffset[phase];
+    return _walkTorsoYOffset[phase];
 }
 
 void RuleUnitSprite::setDie(int die)
@@ -284,19 +275,9 @@ void RuleUnitSprite::setStandWeaponYOffset(int standWeaponYOffset)
     this->_standWeaponYOffset = standWeaponYOffset;
 }
 
-void RuleUnitSprite::setWalkArmsYOffset(int walkArmsYOffset, int phase)
+void RuleUnitSprite::setWalkTorsoYOffset(int walkTorsoYOffset, int phase)
 {
-    this->_walkArmsYOffset[phase] = walkArmsYOffset;
-}
-
-/**
- * Gets the legs stand frame.
- * @param phase
- * @return Y offset.
- */
-int RuleUnitSprite::getLegsWalkOffset(int phase)
-{
-	return _walkLegsYOffset[phase];
+    this->_walkTorsoYOffset[phase] = walkTorsoYOffset;
 }
 
 }

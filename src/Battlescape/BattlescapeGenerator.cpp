@@ -194,6 +194,7 @@ void BattlescapeGenerator::run()
 			if ((*i)->getCraft() == _craft)
 				addSoldier((*i), _game->getRuleset()->getUnitSprites("XCOM_0"));
 		}
+		_save->setSelectedUnit(_save->getUnits()->at(0)); // select first soldier
 
 		// add items that are in the craft
 		for (std::map<std::string, Item*>::iterator i = _craft->getItems()->begin(); i != _craft->getItems()->end(); i++)
@@ -252,7 +253,6 @@ void BattlescapeGenerator::addSoldier(Soldier *soldier, RuleUnitSprite *rules)
 	}
 
 	_save->getUnits()->push_back(unit);
-	_save->setSelectedUnit(unit);
 }
 
 /**

@@ -1188,23 +1188,21 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_terrains.insert(std::pair<std::string, RuleTerrain*>("URBAN",urban));
 
 	RuleUnitSprite *xcom_0 = new RuleUnitSprite();
+	int o[8] = {1, 0, -1, 0, 1, 0, -1, 0};
 	xcom_0->setSpriteSheet("XCOM_0.PCK");
 	xcom_0->setTorso(32);
 	xcom_0->setFemaleTorso(267);
 	xcom_0->setLegsStand(16);
 	for (int i=0; i<8; i++)
 		xcom_0->setLegsWalk(56 + 24 * i, i);
-	for (int i=0; i<8; i++)
-		xcom_0->setLegsWalkOffset((i%4)?0:-2, i);
 	xcom_0->setLeftArmStand(0);
 	xcom_0->setRightArmStand(8);
 	for (int i=0; i<8; i++)
 		xcom_0->setLeftArmWalk(40 + 24 * i, i);
 	for (int i=0; i<8; i++)
 		xcom_0->setRightArmWalk(48 + 24 * i, i);
-	int o[8] = {-1, 0, 1, 0, -1, 0, 1, 0};
 	for (int i=0; i<8; i++)
-		xcom_0->setWalkArmsYOffset(o[i], i);
+		xcom_0->setWalkTorsoYOffset(o[i], i);
 
 	RuleUnitSprite *sectoid = new RuleUnitSprite();
 	sectoid->setSpriteSheet("SECTOID.PCK");
@@ -1213,8 +1211,6 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	sectoid->setLegsStand(16);
 	for (int i=0; i<8; i++)
 		sectoid->setLegsWalk(56 + 24 * i, i);
-	for (int i=0; i<8; i++)
-		sectoid->setLegsWalkOffset((i%4)?0:-2, i);
 	sectoid->setLeftArmStand(0);
 	sectoid->setRightArmStand(8);
 	for (int i=0; i<8; i++)
@@ -1223,7 +1219,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 		sectoid->setRightArmWalk(48 + 24 * i, i);
 	//int o[8] = {2, 0, 2, 0, -1, 2, 0, 2};
 	for (int i=0; i<8; i++)
-		sectoid->setWalkArmsYOffset(o[i], i);
+		sectoid->setWalkTorsoYOffset(o[i], i);
 
 	_unitSprites.insert(std::pair<std::string, RuleUnitSprite*>("XCOM_0",xcom_0));
 	_unitSprites.insert(std::pair<std::string, RuleUnitSprite*>("SECTOID",sectoid));

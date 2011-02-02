@@ -43,13 +43,12 @@ protected:
 	int _currentFrame[4];
 	bool _discovered; // tile has been seen in the past
 	std::vector<BattleUnit *> _visibleByUnit; // units this tile is now seen by 
-	int _shadeSun;
-	int _light, _lastLight, _smoke, _fire, _sessionID;
+	int _sunLight, _light, _lastLight, _smoke, _fire, _sessionID;
 	Position _pos;
 	bool _cached;
 	BattleUnit *_unit; // unit on this tile
 	std::vector<BattleItem *> _inventory; // items on this tile
-
+	int _animationOffset; //Animation frame offset. Set at random, to break tile pattern in cloud of smoke. Ranges from 0 to 3. 
 public:
 	/// Creates a tile.
 	Tile(const Position& pos);
@@ -84,12 +83,13 @@ public:
 	void setDiscovered(bool flag);
 	bool isDiscovered();
 	/// Set the shade amount.
-	void setShadeSun(int shade);
+	void setSunLight(int sun);
 	/// Change a light amount (+ ligther / - dimmer).
 	void resetLight();
 	void addLight(int light, int sessionID);
 	void isSeenBy(BattleUnit *unit, int sessionID);
 	void setLight();
+	bool isChecked(int sessionID);
 	/// Get the shade amount.
 	int getShade();
 	/// Destroy a tile part.
@@ -104,6 +104,10 @@ public:
 	void setFire(int fire);
 	/// Get fire.
 	int getFire();
+	/// Set smoke.
+	void setSmoke(int smoke);
+	/// Get smoke.
+	int getSmoke();
 };
 
 }

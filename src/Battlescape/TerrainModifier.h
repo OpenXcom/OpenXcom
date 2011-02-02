@@ -19,6 +19,7 @@
 #ifndef OPENXCOM_TERRAINMODIFIER_H
 #define OPENXCOM_TERRAINMODIFIER_H
 
+#include <vector>
 #include "Position.h"
 #include "../Ruleset/MapData.h"
 
@@ -35,9 +36,12 @@ class Tile;
 class TerrainModifier
 {
 private:
+	std::vector<std::vector<int> > distances;
 	SavedBattleGame *_save;
+	void addLight(const Position &center, int power);
 	int blockage(Tile *tile, const int part, Affector affector);
-	int blockage(Tile *startTile, Tile *endTile, Affector affector);
+	int horizontalBlockage(Tile *startTile, Tile *endTile, Affector affector);
+	int verticalBlockage(Tile *startTile, Tile *endTile, Affector affector);
 	int vectorToDirection(const Position &vector);
 public:
 	/// Creates a new TerrainModifier class.
@@ -49,13 +53,11 @@ public:
 	/// Calculate sun shading of a single tile.
 	void calculateSunShading(Tile *tile);
 	/// Calculate the visible tiles of a unit.
-	void calculateLineOfSight(BattleUnit *unit);
+	void calculateFOV(BattleUnit *unit);
 	/// Recalculate lighting of the battlescape.
 	void calculateLighting();
 	/// Tile destruction. (for testing purposes)
 	void destroyTile(Tile *tile);
-	/// Affect tiles in a circular pattern.
-	void circularRaytracing(const Position &center, Affector affector, int power, double startAngle = 0, double stopAngle = 360, BattleUnit *unit = 0);
 };
 
 }

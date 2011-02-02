@@ -66,6 +66,8 @@ public:
 	int dequeuePath();
 	/// Get's the TU cost to move from 1 tile to the other.
 	int getTUCost(const Position &startPosition, const int direction, Position *endPosition, BattleUnit *unit);
+	/// Abort the current path.
+	void abortPath();
 };
 
 }

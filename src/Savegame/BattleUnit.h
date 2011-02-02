@@ -94,8 +94,10 @@ public:
 	void startWalking(int direction, const Position &destination);
 	/// Increase the walkingPhase
 	void keepWalking();
-	/// Gets the walking phase
+	/// Gets the walking phase for animation and sound
 	int getWalkingPhase() const;
+	/// Gets the walking phase for diagonal walking
+	int getDiagonalWalkingPhase() const;
 	/// Gets the unit's destination when walking
 	const Position &getDestination() const;
 	/// Look at a certain point.
