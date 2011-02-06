@@ -523,7 +523,7 @@ void BattlescapeState::moveUnit()
 			//_battleGame->getTerrainModifier()->calculateLighting();
 			if (unit->getStatus() == STATUS_STANDING) // we finished walking
 			{
-				_battleGame->getTerrainModifier()->calculateLighting();
+				_battleGame->getTerrainModifier()->calculateUnitLighting();
 				_map->hideCursor(false); // show cursor again
 				_game->getCursor()->setVisible(true);
 				_map->cacheUnits();
@@ -569,13 +569,13 @@ bool BattlescapeState::unitOpensDoor(BattleUnit *unit)
 	if (door == 0) //normal door
 	{
 		_game->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(3)->play();
-		_battleGame->getTerrainModifier()->calculateLighting();
+		_battleGame->getTerrainModifier()->calculateFOV(tile->getPosition());
 		return true;
 	}
 	if (door == 1) // ufo door
 	{
 		_game->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(RNG::generate(20,21))->play();
-		_battleGame->getTerrainModifier()->calculateLighting();
+		_battleGame->getTerrainModifier()->calculateFOV(tile->getPosition());
 		return true;
 	}
 	if (door == 3) // ufo door opening

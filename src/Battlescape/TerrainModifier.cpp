@@ -24,6 +24,7 @@
 #include "../Savegame/Tile.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Engine/RNG.h"
+#include "../Ruleset/MapDataSet.h"
 
 namespace OpenXcom
 {
@@ -83,14 +84,16 @@ void TerrainModifier::calculateSunShading(Tile *tile)
 		}
 	}
 
-	tile->setSunLight(power);
+	tile->addLight(power, 0, 0);
 }
 
 /**
-  * Recalculate lighting for the complete battlescape: units,terrain,items,fire.
+  * Recalculate lighting for the terrain: objects,items,fire.
   */
-void TerrainModifier::calculateLighting()
+void TerrainModifier::calculateTerrainLighting()
 {
+	const int layer = 1;
+
 	// during daytime don't calculate lighting
 	if (_save->getGlobalShade() < 1)
 		return;
@@ -98,7 +101,7 @@ void TerrainModifier::calculateLighting()
 	// reset all light to 0 first
 	for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); i++)
 	{
-		_save->getTiles()[i]->resetLight();
+		_save->getTiles()[i]->resetLight(layer);
 	}
 
 	// add lighting of terrain
@@ -108,40 +111,64 @@ void TerrainModifier::calculateLighting()
 		if (_save->getTiles()[i]->getMapData(O_FLOOR)
 			&& _save->getTiles()[i]->getMapData(O_FLOOR)->getLightSource())
 		{
-			addLight(_save->getTiles()[i]->getPosition(), _save->getTiles()[i]->getMapData(O_FLOOR)->getLightSource());
+			addLight(_save->getTiles()[i]->getPosition(), _save->getTiles()[i]->getMapData(O_FLOOR)->getLightSource(), layer);
 		}
 		if (_save->getTiles()[i]->getMapData(O_OBJECT)
 			&& _save->getTiles()[i]->getMapData(O_OBJECT)->getLightSource())
 		{
-			addLight(_save->getTiles()[i]->getPosition(), _save->getTiles()[i]->getMapData(O_OBJECT)->getLightSource());
+			addLight(_save->getTiles()[i]->getPosition(), _save->getTiles()[i]->getMapData(O_OBJECT)->getLightSource(), layer);
 		}
 
-		// not sure yet how much lighting power fire has
+		// fires
 		if (_save->getTiles()[i]->getFire())
 		{
-			addLight(_save->getTiles()[i]->getPosition(), 13);
+			addLight(_save->getTiles()[i]->getPosition(), 15, layer);
 		}
 
 	}
 
 	// add lighting of items (flares)
 
+	// indicate we have finished recalculating
+	for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); i++)
+	{
+		_save->getTiles()[i]->setLight(layer);
+	}
+}
+
+/**
+  * Recalculate lighting for the units.
+  */
+void TerrainModifier::calculateUnitLighting()
+{
+	const int layer = 2;
+
+	// during daytime don't calculate lighting
+	if (_save->getGlobalShade() < 1)
+		return;
+
+	// reset all light to 0 first
+	for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); i++)
+	{
+		_save->getTiles()[i]->resetLight(layer);
+	}
+
 	// add lighting of soldiers + recalculate line of sight
 	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); i++)
 	{
 		if ((*i)->getFaction() == FACTION_PLAYER)
 		{
-			addLight((*i)->getPosition(), 15);
-			calculateFOV(*i);
+			addLight((*i)->getPosition(), 15, layer);
 		}
 	}
 
 	// indicate we have finished recalculating
 	for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); i++)
 	{
-		_save->getTiles()[i]->setLight();
+		_save->getTiles()[i]->setLight(layer);
 	}
 }
+
 
 /**
  * Destroys all parts of a tile. This is used for testing purposes (press 'd' on battlescape)
@@ -157,12 +184,19 @@ void TerrainModifier::destroyTile(Tile *tile)
 	{
 		tile->setMapData(0, O_FLOOR);
 	}
+	// on bottom level, if floor is destroyed, it turns into burned ground from blanks.mcd
+	if (tile->getPosition().z == 0 && tile->getMapData(O_FLOOR) == 0)
+	{
+		tile->setMapData(_save->getMapDataSets()->at(0)->getObjects()->at(0), O_FLOOR);
+	}
 	for (int i=0; i < _save->getHeight() - 1; i++)
 	{
 		calculateSunShading(_save->getTile(Position(tile->getPosition().x, tile->getPosition().y, i)));
 	}
 
-	calculateLighting();
+	// recalculate line of sight (to optimise: only units in range)
+	calculateFOV(tile->getPosition());
+
 }
 
 /**
@@ -273,7 +307,28 @@ void TerrainModifier::calculateFOV(BattleUnit *unit)
 	}
 }
 
-void TerrainModifier::addLight(const Position &center, int power)
+/**
+ * Calculates line of sight of a soldiers within range of the Position.
+ * @param position
+ */
+void TerrainModifier::calculateFOV(const Position &position)
+{
+	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); i++)
+	{
+		if ((*i)->getFaction() == FACTION_PLAYER)
+		{
+			calculateFOV(*i);
+		}
+	}
+}
+
+/**
+ * Adds simple light overlay.
+ * @param center
+ * @param power
+ * @param layer
+ */
+void TerrainModifier::addLight(const Position &center, int power, int layer)
 {
 	int sessionID = RNG::generate(1,65000);
 	for (int x = 0; x <= power; x++)
@@ -284,13 +339,13 @@ void TerrainModifier::addLight(const Position &center, int power)
 			{
 				//int distance = sqrt(float(x*x + y*y));
 				if (_save->getTile(Position(center.x + x,center.y + y, z)))
-				_save->getTile(Position(center.x + x,center.y + y, z))->addLight(power - distances[x][y], sessionID);
+				_save->getTile(Position(center.x + x,center.y + y, z))->addLight(power - distances[x][y], sessionID, layer);
 				if (_save->getTile(Position(center.x - x,center.y - y, z)))
-				_save->getTile(Position(center.x - x,center.y - y, z))->addLight(power - distances[x][y], sessionID);
+				_save->getTile(Position(center.x - x,center.y - y, z))->addLight(power - distances[x][y], sessionID, layer);
 				if (_save->getTile(Position(center.x - x,center.y + y, z)))
-				_save->getTile(Position(center.x - x,center.y + y, z))->addLight(power - distances[x][y], sessionID);
+				_save->getTile(Position(center.x - x,center.y + y, z))->addLight(power - distances[x][y], sessionID, layer);
 				if (_save->getTile(Position(center.x + x,center.y - y, z)))
-				_save->getTile(Position(center.x + x,center.y - y, z))->addLight(power - distances[x][y], sessionID);
+				_save->getTile(Position(center.x + x,center.y - y, z))->addLight(power - distances[x][y], sessionID, layer);
 			}
 		}
 	}

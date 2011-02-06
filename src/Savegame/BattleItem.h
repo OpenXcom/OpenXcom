@@ -38,14 +38,14 @@ enum Location {LOC_GROUND, LOC_LEFT_ARM, LOC_RIGHT_ARM, LOC_LEFT_LEG, LOC_RIGHT_
 class BattleItem
 {
 private:
-	Item *_item;
+	RuleItem *_rules;
 	int _ammoQty;
 	Position _position;
 	Location _location;
 	BattleItem *_ammoItem;
 public:
 	/// Creates a item of the specified type.
-	BattleItem(Item *item, int ammoQty = 0);
+	BattleItem(RuleItem *rules, int ammoQty = 0);
 	/// Cleans up the item.
 	~BattleItem();
 	/// Gets the item's ruleset.

@@ -23,6 +23,7 @@
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
+#include "../Savegame/Item.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/Soldier.h"
 #include "../Savegame/BattleUnit.h"
@@ -219,7 +220,8 @@ void BattlescapeGenerator::run()
 	_save->setGlobalShade(worldshades[_worldShade]);
 
 	_save->getTerrainModifier()->calculateSunShading();
-	_save->getTerrainModifier()->calculateLighting();
+	_save->getTerrainModifier()->calculateTerrainLighting();
+	_save->getTerrainModifier()->calculateUnitLighting();
 }
 
 /**
@@ -319,7 +321,7 @@ void BattlescapeGenerator::addAlien(RuleUnitSprite *rules, NodeRank rank, const 
  */
 void BattlescapeGenerator::addItem(Item *item)
 {
-	BattleItem *bi = new BattleItem(item);
+	BattleItem *bi = new BattleItem(item->getRules());
 
 	// todo: define position
 	_save->getItems()->push_back(bi);

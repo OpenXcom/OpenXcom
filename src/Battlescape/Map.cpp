@@ -403,7 +403,7 @@ void Map::keyboardPress(Action *action, State *state)
 	if (action->getDetails()->key.keysym.sym == SDLK_f)
 	{
 		_save->getTile(pos)->setFire(RNG::generate(1,5));
-		_save->getTerrainModifier()->calculateLighting();
+		_save->getTerrainModifier()->calculateTerrainLighting();
 	}
 	// "s" - puts a tile on smoke (for testing purposes)
 	if (action->getDetails()->key.keysym.sym == SDLK_s)

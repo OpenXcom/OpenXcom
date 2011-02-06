@@ -38,7 +38,7 @@ class TerrainModifier
 private:
 	std::vector<std::vector<int> > distances;
 	SavedBattleGame *_save;
-	void addLight(const Position &center, int power);
+	void addLight(const Position &center, int power, int layer);
 	int blockage(Tile *tile, const int part, Affector affector);
 	int horizontalBlockage(Tile *startTile, Tile *endTile, Affector affector);
 	int verticalBlockage(Tile *startTile, Tile *endTile, Affector affector);
@@ -54,8 +54,12 @@ public:
 	void calculateSunShading(Tile *tile);
 	/// Calculate the visible tiles of a unit.
 	void calculateFOV(BattleUnit *unit);
+	/// Calculate the field of view within range of a certain position.
+	void calculateFOV(const Position &position);
 	/// Recalculate lighting of the battlescape.
-	void calculateLighting();
+	void calculateTerrainLighting();
+	/// Recalculate lighting of the battlescape.
+	void calculateUnitLighting();
 	/// Tile destruction. (for testing purposes)
 	void destroyTile(Tile *tile);
 };

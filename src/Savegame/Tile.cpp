@@ -28,12 +28,17 @@ namespace OpenXcom
 * constructor
 * @param pos Position.
 */
-Tile::Tile(const Position& pos): _discovered(false), _sunLight(0), _light(0), _lastLight(0), _smoke(0), _fire(0), _pos(pos), _cached(false), _unit(0)
+Tile::Tile(const Position& pos): _discovered(false), _smoke(0), _fire(0), _pos(pos), _cached(false), _unit(0)
 {
 	for (int i = 0; i < 4; i++)
 	{
 		_objects[i] = 0;
 		_currentFrame[i] = 0;
+	}
+	for (int layer = 0; layer < LIGHTLAYERS; layer++)
+	{
+		_light[layer] = 0;
+		_lastLight[layer] = 0;
 	}
 }
 
@@ -234,32 +239,19 @@ bool Tile::isDiscovered()
 {
 	return _discovered;
 }
-/**
- * Sets the tile's shade amount 0-15.
- * Determined by the sun. Absolute amount.
- * @param shade
- */
-void Tile::setSunLight(int sun)
-{
-	if (_sunLight != sun)
-	{
-		_sunLight = sun;
-		setCached(false);
-	}
-}
 
 /**
  * Add a light amount to the tile. If it was already lit more, it is ignored.
  * @param light Amount of light to add.
  * @param sessionID Unique number to avoid tiles are lit only once in a session.
  */
-void Tile::addLight(int light, int sessionID)
+void Tile::addLight(int light, int sessionID, int layer)
 {
 	if (sessionID == _sessionID) return;
 	_sessionID = sessionID;
 
-	if (_light < light)
-		_light = light;
+	if (_light[layer] < light)
+		_light[layer] = light;
 }
 
 bool Tile::isChecked(int sessionID)
@@ -278,43 +270,44 @@ void Tile::isSeenBy(BattleUnit *unit, int sessionID)
 		setCached(false);
 	}
 	_sessionID = sessionID;
-	_visibleByUnit.push_back(unit);
 }
 
-void Tile::resetLight()
+void Tile::resetLight(int layer)
 {
-	_lastLight = _light;
-	_light = 0;
+	_lastLight[layer] = _light[layer];
+	_light[layer] = 0;
 	_sessionID = 0;
-	_visibleByUnit.clear();
 }
 
-void Tile::setLight()
+void Tile::setLight(int layer)
 {
-	if (_lastLight != _light)
+	if (_lastLight[layer] != _light[layer])
 	{
 		setCached(false);
 	}
 }
 
 /**
- * Gets the tile's shade amount 0-15.
+ * Gets the tile's shade amount 0-15. It returns the brightest of all light layers.
+ * And shade level is actually the inverse of light level.
  * @return shade
  */
 int Tile::getShade()
 {
 	int light = 0;
 
-	if (_sunLight > _light)
-		light = _sunLight;
-	else
-		light = _light;
+	for (int layer = 0; layer < LIGHTLAYERS; layer++)
+	{
+		if (_light[layer] > light)
+			light = _light[layer];
+	}
 
 	return 15 - light;
 }
 
 /**
- * Destroy a part on this tile.
+ * Destroy a part on this tile. We first remove the old object, then replace it with the new one.
+ * This is because the object type of the old and new one are not nescessarly the same.
  * @param part
  */
 void Tile::destroy(int part)

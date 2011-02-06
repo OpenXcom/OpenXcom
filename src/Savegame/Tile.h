@@ -24,6 +24,8 @@
 #include "../Battlescape/Position.h"
 #include "../Ruleset/MapData.h"
 
+#define LIGHTLAYERS 3
+
 namespace OpenXcom
 {
 
@@ -42,8 +44,7 @@ protected:
 	MapData *_objects[4];
 	int _currentFrame[4];
 	bool _discovered; // tile has been seen in the past
-	std::vector<BattleUnit *> _visibleByUnit; // units this tile is now seen by 
-	int _sunLight, _light, _lastLight, _smoke, _fire, _sessionID;
+	int _light[LIGHTLAYERS], _lastLight[LIGHTLAYERS], _smoke, _fire, _sessionID;
 	Position _pos;
 	bool _cached;
 	BattleUnit *_unit; // unit on this tile
@@ -82,13 +83,10 @@ public:
 	bool isCached();
 	void setDiscovered(bool flag);
 	bool isDiscovered();
-	/// Set the shade amount.
-	void setSunLight(int sun);
-	/// Change a light amount (+ ligther / - dimmer).
-	void resetLight();
-	void addLight(int light, int sessionID);
+	void resetLight(int layer);
+	void addLight(int light, int sessionID, int layer);
 	void isSeenBy(BattleUnit *unit, int sessionID);
-	void setLight();
+	void setLight(int layer);
 	bool isChecked(int sessionID);
 	/// Get the shade amount.
 	int getShade();

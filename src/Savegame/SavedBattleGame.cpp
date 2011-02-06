@@ -84,8 +84,8 @@ void SavedBattleGame::load(const YAML::Node &node)
  */
 void SavedBattleGame::save(YAML::Emitter &out) const
 {
-/** under construction
-*
+/** 
+* under construction
 */
 	out << YAML::BeginMap;
 
