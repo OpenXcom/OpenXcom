@@ -18,6 +18,7 @@
  */
 #include "Palette.h"
 #include <fstream>
+#include "Exception.h"
 
 namespace OpenXcom
 {
@@ -54,28 +55,21 @@ void Palette::loadDat(const std::string &filename, int ncolors, int offset)
 	std::ifstream palFile (filename.c_str(), std::ios::in | std::ios::binary);
 	if (!palFile)
 	{
-		throw "Failed to load palette";
+		throw Exception("Failed to load palette");
 	}
 
 	// Move pointer to proper pallete
 	palFile.seekg(offset, std::ios::beg);
 	
-	char value[3];
+	Uint8 value[3];
 
-	for (int j = 0; j < ncolors && palFile.read(value, 3); j++)
+	for (int j = 0; j < ncolors && palFile.read((char*)value, 3); j++)
 	{
 		// Correct X-Com colors to RGB colors
-		_colors[j].r = Uint8(value[0]) * 4;
-		_colors[j].g = Uint8(value[1]) * 4;
-		_colors[j].b = Uint8(value[2]) * 4;
+		_colors[j].r = value[0] * 4;
+		_colors[j].g = value[1] * 4;
+		_colors[j].b = value[2] * 4;
 	}
-
-	/*
-	if (!palFile.eof())
-	{
-		throw "Invalid data from file";
-	}
-	*/
 
 	palFile.close();
 }

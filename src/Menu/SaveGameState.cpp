@@ -22,6 +22,7 @@
 #include "../Savegame/SavedGame.h"
 #include "../Engine/Game.h"
 #include "../Engine/Action.h"
+#include "../Engine/Exception.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
 #include "../Engine/Font.h"
@@ -159,19 +160,19 @@ void SaveGameState::edtSaveKeyPress(Action *action)
 				std::string newName = USER_DIR + Language::wstrToUtf8(_edtSave->getText()) + ".sav";
 				if (rename(oldName.c_str(), newName.c_str()) != 0)
 				{
-					throw "Failed to overwrite save";
+					throw Exception("Failed to overwrite save");
 				}
 			}
 			_game->getSavedGame()->save(Language::wstrToUtf8(_edtSave->getText()));
 		}
-		catch (const char *c)
+		catch (Exception &e)
 		{
-			std::cout << "ERROR: " << c << std::endl;
+			std::cerr << "ERROR: " << e.what() << std::endl;
 			_game->pushState(new GeoscapeErrorState(_game, "STR_SAVE_UNSUCCESSFUL"));
 		}
-		catch (YAML::Exception e)
+		catch (YAML::Exception &e)
 		{
-			std::cout << "ERROR: " << e.what() << std::endl;
+			std::cerr << "ERROR: " << e.what() << std::endl;
 			_game->pushState(new GeoscapeErrorState(_game, "STR_SAVE_UNSUCCESSFUL"));
 		}
 		_game->popState();

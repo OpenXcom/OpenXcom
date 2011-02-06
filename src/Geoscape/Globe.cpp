@@ -36,6 +36,7 @@
 #include "../Interface/Text.h"
 #include "../Engine/Font.h"
 #include "../Engine/Language.h"
+#include "../Engine/Exception.h"
 #include "../Ruleset/RuleRegion.h"
 #include "../Savegame/Region.h"
 #include "../Ruleset/City.h"
@@ -332,7 +333,7 @@ void Globe::loadDat(const std::string &filename, std::list<Polygon*> *polygons)
 	std::ifstream mapFile (filename.c_str(), std::ios::in | std::ios::binary);
 	if (!mapFile)
 	{
-		throw "Failed to load DAT";
+		throw Exception("Failed to load DAT");
 	}
 	
 	short value[10];
@@ -368,7 +369,7 @@ void Globe::loadDat(const std::string &filename, std::list<Polygon*> *polygons)
 
 	if (!mapFile.eof())
 	{
-		throw "Invalid data from file";
+		throw Exception("Invalid data from file");
 	}
 
 	mapFile.close();

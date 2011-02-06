@@ -19,6 +19,7 @@
 #include "SurfaceSet.h"
 #include <fstream>
 #include "Surface.h"
+#include "Exception.h"
 
 namespace OpenXcom
 {
@@ -96,10 +97,10 @@ void SurfaceSet::loadPck(const std::string &pck, const std::string &tab)
     std::ifstream imgFile (pck.c_str(), std::ios::in | std::ios::binary);
 	if (!imgFile)
 	{
-		throw "Failed to load PCK";
+		throw Exception("Failed to load PCK");
 	}
 	
-	char value;
+	Uint8 value;
 	
 	for (int frame = 0; frame < nframes; frame++)
 	{
@@ -108,7 +109,7 @@ void SurfaceSet::loadPck(const std::string &pck, const std::string &tab)
 		// Lock the surface
 		_frames[frame]->lock();
 
-		imgFile.read(&value, 1);
+		imgFile.read((char*)&value, 1);
 		for (int i = 0; i < value; i++)
 		{
 			for (int j = 0; j < _width; j++)
@@ -117,36 +118,25 @@ void SurfaceSet::loadPck(const std::string &pck, const std::string &tab)
 			}
 		}
 		
-		while (imgFile.read(&value, 1))
+		while (imgFile.read((char*)&value, 1) && value != 255)
 		{
-			if (value == -2)
+			if (value == 254)
 			{
-				imgFile.read(&value, 1);
+				imgFile.read((char*)&value, 1);
 				for (int i = 0; i < value; i++)
 				{
 					_frames[frame]->setPixelIterative(&x, &y, 0);
 				}
 			}
-			else if (value == -1)
-			{
-				break;
-			}
 			else
 			{
-				_frames[frame]->setPixelIterative(&x, &y, Uint8(value));
+				_frames[frame]->setPixelIterative(&x, &y, value);
 			}
 		}
 
 		// Unlock the surface
 		_frames[frame]->unlock();
 	}
-	
-	/*
-	if (!imgFile.eof())
-	{
-		throw "Invalid data from file";
-	}
-	*/
 
 	imgFile.close();
 	offsetFile.close();
@@ -168,7 +158,7 @@ void SurfaceSet::loadDat(const std::string &filename)
 	std::ifstream imgFile (filename.c_str(), std::ios::in | std::ios::binary);
 	if (!imgFile)
 	{
-		throw "Failed to load DAT";
+		throw Exception("Failed to load DAT");
 	}
 	
 	imgFile.seekg(0, std::ios::end);
@@ -183,15 +173,15 @@ void SurfaceSet::loadDat(const std::string &filename)
 		_frames.push_back(surface);
 	}
 
-	char value;
+	Uint8 value;
 	int x = 0, y = 0, frame = 0;
 
 	// Lock the surface
 	_frames[frame]->lock();
 
-	while (imgFile.read(&value, 1))
+	while (imgFile.read((char*)&value, 1))
 	{
-		_frames[frame]->setPixelIterative(&x, &y, Uint8(value));
+		_frames[frame]->setPixelIterative(&x, &y, value);
 		
 		if (y >= _height)
 		{
@@ -208,13 +198,6 @@ void SurfaceSet::loadDat(const std::string &filename)
 				_frames[frame]->lock();
 		}
 	}
-
-	/*
-	if (!imgFile.eof())
-	{
-		throw "Invalid data from file";
-	}
-	*/
 
 	imgFile.close();
 }

@@ -18,6 +18,7 @@
  */
 #include "TestState.h"
 #include <iostream>
+#include "SDL.h"
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
@@ -26,18 +27,18 @@
 #include "../Engine/Screen.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Surface.h"
+#include "../Engine/Exception.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
-#include "SDL.h"
 
 namespace OpenXcom
 {
 
 void FontToBmp(const std::string &font, int w, int h)
 {
-	std::string dat = "./DATA/GEODATA/" + font + ".DAT";
+	std::string dat = "./" + font + ".DAT";
 	std::string bmp = "./" + font + ".BMP";
 	Surface *s = new Surface(w, h*173);
 	s->loadScr(dat);
@@ -59,7 +60,7 @@ void FontToBmp(const std::string &font, int w, int h)
 
 void BmpToFont(const std::string &font)
 {
-	std::string dat = "./DATA/GEODATA/" + font + ".DAT";
+	std::string dat = "./" + font + ".DAT";
 	std::string bmp = "./" + font + ".BMP";
 	SDL_Surface *s = SDL_LoadBMP(bmp.c_str());
 }
@@ -109,8 +110,10 @@ TestState::TestState(Game *game) : State(game)
 	
 	_i = 0;
 
-	FontToBmp("BIGLETS", 16, 16);
-	FontToBmp("SMALLSET", 8, 9);
+	FontToBmp("BIGLETS_R", 16, 16);
+	FontToBmp("SMALLSET_R", 8, 9);
+	FontToBmp("BIGLETS_P", 16, 16);
+	FontToBmp("SMALLSET_P", 8, 9);
 }
 
 TestState::~TestState()
@@ -150,7 +153,7 @@ SDL_Surface *TestState::testSurface()
 	
 	if (surface == 0)
 	{
-		throw SDL_GetError();
+		throw Exception(SDL_GetError());
 	}
 
 	// Lock the surface

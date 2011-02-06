@@ -392,6 +392,9 @@
     <ClCompile Include="Ruleset\MapData.cpp">
       <Filter>Ruleset</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Exception.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -786,6 +789,9 @@
       <Filter>Ruleset</Filter>
     </ClInclude>
     <ClInclude Include="dirent.h" />
+    <ClInclude Include="Engine\Exception.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="OpenXcom.rc" />

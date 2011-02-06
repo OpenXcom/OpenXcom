@@ -21,6 +21,7 @@
 #include <iomanip>
 #include <sys/stat.h>
 #include "SDL_rotozoom.h"
+#include "Exception.h"
 #include "Surface.h"
 #include "Action.h"
 
@@ -42,7 +43,7 @@ Screen::Screen(int width, int height, int bpp) : _xScale(1.0), _yScale(1.0), _fu
 	_screen = SDL_SetVideoMode(width, height, bpp, _flags);
 	if (_screen == 0)
 	{
-		throw SDL_GetError();
+		throw Exception(SDL_GetError());
 	}
 	_surface = new Surface(width, height);
 }
@@ -114,7 +115,7 @@ void Screen::flip()
 
 	if (SDL_Flip(_screen) == -1)
     {
-        throw SDL_GetError();
+        throw Exception(SDL_GetError());
     }
 }
 
@@ -184,7 +185,7 @@ void Screen::setResolution(int width, int height)
 	_screen = SDL_SetVideoMode(width, height, _screen->format->BitsPerPixel, _flags);
 	if (_screen == 0)
 	{
-		throw SDL_GetError();
+		throw Exception(SDL_GetError());
 	}
 	setPalette(_surface->getPalette());
 }

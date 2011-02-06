@@ -18,6 +18,7 @@
  */
 #include <iostream>
 #include <cstring>
+#include <exception>
 #include "Engine/Game.h"
 #include "Engine/Screen.h"
 #include "Menu/StartState.h"
@@ -35,14 +36,16 @@
  * under the GNU General Public License. Enjoy!
  */
 
-OpenXcom::Game *game;
+OpenXcom::Game *game = 0;
 
 // If you can't tell what the main() is for you should have your
 // programming license revoked...
 int main(int argc, char** args)
 {
+#ifndef _DEBUG
 	try
 	{
+#endif
 		game = new OpenXcom::Game("OpenXcom", 320, 200, 8);
 		
 		// Handles command line arguments
@@ -60,17 +63,14 @@ int main(int argc, char** args)
 		game->getScreen()->setResolution(width, height);
 		game->setState(new OpenXcom::StartState(game));
 		game->run();
+#ifndef _DEBUG
 	}
-	catch (const char* c)
+	catch (std::exception &e)
 	{
-		std::cerr << "ERROR: " << c << std::endl;
+		std::cerr << "ERROR: " << e.what() << std::endl;
 		exit(EXIT_FAILURE);
 	}
-	catch (std::exception e)
-	{
-		std::cerr << "EXCEPTION: " << e.what() << std::endl;
-		exit(EXIT_FAILURE);
-	}
+#endif
 	
 	delete game;
 

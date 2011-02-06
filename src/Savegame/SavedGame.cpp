@@ -34,6 +34,7 @@
 #include "Waypoint.h"
 #include "../Engine/Language.h"
 #include "../Interface/TextList.h"
+#include "../Engine/Exception.h"
 
 namespace OpenXcom
 {
@@ -88,7 +89,7 @@ void SavedGame::getList(TextList *list, Language *lang)
 	DIR *dp = opendir(USER_DIR);
     if (dp == 0)
 	{
-        throw "Failed to open saves directory";
+        throw Exception("Failed to open saves directory");
     }
 	
     struct dirent *dirp;
@@ -104,7 +105,7 @@ void SavedGame::getList(TextList *list, Language *lang)
 		std::ifstream fin(fullname.c_str());
 		if (!fin)
 		{
-			throw "Failed to load savegame";
+			throw Exception("Failed to load savegame");
 		}
 		YAML::Parser parser(fin);
 		YAML::Node doc;
@@ -138,7 +139,7 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	std::ifstream fin(s.c_str());
 	if (!fin)
 	{
-		throw "Failed to load savegame";
+		throw Exception("Failed to load savegame");
 	}
     YAML::Parser parser(fin);
 	YAML::Node doc;
@@ -149,7 +150,7 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	doc["version"] >> v;
 	if (v != "0.2")
 	{
-		throw "Version mismatch";
+		throw Exception("Version mismatch");
 	}
 	_time->load(doc["time"]);
 
@@ -230,7 +231,7 @@ void SavedGame::save(const std::string &filename) const
 	std::ofstream sav(s.c_str());
 	if (!sav)
 	{
-		throw "Failed to save savegame";
+		throw Exception("Failed to save savegame");
 	}
 
 	YAML::Emitter outBrief, outSave;

@@ -28,6 +28,7 @@
 #include "../Savegame/SavedGame.h"
 #include "Palette.h"
 #include "Action.h"
+#include "Exception.h"
 
 namespace OpenXcom
 {
@@ -47,13 +48,13 @@ Game::Game(const std::string &title, int width, int height, int bpp) : _screen(0
 	// Initialize SDL
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
 	{
-		throw SDL_GetError();
+		throw Exception(SDL_GetError());
 	}
 
 	// Initialize SDL_mixer
 	if (Mix_OpenAudio(22050, AUDIO_S16SYS, 2, 1024) != 0)
 	{
-		throw Mix_GetError();
+		throw Exception(Mix_GetError());
 	}
 	Mix_AllocateChannels(16);
 

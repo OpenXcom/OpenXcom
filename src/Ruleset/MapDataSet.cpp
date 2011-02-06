@@ -20,6 +20,7 @@
 #include "MapData.h"
 #include <fstream>
 #include <sstream>
+#include "../Engine/Exception.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Resource/ResourcePack.h"
 
@@ -147,7 +148,7 @@ void MapDataSet::load(ResourcePack *res)
 	std::ifstream mapFile (ResourcePack::insensitive(s.str()).c_str(), std::ios::in | std::ios::binary);
 	if (!mapFile)
 	{
-		throw "Failed to load MCD";
+		throw Exception("Failed to load MCD");
 	}
 
 	while (mapFile.read((char*)&mcd, sizeof(MCD)))
@@ -172,7 +173,7 @@ void MapDataSet::load(ResourcePack *res)
 
 	if (!mapFile.eof())
 	{
-		throw "Invalid data from file";
+		throw Exception("Invalid data from file");
 	}
 
 	mapFile.close();

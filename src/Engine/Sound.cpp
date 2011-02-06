@@ -19,6 +19,7 @@
 #include "Sound.h"
 #include <iostream>
 #include "SDL.h"
+#include "Exception.h"
 
 namespace OpenXcom
 {
@@ -47,7 +48,7 @@ void Sound::load(const std::string &filename)
 	_sound = Mix_LoadWAV(filename.c_str());
 	if (_sound == 0) 
 	{
-		throw Mix_GetError();
+		throw Exception(Mix_GetError());
 	}
 }
 
@@ -62,7 +63,7 @@ void Sound::load(const void *data, unsigned int size)
 	_sound = Mix_LoadWAV_RW(rw, 1);
 	if (_sound == 0)
 	{
-		throw Mix_GetError();
+		throw Exception(Mix_GetError());
 	}
 }
 
@@ -73,7 +74,7 @@ void Sound::play() const
 {
 	if (_sound != 0 && Mix_PlayChannel(-1, _sound, 0) == -1)
 	{
-		std::cout << Mix_GetError() << std::endl;
+		std::cerr << Mix_GetError() << std::endl;
 	}
 }
 

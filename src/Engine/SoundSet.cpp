@@ -19,6 +19,7 @@
 #include "SoundSet.h"
 #include "CatFile.h"
 #include "Sound.h"
+#include "Exception.h"
 
 namespace OpenXcom
 {
@@ -57,7 +58,7 @@ void SoundSet::loadCat(const std::string &filename, bool wav)
 	CatFile sndFile (filename.c_str());
 	if (!sndFile)
 	{
-		throw "Failed to load CAT";
+		throw Exception("Failed to load CAT");
 	}
 
 	// Load each sound file
@@ -93,10 +94,10 @@ void SoundSet::loadCat(const std::string &filename, bool wav)
 			else
 				s->load(newsound, 44 + size);
 		}
-		catch (char* c)
+		catch (Exception &e)
 		{
 			// Ignore junk in the file
-			c = c;
+			e = e;
 		}
 		_sounds.push_back(s);
 

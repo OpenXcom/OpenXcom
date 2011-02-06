@@ -17,9 +17,10 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Surface.h"
+#include <fstream>
 #include "SDL_gfxPrimitives.h"
 #include "Palette.h"
-#include <fstream>
+#include "Exception.h"
 
 namespace OpenXcom
 {
@@ -41,7 +42,7 @@ Surface::Surface(int width, int height, int x, int y) : _x(x), _y(y), _visible(t
 
 	if (_surface == 0)
 	{
-		throw SDL_GetError();
+		throw Exception(SDL_GetError());
 	}
 
 	SDL_SetColorKey(_surface, SDL_SRCCOLORKEY, 0);
@@ -90,23 +91,23 @@ void Surface::loadScr(const std::string &filename)
 	std::ifstream imgFile (filename.c_str(), std::ios::in | std::ios::binary);
 	if (!imgFile)
 	{
-		throw "Failed to load SCR";
+		throw Exception("Failed to load SCR");
 	}
 
 	// Lock the surface
 	lock();
 	
-	char value;
+	Uint8 value;
 	int x = 0, y = 0;
 
-	while (imgFile.read(&value, 1))
+	while (imgFile.read((char*)&value, 1))
 	{
-		setPixelIterative(&x, &y, Uint8(value));
+		setPixelIterative(&x, &y, value);
 	}
 
 	if (!imgFile.eof())
 	{
-		throw "Invalid data from file";
+		throw Exception("Invalid data from file");
 	}
 
 	// Unlock the surface
@@ -128,22 +129,22 @@ void Surface::loadSpk(const std::string &filename)
 	std::ifstream imgFile (filename.c_str(), std::ios::in | std::ios::binary);
 	if (!imgFile)
 	{
-		throw "Failed to load SPK";
+		throw Exception("Failed to load SPK");
 	}
 
 	// Lock the surface
 	lock();
 	
 	Uint16 flag;
-	char value;
+	Uint8 value;
 	int x = 0, y = 0;
 
-	while (imgFile.read((char*)&flag, sizeof(flag)))
+	while (imgFile.read((char*)&flag, sizeof(flag)) && flag != 65533)
 	{
 		if (flag == 65535)
 		{
 			imgFile.read((char*)&flag, sizeof(flag));
-			for (int i = 0; i < flag*2; i++)
+			for (int i = 0; i < flag * 2; i++)
 			{
 				setPixelIterative(&x, &y, 0);
 			}
@@ -151,23 +152,13 @@ void Surface::loadSpk(const std::string &filename)
 		else if (flag == 65534)
 		{
 			imgFile.read((char*)&flag, sizeof(flag));
-			for (int i = 0; i < flag*2; i++)
+			for (int i = 0; i < flag * 2; i++)
 			{
-				imgFile.read(&value, 1);
-				setPixelIterative(&x, &y, Uint8(value));
+				imgFile.read((char*)&value, 1);
+				setPixelIterative(&x, &y, value);
 			}
 		}
-		else if (flag == 65533)
-		{
-			break;
-		}
 	}
-	/*
-	if (!imgFile.eof())
-	{
-		throw "Invalid data from file";
-	}
-	*/
 
 	// Unlock the surface
 	unlock();

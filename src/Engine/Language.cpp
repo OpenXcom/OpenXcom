@@ -19,6 +19,7 @@
 #include "Language.h"
 #include <iostream>
 #include <fstream>
+#include "Exception.h"
 
 namespace OpenXcom
 {
@@ -156,7 +157,7 @@ void Language::loadLng(const std::string &filename)
 	std::ifstream txtFile (filename.c_str(), std::ios::in | std::ios::binary);
 	if (!txtFile)
 	{
-		throw "Failed to load LNG";
+		throw Exception("Failed to load LNG");
 	}
 	
 	char value;
@@ -198,7 +199,9 @@ void Language::loadLng(const std::string &filename)
 	}
 
 	if (!txtFile.eof())
-		throw "Invalid data from file";
+	{
+		throw Exception("Invalid data from file");
+	}
 
 	txtFile.close();
 }

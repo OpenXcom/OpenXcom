@@ -110,6 +110,8 @@
 		<Unit filename="Engine\Action.h" />
 		<Unit filename="Engine\CatFile.cpp" />
 		<Unit filename="Engine\CatFile.h" />
+		<Unit filename="Engine\Exception.cpp" />
+		<Unit filename="Engine\Exception.h" />
 		<Unit filename="Engine\Font.cpp" />
 		<Unit filename="Engine\Font.h" />
 		<Unit filename="Engine\Game.cpp" />
@@ -275,8 +277,6 @@
 		<Unit filename="Savegame\BaseFacility.h" />
 		<Unit filename="Savegame\BattleItem.cpp" />
 		<Unit filename="Savegame\BattleItem.h" />
-		<Unit filename="Savegame\BattleSoldier.cpp" />
-		<Unit filename="Savegame\BattleSoldier.h" />
 		<Unit filename="Savegame\BattleUnit.cpp" />
 		<Unit filename="Savegame\BattleUnit.h" />
 		<Unit filename="Savegame\Country.cpp" />

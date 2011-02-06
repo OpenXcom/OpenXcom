@@ -200,6 +200,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Engine\Exception.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Engine\Exception.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Engine\Font.cpp"
 				>
 			</File>

@@ -20,6 +20,7 @@
 #include "../Ruleset/MapData.h"
 #include "../Ruleset/MapDataSet.h"
 #include "../Engine/SurfaceSet.h"
+#include "../Engine/Exception.h"
 
 namespace OpenXcom
 {
@@ -59,7 +60,7 @@ MapData *Tile::getMapData(int part)
 {
 	if (part < 0 || part > 3)
 	{
-		throw "unkown MapDataID part";
+		throw Exception("unkown MapDataID part");
 	}
 	return _objects[part];
 }

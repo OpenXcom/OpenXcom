@@ -23,6 +23,7 @@
 #include "../Engine/Action.h"
 #include "../Resource/XcomResourcePack.h"
 #include "../Engine/Surface.h"
+#include "../Engine/Exception.h"
 #include "TestState.h"
 #include "NoteState.h"
 
@@ -82,12 +83,12 @@ void StartState::think()
 			_game->setResourcePack(new XcomResourcePack(DATA_FOLDER));
 			_load = LOADING_SUCCESSFUL;
 		}
-		catch (const char* c)
+		catch (Exception &e)
 		{
-			std::cout << c << std::endl;
+			std::cerr << e.what() << std::endl;
 			_load = LOADING_FAILED;
 			_surface->clear();
-			_surface->drawString(0, 0, c, 0);
+			_surface->drawString(0, 0, e.what(), 0);
 			_surface->drawString(0, 16, "Make sure X-Com is in the DATA subfolder", 1);
 			_surface->drawString(0, 192, "Press any key to quit", 1);
 		}

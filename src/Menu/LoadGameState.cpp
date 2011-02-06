@@ -21,6 +21,7 @@
 #include "yaml.h"
 #include "../Savegame/SavedGame.h"
 #include "../Engine/Game.h"
+#include "../Engine/Exception.h"
 #include "../Resource/ResourcePack.h"
 #include "../Ruleset/XcomRuleset.h"
 #include "../Engine/Language.h"
@@ -132,14 +133,14 @@ void LoadGameState::lstSavesClick(Action *action)
 			_game->setState(new BattlescapeState(_game));
 		}
 	}
-	catch (const char *c)
+	catch (Exception &e)
 	{
-		std::cout << "ERROR: " << c << std::endl;
+		std::cerr << "ERROR: " << e.what() << std::endl;
 		_game->pushState(new GeoscapeErrorState(_game, "STR_LOAD_UNSUCCESSFUL"));
 	}
-	catch (YAML::Exception e)
+	catch (YAML::Exception &e)
 	{
-		std::cout << "ERROR: " << e.what() << std::endl;
+		std::cerr << "ERROR: " << e.what() << std::endl;
 		_game->pushState(new GeoscapeErrorState(_game, "STR_LOAD_UNSUCCESSFUL"));
 	}
 }

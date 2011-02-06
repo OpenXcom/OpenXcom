@@ -33,6 +33,7 @@
 #include "../Savegame/Node.h"
 #include "../Savegame/NodeLink.h"
 #include "../Engine/RNG.h"
+#include "../Engine/Exception.h"
 #include "../Ruleset/MapBlock.h"
 #include "../Ruleset/MapDataSet.h"
 #include "../Ruleset/RuleUfo.h"
@@ -538,7 +539,7 @@ int BattlescapeGenerator::loadMAP(MapBlock *mapblock, int xoff, int yoff, RuleTe
 	std::ifstream mapFile (ResourcePack::insensitive(filename.str()).c_str(), std::ios::in| std::ios::binary);
 	if (!mapFile)
 	{
-		throw "Failed to load MAP";
+		throw Exception("Failed to load MAP");
 	}
 	
 	mapFile.read((char*)&size, sizeof(size));
@@ -583,7 +584,7 @@ int BattlescapeGenerator::loadMAP(MapBlock *mapblock, int xoff, int yoff, RuleTe
 
 	if (!mapFile.eof())
 	{
-		throw "Invalid data from file";
+		throw Exception("Invalid data from file");
 	}
 
 	mapFile.close();
@@ -610,7 +611,7 @@ void BattlescapeGenerator::loadRMP(MapBlock *mapblock, int xoff, int yoff)
 	std::ifstream mapFile (ResourcePack::insensitive(filename.str()).c_str(), std::ios::in| std::ios::binary);
 	if (!mapFile)
 	{
-		throw "Failed to load RMP";
+		throw Exception("Failed to load RMP");
 	}
 
 	int nodeOffset = _save->getNodes()->size();
@@ -633,7 +634,7 @@ void BattlescapeGenerator::loadRMP(MapBlock *mapblock, int xoff, int yoff)
 
 	if (!mapFile.eof())
 	{
-		throw "Invalid data from file";
+		throw Exception("Invalid data from file");
 	}
 
 	mapFile.close();

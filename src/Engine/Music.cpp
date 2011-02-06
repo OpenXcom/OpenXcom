@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Music.h"
+#include "Exception.h"
 
 namespace OpenXcom
 {
@@ -45,7 +46,7 @@ void Music::load(const std::string &filename)
 	_music = Mix_LoadMUS(filename.c_str());
 	if (_music == 0) 
 	{
-		throw Mix_GetError();
+		throw Exception(Mix_GetError());
 	}
 }
 
@@ -61,7 +62,7 @@ void Music::load(const void *data, unsigned int size)
 	SDL_FreeRW(rwops);
 	if (_music == 0)
 	{
-		throw Mix_GetError();
+		throw Exception(Mix_GetError());
 	}
 }
 
@@ -72,7 +73,7 @@ void Music::play() const
 {
 	if (_music != 0 && Mix_PlayMusic(_music, -1) == -1)
 	{
-		throw Mix_GetError();
+		throw Exception(Mix_GetError());
 	}
 }
 
