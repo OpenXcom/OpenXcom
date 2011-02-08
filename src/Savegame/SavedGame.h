@@ -103,7 +103,7 @@ public:
 	/// Gets the current waypoint ID.
 	int *const getWaypointId();
 	/// Gets the current battle game.
-	SavedBattleGame *getBattleGame();
+	SavedBattleGame *const getBattleGame();
 	/// Sets the current battle game.
 	void setBattleGame(SavedBattleGame *battleGame);
 	/// Handles the end battle stuff.

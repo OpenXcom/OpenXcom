@@ -325,11 +325,11 @@ void BaseInfoState::init()
 	_barQuarters->setValue(_base->getUsedQuarters());
 
 	std::wstringstream ss5;
-	ss5 << _base->getUsedStores() << ":" << _base->getAvailableStores();
+	ss5 << _base->getUsedStores(_game->getRuleset()) << ":" << _base->getAvailableStores();
 	_numStores->setText(ss5.str());
 
 	_barStores->setMax(_base->getAvailableStores());
-	_barStores->setValue(_base->getUsedStores());
+	_barStores->setValue(_base->getUsedStores(_game->getRuleset()));
 
 	std::wstringstream ss6;
 	ss6 << _base->getUsedLaboratories() << ":" << _base->getAvailableLaboratories();

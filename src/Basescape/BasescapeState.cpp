@@ -373,12 +373,7 @@ void BasescapeState::viewClick(Action *action)
 		squares -= fac->getRules()->getSize() * fac->getRules()->getSize();
 
 		// Is facility in use?
-		if (fac->getBuildTime() == 0 &&
-		   (_base->getAvailableQuarters() - fac->getRules()->getPersonnel() < _base->getUsedQuarters() ||
-			_base->getAvailableStores() - fac->getRules()->getStorage() < _base->getUsedStores() ||
-			_base->getAvailableLaboratories() - fac->getRules()->getLaboratories() < _base->getUsedLaboratories() ||
-			_base->getAvailableWorkshops() - fac->getRules()->getWorkshops() < _base->getUsedWorkshops() ||
-			_base->getAvailableHangars() - fac->getRules()->getCrafts() < _base->getUsedHangars()))
+		if (fac->inUse(_game->getRuleset()))
 		{
 			_game->pushState(new BasescapeErrorState(_game, "STR_FACILITY_IN_USE"));
 		}

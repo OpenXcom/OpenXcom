@@ -18,6 +18,7 @@
  */
 #include "CraftWeaponsState.h"
 #include <sstream>
+#include <cmath>
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
@@ -31,7 +32,7 @@
 #include "../Savegame/Craft.h"
 #include "../Savegame/CraftWeapon.h"
 #include "../Ruleset/RuleCraftWeapon.h"
-#include "../Savegame/Item.h"
+#include "../Savegame/ItemContainer.h"
 #include "../Savegame/Base.h"
 
 namespace OpenXcom
@@ -114,11 +115,11 @@ CraftWeaponsState::CraftWeaponsState(Game *game, Base *base, unsigned int craft,
 		if (*i == 0)
 			continue;
 
-		if ((*_base->getItems())[(*i)->getLauncherItem()]->getQuantity() > 0)
+		if (_base->getItems()->getItem((*i)->getLauncherItem()) > 0)
 		{
 			std::wstringstream ss, ss2;
-			ss << (*_base->getItems())[(*i)->getLauncherItem()]->getQuantity();
-			ss2 << (*_base->getItems())[(*i)->getClipItem()]->getQuantity();
+			ss << _base->getItems()->getItem((*i)->getLauncherItem());
+			ss2 << _base->getItems()->getItem((*i)->getClipItem());
 			_lstWeapons->addRow(3, _game->getLanguage()->getString((*i)->getType()).c_str(), ss.str().c_str(), ss2.str().c_str());
 		}
 	}
@@ -153,8 +154,8 @@ void CraftWeaponsState::lstWeaponsClick(Action *action)
 	// Remove current weapon
 	if (current != 0)
 	{
-		(*_base->getItems())[current->getRules()->getLauncherItem()]->setQuantity((*_base->getItems())[current->getRules()->getLauncherItem()]->getQuantity() + 1);
-		//(*_base->getItems())[current->getRules()->getClipItem()]->setQuantity((*_base->getItems())[current->getRules()->getClipItem()]->getQuantity() + current->getAmmo());
+		_base->getItems()->addItem(current->getRules()->getLauncherItem());
+		_base->getItems()->addItem(current->getRules()->getClipItem(), (int)floor((double)current->getAmmo() / current->getRules()->getRearmRate()));
 		delete current;
 		_base->getCrafts()->at(_craft)->getWeapons()->at(_weapon) = 0;
 	}
@@ -163,7 +164,7 @@ void CraftWeaponsState::lstWeaponsClick(Action *action)
 	if (_weapons[_lstWeapons->getSelectedRow()] != 0)
 	{
 		CraftWeapon *sel = new CraftWeapon(_weapons[_lstWeapons->getSelectedRow()], 0);
-		(*_base->getItems())[sel->getRules()->getLauncherItem()]->setQuantity((*_base->getItems())[sel->getRules()->getLauncherItem()]->getQuantity() - 1);
+		_base->getItems()->removeItem(sel->getRules()->getLauncherItem());
 		_base->getCrafts()->at(_craft)->getWeapons()->at(_weapon) = sel;
 		if (_base->getCrafts()->at(_craft)->getStatus() == "STR_READY")
 		{

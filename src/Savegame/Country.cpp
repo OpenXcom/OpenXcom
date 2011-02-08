@@ -26,10 +26,14 @@ namespace OpenXcom
 /**
  * Initializes a country of the specified type.
  * @param rules Pointer to ruleset.
+ * @param gen Generate new funding.
  */
-Country::Country(RuleCountry *rules) : _rules(rules), _funding(0), _change(0), _activityXcom(0), _activityAlien(0)
+Country::Country(RuleCountry *rules, bool gen) : _rules(rules), _funding(0), _change(0), _activityXcom(0), _activityAlien(0)
 {
-	_funding = RNG::generate(rules->getMinFunding(), rules->getMaxFunding()) * 1000;
+	if (gen)
+	{
+		_funding = RNG::generate(rules->getMinFunding(), rules->getMaxFunding()) * 1000;
+	}
 }
 
 /**

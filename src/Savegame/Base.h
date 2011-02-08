@@ -22,8 +22,6 @@
 #include "Target.h"
 #include <string>
 #include <vector>
-#include <map>
-#include <string>
 #include "yaml.h"
 
 namespace OpenXcom
@@ -32,7 +30,7 @@ namespace OpenXcom
 class BaseFacility;
 class Soldier;
 class Craft;
-class Item;
+class ItemContainer;
 class Language;
 class Ruleset;
 class SavedGame;
@@ -48,7 +46,7 @@ private:
 	std::vector<BaseFacility*> _facilities;
 	std::vector<Soldier*> _soldiers;
 	std::vector<Craft*> _crafts;
-	std::map<std::string, Item*> _items;
+	ItemContainer *_items;
 	int _scientists, _engineers;
 public:
 	/// Creates a new base.
@@ -66,13 +64,13 @@ public:
 	/// Sets the base's name.
 	void setName(const std::wstring &name);
 	/// Gets the base's facilities.
-	std::vector<BaseFacility*> *getFacilities();
+	std::vector<BaseFacility*> *const getFacilities();
 	/// Gets the base's soldiers.
-	std::vector<Soldier*> *getSoldiers();
+	std::vector<Soldier*> *const getSoldiers();
 	/// Gets the base's crafts.
-	std::vector<Craft*> *getCrafts();
+	std::vector<Craft*> *const getCrafts();
 	/// Gets the base's items.
-	std::map<std::string, Item*> *getItems();
+	ItemContainer *const getItems();
 	/// Sets the base's scientists.
 	void setScientists(int scientists);
 	/// Sets the base's engineers.
@@ -94,7 +92,7 @@ public:
 	/// Gets the base's available living quarters.
 	int getAvailableQuarters() const;
 	/// Gets the base's used storage space.
-	int getUsedStores() const;
+	int getUsedStores(Ruleset *rule) const;
 	/// Gets the base's available storage space.
 	int getAvailableStores() const;
 	/// Gets the base's used laboratory space.

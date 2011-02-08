@@ -27,6 +27,7 @@ namespace OpenXcom
 class RuleBaseFacility;
 class Base;
 class Target;
+class Ruleset;
 
 /**
  * Represents a base facility placed in a base.
@@ -38,10 +39,11 @@ class BaseFacility
 {
 private:
 	RuleBaseFacility *_rules;
+	Base *_base;
 	int _x, _y, _buildTime;
 public:
 	/// Creates a base facility of the specified type.
-	BaseFacility(RuleBaseFacility *rules, int x, int y);
+	BaseFacility(RuleBaseFacility *rules, Base *base, int x, int y);
 	/// Cleans up the base facility.
 	~BaseFacility();
 	/// Loads the base facility from YAML.
@@ -61,7 +63,9 @@ public:
 	/// Builds up the facility.
 	void build();
 	/// Checks if a target is inside the facility's radar.
-	bool insideRadarRange(Base *base, Target *target) const;
+	bool insideRadarRange(Target *target) const;
+	/// Checks if the facility is currently in use.
+	bool inUse(Ruleset *rule) const;
 };
 
 }

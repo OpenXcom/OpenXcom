@@ -20,7 +20,6 @@
 #define OPENXCOM_CRAFT_H
 
 #include "MovingTarget.h"
-#include <map>
 #include <vector>
 #include <string>
 
@@ -31,7 +30,7 @@ class RuleCraft;
 class Base;
 class Soldier;
 class CraftWeapon;
-class Item;
+class ItemContainer;
 class Ruleset;
 
 /**
@@ -47,15 +46,13 @@ private:
 	Base *_base;
 	int _id, _fuel, _damage;
 	std::vector<CraftWeapon*> _weapons;
-	std::map<std::string, Item*> _items;
+	ItemContainer *_items;
 	std::string _status;
 	bool _lowFuel;
 	bool _inBattlescape;
 public:
 	/// Creates a craft of the specified type.
-	Craft(RuleCraft *rules, Base *base);
-	/// Creates a craft of the specified type.
-	Craft(RuleCraft *rules, std::map<std::string, int> *id, Base *base);
+	Craft(RuleCraft *rules, Base *base, std::map<std::string, int> *ids = 0);
 	/// Cleans up the craft.
 	~Craft();
 	/// Loads the craft from YAML.
@@ -89,9 +86,9 @@ public:
 	/// Gets the craft's amount of HWPs.
 	int getNumHWPs() const;
 	/// Gets the craft's weapons.
-	std::vector<CraftWeapon*> *getWeapons();
+	std::vector<CraftWeapon*> *const getWeapons();
 	/// Gets the craft's items.
-	std::map<std::string, Item*> *getItems();
+	ItemContainer *const getItems();
 	/// Gets the craft's amount of fuel.
 	int getFuel() const;
 	/// Sets the craft's amount of fuel.

@@ -25,7 +25,7 @@
 #include "CraftWeapon.h"
 #include "../Ruleset/RuleCraftWeapon.h"
 #include "../Ruleset/Ruleset.h"
-#include "Item.h"
+#include "ItemContainer.h"
 #include "Soldier.h"
 #include "Base.h"
 
@@ -35,26 +35,20 @@ namespace OpenXcom
 #define CRAFT_RANGE 600
 
 /**
- * Initializes a craft of the specified type with no ID.
- * @param rules Pointer to ruleset.
- * @param base Pointer to base of origin.
- */
-Craft::Craft(RuleCraft *rules, Base *base) : MovingTarget(), _rules(rules), _base(base), _id(0), _fuel(0), _damage(0), _weapons(), _items(), _status("STR_READY"), _lowFuel(false), _inBattlescape(false)
-{
-
-}
-
-/**
  * Initializes a craft of the specified type and
  * assigns it the latest craft ID available.
  * @param rules Pointer to ruleset.
- * @param id List of craft IDs.
  * @param base Pointer to base of origin.
+ * @param ids List of craft IDs (Leave NULL for no ID).
  */
-Craft::Craft(RuleCraft *rules, std::map<std::string, int> *id, Base *base) : MovingTarget(), _rules(rules), _base(base), _fuel(0), _damage(0), _weapons(), _items(), _status("STR_READY"), _lowFuel(false), _inBattlescape(false)
+Craft::Craft(RuleCraft *rules, Base *base, std::map<std::string, int> *ids) : MovingTarget(), _rules(rules), _base(base), _id(0), _fuel(0), _damage(0), _weapons(), _status("STR_READY"), _lowFuel(false), _inBattlescape(false)
 {
-	_id = (*id)[_rules->getType()];
-	(*id)[_rules->getType()]++;
+	_items = new ItemContainer();
+	if (ids != 0)
+	{
+		_id = (*ids)[_rules->getType()];
+		(*ids)[_rules->getType()]++;
+	}
 	for (int i = 0; i < _rules->getWeapons(); i++)
 	{
 		_weapons.push_back(0);
@@ -70,10 +64,7 @@ Craft::~Craft()
 	{
 		delete *i;
 	}
-	for (std::map<std::string, Item*>::iterator i = _items.begin(); i != _items.end(); i++)
-	{
-		delete i->second;
-	}
+	delete _items;
 }
 
 /**
@@ -91,34 +82,19 @@ void Craft::load(const YAML::Node &node, Ruleset *rule)
 	node["damage"] >> _damage;
 
 	size = node["weapons"].size();
-	for (unsigned i = 0; i < size; i++)
+	for (unsigned int i = 0; i < size; i++)
 	{
 		std::string type;
 		node["weapons"][i]["type"] >> type;
-		if (type == "0")
-		{
-			_weapons.push_back(0);
-		}
-		else
+		if (type != "0")
 		{
 			CraftWeapon *w = new CraftWeapon(rule->getCraftWeapon(type), 0);
 			w->load(node["weapons"][i]);
-			_weapons.push_back(w);
+			_weapons[i] = w;
 		}
 	}
 
-	size = node["items"].size();
-	for (unsigned i = 0; i < size; i++)
-	{
-		int qty;
-		node["items"][i]["qty"] >> qty;
-		std::string type;
-		node["items"][i]["type"] >> type;
-		Item *it = new Item(rule->getItem(type), qty);
-		it->load(node["items"][i]);
-		_items.insert(std::pair<std::string, Item*>(type, it));
-	}
-
+	_items->load(node["items"]);
 	node["status"] >> _status;
 	node["lowFuel"] >> _lowFuel;
 	node["inBattlescape"] >> _inBattlescape;
@@ -153,10 +129,7 @@ void Craft::save(YAML::Emitter &out) const
 	out << YAML::EndSeq;
 	out << YAML::Key << "items" << YAML::Value;
 	out << YAML::BeginSeq;
-	for (std::map<std::string, Item*>::const_iterator i = _items.begin(); i != _items.end(); i++)
-	{
-		(*i).second->save(out);
-	}
+	_items->save(out);
 	out << YAML::EndSeq;
 	out << YAML::Key << "status" << YAML::Value << _status;
 	out << YAML::Key << "lowFuel" << YAML::Value << _lowFuel;
@@ -304,14 +277,7 @@ int Craft::getNumSoldiers() const
  */
 int Craft::getNumEquipment() const
 {
-	int total = 0;
-
-	for (std::map<std::string, Item*>::const_iterator i = _items.begin(); i != _items.end(); i++)
-	{
-		total += i->second->getQuantity();
-	}
-
-	return total;
+	return _items->getTotalQuantity();
 }
 
 /**
@@ -329,7 +295,7 @@ int Craft::getNumHWPs() const
  * in the craft.
  * @return Pointer to weapon list.
  */
-std::vector<CraftWeapon*> *Craft::getWeapons()
+std::vector<CraftWeapon*> *const Craft::getWeapons()
 {
 	return &_weapons;
 }
@@ -338,9 +304,9 @@ std::vector<CraftWeapon*> *Craft::getWeapons()
  * Returns the list of items in the craft.
  * @return Pointer to the item list.
  */
-std::map<std::string, Item*> *Craft::getItems()
+ItemContainer *const Craft::getItems()
 {
-	return &_items;
+	return _items;
 }
 
 /**
@@ -588,10 +554,14 @@ void Craft::rearm()
 		if ((*i) == 0)
 			continue;
 		available++;
-		(*i)->rearm();
 		if ((*i)->getAmmo() >= (*i)->getRules()->getAmmoMax())
 		{
 			full++;
+		}
+		else
+		{
+			(*i)->rearm();
+			_base->getItems()->removeItem((*i)->getRules()->getClipItem());
 		}
 	}
 	if (full == available)

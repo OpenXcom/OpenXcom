@@ -29,10 +29,11 @@ namespace OpenXcom
 /**
  * Initializes a base facility of the specified type.
  * @param rules Pointer to ruleset.
+ * @param base Pointer to base of origin.
  * @param x X position in grid squares.
  * @param y Y position in grid squares.
  */
-BaseFacility::BaseFacility(RuleBaseFacility *rules, int x, int y) : _rules(rules), _x(x), _y(y), _buildTime(0)
+BaseFacility::BaseFacility(RuleBaseFacility *rules, Base *base, int x, int y) : _rules(rules), _base(base), _x(x), _y(y), _buildTime(0)
 {
 }
 
@@ -128,11 +129,10 @@ void BaseFacility::build()
 /**
  * Returns if a certain target is covered by the facility's
  * radar range, taking in account the positions of both.
- * @param base Pointer to base the facility belongs to.
  * @param target Pointer to target to compare.
  * @return True if it's within range, False otherwise.
  */
-bool BaseFacility::insideRadarRange(Base *base, Target *target) const
+bool BaseFacility::insideRadarRange(Target *target) const
 {
 	if (_rules->getRadarRange() == 0)
 		return false;
@@ -141,11 +141,30 @@ bool BaseFacility::insideRadarRange(Base *base, Target *target) const
 	double newrange = _rules->getRadarRange() * (1 / 60.0) * (M_PI / 180);
 	for (double lon = target->getLongitude() - 2*M_PI; lon <= target->getLongitude() + 2*M_PI; lon += 2*M_PI)
 	{
-		double dLon = lon - base->getLongitude();
-		double dLat = target->getLatitude() - base->getLatitude();
+		double dLon = lon - _base->getLongitude();
+		double dLat = target->getLatitude() - _base->getLatitude();
 		inside = inside || (dLon * dLon + dLat * dLat <= newrange * newrange);
 	}
     return inside;
+}
+
+/**
+ * Returns if this facility is currently being
+ * used by its base.
+ * @param rule Pointer to ruleset.
+ * @return True if it's under use, False otherwise.
+ */
+bool BaseFacility::inUse(Ruleset *rule) const
+{
+	if (_buildTime > 0)
+	{
+		return false;
+	}
+	return (_base->getAvailableQuarters() - _rules->getPersonnel() < _base->getUsedQuarters() ||
+			_base->getAvailableStores() - _rules->getStorage() < _base->getUsedStores(rule) ||
+			_base->getAvailableLaboratories() - _rules->getLaboratories() < _base->getUsedLaboratories() ||
+			_base->getAvailableWorkshops() - _rules->getWorkshops() < _base->getUsedWorkshops() ||
+			_base->getAvailableHangars() - _rules->getCrafts() < _base->getUsedHangars());
 }
 
 }

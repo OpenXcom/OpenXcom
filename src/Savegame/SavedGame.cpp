@@ -162,17 +162,17 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	doc["funds"] >> _funds;
 
 	size = doc["countries"].size();
-	for (unsigned i = 0; i < size; i++)
+	for (unsigned int i = 0; i < size; i++)
 	{
 		std::string type;
 		doc["countries"][i]["type"] >> type;
-		Country *c = new Country(rule->getCountry(type));
+		Country *c = new Country(rule->getCountry(type), false);
 		c->load(doc["countries"][i]);
 		_countries.push_back(c);
 	}
 
 	size = doc["regions"].size();
-	for (unsigned i = 0; i < size; i++)
+	for (unsigned int i = 0; i < size; i++)
 	{
 		std::string type;
 		doc["regions"][i]["type"] >> type;
@@ -182,7 +182,7 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	}
 	
 	size = doc["ufos"].size();
-	for (unsigned i = 0; i < size; i++)
+	for (unsigned int i = 0; i < size; i++)
 	{
 		std::string type;
 		doc["ufos"][i]["type"] >> type;
@@ -194,7 +194,7 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	doc["craftId"] >> _craftId;
 
 	size = doc["waypoints"].size();
-	for (unsigned i = 0; i < size; i++)
+	for (unsigned int i = 0; i < size; i++)
 	{
 		Waypoint *w = new Waypoint();
 		w->load(doc["waypoints"][i]);
@@ -205,7 +205,7 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	doc["waypointId"] >> _waypointId;
 
 	size = doc["bases"].size();
-	for (unsigned i = 0; i < size; i++)
+	for (unsigned int i = 0; i < size; i++)
 	{
 		Base *b = new Base();
 		b->load(doc["bases"][i], rule, this);
@@ -436,7 +436,7 @@ std::vector<Waypoint*> *const SavedGame::getWaypoints()
  * Get pointer to the battleGame object.
  * @return Pointer to the battleGame object.
  */
-SavedBattleGame *SavedGame::getBattleGame()
+SavedBattleGame *const SavedGame::getBattleGame()
 {
 	return _battleGame;
 }

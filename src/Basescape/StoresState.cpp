@@ -30,7 +30,8 @@
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Base.h"
 #include "../Ruleset/Ruleset.h"
-#include "../Savegame/Item.h"
+#include "../Ruleset/RuleItem.h"
+#include "../Savegame/ItemContainer.h"
 
 namespace OpenXcom
 {
@@ -91,11 +92,12 @@ StoresState::StoresState(Game *game, Base *base) : State(game), _base(base)
 	_lstStores->setBackground(_window);
 	_lstStores->setMargin(2);
 
-	for (std::map<std::string, Item*>::iterator i = _base->getItems()->begin(); i != _base->getItems()->end(); i++)
+	for (std::map<std::string, int>::iterator i = _base->getItems()->getContents()->begin(); i != _base->getItems()->getContents()->end(); i++)
 	{
+		RuleItem *rule = _game->getRuleset()->getItem(i->first);
 		std::wstringstream ss, ss2;
-		ss << i->second->getQuantity();
-		ss2 << i->second->getTotalSize();
+		ss << i->second;
+		ss2 << i->second * rule->getSize();
 		_lstStores->addRow(3, _game->getLanguage()->getString(i->first).c_str(), ss.str().c_str(), ss2.str().c_str());
 	}
 }

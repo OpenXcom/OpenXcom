@@ -23,7 +23,7 @@
 #include "Craft.h"
 #include "../Ruleset/RuleCraft.h"
 #include "../Ruleset/Ruleset.h"
-#include "Item.h"
+#include "ItemContainer.h"
 #include "Soldier.h"
 #include "SavedGame.h"
 #include "Ufo.h"
@@ -40,8 +40,9 @@ namespace OpenXcom
 /**
  * Initializes an empty base.
  */
-Base::Base() : Target(), _name(L""), _facilities(), _soldiers(), _crafts(), _items(), _scientists(0), _engineers(0)
+Base::Base() : Target(), _name(L""), _facilities(), _soldiers(), _crafts(), _scientists(0), _engineers(0)
 {
+	_items = new ItemContainer();
 }
 
 /**
@@ -61,10 +62,7 @@ Base::~Base()
 	{
 		delete *i;
 	}
-	for (std::map<std::string, Item*>::iterator i = _items.begin(); i != _items.end(); i++)
-	{
-		delete i->second;
-	}
+	delete _items;
 }
 
 /**
@@ -83,20 +81,20 @@ void Base::load(const YAML::Node &node, Ruleset *rule, SavedGame *save)
 	_name = Language::utf8ToWstr(name);
 
 	size = node["facilities"].size();
-	for (unsigned i = 0; i < size; i++)
+	for (unsigned int i = 0; i < size; i++)
 	{
 		int x, y;
 		node["facilities"][i]["x"] >> x;
 		node["facilities"][i]["y"] >> y;
 		std::string type;
 		node["facilities"][i]["type"] >> type;
-		BaseFacility *f = new BaseFacility(rule->getBaseFacility(type), x, y);
+		BaseFacility *f = new BaseFacility(rule->getBaseFacility(type), this, x, y);
 		f->load(node["facilities"][i]);
 		_facilities.push_back(f);
 	}
 
 	size = node["crafts"].size();
-	for (unsigned i = 0; i < size; i++)
+	for (unsigned int i = 0; i < size; i++)
 	{
 		std::string type;
 		node["crafts"][i]["type"] >> type;
@@ -139,7 +137,7 @@ void Base::load(const YAML::Node &node, Ruleset *rule, SavedGame *save)
 	}
 
 	size = node["soldiers"].size();
-	for (unsigned i = 0; i < size; i++)
+	for (unsigned int i = 0; i < size; i++)
 	{
 		Soldier *s = new Soldier();
 		s->load(node["soldiers"][i]);
@@ -161,18 +159,7 @@ void Base::load(const YAML::Node &node, Ruleset *rule, SavedGame *save)
 		_soldiers.push_back(s);
 	}
 
-	size = node["items"].size();
-	for (unsigned i = 0; i < size; i++)
-	{
-		int qty;
-		node["items"][i]["qty"] >> qty;
-		std::string type;
-		node["items"][i]["type"] >> type;
-		Item *it = new Item(rule->getItem(type), qty);
-		it->load(node["items"][i]);
-		_items.insert(std::pair<std::string, Item*>(type, it));
-	}
-
+	_items->load(node["items"]);
 	node["scientists"] >> _scientists;
 	node["engineers"] >> _engineers;
 }
@@ -208,10 +195,7 @@ void Base::save(YAML::Emitter &out) const
 	out << YAML::EndSeq;
 	out << YAML::Key << "items" << YAML::Value;
 	out << YAML::BeginSeq;
-	for (std::map<std::string, Item*>::const_iterator i = _items.begin(); i != _items.end(); i++)
-	{
-		(*i).second->save(out);
-	}
+	_items->save(out);
 	out << YAML::EndSeq;
 	out << YAML::Key << "scientists" << YAML::Value << _scientists;
 	out << YAML::Key << "engineers" << YAML::Value << _engineers;
@@ -253,7 +237,7 @@ void Base::setName(const std::wstring &name)
  * Returns the list of facilities in the base.
  * @return Pointer to the facility list.
  */
-std::vector<BaseFacility*> *Base::getFacilities()
+std::vector<BaseFacility*> *const Base::getFacilities()
 {
 	return &_facilities;
 }
@@ -262,7 +246,7 @@ std::vector<BaseFacility*> *Base::getFacilities()
  * Returns the list of soldiers in the base.
  * @return Pointer to the soldier list.
  */
-std::vector<Soldier*> *Base::getSoldiers()
+std::vector<Soldier*> *const Base::getSoldiers()
 {
 	return &_soldiers;
 }
@@ -271,7 +255,7 @@ std::vector<Soldier*> *Base::getSoldiers()
  * Returns the list of crafts in the base.
  * @return Pointer to the craft list.
  */
-std::vector<Craft*> *Base::getCrafts()
+std::vector<Craft*> *const Base::getCrafts()
 {
 	return &_crafts;
 }
@@ -280,9 +264,9 @@ std::vector<Craft*> *Base::getCrafts()
  * Returns the list of items in the base.
  * @return Pointer to the item list.
  */
-std::map<std::string, Item*> *Base::getItems()
+ItemContainer *const Base::getItems()
 {
-	return &_items;
+	return _items;
 }
 
 /**
@@ -400,21 +384,15 @@ int Base::getAvailableQuarters() const
 /**
  * Returns the amount of stores used up
  * by equipment in the base.
+ * @param rule Pointer to ruleset.
  * @return Storage space.
  */
-int Base::getUsedStores() const
+int Base::getUsedStores(Ruleset *rule) const
 {
-	double total = 0;
-	for (std::map<std::string, Item*>::const_iterator i = _items.begin(); i != _items.end(); i++)
-	{
-		total += i->second->getTotalSize();
-	}
+	double total = _items->getTotalSize(rule);
 	for (std::vector<Craft*>::const_iterator i = _crafts.begin(); i != _crafts.end(); i++)
 	{
-		for (std::map<std::string, Item*>::const_iterator j = (*i)->getItems()->begin(); j != (*i)->getItems()->end(); j++)
-		{
-			total += j->second->getTotalSize();
-		}
+		total += (*i)->getItems()->getTotalSize(rule);
 	}
 	return (int)floor(total);
 }

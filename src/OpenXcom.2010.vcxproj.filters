@@ -206,9 +206,6 @@
     <ClCompile Include="Savegame\GameTime.cpp">
       <Filter>Savegame</Filter>
     </ClCompile>
-    <ClCompile Include="Savegame\Item.cpp">
-      <Filter>Savegame</Filter>
-    </ClCompile>
     <ClCompile Include="Savegame\MovingTarget.cpp">
       <Filter>Savegame</Filter>
     </ClCompile>
@@ -394,6 +391,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Exception.cpp">
       <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Savegame\ItemContainer.cpp">
+      <Filter>Savegame</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -602,9 +602,6 @@
     <ClInclude Include="Savegame\GameTime.h">
       <Filter>Savegame</Filter>
     </ClInclude>
-    <ClInclude Include="Savegame\Item.h">
-      <Filter>Savegame</Filter>
-    </ClInclude>
     <ClInclude Include="Savegame\MovingTarget.h">
       <Filter>Savegame</Filter>
     </ClInclude>
@@ -791,6 +788,9 @@
     <ClInclude Include="dirent.h" />
     <ClInclude Include="Engine\Exception.h">
       <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Savegame\ItemContainer.h">
+      <Filter>Savegame</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

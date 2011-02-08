@@ -39,7 +39,7 @@ private:
 	int _activityXcom, _activityAlien;
 public:
 	/// Creates a new country of the specified type.
-	Country(RuleCountry *rules);
+	Country(RuleCountry *rules, bool gen = true);
 	/// Cleans up the country.
 	~Country();
 	/// Loads the country from YAML.

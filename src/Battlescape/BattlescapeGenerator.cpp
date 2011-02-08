@@ -23,7 +23,7 @@
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
-#include "../Savegame/Item.h"
+#include "../Savegame/ItemContainer.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/Soldier.h"
 #include "../Savegame/BattleUnit.h"
@@ -199,10 +199,12 @@ void BattlescapeGenerator::run()
 		_save->setSelectedUnit(_save->getUnits()->at(0)); // select first soldier
 
 		// add items that are in the craft
+		/*
 		for (std::map<std::string, Item*>::iterator i = _craft->getItems()->begin(); i != _craft->getItems()->end(); i++)
 		{
 				addItem((*i).second);
 		}
+		*/
 	}
 
 	if (_missionType == MISS_UFORECOVERY)
@@ -322,10 +324,12 @@ void BattlescapeGenerator::addAlien(RuleUnitSprite *rules, NodeRank rank, const 
  */
 void BattlescapeGenerator::addItem(Item *item)
 {
+	/*
 	BattleItem *bi = new BattleItem(item->getRules());
 
 	// todo: define position
 	_save->getItems()->push_back(bi);
+	*/
 }
 
 /** 

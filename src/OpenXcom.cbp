@@ -287,8 +287,8 @@
 		<Unit filename="Savegame\CraftWeapon.h" />
 		<Unit filename="Savegame\GameTime.cpp" />
 		<Unit filename="Savegame\GameTime.h" />
-		<Unit filename="Savegame\Item.cpp" />
-		<Unit filename="Savegame\Item.h" />
+		<Unit filename="Savegame\ItemContainer.cpp" />
+		<Unit filename="Savegame\ItemContainer.h" />
 		<Unit filename="Savegame\MovingTarget.cpp" />
 		<Unit filename="Savegame\MovingTarget.h" />
 		<Unit filename="Savegame\Node.cpp" />

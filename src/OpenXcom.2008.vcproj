@@ -1017,11 +1017,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Savegame\Item.cpp"
+				RelativePath=".\Savegame\ItemContainer.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Savegame\Item.h"
+				RelativePath=".\Savegame\ItemContainer.h"
 				>
 			</File>
 			<File

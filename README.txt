@@ -53,14 +53,14 @@ Run openxcom to play.
 1.4. Options
 -------------
 You can use the following command-line arguments to
-change the game’s internal settings:
+change the game's internal settings:
 
 "-fullscreen" - starts the game in full-screen mode
 instead of in a window.
 
 "-width w -height h" - resizes the game screen to that
 resolution. Since the original resolution is tiny, by default
-the game runs at 640×400 resolution (2x size). You can
+the game runs at 640x400 resolution (2x size). You can
 use this to make the game bigger to suit your tastes.
 Be careful though, the game will only work in full-screen
 if you use a resolution supported by your system.

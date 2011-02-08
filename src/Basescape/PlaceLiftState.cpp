@@ -79,7 +79,7 @@ PlaceLiftState::~PlaceLiftState()
  */
 void PlaceLiftState::viewClick(Action *action)
 {
-	BaseFacility *fac = new BaseFacility(_game->getRuleset()->getBaseFacility("STR_ACCESS_LIFT"), _view->getGridX(), _view->getGridY());
+	BaseFacility *fac = new BaseFacility(_game->getRuleset()->getBaseFacility("STR_ACCESS_LIFT"), _base, _view->getGridX(), _view->getGridY());
 	fac->setBuildTime(0);
 	_base->getFacilities()->push_back(fac);
 	_game->popState();

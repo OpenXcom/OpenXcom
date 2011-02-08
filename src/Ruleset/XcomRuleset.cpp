@@ -42,7 +42,7 @@
 #include "../Savegame/Ufo.h"
 #include "../Savegame/CraftWeapon.h"
 #include "../Savegame/Soldier.h"
-#include "../Savegame/Item.h"
+#include "../Savegame/ItemContainer.h"
 #include "City.h"
 #include "../Savegame/Tile.h"
 
@@ -1291,52 +1291,52 @@ SavedGame *XcomRuleset::newSave(GameDifficulty diff)
 	base->setScientists(10);
 
 	// Add facilities
-	base->getFacilities()->push_back(new BaseFacility(getBaseFacility("STR_ACCESS_LIFT"), 2, 2));
-	base->getFacilities()->push_back(new BaseFacility(getBaseFacility("STR_HANGAR"), 2, 0));
-	base->getFacilities()->push_back(new BaseFacility(getBaseFacility("STR_HANGAR"), 0, 4));
-	base->getFacilities()->push_back(new BaseFacility(getBaseFacility("STR_HANGAR"), 4, 4));
-	base->getFacilities()->push_back(new BaseFacility(getBaseFacility("STR_LIVING_QUARTERS"), 3, 2));
-	base->getFacilities()->push_back(new BaseFacility(getBaseFacility("STR_GENERAL_STORES"), 2, 3));
-	base->getFacilities()->push_back(new BaseFacility(getBaseFacility("STR_LABORATORY"), 3, 3));
-	base->getFacilities()->push_back(new BaseFacility(getBaseFacility("STR_WORKSHOP"), 4, 3));
-	base->getFacilities()->push_back(new BaseFacility(getBaseFacility("STR_SMALL_RADAR_SYSTEM"), 1, 3));
+	base->getFacilities()->push_back(new BaseFacility(getBaseFacility("STR_ACCESS_LIFT"), base, 2, 2));
+	base->getFacilities()->push_back(new BaseFacility(getBaseFacility("STR_HANGAR"), base, 2, 0));
+	base->getFacilities()->push_back(new BaseFacility(getBaseFacility("STR_HANGAR"), base, 0, 4));
+	base->getFacilities()->push_back(new BaseFacility(getBaseFacility("STR_HANGAR"), base, 4, 4));
+	base->getFacilities()->push_back(new BaseFacility(getBaseFacility("STR_LIVING_QUARTERS"), base, 3, 2));
+	base->getFacilities()->push_back(new BaseFacility(getBaseFacility("STR_GENERAL_STORES"), base, 2, 3));
+	base->getFacilities()->push_back(new BaseFacility(getBaseFacility("STR_LABORATORY"), base, 3, 3));
+	base->getFacilities()->push_back(new BaseFacility(getBaseFacility("STR_WORKSHOP"), base, 4, 3));
+	base->getFacilities()->push_back(new BaseFacility(getBaseFacility("STR_SMALL_RADAR_SYSTEM"), base, 1, 3));
 
 	// Add items
-	base->getItems()->insert(std::pair<std::string, Item*>("STR_STINGRAY_LAUNCHER", new Item(getItem("STR_STINGRAY_LAUNCHER"), 1)));
-	base->getItems()->insert(std::pair<std::string, Item*>("STR_AVALANCHE_LAUNCHER", new Item(getItem("STR_AVALANCHE_LAUNCHER"), 1)));
-	base->getItems()->insert(std::pair<std::string, Item*>("STR_CANNON", new Item(getItem("STR_CANNON"), 2)));
-	base->getItems()->insert(std::pair<std::string, Item*>("STR_STINGRAY_MISSILES", new Item(getItem("STR_STINGRAY_MISSILES"), 25)));
-	base->getItems()->insert(std::pair<std::string, Item*>("STR_AVALANCHE_MISSILES", new Item(getItem("STR_AVALANCHE_MISSILES"), 10)));
-	base->getItems()->insert(std::pair<std::string, Item*>("STR_CANNON_ROUNDS_X50", new Item(getItem("STR_CANNON_ROUNDS_X50"), 1)));
-	base->getItems()->insert(std::pair<std::string, Item*>("STR_PISTOL", new Item(getItem("STR_PISTOL"), 2)));
-	base->getItems()->insert(std::pair<std::string, Item*>("STR_PISTOL_CLIP", new Item(getItem("STR_PISTOL_CLIP"), 8)));
-	base->getItems()->insert(std::pair<std::string, Item*>("STR_RIFLE", new Item(getItem("STR_RIFLE"), 2)));
-	base->getItems()->insert(std::pair<std::string, Item*>("STR_RIFLE_CLIP", new Item(getItem("STR_RIFLE_CLIP"), 8)));
-	base->getItems()->insert(std::pair<std::string, Item*>("STR_HEAVY_CANNON", new Item(getItem("STR_HEAVY_CANNON"), 1)));
-	base->getItems()->insert(std::pair<std::string, Item*>("STR_HC_AP_AMMO", new Item(getItem("STR_HC_AP_AMMO"), 6)));
-	base->getItems()->insert(std::pair<std::string, Item*>("STR_AUTO_CANNON", new Item(getItem("STR_AUTO_CANNON"), 1)));
-	base->getItems()->insert(std::pair<std::string, Item*>("STR_AC_AP_AMMO", new Item(getItem("STR_AC_AP_AMMO"), 6)));
-	base->getItems()->insert(std::pair<std::string, Item*>("STR_ROCKET_LAUNCHER", new Item(getItem("STR_ROCKET_LAUNCHER"), 1)));
-	base->getItems()->insert(std::pair<std::string, Item*>("STR_SMALL_ROCKET", new Item(getItem("STR_SMALL_ROCKET"), 4)));
-	base->getItems()->insert(std::pair<std::string, Item*>("STR_GRENADE", new Item(getItem("STR_GRENADE"), 5)));
-	base->getItems()->insert(std::pair<std::string, Item*>("STR_SMOKE_GRENADE", new Item(getItem("STR_SMOKE_GRENADE"), 5)));
+	base->getItems()->addItem("STR_STINGRAY_LAUNCHER", 1);
+	base->getItems()->addItem("STR_AVALANCHE_LAUNCHER", 1);
+	base->getItems()->addItem("STR_CANNON", 2);
+	base->getItems()->addItem("STR_STINGRAY_MISSILES", 25);
+	base->getItems()->addItem("STR_AVALANCHE_MISSILES", 10);
+	base->getItems()->addItem("STR_CANNON_ROUNDS_X50", 1);
+	base->getItems()->addItem("STR_PISTOL", 2);
+	base->getItems()->addItem("STR_PISTOL_CLIP", 8);
+	base->getItems()->addItem("STR_RIFLE", 2);
+	base->getItems()->addItem("STR_RIFLE_CLIP", 8);
+	base->getItems()->addItem("STR_HEAVY_CANNON", 1);
+	base->getItems()->addItem("STR_HC_AP_AMMO", 6);
+	base->getItems()->addItem("STR_AUTO_CANNON", 1);
+	base->getItems()->addItem("STR_AC_AP_AMMO", 6);
+	base->getItems()->addItem("STR_ROCKET_LAUNCHER", 1);
+	base->getItems()->addItem("STR_SMALL_ROCKET", 4);
+	base->getItems()->addItem("STR_GRENADE", 5);
+	base->getItems()->addItem("STR_SMOKE_GRENADE", 5);
 
 	// Add crafts
-	Craft *skyranger = new Craft(getCraft("STR_SKYRANGER"), save->getCraftIds(), base);
+	Craft *skyranger = new Craft(getCraft("STR_SKYRANGER"), base, save->getCraftIds());
 	skyranger->setFuel(skyranger->getRules()->getMaxFuel());
-	skyranger->getItems()->insert(std::pair<std::string, Item*>("STR_PISTOL", new Item(getItem("STR_PISTOL"), 3)));
-	skyranger->getItems()->insert(std::pair<std::string, Item*>("STR_PISTOL_CLIP", new Item(getItem("STR_PISTOL_CLIP"), 5)));
-	skyranger->getItems()->insert(std::pair<std::string, Item*>("STR_RIFLE", new Item(getItem("STR_RIFLE"), 6)));
-	skyranger->getItems()->insert(std::pair<std::string, Item*>("STR_RIFLE_CLIP", new Item(getItem("STR_RIFLE_CLIP"), 12)));
-	skyranger->getItems()->insert(std::pair<std::string, Item*>("STR_HEAVY_CANNON", new Item(getItem("STR_HEAVY_CANNON"), 1)));
-	skyranger->getItems()->insert(std::pair<std::string, Item*>("STR_HC_AP_AMMO", new Item(getItem("STR_HC_AP_AMMO"), 2)));
-	skyranger->getItems()->insert(std::pair<std::string, Item*>("STR_HC_HE_AMMO", new Item(getItem("STR_HC_HE_AMMO"), 2)));
-	skyranger->getItems()->insert(std::pair<std::string, Item*>("STR_GRENADE", new Item(getItem("STR_GRENADE"), 8)));
+	skyranger->getItems()->addItem("STR_PISTOL", 3);
+	skyranger->getItems()->addItem("STR_PISTOL_CLIP", 5);
+	skyranger->getItems()->addItem("STR_RIFLE", 6);
+	skyranger->getItems()->addItem("STR_RIFLE_CLIP", 12);
+	skyranger->getItems()->addItem("STR_HEAVY_CANNON", 1);
+	skyranger->getItems()->addItem("STR_HC_AP_AMMO", 2);
+	skyranger->getItems()->addItem("STR_HC_HE_AMMO", 2);
+	skyranger->getItems()->addItem("STR_GRENADE", 8);
 	base->getCrafts()->push_back(skyranger);
 
 	for (int i = 0; i < 2; i++)
 	{
-		Craft *interceptor = new Craft(getCraft("STR_INTERCEPTOR"), save->getCraftIds(), base);
+		Craft *interceptor = new Craft(getCraft("STR_INTERCEPTOR"), base, save->getCraftIds());
 		interceptor->setFuel(interceptor->getRules()->getMaxFuel());
 		interceptor->getWeapons()->at(0) = new CraftWeapon(getCraftWeapon("STR_STINGRAY"), getCraftWeapon("STR_STINGRAY")->getAmmoMax());
 		interceptor->getWeapons()->at(1) = new CraftWeapon(getCraftWeapon("STR_CANNON_UC"), getCraftWeapon("STR_CANNON_UC")->getAmmoMax());

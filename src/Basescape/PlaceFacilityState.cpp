@@ -148,7 +148,7 @@ void PlaceFacilityState::viewClick(Action *action)
 	}
 	else
 	{
-		BaseFacility *fac = new BaseFacility(_rule, _view->getGridX(), _view->getGridY());
+		BaseFacility *fac = new BaseFacility(_rule, _base, _view->getGridX(), _view->getGridY());
 		fac->setBuildTime(_rule->getBuildTime());
 		_base->getFacilities()->push_back(fac);
 		_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() - _rule->getBuildCost());

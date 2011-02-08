@@ -17,7 +17,6 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "BattleItem.h"
-#include "Item.h"
 #include "../Ruleset/RuleItem.h"
 
 namespace OpenXcom

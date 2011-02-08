@@ -618,7 +618,7 @@ void GeoscapeState::time30Minutes()
 				{
 					if ((*f)->getBuildTime() != 0)
 						continue;
-					if ((*f)->insideRadarRange(*b, *u))
+					if ((*f)->insideRadarRange(*u))
 					{
 						int chance = RNG::generate(1, 100);
 						if (chance <= (*f)->getRules()->getRadarChance())
@@ -650,7 +650,7 @@ void GeoscapeState::time30Minutes()
 			{
 				for (std::vector<BaseFacility*>::iterator f = (*b)->getFacilities()->begin(); f != (*b)->getFacilities()->end() && !detected; f++)
 				{
-					detected = detected || (*f)->insideRadarRange(*b, *u);
+					detected = detected || (*f)->insideRadarRange(*u);
 				}
 				for (std::vector<Craft*>::iterator c = (*b)->getCrafts()->begin(); c != (*b)->getCrafts()->end() && !detected; c++)
 				{
