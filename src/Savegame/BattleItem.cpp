@@ -27,7 +27,7 @@ namespace OpenXcom
  * @param item Pointer to item.
  * @param qty Initial ammo quantity.
  */
-BattleItem::BattleItem(RuleItem *rules, int qty) : _rules(rules), _ammoQty(qty)
+BattleItem::BattleItem(RuleItem *rules, int qty) : _rules(rules), _itemProperty1(qty)
 {
 }
 
@@ -53,7 +53,7 @@ RuleItem *const BattleItem::getRules() const
  */
 int BattleItem::getAmmoQuantity() const
 {
-	return _ammoQty;
+	return _itemProperty1;
 }
 
 /**
@@ -62,7 +62,7 @@ int BattleItem::getAmmoQuantity() const
  */
 void BattleItem::setAmmoQuantity(int qty)
 {
-	_ammoQty = qty;
+	_itemProperty1 = qty;
 }
 
 }

@@ -26,8 +26,7 @@ namespace OpenXcom
 
 class Item;
 class RuleItem;
-
-enum Location {LOC_GROUND, LOC_LEFT_ARM, LOC_RIGHT_ARM, LOC_LEFT_LEG, LOC_RIGHT_LEG, LOC_BELT, LOC_BACKPACK};
+class BattleUnit;
 
 /**
  * Represents a single item in the battlescape.
@@ -39,10 +38,11 @@ class BattleItem
 {
 private:
 	RuleItem *_rules;
-	int _ammoQty;
 	Position _position;
-	Location _location;
-	BattleItem *_ammoItem;
+	BattleUnit *_owner;
+	int _inventorySlot;
+	BattleItem *_parentItem;
+	int _itemProperty1, _itemProperty2, _itemProperty3;
 public:
 	/// Creates a item of the specified type.
 	BattleItem(RuleItem *rules, int ammoQty = 0);
