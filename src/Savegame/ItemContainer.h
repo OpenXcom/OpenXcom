@@ -26,7 +26,7 @@
 namespace OpenXcom
 {
 
-class Ruleset;
+class RuleItem;
 
 /**
  * Represents the items contained by a certain entity,
@@ -37,6 +37,7 @@ class ItemContainer
 {
 private:
 	std::map<std::string, int> _qty;
+	std::map<std::string, RuleItem*> _rules;
 public:
 	/// Creates an empty item container.
 	ItemContainer();
@@ -47,15 +48,17 @@ public:
 	/// Saves the item container to YAML.
 	void save(YAML::Emitter& out) const;
 	/// Adds an item to the container.
-	void addItem(const std::string &id, int qty = 1);
+	void addItem(RuleItem *item, int qty = 1);
 	/// Removes an item from the container.
 	void removeItem(const std::string &id, int qty = 1);
 	/// Gets an item in the container.
 	int getItem(const std::string &id) const;
+	/// Gets the ruleset for an item in the container.
+	RuleItem *getRule(const std::string &id) const;
 	/// Gets the total quantity of items in the container.
 	int getTotalQuantity() const;
 	/// Gets the total size of items in the container.
-	double getTotalSize(Ruleset *rule) const;
+	double getTotalSize() const;
 	/// Gets all the items in the container.
 	std::map<std::string, int> *const getContents();
 };

@@ -92,7 +92,7 @@ public:
 	/// Gets the base's available living quarters.
 	int getAvailableQuarters() const;
 	/// Gets the base's used storage space.
-	int getUsedStores(Ruleset *rule) const;
+	int getUsedStores() const;
 	/// Gets the base's available storage space.
 	int getAvailableStores() const;
 	/// Gets the base's used laboratory space.

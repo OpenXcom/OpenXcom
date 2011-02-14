@@ -151,17 +151,16 @@ bool BaseFacility::insideRadarRange(Target *target) const
 /**
  * Returns if this facility is currently being
  * used by its base.
- * @param rule Pointer to ruleset.
  * @return True if it's under use, False otherwise.
  */
-bool BaseFacility::inUse(Ruleset *rule) const
+bool BaseFacility::inUse() const
 {
 	if (_buildTime > 0)
 	{
 		return false;
 	}
 	return (_base->getAvailableQuarters() - _rules->getPersonnel() < _base->getUsedQuarters() ||
-			_base->getAvailableStores() - _rules->getStorage() < _base->getUsedStores(rule) ||
+			_base->getAvailableStores() - _rules->getStorage() < _base->getUsedStores() ||
 			_base->getAvailableLaboratories() - _rules->getLaboratories() < _base->getUsedLaboratories() ||
 			_base->getAvailableWorkshops() - _rules->getWorkshops() < _base->getUsedWorkshops() ||
 			_base->getAvailableHangars() - _rules->getCrafts() < _base->getUsedHangars());

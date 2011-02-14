@@ -384,15 +384,14 @@ int Base::getAvailableQuarters() const
 /**
  * Returns the amount of stores used up
  * by equipment in the base.
- * @param rule Pointer to ruleset.
  * @return Storage space.
  */
-int Base::getUsedStores(Ruleset *rule) const
+int Base::getUsedStores() const
 {
-	double total = _items->getTotalSize(rule);
+	double total = _items->getTotalSize();
 	for (std::vector<Craft*>::const_iterator i = _crafts.begin(); i != _crafts.end(); i++)
 	{
-		total += (*i)->getItems()->getTotalSize(rule);
+		total += (*i)->getItems()->getTotalSize();
 	}
 	return (int)floor(total);
 }
