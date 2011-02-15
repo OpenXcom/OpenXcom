@@ -883,42 +883,55 @@ XcomRuleset::XcomRuleset() : Ruleset()
 
 	RuleItem *pistol = new RuleItem("STR_PISTOL");
 	pistol->setSize(0.1f);
+	pistol->setBigSprite(3);
 
 	RuleItem *pclip = new RuleItem("STR_PISTOL_CLIP");
 	pclip->setSize(0.1f);
-
+	pclip->setBigSprite(4);
+	
 	RuleItem *rifle = new RuleItem("STR_RIFLE");
 	rifle->setSize(0.2f);
+	rifle->setBigSprite(1);
 
 	RuleItem *rclip = new RuleItem("STR_RIFLE_CLIP");
 	rclip->setSize(0.1f);
+	rclip->setBigSprite(2);
 
 	RuleItem *hcannon = new RuleItem("STR_HEAVY_CANNON");
 	hcannon->setSize(0.3f);
+	hcannon->setBigSprite(11);
 
 	RuleItem *hcap = new RuleItem("STR_HC_AP_AMMO");
 	hcap->setSize(0.1f);
+	hcap->setBigSprite(12);
 
 	RuleItem *hche = new RuleItem("STR_HC_HE_AMMO");
 	hche->setSize(0.1f);
+	hche->setBigSprite(13);
 
 	RuleItem *acannon = new RuleItem("STR_AUTO_CANNON");
 	acannon->setSize(0.3f);
+	acannon->setBigSprite(7);
 
 	RuleItem *acap = new RuleItem("STR_AC_AP_AMMO");
 	acap->setSize(0.1f);
+	acap->setBigSprite(8);
 
 	RuleItem *rlauncher = new RuleItem("STR_ROCKET_LAUNCHER");
 	rlauncher->setSize(0.4f);
+	rlauncher->setBigSprite(15);
 
 	RuleItem *srocket = new RuleItem("STR_SMALL_ROCKET");
 	srocket->setSize(0.2f);
+	srocket->setBigSprite(16);
 
 	RuleItem *grenade = new RuleItem("STR_GRENADE");
 	grenade->setSize(0.1f);
+	grenade->setBigSprite(19);
 
 	RuleItem *sgrenade = new RuleItem("STR_SMOKE_GRENADE");
 	sgrenade->setSize(0.1f);
+	sgrenade->setBigSprite(20);
 
 	_items.insert(std::pair<std::string, RuleItem*>("STR_STINGRAY_LAUNCHER", slauncher));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_AVALANCHE_LAUNCHER", alauncher));
@@ -1055,6 +1068,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	culta->getMapDataSets()->push_back(getMapDataSet("CULTIVAT"));
 	culta->getMapDataSets()->push_back(getMapDataSet("BARN"));
 	culta->getMapBlocks()->push_back(new MapBlock(culta,"CULTA00",10,10,true));
+	culta->getMapBlocks()->push_back(new MapBlock(culta,"CULTA0B",10,10,true)); //test
 	culta->getMapBlocks()->push_back(new MapBlock(culta,"CULTA01",10,10,false));
 	culta->getMapBlocks()->push_back(new MapBlock(culta,"CULTA02",10,10,false));
 	culta->getMapBlocks()->push_back(new MapBlock(culta,"CULTA03",10,10,false));

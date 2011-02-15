@@ -199,12 +199,15 @@ void BattlescapeGenerator::run()
 		_save->setSelectedUnit(_save->getUnits()->at(0)); // select first soldier
 
 		// add items that are in the craft
-		/*
-		for (std::map<std::string, Item*>::iterator i = _craft->getItems()->begin(); i != _craft->getItems()->end(); i++)
+		/*for (std::map<std::string, ItemContainer*>::iterator i = _craft->getItems()->begin(); i != _craft->getItems()->end(); i++)
 		{
 				addItem((*i).second);
-		}
-		*/
+		}*/
+		// test data
+		addItem(_game->getRuleset()->getItem("STR_HEAVY_CANNON"));
+		addItem(_game->getRuleset()->getItem("STR_PISTOL"));
+		addItem(_game->getRuleset()->getItem("STR_RIFLE"));
+		addItem(_game->getRuleset()->getItem("STR_GRENADE"));
 	}
 
 	if (_missionType == MISS_UFORECOVERY)
@@ -295,7 +298,7 @@ void BattlescapeGenerator::addAlien(RuleUnitSprite *rules, NodeRank rank, const 
 
 	// second try in case we still haven't found a place to spawn
 	// this time without randomness
-	for (int priority=10; priority > 0 && !bFound; priority--)
+	for (int priority = 10; priority > 0 && !bFound; priority--)
 	{
 		for (std::vector<Node*>::iterator i = _save->getNodes()->begin(); i != _save->getNodes()->end() && !bFound; i++)
 		{
@@ -318,18 +321,27 @@ void BattlescapeGenerator::addAlien(RuleUnitSprite *rules, NodeRank rank, const 
 
 	_save->getUnits()->push_back(unit);
 }
+
 /**
  * Adds an item to the game and assign it to a soldier?.
  * @param item pointer to the Item
  */
-void BattlescapeGenerator::addItem(Item *item)
+void BattlescapeGenerator::addItem(RuleItem *item)
 {
-	/*
-	BattleItem *bi = new BattleItem(item->getRules());
+	BattleItem *bi = new BattleItem(item);
 
-	// todo: define position
+	// find the first soldier with a free right hand
+	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); i++)
+	{
+		if (!_save->getItemFromUnit((*i), RIGHT_HAND))
+		{
+			bi->setOwner((*i));
+			bi->setSlot(RIGHT_HAND);
+			break;
+		}
+	}
+
 	_save->getItems()->push_back(bi);
-	*/
 }
 
 /** 

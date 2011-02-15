@@ -62,6 +62,8 @@ public:
 	void calculateUnitLighting();
 	/// Tile destruction. (for testing purposes)
 	void destroyTile(Tile *tile);
+	/// Explosions.
+	void explode(const Position &center, int power, Affector affector, int maxRadius);
 };
 
 }

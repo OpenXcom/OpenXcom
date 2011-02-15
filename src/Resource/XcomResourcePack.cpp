@@ -423,7 +423,7 @@ void XcomResourcePack::loadBattlescapeResources()
 	_sets["SMOKE.PCK"] = new SurfaceSet(32, 40);
 	_sets["SMOKE.PCK"]->loadPck(insensitive(s.str()), insensitive(s2.str()));
 
-	// Load Battlescape Terrain (only blacks are loaded, others are loaded at runtime)
+	// Load Battlescape Terrain (only blacks are loaded, others are loaded just in time)
 	std::string bsets[] = {"BLANKS.PCK"};
 
 	for (int i = 0; i < 1; i++)
@@ -470,6 +470,12 @@ void XcomResourcePack::loadBattlescapeResources()
 		_sets[usets[i]] = new SurfaceSet(32, 40);
 		_sets[usets[i]]->loadPck(insensitive(s.str()), insensitive(s2.str()));
 	}
+	s.str("");
+	s << _folder << "UNITS/" << "BIGOBS.PCK";
+	s2.str("");
+	s2 << _folder << "UNITS/" << "BIGOBS.TAB";
+	_sets["BIGOBS.PCK"] = new SurfaceSet(32, 48);
+	_sets["BIGOBS.PCK"]->loadPck(insensitive(s.str()), insensitive(s2.str()));
 
 }
 

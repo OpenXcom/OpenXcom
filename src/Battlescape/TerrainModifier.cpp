@@ -153,7 +153,7 @@ void TerrainModifier::calculateUnitLighting()
 		_save->getTiles()[i]->resetLight(layer);
 	}
 
-	// add lighting of soldiers + recalculate line of sight
+	// add lighting of soldiers
 	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); i++)
 	{
 		if ((*i)->getFaction() == FACTION_PLAYER)
@@ -386,6 +386,96 @@ int TerrainModifier::blockage(Tile *tile, const int part, Affector affector)
 	}
 
 	return blockage;
+}
+
+/**
+ * HE, smoke and fire explodes in a circular pattern on 1 level only. HE however damages floor tiles of the above level. Not the units on it.
+ * HE destroys an object if its armor is lower than the explosive power, then it's HE blockage is applied for further propagation.
+ * See http://www.ufopaedia.org/index.php?title=Explosions for more info.
+ * @param center
+ * @param power
+ * @param affector
+ */
+void TerrainModifier::explode(const Position &center, int power, Affector affector, int maxRadius)
+{
+	double centerZ = center.z;
+	double centerX = center.x + 0.5;
+	double centerY = center.y + 0.5;
+	int power_;
+
+	// a unique ID for this session, used to avoid tiles to be affected more than once.
+	int sessionID = RNG::generate(1,65000);
+
+	// raytrace every 3 degrees makes sure we cover all tiles in a circle.
+	for (double te = 0; te <= 360; te += 3)
+	{
+		double cos_te = cos(te * M_PI / 180.0);
+		double sin_te = sin(te * M_PI / 180.0);
+		//double cos_te = _cosTable[(int)te/3];
+		//double sin_te = _sinTable[(int)te/3];
+
+		Tile *origin = _save->getTile(center);
+		double l = 0;
+		double vx, vy, vz;
+		int tileX, tileY, tileZ;
+		power_ = power;
+
+		while (power_ > 0 && l <= maxRadius)
+		{
+			vx = centerX + l * cos_te;
+			vy = centerY + l * sin_te;
+			vz = centerZ;
+
+			tileZ = int(floor(vz));
+			tileX = int(floor(vx));
+			tileY = int(floor(vy));
+
+			Tile *dest = _save->getTile(Position(tileX, tileY, tileZ));
+			if (!dest) break; // out of map!
+
+			// horizontal blockage by walls
+			power_ -= horizontalBlockage(origin, dest, affector);
+
+			if (power_ > 0/* && !dest->isChecked(sessionID)*/)
+			{
+				if (affector == AFFECT_HE)
+				{
+					// explosives do 1/2 damage to terrain and 1/2 up to 3/2 random damage to units
+					dest->setExplosive(power_ / 2, sessionID);
+					// TODO: destroy floors above
+				
+				}
+				if (affector == AFFECT_SMOKE)
+				{
+					// smoke from explosions always stay 15 to 20 turns
+					dest->setSmoke(RNG::generate(15, 20));
+				}
+			}
+
+			power_ -= 10; // explosive damage decreases by 10
+
+			// objects on destination tile affect the ray after it has crossed this tile
+			// but it has to be calculated before we affect the tile (it could have been blown up)
+			if (dest->getMapData(O_OBJECT))
+			{
+				power_ -= dest->getMapData(O_OBJECT)->getBlock(affector);
+			}
+			origin = dest;
+			l++;
+		}
+	}
+
+	// indicate we have finished recalculating
+	if (affector == AFFECT_HE)
+	{
+		for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); i++)
+		{
+			_save->getTiles()[i]->detonate();
+		}
+	}
+
+	// recalculate line of sight (to optimise: only units in range)
+	calculateFOV(center);
 }
 
 /**

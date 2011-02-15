@@ -129,6 +129,7 @@
     <ClCompile Include="Battlescape\BattlescapeGenerator.cpp" />
     <ClCompile Include="Battlescape\BattlescapeState.cpp" />
     <ClCompile Include="Battlescape\BriefingCrashState.cpp" />
+    <ClCompile Include="Battlescape\ItemAction.cpp" />
     <ClCompile Include="Battlescape\Map.cpp" />
     <ClCompile Include="Battlescape\Pathfinding.cpp" />
     <ClCompile Include="Battlescape\PathfindingNode.cpp" />
@@ -263,6 +264,7 @@
     <ClInclude Include="Battlescape\BattlescapeGenerator.h" />
     <ClInclude Include="Battlescape\BattlescapeState.h" />
     <ClInclude Include="Battlescape\BriefingCrashState.h" />
+    <ClInclude Include="Battlescape\ItemAction.h" />
     <ClInclude Include="Battlescape\Map.h" />
     <ClInclude Include="Battlescape\Pathfinding.h" />
     <ClInclude Include="Battlescape\PathfindingNode.h" />

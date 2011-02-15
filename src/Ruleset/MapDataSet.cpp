@@ -169,6 +169,9 @@ void MapDataSet::load(ResourcePack *res)
 		to->setDieMCD((int)(mcd.Die_MCD));
 		to->setBlockValue((int)mcd.Light_Block, (int)mcd.Stop_LOS, (int)mcd.HE_Block, (int)mcd.Block_Smoke, (int)mcd.Block_Fire, (int)mcd.Block_Smoke);
 		to->setLightSource((int)mcd.Light_Source);
+		to->setArmor((int)mcd.Armour);
+		to->setFlammable((int)mcd.Flammable);
+		to->setFuel((int)mcd.Fuel);
 	}
 
 	if (!mapFile.eof())

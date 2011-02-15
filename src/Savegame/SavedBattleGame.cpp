@@ -385,7 +385,6 @@ TerrainModifier *SavedBattleGame::getTerrainModifier()
 	return _terrainModifier;
 }
 
-
 /**
 * gets a pointer to the array of mapblock
 * @return pointer to the array of mapblocks
@@ -393,6 +392,22 @@ TerrainModifier *SavedBattleGame::getTerrainModifier()
 std::vector<MapDataSet*> *SavedBattleGame::getMapDataSets()
 {
 	return &_mapDataFiles;
+}
+
+/**
+* get an item from a specific unit and slot
+* @return 
+*/
+BattleItem *SavedBattleGame::getItemFromUnit(BattleUnit *unit, int slot)
+{
+	for (std::vector<BattleItem*>::iterator i = _items.begin(); i != _items.end(); i++)
+	{
+		if ((*i)->getOwner() == unit && (*i)->getSlot() == slot)
+		{
+			return *i;
+		}
+	}
+	return 0;
 }
 
 /** under construction

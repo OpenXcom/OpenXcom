@@ -126,4 +126,21 @@ void RuleItem::setEquippable(bool equip)
 	_equip = equip;
 }
 
+/**
+ * Returns the reference in BIGOBS.PCK for use in inventory.
+ * @return Sprite reference.
+ */
+int RuleItem::getBigSprite() const
+{
+	return _bigSprite;
+}
+
+/**
+ * Changes the reference in BIGOBS.PCK for use in inventory.
+ * @param sprite Sprite reference.
+ */
+void RuleItem::setBigSprite(int sprite)
+{
+	_bigSprite = sprite;
+}
 }

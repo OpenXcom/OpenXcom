@@ -119,6 +119,8 @@ public:
 	Pathfinding *getPathfinding();
 	/// get the terrainmodifier object
 	TerrainModifier *getTerrainModifier();
+	/// get an item from a specific unit and slot
+	BattleItem *getItemFromUnit(BattleUnit *unit, int slot);
 };
 
 }

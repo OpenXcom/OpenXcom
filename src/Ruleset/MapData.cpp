@@ -328,4 +328,57 @@ void MapData::setLightSource(int value)
 	_lightSource = value;
 }
 
+/**
+  * Get the amount of armor.
+  * @return armor
+  */
+int MapData::getArmor()
+{
+	return _armor;
+}
+
+/**
+  * Set the amount of armor.
+  * @value armor
+  */
+void MapData::setArmor(int value)
+{
+	_armor = value;
+}
+
+/**
+  * Get the amount of flammable.
+  * @return armor
+  */
+int MapData::getFlammable()
+{
+	return _flammable;
+}
+
+/**
+  * Set the amount of flammable.
+  * @value armor
+  */
+void MapData::setFlammable(int value)
+{
+	_flammable = value;
+}
+
+/**
+  * Get the amount of fuel.
+  * @return fuel
+  */
+int MapData::getFuel()
+{
+	return _fuel;
+}
+
+/**
+  * Set the amount of fuel.
+  * @value fuel
+  */
+void MapData::setFuel(int value)
+{
+	_fuel = value;
+}
 }

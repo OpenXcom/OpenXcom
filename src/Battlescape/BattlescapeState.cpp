@@ -16,6 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+#include <sstream>
+#include <string>
 #include "Map.h"
 #include "BattlescapeState.h"
 #include "Pathfinding.h"
@@ -41,7 +44,9 @@
 #include "../Savegame/Tile.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/Soldier.h"
+#include "../Savegame/BattleItem.h"
 #include "../Ruleset/Ruleset.h"
+#include "../Ruleset/RuleItem.h"
 #include "../Engine/Timer.h"
 #include "../Engine/SoundSet.h"
 #include "../Engine/Sound.h"
@@ -77,6 +82,8 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	_btnReserveSnap = new ImageButton(28, 11, 78, 177);
 	_btnReserveAimed = new ImageButton(28, 11, 49, 189);
 	_btnReserveAuto = new ImageButton(28, 11, 78, 189);
+	_btnLeftHandItem = new ImageButton(32, 48, 8, 149);
+	_btnRightHandItem = new ImageButton(32, 48, 280, 149);
 
 	// Create soldier stats summary
 	_txtName = new Text(120, 10, 135, 176);
@@ -142,6 +149,8 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	add(_btnReserveSnap);
 	add(_btnReserveAimed);
 	add(_btnReserveAuto);
+	add(_btnLeftHandItem);
+	add(_btnRightHandItem);
 
 	// Set up objects
 	_game->getResourcePack()->getSurface("ICONS.PCK")->blit(_icons);
@@ -430,6 +439,25 @@ void BattlescapeState::updateSoldierInfo(BattleUnit *unit)
 	_numMorale->setValue(100);
 	_barMorale->setMax(100);
 	_barMorale->setValue(100);
+
+	BattleItem *leftHandItem = _battleGame->getItemFromUnit(unit, LEFT_HAND);
+	if (leftHandItem)
+	{
+		drawItemSprite(leftHandItem, _btnLeftHandItem);
+	}
+	BattleItem *rightHandItem = _battleGame->getItemFromUnit(unit, RIGHT_HAND);
+	if (rightHandItem)
+	{
+		drawItemSprite(rightHandItem, _btnRightHandItem);
+	}
+
+}
+
+
+void BattlescapeState::drawItemSprite(BattleItem *item, Surface *surface)
+{
+	SurfaceSet *texture = _game->getResourcePack()->getSurfaceSet("BIGOBS.PCK");
+	texture->getFrame(item->getRules()->getBigSprite())->blit(surface);
 }
 
 /**

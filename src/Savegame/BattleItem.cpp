@@ -27,8 +27,11 @@ namespace OpenXcom
  * @param item Pointer to item.
  * @param qty Initial ammo quantity.
  */
-BattleItem::BattleItem(RuleItem *rules, int qty) : _rules(rules), _itemProperty1(qty)
+BattleItem::BattleItem(RuleItem *rules) : _rules(rules)
 {
+	_itemProperty[0] = 0;
+	_itemProperty[1] = 0;
+	_itemProperty[2] = 0;
 }
 
 /**
@@ -53,7 +56,7 @@ RuleItem *const BattleItem::getRules() const
  */
 int BattleItem::getAmmoQuantity() const
 {
-	return _itemProperty1;
+	return _itemProperty[0];
 }
 
 /**
@@ -62,7 +65,31 @@ int BattleItem::getAmmoQuantity() const
  */
 void BattleItem::setAmmoQuantity(int qty)
 {
-	_itemProperty1 = qty;
+	_itemProperty[0] = qty;
+}
+
+/// Gets the item's owner.
+BattleUnit *BattleItem::getOwner() const
+{
+	return _owner;
+}
+
+/// Sets the item's owner.
+void BattleItem::setOwner(BattleUnit *owner)
+{
+	_owner = owner;
+}
+
+/// Gets the item's inventory slot.
+InventorySlot BattleItem::getSlot() const
+{
+	return _inventorySlot;
+}
+
+/// Sets the item's inventory slot.
+void BattleItem::setSlot(InventorySlot slot)
+{
+	_inventorySlot = slot;
 }
 
 }

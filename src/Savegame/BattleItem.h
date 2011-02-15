@@ -21,6 +21,8 @@
 
 #include "../Battlescape/Position.h"
 
+enum InventorySlot { RIGHT_HAND, LEFT_HAND };
+
 namespace OpenXcom
 {
 
@@ -40,12 +42,12 @@ private:
 	RuleItem *_rules;
 	Position _position;
 	BattleUnit *_owner;
-	int _inventorySlot;
+	InventorySlot _inventorySlot;
 	BattleItem *_parentItem;
-	int _itemProperty1, _itemProperty2, _itemProperty3;
+	int _itemProperty[3];
 public:
 	/// Creates a item of the specified type.
-	BattleItem(RuleItem *rules, int ammoQty = 0);
+	BattleItem(RuleItem *rules);
 	/// Cleans up the item.
 	~BattleItem();
 	/// Gets the item's ruleset.
@@ -54,6 +56,14 @@ public:
 	int getAmmoQuantity() const;
 	/// Sets the item's ammo quantity.
 	void setAmmoQuantity(int qty);
+	/// Gets the item's owner.
+	BattleUnit *getOwner() const;
+	/// Sets the item's owner.
+	void setOwner(BattleUnit *owner);
+	/// Gets the item's inventory slot.
+	InventorySlot getSlot() const;
+	/// Sets the item's inventory slot.
+	void setSlot(InventorySlot slot);
 };
 
 }

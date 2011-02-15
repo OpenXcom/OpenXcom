@@ -52,7 +52,6 @@ private:
 	UnitStatus _status;
 	int _walkPhase;
 	std::vector<Tile *> _visibleTiles;
-	std::vector<BattleItem *> _inventory;
 	int _tu, _energy, _health, _morale;
 	Soldier *_soldier;
 	//BattleAI *_ai;

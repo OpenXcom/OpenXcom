@@ -20,6 +20,7 @@
 #include "../Ruleset/MapData.h"
 #include "../Ruleset/MapDataSet.h"
 #include "../Engine/SurfaceSet.h"
+#include "../Engine/RNG.h"
 #include "../Engine/Exception.h"
 
 namespace OpenXcom
@@ -29,7 +30,7 @@ namespace OpenXcom
 * constructor
 * @param pos Position.
 */
-Tile::Tile(const Position& pos): _discovered(false), _smoke(0), _fire(0), _pos(pos), _cached(false), _unit(0)
+Tile::Tile(const Position& pos): _discovered(false), _smoke(0), _fire(0), _pos(pos), _cached(false), _unit(0), _explosive(0)
 {
 	for (int i = 0; i < 4; i++)
 	{
@@ -310,6 +311,7 @@ int Tile::getShade()
  * Destroy a part on this tile. We first remove the old object, then replace it with the new one.
  * This is because the object type of the old and new one are not nescessarly the same.
  * @param part
+ * @param sessionID
  */
 void Tile::destroy(int part)
 {
@@ -325,6 +327,102 @@ void Tile::destroy(int part)
 	}
 }
 
+
+/**
+
+ * @param power
+ * @param sessionID
+ */
+void Tile::setExplosive(int power, int sessionID)
+{
+	if (sessionID = _sessionID)
+	{
+		_explosive = (_explosive + power) / 2;
+	}
+	else
+	{
+		_sessionID = sessionID;
+		_explosive = power;
+	}
+}
+
+void Tile::detonate()
+{
+	int decrease;
+
+	if (_explosive)
+	{
+		for (int i = 0; i < 4; i++)
+		{
+			if(_objects[i])
+			{
+				if ((_explosive) >= _objects[i]->getArmor())
+				{
+					decrease = _objects[i]->getArmor();
+					destroy(i);
+					// explosions create smoke which only stays 1 or 2 turns
+					setSmoke(1);
+					if (_objects[i] && (_explosive - decrease) >= _objects[i]->getArmor())
+					{
+						destroy(i);
+						setSmoke(2);
+					}
+				}
+			}
+		}
+		// flammable of the tile needs to be 20 or lower (lower is better chance of catching fire) to catch fire
+		// note that when we get here, flammable objects can already be destroyed by the explosion, thus not catching fire.
+		int flam = getFlammability();
+		if (flam <= 20)
+		{
+			if (RNG::generate(0, 20) - flam >= 0)
+			{
+				ignite();
+			}
+		}
+		_explosive = 0;
+	}
+}
+
+/*
+ * Flammability of a tile is the lowest flammability of it's objects
+ */
+int Tile::getFlammability()
+{
+	int flam = 255;
+
+	for (int i=0; i < 4; i++)
+	{
+		if (_objects[i])
+		{
+			if (_objects[i]->getFlammable() < flam)
+			{
+				flam = _objects[i]->getFlammable();
+			}
+		}
+	}
+	return flam;
+}
+
+/*
+ * Ignite starts fire on a tile, it will last <fuel> rounds. Fuel of a tile is the highest fuel of it's objects
+ */
+void Tile::ignite()
+{
+	int fuel = 0;
+
+	for (int i=0; i < 4; i++)
+	{
+		if (_objects[i])
+		{
+			if (_objects[i]->getFuel() > fuel)
+			{
+				fuel = _objects[i]->getFuel();
+			}
+		}
+	}
+	setFire(fuel);
+}
 /**
  * Animate the tile. This means to advance the current frame for every object.
  */
@@ -384,7 +482,7 @@ BattleUnit *Tile::getUnit()
 void Tile::setFire(int fire)
 {
 	_fire = fire;
-	_smoke = 0;
+	_smoke = 0; // fire stops smoke, like in the original game
 }
 
 int Tile::getFire()
@@ -396,7 +494,7 @@ void Tile::setSmoke(int smoke)
 {
 	if (smoke > 40) smoke = 40;
 	_smoke = smoke;
-	_fire = 0;
+	_fire = 0; // smoke stops fire, like in the original game
 }
 
 int Tile::getSmoke()

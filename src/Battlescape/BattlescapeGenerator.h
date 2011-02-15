@@ -33,7 +33,7 @@ class ResourcePack;
 class RuleSet;
 class Soldier;
 class RuleUnitSprite;
-class Item;
+class RuleItem;
 class Game;
 
 /**
@@ -62,7 +62,7 @@ private:
 	/// Add an alien to the game
 	void addAlien(RuleUnitSprite *rules, NodeRank rank, const std::wstring &name);
 	/// Add an item to the game
-	void addItem(Item *item);
+	void addItem(RuleItem *item);
 	/// loads an XCOM MAP file
 	int loadMAP(MapBlock *mapblock, int xoff, int yoff, RuleTerrain *terrain, bool discovered = false);
 	/// loads an XCOM RMP file

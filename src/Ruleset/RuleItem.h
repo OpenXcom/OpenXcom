@@ -37,6 +37,7 @@ private:
 	float _size;
 	int _value, _time;
 	bool _equip;
+	int _bigSprite, _floorSprite, _handSprite;
 public:
 	/// Creates a blank item ruleset.
 	RuleItem(std::string type);
@@ -60,6 +61,11 @@ public:
 	bool getEquippable() const;
 	/// Sets if the item is equippable.
 	void setEquippable(bool equip);
+	/// Gets the item's reference in BIGOBS.PCK for use in inventory.
+	int getBigSprite() const;
+	/// Sets the item's reference in BIGOBS.PCK for use in inventory.
+	void setBigSprite(int value);
+
 };
 
 }

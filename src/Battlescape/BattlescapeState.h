@@ -33,6 +33,7 @@ class Bar;
 class NumberText;
 class BattleUnit;
 class SavedBattleGame;
+class BattleItem;
 
 /**
  * Battlescape screen which shows the tactical battle
@@ -47,12 +48,14 @@ private:
 	InteractiveSurface *_btnEndTurn, *_btnAbort;
 	ImageButton *_reserve;
 	ImageButton *_btnReserveNone, *_btnReserveSnap, *_btnReserveAimed, *_btnReserveAuto;
+	ImageButton *_btnLeftHandItem, *_btnRightHandItem;
 	Text *_txtName;
 	NumberText *_numTimeUnits, *_numEnergy, *_numHealth, *_numMorale, *_numLayers;
 	Bar *_barTimeUnits, *_barEnergy, *_barHealth, *_barMorale;
 	Timer *_walkingTimer, *_bulletTimer;
 	SavedBattleGame *_battleGame;
 	bool unitOpensDoor(BattleUnit *unit);
+	void drawItemSprite(BattleItem *item, Surface *surface);
 public:
 	/// Creates the Battlescape state.
 	BattlescapeState(Game *game);

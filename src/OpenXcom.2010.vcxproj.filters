@@ -395,6 +395,9 @@
     <ClCompile Include="Savegame\ItemContainer.cpp">
       <Filter>Savegame</Filter>
     </ClCompile>
+    <ClCompile Include="Battlescape\ItemAction.cpp">
+      <Filter>Battlescape</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -791,6 +794,9 @@
     </ClInclude>
     <ClInclude Include="Savegame\ItemContainer.h">
       <Filter>Savegame</Filter>
+    </ClInclude>
+    <ClInclude Include="Battlescape\ItemAction.h">
+      <Filter>Battlescape</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
