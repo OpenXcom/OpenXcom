@@ -90,7 +90,7 @@ MonthlyReportState::MonthlyReportState(Game *game) : State(game)
 
 	_txtDesc->setColor(Palette::blockOffset(8)+10);
 	_txtDesc->setWordWrap(true);
-	_txtDesc->setText(_game->getLanguage()->getString("STR_COUNCIL_SATISFIED"));
+	_txtDesc->setText(_game->getLanguage()->getString("STR_COUNCIL_IS_GENERALLY_SATISFIED"));
 }
 
 /**

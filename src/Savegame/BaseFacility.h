@@ -65,7 +65,7 @@ public:
 	/// Checks if a target is inside the facility's radar.
 	bool insideRadarRange(Target *target) const;
 	/// Checks if the facility is currently in use.
-	bool inUse(Ruleset *rule) const;
+	bool inUse() const;
 };
 
 }

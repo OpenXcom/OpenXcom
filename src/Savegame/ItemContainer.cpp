@@ -17,7 +17,6 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "ItemContainer.h"
-#include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleItem.h"
 
 namespace OpenXcom
@@ -26,7 +25,7 @@ namespace OpenXcom
 /**
  * Initializes an item container with no contents.
  */
-ItemContainer::ItemContainer() : _qty()
+ItemContainer::ItemContainer() : _qty(), _rules()
 {
 }
 
@@ -57,16 +56,17 @@ void ItemContainer::save(YAML::Emitter &out) const
 
 /**
  * Adds an item amount to the container.
- * @param id Item ID.
+ * @param iitem Item ruleset.
  * @param qty Item quantity.
  */
-void ItemContainer::addItem(const std::string &id, int qty)
+void ItemContainer::addItem(RuleItem *item, int qty)
 {
-	if (_qty.find(id) == _qty.end())
+	if (_qty.find(item->getType()) == _qty.end())
 	{
-		_qty[id] = 0;
+		_qty[item->getType()] = 0;
+		_rules[item->getType()] = item;
 	}
-	_qty[id] += qty;
+	_qty[item->getType()] += qty;
 }
 
 /**
@@ -110,6 +110,25 @@ int ItemContainer::getItem(const std::string &id) const
 }
 
 /**
+ * Returns the ruleset of an item in the container.
+ * @param id Item ID.
+ * @return Item rules.
+ */
+RuleItem *ItemContainer::getRule(const std::string &id) const
+{
+	std::map<std::string, RuleItem*>::const_iterator it = _rules.find(id);
+
+	if (it == _rules.end())
+	{
+		return 0;
+	}
+	else
+	{
+		return it->second;
+	}
+}
+
+/**
  * Returns the total quantity of the items in the container.
  * @return Total item quantity.
  */
@@ -125,15 +144,16 @@ int ItemContainer::getTotalQuantity() const
 
 /**
  * Returns the total size of the items in the container.
- * @param rule Pointer to ruleset.
  * @return Total item size.
  */
-double ItemContainer::getTotalSize(Ruleset *rule) const
+double ItemContainer::getTotalSize() const
 {
 	double total = 0;
-	for (std::map<std::string, int>::const_iterator i = _qty.begin(); i != _qty.end(); i++)
+	std::map<std::string, int>::const_iterator i;
+	std::map<std::string, RuleItem*>::const_iterator j;
+	for (i = _qty.begin(), j = _rules.begin(); i != _qty.end(); i++)
 	{
-		total += rule->getItem(i->first)->getSize() * i->second;
+		total += j->second->getSize() * i->second;
 	}
 	return total;
 }

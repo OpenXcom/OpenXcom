@@ -373,7 +373,7 @@ void BasescapeState::viewClick(Action *action)
 		squares -= fac->getRules()->getSize() * fac->getRules()->getSize();
 
 		// Is facility in use?
-		if (fac->inUse(_game->getRuleset()))
+		if (fac->inUse())
 		{
 			_game->pushState(new BasescapeErrorState(_game, "STR_FACILITY_IN_USE"));
 		}

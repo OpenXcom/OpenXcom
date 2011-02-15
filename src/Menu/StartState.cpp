@@ -88,7 +88,7 @@ void StartState::think()
 			std::cerr << e.what() << std::endl;
 			_load = LOADING_FAILED;
 			_surface->clear();
-			_surface->drawString(0, 0, e.what(), 0);
+			_surface->drawString(0, 0, e.what(), 1);
 			_surface->drawString(0, 16, "Make sure X-Com is in the DATA subfolder", 1);
 			_surface->drawString(0, 192, "Press any key to quit", 1);
 		}

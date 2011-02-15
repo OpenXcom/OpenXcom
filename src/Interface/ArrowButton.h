@@ -24,7 +24,7 @@
 namespace OpenXcom
 {
 
-enum ArrowShape { ARROW_BIG_UP, ARROW_BIG_DOWN };
+enum ArrowShape { ARROW_BIG_UP, ARROW_BIG_DOWN, ARROW_SMALL_UP, ARROW_SMALL_DOWN, ARROW_SMALL_LEFT, ARROW_SMALL_RIGHT };
 
 class TextList;
 class Timer;

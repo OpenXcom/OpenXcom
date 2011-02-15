@@ -704,7 +704,7 @@ void GeoscapeState::time1Day()
 					timerReset();
 					std::wstring s = _game->getLanguage()->getString("STR_PRODUCTION_OF");
 					s += _game->getLanguage()->getString((*j)->getRules()->getType());
-					s += _game->getLanguage()->getString("STR_AT");
+					s += _game->getLanguage()->getString("STR_AT_");
 					s += (*i)->getName();
 					s += _game->getLanguage()->getString("STR_IS_COMPLETE");
 					popup(new GeoscapeMessageState(_game, s));

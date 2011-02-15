@@ -154,8 +154,8 @@ void CraftWeaponsState::lstWeaponsClick(Action *action)
 	// Remove current weapon
 	if (current != 0)
 	{
-		_base->getItems()->addItem(current->getRules()->getLauncherItem());
-		_base->getItems()->addItem(current->getRules()->getClipItem(), (int)floor((double)current->getAmmo() / current->getRules()->getRearmRate()));
+		_base->getItems()->addItem(_game->getRuleset()->getItem(current->getRules()->getLauncherItem()));
+		_base->getItems()->addItem(_game->getRuleset()->getItem(current->getRules()->getClipItem()), (int)floor((double)current->getAmmo() / current->getRules()->getRearmRate()));
 		delete current;
 		_base->getCrafts()->at(_craft)->getWeapons()->at(_weapon) = 0;
 	}
