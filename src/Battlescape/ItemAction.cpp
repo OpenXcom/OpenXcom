@@ -26,7 +26,7 @@ namespace OpenXcom
  * Sets up an ItemAction.
  * @param item pointer to the item object.
  */
-ItemAction::ItemAction(BattleItem *item) : _item(item), _status(IDLE)
+ItemAction::ItemAction(BattleItem *item, ItemActionType type) : _item(item), _status(PENDING), _type(type)
 {
 
 }

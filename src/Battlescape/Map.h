@@ -36,6 +36,8 @@ class BattleUnit;
 // below Y 140 the buttons area starts
 #define BUTTONS_AREA 140
 
+enum CursorType { CT_NONE, CT_NORMAL, CT_AIM, CT_PSI, CT_WAYPOINT, CT_THROW };
+
 /**
  * Interactive map of the battlescape
  */
@@ -55,7 +57,7 @@ private:
 	int _RMBClickX, _RMBClickY;
 	int _spriteWidth, _spriteHeight;
 	int _selectorX, _selectorY;
-	bool _hideCursor;
+	CursorType _cursorType;
 	int _animFrame;
 	int _scrollX, _scrollY;
 	bool _RMBDragging;
@@ -110,10 +112,11 @@ public:
 	void getSelectorPosition(Position *pos);
 	/// Calculate the offset of a soldier, when it is walking in the middle of 2 tiles.
 	void calculateWalkingOffset(BattleUnit *unit, Position *offset);
-	/// Hide cursor.
-	void hideCursor(bool flag);
-	/// is cursor hidden.
-	bool isCursorHidden();
+	/// Set the 3D cursor type.
+	void setCursorType(CursorType type);
+	/// Get the 3D cursor type.
+	CursorType getCursorType() const;
+	/// Cache units.
 	void cacheUnits();
 };
 

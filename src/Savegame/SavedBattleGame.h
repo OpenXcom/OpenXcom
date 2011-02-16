@@ -21,6 +21,7 @@
 
 #include <vector>
 #include "yaml.h"
+#include "BattleItem.h"
 
 namespace OpenXcom
 {
@@ -120,7 +121,7 @@ public:
 	/// get the terrainmodifier object
 	TerrainModifier *getTerrainModifier();
 	/// get an item from a specific unit and slot
-	BattleItem *getItemFromUnit(BattleUnit *unit, int slot);
+	BattleItem *getItemFromUnit(BattleUnit *unit, InventorySlot slot);
 };
 
 }

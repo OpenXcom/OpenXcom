@@ -21,14 +21,14 @@
 
 #include "../Battlescape/Position.h"
 
-enum InventorySlot { RIGHT_HAND, LEFT_HAND };
-
 namespace OpenXcom
 {
 
 class Item;
 class RuleItem;
 class BattleUnit;
+
+enum InventorySlot { RIGHT_HAND, LEFT_HAND };
 
 /**
  * Represents a single item in the battlescape.

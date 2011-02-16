@@ -833,9 +833,10 @@ void GeoscapeState::btnUfopaediaClick(Action *action)
 	/* Daiky: uncomment this bit to start a terror mission */
 	_game->getSavedGame()->setBattleGame(new SavedBattleGame());	
 	BattlescapeGenerator *bgen = new BattlescapeGenerator(_game);
-	bgen->setMissionType(MISS_TERROR);
+	//bgen->setMissionType(MISS_TERROR);
+	bgen->setMissionType(MISS_UFOASSAULT);
 	bgen->setWorldTexture(1);
-	bgen->setWorldShade(7);
+	bgen->setWorldShade(0);
 	bgen->setCraft(_game->getSavedGame()->getBases()->at(0)->getCrafts()->at(0));
 	bgen->run();
 	delete bgen;

@@ -34,6 +34,7 @@ class NumberText;
 class BattleUnit;
 class SavedBattleGame;
 class BattleItem;
+class ItemAction;
 
 /**
  * Battlescape screen which shows the tactical battle
@@ -54,7 +55,10 @@ private:
 	Bar *_barTimeUnits, *_barEnergy, *_barHealth, *_barMorale;
 	Timer *_walkingTimer, *_bulletTimer;
 	SavedBattleGame *_battleGame;
+	ItemAction *_inProgressItemAction;
 	bool unitOpensDoor(BattleUnit *unit);
+	void cancelInProgressItemAction();
+	void handleItemClick(BattleItem *item);
 	void drawItemSprite(BattleItem *item, Surface *surface);
 public:
 	/// Creates the Battlescape state.
@@ -95,6 +99,10 @@ public:
 	void btnEndTurnClick(Action *action);
 	/// Handler for clicking the Abort button.
 	void btnAbortClick(Action *action);
+	/// Handler for clicking the left hand item button.
+	void btnLeftHandItemClick(Action *action);
+	/// Handler for clicking the right hand item button.
+	void btnRightHandItemClick(Action *action);
 	/// updates soldier name/rank/tu/energy/health/morale
 	void updateSoldierInfo(BattleUnit *unit);
 	/// Animate walking unit.

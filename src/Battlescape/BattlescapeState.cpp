@@ -23,6 +23,7 @@
 #include "BattlescapeState.h"
 #include "Pathfinding.h"
 #include "TerrainModifier.h"
+#include "ItemAction.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Game.h"
 #include "../Engine/Music.h"
@@ -169,6 +170,8 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	_btnMapDown->onMouseClick((ActionHandler)&BattlescapeState::btnMapDownClick);
 	_btnNextSoldier->onMouseClick((ActionHandler)&BattlescapeState::btnNextSoldierClick);
 	_btnCenter->onMouseClick((ActionHandler)&BattlescapeState::btnCenterClick);
+	_btnLeftHandItem->onMouseClick((ActionHandler)&BattlescapeState::btnLeftHandItemClick);
+	_btnRightHandItem->onMouseClick((ActionHandler)&BattlescapeState::btnRightHandItemClick);
 	
 	_txtName->setColor(Palette::blockOffset(13));
 	_numTimeUnits->setColor(Palette::blockOffset(4));
@@ -213,6 +216,8 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	_bulletTimer = new Timer(DEFAULT_BULLET_SPEED);
 	_bulletTimer->onTimer((StateHandler)&BattlescapeState::moveBullet);
 	_bulletTimer->start();
+
+	_inProgressItemAction = 0;
 }
 
 /**
@@ -222,6 +227,7 @@ BattlescapeState::~BattlescapeState()
 {
 	delete _walkingTimer;
 	delete _bulletTimer;
+	delete _inProgressItemAction;
 }
 
 
@@ -249,9 +255,16 @@ void BattlescapeState::think()
  */
 void BattlescapeState::mapClick(Action *action)
 {
-	// right-click abort walking
+	// right-click abort 
+	
+	// right-click abort walking or in progress action
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
+		if (_inProgressItemAction)
+		{
+			cancelInProgressItemAction();
+			return;
+		}
 		BattleUnit *unit = _battleGame->getSelectedUnit();
 		if (unit->getStatus() == STATUS_WALKING)
 		{
@@ -263,8 +276,8 @@ void BattlescapeState::mapClick(Action *action)
 	// don't handle mouseclicks below 140, because they are in the buttons area (it overlaps with map surface)
 	if (action->getDetails()->motion.y/action->getYScale() > BUTTONS_AREA) return;
 
-	// don't accept below clicks if there is no cursor
-	if (_map->isCursorHidden()) return;
+	// don't accept leftclicks if there is no cursor
+	if (_map->getCursorType() == CT_NONE) return;
 
 	Position pos;
 	_map->getSelectorPosition(&pos);
@@ -416,6 +429,26 @@ void BattlescapeState::btnAbortClick(Action *action)
 }
 
 /**
+ * Shows action popup menu. When clicked, create the action.
+ * @param action Pointer to an action.
+ */
+void BattlescapeState::btnLeftHandItemClick(Action *action)
+{
+	BattleItem *leftHandItem = _battleGame->getItemFromUnit(_battleGame->getSelectedUnit(), LEFT_HAND);
+	handleItemClick(leftHandItem);
+}
+
+/**
+ * Shows action popup menu. When clicked, create the action.
+ * @param action Pointer to an action.
+ */
+void BattlescapeState::btnRightHandItemClick(Action *action)
+{
+	BattleItem *rightHandItem = _battleGame->getItemFromUnit(_battleGame->getSelectedUnit(), RIGHT_HAND);
+	handleItemClick(rightHandItem);	
+}
+
+/**
  * Updates soldier name/rank/tu/energy/health/morale.
  * @param unit Pointer to current unit.
  */
@@ -453,6 +486,26 @@ void BattlescapeState::updateSoldierInfo(BattleUnit *unit)
 
 }
 
+void BattlescapeState::handleItemClick(BattleItem *item)
+{
+	if (item && !_inProgressItemAction)
+	{
+		_inProgressItemAction = new ItemAction(item, SNAP_SHOT);
+		if (_inProgressItemAction->getStatus() == ERROR)
+		{
+			// show error
+			cancelInProgressItemAction();
+		}
+		_map->setCursorType(CT_AIM);
+	}
+}
+
+void BattlescapeState::cancelInProgressItemAction()
+{
+	_map->setCursorType(CT_NORMAL);
+	delete _inProgressItemAction;
+	_inProgressItemAction = 0;
+}
 
 void BattlescapeState::drawItemSprite(BattleItem *item, Surface *surface)
 {
@@ -534,7 +587,7 @@ void BattlescapeState::moveUnit()
 				Position destination;
 				tu = pf->getTUCost(unit->getPosition(), dir, &destination, unit);
 				unit->startWalking(dir, destination);
-				_map->hideCursor(true); // hide cursor while walking
+				_map->setCursorType(CT_NONE); // hide cursor while walking
 				_game->getCursor()->setVisible(false);
 
 				_map->cacheUnits();
@@ -552,7 +605,7 @@ void BattlescapeState::moveUnit()
 			if (unit->getStatus() == STATUS_STANDING) // we finished walking
 			{
 				_battleGame->getTerrainModifier()->calculateUnitLighting();
-				_map->hideCursor(false); // show cursor again
+				_map->setCursorType(CT_NORMAL); // show cursor again
 				_game->getCursor()->setVisible(true);
 				_map->cacheUnits();
 				_map->draw();

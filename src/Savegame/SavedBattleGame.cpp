@@ -398,7 +398,7 @@ std::vector<MapDataSet*> *SavedBattleGame::getMapDataSets()
 * get an item from a specific unit and slot
 * @return 
 */
-BattleItem *SavedBattleGame::getItemFromUnit(BattleUnit *unit, int slot)
+BattleItem *SavedBattleGame::getItemFromUnit(BattleUnit *unit, InventorySlot slot)
 {
 	for (std::vector<BattleItem*>::iterator i = _items.begin(); i != _items.end(); i++)
 	{

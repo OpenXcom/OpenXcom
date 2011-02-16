@@ -1068,7 +1068,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	culta->getMapDataSets()->push_back(getMapDataSet("CULTIVAT"));
 	culta->getMapDataSets()->push_back(getMapDataSet("BARN"));
 	culta->getMapBlocks()->push_back(new MapBlock(culta,"CULTA00",10,10,true));
-	culta->getMapBlocks()->push_back(new MapBlock(culta,"CULTA0B",10,10,true)); //test
+	//culta->getMapBlocks()->push_back(new MapBlock(culta,"CULTA0B",10,10,false));
 	culta->getMapBlocks()->push_back(new MapBlock(culta,"CULTA01",10,10,false));
 	culta->getMapBlocks()->push_back(new MapBlock(culta,"CULTA02",10,10,false));
 	culta->getMapBlocks()->push_back(new MapBlock(culta,"CULTA03",10,10,false));

@@ -22,24 +22,27 @@
 #include <vector>
 #include "Position.h"
 
-enum ItemActionStatus { FLYING, EXPLODING, IDLE };
 
 namespace OpenXcom
 {
 
 class BattleItem;
 
+enum ItemActionStatus { PENDING, ERROR, LAUNCHED, IMPACT, FINISHED };
+enum ItemActionType { THROW, AUTO_SHOT, SNAP_SHOT, AIMED_SHOT, OPEN, CLOSE, STUN, PRIME_GRENADE, USE_SCANNER, USE_MEDIKIT, LAUNCH_MISSILE };
+
 /**
- * A utility class that handles firing weapons and throwing grenades.
+ * A class that handles firing weapons and throwing grenades.
  */
 class ItemAction
 {
 private:
 	BattleItem *_item;
 	ItemActionStatus _status;
+	ItemActionType _type;
 public:
 	/// Creates a new ItemAction class
-	ItemAction(BattleItem *item);
+	ItemAction(BattleItem *item, ItemActionType type);
 	/// Cleans up the ItemAction.
 	~ItemAction();
 	/// Start the item action.

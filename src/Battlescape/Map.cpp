@@ -71,7 +71,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Map::Map(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _mapOffsetX(-250), _mapOffsetY(250), _viewHeight(0), _hideCursor(false), _animFrame(0), _scrollX(0), _scrollY(0), _RMBDragging(false)
+Map::Map(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _mapOffsetX(-250), _mapOffsetY(250), _viewHeight(0), _cursorType(CT_NORMAL), _animFrame(0), _scrollX(0), _scrollY(0), _RMBDragging(false)
 {
 	_scrollTimer = new Timer(50);
 	_scrollTimer->onTimer((SurfaceHandler)&Map::scroll);
@@ -246,14 +246,24 @@ void Map::drawTerrain()
 					BattleUnit *unit = tile->getUnit();
 
 					// Draw cursor back
-					if (_selectorX == itY && _selectorY == itX && !_hideCursor)
+					if (_selectorX == itY && _selectorY == itX && _cursorType != CT_NONE)
 					{
 						if (_viewHeight == itZ)
 						{
-							if (unit)
-								frameNumber = 1; // yellow box
-							else
-								frameNumber = 0; // red box
+							if (_cursorType == CT_NORMAL)
+							{
+								if (unit)
+									frameNumber = 1; // yellow box
+								else
+									frameNumber = 0; // red box
+							}
+							if (_cursorType == CT_AIM)
+							{
+								if (unit)
+									frameNumber = 7 + (_animFrame / 2); // yellow animated crosshairs
+								else
+									frameNumber = 6; // red static crosshairs
+							}
 						}
 						else if (_viewHeight > itZ)
 						{
@@ -290,7 +300,7 @@ void Map::drawTerrain()
 							frame->setX(screenPosition.x + offset.x);
 							frame->setY(screenPosition.y + offset.y);
 							frame->blit(this);
-							if (unit == (BattleUnit*)_save->getSelectedUnit() && !_hideCursor)
+							if (unit == (BattleUnit*)_save->getSelectedUnit() && _cursorType != CT_NONE)
 							{
 								drawArrow(screenPosition + offset);
 							}
@@ -312,7 +322,7 @@ void Map::drawTerrain()
 								frame->setX(screenPosition.x + offset.x);
 								frame->setY(screenPosition.y + offset.y);
 								frame->blit(this);
-								if (unit == (BattleUnit*)_save->getSelectedUnit() && !_hideCursor)
+								if (unit == (BattleUnit*)_save->getSelectedUnit() && _cursorType != CT_NONE)
 								{
 									drawArrow(screenPosition + offset);
 								}
@@ -321,14 +331,24 @@ void Map::drawTerrain()
 					}
 
 					// Draw cursor front
-					if (_selectorX == itY && _selectorY == itX && !_hideCursor)
+					if (_selectorX == itY && _selectorY == itX && _cursorType != CT_NONE)
 					{
 						if (_viewHeight == itZ)
 						{
-							if (unit)
-								frameNumber = 4; // yellow box
-							else
-								frameNumber = 3; // red box
+							if (_cursorType == CT_NORMAL)
+							{
+								if (unit)
+									frameNumber = 4; // yellow box
+								else
+									frameNumber = 3; // red box
+							}
+							if (_cursorType == CT_AIM)
+							{
+								if (unit)
+									frameNumber = 7 + (_animFrame / 2); // yellow animated crosshairs
+								else
+									frameNumber = 6; // red static crosshairs
+							}
 						}
 						else if (_viewHeight > itZ)
 						{
@@ -782,23 +802,26 @@ void Map::calculateWalkingOffset(BattleUnit *unit, Position *offset)
 }
 
 /**
- * This removes the selection caret and soldier selection arrow.
- * @param flag
+ * Set the 3D cursor to selection/aim mode
+ * @param type
  */
-void Map::hideCursor(bool flag)
+void Map::setCursorType(CursorType type)
 {
-	_hideCursor = flag;
+	_cursorType = type;
 }
 
 /**
- * Check if cursor is hidden.
- * @return flag
+ * Get cursor type.
+ * @return cursortype
  */
-bool Map::isCursorHidden()
+CursorType Map::getCursorType() const
 {
-	return _hideCursor;
+	return _cursorType;
 }
 
+/**
+ * cacheTileSprites
+ */
 void Map::cacheTileSprites()
 {
 	for (int i = 0; i < _tileCount; i++)
