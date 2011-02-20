@@ -34,7 +34,7 @@ class NumberText;
 class BattleUnit;
 class SavedBattleGame;
 class BattleItem;
-class ItemAction;
+class BattleAction;
 
 /**
  * Battlescape screen which shows the tactical battle
@@ -53,11 +53,10 @@ private:
 	Text *_txtName;
 	NumberText *_numTimeUnits, *_numEnergy, *_numHealth, *_numMorale, *_numLayers;
 	Bar *_barTimeUnits, *_barEnergy, *_barHealth, *_barMorale;
-	Timer *_walkingTimer, *_bulletTimer;
+	Timer *_walkingTimer, *_bulletTimer, *_animTimer;
 	SavedBattleGame *_battleGame;
-	ItemAction *_inProgressItemAction;
-	bool unitOpensDoor(BattleUnit *unit);
-	void cancelInProgressItemAction();
+	BattleAction *_action;
+	void checkActionFinished();
 	void handleItemClick(BattleItem *item);
 	void drawItemSprite(BattleItem *item, Surface *surface);
 public:
@@ -109,6 +108,8 @@ public:
 	void moveUnit();
 	/// Animate flying bullet.
 	void moveBullet();
+	/// Animate other stuff.
+	void animate();
 };
 
 }

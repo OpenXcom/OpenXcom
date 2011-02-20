@@ -46,7 +46,7 @@ class Map : public InteractiveSurface
 private:
 	SavedBattleGame *_save;
 	ResourcePack *_res;
-	Timer *_scrollTimer, *_animTimer;
+	Timer *_scrollTimer;
 	Surface *_arrow;
 	Game *_game;
 	Surface **_tileFloorCache;
@@ -83,7 +83,7 @@ public:
 	/// draw the surface
 	void draw();
 	/// draws the terrain
-	void drawTerrain();
+	void drawTerrain(Surface *surface);
 	/// Special handling for mouse clicks.
 	void mouseClick(Action *action, State *state);
 	/// Special handling for mous over
@@ -107,7 +107,7 @@ public:
 	/// Sets the battlescape selector position relative to mouseposition.
 	void setSelectorPosition(int mx, int my);
 	/// Draws the small arrow above the selected soldier.
-	void drawArrow(const Position &pos);
+	void drawArrow(const Position &pos, Surface *surface);
 	/// Get the currently selected position.
 	void getSelectorPosition(Position *pos);
 	/// Calculate the offset of a soldier, when it is walking in the middle of 2 tiles.

@@ -26,6 +26,7 @@ namespace OpenXcom
 
 class ResourcePack;
 class BattleUnit;
+class BattleItem;
 
 /**
  * A class that renders a specific unit, given its render rules
@@ -36,6 +37,7 @@ class UnitSprite : public Surface
 private:
 	ResourcePack *_res;
 	BattleUnit *_unit;
+	BattleItem *_item;
 public:
 	/// Creates a new UnitSprite at the specified position and size.
 	UnitSprite(int width, int height, int x, int y);
@@ -45,6 +47,8 @@ public:
 	void setResourcePack(ResourcePack *res);
 	/// Sets the battleunit to be rendered.
 	void setBattleUnit(BattleUnit *unit);
+	/// Sets the battleitem to be rendered.
+	void setBattleItem(BattleItem *item);
 	/// Draw the surface.
 	void draw();
 	/// Blit the surface.

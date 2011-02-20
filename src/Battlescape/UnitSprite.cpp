@@ -23,7 +23,9 @@
 #include "../Battlescape/Position.h"
 #include "../Resource/ResourcePack.h"
 #include "../Ruleset/RuleUnitSprite.h"
+#include "../Ruleset/RuleItem.h"
 #include "../Savegame/BattleUnit.h"
+#include "../Savegame/BattleItem.h"
 #include "../Savegame/Soldier.h"
 
 namespace OpenXcom
@@ -36,7 +38,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-UnitSprite::UnitSprite(int width, int height, int x, int y) : Surface(width, height, x, y)
+UnitSprite::UnitSprite(int width, int height, int x, int y) : Surface(width, height, x, y), _res(0), _unit(0), _item(0)
 {
 
 
@@ -69,6 +71,15 @@ void UnitSprite::setBattleUnit(BattleUnit *unit)
 }
 
 /**
+ * Links this sprite to a BattleItem to get the data for rendering.
+ * @param unit Pointer to the BattleItem.
+ */
+void UnitSprite::setBattleItem(BattleItem *item)
+{
+	_item = item;
+}
+
+/**
  * Draws a unit, using the drawing rules of the unit.
  * This function is called by Map, for each unit on the screen.
  */
@@ -76,7 +87,7 @@ void UnitSprite::draw()
 {
 	RuleUnitSprite *rules = _unit->getRenderRules();
 	std::string sheet = rules->getSpriteSheet();
-	Surface *torso = 0, *legs = 0, *bottomArm = 0, *topArm = 0;
+	Surface *torso = 0, *legs = 0, *bottomArm = 0, *topArm = 0, *item = 0;
 	clear();
 	
 	if (rules->getTorso() > -1)
@@ -125,10 +136,19 @@ void UnitSprite::draw()
 		}
 	}
 
+	if (_item)
+	{
+		item = _res->getSurfaceSet("HANDOB.PCK")->getFrame(_item->getRules()->getHandSprite() + _unit->getDirection());
+	}
+
+	if (_unit->getDirection() < 1 || _unit->getDirection() > 5)
+		if (item) item->blit(this);
 	if (bottomArm) bottomArm->blit(this);
 	if (torso) torso->blit(this);
 	if (legs) legs->blit(this);
 	if (topArm) topArm->blit(this);
+	if (_unit->getDirection() > 0 && _unit->getDirection() < 6)
+		if (item) item->blit(this);	
 
 }
 

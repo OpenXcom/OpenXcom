@@ -16,6 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+
 #include "SavedBattleGame.h"
 #include "SavedGame.h"
 #include "Tile.h"
@@ -30,6 +32,8 @@
 
 namespace OpenXcom
 {
+
+std::string base64_encode(unsigned char const* bytes_to_encode, unsigned int in_len);
 
 /**
  * Initializes a brand new battlescape saved game.
@@ -75,7 +79,22 @@ SavedBattleGame::~SavedBattleGame()
  */
 void SavedBattleGame::load(const YAML::Node &node)
 {
-	//TODO: Daiky
+	unsigned int size = 0;
+
+	node["width"] >> _width;
+	node["length"] >> _length;
+	node["height"] >> _height;
+
+	size = node["mapdatafiles"].size();
+	for (unsigned int i = 0; i < size; i++)
+	{
+		std::string name;
+		node["mapdatafiles"][i] >> name;
+		// now we have the names of the mapdatafiles, but we need to find the mapadatafile objects themselves...
+		// no idea to do this atm
+		// will figure this out some time
+	}
+
 }
 
 /**
@@ -105,7 +124,7 @@ void SavedBattleGame::save(YAML::Emitter &out) const
 	/* 1 byte for the datafile ID, 1 byte for the relative object ID in that file */
 	/* Value 0xFF means the next two bytes are the number of empty objects */
 	/* The binary data is then base64 encoded to save as a string */
-	/*Uint8 tileData[8];
+	Uint8 tileData[8];
 	Uint16 empties = 0;
 	std::string tilesData;
 	for (int i = 0; i < _height * _length * _width; i++)
@@ -116,11 +135,20 @@ void SavedBattleGame::save(YAML::Emitter &out) const
 		}
 		else
 		{
+			// if we had empty tiles before
+			// write them now
 			if (empties)
 			{
 				tilesData += 0xFF;
 				tilesData += empties;
 				empties = 0;
+			}
+			// now write 4x2 bytes
+			for (int part = 0; part < 4; part++)
+			{
+				MapDataSet *mds = _tiles[i]->getMapData(part)->getDataset();
+				tilesData += (Uint8)(std::find(_mapDataFiles.begin(), _mapDataFiles.end(), mds) - _mapDataFiles.begin());
+				tilesData += (Uint8)(std::find(mds->getObjects()->begin(), mds->getObjects()->end(), _tiles[i]->getMapData(part)) - mds->getObjects()->begin());
 			}
 		}
 	}
@@ -130,10 +158,19 @@ void SavedBattleGame::save(YAML::Emitter &out) const
 		tilesData += empties;
 	}
 	//out << YAML::Key << "tiles" << YAML::WriteBinary(tilesData, tilesData.length());
-	*/
+	out << YAML::Key << "tiles" << base64_encode((unsigned char*)(tilesData.c_str()), tilesData.length());
+
 	out << YAML::Key << "units" << YAML::Value;
 	out << YAML::BeginSeq;
 	for (std::vector<BattleUnit*>::const_iterator i = _units.begin(); i != _units.end(); i++)
+	{
+		(*i)->save(out);
+	}
+	out << YAML::EndSeq;
+
+	out << YAML::Key << "items" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::vector<BattleItem*>::const_iterator i = _items.begin(); i != _items.end(); i++)
 	{
 		(*i)->save(out);
 	}

@@ -81,7 +81,7 @@ void Pathfinding::calculate(BattleUnit *unit, Position &endPosition)
 	Position currentPos, nextPos, startPosition = unit->getPosition();
 	int tuCost;
 
-	_movementType = WALK; // should be parameter
+	_movementType = MT_WALK; // should be parameter
 	_unit = unit;
 
 	Tile *destinationTile = _save->getTile(endPosition);

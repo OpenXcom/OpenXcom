@@ -884,54 +884,71 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	RuleItem *pistol = new RuleItem("STR_PISTOL");
 	pistol->setSize(0.1f);
 	pistol->setBigSprite(3);
+	pistol->setHandSprite(96);
 
 	RuleItem *pclip = new RuleItem("STR_PISTOL_CLIP");
 	pclip->setSize(0.1f);
 	pclip->setBigSprite(4);
+	pclip->setHandSprite(120);
 	
 	RuleItem *rifle = new RuleItem("STR_RIFLE");
 	rifle->setSize(0.2f);
 	rifle->setBigSprite(1);
+	rifle->setHandSprite(0);
+	rifle->setTwoHanded(true);
 
 	RuleItem *rclip = new RuleItem("STR_RIFLE_CLIP");
 	rclip->setSize(0.1f);
 	rclip->setBigSprite(2);
+	rclip->setHandSprite(120);
 
 	RuleItem *hcannon = new RuleItem("STR_HEAVY_CANNON");
 	hcannon->setSize(0.3f);
 	hcannon->setBigSprite(11);
+	hcannon->setHandSprite(24);
+	hcannon->setTwoHanded(true);
 
 	RuleItem *hcap = new RuleItem("STR_HC_AP_AMMO");
 	hcap->setSize(0.1f);
 	hcap->setBigSprite(12);
+	hcap->setHandSprite(120);
 
 	RuleItem *hche = new RuleItem("STR_HC_HE_AMMO");
 	hche->setSize(0.1f);
 	hche->setBigSprite(13);
+	hche->setHandSprite(120);
 
 	RuleItem *acannon = new RuleItem("STR_AUTO_CANNON");
 	acannon->setSize(0.3f);
 	acannon->setBigSprite(7);
+	acannon->setHandSprite(32);
+	acannon->setTwoHanded(true);
 
 	RuleItem *acap = new RuleItem("STR_AC_AP_AMMO");
 	acap->setSize(0.1f);
 	acap->setBigSprite(8);
+	acap->setHandSprite(120);
 
 	RuleItem *rlauncher = new RuleItem("STR_ROCKET_LAUNCHER");
 	rlauncher->setSize(0.4f);
 	rlauncher->setBigSprite(15);
+	rlauncher->setHandSprite(9);
+	rlauncher->setTwoHanded(true);
 
 	RuleItem *srocket = new RuleItem("STR_SMALL_ROCKET");
 	srocket->setSize(0.2f);
 	srocket->setBigSprite(16);
+	srocket->setHandSprite(120);
 
 	RuleItem *grenade = new RuleItem("STR_GRENADE");
 	grenade->setSize(0.1f);
 	grenade->setBigSprite(19);
+	grenade->setHandSprite(120);
 
 	RuleItem *sgrenade = new RuleItem("STR_SMOKE_GRENADE");
 	sgrenade->setSize(0.1f);
 	sgrenade->setBigSprite(20);
+	sgrenade->setHandSprite(120);
 
 	_items.insert(std::pair<std::string, RuleItem*>("STR_STINGRAY_LAUNCHER", slauncher));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_AVALANCHE_LAUNCHER", alauncher));

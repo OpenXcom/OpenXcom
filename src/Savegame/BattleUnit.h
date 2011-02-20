@@ -58,6 +58,7 @@ private:
 	//RuleNPC *_NPCRule;
 	std::wstring _name;
 	bool _cached;
+	BattleItem *_rightHandItem, *_leftHandItem;
 public:
 	/// Creates a BattleUnit.
 	BattleUnit(RuleUnitSprite *renderRules, UnitFaction faction);
@@ -104,7 +105,7 @@ public:
 	/// Look at a certain direction.
 	void lookAt(int direction);
 	/// Turn to the destination direction.
-	void turn();
+	void turn(bool spendTU);
 	/// Gets the unit's maximum time units.
 	int getMaxTimeUnits() const;
 	/// Gets the unit's maximum stamina.
@@ -125,7 +126,6 @@ public:
 	void setCached(bool cached);
 	/// If this unit is cached on the battlescape.
 	bool isCached() const;
-
 
 };
 

@@ -36,7 +36,7 @@ private:
 	std::string _type;
 	float _size;
 	int _value, _time;
-	bool _equip;
+	bool _equip, _twoHanded;
 	int _bigSprite, _floorSprite, _handSprite;
 public:
 	/// Creates a blank item ruleset.
@@ -65,6 +65,18 @@ public:
 	int getBigSprite() const;
 	/// Sets the item's reference in BIGOBS.PCK for use in inventory.
 	void setBigSprite(int value);
+	/// Gets the item's reference in FLOOROB.PCK for use in inventory.
+	int getFloorSprite() const;
+	/// Sets the item's reference in FLOOROB.PCK for use in inventory.
+	void setFloorSprite(int value);
+	/// Gets the item's reference in HANDOB.PCK for use in inventory.
+	int getHandSprite() const;
+	/// Sets the item's reference in HANDOB.PCK for use in inventory.
+	void setHandSprite(int value);
+	/// Gets if the item is two-handed.
+	bool getTwoHanded() const;
+	/// Sets if the item is two-handed.
+	void setTwoHanded(bool flag);
 
 };
 

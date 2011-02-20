@@ -32,6 +32,7 @@ class Tile;
 
 /**
  * A utility class that modifies tile properties on a battlescape map. This includes lighting, destruction, smoke, fire, fog of war.
+ * Note that this function does not handle any sounds or animations.
  */
 class TerrainModifier
 {

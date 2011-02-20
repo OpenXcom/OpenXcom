@@ -44,7 +44,6 @@
 #define SCROLL_AMOUNT 20
 #define SCROLL_BORDER 5
 #define SCROLL_DIAGONAL_EDGE 60
-#define DEFAULT_ANIM_SPEED 100
 #define RMB_SCROLL false
 
 /*
@@ -75,10 +74,6 @@ Map::Map(int width, int height, int x, int y) : InteractiveSurface(width, height
 {
 	_scrollTimer = new Timer(50);
 	_scrollTimer->onTimer((SurfaceHandler)&Map::scroll);
-
-	_animTimer = new Timer(DEFAULT_ANIM_SPEED);
-	_animTimer->onTimer((SurfaceHandler)&Map::animate);
-	_animTimer->start();
 }
 
 /**
@@ -87,7 +82,6 @@ Map::Map(int width, int height, int x, int y) : InteractiveSurface(width, height
 Map::~Map()
 {
 	delete _scrollTimer;
-	delete _animTimer;
 
 	for (int i = 0; i < _tileCount; i++)
 	{
@@ -179,7 +173,6 @@ void Map::init()
 void Map::think()
 {
 	_scrollTimer->think(0, this);
-	_animTimer->think(0, this);
 }
 
 /**
@@ -187,14 +180,17 @@ void Map::think()
  */
 void Map::draw()
 {
-	clear();
-	drawTerrain();
+	// TODO: instead of drawing the whole map all the time while scrolling,
+	//       do something smarter with a backbuffer
+	//       theory explained here: http://www.vbforums.com/showthread.php?t=317858
+	this->clear();
+	drawTerrain(this);
 }
 
 /**
 * Draw the terrain.
 */
-void Map::drawTerrain()
+void Map::drawTerrain(Surface *surface)
 {
 	int frameNumber = 0;
 	Surface *frame;
@@ -204,7 +200,6 @@ void Map::drawTerrain()
     int beginZ = 0, endZ = _viewHeight;
 	Position mapPosition, screenPosition;
 	int index;
-	int cacheCount = 0;
 
     for (int itZ = beginZ; itZ <= endZ; itZ++) 
 	{
@@ -217,18 +212,13 @@ void Map::drawTerrain()
 				screenPosition.x += _mapOffsetX;
 				screenPosition.y += _mapOffsetY;
 
-				// only render cells that are inside the viewport
-				if (screenPosition.x > -_spriteWidth && screenPosition.x < getWidth() + _spriteWidth &&
-					screenPosition.y > -_spriteHeight && screenPosition.y < getHeight() + _spriteHeight )
+				// only render cells that are inside the surface
+				if (screenPosition.x > -_spriteWidth && screenPosition.x < surface->getWidth() + _spriteWidth &&
+					screenPosition.y > -_spriteHeight && screenPosition.y < surface->getHeight() + _spriteHeight )
 				{
 					index = _save->getTileIndex(mapPosition); // index used for tile cache
 
-					// to minize framedrops, only recalculate x tiles per draw.
-					if (cacheCount < 10)
-					{
-						if (cacheTileSprites(index))
-							cacheCount++;
-					}
+					cacheTileSprites(index);
 
 					tile = _save->getTile(mapPosition);
 					// Draw floor
@@ -239,7 +229,7 @@ void Map::drawTerrain()
 						{
 							frame->setX(screenPosition.x);
 							frame->setY(screenPosition.y);
-							frame->blit(this);
+							frame->blit(surface);
 						}
 					}
 
@@ -272,7 +262,7 @@ void Map::drawTerrain()
 						frame = _res->getSurfaceSet("CURSOR.PCK")->getFrame(frameNumber);
 						frame->setX(screenPosition.x);
 						frame->setY(screenPosition.y);
-						frame->blit(this);
+						frame->blit(surface);
 					}
 
 					// Draw walls
@@ -283,7 +273,7 @@ void Map::drawTerrain()
 						{
 							frame->setX(screenPosition.x);
 							frame->setY(screenPosition.y);
-							frame->blit(this);
+							frame->blit(surface);
 						}
 					}
 
@@ -299,10 +289,10 @@ void Map::drawTerrain()
 							calculateWalkingOffset(unit, &offset);
 							frame->setX(screenPosition.x + offset.x);
 							frame->setY(screenPosition.y + offset.y);
-							frame->blit(this);
+							frame->blit(surface);
 							if (unit == (BattleUnit*)_save->getSelectedUnit() && _cursorType != CT_NONE)
 							{
-								drawArrow(screenPosition + offset);
+								drawArrow(screenPosition + offset, surface);
 							}
 						}
 					}
@@ -321,10 +311,10 @@ void Map::drawTerrain()
 								offset.y += 24;
 								frame->setX(screenPosition.x + offset.x);
 								frame->setY(screenPosition.y + offset.y);
-								frame->blit(this);
+								frame->blit(surface);
 								if (unit == (BattleUnit*)_save->getSelectedUnit() && _cursorType != CT_NONE)
 								{
-									drawArrow(screenPosition + offset);
+									drawArrow(screenPosition + offset, surface);
 								}
 							}
 						}
@@ -357,7 +347,7 @@ void Map::drawTerrain()
 						frame = _res->getSurfaceSet("CURSOR.PCK")->getFrame(frameNumber);
 						frame->setX(screenPosition.x);
 						frame->setY(screenPosition.y);
-						frame->blit(this);
+						frame->blit(surface);
 					}
 					
 					tile = _save->getTile(mapPosition);
@@ -368,7 +358,7 @@ void Map::drawTerrain()
 						frame = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frameNumber + (_animFrame / 2));
 						frame->setX(screenPosition.x);
 						frame->setY(screenPosition.y);
-						frame->blit(this);
+						frame->blit(surface);
 					}
 					if (tile->getSmoke() && tile->isDiscovered())
 					{
@@ -376,7 +366,7 @@ void Map::drawTerrain()
 						frame = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frameNumber + (_animFrame / 2));
 						frame->setX(screenPosition.x);
 						frame->setY(screenPosition.y);
-						frame->blit(this);
+						frame->blit(surface);
 					}
 
 				}
@@ -711,11 +701,11 @@ void Map::convertMapToScreen(const Position &mapPos, Position *screenPos)
  * Draws the small arrow above the selected soldier.
  * @param screenPos
  */
-void Map::drawArrow(const Position &screenPos)
+void Map::drawArrow(const Position &screenPos, Surface *surface)
 {
 	_arrow->setX(screenPos.x + (_spriteWidth / 2) - (_arrow->getWidth() / 2));
 	_arrow->setY(screenPos.y - _arrow->getHeight() + _animFrame);
-	_arrow->blit(this);
+	_arrow->blit(surface);
 }
 
 /**
@@ -973,6 +963,15 @@ void Map::cacheUnits()
 				_unitCache.at((*i)->getId())->clear();
 			}
 			unitSprite->setBattleUnit((*i));
+			BattleItem *handItem = _save->getItemFromUnit((*i), RIGHT_HAND);
+			if (handItem)
+			{
+				unitSprite->setBattleItem(handItem);
+			}
+			else
+			{
+				unitSprite->setBattleItem(0);
+			}
 			unitSprite->draw();
 			unitSprite->blit(_unitCache.at((*i)->getId()));
 

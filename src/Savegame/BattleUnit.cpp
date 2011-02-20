@@ -273,7 +273,7 @@ void BattleUnit::lookAt(int direction)
 	_status = STATUS_TURNING;
 }
 
-void BattleUnit::turn()
+void BattleUnit::turn(bool spendTU)
 {
     int a = _toDirection - _direction;
     if (a != 0) {
@@ -294,6 +294,12 @@ void BattleUnit::turn()
         if (_direction > 7) _direction = 0;
 		_cached = false;
     }
+
+	// turning always costs 1 tu, except for turning during walking
+	if (spendTU)
+	{
+		_tu--;
+	}
 
 	if (_toDirection == _direction)
 	{

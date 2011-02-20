@@ -16,39 +16,43 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_ITEMACTION_H
-#define OPENXCOM_ITEMACTION_H
+#ifndef OPENXCOM_PROJECTILE_H
+#define OPENXCOM_PROJECTILE_H
 
-#include <vector>
+#include "../Engine/Surface.h"
 #include "Position.h"
-
 
 namespace OpenXcom
 {
 
+class ResourcePack;
 class BattleItem;
 
-enum ItemActionStatus { PENDING, ERROR, LAUNCHED, IMPACT, FINISHED };
-enum ItemActionType { THROW, AUTO_SHOT, SNAP_SHOT, AIMED_SHOT, OPEN, CLOSE, STUN, PRIME_GRENADE, USE_SCANNER, USE_MEDIKIT, LAUNCH_MISSILE };
-
 /**
- * A class that handles firing weapons and throwing grenades.
+ * A class that represents & renders a bullet or a flying item.
  */
-class ItemAction
+class Projectile : public Surface
 {
 private:
+	ResourcePack *_res;
 	BattleItem *_item;
-	ItemActionStatus _status;
-	ItemActionType _type;
+	Position _origin;
+	double _fi, _te, _ro;
 public:
-	/// Creates a new ItemAction class
-	ItemAction(BattleItem *item, ItemActionType type);
-	/// Cleans up the ItemAction.
-	~ItemAction();
-	/// Start the item action.
-	void start();
-	/// Get the item action status.
-	ItemActionStatus getStatus() const;
+	/// Creates a new Projectile .
+	Projectile(ResourcePack *res, Position _origin);
+	/// Cleans up the Projectile.
+	~Projectile();
+	/// Sets the battleitem to be rendered.
+	void setBattleItem(BattleItem *item);
+	/// Sets the trajectory initial angles.
+	bool setLaunchAngles(double fi, double te, double ro);
+	/// Move the projectile one step.
+	bool move();
+	/// Draw the surface.
+	void draw();
+	/// Blit the surface.
+	void blit(Surface *surface);
 };
 
 }

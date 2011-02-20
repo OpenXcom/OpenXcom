@@ -25,7 +25,7 @@ namespace OpenXcom
  * Creates a blank ruleset for a certain type of item.
  * @param type String defining the type.
  */
-RuleItem::RuleItem(std::string type) : _type(type), _size(0.0), _value(0), _time(24), _equip(true)
+RuleItem::RuleItem(std::string type) : _type(type), _size(0.0), _value(0), _time(24), _equip(true), _twoHanded(false)
 {
 }
 
@@ -142,5 +142,59 @@ int RuleItem::getBigSprite() const
 void RuleItem::setBigSprite(int sprite)
 {
 	_bigSprite = sprite;
+}
+
+/**
+ * Returns the reference in FLOOROB.PCK for use in inventory.
+ * @return Sprite reference.
+ */
+int RuleItem::getFloorSprite() const
+{
+	return _floorSprite;
+}
+
+/**
+ * Changes the reference in FLOOROB.PCK for use in inventory.
+ * @param sprite Sprite reference.
+ */
+void RuleItem::setFloorSprite(int sprite)
+{
+	_floorSprite = sprite;
+}
+
+/**
+ * Returns the reference in HANDOB.PCK for use in inventory.
+ * @return Sprite reference.
+ */
+int RuleItem::getHandSprite() const
+{
+	return _handSprite;
+}
+
+/**
+ * Changes the reference in HANDOB.PCK for use in inventory.
+ * @param sprite Sprite reference.
+ */
+void RuleItem::setHandSprite(int sprite)
+{
+	_handSprite = sprite;
+}
+
+/**
+ * Returns whether this item is held with two hands.
+ * @return Is it two-handed?
+ */
+bool RuleItem::getTwoHanded() const
+{
+	return _twoHanded;
+}
+
+/**
+ * Changes whether this item is held with two hands.
+ * @param equip Is it two-handed?
+ */
+void RuleItem::setTwoHanded(bool flag)
+{
+	_twoHanded = flag;
 }
 }

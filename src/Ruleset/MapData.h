@@ -47,7 +47,7 @@ enum SpecialTileType{TILE=0,
 					END_POINT,
 					MUST_DESTROY};
 
-enum MovementType{WALK=0, FLY, SLIDE};
+enum MovementType{ MT_WALK, MT_FLY, MT_SLIDE};
 
 enum Affector { AFFECT_LIGHT, AFFECT_VISION, AFFECT_HE, AFFECT_SMOKE, AFFECT_FIRE, AFFECT_GAS };
 

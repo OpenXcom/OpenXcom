@@ -20,6 +20,7 @@
 #define OPENXCOM_BATTLEITEM_H
 
 #include "../Battlescape/Position.h"
+#include "yaml.h"
 
 namespace OpenXcom
 {
@@ -50,6 +51,10 @@ public:
 	BattleItem(RuleItem *rules);
 	/// Cleans up the item.
 	~BattleItem();
+	/// Loads the item from YAML.
+	void load(const YAML::Node& node);
+	/// Saves the item to YAML.
+	void save(YAML::Emitter& out) const;
 	/// Gets the item's ruleset.
 	RuleItem *const getRules() const;
 	/// Gets the item's ammo quantity

@@ -126,6 +126,7 @@ void BattlescapeGenerator::run()
 	_height = 4;
 	_unitCount = 0;
 
+	// find out the terrain type
 	if (_missionType == MISS_TERROR)
 	{
 		_terrain = _game->getRuleset()->getTerrain("URBAN");
@@ -183,9 +184,10 @@ void BattlescapeGenerator::run()
 		}	
 	}
 
+	// creates the tile objects
 	_save->initMap(_width, _length, _height);
 
-	// lets generate the map now and store it inside the tiles
+	// lets generate the map now and store it inside the tile objects
 	generateMap();
 
 	if (_craft != 0)

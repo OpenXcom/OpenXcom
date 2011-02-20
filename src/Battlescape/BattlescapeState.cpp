@@ -21,10 +21,7 @@
 #include <string>
 #include "Map.h"
 #include "BattlescapeState.h"
-#include "Pathfinding.h"
-#include "TerrainModifier.h"
-#include "ItemAction.h"
-#include "../Engine/RNG.h"
+#include "BattleAction.h"
 #include "../Engine/Game.h"
 #include "../Engine/Music.h"
 #include "../Engine/Language.h"
@@ -49,15 +46,13 @@
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Engine/Timer.h"
-#include "../Engine/SoundSet.h"
-#include "../Engine/Sound.h"
-#include "../Savegame/Craft.h"
 
 namespace OpenXcom
 {
 
 #define DEFAULT_WALK_SPEED 40
 #define DEFAULT_BULLET_SPEED 20
+#define DEFAULT_ANIM_SPEED 100
 
 /**
  * Initializes all the elements in the Battlescape screen.
@@ -217,7 +212,11 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	_bulletTimer->onTimer((StateHandler)&BattlescapeState::moveBullet);
 	_bulletTimer->start();
 
-	_inProgressItemAction = 0;
+	_animTimer = new Timer(DEFAULT_ANIM_SPEED);
+	_animTimer->onTimer((StateHandler)&BattlescapeState::animate);
+	_animTimer->start();
+
+	_action = 0;
 }
 
 /**
@@ -227,7 +226,8 @@ BattlescapeState::~BattlescapeState()
 {
 	delete _walkingTimer;
 	delete _bulletTimer;
-	delete _inProgressItemAction;
+	delete _animTimer;
+	delete _action;
 }
 
 
@@ -245,6 +245,7 @@ void BattlescapeState::think()
 {
 	_walkingTimer->think(this, 0);
 	_bulletTimer->think(this, 0);
+	_animTimer->think(this, 0);
 	_map->think();
 }
 
@@ -260,15 +261,10 @@ void BattlescapeState::mapClick(Action *action)
 	// right-click abort walking or in progress action
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
-		if (_inProgressItemAction)
+		if (_action)
 		{
-			cancelInProgressItemAction();
-			return;
-		}
-		BattleUnit *unit = _battleGame->getSelectedUnit();
-		if (unit->getStatus() == STATUS_WALKING)
-		{
-			_battleGame->getPathfinding()->abortPath();
+			_action->cancel();
+			checkActionFinished();
 			return;
 		}
 	}
@@ -284,6 +280,7 @@ void BattlescapeState::mapClick(Action *action)
 
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
+		// if we clicked a unit, we select this unit
 		BattleUnit *unit = _battleGame->selectUnit(pos);
 		if (unit)
 		{
@@ -291,16 +288,26 @@ void BattlescapeState::mapClick(Action *action)
 			updateSoldierInfo(unit);
 			return;
 		}
-		Pathfinding *pf = _battleGame->getPathfinding();
-		pf->calculate(_battleGame->getSelectedUnit(), pos);
+		// if we clicked somewhere else we start a walk action
+		if (!_action)
+		{
+			_action = new BattleAction(_battleGame, _game->getResourcePack(), 0, WALK);
+			_action->setTarget(pos);
+			_action->start();
+			_map->setCursorType(CT_NONE);
+			checkActionFinished(); // could be the action goes into error immediatly
+		}
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
-		BattleUnit *unit = _battleGame->getSelectedUnit();
-		unit->lookAt(pos);
-		if (unit->getStatus() != STATUS_TURNING)
+		if (!_action)
 		{
-			unitOpensDoor(unit);
+			_action = new BattleAction(_battleGame, _game->getResourcePack(), 0, TURN);
+			_action->setTarget(pos);
+			_action->start();
+			_map->cacheUnits();
+			_map->draw();
+			checkActionFinished(); // could be the action goes into error immediatly
 		}
 	}
 	
@@ -312,10 +319,10 @@ void BattlescapeState::mapClick(Action *action)
  */
 void BattlescapeState::btnUnitUpClick(Action *action)
 {
-	Pathfinding *pf = _battleGame->getPathfinding();
+	/*Pathfinding *pf = _battleGame->getPathfinding();
 	Position start = _battleGame->getSelectedUnit()->getPosition();
 	Position end = start + Position(0, 0, +1);
-	pf->calculate(_battleGame->getSelectedUnit(), end);
+	pf->calculate(_battleGame->getSelectedUnit(), end);*/
 }
 
 /**
@@ -324,10 +331,10 @@ void BattlescapeState::btnUnitUpClick(Action *action)
  */
 void BattlescapeState::btnUnitDownClick(Action *action)
 {
-	Pathfinding *pf = _battleGame->getPathfinding();
+	/*Pathfinding *pf = _battleGame->getPathfinding();
 	Position start = _battleGame->getSelectedUnit()->getPosition();
 	Position end = start + Position(0, 0, -1);
-	pf->calculate((BattleUnit*)_battleGame->getSelectedUnit(), end);
+	pf->calculate((BattleUnit*)_battleGame->getSelectedUnit(), end);*/
 }
 
 /**
@@ -474,39 +481,59 @@ void BattlescapeState::updateSoldierInfo(BattleUnit *unit)
 	_barMorale->setValue(100);
 
 	BattleItem *leftHandItem = _battleGame->getItemFromUnit(unit, LEFT_HAND);
+	_btnLeftHandItem->clear();
 	if (leftHandItem)
 	{
 		drawItemSprite(leftHandItem, _btnLeftHandItem);
 	}
 	BattleItem *rightHandItem = _battleGame->getItemFromUnit(unit, RIGHT_HAND);
+	_btnRightHandItem->clear();
 	if (rightHandItem)
 	{
 		drawItemSprite(rightHandItem, _btnRightHandItem);
 	}
-
 }
 
+/*
+ * This function popups a context sensitive list of actions the user can choose from.
+ * Some actions result in a change of gamestate. Some result in a battlescape action.
+ * @param item Item the user clicked on (righthand/lefthand)
+ */
 void BattlescapeState::handleItemClick(BattleItem *item)
 {
-	if (item && !_inProgressItemAction)
+	// TODO popup menu	
+
+	// TODO other gamestates: scanner/medikit
+
+	if (item && !_action)
 	{
-		_inProgressItemAction = new ItemAction(item, SNAP_SHOT);
-		if (_inProgressItemAction->getStatus() == ERROR)
-		{
-			// show error
-			cancelInProgressItemAction();
-		}
+		_action = new BattleAction(_battleGame, _game->getResourcePack(), item, SNAP_SHOT);
 		_map->setCursorType(CT_AIM);
+		checkActionFinished(); // could be the action goes into error immediatly
 	}
 }
 
-void BattlescapeState::cancelInProgressItemAction()
+/**
+ * This function checks if the current actions finished, displaying an error if any.
+ */
+void BattlescapeState::checkActionFinished()
 {
-	_map->setCursorType(CT_NORMAL);
-	delete _inProgressItemAction;
-	_inProgressItemAction = 0;
+	if (_action->getStatus() == FINISHED)
+	{
+		_map->setCursorType(CT_NORMAL);
+		_game->getCursor()->setVisible(true);
+		// TODO handle result
+
+		delete _action;
+		_action = 0;
+	}
 }
 
+/**
+ * Draws the item's sprite on a surface.
+ * @param item the given item
+ * @surface surface the given surface
+ */
 void BattlescapeState::drawItemSprite(BattleItem *item, Surface *surface)
 {
 	SurfaceSet *texture = _game->getResourcePack()->getSurfaceSet("BIGOBS.PCK");
@@ -518,161 +545,41 @@ void BattlescapeState::drawItemSprite(BattleItem *item, Surface *surface)
  */
 void BattlescapeState::moveUnit()
 {
-	int tu = 0;
-	BattleUnit *unit = _battleGame->getSelectedUnit();
-	Pathfinding *pf = _battleGame->getPathfinding();
-	static bool moved = false;
-
-	if (unit->getStatus() == STATUS_WALKING)
+	if (_action && (_action->getType() == WALK || _action->getType() == TURN))
 	{
-		// play footstep sound 1
-		if (unit->getWalkingPhase() == 3)
-		{
-			Tile *tile = _battleGame->getTile(unit->getPosition());
-			if (tile->getFootstepSound())
-				_game->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(22 + (tile->getFootstepSound()*2))->play();
-		}
-		// play footstep sound 2
-		if (unit->getWalkingPhase() == 7)
-		{
-			Tile *tile = _battleGame->getTile(unit->getPosition());
-			if (tile->getFootstepSound())
-				_game->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(23 + (tile->getFootstepSound()*2))->play();
-		}
-
-		unit->keepWalking(); // advances the phase
-
-		// unit moved from one tile to the other, update the tiles
-		if (unit->getPosition() != unit->getLastPosition())
-		{
-			_battleGame->getTile(unit->getLastPosition())->setUnit(0);
-			_battleGame->getTile(unit->getPosition())->setUnit(unit);
-		}
-
-		if (unit->getStatus() != STATUS_STANDING) // we handle the standing part below
-		{
-			_map->cacheUnits();
-			_map->draw();
-		}
-	}
-
-	if (unit->getStatus() == STATUS_TURNING)
-	{
-		unit->turn();
-		_battleGame->getTerrainModifier()->calculateFOV(unit);
+		_action->moveUnit();
+		// if the unit changed level, camera changes level with
+		_map->setViewHeight(_battleGame->getSelectedUnit()->getPosition().z);
+		checkActionFinished();
 		_map->cacheUnits();
 		_map->draw();
 	}
-
-	if (unit->getStatus() == STATUS_STANDING)
-	{
-		int dir = pf->getStartDirection();
-		if (dir != -1)
-		{
-			if (dir != unit->getDirection()) 
-			{
-				// we are looking in the wrong way, turn first
-				unit->lookAt(dir);
-			}
-			else
-			{
-				// ok, we are looking the right way
-				// first open doors (if any)
-				if (unitOpensDoor(unit))
-				{
-					return; // don't start walking yet, wait for the ufo door to open
-				}
-				// now start moving
-				dir = pf->dequeuePath();
-				Position destination;
-				tu = pf->getTUCost(unit->getPosition(), dir, &destination, unit);
-				unit->startWalking(dir, destination);
-				_map->setCursorType(CT_NONE); // hide cursor while walking
-				_game->getCursor()->setVisible(false);
-
-				_map->cacheUnits();
-				_map->draw(); // draws phase 0
-			}
-		}
-
-		if (moved) // we have moved one tile: the walking cycle is finished
-		{
-			moved = false;
-			_map->setViewHeight(unit->getPosition().z);
-			_battleGame->getTerrainModifier()->calculateFOV(unit);
-			// if you want lighting to be calculated every step, uncomment next line
-			//_battleGame->getTerrainModifier()->calculateLighting();
-			if (unit->getStatus() == STATUS_STANDING) // we finished walking
-			{
-				_battleGame->getTerrainModifier()->calculateUnitLighting();
-				_map->setCursorType(CT_NORMAL); // show cursor again
-				_game->getCursor()->setVisible(true);
-				_map->cacheUnits();
-				_map->draw();
-			}
-		}
-
-		if (unit->getStatus() == STATUS_WALKING)
-		{
-			moved = true;
-		}
-	}
-
 }
 
-/**
- * Soldier opens a door (if any) by rightclick, or by walking through it.
- * Normal door changes the tile objects. We need to make a sound 3 here.
- * Ufo door updates the ufodooropened flag of the tile. We need to make a sound 20 or 21 and start the animation.
- */
-bool BattlescapeState::unitOpensDoor(BattleUnit *unit)
-{
-	int door = -1;
-	Tile *tile = _battleGame->getTile(unit->getPosition());
-	switch(unit->getDirection())
-	{
-	case 0:	// north
-		door = tile->openDoor(O_NORTHWALL);
-		break;
-	case 2: // east
-		tile = _battleGame->getTile(tile->getPosition() + Position(1, 0, 0));
-		if (tile) door = tile->openDoor(O_WESTWALL);
-		break;
-	case 4: // south
-		tile = _battleGame->getTile(tile->getPosition() + Position(0, -1, 0));
-		if (tile) door = tile->openDoor(O_NORTHWALL);
-		break;
-	case 6: // west
-		door = tile->openDoor(O_WESTWALL);
-		break;
-	}
-
-	if (door == 0) //normal door
-	{
-		_game->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(3)->play();
-		_battleGame->getTerrainModifier()->calculateFOV(tile->getPosition());
-		return true;
-	}
-	if (door == 1) // ufo door
-	{
-		_game->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(RNG::generate(20,21))->play();
-		_battleGame->getTerrainModifier()->calculateFOV(tile->getPosition());
-		return true;
-	}
-	if (door == 3) // ufo door opening
-	{
-		return true;
-	}
-
-	return false;
-}
 
 /**
  * Animate flying bullet.
  */
 void BattlescapeState::moveBullet()
 {
+	if (_action)
+	{
+		_action->moveBullet();
+		checkActionFinished();
+	}
+}
 
+/**
+ * Animate other stuff.
+ */
+void BattlescapeState::animate()
+{
+	if (_action)
+	{
+		_action->animate();
+		checkActionFinished();
+	}
+	_map->animate();
 }
 
 }
