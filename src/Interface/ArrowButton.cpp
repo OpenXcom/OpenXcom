@@ -151,6 +151,66 @@ void ArrowButton::draw()
 		}
 		drawRect(&square, color);
 	}
+	else if (_shape == ARROW_SMALL_UP)
+	{
+		// Draw arrow triangle 1
+		square.x = 1;
+		square.y = 5;
+		square.w = 9;
+		square.h = 1;
+
+		for (; square.w > 1; square.w -= 2)
+		{
+			drawRect(&square, color + 2);
+			square.x++;
+			square.y--;
+		}
+		drawRect(&square, color + 2);
+
+		// Draw arrow triangle 2
+		square.x = 2;
+		square.y = 5;
+		square.w = 7;
+		square.h = 1;
+
+		for (; square.w > 1; square.w -= 2)
+		{
+			drawRect(&square, color);
+			square.x++;
+			square.y--;
+		}
+		drawRect(&square, color);
+	}
+	else if (_shape == ARROW_SMALL_DOWN)
+	{
+		// Draw arrow triangle 1
+		square.x = 1;
+		square.y = 2;
+		square.w = 9;
+		square.h = 1;
+
+		for (; square.w > 1; square.w -= 2)
+		{
+			drawRect(&square, color + 2);
+			square.x++;
+			square.y++;
+		}
+		drawRect(&square, color + 2);
+
+		// Draw arrow triangle 2
+		square.x = 2;
+		square.y = 2;
+		square.w = 7;
+		square.h = 1;
+
+		for (; square.w > 1; square.w -= 2)
+		{
+			drawRect(&square, color);
+			square.x++;
+			square.y++;
+		}
+		drawRect(&square, color);
+	}
 
 	unlock();
 }
