@@ -33,14 +33,11 @@
 namespace OpenXcom
 {
 
-#define SOLDIER_MAINT 20000
-#define ENGINEER_MAINT 25000
-#define SCIENTIST_MAINT 30000
-
 /**
  * Initializes an empty base.
+ * @param rule Pointer to ruleset.
  */
-Base::Base() : Target(), _name(L""), _facilities(), _soldiers(), _crafts(), _scientists(0), _engineers(0)
+Base::Base(Ruleset *rule) : Target(), _rule(rule), _name(L""), _facilities(), _soldiers(), _crafts(), _scientists(0), _engineers(0)
 {
 	_items = new ItemContainer();
 }
@@ -388,10 +385,10 @@ int Base::getAvailableQuarters() const
  */
 int Base::getUsedStores() const
 {
-	double total = _items->getTotalSize();
+	double total = _items->getTotalSize(_rule);
 	for (std::vector<Craft*>::const_iterator i = _crafts.begin(); i != _crafts.end(); i++)
 	{
-		total += (*i)->getItems()->getTotalSize();
+		total += (*i)->getItems()->getTotalSize(_rule);
 	}
 	return (int)floor(total);
 }
@@ -581,7 +578,7 @@ int Base::getCraftMaintenance() const
 	int total = 0;
 	for (std::vector<Craft*>::const_iterator i = _crafts.begin(); i != _crafts.end(); i++)
 	{
-		total += (*i)->getRules()->getMonthlyFee();
+		total += (*i)->getRules()->getCost();
 	}
 	return total;
 }
@@ -594,9 +591,9 @@ int Base::getCraftMaintenance() const
 int Base::getPersonnelMaintenance() const
 {
 	int total = 0;
-	total += _soldiers.size() * SOLDIER_MAINT;
-	total += _engineers * ENGINEER_MAINT;
-	total += _scientists * SCIENTIST_MAINT;
+	total += _soldiers.size() * _rule->getSoldierCost();
+	total += _engineers * _rule->getEngineerCost();
+	total += _scientists * _rule->getScientistCost();
 	return total;
 }
 

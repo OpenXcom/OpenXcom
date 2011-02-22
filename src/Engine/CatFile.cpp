@@ -28,9 +28,7 @@ namespace OpenXcom
  * of a filename followed by its contents.
  * @param path Full path to CAT file.
  */
-CatFile::CatFile(const char *path) :
-	std::ifstream(path, std::ios::in | std::ios::binary),
-	_amount(0), _offset(0), _size(0)
+CatFile::CatFile(const char *path) : std::ifstream(path, std::ios::in | std::ios::binary), _amount(0), _offset(0), _size(0)
 {
 	if (!this)
 		return;

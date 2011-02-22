@@ -88,6 +88,8 @@
 		<Unit filename="Basescape\SoldiersState.h" />
 		<Unit filename="Basescape\StoresState.cpp" />
 		<Unit filename="Basescape\StoresState.h" />
+		<Unit filename="Battlescape\BattleAction.cpp" />
+		<Unit filename="Battlescape\BattleAction.h" />
 		<Unit filename="Battlescape\BattlescapeGenerator.cpp" />
 		<Unit filename="Battlescape\BattlescapeGenerator.h" />
 		<Unit filename="Battlescape\BattlescapeState.cpp" />
@@ -102,6 +104,8 @@
 		<Unit filename="Battlescape\PathfindingNode.h" />
 		<Unit filename="Battlescape\Position.cpp" />
 		<Unit filename="Battlescape\Position.h" />
+		<Unit filename="Battlescape\Projectile.cpp" />
+		<Unit filename="Battlescape\Projectile.h" />
 		<Unit filename="Battlescape\TerrainModifier.cpp" />
 		<Unit filename="Battlescape\TerrainModifier.h" />
 		<Unit filename="Battlescape\UnitSprite.cpp" />

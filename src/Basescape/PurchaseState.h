@@ -42,7 +42,9 @@ private:
 	Window *_window;
 	Text *_txtTitle, *_txtFunds, *_txtPurchases, *_txtItem, *_txtCost, *_txtQuantity;
 	TextList *_lstItems;
-	std::vector<std::string> _items;
+	std::vector<std::string> _crafts, _items;
+	std::vector<int> _qtys;
+	int _total;
 public:
 	/// Creates the Purchase state.
 	PurchaseState(Game *game);

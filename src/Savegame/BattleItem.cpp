@@ -24,8 +24,7 @@ namespace OpenXcom
 
 /**
  * Initializes a item of the specified type.
- * @param item Pointer to item.
- * @param qty Initial ammo quantity.
+ * @param rules Pointer to ruleset.
  */
 BattleItem::BattleItem(RuleItem *rules) : _rules(rules)
 {

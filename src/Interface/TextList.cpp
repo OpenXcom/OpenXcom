@@ -428,13 +428,13 @@ void TextList::handle(Action *action, State *state)
 	InteractiveSurface::handle(action, state);
 	_up->handle(action, state);
 	_down->handle(action, state);
-	for (std::vector<ArrowButton*>::iterator i = _arrow1.begin(); i < _arrow1.end(); i++)
+	if (_arrowPos != -1)
 	{
-		(*i)->handle(action, state);
-	}
-	for (std::vector<ArrowButton*>::iterator i = _arrow2.begin(); i < _arrow2.end(); i++)
-	{
-		(*i)->handle(action, state);
+		for (unsigned int i = _scroll; i < _texts.size() && i < _scroll + _visibleRows; i++)
+		{
+			_arrow1[i]->handle(action, state);
+			_arrow2[i]->handle(action, state);
+		}
 	}
 }
 

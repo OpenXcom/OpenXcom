@@ -214,7 +214,7 @@ void BasescapeState::init()
 	else
 	{
 		// Use a blank base for special case when player has no bases
-		_base = new Base();
+		_base = new Base(_game->getRuleset());
 	}
 
 	_view->setBase(_base);
@@ -264,7 +264,7 @@ void BasescapeState::setBase(Base *base)
  */
 void BasescapeState::btnNewBaseClick(Action *action)
 {
-	Base *base = new Base();
+	Base *base = new Base(_game->getRuleset());
 	_game->popState();
 	_game->pushState(new BuildNewBaseState(_game, base, _globe, false));
 }

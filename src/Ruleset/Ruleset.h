@@ -60,6 +60,7 @@ protected:
 	std::map<std::string, RuleTerrain*> _terrains;
 	std::map<std::string, MapDataSet*> _mapDataFiles;
 	std::map<std::string, RuleUnitSprite*> _unitSprites;
+	int _costSoldier, _costEngineer, _costScientist;
 public:
 	/// Creates a blank ruleset.
 	Ruleset();
@@ -84,11 +85,17 @@ public:
 	/// Gets the ruleset for a UFO type.
 	RuleUfo *const getUfo(std::string id);
 	/// Gets terrains for battlescape games.
-	RuleTerrain *getTerrain(std::string name);
+	RuleTerrain *const getTerrain(std::string name);
 	/// Gets mapdatafile for battlescape games.
-	MapDataSet *getMapDataSet(std::string name);
+	MapDataSet *const getMapDataSet(std::string name);
 	/// Gets unitsprite rules.
-	RuleUnitSprite *getUnitSprites(std::string name);
+	RuleUnitSprite *const getUnitSprites(std::string name);
+	/// Gets the cost of a soldier.
+	int getSoldierCost() const;
+	/// Gets the cost of an engineer.
+	int getEngineerCost() const;
+	/// Gets the cost of a scientist.
+	int getScientistCost() const;
 };
 
 }

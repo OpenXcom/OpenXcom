@@ -21,7 +21,6 @@
 
 #include <vector>
 #include <string>
-#include <string>
 
 namespace OpenXcom
 {
@@ -39,7 +38,7 @@ class RuleCraft
 private:
 	std::string _type;
 	int _sprite;
-	int _fuelMax, _damageMax, _speedMax, _accel, _weapons, _soldiers, _hwps, _fee, _repair, _refuel;
+	int _fuelMax, _damageMax, _speedMax, _accel, _weapons, _soldiers, _hwps, _cost, _repair, _refuel, _range;
 	// battlescape:
 	RuleTerrain *_battlescapeTerrainData;
 public:
@@ -81,10 +80,10 @@ public:
 	int getHWPs() const;
 	/// Sets the craft's HWP capacity.
 	void setHWPs(int hwps);
-	/// Gets the craft's monthly fee.
-	int getMonthlyFee() const;
-	/// Sets the craft's monthly fee.
-	void setMonthlyFee(int fee);
+	/// Gets the craft's cost.
+	int getCost() const;
+	/// Sets the craft's cost.
+	void setCost(int cost);
 	/// Gets the craft's repair rate.
 	int getRepairRate() const;
 	/// Sets the craft's repair rate.
@@ -93,6 +92,10 @@ public:
 	int getRefuelRate() const;
 	/// Sets the craft's refuel rate.
 	void setRefuelRate(int refuel);
+	/// Gets the craft's radar range.
+	int getRadarRange() const;
+	/// Sets the craft's radar range.
+	void setRadarRange(int range);
 	/// Gets the craft's terrain data.
 	RuleTerrain *getBattlescapeTerrainData();
 	/// Sets the craft's terrain data.

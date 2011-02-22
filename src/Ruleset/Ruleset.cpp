@@ -35,7 +35,7 @@ namespace OpenXcom
 /**
  * Creates a ruleset with blank sets of rules.
  */
-Ruleset::Ruleset() : _names(), _countries(), _regions(), _facilities(), _crafts(), _craftWeapons(), _items(), _ufos(), _terrains(), _mapDataFiles(), _unitSprites()
+Ruleset::Ruleset() : _names(), _countries(), _regions(), _facilities(), _crafts(), _craftWeapons(), _items(), _ufos(), _terrains(), _mapDataFiles(), _unitSprites(), _costSoldier(0), _costEngineer(0), _costScientist(0)
 {
 }
 
@@ -185,7 +185,7 @@ RuleUfo *const Ruleset::getUfo(std::string id)
  * @param name terrain name.
  * @return Rules for the terrain.
  */
-RuleTerrain *Ruleset::getTerrain(std::string name)
+RuleTerrain *const Ruleset::getTerrain(std::string name)
 {
 	return _terrains[name];
 }
@@ -195,7 +195,7 @@ RuleTerrain *Ruleset::getTerrain(std::string name)
  * @param name datafile name.
  * @return Rules for the datafile.
  */
-MapDataSet *Ruleset::getMapDataSet(std::string name)
+MapDataSet *const Ruleset::getMapDataSet(std::string name)
 {
 	return _mapDataFiles[name];
 }
@@ -205,9 +205,39 @@ MapDataSet *Ruleset::getMapDataSet(std::string name)
  * @param name datafile name.
  * @return Rules for the datafile.
  */
-RuleUnitSprite *Ruleset::getUnitSprites(std::string name)
+RuleUnitSprite *const Ruleset::getUnitSprites(std::string name)
 {
 	return _unitSprites[name];
+}
+
+/**
+ * Returns the cost of an individual soldier
+ * for purchase/maintenance.
+ * @return Cost.
+ */
+int Ruleset::getSoldierCost() const
+{
+	return _costSoldier;
+}
+
+/**
+ * Returns the cost of an individual engineer
+ * for purchase/maintenance.
+ * @return Cost.
+ */
+int Ruleset::getEngineerCost() const
+{
+	return _costEngineer;
+}
+
+/**
+ * Returns the cost of an individual scientist
+ * for purchase/maintenance.
+ * @return Cost.
+ */
+int Ruleset::getScientistCost() const
+{
+	return _costScientist;
 }
 
 }
