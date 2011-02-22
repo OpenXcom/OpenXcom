@@ -135,11 +135,11 @@ void TextList::addRow(int cols, ...)
 
 	if (_arrowPos != -1)
 	{
-		ArrowButton *a1 = new ArrowButton(ARROW_SMALL_UP, 11, 8, _arrowPos, getY());
+		ArrowButton *a1 = new ArrowButton(ARROW_SMALL_UP, 11, 8, getX() + _arrowPos, getY());
 		a1->setPalette(this->getPalette());
 		a1->setColor(_up->getColor());
 		_arrow1.push_back(a1);
-		ArrowButton *a2 = new ArrowButton(ARROW_SMALL_DOWN, 11, 8, _arrowPos + 13, getY());
+		ArrowButton *a2 = new ArrowButton(ARROW_SMALL_DOWN, 11, 8, getX() + _arrowPos + 12, getY());
 		a2->setPalette(this->getPalette());
 		a2->setColor(_up->getColor());
 		_arrow2.push_back(a2);
@@ -348,7 +348,6 @@ void TextList::scrollUp()
 		_scroll--;
 		draw();
 	}
-
 	updateArrows();
 }
 
@@ -362,7 +361,6 @@ void TextList::scrollDown()
 		_scroll++;
 		draw();
 	}
-
 	updateArrows();
 }
 
@@ -389,10 +387,6 @@ void TextList::draw()
 			(*j)->setY((i - _scroll) * (_small->getHeight() + _small->getSpacing()));
             (*j)->blit(this);
         }
-		_arrow1[i]->setY((i - _scroll) * (_small->getHeight() + _small->getSpacing()));
-		_arrow1[i]->blit(this);
-		_arrow2[i]->setY((i - _scroll) * (_small->getHeight() + _small->getSpacing()));
-		_arrow2[i]->blit(this);
     }
 }
 
@@ -411,6 +405,16 @@ void TextList::blit(Surface *surface)
 	{
 		_up->blit(surface);
 		_down->blit(surface);
+		if (_arrowPos != -1)
+		{
+			for (unsigned int i = _scroll; i < _texts.size() && i < _scroll + _visibleRows; i++)
+			{
+				_arrow1[i]->setY(getY() + (i - _scroll) * (_small->getHeight() + _small->getSpacing()));
+				_arrow1[i]->blit(surface);
+				_arrow2[i]->setY(getY() + (i - _scroll) * (_small->getHeight() + _small->getSpacing()));
+				_arrow2[i]->blit(surface);
+			}
+		}
 	}
 }
 
@@ -424,6 +428,14 @@ void TextList::handle(Action *action, State *state)
 	InteractiveSurface::handle(action, state);
 	_up->handle(action, state);
 	_down->handle(action, state);
+	for (std::vector<ArrowButton*>::iterator i = _arrow1.begin(); i < _arrow1.end(); i++)
+	{
+		(*i)->handle(action, state);
+	}
+	for (std::vector<ArrowButton*>::iterator i = _arrow2.begin(); i < _arrow2.end(); i++)
+	{
+		(*i)->handle(action, state);
+	}
 }
 
 /**
@@ -434,6 +446,14 @@ void TextList::think()
 	InteractiveSurface::think();
 	_up->think();
 	_down->think();
+	for (std::vector<ArrowButton*>::iterator i = _arrow1.begin(); i < _arrow1.end(); i++)
+	{
+		(*i)->think();
+	}
+	for (std::vector<ArrowButton*>::iterator i = _arrow2.begin(); i < _arrow2.end(); i++)
+	{
+		(*i)->think();
+	}
 }
 
 /**

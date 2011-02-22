@@ -105,7 +105,17 @@ PurchaseState::PurchaseState(Game *game) : State(game)
 	_lstItems->setSelectable(true);
 	_lstItems->setBackground(_window);
 	_lstItems->setMargin(2);
-	_lstItems->addRow(3, L"Soldier", L"40 000", L"0");
+
+	_items.push_back("STR_SOLDIER");
+	_items.push_back("STR_SCIENTIST");
+	_items.push_back("STR_ENGINEER");
+	_items.push_back("STR_SKYRANGER");
+	_items.push_back("STR_INTERCEPTOR");
+
+	for (std::vector<std::string>::iterator i = _items.begin(); i != _items.end(); i++)
+	{
+		_lstItems->addRow(3, _game->getLanguage()->getString(*i).c_str(), L"40 000", L"0");
+	}
 }
 
 /**

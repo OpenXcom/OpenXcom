@@ -20,6 +20,8 @@
 #define OPENXCOM_PURCHASESTATE_H
 
 #include "../Engine/State.h"
+#include <vector>
+#include <string>
 
 namespace OpenXcom
 {
@@ -40,6 +42,7 @@ private:
 	Window *_window;
 	Text *_txtTitle, *_txtFunds, *_txtPurchases, *_txtItem, *_txtCost, *_txtQuantity;
 	TextList *_lstItems;
+	std::vector<std::string> _items;
 public:
 	/// Creates the Purchase state.
 	PurchaseState(Game *game);
