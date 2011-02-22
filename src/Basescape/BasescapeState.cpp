@@ -156,7 +156,7 @@ BasescapeState::BasescapeState(Game *game, Base *base, Globe *globe) : State(gam
 	_btnTransfer->setText(_game->getLanguage()->getString("STR_NOT_AVAILABLE"));
 
 	_btnPurchase->setColor(Palette::blockOffset(13)+8);
-	_btnPurchase->setText(_game->getLanguage()->getString("STR_NOT_AVAILABLE"));
+	_btnPurchase->setText(_game->getLanguage()->getString("STR_PURCHASE_RECRUIT"));
 	_btnPurchase->onMouseClick((ActionHandler)&BasescapeState::btnPurchaseClick);
 
 	_btnSell->setColor(Palette::blockOffset(13)+8);
@@ -329,7 +329,7 @@ void BasescapeState::btnManufactureClick(Action *action)
  */
 void BasescapeState::btnPurchaseClick(Action *action)
 {
-	//_game->pushState(new PurchaseState(_game));
+	_game->pushState(new PurchaseState(_game));
 }
 
 /**

@@ -100,11 +100,12 @@ PurchaseState::PurchaseState(Game *game) : State(game)
 
 	_lstItems->setColor(Palette::blockOffset(13)+10);
 	_lstItems->setArrowColor(Palette::blockOffset(13)+13);
+	_lstItems->setArrowColumn(227);
 	_lstItems->setColumns(3, 162, 92, 32);
 	_lstItems->setSelectable(true);
 	_lstItems->setBackground(_window);
 	_lstItems->setMargin(2);
-	_lstItems->addRow(3, "Soldier", "40 000", "0");
+	_lstItems->addRow(3, L"Soldier", L"40 000", L"0");
 }
 
 /**

@@ -49,6 +49,8 @@ private:
 	Surface *_bg, *_selector;
 	ArrowButton *_up, *_down;
 	int _margin;
+	std::vector<ArrowButton*> _arrow1, _arrow2;
+	int _arrowPos;
 
 	/// Updates the arrow buttons.
 	void updateArrows();
@@ -85,6 +87,8 @@ public:
 	void setMargin(int margin);
 	/// Sets the arrow color of the text list.
 	void setArrowColor(Uint8 color);
+	/// Sets the arrow column of the text list.
+	void setArrowColumn(int pos);
 	/// Clears the list.
 	void clearList();
 	/// Scrolls the list up.

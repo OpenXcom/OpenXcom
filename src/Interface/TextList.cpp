@@ -34,7 +34,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-TextList::TextList(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _texts(), _columns(), _big(0), _small(0), _scroll(0), _visibleRows(0), _color(0), _align(ALIGN_LEFT), _dot(false), _selectable(false), _selRow(0), _bg(0), _selector(0), _margin(0)
+TextList::TextList(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _texts(), _columns(), _big(0), _small(0), _scroll(0), _visibleRows(0), _color(0), _align(ALIGN_LEFT), _dot(false), _selectable(false), _selRow(0), _bg(0), _selector(0), _margin(0), _arrow1(), _arrow2(), _arrowPos(-1)
 {
 	_up = new ArrowButton(ARROW_BIG_UP, 13, 14, getX() + getWidth() + 4, getY() + 1);
 	_up->setVisible(false);
@@ -49,10 +49,20 @@ TextList::TextList(int width, int height, int x, int y) : InteractiveSurface(wid
  */
 TextList::~TextList()
 {
-	for (std::vector< std::vector<Text*> >::iterator u = _texts.begin(); u < _texts.end(); u++) {
-		for (std::vector<Text*>::iterator v = (*u).begin(); v < (*u).end(); v++) {
-			delete (*v);
+	for (std::vector< std::vector<Text*> >::iterator u = _texts.begin(); u < _texts.end(); u++)
+	{
+		for (std::vector<Text*>::iterator v = (*u).begin(); v < (*u).end(); v++)
+		{
+			delete *v;
 		}
+	}
+	for (std::vector<ArrowButton*>::iterator i = _arrow1.begin(); i < _arrow1.end(); i++)
+	{
+		delete *i;
+	}
+	for (std::vector<ArrowButton*>::iterator i = _arrow2.begin(); i < _arrow2.end(); i++)
+	{
+		delete *i;
 	}
 	delete _selector;
 	delete _up;
@@ -99,9 +109,13 @@ void TextList::addRow(int cols, ...)
 			for (std::wstring::iterator c = buf.begin(); c < buf.end(); c++)
 			{
 				if (*c == ' ')
+				{
 					w += _small->getWidth() / 2;
+				}
 				else
+				{
 					w += _small->getChar(*c)->getCrop()->w + _small->getSpacing();
+				}
 			}
 			while (w < _columns[i])
 			{
@@ -118,10 +132,21 @@ void TextList::addRow(int cols, ...)
 		rowX += _columns[i];
 	}
 	_texts.push_back(temp);
+
+	if (_arrowPos != -1)
+	{
+		ArrowButton *a1 = new ArrowButton(ARROW_SMALL_UP, 11, 8, _arrowPos, getY());
+		a1->setPalette(this->getPalette());
+		a1->setColor(_up->getColor());
+		_arrow1.push_back(a1);
+		ArrowButton *a2 = new ArrowButton(ARROW_SMALL_DOWN, 11, 8, _arrowPos + 13, getY());
+		a2->setPalette(this->getPalette());
+		a2->setColor(_up->getColor());
+		_arrow2.push_back(a2);
+	}
+
 	draw();
-
 	va_end(args);
-
 	updateArrows();
 }
 
@@ -162,8 +187,18 @@ void TextList::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 			(*v)->setPalette(colors, firstcolor, ncolors);
 		}
 	}
+	for (std::vector<ArrowButton*>::iterator i = _arrow1.begin(); i < _arrow1.end(); i++)
+	{
+		(*i)->setPalette(colors, firstcolor, ncolors);
+	}
+	for (std::vector<ArrowButton*>::iterator i = _arrow2.begin(); i < _arrow2.end(); i++)
+	{
+		(*i)->setPalette(colors, firstcolor, ncolors);
+	}
 	if (_selector != 0)
+	{
 		_selector->setPalette(colors, firstcolor, ncolors);
+	}
 	_up->setPalette(colors, firstcolor, ncolors);
 	_down->setPalette(colors, firstcolor, ncolors);
 }
@@ -185,7 +220,9 @@ void TextList::setFonts(Font *big, Font *small)
 	_selector->setVisible(false);
 
 	for (int y = 0; y < getHeight(); y += _small->getHeight() + _small->getSpacing())
+	{
 		_visibleRows++;
+	}
 }
 
 /**
@@ -276,6 +313,16 @@ void TextList::setArrowColor(Uint8 color)
 }
 
 /**
+ * Sets the position of the column of arrow buttons
+ * in the text list.
+ * @param pos X in pixels (-1 to disable).
+ */
+void TextList::setArrowColumn(int pos)
+{
+	_arrowPos = pos;
+}
+
+/**
  * Removes all the rows currently stored in the list.
  */
 void TextList::clearList()
@@ -342,6 +389,10 @@ void TextList::draw()
 			(*j)->setY((i - _scroll) * (_small->getHeight() + _small->getSpacing()));
             (*j)->blit(this);
         }
+		_arrow1[i]->setY((i - _scroll) * (_small->getHeight() + _small->getSpacing()));
+		_arrow1[i]->blit(this);
+		_arrow2[i]->setY((i - _scroll) * (_small->getHeight() + _small->getSpacing()));
+		_arrow2[i]->blit(this);
     }
 }
 
