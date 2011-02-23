@@ -18,7 +18,7 @@
  */
 #include "BattleAction.h"
 #include "Pathfinding.h"
-#include "Terrainmodifier.h"
+#include "TerrainModifier.h"
 #include "Projectile.h"
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/BattleUnit.h"

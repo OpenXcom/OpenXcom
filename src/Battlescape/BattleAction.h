@@ -19,6 +19,7 @@
 #ifndef OPENXCOM_BATTLEACTION_H
 #define OPENXCOM_BATTLEACTION_H
 
+#include <string>
 #include <vector>
 #include "Position.h"
 
