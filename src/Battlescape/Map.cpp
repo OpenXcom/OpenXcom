@@ -532,8 +532,8 @@ void Map::keyboardPress(Action *action, State *state)
  */
 void Map::mouseOver(Action *action, State *state)
 {
-	int posX = action->getDetails()->motion.x;
-	int posY = action->getDetails()->motion.y;
+	int posX = action->getXMouse();
+	int posY = action->getYMouse();
 
 	// handle RMB dragging
 	if ((action->getDetails()->motion.state & SDL_BUTTON(SDL_BUTTON_RIGHT)) && RMB_SCROLL)

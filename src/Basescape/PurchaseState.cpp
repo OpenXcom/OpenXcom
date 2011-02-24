@@ -18,16 +18,21 @@
  */
 #include "PurchaseState.h"
 #include <string>
+#include <sstream>
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
 #include "../Engine/Font.h"
 #include "../Engine/Palette.h"
+#include "../Engine/Timer.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
 #include "../Savegame/SavedGame.h"
+#include "../Ruleset/Ruleset.h"
+#include "../Ruleset/RuleCraft.h"
+#include "../Ruleset/RuleItem.h"
 
 namespace OpenXcom
 {
@@ -81,13 +86,15 @@ PurchaseState::PurchaseState(Game *game) : State(game)
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(_game->getLanguage()->getString("STR_PURCHASE_HIRE_PERSONNEL"));
 
-	std::wstring s = _game->getLanguage()->getString("STR_CURRENT_FUNDS");
-	s += Text::formatFunding(_game->getSavedGame()->getFunds());
+	std::wstring s1 = _game->getLanguage()->getString("STR_CURRENT_FUNDS");
+	s1 += Text::formatFunding(_game->getSavedGame()->getFunds());
 	_txtFunds->setColor(Palette::blockOffset(13)+10);
-	_txtFunds->setText(s);
+	_txtFunds->setText(s1);
 
+	std::wstring s2 = _game->getLanguage()->getString("STR_COST_OF_PURCHASES");
+	s2 += Text::formatFunding(0);
 	_txtPurchases->setColor(Palette::blockOffset(13)+10);
-	_txtPurchases->setText(_game->getLanguage()->getString("STR_COST_OF_PURCHASES"));
+	_txtPurchases->setText(s2);
 
 	_txtItem->setColor(Palette::blockOffset(13)+10);
 	_txtItem->setText(_game->getLanguage()->getString("STR_ITEM"));
@@ -106,16 +113,55 @@ PurchaseState::PurchaseState(Game *game) : State(game)
 	_lstItems->setBackground(_window);
 	_lstItems->setMargin(2);
 
-	_items.push_back("STR_SOLDIER");
-	_items.push_back("STR_SCIENTIST");
-	_items.push_back("STR_ENGINEER");
-	_items.push_back("STR_SKYRANGER");
-	_items.push_back("STR_INTERCEPTOR");
+	_total = 0;
+	_sel = -1;
+	_crafts.push_back("STR_SKYRANGER");
+	_crafts.push_back("STR_INTERCEPTOR");
+	_items.push_back("STR_STINGRAY_LAUNCHER");
+	_items.push_back("STR_AVALANCHE_LAUNCHER");
+	_items.push_back("STR_CANNON");
+	_items.push_back("STR_STINGRAY_MISSILES");
+	_items.push_back("STR_AVALANCHE_MISSILES");
+	_items.push_back("STR_CANNON_ROUNDS_X50");
+	_items.push_back("STR_PISTOL");
+	_items.push_back("STR_PISTOL_CLIP");
+	_items.push_back("STR_RIFLE");
+	_items.push_back("STR_RIFLE_CLIP");
+	_items.push_back("STR_HEAVY_CANNON");
+	_items.push_back("STR_HC_AP_AMMO");
+	_items.push_back("STR_HC_HE_AMMO");
+	_items.push_back("STR_AUTO_CANNON");
+	_items.push_back("STR_AC_AP_AMMO");
+	_items.push_back("STR_ROCKET_LAUNCHER");
+	_items.push_back("STR_SMALL_ROCKET");
+	_items.push_back("STR_GRENADE");
+	_items.push_back("STR_SMOKE_GRENADE");
 
+	_qtys.push_back(0);
+	_lstItems->addRow(3, _game->getLanguage()->getString("STR_SOLDIER").c_str(), Text::formatFunding(_game->getRuleset()->getSoldierCost() * 2).c_str(), L"0");
+	_qtys.push_back(0);
+	_lstItems->addRow(3, _game->getLanguage()->getString("STR_SCIENTIST").c_str(), Text::formatFunding(_game->getRuleset()->getScientistCost() * 2).c_str(), L"0");
+	_qtys.push_back(0);
+	_lstItems->addRow(3, _game->getLanguage()->getString("STR_ENGINEER").c_str(), Text::formatFunding(_game->getRuleset()->getEngineerCost() * 2).c_str(), L"0");
+	for (std::vector<std::string>::iterator i = _crafts.begin(); i != _crafts.end(); i++)
+	{
+		_qtys.push_back(0);
+		_lstItems->addRow(3, _game->getLanguage()->getString(*i).c_str(), Text::formatFunding(_game->getRuleset()->getCraft(*i)->getCost()).c_str(), L"0");
+	}
 	for (std::vector<std::string>::iterator i = _items.begin(); i != _items.end(); i++)
 	{
-		_lstItems->addRow(3, _game->getLanguage()->getString(*i).c_str(), L"40 000", L"0");
+		_qtys.push_back(0);
+		_lstItems->addRow(3, _game->getLanguage()->getString(*i).c_str(), Text::formatFunding(_game->getRuleset()->getItem(*i)->getCost()).c_str(), L"0");
 	}
+	_lstItems->onLeftArrowPress((ActionHandler)&PurchaseState::lstItemsLeftArrowPress);
+	_lstItems->onLeftArrowRelease((ActionHandler)&PurchaseState::lstItemsLeftArrowRelease);
+	_lstItems->onRightArrowPress((ActionHandler)&PurchaseState::lstItemsRightArrowPress);
+	_lstItems->onRightArrowRelease((ActionHandler)&PurchaseState::lstItemsRightArrowRelease);
+
+	_timerInc = new Timer(50);
+	_timerInc->onTimer((StateHandler)&PurchaseState::increase);
+	_timerDec = new Timer(50);
+	_timerDec->onTimer((StateHandler)&PurchaseState::decrease);
 }
 
 /**
@@ -124,6 +170,17 @@ PurchaseState::PurchaseState(Game *game) : State(game)
 PurchaseState::~PurchaseState()
 {
 	
+}
+
+/**
+ * Runs the game timer and handles popups.
+ */
+void PurchaseState::think()
+{
+	State::think();
+
+	_timerInc->think(this, 0);
+	_timerDec->think(this, 0);
 }
 
 void PurchaseState::btnOkClick(Action *action)
@@ -138,6 +195,71 @@ void PurchaseState::btnOkClick(Action *action)
 void PurchaseState::btnCancelClick(Action *action)
 {
 	_game->popState();
+}
+
+/**
+ * Starts increasing the item.
+ * @param action Pointer to an action.
+ */
+void PurchaseState::lstItemsLeftArrowPress(Action *action)
+{
+	_sel = _lstItems->getSelectedRow();
+	_timerInc->start();
+	
+}
+
+/**
+ * Stops increasing the item.
+ * @param action Pointer to an action.
+ */
+void PurchaseState::lstItemsLeftArrowRelease(Action *action)
+{
+	_timerInc->stop();
+}
+
+/**
+ * Starts decreasing the item.
+ * @param action Pointer to an action.
+ */
+void PurchaseState::lstItemsRightArrowPress(Action *action)
+{
+	_sel = _lstItems->getSelectedRow();
+	_timerDec->start();
+	
+}
+
+/**
+ * Stops decreasing the item.
+ * @param action Pointer to an action.
+ */
+void PurchaseState::lstItemsRightArrowRelease(Action *action)
+{
+	_timerDec->stop();	
+}
+
+/**
+ * Increases the quantity of the selected item on the list.
+ */
+void PurchaseState::increase()
+{
+	_qtys[_sel]++;
+	std::wstringstream ss;
+	ss << _qtys[_sel];
+	_lstItems->getCell(_sel, 2)->setText(ss.str());
+	_lstItems->draw();
+}
+
+/**
+ * Decreases the quantity of the selected item on the list.
+ */
+void PurchaseState::decrease()
+{
+	if (_qtys[_sel] > 0)
+		_qtys[_sel]--;
+	std::wstringstream ss;
+	ss << _qtys[_sel];
+	_lstItems->getCell(_sel, 2)->setText(ss.str());
+	_lstItems->draw();
 }
 
 }

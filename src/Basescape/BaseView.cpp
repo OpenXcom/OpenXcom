@@ -497,7 +497,7 @@ void BaseView::blit(Surface *surface)
  */
 void BaseView::mouseOver(Action *action, State *state)
 {
-	double x = action->getDetails()->button.x - _x * action->getXScale(), y = action->getDetails()->button.y - _y * action->getYScale();
+	double x = action->getXMouse() - _x * action->getXScale(), y = action->getYMouse() - _y * action->getYScale();
 	_gridX = (int)floor(x / (GRID_SIZE * action->getXScale()));
 	_gridY = (int)floor(y / (GRID_SIZE * action->getYScale()));
 	if (_gridX >= 0 && _gridX < BASE_SIZE && _gridY >= 0 && _gridY < BASE_SIZE)

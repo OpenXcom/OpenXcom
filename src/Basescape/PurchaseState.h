@@ -30,6 +30,7 @@ class TextButton;
 class Window;
 class Text;
 class TextList;
+class Timer;
 
 /**
  * Purchase/Hire screen that lets the player buy
@@ -42,16 +43,33 @@ private:
 	Window *_window;
 	Text *_txtTitle, *_txtFunds, *_txtPurchases, *_txtItem, *_txtCost, *_txtQuantity;
 	TextList *_lstItems;
-	std::vector<std::string> _items;
+	std::vector<std::string> _crafts, _items;
+	std::vector<int> _qtys;
+	int _total, _sel;
+	Timer *_timerInc, *_timerDec;
 public:
 	/// Creates the Purchase state.
 	PurchaseState(Game *game);
 	/// Cleans up the Purchase state.
 	~PurchaseState();
+	/// Runs the timers.
+	void think();
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
 	/// Handler for clicking the Cancel button.
 	void btnCancelClick(Action *action);
+	/// Handler for pressing an Increase arrow in the list.
+	void lstItemsLeftArrowPress(Action *action);
+	/// Handler for releasing an Increase arrow in the list.
+	void lstItemsLeftArrowRelease(Action *action);
+	/// Handler for pressing a Decrease arrow in the list.
+	void lstItemsRightArrowPress(Action *action);
+	/// Handler for releasing a Decrease arrow in the list.
+	void lstItemsRightArrowRelease(Action *action);
+	/// Increases the quantity of an item.
+	void increase();
+	/// Decreases the quantity of an item.
+	void decrease();
 };
 
 }

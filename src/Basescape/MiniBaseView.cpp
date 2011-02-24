@@ -161,7 +161,7 @@ void MiniBaseView::draw()
  */
 void MiniBaseView::mouseOver(Action *action, State *state)
 {
-	double x = action->getDetails()->button.x - getX() * action->getXScale();
+	double x = action->getXMouse() - getX() * action->getXScale();
 	_hoverBase = (int)floor(x / ((MINI_SIZE + 2) * action->getXScale()));
 
 	InteractiveSurface::mouseOver(action, state);

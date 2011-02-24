@@ -595,7 +595,14 @@
 		<Filter
 			Name="Battlescape"
 			>
-			
+			<File
+				RelativePath=".\Battlescape\BattleAction.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\BattleAction.h"
+				>
+			</File>
 			<File
 				RelativePath=".\Battlescape\BattlescapeGenerator.cpp"
 				>
@@ -650,6 +657,14 @@
 			</File>
 			<File
 				RelativePath=".\Battlescape\Position.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\Projectile.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\Projectile.h"
 				>
 			</File>
 			<File

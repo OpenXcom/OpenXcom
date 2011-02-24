@@ -710,7 +710,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	skyranger->setWeapons(0);
 	skyranger->setMaxDamage(150);
 	skyranger->setSoldiers(14);
-	skyranger->setMonthlyFee(500000);
+	skyranger->setCost(500000);
 	skyranger->setHWPs(3);
 	skyranger->setRefuelRate(50);
 
@@ -750,7 +750,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	interceptor->setWeapons(2);
 	interceptor->setMaxDamage(100);
 	interceptor->setSoldiers(0);
-	interceptor->setMonthlyFee(600000);
+	interceptor->setCost(600000);
 	interceptor->setHWPs(0);
 	interceptor->setRefuelRate(50);
 
@@ -859,94 +859,113 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	// Add items
 	RuleItem *slauncher = new RuleItem("STR_STINGRAY_LAUNCHER");
 	slauncher->setSize(0.8f);
+	slauncher->setCost(16000);
 	slauncher->setEquippable(false);
 
 	RuleItem *alauncher = new RuleItem("STR_AVALANCHE_LAUNCHER");
 	alauncher->setSize(1.0f);
+	alauncher->setCost(17000);
 	alauncher->setEquippable(false);
 
 	RuleItem *icannon = new RuleItem("STR_CANNON");
 	icannon->setSize(1.5f);
+	icannon->setCost(30000);
 	icannon->setEquippable(false);
 
 	RuleItem *smissile = new RuleItem("STR_STINGRAY_MISSILES");
 	smissile->setSize(0.4f);
+	smissile->setCost(3000);
 	smissile->setEquippable(false);
 
 	RuleItem *amissile = new RuleItem("STR_AVALANCHE_MISSILES");
 	amissile->setSize(1.5f);
+	amissile->setCost(9000);
 	amissile->setEquippable(false);
 
 	RuleItem *crounds = new RuleItem("STR_CANNON_ROUNDS_X50");
 	crounds->setSize(0.0f);
+	crounds->setCost(1240);
 	crounds->setEquippable(false);
 
 	RuleItem *pistol = new RuleItem("STR_PISTOL");
 	pistol->setSize(0.1f);
+	pistol->setCost(800);
 	pistol->setBigSprite(3);
 	pistol->setHandSprite(96);
 
 	RuleItem *pclip = new RuleItem("STR_PISTOL_CLIP");
 	pclip->setSize(0.1f);
+	pclip->setCost(70);
 	pclip->setBigSprite(4);
 	pclip->setHandSprite(120);
 	
 	RuleItem *rifle = new RuleItem("STR_RIFLE");
 	rifle->setSize(0.2f);
+	rifle->setCost(3000);
 	rifle->setBigSprite(1);
 	rifle->setHandSprite(0);
 	rifle->setTwoHanded(true);
 
 	RuleItem *rclip = new RuleItem("STR_RIFLE_CLIP");
 	rclip->setSize(0.1f);
+	rclip->setCost(200);
 	rclip->setBigSprite(2);
 	rclip->setHandSprite(120);
 
 	RuleItem *hcannon = new RuleItem("STR_HEAVY_CANNON");
 	hcannon->setSize(0.3f);
+	hcannon->setCost(6400);
 	hcannon->setBigSprite(11);
 	hcannon->setHandSprite(24);
 	hcannon->setTwoHanded(true);
 
 	RuleItem *hcap = new RuleItem("STR_HC_AP_AMMO");
 	hcap->setSize(0.1f);
+	hcap->setCost(300);
 	hcap->setBigSprite(12);
 	hcap->setHandSprite(120);
 
 	RuleItem *hche = new RuleItem("STR_HC_HE_AMMO");
 	hche->setSize(0.1f);
+	hche->setCost(500);
 	hche->setBigSprite(13);
 	hche->setHandSprite(120);
 
 	RuleItem *acannon = new RuleItem("STR_AUTO_CANNON");
 	acannon->setSize(0.3f);
+	acannon->setCost(13500);
 	acannon->setBigSprite(7);
 	acannon->setHandSprite(32);
 	acannon->setTwoHanded(true);
 
 	RuleItem *acap = new RuleItem("STR_AC_AP_AMMO");
 	acap->setSize(0.1f);
+	acap->setCost(500);
 	acap->setBigSprite(8);
 	acap->setHandSprite(120);
 
 	RuleItem *rlauncher = new RuleItem("STR_ROCKET_LAUNCHER");
 	rlauncher->setSize(0.4f);
+	rlauncher->setCost(4000);
 	rlauncher->setBigSprite(15);
 	rlauncher->setHandSprite(9);
 	rlauncher->setTwoHanded(true);
 
 	RuleItem *srocket = new RuleItem("STR_SMALL_ROCKET");
 	srocket->setSize(0.2f);
+	srocket->setCost(600);
 	srocket->setBigSprite(16);
 	srocket->setHandSprite(120);
 
 	RuleItem *grenade = new RuleItem("STR_GRENADE");
 	grenade->setSize(0.1f);
+	grenade->setCost(300);
 	grenade->setBigSprite(19);
 	grenade->setHandSprite(120);
 
 	RuleItem *sgrenade = new RuleItem("STR_SMOKE_GRENADE");
 	sgrenade->setSize(0.1f);
+	sgrenade->setCost(150);
 	sgrenade->setBigSprite(20);
 	sgrenade->setHandSprite(120);
 
@@ -1263,6 +1282,10 @@ XcomRuleset::XcomRuleset() : Ruleset()
 
 	_unitSprites.insert(std::pair<std::string, RuleUnitSprite*>("XCOM_0",xcom_0));
 	_unitSprites.insert(std::pair<std::string, RuleUnitSprite*>("SECTOID",sectoid));
+
+	_costSoldier = 20000;
+	_costEngineer = 25000;
+	_costScientist = 30000;
 }
 
 /**
@@ -1326,7 +1349,7 @@ SavedGame *XcomRuleset::newSave(GameDifficulty diff)
 	save->getCraftIds()->insert(std::pair<std::string, int>("STR_FIRESTORM", 1));
 
 	// Set up initial base
-	Base *base = new Base();
+	Base *base = new Base(this);
 	base->setEngineers(10);
 	base->setScientists(10);
 
@@ -1342,36 +1365,36 @@ SavedGame *XcomRuleset::newSave(GameDifficulty diff)
 	base->getFacilities()->push_back(new BaseFacility(getBaseFacility("STR_SMALL_RADAR_SYSTEM"), base, 1, 3));
 
 	// Add items
-	base->getItems()->addItem(getItem("STR_STINGRAY_LAUNCHER"), 1);
-	base->getItems()->addItem(getItem("STR_AVALANCHE_LAUNCHER"), 1);
-	base->getItems()->addItem(getItem("STR_CANNON"), 2);
-	base->getItems()->addItem(getItem("STR_STINGRAY_MISSILES"), 25);
-	base->getItems()->addItem(getItem("STR_AVALANCHE_MISSILES"), 10);
-	base->getItems()->addItem(getItem("STR_CANNON_ROUNDS_X50"), 1);
-	base->getItems()->addItem(getItem("STR_PISTOL"), 2);
-	base->getItems()->addItem(getItem("STR_PISTOL_CLIP"), 8);
-	base->getItems()->addItem(getItem("STR_RIFLE"), 2);
-	base->getItems()->addItem(getItem("STR_RIFLE_CLIP"), 8);
-	base->getItems()->addItem(getItem("STR_HEAVY_CANNON"), 1);
-	base->getItems()->addItem(getItem("STR_HC_AP_AMMO"), 6);
-	base->getItems()->addItem(getItem("STR_AUTO_CANNON"), 1);
-	base->getItems()->addItem(getItem("STR_AC_AP_AMMO"), 6);
-	base->getItems()->addItem(getItem("STR_ROCKET_LAUNCHER"), 1);
-	base->getItems()->addItem(getItem("STR_SMALL_ROCKET"), 4);
-	base->getItems()->addItem(getItem("STR_GRENADE"), 5);
-	base->getItems()->addItem(getItem("STR_SMOKE_GRENADE"), 5);
+	base->getItems()->addItem("STR_STINGRAY_LAUNCHER", 1);
+	base->getItems()->addItem("STR_AVALANCHE_LAUNCHER", 1);
+	base->getItems()->addItem("STR_CANNON", 2);
+	base->getItems()->addItem("STR_STINGRAY_MISSILES", 25);
+	base->getItems()->addItem("STR_AVALANCHE_MISSILES", 10);
+	base->getItems()->addItem("STR_CANNON_ROUNDS_X50", 1);
+	base->getItems()->addItem("STR_PISTOL", 2);
+	base->getItems()->addItem("STR_PISTOL_CLIP", 8);
+	base->getItems()->addItem("STR_RIFLE", 2);
+	base->getItems()->addItem("STR_RIFLE_CLIP", 8);
+	base->getItems()->addItem("STR_HEAVY_CANNON", 1);
+	base->getItems()->addItem("STR_HC_AP_AMMO", 6);
+	base->getItems()->addItem("STR_AUTO_CANNON", 1);
+	base->getItems()->addItem("STR_AC_AP_AMMO", 6);
+	base->getItems()->addItem("STR_ROCKET_LAUNCHER", 1);
+	base->getItems()->addItem("STR_SMALL_ROCKET", 4);
+	base->getItems()->addItem("STR_GRENADE", 5);
+	base->getItems()->addItem("STR_SMOKE_GRENADE", 5);
 
 	// Add crafts
 	Craft *skyranger = new Craft(getCraft("STR_SKYRANGER"), base, save->getCraftIds());
 	skyranger->setFuel(skyranger->getRules()->getMaxFuel());
-	skyranger->getItems()->addItem(getItem("STR_PISTOL"), 3);
-	skyranger->getItems()->addItem(getItem("STR_PISTOL_CLIP"), 5);
-	skyranger->getItems()->addItem(getItem("STR_RIFLE"), 6);
-	skyranger->getItems()->addItem(getItem("STR_RIFLE_CLIP"), 12);
-	skyranger->getItems()->addItem(getItem("STR_HEAVY_CANNON"), 1);
-	skyranger->getItems()->addItem(getItem("STR_HC_AP_AMMO"), 2);
-	skyranger->getItems()->addItem(getItem("STR_HC_HE_AMMO"), 2);
-	skyranger->getItems()->addItem(getItem("STR_GRENADE"), 8);
+	skyranger->getItems()->addItem("STR_PISTOL", 3);
+	skyranger->getItems()->addItem("STR_PISTOL_CLIP", 5);
+	skyranger->getItems()->addItem("STR_RIFLE", 6);
+	skyranger->getItems()->addItem("STR_RIFLE_CLIP", 12);
+	skyranger->getItems()->addItem("STR_HEAVY_CANNON", 1);
+	skyranger->getItems()->addItem("STR_HC_AP_AMMO", 2);
+	skyranger->getItems()->addItem("STR_HC_HE_AMMO", 2);
+	skyranger->getItems()->addItem("STR_GRENADE", 8);
 	base->getCrafts()->push_back(skyranger);
 
 	for (int i = 0; i < 2; i++)

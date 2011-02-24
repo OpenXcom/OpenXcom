@@ -25,7 +25,7 @@ namespace OpenXcom
  * Creates a blank ruleset for a certain type of item.
  * @param type String defining the type.
  */
-RuleItem::RuleItem(std::string type) : _type(type), _size(0.0), _value(0), _time(24), _equip(true), _twoHanded(false)
+RuleItem::RuleItem(std::string type) : _type(type), _size(0.0), _cost(0), _time(24), _equip(true), _twoHanded(false)
 {
 }
 
@@ -67,23 +67,23 @@ void RuleItem::setSize(float size)
 }
 
 /**
- * Returns the amount of money you get for
- * selling this item.
- * @return Sale value.
+ * Returns the amount of money this item
+ * costs in purchase/sale.
+ * @return Cost.
  */
-int RuleItem::getSaleValue() const
+int RuleItem::getCost() const
 {
-	return _value;
+	return _cost;
 }
 
 /**
- * Changes the amount of money you get for
- * selling this item.
- * @param value Sale value.
+ * Changes the amount of money this item
+ * costs in purchase/sale.
+ * @param cost Cost.
  */
-void RuleItem::setSaleValue(int value)
+void RuleItem::setCost(int cost)
 {
-	_value = value;
+	_cost = cost;
 }
 
 /**

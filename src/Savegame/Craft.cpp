@@ -32,8 +32,6 @@
 namespace OpenXcom
 {
 
-#define CRAFT_RANGE 600
-
 /**
  * Initializes a craft of the specified type and
  * assigns it the latest craft ID available.
@@ -497,7 +495,7 @@ void Craft::think()
 bool Craft::insideRadarRange(Target *target) const
 {
 	bool inside = false;
-	double newrange = CRAFT_RANGE * (1 / 60.0) * (M_PI / 180);
+	double newrange = _rules->getRadarRange() * (1 / 60.0) * (M_PI / 180);
 	for (double lon = target->getLongitude() - 2*M_PI; lon <= target->getLongitude() + 2*M_PI; lon += 2*M_PI)
 	{
 		double dLon = lon - _lon;

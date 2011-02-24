@@ -49,7 +49,7 @@ private:
 	Surface *_bg, *_selector;
 	ArrowButton *_up, *_down;
 	int _margin;
-	std::vector<ArrowButton*> _arrow1, _arrow2;
+	std::vector<ArrowButton*> _arrowLeft, _arrowRight;
 	int _arrowPos;
 
 	/// Updates the arrow buttons.
@@ -89,6 +89,18 @@ public:
 	void setArrowColor(Uint8 color);
 	/// Sets the arrow column of the text list.
 	void setArrowColumn(int pos);
+	/// Hooks an action handler to a mouse click on the left arrows.
+	void onLeftArrowClick(ActionHandler handler);
+	/// Hooks an action handler to a mouse press over the left arrows.
+	void onLeftArrowPress(ActionHandler handler);
+	/// Hooks an action handler to a mouse release over the left arrows.
+	void onLeftArrowRelease(ActionHandler handler);
+	/// Hooks an action handler to a mouse click on the right arrows.
+	void onRightArrowClick(ActionHandler handler);
+	/// Hooks an action handler to a mouse press over the right arrows.
+	void onRightArrowPress(ActionHandler handler);
+	/// Hooks an action handler to a mouse release over the right arrows.
+	void onRightArrowRelease(ActionHandler handler);
 	/// Clears the list.
 	void clearList();
 	/// Scrolls the list up.

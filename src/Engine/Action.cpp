@@ -24,11 +24,11 @@ namespace OpenXcom
 
 /**
  * Creates a new action.
- * @param xScale Screen's X scaling factor.
- * @param yScale Screen's Y scaling factor.
+ * @param scaleX Screen's X scaling factor.
+ * @param scaleY Screen's Y scaling factor.
  * @param ev Pointer to SDL_event.
  */
-Action::Action(SDL_Event *ev, double xScale, double yScale) : _ev(ev), _xScale(xScale), _yScale(yScale), _sender(0)
+Action::Action(SDL_Event *ev, double scaleX, double scaleY) : _ev(ev), _scaleX(scaleX), _scaleY(scaleY), _mouseX(-1), _mouseY(-1), _sender(0)
 {
 }
 
@@ -43,7 +43,7 @@ Action::~Action()
  */
 double Action::getXScale() const
 {
-	return _xScale;
+	return _scaleX;
 }
 
 /**
@@ -53,7 +53,49 @@ double Action::getXScale() const
  */
 double Action::getYScale() const
 {
-	return _yScale;
+	return _scaleY;
+}
+
+/**
+ * Returns the absolute X position of the
+ * mouse cursor relative to the game window,
+ * or -1 if this isn't a mouse-related action.
+ * @return Mouse's X position.
+ */
+int Action::getXMouse() const
+{
+	return _mouseX;
+}
+
+/**
+ * Changes the absolute X position of the
+ * mouse cursor relative to the game window.
+ * @param x Mouse's X position.
+ */
+void Action::setXMouse(int x)
+{
+	_mouseX = x;
+}
+
+/**
+ * Returns the absolute Y position of the
+ * mouse cursor relative to the game window,
+ * or -1 if this isn't a mouse-related action.
+ * @return Mouse's Y position.
+ */
+int Action::getYMouse() const
+{
+	return _mouseY;
+}
+
+/**
+ * Changes the absolute Y position of the
+ * mouse cursor relative to the game window.
+ * @param y Mouse's Y position.
+ */
+void Action::setYMouse(int y)
+{
+	_mouseY = y;
 }
 
 /**

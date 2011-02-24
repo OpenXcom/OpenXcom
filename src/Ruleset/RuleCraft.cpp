@@ -27,7 +27,7 @@ namespace OpenXcom
  * type of craft.
  * @param type String defining the type.
  */
-RuleCraft::RuleCraft(std::string type) : _type(type), _sprite(-1), _fuelMax(0), _damageMax(0), _speedMax(0), _accel(0), _weapons(0), _soldiers(0), _hwps(0), _fee(0), _repair(1), _refuel(1), _battlescapeTerrainData(0)
+RuleCraft::RuleCraft(std::string type) : _type(type), _sprite(-1), _fuelMax(0), _damageMax(0), _speedMax(0), _accel(0), _weapons(0), _soldiers(0), _hwps(0), _cost(0), _repair(1), _refuel(1), _range(600), _battlescapeTerrainData(0)
 {
 
 }
@@ -209,23 +209,23 @@ void RuleCraft::setHWPs(int hwps)
 }
 
 /**
- * Returns the monthly rental fee that needs to be
- * paid as long as this craft is owned (0 = no rental).
- * @return Monthly fee.
+ * Returns the cost of this craft for
+ * purchase/maintenance.
+ * @return Cost.
  */
-int RuleCraft::getMonthlyFee() const
+int RuleCraft::getCost() const
 {
-	return _fee;
+	return _cost;
 }
 
 /**
- * Changes the monthly rental fee that needs to be
- * paid as long as this craft is owned.
- * @param fee Monthly fee.
+ * Changes the cost of this craft for
+ * purchase/maintenance.
+ * @param cost Cost.
  */
-void RuleCraft::setMonthlyFee(int fee)
+void RuleCraft::setCost(int cost)
 {
-	_fee = fee;
+	_cost = cost;
 }
 
 /**
@@ -266,6 +266,26 @@ int RuleCraft::getRefuelRate() const
 void RuleCraft::setRefuelRate(int refuel)
 {
 	_refuel = refuel;
+}
+
+/**
+ * Returns the craft's radar range
+ * for detecting UFOs.
+ * @return Range in nautical miles.
+ */
+int RuleCraft::getRadarRange() const
+{
+	return _range;
+}
+
+/**
+ * Changes the craft's radar range
+ * for detecting UFOs.
+ * @param range Range in nautical miles.
+ */
+void RuleCraft::setRadarRange(int range)
+{
+	_range = range;
 }
 
 /**

@@ -34,7 +34,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-TextList::TextList(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _texts(), _columns(), _big(0), _small(0), _scroll(0), _visibleRows(0), _color(0), _align(ALIGN_LEFT), _dot(false), _selectable(false), _selRow(0), _bg(0), _selector(0), _margin(0), _arrow1(), _arrow2(), _arrowPos(-1)
+TextList::TextList(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _texts(), _columns(), _big(0), _small(0), _scroll(0), _visibleRows(0), _color(0), _align(ALIGN_LEFT), _dot(false), _selectable(false), _selRow(0), _bg(0), _selector(0), _margin(0), _arrowLeft(), _arrowRight(), _arrowPos(-1)
 {
 	_up = new ArrowButton(ARROW_BIG_UP, 13, 14, getX() + getWidth() + 4, getY() + 1);
 	_up->setVisible(false);
@@ -56,11 +56,11 @@ TextList::~TextList()
 			delete *v;
 		}
 	}
-	for (std::vector<ArrowButton*>::iterator i = _arrow1.begin(); i < _arrow1.end(); i++)
+	for (std::vector<ArrowButton*>::iterator i = _arrowLeft.begin(); i < _arrowLeft.end(); i++)
 	{
 		delete *i;
 	}
-	for (std::vector<ArrowButton*>::iterator i = _arrow2.begin(); i < _arrow2.end(); i++)
+	for (std::vector<ArrowButton*>::iterator i = _arrowRight.begin(); i < _arrowRight.end(); i++)
 	{
 		delete *i;
 	}
@@ -138,11 +138,11 @@ void TextList::addRow(int cols, ...)
 		ArrowButton *a1 = new ArrowButton(ARROW_SMALL_UP, 11, 8, getX() + _arrowPos, getY());
 		a1->setPalette(this->getPalette());
 		a1->setColor(_up->getColor());
-		_arrow1.push_back(a1);
+		_arrowLeft.push_back(a1);
 		ArrowButton *a2 = new ArrowButton(ARROW_SMALL_DOWN, 11, 8, getX() + _arrowPos + 12, getY());
 		a2->setPalette(this->getPalette());
 		a2->setColor(_up->getColor());
-		_arrow2.push_back(a2);
+		_arrowRight.push_back(a2);
 	}
 
 	draw();
@@ -187,11 +187,11 @@ void TextList::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 			(*v)->setPalette(colors, firstcolor, ncolors);
 		}
 	}
-	for (std::vector<ArrowButton*>::iterator i = _arrow1.begin(); i < _arrow1.end(); i++)
+	for (std::vector<ArrowButton*>::iterator i = _arrowLeft.begin(); i < _arrowLeft.end(); i++)
 	{
 		(*i)->setPalette(colors, firstcolor, ncolors);
 	}
-	for (std::vector<ArrowButton*>::iterator i = _arrow2.begin(); i < _arrow2.end(); i++)
+	for (std::vector<ArrowButton*>::iterator i = _arrowRight.begin(); i < _arrowRight.end(); i++)
 	{
 		(*i)->setPalette(colors, firstcolor, ncolors);
 	}
@@ -323,6 +323,78 @@ void TextList::setArrowColumn(int pos)
 }
 
 /**
+ * Sets a function to be called everytime the left arrows are mouse clicked.
+ * @param handler Action handler.
+ */
+void TextList::onLeftArrowClick(ActionHandler handler)
+{
+	for (std::vector<ArrowButton*>::iterator i = _arrowLeft.begin(); i < _arrowLeft.end(); i++)
+	{
+		(*i)->onMouseClick(handler);
+	}
+}
+
+/**
+ * Sets a function to be called everytime the left arrows are mouse pressed.
+ * @param handler Action handler.
+ */
+void TextList::onLeftArrowPress(ActionHandler handler)
+{
+	for (std::vector<ArrowButton*>::iterator i = _arrowLeft.begin(); i < _arrowLeft.end(); i++)
+	{
+		(*i)->onMousePress(handler);
+	}
+}
+
+/**
+ * Sets a function to be called everytime the left arrows are mouse released.
+ * @param handler Action handler.
+ */
+void TextList::onLeftArrowRelease(ActionHandler handler)
+{
+	for (std::vector<ArrowButton*>::iterator i = _arrowLeft.begin(); i < _arrowLeft.end(); i++)
+	{
+		(*i)->onMouseRelease(handler);
+	}
+}
+
+/**
+ * Sets a function to be called everytime the right arrows are mouse clicked.
+ * @param handler Action handler.
+ */
+void TextList::onRightArrowClick(ActionHandler handler)
+{
+	for (std::vector<ArrowButton*>::iterator i = _arrowRight.begin(); i < _arrowRight.end(); i++)
+	{
+		(*i)->onMouseClick(handler);
+	}
+}
+
+/**
+ * Sets a function to be called everytime the right arrows are mouse pressed.
+ * @param handler Action handler.
+ */
+void TextList::onRightArrowPress(ActionHandler handler)
+{
+	for (std::vector<ArrowButton*>::iterator i = _arrowRight.begin(); i < _arrowRight.end(); i++)
+	{
+		(*i)->onMousePress(handler);
+	}
+}
+
+/**
+ * Sets a function to be called everytime the right arrows are mouse released.
+ * @param handler Action handler.
+ */
+void TextList::onRightArrowRelease(ActionHandler handler)
+{
+	for (std::vector<ArrowButton*>::iterator i = _arrowRight.begin(); i < _arrowRight.end(); i++)
+	{
+		(*i)->onMouseRelease(handler);
+	}
+}
+
+/**
  * Removes all the rows currently stored in the list.
  */
 void TextList::clearList()
@@ -409,10 +481,10 @@ void TextList::blit(Surface *surface)
 		{
 			for (unsigned int i = _scroll; i < _texts.size() && i < _scroll + _visibleRows; i++)
 			{
-				_arrow1[i]->setY(getY() + (i - _scroll) * (_small->getHeight() + _small->getSpacing()));
-				_arrow1[i]->blit(surface);
-				_arrow2[i]->setY(getY() + (i - _scroll) * (_small->getHeight() + _small->getSpacing()));
-				_arrow2[i]->blit(surface);
+				_arrowLeft[i]->setY(getY() + (i - _scroll) * (_small->getHeight() + _small->getSpacing()));
+				_arrowLeft[i]->blit(surface);
+				_arrowRight[i]->setY(getY() + (i - _scroll) * (_small->getHeight() + _small->getSpacing()));
+				_arrowRight[i]->blit(surface);
 			}
 		}
 	}
@@ -428,13 +500,13 @@ void TextList::handle(Action *action, State *state)
 	InteractiveSurface::handle(action, state);
 	_up->handle(action, state);
 	_down->handle(action, state);
-	for (std::vector<ArrowButton*>::iterator i = _arrow1.begin(); i < _arrow1.end(); i++)
+	if (_arrowPos != -1)
 	{
-		(*i)->handle(action, state);
-	}
-	for (std::vector<ArrowButton*>::iterator i = _arrow2.begin(); i < _arrow2.end(); i++)
-	{
-		(*i)->handle(action, state);
+		for (unsigned int i = _scroll; i < _texts.size() && i < _scroll + _visibleRows; i++)
+		{
+			_arrowLeft[i]->handle(action, state);
+			_arrowRight[i]->handle(action, state);
+		}
 	}
 }
 
@@ -446,11 +518,11 @@ void TextList::think()
 	InteractiveSurface::think();
 	_up->think();
 	_down->think();
-	for (std::vector<ArrowButton*>::iterator i = _arrow1.begin(); i < _arrow1.end(); i++)
+	for (std::vector<ArrowButton*>::iterator i = _arrowLeft.begin(); i < _arrowLeft.end(); i++)
 	{
 		(*i)->think();
 	}
-	for (std::vector<ArrowButton*>::iterator i = _arrow2.begin(); i < _arrow2.end(); i++)
+	for (std::vector<ArrowButton*>::iterator i = _arrowRight.begin(); i < _arrowRight.end(); i++)
 	{
 		(*i)->think();
 	}
@@ -508,7 +580,6 @@ void TextList::mouseClick(Action *action, State *state)
 		if (_selRow < _texts.size())
 		{
 			InteractiveSurface::mouseClick(action, state);
-			_selector->setVisible(false);
 		}
 	}
 }
@@ -520,10 +591,10 @@ void TextList::mouseClick(Action *action, State *state)
  */
 void TextList::mouseOver(Action *action, State *state)
 {
-	int h = _small->getHeight() + _small->getSpacing();
 	if (_selectable)
 	{
-		double y = action->getDetails()->button.y - getY() * action->getYScale();
+		int h = _small->getHeight() + _small->getSpacing();
+		double y = action->getYMouse() - getY() * action->getYScale();
 		_selRow = _scroll + (int)floor(y / (h * action->getYScale()));
 
 		if (_selRow < _texts.size())

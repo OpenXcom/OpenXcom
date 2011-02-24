@@ -35,7 +35,7 @@ class RuleItem
 private:
 	std::string _type;
 	float _size;
-	int _value, _time;
+	int _cost, _time;
 	bool _equip, _twoHanded;
 	int _bigSprite, _floorSprite, _handSprite;
 public:
@@ -49,10 +49,10 @@ public:
 	float getSize() const;
 	/// Sets the item's size.
 	void setSize(float size);
-	/// Gets the item's sale value.
-	int getSaleValue() const;
-	/// Sets the item's sale value.
-	void setSaleValue(int value);
+	/// Gets the item's cost.
+	int getCost() const;
+	/// Sets the item's cost.
+	void setCost(int cost);
 	/// Gets the item's transfer time.
 	int getTransferTime() const;
 	/// Sets the item's transfer time.
