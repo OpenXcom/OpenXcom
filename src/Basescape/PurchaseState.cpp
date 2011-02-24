@@ -24,6 +24,7 @@
 #include "../Engine/Language.h"
 #include "../Engine/Font.h"
 #include "../Engine/Palette.h"
+#include "../Engine/Timer.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
@@ -113,6 +114,7 @@ PurchaseState::PurchaseState(Game *game) : State(game)
 	_lstItems->setMargin(2);
 
 	_total = 0;
+	_sel = -1;
 	_crafts.push_back("STR_SKYRANGER");
 	_crafts.push_back("STR_INTERCEPTOR");
 	_items.push_back("STR_STINGRAY_LAUNCHER");
@@ -151,6 +153,15 @@ PurchaseState::PurchaseState(Game *game) : State(game)
 		_qtys.push_back(0);
 		_lstItems->addRow(3, _game->getLanguage()->getString(*i).c_str(), Text::formatFunding(_game->getRuleset()->getItem(*i)->getCost()).c_str(), L"0");
 	}
+	_lstItems->onLeftArrowPress((ActionHandler)&PurchaseState::lstItemsLeftArrowPress);
+	_lstItems->onLeftArrowRelease((ActionHandler)&PurchaseState::lstItemsLeftArrowRelease);
+	_lstItems->onRightArrowPress((ActionHandler)&PurchaseState::lstItemsRightArrowPress);
+	_lstItems->onRightArrowRelease((ActionHandler)&PurchaseState::lstItemsRightArrowRelease);
+
+	_timerInc = new Timer(50);
+	_timerInc->onTimer((StateHandler)&PurchaseState::increase);
+	_timerDec = new Timer(50);
+	_timerDec->onTimer((StateHandler)&PurchaseState::decrease);
 }
 
 /**
@@ -159,6 +170,17 @@ PurchaseState::PurchaseState(Game *game) : State(game)
 PurchaseState::~PurchaseState()
 {
 	
+}
+
+/**
+ * Runs the game timer and handles popups.
+ */
+void PurchaseState::think()
+{
+	State::think();
+
+	_timerInc->think(this, 0);
+	_timerDec->think(this, 0);
 }
 
 void PurchaseState::btnOkClick(Action *action)
@@ -173,6 +195,71 @@ void PurchaseState::btnOkClick(Action *action)
 void PurchaseState::btnCancelClick(Action *action)
 {
 	_game->popState();
+}
+
+/**
+ * Starts increasing the item.
+ * @param action Pointer to an action.
+ */
+void PurchaseState::lstItemsLeftArrowPress(Action *action)
+{
+	_sel = _lstItems->getSelectedRow();
+	_timerInc->start();
+	
+}
+
+/**
+ * Stops increasing the item.
+ * @param action Pointer to an action.
+ */
+void PurchaseState::lstItemsLeftArrowRelease(Action *action)
+{
+	_timerInc->stop();
+}
+
+/**
+ * Starts decreasing the item.
+ * @param action Pointer to an action.
+ */
+void PurchaseState::lstItemsRightArrowPress(Action *action)
+{
+	_sel = _lstItems->getSelectedRow();
+	_timerDec->start();
+	
+}
+
+/**
+ * Stops decreasing the item.
+ * @param action Pointer to an action.
+ */
+void PurchaseState::lstItemsRightArrowRelease(Action *action)
+{
+	_timerDec->stop();	
+}
+
+/**
+ * Increases the quantity of the selected item on the list.
+ */
+void PurchaseState::increase()
+{
+	_qtys[_sel]++;
+	std::wstringstream ss;
+	ss << _qtys[_sel];
+	_lstItems->getCell(_sel, 2)->setText(ss.str());
+	_lstItems->draw();
+}
+
+/**
+ * Decreases the quantity of the selected item on the list.
+ */
+void PurchaseState::decrease()
+{
+	if (_qtys[_sel] > 0)
+		_qtys[_sel]--;
+	std::wstringstream ss;
+	ss << _qtys[_sel];
+	_lstItems->getCell(_sel, 2)->setText(ss.str());
+	_lstItems->draw();
 }
 
 }

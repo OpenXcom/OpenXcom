@@ -37,7 +37,7 @@ namespace OpenXcom
  * @param height Height in pixels.
  * @param bpp Bits-per-pixel.
  */
-Screen::Screen(int width, int height, int bpp) : _xScale(1.0), _yScale(1.0), _fullscreen(false)
+Screen::Screen(int width, int height, int bpp) : _scaleX(1.0), _scaleY(1.0), _fullscreen(false)
 {
 	_flags = SDL_SWSURFACE|SDL_HWPALETTE;
 	_screen = SDL_SetVideoMode(width, height, bpp, _flags);
@@ -104,7 +104,7 @@ void Screen::flip()
 {
 	if (getWidth() != BASE_WIDTH || getHeight() != BASE_HEIGHT)
 	{
-		SDL_Surface* zoom = zoomSurface(_surface->getSurface(), _xScale, _yScale, 0);
+		SDL_Surface* zoom = zoomSurface(_surface->getSurface(), _scaleX, _scaleY, 0);
 		SDL_BlitSurface(zoom, 0, _screen, 0);
 		SDL_FreeSurface(zoom);
 	}
@@ -180,8 +180,8 @@ int Screen::getHeight() const
  */
 void Screen::setResolution(int width, int height)
 {
-	_xScale = width / BASE_WIDTH;
-	_yScale = height / BASE_HEIGHT;
+	_scaleX = width / BASE_WIDTH;
+	_scaleY = height / BASE_HEIGHT;
 	_screen = SDL_SetVideoMode(width, height, _screen->format->BitsPerPixel, _flags);
 	if (_screen == 0)
 	{
@@ -215,7 +215,7 @@ void Screen::setFullscreen(bool full)
  */
 double Screen::getXScale() const
 {
-	return _xScale;
+	return _scaleX;
 }
 
 /**
@@ -224,7 +224,7 @@ double Screen::getXScale() const
  */
 double Screen::getYScale() const
 {
-	return _yScale;
+	return _scaleY;
 }
 
 }

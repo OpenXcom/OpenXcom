@@ -1195,7 +1195,7 @@ void Globe::blit(Surface *surface)
 void Globe::mousePress(Action *action, State *state)
 {
 	double lon, lat;
-	cartToPolar((Sint16)floor(action->getDetails()->button.x / action->getXScale()), (Sint16)floor(action->getDetails()->button.y / action->getYScale()), &lon, &lat);
+	cartToPolar((Sint16)floor(action->getXMouse() / action->getXScale()), (Sint16)floor(action->getYMouse() / action->getYScale()), &lon, &lat);
 
 	// Check for errors
 	if (lat == lat && lon == lon)
@@ -1210,7 +1210,7 @@ void Globe::mousePress(Action *action, State *state)
 void Globe::mouseRelease(Action *action, State *state)
 {
 	double lon, lat;
-	cartToPolar((Sint16)floor(action->getDetails()->button.x / action->getXScale()), (Sint16)floor(action->getDetails()->button.y / action->getYScale()), &lon, &lat);
+	cartToPolar((Sint16)floor(action->getXMouse() / action->getXScale()), (Sint16)floor(action->getYMouse() / action->getYScale()), &lon, &lat);
 
 	// Check for errors
 	if (lat == lat && lon == lon)
@@ -1226,7 +1226,7 @@ void Globe::mouseRelease(Action *action, State *state)
 void Globe::mouseClick(Action *action, State *state)
 {
 	double lon, lat;
-	cartToPolar((Sint16)floor(action->getDetails()->button.x / action->getXScale()), (Sint16)floor(action->getDetails()->button.y / action->getYScale()), &lon, &lat);
+	cartToPolar((Sint16)floor(action->getXMouse() / action->getXScale()), (Sint16)floor(action->getYMouse() / action->getYScale()), &lon, &lat);
 
 	// Check for errors
 	if (lat == lat && lon == lon)

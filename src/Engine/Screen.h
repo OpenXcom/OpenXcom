@@ -40,7 +40,7 @@ class Screen
 private:
 	Surface *_surface;
 	SDL_Surface *_screen;
-	double _xScale, _yScale;
+	double _scaleX, _scaleY;
 	Uint32 _flags;
 	bool _fullscreen;
 public:

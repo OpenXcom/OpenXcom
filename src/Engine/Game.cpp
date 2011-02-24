@@ -122,6 +122,16 @@ void Game::run()
 		{
 			_states.back()->init();
 			_init = true;
+
+			// Refresh mouse position
+			SDL_Event ev;
+			int x, y;
+			SDL_GetMouseState(&x, &y);
+			ev.type = SDL_MOUSEMOTION;
+			ev.motion.x = x;
+			ev.motion.y = y;
+			Action action = Action(&ev, _screen->getXScale(), _screen->getYScale());
+			_states.back()->handle(&action);
 		}
 
 		// Process events

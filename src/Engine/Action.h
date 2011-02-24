@@ -35,17 +35,26 @@ class Action
 {
 private:
 	SDL_Event *_ev;
-	double _xScale, _yScale;
+	double _scaleX, _scaleY;
+	int _mouseX, _mouseY;
 	InteractiveSurface *_sender;
 public:
 	/// Creates an action with given event data.
-	Action(SDL_Event *ev, double xScale, double yScale);
+	Action(SDL_Event *ev, double scaleX, double scaleY);
 	/// Cleans up the action.
 	~Action();
 	/// Gets the screen's X scale.
 	double getXScale() const;
 	/// Gets the screen's Y scale.
 	double getYScale() const;
+	/// Gets the mouse's X position.
+	int getXMouse() const;
+	/// Sets the mouse's X position.
+	void setXMouse(int x);
+	/// Gets the mouse's Y position.
+	int getYMouse() const;
+	/// Sets the mouse's Y position.
+	void setYMouse(int y);
 	/// Gets the sender of the action.
 	InteractiveSurface *const getSender() const;
 	/// Sets the sender of the action.
