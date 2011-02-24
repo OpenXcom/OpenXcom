@@ -30,7 +30,7 @@ namespace OpenXcom
 * constructor
 * @param pos Position.
 */
-Tile::Tile(const Position& pos): _discovered(false), _smoke(0), _fire(0), _pos(pos), _cached(false), _unit(0), _explosive(0)
+Tile::Tile(const Position& pos): _discovered(false), _smoke(0), _fire(0), _pos(pos), _cached(false), _explosive(0), _unit(0)
 {
 	for (int i = 0; i < 4; i++)
 	{
@@ -483,6 +483,7 @@ void Tile::setFire(int fire)
 {
 	_fire = fire;
 	_smoke = 0; // fire stops smoke, like in the original game
+	_animationOffset = RNG::generate(0,3);
 }
 
 int Tile::getFire()
@@ -495,11 +496,17 @@ void Tile::setSmoke(int smoke)
 	if (smoke > 40) smoke = 40;
 	_smoke = smoke;
 	_fire = 0; // smoke stops fire, like in the original game
+	_animationOffset = RNG::generate(0,3);
 }
 
 int Tile::getSmoke()
 {
 	return _smoke;
+}
+
+int Tile::getAnimationOffset()
+{
+	return _animationOffset;
 }
 
 }

@@ -107,7 +107,7 @@ void UnitSprite::draw()
 		torso->setY(rules->getWalkTorsoOffset(_unit->getWalkingPhase()));
 	}
 
-	if (_unit->getStatus() == STATUS_STANDING || _unit->getStatus() == STATUS_TURNING)
+	if (_unit->getStatus() == STATUS_STANDING || _unit->getStatus() == STATUS_TURNING || _unit->getStatus() == STATUS_AIMING)
 	{
 		legs = _res->getSurfaceSet(sheet)->getFrame(rules->getLegsStand() + _unit->getDirection());
 		if (_unit->getDirection() < 4)
@@ -138,7 +138,81 @@ void UnitSprite::draw()
 
 	if (_item)
 	{
-		item = _res->getSurfaceSet("HANDOB.PCK")->getFrame(_item->getRules()->getHandSprite() + _unit->getDirection());
+		if (_unit->getStatus() == STATUS_AIMING)
+		{
+			int dir = _unit->getDirection() + 2;
+			if (dir > 7) dir -= 8;
+			item = _res->getSurfaceSet("HANDOB.PCK")->getFrame(_item->getRules()->getHandSprite() + dir);
+			// hacking to place the weapon so it looks kinda good
+			// To purists that know the exact pixel offsets: please PM me
+			// Daiky
+			int offX[8] = { 5, 10, 5, 4, -5, -11, -4, 0 };
+			int offY[8] = { -5, -1, 0, 10, 4, 0, -4, -8 };
+			item->setX(offX[_unit->getDirection()]);
+			item->setY(offY[_unit->getDirection()]);
+		}
+		else
+		{
+			item = _res->getSurfaceSet("HANDOB.PCK")->getFrame(_item->getRules()->getHandSprite() + _unit->getDirection());
+			item->setX(0);
+			item->setY(0);
+		}
+
+		if (_item->getRules()->getTwoHanded())
+		{
+			if (_unit->getDirection() < 4)
+			{
+				bottomArm = _res->getSurfaceSet(sheet)->getFrame(rules->getLeftArm2HWeapon() + _unit->getDirection());
+				if (_unit->getStatus() == STATUS_AIMING)
+				{
+					topArm = _res->getSurfaceSet(sheet)->getFrame(rules->getRightArm2HShoot() + _unit->getDirection());
+				}
+				else
+				{
+					topArm = _res->getSurfaceSet(sheet)->getFrame(rules->getRightArm2HWeapon() + _unit->getDirection());
+				}
+			}
+			else
+			{
+				topArm = _res->getSurfaceSet(sheet)->getFrame(rules->getLeftArm2HWeapon() + _unit->getDirection());
+				if (_unit->getStatus() == STATUS_AIMING)
+				{
+					bottomArm = _res->getSurfaceSet(sheet)->getFrame(rules->getRightArm2HShoot() + _unit->getDirection());
+				}
+				else
+				{
+					bottomArm = _res->getSurfaceSet(sheet)->getFrame(rules->getRightArm2HWeapon() + _unit->getDirection());
+				}
+			}
+			if (_unit->getStatus() == STATUS_WALKING)
+			{
+				topArm->setY(rules->getWalkTorsoOffset(_unit->getWalkingPhase()));
+				bottomArm->setY(rules->getWalkTorsoOffset(_unit->getWalkingPhase()));
+			}
+		}
+		else
+		{
+			if (_unit->getDirection() < 4)
+			{
+				topArm = _res->getSurfaceSet(sheet)->getFrame(rules->getRightArm1HWeapon() + _unit->getDirection());
+				if (_unit->getStatus() == STATUS_WALKING)
+				{
+					topArm->setY(rules->getWalkTorsoOffset(_unit->getWalkingPhase()));
+				}
+			}
+			else
+			{
+				bottomArm = _res->getSurfaceSet(sheet)->getFrame(rules->getRightArm1HWeapon() + _unit->getDirection());
+				if (_unit->getStatus() == STATUS_WALKING)
+				{
+					bottomArm->setY(rules->getWalkTorsoOffset(_unit->getWalkingPhase()));
+				}
+			}
+		}
+		if (_unit->getStatus() == STATUS_WALKING)
+		{
+			item->setY(rules->getWalkTorsoOffset(_unit->getWalkingPhase()));
+		}
 	}
 
 	if (_unit->getDirection() < 1 || _unit->getDirection() > 5)
@@ -146,9 +220,12 @@ void UnitSprite::draw()
 	if (bottomArm) bottomArm->blit(this);
 	if (torso) torso->blit(this);
 	if (legs) legs->blit(this);
-	if (topArm) topArm->blit(this);
+	if (_unit->getDirection() >= 4)	
+		if (topArm) topArm->blit(this);
 	if (_unit->getDirection() > 0 && _unit->getDirection() < 6)
 		if (item) item->blit(this);	
+	if (_unit->getDirection() < 4)	
+		if (topArm) topArm->blit(this);
 
 }
 

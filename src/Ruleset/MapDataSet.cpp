@@ -18,6 +18,7 @@
  */
 #include "MapDataSet.h"
 #include "MapData.h"
+#include "MapModel.h"
 #include <fstream>
 #include <sstream>
 #include "../Engine/Exception.h"
@@ -30,7 +31,7 @@ namespace OpenXcom
 /**
 * MapDataSet construction.
 */
-MapDataSet::MapDataSet(std::string name, int size):_name(name), _size(size), _objects(), _loaded(false)
+MapDataSet::MapDataSet(std::string name, int size):_name(name), _size(size), _objects(), _models(), _loaded(false)
 {
 }
 
@@ -138,7 +139,7 @@ void MapDataSet::load(ResourcePack *res)
 	};
 
 	MCD mcd;
-
+	MapModel *model = 0;
 
 	// Load Terrain Data from MCD file
 	std::stringstream s;
@@ -158,7 +159,9 @@ void MapDataSet::load(ResourcePack *res)
 
 		// set all the terrainobject properties:
 		for (int frame = 0; frame < 8; frame++)
+		{
 			to->setSprite(frame,(int)mcd.Frame[frame]);
+		}
 		to->setYOffset((int)mcd.P_Level);
 		to->setSpecialType((int)mcd.Target_Type, (int)mcd.Tile_Type);
 		to->setTUCosts((int)mcd.TU_Walk, (int)mcd.TU_Fly, (int)mcd.TU_Slide);
@@ -172,6 +175,37 @@ void MapDataSet::load(ResourcePack *res)
 		to->setArmor((int)mcd.Armour);
 		to->setFlammable((int)mcd.Flammable);
 		to->setFuel((int)mcd.Fuel);
+
+
+
+		// build the 3D voxel model for this object using the loft references
+		model = new MapModel();
+		for (int layer = 0; layer < 12; layer++)
+		{
+			int loft = (int)mcd.LOFT[layer];
+			for (int row = 0; row < 16; row++)
+			{
+				model->set16Voxels(res->getVoxelData()->at((loft*16)+row), row, (layer*2));
+				model->set16Voxels(res->getVoxelData()->at((loft*16)+row), row, (layer*2)+1);
+			}
+		}
+		// check if we have already the same model in our list
+		bool found = false;
+		for (std::vector<MapModel*>::iterator i = _models.begin(); i != _models.end() && !found; i++)
+		{
+			if ((MapModel*)(*i)->equals(model))
+			{
+				delete model;
+				model = 0;
+				to->setModel(*i);
+				found = true;
+			}
+		}
+		if (!found)
+		{
+			_models.push_back(model);
+			to->setModel(model);
+		}
 	}
 
 	if (!mapFile.eof())
@@ -195,6 +229,10 @@ void MapDataSet::unload()
 	if (_loaded)
 	{
 		for (std::vector<MapData*>::iterator i = _objects.begin(); i != _objects.end(); i++)
+		{
+			delete *i;
+		}
+		for (std::vector<MapModel*>::iterator i = _models.begin(); i != _models.end(); i++)
 		{
 			delete *i;
 		}

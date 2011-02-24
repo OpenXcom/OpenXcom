@@ -32,6 +32,8 @@ class MapData;
 class Position;
 class Tile;
 class BattleUnit;
+class BattleAction;
+class BulletSprite;
 
 // below Y 140 the buttons area starts
 #define BUTTONS_AREA 140
@@ -54,6 +56,7 @@ private:
 	int _tileCount;
 	std::vector<Surface *> _unitCache;
 	int _mapOffsetX, _mapOffsetY, _viewHeight;
+	int _bufOffsetX, _bufOffsetY;
 	int _RMBClickX, _RMBClickY;
 	int _spriteWidth, _spriteHeight;
 	int _selectorX, _selectorY;
@@ -62,6 +65,10 @@ private:
 	int _scrollX, _scrollY;
 	bool _RMBDragging;
 	int _centerX, _centerY;
+	Surface *_buffer;
+	BattleAction *_action;
+	BulletSprite *_bullet[36];
+
 
 	void minMaxInt(int *value, const int minValue, const int maxValue);
 	void cacheTileSprites();
@@ -81,7 +88,7 @@ public:
 	/// handle timers
 	void think();
 	/// draw the surface
-	void draw();
+	void draw(bool forceRedraw);
 	/// draws the terrain
 	void drawTerrain(Surface *surface);
 	/// Special handling for mouse clicks.
@@ -104,6 +111,8 @@ public:
 	void centerOnPosition(const Position &pos);
 	/// Converts map coordinates to screen coordinates.
 	void convertMapToScreen(const Position &mapPos, Position *screenPos);
+	/// Converts voxel coordinates to screen coordinates.
+	void convertVoxelToScreen(const Position &voxelPos, Position *screenPos);
 	/// Sets the battlescape selector position relative to mouseposition.
 	void setSelectorPosition(int mx, int my);
 	/// Draws the small arrow above the selected soldier.
@@ -118,6 +127,9 @@ public:
 	CursorType getCursorType() const;
 	/// Cache units.
 	void cacheUnits();
+	/// Set battle action
+	void setBattleAction(BattleAction *action);
+	BattleAction *getBattleAction() const;
 };
 
 }

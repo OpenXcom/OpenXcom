@@ -16,35 +16,31 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_RNG_H
-#define OPENXCOM_RNG_H
+#ifndef OPENXCOM_BULLETSPRITE_H
+#define OPENXCOM_BULLETSPRITE_H
+
+#include "../Engine/Surface.h"
 
 namespace OpenXcom
 {
 
 /**
- * Random Number Generator used throughout the game
- * for all your randomness needs. It's really just the
- * standard C generator, but wrapped in a way that we
- * can store its seed for later use if necessary.
+ * A class that renders a bullet sprite.
  */
-class RNG
+class BulletSprite : public Surface
 {
 private:
-	static int _seed;
+	static const int pixels[37][9];
+	int _type;
 public:
-	RNG();
-	~RNG();
-	/// Initializes the generator.
-	static void init(int seed = -1);
-	/// Gets the generator's seed.
-	static int getSeed();
-	/// Generates a random integer number.
-	static int generate(int min, int max);
-	/// Generates a random decimal number.
-	static double generate(double min, double max);
-	/// Get normally distributed value.
-	static double getNormal();
+	/// Creates a new BulletSprite.
+	BulletSprite(int type);
+	/// Cleans up the BulletSprite.
+	~BulletSprite();
+	/// Draw the surface.
+	void draw();
+	/// Blit the surface.
+	void blit(Surface *surface);
 };
 
 }

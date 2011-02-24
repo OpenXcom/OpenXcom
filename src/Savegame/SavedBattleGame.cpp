@@ -124,7 +124,7 @@ void SavedBattleGame::save(YAML::Emitter &out) const
 	/* 1 byte for the datafile ID, 1 byte for the relative object ID in that file */
 	/* Value 0xFF means the next two bytes are the number of empty objects */
 	/* The binary data is then base64 encoded to save as a string */
-	Uint8 tileData[8];
+	/*Uint8 tileData[8];
 	Uint16 empties = 0;
 	std::string tilesData;
 	for (int i = 0; i < _height * _length * _width; i++)
@@ -158,7 +158,7 @@ void SavedBattleGame::save(YAML::Emitter &out) const
 		tilesData += empties;
 	}
 	//out << YAML::Key << "tiles" << YAML::WriteBinary(tilesData, tilesData.length());
-	out << YAML::Key << "tiles" << base64_encode((unsigned char*)(tilesData.c_str()), tilesData.length());
+	out << YAML::Key << "tiles" << base64_encode((unsigned char*)(tilesData.c_str()), tilesData.length());*/
 
 	out << YAML::Key << "units" << YAML::Value;
 	out << YAML::BeginSeq;

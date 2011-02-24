@@ -32,7 +32,7 @@ class Tile;
 class BattleItem;
 class Soldier;
 
-enum UnitStatus {STATUS_STANDING, STATUS_SITTING, STATUS_WALKING, STATUS_TURNING, STATUS_FALLING, STATUS_DEAD};
+enum UnitStatus {STATUS_STANDING, STATUS_WALKING, STATUS_TURNING, STATUS_AIMING, STATUS_FALLING, STATUS_DEAD};
 enum UnitFaction {FACTION_PLAYER, FACTION_HOSTILE, FACTION_NEUTRAL, FACTION_FRIENDLY};
 
 /**
@@ -57,7 +57,7 @@ private:
 	//BattleAI *_ai;
 	//RuleNPC *_NPCRule;
 	std::wstring _name;
-	bool _cached;
+	bool _cached, _kneeled;
 	BattleItem *_rightHandItem, *_leftHandItem;
 public:
 	/// Creates a BattleUnit.
@@ -126,6 +126,12 @@ public:
 	void setCached(bool cached);
 	/// If this unit is cached on the battlescape.
 	bool isCached() const;
+	/// Kneel down.
+	void kneel(bool kneeled);
+	/// Is kneeled?
+	bool isKneeled() const;
+	/// Aim.
+	void aim(bool aiming);
 
 };
 

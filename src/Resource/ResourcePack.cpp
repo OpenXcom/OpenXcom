@@ -238,4 +238,13 @@ void ResourcePack::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 	}
 }
 
+/**
+ * Returns the list of voxeldata in the resource set.
+ * @return Pointer to the list of voxeldata.
+ */
+std::vector<Uint16> *const ResourcePack::getVoxelData()
+{
+	return &_voxelData;
+}
+
 }

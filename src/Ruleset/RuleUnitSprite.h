@@ -43,7 +43,7 @@ private:
 	int _legsWalk[8];
 	int _leftArm2HWeapon;
 	int _rightArm2HWeapon;
-	int _leftArm1HWeapon;
+	int _rightArm2HShoot;
 	int _rightArm1HWeapon;
 	int _die;
 	int _femaleTorso;
@@ -88,7 +88,7 @@ public:
 	/// Gets the legs walk offset.
 	int getLegsWalkOffset(int phase);
     int getDie() const;
-    int getLeftArm1HWeapon() const;
+    int getRightArm2HShoot() const;
     int getLeftArm2HWeapon() const;
     int getLeftArmStand() const;
     int getLeftArmWalk(int phase) const;
@@ -104,7 +104,7 @@ public:
     int getWalkArmsOffset(int phase) const;
     int getWalkTorsoOffset(int phase) const;
     void setDie(int die);
-    void setLeftArm1HWeapon(int leftArm1HWeapon);
+    void setRightArm2HShoot(int rightArm2HShoot);
     void setLeftArm2HWeapon(int leftArm2HWeapon);
     void setLeftArmStand(int leftArmStand);
     void setLeftArmWalk(int leftArmWalk, int phase);

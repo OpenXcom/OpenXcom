@@ -34,7 +34,7 @@ class NumberText;
 class BattleUnit;
 class SavedBattleGame;
 class BattleItem;
-class BattleAction;
+class Window;
 
 /**
  * Battlescape screen which shows the tactical battle
@@ -55,7 +55,6 @@ private:
 	Bar *_barTimeUnits, *_barEnergy, *_barHealth, *_barMorale;
 	Timer *_walkingTimer, *_bulletTimer, *_animTimer;
 	SavedBattleGame *_battleGame;
-	BattleAction *_action;
 	void checkActionFinished();
 	void handleItemClick(BattleItem *item);
 	void drawItemSprite(BattleItem *item, Surface *surface);

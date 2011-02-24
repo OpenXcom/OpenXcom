@@ -37,6 +37,7 @@
 #include "../Interface/Bar.h"
 #include "../Interface/ImageButton.h"
 #include "../Interface/NumberText.h"
+#include "../Interface/Window.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
@@ -216,7 +217,6 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	_animTimer->onTimer((StateHandler)&BattlescapeState::animate);
 	_animTimer->start();
 
-	_action = 0;
 }
 
 /**
@@ -227,7 +227,6 @@ BattlescapeState::~BattlescapeState()
 	delete _walkingTimer;
 	delete _bulletTimer;
 	delete _animTimer;
-	delete _action;
 }
 
 
@@ -235,7 +234,7 @@ void BattlescapeState::init()
 {
 	_map->focus();
 	_map->cacheUnits();
-	_map->draw();
+	_map->draw(true);
 }
 
 /**
@@ -261,9 +260,9 @@ void BattlescapeState::mapClick(Action *action)
 	// right-click abort walking or in progress action
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
-		if (_action)
+		if (_map->getBattleAction())
 		{
-			_action->cancel();
+			_map->getBattleAction()->cancel();
 			checkActionFinished();
 			return;
 		}
@@ -289,24 +288,33 @@ void BattlescapeState::mapClick(Action *action)
 			return;
 		}
 		// if we clicked somewhere else we start a walk action
-		if (!_action)
+		if (!_map->getBattleAction())
 		{
-			_action = new BattleAction(_battleGame, _game->getResourcePack(), 0, WALK);
-			_action->setTarget(pos);
-			_action->start();
+			BattleAction *ba = new BattleAction(_battleGame, _game->getResourcePack(), 0, WALK);
+			ba->setTarget(pos);
+			ba->start();
+			_map->setBattleAction(ba);
 			_map->setCursorType(CT_NONE);
 			checkActionFinished(); // could be the action goes into error immediatly
+		}
+		// if there is a pending firing action going on, trigger the action
+		if (_map->getBattleAction() && _map->getBattleAction()->getStatus() == PENDING)
+		{
+			_map->getBattleAction()->setTarget(pos);
+			_map->getBattleAction()->start();
+			_battleGame->getSelectedUnit()->aim(true);
+			_map->cacheUnits();
 		}
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
-		if (!_action)
+		if (!_map->getBattleAction())
 		{
-			_action = new BattleAction(_battleGame, _game->getResourcePack(), 0, TURN);
-			_action->setTarget(pos);
-			_action->start();
+			BattleAction *ba = new BattleAction(_battleGame, _game->getResourcePack(), 0, TURN);
+			ba->setTarget(pos);
+			ba->start();
+			_map->setBattleAction(ba);
 			_map->cacheUnits();
-			_map->draw();
 			checkActionFinished(); // could be the action goes into error immediatly
 		}
 	}
@@ -433,7 +441,7 @@ void BattlescapeState::btnAbortClick(Action *action)
 	_game->getSavedGame()->endBattle();
 	_game->getCursor()->setColor(Palette::blockOffset(15) + 12);
 	_game->popState();
-}
+}	
 
 /**
  * Shows action popup menu. When clicked, create the action.
@@ -505,9 +513,9 @@ void BattlescapeState::handleItemClick(BattleItem *item)
 
 	// TODO other gamestates: scanner/medikit
 
-	if (item && !_action)
+	if (item && !_map->getBattleAction())
 	{
-		_action = new BattleAction(_battleGame, _game->getResourcePack(), item, SNAP_SHOT);
+		_map->setBattleAction(new BattleAction(_battleGame, _game->getResourcePack(), item, SNAP_SHOT));
 		_map->setCursorType(CT_AIM);
 		checkActionFinished(); // could be the action goes into error immediatly
 	}
@@ -518,14 +526,15 @@ void BattlescapeState::handleItemClick(BattleItem *item)
  */
 void BattlescapeState::checkActionFinished()
 {
-	if (_action->getStatus() == FINISHED)
+	if (_map->getBattleAction()->getStatus() == FINISHED)
 	{
 		_map->setCursorType(CT_NORMAL);
 		_game->getCursor()->setVisible(true);
 		// TODO handle result
 
-		delete _action;
-		_action = 0;
+		delete _map->getBattleAction();
+		_map->setBattleAction(0);
+		_map->cacheUnits();
 	}
 }
 
@@ -545,14 +554,13 @@ void BattlescapeState::drawItemSprite(BattleItem *item, Surface *surface)
  */
 void BattlescapeState::moveUnit()
 {
-	if (_action && (_action->getType() == WALK || _action->getType() == TURN))
+	if (_map->getBattleAction() && (_map->getBattleAction()->getType() == WALK || _map->getBattleAction()->getType() == TURN))
 	{
-		_action->moveUnit();
+		_map->getBattleAction()->moveUnit();
 		// if the unit changed level, camera changes level with
 		_map->setViewHeight(_battleGame->getSelectedUnit()->getPosition().z);
 		checkActionFinished();
 		_map->cacheUnits();
-		_map->draw();
 	}
 }
 
@@ -562,9 +570,9 @@ void BattlescapeState::moveUnit()
  */
 void BattlescapeState::moveBullet()
 {
-	if (_action)
+	if (_map->getBattleAction())
 	{
-		_action->moveBullet();
+		_map->getBattleAction()->moveBullet();
 		checkActionFinished();
 	}
 }
@@ -574,9 +582,9 @@ void BattlescapeState::moveBullet()
  */
 void BattlescapeState::animate()
 {
-	if (_action)
+	if (_map->getBattleAction())
 	{
-		_action->animate();
+		_map->getBattleAction()->animate();
 		checkActionFinished();
 	}
 	_map->animate();

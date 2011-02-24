@@ -17,6 +17,8 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "RNG.h"
+#define _USE_MATH_DEFINES
+#include <cmath>
 #include <cstdlib>
 #include <ctime>
 
@@ -74,6 +76,23 @@ double RNG::generate(double min, double max)
 {
 	_seed = rand();
 	return (_seed * (max - min) / RAND_MAX + min);
+}
+
+/**
+ * Get a standard normally distributed value.
+ * @return normally distributed value.
+ */
+double RNG::getNormal()
+{
+    const double low = 1E-10;
+    double v1, v2, rsq, fact;
+    do { // (v1, v2) should be inside the unit circle.
+        v1 = generate(-1.0, 1.0);
+        v2 = generate(-1.0, 1.0);
+        rsq = v1 * v1 + v2 * v2;
+    } while (rsq >= 1.0 || rsq < low); // Don't make it too low to avoid precision errors.
+    fact = sqrt (-2.0 * log (rsq) / rsq);
+    return v2 * fact;
 }
 
 }

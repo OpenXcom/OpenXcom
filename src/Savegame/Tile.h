@@ -113,6 +113,7 @@ public:
 	/// Get flammability.
 	int getFlammability();
 	void ignite();
+	int getAnimationOffset();
 };
 
 }

@@ -19,6 +19,7 @@
 #ifndef OPENXCOM_BATTLEACTION_H
 #define OPENXCOM_BATTLEACTION_H
 
+#include <string>
 #include <vector>
 #include "Position.h"
 
@@ -38,6 +39,7 @@ enum BattleActionType { THROW, AUTO_SHOT, SNAP_SHOT, AIMED_SHOT, STUN, HIT, EXPL
 /**
  * This class handles battlescape actions: stuff a unit or an item does that can affect the battlescape terrain or units.
  * These actions can be triggered by the player or the AI.
+ * Maybe this class can be made abstract and have different subclasses for specific actions... we'll see.
  */
 class BattleAction
 {
@@ -48,9 +50,10 @@ private:
 	BattleActionStatus _status;
 	BattleActionType _type;
 	std::string _result;
-	Position _target;
+	Position _target, _position;
 	bool unitOpensDoor(BattleUnit *unit);
 	Projectile *_projectile;
+	int _animFrame;
 public:
 	/// Creates a new BattleAction class
 	BattleAction(SavedBattleGame *save, ResourcePack *res, BattleItem *item, BattleActionType type);
@@ -74,6 +77,12 @@ public:
 	BattleActionStatus getStatus() const;
 	/// Get the battle action type.
 	BattleActionType getType() const;
+	/// Get the projectile type.
+	int getProjectileType() const;
+	/// Get position (of the projectile)
+	Position getPosition(int offset = 0) const;
+	int getProjectileParticle(int offset) const;
+	int getAnimFrame() const;
 };
 
 }

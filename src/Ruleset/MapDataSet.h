@@ -28,6 +28,7 @@ namespace OpenXcom
 class MapData;
 class SurfaceSet;
 class ResourcePack;
+class MapModel;
 
 /**
  * Represents a Terrain Map Datafile.
@@ -41,6 +42,7 @@ private:
 	std::string _name;
 	int _size;
 	std::vector<MapData*> _objects;
+	std::vector<MapModel*> _models;
 	SurfaceSet *_surfaceSet;
 	bool _loaded;
 public:

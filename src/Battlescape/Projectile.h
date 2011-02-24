@@ -19,7 +19,7 @@
 #ifndef OPENXCOM_PROJECTILE_H
 #define OPENXCOM_PROJECTILE_H
 
-#include "../Engine/Surface.h"
+#include <vector>
 #include "Position.h"
 
 namespace OpenXcom
@@ -27,32 +27,38 @@ namespace OpenXcom
 
 class ResourcePack;
 class BattleItem;
+class SavedBattleGame;
 
 /**
- * A class that represents & renders a bullet or a flying item.
+ * A class that calculates a projectile's trajectory. Fired or thrown.
  */
-class Projectile : public Surface
+class Projectile
 {
 private:
 	ResourcePack *_res;
+	SavedBattleGame *_save;
 	BattleItem *_item;
-	Position _origin;
-	double _fi, _te, _ro;
+	Position _origin, _target;
+	std::vector<Position> _trajectory;
+	int _position;
+	static const int _trail[11][36];
+	int _bulletType;
+	int calculateLine(const Position& origin, const Position& target, bool store);
+	void applyAccuracy(const Position& origin, Position *target, double accuracy);
+	int voxelCheck(const Position& voxel);
 public:
-	/// Creates a new Projectile .
-	Projectile(ResourcePack *res, Position _origin);
+	/// Creates a new Projectile.
+	Projectile(ResourcePack *res, SavedBattleGame *save, Position _origin, Position _target);
 	/// Cleans up the Projectile.
 	~Projectile();
-	/// Sets the battleitem to be rendered.
-	void setBattleItem(BattleItem *item);
-	/// Sets the trajectory initial angles.
-	bool setLaunchAngles(double fi, double te, double ro);
-	/// Move the projectile one step.
+	/// Calculates the trajectory.
+	bool calculateTrajectory();
+	/// Move the projectile one step in it's trajectory.
 	bool move();
-	/// Draw the surface.
-	void draw();
-	/// Blit the surface.
-	void blit(Surface *surface);
+	/// Get the current position in voxel space.
+	Position getPosition(int offset = 0) const;
+	/// Get a particle from the particle array.
+	int getParticle(int i);
 };
 
 }

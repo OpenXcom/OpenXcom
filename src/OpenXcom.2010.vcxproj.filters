@@ -401,6 +401,12 @@
     <ClCompile Include="Battlescape\Projectile.cpp">
       <Filter>Battlescape</Filter>
     </ClCompile>
+    <ClCompile Include="Battlescape\BulletSprite.cpp">
+      <Filter>Battlescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Ruleset\MapModel.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -803,6 +809,12 @@
     </ClInclude>
     <ClInclude Include="Battlescape\Projectile.h">
       <Filter>Battlescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Battlescape\BulletSprite.h">
+      <Filter>Battlescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\MapModel.h">
+      <Filter>Ruleset</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

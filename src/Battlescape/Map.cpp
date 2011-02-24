@@ -24,6 +24,9 @@
 #include "Position.h"
 #include "Pathfinding.h"
 #include "TerrainModifier.h"
+#include "BattleAction.h"
+#include "Projectile.h"
+#include "BulletSprite.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Action.h"
 #include "../Engine/SurfaceSet.h"
@@ -74,6 +77,7 @@ Map::Map(int width, int height, int x, int y) : InteractiveSurface(width, height
 {
 	_scrollTimer = new Timer(50);
 	_scrollTimer->onTimer((SurfaceHandler)&Map::scroll);
+	_action = 0;
 }
 
 /**
@@ -97,6 +101,13 @@ Map::~Map()
 	}
 
 	delete _arrow;
+	delete _buffer;
+	delete _action;
+
+	for (int i = 0; i < 36; i++)
+	{
+		delete _bullet[i];
+	}
 }
 
 /**
@@ -165,6 +176,16 @@ void Map::init()
 		for (int x = 0; x < 9; x++)
 			_arrow->setPixel(x, y, pixels[x+(y*9)]);
 	_arrow->unlock();
+
+	_buffer = new Surface(this->getWidth() + _spriteWidth*4, this->getHeight() + _spriteHeight*4);
+	_buffer->setPalette(this->getPalette());
+
+	for (int i = 0; i < 36; i++)
+	{
+		_bullet[i] = new BulletSprite(i);
+		_bullet[i]->setPalette(this->getPalette());
+		_bullet[i]->draw();
+	}
 }
 
 /**
@@ -177,14 +198,36 @@ void Map::think()
 
 /**
  * Draws the whole map, part by part.
+ * todo: work with dirty rects
  */
-void Map::draw()
+void Map::draw(bool forceRedraw)
 {
-	// TODO: instead of drawing the whole map all the time while scrolling,
-	//       do something smarter with a backbuffer
-	//       theory explained here: http://www.vbforums.com/showthread.php?t=317858
+	static int lastX, lastY;
+
+	if (((_mapOffsetX - lastX) < -_spriteWidth*2 ||
+		(_mapOffsetX - lastX) > _spriteWidth*2 ||
+		(_mapOffsetY - lastY) < -_spriteWidth*2 ||
+		(_mapOffsetY - lastY) > _spriteWidth*2) || forceRedraw)
+	{
+		// if the screen moved outside the buffer region, redraw it
+		_buffer->clear();
+		_bufOffsetX = -_spriteWidth*2;
+		_bufOffsetY = -_spriteHeight*2;
+		drawTerrain(_buffer);
+	}
+	else
+	{
+		// if we are still inside buffer region just move the buffer.
+		_bufOffsetX += (_mapOffsetX - lastX);
+		_bufOffsetY += (_mapOffsetY - lastY);
+	}
+	_buffer->setX(_bufOffsetX);
+	_buffer->setY(_bufOffsetY);
 	this->clear();
-	drawTerrain(this);
+	_buffer->blit(this);
+
+	lastX = _mapOffsetX;
+	lastY = _mapOffsetY;
 }
 
 /**
@@ -198,8 +241,15 @@ void Map::drawTerrain(Surface *surface)
 	int beginX = 0, endX = _save->getWidth() - 1;
     int beginY = 0, endY = _save->getLength() - 1;
     int beginZ = 0, endZ = _viewHeight;
-	Position mapPosition, screenPosition;
+	Position mapPosition, screenPosition, bulletPosition;
 	int index;
+	bool dirty;
+
+	// if we got bullet, we like to calculate the position already outside the loop
+	if (_action && (_action->getProjectileType() > 0 || _action->getType()==HIT))
+	{
+		bulletPosition = Position(_action->getPosition(0).x / 16, _action->getPosition(0).y / 16, _action->getPosition(0).z / 24);
+	}
 
     for (int itZ = beginZ; itZ <= endZ; itZ++) 
 	{
@@ -209,8 +259,8 @@ void Map::drawTerrain(Surface *surface)
 			{
 				mapPosition = Position(itX, itY, itZ);
 				convertMapToScreen(mapPosition, &screenPosition);
-				screenPosition.x += _mapOffsetX;
-				screenPosition.y += _mapOffsetY;
+				screenPosition.x += _mapOffsetX - _bufOffsetX;
+				screenPosition.y += _mapOffsetY - _bufOffsetY;
 
 				// only render cells that are inside the surface
 				if (screenPosition.x > -_spriteWidth && screenPosition.x < surface->getWidth() + _spriteWidth &&
@@ -218,7 +268,7 @@ void Map::drawTerrain(Surface *surface)
 				{
 					index = _save->getTileIndex(mapPosition); // index used for tile cache
 
-					cacheTileSprites(index);
+					dirty = cacheTileSprites(index);
 
 					tile = _save->getTile(mapPosition);
 					// Draw floor
@@ -278,6 +328,33 @@ void Map::drawTerrain(Surface *surface)
 					}
 
 					// Draw items
+
+					// check if we got bullet
+					if (_action && _action->getProjectileType() > 0 && bulletPosition == mapPosition)
+					{
+						for (int i=1;i<_action->getProjectileParticle(0);i++)
+						{
+							if (_action->getProjectileParticle(i) != 0xFF)
+							{
+								Position voxelPos = _action->getPosition(1-i);
+								convertVoxelToScreen(voxelPos, &bulletPosition);
+								_bullet[i]->setX(bulletPosition.x);
+								_bullet[i]->setY(bulletPosition.y);
+								_bullet[i]->blit(surface);
+							}
+						}
+					}
+					// check if we got impact
+					if (_action && _action->getType()==HIT && bulletPosition == mapPosition)
+					{
+						Position voxelPos = _action->getPosition();
+						convertVoxelToScreen(voxelPos, &bulletPosition);
+						frame = _res->getSurfaceSet("SMOKE.PCK")->getFrame(26+_action->getAnimFrame());
+						frame->setX(bulletPosition.x - (_spriteWidth / 2));
+						frame->setY(bulletPosition.y - (_spriteHeight / 2));
+						frame->blit(surface);
+					}
+
 
 					// Draw soldier
 					if (unit)
@@ -355,7 +432,15 @@ void Map::drawTerrain(Surface *surface)
 					if (tile->getFire() && tile->isDiscovered())
 					{
 						frameNumber = 0; // see http://www.ufopaedia.org/images/c/cb/Smoke.gif
-						frame = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frameNumber + (_animFrame / 2));
+						if ((_animFrame / 2) + tile->getAnimationOffset() > 3)
+						{
+							frameNumber += ((_animFrame / 2) + tile->getAnimationOffset() - 4);
+						}
+						else
+						{
+							frameNumber += (_animFrame / 2) + tile->getAnimationOffset();
+						}
+						frame = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frameNumber);
 						frame->setX(screenPosition.x);
 						frame->setY(screenPosition.y);
 						frame->blit(surface);
@@ -363,12 +448,19 @@ void Map::drawTerrain(Surface *surface)
 					if (tile->getSmoke() && tile->isDiscovered())
 					{
 						frameNumber = 8 + int(floor((tile->getSmoke() / 5.0) - 0.1)); // see http://www.ufopaedia.org/images/c/cb/Smoke.gif
-						frame = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frameNumber + (_animFrame / 2));
+						if ((_animFrame / 2) + tile->getAnimationOffset() > 3)
+						{
+							frameNumber += ((_animFrame / 2) + tile->getAnimationOffset() - 4);
+						}
+						else
+						{
+							frameNumber += (_animFrame / 2) + tile->getAnimationOffset();
+						}
+						frame = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frameNumber);
 						frame->setX(screenPosition.x);
 						frame->setY(screenPosition.y);
 						frame->blit(surface);
 					}
-
 				}
 			}
 		}
@@ -565,7 +657,8 @@ void Map::setSelectorPosition(int mx, int my)
 
 	if (oldX != _selectorX || oldY != _selectorY)
 	{
-		draw();
+		//draw(false);
+		// todo: when working with dirty rects we can implement smooth mouse movement
 	}
 }
 
@@ -608,7 +701,7 @@ void Map::scroll()
 		_scrollX = 0;
 		_scrollY = 0;
 	}
-	draw();
+	draw(false);
 }
 
 /**
@@ -624,7 +717,7 @@ void Map::animate()
 		_save->getTiles()[i]->animate();
 	}
 	cacheTileSprites();
-	draw();
+	draw(true);
 }
 
 /**
@@ -636,7 +729,7 @@ void Map::up()
 	{
 		_viewHeight++;
 		_mapOffsetY += _spriteHeight / 2;
-		draw();
+		draw(true);
 	}
 }
 
@@ -649,7 +742,7 @@ void Map::down()
 	{
 		_viewHeight--;
 		_mapOffsetY -= _spriteHeight / 2;
-		draw();
+		draw(true);
 	}
 }
 
@@ -661,7 +754,7 @@ void Map::setViewHeight(int viewheight)
 {
 	_viewHeight = viewheight;
 	minMaxInt(&_viewHeight, 0, _save->getHeight()-1);
-	draw();
+	draw(true);
 }
 
 
@@ -682,7 +775,7 @@ void Map::centerOnPosition(const Position &mapPos)
 
 	_viewHeight = mapPos.z;
 	
-	draw();
+	draw(true);
 }
 
 /**
@@ -695,6 +788,24 @@ void Map::convertMapToScreen(const Position &mapPos, Position *screenPos)
 	screenPos->z = 0; // not used
 	screenPos->x = mapPos.x * (_spriteWidth / 2) + mapPos.y * (_spriteWidth / 2);
 	screenPos->y = mapPos.x * (_spriteWidth / 4) - mapPos.y * (_spriteWidth / 4) - mapPos.z * ((_spriteHeight + _spriteWidth / 4) / 2);
+}
+
+/**
+ * Convert map coordinates X,Y,Z to screen positions X, Y.
+ * @param mapPos X,Y,Z coordinates on the map.
+ * @param screenPos to screen position.
+ */
+void Map::convertVoxelToScreen(const Position &voxelPos, Position *screenPos)
+{
+	Position mapPosition = Position(voxelPos.x / 16, voxelPos.y / 16, voxelPos.z / 24);
+	convertMapToScreen(mapPosition, screenPos);
+	double dx = voxelPos.x - (mapPosition.x * 16);
+	double dy = voxelPos.y - (mapPosition.y * 16);
+	double dz = voxelPos.z - (mapPosition.z * 24);
+	screenPos->x += (int)(dx + dy - 1);
+	screenPos->y += (int)(((_spriteHeight / 4.0) * 3.0) + (dx / 2.0) - (dy / 2.0) - dz);
+	screenPos->x += _mapOffsetX - _bufOffsetX;
+	screenPos->y += _mapOffsetY - _bufOffsetY;
 }
 
 /**
@@ -981,5 +1092,17 @@ void Map::cacheUnits()
 	}
 	delete unitSprite;
 }
+
+void Map::setBattleAction(BattleAction *action)
+{
+	_action = action;
+}
+
+
+BattleAction *Map::getBattleAction() const
+{
+	return _action;
+}
+
 
 }

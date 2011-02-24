@@ -37,6 +37,7 @@
 #include "../Savegame/Node.h"
 #include "../Savegame/NodeLink.h"
 #include "../Battlescape/Position.h"
+#include "../Ruleset/MapModel.h"
 
 namespace OpenXcom
 {
@@ -476,6 +477,11 @@ void XcomResourcePack::loadBattlescapeResources()
 	s2 << _folder << "UNITS/" << "BIGOBS.TAB";
 	_sets["BIGOBS.PCK"] = new SurfaceSet(32, 48);
 	_sets["BIGOBS.PCK"]->loadPck(insensitive(s.str()), insensitive(s2.str()));
+
+	s.str("");
+	s << _folder << "GEODATA/" << "LOFTEMPS.DAT";
+	MapModel::loadLOFTEMPS(insensitive(s.str()), &_voxelData);
+
 
 }
 

@@ -31,7 +31,7 @@ namespace OpenXcom
  * @param renderRules Pointer to RuleUnitSprite object.
  * @param faction Which faction the units belongs to.
  */
-BattleUnit::BattleUnit(RuleUnitSprite *renderRules, UnitFaction faction) : _renderRules(renderRules), _faction(faction), _id(0), _pos(Position()), _lastPos(Position()), _direction(0), _status(STATUS_STANDING), _walkPhase(0), _soldier(0), _name(L"Civilian"), _cached(false)
+BattleUnit::BattleUnit(RuleUnitSprite *renderRules, UnitFaction faction) : _renderRules(renderRules), _faction(faction), _id(0), _pos(Position()), _lastPos(Position()), _direction(0), _status(STATUS_STANDING), _walkPhase(0), _soldier(0), _name(L"Civilian"), _cached(false), _kneeled(false)
 {
 
 }
@@ -398,6 +398,36 @@ void BattleUnit::setCached(bool cached)
 bool BattleUnit::isCached() const
 {
 	return _cached;
+}
+
+/**
+ * Kneel down and spend TUs.
+ * @flag to kneel or to stand up
+ */
+void BattleUnit::kneel(bool kneeled)
+{
+	_kneeled = kneeled;
+}
+
+/**
+ * Is kneeled down?
+ */
+bool BattleUnit::isKneeled() const
+{
+	return _kneeled;
+}
+
+/**
+ * Aim. (shows the right hand sprite and weapon holding)
+ */ 
+void BattleUnit::aim(bool aiming)
+{
+	if (aiming)
+		_status = STATUS_AIMING;
+	else
+		_status = STATUS_STANDING;
+
+	setCached(false);
 }
 
 }

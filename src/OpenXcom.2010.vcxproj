@@ -130,6 +130,7 @@
     <ClCompile Include="Battlescape\BattlescapeState.cpp" />
     <ClCompile Include="Battlescape\BriefingCrashState.cpp" />
     <ClCompile Include="Battlescape\BattleAction.cpp" />
+    <ClCompile Include="Battlescape\BulletSprite.cpp" />
     <ClCompile Include="Battlescape\Map.cpp" />
     <ClCompile Include="Battlescape\Pathfinding.cpp" />
     <ClCompile Include="Battlescape\PathfindingNode.cpp" />
@@ -207,6 +208,7 @@
     <ClCompile Include="Ruleset\MapBlock.cpp" />
     <ClCompile Include="Ruleset\MapDataSet.cpp" />
     <ClCompile Include="Ruleset\MapData.cpp" />
+    <ClCompile Include="Ruleset\MapModel.cpp" />
     <ClCompile Include="Ruleset\RuleBaseFacility.cpp" />
     <ClCompile Include="Ruleset\RuleCountry.cpp" />
     <ClCompile Include="Ruleset\RuleCraft.cpp" />
@@ -266,6 +268,7 @@
     <ClInclude Include="Battlescape\BattlescapeState.h" />
     <ClInclude Include="Battlescape\BriefingCrashState.h" />
     <ClInclude Include="Battlescape\BattleAction.h" />
+    <ClInclude Include="Battlescape\BulletSprite.h" />
     <ClInclude Include="Battlescape\Map.h" />
     <ClInclude Include="Battlescape\Pathfinding.h" />
     <ClInclude Include="Battlescape\PathfindingNode.h" />
@@ -344,6 +347,7 @@
     <ClInclude Include="Ruleset\MapBlock.h" />
     <ClInclude Include="Ruleset\MapDataSet.h" />
     <ClInclude Include="Ruleset\MapData.h" />
+    <ClInclude Include="Ruleset\MapModel.h" />
     <ClInclude Include="Ruleset\RuleBaseFacility.h" />
     <ClInclude Include="Ruleset\RuleCountry.h" />
     <ClInclude Include="Ruleset\RuleCraft.h" />

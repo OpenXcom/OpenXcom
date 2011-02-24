@@ -1234,6 +1234,11 @@ XcomRuleset::XcomRuleset() : Ruleset()
 		xcom_0->setRightArmWalk(48 + 24 * i, i);
 	for (int i=0; i<8; i++)
 		xcom_0->setWalkTorsoYOffset(o[i], i);
+	xcom_0->setRightArm1HWeapon(232);
+	xcom_0->setLeftArm2HWeapon(240);
+	xcom_0->setRightArm2HWeapon(248);
+	xcom_0->setRightArm2HShoot(256);
+	xcom_0->setDie(264);
 
 	RuleUnitSprite *sectoid = new RuleUnitSprite();
 	sectoid->setSpriteSheet("SECTOID.PCK");
@@ -1248,9 +1253,13 @@ XcomRuleset::XcomRuleset() : Ruleset()
 		sectoid->setLeftArmWalk(40 + 24 * i, i);
 	for (int i=0; i<8; i++)
 		sectoid->setRightArmWalk(48 + 24 * i, i);
-	//int o[8] = {2, 0, 2, 0, -1, 2, 0, 2};
 	for (int i=0; i<8; i++)
 		sectoid->setWalkTorsoYOffset(o[i], i);
+	sectoid->setRightArm1HWeapon(232);
+	sectoid->setLeftArm2HWeapon(240);
+	sectoid->setRightArm2HWeapon(248);
+	sectoid->setRightArm2HShoot(256);
+	sectoid->setDie(264);
 
 	_unitSprites.insert(std::pair<std::string, RuleUnitSprite*>("XCOM_0",xcom_0));
 	_unitSprites.insert(std::pair<std::string, RuleUnitSprite*>("SECTOID",sectoid));

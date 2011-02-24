@@ -18,7 +18,7 @@
  */
 #include "BattleAction.h"
 #include "Pathfinding.h"
-#include "Terrainmodifier.h"
+#include "TerrainModifier.h"
 #include "Projectile.h"
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/BattleUnit.h"
@@ -38,7 +38,7 @@ namespace OpenXcom
  * Sets up an BattleAction.
  * @param item pointer to the item object.
  */
-BattleAction::BattleAction(SavedBattleGame *save, ResourcePack *res, BattleItem *item, BattleActionType type) : _save(save), _res(res), _item(item), _status(PENDING), _type(type), _result(""), _projectile(0)
+BattleAction::BattleAction(SavedBattleGame *save, ResourcePack *res, BattleItem *item, BattleActionType type) : _save(save), _res(res), _item(item), _status(PENDING), _type(type), _result(""), _projectile(0), _animFrame(0)
 {
 
 }
@@ -48,6 +48,7 @@ BattleAction::BattleAction(SavedBattleGame *save, ResourcePack *res, BattleItem 
  */
 BattleAction::~BattleAction()
 {
+	delete _projectile;
 }
 
 /**
@@ -75,7 +76,16 @@ void BattleAction::start()
 	}
 	else if (_type == SNAP_SHOT)
 	{
-
+		_save->getSelectedUnit()->aim(true);
+		_projectile = new Projectile(_res, _save, _save->getSelectedUnit()->getPosition(), _target);
+		if (_projectile->calculateTrajectory())
+		{
+			_status = INPROGRESS;
+		}
+		else
+		{
+			_status = FINISHED; // no line of fire
+		}
 	}
 	else if (_type == AIMED_SHOT)
 	{
@@ -97,11 +107,13 @@ void BattleAction::start()
 	{
 		Pathfinding *pf = _save->getPathfinding();
 		pf->calculate(_save->getSelectedUnit(), _target);
+		_status = INPROGRESS;
 	}
 	else if (_type == TURN)
 	{
 		BattleUnit *unit = _save->getSelectedUnit();
 		unit->lookAt(_target);
+		_status = INPROGRESS;
 		if (unit->getStatus() != STATUS_TURNING)
 		{
 			unitOpensDoor(unit);
@@ -119,7 +131,15 @@ void BattleAction::moveBullet()
 {
 	if (_projectile)
 	{
-		_projectile->move();
+		if(!_projectile->move())
+		{
+			// impact !
+			_position = _projectile->getPosition(-1);
+			delete _projectile;
+			_projectile = 0;
+			_save->getSelectedUnit()->aim(false);
+			_type = HIT;
+		}
 	}
 }
 
@@ -222,7 +242,12 @@ void BattleAction::moveUnit()
  */
 void BattleAction::animate()
 {
-
+	if (_type == HIT)
+	{
+		_animFrame++;
+		if (_animFrame == 10)
+			_status = FINISHED;
+	}
 }
 
 /**
@@ -314,6 +339,40 @@ bool BattleAction::unitOpensDoor(BattleUnit *unit)
 	}
 
 	return false;
+}
+
+/// Get the projectile type.
+// Depending on the weapon a different projectile sprite is drawn, there are 11 different types
+int BattleAction::getProjectileType() const
+{
+	if (_projectile)
+	{
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+/// Get position (of the projectile) in voxel space
+Position BattleAction::getPosition(int offset) const
+{
+	if (_projectile)
+		return _projectile->getPosition(offset);
+	else
+		return _position;
+}
+
+/// Get position (of the projectile) in voxel space
+int BattleAction::getProjectileParticle(int offset) const
+{
+	return _projectile->getParticle(offset);
+}
+
+int BattleAction::getAnimFrame() const
+{
+	return _animFrame;
 }
 
 }

@@ -22,6 +22,7 @@
 #include <map>
 #include <string>
 #include <list>
+#include <vector>
 #include "SDL.h"
 
 namespace OpenXcom
@@ -60,6 +61,7 @@ protected:
 	std::list<Polygon*> _polygons;
 	std::list<Polyline*> _polylines;
 	std::map<std::string, Music*> _musics;
+	std::vector<Uint16> _voxelData;
 public:
 	/// Create a new resource pack with a folder's contents.
 	ResourcePack(const std::string &folder);
@@ -87,6 +89,8 @@ public:
 	Palette *const getPalette(const std::string &name);
 	/// Sets a new palette.
 	void setPalette(SDL_Color *colors, int firstcolor, int ncolors);
+	/// Gets list of voxel data.
+	std::vector<Uint16> *const getVoxelData();
 };
 
 }

@@ -134,9 +134,9 @@ int RuleUnitSprite::getDie() const
     return _die;
 }
 
-int RuleUnitSprite::getLeftArm1HWeapon() const
+int RuleUnitSprite::getRightArm2HShoot() const
 {
-    return _leftArm1HWeapon;
+    return _rightArm2HShoot;
 }
 
 int RuleUnitSprite::getLeftArm2HWeapon() const
@@ -210,9 +210,9 @@ void RuleUnitSprite::setDie(int die)
     this->_die = die;
 }
 
-void RuleUnitSprite::setLeftArm1HWeapon(int leftArm1HWeapon)
+void RuleUnitSprite::setRightArm2HShoot(int rightArm2HShoot)
 {
-    this->_leftArm1HWeapon = leftArm1HWeapon;
+    this->_rightArm2HShoot = rightArm2HShoot;
 }
 
 void RuleUnitSprite::setLeftArm2HWeapon(int leftArm2HWeapon)

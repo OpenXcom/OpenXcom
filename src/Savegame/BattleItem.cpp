@@ -47,9 +47,9 @@ BattleItem::~BattleItem()
  */
 void BattleItem::load(const YAML::Node &node)
 {
-	int a;
+/*	int a;
 
-/*	node["id"] >> _id;
+	node["id"] >> _id;
 	std::string name;
 	node["name"] >> name;
 	_name = Language::utf8ToWstr(name);

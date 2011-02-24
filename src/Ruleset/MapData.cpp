@@ -47,6 +47,18 @@ MapDataSet *MapData::getDataset()
 	return _dataset;
 }
 
+/// Get the 3D voxel model.
+MapModel *MapData::getModel() const
+{
+	return _model;
+}
+
+/// Set the 3D voxel model.
+void MapData::setModel(MapModel *model)
+{
+	_model = model;
+}
+
 /**
 * Get the sprite index.
 * @param frameID Animation frame 0-7
