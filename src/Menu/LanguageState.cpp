@@ -91,9 +91,10 @@ LanguageState::~LanguageState()
 void LanguageState::changeLanguage(const std::string &lang)
 {
 	std::stringstream ss;
-	ss << _game->getResourcePack()->getFolder() << "Language/" << lang;
+	ResourcePack *rp = _game->getResourcePack();
+	ss << rp->getFolder() << "Language/" << lang;
 	Language *l = new Language();
-	l->loadLng(ss.str());
+	l->loadLng(rp->insensitive(ss.str()));
 	_game->setLanguage(l);
 	_game->setState(new MainMenuState(_game));
 }
