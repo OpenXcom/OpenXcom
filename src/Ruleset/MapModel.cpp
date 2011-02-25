@@ -114,7 +114,6 @@ void MapModel::set16Voxels(Uint16 voxels, int y, int z)
 /**
 * Get a single MapModel voxel state. Voxels are either filled or not.
 * We store voxels in a 16 bit unsigned int. Hence the bitshifting and tricks.
-* Also: Y is reversed...
 * @param x
 * @param y
 * @param z
@@ -122,7 +121,10 @@ void MapModel::set16Voxels(Uint16 voxels, int y, int z)
 */
 bool MapModel::getVoxel(int x, int y, int z) const
 {
-	return (_voxels[z * _length + (15-y)] & (1 << x))==(1 << x);
+	// coords are reversed
+	x = 15 - x;
+	y = 15 - y;
+	return (_voxels[z * _length + y] & (1 << x))==(1 << x);
 }
 
 /**

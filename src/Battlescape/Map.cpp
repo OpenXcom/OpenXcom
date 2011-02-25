@@ -107,6 +107,7 @@ Map::~Map()
 	for (int i = 0; i < 36; i++)
 	{
 		delete _bullet[i];
+		delete _bulletShadow[i];
 	}
 }
 
@@ -185,6 +186,10 @@ void Map::init()
 		_bullet[i] = new BulletSprite(i);
 		_bullet[i]->setPalette(this->getPalette());
 		_bullet[i]->draw();
+		_bulletShadow[i] = new BulletSprite(i);
+		_bulletShadow[i]->setPalette(this->getPalette());
+		_bulletShadow[i]->draw();
+		_bulletShadow[i]->setShade(16);
 	}
 }
 
@@ -241,7 +246,7 @@ void Map::drawTerrain(Surface *surface)
 	int beginX = 0, endX = _save->getWidth() - 1;
     int beginY = 0, endY = _save->getLength() - 1;
     int beginZ = 0, endZ = _viewHeight;
-	Position mapPosition, screenPosition, bulletPosition;
+	Position mapPosition, screenPosition, bulletPosition, bulletPositionScreen;
 	int index;
 	bool dirty;
 
@@ -370,18 +375,39 @@ void Map::drawTerrain(Surface *surface)
 						}
 					}
 
-										// check if we got bullet
-					if (_action && _action->getProjectileType() > 0 && bulletPosition == mapPosition)
+					// check if we got bullet
+					if (_action && _action->getProjectileType() > 0)
 					{
-						for (int i=1;i<_action->getProjectileParticle(0);i++)
+						// draw bullet on the correct tile
+						if (bulletPosition == mapPosition)
 						{
-							if (_action->getProjectileParticle(i) != 0xFF)
+							for (int i = 1; i <= _action->getProjectileParticle(0); i++)
 							{
-								Position voxelPos = _action->getPosition(1-i);
-								convertVoxelToScreen(voxelPos, &bulletPosition);
-								_bullet[i]->setX(bulletPosition.x);
-								_bullet[i]->setY(bulletPosition.y);
-								_bullet[i]->blit(surface);
+								if (_action->getProjectileParticle(i) != 0xFF)
+								{
+									Position voxelPos = _action->getPosition(1-i);
+									convertVoxelToScreen(voxelPos, &bulletPositionScreen);
+									_bullet[_action->getProjectileParticle(i)]->setX(bulletPositionScreen.x);
+									_bullet[_action->getProjectileParticle(i)]->setY(bulletPositionScreen.y);
+									_bullet[_action->getProjectileParticle(i)]->blit(surface);
+								}
+							}
+						}
+						// draw shadow only on bottom tile
+						if (bulletPosition.x == mapPosition.x && bulletPosition.y == mapPosition.y
+							&& mapPosition.z == 0)
+						{
+							for (int i = 1; i < _action->getProjectileParticle(0); i++)
+							{
+								if (_action->getProjectileParticle(i) != 0xFF)
+								{
+									Position voxelPos = _action->getPosition(1-i);
+									voxelPos.z = 0;
+									convertVoxelToScreen(voxelPos, &bulletPositionScreen);
+									_bulletShadow[_action->getProjectileParticle(i)]->setX(bulletPositionScreen.x);
+									_bulletShadow[_action->getProjectileParticle(i)]->setY(bulletPositionScreen.y);
+									_bulletShadow[_action->getProjectileParticle(i)]->blit(surface);
+								}
 							}
 						}
 					}

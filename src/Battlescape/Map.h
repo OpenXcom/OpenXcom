@@ -68,6 +68,7 @@ private:
 	Surface *_buffer;
 	BattleAction *_action;
 	BulletSprite *_bullet[36];
+	BulletSprite *_bulletShadow[36];
 
 
 	void minMaxInt(int *value, const int minValue, const int maxValue);
