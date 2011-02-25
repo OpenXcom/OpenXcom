@@ -30,7 +30,8 @@ class BattleItem;
 class SavedBattleGame;
 
 /**
- * A class that calculates a projectile's trajectory. Fired or thrown.
+ * A class that represents a projectile. BattleAction is the owner of an instance of this class during it's short life.
+ * It calculates it's own trajectory and then moves along this precalculated trajectory in voxel space.
  */
 class Projectile
 {

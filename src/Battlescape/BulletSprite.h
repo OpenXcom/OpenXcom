@@ -25,7 +25,8 @@ namespace OpenXcom
 {
 
 /**
- * A class that renders a bullet sprite.
+ * A class that renders a bullet sprite, which is a 3x3 Surface.
+ * This small sprite either represents the bullet itself or it's trailing particles.
  */
 class BulletSprite : public Surface
 {

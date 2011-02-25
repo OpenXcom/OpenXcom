@@ -79,9 +79,11 @@ public:
 	BattleActionType getType() const;
 	/// Get the projectile type.
 	int getProjectileType() const;
-	/// Get position (of the projectile)
+	/// Get position (of the projectile).
 	Position getPosition(int offset = 0) const;
+	/// Get the particle ID of the projectile.
 	int getProjectileParticle(int offset) const;
+	/// Get the animation frame of the hit or explosion animation.
 	int getAnimFrame() const;
 };
 

@@ -53,15 +53,14 @@ const int Projectile::_trail[11][36] = {
 
 /**
  * Sets up a UnitSprite with the specified size and position.
- * @param width Width in pixels.
- * @param height Height in pixels.
- * @param x X position in pixels.
- * @param y Y position in pixels.
+ * @param res Pointer to resourcepack.
+ * @param save Pointer to battlesavegame.
+ * @param origin Projectile's start position in tile x/y/z.
+ * @param target Projectile's target position in tile x/y/z.
  */
 Projectile::Projectile(ResourcePack *res, SavedBattleGame *save, Position origin, Position target) : _res(res), _save(save), _origin(origin), _target(target), _position(0)
 {
-	_bulletType=4;
-
+	_bulletType=4; // test
 }
 
 /**
@@ -82,7 +81,6 @@ bool Projectile::calculateTrajectory()
 	// First determine the origin voxel. This depends on soldier direction, stance, terrain level...
 	// For testing we some voxel in the middle.
 	originVoxel = Position(_origin.x*16 + 8, _origin.y*16 + 8, _origin.z*24 + 19);
-
 
 	//  determine the target voxel.
 	// aim at the center of the unit, the object, the walls or the floor (in that priority)
@@ -114,9 +112,9 @@ bool Projectile::calculateTrajectory()
 		return false; // no line of fire
 	}
 
-	// apply some accuracy modifiers
+	// apply some accuracy modifiers (todo: calculate this)
 	// This will results in a new target voxel
-	applyAccuracy(originVoxel, &targetVoxel, 1.0);
+	applyAccuracy(originVoxel, &targetVoxel, 1.0); // test
 
 	// finally do a line calculation and store this trajectory.
 	calculateLine(originVoxel, targetVoxel, true);
@@ -124,6 +122,12 @@ bool Projectile::calculateTrajectory()
 	return true;
 }
 
+/**
+ * applyAccuracy calculates the new target in voxel space, based on the given accuracy modifier.
+ * @param origin Startposition of the trajectory.
+ * @param target Endpoint of the trajectory.
+ * @param accuracy Accuracy modifier.
+ */
 void Projectile::applyAccuracy(const Position& origin, Position *target, double accuracy)
 {
 	// maxDeviation is the max angle deviation for accuracy 0% in degrees
@@ -144,7 +148,7 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 		dRot *= -1;
 	if (RNG::generate(0,1) == 1)
 		dTilt *= -1;
-	dTilt /= 10.0; // not sure
+	dTilt /= 10.0; // test
 	rotation = atan2(double(target->y - origin.y), double(target->x - origin.x)) * 180 / M_PI;
 	tilt = atan2(double(target->z - origin.z),
 		sqrt(double(target->x - origin.x)*double(target->x - origin.x)+double(target->y - origin.y)*double(target->y - origin.y))) * 180 / M_PI;
@@ -164,10 +168,10 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 
 /**
  * calculateLine. Using bresenham algorithm in 3D.
- * @param originVoxel
- * @param targetVoxel
+ * @param origin
+ * @param target
  * @param store
- * @return something
+ * @return the objectnumber(0-3) or unit(4) or out of map (5) or -1(hit nothing)
  */
 int Projectile::calculateLine(const Position& origin, const Position& target, bool store)
 {
@@ -308,6 +312,7 @@ bool Projectile::move()
 
 /**
  * Get the current position in voxel space.
+ * @param offset
  * @return position in voxel space.
  */
 Position Projectile::getPosition(int offset) const
@@ -321,6 +326,7 @@ Position Projectile::getPosition(int offset) const
 /**
  * Get a particle from the particle array.
  * @param i
+ * @return particle id
  */
 int Projectile::getParticle(int i)
 {

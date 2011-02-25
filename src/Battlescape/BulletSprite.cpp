@@ -65,14 +65,14 @@ const int BulletSprite::pixels[37][9] = {
 };
 
 /**
- * Sets up a BulletSprite .
+ * Sets up a BulletSprite 3x3 surface.
  */
 BulletSprite::BulletSprite(int type) : Surface(3, 3), _type(type)
 {
 }
 
 /**
- * Deletes the UnitSprite.
+ * Deletes the BulletSprite.
  */
 BulletSprite::~BulletSprite()
 {

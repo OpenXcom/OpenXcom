@@ -54,6 +54,7 @@ BattleAction::~BattleAction()
 /**
  * Set the target.
  * todo: multiple targets are possible with blaster launchers, so we need list of targets here with add/remove
+ * @param target Position in tile x/y/z.
  */
 void BattleAction::setTarget(const Position &target)
 {
@@ -62,7 +63,7 @@ void BattleAction::setTarget(const Position &target)
 
 /**
  * Start the action.
- * There has got to be a more elegant way to write this.
+ * Maybe there's a more elegant way to write this.
  */
 void BattleAction::start()
 {
@@ -125,7 +126,7 @@ void BattleAction::start()
 }
 
 /**
- * moveBullet is triggered by a timer. It advances the projectile, until it hits something or flies out of the map.
+ * moveBullet is triggered by a timer. It advances the projectile, until the trajectory finished.
  */
 void BattleAction::moveBullet()
 {
@@ -297,6 +298,7 @@ BattleActionType BattleAction::getType() const
  * Normal door changes the tile objects. We need to make a sound 3 here.
  * Ufo door updates the ufodooropened flag of the tile. We need to make a sound 20 or 21 and start the animation.
  * An ufo door takes a few animation frames: while this animation is running this function returns true.
+ * @param unit
  * @return false if there is no door
  */
 bool BattleAction::unitOpensDoor(BattleUnit *unit)
@@ -341,8 +343,11 @@ bool BattleAction::unitOpensDoor(BattleUnit *unit)
 	return false;
 }
 
-/// Get the projectile type.
-// Depending on the weapon a different projectile sprite is drawn, there are 11 different types
+/**
+ * Get the projectile type.
+ * Depending on the weapon a different projectile sprite is drawn, there are 11 different types.
+ * @return type 0-10
+ */
 int BattleAction::getProjectileType() const
 {
 	if (_projectile)
@@ -355,7 +360,11 @@ int BattleAction::getProjectileType() const
 	}
 }
 
-/// Get position (of the projectile) in voxel space
+/**
+ * Get position (of the projectile) in voxel space.
+ * @param offset Used for trailing particles that need to be drawn at previous positions.
+ * @return Position in voxel space.
+ */
 Position BattleAction::getPosition(int offset) const
 {
 	if (_projectile)
@@ -364,12 +373,20 @@ Position BattleAction::getPosition(int offset) const
 		return _position;
 }
 
-/// Get position (of the projectile) in voxel space
+/**
+ * Get the particle ID. This is needed for drawing the projectile + trailing particles.
+ * @param offset
+ * @return particle ID
+ */
 int BattleAction::getProjectileParticle(int offset) const
 {
 	return _projectile->getParticle(offset);
 }
 
+/**
+ * Get the hit visual effect animation frame.
+ * @return frame ID
+ */
 int BattleAction::getAnimFrame() const
 {
 	return _animFrame;

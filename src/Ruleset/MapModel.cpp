@@ -27,6 +27,9 @@ namespace OpenXcom
 
 /**
 * MapModel construction
+* @param width default 16
+* @param length default 16
+* @param height default 24
 */
 MapModel::MapModel(int width, int length, int height): _width(width), _length(length), _height(height)
 {
@@ -42,6 +45,11 @@ MapModel::~MapModel()
 {
 }
 
+/**
+* loadLOFTEMPS loads the LOFTEMPS.DAT into the ruleset voxeldata
+* @param filename
+* @param voxelData
+*/
 void MapModel::loadLOFTEMPS(const std::string &filename, std::vector<Uint16> *voxelData)
 {
 	// Load file
@@ -84,8 +92,8 @@ int MapModel::getLength() const
 }
 
 /**
-* Sets the MapModel height.
-* @param height in voxels.
+* Gets the MapModel height.
+* @return height in voxels.
 */
 int MapModel::getHeight() const
 {
@@ -93,8 +101,10 @@ int MapModel::getHeight() const
 }
 
 /**
-* Sets the MapModel height.
-* @param height in voxels.
+* Sets 16 voxels using an unsigned 16 bit variable. It also recalculates the checksum.
+* @param voxels
+* @param y this is the column
+* @param z this is the layer
 */
 void MapModel::set16Voxels(Uint16 voxels, int y, int z)
 {
@@ -104,9 +114,12 @@ void MapModel::set16Voxels(Uint16 voxels, int y, int z)
 }
 
 /**
-* Get a single MapModel voxel. Voxels are either filled or not.
+* Get a single MapModel voxel state. Voxels are either filled or not.
 * We store voxels in a 16 bit unsigned int. Hence the bitshifting and tricks.
 * Also: Y is reversed...
+* @param x
+* @param y
+* @param z
 * @return bool whether voxel is filled.
 */
 bool MapModel::getVoxel(int x, int y, int z) const
@@ -115,7 +128,9 @@ bool MapModel::getVoxel(int x, int y, int z) const
 }
 
 /**
-* The equals function. Compares two checksums of mapmodel objects.
+* The equals function. Compares two checksums of mapmodel objects with their checksum.
+* @param mapModel
+* @return bool
 */
 bool MapModel::equals (const MapModel *mapModel) const
 {
@@ -124,6 +139,9 @@ bool MapModel::equals (const MapModel *mapModel) const
 
 /**
 * Calculates a checksum. Used to compare two models.
+* @param data Pointer to the data.
+* @param len Length of the data.
+* @return Uint32 a 32bit checksum.
 */
 Uint32 MapModel::fletcher32( Uint16 *data, size_t len )
 {
