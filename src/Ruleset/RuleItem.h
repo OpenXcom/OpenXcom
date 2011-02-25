@@ -37,7 +37,8 @@ private:
 	float _size;
 	int _cost, _time;
 	bool _equip, _twoHanded;
-	int _bigSprite, _floorSprite, _handSprite;
+	int _bigSprite, _floorSprite, _handSprite, _bulletSprite;
+	int _fireSound, _hitSound, _hitAnimation;
 public:
 	/// Creates a blank item ruleset.
 	RuleItem(std::string type);
@@ -64,19 +65,35 @@ public:
 	/// Gets the item's reference in BIGOBS.PCK for use in inventory.
 	int getBigSprite() const;
 	/// Sets the item's reference in BIGOBS.PCK for use in inventory.
-	void setBigSprite(int value);
+	void setBigSprite(int sprite);
 	/// Gets the item's reference in FLOOROB.PCK for use in inventory.
 	int getFloorSprite() const;
 	/// Sets the item's reference in FLOOROB.PCK for use in inventory.
-	void setFloorSprite(int value);
+	void setFloorSprite(int sprite);
 	/// Gets the item's reference in HANDOB.PCK for use in inventory.
 	int getHandSprite() const;
 	/// Sets the item's reference in HANDOB.PCK for use in inventory.
-	void setHandSprite(int value);
+	void setHandSprite(int sprite);
 	/// Gets if the item is two-handed.
 	bool getTwoHanded() const;
 	/// Sets if the item is two-handed.
 	void setTwoHanded(bool flag);
+	/// Gets the item's bullet sprite reference.
+	int getBulletSprite() const;
+	/// Sets the item's bulet sprite reference.
+	void setBulletSprite(int sprite);
+	/// Gets the item's fire sound.
+	int getFireSound() const;
+	/// Sets the item's fire sound.
+	void setFireSound(int sound);
+	/// Gets the item's hit sound.
+	int getHitSound() const;
+	/// Sets the item's hit sound.
+	void setHitSound(int sound);
+	/// Gets the item's hit animation.
+	int getHitAnimation() const;
+	/// Sets the item's hit animation.
+	void setHitAnimation(int animation);
 
 };
 

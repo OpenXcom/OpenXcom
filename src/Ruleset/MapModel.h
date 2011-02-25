@@ -37,8 +37,6 @@ class MapModel
 private:
 	int _width, _length, _height;
 	Uint16 *_voxels;
-	Uint32 fletcher32( Uint16 *data, size_t len );
-	Uint32 _checksum;
 public:
 	MapModel(int width = 16, int length = 16, int height = 24);
 	~MapModel();
@@ -55,7 +53,7 @@ public:
 	/// Get a single voxel.
 	bool getVoxel(int x, int y, int z) const;
 	/// Equals function.
-    bool equals (const MapModel *mapModel) const;
+    bool equals (const MapModel *mapModel);
 
 };
 

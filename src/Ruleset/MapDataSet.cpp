@@ -176,8 +176,6 @@ void MapDataSet::load(ResourcePack *res)
 		to->setFlammable((int)mcd.Flammable);
 		to->setFuel((int)mcd.Fuel);
 
-
-
 		// build the 3D voxel model for this object using the loft references
 		model = new MapModel();
 		for (int layer = 0; layer < 12; layer++)
@@ -197,7 +195,7 @@ void MapDataSet::load(ResourcePack *res)
 			{
 				delete model;
 				model = 0;
-				to->setModel(*i);
+				to->setModel((MapModel*)(*i));
 				found = true;
 			}
 		}
@@ -205,6 +203,7 @@ void MapDataSet::load(ResourcePack *res)
 		{
 			_models.push_back(model);
 			to->setModel(model);
+			model = 0;
 		}
 	}
 

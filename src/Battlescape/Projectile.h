@@ -49,7 +49,7 @@ private:
 	int voxelCheck(const Position& voxel);
 public:
 	/// Creates a new Projectile.
-	Projectile(ResourcePack *res, SavedBattleGame *save, Position _origin, Position _target);
+	Projectile(ResourcePack *res, SavedBattleGame *save, Position _origin, Position _target, int bulletType);
 	/// Cleans up the Projectile.
 	~Projectile();
 	/// Calculates the trajectory.

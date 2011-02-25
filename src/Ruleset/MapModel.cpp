@@ -109,8 +109,6 @@ int MapModel::getHeight() const
 void MapModel::set16Voxels(Uint16 voxels, int y, int z)
 {
 	_voxels[z * _length + y] = voxels;
-	// recalculate checksum each time?
-	_checksum = fletcher32(_voxels, (_width/16) * _length * _height);
 }
 
 /**
@@ -128,39 +126,18 @@ bool MapModel::getVoxel(int x, int y, int z) const
 }
 
 /**
-* The equals function. Compares two checksums of mapmodel objects with their checksum.
+* The equals function.
 * @param mapModel
 * @return bool
 */
-bool MapModel::equals (const MapModel *mapModel) const
+bool MapModel::equals (const MapModel *mapModel)
 {
-	return _checksum == mapModel->_checksum;
-}
-
-/**
-* Calculates a checksum. Used to compare two models.
-* @param data Pointer to the data.
-* @param len Length of the data.
-* @return Uint32 a 32bit checksum.
-*/
-Uint32 MapModel::fletcher32( Uint16 *data, size_t len )
-{
-        Uint32 sum1 = 0xffff, sum2 = 0xffff;
- 
-        while (len) {
-                unsigned tlen = len > 360 ? 360 : len;
-                len -= tlen;
-                do {
-                        sum1 += *data++;
-                        sum2 += sum1;
-                } while (--tlen);
-                sum1 = (sum1 & 0xffff) + (sum1 >> 16);
-                sum2 = (sum2 & 0xffff) + (sum2 >> 16);
-        }
-        /* Second reduction step to reduce sums to 16 bits */
-        sum1 = (sum1 & 0xffff) + (sum1 >> 16);
-        sum2 = (sum2 & 0xffff) + (sum2 >> 16);
-        return sum2 << 16 | sum1;
+	for (int i=0; i < (_width/16) * _length * _height; i++)
+	{
+		if (this->_voxels[i] != mapModel->_voxels[i])
+			return false;
+	}
+	return true;
 }
 
 }

@@ -29,6 +29,7 @@
 #include "../Engine/RNG.h"
 #include "../Engine/SoundSet.h"
 #include "../Engine/Sound.h"
+#include "../Ruleset/RuleItem.h"
 
 
 namespace OpenXcom
@@ -78,10 +79,11 @@ void BattleAction::start()
 	else if (_type == SNAP_SHOT)
 	{
 		_save->getSelectedUnit()->aim(true);
-		_projectile = new Projectile(_res, _save, _save->getSelectedUnit()->getPosition(), _target);
+		_projectile = new Projectile(_res, _save, _save->getSelectedUnit()->getPosition(), _target, _item->getRules()->getBulletSprite());
 		if (_projectile->calculateTrajectory())
 		{
 			_status = INPROGRESS;
+			_res->getSoundSet("BATTLE.CAT")->getSound(_item->getRules()->getFireSound())->play();
 		}
 		else
 		{
@@ -135,6 +137,7 @@ void BattleAction::moveBullet()
 		if(!_projectile->move())
 		{
 			// impact !
+			_res->getSoundSet("BATTLE.CAT")->getSound(_item->getRules()->getHitSound())->play();
 			_position = _projectile->getPosition(-1);
 			delete _projectile;
 			_projectile = 0;

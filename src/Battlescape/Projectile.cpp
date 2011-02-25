@@ -57,10 +57,11 @@ const int Projectile::_trail[11][36] = {
  * @param save Pointer to battlesavegame.
  * @param origin Projectile's start position in tile x/y/z.
  * @param target Projectile's target position in tile x/y/z.
+ * @param bulletType
  */
-Projectile::Projectile(ResourcePack *res, SavedBattleGame *save, Position origin, Position target) : _res(res), _save(save), _origin(origin), _target(target), _position(0)
+Projectile::Projectile(ResourcePack *res, SavedBattleGame *save, Position origin, Position target, int bulletType) : _res(res), _save(save), _origin(origin), _target(target), _position(0), _bulletType(bulletType)
 {
-	_bulletType=4; // test
+
 }
 
 /**

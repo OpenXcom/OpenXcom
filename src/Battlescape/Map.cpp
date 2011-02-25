@@ -329,33 +329,6 @@ void Map::drawTerrain(Surface *surface)
 
 					// Draw items
 
-					// check if we got bullet
-					if (_action && _action->getProjectileType() > 0 && bulletPosition == mapPosition)
-					{
-						for (int i=1;i<_action->getProjectileParticle(0);i++)
-						{
-							if (_action->getProjectileParticle(i) != 0xFF)
-							{
-								Position voxelPos = _action->getPosition(1-i);
-								convertVoxelToScreen(voxelPos, &bulletPosition);
-								_bullet[i]->setX(bulletPosition.x);
-								_bullet[i]->setY(bulletPosition.y);
-								_bullet[i]->blit(surface);
-							}
-						}
-					}
-					// check if we got impact
-					if (_action && _action->getType()==HIT && bulletPosition == mapPosition)
-					{
-						Position voxelPos = _action->getPosition();
-						convertVoxelToScreen(voxelPos, &bulletPosition);
-						frame = _res->getSurfaceSet("SMOKE.PCK")->getFrame(26+_action->getAnimFrame());
-						frame->setX(bulletPosition.x - (_spriteWidth / 2));
-						frame->setY(bulletPosition.y - (_spriteHeight / 2));
-						frame->blit(surface);
-					}
-
-
 					// Draw soldier
 					if (unit)
 					{
@@ -395,6 +368,32 @@ void Map::drawTerrain(Surface *surface)
 								}
 							}
 						}
+					}
+
+										// check if we got bullet
+					if (_action && _action->getProjectileType() > 0 && bulletPosition == mapPosition)
+					{
+						for (int i=1;i<_action->getProjectileParticle(0);i++)
+						{
+							if (_action->getProjectileParticle(i) != 0xFF)
+							{
+								Position voxelPos = _action->getPosition(1-i);
+								convertVoxelToScreen(voxelPos, &bulletPosition);
+								_bullet[i]->setX(bulletPosition.x);
+								_bullet[i]->setY(bulletPosition.y);
+								_bullet[i]->blit(surface);
+							}
+						}
+					}
+					// check if we got impact
+					if (_action && _action->getType()==HIT && bulletPosition == mapPosition)
+					{
+						Position voxelPos = _action->getPosition();
+						convertVoxelToScreen(voxelPos, &bulletPosition);
+						frame = _res->getSurfaceSet("SMOKE.PCK")->getFrame(26 + _action->getAnimFrame());
+						frame->setX(bulletPosition.x - (_spriteWidth / 2));
+						frame->setY(bulletPosition.y - (_spriteHeight / 2));
+						frame->blit(surface);
 					}
 
 					// Draw cursor front

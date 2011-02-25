@@ -197,4 +197,77 @@ void RuleItem::setTwoHanded(bool flag)
 {
 	_twoHanded = flag;
 }
+
+/**
+ * Returns the item's bullet sprite reference.
+ * @return Sprite reference.
+ */
+int RuleItem::getBulletSprite() const
+{
+	return _bulletSprite;
+}
+
+/**
+ * Changes the item's bulet sprite reference.
+ * @param sprite Sprite reference.
+ */
+void RuleItem::setBulletSprite(int sprite)
+{
+	_bulletSprite = sprite;
+}
+
+/**
+ * Returns the item's fire sound.
+ * @return Sprite reference.
+ */
+int RuleItem::getFireSound() const
+{
+	return _fireSound;
+}
+
+/**
+ * Changes the item's fire sound..
+ * @param sprite Sprite reference.
+ */
+void RuleItem::setFireSound(int sound)
+{
+	_fireSound = sound;
+}
+
+/**
+ * Returns the item's hit sound.
+ * @return Sprite reference.
+ */
+int RuleItem::getHitSound() const
+{
+	return _hitSound;
+}
+
+/**
+ * Changes the item's fire sound..
+ * @param sprite Sprite reference.
+ */
+void RuleItem::setHitSound(int sound)
+{
+	_hitSound = sound;
+}
+
+/**
+ * Returns the item's hit sound.
+ * @return Sprite reference.
+ */
+int RuleItem::getHitAnimation() const
+{
+	return _hitAnimation;
+}
+
+/**
+ * Changes the item's fire sound..
+ * @param sprite Sprite reference.
+ */
+void RuleItem::setHitAnimation(int animation)
+{
+	_hitAnimation = animation;
+}
+
 }

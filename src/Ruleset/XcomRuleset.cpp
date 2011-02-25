@@ -892,6 +892,10 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	pistol->setCost(800);
 	pistol->setBigSprite(3);
 	pistol->setHandSprite(96);
+	pistol->setBulletSprite(1);
+	pistol->setHitAnimation(26);
+	pistol->setFireSound(4);
+	pistol->setHitSound(22);
 
 	RuleItem *pclip = new RuleItem("STR_PISTOL_CLIP");
 	pclip->setSize(0.1f);
@@ -905,6 +909,10 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	rifle->setBigSprite(1);
 	rifle->setHandSprite(0);
 	rifle->setTwoHanded(true);
+	rifle->setBulletSprite(2);
+	rifle->setHitAnimation(26);
+	rifle->setFireSound(4);
+	rifle->setHitSound(22);
 
 	RuleItem *rclip = new RuleItem("STR_RIFLE_CLIP");
 	rclip->setSize(0.1f);
@@ -918,6 +926,11 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	hcannon->setBigSprite(11);
 	hcannon->setHandSprite(24);
 	hcannon->setTwoHanded(true);
+	hcannon->setBulletSprite(4);
+	hcannon->setHitAnimation(26);
+	hcannon->setFireSound(12);
+	hcannon->setHitSound(13);
+
 
 	RuleItem *hcap = new RuleItem("STR_HC_AP_AMMO");
 	hcap->setSize(0.1f);
@@ -937,7 +950,11 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	acannon->setBigSprite(7);
 	acannon->setHandSprite(32);
 	acannon->setTwoHanded(true);
-
+	acannon->setBulletSprite(3);
+	acannon->setHitAnimation(26);
+	acannon->setFireSound(12);
+	acannon->setHitSound(13);
+	
 	RuleItem *acap = new RuleItem("STR_AC_AP_AMMO");
 	acap->setSize(0.1f);
 	acap->setCost(500);
@@ -950,6 +967,9 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	rlauncher->setBigSprite(15);
 	rlauncher->setHandSprite(9);
 	rlauncher->setTwoHanded(true);
+	rlauncher->setBulletSprite(0);
+	acannon->setFireSound(52);
+	acannon->setHitSound(0);
 
 	RuleItem *srocket = new RuleItem("STR_SMALL_ROCKET");
 	srocket->setSize(0.2f);
