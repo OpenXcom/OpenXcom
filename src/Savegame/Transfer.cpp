@@ -108,6 +108,7 @@ void Transfer::setEngineers(int engineers)
 
 /**
  * Gets the name of the contents of the transfer.
+ * @param lang Language to get strings from.
  * @return Name string.
  */
 std::wstring Transfer::getName(Language *lang) const
