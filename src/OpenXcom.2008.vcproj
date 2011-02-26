@@ -636,6 +636,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Battlescape\BulletSprite.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\BulletSprite.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Battlescape\Map.cpp"
 				>
 			</File>
@@ -1197,6 +1205,14 @@
 			</File>
 			<File
 				RelativePath=".\Ruleset\MapDataSet.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\MapModel.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\MapModel.h"
 				>
 			</File>
 			<File

@@ -98,6 +98,8 @@
 		<Unit filename="Battlescape\BattlescapeState.h" />
 		<Unit filename="Battlescape\BriefingCrashState.cpp" />
 		<Unit filename="Battlescape\BriefingCrashState.h" />
+		<Unit filename="Battlescape\BulletSprite.cpp" />
+		<Unit filename="Battlescape\BulletSprite.h" />
 		<Unit filename="Battlescape\Map.cpp" />
 		<Unit filename="Battlescape\Map.h" />
 		<Unit filename="Battlescape\Pathfinding.cpp" />
@@ -253,6 +255,8 @@
 		<Unit filename="Ruleset\MapData.h" />
 		<Unit filename="Ruleset\MapDataSet.cpp" />
 		<Unit filename="Ruleset\MapDataSet.h" />
+		<Unit filename="Ruleset\MapModel.cpp" />
+		<Unit filename="Ruleset\MapModel.h" />
 		<Unit filename="Ruleset\RuleBaseFacility.cpp" />
 		<Unit filename="Ruleset\RuleBaseFacility.h" />
 		<Unit filename="Ruleset\RuleCountry.cpp" />

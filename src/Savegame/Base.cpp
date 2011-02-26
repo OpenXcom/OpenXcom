@@ -95,7 +95,7 @@ void Base::load(const YAML::Node &node, SavedGame *save)
 		std::string type;
 		node["crafts"][i]["type"] >> type;
 		Craft *c = new Craft(_rule->getCraft(type), this);
-		c->load(node["crafts"][i], rule);
+		c->load(node["crafts"][i], _rule);
 		if (const YAML::Node *pName = node["crafts"][i].FindValue("dest"))
 		{
 			std::string type;

@@ -45,7 +45,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base), _total(0), _sel(-1), _pQty(0), _cQty(0), _iQty(0.0f)
+PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base), _sel(0), _total(0), _pQty(0), _cQty(0), _iQty(0.0f)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
