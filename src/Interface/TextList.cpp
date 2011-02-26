@@ -70,6 +70,23 @@ TextList::~TextList()
 }
 
 /**
+ * Unpresses all the arrow buttons.
+ * @param state Pointer to running state.
+ */
+void TextList::unpress(State *state)
+{
+	InteractiveSurface::unpress(state);
+	for (std::vector<ArrowButton*>::iterator i = _arrowLeft.begin(); i < _arrowLeft.end(); i++)
+	{
+		(*i)->unpress(state);
+	}
+	for (std::vector<ArrowButton*>::iterator i = _arrowRight.begin(); i < _arrowRight.end(); i++)
+	{
+		(*i)->unpress(state);
+	}
+}
+
+/**
  * Returns a pointer to a certain Text object in the list.
  * Useful for customizing or getting values off an individual cell.
  * @note If a Text is changed, a redraw needs to be manually requested.

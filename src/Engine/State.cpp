@@ -47,7 +47,9 @@ State::State(Game *game) : _game(game), _screen(true)
 State::~State()
 {
 	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i < _surfaces.end(); i++)
+	{
 		delete *i;
+	}
 }
 
 /**

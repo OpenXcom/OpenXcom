@@ -53,6 +53,8 @@ public:
 	virtual void handle(Action *action, State *state);
 	/// Sets focus on this surface.
 	virtual void focus();
+	/// Unpresses the surface.
+	virtual void unpress(State *state);
 	/// Hooks an action handler to a mouse click on the surface.
 	void onMouseClick(ActionHandler handler);
 	/// Hooks an action handler to a mouse press over the surface.

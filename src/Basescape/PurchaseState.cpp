@@ -33,6 +33,9 @@
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleCraft.h"
 #include "../Ruleset/RuleItem.h"
+#include "../Savegame/Base.h"
+#include "../Engine/Action.h"
+#include "PurchaseErrorState.h"
 
 namespace OpenXcom
 {
@@ -40,8 +43,9 @@ namespace OpenXcom
 /**
  * Initializes all the elements in the Purchase/Hire screen.
  * @param game Pointer to the core game.
+ * @param base Pointer to the base to get info from.
  */
-PurchaseState::PurchaseState(Game *game) : State(game)
+PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base), _total(0), _sel(-1), _pQty(0), _cQty(0), _iQty(0.0f)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
@@ -86,14 +90,14 @@ PurchaseState::PurchaseState(Game *game) : State(game)
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(_game->getLanguage()->getString("STR_PURCHASE_HIRE_PERSONNEL"));
 
+	_txtFunds->setColor(Palette::blockOffset(13)+10);
 	std::wstring s1 = _game->getLanguage()->getString("STR_CURRENT_FUNDS");
 	s1 += Text::formatFunding(_game->getSavedGame()->getFunds());
-	_txtFunds->setColor(Palette::blockOffset(13)+10);
 	_txtFunds->setText(s1);
 
-	std::wstring s2 = _game->getLanguage()->getString("STR_COST_OF_PURCHASES");
-	s2 += Text::formatFunding(0);
 	_txtPurchases->setColor(Palette::blockOffset(13)+10);
+	std::wstring s2 = _game->getLanguage()->getString("STR_COST_OF_PURCHASES");
+	s2 += Text::formatFunding(_total);
 	_txtPurchases->setText(s2);
 
 	_txtItem->setColor(Palette::blockOffset(13)+10);
@@ -113,8 +117,6 @@ PurchaseState::PurchaseState(Game *game) : State(game)
 	_lstItems->setBackground(_window);
 	_lstItems->setMargin(2);
 
-	_total = 0;
-	_sel = -1;
 	_crafts.push_back("STR_SKYRANGER");
 	_crafts.push_back("STR_INTERCEPTOR");
 	_items.push_back("STR_STINGRAY_LAUNCHER");
@@ -169,7 +171,8 @@ PurchaseState::PurchaseState(Game *game) : State(game)
  */
 PurchaseState::~PurchaseState()
 {
-	
+	delete _timerInc;
+	delete _timerDec;
 }
 
 /**
@@ -205,7 +208,6 @@ void PurchaseState::lstItemsLeftArrowPress(Action *action)
 {
 	_sel = _lstItems->getSelectedRow();
 	_timerInc->start();
-	
 }
 
 /**
@@ -225,7 +227,6 @@ void PurchaseState::lstItemsRightArrowPress(Action *action)
 {
 	_sel = _lstItems->getSelectedRow();
 	_timerDec->start();
-	
 }
 
 /**
@@ -238,15 +239,81 @@ void PurchaseState::lstItemsRightArrowRelease(Action *action)
 }
 
 /**
+ * Gets the price of the currently selected item.
+ */
+int PurchaseState::getPrice()
+{
+	if (_sel == 0)
+	{
+		return _game->getRuleset()->getSoldierCost() * 2;
+	}
+	else if (_sel == 1)
+	{
+		return _game->getRuleset()->getScientistCost() * 2;
+	}
+	else if (_sel == 2)
+	{
+		return _game->getRuleset()->getEngineerCost() * 2;
+	}
+	else if (_sel >= 3 && _sel < 3 + _crafts.size())
+	{
+		return _game->getRuleset()->getCraft(_crafts[_sel - 3])->getCost();
+	}
+	else
+	{
+		return _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getCost();
+	}
+}
+
+/**
  * Increases the quantity of the selected item on the list.
  */
 void PurchaseState::increase()
 {
-	_qtys[_sel]++;
-	std::wstringstream ss;
-	ss << _qtys[_sel];
-	_lstItems->getCell(_sel, 2)->setText(ss.str());
-	_lstItems->draw();
+	if (_total + getPrice() > _game->getSavedGame()->getFunds())
+	{
+		_timerInc->stop();
+		_game->pushState(new PurchaseErrorState(_game, "STR_NOT_ENOUGH_MONEY"));
+	}
+	else if (_sel <= 2 && _pQty + 1 > _base->getAvailableQuarters() - _base->getUsedQuarters())
+	{
+		_timerInc->stop();
+		_game->pushState(new PurchaseErrorState(_game, "STR_NOT_ENOUGH_LIVING_SPACE"));
+	}
+	else if (_sel >= 3 && _sel < 3 + _crafts.size() && _cQty + 1 > _base->getAvailableHangars() - _base->getUsedHangars())
+	{
+		_timerInc->stop();
+		_game->pushState(new PurchaseErrorState(_game, "STR_NO_FREE_HANGARS_FOR_PURCHASE"));
+	}
+	else if (_sel >= 3 + _crafts.size() && _iQty + _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getSize() > _base->getAvailableStores() - _base->getUsedStores())
+	{
+		_timerInc->stop();
+		_game->pushState(new PurchaseErrorState(_game, "STR_NOT_ENOUGH_STORE_SPACE"));
+	}
+	else
+	{
+		if (_sel <= 2)
+		{
+			_pQty++;
+		}
+		else if (_sel >= 3 && _sel < 3 + _crafts.size())
+		{
+			_cQty++;
+		}
+		else if (_sel >= 3 + _crafts.size())
+		{
+			_iQty += _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getSize();
+		}
+		_qtys[_sel]++;
+		std::wstringstream ss;
+		ss << _qtys[_sel];
+		_lstItems->getCell(_sel, 2)->setText(ss.str());
+		_lstItems->draw();
+		_total += getPrice();
+		std::wstring s = _game->getLanguage()->getString("STR_COST_OF_PURCHASES");
+		s += Text::formatFunding(_total);
+		_txtPurchases->setText(s);
+	}
 }
 
 /**
@@ -255,11 +322,29 @@ void PurchaseState::increase()
 void PurchaseState::decrease()
 {
 	if (_qtys[_sel] > 0)
+	{
+		if (_sel <= 2)
+		{
+			_pQty--;
+		}
+		else if (_sel >= 3 && _sel < 3 + _crafts.size())
+		{
+			_cQty--;
+		}
+		else if (_sel >= 3 + _crafts.size())
+		{
+			_iQty -= _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getSize();
+		}
 		_qtys[_sel]--;
-	std::wstringstream ss;
-	ss << _qtys[_sel];
-	_lstItems->getCell(_sel, 2)->setText(ss.str());
-	_lstItems->draw();
+		std::wstringstream ss;
+		ss << _qtys[_sel];
+		_lstItems->getCell(_sel, 2)->setText(ss.str());
+		_lstItems->draw();
+		_total -= getPrice();
+	}
+	std::wstring s = _game->getLanguage()->getString("STR_COST_OF_PURCHASES");
+	s += Text::formatFunding(_total);
+	_txtPurchases->setText(s);
 }
 
 }

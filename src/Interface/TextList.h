@@ -59,6 +59,8 @@ public:
 	TextList(int width, int height, int x = 0, int y = 0);
 	/// Cleans up the text list.
 	~TextList();
+	/// Unpresses the surface.
+	void unpress(State *state);
 	/// Gets a certain cell in the text list.
 	Text *const getCell(int row, int col) const;
 	/// Adds a new row to the text list.

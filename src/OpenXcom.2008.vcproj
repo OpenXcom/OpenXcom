@@ -62,7 +62,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="SDLmain.lib SDL.lib SDL_gfx.lib SDL_mixer.lib yaml-cpp.lib"
+				AdditionalDependencies="SDLmain.lib SDL.lib SDL_gfx.lib SDL_mixer.lib yaml-cpp_d.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;..\deps\lib&quot;"
 				GenerateManifest="true"
@@ -549,6 +549,14 @@
 			</File>
 			<File
 				RelativePath=".\Basescape\PurchaseState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\PurchaseErrorState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\PurchaseErrorState.h"
 				>
 			</File>
 			<File
@@ -1109,6 +1117,14 @@
 			</File>
 			<File
 				RelativePath=".\Savegame\Tile.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\Transfer.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\Transfer.h"
 				>
 			</File>
 			<File

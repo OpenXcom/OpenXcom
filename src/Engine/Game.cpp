@@ -29,6 +29,7 @@
 #include "Palette.h"
 #include "Action.h"
 #include "Exception.h"
+#include "InteractiveSurface.h"
 
 namespace OpenXcom
 {
@@ -122,6 +123,16 @@ void Game::run()
 		{
 			_states.back()->init();
 			_init = true;
+
+			// Unpress buttons
+			for (std::vector<Surface*>::iterator i = _states.back()->getSurfaces()->begin(); i < _states.back()->getSurfaces()->end(); i++)
+			{
+				InteractiveSurface *s = dynamic_cast<InteractiveSurface*>(*i);
+				if (s != 0)
+				{
+					s->unpress(_states.back());
+				}
+			}
 
 			// Refresh mouse position
 			SDL_Event ev;

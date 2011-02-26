@@ -65,10 +65,9 @@ Base::~Base()
 /**
  * Loads the base from a YAML file.
  * @param node YAML node.
- * @param rule Ruleset for the saved game.
  * @param save Pointer to saved game.
  */
-void Base::load(const YAML::Node &node, Ruleset *rule, SavedGame *save)
+void Base::load(const YAML::Node &node, SavedGame *save)
 {
 	unsigned int size = 0;
 
@@ -85,7 +84,7 @@ void Base::load(const YAML::Node &node, Ruleset *rule, SavedGame *save)
 		node["facilities"][i]["y"] >> y;
 		std::string type;
 		node["facilities"][i]["type"] >> type;
-		BaseFacility *f = new BaseFacility(rule->getBaseFacility(type), this, x, y);
+		BaseFacility *f = new BaseFacility(_rule->getBaseFacility(type), this, x, y);
 		f->load(node["facilities"][i]);
 		_facilities.push_back(f);
 	}
@@ -95,7 +94,7 @@ void Base::load(const YAML::Node &node, Ruleset *rule, SavedGame *save)
 	{
 		std::string type;
 		node["crafts"][i]["type"] >> type;
-		Craft *c = new Craft(rule->getCraft(type), this);
+		Craft *c = new Craft(_rule->getCraft(type), this);
 		c->load(node["crafts"][i], rule);
 		if (const YAML::Node *pName = node["crafts"][i].FindValue("dest"))
 		{
@@ -255,6 +254,16 @@ std::vector<Soldier*> *const Base::getSoldiers()
 std::vector<Craft*> *const Base::getCrafts()
 {
 	return &_crafts;
+}
+
+/**
+ * Returns the list of transfers destined
+ * to this base.
+ * @return Pointer to the transfer list.
+ */
+std::vector<Transfer*> *const Base::getTransfers()
+{
+	return &_transfers;
 }
 
 /**

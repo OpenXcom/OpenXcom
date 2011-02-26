@@ -78,6 +78,8 @@
 		<Unit filename="Basescape\PlaceLiftState.h" />
 		<Unit filename="Basescape\PurchaseState.cpp" />
 		<Unit filename="Basescape\PurchaseState.h" />
+		<Unit filename="Basescape\PurchaseErrorState.cpp" />
+		<Unit filename="Basescape\PurchaseErrorState.h" />
 		<Unit filename="Basescape\ResearchState.cpp" />
 		<Unit filename="Basescape\ResearchState.h" />
 		<Unit filename="Basescape\SellState.cpp" />
@@ -311,6 +313,8 @@
 		<Unit filename="Savegame\Target.h" />
 		<Unit filename="Savegame\Tile.cpp" />
 		<Unit filename="Savegame\Tile.h" />
+		<Unit filename="Savegame\Transfer.cpp" />
+		<Unit filename="Savegame\Transfer.h" />
 		<Unit filename="Savegame\Ufo.cpp" />
 		<Unit filename="Savegame\Ufo.h" />
 		<Unit filename="Savegame\Waypoint.cpp" />

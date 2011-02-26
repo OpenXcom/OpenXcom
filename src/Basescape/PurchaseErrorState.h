@@ -16,10 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_SELLSTATE_H
-#define OPENXCOM_SELLSTATE_H
+#ifndef OPENXCOM_PURCHASEERRORSTATE_H
+#define OPENXCOM_PURCHASEERRORSTATE_H
 
 #include "../Engine/State.h"
+#include <string>
 
 namespace OpenXcom
 {
@@ -27,30 +28,24 @@ namespace OpenXcom
 class TextButton;
 class Window;
 class Text;
-class TextList;
-class Base;
 
 /**
- * Sell/Sack screen that lets the player sell
- * any items in a particular base.
+ * Generic window used to display error messages
+ * when the player is on the Purchase screen.
  */
-class SellState : public State
+class PurchaseErrorState : public State
 {
 private:
-	Base *_base;
-	TextButton *_btnOk, *_btnCancel;
+	TextButton *_btnOk;
 	Window *_window;
-	Text *_txtTitle, *_txtSales, *_txtFunds, *_txtItem, *_txtQuantity, *_txtSell, *_txtValue;
-	TextList *_lstItems;
+	Text *_txtError;
 public:
-	/// Creates the Sell state.
-	SellState(Game *game, Base *base);
-	/// Cleans up the Sell state.
-	~SellState();
+	/// Creates the Purchase Error state.
+	PurchaseErrorState(Game *game, std::string str);
+	/// Cleans up the Purchase Error state.
+	~PurchaseErrorState();
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
-	/// Handler for clicking the Cancel button.
-	void btnCancelClick(Action *action);
 };
 
 }

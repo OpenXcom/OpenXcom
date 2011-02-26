@@ -28,6 +28,7 @@ class TextButton;
 class Window;
 class Text;
 class TextList;
+class Base;
 
 /**
  * Research screen that lets the player manage
@@ -36,13 +37,14 @@ class TextList;
 class ResearchState : public State
 {
 private:
+	Base *_base;
 	TextButton *_btnNew, *_btnOk;
 	Window *_window;
 	Text *_txtTitle, *_txtAvailable, *_txtAllocated, *_txtSpace, *_txtProject, *_txtScientists, *_txtProgress;
 	TextList *_lstResearch;
 public:
 	/// Creates the Research state.
-	ResearchState(Game *game);
+	ResearchState(Game *game, Base *base);
 	/// Cleans up the Research state.
 	~ResearchState();
 	/// Handler for clicking the OK button.

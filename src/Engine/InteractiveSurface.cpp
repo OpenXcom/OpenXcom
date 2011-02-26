@@ -49,14 +49,10 @@ InteractiveSurface::~InteractiveSurface()
 void InteractiveSurface::setVisible(bool visible)
 {
 	Surface::setVisible(visible);
-
 	// Unpress button if it was hidden
-	if (!_visible && _isPressed)
+	if (!_visible)
 	{
-		SDL_Event ev;
-		ev.button.button = SDL_BUTTON_LEFT;
-		_isPressed = false;
-		mouseRelease(new Action(&ev, 0.0, 0.0), 0);
+		unpress(0);
 	}
 }
 
@@ -146,6 +142,24 @@ void InteractiveSurface::handle(Action *action, State *state)
 void InteractiveSurface::focus()
 {
 	_isFocused = true;
+}
+
+/**
+ * Simulates a "mouse button release". Used in circumstances
+ * where the surface is unpressed without user input.
+ * @param state Pointer to running state.
+ */
+void InteractiveSurface::unpress(State *state)
+{
+	if (_isPressed)
+	{
+		_isPressed = false;
+		SDL_Event ev;
+		ev.type = SDL_MOUSEBUTTONUP;
+		ev.button.button = SDL_BUTTON_LEFT;
+		Action a = Action(&ev, 0.0, 0.0);
+		mouseRelease(&a, state);
+	}
 }
 
 /**

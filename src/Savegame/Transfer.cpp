@@ -1,0 +1,181 @@
+/*
+ * Copyright 2010 OpenXcom Developers.
+ *
+ * This file is part of OpenXcom.
+ *
+ * OpenXcom is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * OpenXcom is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
+ */
+#include "Transfer.h"
+#include "Base.h"
+#include "Soldier.h"
+#include "Craft.h"
+#include "ItemContainer.h"
+#include "../Engine/Language.h"
+
+namespace OpenXcom
+{
+
+/**
+ * Initializes a transfer.
+ * @param hours Hours in-transit.
+ */
+Transfer::Transfer(int hours) : _hours(hours), _soldier(0), _craft(0), _itemId(""), _itemQty(0), _scientists(0), _engineers(0)
+{
+}
+
+/**
+ *
+ */
+Transfer::~Transfer()
+{
+}
+
+/**
+ * Loads the transfer from a YAML file.
+ * @param node YAML node.
+ */
+void Transfer::load(const YAML::Node &node)
+{
+}
+
+/**
+ * Saves the country to a YAML file.
+ * @param out YAML emitter.
+ */
+void Transfer::save(YAML::Emitter &out) const
+{
+	out << YAML::BeginMap;
+	out << YAML::EndMap;
+}
+
+/**
+ * Sets the soldier being transferred.
+ * @param soldier Pointer to soldier.
+ */
+void Transfer::setSoldier(Soldier *soldier)
+{
+	_soldier = soldier;
+}
+
+/**
+ * Sets the craft being transferred.
+ * @param craft Pointer to craft.
+ */
+void Transfer::setCraft(Craft *craft)
+{
+	_craft = craft;
+}
+
+/**
+ * Sets the items being transferred.
+ * @param id Item identifier.
+ * @param qty Item quantity.
+ */
+void Transfer::setItems(std::string id, int qty)
+{
+	_itemId = id;
+	_itemQty = qty;
+}
+
+/**
+ * Sets the scientists being transferred.
+ * @param scientists Amount of scientists.
+ */
+void Transfer::setScientists(int scientists)
+{
+	_scientists = scientists;
+}
+
+/**
+ * Sets the engineers being transferred.
+ * @param engineers Amount of engineers.
+ */
+void Transfer::setEngineers(int engineers)
+{
+	_engineers = engineers;
+}
+
+/**
+ * Gets the name of the contents of the transfer.
+ * @return Name string.
+ */
+std::wstring Transfer::getName(Language *lang) const
+{
+	if (_soldier != 0)
+	{
+		return _soldier->getName();
+	}
+	else if (_craft != 0)
+	{
+		return _craft->getName(lang);
+	}
+	else if (_itemQty != 0)
+	{
+		return lang->getString(_itemId);
+	}
+	else if (_scientists != 0)
+	{
+		return lang->getString("STR_SCIENTISTS");
+	}
+	else if (_engineers != 0)
+	{
+		return lang->getString("STR_ENGINEERS");
+	}
+	return L"";
+}
+
+/**
+ * Returns the time remaining until the
+ * transfer arrives at its destination.
+ * @return Amount of hours.
+ */
+int Transfer::getHours() const
+{
+	return _hours;
+}
+
+/**
+ * Advances the transfer and takes care of
+ * the delivery once it's arrived.
+ * @param base Pointer to destination base.
+ */
+void Transfer::advance(Base *base)
+{
+	_hours--;
+	if (_hours == 0)
+	{
+		if (_soldier != 0)
+		{
+			base->getSoldiers()->push_back(_soldier);
+		}
+		else if (_craft != 0)
+		{
+			base->getCrafts()->push_back(_craft);
+		}
+		else if (_itemQty != 0)
+		{
+			base->getItems()->addItem(_itemId, _itemQty);
+		}
+		else if (_scientists != 0)
+		{
+			base->setScientists(base->getTotalScientists() + _scientists);
+		}
+		else if (_engineers != 0)
+		{
+			base->setEngineers(base->getTotalEngineers() + _engineers);
+		}
+	}
+}
+
+}

@@ -28,6 +28,7 @@ class TextButton;
 class Window;
 class Text;
 class TextList;
+class Base;
 
 /**
  * Manufacture screen that lets the player manage
@@ -36,13 +37,14 @@ class TextList;
 class ManufactureState : public State
 {
 private:
+	Base *_base;
 	TextButton *_btnNew, *_btnOk;
 	Window *_window;
 	Text *_txtTitle, *_txtAvailable, *_txtAllocated, *_txtSpace, *_txtFunds, *_txtItem, *_txtEngineers, *_txtProduced, *_txtTotal, *_txtCost, *_txtTimeLeft;
 	TextList *_lstManufacture;
 public:
 	/// Creates the Manufacture state.
-	ManufactureState(Game *game);
+	ManufactureState(Game *game, Base *base);
 	/// Cleans up the Manufacture state.
 	~ManufactureState();
 	/// Handler for clicking the OK button.

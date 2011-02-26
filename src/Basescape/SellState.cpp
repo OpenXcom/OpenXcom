@@ -28,6 +28,7 @@
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
 #include "../Savegame/SavedGame.h"
+#include "../Savegame/Base.h"
 
 namespace OpenXcom
 {
@@ -35,8 +36,9 @@ namespace OpenXcom
 /**
  * Initializes all the elements in the Sell/Sack screen.
  * @param game Pointer to the core game.
+ * @param base Pointer to the base to get info from.
  */
-SellState::SellState(Game *game) : State(game)
+SellState::SellState(Game *game, Base *base) : State(game), _base(base)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);

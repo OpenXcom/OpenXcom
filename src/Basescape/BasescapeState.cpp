@@ -311,7 +311,7 @@ void BasescapeState::btnFacilitiesClick(Action *action)
  */
 void BasescapeState::btnResearchClick(Action *action)
 {
-	//_game->pushState(new ResearchState(_game));
+	//_game->pushState(new ResearchState(_game, _base));
 }
 
 /**
@@ -320,7 +320,7 @@ void BasescapeState::btnResearchClick(Action *action)
  */
 void BasescapeState::btnManufactureClick(Action *action)
 {
-	//_game->pushState(new ManufactureState(_game));
+	//_game->pushState(new ManufactureState(_game, _base));
 }
 
 /**
@@ -329,7 +329,7 @@ void BasescapeState::btnManufactureClick(Action *action)
  */
 void BasescapeState::btnPurchaseClick(Action *action)
 {
-	_game->pushState(new PurchaseState(_game));
+	_game->pushState(new PurchaseState(_game, _base));
 }
 
 /**
@@ -338,7 +338,7 @@ void BasescapeState::btnPurchaseClick(Action *action)
  */
 void BasescapeState::btnSellClick(Action *action)
 {
-	//_game->pushState(new SellState(_game));
+	//_game->pushState(new SellState(_game, _base));
 }
 
 /**

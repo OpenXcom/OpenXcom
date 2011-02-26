@@ -208,7 +208,7 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	for (unsigned int i = 0; i < size; i++)
 	{
 		Base *b = new Base(rule);
-		b->load(doc["bases"][i], rule, this);
+		b->load(doc["bases"][i], this);
 		_bases.push_back(b);
 	}
 

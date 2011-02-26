@@ -32,6 +32,7 @@ class BaseFacility;
 class Soldier;
 class Craft;
 class ItemContainer;
+class Transfer;
 class Language;
 class Ruleset;
 class SavedGame;
@@ -48,6 +49,7 @@ private:
 	std::vector<BaseFacility*> _facilities;
 	std::vector<Soldier*> _soldiers;
 	std::vector<Craft*> _crafts;
+	std::vector<Transfer*> _transfers;
 	ItemContainer *_items;
 	int _scientists, _engineers;
 public:
@@ -56,7 +58,7 @@ public:
 	/// Cleans up the base.
 	~Base();
 	/// Loads the base from YAML.
-	void load(const YAML::Node& node, Ruleset *rule, SavedGame *save);
+	void load(const YAML::Node& node, SavedGame *save);
 	/// Saves the base to YAML.
 	void save(YAML::Emitter& out) const;
 	/// Saves the base's ID to YAML.
@@ -71,6 +73,8 @@ public:
 	std::vector<Soldier*> *const getSoldiers();
 	/// Gets the base's crafts.
 	std::vector<Craft*> *const getCrafts();
+	/// Gets the base's transfers.
+	std::vector<Transfer*> *const getTransfers();
 	/// Gets the base's items.
 	ItemContainer *const getItems();
 	/// Sets the base's scientists.

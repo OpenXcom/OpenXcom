@@ -1,7 +1,7 @@
 
-#ignore thumbnails created by windows
+#Ignore thumbnails created by Windows
 Thumbs.db
-#Ignore files build by Visual Studio
+#Ignore files built by Visual Studio
 *.obj
 *.exe
 *.pdb
@@ -32,5 +32,20 @@ _ReSharper*/
 *.svl*
 *.dll
 *.mvf
-*.sdf
+*.*sdf
 *.idc
+#OpenXcom stuff
+bin/DATA/GEODATA/
+bin/DATA/GEOGRAPH/
+bin/DATA/MAPS/
+bin/DATA/ROUTES/
+bin/DATA/SOUND/
+bin/DATA/TERRAIN/
+bin/DATA/UFOGRAPH/
+bin/DATA/UFOINTRO/
+bin/DATA/UNITS/
+bin/USER/*.bmp
+bin/USER/*.sav
+deps/
+docs/html/
+obj/

@@ -31,6 +31,7 @@ class Window;
 class Text;
 class TextList;
 class Timer;
+class Base;
 
 /**
  * Purchase/Hire screen that lets the player buy
@@ -39,17 +40,23 @@ class Timer;
 class PurchaseState : public State
 {
 private:
+	Base *_base;
+
 	TextButton *_btnOk, *_btnCancel;
 	Window *_window;
 	Text *_txtTitle, *_txtFunds, *_txtPurchases, *_txtItem, *_txtCost, *_txtQuantity;
 	TextList *_lstItems;
 	std::vector<std::string> _crafts, _items;
 	std::vector<int> _qtys;
-	int _total, _sel;
+	unsigned int _sel;
+	int _total, _pQty, _cQty;
+	float _iQty;
 	Timer *_timerInc, *_timerDec;
+	/// Gets selected price.
+	int getPrice();
 public:
 	/// Creates the Purchase state.
-	PurchaseState(Game *game);
+	PurchaseState(Game *game, Base *base);
 	/// Cleans up the Purchase state.
 	~PurchaseState();
 	/// Runs the timers.
