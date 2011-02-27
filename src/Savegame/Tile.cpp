@@ -30,7 +30,7 @@ namespace OpenXcom
 * constructor
 * @param pos Position.
 */
-Tile::Tile(const Position& pos): _discovered(false), _smoke(0), _fire(0), _pos(pos), _cached(false), _explosive(0), _unit(0)
+Tile::Tile(const Position& pos): _discovered(false), _smoke(0), _fire(0),  _explosive(0), _pos(pos), _cached(false), _unit(0)
 {
 	for (int i = 0; i < 4; i++)
 	{
@@ -42,6 +42,7 @@ Tile::Tile(const Position& pos): _discovered(false), _smoke(0), _fire(0), _pos(p
 		_light[layer] = 0;
 		_lastLight[layer] = 0;
 	}
+	_sessionID = 1;
 }
 
 /**
@@ -96,7 +97,7 @@ int Tile::getTUCost(int part, MovementType movementType)
 {
 	if (_objects[part])
 		return _objects[part]->getTUCost(movementType);
-	else 
+	else
 		return 0;
 }
 
@@ -329,19 +330,17 @@ void Tile::destroy(int part)
 
 
 /**
-
  * @param power
  * @param sessionID
  */
-void Tile::setExplosive(int power, int sessionID)
+void Tile::setExplosive(int power)
 {
-	if (sessionID = _sessionID)
+	if (_explosive)
 	{
 		_explosive = (_explosive + power) / 2;
 	}
 	else
 	{
-		_sessionID = sessionID;
 		_explosive = power;
 	}
 }

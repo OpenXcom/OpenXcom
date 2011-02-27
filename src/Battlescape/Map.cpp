@@ -50,7 +50,7 @@
 #define RMB_SCROLL false
 
 /*
-  1) Map origin is left corner. 
+  1) Map origin is left corner.
   2) X axis goes downright. (width of the map)
   3) Y axis goes upright. (length of the map
   4) Z axis goes up (height of the map)
@@ -60,7 +60,7 @@
 	    0,0/  \
 		   \  /
 		    \/
-          x+  
+          x+
 */
 
 namespace OpenXcom
@@ -158,9 +158,9 @@ void Map::init()
 	// load the tiny arrow into a surface
 	int f = Palette::blockOffset(1)+1; // yellow
 	int b = 15; // black
-	int pixels[81] = { 0, 0, b, b, b, b, b, 0, 0, 
+	int pixels[81] = { 0, 0, b, b, b, b, b, 0, 0,
 					   0, 0, b, f, f, f, b, 0, 0,
-				       0, 0, b, f, f, f, b, 0, 0, 
+				       0, 0, b, f, f, f, b, 0, 0,
 					   b, b, b, f, f, f, b, b, b,
 					   b, f, f, f, f, f, f, f, b,
 					   0, b, f, f, f, f, f, b, 0,
@@ -272,11 +272,11 @@ void Map::drawTerrain(Surface *surface)
 	bulletHighX = bulletHighX / 16;
 	bulletHighY = bulletHighY / 16;
 
-    for (int itZ = beginZ; itZ <= endZ; itZ++) 
+    for (int itZ = beginZ; itZ <= endZ; itZ++)
 	{
-        for (int itX = beginX; itX <= endX; itX++) 
+        for (int itX = beginX; itX <= endX; itX++)
 		{
-            for (int itY = endY; itY >= beginY; itY--) 
+            for (int itY = endY; itY >= beginY; itY--)
 			{
 				mapPosition = Position(itX, itY, itZ);
 				convertMapToScreen(mapPosition, &screenPosition);
@@ -368,7 +368,7 @@ void Map::drawTerrain(Surface *surface)
 						}
 					}
 					// if we can see through the floor, draw the soldier below it if it is on stairs
-					if (itZ > 0 && tile->hasNoFloor()) 
+					if (itZ > 0 && tile->hasNoFloor())
 					{
 						unit = _save->selectUnit(mapPosition + Position(0, 0, -1));
 						tile = _save->getTile(mapPosition + Position(0, 0, -1));
@@ -477,7 +477,7 @@ void Map::drawTerrain(Surface *surface)
 						frame->setY(screenPosition.y);
 						frame->blit(surface);
 					}
-					
+
 					tile = _save->getTile(mapPosition);
 					// Draw smoke/fire
 					if (tile->getFire() && tile->isDiscovered())
@@ -718,7 +718,7 @@ void Map::convertScreenToMap(int screenX, int screenY, int *mapX, int *mapY)
 	// add half a tileheight to the mouseposition per layer we are above the floor
     screenY += -_spriteHeight + (_viewHeight + 1) * (_spriteHeight / 2);
 
-	// calculate the actual x/y pixelposition on a diamond shaped map 
+	// calculate the actual x/y pixelposition on a diamond shaped map
 	// taking the view offset into account
     *mapX = screenX - _mapOffsetX - 2 * screenY + 2 * _mapOffsetY;
     *mapY = screenY - _mapOffsetY + *mapX / 4;
@@ -825,7 +825,7 @@ void Map::centerOnPosition(const Position &mapPos)
 	convertScreenToMap((getWidth() / 2), (BUTTONS_AREA / 2), &_centerX, &_centerY);
 
 	_viewHeight = mapPos.z;
-	
+
 	draw(true);
 }
 
@@ -992,7 +992,7 @@ bool Map::cacheTileSprites(int i)
 	Surface *frame = 0;
 	Tile *tile = _save->getTiles()[i];
 	bool door = false;
-	
+
 	if(tile && !tile->isCached())
 	{
 

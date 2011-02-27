@@ -8,6 +8,7 @@
 		<Build>
 			<Target title="Debug">
 				<Option output="..\bin\Debug\OpenXcom" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="..\bin" />
 				<Option object_output="..\obj\Debug\" />
 				<Option type="0" />
 				<Option compiler="gcc" />
@@ -17,6 +18,7 @@
 			</Target>
 			<Target title="Release">
 				<Option output="..\bin\Release\OpenXcom" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="..\bin" />
 				<Option object_output="..\obj\Release\" />
 				<Option type="0" />
 				<Option compiler="gcc" />
@@ -76,10 +78,10 @@
 		<Unit filename="Basescape\PlaceFacilityState.h" />
 		<Unit filename="Basescape\PlaceLiftState.cpp" />
 		<Unit filename="Basescape\PlaceLiftState.h" />
-		<Unit filename="Basescape\PurchaseState.cpp" />
-		<Unit filename="Basescape\PurchaseState.h" />
 		<Unit filename="Basescape\PurchaseErrorState.cpp" />
 		<Unit filename="Basescape\PurchaseErrorState.h" />
+		<Unit filename="Basescape\PurchaseState.cpp" />
+		<Unit filename="Basescape\PurchaseState.h" />
 		<Unit filename="Basescape\ResearchState.cpp" />
 		<Unit filename="Basescape\ResearchState.h" />
 		<Unit filename="Basescape\SellState.cpp" />
@@ -90,8 +92,8 @@
 		<Unit filename="Basescape\SoldiersState.h" />
 		<Unit filename="Basescape\StoresState.cpp" />
 		<Unit filename="Basescape\StoresState.h" />
-		<Unit filename="Battlescape\BattleAction.cpp" />
-		<Unit filename="Battlescape\BattleAction.h" />
+		<Unit filename="Battlescape\BattleState.cpp" />
+		<Unit filename="Battlescape\BattleState.h" />
 		<Unit filename="Battlescape\BattlescapeGenerator.cpp" />
 		<Unit filename="Battlescape\BattlescapeGenerator.h" />
 		<Unit filename="Battlescape\BattlescapeState.cpp" />
@@ -100,6 +102,10 @@
 		<Unit filename="Battlescape\BriefingCrashState.h" />
 		<Unit filename="Battlescape\BulletSprite.cpp" />
 		<Unit filename="Battlescape\BulletSprite.h" />
+		<Unit filename="Battlescape\Explosion.cpp" />
+		<Unit filename="Battlescape\Explosion.h" />
+		<Unit filename="Battlescape\ExplosionBState.cpp" />
+		<Unit filename="Battlescape\ExplosionBState.h" />
 		<Unit filename="Battlescape\Map.cpp" />
 		<Unit filename="Battlescape\Map.h" />
 		<Unit filename="Battlescape\Pathfinding.cpp" />
@@ -110,10 +116,16 @@
 		<Unit filename="Battlescape\Position.h" />
 		<Unit filename="Battlescape\Projectile.cpp" />
 		<Unit filename="Battlescape\Projectile.h" />
+		<Unit filename="Battlescape\ProjectileFlyBState.cpp" />
+		<Unit filename="Battlescape\ProjectileFlyBState.h" />
 		<Unit filename="Battlescape\TerrainModifier.cpp" />
 		<Unit filename="Battlescape\TerrainModifier.h" />
 		<Unit filename="Battlescape\UnitSprite.cpp" />
 		<Unit filename="Battlescape\UnitSprite.h" />
+		<Unit filename="Battlescape\UnitTurnBState.cpp" />
+		<Unit filename="Battlescape\UnitTurnBState.h" />
+		<Unit filename="Battlescape\UnitWalkBState.cpp" />
+		<Unit filename="Battlescape\UnitWalkBState.h" />
 		<Unit filename="Engine\Action.cpp" />
 		<Unit filename="Engine\Action.h" />
 		<Unit filename="Engine\CatFile.cpp" />
@@ -122,10 +134,10 @@
 		<Unit filename="Engine\Exception.h" />
 		<Unit filename="Engine\Font.cpp" />
 		<Unit filename="Engine\Font.h" />
-		<Unit filename="Engine\Game.cpp" />
-		<Unit filename="Engine\Game.h" />
 		<Unit filename="Engine\GMCat.cpp" />
 		<Unit filename="Engine\GMCat.h" />
+		<Unit filename="Engine\Game.cpp" />
+		<Unit filename="Engine\Game.h" />
 		<Unit filename="Engine\InteractiveSurface.cpp" />
 		<Unit filename="Engine\InteractiveSurface.h" />
 		<Unit filename="Engine\Language.cpp" />
@@ -240,9 +252,6 @@
 		<Unit filename="Menu\StartState.h" />
 		<Unit filename="Menu\TestState.cpp" />
 		<Unit filename="Menu\TestState.h" />
-		<Unit filename="OpenXcom.rc">
-			<Option compilerVar="WINDRES" />
-		</Unit>
 		<Unit filename="Resource\ResourcePack.cpp" />
 		<Unit filename="Resource\ResourcePack.h" />
 		<Unit filename="Resource\XcomResourcePack.cpp" />
@@ -269,14 +278,14 @@
 		<Unit filename="Ruleset\RuleItem.h" />
 		<Unit filename="Ruleset\RuleRegion.cpp" />
 		<Unit filename="Ruleset\RuleRegion.h" />
-		<Unit filename="Ruleset\Ruleset.cpp" />
-		<Unit filename="Ruleset\Ruleset.h" />
 		<Unit filename="Ruleset\RuleTerrain.cpp" />
 		<Unit filename="Ruleset\RuleTerrain.h" />
 		<Unit filename="Ruleset\RuleUfo.cpp" />
 		<Unit filename="Ruleset\RuleUfo.h" />
 		<Unit filename="Ruleset\RuleUnitSprite.cpp" />
 		<Unit filename="Ruleset\RuleUnitSprite.h" />
+		<Unit filename="Ruleset\Ruleset.cpp" />
+		<Unit filename="Ruleset\Ruleset.h" />
 		<Unit filename="Ruleset\SoldierNamePool.cpp" />
 		<Unit filename="Ruleset\SoldierNamePool.h" />
 		<Unit filename="Ruleset\XcomRuleset.cpp" />

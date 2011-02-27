@@ -44,7 +44,12 @@ protected:
 	MapData *_objects[4];
 	int _currentFrame[4];
 	bool _discovered; // tile has been seen in the past
-	int _light[LIGHTLAYERS], _lastLight[LIGHTLAYERS], _smoke, _fire, _sessionID, _explosive;
+	int _light[LIGHTLAYERS];
+	int _lastLight[LIGHTLAYERS];
+	int _smoke;
+	int _fire;
+	int _sessionID;
+	int _explosive;
 	Position _pos;
 	bool _cached;
 	BattleUnit *_unit; // unit on this tile
@@ -93,7 +98,7 @@ public:
 	/// Destroy a tile part.
 	void destroy(int part);
 	/// Destroy a tile part.
-	void setExplosive(int power, int sessionID);
+	void setExplosive(int power);
 	/// Destroy a tile part.
 	void detonate();
 	/// Animated the tile parts.

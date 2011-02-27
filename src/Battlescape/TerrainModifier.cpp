@@ -403,9 +403,6 @@ void TerrainModifier::explode(const Position &center, int power, Affector affect
 	double centerY = center.y + 0.5;
 	int power_;
 
-	// a unique ID for this session, used to avoid tiles to be affected more than once.
-	int sessionID = RNG::generate(1,65000);
-
 	// raytrace every 3 degrees makes sure we cover all tiles in a circle.
 	for (double te = 0; te <= 360; te += 3)
 	{
@@ -441,7 +438,7 @@ void TerrainModifier::explode(const Position &center, int power, Affector affect
 				if (affector == AFFECT_HE)
 				{
 					// explosives do 1/2 damage to terrain and 1/2 up to 3/2 random damage to units
-					dest->setExplosive(power_ / 2, sessionID);
+					dest->setExplosive(power_ / 2);
 					// TODO: destroy floors above
 				
 				}
