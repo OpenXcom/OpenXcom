@@ -713,6 +713,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	skyranger->setCost(500000);
 	skyranger->setHWPs(3);
 	skyranger->setRefuelRate(50);
+	skyranger->setTransferTime(72);
 
 	RuleTerrain *ruleTerrain = new RuleTerrain("PLANE");
 	skyranger->setBattlescapeTerrainData(ruleTerrain);
@@ -753,6 +754,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	interceptor->setCost(600000);
 	interceptor->setHWPs(0);
 	interceptor->setRefuelRate(50);
+	interceptor->setTransferTime(96);
 
 	RuleCraft* firestorm = new RuleCraft("STR_FIRESTORM");
 	firestorm->setSprite(4);
@@ -860,31 +862,37 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	RuleItem *slauncher = new RuleItem("STR_STINGRAY_LAUNCHER");
 	slauncher->setSize(0.8f);
 	slauncher->setCost(16000);
+	slauncher->setTransferTime(48);
 	slauncher->setEquippable(false);
 
 	RuleItem *alauncher = new RuleItem("STR_AVALANCHE_LAUNCHER");
 	alauncher->setSize(1.0f);
 	alauncher->setCost(17000);
+	alauncher->setTransferTime(48);
 	alauncher->setEquippable(false);
 
 	RuleItem *icannon = new RuleItem("STR_CANNON");
 	icannon->setSize(1.5f);
 	icannon->setCost(30000);
+	icannon->setTransferTime(48);
 	icannon->setEquippable(false);
 
 	RuleItem *smissile = new RuleItem("STR_STINGRAY_MISSILES");
 	smissile->setSize(0.4f);
 	smissile->setCost(3000);
+	smissile->setTransferTime(48);
 	smissile->setEquippable(false);
 
 	RuleItem *amissile = new RuleItem("STR_AVALANCHE_MISSILES");
 	amissile->setSize(1.5f);
 	amissile->setCost(9000);
+	amissile->setTransferTime(48);
 	amissile->setEquippable(false);
 
 	RuleItem *crounds = new RuleItem("STR_CANNON_ROUNDS_X50");
 	crounds->setSize(0.0f);
 	crounds->setCost(1240);
+	crounds->setTransferTime(96);
 	crounds->setEquippable(false);
 
 	RuleItem *pistol = new RuleItem("STR_PISTOL");
@@ -1306,6 +1314,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_costSoldier = 20000;
 	_costEngineer = 25000;
 	_costScientist = 30000;
+	_timePersonnel = 72;
 }
 
 /**

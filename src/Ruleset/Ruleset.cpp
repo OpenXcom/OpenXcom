@@ -240,4 +240,14 @@ int Ruleset::getScientistCost() const
 	return _costScientist;
 }
 
+/**
+ * Returns the time it takes to transfer personnel
+ * between bases.
+ * @return Time in hours.
+ */
+int Ruleset::getPersonnelTime() const
+{
+	return _timePersonnel;
+}
+
 }

@@ -38,7 +38,7 @@ class RuleCraft
 private:
 	std::string _type;
 	int _sprite;
-	int _fuelMax, _damageMax, _speedMax, _accel, _weapons, _soldiers, _hwps, _cost, _repair, _refuel, _range;
+	int _fuelMax, _damageMax, _speedMax, _accel, _weapons, _soldiers, _hwps, _cost, _repair, _refuel, _range, _time;
 	// battlescape:
 	RuleTerrain *_battlescapeTerrainData;
 public:
@@ -96,6 +96,10 @@ public:
 	int getRadarRange() const;
 	/// Sets the craft's radar range.
 	void setRadarRange(int range);
+	/// Gets the item's transfer time.
+	int getTransferTime() const;
+	/// Sets the item's transfer time.
+	void setTransferTime(int time);
 	/// Gets the craft's terrain data.
 	RuleTerrain *getBattlescapeTerrainData();
 	/// Sets the craft's terrain data.

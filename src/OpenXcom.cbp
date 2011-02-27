@@ -92,7 +92,9 @@
 		<Unit filename="Basescape\SoldiersState.h" />
 		<Unit filename="Basescape\StoresState.cpp" />
 		<Unit filename="Basescape\StoresState.h" />
+		<Unit filename="Basescape\TransfersState.cpp" />
 		<Unit filename="Battlescape\BattleState.cpp" />
+		<Unit filename="Basescape\TransfersState.h" />
 		<Unit filename="Battlescape\BattleState.h" />
 		<Unit filename="Battlescape\BattlescapeGenerator.cpp" />
 		<Unit filename="Battlescape\BattlescapeGenerator.h" />
