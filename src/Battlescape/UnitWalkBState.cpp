@@ -1,0 +1,192 @@
+/*
+ * Copyright 2010 OpenXcom Developers.
+ *
+ * This file is part of OpenXcom.
+ *
+ * OpenXcom is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * OpenXcom is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#include "UnitWalkBState.h"
+#include "TerrainModifier.h"
+#include "Pathfinding.h"
+#include "BattlescapeState.h"
+#include "Map.h"
+#include "../Engine/Game.h"
+#include "../Savegame/BattleUnit.h"
+#include "../Savegame/SavedGame.h"
+#include "../Savegame/SavedBattleGame.h"
+#include "../Savegame/Tile.h"
+#include "../Resource/ResourcePack.h"
+#include "../Engine/SoundSet.h"
+#include "../Engine/Sound.h"
+#include "../Engine/RNG.h"
+
+namespace OpenXcom
+{
+
+/**
+ * Sets up an UnitWalkBState.
+ */
+UnitWalkBState::UnitWalkBState(BattlescapeState *parent) : BattleState(parent)
+{
+	
+}
+
+/**
+ * Deletes the UnitWalkBState.
+ */
+UnitWalkBState::~UnitWalkBState()
+{
+
+}
+
+bool UnitWalkBState::init()
+{
+	_parent->setStateInterval(DEFAULT_WALK_SPEED);
+	_unit = _parent->getGame()->getSavedGame()->getBattleGame()->getSelectedUnit();
+	_pf = _parent->getGame()->getSavedGame()->getBattleGame()->getPathfinding();
+	_terrain = _parent->getGame()->getSavedGame()->getBattleGame()->getTerrainModifier();
+	_target = _parent->getTarget();
+	_pf->calculate(_unit, _target);
+	return true;
+}
+
+bool UnitWalkBState::think()
+{
+	// during a walking cycle we make step sounds
+	if (_unit->getStatus() == STATUS_WALKING)
+	{
+
+		// play footstep sound 1
+		if (_unit->getWalkingPhase() == 3)
+		{
+			Tile *tile = _parent->getGame()->getSavedGame()->getBattleGame()->getTile(_unit->getPosition());
+			if (tile->getFootstepSound())
+			{
+				_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(22 + (tile->getFootstepSound()*2))->play();
+			}
+		}
+		// play footstep sound 2
+		if (_unit->getWalkingPhase() == 7)
+		{
+			Tile *tile = _parent->getGame()->getSavedGame()->getBattleGame()->getTile(_unit->getPosition());
+			if (tile->getFootstepSound())
+			{
+				_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(23 + (tile->getFootstepSound()*2))->play();
+			}
+		}
+
+		_unit->keepWalking(); // advances the phase
+
+		// unit moved from one tile to the other, update the tiles
+		if (_unit->getPosition() != _unit->getLastPosition())
+		{
+			_parent->getGame()->getSavedGame()->getBattleGame()->getTile(_unit->getLastPosition())->setUnit(0);
+			_parent->getGame()->getSavedGame()->getBattleGame()->getTile(_unit->getPosition())->setUnit(_unit);
+			// if the unit changed level, camera changes level with
+			_parent->getMap()->setViewHeight(_unit->getPosition().z);
+		}
+
+		// is the walking cycle finished?
+		if (_unit->getStatus() == STATUS_STANDING)
+		{
+			_terrain->calculateFOV(_unit);
+			// if you want lighting to be calculated every step, uncomment next line
+			//_terrain->calculateLighting();
+		}
+		else
+		{
+			// make sure the unit sprites are up to date
+			_parent->getMap()->cacheUnits();
+		}
+	}
+
+	// we are just standing around, shouldn't we be walking?
+	if (_unit->getStatus() == STATUS_STANDING)
+	{
+		int dir = _pf->getStartDirection();
+		if (dir != -1)
+		{
+			// we are looking in the wrong way, turn first
+			// we are not using the turn state, because turning during walking costs no tu
+			if (dir != _unit->getDirection()) 
+			{
+				_unit->lookAt(dir);
+				return true;
+			}
+
+			// now open doors (if any)
+			int door = _terrain->unitOpensDoor(_unit);
+			if (door == 3)
+			{
+				return true; // don't start walking yet, wait for the ufo door to open
+			}
+			if (door == 0)
+			{
+				_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(3)->play(); // normal door
+			}
+			if (door == 1)
+			{
+				_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(RNG::generate(20,21))->play(); // ufo door
+				return true; // don't start walking yet, wait for the ufo door to open
+			}
+
+			// now start moving
+			dir = _pf->dequeuePath();
+			Position destination;
+			int tu = _pf->getTUCost(_unit->getPosition(), dir, &destination, _unit);
+			_unit->startWalking(dir, destination);
+			// make sure the unit sprites are up to date
+			_parent->getMap()->cacheUnits();
+		}
+		else
+		{
+			// no more waypoints, this means we succesfully finished this action
+			_terrain->calculateUnitLighting();
+			// make sure the unit sprites are up to date
+			_parent->getMap()->cacheUnits();
+			return false;
+		}
+	}
+
+	// turning during walking costs no tu
+	if (_unit->getStatus() == STATUS_TURNING)
+	{
+		_unit->turn(false);
+		_terrain->calculateFOV(_unit);
+		// make sure the unit sprites are up to date
+		_parent->getMap()->cacheUnits();
+	}
+
+	return true;
+}
+
+/*
+ * Abort unit walking.
+ */
+void UnitWalkBState::cancel()
+{
+	_pf->abortPath();
+}
+
+/*
+ * Get the action result. Returns error messages or an empty string when everything went fine.
+ * @return returnmessage Empty when everything is fine.
+ */
+std::string UnitWalkBState::getResult() const
+{
+	return _result;
+}
+
+}

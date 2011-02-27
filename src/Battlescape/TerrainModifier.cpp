@@ -586,4 +586,43 @@ int TerrainModifier::vectorToDirection(const Position &vector)
 	return -1;
 }
 
+/**
+ * Soldier opens a door (if any) by rightclick, or by walking through it.
+ * Normal door changes the tile objects. We need to make a sound 3 here.
+ * Ufo door updates the ufodooropened flag of the tile. We need to make a sound 20 or 21 and start the animation.
+ * An ufo door takes a few animation frames: while this animation is running this function returns true.
+ * @param unit
+ * @return 0 normal door opened, 1 ufo door is starting to open, 3 ufo door is still opening, -1 there is no door.
+ */
+int TerrainModifier::unitOpensDoor(BattleUnit *unit)
+{
+	int door = -1;
+	Tile *tile = _save->getTile(unit->getPosition());
+	switch(unit->getDirection())
+	{
+	case 0:	// north
+		door = tile->openDoor(O_NORTHWALL);
+		break;
+	case 2: // east
+		tile = _save->getTile(tile->getPosition() + Position(1, 0, 0));
+		if (tile) door = tile->openDoor(O_WESTWALL);
+		break;
+	case 4: // south
+		tile = _save->getTile(tile->getPosition() + Position(0, -1, 0));
+		if (tile) door = tile->openDoor(O_NORTHWALL);
+		break;
+	case 6: // west
+		door = tile->openDoor(O_WESTWALL);
+		break;
+	}
+
+	if (door == 0 || door == 1)
+	{
+		_save->getTerrainModifier()->calculateFOV(tile->getPosition());
+	}
+
+	return door;
+}
+
+
 }

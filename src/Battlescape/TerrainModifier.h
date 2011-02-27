@@ -65,6 +65,7 @@ public:
 	void destroyTile(Tile *tile);
 	/// Explosions.
 	void explode(const Position &center, int power, Affector affector, int maxRadius);
+	int unitOpensDoor(BattleUnit *unit);
 };
 
 }

@@ -143,11 +143,9 @@ void UnitSprite::draw()
 			int dir = _unit->getDirection() + 2;
 			if (dir > 7) dir -= 8;
 			item = _res->getSurfaceSet("HANDOB.PCK")->getFrame(_item->getRules()->getHandSprite() + dir);
-			// hacking to place the weapon so it looks kinda good
-			// To purists that know the exact pixel offsets: please PM me
-			// Daiky
-			int offX[8] = { 5, 10, 5, 4, -5, -11, -4, 0 };
-			int offY[8] = { -5, -1, 0, 10, 4, 0, -4, -8 };
+			int offX[8] = { 8, 10, 7, 4, -9, -11, -7, -3 };
+			int offY[8] = { -6, -3, 0, 2, 0, -4, -7, -9 };
+
 			item->setX(offX[_unit->getDirection()]);
 			item->setY(offY[_unit->getDirection()]);
 		}
@@ -214,6 +212,19 @@ void UnitSprite::draw()
 			item->setY(rules->getWalkTorsoOffset(_unit->getWalkingPhase()));
 		}
 	}
+
+	// todo: kneeling +4 pixels
+	// to check
+/*
+[00:01] <Dexus> dir0_seq: [leftarm, legs, handob, torso, rightarm]
+[00:01] <Dexus> dir1_seq: [leftarm, legs, torso, handob, rightarm]
+[00:01] <Dexus> dir2_seq: [leftarm, legs, torso, handob, rightarm]
+[00:01] <Dexus> dir3_seq: [legs, torso, leftarm, rightarm, handob]
+[00:01] <Dexus> dir4_seq: [rightarm, legs, torso, leftarm, handob]
+[00:01] <Dexus> dir5_seq: [rightarm, legs, handob, torso, leftarm]
+[00:01] <Dexus> dir6_seq: [rightarm, legs, handob, torso, leftarm]
+[00:01] <Dexus> dir7_seq: [handob, leftarm, rightarm, legs, torso]
+*/
 
 	if (_unit->getDirection() < 1 || _unit->getDirection() > 5)
 		if (item) item->blit(this);

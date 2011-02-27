@@ -21,7 +21,10 @@
 #include <string>
 #include "Map.h"
 #include "BattlescapeState.h"
-#include "BattleAction.h"
+#include "BattleState.h"
+#include "UnitTurnBState.h"
+#include "UnitWalkBState.h"
+#include "ProjectileFlyBState.h"
 #include "../Engine/Game.h"
 #include "../Engine/Music.h"
 #include "../Engine/Language.h"
@@ -50,10 +53,6 @@
 
 namespace OpenXcom
 {
-
-#define DEFAULT_WALK_SPEED 40
-#define DEFAULT_BULLET_SPEED 20
-#define DEFAULT_ANIM_SPEED 100
 
 /**
  * Initializes all the elements in the Battlescape screen.
@@ -205,13 +204,9 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	// Set music
 	_game->getResourcePack()->getMusic("GMTACTIC")->play();
 
-	_walkingTimer = new Timer(DEFAULT_WALK_SPEED);
-	_walkingTimer->onTimer((StateHandler)&BattlescapeState::moveUnit);
-	_walkingTimer->start();
-
-	_bulletTimer = new Timer(DEFAULT_BULLET_SPEED);
-	_bulletTimer->onTimer((StateHandler)&BattlescapeState::moveBullet);
-	_bulletTimer->start();
+	_stateTimer = new Timer(DEFAULT_ANIM_SPEED);
+	_stateTimer->onTimer((StateHandler)&BattlescapeState::handleState);
+	_stateTimer->start();
 
 	_animTimer = new Timer(DEFAULT_ANIM_SPEED);
 	_animTimer->onTimer((StateHandler)&BattlescapeState::animate);
@@ -224,8 +219,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
  */
 BattlescapeState::~BattlescapeState()
 {
-	delete _walkingTimer;
-	delete _bulletTimer;
+	delete _stateTimer;
 	delete _animTimer;
 }
 
@@ -235,6 +229,7 @@ void BattlescapeState::init()
 	_map->focus();
 	_map->cacheUnits();
 	_map->draw(true);
+	_targeting = false;
 }
 
 /**
@@ -242,8 +237,7 @@ void BattlescapeState::init()
   */
 void BattlescapeState::think()
 {
-	_walkingTimer->think(this, 0);
-	_bulletTimer->think(this, 0);
+	_stateTimer->think(this, 0);
 	_animTimer->think(this, 0);
 	_map->think();
 }
@@ -255,15 +249,12 @@ void BattlescapeState::think()
  */
 void BattlescapeState::mapClick(Action *action)
 {
-	// right-click abort 
-	
-	// right-click abort walking or in progress action
+	// right-click aborts walking state
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
-		if (_map->getBattleAction())
+		if (!_states.empty())
 		{
-			_map->getBattleAction()->cancel();
-			checkActionFinished();
+			_states.front()->cancel();
 			return;
 		}
 	}
@@ -271,52 +262,45 @@ void BattlescapeState::mapClick(Action *action)
 	// don't handle mouseclicks below 140, because they are in the buttons area (it overlaps with map surface)
 	if (action->getYMouse() / action->getYScale() > BUTTONS_AREA) return;
 
-	// don't accept leftclicks if there is no cursor
-	if (_map->getCursorType() == CT_NONE) return;
+	// don't accept leftclicks if there is no cursor or there is an action busy
+	if (_map->getCursorType() == CT_NONE || !_states.empty()) return;
 
 	Position pos;
 	_map->getSelectorPosition(&pos);
 
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		// if we clicked a unit, we select this unit
-		BattleUnit *unit = _battleGame->selectUnit(pos);
-		if (unit)
+		if (_targeting)
 		{
-			_battleGame->setSelectedUnit(unit);
-			updateSoldierInfo(unit);
-			return;
+			//  -= fire weapon =-
+			_targeting = false;
+			_target = pos;
+			handlePlayerAction(new ProjectileFlyBState(this));
 		}
-		// if we clicked somewhere else we start a walk action
-		if (!_map->getBattleAction())
+		else
 		{
-			BattleAction *ba = new BattleAction(_battleGame, _game->getResourcePack(), 0, WALK);
-			ba->setTarget(pos);
-			ba->start();
-			_map->setBattleAction(ba);
-			_map->setCursorType(CT_NONE);
-			checkActionFinished(); // could be the action goes into error immediatly
-		}
-		// if there is a pending firing action going on, trigger the action
-		if (_map->getBattleAction() && _map->getBattleAction()->getStatus() == PENDING)
-		{
-			_map->getBattleAction()->setTarget(pos);
-			_map->getBattleAction()->start();
-			_battleGame->getSelectedUnit()->aim(true);
-			_map->cacheUnits();
+			BattleUnit *unit = _battleGame->selectUnit(pos);
+			if (unit)
+			{
+			//  -= select unit =-
+				_battleGame->setSelectedUnit(unit);
+				updateSoldierInfo(unit);
+			}
+			else
+			{
+			//  -= start walking =-
+				_selectedAction = BA_WALK;
+				_target = pos;
+				handlePlayerAction(new UnitWalkBState(this));
+			}
 		}
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
-		if (!_map->getBattleAction())
-		{
-			BattleAction *ba = new BattleAction(_battleGame, _game->getResourcePack(), 0, TURN);
-			ba->setTarget(pos);
-			ba->start();
-			_map->setBattleAction(ba);
-			_map->cacheUnits();
-			checkActionFinished(); // could be the action goes into error immediatly
-		}
+		//  -= turn to or open door =-
+		_selectedAction = BA_TURN;
+		_target = pos;
+		handlePlayerAction(new UnitTurnBState(this));
 	}
 	
 }
@@ -504,37 +488,22 @@ void BattlescapeState::updateSoldierInfo(BattleUnit *unit)
 
 /*
  * This function popups a context sensitive list of actions the user can choose from.
- * Some actions result in a change of gamestate. Some result in a battlescape action.
+ * Some actions result in a change of gamestate.
  * @param item Item the user clicked on (righthand/lefthand)
  */
 void BattlescapeState::handleItemClick(BattleItem *item)
 {
-	// TODO popup menu	
-
-	// TODO other gamestates: scanner/medikit
-
-	if (item && !_map->getBattleAction())
+	// make sure there is an item, and the battlescape is in an idle state
+	if (item && _states.empty())
 	{
-		_map->setBattleAction(new BattleAction(_battleGame, _game->getResourcePack(), item, SNAP_SHOT));
+		// TODO popup menu	
+
+		// TODO other gamestates: scanner/medikit
+		// this should be returned by the popup menu, but is now hardcoded to test without popup menu
+		_selectedAction = BA_SNAPSHOT;
+		_selectedItem = item;
 		_map->setCursorType(CT_AIM);
-		checkActionFinished(); // could be the action goes into error immediatly
-	}
-}
-
-/**
- * This function checks if the current actions finished, displaying an error if any.
- */
-void BattlescapeState::checkActionFinished()
-{
-	if (_map->getBattleAction()->getStatus() == FINISHED)
-	{
-		_map->setCursorType(CT_NORMAL);
-		_game->getCursor()->setVisible(true);
-		// TODO handle result
-
-		delete _map->getBattleAction();
-		_map->setBattleAction(0);
-		_map->cacheUnits();
+		_targeting = true;	
 	}
 }
 
@@ -550,44 +519,101 @@ void BattlescapeState::drawItemSprite(BattleItem *item, Surface *surface)
 }
 
 /**
- * Animate walking unit.
+ * Give time slice to the front state.
  */
-void BattlescapeState::moveUnit()
+void BattlescapeState::handleState()
 {
-	if (_map->getBattleAction() && (_map->getBattleAction()->getType() == WALK || _map->getBattleAction()->getType() == TURN))
+	if (!_states.empty())
 	{
-		_map->getBattleAction()->moveUnit();
-		// if the unit changed level, camera changes level with
-		_map->setViewHeight(_battleGame->getSelectedUnit()->getPosition().z);
-		checkActionFinished();
-		_map->cacheUnits();
+		if (!_states.front()->think())
+		{
+			// the state is dead - clean it up
+			_states.pop_front();
+			// if all states are empty - give the mouse back to the player
+			if (_states.empty())
+			{
+				_map->setCursorType(CT_NORMAL);
+				_game->getCursor()->setVisible(true);
+			}
+			else
+			{
+				// init the next state in queue
+				_states.front()->init();
+			}
+		}
+		_map->draw(true); // redraw map
 	}
 }
 
-
-/**
- * Animate flying bullet.
- */
-void BattlescapeState::moveBullet()
+void BattlescapeState::handlePlayerAction(BattleState* state)
 {
-	if (_map->getBattleAction())
+	if (state->init())
 	{
-		_map->getBattleAction()->moveBullet();
-		checkActionFinished();
+		_map->setCursorType(CT_NONE);
+		_game->getCursor()->setVisible(false);
+		statePushFront(state);
+	}
+	else
+	{
+		if (_states.empty())
+		{
+			_map->setCursorType(CT_NORMAL);
+			_game->getCursor()->setVisible(true);
+		}
 	}
 }
 
 /**
- * Animate other stuff.
+ * Animate other stuff on the map.
  */
 void BattlescapeState::animate()
 {
-	if (_map->getBattleAction())
-	{
-		_map->getBattleAction()->animate();
-		checkActionFinished();
-	}
 	_map->animate();
+}
+
+/// Get target.
+Position BattlescapeState::getTarget() const
+{
+	return _target;
+}
+
+/// Get game.
+Game *BattlescapeState::getGame() const
+{
+	return _game;
+}
+
+/// Get map.
+Map *BattlescapeState::getMap() const
+{
+	return _map;
+}
+
+void BattlescapeState::statePushFront(BattleState *bs)
+{
+	_states.push_front(bs);
+	bs->init();
+}
+
+void BattlescapeState::statePushNext(BattleState *bs)
+{
+	_states.insert(++_states.begin(), bs);
+}
+
+
+void BattlescapeState::statePushBack(BattleState *bs)
+{
+	_states.push_back(bs);
+}
+
+void BattlescapeState::setStateInterval(Uint32 interval)
+{
+	_stateTimer->setInterval(interval);
+}
+
+BattleItem *BattlescapeState::getSelectedItem() const
+{
+	return _selectedItem;
 }
 
 }

@@ -276,9 +276,6 @@ int Projectile::voxelCheck(const Position& voxel)
 
 	for (int i=0; i< 4; i++)
 	{
-		int tx = voxel.x/16;
-		int ty = voxel.y/16;
-		int tz = voxel.z/24;
 		Tile *tile = _save->getTile(Position(voxel.x/16, voxel.y/16, voxel.z/24));
 		// check if we are not out of the map
 		if (tile == 0)
@@ -295,13 +292,13 @@ int Projectile::voxelCheck(const Position& voxel)
 }
 
 /**
- * Move one step further in the trajectory.
+ * Move further in the trajectory.
  * @return false if the trajectory is finished - no new position exists in the trajectory.
  */
 bool Projectile::move()
 {
-	_position++;
-	if (_trajectory.size() == _position)
+	_position+=2;
+	if ((_trajectory.size()-1) <= _position)
 	{
 		return false;
 	}
@@ -318,7 +315,7 @@ bool Projectile::move()
  */
 Position Projectile::getPosition(int offset) const
 {
-	if (_position + offset >= 0)
+	if (_position + offset >= 0 && _position + offset < _trajectory.size())
 		return _trajectory.at(_position + offset);
 	else
 		return _trajectory.at(_position);

@@ -105,7 +105,7 @@ public:
 	/// Look at a certain direction.
 	void lookAt(int direction);
 	/// Turn to the destination direction.
-	void turn(bool spendTU);
+	void turn(bool spendTU = true);
 	/// Gets the unit's maximum time units.
 	int getMaxTimeUnits() const;
 	/// Gets the unit's maximum stamina.

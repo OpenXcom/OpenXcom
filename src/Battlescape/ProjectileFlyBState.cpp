@@ -1,0 +1,124 @@
+/*
+ * Copyright 2010 OpenXcom Developers.
+ *
+ * This file is part of OpenXcom.
+ *
+ * OpenXcom is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * OpenXcom is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#include "ProjectileFlyBState.h"
+#include "ExplosionBState.h"
+#include "BattlescapeState.h"
+#include "Projectile.h"
+#include "TerrainModifier.h"
+#include "Map.h"
+#include "../Engine/Game.h"
+#include "../Savegame/BattleUnit.h"
+#include "../Savegame/SavedGame.h"
+#include "../Savegame/SavedBattleGame.h"
+#include "../Resource/ResourcePack.h"
+#include "../Engine/SoundSet.h"
+#include "../Engine/Sound.h"
+#include "../Ruleset/RuleItem.h"
+
+namespace OpenXcom
+{
+
+/**
+ * Sets up an ProjectileFlyBState.
+ */
+ProjectileFlyBState::ProjectileFlyBState(BattlescapeState *parent) : BattleState(parent)
+{
+	
+}
+
+/**
+ * Deletes the ProjectileFlyBState.
+ */
+ProjectileFlyBState::~ProjectileFlyBState()
+{
+
+}
+
+bool ProjectileFlyBState::init()
+{
+	_parent->setStateInterval(DEFAULT_BULLET_SPEED);
+	_unit = _parent->getGame()->getSavedGame()->getBattleGame()->getSelectedUnit();
+	// create a new projectile
+	Projectile *projectile = new Projectile(_parent->getGame()->getResourcePack(),
+									_parent->getGame()->getSavedGame()->getBattleGame(),
+									_unit->getPosition(),
+									_parent->getTarget(),
+									_parent->getSelectedItem()->getRules()->getBulletSprite()
+									);
+	// add the projectile on the map
+	_parent->getMap()->setProjectile(projectile);
+	// let it calculate a trajectory
+	if (projectile->calculateTrajectory())
+	{
+		// set the soldier in an aiming position
+		_unit->aim(true);
+		_parent->getMap()->cacheUnits();
+		// and we have a lift-off
+		_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(_parent->getSelectedItem()->getRules()->getFireSound())->play();
+	}
+	else
+	{
+		// no line of fire
+		delete projectile;
+		_parent->getMap()->setProjectile(0);
+		return false;
+	}
+
+	return true;
+}
+
+bool ProjectileFlyBState::think()
+{
+	if(!_parent->getMap()->getProjectile()->move())
+	{
+		// impact !
+		//_res->getSoundSet("BATTLE.CAT")->getSound(_item->getRules()->getHitSound())->play();
+		_parent->statePushNext(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(-1)));
+
+		delete _parent->getMap()->getProjectile();
+		_parent->getMap()->setProjectile(0);
+		_unit->aim(false);
+		_parent->getMap()->cacheUnits();
+
+		return false;
+	}
+	else
+	{
+		return true;
+	}
+}
+
+/*
+ * Unit turning cannot be cancelled.
+ */
+void ProjectileFlyBState::cancel()
+{
+}
+
+/*
+ * Get the action result. Returns error messages or an empty string when everything went fine.
+ * @return returnmessage Empty when everything is fine.
+ */
+std::string ProjectileFlyBState::getResult() const
+{
+	return _result;
+}
+
+}

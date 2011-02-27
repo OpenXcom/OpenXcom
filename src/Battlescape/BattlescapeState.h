@@ -20,6 +20,8 @@
 #define OPENXCOM_BATTLESCAPESTATE_H
 
 #include "../Engine/State.h"
+#include "Position.h"
+#include <list>
 
 namespace OpenXcom
 {
@@ -35,6 +37,14 @@ class BattleUnit;
 class SavedBattleGame;
 class BattleItem;
 class Window;
+class BattleState;
+class Timer;
+
+enum BattleActionType { BA_THROW, BA_AUTOSHOT, BA_SNAPSHOT, BA_AIMEDSHOT, BA_STUN, BA_HIT, BA_WALK, BA_TURN };
+
+#define DEFAULT_WALK_SPEED 40
+#define DEFAULT_BULLET_SPEED 20
+#define DEFAULT_ANIM_SPEED 100
 
 /**
  * Battlescape screen which shows the tactical battle
@@ -53,8 +63,15 @@ private:
 	Text *_txtName;
 	NumberText *_numTimeUnits, *_numEnergy, *_numHealth, *_numMorale, *_numLayers;
 	Bar *_barTimeUnits, *_barEnergy, *_barHealth, *_barMorale;
-	Timer *_walkingTimer, *_bulletTimer, *_animTimer;
+	Timer *_stateTimer, *_animTimer;
 	SavedBattleGame *_battleGame;
+
+	BattleActionType _selectedAction;
+	BattleItem *_selectedItem;
+	Position _target;
+	std::list<BattleState*> _states;
+	bool _targeting;
+
 	void checkActionFinished();
 	void handleItemClick(BattleItem *item);
 	void drawItemSprite(BattleItem *item, Surface *surface);
@@ -103,12 +120,28 @@ public:
 	void btnRightHandItemClick(Action *action);
 	/// updates soldier name/rank/tu/energy/health/morale
 	void updateSoldierInfo(BattleUnit *unit);
-	/// Animate walking unit.
-	void moveUnit();
-	/// Animate flying bullet.
-	void moveBullet();
+	/// handlestates timer.
+	void handleState();
+	/// handle player action.
+	void handlePlayerAction(BattleState* state);
 	/// Animate other stuff.
 	void animate();
+	/// Get target position.
+	Position getTarget() const;
+	/// Get game.
+	Game *getGame() const;
+	/// Get map.
+	Map *getMap() const;
+	/// Push a state at the front of the list.
+	void statePushFront(BattleState *bs);
+	/// Push a state at the second of the list.
+	void statePushNext(BattleState *bs);
+	/// Push a state at the back of the list.
+	void statePushBack(BattleState *bs);
+	/// Set state think interval.
+	void setStateInterval(Uint32 interval);
+	/// Get selected item.
+	BattleItem *getSelectedItem() const;
 };
 
 }

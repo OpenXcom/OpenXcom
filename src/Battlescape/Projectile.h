@@ -30,7 +30,7 @@ class BattleItem;
 class SavedBattleGame;
 
 /**
- * A class that represents a projectile. BattleAction is the owner of an instance of this class during it's short life.
+ * A class that represents a projectile. Map is the owner of an instance of this class during it's short life.
  * It calculates it's own trajectory and then moves along this precalculated trajectory in voxel space.
  */
 class Projectile
@@ -41,7 +41,7 @@ private:
 	BattleItem *_item;
 	Position _origin, _target;
 	std::vector<Position> _trajectory;
-	int _position;
+	unsigned int _position;
 	static const int _trail[11][36];
 	int _bulletType;
 	int calculateLine(const Position& origin, const Position& target, bool store);

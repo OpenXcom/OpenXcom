@@ -24,9 +24,9 @@
 #include "Position.h"
 #include "Pathfinding.h"
 #include "TerrainModifier.h"
-#include "BattleAction.h"
 #include "Projectile.h"
 #include "BulletSprite.h"
+#include "Explosion.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Action.h"
 #include "../Engine/SurfaceSet.h"
@@ -77,7 +77,6 @@ Map::Map(int width, int height, int x, int y) : InteractiveSurface(width, height
 {
 	_scrollTimer = new Timer(50);
 	_scrollTimer->onTimer((SurfaceHandler)&Map::scroll);
-	_action = 0;
 }
 
 /**
@@ -102,7 +101,6 @@ Map::~Map()
 
 	delete _arrow;
 	delete _buffer;
-	delete _action;
 
 	for (int i = 0; i < 36; i++)
 	{
@@ -191,6 +189,8 @@ void Map::init()
 		_bulletShadow[i]->draw();
 		_bulletShadow[i]->setShade(16);
 	}
+
+	_projectile = 0;
 }
 
 /**
@@ -246,15 +246,31 @@ void Map::drawTerrain(Surface *surface)
 	int beginX = 0, endX = _save->getWidth() - 1;
     int beginY = 0, endY = _save->getLength() - 1;
     int beginZ = 0, endZ = _viewHeight;
-	Position mapPosition, screenPosition, bulletPosition, bulletPositionScreen;
+	Position mapPosition, screenPosition, bulletPositionScreen;
+	int bulletLowX=16000, bulletLowY=16000, bulletHighX=0, bulletHighY=0;
 	int index;
 	bool dirty;
 
-	// if we got bullet, we like to calculate the position already outside the loop
-	if (_action && (_action->getProjectileType() > 0 || _action->getType()==HIT))
+	// if we got bullet, get the highest x and y tiles to draw it on
+	if (_projectile)
 	{
-		bulletPosition = Position(_action->getPosition(0).x / 16, _action->getPosition(0).y / 16, _action->getPosition(0).z / 24);
+		for (int i = 1; i <= _projectile->getParticle(0); i++)
+		{
+			if (_projectile->getPosition(1-i).x < bulletLowX)
+				bulletLowX = _projectile->getPosition(1-i).x;
+			if (_projectile->getPosition(1-i).y < bulletLowY)
+				bulletLowY = _projectile->getPosition(1-i).y;
+			if (_projectile->getPosition(1-i).x > bulletHighX)
+				bulletHighX = _projectile->getPosition(1-i).x;
+			if (_projectile->getPosition(1-i).y > bulletHighY)
+				bulletHighY = _projectile->getPosition(1-i).y;
+		}
 	}
+	// divide by 16 to go from voxel to tile position
+	bulletLowX = bulletLowX / 16;
+	bulletLowY = bulletLowY / 16;
+	bulletHighX = bulletHighX / 16;
+	bulletHighY = bulletHighY / 16;
 
     for (int itZ = beginZ; itZ <= endZ; itZ++) 
 	{
@@ -376,49 +392,59 @@ void Map::drawTerrain(Surface *surface)
 					}
 
 					// check if we got bullet
-					if (_action && _action->getProjectileType() > 0)
+					if (_projectile)
 					{
 						// draw bullet on the correct tile
-						if (bulletPosition == mapPosition)
+						if (itX >= bulletLowX && itX <= bulletHighX && itY >= bulletLowY && itY <= bulletHighY)
 						{
-							for (int i = 1; i <= _action->getProjectileParticle(0); i++)
+							if (itZ == 0)
 							{
-								if (_action->getProjectileParticle(i) != 0xFF)
+								// draw shadow on the floor
+								for (int i = 1; i <= _projectile->getParticle(0); i++)
 								{
-									Position voxelPos = _action->getPosition(1-i);
-									convertVoxelToScreen(voxelPos, &bulletPositionScreen);
-									_bullet[_action->getProjectileParticle(i)]->setX(bulletPositionScreen.x);
-									_bullet[_action->getProjectileParticle(i)]->setY(bulletPositionScreen.y);
-									_bullet[_action->getProjectileParticle(i)]->blit(surface);
+									if (_projectile->getParticle(i) != 0xFF)
+									{
+										Position voxelPos = _projectile->getPosition(1-i);
+										voxelPos.z = 0;
+										if (voxelPos.x/16 == mapPosition.x &&
+											voxelPos.y/16 == mapPosition.y)
+										{
+											convertVoxelToScreen(voxelPos, &bulletPositionScreen);
+											_bulletShadow[_projectile->getParticle(i)]->setX(bulletPositionScreen.x);
+											_bulletShadow[_projectile->getParticle(i)]->setY(bulletPositionScreen.y);
+											_bulletShadow[_projectile->getParticle(i)]->blit(surface);
+										}
+									}
 								}
 							}
-						}
-						// draw shadow only on bottom tile
-						if (bulletPosition.x == mapPosition.x && bulletPosition.y == mapPosition.y
-							&& mapPosition.z == 0)
-						{
-							for (int i = 1; i < _action->getProjectileParticle(0); i++)
+
+							for (int i = 1; i <= _projectile->getParticle(0); i++)
 							{
-								if (_action->getProjectileParticle(i) != 0xFF)
+								if (_projectile->getParticle(i) != 0xFF)
 								{
-									Position voxelPos = _action->getPosition(1-i);
-									voxelPos.z = 0;
-									convertVoxelToScreen(voxelPos, &bulletPositionScreen);
-									_bulletShadow[_action->getProjectileParticle(i)]->setX(bulletPositionScreen.x);
-									_bulletShadow[_action->getProjectileParticle(i)]->setY(bulletPositionScreen.y);
-									_bulletShadow[_action->getProjectileParticle(i)]->blit(surface);
+									Position voxelPos = _projectile->getPosition(1-i);
+									if (voxelPos.x/16 == mapPosition.x &&
+										voxelPos.y/16 == mapPosition.y &&
+										voxelPos.z/24 == mapPosition.z )
+									{
+										convertVoxelToScreen(voxelPos, &bulletPositionScreen);
+										_bullet[_projectile->getParticle(i)]->setX(bulletPositionScreen.x);
+										_bullet[_projectile->getParticle(i)]->setY(bulletPositionScreen.y);
+										_bullet[_projectile->getParticle(i)]->blit(surface);
+									}
 								}
 							}
 						}
 					}
-					// check if we got impact
-					if (_action && _action->getType()==HIT && bulletPosition == mapPosition)
+
+					// check if we gots explosions
+					for (std::set<Explosion*>::const_iterator i = _explosions.begin(); i != _explosions.end(); i++)
 					{
-						Position voxelPos = _action->getPosition();
-						convertVoxelToScreen(voxelPos, &bulletPosition);
-						frame = _res->getSurfaceSet("SMOKE.PCK")->getFrame(26 + _action->getAnimFrame());
-						frame->setX(bulletPosition.x - (_spriteWidth / 2));
-						frame->setY(bulletPosition.y - (_spriteHeight / 2));
+						Position voxelPos = (*i)->getPosition();
+						convertVoxelToScreen(voxelPos, &bulletPositionScreen);
+						frame = _res->getSurfaceSet("SMOKE.PCK")->getFrame((*i)->getCurrentFrame());
+						frame->setX(bulletPositionScreen.x - (_spriteWidth / 2));
+						frame->setY(bulletPositionScreen.y - (_spriteHeight / 2));
 						frame->blit(surface);
 					}
 
@@ -1118,15 +1144,19 @@ void Map::cacheUnits()
 	delete unitSprite;
 }
 
-void Map::setBattleAction(BattleAction *action)
+void Map::setProjectile(Projectile *projectile)
 {
-	_action = action;
+	_projectile = projectile;
 }
 
-
-BattleAction *Map::getBattleAction() const
+Projectile *Map::getProjectile() const
 {
-	return _action;
+	return _projectile;
+}
+
+std::set<Explosion*> *Map::getExplosions()
+{
+	return &_explosions;
 }
 
 

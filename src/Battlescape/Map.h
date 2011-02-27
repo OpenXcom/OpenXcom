@@ -20,6 +20,7 @@
 #define OPENXCOM_MAP_H
 
 #include "../Engine/InteractiveSurface.h"
+#include <set>
 
 namespace OpenXcom
 {
@@ -32,8 +33,9 @@ class MapData;
 class Position;
 class Tile;
 class BattleUnit;
-class BattleAction;
 class BulletSprite;
+class Projectile;
+class Explosion;
 
 // below Y 140 the buttons area starts
 #define BUTTONS_AREA 140
@@ -66,13 +68,13 @@ private:
 	bool _RMBDragging;
 	int _centerX, _centerY;
 	Surface *_buffer;
-	BattleAction *_action;
 	BulletSprite *_bullet[36];
 	BulletSprite *_bulletShadow[36];
+	Projectile *_projectile;
+	std::set<Explosion *> _explosions;
 
 
 	void minMaxInt(int *value, const int minValue, const int maxValue);
-	void cacheTileSprites();
 	bool cacheTileSprites(int i);
 	void convertScreenToMap(int screenX, int screenY, int *mapX, int *mapY);
 public:
@@ -126,11 +128,16 @@ public:
 	void setCursorType(CursorType type);
 	/// Get the 3D cursor type.
 	CursorType getCursorType() const;
+	/// Cache tile sprites.
+	void cacheTileSprites();
 	/// Cache units.
 	void cacheUnits();
-	/// Set battle action
-	void setBattleAction(BattleAction *action);
-	BattleAction *getBattleAction() const;
+	/// Set projectile
+	void setProjectile(Projectile *projectile);
+	/// Get projectile
+	Projectile *getProjectile() const;
+	/// Get explosion set
+	std::set<Explosion*> *getExplosions();
 };
 
 }
