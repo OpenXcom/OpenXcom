@@ -50,7 +50,7 @@ ExplosionBState::~ExplosionBState()
 
 }
 
-bool ExplosionBState::init()
+void ExplosionBState::init()
 {	
 	_parent->setStateInterval(DEFAULT_ANIM_SPEED);
 	_unit = _parent->getGame()->getSavedGame()->getBattleGame()->getSelectedUnit();
@@ -61,24 +61,22 @@ bool ExplosionBState::init()
 	// KABOOM
 	_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(_parent->getSelectedItem()->getRules()->getHitSound())->play();
 
-	return true;
 }
 
-bool ExplosionBState::think()
+void ExplosionBState::think()
 {
 	for (std::set<Explosion*>::const_iterator i = _parent->getMap()->getExplosions()->begin(); i != _parent->getMap()->getExplosions()->end(); i++)
 	{
 		if(!(*i)->animate())
 		{
-			// game over
 			_parent->getMap()->getExplosions()->erase((*i));
 			if (_parent->getMap()->getExplosions()->empty())
 			{
-				return false;
+				_parent->popState();
+				return;
 			}
 		}
 	}
-	return true;
 }
 
 /*

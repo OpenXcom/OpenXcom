@@ -51,7 +51,7 @@ UnitWalkBState::~UnitWalkBState()
 
 }
 
-bool UnitWalkBState::init()
+void UnitWalkBState::init()
 {
 	_parent->setStateInterval(DEFAULT_WALK_SPEED);
 	_unit = _parent->getGame()->getSavedGame()->getBattleGame()->getSelectedUnit();
@@ -59,10 +59,9 @@ bool UnitWalkBState::init()
 	_terrain = _parent->getGame()->getSavedGame()->getBattleGame()->getTerrainModifier();
 	_target = _parent->getTarget();
 	_pf->calculate(_unit, _target);
-	return true;
 }
 
-bool UnitWalkBState::think()
+void UnitWalkBState::think()
 {
 	// during a walking cycle we make step sounds
 	if (_unit->getStatus() == STATUS_WALKING)
@@ -123,14 +122,14 @@ bool UnitWalkBState::think()
 			if (dir != _unit->getDirection()) 
 			{
 				_unit->lookAt(dir);
-				return true;
+				return;
 			}
 
 			// now open doors (if any)
 			int door = _terrain->unitOpensDoor(_unit);
 			if (door == 3)
 			{
-				return true; // don't start walking yet, wait for the ufo door to open
+				return; // don't start walking yet, wait for the ufo door to open
 			}
 			if (door == 0)
 			{
@@ -139,7 +138,7 @@ bool UnitWalkBState::think()
 			if (door == 1)
 			{
 				_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(RNG::generate(20,21))->play(); // ufo door
-				return true; // don't start walking yet, wait for the ufo door to open
+				return; // don't start walking yet, wait for the ufo door to open
 			}
 
 			// now start moving
@@ -156,7 +155,8 @@ bool UnitWalkBState::think()
 			_terrain->calculateUnitLighting();
 			// make sure the unit sprites are up to date
 			_parent->getMap()->cacheUnits();
-			return false;
+			_parent->popState();
+			return;
 		}
 	}
 
@@ -168,8 +168,6 @@ bool UnitWalkBState::think()
 		// make sure the unit sprites are up to date
 		_parent->getMap()->cacheUnits();
 	}
-
-	return true;
 }
 
 /*

@@ -79,7 +79,10 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	_btnReserveAimed = new ImageButton(28, 11, 49, 189);
 	_btnReserveAuto = new ImageButton(28, 11, 78, 189);
 	_btnLeftHandItem = new ImageButton(32, 48, 8, 149);
+	_numAmmoLeft = new NumberText(3, 5, 8, 149);
 	_btnRightHandItem = new ImageButton(32, 48, 280, 149);
+	_numAmmoRight = new NumberText(3, 5, 280, 149);
+	_btnKneel = new InteractiveSurface(32, 16, 113, 160);
 
 	// Create soldier stats summary
 	_txtName = new Text(120, 10, 135, 176);
@@ -132,6 +135,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	add(_btnMapDown);
 	add(_btnNextSoldier);
 	add(_btnCenter);
+	add(_btnKneel);
 	add(_txtName);
 	add(_numTimeUnits);
 	add(_numEnergy);
@@ -146,7 +150,9 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	add(_btnReserveAimed);
 	add(_btnReserveAuto);
 	add(_btnLeftHandItem);
+	add(_numAmmoLeft);
 	add(_btnRightHandItem);
+	add(_numAmmoRight);
 
 	// Set up objects
 	_game->getResourcePack()->getSurface("ICONS.PCK")->blit(_icons);
@@ -160,11 +166,18 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	_numLayers->setColor(Palette::blockOffset(1)-2);
 	_numLayers->setValue(1);
 
+	_numAmmoLeft->setColor(Palette::blockOffset(1)-2);
+	_numAmmoLeft->setValue(999);
+
+	_numAmmoRight->setColor(Palette::blockOffset(1)-2);
+	_numAmmoRight->setValue(999);
+
 	_btnAbort->onMouseClick((ActionHandler)&BattlescapeState::btnAbortClick);
 	_btnMapUp->onMouseClick((ActionHandler)&BattlescapeState::btnMapUpClick);
 	_btnMapDown->onMouseClick((ActionHandler)&BattlescapeState::btnMapDownClick);
 	_btnNextSoldier->onMouseClick((ActionHandler)&BattlescapeState::btnNextSoldierClick);
 	_btnCenter->onMouseClick((ActionHandler)&BattlescapeState::btnCenterClick);
+	_btnKneel->onMouseClick((ActionHandler)&BattlescapeState::btnKneelClick);
 	_btnLeftHandItem->onMouseClick((ActionHandler)&BattlescapeState::btnLeftHandItemClick);
 	_btnRightHandItem->onMouseClick((ActionHandler)&BattlescapeState::btnRightHandItemClick);
 	
@@ -275,7 +288,10 @@ void BattlescapeState::mapClick(Action *action)
 			//  -= fire weapon =-
 			_targeting = false;
 			_target = pos;
-			handlePlayerAction(new ProjectileFlyBState(this));
+			_map->setCursorType(CT_NONE);
+			_game->getCursor()->setVisible(false);
+			statePushBack(new UnitTurnBState(this));
+			statePushBack(new ProjectileFlyBState(this));
 		}
 		else
 		{
@@ -289,18 +305,18 @@ void BattlescapeState::mapClick(Action *action)
 			else
 			{
 			//  -= start walking =-
-				_selectedAction = BA_WALK;
 				_target = pos;
-				handlePlayerAction(new UnitWalkBState(this));
+				_map->setCursorType(CT_NONE);
+				_game->getCursor()->setVisible(false);
+				statePushBack(new UnitWalkBState(this));
 			}
 		}
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
 		//  -= turn to or open door =-
-		_selectedAction = BA_TURN;
 		_target = pos;
-		handlePlayerAction(new UnitTurnBState(this));
+		statePushBack(new UnitTurnBState(this));
 	}
 	
 }
@@ -359,7 +375,11 @@ void BattlescapeState::btnShowMapClick(Action *action)
  * @param action Pointer to an action.
  */
 void BattlescapeState::btnKneelClick(Action *action)
-{}
+{
+	// TODO: check for timeunits... check for FOV...
+	_battleGame->getSelectedUnit()->kneel(!_battleGame->getSelectedUnit()->isKneeled());
+	_map->cacheUnits();
+}
 
 /**
  * Go to soldier info screen.
@@ -525,41 +545,8 @@ void BattlescapeState::handleState()
 {
 	if (!_states.empty())
 	{
-		if (!_states.front()->think())
-		{
-			// the state is dead - clean it up
-			_states.pop_front();
-			// if all states are empty - give the mouse back to the player
-			if (_states.empty())
-			{
-				_map->setCursorType(CT_NORMAL);
-				_game->getCursor()->setVisible(true);
-			}
-			else
-			{
-				// init the next state in queue
-				_states.front()->init();
-			}
-		}
+		_states.front()->think();
 		_map->draw(true); // redraw map
-	}
-}
-
-void BattlescapeState::handlePlayerAction(BattleState* state)
-{
-	if (state->init())
-	{
-		_map->setCursorType(CT_NONE);
-		_game->getCursor()->setVisible(false);
-		statePushFront(state);
-	}
-	else
-	{
-		if (_states.empty())
-		{
-			_map->setCursorType(CT_NORMAL);
-			_game->getCursor()->setVisible(true);
-		}
 	}
 }
 
@@ -589,21 +576,69 @@ Map *BattlescapeState::getMap() const
 	return _map;
 }
 
+/**
+ * Push a state at the front of the queue and start it.
+ * @param bs Battlestate.
+ */
 void BattlescapeState::statePushFront(BattleState *bs)
 {
 	_states.push_front(bs);
 	bs->init();
 }
 
+/**
+ * Push a state as the next state after the current one.
+ * @param bs Battlestate.
+ */
 void BattlescapeState::statePushNext(BattleState *bs)
 {
-	_states.insert(++_states.begin(), bs);
+	if (_states.empty())
+	{
+		_states.push_front(bs);
+		bs->init();
+	}
+	else
+	{
+		_states.insert(++_states.begin(), bs);
+	}
+
 }
 
-
+/**
+ * Push a state at the back.
+ * @param bs Battlestate.
+ */
 void BattlescapeState::statePushBack(BattleState *bs)
 {
-	_states.push_back(bs);
+	if (_states.empty())
+	{
+		_states.push_front(bs);
+		bs->init();
+	}
+	else
+	{
+		_states.push_back(bs);
+	}
+}
+
+/**
+ * Pop the current state. Handle errors and mouse cursor appearing again.
+ */
+void BattlescapeState::popState()
+{
+	// TODO : first handle return message
+	_states.pop_front();
+	// if all states are empty - give the mouse back to the player
+	if (_states.empty())
+	{
+		_map->setCursorType(CT_NORMAL);
+		_game->getCursor()->setVisible(true);
+	}
+	else
+	{
+		// init the next state in queue
+		_states.front()->init();
+	}
 }
 
 void BattlescapeState::setStateInterval(Uint32 interval)

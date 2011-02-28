@@ -37,6 +37,7 @@ private:
 	int _leftArmStand;
 	int _rightArmStand;
 	int _legsStand;
+	int _legsKneel;
 	int _torso;
 	int _leftArmWalk[8];
 	int _rightArmWalk[8];
@@ -79,6 +80,10 @@ public:
 	void setLegsStand(int id);
 	/// Gets the legs stand start frame.
 	int getLegsStand() const;
+	/// Sets the legs stand start frame.
+	void setLegsKneel(int id);
+	/// Gets the legs stand start frame.
+	int getLegsKneel() const;
 	/// Sets the legs walk start frame.
 	void setLegsWalk(int id, int dir);
 	/// Gets the legs walk start frame.

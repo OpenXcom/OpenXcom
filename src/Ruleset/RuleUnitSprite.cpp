@@ -104,11 +104,28 @@ void RuleUnitSprite::setLegsStand(int id)
  * Gets the legs stand frame.
  * @return Start frame.
  */
+int RuleUnitSprite::getLegsKneel() const
+{
+	return _legsKneel;
+}
+
+/**
+ * Sets the legs stand start frame.
+ * @param id framenumber.
+ */
+void RuleUnitSprite::setLegsKneel(int id)
+{
+	_legsKneel = id;
+}
+
+/**
+ * Gets the legs stand frame.
+ * @return Start frame.
+ */
 int RuleUnitSprite::getLegsStand() const
 {
 	return _legsStand;
 }
-
 /**
  * Sets the legs walk start frame.
  * @param id framenumber.

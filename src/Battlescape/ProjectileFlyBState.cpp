@@ -51,7 +51,7 @@ ProjectileFlyBState::~ProjectileFlyBState()
 
 }
 
-bool ProjectileFlyBState::init()
+void ProjectileFlyBState::init()
 {
 	_parent->setStateInterval(DEFAULT_BULLET_SPEED);
 	_unit = _parent->getGame()->getSavedGame()->getBattleGame()->getSelectedUnit();
@@ -78,13 +78,12 @@ bool ProjectileFlyBState::init()
 		// no line of fire
 		delete projectile;
 		_parent->getMap()->setProjectile(0);
-		return false;
+		_parent->popState();
 	}
 
-	return true;
 }
 
-bool ProjectileFlyBState::think()
+void ProjectileFlyBState::think()
 {
 	if(!_parent->getMap()->getProjectile()->move())
 	{
@@ -96,12 +95,7 @@ bool ProjectileFlyBState::think()
 		_parent->getMap()->setProjectile(0);
 		_unit->aim(false);
 		_parent->getMap()->cacheUnits();
-
-		return false;
-	}
-	else
-	{
-		return true;
+		_parent->popState();
 	}
 }
 

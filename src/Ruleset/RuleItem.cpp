@@ -25,7 +25,7 @@ namespace OpenXcom
  * Creates a blank ruleset for a certain type of item.
  * @param type String defining the type.
  */
-RuleItem::RuleItem(std::string type) : _type(type), _size(0.0), _cost(0), _time(24), _equip(true), _twoHanded(false)
+RuleItem::RuleItem(std::string type) : _type(type), _size(0.0), _cost(0), _time(24), _equip(true), _twoHanded(false), _damageType(DT_NONE)
 {
 }
 
@@ -262,12 +262,93 @@ int RuleItem::getHitAnimation() const
 }
 
 /**
- * Changes the item's fire sound..
+ * Changes the item's fire sound.
  * @param sprite Sprite reference.
  */
 void RuleItem::setHitAnimation(int animation)
 {
 	_hitAnimation = animation;
+}
+
+/**
+ * Returns the item's power.
+ * @return power Teh powah.
+ */
+int RuleItem::getPower() const
+{
+	return _power;
+}
+
+/**
+ * Sets the item's power.
+ * @param power the item's power.
+ */
+void RuleItem::setPower(int power)
+{
+	_power = power;
+}
+
+/**
+ * Returns the item's accuracy for snapshots.
+ * @return Accuracy the item's accuracy for snapshots.
+ */
+int RuleItem::getAccuracySnap() const
+{
+	return _accuracySnap;
+}
+
+/**
+ * Sets the item's accuracy for snapshots.
+ * @param accuracy item's accuracy for snapshots.
+ */
+void RuleItem::setAccuracySnap(int accuracy)
+{
+	_accuracySnap = accuracy;
+}
+
+/**
+ * Returns a list of compatible ammo.
+ * @return pointer to a list of compatible ammo.
+ */
+std::vector<std::string> *RuleItem::getCompatibleAmmo()
+{
+	return &_compatibleAmmo;
+}
+
+/**
+ * Returns the item's damage type.
+ * @return damagetype the item's damage type.
+ */
+ItemDamageType RuleItem::getDamageType() const
+{
+	return _damageType;
+}
+
+/**
+ * Sets the item's damage type.
+ * @param damagetype the item's damage type.
+ */
+void RuleItem::setDamageType(ItemDamageType damageType)
+{
+	_damageType = damageType;
+}
+
+/**
+ * Returns the item's type.
+ * @return type the item's type.
+ */
+BattleType RuleItem::getBattleType() const
+{
+	return _battleType;
+}
+
+/**
+ * Sets the item's type.
+ * @param type the item's type.
+ */
+void RuleItem::setBattleType(BattleType type)
+{
+	_battleType = type;
 }
 
 }

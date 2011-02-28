@@ -40,7 +40,7 @@ class Window;
 class BattleState;
 class Timer;
 
-enum BattleActionType { BA_THROW, BA_AUTOSHOT, BA_SNAPSHOT, BA_AIMEDSHOT, BA_STUN, BA_HIT, BA_WALK, BA_TURN };
+enum BattleActionType { BA_THROW, BA_AUTOSHOT, BA_SNAPSHOT, BA_AIMEDSHOT, BA_STUN, BA_HIT };
 
 #define DEFAULT_WALK_SPEED 40
 #define DEFAULT_BULLET_SPEED 20
@@ -61,7 +61,7 @@ private:
 	ImageButton *_btnReserveNone, *_btnReserveSnap, *_btnReserveAimed, *_btnReserveAuto;
 	ImageButton *_btnLeftHandItem, *_btnRightHandItem;
 	Text *_txtName;
-	NumberText *_numTimeUnits, *_numEnergy, *_numHealth, *_numMorale, *_numLayers;
+	NumberText *_numTimeUnits, *_numEnergy, *_numHealth, *_numMorale, *_numLayers, *_numAmmoLeft, *_numAmmoRight;
 	Bar *_barTimeUnits, *_barEnergy, *_barHealth, *_barMorale;
 	Timer *_stateTimer, *_animTimer;
 	SavedBattleGame *_battleGame;
@@ -122,8 +122,6 @@ public:
 	void updateSoldierInfo(BattleUnit *unit);
 	/// handlestates timer.
 	void handleState();
-	/// handle player action.
-	void handlePlayerAction(BattleState* state);
 	/// Animate other stuff.
 	void animate();
 	/// Get target position.
@@ -138,6 +136,8 @@ public:
 	void statePushNext(BattleState *bs);
 	/// Push a state at the back of the list.
 	void statePushBack(BattleState *bs);
+	/// Remove current state.
+	void popState();
 	/// Set state think interval.
 	void setStateInterval(Uint32 interval);
 	/// Get selected item.

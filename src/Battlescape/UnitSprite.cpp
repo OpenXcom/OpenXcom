@@ -87,57 +87,46 @@ void UnitSprite::draw()
 {
 	RuleUnitSprite *rules = _unit->getRenderRules();
 	std::string sheet = rules->getSpriteSheet();
-	Surface *torso = 0, *legs = 0, *bottomArm = 0, *topArm = 0, *item = 0;
+	Surface *torso = 0, *legs = 0, *leftArm = 0, *rightArm = 0, *item = 0;
 	clear();
 	
-	if (rules->getTorso() > -1)
+	if (_unit->getGender() == GENDER_FEMALE)
 	{
-		if (_unit != 0 && _unit->getGender() == GENDER_FEMALE)
-		{
-			torso = _res->getSurfaceSet(sheet)->getFrame(rules->getFemaleTorso() + _unit->getDirection());
-		}
-		else
-		{
-			torso = _res->getSurfaceSet(sheet)->getFrame(rules->getTorso() + _unit->getDirection());
-		}
+		torso = _res->getSurfaceSet(sheet)->getFrame(rules->getFemaleTorso() + _unit->getDirection());
+	}
+	else
+	{
+		torso = _res->getSurfaceSet(sheet)->getFrame(rules->getTorso() + _unit->getDirection());
 	}
 
-	if (torso && _unit->getStatus() == STATUS_WALKING)
+	if (_unit->getStatus() == STATUS_WALKING)
 	{
 		torso->setY(rules->getWalkTorsoOffset(_unit->getWalkingPhase()));
 	}
 
-	if (_unit->getStatus() == STATUS_STANDING || _unit->getStatus() == STATUS_TURNING || _unit->getStatus() == STATUS_AIMING)
-	{
-		legs = _res->getSurfaceSet(sheet)->getFrame(rules->getLegsStand() + _unit->getDirection());
-		if (_unit->getDirection() < 4)
-		{
-			bottomArm = _res->getSurfaceSet(sheet)->getFrame(rules->getLeftArmStand() + _unit->getDirection());
-			topArm = _res->getSurfaceSet(sheet)->getFrame(rules->getRightArmStand() + _unit->getDirection());
-		}
-		else
-		{
-			topArm = _res->getSurfaceSet(sheet)->getFrame(rules->getLeftArmStand() + _unit->getDirection());
-			bottomArm = _res->getSurfaceSet(sheet)->getFrame(rules->getRightArmStand() + _unit->getDirection());
-		}
-	}
 	if (_unit->getStatus() == STATUS_WALKING)
 	{
 		legs = _res->getSurfaceSet(sheet)->getFrame(rules->getLegsWalk(_unit->getDirection()) + _unit->getWalkingPhase());
-		if (_unit->getDirection() < 4)
+		leftArm = _res->getSurfaceSet(sheet)->getFrame(rules->getLeftArmWalk(_unit->getDirection()) + _unit->getWalkingPhase());
+		rightArm = _res->getSurfaceSet(sheet)->getFrame(rules->getRightArmWalk(_unit->getDirection()) + _unit->getWalkingPhase());
+	}
+	else
+	{
+		if (_unit->isKneeled())
 		{
-			bottomArm = _res->getSurfaceSet(sheet)->getFrame(rules->getLeftArmWalk(_unit->getDirection()) + _unit->getWalkingPhase());
-			topArm = _res->getSurfaceSet(sheet)->getFrame(rules->getRightArmWalk(_unit->getDirection()) + _unit->getWalkingPhase());
+			legs = _res->getSurfaceSet(sheet)->getFrame(rules->getLegsKneel() + _unit->getDirection());
 		}
 		else
 		{
-			topArm = _res->getSurfaceSet(sheet)->getFrame(rules->getLeftArmWalk(_unit->getDirection()) + _unit->getWalkingPhase());
-			bottomArm = _res->getSurfaceSet(sheet)->getFrame(rules->getRightArmWalk(_unit->getDirection()) + _unit->getWalkingPhase());
+			legs = _res->getSurfaceSet(sheet)->getFrame(rules->getLegsStand() + _unit->getDirection());
 		}
+		leftArm = _res->getSurfaceSet(sheet)->getFrame(rules->getLeftArmStand() + _unit->getDirection());
+		rightArm = _res->getSurfaceSet(sheet)->getFrame(rules->getRightArmStand() + _unit->getDirection());
 	}
 
 	if (_item)
 	{
+		// draw handob item
 		if (_unit->getStatus() == STATUS_AIMING)
 		{
 			int dir = _unit->getDirection() + 2;
@@ -156,88 +145,60 @@ void UnitSprite::draw()
 			item->setY(0);
 		}
 
+		// draw arms holding the item
 		if (_item->getRules()->getTwoHanded())
 		{
-			if (_unit->getDirection() < 4)
+			leftArm = _res->getSurfaceSet(sheet)->getFrame(rules->getLeftArm2HWeapon() + _unit->getDirection());
+			if (_unit->getStatus() == STATUS_AIMING)
 			{
-				bottomArm = _res->getSurfaceSet(sheet)->getFrame(rules->getLeftArm2HWeapon() + _unit->getDirection());
-				if (_unit->getStatus() == STATUS_AIMING)
-				{
-					topArm = _res->getSurfaceSet(sheet)->getFrame(rules->getRightArm2HShoot() + _unit->getDirection());
-				}
-				else
-				{
-					topArm = _res->getSurfaceSet(sheet)->getFrame(rules->getRightArm2HWeapon() + _unit->getDirection());
-				}
+				rightArm = _res->getSurfaceSet(sheet)->getFrame(rules->getRightArm2HShoot() + _unit->getDirection());
 			}
 			else
 			{
-				topArm = _res->getSurfaceSet(sheet)->getFrame(rules->getLeftArm2HWeapon() + _unit->getDirection());
-				if (_unit->getStatus() == STATUS_AIMING)
-				{
-					bottomArm = _res->getSurfaceSet(sheet)->getFrame(rules->getRightArm2HShoot() + _unit->getDirection());
-				}
-				else
-				{
-					bottomArm = _res->getSurfaceSet(sheet)->getFrame(rules->getRightArm2HWeapon() + _unit->getDirection());
-				}
-			}
-			if (_unit->getStatus() == STATUS_WALKING)
-			{
-				topArm->setY(rules->getWalkTorsoOffset(_unit->getWalkingPhase()));
-				bottomArm->setY(rules->getWalkTorsoOffset(_unit->getWalkingPhase()));
+				rightArm = _res->getSurfaceSet(sheet)->getFrame(rules->getRightArm2HWeapon() + _unit->getDirection());
 			}
 		}
 		else
 		{
-			if (_unit->getDirection() < 4)
-			{
-				topArm = _res->getSurfaceSet(sheet)->getFrame(rules->getRightArm1HWeapon() + _unit->getDirection());
-				if (_unit->getStatus() == STATUS_WALKING)
-				{
-					topArm->setY(rules->getWalkTorsoOffset(_unit->getWalkingPhase()));
-				}
-			}
-			else
-			{
-				bottomArm = _res->getSurfaceSet(sheet)->getFrame(rules->getRightArm1HWeapon() + _unit->getDirection());
-				if (_unit->getStatus() == STATUS_WALKING)
-				{
-					bottomArm->setY(rules->getWalkTorsoOffset(_unit->getWalkingPhase()));
-				}
-			}
+			rightArm = _res->getSurfaceSet(sheet)->getFrame(rules->getRightArm1HWeapon() + _unit->getDirection());
 		}
+
+		// bob arm(s) & item up/down when walking
 		if (_unit->getStatus() == STATUS_WALKING)
 		{
 			item->setY(rules->getWalkTorsoOffset(_unit->getWalkingPhase()));
+			rightArm->setY(rules->getWalkTorsoOffset(_unit->getWalkingPhase()));
+			if (_item->getRules()->getTwoHanded())
+				leftArm->setY(rules->getWalkTorsoOffset(_unit->getWalkingPhase()));
 		}
 	}
 
-	// todo: kneeling +4 pixels
-	// to check
-/*
-[00:01] <Dexus> dir0_seq: [leftarm, legs, handob, torso, rightarm]
-[00:01] <Dexus> dir1_seq: [leftarm, legs, torso, handob, rightarm]
-[00:01] <Dexus> dir2_seq: [leftarm, legs, torso, handob, rightarm]
-[00:01] <Dexus> dir3_seq: [legs, torso, leftarm, rightarm, handob]
-[00:01] <Dexus> dir4_seq: [rightarm, legs, torso, leftarm, handob]
-[00:01] <Dexus> dir5_seq: [rightarm, legs, handob, torso, leftarm]
-[00:01] <Dexus> dir6_seq: [rightarm, legs, handob, torso, leftarm]
-[00:01] <Dexus> dir7_seq: [handob, leftarm, rightarm, legs, torso]
-*/
-
-	if (_unit->getDirection() < 1 || _unit->getDirection() > 5)
-		if (item) item->blit(this);
-	if (bottomArm) bottomArm->blit(this);
-	if (torso) torso->blit(this);
-	if (legs) legs->blit(this);
-	if (_unit->getDirection() >= 4)	
-		if (topArm) topArm->blit(this);
-	if (_unit->getDirection() > 0 && _unit->getDirection() < 6)
-		if (item) item->blit(this);	
-	if (_unit->getDirection() < 4)	
-		if (topArm) topArm->blit(this);
-
+	if (_unit->isKneeled())
+	{
+		leftArm->setY(4);
+		rightArm->setY(4);
+		torso->setY(4);
+		item?item->setY(4):void();
+	}
+	else if (_unit->getStatus() != STATUS_WALKING)
+	{
+		leftArm->setY(0);
+		rightArm->setY(0);
+		torso->setY(0);
+		item?item->setY(0):void();
+	}
+	
+	switch (_unit->getDirection())
+	{
+	case 0: leftArm->blit(this); legs->blit(this); item?item->blit(this):void(); torso->blit(this); rightArm->blit(this); break;
+	case 1: leftArm->blit(this); legs->blit(this); torso->blit(this); item?item->blit(this):void(); rightArm->blit(this); break;
+	case 2: leftArm->blit(this); legs->blit(this); torso->blit(this); item?item->blit(this):void(); rightArm->blit(this); break;
+	case 3: legs->blit(this); torso->blit(this); leftArm->blit(this); rightArm->blit(this); item?item->blit(this):void(); break;
+	case 4: rightArm->blit(this); legs->blit(this); torso->blit(this); leftArm->blit(this); item?item->blit(this):void(); break;
+	case 5: rightArm->blit(this); legs->blit(this); item?item->blit(this):void(); torso->blit(this); leftArm->blit(this); break;
+	case 6: rightArm->blit(this); legs->blit(this); item?item->blit(this):void(); torso->blit(this); leftArm->blit(this); break;
+	case 7: item?item->blit(this):void(); leftArm->blit(this); rightArm->blit(this); legs->blit(this); torso->blit(this); break;
+	}
 }
 
 /**

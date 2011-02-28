@@ -35,15 +35,7 @@ namespace OpenXcom
  */
 TerrainModifier::TerrainModifier(SavedBattleGame *save) : _save(save)
 {
-	distances.resize(16);
-	for (int x = 0; x < 16; x++)
-	{
-	    distances[x].resize(16);
-		for (int y = 0; y < 16; y++)
-		{
-			distances[x][y] = int(floor(sqrt(float(x*x + y*y)) + 0.5));
-		}
-	}
+
 }
 
 /**
@@ -72,6 +64,7 @@ void TerrainModifier::calculateSunShading()
   */
 void TerrainModifier::calculateSunShading(Tile *tile)
 {
+	const int layer = 0; // Ambient lighting layer.
 
 	int power = 15 - _save->getGlobalShade();
 
@@ -84,7 +77,7 @@ void TerrainModifier::calculateSunShading(Tile *tile)
 		}
 	}
 
-	tile->addLight(power, 0, 0);
+	tile->addLight(power, layer);
 }
 
 /**
@@ -92,7 +85,8 @@ void TerrainModifier::calculateSunShading(Tile *tile)
   */
 void TerrainModifier::calculateTerrainLighting()
 {
-	const int layer = 1;
+	const int layer = 1; // Static lighting layer.
+	const int fireLightPower = 15; // amount of light a fire generates
 
 	// during daytime don't calculate lighting
 	if (_save->getGlobalShade() < 1)
@@ -122,17 +116,17 @@ void TerrainModifier::calculateTerrainLighting()
 		// fires
 		if (_save->getTiles()[i]->getFire())
 		{
-			addLight(_save->getTiles()[i]->getPosition(), 15, layer);
+			addLight(_save->getTiles()[i]->getPosition(), fireLightPower, layer);
 		}
 
 	}
 
-	// add lighting of items (flares)
+	// todo: add lighting of items (flares)
 
-	// indicate we have finished recalculating
+	// set changed light tiles to uncached
 	for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); i++)
 	{
-		_save->getTiles()[i]->setLight(layer);
+		_save->getTiles()[i]->checkForChangedLight(layer);
 	}
 }
 
@@ -141,7 +135,8 @@ void TerrainModifier::calculateTerrainLighting()
   */
 void TerrainModifier::calculateUnitLighting()
 {
-	const int layer = 2;
+	const int layer = 2; // Dynamic lighting layer.
+	const int personalLightPower = 15; // amount of light a unit generates
 
 	// during daytime don't calculate lighting
 	if (_save->getGlobalShade() < 1)
@@ -158,53 +153,26 @@ void TerrainModifier::calculateUnitLighting()
 	{
 		if ((*i)->getFaction() == FACTION_PLAYER)
 		{
-			addLight((*i)->getPosition(), 15, layer);
+			addLight((*i)->getPosition(), personalLightPower, layer);
 		}
 	}
 
-	// indicate we have finished recalculating
+	// set changed light tiles to uncached
 	for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); i++)
 	{
-		_save->getTiles()[i]->setLight(layer);
+		_save->getTiles()[i]->checkForChangedLight(layer);
 	}
 }
 
-
 /**
- * Destroys all parts of a tile. This is used for testing purposes (press 'd' on battlescape)
- * @param tile
- */
-void TerrainModifier::destroyTile(Tile *tile)
-{
-	tile->destroy(0);
-	tile->destroy(1);
-	tile->destroy(2);
-	tile->destroy(3);
-	if (tile->getPosition().z > 0)
-	{
-		tile->setMapData(0, O_FLOOR);
-	}
-	// on bottom level, if floor is destroyed, it turns into burned ground from blanks.mcd
-	if (tile->getPosition().z == 0 && tile->getMapData(O_FLOOR) == 0)
-	{
-		tile->setMapData(_save->getMapDataSets()->at(0)->getObjects()->at(0), O_FLOOR);
-	}
-	for (int i=0; i < _save->getHeight() - 1; i++)
-	{
-		calculateSunShading(_save->getTile(Position(tile->getPosition().x, tile->getPosition().y, i)));
-	}
-
-	// recalculate line of sight (to optimise: only units in range)
-	calculateFOV(tile->getPosition());
-
-}
-
-/**
- * Calculates line of sight of a soldier. Every visible tile is marked + fog of war is removed.
+ * Calculates line of sight of a soldier. For every visible tile fog of war is removed.
+ * TODO : use bresenham algorithm? use voxel space?
+ * TODO : aliens spotted? Seeing of other units?
  * @param unit
  */
 void TerrainModifier::calculateFOV(BattleUnit *unit)
 {
+	// units see 90 degrees sidewards.
 	double startAngle[8] = { 45, 0, -45, 270, 225, 180, 135, 90 };
 	double endAngle[8] = { 135, 90, 45, 360, 315, 270, 225, 180 };
 
@@ -212,6 +180,8 @@ void TerrainModifier::calculateFOV(BattleUnit *unit)
 	double centerX = unit->getPosition().x + 0.5;
 	double centerY = unit->getPosition().y + 0.5;
 	int power_, objectFalloff;
+
+	// units see 90 degrees down and 60 degrees up.
 	double startFi = -90;
 	double endFi = 60;
 
@@ -220,11 +190,8 @@ void TerrainModifier::calculateFOV(BattleUnit *unit)
 		startFi = 0;
 	}
 
-	// a unique ID for this session, used to avoid tiles to be affected more than once.
-	int sessionID = RNG::generate(1,65000);
-
-	// obviously
-	_save->getTile(unit->getPosition())->isSeenBy(unit, sessionID);
+	// we see the tile we are standing on
+	_save->getTile(unit->getPosition())->setDiscovered(true);
 
 	// raytrace up and down
 	for (double fi = startFi; fi <= endFi; fi += 6)
@@ -237,8 +204,6 @@ void TerrainModifier::calculateFOV(BattleUnit *unit)
 		{
 			double cos_te = cos(te * M_PI / 180.0);
 			double sin_te = sin(te * M_PI / 180.0);
-			//double cos_te = _cosTable[(int)te/3];
-			//double sin_te = _sinTable[(int)te/3];
 
 			Tile *origin = _save->getTile(unit->getPosition());
 			double l = 0;
@@ -285,19 +250,19 @@ void TerrainModifier::calculateFOV(BattleUnit *unit)
 					objectFalloff += int(dest->getSmoke() / 3);
 				}
 
-				if (power_ > 0 && !dest->isChecked(sessionID) && dest->getShade() < 10)
+				if (power_ > 0 && dest->getShade() < 10)
 				{
-					dest->isSeenBy(unit, sessionID);
+					dest->setDiscovered(true);
 					// if there is a door to the east or south of a visible tile, we see that too
 					Tile* t = _save->getTile(Position(tileX + 1, tileY, tileZ));
 					if (t && t->getMapData(O_WESTWALL) && (t->getMapData(O_WESTWALL)->isDoor() || t->getMapData(O_WESTWALL)->isUFODoor()))
 					{
-						t->isSeenBy(unit, sessionID);
+						t->setDiscovered(true);
 					}
 					t = _save->getTile(Position(tileX, tileY - 1, tileZ));
 					if (t && t->getMapData(O_NORTHWALL) && (t->getMapData(O_NORTHWALL)->isDoor() || t->getMapData(O_NORTHWALL)->isUFODoor()))
 					{
-						t->isSeenBy(unit, sessionID);
+						t->setDiscovered(true);
 					}
 				}
 				power_ -= objectFalloff;
@@ -309,6 +274,7 @@ void TerrainModifier::calculateFOV(BattleUnit *unit)
 
 /**
  * Calculates line of sight of a soldiers within range of the Position.
+ * TODO: review this, because it is recalculating all soldiers.
  * @param position
  */
 void TerrainModifier::calculateFOV(const Position &position)
@@ -323,29 +289,33 @@ void TerrainModifier::calculateFOV(const Position &position)
 }
 
 /**
- * Adds simple light overlay.
+ * Adds circular light pattern starting from center and loosing power with distance travelled.
  * @param center
  * @param power
- * @param layer
+ * @param layer Light is seperated in 3 layers: Ambient, Static and Dynamic.
  */
 void TerrainModifier::addLight(const Position &center, int power, int layer)
 {
-	int sessionID = RNG::generate(1,65000);
+	// only loop through the positive quadrant.
 	for (int x = 0; x <= power; x++)
 	{
 		for (int y = 0; y <= power; y++)
 		{
 			for (int z = 0; z < _save->getHeight(); z++)
 			{
-				//int distance = sqrt(float(x*x + y*y));
+				int distance = int(floor(sqrt(float(x*x + y*y)) + 0.5));
+
 				if (_save->getTile(Position(center.x + x,center.y + y, z)))
-				_save->getTile(Position(center.x + x,center.y + y, z))->addLight(power - distances[x][y], sessionID, layer);
+					_save->getTile(Position(center.x + x,center.y + y, z))->addLight(power - distance, layer);
+
 				if (_save->getTile(Position(center.x - x,center.y - y, z)))
-				_save->getTile(Position(center.x - x,center.y - y, z))->addLight(power - distances[x][y], sessionID, layer);
+					_save->getTile(Position(center.x - x,center.y - y, z))->addLight(power - distance, layer);
+
 				if (_save->getTile(Position(center.x - x,center.y + y, z)))
-				_save->getTile(Position(center.x - x,center.y + y, z))->addLight(power - distances[x][y], sessionID, layer);
+					_save->getTile(Position(center.x - x,center.y + y, z))->addLight(power - distance, layer);
+
 				if (_save->getTile(Position(center.x + x,center.y - y, z)))
-				_save->getTile(Position(center.x + x,center.y - y, z))->addLight(power - distances[x][y], sessionID, layer);
+					_save->getTile(Position(center.x + x,center.y - y, z))->addLight(power - distance, layer);
 			}
 		}
 	}
@@ -392,9 +362,11 @@ int TerrainModifier::blockage(Tile *tile, const int part, Affector affector)
  * HE, smoke and fire explodes in a circular pattern on 1 level only. HE however damages floor tiles of the above level. Not the units on it.
  * HE destroys an object if its armor is lower than the explosive power, then it's HE blockage is applied for further propagation.
  * See http://www.ufopaedia.org/index.php?title=Explosions for more info.
+ * TODO : use bresenham?
  * @param center
  * @param power
  * @param affector
+ * @param maxRadius
  */
 void TerrainModifier::explode(const Position &center, int power, Affector affector, int maxRadius)
 {
@@ -408,8 +380,6 @@ void TerrainModifier::explode(const Position &center, int power, Affector affect
 	{
 		double cos_te = cos(te * M_PI / 180.0);
 		double sin_te = sin(te * M_PI / 180.0);
-		//double cos_te = _cosTable[(int)te/3];
-		//double sin_te = _sinTable[(int)te/3];
 
 		Tile *origin = _save->getTile(center);
 		double l = 0;
@@ -433,7 +403,7 @@ void TerrainModifier::explode(const Position &center, int power, Affector affect
 			// horizontal blockage by walls
 			power_ -= horizontalBlockage(origin, dest, affector);
 
-			if (power_ > 0/* && !dest->isChecked(sessionID)*/)
+			if (power_ > 0)
 			{
 				if (affector == AFFECT_HE)
 				{
@@ -477,7 +447,7 @@ void TerrainModifier::explode(const Position &center, int power, Affector affect
 
 /**
  * The amount of power that is blocked going from one tile to another on a different level.
- * Can cross more than one level.
+ * Can cross more than one level. Only floor tiles are taken into account.
  * @param startTile
  * @param endTile
  * @param affector
@@ -584,12 +554,12 @@ int TerrainModifier::vectorToDirection(const Position &vector)
 }
 
 /**
- * Soldier opens a door (if any) by rightclick, or by walking through it.
- * Normal door changes the tile objects. We need to make a sound 3 here.
- * Ufo door updates the ufodooropened flag of the tile. We need to make a sound 20 or 21 and start the animation.
- * An ufo door takes a few animation frames: while this animation is running this function returns true.
+ * Soldier opens a door (if any) by rightclick, or by walking through it. The unit has to face in the right direction.
  * @param unit
- * @return 0 normal door opened, 1 ufo door is starting to open, 3 ufo door is still opening, -1 there is no door.
+ * @return -1 there is no door, you can walk through.
+ *          0 normal door opened, make a squeeky sound and you can walk through.
+ *          1 ufo door is starting to open, make a woosh sound, don't walk through.
+ *          3 ufo door is still opening, don't walk through it yet. (have patience, futuristic technology...)
  */
 int TerrainModifier::unitOpensDoor(BattleUnit *unit)
 {

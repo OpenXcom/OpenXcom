@@ -49,7 +49,7 @@ UnitTurnBState::~UnitTurnBState()
 
 }
 
-bool UnitTurnBState::init()
+void UnitTurnBState::init()
 {
 	_parent->setStateInterval(DEFAULT_WALK_SPEED);
 	_unit = _parent->getGame()->getSavedGame()->getBattleGame()->getSelectedUnit();
@@ -66,23 +66,18 @@ bool UnitTurnBState::init()
 		{
 			_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(RNG::generate(20,21))->play(); // ufo door
 		}
-		return false;
+		_parent->popState();
 	}
-	return true;
 }
 
-bool UnitTurnBState::think()
+void UnitTurnBState::think()
 {
 	_unit->turn();
 	_parent->getGame()->getSavedGame()->getBattleGame()->getTerrainModifier()->calculateFOV(_unit);
 	_parent->getMap()->cacheUnits();
 	if (_unit->getStatus() == STATUS_STANDING)
 	{
-		return false;
-	}
-	else
-	{
-		return true;
+		_parent->popState();
 	}
 }
 

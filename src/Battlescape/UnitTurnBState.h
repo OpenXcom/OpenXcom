@@ -36,12 +36,12 @@ public:
 	UnitTurnBState(BattlescapeState *parent);
 	/// Cleans up the UnitTurnBState.
 	~UnitTurnBState();
-	/// Initializes the state. Returns false when finished.
-	bool init();
+	/// Initializes the state.
+	void init();
 	/// Handles a cancels request.
 	void cancel();
-	/// Runs state functionality every cycle. Returns false when finished.
-	bool think();
+	/// Runs state functionality every cycle.
+	void think();
 	/// Get the result of the state.
 	std::string getResult() const;
 };

@@ -896,12 +896,18 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	pistol->setHitAnimation(26);
 	pistol->setFireSound(4);
 	pistol->setHitSound(22);
+	pistol->setAccuracySnap(60);
+	pistol->getCompatibleAmmo()->push_back("STR_PISTOL_CLIP");
+	pistol->setBattleType(BT_FIREARM);
 
 	RuleItem *pclip = new RuleItem("STR_PISTOL_CLIP");
 	pclip->setSize(0.1f);
 	pclip->setCost(70);
 	pclip->setBigSprite(4);
 	pclip->setHandSprite(120);
+	pclip->setPower(26);
+	pclip->setDamageType(DT_AP);
+	pclip->setBattleType(BT_AMMO);
 	
 	RuleItem *rifle = new RuleItem("STR_RIFLE");
 	rifle->setSize(0.2f);
@@ -913,12 +919,18 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	rifle->setHitAnimation(26);
 	rifle->setFireSound(4);
 	rifle->setHitSound(22);
+	rifle->setAccuracySnap(60);
+	rifle->getCompatibleAmmo()->push_back("STR_RIFLE_CLIP");
+	rifle->setBattleType(BT_FIREARM);
 
 	RuleItem *rclip = new RuleItem("STR_RIFLE_CLIP");
 	rclip->setSize(0.1f);
 	rclip->setCost(200);
 	rclip->setBigSprite(2);
 	rclip->setHandSprite(120);
+	rclip->setPower(30);
+	rclip->setDamageType(DT_AP);
+	rclip->setBattleType(BT_AMMO);
 
 	RuleItem *hcannon = new RuleItem("STR_HEAVY_CANNON");
 	hcannon->setSize(0.3f);
@@ -930,19 +942,29 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	hcannon->setHitAnimation(26);
 	hcannon->setFireSound(12);
 	hcannon->setHitSound(13);
-
+	hcannon->setAccuracySnap(60);
+	hcannon->getCompatibleAmmo()->push_back("STR_HC_AP_AMMO");
+	hcannon->getCompatibleAmmo()->push_back("STR_HC_HE_AMMO");
+	hcannon->getCompatibleAmmo()->push_back("STR_HC_IN_AMMO");
+	hcannon->setBattleType(BT_FIREARM);
 
 	RuleItem *hcap = new RuleItem("STR_HC_AP_AMMO");
 	hcap->setSize(0.1f);
 	hcap->setCost(300);
 	hcap->setBigSprite(12);
 	hcap->setHandSprite(120);
+	hcap->setPower(56);
+	hcap->setDamageType(DT_AP);
+	hcap->setBattleType(BT_AMMO);
 
 	RuleItem *hche = new RuleItem("STR_HC_HE_AMMO");
 	hche->setSize(0.1f);
 	hche->setCost(500);
 	hche->setBigSprite(13);
 	hche->setHandSprite(120);
+	hche->setPower(52);
+	hche->setDamageType(DT_HE);
+	hche->setBattleType(BT_AMMO);
 
 	RuleItem *acannon = new RuleItem("STR_AUTO_CANNON");
 	acannon->setSize(0.3f);
@@ -954,12 +976,20 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	acannon->setHitAnimation(26);
 	acannon->setFireSound(12);
 	acannon->setHitSound(13);
+	acannon->setAccuracySnap(56);
+	acannon->getCompatibleAmmo()->push_back("STR_AC_AP_AMMO");
+	acannon->getCompatibleAmmo()->push_back("STR_AC_HE_AMMO");
+	acannon->getCompatibleAmmo()->push_back("STR_AC_IN_AMMO");
+	acannon->setBattleType(BT_FIREARM);
 	
 	RuleItem *acap = new RuleItem("STR_AC_AP_AMMO");
 	acap->setSize(0.1f);
 	acap->setCost(500);
 	acap->setBigSprite(8);
 	acap->setHandSprite(120);
+	acap->setPower(42);
+	acap->setDamageType(DT_AP);
+	acap->setBattleType(BT_AMMO);
 
 	RuleItem *rlauncher = new RuleItem("STR_ROCKET_LAUNCHER");
 	rlauncher->setSize(0.4f);
@@ -968,26 +998,38 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	rlauncher->setHandSprite(9);
 	rlauncher->setTwoHanded(true);
 	rlauncher->setBulletSprite(0);
-	acannon->setFireSound(52);
-	acannon->setHitSound(0);
+	rlauncher->setFireSound(52);
+	rlauncher->setHitSound(0);
+	rlauncher->setAccuracySnap(55);
+	rlauncher->getCompatibleAmmo()->push_back("STR_SMALL_ROCKET");
+	rlauncher->setBattleType(BT_FIREARM);
 
 	RuleItem *srocket = new RuleItem("STR_SMALL_ROCKET");
 	srocket->setSize(0.2f);
 	srocket->setCost(600);
 	srocket->setBigSprite(16);
 	srocket->setHandSprite(120);
+	srocket->setPower(75);
+	srocket->setDamageType(DT_HE);
+	srocket->setBattleType(BT_AMMO);
 
 	RuleItem *grenade = new RuleItem("STR_GRENADE");
 	grenade->setSize(0.1f);
 	grenade->setCost(300);
 	grenade->setBigSprite(19);
 	grenade->setHandSprite(120);
+	grenade->setPower(50);
+	grenade->setDamageType(DT_HE);
+	grenade->setBattleType(BT_GRENADE);
 
 	RuleItem *sgrenade = new RuleItem("STR_SMOKE_GRENADE");
 	sgrenade->setSize(0.1f);
 	sgrenade->setCost(150);
 	sgrenade->setBigSprite(20);
 	sgrenade->setHandSprite(120);
+	sgrenade->setPower(60);
+	sgrenade->setDamageType(DT_SMOKE);
+	sgrenade->setBattleType(BT_GRENADE);
 
 	_items.insert(std::pair<std::string, RuleItem*>("STR_STINGRAY_LAUNCHER", slauncher));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_AVALANCHE_LAUNCHER", alauncher));
@@ -1263,6 +1305,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	xcom_0->setTorso(32);
 	xcom_0->setFemaleTorso(267);
 	xcom_0->setLegsStand(16);
+	xcom_0->setLegsKneel(24);
 	for (int i=0; i<8; i++)
 		xcom_0->setLegsWalk(56 + 24 * i, i);
 	xcom_0->setLeftArmStand(0);

@@ -42,7 +42,6 @@ Tile::Tile(const Position& pos): _discovered(false), _smoke(0), _fire(0),  _expl
 		_light[layer] = 0;
 		_lastLight[layer] = 0;
 	}
-	_sessionID = 1;
 }
 
 /**
@@ -56,7 +55,7 @@ Tile::~Tile()
 /**
  * Get the MapData pointer of a part of the tile.
  * @param part the part 0-3.
- * @return pointer to terrainobject
+ * @return pointer to mapdata
  */
 MapData *Tile::getMapData(int part)
 {
@@ -79,8 +78,8 @@ void Tile::setMapData(MapData *dat, int part)
 }
 
 /**
- * Gets wether this tile has no objects.
- * @return bool
+ * Gets wether this tile has no objects. Note that we can have a unit or smoke on this tile.
+ * @return bool True if there is nothing but air on this tile.
  */
 bool Tile::isVoid()
 {
@@ -126,7 +125,7 @@ bool Tile::isBigWall()
 }
 
 /**
- * If an object stand on this tile, how high is it standing.
+ * If an object stand on this tile, this returns how high the unit is it standing.
  * @return the level in pixels
  */
 int Tile::getTerrainLevel()
@@ -153,7 +152,7 @@ const Position& Tile::getPosition() const
 
 /**
  * Gets the tile's footstep sound.
- * @return position
+ * @return sound ID
  */
 int Tile::getFootstepSound()
 {
@@ -171,7 +170,7 @@ int Tile::getFootstepSound()
 /**
  * Open a door on this tile.
  * @param part
- * @return an ID, 0(normal), 1(ufo) or -1 if no door opened or 3 if ufo door is still opening
+ * @return a value: 0(normal door), 1(ufo door) or -1 if no door opened or 3 if ufo door(=animated) is still opening
  */
 int Tile::openDoor(int part)
 {
@@ -211,7 +210,7 @@ bool Tile::isUfoDoorOpen(int part)
 }
 
 /**
- * Sets the tile's cache flag.
+ * Sets the tile's cache flag. Set when objects or lighting on this tile changed.
  * @param cached
  */
 void Tile::setCached(bool cached)
@@ -230,59 +229,54 @@ bool Tile::isCached()
 }
 
 /**
- * Sets the tile's cache flag.
+ * Sets the tile's cache flag. - TODO: set this for each object seperatly?
  * @param flag true/false
  */
 void Tile::setDiscovered(bool flag)
 {
-	_discovered = flag;
+	if (_discovered != flag)
+	{
+		_discovered = flag;
+		setCached(false);
+	}
 }
 
+/**
+ * Get the black fog of war state of this tile.
+ * @return bool True = discovered the tile.
+ */
 bool Tile::isDiscovered()
 {
 	return _discovered;
 }
 
+
 /**
- * Add a light amount to the tile. If it was already lit more, it is ignored.
- * @param light Amount of light to add.
- * @param sessionID Unique number to avoid tiles are lit only once in a session.
+ * Reset the light amount on the tile. This is done before a light level recalculation.
+ * @param layer Light is seperated in 3 layers: Ambient, Static and Dynamic.
  */
-void Tile::addLight(int light, int sessionID, int layer)
-{
-	if (sessionID == _sessionID) return;
-	_sessionID = sessionID;
-
-	if (_light[layer] < light)
-		_light[layer] = light;
-}
-
-bool Tile::isChecked(int sessionID)
-{
-	if (sessionID == _sessionID) return true;
-	return false;
-}
-
-
-void Tile::isSeenBy(BattleUnit *unit, int sessionID)
-{
-	if (sessionID == _sessionID) return;
-	if (!_discovered)
-	{
-		_discovered = true;
-		setCached(false);
-	}
-	_sessionID = sessionID;
-}
-
 void Tile::resetLight(int layer)
 {
 	_lastLight[layer] = _light[layer];
 	_light[layer] = 0;
-	_sessionID = 0;
 }
 
-void Tile::setLight(int layer)
+/**
+ * Add the light amount on the tile. Only add light if the current light is lower.
+ * @param light Amount of light to add.
+ * @param layer Light is seperated in 3 layers: Ambient, Static and Dynamic.
+ */
+void Tile::addLight(int light, int layer)
+{
+	if (_light[layer] < light)
+		_light[layer] = light;
+}
+
+/**
+ * Tiles that have their light amount changed, need to be re-cached.
+ * @param layer Light is seperated in 3 layers: Ambient, Static and Dynamic.
+ */
+void Tile::checkForChangedLight(int layer)
 {
 	if (_lastLight[layer] != _light[layer])
 	{
@@ -292,7 +286,7 @@ void Tile::setLight(int layer)
 
 /**
  * Gets the tile's shade amount 0-15. It returns the brightest of all light layers.
- * And shade level is actually the inverse of light level.
+ * Shade level is the inverse of light level. So a maximum amount of light (15) returns shade level 0.
  * @return shade
  */
 int Tile::getShade()
@@ -309,10 +303,9 @@ int Tile::getShade()
 }
 
 /**
- * Destroy a part on this tile. We first remove the old object, then replace it with the new one.
+ * Destroy a part on this tile. We first remove the old object, then replace it with the destroyed one.
  * This is because the object type of the old and new one are not nescessarly the same.
  * @param part
- * @param sessionID
  */
 void Tile::destroy(int part)
 {
@@ -330,8 +323,10 @@ void Tile::destroy(int part)
 
 
 /**
+ * Set a "virtual" explosive on this tile. We mark a tile this way to detonate it later.
+ * We do it this way, because the same tile can be visited multiple times by an "explosion ray".
+ * The explosive power on the tile is some kind of moving average of the explosive rays that passes it.
  * @param power
- * @param sessionID
  */
 void Tile::setExplosive(int power)
 {
@@ -345,6 +340,12 @@ void Tile::setExplosive(int power)
 	}
 }
 
+/**
+ * Apply the explosive power to the tile parts. This is where the actual destruction takes place.
+ * Normally the explosive value is set to zero after this.
+ * TODO : but with secondary explosions this value is set to the explosive power of the object.
+ * TODO : these will be checked later and trigger the secondary explosions.
+ */
 void Tile::detonate()
 {
 	int decrease;
@@ -384,7 +385,8 @@ void Tile::detonate()
 }
 
 /*
- * Flammability of a tile is the lowest flammability of it's objects
+ * Flammability of a tile is the lowest flammability of it's objects.
+ * @return Flammability : the lower the value, the higher the chance the tile/object catches fire.
  */
 int Tile::getFlammability()
 {
@@ -404,7 +406,8 @@ int Tile::getFlammability()
 }
 
 /*
- * Ignite starts fire on a tile, it will last <fuel> rounds. Fuel of a tile is the highest fuel of it's objects
+ * Ignite starts fire on a tile, it will burn <fuel> rounds. Fuel of a tile is the highest fuel of it's objects.
+ * NOT the sum of the fuel of the objects! TODO: check if this is like in the original.
  */
 void Tile::ignite()
 {
@@ -422,8 +425,11 @@ void Tile::ignite()
 	}
 	setFire(fuel);
 }
+
 /**
  * Animate the tile. This means to advance the current frame for every object.
+ * Ufo doors are a bit special, they animated only when triggered.
+ * When ufo doors are on frame 0(closed) or frame 7(open) they are not animated further.
  */
 void Tile::animate()
 {
@@ -441,6 +447,7 @@ void Tile::animate()
 			{
 				newframe = 0;
 			}
+			// only re-cache when the object actually changed.
 			if (_objects[i]->getSprite(_currentFrame[i]) != _objects[i]->getSprite(newframe))
 			{
 				setCached(false);
@@ -478,6 +485,10 @@ BattleUnit *Tile::getUnit()
 	return _unit;
 }
 
+/**
+ * Set the amount of turns this tile is on fire. 0 = no fire.
+ * @param fire : amount of turns this tile is on fire.
+ */
 void Tile::setFire(int fire)
 {
 	_fire = fire;
@@ -485,11 +496,19 @@ void Tile::setFire(int fire)
 	_animationOffset = RNG::generate(0,3);
 }
 
+/**
+ * Get the amount of turns this tile is on fire. 0 = no fire.
+ * @return fire : amount of turns this tile is on fire.
+ */
 int Tile::getFire()
 {
 	return _fire;
 }
 
+/**
+ * Set the amount of turns this tile is smoking. 0 = no smoke.
+ * @param smoke : amount of turns this tile is smoking.
+ */
 void Tile::setSmoke(int smoke)
 {
 	if (smoke > 40) smoke = 40;
@@ -498,11 +517,20 @@ void Tile::setSmoke(int smoke)
 	_animationOffset = RNG::generate(0,3);
 }
 
+/**
+ * Get the amount of turns this tile is smoking. 0 = no smoke.
+ * @return smoke : amount of turns this tile is smoking.
+ */
 int Tile::getSmoke()
 {
 	return _smoke;
 }
 
+/**
+ * Get the number of frames the fire or smoke animation is off-sync.
+ * To void fire and smoke animations of different tiles moving nice in sync - it looks fake.
+ * @return offset
+ */
 int Tile::getAnimationOffset()
 {
 	return _animationOffset;

@@ -43,18 +43,17 @@ class Tile
 protected:
 	MapData *_objects[4];
 	int _currentFrame[4];
-	bool _discovered; // tile has been seen in the past
+	bool _discovered;
 	int _light[LIGHTLAYERS];
 	int _lastLight[LIGHTLAYERS];
 	int _smoke;
 	int _fire;
-	int _sessionID;
 	int _explosive;
 	Position _pos;
 	bool _cached;
-	BattleUnit *_unit; // unit on this tile
-	std::vector<BattleItem *> _inventory; // items on this tile
-	int _animationOffset; //Animation frame offset. Set at random, to break tile pattern in cloud of smoke. Ranges from 0 to 3. 
+	BattleUnit *_unit;
+	std::vector<BattleItem *> _inventory;
+	int _animationOffset;
 public:
 	/// Creates a tile.
 	Tile(const Position& pos);
@@ -86,26 +85,31 @@ public:
 	void setCached(bool cached);
 	/// Check if tile is cached.
 	bool isCached();
+	/// Sets the black fog of war status of this tile.
 	void setDiscovered(bool flag);
+	/// Gets the black fog of war status of this tile.
 	bool isDiscovered();
+	/// Reset light to zero for this tile.
 	void resetLight(int layer);
-	void addLight(int light, int sessionID, int layer);
-	void isSeenBy(BattleUnit *unit, int sessionID);
-	void setLight(int layer);
-	bool isChecked(int sessionID);
+	/// Add light to this tile.
+	void addLight(int light, int layer);
+	/// Checks if the light on this tile has changed.
+	void checkForChangedLight(int layer);
 	/// Get the shade amount.
 	int getShade();
 	/// Destroy a tile part.
 	void destroy(int part);
-	/// Destroy a tile part.
+	/// Set a "virtual" explosive on this tile, to detonate later.
 	void setExplosive(int power);
-	/// Destroy a tile part.
+	/// Apply the explosive power to the tile parts.
 	void detonate();
 	/// Animated the tile parts.
 	void animate();
-	/// Get surfaces.
+	/// Get object sprites.
 	Surface *getSprite(int part);
+	/// Set a unit on this tile.
 	void setUnit(BattleUnit *unit);
+	/// Get the unit on this tile.
 	BattleUnit *getUnit();
 	/// Set fire.
 	void setFire(int fire);
@@ -117,7 +121,9 @@ public:
 	int getSmoke();
 	/// Get flammability.
 	int getFlammability();
+	/// Sets the objects on the tile on fire.
 	void ignite();
+	/// Get fire and smoke animation offset.
 	int getAnimationOffset();
 };
 

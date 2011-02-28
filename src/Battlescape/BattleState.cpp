@@ -39,11 +39,11 @@ BattleState::~BattleState()
 }
 
 /**
- * Start the current BattleState.Returns false when finished.
+ * Start the current BattleState.
  */
-bool BattleState::init()
+void BattleState::init()
 {
-	return true;
+
 }
 
 
@@ -58,11 +58,10 @@ void BattleState::cancel()
 /**
  * Runs any code the state needs to keep updating every
  * game cycle.
- * @return returns false when this state has finished
  */
-bool BattleState::think()
+void BattleState::think()
 {
-	return true;
+
 }
 
 /*

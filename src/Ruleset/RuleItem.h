@@ -20,6 +20,10 @@
 #define OPENXCOM_RULEITEM_H
 
 #include <string>
+#include <vector>
+
+enum ItemDamageType { DT_NONE, DT_AP, DT_IN, DT_HE, DT_LASER, DT_PLASMA, DT_STUN, DT_MELEE, DT_ACID, DT_SMOKE };
+enum BattleType { BT_FIREARM, BT_AMMO, BT_MELEE, BT_GRENADE, BT_PROXIMITYGRENADE, BT_MEDIKIT, BT_SCANNER };
 
 namespace OpenXcom
 {
@@ -39,6 +43,10 @@ private:
 	bool _equip, _twoHanded;
 	int _bigSprite, _floorSprite, _handSprite, _bulletSprite;
 	int _fireSound, _hitSound, _hitAnimation;
+	int _power, _accuracyAuto, _accuracySnap, _accuracyAimed;
+	std::vector<std::string> _compatibleAmmo;
+	ItemDamageType _damageType;
+	BattleType _battleType;
 public:
 	/// Creates a blank item ruleset.
 	RuleItem(std::string type);
@@ -94,7 +102,24 @@ public:
 	int getHitAnimation() const;
 	/// Sets the item's hit animation.
 	void setHitAnimation(int animation);
-
+	/// Gets the item's power.
+	int getPower() const;
+	/// Sets the item's power.
+	void setPower(int power);
+	/// Gets the item's accuracy.
+	int getAccuracySnap() const;
+	/// Sets the item's accuracy.
+	void setAccuracySnap(int accuracy);
+	/// Gets list of compatible ammo.
+	std::vector<std::string> *getCompatibleAmmo();
+	/// Gets the item's damage type.
+	ItemDamageType getDamageType() const;
+	/// Sets the item's damage type.
+	void setDamageType(ItemDamageType damageType);
+	/// Gets the item's type.
+	BattleType getBattleType() const;
+	/// Sets the item's type.
+	void setBattleType(BattleType type);
 };
 
 }

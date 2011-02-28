@@ -40,12 +40,12 @@ public:
 	BattleState(BattlescapeState *parent);
 	/// Cleans up the BattleState.
 	virtual ~BattleState();
-	/// Initializes the state. Returns false when finished.
-	virtual bool init();
+	/// Initializes the state.
+	virtual void init();
 	/// Handles a cancels request.
 	virtual void cancel();
-	/// Runs state functionality every cycle. Returns false when finished.
-	virtual bool think();
+	/// Runs state functionality every cycle.
+	virtual void think();
 	/// Get the result of the state.
 	std::string getResult() const;
 };

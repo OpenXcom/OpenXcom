@@ -37,7 +37,6 @@ class Tile;
 class TerrainModifier
 {
 private:
-	std::vector<std::vector<int> > distances;
 	SavedBattleGame *_save;
 	void addLight(const Position &center, int power, int layer);
 	int blockage(Tile *tile, const int part, Affector affector);
@@ -61,10 +60,9 @@ public:
 	void calculateTerrainLighting();
 	/// Recalculate lighting of the battlescape.
 	void calculateUnitLighting();
-	/// Tile destruction. (for testing purposes)
-	void destroyTile(Tile *tile);
 	/// Explosions.
 	void explode(const Position &center, int power, Affector affector, int maxRadius);
+	/// Unit opens door?
 	int unitOpensDoor(BattleUnit *unit);
 };
 

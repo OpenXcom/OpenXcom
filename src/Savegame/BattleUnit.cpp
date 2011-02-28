@@ -206,6 +206,7 @@ void BattleUnit::startWalking(int direction, const Position &destination)
 	_destination = destination;
 	_lastPos = _pos;
 	_cached = false;
+	_kneeled = false;
 }
 
 void BattleUnit::keepWalking()
@@ -407,6 +408,7 @@ bool BattleUnit::isCached() const
 void BattleUnit::kneel(bool kneeled)
 {
 	_kneeled = kneeled;
+	setCached(false);
 }
 
 /**
