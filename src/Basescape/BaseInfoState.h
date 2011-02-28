@@ -72,6 +72,8 @@ public:
 	void miniClick(Action *action);
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
+	/// Handler for clicking the Transfers button.
+	void btnTransfersClick(Action *action);
 	/// Handler for clicking the Stores button.
 	void btnStoresClick(Action *action);
 	/// Handler for clicking the Monthly Costs button.

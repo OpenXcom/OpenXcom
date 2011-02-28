@@ -33,6 +33,7 @@
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Base.h"
 #include "MonthlyCostsState.h"
+#include "TransfersState.h"
 #include "StoresState.h"
 #include "BasescapeState.h"
 
@@ -160,7 +161,8 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 	_btnOk->onMouseClick((ActionHandler)&BaseInfoState::btnOkClick);
 
 	_btnTransfers->setColor(Palette::blockOffset(15)+9);
-	_btnTransfers->setText(_game->getLanguage()->getString("STR_NOT_AVAILABLE"));
+	_btnTransfers->setText(_game->getLanguage()->getString("STR_TRANSFERS_UC"));
+	_btnTransfers->onMouseClick((ActionHandler)&BaseInfoState::btnTransfersClick);
 
 	_btnStores->setColor(Palette::blockOffset(15)+9);
 	_btnStores->setText(_game->getLanguage()->getString("STR_STORES_UC"));
@@ -410,6 +412,15 @@ void BaseInfoState::miniClick(Action *action)
 void BaseInfoState::btnOkClick(Action *action)
 {
 	_game->popState();
+}
+
+/**
+ * Goes to the Transfers window.
+ * @param action Pointer to an action.
+ */
+void BaseInfoState::btnTransfersClick(Action *action)
+{
+	_game->pushState(new TransfersState(_game, _base));
 }
 
 /**

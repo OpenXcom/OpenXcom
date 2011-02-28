@@ -35,6 +35,9 @@
 #include "../Ruleset/RuleItem.h"
 #include "../Savegame/Base.h"
 #include "../Engine/Action.h"
+#include "../Savegame/Transfer.h"
+#include "../Savegame/Craft.h"
+#include "../Savegame/Soldier.h"
 #include "PurchaseErrorState.h"
 
 namespace OpenXcom
@@ -186,9 +189,58 @@ void PurchaseState::think()
 	_timerDec->think(this, 0);
 }
 
+/**
+ * Purchases the selected items.
+ * @param action Pointer to an action.
+ */
 void PurchaseState::btnOkClick(Action *action)
 {
-	
+	_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() - _total);
+	for (unsigned int i = 0; i < _qtys.size(); i++)
+	{
+		if (_qtys[i] > 0)
+		{
+			if (i == 0)
+			{
+				for (int s = 0; s < _qtys[i]; s++)
+				{
+					Transfer *t = new Transfer(_game->getRuleset()->getPersonnelTime());
+					t->setSoldier(new Soldier(_game->getRuleset()->getPools()));
+					_base->getTransfers()->push_back(t);
+				}
+			}
+			else if (i == 1)
+			{
+				Transfer *t = new Transfer(_game->getRuleset()->getPersonnelTime());
+				t->setScientists(_qtys[i]);
+				_base->getTransfers()->push_back(t);
+			}
+			else if (i == 2)
+			{
+				Transfer *t = new Transfer(_game->getRuleset()->getPersonnelTime());
+				t->setEngineers(_qtys[i]);
+				_base->getTransfers()->push_back(t);
+			}
+			else if (i >= 3 && i < 3 + _crafts.size())
+			{
+				for (int c = 0; c < _qtys[i]; c++)
+				{
+					RuleCraft *rc = _game->getRuleset()->getCraft(_crafts[i - 3]);
+					Transfer *t = new Transfer(rc->getTransferTime());
+					t->setCraft(new Craft(rc, _base, _game->getSavedGame()->getCraftIds()));
+					_base->getTransfers()->push_back(t);
+				}
+			}
+			else
+			{
+				RuleItem *ri = _game->getRuleset()->getItem(_items[i - 3 - _crafts.size()]);
+				Transfer *t = new Transfer(ri->getTransferTime());
+				t->setItems(_items[i - 3 - _crafts.size()], _qtys[i]);
+				_base->getTransfers()->push_back(t);
+			}
+		}
+	}
+	_game->popState();
 }
 
 /**

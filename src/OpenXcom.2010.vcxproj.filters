@@ -400,18 +400,21 @@
     </ClCompile>
     <ClCompile Include="Battlescape\BulletSprite.cpp">
       <Filter>Battlescape</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="Basescape\PurchaseErrorState.cpp">
       <Filter>Basescape</Filter>
     </ClCompile>
     <ClCompile Include="Ruleset\MapModel.cpp">
       <Filter>Ruleset</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="Savegame\Transfer.cpp">
       <Filter>Savegame</Filter>
     </ClCompile>
     <ClCompile Include="Battlescape\BattleState.cpp">
       <Filter>Battlescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Basescape\TransfersState.cpp">
+      <Filter>Basescape</Filter>
     </ClCompile>
     <ClCompile Include="Battlescape\ExplosionBState.cpp">
       <Filter>Battlescape</Filter>
@@ -830,13 +833,13 @@
     </ClInclude>
     <ClInclude Include="Battlescape\BulletSprite.h">
       <Filter>Battlescape</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="Basescape\PurchaseErrorState.h">
       <Filter>Basescape</Filter>
     </ClInclude>
     <ClInclude Include="Ruleset\MapModel.h">
       <Filter>Ruleset</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="Savegame\Transfer.h">
       <Filter>Savegame</Filter>
     </ClInclude>
@@ -857,6 +860,9 @@
     </ClInclude>
     <ClInclude Include="Battlescape\Explosion.h">
       <Filter>Battlescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Basescape\TransfersState.h">
+      <Filter>Basescape</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

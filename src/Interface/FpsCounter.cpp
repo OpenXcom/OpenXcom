@@ -73,7 +73,7 @@ void FpsCounter::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
  */
 void FpsCounter::handle(Action *action)
 {
-	if (action->getDetails()->type == SDL_KEYDOWN && action->getDetails()->key.keysym.sym == SDLK_F12)
+	if (action->getDetails()->type == SDL_KEYDOWN && action->getDetails()->key.keysym.sym == SDLK_F5)
 	{
 		_visible = !_visible;
 	}

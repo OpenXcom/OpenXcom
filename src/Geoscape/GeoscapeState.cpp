@@ -46,6 +46,7 @@
 #include "../Savegame/Ufo.h"
 #include "../Ruleset/RuleUfo.h"
 #include "../Savegame/Waypoint.h"
+#include "../Savegame/Transfer.h"
 #include "OptionsState.h"
 #include "InterceptState.h"
 #include "../Basescape/BasescapeState.h"
@@ -681,6 +682,15 @@ void GeoscapeState::time1Hour()
 			{
 				(*j)->rearm();
 			}
+		}
+	}
+
+	// Handle transfers
+	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); i++)
+	{
+		for (std::vector<Transfer*>::iterator j = (*i)->getTransfers()->begin(); j != (*i)->getTransfers()->end(); j++)
+		{
+			(*j)->advance(*i);
 		}
 	}
 }

@@ -147,6 +147,30 @@ int Transfer::getHours() const
 }
 
 /**
+ * Returns the quantity of items in the transfer.
+ * @return Amount of items.
+ */
+int Transfer::getQuantity() const
+{
+	if (_itemQty != 0)
+	{
+		return _itemQty;
+	}
+	else if (_scientists != 0)
+	{
+		return _scientists;
+	}
+	else if (_engineers != 0)
+	{
+		return _engineers;
+	}
+	else
+	{
+		return 1;
+	}
+}
+
+/**
  * Advances the transfer and takes care of
  * the delivery once it's arrived.
  * @param base Pointer to destination base.

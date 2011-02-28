@@ -66,6 +66,8 @@ public:
 	std::wstring getName(Language *lang) const;
 	/// Gets the hours remaining of the transfer.
 	int getHours() const;
+	/// Gets the quantity of the transfer.
+	int getQuantity() const;
 	/// Advances the transfer.
 	void advance(Base *base);
 };

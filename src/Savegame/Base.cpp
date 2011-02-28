@@ -29,6 +29,8 @@
 #include "Ufo.h"
 #include "Waypoint.h"
 #include "../Engine/Language.h"
+#include "../Ruleset/RuleItem.h"
+#include "Transfer.h"
 
 namespace OpenXcom
 {
@@ -366,7 +368,12 @@ int Base::getTotalEngineers() const
  */
 int Base::getUsedQuarters() const
 {
-	return getTotalSoldiers() + getTotalScientists() + getTotalEngineers();
+	int total = getTotalSoldiers() + getTotalScientists() + getTotalEngineers();
+	for (std::vector<Transfer*>::const_iterator i = _transfers.begin(); i != _transfers.end(); i++)
+	{
+		;
+	}
+	return total;
 }
 
 /**
@@ -398,6 +405,10 @@ int Base::getUsedStores() const
 	for (std::vector<Craft*>::const_iterator i = _crafts.begin(); i != _crafts.end(); i++)
 	{
 		total += (*i)->getItems()->getTotalSize(_rule);
+	}
+	for (std::vector<Transfer*>::const_iterator i = _transfers.begin(); i != _transfers.end(); i++)
+	{
+		;
 	}
 	return (int)floor(total);
 }
@@ -483,7 +494,12 @@ int Base::getAvailableWorkshops() const
  */
 int Base::getUsedHangars() const
 {
-	return _crafts.size();
+	int total = _crafts.size();
+	for (std::vector<Transfer*>::const_iterator i = _transfers.begin(); i != _transfers.end(); i++)
+	{
+		;
+	}
+	return total;
 }
 
 /**

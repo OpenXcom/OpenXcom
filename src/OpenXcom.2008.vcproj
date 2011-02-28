@@ -599,6 +599,14 @@
 				RelativePath=".\Basescape\StoresState.h"
 				>
 			</File>
+			<File
+				RelativePath=".\Basescape\TransfersState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\TransfersState.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Battlescape"

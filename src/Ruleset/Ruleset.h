@@ -60,7 +60,7 @@ protected:
 	std::map<std::string, RuleTerrain*> _terrains;
 	std::map<std::string, MapDataSet*> _mapDataFiles;
 	std::map<std::string, RuleUnitSprite*> _unitSprites;
-	int _costSoldier, _costEngineer, _costScientist;
+	int _costSoldier, _costEngineer, _costScientist, _timePersonnel;
 public:
 	/// Creates a blank ruleset.
 	Ruleset();
@@ -96,6 +96,8 @@ public:
 	int getEngineerCost() const;
 	/// Gets the cost of a scientist.
 	int getScientistCost() const;
+	/// Gets the transfer time of personnel.
+	int getPersonnelTime() const;
 };
 
 }
