@@ -50,7 +50,7 @@ void Transfer::load(const YAML::Node &node)
 }
 
 /**
- * Saves the country to a YAML file.
+ * Saves the transfer to a YAML file.
  * @param out YAML emitter.
  */
 void Transfer::save(YAML::Emitter &out) const
@@ -60,7 +60,7 @@ void Transfer::save(YAML::Emitter &out) const
 }
 
 /**
- * Sets the soldier being transferred.
+ * Changes the soldier being transferred.
  * @param soldier Pointer to soldier.
  */
 void Transfer::setSoldier(Soldier *soldier)
@@ -69,7 +69,7 @@ void Transfer::setSoldier(Soldier *soldier)
 }
 
 /**
- * Sets the craft being transferred.
+ * Changes the craft being transferred.
  * @param craft Pointer to craft.
  */
 void Transfer::setCraft(Craft *craft)
@@ -78,7 +78,16 @@ void Transfer::setCraft(Craft *craft)
 }
 
 /**
- * Sets the items being transferred.
+ * Returns the items being transferred.
+ * @return Item ID.
+ */
+std::string Transfer::getItems() const
+{
+	return _itemId;
+}
+
+/**
+ * Changes the items being transferred.
  * @param id Item identifier.
  * @param qty Item quantity.
  */
@@ -89,7 +98,7 @@ void Transfer::setItems(std::string id, int qty)
 }
 
 /**
- * Sets the scientists being transferred.
+ * Changes the scientists being transferred.
  * @param scientists Amount of scientists.
  */
 void Transfer::setScientists(int scientists)
@@ -98,7 +107,7 @@ void Transfer::setScientists(int scientists)
 }
 
 /**
- * Sets the engineers being transferred.
+ * Changes the engineers being transferred.
  * @param engineers Amount of engineers.
  */
 void Transfer::setEngineers(int engineers)
@@ -107,7 +116,7 @@ void Transfer::setEngineers(int engineers)
 }
 
 /**
- * Gets the name of the contents of the transfer.
+ * Returns the name of the contents of the transfer.
  * @param lang Language to get strings from.
  * @return Name string.
  */
@@ -121,10 +130,6 @@ std::wstring Transfer::getName(Language *lang) const
 	{
 		return _craft->getName(lang);
 	}
-	else if (_itemQty != 0)
-	{
-		return lang->getString(_itemId);
-	}
 	else if (_scientists != 0)
 	{
 		return lang->getString("STR_SCIENTISTS");
@@ -133,7 +138,7 @@ std::wstring Transfer::getName(Language *lang) const
 	{
 		return lang->getString("STR_ENGINEERS");
 	}
-	return L"";
+	return lang->getString(_itemId);
 }
 
 /**
@@ -164,10 +169,32 @@ int Transfer::getQuantity() const
 	{
 		return _engineers;
 	}
-	else
+	return 1;
+}
+
+/**
+ * Returns the type of the contents of the transfer.
+ * @return TransferType.
+ */
+TransferType Transfer::getType() const
+{
+	if (_soldier != 0)
 	{
-		return 1;
+		return TRANSFER_SOLDIER;
 	}
+	else if (_craft != 0)
+	{
+		return TRANSFER_CRAFT;
+	}
+	else if (_scientists != 0)
+	{
+		return TRANSFER_SCIENTIST;
+	}
+	else if (_engineers != 0)
+	{
+		return TRANSFER_ENGINEER;
+	}
+	return TRANSFER_ITEM;
 }
 
 /**
@@ -194,11 +221,11 @@ void Transfer::advance(Base *base)
 		}
 		else if (_scientists != 0)
 		{
-			base->setScientists(base->getTotalScientists() + _scientists);
+			base->setScientists(base->getScientists() + _scientists);
 		}
 		else if (_engineers != 0)
 		{
-			base->setEngineers(base->getTotalEngineers() + _engineers);
+			base->setEngineers(base->getEngineers() + _engineers);
 		}
 	}
 }

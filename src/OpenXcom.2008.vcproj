@@ -840,6 +840,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Geoscape\ItemsArrivingState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\ItemsArrivingState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Geoscape\LowFuelState.cpp"
 				>
 			</File>

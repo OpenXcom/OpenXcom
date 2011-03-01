@@ -25,6 +25,8 @@
 namespace OpenXcom
 {
 
+	enum TransferType { TRANSFER_SOLDIER, TRANSFER_CRAFT, TRANSFER_ITEM, TRANSFER_SCIENTIST, TRANSFER_ENGINEER };
+
 class Soldier;
 class Craft;
 class Language;
@@ -56,6 +58,8 @@ public:
 	void setSoldier(Soldier *soldier);
 	/// Sets the craft of the transfer.
 	void setCraft(Craft *craft);
+	/// Gets the items of the transfer.
+	std::string getItems() const;
 	/// Sets the items of the transfer.
 	void setItems(std::string id, int qty = 1);
 	/// Sets the scientists of the transfer.
@@ -68,6 +72,8 @@ public:
 	int getHours() const;
 	/// Gets the quantity of the transfer.
 	int getQuantity() const;
+	/// Gets the type of the transfer.
+	TransferType getType() const;
 	/// Advances the transfer.
 	void advance(Base *base);
 };

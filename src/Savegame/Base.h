@@ -77,8 +77,12 @@ public:
 	std::vector<Transfer*> *const getTransfers();
 	/// Gets the base's items.
 	ItemContainer *const getItems();
+	/// Gets the base's scientists.
+	int getScientists() const;
 	/// Sets the base's scientists.
 	void setScientists(int scientists);
+	/// Gets the base's engineers.
+	int getEngineers() const;
 	/// Sets the base's engineers.
 	void setEngineers(int engineers);
 	/// Gets the base's available soldiers.
