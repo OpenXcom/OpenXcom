@@ -278,7 +278,16 @@ ItemContainer *const Base::getItems()
 }
 
 /**
- * Changes the amount of scientists in the base.
+ * Returns the amount of scientists currently in the base.
+ * @return Number of scientists.
+ */
+int Base::getScientists() const
+{
+	return _scientists;
+}
+
+/**
+ * Changes the amount of scientists currently in the base.
  * @param scientists Number of scientists.
  */
 void Base::setScientists(int scientists)
@@ -287,7 +296,16 @@ void Base::setScientists(int scientists)
 }
 
 /**
- * Changes the amount of engineers in the base.
+ * Returns the amount of engineers currently in the base.
+ * @return Number of engineers.
+ */
+int Base::getEngineers() const
+{
+	return _engineers;
+}
+
+/**
+ * Changes the amount of engineers currently in the base.
  * @param engineers Number of engineers.
  */
 void Base::setEngineers(int engineers)
@@ -306,7 +324,9 @@ int Base::getAvailableSoldiers() const
 	for (std::vector<Soldier*>::const_iterator i = _soldiers.begin(); i != _soldiers.end(); i++)
 	{
 		if ((*i)->getCraft() == 0)
+		{
 			total++;
+		}
 	}
 	return total;
 }
@@ -318,7 +338,15 @@ int Base::getAvailableSoldiers() const
  */
 int Base::getTotalSoldiers() const
 {
-	return _soldiers.size();
+	int total = _soldiers.size();
+	for (std::vector<Transfer*>::const_iterator i = _transfers.begin(); i != _transfers.end(); i++)
+	{
+		if ((*i)->getType() == TRANSFER_SOLDIER)
+		{
+			total += (*i)->getQuantity();
+		}
+	}
+	return total;
 }
 
 /**
@@ -338,7 +366,15 @@ int Base::getAvailableScientists() const
  */
 int Base::getTotalScientists() const
 {
-	return _scientists;
+	int total = _scientists;
+	for (std::vector<Transfer*>::const_iterator i = _transfers.begin(); i != _transfers.end(); i++)
+	{
+		if ((*i)->getType() == TRANSFER_SCIENTIST)
+		{
+			total += (*i)->getQuantity();
+		}
+	}
+	return total;
 }
 
 /**
@@ -358,7 +394,15 @@ int Base::getAvailableEngineers() const
  */
 int Base::getTotalEngineers() const
 {
-	return _engineers;
+	int total = _engineers;
+	for (std::vector<Transfer*>::const_iterator i = _transfers.begin(); i != _transfers.end(); i++)
+	{
+		if ((*i)->getType() == TRANSFER_ENGINEER)
+		{
+			total += (*i)->getQuantity();
+		}
+	}
+	return total;
 }
 
 /**
@@ -368,12 +412,7 @@ int Base::getTotalEngineers() const
  */
 int Base::getUsedQuarters() const
 {
-	int total = getTotalSoldiers() + getTotalScientists() + getTotalEngineers();
-	for (std::vector<Transfer*>::const_iterator i = _transfers.begin(); i != _transfers.end(); i++)
-	{
-		;
-	}
-	return total;
+	return getTotalSoldiers() + getTotalScientists() + getTotalEngineers();
 }
 
 /**
@@ -408,7 +447,10 @@ int Base::getUsedStores() const
 	}
 	for (std::vector<Transfer*>::const_iterator i = _transfers.begin(); i != _transfers.end(); i++)
 	{
-		;
+		if ((*i)->getType() == TRANSFER_ITEM)
+		{
+			total += (*i)->getQuantity() * _rule->getItem((*i)->getItems())->getSize();
+		}
 	}
 	return (int)floor(total);
 }
@@ -497,7 +539,10 @@ int Base::getUsedHangars() const
 	int total = _crafts.size();
 	for (std::vector<Transfer*>::const_iterator i = _transfers.begin(); i != _transfers.end(); i++)
 	{
-		;
+		if ((*i)->getType() == TRANSFER_CRAFT)
+		{
+			total += (*i)->getQuantity();
+		}
 	}
 	return total;
 }
