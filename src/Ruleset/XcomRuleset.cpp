@@ -974,6 +974,15 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	hche->setDamageType(DT_HE);
 	hche->setBattleType(BT_AMMO);
 
+	RuleItem *hcin = new RuleItem("STR_HC_IN_AMMO");
+	hcin->setSize(0.1f);
+	hcin->setCost(400);
+	hcin->setBigSprite(14);
+	hcin->setHandSprite(120);
+	hcin->setPower(60);
+	hcin->setDamageType(DT_IN);
+	hcin->setBattleType(BT_AMMO);
+
 	RuleItem *acannon = new RuleItem("STR_AUTO_CANNON");
 	acannon->setSize(0.3f);
 	acannon->setCost(13500);
@@ -1052,6 +1061,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_items.insert(std::pair<std::string, RuleItem*>("STR_HEAVY_CANNON", hcannon));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_HC_AP_AMMO", hcap));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_HC_HE_AMMO", hche));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_HC_IN_AMMO", hcin));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_AUTO_CANNON", acannon));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_AC_AP_AMMO", acap));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_ROCKET_LAUNCHER", rlauncher));

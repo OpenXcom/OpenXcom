@@ -44,9 +44,7 @@ private:
 	unsigned int _position;
 	static const int _trail[11][36];
 	int _bulletType;
-	int calculateLine(const Position& origin, const Position& target, bool store);
 	void applyAccuracy(const Position& origin, Position *target, double accuracy);
-	int voxelCheck(const Position& voxel);
 public:
 	/// Creates a new Projectile.
 	Projectile(ResourcePack *res, SavedBattleGame *save, Position _origin, Position _target, int bulletType);

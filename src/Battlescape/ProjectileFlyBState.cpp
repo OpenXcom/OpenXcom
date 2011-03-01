@@ -89,7 +89,7 @@ void ProjectileFlyBState::think()
 	{
 		// impact !
 		//_res->getSoundSet("BATTLE.CAT")->getSound(_item->getRules()->getHitSound())->play();
-		_parent->statePushNext(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(-1)));
+		_parent->statePushNext(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(0), _parent->getSelectedItem()));
 
 		delete _parent->getMap()->getProjectile();
 		_parent->getMap()->setProjectile(0);

@@ -40,7 +40,7 @@ class Window;
 class BattleState;
 class Timer;
 
-enum BattleActionType { BA_THROW, BA_AUTOSHOT, BA_SNAPSHOT, BA_AIMEDSHOT, BA_STUN, BA_HIT };
+enum BattleActionType { BA_NONE, BA_THROW, BA_AUTOSHOT, BA_SNAPSHOT, BA_AIMEDSHOT, BA_STUN, BA_HIT };
 
 #define DEFAULT_WALK_SPEED 40
 #define DEFAULT_BULLET_SPEED 20

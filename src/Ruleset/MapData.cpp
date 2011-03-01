@@ -144,9 +144,20 @@ void MapData::setFlags(bool isUfoDoor, bool stopLOS, bool isNoFloor, bool isBigW
   * @param type
   * @return blockage (0-255)
   */
-int MapData::getBlock(Affector type)
+int MapData::getBlock(ItemDamageType type)
 {
-	return _block[(int)type]; 
+	if (type == DT_NONE)
+		return _block[1];
+	if (type == DT_HE)
+		return _block[2]; 
+	if (type == DT_SMOKE)
+		return _block[3]; 
+	if (type == DT_IN)
+		return _block[4]; 
+	if (type == DT_STUN)
+		return _block[5]; 
+
+	return 0;
 }
 
 /**

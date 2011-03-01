@@ -24,6 +24,7 @@
 #include "Map.h"
 #include "../Engine/Game.h"
 #include "../Savegame/BattleUnit.h"
+#include "../Savegame/BattleItem.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Resource/ResourcePack.h"
@@ -37,7 +38,7 @@ namespace OpenXcom
 /**
  * Sets up an ExplosionBState.
  */
-ExplosionBState::ExplosionBState(BattlescapeState *parent, Position center) : BattleState(parent), _center(center)
+ExplosionBState::ExplosionBState(BattlescapeState *parent, Position center, BattleItem *item) : BattleState(parent), _center(center), _item(item)
 {
 	
 }
@@ -56,11 +57,11 @@ void ExplosionBState::init()
 	_unit = _parent->getGame()->getSavedGame()->getBattleGame()->getSelectedUnit();
 	// create a new kaboom
 	Explosion *explosion = new Explosion(_center,_parent->getSelectedItem()->getRules()->getHitAnimation(), false);
-	// add the projectile on the map
+	// add the explosion on the map
 	_parent->getMap()->getExplosions()->insert(explosion);
 	// KABOOM
 	_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(_parent->getSelectedItem()->getRules()->getHitSound())->play();
-
+	_parent->getGame()->getSavedGame()->getBattleGame()->getTerrainModifier()->explode(_center, _item->getAmmoItem()->getRules()->getPower(), _item->getAmmoItem()->getRules()->getDamageType(), 100);
 }
 
 void ExplosionBState::think()

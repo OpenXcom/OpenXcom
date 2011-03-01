@@ -225,6 +225,8 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	_animTimer->onTimer((StateHandler)&BattlescapeState::animate);
 	_animTimer->start();
 
+
+	_selectedAction = BA_NONE;
 }
 
 /**

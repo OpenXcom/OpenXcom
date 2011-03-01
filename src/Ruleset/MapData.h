@@ -20,6 +20,7 @@
 #define OPENXCOM_MAPDATA_H
 
 #include <string>
+#include "../Ruleset/RuleItem.h"
 
 namespace OpenXcom
 {
@@ -49,8 +50,6 @@ enum SpecialTileType{TILE=0,
 					MUST_DESTROY};
 
 enum MovementType{ MT_WALK, MT_FLY, MT_SLIDE};
-
-enum Affector { AFFECT_LIGHT, AFFECT_VISION, AFFECT_HE, AFFECT_SMOKE, AFFECT_FIRE, AFFECT_GAS };
 
 /**
  * MapData is the smallest piece of a Battlescape terrain, holding info about a certain object, wall, floor, ...
@@ -91,7 +90,7 @@ public:
 	/// Sets all kinds of flags.
 	void setFlags(bool isUfoDoor, bool stopLOS, bool isNoFloor, bool isBigWall, bool isGravLift, bool isDoor, bool blockFire, bool blockSmoke);
 	/// Get the amount of blockage of a certain type.
-	int getBlock(Affector type);
+	int getBlock(ItemDamageType type);
 	/// Sets the amount of blockage for all types.
 	void setBlockValue(int lightBlock, int visionBlock, int HEBlock, int smokeBlock, int fireBlock, int gasBlock);
 	/// Gets the offset on the Y axis when drawing this object.

@@ -39,10 +39,11 @@ class TerrainModifier
 private:
 	SavedBattleGame *_save;
 	void addLight(const Position &center, int power, int layer);
-	int blockage(Tile *tile, const int part, Affector affector);
-	int horizontalBlockage(Tile *startTile, Tile *endTile, Affector affector);
-	int verticalBlockage(Tile *startTile, Tile *endTile, Affector affector);
+	int blockage(Tile *tile, const int part, ItemDamageType type);
+	int horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageType type);
+	int verticalBlockage(Tile *startTile, Tile *endTile, ItemDamageType type);
 	int vectorToDirection(const Position &vector);
+	int voxelCheck(const Position& voxel);
 public:
 	/// Creates a new TerrainModifier class.
 	TerrainModifier(SavedBattleGame *save);
@@ -61,9 +62,12 @@ public:
 	/// Recalculate lighting of the battlescape.
 	void calculateUnitLighting();
 	/// Explosions.
-	void explode(const Position &center, int power, Affector affector, int maxRadius);
+	void explode(const Position &center, int power, ItemDamageType type, int maxRadius);
 	/// Unit opens door?
 	int unitOpensDoor(BattleUnit *unit);
+	/// Calculate line.
+	int calculateLine(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory);
+
 };
 
 }

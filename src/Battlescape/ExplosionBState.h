@@ -27,15 +27,17 @@ namespace OpenXcom
 
 class BattlescapeState;
 class BattleUnit;
+class BattleItem;
 
 class ExplosionBState : public BattleState
 {
 private:
 	BattleUnit *_unit;
 	Position _center;
+	BattleItem *_item;
 public:
 	/// Creates a new ExplosionBState class
-	ExplosionBState(BattlescapeState *parent, Position center);
+	ExplosionBState(BattlescapeState *parent, Position center, BattleItem *item);
 	/// Cleans up the ExplosionBState.
 	~ExplosionBState();
 	/// Initializes the state.

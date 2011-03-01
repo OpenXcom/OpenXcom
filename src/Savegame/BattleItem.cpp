@@ -26,7 +26,7 @@ namespace OpenXcom
  * Initializes a item of the specified type.
  * @param rules Pointer to ruleset.
  */
-BattleItem::BattleItem(RuleItem *rules) : _rules(rules)
+BattleItem::BattleItem(RuleItem *rules) : _rules(rules), _owner(0), _ammoItem(0)
 {
 	_itemProperty[0] = 0;
 	_itemProperty[1] = 0;
@@ -143,6 +143,19 @@ InventorySlot BattleItem::getSlot() const
 void BattleItem::setSlot(InventorySlot slot)
 {
 	_inventorySlot = slot;
+}
+
+/// Gets the item's ammo item.
+BattleItem *BattleItem::getAmmoItem()
+{
+	return _ammoItem;
+}
+
+/// Sets the item's ammo item. Return false when ammo doesn't fit, or weapon already contains ammo?
+bool BattleItem::setAmmoItem(BattleItem *item)
+{
+	_ammoItem = item;
+	return true;
 }
 
 }

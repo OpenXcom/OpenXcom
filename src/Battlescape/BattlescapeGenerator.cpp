@@ -207,9 +207,11 @@ void BattlescapeGenerator::run()
 		}*/
 		// test data
 		addItem(_game->getRuleset()->getItem("STR_HEAVY_CANNON"));
-		addItem(_game->getRuleset()->getItem("STR_PISTOL"));
-		addItem(_game->getRuleset()->getItem("STR_RIFLE"));
-		addItem(_game->getRuleset()->getItem("STR_GRENADE"));
+		addItem(_game->getRuleset()->getItem("STR_HEAVY_CANNON"));
+		addItem(_game->getRuleset()->getItem("STR_HEAVY_CANNON"));
+		addItem(_game->getRuleset()->getItem("STR_HC_AP_AMMO"));
+		addItem(_game->getRuleset()->getItem("STR_HC_HE_AMMO"));
+		addItem(_game->getRuleset()->getItem("STR_HC_IN_AMMO"));
 	}
 
 	if (_missionType == MISS_UFORECOVERY)
@@ -332,14 +334,30 @@ void BattlescapeGenerator::addItem(RuleItem *item)
 {
 	BattleItem *bi = new BattleItem(item);
 
-	// find the first soldier with a free right hand
-	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); i++)
+	if (item->getBattleType() == BT_AMMO)
 	{
-		if (!_save->getItemFromUnit((*i), RIGHT_HAND))
+		// find equipped weapons that can be loaded with this ammo
+		for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); i++)
 		{
-			bi->setOwner((*i));
-			bi->setSlot(RIGHT_HAND);
-			break;
+			BattleItem *weapon = _save->getItemFromUnit((*i), RIGHT_HAND);
+			if (weapon && weapon->getAmmoItem() == 0)
+			{
+				weapon->setAmmoItem(bi);
+				break;
+			}
+		}
+	}
+	else
+	{
+		// find the first soldier with a free right hand
+		for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); i++)
+		{
+			if (!_save->getItemFromUnit((*i), RIGHT_HAND))
+			{
+				bi->setOwner((*i));
+				bi->setSlot(RIGHT_HAND);
+				break;
+			}
 		}
 	}
 

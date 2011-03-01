@@ -25,6 +25,8 @@
 #include "../Savegame/BattleUnit.h"
 #include "../Engine/RNG.h"
 #include "../Ruleset/MapDataSet.h"
+#include "../Ruleset/MapData.h"
+#include "../Ruleset/MapModel.h"
 
 namespace OpenXcom
 {
@@ -71,7 +73,7 @@ void TerrainModifier::calculateSunShading(Tile *tile)
 	// At night/dusk sun isn't dropping shades
 	if (_save->getGlobalShade() <= 5)
 	{
-		if (verticalBlockage(_save->getTile(Position(tile->getPosition().x, tile->getPosition().y, _save->getHeight() - 1)), tile, AFFECT_LIGHT))
+		if (verticalBlockage(_save->getTile(Position(tile->getPosition().x, tile->getPosition().y, _save->getHeight() - 1)), tile, DT_NONE))
 		{
 			power-=2;
 		}
@@ -228,27 +230,27 @@ void TerrainModifier::calculateFOV(BattleUnit *unit)
 				if (!dest) break; // out of map!
 
 				// horizontal blockage by walls
-				power_ -= horizontalBlockage(origin, dest, AFFECT_VISION);
+				power_ -= horizontalBlockage(origin, dest, DT_NONE);
 
 				// vertical blockage by ceilings/floors
-				power_ -= verticalBlockage(origin, dest, AFFECT_VISION);
+				power_ -= verticalBlockage(origin, dest, DT_NONE);
 
 				// objects on destination tile affect the ray after it has crossed this tile
 				// but it has to be calculated before we affect the tile (it could have been blown up)
 				if (dest->getMapData(O_OBJECT))
 				{
-					objectFalloff = dest->getMapData(O_OBJECT)->getBlock(AFFECT_VISION);
+					objectFalloff = dest->getMapData(O_OBJECT)->getBlock(DT_NONE);
 				}
 				else
 				{
 					objectFalloff = 0;
 				}
 
-				// smoke decreases visibility
-				if (dest->getSmoke())
+				// smoke decreases visibility - but not for terrain
+				/*if (dest->getSmoke())
 				{
 					objectFalloff += int(dest->getSmoke() / 3);
-				}
+				}*/
 
 				if (power_ > 0 && dest->getShade() < 10)
 				{
@@ -328,7 +330,7 @@ void TerrainModifier::addLight(const Position &center, int power, int layer)
  * @param affector
  * @return amount of blockage
  */
-int TerrainModifier::blockage(Tile *tile, const int part, Affector affector)
+int TerrainModifier::blockage(Tile *tile, const int part, ItemDamageType type)
 {
 	int blockage = 0;
 	
@@ -337,9 +339,7 @@ int TerrainModifier::blockage(Tile *tile, const int part, Affector affector)
 	if (part == O_FLOOR && tile->getMapData(O_FLOOR))
 	{
 		// blockage modifiers of floors in ufo only counted for horizontal stuff, so this is kind of an experiment
-		if (affector == AFFECT_LIGHT)
-			blockage += 2;	
-		else if (affector == AFFECT_HE)
+		if (type == DT_HE)
 			blockage += 15;	
 		else
 			blockage += 255;
@@ -347,7 +347,7 @@ int TerrainModifier::blockage(Tile *tile, const int part, Affector affector)
 	else
 	{
 		if (tile->getMapData(part))
-			blockage += tile->getMapData(part)->getBlock(affector);
+			blockage += tile->getMapData(part)->getBlock(type);
 
 		// open ufo doors are actually still closed behind the scenes
 		// so a special trick is needed to see if they are open, if they are, they obviously don't block anything
@@ -368,76 +368,100 @@ int TerrainModifier::blockage(Tile *tile, const int part, Affector affector)
  * @param affector
  * @param maxRadius
  */
-void TerrainModifier::explode(const Position &center, int power, Affector affector, int maxRadius)
+void TerrainModifier::explode(const Position &center, int power, ItemDamageType type, int maxRadius)
 {
-	double centerZ = center.z;
-	double centerX = center.x + 0.5;
-	double centerY = center.y + 0.5;
-	int power_;
-
-	// raytrace every 3 degrees makes sure we cover all tiles in a circle.
-	for (double te = 0; te <= 360; te += 3)
+	if (type == DT_AP)
 	{
-		double cos_te = cos(te * M_PI / 180.0);
-		double sin_te = sin(te * M_PI / 180.0);
-
-		Tile *origin = _save->getTile(center);
-		double l = 0;
-		double vx, vy, vz;
-		int tileX, tileY, tileZ;
-		power_ = power;
-
-		while (power_ > 0 && l <= maxRadius)
+		int part = voxelCheck(center);
+		if (part >= 0 && part <= 4)
 		{
-			vx = centerX + l * cos_te;
-			vy = centerY + l * sin_te;
-			vz = centerZ;
-
-			tileZ = int(floor(vz));
-			tileX = int(floor(vx));
-			tileY = int(floor(vy));
-
-			Tile *dest = _save->getTile(Position(tileX, tileY, tileZ));
-			if (!dest) break; // out of map!
-
-			// horizontal blockage by walls
-			power_ -= horizontalBlockage(origin, dest, affector);
-
-			if (power_ > 0)
-			{
-				if (affector == AFFECT_HE)
-				{
-					// explosives do 1/2 damage to terrain and 1/2 up to 3/2 random damage to units
-					dest->setExplosive(power_ / 2);
-					// TODO: destroy floors above
-				
-				}
-				if (affector == AFFECT_SMOKE)
-				{
-					// smoke from explosions always stay 15 to 20 turns
-					dest->setSmoke(RNG::generate(15, 20));
-				}
-			}
-
-			power_ -= 10; // explosive damage decreases by 10
-
-			// objects on destination tile affect the ray after it has crossed this tile
-			// but it has to be calculated before we affect the tile (it could have been blown up)
-			if (dest->getMapData(O_OBJECT))
-			{
-				power_ -= dest->getMapData(O_OBJECT)->getBlock(affector);
-			}
-			origin = dest;
-			l++;
+			// todo: check armor against power...
+			_save->getTile(Position(center.x/16, center.y/16, center.z/24))->destroy(part);
 		}
 	}
-
-	// indicate we have finished recalculating
-	if (affector == AFFECT_HE)
+	else
 	{
-		for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); i++)
+		double centerZ = (center.z / 24) + 0.5;
+		double centerX = (center.x / 16) + 0.5;
+		double centerY = (center.y / 16) + 0.5;
+		int power_;
+
+		if (type == DT_IN)
 		{
-			_save->getTiles()[i]->detonate();
+			power /= 2;
+		}
+
+
+		// raytrace every 3 degrees makes sure we cover all tiles in a circle.
+		for (double te = 0; te <= 360; te += 3)
+		{
+			double cos_te = cos(te * M_PI / 180.0);
+			double sin_te = sin(te * M_PI / 180.0);
+
+			Tile *origin = _save->getTile(center);
+			double l = 0;
+			double vx, vy, vz;
+			int tileX, tileY, tileZ;
+			power_ = power;
+
+			while (power_ > 0 && l <= maxRadius)
+			{
+				vx = centerX + l * cos_te;
+				vy = centerY + l * sin_te;
+				vz = centerZ;
+
+				tileZ = int(floor(vz));
+				tileX = int(floor(vx));
+				tileY = int(floor(vy));
+
+				Tile *dest = _save->getTile(Position(tileX, tileY, tileZ));
+				if (!dest) break; // out of map!
+
+				// horizontal blockage by walls
+				power_ -= horizontalBlockage(origin, dest, type);
+
+				if (power_ > 0)
+				{
+					if (type == DT_HE)
+					{
+						// explosives do 1/2 damage to terrain and 1/2 up to 3/2 random damage to units
+						dest->setExplosive(power_ / 2);
+						// TODO: destroy floors above
+				
+					}
+					if (type == DT_SMOKE)
+					{
+						// smoke from explosions always stay 15 to 20 turns
+						dest->setSmoke(RNG::generate(15, 20));
+					}
+					if (type == DT_IN)
+					{
+						// fire from explosions always stay 1 to 2 turns + it ignites stuff
+						dest->setFire(RNG::generate(15, 20));
+						dest->ignite();
+					}
+				}
+
+				power_ -= 10; // explosive damage decreases by 10
+
+				// objects on destination tile affect the ray after it has crossed this tile
+				// but it has to be calculated before we affect the tile (it could have been blown up)
+				if (dest->getMapData(O_OBJECT))
+				{
+					power_ -= dest->getMapData(O_OBJECT)->getBlock(type);
+				}
+				origin = dest;
+				l++;
+			}
+		}
+
+		// indicate we have finished recalculating
+		if (type == DT_HE)
+		{
+			for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); i++)
+			{
+				_save->getTiles()[i]->detonate();
+			}
 		}
 	}
 
@@ -453,7 +477,7 @@ void TerrainModifier::explode(const Position &center, int power, Affector affect
  * @param affector
  * @return amount of blockage
  */
-int TerrainModifier::verticalBlockage(Tile *startTile, Tile *endTile, Affector affector)
+int TerrainModifier::verticalBlockage(Tile *startTile, Tile *endTile, ItemDamageType type)
 {
 	int block = 0;
 
@@ -468,14 +492,14 @@ int TerrainModifier::verticalBlockage(Tile *startTile, Tile *endTile, Affector a
 	{
 		for (int z = startTile->getPosition().z; z > endTile->getPosition().z; z--)
 		{
-			block += blockage(_save->getTile(Position(x, y, z)), O_FLOOR, affector);
+			block += blockage(_save->getTile(Position(x, y, z)), O_FLOOR, type);
 		}
 	}
 	else if (direction > 0) // up
 	{
 		for (int z = startTile->getPosition().z + 1; z <= endTile->getPosition().z; z++)
 		{
-			block += blockage(_save->getTile(Position(x, y, z)), O_FLOOR, affector);
+			block += blockage(_save->getTile(Position(x, y, z)), O_FLOOR, type);
 		}
 	}
 
@@ -489,7 +513,7 @@ int TerrainModifier::verticalBlockage(Tile *startTile, Tile *endTile, Affector a
  * @param affector
  * @return amount of blockage
  */
-int TerrainModifier::horizontalBlockage(Tile *startTile, Tile *endTile, Affector affector)
+int TerrainModifier::horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageType type)
 {
 	// safety check
 	if (startTile == 0 || endTile == 0) return 0;
@@ -500,36 +524,36 @@ int TerrainModifier::horizontalBlockage(Tile *startTile, Tile *endTile, Affector
 	switch(direction)
 	{
 	case 0:	// north
-		return blockage(startTile, O_NORTHWALL, affector);
+		return blockage(startTile, O_NORTHWALL, type);
 		break;
 	case 1: // north east
-		return (blockage(startTile,O_NORTHWALL, affector) + blockage(endTile,O_WESTWALL, affector))/2
-			+ (blockage(_save->getTile(startTile->getPosition() + Position(1, 0, 0)),O_WESTWALL, affector)
-			+ blockage(_save->getTile(startTile->getPosition() + Position(1, 0, 0)),O_NORTHWALL, affector))/2;
+		return (blockage(startTile,O_NORTHWALL, type) + blockage(endTile,O_WESTWALL, type))/2
+			+ (blockage(_save->getTile(startTile->getPosition() + Position(1, 0, 0)),O_WESTWALL, type)
+			+ blockage(_save->getTile(startTile->getPosition() + Position(1, 0, 0)),O_NORTHWALL, type))/2;
 		break;
 	case 2: // east
-		return blockage(endTile,O_WESTWALL, affector);
+		return blockage(endTile,O_WESTWALL, type);
 		break;
 	case 3: // south east
-		return (blockage(endTile,O_WESTWALL, affector) + blockage(endTile,O_NORTHWALL, affector))/2
-			+ (blockage(_save->getTile(startTile->getPosition() + Position(1, 0, 0)),O_WESTWALL, affector)
-			+ blockage(_save->getTile(startTile->getPosition() + Position(0, -1, 0)),O_NORTHWALL, affector))/2;
+		return (blockage(endTile,O_WESTWALL, type) + blockage(endTile,O_NORTHWALL, type))/2
+			+ (blockage(_save->getTile(startTile->getPosition() + Position(1, 0, 0)),O_WESTWALL, type)
+			+ blockage(_save->getTile(startTile->getPosition() + Position(0, -1, 0)),O_NORTHWALL, type))/2;
 		break;
 	case 4: // south
-		return blockage(endTile,O_NORTHWALL, affector);
+		return blockage(endTile,O_NORTHWALL, type);
 		break;
 	case 5: // south west
-		return (blockage(endTile,O_NORTHWALL, affector) + blockage(startTile,O_WESTWALL, affector))/2
-			+ (blockage(_save->getTile(startTile->getPosition() + Position(0, -1, 0)),O_WESTWALL, affector)
-			+ blockage(_save->getTile(startTile->getPosition() + Position(0, -1, 0)),O_NORTHWALL, affector))/2;
+		return (blockage(endTile,O_NORTHWALL, type) + blockage(startTile,O_WESTWALL, type))/2
+			+ (blockage(_save->getTile(startTile->getPosition() + Position(0, -1, 0)),O_WESTWALL, type)
+			+ blockage(_save->getTile(startTile->getPosition() + Position(0, -1, 0)),O_NORTHWALL, type))/2;
 		break;
 	case 6: // west
-		return blockage(startTile,O_WESTWALL, affector);
+		return blockage(startTile,O_WESTWALL, type);
 		break;
 	case 7: // north west
-		return (blockage(startTile,O_WESTWALL, affector) + blockage(startTile,O_NORTHWALL, affector))/2
-			+ (blockage(_save->getTile(startTile->getPosition() + Position(0, 1, 0)),O_WESTWALL, affector)
-			+ blockage(_save->getTile(startTile->getPosition() + Position(-1, 0, 0)),O_NORTHWALL, affector))/2;
+		return (blockage(startTile,O_WESTWALL, type) + blockage(startTile,O_NORTHWALL, type))/2
+			+ (blockage(_save->getTile(startTile->getPosition() + Position(0, 1, 0)),O_WESTWALL, type)
+			+ blockage(_save->getTile(startTile->getPosition() + Position(-1, 0, 0)),O_NORTHWALL, type))/2;
 		break;
 	}
 
@@ -591,5 +615,132 @@ int TerrainModifier::unitOpensDoor(BattleUnit *unit)
 	return door;
 }
 
+/**
+ * calculateLine. Using bresenham algorithm in 3D.
+ * @param origin
+ * @param target
+ * @param storeTrajectory true will store the whole trajectory - otherwise it just stores the last position.
+ * @return the objectnumber(0-3) or unit(4) or out of map (5) or -1(hit nothing)
+ */
+int TerrainModifier::calculateLine(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory)
+{
+	int x, x0, x1, delta_x, step_x;
+    int y, y0, y1, delta_y, step_y;
+    int z, z0, z1, delta_z, step_z;
+    int swap_xy, swap_xz;
+    int drift_xy, drift_xz;
+    int cx, cy, cz;
+
+    //start and end points
+    x0 = origin.x;     x1 = target.x;
+    y0 = origin.y;     y1 = target.y;
+    z0 = origin.z;     z1 = target.z;
+    
+    //'steep' xy Line, make longest delta x plane  
+    swap_xy = abs(y1 - y0) > abs(x1 - x0);
+    if (swap_xy)
+	{
+        std::swap(x0, y0);
+        std::swap(x1, y1);
+	}
+                
+    //do same for xz
+    swap_xz = abs(z1 - z0) > abs(x1 - x0);
+    if (swap_xz)
+	{
+        std::swap(x0, z0);
+		std::swap(x1, z1);
+	}
+    
+    //delta is Length in each plane
+    delta_x = abs(x1 - x0);
+    delta_y = abs(y1 - y0);
+    delta_z = abs(z1 - z0);
+    
+    //drift controls when to step in 'shallow' planes
+    //starting value keeps Line centred
+    drift_xy  = (delta_x / 2);
+    drift_xz  = (delta_x / 2);
+    
+    //direction of line
+	step_x = 1;  if (x0 > x1) {  step_x = -1; }
+	step_y = 1;  if (y0 > y1) {  step_y = -1; }
+	step_z = 1;  if (z0 > z1) {  step_z = -1; }
+    
+    //starting point
+    y = y0;
+    z = z0;
+    
+    //step through longest delta (which we have swapped to x)
+    for (x = x0; x != x1; x += step_x)
+	{
+        //copy position
+        cx = x;    cy = y;    cz = z;
+
+        //unswap (in reverse)
+        if (swap_xz) std::swap(cx, cz);
+        if (swap_xy) std::swap(cx, cy);
+        
+		if (storeTrajectory)
+		{
+			trajectory->push_back(Position(cx, cy, cz));
+		}
+        //passes through this point?
+		int result = voxelCheck(Position(cx, cy, cz));
+		if (result != -1)
+		{
+			if (!storeTrajectory)
+			{ // store the position of impact
+				trajectory->push_back(Position(cx, cy, cz));
+			}
+			return result;
+		}
+        
+        //update progress in other planes
+        drift_xy = drift_xy - delta_y;
+        drift_xz = drift_xz - delta_z;
+
+        //step in y plane
+        if (drift_xy < 0)
+		{
+            y = y + step_y;
+            drift_xy = drift_xy + delta_x;
+		}
+        
+        //same in z
+        if (drift_xz < 0)
+		{
+            z = z + step_z;
+            drift_xz = drift_xz + delta_x;
+		}
+	}
+
+	return -1;
+}
+
+/**
+ * check if we hit a voxel.
+ * @return the objectnumber(0-3) or unit(4) or out of map (5) or -1(hit nothing)
+ */
+int TerrainModifier::voxelCheck(const Position& voxel)
+{
+	//todo add unit models
+
+	for (int i=0; i< 4; i++)
+	{
+		Tile *tile = _save->getTile(Position(voxel.x/16, voxel.y/16, voxel.z/24));
+		// check if we are not out of the map
+		if (tile == 0)
+		{
+			return 5;
+		}
+		MapData *mp = tile->getMapData(i);
+		if (mp != 0 && mp->getModel()->getVoxel(voxel.x%16, voxel.y%16, voxel.z%24))
+		{
+			return i;
+		}
+	}
+	return -1;
+}
 
 }

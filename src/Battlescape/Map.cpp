@@ -559,16 +559,7 @@ void Map::keyboardPress(Action *action, State *state)
 		_save->getTile(pos)->setSmoke(RNG::generate(1,50));
 		//_save->getTerrainModifier()->calculateLighting();
 	}
-	// "e" - does an HE explosion (for testing purposes)
-	if (action->getDetails()->key.keysym.sym == SDLK_e)
-	{
-		_save->getTerrainModifier()->explode(pos, 50, AFFECT_HE, 6);
-	}
-	// "z" - does an smokegrenade (for testing purposes)
-	if (action->getDetails()->key.keysym.sym == SDLK_z)
-	{
-		_save->getTerrainModifier()->explode(pos, 60, AFFECT_SMOKE, 99);
-	}
+
 }
 
 /**

@@ -19,6 +19,7 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include "Projectile.h"
+#include "TerrainModifier.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Battlescape/Position.h"
 #include "../Resource/ResourcePack.h"
@@ -118,7 +119,7 @@ bool Projectile::calculateTrajectory()
 	applyAccuracy(originVoxel, &targetVoxel, 1.0); // test
 
 	// finally do a line calculation and store this trajectory.
-	calculateLine(originVoxel, targetVoxel, true);
+	_save->getTerrainModifier()->calculateLine(originVoxel, targetVoxel, true, &_trajectory);
 
 	return true;
 }
@@ -168,130 +169,6 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 }
 
 /**
- * calculateLine. Using bresenham algorithm in 3D.
- * @param origin
- * @param target
- * @param store
- * @return the objectnumber(0-3) or unit(4) or out of map (5) or -1(hit nothing)
- */
-int Projectile::calculateLine(const Position& origin, const Position& target, bool store)
-{
-	int x, x0, x1, delta_x, step_x;
-    int y, y0, y1, delta_y, step_y;
-    int z, z0, z1, delta_z, step_z;
-    int swap_xy, swap_xz;
-    int drift_xy, drift_xz;
-    int cx, cy, cz;
-
-    //start and end points
-    x0 = origin.x;     x1 = target.x;
-    y0 = origin.y;     y1 = target.y;
-    z0 = origin.z;     z1 = target.z;
-    
-    //'steep' xy Line, make longest delta x plane  
-    swap_xy = abs(y1 - y0) > abs(x1 - x0);
-    if (swap_xy)
-	{
-        std::swap(x0, y0);
-        std::swap(x1, y1);
-	}
-                
-    //do same for xz
-    swap_xz = abs(z1 - z0) > abs(x1 - x0);
-    if (swap_xz)
-	{
-        std::swap(x0, z0);
-		std::swap(x1, z1);
-	}
-    
-    //delta is Length in each plane
-    delta_x = abs(x1 - x0);
-    delta_y = abs(y1 - y0);
-    delta_z = abs(z1 - z0);
-    
-    //drift controls when to step in 'shallow' planes
-    //starting value keeps Line centred
-    drift_xy  = (delta_x / 2);
-    drift_xz  = (delta_x / 2);
-    
-    //direction of line
-	step_x = 1;  if (x0 > x1) {  step_x = -1; }
-	step_y = 1;  if (y0 > y1) {  step_y = -1; }
-	step_z = 1;  if (z0 > z1) {  step_z = -1; }
-    
-    //starting point
-    y = y0;
-    z = z0;
-    
-    //step through longest delta (which we have swapped to x)
-    for (x = x0; x != x1; x += step_x)
-	{
-        //copy position
-        cx = x;    cy = y;    cz = z;
-
-        //unswap (in reverse)
-        if (swap_xz) std::swap(cx, cz);
-        if (swap_xy) std::swap(cx, cy);
-        
-		if (store)
-		{
-			_trajectory.push_back(Position(cx, cy, cz));
-		}
-        //passes through this point?
-		int result = voxelCheck(Position(cx, cy, cz));
-		if (result != -1)
-		{
-			return result;
-		}
-        
-        //update progress in other planes
-        drift_xy = drift_xy - delta_y;
-        drift_xz = drift_xz - delta_z;
-
-        //step in y plane
-        if (drift_xy < 0)
-		{
-            y = y + step_y;
-            drift_xy = drift_xy + delta_x;
-		}
-        
-        //same in z
-        if (drift_xz < 0)
-		{
-            z = z + step_z;
-            drift_xz = drift_xz + delta_x;
-		}
-	}
-
-	return -1;
-}
-
-/**
- * check if we hit a voxel.
- * @return the objectnumber(0-3) or unit(4) or out of map (5) or -1(hit nothing)
- */
-int Projectile::voxelCheck(const Position& voxel)
-{
-	//todo add unit models
-
-	for (int i=0; i< 4; i++)
-	{
-		Tile *tile = _save->getTile(Position(voxel.x/16, voxel.y/16, voxel.z/24));
-		// check if we are not out of the map
-		if (tile == 0)
-		{
-			return 5;
-		}
-		MapData *mp = tile->getMapData(i);
-		if (mp != 0 && mp->getModel()->getVoxel(voxel.x%16, voxel.y%16, voxel.z%24))
-		{
-			return i;
-		}
-	}
-	return -1;
-}
-
-/**
  * Move further in the trajectory.
  * @return false if the trajectory is finished - no new position exists in the trajectory.
  */
@@ -300,6 +177,8 @@ bool Projectile::move()
 	_position+=2;
 	if ((_trajectory.size()-1) <= _position)
 	{
+		while (_position >= _trajectory.size())
+			_position--;
 		return false;
 	}
 	else

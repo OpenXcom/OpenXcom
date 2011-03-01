@@ -44,7 +44,7 @@ private:
 	Position _position;
 	BattleUnit *_owner;
 	InventorySlot _inventorySlot;
-	BattleItem *_parentItem;
+	BattleItem *_ammoItem;
 	int _itemProperty[3];
 public:
 	/// Creates a item of the specified type.
@@ -69,6 +69,10 @@ public:
 	InventorySlot getSlot() const;
 	/// Sets the item's inventory slot.
 	void setSlot(InventorySlot slot);
+	/// Gets the item's ammo item.
+	BattleItem *getAmmoItem();
+	/// Sets the item's ammo item.
+	bool setAmmoItem(BattleItem *item);
 };
 
 }
