@@ -179,6 +179,7 @@
     <ClCompile Include="Geoscape\Globe.cpp" />
     <ClCompile Include="Geoscape\GraphsState.cpp" />
     <ClCompile Include="Geoscape\InterceptState.cpp" />
+    <ClCompile Include="Geoscape\ItemsArrivingState.cpp" />
     <ClCompile Include="Geoscape\LowFuelState.cpp" />
     <ClCompile Include="Geoscape\MonthlyReportState.cpp" />
     <ClCompile Include="Geoscape\MultipleTargetsState.cpp" />
@@ -326,6 +327,7 @@
     <ClInclude Include="Geoscape\Globe.h" />
     <ClInclude Include="Geoscape\GraphsState.h" />
     <ClInclude Include="Geoscape\InterceptState.h" />
+    <ClInclude Include="Geoscape\ItemsArrivingState.h" />
     <ClInclude Include="Geoscape\LowFuelState.h" />
     <ClInclude Include="Geoscape\MonthlyReportState.h" />
     <ClInclude Include="Geoscape\MultipleTargetsState.h" />

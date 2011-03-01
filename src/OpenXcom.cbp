@@ -196,6 +196,8 @@
 		<Unit filename="Geoscape\GraphsState.h" />
 		<Unit filename="Geoscape\InterceptState.cpp" />
 		<Unit filename="Geoscape\InterceptState.h" />
+		<Unit filename="Geoscape\ItemsArrivingState.cpp" />
+		<Unit filename="Geoscape\ItemsArrivingState.h" />
 		<Unit filename="Geoscape\LowFuelState.cpp" />
 		<Unit filename="Geoscape\LowFuelState.h" />
 		<Unit filename="Geoscape\MonthlyReportState.cpp" />
