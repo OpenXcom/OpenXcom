@@ -61,7 +61,6 @@ void ExplosionBState::init()
 	_parent->getMap()->getExplosions()->insert(explosion);
 	// KABOOM
 	_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(_parent->getSelectedItem()->getRules()->getHitSound())->play();
-	_parent->getGame()->getSavedGame()->getBattleGame()->getTerrainModifier()->explode(_center, _item->getAmmoItem()->getRules()->getPower(), _item->getAmmoItem()->getRules()->getDamageType(), 100);
 }
 
 void ExplosionBState::think()
@@ -73,6 +72,7 @@ void ExplosionBState::think()
 			_parent->getMap()->getExplosions()->erase((*i));
 			if (_parent->getMap()->getExplosions()->empty())
 			{
+				_parent->getGame()->getSavedGame()->getBattleGame()->getTerrainModifier()->explode(_center, _item->getAmmoItem()->getRules()->getPower(), _item->getAmmoItem()->getRules()->getDamageType(), 100);
 				_parent->popState();
 				return;
 			}

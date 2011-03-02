@@ -268,7 +268,18 @@ void BattlescapeState::mapClick(Action *action)
 	// right-click aborts walking state
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
-		if (!_states.empty())
+		if (_states.empty())
+		{
+			if (_targeting)
+			{
+				_targeting = false;
+				_map->setCursorType(CT_NORMAL);
+				_game->getCursor()->setVisible(true);
+				_selectedAction = BA_NONE;
+				return;
+			}
+		}
+		else
 		{
 			_states.front()->cancel();
 			return;
@@ -289,7 +300,6 @@ void BattlescapeState::mapClick(Action *action)
 		if (_targeting)
 		{
 			//  -= fire weapon =-
-			_targeting = false;
 			_target = pos;
 			_map->setCursorType(CT_NONE);
 			_game->getCursor()->setVisible(false);
@@ -634,8 +644,15 @@ void BattlescapeState::popState()
 	// if all states are empty - give the mouse back to the player
 	if (_states.empty())
 	{
-		_map->setCursorType(CT_NORMAL);
-		_game->getCursor()->setVisible(true);
+		if (_selectedAction == BA_NONE)
+		{
+			_map->setCursorType(CT_NORMAL);
+			_game->getCursor()->setVisible(true);
+		}
+		else
+		{
+			_map->setCursorType(CT_AIM);
+		}
 	}
 	else
 	{
