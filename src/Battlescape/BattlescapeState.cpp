@@ -90,7 +90,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	_numTimeUnits = new NumberText(15, 5, 136, 186);
 	_barTimeUnits = new Bar(102, 3, 170, 185);
 
-	_numEnergy = new NumberText(15, 5, 153, 186);
+	_numEnergy = new NumberText(15, 5, 154, 186);
 	_barEnergy = new Bar(102, 3, 170, 189);
 
 	_numHealth = new NumberText(15, 5, 136, 194);
@@ -181,7 +181,8 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	_btnLeftHandItem->onMouseClick((ActionHandler)&BattlescapeState::btnLeftHandItemClick);
 	_btnRightHandItem->onMouseClick((ActionHandler)&BattlescapeState::btnRightHandItemClick);
 	
-	_txtName->setColor(Palette::blockOffset(13));
+	_txtName->setColor(Palette::blockOffset(7));
+	_txtName->setHighContrast(true);
 	_numTimeUnits->setColor(Palette::blockOffset(4));
 	_numEnergy->setColor(Palette::blockOffset(1));
 	_numHealth->setColor(Palette::blockOffset(2));

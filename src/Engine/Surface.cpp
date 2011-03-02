@@ -221,6 +221,25 @@ void Surface::offset(int off, int min, int max)
 }
 
 /**
+ * Multiplies all the colors in the surface by a set factor.
+ * @param factor Amount to multiply.
+ */
+void Surface::multiply(int factor)
+{
+	// Lock the surface
+	lock();
+	
+	for (int x = 0, y = 0; x < getWidth() && y < getHeight();)
+	{
+		Uint8 pixel = getPixel(x, y);
+		setPixelIterative(&x, &y, pixel * factor);
+	}
+
+	// Unlock the surface
+	unlock();
+}
+
+/**
  * Inverts all the colors in the surface according to a middle point.
  * Used for effects like shifting a button between pressed and unpressed.
  * @param mid Middle point.

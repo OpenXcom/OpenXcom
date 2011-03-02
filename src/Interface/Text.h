@@ -43,7 +43,7 @@ private:
 	Font *_big, *_small, *_font;
 	std::wstring _text, _wrappedText;
 	std::vector<int> _lineWidth, _lineHeight;
-	bool _wrap, _invert;
+	bool _wrap, _invert, _contrast;
 	TextHAlign _align;
 	TextVAlign _valign;
 	Uint8 _color;
@@ -73,6 +73,8 @@ public:
 	void setWordWrap(bool wrap);
 	/// Sets the text's color invert setting.
 	void setInvert(bool invert);
+	/// Sets the text's high contrast color setting.
+	void setHighContrast(bool contrast);
 	/// Sets the text's horizontal alignment.
 	void setAlign(TextHAlign align);
 	/// Sets the text's vertical alignment.

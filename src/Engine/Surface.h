@@ -54,6 +54,8 @@ public:
 	void clear();
 	/// Offsets the surface's colors by a set amount.
 	void offset(int off, int min = -1, int max = -1);
+	/// Multiplies the surface's colors by a set amount.
+	void multiply(int factor);
 	/// Inverts the surface's colors.
 	void invert(Uint8 mid);
 	/// Sets the surface's shade level.

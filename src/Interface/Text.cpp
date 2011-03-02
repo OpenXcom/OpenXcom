@@ -30,7 +30,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Text::Text(int width, int height, int x, int y) : Surface(width, height, x, y), _big(0), _small(0), _font(0), _text(L""), _wrap(false), _invert(false), _align(ALIGN_LEFT), _valign(ALIGN_TOP), _color(0)
+Text::Text(int width, int height, int x, int y) : Surface(width, height, x, y), _big(0), _small(0), _font(0), _text(L""), _wrap(false), _invert(false), _contrast(false), _align(ALIGN_LEFT), _valign(ALIGN_TOP), _color(0)
 {
 }
 
@@ -144,6 +144,17 @@ void Text::setWordWrap(bool wrap)
 void Text::setInvert(bool invert)
 {
 	_invert = invert;
+	draw();
+}
+
+/**
+ * Enables/disables high contrast color. Mostly used for
+ * Battlescape text.
+ * @param contrast High contrast setting.
+ */
+void Text::setHighContrast(bool contrast)
+{
+	_contrast = contrast;
 	draw();
 }
 
@@ -367,7 +378,10 @@ void Text::draw()
 			pos += 1;
 		}
 	}
-
+	if (_contrast)
+	{
+		this->multiply(3);
+	}
 	this->offset(_color);
 	if (_invert)
 	{
