@@ -50,7 +50,7 @@ TransfersState::TransfersState(Game *game, Base *base) : State(game), _base(base
 	_txtItem = new Text(114, 8, 26, 34);
 	_txtQuantity = new Text(44, 8, 141, 34);
 	_txtArrivalTime = new Text(112, 8, 186, 34);
-	_lstTransfers = new TextList(256, 118, 24, 50);
+	_lstTransfers = new TextList(256, 112, 24, 50);
 	
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
@@ -86,7 +86,7 @@ TransfersState::TransfersState(Game *game, Base *base) : State(game), _base(base
 	_txtArrivalTime->setText(_game->getLanguage()->getString("STR_ARRIVAL_TIME_HOURS"));
 	
 	_lstTransfers->setColor(Palette::blockOffset(13)+10);
-	_lstTransfers->setArrowColor(Palette::blockOffset(15)+6);
+	_lstTransfers->setArrowColor(Palette::blockOffset(15)+9);
 	_lstTransfers->setColumns(3, 155, 55, 46);
 	_lstTransfers->setSelectable(true);
 	_lstTransfers->setBackground(_window);

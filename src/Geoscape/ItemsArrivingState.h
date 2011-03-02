@@ -28,6 +28,7 @@ class TextButton;
 class Window;
 class Text;
 class TextList;
+class GeoscapeState;
 
 /**
  * Items Arriving window that displays all
@@ -36,17 +37,20 @@ class TextList;
 class ItemsArrivingState : public State
 {
 private:
+	GeoscapeState *_state;
 	TextButton *_btnOk, *_btnOk5Secs;
 	Window *_window;
 	Text *_txtTitle, *_txtItem, *_txtQuantity, *_txtDestination;
 	TextList *_lstTransfers;
 public:
 	/// Creates the ItemsArriving state.
-	ItemsArrivingState(Game *game);
+	ItemsArrivingState(Game *game, GeoscapeState *state);
 	/// Cleans up the ItemsArriving state.
 	~ItemsArrivingState();
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
+	/// Handler for clicking the OK - 5 Secs button.
+	void btnOk5SecsClick(Action *action);
 };
 
 }

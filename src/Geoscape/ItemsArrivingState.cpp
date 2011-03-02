@@ -30,6 +30,7 @@
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/Transfer.h"
+#include "GeoscapeState.h"
 
 namespace OpenXcom
 {
@@ -38,13 +39,14 @@ namespace OpenXcom
  * Initializes all the elements in the Items Arriving window.
  * @param game Pointer to the core game.
  */
-ItemsArrivingState::ItemsArrivingState(Game *game) : State(game)
+ItemsArrivingState::ItemsArrivingState(Game *game, GeoscapeState *state) : State(game), _state(state)
 {
 	_screen = false;
 
 	// Create objects
 	_window = new Window(this, 288, 180, 16, 10, POPUP_BOTH);
 	_btnOk = new TextButton(272, 16, 24, 166);
+	_btnOk5Secs = new TextButton(272, 16, 24, 166);
 	_txtTitle = new Text(278, 16, 21, 18);
 	_txtItem = new Text(114, 8, 26, 34);
 	_txtQuantity = new Text(44, 8, 141, 34);
@@ -56,6 +58,7 @@ ItemsArrivingState::ItemsArrivingState(Game *game) : State(game)
 
 	add(_window);
 	add(_btnOk);
+	add(_btnOk5Secs);
 	add(_txtTitle);
 	add(_txtItem);
 	add(_txtQuantity);
@@ -63,29 +66,33 @@ ItemsArrivingState::ItemsArrivingState(Game *game) : State(game)
 	add(_lstTransfers);
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(15)+9);
+	_window->setColor(Palette::blockOffset(8)+8);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(15)+9);
+	_btnOk->setColor(Palette::blockOffset(8)+8);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ItemsArrivingState::btnOkClick);
 
-	_txtTitle->setColor(Palette::blockOffset(15)+6);
+	_btnOk->setColor(Palette::blockOffset(8)+8);
+	_btnOk->setText(_game->getLanguage()->getString("STR_OK_5_SECS"));
+	_btnOk->onMouseClick((ActionHandler)&ItemsArrivingState::btnOk5SecsClick);
+
+	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setText(_game->getLanguage()->getString("STR_TRANSFERS"));
+	_txtTitle->setText(_game->getLanguage()->getString("STR_ITEMS_ARRIVING"));
 
-	_txtItem->setColor(Palette::blockOffset(15)+6);
+	_txtItem->setColor(Palette::blockOffset(8)+5);
 	_txtItem->setText(_game->getLanguage()->getString("STR_ITEM"));
 
-	_txtQuantity->setColor(Palette::blockOffset(15)+6);
+	_txtQuantity->setColor(Palette::blockOffset(8)+5);
 	_txtQuantity->setText(_game->getLanguage()->getString("STR_QUANTITY_UC"));
 
-	_txtDestination->setColor(Palette::blockOffset(15)+6);
+	_txtDestination->setColor(Palette::blockOffset(8)+5);
 	_txtDestination->setText(_game->getLanguage()->getString("STR_DESTINATION"));
 	
-	_lstTransfers->setColor(Palette::blockOffset(13)+10);
-	_lstTransfers->setArrowColor(Palette::blockOffset(15)+6);
+	_lstTransfers->setColor(Palette::blockOffset(8)+10);
+	_lstTransfers->setArrowColor(Palette::blockOffset(8)+8);
 	_lstTransfers->setColumns(3, 155, 55, 46);
 	_lstTransfers->setSelectable(true);
 	_lstTransfers->setBackground(_window);
@@ -95,9 +102,18 @@ ItemsArrivingState::ItemsArrivingState(Game *game) : State(game)
 	{
 		for (std::vector<Transfer*>::iterator j = (*i)->getTransfers()->begin(); j != (*i)->getTransfers()->end(); j++)
 		{
-			std::wstringstream ss;
-			ss << (*j)->getQuantity();
-			_lstTransfers->addRow(3, (*i)->getName(_game->getLanguage()).c_str(), ss.str().c_str(), (*i)->getName().c_str());
+			if ((*j)->getHours() == 0)
+			{
+				std::wstringstream ss;
+				ss << (*j)->getQuantity();
+				_lstTransfers->addRow(3, (*j)->getName(_game->getLanguage()).c_str(), ss.str().c_str(), (*i)->getName().c_str());
+				delete *j;
+				j = (*i)->getTransfers()->erase(j);
+				if (j == (*i)->getTransfers()->end())
+				{
+					break;
+				}
+			}
 		}
 	}
 }
@@ -116,6 +132,16 @@ ItemsArrivingState::~ItemsArrivingState()
  */
 void ItemsArrivingState::btnOkClick(Action *action)
 {
+	_game->popState();
+}
+
+/**
+ * Reduces the speed to 5 Secs and returns to the previous screen.
+ * @param action Pointer to an action.
+ */
+void ItemsArrivingState::btnOk5SecsClick(Action *action)
+{
+	_state->timerReset();
 	_game->popState();
 }
 

@@ -62,6 +62,7 @@
 #include "LowFuelState.h"
 #include "MultipleTargetsState.h"
 #include "ConfirmLandingState.h"
+#include "ItemsArrivingState.h"
 #include "../Battlescape/BattlescapeState.h"
 #include "../Battlescape/BattlescapeGenerator.h"
 
@@ -686,12 +687,21 @@ void GeoscapeState::time1Hour()
 	}
 
 	// Handle transfers
+	bool window = false;
 	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); i++)
 	{
 		for (std::vector<Transfer*>::iterator j = (*i)->getTransfers()->begin(); j != (*i)->getTransfers()->end(); j++)
 		{
 			(*j)->advance(*i);
+			if (!window && (*j)->getHours() == 0)
+			{
+				window = true;
+			}
 		}
+	}
+	if (window)
+	{
+		popup(new ItemsArrivingState(_game, this));
 	}
 }
 
