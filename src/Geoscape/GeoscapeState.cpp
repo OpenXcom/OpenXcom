@@ -518,8 +518,7 @@ void GeoscapeState::time5Seconds()
 		{
 			delete *i;
 			i = _game->getSavedGame()->getUfos()->erase(i);
-			if (i == _game->getSavedGame()->getUfos()->end())
-				break;
+			i--;
 		}
 	}
 
@@ -530,8 +529,7 @@ void GeoscapeState::time5Seconds()
 		{
 			delete *i;
 			i = _game->getSavedGame()->getWaypoints()->erase(i);
-			if (i == _game->getSavedGame()->getWaypoints()->end())
-				break;
+			i--;
 		}
 	}
 }

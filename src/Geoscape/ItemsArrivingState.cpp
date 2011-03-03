@@ -44,14 +44,14 @@ ItemsArrivingState::ItemsArrivingState(Game *game, GeoscapeState *state) : State
 	_screen = false;
 
 	// Create objects
-	_window = new Window(this, 288, 180, 16, 10, POPUP_BOTH);
-	_btnOk = new TextButton(272, 16, 24, 166);
-	_btnOk5Secs = new TextButton(272, 16, 24, 166);
-	_txtTitle = new Text(278, 16, 21, 18);
-	_txtItem = new Text(114, 8, 26, 34);
-	_txtQuantity = new Text(44, 8, 141, 34);
-	_txtDestination = new Text(112, 8, 186, 34);
-	_lstTransfers = new TextList(256, 118, 24, 50);
+	_window = new Window(this, 320, 180, 0, 10, POPUP_BOTH);
+	_btnOk = new TextButton(148, 16, 8, 166);
+	_btnOk5Secs = new TextButton(148, 16, 160, 166);
+	_txtTitle = new Text(310, 16, 5, 18);
+	_txtItem = new Text(120, 8, 10, 34);
+	_txtQuantity = new Text(50, 8, 150, 34);
+	_txtDestination = new Text(110, 8, 205, 34);
+	_lstTransfers = new TextList(288, 112, 8, 50);
 	
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
@@ -73,9 +73,9 @@ ItemsArrivingState::ItemsArrivingState(Game *game, GeoscapeState *state) : State
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ItemsArrivingState::btnOkClick);
 
-	_btnOk->setColor(Palette::blockOffset(8)+8);
-	_btnOk->setText(_game->getLanguage()->getString("STR_OK_5_SECS"));
-	_btnOk->onMouseClick((ActionHandler)&ItemsArrivingState::btnOk5SecsClick);
+	_btnOk5Secs->setColor(Palette::blockOffset(8)+8);
+	_btnOk5Secs->setText(_game->getLanguage()->getString("STR_OK_5_SECS"));
+	_btnOk5Secs->onMouseClick((ActionHandler)&ItemsArrivingState::btnOk5SecsClick);
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setBig();
@@ -93,7 +93,7 @@ ItemsArrivingState::ItemsArrivingState(Game *game, GeoscapeState *state) : State
 	
 	_lstTransfers->setColor(Palette::blockOffset(8)+10);
 	_lstTransfers->setArrowColor(Palette::blockOffset(8)+8);
-	_lstTransfers->setColumns(3, 155, 55, 46);
+	_lstTransfers->setColumns(3, 165, 25, 98);
 	_lstTransfers->setSelectable(true);
 	_lstTransfers->setBackground(_window);
 	_lstTransfers->setMargin(2);
@@ -109,10 +109,7 @@ ItemsArrivingState::ItemsArrivingState(Game *game, GeoscapeState *state) : State
 				_lstTransfers->addRow(3, (*j)->getName(_game->getLanguage()).c_str(), ss.str().c_str(), (*i)->getName().c_str());
 				delete *j;
 				j = (*i)->getTransfers()->erase(j);
-				if (j == (*i)->getTransfers()->end())
-				{
-					break;
-				}
+				j--;
 			}
 		}
 	}

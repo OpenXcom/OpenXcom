@@ -380,8 +380,7 @@ void DogfightState::move()
 					_game->getResourcePack()->getSoundSet("GEO.CAT")->getSound(12)->play();
 				}
 				d = wDist->erase(d);
-				if (d == wDist->end())
-					break;
+				d--;
 			}
 		}
 
