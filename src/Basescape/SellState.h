@@ -28,7 +28,10 @@ class TextButton;
 class Window;
 class Text;
 class TextList;
+class Timer;
 class Base;
+class Soldier;
+class Craft;
 
 /**
  * Sell/Sack screen that lets the player sell
@@ -42,15 +45,40 @@ private:
 	Window *_window;
 	Text *_txtTitle, *_txtSales, *_txtFunds, *_txtItem, *_txtQuantity, *_txtSell, *_txtValue;
 	TextList *_lstItems;
+	std::vector<int> _qtys;
+	std::vector<Soldier*> _soldiers;
+	std::vector<Craft*> _crafts;
+	std::vector<std::string> _items;
+	unsigned int _sel;
+	int _total, _sOffset, _eOffset;
+	Timer *_timerInc, *_timerDec;
+	/// Gets selected price.
+	int getPrice();
+	/// Gets selected quantity.
+	int getQuantity();
 public:
 	/// Creates the Sell state.
 	SellState(Game *game, Base *base);
 	/// Cleans up the Sell state.
 	~SellState();
+	/// Runs the timers.
+	void think();
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
 	/// Handler for clicking the Cancel button.
 	void btnCancelClick(Action *action);
+	/// Handler for pressing an Increase arrow in the list.
+	void lstItemsLeftArrowPress(Action *action);
+	/// Handler for releasing an Increase arrow in the list.
+	void lstItemsLeftArrowRelease(Action *action);
+	/// Handler for pressing a Decrease arrow in the list.
+	void lstItemsRightArrowPress(Action *action);
+	/// Handler for releasing a Decrease arrow in the list.
+	void lstItemsRightArrowRelease(Action *action);
+	/// Increases the quantity of an item.
+	void increase();
+	/// Decreases the quantity of an item.
+	void decrease();
 };
 
 }

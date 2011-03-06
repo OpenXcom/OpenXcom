@@ -18,6 +18,7 @@
  */
 #include "SellState.h"
 #include <string>
+#include <cmath>
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
@@ -29,6 +30,14 @@
 #include "../Interface/TextList.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Base.h"
+#include "../Savegame/Soldier.h"
+#include "../Savegame/Craft.h"
+#include "../Savegame/ItemContainer.h"
+#include "../Ruleset/Ruleset.h"
+#include "../Ruleset/RuleItem.h"
+#include "../Savegame/CraftWeapon.h"
+#include "../Ruleset/RuleCraftWeapon.h"
+#include "../Engine/Timer.h"
 
 namespace OpenXcom
 {
@@ -38,7 +47,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-SellState::SellState(Game *game, Base *base) : State(game), _base(base)
+SellState::SellState(Game *game, Base *base) : State(game), _base(base), _qtys(), _soldiers(), _crafts(), _items(), _sel(0), _total(0), _sOffset(0), _eOffset(0)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
@@ -84,14 +93,16 @@ SellState::SellState(Game *game, Base *base) : State(game), _base(base)
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(_game->getLanguage()->getString("STR_SELL_ITEMS_SACK_PERSONNEL"));
-
+	
+	std::wstring s1 = _game->getLanguage()->getString("STR_VALUE_OF_SALES");
+	s1 += Text::formatFunding(_total);
 	_txtSales->setColor(Palette::blockOffset(13)+10);
-	_txtSales->setText(_game->getLanguage()->getString("STR_VALUE_OF_SALES"));
+	_txtSales->setText(s1);
 
-	std::wstring s = _game->getLanguage()->getString("STR_FUNDS");
-	s += Text::formatFunding(_game->getSavedGame()->getFunds());
+	std::wstring s2 = _game->getLanguage()->getString("STR_FUNDS");
+	s2 += Text::formatFunding(_game->getSavedGame()->getFunds());
 	_txtFunds->setColor(Palette::blockOffset(13)+10);
-	_txtFunds->setText(s);
+	_txtFunds->setText(s2);
 
 	_txtItem->setColor(Palette::blockOffset(13)+10);
 	_txtItem->setText(_game->getLanguage()->getString("STR_ITEM"));
@@ -107,11 +118,64 @@ SellState::SellState(Game *game, Base *base) : State(game), _base(base)
 
 	_lstItems->setColor(Palette::blockOffset(13)+10);
 	_lstItems->setArrowColor(Palette::blockOffset(13)+13);
+	_lstItems->setArrowColumn(189);
 	_lstItems->setColumns(4, 156, 62, 28, 40);
 	_lstItems->setSelectable(true);
 	_lstItems->setBackground(_window);
 	_lstItems->setMargin(2);
-	_lstItems->addRow(4, "Soldier", "1", "0", "$40 000");
+	_lstItems->onLeftArrowPress((ActionHandler)&SellState::lstItemsLeftArrowPress);
+	_lstItems->onLeftArrowRelease((ActionHandler)&SellState::lstItemsLeftArrowRelease);
+	_lstItems->onRightArrowPress((ActionHandler)&SellState::lstItemsRightArrowPress);
+	_lstItems->onRightArrowRelease((ActionHandler)&SellState::lstItemsRightArrowRelease);
+
+	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); i++)
+	{
+		if ((*i)->getCraft() == 0)
+		{
+			_qtys.push_back(0);
+			_soldiers.push_back(*i);
+			_lstItems->addRow(4, (*i)->getName().c_str(), L"1", L"0", Text::formatFunding(0).c_str());
+		}
+	}
+	for (std::vector<Craft*>::iterator i = _base->getCrafts()->begin(); i != _base->getCrafts()->end(); i++)
+	{
+		if ((*i)->getStatus() != "STR_OUT")
+		{
+			_qtys.push_back(0);
+			_crafts.push_back(*i);
+			_lstItems->addRow(4, (*i)->getName(_game->getLanguage()).c_str(), L"1", L"0", Text::formatFunding(0).c_str());
+		}
+	}
+	if (_base->getAvailableScientists() > 0)
+	{
+		_qtys.push_back(0);
+		_sOffset++;
+		std::wstringstream ss;
+		ss << _base->getAvailableScientists();
+		_lstItems->addRow(4, _game->getLanguage()->getString("STR_SCIENTIST").c_str(), ss.str().c_str(), L"0", Text::formatFunding(0).c_str());
+	}
+	if (_base->getAvailableEngineers() > 0)
+	{
+		_qtys.push_back(0);
+		_eOffset++;
+		std::wstringstream ss;
+		ss << _base->getAvailableEngineers();
+		_lstItems->addRow(4, _game->getLanguage()->getString("STR_ENGINEER").c_str(), ss.str().c_str(), L"0", Text::formatFunding(0).c_str());
+	}
+	for (std::map<std::string, int>::iterator i = _base->getItems()->getContents()->begin(); i != _base->getItems()->getContents()->end(); i++)
+	{
+		_qtys.push_back(0);
+		_items.push_back(i->first);
+		RuleItem *rule = _game->getRuleset()->getItem(i->first);
+		std::wstringstream ss;
+		ss << i->second;
+		_lstItems->addRow(4, _game->getLanguage()->getString(i->first).c_str(), ss.str().c_str(), L"0", Text::formatFunding(rule->getCost() / 2).c_str());
+	}
+
+	_timerInc = new Timer(50);
+	_timerInc->onTimer((StateHandler)&SellState::increase);
+	_timerDec = new Timer(50);
+	_timerDec->onTimer((StateHandler)&SellState::decrease);
 }
 
 /**
@@ -119,12 +183,101 @@ SellState::SellState(Game *game, Base *base) : State(game), _base(base)
  */
 SellState::~SellState()
 {
-	
+	delete _timerInc;
+	delete _timerDec;
 }
 
+/**
+ * Runs the game timer and handles popups.
+ */
+void SellState::think()
+{
+	State::think();
+
+	_timerInc->think(this, 0);
+	_timerDec->think(this, 0);
+}
+
+/**
+ * Sells the selected items.
+ * @param action Pointer to an action.
+ */
 void SellState::btnOkClick(Action *action)
 {
-	
+	_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() + _total);
+	for (unsigned int i = 0; i < _qtys.size(); i++)
+	{
+		if (_qtys[i] > 0)
+		{
+			// Sell soldiers
+			if (i < _soldiers.size())
+			{
+				delete _soldiers[i];
+				for (std::vector<Soldier*>::iterator s = _base->getSoldiers()->begin(); s != _base->getSoldiers()->end(); s++)
+				{
+					if (*s == _soldiers[i])
+					{
+						_base->getSoldiers()->erase(s);
+						break;
+					}
+				}
+			}
+			// Sell crafts
+			else if (i >= _soldiers.size() && i < _soldiers.size() + _crafts.size())
+			{
+				Craft *craft =  _crafts[i - _soldiers.size()];
+
+				// Remove weapons from craft
+				for (std::vector<CraftWeapon*>::iterator w = craft->getWeapons()->begin(); w != craft->getWeapons()->end(); w++)
+				{
+					_base->getItems()->addItem((*w)->getRules()->getLauncherItem());
+					_base->getItems()->addItem((*w)->getRules()->getClipItem()), (int)floor((double)(*w)->getAmmo() / (*w)->getRules()->getRearmRate());
+				}
+
+				// Remove items from craft
+				for (std::map<std::string, int>::iterator it = craft->getItems()->getContents()->begin(); it != craft->getItems()->getContents()->end(); it++)
+				{
+					_base->getItems()->addItem(it->first, it->second);
+				}
+
+				// Remove soldiers from craft
+				for (std::vector<Soldier*>::iterator s = _base->getSoldiers()->begin(); s != _base->getSoldiers()->end(); s++)
+				{
+					if ((*s)->getCraft() == craft)
+					{
+						(*s)->setCraft(0);
+					}
+				}
+
+				// Remove craft
+				delete craft;
+				for (std::vector<Craft*>::iterator c = _base->getCrafts()->begin(); c != _base->getCrafts()->end(); c++)
+				{
+					if (*c == craft)
+					{
+						_base->getCrafts()->erase(c);
+						break;
+					}
+				}
+			}
+			// Sell scientists
+			else if (_base->getAvailableScientists() > 0 && i == _soldiers.size() + _crafts.size())
+			{
+				_base->setScientists(_base->getScientists() - _qtys[i]);
+			}
+			// Sell engineers
+			else if (_base->getAvailableEngineers() > 0 && i == _soldiers.size() + _crafts.size() + _sOffset)
+			{
+				_base->setEngineers(_base->getEngineers() - _qtys[i]);
+			}
+			// Sell items
+			else
+			{
+				_base->getItems()->removeItem(_items[i - _soldiers.size() - _crafts.size() - _sOffset - _eOffset], _qtys[i]);
+			}
+		}
+	}
+	_game->popState();
 }
 
 /**
@@ -134,6 +287,127 @@ void SellState::btnOkClick(Action *action)
 void SellState::btnCancelClick(Action *action)
 {
 	_game->popState();
+}
+
+/**
+ * Starts increasing the item.
+ * @param action Pointer to an action.
+ */
+void SellState::lstItemsLeftArrowPress(Action *action)
+{
+	_sel = _lstItems->getSelectedRow();
+	_timerInc->start();
+}
+
+/**
+ * Stops increasing the item.
+ * @param action Pointer to an action.
+ */
+void SellState::lstItemsLeftArrowRelease(Action *action)
+{
+	_timerInc->stop();
+}
+
+/**
+ * Starts decreasing the item.
+ * @param action Pointer to an action.
+ */
+void SellState::lstItemsRightArrowPress(Action *action)
+{
+	_sel = _lstItems->getSelectedRow();
+	_timerDec->start();
+}
+
+/**
+ * Stops decreasing the item.
+ * @param action Pointer to an action.
+ */
+void SellState::lstItemsRightArrowRelease(Action *action)
+{
+	_timerDec->stop();	
+}
+
+/**
+ * Gets the price of the currently selected item.
+ */
+int SellState::getPrice()
+{
+	// Personnel/craft aren't worth anything
+	if (_sel < _soldiers.size() + _crafts.size() + _sOffset + _eOffset)
+	{
+		return 0;
+	}
+	// Item cost
+	else
+	{
+		return _game->getRuleset()->getItem(_items[_sel - _soldiers.size() - _crafts.size() - _sOffset - _eOffset])->getCost() / 2;
+	}
+}
+
+/**
+ * Gets the quantity of the currently selected item
+ * on the base.
+ */
+int SellState::getQuantity()
+{
+	// Soldiers/crafts are individual
+	if (_sel < _soldiers.size() + _crafts.size())
+	{
+		return 1;
+	}
+	// Scientist quantity
+	else if (_base->getAvailableScientists() > 0 && _sel == _soldiers.size() + _crafts.size())
+	{
+		return _base->getAvailableScientists();
+	}
+	// Engineer quantity
+	else if (_base->getAvailableEngineers() > 0 && _sel == _soldiers.size() + _crafts.size() + _sOffset)
+	{
+		return _base->getAvailableEngineers();
+	}
+	// Item quantity
+	else
+	{
+		return _base->getItems()->getItem(_items[_sel - _soldiers.size() - _crafts.size() - _sOffset - _eOffset]);
+	}
+}
+
+/**
+ * Increases the quantity of the selected item to sell.
+ */
+void SellState::increase()
+{
+	if (_qtys[_sel] < getQuantity())
+	{
+		_qtys[_sel]++;
+		std::wstringstream ss;
+		ss << _qtys[_sel];
+		_lstItems->getCell(_sel, 2)->setText(ss.str());
+		_lstItems->draw();
+		_total += getPrice();
+		std::wstring s = _game->getLanguage()->getString("STR_VALUE_OF_SALES");
+		s += Text::formatFunding(_total);
+		_txtSales->setText(s);
+	}
+}
+
+/**
+ * Decreases the quantity of the selected item to sell.
+ */
+void SellState::decrease()
+{
+	if (_qtys[_sel] > 0)
+	{
+		_qtys[_sel]--;
+		std::wstringstream ss;
+		ss << _qtys[_sel];
+		_lstItems->getCell(_sel, 2)->setText(ss.str());
+		_lstItems->draw();
+		_total -= getPrice();
+		std::wstring s = _game->getLanguage()->getString("STR_VALUE_OF_SALES");
+		s += Text::formatFunding(_total);
+		_txtSales->setText(s);
+	}
 }
 
 }

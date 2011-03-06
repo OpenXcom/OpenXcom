@@ -160,7 +160,7 @@ BasescapeState::BasescapeState(Game *game, Base *base, Globe *globe) : State(gam
 	_btnPurchase->onMouseClick((ActionHandler)&BasescapeState::btnPurchaseClick);
 
 	_btnSell->setColor(Palette::blockOffset(13)+8);
-	_btnSell->setText(_game->getLanguage()->getString("STR_NOT_AVAILABLE"));
+	_btnSell->setText(_game->getLanguage()->getString("STR_SELL_SACK_UC"));
 	_btnSell->onMouseClick((ActionHandler)&BasescapeState::btnSellClick);
 
 	_btnGeoscape->setColor(Palette::blockOffset(13)+8);
@@ -338,7 +338,7 @@ void BasescapeState::btnPurchaseClick(Action *action)
  */
 void BasescapeState::btnSellClick(Action *action)
 {
-	//_game->pushState(new SellState(_game, _base));
+	_game->pushState(new SellState(_game, _base));
 }
 
 /**

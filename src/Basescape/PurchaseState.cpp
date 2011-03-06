@@ -200,6 +200,7 @@ void PurchaseState::btnOkClick(Action *action)
 	{
 		if (_qtys[i] > 0)
 		{
+			// Buy soldiers
 			if (i == 0)
 			{
 				for (int s = 0; s < _qtys[i]; s++)
@@ -209,18 +210,21 @@ void PurchaseState::btnOkClick(Action *action)
 					_base->getTransfers()->push_back(t);
 				}
 			}
+			// Buy scientists
 			else if (i == 1)
 			{
 				Transfer *t = new Transfer(_game->getRuleset()->getPersonnelTime());
 				t->setScientists(_qtys[i]);
 				_base->getTransfers()->push_back(t);
 			}
+			// Buy engineers
 			else if (i == 2)
 			{
 				Transfer *t = new Transfer(_game->getRuleset()->getPersonnelTime());
 				t->setEngineers(_qtys[i]);
 				_base->getTransfers()->push_back(t);
 			}
+			// Buy crafts
 			else if (i >= 3 && i < 3 + _crafts.size())
 			{
 				for (int c = 0; c < _qtys[i]; c++)
@@ -231,6 +235,7 @@ void PurchaseState::btnOkClick(Action *action)
 					_base->getTransfers()->push_back(t);
 				}
 			}
+			// Buy items
 			else
 			{
 				RuleItem *ri = _game->getRuleset()->getItem(_items[i - 3 - _crafts.size()]);
@@ -295,22 +300,27 @@ void PurchaseState::lstItemsRightArrowRelease(Action *action)
  */
 int PurchaseState::getPrice()
 {
+	// Soldier cost
 	if (_sel == 0)
 	{
 		return _game->getRuleset()->getSoldierCost() * 2;
 	}
+	// Scientist cost
 	else if (_sel == 1)
 	{
 		return _game->getRuleset()->getScientistCost() * 2;
 	}
+	// Engineer cost
 	else if (_sel == 2)
 	{
 		return _game->getRuleset()->getEngineerCost() * 2;
 	}
+	// Craft cost
 	else if (_sel >= 3 && _sel < 3 + _crafts.size())
 	{
 		return _game->getRuleset()->getCraft(_crafts[_sel - 3])->getCost();
 	}
+	// Item cost
 	else
 	{
 		return _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getCost();
@@ -344,14 +354,17 @@ void PurchaseState::increase()
 	}
 	else
 	{
+		// Personnel count
 		if (_sel <= 2)
 		{
 			_pQty++;
 		}
+		// Craft count
 		else if (_sel >= 3 && _sel < 3 + _crafts.size())
 		{
 			_cQty++;
 		}
+		// Item count
 		else if (_sel >= 3 + _crafts.size())
 		{
 			_iQty += _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getSize();
