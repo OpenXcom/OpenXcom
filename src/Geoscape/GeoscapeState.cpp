@@ -839,15 +839,8 @@ void GeoscapeState::btnBasesClick(Action *action)
  */
 void GeoscapeState::btnGraphsClick(Action *action)
 {
-	_game->pushState(new GraphsState(_game));
-}
+	//_game->pushState(new GraphsState(_game));
 
-/**
- * Goes to the Ufopaedia screen.
- * @param action Pointer to an action.
- */
-void GeoscapeState::btnUfopaediaClick(Action *action)
-{
 	/* Daiky: uncomment this bit to start a terror mission */
 	_game->getSavedGame()->setBattleGame(new SavedBattleGame());	
 	BattlescapeGenerator *bgen = new BattlescapeGenerator(_game);
@@ -858,8 +851,17 @@ void GeoscapeState::btnUfopaediaClick(Action *action)
 	bgen->setCraft(_game->getSavedGame()->getBases()->at(0)->getCrafts()->at(0));
 	bgen->run();
 	delete bgen;
+	_music = false;
 	_game->pushState(new BattlescapeState(_game));
-	
+}
+
+/**
+ * Goes to the Ufopaedia window.
+ * @param action Pointer to an action.
+ */
+void GeoscapeState::btnUfopaediaClick(Action *action)
+{
+		
 }
 
 /**

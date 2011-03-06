@@ -612,14 +612,6 @@
 			Name="Battlescape"
 			>
 			<File
-				RelativePath=".\Battlescape\BattleAction.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Battlescape\BattleAction.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Battlescape\BattlescapeGenerator.cpp"
 				>
 			</File>
@@ -634,7 +626,15 @@
 			<File
 				RelativePath=".\Battlescape\BattlescapeState.h"
 				>
-			</File>		
+			</File>
+			<File
+				RelativePath=".\Battlescape\BattleState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\BattleState.h"
+				>
+			</File>			
 			<File
 				RelativePath=".\Battlescape\BriefingCrashState.cpp"
 				>
@@ -649,6 +649,22 @@
 			</File>
 			<File
 				RelativePath=".\Battlescape\BulletSprite.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\Explosion.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\Explosion.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\ExplosionBState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\ExplosionBState.h"
 				>
 			</File>
 			<File
@@ -692,6 +708,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Battlescape\ProjectiveFlyBState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\ProjectileFlyBState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Battlescape\TerrainModifier.cpp"
 				>
 			</File>
@@ -705,6 +729,22 @@
 			</File>
 			<File
 				RelativePath=".\Battlescape\UnitSprite.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\UnitTurnBState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\UnitTurnBState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\UnitWalkBState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\UnitWalkBState.h"
 				>
 			</File>
 		</Filter>

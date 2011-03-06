@@ -48,7 +48,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base), _sel(0), _total(0), _pQty(0), _cQty(0), _iQty(0.0f)
+PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base), _crafts(), _items(), _qtys(), _sel(0), _total(0), _pQty(0), _cQty(0), _iQty(0.0f)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
@@ -119,6 +119,10 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 	_lstItems->setSelectable(true);
 	_lstItems->setBackground(_window);
 	_lstItems->setMargin(2);
+	_lstItems->onLeftArrowPress((ActionHandler)&PurchaseState::lstItemsLeftArrowPress);
+	_lstItems->onLeftArrowRelease((ActionHandler)&PurchaseState::lstItemsLeftArrowRelease);
+	_lstItems->onRightArrowPress((ActionHandler)&PurchaseState::lstItemsRightArrowPress);
+	_lstItems->onRightArrowRelease((ActionHandler)&PurchaseState::lstItemsRightArrowRelease);
 
 	_crafts.push_back("STR_SKYRANGER");
 	_crafts.push_back("STR_INTERCEPTOR");
@@ -158,10 +162,6 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 		_qtys.push_back(0);
 		_lstItems->addRow(3, _game->getLanguage()->getString(*i).c_str(), Text::formatFunding(_game->getRuleset()->getItem(*i)->getCost()).c_str(), L"0");
 	}
-	_lstItems->onLeftArrowPress((ActionHandler)&PurchaseState::lstItemsLeftArrowPress);
-	_lstItems->onLeftArrowRelease((ActionHandler)&PurchaseState::lstItemsLeftArrowRelease);
-	_lstItems->onRightArrowPress((ActionHandler)&PurchaseState::lstItemsRightArrowPress);
-	_lstItems->onRightArrowRelease((ActionHandler)&PurchaseState::lstItemsRightArrowRelease);
 
 	_timerInc = new Timer(50);
 	_timerInc->onTimer((StateHandler)&PurchaseState::increase);
@@ -318,7 +318,7 @@ int PurchaseState::getPrice()
 }
 
 /**
- * Increases the quantity of the selected item on the list.
+ * Increases the quantity of the selected item to buy.
  */
 void PurchaseState::increase()
 {
@@ -369,7 +369,7 @@ void PurchaseState::increase()
 }
 
 /**
- * Decreases the quantity of the selected item on the list.
+ * Decreases the quantity of the selected item to buy.
  */
 void PurchaseState::decrease()
 {
@@ -393,10 +393,10 @@ void PurchaseState::decrease()
 		_lstItems->getCell(_sel, 2)->setText(ss.str());
 		_lstItems->draw();
 		_total -= getPrice();
+		std::wstring s = _game->getLanguage()->getString("STR_COST_OF_PURCHASES");
+		s += Text::formatFunding(_total);
+		_txtPurchases->setText(s);
 	}
-	std::wstring s = _game->getLanguage()->getString("STR_COST_OF_PURCHASES");
-	s += Text::formatFunding(_total);
-	_txtPurchases->setText(s);
 }
 
 }

@@ -34,7 +34,8 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-TextList::TextList(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _texts(), _columns(), _big(0), _small(0), _scroll(0), _visibleRows(0), _color(0), _align(ALIGN_LEFT), _dot(false), _selectable(false), _selRow(0), _bg(0), _selector(0), _margin(0), _arrowLeft(), _arrowRight(), _arrowPos(-1)
+TextList::TextList(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _texts(), _columns(), _big(0), _small(0), _scroll(0), _visibleRows(0), _color(0), _align(ALIGN_LEFT), _dot(false), _selectable(false), _selRow(0), _bg(0), _selector(0), _margin(0),
+																									_arrowLeft(), _arrowRight(), _arrowPos(-1), _leftClick(0), _leftPress(0), _leftRelease(0), _rightClick(0), _rightPress(0), _rightRelease(0)
 {
 	_up = new ArrowButton(ARROW_BIG_UP, 13, 14, getX() + getWidth() + 4, getY() + 1);
 	_up->setVisible(false);
@@ -155,10 +156,16 @@ void TextList::addRow(int cols, ...)
 		ArrowButton *a1 = new ArrowButton(ARROW_SMALL_UP, 11, 8, getX() + _arrowPos, getY());
 		a1->setPalette(this->getPalette());
 		a1->setColor(_up->getColor());
+		a1->onMouseClick(_leftClick);
+		a1->onMousePress(_leftPress);
+		a1->onMouseRelease(_leftRelease);
 		_arrowLeft.push_back(a1);
 		ArrowButton *a2 = new ArrowButton(ARROW_SMALL_DOWN, 11, 8, getX() + _arrowPos + 12, getY());
 		a2->setPalette(this->getPalette());
 		a2->setColor(_up->getColor());
+		a2->onMouseClick(_rightClick);
+		a2->onMousePress(_rightPress);
+		a2->onMouseRelease(_rightRelease);
 		_arrowRight.push_back(a2);
 	}
 
@@ -345,6 +352,7 @@ void TextList::setArrowColumn(int pos)
  */
 void TextList::onLeftArrowClick(ActionHandler handler)
 {
+	_leftClick = handler;
 	for (std::vector<ArrowButton*>::iterator i = _arrowLeft.begin(); i < _arrowLeft.end(); i++)
 	{
 		(*i)->onMouseClick(handler);
@@ -357,6 +365,7 @@ void TextList::onLeftArrowClick(ActionHandler handler)
  */
 void TextList::onLeftArrowPress(ActionHandler handler)
 {
+	_leftPress = handler;
 	for (std::vector<ArrowButton*>::iterator i = _arrowLeft.begin(); i < _arrowLeft.end(); i++)
 	{
 		(*i)->onMousePress(handler);
@@ -369,6 +378,7 @@ void TextList::onLeftArrowPress(ActionHandler handler)
  */
 void TextList::onLeftArrowRelease(ActionHandler handler)
 {
+	_leftRelease = handler;
 	for (std::vector<ArrowButton*>::iterator i = _arrowLeft.begin(); i < _arrowLeft.end(); i++)
 	{
 		(*i)->onMouseRelease(handler);
@@ -381,6 +391,7 @@ void TextList::onLeftArrowRelease(ActionHandler handler)
  */
 void TextList::onRightArrowClick(ActionHandler handler)
 {
+	_rightClick = handler;
 	for (std::vector<ArrowButton*>::iterator i = _arrowRight.begin(); i < _arrowRight.end(); i++)
 	{
 		(*i)->onMouseClick(handler);
@@ -393,6 +404,7 @@ void TextList::onRightArrowClick(ActionHandler handler)
  */
 void TextList::onRightArrowPress(ActionHandler handler)
 {
+	_rightPress = handler;
 	for (std::vector<ArrowButton*>::iterator i = _arrowRight.begin(); i < _arrowRight.end(); i++)
 	{
 		(*i)->onMousePress(handler);
@@ -405,6 +417,7 @@ void TextList::onRightArrowPress(ActionHandler handler)
  */
 void TextList::onRightArrowRelease(ActionHandler handler)
 {
+	_rightRelease = handler;
 	for (std::vector<ArrowButton*>::iterator i = _arrowRight.begin(); i < _arrowRight.end(); i++)
 	{
 		(*i)->onMouseRelease(handler);

@@ -51,6 +51,7 @@ private:
 	int _margin;
 	std::vector<ArrowButton*> _arrowLeft, _arrowRight;
 	int _arrowPos;
+	ActionHandler _leftClick, _leftPress, _leftRelease, _rightClick, _rightPress, _rightRelease;
 
 	/// Updates the arrow buttons.
 	void updateArrows();

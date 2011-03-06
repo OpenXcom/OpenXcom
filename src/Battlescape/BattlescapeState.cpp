@@ -181,7 +181,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	_btnLeftHandItem->onMouseClick((ActionHandler)&BattlescapeState::btnLeftHandItemClick);
 	_btnRightHandItem->onMouseClick((ActionHandler)&BattlescapeState::btnRightHandItemClick);
 	
-	_txtName->setColor(Palette::blockOffset(7));
+	_txtName->setColor(Palette::blockOffset(8)-1);
 	_txtName->setHighContrast(true);
 	_numTimeUnits->setColor(Palette::blockOffset(4));
 	_numEnergy->setColor(Palette::blockOffset(1));

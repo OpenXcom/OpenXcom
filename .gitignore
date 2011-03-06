@@ -48,4 +48,4 @@ bin/USER/*.bmp
 bin/USER/*.sav
 deps/
 docs/html/
-obj/
+*.o
