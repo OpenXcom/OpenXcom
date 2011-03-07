@@ -17,7 +17,6 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "PurchaseState.h"
-#include <string>
 #include <sstream>
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"

@@ -20,6 +20,8 @@
 #define OPENXCOM_SELLSTATE_H
 
 #include "../Engine/State.h"
+#include <vector>
+#include <string>
 
 namespace OpenXcom
 {
