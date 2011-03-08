@@ -24,6 +24,9 @@
 #include "yaml.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Engine/RNG.h"
+#include "../Engine/Language.h"
+#include "../Interface/TextList.h"
+#include "../Engine/Exception.h"
 #include "SavedBattleGame.h"
 #include "GameTime.h"
 #include "Country.h"
@@ -32,9 +35,7 @@
 #include "Region.h"
 #include "Ufo.h"
 #include "Waypoint.h"
-#include "../Engine/Language.h"
-#include "../Interface/TextList.h"
-#include "../Engine/Exception.h"
+#include "UfopaediaSaved.h"
 
 namespace OpenXcom
 {
@@ -45,8 +46,9 @@ namespace OpenXcom
  */
 SavedGame::SavedGame(GameDifficulty difficulty) : _difficulty(difficulty), _funds(0), _countries(), _regions(), _bases(), _ufos(), _craftId(), _waypoints(), _ufoId(1), _waypointId(1), _battleGame(0)
 {
-	_time = new GameTime(6, 1, 1, 1999, 12, 0, 0);
 	RNG::init();
+	_time = new GameTime(6, 1, 1, 1999, 12, 0, 0);
+	_ufopaedia = new UfopaediaSaved();
 }
 
 /** 
@@ -76,6 +78,7 @@ SavedGame::~SavedGame()
 		delete *i;
 	}
 	delete _battleGame;
+	delete _ufopaedia;
 }
 
 /**
@@ -483,6 +486,15 @@ void SavedGame::endBattle()
 
 	// bye save game, battle is over
 	setBattleGame(0);
+}
+
+/**
+ * Get pointer to the ufopaedia object.
+ * @return Pointer to the ufopaedia object.
+ */
+UfopaediaSaved *SavedGame::getUfopaedia()
+{
+	return _ufopaedia;
 }
 
 }

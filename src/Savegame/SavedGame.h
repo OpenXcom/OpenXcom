@@ -38,6 +38,7 @@ class Waypoint;
 class SavedBattleGame;
 class TextList;
 class Language;
+class UfopaediaSaved;
 
 /**
  * Enumator containing all the possible game difficulties.
@@ -63,6 +64,7 @@ private:
 	std::vector<Waypoint*> _waypoints;
 	int _ufoId, _waypointId;
 	SavedBattleGame *_battleGame;
+	UfopaediaSaved *_ufopaedia;
 public:
 	/// Creates a new save with a certain difficultyiculty.
 	SavedGame(GameDifficulty difficulty);
@@ -108,6 +110,8 @@ public:
 	void setBattleGame(SavedBattleGame *battleGame);
 	/// Handles the end battle stuff.
 	void endBattle();
+	/// Gets the current Ufopaedia parameters.
+	UfopaediaSaved *getUfopaedia();
 };
 
 }

@@ -969,6 +969,58 @@
 			</File>
 		</Filter>
 		<Filter
+			Name="Ufopaedia"
+			>
+			<File
+				RelativePath=".\Ufopaedia\ArticleState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ufopaedia\ArticleState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Ufopaedia\ArticleStateText.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ufopaedia\ArticleStateText.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Ufopaedia\ArticleStateTextImage.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ufopaedia\ArticleStateTextImage.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Ufopaedia\Ufopaedia.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ufopaedia\Ufopaedia.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Ufopaedia\UfopaediaSelectState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ufopaedia\UfopaediaSelectState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Ufopaedia\UfopaediaStartState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ufopaedia\UfopaediaStartState.h"
+				>
+			</File>
+		</Filter>
+		<Filter
 			Name="Menu"
 			>
 			<File
@@ -1200,6 +1252,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Savegame\UfopaediaSaved.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\UfopaediaSaved.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Savegame\Waypoint.cpp"
 				>
 			</File>
@@ -1231,6 +1291,14 @@
 		<Filter
 			Name="Ruleset"
 			>
+			<File
+				RelativePath=".\Ruleset\ArticleDefinition.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\ArticleDefinition.h"
+				>
+			</File>
 			<File
 				RelativePath=".\Ruleset\City.cpp"
 				>

@@ -28,6 +28,7 @@
 #include "RuleTerrain.h"
 #include "MapDataSet.h"
 #include "RuleUnitSprite.h"
+#include "ArticleDefinition.h"
 
 namespace OpenXcom
 {
@@ -85,6 +86,10 @@ Ruleset::~Ruleset()
 		delete i->second;
 	}
 	for (std::map<std::string, RuleUnitSprite*>::iterator i = _unitSprites.begin(); i != _unitSprites.end(); i++)
+	{
+		delete i->second;
+	}
+	for (std::map<std::string, ArticleDefinition*>::iterator i = _ufopaediaArticles.begin(); i != _ufopaediaArticles.end(); i++)
 	{
 		delete i->second;
 	}
@@ -248,6 +253,16 @@ int Ruleset::getScientistCost() const
 int Ruleset::getPersonnelTime() const
 {
 	return _timePersonnel;
+}
+
+/**
+ * Returns the article definition for a given name.
+ * @param name Article name.
+ * @return Article definition.
+ */
+ArticleDefinition *Ruleset::getUfopaediaArticle(std::string name)
+{
+	return _ufopaediaArticles[name];
 }
 
 }

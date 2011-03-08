@@ -65,6 +65,7 @@
 #include "ItemsArrivingState.h"
 #include "../Battlescape/BattlescapeState.h"
 #include "../Battlescape/BattlescapeGenerator.h"
+#include "../Ufopaedia/Ufopaedia.h"
 
 namespace OpenXcom
 {
@@ -861,7 +862,7 @@ void GeoscapeState::btnGraphsClick(Action *action)
  */
 void GeoscapeState::btnUfopaediaClick(Action *action)
 {
-		
+	Ufopaedia::open(_game);
 }
 
 /**
