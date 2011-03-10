@@ -230,12 +230,6 @@
     <ClCompile Include="Geoscape\GeoscapeCraftState.cpp">
       <Filter>Geoscape</Filter>
     </ClCompile>
-    <ClCompile Include="Geoscape\GeoscapeErrorState.cpp">
-      <Filter>Geoscape</Filter>
-    </ClCompile>
-    <ClCompile Include="Geoscape\GeoscapeMessageState.cpp">
-      <Filter>Geoscape</Filter>
-    </ClCompile>
     <ClCompile Include="Geoscape\GeoscapeState.cpp">
       <Filter>Geoscape</Filter>
     </ClCompile>
@@ -457,6 +451,15 @@
     </ClCompile>
     <ClCompile Include="Savegame\UfopaediaSaved.cpp">
       <Filter>Savegame</Filter>
+    </ClCompile>
+    <ClCompile Include="Geoscape\CannotRearmState.cpp">
+      <Filter>Geoscape</Filter>
+    </ClCompile>
+    <ClCompile Include="Geoscape\GeoscapeErrorState.cpp">
+      <Filter>Geoscape</Filter>
+    </ClCompile>
+    <ClCompile Include="Geoscape\ProductionCompleteState.cpp">
+      <Filter>Geoscape</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -689,12 +692,6 @@
     <ClInclude Include="Geoscape\GeoscapeCraftState.h">
       <Filter>Geoscape</Filter>
     </ClInclude>
-    <ClInclude Include="Geoscape\GeoscapeErrorState.h">
-      <Filter>Geoscape</Filter>
-    </ClInclude>
-    <ClInclude Include="Geoscape\GeoscapeMessageState.h">
-      <Filter>Geoscape</Filter>
-    </ClInclude>
     <ClInclude Include="Geoscape\GeoscapeState.h">
       <Filter>Geoscape</Filter>
     </ClInclude>
@@ -917,6 +914,18 @@
     </ClInclude>
     <ClInclude Include="Savegame\UfopaediaSaved.h">
       <Filter>Savegame</Filter>
+    </ClInclude>
+    <ClInclude Include="Geoscape\CannotRearmState.h">
+      <Filter>Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Geoscape\GeoscapeErrorState.cpp">
+      <Filter>Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Geoscape\GeoscapeErrorState.h">
+      <Filter>Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Geoscape\ProductionCompleteState.h">
+      <Filter>Geoscape</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

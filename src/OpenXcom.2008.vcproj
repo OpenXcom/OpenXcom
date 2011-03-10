@@ -776,6 +776,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Geoscape\CannotRearmState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\CannotRearmState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Geoscape\ConfirmDestinationState.cpp"
 				>
 			</File>
@@ -840,11 +848,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Geoscape\GeoscapeMessageState.cpp"
+				RelativePath=".\Geoscape\ProductionCompleteState.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Geoscape\GeoscapeMessageState.h"
+				RelativePath=".\Geoscape\ProductionCompleteState.h"
 				>
 			</File>
 			<File

@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_GEOSCAPEMESSAGESTATE_H
-#define OPENXCOM_GEOSCAPEMESSAGESTATE_H
+#ifndef OPENXCOM_PRODUCTIONCOMPLETESTATE_H
+#define OPENXCOM_PRODUCTIONCOMPLETESTATE_H
 
 #include <string>
 #include "../Engine/State.h"
@@ -30,20 +30,20 @@ class Window;
 class Text;
 
 /**
- * Generic window used to display information messages
- * when the player is on the Geoscape.
+ * Window used to notify the player when
+ * a production is completed.
  */
-class GeoscapeMessageState : public State
+class ProductionCompleteState : public State
 {
 private:
 	TextButton *_btnOk;
 	Window *_window;
 	Text *_txtMessage;
 public:
-	/// Creates the Geoscape Message state.
-	GeoscapeMessageState(Game *game, std::wstring str);
-	/// Cleans up the Geoscape Message state.
-	~GeoscapeMessageState();
+	/// Creates the Production Complete state.
+	ProductionCompleteState(Game *game, const std::wstring &item, const std::wstring &base);
+	/// Cleans up the Production Complete state.
+	~ProductionCompleteState();
 	/// Updates the palette.
 	void init();
 	/// Handler for clicking the OK button.

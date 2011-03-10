@@ -170,6 +170,8 @@
 		<Unit filename="Geoscape\BaseNameState.h" />
 		<Unit filename="Geoscape\BuildNewBaseState.cpp" />
 		<Unit filename="Geoscape\BuildNewBaseState.h" />
+		<Unit filename="Geoscape\CannotRearmState.cpp" />
+		<Unit filename="Geoscape\CannotRearmState.h" />
 		<Unit filename="Geoscape\ConfirmDestinationState.cpp" />
 		<Unit filename="Geoscape\ConfirmDestinationState.h" />
 		<Unit filename="Geoscape\ConfirmLandingState.cpp" />
@@ -186,8 +188,8 @@
 		<Unit filename="Geoscape\GeoscapeCraftState.h" />
 		<Unit filename="Geoscape\GeoscapeErrorState.cpp" />
 		<Unit filename="Geoscape\GeoscapeErrorState.h" />
-		<Unit filename="Geoscape\GeoscapeMessageState.cpp" />
-		<Unit filename="Geoscape\GeoscapeMessageState.h" />
+		<Unit filename="Geoscape\ProductionCompleteState.cpp" />
+		<Unit filename="Geoscape\ProductionCompleteState.h" />
 		<Unit filename="Geoscape\GeoscapeState.cpp" />
 		<Unit filename="Geoscape\GeoscapeState.h" />
 		<Unit filename="Geoscape\Globe.cpp" />

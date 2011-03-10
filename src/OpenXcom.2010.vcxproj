@@ -166,6 +166,7 @@
     <ClCompile Include="Geoscape\AbandonGameState.cpp" />
     <ClCompile Include="Geoscape\BaseNameState.cpp" />
     <ClCompile Include="Geoscape\BuildNewBaseState.cpp" />
+    <ClCompile Include="Geoscape\CannotRearmState.cpp" />
     <ClCompile Include="Geoscape\ConfirmDestinationState.cpp" />
     <ClCompile Include="Geoscape\ConfirmLandingState.cpp" />
     <ClCompile Include="Geoscape\ConfirmNewBaseState.cpp" />
@@ -174,7 +175,7 @@
     <ClCompile Include="Geoscape\FundingState.cpp" />
     <ClCompile Include="Geoscape\GeoscapeCraftState.cpp" />
     <ClCompile Include="Geoscape\GeoscapeErrorState.cpp" />
-    <ClCompile Include="Geoscape\GeoscapeMessageState.cpp" />
+    <ClCompile Include="Geoscape\ProductionCompleteState.cpp" />
     <ClCompile Include="Geoscape\GeoscapeState.cpp" />
     <ClCompile Include="Geoscape\Globe.cpp" />
     <ClCompile Include="Geoscape\GraphsState.cpp" />
@@ -322,6 +323,7 @@
     <ClInclude Include="Geoscape\AbandonGameState.h" />
     <ClInclude Include="Geoscape\BaseNameState.h" />
     <ClInclude Include="Geoscape\BuildNewBaseState.h" />
+    <ClInclude Include="Geoscape\CannotRearmState.h" />
     <ClInclude Include="Geoscape\ConfirmDestinationState.h" />
     <ClInclude Include="Geoscape\ConfirmLandingState.h" />
     <ClInclude Include="Geoscape\ConfirmNewBaseState.h" />
@@ -330,7 +332,7 @@
     <ClInclude Include="Geoscape\FundingState.h" />
     <ClInclude Include="Geoscape\GeoscapeCraftState.h" />
     <ClInclude Include="Geoscape\GeoscapeErrorState.h" />
-    <ClInclude Include="Geoscape\GeoscapeMessageState.h" />
+    <ClInclude Include="Geoscape\ProductionCompleteState.h" />
     <ClInclude Include="Geoscape\GeoscapeState.h" />
     <ClInclude Include="Geoscape\Globe.h" />
     <ClInclude Include="Geoscape\GraphsState.h" />
