@@ -352,6 +352,8 @@ void Tile::detonate()
 
 	if (_explosive)
 	{
+		// explosions create smoke which only stays 1 or 2 turns
+		setSmoke(1);
 		for (int i = 0; i < 4; i++)
 		{
 			if(_objects[i])
@@ -360,12 +362,10 @@ void Tile::detonate()
 				{
 					decrease = _objects[i]->getArmor();
 					destroy(i);
-					// explosions create smoke which only stays 1 or 2 turns
-					setSmoke(1);
+					setSmoke(2);
 					if (_objects[i] && (_explosive - decrease) >= _objects[i]->getArmor())
 					{
 						destroy(i);
-						setSmoke(2);
 					}
 				}
 			}

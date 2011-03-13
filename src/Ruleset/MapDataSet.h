@@ -21,6 +21,7 @@
 
 #include <string>
 #include <vector>
+#include "SDL.h"
 
 namespace OpenXcom
 {
@@ -28,7 +29,6 @@ namespace OpenXcom
 class MapData;
 class SurfaceSet;
 class ResourcePack;
-class MapModel;
 
 /**
  * Represents a Terrain Map Datafile.
@@ -42,12 +42,14 @@ private:
 	std::string _name;
 	int _size;
 	std::vector<MapData*> _objects;
-	std::vector<MapModel*> _models;
 	SurfaceSet *_surfaceSet;
 	bool _loaded;
+	ResourcePack *_res;
 public:
 	MapDataSet(std::string name, int size);
 	~MapDataSet();
+	/// Loads voxeldata from a DAT file.
+	static void loadLOFTEMPS(const std::string &filename, std::vector<Uint16> *voxelData);
 	/// Get the dataset name (used for MAP generation).
 	std::string getName();
 	/// Get the dataset size.
@@ -60,6 +62,8 @@ public:
 	void load(ResourcePack *res);
 	///	Unload to free memory.
 	void unload();
+	/// Get resourcepack
+	ResourcePack *getResourcePack();
 };
 
 }

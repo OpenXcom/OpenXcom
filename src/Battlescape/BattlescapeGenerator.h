@@ -32,8 +32,9 @@ class RuleTerrain;
 class ResourcePack;
 class RuleSet;
 class Soldier;
-class RuleUnitSprite;
+class RuleArmor;
 class RuleItem;
+class RuleAlien;
 class Game;
 
 /**
@@ -58,9 +59,9 @@ private:
 	/// links tiles with terrainobjects, for easier/faster lookup
 	void linkTilesWithMapDatas();
 	/// Add a soldier to the game
-	void addSoldier(Soldier *soldier, RuleUnitSprite *rules);
+	void addSoldier(Soldier *soldier);
 	/// Add an alien to the game
-	void addAlien(RuleUnitSprite *rules, NodeRank rank, const std::wstring &name);
+	void addAlien(RuleAlien *rules, RuleArmor *armor, NodeRank rank);
 	/// Add an item to the game
 	void addItem(RuleItem *item);
 	/// loads an XCOM MAP file

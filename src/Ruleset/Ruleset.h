@@ -38,7 +38,9 @@ class RuleUfo;
 class RuleTerrain;
 class MapDataSet;
 class ResourcePack;
-class RuleUnitSprite;
+class RuleSoldier;
+class RuleAlien;
+class RuleArmor;
 
 /**
  * Set of rules and stats for a game.
@@ -59,7 +61,9 @@ protected:
 	std::map<std::string, RuleUfo*> _ufos;
 	std::map<std::string, RuleTerrain*> _terrains;
 	std::map<std::string, MapDataSet*> _mapDataFiles;
-	std::map<std::string, RuleUnitSprite*> _unitSprites;
+	std::map<std::string, RuleSoldier*> _soldiers;
+	std::map<std::string, RuleAlien*> _aliens;
+	std::map<std::string, RuleArmor*> _armors;
 	int _costSoldier, _costEngineer, _costScientist, _timePersonnel;
 public:
 	/// Creates a blank ruleset.
@@ -88,8 +92,12 @@ public:
 	RuleTerrain *const getTerrain(std::string name);
 	/// Gets mapdatafile for battlescape games.
 	MapDataSet *const getMapDataSet(std::string name);
-	/// Gets unitsprite rules.
-	RuleUnitSprite *const getUnitSprites(std::string name);
+	/// Gets unit rules.
+	RuleSoldier *const getSoldier(std::string name);
+	/// Gets unit rules.
+	RuleAlien *const getAlien(std::string name);
+	/// Gets armor rules.
+	RuleArmor *const getArmor(std::string name);
 	/// Gets the cost of a soldier.
 	int getSoldierCost() const;
 	/// Gets the cost of an engineer.

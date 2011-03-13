@@ -27,7 +27,8 @@
 #include "RuleUfo.h"
 #include "RuleTerrain.h"
 #include "MapDataSet.h"
-#include "RuleUnitSprite.h"
+#include "RuleSoldier.h"
+#include "RuleAlien.h"
 
 namespace OpenXcom
 {
@@ -35,7 +36,7 @@ namespace OpenXcom
 /**
  * Creates a ruleset with blank sets of rules.
  */
-Ruleset::Ruleset() : _names(), _countries(), _regions(), _facilities(), _crafts(), _craftWeapons(), _items(), _ufos(), _terrains(), _mapDataFiles(), _unitSprites(), _costSoldier(0), _costEngineer(0), _costScientist(0)
+Ruleset::Ruleset() : _names(), _countries(), _regions(), _facilities(), _crafts(), _craftWeapons(), _items(), _ufos(), _terrains(), _mapDataFiles(), _soldiers(), _aliens(), _costSoldier(0), _costEngineer(0), _costScientist(0)
 {
 }
 
@@ -84,7 +85,11 @@ Ruleset::~Ruleset()
 	{
 		delete i->second;
 	}
-	for (std::map<std::string, RuleUnitSprite*>::iterator i = _unitSprites.begin(); i != _unitSprites.end(); i++)
+	for (std::map<std::string, RuleSoldier*>::iterator i = _soldiers.begin(); i != _soldiers.end(); i++)
+	{
+		delete i->second;
+	}
+	for (std::map<std::string, RuleAlien*>::iterator i = _aliens.begin(); i != _aliens.end(); i++)
 	{
 		delete i->second;
 	}
@@ -201,13 +206,33 @@ MapDataSet *const Ruleset::getMapDataSet(std::string name)
 }
 
 /**
- * Returns the info about a specific unit to draw it
- * @param name datafile name.
- * @return Rules for the datafile.
+ * Returns the info about a specific unit
+ * @param name Unit name.
+ * @return Rules for the units.
  */
-RuleUnitSprite *const Ruleset::getUnitSprites(std::string name)
+RuleSoldier *const Ruleset::getSoldier(std::string name)
 {
-	return _unitSprites[name];
+	return _soldiers[name];
+}
+
+/**
+ * Returns the info about a specific unit
+ * @param name Unit name.
+ * @return Rules for the units.
+ */
+RuleAlien *const Ruleset::getAlien(std::string name)
+{
+	return _aliens[name];
+}
+
+/**
+ * Returns the info about a specific armor
+ * @param name Armor name.
+ * @return Rules for the armor.
+ */
+RuleArmor *const Ruleset::getArmor(std::string name)
+{
+	return _armors[name];
 }
 
 /**

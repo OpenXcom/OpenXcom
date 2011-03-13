@@ -37,7 +37,7 @@
 #include "../Savegame/Node.h"
 #include "../Savegame/NodeLink.h"
 #include "../Battlescape/Position.h"
-#include "../Ruleset/MapModel.h"
+#include "../Ruleset/MapDataSet.h"
 
 namespace OpenXcom
 {
@@ -480,9 +480,7 @@ void XcomResourcePack::loadBattlescapeResources()
 
 	s.str("");
 	s << _folder << "GEODATA/" << "LOFTEMPS.DAT";
-	MapModel::loadLOFTEMPS(insensitive(s.str()), &_voxelData);
-
-
+	MapDataSet::loadLOFTEMPS(insensitive(s.str()), &_voxelData);
 }
 
 }

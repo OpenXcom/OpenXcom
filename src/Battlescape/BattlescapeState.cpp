@@ -484,34 +484,35 @@ void BattlescapeState::btnRightHandItemClick(Action *action)
  * Updates soldier name/rank/tu/energy/health/morale.
  * @param unit Pointer to current unit.
  */
-void BattlescapeState::updateSoldierInfo(BattleUnit *unit)
+void BattlescapeState::updateSoldierInfo(BattleUnit *battleUnit)
 {
-	_txtName->setText(unit->getName());
-	if (unit->getRankSprite())
+	_txtName->setText(battleUnit->getUnit()->getName());
+	Soldier *soldier = dynamic_cast<Soldier*>(battleUnit->getUnit());
+	if (soldier != 0)
 	{
 		SurfaceSet *texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
-		texture->getFrame(unit->getRankSprite())->blit(_rank);
+		texture->getFrame(soldier->getRankSprite())->blit(_rank);
 	}
-	_numTimeUnits->setValue(unit->getMaxTimeUnits());
-	_barTimeUnits->setMax(unit->getMaxTimeUnits());
-	_barTimeUnits->setValue(unit->getMaxTimeUnits());
-	_numEnergy->setValue(unit->getMaxStamina());
-	_barEnergy->setMax(unit->getMaxStamina());
-	_barEnergy->setValue(unit->getMaxStamina());
-	_numHealth->setValue(unit->getMaxHealth());
-	_barHealth->setMax(unit->getMaxHealth());
-	_barHealth->setValue(unit->getMaxHealth());
-	_numMorale->setValue(100);
+	_numTimeUnits->setValue(battleUnit->getTimeUnits());
+	_barTimeUnits->setMax(battleUnit->getUnit()->getTimeUnits());
+	_barTimeUnits->setValue(battleUnit->getTimeUnits());
+	_numEnergy->setValue(battleUnit->getEnergy());
+	_barEnergy->setMax(battleUnit->getUnit()->getStamina());
+	_barEnergy->setValue(battleUnit->getEnergy());
+	_numHealth->setValue(battleUnit->getHealth());
+	_barHealth->setMax(battleUnit->getUnit()->getHealth());
+	_barHealth->setValue(battleUnit->getHealth());
+	_numMorale->setValue(battleUnit->getMorale());
 	_barMorale->setMax(100);
-	_barMorale->setValue(100);
+	_barMorale->setValue(battleUnit->getMorale());
 
-	BattleItem *leftHandItem = _battleGame->getItemFromUnit(unit, LEFT_HAND);
+	BattleItem *leftHandItem = _battleGame->getItemFromUnit(battleUnit, LEFT_HAND);
 	_btnLeftHandItem->clear();
 	if (leftHandItem)
 	{
 		drawItemSprite(leftHandItem, _btnLeftHandItem);
 	}
-	BattleItem *rightHandItem = _battleGame->getItemFromUnit(unit, RIGHT_HAND);
+	BattleItem *rightHandItem = _battleGame->getItemFromUnit(battleUnit, RIGHT_HAND);
 	_btnRightHandItem->clear();
 	if (rightHandItem)
 	{

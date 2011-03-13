@@ -216,7 +216,8 @@
     <ClCompile Include="Ruleset\MapBlock.cpp" />
     <ClCompile Include="Ruleset\MapDataSet.cpp" />
     <ClCompile Include="Ruleset\MapData.cpp" />
-    <ClCompile Include="Ruleset\MapModel.cpp" />
+    <ClCompile Include="Ruleset\RuleAlien.cpp" />
+    <ClCompile Include="Ruleset\RuleArmor.cpp" />
     <ClCompile Include="Ruleset\RuleBaseFacility.cpp" />
     <ClCompile Include="Ruleset\RuleCountry.cpp" />
     <ClCompile Include="Ruleset\RuleCraft.cpp" />
@@ -224,11 +225,12 @@
     <ClCompile Include="Ruleset\RuleItem.cpp" />
     <ClCompile Include="Ruleset\RuleRegion.cpp" />
     <ClCompile Include="Ruleset\Ruleset.cpp" />
+    <ClCompile Include="Ruleset\RuleSoldier.cpp" />
     <ClCompile Include="Ruleset\RuleUfo.cpp" />
     <ClCompile Include="Ruleset\RuleTerrain.cpp" />
-    <ClCompile Include="Ruleset\RuleUnitSprite.cpp" />
     <ClCompile Include="Ruleset\SoldierNamePool.cpp" />
     <ClCompile Include="Ruleset\XcomRuleset.cpp" />
+    <ClCompile Include="Savegame\Alien.cpp" />
     <ClCompile Include="Savegame\Base.cpp" />
     <ClCompile Include="Savegame\BaseFacility.cpp" />
     <ClCompile Include="Savegame\BattleItem.cpp" />
@@ -249,6 +251,7 @@
     <ClCompile Include="Savegame\Tile.cpp" />
     <ClCompile Include="Savegame\Transfer.cpp" />
     <ClCompile Include="Savegame\Ufo.cpp" />
+    <ClCompile Include="Savegame\Unit.cpp" />
     <ClCompile Include="Savegame\Waypoint.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -364,7 +367,8 @@
     <ClInclude Include="Ruleset\MapBlock.h" />
     <ClInclude Include="Ruleset\MapDataSet.h" />
     <ClInclude Include="Ruleset\MapData.h" />
-    <ClInclude Include="Ruleset\MapModel.h" />
+    <ClInclude Include="Ruleset\RuleAlien.h" />
+    <ClInclude Include="Ruleset\RuleArmor.h" />
     <ClInclude Include="Ruleset\RuleBaseFacility.h" />
     <ClInclude Include="Ruleset\RuleCountry.h" />
     <ClInclude Include="Ruleset\RuleCraft.h" />
@@ -372,11 +376,12 @@
     <ClInclude Include="Ruleset\RuleItem.h" />
     <ClInclude Include="Ruleset\RuleRegion.h" />
     <ClInclude Include="Ruleset\Ruleset.h" />
+    <ClInclude Include="Ruleset\RuleSoldier.h" />
     <ClInclude Include="Ruleset\RuleUfo.h" />
     <ClInclude Include="Ruleset\RuleTerrain.h" />
-    <ClInclude Include="Ruleset\RuleUnitSprite.h" />
     <ClInclude Include="Ruleset\SoldierNamePool.h" />
     <ClInclude Include="Ruleset\XcomRuleset.h" />
+    <ClInclude Include="Savegame\Alien.h" />
     <ClInclude Include="Savegame\Base.h" />
     <ClInclude Include="Savegame\BaseFacility.h" />
     <ClInclude Include="Savegame\BattleItem.h" />
@@ -397,6 +402,7 @@
     <ClInclude Include="Savegame\Tile.h" />
     <ClInclude Include="Savegame\Transfer.h" />
     <ClInclude Include="Savegame\Ufo.h" />
+    <ClInclude Include="Savegame\Unit.h" />
     <ClInclude Include="Savegame\Waypoint.h" />
   </ItemGroup>
   <ItemGroup>

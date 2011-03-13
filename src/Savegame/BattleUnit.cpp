@@ -22,18 +22,22 @@
 #include "../Engine/Palette.h"
 #include "../Engine/Language.h"
 #include "../Battlescape/Pathfinding.h"
+#include "Alien.h"
 
 namespace OpenXcom
 {
 
 /**
  * Initializes a BattleUnit.
- * @param renderRules Pointer to RuleUnitSprite object.
+ * @param rules Pointer to RuleUnit object.
  * @param faction Which faction the units belongs to.
  */
-BattleUnit::BattleUnit(RuleUnitSprite *renderRules, UnitFaction faction) : _renderRules(renderRules), _faction(faction), _id(0), _pos(Position()), _lastPos(Position()), _direction(0), _status(STATUS_STANDING), _walkPhase(0), _soldier(0), _name(L"Civilian"), _cached(false), _kneeled(false)
+BattleUnit::BattleUnit(Unit *unit, UnitFaction faction) : _unit(unit), _faction(faction), _id(0), _pos(Position()), _lastPos(Position()), _direction(0), _status(STATUS_STANDING), _walkPhase(0), _cached(false), _kneeled(false)
 {
-
+	_tu = unit->getTimeUnits();
+	_energy = unit->getStamina();
+	_health = unit->getHealth();
+	_morale = 100;
 }
 
 /**
@@ -41,7 +45,7 @@ BattleUnit::BattleUnit(RuleUnitSprite *renderRules, UnitFaction faction) : _rend
  */
 BattleUnit::~BattleUnit()
 {
-	
+
 }
 
 /**
@@ -54,8 +58,6 @@ void BattleUnit::load(const YAML::Node &node)
 
 	node["id"] >> _id;
 	std::string name;
-	node["name"] >> name;
-	_name = Language::utf8ToWstr(name);
 	node["faction"] >> a;
 	_faction = (UnitFaction)a;
 	node["status"] >> a;
@@ -81,7 +83,6 @@ void BattleUnit::save(YAML::Emitter &out) const
 	out << YAML::BeginMap;
 
 	out << YAML::Key << "id" << YAML::Value << _id;
-	out << YAML::Key << "name" << YAML::Value << Language::wstrToUtf8(_name);
 	out << YAML::Key << "faction" << YAML::Value << _faction;
 	out << YAML::Key << "status" << YAML::Value << _status;
 
@@ -96,15 +97,6 @@ void BattleUnit::save(YAML::Emitter &out) const
 	out << YAML::Key << "morale" << YAML::Value << _morale;
 
 	out << YAML::EndMap;
-}
-
-/**
- * Attach a geoscape soldier.
- * @param soldier Pointer to Soldier.
- */
-void BattleUnit::setSoldier(Soldier *soldier)
-{
-	_soldier = soldier;
 }
 
 /**
@@ -129,9 +121,9 @@ void BattleUnit::setId(int id)
  * Returns the ruleset for the unit's type.
  * @return Pointer to ruleset.
  */
-RuleUnitSprite *const BattleUnit::getRenderRules() const
+Unit *const BattleUnit::getUnit() const
 {
-	return _renderRules;
+	return _unit;
 }
 
 /**
@@ -310,76 +302,12 @@ void BattleUnit::turn(bool spendTU)
 }
 
 /**
- * Returns the soldier's maximum amount of time units.
- * @return Time units.
- */
-int BattleUnit::getMaxTimeUnits() const
-{
-	return _soldier?_soldier->getTimeUnits():100;
-}
-
-/**
- * Returns the soldier's maximum amount of stamina.
- * @return Stamina.
- */
-int BattleUnit::getMaxStamina() const
-{
-	return _soldier?_soldier->getStamina():100;
-}
-
-/**
- * Returns the soldier's maximum amount of health.
- * @return Health.
- */
-int BattleUnit::getMaxHealth() const
-{
-	return _soldier?_soldier->getHealth():100;
-}
-
-/**
- * Returns the soldier's full name.
- * @return Soldier name.
- */
-std::wstring BattleUnit::getName() const
-{
-	return _soldier?_soldier->getName():_name;
-}
-
-/**
- * Returns the soldier's gender.
- * @return Gender.
- */
-SoldierGender BattleUnit::getGender() const
-{
-	return _soldier?_soldier->getGender():GENDER_MALE;
-}
-
-/**
  * Returns the unit's faction.
  * @return Faction.
  */
 UnitFaction BattleUnit::getFaction() const
 {
 	return _faction;
-}
-
-/**
- * Changes the unit's full name. (only for aliens)
- * @param name unit's name.
- */
-void BattleUnit::setName(const std::wstring &name)
-{
-	_name = name;
-}
-
-/**
- * Returns a graphic representation of
- * the soldier's military rank.
- * @return Sprite ID for rank.
- */
-int BattleUnit::getRankSprite() const
-{
-	return _soldier?_soldier->getRankSprite():0;
 }
 
 /**
@@ -430,6 +358,42 @@ void BattleUnit::aim(bool aiming)
 		_status = STATUS_STANDING;
 
 	setCached(false);
+}
+
+/**
+ * Returns the soldier's amount of time units.
+ * @return Time units.
+ */
+int BattleUnit::getTimeUnits() const
+{
+	return _tu;
+}
+
+/**
+ * Returns the soldier's amount of stamina.
+ * @return Stamina.
+ */
+int BattleUnit::getEnergy() const
+{
+	return _energy;
+}
+
+/**
+ * Returns the soldier's amount of health.
+ * @return Health.
+ */
+int BattleUnit::getHealth() const
+{
+	return _health;
+}
+
+/**
+ * Returns the soldier's amount of bravery.
+ * @return Bravery.
+ */
+int BattleUnit::getMorale() const
+{
+	return _morale;
 }
 
 }

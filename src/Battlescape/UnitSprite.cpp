@@ -22,8 +22,10 @@
 #include "../Engine/SurfaceSet.h"
 #include "../Battlescape/Position.h"
 #include "../Resource/ResourcePack.h"
-#include "../Ruleset/RuleUnitSprite.h"
+#include "../Ruleset/RuleSoldier.h"
+#include "../Ruleset/RuleAlien.h"
 #include "../Ruleset/RuleItem.h"
+#include "../Ruleset/RuleArmor.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/Soldier.h"
@@ -38,7 +40,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-UnitSprite::UnitSprite(int width, int height, int x, int y) : Surface(width, height, x, y), _res(0), _unit(0), _item(0)
+UnitSprite::UnitSprite(int width, int height, int x, int y) : Surface(width, height, x, y), _unit(0), _item(0)
 {
 
 
@@ -56,9 +58,10 @@ UnitSprite::~UnitSprite()
  * Changes the pack for the UnitSprite to get resources for rendering.
  * @param res Pointer to the resource pack.
  */
-void UnitSprite::setResourcePack(ResourcePack *res)
+void UnitSprite::setSurfaces(SurfaceSet *unitSurface, SurfaceSet *itemSurface)
 {
-	_res = res;
+	_unitSurface = unitSurface;
+	_itemSurface = itemSurface;
 }
 
 /**
@@ -85,45 +88,54 @@ void UnitSprite::setBattleItem(BattleItem *item)
  */
 void UnitSprite::draw()
 {
-	RuleUnitSprite *rules = _unit->getRenderRules();
-	std::string sheet = rules->getSpriteSheet();
 	Surface *torso = 0, *legs = 0, *leftArm = 0, *rightArm = 0, *item = 0;
+
+	// magic numbers
+	const int maleTorso = 32, femaleTorso = 267, legsStand = 16, legsKneel = 24, die = 264;
+	const int larmStand = 0, rarmStand = 8, rarm1H = 232, larm2H = 240, ramr2H = 248, rarmShoot = 256;
+	const int legsWalk[8] = { 56, 56+24, 56+24*2, 56+24*3, 56+24*4, 56+24*5, 56+24*6, 56+24*7 };
+	const int larmWalk[8] = { 40, 40+24, 40+24*2, 40+24*3, 40+24*4, 40+24*5, 40+24*6, 40+24*7 };
+	const int rarmWalk[8] = { 48, 48+24, 48+24*2, 48+24*3, 48+24*4, 48+24*5, 48+24*6, 48+24*7 };
+	const int yoffWalk[8] = {1, 0, -1, 0, 1, 0, -1, 0};
+	const int offX[8] = { 8, 10, 7, 4, -9, -11, -7, -3 };
+	const int offY[8] = { -6, -3, 0, 2, 0, -4, -7, -9 };
+	const int offYKneel = 4;
+
 	clear();
-	
-	if (_unit->getGender() == GENDER_FEMALE)
+	Soldier *soldier = dynamic_cast<Soldier*>(_unit->getUnit());
+
+	if (soldier != 0 && soldier->getGender() == GENDER_FEMALE)
 	{
-		torso = _res->getSurfaceSet(sheet)->getFrame(rules->getFemaleTorso() + _unit->getDirection());
+		torso = _unitSurface->getFrame(femaleTorso + _unit->getDirection());
 	}
 	else
 	{
-		torso = _res->getSurfaceSet(sheet)->getFrame(rules->getTorso() + _unit->getDirection());
+		torso = _unitSurface->getFrame(maleTorso + _unit->getDirection());
 	}
 
+	// when walking, torso(fixed sprite) has to be animated up/down
 	if (_unit->getStatus() == STATUS_WALKING)
 	{
-		torso->setY(rules->getWalkTorsoOffset(_unit->getWalkingPhase()));
-	}
-
-	if (_unit->getStatus() == STATUS_WALKING)
-	{
-		legs = _res->getSurfaceSet(sheet)->getFrame(rules->getLegsWalk(_unit->getDirection()) + _unit->getWalkingPhase());
-		leftArm = _res->getSurfaceSet(sheet)->getFrame(rules->getLeftArmWalk(_unit->getDirection()) + _unit->getWalkingPhase());
-		rightArm = _res->getSurfaceSet(sheet)->getFrame(rules->getRightArmWalk(_unit->getDirection()) + _unit->getWalkingPhase());
+		torso->setY(yoffWalk[_unit->getWalkingPhase()]);
+		legs = _unitSurface->getFrame(legsWalk[_unit->getDirection()] + _unit->getWalkingPhase());
+		leftArm = _unitSurface->getFrame(larmWalk[_unit->getDirection()] + _unit->getWalkingPhase());
+		rightArm = _unitSurface->getFrame(rarmWalk[_unit->getDirection()] + _unit->getWalkingPhase());
 	}
 	else
 	{
 		if (_unit->isKneeled())
 		{
-			legs = _res->getSurfaceSet(sheet)->getFrame(rules->getLegsKneel() + _unit->getDirection());
+			legs = _unitSurface->getFrame(legsKneel + _unit->getDirection());
 		}
 		else
 		{
-			legs = _res->getSurfaceSet(sheet)->getFrame(rules->getLegsStand() + _unit->getDirection());
+			legs = _unitSurface->getFrame(legsStand + _unit->getDirection());
 		}
-		leftArm = _res->getSurfaceSet(sheet)->getFrame(rules->getLeftArmStand() + _unit->getDirection());
-		rightArm = _res->getSurfaceSet(sheet)->getFrame(rules->getRightArmStand() + _unit->getDirection());
+		leftArm = _unitSurface->getFrame(larmStand + _unit->getDirection());
+		rightArm = _unitSurface->getFrame(rarmStand + _unit->getDirection());
 	}
 
+	// holding an item
 	if (_item)
 	{
 		// draw handob item
@@ -131,16 +143,13 @@ void UnitSprite::draw()
 		{
 			int dir = _unit->getDirection() + 2;
 			if (dir > 7) dir -= 8;
-			item = _res->getSurfaceSet("HANDOB.PCK")->getFrame(_item->getRules()->getHandSprite() + dir);
-			int offX[8] = { 8, 10, 7, 4, -9, -11, -7, -3 };
-			int offY[8] = { -6, -3, 0, 2, 0, -4, -7, -9 };
-
+			item = _itemSurface->getFrame(_item->getRules()->getHandSprite() + dir);
 			item->setX(offX[_unit->getDirection()]);
 			item->setY(offY[_unit->getDirection()]);
 		}
 		else
 		{
-			item = _res->getSurfaceSet("HANDOB.PCK")->getFrame(_item->getRules()->getHandSprite() + _unit->getDirection());
+			item = _itemSurface->getFrame(_item->getRules()->getHandSprite() + _unit->getDirection());
 			item->setX(0);
 			item->setY(0);
 		}
@@ -148,37 +157,38 @@ void UnitSprite::draw()
 		// draw arms holding the item
 		if (_item->getRules()->getTwoHanded())
 		{
-			leftArm = _res->getSurfaceSet(sheet)->getFrame(rules->getLeftArm2HWeapon() + _unit->getDirection());
+			leftArm = _unitSurface->getFrame(larm2H + _unit->getDirection());
 			if (_unit->getStatus() == STATUS_AIMING)
 			{
-				rightArm = _res->getSurfaceSet(sheet)->getFrame(rules->getRightArm2HShoot() + _unit->getDirection());
+				rightArm = _unitSurface->getFrame(rarmShoot + _unit->getDirection());
 			}
 			else
 			{
-				rightArm = _res->getSurfaceSet(sheet)->getFrame(rules->getRightArm2HWeapon() + _unit->getDirection());
+				rightArm = _unitSurface->getFrame(ramr2H + _unit->getDirection());
 			}
 		}
 		else
 		{
-			rightArm = _res->getSurfaceSet(sheet)->getFrame(rules->getRightArm1HWeapon() + _unit->getDirection());
+			rightArm = _unitSurface->getFrame(rarm1H + _unit->getDirection());
 		}
 
-		// bob arm(s) & item up/down when walking
+		// the fixed arm(s) have to be animated up/down when walking
 		if (_unit->getStatus() == STATUS_WALKING)
 		{
-			item->setY(rules->getWalkTorsoOffset(_unit->getWalkingPhase()));
-			rightArm->setY(rules->getWalkTorsoOffset(_unit->getWalkingPhase()));
+			item->setY(yoffWalk[_unit->getWalkingPhase()]);
+			rightArm->setY(yoffWalk[_unit->getWalkingPhase()]);
 			if (_item->getRules()->getTwoHanded())
-				leftArm->setY(rules->getWalkTorsoOffset(_unit->getWalkingPhase()));
+				leftArm->setY(yoffWalk[_unit->getWalkingPhase()]);
 		}
 	}
 
+	// offset everything but legs when kneeled
 	if (_unit->isKneeled())
 	{
-		leftArm->setY(4);
-		rightArm->setY(4);
-		torso->setY(4);
-		item?item->setY(4):void();
+		leftArm->setY(offYKneel);
+		rightArm->setY(offYKneel);
+		torso->setY(offYKneel);
+		item?item->setY(offYKneel):void();
 	}
 	else if (_unit->getStatus() != STATUS_WALKING)
 	{
@@ -188,6 +198,7 @@ void UnitSprite::draw()
 		item?item->setY(0):void();
 	}
 	
+	// blit order depends on unit direction
 	switch (_unit->getDirection())
 	{
 	case 0: leftArm->blit(this); legs->blit(this); item?item->blit(this):void(); torso->blit(this); rightArm->blit(this); break;

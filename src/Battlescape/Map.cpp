@@ -41,6 +41,7 @@
 #include "../Savegame/BattleUnit.h"
 #include "../Ruleset/MapDataSet.h"
 #include "../Ruleset/MapData.h"
+#include "../Ruleset/RuleArmor.h"
 #include "../Interface/Text.h"
 #include "../Interface/Cursor.h"
 
@@ -247,7 +248,7 @@ void Map::drawTerrain(Surface *surface)
     int beginY = 0, endY = _save->getLength() - 1;
     int beginZ = 0, endZ = _viewHeight;
 	Position mapPosition, screenPosition, bulletPositionScreen;
-	int bulletLowX=16000, bulletLowY=16000, bulletHighX=0, bulletHighY=0;
+	int bulletLowX=16000, bulletLowY=16000, bulletLowZ=16000, bulletHighX=0, bulletHighY=0, bulletHighZ=0;
 	int index;
 	bool dirty;
 
@@ -260,17 +261,23 @@ void Map::drawTerrain(Surface *surface)
 				bulletLowX = _projectile->getPosition(1-i).x;
 			if (_projectile->getPosition(1-i).y < bulletLowY)
 				bulletLowY = _projectile->getPosition(1-i).y;
+			if (_projectile->getPosition(1-i).z < bulletLowZ)
+				bulletLowZ = _projectile->getPosition(1-i).z;
 			if (_projectile->getPosition(1-i).x > bulletHighX)
 				bulletHighX = _projectile->getPosition(1-i).x;
 			if (_projectile->getPosition(1-i).y > bulletHighY)
 				bulletHighY = _projectile->getPosition(1-i).y;
+			if (_projectile->getPosition(1-i).z > bulletHighZ)
+				bulletHighZ = _projectile->getPosition(1-i).z;
 		}
 	}
 	// divide by 16 to go from voxel to tile position
 	bulletLowX = bulletLowX / 16;
 	bulletLowY = bulletLowY / 16;
+	bulletLowZ = bulletLowZ / 24;
 	bulletHighX = bulletHighX / 16;
 	bulletHighY = bulletHighY / 16;
+	bulletHighZ = bulletHighZ / 24;
 
     for (int itZ = beginZ; itZ <= endZ; itZ++)
 	{
@@ -424,8 +431,7 @@ void Map::drawTerrain(Surface *surface)
 								{
 									Position voxelPos = _projectile->getPosition(1-i);
 									if (voxelPos.x/16 == mapPosition.x &&
-										voxelPos.y/16 == mapPosition.y &&
-										voxelPos.z/24 == mapPosition.z )
+										voxelPos.y/16 == mapPosition.y )
 									{
 										convertVoxelToScreen(voxelPos, &bulletPositionScreen);
 										_bullet[_projectile->getParticle(i)]->setX(bulletPositionScreen.x);
@@ -1094,7 +1100,7 @@ bool Map::cacheTileSprites(int i)
 void Map::cacheUnits()
 {
 	UnitSprite *unitSprite = new UnitSprite(_spriteWidth, _spriteHeight, 0, 0);
-	unitSprite->setResourcePack(_res);
+	//unitSprite->setSurfaces();
 	unitSprite->setPalette(this->getPalette());
 
 	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); i++)
@@ -1120,6 +1126,8 @@ void Map::cacheUnits()
 			{
 				unitSprite->setBattleItem(0);
 			}
+			unitSprite->setSurfaces(_res->getSurfaceSet((*i)->getUnit()->getArmor()->getSpriteSheet()),
+									_res->getSurfaceSet("HANDOB.PCK"));
 			unitSprite->draw();
 			unitSprite->blit(_unitCache.at((*i)->getId()));
 
