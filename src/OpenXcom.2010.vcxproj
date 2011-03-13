@@ -166,6 +166,7 @@
     <ClCompile Include="Geoscape\AbandonGameState.cpp" />
     <ClCompile Include="Geoscape\BaseNameState.cpp" />
     <ClCompile Include="Geoscape\BuildNewBaseState.cpp" />
+    <ClCompile Include="Geoscape\CannotRearmState.cpp" />
     <ClCompile Include="Geoscape\ConfirmDestinationState.cpp" />
     <ClCompile Include="Geoscape\ConfirmLandingState.cpp" />
     <ClCompile Include="Geoscape\ConfirmNewBaseState.cpp" />
@@ -174,7 +175,7 @@
     <ClCompile Include="Geoscape\FundingState.cpp" />
     <ClCompile Include="Geoscape\GeoscapeCraftState.cpp" />
     <ClCompile Include="Geoscape\GeoscapeErrorState.cpp" />
-    <ClCompile Include="Geoscape\GeoscapeMessageState.cpp" />
+    <ClCompile Include="Geoscape\ProductionCompleteState.cpp" />
     <ClCompile Include="Geoscape\GeoscapeState.cpp" />
     <ClCompile Include="Geoscape\Globe.cpp" />
     <ClCompile Include="Geoscape\GraphsState.cpp" />
@@ -212,6 +213,7 @@
     <ClCompile Include="Menu\TestState.cpp" />
     <ClCompile Include="Resource\ResourcePack.cpp" />
     <ClCompile Include="Resource\XcomResourcePack.cpp" />
+    <ClCompile Include="Ruleset\ArticleDefinition.cpp" />
     <ClCompile Include="Ruleset\City.cpp" />
     <ClCompile Include="Ruleset\MapBlock.cpp" />
     <ClCompile Include="Ruleset\MapDataSet.cpp" />
@@ -252,7 +254,14 @@
     <ClCompile Include="Savegame\Transfer.cpp" />
     <ClCompile Include="Savegame\Ufo.cpp" />
     <ClCompile Include="Savegame\Unit.cpp" />
+    <ClCompile Include="Savegame\UfopaediaSaved.cpp" />
     <ClCompile Include="Savegame\Waypoint.cpp" />
+    <ClCompile Include="Ufopaedia\ArticleState.cpp" />
+    <ClCompile Include="Ufopaedia\ArticleStateText.cpp" />
+    <ClCompile Include="Ufopaedia\ArticleStateTextImage.cpp" />
+    <ClCompile Include="Ufopaedia\Ufopaedia.cpp" />
+    <ClCompile Include="Ufopaedia\UfopaediaSelectState.cpp" />
+    <ClCompile Include="Ufopaedia\UfopaediaStartState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Basescape\BaseInfoState.h" />
@@ -317,6 +326,7 @@
     <ClInclude Include="Geoscape\AbandonGameState.h" />
     <ClInclude Include="Geoscape\BaseNameState.h" />
     <ClInclude Include="Geoscape\BuildNewBaseState.h" />
+    <ClInclude Include="Geoscape\CannotRearmState.h" />
     <ClInclude Include="Geoscape\ConfirmDestinationState.h" />
     <ClInclude Include="Geoscape\ConfirmLandingState.h" />
     <ClInclude Include="Geoscape\ConfirmNewBaseState.h" />
@@ -325,7 +335,7 @@
     <ClInclude Include="Geoscape\FundingState.h" />
     <ClInclude Include="Geoscape\GeoscapeCraftState.h" />
     <ClInclude Include="Geoscape\GeoscapeErrorState.h" />
-    <ClInclude Include="Geoscape\GeoscapeMessageState.h" />
+    <ClInclude Include="Geoscape\ProductionCompleteState.h" />
     <ClInclude Include="Geoscape\GeoscapeState.h" />
     <ClInclude Include="Geoscape\Globe.h" />
     <ClInclude Include="Geoscape\GraphsState.h" />
@@ -363,6 +373,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="Resource\ResourcePack.h" />
     <ClInclude Include="Resource\XcomResourcePack.h" />
+    <ClInclude Include="Ruleset\ArticleDefinition.h" />
     <ClInclude Include="Ruleset\City.h" />
     <ClInclude Include="Ruleset\MapBlock.h" />
     <ClInclude Include="Ruleset\MapDataSet.h" />
@@ -403,7 +414,14 @@
     <ClInclude Include="Savegame\Transfer.h" />
     <ClInclude Include="Savegame\Ufo.h" />
     <ClInclude Include="Savegame\Unit.h" />
+    <ClInclude Include="Savegame\UfopaediaSaved.h" />
     <ClInclude Include="Savegame\Waypoint.h" />
+    <ClInclude Include="Ufopaedia\ArticleState.h" />
+    <ClInclude Include="Ufopaedia\ArticleStateText.h" />
+    <ClInclude Include="Ufopaedia\ArticleStateTextImage.h" />
+    <ClInclude Include="Ufopaedia\Ufopaedia.h" />
+    <ClInclude Include="Ufopaedia\UfopaediaSelectState.h" />
+    <ClInclude Include="Ufopaedia\UfopaediaStartState.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="OpenXcom.rc" />

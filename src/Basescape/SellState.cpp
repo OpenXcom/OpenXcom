@@ -230,8 +230,11 @@ void SellState::btnOkClick(Action *action)
 				// Remove weapons from craft
 				for (std::vector<CraftWeapon*>::iterator w = craft->getWeapons()->begin(); w != craft->getWeapons()->end(); w++)
 				{
-					_base->getItems()->addItem((*w)->getRules()->getLauncherItem());
-					_base->getItems()->addItem((*w)->getRules()->getClipItem()), (int)floor((double)(*w)->getAmmo() / (*w)->getRules()->getRearmRate());
+					if ((*w) != 0)
+					{
+						_base->getItems()->addItem((*w)->getRules()->getLauncherItem());
+						_base->getItems()->addItem((*w)->getRules()->getClipItem()), (int)floor((double)(*w)->getAmmo() / (*w)->getRules()->getRearmRate());
+					}
 				}
 
 				// Remove items from craft

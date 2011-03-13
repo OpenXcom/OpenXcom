@@ -230,12 +230,6 @@
     <ClCompile Include="Geoscape\GeoscapeCraftState.cpp">
       <Filter>Geoscape</Filter>
     </ClCompile>
-    <ClCompile Include="Geoscape\GeoscapeErrorState.cpp">
-      <Filter>Geoscape</Filter>
-    </ClCompile>
-    <ClCompile Include="Geoscape\GeoscapeMessageState.cpp">
-      <Filter>Geoscape</Filter>
-    </ClCompile>
     <ClCompile Include="Geoscape\GeoscapeState.cpp">
       <Filter>Geoscape</Filter>
     </ClCompile>
@@ -442,6 +436,39 @@
     </ClCompile>
     <ClCompile Include="Ruleset\RuleSoldier.cpp">
       <Filter>Ruleset</Filter>
+    </ClCompile>
+    <ClCompile Include="Ufopaedia\ArticleState.cpp">
+      <Filter>Ufopaedia</Filter>
+    </ClCompile>
+    <ClCompile Include="Ufopaedia\ArticleStateText.cpp">
+      <Filter>Ufopaedia</Filter>
+    </ClCompile>
+    <ClCompile Include="Ufopaedia\ArticleStateTextImage.cpp">
+      <Filter>Ufopaedia</Filter>
+    </ClCompile>
+    <ClCompile Include="Ufopaedia\Ufopaedia.cpp">
+      <Filter>Ufopaedia</Filter>
+    </ClCompile>
+    <ClCompile Include="Ufopaedia\UfopaediaSelectState.cpp">
+      <Filter>Ufopaedia</Filter>
+    </ClCompile>
+    <ClCompile Include="Ufopaedia\UfopaediaStartState.cpp">
+      <Filter>Ufopaedia</Filter>
+    </ClCompile>
+    <ClCompile Include="Ruleset\ArticleDefinition.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
+    <ClCompile Include="Savegame\UfopaediaSaved.cpp">
+      <Filter>Savegame</Filter>
+    </ClCompile>
+    <ClCompile Include="Geoscape\CannotRearmState.cpp">
+      <Filter>Geoscape</Filter>
+    </ClCompile>
+    <ClCompile Include="Geoscape\GeoscapeErrorState.cpp">
+      <Filter>Geoscape</Filter>
+    </ClCompile>
+    <ClCompile Include="Geoscape\ProductionCompleteState.cpp">
+      <Filter>Geoscape</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -674,12 +701,6 @@
     <ClInclude Include="Geoscape\GeoscapeCraftState.h">
       <Filter>Geoscape</Filter>
     </ClInclude>
-    <ClInclude Include="Geoscape\GeoscapeErrorState.h">
-      <Filter>Geoscape</Filter>
-    </ClInclude>
-    <ClInclude Include="Geoscape\GeoscapeMessageState.h">
-      <Filter>Geoscape</Filter>
-    </ClInclude>
     <ClInclude Include="Geoscape\GeoscapeState.h">
       <Filter>Geoscape</Filter>
     </ClInclude>
@@ -888,6 +909,42 @@
     <ClInclude Include="Ruleset\RuleSoldier.h">
       <Filter>Ruleset</Filter>
     </ClInclude>
+    <ClInclude Include="Ufopaedia\ArticleState.h">
+      <Filter>Ufopaedia</Filter>
+    </ClInclude>
+    <ClInclude Include="Ufopaedia\ArticleStateText.h">
+      <Filter>Ufopaedia</Filter>
+    </ClInclude>
+    <ClInclude Include="Ufopaedia\ArticleStateTextImage.h">
+      <Filter>Ufopaedia</Filter>
+    </ClInclude>
+    <ClInclude Include="Ufopaedia\Ufopaedia.h">
+      <Filter>Ufopaedia</Filter>
+    </ClInclude>
+    <ClInclude Include="Ufopaedia\UfopaediaSelectState.h">
+      <Filter>Ufopaedia</Filter>
+    </ClInclude>
+    <ClInclude Include="Ufopaedia\UfopaediaStartState.h">
+      <Filter>Ufopaedia</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\ArticleDefinition.h">
+      <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Savegame\UfopaediaSaved.h">
+      <Filter>Savegame</Filter>
+    </ClInclude>
+    <ClInclude Include="Geoscape\CannotRearmState.h">
+      <Filter>Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Geoscape\GeoscapeErrorState.cpp">
+      <Filter>Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Geoscape\GeoscapeErrorState.h">
+      <Filter>Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Geoscape\ProductionCompleteState.h">
+      <Filter>Geoscape</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="OpenXcom.rc" />
@@ -919,6 +976,9 @@
     </Filter>
     <Filter Include="Menu">
       <UniqueIdentifier>{4218da2f-b393-45b2-a55f-da7fa4d91fe4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Ufopaedia">
+      <UniqueIdentifier>{41135935-090f-4179-a64d-0efbd66b5f5c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -53,7 +53,7 @@
 #include "GraphsState.h"
 #include "FundingState.h"
 #include "MonthlyReportState.h"
-#include "GeoscapeMessageState.h"
+#include "ProductionCompleteState.h"
 #include "UfoDetectedState.h"
 #include "GeoscapeCraftState.h"
 #include "DogfightState.h"
@@ -65,6 +65,7 @@
 #include "ItemsArrivingState.h"
 #include "../Battlescape/BattlescapeState.h"
 #include "../Battlescape/BattlescapeGenerator.h"
+#include "../Ufopaedia/Ufopaedia.h"
 
 namespace OpenXcom
 {
@@ -720,12 +721,7 @@ void GeoscapeState::time1Day()
 				if ((*j)->getBuildTime() == 0)
 				{
 					timerReset();
-					std::wstring s = _game->getLanguage()->getString("STR_PRODUCTION_OF");
-					s += _game->getLanguage()->getString((*j)->getRules()->getType());
-					s += _game->getLanguage()->getString("STR_AT_");
-					s += (*i)->getName();
-					s += _game->getLanguage()->getString("STR_IS_COMPLETE");
-					popup(new GeoscapeMessageState(_game, s));
+					popup(new ProductionCompleteState(_game, _game->getLanguage()->getString((*j)->getRules()->getType()), (*i)->getName()));
 				}
 			}
 		}
@@ -861,7 +857,7 @@ void GeoscapeState::btnGraphsClick(Action *action)
  */
 void GeoscapeState::btnUfopaediaClick(Action *action)
 {
-		
+	Ufopaedia::open(_game);
 }
 
 /**

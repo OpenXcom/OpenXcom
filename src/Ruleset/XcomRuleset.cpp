@@ -47,6 +47,9 @@
 #include "../Savegame/ItemContainer.h"
 #include "City.h"
 #include "../Savegame/Tile.h"
+#include "../Ufopaedia/Ufopaedia.h"
+#include "../Savegame/UfopaediaSaved.h"
+#include "ArticleDefinition.h"
 
 namespace OpenXcom
 {
@@ -1390,6 +1393,41 @@ XcomRuleset::XcomRuleset() : Ruleset()
 
 	_aliens.insert(std::pair<std::string, RuleAlien*>("SECTOID_SOLDIER", sectoidSoldier));
 
+	// create Ufopaedia article definitions
+	int sort_key = 1;
+	
+	// ALIEN LIFE FORMS
+	ArticleDefinitionTextImage article_textimage;
+	article_textimage.text_width = 100;
+	article_textimage.section = UFOPAEDIA_ALIEN_LIFE_FORMS;
+
+	article_textimage.id = "STR_SECTOID";
+	article_textimage.title = "STR_SECTOID";
+	article_textimage.image_id = "UP024.SPK";
+	article_textimage.text = "STR_SECTOID_UFOPEDIA";
+	article_textimage.sort_key = sort_key++;
+
+	_ufopaediaArticles[article_textimage.id] = new ArticleDefinitionTextImage(article_textimage);
+	
+	article_textimage.id = "STR_SNAKEMAN";
+	article_textimage.title = "STR_SNAKEMAN";
+	article_textimage.image_id = "UP030.SPK";
+	article_textimage.text = "STR_SNAKEMAN_UFOPEDIA";
+	article_textimage.sort_key = sort_key++;
+
+	_ufopaediaArticles[article_textimage.id] = new ArticleDefinitionTextImage(article_textimage);
+
+	// ALIEN RESEARCH
+	ArticleDefinitionText article_text;
+	article_text.section = UFOPAEDIA_ALIEN_RESEARCH;
+
+	article_text.id = "STR_ALIEN_ORIGINS";
+	article_text.title = "STR_ALIEN_ORIGINS";
+	article_text.text = "STR_ALIEN_ORIGINS_UFOPEDIA";
+	article_text.sort_key = sort_key++;
+	
+	_ufopaediaArticles[article_text.id] = new ArticleDefinitionText(article_text);
+
 	_costSoldier = 20000;
 	_costEngineer = 25000;
 	_costScientist = 30000;
@@ -1523,6 +1561,11 @@ SavedGame *XcomRuleset::newSave(GameDifficulty diff)
 	}
 
 	save->getBases()->push_back(base);
+
+	// init savedgame articles
+	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_SECTOID"]);
+//	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_SNAKEMAN"]);
+	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_ALIEN_ORIGINS"]);
 	
 	return save;
 }

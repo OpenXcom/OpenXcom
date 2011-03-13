@@ -41,6 +41,7 @@ class ResourcePack;
 class RuleSoldier;
 class RuleAlien;
 class RuleArmor;
+class ArticleDefinition;
 
 /**
  * Set of rules and stats for a game.
@@ -64,6 +65,7 @@ protected:
 	std::map<std::string, RuleSoldier*> _soldiers;
 	std::map<std::string, RuleAlien*> _aliens;
 	std::map<std::string, RuleArmor*> _armors;
+	std::map<std::string, ArticleDefinition*> _ufopaediaArticles;
 	int _costSoldier, _costEngineer, _costScientist, _timePersonnel;
 public:
 	/// Creates a blank ruleset.
@@ -98,6 +100,8 @@ public:
 	RuleAlien *const getAlien(std::string name);
 	/// Gets armor rules.
 	RuleArmor *const getArmor(std::string name);
+	/// Gets Ufopaedia article definition.
+	ArticleDefinition *getUfopaediaArticle(std::string name);
 	/// Gets the cost of a soldier.
 	int getSoldierCost() const;
 	/// Gets the cost of an engineer.

@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "GeoscapeMessageState.h"
+#include "ProductionCompleteState.h"
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
@@ -30,11 +30,12 @@ namespace OpenXcom
 {
 
 /**
- * Initializes all the elements in a Geoscape message window.
+ * Initializes all the elements in a Production Complete window.
  * @param game Pointer to the core game.
- * @param str Message to display.
+ * @param item Item that finished producing.
+ * @param base Base the item belongs to.
  */
-GeoscapeMessageState::GeoscapeMessageState(Game *game, std::wstring str) : State(game)
+ProductionCompleteState::ProductionCompleteState(Game *game, const std::wstring &item, const std::wstring &base) : State(game)
 {
 	_screen = false;
 
@@ -56,20 +57,25 @@ GeoscapeMessageState::GeoscapeMessageState(Game *game, std::wstring str) : State
 
 	_btnOk->setColor(Palette::blockOffset(8)+8);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)&GeoscapeMessageState::btnOkClick);
+	_btnOk->onMouseClick((ActionHandler)&ProductionCompleteState::btnOkClick);
 
 	_txtMessage->setColor(Palette::blockOffset(15)-1);
 	_txtMessage->setAlign(ALIGN_CENTER);
 	_txtMessage->setVerticalAlign(ALIGN_MIDDLE);
 	_txtMessage->setBig();
 	_txtMessage->setWordWrap(true);
-	_txtMessage->setText(str);
+	std::wstring s = _game->getLanguage()->getString("STR_PRODUCTION_OF");
+	s += item;
+	s += _game->getLanguage()->getString("STR_AT_");
+	s += base;
+	s += _game->getLanguage()->getString("STR_IS_COMPLETE");
+	_txtMessage->setText(s);
 }
 
 /**
  *
  */
-GeoscapeMessageState::~GeoscapeMessageState()
+ProductionCompleteState::~ProductionCompleteState()
 {
 	
 }
@@ -77,7 +83,7 @@ GeoscapeMessageState::~GeoscapeMessageState()
 /**
  * Resets the palette.
  */
-void GeoscapeMessageState::init()
+void ProductionCompleteState::init()
 {
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
 }
@@ -86,7 +92,7 @@ void GeoscapeMessageState::init()
  * Closes the window.
  * @param action Pointer to an action.
  */
-void GeoscapeMessageState::btnOkClick(Action *action)
+void ProductionCompleteState::btnOkClick(Action *action)
 {
 	_game->popState();
 }

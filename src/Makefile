@@ -62,6 +62,9 @@ $(OBJDIR)%.o:: Ruleset/%.cpp
 $(OBJDIR)%.o:: Savegame/%.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
+$(OBJDIR)%.o:: Ufopaedia/%.cpp
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
+
 clean:
 	rm -f $(BINDIR)$(BIN) $(OBJDIR)*.o
 
