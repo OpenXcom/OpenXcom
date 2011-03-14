@@ -27,10 +27,10 @@
 namespace OpenXcom
 {
 
-class RuleUnitSprite;
 class Tile;
 class BattleItem;
-class Soldier;
+class Unit;
+class RuleUnit;
 
 enum UnitStatus {STATUS_STANDING, STATUS_WALKING, STATUS_TURNING, STATUS_AIMING, STATUS_FALLING, STATUS_DEAD};
 enum UnitFaction {FACTION_PLAYER, FACTION_HOSTILE, FACTION_NEUTRAL, FACTION_FRIENDLY};
@@ -42,7 +42,7 @@ enum UnitFaction {FACTION_PLAYER, FACTION_HOSTILE, FACTION_NEUTRAL, FACTION_FRIE
 class BattleUnit
 {
 private:
-	RuleUnitSprite *_renderRules;
+	Unit *_unit;
 	UnitFaction _faction;
 	int _id;
 	Position _pos;
@@ -53,31 +53,23 @@ private:
 	int _walkPhase;
 	std::vector<Tile *> _visibleTiles;
 	int _tu, _energy, _health, _morale;
-	Soldier *_soldier;
-	//BattleAI *_ai;
-	//RuleNPC *_NPCRule;
-	std::wstring _name;
 	bool _cached, _kneeled;
 	BattleItem *_rightHandItem, *_leftHandItem;
 public:
 	/// Creates a BattleUnit.
-	BattleUnit(RuleUnitSprite *renderRules, UnitFaction faction);
+	BattleUnit(Unit *_unit, UnitFaction faction);
 	/// Cleans up the BattleUnit.
 	virtual ~BattleUnit();
 	/// Loads the unit from YAML.
 	void load(const YAML::Node& node);
 	/// Saves the unit to YAML.
 	void save(YAML::Emitter& out) const;
-	/// Assigns a geoscape soldier.
-	void setSoldier(Soldier *soldier);
-	/// Assigns an NPC rule and Battle AI.
-	//void setNPC(RuleNPC *NPCRule, BattleAI *ai);
 	/// Gets the BattleUnit's ID.
 	int getId() const;
 	/// Sets the BattleUnit's ID.
 	void setId(int id);
-	/// Gets the unit's rendering ruleset.
-	RuleUnitSprite *const getRenderRules() const;
+	/// Gets the unit's soldier data.
+	Unit *const getUnit() const;
 	/// Sets the unit's position X, Y, Z
 	void setPosition(const Position& pos);
 	/// Gets the unit's position.
@@ -106,22 +98,10 @@ public:
 	void lookAt(int direction);
 	/// Turn to the destination direction.
 	void turn(bool spendTU = true);
-	/// Gets the unit's maximum time units.
-	int getMaxTimeUnits() const;
-	/// Gets the unit's maximum stamina.
-	int getMaxStamina() const;
-	/// Gets the unit's maximum health.
-	int getMaxHealth() const;
-	/// Gets the soldier's name.
-	std::wstring getName() const;
 	/// Gets the soldier's gender.
 	SoldierGender getGender() const;
 	/// Gets the unit's faction.
 	UnitFaction getFaction() const;
-	/// Sets the unit's name. Only for aliens.
-	void setName(const std::wstring &name);
-	/// Gets a sprite version of the soldier's rank.
-	int getRankSprite() const;
 	/// Set the cached flag.
 	void setCached(bool cached);
 	/// If this unit is cached on the battlescape.
@@ -132,6 +112,15 @@ public:
 	bool isKneeled() const;
 	/// Aim.
 	void aim(bool aiming);
+	/// Gets the unit's time units.
+	int getTimeUnits() const;
+	/// Gets the unit's stamina.
+	int getEnergy() const;
+	/// Gets the unit's health.
+	int getHealth() const;
+	/// Gets the unit's bravery.
+	int getMorale() const;
+
 
 };
 

@@ -19,9 +19,9 @@
 #ifndef OPENXCOM_SOLDIER_H
 #define OPENXCOM_SOLDIER_H
 
-#include <vector>
 #include <string>
 #include "yaml.h"
+#include "Unit.h"
 
 namespace OpenXcom
 {
@@ -32,17 +32,20 @@ enum SoldierLook { LOOK_BLONDE, LOOK_BROWNHAIR, LOOK_ORIENTAL, LOOK_AFRICAN };
 
 class Craft;
 class SoldierNamePool;
+class RuleSoldier;
 
 /**
  * Represents a soldier hired by the player.
  * Soldiers have a wide variety of stats that affect
  * their performance during battles.
  */
-class Soldier
+class Soldier : public Unit
 {
 private:
 	std::wstring _name;
-	int _tu, _stamina, _health, _bravery, _reactions, _firing, _throwing, _strength, _psiStrength, _psiSkill, _melee;
+	RuleSoldier *_rules;
+	UnitStats _initialStats;
+	UnitStats _currentStats;
 	SoldierRank _rank;
 	Craft *_craft;
 	SoldierGender _gender;
@@ -52,9 +55,11 @@ public:
 	/// Creates a new soldier.
 	Soldier();
 	/// Creates a new soldier with random stats.
-	Soldier(std::vector<SoldierNamePool*> *names);
+	Soldier(RuleSoldier *rules, std::vector<SoldierNamePool*> *names, RuleArmor *armor);
 	/// Cleans up the soldier.
 	~Soldier();
+	/// Initialises 
+	void initStatsIncrease();
 	/// Loads the soldier from YAML.
 	void load(const YAML::Node& node);
 	/// Saves the soldier to YAML.
@@ -93,6 +98,9 @@ public:
 	int getKills() const;
 	/// Gets the soldier's gender.
 	SoldierGender getGender() const;
+	/// Gets a string version of the soldier's armor.
+	std::string getArmor() const;
+
 };
 
 }

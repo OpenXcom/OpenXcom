@@ -323,9 +323,6 @@
     <ClCompile Include="Interface\FpsCounter.cpp">
       <Filter>Interface</Filter>
     </ClCompile>
-    <ClCompile Include="Ruleset\RuleUnitSprite.cpp">
-      <Filter>Ruleset</Filter>
-    </ClCompile>
     <ClCompile Include="Battlescape\UnitSprite.cpp">
       <Filter>Battlescape</Filter>
     </ClCompile>
@@ -398,9 +395,6 @@
     <ClCompile Include="Basescape\PurchaseErrorState.cpp">
       <Filter>Basescape</Filter>
     </ClCompile>
-    <ClCompile Include="Ruleset\MapModel.cpp">
-      <Filter>Ruleset</Filter>
-    </ClCompile>
     <ClCompile Include="Savegame\Transfer.cpp">
       <Filter>Savegame</Filter>
     </ClCompile>
@@ -427,6 +421,21 @@
     </ClCompile>
     <ClCompile Include="Geoscape\ItemsArrivingState.cpp">
       <Filter>Geoscape</Filter>
+    </ClCompile>
+    <ClCompile Include="Ruleset\RuleArmor.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
+    <ClCompile Include="Savegame\Alien.cpp">
+      <Filter>Savegame</Filter>
+    </ClCompile>
+    <ClCompile Include="Savegame\Unit.cpp">
+      <Filter>Savegame</Filter>
+    </ClCompile>
+    <ClCompile Include="Ruleset\RuleAlien.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
+    <ClCompile Include="Ruleset\RuleSoldier.cpp">
+      <Filter>Ruleset</Filter>
     </ClCompile>
     <ClCompile Include="Ufopaedia\ArticleState.cpp">
       <Filter>Ufopaedia</Filter>
@@ -785,9 +794,6 @@
     <ClInclude Include="Interface\FpsCounter.h">
       <Filter>Interface</Filter>
     </ClInclude>
-    <ClInclude Include="Ruleset\RuleUnitSprite.h">
-      <Filter>Ruleset</Filter>
-    </ClInclude>
     <ClInclude Include="Battlescape\UnitSprite.h">
       <Filter>Battlescape</Filter>
     </ClInclude>
@@ -861,9 +867,6 @@
     <ClInclude Include="Basescape\PurchaseErrorState.h">
       <Filter>Basescape</Filter>
     </ClInclude>
-    <ClInclude Include="Ruleset\MapModel.h">
-      <Filter>Ruleset</Filter>
-    </ClInclude>
     <ClInclude Include="Savegame\Transfer.h">
       <Filter>Savegame</Filter>
     </ClInclude>
@@ -890,6 +893,21 @@
     </ClInclude>
     <ClInclude Include="Geoscape\ItemsArrivingState.h">
       <Filter>Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\RuleArmor.h">
+      <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Savegame\Alien.h">
+      <Filter>Savegame</Filter>
+    </ClInclude>
+    <ClInclude Include="Savegame\Unit.h">
+      <Filter>Savegame</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\RuleAlien.h">
+      <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\RuleSoldier.h">
+      <Filter>Ruleset</Filter>
     </ClInclude>
     <ClInclude Include="Ufopaedia\ArticleState.h">
       <Filter>Ufopaedia</Filter>

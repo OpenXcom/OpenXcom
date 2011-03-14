@@ -31,7 +31,7 @@ namespace OpenXcom
 class Tile;
 class SavedGame;
 class MapDataSet;
-class RuleUnitSprite;
+class RuleUnit;
 class MapBlock;
 class Node;
 class ResourcePack;

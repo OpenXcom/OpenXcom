@@ -23,10 +23,10 @@
 #include "../Engine/SurfaceSet.h"
 #include "../Battlescape/Position.h"
 #include "../Resource/ResourcePack.h"
-#include "../Ruleset/RuleUnitSprite.h"
+#include "../Ruleset/RuleAlien.h"
+#include "../Ruleset/RuleSoldier.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/MapData.h"
-#include "../Ruleset/MapModel.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/Soldier.h"
@@ -83,6 +83,11 @@ bool Projectile::calculateTrajectory()
 	// First determine the origin voxel. This depends on soldier direction, stance, terrain level...
 	// For testing we some voxel in the middle.
 	originVoxel = Position(_origin.x*16 + 8, _origin.y*16 + 8, _origin.z*24 + 19);
+	originVoxel.z += -_save->getTile(_origin)->getTerrainLevel();
+	if (originVoxel.z >= (_origin.z + 1)*24)
+	{
+		_origin.z++;
+	}
 
 	//  determine the target voxel.
 	// aim at the center of the unit, the object, the walls or the floor (in that priority)

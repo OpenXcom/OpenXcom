@@ -26,6 +26,7 @@
 #include "../Savegame/ItemContainer.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/Soldier.h"
+#include "../Savegame/Alien.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/Ufo.h"
@@ -44,6 +45,7 @@
 #include "../Ruleset/MapData.h"
 #include "../Resource/XcomResourcePack.h"
 #include "../Engine/Game.h"
+#include "../Engine/Language.h"
 
 namespace OpenXcom
 {
@@ -196,7 +198,7 @@ void BattlescapeGenerator::run()
 		for (std::vector<Soldier*>::iterator i = _craft->getBase()->getSoldiers()->begin(); i != _craft->getBase()->getSoldiers()->end(); i++)
 		{
 			if ((*i)->getCraft() == _craft)
-				addSoldier((*i), _game->getRuleset()->getUnitSprites("XCOM_0"));
+				addSoldier((*i));
 		}
 		_save->setSelectedUnit(_save->getUnits()->at(0)); // select first soldier
 
@@ -216,13 +218,19 @@ void BattlescapeGenerator::run()
 
 	if (_missionType == MISS_UFORECOVERY)
 	{
+		std::wstringstream name;
+		name << _game->getLanguage()->getString("STR_SECTOID") << _game->getLanguage()->getString("STR_LIVE_ENGINEER");
 		// add aliens (should depend on mission type & difficulty level)
-		addAlien(_game->getRuleset()->getUnitSprites("SECTOID"), ENGINEER, L"Sectoid Engineer");
-		addAlien(_game->getRuleset()->getUnitSprites("SECTOID"), NAVIGATOR, L"Sectoid Navigator");
-		addAlien(_game->getRuleset()->getUnitSprites("SECTOID"), SOLDIER, L"Sectoid Soldier");
-		addAlien(_game->getRuleset()->getUnitSprites("SECTOID"), SCOUT, L"Sectoid Soldier");
-		addAlien(_game->getRuleset()->getUnitSprites("SECTOID"), SCOUT, L"Sectoid Soldier");
-		addAlien(_game->getRuleset()->getUnitSprites("SECTOID"), SCOUT, L"Sectoid Soldier");
+		addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), ENGINEER);
+		name.str(L"");
+		name << _game->getLanguage()->getString("STR_SECTOID") << _game->getLanguage()->getString("STR_LIVE_NAVIGATOR");
+		addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), NAVIGATOR);
+		name.str(L"");
+		name << _game->getLanguage()->getString("STR_SECTOID") << _game->getLanguage()->getString("STR_LIVE_SOLDIER");
+		addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), SOLDIER);
+		addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), SCOUT);
+		addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), SCOUT);
+		addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), SCOUT);
 	}
 
 	// set shade (alien bases are a little darker, sites depend on worldshade)
@@ -237,12 +245,11 @@ void BattlescapeGenerator::run()
 /**
  * Adds a soldier to the game and place him on a free spawnpoint.
  * @param soldier pointer to the Soldier
- * @param rules pointer to the RuleUnitSprite which holds info about unit drawing.
+ * @param rules pointer to the RuleUnit which holds info about unit .
  */
-void BattlescapeGenerator::addSoldier(Soldier *soldier, RuleUnitSprite *rules)
+void BattlescapeGenerator::addSoldier(Soldier *soldier)
 {
-	BattleUnit *unit = new BattleUnit(rules, FACTION_PLAYER);
-	unit->setSoldier(soldier);
+	BattleUnit *unit = new BattleUnit(soldier, FACTION_PLAYER);
 	unit->setId(_unitCount++);
 
 	Position pos;
@@ -269,13 +276,13 @@ void BattlescapeGenerator::addSoldier(Soldier *soldier, RuleUnitSprite *rules)
 
 /**
  * Adds an alien to the game and place him on a free spawnpoint.
- * @param rules pointer to the RuleUnitSprite which holds info about unit drawing.
+ * @param rules pointer to the RuleUnit which holds info about unit .
  * @param rank The rank of the alien.
  * @param name The name of the alien.
  */
-void BattlescapeGenerator::addAlien(RuleUnitSprite *rules, NodeRank rank, const std::wstring &name)
+void BattlescapeGenerator::addAlien(RuleAlien *rules, RuleArmor *armor, NodeRank rank)
 {
-	BattleUnit *unit = new BattleUnit(rules, FACTION_HOSTILE);
+	BattleUnit *unit = new BattleUnit(new Alien(rules, armor, _game->getLanguage()), FACTION_HOSTILE);
 	Node *node;
 	bool bFound = false;
 	unit->setId(_unitCount++);
@@ -321,7 +328,6 @@ void BattlescapeGenerator::addAlien(RuleUnitSprite *rules, NodeRank rank, const 
 	}
 
 	unit->setDirection(RNG::generate(0,7));
-	unit->setName(name);
 
 	_save->getUnits()->push_back(unit);
 }

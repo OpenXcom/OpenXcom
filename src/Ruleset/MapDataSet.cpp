@@ -18,7 +18,6 @@
  */
 #include "MapDataSet.h"
 #include "MapData.h"
-#include "MapModel.h"
 #include <fstream>
 #include <sstream>
 #include "../Engine/Exception.h"
@@ -31,7 +30,7 @@ namespace OpenXcom
 /**
 * MapDataSet construction.
 */
-MapDataSet::MapDataSet(std::string name, int size):_name(name), _size(size), _objects(), _models(), _loaded(false)
+MapDataSet::MapDataSet(std::string name, int size):_name(name), _size(size), _objects(), _loaded(false)
 {
 }
 
@@ -89,6 +88,7 @@ void MapDataSet::load(ResourcePack *res)
 	// prevents loading twice
 	if (_loaded) return;
 	_loaded = true;
+	_res = res;
 
 	// the struct below helps to read the xcom file format
 	struct MCD
@@ -139,7 +139,6 @@ void MapDataSet::load(ResourcePack *res)
 	};
 
 	MCD mcd;
-	MapModel *model = 0;
 
 	// Load Terrain Data from MCD file
 	std::stringstream s;
@@ -176,34 +175,10 @@ void MapDataSet::load(ResourcePack *res)
 		to->setFlammable((int)mcd.Flammable);
 		to->setFuel((int)mcd.Fuel);
 
-		// build the 3D voxel model for this object using the loft references
-		model = new MapModel();
 		for (int layer = 0; layer < 12; layer++)
 		{
 			int loft = (int)mcd.LOFT[layer];
-			for (int row = 0; row < 16; row++)
-			{
-				model->set16Voxels(res->getVoxelData()->at((loft*16)+row), row, (layer*2));
-				model->set16Voxels(res->getVoxelData()->at((loft*16)+row), row, (layer*2)+1);
-			}
-		}
-		// check if we have already the same model in our list
-		bool found = false;
-		for (std::vector<MapModel*>::iterator i = _models.begin(); i != _models.end() && !found; i++)
-		{
-			if ((MapModel*)(*i)->equals(model))
-			{
-				delete model;
-				model = 0;
-				to->setModel((MapModel*)(*i));
-				found = true;
-			}
-		}
-		if (!found)
-		{
-			_models.push_back(model);
-			to->setModel(model);
-			model = 0;
+			to->setLoftID(loft, layer);
 		}
 	}
 
@@ -231,12 +206,42 @@ void MapDataSet::unload()
 		{
 			delete *i;
 		}
-		for (std::vector<MapModel*>::iterator i = _models.begin(); i != _models.end(); i++)
-		{
-			delete *i;
-		}
 		delete _surfaceSet;
 	}
+}
+
+/**
+* loadLOFTEMPS loads the LOFTEMPS.DAT into the ruleset voxeldata
+* @param filename
+* @param voxelData
+*/
+void MapDataSet::loadLOFTEMPS(const std::string &filename, std::vector<Uint16> *voxelData)
+{
+	// Load file
+	std::ifstream mapFile (filename.c_str(), std::ios::in | std::ios::binary);
+	if (!mapFile)
+	{
+		throw Exception("Failed to load DAT");
+	}
+	
+	Uint16 value;
+
+	while (mapFile.read((char*)&value, sizeof(value)))
+	{
+		voxelData->push_back(value);
+	}
+
+	if (!mapFile.eof())
+	{
+		throw Exception("Invalid data from file");
+	}
+
+	mapFile.close();
+}
+
+ResourcePack *MapDataSet::getResourcePack()
+{
+	return _res;
 }
 
 }

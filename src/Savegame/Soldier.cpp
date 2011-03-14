@@ -21,6 +21,7 @@
 #include "../Engine/Language.h"
 #include "../Savegame/Craft.h"
 #include "../Ruleset/SoldierNamePool.h"
+#include "../Ruleset/RuleSoldier.h"
 
 namespace OpenXcom
 {
@@ -28,9 +29,21 @@ namespace OpenXcom
 /**
  * Initializes a new blank soldier.
  */
-Soldier::Soldier() : _name(L""), _tu(0), _stamina(0), _health(0), _bravery(0), _reactions(0), _firing(0), _throwing(0), _strength(0), _psiStrength(0), _psiSkill(0), _melee(0), _rank(RANK_ROOKIE), _craft(0), _gender(GENDER_MALE), _look(LOOK_BLONDE), _missions(0), _kills(0)
+Soldier::Soldier() : _name(L""), _rank(RANK_ROOKIE), _craft(0), _gender(GENDER_MALE), _look(LOOK_BLONDE), _missions(0), _kills(0)
 {
+	_initialStats.bravery = 0;
+	_initialStats.firing = 0;
+	_initialStats.health = 0;
+	_initialStats.melee = 0;
+	_initialStats.psiSkill = 0;
+	_initialStats.psiStrength = 0;
+	_initialStats.reactions = 0;
+	_initialStats.stamina = 0;
+	_initialStats.strength = 0;
+	_initialStats.throwing = 0;
+	_initialStats.tu = 0;
 
+	_currentStats = _initialStats;
 }
 
 /**
@@ -38,18 +51,24 @@ Soldier::Soldier() : _name(L""), _tu(0), _stamina(0), _health(0), _bravery(0), _
  * pulled from a set of SoldierNamePool's.
  * @param names List of name pools.
  */
-Soldier::Soldier(std::vector<SoldierNamePool*> *names) : _psiSkill(0), _rank(RANK_ROOKIE), _craft(0), _missions(0), _kills(0)
+Soldier::Soldier(RuleSoldier *rules, std::vector<SoldierNamePool*> *names, RuleArmor *armor) : Unit(armor), _rules(rules), _rank(RANK_ROOKIE), _craft(0), _missions(0), _kills(0)
 {
-	_tu = RNG::generate(50, 60);
-	_stamina = RNG::generate(40, 70);
-	_health = RNG::generate(25, 40);
-	_bravery = RNG::generate(1, 6)*10;
-	_reactions = RNG::generate(50, 60);
-	_firing = RNG::generate(40, 70);
-	_throwing = RNG::generate(50, 80);
-	_strength = RNG::generate(20, 40);
-	_psiStrength = RNG::generate(0, 100);
-	_melee = RNG::generate(20, 40);
+	UnitStats minStats = rules->getMinStats();
+	UnitStats maxStats = rules->getMaxStats();
+
+	_initialStats.tu = RNG::generate(minStats.tu, maxStats.tu);
+	_initialStats.stamina = RNG::generate(minStats.stamina, maxStats.stamina);
+	_initialStats.health = RNG::generate(minStats.health, maxStats.health);
+	_initialStats.bravery = RNG::generate(minStats.bravery, maxStats.bravery);
+	_initialStats.reactions = RNG::generate(minStats.reactions, maxStats.reactions);
+	_initialStats.firing = RNG::generate(minStats.firing, maxStats.firing);
+	_initialStats.throwing = RNG::generate(minStats.throwing, maxStats.throwing);
+	_initialStats.strength = RNG::generate(minStats.strength, maxStats.strength);
+	_initialStats.psiStrength = RNG::generate(minStats.psiStrength, maxStats.psiStrength);
+	_initialStats.melee = RNG::generate(minStats.melee, maxStats.melee);
+	_initialStats.psiSkill = 0;
+
+	_currentStats = _initialStats;
 
 	int gender;
 	_name = names->at(RNG::generate(0, names->size()-1))->genName(&gender);
@@ -74,17 +93,17 @@ void Soldier::load(const YAML::Node &node)
 	std::string name;
 	node["name"] >> name;
 	_name = Language::utf8ToWstr(name);
-	node["tu"] >> _tu;
-	node["stamina"] >> _stamina;
-	node["health"] >> _health;
-	node["bravery"] >> _bravery;
-	node["reactions"] >> _reactions;
-	node["firing"] >> _firing;
-	node["throwing"] >> _throwing;
-	node["strength"] >> _strength;
-	node["psiStrength"] >> _psiStrength;
-	node["psiSkill"] >> _psiSkill;
-	node["melee"] >> _melee;
+	node["tu"] >> _initialStats.tu;
+	node["stamina"] >> _initialStats.stamina;
+	node["health"] >> _initialStats.health;
+	node["bravery"] >> _initialStats.bravery;
+	node["reactions"] >> _initialStats.reactions;
+	node["firing"] >> _initialStats.firing;
+	node["throwing"] >> _initialStats.throwing;
+	node["strength"] >> _initialStats.strength;
+	node["psiStrength"] >> _initialStats.psiStrength;
+	node["psiSkill"] >> _initialStats.psiSkill;
+	node["melee"] >> _initialStats.melee;
 	node["rank"] >> a;
 	_rank = (SoldierRank)a;
 	node["gender"] >> a;
@@ -103,17 +122,17 @@ void Soldier::save(YAML::Emitter &out) const
 {
 	out << YAML::BeginMap;
 	out << YAML::Key << "name" << YAML::Value << Language::wstrToUtf8(_name);
-	out << YAML::Key << "tu" << YAML::Value << _tu;
-	out << YAML::Key << "stamina" << YAML::Value << _stamina;
-	out << YAML::Key << "health" << YAML::Value << _health;
-	out << YAML::Key << "bravery" << YAML::Value << _bravery;
-	out << YAML::Key << "reactions" << YAML::Value << _reactions;
-	out << YAML::Key << "firing" << YAML::Value << _firing;
-	out << YAML::Key << "throwing" << YAML::Value << _throwing;
-	out << YAML::Key << "strength" << YAML::Value << _strength;
-	out << YAML::Key << "psiStrength" << YAML::Value << _psiStrength;
-	out << YAML::Key << "psiSkill" << YAML::Value << _psiSkill;
-	out << YAML::Key << "melee" << YAML::Value << _melee;
+	out << YAML::Key << "tu" << YAML::Value << _initialStats.tu;
+	out << YAML::Key << "stamina" << YAML::Value << _initialStats.stamina;
+	out << YAML::Key << "health" << YAML::Value << _initialStats.health;
+	out << YAML::Key << "bravery" << YAML::Value << _initialStats.bravery;
+	out << YAML::Key << "reactions" << YAML::Value << _initialStats.reactions;
+	out << YAML::Key << "firing" << YAML::Value << _initialStats.firing;
+	out << YAML::Key << "throwing" << YAML::Value << _initialStats.throwing;
+	out << YAML::Key << "strength" << YAML::Value << _initialStats.strength;
+	out << YAML::Key << "psiStrength" << YAML::Value << _initialStats.psiStrength;
+	out << YAML::Key << "psiSkill" << YAML::Value << _initialStats.psiSkill;
+	out << YAML::Key << "melee" << YAML::Value << _initialStats.melee;
 	out << YAML::Key << "rank" << YAML::Value << _rank;
 	if (_craft != 0)
 	{
@@ -210,7 +229,7 @@ int Soldier::getRankSprite() const
  */
 int Soldier::getTimeUnits() const
 {
-	return _tu;
+	return _initialStats.tu;
 }
 
 /**
@@ -219,7 +238,7 @@ int Soldier::getTimeUnits() const
  */
 int Soldier::getStamina() const
 {
-	return _stamina;
+	return _initialStats.stamina;
 }
 
 /**
@@ -228,7 +247,7 @@ int Soldier::getStamina() const
  */
 int Soldier::getHealth() const
 {
-	return _health;
+	return _initialStats.health;
 }
 
 /**
@@ -237,7 +256,7 @@ int Soldier::getHealth() const
  */
 int Soldier::getBravery() const
 {
-	return _bravery;
+	return _initialStats.bravery;
 }
 
 /**
@@ -246,7 +265,7 @@ int Soldier::getBravery() const
  */
 int Soldier::getReactions() const
 {
-	return _reactions;
+	return _initialStats.reactions;
 }
 
 /**
@@ -255,7 +274,7 @@ int Soldier::getReactions() const
  */
 int Soldier::getFiringAccuracy() const
 {
-	return _firing;
+	return _initialStats.firing;
 }
 
 /**
@@ -264,7 +283,7 @@ int Soldier::getFiringAccuracy() const
  */
 int Soldier::getThrowingAccuracy() const
 {
-	return _throwing;
+	return _initialStats.throwing;
 }
 
 /**
@@ -273,7 +292,7 @@ int Soldier::getThrowingAccuracy() const
  */
 int Soldier::getStrength() const
 {
-	return _strength;
+	return _initialStats.strength;
 }
 
 /**

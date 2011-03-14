@@ -26,7 +26,7 @@
 #include "../Engine/RNG.h"
 #include "../Ruleset/MapDataSet.h"
 #include "../Ruleset/MapData.h"
-#include "../Ruleset/MapModel.h"
+#include "../Resource/ResourcePack.h"
 
 namespace OpenXcom
 {
@@ -735,9 +735,16 @@ int TerrainModifier::voxelCheck(const Position& voxel)
 			return 5;
 		}
 		MapData *mp = tile->getMapData(i);
-		if (mp != 0 && mp->getModel()->getVoxel(voxel.x%16, voxel.y%16, voxel.z%24))
+		if (mp != 0)
 		{
-			return i;
+			int x = 15 - voxel.x%16;
+			int y = 15 - voxel.y%16;
+			int idx = (mp->getLoftID((voxel.z%24)/2)*16) + y;
+			Uint16 voxels = mp->getDataset()->getResourcePack()->getVoxelData()->at(idx);
+			if ((voxels & (1 << x))==(1 << x))
+			{
+				return i;
+			}
 		}
 	}
 	return -1;

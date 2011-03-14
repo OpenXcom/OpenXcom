@@ -26,7 +26,6 @@ namespace OpenXcom
 {
 
 class MapDataSet;
-class MapModel;
 
 #define O_FLOOR 0
 #define O_WESTWALL 1
@@ -59,22 +58,18 @@ class MapData
 {
 private:
 	MapDataSet *_dataset;
-	MapModel *_model;
 	SpecialTileType _specialType;
 	bool _isUfoDoor, _stopLOS, _isNoFloor, _isBigWall, _isGravLift, _isDoor, _blockFire, _blockSmoke;
 	int _yOffset, _TUWalk, _TUFly, _TUSlide, _terrainLevel, _footstepSound, _dieMCD, _altMCD, _objectType, _lightSource;
 	int _armor, _flammable, _fuel;
 	int _sprite[8];
 	int _block[6];
+	int _loftID[12];
 public:
 	MapData(MapDataSet *dataset);
 	~MapData();
 	/// Get the dataset this object belongs to.
 	MapDataSet *getDataset();
-	/// Get the 3D voxel model.
-	MapModel *getModel() const;
-	/// Set the 3D voxel model.
-	void setModel(MapModel *model);
 	/// Get the sprite index for a certain frame.
 	int getSprite(int frameID);
 	/// Set the sprite index for a certain frame.
@@ -139,6 +134,10 @@ public:
 	int getFuel();
 	/// Set the amount of fuel.
 	void setFuel(int value);
+	/// Get the loft index for a certain layer.
+	int getLoftID(int layer);
+	/// Set the loft index for a certain layer.
+	void setLoftID(int loft, int layer);
 };
 
 }

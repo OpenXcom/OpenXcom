@@ -31,7 +31,9 @@
 #include "RuleTerrain.h"
 #include "MapBlock.h"
 #include "MapDataSet.h"
-#include "RuleUnitSprite.h"
+#include "RuleSoldier.h"
+#include "RuleAlien.h"
+#include "RuleArmor.h"
 #include "SoldierNamePool.h"
 #include "../Savegame/Region.h"
 #include "../Engine/RNG.h"
@@ -1320,52 +1322,76 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_terrains.insert(std::pair<std::string, RuleTerrain*>("MARS",mars));
 	_terrains.insert(std::pair<std::string, RuleTerrain*>("URBAN",urban));
 
-	RuleUnitSprite *xcom_0 = new RuleUnitSprite();
-	int o[8] = {1, 0, -1, 0, 1, 0, -1, 0};
-	xcom_0->setSpriteSheet("XCOM_0.PCK");
-	xcom_0->setTorso(32);
-	xcom_0->setFemaleTorso(267);
-	xcom_0->setLegsStand(16);
-	xcom_0->setLegsKneel(24);
-	for (int i=0; i<8; i++)
-		xcom_0->setLegsWalk(56 + 24 * i, i);
-	xcom_0->setLeftArmStand(0);
-	xcom_0->setRightArmStand(8);
-	for (int i=0; i<8; i++)
-		xcom_0->setLeftArmWalk(40 + 24 * i, i);
-	for (int i=0; i<8; i++)
-		xcom_0->setRightArmWalk(48 + 24 * i, i);
-	for (int i=0; i<8; i++)
-		xcom_0->setWalkTorsoYOffset(o[i], i);
-	xcom_0->setRightArm1HWeapon(232);
-	xcom_0->setLeftArm2HWeapon(240);
-	xcom_0->setRightArm2HWeapon(248);
-	xcom_0->setRightArm2HShoot(256);
-	xcom_0->setDie(264);
+	RuleArmor *coveralls = new RuleArmor("STR_NONE_UC", "XCOM_0.PCK");
+	coveralls->setArmor(12, 8, 5, 2);
 
-	RuleUnitSprite *sectoid = new RuleUnitSprite();
-	sectoid->setSpriteSheet("SECTOID.PCK");
-	sectoid->setTorso(32);
-	sectoid->setFemaleTorso(267);
-	sectoid->setLegsStand(16);
-	for (int i=0; i<8; i++)
-		sectoid->setLegsWalk(56 + 24 * i, i);
-	sectoid->setLeftArmStand(0);
-	sectoid->setRightArmStand(8);
-	for (int i=0; i<8; i++)
-		sectoid->setLeftArmWalk(40 + 24 * i, i);
-	for (int i=0; i<8; i++)
-		sectoid->setRightArmWalk(48 + 24 * i, i);
-	for (int i=0; i<8; i++)
-		sectoid->setWalkTorsoYOffset(o[i], i);
-	sectoid->setRightArm1HWeapon(232);
-	sectoid->setLeftArm2HWeapon(240);
-	sectoid->setRightArm2HWeapon(248);
-	sectoid->setRightArm2HShoot(256);
-	sectoid->setDie(264);
+	RuleArmor *personalArmor = new RuleArmor("STR_PERSONAL_ARMOR_UC", "XCOM_1.PCK");
+	personalArmor->setArmor(50, 40, 40, 30);
 
-	_unitSprites.insert(std::pair<std::string, RuleUnitSprite*>("XCOM_0",xcom_0));
-	_unitSprites.insert(std::pair<std::string, RuleUnitSprite*>("SECTOID",sectoid));
+	RuleArmor *powerSuit = new RuleArmor("STR_POWER_SUIT_UC", "XCOM_2.PCK");
+	powerSuit->setArmor(100, 80, 70, 60);
+
+	RuleArmor *flyingSuit = new RuleArmor("STR_FLYING_SUIT_UC", "XCOM_2.PCK");
+	flyingSuit->setArmor(110, 90, 80, 70);
+
+	RuleArmor *sectoidSoldierArmor = new RuleArmor("SECTOID_ARMOR0", "SECTOID.PCK");
+	flyingSuit->setArmor(4, 3, 2, 2);
+
+	_armors.insert(std::pair<std::string, RuleArmor*>("STR_NONE_UC", coveralls));
+	_armors.insert(std::pair<std::string, RuleArmor*>("STR_PERSONAL_ARMOR_UC", personalArmor));
+	_armors.insert(std::pair<std::string, RuleArmor*>("STR_POWER_SUIT_UC" ,powerSuit));
+	_armors.insert(std::pair<std::string, RuleArmor*>("STR_FLYING_SUIT_UC", flyingSuit));
+	_armors.insert(std::pair<std::string, RuleArmor*>("SECTOID_ARMOR0", sectoidSoldierArmor));
+
+	RuleSoldier *xcom = new RuleSoldier("XCOM");
+	xcom->setArmor("STR_NONE_UC");
+	UnitStats s1;
+	s1.tu = 50;
+	s1.stamina = 40;
+	s1.health = 25;
+	s1.bravery = 10;
+	s1.reactions = 30;
+	s1.firing = 40;
+	s1.throwing = 50;
+	s1.strength = 20;
+	s1.psiStrength = 0;
+	s1.psiSkill = 16;
+	s1.melee = 20;
+	UnitStats s2;
+	s2.tu = 60;
+	s2.stamina = 70;
+	s2.health = 40;
+	s2.bravery = 60;
+	s2.reactions = 60;
+	s2.firing = 70;
+	s2.throwing = 80;
+	s2.strength = 40;
+	s2.psiStrength = 100;
+	s2.psiSkill = 24;
+	s2.melee = 40;
+	xcom->setStats(s1, s2);
+	xcom->setVoxelParameters(22, 14, 3);
+
+	_soldiers.insert(std::pair<std::string, RuleSoldier*>("XCOM", xcom));
+
+	
+	RuleAlien *sectoidSoldier = new RuleAlien("SECTOID_SOLDIER", "STR_SECTOID", "STR_LIVE_SOLDIER");
+	sectoidSoldier->setArmor("SECTOID_ARMOR0");
+	s1.tu = 54;
+	s1.stamina = 90;
+	s1.health = 30;
+	s1.bravery = 80;
+	s1.reactions = 63;
+	s1.firing = 52;
+	s1.throwing = 58;
+	s1.strength = 30;
+	s1.psiStrength = 40;
+	s1.psiSkill = 0;
+	s1.melee = 76;
+	sectoidSoldier->setStats(s1);
+	sectoidSoldier->setVoxelParameters(16, 12, 2);
+
+	_aliens.insert(std::pair<std::string, RuleAlien*>("SECTOID_SOLDIER", sectoidSoldier));
 
 	// create Ufopaedia article definitions
 	int sort_key = 1;
@@ -1529,7 +1555,7 @@ SavedGame *XcomRuleset::newSave(GameDifficulty diff)
 	// Generate soldiers
 	for (int i = 0; i < 8; i++)
 	{
-		Soldier *soldier = new Soldier(&_names);
+		Soldier *soldier = new Soldier(getSoldier("XCOM"), &_names, getArmor("STR_NONE_UC"));
 		soldier->setCraft(skyranger);
 		base->getSoldiers()->push_back(soldier);
 	}

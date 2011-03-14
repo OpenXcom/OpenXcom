@@ -47,18 +47,6 @@ MapDataSet *MapData::getDataset()
 	return _dataset;
 }
 
-/// Get the 3D voxel model.
-MapModel *MapData::getModel() const
-{
-	return _model;
-}
-
-/// Set the 3D voxel model.
-void MapData::setModel(MapModel *model)
-{
-	_model = model;
-}
-
 /**
 * Get the sprite index.
 * @param frameID Animation frame 0-7
@@ -404,4 +392,17 @@ void MapData::setFuel(int value)
 {
 	_fuel = value;
 }
+
+/// Get the loft index for a certain layer.
+int MapData::getLoftID(int layer)
+{
+	return _loftID[layer];
+}
+
+/// Set the loft index for a certain layer.
+void MapData::setLoftID(int loft, int layer)
+{
+	_loftID[layer] = loft;
+}
+
 }
