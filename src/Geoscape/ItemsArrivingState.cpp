@@ -100,7 +100,7 @@ ItemsArrivingState::ItemsArrivingState(Game *game, GeoscapeState *state) : State
 
 	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); i++)
 	{
-		for (std::vector<Transfer*>::iterator j = (*i)->getTransfers()->begin(); j != (*i)->getTransfers()->end(); j++)
+		for (std::vector<Transfer*>::iterator j = (*i)->getTransfers()->begin(); j != (*i)->getTransfers()->end();)
 		{
 			if ((*j)->getHours() == 0)
 			{
@@ -109,7 +109,10 @@ ItemsArrivingState::ItemsArrivingState(Game *game, GeoscapeState *state) : State
 				_lstTransfers->addRow(3, (*j)->getName(_game->getLanguage()).c_str(), ss.str().c_str(), (*i)->getName().c_str());
 				delete *j;
 				j = (*i)->getTransfers()->erase(j);
-				j--;
+			}
+			else
+			{
+				j++;
 			}
 		}
 	}

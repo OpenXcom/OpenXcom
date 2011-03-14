@@ -27,7 +27,7 @@ namespace OpenXcom
  * @param rules Pointer to ruleset.
  * @param ammo Initial ammo.
  */
-CraftWeapon::CraftWeapon(RuleCraftWeapon *rules, int ammo) : _rules(rules), _ammo(ammo)
+CraftWeapon::CraftWeapon(RuleCraftWeapon *rules, int ammo) : _rules(rules), _ammo(ammo), _rearming(false)
 {
 }
 
@@ -45,6 +45,7 @@ CraftWeapon::~CraftWeapon()
 void CraftWeapon::load(const YAML::Node &node)
 {
 	node["ammo"] >> _ammo;
+	node["rearming"] >> _rearming;
 }
 
 /**
@@ -56,6 +57,7 @@ void CraftWeapon::save(YAML::Emitter &out) const
 	out << YAML::BeginMap;
 	out << YAML::Key << "type" << YAML::Value << _rules->getType();
 	out << YAML::Key << "ammo" << YAML::Value << _ammo;
+	out << YAML::Key << "rearming" << YAML::Value << _rearming;
 	out << YAML::EndMap;
 }
 
@@ -91,11 +93,34 @@ void CraftWeapon::setAmmo(int ammo)
 }
 
 /**
+ * Returns whether this craft weapon needs rearming.
+ * @return Rearming status.
+ */
+bool CraftWeapon::isRearming() const
+{
+	return _rearming;
+}
+
+/**
+ * Changes whether this craft weapon needs rearming
+ * (for example, in case there's no more ammo).
+ * @param rearming Rearming status.
+ */
+void CraftWeapon::setRearming(bool rearming)
+{
+	_rearming = rearming;
+}
+
+/**
  * Rearms this craft weapon's ammo.
  */
 void CraftWeapon::rearm()
 {
 	setAmmo(_ammo + _rules->getRearmRate());
+	if (_ammo == _rules->getAmmoMax())
+	{
+		_rearming = false;
+	}
 }
 
 }

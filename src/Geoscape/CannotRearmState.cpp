@@ -25,6 +25,7 @@
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
+#include "GeoscapeState.h"
 
 namespace OpenXcom
 {
@@ -36,7 +37,7 @@ namespace OpenXcom
  * @param craft Craft rearming.
  * @param base Base the craft belongs to.
  */
-CannotRearmState::CannotRearmState(Game *game, const std::wstring &ammo, const std::wstring &craft, const std::wstring &base) : State(game)
+CannotRearmState::CannotRearmState(Game *game, GeoscapeState *state, const std::wstring &ammo, const std::wstring &craft, const std::wstring &base) : State(game), _state(state)
 {
 	_screen = false;
 
@@ -44,7 +45,7 @@ CannotRearmState::CannotRearmState(Game *game, const std::wstring &ammo, const s
 	_window = new Window(this, 256, 160, 32, 20, POPUP_BOTH);
 	_btnOk = new TextButton(100, 18, 48, 150);
 	_btnOk5Secs = new TextButton(100, 18, 172, 150);
-	_txtMessage = new Text(246, 80, 37, 50);
+	_txtMessage = new Text(226, 80, 47, 50);
 	
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
@@ -62,9 +63,9 @@ CannotRearmState::CannotRearmState(Game *game, const std::wstring &ammo, const s
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&CannotRearmState::btnOkClick);
 
-	_btnOk->setColor(Palette::blockOffset(8)+8);
-	_btnOk->setText(_game->getLanguage()->getString("STR_OK_5_SECS"));
-	_btnOk->onMouseClick((ActionHandler)&CannotRearmState::btnOk5SecsClick);
+	_btnOk5Secs->setColor(Palette::blockOffset(8)+8);
+	_btnOk5Secs->setText(_game->getLanguage()->getString("STR_OK_5_SECS"));
+	_btnOk5Secs->onMouseClick((ActionHandler)&CannotRearmState::btnOk5SecsClick);
 
 	_txtMessage->setColor(Palette::blockOffset(15)-1);
 	_txtMessage->setAlign(ALIGN_CENTER);
@@ -74,9 +75,9 @@ CannotRearmState::CannotRearmState(Game *game, const std::wstring &ammo, const s
 	std::wstring s = _game->getLanguage()->getString("STR_NOT_ENOUGH");
 	s += ammo;
 	s += _game->getLanguage()->getString("STR_TO_REARM");
-	s += base;
-	s += _game->getLanguage()->getString("STR_AT");
 	s += craft;
+	s += _game->getLanguage()->getString("STR_AT_");
+	s += base;
 	_txtMessage->setText(s);
 }
 
@@ -111,6 +112,7 @@ void CannotRearmState::btnOkClick(Action *action)
  */
 void CannotRearmState::btnOk5SecsClick(Action *action)
 {
+	_state->timerReset();
 	_game->popState();
 }
 

@@ -232,7 +232,9 @@ void Craft::setDestination(Target *dest)
 int Craft::getNumWeapons() const
 {
 	if (_rules->getWeapons() == 0)
+	{
 		return 0;
+	}
 
 	int total = 0;
 
@@ -469,15 +471,15 @@ void Craft::think()
 
 			if (_damage > 0)
 			{
-				setStatus("STR_REPAIRS");
+				_status = "STR_REPAIRS";
 			}
 			else if (available != full)
 			{
-				setStatus("STR_REARMING");
+				_status = "STR_REARMING";
 			}
 			else
 			{
-				setStatus("STR_REFUELLING");
+				_status = "STR_REFUELLING";
 			}
 			setSpeed(0);
 			setDestination(0);
@@ -544,28 +546,32 @@ void Craft::refuel()
  * Rearms the craft's weapons by adding ammo every hour
  * while it's docked in the base.
  */
-void Craft::rearm()
+std::string Craft::rearm()
 {
-	int available = 0, full = 0;
-	for (std::vector<CraftWeapon*>::iterator i = _weapons.begin(); i != _weapons.end(); i++)
+	std::string ammo = "";
+	for (std::vector<CraftWeapon*>::iterator i = _weapons.begin(); ; i++)
 	{
-		if ((*i) == 0)
-			continue;
-		available++;
-		if ((*i)->getAmmo() >= (*i)->getRules()->getAmmoMax())
+		if (i == _weapons.end())
 		{
-			full++;
+			_status = "STR_REFUELLING";
+			break;
 		}
-		else
+		if (*i != 0 && (*i)->isRearming())
 		{
-			(*i)->rearm();
-			_base->getItems()->removeItem((*i)->getRules()->getClipItem());
+			if (_base->getItems()->getItem((*i)->getRules()->getClipItem()) > 0)
+			{
+				(*i)->rearm();
+				_base->getItems()->removeItem((*i)->getRules()->getClipItem());
+				break;
+			}
+			else
+			{
+				ammo = (*i)->getRules()->getClipItem();
+				(*i)->setRearming(false);
+			}
 		}
 	}
-	if (full == available)
-	{
-		_status = "STR_REFUELLING";
-	}
+	return ammo;
 }
 
 /**

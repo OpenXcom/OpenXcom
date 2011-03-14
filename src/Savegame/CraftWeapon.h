@@ -37,6 +37,7 @@ class CraftWeapon
 private:
 	RuleCraftWeapon *_rules;
 	int _ammo;
+	bool _rearming;
 public:
 	/// Creates a craft weapon of the specified type.
 	CraftWeapon(RuleCraftWeapon *rules, int ammo);
@@ -48,10 +49,14 @@ public:
 	void save(YAML::Emitter& out) const;
 	/// Gets the craft weapon's ruleset.
 	RuleCraftWeapon *const getRules() const;
-	/// Gets the craft weapon's ammo
+	/// Gets the craft weapon's ammo.
 	int getAmmo() const;
 	/// Sets the craft weapon's ammo.
 	void setAmmo(int ammo);
+	/// Gets the craft weapon's rearming status.
+	bool isRearming() const;
+	/// Sets the craft weapon's rearming status
+	void setRearming(bool rearming);
 	/// Rearms the craft weapon.
 	void rearm();
 };

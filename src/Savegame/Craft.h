@@ -124,7 +124,7 @@ public:
 	/// Refuels the craft.
 	void refuel();
 	/// Rearms the craft.
-	void rearm();
+	std::string rearm();
 	/// Sets the craft's battlescape status.
 	void setInBattlescape(bool inbattle);
 	/// Gets if the craft is in battlescape.

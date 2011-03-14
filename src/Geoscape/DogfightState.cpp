@@ -362,7 +362,7 @@ void DogfightState::move()
 			wTimer = _w2Timer;
 		}
 
-		for (std::vector<int>::iterator d = wDist->begin(); d != wDist->end(); d++)
+		for (std::vector<int>::iterator d = wDist->begin(); d != wDist->end();)
 		{
 			// Update weapons
 			(*d) += 8;
@@ -380,7 +380,10 @@ void DogfightState::move()
 					_game->getResourcePack()->getSoundSet("GEO.CAT")->getSound(12)->play();
 				}
 				d = wDist->erase(d);
-				d--;
+			}
+			else
+			{
+				d++;
 			}
 		}
 
