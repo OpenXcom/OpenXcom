@@ -93,17 +93,17 @@ void Soldier::load(const YAML::Node &node)
 	std::string name;
 	node["name"] >> name;
 	_name = Language::utf8ToWstr(name);
-	node["tu"] >> _initialStats.tu;
-	node["stamina"] >> _initialStats.stamina;
-	node["health"] >> _initialStats.health;
-	node["bravery"] >> _initialStats.bravery;
-	node["reactions"] >> _initialStats.reactions;
-	node["firing"] >> _initialStats.firing;
-	node["throwing"] >> _initialStats.throwing;
-	node["strength"] >> _initialStats.strength;
-	node["psiStrength"] >> _initialStats.psiStrength;
-	node["psiSkill"] >> _initialStats.psiSkill;
-	node["melee"] >> _initialStats.melee;
+	node["tu"] >> _currentStats.tu;
+	node["stamina"] >> _currentStats.stamina;
+	node["health"] >> _currentStats.health;
+	node["bravery"] >> _currentStats.bravery;
+	node["reactions"] >> _currentStats.reactions;
+	node["firing"] >> _currentStats.firing;
+	node["throwing"] >> _currentStats.throwing;
+	node["strength"] >> _currentStats.strength;
+	node["psiStrength"] >> _currentStats.psiStrength;
+	node["psiSkill"] >> _currentStats.psiSkill;
+	node["melee"] >> _currentStats.melee;
 	node["rank"] >> a;
 	_rank = (SoldierRank)a;
 	node["gender"] >> a;
@@ -229,7 +229,7 @@ int Soldier::getRankSprite() const
  */
 int Soldier::getTimeUnits() const
 {
-	return _initialStats.tu;
+	return _currentStats.tu;
 }
 
 /**
@@ -238,7 +238,7 @@ int Soldier::getTimeUnits() const
  */
 int Soldier::getStamina() const
 {
-	return _initialStats.stamina;
+	return _currentStats.stamina;
 }
 
 /**
@@ -247,7 +247,7 @@ int Soldier::getStamina() const
  */
 int Soldier::getHealth() const
 {
-	return _initialStats.health;
+	return _currentStats.health;
 }
 
 /**
@@ -256,7 +256,7 @@ int Soldier::getHealth() const
  */
 int Soldier::getBravery() const
 {
-	return _initialStats.bravery;
+	return _currentStats.bravery;
 }
 
 /**
@@ -265,7 +265,7 @@ int Soldier::getBravery() const
  */
 int Soldier::getReactions() const
 {
-	return _initialStats.reactions;
+	return _currentStats.reactions;
 }
 
 /**
@@ -274,7 +274,7 @@ int Soldier::getReactions() const
  */
 int Soldier::getFiringAccuracy() const
 {
-	return _initialStats.firing;
+	return _currentStats.firing;
 }
 
 /**
@@ -283,7 +283,7 @@ int Soldier::getFiringAccuracy() const
  */
 int Soldier::getThrowingAccuracy() const
 {
-	return _initialStats.throwing;
+	return _currentStats.throwing;
 }
 
 /**
@@ -292,7 +292,7 @@ int Soldier::getThrowingAccuracy() const
  */
 int Soldier::getStrength() const
 {
-	return _initialStats.strength;
+	return _currentStats.strength;
 }
 
 /**
@@ -320,6 +320,28 @@ int Soldier::getKills() const
 SoldierGender Soldier::getGender() const
 {
 	return _gender;
+}
+
+/// Gets soldier rules.
+RuleSoldier *Soldier::getRules() const
+{
+	return _rules;
+}
+
+/// 
+int Soldier::getStandHeight() const
+{
+	return _rules->getStandHeight();
+}
+/// 
+int Soldier::getKneelHeight() const
+{
+	return _rules->getKneelHeight();
+}
+/// 
+int Soldier::gotLoftemps() const
+{
+	return _rules->gotLoftemps();
 }
 
 }

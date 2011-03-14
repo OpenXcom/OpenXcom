@@ -29,6 +29,7 @@
 #include "../Battlescape/Pathfinding.h"
 #include "../Battlescape/TerrainModifier.h"
 #include "../Battlescape/Position.h"
+#include "../Resource/ResourcePack.h"
 
 namespace OpenXcom
 {
@@ -200,8 +201,12 @@ void SavedBattleGame::initMap(int width, int length, int height)
 	_length = length;
 	_height = height;
 	_tiles = new Tile*[_height * _length * _width];
+}
+
+void SavedBattleGame::initUtilities(ResourcePack *res)
+{
 	_pathfinding = new Pathfinding(this);
-	_terrainModifier = new TerrainModifier(this);
+	_terrainModifier = new TerrainModifier(this, res->getVoxelData());
 }
 
 /** 

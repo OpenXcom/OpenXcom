@@ -22,6 +22,7 @@
 #include <vector>
 #include "Position.h"
 #include "../Ruleset/MapData.h"
+#include "SDL.h"
 
 namespace OpenXcom
 {
@@ -38,6 +39,7 @@ class TerrainModifier
 {
 private:
 	SavedBattleGame *_save;
+	std::vector<Uint16> *_voxelData;
 	void addLight(const Position &center, int power, int layer);
 	int blockage(Tile *tile, const int part, ItemDamageType type);
 	int horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageType type);
@@ -46,7 +48,7 @@ private:
 	int voxelCheck(const Position& voxel);
 public:
 	/// Creates a new TerrainModifier class.
-	TerrainModifier(SavedBattleGame *save);
+	TerrainModifier(SavedBattleGame *save, std::vector<Uint16> *voxelData);
 	/// Cleans up the TerrainModifier.
 	~TerrainModifier();
 	/// Calculate sun shading of the whole map.

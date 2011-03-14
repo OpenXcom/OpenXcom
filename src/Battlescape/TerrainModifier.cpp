@@ -23,9 +23,13 @@
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
 #include "../Savegame/BattleUnit.h"
+#include "../Savegame/Soldier.h"
+#include "../Savegame/Alien.h"
 #include "../Engine/RNG.h"
 #include "../Ruleset/MapDataSet.h"
 #include "../Ruleset/MapData.h"
+#include "../Ruleset/RuleAlien.h"
+#include "../Ruleset/RuleSoldier.h"
 #include "../Resource/ResourcePack.h"
 
 namespace OpenXcom
@@ -35,7 +39,7 @@ namespace OpenXcom
  * Sets up a TerrainModifier.
  * @param save pointer to SavedBattleGame object.
  */
-TerrainModifier::TerrainModifier(SavedBattleGame *save) : _save(save)
+TerrainModifier::TerrainModifier(SavedBattleGame *save, std::vector<Uint16> *voxelData) : _save(save), _voxelData(voxelData)
 {
 
 }
@@ -373,10 +377,16 @@ void TerrainModifier::explode(const Position &center, int power, ItemDamageType 
 	if (type == DT_AP)
 	{
 		int part = voxelCheck(center);
-		if (part >= 0 && part <= 4)
+		if (part >= 0 && part <= 3)
 		{
-			// todo: check armor against power...
-			_save->getTile(Position(center.x/16, center.y/16, center.z/24))->destroy(part);
+			// power 25% to 75%
+			_save->getTile(Position(center.x/16, center.y/16, center.z/24))->damage(part, (int)(RNG::generate(power/4, (power*3)/4)));
+		}
+		else if (part == 4)
+		{
+			// power 0 - 200%
+			_save->getTile(Position(center.x/16, center.y/16, center.z/24))->getUnit()->damage(
+				Position(center.x%16, center.y%16, center.z%24), RNG::generate(0, power*2));
 		}
 	}
 	else
@@ -390,7 +400,6 @@ void TerrainModifier::explode(const Position &center, int power, ItemDamageType 
 		{
 			power /= 2;
 		}
-
 
 		// raytrace every 3 degrees makes sure we cover all tiles in a circle.
 		for (double te = 0; te <= 360; te += 3)
@@ -426,6 +435,10 @@ void TerrainModifier::explode(const Position &center, int power, ItemDamageType 
 					{
 						// explosives do 1/2 damage to terrain and 1/2 up to 3/2 random damage to units
 						dest->setExplosive(power_ / 2);
+						// power 50 - 150%
+						if (dest->getUnit())
+							dest->getUnit()->damage(Position(0, 0, 0), (int)(RNG::generate(power_/2.0, power_*1.5)));
+
 						// TODO: destroy floors above
 				
 					}
@@ -724,24 +737,38 @@ int TerrainModifier::calculateLine(const Position& origin, const Position& targe
  */
 int TerrainModifier::voxelCheck(const Position& voxel)
 {
-	//todo add unit models
+
+	Tile *tile = _save->getTile(Position(voxel.x/16, voxel.y/16, voxel.z/24));
+	// check if we are not out of the map
+	if (tile == 0)
+	{
+		return 5;
+	}
+
+	BattleUnit *unit = tile->getUnit();
+	if (unit != 0)
+	{
+		if ((voxel.z%24) < (unit->isKneeled()?unit->getUnit()->getKneelHeight():unit->getUnit()->getStandHeight()))
+		{
+			int x = 15 - voxel.x%16;
+			int y = 15 - voxel.y%16;
+			int idx = (unit->getUnit()->gotLoftemps() * 16) + y;
+			if ((_voxelData->at(idx) & (1 << x))==(1 << x))
+			{
+				return 4;
+			}
+		}
+	}
 
 	for (int i=0; i< 4; i++)
 	{
-		Tile *tile = _save->getTile(Position(voxel.x/16, voxel.y/16, voxel.z/24));
-		// check if we are not out of the map
-		if (tile == 0)
-		{
-			return 5;
-		}
 		MapData *mp = tile->getMapData(i);
 		if (mp != 0)
 		{
 			int x = 15 - voxel.x%16;
 			int y = 15 - voxel.y%16;
 			int idx = (mp->getLoftID((voxel.z%24)/2)*16) + y;
-			Uint16 voxels = mp->getDataset()->getResourcePack()->getVoxelData()->at(idx);
-			if ((voxels & (1 << x))==(1 << x))
+			if ((_voxelData->at(idx) & (1 << x))==(1 << x))
 			{
 				return i;
 			}

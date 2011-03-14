@@ -120,6 +120,8 @@ public:
 	int getHealth() const;
 	/// Gets the unit's bravery.
 	int getMorale() const;
+	/// Damage
+	void damage(Position position, int power);
 
 
 };

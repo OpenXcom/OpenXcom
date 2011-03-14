@@ -100,7 +100,14 @@ public:
 	SoldierGender getGender() const;
 	/// Gets a string version of the soldier's armor.
 	std::string getArmor() const;
-
+	/// Gets soldier rules.
+	RuleSoldier *getRules() const;
+	/// 
+	int getStandHeight() const;
+	/// 
+	int getKneelHeight() const;
+	/// 
+	int gotLoftemps() const;
 };
 
 }

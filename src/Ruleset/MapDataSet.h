@@ -44,7 +44,8 @@ private:
 	std::vector<MapData*> _objects;
 	SurfaceSet *_surfaceSet;
 	bool _loaded;
-	ResourcePack *_res;
+	static MapData *_blankTile;
+	static MapData *_scourgedTile;
 public:
 	MapDataSet(std::string name, int size);
 	~MapDataSet();
@@ -62,8 +63,9 @@ public:
 	void load(ResourcePack *res);
 	///	Unload to free memory.
 	void unload();
-	/// Get resourcepack
-	ResourcePack *getResourcePack();
+	/// 
+	static MapData *getBlankFloorTile();
+	static MapData *getScourgedEarthTile();
 };
 
 }

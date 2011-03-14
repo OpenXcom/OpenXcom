@@ -319,6 +319,21 @@ void Tile::destroy(int part)
 			setMapData(dead, dead->getObjectType());
 		}
 	}
+	/* check if the floor on the lowest level is gone */
+	if (part == O_FLOOR && getPosition().z == 0 && _objects[O_FLOOR] == 0)
+	{
+		/* replace with scourched earth */
+		setMapData(MapDataSet::getScourgedEarthTile(), O_FLOOR);
+	}
+
+
+}
+
+/* damage terrain  - check against armor*/
+void Tile::damage(int part, int power)
+{
+	if (power >= _objects[part]->getArmor())
+		destroy(part);
 }
 
 

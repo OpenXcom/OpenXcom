@@ -99,6 +99,8 @@ public:
 	int getShade();
 	/// Destroy a tile part.
 	void destroy(int part);
+	/// Damage a tile part.
+	void damage(int part, int power);
 	/// Set a "virtual" explosive on this tile, to detonate later.
 	void setExplosive(int power);
 	/// Apply the explosive power to the tile parts.

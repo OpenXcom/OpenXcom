@@ -413,8 +413,8 @@ void Map::drawTerrain(Surface *surface)
 									{
 										Position voxelPos = _projectile->getPosition(1-i);
 										voxelPos.z = 0;
-										if (voxelPos.x/16 == mapPosition.x &&
-											voxelPos.y/16 == mapPosition.y)
+										if (voxelPos.x / 16 == mapPosition.x &&
+											voxelPos.y / 16 == mapPosition.y)
 										{
 											convertVoxelToScreen(voxelPos, &bulletPositionScreen);
 											_bulletShadow[_projectile->getParticle(i)]->setX(bulletPositionScreen.x);
@@ -430,8 +430,8 @@ void Map::drawTerrain(Surface *surface)
 								if (_projectile->getParticle(i) != 0xFF)
 								{
 									Position voxelPos = _projectile->getPosition(1-i);
-									if (voxelPos.x/16 == mapPosition.x &&
-										voxelPos.y/16 == mapPosition.y )
+									if (voxelPos.x / 16 == mapPosition.x &&
+										voxelPos.y / 16 == mapPosition.y )
 									{
 										convertVoxelToScreen(voxelPos, &bulletPositionScreen);
 										_bullet[_projectile->getParticle(i)]->setX(bulletPositionScreen.x);
@@ -449,8 +449,8 @@ void Map::drawTerrain(Surface *surface)
 						Position voxelPos = (*i)->getPosition();
 						convertVoxelToScreen(voxelPos, &bulletPositionScreen);
 						frame = _res->getSurfaceSet("SMOKE.PCK")->getFrame((*i)->getCurrentFrame());
-						frame->setX(bulletPositionScreen.x - (_spriteWidth / 2));
-						frame->setY(bulletPositionScreen.y - (_spriteHeight / 2));
+						frame->setX(bulletPositionScreen.x - 18);
+						frame->setY(bulletPositionScreen.y - 18);
 						frame->blit(surface);
 					}
 
@@ -990,6 +990,7 @@ bool Map::cacheTileSprites(int i)
 
 		/* draw a floor object on the cache (if any) */
 		object = tile->getMapData(O_FLOOR);
+
 		if (object)
 		{
 			if (_tileFloorCache[i] == 0)

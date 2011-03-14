@@ -27,13 +27,15 @@
 namespace OpenXcom
 {
 
+MapData *MapDataSet::_blankTile = 0;
+MapData *MapDataSet::_scourgedTile = 0;
+
 /**
 * MapDataSet construction.
 */
 MapDataSet::MapDataSet(std::string name, int size):_name(name), _size(size), _objects(), _loaded(false)
 {
 }
-
 
 /**
 * MapDataSet DESTRUCTION.
@@ -88,7 +90,8 @@ void MapDataSet::load(ResourcePack *res)
 	// prevents loading twice
 	if (_loaded) return;
 	_loaded = true;
-	_res = res;
+
+	int objNumber = 0;
 
 	// the struct below helps to read the xcom file format
 	struct MCD
@@ -180,7 +183,18 @@ void MapDataSet::load(ResourcePack *res)
 			int loft = (int)mcd.LOFT[layer];
 			to->setLoftID(loft, layer);
 		}
+
+		// store the 2 tiles of blanks in a static - so they are accesible everywhere
+		if (_name.compare("BLANKS") == 0)
+		{
+			if (objNumber == 0)
+				MapDataSet::_blankTile = to;
+			else if (objNumber == 1)
+				MapDataSet::_scourgedTile = to;
+		}
+		objNumber++;
 	}
+
 
 	if (!mapFile.eof())
 	{
@@ -239,9 +253,14 @@ void MapDataSet::loadLOFTEMPS(const std::string &filename, std::vector<Uint16> *
 	mapFile.close();
 }
 
-ResourcePack *MapDataSet::getResourcePack()
+MapData *MapDataSet::getBlankFloorTile()
 {
-	return _res;
+	return MapDataSet::_blankTile;
+}
+
+MapData *MapDataSet::getScourgedEarthTile()
+{
+	return MapDataSet::_scourgedTile;
 }
 
 }

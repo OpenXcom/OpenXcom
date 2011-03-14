@@ -126,5 +126,25 @@ int Alien::getStrength() const
 	return _rules->getStats().strength;
 }
 
+RuleAlien *Alien::getRules() const
+{
+	return _rules;
+}
+
+/// 
+int Alien::getStandHeight() const
+{
+	return _rules->getStandHeight();
+}
+/// 
+int Alien::getKneelHeight() const
+{
+	return _rules->getKneelHeight();
+}
+/// 
+int Alien::gotLoftemps() const
+{
+	return _rules->gotLoftemps();
+}
 
 }

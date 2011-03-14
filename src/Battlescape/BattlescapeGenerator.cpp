@@ -188,6 +188,7 @@ void BattlescapeGenerator::run()
 
 	// creates the tile objects
 	_save->initMap(_width, _length, _height);
+	_save->initUtilities(_res);
 
 	// lets generate the map now and store it inside the tile objects
 	generateMap();
@@ -286,7 +287,6 @@ void BattlescapeGenerator::addAlien(RuleAlien *rules, RuleArmor *armor, NodeRank
 	Node *node;
 	bool bFound = false;
 	unit->setId(_unitCount++);
-
 
 	// find a place to spawn, going from highest priority to lowest
 	// some randomness is added

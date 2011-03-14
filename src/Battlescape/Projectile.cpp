@@ -30,6 +30,7 @@
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/Soldier.h"
+#include "../Savegame/Alien.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
 #include "../Engine/RNG.h"
@@ -80,16 +81,24 @@ Projectile::~Projectile()
 bool Projectile::calculateTrajectory()
 {
 	Position originVoxel, targetVoxel;
-	// First determine the origin voxel. This depends on soldier direction, stance, terrain level...
-	// For testing we some voxel in the middle.
-	originVoxel = Position(_origin.x*16 + 8, _origin.y*16 + 8, _origin.z*24 + 19);
+	int direction;
+	int dirYshift[8] = {1, 1, 8, 15, 15, 15, 8, 1 };
+	int dirXshift[8] = {8, 14, 15, 15, 8, 1, 1, 1 };
+	// large units : x2
+
+	originVoxel = Position(_origin.x*16, _origin.y*16, _origin.z*24);
 	originVoxel.z += -_save->getTile(_origin)->getTerrainLevel();
+	BattleUnit *bu = _save->getTile(_origin)->getUnit();
+	originVoxel.z += bu->isKneeled()?bu->getUnit()->getKneelHeight():bu->getUnit()->getStandHeight();
 	if (originVoxel.z >= (_origin.z + 1)*24)
 	{
 		_origin.z++;
 	}
+	direction = bu->getDirection();
+	originVoxel.x += dirXshift[direction];
+	originVoxel.y += 15-dirYshift[direction];
 
-	//  determine the target voxel.
+	// determine the target voxel.
 	// aim at the center of the unit, the object, the walls or the floor (in that priority)
 	// if there is no LOF to the center, try elsewhere (more outward).
 	// Store this target voxel.

@@ -660,6 +660,7 @@ void BattlescapeState::popState()
 		// init the next state in queue
 		_states.front()->init();
 	}
+	updateSoldierInfo(_battleGame->getSelectedUnit());
 }
 
 void BattlescapeState::setStateInterval(Uint32 interval)

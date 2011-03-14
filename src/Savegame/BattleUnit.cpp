@@ -396,4 +396,11 @@ int BattleUnit::getMorale() const
 	return _morale;
 }
 
+void BattleUnit::damage(Position position, int power)
+{
+	_health -= power;
+	if (_health < 0)
+		_health = 0;
+}
+
 }

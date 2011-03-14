@@ -78,6 +78,8 @@ public:
 	void save(YAML::Emitter& out) const;
 	/// Set the dimensions of the map and initializes it.
 	void initMap(int width, int length, int height);
+	/// initiliases pathfinding and terrainmodifier
+	void initUtilities(ResourcePack *res);
 	/// Gets the game's mapdatafiles.
 	std::vector<MapDataSet*> *getMapDataSets();
 	/// Set the mission type.

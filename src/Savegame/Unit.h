@@ -68,6 +68,12 @@ public:
 	virtual int getThrowingAccuracy() const = 0;
 	/// Gets the unit's strength.
 	virtual int getStrength() const = 0;
+	/// 
+	virtual int getStandHeight() const = 0;
+	/// 
+	virtual int getKneelHeight() const = 0;
+	/// 
+	virtual int gotLoftemps() const = 0;
 
 };
 
