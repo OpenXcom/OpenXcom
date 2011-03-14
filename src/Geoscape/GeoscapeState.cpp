@@ -63,6 +63,7 @@
 #include "MultipleTargetsState.h"
 #include "ConfirmLandingState.h"
 #include "ItemsArrivingState.h"
+#include "CannotRearmState.h"
 #include "../Battlescape/BattlescapeState.h"
 #include "../Battlescape/BattlescapeGenerator.h"
 #include "../Ufopaedia/Ufopaedia.h"
@@ -513,24 +514,30 @@ void GeoscapeState::time5Seconds()
 	}
 
 	// Clean up dead UFOs
-	for (std::vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end(); i++)
+	for (std::vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end();)
 	{
 		if ((*i)->reachedDestination() || (*i)->getDaysCrashed() > 4)
 		{
 			delete *i;
 			i = _game->getSavedGame()->getUfos()->erase(i);
-			i--;
+		}
+		else
+		{
+			i++;
 		}
 	}
 
 	// Clean up unused waypoints
-	for (std::vector<Waypoint*>::iterator i = _game->getSavedGame()->getWaypoints()->begin(); i != _game->getSavedGame()->getWaypoints()->end(); i++)
+	for (std::vector<Waypoint*>::iterator i = _game->getSavedGame()->getWaypoints()->begin(); i != _game->getSavedGame()->getWaypoints()->end();)
 	{
 		if ((*i)->getFollowers()->empty())
 		{
 			delete *i;
 			i = _game->getSavedGame()->getWaypoints()->erase(i);
-			i--;
+		}
+		else
+		{
+			i++;
 		}
 	}
 }
@@ -680,7 +687,11 @@ void GeoscapeState::time1Hour()
 			}
 			else if ((*j)->getStatus() == "STR_REARMING")
 			{
-				(*j)->rearm();
+				std::string s = (*j)->rearm();
+				if (s != "")
+				{
+					popup(new CannotRearmState(_game, this, _game->getLanguage()->getString(s), (*j)->getName(_game->getLanguage()), (*i)->getName()));
+				}
 			}
 		}
 	}

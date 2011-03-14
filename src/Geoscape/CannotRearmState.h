@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_PRODUCTIONCOMPLETESTATE_H
-#define OPENXCOM_PRODUCTIONCOMPLETESTATE_H
+#ifndef OPENXCOM_CANNOTREARMSTATE_H
+#define OPENXCOM_CANNOTREARMSTATE_H
 
 #include <string>
 #include "../Engine/State.h"
@@ -28,6 +28,7 @@ namespace OpenXcom
 class TextButton;
 class Window;
 class Text;
+class GeoscapeState;
 
 /**
  * Window used to notify the player when
@@ -36,12 +37,13 @@ class Text;
 class CannotRearmState : public State
 {
 private:
+	GeoscapeState *_state;
 	TextButton *_btnOk, *_btnOk5Secs;
 	Window *_window;
 	Text *_txtMessage;
 public:
 	/// Creates the Cannot Rearm state.
-	CannotRearmState(Game *game, const std::wstring &ammo, const std::wstring &craft, const std::wstring &base);
+	CannotRearmState(Game *game, GeoscapeState *state, const std::wstring &ammo, const std::wstring &craft, const std::wstring &base);
 	/// Cleans up the Cannot Rearm state.
 	~CannotRearmState();
 	/// Updates the palette.

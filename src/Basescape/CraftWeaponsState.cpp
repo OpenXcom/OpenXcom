@@ -103,24 +103,21 @@ CraftWeaponsState::CraftWeaponsState(Game *game, Base *base, unsigned int craft,
 	_lstWeapons->setBackground(_window);
 	_lstWeapons->setMargin(8);
 
-	_lstWeapons->addRow(3, _game->getLanguage()->getString("STR_NONE_UC").c_str(), "", "");
-
+	_lstWeapons->addRow(1, _game->getLanguage()->getString("STR_NONE_UC").c_str());
 	_weapons.push_back(0);
-	_weapons.push_back(_game->getRuleset()->getCraftWeapon("STR_STINGRAY"));
-	_weapons.push_back(_game->getRuleset()->getCraftWeapon("STR_AVALANCHE"));
-	_weapons.push_back(_game->getRuleset()->getCraftWeapon("STR_CANNON_UC"));
 
-	for (std::vector<RuleCraftWeapon*>::iterator i = _weapons.begin(); i != _weapons.end(); i++)
+	std::string s[] = {"STR_STINGRAY", "STR_AVALANCHE", "STR_CANNON_UC"};
+
+	for (int i = 0; i < 3; i++)
 	{
-		if (*i == 0)
-			continue;
-
-		if (_base->getItems()->getItem((*i)->getLauncherItem()) > 0)
+		RuleCraftWeapon *w = _game->getRuleset()->getCraftWeapon(s[i]);
+		if (_base->getItems()->getItem(w->getLauncherItem()) > 0)
 		{
+			_weapons.push_back(w);
 			std::wstringstream ss, ss2;
-			ss << _base->getItems()->getItem((*i)->getLauncherItem());
-			ss2 << _base->getItems()->getItem((*i)->getClipItem());
-			_lstWeapons->addRow(3, _game->getLanguage()->getString((*i)->getType()).c_str(), ss.str().c_str(), ss2.str().c_str());
+			ss << _base->getItems()->getItem(w->getLauncherItem());
+			ss2 << _base->getItems()->getItem(w->getClipItem());
+			_lstWeapons->addRow(3, _game->getLanguage()->getString(w->getType()).c_str(), ss.str().c_str(), ss2.str().c_str());
 		}
 	}
 	_lstWeapons->onMouseClick((ActionHandler)&CraftWeaponsState::lstWeaponsClick);
@@ -164,6 +161,7 @@ void CraftWeaponsState::lstWeaponsClick(Action *action)
 	if (_weapons[_lstWeapons->getSelectedRow()] != 0)
 	{
 		CraftWeapon *sel = new CraftWeapon(_weapons[_lstWeapons->getSelectedRow()], 0);
+		sel->setRearming(true);
 		_base->getItems()->removeItem(sel->getRules()->getLauncherItem());
 		_base->getCrafts()->at(_craft)->getWeapons()->at(_weapon) = sel;
 		if (_base->getCrafts()->at(_craft)->getStatus() == "STR_READY")
