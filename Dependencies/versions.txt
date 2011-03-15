@@ -1,0 +1,4 @@
+SDL-1.2.14
+SDL_mixer-1.2.11
+SDL_gfx-2.0.22
+yaml-cpp-0.2.5

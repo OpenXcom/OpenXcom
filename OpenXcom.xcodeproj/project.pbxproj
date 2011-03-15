@@ -1,0 +1,344 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		6B0F936012A18B0700CAE385 /* SDL.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 6B18148A12A13941008CB2DA /* SDL.framework */; };
+		6B0F936112A18B0900CAE385 /* SDL_mixer.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 6B18148C12A13A23008CB2DA /* SDL_mixer.framework */; };
+		6B0F936A12A18DC100CAE385 /* SDL_gfx.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B0F936912A18DC100CAE385 /* SDL_gfx.framework */; };
+		6B0F936B12A18DCC00CAE385 /* SDL_gfx.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 6B0F936912A18DC100CAE385 /* SDL_gfx.framework */; };
+		6B18148B12A13941008CB2DA /* SDL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B18148A12A13941008CB2DA /* SDL.framework */; };
+		6B18148D12A13A23008CB2DA /* SDL_mixer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B18148C12A13A23008CB2DA /* SDL_mixer.framework */; };
+		6B77965612C4A9D400C4078A /* DATA in Resources */ = {isa = PBXBuildFile; fileRef = 6B77935A12C4A9D300C4078A /* DATA */; };
+		6BA0330812D6025D00D54C2A /* YAML.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BA0330712D6025D00D54C2A /* YAML.framework */; };
+		6BA0330912D6026E00D54C2A /* YAML.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 6BA0330712D6025D00D54C2A /* YAML.framework */; };
+		6BD38C4612A06758001A550C /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BD38C4512A06758001A550C /* Cocoa.framework */; };
+		6BD38C4B12A06758001A550C /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6BD38C4912A06758001A550C /* InfoPlist.strings */; };
+		6BD38C5012A06758001A550C /* SDLMain.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6BD38C4E12A06758001A550C /* SDLMain.xib */; };
+		6BD38C5312A06758001A550C /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 6BD38C5112A06758001A550C /* Credits.rtf */; };
+		6BD38C5E12A06A15001A550C /* SDLMain.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BD38C5D12A06A15001A550C /* SDLMain.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		6B0F935412A1877B00CAE385 /* Copy Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				6BA0330912D6026E00D54C2A /* YAML.framework in Copy Frameworks */,
+				6B0F936012A18B0700CAE385 /* SDL.framework in Copy Frameworks */,
+				6B0F936B12A18DCC00CAE385 /* SDL_gfx.framework in Copy Frameworks */,
+				6B0F936112A18B0900CAE385 /* SDL_mixer.framework in Copy Frameworks */,
+			);
+			name = "Copy Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		6B0F936912A18DC100CAE385 /* SDL_gfx.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL_gfx.framework; path = Dependencies/SDL_gfx.framework; sourceTree = "<group>"; };
+		6B18148A12A13941008CB2DA /* SDL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL.framework; path = Dependencies/SDL.framework; sourceTree = "<group>"; };
+		6B18148C12A13A23008CB2DA /* SDL_mixer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL_mixer.framework; path = Dependencies/SDL_mixer.framework; sourceTree = "<group>"; };
+		6B77935A12C4A9D300C4078A /* DATA */ = {isa = PBXFileReference; lastKnownFileType = folder; name = DATA; path = trunk/bin/DATA; sourceTree = "<group>"; };
+		6BA0330712D6025D00D54C2A /* YAML.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = YAML.framework; path = Dependencies/YAML.framework; sourceTree = "<group>"; };
+		6BD38C4212A06757001A550C /* OpenXcom.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpenXcom.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6BD38C4512A06758001A550C /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		6BD38C4712A06758001A550C /* OpenXcom-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "OpenXcom-Info.plist"; sourceTree = "<group>"; };
+		6BD38C4812A06758001A550C /* OpenXcom_Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpenXcom_Prefix.pch; sourceTree = "<group>"; };
+		6BD38C4A12A06758001A550C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		6BD38C4F12A06758001A550C /* SDLMain.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = SDLMain.xib; path = en.lproj/SDLMain.xib; sourceTree = "<group>"; };
+		6BD38C5212A06758001A550C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
+		6BD38C5C12A06A15001A550C /* SDLMain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDLMain.h; sourceTree = "<group>"; };
+		6BD38C5D12A06A15001A550C /* SDLMain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDLMain.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		6BD38C3F12A06757001A550C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6BD38C4612A06758001A550C /* Cocoa.framework in Frameworks */,
+				6BA0330812D6025D00D54C2A /* YAML.framework in Frameworks */,
+				6B18148B12A13941008CB2DA /* SDL.framework in Frameworks */,
+				6B0F936A12A18DC100CAE385 /* SDL_gfx.framework in Frameworks */,
+				6B18148D12A13A23008CB2DA /* SDL_mixer.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		6BD38C3312A06757001A550C = {
+			isa = PBXGroup;
+			children = (
+				6BD38C3A12A06757001A550C /* Classes */,
+				6BD38C3B12A06757001A550C /* Other Sources */,
+				6BD38C3C12A06757001A550C /* Resources */,
+				6BD38C3D12A06757001A550C /* Frameworks */,
+				6BD38C4312A06757001A550C /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		6BD38C3A12A06757001A550C /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				6BD38C5C12A06A15001A550C /* SDLMain.h */,
+				6BD38C5D12A06A15001A550C /* SDLMain.m */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		6BD38C3B12A06757001A550C /* Other Sources */ = {
+			isa = PBXGroup;
+			children = (
+				6BD38C4812A06758001A550C /* OpenXcom_Prefix.pch */,
+			);
+			name = "Other Sources";
+			sourceTree = "<group>";
+		};
+		6BD38C3C12A06757001A550C /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				6B77935A12C4A9D300C4078A /* DATA */,
+				6BD38C4712A06758001A550C /* OpenXcom-Info.plist */,
+				6BD38C4912A06758001A550C /* InfoPlist.strings */,
+				6BD38C4E12A06758001A550C /* SDLMain.xib */,
+				6BD38C5112A06758001A550C /* Credits.rtf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		6BD38C3D12A06757001A550C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				6BA0330712D6025D00D54C2A /* YAML.framework */,
+				6B0F936912A18DC100CAE385 /* SDL_gfx.framework */,
+				6BD38C4512A06758001A550C /* Cocoa.framework */,
+				6B18148A12A13941008CB2DA /* SDL.framework */,
+				6B18148C12A13A23008CB2DA /* SDL_mixer.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		6BD38C4312A06757001A550C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6BD38C4212A06757001A550C /* OpenXcom.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		6BD38C4112A06757001A550C /* OpenXcom */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6BD38C5912A06758001A550C /* Build configuration list for PBXNativeTarget "OpenXcom" */;
+			buildPhases = (
+				6BD38C4012A06757001A550C /* Resources */,
+				6BD38C3E12A06757001A550C /* Sources */,
+				6BD38C3F12A06757001A550C /* Frameworks */,
+				6B0F935412A1877B00CAE385 /* Copy Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = OpenXcom;
+			productName = OpenXcom;
+			productReference = 6BD38C4212A06757001A550C /* OpenXcom.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		6BD38C3512A06757001A550C /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 6BD38C3812A06757001A550C /* Build configuration list for PBXProject "OpenXcom" */;
+			compatibilityVersion = "Xcode 3.2";
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 6BD38C3312A06757001A550C;
+			productRefGroup = 6BD38C4312A06757001A550C /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				6BD38C4112A06757001A550C /* OpenXcom */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		6BD38C4012A06757001A550C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6BD38C4B12A06758001A550C /* InfoPlist.strings in Resources */,
+				6BD38C5012A06758001A550C /* SDLMain.xib in Resources */,
+				6BD38C5312A06758001A550C /* Credits.rtf in Resources */,
+				6B77965612C4A9D400C4078A /* DATA in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		6BD38C3E12A06757001A550C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6BD38C5E12A06A15001A550C /* SDLMain.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		6BD38C4912A06758001A550C /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6BD38C4A12A06758001A550C /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		6BD38C4E12A06758001A550C /* SDLMain.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6BD38C4F12A06758001A550C /* SDLMain.xib */,
+			);
+			name = SDLMain.xib;
+			sourceTree = "<group>";
+		};
+		6BD38C5112A06758001A550C /* Credits.rtf */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6BD38C5212A06758001A550C /* en */,
+			);
+			name = Credits.rtf;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		6BD38C5712A06758001A550C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACH_O_TYPE = mh_execute;
+				MACOSX_DEPLOYMENT_TARGET = 10.5;
+				ONLY_ACTIVE_ARCH = YES;
+				PREBINDING = NO;
+				SDKROOT = macosx10.6;
+				SKIP_INSTALL = YES;
+				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
+				VALID_ARCHS = "i386 x86_64";
+			};
+			name = Debug;
+		};
+		6BD38C5812A06758001A550C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACH_O_TYPE = mh_execute;
+				MACOSX_DEPLOYMENT_TARGET = 10.5;
+				PREBINDING = NO;
+				SDKROOT = macosx10.6;
+				SKIP_INSTALL = YES;
+				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
+				VALID_ARCHS = "i386 x86_64";
+			};
+			name = Release;
+		};
+		6BD38C5A12A06758001A550C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)/Dependencies\"";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = OpenXcom_Prefix.pch;
+				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/Dependencies/SDL.framework/Headers\"",
+					"\"$(SRCROOT)/Dependencies/SDL_mixer.framework/Headers\"",
+					"\"$(SRCROOT)/Dependencies/SDL_gfx.framework/Headers\"",
+					"\"$(SRCROOT)/Dependencies/YAML.framework/Headers\"",
+				);
+				INFOPLIST_FILE = "OpenXcom-Info.plist";
+				INSTALL_PATH = "";
+				PRODUCT_NAME = OpenXcom;
+				VERSION_INFO_BUILDER = "";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		6BD38C5B12A06758001A550C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)/Dependencies\"";
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = OpenXcom_Prefix.pch;
+				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/Dependencies/SDL.framework/Headers\"",
+					"\"$(SRCROOT)/Dependencies/SDL_mixer.framework/Headers\"",
+					"\"$(SRCROOT)/Dependencies/SDL_gfx.framework/Headers\"",
+					"\"$(SRCROOT)/Dependencies/YAML.framework/Headers\"",
+				);
+				INFOPLIST_FILE = "OpenXcom-Info.plist";
+				INSTALL_PATH = "";
+				PRODUCT_NAME = OpenXcom;
+				VERSION_INFO_BUILDER = "";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		6BD38C3812A06757001A550C /* Build configuration list for PBXProject "OpenXcom" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6BD38C5712A06758001A550C /* Debug */,
+				6BD38C5812A06758001A550C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6BD38C5912A06758001A550C /* Build configuration list for PBXNativeTarget "OpenXcom" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6BD38C5A12A06758001A550C /* Debug */,
+				6BD38C5B12A06758001A550C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 6BD38C3512A06757001A550C /* Project object */;
+}

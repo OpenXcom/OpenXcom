@@ -1,0 +1,66 @@
+// !$*UTF8*$!
+{
+	6BD38C3512A06757001A550C /* Project object */ = {
+		activeBuildConfigurationName = Debug;
+		activeExecutable = F34E5B5E132FE3C9005FECFA /* OpenXcom */;
+		activeTarget = 6BD38C4112A06757001A550C /* OpenXcom */;
+		codeSenseManager = F34E5B6F132FE3E9005FECFA /* Code sense */;
+		executables = (
+			F34E5B5E132FE3C9005FECFA /* OpenXcom */,
+		);
+		perUserDictionary = {
+			PBXPerProjectTemplateStateSaveDate = 321905609;
+			PBXWorkspaceStateSaveDate = 321905609;
+		};
+		sourceControlManager = F34E5B6E132FE3E9005FECFA /* Source Control */;
+		userBuildSettings = {
+		};
+	};
+	6BD38C4112A06757001A550C /* OpenXcom */ = {
+		activeExec = 0;
+		executables = (
+			F34E5B5E132FE3C9005FECFA /* OpenXcom */,
+		);
+	};
+	F34E5B5E132FE3C9005FECFA /* OpenXcom */ = {
+		isa = PBXExecutable;
+		activeArgIndices = (
+		);
+		argumentStrings = (
+		);
+		autoAttachOnCrash = 1;
+		breakpointsEnabled = 0;
+		configStateDict = {
+		};
+		customDataFormattersEnabled = 1;
+		dataTipCustomDataFormattersEnabled = 1;
+		dataTipShowTypeColumn = 1;
+		dataTipSortType = 0;
+		debuggerPlugin = GDBDebugging;
+		disassemblyDisplayState = 0;
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		executableSystemSymbolLevel = 0;
+		executableUserSymbolLevel = 0;
+		libgmallocEnabled = 0;
+		name = OpenXcom;
+		showTypeColumn = 0;
+		sourceDirectories = (
+		);
+	};
+	F34E5B6E132FE3E9005FECFA /* Source Control */ = {
+		isa = PBXSourceControlManager;
+		fallbackIsa = XCSourceControlManager;
+		isSCMEnabled = 0;
+		scmConfiguration = {
+			repositoryNamesForRoots = {
+				"" = "";
+			};
+		};
+	};
+	F34E5B6F132FE3E9005FECFA /* Code sense */ = {
+		isa = PBXCodeSenseManager;
+		indexTemplatePath = "";
+	};
+}

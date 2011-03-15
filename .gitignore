@@ -49,3 +49,5 @@ bin/USER/*.sav
 deps/
 docs/html/
 *.o
+.DS_Store
+build/*
