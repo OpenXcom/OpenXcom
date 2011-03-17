@@ -22,6 +22,7 @@
 #include "../Savegame/UfopaediaSaved.h"
 #include "../Ruleset/ArticleDefinition.h"
 #include "ArticleState.h"
+#include "ArticleStateCraft.h"
 #include "ArticleStateText.h"
 #include "ArticleStateTextImage.h"
 #include "../Engine/Game.h"
@@ -54,6 +55,9 @@ namespace OpenXcom
 	{
 		switch(article->getType())
 		{
+			case UFOPAEDIA_TYPE_CRAFT:
+				return new ArticleStateCraft(game, static_cast<ArticleDefinitionCraft *> (article));
+				break;
 			case UFOPAEDIA_TYPE_TEXT:
 				return new ArticleStateText(game, static_cast<ArticleDefinitionText *> (article));
 				break;

@@ -157,12 +157,14 @@ void TextButton::draw()
 		{
 		case 0:
 			color = _color + 2;
+			setPixel(square.w, 0, color);
 			break;
 		case 1:
 			color = _color - 1;
 			break;
 		case 2:
 			color = _color + 1;
+			setPixel(square.w+1, 1, color);
 			break;
 		case 3:
 			color = _color;

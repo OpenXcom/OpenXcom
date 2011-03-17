@@ -21,9 +21,11 @@
 #define OPENXCOM_ARTICLEDEFINITION_H
 
 #include <string>
+#include <vector>
 
 namespace OpenXcom
 {
+	class RuleCraft;	
 	
 	/// define article types
 	enum UfopaediaTypeId {
@@ -67,6 +69,37 @@ namespace OpenXcom
 		UfopaediaTypeId _type_id;
 	};
 
+	class ArticleDefinitionRect
+	{
+	public:
+		ArticleDefinitionRect();
+		
+		void set(int set_x, int set_y, int set_width, int set_height);
+		
+		int x;
+		int y;
+		int width;
+		int height;
+	};
+	
+	/**
+	 * ArticleDefinitionCraft defines articles for craft, e.g. SKYRANGER.
+	 * They have a large background image, a stats block and a description positioned differently.
+	 */
+	
+	class ArticleDefinitionCraft : public ArticleDefinition
+	{
+	public:
+		/// Constructor
+		ArticleDefinitionCraft();
+		
+		std::string image_id;
+		ArticleDefinitionRect rect_stats;
+		ArticleDefinitionRect rect_text;
+		RuleCraft *craft;
+		std::string text;
+	};
+	
 	/**
 	 * ArticleDefinitionText defines articles with only text, e.g. ALIEN RESEARCH.
 	 */
