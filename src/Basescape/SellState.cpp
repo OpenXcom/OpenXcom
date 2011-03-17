@@ -233,7 +233,7 @@ void SellState::btnOkClick(Action *action)
 					if ((*w) != 0)
 					{
 						_base->getItems()->addItem((*w)->getRules()->getLauncherItem());
-						_base->getItems()->addItem((*w)->getRules()->getClipItem()), (int)floor((double)(*w)->getAmmo() / (*w)->getRules()->getRearmRate());
+						_base->getItems()->addItem((*w)->getRules()->getClipItem(), (int)floor((double)(*w)->getAmmo() / (*w)->getRules()->getRearmRate()));
 					}
 				}
 
