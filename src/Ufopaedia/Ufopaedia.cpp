@@ -23,6 +23,7 @@
 #include "../Ruleset/ArticleDefinition.h"
 #include "ArticleState.h"
 #include "ArticleStateCraft.h"
+#include "ArticleStateCraftWeapon.h"
 #include "ArticleStateText.h"
 #include "ArticleStateTextImage.h"
 #include "../Engine/Game.h"
@@ -57,6 +58,9 @@ namespace OpenXcom
 		{
 			case UFOPAEDIA_TYPE_CRAFT:
 				return new ArticleStateCraft(game, static_cast<ArticleDefinitionCraft *> (article));
+				break;
+			case UFOPAEDIA_TYPE_CRAFT_WEAPON:
+				return new ArticleStateCraftWeapon(game, static_cast<ArticleDefinitionCraftWeapon *> (article));
 				break;
 			case UFOPAEDIA_TYPE_TEXT:
 				return new ArticleStateText(game, static_cast<ArticleDefinitionText *> (article));

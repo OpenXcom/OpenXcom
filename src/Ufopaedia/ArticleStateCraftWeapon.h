@@ -17,8 +17,8 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef OPENXCOM_ARTICLESTATECRAFT_H
-#define OPENXCOM_ARTICLESTATECRAFT_H
+#ifndef OPENXCOM_ARTICLESTATECRAFTWEAPON_H
+#define OPENXCOM_ARTICLESTATECRAFTWEAPON_H
 
 #include <string>
 #include "ArticleState.h"
@@ -28,23 +28,20 @@ namespace OpenXcom
 	class Game;
 	class Text;
 	class TextList;
-	class ArticleDefinitionCraft;
+	class ArticleDefinitionCraftWeapon;
 	
 	/**
-	 * ArticleStateCraft has a caption, text, background image and a stats block.
-	 * The layout of the description text and stats block can vary, 
-	 * depending on the background craft image.
+	 * ArticleStateCraftWeapon has a caption, background image and a stats block.
 	 */
 	
-	class ArticleStateCraft : public ArticleState
+	class ArticleStateCraftWeapon : public ArticleState
 	{
 	public:
-		ArticleStateCraft(Game *game, ArticleDefinitionCraft *article_defs);
-		virtual ~ArticleStateCraft();
+		ArticleStateCraftWeapon(Game *game, ArticleDefinitionCraftWeapon *article_defs);
+		virtual ~ArticleStateCraftWeapon();
 		
 	protected:
 		Text *_txtTitle;
-		Text *_txtInfo;
 		TextList *_lstInfo;
 	};
 }

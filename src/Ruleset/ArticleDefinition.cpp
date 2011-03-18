@@ -69,6 +69,12 @@ namespace OpenXcom
 	/**
 	 * Constructor (only setting type of base class)
 	 */
+	ArticleDefinitionCraftWeapon::ArticleDefinitionCraftWeapon() : ArticleDefinition(UFOPAEDIA_TYPE_CRAFT_WEAPON), weapon(0)
+	{}
+	
+	/**
+	 * Constructor (only setting type of base class)
+	 */
 	ArticleDefinitionText::ArticleDefinitionText() : ArticleDefinition(UFOPAEDIA_TYPE_TEXT)
 	{}
 	

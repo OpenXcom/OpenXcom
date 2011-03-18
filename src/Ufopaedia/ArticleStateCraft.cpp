@@ -74,7 +74,7 @@ namespace OpenXcom
 		std::wstringstream ss;
 		_lstInfo->setColor(Palette::blockOffset(14)+15);
 		_lstInfo->setColumns(2, 82, 40);
-//		_lstInfo->setDot(true);
+		_lstInfo->setCondensed(true);
 
 		ss.str(L"");ss.clear();
 		ss << defs->craft->getMaxSpeed();

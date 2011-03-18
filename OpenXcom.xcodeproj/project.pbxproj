@@ -183,6 +183,7 @@
 		F3233BC5132FFA3C00908939 /* UfopaediaSelectState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F3233B21132FFA3C00908939 /* UfopaediaSelectState.cpp */; };
 		F3233BC6132FFA3C00908939 /* UfopaediaStartState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F3233B23132FFA3C00908939 /* UfopaediaStartState.cpp */; };
 		F3233EBF1332543B00908939 /* ArticleStateCraft.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F3233EBE1332543B00908939 /* ArticleStateCraft.cpp */; };
+		F323428B1332CB4A00908939 /* ArticleStateCraftWeapon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F323428A1332CB4A00908939 /* ArticleStateCraftWeapon.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -536,6 +537,8 @@
 		F3233B24132FFA3C00908939 /* UfopaediaStartState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UfopaediaStartState.h; sourceTree = "<group>"; };
 		F3233EBD1332543B00908939 /* ArticleStateCraft.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArticleStateCraft.h; sourceTree = "<group>"; };
 		F3233EBE1332543B00908939 /* ArticleStateCraft.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ArticleStateCraft.cpp; sourceTree = "<group>"; };
+		F32342891332CB4A00908939 /* ArticleStateCraftWeapon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArticleStateCraftWeapon.h; sourceTree = "<group>"; };
+		F323428A1332CB4A00908939 /* ArticleStateCraftWeapon.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ArticleStateCraftWeapon.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1007,6 +1010,8 @@
 				F3233B1A132FFA3C00908939 /* ArticleState.h */,
 				F3233EBD1332543B00908939 /* ArticleStateCraft.h */,
 				F3233EBE1332543B00908939 /* ArticleStateCraft.cpp */,
+				F32342891332CB4A00908939 /* ArticleStateCraftWeapon.h */,
+				F323428A1332CB4A00908939 /* ArticleStateCraftWeapon.cpp */,
 				F3233B1B132FFA3C00908939 /* ArticleStateText.cpp */,
 				F3233B1C132FFA3C00908939 /* ArticleStateText.h */,
 				F3233B1D132FFA3C00908939 /* ArticleStateTextImage.cpp */,
@@ -1245,6 +1250,7 @@
 				F3233BC5132FFA3C00908939 /* UfopaediaSelectState.cpp in Sources */,
 				F3233BC6132FFA3C00908939 /* UfopaediaStartState.cpp in Sources */,
 				F3233EBF1332543B00908939 /* ArticleStateCraft.cpp in Sources */,
+				F323428B1332CB4A00908939 /* ArticleStateCraftWeapon.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

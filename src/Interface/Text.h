@@ -83,6 +83,8 @@ public:
 	void setColor(Uint8 color);
 	/// Gets the text's color.
 	Uint8 getColor() const;
+	/// Gets the rendered text's width.
+	int getTextWidth();
 	/// Gets the rendered text's height.
 	int getTextHeight();
 	/// Draws the text.
