@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;..\deps\include\SDL&quot;;&quot;..\deps\include\yaml-cpp&quot;"
+				AdditionalIncludeDirectories="&quot;..\deps\include&quot;;&quot;..\deps\include\SDL&quot;;&quot;..\deps\include\yaml-cpp&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -62,7 +62,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="SDLmain.lib SDL.lib SDL_gfx.lib SDL_mixer.lib yaml-cpp_d.lib"
+				AdditionalDependencies="SDLmain.lib SDL.lib SDL_gfx.lib SDL_mixer.lib yaml-cpp.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;..\deps\lib&quot;"
 				GenerateManifest="true"
@@ -121,7 +121,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;..\deps\include\SDL&quot;;&quot;..\deps\include\yaml-cpp&quot;"
+				AdditionalIncludeDirectories="&quot;..\deps\include&quot;;&quot;..\deps\include\SDL&quot;;&quot;..\deps\include\yaml-cpp&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -1100,6 +1100,14 @@
 			Name="Savegame"
 			>
 			<File
+				RelativePath=".\Savegame\Alien.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\Alien.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Savegame\Base.cpp"
 				>
 			</File>
@@ -1268,6 +1276,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Savegame\Unit.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\Unit.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Savegame\Waypoint.cpp"
 				>
 			</File>
@@ -1340,11 +1356,19 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Ruleset\MapModel.cpp"
+				RelativePath=".\Ruleset\RuleAlien.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Ruleset\MapModel.h"
+				RelativePath=".\Ruleset\RuleAlien.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\RuleArmor.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\RuleArmor.h"
 				>
 			</File>
 			<File
@@ -1404,6 +1428,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Ruleset\RuleSoldier.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\RuleSoldier.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Ruleset\RuleTerrain.cpp"
 				>
 			</File>
@@ -1417,14 +1449,6 @@
 			</File>
 			<File
 				RelativePath=".\Ruleset\RuleUfo.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Ruleset\RuleUnitSprite.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Ruleset\RuleUnitSprite.h"
 				>
 			</File>
 			<File

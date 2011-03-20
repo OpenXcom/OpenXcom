@@ -936,9 +936,6 @@
     <ClInclude Include="Geoscape\CannotRearmState.h">
       <Filter>Geoscape</Filter>
     </ClInclude>
-    <ClInclude Include="Geoscape\GeoscapeErrorState.cpp">
-      <Filter>Geoscape</Filter>
-    </ClInclude>
     <ClInclude Include="Geoscape\GeoscapeErrorState.h">
       <Filter>Geoscape</Filter>
     </ClInclude>
