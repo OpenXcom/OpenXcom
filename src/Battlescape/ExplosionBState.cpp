@@ -21,6 +21,7 @@
 #include "BattlescapeState.h"
 #include "Explosion.h"
 #include "TerrainModifier.h"
+#include "UnitFallBState.h"
 #include "Map.h"
 #include "../Engine/Game.h"
 #include "../Savegame/BattleUnit.h"
@@ -51,6 +52,12 @@ ExplosionBState::~ExplosionBState()
 
 }
 
+/**
+ * init explosion :
+ * - create an explosion sprite
+ * - add it to the list of explosion sprites(on map)
+ * - explosion sound
+ */
 void ExplosionBState::init()
 {	
 	_parent->setStateInterval(DEFAULT_ANIM_SPEED);
@@ -63,6 +70,10 @@ void ExplosionBState::init()
 	_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(_parent->getSelectedItem()->getRules()->getHitSound())->play();
 }
 
+/*
+ * Animate explosion sprites. If their animation is finished remove them from the list.
+ * If the list is empty, this states is finished.
+ */
 void ExplosionBState::think()
 {
 	for (std::set<Explosion*>::const_iterator i = _parent->getMap()->getExplosions()->begin(); i != _parent->getMap()->getExplosions()->end(); i++)
@@ -72,8 +83,21 @@ void ExplosionBState::think()
 			_parent->getMap()->getExplosions()->erase((*i));
 			if (_parent->getMap()->getExplosions()->empty())
 			{
-				_parent->getGame()->getSavedGame()->getBattleGame()->getTerrainModifier()->explode(_center, _item->getAmmoItem()->getRules()->getPower(), _item->getAmmoItem()->getRules()->getDamageType(), 100);
 				_parent->popState();
+
+				SavedBattleGame *save = _parent->getGame()->getSavedGame()->getBattleGame();
+				// after the animation is done, the real explosion takes place
+				save->getTerrainModifier()->explode(_center, _item->getAmmoItem()->getRules()->getPower(), _item->getAmmoItem()->getRules()->getDamageType(), 100);
+
+				// now check for new casualties
+				for (std::vector<BattleUnit*>::iterator j = save->getUnits()->begin(); j != save->getUnits()->end(); j++)
+				{
+					if ((*j)->getHealth() == 0 && (*j)->getStatus() != STATUS_DEAD)
+					{
+						_parent->statePushFront(new UnitFallBState(_parent, (*j), _item->getAmmoItem()->getRules()->getDamageType() == DT_HE));
+					}
+				}
+
 				return;
 			}
 		}
@@ -81,7 +105,7 @@ void ExplosionBState::think()
 }
 
 /*
- * Unit turning cannot be cancelled.
+ * Explosion cannot be cancelled.
  */
 void ExplosionBState::cancel()
 {

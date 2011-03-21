@@ -126,22 +126,36 @@ int Alien::getStrength() const
 	return _rules->getStats().strength;
 }
 
+/**
+ * Returns the soldier's rules.
+ * @return rulealien
+ */
 RuleAlien *Alien::getRules() const
 {
 	return _rules;
 }
 
-/// 
+/**
+ * Returns the soldier's stand height.
+ * @return stand height
+ */ 
 int Alien::getStandHeight() const
 {
 	return _rules->getStandHeight();
 }
-/// 
+
+/**
+ * Returns the soldier's kneel height.
+ * @return kneel height
+ */
 int Alien::getKneelHeight() const
 {
 	return _rules->getKneelHeight();
 }
-/// 
+/**
+ * Returns the soldier's loftemps ID.
+ * @return loftemps ID
+ */
 int Alien::gotLoftemps() const
 {
 	return _rules->gotLoftemps();

@@ -23,6 +23,8 @@
 #include "../Engine/Language.h"
 #include "../Battlescape/Pathfinding.h"
 #include "Alien.h"
+#include "Soldier.h"
+#include "../Ruleset/RuleArmor.h"
 
 namespace OpenXcom
 {
@@ -32,7 +34,7 @@ namespace OpenXcom
  * @param rules Pointer to RuleUnit object.
  * @param faction Which faction the units belongs to.
  */
-BattleUnit::BattleUnit(Unit *unit, UnitFaction faction) : _unit(unit), _faction(faction), _id(0), _pos(Position()), _lastPos(Position()), _direction(0), _status(STATUS_STANDING), _walkPhase(0), _cached(false), _kneeled(false)
+BattleUnit::BattleUnit(Unit *unit, UnitFaction faction) : _unit(unit), _faction(faction), _id(0), _pos(Position()), _lastPos(Position()), _direction(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _cached(false), _kneeled(false)
 {
 	_tu = unit->getTimeUnits();
 	_energy = unit->getStamina();
@@ -182,14 +184,20 @@ int BattleUnit::getDirection() const
 	return _direction;
 }
 
-/*
+/**
  * Gets the unit's status.
+ * @return the unit's status
  */
 UnitStatus BattleUnit::getStatus()
 {
 	return _status;
 }
 
+/**
+ * startWalking
+ * @param direction
+ * @param destination
+ */
 void BattleUnit::startWalking(int direction, const Position &destination)
 {
 	_direction = direction;
@@ -245,6 +253,10 @@ int BattleUnit::getDiagonalWalkingPhase() const
 	return (_walkPhase / 8) * 8;
 }
 
+/**
+ * Look at a point.
+ * @param point.
+ */
 void BattleUnit::lookAt(const Position &point)
 {
 	double ox = point.x - _pos.x;
@@ -260,13 +272,20 @@ void BattleUnit::lookAt(const Position &point)
 	}
 }
 
+/**
+ * Look at a direction.
+ * @param direction.
+ */
 void BattleUnit::lookAt(int direction)
 {
 	_toDirection = direction;
 	_status = STATUS_TURNING;
 }
 
-void BattleUnit::turn(bool spendTU)
+/**
+ * Turn.
+ */
+void BattleUnit::turn()
 {
     int a = _toDirection - _direction;
     if (a != 0) {
@@ -288,17 +307,16 @@ void BattleUnit::turn(bool spendTU)
 		_cached = false;
     }
 
-	// turning always costs 1 tu, except for turning during walking
-	if (spendTU)
-	{
-		_tu--;
-	}
-
 	if (_toDirection == _direction)
 	{
 		// we officially reached our destination
 		_status = STATUS_STANDING;
 	}
+}
+
+void BattleUnit::abortTurn()
+{
+	_status = STATUS_STANDING;
 }
 
 /**
@@ -331,7 +349,7 @@ bool BattleUnit::isCached() const
 
 /**
  * Kneel down and spend TUs.
- * @flag to kneel or to stand up
+ * @param to kneel or to stand up
  */
 void BattleUnit::kneel(bool kneeled)
 {
@@ -341,6 +359,7 @@ void BattleUnit::kneel(bool kneeled)
 
 /**
  * Is kneeled down?
+ * @return true/false
  */
 bool BattleUnit::isKneeled() const
 {
@@ -349,6 +368,7 @@ bool BattleUnit::isKneeled() const
 
 /**
  * Aim. (shows the right hand sprite and weapon holding)
+ * @param aiming
  */ 
 void BattleUnit::aim(bool aiming)
 {
@@ -396,11 +416,94 @@ int BattleUnit::getMorale() const
 	return _morale;
 }
 
+/**
+ * Do an amount of damage.
+ * @param position
+ * @param power
+ */
 void BattleUnit::damage(Position position, int power)
 {
-	_health -= power;
+	// todo : determine direction we got hit (4 directions)
+	// todo : armor reduction
+	// todo : fatal wounds
+	_health -= (power - getUnit()->getArmor()->getFrontArmor());
 	if (_health < 0)
 		_health = 0;
+}
+
+/**
+ * Returns the soldier's amount of bravery.
+ * @return Bravery.
+ */
+void BattleUnit::startFalling()
+{
+	_status = STATUS_FALLING;
+	_fallPhase = 0;
+	setCached(false);
+}
+
+/**
+ * Returns the soldier's amount of bravery.
+ * @return Bravery.
+ */
+void BattleUnit::keepFalling()
+{
+	_fallPhase++;
+	if (_fallPhase == 3)
+	{
+		_fallPhase = 2;
+		if (_health == 0)
+			_status = STATUS_DEAD;
+		else
+			_status = STATUS_UNCONSCIOUS;
+	}
+	setCached(false);
+}
+
+
+/**
+ * Returns the soldier's amount of bravery.
+ * @return Bravery.
+ */
+int BattleUnit::getFallingPhase() const
+{
+	return _fallPhase;
+}
+
+/**
+ * Returns whether the soldier is out of combat, dead or unconscious.
+ * @return flag if out or not.
+ */
+bool BattleUnit::isOut() const
+{
+	return _status == STATUS_DEAD || _status == STATUS_UNCONSCIOUS;
+}
+
+/**
+ * Spend time units if it can. Return false if it can't.
+ * @param tu
+ * @return flag if it could spend the time units or not.
+ */
+bool BattleUnit::spendTimeUnits(int tu)
+{
+	if (tu <= _tu)
+	{
+		_tu -= tu;
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+/**
+ * Set a specific number of timeunits.
+ * @param tu
+ */
+void BattleUnit::setTimeUnits(int tu)
+{
+	_tu = tu;
 }
 
 }

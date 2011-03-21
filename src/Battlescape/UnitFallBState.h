@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_EXPLOSIONBSTATE_H
-#define OPENXCOM_EXPLOSIONBSTATE_H
+#ifndef OPENXCOM_UNITDIEBSTATE_H
+#define OPENXCOM_UNITDIEBSTATE_H
 
 #include "BattleState.h"
 #include "Position.h"
@@ -25,23 +25,18 @@
 namespace OpenXcom
 {
 
-class BattlescapeState;
 class BattleUnit;
-class BattleItem;
 
-/* Explosion state not only handles explosions, but also bullet impacts! */
-
-class ExplosionBState : public BattleState
+class UnitFallBState : public BattleState
 {
 private:
 	BattleUnit *_unit;
-	Position _center;
-	BattleItem *_item;
+	bool _instakill;
 public:
-	/// Creates a new ExplosionBState class
-	ExplosionBState(BattlescapeState *parent, Position center, BattleItem *item);
-	/// Cleans up the ExplosionBState.
-	~ExplosionBState();
+	/// Creates a new UnitFallBState class
+	UnitFallBState(BattlescapeState *parent, BattleUnit *unit, bool instakill);
+	/// Cleans up the UnitFallBState.
+	~UnitFallBState();
 	/// Initializes the state.
 	void init();
 	/// Handles a cancels request.
@@ -50,7 +45,6 @@ public:
 	void think();
 	/// Get the result of the state.
 	std::string getResult() const;
-
 };
 
 }

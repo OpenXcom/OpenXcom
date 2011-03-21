@@ -24,6 +24,7 @@
 #include <vector>
 #include "yaml.h"
 #include "BattleItem.h"
+#include "BattleUnit.h"
 
 namespace OpenXcom
 {
@@ -67,6 +68,9 @@ private:
 	TerrainModifier *_terrainModifier;
 	MissionType _missionType;
 	int _globalShade;
+	UnitFaction _side;
+	int _turn;
+	bool _debugMode;
 public:
 	/// Creates a new battle save, based on current generic save.
 	SavedBattleGame();
@@ -126,6 +130,12 @@ public:
 	TerrainModifier *getTerrainModifier();
 	/// get an item from a specific unit and slot
 	BattleItem *getItemFromUnit(BattleUnit *unit, InventorySlot slot);
+	UnitFaction getSide() const;
+	int getTurn() const;
+	void endTurn();
+	void setDebugMode();
+	bool getDebugMode() const;
+
 };
 
 }

@@ -322,23 +322,36 @@ SoldierGender Soldier::getGender() const
 	return _gender;
 }
 
-/// Gets soldier rules.
+/**
+ * Returns the soldier's rules.
+ * @return rulesoldier
+ */
 RuleSoldier *Soldier::getRules() const
 {
 	return _rules;
 }
 
-/// 
+/**
+ * Returns the soldier's stand height.
+ * @return stand height
+ */ 
 int Soldier::getStandHeight() const
 {
 	return _rules->getStandHeight();
 }
-/// 
+
+/**
+ * Returns the soldier's kneel height.
+ * @return kneel height
+ */
 int Soldier::getKneelHeight() const
 {
 	return _rules->getKneelHeight();
 }
-/// 
+/**
+ * Returns the soldier's loftemps ID.
+ * @return loftemps ID
+ */
 int Soldier::gotLoftemps() const
 {
 	return _rules->gotLoftemps();
