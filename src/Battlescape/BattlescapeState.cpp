@@ -50,6 +50,7 @@
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Engine/Timer.h"
+#include "../Interface/FpsCounter.h"
 
 namespace OpenXcom
 {
@@ -125,6 +126,9 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 
 	// Fix cursor
 	_game->getCursor()->setColor(Palette::blockOffset(9));
+
+	// Fix the FpsCounter color.
+	_game->getFpsCounter()->setColor(Palette::blockOffset(9));
 
 	add(_map);
 	add(_icons);

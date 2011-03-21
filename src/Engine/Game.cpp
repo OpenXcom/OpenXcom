@@ -217,6 +217,15 @@ Cursor *const Game::getCursor() const
 }
 
 /**
+ * Returns the FpsCounter used by the game.
+ * @return Pointer to the FpsCounter.
+ */
+FpsCounter *const Game::getFpsCounter() const
+{
+	return _fpsCounter;
+}
+
+/**
  * Replaces a certain amount of colors in the palettes of the game's
  * screen and resources.
  * @param colors Pointer to the set of colors.

@@ -43,7 +43,7 @@ FpsCounter::FpsCounter(int width, int height, int x, int y) : Surface(width, hei
 	_timer->start();
 
 	_text = new NumberText(width, height, x, y);
-	_text->setColor(Palette::blockOffset(15)+12);
+	setColor(Palette::blockOffset(15)+12);
 }
 
 /**
@@ -65,6 +65,15 @@ void FpsCounter::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 {
 	Surface::setPalette(colors, firstcolor, ncolors);
 	_text->setPalette(colors, firstcolor, ncolors);
+}
+
+/**
+ * Sets the text color of the counter.
+ * @param color The color to set.
+ */
+void FpsCounter::setColor(Uint8 color)
+{
+	_text->setColor(color);
 }
 
 /**

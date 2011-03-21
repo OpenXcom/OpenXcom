@@ -67,6 +67,8 @@ public:
 	Screen *const getScreen() const;
 	/// Gets the game's cursor.
 	Cursor *const getCursor() const;
+	/// Gets the FpsCounter.
+	FpsCounter *const getFpsCounter() const;
 	/// Sets the game's 8bpp palette.
 	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
 	/// Resets the state stack to a new state.

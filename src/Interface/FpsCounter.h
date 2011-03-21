@@ -46,6 +46,8 @@ public:
 	~FpsCounter();
 	/// Sets the FPS counter's palette.
 	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
+	/// Sets the FpsCounter's color.
+	void setColor(Uint8 color);
 	/// Handles keyboard events.
 	void handle(Action *action);
 	/// Advances frame counter.
