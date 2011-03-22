@@ -69,8 +69,7 @@ PathfindingNode *Pathfinding::getNode(const Position& pos)
 }
 
 /**
- * Calculate the shortest path using a simple brute force algorithm. 
- * Which works okay with small maps.
+ * Calculate the shortest path using a simple A-Star algorithm.
  * @param unit
  * @param endPosition
  */
@@ -282,7 +281,7 @@ bool Pathfinding::isBlocked(Tile *tile, const int part)
 
 	if (tile->getTUCost(part, _movementType) == 255) return true; // blocking part
 
-	BattleUnit *unit = _save->selectUnit(tile->getPosition());
+	BattleUnit *unit = tile->getUnit();
 	if (unit != 0 && unit != _unit && (part==0 || part==3)) return true;
 
 	if (tile->isBigWall()) return true; // big walls block every part

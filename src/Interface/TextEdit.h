@@ -41,6 +41,7 @@ private:
 	bool _blink;
 	Timer *_timer;
 	wchar_t _ascii;
+	unsigned int _caret;
 
 	/// Checks if a character will exceed the maximum width.
 	bool exceedsMaxWidth(wchar_t c);

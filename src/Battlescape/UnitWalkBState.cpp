@@ -117,6 +117,17 @@ void UnitWalkBState::think()
 		int dir = _pf->getStartDirection();
 		if (dir != -1)
 		{
+			Position destination;
+			int tu = _pf->getTUCost(_unit->getPosition(), dir, &destination, _unit);
+
+			if (tu > _unit->getTimeUnits())
+			{
+				_result = "STR_NOT_ENOUGH_TIME_UNITS";
+				_parent->popState();
+				_parent->getMap()->cacheUnits();
+				return;
+			}
+
 			// we are looking in the wrong way, turn first
 			// we are not using the turn state, because turning during walking costs no tu
 			if (dir != _unit->getDirection()) 
@@ -143,9 +154,15 @@ void UnitWalkBState::think()
 
 			// now start moving
 			dir = _pf->dequeuePath();
-			Position destination;
-			int tu = _pf->getTUCost(_unit->getPosition(), dir, &destination, _unit);
-			_unit->startWalking(dir, destination);
+			if (_unit->spendTimeUnits(tu))
+			{
+				_unit->startWalking(dir, destination);
+			}
+			else
+			{
+				_result = "STR_NOT_ENOUGH_TIME_UNITS";
+				_parent->popState();
+			}
 			// make sure the unit sprites are up to date
 			_parent->getMap()->cacheUnits();
 		}
@@ -153,6 +170,7 @@ void UnitWalkBState::think()
 		{
 			// no more waypoints, this means we succesfully finished this action
 			_terrain->calculateUnitLighting();
+			_terrain->calculateFOV(_unit);
 			// make sure the unit sprites are up to date
 			_parent->getMap()->cacheUnits();
 			_parent->popState();
@@ -163,7 +181,7 @@ void UnitWalkBState::think()
 	// turning during walking costs no tu
 	if (_unit->getStatus() == STATUS_TURNING)
 	{
-		_unit->turn(false);
+		_unit->turn();
 		_terrain->calculateFOV(_unit);
 		// make sure the unit sprites are up to date
 		_parent->getMap()->cacheUnits();

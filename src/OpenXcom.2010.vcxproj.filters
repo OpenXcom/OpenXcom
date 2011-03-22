@@ -470,6 +470,9 @@
     <ClCompile Include="Geoscape\ProductionCompleteState.cpp">
       <Filter>Geoscape</Filter>
     </ClCompile>
+    <ClCompile Include="Battlescape\UnitFallBState.cpp">
+      <Filter>Battlescape</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -941,6 +944,9 @@
     </ClInclude>
     <ClInclude Include="Geoscape\ProductionCompleteState.h">
       <Filter>Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Battlescape\UnitFallBState.h">
+      <Filter>Battlescape</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

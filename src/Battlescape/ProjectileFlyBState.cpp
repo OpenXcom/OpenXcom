@@ -51,6 +51,11 @@ ProjectileFlyBState::~ProjectileFlyBState()
 
 }
 
+/**
+ * init sequence:
+ * - create a projectile sprite & add it to the map
+ * - calculate it's trajectory
+ */
 void ProjectileFlyBState::init()
 {
 	_parent->setStateInterval(DEFAULT_BULLET_SPEED);
@@ -80,15 +85,18 @@ void ProjectileFlyBState::init()
 		_parent->getMap()->setProjectile(0);
 		_parent->popState();
 	}
-
 }
 
+/**
+ * Animates the projectile (move to the next point in it's trajectory).
+ * If the animation is finished the projectile sprite is removed from the map.
+ * And this state is finished.
+ */
 void ProjectileFlyBState::think()
 {
 	if(!_parent->getMap()->getProjectile()->move())
 	{
 		// impact !
-		//_res->getSoundSet("BATTLE.CAT")->getSound(_item->getRules()->getHitSound())->play();
 		_parent->statePushNext(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(0), _parent->getSelectedItem()));
 
 		delete _parent->getMap()->getProjectile();
@@ -100,7 +108,7 @@ void ProjectileFlyBState::think()
 }
 
 /*
- * Unit turning cannot be cancelled.
+ * Flying projectiles cannot be cancelled.
  */
 void ProjectileFlyBState::cancel()
 {

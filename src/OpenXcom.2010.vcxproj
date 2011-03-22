@@ -63,7 +63,7 @@
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>yaml-cpp.lib;SDL_mixer.lib;SDL_gfx.lib;SDLmain.lib;SDL.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>yaml-cpp_d.lib;SDL_mixer.lib;SDL_gfx.lib;SDLmain.lib;SDL.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\deps\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
@@ -142,6 +142,7 @@
     <ClCompile Include="Battlescape\Projectile.cpp" />
     <ClCompile Include="Battlescape\ProjectileFlyBState.cpp" />
     <ClCompile Include="Battlescape\TerrainModifier.cpp" />
+    <ClCompile Include="Battlescape\UnitFallBState.cpp" />
     <ClCompile Include="Battlescape\UnitSprite.cpp" />
     <ClCompile Include="Battlescape\UnitTurnBState.cpp" />
     <ClCompile Include="Battlescape\UnitWalkBState.cpp" />
@@ -301,6 +302,7 @@
     <ClInclude Include="Battlescape\Projectile.h" />
     <ClInclude Include="Battlescape\ProjectileFlyBState.h" />
     <ClInclude Include="Battlescape\TerrainModifier.h" />
+    <ClInclude Include="Battlescape\UnitFallBState.h" />
     <ClInclude Include="Battlescape\UnitSprite.h" />
     <ClInclude Include="Battlescape\UnitTurnBState.h" />
     <ClInclude Include="Battlescape\UnitWalkBState.h" />

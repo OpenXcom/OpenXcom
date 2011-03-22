@@ -29,6 +29,7 @@
 #include "../Engine/SoundSet.h"
 #include "../Engine/Sound.h"
 #include "../Engine/RNG.h"
+#include "../Engine/Language.h"
 
 namespace OpenXcom
 {
@@ -72,11 +73,20 @@ void UnitTurnBState::init()
 
 void UnitTurnBState::think()
 {
-	_unit->turn();
-	_parent->getGame()->getSavedGame()->getBattleGame()->getTerrainModifier()->calculateFOV(_unit);
-	_parent->getMap()->cacheUnits();
-	if (_unit->getStatus() == STATUS_STANDING)
+	if (_unit->spendTimeUnits(1))
 	{
+		_unit->turn();
+		_parent->getGame()->getSavedGame()->getBattleGame()->getTerrainModifier()->calculateFOV(_unit);
+		_parent->getMap()->cacheUnits();
+		if (_unit->getStatus() == STATUS_STANDING)
+		{
+			_parent->popState();
+		}
+	}
+	else
+	{
+		_unit->abortTurn();
+		_result = "STR_NOT_ENOUGH_TIME_UNITS";
 		_parent->popState();
 	}
 }

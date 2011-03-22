@@ -102,11 +102,11 @@ public:
 	std::string getArmor() const;
 	/// Gets soldier rules.
 	RuleSoldier *getRules() const;
-	/// 
+	/// Gets the soldier's stand height.
 	int getStandHeight() const;
-	/// 
+	/// Gets the soldier's kneel height.
 	int getKneelHeight() const;
-	/// 
+	/// Gets the soldier's loft ID.
 	int gotLoftemps() const;
 };
 

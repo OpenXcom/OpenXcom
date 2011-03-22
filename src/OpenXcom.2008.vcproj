@@ -732,6 +732,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Battlescape\UnitFallBState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\UnitFallBState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Battlescape\UnitTurnBState.cpp"
 				>
 			</File>

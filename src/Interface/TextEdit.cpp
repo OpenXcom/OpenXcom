@@ -32,7 +32,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-TextEdit::TextEdit(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _value(L""), _blink(true), _ascii('A')
+TextEdit::TextEdit(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _value(L""), _blink(true), _ascii('A'), _caret(0)
 {
 	_validButton = SDL_BUTTON_LEFT;
 
@@ -206,16 +206,27 @@ void TextEdit::blink()
  */
 void TextEdit::draw()
 {
-	std::wstringstream ss;
-#ifdef DINGOO
-	ss << _value << _ascii;
-#else
-	ss << _value << "*";
-#endif
+	std::wstring newValue = _value;
+
 	if (_isFocused && _blink)
-		_text->setText(ss.str());
+	{
+#ifdef DINGOO
+		newValue += _ascii;
+#else
+	    newValue.insert(newValue.length() - _caret, L"*");
+#endif
+		_text->setText(newValue);
+    }
 	else
-		_text->setText(_value);
+	{
+#ifdef DINGOO
+        _text->setText(_value);
+#else
+        newValue.insert(newValue.length() - _caret, L" ");
+		_text->setText(newValue);
+#endif
+
+    }
 
 	clear();
 	_text->blit(this);
@@ -282,10 +293,34 @@ void TextEdit::keyboardPress(Action *action, State *state)
 		break;
 	case SDLK_LEFT:
 #endif
+    case SDLK_END:
+        _caret = 0;
+        break;
+    case SDLK_HOME:
+        _caret = _value.length();
+        break;
+    case SDLK_LEFT:
+        if (_caret < _value.length())
+			_caret++;
+        break;
+    case SDLK_RIGHT:
+		if (_caret > 0)
+			_caret--;
+        break;
 	case SDLK_BACKSPACE:
-		if (_value.length() > 0)
-			_value.resize(_value.length() - 1);
+		if (_value.length() - _caret > 0)
+		{
+			_value.erase(_value.length() - _caret - 1, 1);
+        }
 		break;
+	case SDLK_DELETE:
+        if (_value.length() - _caret >= 0)
+		{
+			_value.erase(_value.length() - _caret, 1);
+			if (_caret > 0)
+				_caret--;
+        }
+	    break;
 	case SDLK_RETURN:
 		_isFocused = false;
 		_blink = false;
@@ -295,7 +330,10 @@ void TextEdit::keyboardPress(Action *action, State *state)
 		if (action->getDetails()->key.keysym.unicode != 0)
 		{
 			if (action->getDetails()->key.keysym.unicode >= ' ' && action->getDetails()->key.keysym.unicode <= '~' && !exceedsMaxWidth((wchar_t)action->getDetails()->key.keysym.unicode))
-				_value += (wchar_t)action->getDetails()->key.keysym.unicode;
+			{
+			    _value.insert(_value.length() - _caret, 1, (wchar_t) action->getDetails()->key.keysym.unicode);
+			    //_value += (wchar_t)action->getDetails()->key.keysym.unicode;
+			}
 		}
 	}
 	draw();

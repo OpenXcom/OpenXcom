@@ -104,6 +104,19 @@ void UnitSprite::draw()
 	clear();
 	Soldier *soldier = dynamic_cast<Soldier*>(_unit->getUnit());
 
+	if (_unit->isOut())
+	{
+		// unit is drawn as an item
+		return;
+	}
+
+	if (_unit->getStatus() == STATUS_FALLING)
+	{
+		torso = _unitSurface->getFrame(die + _unit->getFallingPhase());
+		torso->blit(this);
+		return;
+	}
+
 	if (soldier != 0 && soldier->getGender() == GENDER_FEMALE)
 	{
 		torso = _unitSurface->getFrame(femaleTorso + _unit->getDirection());

@@ -22,6 +22,7 @@
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Exception.h"
+#include "BattleUnit.h"
 
 namespace OpenXcom
 {
@@ -497,7 +498,10 @@ void Tile::setUnit(BattleUnit *unit)
  */
 BattleUnit *Tile::getUnit()
 {
-	return _unit;
+	if (_unit != 0 && _unit->isOut())
+		return 0;
+	else
+		return _unit;
 }
 
 /**
