@@ -67,6 +67,7 @@
 #include "../Battlescape/BattlescapeState.h"
 #include "../Battlescape/BattlescapeGenerator.h"
 #include "../Ufopaedia/Ufopaedia.h"
+#include "../Interface/FpsCounter.h"
 
 namespace OpenXcom
 {
@@ -321,6 +322,9 @@ void GeoscapeState::init()
 		_game->getResourcePack()->getMusic(ss.str())->play();
 		_music = true;
 	}
+
+	// Make sure the FpsCounter is the right color (it might have changed if you're coming from another palette).
+	_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
 }
 
 /**
