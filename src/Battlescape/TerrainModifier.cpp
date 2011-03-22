@@ -157,7 +157,7 @@ void TerrainModifier::calculateUnitLighting()
 	// add lighting of soldiers
 	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); i++)
 	{
-		if ((*i)->getFaction() == FACTION_PLAYER)
+		if ((*i)->getFaction() == FACTION_PLAYER && !(*i)->isOut())
 		{
 			addLight((*i)->getPosition(), personalLightPower, layer);
 		}
@@ -480,6 +480,7 @@ void TerrainModifier::explode(const Position &center, int power, ItemDamageType 
 
 	// recalculate line of sight (to optimise: only units in range)
 	calculateFOV(center);
+	calculateTerrainLighting(); // fires could have been started
 }
 
 /**

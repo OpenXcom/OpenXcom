@@ -71,6 +71,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 
 	// Create buttons
 	_btnAbort = new InteractiveSurface(32, 16, 240, 160);
+	_btnEndTurn = new InteractiveSurface(32, 16, 240, 144);
 	_btnMapUp = new InteractiveSurface(32, 16, 80, 144);
 	_btnMapDown = new InteractiveSurface(32, 16, 80, 160);
 	_btnNextSoldier = new InteractiveSurface(32, 16, 176, 144);
@@ -135,6 +136,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	add(_numLayers);
 	add(_rank);
 	add(_btnAbort);
+	add(_btnEndTurn);
 	add(_btnMapUp);
 	add(_btnMapDown);
 	add(_btnNextSoldier);
@@ -177,6 +179,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	_numAmmoRight->setValue(999);
 
 	_btnAbort->onMouseClick((ActionHandler)&BattlescapeState::btnAbortClick);
+	_btnEndTurn->onMouseClick((ActionHandler)&BattlescapeState::btnEndTurnClick);
 	_btnMapUp->onMouseClick((ActionHandler)&BattlescapeState::btnMapUpClick);
 	_btnMapDown->onMouseClick((ActionHandler)&BattlescapeState::btnMapDownClick);
 	_btnNextSoldier->onMouseClick((ActionHandler)&BattlescapeState::btnNextSoldierClick);
@@ -301,7 +304,7 @@ void BattlescapeState::mapClick(Action *action)
 
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		if (_targeting)
+		if (_targeting && _battleGame->getSelectedUnit())
 		{
 			//  -= fire weapon =-
 			_target = pos;
@@ -316,10 +319,13 @@ void BattlescapeState::mapClick(Action *action)
 			if (unit)
 			{
 			//  -= select unit =-
-				_battleGame->setSelectedUnit(unit);
-				updateSoldierInfo(unit);
+				if (!unit->isOut() && unit->getFaction() == _battleGame->getSide())
+				{
+					_battleGame->setSelectedUnit(unit);
+					updateSoldierInfo(unit);
+				}
 			}
-			else
+			else if (_battleGame->getSelectedUnit())
 			{
 			//  -= start walking =-
 				_target = pos;
@@ -329,7 +335,7 @@ void BattlescapeState::mapClick(Action *action)
 			}
 		}
 	}
-	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT && _battleGame->getSelectedUnit())
 	{
 		//  -= turn to or open door =-
 		_target = pos;
@@ -394,8 +400,11 @@ void BattlescapeState::btnShowMapClick(Action *action)
 void BattlescapeState::btnKneelClick(Action *action)
 {
 	// TODO: check for timeunits... check for FOV...
-	_battleGame->getSelectedUnit()->kneel(!_battleGame->getSelectedUnit()->isKneeled());
-	_map->cacheUnits();
+	if (_battleGame->getSelectedUnit())
+	{
+		_battleGame->getSelectedUnit()->kneel(!_battleGame->getSelectedUnit()->isKneeled());
+		_map->cacheUnits();
+	}
 }
 
 /**
@@ -411,7 +420,10 @@ void BattlescapeState::btnSoldierClick(Action *action)
  */
 void BattlescapeState::btnCenterClick(Action *action)
 {
-	_map->centerOnPosition(_battleGame->getSelectedUnit()->getPosition());
+	if (_battleGame->getSelectedUnit())
+	{
+		_map->centerOnPosition(_battleGame->getSelectedUnit()->getPosition());
+	}
 }
 
 /**
@@ -422,7 +434,7 @@ void BattlescapeState::btnNextSoldierClick(Action *action)
 {
 	BattleUnit *unit = _battleGame->selectNextPlayerUnit();
 	updateSoldierInfo(unit);
-	_map->centerOnPosition(unit->getPosition());
+	if (unit) _map->centerOnPosition(unit->getPosition());
 }
 
 /**
@@ -451,7 +463,25 @@ void BattlescapeState::btnHelpClick(Action *action)
  * @param action Pointer to an action.
  */
 void BattlescapeState::btnEndTurnClick(Action *action)
-{}
+{
+	_battleGame->endTurn();
+	updateSoldierInfo(_battleGame->getSelectedUnit());
+	if (_battleGame->getSelectedUnit())
+	{
+		_map->centerOnPosition(_battleGame->getSelectedUnit()->getPosition());
+	}
+
+	if (_battleGame->getSide() == FACTION_HOSTILE)
+	{
+		// do AI stuff
+
+		if (!_battleGame->getDebugMode())
+		{
+			btnEndTurnClick(action);
+		}
+	}
+
+}
 
 /**
  * Abort game.
@@ -460,7 +490,8 @@ void BattlescapeState::btnEndTurnClick(Action *action)
 void BattlescapeState::btnAbortClick(Action *action)
 {
 	_game->getSavedGame()->endBattle();
-	_game->getCursor()->setColor(Palette::blockOffset(15) + 12);
+	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
+	_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
 	_game->popState();
 }	
 
@@ -470,8 +501,11 @@ void BattlescapeState::btnAbortClick(Action *action)
  */
 void BattlescapeState::btnLeftHandItemClick(Action *action)
 {
-	BattleItem *leftHandItem = _battleGame->getItemFromUnit(_battleGame->getSelectedUnit(), LEFT_HAND);
-	handleItemClick(leftHandItem);
+	if (_battleGame->getSelectedUnit())
+	{
+		BattleItem *leftHandItem = _battleGame->getItemFromUnit(_battleGame->getSelectedUnit(), LEFT_HAND);
+		handleItemClick(leftHandItem);
+	}
 }
 
 /**
@@ -480,16 +514,40 @@ void BattlescapeState::btnLeftHandItemClick(Action *action)
  */
 void BattlescapeState::btnRightHandItemClick(Action *action)
 {
-	BattleItem *rightHandItem = _battleGame->getItemFromUnit(_battleGame->getSelectedUnit(), RIGHT_HAND);
-	handleItemClick(rightHandItem);	
+	if (_battleGame->getSelectedUnit())
+	{
+		BattleItem *rightHandItem = _battleGame->getItemFromUnit(_battleGame->getSelectedUnit(), RIGHT_HAND);
+		handleItemClick(rightHandItem);	
+	}
 }
 
 /**
  * Updates soldier name/rank/tu/energy/health/morale.
- * @param unit Pointer to current unit.
+ * @param battleUnit Pointer to current unit.
  */
 void BattlescapeState::updateSoldierInfo(BattleUnit *battleUnit)
 {
+	if (battleUnit == 0)
+	{
+		_txtName->setText(L"");
+		_rank->clear();
+		_numTimeUnits->clear();
+		_barTimeUnits->clear();
+		_barTimeUnits->clear();
+		_numEnergy->clear();
+		_barEnergy->clear();
+		_barEnergy->clear();
+		_numHealth->clear();
+		_barHealth->clear();
+		_barHealth->clear();
+		_numMorale->clear();
+		_barMorale->clear();
+		_barMorale->clear();
+		_btnLeftHandItem->clear();
+		_btnRightHandItem->clear();
+		return;
+	}
+
 	_txtName->setText(battleUnit->getUnit()->getName());
 	Soldier *soldier = dynamic_cast<Soldier*>(battleUnit->getUnit());
 	if (soldier != 0)
@@ -569,26 +627,42 @@ void BattlescapeState::handleState()
 }
 
 /**
- * Animate other stuff on the map.
+ * Animate map objects on the map, also smoke,fire,....
  */
 void BattlescapeState::animate()
 {
 	_map->animate();
 }
 
-/// Get target.
+/**
+ * Get the current position on the map that the user has targetted.
+ * For example to shoot or throw towards.
+ */
 Position BattlescapeState::getTarget() const
 {
 	return _target;
 }
 
-/// Get game.
+/**
+ * Gets the item the user has clicked to use (can be left or right-hand item).
+ * @return item Left or right-hand item.
+ */
+BattleItem *BattlescapeState::getSelectedItem() const
+{
+	return _selectedItem;
+}
+
+/**
+ * Get pointer to the game. Some states need this info.
+ */
 Game *BattlescapeState::getGame() const
 {
 	return _game;
 }
 
-/// Get map.
+/**
+ * Get pointer to the map. Some states need this info.
+ */
 Map *BattlescapeState::getMap() const
 {
 	return _map;
@@ -641,6 +715,7 @@ void BattlescapeState::statePushBack(BattleState *bs)
 
 /**
  * Pop the current state. Handle errors and mouse cursor appearing again.
+ * States pop themselves when they are finished.
  */
 void BattlescapeState::popState()
 {
@@ -664,17 +739,24 @@ void BattlescapeState::popState()
 		// init the next state in queue
 		_states.front()->init();
 	}
+	if (_battleGame->getSelectedUnit() == 0 || _battleGame->getSelectedUnit()->isOut())
+	{
+		_targeting = false;
+		_selectedAction = BA_NONE;
+		_map->setCursorType(CT_NORMAL);
+		_game->getCursor()->setVisible(true);
+		_battleGame->setSelectedUnit(0);
+	}
 	updateSoldierInfo(_battleGame->getSelectedUnit());
 }
 
+/**
+ * Sets the timer interval for think() calls of the state.
+ * @param interval An interval in ms.
+ */
 void BattlescapeState::setStateInterval(Uint32 interval)
 {
 	_stateTimer->setInterval(interval);
-}
-
-BattleItem *BattlescapeState::getSelectedItem() const
-{
-	return _selectedItem;
 }
 
 }

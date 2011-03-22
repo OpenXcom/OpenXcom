@@ -59,7 +59,7 @@ const int Projectile::_trail[11][36] = {
  * @param save Pointer to battlesavegame.
  * @param origin Projectile's start position in tile x/y/z.
  * @param target Projectile's target position in tile x/y/z.
- * @param bulletType
+ * @param bulletType A number that corresponds to the type of bullet this is.
  */
 Projectile::Projectile(ResourcePack *res, SavedBattleGame *save, Position origin, Position target, int bulletType) : _res(res), _save(save), _origin(origin), _target(target), _position(0), _bulletType(bulletType)
 {
@@ -105,7 +105,7 @@ bool Projectile::calculateTrajectory()
 	Tile *tile = _save->getTile(_target);
 	if (tile->getUnit() != 0)
 	{
-		targetVoxel = Position(_target.x*16 + 8, _target.y*16 + 8, _target.z*24 + 19);
+		targetVoxel = Position(_target.x*16 + 8, _target.y*16 + 8, _target.z*24 + tile->getUnit()->getUnit()->getStandHeight()/2);
 	}
 	else if (tile->getMapData(O_OBJECT) != 0)
 	{
@@ -188,11 +188,16 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
  */
 bool Projectile::move()
 {
-	_position+=2;
-	if ((_trajectory.size()-1) <= _position)
+	_position++;
+	if (_position == _trajectory.size())
 	{
-		while (_position >= _trajectory.size())
-			_position--;
+		_position--;
+		return false;
+	}
+	_position++;
+	if (_position == _trajectory.size())
+	{
+		_position--;
 		return false;
 	}
 	else

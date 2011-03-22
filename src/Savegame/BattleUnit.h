@@ -32,8 +32,8 @@ class BattleItem;
 class Unit;
 class RuleUnit;
 
-enum UnitStatus {STATUS_STANDING, STATUS_WALKING, STATUS_TURNING, STATUS_AIMING, STATUS_FALLING, STATUS_DEAD};
-enum UnitFaction {FACTION_PLAYER, FACTION_HOSTILE, FACTION_NEUTRAL, FACTION_FRIENDLY};
+enum UnitStatus {STATUS_STANDING, STATUS_WALKING, STATUS_TURNING, STATUS_AIMING, STATUS_FALLING, STATUS_DEAD, STATUS_UNCONSCIOUS};
+enum UnitFaction {FACTION_PLAYER, FACTION_HOSTILE, FACTION_NEUTRAL};
 
 /**
  * Represents a moving unit in the battlescape, player controlled or AI controlled
@@ -50,7 +50,7 @@ private:
 	int _direction, _toDirection;
 	Position _destination;
 	UnitStatus _status;
-	int _walkPhase;
+	int _walkPhase, _fallPhase;
 	std::vector<Tile *> _visibleTiles;
 	int _tu, _energy, _health, _morale;
 	bool _cached, _kneeled;
@@ -97,7 +97,9 @@ public:
 	/// Look at a certain direction.
 	void lookAt(int direction);
 	/// Turn to the destination direction.
-	void turn(bool spendTU = true);
+	void turn();
+	/// Abort turning.
+	void abortTurn();
 	/// Gets the soldier's gender.
 	SoldierGender getGender() const;
 	/// Gets the unit's faction.
@@ -122,6 +124,17 @@ public:
 	int getMorale() const;
 	/// Damage
 	void damage(Position position, int power);
+	/// Start falling sequence
+	void startFalling();
+	void keepFalling();
+	/// Get falling sequence
+	int getFallingPhase() const;
+	/// The unit is out - either dead or unconscious.
+	bool isOut() const;
+	/// Spend time units if it can.
+	bool spendTimeUnits(int tu);
+	/// Set time units.
+	void setTimeUnits(int tu);
 
 
 };

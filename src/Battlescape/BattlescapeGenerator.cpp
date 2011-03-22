@@ -246,7 +246,6 @@ void BattlescapeGenerator::run()
 /**
  * Adds a soldier to the game and place him on a free spawnpoint.
  * @param soldier pointer to the Soldier
- * @param rules pointer to the RuleUnit which holds info about unit .
  */
 void BattlescapeGenerator::addSoldier(Soldier *soldier)
 {
@@ -277,9 +276,9 @@ void BattlescapeGenerator::addSoldier(Soldier *soldier)
 
 /**
  * Adds an alien to the game and place him on a free spawnpoint.
- * @param rules pointer to the RuleUnit which holds info about unit .
- * @param rank The rank of the alien.
- * @param name The name of the alien.
+ * @param rules pointer to the RuleAlien which holds info about alien .
+ * @param armor The armor of the alien.
+ * @param rank The rank of the alien, used for spawn point search.
  */
 void BattlescapeGenerator::addAlien(RuleAlien *rules, RuleArmor *armor, NodeRank rank)
 {
@@ -372,7 +371,6 @@ void BattlescapeGenerator::addItem(RuleItem *item)
 
 /** 
  * Generates a map (set of tiles) for a new battlescape game.
- * @param res pointer to ResourcePack.
  */
 void BattlescapeGenerator::generateMap()
 {
@@ -639,7 +637,6 @@ int BattlescapeGenerator::loadMAP(MapBlock *mapblock, int xoff, int yoff, RuleTe
  * @param mapblock pointer to MapBlock.
  * @param xoff mapblock offset in X direction
  * @param yoff mapblock offset in Y direction
- * @param save pointer to the current battle game
  * @sa http://www.ufopaedia.org/index.php?title=ROUTES
  */
 void BattlescapeGenerator::loadRMP(MapBlock *mapblock, int xoff, int yoff)

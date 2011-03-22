@@ -59,12 +59,13 @@ public:
 	int getThrowingAccuracy() const;
 	/// Gets the Alien's strength.
 	int getStrength() const;
+	/// Gets the Alien's rules.
 	RuleAlien *getRules() const;
-	/// 
+	/// Gets the alien's stand height.
 	int getStandHeight() const;
-	/// 
+	/// Gets the alien's kneel height.
 	int getKneelHeight() const;
-	/// 
+	/// Gets the alien's loft ID.
 	int gotLoftemps() const;
 };
 

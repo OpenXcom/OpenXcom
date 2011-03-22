@@ -21,8 +21,6 @@
 #include "SavedBattleGame.h"
 #include "SavedGame.h"
 #include "Tile.h"
-#include "BattleUnit.h"
-#include "BattleItem.h"
 #include "Node.h"
 #include "SDL.h"
 #include "../Ruleset/MapDataSet.h"
@@ -39,7 +37,7 @@ std::string base64_encode(unsigned char const* bytes_to_encode, unsigned int in_
 /**
  * Initializes a brand new battlescape saved game.
  */
-SavedBattleGame::SavedBattleGame() : _tiles(), _nodes(), _units()
+SavedBattleGame::SavedBattleGame() : _tiles(), _nodes(), _units(), _side(FACTION_PLAYER), _turn(1), _debugMode(false)
 {
 
 }
@@ -337,10 +335,16 @@ BattleUnit *SavedBattleGame::selectNextPlayerUnit()
 {
 	std::vector<BattleUnit*>::iterator i = _units.begin();
 	bool bNext = false;
+	int wraps = 0;
+
+	if (_selectedUnit == 0)
+	{
+		bNext = true;
+	}
 
 	do
 	{
-		if (bNext && (*i)->getFaction() == FACTION_PLAYER)
+		if (bNext && (*i)->getFaction() == _side && !(*i)->isOut())
 		{
 			break;
 		}
@@ -352,6 +356,13 @@ BattleUnit *SavedBattleGame::selectNextPlayerUnit()
 		if (i == _units.end())
 		{
 			i = _units.begin();
+			wraps++;
+		}
+		// back to where we started... no more units found
+		if (wraps == 2)
+		{
+			_selectedUnit = 0;
+			return _selectedUnit;
 		}
 	}
 	while (true);
@@ -450,6 +461,55 @@ BattleItem *SavedBattleGame::getItemFromUnit(BattleUnit *unit, InventorySlot slo
 		}
 	}
 	return 0;
+}
+
+UnitFaction SavedBattleGame::getSide() const
+{
+	return _side;
+}
+
+int SavedBattleGame::getTurn() const
+{
+	return _turn;
+}
+
+void SavedBattleGame::endTurn()
+{
+	if (_side == FACTION_PLAYER)
+	{
+		_side = FACTION_HOSTILE;
+	}
+	else if (_side == FACTION_HOSTILE)
+	{
+		_turn++;
+		_side = FACTION_PLAYER;
+	}
+
+	for (std::vector<BattleUnit*>::iterator i = _units.begin(); i != _units.end(); i++)
+	{
+		if ((*i)->getFaction() == _side)
+		{
+			(*i)->setTimeUnits((*i)->getUnit()->getTimeUnits());
+		}
+	}
+
+	_selectedUnit = 0;
+	selectNextPlayerUnit();
+}
+
+void SavedBattleGame::setDebugMode()
+{
+	for (int i = 0; i < _height * _length * _width; i++)
+	{
+		_tiles[i]->setDiscovered(true);
+	}
+
+	_debugMode = true;
+}
+
+bool SavedBattleGame::getDebugMode() const
+{
+	return _debugMode;
 }
 
 /** under construction

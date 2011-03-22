@@ -449,8 +449,8 @@ void Map::drawTerrain(Surface *surface)
 						Position voxelPos = (*i)->getPosition();
 						convertVoxelToScreen(voxelPos, &bulletPositionScreen);
 						frame = _res->getSurfaceSet("SMOKE.PCK")->getFrame((*i)->getCurrentFrame());
-						frame->setX(bulletPositionScreen.x - 18);
-						frame->setY(bulletPositionScreen.y - 18);
+						frame->setX(bulletPositionScreen.x - 15);
+						frame->setY(bulletPositionScreen.y - 15);
 						frame->blit(surface);
 					}
 
@@ -553,17 +553,11 @@ void Map::keyboardPress(Action *action, State *state)
 	getSelectorPosition(&pos);
 	InteractiveSurface::keyboardPress(action, state);
 
-	// "f" - puts a tile on fire (for testing purposes)
-	if (action->getDetails()->key.keysym.sym == SDLK_f)
+	// "d" - enable debug mode
+	if (action->getDetails()->key.keysym.sym == SDLK_d)
 	{
-		_save->getTile(pos)->setFire(RNG::generate(1,5));
-		_save->getTerrainModifier()->calculateTerrainLighting();
-	}
-	// "s" - puts a tile on smoke (for testing purposes)
-	if (action->getDetails()->key.keysym.sym == SDLK_s)
-	{
-		_save->getTile(pos)->setSmoke(RNG::generate(1,50));
-		//_save->getTerrainModifier()->calculateLighting();
+		_save->setDebugMode();
+		cacheTileSprites();
 	}
 
 }
@@ -976,7 +970,8 @@ void Map::cacheTileSprites()
 }
 
 /**
- * Caches tile's sprites.
+ * Caches 1 tile's sprites.
+ * @return false if the tile did not need redrawing.
  */
 bool Map::cacheTileSprites(int i)
 {
@@ -1098,6 +1093,9 @@ bool Map::cacheTileSprites(int i)
 	}
 }
 
+/**
+ * Check all units if they need to be redrawn.
+ */
 void Map::cacheUnits()
 {
 	UnitSprite *unitSprite = new UnitSprite(_spriteWidth, _spriteHeight, 0, 0);
@@ -1139,16 +1137,28 @@ void Map::cacheUnits()
 	delete unitSprite;
 }
 
+/**
+ * Put a projectile sprite on the map
+ * @param projectile
+ */
 void Map::setProjectile(Projectile *projectile)
 {
 	_projectile = projectile;
 }
 
+/**
+ * Get the current projectile sprite on the map
+ * @return 0 if there is no projectile sprite on the map.
+ */
 Projectile *Map::getProjectile() const
 {
 	return _projectile;
 }
 
+/**
+ * Get a list of explosion sprites on the map.
+ * @return a list of explosion sprites.
+ */
 std::set<Explosion*> *Map::getExplosions()
 {
 	return &_explosions;

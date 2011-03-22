@@ -22,9 +22,10 @@ namespace OpenXcom
 {
 
 /**
- * Sets up a UnitSprite with the specified size and position.
+ * Sets up a Explosion sprite with the specified size and position.
  * @param position Explosion center position in voxel x/y/z.
- * @param frame
+ * @param startFrame A startframe - can be used to offset different explosions at different frames.
+ * @param big Flag to indicate it is a bullet hit(false), or a real explosion(true).
  */
 Explosion::Explosion(Position position, int startFrame, bool big) : _position(position), _currentFrame(startFrame), _startFrame(startFrame), _big(big)
 {
@@ -67,14 +68,19 @@ Position Explosion::getPosition() const
 	return _position;
 }
 
-
-/// Get a the current frame.
+/**
+ * Get the current frame in the animation.
+ * @return frame number.
+ */
 int Explosion::getCurrentFrame()
 {
 	return _currentFrame;
 }
 
-/// Is small?
+/**
+ * Return flag to indicate it is a bullet hit(false), or a real explosion(true).
+ * @return big
+ */
 bool Explosion::isBig()
 {
 	return _big;
