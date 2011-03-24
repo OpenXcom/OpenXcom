@@ -29,6 +29,8 @@
 #include "../Engine/SoundSet.h"
 #include "../Engine/Sound.h"
 #include "../Engine/RNG.h"
+#include "../Ruleset/XcomRuleset.h"
+#include "../Ruleset/RuleArmor.h"
 
 namespace OpenXcom
 {
@@ -103,11 +105,16 @@ void UnitFallBState::think()
 	{
 		_unit->keepFalling();
 	}
-	else
+	
+	if (_unit->getStatus() == STATUS_DEAD || _unit->getStatus() == STATUS_UNCONSCIOUS)
 	{
-		_parent->getGame()->getSavedGame()->getBattleGame()->getTerrainModifier()->calculateUnitLighting();
+		TerrainModifier *terrain = _parent->getGame()->getSavedGame()->getBattleGame()->getTerrainModifier();
+		convertUnitToCorpse(_unit, terrain);
+		terrain->calculateUnitLighting();
+		_parent->getMap()->cacheTileSprites();
 		_parent->popState();
 	}
+
 	_parent->getMap()->cacheUnits();
 }
 
@@ -125,6 +132,11 @@ void UnitFallBState::cancel()
 std::string UnitFallBState::getResult() const
 {
 	return _result;
+}
+
+void UnitFallBState::convertUnitToCorpse(BattleUnit *unit, TerrainModifier *terrain)
+{
+	terrain->spawnItem(_unit->getPosition(), new BattleItem(_parent->getGame()->getRuleset()->getItem(_unit->getUnit()->getArmor()->getCorpseItem())));
 }
 
 }

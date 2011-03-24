@@ -34,8 +34,9 @@ namespace OpenXcom
 class RuleArmor
 {
 private:
-	std::string _type, _spriteSheet;
+	std::string _type, _spriteSheet, _corpseItem;
 	int _frontArmor, _sideArmor, _rearArmor, _underArmor;
+
 public:
 	/// Creates a blank armor ruleset.
 	RuleArmor(std::string type, std::string spriteSheet);
@@ -55,6 +56,10 @@ public:
 	int getRearArmor() const;
 	/// get the under armor level.
 	int getUnderArmor() const;
+	/// Set the corpse item.
+	void setCorpseItem(std::string corpseItem);
+	/// Get the corpse item.
+	std::string getCorpseItem() const;
 };
 
 }

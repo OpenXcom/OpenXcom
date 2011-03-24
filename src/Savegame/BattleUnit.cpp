@@ -74,6 +74,8 @@ void BattleUnit::load(const YAML::Node &node)
 	node["health"] >> _health;
 	node["energy"] >> _energy;
 	node["morale"] >> _morale;
+
+	node["kneeled"] >> _kneeled;
 }
 
 /**
@@ -97,6 +99,8 @@ void BattleUnit::save(YAML::Emitter &out) const
 	out << YAML::Key << "health" << YAML::Value << _health;
 	out << YAML::Key << "energy" << YAML::Value << _energy;
 	out << YAML::Key << "morale" << YAML::Value << _morale;
+
+	out << YAML::Key << "kneeled" << YAML::Value << _kneeled;
 
 	out << YAML::EndMap;
 }
@@ -504,6 +508,31 @@ bool BattleUnit::spendTimeUnits(int tu)
 void BattleUnit::setTimeUnits(int tu)
 {
 	_tu = tu;
+}
+
+/**
+ * Add this unit to the list of visible units. Returns true if this is a new one.
+ * @param unit
+ */
+bool BattleUnit::addToVisibleUnits(BattleUnit *unit)
+{
+	for (std::vector<BattleUnit*>::iterator i = _visibleUnits.begin(); i != _visibleUnits.end(); i++)
+	{
+		if ((BattleUnit*)(*i) == unit)
+		{
+			return false;
+		}
+	}
+	_visibleUnits.push_back(unit);
+	return true;
+}
+
+/**
+ * Clear visible units.
+ */
+void BattleUnit::clearVisibleUnits()
+{
+	_visibleUnits.clear();
 }
 
 }

@@ -23,6 +23,8 @@
 #include "../Engine/RNG.h"
 #include "../Engine/Exception.h"
 #include "BattleUnit.h"
+#include "BattleItem.h"
+#include "../Ruleset/RuleItem.h"
 
 namespace OpenXcom
 {
@@ -50,7 +52,7 @@ Tile::Tile(const Position& pos): _discovered(false), _smoke(0), _fire(0),  _expl
  */
 Tile::~Tile()
 {
-
+	_inventory.clear();
 }
 
 /**
@@ -553,6 +555,32 @@ int Tile::getSmoke()
 int Tile::getAnimationOffset()
 {
 	return _animationOffset;
+}
+
+/**
+ * Add an item on the tile.
+ * @param item
+ */
+void Tile::addItem(BattleItem *item)
+{
+	_inventory.push_back(item);
+	setCached(false);
+}
+
+/**
+ * Get the topmost item sprite to draw on the battlescape.
+ * @return item sprite ID in floorob, or -1 when no item
+ */
+int Tile::getTopItemSprite()
+{
+	if (_inventory.size() > 0)
+	{
+		return _inventory.at(0)->getRules()->getFloorSprite();
+	}
+	else
+	{
+		return -1;
+	}
 }
 
 }

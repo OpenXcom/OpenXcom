@@ -142,6 +142,7 @@ int RuleItem::getBigSprite() const
 void RuleItem::setBigSprite(int sprite)
 {
 	_bigSprite = sprite;
+	_floorSprite = sprite;
 }
 
 /**

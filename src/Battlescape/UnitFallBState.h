@@ -26,6 +26,7 @@ namespace OpenXcom
 {
 
 class BattleUnit;
+class TerrainModifier;
 
 class UnitFallBState : public BattleState
 {
@@ -45,6 +46,8 @@ public:
 	void think();
 	/// Get the result of the state.
 	std::string getResult() const;
+	/// Convert a unit to a corpse.
+	void convertUnitToCorpse(BattleUnit *unit, TerrainModifier *terrain);
 };
 
 }
