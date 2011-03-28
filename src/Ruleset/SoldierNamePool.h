@@ -21,6 +21,7 @@
 
 #include <string>
 #include <vector>
+#include "yaml.h"
 
 namespace OpenXcom
 {
@@ -34,20 +35,16 @@ namespace OpenXcom
 class SoldierNamePool
 {
 private:
-	std::vector<std::wstring> _maleNames, _femaleNames, _lastNames;
+	std::vector<std::wstring> _maleFirst, _femaleFirst, _maleLast, _femaleLast;
 public:
 	/// Creates a blank pool.
 	SoldierNamePool();
 	/// Cleans up the pool.
 	~SoldierNamePool();
+	/// Loads the pool from YAML.
+	void load(const std::string &filename);
 	/// Generates a new name from the pool.
 	std::wstring genName(int *gender) const;
-	/// Adds a male first name.
-	void addMaleName(const std::wstring &name);
-	/// Adds a female first name.
-	void addFemaleName(const std::wstring &name);
-	/// Adds a last name.
-	void addLastName(const std::wstring &name);
 };
 
 }

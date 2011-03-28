@@ -17,8 +17,12 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "SoldierNamePool.h"
+#include <iostream>
 #include <sstream>
+#include <fstream>
 #include "../Engine/RNG.h"
+#include "../Engine/Language.h"
+#include "../Engine/Exception.h"
 
 namespace OpenXcom
 {
@@ -26,7 +30,7 @@ namespace OpenXcom
 /**
  * Initializes a new pool with blank lists of names.
  */
-SoldierNamePool::SoldierNamePool() : _maleNames(), _femaleNames(), _lastNames()
+SoldierNamePool::SoldierNamePool() : _maleFirst(), _femaleFirst(), _maleLast(), _femaleLast()
 {
 }
 
@@ -38,6 +42,59 @@ SoldierNamePool::~SoldierNamePool()
 }
 
 /**
+ * Loads the pool from a YAML file.
+ * @param filename YAML file.
+ */
+void SoldierNamePool::load(const std::string &filename)
+{
+	unsigned int size = 0;
+
+	std::string s = "./DATA/SoldierName/" + filename + ".nam";
+	std::ifstream fin(s.c_str());
+	if (!fin)
+	{
+		throw Exception("Failed to load name pool");
+	}
+    YAML::Parser parser(fin);
+	YAML::Node doc;
+    parser.GetNextDocument(doc);
+
+	for(YAML::Iterator it = doc["maleFirst"].begin(); it != doc["maleFirst"].end(); it++)
+	{
+		std::string name;
+		*it >> name;
+		_maleFirst.push_back(Language::utf8ToWstr(name));
+	}
+	for(YAML::Iterator it = doc["femaleFirst"].begin(); it != doc["femaleFirst"].end(); it++)
+	{
+		std::string name;
+		*it >> name;
+		_femaleFirst.push_back(Language::utf8ToWstr(name));
+	}
+	for(YAML::Iterator it = doc["maleLast"].begin(); it != doc["maleLast"].end(); it++)
+	{
+		std::string name;
+		*it >> name;
+		_maleLast.push_back(Language::utf8ToWstr(name));
+	}
+	if (const YAML::Node *pName = doc.FindValue("femaleLast"))
+	{
+		for(YAML::Iterator it = doc["femaleLast"].begin(); it != doc["femaleLast"].end(); it++)
+		{
+			std::string name;
+			*it >> name;
+			_femaleLast.push_back(Language::utf8ToWstr(name));
+		}
+	}
+	else
+	{
+		_femaleLast = _maleLast;
+	}
+		
+	fin.close();
+}
+
+/**
  * Returns a new random name (first + last) from the
  * lists of names contained within.
  * @param gender Returned gender of the name.
@@ -46,47 +103,22 @@ SoldierNamePool::~SoldierNamePool()
 std::wstring SoldierNamePool::genName(int *gender) const
 {
 	std::wstringstream name;
-	unsigned int first = RNG::generate(1, _maleNames.size() + _femaleNames.size());
-	unsigned int last = RNG::generate(1, _lastNames.size());
-	if (first <= _maleNames.size())
+	unsigned int first = RNG::generate(1, _maleFirst.size() + _femaleFirst.size());
+	if (first <= _maleFirst.size())
 	{
 		*gender = 0;
-		name << _maleNames[first - 1];
+		name << _maleFirst[first - 1];
+		unsigned int last = RNG::generate(1, _maleLast.size());
+		name << " " << _maleLast[last - 1];
 	}
 	else
 	{
 		*gender = 1;
-		name << _femaleNames[first - _maleNames.size() - 1];
+		name << _femaleFirst[first - _maleFirst.size() - 1];
+		unsigned int last = RNG::generate(1, _femaleLast.size());
+		name << " " << _femaleLast[last - 1];
 	}
-	name << " " << _lastNames[last - 1];
 	return name.str();
-}
-
-/**
- * Adds a new male first name to the pool.
- * @param name New name.
- */
-void SoldierNamePool::addMaleName(const std::wstring &name)
-{
-	_maleNames.push_back(name);
-}
-
-/**
- * Adds a new female first name to the pool.
- * @param name New name.
- */
-void SoldierNamePool::addFemaleName(const std::wstring &name)
-{
-	_femaleNames.push_back(name);
-}
-
-/**
- * Adds a new last name to the pool.
- * @param name New name.
- */
-void SoldierNamePool::addLastName(const std::wstring &name)
-{
-	_lastNames.push_back(name);
 }
 
 }
