@@ -30,7 +30,7 @@ namespace OpenXcom
  * Initializes a UFO of the specified type.
  * @param rules Pointer to ruleset.
  */
-Ufo::Ufo(RuleUfo *rules) : MovingTarget(), _rules(rules), _id(0), _damage(0), _altitude(0), _direction("STR_NORTH"), _detected(false), _daysCrashed(0), _inBattlescape(false)
+Ufo::Ufo(RuleUfo *rules) : MovingTarget(), _rules(rules), _id(0), _damage(0), _altitude(0), _direction("STR_NORTH"), _detected(false), _hoursCrashed(-1), _inBattlescape(false)
 {
 }
 
@@ -54,7 +54,7 @@ void Ufo::load(const YAML::Node &node)
 	node["altitude"] >> _altitude;
 	node["direction"] >> _direction;
 	node["detected"] >> _detected;
-	node["daysCrashed"] >> _daysCrashed;
+	node["hoursCrashed"] >> _hoursCrashed;
 	node["inBattlescape"] >> _inBattlescape;
 
 	double lon, lat;
@@ -78,7 +78,7 @@ void Ufo::save(YAML::Emitter &out) const
 	out << YAML::Key << "altitude" << YAML::Value << _altitude;
 	out << YAML::Key << "direction" << YAML::Value << _direction;
 	out << YAML::Key << "detected" << YAML::Value << _detected;
-	out << YAML::Key << "daysCrashed" << YAML::Value << _daysCrashed;
+	out << YAML::Key << "hoursCrashed" << YAML::Value << _hoursCrashed;
 	out << YAML::Key << "inBattlescape" << YAML::Value << _inBattlescape;
 	out << YAML::EndMap;
 }
@@ -183,21 +183,21 @@ void Ufo::setDetected(bool detected)
 }
 
 /**
- * Returns the amount of days the UFO has been crashed for.
- * @return Amount of days.
+ * Returns the amount of hours the UFO has been crashed for.
+ * @return Amount of hours.
  */
-int Ufo::getDaysCrashed() const
+int Ufo::getHoursCrashed() const
 {
-	return _daysCrashed;
+	return _hoursCrashed;
 }
 
 /**
- * Changes the amount of days the UFO has been crashed for.
- * @param days Amount of days.
+ * Changes the amount of hours the UFO has been crashed for.
+ * @param hours Amount of hours.
  */
-void Ufo::setDaysCrashed(int days)
+void Ufo::setHoursCrashed(int hours)
 {
-	_daysCrashed = days;
+	_hoursCrashed = hours;
 }
 
 /**

@@ -506,6 +506,10 @@ void DogfightState::move()
 			{
 				_destroy = true;
 			}
+			else
+			{
+				_ufo->setHoursCrashed(24 + RNG::generate(0, 72));
+			}
 		}
 		_targetRadius = 0;
 		_end = true;

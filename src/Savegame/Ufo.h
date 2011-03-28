@@ -41,7 +41,7 @@ private:
 	int _id, _damage, _altitude;
 	std::string _direction;
 	bool _detected;
-	int _daysCrashed;
+	int _hoursCrashed;
 	bool _inBattlescape;
 	
 	/// Calculates a new speed vector to the destination.
@@ -73,10 +73,10 @@ public:
 	bool getDetected() const;
 	/// Sets the UFO's detection status.
 	void setDetected(bool detected);
-	/// Gets the UFO's amount of crashed days.
-	int getDaysCrashed() const;
-	/// Sets the UFO's amount of crashed days.
-	void setDaysCrashed(int days);
+	/// Gets the UFO's amount of crashed hours.
+	int getHoursCrashed() const;
+	/// Sets the UFO's amount of crashed hours.
+	void setHoursCrashed(int hours);
 	/// Gets the UFO's direction.
 	std::string getDirection() const;
 	/// Gets the UFO's altitude.

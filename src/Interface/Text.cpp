@@ -69,6 +69,7 @@ std::wstring Text::formatFunding(int funds)
 void Text::setBig()
 {
 	_font = _big;
+	processText();
 }
 
 /**
@@ -77,6 +78,7 @@ void Text::setBig()
 void Text::setSmall()
 {
 	_font = _small;
+	processText();
 }
 
 /**
@@ -343,7 +345,7 @@ void Text::draw()
 		if (*c == ' ')
 		{
 			// panther: trim spaces on line begins
-			if (pos>0)
+			if (pos > 0)
 			{
 				x += font->getWidth() / 2;
 			}

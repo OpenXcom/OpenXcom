@@ -32,13 +32,15 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-TextEdit::TextEdit(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _value(L""), _blink(true), _ascii('A'), _caret(0)
+TextEdit::TextEdit(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _value(L""), _blink(true), _ascii('A'), _caretPos(0)
 {
 	_validButton = SDL_BUTTON_LEFT;
 
 	_text = new Text(width, height, 0, 0);
 	_timer = new Timer(100);
 	_timer->onTimer((SurfaceHandler)&TextEdit::blink);
+	_caret = new Text(16, 16, 0, 0);
+	_caret->setText(L"|");
 }
 
 /**
@@ -47,6 +49,7 @@ TextEdit::TextEdit(int width, int height, int x, int y) : InteractiveSurface(wid
 TextEdit::~TextEdit()
 {
 	delete _text;
+	delete _caret;
 	delete _timer;
 }
 
@@ -56,10 +59,14 @@ TextEdit::~TextEdit()
  */
 void TextEdit::focus()
 {
+	if (!_isFocused)
+	{
+		_caretPos = _value.length();
+		_blink = true;
+		_timer->start();
+		draw();
+	}
 	InteractiveSurface::focus();
-	_blink = true;
-	_timer->start();
-	draw();
 }
 
 /**
@@ -68,6 +75,7 @@ void TextEdit::focus()
 void TextEdit::setBig()
 {
 	_text->setBig();
+	_caret->setBig();
 }
 
 /**
@@ -76,6 +84,7 @@ void TextEdit::setBig()
 void TextEdit::setSmall()
 {
 	_text->setSmall();
+	_caret->setSmall();
 }
 
 /**
@@ -88,6 +97,7 @@ void TextEdit::setSmall()
 void TextEdit::setFonts(Font *big, Font *small)
 {
 	_text->setFonts(big, small);
+	_caret->setFonts(big, small);
 }
 
 /**
@@ -159,6 +169,7 @@ void TextEdit::setVerticalAlign(TextVAlign valign)
 void TextEdit::setColor(Uint8 color)
 {
 	_text->setColor(color);
+	_caret->setColor(color);
 }
 
 /**
@@ -180,6 +191,7 @@ void TextEdit::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 {
 	Surface::setPalette(colors, firstcolor, ncolors);
 	_text->setPalette(colors, firstcolor, ncolors);
+	_caret->setPalette(colors, firstcolor, ncolors);
 }
 
 /**
@@ -201,35 +213,41 @@ void TextEdit::blink()
 }
 
 /**
- * Adds a flashing * to the end of the text
+ * Adds a flashing | caret to the text
  * to show when it's focused and editable.
  */
 void TextEdit::draw()
 {
+	_text->setText(_value);
+#ifdef DINGOO
 	std::wstring newValue = _value;
-
 	if (_isFocused && _blink)
 	{
-#ifdef DINGOO
 		newValue += _ascii;
-#else
-	    newValue.insert(newValue.length() - _caret, L"*");
-#endif
 		_text->setText(newValue);
     }
-	else
-	{
-#ifdef DINGOO
-        _text->setText(_value);
-#else
-        newValue.insert(newValue.length() - _caret, L" ");
-		_text->setText(newValue);
 #endif
-
-    }
-
 	clear();
 	_text->blit(this);
+#ifndef DINGOO
+	if (_isFocused && _blink)
+	{
+		int x = 0;
+		for (unsigned int i = 0; i < _caretPos; i++)
+		{
+			if (_value[i] == ' ')
+			{
+				x += _text->getFont()->getWidth() / 2;
+			}
+			else
+			{
+				x += _text->getFont()->getChar(_value[i])->getCrop()->w + _text->getFont()->getSpacing();
+			}
+		}
+		_caret->setX(x);
+		_caret->blit(this);
+    }
+#endif
 }
 
 /**
@@ -245,14 +263,19 @@ bool TextEdit::exceedsMaxWidth(wchar_t c)
 	std::wstring s = _value;
 
 	s += c;
-	s += '*';
 	for (std::wstring::iterator i = s.begin(); i < s.end(); i++)
-		w += _text->getFont()->getChar(*i)->getCrop()->w + _text->getFont()->getSpacing();
+	{
+		if (*i == ' ')
+		{
+			w += _text->getFont()->getWidth() / 2;
+		}
+		else
+		{
+			w += _text->getFont()->getChar(*i)->getCrop()->w + _text->getFont()->getSpacing();
+		}
+	}
 
-	if (w > getWidth())
-		return true;
-	else
-		return false;
+	return (w > getWidth());
 }
 
 /**
@@ -280,45 +303,59 @@ void TextEdit::keyboardPress(Action *action, State *state)
 	case SDLK_UP:
 		_ascii++;
 		if (_ascii > '~')
+		{
 			_ascii = ' ';
+		}
 		break;
 	case SDLK_DOWN:
 		_ascii--;
 		if (_ascii < ' ')
+		{
 			_ascii = '~';
+		}
+		break;
+	case SDLK_LEFT:
+		if (_value.length() > 0)
+		{
+			_value.resize(_value.length() - 1);
+		}
 		break;
 	case SDLK_RIGHT:
 		if (!exceedsMaxWidth(_ascii))
+		{
 			_value += _ascii;
+		}
 		break;
-	case SDLK_LEFT:
-#endif
-    case SDLK_END:
-        _caret = 0;
-        break;
-    case SDLK_HOME:
-        _caret = _value.length();
-        break;
+#else
     case SDLK_LEFT:
-        if (_caret < _value.length())
-			_caret++;
+        if (_caretPos > 0)
+		{
+			_caretPos--;
+		}
         break;
     case SDLK_RIGHT:
-		if (_caret > 0)
-			_caret--;
+		if (_caretPos < _value.length())
+		{
+			_caretPos++;
+		}
+        break;
+    case SDLK_HOME:
+        _caretPos = 0;
+        break;
+    case SDLK_END:
+        _caretPos = _value.length();
         break;
 	case SDLK_BACKSPACE:
-		if (_value.length() - _caret > 0)
+		if (_caretPos > 0)
 		{
-			_value.erase(_value.length() - _caret - 1, 1);
+			_value.erase(_caretPos - 1, 1);
+			_caretPos--;
         }
 		break;
 	case SDLK_DELETE:
-        if (_value.length() - _caret >= 0)
+        if (_caretPos < _value.length())
 		{
-			_value.erase(_value.length() - _caret, 1);
-			if (_caret > 0)
-				_caret--;
+			_value.erase(_caretPos, 1);
         }
 	    break;
 	case SDLK_RETURN:
@@ -331,11 +368,12 @@ void TextEdit::keyboardPress(Action *action, State *state)
 		{
 			if (action->getDetails()->key.keysym.unicode >= ' ' && action->getDetails()->key.keysym.unicode <= '~' && !exceedsMaxWidth((wchar_t)action->getDetails()->key.keysym.unicode))
 			{
-			    _value.insert(_value.length() - _caret, 1, (wchar_t) action->getDetails()->key.keysym.unicode);
-			    //_value += (wchar_t)action->getDetails()->key.keysym.unicode;
+			    _value.insert(_caretPos, 1, (wchar_t) action->getDetails()->key.keysym.unicode);
+				_caretPos++;
 			}
 		}
 	}
+#endif
 	draw();
 
 	InteractiveSurface::keyboardPress(action, state);

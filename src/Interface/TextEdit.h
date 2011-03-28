@@ -36,12 +36,12 @@ class Timer;
 class TextEdit : public InteractiveSurface
 {
 private:
-	Text *_text;
+	Text *_text, *_caret;
 	std::wstring _value;
 	bool _blink;
 	Timer *_timer;
 	wchar_t _ascii;
-	unsigned int _caret;
+	unsigned int _caretPos;
 
 	/// Checks if a character will exceed the maximum width.
 	bool exceedsMaxWidth(wchar_t c);

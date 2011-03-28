@@ -449,7 +449,7 @@ void GeoscapeState::time5Seconds()
 	for (std::vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end(); i++)
 	{
 		(*i)->think();
-		if ((*i)->reachedDestination() || (*i)->getDaysCrashed() > 4)
+		if ((*i)->reachedDestination() || (*i)->getHoursCrashed() == 0)
 		{
 			(*i)->setDetected(false);
 		}
@@ -516,7 +516,7 @@ void GeoscapeState::time5Seconds()
 	// Clean up dead UFOs
 	for (std::vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end();)
 	{
-		if ((*i)->reachedDestination() || (*i)->getDaysCrashed() > 4)
+		if ((*i)->reachedDestination() || (*i)->getHoursCrashed() == 0)
 		{
 			delete *i;
 			i = _game->getSavedGame()->getUfos()->erase(i);
@@ -696,6 +696,15 @@ void GeoscapeState::time1Hour()
 		}
 	}
 
+	// Handle crashed UFOs expiring
+	for (std::vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end(); i++)
+	{
+		if ((*i)->isCrashed() && (*i)->getHoursCrashed() > 0)
+		{
+			(*i)->setHoursCrashed((*i)->getHoursCrashed() - 1);
+		}
+	}
+
 	// Handle transfers
 	bool window = false;
 	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); i++)
@@ -735,15 +744,6 @@ void GeoscapeState::time1Day()
 					popup(new ProductionCompleteState(_game, _game->getLanguage()->getString((*j)->getRules()->getType()), (*i)->getName()));
 				}
 			}
-		}
-	}
-
-	// Handle crashed UFOs expiring
-	for (std::vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end(); i++)
-	{
-		if ((*i)->isCrashed())
-		{
-			(*i)->setDaysCrashed((*i)->getDaysCrashed() + 1);
 		}
 	}
 }
