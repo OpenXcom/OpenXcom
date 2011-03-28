@@ -1053,6 +1053,14 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	sgrenade->setDamageType(DT_SMOKE);
 	sgrenade->setBattleType(BT_GRENADE);
 
+	RuleItem *corpse = new RuleItem("STR_CORPSE");
+	corpse->setBigSprite(45);
+	corpse->setFloorSprite(39);
+
+	RuleItem *scorpse = new RuleItem("STR_SECTOID_CORPSE");
+	scorpse->setBigSprite(46);
+	scorpse->setFloorSprite(42);
+
 	_items.insert(std::pair<std::string, RuleItem*>("STR_STINGRAY_LAUNCHER", slauncher));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_AVALANCHE_LAUNCHER", alauncher));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_CANNON", icannon));
@@ -1073,6 +1081,8 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_items.insert(std::pair<std::string, RuleItem*>("STR_SMALL_ROCKET", srocket));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_GRENADE", grenade));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_SMOKE_GRENADE", sgrenade));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_CORPSE", corpse));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_SECTOID_CORPSE", scorpse));
 
 	// Add UFOs
 	RuleUfo *sscout = new RuleUfo("STR_SMALL_SCOUT");
@@ -1324,6 +1334,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 
 	RuleArmor *coveralls = new RuleArmor("STR_NONE_UC", "XCOM_0.PCK");
 	coveralls->setArmor(12, 8, 5, 2);
+	coveralls->setCorpseItem("STR_CORPSE");
 
 	RuleArmor *personalArmor = new RuleArmor("STR_PERSONAL_ARMOR_UC", "XCOM_1.PCK");
 	personalArmor->setArmor(50, 40, 40, 30);
@@ -1335,7 +1346,8 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	flyingSuit->setArmor(110, 90, 80, 70);
 
 	RuleArmor *sectoidSoldierArmor = new RuleArmor("SECTOID_ARMOR0", "SECTOID.PCK");
-	flyingSuit->setArmor(4, 3, 2, 2);
+	sectoidSoldierArmor->setArmor(4, 3, 2, 2);
+	sectoidSoldierArmor->setCorpseItem("STR_SECTOID_CORPSE");
 
 	_armors.insert(std::pair<std::string, RuleArmor*>("STR_NONE_UC", coveralls));
 	_armors.insert(std::pair<std::string, RuleArmor*>("STR_PERSONAL_ARMOR_UC", personalArmor));

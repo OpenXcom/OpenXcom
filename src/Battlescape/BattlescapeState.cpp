@@ -316,10 +316,10 @@ void BattlescapeState::mapClick(Action *action)
 		else
 		{
 			BattleUnit *unit = _battleGame->selectUnit(pos);
-			if (unit)
+			if (unit && !unit->isOut())
 			{
 			//  -= select unit =-
-				if (!unit->isOut() && unit->getFaction() == _battleGame->getSide())
+				if (unit->getFaction() == _battleGame->getSide())
 				{
 					_battleGame->setSelectedUnit(unit);
 					updateSoldierInfo(unit);
@@ -400,10 +400,15 @@ void BattlescapeState::btnShowMapClick(Action *action)
 void BattlescapeState::btnKneelClick(Action *action)
 {
 	// TODO: check for timeunits... check for FOV...
-	if (_battleGame->getSelectedUnit())
+	BattleUnit *bu = _battleGame->getSelectedUnit();
+	if (bu)
 	{
-		_battleGame->getSelectedUnit()->kneel(!_battleGame->getSelectedUnit()->isKneeled());
-		_map->cacheUnits();
+		if (bu->spendTimeUnits(bu->isKneeled()?8:4))
+		{
+			bu->kneel(!bu->isKneeled());
+			_map->cacheUnits();
+			updateSoldierInfo(bu);	
+		}
 	}
 }
 

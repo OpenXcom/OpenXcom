@@ -84,5 +84,16 @@ int RuleArmor::getUnderArmor() const
 {
 	return _underArmor;
 }
+/// Set the corpse item.
+void RuleArmor::setCorpseItem(std::string corpseItem)
+{
+	_corpseItem = corpseItem;
+}
+/// Get the corpse item.
+std::string RuleArmor::getCorpseItem() const
+{
+	return _corpseItem;
+}
+
 
 }

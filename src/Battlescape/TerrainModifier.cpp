@@ -276,7 +276,54 @@ void TerrainModifier::calculateFOV(BattleUnit *unit)
 			}
 		}
 	}
+
 }
+
+/**
+ * Check for every opposing unit within range if there is a clear line of sight
+ * @param unit
+ */
+bool TerrainModifier::checkForVisibleUnits(BattleUnit *unit)
+{
+	Position originVoxel, targetVoxel;
+	originVoxel = Position(unit->getPosition().x*16, unit->getPosition().y*16, unit->getPosition().z*24);
+	originVoxel.z += -_save->getTile(unit->getPosition())->getTerrainLevel();
+	originVoxel.z += unit->isKneeled()?unit->getUnit()->getKneelHeight():unit->getUnit()->getStandHeight();
+
+	unit->clearVisibleUnits();
+
+	bool unitSeen = false;
+
+	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); i++)
+	{
+		// only check for opposing units
+		if (unit->getFaction() == FACTION_PLAYER)
+		{
+			if ((*i)->getFaction() == FACTION_PLAYER ||
+				(*i)->getFaction() == FACTION_NEUTRAL)
+				continue;
+		}
+		if (unit->getFaction() == FACTION_HOSTILE)
+		{
+			if ((*i)->getFaction() == FACTION_HOSTILE)
+				continue;
+		}
+		targetVoxel = Position((*i)->getPosition().x*16, (*i)->getPosition().y*16, (*i)->getPosition().z*24);
+		targetVoxel.z += -_save->getTile((*i)->getPosition())->getTerrainLevel();
+		targetVoxel.z += (*i)->isKneeled()?(*i)->getUnit()->getKneelHeight():(*i)->getUnit()->getStandHeight();
+
+		// cast a ray from the middle of the unit to the middle of this one
+		int test = calculateLine(originVoxel, targetVoxel, false, 0);
+		if (test == -1)
+		{
+			unitSeen = true;
+			unit->addToVisibleUnits((*i));
+		}
+	}
+
+	return unitSeen;
+}
+
 
 /**
  * Calculates line of sight of a soldiers within range of the Position.
@@ -287,9 +334,13 @@ void TerrainModifier::calculateFOV(const Position &position)
 {
 	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); i++)
 	{
-		if ((*i)->getFaction() == FACTION_PLAYER)
+		if ((*i)->getFaction() == _save->getSide())
 		{
-			calculateFOV(*i);
+			if ((*i)->getFaction() == FACTION_PLAYER)
+			{
+				calculateFOV(*i);
+			}
+			checkForVisibleUnits(*i);
 		}
 	}
 }
@@ -703,7 +754,7 @@ int TerrainModifier::calculateLine(const Position& origin, const Position& targe
 		int result = voxelCheck(Position(cx, cy, cz));
 		if (result != -1)
 		{
-			if (!storeTrajectory)
+			if (!storeTrajectory && trajectory != 0)
 			{ // store the position of impact
 				trajectory->push_back(Position(cx, cy, cz));
 			}
@@ -776,6 +827,23 @@ int TerrainModifier::voxelCheck(const Position& voxel)
 		}
 	}
 	return -1;
+}
+
+/**
+ * Add item & affect with gravity.
+ * @param position
+ * @param item
+ */
+void TerrainModifier::spawnItem(const Position &position, BattleItem *item)
+{
+	Position p = position;
+
+	while (_save->getTile(p)->getMapData(O_FLOOR) == 0 && p.z > 0)
+	{
+		p.z--;
+	}
+
+	_save->getTile(p)->addItem(item);
 }
 
 }

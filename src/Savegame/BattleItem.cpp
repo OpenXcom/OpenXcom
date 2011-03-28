@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "BattleItem.h"
+#include "BattleUnit.h"
 #include "../Ruleset/RuleItem.h"
 
 namespace OpenXcom
@@ -46,26 +47,14 @@ BattleItem::~BattleItem()
  */
 void BattleItem::load(const YAML::Node &node)
 {
-/*	int a;
+	int a;
 
-	node["id"] >> _id;
-	std::string name;
-	node["name"] >> name;
-	_name = Language::utf8ToWstr(name);
-	node["faction"] >> a;
-	_faction = (UnitFaction)a;
-	node["status"] >> a;
-	_status = (UnitStatus)a;
+	node["X"] >> _position.x;
+	node["Y"] >> _position.y;
+	node["Z"] >> _position.z;
 
-	node["X"] >> _pos.x;
-	node["Y"] >> _pos.y;
-	node["Z"] >> _pos.z;
-	node["direction"] >> _direction;
-
-	node["tu"] >> _tu;
-	node["health"] >> _health;
-	node["energy"] >> _energy;
-	node["morale"] >> _morale;*/
+	node["inventoryslot"] >> a;
+	_inventorySlot = (InventorySlot)a;
 }
 
 /**
@@ -76,20 +65,12 @@ void BattleItem::save(YAML::Emitter &out) const
 {
 	out << YAML::BeginMap;
 
-/*	out << YAML::Key << "id" << YAML::Value << _id;
-	out << YAML::Key << "name" << YAML::Value << Language::wstrToUtf8(_name);
-	out << YAML::Key << "faction" << YAML::Value << _faction;
-	out << YAML::Key << "status" << YAML::Value << _status;
-
-	out << YAML::Key << "X" << YAML::Value << _pos.x;
-	out << YAML::Key << "Y" << YAML::Value << _pos.y;
-	out << YAML::Key << "Z" << YAML::Value << _pos.z;
-	out << YAML::Key << "direction" << YAML::Value << _direction;
-
-	out << YAML::Key << "tu" << YAML::Value << _tu;
-	out << YAML::Key << "health" << YAML::Value << _health;
-	out << YAML::Key << "energy" << YAML::Value << _energy;
-	out << YAML::Key << "morale" << YAML::Value << _morale;*/
+	out << YAML::Key << "type" << YAML::Value << _rules->getType();
+	out << YAML::Key << "X" << YAML::Value << _position.x;
+	out << YAML::Key << "Y" << YAML::Value << _position.y;
+	out << YAML::Key << "Z" << YAML::Value << _position.z;
+	out << YAML::Key << "owner" << YAML::Value << _owner->getId();
+	out << YAML::Key << "inventoryslot" << YAML::Value << (int)_inventorySlot;
 
 	out << YAML::EndMap;
 }

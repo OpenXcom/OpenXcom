@@ -1003,6 +1003,17 @@ bool Map::cacheTileSprites(int i)
 			frame->setX(0);
 			frame->setY(-object->getYOffset());
 			frame->blit(_tileFloorCache[i]);
+
+			// draw an item on top of the floor (if any)
+			int sprite = tile->getTopItemSprite();
+			if (sprite != -1)
+			{
+				frame = _res->getSurfaceSet("FLOOROB.PCK")->getFrame(sprite);
+				frame->setX(0);
+				frame->setY(-object->getTerrainLevel());
+				frame->blit(_tileFloorCache[i]);
+			}
+
 			_tileFloorCache[i]->setShade(tile->isDiscovered()?tile->getShade():16);
 		}
 		else if (_tileFloorCache[i] != 0)

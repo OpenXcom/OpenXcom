@@ -29,6 +29,7 @@ namespace OpenXcom
 
 class SavedBattleGame;
 class BattleUnit;
+class BattleItem;
 class Tile;
 
 /**
@@ -57,6 +58,8 @@ public:
 	void calculateSunShading(Tile *tile);
 	/// Calculate the visible tiles of a unit.
 	void calculateFOV(BattleUnit *unit);
+	/// Calculate the visible units of a unit.
+	bool checkForVisibleUnits(BattleUnit *unit);
 	/// Calculate the field of view within range of a certain position.
 	void calculateFOV(const Position &position);
 	/// Recalculate lighting of the battlescape.
@@ -69,6 +72,8 @@ public:
 	int unitOpensDoor(BattleUnit *unit);
 	/// Calculate line.
 	int calculateLine(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory);
+	/// Add item & affect with gravity.
+	void spawnItem(const Position &position, BattleItem *item);
 
 };
 

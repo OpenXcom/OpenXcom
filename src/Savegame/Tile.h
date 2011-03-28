@@ -127,6 +127,10 @@ public:
 	void ignite();
 	/// Get fire and smoke animation offset.
 	int getAnimationOffset();
+	/// Add item
+	void addItem(BattleItem *item);
+	/// Get top-most item
+	int getTopItemSprite();
 };
 
 }

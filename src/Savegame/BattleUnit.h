@@ -51,7 +51,7 @@ private:
 	Position _destination;
 	UnitStatus _status;
 	int _walkPhase, _fallPhase;
-	std::vector<Tile *> _visibleTiles;
+	std::vector<BattleUnit *> _visibleUnits;
 	int _tu, _energy, _health, _morale;
 	bool _cached, _kneeled;
 	BattleItem *_rightHandItem, *_leftHandItem;
@@ -135,6 +135,10 @@ public:
 	bool spendTimeUnits(int tu);
 	/// Set time units.
 	void setTimeUnits(int tu);
+	/// Add unit to visible units.
+	bool addToVisibleUnits(BattleUnit *unit);
+	/// Clear visible units.
+	void clearVisibleUnits();
 
 
 };

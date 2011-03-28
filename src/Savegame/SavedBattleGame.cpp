@@ -328,7 +328,7 @@ void SavedBattleGame::setSelectedUnit(BattleUnit *unit)
 }
 
 /**
- * Select the next player unit TODO move this to BattlescapeState !!
+ * Select the next player unit TODO move this to BattlescapeState ?
  * @return pointer to BattleUnit.
  */
 BattleUnit *SavedBattleGame::selectNextPlayerUnit()
