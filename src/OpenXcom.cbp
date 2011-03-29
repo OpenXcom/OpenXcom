@@ -351,6 +351,10 @@
 		<Unit filename="Savegame\Waypoint.h" />
 		<Unit filename="Ufopaedia\ArticleState.cpp" />
 		<Unit filename="Ufopaedia\ArticleState.h" />
+		<Unit filename="Ufopaedia\ArticleStateCraft.cpp" />
+		<Unit filename="Ufopaedia\ArticleStateCraft.h" />
+		<Unit filename="Ufopaedia\ArticleStateCraftWeapon.cpp" />
+		<Unit filename="Ufopaedia\ArticleStateCraftWeapon.h" />
 		<Unit filename="Ufopaedia\ArticleStateText.cpp" />
 		<Unit filename="Ufopaedia\ArticleStateText.h" />
 		<Unit filename="Ufopaedia\ArticleStateTextImage.cpp" />

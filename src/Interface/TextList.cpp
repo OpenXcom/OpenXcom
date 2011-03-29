@@ -34,7 +34,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-TextList::TextList(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _texts(), _columns(), _big(0), _small(0), _font(0), _scroll(0), _visibleRows(0), _color(0), _align(ALIGN_LEFT), _dot(false), _selectable(false), _text_big(false), _condensed(false), _selRow(0), _bg(0), _selector(0), _margin(0),
+TextList::TextList(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _texts(), _columns(), _big(0), _small(0), _font(0), _scroll(0), _visibleRows(0), _color(0), _align(ALIGN_LEFT), _dot(false), _selectable(false), _condensed(false), _selRow(0), _bg(0), _selector(0), _margin(0),
 																									_arrowLeft(), _arrowRight(), _arrowPos(-1), _leftClick(0), _leftPress(0), _leftRelease(0), _rightClick(0), _rightPress(0), _rightRelease(0)
 {
 	_up = new ArrowButton(ARROW_BIG_UP, 13, 14, getX() + getWidth() + 4, getY() + 1);
@@ -115,10 +115,13 @@ void TextList::addRow(int cols, ...)
 
 	for (int i = 0; i < cols; i++)
 	{
+		// Place text
 		Text* txt = new Text(_columns[i], _font->getHeight(), _margin + rowX, getY());
 		txt->setPalette(this->getPalette());
 		txt->setFonts(_big, _small);
-		if (_text_big)
+		txt->setColor(_color);
+		txt->setAlign(_align);
+		if (_font == _big)
 		{
 			txt->setBig();
 		}
@@ -150,9 +153,6 @@ void TextList::addRow(int cols, ...)
 			}
 		}
 		txt->setText(buf);
-
-		txt->setColor(_color);
-		txt->setAlign(_align);
 		temp.push_back(txt);
 		if (_condensed)
 		{
@@ -166,6 +166,7 @@ void TextList::addRow(int cols, ...)
 	}
 	_texts.push_back(temp);
 
+	// Place arrow buttons
 	if (_arrowPos != -1)
 	{
 		ArrowButton *a1 = new ArrowButton(ARROW_SMALL_UP, 11, 8, getX() + _arrowPos, getY());
@@ -315,13 +316,39 @@ void TextList::setSelectable(bool selectable)
 }
 
 /**
-	* If enabled, the text will be set to use the big font.
-	* @param big True for big, False for small.
-	*/
-void TextList::setBig(bool big)
+ * Changes the text list to use the big-size font.
+ */
+void TextList::setBig()
 {
-	_text_big = big;
-	_font = (big ? _big : _small);
+	_font = _big;
+
+	delete _selector;
+	_selector = new Surface(getWidth(), _font->getHeight() + _font->getSpacing(), getX(), getY());
+	_selector->setPalette(getPalette());
+	_selector->setVisible(false);
+
+	for (int y = 0; y < getHeight(); y += _font->getHeight() + _font->getSpacing())
+	{
+		_visibleRows++;
+	}
+}
+
+/**
+ * Changes the text list to use the small-size font.
+ */
+void TextList::setSmall()
+{
+	_font = _small;
+
+	delete _selector;
+	_selector = new Surface(getWidth(), _font->getHeight() + _font->getSpacing(), getX(), getY());
+	_selector->setPalette(getPalette());
+	_selector->setVisible(false);
+
+	for (int y = 0; y < getHeight(); y += _font->getHeight() + _font->getSpacing())
+	{
+		_visibleRows++;
+	}
 }
 	
 /**

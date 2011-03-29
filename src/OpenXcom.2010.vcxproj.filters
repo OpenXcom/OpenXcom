@@ -473,6 +473,12 @@
     <ClCompile Include="Battlescape\UnitFallBState.cpp">
       <Filter>Battlescape</Filter>
     </ClCompile>
+    <ClCompile Include="Ufopaedia\ArticleStateCraft.cpp">
+      <Filter>Ufopaedia</Filter>
+    </ClCompile>
+    <ClCompile Include="Ufopaedia\ArticleStateCraftWeapon.cpp">
+      <Filter>Ufopaedia</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -947,6 +953,12 @@
     </ClInclude>
     <ClInclude Include="Battlescape\UnitFallBState.h">
       <Filter>Battlescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Ufopaedia\ArticleStateCraft.h">
+      <Filter>Ufopaedia</Filter>
+    </ClInclude>
+    <ClInclude Include="Ufopaedia\ArticleStateCraftWeapon.h">
+      <Filter>Ufopaedia</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

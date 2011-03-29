@@ -996,6 +996,22 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Ufopaedia\ArticleStateCraft.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ufopaedia\ArticleStateCraft.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Ufopaedia\ArticleStateCraftWeapon.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ufopaedia\ArticleStateCraftWeapon.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Ufopaedia\ArticleStateText.cpp"
 				>
 			</File>

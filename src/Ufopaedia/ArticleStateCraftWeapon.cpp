@@ -67,7 +67,7 @@ namespace OpenXcom
 		_lstInfo->setColor(Palette::blockOffset(14)+15);
 		_lstInfo->setColumns(2, 134, 70);
 		_lstInfo->setDot(true);
-		_lstInfo->setBig(true);
+		_lstInfo->setBig();
 		
 		ss.str(L"");ss.clear();
 		ss << defs->weapon->getDamage();

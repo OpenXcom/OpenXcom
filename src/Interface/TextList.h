@@ -44,7 +44,7 @@ private:
 	unsigned int _scroll, _visibleRows;
 	Uint8 _color;
 	TextHAlign _align;
-	bool _dot, _selectable, _text_big, _condensed;
+	bool _dot, _selectable, _condensed;
 	unsigned int _selRow;
 	Surface *_bg, *_selector;
 	ArrowButton *_up, *_down;
@@ -82,8 +82,10 @@ public:
 	void setDot(bool dot);
 	/// Sets whether the list is selectable.
 	void setSelectable(bool selectable);
-	/// Sets whether to display big text boxes.
-	void setBig(bool big);
+	/// Sets the text size to big.
+	void setBig();
+	/// Sets the text size to small.
+	void setSmall();
 	/// Sets whether to condense columns instead of a table like layout.
 	void setCondensed(bool condensed);
 	/// Sets the background for the selector.
