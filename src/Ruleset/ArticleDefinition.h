@@ -21,22 +21,25 @@
 #define OPENXCOM_ARTICLEDEFINITION_H
 
 #include <string>
+#include <vector>
 
 namespace OpenXcom
 {
+	class RuleCraft;	
+	class RuleCraftWeapon;
 	
 	/// define article types
 	enum UfopaediaTypeId {
-		UFOPAEDIA_TYPE_UNKNOWN		= 0,
-		UFOPAEDIA_TYPE_CRAFT			= 1,
-		UFOPAEDIA_TYPE_ARMAMENT		= 2,
-		UFOPAEDIA_TYPE_HWP				= 3,
-		UFOPAEDIA_TYPE_EQUIPMENT	= 4,
-		UFOPAEDIA_TYPE_WEAPON			= 5,
-		UFOPAEDIA_TYPE_FACILITY		= 6,
-		UFOPAEDIA_TYPE_TEXTIMAGE	= 7,
-		UFOPAEDIA_TYPE_TEXT				= 8,
-		UFOPAEDIA_TYPE_UFO				= 9
+		UFOPAEDIA_TYPE_UNKNOWN				= 0,
+		UFOPAEDIA_TYPE_CRAFT					= 1,
+		UFOPAEDIA_TYPE_CRAFT_WEAPON		= 2,
+		UFOPAEDIA_TYPE_HWP						= 3,
+		UFOPAEDIA_TYPE_EQUIPMENT			= 4,
+		UFOPAEDIA_TYPE_WEAPON					= 5,
+		UFOPAEDIA_TYPE_FACILITY				= 6,
+		UFOPAEDIA_TYPE_TEXTIMAGE			= 7,
+		UFOPAEDIA_TYPE_TEXT						= 8,
+		UFOPAEDIA_TYPE_UFO						= 9
 	};
 
 	/**
@@ -67,6 +70,52 @@ namespace OpenXcom
 		UfopaediaTypeId _type_id;
 	};
 
+	class ArticleDefinitionRect
+	{
+	public:
+		ArticleDefinitionRect();
+		
+		void set(int set_x, int set_y, int set_width, int set_height);
+		
+		int x;
+		int y;
+		int width;
+		int height;
+	};
+	
+	/**
+	 * ArticleDefinitionCraft defines articles for craft, e.g. SKYRANGER.
+	 * They have a large background image, a stats block and a description positioned differently.
+	 */
+	
+	class ArticleDefinitionCraft : public ArticleDefinition
+	{
+	public:
+		/// Constructor
+		ArticleDefinitionCraft();
+		
+		std::string image_id;
+		ArticleDefinitionRect rect_stats;
+		ArticleDefinitionRect rect_text;
+		RuleCraft *craft;
+		std::string text;
+	};
+	
+	/**
+	 * ArticleDefinitionCraftWeapon defines articles for craft weapons, e.g. STINGRAY, AVALANCHE.
+	 * They have a large background image and a stats block.
+	 */
+	
+	class ArticleDefinitionCraftWeapon : public ArticleDefinition
+	{
+	public:
+		/// Constructor
+		ArticleDefinitionCraftWeapon();
+		
+		std::string image_id;
+		RuleCraftWeapon *weapon;
+	};
+	
 	/**
 	 * ArticleDefinitionText defines articles with only text, e.g. ALIEN RESEARCH.
 	 */

@@ -1174,6 +1174,118 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	// create Ufopaedia article definitions
 	int sort_key = 1;
 	
+	// XCOM CRAFT AND ARMAMENT
+	ArticleDefinitionCraft article_craft;
+	article_craft.section = UFOPAEDIA_XCOM_CRAFT_ARMAMENT;
+
+	article_craft.id = "STR_SKYRANGER";
+	article_craft.title = "STR_SKYRANGER";
+	article_craft.image_id = "UP004.SPK";
+	article_craft.text = "STR_SKYRANGER_UFOPEDIA";
+	article_craft.rect_text.set(5, 40, 140, 100);
+	article_craft.craft = _crafts[article_craft.id];
+	article_craft.rect_stats.set(160, 5, 140, 60);
+	article_craft.sort_key = sort_key++;
+	
+	_ufopaediaArticles[article_craft.id] = new ArticleDefinitionCraft(article_craft);
+	
+	article_craft.id = "STR_LIGHTNING";
+	article_craft.title = "STR_LIGHTNING";
+	article_craft.image_id = "UP003.SPK";
+	article_craft.text = "STR_LIGHTNING_UFOPEDIA";
+	article_craft.rect_text.set(5, 40, 310, 60);
+	article_craft.craft = _crafts[article_craft.id];
+	article_craft.rect_stats.set(5, 132, 140, 60);
+	article_craft.sort_key = sort_key++;
+	
+	_ufopaediaArticles[article_craft.id] = new ArticleDefinitionCraft(article_craft);
+	
+	article_craft.id = "STR_AVENGER";
+	article_craft.title = "STR_AVENGER";
+	article_craft.image_id = "UP001.SPK";
+	article_craft.text = "STR_AVENGER_UFOPEDIA";
+	article_craft.rect_text.set(5, 40, 140, 100);
+	article_craft.craft = _crafts[article_craft.id];
+	article_craft.rect_stats.set(160, 5, 140, 60);
+	article_craft.sort_key = sort_key++;
+	
+	_ufopaediaArticles[article_craft.id] = new ArticleDefinitionCraft(article_craft);
+
+	article_craft.id = "STR_INTERCEPTOR";
+	article_craft.title = "STR_INTERCEPTOR";
+	article_craft.image_id = "UP002.SPK";
+	article_craft.text = "STR_INTERCEPTOR_UFOPEDIA";
+	article_craft.rect_text.set(5, 40, 210, 60);
+	article_craft.craft = _crafts[article_craft.id];
+	article_craft.rect_stats.set(5, 110, 140, 60);
+	article_craft.sort_key = sort_key++;
+	
+	_ufopaediaArticles[article_craft.id] = new ArticleDefinitionCraft(article_craft);
+	
+	article_craft.id = "STR_FIRESTORM";
+	article_craft.title = "STR_FIRESTORM";
+	article_craft.image_id = "UP005.SPK";
+	article_craft.text = "STR_FIRESTORM_UFOPEDIA";
+	article_craft.rect_text.set(5, 40, 140, 100);
+	article_craft.craft = _crafts[article_craft.id];
+	article_craft.rect_stats.set(160, 5, 140, 60);
+	article_craft.sort_key = sort_key++;
+	
+	_ufopaediaArticles[article_craft.id] = new ArticleDefinitionCraft(article_craft);
+	
+	
+	ArticleDefinitionCraftWeapon article_craft_weapon;
+	article_craft_weapon.section = UFOPAEDIA_XCOM_CRAFT_ARMAMENT;
+	
+	article_craft_weapon.id = "STR_STINGRAY";
+	article_craft_weapon.title = "STR_STINGRAY";
+	article_craft_weapon.image_id = "UP006.SPK";
+	article_craft_weapon.weapon = _craftWeapons[article_craft_weapon.id];
+	article_craft.sort_key = sort_key++;
+	
+	_ufopaediaArticles[article_craft_weapon.id] = new ArticleDefinitionCraftWeapon(article_craft_weapon);
+	
+	article_craft_weapon.id = "STR_AVALANCHE";
+	article_craft_weapon.title = "STR_AVALANCHE";
+	article_craft_weapon.image_id = "UP007.SPK";
+	article_craft_weapon.weapon = _craftWeapons[article_craft_weapon.id];
+	article_craft.sort_key = sort_key++;
+	
+	_ufopaediaArticles[article_craft_weapon.id] = new ArticleDefinitionCraftWeapon(article_craft_weapon);
+	
+	article_craft_weapon.id = "STR_CANNON_UC";
+	article_craft_weapon.title = "STR_CANNON_UC";
+	article_craft_weapon.image_id = "UP008.SPK";
+	article_craft_weapon.weapon = _craftWeapons[article_craft_weapon.id];
+	article_craft.sort_key = sort_key++;
+	
+	_ufopaediaArticles[article_craft_weapon.id] = new ArticleDefinitionCraftWeapon(article_craft_weapon);
+	
+	article_craft_weapon.id = "STR_FUSION_BALL_UC";
+	article_craft_weapon.title = "STR_FUSION_BALL_UC";
+	article_craft_weapon.image_id = "UP009.SPK";
+	article_craft_weapon.weapon = _craftWeapons[article_craft_weapon.id];
+	article_craft.sort_key = sort_key++;
+	
+	_ufopaediaArticles[article_craft_weapon.id] = new ArticleDefinitionCraftWeapon(article_craft_weapon);
+	
+	article_craft_weapon.id = "STR_LASER_CANNON_UC";
+	article_craft_weapon.title = "STR_LASER_CANNON_UC";
+	article_craft_weapon.image_id = "UP010.SPK";
+	article_craft_weapon.weapon = _craftWeapons[article_craft_weapon.id];
+	article_craft.sort_key = sort_key++;
+	
+	_ufopaediaArticles[article_craft_weapon.id] = new ArticleDefinitionCraftWeapon(article_craft_weapon);
+	
+	article_craft_weapon.id = "STR_PLASMA_BEAM_UC";
+	article_craft_weapon.title = "STR_PLASMA_BEAM_UC";
+	article_craft_weapon.image_id = "UP011.SPK";
+	article_craft_weapon.weapon = _craftWeapons[article_craft_weapon.id];
+	article_craft.sort_key = sort_key++;
+	
+	_ufopaediaArticles[article_craft_weapon.id] = new ArticleDefinitionCraftWeapon(article_craft_weapon);
+	
+	
 	// ALIEN LIFE FORMS
 	ArticleDefinitionTextImage article_textimage;
 	article_textimage.text_width = 100;
@@ -1341,6 +1453,19 @@ SavedGame *XcomRuleset::newSave(GameDifficulty diff)
 	save->getBases()->push_back(base);
 
 	// init savedgame articles
+	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_SKYRANGER"]);
+	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_LIGHTNING"]);
+	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_AVENGER"]);
+	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_INTERCEPTOR"]);
+	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_FIRESTORM"]);
+
+	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_STINGRAY"]);
+	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_AVALANCHE"]);
+	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_CANNON_UC"]);
+	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_FUSION_BALL_UC"]);
+	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_LASER_CANNON_UC"]);
+	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_PLASMA_BEAM_UC"]);
+
 	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_SECTOID"]);
 //	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_SNAKEMAN"]);
 	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_ALIEN_ORIGINS"]);

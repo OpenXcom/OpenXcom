@@ -44,6 +44,34 @@ namespace OpenXcom
 		return _type_id;
 	}
 	
+	/** 
+	 * Constructor
+	 */
+	ArticleDefinitionRect::ArticleDefinitionRect() : x(0), y(0), width(0), height(0) {}
+	
+	/** 
+	 * Set the rectangle parameters in a function
+	 */
+	void ArticleDefinitionRect::set(int set_x, int set_y, int set_width, int set_height)
+	{
+		x = set_x;
+		y = set_y;
+		width = set_width;
+		height = set_height;
+	}
+	
+	/**
+	 * Constructor (only setting type of base class)
+	 */
+	ArticleDefinitionCraft::ArticleDefinitionCraft() : ArticleDefinition(UFOPAEDIA_TYPE_CRAFT), craft(0)
+	{}
+	
+	/**
+	 * Constructor (only setting type of base class)
+	 */
+	ArticleDefinitionCraftWeapon::ArticleDefinitionCraftWeapon() : ArticleDefinition(UFOPAEDIA_TYPE_CRAFT_WEAPON), weapon(0)
+	{}
+	
 	/**
 	 * Constructor (only setting type of base class)
 	 */

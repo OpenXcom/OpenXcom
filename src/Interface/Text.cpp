@@ -217,6 +217,23 @@ int Text::getTextHeight()
 	return height;
 }
 	
+	/**
+	 * Returns the rendered text's height. Useful to check if wordwrap applies.
+	 * @return height value.
+	 */
+	int Text::getTextWidth()
+	{
+		int width = 0;
+		for (std::vector<int>::iterator i = _lineWidth.begin(); i != _lineWidth.end(); i++)
+		{
+			if (*i>width)
+			{
+				width = *i;
+			}
+		}
+		return width;
+	}
+	
 /**
  * Takes care of any text post-processing like calculating
  * line metrics for alignment and wordwrapping if necessary.

@@ -1,4 +1,5 @@
-#Ignore thumbnails created by Windows
+*.o
+.DS_Store
 Thumbs.db
 #Ignore files built by Visual Studio
 *.obj
@@ -47,4 +48,5 @@ bin/USER/*.bmp
 bin/USER/*.sav
 deps/
 docs/html/
-*.o
+build/
+Dependencies/

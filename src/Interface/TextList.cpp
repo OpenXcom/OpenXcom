@@ -34,7 +34,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-TextList::TextList(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _texts(), _columns(), _big(0), _small(0), _scroll(0), _visibleRows(0), _color(0), _align(ALIGN_LEFT), _dot(false), _selectable(false), _selRow(0), _bg(0), _selector(0), _margin(0),
+TextList::TextList(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _texts(), _columns(), _big(0), _small(0), _font(0), _scroll(0), _visibleRows(0), _color(0), _align(ALIGN_LEFT), _dot(false), _selectable(false), _text_big(false), _condensed(false), _selRow(0), _bg(0), _selector(0), _margin(0),
 																									_arrowLeft(), _arrowRight(), _arrowPos(-1), _leftClick(0), _leftPress(0), _leftRelease(0), _rightClick(0), _rightPress(0), _rightRelease(0)
 {
 	_up = new ArrowButton(ARROW_BIG_UP, 13, 14, getX() + getWidth() + 4, getY() + 1);
@@ -115,9 +115,17 @@ void TextList::addRow(int cols, ...)
 
 	for (int i = 0; i < cols; i++)
 	{
-		Text* txt = new Text(_columns[i], _small->getHeight(), _margin + rowX, getY());
+		Text* txt = new Text(_columns[i], _font->getHeight(), _margin + rowX, getY());
 		txt->setPalette(this->getPalette());
 		txt->setFonts(_big, _small);
+		if (_text_big)
+		{
+			txt->setBig();
+		}
+		else
+		{
+			txt->setSmall();
+		}
 		
 		std::wstring buf = va_arg(args, wchar_t*);
 		// Places dots between text
@@ -128,16 +136,16 @@ void TextList::addRow(int cols, ...)
 			{
 				if (*c == ' ')
 				{
-					w += _small->getWidth() / 2;
+					w += _font->getWidth() / 2;
 				}
 				else
 				{
-					w += _small->getChar(*c)->getCrop()->w + _small->getSpacing();
+					w += _font->getChar(*c)->getCrop()->w + _font->getSpacing();
 				}
 			}
 			while (w < _columns[i])
 			{
-				w += _small->getChar('.')->getCrop()->w + _small->getSpacing();
+				w += _font->getChar('.')->getCrop()->w + _font->getSpacing();
 				buf += '.';
 			}
 		}
@@ -145,9 +153,16 @@ void TextList::addRow(int cols, ...)
 
 		txt->setColor(_color);
 		txt->setAlign(_align);
-		txt->setSmall();
 		temp.push_back(txt);
-		rowX += _columns[i];
+		if (_condensed)
+		{
+			rowX += txt->getTextWidth();
+		}
+		else
+		{
+			rowX += _columns[i];
+		}
+
 	}
 	_texts.push_back(temp);
 
@@ -237,13 +252,14 @@ void TextList::setFonts(Font *big, Font *small)
 {
 	_big = big;
 	_small = small;
+	_font = small;
 	
 	delete _selector;
-	_selector = new Surface(getWidth(), _small->getHeight() + _small->getSpacing(), getX(), getY());
+	_selector = new Surface(getWidth(), _font->getHeight() + _font->getSpacing(), getX(), getY());
 	_selector->setPalette(getPalette());
 	_selector->setVisible(false);
 
-	for (int y = 0; y < getHeight(); y += _small->getHeight() + _small->getSpacing())
+	for (int y = 0; y < getHeight(); y += _font->getHeight() + _font->getSpacing())
 	{
 		_visibleRows++;
 	}
@@ -298,6 +314,26 @@ void TextList::setSelectable(bool selectable)
 	_selectable = selectable;
 }
 
+/**
+	* If enabled, the text will be set to use the big font.
+	* @param big True for big, False for small.
+	*/
+void TextList::setBig(bool big)
+{
+	_text_big = big;
+	_font = (big ? _big : _small);
+}
+	
+/**
+ * If enabled, the text in different columns will be separated by dots.
+ * Otherwise, it will only be separated by blank space.
+ * @param condensed True for condensed layout, False for table layout.
+ */
+void TextList::setCondensed(bool condensed)
+{
+	_condensed = condensed;
+}
+	
 /**
  * Returns the currently selected row if the text
  * list is selectable.
@@ -486,7 +522,7 @@ void TextList::draw()
 	{
 		for (std::vector<Text*>::iterator j = _texts[i].begin(); j < _texts[i].end(); j++)
 		{
-			(*j)->setY((i - _scroll) * (_small->getHeight() + _small->getSpacing()));
+			(*j)->setY((i - _scroll) * (_font->getHeight() + _font->getSpacing()));
             (*j)->blit(this);
         }
     }
@@ -511,9 +547,9 @@ void TextList::blit(Surface *surface)
 		{
 			for (unsigned int i = _scroll; i < _texts.size() && i < _scroll + _visibleRows; i++)
 			{
-				_arrowLeft[i]->setY(getY() + (i - _scroll) * (_small->getHeight() + _small->getSpacing()));
+				_arrowLeft[i]->setY(getY() + (i - _scroll) * (_font->getHeight() + _font->getSpacing()));
 				_arrowLeft[i]->blit(surface);
-				_arrowRight[i]->setY(getY() + (i - _scroll) * (_small->getHeight() + _small->getSpacing()));
+				_arrowRight[i]->setY(getY() + (i - _scroll) * (_font->getHeight() + _font->getSpacing()));
 				_arrowRight[i]->blit(surface);
 			}
 		}
@@ -623,7 +659,7 @@ void TextList::mouseOver(Action *action, State *state)
 {
 	if (_selectable)
 	{
-		int h = _small->getHeight() + _small->getSpacing();
+		int h = _font->getHeight() + _font->getSpacing();
 		double y = action->getYMouse() - getY() * action->getYScale();
 		_selRow = _scroll + (int)floor(y / (h * action->getYScale()));
 
