@@ -479,6 +479,9 @@
     <ClCompile Include="Ufopaedia\ArticleStateCraftWeapon.cpp">
       <Filter>Ufopaedia</Filter>
     </ClCompile>
+    <ClCompile Include="Basescape\CraftEquipmentState.cpp">
+      <Filter>Basescape</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -959,6 +962,9 @@
     </ClInclude>
     <ClInclude Include="Ufopaedia\ArticleStateCraftWeapon.h">
       <Filter>Ufopaedia</Filter>
+    </ClInclude>
+    <ClInclude Include="Basescape\CraftEquipmentState.h">
+      <Filter>Basescape</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
