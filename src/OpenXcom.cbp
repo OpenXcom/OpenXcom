@@ -59,6 +59,10 @@
 		<Unit filename="Basescape\BasescapeState.h" />
 		<Unit filename="Basescape\BuildFacilitiesState.cpp" />
 		<Unit filename="Basescape\BuildFacilitiesState.h" />
+		<Unit filename="Basescape\CraftArmorState.cpp" />
+		<Unit filename="Basescape\CraftArmorState.h" />
+		<Unit filename="Basescape\CraftEquipmentState.cpp" />
+		<Unit filename="Basescape\CraftEquipmentStateState.h" />
 		<Unit filename="Basescape\CraftInfoState.cpp" />
 		<Unit filename="Basescape\CraftInfoState.h" />
 		<Unit filename="Basescape\CraftSoldiersState.cpp" />
@@ -87,6 +91,8 @@
 		<Unit filename="Basescape\ResearchState.h" />
 		<Unit filename="Basescape\SellState.cpp" />
 		<Unit filename="Basescape\SellState.h" />
+		<Unit filename="Basescape\SoldierArmorState.cpp" />
+		<Unit filename="Basescape\SoldierArmorState.h" />
 		<Unit filename="Basescape\SoldierInfoState.cpp" />
 		<Unit filename="Basescape\SoldierInfoState.h" />
 		<Unit filename="Basescape\SoldiersState.cpp" />
@@ -123,6 +129,8 @@
 		<Unit filename="Battlescape\ProjectileFlyBState.h" />
 		<Unit filename="Battlescape\TerrainModifier.cpp" />
 		<Unit filename="Battlescape\TerrainModifier.h" />
+		<Unit filename="Battlescape\UnitFallBState.cpp" />
+		<Unit filename="Battlescape\UnitFallBState.h" />
 		<Unit filename="Battlescape\UnitSprite.cpp" />
 		<Unit filename="Battlescape\UnitSprite.h" />
 		<Unit filename="Battlescape\UnitTurnBState.cpp" />
@@ -368,7 +376,6 @@
 		<Unit filename="Ufopaedia\StartState.cpp" />
 		<Unit filename="dirent.h" />
 		<Unit filename="main.cpp" />
-		<Unit filename="resource.h" />
 		<Extensions>
 			<code_completion />
 			<debugger />

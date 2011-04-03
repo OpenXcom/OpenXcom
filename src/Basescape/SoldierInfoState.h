@@ -42,8 +42,8 @@ private:
 	unsigned int _soldier;
 
 	Surface *_bg, *_rank;
-	TextButton *_btnOk, *_btnPrev, *_btnNext, *_btnArmour;
-	Text *_txtArmour, *_txtRank, *_txtMissions, *_txtKills, *_txtCraft;
+	TextButton *_btnOk, *_btnPrev, *_btnNext, *_btnArmor;
+	Text *_txtArmor, *_txtRank, *_txtMissions, *_txtKills, *_txtCraft;
 	TextEdit *_edtSoldier;
 
 	Text *_txtTimeUnits, *_txtStamina, *_txtHealth, *_txtBravery, *_txtReactions, *_txtFiring, *_txtThrowing, *_txtStrength;
@@ -64,6 +64,8 @@ public:
 	void btnPrevClick(Action *action);
 	/// Handler for clicking the Next button.
 	void btnNextClick(Action *action);
+	/// Handler for clicking the Armor button.
+	void btnArmorClick(Action *action);
 };
 
 }

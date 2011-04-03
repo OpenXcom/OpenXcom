@@ -118,7 +118,7 @@ SellState::SellState(Game *game, Base *base) : State(game), _base(base), _qtys()
 
 	_lstItems->setColor(Palette::blockOffset(13)+10);
 	_lstItems->setArrowColor(Palette::blockOffset(13)+13);
-	_lstItems->setArrowColumn(189);
+	_lstItems->setArrowColumn(189, ARROW_VERTICAL);
 	_lstItems->setColumns(4, 156, 62, 28, 40);
 	_lstItems->setSelectable(true);
 	_lstItems->setBackground(_window);
@@ -188,7 +188,7 @@ SellState::~SellState()
 }
 
 /**
- * Runs the game timer and handles popups.
+ * Runs the arrow timers.
  */
 void SellState::think()
 {

@@ -34,6 +34,7 @@
 #include "../Ruleset/RuleCraft.h"
 #include "../Savegame/Soldier.h"
 #include "../Engine/SurfaceSet.h"
+#include "SoldierArmorState.h"
 
 namespace OpenXcom
 {
@@ -52,9 +53,9 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, unsigned int soldier)
 	_btnPrev = new TextButton(28, 14, 0, 33);
 	_btnOk = new TextButton(48, 14, 30, 33);
 	_btnNext = new TextButton(28, 14, 80, 33);
-	_btnArmour = new TextButton(60, 14, 130, 33);
+	_btnArmor = new TextButton(60, 14, 130, 33);
 	_edtSoldier = new TextEdit(200, 16, 40, 9);
-	_txtArmour = new Text(120, 9, 194, 38);
+	_txtArmor = new Text(120, 9, 194, 38);
 	_txtRank = new Text(130, 9, 0, 48);
 	_txtMissions = new Text(100, 9, 130, 48);
 	_txtKills = new Text(100, 9, 230, 48);
@@ -97,9 +98,9 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, unsigned int soldier)
 	add(_btnOk);
 	add(_btnPrev);
 	add(_btnNext);
-	add(_btnArmour);
+	add(_btnArmor);
 	add(_edtSoldier);
-	add(_txtArmour);
+	add(_txtArmor);
 	add(_txtRank);
 	add(_txtMissions);
 	add(_txtKills);
@@ -152,14 +153,15 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, unsigned int soldier)
 	_btnNext->setText(L">>");
 	_btnNext->onMouseClick((ActionHandler)&SoldierInfoState::btnNextClick);
 
-	_btnArmour->setColor(Palette::blockOffset(15)+9);
-	_btnArmour->setText(_game->getLanguage()->getString("STR_ARMOR"));
+	_btnArmor->setColor(Palette::blockOffset(15)+9);
+	_btnArmor->setText(_game->getLanguage()->getString("STR_ARMOR"));
+	_btnArmor->onMouseClick((ActionHandler)&SoldierInfoState::btnArmorClick);
 
 	_edtSoldier->setColor(Palette::blockOffset(13)+10);
 	_edtSoldier->setBig();
 	_edtSoldier->onKeyboardPress((ActionHandler)&SoldierInfoState::edtSoldierKeyPress);
 
-	_txtArmour->setColor(Palette::blockOffset(13));
+	_txtArmor->setColor(Palette::blockOffset(13));
 
 	_txtRank->setColor(Palette::blockOffset(13));
 
@@ -313,7 +315,7 @@ void SoldierInfoState::init()
 	_barStrength->setMax(s->getStrength());
 	_barStrength->setValue(s->getStrength());
 
-	_txtArmour->setText(_game->getLanguage()->getString("STR_NONE_UC"));
+	_txtArmor->setText(_game->getLanguage()->getString("STR_NONE_UC"));
 
 	std::wstringstream ss9;
 	ss9 << _game->getLanguage()->getString("STR_RANK_") << _game->getLanguage()->getString(s->getRankString());
@@ -380,6 +382,15 @@ void SoldierInfoState::btnNextClick(Action *action)
 	if (_soldier >= _base->getSoldiers()->size())
 		_soldier = 0;
 	init();
+}
+
+/**
+ * Shows the Select Armor window.
+ * @param action Pointer to an action.
+ */
+void SoldierInfoState::btnArmorClick(Action *action)
+{
+	_game->pushState(new SoldierArmorState(_game, _base, _soldier));
 }
 
 }

@@ -211,6 +211,72 @@ void ArrowButton::draw()
 		}
 		drawRect(&square, color);
 	}
+	else if (_shape == ARROW_SMALL_LEFT)
+	{
+		// Draw arrow triangle 1
+		square.x = 2;
+		square.y = 4;
+		square.w = 2;
+		square.h = 1;
+
+		for (; square.h < 5; square.h += 2)
+		{
+			drawRect(&square, color + 2);
+			square.x += 2;
+			square.y--;
+		}
+		square.w = 1;
+		drawRect(&square, color + 2);
+
+		// Draw arrow triangle 2
+		square.x = 3;
+		square.y = 4;
+		square.w = 2;
+		square.h = 1;
+
+		for (; square.h < 5; square.h += 2)
+		{
+			drawRect(&square, color);
+			square.x += 2;
+			square.y--;
+		}
+		square.w = 1;
+		drawRect(&square, color);
+	}
+	else if (_shape == ARROW_SMALL_RIGHT)
+	{
+		// Draw arrow triangle 1
+		square.x = 7;
+		square.y = 4;
+		square.w = 2;
+		square.h = 1;
+
+		for (; square.h < 5; square.h += 2)
+		{
+			drawRect(&square, color + 2);
+			square.x -= 2;
+			square.y--;
+		}
+		square.x++;
+		square.w = 1;
+		drawRect(&square, color + 2);
+
+		// Draw arrow triangle 2
+		square.x = 6;
+		square.y = 4;
+		square.w = 2;
+		square.h = 1;
+
+		for (; square.h < 5; square.h += 2)
+		{
+			drawRect(&square, color);
+			square.x -= 2;
+			square.y--;
+		}
+		square.x++;
+		square.w = 1;
+		drawRect(&square, color);
+	}
 
 	unlock();
 }

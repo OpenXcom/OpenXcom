@@ -23,7 +23,7 @@
 #include <vector>
 
 enum ItemDamageType { DT_NONE, DT_AP, DT_IN, DT_HE, DT_LASER, DT_PLASMA, DT_STUN, DT_MELEE, DT_ACID, DT_SMOKE };
-enum BattleType { BT_FIREARM, BT_AMMO, BT_MELEE, BT_GRENADE, BT_PROXIMITYGRENADE, BT_MEDIKIT, BT_SCANNER };
+enum BattleType { BT_NONE, BT_FIREARM, BT_AMMO, BT_MELEE, BT_GRENADE, BT_PROXIMITYGRENADE, BT_MEDIKIT, BT_SCANNER };
 
 namespace OpenXcom
 {
@@ -39,14 +39,16 @@ class RuleItem
 private:
 	std::string _type;
 	float _size;
-	int _cost, _time;
-	bool _equip, _twoHanded;
+	int _cost, _time, _weight;
 	int _bigSprite, _floorSprite, _handSprite, _bulletSprite;
 	int _fireSound, _hitSound, _hitAnimation;
-	int _power, _accuracyAuto, _accuracySnap, _accuracyAimed;
+	int _power, _displayPriority, _width, _height;
 	std::vector<std::string> _compatibleAmmo;
 	ItemDamageType _damageType;
+	int _accuracyAuto, _accuracySnap, _accuracyAimed, _tuAuto, _tuSnap, _tuAimed;
+	int _ammoClip, _accuracyMelee, _tuMelee;
 	BattleType _battleType;
+	bool _twoHanded, _waypoint;
 public:
 	/// Creates a blank item ruleset.
 	RuleItem(std::string type);
@@ -66,10 +68,6 @@ public:
 	int getTransferTime() const;
 	/// Sets the item's transfer time.
 	void setTransferTime(int time);
-	/// Gets if the item is equippable.
-	bool getEquippable() const;
-	/// Sets if the item is equippable.
-	void setEquippable(bool equip);
 	/// Gets the item's reference in BIGOBS.PCK for use in inventory.
 	int getBigSprite() const;
 	/// Sets the item's reference in BIGOBS.PCK for use in inventory.

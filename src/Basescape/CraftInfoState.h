@@ -40,7 +40,7 @@ private:
 	Base *_base;
 	unsigned int _craft;
 
-	TextButton *_btnOk, *_btnW1, *_btnW2, *_btnCrew, *_btnEquip, *_btnArmour;
+	TextButton *_btnOk, *_btnW1, *_btnW2, *_btnCrew, *_btnEquip, *_btnArmor;
 	Window *_window;
 	Text *_txtCraft, *_txtDamage, *_txtFuel;
 	Text *_txtW1Name, *_txtW1Ammo, *_txtW1Max, *_txtW2Name, *_txtW2Ammo, *_txtW2Max;
@@ -60,6 +60,10 @@ public:
 	void btnW2Click(Action *action);
 	/// Handler for clicking the Crew button.
 	void btnCrewClick(Action *action);
+	/// Handler for clicking the Equipment button.
+	void btnEquipClick(Action *action);
+	/// Handler for clicking the Armor button.
+	void btnArmorClick(Action *action);
 };
 
 }

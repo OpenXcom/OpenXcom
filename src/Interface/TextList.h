@@ -26,6 +26,8 @@
 namespace OpenXcom
 {
 
+enum ArrowOrientation { ARROW_VERTICAL, ARROW_HORIZONTAL };
+
 class Font;
 class ArrowButton;
 
@@ -51,6 +53,7 @@ private:
 	int _margin;
 	std::vector<ArrowButton*> _arrowLeft, _arrowRight;
 	int _arrowPos;
+	ArrowOrientation _arrowType;
 	ActionHandler _leftClick, _leftPress, _leftRelease, _rightClick, _rightPress, _rightRelease;
 
 	/// Updates the arrow buttons.
@@ -97,7 +100,7 @@ public:
 	/// Sets the arrow color of the text list.
 	void setArrowColor(Uint8 color);
 	/// Sets the arrow column of the text list.
-	void setArrowColumn(int pos);
+	void setArrowColumn(int pos, ArrowOrientation type);
 	/// Hooks an action handler to a mouse click on the left arrows.
 	void onLeftArrowClick(ActionHandler handler);
 	/// Hooks an action handler to a mouse press over the left arrows.

@@ -35,7 +35,7 @@ namespace OpenXcom
  * @param y Y position in pixels.
  */
 TextList::TextList(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _texts(), _columns(), _big(0), _small(0), _font(0), _scroll(0), _visibleRows(0), _color(0), _align(ALIGN_LEFT), _dot(false), _selectable(false), _condensed(false), _selRow(0), _bg(0), _selector(0), _margin(0),
-																									_arrowLeft(), _arrowRight(), _arrowPos(-1), _leftClick(0), _leftPress(0), _leftRelease(0), _rightClick(0), _rightPress(0), _rightRelease(0)
+																									_arrowLeft(), _arrowRight(), _arrowPos(-1), _arrowType(ARROW_VERTICAL), _leftClick(0), _leftPress(0), _leftRelease(0), _rightClick(0), _rightPress(0), _rightRelease(0)
 {
 	_up = new ArrowButton(ARROW_BIG_UP, 13, 14, getX() + getWidth() + 4, getY() + 1);
 	_up->setVisible(false);
@@ -169,14 +169,25 @@ void TextList::addRow(int cols, ...)
 	// Place arrow buttons
 	if (_arrowPos != -1)
 	{
-		ArrowButton *a1 = new ArrowButton(ARROW_SMALL_UP, 11, 8, getX() + _arrowPos, getY());
+		ArrowShape shape1, shape2;
+		if (_arrowType == ARROW_VERTICAL)
+		{
+			shape1 = ARROW_SMALL_UP;
+			shape2 = ARROW_SMALL_DOWN;
+		}
+		else
+		{
+			shape1 = ARROW_SMALL_LEFT;
+			shape2 = ARROW_SMALL_RIGHT;
+		}
+		ArrowButton *a1 = new ArrowButton(shape1, 11, 8, getX() + _arrowPos, getY());
 		a1->setPalette(this->getPalette());
 		a1->setColor(_up->getColor());
 		a1->onMouseClick(_leftClick);
 		a1->onMousePress(_leftPress);
 		a1->onMouseRelease(_leftRelease);
 		_arrowLeft.push_back(a1);
-		ArrowButton *a2 = new ArrowButton(ARROW_SMALL_DOWN, 11, 8, getX() + _arrowPos + 12, getY());
+		ArrowButton *a2 = new ArrowButton(shape2, 11, 8, getX() + _arrowPos + 12, getY());
 		a2->setPalette(this->getPalette());
 		a2->setColor(_up->getColor());
 		a2->onMouseClick(_rightClick);
@@ -403,10 +414,12 @@ void TextList::setArrowColor(Uint8 color)
  * Sets the position of the column of arrow buttons
  * in the text list.
  * @param pos X in pixels (-1 to disable).
+ * @param type Arrow orientation type.
  */
-void TextList::setArrowColumn(int pos)
+void TextList::setArrowColumn(int pos, ArrowOrientation type)
 {
 	_arrowPos = pos;
+	_arrowType = type;
 }
 
 /**

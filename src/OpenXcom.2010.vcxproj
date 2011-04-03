@@ -63,7 +63,7 @@
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>yaml-cpp.lib;SDL_mixer.lib;SDL_gfx.lib;SDLmain.lib;SDL.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>yaml-cppd.lib;SDL_mixer.lib;SDL_gfx.lib;SDLmain.lib;SDL.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\deps\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
@@ -110,6 +110,7 @@
     <ClCompile Include="Basescape\BasescapeState.cpp" />
     <ClCompile Include="Basescape\BaseView.cpp" />
     <ClCompile Include="Basescape\BuildFacilitiesState.cpp" />
+    <ClCompile Include="Basescape\CraftArmorState.cpp" />
     <ClCompile Include="Basescape\CraftEquipmentState.cpp" />
     <ClCompile Include="Basescape\CraftInfoState.cpp" />
     <ClCompile Include="Basescape\CraftSoldiersState.cpp" />
@@ -125,6 +126,7 @@
     <ClCompile Include="Basescape\PurchaseState.cpp" />
     <ClCompile Include="Basescape\ResearchState.cpp" />
     <ClCompile Include="Basescape\SellState.cpp" />
+    <ClCompile Include="Basescape\SoldierArmorState.cpp" />
     <ClCompile Include="Basescape\SoldierInfoState.cpp" />
     <ClCompile Include="Basescape\SoldiersState.cpp" />
     <ClCompile Include="Basescape\StoresState.cpp" />
@@ -273,6 +275,7 @@
     <ClInclude Include="Basescape\BasescapeState.h" />
     <ClInclude Include="Basescape\BaseView.h" />
     <ClInclude Include="Basescape\BuildFacilitiesState.h" />
+    <ClInclude Include="Basescape\CraftArmorState.h" />
     <ClInclude Include="Basescape\CraftEquipmentState.h" />
     <ClInclude Include="Basescape\CraftInfoState.h" />
     <ClInclude Include="Basescape\CraftSoldiersState.h" />
@@ -288,6 +291,7 @@
     <ClInclude Include="Basescape\PurchaseState.h" />
     <ClInclude Include="Basescape\ResearchState.h" />
     <ClInclude Include="Basescape\SellState.h" />
+    <ClInclude Include="Basescape\SoldierArmorState.h" />
     <ClInclude Include="Basescape\SoldierInfoState.h" />
     <ClInclude Include="Basescape\SoldiersState.h" />
     <ClInclude Include="Basescape\StoresState.h" />

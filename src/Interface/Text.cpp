@@ -265,7 +265,7 @@ void Text::processText()
 	for (std::wstring::iterator c = s->begin(); c <= s->end(); c++)
 	{
 		// End of the line
-		if (c == s->end() || *c == '\n' || *c == 2)
+		if (c == s->end() || *c == L'\n' || *c == 2)
 		{
 			// Add line measurements for alignment later
 			_lineWidth.push_back(width);
@@ -279,7 +279,7 @@ void Text::processText()
 				font = _small;
 		}
 		// Keep track of spaces for wordwrapping
-		else if (*c == ' ')
+		else if (*c == L' ')
 		{
 			space = c;
 			width += font->getWidth() / 2;
@@ -293,10 +293,10 @@ void Text::processText()
 		}
 
 		// Wordwrap if the last word doesn't fit the line
-		if (_wrap && width > getWidth())
+		if (_wrap && width > getWidth() && *c != L' ')
 		{
 			// Go back to the last space and put a linebreak there
-			*space = '\n';
+			*space = L'\n';
 			c = space - 1;
 			width -= word + font->getWidth() / 2;
 		}
@@ -361,11 +361,7 @@ void Text::draw()
 	{
 		if (*c == ' ')
 		{
-			// panther: trim spaces on line begins
-			if (pos > 0)
-			{
-				x += font->getWidth() / 2;
-			}
+			x += font->getWidth() / 2;
 		}
 		else if (*c == '\n' || *c == 2)
 		{

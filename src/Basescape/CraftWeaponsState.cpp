@@ -53,10 +53,10 @@ CraftWeaponsState::CraftWeaponsState(Game *game, Base *base, unsigned int craft,
 	_window = new Window(this, 220, 160, 50, 20, POPUP_BOTH);
 	_btnCancel = new TextButton(140, 16, 90, 156);
 	_txtTitle = new Text(208, 16, 56, 28);
-	_txtArmament = new Text(76, 8, 66, 52);
-	_txtQuantity = new Text(50, 8, 145, 52);
-	_txtAmmunition = new Text(68, 8, 195, 44);
-	_txtAvailable = new Text(68, 8, 195, 52);
+	_txtArmament = new Text(76, 9, 66, 52);
+	_txtQuantity = new Text(50, 9, 145, 52);
+	_txtAmmunition = new Text(68, 9, 195, 44);
+	_txtAvailable = new Text(68, 9, 195, 52);
 	_lstWeapons = new TextList(188, 80, 58, 68);
 
 	// Set palette
@@ -142,7 +142,6 @@ void CraftWeaponsState::btnCancelClick(Action *action)
 
 /**
  * Equips the weapon on the craft and returns to the previous screen.
- * @note Ammo consumption currently disabled for testing purposes.
  * @param action Pointer to an action.
  */
 void CraftWeaponsState::lstWeaponsClick(Action *action)

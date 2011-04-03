@@ -482,6 +482,12 @@
     <ClCompile Include="Basescape\CraftEquipmentState.cpp">
       <Filter>Basescape</Filter>
     </ClCompile>
+    <ClCompile Include="Basescape\CraftArmorState.cpp">
+      <Filter>Basescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Basescape\SoldierArmorState.cpp">
+      <Filter>Basescape</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -964,6 +970,12 @@
       <Filter>Ufopaedia</Filter>
     </ClInclude>
     <ClInclude Include="Basescape\CraftEquipmentState.h">
+      <Filter>Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Basescape\CraftArmorState.h">
+      <Filter>Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Basescape\SoldierArmorState.h">
       <Filter>Basescape</Filter>
     </ClInclude>
   </ItemGroup>

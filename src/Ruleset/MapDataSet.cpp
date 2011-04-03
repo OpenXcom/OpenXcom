@@ -119,7 +119,7 @@ void MapDataSet::load(ResourcePack *res)
     unsigned char TU_Walk;
     unsigned char TU_Fly;
     unsigned char TU_Slide;
-    unsigned char Armour;
+    unsigned char Armor;
     unsigned char HE_Block;
     unsigned char Die_MCD;
     unsigned char Flammable;
@@ -174,7 +174,7 @@ void MapDataSet::load(ResourcePack *res)
 		to->setDieMCD((int)(mcd.Die_MCD));
 		to->setBlockValue((int)mcd.Light_Block, (int)mcd.Stop_LOS, (int)mcd.HE_Block, (int)mcd.Block_Smoke, (int)mcd.Block_Fire, (int)mcd.Block_Smoke);
 		to->setLightSource((int)mcd.Light_Source);
-		to->setArmor((int)mcd.Armour);
+		to->setArmor((int)mcd.Armor);
 		to->setFlammable((int)mcd.Flammable);
 		to->setFuel((int)mcd.Fuel);
 

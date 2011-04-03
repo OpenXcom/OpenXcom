@@ -34,6 +34,8 @@
 #include "../Savegame/Base.h"
 #include "CraftSoldiersState.h"
 #include "CraftWeaponsState.h"
+#include "CraftEquipmentState.h"
+#include "CraftArmorState.h"
 
 namespace OpenXcom
 {
@@ -53,7 +55,7 @@ CraftInfoState::CraftInfoState(Game *game, Base *base, unsigned int craft) : Sta
 	_btnW2 = new TextButton(24, 32, 272, 48);
 	_btnCrew = new TextButton(64, 16, 24, 96);
 	_btnEquip = new TextButton(64, 16, 24, 120);
-	_btnArmour = new TextButton(64, 16, 24, 144);
+	_btnArmor = new TextButton(64, 16, 24, 144);
 	_txtCraft = new Text(310, 16, 5, 8);
 	_txtDamage = new Text(82, 9, 24, 24);
 	_txtFuel = new Text(82, 9, 232, 24);
@@ -78,7 +80,7 @@ CraftInfoState::CraftInfoState(Game *game, Base *base, unsigned int craft) : Sta
 	add(_btnW2);
 	add(_btnCrew);
 	add(_btnEquip);
-	add(_btnArmour);
+	add(_btnArmor);
 	add(_txtCraft);
 	add(_txtDamage);
 	add(_txtFuel);
@@ -115,10 +117,12 @@ CraftInfoState::CraftInfoState(Game *game, Base *base, unsigned int craft) : Sta
 	_btnCrew->onMouseClick((ActionHandler)&CraftInfoState::btnCrewClick);
 
 	_btnEquip->setColor(Palette::blockOffset(13)+13);
-	_btnEquip->setText(_game->getLanguage()->getString("STR_NOT_AVAILABLE"));
+	_btnEquip->setText(_game->getLanguage()->getString("STR_EQUIPMENT_UC"));
+	_btnEquip->onMouseClick((ActionHandler)&CraftInfoState::btnEquipClick);
 
-	_btnArmour->setColor(Palette::blockOffset(13)+13);
-	_btnArmour->setText(_game->getLanguage()->getString("STR_NOT_AVAILABLE"));
+	_btnArmor->setColor(Palette::blockOffset(13)+13);
+	_btnArmor->setText(_game->getLanguage()->getString("STR_ARMOR"));
+	_btnArmor->onMouseClick((ActionHandler)&CraftInfoState::btnArmorClick);
 
 	_txtCraft->setColor(Palette::blockOffset(13)+10);
 	_txtCraft->setBig();
@@ -202,7 +206,7 @@ void CraftInfoState::init()
 		_equip->setVisible(false);
 		_btnCrew->setVisible(false);
 		_btnEquip->setVisible(false);
-		_btnArmour->setVisible(false);
+		_btnArmor->setVisible(false);
 	}
 
 	if (c->getRules()->getWeapons() > 0)
@@ -318,6 +322,24 @@ void CraftInfoState::btnW2Click(Action *action)
 void CraftInfoState::btnCrewClick(Action *action)
 {
 	_game->pushState(new CraftSoldiersState(_game, _base, _craft));
+}
+
+/**
+ * Goes to the Select Equipment screen.
+ * @param action Pointer to an action.
+ */
+void CraftInfoState::btnEquipClick(Action *action)
+{
+	_game->pushState(new CraftEquipmentState(_game, _base, _craft));
+}
+
+/**
+ * Goes to the Select Armor screen.
+ * @param action Pointer to an action.
+ */
+void CraftInfoState::btnArmorClick(Action *action)
+{
+	_game->pushState(new CraftArmorState(_game, _base, _craft));
 }
 
 }

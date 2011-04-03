@@ -62,7 +62,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="SDLmain.lib SDL.lib SDL_gfx.lib SDL_mixer.lib yaml-cpp.lib"
+				AdditionalDependencies="SDLmain.lib SDL.lib SDL_gfx.lib SDL_mixer.lib yaml-cppd.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;..\deps\lib&quot;"
 				GenerateManifest="true"
@@ -464,6 +464,22 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Basescape\CraftArmorState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\CraftArmorState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\CraftEquipmentState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\CraftEquipmentState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Basescape\CraftInfoState.cpp"
 				>
 			</File>
@@ -573,6 +589,14 @@
 			</File>
 			<File
 				RelativePath=".\Basescape\SellState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\SoldierArmorState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\SoldierArmorState.h"
 				>
 			</File>
 			<File

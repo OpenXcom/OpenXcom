@@ -47,7 +47,7 @@ namespace OpenXcom
 		
 		// set buttons
 		_btnOk = new TextButton(224, 16, 48, 166);
-		_lstSelection = new TextList(224, 104, 40, 52);
+		_lstSelection = new TextList(224, 104, 40, 50);
 		
 		// Set palette
 		_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
@@ -71,10 +71,10 @@ namespace OpenXcom
 		
 		_lstSelection->setColor(Palette::blockOffset(8)+5);
 		_lstSelection->setArrowColor(Palette::blockOffset(15)+2);
-		_lstSelection->setColumns(1, 224);
+		_lstSelection->setColumns(1, 206);
 		_lstSelection->setSelectable(true);
 		_lstSelection->setBackground(_window);
-		_lstSelection->setMargin(9);
+		_lstSelection->setMargin(18);
 		_lstSelection->setAlign(ALIGN_CENTER);
 		_lstSelection->onMouseClick((ActionHandler)&UfopaediaSelectState::lstSelectionClick);
 		

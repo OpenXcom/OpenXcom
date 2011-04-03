@@ -16,43 +16,45 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_CRAFTSOLDIERSSTATE_H
-#define OPENXCOM_CRAFTSOLDIERSSTATE_H
+#ifndef OPENXCOM_SOLDIERARMORSTATE_H
+#define OPENXCOM_SOLDIERARMORSTATE_H
 
+#include <vector>
 #include "../Engine/State.h"
 
 namespace OpenXcom
 {
 
+class Base;
 class TextButton;
 class Window;
 class Text;
 class TextList;
-class Base;
+class RuleCraftWeapon;
 
 /**
- * Select Squad screen that lets the player
- * pick the soldiers to assign to a craft.
+ * Select Armor window that allows to
+ * change the armor equipped on a soldier.
  */
-class CraftSoldiersState : public State
+class SoldierArmorState : public State
 {
 private:
-	TextButton *_btnOk;
-	Window *_window;
-	Text *_txtTitle, *_txtName, *_txtRank, *_txtCraft, *_txtAvailable, *_txtUsed;
-	TextList *_lstSoldiers;
-
 	Base *_base;
-	unsigned int _craft;
+	unsigned int _soldier;
+
+	TextButton *_btnCancel;
+	Window *_window;
+	Text *_txtTitle, *_txtSoldier, *_txtType, *_txtQuantity;
+	TextList *_lstArmor;
 public:
-	/// Creates the Craft Soldiers state.
-	CraftSoldiersState(Game *game, Base *base, unsigned int craft);
-	/// Cleans up the Craft Soldiers state.
-	~CraftSoldiersState();
-	/// Handler for clicking the OK button.
-	void btnOkClick(Action *action);
-	/// Handler for clicking the Soldiers list.
-	void lstSoldiersClick(Action *action);
+	/// Creates the Soldier Armor state.
+	SoldierArmorState(Game *game, Base *base, unsigned int soldier);
+	/// Cleans up the Soldier Armor state.
+	~SoldierArmorState();
+	/// Handler for clicking the Cancel button.
+	void btnCancelClick(Action *action);
+	/// Handler for clicking the Weapons list.
+	void lstArmorClick(Action *action);
 };
 
 }

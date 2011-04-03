@@ -113,7 +113,7 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 
 	_lstItems->setColor(Palette::blockOffset(13)+10);
 	_lstItems->setArrowColor(Palette::blockOffset(13)+13);
-	_lstItems->setArrowColumn(227);
+	_lstItems->setArrowColumn(227, ARROW_VERTICAL);
 	_lstItems->setColumns(3, 162, 92, 32);
 	_lstItems->setSelectable(true);
 	_lstItems->setBackground(_window);
@@ -178,7 +178,7 @@ PurchaseState::~PurchaseState()
 }
 
 /**
- * Runs the game timer and handles popups.
+ * Runs the arrow timers.
  */
 void PurchaseState::think()
 {

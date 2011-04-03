@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "SoldiersState.h"
+#include "CraftArmorState.h"
 #include <string>
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
@@ -31,85 +31,70 @@
 #include "../Savegame/Soldier.h"
 #include "../Savegame/Craft.h"
 #include "../Ruleset/RuleCraft.h"
-#include "SoldierInfoState.h"
+#include "SoldierArmorState.h"
 
 namespace OpenXcom
 {
 
 /**
- * Initializes all the elements in the Soldiers screen.
+ * Initializes all the elements in the Craft Armor screen.
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
+ * @param craft ID of the selected craft.
  */
-SoldiersState::SoldiersState(Game *game, Base *base) : State(game), _base(base)
+CraftArmorState::CraftArmorState(Game *game, Base *base, unsigned int craft) : State(game), _base(base), _craft(craft)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
 	_btnOk = new TextButton(288, 16, 16, 176);
-	_txtTitle = new Text(310, 16, 5, 8);
+	_txtTitle = new Text(300, 16, 16, 7);
 	_txtName = new Text(114, 9, 16, 32);
-	_txtRank = new Text(102, 9, 130, 32);
-	_txtCraft = new Text(82, 9, 232, 32);
+	_txtCraft = new Text(70, 9, 130, 32);
+	_txtArmor = new Text(100, 9, 200, 32);
 	_lstSoldiers = new TextList(288, 128, 8, 40);
 	
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
+	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
 
 	add(_window);
 	add(_btnOk);
 	add(_txtTitle);
 	add(_txtName);
-	add(_txtRank);
 	add(_txtCraft);
+	add(_txtArmor);
 	add(_lstSoldiers);
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(15)+4);
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK02.SCR"));
+	_window->setColor(Palette::blockOffset(13)+13);
+	_window->setBackground(_game->getResourcePack()->getSurface("BACK14.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(13)+13);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)&SoldiersState::btnOkClick);
+	_btnOk->onMouseClick((ActionHandler)&CraftArmorState::btnOkClick);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
-	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setText(_game->getLanguage()->getString("STR_SOLDIER_LIST"));
+	_txtTitle->setText(_game->getLanguage()->getString("STR_SELECT_ARMOR"));
 
-	_txtName->setColor(Palette::blockOffset(15)+1);
+	_txtName->setColor(Palette::blockOffset(13)+10);
 	_txtName->setText(_game->getLanguage()->getString("STR_NAME_UC"));
 
-	_txtRank->setColor(Palette::blockOffset(15)+1);
-	_txtRank->setText(_game->getLanguage()->getString("STR_RANK"));
-
-	_txtCraft->setColor(Palette::blockOffset(15)+1);
+	_txtCraft->setColor(Palette::blockOffset(13)+10);
 	_txtCraft->setText(_game->getLanguage()->getString("STR_CRAFT"));
 
+	_txtArmor->setColor(Palette::blockOffset(13)+10);
+	_txtArmor->setText(_game->getLanguage()->getString("STR_ARMOR"));
+
 	_lstSoldiers->setColor(Palette::blockOffset(13)+10);
-	_lstSoldiers->setArrowColor(Palette::blockOffset(15)+4);
-	_lstSoldiers->setColumns(3, 114, 102, 64);
+	_lstSoldiers->setArrowColor(Palette::blockOffset(13)+13);
+	_lstSoldiers->setColumns(3, 114, 70, 96);
 	_lstSoldiers->setSelectable(true);
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setMargin(8);
-	_lstSoldiers->onMouseClick((ActionHandler)&SoldiersState::lstSoldiersClick);
-}
+	_lstSoldiers->onMouseClick((ActionHandler)&CraftArmorState::lstSoldiersClick);
 
-/**
- *
- */
-SoldiersState::~SoldiersState()
-{
-	
-}
-
-/**
- * The soldier names can change
- * after going into other screens.
- */
-void SoldiersState::init()
-{
 	int row = 0;
-	_lstSoldiers->clearList();
+	Craft *c = _base->getCrafts()->at(_craft);
 	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); i++)
 	{
 		std::wstring s;
@@ -121,34 +106,52 @@ void SoldiersState::init()
 		{
 			s = (*i)->getCraft()->getName(_game->getLanguage());
 		}
-		_lstSoldiers->addRow(3, (*i)->getName().c_str(), _game->getLanguage()->getString((*i)->getRankString()).c_str(), s.c_str());
-		if ((*i)->getCraft() == 0)
+		_lstSoldiers->addRow(3, (*i)->getName().c_str(), s.c_str(), _game->getLanguage()->getString("STR_NONE_UC").c_str());
+
+		Uint8 color;
+		if ((*i)->getCraft() == c)
 		{
-			_lstSoldiers->getCell(row, 0)->setColor(Palette::blockOffset(15)+6);
-			_lstSoldiers->getCell(row, 1)->setColor(Palette::blockOffset(15)+6);
-			_lstSoldiers->getCell(row, 2)->setColor(Palette::blockOffset(15)+6);
+			color = Palette::blockOffset(13);
 		}
+		else if ((*i)->getCraft() != 0)
+		{
+			color = Palette::blockOffset(15)+6;
+		}
+		else
+		{
+			color = Palette::blockOffset(13)+10;
+		}
+		_lstSoldiers->getCell(row, 0)->setColor(color);
+		_lstSoldiers->getCell(row, 1)->setColor(color);
+		_lstSoldiers->getCell(row, 2)->setColor(color);
 		row++;
 	}
 	_lstSoldiers->draw();
 }
 
 /**
+ *
+ */
+CraftArmorState::~CraftArmorState()
+{
+}
+
+/**
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void SoldiersState::btnOkClick(Action *action)
+void CraftArmorState::btnOkClick(Action *action)
 {
 	_game->popState();
 }
 
 /**
- * Shows the selected soldier's info.
+ * Shows the Select Armor window.
  * @param action Pointer to an action.
  */
-void SoldiersState::lstSoldiersClick(Action *action)
+void CraftArmorState::lstSoldiersClick(Action *action)
 {
-	_game->pushState(new SoldierInfoState(_game, _base, _lstSoldiers->getSelectedRow()));
+	_game->pushState(new SoldierArmorState(_game, _base, _lstSoldiers->getSelectedRow()));
 }
 
 }
