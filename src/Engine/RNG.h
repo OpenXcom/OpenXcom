@@ -44,7 +44,7 @@ public:
 	/// Generates a random decimal number.
 	static double generate(double min, double max);
 	/// Get normally distributed value.
-	static double getNormal();
+	static double boxMuller(double m = 0, double s = 1);
 };
 
 }

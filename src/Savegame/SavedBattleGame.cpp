@@ -481,6 +481,7 @@ void SavedBattleGame::endTurn()
 	}
 	else if (_side == FACTION_HOSTILE)
 	{
+		_terrainModifier->prepareNewTurn();
 		_turn++;
 		_side = FACTION_PLAYER;
 	}

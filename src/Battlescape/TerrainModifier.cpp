@@ -442,9 +442,9 @@ void TerrainModifier::explode(const Position &center, int power, ItemDamageType 
 	}
 	else
 	{
-		double centerZ = (center.z / 24) + 0.5;
-		double centerX = (center.x / 16) + 0.5;
-		double centerY = (center.y / 16) + 0.5;
+		double centerZ = (int)(center.z / 24) + 0.5;
+		double centerX = (int)(center.x / 16) + 0.5;
+		double centerY = (int)(center.y / 16) + 0.5;
 		int power_;
 
 		if (type == DT_IN)
@@ -496,13 +496,17 @@ void TerrainModifier::explode(const Position &center, int power, ItemDamageType 
 					if (type == DT_SMOKE)
 					{
 						// smoke from explosions always stay 15 to 20 turns
-						dest->setSmoke(RNG::generate(15, 20));
+						if (dest->getSmoke() < 10)
+						{
+							dest->addSmoke(RNG::generate(15, 20));
+						}
 					}
 					if (type == DT_IN)
 					{
-						// fire from explosions always stay 1 to 2 turns + it ignites stuff
-						dest->setFire(RNG::generate(15, 20));
-						dest->ignite();
+						if (dest->getFire() == 0)
+						{
+							dest->ignite();
+						}
 					}
 				}
 
@@ -844,6 +848,75 @@ void TerrainModifier::spawnItem(const Position &position, BattleItem *item)
 	}
 
 	_save->getTile(p)->addItem(item);
+}
+
+/**
+ * New turn preparations. Like fire and smoke spreading.
+ */
+void TerrainModifier::prepareNewTurn()
+{
+	std::vector<Tile*> tilesOnFire;
+	std::vector<Tile*> tilesOnSmoke;
+	
+	// prepare a list of tiles on fire/smoke
+	for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); i++)
+	{
+		if (_save->getTiles()[i]->getFire() > 0)
+		{
+			tilesOnFire.push_back(_save->getTiles()[i]);
+		}
+		if (_save->getTiles()[i]->getSmoke() > 0)
+		{
+			tilesOnSmoke.push_back(_save->getTiles()[i]);
+		}
+	}
+
+	for (std::vector<Tile*>::iterator i = tilesOnSmoke.begin(); i != tilesOnSmoke.end(); i++)
+	{
+
+		(*i)->prepareNewTurn();
+	}
+
+	for (std::vector<Tile*>::iterator i = tilesOnFire.begin(); i != tilesOnFire.end(); i++)
+	{
+		int z = (*i)->getPosition().z;
+		for (int x = (*i)->getPosition().x-1; x <= (*i)->getPosition().x+1; x++)
+		{
+			for (int y = (*i)->getPosition().y-1; y <= (*i)->getPosition().y+1; y++)
+			{
+				Tile *t = _save->getTile(Position(x, y, z));
+				if (t && t->getFire() == 0)
+				{
+					// check adjacent tiles - if they have a flammability of < 255, there is a chance...
+					if (horizontalBlockage((*i), t, DT_IN) == 0)
+					{
+						int flam = t->getFlammability();
+						if (flam < 255)
+						{
+							double base = RNG::boxMuller(0,126);
+							if (base < 0) base *= -1;
+						
+							if (flam < base)
+							{
+								if (RNG::generate(0, flam) < 2)
+								{
+									t->ignite();
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		(*i)->prepareNewTurn();
+	}
+
+	if (tilesOnFire.size() > 0)
+	{
+		calculateTerrainLighting(); // fires could have been stopped
+	}
+
 }
 
 }

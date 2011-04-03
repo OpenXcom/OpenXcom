@@ -371,7 +371,7 @@ void Tile::detonate()
 	if (_explosive)
 	{
 		// explosions create smoke which only stays 1 or 2 turns
-		setSmoke(1);
+		addSmoke(1);
 		for (int i = 0; i < 4; i++)
 		{
 			if(_objects[i])
@@ -380,7 +380,7 @@ void Tile::detonate()
 				{
 					decrease = _objects[i]->getArmor();
 					destroy(i);
-					setSmoke(2);
+					addSmoke(2);
 					if (_objects[i] && (_explosive - decrease) >= _objects[i]->getArmor())
 					{
 						destroy(i);
@@ -441,7 +441,11 @@ void Tile::ignite()
 			}
 		}
 	}
-	setFire(fuel);
+	setFire(fuel + 1);
+	if (fuel > 1)
+	{
+		addSmoke(fuel * 2); // not sure
+	}
 }
 
 /**
@@ -513,7 +517,6 @@ BattleUnit *Tile::getUnit()
 void Tile::setFire(int fire)
 {
 	_fire = fire;
-	_smoke = 0; // fire stops smoke, like in the original game
 	_animationOffset = RNG::generate(0,3);
 }
 
@@ -530,11 +533,10 @@ int Tile::getFire()
  * Set the amount of turns this tile is smoking. 0 = no smoke.
  * @param smoke : amount of turns this tile is smoking.
  */
-void Tile::setSmoke(int smoke)
+void Tile::addSmoke(int smoke)
 {
-	if (smoke > 40) smoke = 40;
-	_smoke = smoke;
-	_fire = 0; // smoke stops fire, like in the original game
+	_smoke += smoke;
+	if (_smoke > 40) _smoke = 40;
 	_animationOffset = RNG::generate(0,3);
 }
 
@@ -580,6 +582,44 @@ int Tile::getTopItemSprite()
 	else
 	{
 		return -1;
+	}
+}
+
+/**
+ * New turn preparations. Decrease smoke and fire timers.
+ */
+void Tile::prepareNewTurn()
+{
+	_smoke--;
+	if (_smoke < 0) _smoke = 0;
+
+	if (_fire == 1)
+	{
+		// fire will be finished in this turn
+		// destroy all objects that burned, and try to ignite again
+		for (int i = 0; i < 4; i++)
+		{
+			if(_objects[i])
+			{
+				if (_objects[i]->getFlammable() < 255)
+				{
+					destroy(i);
+				}
+			}
+		}
+		if (getFlammability() < 255)
+		{
+			ignite();
+		}
+		else
+		{
+			_fire = 0;
+		}
+	}
+	else
+	{
+		_fire--;
+		if (_fire < 0) _fire = 0;
 	}
 }
 

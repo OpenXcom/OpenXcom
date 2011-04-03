@@ -60,11 +60,14 @@ private:
 	ImageButton *_reserve;
 	ImageButton *_btnReserveNone, *_btnReserveSnap, *_btnReserveAimed, *_btnReserveAuto;
 	ImageButton *_btnLeftHandItem, *_btnRightHandItem;
+	InteractiveSurface *_btnVisibleUnit[10];
 	Text *_txtName;
 	NumberText *_numTimeUnits, *_numEnergy, *_numHealth, *_numMorale, *_numLayers, *_numAmmoLeft, *_numAmmoRight;
 	Bar *_barTimeUnits, *_barEnergy, *_barHealth, *_barMorale;
 	Timer *_stateTimer, *_animTimer;
 	SavedBattleGame *_battleGame;
+	Text *_txtDebug;
+	int _animFrame;
 
 	BattleActionType _selectedAction;
 	BattleItem *_selectedItem;
@@ -142,6 +145,10 @@ public:
 	void setStateInterval(Uint32 interval);
 	/// Get selected item.
 	BattleItem *getSelectedItem() const;
+	/// Show debug message.
+	void debug(const std::wstring message);
+	/// Handle keypresses.
+	void handle(Action *action);
 };
 
 }

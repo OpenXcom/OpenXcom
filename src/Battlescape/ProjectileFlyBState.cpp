@@ -97,7 +97,15 @@ void ProjectileFlyBState::think()
 	if(!_parent->getMap()->getProjectile()->move())
 	{
 		// impact !
-		_parent->statePushNext(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(0), _parent->getSelectedItem()));
+		int offset = 0;
+		// explosions impact not inside the voxel but one step back
+		if (_parent->getSelectedItem()->getAmmoItem() && (
+			_parent->getSelectedItem()->getAmmoItem()->getRules()->getDamageType() == DT_HE || 
+			_parent->getSelectedItem()->getAmmoItem()->getRules()->getDamageType() == DT_IN))
+		{
+			offset = -1;
+		}
+		_parent->statePushNext(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(offset), _parent->getSelectedItem()));
 
 		delete _parent->getMap()->getProjectile();
 		_parent->getMap()->setProjectile(0);
