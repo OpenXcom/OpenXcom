@@ -154,7 +154,7 @@ void UnitWalkBState::think()
 
 			// now start moving
 			dir = _pf->dequeuePath();
-			if (_unit->spendTimeUnits(tu))
+			if (_unit->spendTimeUnits(tu, _parent->getGame()->getSavedGame()->getBattleGame()->getDebugMode()))
 			{
 				_unit->startWalking(dir, destination);
 			}

@@ -118,7 +118,7 @@ public:
 	/// Get fire.
 	int getFire();
 	/// Set smoke.
-	void setSmoke(int smoke);
+	void addSmoke(int smoke);
 	/// Get smoke.
 	int getSmoke();
 	/// Get flammability.
@@ -131,6 +131,8 @@ public:
 	void addItem(BattleItem *item);
 	/// Get top-most item
 	int getTopItemSprite();
+	/// Decrease fire and smoke timers.
+	void prepareNewTurn();
 };
 
 }

@@ -549,17 +549,9 @@ void Map::mouseClick(Action *action, State *state)
  */
 void Map::keyboardPress(Action *action, State *state)
 {
-	Position pos;
-	getSelectorPosition(&pos);
+	//Position pos;
+	//getSelectorPosition(&pos);
 	InteractiveSurface::keyboardPress(action, state);
-
-	// "d" - enable debug mode
-	if (action->getDetails()->key.keysym.sym == SDLK_d)
-	{
-		_save->setDebugMode();
-		cacheTileSprites();
-	}
-
 }
 
 /**

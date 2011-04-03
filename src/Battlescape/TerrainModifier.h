@@ -74,6 +74,8 @@ public:
 	int calculateLine(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory);
 	/// Add item & affect with gravity.
 	void spawnItem(const Position &position, BattleItem *item);
+	/// New turn preparations.
+	void prepareNewTurn();
 
 };
 

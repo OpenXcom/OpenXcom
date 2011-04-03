@@ -157,14 +157,8 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 	double rotation, tilt;
 	double baseDeviation = (maxDeviation - (maxDeviation * accuracy)) + minDeviation;
 	// the angle deviations are spread using a normal distribution between 0 and baseDeviation
-	dRot = RNG::getNormal() * baseDeviation;
-	dTilt = RNG::getNormal() * baseDeviation;
-	// or in the other direction perhaps
-	if (RNG::generate(0,1) == 1)
-		dRot *= -1;
-	if (RNG::generate(0,1) == 1)
-		dTilt *= -1;
-	dTilt /= 10.0; // test
+	dRot = RNG::boxMuller(0, baseDeviation);
+	dTilt = RNG::boxMuller(0, baseDeviation / 10.0);
 	rotation = atan2(double(target->y - origin.y), double(target->x - origin.x)) * 180 / M_PI;
 	tilt = atan2(double(target->z - origin.z),
 		sqrt(double(target->x - origin.x)*double(target->x - origin.x)+double(target->y - origin.y)*double(target->y - origin.y))) * 180 / M_PI;

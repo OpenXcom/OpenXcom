@@ -488,8 +488,10 @@ bool BattleUnit::isOut() const
  * @param tu
  * @return flag if it could spend the time units or not.
  */
-bool BattleUnit::spendTimeUnits(int tu)
+bool BattleUnit::spendTimeUnits(int tu, bool debugmode)
 {
+	if (debugmode) return true;
+
 	if (tu <= _tu)
 	{
 		_tu -= tu;

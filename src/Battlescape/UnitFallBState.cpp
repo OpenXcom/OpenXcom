@@ -108,6 +108,7 @@ void UnitFallBState::think()
 	
 	if (_unit->getStatus() == STATUS_DEAD || _unit->getStatus() == STATUS_UNCONSCIOUS)
 	{
+		_unit->keepFalling();
 		TerrainModifier *terrain = _parent->getGame()->getSavedGame()->getBattleGame()->getTerrainModifier();
 		convertUnitToCorpse(_unit, terrain);
 		terrain->calculateUnitLighting();

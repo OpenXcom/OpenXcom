@@ -101,6 +101,8 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	_numMorale = new NumberText(15, 5, 154, 194);
 	_barMorale = new Bar(102, 3, 170, 197);
 
+	_txtDebug = new Text(300, 10, 20, 0);
+
 	_reserve = _btnReserveNone;
 
 	// Set palette
@@ -160,6 +162,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	add(_btnRightHandItem);
 	add(_numAmmoRight);
 
+	add(_txtDebug);
 	// Set up objects
 	_game->getResourcePack()->getSurface("ICONS.PCK")->blit(_icons);
 	
@@ -203,6 +206,9 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	_barMorale->setColor(Palette::blockOffset(12));
 	_barMorale->setScale(1.0);
 
+	_txtDebug->setColor(Palette::blockOffset(8)-1);
+	_txtDebug->setHighContrast(true);
+
 	updateSoldierInfo(_battleGame->getSelectedUnit());
 	_map->centerOnPosition(_battleGame->getSelectedUnit()->getPosition());
 
@@ -232,7 +238,6 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	_animTimer = new Timer(DEFAULT_ANIM_SPEED);
 	_animTimer->onTimer((StateHandler)&BattlescapeState::animate);
 	_animTimer->start();
-
 
 	_selectedAction = BA_NONE;
 }
@@ -403,7 +408,7 @@ void BattlescapeState::btnKneelClick(Action *action)
 	BattleUnit *bu = _battleGame->getSelectedUnit();
 	if (bu)
 	{
-		if (bu->spendTimeUnits(bu->isKneeled()?8:4))
+		if (bu->spendTimeUnits(bu->isKneeled()?8:4, _battleGame->getDebugMode()))
 		{
 			bu->kneel(!bu->isKneeled());
 			_map->cacheUnits();
@@ -585,6 +590,8 @@ void BattlescapeState::updateSoldierInfo(BattleUnit *battleUnit)
 	{
 		drawItemSprite(rightHandItem, _btnRightHandItem);
 	}
+
+
 }
 
 /*
@@ -636,6 +643,8 @@ void BattlescapeState::handleState()
  */
 void BattlescapeState::animate()
 {
+	_animFrame++;
+	if (_animFrame == 8) _animFrame = 0;
 	_map->animate();
 }
 
@@ -762,6 +771,38 @@ void BattlescapeState::popState()
 void BattlescapeState::setStateInterval(Uint32 interval)
 {
 	_stateTimer->setInterval(interval);
+}
+
+/**
+ * Show a debug message in the topleft corner.
+ * @param message Debug message.
+ */
+void BattlescapeState::debug(const std::wstring message)
+{
+	if (_battleGame->getDebugMode())
+	{
+		_txtDebug->setText(message);
+	}
+}
+
+/**
+ * Takes care of any events from the core game engine.
+ * @param action Pointer to an action.
+ */
+void BattlescapeState::handle(Action *action)
+{
+	State::handle(action);
+
+	if (action->getDetails()->type == SDL_KEYDOWN)
+	{
+			// "d" - enable debug mode
+		if (action->getDetails()->key.keysym.sym == SDLK_d)
+		{
+			_battleGame->setDebugMode();
+			debug(L"Debug Mode");
+		}
+	}
+
 }
 
 }

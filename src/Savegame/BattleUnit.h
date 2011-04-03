@@ -132,7 +132,7 @@ public:
 	/// The unit is out - either dead or unconscious.
 	bool isOut() const;
 	/// Spend time units if it can.
-	bool spendTimeUnits(int tu);
+	bool spendTimeUnits(int tu, bool debugmode);
 	/// Set time units.
 	void setTimeUnits(int tu);
 	/// Add unit to visible units.

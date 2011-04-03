@@ -204,9 +204,17 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 		fellDown = true;
 	}
 
+	// if we don't want to fall down and there is no floor, it ends here
+	if (!fellDown && destinationTile->hasNoFloor())
+	{
+		return 255;
+	}
+
 	// check if the destination tile can be walked over
 	if ((isBlocked(destinationTile, O_FLOOR) || isBlocked(destinationTile, O_OBJECT)) && !fellDown)
+	{
 		return 255;
+	}
 
 	// calculate the cost by adding floor walk cost and object walk cost
 	int cost = destinationTile->getTUCost(O_FLOOR, _movementType);
@@ -360,7 +368,8 @@ bool Pathfinding::canFallDown(Tile *here)
 	if (here->getPosition().z == 0)
 		return false;
 
-	if (_save->selectUnit(here->getPosition() + Position(0, 0, -1)))
+	if (_save->selectUnit(here->getPosition() + Position(0, 0, -1)) &&
+		_save->selectUnit(here->getPosition() + Position(0, 0, -1)) != _unit)
 		return false;
 
 	if (!here || here->hasNoFloor())
