@@ -71,6 +71,8 @@ public:
 	void btnPurchaseClick(Action *action);
 	/// Handler for clicking the Sell/Sack button.
 	void btnSellClick(Action *action);
+	/// Handler for clicking the Transfer button.
+	void btnTransferClick(Action *action);
 	/// Handler for clicking the Geoscape button.
 	void btnGeoscapeClick(Action *action);
 	/// Handler for clicking the base view.

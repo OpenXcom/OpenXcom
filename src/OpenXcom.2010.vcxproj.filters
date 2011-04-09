@@ -491,6 +491,9 @@
     <ClCompile Include="Basescape\TransferItemsState.cpp">
       <Filter>Basescape</Filter>
     </ClCompile>
+    <ClCompile Include="Basescape\TransferBaseState.cpp">
+      <Filter>Basescape</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -982,6 +985,9 @@
       <Filter>Basescape</Filter>
     </ClInclude>
     <ClInclude Include="Basescape\TransferItemsState.h">
+      <Filter>Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Basescape\TransferBaseState.h">
       <Filter>Basescape</Filter>
     </ClInclude>
   </ItemGroup>

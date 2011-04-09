@@ -45,7 +45,8 @@ namespace OpenXcom
 /**
  * Initializes all the elements in the Transfer screen.
  * @param game Pointer to the core game.
- * @param base Pointer to the base to get info from.
+ * @param baseFrom Pointer to the source base.
+ * @param baseTo Pointer to the destination base.
  */
 TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo) : State(game), _baseFrom(baseFrom), _baseTo(baseTo), _qtys(), _soldiers(), _crafts(), _items(), _sel(0), _total(0), _sOffset(0), _eOffset(0)
 {
@@ -54,11 +55,11 @@ TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo)
 	_btnOk = new TextButton(148, 16, 8, 176);
 	_btnCancel = new TextButton(148, 16, 164, 176);
 	_txtTitle = new Text(310, 16, 5, 8);
-	_txtItem = new Text(130, 9, 10, 32);
-	_txtQuantity = new Text(44, 9, 140, 32);
-	_txtAmountTransfer = new Text(96, 9, 184, 32);
-	_txtAmountDestination = new Text(34, 9, 280, 32);
-	_lstItems = new TextList(288, 120, 8, 44);
+	_txtItem = new Text(130, 9, 10, 22);
+	_txtQuantity = new Text(50, 9, 150, 22);
+	_txtAmountTransfer = new Text(60, 16, 200, 22);
+	_txtAmountDestination = new Text(60, 16, 260, 22);
+	_lstItems = new TextList(288, 128, 8, 40);
 	
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
@@ -77,11 +78,11 @@ TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo)
 	_window->setColor(Palette::blockOffset(13)+13);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(13)+13);
+	_btnOk->setColor(Palette::blockOffset(15)+9);
 	_btnOk->setText(_game->getLanguage()->getString("STR_TRANSFER"));
 	_btnOk->onMouseClick((ActionHandler)&TransferItemsState::btnOkClick);
 
-	_btnCancel->setColor(Palette::blockOffset(13)+13);
+	_btnCancel->setColor(Palette::blockOffset(15)+9);
 	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)&TransferItemsState::btnCancelClick);
 
@@ -102,10 +103,10 @@ TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo)
 	_txtAmountDestination->setColor(Palette::blockOffset(13)+10);
 	_txtAmountDestination->setText(_game->getLanguage()->getString("STR_AMOUNT_AT_DESTINATION"));
 
-	_lstItems->setColor(Palette::blockOffset(13)+10);
+	_lstItems->setColor(Palette::blockOffset(15)+1);
 	_lstItems->setArrowColor(Palette::blockOffset(13)+13);
-	_lstItems->setArrowColumn(189, ARROW_VERTICAL);
-	_lstItems->setColumns(4, 156, 62, 28, 40);
+	_lstItems->setArrowColumn(193, ARROW_VERTICAL);
+	_lstItems->setColumns(4, 162, 58, 55, 11);
 	_lstItems->setSelectable(true);
 	_lstItems->setBackground(_window);
 	_lstItems->setMargin(2);

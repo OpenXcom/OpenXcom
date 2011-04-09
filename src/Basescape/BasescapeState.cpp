@@ -44,6 +44,7 @@
 #include "ManufactureState.h"
 #include "PurchaseState.h"
 #include "SellState.h"
+#include "TransferBaseState.h"
 
 namespace OpenXcom
 {
@@ -153,7 +154,8 @@ BasescapeState::BasescapeState(Game *game, Base *base, Globe *globe) : State(gam
 	_btnManufacture->onMouseClick((ActionHandler)&BasescapeState::btnManufactureClick);
 
 	_btnTransfer->setColor(Palette::blockOffset(13)+8);
-	_btnTransfer->setText(_game->getLanguage()->getString("STR_TRANSFER"));
+	_btnTransfer->setText(_game->getLanguage()->getString("STR_TRANSFER_UC"));
+	_btnTransfer->onMouseClick((ActionHandler)&BasescapeState::btnTransferClick);
 
 	_btnPurchase->setColor(Palette::blockOffset(13)+8);
 	_btnPurchase->setText(_game->getLanguage()->getString("STR_PURCHASE_RECRUIT"));
@@ -339,6 +341,15 @@ void BasescapeState::btnPurchaseClick(Action *action)
 void BasescapeState::btnSellClick(Action *action)
 {
 	_game->pushState(new SellState(_game, _base));
+}
+
+/**
+ * Goes to the Select Destination Base window.
+ * @param action Pointer to an action.
+ */
+void BasescapeState::btnTransferClick(Action *action)
+{
+	_game->pushState(new TransferBaseState(_game, _base));
 }
 
 /**

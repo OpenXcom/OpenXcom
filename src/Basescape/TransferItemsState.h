@@ -36,8 +36,8 @@ class Soldier;
 class Craft;
 
 /**
- * Sell/Sack screen that lets the player sell
- * any items in a particular base.
+ * Transfer screen that lets the player pick
+ * what items to transfer between bases.
  */
 class TransferItemsState : public State
 {
