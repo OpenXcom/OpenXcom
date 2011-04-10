@@ -624,6 +624,22 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Basescape\TransferBaseState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\TransferBaseState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\TransferItemsState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\TransferItemsState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Basescape\TransfersState.cpp"
 				>
 			</File>

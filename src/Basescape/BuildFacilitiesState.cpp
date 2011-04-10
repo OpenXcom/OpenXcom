@@ -76,6 +76,7 @@ BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base, State *state)
 	_lstFacilities->setSelectable(true);
 	_lstFacilities->setBackground(_window);
 	_lstFacilities->setMargin(2);
+	_lstFacilities->onMouseClick((ActionHandler)&BuildFacilitiesState::lstFacilitiesClick);
 
 	_facilities.push_back(_game->getRuleset()->getBaseFacility("STR_LIVING_QUARTERS"));
 	_facilities.push_back(_game->getRuleset()->getBaseFacility("STR_LABORATORY"));
@@ -91,7 +92,6 @@ BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base, State *state)
 	{
 		_lstFacilities->addRow(1, _game->getLanguage()->getString((*i)->getType()).c_str());
 	}
-	_lstFacilities->onMouseClick((ActionHandler)&BuildFacilitiesState::lstFacilitiesClick);
 }
 
 /**

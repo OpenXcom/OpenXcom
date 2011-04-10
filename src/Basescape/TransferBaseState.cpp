@@ -29,6 +29,9 @@
 #include "../Interface/TextList.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Base.h"
+#include "../Savegame/Region.h"
+#include "../Ruleset/RuleRegion.h"
+#include "TransferItemsState.h"
 
 namespace OpenXcom
 {
@@ -38,7 +41,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-TransferBaseState::TransferBaseState(Game *game, Base *base) : State(game), _base(base)
+TransferBaseState::TransferBaseState(Game *game, Base *base) : State(game), _base(base), _bases()
 {
 	// Create objects
 	_window = new Window(this, 280, 140, 20, 30);
@@ -50,7 +53,7 @@ TransferBaseState::TransferBaseState(Game *game, Base *base) : State(game), _bas
 	_lstBases = new TextList(248, 64, 28, 80);
 	
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
 
 	add(_window);
 	add(_btnCancel);
@@ -74,7 +77,9 @@ TransferBaseState::TransferBaseState(Game *game, Base *base) : State(game), _bas
 	_txtTitle->setText(_game->getLanguage()->getString("STR_SELECT_DESTINATION_BASE"));
 
 	_txtFunds->setColor(Palette::blockOffset(13)+5);
-	_txtFunds->setText(_game->getLanguage()->getString("STR_CURRENT_FUNDS"));
+	std::wstring s = _game->getLanguage()->getString("STR_CURRENT_FUNDS");
+	s += Text::formatFunding(_game->getSavedGame()->getFunds());
+	_txtFunds->setText(s);
 
 	_txtName->setColor(Palette::blockOffset(13)+5);
 	_txtName->setText(_game->getLanguage()->getString("STR_NAME"));
@@ -90,6 +95,31 @@ TransferBaseState::TransferBaseState(Game *game, Base *base) : State(game), _bas
 	_lstBases->setSelectable(true);
 	_lstBases->setBackground(_window);
 	_lstBases->setMargin(2);
+	_lstBases->onMouseClick((ActionHandler)&TransferBaseState::lstBasesClick);
+
+	int row = 0;
+	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); i++)
+	{
+		if ((*i) != _base)
+		{
+			// Get area
+			std::wstring area = L"";
+			for (std::vector<Region*>::iterator j = _game->getSavedGame()->getRegions()->begin(); j != _game->getSavedGame()->getRegions()->end(); j++)
+			{
+				if ((*j)->getRules()->insideRegion((*i)->getLongitude(), (*i)->getLatitude()))
+				{
+					area = _game->getLanguage()->getString((*j)->getRules()->getType());
+					break;
+				}
+			}
+
+			_lstBases->addRow(2, (*i)->getName().c_str(), area.c_str());
+			_lstBases->getCell(row, 1)->setColor(Palette::blockOffset(13)+5);
+			_bases.push_back(*i);
+			row++;
+		}
+	}
+	_lstBases->draw();
 }
 
 /**
@@ -106,6 +136,15 @@ TransferBaseState::~TransferBaseState()
 void TransferBaseState::btnCancelClick(Action *action)
 {
 	_game->popState();
+}
+
+/**
+ * Shows Transfer screen for the selected base.
+ * @param action Pointer to an action.
+ */
+void TransferBaseState::lstBasesClick(Action *action)
+{
+	_game->pushState(new TransferItemsState(_game, _base, _bases[_lstBases->getSelectedRow()]));
 }
 
 }

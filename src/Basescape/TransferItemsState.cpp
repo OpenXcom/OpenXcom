@@ -268,6 +268,7 @@ void TransferItemsState::btnOkClick(Action *action)
 		}
 	}
 	_game->popState();
+	_game->popState();
 }
 
 /**
@@ -276,6 +277,7 @@ void TransferItemsState::btnOkClick(Action *action)
  */
 void TransferItemsState::btnCancelClick(Action *action)
 {
+	_game->popState();
 	_game->popState();
 }
 

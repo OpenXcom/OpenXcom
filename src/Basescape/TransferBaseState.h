@@ -21,7 +21,6 @@
 
 #include "../Engine/State.h"
 #include <vector>
-#include <string>
 
 namespace OpenXcom
 {
@@ -44,6 +43,7 @@ private:
 	Window *_window;
 	Text *_txtTitle, *_txtFunds, *_txtName, *_txtArea;
 	TextList *_lstBases;
+	std::vector<Base*> _bases;
 public:
 	/// Creates the Transfer Base state.
 	TransferBaseState(Game *game, Base *base);
@@ -51,6 +51,8 @@ public:
 	~TransferBaseState();
 	/// Handler for clicking the Cancel button.
 	void btnCancelClick(Action *action);
+	/// Handler for clicking the Bases list.
+	void lstBasesClick(Action *action);
 };
 
 }
