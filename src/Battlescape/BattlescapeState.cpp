@@ -175,10 +175,10 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	_numLayers->setColor(Palette::blockOffset(1)-2);
 	_numLayers->setValue(1);
 
-	_numAmmoLeft->setColor(Palette::blockOffset(1)-2);
+	_numAmmoLeft->setColor(2);
 	_numAmmoLeft->setValue(999);
 
-	_numAmmoRight->setColor(Palette::blockOffset(1)-2);
+	_numAmmoRight->setColor(2);
 	_numAmmoRight->setValue(999);
 
 	_btnAbort->onMouseClick((ActionHandler)&BattlescapeState::btnAbortClick);
@@ -580,15 +580,19 @@ void BattlescapeState::updateSoldierInfo(BattleUnit *battleUnit)
 
 	BattleItem *leftHandItem = _battleGame->getItemFromUnit(battleUnit, LEFT_HAND);
 	_btnLeftHandItem->clear();
+	_numAmmoLeft->clear();
 	if (leftHandItem)
 	{
 		drawItemSprite(leftHandItem, _btnLeftHandItem);
+		_numAmmoLeft->setValue(leftHandItem->getAmmoQuantity());
 	}
 	BattleItem *rightHandItem = _battleGame->getItemFromUnit(battleUnit, RIGHT_HAND);
 	_btnRightHandItem->clear();
+	_numAmmoRight->clear();
 	if (rightHandItem)
 	{
 		drawItemSprite(rightHandItem, _btnRightHandItem);
+		_numAmmoRight->setValue(rightHandItem->getAmmoQuantity());
 	}
 
 
@@ -623,6 +627,9 @@ void BattlescapeState::handleItemClick(BattleItem *item)
 void BattlescapeState::drawItemSprite(BattleItem *item, Surface *surface)
 {
 	SurfaceSet *texture = _game->getResourcePack()->getSurfaceSet("BIGOBS.PCK");
+	Surface *frame = texture->getFrame(item->getRules()->getBigSprite());
+	frame->setX((2 - item->getRules()->getSizeX()) * 8);
+	frame->setY((3 - item->getRules()->getSizeY()) * 8);
 	texture->getFrame(item->getRules()->getBigSprite())->blit(surface);
 }
 

@@ -62,12 +62,24 @@ void ExplosionBState::init()
 {	
 	_parent->setStateInterval(DEFAULT_ANIM_SPEED);
 	_unit = _parent->getGame()->getSavedGame()->getBattleGame()->getSelectedUnit();
-	// create a new kaboom
-	Explosion *explosion = new Explosion(_center,_parent->getSelectedItem()->getRules()->getHitAnimation(), false);
-	// add the explosion on the map
-	_parent->getMap()->getExplosions()->insert(explosion);
-	// KABOOM
-	_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(_parent->getSelectedItem()->getRules()->getHitSound())->play();
+	if (_parent->getSelectedItem()->getAmmoItem()->getRules()->getHitAnimation() == 0)
+	{
+		// create a new kaboom
+		Explosion *explosion = new Explosion(_center, 0, true);
+		// add the explosion on the map
+		_parent->getMap()->getExplosions()->insert(explosion);
+		// KABOOM
+		_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(_parent->getSelectedItem()->getAmmoItem()->getRules()->getHitSound())->play();
+	}
+	else
+	{
+		// create a new kaboom
+		Explosion *explosion = new Explosion(_center,_parent->getSelectedItem()->getAmmoItem()->getRules()->getHitAnimation(), false);
+		// add the explosion on the map
+		_parent->getMap()->getExplosions()->insert(explosion);
+		// KABOOM
+		_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(_parent->getSelectedItem()->getAmmoItem()->getRules()->getHitSound())->play();
+	}
 }
 
 /*

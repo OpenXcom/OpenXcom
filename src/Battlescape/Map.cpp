@@ -446,12 +446,15 @@ void Map::drawTerrain(Surface *surface)
 					// check if we gots explosions
 					for (std::set<Explosion*>::const_iterator i = _explosions.begin(); i != _explosions.end(); i++)
 					{
-						Position voxelPos = (*i)->getPosition();
-						convertVoxelToScreen(voxelPos, &bulletPositionScreen);
-						frame = _res->getSurfaceSet("SMOKE.PCK")->getFrame((*i)->getCurrentFrame());
-						frame->setX(bulletPositionScreen.x - 15);
-						frame->setY(bulletPositionScreen.y - 15);
-						frame->blit(surface);
+						if (!(*i)->isBig())
+						{
+							Position voxelPos = (*i)->getPosition();
+							convertVoxelToScreen(voxelPos, &bulletPositionScreen);
+							frame = _res->getSurfaceSet("SMOKE.PCK")->getFrame((*i)->getCurrentFrame());
+							frame->setX(bulletPositionScreen.x - 15);
+							frame->setY(bulletPositionScreen.y - 15);
+							frame->blit(surface);
+						}
 					}
 
 					// Draw cursor front

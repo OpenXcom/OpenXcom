@@ -332,4 +332,39 @@ void RuleItem::setBattleType(BattleType type)
 	_battleType = type;
 }
 
+/**
+ * Returns the item's X size.
+ * @return the item's X size.
+ */
+int RuleItem::getSizeX() const
+{
+	return _sizeX;
+}
+
+/**
+ * Sets the item's size X.
+ * @param size the item's size X.
+ */
+void RuleItem::setSizeX(int size)
+{
+	_sizeX = size;
+}
+
+/**
+ * Returns the item's Y size.
+ * @return the item's Y size.
+ */
+int RuleItem::getSizeY() const
+{
+	return _sizeY;
+}
+
+/**
+ * Sets the item's size Y.
+ * @param size the item's size Y.
+ */
+void RuleItem::setSizeY(int size)
+{
+	_sizeY = size;
+}
 }

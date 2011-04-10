@@ -209,12 +209,12 @@ void BattlescapeGenerator::run()
 				addItem((*i).second);
 		}*/
 		// test data
+		addItem(_game->getRuleset()->getItem("STR_RIFLE"));
 		addItem(_game->getRuleset()->getItem("STR_HEAVY_CANNON"));
-		addItem(_game->getRuleset()->getItem("STR_HEAVY_CANNON"));
-		addItem(_game->getRuleset()->getItem("STR_HEAVY_CANNON"));
-		addItem(_game->getRuleset()->getItem("STR_HC_AP_AMMO"));
+		addItem(_game->getRuleset()->getItem("STR_ROCKET_LAUNCHER"));
+		addItem(_game->getRuleset()->getItem("STR_RIFLE_CLIP"));
 		addItem(_game->getRuleset()->getItem("STR_HC_HE_AMMO"));
-		addItem(_game->getRuleset()->getItem("STR_HC_IN_AMMO"));
+		addItem(_game->getRuleset()->getItem("STR_SMALL_ROCKET"));
 	}
 
 	if (_missionType == MISS_UFORECOVERY)
