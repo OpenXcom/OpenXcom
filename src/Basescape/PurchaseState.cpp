@@ -364,7 +364,7 @@ void PurchaseState::increase()
 			_cQty++;
 		}
 		// Item count
-		else if (_sel >= 3 + _crafts.size())
+		else
 		{
 			_iQty += _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getSize();
 		}
@@ -387,15 +387,18 @@ void PurchaseState::decrease()
 {
 	if (_qtys[_sel] > 0)
 	{
+		// Personnel count
 		if (_sel <= 2)
 		{
 			_pQty--;
 		}
+		// Craft count
 		else if (_sel >= 3 && _sel < 3 + _crafts.size())
 		{
 			_cQty--;
 		}
-		else if (_sel >= 3 + _crafts.size())
+		// Item count
+		else
 		{
 			_iQty -= _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getSize();
 		}

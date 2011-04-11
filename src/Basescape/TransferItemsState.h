@@ -52,10 +52,9 @@ private:
 	std::vector<Craft*> _crafts;
 	std::vector<std::string> _items;
 	unsigned int _sel;
-	int _total, _sOffset, _eOffset;
+	int _total, _sOffset, _eOffset, _pQty, _cQty;
+	float _iQty;
 	Timer *_timerInc, *_timerDec;
-	/// Gets selected price.
-	int getPrice();
 	/// Gets selected quantity.
 	int getQuantity();
 public:

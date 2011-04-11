@@ -38,6 +38,7 @@
 #include "../Savegame/CraftWeapon.h"
 #include "../Ruleset/RuleCraftWeapon.h"
 #include "../Engine/Timer.h"
+#include "PurchaseErrorState.h"
 
 namespace OpenXcom
 {
@@ -48,7 +49,7 @@ namespace OpenXcom
  * @param baseFrom Pointer to the source base.
  * @param baseTo Pointer to the destination base.
  */
-TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo) : State(game), _baseFrom(baseFrom), _baseTo(baseTo), _qtys(), _soldiers(), _crafts(), _items(), _sel(0), _total(0), _sOffset(0), _eOffset(0)
+TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo) : State(game), _baseFrom(baseFrom), _baseTo(baseTo), _qtys(), _soldiers(), _crafts(), _items(), _sel(0), _total(0), _sOffset(0), _eOffset(0), _pQty(0), _cQty(0), _iQty(0.0f)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
@@ -121,7 +122,7 @@ TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo)
 		{
 			_qtys.push_back(0);
 			_soldiers.push_back(*i);
-			_lstItems->addRow(4, (*i)->getName().c_str(), L"1", L"0", Text::formatFunding(0).c_str());
+			_lstItems->addRow(4, (*i)->getName().c_str(), L"1", L"0", L"0");
 		}
 	}
 	for (std::vector<Craft*>::iterator i = _baseFrom->getCrafts()->begin(); i != _baseFrom->getCrafts()->end(); i++)
@@ -130,33 +131,35 @@ TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo)
 		{
 			_qtys.push_back(0);
 			_crafts.push_back(*i);
-			_lstItems->addRow(4, (*i)->getName(_game->getLanguage()).c_str(), L"1", L"0", Text::formatFunding(0).c_str());
+			_lstItems->addRow(4, (*i)->getName(_game->getLanguage()).c_str(), L"1", L"0", L"0");
 		}
 	}
 	if (_baseFrom->getAvailableScientists() > 0)
 	{
 		_qtys.push_back(0);
 		_sOffset++;
-		std::wstringstream ss;
+		std::wstringstream ss, ss2;
 		ss << _baseFrom->getAvailableScientists();
-		_lstItems->addRow(4, _game->getLanguage()->getString("STR_SCIENTIST").c_str(), ss.str().c_str(), L"0", Text::formatFunding(0).c_str());
+		ss2 << _baseTo->getAvailableScientists();
+		_lstItems->addRow(4, _game->getLanguage()->getString("STR_SCIENTIST").c_str(), ss.str().c_str(), L"0", ss2.str().c_str());
 	}
 	if (_baseFrom->getAvailableEngineers() > 0)
 	{
 		_qtys.push_back(0);
 		_eOffset++;
-		std::wstringstream ss;
+		std::wstringstream ss, ss2;
 		ss << _baseFrom->getAvailableEngineers();
-		_lstItems->addRow(4, _game->getLanguage()->getString("STR_ENGINEER").c_str(), ss.str().c_str(), L"0", Text::formatFunding(0).c_str());
+		ss2 << _baseTo->getAvailableEngineers();
+		_lstItems->addRow(4, _game->getLanguage()->getString("STR_ENGINEER").c_str(), ss.str().c_str(), L"0", ss2.str().c_str());
 	}
 	for (std::map<std::string, int>::iterator i = _baseFrom->getItems()->getContents()->begin(); i != _baseFrom->getItems()->getContents()->end(); i++)
 	{
 		_qtys.push_back(0);
 		_items.push_back(i->first);
-		RuleItem *rule = _game->getRuleset()->getItem(i->first);
-		std::wstringstream ss;
+		std::wstringstream ss, ss2;
 		ss << i->second;
-		_lstItems->addRow(4, _game->getLanguage()->getString(i->first).c_str(), ss.str().c_str(), L"0", Text::formatFunding(rule->getCost() / 2).c_str());
+		ss2 << _baseTo->getItems()->getItem(i->first);
+		_lstItems->addRow(4, _game->getLanguage()->getString(i->first).c_str(), ss.str().c_str(), L"0", ss2.str().c_str());
 	}
 
 	_timerInc = new Timer(50);
@@ -191,84 +194,7 @@ void TransferItemsState::think()
  */
 void TransferItemsState::btnOkClick(Action *action)
 {
-	_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() + _total);
-	for (unsigned int i = 0; i < _qtys.size(); i++)
-	{
-		if (_qtys[i] > 0)
-		{
-			// Sell soldiers
-			if (i < _soldiers.size())
-			{
-				delete _soldiers[i];
-				for (std::vector<Soldier*>::iterator s = _baseFrom->getSoldiers()->begin(); s != _baseFrom->getSoldiers()->end(); s++)
-				{
-					if (*s == _soldiers[i])
-					{
-						_baseFrom->getSoldiers()->erase(s);
-						break;
-					}
-				}
-			}
-			// Sell crafts
-			else if (i >= _soldiers.size() && i < _soldiers.size() + _crafts.size())
-			{
-				Craft *craft =  _crafts[i - _soldiers.size()];
-
-				// Remove weapons from craft
-				for (std::vector<CraftWeapon*>::iterator w = craft->getWeapons()->begin(); w != craft->getWeapons()->end(); w++)
-				{
-					if ((*w) != 0)
-					{
-						_baseFrom->getItems()->addItem((*w)->getRules()->getLauncherItem());
-						_baseFrom->getItems()->addItem((*w)->getRules()->getClipItem(), (int)floor((double)(*w)->getAmmo() / (*w)->getRules()->getRearmRate()));
-					}
-				}
-
-				// Remove items from craft
-				for (std::map<std::string, int>::iterator it = craft->getItems()->getContents()->begin(); it != craft->getItems()->getContents()->end(); it++)
-				{
-					_baseFrom->getItems()->addItem(it->first, it->second);
-				}
-
-				// Remove soldiers from craft
-				for (std::vector<Soldier*>::iterator s = _baseFrom->getSoldiers()->begin(); s != _baseFrom->getSoldiers()->end(); s++)
-				{
-					if ((*s)->getCraft() == craft)
-					{
-						(*s)->setCraft(0);
-					}
-				}
-
-				// Remove craft
-				delete craft;
-				for (std::vector<Craft*>::iterator c = _baseFrom->getCrafts()->begin(); c != _baseFrom->getCrafts()->end(); c++)
-				{
-					if (*c == craft)
-					{
-						_baseFrom->getCrafts()->erase(c);
-						break;
-					}
-				}
-			}
-			// Sell scientists
-			else if (_baseFrom->getAvailableScientists() > 0 && i == _soldiers.size() + _crafts.size())
-			{
-				_baseFrom->setScientists(_baseFrom->getScientists() - _qtys[i]);
-			}
-			// Sell engineers
-			else if (_baseFrom->getAvailableEngineers() > 0 && i == _soldiers.size() + _crafts.size() + _sOffset)
-			{
-				_baseFrom->setEngineers(_baseFrom->getEngineers() - _qtys[i]);
-			}
-			// Sell items
-			else
-			{
-				_baseFrom->getItems()->removeItem(_items[i - _soldiers.size() - _crafts.size() - _sOffset - _eOffset], _qtys[i]);
-			}
-		}
-	}
-	_game->popState();
-	_game->popState();
+	
 }
 
 /**
@@ -320,23 +246,6 @@ void TransferItemsState::lstItemsRightArrowRelease(Action *action)
 }
 
 /**
- * Gets the price of the currently selected item.
- */
-int TransferItemsState::getPrice()
-{
-	// Personnel/craft aren't worth anything
-	if (_sel < _soldiers.size() + _crafts.size() + _sOffset + _eOffset)
-	{
-		return 0;
-	}
-	// Item cost
-	else
-	{
-		return _game->getRuleset()->getItem(_items[_sel - _soldiers.size() - _crafts.size() - _sOffset - _eOffset])->getCost() / 2;
-	}
-}
-
-/**
  * Gets the quantity of the currently selected item
  * on the base.
  */
@@ -369,14 +278,43 @@ int TransferItemsState::getQuantity()
  */
 void TransferItemsState::increase()
 {
-	if (_qtys[_sel] < getQuantity())
+	if ((_sel < _soldiers.size() || (_sel >= _soldiers.size() + _crafts.size()  && _sel < _soldiers.size() + _crafts.size() + _sOffset + _eOffset)) && _pQty + 1 > _baseTo->getAvailableQuarters() - _baseTo->getUsedQuarters())
 	{
+		_timerInc->stop();
+		_game->pushState(new PurchaseErrorState(_game, "STR_NO_FREE_ACCOMODATION"));
+	}
+	else if (_sel >= _soldiers.size() && _sel < _soldiers.size() + _crafts.size() && _cQty + 1 > _baseTo->getAvailableHangars() - _baseTo->getUsedHangars())
+	{
+		_timerInc->stop();
+		_game->pushState(new PurchaseErrorState(_game, "STR_NO_FREE_HANGARS_FOR_TRANSFER"));
+	}
+	else if (_sel >= _soldiers.size() + _crafts.size() + _sOffset + _eOffset && _iQty + _game->getRuleset()->getItem(_items[_sel - _soldiers.size() - _crafts.size() - _sOffset - _eOffset])->getSize() > _baseTo->getAvailableStores() - _baseTo->getUsedStores())
+	{
+		_timerInc->stop();
+		_game->pushState(new PurchaseErrorState(_game, "STR_NOT_ENOUGH_STORE_SPACE"));
+	}
+	else if (_qtys[_sel] < getQuantity())
+	{
+		// Personnel count
+		if (_sel < _soldiers.size() || (_sel >= _soldiers.size() + _crafts.size()  && _sel < _soldiers.size() + _crafts.size() + _sOffset + _eOffset))
+		{
+			_pQty++;
+		}
+		// Craft count
+		else if (_sel >= _soldiers.size() && _sel < _soldiers.size() + _crafts.size())
+		{
+			_cQty++;
+		}
+		// Item count
+		else
+		{
+			_iQty += _game->getRuleset()->getItem(_items[_sel - _soldiers.size() - _crafts.size() - _sOffset - _eOffset])->getSize();
+		}
 		_qtys[_sel]++;
 		std::wstringstream ss;
 		ss << _qtys[_sel];
 		_lstItems->getCell(_sel, 2)->setText(ss.str());
 		_lstItems->draw();
-		_total += getPrice();
 	}
 }
 
@@ -387,12 +325,26 @@ void TransferItemsState::decrease()
 {
 	if (_qtys[_sel] > 0)
 	{
+		// Personnel count
+		if (_sel < _soldiers.size() || (_sel >= _soldiers.size() + _crafts.size()  && _sel < _soldiers.size() + _crafts.size() + _sOffset + _eOffset))
+		{
+			_pQty--;
+		}
+		// Craft count
+		else if (_sel >= _soldiers.size() && _sel < _soldiers.size() + _crafts.size())
+		{
+			_cQty--;
+		}
+		// Item count
+		else
+		{
+			_iQty -= _game->getRuleset()->getItem(_items[_sel - _soldiers.size() - _crafts.size() - _sOffset - _eOffset])->getSize();
+		}
 		_qtys[_sel]--;
 		std::wstringstream ss;
 		ss << _qtys[_sel];
 		_lstItems->getCell(_sel, 2)->setText(ss.str());
 		_lstItems->draw();
-		_total -= getPrice();
 	}
 }
 

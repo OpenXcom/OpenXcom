@@ -66,7 +66,7 @@ private:
 	SavedBattleGame *_battleGame;
 	UfopaediaSaved *_ufopaedia;
 public:
-	/// Creates a new save with a certain difficultyiculty.
+	/// Creates a new save with a certain difficulty.
 	SavedGame(GameDifficulty difficulty);
 	/// Cleans up the saved game.
 	~SavedGame();

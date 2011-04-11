@@ -356,7 +356,7 @@ int Base::getTotalSoldiers() const
  */
 int Base::getAvailableScientists() const
 {
-	return 0;
+	return _scientists;
 }
 
 /**
@@ -384,7 +384,7 @@ int Base::getTotalScientists() const
  */
 int Base::getAvailableEngineers() const
 {
-	return 0;
+	return _engineers;
 }
 
 /**
