@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "ResearchState.h"
+#include <sstream>
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
@@ -83,12 +84,19 @@ ResearchState::ResearchState(Game *game, Base *base) : State(game), _base(base)
 	_txtTitle->setText(_game->getLanguage()->getString("STR_CURRENT_RESEARCH"));
 
 	_txtAvailable->setColor(Palette::blockOffset(13)+10);
-	_txtAvailable->setText(_game->getLanguage()->getString("STR_SCIENTISTS_AVAILABLE"));
+	_txtAvailable->setSecondaryColor(Palette::blockOffset(13));
+	std::wstringstream ss;
+	ss << _game->getLanguage()->getString("STR_SCIENTISTS_AVAILABLE") << L'\x01' << _base->getAvailableScientists();
+	_txtAvailable->setText(ss.str());
 
 	_txtAllocated->setColor(Palette::blockOffset(13)+10);
-	_txtAllocated->setText(_game->getLanguage()->getString("STR_SCIENTISTS_ALLOCATED"));
+	_txtAllocated->setSecondaryColor(Palette::blockOffset(13));
+	std::wstringstream ss2;
+	ss2 << _game->getLanguage()->getString("STR_SCIENTISTS_ALLOCATED") << L'\x01' << (_base->getTotalScientists() - _base->getAvailableScientists());
+	_txtAllocated->setText(ss2.str());
 
 	_txtSpace->setColor(Palette::blockOffset(13)+10);
+	_txtSpace->setSecondaryColor(Palette::blockOffset(13));
 	_txtSpace->setText(_game->getLanguage()->getString("STR_LABORATORY_SPACE_AVAILABLE"));
 
 	_txtProject->setColor(Palette::blockOffset(13)+10);

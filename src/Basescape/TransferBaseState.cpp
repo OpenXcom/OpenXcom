@@ -77,8 +77,9 @@ TransferBaseState::TransferBaseState(Game *game, Base *base) : State(game), _bas
 	_txtTitle->setText(_game->getLanguage()->getString("STR_SELECT_DESTINATION_BASE"));
 
 	_txtFunds->setColor(Palette::blockOffset(13)+5);
+	_txtFunds->setSecondaryColor(Palette::blockOffset(13));
 	std::wstring s = _game->getLanguage()->getString("STR_CURRENT_FUNDS");
-	s += Text::formatFunding(_game->getSavedGame()->getFunds());
+	s += L'\x01' + Text::formatFunding(_game->getSavedGame()->getFunds());
 	_txtFunds->setText(s);
 
 	_txtName->setColor(Palette::blockOffset(13)+5);

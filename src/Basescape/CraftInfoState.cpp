@@ -129,20 +129,26 @@ CraftInfoState::CraftInfoState(Game *game, Base *base, unsigned int craft) : Sta
 	_txtCraft->setAlign(ALIGN_CENTER);
 
 	_txtDamage->setColor(Palette::blockOffset(13)+10);
+	_txtDamage->setSecondaryColor(Palette::blockOffset(13));
 
 	_txtFuel->setColor(Palette::blockOffset(13)+10);
+	_txtFuel->setSecondaryColor(Palette::blockOffset(13));
 
 	_txtW1Name->setColor(Palette::blockOffset(13)+5);
 
 	_txtW1Ammo->setColor(Palette::blockOffset(13)+10);
+	_txtW1Ammo->setSecondaryColor(Palette::blockOffset(13)+5);
 
 	_txtW1Max->setColor(Palette::blockOffset(13)+10);
+	_txtW1Max->setSecondaryColor(Palette::blockOffset(13)+5);
 
 	_txtW2Name->setColor(Palette::blockOffset(13)+5);
 
 	_txtW2Ammo->setColor(Palette::blockOffset(13)+10);
+	_txtW2Ammo->setSecondaryColor(Palette::blockOffset(13)+5);
 
 	_txtW2Max->setColor(Palette::blockOffset(13)+10);
+	_txtW2Max->setSecondaryColor(Palette::blockOffset(13)+5);
 }
 
 /**
@@ -172,11 +178,11 @@ void CraftInfoState::init()
 	texture->getFrame(c->getRules()->getSprite() + 33)->blit(_sprite);
 
 	std::wstringstream ss;
-	ss << _game->getLanguage()->getString("STR_DAMAGE_UC_") << c->getDamagePercentage() << "%";
+	ss << _game->getLanguage()->getString("STR_DAMAGE_UC_") << L'\x01' << c->getDamagePercentage() << "%";
 	_txtDamage->setText(ss.str());
 
 	std::wstringstream ss2;
-	ss2 << _game->getLanguage()->getString("STR_FUEL") << c->getFuelPercentage() << "%";
+	ss2 << _game->getLanguage()->getString("STR_FUEL") << L'\x01' << c->getFuelPercentage() << "%";
 	_txtFuel->setText(ss2.str());
 	
 	if (c->getRules()->getSoldiers() > 0)
@@ -223,11 +229,11 @@ void CraftInfoState::init()
 			_txtW1Name->setText(_game->getLanguage()->getString(w1->getRules()->getType()));
 
 			std::wstringstream ss3;
-			ss3 << _game->getLanguage()->getString("STR_AMMO_") << w1->getAmmo();
+			ss3 << _game->getLanguage()->getString("STR_AMMO_") << L'\x01' << w1->getAmmo();
 			_txtW1Ammo->setText(ss3.str());
 
 			std::wstringstream ss4;
-			ss4 << _game->getLanguage()->getString("STR_MAX") << w1->getRules()->getAmmoMax();
+			ss4 << _game->getLanguage()->getString("STR_MAX") << L'\x01' << w1->getRules()->getAmmoMax();
 			_txtW1Max->setText(ss4.str());
 		}
 		else
@@ -261,11 +267,11 @@ void CraftInfoState::init()
 			_txtW2Name->setText(_game->getLanguage()->getString(w2->getRules()->getType()));
 
 			std::wstringstream ss5;
-			ss5 << _game->getLanguage()->getString("STR_AMMO_") << w2->getAmmo();
+			ss5 << _game->getLanguage()->getString("STR_AMMO_") << L'\x01' << w2->getAmmo();
 			_txtW2Ammo->setText(ss5.str());
 
 			std::wstringstream ss6;
-			ss6 << _game->getLanguage()->getString("STR_MAX") << w2->getRules()->getAmmoMax();
+			ss6 << _game->getLanguage()->getString("STR_MAX") << L'\x01' << w2->getRules()->getAmmoMax();
 			_txtW2Max->setText(ss6.str());
 		}
 		else

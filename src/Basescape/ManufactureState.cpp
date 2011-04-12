@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "ManufactureState.h"
+#include <sstream>
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
@@ -27,6 +28,7 @@
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
 #include "../Savegame/Base.h"
+#include "../Savegame/SavedGame.h"
 
 namespace OpenXcom
 {
@@ -91,16 +93,26 @@ ManufactureState::ManufactureState(Game *game, Base *base) : State(game), _base(
 	_txtTitle->setText(_game->getLanguage()->getString("STR_CURRENT_PRODUCTION"));
 
 	_txtAvailable->setColor(Palette::blockOffset(15)+6);
-	_txtAvailable->setText(_game->getLanguage()->getString("STR_ENGINEERS_AVAILABLE"));
+	_txtAvailable->setSecondaryColor(Palette::blockOffset(13));
+	std::wstringstream ss;
+	ss << _game->getLanguage()->getString("STR_ENGINEERS_AVAILABLE") << L'\x01' << _base->getAvailableEngineers();
+	_txtAvailable->setText(ss.str());
 
 	_txtAllocated->setColor(Palette::blockOffset(15)+6);
-	_txtAllocated->setText(_game->getLanguage()->getString("STR_ENGINEERS_ALLOCATED"));
+	_txtAllocated->setSecondaryColor(Palette::blockOffset(13));
+	std::wstringstream ss2;
+	ss2 << _game->getLanguage()->getString("STR_ENGINEERS_ALLOCATED") << L'\x01' << (_base->getTotalEngineers() - _base->getAvailableEngineers());
+	_txtAllocated->setText(ss2.str());
 
 	_txtSpace->setColor(Palette::blockOffset(15)+6);
+	_txtSpace->setSecondaryColor(Palette::blockOffset(13));
 	_txtSpace->setText(_game->getLanguage()->getString("STR_WORKSHOP_SPACE_AVAILABLE"));
 
 	_txtFunds->setColor(Palette::blockOffset(15)+6);
-	_txtFunds->setText(_game->getLanguage()->getString("STR_CURRENT_FUNDS"));
+	_txtFunds->setSecondaryColor(Palette::blockOffset(13));
+	std::wstringstream ss4;
+	ss4 << _game->getLanguage()->getString("STR_CURRENT_FUNDS") << L'\x01' << Text::formatFunding(_game->getSavedGame()->getFunds());
+	_txtFunds->setText(ss4.str());
 
 	_txtItem->setColor(Palette::blockOffset(15)+1);
 	_txtItem->setText(_game->getLanguage()->getString("STR_ITEM"));

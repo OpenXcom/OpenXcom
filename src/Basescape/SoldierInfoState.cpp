@@ -163,13 +163,17 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, unsigned int soldier)
 
 	_txtArmor->setColor(Palette::blockOffset(13));
 
-	_txtRank->setColor(Palette::blockOffset(13));
+	_txtRank->setColor(Palette::blockOffset(13)+10);
+	_txtRank->setSecondaryColor(Palette::blockOffset(13));
+	
+	_txtMissions->setColor(Palette::blockOffset(13)+10);
+	_txtMissions->setSecondaryColor(Palette::blockOffset(13));
 
-	_txtMissions->setColor(Palette::blockOffset(13));
+	_txtKills->setColor(Palette::blockOffset(13)+10);
+	_txtKills->setSecondaryColor(Palette::blockOffset(13));
 
-	_txtKills->setColor(Palette::blockOffset(13));
-
-	_txtCraft->setColor(Palette::blockOffset(13));
+	_txtCraft->setColor(Palette::blockOffset(13)+10);
+	_txtCraft->setSecondaryColor(Palette::blockOffset(13));
 
 
 	_txtTimeUnits->setColor(Palette::blockOffset(15)+1);
@@ -318,19 +322,19 @@ void SoldierInfoState::init()
 	_txtArmor->setText(_game->getLanguage()->getString("STR_NONE_UC"));
 
 	std::wstringstream ss9;
-	ss9 << _game->getLanguage()->getString("STR_RANK_") << _game->getLanguage()->getString(s->getRankString());
+	ss9 << _game->getLanguage()->getString("STR_RANK_") << L'\x01' << _game->getLanguage()->getString(s->getRankString());
 	_txtRank->setText(ss9.str());
 
 	std::wstringstream ss10;
-	ss10 << _game->getLanguage()->getString("STR_MISSIONS") << s->getMissions();
+	ss10 << _game->getLanguage()->getString("STR_MISSIONS") << L'\x01' << s->getMissions();
 	_txtMissions->setText(ss10.str());
 
 	std::wstringstream ss11;
-	ss11 << _game->getLanguage()->getString("STR_KILLS") << s->getKills();
+	ss11 << _game->getLanguage()->getString("STR_KILLS") << L'\x01' << s->getKills();
 	_txtKills->setText(ss11.str());
 
 	std::wstringstream ss12;
-	ss12 << _game->getLanguage()->getString("STR_CRAFT_");
+	ss12 << _game->getLanguage()->getString("STR_CRAFT_") << L'\x01';
 	if (s->getCraft() == 0)
 		ss12 << _game->getLanguage()->getString("STR_NONE");
 	else

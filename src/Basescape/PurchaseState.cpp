@@ -93,13 +93,15 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 	_txtTitle->setText(_game->getLanguage()->getString("STR_PURCHASE_HIRE_PERSONNEL"));
 
 	_txtFunds->setColor(Palette::blockOffset(13)+10);
+	_txtFunds->setSecondaryColor(Palette::blockOffset(13));
 	std::wstring s1 = _game->getLanguage()->getString("STR_CURRENT_FUNDS");
-	s1 += Text::formatFunding(_game->getSavedGame()->getFunds());
+	s1 += L'\x01' + Text::formatFunding(_game->getSavedGame()->getFunds());
 	_txtFunds->setText(s1);
 
 	_txtPurchases->setColor(Palette::blockOffset(13)+10);
+	_txtPurchases->setSecondaryColor(Palette::blockOffset(13));
 	std::wstring s2 = _game->getLanguage()->getString("STR_COST_OF_PURCHASES");
-	s2 += Text::formatFunding(_total);
+	s2 += L'\x01' + Text::formatFunding(_total);
 	_txtPurchases->setText(s2);
 
 	_txtItem->setColor(Palette::blockOffset(13)+10);
@@ -375,7 +377,7 @@ void PurchaseState::increase()
 		_lstItems->draw();
 		_total += getPrice();
 		std::wstring s = _game->getLanguage()->getString("STR_COST_OF_PURCHASES");
-		s += Text::formatFunding(_total);
+		s += L'\x01' + Text::formatFunding(_total);
 		_txtPurchases->setText(s);
 	}
 }
@@ -409,7 +411,7 @@ void PurchaseState::decrease()
 		_lstItems->draw();
 		_total -= getPrice();
 		std::wstring s = _game->getLanguage()->getString("STR_COST_OF_PURCHASES");
-		s += Text::formatFunding(_total);
+		s += L'\x01' + Text::formatFunding(_total);
 		_txtPurchases->setText(s);
 	}
 }

@@ -130,30 +130,21 @@ void TextList::addRow(int cols, ...)
 		{
 			txt->setSmall();
 		}
-		
-		std::wstring buf = va_arg(args, wchar_t*);
+		txt->setText(va_arg(args, wchar_t*));
+
 		// Places dots between text
 		if (_dot && i < cols - 1)
 		{
-			int w = 0;
-			for (std::wstring::iterator c = buf.begin(); c < buf.end(); c++)
-			{
-				if (*c == ' ')
-				{
-					w += _font->getWidth() / 2;
-				}
-				else
-				{
-					w += _font->getChar(*c)->getCrop()->w + _font->getSpacing();
-				}
-			}
+			std::wstring buf = txt->getText();
+			int w = txt->getTextWidth();
 			while (w < _columns[i])
 			{
 				w += _font->getChar('.')->getCrop()->w + _font->getSpacing();
 				buf += '.';
 			}
+			txt->setText(buf);
 		}
-		txt->setText(buf);
+
 		temp.push_back(txt);
 		if (_condensed)
 		{
@@ -163,7 +154,6 @@ void TextList::addRow(int cols, ...)
 		{
 			rowX += _columns[i];
 		}
-
 	}
 	_texts.push_back(temp);
 

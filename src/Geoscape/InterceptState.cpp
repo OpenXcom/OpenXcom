@@ -94,6 +94,7 @@ InterceptState::InterceptState(Game *game, Globe *globe, Base *base) : State(gam
 	_txtWeapons->setText(_game->getLanguage()->getString("STR_WEAPONS_CREW_HWPS"));
 
 	_lstCrafts->setColor(Palette::blockOffset(15)-1);
+	_lstCrafts->setSecondaryColor(Palette::blockOffset(8)+10);
 	_lstCrafts->setArrowColor(Palette::blockOffset(15)+2);
 	_lstCrafts->setColumns(4, 86, 65, 85, 46);
 	_lstCrafts->setSelectable(true);
@@ -109,7 +110,32 @@ InterceptState::InterceptState(Game *game, Globe *globe, Base *base) : State(gam
 		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); j++)
 		{
 			std::wstringstream ss;
-			ss << (*j)->getNumWeapons() << "/" << (*j)->getNumSoldiers() << "/" << (*j)->getNumHWPs();
+			if ((*j)->getNumWeapons() > 0)
+			{
+				ss << L'\x01' << (*j)->getNumWeapons() << L'\x01';
+			}
+			else
+			{
+				ss << (*j)->getNumWeapons();
+			}
+			ss << "/";
+			if ((*j)->getNumSoldiers() > 0)
+			{
+				ss << L'\x01' << (*j)->getNumSoldiers() << L'\x01';
+			}
+			else
+			{
+				ss << (*j)->getNumSoldiers();
+			}
+			ss << "/";
+			if ((*j)->getNumHWPs() > 0)
+			{
+				ss << L'\x01' << (*j)->getNumWeapons() << L'\x01';
+			}
+			else
+			{
+				ss << (*j)->getNumHWPs();
+			}
 			_crafts.push_back(*j);
 			_lstCrafts->addRow(4, (*j)->getName(_game->getLanguage()).c_str(), _game->getLanguage()->getString((*j)->getStatus()).c_str(), (*i)->getName().c_str(), ss.str().c_str());
 			if ((*j)->getStatus() == "STR_READY")
