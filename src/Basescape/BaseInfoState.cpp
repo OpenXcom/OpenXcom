@@ -261,7 +261,7 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 	_txtShortRange->setText(_game->getLanguage()->getString("STR_SHORT_RANGE_DETECTION"));
 
 	_numShortRange->setColor(Palette::blockOffset(13));
-	if (_game->getLanguage()->getName() == L"DEUTSCHE")
+	if (_game->getLanguage()->getName() == L"DEUTSCH")
 	{
 		_numShortRange->setX(137);
 	}
@@ -273,7 +273,7 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 	_txtLongRange->setText(_game->getLanguage()->getString("STR_LONG_RANGE_DETECTION"));
 
 	_numLongRange->setColor(Palette::blockOffset(13));
-	if (_game->getLanguage()->getName() == L"DEUTSCHE")
+	if (_game->getLanguage()->getName() == L"DEUTSCH")
 	{
 		_numLongRange->setX(137);
 	}

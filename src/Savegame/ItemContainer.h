@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_ITEM_H
-#define OPENXCOM_ITEM_H
+#ifndef OPENXCOM_ITEMCONTAINER_H
+#define OPENXCOM_ITEMCONTAINER_H
 
 #include <string>
 #include <map>

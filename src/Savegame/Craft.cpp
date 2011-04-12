@@ -126,9 +126,7 @@ void Craft::save(YAML::Emitter &out) const
 	}
 	out << YAML::EndSeq;
 	out << YAML::Key << "items" << YAML::Value;
-	out << YAML::BeginSeq;
 	_items->save(out);
-	out << YAML::EndSeq;
 	out << YAML::Key << "status" << YAML::Value << _status;
 	out << YAML::Key << "lowFuel" << YAML::Value << _lowFuel;
 	out << YAML::Key << "inBattlescape" << YAML::Value << _inBattlescape;

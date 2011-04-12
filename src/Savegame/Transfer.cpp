@@ -22,6 +22,7 @@
 #include "Craft.h"
 #include "ItemContainer.h"
 #include "../Engine/Language.h"
+#include "../Ruleset/Ruleset.h"
 
 namespace OpenXcom
 {
@@ -39,14 +40,42 @@ Transfer::Transfer(int hours) : _hours(hours), _soldier(0), _craft(0), _itemId("
  */
 Transfer::~Transfer()
 {
+	delete _soldier;
+	delete _craft;
 }
 
 /**
  * Loads the transfer from a YAML file.
  * @param node YAML node.
  */
-void Transfer::load(const YAML::Node &node)
+void Transfer::load(const YAML::Node &node, Base *base, Ruleset *rule)
 {
+	node["hours"] >> _hours;
+	if (const YAML::Node *pName = node.FindValue("soldier"))
+	{
+		_soldier = new Soldier();
+		_soldier->load(*pName);
+	}
+	else if (const YAML::Node *pName = node.FindValue("craft"))
+	{
+		std::string type;
+		(*pName)["type"] >> type;
+		_craft = new Craft(rule->getCraft(type), base);
+		_craft->load(*pName, rule);
+	}
+	else if (const YAML::Node *pName = node.FindValue("itemId"))
+	{
+		*pName >> _itemId;
+		node["itemQty"] >> _itemQty;
+	}
+	else if (const YAML::Node *pName = node.FindValue("scientists"))
+	{
+		*pName >> _scientists;
+	}
+	else if (const YAML::Node *pName = node.FindValue("engineers"))
+	{
+		*pName >> _engineers;
+	}
 }
 
 /**
@@ -56,6 +85,30 @@ void Transfer::load(const YAML::Node &node)
 void Transfer::save(YAML::Emitter &out) const
 {
 	out << YAML::BeginMap;
+	out << YAML::Key << "hours" << YAML::Value << _hours;
+	if (_soldier != 0)
+	{
+		out << YAML::Key << "soldier" << YAML::Value;
+		_soldier->save(out);
+	}
+	else if (_craft != 0)
+	{
+		out << YAML::Key << "craft" << YAML::Value;
+		_craft->save(out);
+	}
+	else if (_itemQty != 0)
+	{
+		out << YAML::Key << "itemId" << YAML::Value << _itemId;
+		out << YAML::Key << "itemQty" << YAML::Value << _itemQty;
+	}
+	else if (_scientists != 0)
+	{
+		out << YAML::Key << "scientists" << YAML::Value << _scientists;
+	}
+	else if (_engineers != 0)
+	{
+		out << YAML::Key << "engineers" << YAML::Value << _engineers;
+	}
 	out << YAML::EndMap;
 }
 

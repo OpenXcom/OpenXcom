@@ -25,12 +25,13 @@
 namespace OpenXcom
 {
 
-	enum TransferType { TRANSFER_SOLDIER, TRANSFER_CRAFT, TRANSFER_ITEM, TRANSFER_SCIENTIST, TRANSFER_ENGINEER };
+enum TransferType { TRANSFER_SOLDIER, TRANSFER_CRAFT, TRANSFER_ITEM, TRANSFER_SCIENTIST, TRANSFER_ENGINEER };
 
 class Soldier;
 class Craft;
 class Language;
 class Base;
+class Ruleset;
 
 /**
  * Represents an item transfer.
@@ -51,7 +52,7 @@ public:
 	/// Cleans up the transfer.
 	~Transfer();
 	/// Loads the transfer from YAML.
-	void load(const YAML::Node& node);
+	void load(const YAML::Node& node, Base *base, Ruleset *rule);
 	/// Saves the transfer to YAML.
 	void save(YAML::Emitter& out) const;
 	/// Sets the soldier of the transfer.

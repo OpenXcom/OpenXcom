@@ -44,8 +44,7 @@ class Soldier : public Unit
 private:
 	std::wstring _name;
 	RuleSoldier *_rules;
-	UnitStats _initialStats;
-	UnitStats _currentStats;
+	UnitStats _initialStats, _currentStats;
 	SoldierRank _rank;
 	Craft *_craft;
 	SoldierGender _gender;

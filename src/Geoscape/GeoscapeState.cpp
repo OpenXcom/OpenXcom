@@ -156,7 +156,7 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(fa
 	_game->getResourcePack()->getSurface("GEOBORD.SCR")->blit(_bg);
 
 	Surface* sidebar = 0;
-	if (_game->getLanguage()->getName() == L"DEUTSCHE")
+	if (_game->getLanguage()->getName() == L"DEUTSCH")
 	{
 		sidebar = _game->getResourcePack()->getSurface("German.geo");
 	}

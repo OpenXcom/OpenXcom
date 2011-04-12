@@ -160,6 +160,16 @@ void Base::load(const YAML::Node &node, SavedGame *save)
 	_items->load(node["items"]);
 	node["scientists"] >> _scientists;
 	node["engineers"] >> _engineers;
+
+	size = node["transfers"].size();
+	for (unsigned int i = 0; i < size; i++)
+	{
+		int hours;
+		node["transfers"][i]["hours"] >> hours;
+		Transfer *t = new Transfer(hours);
+		t->load(node["transfers"][i], this, _rule);
+		_transfers.push_back(t);
+	}
 }
 
 /**
@@ -192,11 +202,16 @@ void Base::save(YAML::Emitter &out) const
 	}
 	out << YAML::EndSeq;
 	out << YAML::Key << "items" << YAML::Value;
-	out << YAML::BeginSeq;
 	_items->save(out);
-	out << YAML::EndSeq;
 	out << YAML::Key << "scientists" << YAML::Value << _scientists;
 	out << YAML::Key << "engineers" << YAML::Value << _engineers;
+	out << YAML::Key << "transfers" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::vector<Transfer*>::const_iterator i = _transfers.begin(); i != _transfers.end(); i++)
+	{
+		(*i)->save(out);
+	}
+	out << YAML::EndSeq;
 	out << YAML::EndMap;
 }
 
