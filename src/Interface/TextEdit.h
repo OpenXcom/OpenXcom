@@ -66,6 +66,8 @@ public:
 	void setWordWrap(bool wrap);
 	/// Sets the text edit's color invert setting.
 	void setInvert(bool invert);
+	/// Sets the text edit's high contrast color setting.
+	void setHighContrast(bool contrast);
 	/// Sets the text edit's horizontal alignment.
 	void setAlign(TextHAlign align);
 	/// Sets the text edit's vertical alignment.
@@ -74,6 +76,10 @@ public:
 	void setColor(Uint8 color);
 	/// Gets the text edit's color.
 	Uint8 getColor() const;
+	/// Sets the text edit's secondary color.
+	void setSecondaryColor(Uint8 color);
+	/// Gets the text edit's secondary color.
+	Uint8 getSecondaryColor() const;
 	/// Sets the text edit's palette.
 	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
 	/// Handles the timers.

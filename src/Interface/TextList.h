@@ -44,7 +44,7 @@ private:
 	std::vector<int> _columns;
 	Font *_big, *_small, *_font;
 	unsigned int _scroll, _visibleRows;
-	Uint8 _color;
+	Uint8 _color, _color2;
 	TextHAlign _align;
 	bool _dot, _selectable, _condensed;
 	unsigned int _selRow;
@@ -79,6 +79,10 @@ public:
 	void setColor(Uint8 color);
 	/// Gets the text color of the text list.
 	Uint8 getColor() const;
+	/// Sets the secondary color of the text list.
+	void setSecondaryColor(Uint8 color);
+	/// Gets the secondary color of the text list.
+	Uint8 getSecondaryColor() const;
 	/// Sets the text horizontal alignment of the text list.
 	void setAlign(TextHAlign align);
 	/// Sets whether to separate columns with dots.

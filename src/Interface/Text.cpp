@@ -30,7 +30,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Text::Text(int width, int height, int x, int y) : Surface(width, height, x, y), _big(0), _small(0), _font(0), _text(L""), _wrap(false), _invert(false), _contrast(false), _align(ALIGN_LEFT), _valign(ALIGN_TOP), _color(0)
+Text::Text(int width, int height, int x, int y) : Surface(width, height, x, y), _big(0), _small(0), _font(0), _text(L""), _wrap(false), _invert(false), _contrast(false), _align(ALIGN_LEFT), _valign(ALIGN_TOP), _color(0), _color2(0)
 {
 }
 
@@ -204,13 +204,34 @@ Uint8 Text::getColor() const
 }
 
 /**
- * Returns the rendered text's height. Useful to check if wordwrap applies.
- * @return height value.
+ * Changes the secondary color used to render the text. The text
+ * switches between the primary and secondary color whenever there's
+ * a \x01 in the string.
+ * @param color Color value.
  */
-int Text::getTextHeight()
+void Text::setSecondaryColor(Uint8 color)
+{
+	_color2 = color;
+	draw();
+}
+
+/**
+ * Returns the secondary color used to render the text.
+ * @return Color value.
+ */
+Uint8 Text::getSecondaryColor() const
+{
+	return _color2;
+}
+
+/**
+ * Returns the rendered text's height. Useful to check if wordwrap applies.
+ * @return Height in pixels.
+ */
+int Text::getTextHeight() const
 {
 	int height = 0;
-	for (std::vector<int>::iterator i = _lineHeight.begin(); i != _lineHeight.end(); i++)
+	for (std::vector<int>::const_iterator i = _lineHeight.begin(); i != _lineHeight.end(); i++)
 	{
 		height += *i;
 	}
@@ -218,13 +239,13 @@ int Text::getTextHeight()
 }
 	
 /**
-  * Returns the rendered text's height. Useful to check if wordwrap applies.
-  * @return height value.
+  * Returns the rendered text's width.
+  * @return Width in pixels.
   */
-int Text::getTextWidth()
+int Text::getTextWidth() const
 {
 	int width = 0;
-	for (std::vector<int>::iterator i = _lineWidth.begin(); i != _lineWidth.end(); i++)
+	for (std::vector<int>::const_iterator i = _lineWidth.begin(); i != _lineWidth.end(); i++)
 	{
 		if (*i > width)
 		{
@@ -275,6 +296,7 @@ void Text::processText()
 			
 			if (c == s->end())
 				break;
+			// \x02 marks start of small text
 			else if (*c == 2)
 				font = _small;
 		}
@@ -286,19 +308,19 @@ void Text::processText()
 			word = 0;
 		}
 		// Keep track of the width of the last line and word
-		else
+		else if (*c != 1)
 		{
 			width += font->getChar(*c)->getCrop()->w + font->getSpacing();
 			word += font->getChar(*c)->getCrop()->w + font->getSpacing();
-		}
 
-		// Wordwrap if the last word doesn't fit the line
-		if (_wrap && width > getWidth() && *c != L' ')
-		{
-			// Go back to the last space and put a linebreak there
-			*space = L'\n';
-			c = space - 1;
-			width -= word + font->getWidth() / 2;
+			// Wordwrap if the last word doesn't fit the line
+			if (_wrap && width > getWidth())
+			{
+				// Go back to the last space and put a linebreak there
+				*space = L'\n';
+				c = space - 1;
+				width -= word + font->getWidth() / 2;
+			}
 		}
 	}
 
@@ -318,8 +340,9 @@ void Text::draw()
 		return;
 	}
 
-	int x = 0, y = 0, line = 0, height = 0, pos = 0;
+	int x = 0, y = 0, line = 0, height = 0;
 	Font *font = _font;
+	Uint8 color = _color;
 	std::wstring *s = &_text;
 
 	for (std::vector<int>::iterator i = _lineHeight.begin(); i != _lineHeight.end(); i++)
@@ -354,7 +377,9 @@ void Text::draw()
 	}
 
 	if (_wrap)
+	{
 		s = &_wrappedText;
+	}
 
 	// Draw each letter one by one
 	for (std::wstring::iterator c = s->begin(); c != s->end(); c++)
@@ -366,7 +391,6 @@ void Text::draw()
 		else if (*c == '\n' || *c == 2)
 		{
 			line++;
-			pos = 0;
 			y += font->getHeight() + font->getSpacing();
 			switch (_align)
 			{
@@ -381,23 +405,29 @@ void Text::draw()
 				break;
 			}
 			if (*c == 2)
+			{
 				font = _small;
+			}
+		}
+		else if (*c == 1)
+		{
+			color = (color == _color ? _color2 : _color);
 		}
 		else
 		{
 			Surface* chr = font->getChar(*c);
-			chr->setX(x);
-			chr->setY(y);
-			chr->blit(this);
+			Surface letter = Surface(chr->getCrop()->w, chr->getCrop()->h, x, y);
+			letter.setPalette(getPalette());
+			chr->blit(&letter);
+			letter.offset(color);
+			letter.blit(this);
 			x += chr->getCrop()->w + font->getSpacing();
-			pos += 1;
 		}
 	}
 	if (_contrast)
 	{
 		this->multiply(3);
 	}
-	this->offset(_color);
 	if (_invert)
 	{
 		this->invert(_color + 3);

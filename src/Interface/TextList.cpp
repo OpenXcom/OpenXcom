@@ -120,6 +120,7 @@ void TextList::addRow(int cols, ...)
 		txt->setPalette(this->getPalette());
 		txt->setFonts(_big, _small);
 		txt->setColor(_color);
+		txt->setSecondaryColor(_color2);
 		txt->setAlign(_align);
 		if (_font == _big)
 		{
@@ -294,6 +295,24 @@ void TextList::setColor(Uint8 color)
 Uint8 TextList::getColor() const
 {
 	return _color;
+}
+
+/**
+ * Changes the secondary color of the text in the list.
+ * @param color Color value.
+ */
+void TextList::setSecondaryColor(Uint8 color)
+{
+	_color2 = color;
+}
+
+/**
+ * Returns the secondary color of the text in the list.
+ * @return Color value.
+ */
+Uint8 TextList::getSecondaryColor() const
+{
+	return _color2;
 }
 
 /**

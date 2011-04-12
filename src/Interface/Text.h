@@ -46,7 +46,7 @@ private:
 	bool _wrap, _invert, _contrast;
 	TextHAlign _align;
 	TextVAlign _valign;
-	Uint8 _color;
+	Uint8 _color, _color2;
 
 	/// Processes the contained text.
 	void processText();
@@ -83,10 +83,14 @@ public:
 	void setColor(Uint8 color);
 	/// Gets the text's color.
 	Uint8 getColor() const;
+	/// Sets the text's secondary color.
+	void setSecondaryColor(Uint8 color);
+	/// Gets the text's secondary color.
+	Uint8 getSecondaryColor() const;
 	/// Gets the rendered text's width.
-	int getTextWidth();
+	int getTextWidth() const;
 	/// Gets the rendered text's height.
-	int getTextHeight();
+	int getTextHeight() const;
 	/// Draws the text.
 	void draw();
 };

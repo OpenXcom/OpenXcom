@@ -141,6 +141,16 @@ void TextEdit::setInvert(bool invert)
 }
 
 /**
+ * Enables/disables high contrast color. Mostly used for
+ * Battlescape text.
+ * @param contrast High contrast setting.
+ */
+void TextEdit::setHighContrast(bool contrast)
+{
+	_text->setHighContrast(contrast);
+}
+
+/**
  * Changes the way the text is aligned horizontally
  * relative to the drawing area.
  * @param align Horizontal alignment.
@@ -179,6 +189,26 @@ void TextEdit::setColor(Uint8 color)
 Uint8 TextEdit::getColor() const
 {
 	return _text->getColor();
+}
+
+/**
+ * Changes the secondary color used to render the text. The text
+ * switches between the primary and secondary color whenever there's
+ * a \x01 in the string.
+ * @param color Color value.
+ */
+void TextEdit::setSecondaryColor(Uint8 color)
+{
+	_text->setSecondaryColor(color);
+}
+
+/**
+ * Returns the secondary color used to render the text.
+ * @return Color value.
+ */
+Uint8 TextEdit::getSecondaryColor() const
+{
+	return _text->getSecondaryColor();
 }
 
 /**
