@@ -46,6 +46,7 @@ private:
 	Craft *_craft;
 	std::string _itemId;
 	int _itemQty, _scientists, _engineers;
+	bool _delivered;
 public:
 	/// Creates a new transfer.
 	Transfer(int hours);

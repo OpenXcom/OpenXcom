@@ -31,7 +31,7 @@ namespace OpenXcom
  * Initializes a transfer.
  * @param hours Hours in-transit.
  */
-Transfer::Transfer(int hours) : _hours(hours), _soldier(0), _craft(0), _itemId(""), _itemQty(0), _scientists(0), _engineers(0)
+Transfer::Transfer(int hours) : _hours(hours), _soldier(0), _craft(0), _itemId(""), _itemQty(0), _scientists(0), _engineers(0), _delivered(false)
 {
 }
 
@@ -40,8 +40,11 @@ Transfer::Transfer(int hours) : _hours(hours), _soldier(0), _craft(0), _itemId("
  */
 Transfer::~Transfer()
 {
-	delete _soldier;
-	delete _craft;
+	if (!_delivered)
+	{
+		delete _soldier;
+		delete _craft;
+	}
 }
 
 /**
@@ -76,6 +79,7 @@ void Transfer::load(const YAML::Node &node, Base *base, Ruleset *rule)
 	{
 		*pName >> _engineers;
 	}
+	node["delivered"] >> _delivered;
 }
 
 /**
@@ -109,6 +113,7 @@ void Transfer::save(YAML::Emitter &out) const
 	{
 		out << YAML::Key << "engineers" << YAML::Value << _engineers;
 	}
+	out << YAML::Key << "delivered" << YAML::Value << _delivered;
 	out << YAML::EndMap;
 }
 
@@ -280,6 +285,7 @@ void Transfer::advance(Base *base)
 		{
 			base->setEngineers(base->getEngineers() + _engineers);
 		}
+		_delivered = true;
 	}
 }
 
