@@ -529,6 +529,11 @@ bool BattleUnit::addToVisibleUnits(BattleUnit *unit)
 	return true;
 }
 
+std::vector<BattleUnit*> *BattleUnit::getVisibleUnits()
+{
+	return &_visibleUnits;
+}
+
 /**
  * Clear visible units.
  */

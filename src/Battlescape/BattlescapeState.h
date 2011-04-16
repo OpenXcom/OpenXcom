@@ -61,6 +61,9 @@ private:
 	ImageButton *_btnReserveNone, *_btnReserveSnap, *_btnReserveAimed, *_btnReserveAuto;
 	ImageButton *_btnLeftHandItem, *_btnRightHandItem;
 	InteractiveSurface *_btnVisibleUnit[10];
+	NumberText *_numVisibleUnit[10];
+	BattleUnit *_visibleUnit[10];
+
 	Text *_txtName;
 	NumberText *_numTimeUnits, *_numEnergy, *_numHealth, *_numMorale, *_numLayers, *_numAmmoLeft, *_numAmmoRight;
 	Bar *_barTimeUnits, *_barEnergy, *_barHealth, *_barMorale;
@@ -78,6 +81,7 @@ private:
 	void checkActionFinished();
 	void handleItemClick(BattleItem *item);
 	void drawItemSprite(BattleItem *item, Surface *surface);
+	void blinkVisibleUnitButtons();
 public:
 	/// Creates the Battlescape state.
 	BattlescapeState(Game *game);
@@ -121,6 +125,8 @@ public:
 	void btnLeftHandItemClick(Action *action);
 	/// Handler for clicking the right hand item button.
 	void btnRightHandItemClick(Action *action);
+	/// Handler for clicking a visible unit button.
+	void btnVisibleUnitClick(Action *action);
 	/// updates soldier name/rank/tu/energy/health/morale
 	void updateSoldierInfo(BattleUnit *unit);
 	/// handlestates timer.

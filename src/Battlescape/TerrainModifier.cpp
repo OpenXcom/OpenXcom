@@ -178,105 +178,111 @@ void TerrainModifier::calculateUnitLighting()
  */
 void TerrainModifier::calculateFOV(BattleUnit *unit)
 {
-	// units see 90 degrees sidewards.
-	double startAngle[8] = { 45, 0, -45, 270, 225, 180, 135, 90 };
-	double endAngle[8] = { 135, 90, 45, 360, 315, 270, 225, 180 };
 
-	double centerZ = (unit->getPosition().z * 2) + 1.5;
-	double centerX = unit->getPosition().x + 0.5;
-	double centerY = unit->getPosition().y + 0.5;
-	int power_, objectFalloff;
-
-	// units see 90 degrees down and 60 degrees up.
-	double startFi = -90;
-	double endFi = 60;
-
-	if (unit->getPosition().z == 0)
+	if (unit->getFaction() == FACTION_PLAYER)
 	{
-		startFi = 0;
-	}
 
-	// we see the tile we are standing on
-	_save->getTile(unit->getPosition())->setDiscovered(true);
+		// units see 90 degrees sidewards.
+		double startAngle[8] = { 45, 0, -45, 270, 225, 180, 135, 90 };
+		double endAngle[8] = { 135, 90, 45, 360, 315, 270, 225, 180 };
 
-	// raytrace up and down
-	for (double fi = startFi; fi <= endFi; fi += 6)
-	{
-		double cos_fi = cos(fi * M_PI / 180.0);
-		double sin_fi = sin(fi * M_PI / 180.0);
+		double centerZ = (unit->getPosition().z * 2) + 1.5;
+		double centerX = unit->getPosition().x + 0.5;
+		double centerY = unit->getPosition().y + 0.5;
+		int power_, objectFalloff;
 
-		// raytrace every 3 degrees makes sure we cover all tiles in a circle.
-		for (double te = startAngle[unit->getDirection()]; te <= endAngle[unit->getDirection()]; te += 3)
+		// units see 90 degrees down and 60 degrees up.
+		double startFi = -90;
+		double endFi = 60;
+
+		if (unit->getPosition().z == 0)
 		{
-			double cos_te = cos(te * M_PI / 180.0);
-			double sin_te = sin(te * M_PI / 180.0);
+			startFi = 0;
+		}
 
-			Tile *origin = _save->getTile(unit->getPosition());
-			double l = 0;
-			double vx, vy, vz;
-			int tileX, tileY, tileZ;
-			power_ = 20;
+		// we see the tile we are standing on
+		_save->getTile(unit->getPosition())->setDiscovered(true);
 
-			while (power_ > 0)
+		// raytrace up and down
+		for (double fi = startFi; fi <= endFi; fi += 6)
+		{
+			double cos_fi = cos(fi * M_PI / 180.0);
+			double sin_fi = sin(fi * M_PI / 180.0);
+
+			// raytrace every 3 degrees makes sure we cover all tiles in a circle.
+			for (double te = startAngle[unit->getDirection()]; te <= endAngle[unit->getDirection()]; te += 3)
 			{
-				l++;
-				vx = centerX + l * cos_te * cos_fi;
-				vy = centerY + l * sin_te * cos_fi;
-				vz = centerZ + l * sin_fi;
+				double cos_te = cos(te * M_PI / 180.0);
+				double sin_te = sin(te * M_PI / 180.0);
 
-				tileZ = int(floor(vz / 2.0));
-				tileX = int(floor(vx));
-				tileY = int(floor(vy));
+				Tile *origin = _save->getTile(unit->getPosition());
+				double l = 0;
+				double vx, vy, vz;
+				int tileX, tileY, tileZ;
+				power_ = 20;
 
-				power_--;
-
-				Tile *dest = _save->getTile(Position(tileX, tileY, tileZ));
-				if (!dest) break; // out of map!
-
-				// horizontal blockage by walls
-				power_ -= horizontalBlockage(origin, dest, DT_NONE);
-
-				// vertical blockage by ceilings/floors
-				power_ -= verticalBlockage(origin, dest, DT_NONE);
-
-				// objects on destination tile affect the ray after it has crossed this tile
-				// but it has to be calculated before we affect the tile (it could have been blown up)
-				if (dest->getMapData(O_OBJECT))
+				while (power_ > 0)
 				{
-					objectFalloff = dest->getMapData(O_OBJECT)->getBlock(DT_NONE);
-				}
-				else
-				{
-					objectFalloff = 0;
-				}
+					l++;
+					vx = centerX + l * cos_te * cos_fi;
+					vy = centerY + l * sin_te * cos_fi;
+					vz = centerZ + l * sin_fi;
 
-				// smoke decreases visibility - but not for terrain
-				/*if (dest->getSmoke())
-				{
-					objectFalloff += int(dest->getSmoke() / 3);
-				}*/
+					tileZ = int(floor(vz / 2.0));
+					tileX = int(floor(vx));
+					tileY = int(floor(vy));
 
-				if (power_ > 0 && dest->getShade() < 10)
-				{
-					dest->setDiscovered(true);
-					// if there is a door to the east or south of a visible tile, we see that too
-					Tile* t = _save->getTile(Position(tileX + 1, tileY, tileZ));
-					if (t && t->getMapData(O_WESTWALL) && (t->getMapData(O_WESTWALL)->isDoor() || t->getMapData(O_WESTWALL)->isUFODoor()))
+					power_--;
+
+					Tile *dest = _save->getTile(Position(tileX, tileY, tileZ));
+					if (!dest) break; // out of map!
+
+					// horizontal blockage by walls
+					power_ -= horizontalBlockage(origin, dest, DT_NONE);
+
+					// vertical blockage by ceilings/floors
+					power_ -= verticalBlockage(origin, dest, DT_NONE);
+
+					// objects on destination tile affect the ray after it has crossed this tile
+					// but it has to be calculated before we affect the tile (it could have been blown up)
+					if (dest->getMapData(O_OBJECT))
 					{
-						t->setDiscovered(true);
+						objectFalloff = dest->getMapData(O_OBJECT)->getBlock(DT_NONE);
 					}
-					t = _save->getTile(Position(tileX, tileY - 1, tileZ));
-					if (t && t->getMapData(O_NORTHWALL) && (t->getMapData(O_NORTHWALL)->isDoor() || t->getMapData(O_NORTHWALL)->isUFODoor()))
+					else
 					{
-						t->setDiscovered(true);
+						objectFalloff = 0;
 					}
+
+					// smoke decreases visibility - but not for terrain
+					/*if (dest->getSmoke())
+					{
+						objectFalloff += int(dest->getSmoke() / 3);
+					}*/
+
+					if (power_ > 0 && dest->getShade() < 10)
+					{
+						dest->setDiscovered(true);
+						// if there is a door to the east or south of a visible tile, we see that too
+						Tile* t = _save->getTile(Position(tileX + 1, tileY, tileZ));
+						if (t && t->getMapData(O_WESTWALL) && (t->getMapData(O_WESTWALL)->isDoor() || t->getMapData(O_WESTWALL)->isUFODoor()))
+						{
+							t->setDiscovered(true);
+						}
+						t = _save->getTile(Position(tileX, tileY - 1, tileZ));
+						if (t && t->getMapData(O_NORTHWALL) && (t->getMapData(O_NORTHWALL)->isDoor() || t->getMapData(O_NORTHWALL)->isUFODoor()))
+						{
+							t->setDiscovered(true);
+						}
+					}
+					power_ -= objectFalloff;
+					origin = dest;
 				}
-				power_ -= objectFalloff;
-				origin = dest;
 			}
 		}
 	}
 
+	checkForVisibleUnits(unit);
 }
 
 /**
@@ -291,6 +297,8 @@ bool TerrainModifier::checkForVisibleUnits(BattleUnit *unit)
 	originVoxel.z += unit->isKneeled()?unit->getUnit()->getKneelHeight():unit->getUnit()->getStandHeight();
 
 	unit->clearVisibleUnits();
+
+	// TODO :: only check within range (day-night) and within the quadrant we are looking at !!!
 
 	bool unitSeen = false;
 
@@ -308,6 +316,12 @@ bool TerrainModifier::checkForVisibleUnits(BattleUnit *unit)
 			if ((*i)->getFaction() == FACTION_HOSTILE)
 				continue;
 		}
+
+		if ((*i)->isOut())
+		{
+			continue;
+		}
+
 		targetVoxel = Position((*i)->getPosition().x*16, (*i)->getPosition().y*16, (*i)->getPosition().z*24);
 		targetVoxel.z += -_save->getTile((*i)->getPosition())->getTerrainLevel();
 		targetVoxel.z += (*i)->isKneeled()?(*i)->getUnit()->getKneelHeight():(*i)->getUnit()->getStandHeight();
@@ -336,11 +350,7 @@ void TerrainModifier::calculateFOV(const Position &position)
 	{
 		if ((*i)->getFaction() == _save->getSide())
 		{
-			if ((*i)->getFaction() == FACTION_PLAYER)
-			{
-				calculateFOV(*i);
-			}
-			checkForVisibleUnits(*i);
+			calculateFOV(*i);
 		}
 	}
 }

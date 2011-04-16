@@ -137,6 +137,8 @@ public:
 	void setTimeUnits(int tu);
 	/// Add unit to visible units.
 	bool addToVisibleUnits(BattleUnit *unit);
+	/// Get the list of visible units.
+	std::vector<BattleUnit*> *BattleUnit::getVisibleUnits();
 	/// Clear visible units.
 	void clearVisibleUnits();
 

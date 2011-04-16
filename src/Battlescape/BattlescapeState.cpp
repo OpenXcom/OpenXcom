@@ -85,6 +85,12 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	_btnRightHandItem = new ImageButton(32, 48, 280, 149);
 	_numAmmoRight = new NumberText(3, 5, 280, 149);
 	_btnKneel = new InteractiveSurface(32, 16, 113, 160);
+	for (int i = 0; i < 10; i++)
+	{
+		_btnVisibleUnit[i] = new InteractiveSurface(15, 12, 300, 128 - (i * 13));
+		_numVisibleUnit[i] = new NumberText(15, 12, 306, 132 - (i * 13));
+	}
+	_numVisibleUnit[9]->setX(304); // center number 10
 
 	// Create soldier stats summary
 	_txtName = new Text(120, 10, 135, 176);
@@ -161,6 +167,11 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	add(_numAmmoLeft);
 	add(_btnRightHandItem);
 	add(_numAmmoRight);
+	for (int i = 0; i < 10; i++)
+	{
+		add(_btnVisibleUnit[i]);
+		add(_numVisibleUnit[i]);
+	}
 
 	add(_txtDebug);
 	// Set up objects
@@ -190,6 +201,13 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	_btnKneel->onMouseClick((ActionHandler)&BattlescapeState::btnKneelClick);
 	_btnLeftHandItem->onMouseClick((ActionHandler)&BattlescapeState::btnLeftHandItemClick);
 	_btnRightHandItem->onMouseClick((ActionHandler)&BattlescapeState::btnRightHandItemClick);
+	for (int i = 0; i < 10; i++)
+	{
+		_btnVisibleUnit[i]->onMouseClick((ActionHandler)&BattlescapeState::btnVisibleUnitClick);
+		_numVisibleUnit[i]->setColor(16);
+		_numVisibleUnit[i]->setValue(i+1);
+	}
+
 	
 	_txtName->setColor(Palette::blockOffset(8)-1);
 	_txtName->setHighContrast(true);
@@ -251,7 +269,6 @@ BattlescapeState::~BattlescapeState()
 	delete _animTimer;
 }
 
-
 void BattlescapeState::init()
 {
 	_map->focus();
@@ -268,6 +285,36 @@ void BattlescapeState::think()
 	_stateTimer->think(this, 0);
 	_animTimer->think(this, 0);
 	_map->think();
+}
+
+void BattlescapeState::blinkVisibleUnitButtons()
+{
+	static int delta = 1, color = 32;
+	
+	SDL_Rect square1;
+	square1.x = 0;
+	square1.y = 0;
+	square1.w = 15;
+	square1.h = 12;
+	SDL_Rect square2;
+	square2.x = 1;
+	square2.y = 1;
+	square2.w = 13;
+	square2.h = 10;
+
+	for (int i = 0; i < 10;  i++)
+	{
+		if (_btnVisibleUnit[i]->getVisible() == true)
+		{
+			_btnVisibleUnit[i]->drawRect(&square1, 15);
+			_btnVisibleUnit[i]->drawRect(&square2, color);
+		}
+	}
+
+	if (color == 44) delta = -2;
+	if (color == 32) delta = 1;
+
+	color += delta;
 }
 
 /**
@@ -532,6 +579,32 @@ void BattlescapeState::btnRightHandItemClick(Action *action)
 }
 
 /**
+ * Center on the unit corresponding with this button.
+ * @param action Pointer to an action.
+ */
+void BattlescapeState::btnVisibleUnitClick(Action *action)
+{
+	int btnID = -1;
+	
+	popState();
+
+	// got to find out which button was pressed
+	for (int i = 0; i < 10 && btnID == -1; i++)
+	{
+		if (action->getSender() == _btnVisibleUnit[i])
+		{
+			btnID = i;
+		}
+	}
+
+	if (btnID != -1)
+	{
+		_map->centerOnPosition(_visibleUnit[btnID]->getPosition());
+	}
+}
+
+
+/**
  * Updates soldier name/rank/tu/energy/health/morale.
  * @param battleUnit Pointer to current unit.
  */
@@ -595,7 +668,19 @@ void BattlescapeState::updateSoldierInfo(BattleUnit *battleUnit)
 		_numAmmoRight->setValue(rightHandItem->getAmmoQuantity());
 	}
 
-
+	for (int i = 0; i < 10; i++)
+	{
+		_btnVisibleUnit[i]->hide();
+		_numVisibleUnit[i]->hide();
+		_visibleUnit[i] = 0;
+	}
+	int j = 0;
+	for (std::vector<BattleUnit*>::iterator i = battleUnit->getVisibleUnits()->begin(); i != battleUnit->getVisibleUnits()->end(); i++)
+	{
+		_btnVisibleUnit[j]->show();
+		_numVisibleUnit[j]->show();
+		_visibleUnit[j] = (*i);
+	}
 }
 
 /*
@@ -653,6 +738,8 @@ void BattlescapeState::animate()
 	_animFrame++;
 	if (_animFrame == 8) _animFrame = 0;
 	_map->animate();
+
+	blinkVisibleUnitButtons();
 }
 
 /**
