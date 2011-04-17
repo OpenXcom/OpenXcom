@@ -201,6 +201,11 @@ void TerrainModifier::calculateFOV(BattleUnit *unit)
 	}
 
 	unit->clearVisibleUnits();
+	for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); i++)
+	{
+		_save->getTiles()[i]->setChecked(false);
+	}
+
 
 	// raytrace up and down
 	for (double fi = startFi; fi <= endFi; fi += 6)
@@ -259,8 +264,9 @@ void TerrainModifier::calculateFOV(BattleUnit *unit)
 					objectFalloff += int(dest->getSmoke() / 3);
 				}*/
 
-				if (power_ > 0 && dest->getShade() < 10)
+				if (power_ > 0 && dest->getShade() < 10 && !dest->getChecked())
 				{
+					dest->setChecked(true);
 					checkForVisibleUnits(unit, dest);
 					if (unit->getFaction() == FACTION_PLAYER)
 					{

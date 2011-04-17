@@ -63,6 +63,8 @@ private:
 	InteractiveSurface *_btnVisibleUnit[10];
 	NumberText *_numVisibleUnit[10];
 	BattleUnit *_visibleUnit[10];
+	Surface *_warningMessageBackground;
+	Text *_txtWarningMessage;
 
 	Text *_txtName;
 	NumberText *_numTimeUnits, *_numEnergy, *_numHealth, *_numMorale, *_numLayers, *_numAmmoLeft, *_numAmmoRight;
@@ -82,6 +84,8 @@ private:
 	void handleItemClick(BattleItem *item);
 	void drawItemSprite(BattleItem *item, Surface *surface);
 	void blinkVisibleUnitButtons();
+	void blinkWarningMessage();
+	void showWarningMessage(std::string message);
 public:
 	/// Creates the Battlescape state.
 	BattlescapeState(Game *game);

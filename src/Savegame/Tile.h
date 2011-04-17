@@ -43,7 +43,7 @@ class Tile
 protected:
 	MapData *_objects[4];
 	int _currentFrame[4];
-	bool _discovered;
+	bool _discovered, _checked;
 	int _light[LIGHTLAYERS];
 	int _lastLight[LIGHTLAYERS];
 	int _smoke;
@@ -133,6 +133,11 @@ public:
 	int getTopItemSprite();
 	/// Decrease fire and smoke timers.
 	void prepareNewTurn();
+	/// Set whether we checked this tile.
+	void setChecked(bool flag);
+	/// Get whether we checked this tile.
+	bool getChecked();
+
 };
 
 }
