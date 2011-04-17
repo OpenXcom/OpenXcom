@@ -172,98 +172,103 @@ void TerrainModifier::calculateUnitLighting()
 
 /**
  * Calculates line of sight of a soldier. For every visible tile fog of war is removed.
- * TODO : use bresenham algorithm? use voxel space?
- * TODO : aliens spotted? Seeing of other units?
  * @param unit
  */
 void TerrainModifier::calculateFOV(BattleUnit *unit)
 {
+	// units see 90 degrees sidewards.
+	double startAngle[8] = { 45, 0, -45, 270, 225, 180, 135, 90 };
+	double endAngle[8] = { 135, 90, 45, 360, 315, 270, 225, 180 };
 
+	double centerZ = (unit->getPosition().z * 2) + 1.5;
+	double centerX = unit->getPosition().x + 0.5;
+	double centerY = unit->getPosition().y + 0.5;
+	int power_, objectFalloff;
+
+	// units see 90 degrees down and 60 degrees up.
+	double startFi = -90;
+	double endFi = 60;
+
+	if (unit->getPosition().z == 0)
+	{
+		startFi = 0;
+	}
+
+	// we see the tile we are standing on
 	if (unit->getFaction() == FACTION_PLAYER)
 	{
-
-		// units see 90 degrees sidewards.
-		double startAngle[8] = { 45, 0, -45, 270, 225, 180, 135, 90 };
-		double endAngle[8] = { 135, 90, 45, 360, 315, 270, 225, 180 };
-
-		double centerZ = (unit->getPosition().z * 2) + 1.5;
-		double centerX = unit->getPosition().x + 0.5;
-		double centerY = unit->getPosition().y + 0.5;
-		int power_, objectFalloff;
-
-		// units see 90 degrees down and 60 degrees up.
-		double startFi = -90;
-		double endFi = 60;
-
-		if (unit->getPosition().z == 0)
-		{
-			startFi = 0;
-		}
-
-		// we see the tile we are standing on
 		_save->getTile(unit->getPosition())->setDiscovered(true);
+	}
 
-		// raytrace up and down
-		for (double fi = startFi; fi <= endFi; fi += 6)
+	unit->clearVisibleUnits();
+
+	// raytrace up and down
+	for (double fi = startFi; fi <= endFi; fi += 6)
+	{
+		double cos_fi = cos(fi * M_PI / 180.0);
+		double sin_fi = sin(fi * M_PI / 180.0);
+
+		// raytrace every 3 degrees makes sure we cover all tiles in a circle.
+		for (double te = startAngle[unit->getDirection()]; te <= endAngle[unit->getDirection()]; te += 3)
 		{
-			double cos_fi = cos(fi * M_PI / 180.0);
-			double sin_fi = sin(fi * M_PI / 180.0);
+			double cos_te = cos(te * M_PI / 180.0);
+			double sin_te = sin(te * M_PI / 180.0);
 
-			// raytrace every 3 degrees makes sure we cover all tiles in a circle.
-			for (double te = startAngle[unit->getDirection()]; te <= endAngle[unit->getDirection()]; te += 3)
+			Tile *origin = _save->getTile(unit->getPosition());
+			double l = 0;
+			double vx, vy, vz;
+			int tileX, tileY, tileZ;
+			power_ = 20;
+
+			while (power_ > 0)
 			{
-				double cos_te = cos(te * M_PI / 180.0);
-				double sin_te = sin(te * M_PI / 180.0);
+				l++;
+				vx = centerX + l * cos_te * cos_fi;
+				vy = centerY + l * sin_te * cos_fi;
+				vz = centerZ + l * sin_fi;
 
-				Tile *origin = _save->getTile(unit->getPosition());
-				double l = 0;
-				double vx, vy, vz;
-				int tileX, tileY, tileZ;
-				power_ = 20;
+				tileZ = int(floor(vz / 2.0));
+				tileX = int(floor(vx));
+				tileY = int(floor(vy));
 
-				while (power_ > 0)
+				power_--;
+
+				Tile *dest = _save->getTile(Position(tileX, tileY, tileZ));
+				if (!dest) break; // out of map!
+
+				// horizontal blockage by walls
+				power_ -= horizontalBlockage(origin, dest, DT_NONE);
+
+				// vertical blockage by ceilings/floors
+				power_ -= verticalBlockage(origin, dest, DT_NONE);
+
+				// objects on destination tile affect the ray after it has crossed this tile
+				// but it has to be calculated before we affect the tile (it could have been blown up)
+				if (dest->getMapData(O_OBJECT))
 				{
-					l++;
-					vx = centerX + l * cos_te * cos_fi;
-					vy = centerY + l * sin_te * cos_fi;
-					vz = centerZ + l * sin_fi;
+					objectFalloff = dest->getMapData(O_OBJECT)->getBlock(DT_NONE);
+				}
+				else
+				{
+					objectFalloff = 0;
+				}
 
-					tileZ = int(floor(vz / 2.0));
-					tileX = int(floor(vx));
-					tileY = int(floor(vy));
+				// smoke decreases visibility - but not for terrain
+				/*if (dest->getSmoke())
+				{
+					objectFalloff += int(dest->getSmoke() / 3);
+				}*/
 
-					power_--;
-
-					Tile *dest = _save->getTile(Position(tileX, tileY, tileZ));
-					if (!dest) break; // out of map!
-
-					// horizontal blockage by walls
-					power_ -= horizontalBlockage(origin, dest, DT_NONE);
-
-					// vertical blockage by ceilings/floors
-					power_ -= verticalBlockage(origin, dest, DT_NONE);
-
-					// objects on destination tile affect the ray after it has crossed this tile
-					// but it has to be calculated before we affect the tile (it could have been blown up)
-					if (dest->getMapData(O_OBJECT))
-					{
-						objectFalloff = dest->getMapData(O_OBJECT)->getBlock(DT_NONE);
-					}
-					else
-					{
-						objectFalloff = 0;
-					}
-
-					// smoke decreases visibility - but not for terrain
-					/*if (dest->getSmoke())
-					{
-						objectFalloff += int(dest->getSmoke() / 3);
-					}*/
-
-					if (power_ > 0 && dest->getShade() < 10)
+				if (power_ > 0 && dest->getShade() < 10)
+				{
+					checkForVisibleUnits(unit, dest);
+					if (unit->getFaction() == FACTION_PLAYER)
 					{
 						dest->setDiscovered(true);
-						// if there is a door to the east or south of a visible tile, we see that too
+					}
+					// if there is a door to the east or south of a visible tile, we see that too
+					if (unit->getFaction() == FACTION_PLAYER)
+					{
 						Tile* t = _save->getTile(Position(tileX + 1, tileY, tileZ));
 						if (t && t->getMapData(O_WESTWALL) && (t->getMapData(O_WESTWALL)->isDoor() || t->getMapData(O_WESTWALL)->isUFODoor()))
 						{
@@ -275,64 +280,55 @@ void TerrainModifier::calculateFOV(BattleUnit *unit)
 							t->setDiscovered(true);
 						}
 					}
-					power_ -= objectFalloff;
-					origin = dest;
 				}
+				power_ -= objectFalloff;
+				origin = dest;
 			}
 		}
 	}
-
-	checkForVisibleUnits(unit);
 }
 
 /**
- * Check for every opposing unit within range if there is a clear line of sight
+ * Check for an opposing unit on this tile
  * @param unit
+ * @param tile
  */
-bool TerrainModifier::checkForVisibleUnits(BattleUnit *unit)
+bool TerrainModifier::checkForVisibleUnits(BattleUnit *unit, Tile *tile)
 {
+	BattleUnit *bu = tile->getUnit();
+
+	if (bu == 0 || bu->isOut())
+	{
+		return false;
+	}
+
+	if (unit->getFaction() == FACTION_PLAYER && (bu->getFaction() == FACTION_PLAYER || bu->getFaction() == FACTION_NEUTRAL))
+	{
+		return false;
+	}
+
+	if (unit->getFaction() == FACTION_HOSTILE && bu->getFaction() == FACTION_HOSTILE)
+	{
+		return false;
+	}
+
 	Position originVoxel, targetVoxel;
-	originVoxel = Position(unit->getPosition().x*16, unit->getPosition().y*16, unit->getPosition().z*24);
-	originVoxel.z += -_save->getTile(unit->getPosition())->getTerrainLevel();
+	originVoxel = Position((unit->getPosition().x * 16) + 8, (unit->getPosition().y * 16) + 8, unit->getPosition().z*24);
+	originVoxel.z += -tile->getTerrainLevel();
 	originVoxel.z += unit->isKneeled()?unit->getUnit()->getKneelHeight():unit->getUnit()->getStandHeight();
-
-	unit->clearVisibleUnits();
-
-	// TODO :: only check within range (day-night) and within the quadrant we are looking at !!!
-
 	bool unitSeen = false;
 
-	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); i++)
+	targetVoxel = Position((bu->getPosition().x * 16) + 8, (bu->getPosition().y * 16) + 8, bu->getPosition().z*24);
+	targetVoxel.z += -_save->getTile(bu->getPosition())->getTerrainLevel();
+	targetVoxel.z += bu->isKneeled()?bu->getUnit()->getKneelHeight():bu->getUnit()->getStandHeight();
+
+	// cast a ray from the middle of the unit to the middle of this one
+	int test = calculateLine(originVoxel, targetVoxel, false, 0);
+	Position hitPosition = Position(targetVoxel.x/16, targetVoxel.y/16, targetVoxel.z/24);
+	if (test == -1 || (test == 4 && bu->getPosition() == hitPosition))
 	{
-		// only check for opposing units
-		if (unit->getFaction() == FACTION_PLAYER)
-		{
-			if ((*i)->getFaction() == FACTION_PLAYER ||
-				(*i)->getFaction() == FACTION_NEUTRAL)
-				continue;
-		}
-		if (unit->getFaction() == FACTION_HOSTILE)
-		{
-			if ((*i)->getFaction() == FACTION_HOSTILE)
-				continue;
-		}
-
-		if ((*i)->isOut())
-		{
-			continue;
-		}
-
-		targetVoxel = Position((*i)->getPosition().x*16, (*i)->getPosition().y*16, (*i)->getPosition().z*24);
-		targetVoxel.z += -_save->getTile((*i)->getPosition())->getTerrainLevel();
-		targetVoxel.z += (*i)->isKneeled()?(*i)->getUnit()->getKneelHeight():(*i)->getUnit()->getStandHeight();
-
-		// cast a ray from the middle of the unit to the middle of this one
-		int test = calculateLine(originVoxel, targetVoxel, false, 0);
-		if (test == -1)
-		{
-			unitSeen = true;
-			unit->addToVisibleUnits((*i));
-		}
+		unitSeen = true;
+		unit->addToVisibleUnits(bu);
 	}
 
 	return unitSeen;
@@ -441,7 +437,8 @@ void TerrainModifier::explode(const Position &center, int power, ItemDamageType 
 		if (part >= 0 && part <= 3)
 		{
 			// power 25% to 75%
-			_save->getTile(Position(center.x/16, center.y/16, center.z/24))->damage(part, (int)(RNG::generate(power/4, (power*3)/4)));
+			_save->getTile(Position(center.x/16, center.y/16, center.z/24))->damage(
+				part, (int)(RNG::generate(power/4, (power*3)/4)));
 		}
 		else if (part == 4)
 		{

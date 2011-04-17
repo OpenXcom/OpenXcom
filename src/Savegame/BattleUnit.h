@@ -19,7 +19,7 @@
 #ifndef OPENXCOM_BATTLEUNIT_H
 #define OPENXCOM_BATTLEUNIT_H
 
-#include <vector>
+#include <set>
 #include <string>
 #include "../Battlescape/Position.h"
 #include "Soldier.h"
@@ -52,6 +52,7 @@ private:
 	UnitStatus _status;
 	int _walkPhase, _fallPhase;
 	std::vector<BattleUnit *> _visibleUnits;
+	std::vector<Tile *> _visibleTiles;
 	int _tu, _energy, _health, _morale;
 	bool _cached, _kneeled;
 	BattleItem *_rightHandItem, *_leftHandItem;
@@ -122,12 +123,13 @@ public:
 	int getHealth() const;
 	/// Gets the unit's bravery.
 	int getMorale() const;
-	/// Damage
+	/// Do damage to the unit.
 	void damage(Position position, int power);
-	/// Start falling sequence
+	/// Start falling sequence.
 	void startFalling();
+	/// Increment the falling sequence.
 	void keepFalling();
-	/// Get falling sequence
+	/// Get falling sequence.
 	int getFallingPhase() const;
 	/// The unit is out - either dead or unconscious.
 	bool isOut() const;
@@ -138,11 +140,9 @@ public:
 	/// Add unit to visible units.
 	bool addToVisibleUnits(BattleUnit *unit);
 	/// Get the list of visible units.
-	std::vector<BattleUnit*> *BattleUnit::getVisibleUnits();
+	std::vector<BattleUnit*> *getVisibleUnits();
 	/// Clear visible units.
 	void clearVisibleUnits();
-
-
 };
 
 }

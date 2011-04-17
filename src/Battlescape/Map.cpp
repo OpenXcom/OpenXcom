@@ -355,8 +355,6 @@ void Map::drawTerrain(Surface *surface)
 						}
 					}
 
-					// Draw items
-
 					// Draw soldier
 					if (unit)
 					{
@@ -397,6 +395,7 @@ void Map::drawTerrain(Surface *surface)
 							}
 						}
 					}
+					unit = tile->getUnit();
 
 					// check if we got bullet
 					if (_projectile)
@@ -999,16 +998,6 @@ bool Map::cacheTileSprites(int i)
 			frame->setY(-object->getYOffset());
 			frame->blit(_tileFloorCache[i]);
 
-			// draw an item on top of the floor (if any)
-			int sprite = tile->getTopItemSprite();
-			if (sprite != -1)
-			{
-				frame = _res->getSurfaceSet("FLOOROB.PCK")->getFrame(sprite);
-				frame->setX(0);
-				frame->setY(-object->getTerrainLevel());
-				frame->blit(_tileFloorCache[i]);
-			}
-
 			_tileFloorCache[i]->setShade(tile->isDiscovered()?tile->getShade():16);
 		}
 		else if (_tileFloorCache[i] != 0)
@@ -1017,7 +1006,7 @@ bool Map::cacheTileSprites(int i)
 		}
 
 		/* draw terrain objects on the cache (if any) */
-		if (tile->getMapData(O_WESTWALL) != 0 || tile->getMapData(O_NORTHWALL) != 0 || tile->getMapData(O_OBJECT) != 0)
+		if (tile->getMapData(O_WESTWALL) != 0 || tile->getMapData(O_NORTHWALL) != 0 || tile->getMapData(O_OBJECT) != 0 || tile->getTopItemSprite() != -1)
 		{
 			if (_tileWallsCache[i] == 0)
 			{
@@ -1068,6 +1057,20 @@ bool Map::cacheTileSprites(int i)
 				frame = tile->getSprite(O_OBJECT);
 				frame->setX(0);
 				frame->setY(-object->getYOffset());
+				frame->blit(_tileWallsCache[i]);
+			}
+
+			// draw an item on top of the floor (if any)
+			int sprite = tile->getTopItemSprite();
+			if (sprite != -1)
+			{
+				frame = _res->getSurfaceSet("FLOOROB.PCK")->getFrame(sprite);
+				frame->setX(0);
+				if (object == 0)
+				{
+					object = tile->getMapData(O_FLOOR);
+				}
+				frame->setY(object->getTerrainLevel());
 				frame->blit(_tileWallsCache[i]);
 			}
 

@@ -680,6 +680,7 @@ void BattlescapeState::updateSoldierInfo(BattleUnit *battleUnit)
 		_btnVisibleUnit[j]->show();
 		_numVisibleUnit[j]->show();
 		_visibleUnit[j] = (*i);
+		j++;
 	}
 }
 

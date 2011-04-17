@@ -383,7 +383,7 @@ BattleUnit *SavedBattleGame::selectUnit(const Position& pos)
 
 	for (std::vector<BattleUnit*>::iterator i = _units.begin(); i != _units.end(); i++)
 	{
-		if ((*i)->getPosition() == pos)
+		if ((*i)->getPosition() == pos && !(*i)->isOut())
 		{
 			bu = *i;
 			break;

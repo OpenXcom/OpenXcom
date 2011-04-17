@@ -47,6 +47,7 @@ private:
 	int verticalBlockage(Tile *startTile, Tile *endTile, ItemDamageType type);
 	int vectorToDirection(const Position &vector);
 	int voxelCheck(const Position& voxel);
+	bool checkForVisibleUnits(BattleUnit *unit, Tile *tile);
 public:
 	/// Creates a new TerrainModifier class.
 	TerrainModifier(SavedBattleGame *save, std::vector<Uint16> *voxelData);
@@ -58,8 +59,6 @@ public:
 	void calculateSunShading(Tile *tile);
 	/// Calculate the visible tiles of a unit.
 	void calculateFOV(BattleUnit *unit);
-	/// Calculate the visible units of a unit.
-	bool checkForVisibleUnits(BattleUnit *unit);
 	/// Calculate the field of view within range of a certain position.
 	void calculateFOV(const Position &position);
 	/// Recalculate lighting of the battlescape.
@@ -76,7 +75,6 @@ public:
 	void spawnItem(const Position &position, BattleItem *item);
 	/// New turn preparations.
 	void prepareNewTurn();
-
 };
 
 }
