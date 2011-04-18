@@ -39,6 +39,7 @@
 #include "../Ruleset/RuleCraftWeapon.h"
 #include "../Engine/Timer.h"
 #include "PurchaseErrorState.h"
+#include "TransferConfirmState.h"
 
 namespace OpenXcom
 {
@@ -49,7 +50,7 @@ namespace OpenXcom
  * @param baseFrom Pointer to the source base.
  * @param baseTo Pointer to the destination base.
  */
-TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo) : State(game), _baseFrom(baseFrom), _baseTo(baseTo), _qtys(), _soldiers(), _crafts(), _items(), _sel(0), _total(0), _sOffset(0), _eOffset(0), _pQty(0), _cQty(0), _iQty(0.0f)
+TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo) : State(game), _baseFrom(baseFrom), _baseTo(baseTo), _qtys(), _soldiers(), _crafts(), _items(), _sel(0), _total(0), _sOffset(0), _eOffset(0), _pQty(0), _cQty(0), _iQty(0.0f), _distance(0.0)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
@@ -161,6 +162,7 @@ TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo)
 		ss2 << _baseTo->getItems()->getItem(i->first);
 		_lstItems->addRow(4, _game->getLanguage()->getString(i->first).c_str(), ss.str().c_str(), L"0", ss2.str().c_str());
 	}
+	_distance = getDistance();
 
 	_timerInc = new Timer(50);
 	_timerInc->onTimer((StateHandler)&TransferItemsState::increase);
@@ -194,7 +196,7 @@ void TransferItemsState::think()
  */
 void TransferItemsState::btnOkClick(Action *action)
 {
-	
+	_game->pushState(new TransferConfirmState(_game, this));
 }
 
 /**
@@ -246,8 +248,36 @@ void TransferItemsState::lstItemsRightArrowRelease(Action *action)
 }
 
 /**
+ * Gets the transfer cost of the currently selected item.
+ * @return Transfer cost.
+ */
+int TransferItemsState::getCost()
+{
+	int cost = 0;
+	// Personnel cost
+	if (_sel < _soldiers.size() || (_sel >= _soldiers.size() + _crafts.size()  && _sel < _soldiers.size() + _crafts.size() + _sOffset + _eOffset))
+	{
+		cost = 5;
+	}
+	// Craft cost
+	else if (_sel >= _soldiers.size() && _sel < _soldiers.size() + _crafts.size())
+	{
+		cost = 25;
+	}
+	// Item cost
+	else
+	{
+		cost = 1;
+	}
+
+	// TODO: Account for distance here
+	return cost;
+}
+
+/**
  * Gets the quantity of the currently selected item
  * on the base.
+ * @return Item quantity.
  */
 int TransferItemsState::getQuantity()
 {
@@ -315,6 +345,7 @@ void TransferItemsState::increase()
 		ss << _qtys[_sel];
 		_lstItems->getCell(_sel, 2)->setText(ss.str());
 		_lstItems->draw();
+		_total += getCost();
 	}
 }
 
@@ -345,7 +376,33 @@ void TransferItemsState::decrease()
 		ss << _qtys[_sel];
 		_lstItems->getCell(_sel, 2)->setText(ss.str());
 		_lstItems->draw();
+		_total -= getCost();
 	}
+}
+
+/**
+ * Gets the total cost of the current transfer.
+ * @return Total cost.
+ */
+int TransferItemsState::getTotal()
+{
+	return _total;
+}
+
+/**
+ * Gets the shortest distance between the two bases.
+ * @return Distance
+ */
+double TransferItemsState::getDistance()
+{
+	double x[2], y[2], z[2], r = 128.0;
+	x[0] = - r * sin(_baseFrom->getLongitude()) * cos(_baseFrom->getLatitude());
+	y[0] = - r * sin(_baseFrom->getLongitude()) * sin(_baseFrom->getLatitude());
+	z[0] = r * cos(_baseFrom->getLongitude());
+	x[1] = - r * sin(_baseTo->getLongitude()) * cos(_baseTo->getLatitude());
+	y[1] = - r * sin(_baseTo->getLongitude()) * sin(_baseTo->getLatitude());
+	z[1] = r * cos(_baseTo->getLongitude());
+	return 0;
 }
 
 }

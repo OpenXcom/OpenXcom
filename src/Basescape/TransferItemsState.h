@@ -54,9 +54,14 @@ private:
 	unsigned int _sel;
 	int _total, _sOffset, _eOffset, _pQty, _cQty;
 	float _iQty;
+	double _distance;
 	Timer *_timerInc, *_timerDec;
+	/// Gets selected cost.
+	int getCost();
 	/// Gets selected quantity.
 	int getQuantity();
+	/// Gets distance between bases.
+	double getDistance();
 public:
 	/// Creates the Transfer Items state.
 	TransferItemsState(Game *game, Base *baseFrom, Base *baseTo);
@@ -80,6 +85,8 @@ public:
 	void increase();
 	/// Decreases the quantity of an item.
 	void decrease();
+	/// Gets the total of the transfer.
+	int getTotal();
 };
 
 }
