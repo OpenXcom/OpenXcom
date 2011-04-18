@@ -25,6 +25,7 @@
 #include "UnitTurnBState.h"
 #include "UnitWalkBState.h"
 #include "ProjectileFlyBState.h"
+#include "TerrainModifier.h"
 #include "../Engine/Game.h"
 #include "../Engine/Music.h"
 #include "../Engine/Language.h"
@@ -91,6 +92,8 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 		_numVisibleUnit[i] = new NumberText(15, 12, 306, 132 - (i * 13));
 	}
 	_numVisibleUnit[9]->setX(304); // center number 10
+	_warningMessageBackground = new Surface(224, 24, 48, 176);
+	_txtWarningMessage = new Text(224, 24, 48, 184);
 
 	// Create soldier stats summary
 	_txtName = new Text(120, 10, 135, 176);
@@ -172,6 +175,8 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 		add(_btnVisibleUnit[i]);
 		add(_numVisibleUnit[i]);
 	}
+	add(_warningMessageBackground);
+	add(_txtWarningMessage);
 
 	add(_txtDebug);
 	// Set up objects
@@ -207,7 +212,10 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 		_numVisibleUnit[i]->setColor(16);
 		_numVisibleUnit[i]->setValue(i+1);
 	}
-
+	_txtWarningMessage->setColor(16);
+	_txtWarningMessage->setHighContrast(true);
+	_txtWarningMessage->setAlign(ALIGN_CENTER);
+	_warningMessageBackground->setVisible(false);
 	
 	_txtName->setColor(Palette::blockOffset(8)-1);
 	_txtName->setHighContrast(true);
@@ -287,6 +295,9 @@ void BattlescapeState::think()
 	_map->think();
 }
 
+/**
+  * Shift the red colors of the visible unit buttons backgrounds.
+  */
 void BattlescapeState::blinkVisibleUnitButtons()
 {
 	static int delta = 1, color = 32;
@@ -315,6 +326,48 @@ void BattlescapeState::blinkVisibleUnitButtons()
 	if (color == 32) delta = 1;
 
 	color += delta;
+}
+
+
+/**
+  * Shift the red color of the warning message.
+  */
+void BattlescapeState::blinkWarningMessage()
+{
+	static int color = 32;
+
+	if (_warningMessageBackground->getVisible() == false)
+		return;
+
+	SDL_Rect square1;
+	square1.x = 0;
+	square1.y = 0;
+	square1.w = 224;
+	square1.h = 48;
+	_warningMessageBackground->drawRect(&square1, color);
+
+	if (color >= 44)
+	{
+		_warningMessageBackground->setVisible(false);
+		_txtWarningMessage->setVisible(false);
+		color = 32;
+	}
+	else
+	{
+		color++;
+	}
+}
+
+/**
+  * Show warning message.
+  * @param message untranslated
+  */
+void BattlescapeState::showWarningMessage(std::string message)
+{
+	std::wstring messageText = _game->getLanguage()->getString(message);
+	_warningMessageBackground->setVisible(true);
+	_txtWarningMessage->setVisible(true);
+	_txtWarningMessage->setText(messageText);
 }
 
 /**
@@ -668,6 +721,7 @@ void BattlescapeState::updateSoldierInfo(BattleUnit *battleUnit)
 		_numAmmoRight->setValue(rightHandItem->getAmmoQuantity());
 	}
 
+	_battleGame->getTerrainModifier()->calculateFOV(_battleGame->getSelectedUnit());
 	for (int i = 0; i < 10; i++)
 	{
 		_btnVisibleUnit[i]->hide();
@@ -741,6 +795,7 @@ void BattlescapeState::animate()
 	_map->animate();
 
 	blinkVisibleUnitButtons();
+	blinkWarningMessage();
 }
 
 /**
@@ -828,7 +883,10 @@ void BattlescapeState::statePushBack(BattleState *bs)
  */
 void BattlescapeState::popState()
 {
-	// TODO : first handle return message
+	if (_states.front()->getResult().length() > 0)
+	{
+		showWarningMessage(_states.front()->getResult());
+	}
 	_states.pop_front();
 	// if all states are empty - give the mouse back to the player
 	if (_states.empty())

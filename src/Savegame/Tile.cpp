@@ -623,4 +623,22 @@ void Tile::prepareNewTurn()
 	}
 }
 
+/**
+ * Set whether we checked this tile.
+ * @param flag
+ */
+void Tile::setChecked(bool flag)
+{
+	_checked = flag;
+}
+
+/**
+ * Get whether we checked this tile.
+ * @return flag
+ */
+bool Tile::getChecked()
+{
+	return _checked;
+}
+
 }
