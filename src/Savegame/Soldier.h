@@ -52,9 +52,9 @@ private:
 	int _missions, _kills;
 public:
 	/// Creates a new soldier.
-	Soldier();
+	Soldier(RuleSoldier *rules, RuleArmor *armor);
 	/// Creates a new soldier with random stats.
-	Soldier(RuleSoldier *rules, std::vector<SoldierNamePool*> *names, RuleArmor *armor);
+	Soldier(RuleSoldier *rules, RuleArmor *armor, std::vector<SoldierNamePool*> *names);
 	/// Cleans up the soldier.
 	~Soldier();
 	/// Initialises 

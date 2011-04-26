@@ -28,8 +28,10 @@ namespace OpenXcom
 
 /**
  * Initializes a new blank soldier.
+ * @param rules Soldier ruleset.
+ * @param armor Soldier armor.
  */
-Soldier::Soldier() : _name(L""), _rank(RANK_ROOKIE), _craft(0), _gender(GENDER_MALE), _look(LOOK_BLONDE), _missions(0), _kills(0)
+Soldier::Soldier(RuleSoldier *rules, RuleArmor *armor) : Unit(armor), _rules(rules), _name(L""), _rank(RANK_ROOKIE), _craft(0), _gender(GENDER_MALE), _look(LOOK_BLONDE), _missions(0), _kills(0)
 {
 	_initialStats.bravery = 0;
 	_initialStats.firing = 0;
@@ -49,9 +51,11 @@ Soldier::Soldier() : _name(L""), _rank(RANK_ROOKIE), _craft(0), _gender(GENDER_M
 /**
  * Initializes a new soldier with random stats and a name
  * pulled from a set of SoldierNamePool's.
+ * @param rules Soldier ruleset.
+ * @param armor Soldier armor.
  * @param names List of name pools.
  */
-Soldier::Soldier(RuleSoldier *rules, std::vector<SoldierNamePool*> *names, RuleArmor *armor) : Unit(armor), _rules(rules), _rank(RANK_ROOKIE), _craft(0), _missions(0), _kills(0)
+Soldier::Soldier(RuleSoldier *rules, RuleArmor *armor, std::vector<SoldierNamePool*> *names) : Unit(armor), _rules(rules), _rank(RANK_ROOKIE), _craft(0), _missions(0), _kills(0)
 {
 	UnitStats minStats = rules->getMinStats();
 	UnitStats maxStats = rules->getMaxStats();

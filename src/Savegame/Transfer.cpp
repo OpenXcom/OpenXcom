@@ -36,7 +36,7 @@ Transfer::Transfer(int hours) : _hours(hours), _soldier(0), _craft(0), _itemId("
 }
 
 /**
- *
+ * Cleans up undelivered transfers.
  */
 Transfer::~Transfer()
 {
@@ -50,13 +50,15 @@ Transfer::~Transfer()
 /**
  * Loads the transfer from a YAML file.
  * @param node YAML node.
+ * @param base Destination base.
+ * @param rule Game ruleset.
  */
 void Transfer::load(const YAML::Node &node, Base *base, Ruleset *rule)
 {
 	node["hours"] >> _hours;
 	if (const YAML::Node *pName = node.FindValue("soldier"))
 	{
-		_soldier = new Soldier();
+		_soldier = new Soldier(rule->getSoldier("XCOM"), rule->getArmor("STR_NONE_UC"));
 		_soldier->load(*pName);
 	}
 	else if (const YAML::Node *pName = node.FindValue("craft"))

@@ -1476,7 +1476,7 @@ SavedGame *XcomRuleset::newSave(GameDifficulty diff)
 	// Generate soldiers
 	for (int i = 0; i < 8; i++)
 	{
-		Soldier *soldier = new Soldier(getSoldier("XCOM"), &_names, getArmor("STR_NONE_UC"));
+		Soldier *soldier = new Soldier(getSoldier("XCOM"), getArmor("STR_NONE_UC"), &_names);
 		soldier->setCraft(skyranger);
 		base->getSoldiers()->push_back(soldier);
 	}
