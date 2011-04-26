@@ -645,6 +645,10 @@ void Globe::cache(std::list<Polygon*> *polygons, std::list<Polygon*> *cache)
 void Globe::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 {
 	Surface::setPalette(colors, firstcolor, ncolors);
+	for (int shade = 0; shade < NUM_SHADES; shade++)
+	{
+		_texture[shade]->setPalette(colors, firstcolor, ncolors);
+	}
 	_countries->setPalette(colors, firstcolor, ncolors);
 	_markers->setPalette(colors, firstcolor, ncolors);
 	_mkXcomBase->setPalette(colors, firstcolor, ncolors);

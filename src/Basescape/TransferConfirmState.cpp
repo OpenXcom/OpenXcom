@@ -25,7 +25,7 @@
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
-#include "../Savegame/SavedGame.h"
+#include "../Savegame/Base.h"
 #include "TransferItemsState.h"
 
 namespace OpenXcom
@@ -34,22 +34,23 @@ namespace OpenXcom
 /**
  * Initializes all the elements in the Confirm Transfer window.
  * @param game Pointer to the core game.
+ * @param base Pointer to the destination base.
  * @param state Pointer to the Transfer state.
  */
-TransferConfirmState::TransferConfirmState(Game *game, TransferItemsState *state) : State(game), _state(state)
+TransferConfirmState::TransferConfirmState(Game *game, Base *base, TransferItemsState *state) : State(game), _base(base), _state(state)
 {
 	_screen = false;
 
 	// Create objects
 	_window = new Window(this, 320, 80, 0, 60);
-	_btnCancel = new TextButton(264, 16, 28, 146);
-	_btnOk = new TextButton(264, 16, 28, 146);
-	_txtTitle = new Text(270, 16, 25, 38);
-	_txtCost = new Text(250, 9, 30, 54);
-	_txtTotal = new Text(130, 16, 28, 64);
+	_btnCancel = new TextButton(128, 16, 176, 115);
+	_btnOk = new TextButton(128, 16, 16, 115);
+	_txtTitle = new Text(310, 16, 5, 75);
+	_txtCost = new Text(60, 16, 110, 95);
+	_txtTotal = new Text(100, 16, 170, 95);
 	
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
+	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
 
 	add(_window);
 	add(_btnCancel);
@@ -62,28 +63,28 @@ TransferConfirmState::TransferConfirmState(Game *game, TransferItemsState *state
 	_window->setColor(Palette::blockOffset(13)+8);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
-	_btnCancel->setColor(Palette::blockOffset(13)+8);
+	_btnCancel->setColor(Palette::blockOffset(15)+9);
 	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&TransferConfirmState::btnCancelClick);
 
-	_btnOk->setColor(Palette::blockOffset(13)+8);
+	_btnOk->setColor(Palette::blockOffset(15)+9);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&TransferConfirmState::btnOkClick);
 
-	_txtTitle->setColor(Palette::blockOffset(13)+5);
+	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setText(_game->getLanguage()->getString("STR_SELECT_DESTINATION_BASE"));
+	std::wstring s = _game->getLanguage()->getString("STR_TRANSFER_ITEMS_TO");
+	s += _base->getName();
+	_txtTitle->setText(s);
 
-	_txtCost->setColor(Palette::blockOffset(13)+5);
-	_txtCost->setSecondaryColor(Palette::blockOffset(13));
-	std::wstring s = _game->getLanguage()->getString("STR_CURRENT_FUNDS");
-	s += L'\x01' + Text::formatFunding(_game->getSavedGame()->getFunds());
-	_txtCost->setText(s);
+	_txtCost->setColor(Palette::blockOffset(13)+10);
+	_txtCost->setBig();
+	_txtCost->setText(_game->getLanguage()->getString("STR_COST"));
 
-	_txtTotal->setColor(Palette::blockOffset(13)+5);
-	_txtTotal->setText(_game->getLanguage()->getString("STR_NAME"));
+	_txtTotal->setColor(Palette::blockOffset(15)+1);
 	_txtTotal->setBig();
+	_txtTotal->setText(Text::formatFunding(_state->getTotal()));
 }
 
 /**
@@ -108,7 +109,10 @@ void TransferConfirmState::btnCancelClick(Action *action)
  */
 void TransferConfirmState::btnOkClick(Action *action)
 {
-	;
+	_state->completeTransfer();
+	_game->popState();
+	_game->popState();
+	_game->popState();
 }
 
 }

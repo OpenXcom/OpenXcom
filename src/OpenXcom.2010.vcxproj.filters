@@ -497,6 +497,9 @@
     <ClCompile Include="Basescape\TransferConfirmState.cpp">
       <Filter>Basescape</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\CrossPlatform.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -995,6 +998,9 @@
     </ClInclude>
     <ClInclude Include="Basescape\TransferConfirmState.h">
       <Filter>Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\CrossPlatform.h">
+      <Filter>Engine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

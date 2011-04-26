@@ -28,6 +28,7 @@ class TextButton;
 class Window;
 class Text;
 class TransferItemsState;
+class Base;
 
 /**
  * Window to confirm a transfer between bases.
@@ -38,10 +39,11 @@ private:
 	TextButton *_btnCancel, *_btnOk;
 	Window *_window;
 	Text *_txtTitle, *_txtCost, *_txtTotal;
+	Base *_base;
 	TransferItemsState *_state;
 public:
 	/// Creates the Transfer Confirm state.
-	TransferConfirmState(Game *game, TransferItemsState *state);
+	TransferConfirmState(Game *game, Base *base, TransferItemsState *state);
 	/// Cleans up the Transfer Confirm state.
 	~TransferConfirmState();
 	/// Handler for clicking the Cancel button.

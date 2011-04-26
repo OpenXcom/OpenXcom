@@ -59,7 +59,7 @@ private:
 	InteractiveSurface *_btnEndTurn, *_btnAbort;
 	ImageButton *_reserve;
 	ImageButton *_btnReserveNone, *_btnReserveSnap, *_btnReserveAimed, *_btnReserveAuto;
-	ImageButton *_btnLeftHandItem, *_btnRightHandItem;
+	InteractiveSurface *_btnLeftHandItem, *_btnRightHandItem;
 	InteractiveSurface *_btnVisibleUnit[10];
 	NumberText *_numVisibleUnit[10];
 	BattleUnit *_visibleUnit[10];

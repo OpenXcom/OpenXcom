@@ -49,6 +49,8 @@ public:
 	SaveGameState(Game *game);
 	/// Cleans up the Save Game state.
 	~SaveGameState();
+	/// Updates the palette.
+	void init();
 	/// Handler for clicking the Cancel button.
 	void btnCancelClick(Action *action);
 	/// Handler for pressing a key on the Save edit.

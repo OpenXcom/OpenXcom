@@ -67,10 +67,14 @@ public:
 	TransferItemsState(Game *game, Base *baseFrom, Base *baseTo);
 	/// Cleans up the Transfer Items state.
 	~TransferItemsState();
+	/// Updates the palette.
+	void init();
 	/// Runs the timers.
 	void think();
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
+	/// Completes the transfer between bases.
+	void completeTransfer();
 	/// Handler for clicking the Cancel button.
 	void btnCancelClick(Action *action);
 	/// Handler for pressing an Increase arrow in the list.
