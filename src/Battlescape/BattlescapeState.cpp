@@ -376,6 +376,7 @@ void BattlescapeState::blinkWarningMessage()
 		_warningMessageBackground->setVisible(false);
 		_txtWarningMessage->setVisible(false);
 		color = 32;
+		delay = 12;
 	}
 
 }

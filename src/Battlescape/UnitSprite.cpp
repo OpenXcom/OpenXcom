@@ -154,8 +154,7 @@ void UnitSprite::draw()
 		// draw handob item
 		if (_unit->getStatus() == STATUS_AIMING)
 		{
-			int dir = _unit->getDirection() + 2;
-			if (dir > 7) dir -= 8;
+			int dir = (_unit->getDirection() + 2)%8;
 			item = _itemSurface->getFrame(_item->getRules()->getHandSprite() + dir);
 			item->setX(offX[_unit->getDirection()]);
 			item->setY(offY[_unit->getDirection()]);
@@ -201,14 +200,13 @@ void UnitSprite::draw()
 		leftArm->setY(offYKneel);
 		rightArm->setY(offYKneel);
 		torso->setY(offYKneel);
-		item?item->setY(offYKneel):void();
+		item?item->setY(item->getY() + offYKneel):void();
 	}
 	else if (_unit->getStatus() != STATUS_WALKING)
 	{
 		leftArm->setY(0);
 		rightArm->setY(0);
 		torso->setY(0);
-		item?item->setY(0):void();
 	}
 	
 	// blit order depends on unit direction
