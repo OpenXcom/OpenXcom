@@ -39,6 +39,7 @@ class BattleItem;
 class Window;
 class BattleState;
 class Timer;
+class ActionMenuItem;
 
 enum BattleActionType { BA_NONE, BA_THROW, BA_AUTOSHOT, BA_SNAPSHOT, BA_AIMEDSHOT, BA_STUN, BA_HIT };
 
@@ -74,11 +75,12 @@ private:
 	Text *_txtDebug;
 	int _animFrame;
 
+	ActionMenuItem *_actionMenu[5];
 	BattleActionType _selectedAction;
 	BattleItem *_selectedItem;
 	Position _target;
 	std::list<BattleState*> _states;
-	bool _targeting;
+	bool _targeting, _popup;
 
 	void checkActionFinished();
 	void handleItemClick(BattleItem *item);
@@ -86,6 +88,7 @@ private:
 	void blinkVisibleUnitButtons();
 	void blinkWarningMessage();
 	void showWarningMessage(std::string message);
+	void hidePopup();
 public:
 	/// Creates the Battlescape state.
 	BattlescapeState(Game *game);
@@ -131,6 +134,8 @@ public:
 	void btnRightHandItemClick(Action *action);
 	/// Handler for clicking a visible unit button.
 	void btnVisibleUnitClick(Action *action);
+	/// Handler for clicking a action menu item.
+	void btnActionMenuItemClick(Action *action);
 	/// updates soldier name/rank/tu/energy/health/morale
 	void updateSoldierInfo(BattleUnit *unit);
 	/// handlestates timer.

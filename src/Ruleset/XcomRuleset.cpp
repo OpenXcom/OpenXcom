@@ -668,6 +668,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	pistol->setBulletSprite(1);
 	pistol->setFireSound(4);
 	pistol->setAccuracySnap(60);
+	pistol->setAccuracyAimed(78);
 	pistol->getCompatibleAmmo()->push_back("STR_PISTOL_CLIP");
 	pistol->setBattleType(BT_FIREARM);
 	pistol->setSizeX(1);
@@ -694,7 +695,9 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	rifle->setTwoHanded(true);
 	rifle->setBulletSprite(2);
 	rifle->setFireSound(4);
+	rifle->setAccuracyAuto(35);
 	rifle->setAccuracySnap(60);
+	rifle->setAccuracyAimed(110);
 	rifle->getCompatibleAmmo()->push_back("STR_RIFLE_CLIP");
 	rifle->setBattleType(BT_FIREARM);
 	rifle->setSizeX(1);
@@ -722,6 +725,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	hcannon->setBulletSprite(4);
 	hcannon->setFireSound(12);
 	hcannon->setAccuracySnap(60);
+	hcannon->setAccuracyAimed(90);
 	hcannon->getCompatibleAmmo()->push_back("STR_HC_AP_AMMO");
 	hcannon->getCompatibleAmmo()->push_back("STR_HC_HE_AMMO");
 	hcannon->getCompatibleAmmo()->push_back("STR_HC_IN_AMMO");
@@ -776,7 +780,9 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	acannon->setTwoHanded(true);
 	acannon->setBulletSprite(3);
 	acannon->setFireSound(12);
+	acannon->setAccuracyAuto(32);
 	acannon->setAccuracySnap(56);
+	acannon->setAccuracyAimed(82);
 	acannon->getCompatibleAmmo()->push_back("STR_AC_AP_AMMO");
 	acannon->getCompatibleAmmo()->push_back("STR_AC_HE_AMMO");
 	acannon->getCompatibleAmmo()->push_back("STR_AC_IN_AMMO");
@@ -806,6 +812,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	rlauncher->setBulletSprite(0);
 	rlauncher->setFireSound(52);
 	rlauncher->setAccuracySnap(55);
+	rlauncher->setAccuracyAimed(115);
 	rlauncher->getCompatibleAmmo()->push_back("STR_SMALL_ROCKET");
 	rlauncher->setBattleType(BT_FIREARM);
 	rlauncher->setSizeX(2);

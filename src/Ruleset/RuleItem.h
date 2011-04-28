@@ -109,6 +109,26 @@ public:
 	int getAccuracySnap() const;
 	/// Sets the item's accuracy.
 	void setAccuracySnap(int accuracy);
+	/// Gets the item's accuracy.
+	int getAccuracyAuto() const;
+	/// Sets the item's accuracy.
+	void setAccuracyAuto(int accuracy);
+	/// Gets the item's accuracy.
+	int getAccuracyAimed() const;
+	/// Sets the item's accuracy.
+	void setAccuracyAimed(int accuracy);
+	/// Gets the item's tu.
+	int getTUSnap() const;
+	/// Sets the item's tu.
+	void setTUSnap(int tu);
+	/// Gets the item's tu.
+	int getTUAuto() const;
+	/// Sets the item's tu.
+	void setTUAuto(int tu);
+	/// Gets the item's tu.
+	int getTUAimed() const;
+	/// Sets the item's tu.
+	void setTUAimed(int tu);
 	/// Gets list of compatible ammo.
 	std::vector<std::string> *getCompatibleAmmo();
 	/// Gets the item's damage type.

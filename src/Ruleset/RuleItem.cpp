@@ -25,7 +25,7 @@ namespace OpenXcom
  * Creates a blank ruleset for a certain type of item.
  * @param type String defining the type.
  */
-RuleItem::RuleItem(std::string type) : _type(type), _size(0.0), _cost(0), _time(24), _twoHanded(false), _damageType(DT_NONE), _battleType(BT_NONE)
+RuleItem::RuleItem(std::string type) : _type(type), _size(0.0), _cost(0), _time(24), _twoHanded(false), _damageType(DT_NONE), _battleType(BT_NONE), _accuracyAuto(0), _accuracySnap(0), _accuracyAimed(0)
 {
 }
 
@@ -286,6 +286,43 @@ void RuleItem::setAccuracySnap(int accuracy)
 {
 	_accuracySnap = accuracy;
 }
+
+/**
+ * Returns the item's accuracy for autoshots.
+ * @return Accuracy the item's accuracy for autoshots.
+ */
+int RuleItem::getAccuracyAuto() const
+{
+	return _accuracyAuto;
+}
+
+/**
+ * Sets the item's accuracy for autoshots.
+ * @param accuracy item's accuracy for autoshots.
+ */
+void RuleItem::setAccuracyAuto(int accuracy)
+{
+	_accuracyAuto = accuracy;
+}
+
+/**
+ * Returns the item's accuracy for aimed shots.
+ * @return Accuracy the item's accuracy for aimed sthos.
+ */
+int RuleItem::getAccuracyAimed() const
+{
+	return _accuracyAimed;
+}
+
+/**
+ * Sets the item's accuracy for aimed shot.
+ * @param accuracy item's accuracy for aimed shots.
+ */
+void RuleItem::setAccuracyAimed(int accuracy)
+{
+	_accuracyAimed = accuracy;
+}
+
 
 /**
  * Returns a list of compatible ammo.
