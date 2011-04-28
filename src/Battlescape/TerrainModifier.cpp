@@ -675,19 +675,52 @@ int TerrainModifier::unitOpensDoor(BattleUnit *unit)
 	{
 	case 0:	// north
 		door = tile->openDoor(O_NORTHWALL);
+		if (door == 1)
+		{
+			// check for adjacent door(s)
+			tile = _save->getTile(unit->getPosition() + Position(1, 0, 0));
+			if (tile) tile->openDoor(O_NORTHWALL);
+			tile = _save->getTile(unit->getPosition() + Position(-1, 0, 0));
+			if (tile) tile->openDoor(O_NORTHWALL);
+		}
 		break;
 	case 2: // east
 		tile = _save->getTile(tile->getPosition() + Position(1, 0, 0));
 		if (tile) door = tile->openDoor(O_WESTWALL);
+		if (door == 1)
+		{
+			// check for adjacent door(s)
+			tile = _save->getTile(unit->getPosition() + Position(1, -1, 0));
+			if (tile) tile->openDoor(O_WESTWALL);
+			tile = _save->getTile(unit->getPosition() + Position(1, 1, 0));
+			if (tile) tile->openDoor(O_WESTWALL);
+		}
 		break;
 	case 4: // south
 		tile = _save->getTile(tile->getPosition() + Position(0, -1, 0));
 		if (tile) door = tile->openDoor(O_NORTHWALL);
+		if (door == 1)
+		{
+			// check for adjacent door(s)
+			tile = _save->getTile(unit->getPosition() + Position(1, -1, 0));
+			if (tile) tile->openDoor(O_NORTHWALL);
+			tile = _save->getTile(unit->getPosition() + Position(-1, -1, 0));
+			if (tile) tile->openDoor(O_NORTHWALL);
+		}
 		break;
 	case 6: // west
 		door = tile->openDoor(O_WESTWALL);
+		if (door == 1)
+		{
+			// check for adjacent door(s)
+			tile = _save->getTile(unit->getPosition() + Position(0, -1, 0));
+			if (tile) tile->openDoor(O_WESTWALL);
+			tile = _save->getTile(unit->getPosition() + Position(0, 1, 0));
+			if (tile) tile->openDoor(O_WESTWALL);
+		}
 		break;
 	}
+
 
 	if (door == 0 || door == 1)
 	{
@@ -864,6 +897,25 @@ void TerrainModifier::spawnItem(const Position &position, BattleItem *item)
 }
 
 /**
+ * Close ufo doors.
+ * @return whether doors are closed.
+ */
+int TerrainModifier::closeUfoDoors()
+{
+	int doorsclosed = 0;
+	
+	// prepare a list of tiles on fire/smoke & close any ufo doors
+	for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); i++)
+	{
+		doorsclosed += _save->getTiles()[i]->closeUfoDoor();
+	}
+
+	return doorsclosed;
+}
+
+
+
+/**
  * New turn preparations. Like fire and smoke spreading.
  */
 void TerrainModifier::prepareNewTurn()
@@ -871,7 +923,7 @@ void TerrainModifier::prepareNewTurn()
 	std::vector<Tile*> tilesOnFire;
 	std::vector<Tile*> tilesOnSmoke;
 	
-	// prepare a list of tiles on fire/smoke
+	// prepare a list of tiles on fire/smoke & close any ufo doors
 	for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); i++)
 	{
 		if (_save->getTiles()[i]->getFire() > 0)

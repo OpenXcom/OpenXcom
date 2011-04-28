@@ -69,6 +69,8 @@ public:
 	void explode(const Position &center, int power, ItemDamageType type, int maxRadius);
 	/// Unit opens door?
 	int unitOpensDoor(BattleUnit *unit);
+	/// Close ufo doors.
+	int closeUfoDoors();
 	/// Calculate line.
 	int calculateLine(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory);
 	/// Add item & affect with gravity.

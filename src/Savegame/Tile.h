@@ -81,6 +81,8 @@ public:
 	int openDoor(int part);
 	/// Check if ufo door is open.
 	bool isUfoDoorOpen(int part);
+	/// Close ufo door.
+	int closeUfoDoor();
 	/// Set the cached flag.
 	void setCached(bool cached);
 	/// Check if tile is cached.

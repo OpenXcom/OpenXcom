@@ -148,7 +148,7 @@ void UnitWalkBState::think()
 			}
 			if (door == 1)
 			{
-				_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(RNG::generate(20,21))->play(); // ufo door
+				_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(20)->play(); // ufo door
 				return; // don't start walking yet, wait for the ufo door to open
 			}
 

@@ -212,6 +212,23 @@ bool Tile::isUfoDoorOpen(int part)
 	return false;
 }
 
+int Tile::closeUfoDoor()
+{
+	int retval = 0;
+
+	for (int part = 0; part < 4; part++)
+	{
+		if (isUfoDoorOpen(part))
+		{
+			_currentFrame[part] = 0;
+			retval = 1;
+			setCached(false);
+		}
+	}
+
+	return retval;
+}
+
 /**
  * Sets the tile's cache flag. Set when objects or lighting on this tile changed.
  * @param cached

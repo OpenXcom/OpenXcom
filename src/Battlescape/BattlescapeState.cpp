@@ -35,6 +35,8 @@
 #include "../Engine/Surface.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Screen.h"
+#include "../Engine/SoundSet.h"
+#include "../Engine/Sound.h"
 #include "../Engine/Action.h"
 #include "../Resource/ResourcePack.h"
 #include "../Interface/Cursor.h"
@@ -620,6 +622,12 @@ void BattlescapeState::btnHelpClick(Action *action)
 void BattlescapeState::btnEndTurnClick(Action *action)
 {
 	if (_popup) return;
+
+	if (_battleGame->getTerrainModifier()->closeUfoDoors())
+	{
+		_game->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(21)->play(); // ufo door closed
+	}
+
 	_battleGame->endTurn();
 	updateSoldierInfo(_battleGame->getSelectedUnit());
 	if (_battleGame->getSelectedUnit())
