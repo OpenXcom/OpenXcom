@@ -103,6 +103,15 @@ LoadGameState::~LoadGameState()
 {
 	
 }
+
+/**
+ * Resets the palette since it's bound to change on other screens.
+ */
+void LoadGameState::init()
+{
+	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
+}
+
 /**
  * Returns to the previous screen.
  * @param action Pointer to an action.

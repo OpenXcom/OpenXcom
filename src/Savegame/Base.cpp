@@ -137,7 +137,7 @@ void Base::load(const YAML::Node &node, SavedGame *save)
 	size = node["soldiers"].size();
 	for (unsigned int i = 0; i < size; i++)
 	{
-		Soldier *s = new Soldier();
+		Soldier *s = new Soldier(_rule->getSoldier("XCOM"), _rule->getArmor("STR_NONE_UC"));
 		s->load(node["soldiers"][i]);
 		if (const YAML::Node *pName = node["soldiers"][i].FindValue("craft"))
 		{

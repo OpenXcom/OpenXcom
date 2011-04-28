@@ -38,7 +38,9 @@
 #include "../Savegame/CraftWeapon.h"
 #include "../Ruleset/RuleCraftWeapon.h"
 #include "../Engine/Timer.h"
+#include "../Savegame/Transfer.h"
 #include "PurchaseErrorState.h"
+#include "TransferConfirmState.h"
 
 namespace OpenXcom
 {
@@ -49,7 +51,7 @@ namespace OpenXcom
  * @param baseFrom Pointer to the source base.
  * @param baseTo Pointer to the destination base.
  */
-TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo) : State(game), _baseFrom(baseFrom), _baseTo(baseTo), _qtys(), _soldiers(), _crafts(), _items(), _sel(0), _total(0), _sOffset(0), _eOffset(0), _pQty(0), _cQty(0), _iQty(0.0f)
+TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo) : State(game), _baseFrom(baseFrom), _baseTo(baseTo), _qtys(), _soldiers(), _crafts(), _items(), _sel(0), _total(0), _sOffset(0), _eOffset(0), _pQty(0), _cQty(0), _iQty(0.0f), _distance(0.0)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
@@ -161,6 +163,7 @@ TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo)
 		ss2 << _baseTo->getItems()->getItem(i->first);
 		_lstItems->addRow(4, _game->getLanguage()->getString(i->first).c_str(), ss.str().c_str(), L"0", ss2.str().c_str());
 	}
+	_distance = getDistance();
 
 	_timerInc = new Timer(50);
 	_timerInc->onTimer((StateHandler)&TransferItemsState::increase);
@@ -175,6 +178,14 @@ TransferItemsState::~TransferItemsState()
 {
 	delete _timerInc;
 	delete _timerDec;
+}
+
+/**
+ * Resets the palette since it's bound to change on other screens.
+ */
+void TransferItemsState::init()
+{
+	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
 }
 
 /**
@@ -194,7 +205,88 @@ void TransferItemsState::think()
  */
 void TransferItemsState::btnOkClick(Action *action)
 {
-	
+	_game->pushState(new TransferConfirmState(_game, _baseTo, this));
+}
+
+void TransferItemsState::completeTransfer()
+{
+	int time = (int)floor(6 + _distance / 200.0);
+	_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() - _total);
+	for (unsigned int i = 0; i < _qtys.size(); i++)
+	{
+		if (_qtys[i] > 0)
+		{
+			// Transfer soldiers
+			if (i < _soldiers.size())
+			{
+				for (std::vector<Soldier*>::iterator s = _baseFrom->getSoldiers()->begin(); s != _baseFrom->getSoldiers()->end(); s++)
+				{
+					if (*s == _soldiers[i])
+					{
+						_baseFrom->getSoldiers()->erase(s);
+						Transfer *t = new Transfer(time);
+						t->setSoldier(*s);
+						_baseTo->getTransfers()->push_back(t);
+						break;
+					}
+				}
+			}
+			// Transfer crafts
+			else if (i >= _soldiers.size() && i < _soldiers.size() + _crafts.size())
+			{
+				Craft *craft =  _crafts[i - _soldiers.size()];
+
+				// Transfer soldiers inside craft
+				for (std::vector<Soldier*>::iterator s = _baseFrom->getSoldiers()->begin(); s != _baseFrom->getSoldiers()->end(); s++)
+				{
+					if ((*s)->getCraft() == craft)
+					{
+						_baseFrom->getSoldiers()->erase(s);
+						Transfer *t = new Transfer(time);
+						t->setSoldier(*s);
+						_baseTo->getTransfers()->push_back(t);
+					}
+				}
+
+				// Transfer craft
+				for (std::vector<Craft*>::iterator c = _baseFrom->getCrafts()->begin(); c != _baseFrom->getCrafts()->end(); c++)
+				{
+					if (*c == craft)
+					{
+						_baseFrom->getCrafts()->erase(c);
+						Transfer *t = new Transfer(time);
+						t->setCraft(*c);
+						_baseTo->getTransfers()->push_back(t);
+						break;
+					}
+				}
+			}
+			// Transfer scientists
+			else if (_baseFrom->getAvailableScientists() > 0 && i == _soldiers.size() + _crafts.size())
+			{
+				_baseFrom->setScientists(_baseFrom->getScientists() - _qtys[i]);
+				Transfer *t = new Transfer(time);
+				t->setScientists(_qtys[i]);
+				_baseTo->getTransfers()->push_back(t);
+			}
+			// Transfer engineers
+			else if (_baseFrom->getAvailableEngineers() > 0 && i == _soldiers.size() + _crafts.size() + _sOffset)
+			{
+				_baseFrom->setEngineers(_baseFrom->getEngineers() - _qtys[i]);
+				Transfer *t = new Transfer(time);
+				t->setEngineers(_qtys[i]);
+				_baseTo->getTransfers()->push_back(t);
+			}
+			// Transfer items
+			else
+			{
+				_baseFrom->getItems()->removeItem(_items[i - _soldiers.size() - _crafts.size() - _sOffset - _eOffset], _qtys[i]);
+				Transfer *t = new Transfer(time);
+				t->setItems(_items[i - _soldiers.size() - _crafts.size() - _sOffset - _eOffset], _qtys[i]);
+				_baseTo->getTransfers()->push_back(t);
+			}
+		}
+	}
 }
 
 /**
@@ -246,8 +338,34 @@ void TransferItemsState::lstItemsRightArrowRelease(Action *action)
 }
 
 /**
+ * Gets the transfer cost of the currently selected item.
+ * @return Transfer cost.
+ */
+int TransferItemsState::getCost()
+{
+	int cost = 0;
+	// Personnel cost
+	if (_sel < _soldiers.size() || (_sel >= _soldiers.size() + _crafts.size()  && _sel < _soldiers.size() + _crafts.size() + _sOffset + _eOffset))
+	{
+		cost = 5;
+	}
+	// Craft cost
+	else if (_sel >= _soldiers.size() && _sel < _soldiers.size() + _crafts.size())
+	{
+		cost = 25;
+	}
+	// Item cost
+	else
+	{
+		cost = 1;
+	}
+	return (int)floor(_distance / 20.0 * cost);
+}
+
+/**
  * Gets the quantity of the currently selected item
  * on the base.
+ * @return Item quantity.
  */
 int TransferItemsState::getQuantity()
 {
@@ -283,10 +401,19 @@ void TransferItemsState::increase()
 		_timerInc->stop();
 		_game->pushState(new PurchaseErrorState(_game, "STR_NO_FREE_ACCOMODATION"));
 	}
-	else if (_sel >= _soldiers.size() && _sel < _soldiers.size() + _crafts.size() && _cQty + 1 > _baseTo->getAvailableHangars() - _baseTo->getUsedHangars())
+	else if (_sel >= _soldiers.size() && _sel < _soldiers.size() + _crafts.size())
 	{
-		_timerInc->stop();
-		_game->pushState(new PurchaseErrorState(_game, "STR_NO_FREE_HANGARS_FOR_TRANSFER"));
+		Craft *craft =  _crafts[_sel - _soldiers.size()];
+		if (_cQty + 1 > _baseTo->getAvailableHangars() - _baseTo->getUsedHangars())
+		{
+			_timerInc->stop();
+			_game->pushState(new PurchaseErrorState(_game, "STR_NO_FREE_HANGARS_FOR_TRANSFER"));
+		}
+		else if (_pQty + craft->getNumSoldiers() > _baseTo->getAvailableQuarters() - _baseTo->getUsedQuarters())
+		{
+			_timerInc->stop();
+			_game->pushState(new PurchaseErrorState(_game, "STR_NO_FREE_ACCOMODATION_CREW"));
+		}
 	}
 	else if (_sel >= _soldiers.size() + _crafts.size() + _sOffset + _eOffset && _iQty + _game->getRuleset()->getItem(_items[_sel - _soldiers.size() - _crafts.size() - _sOffset - _eOffset])->getSize() > _baseTo->getAvailableStores() - _baseTo->getUsedStores())
 	{
@@ -303,7 +430,9 @@ void TransferItemsState::increase()
 		// Craft count
 		else if (_sel >= _soldiers.size() && _sel < _soldiers.size() + _crafts.size())
 		{
+			Craft *craft =  _crafts[_sel - _soldiers.size()];
 			_cQty++;
+			_pQty += craft->getNumSoldiers();
 		}
 		// Item count
 		else
@@ -315,6 +444,7 @@ void TransferItemsState::increase()
 		ss << _qtys[_sel];
 		_lstItems->getCell(_sel, 2)->setText(ss.str());
 		_lstItems->draw();
+		_total += getCost();
 	}
 }
 
@@ -333,7 +463,9 @@ void TransferItemsState::decrease()
 		// Craft count
 		else if (_sel >= _soldiers.size() && _sel < _soldiers.size() + _crafts.size())
 		{
+			Craft *craft =  _crafts[_sel - _soldiers.size()];
 			_cQty--;
+			_pQty -= craft->getNumSoldiers();
 		}
 		// Item count
 		else
@@ -345,7 +477,37 @@ void TransferItemsState::decrease()
 		ss << _qtys[_sel];
 		_lstItems->getCell(_sel, 2)->setText(ss.str());
 		_lstItems->draw();
+		_total -= getCost();
 	}
+}
+
+/**
+ * Gets the total cost of the current transfer.
+ * @return Total cost.
+ */
+int TransferItemsState::getTotal()
+{
+	return _total;
+}
+
+/**
+ * Gets the shortest distance between the two bases.
+ * @return Distance
+ */
+double TransferItemsState::getDistance()
+{
+	double x[3], y[3], z[3], r = 128.0;
+	Base *base = _baseFrom;
+	for (int i = 0; i < 2; i++) {
+		x[i] = - r * sin(base->getLatitude()) * cos(base->getLongitude());
+		y[i] = - r * sin(base->getLatitude()) * sin(base->getLongitude());
+		z[i] = r * cos(base->getLatitude());
+		base = _baseTo;
+	}
+	x[2] = x[1] - x[0];
+	y[2] = y[1] - y[0];
+	z[2] = z[1] - z[0];
+	return sqrt(x[2] * x[2] + y[2] * y[2] + z[2] * z[2]);
 }
 
 }

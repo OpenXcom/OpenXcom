@@ -19,7 +19,6 @@
 #ifndef OPENXCOM__LOADGAMESTATE_H
 #define OPENXCOM__LOADGAMESTATE_H
 
-#include <string>
 #include "../Engine/State.h"
 
 namespace OpenXcom
@@ -46,6 +45,8 @@ public:
 	LoadGameState(Game *game);
 	/// Cleans up the Load Game state.
 	~LoadGameState();
+	/// Updates the palette.
+	void init();
 	/// Handler for clicking the Cancel button.
 	void btnCancelClick(Action *action);
 	/// Handler for clicking the Saves list.

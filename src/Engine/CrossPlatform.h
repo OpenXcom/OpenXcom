@@ -16,35 +16,28 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_RNG_H
-#define OPENXCOM_RNG_H
+#ifndef OPENXCOM_CROSSPLATFORM_H
+#define OPENXCOM_CROSSPLATFORM_H
+
+#include <string>
 
 namespace OpenXcom
 {
 
 /**
- * Random Number Generator used throughout the game
- * for all your randomness needs. It's really just the
- * standard C generator, but wrapped in a way that we
- * can store its seed for later use if necessary.
+ * Generic purpose functions that need different
+ * implementations for different platforms.
  */
-class RNG
+class CrossPlatform
 {
 private:
-	static int _seed;
-	RNG();
-	~RNG();
+	CrossPlatform();
+	~CrossPlatform();
 public:
-	/// Initializes the generator.
-	static void init(int seed = -1);
-	/// Gets the generator's seed.
-	static int getSeed();
-	/// Generates a random integer number.
-	static int generate(int min, int max);
-	/// Generates a random decimal number.
-	static double generate(double min, double max);
-	/// Get normally distributed value.
-	static double boxMuller(double m = 0, double s = 1);
+	/// Displays an error message.
+	static void showError(const std::string &error);
+	/// Displays an error message.
+	static void showError(const std::wstring &error);
 };
 
 }

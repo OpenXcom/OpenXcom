@@ -45,7 +45,7 @@ ProductionCompleteState::ProductionCompleteState(Game *game, const std::wstring 
 	_txtMessage = new Text(246, 80, 37, 50);
 	
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
 
 	add(_window);
 	add(_btnOk);
@@ -66,7 +66,7 @@ ProductionCompleteState::ProductionCompleteState(Game *game, const std::wstring 
 	_txtMessage->setWordWrap(true);
 	std::wstring s = _game->getLanguage()->getString("STR_PRODUCTION_OF");
 	s += item;
-	s += _game->getLanguage()->getString("STR_AT_");
+	s += _game->getLanguage()->getString("STR__AT__");
 	s += base;
 	s += _game->getLanguage()->getString("STR_IS_COMPLETE");
 	_txtMessage->setText(s);
@@ -85,7 +85,7 @@ ProductionCompleteState::~ProductionCompleteState()
  */
 void ProductionCompleteState::init()
 {
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
 }
 
 /**

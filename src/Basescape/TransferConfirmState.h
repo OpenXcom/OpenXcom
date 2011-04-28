@@ -16,10 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM__SAVEGAMESTATE_H
-#define OPENXCOM__SAVEGAMESTATE_H
+#ifndef OPENXCOM_TRANSFERBASESTATE_H
+#define OPENXCOM_TRANSFERBASESTATE_H
 
-#include <string>
 #include "../Engine/State.h"
 
 namespace OpenXcom
@@ -28,35 +27,29 @@ namespace OpenXcom
 class TextButton;
 class Window;
 class Text;
-class TextList;
-class TextEdit;
+class TransferItemsState;
+class Base;
 
 /**
- * Save Game screen for listing info on available
- * saved games and saving them.
+ * Window to confirm a transfer between bases.
  */
-class SaveGameState : public State
+class TransferConfirmState : public State
 {
 private:
-	TextButton *_btnCancel;
+	TextButton *_btnCancel, *_btnOk;
 	Window *_window;
-	Text *_txtTitle, *_txtName, *_txtTime, *_txtDate;
-	TextList *_lstSaves;
-	TextEdit *_edtSave;
-	std::string _selected;
+	Text *_txtTitle, *_txtCost, *_txtTotal;
+	Base *_base;
+	TransferItemsState *_state;
 public:
-	/// Creates the Save Game state.
-	SaveGameState(Game *game);
-	/// Cleans up the Save Game state.
-	~SaveGameState();
-	/// Updates the palette.
-	void init();
+	/// Creates the Transfer Confirm state.
+	TransferConfirmState(Game *game, Base *base, TransferItemsState *state);
+	/// Cleans up the Transfer Confirm state.
+	~TransferConfirmState();
 	/// Handler for clicking the Cancel button.
 	void btnCancelClick(Action *action);
-	/// Handler for pressing a key on the Save edit.
-	void edtSaveKeyPress(Action *action);
-	/// Handler for clicking the Saves list.
-	void lstSavesClick(Action *action);
+	/// Handler for clicking the OK button.
+	void btnOkClick(Action *action);
 };
 
 }

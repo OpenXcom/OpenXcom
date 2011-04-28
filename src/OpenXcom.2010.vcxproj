@@ -131,6 +131,7 @@
     <ClCompile Include="Basescape\SoldiersState.cpp" />
     <ClCompile Include="Basescape\StoresState.cpp" />
     <ClCompile Include="Basescape\TransferBaseState.cpp" />
+    <ClCompile Include="Basescape\TransferConfirmState.cpp" />
     <ClCompile Include="Basescape\TransferItemsState.cpp" />
     <ClCompile Include="Basescape\TransfersState.cpp" />
     <ClCompile Include="Battlescape\ActionMenuItem.cpp" />
@@ -154,6 +155,7 @@
     <ClCompile Include="Battlescape\UnitWalkBState.cpp" />
     <ClCompile Include="Engine\Action.cpp" />
     <ClCompile Include="Engine\CatFile.cpp" />
+    <ClCompile Include="Engine\CrossPlatform.cpp" />
     <ClCompile Include="Engine\Exception.cpp" />
     <ClCompile Include="Engine\Font.cpp" />
     <ClCompile Include="Engine\Game.cpp" />
@@ -299,6 +301,7 @@
     <ClInclude Include="Basescape\SoldiersState.h" />
     <ClInclude Include="Basescape\StoresState.h" />
     <ClInclude Include="Basescape\TransferBaseState.h" />
+    <ClInclude Include="Basescape\TransferConfirmState.h" />
     <ClInclude Include="Basescape\TransferItemsState.h" />
     <ClInclude Include="Basescape\TransfersState.h" />
     <ClInclude Include="Battlescape\ActionMenuItem.h" />
@@ -323,6 +326,7 @@
     <ClInclude Include="dirent.h" />
     <ClInclude Include="Engine\Action.h" />
     <ClInclude Include="Engine\CatFile.h" />
+    <ClInclude Include="Engine\CrossPlatform.h" />
     <ClInclude Include="Engine\Exception.h" />
     <ClInclude Include="Engine\Font.h" />
     <ClInclude Include="Engine\Game.h" />

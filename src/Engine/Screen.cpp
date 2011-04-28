@@ -68,7 +68,7 @@ Surface *const Screen::getSurface() const
 }
 
 /**
- * Switches fullscreen mode.
+ * Handles screen key shortcuts.
  * @param action Pointer to an action.
  */
 void Screen::handle(Action *action)
@@ -187,7 +187,7 @@ void Screen::setResolution(int width, int height)
 	{
 		throw Exception(SDL_GetError());
 	}
-	setPalette(_surface->getPalette());
+	setPalette(getPalette());
 }
 
 /**

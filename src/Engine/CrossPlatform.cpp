@@ -16,37 +16,39 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_RNG_H
-#define OPENXCOM_RNG_H
+#include "CrossPlatform.h"
+#ifdef _WIN32
+#include <windows.h>
+#endif
+#include <iostream>
 
 namespace OpenXcom
 {
 
 /**
- * Random Number Generator used throughout the game
- * for all your randomness needs. It's really just the
- * standard C generator, but wrapped in a way that we
- * can store its seed for later use if necessary.
+ * Displays a message box with an error message.
+ * @param error Error message.
  */
-class RNG
+void CrossPlatform::showError(const std::string &error)
 {
-private:
-	static int _seed;
-	RNG();
-	~RNG();
-public:
-	/// Initializes the generator.
-	static void init(int seed = -1);
-	/// Gets the generator's seed.
-	static int getSeed();
-	/// Generates a random integer number.
-	static int generate(int min, int max);
-	/// Generates a random decimal number.
-	static double generate(double min, double max);
-	/// Get normally distributed value.
-	static double boxMuller(double m = 0, double s = 1);
-};
-
+#ifdef _WIN32
+	MessageBoxA(NULL, error.c_str(), "OpenXcom Error", MB_ICONERROR | MB_OK);
+#else
+	std::cerr << "ERROR: " << error << std::endl;
+#endif
 }
 
+/**
+ * Displays a message box with an error message.
+ * @param error Error message.
+ */
+void CrossPlatform::showError(const std::wstring &error)
+{
+#ifdef _WIN32
+	MessageBoxW(NULL, error.c_str(), L"OpenXcom Error", MB_ICONERROR | MB_OK);
+#else
+	std::wcerr << L"ERROR: " << error << std::endl;
 #endif
+}
+
+}

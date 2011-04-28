@@ -16,9 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include <iostream>
 #include <cstring>
 #include <exception>
+#include "Engine/CrossPlatform.h"
 #include "Engine/Game.h"
 #include "Engine/Screen.h"
 #include "Menu/StartState.h"
@@ -36,7 +36,9 @@
  * under the GNU General Public License. Enjoy!
  */
 
-OpenXcom::Game *game = 0;
+using namespace OpenXcom;
+
+Game *game = 0;
 
 // If you can't tell what the main() is for you should have your
 // programming license revoked...
@@ -46,7 +48,7 @@ int main(int argc, char** args)
 	try
 	{
 #endif
-		game = new OpenXcom::Game("OpenXcom", 320, 200, 8);
+		game = new Game("OpenXcom", 320, 200, 16);
 		
 		// Handles command line arguments
 		int width = 640;
@@ -61,13 +63,13 @@ int main(int argc, char** args)
 				height = atoi(args[i+1]);
 		}
 		game->getScreen()->setResolution(width, height);
-		game->setState(new OpenXcom::StartState(game));
+		game->setState(new StartState(game));
 		game->run();
 #ifndef _DEBUG
 	}
 	catch (std::exception &e)
 	{
-		std::cerr << "ERROR: " << e.what() << std::endl;
+		CrossPlatform::showError(e.what());
 		exit(EXIT_FAILURE);
 	}
 #endif

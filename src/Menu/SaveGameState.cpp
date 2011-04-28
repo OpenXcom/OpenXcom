@@ -50,8 +50,8 @@ SaveGameState::SaveGameState(Game *game) : State(game), _selected("")
 	_txtName = new Text(150, 9, 16, 24);
 	_txtTime = new Text(30, 9, 184, 24);
 	_txtDate = new Text(30, 9, 214, 24);
-	_edtSave = new TextEdit(168, 9, 0, 0);
 	_lstSaves = new TextList(288, 128, 8, 32);
+	_edtSave = new TextEdit(168, 9, 0, 0);
 	
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
@@ -62,8 +62,8 @@ SaveGameState::SaveGameState(Game *game) : State(game), _selected("")
 	add(_txtName);
 	add(_txtTime);
 	add(_txtDate);
-	add(_edtSave);
 	add(_lstSaves);
+	add(_edtSave);
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(8)+8);
@@ -86,10 +86,6 @@ SaveGameState::SaveGameState(Game *game) : State(game), _selected("")
 
 	_txtDate->setColor(Palette::blockOffset(15)-1);
 	_txtDate->setText(_game->getLanguage()->getString("STR_DATE"));
-
-	_edtSave->setColor(Palette::blockOffset(8)+10);
-	_edtSave->setVisible(false);
-	_edtSave->onKeyboardPress((ActionHandler)&SaveGameState::edtSaveKeyPress);
 	
 	_lstSaves->setColor(Palette::blockOffset(8)+10);
 	_lstSaves->setArrowColor(Palette::blockOffset(8)+8);
@@ -100,6 +96,10 @@ SaveGameState::SaveGameState(Game *game) : State(game), _selected("")
 	_lstSaves->onMouseClick((ActionHandler)&SaveGameState::lstSavesClick);
 	_lstSaves->addRow(1, L"<NEW SAVED GAME>");
 	SavedGame::getList(_lstSaves, _game->getLanguage());
+
+	_edtSave->setColor(Palette::blockOffset(8)+10);
+	_edtSave->setVisible(false);
+	_edtSave->onKeyboardPress((ActionHandler)&SaveGameState::edtSaveKeyPress);
 }
 
 /**
@@ -108,6 +108,14 @@ SaveGameState::SaveGameState(Game *game) : State(game), _selected("")
 SaveGameState::~SaveGameState()
 {
 	
+}
+
+/**
+ * Resets the palette since it's bound to change on other screens.
+ */
+void SaveGameState::init()
+{
+	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
 }
 
 /**

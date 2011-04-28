@@ -83,9 +83,9 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	_btnReserveSnap = new ImageButton(28, 11, 78, 177);
 	_btnReserveAimed = new ImageButton(28, 11, 49, 189);
 	_btnReserveAuto = new ImageButton(28, 11, 78, 189);
-	_btnLeftHandItem = new ImageButton(32, 48, 8, 149);
+	_btnLeftHandItem = new InteractiveSurface(32, 48, 8, 149);
 	_numAmmoLeft = new NumberText(3, 5, 8, 149);
-	_btnRightHandItem = new ImageButton(32, 48, 280, 149);
+	_btnRightHandItem = new InteractiveSurface(32, 48, 280, 149);
 	_numAmmoRight = new NumberText(3, 5, 280, 149);
 	_btnKneel = new InteractiveSurface(32, 16, 113, 160);
 	for (int i = 0; i < 10; i++)
