@@ -31,7 +31,7 @@ namespace OpenXcom
  * @param rules Soldier ruleset.
  * @param armor Soldier armor.
  */
-Soldier::Soldier(RuleSoldier *rules, RuleArmor *armor) : Unit(armor), _rules(rules), _name(L""), _rank(RANK_ROOKIE), _craft(0), _gender(GENDER_MALE), _look(LOOK_BLONDE), _missions(0), _kills(0)
+Soldier::Soldier(RuleSoldier *rules, RuleArmor *armor) : Unit(armor), _name(L""), _rules(rules), _rank(RANK_ROOKIE), _craft(0), _gender(GENDER_MALE), _look(LOOK_BLONDE), _missions(0), _kills(0)
 {
 	_initialStats.bravery = 0;
 	_initialStats.firing = 0;
@@ -339,7 +339,7 @@ RuleSoldier *Soldier::getRules() const
 /**
  * Returns the soldier's stand height.
  * @return stand height
- */ 
+ */
 int Soldier::getStandHeight() const
 {
 	return _rules->getStandHeight();
