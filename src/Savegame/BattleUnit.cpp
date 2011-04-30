@@ -430,9 +430,13 @@ void BattleUnit::damage(Position position, int power)
 	// todo : determine direction we got hit (4 directions)
 	// todo : armor reduction
 	// todo : fatal wounds
-	_health -= (power - getUnit()->getArmor()->getFrontArmor());
-	if (_health < 0)
-		_health = 0;
+	int damage = (power - getUnit()->getArmor()->getFrontArmor());
+	if (damage > 0)
+	{
+		_health -= damage;
+		if (_health < 0)
+			_health = 0;
+	}
 }
 
 /**

@@ -60,6 +60,13 @@ void ProjectileFlyBState::init()
 {
 	_parent->setStateInterval(DEFAULT_BULLET_SPEED);
 	_unit = _parent->getGame()->getSavedGame()->getBattleGame()->getSelectedUnit();
+	if (_unit->isOut()) 
+	{
+		// something went wrong
+		_parent->popState();
+		return;
+	}
+
 	// create a new projectile
 	Projectile *projectile = new Projectile(_parent->getGame()->getResourcePack(),
 									_parent->getGame()->getSavedGame()->getBattleGame(),

@@ -46,7 +46,7 @@ private:
 	int horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageType type);
 	int verticalBlockage(Tile *startTile, Tile *endTile, ItemDamageType type);
 	int vectorToDirection(const Position &vector);
-	int voxelCheck(const Position& voxel);
+	int voxelCheck(const Position& voxel, BattleUnit *excludeUnit);
 	bool checkForVisibleUnits(BattleUnit *unit, Tile *tile);
 public:
 	/// Creates a new TerrainModifier class.
@@ -66,13 +66,13 @@ public:
 	/// Recalculate lighting of the battlescape.
 	void calculateUnitLighting();
 	/// Explosions.
-	void explode(const Position &center, int power, ItemDamageType type, int maxRadius);
+	void explode(const Position &center, int power, ItemDamageType type, int maxRadius, BattleUnit *unit);
 	/// Unit opens door?
 	int unitOpensDoor(BattleUnit *unit);
 	/// Close ufo doors.
 	int closeUfoDoors();
 	/// Calculate line.
-	int calculateLine(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory);
+	int calculateLine(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit);
 	/// Add item & affect with gravity.
 	void spawnItem(const Position &position, BattleItem *item);
 	/// New turn preparations.

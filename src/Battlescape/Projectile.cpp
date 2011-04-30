@@ -106,7 +106,14 @@ bool Projectile::calculateTrajectory()
 	Tile *tile = _save->getTile(_target);
 	if (tile->getUnit() != 0)
 	{
-		targetVoxel = Position(_target.x*16 + 8, _target.y*16 + 8, _target.z*24 + tile->getUnit()->getUnit()->getStandHeight()/2);
+		if (_origin == _target)
+		{
+			targetVoxel = Position(_target.x*16 + 8, _target.y*16 + 8, _target.z*24);
+		}
+		else
+		{
+			targetVoxel = Position(_target.x*16 + 8, _target.y*16 + 8, _target.z*24 + tile->getUnit()->getUnit()->getStandHeight()/2);
+		}
 	}
 	else if (tile->getMapData(O_OBJECT) != 0)
 	{
@@ -134,7 +141,7 @@ bool Projectile::calculateTrajectory()
 	applyAccuracy(originVoxel, &targetVoxel, 1.0); // test
 
 	// finally do a line calculation and store this trajectory.
-	_save->getTerrainModifier()->calculateLine(originVoxel, targetVoxel, true, &_trajectory);
+	_save->getTerrainModifier()->calculateLine(originVoxel, targetVoxel, true, &_trajectory, bu);
 
 	return true;
 }

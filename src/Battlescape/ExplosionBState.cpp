@@ -97,7 +97,7 @@ void ExplosionBState::think()
 			{
 				SavedBattleGame *save = _parent->getGame()->getSavedGame()->getBattleGame();
 				// after the animation is done, the real explosion takes place
-				save->getTerrainModifier()->explode(_center, _item->getAmmoItem()->getRules()->getPower(), _item->getAmmoItem()->getRules()->getDamageType(), 100);
+				save->getTerrainModifier()->explode(_center, _item->getAmmoItem()->getRules()->getPower(), _item->getAmmoItem()->getRules()->getDamageType(), 100, save->getSelectedUnit());
 
 				// now check for new casualties
 				for (std::vector<BattleUnit*>::iterator j = save->getUnits()->begin(); j != save->getUnits()->end(); j++)

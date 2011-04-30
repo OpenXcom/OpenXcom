@@ -439,7 +439,7 @@ void BattlescapeState::mapClick(Action *action)
 
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		if (_targeting && _battleGame->getSelectedUnit() && pos != _battleGame->getSelectedUnit()->getPosition())
+		if (_targeting && _battleGame->getSelectedUnit())
 		{
 			//  -= fire weapon =-
 			_target = pos;

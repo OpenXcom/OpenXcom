@@ -329,7 +329,7 @@ bool TerrainModifier::checkForVisibleUnits(BattleUnit *unit, Tile *tile)
 	targetVoxel.z += bu->isKneeled()?bu->getUnit()->getKneelHeight():bu->getUnit()->getStandHeight();
 
 	// cast a ray from the middle of the unit to the middle of this one
-	int test = calculateLine(originVoxel, targetVoxel, false, 0);
+	int test = calculateLine(originVoxel, targetVoxel, false, 0, 0);
 	Position hitPosition = Position(targetVoxel.x/16, targetVoxel.y/16, targetVoxel.z/24);
 	if (test == -1 || (test == 4 && bu->getPosition() == hitPosition))
 	{
@@ -435,11 +435,11 @@ int TerrainModifier::blockage(Tile *tile, const int part, ItemDamageType type)
  * @param affector
  * @param maxRadius
  */
-void TerrainModifier::explode(const Position &center, int power, ItemDamageType type, int maxRadius)
+void TerrainModifier::explode(const Position &center, int power, ItemDamageType type, int maxRadius, BattleUnit *unit)
 {
 	if (type == DT_AP)
 	{
-		int part = voxelCheck(center);
+		int part = voxelCheck(center, unit);
 		if (part >= 0 && part <= 3)
 		{
 			// power 25% to 75%
@@ -737,7 +737,7 @@ int TerrainModifier::unitOpensDoor(BattleUnit *unit)
  * @param storeTrajectory true will store the whole trajectory - otherwise it just stores the last position.
  * @return the objectnumber(0-3) or unit(4) or out of map (5) or -1(hit nothing)
  */
-int TerrainModifier::calculateLine(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory)
+int TerrainModifier::calculateLine(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit)
 {
 	int x, x0, x1, delta_x, step_x;
     int y, y0, y1, delta_y, step_y;
@@ -801,7 +801,7 @@ int TerrainModifier::calculateLine(const Position& origin, const Position& targe
 			trajectory->push_back(Position(cx, cy, cz));
 		}
         //passes through this point?
-		int result = voxelCheck(Position(cx, cy, cz));
+		int result = voxelCheck(Position(cx, cy, cz), excludeUnit);
 		if (result != -1)
 		{
 			if (!storeTrajectory && trajectory != 0)
@@ -837,7 +837,7 @@ int TerrainModifier::calculateLine(const Position& origin, const Position& targe
  * check if we hit a voxel.
  * @return the objectnumber(0-3) or unit(4) or out of map (5) or -1(hit nothing)
  */
-int TerrainModifier::voxelCheck(const Position& voxel)
+int TerrainModifier::voxelCheck(const Position& voxel, BattleUnit *excludeUnit)
 {
 
 	Tile *tile = _save->getTile(Position(voxel.x/16, voxel.y/16, voxel.z/24));
@@ -848,7 +848,7 @@ int TerrainModifier::voxelCheck(const Position& voxel)
 	}
 
 	BattleUnit *unit = tile->getUnit();
-	if (unit != 0)
+	if (unit != 0 && unit != excludeUnit)
 	{
 		if ((voxel.z%24) < (unit->isKneeled()?unit->getUnit()->getKneelHeight():unit->getUnit()->getStandHeight()))
 		{
