@@ -877,19 +877,19 @@ void BattlescapeState::handleItemClick(BattleItem *item)
 		id++;
 		ss1.str(L"");
 		ss2.str(L"");
-		if (item->getRules()->getAccuracySnap() != 0)
+		if (item->getRules()->getAccuracyAuto() != 0)
 		{
-			ss1 << strAcc.c_str() << item->getRules()->getAccuracySnap() << "%";
-			_actionMenu[id]->setAction(BA_SNAPSHOT, _game->getLanguage()->getString("STR_SNAP_SHOT"), ss1.str(), ss2.str());
+			ss1 << strAcc.c_str() << item->getRules()->getAccuracyAuto() << "%";
+			_actionMenu[id]->setAction(BA_AUTOSHOT, _game->getLanguage()->getString("STR_AUTO_SHOT"), ss1.str(), ss2.str());
 			_actionMenu[id]->setVisible(true);
 			id++;
 			ss1.str(L"");
 			ss2.str(L"");
 		}
-		if (item->getRules()->getAccuracyAuto() != 0)
+		if (item->getRules()->getAccuracySnap() != 0)
 		{
-			ss1 << strAcc.c_str() << item->getRules()->getAccuracyAuto() << "%";
-			_actionMenu[id]->setAction(BA_AUTOSHOT, _game->getLanguage()->getString("STR_AUTO_SHOT"), ss1.str(), ss2.str());
+			ss1 << strAcc.c_str() << item->getRules()->getAccuracySnap() << "%";
+			_actionMenu[id]->setAction(BA_SNAPSHOT, _game->getLanguage()->getString("STR_SNAP_SHOT"), ss1.str(), ss2.str());
 			_actionMenu[id]->setVisible(true);
 			id++;
 			ss1.str(L"");
