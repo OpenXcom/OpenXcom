@@ -104,10 +104,13 @@ void ExplosionBState::think()
 				{
 					if ((*j)->getHealth() == 0 && (*j)->getStatus() != STATUS_DEAD)
 					{
-						_parent->statePushFront(new UnitFallBState(_parent, (*j), _item->getAmmoItem()->getRules()->getDamageType() == DT_HE));
+						_parent->statePushBack(new UnitFallBState(_parent, (*j), _item->getAmmoItem()->getRules()->getDamageType() == DT_HE));
 					}
 				}
-				_unit->aim(false);
+				if (!_unit->isOut())
+				{
+					_unit->aim(false);
+				}
 				_parent->getMap()->cacheUnits();
 				_parent->popState();
 				return;
