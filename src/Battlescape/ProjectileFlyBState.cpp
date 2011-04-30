@@ -109,8 +109,6 @@ void ProjectileFlyBState::think()
 
 		delete _parent->getMap()->getProjectile();
 		_parent->getMap()->setProjectile(0);
-		_unit->aim(false);
-		_parent->getMap()->cacheUnits();
 		_parent->popState();
 	}
 }

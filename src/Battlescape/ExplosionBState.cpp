@@ -95,8 +95,6 @@ void ExplosionBState::think()
 			_parent->getMap()->getExplosions()->erase((*i));
 			if (_parent->getMap()->getExplosions()->empty())
 			{
-				_parent->popState();
-
 				SavedBattleGame *save = _parent->getGame()->getSavedGame()->getBattleGame();
 				// after the animation is done, the real explosion takes place
 				save->getTerrainModifier()->explode(_center, _item->getAmmoItem()->getRules()->getPower(), _item->getAmmoItem()->getRules()->getDamageType(), 100);
@@ -109,7 +107,9 @@ void ExplosionBState::think()
 						_parent->statePushFront(new UnitFallBState(_parent, (*j), _item->getAmmoItem()->getRules()->getDamageType() == DT_HE));
 					}
 				}
-
+				_unit->aim(false);
+				_parent->getMap()->cacheUnits();
+				_parent->popState();
 				return;
 			}
 		}

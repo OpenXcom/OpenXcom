@@ -746,7 +746,11 @@ void BattlescapeState::btnActionMenuItemClick(Action *action)
 
 	if (btnID != -1)
 	{
-		_selectedAction = BA_SNAPSHOT;
+		_selectedAction = _actionMenu[btnID]->getAction();
+		if (_selectedAction == BA_AUTOSHOT)
+		{
+			_autoShot = 1;
+		}
 		_map->setCursorType(CT_AIM);
 		_targeting = true;
 		hidePopup();
@@ -1041,6 +1045,21 @@ void BattlescapeState::popState()
 		showWarningMessage(_states.front()->getResult());
 	}
 	_states.pop_front();
+
+	if (_states.empty() && _selectedAction == BA_AUTOSHOT)
+	{
+		_autoShot++;
+		if (_autoShot <= 3)
+		{
+			// shoot another try
+			statePushBack(new ProjectileFlyBState(this));
+		}
+		else
+		{
+			_autoShot = 1;
+		}
+	}
+
 	// if all states are empty - give the mouse back to the player
 	if (_states.empty())
 	{
