@@ -19,8 +19,9 @@
 #include "CrossPlatform.h"
 #ifdef _WIN32
 #include <windows.h>
-#endif
+#else
 #include <iostream>
+#endif
 
 namespace OpenXcom
 {

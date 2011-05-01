@@ -32,7 +32,7 @@ ActionMenuItem::ActionMenuItem(State *state, int id, Font *bigFont) : Interactiv
 	_txtDescription->setFonts(bigFont, 0);
 	_txtDescription->setBig();
 	_txtDescription->setHighContrast(true);
-	_txtDescription->setColor(16);
+	_txtDescription->setColor(0);
 	_txtDescription->setVisible(true);
 	_txtDescription->setText(L"Undefined");
 
@@ -40,14 +40,14 @@ ActionMenuItem::ActionMenuItem(State *state, int id, Font *bigFont) : Interactiv
 	_txtAcc->setFonts(bigFont, 0);
 	_txtAcc->setBig();
 	_txtAcc->setHighContrast(true);
-	_txtAcc->setColor(16);
+	_txtAcc->setColor(0);
 	_txtAcc->setText(L"Acc>");
 
 	_txtTU = new Text(100, 20, 195, 13);
 	_txtTU->setFonts(bigFont, 0);
 	_txtTU->setBig();
 	_txtTU->setHighContrast(true);
-	_txtTU->setColor(16);
+	_txtTU->setColor(0);
 	_txtTU->setText(L"TUs>");
 }
 
