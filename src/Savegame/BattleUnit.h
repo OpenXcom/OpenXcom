@@ -143,6 +143,10 @@ public:
 	std::vector<BattleUnit*> *getVisibleUnits();
 	/// Clear visible units.
 	void clearVisibleUnits();
+	/// Calculate firing accuracy.
+	double getFiringAccuracy(int baseAccuracy);
+	/// Calculate throwing accuracy.
+	double getThrowingAccuracy();
 };
 
 }

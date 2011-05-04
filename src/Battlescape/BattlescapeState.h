@@ -161,6 +161,8 @@ public:
 	void setStateInterval(Uint32 interval);
 	/// Get selected item.
 	BattleItem *getSelectedItem() const;
+	/// Get selected action.
+	BattleActionType getSelectedAction() const;
 	/// Show debug message.
 	void debug(const std::wstring message);
 	/// Handle keypresses.

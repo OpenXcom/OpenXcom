@@ -51,7 +51,7 @@ public:
 	/// Cleans up the Projectile.
 	~Projectile();
 	/// Calculates the trajectory.
-	bool calculateTrajectory();
+	bool calculateTrajectory(double accuracy);
 	/// Move the projectile one step in it's trajectory.
 	bool move();
 	/// Get the current position in voxel space.

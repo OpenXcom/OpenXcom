@@ -653,11 +653,7 @@ void BattlescapeState::btnEndTurnClick(Action *action)
  */
 void BattlescapeState::btnAbortClick(Action *action)
 {
-	if (_popup)
-	{
-		hidePopup();
-		return;
-	}
+	if (_popup) return;
 	_game->getSavedGame()->endBattle();
 	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
 	_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
@@ -689,7 +685,11 @@ void BattlescapeState::btnLeftHandItemClick(Action *action)
  */
 void BattlescapeState::btnRightHandItemClick(Action *action)
 {
-	if (_popup) return;
+	if (_popup)
+	{
+		hidePopup();
+		return;
+	}
 	if (_selectedAction != BA_NONE) return;
 	if (_battleGame->getSelectedUnit())
 	{
@@ -732,8 +732,6 @@ void BattlescapeState::btnVisibleUnitClick(Action *action)
 void BattlescapeState::btnActionMenuItemClick(Action *action)
 {
 	int btnID = -1;
-	
-	popState();
 
 	// got to find out which button was pressed
 	for (int i = 0; i < 10 && btnID == -1; i++)
@@ -866,20 +864,23 @@ void BattlescapeState::handleItemClick(BattleItem *item)
 	// make sure there is an item, and the battlescape is in an idle state
 	if (item && _states.empty())
 	{
+		BattleUnit *bu = _battleGame->getSelectedUnit();
 		// Build up the popup menu
 		int id = 0;
 		std::wstring strAcc = _game->getLanguage()->getString("STR_ACC");
 		std::wstring strTU = _game->getLanguage()->getString("STR_TUS");
 		std::wstringstream ss1, ss2;
-		//_game->getLanguage()->getString(message);
-		_actionMenu[id]->setAction(BA_THROW, _game->getLanguage()->getString("STR_THROW"), strAcc, strTU);
+		ss1 << strAcc.c_str() << (int)floor(bu->getThrowingAccuracy() * 100) << "%";
+		ss2 << strTU.c_str() << (int)floor(bu->getUnit()->getTimeUnits() * 0.25);
+		_actionMenu[id]->setAction(BA_THROW, _game->getLanguage()->getString("STR_THROW"), ss1.str(), ss2.str());
 		_actionMenu[id]->setVisible(true);
 		id++;
 		ss1.str(L"");
 		ss2.str(L"");
 		if (item->getRules()->getAccuracyAuto() != 0)
 		{
-			ss1 << strAcc.c_str() << item->getRules()->getAccuracyAuto() << "%";
+			ss1 << strAcc.c_str() << (int)floor(bu->getFiringAccuracy(item->getRules()->getAccuracyAuto()) * 100) << "%";
+			ss2 << strTU.c_str() << 0;
 			_actionMenu[id]->setAction(BA_AUTOSHOT, _game->getLanguage()->getString("STR_AUTO_SHOT"), ss1.str(), ss2.str());
 			_actionMenu[id]->setVisible(true);
 			id++;
@@ -888,7 +889,8 @@ void BattlescapeState::handleItemClick(BattleItem *item)
 		}
 		if (item->getRules()->getAccuracySnap() != 0)
 		{
-			ss1 << strAcc.c_str() << item->getRules()->getAccuracySnap() << "%";
+			ss1 << strAcc.c_str() << (int)floor(bu->getFiringAccuracy(item->getRules()->getAccuracySnap()) * 100) << "%";
+			ss2 << strTU.c_str() << 0;
 			_actionMenu[id]->setAction(BA_SNAPSHOT, _game->getLanguage()->getString("STR_SNAP_SHOT"), ss1.str(), ss2.str());
 			_actionMenu[id]->setVisible(true);
 			id++;
@@ -897,7 +899,8 @@ void BattlescapeState::handleItemClick(BattleItem *item)
 		}
 		if (item->getRules()->getAccuracyAimed() != 0)
 		{
-			ss1 << strAcc.c_str() << item->getRules()->getAccuracyAimed() << "%";
+			ss1 << strAcc.c_str() << (int)floor(bu->getFiringAccuracy(item->getRules()->getAccuracyAimed()) * 100) << "%";
+			ss2 << strTU.c_str() << 0;
 			_actionMenu[id]->setAction(BA_AIMEDSHOT, _game->getLanguage()->getString("STR_AIMED_SHOT"), ss1.str(), ss2.str());
 			_actionMenu[id]->setVisible(true);
 			id++;
@@ -969,6 +972,15 @@ Position BattlescapeState::getTarget() const
 BattleItem *BattlescapeState::getSelectedItem() const
 {
 	return _selectedItem;
+}
+
+/**
+ * Gets the item the user has clicked to use (can be left or right-hand item).
+ * @return item Left or right-hand item.
+ */
+BattleActionType BattlescapeState::getSelectedAction() const
+{
+	return _selectedAction;
 }
 
 /**

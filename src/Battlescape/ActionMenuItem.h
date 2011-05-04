@@ -48,7 +48,9 @@ public:
 	~ActionMenuItem();
 	/// Assign an action to it.
 	void setAction(BattleActionType action, std::wstring description, std::wstring accuracy, std::wstring timeunits);
+	/// Get the assigned action.
 	BattleActionType getAction();
+	/// Set the palettes.
 	void setPalette(SDL_Color *colors, int firstcolor, int ncolors);
 	/// Redraw it.
 	void draw();

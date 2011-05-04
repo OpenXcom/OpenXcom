@@ -546,4 +546,39 @@ void BattleUnit::clearVisibleUnits()
 	_visibleUnits.clear();
 }
 
+/**
+ * Calculate firing accuracy.
+ * Formula = accuracyStat * weaponAccuracy * kneelingbonus(1.15) * one-handPenalty(0.8) * woundsPenalty(% health) * critWoundsPenalty (-10%/wound)
+ * @param weaponAccuracy
+ * @return firing Accuracy
+ */
+double BattleUnit::getFiringAccuracy(int weaponAccuracy)
+{
+	double result = (double)(_unit->getFiringAccuracy()/100.0);
+
+	result *= (double)(weaponAccuracy/100.0);
+
+	if (_kneeled)
+		result *= 1.15;
+
+	result *= ((double)_health/(double)_unit->getHealth());
+
+	return result;
+}
+
+/**
+ * Calculate throwing accuracy.
+ * Formula = accuracyStat * woundsPenalty(% health) * critWoundsPenalty (-10%/wound)
+ * @param weaponAccuracy
+ * @return firing Accuracy
+ */
+double BattleUnit::getThrowingAccuracy()
+{
+	double result = (double)(_unit->getFiringAccuracy()/100.0);
+
+	result *= ((double)_health/(double)_unit->getHealth());
+
+	return result;
+}
+
 }

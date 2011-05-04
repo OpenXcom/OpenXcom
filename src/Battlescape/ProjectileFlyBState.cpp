@@ -58,6 +58,8 @@ ProjectileFlyBState::~ProjectileFlyBState()
  */
 void ProjectileFlyBState::init()
 {
+	int baseAcc;
+
 	_parent->setStateInterval(DEFAULT_BULLET_SPEED);
 	_unit = _parent->getGame()->getSavedGame()->getBattleGame()->getSelectedUnit();
 	if (_unit->isOut()) 
@@ -67,17 +69,30 @@ void ProjectileFlyBState::init()
 		return;
 	}
 
+	switch (_parent->getSelectedAction())
+	{
+	case BA_AUTOSHOT:
+		baseAcc = _parent->getSelectedItem()->getRules()->getAccuracyAuto();
+		break;
+	case BA_SNAPSHOT:
+		baseAcc = _parent->getSelectedItem()->getRules()->getAccuracySnap();
+		break;
+	case BA_AIMEDSHOT:
+		baseAcc = _parent->getSelectedItem()->getRules()->getAccuracyAimed();
+		break;
+	}
+
 	// create a new projectile
 	Projectile *projectile = new Projectile(_parent->getGame()->getResourcePack(),
 									_parent->getGame()->getSavedGame()->getBattleGame(),
 									_unit->getPosition(),
 									_parent->getTarget(),
-									_parent->getSelectedItem()->getRules()->getBulletSprite()
+									_parent->getSelectedItem()->getRules()->getBulletSprite()									
 									);
 	// add the projectile on the map
 	_parent->getMap()->setProjectile(projectile);
 	// let it calculate a trajectory
-	if (projectile->calculateTrajectory())
+	if (projectile->calculateTrajectory(_unit->getFiringAccuracy(baseAcc)))
 	{
 		// set the soldier in an aiming position
 		_unit->aim(true);
@@ -90,6 +105,7 @@ void ProjectileFlyBState::init()
 		// no line of fire
 		delete projectile;
 		_parent->getMap()->setProjectile(0);
+		_result = "STR_NO_LINE_OF_FIRE";
 		_parent->popState();
 	}
 }

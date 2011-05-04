@@ -24,7 +24,10 @@ namespace OpenXcom
 {
 
 /**
- * Sets up a Explosion sprite with the specified size and position.
+ * Sets up an Action menu item.
+ * @param state the parent state.
+ * @param id the id.
+ * @param bigFont pointer to the font.
  */
 ActionMenuItem::ActionMenuItem(State *state, int id, Font *bigFont) : InteractiveSurface(270, 40, 25, 160 - (id*40)), _id(id), _highlighted(false)
 {
@@ -34,21 +37,18 @@ ActionMenuItem::ActionMenuItem(State *state, int id, Font *bigFont) : Interactiv
 	_txtDescription->setHighContrast(true);
 	_txtDescription->setColor(0);
 	_txtDescription->setVisible(true);
-	_txtDescription->setText(L"Undefined");
 
 	_txtAcc = new Text(100, 20, 126, 13);
 	_txtAcc->setFonts(bigFont, 0);
 	_txtAcc->setBig();
 	_txtAcc->setHighContrast(true);
 	_txtAcc->setColor(0);
-	_txtAcc->setText(L"Acc>");
 
 	_txtTU = new Text(100, 20, 195, 13);
 	_txtTU->setFonts(bigFont, 0);
 	_txtTU->setBig();
 	_txtTU->setHighContrast(true);
 	_txtTU->setColor(0);
-	_txtTU->setText(L"TUs>");
 }
 
 /**
@@ -59,6 +59,13 @@ ActionMenuItem::~ActionMenuItem()
 
 }
 
+/**
+ * Link with an action and fill in the text fields.
+ * @param action the battlescape action
+ * @param description the actions description
+ * @param accuracy the actions accuracy, including the Acc> prefix
+ * @param timeunits the timeunits string, incliding the TUs> prefix
+ */
 void ActionMenuItem::setAction(BattleActionType action, std::wstring description, std::wstring accuracy, std::wstring timeunits)
 {
 	_action = action;
@@ -68,6 +75,10 @@ void ActionMenuItem::setAction(BattleActionType action, std::wstring description
 	draw();
 }
 
+/**
+ * Get the action that was linked to this menu item.
+ * @return action
+ */
 BattleActionType ActionMenuItem::getAction()
 {
 	return _action;
@@ -133,14 +144,24 @@ void ActionMenuItem::draw()
 	_txtTU->blit(this);
 }
 
-/// Processes a mouse hover in event.
+/**
+ * Processes a mouse hover in event.
+ * @param action Pointer to an action.
+ * @param state Pointer to an state.
+ */
 void ActionMenuItem::mouseIn(Action *action, State *state)
 {
 	_highlighted = true;
 	draw();
 	InteractiveSurface::mouseIn(action, state);
 }
-/// Processes a mouse hover out event.
+
+
+/**
+ * Processes a mouse hover out event.
+ * @param action Pointer to an action.
+ * @param state Pointer to an state.
+ */
 void ActionMenuItem::mouseOut(Action *action, State *state)
 {
 	_highlighted = false;

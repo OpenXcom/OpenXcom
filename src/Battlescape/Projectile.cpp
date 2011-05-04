@@ -78,7 +78,7 @@ Projectile::~Projectile()
  * calculateTrajectory.
  * @return true when a trajectory is possible.
  */
-bool Projectile::calculateTrajectory()
+bool Projectile::calculateTrajectory(double accuracy)
 {
 	Position originVoxel, targetVoxel;
 	int direction;
@@ -138,7 +138,7 @@ bool Projectile::calculateTrajectory()
 
 	// apply some accuracy modifiers (todo: calculate this)
 	// This will results in a new target voxel
-	applyAccuracy(originVoxel, &targetVoxel, 1.0); // test
+	applyAccuracy(originVoxel, &targetVoxel, accuracy);
 
 	// finally do a line calculation and store this trajectory.
 	_save->getTerrainModifier()->calculateLine(originVoxel, targetVoxel, true, &_trajectory, bu);
