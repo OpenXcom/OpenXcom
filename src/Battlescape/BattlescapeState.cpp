@@ -225,7 +225,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 		_numVisibleUnit[i]->setColor(16);
 		_numVisibleUnit[i]->setValue(i+1);
 	}
-	_txtWarningMessage->setColor(16);
+	_txtWarningMessage->setColor(Palette::blockOffset(2)-1);
 	_txtWarningMessage->setHighContrast(true);
 	_txtWarningMessage->setAlign(ALIGN_CENTER);
 	_warningMessageBackground->setVisible(false);
@@ -1129,15 +1129,18 @@ void BattlescapeState::debug(const std::wstring message)
  */
 void BattlescapeState::handle(Action *action)
 {
-	State::handle(action);
-
-	if (action->getDetails()->type == SDL_KEYDOWN)
+	if (_game->getCursor()->getVisible())
 	{
-			// "d" - enable debug mode
-		if (action->getDetails()->key.keysym.sym == SDLK_d)
+		State::handle(action);
+
+		if (action->getDetails()->type == SDL_KEYDOWN)
 		{
-			_battleGame->setDebugMode();
-			debug(L"Debug Mode");
+				// "d" - enable debug mode
+			if (action->getDetails()->key.keysym.sym == SDLK_d)
+			{
+				_battleGame->setDebugMode();
+				debug(L"Debug Mode");
+			}
 		}
 	}
 
