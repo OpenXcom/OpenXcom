@@ -19,6 +19,7 @@
 
 #include <sstream>
 #include <string>
+#include <cmath>
 #include "ActionMenuItem.h"
 #include "Map.h"
 #include "BattlescapeState.h"
@@ -193,7 +194,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	add(_txtDebug);
 	// Set up objects
 	_game->getResourcePack()->getSurface("ICONS.PCK")->blit(_icons);
-	
+
 	_battleGame = _game->getSavedGame()->getBattleGame();
 	_map->setResourcePack(_game->getResourcePack());
 	_map->setSavedGame(_battleGame, _game);
@@ -233,7 +234,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 		_actionMenu[i]->setVisible(false);
 		_actionMenu[i]->onMouseClick((ActionHandler)&BattlescapeState::btnActionMenuItemClick);
 	}
-	
+
 	_txtName->setColor(Palette::blockOffset(8)-1);
 	_txtName->setHighContrast(true);
 	_numTimeUnits->setColor(Palette::blockOffset(4));
@@ -319,7 +320,7 @@ void BattlescapeState::think()
 void BattlescapeState::blinkVisibleUnitButtons()
 {
 	static int delta = 1, color = 32;
-	
+
 	SDL_Rect square1;
 	square1.x = 0;
 	square1.y = 0;
@@ -476,7 +477,7 @@ void BattlescapeState::mapClick(Action *action)
 		_target = pos;
 		statePushBack(new UnitTurnBState(this));
 	}
-	
+
 }
 
 /**
@@ -549,7 +550,7 @@ void BattlescapeState::btnKneelClick(Action *action)
 		{
 			bu->kneel(!bu->isKneeled());
 			_map->cacheUnits();
-			updateSoldierInfo(bu);	
+			updateSoldierInfo(bu);
 		}
 	}
 }
@@ -658,7 +659,7 @@ void BattlescapeState::btnAbortClick(Action *action)
 	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
 	_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
 	_game->popState();
-}	
+}
 
 /**
  * Shows action popup menu. When clicked, create the action.
@@ -694,7 +695,7 @@ void BattlescapeState::btnRightHandItemClick(Action *action)
 	if (_battleGame->getSelectedUnit())
 	{
 		BattleItem *rightHandItem = _battleGame->getItemFromUnit(_battleGame->getSelectedUnit(), RIGHT_HAND);
-		handleItemClick(rightHandItem);	
+		handleItemClick(rightHandItem);
 	}
 }
 
@@ -707,7 +708,7 @@ void BattlescapeState::btnVisibleUnitClick(Action *action)
 	if (_popup) return;
 
 	int btnID = -1;
-	
+
 	popState();
 
 	// got to find out which button was pressed

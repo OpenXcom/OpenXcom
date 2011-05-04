@@ -40,7 +40,7 @@ namespace OpenXcom
  */
 ProjectileFlyBState::ProjectileFlyBState(BattlescapeState *parent) : BattleState(parent)
 {
-	
+
 }
 
 /**
@@ -62,7 +62,7 @@ void ProjectileFlyBState::init()
 
 	_parent->setStateInterval(DEFAULT_BULLET_SPEED);
 	_unit = _parent->getGame()->getSavedGame()->getBattleGame()->getSelectedUnit();
-	if (_unit->isOut()) 
+	if (_unit->isOut())
 	{
 		// something went wrong
 		_parent->popState();
@@ -80,6 +80,8 @@ void ProjectileFlyBState::init()
 	case BA_AIMEDSHOT:
 		baseAcc = _parent->getSelectedItem()->getRules()->getAccuracyAimed();
 		break;
+    default:
+        baseAcc = 0;
 	}
 
 	// create a new projectile
@@ -87,7 +89,7 @@ void ProjectileFlyBState::init()
 									_parent->getGame()->getSavedGame()->getBattleGame(),
 									_unit->getPosition(),
 									_parent->getTarget(),
-									_parent->getSelectedItem()->getRules()->getBulletSprite()									
+									_parent->getSelectedItem()->getRules()->getBulletSprite()
 									);
 	// add the projectile on the map
 	_parent->getMap()->setProjectile(projectile);
@@ -123,7 +125,7 @@ void ProjectileFlyBState::think()
 		int offset = 0;
 		// explosions impact not inside the voxel but one step back
 		if (_parent->getSelectedItem()->getAmmoItem() && (
-			_parent->getSelectedItem()->getAmmoItem()->getRules()->getDamageType() == DT_HE || 
+			_parent->getSelectedItem()->getAmmoItem()->getRules()->getDamageType() == DT_HE ||
 			_parent->getSelectedItem()->getAmmoItem()->getRules()->getDamageType() == DT_IN))
 		{
 			offset = -1;
