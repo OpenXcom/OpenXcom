@@ -1139,7 +1139,7 @@ void Map::cacheUnits()
 			unitSprite->draw();
 			unitSprite->blit(_unitCache.at((*i)->getId()));
 
-			_unitCache.at((*i)->getId())->setShade(_save->getTile((*i)->getPosition())->getShade());
+			_unitCache.at((*i)->getId())->setShade(_save->getTile((*i)->getPosition())->isDiscovered()?_save->getTile((*i)->getPosition())->getShade():16);
 			(*i)->setCached(true);
 		}
 	}

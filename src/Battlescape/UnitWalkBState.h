@@ -52,6 +52,8 @@ public:
 	void think();
 	/// Get the result of the state.
 	std::string getResult() const;
+	/// Post walking procedure
+	void postWalkingProcedures();
 
 };
 

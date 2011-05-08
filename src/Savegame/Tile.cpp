@@ -258,6 +258,11 @@ void Tile::setDiscovered(bool flag)
 	{
 		_discovered = flag;
 		setCached(false);
+		// if light on tile changes, units and objects on it change light too
+		if (_unit != 0)
+		{
+			_unit->setCached(false);
+		}
 	}
 }
 
@@ -301,6 +306,11 @@ void Tile::checkForChangedLight(int layer)
 	if (_lastLight[layer] != _light[layer])
 	{
 		setCached(false);
+		// if light on tile changes, units and objects on it change light too
+		if (_unit != 0)
+		{
+			_unit->setCached(false);
+		}
 	}
 }
 

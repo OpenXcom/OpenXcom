@@ -780,6 +780,14 @@ void BattlescapeState::hidePopup()
  */
 void BattlescapeState::updateSoldierInfo(BattleUnit *battleUnit)
 {
+
+	for (int i = 0; i < 10; i++)
+	{
+		_btnVisibleUnit[i]->hide();
+		_numVisibleUnit[i]->hide();
+		_visibleUnit[i] = 0;
+	}
+
 	if (battleUnit == 0)
 	{
 		_txtName->setText(L"");
@@ -839,12 +847,6 @@ void BattlescapeState::updateSoldierInfo(BattleUnit *battleUnit)
 	}
 
 	_battleGame->getTerrainModifier()->calculateFOV(_battleGame->getSelectedUnit());
-	for (int i = 0; i < 10; i++)
-	{
-		_btnVisibleUnit[i]->hide();
-		_numVisibleUnit[i]->hide();
-		_visibleUnit[i] = 0;
-	}
 	int j = 0;
 	for (std::vector<BattleUnit*>::iterator i = battleUnit->getVisibleUnits()->begin(); i != battleUnit->getVisibleUnits()->end(); i++)
 	{

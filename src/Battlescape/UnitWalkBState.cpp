@@ -123,8 +123,7 @@ void UnitWalkBState::think()
 			if (tu > _unit->getTimeUnits())
 			{
 				_result = "STR_NOT_ENOUGH_TIME_UNITS";
-				_parent->popState();
-				_parent->getMap()->cacheUnits();
+				_pf->abortPath();
 				return;
 			}
 
@@ -168,12 +167,7 @@ void UnitWalkBState::think()
 		}
 		else
 		{
-			// no more waypoints, this means we succesfully finished this action
-			_terrain->calculateUnitLighting();
-			_terrain->calculateFOV(_unit);
-			// make sure the unit sprites are up to date
-			_parent->getMap()->cacheUnits();
-			_parent->popState();
+			postWalkingProcedures();
 			return;
 		}
 	}
@@ -203,6 +197,18 @@ void UnitWalkBState::cancel()
 std::string UnitWalkBState::getResult() const
 {
 	return _result;
+}
+
+
+/*
+ * Handle some calculations when the walking finished.
+ */
+void UnitWalkBState::postWalkingProcedures()
+{
+	_terrain->calculateUnitLighting();
+	_terrain->calculateFOV(_unit);
+	_parent->getMap()->cacheUnits();
+	_parent->popState();
 }
 
 }
