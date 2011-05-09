@@ -61,7 +61,7 @@ const int Projectile::_trail[11][36] = {
  * @param target Projectile's target position in tile x/y/z.
  * @param bulletType A number that corresponds to the type of bullet this is.
  */
-Projectile::Projectile(ResourcePack *res, SavedBattleGame *save, Position origin, Position target, int bulletType) : _res(res), _save(save), _origin(origin), _target(target), _position(0), _bulletType(bulletType)
+Projectile::Projectile(ResourcePack *res, SavedBattleGame *save, Position origin, Position target, int bulletType, BattleItem *item) : _res(res), _save(save), _origin(origin), _target(target), _position(0), _bulletType(bulletType), _item(item)
 {
 
 }
@@ -229,6 +229,11 @@ Position Projectile::getPosition(int offset) const
 int Projectile::getParticle(int i)
 {
 	return _trail[_bulletType][i];
+}
+
+BattleItem *Projectile::getItem() const
+{
+	return _item;
 }
 
 }

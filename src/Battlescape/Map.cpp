@@ -318,7 +318,7 @@ void Map::drawTerrain(Surface *surface)
 					{
 						if (_viewHeight == itZ)
 						{
-							if (_cursorType == CT_NORMAL)
+							if (_cursorType == CT_NORMAL || _cursorType == CT_THROW)
 							{
 								if (unit)
 									frameNumber = 1; // yellow box
@@ -400,42 +400,63 @@ void Map::drawTerrain(Surface *surface)
 					// check if we got bullet
 					if (_projectile)
 					{
+						Surface *item = 0;
+						if (_projectile->getItem())
+							item = _res->getSurfaceSet("FLOOROB.PCK")->getFrame(_projectile->getItem()->getRules()->getFloorSprite());
 						// draw bullet on the correct tile
 						if (itX >= bulletLowX && itX <= bulletHighX && itY >= bulletLowY && itY <= bulletHighY)
 						{
 							if (itZ == 0)
 							{
 								// draw shadow on the floor
-								for (int i = 1; i <= _projectile->getParticle(0); i++)
+								if (item)
 								{
-									if (_projectile->getParticle(i) != 0xFF)
+									void();
+								}
+								else
+								{
+									for (int i = 1; i <= _projectile->getParticle(0); i++)
 									{
-										Position voxelPos = _projectile->getPosition(1-i);
-										voxelPos.z = 0;
-										if (voxelPos.x / 16 == mapPosition.x &&
-											voxelPos.y / 16 == mapPosition.y)
+										if (_projectile->getParticle(i) != 0xFF)
 										{
-											convertVoxelToScreen(voxelPos, &bulletPositionScreen);
-											_bulletShadow[_projectile->getParticle(i)]->setX(bulletPositionScreen.x);
-											_bulletShadow[_projectile->getParticle(i)]->setY(bulletPositionScreen.y);
-											_bulletShadow[_projectile->getParticle(i)]->blit(surface);
+											Position voxelPos = _projectile->getPosition(1-i);
+											voxelPos.z = 0;
+											if (voxelPos.x / 16 == mapPosition.x &&
+												voxelPos.y / 16 == mapPosition.y)
+											{
+												convertVoxelToScreen(voxelPos, &bulletPositionScreen);
+												_bulletShadow[_projectile->getParticle(i)]->setX(bulletPositionScreen.x);
+												_bulletShadow[_projectile->getParticle(i)]->setY(bulletPositionScreen.y);
+												_bulletShadow[_projectile->getParticle(i)]->blit(surface);
+											}
 										}
 									}
 								}
 							}
 
-							for (int i = 1; i <= _projectile->getParticle(0); i++)
+							if (item)
 							{
-								if (_projectile->getParticle(i) != 0xFF)
+								Position voxelPos = _projectile->getPosition();
+								convertVoxelToScreen(voxelPos, &bulletPositionScreen);
+								item->setX(bulletPositionScreen.x - item->getWidth()/2);
+								item->setY(bulletPositionScreen.y - item->getHeight()/2);
+								item->blit(surface);
+							}
+							else
+							{
+								for (int i = 1; i <= _projectile->getParticle(0); i++)
 								{
-									Position voxelPos = _projectile->getPosition(1-i);
-									if (voxelPos.x / 16 == mapPosition.x &&
-										voxelPos.y / 16 == mapPosition.y )
+									if (_projectile->getParticle(i) != 0xFF)
 									{
-										convertVoxelToScreen(voxelPos, &bulletPositionScreen);
-										_bullet[_projectile->getParticle(i)]->setX(bulletPositionScreen.x);
-										_bullet[_projectile->getParticle(i)]->setY(bulletPositionScreen.y);
-										_bullet[_projectile->getParticle(i)]->blit(surface);
+										Position voxelPos = _projectile->getPosition(1-i);
+										if (voxelPos.x / 16 == mapPosition.x &&
+											voxelPos.y / 16 == mapPosition.y )
+										{
+											convertVoxelToScreen(voxelPos, &bulletPositionScreen);
+											_bullet[_projectile->getParticle(i)]->setX(bulletPositionScreen.x);
+											_bullet[_projectile->getParticle(i)]->setY(bulletPositionScreen.y);
+											_bullet[_projectile->getParticle(i)]->blit(surface);
+										}
 									}
 								}
 							}
@@ -461,7 +482,7 @@ void Map::drawTerrain(Surface *surface)
 					{
 						if (_viewHeight == itZ)
 						{
-							if (_cursorType == CT_NORMAL)
+							if (_cursorType == CT_NORMAL || _cursorType == CT_THROW)
 							{
 								if (unit)
 									frameNumber = 4; // yellow box
@@ -484,6 +505,13 @@ void Map::drawTerrain(Surface *surface)
 						frame->setX(screenPosition.x);
 						frame->setY(screenPosition.y);
 						frame->blit(surface);
+						if (_cursorType == CT_THROW)
+						{
+							frame = _res->getSurfaceSet("CURSOR.PCK")->getFrame(15 + (_animFrame / 4));
+							frame->setX(screenPosition.x);
+							frame->setY(screenPosition.y);
+							frame->blit(surface);
+						}
 					}
 
 					tile = _save->getTile(mapPosition);

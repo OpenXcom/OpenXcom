@@ -750,7 +750,14 @@ void BattlescapeState::btnActionMenuItemClick(Action *action)
 		{
 			_autoShot = 1;
 		}
-		_map->setCursorType(CT_AIM);
+		if (_selectedAction == BA_THROW)
+		{
+			_map->setCursorType(CT_THROW);
+		}
+		else
+		{
+			_map->setCursorType(CT_AIM);
+		}
 		_targeting = true;
 		hidePopup();
 	}
@@ -768,10 +775,15 @@ void BattlescapeState::hidePopup()
 	{
 		_map->setCursorType(CT_NORMAL);
 	}
+	else if (_selectedAction == BA_THROW)
+	{
+		_map->setCursorType(CT_THROW);
+	}
 	else
 	{
 		_map->setCursorType(CT_AIM);
 	}
+
 }
 
 /**
@@ -1083,6 +1095,10 @@ void BattlescapeState::popState()
 		{
 			_map->setCursorType(CT_NORMAL);
 		}
+		else if (_selectedAction == BA_THROW)
+		{
+			_map->setCursorType(CT_THROW);
+		}
 		else
 		{
 			_map->setCursorType(CT_AIM);
@@ -1131,7 +1147,7 @@ void BattlescapeState::debug(const std::wstring message)
  */
 void BattlescapeState::handle(Action *action)
 {
-	if (_game->getCursor()->getVisible())
+	if (_game->getCursor()->getVisible() || action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
 		State::handle(action);
 

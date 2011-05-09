@@ -47,7 +47,7 @@ private:
 	void applyAccuracy(const Position& origin, Position *target, double accuracy);
 public:
 	/// Creates a new Projectile.
-	Projectile(ResourcePack *res, SavedBattleGame *save, Position _origin, Position _target, int bulletType);
+	Projectile(ResourcePack *res, SavedBattleGame *save, Position origin, Position target, int bulletType, BattleItem *item);
 	/// Cleans up the Projectile.
 	~Projectile();
 	/// Calculates the trajectory.
@@ -58,6 +58,8 @@ public:
 	Position getPosition(int offset = 0) const;
 	/// Get a particle from the particle array.
 	int getParticle(int i);
+	/// Get the item
+	BattleItem *getItem() const;
 };
 
 }
