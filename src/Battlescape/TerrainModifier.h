@@ -73,6 +73,7 @@ public:
 	int closeUfoDoors();
 	/// Calculate line.
 	int calculateLine(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit);
+	int calculateParabola(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit);
 	/// Add item & affect with gravity.
 	void spawnItem(const Position &position, BattleItem *item);
 	/// New turn preparations.

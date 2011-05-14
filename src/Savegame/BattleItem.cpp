@@ -32,6 +32,10 @@ BattleItem::BattleItem(RuleItem *rules) : _rules(rules), _owner(0), _ammoItem(0)
 	_itemProperty[0] = 0;
 	_itemProperty[1] = 0;
 	_itemProperty[2] = 0;
+	if (_rules->getBattleType() == BT_AMMO)
+	{
+		setAmmoQuantity(_rules->getClipSize());
+	}
 }
 
 /**
@@ -102,6 +106,20 @@ void BattleItem::setAmmoQuantity(int qty)
 	_itemProperty[0] = qty;
 }
 
+/**
+ * Changes the quantity of ammo in this item.
+ * @param qty Ammo quantity.
+ */
+bool BattleItem::spendBullet()
+{
+	_itemProperty[0]--;
+	if (_itemProperty[0] == 0)
+		return false;
+	else
+		return true;
+}
+
+
 /// Gets the item's owner.
 BattleUnit *BattleItem::getOwner() const
 {
@@ -132,11 +150,22 @@ BattleItem *BattleItem::getAmmoItem()
 	return _ammoItem;
 }
 
-/// Sets the item's ammo item. Return false when ammo doesn't fit, or weapon already contains ammo?
-bool BattleItem::setAmmoItem(BattleItem *item)
+/// Sets the item's ammo item. Return -2 when ammo doesn't fit, or -1 when weapon already contains ammo?
+int BattleItem::setAmmoItem(BattleItem *item)
 {
-	_ammoItem = item;
-	return true;
+	if (_ammoItem)
+		return -1;
+
+	for (std::vector<std::string>::iterator i = _rules->getCompatibleAmmo()->begin(); i != _rules->getCompatibleAmmo()->end(); i++)
+	{
+		if (*i == item->getRules()->getType())
+		{
+			_ammoItem = item;
+			return 0;
+		}
+	}
+
+	return -2;
 }
 
 }

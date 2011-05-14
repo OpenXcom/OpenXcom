@@ -28,6 +28,7 @@ namespace OpenXcom
 class ResourcePack;
 class BattleItem;
 class SavedBattleGame;
+class Surface;
 
 /**
  * A class that represents a projectile. Map is the owner of an instance of this class during it's short life.
@@ -44,6 +45,7 @@ private:
 	unsigned int _position;
 	static const int _trail[11][36];
 	int _bulletType;
+	Surface *_sprite, *_shadowSprite;
 	void applyAccuracy(const Position& origin, Position *target, double accuracy);
 public:
 	/// Creates a new Projectile.
@@ -52,6 +54,7 @@ public:
 	~Projectile();
 	/// Calculates the trajectory.
 	bool calculateTrajectory(double accuracy);
+	bool calculateThrow(double accuracy);
 	/// Move the projectile one step in it's trajectory.
 	bool move();
 	/// Get the current position in voxel space.
@@ -60,6 +63,8 @@ public:
 	int getParticle(int i);
 	/// Get the item
 	BattleItem *getItem() const;
+	Surface *getSprite() const;
+	Surface *getShadowSprite() const;
 };
 
 }

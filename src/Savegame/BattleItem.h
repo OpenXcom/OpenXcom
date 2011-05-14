@@ -61,6 +61,8 @@ public:
 	int getAmmoQuantity() const;
 	/// Sets the item's ammo quantity.
 	void setAmmoQuantity(int qty);
+	/// Spend one bullet.
+	bool spendBullet();
 	/// Gets the item's owner.
 	BattleUnit *getOwner() const;
 	/// Sets the item's owner.
@@ -72,7 +74,7 @@ public:
 	/// Gets the item's ammo item.
 	BattleItem *getAmmoItem();
 	/// Sets the item's ammo item.
-	bool setAmmoItem(BattleItem *item);
+	int setAmmoItem(BattleItem *item);
 };
 
 }

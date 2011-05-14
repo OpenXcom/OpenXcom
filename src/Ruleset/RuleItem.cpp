@@ -404,4 +404,23 @@ void RuleItem::setSizeY(int size)
 {
 	_sizeY = size;
 }
+
+/**
+ * Returns the item's Y size.
+ * @return the item's Y size.
+ */
+int RuleItem::getClipSize() const
+{
+	return _clipSize;
+}
+
+/**
+ * Sets the item's size Y.
+ * @param size the item's size Y.
+ */
+void RuleItem::setClipSize(int size)
+{
+	_clipSize = size;
+}
+
 }

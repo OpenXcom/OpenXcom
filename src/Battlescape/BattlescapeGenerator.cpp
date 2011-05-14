@@ -215,20 +215,24 @@ void BattlescapeGenerator::run()
 		addItem(_game->getRuleset()->getItem("STR_RIFLE_CLIP"));
 		addItem(_game->getRuleset()->getItem("STR_HC_HE_AMMO"));
 		addItem(_game->getRuleset()->getItem("STR_SMALL_ROCKET"));
+		addItem(_game->getRuleset()->getItem("STR_GRENADE"));
+		addItem(_game->getRuleset()->getItem("STR_SMOKE_GRENADE"));
+		addItem(_game->getRuleset()->getItem("STR_PISTOL"));
+		addItem(_game->getRuleset()->getItem("STR_PISTOL_CLIP"));
 	}
 
 	if (_missionType == MISS_UFORECOVERY)
 	{
-		std::wstringstream name;
-		name << _game->getLanguage()->getString("STR_SECTOID") << _game->getLanguage()->getString("STR_LIVE_ENGINEER");
 		// add aliens (should depend on mission type & difficulty level)
 		addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), ENGINEER);
-		name.str(L"");
-		name << _game->getLanguage()->getString("STR_SECTOID") << _game->getLanguage()->getString("STR_LIVE_NAVIGATOR");
 		addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), NAVIGATOR);
-		name.str(L"");
-		name << _game->getLanguage()->getString("STR_SECTOID") << _game->getLanguage()->getString("STR_LIVE_SOLDIER");
 		addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), SOLDIER);
+	}
+	else
+	{
+		addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), SCOUT);
+		addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), SCOUT);
+		addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), SCOUT);
 	}
 	addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), SCOUT);
 	addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), SCOUT);
@@ -347,8 +351,8 @@ void BattlescapeGenerator::addItem(RuleItem *item)
 			BattleItem *weapon = _save->getItemFromUnit((*i), RIGHT_HAND);
 			if (weapon && weapon->getAmmoItem() == 0)
 			{
-				weapon->setAmmoItem(bi);
-				break;
+				if (weapon->setAmmoItem(bi) == 0)
+					break;
 			}
 		}
 	}

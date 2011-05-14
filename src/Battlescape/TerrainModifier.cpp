@@ -61,7 +61,7 @@ void TerrainModifier::calculateSunShading()
 	for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); i++)
 	{
 		calculateSunShading(_save->getTiles()[i]);
-	}	
+	}
 }
 
 /**
@@ -400,14 +400,14 @@ void TerrainModifier::addLight(const Position &center, int power, int layer)
 int TerrainModifier::blockage(Tile *tile, const int part, ItemDamageType type)
 {
 	int blockage = 0;
-	
+
 	if (tile == 0) return 0; // probably outside the map here
 
 	if (part == O_FLOOR && tile->getMapData(O_FLOOR))
 	{
 		// blockage modifiers of floors in ufo only counted for horizontal stuff, so this is kind of an experiment
 		if (type == DT_HE)
-			blockage += 15;	
+			blockage += 15;
 		else
 			blockage += 255;
 	}
@@ -418,7 +418,7 @@ int TerrainModifier::blockage(Tile *tile, const int part, ItemDamageType type)
 
 		// open ufo doors are actually still closed behind the scenes
 		// so a special trick is needed to see if they are open, if they are, they obviously don't block anything
-		if (tile->isUfoDoorOpen(part)) 
+		if (tile->isUfoDoorOpen(part))
 			blockage = 0;
 	}
 
@@ -504,7 +504,7 @@ void TerrainModifier::explode(const Position &center, int power, ItemDamageType 
 							dest->getUnit()->damage(Position(0, 0, 0), (int)(RNG::generate(power_/2.0, power_*1.5)));
 
 						// TODO: destroy floors above
-				
+
 					}
 					if (type == DT_SMOKE)
 					{
@@ -750,15 +750,15 @@ int TerrainModifier::calculateLine(const Position& origin, const Position& targe
     x0 = origin.x;     x1 = target.x;
     y0 = origin.y;     y1 = target.y;
     z0 = origin.z;     z1 = target.z;
-    
-    //'steep' xy Line, make longest delta x plane  
+
+    //'steep' xy Line, make longest delta x plane
     swap_xy = abs(y1 - y0) > abs(x1 - x0);
     if (swap_xy)
 	{
         std::swap(x0, y0);
         std::swap(x1, y1);
 	}
-                
+
     //do same for xz
     swap_xz = abs(z1 - z0) > abs(x1 - x0);
     if (swap_xz)
@@ -766,26 +766,26 @@ int TerrainModifier::calculateLine(const Position& origin, const Position& targe
         std::swap(x0, z0);
 		std::swap(x1, z1);
 	}
-    
+
     //delta is Length in each plane
     delta_x = abs(x1 - x0);
     delta_y = abs(y1 - y0);
     delta_z = abs(z1 - z0);
-    
+
     //drift controls when to step in 'shallow' planes
     //starting value keeps Line centred
     drift_xy  = (delta_x / 2);
     drift_xz  = (delta_x / 2);
-    
+
     //direction of line
 	step_x = 1;  if (x0 > x1) {  step_x = -1; }
 	step_y = 1;  if (y0 > y1) {  step_y = -1; }
 	step_z = 1;  if (z0 > z1) {  step_z = -1; }
-    
+
     //starting point
     y = y0;
     z = z0;
-    
+
     //step through longest delta (which we have swapped to x)
     for (x = x0; x != x1; x += step_x)
 	{
@@ -795,7 +795,7 @@ int TerrainModifier::calculateLine(const Position& origin, const Position& targe
         //unswap (in reverse)
         if (swap_xz) std::swap(cx, cz);
         if (swap_xy) std::swap(cx, cy);
-        
+
 		if (storeTrajectory)
 		{
 			trajectory->push_back(Position(cx, cy, cz));
@@ -810,7 +810,7 @@ int TerrainModifier::calculateLine(const Position& origin, const Position& targe
 			}
 			return result;
 		}
-        
+
         //update progress in other planes
         drift_xy = drift_xy - delta_y;
         drift_xz = drift_xz - delta_z;
@@ -821,7 +821,7 @@ int TerrainModifier::calculateLine(const Position& origin, const Position& targe
             y = y + step_y;
             drift_xy = drift_xy + delta_x;
 		}
-        
+
         //same in z
         if (drift_xz < 0)
 		{
@@ -830,6 +830,51 @@ int TerrainModifier::calculateLine(const Position& origin, const Position& targe
 		}
 	}
 
+	return -1;
+}
+
+/**
+ * calculateParabola.
+ * @param origin
+ * @param target
+ * @param storeTrajectory true will store the whole trajectory - otherwise it just stores the last position.
+ * @return the objectnumber(0-3) or unit(4) or out of map (5) or -1(hit nothing)
+ */
+int TerrainModifier::calculateParabola(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit)
+{
+    double ro = sqrt((double)((target.x - origin.x) * (target.x - origin.x) + (target.y - origin.y) * (target.y - origin.y) + (target.z - origin.z) * (target.z - origin.z)));
+
+    double fi = acos((double)(target.z - origin.z) / ro);
+    double te = atan2((double)(target.y - origin.y), (double)(target.x - origin.x));
+
+    double zA = sqrt(ro);
+    double zK = 4.0 * zA / ro / ro;
+
+    int x = origin.x;
+	int y = origin.y;
+	int z = origin.z;
+    int i = 8;
+
+    while (z > 0) {
+        x = (int)((double)origin.x + (double)i * cos(te) * sin(fi));
+        y = (int)((double)origin.y + (double)i * sin(te) * sin(fi));
+        z = (int)((double)origin.z + (double)i * cos(fi) - zK * ((double)i - ro / 2.0) * ((double)i - ro / 2.0) + zA);
+		if (storeTrajectory)
+		{
+			trajectory->push_back(Position(x, y, z));
+		}
+        //passes through this point?
+		int result = voxelCheck(Position(x, y, z), excludeUnit);
+		if (result != -1)
+		{
+			if (!storeTrajectory && trajectory != 0)
+			{ // store the position of impact
+				trajectory->push_back(Position(x, y, z));
+			}
+			return result;
+		}
+        i++;
+    }
 	return -1;
 }
 
@@ -903,7 +948,7 @@ void TerrainModifier::spawnItem(const Position &position, BattleItem *item)
 int TerrainModifier::closeUfoDoors()
 {
 	int doorsclosed = 0;
-	
+
 	// prepare a list of tiles on fire/smoke & close any ufo doors
 	for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); i++)
 	{
@@ -922,7 +967,7 @@ void TerrainModifier::prepareNewTurn()
 {
 	std::vector<Tile*> tilesOnFire;
 	std::vector<Tile*> tilesOnSmoke;
-	
+
 	// prepare a list of tiles on fire/smoke & close any ufo doors
 	for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); i++)
 	{
@@ -960,7 +1005,7 @@ void TerrainModifier::prepareNewTurn()
 						{
 							double base = RNG::boxMuller(0,126);
 							if (base < 0) base *= -1;
-						
+
 							if (flam < base)
 							{
 								if (RNG::generate(0, flam) < 2)

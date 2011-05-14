@@ -87,9 +87,9 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	_btnReserveAimed = new ImageButton(28, 11, 49, 189);
 	_btnReserveAuto = new ImageButton(28, 11, 78, 189);
 	_btnLeftHandItem = new InteractiveSurface(32, 48, 8, 149);
-	_numAmmoLeft = new NumberText(3, 5, 8, 149);
+	_numAmmoLeft = new NumberText(30, 5, 8, 149);
 	_btnRightHandItem = new InteractiveSurface(32, 48, 280, 149);
-	_numAmmoRight = new NumberText(3, 5, 280, 149);
+	_numAmmoRight = new NumberText(30, 5, 280, 149);
 	_btnKneel = new InteractiveSurface(32, 16, 113, 160);
 	for (int i = 0; i < 10; i++)
 	{
@@ -446,8 +446,13 @@ void BattlescapeState::mapClick(Action *action)
 			_target = pos;
 			_map->setCursorType(CT_NONE);
 			_game->getCursor()->setVisible(false);
-			statePushBack(new UnitTurnBState(this));
-			statePushBack(new ProjectileFlyBState(this));
+			_states.push_back(new ProjectileFlyBState(this));
+			if (_selectedAction == BA_AUTOSHOT)
+			{
+				_states.push_back(new ProjectileFlyBState(this));
+				_states.push_back(new ProjectileFlyBState(this));
+			}
+			statePushFront(new UnitTurnBState(this));
 		}
 		else
 		{
@@ -746,10 +751,6 @@ void BattlescapeState::btnActionMenuItemClick(Action *action)
 	if (btnID != -1)
 	{
 		_selectedAction = _actionMenu[btnID]->getAction();
-		if (_selectedAction == BA_AUTOSHOT)
-		{
-			_autoShot = 1;
-		}
 		if (_selectedAction == BA_THROW)
 		{
 			_map->setCursorType(CT_THROW);
@@ -847,7 +848,8 @@ void BattlescapeState::updateSoldierInfo(BattleUnit *battleUnit)
 	if (leftHandItem)
 	{
 		drawItemSprite(leftHandItem, _btnLeftHandItem);
-		_numAmmoLeft->setValue(leftHandItem->getAmmoQuantity());
+		if (leftHandItem->getAmmoItem())
+			_numAmmoLeft->setValue(leftHandItem->getAmmoItem()->getAmmoQuantity());
 	}
 	BattleItem *rightHandItem = _battleGame->getItemFromUnit(battleUnit, RIGHT_HAND);
 	_btnRightHandItem->clear();
@@ -855,7 +857,8 @@ void BattlescapeState::updateSoldierInfo(BattleUnit *battleUnit)
 	if (rightHandItem)
 	{
 		drawItemSprite(rightHandItem, _btnRightHandItem);
-		_numAmmoRight->setValue(rightHandItem->getAmmoQuantity());
+		if (rightHandItem->getAmmoItem())
+			_numAmmoRight->setValue(rightHandItem->getAmmoItem()->getAmmoQuantity());
 	}
 
 	_battleGame->getTerrainModifier()->calculateFOV(_battleGame->getSelectedUnit());
@@ -1073,31 +1076,18 @@ void BattlescapeState::popState()
 	}
 	_states.pop_front();
 
-	if (_states.empty() && _selectedAction == BA_AUTOSHOT)
-	{
-		_autoShot++;
-		if (_autoShot <= 3)
-		{
-			// shoot another try
-			statePushBack(new ProjectileFlyBState(this));
-		}
-		else
-		{
-			_autoShot = 1;
-		}
-	}
-
 	// if all states are empty - give the mouse back to the player
 	if (_states.empty())
 	{
+		if (_selectedAction == BA_THROW)
+		{
+			_targeting = false;
+			_selectedAction = BA_NONE;
+		}
 		_game->getCursor()->setVisible(true);
 		if (_selectedAction == BA_NONE)
 		{
 			_map->setCursorType(CT_NORMAL);
-		}
-		else if (_selectedAction == BA_THROW)
-		{
-			_map->setCursorType(CT_THROW);
 		}
 		else
 		{

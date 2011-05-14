@@ -253,7 +253,7 @@ void Map::drawTerrain(Surface *surface)
 	bool dirty;
 
 	// if we got bullet, get the highest x and y tiles to draw it on
-	if (_projectile)
+	if (_projectile && !_projectile->getItem())
 	{
 		for (int i = 1; i <= _projectile->getParticle(0); i++)
 		{
@@ -270,14 +270,14 @@ void Map::drawTerrain(Surface *surface)
 			if (_projectile->getPosition(1-i).z > bulletHighZ)
 				bulletHighZ = _projectile->getPosition(1-i).z;
 		}
+		// divide by 16 to go from voxel to tile position
+		bulletLowX = bulletLowX / 16;
+		bulletLowY = bulletLowY / 16;
+		bulletLowZ = bulletLowZ / 24;
+		bulletHighX = bulletHighX / 16;
+		bulletHighY = bulletHighY / 16;
+		bulletHighZ = bulletHighZ / 24;
 	}
-	// divide by 16 to go from voxel to tile position
-	bulletLowX = bulletLowX / 16;
-	bulletLowY = bulletLowY / 16;
-	bulletLowZ = bulletLowZ / 24;
-	bulletHighX = bulletHighX / 16;
-	bulletHighY = bulletHighY / 16;
-	bulletHighZ = bulletHighZ / 24;
 
     for (int itZ = beginZ; itZ <= endZ; itZ++)
 	{
@@ -355,6 +355,86 @@ void Map::drawTerrain(Surface *surface)
 						}
 					}
 
+					// check if we got bullet
+					if (_projectile)
+					{
+						Surface *item = 0;
+						if (_projectile->getItem())
+						{
+							item = _projectile->getSprite();
+
+							if (itZ == 0)
+							{
+								// draw shadow on the floor
+								Position voxelPos = _projectile->getPosition();
+								voxelPos.z = 0;
+								if (voxelPos.x / 16 >= mapPosition.x-1 &&
+									voxelPos.y / 16 >= mapPosition.y-1 &&
+									voxelPos.x / 16 <= mapPosition.x+1 &&
+									voxelPos.y / 16 <= mapPosition.y+1 )
+								{
+									convertVoxelToScreen(voxelPos, &bulletPositionScreen);
+									_projectile->getShadowSprite()->setX(bulletPositionScreen.x - 16);
+									_projectile->getShadowSprite()->setY(bulletPositionScreen.y - 26);
+									_projectile->getShadowSprite()->blit(surface);
+								}
+							}
+
+							Position voxelPos = _projectile->getPosition();
+							if (voxelPos.x / 16 == mapPosition.x &&
+								voxelPos.y / 16 == mapPosition.y )
+							{
+								convertVoxelToScreen(voxelPos, &bulletPositionScreen);
+								item->setX(bulletPositionScreen.x - 16);
+								item->setY(bulletPositionScreen.y - 26);
+								item->blit(surface);
+							}
+
+						}
+						else
+						{
+							// draw bullet on the correct tile
+							if (itX >= bulletLowX && itX <= bulletHighX && itY >= bulletLowY && itY <= bulletHighY)
+							{
+								if (itZ == 0)
+								{
+									// draw shadow on the floor
+									for (int i = 1; i <= _projectile->getParticle(0); i++)
+									{
+										if (_projectile->getParticle(i) != 0xFF)
+										{
+											Position voxelPos = _projectile->getPosition(1-i);
+											voxelPos.z = 0;
+											if (voxelPos.x / 16 == mapPosition.x &&
+												voxelPos.y / 16 == mapPosition.y)
+											{
+												convertVoxelToScreen(voxelPos, &bulletPositionScreen);
+												_bulletShadow[_projectile->getParticle(i)]->setX(bulletPositionScreen.x);
+												_bulletShadow[_projectile->getParticle(i)]->setY(bulletPositionScreen.y);
+												_bulletShadow[_projectile->getParticle(i)]->blit(surface);
+											}
+										}
+									}
+								}
+								for (int i = 1; i <= _projectile->getParticle(0); i++)
+								{
+									if (_projectile->getParticle(i) != 0xFF)
+									{
+										Position voxelPos = _projectile->getPosition(1-i);
+										if (voxelPos.x / 16 == mapPosition.x &&
+											voxelPos.y / 16 == mapPosition.y )
+										{
+											convertVoxelToScreen(voxelPos, &bulletPositionScreen);
+											_bullet[_projectile->getParticle(i)]->setX(bulletPositionScreen.x);
+											_bullet[_projectile->getParticle(i)]->setY(bulletPositionScreen.y);
+											_bullet[_projectile->getParticle(i)]->blit(surface);
+										}
+									}
+								}
+							}
+						}
+					}
+
 					// Draw soldier
 					if (unit)
 					{
@@ -396,72 +476,6 @@ void Map::drawTerrain(Surface *surface)
 						}
 					}
 					unit = tile->getUnit();
-
-					// check if we got bullet
-					if (_projectile)
-					{
-						Surface *item = 0;
-						if (_projectile->getItem())
-							item = _res->getSurfaceSet("FLOOROB.PCK")->getFrame(_projectile->getItem()->getRules()->getFloorSprite());
-						// draw bullet on the correct tile
-						if (itX >= bulletLowX && itX <= bulletHighX && itY >= bulletLowY && itY <= bulletHighY)
-						{
-							if (itZ == 0)
-							{
-								// draw shadow on the floor
-								if (item)
-								{
-									void();
-								}
-								else
-								{
-									for (int i = 1; i <= _projectile->getParticle(0); i++)
-									{
-										if (_projectile->getParticle(i) != 0xFF)
-										{
-											Position voxelPos = _projectile->getPosition(1-i);
-											voxelPos.z = 0;
-											if (voxelPos.x / 16 == mapPosition.x &&
-												voxelPos.y / 16 == mapPosition.y)
-											{
-												convertVoxelToScreen(voxelPos, &bulletPositionScreen);
-												_bulletShadow[_projectile->getParticle(i)]->setX(bulletPositionScreen.x);
-												_bulletShadow[_projectile->getParticle(i)]->setY(bulletPositionScreen.y);
-												_bulletShadow[_projectile->getParticle(i)]->blit(surface);
-											}
-										}
-									}
-								}
-							}
-
-							if (item)
-							{
-								Position voxelPos = _projectile->getPosition();
-								convertVoxelToScreen(voxelPos, &bulletPositionScreen);
-								item->setX(bulletPositionScreen.x - item->getWidth()/2);
-								item->setY(bulletPositionScreen.y - item->getHeight()/2);
-								item->blit(surface);
-							}
-							else
-							{
-								for (int i = 1; i <= _projectile->getParticle(0); i++)
-								{
-									if (_projectile->getParticle(i) != 0xFF)
-									{
-										Position voxelPos = _projectile->getPosition(1-i);
-										if (voxelPos.x / 16 == mapPosition.x &&
-											voxelPos.y / 16 == mapPosition.y )
-										{
-											convertVoxelToScreen(voxelPos, &bulletPositionScreen);
-											_bullet[_projectile->getParticle(i)]->setX(bulletPositionScreen.x);
-											_bullet[_projectile->getParticle(i)]->setY(bulletPositionScreen.y);
-											_bullet[_projectile->getParticle(i)]->blit(surface);
-										}
-									}
-								}
-							}
-						}
-					}
 
 					// check if we gots explosions
 					for (std::set<Explosion*>::const_iterator i = _explosions.begin(); i != _explosions.end(); i++)
@@ -505,7 +519,7 @@ void Map::drawTerrain(Surface *surface)
 						frame->setX(screenPosition.x);
 						frame->setY(screenPosition.y);
 						frame->blit(surface);
-						if (_cursorType == CT_THROW)
+						if (_cursorType == CT_THROW && _viewHeight == itZ)
 						{
 							frame = _res->getSurfaceSet("CURSOR.PCK")->getFrame(15 + (_animFrame / 4));
 							frame->setX(screenPosition.x);

@@ -17,7 +17,10 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Alien.h"
+#include <sstream>
 #include "../Ruleset/RuleAlien.h"
+#include "../Engine/Language.h"
+
 
 namespace OpenXcom
 {
@@ -51,7 +54,10 @@ Alien::~Alien()
  */
 std::wstring Alien::getName() const
 {
-	return L"Alien";
+	std::wstringstream name;
+	name << _lang->getString(_rules->getRace());
+	name << _lang->getString(_rules->getRank());
+	return name.str();
 }
 
 /**

@@ -686,6 +686,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	pclip->setHitSound(22);
 	pclip->setSizeX(1);
 	pclip->setSizeY(1);
+	pclip->setClipSize(12);
 	
 	RuleItem *rifle = new RuleItem("STR_RIFLE");
 	rifle->setSize(0.2f);
@@ -715,6 +716,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	rclip->setHitSound(22);
 	rclip->setSizeX(1);
 	rclip->setSizeY(1);
+	rclip->setClipSize(20);
 
 	RuleItem *hcannon = new RuleItem("STR_HEAVY_CANNON");
 	hcannon->setSize(0.3f);
@@ -745,6 +747,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	hcap->setHitSound(13);
 	hcap->setSizeX(1);
 	hcap->setSizeY(1);
+	hcap->setClipSize(6);
 
 	RuleItem *hche = new RuleItem("STR_HC_HE_AMMO");
 	hche->setSize(0.1f);
@@ -758,6 +761,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	hche->setHitSound(0);
 	hche->setSizeX(1);
 	hche->setSizeY(1);
+	hche->setClipSize(6);
 
 	RuleItem *hcin = new RuleItem("STR_HC_IN_AMMO");
 	hcin->setSize(0.1f);
@@ -771,6 +775,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	hcin->setHitSound(0);
 	hcin->setSizeX(1);
 	hcin->setSizeY(1);
+	hcin->setClipSize(6);
 
 	RuleItem *acannon = new RuleItem("STR_AUTO_CANNON");
 	acannon->setSize(0.3f);
@@ -802,6 +807,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	acap->setHitAnimation(26);
 	acap->setSizeX(1);
 	acap->setSizeY(1);
+	acap->setClipSize(14);
 
 	RuleItem *rlauncher = new RuleItem("STR_ROCKET_LAUNCHER");
 	rlauncher->setSize(0.4f);
@@ -830,6 +836,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	srocket->setHitAnimation(0);
 	srocket->setSizeX(1);
 	srocket->setSizeY(3);
+	srocket->setClipSize(1);
 
 	RuleItem *grenade = new RuleItem("STR_GRENADE");
 	grenade->setSize(0.1f);

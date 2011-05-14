@@ -46,7 +46,7 @@ private:
 	std::vector<std::string> _compatibleAmmo;
 	ItemDamageType _damageType;
 	int _accuracyAuto, _accuracySnap, _accuracyAimed, _tuAuto, _tuSnap, _tuAimed;
-	int _ammoClip, _accuracyMelee, _tuMelee;
+	int _clipSize, _accuracyMelee, _tuMelee;
 	BattleType _battleType;
 	bool _twoHanded, _waypoint;
 	int _sizeX, _sizeY;
@@ -147,6 +147,10 @@ public:
 	int getSizeY() const;
 	/// Sets the item's type.
 	void setSizeY(int size);
+	/// Gets the ammo amount.
+	int getClipSize() const;
+	/// Sets the item's ammo amount.
+	void setClipSize(int size);
 };
 
 }

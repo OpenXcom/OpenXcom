@@ -25,6 +25,7 @@
 #include "Map.h"
 #include "../Engine/Game.h"
 #include "../Savegame/BattleUnit.h"
+#include "../Savegame/BattleItem.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Resource/ResourcePack.h"
@@ -69,7 +70,22 @@ void ProjectileFlyBState::init()
 		_parent->popState();
 		return;
 	}
-
+	if (_parent->getSelectedAction() != BA_THROW)
+	{
+		if (_parent->getSelectedItem()->getAmmoItem() == 0)
+		{
+			_result = "STR_NO_AMMUNITION_LOADED";
+			_parent->popState();
+			return;
+		}
+		if (_parent->getSelectedItem()->getAmmoItem()->getAmmoQuantity() == 0)
+		{
+			_result = "STR_NO_ROUNDS_LEFT";
+			_parent->popState();
+			return;
+		}
+	}
+	// action specific initialisation
 	switch (_parent->getSelectedAction())
 	{
 	case BA_AUTOSHOT:
@@ -82,8 +98,16 @@ void ProjectileFlyBState::init()
 		baseAcc = _parent->getSelectedItem()->getRules()->getAccuracyAimed();
 		break;
 	case BA_THROW:
+		if (!validThrowRange())
+		{
+			// out of range
+			_result = "STR_OUT_OF_RANGE";
+			_parent->popState();
+			return;
+		}
 		baseAcc = (int)(_unit->getThrowingAccuracy()*100.0);
 		item = _parent->getSelectedItem();
+		break;
     default:
         baseAcc = 0;
 	}
@@ -99,31 +123,37 @@ void ProjectileFlyBState::init()
 	// add the projectile on the map
 	_parent->getMap()->setProjectile(projectile);
 	// let it calculate a trajectory
-	if (projectile->calculateTrajectory(_unit->getFiringAccuracy(baseAcc)))
+	if (_parent->getSelectedAction() == BA_THROW)
 	{
-		if (_parent->getSelectedAction() == BA_THROW)
-		{
-			item->setOwner(0);
-			_unit->setCached(false);
-			_parent->getMap()->cacheUnits();
-			_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(39)->play();
-		}
-		else
-		{
-			// set the soldier in an aiming position
-			_unit->aim(true);
-			_parent->getMap()->cacheUnits();
-			// and we have a lift-off
-			_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(_parent->getSelectedItem()->getRules()->getFireSound())->play();
-		}
+		projectile->calculateThrow(baseAcc);
+		item->setOwner(0);
+		_unit->setCached(false);
+		_parent->getMap()->cacheUnits();
+		_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(39)->play();
 	}
 	else
 	{
-		// no line of fire
-		delete projectile;
-		_parent->getMap()->setProjectile(0);
-		_result = "STR_NO_LINE_OF_FIRE";
-		_parent->popState();
+		if (projectile->calculateTrajectory(_unit->getFiringAccuracy(baseAcc)))
+		{
+				// set the soldier in an aiming position
+				_unit->aim(true);
+				_parent->getMap()->cacheUnits();
+				// and we have a lift-off
+				_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(_parent->getSelectedItem()->getRules()->getFireSound())->play();
+				if (!_parent->getGame()->getSavedGame()->getBattleGame()->getDebugMode() && _parent->getSelectedItem()->getAmmoItem()->spendBullet() == false)
+				{
+					//_parent->getGame()->getSavedGame()->getBattleGame()->getItems()->erase(_parent->getSelectedItem()->getAmmoItem());
+					_parent->getSelectedItem()->setAmmoItem(0);
+				}
+		}
+		else
+		{
+			// no line of fire
+			delete projectile;
+			_parent->getMap()->setProjectile(0);
+			_result = "STR_NO_LINE_OF_FIRE";
+			_parent->popState();
+		}
 	}
 }
 
@@ -178,6 +208,11 @@ void ProjectileFlyBState::cancel()
 std::string ProjectileFlyBState::getResult() const
 {
 	return _result;
+}
+
+bool ProjectileFlyBState::validThrowRange()
+{
+	return true;
 }
 
 }

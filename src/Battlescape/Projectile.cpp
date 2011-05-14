@@ -21,6 +21,7 @@
 #include "Projectile.h"
 #include "TerrainModifier.h"
 #include "../Engine/SurfaceSet.h"
+#include "../Engine/Surface.h"
 #include "../Battlescape/Position.h"
 #include "../Resource/ResourcePack.h"
 #include "../Ruleset/RuleAlien.h"
@@ -61,9 +62,16 @@ const int Projectile::_trail[11][36] = {
  * @param target Projectile's target position in tile x/y/z.
  * @param bulletType A number that corresponds to the type of bullet this is.
  */
-Projectile::Projectile(ResourcePack *res, SavedBattleGame *save, Position origin, Position target, int bulletType, BattleItem *item) : _res(res), _save(save), _origin(origin), _target(target), _position(0), _bulletType(bulletType), _item(item)
+Projectile::Projectile(ResourcePack *res, SavedBattleGame *save, Position origin, Position target, int bulletType, BattleItem *item) : _res(res), _save(save), _item(item), _origin(origin), _target(target), _position(0), _bulletType(bulletType)
 {
-
+	if (item)
+	{
+		_sprite = _res->getSurfaceSet("FLOOROB.PCK")->getFrame(getItem()->getRules()->getFloorSprite());
+		_shadowSprite = new Surface(_sprite->getWidth(), _sprite->getHeight());
+		_shadowSprite->setPalette(_sprite->getPalette());
+		_sprite->blit(_shadowSprite);
+		_shadowSprite->setShade(16);
+	}
 }
 
 /**
@@ -71,7 +79,10 @@ Projectile::Projectile(ResourcePack *res, SavedBattleGame *save, Position origin
  */
 Projectile::~Projectile()
 {
-
+	if (_item)
+	{
+		delete _shadowSprite;
+	}
 }
 
 /**
@@ -145,6 +156,38 @@ bool Projectile::calculateTrajectory(double accuracy)
 
 	return true;
 }
+
+/**
+ * calculateTrajectory.
+ * @return true when a trajectory is possible.
+ */
+bool Projectile::calculateThrow(double accuracy)
+{
+	Position originVoxel, targetVoxel;
+
+	originVoxel = Position(_origin.x*16 + 8, _origin.y*16 + 8, _origin.z*24);
+	originVoxel.z += -_save->getTile(_origin)->getTerrainLevel();
+	BattleUnit *bu = _save->getTile(_origin)->getUnit();
+	originVoxel.z += bu->isKneeled()?bu->getUnit()->getKneelHeight():bu->getUnit()->getStandHeight();
+	originVoxel.z -= 3;
+	if (originVoxel.z >= (_origin.z + 1)*24)
+	{
+		_origin.z++;
+	}
+
+	// determine the target voxel.
+	// aim at the center of the floor
+	targetVoxel = Position(_target.x*16 + 8, _target.y*16 + 8, _target.z*24 + 2);
+	// apply some accuracy modifiers (todo: calculate this)
+	// This will results in a new target voxel
+	//applyAccuracy(originVoxel, &targetVoxel, accuracy);
+
+	// finally do a line calculation and store this trajectory.
+	_save->getTerrainModifier()->calculateParabola(originVoxel, targetVoxel, true, &_trajectory, bu);
+
+	return true;
+}
+
 
 /**
  * applyAccuracy calculates the new target in voxel space, based on the given accuracy modifier.
@@ -234,6 +277,16 @@ int Projectile::getParticle(int i)
 BattleItem *Projectile::getItem() const
 {
 	return _item;
+}
+
+Surface *Projectile::getSprite() const
+{
+	return _sprite;
+}
+
+Surface *Projectile::getShadowSprite() const
+{
+	return _shadowSprite;
 }
 
 }
