@@ -284,6 +284,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	_animTimer->start();
 
 	_selectedAction = BA_NONE;
+	_selectedActionTUs = 0;
 }
 
 /**
@@ -442,7 +443,12 @@ void BattlescapeState::mapClick(Action *action)
 	{
 		if (_targeting && _battleGame->getSelectedUnit())
 		{
-			//  -= fire weapon =-
+			//  -= fire weapon or throw =-
+			if (_battleGame->getSelectedUnit()->getTimeUnits() < _selectedActionTUs)
+			{
+				showWarningMessage("STR_NOT_ENOUGH_TIME_UNITS");
+				return;
+			}
 			_target = pos;
 			_map->setCursorType(CT_NONE);
 			_game->getCursor()->setVisible(false);
@@ -751,6 +757,7 @@ void BattlescapeState::btnActionMenuItemClick(Action *action)
 	if (btnID != -1)
 	{
 		_selectedAction = _actionMenu[btnID]->getAction();
+		_selectedActionTUs = _actionMenu[btnID]->getTUs();
 		if (_selectedAction == BA_THROW)
 		{
 			_map->setCursorType(CT_THROW);
@@ -884,22 +891,27 @@ void BattlescapeState::handleItemClick(BattleItem *item)
 	{
 		BattleUnit *bu = _battleGame->getSelectedUnit();
 		// Build up the popup menu
-		int id = 0;
+		int id = 0, tu;
 		std::wstring strAcc = _game->getLanguage()->getString("STR_ACC");
 		std::wstring strTU = _game->getLanguage()->getString("STR_TUS");
 		std::wstringstream ss1, ss2;
+
+		// throwing
+		tu = (int)floor(bu->getUnit()->getTimeUnits() * 0.25);
 		ss1 << strAcc.c_str() << (int)floor(bu->getThrowingAccuracy() * 100) << "%";
-		ss2 << strTU.c_str() << (int)floor(bu->getUnit()->getTimeUnits() * 0.25);
-		_actionMenu[id]->setAction(BA_THROW, _game->getLanguage()->getString("STR_THROW"), ss1.str(), ss2.str());
+		ss2 << strTU.c_str() << tu;
+		_actionMenu[id]->setAction(BA_THROW, _game->getLanguage()->getString("STR_THROW"), ss1.str(), ss2.str(), tu);
 		_actionMenu[id]->setVisible(true);
 		id++;
 		ss1.str(L"");
 		ss2.str(L"");
+
 		if (item->getRules()->getAccuracyAuto() != 0)
 		{
+			tu = (int)(bu->getUnit()->getTimeUnits() * item->getRules()->getTUAuto() / 100);
 			ss1 << strAcc.c_str() << (int)floor(bu->getFiringAccuracy(item->getRules()->getAccuracyAuto()) * 100) << "%";
-			ss2 << strTU.c_str() << (int)(bu->getUnit()->getTimeUnits() * item->getRules()->getTUAuto() / 100);
-			_actionMenu[id]->setAction(BA_AUTOSHOT, _game->getLanguage()->getString("STR_AUTO_SHOT"), ss1.str(), ss2.str());
+			ss2 << strTU.c_str() << tu;
+			_actionMenu[id]->setAction(BA_AUTOSHOT, _game->getLanguage()->getString("STR_AUTO_SHOT"), ss1.str(), ss2.str(), tu);
 			_actionMenu[id]->setVisible(true);
 			id++;
 			ss1.str(L"");
@@ -907,9 +919,10 @@ void BattlescapeState::handleItemClick(BattleItem *item)
 		}
 		if (item->getRules()->getAccuracySnap() != 0)
 		{
+			tu = (int)(bu->getUnit()->getTimeUnits() * item->getRules()->getTUSnap() / 100);
 			ss1 << strAcc.c_str() << (int)floor(bu->getFiringAccuracy(item->getRules()->getAccuracySnap()) * 100) << "%";
-			ss2 << strTU.c_str() << (int)(bu->getUnit()->getTimeUnits() * item->getRules()->getTUSnap() / 100);
-			_actionMenu[id]->setAction(BA_SNAPSHOT, _game->getLanguage()->getString("STR_SNAP_SHOT"), ss1.str(), ss2.str());
+			ss2 << strTU.c_str() << tu;
+			_actionMenu[id]->setAction(BA_SNAPSHOT, _game->getLanguage()->getString("STR_SNAP_SHOT"), ss1.str(), ss2.str(), tu);
 			_actionMenu[id]->setVisible(true);
 			id++;
 			ss1.str(L"");
@@ -917,9 +930,10 @@ void BattlescapeState::handleItemClick(BattleItem *item)
 		}
 		if (item->getRules()->getAccuracyAimed() != 0)
 		{
+			tu = (int)(bu->getUnit()->getTimeUnits() * item->getRules()->getTUAimed() / 100);
 			ss1 << strAcc.c_str() << (int)floor(bu->getFiringAccuracy(item->getRules()->getAccuracyAimed()) * 100) << "%";
-			ss2 << strTU.c_str() << (int)(bu->getUnit()->getTimeUnits() * item->getRules()->getTUAimed() / 100);
-			_actionMenu[id]->setAction(BA_AIMEDSHOT, _game->getLanguage()->getString("STR_AIMED_SHOT"), ss1.str(), ss2.str());
+			ss2 << strTU.c_str() << tu;
+			_actionMenu[id]->setAction(BA_AIMEDSHOT, _game->getLanguage()->getString("STR_AIMED_SHOT"), ss1.str(), ss2.str(), tu);
 			_actionMenu[id]->setVisible(true);
 			id++;
 			ss1.str(L"");
@@ -1081,6 +1095,10 @@ void BattlescapeState::popState()
 
 	if (_states.empty())
 	{
+		if (_targeting && _battleGame->getSelectedUnit() && !actionFailed)
+		{
+			_battleGame->getSelectedUnit()->spendTimeUnits(_selectedActionTUs, _battleGame->getDebugMode()); 
+		}
 		if (_selectedAction == BA_THROW && !actionFailed)
 		{
 			_targeting = false;

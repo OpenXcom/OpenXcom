@@ -40,6 +40,7 @@ private:
 	int _id;
 	bool _highlighted;
 	BattleActionType _action;
+	int _tu;
 	Text *_txtDescription, *_txtAcc, *_txtTU;
 public:
 	/// Creates a new ActionMenuItem.
@@ -47,9 +48,11 @@ public:
 	/// Cleans up the ActionMenuItem.
 	~ActionMenuItem();
 	/// Assign an action to it.
-	void setAction(BattleActionType action, std::wstring description, std::wstring accuracy, std::wstring timeunits);
+	void setAction(BattleActionType action, std::wstring description, std::wstring accuracy, std::wstring timeunits, int tu);
 	/// Get the assigned action.
 	BattleActionType getAction();
+	/// Get the assigned action TUs.
+	int getTUs();
 	/// Set the palettes.
 	void setPalette(SDL_Color *colors, int firstcolor, int ncolors);
 	/// Redraw it.

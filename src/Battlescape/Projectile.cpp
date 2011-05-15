@@ -164,6 +164,7 @@ bool Projectile::calculateTrajectory(double accuracy)
 bool Projectile::calculateThrow(double accuracy)
 {
 	Position originVoxel, targetVoxel;
+	bool foundCurve = false;
 
 	originVoxel = Position(_origin.x*16 + 8, _origin.y*16 + 8, _origin.z*24);
 	originVoxel.z += -_save->getTile(_origin)->getTerrainLevel();
@@ -181,11 +182,18 @@ bool Projectile::calculateThrow(double accuracy)
 
 	// we try 4 different curvatures to try and reach our goal.
 	double curvature = 1.0;
-	while (_save->getTerrainModifier()->calculateParabola(originVoxel, targetVoxel, false, &_trajectory, bu, curvature, 1.0) != 0
-			&& curvature < 5.0)
+	while (!foundCurve && curvature < 5.0)
 	{
+		_save->getTerrainModifier()->calculateParabola(originVoxel, targetVoxel, false, &_trajectory, bu, curvature, 1.0);
+		if ((int)_trajectory.at(0).x/16 == (int)targetVoxel.x/16 && (int)_trajectory.at(0).y/16 == (int)targetVoxel.y/16)
+		{
+			foundCurve = true;
+		}
+		else
+		{
+			curvature += 1.0;
+		}
 		_trajectory.clear();
-		curvature += 1.0;
 	}
 	if (curvature == 5.0)
 	{

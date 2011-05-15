@@ -77,6 +77,7 @@ private:
 
 	ActionMenuItem *_actionMenu[5];
 	BattleActionType _selectedAction;
+	int _selectedActionTUs;
 	BattleItem *_selectedItem;
 	Position _target;
 	std::list<BattleState*> _states;

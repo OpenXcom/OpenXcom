@@ -66,12 +66,13 @@ ActionMenuItem::~ActionMenuItem()
  * @param accuracy the actions accuracy, including the Acc> prefix
  * @param timeunits the timeunits string, incliding the TUs> prefix
  */
-void ActionMenuItem::setAction(BattleActionType action, std::wstring description, std::wstring accuracy, std::wstring timeunits)
+void ActionMenuItem::setAction(BattleActionType action, std::wstring description, std::wstring accuracy, std::wstring timeunits, int tu)
 {
 	_action = action;
 	_txtDescription->setText(description);
 	_txtAcc->setText(accuracy);
 	_txtTU->setText(timeunits);
+	_tu = tu;
 	draw();
 }
 
@@ -82,6 +83,15 @@ void ActionMenuItem::setAction(BattleActionType action, std::wstring description
 BattleActionType ActionMenuItem::getAction()
 {
 	return _action;
+}
+
+/**
+ * Get the action tus that was linked to this menu item.
+ * @return tu
+ */
+int ActionMenuItem::getTUs()
+{
+	return _tu;
 }
 
 /**
