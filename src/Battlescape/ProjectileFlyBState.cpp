@@ -125,11 +125,21 @@ void ProjectileFlyBState::init()
 	// let it calculate a trajectory
 	if (_parent->getSelectedAction() == BA_THROW)
 	{
-		projectile->calculateThrow(baseAcc);
-		item->setOwner(0);
-		_unit->setCached(false);
-		_parent->getMap()->cacheUnits();
-		_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(39)->play();
+		if (projectile->calculateThrow(baseAcc))
+		{
+			item->setOwner(0);
+			_unit->setCached(false);
+			_parent->getMap()->cacheUnits();
+			_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(39)->play();
+		}
+		else
+		{
+			// unable to throw here
+			delete projectile;
+			_parent->getMap()->setProjectile(0);
+			_result = "STR_UNABLE_TO_THROW_HERE";
+			_parent->popState();
+		}
 	}
 	else
 	{
@@ -138,9 +148,10 @@ void ProjectileFlyBState::init()
 				// set the soldier in an aiming position
 				_unit->aim(true);
 				_parent->getMap()->cacheUnits();
+				_ammoItem = _parent->getSelectedItem()->getAmmoItem();
 				// and we have a lift-off
 				_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(_parent->getSelectedItem()->getRules()->getFireSound())->play();
-				if (!_parent->getGame()->getSavedGame()->getBattleGame()->getDebugMode() && _parent->getSelectedItem()->getAmmoItem()->spendBullet() == false)
+				if (!_parent->getGame()->getSavedGame()->getBattleGame()->getDebugMode() && _ammoItem->spendBullet() == false)
 				{
 					//_parent->getGame()->getSavedGame()->getBattleGame()->getItems()->erase(_parent->getSelectedItem()->getAmmoItem());
 					_parent->getSelectedItem()->setAmmoItem(0);
@@ -174,18 +185,19 @@ void ProjectileFlyBState::think()
 			pos.y /= 16;
 			pos.z /= 24;
 			_parent->getGame()->getSavedGame()->getBattleGame()->getTerrainModifier()->spawnItem(pos, _parent->getMap()->getProjectile()->getItem());
+			_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(38)->play();
 		}
 		else
 		{
 			int offset = 0;
 			// explosions impact not inside the voxel but one step back
-			if (_parent->getSelectedItem()->getAmmoItem() && (
-				_parent->getSelectedItem()->getAmmoItem()->getRules()->getDamageType() == DT_HE ||
-				_parent->getSelectedItem()->getAmmoItem()->getRules()->getDamageType() == DT_IN))
+			if (_ammoItem && (
+				_ammoItem->getRules()->getDamageType() == DT_HE ||
+				_ammoItem->getRules()->getDamageType() == DT_IN))
 			{
 				offset = -1;
 			}
-			_parent->statePushNext(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(offset), _parent->getSelectedItem()));
+			_parent->statePushNext(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(offset), _ammoItem));
 		}
 
 		delete _parent->getMap()->getProjectile();

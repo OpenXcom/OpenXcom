@@ -27,12 +27,14 @@ namespace OpenXcom
 
 class BattlescapeState;
 class BattleUnit;
+class BattleItem;
 
 class ProjectileFlyBState : public BattleState
 {
 private:
 	BattleUnit *_unit;
 	bool validThrowRange();
+	BattleItem *_ammoItem;
 public:
 	/// Creates a new ProjectileFly class
 	ProjectileFlyBState(BattlescapeState *parent);

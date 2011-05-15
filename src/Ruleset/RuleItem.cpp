@@ -323,6 +323,59 @@ void RuleItem::setAccuracyAimed(int accuracy)
 	_accuracyAimed = accuracy;
 }
 
+/**
+ * Returns the item's accuracy for snapshots.
+ * @return Accuracy the item's accuracy for snapshots.
+ */
+int RuleItem::getTUSnap() const
+{
+	return _tuSnap;
+}
+
+/**
+ * Sets the item's accuracy for snapshots.
+ * @param accuracy item's accuracy for snapshots.
+ */
+void RuleItem::setTUSnap(int tu)
+{
+	_tuSnap = tu;
+}
+
+/**
+ * Returns the item's accuracy for autoshots.
+ * @return Accuracy the item's accuracy for autoshots.
+ */
+int RuleItem::getTUAuto() const
+{
+	return _tuAuto;
+}
+
+/**
+ * Sets the item's accuracy for autoshots.
+ * @param accuracy item's accuracy for autoshots.
+ */
+void RuleItem::setTUAuto(int tu)
+{
+	_tuAuto = tu;
+}
+
+/**
+ * Returns the item's accuracy for aimed shots.
+ * @return Accuracy the item's accuracy for aimed sthos.
+ */
+int RuleItem::getTUAimed() const
+{
+	return _tuAimed;
+}
+
+/**
+ * Sets the item's accuracy for aimed shot.
+ * @param accuracy item's accuracy for aimed shots.
+ */
+void RuleItem::setTUAimed(int tu)
+{
+	_tuAimed = tu;
+}
 
 /**
  * Returns a list of compatible ammo.

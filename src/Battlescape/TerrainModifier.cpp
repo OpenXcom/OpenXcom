@@ -834,20 +834,26 @@ int TerrainModifier::calculateLine(const Position& origin, const Position& targe
 }
 
 /**
- * calculateParabola.
- * @param origin
- * @param target
+ * Calculate a parabola trajectory, used for throwing items.
+ * @param origin in voxelspace
+ * @param target in voxelspace
  * @param storeTrajectory true will store the whole trajectory - otherwise it just stores the last position.
+ * @param excludeUnit makes sure the trajectory does not hit the shooter itself
+ * @param curvature how high the parabola goes: 1.0 is almost straight throw, 3.0 is a very high throw, to throw over a fence for example
+ * @param accuracy is the deviation of the angles it should take into account. 1.0 is perfection.
  * @return the objectnumber(0-3) or unit(4) or out of map (5) or -1(hit nothing)
  */
-int TerrainModifier::calculateParabola(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit)
+int TerrainModifier::calculateParabola(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, double curvature, double accuracy)
 {
     double ro = sqrt((double)((target.x - origin.x) * (target.x - origin.x) + (target.y - origin.y) * (target.y - origin.y) + (target.z - origin.z) * (target.z - origin.z)));
 
     double fi = acos((double)(target.z - origin.z) / ro);
     double te = atan2((double)(target.y - origin.y), (double)(target.x - origin.x));
 
-    double zA = sqrt(ro);
+	fi *= accuracy;
+	te *= accuracy;
+
+    double zA = sqrt(ro)*curvature;
     double zK = 4.0 * zA / ro / ro;
 
     int x = origin.x;
@@ -932,6 +938,10 @@ int TerrainModifier::voxelCheck(const Position& voxel, BattleUnit *excludeUnit)
 void TerrainModifier::spawnItem(const Position &position, BattleItem *item)
 {
 	Position p = position;
+
+	// don't spawn anything outside of bounds
+	if (_save->getTile(p) == 0)
+		return;
 
 	while (_save->getTile(p)->getMapData(O_FLOOR) == 0 && p.z > 0)
 	{

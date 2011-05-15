@@ -898,7 +898,7 @@ void BattlescapeState::handleItemClick(BattleItem *item)
 		if (item->getRules()->getAccuracyAuto() != 0)
 		{
 			ss1 << strAcc.c_str() << (int)floor(bu->getFiringAccuracy(item->getRules()->getAccuracyAuto()) * 100) << "%";
-			ss2 << strTU.c_str() << 0;
+			ss2 << strTU.c_str() << (int)(bu->getUnit()->getTimeUnits() * item->getRules()->getTUAuto() / 100);
 			_actionMenu[id]->setAction(BA_AUTOSHOT, _game->getLanguage()->getString("STR_AUTO_SHOT"), ss1.str(), ss2.str());
 			_actionMenu[id]->setVisible(true);
 			id++;
@@ -908,7 +908,7 @@ void BattlescapeState::handleItemClick(BattleItem *item)
 		if (item->getRules()->getAccuracySnap() != 0)
 		{
 			ss1 << strAcc.c_str() << (int)floor(bu->getFiringAccuracy(item->getRules()->getAccuracySnap()) * 100) << "%";
-			ss2 << strTU.c_str() << 0;
+			ss2 << strTU.c_str() << (int)(bu->getUnit()->getTimeUnits() * item->getRules()->getTUSnap() / 100);
 			_actionMenu[id]->setAction(BA_SNAPSHOT, _game->getLanguage()->getString("STR_SNAP_SHOT"), ss1.str(), ss2.str());
 			_actionMenu[id]->setVisible(true);
 			id++;
@@ -918,7 +918,7 @@ void BattlescapeState::handleItemClick(BattleItem *item)
 		if (item->getRules()->getAccuracyAimed() != 0)
 		{
 			ss1 << strAcc.c_str() << (int)floor(bu->getFiringAccuracy(item->getRules()->getAccuracyAimed()) * 100) << "%";
-			ss2 << strTU.c_str() << 0;
+			ss2 << strTU.c_str() << (int)(bu->getUnit()->getTimeUnits() * item->getRules()->getTUAimed() / 100);
 			_actionMenu[id]->setAction(BA_AIMEDSHOT, _game->getLanguage()->getString("STR_AIMED_SHOT"), ss1.str(), ss2.str());
 			_actionMenu[id]->setVisible(true);
 			id++;
@@ -1068,31 +1068,26 @@ void BattlescapeState::statePushBack(BattleState *bs)
  */
 void BattlescapeState::popState()
 {
+	bool actionFailed = false;
+
 	if (_states.empty()) return;
 
 	if (_states.front()->getResult().length() > 0)
 	{
 		showWarningMessage(_states.front()->getResult());
+		actionFailed = true;
 	}
 	_states.pop_front();
 
-	// if all states are empty - give the mouse back to the player
 	if (_states.empty())
 	{
-		if (_selectedAction == BA_THROW)
+		if (_selectedAction == BA_THROW && !actionFailed)
 		{
 			_targeting = false;
 			_selectedAction = BA_NONE;
 		}
 		_game->getCursor()->setVisible(true);
-		if (_selectedAction == BA_NONE)
-		{
-			_map->setCursorType(CT_NORMAL);
-		}
-		else
-		{
-			_map->setCursorType(CT_AIM);
-		}
+		hidePopup();
 	}
 	else
 	{

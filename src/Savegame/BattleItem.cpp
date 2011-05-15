@@ -153,6 +153,12 @@ BattleItem *BattleItem::getAmmoItem()
 /// Sets the item's ammo item. Return -2 when ammo doesn't fit, or -1 when weapon already contains ammo?
 int BattleItem::setAmmoItem(BattleItem *item)
 {
+	if (item == 0)
+	{
+		_ammoItem = 0;
+		return 0;
+	}
+
 	if (_ammoItem)
 		return -1;
 

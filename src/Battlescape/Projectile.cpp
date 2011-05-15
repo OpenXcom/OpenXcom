@@ -178,12 +178,31 @@ bool Projectile::calculateThrow(double accuracy)
 	// determine the target voxel.
 	// aim at the center of the floor
 	targetVoxel = Position(_target.x*16 + 8, _target.y*16 + 8, _target.z*24 + 2);
-	// apply some accuracy modifiers (todo: calculate this)
-	// This will results in a new target voxel
-	//applyAccuracy(originVoxel, &targetVoxel, accuracy);
 
+	// we try 4 different curvatures to try and reach our goal.
+	double curvature = 1.0;
+	while (_save->getTerrainModifier()->calculateParabola(originVoxel, targetVoxel, false, &_trajectory, bu, curvature, 1.0) != 0
+			&& curvature < 5.0)
+	{
+		_trajectory.clear();
+		curvature += 1.0;
+	}
+	if (curvature == 5.0)
+	{
+		return false;
+	}
+
+	// apply some accuracy modifiers
+	if (accuracy > 100)
+		accuracy = 100;
+	static const double maxDeviation = 0.09;
+	static const double minDeviation = 0;
+	double baseDeviation = (maxDeviation - (maxDeviation * accuracy / 100.0)) + minDeviation;
+	double deviation = RNG::boxMuller(0, baseDeviation);
+
+	_trajectory.clear();
 	// finally do a line calculation and store this trajectory.
-	_save->getTerrainModifier()->calculateParabola(originVoxel, targetVoxel, true, &_trajectory, bu);
+	_save->getTerrainModifier()->calculateParabola(originVoxel, targetVoxel, true, &_trajectory, bu, curvature, 1.0 + deviation);
 
 	return true;
 }

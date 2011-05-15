@@ -62,23 +62,23 @@ void ExplosionBState::init()
 {	
 	_parent->setStateInterval(DEFAULT_ANIM_SPEED);
 	_unit = _parent->getGame()->getSavedGame()->getBattleGame()->getSelectedUnit();
-	if (_parent->getSelectedItem()->getAmmoItem()->getRules()->getHitAnimation() == 0)
+	if (_item->getRules()->getHitAnimation() == 0)
 	{
 		// create a new kaboom
 		Explosion *explosion = new Explosion(_center, 0, true);
 		// add the explosion on the map
 		_parent->getMap()->getExplosions()->insert(explosion);
-		// KABOOM
-		_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(_parent->getSelectedItem()->getAmmoItem()->getRules()->getHitSound())->play();
+		// explosion sound
+		_parent->getGame()->getResourcePack()->getSoundSet("GEO.CAT")->getSound(10)->play();
 	}
 	else
 	{
 		// create a new kaboom
-		Explosion *explosion = new Explosion(_center,_parent->getSelectedItem()->getAmmoItem()->getRules()->getHitAnimation(), false);
+		Explosion *explosion = new Explosion(_center, _item->getRules()->getHitAnimation(), false);
 		// add the explosion on the map
 		_parent->getMap()->getExplosions()->insert(explosion);
-		// KABOOM
-		_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(_parent->getSelectedItem()->getAmmoItem()->getRules()->getHitSound())->play();
+		// bullet hit sound
+		_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(_item->getRules()->getHitSound())->play();
 	}
 }
 
@@ -97,14 +97,14 @@ void ExplosionBState::think()
 			{
 				SavedBattleGame *save = _parent->getGame()->getSavedGame()->getBattleGame();
 				// after the animation is done, the real explosion takes place
-				save->getTerrainModifier()->explode(_center, _item->getAmmoItem()->getRules()->getPower(), _item->getAmmoItem()->getRules()->getDamageType(), 100, save->getSelectedUnit());
+				save->getTerrainModifier()->explode(_center, _item->getRules()->getPower(), _item->getRules()->getDamageType(), 100, save->getSelectedUnit());
 
 				// now check for new casualties
 				for (std::vector<BattleUnit*>::iterator j = save->getUnits()->begin(); j != save->getUnits()->end(); j++)
 				{
 					if ((*j)->getHealth() == 0 && (*j)->getStatus() != STATUS_DEAD)
 					{
-						_parent->statePushBack(new UnitFallBState(_parent, (*j), _item->getAmmoItem()->getRules()->getDamageType() == DT_HE));
+						_parent->statePushBack(new UnitFallBState(_parent, (*j), _item->getRules()->getDamageType() == DT_HE));
 					}
 				}
 				if (!_unit->isOut())
