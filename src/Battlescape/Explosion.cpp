@@ -48,7 +48,7 @@ Explosion::~Explosion()
 bool Explosion::animate()
 {
 	_currentFrame++;
-	if ((_big && _currentFrame == 8) || (!_big && _currentFrame == 10))
+	if ((_big && _currentFrame == 8) || (!_big && _currentFrame == _startFrame+10))
 	{
 		return false;
 	}
