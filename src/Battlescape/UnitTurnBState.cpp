@@ -54,7 +54,7 @@ void UnitTurnBState::init()
 {
 	_parent->setStateInterval(DEFAULT_WALK_SPEED);
 	_unit = _parent->getGame()->getSavedGame()->getBattleGame()->getSelectedUnit();
-	_unit->lookAt(_parent->getTarget());
+	_unit->lookAt(_parent->getAction()->target);
 	if (_unit->getStatus() != STATUS_TURNING)
 	{
 		// try to open a door

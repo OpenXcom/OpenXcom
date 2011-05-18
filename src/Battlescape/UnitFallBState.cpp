@@ -106,7 +106,7 @@ void UnitFallBState::think()
 		_unit->keepFalling();
 	}
 	
-	if (_unit->getStatus() == STATUS_DEAD || _unit->getStatus() == STATUS_UNCONSCIOUS)
+	if (_unit->isOut())
 	{
 		_unit->keepFalling();
 		TerrainModifier *terrain = _parent->getGame()->getSavedGame()->getBattleGame()->getTerrainModifier();

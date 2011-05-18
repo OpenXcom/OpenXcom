@@ -18,9 +18,7 @@
  */
 
 #include <sstream>
-#include <string>
 #include <cmath>
-#include "ActionMenuItem.h"
 #include "Map.h"
 #include "BattlescapeState.h"
 #include "BattleState.h"
@@ -28,6 +26,7 @@
 #include "UnitWalkBState.h"
 #include "ProjectileFlyBState.h"
 #include "TerrainModifier.h"
+#include "ActionMenuState.h"
 #include "../Engine/Game.h"
 #include "../Engine/Music.h"
 #include "../Engine/Language.h"
@@ -45,7 +44,6 @@
 #include "../Interface/Bar.h"
 #include "../Interface/ImageButton.h"
 #include "../Interface/NumberText.h"
-#include "../Interface/Window.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
@@ -65,7 +63,7 @@ namespace OpenXcom
  * Initializes all the elements in the Battlescape screen.
  * @param game Pointer to the core game.
  */
-BattlescapeState::BattlescapeState(Game *game) : State(game)
+BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 {
 	// Create the battlemap view
 	_map = new Map(320, 200, 0, 0);
@@ -99,10 +97,6 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	_numVisibleUnit[9]->setX(304); // center number 10
 	_warningMessageBackground = new Surface(224, 24, 48, 176);
 	_txtWarningMessage = new Text(224, 24, 48, 184);
-	for (int i = 0; i < 5; i++)
-	{
-		_actionMenu[i] = new ActionMenuItem(this, i, _game->getResourcePack()->getFont("BIGLETS.DAT"));
-	}
 
 	// Create soldier stats summary
 	_txtName = new Text(120, 10, 135, 176);
@@ -186,10 +180,6 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	}
 	add(_warningMessageBackground);
 	add(_txtWarningMessage);
-	for (int i = 0; i < 5; i++)
-	{
-		add(_actionMenu[i]);
-	}
 
 	add(_txtDebug);
 	// Set up objects
@@ -229,11 +219,6 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	_txtWarningMessage->setHighContrast(true);
 	_txtWarningMessage->setAlign(ALIGN_CENTER);
 	_warningMessageBackground->setVisible(false);
-	for (int i = 0; i < 5; i++)
-	{
-		_actionMenu[i]->setVisible(false);
-		_actionMenu[i]->onMouseClick((ActionHandler)&BattlescapeState::btnActionMenuItemClick);
-	}
 
 	_txtName->setColor(Palette::blockOffset(8)-1);
 	_txtName->setHighContrast(true);
@@ -283,8 +268,9 @@ BattlescapeState::BattlescapeState(Game *game) : State(game)
 	_animTimer->onTimer((StateHandler)&BattlescapeState::animate);
 	_animTimer->start();
 
-	_selectedAction = BA_NONE;
-	_selectedActionTUs = 0;
+	_action.type = BA_NONE;
+	_action.TU = 0;
+	_action.targeting = false;
 }
 
 /**
@@ -301,8 +287,6 @@ void BattlescapeState::init()
 	_map->focus();
 	_map->cacheUnits();
 	_map->draw(true);
-	_targeting = false;
-	_popup = false;
 }
 
 /**
@@ -310,91 +294,26 @@ void BattlescapeState::init()
   */
 void BattlescapeState::think()
 {
-	_stateTimer->think(this, 0);
-	_animTimer->think(this, 0);
-	_map->think();
-}
+	static bool popped = false;
 
-/**
-  * Shift the red colors of the visible unit buttons backgrounds.
-  */
-void BattlescapeState::blinkVisibleUnitButtons()
-{
-	static int delta = 1, color = 32;
-
-	SDL_Rect square1;
-	square1.x = 0;
-	square1.y = 0;
-	square1.w = 15;
-	square1.h = 12;
-	SDL_Rect square2;
-	square2.x = 1;
-	square2.y = 1;
-	square2.w = 13;
-	square2.h = 10;
-
-	for (int i = 0; i < 10;  i++)
+	if (_popups.empty())
 	{
-		if (_btnVisibleUnit[i]->getVisible() == true)
+		_stateTimer->think(this, 0);
+		_animTimer->think(this, 0);
+		_map->think();
+		if (popped)
 		{
-			_btnVisibleUnit[i]->drawRect(&square1, 15);
-			_btnVisibleUnit[i]->drawRect(&square2, color);
+			setupCursor();
+			popped = false;
 		}
-	}
-
-	if (color == 44) delta = -2;
-	if (color == 32) delta = 1;
-
-	color += delta;
-}
-
-
-/**
-  * Shift the red color of the warning message.
-  */
-void BattlescapeState::blinkWarningMessage()
-{
-	static int color = 32, delay = 12;
-
-	if (_warningMessageBackground->getVisible() == false)
-		return;
-
-	SDL_Rect square1;
-	square1.x = 0;
-	square1.y = 0;
-	square1.w = 224;
-	square1.h = 48;
-	_warningMessageBackground->drawRect(&square1, color);
-
-	if (color >= 44)
-	{
-		delay--;
 	}
 	else
 	{
-		color++;
+		// Handle popups
+		_game->pushState(*_popups.begin());
+		_popups.erase(_popups.begin());
+		popped = true;
 	}
-
-	if (delay == 0)
-	{
-		_warningMessageBackground->setVisible(false);
-		_txtWarningMessage->setVisible(false);
-		color = 32;
-		delay = 12;
-	}
-
-}
-
-/**
-  * Show warning message.
-  * @param message untranslated
-  */
-void BattlescapeState::showWarningMessage(std::string message)
-{
-	std::wstring messageText = _game->getLanguage()->getString(message);
-	_warningMessageBackground->setVisible(true);
-	_txtWarningMessage->setVisible(true);
-	_txtWarningMessage->setText(messageText);
 }
 
 /**
@@ -407,19 +326,14 @@ void BattlescapeState::mapClick(Action *action)
 	// right-click aborts walking state
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
-		if (_popup)
-		{
-			hidePopup();
-			return;
-		}
 		if (_states.empty())
 		{
-			if (_targeting)
+			if (_action.targeting)
 			{
-				_targeting = false;
-				_map->setCursorType(CT_NORMAL);
+				_action.targeting = false;
+				_action.type = BA_NONE;
+				setupCursor();
 				_game->getCursor()->setVisible(true);
-				_selectedAction = BA_NONE;
 				return;
 			}
 		}
@@ -441,19 +355,19 @@ void BattlescapeState::mapClick(Action *action)
 
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		if (_targeting && _battleGame->getSelectedUnit())
+		if (_action.targeting && _battleGame->getSelectedUnit())
 		{
 			//  -= fire weapon or throw =-
-			if (_battleGame->getSelectedUnit()->getTimeUnits() < _selectedActionTUs)
+			if (_battleGame->getSelectedUnit()->getTimeUnits() < _action.TU)
 			{
 				showWarningMessage("STR_NOT_ENOUGH_TIME_UNITS");
 				return;
 			}
-			_target = pos;
+			_action.target = pos;
 			_map->setCursorType(CT_NONE);
 			_game->getCursor()->setVisible(false);
 			_states.push_back(new ProjectileFlyBState(this));
-			if (_selectedAction == BA_AUTOSHOT)
+			if (_action.type == BA_AUTOSHOT)
 			{
 				_states.push_back(new ProjectileFlyBState(this));
 				_states.push_back(new ProjectileFlyBState(this));
@@ -475,7 +389,7 @@ void BattlescapeState::mapClick(Action *action)
 			else if (_battleGame->getSelectedUnit())
 			{
 			//  -= start walking =-
-				_target = pos;
+				_action.target = pos;
 				_map->setCursorType(CT_NONE);
 				_game->getCursor()->setVisible(false);
 				statePushBack(new UnitWalkBState(this));
@@ -485,7 +399,7 @@ void BattlescapeState::mapClick(Action *action)
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT && _battleGame->getSelectedUnit())
 	{
 		//  -= turn to or open door =-
-		_target = pos;
+		_action.target = pos;
 		statePushBack(new UnitTurnBState(this));
 	}
 
@@ -497,7 +411,6 @@ void BattlescapeState::mapClick(Action *action)
  */
 void BattlescapeState::btnUnitUpClick(Action *action)
 {
-	if (_popup) return;
 	/*Pathfinding *pf = _battleGame->getPathfinding();
 	Position start = _battleGame->getSelectedUnit()->getPosition();
 	Position end = start + Position(0, 0, +1);
@@ -510,7 +423,6 @@ void BattlescapeState::btnUnitUpClick(Action *action)
  */
 void BattlescapeState::btnUnitDownClick(Action *action)
 {
-	if (_popup) return;
 	/*Pathfinding *pf = _battleGame->getPathfinding();
 	Position start = _battleGame->getSelectedUnit()->getPosition();
 	Position end = start + Position(0, 0, -1);
@@ -523,7 +435,6 @@ void BattlescapeState::btnUnitDownClick(Action *action)
  */
 void BattlescapeState::btnMapUpClick(Action *action)
 {
-	if (_popup) return;
 	_map->up();
 }
 
@@ -533,7 +444,6 @@ void BattlescapeState::btnMapUpClick(Action *action)
  */
 void BattlescapeState::btnMapDownClick(Action *action)
 {
-	if (_popup) return;
 	_map->down();
 }
 
@@ -543,7 +453,7 @@ void BattlescapeState::btnMapDownClick(Action *action)
  */
 void BattlescapeState::btnShowMapClick(Action *action)
 {
-	if (_popup) return;
+
 }
 
 /**
@@ -552,7 +462,6 @@ void BattlescapeState::btnShowMapClick(Action *action)
  */
 void BattlescapeState::btnKneelClick(Action *action)
 {
-	if (_popup) return;
 	// TODO: check for timeunits... check for FOV...
 	BattleUnit *bu = _battleGame->getSelectedUnit();
 	if (bu)
@@ -572,7 +481,7 @@ void BattlescapeState::btnKneelClick(Action *action)
  */
 void BattlescapeState::btnSoldierClick(Action *action)
 {
-	if (_popup) return;
+
 }
 
 /**
@@ -581,7 +490,6 @@ void BattlescapeState::btnSoldierClick(Action *action)
  */
 void BattlescapeState::btnCenterClick(Action *action)
 {
-	if (_popup) return;
 	if (_battleGame->getSelectedUnit())
 	{
 		_map->centerOnPosition(_battleGame->getSelectedUnit()->getPosition());
@@ -594,7 +502,6 @@ void BattlescapeState::btnCenterClick(Action *action)
  */
 void BattlescapeState::btnNextSoldierClick(Action *action)
 {
-	if (_popup) return;
 	BattleUnit *unit = _battleGame->selectNextPlayerUnit();
 	updateSoldierInfo(unit);
 	if (unit) _map->centerOnPosition(unit->getPosition());
@@ -606,7 +513,7 @@ void BattlescapeState::btnNextSoldierClick(Action *action)
  */
 void BattlescapeState::btnNextStopClick(Action *action)
 {
-	if (_popup) return;
+
 }
 
 /**
@@ -615,7 +522,7 @@ void BattlescapeState::btnNextStopClick(Action *action)
  */
 void BattlescapeState::btnShowLayersClick(Action *action)
 {
-	if (_popup) return;
+
 }
 
 /**
@@ -624,7 +531,7 @@ void BattlescapeState::btnShowLayersClick(Action *action)
  */
 void BattlescapeState::btnHelpClick(Action *action)
 {
-	if (_popup) return;
+
 }
 
 /**
@@ -633,8 +540,6 @@ void BattlescapeState::btnHelpClick(Action *action)
  */
 void BattlescapeState::btnEndTurnClick(Action *action)
 {
-	if (_popup) return;
-
 	if (_battleGame->getTerrainModifier()->closeUfoDoors())
 	{
 		_game->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(21)->play(); // ufo door closed
@@ -665,7 +570,6 @@ void BattlescapeState::btnEndTurnClick(Action *action)
  */
 void BattlescapeState::btnAbortClick(Action *action)
 {
-	if (_popup) return;
 	_game->getSavedGame()->endBattle();
 	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
 	_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
@@ -678,12 +582,7 @@ void BattlescapeState::btnAbortClick(Action *action)
  */
 void BattlescapeState::btnLeftHandItemClick(Action *action)
 {
-	if (_popup)
-	{
-		hidePopup();
-		return;
-	}
-	if (_selectedAction != BA_NONE) return;
+	if (_action.type != BA_NONE) return;
 	if (_battleGame->getSelectedUnit())
 	{
 		BattleItem *leftHandItem = _battleGame->getItemFromUnit(_battleGame->getSelectedUnit(), LEFT_HAND);
@@ -697,12 +596,7 @@ void BattlescapeState::btnLeftHandItemClick(Action *action)
  */
 void BattlescapeState::btnRightHandItemClick(Action *action)
 {
-	if (_popup)
-	{
-		hidePopup();
-		return;
-	}
-	if (_selectedAction != BA_NONE) return;
+	if (_action.type != BA_NONE) return;
 	if (_battleGame->getSelectedUnit())
 	{
 		BattleItem *rightHandItem = _battleGame->getItemFromUnit(_battleGame->getSelectedUnit(), RIGHT_HAND);
@@ -716,8 +610,6 @@ void BattlescapeState::btnRightHandItemClick(Action *action)
  */
 void BattlescapeState::btnVisibleUnitClick(Action *action)
 {
-	if (_popup) return;
-
 	int btnID = -1;
 
 	popState();
@@ -738,27 +630,13 @@ void BattlescapeState::btnVisibleUnitClick(Action *action)
 }
 
 /**
- * Execute the action corresponding with this action menu item.
- * @param action Pointer to an action.
+ * Set the cursor according to the selected action.
  */
-void BattlescapeState::btnActionMenuItemClick(Action *action)
+void BattlescapeState::setupCursor()
 {
-	int btnID = -1;
-
-	// got to find out which button was pressed
-	for (int i = 0; i < 10 && btnID == -1; i++)
+	if (_action.targeting)
 	{
-		if (action->getSender() == _actionMenu[i])
-		{
-			btnID = i;
-		}
-	}
-
-	if (btnID != -1)
-	{
-		_selectedAction = _actionMenu[btnID]->getAction();
-		_selectedActionTUs = _actionMenu[btnID]->getTUs();
-		if (_selectedAction == BA_THROW)
+		if (_action.type == BA_THROW)
 		{
 			_map->setCursorType(CT_THROW);
 		}
@@ -766,32 +644,11 @@ void BattlescapeState::btnActionMenuItemClick(Action *action)
 		{
 			_map->setCursorType(CT_AIM);
 		}
-		_targeting = true;
-		hidePopup();
-	}
-}
-
-/**
- * Hide the popup action menu.
- */
-void BattlescapeState::hidePopup()
-{
-	for (int i=0; i < 5; i++)
-		_actionMenu[i]->setVisible(false);
-	_popup = false;
-	if (_selectedAction == BA_NONE)
-	{
-		_map->setCursorType(CT_NORMAL);
-	}
-	else if (_selectedAction == BA_THROW)
-	{
-		_map->setCursorType(CT_THROW);
 	}
 	else
 	{
-		_map->setCursorType(CT_AIM);
+		_map->setCursorType(CT_NORMAL);
 	}
-
 }
 
 /**
@@ -879,6 +736,88 @@ void BattlescapeState::updateSoldierInfo(BattleUnit *battleUnit)
 	}
 }
 
+/**
+  * Shift the red colors of the visible unit buttons backgrounds.
+  */
+void BattlescapeState::blinkVisibleUnitButtons()
+{
+	static int delta = 1, color = 32;
+
+	SDL_Rect square1;
+	square1.x = 0;
+	square1.y = 0;
+	square1.w = 15;
+	square1.h = 12;
+	SDL_Rect square2;
+	square2.x = 1;
+	square2.y = 1;
+	square2.w = 13;
+	square2.h = 10;
+
+	for (int i = 0; i < 10;  i++)
+	{
+		if (_btnVisibleUnit[i]->getVisible() == true)
+		{
+			_btnVisibleUnit[i]->drawRect(&square1, 15);
+			_btnVisibleUnit[i]->drawRect(&square2, color);
+		}
+	}
+
+	if (color == 44) delta = -2;
+	if (color == 32) delta = 1;
+
+	color += delta;
+}
+
+
+/**
+  * Shift the red color of the warning message.
+  */
+void BattlescapeState::blinkWarningMessage()
+{
+	static int color = 32, delay = 12;
+
+	if (_warningMessageBackground->getVisible() == false)
+		return;
+
+	SDL_Rect square1;
+	square1.x = 0;
+	square1.y = 0;
+	square1.w = 224;
+	square1.h = 48;
+	_warningMessageBackground->drawRect(&square1, color);
+
+	if (color >= 44)
+	{
+		delay--;
+	}
+	else
+	{
+		color++;
+	}
+
+	if (delay == 0)
+	{
+		_warningMessageBackground->setVisible(false);
+		_txtWarningMessage->setVisible(false);
+		color = 32;
+		delay = 12;
+	}
+
+}
+
+/**
+  * Show warning message.
+  * @param message untranslated
+  */
+void BattlescapeState::showWarningMessage(std::string message)
+{
+	std::wstring messageText = _game->getLanguage()->getString(message);
+	_warningMessageBackground->setVisible(true);
+	_txtWarningMessage->setVisible(true);
+	_txtWarningMessage->setText(messageText);
+}
+
 /*
  * This function popups a context sensitive list of actions the user can choose from.
  * Some actions result in a change of gamestate.
@@ -890,62 +829,9 @@ void BattlescapeState::handleItemClick(BattleItem *item)
 	if (item && _states.empty())
 	{
 		BattleUnit *bu = _battleGame->getSelectedUnit();
-		// Build up the popup menu
-		int id = 0, tu;
-		std::wstring strAcc = _game->getLanguage()->getString("STR_ACC");
-		std::wstring strTU = _game->getLanguage()->getString("STR_TUS");
-		std::wstringstream ss1, ss2;
-
-		// throwing
-		tu = (int)floor(bu->getUnit()->getTimeUnits() * 0.25);
-		ss1 << strAcc.c_str() << (int)floor(bu->getThrowingAccuracy() * 100) << "%";
-		ss2 << strTU.c_str() << tu;
-		_actionMenu[id]->setAction(BA_THROW, _game->getLanguage()->getString("STR_THROW"), ss1.str(), ss2.str(), tu);
-		_actionMenu[id]->setVisible(true);
-		id++;
-		ss1.str(L"");
-		ss2.str(L"");
-
-		if (item->getRules()->getAccuracyAuto() != 0)
-		{
-			tu = (int)(bu->getUnit()->getTimeUnits() * item->getRules()->getTUAuto() / 100);
-			ss1 << strAcc.c_str() << (int)floor(bu->getFiringAccuracy(item->getRules()->getAccuracyAuto()) * 100) << "%";
-			ss2 << strTU.c_str() << tu;
-			_actionMenu[id]->setAction(BA_AUTOSHOT, _game->getLanguage()->getString("STR_AUTO_SHOT"), ss1.str(), ss2.str(), tu);
-			_actionMenu[id]->setVisible(true);
-			id++;
-			ss1.str(L"");
-			ss2.str(L"");
-		}
-		if (item->getRules()->getAccuracySnap() != 0)
-		{
-			tu = (int)(bu->getUnit()->getTimeUnits() * item->getRules()->getTUSnap() / 100);
-			ss1 << strAcc.c_str() << (int)floor(bu->getFiringAccuracy(item->getRules()->getAccuracySnap()) * 100) << "%";
-			ss2 << strTU.c_str() << tu;
-			_actionMenu[id]->setAction(BA_SNAPSHOT, _game->getLanguage()->getString("STR_SNAP_SHOT"), ss1.str(), ss2.str(), tu);
-			_actionMenu[id]->setVisible(true);
-			id++;
-			ss1.str(L"");
-			ss2.str(L"");
-		}
-		if (item->getRules()->getAccuracyAimed() != 0)
-		{
-			tu = (int)(bu->getUnit()->getTimeUnits() * item->getRules()->getTUAimed() / 100);
-			ss1 << strAcc.c_str() << (int)floor(bu->getFiringAccuracy(item->getRules()->getAccuracyAimed()) * 100) << "%";
-			ss2 << strTU.c_str() << tu;
-			_actionMenu[id]->setAction(BA_AIMEDSHOT, _game->getLanguage()->getString("STR_AIMED_SHOT"), ss1.str(), ss2.str(), tu);
-			_actionMenu[id]->setVisible(true);
-			id++;
-			ss1.str(L"");
-			ss2.str(L"");
-		}
-
-		_map->setCursorType(CT_NONE);
-		_popup = true;
-
-		// TODO other gamestates: scanner/medikit
-		// this should be returned by the popup menu, but is now hardcoded to test without popup menu
-		_selectedItem = item;
+		_action.actor = bu;
+		_action.weapon = item;
+		popup(new ActionMenuState(_game, &_action));
 	}
 }
 
@@ -989,30 +875,11 @@ void BattlescapeState::animate()
 }
 
 /**
- * Get the current position on the map that the user has targetted.
- * For example to shoot or throw towards.
+ * Get a pointer to the current action.
  */
-Position BattlescapeState::getTarget() const
+BattleAction *BattlescapeState::getAction()
 {
-	return _target;
-}
-
-/**
- * Gets the item the user has clicked to use (can be left or right-hand item).
- * @return item Left or right-hand item.
- */
-BattleItem *BattlescapeState::getSelectedItem() const
-{
-	return _selectedItem;
-}
-
-/**
- * Gets the item the user has clicked to use (can be left or right-hand item).
- * @return item Left or right-hand item.
- */
-BattleActionType BattlescapeState::getSelectedAction() const
-{
-	return _selectedAction;
+	return &_action;
 }
 
 /**
@@ -1095,17 +962,17 @@ void BattlescapeState::popState()
 
 	if (_states.empty())
 	{
-		if (_targeting && _battleGame->getSelectedUnit() && !actionFailed)
+		if (_action.targeting && _battleGame->getSelectedUnit() && !actionFailed)
 		{
-			_battleGame->getSelectedUnit()->spendTimeUnits(_selectedActionTUs, _battleGame->getDebugMode()); 
+			_battleGame->getSelectedUnit()->spendTimeUnits(_action.TU, _battleGame->getDebugMode());
 		}
-		if (_selectedAction == BA_THROW && !actionFailed)
+		if (_action.type == BA_THROW && !actionFailed)
 		{
-			_targeting = false;
-			_selectedAction = BA_NONE;
+			_action.targeting = false;
+			_action.type = BA_NONE;
 		}
 		_game->getCursor()->setVisible(true);
-		hidePopup();
+		setupCursor();
 	}
 	else
 	{
@@ -1114,8 +981,8 @@ void BattlescapeState::popState()
 	}
 	if (_battleGame->getSelectedUnit() == 0 || _battleGame->getSelectedUnit()->isOut())
 	{
-		_targeting = false;
-		_selectedAction = BA_NONE;
+		_action.targeting = false;
+		_action.type = BA_NONE;
 		_map->setCursorType(CT_NORMAL);
 		_game->getCursor()->setVisible(true);
 		_battleGame->setSelectedUnit(0);
@@ -1165,6 +1032,16 @@ void BattlescapeState::handle(Action *action)
 		}
 	}
 
+}
+
+/**
+ * Adds a new popup window to the queue
+ * (this prevents popups from overlapping)
+ * @param state Pointer to popup state.
+ */
+void BattlescapeState::popup(State *state)
+{
+	_popups.push_back(state);
 }
 
 }

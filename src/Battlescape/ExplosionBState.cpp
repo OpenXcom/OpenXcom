@@ -32,6 +32,7 @@
 #include "../Engine/SoundSet.h"
 #include "../Engine/Sound.h"
 #include "../Ruleset/RuleItem.h"
+#include "../Engine/RNG.h"
 
 namespace OpenXcom
 {
@@ -64,10 +65,16 @@ void ExplosionBState::init()
 	_unit = _parent->getGame()->getSavedGame()->getBattleGame()->getSelectedUnit();
 	if (_item->getRules()->getHitAnimation() == 0)
 	{
-		// create a new kaboom
-		Explosion *explosion = new Explosion(_center, 0, true);
-		// add the explosion on the map
-		_parent->getMap()->getExplosions()->insert(explosion);
+		// create 9 explosions
+		for (int i = -32; i < 48; i+=32)
+			for (int j = -32; j < 48; j+=32)
+			{
+				Position p = _center;
+				p.x += i; p.y += j;
+				Explosion *explosion = new Explosion(p, RNG::generate(0,6), true);
+				// add the explosion on the map
+				_parent->getMap()->getExplosions()->insert(explosion);
+			}
 		// explosion sound
 		_parent->getGame()->getResourcePack()->getSoundSet("GEO.CAT")->getSound(10)->play();
 	}
@@ -88,8 +95,9 @@ void ExplosionBState::init()
  */
 void ExplosionBState::think()
 {
-	for (std::set<Explosion*>::const_iterator i = _parent->getMap()->getExplosions()->begin(); i != _parent->getMap()->getExplosions()->end(); i++)
+	for (std::set<Explosion*>::const_iterator i = _parent->getMap()->getExplosions()->begin(), inext = i; i != _parent->getMap()->getExplosions()->end(); i = inext)
 	{
+		++inext;
 		if(!(*i)->animate())
 		{
 			_parent->getMap()->getExplosions()->erase((*i));
@@ -104,7 +112,7 @@ void ExplosionBState::think()
 				{
 					if ((*j)->getHealth() == 0 && (*j)->getStatus() != STATUS_DEAD)
 					{
-						_parent->statePushBack(new UnitFallBState(_parent, (*j), _item->getRules()->getDamageType() == DT_HE));
+						_parent->statePushNext(new UnitFallBState(_parent, (*j), _item->getRules()->getDamageType() == DT_HE));
 					}
 				}
 				if (!_unit->isOut())

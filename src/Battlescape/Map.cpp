@@ -566,6 +566,21 @@ void Map::drawTerrain(Surface *surface)
 			}
 		}
 	}
+
+	// check if we got big explosions
+	for (std::set<Explosion*>::const_iterator i = _explosions.begin(); i != _explosions.end(); i++)
+	{
+		if ((*i)->isBig())
+		{
+			Position voxelPos = (*i)->getPosition();
+			convertVoxelToScreen(voxelPos, &bulletPositionScreen);
+			frame = _res->getSurfaceSet("X1.PCK")->getFrame((*i)->getCurrentFrame());
+			frame->setX(bulletPositionScreen.x - 64);
+			frame->setY(bulletPositionScreen.y - 64);
+			frame->blit(surface);
+		}
+	}
+
 }
 
 /**

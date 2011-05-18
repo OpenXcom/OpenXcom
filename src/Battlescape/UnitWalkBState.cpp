@@ -57,7 +57,7 @@ void UnitWalkBState::init()
 	_unit = _parent->getGame()->getSavedGame()->getBattleGame()->getSelectedUnit();
 	_pf = _parent->getGame()->getSavedGame()->getBattleGame()->getPathfinding();
 	_terrain = _parent->getGame()->getSavedGame()->getBattleGame()->getTerrainModifier();
-	_target = _parent->getTarget();
+	_target = _parent->getAction()->target;
 	_pf->calculate(_unit, _target);
 }
 

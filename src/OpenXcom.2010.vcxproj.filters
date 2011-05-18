@@ -503,6 +503,9 @@
     <ClCompile Include="Engine\CrossPlatform.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
+    <ClCompile Include="Battlescape\ActionMenuState.cpp">
+      <Filter>Battlescape</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1007,6 +1010,9 @@
     </ClInclude>
     <ClInclude Include="Engine\CrossPlatform.h">
       <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Battlescape\ActionMenuState.h">
+      <Filter>Battlescape</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

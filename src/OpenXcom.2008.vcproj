@@ -668,6 +668,14 @@
 				>
 			</File>				
 			<File
+				RelativePath=".\Battlescape\ActionMenuState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\ActionMenuState.h"
+				>
+			</File>						
+			<File
 				RelativePath=".\Battlescape\BattlescapeGenerator.cpp"
 				>
 			</File>

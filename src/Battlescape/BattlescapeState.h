@@ -22,6 +22,7 @@
 #include "../Engine/State.h"
 #include "Position.h"
 #include <list>
+#include <string>
 
 namespace OpenXcom
 {
@@ -46,6 +47,17 @@ enum BattleActionType { BA_NONE, BA_THROW, BA_AUTOSHOT, BA_SNAPSHOT, BA_AIMEDSHO
 #define DEFAULT_WALK_SPEED 40
 #define DEFAULT_BULLET_SPEED 20
 #define DEFAULT_ANIM_SPEED 100
+
+struct BattleAction
+{
+	BattleActionType type;
+	BattleUnit *actor;
+	BattleItem *weapon;
+	Position target;
+	int TU;
+	bool targeting;
+};
+
 
 /**
  * Battlescape screen which shows the tactical battle
@@ -74,22 +86,16 @@ private:
 	SavedBattleGame *_battleGame;
 	Text *_txtDebug;
 	int _animFrame;
-
-	ActionMenuItem *_actionMenu[5];
-	BattleActionType _selectedAction;
-	int _selectedActionTUs;
-	BattleItem *_selectedItem;
-	Position _target;
 	std::list<BattleState*> _states;
-	bool _targeting, _popup;
+	BattleAction _action;
 
-	void checkActionFinished();
 	void handleItemClick(BattleItem *item);
 	void drawItemSprite(BattleItem *item, Surface *surface);
 	void blinkVisibleUnitButtons();
 	void blinkWarningMessage();
 	void showWarningMessage(std::string message);
-	void hidePopup();
+	void setupCursor();
+	std::vector<State*> _popups;
 public:
 	/// Creates the Battlescape state.
 	BattlescapeState(Game *game);
@@ -135,16 +141,12 @@ public:
 	void btnRightHandItemClick(Action *action);
 	/// Handler for clicking a visible unit button.
 	void btnVisibleUnitClick(Action *action);
-	/// Handler for clicking a action menu item.
-	void btnActionMenuItemClick(Action *action);
 	/// updates soldier name/rank/tu/energy/health/morale
 	void updateSoldierInfo(BattleUnit *unit);
 	/// handlestates timer.
 	void handleState();
 	/// Animate other stuff.
 	void animate();
-	/// Get target position.
-	Position getTarget() const;
 	/// Get game.
 	Game *getGame() const;
 	/// Get map.
@@ -159,14 +161,14 @@ public:
 	void popState();
 	/// Set state think interval.
 	void setStateInterval(Uint32 interval);
-	/// Get selected item.
-	BattleItem *getSelectedItem() const;
-	/// Get selected action.
-	BattleActionType getSelectedAction() const;
+	/// Get a pointer to the current action
+	BattleAction *getAction();
 	/// Show debug message.
 	void debug(const std::wstring message);
 	/// Handle keypresses.
 	void handle(Action *action);
+	/// Displays a popup window.
+	void popup(State *state);
 };
 
 }

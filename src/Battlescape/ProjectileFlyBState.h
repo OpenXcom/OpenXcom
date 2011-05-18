@@ -34,7 +34,7 @@ class ProjectileFlyBState : public BattleState
 private:
 	BattleUnit *_unit;
 	bool validThrowRange();
-	BattleItem *_ammoItem;
+	BattleItem *_ammo;
 public:
 	/// Creates a new ProjectileFly class
 	ProjectileFlyBState(BattlescapeState *parent);

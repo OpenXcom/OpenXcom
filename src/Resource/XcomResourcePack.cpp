@@ -428,7 +428,7 @@ void XcomResourcePack::loadBattlescapeResources()
 	s2.str("");
 	s << _folder << "UFOGRAPH/" << "X1.PCK";
 	s2 << _folder << "UFOGRAPH/" << "X1.TAB";
-	_sets["X1.PCK"] = new SurfaceSet(160, 64);
+	_sets["X1.PCK"] = new SurfaceSet(128, 64);
 	_sets["X1.PCK"]->loadPck(insensitive(s.str()), insensitive(s2.str()));
 
 	// Load Battlescape Terrain (only blacks are loaded, others are loaded just in time)

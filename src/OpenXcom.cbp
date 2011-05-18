@@ -110,6 +110,8 @@
 		<Unit filename="Basescape\TransfersState.h" />
 		<Unit filename="Battlescape\ActionMenuItem.cpp" />
 		<Unit filename="Battlescape\ActionMenuItem.h" />
+		<Unit filename="Battlescape\ActionMenuState.cpp" />
+		<Unit filename="Battlescape\ActionMenuState.h" />
 		<Unit filename="Battlescape\BattleState.cpp" />
 		<Unit filename="Battlescape\BattleState.h" />
 		<Unit filename="Battlescape\BattlescapeGenerator.cpp" />

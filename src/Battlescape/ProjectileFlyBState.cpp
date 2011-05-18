@@ -60,25 +60,27 @@ ProjectileFlyBState::~ProjectileFlyBState()
 void ProjectileFlyBState::init()
 {
 	int baseAcc;
-	BattleItem *item = 0;
+	BattleItem *weapon = _parent->getAction()->weapon;
+	BattleItem *projectileItem = 0;
 
 	_parent->setStateInterval(DEFAULT_BULLET_SPEED);
-	_unit = _parent->getGame()->getSavedGame()->getBattleGame()->getSelectedUnit();
+	_unit = _parent->getAction()->actor;
+	_ammo = weapon->getAmmoItem();
 	if (_unit->isOut())
 	{
 		// something went wrong
 		_parent->popState();
 		return;
 	}
-	if (_parent->getSelectedAction() != BA_THROW)
+	if (_parent->getAction()->type != BA_THROW)
 	{
-		if (_parent->getSelectedItem()->getAmmoItem() == 0)
+		if (_ammo == 0)
 		{
 			_result = "STR_NO_AMMUNITION_LOADED";
 			_parent->popState();
 			return;
 		}
-		if (_parent->getSelectedItem()->getAmmoItem()->getAmmoQuantity() == 0)
+		if (_ammo->getAmmoQuantity() == 0)
 		{
 			_result = "STR_NO_ROUNDS_LEFT";
 			_parent->popState();
@@ -86,16 +88,16 @@ void ProjectileFlyBState::init()
 		}
 	}
 	// action specific initialisation
-	switch (_parent->getSelectedAction())
+	switch (_parent->getAction()->type)
 	{
 	case BA_AUTOSHOT:
-		baseAcc = _parent->getSelectedItem()->getRules()->getAccuracyAuto();
+		baseAcc = weapon->getRules()->getAccuracyAuto();
 		break;
 	case BA_SNAPSHOT:
-		baseAcc = _parent->getSelectedItem()->getRules()->getAccuracySnap();
+		baseAcc = weapon->getRules()->getAccuracySnap();
 		break;
 	case BA_AIMEDSHOT:
-		baseAcc = _parent->getSelectedItem()->getRules()->getAccuracyAimed();
+		baseAcc = weapon->getRules()->getAccuracyAimed();
 		break;
 	case BA_THROW:
 		if (!validThrowRange())
@@ -106,7 +108,7 @@ void ProjectileFlyBState::init()
 			return;
 		}
 		baseAcc = (int)(_unit->getThrowingAccuracy()*100.0);
-		item = _parent->getSelectedItem();
+		projectileItem = weapon;
 		break;
     default:
         baseAcc = 0;
@@ -116,18 +118,18 @@ void ProjectileFlyBState::init()
 	Projectile *projectile = new Projectile(_parent->getGame()->getResourcePack(),
 									_parent->getGame()->getSavedGame()->getBattleGame(),
 									_unit->getPosition(),
-									_parent->getTarget(),
-									_parent->getSelectedItem()->getRules()->getBulletSprite(),
-									item
+									_parent->getAction()->target,
+									weapon->getRules()->getBulletSprite(),
+									projectileItem
 									);
 	// add the projectile on the map
 	_parent->getMap()->setProjectile(projectile);
 	// let it calculate a trajectory
-	if (_parent->getSelectedAction() == BA_THROW)
+	if (_parent->getAction()->type == BA_THROW)
 	{
 		if (projectile->calculateThrow(baseAcc))
 		{
-			item->setOwner(0);
+			projectileItem->setOwner(0);
 			_unit->setCached(false);
 			_parent->getMap()->cacheUnits();
 			_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(39)->play();
@@ -148,13 +150,12 @@ void ProjectileFlyBState::init()
 				// set the soldier in an aiming position
 				_unit->aim(true);
 				_parent->getMap()->cacheUnits();
-				_ammoItem = _parent->getSelectedItem()->getAmmoItem();
 				// and we have a lift-off
-				_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(_parent->getSelectedItem()->getRules()->getFireSound())->play();
-				if (!_parent->getGame()->getSavedGame()->getBattleGame()->getDebugMode() && _ammoItem->spendBullet() == false)
+				_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(weapon->getRules()->getFireSound())->play();
+				if (!_parent->getGame()->getSavedGame()->getBattleGame()->getDebugMode() && _ammo->spendBullet() == false)
 				{
 					//_parent->getGame()->getSavedGame()->getBattleGame()->getItems()->erase(_parent->getSelectedItem()->getAmmoItem());
-					_parent->getSelectedItem()->setAmmoItem(0);
+					weapon->setAmmoItem(0);
 				}
 		}
 		else
@@ -178,7 +179,7 @@ void ProjectileFlyBState::think()
 	if(!_parent->getMap()->getProjectile()->move())
 	{
 		// impact !
-		if (_parent->getSelectedAction() == BA_THROW)
+		if (_parent->getAction()->type == BA_THROW)
 		{
 			Position pos = _parent->getMap()->getProjectile()->getPosition();
 			pos.x /= 16;
@@ -191,13 +192,13 @@ void ProjectileFlyBState::think()
 		{
 			int offset = 0;
 			// explosions impact not inside the voxel but one step back
-			if (_ammoItem && (
-				_ammoItem->getRules()->getDamageType() == DT_HE ||
-				_ammoItem->getRules()->getDamageType() == DT_IN))
+			if (_ammo && (
+				_ammo->getRules()->getDamageType() == DT_HE ||
+				_ammo->getRules()->getDamageType() == DT_IN))
 			{
 				offset = -1;
 			}
-			_parent->statePushNext(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(offset), _ammoItem));
+			_parent->statePushNext(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(offset), _ammo));
 		}
 
 		delete _parent->getMap()->getProjectile();
