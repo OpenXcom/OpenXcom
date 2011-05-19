@@ -69,6 +69,10 @@ public:
 	int getTransferTime() const;
 	/// Sets the item's transfer time.
 	void setTransferTime(int time);
+	/// Gets the item's weight.
+	int getWeight() const;
+	/// Sets the item's weight.
+	void setWeight(int cost);
 	/// Gets the item's reference in BIGOBS.PCK for use in inventory.
 	int getBigSprite() const;
 	/// Sets the item's reference in BIGOBS.PCK for use in inventory.

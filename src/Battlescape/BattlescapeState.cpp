@@ -535,10 +535,19 @@ void BattlescapeState::btnHelpClick(Action *action)
 }
 
 /**
- * End turn.
+ * End turn request. This will add a 0 to the end of the state queue,
+ * so all ongoing actions, like explosions are finished first before really switching turn.
  * @param action Pointer to an action.
  */
 void BattlescapeState::btnEndTurnClick(Action *action)
+{
+	statePushBack(0);
+}
+
+/**
+ * End turn.
+ */
+void BattlescapeState::endTurn()
 {
 	if (_battleGame->getTerrainModifier()->closeUfoDoors())
 	{
@@ -558,10 +567,9 @@ void BattlescapeState::btnEndTurnClick(Action *action)
 
 		if (!_battleGame->getDebugMode())
 		{
-			btnEndTurnClick(action);
+			endTurn();
 		}
 	}
-
 }
 
 /**
@@ -935,7 +943,17 @@ void BattlescapeState::statePushBack(BattleState *bs)
 	if (_states.empty())
 	{
 		_states.push_front(bs);
-		bs->init();
+		// end turn request?
+		if (_states.front() == 0)
+		{
+			_states.pop_front();
+			endTurn();
+			return;
+		}
+		else
+		{
+			bs->init();
+		}
 	}
 	else
 	{
@@ -976,6 +994,13 @@ void BattlescapeState::popState()
 	}
 	else
 	{
+		// end turn request?
+		if (_states.front() == 0)
+		{
+			_states.pop_front();
+			endTurn();
+			return;
+		}
 		// init the next state in queue
 		_states.front()->init();
 	}

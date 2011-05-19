@@ -389,7 +389,6 @@ void Map::drawTerrain(Surface *surface)
 								item->setY(bulletPositionScreen.y - 26);
 								item->blit(surface);
 							}
-
 						}
 						else
 						{

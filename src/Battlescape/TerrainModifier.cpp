@@ -978,7 +978,7 @@ void TerrainModifier::prepareNewTurn()
 	std::vector<Tile*> tilesOnFire;
 	std::vector<Tile*> tilesOnSmoke;
 
-	// prepare a list of tiles on fire/smoke & close any ufo doors
+	// prepare a list of tiles on fire/smoke
 	for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); i++)
 	{
 		if (_save->getTiles()[i]->getFire() > 0)

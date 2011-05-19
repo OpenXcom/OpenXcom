@@ -63,7 +63,7 @@ void ExplosionBState::init()
 {	
 	_parent->setStateInterval(DEFAULT_ANIM_SPEED);
 	_unit = _parent->getGame()->getSavedGame()->getBattleGame()->getSelectedUnit();
-	if (_item->getRules()->getHitAnimation() == 0)
+	if (_item == 0 || _item->getRules()->getHitAnimation() == 0)
 	{
 		// create 9 explosions
 		for (int i = -32; i < 48; i+=32)
@@ -115,11 +115,14 @@ void ExplosionBState::think()
 						_parent->statePushNext(new UnitFallBState(_parent, (*j), _item->getRules()->getDamageType() == DT_HE));
 					}
 				}
-				if (!_unit->isOut())
+
+				// if this explosion was caused by a unit shooting, now it's the time to put the gun down
+				if (_unit && !_unit->isOut())
 				{
 					_unit->aim(false);
 				}
 				_parent->getMap()->cacheUnits();
+
 				_parent->popState();
 				return;
 			}

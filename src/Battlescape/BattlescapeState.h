@@ -88,7 +88,8 @@ private:
 	int _animFrame;
 	std::list<BattleState*> _states;
 	BattleAction _action;
-
+	
+	void endTurn();
 	void handleItemClick(BattleItem *item);
 	void drawItemSprite(BattleItem *item, Surface *surface);
 	void blinkVisibleUnitButtons();

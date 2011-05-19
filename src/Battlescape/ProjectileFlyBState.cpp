@@ -16,7 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-
+#define _USE_MATH_DEFINES
+#include <cmath>
 #include "ProjectileFlyBState.h"
 #include "ExplosionBState.h"
 #include "BattlescapeState.h"
@@ -92,12 +93,14 @@ void ProjectileFlyBState::init()
 	{
 	case BA_AUTOSHOT:
 		baseAcc = weapon->getRules()->getAccuracyAuto();
+		_parent->setStateInterval(DEFAULT_BULLET_SPEED/2); // a little faster
 		break;
 	case BA_SNAPSHOT:
 		baseAcc = weapon->getRules()->getAccuracySnap();
 		break;
 	case BA_AIMEDSHOT:
 		baseAcc = weapon->getRules()->getAccuracyAimed();
+		_parent->setStateInterval(DEFAULT_BULLET_SPEED*1.5); // a little slower
 		break;
 	case BA_THROW:
 		if (!validThrowRange())
@@ -181,7 +184,7 @@ void ProjectileFlyBState::think()
 		// impact !
 		if (_parent->getAction()->type == BA_THROW)
 		{
-			Position pos = _parent->getMap()->getProjectile()->getPosition();
+			Position pos = _parent->getMap()->getProjectile()->getPosition(-1);
 			pos.x /= 16;
 			pos.y /= 16;
 			pos.z /= 24;
@@ -223,9 +226,25 @@ std::string ProjectileFlyBState::getResult() const
 	return _result;
 }
 
+/*
+ * Validate the throwing range. 
+ * @return true when range is valid.
+ */
 bool ProjectileFlyBState::validThrowRange()
 {
-	return true;
+	// Throwing Distance roughly = 2.5 × Strength / Weight
+	// note that all coordinates and thus also distances below are in number of tiles (not in voxels).
+	double maxDistance = 2.5 * _parent->getAction()->actor->getUnit()->getStrength() / _parent->getAction()->weapon->getRules()->getWeight();
+	int xdiff = _parent->getAction()->target.x - _unit->getPosition().x;
+	int ydiff = _parent->getAction()->target.y - _unit->getPosition().y;
+	int zdiff = _parent->getAction()->target.z - _unit->getPosition().z;
+	double realDistance = sqrt((double)(xdiff*xdiff)+(double)(ydiff*ydiff));
+
+	// throwing off a building of 1 level lets you throw 2 tiles further than normal range,
+	// throwing up the roof of this building lets your throw 2 tiles less further
+	realDistance += zdiff*2;
+
+	return realDistance < maxDistance;
 }
 
 }

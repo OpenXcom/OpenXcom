@@ -675,6 +675,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	pistol->setBattleType(BT_FIREARM);
 	pistol->setSizeX(1);
 	pistol->setSizeY(2);
+	pistol->setWeight(5);
 
 	RuleItem *pclip = new RuleItem("STR_PISTOL_CLIP");
 	pclip->setSize(0.1f);
@@ -689,6 +690,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	pclip->setSizeX(1);
 	pclip->setSizeY(1);
 	pclip->setClipSize(12);
+	pclip->setWeight(3);
 	
 	RuleItem *rifle = new RuleItem("STR_RIFLE");
 	rifle->setSize(0.2f);
@@ -708,6 +710,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	rifle->setBattleType(BT_FIREARM);
 	rifle->setSizeX(1);
 	rifle->setSizeY(3);
+	rifle->setWeight(8);
 
 	RuleItem *rclip = new RuleItem("STR_RIFLE_CLIP");
 	rclip->setSize(0.1f);
@@ -722,6 +725,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	rclip->setSizeX(1);
 	rclip->setSizeY(1);
 	rclip->setClipSize(20);
+	rclip->setWeight(3);
 
 	RuleItem *hcannon = new RuleItem("STR_HEAVY_CANNON");
 	hcannon->setSize(0.3f);
@@ -741,6 +745,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	hcannon->setBattleType(BT_FIREARM);
 	hcannon->setSizeX(2);
 	hcannon->setSizeY(3);
+	hcannon->setWeight(18);
 
 	RuleItem *hcap = new RuleItem("STR_HC_AP_AMMO");
 	hcap->setSize(0.1f);
@@ -755,6 +760,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	hcap->setSizeX(1);
 	hcap->setSizeY(1);
 	hcap->setClipSize(6);
+	hcap->setWeight(6);
 
 	RuleItem *hche = new RuleItem("STR_HC_HE_AMMO");
 	hche->setSize(0.1f);
@@ -769,6 +775,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	hche->setSizeX(1);
 	hche->setSizeY(1);
 	hche->setClipSize(6);
+	hche->setWeight(6);
 
 	RuleItem *hcin = new RuleItem("STR_HC_IN_AMMO");
 	hcin->setSize(0.1f);
@@ -783,6 +790,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	hcin->setSizeX(1);
 	hcin->setSizeY(1);
 	hcin->setClipSize(6);
+	hcin->setWeight(6);
 
 	RuleItem *acannon = new RuleItem("STR_AUTO_CANNON");
 	acannon->setSize(0.3f);
@@ -804,6 +812,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	acannon->setBattleType(BT_FIREARM);
 	acannon->setSizeX(2);
 	acannon->setSizeY(3);
+	acannon->setWeight(19);
 	
 	RuleItem *acap = new RuleItem("STR_AC_AP_AMMO");
 	acap->setSize(0.1f);
@@ -818,6 +827,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	acap->setSizeX(1);
 	acap->setSizeY(1);
 	acap->setClipSize(14);
+	acap->setWeight(5);
 
 	RuleItem *rlauncher = new RuleItem("STR_ROCKET_LAUNCHER");
 	rlauncher->setSize(0.4f);
@@ -835,6 +845,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	rlauncher->setBattleType(BT_FIREARM);
 	rlauncher->setSizeX(2);
 	rlauncher->setSizeY(3);
+	rlauncher->setWeight(10);
 
 	RuleItem *srocket = new RuleItem("STR_SMALL_ROCKET");
 	srocket->setSize(0.2f);
@@ -849,6 +860,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	srocket->setSizeX(1);
 	srocket->setSizeY(3);
 	srocket->setClipSize(1);
+	srocket->setWeight(6);
 
 	RuleItem *grenade = new RuleItem("STR_GRENADE");
 	grenade->setSize(0.1f);
@@ -860,6 +872,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	grenade->setBattleType(BT_GRENADE);
 	grenade->setSizeX(1);
 	grenade->setSizeY(1);
+	grenade->setWeight(3);
 
 	RuleItem *sgrenade = new RuleItem("STR_SMOKE_GRENADE");
 	sgrenade->setSize(0.1f);
@@ -871,18 +884,21 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	sgrenade->setBattleType(BT_GRENADE);
 	sgrenade->setSizeX(1);
 	sgrenade->setSizeY(1);
+	sgrenade->setWeight(3);
 
 	RuleItem *corpse = new RuleItem("STR_CORPSE");
 	corpse->setBigSprite(45);
 	corpse->setFloorSprite(39);
 	corpse->setSizeX(2);
 	corpse->setSizeY(3);
+	corpse->setWeight(22);
 
 	RuleItem *scorpse = new RuleItem("STR_SECTOID_CORPSE");
 	scorpse->setBigSprite(46);
 	scorpse->setFloorSprite(42);
 	scorpse->setSizeX(2);
 	scorpse->setSizeY(3);
+	scorpse->setWeight(30);
 
 	_items.insert(std::pair<std::string, RuleItem*>("STR_STINGRAY_LAUNCHER", slauncher));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_AVALANCHE_LAUNCHER", alauncher));

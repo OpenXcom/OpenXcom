@@ -101,8 +101,7 @@ void UnitWalkBState::think()
 		if (_unit->getStatus() == STATUS_STANDING)
 		{
 			_terrain->calculateFOV(_unit);
-			// if you want lighting to be calculated every step, uncomment next line
-			//_terrain->calculateLighting();
+			_terrain->calculateUnitLighting();
 		}
 		else
 		{

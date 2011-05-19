@@ -107,6 +107,24 @@ void RuleItem::setTransferTime(int time)
 }
 
 /**
+ * Returns the weight of the item.
+ * @return Weight in strength units.
+ */
+int RuleItem::getWeight() const
+{
+	return _weight;
+}
+
+/**
+ * Changes the weight of this item
+ * @param weight Weight in strength units.
+ */
+void RuleItem::setWeight(int weight)
+{
+	_weight = weight;
+}
+
+/**
  * Returns the reference in BIGOBS.PCK for use in inventory.
  * @return Sprite reference.
  */

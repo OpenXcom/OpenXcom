@@ -119,11 +119,22 @@ bool Projectile::calculateTrajectory(double accuracy)
 	{
 		if (_origin == _target)
 		{
+			// don't shoot at yourself but shoot at the floor
 			targetVoxel = Position(_target.x*16 + 8, _target.y*16 + 8, _target.z*24);
 		}
 		else
 		{
+			// first try is at half the unit height 
 			targetVoxel = Position(_target.x*16 + 8, _target.y*16 + 8, _target.z*24 + tile->getUnit()->getUnit()->getStandHeight()/2);
+			int test = _save->getTerrainModifier()->calculateLine(originVoxel, targetVoxel, false, &_trajectory, bu);
+			_trajectory.clear();
+			if (test != 4)
+			{
+				// did not hit a unit, try at different heights
+				targetVoxel = Position(_target.x*16 + 8, _target.y*16 + 8, _target.z*24 + (tile->getUnit()->getUnit()->getStandHeight()*3)/4);
+				test = _save->getTerrainModifier()->calculateLine(originVoxel, targetVoxel, false, &_trajectory, bu);
+				_trajectory.clear();
+			}
 		}
 	}
 	else if (tile->getMapData(O_OBJECT) != 0)
@@ -225,9 +236,9 @@ bool Projectile::calculateThrow(double accuracy)
 void Projectile::applyAccuracy(const Position& origin, Position *target, double accuracy)
 {
 	// maxDeviation is the max angle deviation for accuracy 0% in degrees
-	static const double maxDeviation = 10;
+	static const double maxDeviation = 8.0;
 	// minDeviation is the max angle deviation for accuracy 100% in degrees
-	static const double minDeviation = 1;
+	static const double minDeviation = 0.2;
 	// maxRange is the maximum range a projectile shall ever travel in voxel space
 	static const double maxRange = 16*1000; // 1000 tiles
 
@@ -236,7 +247,7 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 	double baseDeviation = (maxDeviation - (maxDeviation * accuracy)) + minDeviation;
 	// the angle deviations are spread using a normal distribution between 0 and baseDeviation
 	dRot = RNG::boxMuller(0, baseDeviation);
-	dTilt = RNG::boxMuller(0, baseDeviation / 10.0);
+	dTilt = RNG::boxMuller(0, baseDeviation / 2.0);
 	rotation = atan2(double(target->y - origin.y), double(target->x - origin.x)) * 180 / M_PI;
 	tilt = atan2(double(target->z - origin.z),
 		sqrt(double(target->x - origin.x)*double(target->x - origin.x)+double(target->y - origin.y)*double(target->y - origin.y))) * 180 / M_PI;
