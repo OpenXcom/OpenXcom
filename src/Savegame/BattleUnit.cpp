@@ -25,6 +25,7 @@
 #include "Alien.h"
 #include "Soldier.h"
 #include "../Ruleset/RuleArmor.h"
+#include "../Engine/RNG.h"
 
 namespace OpenXcom
 {
@@ -40,6 +41,13 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction) : _unit(unit), _faction(
 	_energy = unit->getStamina();
 	_health = unit->getHealth();
 	_morale = 100;
+	_armor[SIDE_FRONT] = unit->getArmor()->getFrontArmor();
+	_armor[SIDE_LEFT] = unit->getArmor()->getSideArmor();
+	_armor[SIDE_RIGHT] = unit->getArmor()->getSideArmor();
+	_armor[SIDE_REAR] = unit->getArmor()->getRearArmor();
+	_armor[SIDE_UNDER] = unit->getArmor()->getUnderArmor();
+	for (int i = 0; i < 6; i++)
+		_fatalWounds[i] = 0;
 }
 
 /**
@@ -373,7 +381,7 @@ bool BattleUnit::isKneeled() const
 /**
  * Aim. (shows the right hand sprite and weapon holding)
  * @param aiming
- */ 
+ */
 void BattleUnit::aim(bool aiming)
 {
 	if (aiming)
@@ -427,12 +435,106 @@ int BattleUnit::getMorale() const
  */
 void BattleUnit::damage(Position position, int power)
 {
+	int damage;
+	UnitSide side;
+	int impactheight, x=8, y=8;
+	UnitBodyPart bodypart;
 	// todo : determine direction we got hit (4 directions)
 	// todo : armor reduction
 	// todo : fatal wounds
-	int damage = (power - getUnit()->getArmor()->getFrontArmor());
+
+	if (position == Position(0, 0, 0))
+	{
+		side = SIDE_UNDER;
+	}
+	else
+	{
+		// normalize x and y
+		switch(_direction)
+		{
+		case 0: // heading north, all is the same
+			x = position.x;
+			y = position.y;
+			break;
+		case 1: // somewhere in between 0 and 2
+			x = (position.x + (15 - position.y))/2;
+			y = (position.y + position.x)/2;
+			break;
+		case 2: // heading east
+			x = 15 - position.y;
+			y = position.x;
+			break;
+		case 3:
+			x = ((15 - position.y) + (15 - position.x))/2;
+			y = (position.x + (15 - position.y))/2;
+			break;
+		case 4: // heading south, both axis inversed
+			x = 15 - position.x;
+			y = 15 - position.y;
+			break;
+		case 5:
+			x = ((15 - position.x) + position.y)/2;
+			y = ((15 - position.y) + (15 - position.x))/2;
+			break;
+		case 6: // heading west
+			x = position.y;
+			y = 15 - position.x;
+			break;
+		case 7:
+			x = (position.y + position.x)/2;
+			y = ((15 - position.x) + position.y)/2;
+			break;
+		}
+		// determine side
+		if (y > 9)
+			side = SIDE_FRONT;
+		else if (y < 6)
+			side = SIDE_REAR;
+		else if (x < 6)
+			side = SIDE_LEFT;
+		else if (x > 9)
+			side = SIDE_RIGHT;
+		else
+			side = SIDE_FRONT;
+	}
+
+	impactheight = 10*position.z/(isKneeled()?_unit->getKneelHeight():_unit->getStandHeight());
+
+	if (impactheight > 4 && impactheight < 7) // torso
+	{
+		if (side == SIDE_LEFT)
+		{
+			bodypart = BODYPART_LEFTARM;
+		}else if (side == SIDE_RIGHT)
+		{
+			bodypart = BODYPART_RIGHTARM;
+		}else
+		{
+			bodypart = BODYPART_TORSO;
+		}
+	}else if (impactheight >= 7) //head
+	{
+		bodypart = BODYPART_HEAD;
+	}else if (impactheight <=4) //legs
+	{
+		if (side == SIDE_LEFT || side == SIDE_FRONT)
+		{
+			bodypart = BODYPART_LEFTLEG;
+		}else
+		{
+			bodypart = BODYPART_RIGHTLEG;
+		}
+	}
+
+	damage = (power - getArmor(side));
+
 	if (damage > 0)
 	{
+		// fatal wounds
+		_fatalWounds[bodypart] += RNG::generate(1,3);
+		// armor damage
+		setArmor(getArmor(side) - (damage+5)/10, side);
+		// health damage
 		_health -= damage;
 		if (_health < 0)
 			_health = 0;
@@ -579,6 +681,31 @@ double BattleUnit::getThrowingAccuracy()
 	result *= ((double)_health/(double)_unit->getHealth());
 
 	return result;
+}
+
+/// Set armor value.
+void BattleUnit::setArmor(int armor, UnitSide side)
+{
+	if (armor < 0)
+	{
+		armor = 0;
+	}
+	_armor[side] = armor;
+}
+
+/// Get armor value.
+int BattleUnit::getArmor(UnitSide side)
+{
+	return _armor[side];
+}
+
+/// Get total number of fatal wounds.
+int BattleUnit::getFatalWounds()
+{
+	int sum = 0;
+	for (int i = 0; i < 6; i++)
+		sum += _fatalWounds[i];
+	return sum;
 }
 
 }

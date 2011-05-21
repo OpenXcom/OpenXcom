@@ -142,6 +142,8 @@
 		<Unit filename="Battlescape\TerrainModifier.h" />
 		<Unit filename="Battlescape\UnitFallBState.cpp" />
 		<Unit filename="Battlescape\UnitFallBState.h" />
+		<Unit filename="Battlescape\UnitInfoState.cpp" />
+		<Unit filename="Battlescape\UnitInfoState.h" />
 		<Unit filename="Battlescape\UnitSprite.cpp" />
 		<Unit filename="Battlescape\UnitSprite.h" />
 		<Unit filename="Battlescape\UnitTurnBState.cpp" />

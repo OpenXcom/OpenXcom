@@ -34,6 +34,8 @@ class RuleUnit;
 
 enum UnitStatus {STATUS_STANDING, STATUS_WALKING, STATUS_TURNING, STATUS_AIMING, STATUS_FALLING, STATUS_DEAD, STATUS_UNCONSCIOUS};
 enum UnitFaction {FACTION_PLAYER, FACTION_HOSTILE, FACTION_NEUTRAL};
+enum UnitSide {SIDE_FRONT, SIDE_LEFT, SIDE_RIGHT, SIDE_REAR, SIDE_UNDER};
+enum UnitBodyPart {BODYPART_HEAD, BODYPART_TORSO, BODYPART_RIGHTARM, BODYPART_LEFTARM, BODYPART_RIGHTLEG, BODYPART_LEFTLEG};
 
 /**
  * Represents a moving unit in the battlescape, player controlled or AI controlled
@@ -56,6 +58,8 @@ private:
 	int _tu, _energy, _health, _morale;
 	bool _cached, _kneeled;
 	BattleItem *_rightHandItem, *_leftHandItem;
+	int _armor[5];
+	int _fatalWounds[6];
 public:
 	/// Creates a BattleUnit.
 	BattleUnit(Unit *_unit, UnitFaction faction);
@@ -147,6 +151,12 @@ public:
 	double getFiringAccuracy(int baseAccuracy);
 	/// Calculate throwing accuracy.
 	double getThrowingAccuracy();
+	/// Set armor value.
+	void setArmor(int armor, UnitSide side);
+	/// Get armor value.
+	int getArmor(UnitSide side);
+	/// Get total number of fatal wounds.
+	int getFatalWounds();
 };
 
 }

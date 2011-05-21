@@ -804,6 +804,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Battlescape\UnitInfoState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\UnitInfoState.h"
+				>
+			</File>			
+			<File
 				RelativePath=".\Battlescape\UnitTurnBState.cpp"
 				>
 			</File>

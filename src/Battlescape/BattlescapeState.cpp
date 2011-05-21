@@ -27,6 +27,7 @@
 #include "ProjectileFlyBState.h"
 #include "TerrainModifier.h"
 #include "ActionMenuState.h"
+#include "UnitInfoState.h"
 #include "../Engine/Game.h"
 #include "../Engine/Music.h"
 #include "../Engine/Language.h"
@@ -344,6 +345,17 @@ void BattlescapeState::mapClick(Action *action)
 		}
 	}
 
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT &&
+		action->getYMouse() / action->getYScale() > 180 &&
+		action->getXMouse() / action->getXScale() > 110 &&
+		action->getXMouse() / action->getXScale() < 270)
+	{
+		if (_battleGame->getSelectedUnit())
+		{
+			popup(new UnitInfoState(_game, _battleGame->getSelectedUnit()));
+		}
+	}
+
 	// don't handle mouseclicks below 140, because they are in the buttons area (it overlaps with map surface)
 	if (action->getYMouse() / action->getYScale() > BUTTONS_AREA) return;
 
@@ -620,7 +632,9 @@ void BattlescapeState::btnVisibleUnitClick(Action *action)
 {
 	int btnID = -1;
 
-	popState();
+	_states.clear();
+	setupCursor();
+	_game->getCursor()->setVisible(true);
 
 	// got to find out which button was pressed
 	for (int i = 0; i < 10 && btnID == -1; i++)

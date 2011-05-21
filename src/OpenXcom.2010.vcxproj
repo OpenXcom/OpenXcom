@@ -149,6 +149,7 @@
     <ClCompile Include="Battlescape\Position.cpp" />
     <ClCompile Include="Battlescape\Projectile.cpp" />
     <ClCompile Include="Battlescape\ProjectileFlyBState.cpp" />
+    <ClCompile Include="Battlescape\UnitInfoState.cpp" />
     <ClCompile Include="Battlescape\TerrainModifier.cpp" />
     <ClCompile Include="Battlescape\UnitFallBState.cpp" />
     <ClCompile Include="Battlescape\UnitSprite.cpp" />
@@ -320,6 +321,7 @@
     <ClInclude Include="Battlescape\Position.h" />
     <ClInclude Include="Battlescape\Projectile.h" />
     <ClInclude Include="Battlescape\ProjectileFlyBState.h" />
+    <ClInclude Include="Battlescape\UnitInfoState.h" />
     <ClInclude Include="Battlescape\TerrainModifier.h" />
     <ClInclude Include="Battlescape\UnitFallBState.h" />
     <ClInclude Include="Battlescape\UnitSprite.h" />

@@ -506,6 +506,9 @@
     <ClCompile Include="Battlescape\ActionMenuState.cpp">
       <Filter>Battlescape</Filter>
     </ClCompile>
+    <ClCompile Include="Battlescape\UnitInfoState.cpp">
+      <Filter>Battlescape</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1012,6 +1015,9 @@
       <Filter>Engine</Filter>
     </ClInclude>
     <ClInclude Include="Battlescape\ActionMenuState.h">
+      <Filter>Battlescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Battlescape\UnitInfoState.h">
       <Filter>Battlescape</Filter>
     </ClInclude>
   </ItemGroup>
