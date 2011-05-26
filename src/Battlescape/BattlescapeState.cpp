@@ -25,6 +25,7 @@
 #include "UnitTurnBState.h"
 #include "UnitWalkBState.h"
 #include "ProjectileFlyBState.h"
+#include "ExplosionBState.h"
 #include "TerrainModifier.h"
 #include "ActionMenuState.h"
 #include "UnitInfoState.h"
@@ -561,6 +562,27 @@ void BattlescapeState::btnEndTurnClick(Action *action)
  */
 void BattlescapeState::endTurn()
 {
+	Position p;
+	// check for hot grenades
+	for (int i = 0; i < _battleGame->getWidth() * _battleGame->getLength() * _battleGame->getHeight(); i++)
+	{
+		for (std::vector<BattleItem*>::iterator it = _battleGame->getTiles()[i]->getInventory()->begin(); it != _battleGame->getTiles()[i]->getInventory()->end(); )
+		{
+			if ((*it)->getRules()->getBattleType() == BT_GRENADE)  // it's a grenade // todo: it's primed
+			{
+				p.x = _battleGame->getTiles()[i]->getPosition().x*16 + 8;
+				p.y = _battleGame->getTiles()[i]->getPosition().y*16 + 8;
+				p.z = _battleGame->getTiles()[i]->getPosition().z*24 + _battleGame->getTiles()[i]->getTerrainLevel();
+				statePushNext(new ExplosionBState(this, p, (*it)));
+				it = _battleGame->getTiles()[i]->getInventory()->erase(it);
+			}
+			else
+			{
+				++it;
+			}
+		}
+	}
+
 	if (_battleGame->getTerrainModifier()->closeUfoDoors())
 	{
 		_game->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(21)->play(); // ufo door closed

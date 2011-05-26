@@ -139,6 +139,8 @@ public:
 	void setChecked(bool flag);
 	/// Get whether we checked this tile.
 	bool getChecked();
+	/// Get inventory on this tile.
+	std::vector<BattleItem *> *getInventory();
 
 };
 

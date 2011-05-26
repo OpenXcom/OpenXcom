@@ -668,4 +668,10 @@ bool Tile::getChecked()
 	return _checked;
 }
 
+/// Get inventory on this tile.
+std::vector<BattleItem *> *Tile::getInventory()
+{
+	return &_inventory;
+}
+
 }

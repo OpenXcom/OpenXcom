@@ -61,10 +61,10 @@ ExplosionBState::~ExplosionBState()
  */
 void ExplosionBState::init()
 {	
-	_parent->setStateInterval(DEFAULT_ANIM_SPEED);
 	_unit = _parent->getGame()->getSavedGame()->getBattleGame()->getSelectedUnit();
 	if (_item == 0 || _item->getRules()->getHitAnimation() == 0)
 	{
+		_parent->setStateInterval(DEFAULT_ANIM_SPEED);
 		// create 9 explosions
 		for (int i = -32; i < 48; i+=32)
 			for (int j = -32; j < 48; j+=32)
@@ -80,7 +80,8 @@ void ExplosionBState::init()
 	}
 	else
 	{
-		// create a new kaboom
+		_parent->setStateInterval(DEFAULT_ANIM_SPEED/2);
+		// create a bulet hit
 		Explosion *explosion = new Explosion(_center, _item->getRules()->getHitAnimation(), false);
 		// add the explosion on the map
 		_parent->getMap()->getExplosions()->insert(explosion);

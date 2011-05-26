@@ -93,14 +93,14 @@ void ProjectileFlyBState::init()
 	{
 	case BA_AUTOSHOT:
 		baseAcc = weapon->getRules()->getAccuracyAuto();
-		_parent->setStateInterval(DEFAULT_BULLET_SPEED/2); // a little faster
+		//_parent->setStateInterval(DEFAULT_BULLET_SPEED/2); // a little faster
 		break;
 	case BA_SNAPSHOT:
 		baseAcc = weapon->getRules()->getAccuracySnap();
 		break;
 	case BA_AIMEDSHOT:
 		baseAcc = weapon->getRules()->getAccuracyAimed();
-		_parent->setStateInterval(DEFAULT_BULLET_SPEED*1.5); // a little slower
+		//_parent->setStateInterval(DEFAULT_BULLET_SPEED*1.5); // a little slower
 		break;
 	case BA_THROW:
 		if (!validThrowRange())
