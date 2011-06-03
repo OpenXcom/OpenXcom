@@ -45,7 +45,7 @@ TargetInfoState::TargetInfoState(Game *game, Target *target) : State(game), _tar
 	_txtTitle = new Text(182, 16, 37, 54);
 	_txtTargetted = new Text(182, 8, 37, 74);
 	_txtFollowers = new Text(182, 48, 37, 84);
-	
+
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
 
@@ -75,7 +75,7 @@ TargetInfoState::TargetInfoState(Game *game, Target *target) : State(game), _tar
 	_txtFollowers->setColor(Palette::blockOffset(15)-1);
 	_txtFollowers->setAlign(ALIGN_CENTER);
 	std::wstring s = L"";
-	for (std::vector<Target*>::iterator i = _target->getFollowers()->begin(); i != _target->getFollowers()->end(); i++)
+	for (std::vector<Target*>::iterator i = _target->getFollowers()->begin(); i != _target->getFollowers()->end(); ++i)
 	{
 		s += (*i)->getName(_game->getLanguage());
 		s += L'\n';
@@ -88,7 +88,7 @@ TargetInfoState::TargetInfoState(Game *game, Target *target) : State(game), _tar
  */
 TargetInfoState::~TargetInfoState()
 {
-	
+
 }
 
 /**

@@ -91,7 +91,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_btnRightHandItem = new InteractiveSurface(32, 48, 280, 149);
 	_numAmmoRight = new NumberText(30, 5, 280, 149);
 	_btnKneel = new InteractiveSurface(32, 16, 113, 160);
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 10; ++i)
 	{
 		_btnVisibleUnit[i] = new InteractiveSurface(15, 12, 300, 128 - (i * 13));
 		_numVisibleUnit[i] = new NumberText(15, 12, 306, 132 - (i * 13));
@@ -175,7 +175,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	add(_numAmmoLeft);
 	add(_btnRightHandItem);
 	add(_numAmmoRight);
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 10; ++i)
 	{
 		add(_btnVisibleUnit[i]);
 		add(_numVisibleUnit[i]);
@@ -211,7 +211,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_btnKneel->onMouseClick((ActionHandler)&BattlescapeState::btnKneelClick);
 	_btnLeftHandItem->onMouseClick((ActionHandler)&BattlescapeState::btnLeftHandItemClick);
 	_btnRightHandItem->onMouseClick((ActionHandler)&BattlescapeState::btnRightHandItemClick);
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 10; ++i)
 	{
 		_btnVisibleUnit[i]->onMouseClick((ActionHandler)&BattlescapeState::btnVisibleUnitClick);
 		_numVisibleUnit[i]->setColor(16);
@@ -564,7 +564,7 @@ void BattlescapeState::endTurn()
 {
 	Position p;
 	// check for hot grenades
-	for (int i = 0; i < _battleGame->getWidth() * _battleGame->getLength() * _battleGame->getHeight(); i++)
+	for (int i = 0; i < _battleGame->getWidth() * _battleGame->getLength() * _battleGame->getHeight(); ++i)
 	{
 		for (std::vector<BattleItem*>::iterator it = _battleGame->getTiles()[i]->getInventory()->begin(); it != _battleGame->getTiles()[i]->getInventory()->end(); )
 		{
@@ -659,7 +659,7 @@ void BattlescapeState::btnVisibleUnitClick(Action *action)
 	_game->getCursor()->setVisible(true);
 
 	// got to find out which button was pressed
-	for (int i = 0; i < 10 && btnID == -1; i++)
+	for (int i = 0; i < 10 && btnID == -1; ++i)
 	{
 		if (action->getSender() == _btnVisibleUnit[i])
 		{
@@ -702,7 +702,7 @@ void BattlescapeState::setupCursor()
 void BattlescapeState::updateSoldierInfo(BattleUnit *battleUnit)
 {
 
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 10; ++i)
 	{
 		_btnVisibleUnit[i]->hide();
 		_numVisibleUnit[i]->hide();
@@ -771,7 +771,7 @@ void BattlescapeState::updateSoldierInfo(BattleUnit *battleUnit)
 
 	_battleGame->getTerrainModifier()->calculateFOV(_battleGame->getSelectedUnit());
 	int j = 0;
-	for (std::vector<BattleUnit*>::iterator i = battleUnit->getVisibleUnits()->begin(); i != battleUnit->getVisibleUnits()->end(); i++)
+	for (std::vector<BattleUnit*>::iterator i = battleUnit->getVisibleUnits()->begin(); i != battleUnit->getVisibleUnits()->end(); ++i)
 	{
 		_btnVisibleUnit[j]->show();
 		_numVisibleUnit[j]->show();
@@ -798,7 +798,7 @@ void BattlescapeState::blinkVisibleUnitButtons()
 	square2.w = 13;
 	square2.h = 10;
 
-	for (int i = 0; i < 10;  i++)
+	for (int i = 0; i < 10;  ++i)
 	{
 		if (_btnVisibleUnit[i]->getVisible() == true)
 		{

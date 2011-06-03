@@ -49,15 +49,15 @@ Base::Base(Ruleset *rule) : Target(), _rule(rule), _name(L""), _facilities(), _s
  */
 Base::~Base()
 {
-	for (std::vector<BaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); i++)
+	for (std::vector<BaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); ++i)
 	{
 		delete *i;
 	}
-	for (std::vector<Soldier*>::iterator i = _soldiers.begin(); i != _soldiers.end(); i++)
+	for (std::vector<Soldier*>::iterator i = _soldiers.begin(); i != _soldiers.end(); ++i)
 	{
 		delete *i;
 	}
-	for (std::vector<Craft*>::iterator i = _crafts.begin(); i != _crafts.end(); i++)
+	for (std::vector<Craft*>::iterator i = _crafts.begin(); i != _crafts.end(); ++i)
 	{
 		delete *i;
 	}
@@ -110,7 +110,7 @@ void Base::load(const YAML::Node &node, SavedGame *save)
 			}
 			else if (type == "STR_UFO")
 			{
-				for (std::vector<Ufo*>::iterator i = save->getUfos()->begin(); i != save->getUfos()->end(); i++)
+				for (std::vector<Ufo*>::iterator i = save->getUfos()->begin(); i != save->getUfos()->end(); ++i)
 				{
 					if ((*i)->getId() == id)
 					{
@@ -121,7 +121,7 @@ void Base::load(const YAML::Node &node, SavedGame *save)
 			}
 			else if (type == "STR_WAYPOINT")
 			{
-				for (std::vector<Waypoint*>::iterator i = save->getWaypoints()->begin(); i != save->getWaypoints()->end(); i++)
+				for (std::vector<Waypoint*>::iterator i = save->getWaypoints()->begin(); i != save->getWaypoints()->end(); ++i)
 				{
 					if ((*i)->getId() == id)
 					{
@@ -145,7 +145,7 @@ void Base::load(const YAML::Node &node, SavedGame *save)
 			int id;
 			(*pName)["type"] >> type;
 			(*pName)["id"] >> id;
-			for (std::vector<Craft*>::iterator i = _crafts.begin(); i != _crafts.end(); i++)
+			for (std::vector<Craft*>::iterator i = _crafts.begin(); i != _crafts.end(); ++i)
 			{
 				if ((*i)->getRules()->getType() == type && (*i)->getId() == id)
 				{
@@ -182,21 +182,21 @@ void Base::save(YAML::Emitter &out) const
 	out << YAML::Key << "name" << YAML::Value << Language::wstrToUtf8(_name);
 	out << YAML::Key << "facilities" << YAML::Value;
 	out << YAML::BeginSeq;
-	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); i++)
+	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); ++i)
 	{
 		(*i)->save(out);
 	}
 	out << YAML::EndSeq;
 	out << YAML::Key << "soldiers" << YAML::Value;
 	out << YAML::BeginSeq;
-	for (std::vector<Soldier*>::const_iterator i = _soldiers.begin(); i != _soldiers.end(); i++)
+	for (std::vector<Soldier*>::const_iterator i = _soldiers.begin(); i != _soldiers.end(); ++i)
 	{
 		(*i)->save(out);
 	}
 	out << YAML::EndSeq;
 	out << YAML::Key << "crafts" << YAML::Value;
 	out << YAML::BeginSeq;
-	for (std::vector<Craft*>::const_iterator i = _crafts.begin(); i != _crafts.end(); i++)
+	for (std::vector<Craft*>::const_iterator i = _crafts.begin(); i != _crafts.end(); ++i)
 	{
 		(*i)->save(out);
 	}
@@ -207,7 +207,7 @@ void Base::save(YAML::Emitter &out) const
 	out << YAML::Key << "engineers" << YAML::Value << _engineers;
 	out << YAML::Key << "transfers" << YAML::Value;
 	out << YAML::BeginSeq;
-	for (std::vector<Transfer*>::const_iterator i = _transfers.begin(); i != _transfers.end(); i++)
+	for (std::vector<Transfer*>::const_iterator i = _transfers.begin(); i != _transfers.end(); ++i)
 	{
 		(*i)->save(out);
 	}
@@ -336,7 +336,7 @@ void Base::setEngineers(int engineers)
 int Base::getAvailableSoldiers() const
 {
 	int total = 0;
-	for (std::vector<Soldier*>::const_iterator i = _soldiers.begin(); i != _soldiers.end(); i++)
+	for (std::vector<Soldier*>::const_iterator i = _soldiers.begin(); i != _soldiers.end(); ++i)
 	{
 		if ((*i)->getCraft() == 0)
 		{
@@ -354,7 +354,7 @@ int Base::getAvailableSoldiers() const
 int Base::getTotalSoldiers() const
 {
 	int total = _soldiers.size();
-	for (std::vector<Transfer*>::const_iterator i = _transfers.begin(); i != _transfers.end(); i++)
+	for (std::vector<Transfer*>::const_iterator i = _transfers.begin(); i != _transfers.end(); ++i)
 	{
 		if ((*i)->getType() == TRANSFER_SOLDIER)
 		{
@@ -382,7 +382,7 @@ int Base::getAvailableScientists() const
 int Base::getTotalScientists() const
 {
 	int total = _scientists;
-	for (std::vector<Transfer*>::const_iterator i = _transfers.begin(); i != _transfers.end(); i++)
+	for (std::vector<Transfer*>::const_iterator i = _transfers.begin(); i != _transfers.end(); ++i)
 	{
 		if ((*i)->getType() == TRANSFER_SCIENTIST)
 		{
@@ -410,7 +410,7 @@ int Base::getAvailableEngineers() const
 int Base::getTotalEngineers() const
 {
 	int total = _engineers;
-	for (std::vector<Transfer*>::const_iterator i = _transfers.begin(); i != _transfers.end(); i++)
+	for (std::vector<Transfer*>::const_iterator i = _transfers.begin(); i != _transfers.end(); ++i)
 	{
 		if ((*i)->getType() == TRANSFER_ENGINEER)
 		{
@@ -438,7 +438,7 @@ int Base::getUsedQuarters() const
 int Base::getAvailableQuarters() const
 {
 	int total = 0;
-	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); i++)
+	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); ++i)
 	{
 		if ((*i)->getBuildTime() == 0)
 		{
@@ -456,11 +456,11 @@ int Base::getAvailableQuarters() const
 int Base::getUsedStores() const
 {
 	double total = _items->getTotalSize(_rule);
-	for (std::vector<Craft*>::const_iterator i = _crafts.begin(); i != _crafts.end(); i++)
+	for (std::vector<Craft*>::const_iterator i = _crafts.begin(); i != _crafts.end(); ++i)
 	{
 		total += (*i)->getItems()->getTotalSize(_rule);
 	}
-	for (std::vector<Transfer*>::const_iterator i = _transfers.begin(); i != _transfers.end(); i++)
+	for (std::vector<Transfer*>::const_iterator i = _transfers.begin(); i != _transfers.end(); ++i)
 	{
 		if ((*i)->getType() == TRANSFER_ITEM)
 		{
@@ -478,7 +478,7 @@ int Base::getUsedStores() const
 int Base::getAvailableStores() const
 {
 	int total = 0;
-	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); i++)
+	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); ++i)
 	{
 		if ((*i)->getBuildTime() == 0)
 		{
@@ -506,7 +506,7 @@ int Base::getUsedLaboratories() const
 int Base::getAvailableLaboratories() const
 {
 	int total = 0;
-	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); i++)
+	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); ++i)
 	{
 		if ((*i)->getBuildTime() == 0)
 		{
@@ -534,7 +534,7 @@ int Base::getUsedWorkshops() const
 int Base::getAvailableWorkshops() const
 {
 	int total = 0;
-	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); i++)
+	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); ++i)
 	{
 		if ((*i)->getBuildTime() == 0)
 		{
@@ -552,7 +552,7 @@ int Base::getAvailableWorkshops() const
 int Base::getUsedHangars() const
 {
 	int total = _crafts.size();
-	for (std::vector<Transfer*>::const_iterator i = _transfers.begin(); i != _transfers.end(); i++)
+	for (std::vector<Transfer*>::const_iterator i = _transfers.begin(); i != _transfers.end(); ++i)
 	{
 		if ((*i)->getType() == TRANSFER_CRAFT)
 		{
@@ -570,7 +570,7 @@ int Base::getUsedHangars() const
 int Base::getAvailableHangars() const
 {
 	int total = 0;
-	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); i++)
+	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); ++i)
 	{
 		if ((*i)->getBuildTime() == 0)
 		{
@@ -588,7 +588,7 @@ int Base::getAvailableHangars() const
 int Base::getDefenceValue() const
 {
 	int total = 0;
-	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); i++)
+	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); ++i)
 	{
 		if ((*i)->getBuildTime() == 0)
 		{
@@ -606,7 +606,7 @@ int Base::getDefenceValue() const
 int Base::getShortRangeDetection() const
 {
 	int total = 0;
-	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); i++)
+	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); ++i)
 	{
 		if ((*i)->getBuildTime() == 0 && (*i)->getRules()->getRadarRange() == 1500)
 		{
@@ -624,7 +624,7 @@ int Base::getShortRangeDetection() const
 int Base::getLongRangeDetection() const
 {
 	int total = 0;
-	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); i++)
+	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); ++i)
 	{
 		if ((*i)->getBuildTime() == 0 && (*i)->getRules()->getRadarRange() > 1500)
 		{
@@ -643,7 +643,7 @@ int Base::getLongRangeDetection() const
 int Base::getCraftCount(std::string craft) const
 {
 	int total = 0;
-	for (std::vector<Craft*>::const_iterator i = _crafts.begin(); i != _crafts.end(); i++)
+	for (std::vector<Craft*>::const_iterator i = _crafts.begin(); i != _crafts.end(); ++i)
 	{
 		if ((*i)->getRules()->getType() == craft)
 		{
@@ -661,7 +661,7 @@ int Base::getCraftCount(std::string craft) const
 int Base::getCraftMaintenance() const
 {
 	int total = 0;
-	for (std::vector<Craft*>::const_iterator i = _crafts.begin(); i != _crafts.end(); i++)
+	for (std::vector<Craft*>::const_iterator i = _crafts.begin(); i != _crafts.end(); ++i)
 	{
 		total += (*i)->getRules()->getCost();
 	}
@@ -690,7 +690,7 @@ int Base::getPersonnelMaintenance() const
 int Base::getFacilityMaintenance() const
 {
 	int total = 0;
-	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); i++)
+	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); ++i)
 	{
 		if ((*i)->getBuildTime() == 0)
 		{

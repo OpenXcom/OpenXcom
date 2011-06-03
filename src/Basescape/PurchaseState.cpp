@@ -60,7 +60,7 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 	_txtCost = new Text(102, 9, 152, 32);
 	_txtQuantity = new Text(60, 9, 256, 32);
 	_lstItems = new TextList(288, 128, 8, 40);
-	
+
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
 
@@ -153,12 +153,12 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 	_lstItems->addRow(3, _game->getLanguage()->getString("STR_SCIENTIST").c_str(), Text::formatFunding(_game->getRuleset()->getScientistCost() * 2).c_str(), L"0");
 	_qtys.push_back(0);
 	_lstItems->addRow(3, _game->getLanguage()->getString("STR_ENGINEER").c_str(), Text::formatFunding(_game->getRuleset()->getEngineerCost() * 2).c_str(), L"0");
-	for (std::vector<std::string>::iterator i = _crafts.begin(); i != _crafts.end(); i++)
+	for (std::vector<std::string>::iterator i = _crafts.begin(); i != _crafts.end(); ++i)
 	{
 		_qtys.push_back(0);
 		_lstItems->addRow(3, _game->getLanguage()->getString(*i).c_str(), Text::formatFunding(_game->getRuleset()->getCraft(*i)->getCost()).c_str(), L"0");
 	}
-	for (std::vector<std::string>::iterator i = _items.begin(); i != _items.end(); i++)
+	for (std::vector<std::string>::iterator i = _items.begin(); i != _items.end(); ++i)
 	{
 		_qtys.push_back(0);
 		_lstItems->addRow(3, _game->getLanguage()->getString(*i).c_str(), Text::formatFunding(_game->getRuleset()->getItem(*i)->getCost()).c_str(), L"0");
@@ -197,7 +197,7 @@ void PurchaseState::think()
 void PurchaseState::btnOkClick(Action *action)
 {
 	_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() - _total);
-	for (unsigned int i = 0; i < _qtys.size(); i++)
+	for (unsigned int i = 0; i < _qtys.size(); ++i)
 	{
 		if (_qtys[i] > 0)
 		{
@@ -293,7 +293,7 @@ void PurchaseState::lstItemsRightArrowPress(Action *action)
  */
 void PurchaseState::lstItemsRightArrowRelease(Action *action)
 {
-	_timerDec->stop();	
+	_timerDec->stop();
 }
 
 /**

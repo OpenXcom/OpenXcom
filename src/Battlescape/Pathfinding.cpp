@@ -37,7 +37,7 @@ Pathfinding::Pathfinding(SavedBattleGame *save) : _save(save), _nodes()
 	/* allocate the array and the objects in it */
 	_nodes = new PathfindingNode*[_size];
 	int x, y, z;
-	for (int i = 0; i < _size; i++)
+	for (int i = 0; i < _size; ++i)
 	{
 		_save->getTileCoords(i, &x, &y, &z);
 		_nodes[i] = new PathfindingNode(Position(x, y, z));
@@ -50,7 +50,7 @@ Pathfinding::Pathfinding(SavedBattleGame *save) : _save(save), _nodes()
  */
 Pathfinding::~Pathfinding()
 {
-	for (int i = 0; i < _size; i++)
+	for (int i = 0; i < _size; ++i)
 	{
 		delete _nodes[i];
 	}
@@ -58,7 +58,7 @@ Pathfinding::~Pathfinding()
 
 }
 
-/** 
+/**
  * Gets the Node on a given position on the map.
  * @param pos position
  * @return Pointer to node.
@@ -107,7 +107,7 @@ void Pathfinding::calculate(BattleUnit *unit, Position &endPosition)
 	_path.clear();
 
 	// reset every node, so we have to check them all
-	for (int i = 0; i < _size; i++)
+	for (int i = 0; i < _size; ++i)
 		_nodes[i]->reset();
 
 	// start position is the first one in our "open" list
@@ -130,7 +130,7 @@ void Pathfinding::calculate(BattleUnit *unit, Position &endPosition)
                 getNode(endPosition)->getTUCost() > getNode(currentPos)->getTUCost() + tuCost)
                 )
 				{
-					getNode(nextPos)->check(getNode(currentPos)->getTUCost() + tuCost, 
+					getNode(nextPos)->check(getNode(currentPos)->getTUCost() + tuCost,
 											getNode(currentPos)->getStepsNum() + 1,
 											getNode(currentPos),
 											direction);
@@ -222,7 +222,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 	{
 		cost += destinationTile->getTUCost(O_OBJECT, _movementType);
 	}
-	
+
 	// diagonal walking (uneven directions) costs 50% more tu's
 	if (direction & 1)
 	{
@@ -252,7 +252,7 @@ void Pathfinding::directionToVector(const int direction, Position *vector)
  */
 int Pathfinding::getStartDirection()
 {
-	if (_path.size() == 0) return -1;
+	if (_path.empty()) return -1;
 	return _path.back();
 }
 
@@ -262,7 +262,7 @@ int Pathfinding::getStartDirection()
  */
 int Pathfinding::dequeuePath()
 {
-	if (_path.size() == 0) return -1;
+	if (_path.empty()) return -1;
 	int last_element = _path.back();
 	_path.pop_back();
 	return last_element;

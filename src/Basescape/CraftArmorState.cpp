@@ -52,7 +52,7 @@ CraftArmorState::CraftArmorState(Game *game, Base *base, unsigned int craft) : S
 	_txtCraft = new Text(70, 9, 130, 32);
 	_txtArmor = new Text(100, 9, 200, 32);
 	_lstSoldiers = new TextList(288, 128, 8, 40);
-	
+
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
 
@@ -95,7 +95,7 @@ CraftArmorState::CraftArmorState(Game *game, Base *base, unsigned int craft) : S
 
 	int row = 0;
 	Craft *c = _base->getCrafts()->at(_craft);
-	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); i++)
+	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
 	{
 		std::wstring s;
 		if ((*i)->getCraft() == 0)

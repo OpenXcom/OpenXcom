@@ -37,7 +37,7 @@ Language::Language() : _name(L""), _strings()
  */
 Language::~Language()
 {
-	
+
 }
 
 /**
@@ -53,7 +53,7 @@ std::wstring Language::utf8ToWstr(const std::string& src)
 	wchar_t w = 0;
 	int bytes = 0;
 	wchar_t err = 0xfffd;
-	for (size_t i = 0; i < src.size(); i++)
+	for (size_t i = 0; i < src.size(); ++i)
 	{
 		unsigned char c = (unsigned char)src[i];
 		if (c <= 0x7f) //first byte
@@ -111,7 +111,7 @@ std::wstring Language::utf8ToWstr(const std::string& src)
 std::string Language::wstrToUtf8(const std::wstring& src)
 {
 	std::string dest;
-	for (size_t i = 0; i < src.size(); i++)
+	for (size_t i = 0; i < src.size(); ++i)
 	{
 		wchar_t w = src[i];
 		if (w <= 0x7f)
@@ -152,14 +152,14 @@ std::string Language::wstrToUtf8(const std::wstring& src)
 void Language::loadLng(const std::string &filename)
 {
 	_strings.clear();
-	
+
 	// Load file and put text in map
 	std::ifstream txtFile (filename.c_str(), std::ios::in | std::ios::binary);
 	if (!txtFile)
 	{
 		throw Exception("Failed to load LNG");
 	}
-	
+
 	char value;
 	std::string buffer, bufid;
 	std::wstring bufstr;
@@ -244,10 +244,10 @@ void Language::toHtml() const
 	std::ofstream htmlFile ("lang.html", std::ios::out);
 	htmlFile << "<table border=\"1\" width=\"100%\">" << std::endl;
 	htmlFile << "<tr><th>ID String</th><th>English String</th></tr>" << std::endl;
-	for (std::map<std::string, std::wstring>::const_iterator i = _strings.begin(); i != _strings.end(); i++)
+	for (std::map<std::string, std::wstring>::const_iterator i = _strings.begin(); i != _strings.end(); ++i)
 	{
 		htmlFile << "<tr><td>" << i->first << "</td><td>";
-		for (std::wstring::const_iterator j = i->second.begin(); j != i->second.end(); j++)
+		for (std::wstring::const_iterator j = i->second.begin(); j != i->second.end(); ++j)
 		{
 			if (*j == 2 || *j == '\n')
 			{

@@ -93,7 +93,7 @@ Globe::Globe(Game *game, int cenX, int cenY, int width, int height, int x, int y
 	_blinkTimer->start();
 	_rotTimer = new Timer(50);
 	_rotTimer->onTimer((SurfaceHandler)&Globe::rotate);
-	
+
 	// Globe markers
 	_mkXcomBase = new Surface(3, 3);
 	_mkXcomBase->lock();
@@ -210,7 +210,7 @@ Globe::~Globe()
 	delete _mkCrashedUfo;
 	delete _mkAlienSite;
 
-	for (std::list<Polygon*>::iterator i = _cacheLand.begin(); i != _cacheLand.end(); i++)
+	for (std::list<Polygon*>::iterator i = _cacheLand.begin(); i != _cacheLand.end(); ++i)
 	{
 		delete *i;
 	}
@@ -240,7 +240,7 @@ void Globe::polarToCart(double lon, double lat, Sint16 *x, Sint16 *y) const
  * @param lat Pointer to the output latitude.
  */
 void Globe::cartToPolar(Sint16 x, Sint16 y, double *lon, double *lat) const
-{	
+{
 	// Orthographic projection
 	x -= _cenX;
 	y -= _cenY;
@@ -268,7 +268,7 @@ void Globe::cartToPolar(Sint16 x, Sint16 y, double *lon, double *lat) const
 bool Globe::pointBack(double lon, double lat) const
 {
 	double c = cos(_cenLat) * cos(lat) * cos(lon - _cenLon) + sin(_cenLat) * sin(lat);
-	
+
 	return c < 0;
 }
 
@@ -335,7 +335,7 @@ void Globe::loadDat(const std::string &filename, std::list<Polygon*> *polygons)
 	{
 		throw Exception("Failed to load DAT");
 	}
-	
+
 	short value[10];
 
 	while (mapFile.read((char*)&value, sizeof(value)))
@@ -494,7 +494,7 @@ void Globe::center(double lon, double lat)
 bool Globe::insideLand(double lon, double lat) const
 {
 	bool inside = false;
-	for (std::list<Polygon*>::iterator i = _game->getResourcePack()->getPolygons()->begin(); i != _game->getResourcePack()->getPolygons()->end() && !inside; i++)
+	for (std::list<Polygon*>::iterator i = _game->getResourcePack()->getPolygons()->begin(); i != _game->getResourcePack()->getPolygons()->end() && !inside; ++i)
 	{
 		inside = insidePolygon(lon, lat, *i);
 	}
@@ -542,7 +542,7 @@ std::vector<Target*> Globe::getTargets(int x, int y, bool craft) const
 	std::vector<Target*> v;
 	if (!craft)
 	{
-		for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); i++)
+		for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
 		{
 			if ((*i)->getLongitude() == 0.0 && (*i)->getLatitude() == 0.0)
 				continue;
@@ -552,11 +552,11 @@ std::vector<Target*> Globe::getTargets(int x, int y, bool craft) const
 				v.push_back(*i);
 			}
 
-			for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); j++)
+			for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); ++j)
 			{
 				if ((*j)->getLongitude() == (*i)->getLongitude() && (*j)->getLatitude() == (*i)->getLatitude() && (*j)->getDestination() == 0)
 					continue;
-			
+
 				if (targetNear((*j), x, y))
 				{
 					v.push_back(*j);
@@ -564,17 +564,17 @@ std::vector<Target*> Globe::getTargets(int x, int y, bool craft) const
 			}
 		}
 	}
-	for (std::vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end(); i++)
+	for (std::vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end(); ++i)
 	{
 		if (!(*i)->getDetected())
 			continue;
-		
+
 		if (targetNear((*i), x, y))
 		{
 			v.push_back(*i);
 		}
 	}
-	for (std::vector<Waypoint*>::iterator i = _game->getSavedGame()->getWaypoints()->begin(); i != _game->getSavedGame()->getWaypoints()->end(); i++)
+	for (std::vector<Waypoint*>::iterator i = _game->getSavedGame()->getWaypoints()->begin(); i != _game->getSavedGame()->getWaypoints()->end(); ++i)
 	{
 		if (targetNear((*i), x, y))
 		{
@@ -603,14 +603,14 @@ void Globe::cachePolygons()
 void Globe::cache(std::list<Polygon*> *polygons, std::list<Polygon*> *cache)
 {
 	// Clear existing cache
-	for (std::list<Polygon*>::iterator i = cache->begin(); i != cache->end(); i++)
+	for (std::list<Polygon*>::iterator i = cache->begin(); i != cache->end(); ++i)
 	{
 		delete *i;
-	}	
+	}
 	cache->clear();
-	
+
 	// Pre-calculate values to cache
-	for (std::list<Polygon*>::iterator i = polygons->begin(); i != polygons->end(); i++)
+	for (std::list<Polygon*>::iterator i = polygons->begin(); i != polygons->end(); ++i)
 	{
 		// Is quad on the back face?
 		bool backFace = true;
@@ -620,7 +620,7 @@ void Globe::cache(std::list<Polygon*> *polygons, std::list<Polygon*> *cache)
 		}
 		if (backFace)
 			continue;
-		
+
 		Polygon* p = new Polygon(**i);
 
 		// Convert coordinates
@@ -748,10 +748,10 @@ void Globe::fillLongitudeSegments(double startLon, double endLon, int colourShif
 
 	if (abs(startLon-endLon) > 1)
 	{
-		bigLonAperture = 1; 
+		bigLonAperture = 1;
 	}
-                
-    // find two latitudes where        
+
+    // find two latitudes where
 	startLan = lastVisibleLat(startLon);
 	endLan   = lastVisibleLat(endLon);
 
@@ -777,18 +777,18 @@ void Globe::fillLongitudeSegments(double startLon, double endLon, int colourShif
 		{
 			polarToCart(traceLon, traceLat, &x, &y);
 			polyPointsX.push_back(x);
-			polyPointsY.push_back(y);				
+			polyPointsY.push_back(y);
 		}
-        
+
         // if aperture of longtitude is big then we need find first angle of sector
-		if (bigLonAperture) 
-		{  
-			sx = x - _cenX; 
+		if (bigLonAperture)
+		{
+			sx = x - _cenX;
 			sy = y - _cenY;
 			angle1 = atan(sy / sx);
-			if (sx < 0) angle1 += M_PI; 
+			if (sx < 0) angle1 += M_PI;
 		}
-        
+
 	    // draw second longtitude line from pole
 		traceLon = endLon;
 		dL = (endLan + M_PI/2) / 20;
@@ -796,12 +796,12 @@ void Globe::fillLongitudeSegments(double startLon, double endLon, int colourShif
 		{
 			polarToCart(traceLon, traceLat, &x, &y);
 			polyPointsX2.push_back(x);
-			polyPointsY2.push_back(y);				
+			polyPointsY2.push_back(y);
 		}
-        
+
         // if aperture of longtitudes is big we need find second angle of sector and draw pie of circle between two longtitudes
-		if (bigLonAperture) 
-		{  
+		if (bigLonAperture)
+		{
 			sx = x - _cenX;
 			sy = y - _cenY;
 			angle2 = atan(sy/sx);
@@ -809,20 +809,20 @@ void Globe::fillLongitudeSegments(double startLon, double endLon, int colourShif
 			{
 				angle2 += M_PI;
 			}
-		         
+
 		    // draw sector part of circle
             if (angle1 > angle2)
-		    { 
+		    {
                 dL = (angle1 - angle2) / 20;
 				for (double a = angle2 + dL / 2; a < angle1; a += dL)
 				{
 					x = _cenX + (Sint16)floor(_radius[_zoom] * cos(a));
 					y = _cenY + (Sint16)floor(_radius[_zoom] * sin(a));
 					polyPointsX2.push_back(x);
-					polyPointsY2.push_back(y);				
+					polyPointsY2.push_back(y);
 				}
 		    }
-			else 
+			else
             {
 				dL = (2*M_PI + angle1 - angle2) / 20;
 				for (double a = angle2 + dL / 2; a < 2*M_PI + angle1; a += dL)
@@ -830,7 +830,7 @@ void Globe::fillLongitudeSegments(double startLon, double endLon, int colourShif
 					x = _cenX + (Sint16)floor(_radius[_zoom] * cos(a));
 					y = _cenY + (Sint16)floor(_radius[_zoom] * sin(a));
 					polyPointsX2.push_back(x);
-					polyPointsY2.push_back(y);				
+					polyPointsY2.push_back(y);
 				}
 			}
 		}
@@ -844,12 +844,12 @@ void Globe::fillLongitudeSegments(double startLon, double endLon, int colourShif
 		{
 			polarToCart(traceLon, traceLat, &x, &y);
 			polyPointsX.push_back(x);
-			polyPointsY.push_back(y);				
+			polyPointsY.push_back(y);
 		}
-        
+
         // if aperture of longtitude is big then we need find first angle of sector of pie between longtitudes
 		if (bigLonAperture)
-		{  
+		{
 			sx = x - _cenX;
 			sy = y - _cenY;
 			angle1 = atan(sy / sx);
@@ -858,7 +858,7 @@ void Globe::fillLongitudeSegments(double startLon, double endLon, int colourShif
 				angle1 += M_PI;
 			}
 		}
-        
+
 	    // draw second longtitude line from pole
 		traceLon = endLon;
 		dL = (endLan - M_PI/2) / 20;
@@ -866,12 +866,12 @@ void Globe::fillLongitudeSegments(double startLon, double endLon, int colourShif
 		{
 			polarToCart(traceLon, traceLat, &x, &y);
 			polyPointsX2.push_back(x);
-			polyPointsY2.push_back(y);				
+			polyPointsY2.push_back(y);
 		}
-                
+
         // if aperture of longtitudes is big we need find second angle of sector and draw pie of circle between two longtitudes
 		if (bigLonAperture)
-		{  
+		{
 			sx = x - _cenX;
 			sy = y - _cenY;
 			angle2 = atan(sy / sx);
@@ -880,17 +880,17 @@ void Globe::fillLongitudeSegments(double startLon, double endLon, int colourShif
 				angle2 += M_PI;
 			}
 			if (angle2 > angle1)
-			{ 
+			{
 				dL = (angle2 - angle1) / 20;
 				for (double a = angle1 + dL / 2; a < angle2; a += dL)
 				{
 					x = _cenX + (Sint16)floor(_radius[_zoom] * cos(a));
 					y = _cenY + (Sint16)floor(_radius[_zoom] * sin(a));
 					polyPointsX.push_back(x);
-					polyPointsY.push_back(y);				
+					polyPointsY.push_back(y);
 				}
 		    }
-			else 
+			else
             {
 				dL = (2*M_PI + angle2 - angle1) / 20;
 				for (double a = angle1 + dL / 2; a < 2*M_PI + angle2; a += dL)
@@ -898,15 +898,15 @@ void Globe::fillLongitudeSegments(double startLon, double endLon, int colourShif
 					x = _cenX + (Sint16)floor(_radius[_zoom] * cos(a));
 					y = _cenY + (Sint16)floor(_radius[_zoom] * sin(a));
 					polyPointsX.push_back(x);
-					polyPointsY.push_back(y);				
+					polyPointsY.push_back(y);
 				}
 			}
-		}                 
+		}
 	}
-	
+
 	dx = new Sint16[polyPointsX.size()+polyPointsX2.size()];
 	dy = new Sint16[polyPointsX.size()+polyPointsX2.size()];
-	
+
 	if (polyPointsX.size()+polyPointsX2.size() > 0)
 	{
 		for (unsigned int i = 0; i < polyPointsX.size(); i++)
@@ -961,7 +961,7 @@ void Globe::drawLand()
 	Sint16 x[4], y[4];
 	bool pole;
 
-	for (std::list<Polygon*>::iterator i = _cacheLand.begin(); i != _cacheLand.end(); i++)
+	for (std::list<Polygon*>::iterator i = _cacheLand.begin(); i != _cacheLand.end(); ++i)
 	{
 		minLon = 100.0;
 		maxLon = -100.0;
@@ -1018,7 +1018,7 @@ void Globe::drawDetail()
 		// Lock the surface
 		_countries->lock();
 
-		for (std::list<Polyline*>::iterator i = _game->getResourcePack()->getPolylines()->begin(); i != _game->getResourcePack()->getPolylines()->end(); i++)
+		for (std::list<Polyline*>::iterator i = _game->getResourcePack()->getPolylines()->begin(); i != _game->getResourcePack()->getPolylines()->end(); ++i)
 		{
 			Sint16 x[2], y[2];
 			for (int j = 0; j < (*i)->getPoints() - 1; j++)
@@ -1049,7 +1049,7 @@ void Globe::drawDetail()
 		label->setColor(Palette::blockOffset(15)-1);
 
 		Sint16 x, y;
-		for (std::vector<Country*>::iterator i = _game->getSavedGame()->getCountries()->begin(); i != _game->getSavedGame()->getCountries()->end(); i++)
+		for (std::vector<Country*>::iterator i = _game->getSavedGame()->getCountries()->begin(); i != _game->getSavedGame()->getCountries()->end(); ++i)
 		{
 			// Don't draw if label is facing back
 			if (pointBack((*i)->getRules()->getLabelLongitude(), (*i)->getRules()->getLabelLatitude()))
@@ -1077,9 +1077,9 @@ void Globe::drawDetail()
 		label->setColor(Palette::blockOffset(8)+10);
 
 		Sint16 x, y;
-		for (std::vector<Region*>::iterator i = _game->getSavedGame()->getRegions()->begin(); i != _game->getSavedGame()->getRegions()->end(); i++)
+		for (std::vector<Region*>::iterator i = _game->getSavedGame()->getRegions()->begin(); i != _game->getSavedGame()->getRegions()->end(); ++i)
 		{
-			for (std::vector<City*>::iterator j = (*i)->getRules()->getCities()->begin(); j != (*i)->getRules()->getCities()->end(); j++)
+			for (std::vector<City*>::iterator j = (*i)->getRules()->getCities()->begin(); j != (*i)->getRules()->getCities()->end(); ++j)
 			{
 				// Don't draw if city is facing back
 				if (pointBack((*j)->getLongitude(), (*j)->getLatitude()))
@@ -1114,7 +1114,7 @@ void Globe::drawMarkers()
 	_markers->clear();
 
 	// Draw the base markers
-	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); i++)
+	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
 	{
 		// Cheap hack to hide bases when they haven't been placed yet
 		if (((*i)->getLongitude() != 0.0 || (*i)->getLatitude() != 0.0) &&
@@ -1127,7 +1127,7 @@ void Globe::drawMarkers()
 			_mkXcomBase->blit(_markers);
 		}
 		// Draw the craft markers
-		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); j++)
+		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); ++j)
 		{
 			// Hide crafts docked at base
 			if ((*j)->getStatus() != "STR_OUT" || pointBack((*j)->getLongitude(), (*j)->getLatitude()))
@@ -1142,7 +1142,7 @@ void Globe::drawMarkers()
 	}
 
 	// Draw the UFO markers
-	for (std::vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end(); i++)
+	for (std::vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end(); ++i)
 	{
 		if (pointBack((*i)->getLongitude(), (*i)->getLatitude()))
 			continue;
@@ -1167,7 +1167,7 @@ void Globe::drawMarkers()
 	}
 
 	// Draw the waypoint markers
-	for (std::vector<Waypoint*>::iterator i = _game->getSavedGame()->getWaypoints()->begin(); i != _game->getSavedGame()->getWaypoints()->end(); i++)
+	for (std::vector<Waypoint*>::iterator i = _game->getSavedGame()->getWaypoints()->begin(); i != _game->getSavedGame()->getWaypoints()->end(); ++i)
 	{
 		if (pointBack((*i)->getLongitude(), (*i)->getLatitude()))
 			continue;
@@ -1277,7 +1277,7 @@ void Globe::keyboardPress(Action *action, State *state)
 void Globe::getPolygonTextureAndShade(double lon, double lat, int *texture, int *shade)
 {
 	*texture = -1;
-	for (std::list<Polygon*>::iterator i = _cacheLand.begin(); i != _cacheLand.end(); i++)
+	for (std::list<Polygon*>::iterator i = _cacheLand.begin(); i != _cacheLand.end(); ++i)
 	{
 		if(insidePolygon(lon, lat, *i))
 		{

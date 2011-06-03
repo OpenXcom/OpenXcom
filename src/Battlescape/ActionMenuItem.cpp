@@ -115,16 +115,16 @@ void ActionMenuItem::draw()
 {
 	SDL_Rect square;
 	Uint8 color = 11;
-	
+
 	clear();
-	
+
 	square.x = 0;
 	square.w = getWidth();
 
 	square.y = 0;
 	square.h = getHeight();
 
-	for (int i = 0; i < 9; i++)
+	for (int i = 0; i < 9; ++i)
 	{
 		if (i == 8 && _highlighted)
 			color -= 4;

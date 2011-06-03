@@ -51,7 +51,7 @@ StoresState::StoresState(Game *game, Base *base) : State(game), _base(base)
 	_txtQuantity = new Text(88, 8, 152, 32);
 	_txtSpaceUsed = new Text(74, 8, 240, 32);
 	_lstStores = new TextList(288, 128, 8, 40);
-	
+
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
 
@@ -84,7 +84,7 @@ StoresState::StoresState(Game *game, Base *base) : State(game), _base(base)
 
 	_txtSpaceUsed->setColor(Palette::blockOffset(13)+10);
 	_txtSpaceUsed->setText(_game->getLanguage()->getString("STR_SPACE_USED"));
-	
+
 	_lstStores->setColor(Palette::blockOffset(13)+10);
 	_lstStores->setArrowColor(Palette::blockOffset(13)+13);
 	_lstStores->setColumns(3, 162, 92, 32);
@@ -92,7 +92,7 @@ StoresState::StoresState(Game *game, Base *base) : State(game), _base(base)
 	_lstStores->setBackground(_window);
 	_lstStores->setMargin(2);
 
-	for (std::map<std::string, int>::iterator i = _base->getItems()->getContents()->begin(); i != _base->getItems()->getContents()->end(); i++)
+	for (std::map<std::string, int>::iterator i = _base->getItems()->getContents()->begin(); i != _base->getItems()->getContents()->end(); ++i)
 	{
 		RuleItem *rule = _game->getRuleset()->getItem(i->first);
 		std::wstringstream ss, ss2;
@@ -107,7 +107,7 @@ StoresState::StoresState(Game *game, Base *base) : State(game), _base(base)
  */
 StoresState::~StoresState()
 {
-	
+
 }
 
 /**

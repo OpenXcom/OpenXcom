@@ -93,7 +93,7 @@ void BaseView::setBase(Base *base)
 			_facilities[x][y] = 0;
 
 	// Fill grid with base facilities
-	for (std::vector<BaseFacility*>::iterator i = _base->getFacilities()->begin(); i != _base->getFacilities()->end(); i++)
+	for (std::vector<BaseFacility*>::iterator i = _base->getFacilities()->begin(); i != _base->getFacilities()->end(); ++i)
 	{
 		for (int y = (*i)->getY(); y < (*i)->getY() + (*i)->getRules()->getSize(); y++)
 		{
@@ -127,7 +127,7 @@ BaseFacility *BaseView::getSelectedFacility() const
 }
 
 /**
- * Returns the X position of the grid square 
+ * Returns the X position of the grid square
  * the mouse is currently over.
  * @return X position on the grid.
  */
@@ -137,7 +137,7 @@ int BaseView::getGridX() const
 }
 
 /**
- * Returns the Y position of the grid square 
+ * Returns the Y position of the grid square
  * the mouse is currently over.
  * @return Y position on the grid.
  */
@@ -163,7 +163,7 @@ void BaseView::setSelectable(int size)
 		r.h = _selector->getHeight();
 		r.x = 0;
 		r.y = 0;
-        _selector->drawRect(&r, Palette::blockOffset(1)); 
+        _selector->drawRect(&r, Palette::blockOffset(1));
 		r.w -= 2;
 		r.h -= 2;
 		r.x++;
@@ -202,7 +202,7 @@ bool BaseView::isPlaceable(RuleBaseFacility *rule) const
 	}
 
 	// Check for another facility to connect to
-	for (int i = 0; i < rule->getSize(); i++)
+	for (int i = 0; i < rule->getSize(); ++i)
 	{
 		if ((_gridX > 0 && _facilities[_gridX - 1][_gridY + i] != 0 && _facilities[_gridX - 1][_gridY + i]->getBuildTime() == 0) ||
 			(_gridY > 0 && _facilities[_gridX + i][_gridY - 1] != 0 && _facilities[_gridX + i][_gridY - 1]->getBuildTime() == 0) ||
@@ -326,7 +326,7 @@ void BaseView::blink()
 			r.h = _selector->getHeight();
 			r.x = 0;
 			r.y = 0;
-            _selector->drawRect(&r, Palette::blockOffset(1)); 
+            _selector->drawRect(&r, Palette::blockOffset(1));
 			r.w -= 2;
 			r.h -= 2;
 			r.x++;
@@ -339,7 +339,7 @@ void BaseView::blink()
 			r.h = _selector->getHeight();
 			r.x = 0;
 			r.y = 0;
-            _selector->drawRect(&r, 0); 
+            _selector->drawRect(&r, 0);
 		}
 	}
 }
@@ -363,8 +363,8 @@ void BaseView::draw()
 	}
 
 	std::vector<Craft*>::iterator craft = _base->getCrafts()->begin();
-	
-	for (std::vector<BaseFacility*>::iterator i = _base->getFacilities()->begin(); i != _base->getFacilities()->end(); i++)
+
+	for (std::vector<BaseFacility*>::iterator i = _base->getFacilities()->begin(); i != _base->getFacilities()->end(); ++i)
 	{
 		// Draw facility shape
 		int num = 0;
@@ -388,7 +388,7 @@ void BaseView::draw()
 		}
 	}
 
-	for (std::vector<BaseFacility*>::iterator i = _base->getFacilities()->begin(); i != _base->getFacilities()->end(); i++)
+	for (std::vector<BaseFacility*>::iterator i = _base->getFacilities()->begin(); i != _base->getFacilities()->end(); ++i)
 	{
 		// Draw connectors
 		if ((*i)->getBuildTime() == 0)
@@ -427,7 +427,7 @@ void BaseView::draw()
 		}
 	}
 
-	for (std::vector<BaseFacility*>::iterator i = _base->getFacilities()->begin(); i != _base->getFacilities()->end(); i++)
+	for (std::vector<BaseFacility*>::iterator i = _base->getFacilities()->begin(); i != _base->getFacilities()->end(); ++i)
 	{
 		// Draw facility graphic
 		int num = 0;
@@ -454,7 +454,7 @@ void BaseView::draw()
 			frame->setX((*i)->getX() * GRID_SIZE + ((*i)->getRules()->getSize() - 1) * GRID_SIZE / 2);
 			frame->setY((*i)->getY() * GRID_SIZE + ((*i)->getRules()->getSize() - 1) * GRID_SIZE / 2);
 			frame->blit(this);
-			craft++;
+			++craft;
 		}
 
 		// Draw time remaining

@@ -69,7 +69,7 @@ void Window::setBackground(Surface *bg)
 {
 	if (_popupStep < 1.0)
 	{
-		for (std::vector<Surface*>::iterator i = _state->getSurfaces()->begin(); i < _state->getSurfaces()->end(); i++)
+		for (std::vector<Surface*>::iterator i = _state->getSurfaces()->begin(); i < _state->getSurfaces()->end(); ++i)
 			if ((*i) != this)
 				(*i)->hide();
 	}
@@ -86,7 +86,7 @@ void Window::setColor(Uint8 color)
 {
 	if (_popupStep < 1.0)
 	{
-		for (std::vector<Surface*>::iterator i = _state->getSurfaces()->begin(); i < _state->getSurfaces()->end(); i++)
+		for (std::vector<Surface*>::iterator i = _state->getSurfaces()->begin(); i < _state->getSurfaces()->end(); ++i)
 			if ((*i) != this)
 				(*i)->hide();
 	}
@@ -129,7 +129,7 @@ void Window::popup()
 	}
 	else
 	{
-		for (std::vector<Surface*>::iterator i = _state->getSurfaces()->begin(); i < _state->getSurfaces()->end(); i++)
+		for (std::vector<Surface*>::iterator i = _state->getSurfaces()->begin(); i < _state->getSurfaces()->end(); ++i)
 			if ((*i) != this)
 				(*i)->show();
 		_popupStep = 1.0;
@@ -148,9 +148,9 @@ void Window::draw()
 {
 	SDL_Rect square;
 	Uint8 color = _color;
-	
+
 	clear();
-	
+
 	if (_popup == POPUP_HORIZONTAL || _popup == POPUP_BOTH)
 	{
 		square.x = (int)((getWidth() - getWidth() * _popupStep) / 2);
@@ -191,7 +191,7 @@ void Window::draw()
 		else
 			square.h = 1;
 	}
-		
+
 	if (_bg != 0)
 	{
 		_bg->getCrop()->x = getX() + square.x;

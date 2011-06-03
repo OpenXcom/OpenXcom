@@ -56,13 +56,13 @@ ConfirmNewBaseState::ConfirmNewBaseState(Game *game, Base *base, Globe *globe) :
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
-	
+
 	add(_window);
 	add(_btnOk);
 	add(_btnCancel);
 	add(_txtCost);
 	add(_txtArea);
-	
+
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)+2);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
@@ -76,7 +76,7 @@ ConfirmNewBaseState::ConfirmNewBaseState(Game *game, Base *base, Globe *globe) :
 	_btnCancel->onMouseClick((ActionHandler)&ConfirmNewBaseState::btnCancelClick);
 
 	std::wstringstream ss;
-	for (std::vector<Region*>::iterator i = _game->getSavedGame()->getRegions()->begin(); i != _game->getSavedGame()->getRegions()->end(); i++)
+	for (std::vector<Region*>::iterator i = _game->getSavedGame()->getRegions()->begin(); i != _game->getSavedGame()->getRegions()->end(); ++i)
 	{
 		if ((*i)->getRules()->insideRegion(_base->getLongitude(), _base->getLatitude()))
 		{
@@ -85,14 +85,14 @@ ConfirmNewBaseState::ConfirmNewBaseState(Game *game, Base *base, Globe *globe) :
 			break;
 		}
 	}
-	
+
 	std::wstring s = _game->getLanguage()->getString("STR_COST_");
 	s.erase(s.size()-1, 1);
 	s += L'\x01' + Text::formatFunding(_cost);
 	_txtCost->setColor(Palette::blockOffset(15)-1);
 	_txtCost->setSecondaryColor(Palette::blockOffset(8)+10);
 	_txtCost->setText(s);
-	
+
 	_txtArea->setColor(Palette::blockOffset(15)-1);
 	_txtArea->setSecondaryColor(Palette::blockOffset(8)+10);
 	_txtArea->setText(ss.str());
@@ -103,7 +103,7 @@ ConfirmNewBaseState::ConfirmNewBaseState(Game *game, Base *base, Globe *globe) :
  */
 ConfirmNewBaseState::~ConfirmNewBaseState()
 {
-	
+
 }
 
 /**

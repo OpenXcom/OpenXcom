@@ -58,7 +58,7 @@ TerrainModifier::~TerrainModifier()
   */
 void TerrainModifier::calculateSunShading()
 {
-	for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); i++)
+	for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); ++i)
 	{
 		calculateSunShading(_save->getTiles()[i]);
 	}
@@ -99,13 +99,13 @@ void TerrainModifier::calculateTerrainLighting()
 		return;
 
 	// reset all light to 0 first
-	for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); i++)
+	for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); ++i)
 	{
 		_save->getTiles()[i]->resetLight(layer);
 	}
 
 	// add lighting of terrain
-	for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); i++)
+	for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); ++i)
 	{
 		// only floors and objects can light up
 		if (_save->getTiles()[i]->getMapData(O_FLOOR)
@@ -130,7 +130,7 @@ void TerrainModifier::calculateTerrainLighting()
 	// todo: add lighting of items (flares)
 
 	// set changed light tiles to uncached
-	for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); i++)
+	for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); ++i)
 	{
 		_save->getTiles()[i]->checkForChangedLight(layer);
 	}
@@ -149,13 +149,13 @@ void TerrainModifier::calculateUnitLighting()
 		return;
 
 	// reset all light to 0 first
-	for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); i++)
+	for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); ++i)
 	{
 		_save->getTiles()[i]->resetLight(layer);
 	}
 
 	// add lighting of soldiers
-	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); i++)
+	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
 		if ((*i)->getFaction() == FACTION_PLAYER && !(*i)->isOut())
 		{
@@ -164,7 +164,7 @@ void TerrainModifier::calculateUnitLighting()
 	}
 
 	// set changed light tiles to uncached
-	for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); i++)
+	for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); ++i)
 	{
 		_save->getTiles()[i]->checkForChangedLight(layer);
 	}
@@ -201,7 +201,7 @@ void TerrainModifier::calculateFOV(BattleUnit *unit)
 	}
 
 	unit->clearVisibleUnits();
-	for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); i++)
+	for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); ++i)
 	{
 		_save->getTiles()[i]->setChecked(false);
 	}
@@ -348,7 +348,7 @@ bool TerrainModifier::checkForVisibleUnits(BattleUnit *unit, Tile *tile)
  */
 void TerrainModifier::calculateFOV(const Position &position)
 {
-	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); i++)
+	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
 		if ((*i)->getFaction() == _save->getSide())
 		{
@@ -539,7 +539,7 @@ void TerrainModifier::explode(const Position &center, int power, ItemDamageType 
 		// indicate we have finished recalculating
 		if (type == DT_HE)
 		{
-			for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); i++)
+			for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); ++i)
 			{
 				_save->getTiles()[i]->detonate();
 			}
@@ -651,7 +651,7 @@ int TerrainModifier::vectorToDirection(const Position &vector)
 {
 	int x[8] = {0, 1, 1, 1, 0, -1, -1, -1};
 	int y[8] = {1, 1, 0, -1, -1, -1, 0, 1};
-	for (int i=0;i<9;i++)
+	for (int i=0;i<9;++i)
 	{
 		if (x[i] == vector.x && y[i] == vector.y)
 			return i;
@@ -879,7 +879,7 @@ int TerrainModifier::calculateParabola(const Position& origin, const Position& t
 			}
 			return result;
 		}
-        i++;
+        ++i;
     }
 	return -1;
 }
@@ -913,7 +913,7 @@ int TerrainModifier::voxelCheck(const Position& voxel, BattleUnit *excludeUnit)
 		}
 	}
 
-	for (int i=0; i< 4; i++)
+	for (int i=0; i< 4; ++i)
 	{
 		MapData *mp = tile->getMapData(i);
 		if (mp != 0)
@@ -960,7 +960,7 @@ int TerrainModifier::closeUfoDoors()
 	int doorsclosed = 0;
 
 	// prepare a list of tiles on fire/smoke & close any ufo doors
-	for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); i++)
+	for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); ++i)
 	{
 		doorsclosed += _save->getTiles()[i]->closeUfoDoor();
 	}
@@ -979,7 +979,7 @@ void TerrainModifier::prepareNewTurn()
 	std::vector<Tile*> tilesOnSmoke;
 
 	// prepare a list of tiles on fire/smoke
-	for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); i++)
+	for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); ++i)
 	{
 		if (_save->getTiles()[i]->getFire() > 0)
 		{
@@ -991,13 +991,13 @@ void TerrainModifier::prepareNewTurn()
 		}
 	}
 
-	for (std::vector<Tile*>::iterator i = tilesOnSmoke.begin(); i != tilesOnSmoke.end(); i++)
+	for (std::vector<Tile*>::iterator i = tilesOnSmoke.begin(); i != tilesOnSmoke.end(); ++i)
 	{
 
 		(*i)->prepareNewTurn();
 	}
 
-	for (std::vector<Tile*>::iterator i = tilesOnFire.begin(); i != tilesOnFire.end(); i++)
+	for (std::vector<Tile*>::iterator i = tilesOnFire.begin(); i != tilesOnFire.end(); ++i)
 	{
 		int z = (*i)->getPosition().z;
 		for (int x = (*i)->getPosition().x-1; x <= (*i)->getPosition().x+1; x++)
@@ -1032,7 +1032,7 @@ void TerrainModifier::prepareNewTurn()
 		(*i)->prepareNewTurn();
 	}
 
-	if (tilesOnFire.size() > 0)
+	if (!tilesOnFire.empty())
 	{
 		calculateTerrainLighting(); // fires could have been stopped
 	}

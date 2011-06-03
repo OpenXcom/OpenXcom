@@ -54,7 +54,7 @@ CraftSoldiersState::CraftSoldiersState(Game *game, Base *base, unsigned int craf
 	_txtAvailable = new Text(110, 9, 16, 24);
 	_txtUsed = new Text(110, 9, 130, 24);
 	_lstSoldiers = new TextList(288, 128, 8, 40);
-	
+
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
 
@@ -111,7 +111,7 @@ CraftSoldiersState::CraftSoldiersState(Game *game, Base *base, unsigned int craf
 	_lstSoldiers->onMouseClick((ActionHandler)&CraftSoldiersState::lstSoldiersClick);
 
 	int row = 0;
-	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); i++)
+	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
 	{
 		std::wstring s;
 		if ((*i)->getCraft() == 0)

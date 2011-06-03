@@ -249,12 +249,12 @@ void NumberText::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 void NumberText::draw()
 {
 	clear();
-	
+
 	std::stringstream ss;
 	ss << _value;
 	std::string s = ss.str();
 	int x = 0;
-	for (std::string::iterator i = s.begin(); i != s.end(); i++)
+	for (std::string::iterator i = s.begin(); i != s.end(); ++i)
 	{
 		_chars[*i - '0']->setX(x);
 		_chars[*i - '0']->setY(0);

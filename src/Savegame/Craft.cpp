@@ -47,7 +47,7 @@ Craft::Craft(RuleCraft *rules, Base *base, std::map<std::string, int> *ids) : Mo
 		_id = (*ids)[_rules->getType()];
 		(*ids)[_rules->getType()]++;
 	}
-	for (int i = 0; i < _rules->getWeapons(); i++)
+	for (int i = 0; i < _rules->getWeapons(); ++i)
 	{
 		_weapons.push_back(0);
 	}
@@ -58,7 +58,7 @@ Craft::Craft(RuleCraft *rules, Base *base, std::map<std::string, int> *ids) : Mo
  */
 Craft::~Craft()
 {
-	for (std::vector<CraftWeapon*>::iterator i = _weapons.begin(); i != _weapons.end(); i++)
+	for (std::vector<CraftWeapon*>::iterator i = _weapons.begin(); i != _weapons.end(); ++i)
 	{
 		delete *i;
 	}
@@ -111,7 +111,7 @@ void Craft::save(YAML::Emitter &out) const
 	out << YAML::Key << "damage" << YAML::Value << _damage;
 	out << YAML::Key << "weapons" << YAML::Value;
 	out << YAML::BeginSeq;
-	for (std::vector<CraftWeapon*>::const_iterator i = _weapons.begin(); i != _weapons.end(); i++)
+	for (std::vector<CraftWeapon*>::const_iterator i = _weapons.begin(); i != _weapons.end(); ++i)
 	{
 		if (*i != 0)
 		{
@@ -236,7 +236,7 @@ int Craft::getNumWeapons() const
 
 	int total = 0;
 
-	for (std::vector<CraftWeapon*>::const_iterator i = _weapons.begin(); i != _weapons.end(); i++)
+	for (std::vector<CraftWeapon*>::const_iterator i = _weapons.begin(); i != _weapons.end(); ++i)
 	{
 		if ((*i) != 0)
 		{
@@ -259,7 +259,7 @@ int Craft::getNumSoldiers() const
 
 	int total = 0;
 
-	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); i++)
+	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
 	{
 		if ((*i)->getCraft() == this)
 			total++;
@@ -456,7 +456,7 @@ void Craft::think()
 		if (_dest == (Target*)_base)
 		{
 			int available = 0, full = 0;
-			for (std::vector<CraftWeapon*>::iterator i = _weapons.begin(); i != _weapons.end(); i++)
+			for (std::vector<CraftWeapon*>::iterator i = _weapons.begin(); i != _weapons.end(); ++i)
 			{
 				if ((*i) == 0)
 					continue;
@@ -547,7 +547,7 @@ void Craft::refuel()
 std::string Craft::rearm()
 {
 	std::string ammo = "";
-	for (std::vector<CraftWeapon*>::iterator i = _weapons.begin(); ; i++)
+	for (std::vector<CraftWeapon*>::iterator i = _weapons.begin(); ; ++i)
 	{
 		if (i == _weapons.end())
 		{

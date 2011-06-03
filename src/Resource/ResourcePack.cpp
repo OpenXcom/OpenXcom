@@ -44,35 +44,35 @@ ResourcePack::ResourcePack(const std::string &folder) : _folder(folder), _palett
  */
 ResourcePack::~ResourcePack()
 {
-	for (std::map<std::string, Font*>::iterator i = _fonts.begin(); i != _fonts.end(); i++)
+	for (std::map<std::string, Font*>::iterator i = _fonts.begin(); i != _fonts.end(); ++i)
 	{
 		delete i->second;
 	}
-	for (std::map<std::string, Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); i++)
+	for (std::map<std::string, Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
 	{
 		delete i->second;
 	}
-	for (std::map<std::string, SurfaceSet*>::iterator i = _sets.begin(); i != _sets.end(); i++)
+	for (std::map<std::string, SurfaceSet*>::iterator i = _sets.begin(); i != _sets.end(); ++i)
 	{
 		delete i->second;
 	}
-	for (std::list<Polygon*>::iterator i = _polygons.begin(); i != _polygons.end(); i++)
+	for (std::list<Polygon*>::iterator i = _polygons.begin(); i != _polygons.end(); ++i)
 	{
 		delete *i;
 	}
-	for (std::list<Polyline*>::iterator i = _polylines.begin(); i != _polylines.end(); i++)
+	for (std::list<Polyline*>::iterator i = _polylines.begin(); i != _polylines.end(); ++i)
 	{
 		delete *i;
 	}
-	for (std::map<std::string, Palette*>::iterator i = _palettes.begin(); i != _palettes.end(); i++)
+	for (std::map<std::string, Palette*>::iterator i = _palettes.begin(); i != _palettes.end(); ++i)
 	{
 		delete i->second;
 	}
-	for (std::map<std::string, Music*>::iterator i = _musics.begin(); i != _musics.end(); i++)
+	for (std::map<std::string, Music*>::iterator i = _musics.begin(); i != _musics.end(); ++i)
 	{
 		delete i->second;
 	}
-	for (std::map<std::string, SoundSet*>::iterator i = _sounds.begin(); i != _sounds.end(); i++)
+	for (std::map<std::string, SoundSet*>::iterator i = _sounds.begin(); i != _sounds.end(); ++i)
 	{
 		delete i->second;
 	}
@@ -105,7 +105,7 @@ std::string ResourcePack::insensitive(const std::string &filename)
 	}
 	else
 	{
-		for (std::string::iterator c = newName.begin() + i; c != newName.end(); c++)
+		for (std::string::iterator c = newName.begin() + i; c != newName.end(); ++c)
 			*c = toupper(*c);
 		if (stat(newName.c_str(), &info) == 0)
 		{
@@ -113,7 +113,7 @@ std::string ResourcePack::insensitive(const std::string &filename)
 		}
 		else
 		{
-			for (std::string::iterator c = newName.begin() + i; c != newName.end(); c++)
+			for (std::string::iterator c = newName.begin() + i; c != newName.end(); ++c)
 				*c = tolower(*c);
 			if (stat(newName.c_str(), &info) == 0)
 			{
@@ -224,15 +224,15 @@ Palette *const ResourcePack::getPalette(const std::string &name)
  */
 void ResourcePack::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 {
-	for (std::map<std::string, Font*>::iterator i = _fonts.begin(); i != _fonts.end(); i++)
+	for (std::map<std::string, Font*>::iterator i = _fonts.begin(); i != _fonts.end(); ++i)
 	{
 		i->second->getSurface()->setPalette(colors, firstcolor, ncolors);
 	}
-	for (std::map<std::string, Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); i++)
+	for (std::map<std::string, Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
 	{
 		i->second->setPalette(colors, firstcolor, ncolors);
 	}
-	for (std::map<std::string, SurfaceSet*>::iterator i = _sets.begin(); i != _sets.end(); i++)
+	for (std::map<std::string, SurfaceSet*>::iterator i = _sets.begin(); i != _sets.end(); ++i)
 	{
 		i->second->setPalette(colors, firstcolor, ncolors);
 	}

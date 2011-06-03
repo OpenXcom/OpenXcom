@@ -116,7 +116,7 @@ int ItemContainer::getItem(const std::string &id) const
 int ItemContainer::getTotalQuantity() const
 {
 	int total = 0;
-	for (std::map<std::string, int>::const_iterator i = _qty.begin(); i != _qty.end(); i++)
+	for (std::map<std::string, int>::const_iterator i = _qty.begin(); i != _qty.end(); ++i)
 	{
 		total += i->second;
 	}
@@ -131,7 +131,7 @@ int ItemContainer::getTotalQuantity() const
 double ItemContainer::getTotalSize(Ruleset *rule) const
 {
 	double total = 0;
-	for (std::map<std::string, int>::const_iterator i = _qty.begin(); i != _qty.end(); i++)
+	for (std::map<std::string, int>::const_iterator i = _qty.begin(); i != _qty.end(); ++i)
 	{
 		total += rule->getItem(i->first)->getSize() * i->second;
 	}

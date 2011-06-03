@@ -115,7 +115,7 @@ BuildNewBaseState::BuildNewBaseState(Game *game, Base *base, Globe *globe, bool 
  */
 BuildNewBaseState::~BuildNewBaseState()
 {
-	
+
 }
 
 /**
@@ -161,7 +161,7 @@ void BuildNewBaseState::globeClick(Action *action)
 	{
 		return;
 	}
-	
+
 	// Clicking on land for a base location
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
@@ -169,7 +169,7 @@ void BuildNewBaseState::globeClick(Action *action)
 		{
 			_base->setLongitude(lon);
 			_base->setLatitude(lat);
-			for (std::vector<Craft*>::iterator i = _base->getCrafts()->begin(); i != _base->getCrafts()->end(); i++)
+			for (std::vector<Craft*>::iterator i = _base->getCrafts()->begin(); i != _base->getCrafts()->end(); ++i)
 			{
 				(*i)->setLongitude(lon);
 				(*i)->setLatitude(lat);

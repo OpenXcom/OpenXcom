@@ -38,7 +38,7 @@ namespace OpenXcom
  */
 State::State(Game *game) : _game(game), _screen(true)
 {
-	
+
 }
 
 /**
@@ -46,7 +46,7 @@ State::State(Game *game) : _game(game), _screen(true)
  */
 State::~State()
 {
-	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i < _surfaces.end(); i++)
+	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i < _surfaces.end(); ++i)
 	{
 		delete *i;
 	}
@@ -133,7 +133,7 @@ void State::init()
  */
 void State::think()
 {
-	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i < _surfaces.end(); i++)
+	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i < _surfaces.end(); ++i)
 		(*i)->think();
 }
 
@@ -144,7 +144,7 @@ void State::think()
  */
 void State::handle(Action *action)
 {
-	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i < _surfaces.end(); i++)
+	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i < _surfaces.end(); ++i)
 	{
 		InteractiveSurface* j = dynamic_cast<InteractiveSurface*>(*i);
 		if (j != 0)
@@ -158,7 +158,7 @@ void State::handle(Action *action)
  */
 void State::blit()
 {
-	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i < _surfaces.end(); i++)
+	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i < _surfaces.end(); ++i)
 		(*i)->blit(_game->getScreen()->getSurface());
 }
 

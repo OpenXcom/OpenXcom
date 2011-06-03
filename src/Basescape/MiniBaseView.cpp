@@ -98,7 +98,7 @@ void MiniBaseView::setSelectedBase(unsigned int base)
 void MiniBaseView::draw()
 {
 	clear();
-	for (unsigned int i = 0; i < MAX_BASES; i++)
+	for (unsigned int i = 0; i < MAX_BASES; ++i)
 	{
 		// Draw base squares
 		if (i == _base)
@@ -119,7 +119,7 @@ void MiniBaseView::draw()
 		{
 			SDL_Rect r;
 			lock();
-			for (std::vector<BaseFacility*>::iterator f = _bases->at(i)->getFacilities()->begin(); f != _bases->at(i)->getFacilities()->end(); f++)
+			for (std::vector<BaseFacility*>::iterator f = _bases->at(i)->getFacilities()->begin(); f != _bases->at(i)->getFacilities()->end(); ++f)
 			{
 				int pal;
 				if ((*f)->getBuildTime() == 0)
@@ -136,15 +136,15 @@ void MiniBaseView::draw()
 				r.y++;
 				r.w--;
 				r.h--;
-                drawRect(&r, Palette::blockOffset(pal)+5); 
+                drawRect(&r, Palette::blockOffset(pal)+5);
 				r.x--;
 				r.y--;
-                drawRect(&r, Palette::blockOffset(pal)+2); 
+                drawRect(&r, Palette::blockOffset(pal)+2);
 				r.x++;
 				r.y++;
 				r.w--;
 				r.h--;
-                drawRect(&r, Palette::blockOffset(pal)+3); 
+                drawRect(&r, Palette::blockOffset(pal)+3);
 				r.x--;
 				r.y--;
 				setPixel(r.x, r.y, Palette::blockOffset(pal)+1);

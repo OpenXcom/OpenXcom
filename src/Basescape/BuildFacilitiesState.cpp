@@ -48,7 +48,7 @@ BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base, State *state)
 	_btnOk = new TextButton(112, 16, 200, 176);
 	_txtTitle = new Text(118, 16, 197, 48);
 	_lstFacilities = new TextList(105, 110, 200, 64);
-	
+
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
 
@@ -88,7 +88,7 @@ BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base, State *state)
 	_facilities.push_back(_game->getRuleset()->getBaseFacility("STR_MISSILE_DEFENSES"));
 	_facilities.push_back(_game->getRuleset()->getBaseFacility("STR_HANGAR"));
 
-	for (std::vector<RuleBaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); i++)
+	for (std::vector<RuleBaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); ++i)
 	{
 		_lstFacilities->addRow(1, _game->getLanguage()->getString((*i)->getType()).c_str());
 	}
@@ -99,7 +99,7 @@ BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base, State *state)
  */
 BuildFacilitiesState::~BuildFacilitiesState()
 {
-	
+
 }
 
 /**

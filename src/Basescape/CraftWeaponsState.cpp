@@ -108,7 +108,7 @@ CraftWeaponsState::CraftWeaponsState(Game *game, Base *base, unsigned int craft,
 
 	std::string s[] = {"STR_STINGRAY", "STR_AVALANCHE", "STR_CANNON_UC"};
 
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 3; ++i)
 	{
 		RuleCraftWeapon *w = _game->getRuleset()->getCraftWeapon(s[i]);
 		if (_base->getItems()->getItem(w->getLauncherItem()) > 0)
@@ -128,7 +128,7 @@ CraftWeaponsState::CraftWeaponsState(Game *game, Base *base, unsigned int craft,
  */
 CraftWeaponsState::~CraftWeaponsState()
 {
-	
+
 }
 
 /**

@@ -51,7 +51,7 @@ TransferBaseState::TransferBaseState(Game *game, Base *base) : State(game), _bas
 	_txtName = new Text(130, 16, 28, 64);
 	_txtArea = new Text(130, 16, 160, 64);
 	_lstBases = new TextList(248, 64, 28, 80);
-	
+
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
 
@@ -99,13 +99,13 @@ TransferBaseState::TransferBaseState(Game *game, Base *base) : State(game), _bas
 	_lstBases->onMouseClick((ActionHandler)&TransferBaseState::lstBasesClick);
 
 	int row = 0;
-	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); i++)
+	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
 	{
 		if ((*i) != _base)
 		{
 			// Get area
 			std::wstring area = L"";
-			for (std::vector<Region*>::iterator j = _game->getSavedGame()->getRegions()->begin(); j != _game->getSavedGame()->getRegions()->end(); j++)
+			for (std::vector<Region*>::iterator j = _game->getSavedGame()->getRegions()->begin(); j != _game->getSavedGame()->getRegions()->end(); ++j)
 			{
 				if ((*j)->getRules()->insideRegion((*i)->getLongitude(), (*i)->getLatitude()))
 				{

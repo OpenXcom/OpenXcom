@@ -137,10 +137,10 @@ void BattlescapeGenerator::run()
 	{
 		switch (_worldTexture)
 		{
-		case 0:	
+		case 0:
 		case 6:
 		case 10:
-		case 11:	
+		case 11:
 			{
 				if (_ufo != 0)
 				{
@@ -183,7 +183,7 @@ void BattlescapeGenerator::run()
 				_terrain = _game->getRuleset()->getTerrain("POLAR");
 				break;
 			}
-		}	
+		}
 	}
 
 	// creates the tile objects
@@ -196,7 +196,7 @@ void BattlescapeGenerator::run()
 	if (_craft != 0)
 	{
 		// add soldiers that are in the craft
-		for (std::vector<Soldier*>::iterator i = _craft->getBase()->getSoldiers()->begin(); i != _craft->getBase()->getSoldiers()->end(); i++)
+		for (std::vector<Soldier*>::iterator i = _craft->getBase()->getSoldiers()->begin(); i != _craft->getBase()->getSoldiers()->end(); ++i)
 		{
 			if ((*i)->getCraft() == _craft)
 				addSoldier((*i));
@@ -204,7 +204,7 @@ void BattlescapeGenerator::run()
 		_save->setSelectedUnit(_save->getUnits()->at(0)); // select first soldier
 
 		// add items that are in the craft
-		/*for (std::map<std::string, ItemContainer*>::iterator i = _craft->getItems()->begin(); i != _craft->getItems()->end(); i++)
+		/*for (std::map<std::string, ItemContainer*>::iterator i = _craft->getItems()->begin(); i != _craft->getItems()->end(); ++i)
 		{
 				addItem((*i).second);
 		}*/
@@ -295,7 +295,7 @@ void BattlescapeGenerator::addAlien(RuleAlien *rules, RuleArmor *armor, NodeRank
 	// some randomness is added
 	for (int priority=10; priority > 0 && !bFound; priority--)
 	{
-		for (std::vector<Node*>::iterator i = _save->getNodes()->begin(); i != _save->getNodes()->end() && !bFound; i++)
+		for (std::vector<Node*>::iterator i = _save->getNodes()->begin(); i != _save->getNodes()->end() && !bFound; ++i)
 		{
 			node = *i;
 			if (node->getRank() == rank
@@ -314,7 +314,7 @@ void BattlescapeGenerator::addAlien(RuleAlien *rules, RuleArmor *armor, NodeRank
 	// this time without randomness
 	for (int priority = 10; priority > 0 && !bFound; priority--)
 	{
-		for (std::vector<Node*>::iterator i = _save->getNodes()->begin(); i != _save->getNodes()->end() && !bFound; i++)
+		for (std::vector<Node*>::iterator i = _save->getNodes()->begin(); i != _save->getNodes()->end() && !bFound; ++i)
 		{
 			node = *i;
 			if (node->getRank() == rank
@@ -346,7 +346,7 @@ void BattlescapeGenerator::addItem(RuleItem *item)
 	if (item->getBattleType() == BT_AMMO)
 	{
 		// find equipped weapons that can be loaded with this ammo
-		for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); i++)
+		for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 		{
 			BattleItem *weapon = _save->getItemFromUnit((*i), RIGHT_HAND);
 			if (weapon && weapon->getAmmoItem() == 0)
@@ -359,7 +359,7 @@ void BattlescapeGenerator::addItem(RuleItem *item)
 	else
 	{
 		// find the first soldier with a free right hand
-		for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); i++)
+		for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 		{
 			if (!_save->getItemFromUnit((*i), RIGHT_HAND))
 			{
@@ -373,7 +373,7 @@ void BattlescapeGenerator::addItem(RuleItem *item)
 	_save->getItems()->push_back(bi);
 }
 
-/** 
+/**
  * Generates a map (set of tiles) for a new battlescape game.
  */
 void BattlescapeGenerator::generateMap()
@@ -390,7 +390,7 @@ void BattlescapeGenerator::generateMap()
 	MapBlock* craftMap = 0;
 	MapBlock* ufoMap = 0;
 
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 10; ++i)
 	{
 		for (int j = 0; j < 10; j++)
 		{
@@ -402,7 +402,7 @@ void BattlescapeGenerator::generateMap()
 	blocksToDo = (_width / 10) * (_length / 10);
 
 	/* create tile objects */
-	for (int i = 0; i < _height * _length * _width; i++)
+	for (int i = 0; i < _height * _length * _width; ++i)
 	{
 		Position pos;
 		_save->getTileCoords(i, &pos.x, &pos.y, &pos.z);
@@ -418,7 +418,7 @@ void BattlescapeGenerator::generateMap()
 		ufoX = RNG::generate(0, (_length / 10) - ufoMap->getWidth() / 10);
 		ufoY = RNG::generate(0, (_width / 10) - ufoMap->getLength() / 10);
 
-		for (int i = 0; i < ufoMap->getWidth() / 10; i++)
+		for (int i = 0; i < ufoMap->getWidth() / 10; ++i)
 		{
 			for (int j = 0; j < ufoMap->getLength() / 10; j++)
 			{
@@ -438,7 +438,7 @@ void BattlescapeGenerator::generateMap()
 			craftY = RNG::generate(0, (_width/10)- craftMap->getLength() / 10);
 			placed = true;
 			// check if this place is ok
-			for (int i = 0; i < craftMap->getWidth() / 10; i++)
+			for (int i = 0; i < craftMap->getWidth() / 10; ++i)
 			{
 				for (int j = 0; j < craftMap->getLength() / 10; j++)
 				{
@@ -451,7 +451,7 @@ void BattlescapeGenerator::generateMap()
 			// if ok, allocate it
 			if (placed)
 			{
-				for (int i = 0; i < craftMap->getWidth() / 10; i++)
+				for (int i = 0; i < craftMap->getWidth() / 10; ++i)
 					for (int j = 0; j < craftMap->getLength() / 10; j++)
 						landingzone[craftX + i][craftY + j] = true;
 			}
@@ -464,7 +464,7 @@ void BattlescapeGenerator::generateMap()
 		if (blocks[x][y] == 0)
 		{
 			// last block of this row or column or next block is not free or big block would block landingzone
-			if (x == ((_width / 10) - 1) || y == ((_length / 10) - 1) || blocks[x + 1][y] == dummy 
+			if (x == ((_width / 10) - 1) || y == ((_length / 10) - 1) || blocks[x + 1][y] == dummy
 				|| landingzone[x + 1][y] || landingzone[x + 1][y + 1] || landingzone[x][y + 1] || blocksToDo == 1)
 			{
 				// only small block will fit
@@ -502,7 +502,7 @@ void BattlescapeGenerator::generateMap()
 		}
 	}
 
-	for (std::vector<MapDataSet*>::iterator i = _terrain->getMapDataSets()->begin(); i != _terrain->getMapDataSets()->end(); i++)
+	for (std::vector<MapDataSet*>::iterator i = _terrain->getMapDataSets()->begin(); i != _terrain->getMapDataSets()->end(); ++i)
 	{
 		(*i)->load(_res);
 		_save->getMapDataSets()->push_back(*i);
@@ -526,7 +526,7 @@ void BattlescapeGenerator::generateMap()
 
 	if (_ufo != 0)
 	{
-		for (std::vector<MapDataSet*>::iterator i = _ufo->getRules()->getBattlescapeTerrainData()->getMapDataSets()->begin(); i != _ufo->getRules()->getBattlescapeTerrainData()->getMapDataSets()->end(); i++)
+		for (std::vector<MapDataSet*>::iterator i = _ufo->getRules()->getBattlescapeTerrainData()->getMapDataSets()->begin(); i != _ufo->getRules()->getBattlescapeTerrainData()->getMapDataSets()->end(); ++i)
 		{
 			(*i)->load(_res);
 			_save->getMapDataSets()->push_back(*i);
@@ -537,7 +537,7 @@ void BattlescapeGenerator::generateMap()
 
 	if (_craft != 0)
 	{
-		for (std::vector<MapDataSet*>::iterator i = _craft->getRules()->getBattlescapeTerrainData()->getMapDataSets()->begin(); i != _craft->getRules()->getBattlescapeTerrainData()->getMapDataSets()->end(); i++)
+		for (std::vector<MapDataSet*>::iterator i = _craft->getRules()->getBattlescapeTerrainData()->getMapDataSets()->begin(); i != _craft->getRules()->getBattlescapeTerrainData()->getMapDataSets()->end(); ++i)
 		{
 			(*i)->load(_res);
 			_save->getMapDataSets()->push_back(*i);
@@ -585,7 +585,7 @@ int BattlescapeGenerator::loadMAP(MapBlock *mapblock, int xoff, int yoff, RuleTe
 	{
 		throw Exception("Failed to load MAP");
 	}
-	
+
 	mapFile.read((char*)&size, sizeof(size));
 	length = (int)size[0];
 	width = (int)size[1];

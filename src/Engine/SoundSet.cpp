@@ -37,7 +37,7 @@ SoundSet::SoundSet() : _sounds()
  */
 SoundSet::~SoundSet()
 {
-	for (std::vector<Sound*>::iterator i = _sounds.begin(); i != _sounds.end(); i++)
+	for (std::vector<Sound*>::iterator i = _sounds.begin(); i != _sounds.end(); ++i)
 	{
 		delete *i;
 	}

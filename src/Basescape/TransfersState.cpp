@@ -51,7 +51,7 @@ TransfersState::TransfersState(Game *game, Base *base) : State(game), _base(base
 	_txtQuantity = new Text(44, 8, 141, 34);
 	_txtArrivalTime = new Text(112, 8, 186, 34);
 	_lstTransfers = new TextList(256, 112, 24, 50);
-	
+
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
 
@@ -84,7 +84,7 @@ TransfersState::TransfersState(Game *game, Base *base) : State(game), _base(base
 
 	_txtArrivalTime->setColor(Palette::blockOffset(15)+6);
 	_txtArrivalTime->setText(_game->getLanguage()->getString("STR_ARRIVAL_TIME_HOURS"));
-	
+
 	_lstTransfers->setColor(Palette::blockOffset(13)+10);
 	_lstTransfers->setArrowColor(Palette::blockOffset(15)+9);
 	_lstTransfers->setColumns(3, 155, 55, 46);
@@ -92,7 +92,7 @@ TransfersState::TransfersState(Game *game, Base *base) : State(game), _base(base
 	_lstTransfers->setBackground(_window);
 	_lstTransfers->setMargin(2);
 
-	for (std::vector<Transfer*>::iterator i = _base->getTransfers()->begin(); i != _base->getTransfers()->end(); i++)
+	for (std::vector<Transfer*>::iterator i = _base->getTransfers()->begin(); i != _base->getTransfers()->end(); ++i)
 	{
 		std::wstringstream ss, ss2;
 		ss << (*i)->getQuantity();
@@ -106,7 +106,7 @@ TransfersState::TransfersState(Game *game, Base *base) : State(game), _base(base
  */
 TransfersState::~TransfersState()
 {
-	
+
 }
 
 /**

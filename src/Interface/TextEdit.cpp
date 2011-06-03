@@ -293,7 +293,7 @@ bool TextEdit::exceedsMaxWidth(wchar_t c)
 	std::wstring s = _value;
 
 	s += c;
-	for (std::wstring::iterator i = s.begin(); i < s.end(); i++)
+	for (std::wstring::iterator i = s.begin(); i < s.end(); ++i)
 	{
 		if (*i == ' ')
 		{

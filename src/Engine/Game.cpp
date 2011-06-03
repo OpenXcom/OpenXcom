@@ -72,7 +72,7 @@ Game::Game(const std::string &title, int width, int height, int bpp) : _screen(0
 	// Create cursor
 	_cursor = new Cursor(9, 13);
 	_cursor->setColor(Palette::blockOffset(15)+12);
-	
+
 	// Create fps counter
 	_fpsCounter = new FpsCounter(15, 5, 0, 0);
 }
@@ -84,7 +84,7 @@ Game::~Game()
 {
 	Mix_HaltChannel(-1);
 
-	for (std::list<State*>::iterator i = _states.begin(); i != _states.end(); i++)
+	for (std::list<State*>::iterator i = _states.begin(); i != _states.end(); ++i)
 	{
 		delete *i;
 	}
@@ -116,7 +116,7 @@ void Game::run()
 		{
 			delete _deleted.back();
 			_deleted.pop_back();
-		}		
+		}
 
 		// Initialize active state
 		if (!_init)
@@ -125,7 +125,7 @@ void Game::run()
 			_init = true;
 
 			// Unpress buttons
-			for (std::vector<Surface*>::iterator i = _states.back()->getSurfaces()->begin(); i < _states.back()->getSurfaces()->end(); i++)
+			for (std::vector<Surface*>::iterator i = _states.back()->getSurfaces()->begin(); i < _states.back()->getSurfaces()->end(); ++i)
 			{
 				InteractiveSurface *s = dynamic_cast<InteractiveSurface*>(*i);
 				if (s != 0)
@@ -161,11 +161,11 @@ void Game::run()
 				_states.back()->handle(&action);
 			}
 		}
-		
+
 		// Process logic
 		_fpsCounter->think();
 		_states.back()->think();
-		
+
 		// Process rendering
 		if (_init)
 		{
@@ -173,11 +173,11 @@ void Game::run()
 			std::list<State*>::iterator i = _states.end();
 			do
 			{
-				i--;
+				--i;
 			}
 			while(i != _states.begin() && !(*i)->isScreen());
 
-			for (; i != _states.end(); i++)
+			for (; i != _states.end(); ++i)
 			{
 				(*i)->blit();
 			}
@@ -239,7 +239,7 @@ void Game::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 	_cursor->draw();
 
 	_fpsCounter->setPalette(colors, firstcolor, ncolors);
-	
+
 	if (_res != 0)
 	{
 		_res->setPalette(colors, firstcolor, ncolors);

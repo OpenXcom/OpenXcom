@@ -61,7 +61,7 @@ SellState::SellState(Game *game, Base *base) : State(game), _base(base), _qtys()
 	_txtSell = new Text(96, 9, 184, 32);
 	_txtValue = new Text(34, 9, 280, 32);
 	_lstItems = new TextList(288, 120, 8, 44);
-	
+
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
 
@@ -93,7 +93,7 @@ SellState::SellState(Game *game, Base *base) : State(game), _base(base), _qtys()
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(_game->getLanguage()->getString("STR_SELL_ITEMS_SACK_PERSONNEL"));
-	
+
 	std::wstring s1 = _game->getLanguage()->getString("STR_VALUE_OF_SALES");
 	s1 += Text::formatFunding(_total);
 	_txtSales->setColor(Palette::blockOffset(13)+10);
@@ -128,7 +128,7 @@ SellState::SellState(Game *game, Base *base) : State(game), _base(base), _qtys()
 	_lstItems->onRightArrowPress((ActionHandler)&SellState::lstItemsRightArrowPress);
 	_lstItems->onRightArrowRelease((ActionHandler)&SellState::lstItemsRightArrowRelease);
 
-	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); i++)
+	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
 	{
 		if ((*i)->getCraft() == 0)
 		{
@@ -137,7 +137,7 @@ SellState::SellState(Game *game, Base *base) : State(game), _base(base), _qtys()
 			_lstItems->addRow(4, (*i)->getName().c_str(), L"1", L"0", Text::formatFunding(0).c_str());
 		}
 	}
-	for (std::vector<Craft*>::iterator i = _base->getCrafts()->begin(); i != _base->getCrafts()->end(); i++)
+	for (std::vector<Craft*>::iterator i = _base->getCrafts()->begin(); i != _base->getCrafts()->end(); ++i)
 	{
 		if ((*i)->getStatus() != "STR_OUT")
 		{
@@ -162,7 +162,7 @@ SellState::SellState(Game *game, Base *base) : State(game), _base(base), _qtys()
 		ss << _base->getAvailableEngineers();
 		_lstItems->addRow(4, _game->getLanguage()->getString("STR_ENGINEER").c_str(), ss.str().c_str(), L"0", Text::formatFunding(0).c_str());
 	}
-	for (std::map<std::string, int>::iterator i = _base->getItems()->getContents()->begin(); i != _base->getItems()->getContents()->end(); i++)
+	for (std::map<std::string, int>::iterator i = _base->getItems()->getContents()->begin(); i != _base->getItems()->getContents()->end(); ++i)
 	{
 		_qtys.push_back(0);
 		_items.push_back(i->first);
@@ -205,7 +205,7 @@ void SellState::think()
 void SellState::btnOkClick(Action *action)
 {
 	_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() + _total);
-	for (unsigned int i = 0; i < _qtys.size(); i++)
+	for (unsigned int i = 0; i < _qtys.size(); ++i)
 	{
 		if (_qtys[i] > 0)
 		{
@@ -213,7 +213,7 @@ void SellState::btnOkClick(Action *action)
 			if (i < _soldiers.size())
 			{
 				delete _soldiers[i];
-				for (std::vector<Soldier*>::iterator s = _base->getSoldiers()->begin(); s != _base->getSoldiers()->end(); s++)
+				for (std::vector<Soldier*>::iterator s = _base->getSoldiers()->begin(); s != _base->getSoldiers()->end(); ++s)
 				{
 					if (*s == _soldiers[i])
 					{
@@ -228,7 +228,7 @@ void SellState::btnOkClick(Action *action)
 				Craft *craft =  _crafts[i - _soldiers.size()];
 
 				// Remove weapons from craft
-				for (std::vector<CraftWeapon*>::iterator w = craft->getWeapons()->begin(); w != craft->getWeapons()->end(); w++)
+				for (std::vector<CraftWeapon*>::iterator w = craft->getWeapons()->begin(); w != craft->getWeapons()->end(); ++w)
 				{
 					if ((*w) != 0)
 					{
@@ -238,13 +238,13 @@ void SellState::btnOkClick(Action *action)
 				}
 
 				// Remove items from craft
-				for (std::map<std::string, int>::iterator it = craft->getItems()->getContents()->begin(); it != craft->getItems()->getContents()->end(); it++)
+				for (std::map<std::string, int>::iterator it = craft->getItems()->getContents()->begin(); it != craft->getItems()->getContents()->end(); ++it)
 				{
 					_base->getItems()->addItem(it->first, it->second);
 				}
 
 				// Remove soldiers from craft
-				for (std::vector<Soldier*>::iterator s = _base->getSoldiers()->begin(); s != _base->getSoldiers()->end(); s++)
+				for (std::vector<Soldier*>::iterator s = _base->getSoldiers()->begin(); s != _base->getSoldiers()->end(); ++s)
 				{
 					if ((*s)->getCraft() == craft)
 					{
@@ -254,7 +254,7 @@ void SellState::btnOkClick(Action *action)
 
 				// Remove craft
 				delete craft;
-				for (std::vector<Craft*>::iterator c = _base->getCrafts()->begin(); c != _base->getCrafts()->end(); c++)
+				for (std::vector<Craft*>::iterator c = _base->getCrafts()->begin(); c != _base->getCrafts()->end(); ++c)
 				{
 					if (*c == craft)
 					{
@@ -327,7 +327,7 @@ void SellState::lstItemsRightArrowPress(Action *action)
  */
 void SellState::lstItemsRightArrowRelease(Action *action)
 {
-	_timerDec->stop();	
+	_timerDec->stop();
 }
 
 /**

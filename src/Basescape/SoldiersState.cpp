@@ -51,7 +51,7 @@ SoldiersState::SoldiersState(Game *game, Base *base) : State(game), _base(base)
 	_txtRank = new Text(102, 9, 130, 32);
 	_txtCraft = new Text(82, 9, 232, 32);
 	_lstSoldiers = new TextList(288, 128, 8, 40);
-	
+
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
 
@@ -99,7 +99,7 @@ SoldiersState::SoldiersState(Game *game, Base *base) : State(game), _base(base)
  */
 SoldiersState::~SoldiersState()
 {
-	
+
 }
 
 /**
@@ -110,7 +110,7 @@ void SoldiersState::init()
 {
 	int row = 0;
 	_lstSoldiers->clearList();
-	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); i++)
+	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
 	{
 		std::wstring s;
 		if ((*i)->getCraft() == 0)

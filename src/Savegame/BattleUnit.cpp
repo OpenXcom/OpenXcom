@@ -64,7 +64,7 @@ BattleUnit::~BattleUnit()
  */
 void BattleUnit::load(const YAML::Node &node)
 {
-	int a;
+	int a = 0;
 
 	node["id"] >> _id;
 	std::string name;
@@ -592,6 +592,7 @@ bool BattleUnit::isOut() const
 /**
  * Spend time units if it can. Return false if it can't.
  * @param tu
+ * @param debugmode If this is true, the function actually does noting.
  * @return flag if it could spend the time units or not.
  */
 bool BattleUnit::spendTimeUnits(int tu, bool debugmode)
@@ -624,7 +625,7 @@ void BattleUnit::setTimeUnits(int tu)
  */
 bool BattleUnit::addToVisibleUnits(BattleUnit *unit)
 {
-	for (std::vector<BattleUnit*>::iterator i = _visibleUnits.begin(); i != _visibleUnits.end(); i++)
+	for (std::vector<BattleUnit*>::iterator i = _visibleUnits.begin(); i != _visibleUnits.end(); ++i)
 	{
 		if ((BattleUnit*)(*i) == unit)
 		{
@@ -683,7 +684,11 @@ double BattleUnit::getThrowingAccuracy()
 	return result;
 }
 
-/// Set armor value.
+/**
+ * Set the armor value of a certain armor side.
+ * @param armor Amount of armor.
+ * @param side The side of the armor.
+ */
 void BattleUnit::setArmor(int armor, UnitSide side)
 {
 	if (armor < 0)
@@ -693,13 +698,20 @@ void BattleUnit::setArmor(int armor, UnitSide side)
 	_armor[side] = armor;
 }
 
-/// Get armor value.
+/**
+ * Get the armor value of a certain armor side.
+ * @param side The side of the armor.
+ * @return Amount of armor.
+ */
 int BattleUnit::getArmor(UnitSide side)
 {
 	return _armor[side];
 }
 
-/// Get total number of fatal wounds.
+/**
+ * Get total amount of fatal wounds this unit has.
+ * @return Number of fatal wounds.
+ */
 int BattleUnit::getFatalWounds()
 {
 	int sum = 0;

@@ -156,7 +156,7 @@ CraftInfoState::CraftInfoState(Game *game, Base *base, unsigned int craft) : Sta
  */
 CraftInfoState::~CraftInfoState()
 {
-	
+
 }
 
 /**
@@ -184,7 +184,7 @@ void CraftInfoState::init()
 	std::wstringstream ss2;
 	ss2 << _game->getLanguage()->getString("STR_FUEL") << L'\x01' << c->getFuelPercentage() << "%";
 	_txtFuel->setText(ss2.str());
-	
+
 	if (c->getRules()->getSoldiers() > 0)
 	{
 		_crew->clear();
@@ -192,7 +192,7 @@ void CraftInfoState::init()
 
 		Surface *frame1 = texture->getFrame(38);
 		frame1->setY(0);
-		for (int i = 0, x = 0; i < c->getNumSoldiers(); i++, x += 10)
+		for (int i = 0, x = 0; i < c->getNumSoldiers(); ++i, x += 10)
 		{
 			frame1->setX(x);
 			frame1->blit(_crew);

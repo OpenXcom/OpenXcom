@@ -49,7 +49,7 @@ DismantleFacilityState::DismantleFacilityState(Game *game, Base *base, BaseFacil
 	_btnCancel = new TextButton(44, 16, 112, 115);
 	_txtTitle = new Text(142, 9, 25, 75);
 	_txtFacility = new Text(142, 9, 25, 85);
-	
+
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
 
@@ -85,7 +85,7 @@ DismantleFacilityState::DismantleFacilityState(Game *game, Base *base, BaseFacil
  */
 DismantleFacilityState::~DismantleFacilityState()
 {
-	
+
 }
 
 /**
@@ -97,7 +97,7 @@ void DismantleFacilityState::btnOkClick(Action *action)
 {
 	if (!_fac->getRules()->getLift())
 	{
-		for (std::vector<BaseFacility*>::iterator i = _base->getFacilities()->begin(); i != _base->getFacilities()->end(); i++)
+		for (std::vector<BaseFacility*>::iterator i = _base->getFacilities()->begin(); i != _base->getFacilities()->end(); ++i)
 		{
 			if (*i == _fac)
 			{
@@ -110,7 +110,7 @@ void DismantleFacilityState::btnOkClick(Action *action)
 	// Remove whole base if it's the access lift
 	else
 	{
-		for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); i++)
+		for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
 		{
 			if (*i == _base)
 			{

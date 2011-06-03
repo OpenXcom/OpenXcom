@@ -81,15 +81,15 @@ void MovingTarget::setDestination(Target *dest)
 	// Remove moving target from old destination's followers
 	if (_dest != 0)
 	{
-		for (std::vector<Target*>::iterator i = _dest->getFollowers()->begin(); i != _dest->getFollowers()->end(); i++)
-		{		
+		for (std::vector<Target*>::iterator i = _dest->getFollowers()->begin(); i != _dest->getFollowers()->end(); ++i)
+		{
 			if ((*i) == this)
 			{
 				_dest->getFollowers()->erase(i);
 				break;
 			}
 		}
-	}	
+	}
 	_dest = dest;
 	// Add moving target to new destination's followers
 	if (_dest != 0)

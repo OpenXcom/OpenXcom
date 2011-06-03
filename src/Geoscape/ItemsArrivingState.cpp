@@ -52,7 +52,7 @@ ItemsArrivingState::ItemsArrivingState(Game *game, GeoscapeState *state) : State
 	_txtQuantity = new Text(50, 8, 150, 34);
 	_txtDestination = new Text(110, 8, 205, 34);
 	_lstTransfers = new TextList(288, 112, 8, 50);
-	
+
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
 
@@ -90,7 +90,7 @@ ItemsArrivingState::ItemsArrivingState(Game *game, GeoscapeState *state) : State
 
 	_txtDestination->setColor(Palette::blockOffset(8)+5);
 	_txtDestination->setText(_game->getLanguage()->getString("STR_DESTINATION"));
-	
+
 	_lstTransfers->setColor(Palette::blockOffset(8)+10);
 	_lstTransfers->setArrowColor(Palette::blockOffset(8)+8);
 	_lstTransfers->setColumns(3, 165, 25, 98);
@@ -98,7 +98,7 @@ ItemsArrivingState::ItemsArrivingState(Game *game, GeoscapeState *state) : State
 	_lstTransfers->setBackground(_window);
 	_lstTransfers->setMargin(2);
 
-	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); i++)
+	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
 	{
 		for (std::vector<Transfer*>::iterator j = (*i)->getTransfers()->begin(); j != (*i)->getTransfers()->end();)
 		{
@@ -112,7 +112,7 @@ ItemsArrivingState::ItemsArrivingState(Game *game, GeoscapeState *state) : State
 			}
 			else
 			{
-				j++;
+				++j;
 			}
 		}
 	}
@@ -123,7 +123,7 @@ ItemsArrivingState::ItemsArrivingState(Game *game, GeoscapeState *state) : State
  */
 ItemsArrivingState::~ItemsArrivingState()
 {
-	
+
 }
 
 /**

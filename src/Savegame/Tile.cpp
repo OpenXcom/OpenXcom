@@ -602,7 +602,7 @@ void Tile::addItem(BattleItem *item)
  */
 int Tile::getTopItemSprite()
 {
-	if (_inventory.size() > 0)
+	if (!_inventory.empty())
 	{
 		return _inventory.at(0)->getRules()->getFloorSprite();
 	}
@@ -668,7 +668,10 @@ bool Tile::getChecked()
 	return _checked;
 }
 
-/// Get inventory on this tile.
+/**
+ * Get the inventory on this tile.
+ * @return pointer to a vector of battleitems.
+ */
 std::vector<BattleItem *> *Tile::getInventory()
 {
 	return &_inventory;

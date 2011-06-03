@@ -63,7 +63,7 @@ TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo)
 	_txtAmountTransfer = new Text(60, 16, 200, 22);
 	_txtAmountDestination = new Text(60, 16, 260, 22);
 	_lstItems = new TextList(288, 128, 8, 40);
-	
+
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
 
@@ -118,7 +118,7 @@ TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo)
 	_lstItems->onRightArrowPress((ActionHandler)&TransferItemsState::lstItemsRightArrowPress);
 	_lstItems->onRightArrowRelease((ActionHandler)&TransferItemsState::lstItemsRightArrowRelease);
 
-	for (std::vector<Soldier*>::iterator i = _baseFrom->getSoldiers()->begin(); i != _baseFrom->getSoldiers()->end(); i++)
+	for (std::vector<Soldier*>::iterator i = _baseFrom->getSoldiers()->begin(); i != _baseFrom->getSoldiers()->end(); ++i)
 	{
 		if ((*i)->getCraft() == 0)
 		{
@@ -127,7 +127,7 @@ TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo)
 			_lstItems->addRow(4, (*i)->getName().c_str(), L"1", L"0", L"0");
 		}
 	}
-	for (std::vector<Craft*>::iterator i = _baseFrom->getCrafts()->begin(); i != _baseFrom->getCrafts()->end(); i++)
+	for (std::vector<Craft*>::iterator i = _baseFrom->getCrafts()->begin(); i != _baseFrom->getCrafts()->end(); ++i)
 	{
 		if ((*i)->getStatus() != "STR_OUT")
 		{
@@ -154,7 +154,7 @@ TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo)
 		ss2 << _baseTo->getAvailableEngineers();
 		_lstItems->addRow(4, _game->getLanguage()->getString("STR_ENGINEER").c_str(), ss.str().c_str(), L"0", ss2.str().c_str());
 	}
-	for (std::map<std::string, int>::iterator i = _baseFrom->getItems()->getContents()->begin(); i != _baseFrom->getItems()->getContents()->end(); i++)
+	for (std::map<std::string, int>::iterator i = _baseFrom->getItems()->getContents()->begin(); i != _baseFrom->getItems()->getContents()->end(); ++i)
 	{
 		_qtys.push_back(0);
 		_items.push_back(i->first);
@@ -212,14 +212,14 @@ void TransferItemsState::completeTransfer()
 {
 	int time = (int)floor(6 + _distance / 200.0);
 	_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() - _total);
-	for (unsigned int i = 0; i < _qtys.size(); i++)
+	for (unsigned int i = 0; i < _qtys.size(); ++i)
 	{
 		if (_qtys[i] > 0)
 		{
 			// Transfer soldiers
 			if (i < _soldiers.size())
 			{
-				for (std::vector<Soldier*>::iterator s = _baseFrom->getSoldiers()->begin(); s != _baseFrom->getSoldiers()->end(); s++)
+				for (std::vector<Soldier*>::iterator s = _baseFrom->getSoldiers()->begin(); s != _baseFrom->getSoldiers()->end(); ++s)
 				{
 					if (*s == _soldiers[i])
 					{
@@ -237,7 +237,7 @@ void TransferItemsState::completeTransfer()
 				Craft *craft =  _crafts[i - _soldiers.size()];
 
 				// Transfer soldiers inside craft
-				for (std::vector<Soldier*>::iterator s = _baseFrom->getSoldiers()->begin(); s != _baseFrom->getSoldiers()->end(); s++)
+				for (std::vector<Soldier*>::iterator s = _baseFrom->getSoldiers()->begin(); s != _baseFrom->getSoldiers()->end(); ++s)
 				{
 					if ((*s)->getCraft() == craft)
 					{
@@ -249,7 +249,7 @@ void TransferItemsState::completeTransfer()
 				}
 
 				// Transfer craft
-				for (std::vector<Craft*>::iterator c = _baseFrom->getCrafts()->begin(); c != _baseFrom->getCrafts()->end(); c++)
+				for (std::vector<Craft*>::iterator c = _baseFrom->getCrafts()->begin(); c != _baseFrom->getCrafts()->end(); ++c)
 				{
 					if (*c == craft)
 					{
@@ -334,7 +334,7 @@ void TransferItemsState::lstItemsRightArrowPress(Action *action)
  */
 void TransferItemsState::lstItemsRightArrowRelease(Action *action)
 {
-	_timerDec->stop();	
+	_timerDec->stop();
 }
 
 /**
@@ -498,7 +498,7 @@ double TransferItemsState::getDistance()
 {
 	double x[3], y[3], z[3], r = 128.0;
 	Base *base = _baseFrom;
-	for (int i = 0; i < 2; i++) {
+	for (int i = 0; i < 2; ++i) {
 		x[i] = - r * sin(base->getLatitude()) * cos(base->getLongitude());
 		y[i] = - r * sin(base->getLatitude()) * sin(base->getLongitude());
 		z[i] = r * cos(base->getLatitude());

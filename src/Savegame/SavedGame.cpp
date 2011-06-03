@@ -51,29 +51,29 @@ SavedGame::SavedGame(GameDifficulty difficulty) : _difficulty(difficulty), _fund
 	_ufopaedia = new UfopaediaSaved();
 }
 
-/** 
+/**
  * Deletes the game content from memory.
  */
 SavedGame::~SavedGame()
 {
 	delete _time;
-	for (std::vector<Country*>::iterator i = _countries.begin(); i != _countries.end(); i++)
+	for (std::vector<Country*>::iterator i = _countries.begin(); i != _countries.end(); ++i)
 	{
 		delete *i;
 	}
-	for (std::vector<Region*>::iterator i = _regions.begin(); i != _regions.end(); i++)
+	for (std::vector<Region*>::iterator i = _regions.begin(); i != _regions.end(); ++i)
 	{
 		delete *i;
 	}
-	for (std::vector<Base*>::iterator i = _bases.begin(); i != _bases.end(); i++)
+	for (std::vector<Base*>::iterator i = _bases.begin(); i != _bases.end(); ++i)
 	{
 		delete *i;
 	}
-	for (std::vector<Ufo*>::iterator i = _ufos.begin(); i != _ufos.end(); i++)
+	for (std::vector<Ufo*>::iterator i = _ufos.begin(); i != _ufos.end(); ++i)
 	{
 		delete *i;
 	}
-	for (std::vector<Waypoint*>::iterator i = _waypoints.begin(); i != _waypoints.end(); i++)
+	for (std::vector<Waypoint*>::iterator i = _waypoints.begin(); i != _waypoints.end(); ++i)
 	{
 		delete *i;
 	}
@@ -94,7 +94,7 @@ void SavedGame::getList(TextList *list, Language *lang)
 	{
         throw Exception("Failed to open saves directory");
     }
-	
+
     struct dirent *dirp;
     while ((dirp = readdir(dp)) != 0)
 	{
@@ -108,11 +108,12 @@ void SavedGame::getList(TextList *list, Language *lang)
 		std::ifstream fin(fullname.c_str());
 		if (!fin)
 		{
+		    closedir(dp);
 			throw Exception("Failed to load savegame");
 		}
 		YAML::Parser parser(fin);
 		YAML::Node doc;
-		
+
 		parser.GetNextDocument(doc);
 		GameTime time = GameTime(6, 1, 1, 1999, 12, 0, 0);
 		time.load(doc["time"]);
@@ -159,7 +160,7 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 
 	// Get full save data
 	parser.GetNextDocument(doc);
-	int a;
+	int a = 0;
 	doc["difficulty"] >> a;
 	_difficulty = (GameDifficulty)a;
 	doc["funds"] >> _funds;
@@ -183,7 +184,7 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 		r->load(doc["regions"][i]);
 		_regions.push_back(r);
 	}
-	
+
 	size = doc["ufos"].size();
 	for (unsigned int i = 0; i < size; i++)
 	{
@@ -220,7 +221,7 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 		_battleGame = new SavedBattleGame();
 		_battleGame->load(*pName);
 	}
-	
+
 	fin.close();
 }
 
@@ -254,28 +255,28 @@ void SavedGame::save(const std::string &filename) const
 	out << YAML::Key << "funds" << YAML::Value << _funds;
 	out << YAML::Key << "countries" << YAML::Value;
 	out << YAML::BeginSeq;
-	for (std::vector<Country*>::const_iterator i = _countries.begin(); i != _countries.end(); i++)
+	for (std::vector<Country*>::const_iterator i = _countries.begin(); i != _countries.end(); ++i)
 	{
 		(*i)->save(out);
 	}
 	out << YAML::EndSeq;
 	out << YAML::Key << "regions" << YAML::Value;
 	out << YAML::BeginSeq;
-	for (std::vector<Region*>::const_iterator i = _regions.begin(); i != _regions.end(); i++)
+	for (std::vector<Region*>::const_iterator i = _regions.begin(); i != _regions.end(); ++i)
 	{
 		(*i)->save(out);
 	}
 	out << YAML::EndSeq;
 	out << YAML::Key << "bases" << YAML::Value;
 	out << YAML::BeginSeq;
-	for (std::vector<Base*>::const_iterator i = _bases.begin(); i != _bases.end(); i++)
+	for (std::vector<Base*>::const_iterator i = _bases.begin(); i != _bases.end(); ++i)
 	{
 		(*i)->save(out);
 	}
 	out << YAML::EndSeq;
 	out << YAML::Key << "ufos" << YAML::Value;
 	out << YAML::BeginSeq;
-	for (std::vector<Ufo*>::const_iterator i = _ufos.begin(); i != _ufos.end(); i++)
+	for (std::vector<Ufo*>::const_iterator i = _ufos.begin(); i != _ufos.end(); ++i)
 	{
 		(*i)->save(out);
 	}
@@ -283,7 +284,7 @@ void SavedGame::save(const std::string &filename) const
 	out << YAML::Key << "craftId" << YAML::Value << _craftId;
 	out << YAML::Key << "waypoints" << YAML::Value;
 	out << YAML::BeginSeq;
-	for (std::vector<Waypoint*>::const_iterator i = _waypoints.begin(); i != _waypoints.end(); i++)
+	for (std::vector<Waypoint*>::const_iterator i = _waypoints.begin(); i != _waypoints.end(); ++i)
 	{
 		(*i)->save(out);
 	}
@@ -353,7 +354,7 @@ std::vector<Country*> *const SavedGame::getCountries()
 int SavedGame::getCountryFunding() const
 {
 	int total = 0;
-	for (std::vector<Country*>::const_iterator i = _countries.begin(); i != _countries.end(); i++)
+	for (std::vector<Country*>::const_iterator i = _countries.begin(); i != _countries.end(); ++i)
 	{
 		total += (*i)->getFunding();
 	}
@@ -385,7 +386,7 @@ std::vector<Base*> *const SavedGame::getBases()
 int SavedGame::getBaseMaintenance() const
 {
 	int total = 0;
-	for (std::vector<Base*>::const_iterator i = _bases.begin(); i != _bases.end(); i++)
+	for (std::vector<Base*>::const_iterator i = _bases.begin(); i != _bases.end(); ++i)
 	{
 		total += (*i)->getMonthlyMaintenace();
 	}
@@ -462,9 +463,9 @@ void SavedGame::setBattleGame(SavedBattleGame *battleGame)
 void SavedGame::endBattle()
 {
 	// craft goes back home
-	for (std::vector<Base*>::iterator i = _bases.begin(); i != _bases.end(); i++)
+	for (std::vector<Base*>::iterator i = _bases.begin(); i != _bases.end(); ++i)
 	{
-		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); j++)
+		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); ++j)
 		{
 			if ((*j)->isInBattlescape())
 			{
@@ -476,7 +477,7 @@ void SavedGame::endBattle()
 	}
 
 	// UFO crash/landing site disappears
-	for (std::vector<Ufo*>::iterator i = _ufos.begin(); i != _ufos.end(); i++)
+	for (std::vector<Ufo*>::iterator i = _ufos.begin(); i != _ufos.end(); ++i)
 	{
 		if ((*i)->isInBattlescape())
 		{

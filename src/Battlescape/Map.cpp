@@ -87,7 +87,7 @@ Map::~Map()
 {
 	delete _scrollTimer;
 
-	for (int i = 0; i < _tileCount; i++)
+	for (int i = 0; i < _tileCount; ++i)
 	{
 		delete _tileFloorCache[i];
 		delete _tileWallsCache[i];
@@ -95,7 +95,7 @@ Map::~Map()
 	delete[] _tileFloorCache;
 	delete[] _tileWallsCache;
 
-	for (std::vector<Surface*>::iterator i = _unitCache.begin(); i != _unitCache.end(); i++)
+	for (std::vector<Surface*>::iterator i = _unitCache.begin(); i != _unitCache.end(); ++i)
 	{
 		delete *i;
 	}
@@ -103,7 +103,7 @@ Map::~Map()
 	delete _arrow;
 	delete _buffer;
 
-	for (int i = 0; i < 36; i++)
+	for (int i = 0; i < 36; ++i)
 	{
 		delete _bullet[i];
 		delete _bulletShadow[i];
@@ -134,17 +134,17 @@ void Map::setSavedGame(SavedBattleGame *save, Game *game)
 	_tileFloorCache = new Surface*[_tileCount];
 	_tileWallsCache = new Surface*[_tileCount];
 	_unitCache.clear();
-	for (int i = 0; i < _tileCount; i++)
+	for (int i = 0; i < _tileCount; ++i)
 	{
 		_tileFloorCache[i] = 0;
 		_tileWallsCache[i] = 0;
 	}
-	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); i++)
+	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
 		_unitCache.push_back(0);
 	}
 
-	for (std::vector<MapDataSet*>::const_iterator i = _save->getMapDataSets()->begin(); i != _save->getMapDataSets()->end(); i++)
+	for (std::vector<MapDataSet*>::const_iterator i = _save->getMapDataSets()->begin(); i != _save->getMapDataSets()->end(); ++i)
 	{
 		(*i)->getSurfaceset()->setPalette(this->getPalette());
 	}
@@ -180,7 +180,7 @@ void Map::init()
 	_buffer = new Surface(this->getWidth() + _spriteWidth*4, this->getHeight() + _spriteHeight*4);
 	_buffer->setPalette(this->getPalette());
 
-	for (int i = 0; i < 36; i++)
+	for (int i = 0; i < 36; ++i)
 	{
 		_bullet[i] = new BulletSprite(i);
 		_bullet[i]->setPalette(this->getPalette());
@@ -250,12 +250,13 @@ void Map::drawTerrain(Surface *surface)
 	Position mapPosition, screenPosition, bulletPositionScreen;
 	int bulletLowX=16000, bulletLowY=16000, bulletLowZ=16000, bulletHighX=0, bulletHighY=0, bulletHighZ=0;
 	int index;
-	bool dirty;
+	//bool dirty;
+	BattleUnit *unit = 0;
 
 	// if we got bullet, get the highest x and y tiles to draw it on
 	if (_projectile && !_projectile->getItem())
 	{
-		for (int i = 1; i <= _projectile->getParticle(0); i++)
+		for (int i = 1; i <= _projectile->getParticle(0); ++i)
 		{
 			if (_projectile->getPosition(1-i).x < bulletLowX)
 				bulletLowX = _projectile->getPosition(1-i).x;
@@ -296,7 +297,8 @@ void Map::drawTerrain(Surface *surface)
 				{
 					index = _save->getTileIndex(mapPosition); // index used for tile cache
 
-					dirty = cacheTileSprites(index);
+					//dirty =
+					cacheTileSprites(index);
 
 					tile = _save->getTile(mapPosition);
 					// Draw floor
@@ -309,9 +311,13 @@ void Map::drawTerrain(Surface *surface)
 							frame->setY(screenPosition.y);
 							frame->blit(surface);
 						}
+                        unit = tile->getUnit();
+					}
+					else
+					{
+					    unit = 0;
 					}
 
-					BattleUnit *unit = tile->getUnit();
 
 					// Draw cursor back
 					if (_selectorX == itY && _selectorY == itX && _cursorType != CT_NONE)
@@ -398,7 +404,7 @@ void Map::drawTerrain(Surface *surface)
 								if (itZ == 0)
 								{
 									// draw shadow on the floor
-									for (int i = 1; i <= _projectile->getParticle(0); i++)
+									for (int i = 1; i <= _projectile->getParticle(0); ++i)
 									{
 										if (_projectile->getParticle(i) != 0xFF)
 										{
@@ -415,7 +421,7 @@ void Map::drawTerrain(Surface *surface)
 										}
 									}
 								}
-								for (int i = 1; i <= _projectile->getParticle(0); i++)
+								for (int i = 1; i <= _projectile->getParticle(0); ++i)
 								{
 									if (_projectile->getParticle(i) != 0xFF)
 									{
@@ -477,7 +483,7 @@ void Map::drawTerrain(Surface *surface)
 					unit = tile->getUnit();
 
 					// check if we gots explosions
-					for (std::set<Explosion*>::const_iterator i = _explosions.begin(); i != _explosions.end(); i++)
+					for (std::set<Explosion*>::const_iterator i = _explosions.begin(); i != _explosions.end(); ++i)
 					{
 						if (!(*i)->isBig())
 						{
@@ -567,7 +573,7 @@ void Map::drawTerrain(Surface *surface)
 	}
 
 	// check if we got big explosions
-	for (std::set<Explosion*>::const_iterator i = _explosions.begin(); i != _explosions.end(); i++)
+	for (std::set<Explosion*>::const_iterator i = _explosions.begin(); i != _explosions.end(); ++i)
 	{
 		if ((*i)->isBig())
 		{
@@ -799,7 +805,7 @@ void Map::animate()
 	_animFrame++;
 	if (_animFrame == 8) _animFrame = 0;
 
-	for (int i = 0; i < _tileCount; i++)
+	for (int i = 0; i < _tileCount; ++i)
 	{
 		_save->getTiles()[i]->animate();
 	}
@@ -1012,7 +1018,7 @@ CursorType Map::getCursorType() const
  */
 void Map::cacheTileSprites()
 {
-	for (int i = 0; i < _tileCount; i++)
+	for (int i = 0; i < _tileCount; ++i)
 	{
 		cacheTileSprites(i);
 	}
@@ -1167,7 +1173,7 @@ void Map::cacheUnits()
 	//unitSprite->setSurfaces();
 	unitSprite->setPalette(this->getPalette());
 
-	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); i++)
+	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
 		if (!(*i)->isCached())
 		{

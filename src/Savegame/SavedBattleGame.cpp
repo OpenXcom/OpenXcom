@@ -42,28 +42,28 @@ SavedBattleGame::SavedBattleGame() : _tiles(), _nodes(), _units(), _side(FACTION
 
 }
 
-/** 
+/**
  * Deletes the game content from memory.
  */
 SavedBattleGame::~SavedBattleGame()
 {
-	for (int i = 0; i < _height * _length * _width; i++)
+	for (int i = 0; i < _height * _length * _width; ++i)
 	{
 		delete _tiles[i];
 	}
 	delete[] _tiles;
 
-	for (std::vector<Node*>::iterator i = _nodes.begin(); i != _nodes.end(); i++)
+	for (std::vector<Node*>::iterator i = _nodes.begin(); i != _nodes.end(); ++i)
 	{
 		delete *i;
 	}
 
-	for (std::vector<BattleUnit*>::iterator i = _units.begin(); i != _units.end(); i++)
+	for (std::vector<BattleUnit*>::iterator i = _units.begin(); i != _units.end(); ++i)
 	{
 		delete *i;
 	}
 
-	for (std::vector<BattleItem*>::iterator i = _items.begin(); i != _items.end(); i++)
+	for (std::vector<BattleItem*>::iterator i = _items.begin(); i != _items.end(); ++i)
 	{
 		delete *i;
 	}
@@ -102,7 +102,7 @@ void SavedBattleGame::load(const YAML::Node &node)
  */
 void SavedBattleGame::save(YAML::Emitter &out) const
 {
-/** 
+/**
 * under construction
 */
 	out << YAML::BeginMap;
@@ -113,7 +113,7 @@ void SavedBattleGame::save(YAML::Emitter &out) const
 
 	out << YAML::Key << "mapdatafiles" << YAML::Value;
 	out << YAML::BeginSeq;
-	for (std::vector<MapDataSet*>::const_iterator i = _mapDataFiles.begin(); i != _mapDataFiles.end(); i++)
+	for (std::vector<MapDataSet*>::const_iterator i = _mapDataFiles.begin(); i != _mapDataFiles.end(); ++i)
 	{
 		out << (*i)->getName();
 	}
@@ -161,7 +161,7 @@ void SavedBattleGame::save(YAML::Emitter &out) const
 
 	out << YAML::Key << "units" << YAML::Value;
 	out << YAML::BeginSeq;
-	for (std::vector<BattleUnit*>::const_iterator i = _units.begin(); i != _units.end(); i++)
+	for (std::vector<BattleUnit*>::const_iterator i = _units.begin(); i != _units.end(); ++i)
 	{
 		(*i)->save(out);
 	}
@@ -169,7 +169,7 @@ void SavedBattleGame::save(YAML::Emitter &out) const
 
 	out << YAML::Key << "items" << YAML::Value;
 	out << YAML::BeginSeq;
-	for (std::vector<BattleItem*>::const_iterator i = _items.begin(); i != _items.end(); i++)
+	for (std::vector<BattleItem*>::const_iterator i = _items.begin(); i != _items.end(); ++i)
 	{
 		(*i)->save(out);
 	}
@@ -178,7 +178,7 @@ void SavedBattleGame::save(YAML::Emitter &out) const
 	out << YAML::EndMap;
 }
 
-/** 
+/**
  * Gets a pointer to the array of tiles.
  * @return A pointer to Tile array.
  */
@@ -187,7 +187,7 @@ Tile **SavedBattleGame::getTiles()
 	return _tiles;
 }
 
-/** 
+/**
  * Initializes the array of tiles + creates a pathfinding object.
  * @param width
  * @param length
@@ -207,7 +207,7 @@ void SavedBattleGame::initUtilities(ResourcePack *res)
 	_terrainModifier = new TerrainModifier(this, res->getVoxelData());
 }
 
-/** 
+/**
  * Sets the mission type.
  * @param missionType
  */
@@ -216,7 +216,7 @@ void SavedBattleGame::setMissionType(MissionType missionType)
 	_missionType = missionType;
 }
 
-/** 
+/**
  * Gets the mission type.
  * @return missionType
  */
@@ -225,7 +225,7 @@ MissionType SavedBattleGame::getMissionType() const
 	return _missionType;
 }
 
-/** 
+/**
  * Sets the global shade.
  * @param shade
  */
@@ -234,7 +234,7 @@ void SavedBattleGame::setGlobalShade(int shade)
 	_globalShade = shade;
 }
 
-/** 
+/**
  * Gets the global shade.
  * @return int
  */
@@ -243,7 +243,7 @@ int SavedBattleGame::getGlobalShade() const
 	return _globalShade;
 }
 
-/** 
+/**
  * Gets the map width.
  * @return Width in tiles.
  */
@@ -252,7 +252,7 @@ int SavedBattleGame::getWidth()
 	return _width;
 }
 
-/** 
+/**
  * Gets the map length.
  * @return Length in tiles.
  */
@@ -261,7 +261,7 @@ int SavedBattleGame::getLength()
 	return _length;
 }
 
-/** 
+/**
  * Gets the map height.
  * @return Height in layers.
  */
@@ -270,7 +270,7 @@ int SavedBattleGame::getHeight()
 	return _height;
 }
 
-/** 
+/**
  * This method converts coordinates into a unique index.
  * @param pos position
  * @return Unique index.
@@ -280,7 +280,7 @@ int SavedBattleGame::getTileIndex(const Position& pos)
 	return pos.z * _length * _width + pos.y * _width + pos.x;
 }
 
-/** 
+/**
  * This method converts an index to coords.
  * @param index tileindex
  * @param x pointer to X coordinate.
@@ -295,7 +295,7 @@ void SavedBattleGame::getTileCoords(int index, int *x, int *y, int *z)
 	*x = (index % (_length * _width)) % _width;
 }
 
-/** 
+/**
  * Gets the Tile on a given position on the map.
  * @param pos position
  * @return Pointer to tile.
@@ -352,7 +352,7 @@ BattleUnit *SavedBattleGame::selectNextPlayerUnit()
 		{
 			bNext = true;
 		}
-		i++;
+		++i;
 		if (i == _units.end())
 		{
 			i = _units.begin();
@@ -381,7 +381,7 @@ BattleUnit *SavedBattleGame::selectUnit(const Position& pos)
 {
 	BattleUnit *bu = 0;
 
-	for (std::vector<BattleUnit*>::iterator i = _units.begin(); i != _units.end(); i++)
+	for (std::vector<BattleUnit*>::iterator i = _units.begin(); i != _units.end(); ++i)
 	{
 		if ((*i)->getPosition() == pos && !(*i)->isOut())
 		{
@@ -449,11 +449,11 @@ std::vector<MapDataSet*> *SavedBattleGame::getMapDataSets()
 
 /**
 * get an item from a specific unit and slot
-* @return 
+* @return
 */
 BattleItem *SavedBattleGame::getItemFromUnit(BattleUnit *unit, InventorySlot slot)
 {
-	for (std::vector<BattleItem*>::iterator i = _items.begin(); i != _items.end(); i++)
+	for (std::vector<BattleItem*>::iterator i = _items.begin(); i != _items.end(); ++i)
 	{
 		if ((*i)->getOwner() == unit && (*i)->getSlot() == slot)
 		{
@@ -486,7 +486,7 @@ void SavedBattleGame::endTurn()
 		_side = FACTION_PLAYER;
 	}
 
-	for (std::vector<BattleUnit*>::iterator i = _units.begin(); i != _units.end(); i++)
+	for (std::vector<BattleUnit*>::iterator i = _units.begin(); i != _units.end(); ++i)
 	{
 		if ((*i)->getFaction() == _side)
 		{
@@ -500,7 +500,7 @@ void SavedBattleGame::endTurn()
 
 void SavedBattleGame::setDebugMode()
 {
-	for (int i = 0; i < _height * _length * _width; i++)
+	for (int i = 0; i < _height * _length * _width; ++i)
 	{
 		_tiles[i]->setDiscovered(true);
 	}
@@ -516,7 +516,7 @@ bool SavedBattleGame::getDebugMode() const
 /** under construction
 *
 */
-static const std::string base64_chars = 
+static const std::string base64_chars =
              "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
              "abcdefghijklmnopqrstuvwxyz"
              "0123456789+/";

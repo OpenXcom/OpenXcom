@@ -42,7 +42,7 @@ namespace OpenXcom
  */
 ExplosionBState::ExplosionBState(BattlescapeState *parent, Position center, BattleItem *item) : BattleState(parent), _center(center), _item(item)
 {
-	
+
 }
 
 /**
@@ -60,7 +60,7 @@ ExplosionBState::~ExplosionBState()
  * - explosion sound
  */
 void ExplosionBState::init()
-{	
+{
 	_unit = _parent->getGame()->getSavedGame()->getBattleGame()->getSelectedUnit();
 	if (_item == 0 || _item->getRules()->getHitAnimation() == 0)
 	{
@@ -109,7 +109,7 @@ void ExplosionBState::think()
 				save->getTerrainModifier()->explode(_center, _item->getRules()->getPower(), _item->getRules()->getDamageType(), 100, save->getSelectedUnit());
 
 				// now check for new casualties
-				for (std::vector<BattleUnit*>::iterator j = save->getUnits()->begin(); j != save->getUnits()->end(); j++)
+				for (std::vector<BattleUnit*>::iterator j = save->getUnits()->begin(); j != save->getUnits()->end(); ++j)
 				{
 					if ((*j)->getHealth() == 0 && (*j)->getStatus() != STATUS_DEAD)
 					{

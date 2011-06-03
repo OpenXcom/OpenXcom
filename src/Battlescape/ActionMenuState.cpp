@@ -43,7 +43,7 @@ ActionMenuState::ActionMenuState(Game *game, BattleAction *action) : State(game)
 	_screen = false;
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_4")->getColors());
 
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < 5; ++i)
 	{
 		_actionMenu[i] = new ActionMenuItem(this, i, _game->getResourcePack()->getFont("BIGLETS.DAT"));
 		add(_actionMenu[i]);
@@ -126,7 +126,7 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 	}
 
 	// got to find out which button was pressed
-	for (int i = 0; i < 10 && btnID == -1; i++)
+	for (int i = 0; i < 10 && btnID == -1; ++i)
 	{
 		if (action->getSender() == _actionMenu[i])
 		{

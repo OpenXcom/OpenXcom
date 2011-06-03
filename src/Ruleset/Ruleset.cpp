@@ -46,55 +46,55 @@ Ruleset::Ruleset() : _names(), _countries(), _regions(), _facilities(), _crafts(
  */
 Ruleset::~Ruleset()
 {
-	for (std::vector<SoldierNamePool*>::iterator i = _names.begin(); i != _names.end(); i++)
+	for (std::vector<SoldierNamePool*>::iterator i = _names.begin(); i != _names.end(); ++i)
 	{
 		delete *i;
 	}
-	for (std::map<std::string, RuleCountry*>::iterator i = _countries.begin(); i != _countries.end(); i++)
+	for (std::map<std::string, RuleCountry*>::iterator i = _countries.begin(); i != _countries.end(); ++i)
 	{
 		delete i->second;
 	}
-	for (std::map<std::string, RuleRegion*>::iterator i = _regions.begin(); i != _regions.end(); i++)
+	for (std::map<std::string, RuleRegion*>::iterator i = _regions.begin(); i != _regions.end(); ++i)
 	{
 		delete i->second;
 	}
-	for (std::map<std::string, RuleBaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); i++)
+	for (std::map<std::string, RuleBaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); ++i)
 	{
 		delete i->second;
 	}
-	for (std::map<std::string, RuleCraft*>::iterator i = _crafts.begin(); i != _crafts.end(); i++)
+	for (std::map<std::string, RuleCraft*>::iterator i = _crafts.begin(); i != _crafts.end(); ++i)
 	{
 		delete i->second;
 	}
-	for (std::map<std::string, RuleCraftWeapon*>::iterator i = _craftWeapons.begin(); i != _craftWeapons.end(); i++)
+	for (std::map<std::string, RuleCraftWeapon*>::iterator i = _craftWeapons.begin(); i != _craftWeapons.end(); ++i)
 	{
 		delete i->second;
 	}
-	for (std::map<std::string, RuleItem*>::iterator i = _items.begin(); i != _items.end(); i++)
+	for (std::map<std::string, RuleItem*>::iterator i = _items.begin(); i != _items.end(); ++i)
 	{
 		delete i->second;
 	}
-	for (std::map<std::string, RuleUfo*>::iterator i = _ufos.begin(); i != _ufos.end(); i++)
+	for (std::map<std::string, RuleUfo*>::iterator i = _ufos.begin(); i != _ufos.end(); ++i)
 	{
 		delete i->second;
 	}
-	for (std::map<std::string, RuleTerrain*>::iterator i = _terrains.begin(); i != _terrains.end(); i++)
+	for (std::map<std::string, RuleTerrain*>::iterator i = _terrains.begin(); i != _terrains.end(); ++i)
 	{
 		delete i->second;
 	}
-	for (std::map<std::string, MapDataSet*>::iterator i = _mapDataFiles.begin(); i != _mapDataFiles.end(); i++)
+	for (std::map<std::string, MapDataSet*>::iterator i = _mapDataFiles.begin(); i != _mapDataFiles.end(); ++i)
 	{
 		delete i->second;
 	}
-	for (std::map<std::string, RuleSoldier*>::iterator i = _soldiers.begin(); i != _soldiers.end(); i++)
+	for (std::map<std::string, RuleSoldier*>::iterator i = _soldiers.begin(); i != _soldiers.end(); ++i)
 	{
 		delete i->second;
 	}
-	for (std::map<std::string, RuleAlien*>::iterator i = _aliens.begin(); i != _aliens.end(); i++)
+	for (std::map<std::string, RuleAlien*>::iterator i = _aliens.begin(); i != _aliens.end(); ++i)
 	{
 		delete i->second;
 	}
-	for (std::map<std::string, ArticleDefinition*>::iterator i = _ufopaediaArticles.begin(); i != _ufopaediaArticles.end(); i++)
+	for (std::map<std::string, ArticleDefinition*>::iterator i = _ufopaediaArticles.begin(); i != _ufopaediaArticles.end(); ++i)
 	{
 		delete i->second;
 	}

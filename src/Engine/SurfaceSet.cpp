@@ -54,7 +54,7 @@ SurfaceSet::SurfaceSet(const SurfaceSet& other)
  */
 SurfaceSet::~SurfaceSet()
 {
-	for (std::vector<Surface*>::iterator i = _frames.begin(); i != _frames.end(); i++)
+	for (std::vector<Surface*>::iterator i = _frames.begin(); i != _frames.end(); ++i)
 	{
 		delete *i;
 	}
@@ -99,9 +99,9 @@ void SurfaceSet::loadPck(const std::string &pck, const std::string &tab)
 	{
 		throw Exception("Failed to load PCK");
 	}
-	
+
 	Uint8 value;
-	
+
 	for (int frame = 0; frame < nframes; frame++)
 	{
 		int x = 0, y = 0;
@@ -117,7 +117,7 @@ void SurfaceSet::loadPck(const std::string &pck, const std::string &tab)
 				_frames[frame]->setPixelIterative(&x, &y, 0);
 			}
 		}
-		
+
 		while (imgFile.read((char*)&value, 1) && value != 255)
 		{
 			if (value == 254)
@@ -160,7 +160,7 @@ void SurfaceSet::loadDat(const std::string &filename)
 	{
 		throw Exception("Failed to load DAT");
 	}
-	
+
 	imgFile.seekg(0, std::ios::end);
 	std::streamoff size = imgFile.tellg();
 	imgFile.seekg(0, std::ios::beg);
@@ -182,7 +182,7 @@ void SurfaceSet::loadDat(const std::string &filename)
 	while (imgFile.read((char*)&value, 1))
 	{
 		_frames[frame]->setPixelIterative(&x, &y, value);
-		
+
 		if (y >= _height)
 		{
 			// Unlock the surface
@@ -248,7 +248,7 @@ int SurfaceSet::getTotalFrames() const
  */
 void SurfaceSet::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 {
-	for (std::vector<Surface*>::iterator i = _frames.begin(); i != _frames.end(); i++)
+	for (std::vector<Surface*>::iterator i = _frames.begin(); i != _frames.end(); ++i)
 	{
 		(*i)->setPalette(colors, firstcolor, ncolors);
 	}

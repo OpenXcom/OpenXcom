@@ -97,7 +97,7 @@ void MapDataSet::load(ResourcePack *res)
 	struct MCD
 	{
     unsigned char Frame[8];
-    unsigned char LOFT[12];      
+    unsigned char LOFT[12];
     unsigned short ScanG;
     unsigned char u23;
     unsigned char u24;
@@ -110,7 +110,7 @@ void MapDataSet::load(ResourcePack *res)
     unsigned char UFO_Door;
     unsigned char Stop_LOS;
     unsigned char No_Floor;
-    unsigned char Big_Wall;      
+    unsigned char Big_Wall;
     unsigned char Gravlift;
     unsigned char Door;
     unsigned char Block_Fire;
@@ -123,17 +123,17 @@ void MapDataSet::load(ResourcePack *res)
     unsigned char HE_Block;
     unsigned char Die_MCD;
     unsigned char Flammable;
-    unsigned char Alt_MCD;       
+    unsigned char Alt_MCD;
     unsigned char u48;
-    signed char T_Level;      
+    signed char T_Level;
     unsigned char P_Level;
     unsigned char u51;
-    unsigned char Light_Block;     
-    unsigned char Footstep;         
+    unsigned char Light_Block;
+    unsigned char Footstep;
     unsigned char Tile_Type;
-    unsigned char HE_Type;         
+    unsigned char HE_Type;
     unsigned char HE_Strength;
-    unsigned char Smoke_Blockage;      
+    unsigned char Smoke_Blockage;
     unsigned char Fuel;
     unsigned char Light_Source;
     unsigned char Target_Type;
@@ -216,7 +216,7 @@ void MapDataSet::unload()
 {
 	if (_loaded)
 	{
-		for (std::vector<MapData*>::iterator i = _objects.begin(); i != _objects.end(); i++)
+		for (std::vector<MapData*>::iterator i = _objects.begin(); i != _objects.end(); ++i)
 		{
 			delete *i;
 		}
@@ -237,7 +237,7 @@ void MapDataSet::loadLOFTEMPS(const std::string &filename, std::vector<Uint16> *
 	{
 		throw Exception("Failed to load DAT");
 	}
-	
+
 	Uint16 value;
 
 	while (mapFile.read((char*)&value, sizeof(value)))

@@ -55,7 +55,7 @@ namespace OpenXcom
 DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo) : State(game), _globe(globe), _craft(craft), _ufo(ufo), _timeout(50), _currentDist(640), _targetDist(560), _w1Dist(), _w2Dist(), _end(false), _destroy(false)
 {
 	_targetRadius = _currentRadius = _ufo->getRules()->getRadius();
-	
+
 	_screen = false;
 
 	// Create objects
@@ -104,7 +104,7 @@ DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo) :
 	add(_txtDistance);
 	add(_preview);
 	add(_txtStatus);
-	
+
 	// Set up objects
 	Surface *graphic = _game->getResourcePack()->getSurface("INTERWIN.DAT");
 	graphic->setX(0);
@@ -115,7 +115,7 @@ DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo) :
 	graphic->getCrop()->h = 96;
     _window->drawRect(graphic->getCrop(), 15);
 	graphic->blit(_window);
-	
+
     _preview->drawRect(graphic->getCrop(), 15);
 	graphic->getCrop()->y = 96;
 	graphic->getCrop()->h = 15;
@@ -383,7 +383,7 @@ void DogfightState::move()
 			}
 			else
 			{
-				d++;
+				++d;
 			}
 		}
 
@@ -447,7 +447,7 @@ void DogfightState::move()
 			wDist = &_w2Dist;
 			off = 1;
 		}
-		for (std::vector<int>::iterator d = wDist->begin(); d != wDist->end(); d++)
+		for (std::vector<int>::iterator d = wDist->begin(); d != wDist->end(); ++d)
 		{
 			for (int j = -2; j <= 0; j++)
 			{
@@ -465,7 +465,7 @@ void DogfightState::move()
 			// Disengage any other craft
 			while (_ufo->getFollowers()->size() > 0)
 			{
-				for (std::vector<Target*>::iterator i = _ufo->getFollowers()->begin(); i != _ufo->getFollowers()->end(); i++)
+				for (std::vector<Target*>::iterator i = _ufo->getFollowers()->begin(); i != _ufo->getFollowers()->end(); ++i)
 				{
 					Craft *c = dynamic_cast<Craft*>(*i);
 					if (c)
@@ -475,9 +475,9 @@ void DogfightState::move()
 					}
 				}
 			}
-			
+
 			// Clear UFO
-			for (std::vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end(); i++)
+			for (std::vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end(); ++i)
 			{
 				if (*i == _ufo)
 				{
@@ -558,7 +558,7 @@ void DogfightState::fireWeapon2()
 void DogfightState::minimumDistance()
 {
 	int max = 0;
-	for (std::vector<CraftWeapon*>::iterator i = _craft->getWeapons()->begin(); i < _craft->getWeapons()->end(); i++)
+	for (std::vector<CraftWeapon*>::iterator i = _craft->getWeapons()->begin(); i < _craft->getWeapons()->end(); ++i)
 	{
 		if (*i == 0)
 			continue;
@@ -584,7 +584,7 @@ void DogfightState::minimumDistance()
 void DogfightState::maximumDistance()
 {
 	int min = 1000;
-	for (std::vector<CraftWeapon*>::iterator i = _craft->getWeapons()->begin(); i < _craft->getWeapons()->end(); i++)
+	for (std::vector<CraftWeapon*>::iterator i = _craft->getWeapons()->begin(); i < _craft->getWeapons()->end(); ++i)
 	{
 		if (*i == 0)
 			continue;

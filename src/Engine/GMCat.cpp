@@ -60,7 +60,7 @@ static int gmext_read_stream (struct gmstream *p,
 		return -1;
 	p->nsubs = *data++;
 
-	for (int i=0; i<p->nsubs; i++) {
+	for (int i=0; i<p->nsubs; ++i) {
 		if (n < 4)
 			return -1;
 		unsigned int s = read_uint32_le(data);
@@ -77,7 +77,7 @@ static int gmext_read_stream (struct gmstream *p,
 		return -1;
 	p->ntracks = *data++;
 
-	for (int i=0; i<p->ntracks; i++) {
+	for (int i=0; i<p->ntracks; ++i) {
 		if (n-- < 5)
 			return -1;
 		p->tracks[i].channel = *data++;

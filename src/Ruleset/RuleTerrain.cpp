@@ -39,7 +39,7 @@ RuleTerrain::RuleTerrain(const std::string &name) : _name(name)
 */
 RuleTerrain::~RuleTerrain()
 {
-	for (std::vector<MapBlock*>::iterator i = _mapBlocks.begin(); i != _mapBlocks.end(); i++)
+	for (std::vector<MapBlock*>::iterator i = _mapBlocks.begin(); i != _mapBlocks.end(); ++i)
 	{
 		delete *i;
 	}
@@ -95,7 +95,7 @@ MapBlock* RuleTerrain::getRandomMapBlock(int maxsize, bool landingzone)
 			mb = 0;
 		}
 	}
-	
+
 	return mb;
 }
 
@@ -108,8 +108,8 @@ MapData *RuleTerrain::getMapData(int id)
 {
 	MapDataSet* mdf = 0;
 	int relativeID = id;
-	
-	for (std::vector<MapDataSet*>::iterator i = _mapDataFiles.begin(); i != _mapDataFiles.end(); i++)
+
+	for (std::vector<MapDataSet*>::iterator i = _mapDataFiles.begin(); i != _mapDataFiles.end(); ++i)
 	{
 		mdf = *i;
 		if (relativeID- mdf->getSize() < 0)

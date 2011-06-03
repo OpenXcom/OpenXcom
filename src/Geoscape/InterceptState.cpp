@@ -55,7 +55,7 @@ InterceptState::InterceptState(Game *game, Globe *globe, Base *base) : State(gam
 	_txtBase = new Text(85, 9, 165, 70);
 	_txtWeapons = new Text(80, 16, 238, 62);
 	_lstCrafts = new TextList(288, 64, 8, 78);
-	
+
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
 
@@ -103,11 +103,11 @@ InterceptState::InterceptState(Game *game, Globe *globe, Base *base) : State(gam
 	_lstCrafts->onMouseClick((ActionHandler)&InterceptState::lstCraftsClick);
 
 	int row = 0;
-	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); i++)
+	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
 	{
 		if (_base != 0 && (*i) != _base)
 			continue;
-		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); j++)
+		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); ++j)
 		{
 			std::wstringstream ss;
 			if ((*j)->getNumWeapons() > 0)
@@ -153,7 +153,7 @@ InterceptState::InterceptState(Game *game, Globe *globe, Base *base) : State(gam
  */
 InterceptState::~InterceptState()
 {
-	
+
 }
 
 /**

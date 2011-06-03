@@ -70,7 +70,7 @@ MultipleTargetsState::MultipleTargetsState(Game *game, std::vector<Target*> targ
 		_window = new Window(this, 136, winHeight, 60, winY);
 		_btnCancel = new TextButton(116, BUTTON_HEIGHT, 70, btnY);
 		_lstTargets = new TextList(116, listHeight, 70, listY);
-	
+
 		// Set palette
 		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
 
@@ -92,7 +92,7 @@ MultipleTargetsState::MultipleTargetsState(Game *game, std::vector<Target*> targ
 		_lstTargets->setSelectable(true);
 		_lstTargets->setBackground(_window);
 		_lstTargets->onMouseClick((ActionHandler)&MultipleTargetsState::lstTargetsClick);
-		for (std::vector<Target*>::iterator i = _targets.begin(); i != _targets.end(); i++)
+		for (std::vector<Target*>::iterator i = _targets.begin(); i != _targets.end(); ++i)
 		{
 			_lstTargets->addRow(1, (*i)->getName(_game->getLanguage()).c_str());
 		}
@@ -104,7 +104,7 @@ MultipleTargetsState::MultipleTargetsState(Game *game, std::vector<Target*> targ
  */
 MultipleTargetsState::~MultipleTargetsState()
 {
-	
+
 }
 
 /**

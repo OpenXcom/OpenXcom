@@ -93,7 +93,7 @@ Soldier::~Soldier()
  */
 void Soldier::load(const YAML::Node &node)
 {
-	int a;
+	int a = 0;
 	std::string name;
 	node["name"] >> name;
 	_name = Language::utf8ToWstr(name);

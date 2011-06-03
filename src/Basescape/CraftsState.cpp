@@ -53,7 +53,7 @@ CraftsState::CraftsState(Game *game, Base *base) : State(game), _base(base)
 	_txtCrew = new Text(58, 9, 210, 40);
 	_txtHwp = new Text(46, 9, 268, 40);
 	_lstCrafts = new TextList(288, 118, 8, 58);
-	
+
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)), Palette::backPos, 16);
 
@@ -115,7 +115,7 @@ CraftsState::CraftsState(Game *game, Base *base) : State(game), _base(base)
  */
 CraftsState::~CraftsState()
 {
-	
+
 }
 
 /**
@@ -125,7 +125,7 @@ CraftsState::~CraftsState()
 void CraftsState::init()
 {
 	_lstCrafts->clearList();
-	for (std::vector<Craft*>::iterator i = _base->getCrafts()->begin(); i != _base->getCrafts()->end(); i++)
+	for (std::vector<Craft*>::iterator i = _base->getCrafts()->begin(); i != _base->getCrafts()->end(); ++i)
 	{
 		std::wstringstream ss, ss2, ss3;
 		ss << (*i)->getNumWeapons() << "/" << (*i)->getRules()->getWeapons();

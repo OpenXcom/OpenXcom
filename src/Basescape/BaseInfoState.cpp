@@ -94,7 +94,7 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 	_txtLongRange = new Text(130, 9, 8, 163);
 	_numLongRange = new Text(40, 9, 126, 163);
 	_barLongRange = new Bar(150, 5, 166, 165);
-	
+
 	add(_bg);
 	add(_mini);
 	add(_btnOk);
@@ -140,13 +140,13 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 	add(_txtLongRange);
 	add(_numLongRange);
 	add(_barLongRange);
-	
+
 	// Set up objects
 	_game->getResourcePack()->getSurface("BACK07.SCR")->blit(_bg);
 
 	_mini->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
 	_mini->setBases(_game->getSavedGame()->getBases());
-	for (unsigned int i = 0; i < _game->getSavedGame()->getBases()->size(); i++)
+	for (unsigned int i = 0; i < _game->getSavedGame()->getBases()->size(); ++i)
 	{
 		if (_game->getSavedGame()->getBases()->at(i) == _base)
 		{
@@ -247,7 +247,7 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 
 	_barHangars->setColor(Palette::blockOffset(3));
 	_barHangars->setScale(18.0);
-	
+
 
 	_txtDefence->setColor(Palette::blockOffset(13)+5);
 	_txtDefence->setText(_game->getLanguage()->getString("STR_DEFENCE_STRENGTH"));
@@ -287,7 +287,7 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
  */
 BaseInfoState::~BaseInfoState()
 {
-	
+
 }
 
 /**
@@ -353,7 +353,7 @@ void BaseInfoState::init()
 
 	_barHangars->setMax(_base->getAvailableHangars());
 	_barHangars->setValue(_base->getUsedHangars());
-	
+
 
 	std::wstringstream ss9;
 	ss9 << _base->getDefenceValue();

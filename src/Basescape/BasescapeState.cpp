@@ -75,7 +75,7 @@ BasescapeState::BasescapeState(Game *game, Base *base, Globe *globe) : State(gam
 	_btnPurchase = new TextButton(128, 12, 192, 162);
 	_btnSell = new TextButton(128, 12, 192, 175);
 	_btnGeoscape = new TextButton(128, 12, 192, 188);
-	
+
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
 
@@ -106,7 +106,7 @@ BasescapeState::BasescapeState(Game *game, Base *base, Globe *globe) : State(gam
 
 	_mini->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
 	_mini->setBases(_game->getSavedGame()->getBases());
-	for (unsigned int i = 0; i < _game->getSavedGame()->getBases()->size(); i++)
+	for (unsigned int i = 0; i < _game->getSavedGame()->getBases()->size(); ++i)
 	{
 		if (_game->getSavedGame()->getBases()->at(i) == _base)
 		{
@@ -124,7 +124,7 @@ BasescapeState::BasescapeState(Game *game, Base *base, Globe *globe) : State(gam
 	_txtLocation->setColor(Palette::blockOffset(15)+6);
 
 	_txtFunds->setColor(Palette::blockOffset(13)+10);
-	
+
 	_btnNewBase->setColor(Palette::blockOffset(13)+8);
 	_btnNewBase->setText(_game->getLanguage()->getString("STR_BUILD_NEW_BASE_UC"));
 	_btnNewBase->onMouseClick((ActionHandler)&BasescapeState::btnNewBaseClick);
@@ -177,7 +177,7 @@ BasescapeState::~BasescapeState()
 {
 	// Clean up any temporary bases
 	bool exists = false;
-	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end() && !exists; i++)
+	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end() && !exists; ++i)
 	{
 		if (*i == _base)
 		{
@@ -199,7 +199,7 @@ void BasescapeState::init()
 	if (_game->getSavedGame()->getBases()->size() > 0)
 	{
 		bool exists = false;
-		for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end() && !exists; i++)
+		for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end() && !exists; ++i)
 		{
 			if (*i == _base)
 			{
@@ -224,7 +224,7 @@ void BasescapeState::init()
 	_txtBase->setText(_base->getName());
 
 	// Get area
-	for (std::vector<Region*>::iterator i = _game->getSavedGame()->getRegions()->begin(); i != _game->getSavedGame()->getRegions()->end(); i++)
+	for (std::vector<Region*>::iterator i = _game->getSavedGame()->getRegions()->begin(); i != _game->getSavedGame()->getRegions()->end(); ++i)
 	{
 		if ((*i)->getRules()->insideRegion(_base->getLongitude(), _base->getLatitude()))
 		{
@@ -250,7 +250,7 @@ void BasescapeState::init()
 void BasescapeState::setBase(Base *base)
 {
 	_base = base;
-	for (unsigned int i = 0; i < _game->getSavedGame()->getBases()->size(); i++)
+	for (unsigned int i = 0; i < _game->getSavedGame()->getBases()->size(); ++i)
 	{
 		if (_game->getSavedGame()->getBases()->at(i) == _base)
 		{
@@ -373,7 +373,7 @@ void BasescapeState::viewClick(Action *action)
 	{
 		// Pre-calculate values to ensure base stays connected
 		int x = -1, y = -1, squares = 0;
-		for (std::vector<BaseFacility*>::iterator i = _base->getFacilities()->begin(); i != _base->getFacilities()->end(); i++)
+		for (std::vector<BaseFacility*>::iterator i = _base->getFacilities()->begin(); i != _base->getFacilities()->end(); ++i)
 		{
 			if ((*i)->getRules()->getLift())
 			{

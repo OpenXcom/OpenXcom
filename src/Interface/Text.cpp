@@ -39,7 +39,7 @@ Text::Text(int width, int height, int x, int y) : Surface(width, height, x, y), 
  */
 Text::~Text()
 {
-	
+
 }
 
 /**
@@ -231,13 +231,13 @@ Uint8 Text::getSecondaryColor() const
 int Text::getTextHeight() const
 {
 	int height = 0;
-	for (std::vector<int>::const_iterator i = _lineHeight.begin(); i != _lineHeight.end(); i++)
+	for (std::vector<int>::const_iterator i = _lineHeight.begin(); i != _lineHeight.end(); ++i)
 	{
 		height += *i;
 	}
 	return height;
 }
-	
+
 /**
   * Returns the rendered text's width.
   * @return Width in pixels.
@@ -245,7 +245,7 @@ int Text::getTextHeight() const
 int Text::getTextWidth() const
 {
 	int width = 0;
-	for (std::vector<int>::const_iterator i = _lineWidth.begin(); i != _lineWidth.end(); i++)
+	for (std::vector<int>::const_iterator i = _lineWidth.begin(); i != _lineWidth.end(); ++i)
 	{
 		if (*i > width)
 		{
@@ -254,7 +254,7 @@ int Text::getTextWidth() const
 	}
 	return width;
 }
-	
+
 /**
  * Takes care of any text post-processing like calculating
  * line metrics for alignment and wordwrapping if necessary.
@@ -283,7 +283,7 @@ void Text::processText()
 	Font *font = _font;
 
 	// Go through the text character by character
-	for (std::wstring::iterator c = s->begin(); c <= s->end(); c++)
+	for (std::wstring::iterator c = s->begin(); c <= s->end(); ++c)
 	{
 		// End of the line
 		if (c == s->end() || *c == L'\n' || *c == 2)
@@ -293,7 +293,7 @@ void Text::processText()
 			_lineHeight.push_back(font->getHeight() + font->getSpacing());
 			width = 0;
 			word = 0;
-			
+
 			if (c == s->end())
 				break;
 			// \x02 marks start of small text
@@ -345,7 +345,7 @@ void Text::draw()
 	Uint8 color = _color;
 	std::wstring *s = &_text;
 
-	for (std::vector<int>::iterator i = _lineHeight.begin(); i != _lineHeight.end(); i++)
+	for (std::vector<int>::iterator i = _lineHeight.begin(); i != _lineHeight.end(); ++i)
 	{
 		height += *i;
 	}
@@ -382,7 +382,7 @@ void Text::draw()
 	}
 
 	// Draw each letter one by one
-	for (std::wstring::iterator c = s->begin(); c != s->end(); c++)
+	for (std::wstring::iterator c = s->begin(); c != s->end(); ++c)
 	{
 		if (*c == ' ')
 		{

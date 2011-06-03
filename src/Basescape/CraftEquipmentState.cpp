@@ -56,7 +56,7 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, unsigned int cr
 	_txtAvailable = new Text(110, 9, 16, 24);
 	_txtUsed = new Text(110, 9, 130, 24);
 	_lstEquipment = new TextList(288, 128, 8, 40);
-	
+
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
 
@@ -167,7 +167,7 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, unsigned int cr
 			_lstEquipment->getCell(row, 1)->setColor(color);
 			_lstEquipment->getCell(row, 2)->setColor(color);
 
-			i++;
+			++i;
 			row++;
 		}
 	}
@@ -244,7 +244,7 @@ void CraftEquipmentState::lstEquipmentRightArrowPress(Action *action)
  */
 void CraftEquipmentState::lstEquipmentRightArrowRelease(Action *action)
 {
-	_timerRight->stop();	
+	_timerRight->stop();
 }
 
 /**

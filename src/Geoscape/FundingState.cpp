@@ -48,7 +48,7 @@ FundingState::FundingState(Game *game) : State(game)
 	_txtFunding = new Text(120, 16, 140, 24);
 	_txtChange = new Text(120, 16, 240, 24);
 	_lstCountries = new TextList(280, 136, 32, 40);
-	
+
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
 
@@ -92,7 +92,7 @@ FundingState::FundingState(Game *game) : State(game)
 	_lstCountries->setSecondaryColor(Palette::blockOffset(8)+10);
 	_lstCountries->setColumns(3, 108, 100, 72);
 	_lstCountries->setDot(true);
-	for (std::vector<Country*>::iterator i = _game->getSavedGame()->getCountries()->begin(); i != _game->getSavedGame()->getCountries()->end(); i++)
+	for (std::vector<Country*>::iterator i = _game->getSavedGame()->getCountries()->begin(); i != _game->getSavedGame()->getCountries()->end(); ++i)
 	{
 		std::wstringstream ss, ss2;
 		ss << L'\x01' << Text::formatFunding((*i)->getFunding()) << L'\x01';
@@ -110,7 +110,7 @@ FundingState::FundingState(Game *game) : State(game)
  */
 FundingState::~FundingState()
 {
-	
+
 }
 
 /**

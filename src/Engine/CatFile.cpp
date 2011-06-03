@@ -43,7 +43,7 @@ CatFile::CatFile(const char *path) : std::ifstream(path, std::ios::in | std::ios
 	_offset = new unsigned int[_amount];
 	_size   = new unsigned int[_amount];
 
-	for (unsigned int i = 0; i < _amount; i++)
+	for (unsigned int i = 0; i < _amount; ++i)
 	{
 		read((char*)&_offset[i], sizeof(*_offset));
 		read((char*)&_size[i],   sizeof(*_size));

@@ -27,14 +27,14 @@ namespace OpenXcom {
 	UfopaediaSaved::UfopaediaSaved() : _current_index(0)
 	{
 	}
-	
+
 	/**
 	 * Destructor
 	 */
 	UfopaediaSaved::~UfopaediaSaved()
 	{
 	}
-	
+
 	/**
 	 * Insert an article to the visible list using insertion sort. Access to the list is by index.
 	 * @param article Article definition of the article to insert.
@@ -44,17 +44,17 @@ namespace OpenXcom {
 		// TODO: use insertion sort here!
 		_visible_articles.push_back(article);
 	}
-	
+
 	/**
-	 * Fill an ArticleList with the currently visible ArticleIds of the given section. 
+	 * Fill an ArticleList with the currently visible ArticleIds of the given section.
 	 * @param section Article section to find, e.g. "XCOM Crafts & Armaments", "Alien Lifeforms", etc.
 	 * @param data Article definition list object to fill data in.
 	 */
 	void UfopaediaSaved::getSectionList(std::string section, ArticleDefinitionList &data)
 	{
 		ArticleDefinitionList::iterator it;
-		
-		for (it=_visible_articles.begin(); it!=_visible_articles.end(); it++)
+
+		for (it=_visible_articles.begin(); it!=_visible_articles.end(); ++it)
 		{
 			if ((*it)->section == section)
 			{
@@ -62,18 +62,18 @@ namespace OpenXcom {
 			}
 		}
 	}
-	
+
 	/**
-	 * set the current index to an article in the list found by a definition object. 
+	 * set the current index to an article in the list found by a definition object.
 	 * @param article Article definition of the selected article.
 	 */
 	void UfopaediaSaved::setCurrentArticle(ArticleDefinition *article)
 	{
 		_current_index = getArticleIndex(article->id);
 	}
-	
+
 	/**
-	 * move the current index to the next article. 
+	 * move the current index to the next article.
 	 * @returns Article definition of the newly selected article, 0 on error.
 	 */
 	ArticleDefinition *UfopaediaSaved::goNextArticle()
@@ -87,12 +87,12 @@ namespace OpenXcom {
 		{
 			_current_index++;
 		}
-		
+
 		return _visible_articles[_current_index];
 	}
-	
+
 	/**
-	 * move the current index to the previous article. 
+	 * move the current index to the previous article.
 	 * @returns Article definition of the newly selected article, 0 on error.
 	 */
 	ArticleDefinition *UfopaediaSaved::goPrevArticle()
@@ -110,9 +110,9 @@ namespace OpenXcom {
 		return _visible_articles[_current_index];
 	}
 
-	
+
 	/**
-	 * Checks, if article id is in the visible list. 
+	 * Checks, if article id is in the visible list.
 	 * @param article_id Article id to find.
 	 * @returns true, if article id was found.
 	 */
@@ -122,7 +122,7 @@ namespace OpenXcom {
 	}
 
 	/**
-	 * Gets the index of the selected article_id in the visible list. 
+	 * Gets the index of the selected article_id in the visible list.
 	 * If the id is not found, returns -1.
 	 * @param article_id Article id to find.
 	 * @returns Index of the given article id in the internal list, -1 if not found.
@@ -131,8 +131,8 @@ namespace OpenXcom {
 	{
 		ArticleDefinitionList::iterator it;
 		int index = 0;
-		
-		for (it=_visible_articles.begin(); it!=_visible_articles.end(); it++, index++)
+
+		for (it=_visible_articles.begin(); it!=_visible_articles.end(); ++it, index++)
 		{
 			if ((*it)->id == article_id)
 			{
@@ -141,5 +141,5 @@ namespace OpenXcom {
 		}
 		return -1;
 	}
-	
+
 }

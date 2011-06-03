@@ -36,7 +36,7 @@ RuleRegion::RuleRegion(std::string type): _type(type), _cost(0), _lonMin(), _lon
  */
 RuleRegion::~RuleRegion()
 {
-	for (std::vector<City*>::iterator i = _cities.begin(); i != _cities.end(); i++)
+	for (std::vector<City*>::iterator i = _cities.begin(); i != _cities.end(); ++i)
 	{
 		delete *i;
 	}
@@ -102,7 +102,7 @@ bool RuleRegion::insideRegion(double lon, double lat) const
 			inLon = (lon >= _lonMin[i] && lon < _lonMax[i]);
 		else
 			inLon = ((lon >= _lonMin[i] && lon < 6.283) || (lon >= 0 && lon < _lonMax[i]));
-		
+
 		inLat = (lat >= _latMin[i] && lat < _latMax[i]);
 
 		if (inLon && inLat)
