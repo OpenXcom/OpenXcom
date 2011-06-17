@@ -87,6 +87,12 @@ namespace OpenXcom
 	/**
 	 * Constructor (only setting type of base class)
 	 */
+	ArticleDefinitionBaseFacility::ArticleDefinitionBaseFacility() : ArticleDefinition(UFOPAEDIA_TYPE_BASE_FACILITY), facility(0)
+	{}
+	
+	/**
+	 * Constructor (only setting type of base class)
+	 */
 	ArticleDefinitionUfo::ArticleDefinitionUfo() : ArticleDefinition(UFOPAEDIA_TYPE_UFO), ufo(0)
 	{}
 	

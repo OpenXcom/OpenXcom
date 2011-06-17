@@ -1391,6 +1391,18 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	
 	_ufopaediaArticles[article_text.id] = new ArticleDefinitionText(article_text);
 
+	// BASE FACILITIES
+	ArticleDefinitionBaseFacility article_facility;
+	article_facility.section = UFOPAEDIA_BASE_FACILITIES;
+	
+	article_facility.id = "STR_ACCESS_LIFT";
+	article_facility.title = "STR_ACCESS_LIFT";
+	article_facility.text = "STR_ACCESS_LIFT_UFOPEDIA";
+	article_facility.facility = _facilities[article_facility.id];
+	article_facility.sort_key = sort_key++;
+	
+	_ufopaediaArticles[article_facility.id] = new ArticleDefinitionBaseFacility(article_facility);
+	
 	// UFOs
 	ArticleDefinitionUfo article_ufo;
 	article_ufo.section = UFOPAEDIA_UFOS;
@@ -1401,8 +1413,16 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	article_ufo.ufo = _ufos[article_ufo.id];
 	article_ufo.sort_key = sort_key++;
 	
-	_ufopaediaArticles[article_text.id] = new ArticleDefinitionUfo(article_ufo);
+	_ufopaediaArticles[article_ufo.id] = new ArticleDefinitionUfo(article_ufo);
 
+	article_ufo.id = "STR_HARVESTER";
+	article_ufo.title = "STR_HARVESTER";
+	article_ufo.text = "STR_HARVESTER_UFOPEDIA";
+	article_ufo.ufo = _ufos[article_ufo.id];
+	article_ufo.sort_key = sort_key++;
+	
+	_ufopaediaArticles[article_ufo.id] = new ArticleDefinitionUfo(article_ufo);
+	
 	
 	_costSoldier = 20000;
 	_costEngineer = 25000;
@@ -1556,6 +1576,11 @@ SavedGame *XcomRuleset::newSave(GameDifficulty diff)
 //	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_SNAKEMAN"]);
 	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_ALIEN_ORIGINS"]);
 	
+	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_ACCESS_LIFT"]);
+
+	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_SMALL_SCOUT"]);
+	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_HARVESTER"]);
+
 	return save;
 }
 

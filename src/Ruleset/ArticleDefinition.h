@@ -27,6 +27,7 @@ namespace OpenXcom
 {
 	class RuleCraft;	
 	class RuleCraftWeapon;
+	class RuleBaseFacility;
 	class RuleUfo;
 	
 	/// define article types
@@ -37,7 +38,7 @@ namespace OpenXcom
 		UFOPAEDIA_TYPE_HWP             = 3,
 		UFOPAEDIA_TYPE_EQUIPMENT       = 4,
 		UFOPAEDIA_TYPE_WEAPON          = 5,
-		UFOPAEDIA_TYPE_FACILITY        = 6,
+		UFOPAEDIA_TYPE_BASE_FACILITY   = 6,
 		UFOPAEDIA_TYPE_TEXTIMAGE       = 7,
 		UFOPAEDIA_TYPE_TEXT            = 8,
 		UFOPAEDIA_TYPE_UFO             = 9
@@ -144,6 +145,20 @@ namespace OpenXcom
 		std::string image_id;
 		std::string text;
 		int text_width;
+	};
+	
+	/**
+	 * ArticleDefinitionBaseFacility defines articles for base facilities, e.g. Access lift.
+	 * They have an image (found in BASEBITS.PCK), a stats block and a description.
+	 */
+	
+	class ArticleDefinitionBaseFacility : public ArticleDefinition
+	{
+	public:
+		/// Constructor
+		ArticleDefinitionBaseFacility();
+		RuleBaseFacility *facility;
+		std::string text;
 	};
 	
 	/**

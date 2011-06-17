@@ -60,6 +60,7 @@ namespace OpenXcom
 		// navigation callbacks
 		void btnOkClick(Action *action);
 		void btnCraftArmamentClick(Action *action);
+		void btnBaseFacilitiesClick(Action *action);
 		void btnAlienLifeformsClick(Action *action);
 		void btnAlienResearchClick(Action *action);
 		void btnUfosClick(Action *action);
