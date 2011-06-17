@@ -1314,7 +1314,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	article_craft_weapon.title = "STR_STINGRAY";
 	article_craft_weapon.image_id = "UP006.SPK";
 	article_craft_weapon.weapon = _craftWeapons[article_craft_weapon.id];
-	article_craft.sort_key = sort_key++;
+	article_craft_weapon.sort_key = sort_key++;
 	
 	_ufopaediaArticles[article_craft_weapon.id] = new ArticleDefinitionCraftWeapon(article_craft_weapon);
 	
@@ -1322,7 +1322,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	article_craft_weapon.title = "STR_AVALANCHE";
 	article_craft_weapon.image_id = "UP007.SPK";
 	article_craft_weapon.weapon = _craftWeapons[article_craft_weapon.id];
-	article_craft.sort_key = sort_key++;
+	article_craft_weapon.sort_key = sort_key++;
 	
 	_ufopaediaArticles[article_craft_weapon.id] = new ArticleDefinitionCraftWeapon(article_craft_weapon);
 	
@@ -1330,7 +1330,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	article_craft_weapon.title = "STR_CANNON_UC";
 	article_craft_weapon.image_id = "UP008.SPK";
 	article_craft_weapon.weapon = _craftWeapons[article_craft_weapon.id];
-	article_craft.sort_key = sort_key++;
+	article_craft_weapon.sort_key = sort_key++;
 	
 	_ufopaediaArticles[article_craft_weapon.id] = new ArticleDefinitionCraftWeapon(article_craft_weapon);
 	
@@ -1338,7 +1338,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	article_craft_weapon.title = "STR_FUSION_BALL_UC";
 	article_craft_weapon.image_id = "UP009.SPK";
 	article_craft_weapon.weapon = _craftWeapons[article_craft_weapon.id];
-	article_craft.sort_key = sort_key++;
+	article_craft_weapon.sort_key = sort_key++;
 	
 	_ufopaediaArticles[article_craft_weapon.id] = new ArticleDefinitionCraftWeapon(article_craft_weapon);
 	
@@ -1346,7 +1346,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	article_craft_weapon.title = "STR_LASER_CANNON_UC";
 	article_craft_weapon.image_id = "UP010.SPK";
 	article_craft_weapon.weapon = _craftWeapons[article_craft_weapon.id];
-	article_craft.sort_key = sort_key++;
+	article_craft_weapon.sort_key = sort_key++;
 	
 	_ufopaediaArticles[article_craft_weapon.id] = new ArticleDefinitionCraftWeapon(article_craft_weapon);
 	
@@ -1354,7 +1354,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	article_craft_weapon.title = "STR_PLASMA_BEAM_UC";
 	article_craft_weapon.image_id = "UP011.SPK";
 	article_craft_weapon.weapon = _craftWeapons[article_craft_weapon.id];
-	article_craft.sort_key = sort_key++;
+	article_craft_weapon.sort_key = sort_key++;
 	
 	_ufopaediaArticles[article_craft_weapon.id] = new ArticleDefinitionCraftWeapon(article_craft_weapon);
 	
@@ -1391,6 +1391,19 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	
 	_ufopaediaArticles[article_text.id] = new ArticleDefinitionText(article_text);
 
+	// UFOs
+	ArticleDefinitionUfo article_ufo;
+	article_ufo.section = UFOPAEDIA_UFOS;
+	
+	article_ufo.id = "STR_SMALL_SCOUT";
+	article_ufo.title = "STR_SMALL_SCOUT";
+	article_ufo.text = "STR_SMALL_SCOUT_UFOPEDIA";
+	article_ufo.ufo = _ufos[article_ufo.id];
+	article_ufo.sort_key = sort_key++;
+	
+	_ufopaediaArticles[article_text.id] = new ArticleDefinitionUfo(article_ufo);
+
+	
 	_costSoldier = 20000;
 	_costEngineer = 25000;
 	_costScientist = 30000;

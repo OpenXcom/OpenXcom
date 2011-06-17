@@ -35,6 +35,7 @@ namespace OpenXcom
 	static const std::string UFOPAEDIA_XCOM_CRAFT_ARMAMENT = "XCOM_CRAFT_ARMAMENT";
 	static const std::string UFOPAEDIA_ALIEN_LIFE_FORMS = "ALIEN_LIFE_FORMS";
 	static const std::string UFOPAEDIA_ALIEN_RESEARCH = "ALIEN_RESEARCH";
+	static const std::string UFOPAEDIA_UFOS = "UFOS";
 	
 	/**
 	 * This static class encapsulates all functions related to Ufopaedia

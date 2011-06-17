@@ -27,19 +27,20 @@ namespace OpenXcom
 {
 	class RuleCraft;	
 	class RuleCraftWeapon;
+	class RuleUfo;
 	
 	/// define article types
 	enum UfopaediaTypeId {
-		UFOPAEDIA_TYPE_UNKNOWN				= 0,
-		UFOPAEDIA_TYPE_CRAFT					= 1,
-		UFOPAEDIA_TYPE_CRAFT_WEAPON		= 2,
-		UFOPAEDIA_TYPE_HWP						= 3,
-		UFOPAEDIA_TYPE_EQUIPMENT			= 4,
-		UFOPAEDIA_TYPE_WEAPON					= 5,
-		UFOPAEDIA_TYPE_FACILITY				= 6,
-		UFOPAEDIA_TYPE_TEXTIMAGE			= 7,
-		UFOPAEDIA_TYPE_TEXT						= 8,
-		UFOPAEDIA_TYPE_UFO						= 9
+		UFOPAEDIA_TYPE_UNKNOWN         = 0,
+		UFOPAEDIA_TYPE_CRAFT           = 1,
+		UFOPAEDIA_TYPE_CRAFT_WEAPON    = 2,
+		UFOPAEDIA_TYPE_HWP             = 3,
+		UFOPAEDIA_TYPE_EQUIPMENT       = 4,
+		UFOPAEDIA_TYPE_WEAPON          = 5,
+		UFOPAEDIA_TYPE_FACILITY        = 6,
+		UFOPAEDIA_TYPE_TEXTIMAGE       = 7,
+		UFOPAEDIA_TYPE_TEXT            = 8,
+		UFOPAEDIA_TYPE_UFO             = 9
 	};
 
 	/**
@@ -143,6 +144,21 @@ namespace OpenXcom
 		std::string image_id;
 		std::string text;
 		int text_width;
+	};
+	
+	/**
+	 * ArticleDefinitionUfo defines articles for UFOs, e.g. Small Scout, Terror Ship, etc.
+	 * They have an image (found in INTERWIN.DAT), a stats block and a description.
+	 */
+	
+	class ArticleDefinitionUfo : public ArticleDefinition
+	{
+	public:
+		/// Constructor
+		ArticleDefinitionUfo();
+		
+		RuleUfo *ufo;
+		std::string text;
 	};
 	
 }

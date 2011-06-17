@@ -26,6 +26,7 @@
 #include "ArticleStateCraftWeapon.h"
 #include "ArticleStateText.h"
 #include "ArticleStateTextImage.h"
+#include "ArticleStateUfo.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
 
@@ -67,6 +68,9 @@ namespace OpenXcom
 				break;
 			case UFOPAEDIA_TYPE_TEXTIMAGE:
 				return new ArticleStateTextImage(game, static_cast<ArticleDefinitionTextImage *> (article));
+				break;
+			case UFOPAEDIA_TYPE_UFO:
+				return new ArticleStateUfo(game, static_cast<ArticleDefinitionUfo *> (article));
 				break;
 		}
 		return 0;

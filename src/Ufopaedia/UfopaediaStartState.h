@@ -62,6 +62,7 @@ namespace OpenXcom
 		void btnCraftArmamentClick(Action *action);
 		void btnAlienLifeformsClick(Action *action);
 		void btnAlienResearchClick(Action *action);
+		void btnUfosClick(Action *action);
 //		void btnClick(Action *action);
 	};
 }

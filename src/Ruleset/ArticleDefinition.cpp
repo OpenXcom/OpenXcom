@@ -83,4 +83,11 @@ namespace OpenXcom
 	 */
 	ArticleDefinitionTextImage::ArticleDefinitionTextImage() : ArticleDefinition(UFOPAEDIA_TYPE_TEXTIMAGE)
 	{}
+
+	/**
+	 * Constructor (only setting type of base class)
+	 */
+	ArticleDefinitionUfo::ArticleDefinitionUfo() : ArticleDefinition(UFOPAEDIA_TYPE_UFO), ufo(0)
+	{}
+	
 }
