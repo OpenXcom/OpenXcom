@@ -1403,6 +1403,14 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	
 	_ufopaediaArticles[article_facility.id] = new ArticleDefinitionBaseFacility(article_facility);
 	
+	article_facility.id = "STR_HANGAR";
+	article_facility.title = "STR_HANGAR";
+	article_facility.text = "STR_HANGAR_UFOPEDIA";
+	article_facility.facility = _facilities[article_facility.id];
+	article_facility.sort_key = sort_key++;
+	
+	_ufopaediaArticles[article_facility.id] = new ArticleDefinitionBaseFacility(article_facility);
+	
 	// UFOs
 	ArticleDefinitionUfo article_ufo;
 	article_ufo.section = UFOPAEDIA_UFOS;
@@ -1577,6 +1585,7 @@ SavedGame *XcomRuleset::newSave(GameDifficulty diff)
 	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_ALIEN_ORIGINS"]);
 	
 	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_ACCESS_LIFT"]);
+	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_HANGAR"]);
 
 	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_SMALL_SCOUT"]);
 	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_HARVESTER"]);

@@ -26,6 +26,7 @@
 #include "../Engine/Game.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
+#include "../Engine/SurfaceSet.h"
 #include "../Engine/Language.h"
 #include "../Resource/ResourcePack.h"
 #include "../Interface/Text.h"
@@ -60,48 +61,51 @@ namespace OpenXcom
 		_txtTitle->setWordWrap(true);
 		_txtTitle->setText(Ufopaedia::buildText(_game, defs->title));
 
-		/*
-		for (std::vector<BaseFacility*>::iterator i = _base->getFacilities()->begin(); i != _base->getFacilities()->end(); ++i)
-		{
-			// Draw facility shape
-			int num = 0;
-			for (int y = (*i)->getY(); y < (*i)->getY() + (*i)->getRules()->getSize(); y++)
-			{
-				for (int x = (*i)->getX(); x < (*i)->getX() + (*i)->getRules()->getSize(); x++)
-				{
-					Surface *frame;
-					
-					if ((*i)->getBuildTime() == 0)
-						frame = _texture->getFrame((*i)->getRules()->getSpriteShape() + num);
-					else
-						frame = _texture->getFrame((*i)->getRules()->getSpriteShape() + num + 2 + (*i)->getRules()->getSize());
-					
-					frame->setX(x * GRID_SIZE);
-					frame->setY(y * GRID_SIZE);
-					frame->blit(this);
-					
-					num++;
-				}
-			}
-		}
-		*/
-		
-		/*
-		_image = new Surface(160, 52, 160, 6);
+		// build preview image
+		int tile_size = 32;
+		_image = new Surface(tile_size*2, tile_size*2, 232, 16);
 		add(_image);
+
+		SurfaceSet *graphic = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
+		Surface *frame;
+		int x_offset, y_offset;
+		int x_pos, y_pos;
+		int num;
 		
-		Surface *graphic = _game->getResourcePack()->getSurface("INTERWIN.DAT");
-		graphic->setX(0);
-		graphic->setY(0);
-		graphic->getCrop()->x = 0;
-		graphic->getCrop()->y = 0;
-		graphic->getCrop()->w = 160;
-		graphic->getCrop()->h = 52;
-		_image->drawRect(graphic->getCrop(), 15);
-		graphic->getCrop()->y = 140 + 52 * defs->ufo->getSprite();
-		graphic->getCrop()->h = 52;
-		graphic->blit(_image);
-		*/
+		if (defs->facility->getSize()==1)
+		{
+			x_offset = y_offset = tile_size/2;
+		}
+		else 
+		{
+			x_offset = y_offset = 0;
+		}
+
+		num = 0;
+		y_pos = y_offset;
+		for (int y = 0; y < defs->facility->getSize(); y++)
+		{
+			x_pos = x_offset;
+			for (int x = 0; x < defs->facility->getSize(); x++)
+			{
+				frame = graphic->getFrame(defs->facility->getSpriteShape() + num);
+				frame->setX(x_pos);
+				frame->setY(y_pos);
+				frame->blit(_image);
+				
+				if (defs->facility->getSize()==1)
+				{
+					frame = graphic->getFrame(defs->facility->getSpriteFacility() + num);
+					frame->setX(x_pos);
+					frame->setY(y_pos);
+					frame->blit(_image);
+				}
+
+				x_pos += tile_size;
+				num++;
+			}
+			y_pos += tile_size;
+		}
 		
 		_txtInfo = new Text(300, 90, 10, 104);
 		add(_txtInfo);
