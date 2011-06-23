@@ -44,6 +44,7 @@ namespace OpenXcom
 		// set buttons
 		_btnOk = new TextButton(224, 12, 48, 167);
 		_btnCraftArmament = new TextButton(224, 12, 48, 50);
+		_btnWeaponsEquipment = new TextButton(224, 12, 48, 76);
 		_btnBaseFacilities = new TextButton(224, 12, 48, 102);
 		_btnAlienLifeforms = new TextButton(224, 12, 48, 115);
 		_btnAlienResearch = new TextButton(224, 12, 48, 128);
@@ -56,6 +57,7 @@ namespace OpenXcom
 		add(_txtTitle);
 		add(_btnOk);
 		add(_btnCraftArmament);
+		add(_btnWeaponsEquipment);
 		add(_btnBaseFacilities);
 		add(_btnAlienLifeforms);
 		add(_btnAlienResearch);
@@ -77,6 +79,10 @@ namespace OpenXcom
 		_btnCraftArmament->setText(_game->getLanguage()->getString("STR_XCOM_CRAFT_ARMAMENT"));
 		_btnCraftArmament->onMouseClick((ActionHandler)&UfopaediaStartState::btnCraftArmamentClick);
 
+		_btnWeaponsEquipment->setColor(Palette::blockOffset(8)+8);
+		_btnWeaponsEquipment->setText(_game->getLanguage()->getString("STR_WEAPONS_AND_EQUIPMENT"));
+		_btnWeaponsEquipment->onMouseClick((ActionHandler)&UfopaediaStartState::btnWeaponsEquipmentClick);
+		
 		_btnBaseFacilities->setColor(Palette::blockOffset(8)+8);
 		_btnBaseFacilities->setText(_game->getLanguage()->getString("STR_BASE_FACILITIES"));
 		_btnBaseFacilities->onMouseClick((ActionHandler)&UfopaediaStartState::btnBaseFacilitiesClick);
@@ -114,6 +120,15 @@ namespace OpenXcom
 	void UfopaediaStartState::btnCraftArmamentClick(Action *action)
 	{
 		_game->pushState(new UfopaediaSelectState(_game, UFOPAEDIA_XCOM_CRAFT_ARMAMENT));
+	}
+	
+	/**
+	 * 
+	 * @param action Pointer to an action.
+	 */
+	void UfopaediaStartState::btnWeaponsEquipmentClick(Action *action)
+	{
+		_game->pushState(new UfopaediaSelectState(_game, UFOPAEDIA_WEAPONS_AND_EQUIPMENT));
 	}
 	
 	/**

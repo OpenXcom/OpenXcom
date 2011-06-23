@@ -28,6 +28,7 @@ namespace OpenXcom
 	class RuleCraft;	
 	class RuleCraftWeapon;
 	class RuleBaseFacility;
+	class RuleItem;
 	class RuleUfo;
 	
 	/// define article types
@@ -36,8 +37,8 @@ namespace OpenXcom
 		UFOPAEDIA_TYPE_CRAFT           = 1,
 		UFOPAEDIA_TYPE_CRAFT_WEAPON    = 2,
 		UFOPAEDIA_TYPE_HWP             = 3,
-		UFOPAEDIA_TYPE_EQUIPMENT       = 4,
-		UFOPAEDIA_TYPE_WEAPON          = 5,
+		UFOPAEDIA_TYPE_ITEM            = 4,
+		UFOPAEDIA_TYPE_ARMOR           = 5,
 		UFOPAEDIA_TYPE_BASE_FACILITY   = 6,
 		UFOPAEDIA_TYPE_TEXTIMAGE       = 7,
 		UFOPAEDIA_TYPE_TEXT            = 8,
@@ -158,6 +159,21 @@ namespace OpenXcom
 		/// Constructor
 		ArticleDefinitionBaseFacility();
 		RuleBaseFacility *facility;
+		std::string text;
+	};
+	
+	/**
+	 * ArticleDefinitionItem defines articles for all Items, e.g. Weapons, Ammo, Equipment, etc.
+	 * They have an image (found in BIGOBS.PCK), an optional stats block, maybe ammo and a description.
+	 */
+	
+	class ArticleDefinitionItem : public ArticleDefinition
+	{
+	public:
+		/// Constructor
+		ArticleDefinitionItem();
+		
+		RuleItem *item;
 		std::string text;
 	};
 	

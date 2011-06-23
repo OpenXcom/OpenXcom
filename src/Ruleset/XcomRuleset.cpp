@@ -1305,7 +1305,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	article_craft.sort_key = sort_key++;
 	
 	_ufopaediaArticles[article_craft.id] = new ArticleDefinitionCraft(article_craft);
-	
+
 	
 	ArticleDefinitionCraftWeapon article_craft_weapon;
 	article_craft_weapon.section = UFOPAEDIA_XCOM_CRAFT_ARMAMENT;
@@ -1359,6 +1359,94 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_ufopaediaArticles[article_craft_weapon.id] = new ArticleDefinitionCraftWeapon(article_craft_weapon);
 	
 	
+	// HEAVY WEAPONS PLATFORMS
+	
+	
+	// WEAPONS AND EQUIPMENT
+	ArticleDefinitionItem article_item;
+	article_item.section = UFOPAEDIA_WEAPONS_AND_EQUIPMENT;
+	
+	ArticleDefinitionItem article_item_ammo;
+	article_item_ammo.section = UFOPAEDIA_NOT_AVAILABLE;
+	
+	article_item.id = "STR_PISTOL";
+	article_item.title = "STR_PISTOL";
+	article_item.text = "STR_PISTOL_UFOPEDIA";
+	article_item.item = _items[article_item.id];
+	article_item.sort_key = sort_key++;
+	
+	_ufopaediaArticles[article_item.id] = new ArticleDefinitionItem(article_item);
+	
+	article_item_ammo.id = "STR_PISTOL_CLIP";
+	article_item_ammo.title = "STR_PISTOL_CLIP";
+	article_item_ammo.item = _items[article_item_ammo.id];
+	article_item_ammo.sort_key = sort_key++;
+	
+	_ufopaediaArticles[article_item_ammo.id] = new ArticleDefinitionItem(article_item_ammo);
+	
+	article_item.id = "STR_HEAVY_CANNON";
+	article_item.title = "STR_HEAVY_CANNON";
+	article_item.text = "STR_HEAVY_CANNON_UFOPEDIA";
+	article_item.item = _items[article_item.id];
+	article_item.sort_key = sort_key++;
+	
+	_ufopaediaArticles[article_item.id] = new ArticleDefinitionItem(article_item);
+	
+	article_item_ammo.id = "STR_HC_AP_AMMO";
+	article_item_ammo.title = "STR_HC_AP_AMMO";
+	article_item_ammo.item = _items[article_item_ammo.id];
+	article_item_ammo.sort_key = sort_key++;
+	
+	_ufopaediaArticles[article_item_ammo.id] = new ArticleDefinitionItem(article_item_ammo);
+	
+	article_item_ammo.id = "STR_HC_HE_AMMO";
+	article_item_ammo.title = "STR_HC_HE_AMMO";
+	article_item_ammo.item = _items[article_item_ammo.id];
+	article_item_ammo.sort_key = sort_key++;
+	
+	_ufopaediaArticles[article_item_ammo.id] = new ArticleDefinitionItem(article_item_ammo);
+	
+	article_item.id = "STR_GRENADE";
+	article_item.title = "STR_GRENADE";
+	article_item.text = "STR_GRENADE_UFOPEDIA";
+	article_item.item = _items[article_item.id];
+	article_item.sort_key = sort_key++;
+	
+	_ufopaediaArticles[article_item.id] = new ArticleDefinitionItem(article_item);
+	
+	article_item.id = "STR_SMOKE_GRENADE";
+	article_item.title = "STR_SMOKE_GRENADE";
+	article_item.text = "STR_SMOKE_GRENADE_UFOPEDIA";
+	article_item.item = _items[article_item.id];
+	article_item.sort_key = sort_key++;
+	
+	_ufopaediaArticles[article_item.id] = new ArticleDefinitionItem(article_item);
+	
+	
+	// ALIEN ARTIFACTS
+	
+
+	// BASE FACILITIES
+	ArticleDefinitionBaseFacility article_facility;
+	article_facility.section = UFOPAEDIA_BASE_FACILITIES;
+	
+	article_facility.id = "STR_ACCESS_LIFT";
+	article_facility.title = "STR_ACCESS_LIFT";
+	article_facility.text = "STR_ACCESS_LIFT_UFOPEDIA";
+	article_facility.facility = _facilities[article_facility.id];
+	article_facility.sort_key = sort_key++;
+	
+	_ufopaediaArticles[article_facility.id] = new ArticleDefinitionBaseFacility(article_facility);
+	
+	article_facility.id = "STR_HANGAR";
+	article_facility.title = "STR_HANGAR";
+	article_facility.text = "STR_HANGAR_UFOPEDIA";
+	article_facility.facility = _facilities[article_facility.id];
+	article_facility.sort_key = sort_key++;
+	
+	_ufopaediaArticles[article_facility.id] = new ArticleDefinitionBaseFacility(article_facility);
+	
+
 	// ALIEN LIFE FORMS
 	ArticleDefinitionTextImage article_textimage;
 	article_textimage.text_width = 100;
@@ -1380,6 +1468,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 
 	_ufopaediaArticles[article_textimage.id] = new ArticleDefinitionTextImage(article_textimage);
 
+	
 	// ALIEN RESEARCH
 	ArticleDefinitionText article_text;
 	article_text.section = UFOPAEDIA_ALIEN_RESEARCH;
@@ -1391,25 +1480,9 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	
 	_ufopaediaArticles[article_text.id] = new ArticleDefinitionText(article_text);
 
-	// BASE FACILITIES
-	ArticleDefinitionBaseFacility article_facility;
-	article_facility.section = UFOPAEDIA_BASE_FACILITIES;
 	
-	article_facility.id = "STR_ACCESS_LIFT";
-	article_facility.title = "STR_ACCESS_LIFT";
-	article_facility.text = "STR_ACCESS_LIFT_UFOPEDIA";
-	article_facility.facility = _facilities[article_facility.id];
-	article_facility.sort_key = sort_key++;
+	// UFO COMPONENTS
 	
-	_ufopaediaArticles[article_facility.id] = new ArticleDefinitionBaseFacility(article_facility);
-	
-	article_facility.id = "STR_HANGAR";
-	article_facility.title = "STR_HANGAR";
-	article_facility.text = "STR_HANGAR_UFOPEDIA";
-	article_facility.facility = _facilities[article_facility.id];
-	article_facility.sort_key = sort_key++;
-	
-	_ufopaediaArticles[article_facility.id] = new ArticleDefinitionBaseFacility(article_facility);
 	
 	// UFOs
 	ArticleDefinitionUfo article_ufo;
@@ -1580,6 +1653,15 @@ SavedGame *XcomRuleset::newSave(GameDifficulty diff)
 	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_LASER_CANNON_UC"]);
 	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_PLASMA_BEAM_UC"]);
 
+	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_PISTOL"]);
+	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_PISTOL_CLIP"]);
+	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_HEAVY_CANNON"]);	
+	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_HC_AP_AMMO"]);
+	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_HC_HE_AMMO"]);
+	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_GRENADE"]);
+	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_SMOKE_GRENADE"]);
+
+	
 	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_SECTOID"]);
 //	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_SNAKEMAN"]);
 	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_ALIEN_ORIGINS"]);
