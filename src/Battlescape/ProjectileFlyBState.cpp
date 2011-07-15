@@ -188,8 +188,18 @@ void ProjectileFlyBState::think()
 			pos.x /= 16;
 			pos.y /= 16;
 			pos.z /= 24;
-			_parent->getGame()->getSavedGame()->getBattleGame()->getTerrainModifier()->spawnItem(pos, _parent->getMap()->getProjectile()->getItem());
+			BattleItem *item = _parent->getMap()->getProjectile()->getItem();
 			_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(38)->play();
+
+			if (ALT_GRENADE && item->getRules()->getBattleType() == BT_GRENADE && item->getExplodeTurn() > 0 && item->getExplodeTurn() <= _parent->getGame()->getSavedGame()->getBattleGame()->getTurn())
+			{
+				// it's a hot grenade to explode immediatly
+				_parent->statePushNext(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(-1), item));
+			}
+			else
+			{
+				_parent->getGame()->getSavedGame()->getBattleGame()->getTerrainModifier()->spawnItem(pos, item);
+			}
 		}
 		else
 		{

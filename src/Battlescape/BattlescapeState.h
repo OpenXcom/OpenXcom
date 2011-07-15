@@ -47,6 +47,7 @@ enum BattleActionType { BA_NONE, BA_PRIME, BA_THROW, BA_AUTOSHOT, BA_SNAPSHOT, B
 #define DEFAULT_WALK_SPEED 40
 #define DEFAULT_BULLET_SPEED 20
 #define DEFAULT_ANIM_SPEED 100
+#define ALT_GRENADE false // set to true if you want to play with the alternative grenade handling
 
 struct BattleAction
 {

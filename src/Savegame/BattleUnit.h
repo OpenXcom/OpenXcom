@@ -57,7 +57,6 @@ private:
 	std::vector<Tile *> _visibleTiles;
 	int _tu, _energy, _health, _morale;
 	bool _cached, _kneeled;
-	BattleItem *_rightHandItem, *_leftHandItem;
 	int _armor[5];
 	int _fatalWounds[6];
 public:

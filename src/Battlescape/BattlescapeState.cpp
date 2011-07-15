@@ -564,7 +564,8 @@ void BattlescapeState::btnEndTurnClick(Action *action)
 void BattlescapeState::endTurn()
 {
 	Position p;
-	// check for hot grenades
+
+	// check for hot grenades on the ground
 	for (int i = 0; i < _battleGame->getWidth() * _battleGame->getLength() * _battleGame->getHeight(); ++i)
 	{
 		for (std::vector<BattleItem*>::iterator it = _battleGame->getTiles()[i]->getInventory()->begin(); it != _battleGame->getTiles()[i]->getInventory()->end(); )
@@ -576,13 +577,36 @@ void BattlescapeState::endTurn()
 				p.z = _battleGame->getTiles()[i]->getPosition().z*24 + _battleGame->getTiles()[i]->getTerrainLevel();
 				statePushNext(new ExplosionBState(this, p, (*it)));
 				it = _battleGame->getTiles()[i]->getInventory()->erase(it);
+				continue;
 			}
-			else
+			++it;
+		}
+	}
+
+	// check for hot grenades in the hands (by default grenades don't explode in soldiers hands)
+	if (ALT_GRENADE)
+	{
+		for (std::vector<BattleUnit*>::iterator i = _battleGame->getUnits()->begin(); i != _battleGame->getUnits()->end(); ++i)
+		{
+			for (std::vector<BattleItem*>::iterator it = _battleGame->getItems()->begin(); it != _battleGame->getItems()->end(); )
 			{
+				if ((*it)->getOwner() == (*i))
+				{
+					if ((*it)->getRules()->getBattleType() == BT_GRENADE && (*it)->getExplodeTurn() > 0 && (*it)->getExplodeTurn() <= _battleGame->getTurn())  // it's a grenade to explode now
+					{
+							p.x = (*i)->getPosition().x*16 + 8;
+							p.y = (*i)->getPosition().y*16 + 8;
+							p.z = (*i)->getPosition().z*24 + 18;
+							statePushNext(new ExplosionBState(this, p, (*it)));
+							it = _battleGame->getItems()->erase(it);
+							continue;
+					}
+				}
 				++it;
 			}
 		}
 	}
+
 
 	if (_battleGame->getTerrainModifier()->closeUfoDoors())
 	{

@@ -153,7 +153,15 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 		_action->TU = _actionMenu[btnID]->getTUs();
 		if (_action->type == BA_PRIME)
 		{
-			_game->pushState(new PrimeGrenadeState(_game, _action));
+			if (ALT_GRENADE)
+			{
+				_action->value = 1;
+				_game->popState();
+			}
+			else
+			{
+				_game->pushState(new PrimeGrenadeState(_game, _action));
+			}
 		}
 		else
 		{

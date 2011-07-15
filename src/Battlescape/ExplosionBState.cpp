@@ -123,7 +123,6 @@ void ExplosionBState::think()
 					_unit->aim(false);
 				}
 				_parent->getMap()->cacheUnits();
-
 				_parent->popState();
 				return;
 			}
