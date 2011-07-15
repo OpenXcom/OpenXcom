@@ -42,7 +42,7 @@ class BattleState;
 class Timer;
 class ActionMenuItem;
 
-enum BattleActionType { BA_NONE, BA_THROW, BA_AUTOSHOT, BA_SNAPSHOT, BA_AIMEDSHOT, BA_STUN, BA_HIT };
+enum BattleActionType { BA_NONE, BA_PRIME, BA_THROW, BA_AUTOSHOT, BA_SNAPSHOT, BA_AIMEDSHOT, BA_STUN, BA_HIT };
 
 #define DEFAULT_WALK_SPEED 40
 #define DEFAULT_BULLET_SPEED 20
@@ -56,6 +56,7 @@ struct BattleAction
 	Position target;
 	int TU;
 	bool targeting;
+	int value;
 };
 
 
@@ -95,6 +96,8 @@ private:
 	void blinkVisibleUnitButtons();
 	void blinkWarningMessage();
 	void showWarningMessage(std::string message);
+	//Handles non target actions, like priming a grenade.
+	void handleNonTargetAction();
 	void setupCursor();
 	std::vector<State*> _popups;
 public:

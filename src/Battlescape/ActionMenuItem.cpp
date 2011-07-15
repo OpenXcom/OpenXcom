@@ -31,7 +31,7 @@ namespace OpenXcom
  */
 ActionMenuItem::ActionMenuItem(State *state, int id, Font *bigFont) : InteractiveSurface(270, 40, 25, 160 - (id*40)), _id(id), _highlighted(false)
 {
-	_txtDescription = new Text(100, 20, 16, 13);
+	_txtDescription = new Text(150, 20, 16, 13);
 	_txtDescription->setFonts(bigFont, 0);
 	_txtDescription->setBig();
 	_txtDescription->setHighContrast(true);
@@ -70,7 +70,10 @@ void ActionMenuItem::setAction(BattleActionType action, std::wstring description
 {
 	_action = action;
 	_txtDescription->setText(description);
-	_txtAcc->setText(accuracy);
+	if (accuracy.length())
+		_txtAcc->setText(accuracy);
+	else
+		_txtAcc->setVisible(false);
 	_txtTU->setText(timeunits);
 	_tu = tu;
 	draw();

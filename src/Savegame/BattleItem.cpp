@@ -89,6 +89,24 @@ RuleItem *const BattleItem::getRules() const
 }
 
 /**
+ * Returns the turn to explode on. 0 = unprimed grenade
+ * @return Explode turn.
+ */
+int BattleItem::getExplodeTurn() const
+{
+	return _itemProperty[0];
+}
+
+/**
+ * Set the turn to explode on.
+ * @param turn Turn to explode on.
+ */
+void BattleItem::setExplodeTurn(int turn)
+{
+	_itemProperty[0] = turn;
+}
+
+/**
  * Returns the quantity of ammo in this item.
  * @return Ammo quantity.
  */

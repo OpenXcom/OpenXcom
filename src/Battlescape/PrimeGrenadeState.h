@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http:///www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_ACTIONMENUSTATE_H
-#define OPENXCOM_ACTIONMENUSTATE_H
+#ifndef OPENXCOM_PRIMEGRENADESTATE_H
+#define OPENXCOM_PRIMEGRENADESTATE_H
 
 #include "../Engine/State.h"
 #include "BattlescapeState.h"
@@ -26,24 +26,30 @@ namespace OpenXcom
 {
 
 class Game;
-class ActionMenuItem;
+class Text;
+class InteractiveSurface;
 
 /**
  * Window that allows the player
- * to select a battlescape action.
+ * to set the timer of an explosive.
  */
-class ActionMenuState : public State
+class PrimeGrenadeState : public State
 {
 private:
 	BattleAction *_action;
-	ActionMenuItem *_actionMenu[5];
+	Text *_number[24];
+	Text *_title;
+	Window *_window;
+	InteractiveSurface *_button[24];
+	Surface *_bg;
 public:
-	/// Creates the Action Menu state.
-	ActionMenuState(Game *game, BattleAction *action);
-	/// Cleans up the Action Menu state.
-	~ActionMenuState();
-	/// Handler for clicking a action menu item.
-	void btnActionMenuItemClick(Action *action);
+	/// Creates the Prime Grenade state.
+	PrimeGrenadeState(Game *game, BattleAction *action);
+	/// Cleans up the Prime Grenade state.
+	~PrimeGrenadeState();
+	void init();
+	/// Handler for clicking a button.
+	void btnClick(Action *action);
 };
 
 }

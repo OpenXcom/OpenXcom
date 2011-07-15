@@ -28,6 +28,7 @@
 #include "../Savegame/BattleItem.h"
 #include "../Ruleset/RuleItem.h"
 #include "ActionMenuItem.h"
+#include "PrimeGrenadeState.h"
 
 namespace OpenXcom
 {
@@ -35,8 +36,7 @@ namespace OpenXcom
 /**
  * Initializes all the elements in the Action Menu window.
  * @param game Pointer to the core game.
- * @param unit Pointer to the unit that is doing the action.
- * @param item Pointer to the selected item.
+ * @param action Pointer to the action.
  */
 ActionMenuState::ActionMenuState(Game *game, BattleAction *action) : State(game), _action(action)
 {
@@ -66,6 +66,19 @@ ActionMenuState::ActionMenuState(Game *game, BattleAction *action) : State(game)
 	id++;
 	ss1.str(L"");
 	ss2.str(L"");
+
+	// priming
+	if ((_action->weapon->getRules()->getBattleType() == BT_GRENADE || _action->weapon->getRules()->getBattleType() == BT_PROXIMITYGRENADE)
+		&& _action->weapon->getExplodeTurn() == 0)
+	{
+		tu = (int)floor(_action->actor->getUnit()->getTimeUnits() * 0.50);
+		ss2 << strTU.c_str() << tu;
+		_actionMenu[id]->setAction(BA_PRIME, _game->getLanguage()->getString("STR_PRIME_GRENADE"), ss1.str(), ss2.str(), tu);
+		_actionMenu[id]->setVisible(true);
+		id++;
+		ss1.str(L"");
+		ss2.str(L"");
+	}
 
 	if (_action->weapon->getRules()->getAccuracyAuto() != 0)
 	{
@@ -138,8 +151,15 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 	{
 		_action->type = _actionMenu[btnID]->getAction();
 		_action->TU = _actionMenu[btnID]->getTUs();
-		_action->targeting = true;
-		_game->popState();
+		if (_action->type == BA_PRIME)
+		{
+			_game->pushState(new PrimeGrenadeState(_game, _action));
+		}
+		else
+		{
+			_action->targeting = true;
+			_game->popState();
+		}
 	}
 }
 

@@ -61,6 +61,10 @@ public:
 	int getAmmoQuantity() const;
 	/// Sets the item's ammo quantity.
 	void setAmmoQuantity(int qty);
+	/// Gets the turn to explode on
+	int getExplodeTurn() const;
+	/// Sets the turn to explode on.
+	void setExplodeTurn(int turn);
 	/// Spend one bullet.
 	bool spendBullet();
 	/// Gets the item's owner.
@@ -75,6 +79,7 @@ public:
 	BattleItem *getAmmoItem();
 	/// Sets the item's ammo item.
 	int setAmmoItem(BattleItem *item);
+
 };
 
 }

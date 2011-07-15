@@ -305,6 +305,7 @@ void BattlescapeState::think()
 		_map->think();
 		if (popped)
 		{
+			handleNonTargetAction();
 			setupCursor();
 			popped = false;
 		}
@@ -568,7 +569,7 @@ void BattlescapeState::endTurn()
 	{
 		for (std::vector<BattleItem*>::iterator it = _battleGame->getTiles()[i]->getInventory()->begin(); it != _battleGame->getTiles()[i]->getInventory()->end(); )
 		{
-			if ((*it)->getRules()->getBattleType() == BT_GRENADE)  // it's a grenade // todo: it's primed
+			if ((*it)->getRules()->getBattleType() == BT_GRENADE && (*it)->getExplodeTurn() > 0 && (*it)->getExplodeTurn() <= _battleGame->getTurn())  // it's a grenade to explode now
 			{
 				p.x = _battleGame->getTiles()[i]->getPosition().x*16 + 8;
 				p.y = _battleGame->getTiles()[i]->getPosition().y*16 + 8;
@@ -670,6 +671,29 @@ void BattlescapeState::btnVisibleUnitClick(Action *action)
 	if (btnID != -1)
 	{
 		_map->centerOnPosition(_visibleUnit[btnID]->getPosition());
+	}
+}
+
+/**
+ * Handles non target actions, like priming a grenade.
+ */
+void BattlescapeState::handleNonTargetAction()
+{
+	if (!_action.targeting)
+	{
+		if (_action.type == BA_PRIME && _action.value > -1)
+		{
+			if (_action.actor->spendTimeUnits(_action.TU, _game->getSavedGame()->getBattleGame()->getDebugMode()))
+			{
+				_action.weapon->setExplodeTurn(_game->getSavedGame()->getBattleGame()->getTurn() + _action.value);
+			}
+			else
+			{
+				showWarningMessage("STR_NOT_ENOUGH_TIME_UNITS");
+			}
+		}
+		_action.type = BA_NONE;
+		updateSoldierInfo(_battleGame->getSelectedUnit());
 	}
 }
 
