@@ -78,15 +78,22 @@ namespace OpenXcom {
 	 */
 	ArticleDefinition *UfopaediaSaved::goNextArticle()
 	{
-		if (_current_index == _visible_articles.size() - 1)
+		int loop_over = 0;
+		do
 		{
-			// goto first
-			_current_index = 0;
-		}
-		else
-		{
-			_current_index++;
-		}
+			if (_current_index >= _visible_articles.size() - 1)
+			{
+				// goto first
+				_current_index = 0;
+				// infinite loop saver
+				loop_over += 1;
+			}
+			else
+			{
+				_current_index++;
+			}
+		} 
+		while (loop_over<2 && (_visible_articles[_current_index]->section == UFOPAEDIA_NOT_AVAILABLE));
 
 		return _visible_articles[_current_index];
 	}
@@ -97,15 +104,22 @@ namespace OpenXcom {
 	 */
 	ArticleDefinition *UfopaediaSaved::goPrevArticle()
 	{
-		if (_current_index == 0)
+		int loop_over = 0;
+		do
 		{
-			// goto last
-			_current_index = _visible_articles.size() - 1;
-		}
-		else
-		{
-			_current_index--;
-		}
+			if (_current_index <= 0)
+			{
+				// goto last
+				_current_index = _visible_articles.size() - 1;
+				// infinite loop saver
+				loop_over += 1;
+			}
+			else
+			{
+				_current_index--;
+			}
+		} 
+		while (loop_over<2 && (_visible_articles[_current_index]->section == UFOPAEDIA_NOT_AVAILABLE));
 
 		return _visible_articles[_current_index];
 	}

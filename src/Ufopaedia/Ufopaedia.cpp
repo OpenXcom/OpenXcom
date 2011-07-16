@@ -22,10 +22,13 @@
 #include "../Savegame/UfopaediaSaved.h"
 #include "../Ruleset/ArticleDefinition.h"
 #include "ArticleState.h"
+#include "ArticleStateBaseFacility.h"
 #include "ArticleStateCraft.h"
 #include "ArticleStateCraftWeapon.h"
+#include "ArticleStateItem.h"
 #include "ArticleStateText.h"
 #include "ArticleStateTextImage.h"
+#include "ArticleStateUfo.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
 
@@ -47,6 +50,17 @@ namespace OpenXcom
 	}
 	
 	/**
+	 * Checks, if an article has already been released.
+	 * @param game Pointer to actual game.
+	 * @param article_id Article id to release.
+	 * @returns true, if the article is available.
+	 */
+	bool Ufopaedia::isArticleAvailable(Game *game, std::string &article_id)
+	{
+		return game->getSavedGame()->getUfopaedia()->isArticleAvailable(article_id);
+	}
+	
+	/**
 	 * Creates a new article state dependent on the given article definition.
 	 * @param game Pointer to actual game.
 	 * @param article Article definition to create from.
@@ -62,11 +76,20 @@ namespace OpenXcom
 			case UFOPAEDIA_TYPE_CRAFT_WEAPON:
 				return new ArticleStateCraftWeapon(game, static_cast<ArticleDefinitionCraftWeapon *> (article));
 				break;
+			case UFOPAEDIA_TYPE_ITEM:
+				return new ArticleStateItem(game, static_cast<ArticleDefinitionItem *> (article));
+				break;
+			case UFOPAEDIA_TYPE_BASE_FACILITY:
+				return new ArticleStateBaseFacility(game, static_cast<ArticleDefinitionBaseFacility *> (article));
+				break;
 			case UFOPAEDIA_TYPE_TEXT:
 				return new ArticleStateText(game, static_cast<ArticleDefinitionText *> (article));
 				break;
 			case UFOPAEDIA_TYPE_TEXTIMAGE:
 				return new ArticleStateTextImage(game, static_cast<ArticleDefinitionTextImage *> (article));
+				break;
+			case UFOPAEDIA_TYPE_UFO:
+				return new ArticleStateUfo(game, static_cast<ArticleDefinitionUfo *> (article));
 				break;
 		}
 		return 0;

@@ -57,6 +57,8 @@ public:
 	~Text();
 	/// Formats an integer value as currency.
 	static std::wstring formatFunding(int funds);
+	/// Formats an integer value as percentage.
+	static std::wstring formatPercentage(int value);
 	/// Sets the text size to big.
 	void setBig();
 	/// Sets the text size to small.
