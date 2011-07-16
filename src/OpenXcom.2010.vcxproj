@@ -269,10 +269,13 @@
     <ClCompile Include="Savegame\UfopaediaSaved.cpp" />
     <ClCompile Include="Savegame\Waypoint.cpp" />
     <ClCompile Include="Ufopaedia\ArticleState.cpp" />
+    <ClCompile Include="Ufopaedia\ArticleStateBaseFacility.cpp" />
     <ClCompile Include="Ufopaedia\ArticleStateCraft.cpp" />
     <ClCompile Include="Ufopaedia\ArticleStateCraftWeapon.cpp" />
+    <ClCompile Include="Ufopaedia\ArticleStateItem.cpp" />
     <ClCompile Include="Ufopaedia\ArticleStateText.cpp" />
     <ClCompile Include="Ufopaedia\ArticleStateTextImage.cpp" />
+    <ClCompile Include="Ufopaedia\ArticleStateUfo.cpp" />
     <ClCompile Include="Ufopaedia\Ufopaedia.cpp" />
     <ClCompile Include="Ufopaedia\UfopaediaSelectState.cpp" />
     <ClCompile Include="Ufopaedia\UfopaediaStartState.cpp" />
@@ -443,10 +446,13 @@
     <ClInclude Include="Savegame\UfopaediaSaved.h" />
     <ClInclude Include="Savegame\Waypoint.h" />
     <ClInclude Include="Ufopaedia\ArticleState.h" />
+    <ClInclude Include="Ufopaedia\ArticleStateBaseFacility.h" />
     <ClInclude Include="Ufopaedia\ArticleStateCraft.h" />
     <ClInclude Include="Ufopaedia\ArticleStateCraftWeapon.h" />
+    <ClInclude Include="Ufopaedia\ArticleStateItem.h" />
     <ClInclude Include="Ufopaedia\ArticleStateText.h" />
     <ClInclude Include="Ufopaedia\ArticleStateTextImage.h" />
+    <ClInclude Include="Ufopaedia\ArticleStateUfo.h" />
     <ClInclude Include="Ufopaedia\Ufopaedia.h" />
     <ClInclude Include="Ufopaedia\UfopaediaSelectState.h" />
     <ClInclude Include="Ufopaedia\UfopaediaStartState.h" />

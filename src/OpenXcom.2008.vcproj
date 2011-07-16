@@ -1068,6 +1068,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Ufopaedia\ArticleStateBaseFacility.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ufopaedia\ArticleStateBaseFacility.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Ufopaedia\ArticleStateCraft.cpp"
 				>
 			</File>
@@ -1084,6 +1092,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Ufopaedia\ArticleStateItem.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ufopaedia\ArticleStateItem.h"
+				>
+			</File>			
+			<File
 				RelativePath=".\Ufopaedia\ArticleStateText.cpp"
 				>
 			</File>
@@ -1099,6 +1115,14 @@
 				RelativePath=".\Ufopaedia\ArticleStateTextImage.h"
 				>
 			</File>
+			<File
+				RelativePath=".\Ufopaedia\ArticleStateUfo.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ufopaedia\ArticleStateUfo.h"
+				>
+			</File>			
 			<File
 				RelativePath=".\Ufopaedia\Ufopaedia.cpp"
 				>

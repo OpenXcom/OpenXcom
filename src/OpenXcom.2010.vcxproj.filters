@@ -512,6 +512,15 @@
     <ClCompile Include="Battlescape\PrimeGrenadeState.cpp">
       <Filter>Battlescape</Filter>
     </ClCompile>
+    <ClCompile Include="Ufopaedia\ArticleStateBaseFacility.cpp">
+      <Filter>Ufopaedia</Filter>
+    </ClCompile>
+    <ClCompile Include="Ufopaedia\ArticleStateItem.cpp">
+      <Filter>Ufopaedia</Filter>
+    </ClCompile>
+    <ClCompile Include="Ufopaedia\ArticleStateUfo.cpp">
+      <Filter>Ufopaedia</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1025,6 +1034,15 @@
     </ClInclude>
     <ClInclude Include="Battlescape\PrimeGrenadeState.h">
       <Filter>Battlescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Ufopaedia\ArticleStateBaseFacility.h">
+      <Filter>Ufopaedia</Filter>
+    </ClInclude>
+    <ClInclude Include="Ufopaedia\ArticleStateItem.h">
+      <Filter>Ufopaedia</Filter>
+    </ClInclude>
+    <ClInclude Include="Ufopaedia\ArticleStateUfo.h">
+      <Filter>Ufopaedia</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
