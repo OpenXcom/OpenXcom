@@ -521,6 +521,9 @@
     <ClCompile Include="Ufopaedia\ArticleStateUfo.cpp">
       <Filter>Ufopaedia</Filter>
     </ClCompile>
+    <ClCompile Include="Battlescape\NextTurnState.cpp">
+      <Filter>Battlescape</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1043,6 +1046,9 @@
     </ClInclude>
     <ClInclude Include="Ufopaedia\ArticleStateUfo.h">
       <Filter>Ufopaedia</Filter>
+    </ClInclude>
+    <ClInclude Include="Battlescape\NextTurnState.h">
+      <Filter>Battlescape</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

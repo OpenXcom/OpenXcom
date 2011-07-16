@@ -45,15 +45,15 @@ PrimeGrenadeState::PrimeGrenadeState(Game *game, BattleAction *action) : State(g
 	_screen = false;
 
 	// Create objects
-	_title = new Text(191, 24, 65, 45);
-	_window = new Window(this, 191, 27, 65, 37);
-	_bg = new Surface(191, 93, 65, 45);
+	_title = new Text(192, 24, 65, 45);
+	_window = new Window(this, 192, 27, 65, 37);
+	_bg = new Surface(192, 93, 65, 45);
 
 	int x = 67;
 	int y = 69;
 	for (int i = 0; i < 24; ++i)
 	{
-		_button[i] = new InteractiveSurface(20, 20, x+((i%8)*24), y-3+((i/8)*25));
+		_button[i] = new InteractiveSurface(22, 22, x-1+((i%8)*24), y-4+((i/8)*25));
 		_number[i] = new Text(20, 20, x+((i%8)*24), y+((i/8)*25));
 	}
 
@@ -62,26 +62,24 @@ PrimeGrenadeState::PrimeGrenadeState(Game *game, BattleAction *action) : State(g
 
 	// Set up objects
 	SDL_Rect square;
-	Uint8 fcolor = Palette::blockOffset(2)+9;
-	Uint8 bcolor = Palette::blockOffset(2)+4;
 	square.x = 0;
 	square.y = 0;
 	square.w = _bg->getWidth();
 	square.h = _bg->getHeight();
 	add(_bg);
-	_bg->drawRect(&square, bcolor);
+	_bg->drawRect(&square, Palette::blockOffset(6)+9);
 	_bg->draw();
 
 	add(_window);
-	_window->setColor(fcolor);
+	_window->setColor(Palette::blockOffset(6)+11);
 
 	add(_title);
 	_title->setAlign(ALIGN_CENTER);
 	_title->setFonts(_game->getResourcePack()->getFont("BIGLETS.DAT"), 0);
 	_title->setBig();
 	_title->setText(_game->getLanguage()->getString("STR_SET_TIMER"));
-	_title->setVisible(true);
-	_title->setColor(Palette::blockOffset(1)+1);
+	_title->setColor(Palette::blockOffset(2));
+	_title->setHighContrast(true);
 
 	for (int i = 0; i < 24; ++i)
 	{
@@ -91,7 +89,12 @@ PrimeGrenadeState::PrimeGrenadeState(Game *game, BattleAction *action) : State(g
 		square.y = 0;
 		square.w = _button[i]->getWidth();
 		square.h = _button[i]->getHeight();
-		_button[i]->drawRect(&square, fcolor);
+		_button[i]->drawRect(&square, Palette::blockOffset(0)+15);
+		square.x = 1;
+		square.y = 1;
+		square.w = _button[i]->getWidth()-2;
+		square.h = _button[i]->getHeight()-2;
+		_button[i]->drawRect(&square, Palette::blockOffset(2)+12);
 		_button[i]->draw();
 
 		std::wstringstream ss;
@@ -100,8 +103,8 @@ PrimeGrenadeState::PrimeGrenadeState(Game *game, BattleAction *action) : State(g
 		_number[i]->setFonts(_game->getResourcePack()->getFont("BIGLETS.DAT"), 0);
 		_number[i]->setBig();
 		_number[i]->setText(ss.str());
-		_number[i]->setColor(Palette::blockOffset(1)+1);
-		_number[i]->setVisible(true);
+		_number[i]->setColor(Palette::blockOffset(2));
+		_number[i]->setHighContrast(true);
 		_number[i]->setAlign(ALIGN_CENTER);
 		_number[i]->setVerticalAlign(ALIGN_MIDDLE);
 	}

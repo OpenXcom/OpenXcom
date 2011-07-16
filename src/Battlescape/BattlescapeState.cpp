@@ -21,6 +21,7 @@
 #include <cmath>
 #include "Map.h"
 #include "BattlescapeState.h"
+#include "NextTurnState.h"
 #include "BattleState.h"
 #include "UnitTurnBState.h"
 #include "UnitWalkBState.h"
@@ -577,7 +578,8 @@ void BattlescapeState::endTurn()
 				p.z = _battleGame->getTiles()[i]->getPosition().z*24 + _battleGame->getTiles()[i]->getTerrainLevel();
 				statePushNext(new ExplosionBState(this, p, (*it)));
 				it = _battleGame->getTiles()[i]->getInventory()->erase(it);
-				continue;
+				statePushBack(0);
+				return;
 			}
 			++it;
 		}
@@ -599,7 +601,8 @@ void BattlescapeState::endTurn()
 							p.z = (*i)->getPosition().z*24 + 18;
 							statePushNext(new ExplosionBState(this, p, (*it)));
 							it = _battleGame->getItems()->erase(it);
-							continue;
+							statePushBack(0);
+							return;
 					}
 				}
 				++it;
@@ -619,16 +622,7 @@ void BattlescapeState::endTurn()
 	{
 		_map->centerOnPosition(_battleGame->getSelectedUnit()->getPosition());
 	}
-
-	if (_battleGame->getSide() == FACTION_HOSTILE)
-	{
-		// do AI stuff
-
-		if (!_battleGame->getDebugMode())
-		{
-			endTurn();
-		}
-	}
+	_game->pushState(new NextTurnState(_game, _battleGame));
 }
 
 /**

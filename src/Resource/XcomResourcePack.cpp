@@ -494,6 +494,18 @@ void XcomResourcePack::loadBattlescapeResources()
 	s.str("");
 	s << _folder << "GEODATA/" << "LOFTEMPS.DAT";
 	MapDataSet::loadLOFTEMPS(insensitive(s.str()), &_voxelData);
+
+	std::string scrs[] = {"TAC00.SCR",
+						  "TAC01.SCR"};
+
+	for (int i = 0; i < 2; i++)
+	{
+		std::stringstream s;
+		s << _folder << "UFOGRAPH/" << scrs[i];
+		_surfaces[scrs[i]] = new Surface(320, 200);
+		_surfaces[scrs[i]]->loadScr(insensitive(s.str()));
+	}
+
 }
 
 }
