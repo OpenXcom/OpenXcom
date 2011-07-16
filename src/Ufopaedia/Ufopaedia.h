@@ -33,8 +33,18 @@ namespace OpenXcom
 
 	/// define Ufopaedia sections, which must be consistent
 	static const std::string UFOPAEDIA_XCOM_CRAFT_ARMAMENT = "XCOM_CRAFT_ARMAMENT";
+	static const std::string UFOPAEDIA_HEAVY_WEAPONS_PLATFORMS = "HEAVY_WEAPONS_PLATFORMS";
+	static const std::string UFOPAEDIA_WEAPONS_AND_EQUIPMENT = "WEAPONS_AND_EQUIPMENT";
+	static const std::string UFOPAEDIA_ALIEN_ARTIFACTS = "ALIEN_ARTIFACTS";
+	static const std::string UFOPAEDIA_BASE_FACILITIES = "BASE_FACILITIES";
 	static const std::string UFOPAEDIA_ALIEN_LIFE_FORMS = "ALIEN_LIFE_FORMS";
 	static const std::string UFOPAEDIA_ALIEN_RESEARCH = "ALIEN_RESEARCH";
+	static const std::string UFOPAEDIA_UFO_COMPONENTS = "UFO_COMPONENTS";
+	static const std::string UFOPAEDIA_UFOS = "UFOS";
+	static const std::string UFOPAEDIA_NOT_AVAILABLE = "NOT_AVAILABLE"; 
+	// This last section is meant for articles, that have to be activated, 
+	// but have no own entry in a list. E.g. Ammunition items. 
+	// Maybe others as well, that should just not be selectable.
 	
 	/**
 	 * This static class encapsulates all functions related to Ufopaedia
@@ -49,6 +59,9 @@ namespace OpenXcom
 	public:
 		/// give the user access to a certain article (after research mostly).
 		static void releaseArticle(Game *game, std::string &article_id);
+		
+		/// check, if a specific article is currently available.
+		static bool isArticleAvailable(Game *game, std::string &article_id);
 		
 		/// open Ufopaedia on a certain entry.
 		static void openArticle(Game *game, std::string &article_id);

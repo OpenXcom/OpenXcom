@@ -44,8 +44,11 @@ namespace OpenXcom
 		// set buttons
 		_btnOk = new TextButton(224, 12, 48, 167);
 		_btnCraftArmament = new TextButton(224, 12, 48, 50);
+		_btnWeaponsEquipment = new TextButton(224, 12, 48, 76);
+		_btnBaseFacilities = new TextButton(224, 12, 48, 102);
 		_btnAlienLifeforms = new TextButton(224, 12, 48, 115);
 		_btnAlienResearch = new TextButton(224, 12, 48, 128);
+		_btnUfos = new TextButton(224, 12, 48, 154);
 
 		// Set palette
 		_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
@@ -54,8 +57,11 @@ namespace OpenXcom
 		add(_txtTitle);
 		add(_btnOk);
 		add(_btnCraftArmament);
+		add(_btnWeaponsEquipment);
+		add(_btnBaseFacilities);
 		add(_btnAlienLifeforms);
 		add(_btnAlienResearch);
+		add(_btnUfos);
 		
 		_window->setColor(Palette::blockOffset(15)+2);
 		_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
@@ -73,6 +79,14 @@ namespace OpenXcom
 		_btnCraftArmament->setText(_game->getLanguage()->getString("STR_XCOM_CRAFT_ARMAMENT"));
 		_btnCraftArmament->onMouseClick((ActionHandler)&UfopaediaStartState::btnCraftArmamentClick);
 
+		_btnWeaponsEquipment->setColor(Palette::blockOffset(8)+8);
+		_btnWeaponsEquipment->setText(_game->getLanguage()->getString("STR_WEAPONS_AND_EQUIPMENT"));
+		_btnWeaponsEquipment->onMouseClick((ActionHandler)&UfopaediaStartState::btnWeaponsEquipmentClick);
+		
+		_btnBaseFacilities->setColor(Palette::blockOffset(8)+8);
+		_btnBaseFacilities->setText(_game->getLanguage()->getString("STR_BASE_FACILITIES"));
+		_btnBaseFacilities->onMouseClick((ActionHandler)&UfopaediaStartState::btnBaseFacilitiesClick);
+		
 		_btnAlienLifeforms->setColor(Palette::blockOffset(8)+8);
 		_btnAlienLifeforms->setText(_game->getLanguage()->getString("STR_ALIEN_LIFE_FORMS"));
 		_btnAlienLifeforms->onMouseClick((ActionHandler)&UfopaediaStartState::btnAlienLifeformsClick);
@@ -80,6 +94,10 @@ namespace OpenXcom
 		_btnAlienResearch->setColor(Palette::blockOffset(8)+8);
 		_btnAlienResearch->setText(_game->getLanguage()->getString("STR_ALIEN_RESEARCH_UC"));
 		_btnAlienResearch->onMouseClick((ActionHandler)&UfopaediaStartState::btnAlienResearchClick);
+		
+		_btnUfos->setColor(Palette::blockOffset(8)+8);
+		_btnUfos->setText(_game->getLanguage()->getString("STR_UFOS"));
+		_btnUfos->onMouseClick((ActionHandler)&UfopaediaStartState::btnUfosClick);
 	}
 	
 	UfopaediaStartState::~UfopaediaStartState()
@@ -108,6 +126,24 @@ namespace OpenXcom
 	 * 
 	 * @param action Pointer to an action.
 	 */
+	void UfopaediaStartState::btnWeaponsEquipmentClick(Action *action)
+	{
+		_game->pushState(new UfopaediaSelectState(_game, UFOPAEDIA_WEAPONS_AND_EQUIPMENT));
+	}
+	
+	/**
+	 * 
+	 * @param action Pointer to an action.
+	 */
+	void UfopaediaStartState::btnBaseFacilitiesClick(Action *action)
+	{
+		_game->pushState(new UfopaediaSelectState(_game, UFOPAEDIA_BASE_FACILITIES));
+	}
+	
+	/**
+	 * 
+	 * @param action Pointer to an action.
+	 */
 	void UfopaediaStartState::btnAlienLifeformsClick(Action *action)
 	{
 		_game->pushState(new UfopaediaSelectState(_game, UFOPAEDIA_ALIEN_LIFE_FORMS));
@@ -120,6 +156,15 @@ namespace OpenXcom
 	void UfopaediaStartState::btnAlienResearchClick(Action *action)
 	{
 		_game->pushState(new UfopaediaSelectState(_game, UFOPAEDIA_ALIEN_RESEARCH));
+	}
+	
+	/**
+	 * 
+	 * @param action Pointer to an action.
+	 */
+	void UfopaediaStartState::btnUfosClick(Action *action)
+	{
+		_game->pushState(new UfopaediaSelectState(_game, UFOPAEDIA_UFOS));
 	}
 	
 }

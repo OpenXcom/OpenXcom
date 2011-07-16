@@ -64,6 +64,20 @@ std::wstring Text::formatFunding(int funds)
 }
 
 /**
+ * Takes an integer value and formats it as percentage,
+ * adding a % sign.
+ * @param value The percentage value.
+ * @return The formatted string.
+ */
+std::wstring Text::formatPercentage(int value)
+{
+	std::wstringstream ss;
+	ss << value;
+	ss << "%";
+	return ss.str();
+}
+
+/**
  * Changes the text to use the big-size font.
  */
 void Text::setBig()

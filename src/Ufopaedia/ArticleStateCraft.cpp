@@ -71,14 +71,13 @@ namespace OpenXcom
 		_lstInfo = new TextList(defs->rect_stats.width, defs->rect_stats.height, defs->rect_stats.x, defs->rect_stats.y);
 		add(_lstInfo);
 		
-		std::wstringstream ss;
 		_lstInfo->setColor(Palette::blockOffset(14)+15);
 		_lstInfo->setColumns(2, 82, 40);
 		_lstInfo->setCondensed(true);
 
+		std::wstringstream ss;
 		ss.str(L"");ss.clear();
 		ss << defs->craft->getMaxSpeed();
-		
 		_lstInfo->addRow(2, _game->getLanguage()->getString("STR_MAXIMUM_SPEED_UC").c_str(), ss.str().c_str());
 		_lstInfo->getCell(0, 1)->setColor(Palette::blockOffset(15)+4);
 
