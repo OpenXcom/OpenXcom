@@ -39,9 +39,9 @@ namespace Options
 	std::string getString(std::string id);
 	int getInt(std::string id);
 	bool getBool(std::string id);
-	std::string setString(std::string id, std::string value);
-	std::string setInt(std::string id, int value);
-	std::string setBool(std::string id, bool value);
+	void setString(std::string id, std::string value);
+	void setInt(std::string id, int value);
+	void setBool(std::string id, bool value);
 }
 
 }

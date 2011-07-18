@@ -395,6 +395,14 @@ void Text::draw()
 		s = &_wrappedText;
 	}
 
+	// Set up text color
+	int mul = 1;
+	if (_contrast)
+	{
+		mul = 3;
+	}
+	font->getSurface()->offset(color, -1, -1, mul);
+
 	// Draw each letter one by one
 	for (std::wstring::iterator c = s->begin(); c != s->end(); ++c)
 	{
@@ -420,26 +428,23 @@ void Text::draw()
 			}
 			if (*c == 2)
 			{
+				font->getSurface()->offset(-color, -1, -1, mul);
 				font = _small;
+				font->getSurface()->offset(color, -1, -1, mul);
 			}
 		}
 		else if (*c == 1)
 		{
+			font->getSurface()->offset(-color, -1, -1, mul);
 			color = (color == _color ? _color2 : _color);
+			font->getSurface()->offset(color, -1, -1, mul);
 		}
 		else
 		{
-			int mul = 1;
-			if (_contrast)
-			{
-				mul = 3;
-			}
 			Surface* chr = font->getChar(*c);
 			chr->setX(x);
 			chr->setY(y);
-			chr->offset(color, -1, -1, mul);
 			chr->blit(this);
-			chr->offset(-color, -1, -1, mul);
 			x += chr->getCrop()->w + font->getSpacing();
 		}
 	}
@@ -447,6 +452,9 @@ void Text::draw()
 	{
 		this->invert(_color + 3);
 	}
+
+	// Revert text color
+	font->getSurface()->offset(-color, -1, -1, mul);
 }
 
 }

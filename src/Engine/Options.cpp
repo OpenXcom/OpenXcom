@@ -73,19 +73,19 @@ bool getBool(std::string id)
 	return value;
 }
 
-std::string setString(std::string id, std::string value)
+void setString(std::string id, std::string value)
 {
 	_options[id] = value;
 }
 
-std::string setInt(std::string id, int value)
+void setInt(std::string id, int value)
 {
 	std::stringstream ss;
 	ss << std::dec << value;
 	_options[id] = ss.str();
 }
 
-std::string setBool(std::string id, bool value)
+void setBool(std::string id, bool value)
 {
 	std::stringstream ss;
 	ss << std::boolalpha << value;
