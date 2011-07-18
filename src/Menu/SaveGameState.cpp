@@ -27,6 +27,7 @@
 #include "../Engine/Language.h"
 #include "../Engine/Font.h"
 #include "../Engine/Palette.h"
+#include "../Engine/Options.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
@@ -164,8 +165,8 @@ void SaveGameState::edtSaveKeyPress(Action *action)
 		{
 			if (_selected != "")
 			{
-				std::string oldName = USER_DIR + _selected + ".sav";
-				std::string newName = USER_DIR + Language::wstrToUtf8(_edtSave->getText()) + ".sav";
+				std::string oldName = Options::getUserFolder() + _selected + ".sav";
+				std::string newName = Options::getUserFolder() + Language::wstrToUtf8(_edtSave->getText()) + ".sav";
 				if (rename(oldName.c_str(), newName.c_str()) != 0)
 				{
 					throw Exception("Failed to overwrite save");

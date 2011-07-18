@@ -35,6 +35,7 @@
 // these are for runStandalone...
 #include "../Resource/ResourcePack.h"
 #include "../Ruleset/XcomRuleset.h"
+#include "../Engine/Options.h"
 #include <sstream>
 
 namespace OpenXcom
@@ -175,7 +176,7 @@ namespace OpenXcom
 	{
 		// set game language
 		std::stringstream ss;
-		ss << game->getResourcePack()->getFolder() << "Language/English.lng";
+		ss << Options::getDataFolder() << "Language/English.lng";
 		Language *l = new Language();
 		l->loadLng(ss.str());
 		game->setLanguage(l);

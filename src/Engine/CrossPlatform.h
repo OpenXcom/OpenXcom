@@ -28,17 +28,15 @@ namespace OpenXcom
  * Generic purpose functions that need different
  * implementations for different platforms.
  */
-class CrossPlatform
+namespace CrossPlatform
 {
-private:
-	CrossPlatform();
-	~CrossPlatform();
-public:
+	/// Converts a filename to its existing case-insensitive name.
+	std::string insensitive(const std::string &filename);
 	/// Displays an error message.
-	static void showError(const std::string &error);
+	void showError(const std::string &error);
 	/// Displays an error message.
-	static void showError(const std::wstring &error);
-};
+	void showError(const std::wstring &error);
+}
 
 }
 

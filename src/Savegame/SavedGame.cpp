@@ -27,6 +27,7 @@
 #include "../Engine/Language.h"
 #include "../Interface/TextList.h"
 #include "../Engine/Exception.h"
+#include "../Engine/Options.h"
 #include "SavedBattleGame.h"
 #include "GameTime.h"
 #include "Country.h"
@@ -89,7 +90,7 @@ SavedGame::~SavedGame()
  */
 void SavedGame::getList(TextList *list, Language *lang)
 {
-	DIR *dp = opendir(USER_DIR);
+	DIR *dp = opendir(Options::getUserFolder().c_str());
     if (dp == 0)
 	{
         throw Exception("Failed to open saves directory");
@@ -104,7 +105,7 @@ void SavedGame::getList(TextList *list, Language *lang)
 		{
 			continue;
 		}
-		std::string fullname = USER_DIR + file;
+		std::string fullname = Options::getUserFolder() + file;
 		std::ifstream fin(fullname.c_str());
 		if (!fin)
 		{
@@ -139,7 +140,7 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 {
 	unsigned int size = 0;
 
-	std::string s = USER_DIR + filename + ".sav";
+	std::string s = Options::getUserFolder() + filename + ".sav";
 	std::ifstream fin(s.c_str());
 	if (!fin)
 	{
@@ -231,7 +232,7 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
  */
 void SavedGame::save(const std::string &filename) const
 {
-	std::string s = USER_DIR + filename + ".sav";
+	std::string s = Options::getUserFolder() + filename + ".sav";
 	std::ofstream sav(s.c_str());
 	if (!sav)
 	{

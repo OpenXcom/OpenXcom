@@ -24,6 +24,7 @@
 #include "Exception.h"
 #include "Surface.h"
 #include "Action.h"
+#include "Options.h"
 
 namespace OpenXcom
 {
@@ -85,7 +86,7 @@ void Screen::handle(Action *action)
 		do
 		{
 			ss.str("");
-			ss << "./USER/" << "screen" << std::setfill('0') << std::setw(3) << i << ".bmp";
+			ss << Options::getUserFolder() << "screen" << std::setfill('0') << std::setw(3) << i << ".bmp";
 			i++;
 		}
 		while (stat(ss.str().c_str(), &info) == 0);

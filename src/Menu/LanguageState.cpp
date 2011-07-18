@@ -19,6 +19,7 @@
 #include "LanguageState.h"
 #include <sstream>
 #include "../Engine/Game.h"
+#include "../Engine/Options.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
 #include "../Engine/Font.h"
@@ -91,7 +92,7 @@ LanguageState::~LanguageState()
 void LanguageState::changeLanguage(const std::string &lang)
 {
 	std::stringstream ss;
-	ss << _game->getResourcePack()->getFolder() << "Language/" << lang;
+	ss << Options::getDataFolder() << "Language/" << lang;
 	Language *l = new Language();
 	l->loadLng(ss.str());
 	_game->setLanguage(l);

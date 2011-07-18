@@ -17,7 +17,6 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "ResourcePack.h"
-#include <sys/stat.h>
 #include "../Engine/Palette.h"
 #include "../Engine/Font.h"
 #include "../Engine/Surface.h"
@@ -33,9 +32,8 @@ namespace OpenXcom
 
 /**
  * Initializes a blank resource set pointing to a folder.
- * @param folder Subfolder to load resources from.
  */
-ResourcePack::ResourcePack(const std::string &folder) : _folder(folder), _palettes(), _fonts(), _surfaces(), _sets(), _polygons(), _musics()
+ResourcePack::ResourcePack() : _palettes(), _fonts(), _surfaces(), _sets(), _polygons(), _musics()
 {
 }
 
@@ -76,66 +74,6 @@ ResourcePack::~ResourcePack()
 	{
 		delete i->second;
 	}
-}
-
-/**
- * Takes a filename and tries to figure out the existing
- * case-insensitive filename for it, for file operations.
- * @param filename Original filename.
- * @return Correctly-cased filename or "" if it doesn't exist.
- * @note There's no actual method for figuring out the correct
- * filename on case-sensitive systems, this is just a workaround.
- */
-std::string ResourcePack::insensitive(const std::string &filename)
-{
-	std::string newName = filename;
-
-	// Ignore DATA folder
-	size_t i = newName.find("/DATA/");
-	if (i != std::string::npos)
-		i += 6;
-	else
-		i = 0;
-
-	// Try lowercase and uppercase names
-	struct stat info;
-	if (stat(newName.c_str(), &info) == 0)
-	{
-		return newName;
-	}
-	else
-	{
-		for (std::string::iterator c = newName.begin() + i; c != newName.end(); ++c)
-			*c = toupper(*c);
-		if (stat(newName.c_str(), &info) == 0)
-		{
-			return newName;
-		}
-		else
-		{
-			for (std::string::iterator c = newName.begin() + i; c != newName.end(); ++c)
-				*c = tolower(*c);
-			if (stat(newName.c_str(), &info) == 0)
-			{
-				return newName;
-			}
-			else
-			{
-				return "";
-			}
-		}
-	}
-}
-
-/**
- * Gets the data folder name.
- * Certain battlescape data is loaded on-the-fly
- * it needs to know the folder where to load it.
- * @return the data folder name.
- */
-std::string ResourcePack::getFolder() const
-{
-	return _folder;
 }
 
 /**

@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "CrossPlatform.h"
+#include <sys/stat.h>
 #ifdef _WIN32
 #include <windows.h>
 #else
@@ -25,12 +26,63 @@
 
 namespace OpenXcom
 {
+namespace CrossPlatform
+{
+
+/**
+ * Takes a filename and tries to figure out the existing
+ * case-insensitive filename for it, for file operations.
+ * @param filename Original filename.
+ * @return Correctly-cased filename or "" if it doesn't exist.
+ * @note There's no actual method for figuring out the correct
+ * filename on case-sensitive systems, this is just a workaround.
+ */
+std::string insensitive(const std::string &filename)
+{
+	std::string newName = filename;
+
+	// Ignore DATA folder
+	size_t i = newName.find("/DATA/");
+	if (i != std::string::npos)
+		i += 6;
+	else
+		i = 0;
+
+	// Try lowercase and uppercase names
+	struct stat info;
+	if (stat(newName.c_str(), &info) == 0)
+	{
+		return newName;
+	}
+	else
+	{
+		for (std::string::iterator c = newName.begin() + i; c != newName.end(); ++c)
+			*c = toupper(*c);
+		if (stat(newName.c_str(), &info) == 0)
+		{
+			return newName;
+		}
+		else
+		{
+			for (std::string::iterator c = newName.begin() + i; c != newName.end(); ++c)
+				*c = tolower(*c);
+			if (stat(newName.c_str(), &info) == 0)
+			{
+				return newName;
+			}
+			else
+			{
+				return "";
+			}
+		}
+	}
+}
 
 /**
  * Displays a message box with an error message.
  * @param error Error message.
  */
-void CrossPlatform::showError(const std::string &error)
+void showError(const std::string &error)
 {
 #ifdef _WIN32
 	MessageBoxA(NULL, error.c_str(), "OpenXcom Error", MB_ICONERROR | MB_OK);
@@ -43,7 +95,7 @@ void CrossPlatform::showError(const std::string &error)
  * Displays a message box with an error message.
  * @param error Error message.
  */
-void CrossPlatform::showError(const std::wstring &error)
+void showError(const std::wstring &error)
 {
 #ifdef _WIN32
 	MessageBoxW(NULL, error.c_str(), L"OpenXcom Error", MB_ICONERROR | MB_OK);
@@ -52,4 +104,5 @@ void CrossPlatform::showError(const std::wstring &error)
 #endif
 }
 
+}
 }

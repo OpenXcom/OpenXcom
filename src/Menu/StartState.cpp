@@ -30,8 +30,6 @@
 namespace OpenXcom
 {
 
-#define DATA_FOLDER "./DATA/"
-
 /**
  * Initializes all the elements in the Loading screen.
  * @param game Pointer to the core game.
@@ -80,7 +78,7 @@ void StartState::think()
 	case LOADING_STARTED:
 		try
 		{
-			_game->setResourcePack(new XcomResourcePack(DATA_FOLDER));
+			_game->setResourcePack(new XcomResourcePack());
 			_load = LOADING_SUCCESSFUL;
 		}
 		catch (Exception &e)

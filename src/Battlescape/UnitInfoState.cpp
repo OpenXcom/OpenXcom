@@ -54,43 +54,43 @@ UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit) : State(game), _unit(
 
 	_txtTimeUnits = new Text(120, 9, 8, 31);
 	_numTimeUnits = new Text(18, 9, 150, 31);
-	_barTimeUnits = new Bar(170, 7, 170, 31);
+	_barTimeUnits = new Bar(170, 5, 170, 32);
 
 	_txtEnergy = new Text(120, 9, 8, 41);
 	_numEnergy = new Text(18, 9, 150, 41);
-	_barEnergy = new Bar(170, 7, 170, 41);
+	_barEnergy = new Bar(170, 5, 170, 42);
 
 	_txtHealth = new Text(120, 9, 8, 51);
 	_numHealth = new Text(18, 9, 150, 51);
-	_barHealth = new Bar(170, 7, 170, 51);
+	_barHealth = new Bar(170, 5, 170, 52);
 
 	_txtFatalWounds = new Text(120, 9, 8, 61);
 	_numFatalWounds = new Text(18, 9, 150, 61);
-	_barFatalWounds = new Bar(170, 7, 170, 61);
+	_barFatalWounds = new Bar(170, 5, 170, 62);
 
 	_txtBravery = new Text(120, 9, 8, 71);
 	_numBravery = new Text(18, 9, 150, 71);
-	_barBravery = new Bar(170, 7, 170, 71);
+	_barBravery = new Bar(170, 5, 170, 72);
 
 	_txtMorale = new Text(120, 9, 8, 81);
 	_numMorale = new Text(18, 9, 150, 81);
-	_barMorale = new Bar(170, 7, 170, 81);
+	_barMorale = new Bar(170, 5, 170, 82);
 
 	_txtReactions = new Text(120, 9, 8, 91);
 	_numReactions = new Text(18, 9, 150, 91);
-	_barReactions = new Bar(170, 7, 170, 91);
+	_barReactions = new Bar(170, 5, 170, 92);
 
 	_txtFiring = new Text(120, 9, 8, 101);
 	_numFiring = new Text(18, 9, 150, 101);
-	_barFiring = new Bar(170, 7, 170, 101);
+	_barFiring = new Bar(170, 5, 170, 102);
 
 	_txtThrowing = new Text(120, 9, 8, 111);
 	_numThrowing = new Text(18, 9, 150, 111);
-	_barThrowing = new Bar(170, 7, 170, 111);
+	_barThrowing = new Bar(170, 5, 170, 112);
 
 	_txtStrength = new Text(120, 9, 8, 121);
 	_numStrength = new Text(18, 9, 150, 121);
-	_barStrength = new Bar(170, 7, 170, 121);
+	_barStrength = new Bar(170, 5, 170, 122);
 
 	// 131
 
@@ -98,23 +98,23 @@ UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit) : State(game), _unit(
 	
 	_txtFrontArmour = new Text(120, 9, 8, 151);
 	_numFrontArmour= new Text(18, 9, 150, 151);
-	_barFrontArmour = new Bar(170, 7, 170, 151);
+	_barFrontArmour = new Bar(170, 5, 170, 152);
 	
 	_txtLeftArmour = new Text(120, 9, 8, 161);
 	_numLeftArmour = new Text(18, 9, 150, 161);
-	_barLeftArmour = new Bar(170, 7, 170, 161);
+	_barLeftArmour = new Bar(170, 5, 170, 162);
 	
 	_txtRightArmour = new Text(120, 9, 8, 171);
 	_numRightArmour = new Text(18, 9, 150, 171);
-	_barRightArmour = new Bar(170, 7, 170, 171);
+	_barRightArmour = new Bar(170, 5, 170, 172);
 	
 	_txtRearArmour = new Text(120, 9, 8, 181);
 	_numRearArmour = new Text(18, 9, 150, 181);
-	_barRearArmour = new Bar(170, 7, 170, 181);
+	_barRearArmour = new Bar(170, 5, 170, 182);
 	
 	_txtUnderArmour = new Text(120, 9, 8, 191);
 	_numUnderArmour = new Text(18, 9, 150, 191);
-	_barUnderArmour = new Bar(170, 7, 170, 191);
+	_barUnderArmour = new Bar(170, 5, 170, 192);
 	
 	add(_bg);
 	add(_txtName);
@@ -184,126 +184,158 @@ UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit) : State(game), _unit(
 
 	_txtName->setAlign(ALIGN_CENTER);
 	_txtName->setBig();
+	_txtName->setColor(Palette::blockOffset(4)-1);
+	_txtName->setHighContrast(true);
 
-	_txtTimeUnits->setColor(Palette::blockOffset(15)+1);
+	_txtTimeUnits->setColor(Palette::blockOffset(3)-1);
+	_txtTimeUnits->setHighContrast(true);
 	_txtTimeUnits->setText(_game->getLanguage()->getString("STR_TIME_UNITS"));
 
-	_numTimeUnits->setColor(Palette::blockOffset(13));
+	_numTimeUnits->setColor(Palette::blockOffset(9)-1);
+	_numTimeUnits->setHighContrast(true);
 
-	_barTimeUnits->setColor(Palette::blockOffset(3));
+	_barTimeUnits->setColor(Palette::blockOffset(4));
 	_barTimeUnits->setScale(1.0);
-	_barTimeUnits->setInvert(true);
 
-	_txtEnergy->setColor(Palette::blockOffset(15)+1);
+	_txtEnergy->setColor(Palette::blockOffset(3)-1);
+	_txtEnergy->setHighContrast(true);
 	_txtEnergy->setText(_game->getLanguage()->getString("STR_ENERGY"));
 
-	_numEnergy->setColor(Palette::blockOffset(13));
+	_numEnergy->setColor(Palette::blockOffset(9)-1);
+	_numEnergy->setHighContrast(true);
 
 	_barEnergy->setColor(Palette::blockOffset(9));
 	_barEnergy->setScale(1.0);
-	_barEnergy->setInvert(true);
 
-	_txtHealth->setColor(Palette::blockOffset(15)+1);
+	_txtHealth->setColor(Palette::blockOffset(3)-1);
+	_txtHealth->setHighContrast(true);
 	_txtHealth->setText(_game->getLanguage()->getString("STR_HEALTH"));
 
-	_numHealth->setColor(Palette::blockOffset(13));
+	_numHealth->setColor(Palette::blockOffset(9)-1);
+	_numHealth->setHighContrast(true);
 
 	_barHealth->setColor(Palette::blockOffset(2));
 	_barHealth->setScale(1.0);
-	_barHealth->setInvert(true);
 
-	_txtFatalWounds->setColor(Palette::blockOffset(15)+1);
+	_txtFatalWounds->setColor(Palette::blockOffset(3)-1);
+	_txtFatalWounds->setHighContrast(true);
 	_txtFatalWounds->setText(_game->getLanguage()->getString("STR_FATAL_WOUNDS"));
 
-	_numFatalWounds->setColor(Palette::blockOffset(13));
+	_numFatalWounds->setColor(Palette::blockOffset(9)-1);
+	_numFatalWounds->setHighContrast(true);
 
 	_barFatalWounds->setColor(Palette::blockOffset(2));
 	_barFatalWounds->setScale(1.0);
-	_barFatalWounds->setInvert(true);
 
-	_txtBravery->setColor(Palette::blockOffset(15)+1);
+	_txtBravery->setColor(Palette::blockOffset(3)-1);
+	_txtBravery->setHighContrast(true);
 	_txtBravery->setText(_game->getLanguage()->getString("STR_BRAVERY"));
 
-	_numBravery->setColor(Palette::blockOffset(13));
+	_numBravery->setColor(Palette::blockOffset(9)-1);
+	_numBravery->setHighContrast(true);
 
-	_barBravery->setColor(Palette::blockOffset(4));
+	_barBravery->setColor(Palette::blockOffset(12));
 	_barBravery->setScale(1.0);
-	_barBravery->setInvert(true);
 
-	_txtMorale->setColor(Palette::blockOffset(15)+1);
+	_txtMorale->setColor(Palette::blockOffset(3)-1);
+	_txtMorale->setHighContrast(true);
 	_txtMorale->setText(_game->getLanguage()->getString("STR_MORALE"));
 
-	_numMorale->setColor(Palette::blockOffset(13));
+	_numMorale->setColor(Palette::blockOffset(9)-1);
+	_numMorale->setHighContrast(true);
 
-	_barMorale->setColor(Palette::blockOffset(4));
+	_barMorale->setColor(Palette::blockOffset(12));
 	_barMorale->setScale(1.0);
-	_barMorale->setInvert(true);
 
-	_txtReactions->setColor(Palette::blockOffset(15)+1);
+	_txtReactions->setColor(Palette::blockOffset(3)-1);
+	_txtReactions->setHighContrast(true);
 	_txtReactions->setText(_game->getLanguage()->getString("STR_REACTIONS"));
 
-	_numReactions->setColor(Palette::blockOffset(13));
+	_numReactions->setColor(Palette::blockOffset(9)-1);
+	_numReactions->setHighContrast(true);
 
-	_barReactions->setColor(Palette::blockOffset(1));
+	_barReactions->setColor(Palette::blockOffset(9));
 	_barReactions->setScale(1.0);
-	_barReactions->setInvert(true);
 
-	_txtFiring->setColor(Palette::blockOffset(15)+1);
+	_txtFiring->setColor(Palette::blockOffset(3)-1);
+	_txtFiring->setHighContrast(true);
 	_txtFiring->setText(_game->getLanguage()->getString("STR_FIRING_ACCURACY"));
 
-	_numFiring->setColor(Palette::blockOffset(13));
+	_numFiring->setColor(Palette::blockOffset(9)-1);
+	_numFiring->setHighContrast(true);
 
 	_barFiring->setColor(Palette::blockOffset(8));
 	_barFiring->setScale(1.0);
-	_barFiring->setInvert(true);
 
-	_txtThrowing->setColor(Palette::blockOffset(15)+1);
+	_txtThrowing->setColor(Palette::blockOffset(3)-1);
+	_txtThrowing->setHighContrast(true);
 	_txtThrowing->setText(_game->getLanguage()->getString("STR_THROWING_ACCURACY"));
 
-	_numThrowing->setColor(Palette::blockOffset(13));
+	_numThrowing->setColor(Palette::blockOffset(9)-1);
+	_numThrowing->setHighContrast(true);
 
-	_barThrowing->setColor(Palette::blockOffset(10));
+	_barThrowing->setColor(Palette::blockOffset(6));
 	_barThrowing->setScale(1.0);
-	_barThrowing->setInvert(true);
 
-	_txtStrength->setColor(Palette::blockOffset(15)+1);
+	_txtStrength->setColor(Palette::blockOffset(3)-1);
+	_txtStrength->setHighContrast(true);
 	_txtStrength->setText(_game->getLanguage()->getString("STR_STRENGTH"));
 
-	_numStrength->setColor(Palette::blockOffset(13));
+	_numStrength->setColor(Palette::blockOffset(9)-1);
+	_numStrength->setHighContrast(true);
 
-	_barStrength->setColor(Palette::blockOffset(5));
+	_barStrength->setColor(Palette::blockOffset(3));
 	_barStrength->setScale(1.0);
-	_barStrength->setInvert(true);
 
+	_txtFrontArmour->setColor(Palette::blockOffset(3)-1);
+	_txtFrontArmour->setHighContrast(true);
 	_txtFrontArmour->setText(_game->getLanguage()->getString("STR_FRONT_ARMOR_UC"));
+
+	_numFrontArmour->setColor(Palette::blockOffset(9)-1);
+	_numFrontArmour->setHighContrast(true);
 
 	_barFrontArmour->setColor(Palette::blockOffset(5));
 	_barFrontArmour->setScale(1.0);
-	_barFrontArmour->setInvert(true);
 
+	_txtLeftArmour->setColor(Palette::blockOffset(3)-1);
+	_txtLeftArmour->setHighContrast(true);
 	_txtLeftArmour->setText(_game->getLanguage()->getString("STR_LEFT_ARMOR_UC"));
+
+	_numLeftArmour->setColor(Palette::blockOffset(9)-1);
+	_numLeftArmour->setHighContrast(true);
 
 	_barLeftArmour->setColor(Palette::blockOffset(5));
 	_barLeftArmour->setScale(1.0);
-	_barLeftArmour->setInvert(true);
 
+	_txtRightArmour->setColor(Palette::blockOffset(3)-1);
+	_txtRightArmour->setHighContrast(true);
 	_txtRightArmour->setText(_game->getLanguage()->getString("STR_RIGHT_ARMOR_UC"));
+
+	_numRightArmour->setColor(Palette::blockOffset(9)-1);
+	_numRightArmour->setHighContrast(true);
 
 	_barRightArmour->setColor(Palette::blockOffset(5));
 	_barRightArmour->setScale(1.0);
-	_barRightArmour->setInvert(true);
 
+	_txtRearArmour->setColor(Palette::blockOffset(3)-1);
+	_txtRearArmour->setHighContrast(true);
 	_txtRearArmour->setText(_game->getLanguage()->getString("STR_REAR_ARMOR_UC"));
+
+	_numRearArmour->setColor(Palette::blockOffset(9)-1);
+	_numRearArmour->setHighContrast(true);
 
 	_barRearArmour->setColor(Palette::blockOffset(5));
 	_barRearArmour->setScale(1.0);
-	_barRearArmour->setInvert(true);
 
+	_txtUnderArmour->setColor(Palette::blockOffset(3)-1);
+	_txtUnderArmour->setHighContrast(true);
 	_txtUnderArmour->setText(_game->getLanguage()->getString("STR_UNDER_ARMOR_UC"));
+
+	_numUnderArmour->setColor(Palette::blockOffset(9)-1);
+	_numUnderArmour->setHighContrast(true);
 
 	_barUnderArmour->setColor(Palette::blockOffset(5));
 	_barUnderArmour->setScale(1.0);
-	_barUnderArmour->setInvert(true);
 
 }
 

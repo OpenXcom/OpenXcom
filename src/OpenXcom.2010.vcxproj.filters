@@ -512,6 +512,9 @@
     <ClCompile Include="Battlescape\PrimeGrenadeState.cpp">
       <Filter>Battlescape</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Options.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
     <ClCompile Include="Ufopaedia\ArticleStateBaseFacility.cpp">
       <Filter>Ufopaedia</Filter>
     </ClCompile>
@@ -1037,6 +1040,9 @@
     </ClInclude>
     <ClInclude Include="Battlescape\PrimeGrenadeState.h">
       <Filter>Battlescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Options.h">
+      <Filter>Engine</Filter>
     </ClInclude>
     <ClInclude Include="Ufopaedia\ArticleStateBaseFacility.h">
       <Filter>Ufopaedia</Filter>

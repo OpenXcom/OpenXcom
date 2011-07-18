@@ -356,7 +356,7 @@ void Text::draw()
 
 	int x = 0, y = 0, line = 0, height = 0;
 	Font *font = _font;
-	Uint8 color = _color;
+	int color = _color;
 	std::wstring *s = &_text;
 
 	for (std::vector<int>::iterator i = _lineHeight.begin(); i != _lineHeight.end(); ++i)
@@ -429,18 +429,19 @@ void Text::draw()
 		}
 		else
 		{
+			int mul = 1;
+			if (_contrast)
+			{
+				mul = 3;
+			}
 			Surface* chr = font->getChar(*c);
-			Surface letter = Surface(chr->getCrop()->w, chr->getCrop()->h, x, y);
-			letter.setPalette(getPalette());
-			chr->blit(&letter);
-			letter.offset(color);
-			letter.blit(this);
+			chr->setX(x);
+			chr->setY(y);
+			chr->offset(color, -1, -1, mul);
+			chr->blit(this);
+			chr->offset(-color, -1, -1, mul);
 			x += chr->getCrop()->w + font->getSpacing();
 		}
-	}
-	if (_contrast)
-	{
-		this->multiply(3);
 	}
 	if (_invert)
 	{

@@ -23,6 +23,7 @@
 #include "../Engine/RNG.h"
 #include "../Engine/Language.h"
 #include "../Engine/Exception.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -49,7 +50,7 @@ void SoldierNamePool::load(const std::string &filename)
 {
 	unsigned int size = 0;
 
-	std::string s = "./DATA/SoldierName/" + filename + ".nam";
+	std::string s = Options::getDataFolder() + "SoldierName/" + filename + ".nam";
 	std::ifstream fin(s.c_str());
 	if (!fin)
 	{

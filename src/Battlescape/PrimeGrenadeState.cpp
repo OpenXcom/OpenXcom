@@ -78,7 +78,7 @@ PrimeGrenadeState::PrimeGrenadeState(Game *game, BattleAction *action) : State(g
 	_title->setFonts(_game->getResourcePack()->getFont("BIGLETS.DAT"), 0);
 	_title->setBig();
 	_title->setText(_game->getLanguage()->getString("STR_SET_TIMER"));
-	_title->setColor(Palette::blockOffset(2));
+	_title->setColor(Palette::blockOffset(1)-1);
 	_title->setHighContrast(true);
 
 	for (int i = 0; i < 24; ++i)
@@ -103,7 +103,7 @@ PrimeGrenadeState::PrimeGrenadeState(Game *game, BattleAction *action) : State(g
 		_number[i]->setFonts(_game->getResourcePack()->getFont("BIGLETS.DAT"), 0);
 		_number[i]->setBig();
 		_number[i]->setText(ss.str());
-		_number[i]->setColor(Palette::blockOffset(2));
+		_number[i]->setColor(Palette::blockOffset(1)-1);
 		_number[i]->setHighContrast(true);
 		_number[i]->setAlign(ALIGN_CENTER);
 		_number[i]->setVerticalAlign(ALIGN_MIDDLE);

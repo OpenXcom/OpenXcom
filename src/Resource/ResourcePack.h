@@ -52,7 +52,6 @@ class MapBlock;
 class ResourcePack
 {
 protected:
-	std::string _folder;
 	std::map<std::string, Palette*> _palettes;
 	std::map<std::string, Font*> _fonts;
 	std::map<std::string, Surface*> _surfaces;
@@ -64,13 +63,9 @@ protected:
 	std::vector<Uint16> _voxelData;
 public:
 	/// Create a new resource pack with a folder's contents.
-	ResourcePack(const std::string &folder);
+	ResourcePack();
 	/// Cleans up the resource pack.
 	virtual ~ResourcePack();
-	/// Converts a filename to its existing case-insensitive name.
-	static std::string insensitive(const std::string &filename);
-	/// Gets the data folder name.
-	std::string getFolder() const;
 	/// Gets a particular font.
 	Font *const getFont(const std::string &name);
 	/// Gets a particular surface.

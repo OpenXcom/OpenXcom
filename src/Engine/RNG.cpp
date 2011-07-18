@@ -24,15 +24,17 @@
 
 namespace OpenXcom
 {
+namespace RNG
+{
 
-int RNG::_seed = 0;
+int _seed = 0;
 
 /**
  * Seeds the random generator with a new number.
  * Defaults to the current time if none is set.
  * @param seed New seed.
  */
-void RNG::init(int seed)
+void init(int seed)
 {
 	if (seed == -1)
 	{
@@ -49,7 +51,7 @@ void RNG::init(int seed)
  * Returns the last seed used by the generator.
  * @return Generator seed.
  */
-int RNG::getSeed()
+int getSeed()
 {
 	return _seed;
 }
@@ -60,7 +62,7 @@ int RNG::getSeed()
  * @param max Maximum number.
  * @return Generated number.
  */
-int RNG::generate(int min, int max)
+int generate(int min, int max)
 {
 	_seed = rand();
 	return (_seed % (max - min + 1) + min);
@@ -72,7 +74,7 @@ int RNG::generate(int min, int max)
  * @param max Maximum number.
  * @return Generated number.
  */
-double RNG::generate(double min, double max)
+double generate(double min, double max)
 {
 	_seed = rand();
 	return (_seed * (max - min) / RAND_MAX + min);
@@ -84,7 +86,7 @@ double RNG::generate(double min, double max)
  * @param s standard deviation
  * @return normally distributed value.
  */
-double RNG::boxMuller(double m, double s)	
+double boxMuller(double m, double s)	
 {
 	double x1, x2, w, y1;
 	static double y2;
@@ -112,4 +114,5 @@ double RNG::boxMuller(double m, double s)
 	return( m + y1 * s );
 }
 
+}
 }

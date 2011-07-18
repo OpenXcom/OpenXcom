@@ -142,10 +142,8 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 						 {0, 0, 0}};
 	_game->setPalette(color, Palette::backPos+16, 16);
 
-	// Fix cursor
+	// Fix system colors
 	_game->getCursor()->setColor(Palette::blockOffset(9));
-
-	// Fix the FpsCounter color.
 	_game->getFpsCounter()->setColor(Palette::blockOffset(9));
 
 	add(_map);
@@ -185,6 +183,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	add(_txtWarningMessage);
 
 	add(_txtDebug);
+
 	// Set up objects
 	_game->getResourcePack()->getSurface("ICONS.PCK")->blit(_icons);
 
@@ -218,7 +217,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 		_numVisibleUnit[i]->setColor(16);
 		_numVisibleUnit[i]->setValue(i+1);
 	}
-	_txtWarningMessage->setColor(Palette::blockOffset(2)-1);
+	_txtWarningMessage->setColor(Palette::blockOffset(1)-1);
 	_txtWarningMessage->setHighContrast(true);
 	_txtWarningMessage->setAlign(ALIGN_CENTER);
 	_warningMessageBackground->setVisible(false);
@@ -238,7 +237,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_barMorale->setColor(Palette::blockOffset(12));
 	_barMorale->setScale(1.0);
 
-	_txtDebug->setColor(Palette::blockOffset(8)-1);
+	_txtDebug->setColor(Palette::blockOffset(8));
 	_txtDebug->setHighContrast(true);
 
 	updateSoldierInfo(_battleGame->getSelectedUnit());

@@ -16,30 +16,32 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_RNG_H
-#define OPENXCOM_RNG_H
+#ifndef OPENXCOM_OPTIONS_H
+#define OPENXCOM_OPTIONS_H
+
+#include <string>
 
 namespace OpenXcom
 {
 
 /**
- * Random Number Generator used throughout the game
- * for all your randomness needs. It's really just the
- * standard C generator, but wrapped in a way that we
- * can store its seed for later use if necessary.
+ * Container for all the various global game options
+ * and customizable settings.
  */
-namespace RNG
+namespace Options
 {
-	/// Initializes the generator.
-	void init(int seed = -1);
-	/// Gets the generator's seed.
-	int getSeed();
-	/// Generates a random integer number.
-	int generate(int min, int max);
-	/// Generates a random decimal number.
-	double generate(double min, double max);
-	/// Get normally distributed value.
-	double boxMuller(double m = 0, double s = 1);
+	void load();
+	void save();
+	std::string getDataFolder();
+	void setDataFolder(std::string folder);
+	std::string getUserFolder();
+	void setUserFolder(std::string folder);
+	std::string getString(std::string id);
+	int getInt(std::string id);
+	bool getBool(std::string id);
+	std::string setString(std::string id, std::string value);
+	std::string setInt(std::string id, int value);
+	std::string setBool(std::string id, bool value);
 }
 
 }

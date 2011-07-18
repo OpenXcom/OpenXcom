@@ -23,8 +23,6 @@
 #include <vector>
 #include <string>
 
-#define USER_DIR "./USER/"
-
 namespace OpenXcom
 {
 

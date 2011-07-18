@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers..
+ * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -187,16 +187,28 @@ void Surface::clear()
  * @param off Amount to shift.
  * @param min Minimum color to shift to.
  * @param max Maximum color to shift to.
+ * @param mul Shift multiplier.
  */
-void Surface::offset(int off, int min, int max)
+void Surface::offset(int off, int min, int max, int mul)
 {
+	if (off == 0)
+		return;
+
 	// Lock the surface
 	lock();
 	
 	for (int x = 0, y = 0; x < getWidth() && y < getHeight();)
 	{
 		Uint8 pixel = getPixel(x, y);
-		int p = pixel + off;
+		int p;
+		if (off > 0)
+		{
+			p = pixel * mul + off;
+		}
+		else
+		{
+			p = (pixel + off) / mul;
+		}
 		if (min != -1 && p < min)
 		{
 			p = min;
@@ -214,25 +226,6 @@ void Surface::offset(int off, int min, int max)
 		{
 			setPixelIterative(&x, &y, 0);
 		}
-	}
-
-	// Unlock the surface
-	unlock();
-}
-
-/**
- * Multiplies all the colors in the surface by a set factor.
- * @param factor Amount to multiply.
- */
-void Surface::multiply(int factor)
-{
-	// Lock the surface
-	lock();
-	
-	for (int x = 0, y = 0; x < getWidth() && y < getHeight();)
-	{
-		Uint8 pixel = getPixel(x, y);
-		setPixelIterative(&x, &y, pixel * factor);
 	}
 
 	// Unlock the surface

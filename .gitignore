@@ -4,7 +4,9 @@ Thumbs.db
 #Ignore files built by Visual Studio
 *.obj
 *.exe
+*.exp
 *.pdb
+*.dll
 *.user
 *.aps
 *.pch
@@ -20,17 +22,18 @@ Thumbs.db
 *.ilk
 *.log
 *.tlog
+*.zip
 [Dd]ebug*/
 *.lib
 *.sbr
 [Rr]elease*/
-_ReSharper*/
-[Tt]est[Rr]esult*
+[Tt]est[Rr]esults/
+_UpgradeReport_Files/
+_ReSharper.*/
 *.ipch
 [Ii]pch*/
 *.aps
 *.svl*
-*.dll
 *.mvf
 *.*sdf
 *.idc
