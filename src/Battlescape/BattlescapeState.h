@@ -174,6 +174,8 @@ public:
 	void handle(Action *action);
 	/// Displays a popup window.
 	void popup(State *state);
+	/// Checks for casualties in battle.
+	void checkForCasualties(BattleItem *murderweapon, BattleUnit *murderer);
 };
 
 }

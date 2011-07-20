@@ -23,6 +23,7 @@
 #include <vector>
 #include "../Battlescape/Position.h"
 #include "../Ruleset/MapData.h"
+#include "BattleUnit.h"
 
 #define LIGHTLAYERS 3
 
@@ -43,7 +44,7 @@ class Tile
 protected:
 	MapData *_objects[4];
 	int _currentFrame[4];
-	bool _discovered, _checked;
+	bool _discovered[3], _checked;
 	int _light[LIGHTLAYERS];
 	int _lastLight[LIGHTLAYERS];
 	int _smoke;
@@ -88,9 +89,9 @@ public:
 	/// Check if tile is cached.
 	bool isCached();
 	/// Sets the black fog of war status of this tile.
-	void setDiscovered(bool flag);
+	void setDiscovered(bool flag, int part);
 	/// Gets the black fog of war status of this tile.
-	bool isDiscovered();
+	bool isDiscovered(int part);
 	/// Reset light to zero for this tile.
 	void resetLight(int layer);
 	/// Add light to this tile.

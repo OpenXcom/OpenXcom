@@ -278,6 +278,15 @@ void Map::drawTerrain(Surface *surface)
 		bulletHighX = bulletHighX / 16;
 		bulletHighY = bulletHighY / 16;
 		bulletHighZ = bulletHighZ / 24;
+
+		// if the projectile is outside the viewport - center it back on it
+		convertVoxelToScreen(_projectile->getPosition(), &bulletPositionScreen);
+		if (bulletPositionScreen.x < -_spriteWidth || bulletPositionScreen.x > surface->getWidth() ||
+			bulletPositionScreen.y < -_spriteHeight || bulletPositionScreen.y > surface->getHeight()  )
+		{
+			centerOnPosition(Position(bulletLowX, bulletLowY, bulletLowZ), false);
+			_cameraFollowed = true;
+		}
 	}
 
     for (int itZ = beginZ; itZ <= endZ; itZ++)
@@ -302,7 +311,7 @@ void Map::drawTerrain(Surface *surface)
 
 					tile = _save->getTile(mapPosition);
 					// Draw floor
-					if (tile)
+					if (tile && tile->isDiscovered(2))
 					{
 						frame = _tileFloorCache[index];
 						if (frame)
@@ -317,7 +326,6 @@ void Map::drawTerrain(Surface *surface)
 					{
 					    unit = 0;
 					}
-
 
 					// Draw cursor back
 					if (_selectorX == itY && _selectorY == itX && _cursorType != CT_NONE)
@@ -350,7 +358,7 @@ void Map::drawTerrain(Surface *surface)
 					}
 
 					// Draw walls
-					if (tile)
+					if (tile && (tile->isDiscovered(0) || tile->isDiscovered(1)))
 					{
 						frame = _tileWallsCache[index];
 						if (frame)
@@ -441,7 +449,7 @@ void Map::drawTerrain(Surface *surface)
 					}
 
 					// Draw soldier
-					if (unit)
+					if (unit && tile->isDiscovered(2))
 					{
 						frame = _unitCache.at(unit->getId());
 						if (frame)
@@ -460,15 +468,15 @@ void Map::drawTerrain(Surface *surface)
 					// if we can see through the floor, draw the soldier below it if it is on stairs
 					if (itZ > 0 && tile->hasNoFloor())
 					{
-						unit = _save->selectUnit(mapPosition + Position(0, 0, -1));
-						tile = _save->getTile(mapPosition + Position(0, 0, -1));
-						if (unit && tile->getTerrainLevel() < 0)
+						BattleUnit *tunit = _save->selectUnit(mapPosition + Position(0, 0, -1));
+						Tile *ttile = _save->getTile(mapPosition + Position(0, 0, -1));
+						if (tunit && ttile->getTerrainLevel() < 0 && ttile->isDiscovered(2))
 						{
-							frame = _unitCache.at(unit->getId());
+							frame = _unitCache.at(tunit->getId());
 							if (frame)
 							{
 								Position offset;
-								calculateWalkingOffset(unit, &offset);
+								calculateWalkingOffset(tunit, &offset);
 								offset.y += 24;
 								frame->setX(screenPosition.x + offset.x);
 								frame->setY(screenPosition.y + offset.y);
@@ -480,7 +488,6 @@ void Map::drawTerrain(Surface *surface)
 							}
 						}
 					}
-					unit = tile->getUnit();
 
 					// check if we gots explosions
 					for (std::set<Explosion*>::const_iterator i = _explosions.begin(); i != _explosions.end(); ++i)
@@ -535,7 +542,7 @@ void Map::drawTerrain(Surface *surface)
 
 					tile = _save->getTile(mapPosition);
 					// Draw smoke/fire
-					if (tile->getFire() && tile->isDiscovered())
+					if (tile->getFire() && tile->isDiscovered(2))
 					{
 						frameNumber = 0; // see http://www.ufopaedia.org/images/c/cb/Smoke.gif
 						if ((_animFrame / 2) + tile->getAnimationOffset() > 3)
@@ -551,7 +558,7 @@ void Map::drawTerrain(Surface *surface)
 						frame->setY(screenPosition.y);
 						frame->blit(surface);
 					}
-					if (tile->getSmoke() && tile->isDiscovered())
+					if (tile->getSmoke() && tile->isDiscovered(2))
 					{
 						frameNumber = 8 + int(floor((tile->getSmoke() / 5.0) - 0.1)); // see http://www.ufopaedia.org/images/c/cb/Smoke.gif
 						if ((_animFrame / 2) + tile->getAnimationOffset() > 3)
@@ -583,6 +590,12 @@ void Map::drawTerrain(Surface *surface)
 			frame->setX(bulletPositionScreen.x - 64);
 			frame->setY(bulletPositionScreen.y - 64);
 			frame->blit(surface);
+			// if the projectile is outside the viewport - center it back on it
+			if (bulletPositionScreen.x < -_spriteWidth || bulletPositionScreen.x > surface->getWidth() ||
+				bulletPositionScreen.y < -_spriteHeight || bulletPositionScreen.y > surface->getHeight()  )
+			{
+				centerOnPosition(Position(voxelPos.x/16, voxelPos.y/16, voxelPos.z/24), false);
+			}
 		}
 	}
 
@@ -855,7 +868,7 @@ void Map::setViewHeight(int viewheight)
  * Center map on a certain position.
  * @param mapPos Position to center on.
  */
-void Map::centerOnPosition(const Position &mapPos)
+void Map::centerOnPosition(const Position &mapPos, bool redraw)
 {
 	Position screenPos;
 
@@ -868,7 +881,7 @@ void Map::centerOnPosition(const Position &mapPos)
 
 	_viewHeight = mapPos.z;
 
-	draw(true);
+	if (redraw) draw(true);
 }
 
 /**
@@ -1060,7 +1073,7 @@ bool Map::cacheTileSprites(int i)
 			frame->setY(-object->getYOffset());
 			frame->blit(_tileFloorCache[i]);
 
-			_tileFloorCache[i]->setShade(tile->isDiscovered()?tile->getShade():16);
+			_tileFloorCache[i]->setShade(tile->isDiscovered(2)?tile->getShade():16);
 		}
 		else if (_tileFloorCache[i] != 0)
 		{
@@ -1136,15 +1149,16 @@ bool Map::cacheTileSprites(int i)
 				frame->blit(_tileWallsCache[i]);
 			}
 
-			if (door && tile->getShade() > 8 && tile->isDiscovered()) // don't shade doors too dark, so you can still see them
+			if (door && (tile->isDiscovered(0)||tile->isDiscovered(1))) // don't shade doors too dark, so you can still see them
 			{
-				_tileWallsCache[i]->setShade(8);
+				_tileWallsCache[i]->setShade(0);
 			}
 			else
 			{
-				_tileWallsCache[i]->setShade(tile->isDiscovered()?tile->getShade():16);
+				_tileWallsCache[i]->setShade((tile->isDiscovered(2))?tile->getShade():16);
 			}
-		}else if (_tileWallsCache[i] != 0)
+		}
+		else if (_tileWallsCache[i] != 0)
 		{
 			_tileWallsCache[i]->clear();
 		}
@@ -1201,7 +1215,7 @@ void Map::cacheUnits()
 			unitSprite->draw();
 			unitSprite->blit(_unitCache.at((*i)->getId()));
 
-			_unitCache.at((*i)->getId())->setShade(_save->getTile((*i)->getPosition())->isDiscovered()?_save->getTile((*i)->getPosition())->getShade():16);
+			_unitCache.at((*i)->getId())->setShade(_save->getTile((*i)->getPosition())->isDiscovered(2)?_save->getTile((*i)->getPosition())->getShade():16);
 			(*i)->setCached(true);
 		}
 	}
@@ -1235,5 +1249,11 @@ std::set<Explosion*> *Map::getExplosions()
 	return &_explosions;
 }
 
+bool Map::didCameraFollow()
+{
+	bool value = _cameraFollowed;
+	_cameraFollowed = false;
+	return value;
+}
 
 }

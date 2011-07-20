@@ -39,7 +39,7 @@ private:
 	BattleItem *_item;
 public:
 	/// Creates a new ExplosionBState class
-	ExplosionBState(BattlescapeState *parent, Position center, BattleItem *item);
+	ExplosionBState(BattlescapeState *parent, Position center, BattleItem *item, BattleUnit *unit);
 	/// Cleans up the ExplosionBState.
 	~ExplosionBState();
 	/// Initializes the state.

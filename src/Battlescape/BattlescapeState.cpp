@@ -30,6 +30,7 @@
 #include "TerrainModifier.h"
 #include "ActionMenuState.h"
 #include "UnitInfoState.h"
+#include "UnitFallBState.h"
 #include "../Engine/Game.h"
 #include "../Engine/Music.h"
 #include "../Engine/Language.h"
@@ -380,11 +381,11 @@ void BattlescapeState::mapClick(Action *action)
 			_action.target = pos;
 			_map->setCursorType(CT_NONE);
 			_game->getCursor()->setVisible(false);
-			_states.push_back(new ProjectileFlyBState(this));
-			if (_action.type == BA_AUTOSHOT)
+			_states.push_back(new ProjectileFlyBState(this, _action));
+			if (_action.type == BA_AUTOSHOT) // TODO - this is not very good, an autoshot gets 3 reaction shots this way
 			{
-				_states.push_back(new ProjectileFlyBState(this));
-				_states.push_back(new ProjectileFlyBState(this));
+				_states.push_back(new ProjectileFlyBState(this, _action));
+				_states.push_back(new ProjectileFlyBState(this, _action));
 			}
 			statePushFront(new UnitTurnBState(this));
 		}
@@ -485,6 +486,11 @@ void BattlescapeState::btnKneelClick(Action *action)
 			bu->kneel(!bu->isKneeled());
 			_map->cacheUnits();
 			updateSoldierInfo(bu);
+			BattleAction action;
+			if (_battleGame->getTerrainModifier()->checkReactionFire(bu, &action))
+			{
+				statePushBack(new ProjectileFlyBState(this, action));
+			}
 		}
 	}
 }
@@ -575,7 +581,7 @@ void BattlescapeState::endTurn()
 				p.x = _battleGame->getTiles()[i]->getPosition().x*16 + 8;
 				p.y = _battleGame->getTiles()[i]->getPosition().y*16 + 8;
 				p.z = _battleGame->getTiles()[i]->getPosition().z*24 + _battleGame->getTiles()[i]->getTerrainLevel();
-				statePushNext(new ExplosionBState(this, p, (*it)));
+				statePushNext(new ExplosionBState(this, p, (*it), (*it)->getPreviousOwner()));
 				it = _battleGame->getTiles()[i]->getInventory()->erase(it);
 				statePushBack(0);
 				return;
@@ -598,7 +604,7 @@ void BattlescapeState::endTurn()
 							p.x = (*i)->getPosition().x*16 + 8;
 							p.y = (*i)->getPosition().y*16 + 8;
 							p.z = (*i)->getPosition().z*24 + 18;
-							statePushNext(new ExplosionBState(this, p, (*it)));
+							statePushNext(new ExplosionBState(this, p, (*it), (*it)->getPreviousOwner()));
 							it = _battleGame->getItems()->erase(it);
 							statePushBack(0);
 							return;
@@ -616,12 +622,66 @@ void BattlescapeState::endTurn()
 	}
 
 	_battleGame->endTurn();
+	checkForCasualties(0, 0);
+
 	updateSoldierInfo(_battleGame->getSelectedUnit());
 	if (_battleGame->getSelectedUnit())
 	{
 		_map->centerOnPosition(_battleGame->getSelectedUnit()->getPosition());
 	}
 	_game->pushState(new NextTurnState(_game, _battleGame));
+}
+
+
+/**
+ * Checks for casualties and adjusts morale accordingly.
+ * @param murderweapon
+ * @param murderer
+ */
+void BattlescapeState::checkForCasualties(BattleItem *murderweapon, BattleUnit *murderer)
+{
+	// TODO : include rank bonusses and penalties !!
+	for (std::vector<BattleUnit*>::iterator j = _battleGame->getUnits()->begin(); j != _battleGame->getUnits()->end(); ++j)
+	{
+		if ((*j)->getHealth() == 0 && (*j)->getStatus() != STATUS_DEAD)
+		{
+			BattleUnit *victim = (*j);
+
+			if (murderer)
+			{
+				// if there is a known murderer, he will get a morale bonus if he is of a different faction (what with neutral?)
+				if (victim->getFaction() == FACTION_PLAYER && murderer->getFaction() == FACTION_HOSTILE ||
+					victim->getFaction() == FACTION_HOSTILE && murderer->getFaction() == FACTION_PLAYER)
+				{
+					murderer->moraleChange(+20);
+				}
+				// murderer will get a penalty with friendly fire
+				if (victim->getFaction() == murderer->getFaction())
+				{
+					murderer->moraleChange(-20);
+				}
+			}
+
+			for (std::vector<BattleUnit*>::iterator i = _battleGame->getUnits()->begin(); i != _battleGame->getUnits()->end(); ++i)
+			{
+				// the losing squad all get a morale loss
+				if ((*i)->getFaction() == victim->getFaction())
+				{
+					(*i)->moraleChange(-(22 - ((*i)->getUnit()->getBravery() / 10)*2));
+				}
+				// the winning squad all get a morale increase
+				if ((*i)->getFaction() != victim->getFaction())
+				{
+					(*i)->moraleChange(+10);
+				}
+			}
+
+			if (murderweapon)
+				statePushNext(new UnitFallBState(this, (*j), murderweapon->getRules()->getDamageType() == DT_HE)); // explosions insta-kill a unit
+			else
+				statePushNext(new UnitFallBState(this, (*j), false));
+		}
+	}
 }
 
 /**
@@ -768,6 +828,8 @@ void BattlescapeState::updateSoldierInfo(BattleUnit *battleUnit)
 		_barMorale->clear();
 		_btnLeftHandItem->clear();
 		_btnRightHandItem->clear();
+		_numAmmoLeft->clear();
+		_numAmmoRight->clear();
 		return;
 	}
 
@@ -1059,7 +1121,7 @@ void BattlescapeState::popState()
 	{
 		if (_action.targeting && _battleGame->getSelectedUnit() && !actionFailed)
 		{
-			_battleGame->getSelectedUnit()->spendTimeUnits(_action.TU, _battleGame->getDebugMode());
+			_action.actor->spendTimeUnits(_action.TU, _battleGame->getDebugMode());
 		}
 		if (_action.type == BA_THROW && !actionFailed)
 		{

@@ -900,6 +900,42 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	scorpse->setSizeY(3);
 	scorpse->setWeight(30);
 
+	RuleItem *ppistol = new RuleItem("STR_PLASMA_PISTOL");
+	ppistol->setSize(0.1f);
+	ppistol->setCost(800);
+	ppistol->setBigSprite(32);
+	ppistol->setHandSprite(104);
+	ppistol->setFloorSprite(31);
+	ppistol->setBulletSprite(8);
+	ppistol->setFireSound(18);
+	ppistol->setAccuracyAuto(50);
+	ppistol->setTUAuto(30);
+	ppistol->setAccuracySnap(65);
+	ppistol->setTUSnap(30);
+	ppistol->setAccuracyAimed(85);
+	ppistol->setTUAimed(60);
+	ppistol->getCompatibleAmmo()->push_back("STR_PLASMA_PISTOL_CLIP");
+	ppistol->setBattleType(BT_FIREARM);
+	ppistol->setSizeX(1);
+	ppistol->setSizeY(2);
+	ppistol->setWeight(3);
+
+	RuleItem *ppclip = new RuleItem("STR_PLASMA_PISTOL_CLIP");
+	ppclip->setSize(0.1f);
+	ppclip->setCost(70);
+	ppclip->setBigSprite(34);
+	ppclip->setHandSprite(120);
+	ppclip->setPower(52);
+	ppclip->setDamageType(DT_PLASMA);
+	ppclip->setBattleType(BT_AMMO);
+	ppclip->setHitAnimation(46);
+	ppclip->setHitSound(19);
+	ppclip->setSizeX(1);
+	ppclip->setSizeY(1);
+	ppclip->setClipSize(26);
+	ppclip->setWeight(3);
+
+
 	_items.insert(std::pair<std::string, RuleItem*>("STR_STINGRAY_LAUNCHER", slauncher));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_AVALANCHE_LAUNCHER", alauncher));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_CANNON", icannon));
@@ -922,6 +958,8 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_items.insert(std::pair<std::string, RuleItem*>("STR_SMOKE_GRENADE", sgrenade));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_CORPSE", corpse));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_SECTOID_CORPSE", scorpse));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_PLASMA_PISTOL", ppistol));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_PLASMA_PISTOL_CLIP", ppclip));
 
 	// Add UFOs
 	RuleUfo *sscout = new RuleUfo("STR_SMALL_SCOUT");

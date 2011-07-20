@@ -27,7 +27,7 @@ namespace OpenXcom
  * Initializes a item of the specified type.
  * @param rules Pointer to ruleset.
  */
-BattleItem::BattleItem(RuleItem *rules) : _rules(rules), _owner(0), _ammoItem(0)
+BattleItem::BattleItem(RuleItem *rules) : _rules(rules), _owner(0), _previousOwner(0), _ammoItem(0)
 {
 	_itemProperty[0] = 0;
 	_itemProperty[1] = 0;
@@ -137,16 +137,22 @@ bool BattleItem::spendBullet()
 		return true;
 }
 
-
 /// Gets the item's owner.
 BattleUnit *BattleItem::getOwner() const
 {
 	return _owner;
 }
 
+/// Gets the item's previous owner.
+BattleUnit *BattleItem::getPreviousOwner() const
+{
+	return _previousOwner;
+}
+
 /// Sets the item's owner.
 void BattleItem::setOwner(BattleUnit *owner)
 {
+	_previousOwner = _owner;
 	_owner = owner;
 }
 

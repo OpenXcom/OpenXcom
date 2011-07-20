@@ -21,6 +21,7 @@
 
 #include "BattleState.h"
 #include "Position.h"
+#include "BattlescapeState.h"
 
 namespace OpenXcom
 {
@@ -35,9 +36,10 @@ private:
 	BattleUnit *_unit;
 	bool validThrowRange();
 	BattleItem *_ammo;
+	BattleAction _action;
 public:
 	/// Creates a new ProjectileFly class
-	ProjectileFlyBState(BattlescapeState *parent);
+	ProjectileFlyBState(BattlescapeState *parent, BattleAction action);
 	/// Cleans up the ProjectileFly.
 	~ProjectileFlyBState();
 	/// Initializes the state.

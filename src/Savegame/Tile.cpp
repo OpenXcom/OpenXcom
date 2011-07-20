@@ -33,7 +33,7 @@ namespace OpenXcom
 * constructor
 * @param pos Position.
 */
-Tile::Tile(const Position& pos): _discovered(false), _smoke(0), _fire(0),  _explosive(0), _pos(pos), _cached(false), _unit(0)
+Tile::Tile(const Position& pos): _smoke(0), _fire(0),  _explosive(0), _pos(pos), _cached(false), _unit(0)
 {
 	for (int i = 0; i < 4; i++)
 	{
@@ -45,6 +45,10 @@ Tile::Tile(const Position& pos): _discovered(false), _smoke(0), _fire(0),  _expl
 		_light[layer] = 0;
 		_lastLight[layer] = 0;
 	}
+	_discovered[0] = false;
+	_discovered[1] = false;
+	_discovered[2] = false;
+
 }
 
 /**
@@ -251,12 +255,18 @@ bool Tile::isCached()
 /**
  * Sets the tile's cache flag. - TODO: set this for each object seperatly?
  * @param flag true/false
+ * @param part 0-2 westwall/northwall/content+floor
  */
-void Tile::setDiscovered(bool flag)
+void Tile::setDiscovered(bool flag, int part)
 {
-	if (_discovered != flag)
+	if (_discovered[part] != flag)
 	{
-		_discovered = flag;
+		_discovered[part] = flag;
+		if (part == 2)
+		{
+			_discovered[0] = flag;
+			_discovered[1] = flag;
+		}
 		setCached(false);
 		// if light on tile changes, units and objects on it change light too
 		if (_unit != 0)
@@ -268,11 +278,12 @@ void Tile::setDiscovered(bool flag)
 
 /**
  * Get the black fog of war state of this tile.
+ * @param part 0-2 westwall/northwall/content+floor
  * @return bool True = discovered the tile.
  */
-bool Tile::isDiscovered()
+bool Tile::isDiscovered(int part)
 {
-	return _discovered;
+	return _discovered[part];
 }
 
 

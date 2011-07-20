@@ -138,6 +138,8 @@ public:
 	bool isOut() const;
 	/// Spend time units if it can.
 	bool spendTimeUnits(int tu, bool debugmode);
+	/// Spend energy if it can.
+	bool spendEnergy(int tu, bool debugmode);
 	/// Set time units.
 	void setTimeUnits(int tu);
 	/// Add unit to visible units.
@@ -156,6 +158,12 @@ public:
 	int getArmor(UnitSide side);
 	/// Get total number of fatal wounds.
 	int getFatalWounds();
+	/// Get the current reaction score.
+	double getReactionScore() const;
+	/// Prepare for a new turn.
+	void prepareNewTurn();
+	/// Morale change
+	void moraleChange(int change);
 };
 
 }
