@@ -143,6 +143,7 @@
     <ClCompile Include="Battlescape\BulletSprite.cpp" />
     <ClCompile Include="Battlescape\Explosion.cpp" />
     <ClCompile Include="Battlescape\ExplosionBState.cpp" />
+    <ClCompile Include="Battlescape\InventoryState.cpp" />
     <ClCompile Include="Battlescape\Map.cpp" />
     <ClCompile Include="Battlescape\NextTurnState.cpp" />
     <ClCompile Include="Battlescape\Pathfinding.cpp" />
@@ -321,6 +322,7 @@
     <ClInclude Include="Battlescape\BulletSprite.h" />
     <ClInclude Include="Battlescape\Explosion.h" />
     <ClInclude Include="Battlescape\ExplosionBState.h" />
+    <ClInclude Include="Battlescape\InventoryState.h" />
     <ClInclude Include="Battlescape\Map.h" />
     <ClInclude Include="Battlescape\NextTurnState.h" />
     <ClInclude Include="Battlescape\Pathfinding.h" />

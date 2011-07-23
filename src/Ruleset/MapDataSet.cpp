@@ -23,7 +23,6 @@
 #include "../Engine/Exception.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/CrossPlatform.h"
-#include "../Engine/Options.h"
 #include "../Resource/ResourcePack.h"
 
 namespace OpenXcom
@@ -147,10 +146,10 @@ void MapDataSet::load(ResourcePack *res)
 
 	// Load Terrain Data from MCD file
 	std::stringstream s;
-	s << Options::getDataFolder() << "TERRAIN/" << _name << ".MCD";
+	s << "TERRAIN/" << _name << ".MCD";
 
 	// Load file
-	std::ifstream mapFile (CrossPlatform::insensitive(s.str()).c_str(), std::ios::in | std::ios::binary);
+	std::ifstream mapFile (CrossPlatform::getDataFile(s.str()).c_str(), std::ios::in | std::ios::binary);
 	if (!mapFile)
 	{
 		throw Exception("Failed to load MCD");
@@ -207,10 +206,10 @@ void MapDataSet::load(ResourcePack *res)
 
 	// Load terrain sprites/surfaces/PCK files into a surfaceset
 	std::stringstream s1,s2;
-	s1 << Options::getDataFolder() << "TERRAIN/" << _name << ".PCK";
-	s2 << Options::getDataFolder() << "TERRAIN/" << _name << ".TAB";
+	s1 << "TERRAIN/" << _name << ".PCK";
+	s2 << "TERRAIN/" << _name << ".TAB";
 	_surfaceSet = new SurfaceSet(32, 40);
-	_surfaceSet->loadPck(CrossPlatform::insensitive(s1.str()), CrossPlatform::insensitive(s2.str()));
+	_surfaceSet->loadPck(CrossPlatform::getDataFile(s1.str()), CrossPlatform::getDataFile(s2.str()));
 
 }
 

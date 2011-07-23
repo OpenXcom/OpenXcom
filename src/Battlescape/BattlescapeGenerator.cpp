@@ -46,7 +46,6 @@
 #include "../Resource/XcomResourcePack.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Options.h"
 #include "../Engine/CrossPlatform.h"
 
 namespace OpenXcom
@@ -577,12 +576,12 @@ int BattlescapeGenerator::loadMAP(MapBlock *mapblock, int xoff, int yoff, RuleTe
 	char size[3];
 	unsigned char value[4];
 	std::stringstream filename;
-	filename << Options::getDataFolder() << "MAPS/" << mapblock->getName() << ".MAP";
+	filename << "MAPS/" << mapblock->getName() << ".MAP";
 	std::string mapDataFileName;
 	int terrainObjectID;
 
 	// Load file
-	std::ifstream mapFile (CrossPlatform::insensitive(filename.str()).c_str(), std::ios::in| std::ios::binary);
+	std::ifstream mapFile (CrossPlatform::getDataFile(filename.str()).c_str(), std::ios::in| std::ios::binary);
 	if (!mapFile)
 	{
 		throw Exception("Failed to load MAP");
@@ -650,10 +649,10 @@ void BattlescapeGenerator::loadRMP(MapBlock *mapblock, int xoff, int yoff)
 	int id = 0;
 	char value[24];
 	std::stringstream filename;
-	filename << Options::getDataFolder() << "ROUTES/" << mapblock->getName() << ".RMP";
+	filename << "ROUTES/" << mapblock->getName() << ".RMP";
 
 	// Load file
-	std::ifstream mapFile (CrossPlatform::insensitive(filename.str()).c_str(), std::ios::in| std::ios::binary);
+	std::ifstream mapFile (CrossPlatform::getDataFile(filename.str()).c_str(), std::ios::in| std::ios::binary);
 	if (!mapFile)
 	{
 		throw Exception("Failed to load RMP");

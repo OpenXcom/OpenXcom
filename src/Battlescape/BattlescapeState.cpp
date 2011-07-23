@@ -30,6 +30,7 @@
 #include "TerrainModifier.h"
 #include "ActionMenuState.h"
 #include "UnitInfoState.h"
+#include "InventoryState.h"
 #include "../Engine/Game.h"
 #include "../Engine/Music.h"
 #include "../Engine/Language.h"
@@ -58,7 +59,6 @@
 #include "../Engine/Timer.h"
 #include "../Interface/FpsCounter.h"
 
-
 namespace OpenXcom
 {
 
@@ -77,12 +77,22 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_rank = new Surface(26,23,107,177);
 
 	// Create buttons
-	_btnAbort = new InteractiveSurface(32, 16, 240, 160);
-	_btnEndTurn = new InteractiveSurface(32, 16, 240, 144);
+	_btnUnitUp = new InteractiveSurface(32, 16, 48, 144);
+	_btnUnitDown = new InteractiveSurface(32, 16, 48, 160);
 	_btnMapUp = new InteractiveSurface(32, 16, 80, 144);
 	_btnMapDown = new InteractiveSurface(32, 16, 80, 160);
+	_btnShowMap = new InteractiveSurface(32, 16, 112, 144);
+	_btnKneel = new InteractiveSurface(32, 16, 112, 160);
+	_btnInventory = new InteractiveSurface(32, 16, 144, 144);
+	_btnCenter = new InteractiveSurface(32, 16, 144, 160);
 	_btnNextSoldier = new InteractiveSurface(32, 16, 176, 144);
-	_btnCenter = new InteractiveSurface(32, 16, 145, 160);
+	_btnNextStop = new InteractiveSurface(32, 16, 176, 160);
+	_btnShowLayers = new InteractiveSurface(32, 16, 208, 144);
+	_btnHelp = new InteractiveSurface(32, 16, 208, 160);
+	_btnEndTurn = new InteractiveSurface(32, 16, 240, 144);
+	_btnAbort = new InteractiveSurface(32, 16, 240, 160);
+
+	_btnStats = new InteractiveSurface(166, 24, 106, 176);
 	_btnReserveNone = new ImageButton(28, 11, 49, 177);
 	_btnReserveSnap = new ImageButton(28, 11, 78, 177);
 	_btnReserveAimed = new ImageButton(28, 11, 49, 189);
@@ -91,7 +101,6 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_numAmmoLeft = new NumberText(30, 5, 8, 149);
 	_btnRightHandItem = new InteractiveSurface(32, 48, 280, 149);
 	_numAmmoRight = new NumberText(30, 5, 280, 149);
-	_btnKneel = new InteractiveSurface(32, 16, 113, 160);
 	for (int i = 0; i < 10; ++i)
 	{
 		_btnVisibleUnit[i] = new InteractiveSurface(15, 12, 300, 128 - (i * 13));
@@ -150,13 +159,21 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	add(_icons);
 	add(_numLayers);
 	add(_rank);
-	add(_btnAbort);
-	add(_btnEndTurn);
+	add(_btnUnitUp);
+	add(_btnUnitDown);
 	add(_btnMapUp);
 	add(_btnMapDown);
-	add(_btnNextSoldier);
-	add(_btnCenter);
+	add(_btnShowMap);
 	add(_btnKneel);
+	add(_btnInventory);
+	add(_btnCenter);
+	add(_btnNextSoldier);
+	add(_btnNextStop);
+	add(_btnShowLayers);
+	add(_btnHelp);
+	add(_btnEndTurn);
+	add(_btnAbort);
+	add(_btnStats);
 	add(_txtName);
 	add(_numTimeUnits);
 	add(_numEnergy);
@@ -202,15 +219,24 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_numAmmoRight->setColor(2);
 	_numAmmoRight->setValue(999);
 
-	_btnAbort->onMouseClick((ActionHandler)&BattlescapeState::btnAbortClick);
-	_btnEndTurn->onMouseClick((ActionHandler)&BattlescapeState::btnEndTurnClick);
+	_btnUnitUp->onMouseClick((ActionHandler)&BattlescapeState::btnUnitUpClick);
+	_btnUnitDown->onMouseClick((ActionHandler)&BattlescapeState::btnUnitDownClick);
 	_btnMapUp->onMouseClick((ActionHandler)&BattlescapeState::btnMapUpClick);
 	_btnMapDown->onMouseClick((ActionHandler)&BattlescapeState::btnMapDownClick);
-	_btnNextSoldier->onMouseClick((ActionHandler)&BattlescapeState::btnNextSoldierClick);
-	_btnCenter->onMouseClick((ActionHandler)&BattlescapeState::btnCenterClick);
+	_btnShowMap->onMouseClick((ActionHandler)&BattlescapeState::btnShowMapClick);
 	_btnKneel->onMouseClick((ActionHandler)&BattlescapeState::btnKneelClick);
+	_btnInventory->onMouseClick((ActionHandler)&BattlescapeState::btnInventoryClick);
+	_btnCenter->onMouseClick((ActionHandler)&BattlescapeState::btnCenterClick);
+	_btnNextSoldier->onMouseClick((ActionHandler)&BattlescapeState::btnNextSoldierClick);
+	_btnNextStop->onMouseClick((ActionHandler)&BattlescapeState::btnNextStopClick);
+	_btnShowLayers->onMouseClick((ActionHandler)&BattlescapeState::btnShowLayersClick);
+	_btnHelp->onMouseClick((ActionHandler)&BattlescapeState::btnHelpClick);
+	_btnEndTurn->onMouseClick((ActionHandler)&BattlescapeState::btnEndTurnClick);
+	_btnAbort->onMouseClick((ActionHandler)&BattlescapeState::btnAbortClick);
+	_btnStats->onMouseClick((ActionHandler)&BattlescapeState::btnStatsClick);
 	_btnLeftHandItem->onMouseClick((ActionHandler)&BattlescapeState::btnLeftHandItemClick);
 	_btnRightHandItem->onMouseClick((ActionHandler)&BattlescapeState::btnRightHandItemClick);
+
 	for (int i = 0; i < 10; ++i)
 	{
 		_btnVisibleUnit[i]->onMouseClick((ActionHandler)&BattlescapeState::btnVisibleUnitClick);
@@ -289,6 +315,7 @@ void BattlescapeState::init()
 	_map->focus();
 	_map->cacheUnits();
 	_map->draw(true);
+	updateSoldierInfo(_battleGame->getSelectedUnit());
 }
 
 /**
@@ -344,17 +371,6 @@ void BattlescapeState::mapClick(Action *action)
 		{
 			_states.front()->cancel();
 			return;
-		}
-	}
-
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT &&
-		action->getYMouse() / action->getYScale() > 180 &&
-		action->getXMouse() / action->getXScale() > 110 &&
-		action->getXMouse() / action->getXScale() < 270)
-	{
-		if (_battleGame->getSelectedUnit())
-		{
-			popup(new UnitInfoState(_game, _battleGame->getSelectedUnit()));
 		}
 	}
 
@@ -493,9 +509,12 @@ void BattlescapeState::btnKneelClick(Action *action)
  * Go to soldier info screen.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnSoldierClick(Action *action)
+void BattlescapeState::btnInventoryClick(Action *action)
 {
-
+	if (_battleGame->getSelectedUnit())
+	{
+		_game->pushState(new InventoryState(_game));
+	}
 }
 
 /**
@@ -637,6 +656,18 @@ void BattlescapeState::btnAbortClick(Action *action)
 }
 
 /**
+ * Show selected soldier info.
+ * @param action Pointer to an action.
+ */
+void BattlescapeState::btnStatsClick(Action *action)
+{
+	if (_battleGame->getSelectedUnit())
+	{
+		popup(new UnitInfoState(_game, _battleGame->getSelectedUnit()));
+	}
+}
+
+/**
  * Shows action popup menu. When clicked, create the action.
  * @param action Pointer to an action.
  */
@@ -742,7 +773,6 @@ void BattlescapeState::setupCursor()
  */
 void BattlescapeState::updateSoldierInfo(BattleUnit *battleUnit)
 {
-
 	for (int i = 0; i < 10; ++i)
 	{
 		_btnVisibleUnit[i]->hide();

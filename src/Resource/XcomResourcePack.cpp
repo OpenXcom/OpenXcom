@@ -20,7 +20,6 @@
 #include <sstream>
 #include <sys/stat.h>
 #include "../Engine/CrossPlatform.h"
-#include "../Engine/Options.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Font.h"
 #include "../Engine/Surface.h"
@@ -54,17 +53,17 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 	for (int i = 0; i < 5; i++)
 	{
 		std::stringstream s1, s2;
-		s1 << Options::getDataFolder() << "GEODATA/PALETTES.DAT";
+		s1 << "GEODATA/PALETTES.DAT";
 		s2 << "PALETTES.DAT_" << i;
 		_palettes[s2.str()] = new Palette();
-		_palettes[s2.str()]->loadDat(CrossPlatform::insensitive(s1.str()), 256, Palette::palOffset(i));
+		_palettes[s2.str()]->loadDat(CrossPlatform::getDataFile(s1.str()), 256, Palette::palOffset(i));
 	}
 
 	std::stringstream s1, s2;
-	s1 << Options::getDataFolder() << "GEODATA/BACKPALS.DAT";
+	s1 << "GEODATA/BACKPALS.DAT";
 	s2 << "BACKPALS.DAT";
 	_palettes[s2.str()] = new Palette();
-	_palettes[s2.str()]->loadDat(CrossPlatform::insensitive(s1.str()), 128);
+	_palettes[s2.str()]->loadDat(CrossPlatform::getDataFile(s1.str()), 128);
 	
 	// Load fonts
 	std::string font[] = {"BIGLETS.DAT",
@@ -73,12 +72,12 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 	for (int i = 0; i < 2; i++)
 	{
 		std::stringstream s;
-		s << Options::getDataFolder() << "GEODATA/" << font[i];
+		s << "GEODATA/" << font[i];
 		if (font[i] == "BIGLETS.DAT")
 			_fonts[font[i]] = new Font(16, 16, 173);
 		else if (font[i] == "SMALLSET.DAT")
 			_fonts[font[i]] = new Font(8, 9, 173, -1);
-		_fonts[font[i]]->getSurface()->loadScr(CrossPlatform::insensitive(s.str()));
+		_fonts[font[i]]->getSurface()->loadScr(CrossPlatform::getDataFile(s.str()));
 		_fonts[font[i]]->load();
 	}
 		
@@ -92,18 +91,18 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 	for (int i = 1; i < 5; i++)
 	{
 		std::stringstream s1, s2;
-		s1 << Options::getDataFolder() << "Language/" << lang[i] << ".geo";
+		s1 << "Language/" << lang[i] << ".geo";
 		s2 << lang[i] << ".geo";
 		_surfaces[s2.str()] = new Surface(64, 154);
-		_surfaces[s2.str()]->loadScr(CrossPlatform::insensitive(s1.str()));
+		_surfaces[s2.str()]->loadScr(CrossPlatform::getDataFile(s1.str()));
 	}
 
 	// Load surfaces
 	{
 		std::stringstream s;
-		s << Options::getDataFolder() << "GEODATA/" << "INTERWIN.DAT";
+		s << "GEODATA/" << "INTERWIN.DAT";
 		_surfaces["INTERWIN.DAT"] = new Surface(160, 556);
-		_surfaces["INTERWIN.DAT"]->loadScr(CrossPlatform::insensitive(s.str()));
+		_surfaces["INTERWIN.DAT"]->loadScr(CrossPlatform::getDataFile(s.str()));
 	}
 
 	std::string scrs[] = {"BACK01.SCR",
@@ -129,9 +128,9 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 	for (int i = 0; i < 19; i++)
 	{
 		std::stringstream s;
-		s << Options::getDataFolder() << "GEOGRAPH/" << scrs[i];
+		s << "GEOGRAPH/" << scrs[i];
 		_surfaces[scrs[i]] = new Surface(320, 200);
-		_surfaces[scrs[i]]->loadScr(CrossPlatform::insensitive(s.str()));
+		_surfaces[scrs[i]]->loadScr(CrossPlatform::getDataFile(s.str()));
 	}
 
 	std::string spks[] = {"UP001.SPK",
@@ -181,9 +180,9 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 	for (int i = 0; i < 43; i++)
 	{
 		std::stringstream s;
-		s << Options::getDataFolder() << "GEOGRAPH/" << spks[i];
+		s << "GEOGRAPH/" << spks[i];
 		_surfaces[spks[i]] = new Surface(320, 200);
-		_surfaces[spks[i]]->loadSpk(CrossPlatform::insensitive(s.str()));
+		_surfaces[spks[i]]->loadSpk(CrossPlatform::getDataFile(s.str()));
 	}
 
 	// Load surface sets
@@ -194,28 +193,28 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 	for (int i = 0; i < 3; i++)
 	{
 		std::stringstream s;
-		s << Options::getDataFolder() << "GEOGRAPH/" << sets[i];
+		s << "GEOGRAPH/" << sets[i];
 
 		std::string ext = sets[i].substr(sets[i].length()-3, sets[i].length());
 		if (ext == "PCK")
 		{
 			std::string tab = sets[i].substr(0, sets[i].length()-4) + ".TAB";
 			std::stringstream s2;
-			s2 << Options::getDataFolder() << "GEOGRAPH/" << tab;
+			s2 << "GEOGRAPH/" << tab;
 			_sets[sets[i]] = new SurfaceSet(32, 40);
-			_sets[sets[i]]->loadPck(CrossPlatform::insensitive(s.str()), CrossPlatform::insensitive(s2.str()));
+			_sets[sets[i]]->loadPck(CrossPlatform::getDataFile(s.str()), CrossPlatform::getDataFile(s2.str()));
 		}
 		else
 		{
 			_sets[sets[i]] = new SurfaceSet(32, 32);
-			_sets[sets[i]]->loadDat(CrossPlatform::insensitive(s.str()));
+			_sets[sets[i]]->loadDat(CrossPlatform::getDataFile(s.str()));
 		}
 	}
 
 	// Load polygons
 	std::stringstream s;
-	s << Options::getDataFolder() << "GEODATA/" << "WORLD.DAT";
-	Globe::loadDat(CrossPlatform::insensitive(s.str()), &_polygons);
+	s << "GEODATA/" << "WORLD.DAT";
+	Globe::loadDat(CrossPlatform::getDataFile(s.str()), &_polygons);
 
 	// Load polylines (extracted from game)
 	// -10 = Start of line
@@ -306,12 +305,12 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 	GMCatFile *gmcat = 0;
 
 	std::stringstream musDos;
-	musDos << Options::getDataFolder() << "SOUND/GM.CAT";
+	musDos << "SOUND/GM.CAT";
 	struct stat musInfo;
-	if (stat(CrossPlatform::insensitive(musDos.str()).c_str(), &musInfo) == 0)
+	if (stat(CrossPlatform::getDataFile(musDos.str()).c_str(), &musInfo) == 0)
 	{
 		cat = true;
-		gmcat = new GMCatFile(CrossPlatform::insensitive(musDos.str()).c_str());
+		gmcat = new GMCatFile(CrossPlatform::getDataFile(musDos.str()).c_str());
 	}
 	else
 	{
@@ -330,11 +329,11 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 			for (int j = 0; j < 3; j++)
 			{
 				std::stringstream s;
-				s << Options::getDataFolder() << "SOUND/" << mus[i] << "." << exts[j];
+				s << "SOUND/" << mus[i] << "." << exts[j];
 				struct stat info;
-				if (stat(CrossPlatform::insensitive(s.str()).c_str(), &info) == 0) 
+				if (stat(CrossPlatform::getDataFile(s.str()).c_str(), &info) == 0) 
 				{
-					_musics[mus[i]]->load(CrossPlatform::insensitive(s.str()));
+					_musics[mus[i]]->load(CrossPlatform::getDataFile(s.str()));
 					break;
 				}
 			}
@@ -358,15 +357,15 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 	bool wav = true;
 
 	std::stringstream win, dos;
-	win << Options::getDataFolder() << "SOUND/" << catsWin[0];
-	dos << Options::getDataFolder() << "SOUND/" << catsDos[0];
+	win << "SOUND/" << catsWin[0];
+	dos << "SOUND/" << catsDos[0];
 	struct stat sndInfo;
-	if (stat(CrossPlatform::insensitive(win.str()).c_str(), &sndInfo) == 0)
+	if (stat(CrossPlatform::getDataFile(win.str()).c_str(), &sndInfo) == 0)
 	{
 		cats = catsWin;
 		wav = true;
 	}
-	else if (stat(CrossPlatform::insensitive(dos.str()).c_str(), &sndInfo) == 0)
+	else if (stat(CrossPlatform::getDataFile(dos.str()).c_str(), &sndInfo) == 0)
 	{
 		cats = catsDos;
 		wav = false;
@@ -381,9 +380,9 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 		else
 		{
 			std::stringstream s;
-			s << Options::getDataFolder() << "SOUND/" << cats[i];
+			s << "SOUND/" << cats[i];
 			_sounds[catsId[i]] = new SoundSet();
-			_sounds[catsId[i]]->loadCat(CrossPlatform::insensitive(s.str()), wav);
+			_sounds[catsId[i]]->loadCat(CrossPlatform::getDataFile(s.str()), wav);
 		}
 	}
 
@@ -407,35 +406,35 @@ void XcomResourcePack::loadBattlescapeResources()
 {
 	// Load Battlescape ICONS
 	std::stringstream s;
-	s << Options::getDataFolder() << "UFOGRAPH/" << "ICONS.PCK";
+	s << "UFOGRAPH/" << "ICONS.PCK";
 	_surfaces["ICONS.PCK"] = new Surface(320, 200);
-	_surfaces["ICONS.PCK"]->loadSpk(CrossPlatform::insensitive(s.str()));
+	_surfaces["ICONS.PCK"]->loadSpk(CrossPlatform::getDataFile(s.str()));
 
 	s.str("");
 	std::stringstream s2;
-	s << Options::getDataFolder() << "UFOGRAPH/" << "CURSOR.PCK";
-	s2 << Options::getDataFolder() << "UFOGRAPH/" << "CURSOR.TAB";
+	s << "UFOGRAPH/" << "CURSOR.PCK";
+	s2 << "UFOGRAPH/" << "CURSOR.TAB";
 	_sets["CURSOR.PCK"] = new SurfaceSet(32, 40);
-	_sets["CURSOR.PCK"]->loadPck(CrossPlatform::insensitive(s.str()), CrossPlatform::insensitive(s2.str()));
+	_sets["CURSOR.PCK"]->loadPck(CrossPlatform::getDataFile(s.str()), CrossPlatform::getDataFile(s2.str()));
 
 	s.str("");
 	s2.str("");
-	s << Options::getDataFolder() << "UFOGRAPH/" << "SMOKE.PCK";
-	s2 << Options::getDataFolder() << "UFOGRAPH/" << "SMOKE.TAB";
+	s << "UFOGRAPH/" << "SMOKE.PCK";
+	s2 << "UFOGRAPH/" << "SMOKE.TAB";
 	_sets["SMOKE.PCK"] = new SurfaceSet(32, 40);
-	_sets["SMOKE.PCK"]->loadPck(CrossPlatform::insensitive(s.str()), CrossPlatform::insensitive(s2.str()));
+	_sets["SMOKE.PCK"]->loadPck(CrossPlatform::getDataFile(s.str()), CrossPlatform::getDataFile(s2.str()));
 
 	s.str("");
 	s2.str("");
-	s << Options::getDataFolder() << "UFOGRAPH/" << "X1.PCK";
-	s2 << Options::getDataFolder() << "UFOGRAPH/" << "X1.TAB";
+	s << "UFOGRAPH/" << "X1.PCK";
+	s2 << "UFOGRAPH/" << "X1.TAB";
 	_sets["X1.PCK"] = new SurfaceSet(128, 64);
-	_sets["X1.PCK"]->loadPck(CrossPlatform::insensitive(s.str()), CrossPlatform::insensitive(s2.str()));
+	_sets["X1.PCK"]->loadPck(CrossPlatform::getDataFile(s.str()), CrossPlatform::getDataFile(s2.str()));
 
 	s.str("");
-	s << Options::getDataFolder() << "UFOGRAPH/" << "UNIBORD.PCK";
+	s << "UFOGRAPH/" << "UNIBORD.PCK";
 	_surfaces["UNIBORD.PCK"] = new Surface(320, 200);
-	_surfaces["UNIBORD.PCK"]->loadSpk(CrossPlatform::insensitive(s.str()));
+	_surfaces["UNIBORD.PCK"]->loadSpk(CrossPlatform::getDataFile(s.str()));
 
 
 	// Load Battlescape Terrain (only blacks are loaded, others are loaded just in time)
@@ -444,12 +443,12 @@ void XcomResourcePack::loadBattlescapeResources()
 	for (int i = 0; i < 1; i++)
 	{
 		std::stringstream s;
-		s << Options::getDataFolder() << "TERRAIN/" << bsets[i];
+		s << "TERRAIN/" << bsets[i];
 		std::string tab = bsets[i].substr(0, bsets[i].length()-4) + ".TAB";
 		std::stringstream s2;
-		s2 << Options::getDataFolder() << "TERRAIN/" << tab;
+		s2 << "TERRAIN/" << tab;
 		_sets[bsets[i]] = new SurfaceSet(32, 40);
-		_sets[bsets[i]]->loadPck(CrossPlatform::insensitive(s.str()), CrossPlatform::insensitive(s2.str()));
+		_sets[bsets[i]]->loadPck(CrossPlatform::getDataFile(s.str()), CrossPlatform::getDataFile(s2.str()));
 	}
 
 	// Load Battlescape units
@@ -478,35 +477,61 @@ void XcomResourcePack::loadBattlescapeResources()
 	for (int i = 0; i < 20; i++)
 	{
 		std::stringstream s;
-		s << Options::getDataFolder() << "UNITS/" << usets[i];
+		s << "UNITS/" << usets[i];
 		std::string tab = usets[i].substr(0, usets[i].length()-4) + ".TAB";
 		std::stringstream s2;
-		s2 << Options::getDataFolder() << "UNITS/" << tab;
+		s2 << "UNITS/" << tab;
 		_sets[usets[i]] = new SurfaceSet(32, 40);
-		_sets[usets[i]]->loadPck(CrossPlatform::insensitive(s.str()), CrossPlatform::insensitive(s2.str()));
+		_sets[usets[i]]->loadPck(CrossPlatform::getDataFile(s.str()), CrossPlatform::getDataFile(s2.str()));
 	}
 	s.str("");
-	s << Options::getDataFolder() << "UNITS/" << "BIGOBS.PCK";
+	s << "UNITS/" << "BIGOBS.PCK";
 	s2.str("");
-	s2 << Options::getDataFolder() << "UNITS/" << "BIGOBS.TAB";
+	s2 << "UNITS/" << "BIGOBS.TAB";
 	_sets["BIGOBS.PCK"] = new SurfaceSet(32, 48);
-	_sets["BIGOBS.PCK"]->loadPck(CrossPlatform::insensitive(s.str()), CrossPlatform::insensitive(s2.str()));
+	_sets["BIGOBS.PCK"]->loadPck(CrossPlatform::getDataFile(s.str()), CrossPlatform::getDataFile(s2.str()));
 
 	s.str("");
-	s << Options::getDataFolder() << "GEODATA/" << "LOFTEMPS.DAT";
-	MapDataSet::loadLOFTEMPS(CrossPlatform::insensitive(s.str()), &_voxelData);
+	s << "GEODATA/" << "LOFTEMPS.DAT";
+	MapDataSet::loadLOFTEMPS(CrossPlatform::getDataFile(s.str()), &_voxelData);
 
-	std::string scrs[] = {"TAC00.SCR",
-						  "TAC01.SCR"};
+	std::string scrs[] = {"TAC00.SCR"};
 
-	for (int i = 0; i < 2; i++)
+	for (int i = 0; i < 1; i++)
 	{
 		std::stringstream s;
-		s << Options::getDataFolder() << "UFOGRAPH/" << scrs[i];
+		s << "UFOGRAPH/" << scrs[i];
 		_surfaces[scrs[i]] = new Surface(320, 200);
-		_surfaces[scrs[i]]->loadScr(CrossPlatform::insensitive(s.str()));
+		_surfaces[scrs[i]]->loadScr(CrossPlatform::getDataFile(s.str()));
 	}
 
+	std::string spks[] = {"TAC01.SCR",
+						  "MAN_0F0.SPK",
+						  "MAN_0F1.SPK",
+						  "MAN_0F2.SPK",
+						  "MAN_0F3.SPK",
+						  "MAN_0M0.SPK",
+						  "MAN_0M1.SPK",
+						  "MAN_0M2.SPK",
+						  "MAN_0M3.SPK",
+						  "MAN_1F0.SPK",
+						  "MAN_1F1.SPK",
+						  "MAN_1F2.SPK",
+						  "MAN_1F3.SPK",
+						  "MAN_1M0.SPK",
+						  "MAN_1M1.SPK",
+						  "MAN_1M2.SPK",
+						  "MAN_1M3.SPK",
+						  "MAN_2.SPK",
+						  "MAN_3.SPK"};
+
+	for (int i = 0; i < 19; i++)
+	{
+		std::stringstream s;
+		s << "UFOGRAPH/" << spks[i];
+		_surfaces[spks[i]] = new Surface(320, 200);
+		_surfaces[spks[i]]->loadSpk(CrossPlatform::getDataFile(s.str()));
+	}
 }
 
 }

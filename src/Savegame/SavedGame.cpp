@@ -299,7 +299,7 @@ void SavedGame::save(const std::string &filename) const
 	}
 	out << YAML::EndMap;
 
-	sav << out.c_str() << std::endl << out.c_str();
+	sav << out.c_str();
 	sav.close();
 }
 
