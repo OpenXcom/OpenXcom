@@ -73,7 +73,8 @@ std::string getDataFile(const std::string &filename)
 			}
 			else
 			{
-				throw Exception("Couldn't find " + filename);
+				//throw Exception("Couldn't find " + filename);
+				return "";
 			}
 		}
 	}
@@ -142,9 +143,10 @@ std::wstring findUserFolder()
 #ifdef _WIN32
 	WCHAR path[MAX_PATH];
 
+#if (NTDDI_VERSION >= NTDDI_VISTA)
 	// Check in Saved Games folder (Vista and newer)
 	PWSTR *folder;
-	if (SHGetKnownFolderPath(FOLDERID_SavedGames, 0, NULL, folder) == S_OK)
+	if (SUCCEEDED(SHGetKnownFolderPath(FOLDERID_SavedGames, 0, NULL, folder)))
 	{
 		PathAppendW(*folder, L"OpenXcom");
 		CoTaskMemFree(folder);
@@ -153,9 +155,10 @@ std::wstring findUserFolder()
 			return *folder;
 		}
 	}
+#endif
 
 	// Check in Documents folder (XP and older)
-    if (SHGetFolderPathW(NULL, CSIDL_PERSONAL, NULL, SHGFP_TYPE_CURRENT, path) == S_OK)
+    if (SUCCEEDED(SHGetFolderPathW(NULL, CSIDL_PERSONAL, NULL, SHGFP_TYPE_CURRENT, path)))
 	{
 		PathAppendW(path, L"OpenXcom");
 		if ((GetFileAttributesW(path) & FILE_ATTRIBUTE_DIRECTORY) != 0)
