@@ -18,6 +18,7 @@
  */
 #include "CrossPlatform.h"
 #include <iostream>
+#include <algorithm>
 #include <sys/stat.h>
 #include "Exception.h"
 #include "Options.h"
@@ -25,8 +26,17 @@
 #include <windows.h>
 #include <shlobj.h>
 #include <shlwapi.h>
+#ifndef SHGFP_TYPE_CURRENT
+	#define SHGFP_TYPE_CURRENT 0
+#endif
+#pragma comment(lib, "advapi32.lib")
+#pragma comment(lib, "shell32.lib")
 #pragma comment(lib, "shlwapi.lib")
 #else
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/param.h>
+#include <sys/types.h>
 #endif
 
 namespace OpenXcom
@@ -44,7 +54,11 @@ namespace CrossPlatform
  */
 std::string getDataFile(const std::string &filename)
 {
+	// Correct path endings
 	std::string newName = filename;
+#ifdef _WIN32
+	std::replace(newName.begin(), newName.end(), '/', '\\');
+#endif
 	std::string newPath = Options::getDataFolder() + filename;
 
 	// Try lowercase and uppercase names
@@ -55,8 +69,7 @@ std::string getDataFile(const std::string &filename)
 	}
 	else
 	{
-		for (std::string::iterator c = newName.begin(); c != newName.end(); ++c)
-			*c = toupper(*c);
+		std::transform(newName.begin(), newName.end(), newName.begin(), toupper);
 		newPath = Options::getDataFolder() + newName;
 		if (stat(newPath.c_str(), &info) == 0)
 		{
@@ -64,8 +77,7 @@ std::string getDataFile(const std::string &filename)
 		}
 		else
 		{
-			for (std::string::iterator c = newName.begin(); c != newName.end(); ++c)
-				*c = tolower(*c);
+			std::transform(newName.begin(), newName.end(), newName.begin(), tolower);
 			newPath = Options::getDataFolder() + newName;
 			if (stat(newPath.c_str(), &info) == 0)
 			{
@@ -111,6 +123,16 @@ std::wstring findDataFolder()
 #ifdef _WIN32
 	WCHAR path[MAX_PATH];
 
+	// Check in AppData folder
+    if (SUCCEEDED(SHGetFolderPathW(NULL, CSIDL_COMMON_APPDATA, NULL, SHGFP_TYPE_CURRENT, path)))
+	{
+		PathAppendW(path, L"OpenXcom");
+		if ((GetFileAttributesW(path) & FILE_ATTRIBUTE_DIRECTORY) != 0)
+		{
+			return path;
+		}
+	}
+
 	// Check in binary directory
 	if (GetModuleFileNameW(NULL, path, MAX_PATH) != 0)
 	{
@@ -131,11 +153,25 @@ std::wstring findDataFolder()
 			return path;
 		}
 	}
-
-	return L"";
 #else
+	char path[MAXPATHLEN];
+	struct stat info;
 
+	// Check shared directory
+	path = "/usr/share/openxcom/"
+	if (stat(path, &info) == 0 && S_ISDIR(info.st_mode))
+	{
+		return path;
+	}
+
+	// Check working directory
+	path = "./DATA/";
+	if (stat(path, &info) == 0 && S_ISDIR(info.st_mode))
+	{
+		return path;
+	}
 #endif
+	return L"";
 }
 
 std::wstring findUserFolder()
@@ -143,21 +179,7 @@ std::wstring findUserFolder()
 #ifdef _WIN32
 	WCHAR path[MAX_PATH];
 
-#if (NTDDI_VERSION >= NTDDI_VISTA)
-	// Check in Saved Games folder (Vista and newer)
-	PWSTR *folder;
-	if (SUCCEEDED(SHGetKnownFolderPath(FOLDERID_SavedGames, 0, NULL, folder)))
-	{
-		PathAppendW(*folder, L"OpenXcom");
-		CoTaskMemFree(folder);
-		if ((GetFileAttributesW(*folder) & FILE_ATTRIBUTE_DIRECTORY) != 0)
-		{
-			return *folder;
-		}
-	}
-#endif
-
-	// Check in Documents folder (XP and older)
+	// Check in Documents folder
     if (SUCCEEDED(SHGetFolderPathW(NULL, CSIDL_PERSONAL, NULL, SHGFP_TYPE_CURRENT, path)))
 	{
 		PathAppendW(path, L"OpenXcom");
@@ -187,11 +209,29 @@ std::wstring findUserFolder()
 			return path;
 		}
 	}
-
-	return L"";
 #else
+	char path[MAXPATHLEN];
+	struct stat info;
 
+	// Check HOME directory
+	char *homedir = getenv("HOME");
+	if (homedir)
+	{
+		snprintf(path, MAXPATHLEN, "%s/.openxcom/", homedir);
+		if (stat(path, &info) == 0 && S_ISDIR(info.st_mode))
+		{
+			return path;
+		}
+	}
+
+	// Check working directory
+	path = "./USER/";
+	if (stat(path, &info) == 0 && S_ISDIR(info.st_mode))
+	{
+		return path;
+	}
 #endif
+	return L"";
 }
 
 }

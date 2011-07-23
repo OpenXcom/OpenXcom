@@ -20,10 +20,11 @@ BIN = openxcom
 endif
 
 # Compiler settings
-CXXFLAGS = -Wall -O2 $(addprefix -D,$(TARGET))
+CXXFLAGS ?= -Wall -O2
+CXXFLAGS += $(addprefix -D,$(TARGET))
 CXXFLAGS += `$(PKG-CONFIG) --cflags sdl yaml-cpp`
 
-LDFLAGS = -lSDL_gfx -lSDL_mixer
+LDFLAGS ?= -lSDL_gfx -lSDL_mixer
 LDFLAGS += `$(PKG-CONFIG) --libs sdl yaml-cpp`
 
 # Rules
