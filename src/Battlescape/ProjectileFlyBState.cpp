@@ -20,7 +20,6 @@
 #include <cmath>
 #include "ProjectileFlyBState.h"
 #include "ExplosionBState.h"
-#include "BattlescapeState.h"
 #include "Projectile.h"
 #include "TerrainModifier.h"
 #include "Map.h"
@@ -40,7 +39,7 @@ namespace OpenXcom
 /**
  * Sets up an ProjectileFlyBState.
  */
-ProjectileFlyBState::ProjectileFlyBState(BattlescapeState *parent) : BattleState(parent)
+ProjectileFlyBState::ProjectileFlyBState(BattlescapeState *parent, BattleAction action) : BattleState(parent), _action(action)
 {
 
 }
@@ -61,11 +60,11 @@ ProjectileFlyBState::~ProjectileFlyBState()
 void ProjectileFlyBState::init()
 {
 	int baseAcc;
-	BattleItem *weapon = _parent->getAction()->weapon;
+	BattleItem *weapon = _action.weapon;
 	BattleItem *projectileItem = 0;
 
 	_parent->setStateInterval(DEFAULT_BULLET_SPEED);
-	_unit = _parent->getAction()->actor;
+	_unit = _action.actor;
 	_ammo = weapon->getAmmoItem();
 	if (_unit->isOut())
 	{
@@ -73,7 +72,7 @@ void ProjectileFlyBState::init()
 		_parent->popState();
 		return;
 	}
-	if (_parent->getAction()->type != BA_THROW)
+	if (_action.type != BA_THROW)
 	{
 		if (_ammo == 0)
 		{
@@ -89,7 +88,7 @@ void ProjectileFlyBState::init()
 		}
 	}
 	// action specific initialisation
-	switch (_parent->getAction()->type)
+	switch (_action.type)
 	{
 	case BA_AUTOSHOT:
 		baseAcc = weapon->getRules()->getAccuracyAuto();
@@ -121,14 +120,14 @@ void ProjectileFlyBState::init()
 	Projectile *projectile = new Projectile(_parent->getGame()->getResourcePack(),
 									_parent->getGame()->getSavedGame()->getBattleGame(),
 									_unit->getPosition(),
-									_parent->getAction()->target,
+									_action.target,
 									weapon->getRules()->getBulletSprite(),
 									projectileItem
 									);
 	// add the projectile on the map
 	_parent->getMap()->setProjectile(projectile);
 	// let it calculate a trajectory
-	if (_parent->getAction()->type == BA_THROW)
+	if (_action.type == BA_THROW)
 	{
 		if (projectile->calculateThrow(baseAcc))
 		{
@@ -144,6 +143,7 @@ void ProjectileFlyBState::init()
 			_parent->getMap()->setProjectile(0);
 			_result = "STR_UNABLE_TO_THROW_HERE";
 			_parent->popState();
+			return;
 		}
 	}
 	else
@@ -168,8 +168,16 @@ void ProjectileFlyBState::init()
 			_parent->getMap()->setProjectile(0);
 			_result = "STR_NO_LINE_OF_FIRE";
 			_parent->popState();
+			return;
 		}
 	}
+
+	BattleAction action;
+	if (_parent->getGame()->getSavedGame()->getBattleGame()->getTerrainModifier()->checkReactionFire(_unit, &action))
+	{
+		_parent->statePushBack(new ProjectileFlyBState(_parent, action));
+	}
+
 }
 
 /**
@@ -182,7 +190,7 @@ void ProjectileFlyBState::think()
 	if(!_parent->getMap()->getProjectile()->move())
 	{
 		// impact !
-		if (_parent->getAction()->type == BA_THROW)
+		if (_action.type == BA_THROW)
 		{
 			Position pos = _parent->getMap()->getProjectile()->getPosition(-1);
 			pos.x /= 16;
@@ -194,7 +202,7 @@ void ProjectileFlyBState::think()
 			if (ALT_GRENADE && item->getRules()->getBattleType() == BT_GRENADE && item->getExplodeTurn() > 0 && item->getExplodeTurn() <= _parent->getGame()->getSavedGame()->getBattleGame()->getTurn())
 			{
 				// it's a hot grenade to explode immediatly
-				_parent->statePushNext(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(-1), item));
+				_parent->statePushNext(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(-1), item, _action.actor));
 			}
 			else
 			{
@@ -211,13 +219,14 @@ void ProjectileFlyBState::think()
 			{
 				offset = -1;
 			}
-			_parent->statePushNext(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(offset), _ammo));
+			_parent->statePushNext(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(offset), _ammo, _action.actor));
 		}
 
 		delete _parent->getMap()->getProjectile();
 		_parent->getMap()->setProjectile(0);
 		_parent->popState();
 	}
+
 }
 
 /*
@@ -244,10 +253,10 @@ bool ProjectileFlyBState::validThrowRange()
 {
 	// Throwing Distance roughly = 2.5 × Strength / Weight
 	// note that all coordinates and thus also distances below are in number of tiles (not in voxels).
-	double maxDistance = 2.5 * _parent->getAction()->actor->getUnit()->getStrength() / _parent->getAction()->weapon->getRules()->getWeight();
-	int xdiff = _parent->getAction()->target.x - _unit->getPosition().x;
-	int ydiff = _parent->getAction()->target.y - _unit->getPosition().y;
-	int zdiff = _parent->getAction()->target.z - _unit->getPosition().z;
+	double maxDistance = 2.5 * _action.actor->getUnit()->getStrength() / _action.weapon->getRules()->getWeight();
+	int xdiff = _action.target.x - _unit->getPosition().x;
+	int ydiff = _action.target.y - _unit->getPosition().y;
+	int zdiff = _action.target.z - _unit->getPosition().z;
 	double realDistance = sqrt((double)(xdiff*xdiff)+(double)(ydiff*ydiff));
 
 	// throwing off a building of 1 level lets you throw 2 tiles further than normal range,

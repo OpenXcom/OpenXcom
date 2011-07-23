@@ -531,7 +531,12 @@ void BattleUnit::damage(Position position, int power)
 	if (damage > 0)
 	{
 		// fatal wounds
-		_fatalWounds[bodypart] += RNG::generate(1,3);
+		if (RNG::generate(0,damage) > 2)
+			_fatalWounds[bodypart] += RNG::generate(1,3);
+
+		if (_fatalWounds[bodypart])
+			moraleChange(-_fatalWounds[bodypart]);
+
 		// armor damage
 		setArmor(getArmor(side) - (damage+5)/10, side);
 		// health damage
@@ -602,6 +607,28 @@ bool BattleUnit::spendTimeUnits(int tu, bool debugmode)
 	if (tu <= _tu)
 	{
 		_tu -= tu;
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+/**
+ * Spend energy  if it can. Return false if it can't.
+ * @param tu
+ * @param debugmode If this is true, the function actually does noting.
+ * @return flag if it could spend the time units or not.
+ */
+bool BattleUnit::spendEnergy(int tu, bool debugmode)
+{
+	if (debugmode) return true;
+	int eu = tu / 3;
+
+	if (eu <= _energy)
+	{
+		_energy -= eu;
 		return true;
 	}
 	else
@@ -719,5 +746,59 @@ int BattleUnit::getFatalWounds()
 		sum += _fatalWounds[i];
 	return sum;
 }
+
+
+/**
+ * Little formula to calculate reaction score.
+ * @return Reaction score.
+ */
+double BattleUnit::getReactionScore() const
+{
+	//(Reactions Stat) × (Current Time Units / Max TUs) 
+	double score = ((double)_unit->getReactions() * (double)getTimeUnits()) / (double)_unit->getTimeUnits();
+	return score;
+}
+
+
+/**
+ * Prepare for a new turn.
+ */
+void BattleUnit::prepareNewTurn()
+{
+	// recover TUs
+	int TURecovery = _unit->getTimeUnits();
+	// Each fatal wound to the left or right leg reduces the soldier's TUs by 10%.
+	TURecovery -= (TURecovery * (_fatalWounds[BODYPART_LEFTLEG]+_fatalWounds[BODYPART_RIGHTLEG] * 10))/100;
+	setTimeUnits(TURecovery);
+
+	// recover energy
+	int ENRecovery = _unit->getTimeUnits() / 3;
+	// Each fatal wound to the body reduces the soldier's energy by 10%.
+	ENRecovery -= (_energy * (_fatalWounds[BODYPART_TORSO] * 10))/100;
+	_energy += ENRecovery;
+	if (_energy > _unit->getStamina())
+		_energy = _unit->getStamina();
+
+	// suffer from fatal wounds
+	_health -= getFatalWounds();
+	if (_health < 0)
+		_health = 0;
+}
+
+
+/**
+ * Morale change with bounds check.
+ * @param change can be positive or negative
+ */
+void BattleUnit::moraleChange(int change)
+{
+	_morale += change;
+	if (_morale > 100)
+		_morale = 100;
+	if (_morale < 0)
+		_morale = 0;
+}
+
+
 
 }

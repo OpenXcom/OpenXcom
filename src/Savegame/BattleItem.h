@@ -42,7 +42,7 @@ class BattleItem
 private:
 	RuleItem *_rules;
 	Position _position;
-	BattleUnit *_owner;
+	BattleUnit *_owner, *_previousOwner;
 	InventorySlot _inventorySlot;
 	BattleItem *_ammoItem;
 	int _itemProperty[3];
@@ -69,6 +69,8 @@ public:
 	bool spendBullet();
 	/// Gets the item's owner.
 	BattleUnit *getOwner() const;
+	/// Gets the item's previous owner.
+	BattleUnit *getPreviousOwner() const;
 	/// Sets the item's owner.
 	void setOwner(BattleUnit *owner);
 	/// Gets the item's inventory slot.

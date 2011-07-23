@@ -211,15 +211,18 @@ void BattlescapeGenerator::run()
 		}*/
 		// test data
 		addItem(_game->getRuleset()->getItem("STR_RIFLE"));
-		addItem(_game->getRuleset()->getItem("STR_HEAVY_CANNON"));
-		addItem(_game->getRuleset()->getItem("STR_ROCKET_LAUNCHER"));
 		addItem(_game->getRuleset()->getItem("STR_RIFLE_CLIP"));
+		addItem(_game->getRuleset()->getItem("STR_HEAVY_CANNON"));
 		addItem(_game->getRuleset()->getItem("STR_HC_HE_AMMO"));
+		addItem(_game->getRuleset()->getItem("STR_ROCKET_LAUNCHER"));
 		addItem(_game->getRuleset()->getItem("STR_SMALL_ROCKET"));
 		addItem(_game->getRuleset()->getItem("STR_GRENADE"));
 		addItem(_game->getRuleset()->getItem("STR_SMOKE_GRENADE"));
 		addItem(_game->getRuleset()->getItem("STR_PISTOL"));
 		addItem(_game->getRuleset()->getItem("STR_PISTOL_CLIP"));
+		addItem(_game->getRuleset()->getItem("STR_GRENADE"));
+		addItem(_game->getRuleset()->getItem("STR_GRENADE"));
+		addItem(_game->getRuleset()->getItem("STR_GRENADE"));
 	}
 
 	if (_missionType == MISS_UFORECOVERY)
@@ -238,6 +241,19 @@ void BattlescapeGenerator::run()
 	addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), SCOUT);
 	addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), SCOUT);
 	addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), SCOUT);
+	
+	addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL"));
+	addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL_CLIP"));
+	addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL"));
+	addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL_CLIP"));
+	addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL"));
+	addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL_CLIP"));
+	addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL"));
+	addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL_CLIP"));
+	addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL"));
+	addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL_CLIP"));
+	addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL"));
+	addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL_CLIP"));
 
 	// set shade (alien bases are a little darker, sites depend on worldshade)
 	int worldshades[8] = { 0, 1, 2, 3, 5, 7, 9 , 15 };
@@ -611,7 +627,7 @@ int BattlescapeGenerator::loadMAP(MapBlock *mapblock, int xoff, int yoff, RuleTe
 				_save->getTile(Position(x, y, z))->setMapData(0,part);
 			}
 		}
-		_save->getTile(Position(x, y, z))->setDiscovered(discovered);
+		_save->getTile(Position(x, y, z))->setDiscovered(discovered, 2);
 
 		x++;
 

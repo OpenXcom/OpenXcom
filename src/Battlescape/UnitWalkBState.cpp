@@ -18,6 +18,7 @@
  */
 
 #include "UnitWalkBState.h"
+#include "ProjectileFlyBState.h"
 #include "TerrainModifier.h"
 #include "Pathfinding.h"
 #include "BattlescapeState.h"
@@ -31,6 +32,7 @@
 #include "../Engine/SoundSet.h"
 #include "../Engine/Sound.h"
 #include "../Engine/RNG.h"
+
 
 namespace OpenXcom
 {
@@ -63,6 +65,8 @@ void UnitWalkBState::init()
 
 void UnitWalkBState::think()
 {
+	bool unitspotted = false;
+
 	// during a walking cycle we make step sounds
 	if (_unit->getStatus() == STATUS_WALKING)
 	{
@@ -100,8 +104,21 @@ void UnitWalkBState::think()
 		// is the walking cycle finished?
 		if (_unit->getStatus() == STATUS_STANDING)
 		{
-			_terrain->calculateFOV(_unit);
+			unitspotted = _terrain->calculateFOV(_unit);
 			_terrain->calculateUnitLighting();
+			if (unitspotted)
+			{
+				_pf->abortPath();
+				return;
+			}
+			BattleAction action;
+			if (_terrain->checkReactionFire(_unit, &action))
+			{
+				_parent->statePushBack(new ProjectileFlyBState(_parent, action));
+				// unit got fired upon - stop walking
+				_pf->abortPath();
+				return;
+			}
 		}
 		else
 		{
@@ -154,7 +171,15 @@ void UnitWalkBState::think()
 			dir = _pf->dequeuePath();
 			if (_unit->spendTimeUnits(tu, _parent->getGame()->getSavedGame()->getBattleGame()->getDebugMode()))
 			{
-				_unit->startWalking(dir, destination);
+				if (_unit->spendEnergy(tu, _parent->getGame()->getSavedGame()->getBattleGame()->getDebugMode()))
+				{
+					_unit->startWalking(dir, destination);
+				}
+				else
+				{
+					_result = "STR_NOT_ENOUGH_ENERGY";
+					_parent->popState();
+				}
 			}
 			else
 			{
@@ -175,9 +200,14 @@ void UnitWalkBState::think()
 	if (_unit->getStatus() == STATUS_TURNING)
 	{
 		_unit->turn();
-		_terrain->calculateFOV(_unit);
+		unitspotted = _terrain->calculateFOV(_unit);
 		// make sure the unit sprites are up to date
 		_parent->getMap()->cacheUnits();
+		if (unitspotted)
+		{
+			_pf->abortPath();
+			return;
+		}
 	}
 }
 

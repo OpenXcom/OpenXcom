@@ -72,6 +72,7 @@ private:
 	BulletSprite *_bulletShadow[36];
 	Projectile *_projectile;
 	std::set<Explosion *> _explosions;
+	bool _cameraFollowed;
 
 
 	void minMaxInt(int *value, const int minValue, const int maxValue);
@@ -111,7 +112,7 @@ public:
 	/// set view height
 	void setViewHeight(int viewheight);
 	/// Center map on a unit.
-	void centerOnPosition(const Position &pos);
+	void centerOnPosition(const Position &pos, bool redraw = true);
 	/// Converts map coordinates to screen coordinates.
 	void convertMapToScreen(const Position &mapPos, Position *screenPos);
 	/// Converts voxel coordinates to screen coordinates.
@@ -138,6 +139,8 @@ public:
 	Projectile *getProjectile() const;
 	/// Get explosion set
 	std::set<Explosion*> *getExplosions();
+	///
+	bool didCameraFollow();
 };
 
 }

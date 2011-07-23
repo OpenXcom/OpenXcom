@@ -208,7 +208,13 @@ void UnitSprite::draw()
 		rightArm->setY(0);
 		torso->setY(0);
 	}
-	
+
+	// items are calculated for soldier height (22) - some aliens are smaller, so item is drawn lower.
+	if (item)
+	{
+		item->setY(item->getY() + (22 - _unit->getUnit()->getStandHeight()));
+	}
+
 	// blit order depends on unit direction
 	switch (_unit->getDirection())
 	{

@@ -40,7 +40,7 @@ namespace OpenXcom
 /**
  * Sets up an ExplosionBState.
  */
-ExplosionBState::ExplosionBState(BattlescapeState *parent, Position center, BattleItem *item) : BattleState(parent), _center(center), _item(item)
+ExplosionBState::ExplosionBState(BattlescapeState *parent, Position center, BattleItem *item, BattleUnit *unit) : BattleState(parent), _center(center), _item(item), _unit(unit)
 {
 
 }
@@ -61,7 +61,6 @@ ExplosionBState::~ExplosionBState()
  */
 void ExplosionBState::init()
 {
-	_unit = _parent->getGame()->getSavedGame()->getBattleGame()->getSelectedUnit();
 	if (_item == 0 || _item->getRules()->getHitAnimation() == 0)
 	{
 		_parent->setStateInterval(DEFAULT_ANIM_SPEED);
@@ -106,21 +105,19 @@ void ExplosionBState::think()
 			{
 				SavedBattleGame *save = _parent->getGame()->getSavedGame()->getBattleGame();
 				// after the animation is done, the real explosion takes place
-				save->getTerrainModifier()->explode(_center, _item->getRules()->getPower(), _item->getRules()->getDamageType(), 100, save->getSelectedUnit());
+				save->getTerrainModifier()->explode(_center, _item->getRules()->getPower(), _item->getRules()->getDamageType(), 100, _unit);
 
 				// now check for new casualties
-				for (std::vector<BattleUnit*>::iterator j = save->getUnits()->begin(); j != save->getUnits()->end(); ++j)
-				{
-					if ((*j)->getHealth() == 0 && (*j)->getStatus() != STATUS_DEAD)
-					{
-						_parent->statePushNext(new UnitFallBState(_parent, (*j), _item->getRules()->getDamageType() == DT_HE));
-					}
-				}
+				_parent->checkForCasualties(_item, _unit);
 
-				// if this explosion was caused by a unit shooting, now it's the time to put the gun down
+				// if this explosion was caused by a unit shooting, now it's the time to put the gun down and put the camera back on the shooter
 				if (_unit && !_unit->isOut())
 				{
 					_unit->aim(false);
+					if (_parent->getMap()->didCameraFollow())
+					{
+						_parent->getMap()->centerOnPosition(_unit->getPosition());
+					}
 				}
 				_parent->getMap()->cacheUnits();
 				_parent->popState();

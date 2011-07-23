@@ -23,6 +23,7 @@
 #include "Position.h"
 #include "../Ruleset/MapData.h"
 #include "SDL.h"
+#include "BattlescapeState.h"
 
 namespace OpenXcom
 {
@@ -58,9 +59,11 @@ public:
 	/// Calculate sun shading of a single tile.
 	void calculateSunShading(Tile *tile);
 	/// Calculate the visible tiles of a unit.
-	void calculateFOV(BattleUnit *unit);
+	bool calculateFOV(BattleUnit *unit);
 	/// Calculate the field of view within range of a certain position.
 	void calculateFOV(const Position &position);
+	/// Check reaction fire.
+	bool checkReactionFire(BattleUnit *unit, BattleAction *action);
 	/// Recalculate lighting of the battlescape.
 	void calculateTerrainLighting();
 	/// Recalculate lighting of the battlescape.

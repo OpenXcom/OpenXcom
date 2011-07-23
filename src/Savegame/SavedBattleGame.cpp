@@ -552,7 +552,7 @@ void SavedBattleGame::endTurn()
 	{
 		if ((*i)->getFaction() == _side)
 		{
-			(*i)->setTimeUnits((*i)->getUnit()->getTimeUnits());
+			(*i)->prepareNewTurn();
 		}
 	}
 
@@ -569,7 +569,7 @@ void SavedBattleGame::setDebugMode()
 {
 	for (int i = 0; i < _height * _length * _width; ++i)
 	{
-		_tiles[i]->setDiscovered(true);
+		_tiles[i]->setDiscovered(true, 2);
 	}
 
 	_debugMode = true;
