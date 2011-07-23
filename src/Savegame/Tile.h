@@ -43,6 +43,7 @@ class Tile
 {
 protected:
 	MapData *_objects[4];
+	int _mdsID[4], _mdID[4];
 	int _currentFrame[4];
 	bool _discovered[3], _checked;
 	int _light[LIGHTLAYERS];
@@ -64,6 +65,10 @@ public:
 	MapData *getMapData(int part);
 	/// Sets the pointer to the mapdata for a specific part of the tile
 	void setMapData(MapData *dat, int part);
+	/// Sets the IDs to the mapdata for a specific part of the tile
+	void load(int mdsID, int mdID, int part);
+	/// Gets the IDs to the mapdata for a specific part of the tile
+	void getSaveGameData(int *mdsID, int *mdID, int part);
 	/// Gets wether this tile has no objects
 	bool isVoid();
 	/// Get the TU cost to walk over a certain part of the tile.

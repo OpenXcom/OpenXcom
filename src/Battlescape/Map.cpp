@@ -768,6 +768,13 @@ void Map::setSelectorPosition(int mx, int my)
 	}
 }
 
+/**
+ * Converts screen coordinates to map coordinates.
+ * @param screenX screen x position
+ * @param screenY screen y position
+ * @param mapX map x position
+ * @param mapY map y position
+ */
 void Map::convertScreenToMap(int screenX, int screenY, int *mapX, int *mapY)
 {
 	// add half a tileheight to the mouseposition per layer we are above the floor

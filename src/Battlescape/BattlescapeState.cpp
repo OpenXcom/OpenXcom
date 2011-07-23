@@ -58,6 +58,7 @@
 #include "../Ruleset/RuleItem.h"
 #include "../Engine/Timer.h"
 #include "../Interface/FpsCounter.h"
+#include "../Menu/SaveGameState.h"
 
 
 namespace OpenXcom
@@ -1193,6 +1194,13 @@ void BattlescapeState::handle(Action *action)
 				_battleGame->setDebugMode();
 				debug(L"Debug Mode");
 			}
+
+			// "s" - save game
+			if (action->getDetails()->key.keysym.sym == SDLK_s)
+			{
+				_game->pushState(new SaveGameState(_game));
+			}
+
 		}
 	}
 

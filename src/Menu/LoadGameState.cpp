@@ -20,6 +20,7 @@
 #include <iostream>
 #include "yaml.h"
 #include "../Savegame/SavedGame.h"
+#include "../Savegame/SavedBattleGame.h"
 #include "../Engine/Game.h"
 #include "../Engine/Exception.h"
 #include "../Resource/ResourcePack.h"
@@ -139,6 +140,7 @@ void LoadGameState::lstSavesClick(Action *action)
 		}
 		else
 		{
+			_game->getSavedGame()->getBattleGame()->loadMapResources(_game->getResourcePack());
 			_game->setState(new BattlescapeState(_game));
 		}
 	}

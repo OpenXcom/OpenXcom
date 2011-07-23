@@ -206,9 +206,9 @@ UnitStatus BattleUnit::getStatus()
 }
 
 /**
- * startWalking
- * @param direction
- * @param destination
+ * Initialises variables to start walking.
+ * @param direction Which way to walk.
+ * @param destination The position we should end up on.
  */
 void BattleUnit::startWalking(int direction, const Position &destination)
 {
@@ -221,6 +221,9 @@ void BattleUnit::startWalking(int direction, const Position &destination)
 	_kneeled = false;
 }
 
+/**
+ * This will increment the walking phase.
+ */
 void BattleUnit::keepWalking()
 {
 	int middle, end;
@@ -295,7 +298,7 @@ void BattleUnit::lookAt(int direction)
 }
 
 /**
- * Turn.
+ * Advances the turning towards the target direction.
  */
 void BattleUnit::turn()
 {
@@ -326,6 +329,9 @@ void BattleUnit::turn()
 	}
 }
 
+/**
+ * Stops the turning towards the target direction.
+ */
 void BattleUnit::abortTurn()
 {
 	_status = STATUS_STANDING;
@@ -333,7 +339,7 @@ void BattleUnit::abortTurn()
 
 /**
  * Returns the unit's faction.
- * @return Faction.
+ * @return Faction. (player, hostile or neutral)
  */
 UnitFaction BattleUnit::getFaction() const
 {
@@ -342,6 +348,7 @@ UnitFaction BattleUnit::getFaction() const
 
 /**
  * Sets the unit's cache flag.
+ * Set to true when the unit has to be redrawn from scratch.
  * @param cached
  */
 void BattleUnit::setCached(bool cached)
@@ -360,7 +367,7 @@ bool BattleUnit::isCached() const
 }
 
 /**
- * Kneel down and spend TUs.
+ * Kneel down.
  * @param to kneel or to stand up
  */
 void BattleUnit::kneel(bool kneeled)
@@ -402,8 +409,8 @@ int BattleUnit::getTimeUnits() const
 }
 
 /**
- * Returns the soldier's amount of stamina.
- * @return Stamina.
+ * Returns the soldier's amount of energy.
+ * @return Energy.
  */
 int BattleUnit::getEnergy() const
 {
@@ -420,8 +427,8 @@ int BattleUnit::getHealth() const
 }
 
 /**
- * Returns the soldier's amount of bravery.
- * @return Bravery.
+ * Returns the soldier's amount of morale.
+ * @return Morale.
  */
 int BattleUnit::getMorale() const
 {
@@ -430,7 +437,7 @@ int BattleUnit::getMorale() const
 
 /**
  * Do an amount of damage.
- * @param position
+ * @param position The position defines which part of armor and/or bodypart is hit.
  * @param power
  */
 void BattleUnit::damage(Position position, int power)
@@ -439,9 +446,11 @@ void BattleUnit::damage(Position position, int power)
 	UnitSide side;
 	int impactheight, x=8, y=8;
 	UnitBodyPart bodypart;
-	// todo : determine direction we got hit (4 directions)
-	// todo : armor reduction
-	// todo : fatal wounds
+
+	if (power <= 0)
+	{
+		return;
+	}
 
 	if (position == Position(0, 0, 0))
 	{
@@ -547,8 +556,7 @@ void BattleUnit::damage(Position position, int power)
 }
 
 /**
- * Returns the soldier's amount of bravery.
- * @return Bravery.
+ * Intialises the falling sequence. Occurs after death or stunned.
  */
 void BattleUnit::startFalling()
 {
@@ -558,8 +566,7 @@ void BattleUnit::startFalling()
 }
 
 /**
- * Returns the soldier's amount of bravery.
- * @return Bravery.
+ * Advances the phase of falling sequence.
  */
 void BattleUnit::keepFalling()
 {
@@ -577,8 +584,8 @@ void BattleUnit::keepFalling()
 
 
 /**
- * Returns the soldier's amount of bravery.
- * @return Bravery.
+ * Returns the phase of the falling sequence.
+ * @return phase
  */
 int BattleUnit::getFallingPhase() const
 {
@@ -587,6 +594,7 @@ int BattleUnit::getFallingPhase() const
 
 /**
  * Returns whether the soldier is out of combat, dead or unconscious.
+ * A soldier that is out, cannot perform any actions, cannot be selected, but it's still a unit.
  * @return flag if out or not.
  */
 bool BattleUnit::isOut() const
@@ -663,6 +671,10 @@ bool BattleUnit::addToVisibleUnits(BattleUnit *unit)
 	return true;
 }
 
+/**
+ * Get the pointer to the vector of visible units.
+ * @return pointer to vector.
+ */
 std::vector<BattleUnit*> *BattleUnit::getVisibleUnits()
 {
 	return &_visibleUnits;

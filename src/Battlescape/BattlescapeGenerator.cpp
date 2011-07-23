@@ -419,14 +419,6 @@ void BattlescapeGenerator::generateMap()
 
 	blocksToDo = (_width / 10) * (_length / 10);
 
-	/* create tile objects */
-	for (int i = 0; i < _height * _length * _width; ++i)
-	{
-		Position pos;
-		_save->getTileCoords(i, &pos.x, &pos.y, &pos.z);
-		_save->getTiles()[i] = new Tile(pos);
-	}
-
 	/* Determine UFO landingzone (do this first because ufo is generally bigger) */
 	if (_ufo != 0)
 	{

@@ -87,9 +87,67 @@ void SavedBattleGame::load(const YAML::Node &node)
 	{
 		std::string name;
 		node["mapdatafiles"][i] >> name;
-		// now we have the names of the mapdatafiles, but we need to find the mapadatafile objects themselves...
-		// no idea to do this atm
-		// will figure this out some time
+		MapDataSet *mds = new MapDataSet(name);
+		_mapDataFiles.push_back(mds);
+	}
+
+	initMap(_width, _length, _height);
+
+	int empties = 0;
+	int dp = 0;
+	
+	std::string s;
+	std::vector<unsigned char> data;
+	node["tiles"] >> s;
+	//Base64Decode(s, data);
+	for (int i = 0; i < _height * _length * _width; i++)
+	{
+		if (!empties)
+		{
+			if (data[dp++] == 0xFF)
+			{
+				empties = data[dp++];
+			}
+			else
+			{
+				for (int part = 0; part < 4; part++)
+				{
+					_tiles[i]->load(data[dp++], data[dp++], part);
+				}
+			}
+		}
+		else
+		{
+			empties--;
+		}
+	}
+
+}
+
+/**
+ * TODO function header.
+ * @param
+ * @return
+ */
+void SavedBattleGame::loadMapResources(ResourcePack *res)
+{
+	for (std::vector<MapDataSet*>::const_iterator i = _mapDataFiles.begin(); i != _mapDataFiles.end(); ++i)
+	{
+		(*i)->load(res);
+	}
+
+	int mdsID, mdID;
+
+	for (int i = 0; i < _height * _length * _width; i++)
+	{
+		for (int part = 0; part < 4; part++)
+		{
+			if (mdsID || mdID)
+			{
+				_tiles[i]->getSaveGameData(&mdsID, &mdID, part);
+				_tiles[i]->setMapData(_mapDataFiles[mdsID]->getObjects()->at(mdID), part);
+			}
+		}
 	}
 
 }
@@ -100,9 +158,6 @@ void SavedBattleGame::load(const YAML::Node &node)
  */
 void SavedBattleGame::save(YAML::Emitter &out) const
 {
-/**
-* under construction
-*/
 	out << YAML::BeginMap;
 
 	out << YAML::Key << "width" << YAML::Value << _width;
@@ -121,9 +176,9 @@ void SavedBattleGame::save(YAML::Emitter &out) const
 	/* 1 byte for the datafile ID, 1 byte for the relative object ID in that file */
 	/* Value 0xFF means the next two bytes are the number of empty objects */
 	/* The binary data is then base64 encoded to save as a string */
-	Uint8 tileData[8];
 	Uint16 empties = 0;
-	std::vector<char> data;
+	std::vector<unsigned char> data;
+
 	for (int i = 0; i < _height * _length * _width; i++)
 	{
 		if (_tiles[i]->isVoid())
@@ -137,24 +192,32 @@ void SavedBattleGame::save(YAML::Emitter &out) const
 			if (empties)
 			{
 				data.push_back(0xFF);
-				data.push_back((char)empties);
+				data.push_back((unsigned char)empties);
 				empties = 0;
 			}
 			// now write 4x2 bytes
 			for (int part = 0; part < 4; part++)
 			{
-				MapDataSet *mds = _tiles[i]->getMapData(part)->getDataset();
-				data.push_back((Uint8)(std::find(_mapDataFiles.begin(), _mapDataFiles.end(), mds) - _mapDataFiles.begin()));
-				data.push_back((Uint8)(std::find(mds->getObjects()->begin(), mds->getObjects()->end(), _tiles[i]->getMapData(part)) - mds->getObjects()->begin()));
+				if (_tiles[i]->getMapData(part))
+				{
+					MapDataSet *mds = _tiles[i]->getMapData(part)->getDataset();
+					data.push_back((Uint8)(std::find(_mapDataFiles.begin(), _mapDataFiles.end(), mds) - _mapDataFiles.begin()));
+					data.push_back((Uint8)(std::find(mds->getObjects()->begin(), mds->getObjects()->end(), _tiles[i]->getMapData(part)) - mds->getObjects()->begin()));
+				}
+				else
+				{
+					data.push_back(0);
+					data.push_back(0);
+				}
 			}
 		}
 	}
 	if (empties)
 	{
 		data.push_back(0xFF);
-		data.push_back((char)empties);
+		data.push_back((unsigned char)empties);
 	}
-	out << YAML::Key << "tiles" << YAML::Binary(&data[0], data.size());
+	out << YAML::Key << "tiles" << YAML::Value << YAML::Binary(&data[0], data.size());
 
 	out << YAML::Key << "units" << YAML::Value;
 	out << YAML::BeginSeq;
@@ -196,6 +259,14 @@ void SavedBattleGame::initMap(int width, int length, int height)
 	_length = length;
 	_height = height;
 	_tiles = new Tile*[_height * _length * _width];
+	/* create tile objects */
+	for (int i = 0; i < _height * _length * _width; ++i)
+	{
+		Position pos;
+		getTileCoords(i, &pos.x, &pos.y, &pos.z);
+		_tiles[i] = new Tile(pos);
+	}
+
 }
 
 /**
@@ -539,5 +610,6 @@ bool SavedBattleGame::getDebugMode() const
 {
 	return _debugMode;
 }
+
 
 }

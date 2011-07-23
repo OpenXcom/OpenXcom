@@ -474,12 +474,20 @@ void TerrainModifier::explode(const Position &center, int power, ItemDamageType 
 			// power 25% to 75%
 			_save->getTile(Position(center.x/16, center.y/16, center.z/24))->damage(
 				part, (int)(RNG::generate(power/4, (power*3)/4)));
+			/*_save->getTile(Position(center.x/16, center.y/16, center.z/24))->damage(
+				part, (int)(RNG::boxMuller(power, power/6)));
+				// for testing normal distribution of damage
+				*/
 		}
 		else if (part == 4)
 		{
 			// power 0 - 200%
 			_save->getTile(Position(center.x/16, center.y/16, center.z/24))->getUnit()->damage(
 				Position(center.x%16, center.y%16, center.z%24), RNG::generate(0, power*2));
+			/*_save->getTile(Position(center.x/16, center.y/16, center.z/24))->getUnit()->damage(
+				Position(center.x%16, center.y%16, center.z%24), RNG::boxMuller(power, power/3));
+				// for testing normal distribution of damage
+				*/
 		}
 	}
 	else

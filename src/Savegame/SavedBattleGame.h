@@ -135,6 +135,7 @@ public:
 	void endTurn();
 	void setDebugMode();
 	bool getDebugMode() const;
+	void loadMapResources(ResourcePack *res);
 
 };
 

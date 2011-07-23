@@ -73,7 +73,8 @@ void BattleItem::save(YAML::Emitter &out) const
 	out << YAML::Key << "X" << YAML::Value << _position.x;
 	out << YAML::Key << "Y" << YAML::Value << _position.y;
 	out << YAML::Key << "Z" << YAML::Value << _position.z;
-	out << YAML::Key << "owner" << YAML::Value << _owner->getId();
+	if (_owner)
+		out << YAML::Key << "owner" << YAML::Value << _owner->getId();
 	out << YAML::Key << "inventoryslot" << YAML::Value << (int)_inventorySlot;
 
 	out << YAML::EndMap;
@@ -137,7 +138,10 @@ bool BattleItem::spendBullet()
 		return true;
 }
 
-/// Gets the item's owner.
+/**
+ * Gets the item's owner. 
+ * @return pointer to Battleunit
+ */
 BattleUnit *BattleItem::getOwner() const
 {
 	return _owner;
@@ -149,32 +153,47 @@ BattleUnit *BattleItem::getPreviousOwner() const
 	return _previousOwner;
 }
 
-/// Sets the item's owner.
+/**
+ * Sets the item's owner. 
+ * @param owner pointer to Battleunit
+ */
 void BattleItem::setOwner(BattleUnit *owner)
 {
 	_previousOwner = _owner;
 	_owner = owner;
 }
 
-/// Gets the item's inventory slot.
+/**
+ * Gets the item's inventory slot.
+ * @return InventorySlot
+ */
 InventorySlot BattleItem::getSlot() const
 {
 	return _inventorySlot;
 }
 
-/// Sets the item's inventory slot.
+/**
+ * Sets the item's inventory slot.
+ * @param slot InventorySlot
+ */
 void BattleItem::setSlot(InventorySlot slot)
 {
 	_inventorySlot = slot;
 }
 
-/// Gets the item's ammo item.
+/**
+ * Gets the item's ammo item.
+ * @return BattleItem
+ */
 BattleItem *BattleItem::getAmmoItem()
 {
 	return _ammoItem;
 }
 
-/// Sets the item's ammo item. Return -2 when ammo doesn't fit, or -1 when weapon already contains ammo?
+/**
+ * Sets the item's ammo item.
+ * @return -2 when ammo doesn't fit, or -1 when weapon already contains ammo
+ */
 int BattleItem::setAmmoItem(BattleItem *item)
 {
 	if (item == 0)

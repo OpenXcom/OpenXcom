@@ -85,6 +85,31 @@ void Tile::setMapData(MapData *dat, int part)
 }
 
 /**
+ * Set the MapData references of part 0 to 3.
+ * @param mdsID MapDataSet ID
+ * @param mdID MapData ID
+ * @param part the part number
+ */
+void Tile::load(int mdsID, int mdID, int part)
+{
+	_mdsID[part] = mdsID;
+	_mdID[part] = mdID;
+}
+
+/**
+ * get the MapData references of part 0 to 3.
+ * @param mdsID MapDataSet ID
+ * @param mdID MapData ID
+ * @param part the part number
+ */
+void Tile::getSaveGameData(int *mdsID, int *mdID, int part)
+{
+	*mdsID = _mdsID[part];
+	*mdID = _mdID[part];
+}
+
+
+/**
  * Gets wether this tile has no objects. Note that we can have a unit or smoke on this tile.
  * @return bool True if there is nothing but air on this tile.
  */
