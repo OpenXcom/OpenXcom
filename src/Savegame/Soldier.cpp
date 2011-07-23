@@ -328,6 +328,15 @@ SoldierGender Soldier::getGender() const
 }
 
 /**
+ * Returns the soldier's look.
+ * @return Look.
+ */
+SoldierLook Soldier::getLook() const
+{
+	return _look;
+}
+
+/**
  * Returns the soldier's rules.
  * @return rulesoldier
  */

@@ -30,12 +30,16 @@ namespace OpenXcom
  */
 namespace CrossPlatform
 {
-	/// Converts a filename to its existing case-insensitive name.
-	std::string insensitive(const std::string &filename);
+	/// Gets the correctly-cased path for a data file.
+	std::string getDataFile(const std::string &filename);
 	/// Displays an error message.
 	void showError(const std::string &error);
 	/// Displays an error message.
 	void showError(const std::wstring &error);
+
+	std::wstring findDataFolder();
+
+	std::wstring findUserFolder();
 }
 
 }

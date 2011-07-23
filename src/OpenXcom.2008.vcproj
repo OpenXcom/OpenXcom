@@ -200,6 +200,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Engine\CrossPlatform.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Engine\CrossPlatform.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Engine\Exception.cpp"
 				>
 			</File>
@@ -253,6 +261,14 @@
 			</File>
 			<File
 				RelativePath=".\Engine\Music.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Engine\Options.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Engine\Options.h"
 				>
 			</File>
 			<File
@@ -732,11 +748,27 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Battlescape\InventoryState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\InventoryState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Battlescape\Map.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\Battlescape\Map.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\NextTurnState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\NextTurnState.h"
 				>
 			</File>
 			<File
@@ -761,6 +793,14 @@
 			</File>
 			<File
 				RelativePath=".\Battlescape\Position.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\PrimeGrenadeState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\PrimeGrenadeState.h"
 				>
 			</File>
 			<File

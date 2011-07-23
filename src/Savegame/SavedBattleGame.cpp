@@ -401,6 +401,51 @@ void SavedBattleGame::setSelectedUnit(BattleUnit *unit)
 }
 
 /**
+ * Select the previous player unit TODO move this to BattlescapeState ?
+ * @return pointer to BattleUnit.
+ */
+BattleUnit *SavedBattleGame::selectPreviousPlayerUnit()
+{
+	std::vector<BattleUnit*>::iterator i = _units.begin();
+	bool bPrev = false;
+	int wraps = 0;
+
+	if (_selectedUnit == 0)
+	{
+		bPrev = true;
+	}
+
+	do
+	{
+		if (bPrev && (*i)->getFaction() == _side && !(*i)->isOut())
+		{
+			break;
+		}
+		if ((*i) == _selectedUnit)
+		{
+			bPrev = true;
+		}
+		if (i == _units.begin())
+		{
+			i = _units.end();
+			wraps++;
+		}
+		--i;
+		// back to where we started... no more units found
+		if (wraps == 2)
+		{
+			_selectedUnit = 0;
+			return _selectedUnit;
+		}
+	}
+	while (true);
+
+	_selectedUnit = (*i);
+
+	return _selectedUnit;
+}
+
+/**
  * Select the next player unit TODO move this to BattlescapeState ?
  * @return pointer to BattleUnit.
  */

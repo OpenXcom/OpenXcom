@@ -17,11 +17,16 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "CrossPlatform.h"
+#include <iostream>
 #include <sys/stat.h>
+#include "Exception.h"
+#include "Options.h"
 #ifdef _WIN32
 #include <windows.h>
+#include <shlobj.h>
+#include <shlwapi.h>
+#pragma comment(lib, "shlwapi.lib")
 #else
-#include <iostream>
 #endif
 
 namespace OpenXcom
@@ -30,49 +35,45 @@ namespace CrossPlatform
 {
 
 /**
- * Takes a filename and tries to figure out the existing
- * case-insensitive filename for it, for file operations.
+ * Takes a filename and tries to find it in the game's DATA folder,
+ * accounting for case-sensitivity.
  * @param filename Original filename.
- * @return Correctly-cased filename or "" if it doesn't exist.
+ * @return Correctly-cased filename or exception if it doesn't exist.
  * @note There's no actual method for figuring out the correct
  * filename on case-sensitive systems, this is just a workaround.
  */
-std::string insensitive(const std::string &filename)
+std::string getDataFile(const std::string &filename)
 {
 	std::string newName = filename;
-
-	// Ignore DATA folder
-	size_t i = newName.find("/DATA/");
-	if (i != std::string::npos)
-		i += 6;
-	else
-		i = 0;
+	std::string newPath = Options::getDataFolder() + filename;
 
 	// Try lowercase and uppercase names
 	struct stat info;
 	if (stat(newName.c_str(), &info) == 0)
 	{
-		return newName;
+		return newPath;
 	}
 	else
 	{
-		for (std::string::iterator c = newName.begin() + i; c != newName.end(); ++c)
+		for (std::string::iterator c = newName.begin(); c != newName.end(); ++c)
 			*c = toupper(*c);
-		if (stat(newName.c_str(), &info) == 0)
+		newPath = Options::getDataFolder() + newName;
+		if (stat(newPath.c_str(), &info) == 0)
 		{
-			return newName;
+			return newPath;
 		}
 		else
 		{
-			for (std::string::iterator c = newName.begin() + i; c != newName.end(); ++c)
+			for (std::string::iterator c = newName.begin(); c != newName.end(); ++c)
 				*c = tolower(*c);
-			if (stat(newName.c_str(), &info) == 0)
+			newPath = Options::getDataFolder() + newName;
+			if (stat(newPath.c_str(), &info) == 0)
 			{
-				return newName;
+				return newPath;
 			}
 			else
 			{
-				return "";
+				throw Exception("Couldn't find " + filename);
 			}
 		}
 	}
@@ -101,6 +102,92 @@ void showError(const std::wstring &error)
 	MessageBoxW(NULL, error.c_str(), L"OpenXcom Error", MB_ICONERROR | MB_OK);
 #else
 	std::wcerr << L"ERROR: " << error << std::endl;
+#endif
+}
+
+std::wstring findDataFolder()
+{
+#ifdef _WIN32
+	WCHAR path[MAX_PATH];
+
+	// Check in binary directory
+	if (GetModuleFileNameW(NULL, path, MAX_PATH) != 0)
+	{
+		PathRemoveFileSpecW(path);
+		PathAppendW(path, L"DATA");
+		if ((GetFileAttributesW(path) & FILE_ATTRIBUTE_DIRECTORY) != 0)
+		{
+			return path;
+		}
+	}
+
+	// Check in working directory
+	if (GetCurrentDirectoryW(MAX_PATH, path) != 0)
+	{
+		PathAppendW(path, L"DATA");
+		if ((GetFileAttributesW(path) & FILE_ATTRIBUTE_DIRECTORY) != 0)
+		{
+			return path;
+		}
+	}
+
+	return L"";
+#else
+
+#endif
+}
+
+std::wstring findUserFolder()
+{
+#ifdef _WIN32
+	WCHAR path[MAX_PATH];
+
+	// Check in Saved Games folder (Vista and newer)
+	PWSTR *folder;
+	if (SHGetKnownFolderPath(FOLDERID_SavedGames, 0, NULL, folder) == S_OK)
+	{
+		PathAppendW(*folder, L"OpenXcom");
+		CoTaskMemFree(folder);
+		if ((GetFileAttributesW(*folder) & FILE_ATTRIBUTE_DIRECTORY) != 0)
+		{
+			return *folder;
+		}
+	}
+
+	// Check in Documents folder (XP and older)
+    if (SHGetFolderPathW(NULL, CSIDL_PERSONAL, NULL, SHGFP_TYPE_CURRENT, path) == S_OK)
+	{
+		PathAppendW(path, L"OpenXcom");
+		if ((GetFileAttributesW(path) & FILE_ATTRIBUTE_DIRECTORY) != 0)
+		{
+			return path;
+		}
+	}
+
+	// Check in binary directory
+	if (GetModuleFileNameW(NULL, path, MAX_PATH) != 0)
+	{
+		PathRemoveFileSpecW(path);
+		PathAppendW(path, L"USER");
+		if ((GetFileAttributesW(path) & FILE_ATTRIBUTE_DIRECTORY) != 0)
+		{
+			return path;
+		}
+	}
+
+	// Check in working directory
+	if (GetCurrentDirectoryW(MAX_PATH, path) != 0)
+	{
+		PathAppendW(path, L"USER");
+		if ((GetFileAttributesW(path) & FILE_ATTRIBUTE_DIRECTORY) != 0)
+		{
+			return path;
+		}
+	}
+
+	return L"";
+#else
+
 #endif
 }
 

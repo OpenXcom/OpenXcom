@@ -28,16 +28,14 @@
 #include "../Interface/Text.h"
 #include "../Engine/Action.h"
 #include "../Savegame/SavedBattleGame.h"
-#include "../Engine/Music.h"
-#include "../Battlescape/BattlescapeState.h"
 
 namespace OpenXcom
 {
 
 /**
- * Initializes all the elements in the Crash Briefing screen.
+ * Initializes all the elements in the Next Turn screen.
  * @param game Pointer to the core game.
- * @param craft Pointer to the craft.
+ * @param battleGame Pointer to the saved game.
  */
 NextTurnState::NextTurnState(Game *game, SavedBattleGame *battleGame) : State(game), _battleGame(battleGame)
 {
@@ -58,10 +56,10 @@ NextTurnState::NextTurnState(Game *game, SavedBattleGame *battleGame) : State(ga
 	add(_txtMessage);
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(15)+2);
+	_window->setColor(Palette::blockOffset(0)+8);
 	_window->setBackground(_game->getResourcePack()->getSurface("TAC00.SCR"));
 
-	_txtTitle->setColor(Palette::blockOffset(0));
+	_txtTitle->setColor(Palette::blockOffset(0)-1);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setHighContrast(true);
@@ -88,9 +86,6 @@ NextTurnState::NextTurnState(Game *game, SavedBattleGame *battleGame) : State(ga
 	_txtMessage->setAlign(ALIGN_CENTER);
 	_txtMessage->setHighContrast(true);
 	_txtMessage->setText(_game->getLanguage()->getString("STR_PRESS_BUTTON_TO_CONTINUE"));
-
-	// Set music
-	//_game->getResourcePack()->getMusic("GMDEFEND")->play();
 }
 
 /**

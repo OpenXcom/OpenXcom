@@ -118,6 +118,8 @@ public:
 	BattleUnit *getSelectedUnit();
 	/// set the currently selected unit
 	void setSelectedUnit(BattleUnit *unit);
+	/// select previous soldier
+	BattleUnit *selectPreviousPlayerUnit();
 	/// select next soldier
 	BattleUnit *selectNextPlayerUnit();
 	/// select unit with position on map

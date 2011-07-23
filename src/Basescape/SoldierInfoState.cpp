@@ -258,8 +258,8 @@ SoldierInfoState::~SoldierInfoState()
 }
 
 /**
- * The soldier names can change
- * after going into other screens.
+ * Update soldier stats when
+ * the soldier changes.
  */
 void SoldierInfoState::init()
 {

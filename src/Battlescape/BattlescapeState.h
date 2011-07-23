@@ -70,8 +70,8 @@ private:
 	Surface *_icons, *_rank;
 	Map *_map;
 	InteractiveSurface *_btnUnitUp, *_btnUnitDown, *_btnMapUp, *_btnMapDown, *_btnShowMap, *_btnKneel;
-	InteractiveSurface *_btnSoldier, *_btnCenter, *_btnNextSoldier, *_btnNextStop, *_btnShowLayers, *_btnHelp;
-	InteractiveSurface *_btnEndTurn, *_btnAbort;
+	InteractiveSurface *_btnInventory, *_btnCenter, *_btnNextSoldier, *_btnNextStop, *_btnShowLayers, *_btnHelp;
+	InteractiveSurface *_btnEndTurn, *_btnAbort, *_btnStats;
 	ImageButton *_reserve;
 	ImageButton *_btnReserveNone, *_btnReserveSnap, *_btnReserveAimed, *_btnReserveAuto;
 	InteractiveSurface *_btnLeftHandItem, *_btnRightHandItem;
@@ -125,7 +125,7 @@ public:
 	/// Handler for clicking the Kneel button.
 	void btnKneelClick(Action *action);
 	/// Handler for clicking the Soldier button.
-	void btnSoldierClick(Action *action);
+	void btnInventoryClick(Action *action);
 	/// Handler for clicking the Center button.
 	void btnCenterClick(Action *action);
 	/// Handler for clicking the Next Soldier button.
@@ -140,6 +140,8 @@ public:
 	void btnEndTurnClick(Action *action);
 	/// Handler for clicking the Abort button.
 	void btnAbortClick(Action *action);
+	/// Handler for clicking the stats.
+	void btnStatsClick(Action *action);
 	/// Handler for clicking the left hand item button.
 	void btnLeftHandItemClick(Action *action);
 	/// Handler for clicking the right hand item button.

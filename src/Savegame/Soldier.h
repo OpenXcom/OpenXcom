@@ -97,6 +97,8 @@ public:
 	int getKills() const;
 	/// Gets the soldier's gender.
 	SoldierGender getGender() const;
+	/// Gets the soldier's look.
+	SoldierLook getLook() const;
 	/// Gets a string version of the soldier's armor.
 	std::string getArmor() const;
 	/// Gets soldier rules.
