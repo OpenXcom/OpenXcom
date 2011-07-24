@@ -44,7 +44,7 @@ class SavedGame;
 class Base : public Target
 {
 private:
-	Ruleset *_rule;
+	const Ruleset *_rule;
 	std::wstring _name;
 	std::vector<BaseFacility*> _facilities;
 	std::vector<Soldier*> _soldiers;
@@ -54,7 +54,7 @@ private:
 	int _scientists, _engineers;
 public:
 	/// Creates a new base.
-	Base(Ruleset *rule);
+	Base(const Ruleset *rule);
 	/// Cleans up the base.
 	~Base();
 	/// Loads the base from YAML.

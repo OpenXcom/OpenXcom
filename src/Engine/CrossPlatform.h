@@ -30,15 +30,15 @@ namespace OpenXcom
  */
 namespace CrossPlatform
 {
-	/// Gets the correctly-cased path for a data file.
+	/// Gets the path for a data file.
 	std::string getDataFile(const std::string &filename);
 	/// Displays an error message.
 	void showError(const std::string &error);
 	/// Displays an error message.
 	void showError(const std::wstring &error);
-
+	/// Finds the game's data folder in the system.
 	std::wstring findDataFolder();
-
+	/// Finds the game's user folder in the system.
 	std::wstring findUserFolder();
 }
 

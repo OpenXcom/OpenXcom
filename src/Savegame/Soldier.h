@@ -54,7 +54,7 @@ public:
 	/// Creates a new soldier.
 	Soldier(RuleSoldier *rules, RuleArmor *armor);
 	/// Creates a new soldier with random stats.
-	Soldier(RuleSoldier *rules, RuleArmor *armor, std::vector<SoldierNamePool*> *names);
+	Soldier(RuleSoldier *rules, RuleArmor *armor, const std::vector<SoldierNamePool*> *names);
 	/// Cleans up the soldier.
 	~Soldier();
 	/// Initialises 

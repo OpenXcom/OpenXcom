@@ -53,7 +53,7 @@ Transfer::~Transfer()
  * @param base Destination base.
  * @param rule Game ruleset.
  */
-void Transfer::load(const YAML::Node &node, Base *base, Ruleset *rule)
+void Transfer::load(const YAML::Node &node, Base *base, const Ruleset *rule)
 {
 	node["hours"] >> _hours;
 	if (const YAML::Node *pName = node.FindValue("soldier"))

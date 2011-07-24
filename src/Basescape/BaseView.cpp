@@ -33,8 +33,6 @@
 namespace OpenXcom
 {
 
-#define GRID_SIZE 32
-
 /**
  * Sets up a base view with the specified size and position.
  * @param width Width in pixels.

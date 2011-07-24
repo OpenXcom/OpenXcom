@@ -55,7 +55,7 @@ public:
 	/// Gets the total quantity of items in the container.
 	int getTotalQuantity() const;
 	/// Gets the total size of items in the container.
-	double getTotalSize(Ruleset *rule) const;
+	double getTotalSize(const Ruleset *rule) const;
 	/// Gets all the items in the container.
 	std::map<std::string, int> *const getContents();
 };

@@ -73,8 +73,6 @@ int main(int argc, char** args)
 		exit(EXIT_FAILURE);
 	}
 #endif
-	
-	delete game;
 
 	return EXIT_SUCCESS;
 }

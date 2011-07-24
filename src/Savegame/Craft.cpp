@@ -70,7 +70,7 @@ Craft::~Craft()
  * @param node YAML node.
  * @param rule Ruleset for the saved game.
  */
-void Craft::load(const YAML::Node &node, Ruleset *rule)
+void Craft::load(const YAML::Node &node, const Ruleset *rule)
 {
 	unsigned int size = 0;
 

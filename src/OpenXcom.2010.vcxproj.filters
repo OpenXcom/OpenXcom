@@ -530,6 +530,9 @@
     <ClCompile Include="Battlescape\InventoryState.cpp">
       <Filter>Battlescape</Filter>
     </ClCompile>
+    <ClCompile Include="Ruleset\RuleInventory.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1061,6 +1064,9 @@
     </ClInclude>
     <ClInclude Include="Battlescape\InventoryState.h">
       <Filter>Battlescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\RuleInventory.h">
+      <Filter>Ruleset</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

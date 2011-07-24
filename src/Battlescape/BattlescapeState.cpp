@@ -1082,8 +1082,8 @@ void BattlescapeState::drawItemSprite(BattleItem *item, Surface *surface)
 {
 	SurfaceSet *texture = _game->getResourcePack()->getSurfaceSet("BIGOBS.PCK");
 	Surface *frame = texture->getFrame(item->getRules()->getBigSprite());
-	frame->setX((2 - item->getRules()->getSizeX()) * 8);
-	frame->setY((3 - item->getRules()->getSizeY()) * 8);
+	frame->setX((2 - item->getRules()->getInventoryWidth()) * 8);
+	frame->setY((3 - item->getRules()->getInventoryHeight()) * 8);
 	texture->getFrame(item->getRules()->getBigSprite())->blit(surface);
 }
 

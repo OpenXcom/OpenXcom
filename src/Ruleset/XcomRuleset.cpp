@@ -50,6 +50,7 @@
 #include "../Ufopaedia/Ufopaedia.h"
 #include "../Savegame/UfopaediaSaved.h"
 #include "ArticleDefinition.h"
+#include "RuleInventory.h"
 
 namespace OpenXcom
 {
@@ -674,8 +675,8 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	pistol->setTUAimed(30);
 	pistol->getCompatibleAmmo()->push_back("STR_PISTOL_CLIP");
 	pistol->setBattleType(BT_FIREARM);
-	pistol->setSizeX(1);
-	pistol->setSizeY(2);
+	pistol->setInventoryWidth(1);
+	pistol->setInventoryHeight(2);
 	pistol->setWeight(5);
 
 	RuleItem *pclip = new RuleItem("STR_PISTOL_CLIP");
@@ -688,8 +689,8 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	pclip->setBattleType(BT_AMMO);
 	pclip->setHitAnimation(26);
 	pclip->setHitSound(22);
-	pclip->setSizeX(1);
-	pclip->setSizeY(1);
+	pclip->setInventoryWidth(1);
+	pclip->setInventoryHeight(1);
 	pclip->setClipSize(12);
 	pclip->setWeight(3);
 	
@@ -709,8 +710,8 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	rifle->setTUAimed(80);
 	rifle->getCompatibleAmmo()->push_back("STR_RIFLE_CLIP");
 	rifle->setBattleType(BT_FIREARM);
-	rifle->setSizeX(1);
-	rifle->setSizeY(3);
+	rifle->setInventoryWidth(1);
+	rifle->setInventoryHeight(3);
 	rifle->setWeight(8);
 
 	RuleItem *rclip = new RuleItem("STR_RIFLE_CLIP");
@@ -723,8 +724,8 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	rclip->setBattleType(BT_AMMO);
 	rclip->setHitAnimation(26);
 	rclip->setHitSound(22);
-	rclip->setSizeX(1);
-	rclip->setSizeY(1);
+	rclip->setInventoryWidth(1);
+	rclip->setInventoryHeight(1);
 	rclip->setClipSize(20);
 	rclip->setWeight(3);
 
@@ -745,8 +746,8 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	hcannon->getCompatibleAmmo()->push_back("STR_HC_HE_AMMO");
 	hcannon->getCompatibleAmmo()->push_back("STR_HC_IN_AMMO");
 	hcannon->setBattleType(BT_FIREARM);
-	hcannon->setSizeX(2);
-	hcannon->setSizeY(3);
+	hcannon->setInventoryWidth(2);
+	hcannon->setInventoryHeight(3);
 	hcannon->setWeight(18);
 
 	RuleItem *hcap = new RuleItem("STR_HC_AP_AMMO");
@@ -759,8 +760,8 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	hcap->setBattleType(BT_AMMO);
 	hcap->setHitAnimation(26);
 	hcap->setHitSound(13);
-	hcap->setSizeX(1);
-	hcap->setSizeY(1);
+	hcap->setInventoryWidth(1);
+	hcap->setInventoryHeight(1);
 	hcap->setClipSize(6);
 	hcap->setWeight(6);
 
@@ -774,8 +775,8 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	hche->setBattleType(BT_AMMO);
 	hche->setHitAnimation(0);
 	hche->setHitSound(0);
-	hche->setSizeX(1);
-	hche->setSizeY(1);
+	hche->setInventoryWidth(1);
+	hche->setInventoryHeight(1);
 	hche->setClipSize(6);
 	hche->setWeight(6);
 
@@ -789,8 +790,8 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	hcin->setBattleType(BT_AMMO);
 	hcin->setHitAnimation(0);
 	hcin->setHitSound(0);
-	hcin->setSizeX(1);
-	hcin->setSizeY(1);
+	hcin->setInventoryWidth(1);
+	hcin->setInventoryHeight(1);
 	hcin->setClipSize(6);
 	hcin->setWeight(6);
 
@@ -812,8 +813,8 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	acannon->getCompatibleAmmo()->push_back("STR_AC_HE_AMMO");
 	acannon->getCompatibleAmmo()->push_back("STR_AC_IN_AMMO");
 	acannon->setBattleType(BT_FIREARM);
-	acannon->setSizeX(2);
-	acannon->setSizeY(3);
+	acannon->setInventoryWidth(2);
+	acannon->setInventoryHeight(3);
 	acannon->setWeight(19);
 	
 	RuleItem *acap = new RuleItem("STR_AC_AP_AMMO");
@@ -826,8 +827,8 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	acap->setBattleType(BT_AMMO);
 	acap->setHitSound(13);
 	acap->setHitAnimation(26);
-	acap->setSizeX(1);
-	acap->setSizeY(1);
+	acap->setInventoryWidth(1);
+	acap->setInventoryHeight(1);
 	acap->setClipSize(14);
 	acap->setWeight(5);
 
@@ -846,8 +847,8 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	rlauncher->setTUAimed(75);
 	rlauncher->getCompatibleAmmo()->push_back("STR_SMALL_ROCKET");
 	rlauncher->setBattleType(BT_FIREARM);
-	rlauncher->setSizeX(2);
-	rlauncher->setSizeY(3);
+	rlauncher->setInventoryWidth(2);
+	rlauncher->setInventoryHeight(3);
 	rlauncher->setWeight(10);
 
 	RuleItem *srocket = new RuleItem("STR_SMALL_ROCKET");
@@ -860,8 +861,8 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	srocket->setBattleType(BT_AMMO);
 	srocket->setHitSound(0);
 	srocket->setHitAnimation(0);
-	srocket->setSizeX(1);
-	srocket->setSizeY(3);
+	srocket->setInventoryWidth(1);
+	srocket->setInventoryHeight(3);
 	srocket->setClipSize(1);
 	srocket->setWeight(6);
 
@@ -873,8 +874,8 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	grenade->setPower(50);
 	grenade->setDamageType(DT_HE);
 	grenade->setBattleType(BT_GRENADE);
-	grenade->setSizeX(1);
-	grenade->setSizeY(1);
+	grenade->setInventoryWidth(1);
+	grenade->setInventoryHeight(1);
 	grenade->setWeight(3);
 
 	RuleItem *sgrenade = new RuleItem("STR_SMOKE_GRENADE");
@@ -885,22 +886,22 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	sgrenade->setPower(60);
 	sgrenade->setDamageType(DT_SMOKE);
 	sgrenade->setBattleType(BT_GRENADE);
-	sgrenade->setSizeX(1);
-	sgrenade->setSizeY(1);
+	sgrenade->setInventoryWidth(1);
+	sgrenade->setInventoryHeight(1);
 	sgrenade->setWeight(3);
 
 	RuleItem *corpse = new RuleItem("STR_CORPSE");
 	corpse->setBigSprite(45);
 	corpse->setFloorSprite(39);
-	corpse->setSizeX(2);
-	corpse->setSizeY(3);
+	corpse->setInventoryWidth(2);
+	corpse->setInventoryHeight(3);
 	corpse->setWeight(22);
 
 	RuleItem *scorpse = new RuleItem("STR_SECTOID_CORPSE");
 	scorpse->setBigSprite(46);
 	scorpse->setFloorSprite(42);
-	scorpse->setSizeX(2);
-	scorpse->setSizeY(3);
+	scorpse->setInventoryWidth(2);
+	scorpse->setInventoryHeight(3);
 	scorpse->setWeight(30);
 
 	RuleItem *ppistol = new RuleItem("STR_PLASMA_PISTOL");
@@ -919,8 +920,8 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	ppistol->setTUAimed(60);
 	ppistol->getCompatibleAmmo()->push_back("STR_PLASMA_PISTOL_CLIP");
 	ppistol->setBattleType(BT_FIREARM);
-	ppistol->setSizeX(1);
-	ppistol->setSizeY(2);
+	ppistol->setInventoryWidth(1);
+	ppistol->setInventoryHeight(2);
 	ppistol->setWeight(3);
 
 	RuleItem *ppclip = new RuleItem("STR_PLASMA_PISTOL_CLIP");
@@ -933,8 +934,8 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	ppclip->setBattleType(BT_AMMO);
 	ppclip->setHitAnimation(46);
 	ppclip->setHitSound(19);
-	ppclip->setSizeX(1);
-	ppclip->setSizeY(1);
+	ppclip->setInventoryWidth(1);
+	ppclip->setInventoryHeight(1);
 	ppclip->setClipSize(26);
 	ppclip->setWeight(3);
 
@@ -1074,6 +1075,75 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_ufos.insert(std::pair<std::string, RuleUfo*>("STR_TERROR_SHIP", terror));
 	_ufos.insert(std::pair<std::string, RuleUfo*>("STR_BATTLESHIP", battleship));
 
+	// Add inventory
+
+	RuleInventory *rshoulder = new RuleInventory("STR_RIGHT_SHOULDER");
+	rshoulder->setX(16);
+	rshoulder->setY(40);
+	rshoulder->addSlot(0, 0);
+	rshoulder->addSlot(1, 0);
+
+	RuleInventory *lshoulder = new RuleInventory("STR_LEFT_SHOULDER");
+	lshoulder->setX(112);
+	lshoulder->setY(40);
+	lshoulder->addSlot(0, 0);
+	lshoulder->addSlot(1, 0);
+
+	RuleInventory *rhand = new RuleInventory("STR_RIGHT_HAND");
+	rhand->setX(0);
+	rhand->setY(64);
+	rhand->addSlot(1, 0);
+
+	RuleInventory *lhand = new RuleInventory("STR_LEFT_HAND");
+	lhand->setX(128);
+	lhand->setY(64);
+	lhand->setHand(true);
+
+	RuleInventory *rleg = new RuleInventory("STR_RIGHT_LEG");
+	rleg->setX(0);
+	rleg->setY(120);
+	rleg->addSlot(0, 0);
+	rleg->addSlot(1, 0);
+
+	RuleInventory *lleg = new RuleInventory("STR_LEFT_LEG");
+	lleg->setX(128);
+	lleg->setY(120);
+	lleg->addSlot(0, 0);
+	lleg->addSlot(1, 0);
+
+	RuleInventory *backpack = new RuleInventory("STR_BACK_PACK");
+	backpack->setX(192);
+	backpack->setY(40);
+	backpack->addSlot(0, 0);
+	backpack->addSlot(1, 0);
+	backpack->addSlot(2, 0);
+	backpack->addSlot(0, 1);
+	backpack->addSlot(1, 1);
+	backpack->addSlot(2, 1);
+	backpack->addSlot(0, 2);
+	backpack->addSlot(1, 2);
+	backpack->addSlot(2, 2);
+
+	RuleInventory *belt = new RuleInventory("STR_BELT");
+	belt->setX(192);
+	belt->setY(104);
+	belt->addSlot(0, 0);
+	belt->addSlot(1, 0);
+	belt->addSlot(2, 0);
+	belt->addSlot(3, 0);
+	belt->addSlot(0, 1);
+	belt->addSlot(3, 1);
+
+	_invs.insert(std::pair<std::string, RuleInventory*>("STR_RIGHT_SHOULDER", rshoulder));
+	_invs.insert(std::pair<std::string, RuleInventory*>("STR_LEFT_SHOULDER", lshoulder));
+	_invs.insert(std::pair<std::string, RuleInventory*>("STR_RIGHT_HAND", rhand));
+	_invs.insert(std::pair<std::string, RuleInventory*>("STR_LEFT_HAND", lhand));
+	_invs.insert(std::pair<std::string, RuleInventory*>("STR_RIGHT_LEG", rleg));
+	_invs.insert(std::pair<std::string, RuleInventory*>("STR_LEFT_LEG", lleg));
+	_invs.insert(std::pair<std::string, RuleInventory*>("STR_BACK_PACK", backpack));
+	_invs.insert(std::pair<std::string, RuleInventory*>("STR_BELT", belt));
+	
+	// Add terrain
 	RuleTerrain *culta = new RuleTerrain("CULTA");
 	culta->getMapDataSets()->push_back(getMapDataSet("BLANKS"));
 	culta->getMapDataSets()->push_back(getMapDataSet("CULTIVAT"));
@@ -1212,6 +1282,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_terrains.insert(std::pair<std::string, RuleTerrain*>("MARS",mars));
 	_terrains.insert(std::pair<std::string, RuleTerrain*>("URBAN",urban));
 
+	// Add armor
 	RuleArmor *coveralls = new RuleArmor("STR_NONE_UC", "XCOM_0.PCK");
 	coveralls->setArmor(12, 8, 5, 2);
 	coveralls->setCorpseItem("STR_CORPSE");
@@ -1235,6 +1306,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_armors.insert(std::pair<std::string, RuleArmor*>("STR_FLYING_SUIT_UC", flyingSuit));
 	_armors.insert(std::pair<std::string, RuleArmor*>("SECTOID_ARMOR0", sectoidSoldierArmor));
 
+	// Add units
 	RuleSoldier *xcom = new RuleSoldier("XCOM");
 	xcom->setArmor("STR_NONE_UC");
 	UnitStats s1;
@@ -1565,7 +1637,7 @@ XcomRuleset::~XcomRuleset()
  * @param diff Difficulty for the save.
  * @return New saved game.
  */
-SavedGame *XcomRuleset::newSave(GameDifficulty diff)
+SavedGame *XcomRuleset::newSave(GameDifficulty diff) const
 {
 	SavedGame *save = new SavedGame(diff);
 
@@ -1681,37 +1753,37 @@ SavedGame *XcomRuleset::newSave(GameDifficulty diff)
 	save->getBases()->push_back(base);
 
 	// init savedgame articles
-	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_SKYRANGER"]);
-	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_LIGHTNING"]);
-	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_AVENGER"]);
-	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_INTERCEPTOR"]);
-	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_FIRESTORM"]);
+	save->getUfopaedia()->insertArticle(getUfopaediaArticle("STR_SKYRANGER"));
+	save->getUfopaedia()->insertArticle(getUfopaediaArticle("STR_LIGHTNING"));
+	save->getUfopaedia()->insertArticle(getUfopaediaArticle("STR_AVENGER"));
+	save->getUfopaedia()->insertArticle(getUfopaediaArticle("STR_INTERCEPTOR"));
+	save->getUfopaedia()->insertArticle(getUfopaediaArticle("STR_FIRESTORM"));
 
-	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_STINGRAY"]);
-	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_AVALANCHE"]);
-	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_CANNON_UC"]);
-	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_FUSION_BALL_UC"]);
-	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_LASER_CANNON_UC"]);
-	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_PLASMA_BEAM_UC"]);
+	save->getUfopaedia()->insertArticle(getUfopaediaArticle("STR_STINGRAY"));
+	save->getUfopaedia()->insertArticle(getUfopaediaArticle("STR_AVALANCHE"));
+	save->getUfopaedia()->insertArticle(getUfopaediaArticle("STR_CANNON_UC"));
+	save->getUfopaedia()->insertArticle(getUfopaediaArticle("STR_FUSION_BALL_UC"));
+	save->getUfopaedia()->insertArticle(getUfopaediaArticle("STR_LASER_CANNON_UC"));
+	save->getUfopaedia()->insertArticle(getUfopaediaArticle("STR_PLASMA_BEAM_UC"));
 
-	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_PISTOL"]);
-	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_PISTOL_CLIP"]);
-	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_HEAVY_CANNON"]);	
-	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_HC_AP_AMMO"]);
-	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_HC_HE_AMMO"]);
-	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_GRENADE"]);
-	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_SMOKE_GRENADE"]);
+	save->getUfopaedia()->insertArticle(getUfopaediaArticle("STR_PISTOL"));
+	save->getUfopaedia()->insertArticle(getUfopaediaArticle("STR_PISTOL_CLIP"));
+	save->getUfopaedia()->insertArticle(getUfopaediaArticle("STR_HEAVY_CANNON"));	
+	save->getUfopaedia()->insertArticle(getUfopaediaArticle("STR_HC_AP_AMMO"));
+	save->getUfopaedia()->insertArticle(getUfopaediaArticle("STR_HC_HE_AMMO"));
+	save->getUfopaedia()->insertArticle(getUfopaediaArticle("STR_GRENADE"));
+	save->getUfopaedia()->insertArticle(getUfopaediaArticle("STR_SMOKE_GRENADE"));
 
 	
-	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_SECTOID"]);
-//	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_SNAKEMAN"]);
-	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_ALIEN_ORIGINS"]);
+	save->getUfopaedia()->insertArticle(getUfopaediaArticle("STR_SECTOID"));
+//	save->getUfopaedia()->insertArticle(getUfopaediaArticle("STR_SNAKEMAN"));
+	save->getUfopaedia()->insertArticle(getUfopaediaArticle("STR_ALIEN_ORIGINS"));
 	
-	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_ACCESS_LIFT"]);
-	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_HANGAR"]);
+	save->getUfopaedia()->insertArticle(getUfopaediaArticle("STR_ACCESS_LIFT"));
+	save->getUfopaedia()->insertArticle(getUfopaediaArticle("STR_HANGAR"));
 
-	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_SMALL_SCOUT"]);
-	save->getUfopaedia()->insertArticle(_ufopaediaArticles["STR_HARVESTER"]);
+	save->getUfopaedia()->insertArticle(getUfopaediaArticle("STR_SMALL_SCOUT"));
+	save->getUfopaedia()->insertArticle(getUfopaediaArticle("STR_HARVESTER"));
 
 	return save;
 }

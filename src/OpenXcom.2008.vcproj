@@ -1564,6 +1564,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Ruleset\RuleInventory.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\RuleInventory.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Ruleset\RuleItem.cpp"
 				>
 			</File>

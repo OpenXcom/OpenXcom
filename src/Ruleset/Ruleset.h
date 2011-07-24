@@ -42,6 +42,7 @@ class RuleSoldier;
 class RuleAlien;
 class RuleArmor;
 class ArticleDefinition;
+class RuleInventory;
 
 /**
  * Set of rules and stats for a game.
@@ -66,6 +67,7 @@ protected:
 	std::map<std::string, RuleAlien*> _aliens;
 	std::map<std::string, RuleArmor*> _armors;
 	std::map<std::string, ArticleDefinition*> _ufopaediaArticles;
+	std::map<std::string, RuleInventory*> _invs;
 	int _costSoldier, _costEngineer, _costScientist, _timePersonnel;
 public:
 	/// Creates a blank ruleset.
@@ -73,35 +75,37 @@ public:
 	/// Cleans up the ruleset.
 	virtual ~Ruleset();
 	/// Generates the starting saved game.
-	virtual SavedGame *newSave(GameDifficulty diff);
+	virtual SavedGame *newSave(GameDifficulty diff) const;
 	/// Gets the pool list for soldier names.
 	std::vector<SoldierNamePool*> *const getPools();
 	/// Gets the ruleset for a country type.
-	RuleCountry *const getCountry(std::string id);
+	RuleCountry *const getCountry(const std::string &id) const;
 	/// Gets the ruleset for a region type.
-	RuleRegion *const getRegion(std::string id);
+	RuleRegion *const getRegion(const std::string &id) const;
 	/// Gets the ruleset for a facility type.
-	RuleBaseFacility *const getBaseFacility(std::string id);
+	RuleBaseFacility *const getBaseFacility(const std::string &id) const;
 	/// Gets the ruleset for a craft type.
-	RuleCraft *const getCraft(std::string id);
+	RuleCraft *const getCraft(const std::string &id) const;
 	/// Gets the ruleset for a craft weapon type.
-	RuleCraftWeapon *const getCraftWeapon(std::string id);
+	RuleCraftWeapon *const getCraftWeapon(const std::string &id) const;
 	/// Gets the ruleset for an item type.
-	RuleItem *const getItem(std::string id);
+	RuleItem *const getItem(const std::string &id) const;
 	/// Gets the ruleset for a UFO type.
-	RuleUfo *const getUfo(std::string id);
+	RuleUfo *const getUfo(const std::string &id) const;
 	/// Gets terrains for battlescape games.
-	RuleTerrain *const getTerrain(std::string name);
+	RuleTerrain *const getTerrain(const std::string &name) const;
 	/// Gets mapdatafile for battlescape games.
-	MapDataSet *const getMapDataSet(std::string name);
-	/// Gets unit rules.
-	RuleSoldier *const getSoldier(std::string name);
-	/// Gets unit rules.
-	RuleAlien *const getAlien(std::string name);
+	MapDataSet *const getMapDataSet(const std::string &name) const;
+	/// Gets soldier unit rules.
+	RuleSoldier *const getSoldier(const std::string &name) const;
+	/// Gets alien unit rules.
+	RuleAlien *const getAlien(const std::string &name) const;
 	/// Gets armor rules.
-	RuleArmor *const getArmor(std::string name);
+	RuleArmor *const getArmor(const std::string &name) const;
 	/// Gets Ufopaedia article definition.
-	ArticleDefinition *getUfopaediaArticle(std::string name);
+	ArticleDefinition *const getUfopaediaArticle(const std::string &name) const;
+	/// Gets inventory rules.
+	RuleInventory *const getInventory(const std::string &id) const;
 	/// Gets the cost of a soldier.
 	int getSoldierCost() const;
 	/// Gets the cost of an engineer.

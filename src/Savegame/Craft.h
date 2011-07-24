@@ -56,7 +56,7 @@ public:
 	/// Cleans up the craft.
 	~Craft();
 	/// Loads the craft from YAML.
-	void load(const YAML::Node& node, Ruleset *rule);
+	void load(const YAML::Node& node, const Ruleset *rule);
 	/// Saves the craft to YAML.
 	void save(YAML::Emitter& out) const;
 	/// Saves the craft's ID to YAML.

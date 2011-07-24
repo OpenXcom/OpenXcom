@@ -31,8 +31,6 @@ class RuleBaseFacility;
 class Font;
 class Timer;
 
-#define BASE_SIZE 6
-
 /**
  * Interactive view of a base.
  * Takes a certain base and displays all its facilities
@@ -41,6 +39,9 @@ class Timer;
 class BaseView : public InteractiveSurface
 {
 private:
+	static const int BASE_SIZE = 6;
+	static const int GRID_SIZE = 32;
+
 	Base *_base;
 	SurfaceSet *_texture;
 	BaseFacility *_facilities[BASE_SIZE][BASE_SIZE], *_selFacility;

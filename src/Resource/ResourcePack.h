@@ -67,21 +67,21 @@ public:
 	/// Cleans up the resource pack.
 	virtual ~ResourcePack();
 	/// Gets a particular font.
-	Font *const getFont(const std::string &name);
+	Font *const getFont(const std::string &name) const;
 	/// Gets a particular surface.
-	Surface *const getSurface(const std::string &name);
+	Surface *const getSurface(const std::string &name) const;
 	/// Gets a particular surface set.
-	SurfaceSet *const getSurfaceSet(const std::string &name);
+	SurfaceSet *const getSurfaceSet(const std::string &name) const;
 	/// Gets the list of world polygons.
 	std::list<Polygon*> *const getPolygons();
 	/// Gets the list of world polylines.
 	std::list<Polyline*> *const getPolylines();
 	/// Gets a particular music.
-	Music *const getMusic(const std::string &name);
+	Music *const getMusic(const std::string &name) const;
 	/// Gets a particular sound set.
-	SoundSet *const getSoundSet(const std::string &name);
+	SoundSet *const getSoundSet(const std::string &name) const;
 	/// Gets a particular palette.
-	Palette *const getPalette(const std::string &name);
+	Palette *const getPalette(const std::string &name) const;
 	/// Sets a new palette.
 	void setPalette(SDL_Color *colors, int firstcolor, int ncolors);
 	/// Gets list of voxel data.

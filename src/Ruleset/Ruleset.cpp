@@ -30,6 +30,7 @@
 #include "RuleSoldier.h"
 #include "RuleAlien.h"
 #include "ArticleDefinition.h"
+#include "RuleInventory.h"
 
 namespace OpenXcom
 {
@@ -37,7 +38,7 @@ namespace OpenXcom
 /**
  * Creates a ruleset with blank sets of rules.
  */
-Ruleset::Ruleset() : _names(), _countries(), _regions(), _facilities(), _crafts(), _craftWeapons(), _items(), _ufos(), _terrains(), _mapDataFiles(), _soldiers(), _aliens(), _costSoldier(0), _costEngineer(0), _costScientist(0)
+Ruleset::Ruleset() : _names(), _countries(), _regions(), _facilities(), _crafts(), _craftWeapons(), _items(), _ufos(), _terrains(), _mapDataFiles(), _soldiers(), _aliens(), _invs(), _costSoldier(0), _costEngineer(0), _costScientist(0)
 {
 }
 
@@ -98,6 +99,10 @@ Ruleset::~Ruleset()
 	{
 		delete i->second;
 	}
+	for (std::map<std::string, RuleInventory*>::iterator i = _invs.begin(); i != _invs.end(); ++i)
+	{
+		delete i->second;
+	}
 }
 
 /**
@@ -105,7 +110,7 @@ Ruleset::~Ruleset()
  * @param diff Difficulty for the save.
  * @return New saved game.
  */
-SavedGame *Ruleset::newSave(GameDifficulty diff)
+SavedGame *Ruleset::newSave(GameDifficulty diff) const
 {
 	SavedGame *save = new SavedGame(diff);
 
@@ -126,9 +131,9 @@ std::vector<SoldierNamePool*> *const Ruleset::getPools()
  * @param id Country type.
  * @return Rules for the country.
  */
-RuleCountry *const Ruleset::getCountry(std::string id)
+RuleCountry *const Ruleset::getCountry(const std::string &id) const
 {
-	return _countries[id];
+	return _countries.find(id)->second;
 }
 
 /**
@@ -136,9 +141,9 @@ RuleCountry *const Ruleset::getCountry(std::string id)
  * @param id Region type.
  * @return Rules for the region.
  */
-RuleRegion *const Ruleset::getRegion(std::string id)
+RuleRegion *const Ruleset::getRegion(const std::string &id) const
 {
-	return _regions[id];
+	return _regions.find(id)->second;
 }
 
 /**
@@ -146,9 +151,9 @@ RuleRegion *const Ruleset::getRegion(std::string id)
  * @param id Facility type.
  * @return Rules for the facility.
  */
-RuleBaseFacility *const Ruleset::getBaseFacility(std::string id)
+RuleBaseFacility *const Ruleset::getBaseFacility(const std::string &id) const
 {
-	return _facilities[id];
+	return _facilities.find(id)->second;
 }
 
 /**
@@ -156,9 +161,9 @@ RuleBaseFacility *const Ruleset::getBaseFacility(std::string id)
  * @param id Craft type.
  * @return Rules for the craft.
  */
-RuleCraft *const Ruleset::getCraft(std::string id)
+RuleCraft *const Ruleset::getCraft(const std::string &id) const
 {
-	return _crafts[id];
+	return _crafts.find(id)->second;
 }
 
 /**
@@ -166,18 +171,18 @@ RuleCraft *const Ruleset::getCraft(std::string id)
  * @param id Craft weapon type.
  * @return Rules for the craft weapon.
  */
-RuleCraftWeapon *const Ruleset::getCraftWeapon(std::string id)
+RuleCraftWeapon *const Ruleset::getCraftWeapon(const std::string &id) const
 {
-	return _craftWeapons[id];
+	return _craftWeapons.find(id)->second;
 }
 /**
  * Returns the rules for the specified item.
  * @param id Item type.
  * @return Rules for the item.
  */
-RuleItem *const Ruleset::getItem(std::string id)
+RuleItem *const Ruleset::getItem(const std::string &id) const
 {
-	return _items[id];
+	return _items.find(id)->second;
 }
 
 /**
@@ -185,9 +190,9 @@ RuleItem *const Ruleset::getItem(std::string id)
  * @param id UFO type.
  * @return Rules for the UFO.
  */
-RuleUfo *const Ruleset::getUfo(std::string id)
+RuleUfo *const Ruleset::getUfo(const std::string &id) const
 {
-	return _ufos[id];
+	return _ufos.find(id)->second;
 }
 
 /**
@@ -195,9 +200,9 @@ RuleUfo *const Ruleset::getUfo(std::string id)
  * @param name terrain name.
  * @return Rules for the terrain.
  */
-RuleTerrain *const Ruleset::getTerrain(std::string name)
+RuleTerrain *const Ruleset::getTerrain(const std::string &name) const
 {
-	return _terrains[name];
+	return _terrains.find(name)->second;
 }
 
 /**
@@ -205,9 +210,9 @@ RuleTerrain *const Ruleset::getTerrain(std::string name)
  * @param name datafile name.
  * @return Rules for the datafile.
  */
-MapDataSet *const Ruleset::getMapDataSet(std::string name)
+MapDataSet *const Ruleset::getMapDataSet(const std::string &name) const
 {
-	return _mapDataFiles[name];
+	return _mapDataFiles.find(name)->second;
 }
 
 /**
@@ -215,9 +220,9 @@ MapDataSet *const Ruleset::getMapDataSet(std::string name)
  * @param name Unit name.
  * @return Rules for the units.
  */
-RuleSoldier *const Ruleset::getSoldier(std::string name)
+RuleSoldier *const Ruleset::getSoldier(const std::string &name) const
 {
-	return _soldiers[name];
+	return _soldiers.find(name)->second;
 }
 
 /**
@@ -225,9 +230,9 @@ RuleSoldier *const Ruleset::getSoldier(std::string name)
  * @param name Unit name.
  * @return Rules for the units.
  */
-RuleAlien *const Ruleset::getAlien(std::string name)
+RuleAlien *const Ruleset::getAlien(const std::string &name) const
 {
-	return _aliens[name];
+	return _aliens.find(name)->second;
 }
 
 /**
@@ -235,9 +240,9 @@ RuleAlien *const Ruleset::getAlien(std::string name)
  * @param name Armor name.
  * @return Rules for the armor.
  */
-RuleArmor *const Ruleset::getArmor(std::string name)
+RuleArmor *const Ruleset::getArmor(const std::string &name) const
 {
-	return _armors[name];
+	return _armors.find(name)->second;
 }
 
 /**
@@ -285,9 +290,19 @@ int Ruleset::getPersonnelTime() const
  * @param name Article name.
  * @return Article definition.
  */
-ArticleDefinition *Ruleset::getUfopaediaArticle(std::string name)
+ArticleDefinition *const Ruleset::getUfopaediaArticle(const std::string &name) const
 {
-	return _ufopaediaArticles[name];
+	return _ufopaediaArticles.find(name)->second;
+}
+
+/**
+ * Returns the rules for the specified inventory section.
+ * @param id Inventory type.
+ * @return Rules for the inventory.
+ */
+RuleInventory *const Ruleset::getInventory(const std::string &id) const
+{
+	return _invs.find(id)->second;
 }
 
 }
