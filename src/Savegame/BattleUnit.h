@@ -22,7 +22,7 @@
 #include <set>
 #include <string>
 #include "../Battlescape/Position.h"
-#include "../Battlescape/BattleScapeState.h"
+#include "../Battlescape/BattlescapeState.h"
 #include "Soldier.h"
 
 namespace OpenXcom

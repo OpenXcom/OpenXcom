@@ -205,9 +205,10 @@ void BattlescapeGenerator::run()
 		_save->setSelectedUnit(_save->getUnits()->at(0)); // select first soldier
 
 		// add items that are in the craft
-		/*for (std::map<std::string, ItemContainer*>::iterator i = _craft->getItems()->begin(); i != _craft->getItems()->end(); ++i)
+		/*for (std::map<std::string, int>::iterator i = _craft->getItems()->getContents()->begin(); i != _craft->getItems()->getContents()->end(); ++i)
 		{
-				addItem((*i).second);
+			for (int count=0; count < (*i).second; count++)
+				addItem(_game->getRuleset()->getItem((*i).first));
 		}*/
 		// test data
 		addItem(_game->getRuleset()->getItem("STR_RIFLE"));
