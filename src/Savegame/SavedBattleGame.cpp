@@ -217,7 +217,7 @@ void SavedBattleGame::save(YAML::Emitter &out) const
 		data.push_back(0xFF);
 		data.push_back((unsigned char)empties);
 	}
-	out << YAML::Key << "tiles" << YAML::Value << YAML::Binary(&data[0], data.size());
+	//out << YAML::Key << "tiles" << YAML::Value << YAML::Binary(&data[0], data.size());
 
 	out << YAML::Key << "units" << YAML::Value;
 	out << YAML::BeginSeq;
