@@ -26,8 +26,6 @@
 namespace OpenXcom
 {
 
-#define NUM_SHADES 8
-
 class Game;
 class Polygon;
 class SurfaceSet;
@@ -43,6 +41,16 @@ class Target;
 class Globe : public InteractiveSurface
 {
 private:
+	static const int NUM_SHADES = 8;
+	static const int NUM_TEXTURES = 13;
+	static const int NUM_LANDSHADES = 48;
+	static const int NUM_SEASHADES = 72;
+	static const int NEAR_RADIUS = 25;
+	static const double QUAD_LONGITUDE;
+	static const double QUAD_LATITUDE;
+	static const double ROTATE_LONGITUDE;
+	static const double ROTATE_LATITUDE;
+
 	std::vector<double> _radius;
 	double _cenLon, _cenLat, _rotLon, _rotLat;
 	Sint16 _cenX, _cenY;

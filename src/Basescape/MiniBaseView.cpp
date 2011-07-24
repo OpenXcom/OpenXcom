@@ -26,9 +26,6 @@
 #include "../Savegame/Craft.h"
 #include "../Engine/Palette.h"
 
-#define MAX_BASES 8
-#define MINI_SIZE 14
-
 namespace OpenXcom
 {
 

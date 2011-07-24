@@ -55,7 +55,7 @@ Soldier::Soldier(RuleSoldier *rules, RuleArmor *armor) : Unit(armor), _name(L"")
  * @param armor Soldier armor.
  * @param names List of name pools.
  */
-Soldier::Soldier(RuleSoldier *rules, RuleArmor *armor, std::vector<SoldierNamePool*> *names) : Unit(armor), _rules(rules), _rank(RANK_ROOKIE), _craft(0), _missions(0), _kills(0)
+Soldier::Soldier(RuleSoldier *rules, RuleArmor *armor, const std::vector<SoldierNamePool*> *names) : Unit(armor), _rules(rules), _rank(RANK_ROOKIE), _craft(0), _missions(0), _kills(0)
 {
 	UnitStats minStats = rules->getMinStats();
 	UnitStats maxStats = rules->getMaxStats();

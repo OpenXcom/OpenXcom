@@ -53,7 +53,7 @@ public:
 	/// Cleans up the transfer.
 	~Transfer();
 	/// Loads the transfer from YAML.
-	void load(const YAML::Node& node, Base *base, Ruleset *rule);
+	void load(const YAML::Node& node, Base *base, const Ruleset *rule);
 	/// Saves the transfer to YAML.
 	void save(YAML::Emitter& out) const;
 	/// Sets the soldier of the transfer.

@@ -48,14 +48,10 @@
 namespace OpenXcom
 {
 
-#define NUM_TEXTURES 13
-#define NUM_LANDSHADES 48
-#define NUM_SEASHADES 72
-#define	QUAD_LONGITUDE 0.05
-#define QUAD_LATITUDE 0.2
-#define ROTATE_LONGITUDE 0.25
-#define ROTATE_LATITUDE 0.15
-#define NEAR_RADIUS 25
+const double Globe::QUAD_LONGITUDE = 0.05;
+const double Globe::QUAD_LATITUDE = 0.2;
+const double Globe::ROTATE_LONGITUDE = 0.25;
+const double Globe::ROTATE_LATITUDE = 0.15;
 
 /**
  * Sets up a globe with the specified size and position.

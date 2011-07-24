@@ -68,8 +68,8 @@ namespace OpenXcom
 		
 		SurfaceSet *texture = _game->getResourcePack()->getSurfaceSet("BIGOBS.PCK");
 		Surface *graphic = texture->getFrame(defs->item->getBigSprite());
-		graphic->setX((2 - defs->item->getSizeX()) * 8);
-		graphic->setY((3 - defs->item->getSizeY()) * 8);
+		graphic->setX((2 - defs->item->getInventoryWidth()) * 8);
+		graphic->setY((3 - defs->item->getInventoryHeight()) * 8);
 		graphic->blit(_image);
 		
 		std::vector<std::string> *ammo_data = defs->item->getCompatibleAmmo();
@@ -199,8 +199,8 @@ namespace OpenXcom
 						_txtAmmoDamage[i]->setText(ss.str().c_str());
 
 						graphic = texture->getFrame(ammo_rule->getBigSprite());
-						graphic->setX((2 - ammo_rule->getSizeX()) * 8);
-						graphic->setY((3 - ammo_rule->getSizeY()) * 8);
+						graphic->setX((2 - ammo_rule->getInventoryWidth()) * 8);
+						graphic->setY((3 - ammo_rule->getInventoryHeight()) * 8);
 						graphic->blit(_imageAmmo[i]);
 					}
 				}

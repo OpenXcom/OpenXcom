@@ -25,7 +25,7 @@ namespace OpenXcom
  * Creates a blank ruleset for a certain type of item.
  * @param type String defining the type.
  */
-RuleItem::RuleItem(std::string type) : _type(type), _size(0.0), _cost(0), _time(24), _hitAnimation(0), _damageType(DT_NONE), _accuracyAuto(0), _accuracySnap(0), _accuracyAimed(0), _battleType(BT_NONE), _twoHanded(false)
+RuleItem::RuleItem(std::string type) : _type(type), _size(0.0), _cost(0), _time(24), _hitAnimation(0), _damageType(DT_NONE), _accuracyAuto(0), _accuracySnap(0), _accuracyAimed(0), _battleType(BT_NONE), _twoHanded(false), _invWidth(1), _invHeight(1)
 {
 }
 
@@ -441,44 +441,44 @@ void RuleItem::setBattleType(BattleType type)
 }
 
 /**
- * Returns the item's X size.
- * @return the item's X size.
+ * Returns the item's width in a soldier's inventory.
+ * @return the item's width.
  */
-int RuleItem::getSizeX() const
+int RuleItem::getInventoryWidth() const
 {
-	return _sizeX;
+	return _invWidth;
 }
 
 /**
- * Sets the item's size X.
- * @param size the item's size X.
+ * Sets the item's width in a soldier's inventory.
+ * @param width the item's width.
  */
-void RuleItem::setSizeX(int size)
+void RuleItem::setInventoryWidth(int width)
 {
-	_sizeX = size;
+	_invWidth = width;
 }
 
 /**
- * Returns the item's Y size.
- * @return the item's Y size.
+ * Returns the item's height in a soldier's inventory.
+ * @return the item's height.
  */
-int RuleItem::getSizeY() const
+int RuleItem::getInventoryHeight() const
 {
-	return _sizeY;
+	return _invHeight;
 }
 
 /**
- * Sets the item's size Y.
- * @param size the item's size Y.
+ * Sets the item's height in a soldier's inventory.
+ * @param height the item's height.
  */
-void RuleItem::setSizeY(int size)
+void RuleItem::setInventoryHeight(int height)
 {
-	_sizeY = size;
+	_invHeight = height;
 }
 
 /**
- * Returns the item's Y size.
- * @return the item's Y size.
+ * Returns the item's ammo clip size.
+ * @return the item's ammo clip size.
  */
 int RuleItem::getClipSize() const
 {
@@ -486,8 +486,8 @@ int RuleItem::getClipSize() const
 }
 
 /**
- * Sets the item's size Y.
- * @param size the item's size Y.
+ * Sets the item's ammo clip size.
+ * @param size the item's ammo clip size.
  */
 void RuleItem::setClipSize(int size)
 {

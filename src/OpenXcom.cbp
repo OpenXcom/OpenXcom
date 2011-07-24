@@ -316,6 +316,8 @@
 		<Unit filename="Ruleset\RuleCraft.h" />
 		<Unit filename="Ruleset\RuleCraftWeapon.cpp" />
 		<Unit filename="Ruleset\RuleCraftWeapon.h" />
+		<Unit filename="Ruleset\RuleInventory.cpp" />
+		<Unit filename="Ruleset\RuleInventory.h" />
 		<Unit filename="Ruleset\RuleItem.cpp" />
 		<Unit filename="Ruleset\RuleItem.h" />
 		<Unit filename="Ruleset\RuleRegion.cpp" />

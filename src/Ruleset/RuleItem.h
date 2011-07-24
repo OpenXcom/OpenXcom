@@ -49,7 +49,7 @@ private:
 	int _clipSize, _accuracyMelee, _tuMelee;
 	BattleType _battleType;
 	bool _twoHanded, _waypoint;
-	int _sizeX, _sizeY;
+	int _invWidth, _invHeight;
 public:
 	/// Creates a blank item ruleset.
 	RuleItem(std::string type);
@@ -143,14 +143,14 @@ public:
 	BattleType getBattleType() const;
 	/// Sets the item's type.
 	void setBattleType(BattleType type);
-	/// Gets the item's inventory size X.
-	int getSizeX() const;
-	/// Sets the item's type.
-	void setSizeX(int size);
-	/// Gets the item's inventory size Y.
-	int getSizeY() const;
-	/// Sets the item's type.
-	void setSizeY(int size);
+	/// Gets the item's inventory width.
+	int getInventoryWidth() const;
+	/// Sets the item's inventory width.
+	void setInventoryWidth(int width);
+	/// Gets the item's inventory height.
+	int getInventoryHeight() const;
+	/// Sets the item's inventory height.
+	void setInventoryHeight(int height);
 	/// Gets the ammo amount.
 	int getClipSize() const;
 	/// Sets the item's ammo amount.

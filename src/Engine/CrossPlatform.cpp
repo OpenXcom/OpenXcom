@@ -46,15 +46,15 @@ namespace CrossPlatform
 
 /**
  * Takes a filename and tries to find it in the game's DATA folder,
- * accounting for case-sensitivity.
+ * accounting for the system's case-sensitivity and path style.
  * @param filename Original filename.
- * @return Correctly-cased filename or exception if it doesn't exist.
+ * @return Correct filename or exception if it doesn't exist.
  * @note There's no actual method for figuring out the correct
  * filename on case-sensitive systems, this is just a workaround.
  */
 std::string getDataFile(const std::string &filename)
 {
-	// Correct path endings
+	// Correct folder separator
 	std::string newName = filename;
 #ifdef _WIN32
 	std::replace(newName.begin(), newName.end(), '/', '\\');
@@ -118,6 +118,11 @@ void showError(const std::wstring &error)
 #endif
 }
 
+/**
+ * Checks a bunch of predefined paths for the Data folder according
+ * to the system and returns the full path.
+ * @return Full path to Data folder.
+ */
 std::wstring findDataFolder()
 {
 #ifdef _WIN32
@@ -174,6 +179,11 @@ std::wstring findDataFolder()
 	return L"";
 }
 
+/**
+ * Checks a bunch of predefined paths for the User folder according
+ * to the system and returns the full path.
+ * @return Full path to User folder.
+ */
 std::wstring findUserFolder()
 {
 #ifdef _WIN32

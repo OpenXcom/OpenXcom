@@ -81,9 +81,9 @@ ResourcePack::~ResourcePack()
  * @param name Name of the font.
  * @return Pointer to the font.
  */
-Font *const ResourcePack::getFont(const std::string &name)
+Font *const ResourcePack::getFont(const std::string &name) const
 {
-	return _fonts[name];
+	return _fonts.find(name)->second;
 }
 
 /**
@@ -91,9 +91,9 @@ Font *const ResourcePack::getFont(const std::string &name)
  * @param name Name of the surface.
  * @return Pointer to the surface.
  */
-Surface *const ResourcePack::getSurface(const std::string &name)
+Surface *const ResourcePack::getSurface(const std::string &name) const
 {
-	return _surfaces[name];
+	return _surfaces.find(name)->second;
 }
 
 /**
@@ -101,9 +101,9 @@ Surface *const ResourcePack::getSurface(const std::string &name)
  * @param name Name of the surface set.
  * @return Pointer to the surface set.
  */
-SurfaceSet *const ResourcePack::getSurfaceSet(const std::string &name)
+SurfaceSet *const ResourcePack::getSurfaceSet(const std::string &name) const
 {
-	return _sets[name];
+	return _sets.find(name)->second;
 }
 
 /**
@@ -129,9 +129,9 @@ std::list<Polyline*> *const ResourcePack::getPolylines()
  * @param name Name of the music.
  * @return Pointer to the music.
  */
-Music *const ResourcePack::getMusic(const std::string &name)
+Music *const ResourcePack::getMusic(const std::string &name) const
 {
-	return _musics[name];
+	return _musics.find(name)->second;
 }
 
 /**
@@ -139,9 +139,9 @@ Music *const ResourcePack::getMusic(const std::string &name)
  * @param name Name of the sound set.
  * @return Pointer to the sound set.
  */
-SoundSet *const ResourcePack::getSoundSet(const std::string &name)
+SoundSet *const ResourcePack::getSoundSet(const std::string &name) const
 {
-	return _sounds[name];
+	return _sounds.find(name)->second;
 }
 
 /**
@@ -149,9 +149,9 @@ SoundSet *const ResourcePack::getSoundSet(const std::string &name)
  * @param name Name of the palette.
  * @return Pointer to the palette.
  */
-Palette *const ResourcePack::getPalette(const std::string &name)
+Palette *const ResourcePack::getPalette(const std::string &name) const
 {
-	return _palettes[name];
+	return _palettes.find(name)->second;
 }
 
 /**
