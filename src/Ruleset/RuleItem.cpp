@@ -25,7 +25,7 @@ namespace OpenXcom
  * Creates a blank ruleset for a certain type of item.
  * @param type String defining the type.
  */
-RuleItem::RuleItem(std::string type) : _type(type), _size(0.0), _cost(0), _time(24), _hitAnimation(0), _damageType(DT_NONE), _accuracyAuto(0), _accuracySnap(0), _accuracyAimed(0), _battleType(BT_NONE), _twoHanded(false)
+RuleItem::RuleItem(std::string type) : _type(type), _size(0.0), _cost(0), _time(24), _hitAnimation(0), _damageType(DT_NONE), _accuracyAuto(0), _accuracySnap(0), _accuracyAimed(0), _tuAuto(0), _tuSnap(0), _tuAimed(0), _battleType(BT_NONE), _twoHanded(false)
 {
 }
 

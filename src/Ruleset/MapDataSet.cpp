@@ -178,6 +178,7 @@ void MapDataSet::load(ResourcePack *res)
 		to->setArmor((int)mcd.Armor);
 		to->setFlammable((int)mcd.Flammable);
 		to->setFuel((int)mcd.Fuel);
+		to->setExplosive((int)mcd.HE_Strength);
 
 		for (int layer = 0; layer < 12; layer++)
 		{

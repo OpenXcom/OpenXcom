@@ -191,6 +191,10 @@ bool TerrainModifier::calculateFOV(BattleUnit *unit)
 	double startFi = -90;
 	double endFi = 60;
 
+	std::set<Tile*> tilesAffected;
+	std::pair<std::set<Tile*>::iterator,bool> ret;
+
+
 	int visibleUnitsChecksum = 0;
 
 	if (unit->getPosition().z == 0)
@@ -208,12 +212,6 @@ bool TerrainModifier::calculateFOV(BattleUnit *unit)
 
 	unit->clearVisibleUnits();
 	
-	for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); ++i)
-	{
-		_save->getTiles()[i]->setChecked(false);
-	}
-
-
 	// raytrace up and down
 	for (double fi = startFi; fi <= endFi; fi += 6)
 	{
@@ -259,21 +257,23 @@ bool TerrainModifier::calculateFOV(BattleUnit *unit)
 				// vertical blockage by ceilings/floors
 				objectViewDistance -= verticalBlockage(origin, dest, DT_NONE); // line of sight is all or nothing
 
-				if (objectViewDistance > 0 && dest->getShade() < 10 && !dest->getChecked())
+				if (objectViewDistance > 0 && dest->getShade() < 10)
 				{
-					dest->setChecked(true);
-
-					if (unitViewDistance > 0)
-						checkForVisibleUnits(unit, dest);
-				
-					if (unit->getFaction() == FACTION_PLAYER)
+					ret = tilesAffected.insert(dest); // check if we had this tile already
+					if (ret.second)
 					{
-						dest->setDiscovered(true, 2);
-						// walls to the east or south of a visible tile, we see that too
-						Tile* t = _save->getTile(Position(tileX + 1, tileY, tileZ));
-						if (t) t->setDiscovered(true, 0);
-						t = _save->getTile(Position(tileX, tileY - 1, tileZ));
-						if (t) t->setDiscovered(true, 1);
+						if (unitViewDistance > 0)
+							checkForVisibleUnits(unit, dest);
+				
+						if (unit->getFaction() == FACTION_PLAYER)
+						{
+							dest->setDiscovered(true, 2);
+							// walls to the east or south of a visible tile, we see that too
+							Tile* t = _save->getTile(Position(tileX + 1, tileY, tileZ));
+							if (t) t->setDiscovered(true, 0);
+							t = _save->getTile(Position(tileX, tileY - 1, tileZ));
+							if (t) t->setDiscovered(true, 1);
+						}
 					}
 				}
 				unitViewDistance -= int(dest->getSmoke() / 3);
@@ -393,28 +393,14 @@ bool TerrainModifier::checkReactionFire(BattleUnit *unit, BattleAction *action)
 
 	if (action->actor && highestReactionScore > unit->getReactionScore())
 	{
+		action->type = BA_SNAPSHOT;
+		action->target = unit->getPosition();
 		// lets try and shoot
-		action->weapon = _save->getItemFromUnit(action->actor, RIGHT_HAND);
+		action->weapon = _save->getMainHandWeapon(action->actor);
+		int tu = action->actor->getActionTUs(action->type, action->weapon);
 		if (action->weapon && action->weapon->getAmmoItem() && action->weapon->getAmmoItem()->getAmmoQuantity())
 		{
-			int tu = (int)(action->actor->getUnit()->getTimeUnits() * action->weapon->getRules()->getTUSnap() / 100);
-			if (action->actor->spendTimeUnits(tu, _save->getDebugMode()))
-			{
-				action->target = unit->getPosition();
-				action->type = BA_SNAPSHOT;
-				return true;
-			}
-		}
-		action->weapon = _save->getItemFromUnit(action->actor, LEFT_HAND);
-		if (action->weapon && action->weapon->getAmmoItem() && action->weapon->getAmmoItem()->getAmmoQuantity())
-		{
-			int tu = (int)(action->actor->getUnit()->getTimeUnits() * action->weapon->getRules()->getTUSnap() / 100);
-			if (action->actor->spendTimeUnits(tu, _save->getDebugMode()))
-			{
-				action->target = unit->getPosition();
-				action->type = BA_SNAPSHOT;
-				return true;
-			}
+			return action->actor->spendTimeUnits(tu, _save->getDebugMode());
 		}
 	}
 
@@ -458,7 +444,6 @@ void TerrainModifier::addLight(const Position &center, int power, int layer)
  * HE, smoke and fire explodes in a circular pattern on 1 level only. HE however damages floor tiles of the above level. Not the units on it.
  * HE destroys an object if its armor is lower than the explosive power, then it's HE blockage is applied for further propagation.
  * See http://www.ufopaedia.org/index.php?title=Explosions for more info.
- * TODO : use bresenham?
  * @param center
  * @param power
  * @param affector
@@ -472,22 +457,20 @@ void TerrainModifier::explode(const Position &center, int power, ItemDamageType 
 		if (part >= 0 && part <= 3)
 		{
 			// power 25% to 75%
-			_save->getTile(Position(center.x/16, center.y/16, center.z/24))->damage(
-				part, (int)(RNG::generate(power/4, (power*3)/4)));
-			/*_save->getTile(Position(center.x/16, center.y/16, center.z/24))->damage(
-				part, (int)(RNG::boxMuller(power, power/6)));
-				// for testing normal distribution of damage
-				*/
+			int rndPower = RNG::generate(power/4, (power*3)/4); //RNG::boxMuller(power, power/6)
+			_save->getTile(Position(center.x/16, center.y/16, center.z/24))->damage(part, rndPower);
 		}
 		else if (part == 4)
 		{
 			// power 0 - 200%
-			_save->getTile(Position(center.x/16, center.y/16, center.z/24))->getUnit()->damage(
-				Position(center.x%16, center.y%16, center.z%24), RNG::generate(0, power*2));
-			/*_save->getTile(Position(center.x/16, center.y/16, center.z/24))->getUnit()->damage(
-				Position(center.x%16, center.y%16, center.z%24), RNG::boxMuller(power, power/3));
-				// for testing normal distribution of damage
-				*/
+			int rndPower = RNG::generate(0, power*2); // RNG::boxMuller(power, power/3)
+			_save->getTile(Position(center.x/16, center.y/16, center.z/24))->getUnit()->damage(Position(center.x%16, center.y%16, center.z%24), rndPower);
+
+			// conventional weapons can cause additional stun damage
+			if (type == DT_AP)
+			{
+				_save->getTile(Position(center.x/16, center.y/16, center.z/24))->getUnit()->stun(RNG::generate(0, rndPower/4));
+			}
 		}
 	}
 	else
@@ -496,6 +479,8 @@ void TerrainModifier::explode(const Position &center, int power, ItemDamageType 
 		double centerX = (int)(center.x / 16) + 0.5;
 		double centerY = (int)(center.y / 16) + 0.5;
 		int power_;
+		std::set<Tile*> tilesAffected;
+		std::pair<std::set<Tile*>::iterator,bool> ret;
 
 		if (type == DT_IN)
 		{
@@ -536,49 +521,63 @@ void TerrainModifier::explode(const Position &center, int power, ItemDamageType 
 					{
 						// explosives do 1/2 damage to terrain and 1/2 up to 3/2 random damage to units
 						dest->setExplosive(power_ / 2);
-						// power 50 - 150%
-						if (dest->getUnit())
-							dest->getUnit()->damage(Position(0, 0, 0), (int)(RNG::generate(power_/2.0, power_*1.5)));
-
-						// TODO: destroy floors above
-
 					}
-					if (type == DT_SMOKE)
+
+					ret = tilesAffected.insert(dest); // check if we had this tile already
+					if (ret.second)
 					{
-						// smoke from explosions always stay 10 to 20 turns
-						if (dest->getSmoke() < 10)
+						if (type == DT_HE)
 						{
-							dest->addSmoke(RNG::generate(power_/10, 14));
+							// power 50 - 150%
+							if (dest->getUnit())
+								dest->getUnit()->damage(Position(0, 0, 0), (int)(RNG::generate(power_/2.0, power_*1.5)));
+							// destroy floors above
+							Tile *tileAbove = _save->getTile(Position(tileX, tileY, tileZ+1));
+							if ( tileAbove && tileAbove->getMapData(O_FLOOR) && power_ / 2 >= tileAbove->getMapData(O_FLOOR)->getArmor())
+							{
+								tileAbove->destroy(O_FLOOR);
+							}
+							// very slight chance (0-25%) to minor damage to units above or below explosion
+							if (tileAbove->getUnit())
+								tileAbove->getUnit()->damage(Position(0, 0, 0), (int)(RNG::generate(0.0, power_/4.0)));
+							Tile *tileBelow = _save->getTile(Position(tileX, tileY, tileZ-1));
+							if (tileBelow && !dest->getMapData(O_FLOOR) && tileBelow->getUnit())
+								tileBelow->getUnit()->damage(Position(0, 0, 0), (int)(RNG::generate(0.0, power_/4.0)));
 						}
-					}
-					if (type == DT_IN)
-					{
-						if (dest->getFire() == 0)
+						if (type == DT_SMOKE)
 						{
-							dest->ignite();
+							// smoke from explosions always stay 10 to 20 turns
+							if (dest->getSmoke() < 10)
+							{
+								dest->addSmoke(RNG::generate(power_/10, 14));
+							}
+						}
+						if (type == DT_IN)
+						{
+							if (dest->getFire() == 0)
+							{
+								dest->ignite();
+							}
+							if (dest->getUnit())
+							{
+								dest->getUnit()->damage(Position(0, 0, 0), RNG::generate(0, power_/3)); // immediate IN damage
+								dest->getUnit()->setFire(RNG::generate(1, 5)); // catch fire and burn for 1-5 rounds
+							}
 						}
 					}
 				}
-
 				power_ -= 10; // explosive damage decreases by 10
-
-				// objects on destination tile affect the ray after it has crossed this tile
-				// but it has to be calculated before we affect the tile (it could have been blown up)
-				//if (dest->getMapData(O_OBJECT))
-				//{
-//					power_ -= dest->getMapData(O_OBJECT)->getBlock(type);
-				//}
 				origin = dest;
 				l++;
 			}
 		}
 
-		// indicate we have finished recalculating
+		// now detonate the tiles affected with HE
 		if (type == DT_HE)
 		{
-			for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); ++i)
+			for (std::set<Tile*>::iterator i = tilesAffected.begin(); i != tilesAffected.end(); ++i)
 			{
-				_save->getTiles()[i]->detonate();
+				(*i)->detonate();
 			}
 		}
 	}
@@ -586,6 +585,24 @@ void TerrainModifier::explode(const Position &center, int power, ItemDamageType 
 	// recalculate line of sight (to optimise: only units in range)
 	calculateFOV(center);
 	calculateTerrainLighting(); // fires could have been started
+}
+
+/**
+ * Chained explosions are explosions wich occur after an explosive map object is destroyed.
+ * May be due a direct hit, other explosion or fire.
+ * @return tile on which a explosion occured
+ */
+Tile *TerrainModifier::checkForChainedExplosions()
+{
+
+	for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); ++i)
+	{
+		if (_save->getTiles()[i]->getExplosive())
+		{
+			return _save->getTiles()[i];
+		}
+	}
+	return 0;
 }
 
 /**
@@ -1060,8 +1077,6 @@ int TerrainModifier::closeUfoDoors()
 	return doorsclosed;
 }
 
-
-
 /**
  * New turn preparations. Like fire and smoke spreading.
  */
@@ -1083,14 +1098,55 @@ void TerrainModifier::prepareNewTurn()
 		}
 	}
 
+	// smoke spreads in 1 random direction, but the direction is same for all smoke
+	int spreadX = RNG::generate(-1, +1);
+	int spreadY = RNG::generate(-1, +1);
 	for (std::vector<Tile*>::iterator i = tilesOnSmoke.begin(); i != tilesOnSmoke.end(); ++i)
 	{
-		// TODO - smoke spreading
+		int x = (*i)->getPosition().x;
+		int y = (*i)->getPosition().y;
+		int z = (*i)->getPosition().z;
+
+		if ((*i)->getUnit())
+		{
+			// units in smoke suffer stun
+			(*i)->getUnit()->stun(((*i)->getSmoke()/5)+1);
+		}
+
+		Tile *t = _save->getTile(Position(x+spreadX, y+spreadY, z));
+		if (t && !t->getSmoke() && horizontalBlockage((*i), t, DT_SMOKE) == 0)
+		{
+			t->addSmoke((*i)->getSmoke()/2);
+		}
+		Tile *t2 = _save->getTile(Position(x+spreadX+spreadX, y+spreadY+spreadY, z));
+		if (t && t2 && !t2->getSmoke() && horizontalBlockage(t, t2, DT_SMOKE) == 0)
+		{
+			t2->addSmoke((*i)->getSmoke()/4);
+		}
+
+		// smoke also spreads upwards
+		t = _save->getTile(Position(x, y, z+1));
+		if (t && !t->getSmoke() && verticalBlockage((*i), t, DT_SMOKE) == 0)
+		{
+			t->addSmoke((*i)->getSmoke()/2);
+		}
+
 		(*i)->prepareNewTurn();
 	}
 
 	for (std::vector<Tile*>::iterator i = tilesOnFire.begin(); i != tilesOnFire.end(); ++i)
 	{
+		if ((*i)->getUnit())
+		{
+			// units on a flaming tile suffer damage
+			(*i)->getUnit()->damage(Position(0,0,0), RNG::generate(1,12));
+			// units on a flaming tile can catch fire 33% chance
+			if (RNG::generate(0,2) == 1)
+			{
+				(*i)->getUnit()->setFire(RNG::generate(1,5));
+			}
+		}
+
 		int z = (*i)->getPosition().z;
 		for (int x = (*i)->getPosition().x-1; x <= (*i)->getPosition().x+1; x++)
 		{
@@ -1120,7 +1176,6 @@ void TerrainModifier::prepareNewTurn()
 				}
 			}
 		}
-
 		(*i)->prepareNewTurn();
 	}
 

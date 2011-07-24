@@ -405,4 +405,22 @@ void MapData::setLoftID(int loft, int layer)
 	_loftID[layer] = loft;
 }
 
+/**
+  * Get the amount of explosive.
+  * @return armor
+  */
+int MapData::getExplosive()
+{
+	return _explosive;
+}
+
+/**
+  * Set the amount of explosive.
+  * @value armor
+  */
+void MapData::setExplosive(int value)
+{
+	_explosive = value;
+}
+
 }

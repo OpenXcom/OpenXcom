@@ -238,6 +238,10 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_btnStats->onMouseClick((ActionHandler)&BattlescapeState::btnStatsClick);
 	_btnLeftHandItem->onMouseClick((ActionHandler)&BattlescapeState::btnLeftHandItemClick);
 	_btnRightHandItem->onMouseClick((ActionHandler)&BattlescapeState::btnRightHandItemClick);
+	_btnReserveNone->onMouseClick((ActionHandler)&BattlescapeState::btnReserveNoneClick);
+	_btnReserveSnap->onMouseClick((ActionHandler)&BattlescapeState::btnReserveSnapClick);
+	_btnReserveAimed->onMouseClick((ActionHandler)&BattlescapeState::btnReserveAimedClick);
+	_btnReserveAuto->onMouseClick((ActionHandler)&BattlescapeState::btnReserveAutoClick);
 
 	for (int i = 0; i < 10; ++i)
 	{
@@ -261,6 +265,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_barEnergy->setColor(Palette::blockOffset(1));
 	_barEnergy->setScale(1.0);
 	_barHealth->setColor(Palette::blockOffset(2));
+	_barHealth->setColor2(Palette::blockOffset(5)+2);
 	_barHealth->setScale(1.0);
 	_barMorale->setColor(Palette::blockOffset(12));
 	_barMorale->setScale(1.0);
@@ -301,6 +306,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_action.type = BA_NONE;
 	_action.TU = 0;
 	_action.targeting = false;
+	_tuReserved = BA_NONE;
 }
 
 /**
@@ -494,13 +500,14 @@ void BattlescapeState::btnShowMapClick(Action *action)
  */
 void BattlescapeState::btnKneelClick(Action *action)
 {
-	// TODO: check for timeunits... check for FOV...
 	BattleUnit *bu = _battleGame->getSelectedUnit();
 	if (bu)
 	{
-		if (bu->spendTimeUnits(bu->isKneeled()?8:4, _battleGame->getDebugMode()))
+		int tu = bu->isKneeled()?8:4;
+		if (checkReservedTU(bu, tu) && bu->spendTimeUnits(tu, _battleGame->getDebugMode()))
 		{
 			bu->kneel(!bu->isKneeled());
+			_battleGame->getTerrainModifier()->calculateFOV(bu);
 			_map->cacheUnits();
 			updateSoldierInfo(bu);
 			BattleAction action;
@@ -542,18 +549,22 @@ void BattlescapeState::btnCenterClick(Action *action)
  */
 void BattlescapeState::btnNextSoldierClick(Action *action)
 {
-	BattleUnit *unit = _battleGame->selectNextPlayerUnit();
+	BattleUnit *unit = _battleGame->selectNextPlayerUnit(true);
 	updateSoldierInfo(unit);
 	if (unit) _map->centerOnPosition(unit->getPosition());
 }
 
 /**
- * Don't select current soldier and select next soldier.
+ * Don't reselect current soldier and select next soldier.
  * @param action Pointer to an action.
  */
 void BattlescapeState::btnNextStopClick(Action *action)
 {
-
+	if (_battleGame->getSelectedUnit())
+		_battleGame->getSelectedUnit()->dontReselect();
+	BattleUnit *unit = _battleGame->selectNextPlayerUnit(true);
+	updateSoldierInfo(unit);
+	if (unit) _map->centerOnPosition(unit->getPosition());
 }
 
 /**
@@ -642,6 +653,14 @@ void BattlescapeState::endTurn()
 	}
 
 	_battleGame->endTurn();
+	// check for chained explosions
+	Tile *t = _battleGame->getTerrainModifier()->checkForChainedExplosions();
+	if (t)
+	{
+		Position p = Position(t->getPosition().x * 16, t->getPosition().y * 16, t->getPosition().z * 24);
+		statePushNext(new ExplosionBState(this, p, 0, 0, t));
+	}
+
 	checkForCasualties(0, 0);
 
 	updateSoldierInfo(_battleGame->getSelectedUnit());
@@ -663,7 +682,7 @@ void BattlescapeState::checkForCasualties(BattleItem *murderweapon, BattleUnit *
 	// TODO : include rank bonusses and penalties !!
 	for (std::vector<BattleUnit*>::iterator j = _battleGame->getUnits()->begin(); j != _battleGame->getUnits()->end(); ++j)
 	{
-		if ((*j)->getHealth() == 0 && (*j)->getStatus() != STATUS_DEAD)
+		if ((*j)->getHealth() == 0 && (*j)->getStatus() != STATUS_DEAD && (*j)->getStatus() != STATUS_FALLING)
 		{
 			BattleUnit *victim = (*j);
 
@@ -697,9 +716,13 @@ void BattlescapeState::checkForCasualties(BattleItem *murderweapon, BattleUnit *
 			}
 
 			if (murderweapon)
-				statePushNext(new UnitFallBState(this, (*j), murderweapon->getRules()->getDamageType() == DT_HE)); // explosions insta-kill a unit
+				statePushNext(new UnitFallBState(this, (*j), murderweapon->getRules()->getDamageType()));
 			else
-				statePushNext(new UnitFallBState(this, (*j), false));
+				statePushNext(new UnitFallBState(this, (*j), DT_AP));
+		}
+		else if ((*j)->getStunlevel() >= (*j)->getHealth() && (*j)->getStatus() != STATUS_DEAD && (*j)->getStatus() != STATUS_UNCONSCIOUS && (*j)->getStatus() != STATUS_FALLING)
+		{
+				statePushNext(new UnitFallBState(this, (*j), DT_STUN));
 		}
 	}
 }
@@ -781,6 +804,42 @@ void BattlescapeState::btnVisibleUnitClick(Action *action)
 	{
 		_map->centerOnPosition(_visibleUnit[btnID]->getPosition());
 	}
+}
+
+/**
+ * Reserve time units.
+ * @param action Pointer to an action.
+ */
+void BattlescapeState::btnReserveNoneClick(Action *action)
+{
+	_tuReserved = BA_NONE;
+}
+
+/**
+ * Reserve time units.
+ * @param action Pointer to an action.
+ */
+void BattlescapeState::btnReserveSnapClick(Action *action)
+{
+	_tuReserved = BA_SNAPSHOT;
+}
+
+/**
+ * Reserve time units.
+ * @param action Pointer to an action.
+ */
+void BattlescapeState::btnReserveAimedClick(Action *action)
+{
+	_tuReserved = BA_AIMEDSHOT;
+}
+
+/**
+ * Reserve time units.
+ * @param action Pointer to an action.
+ */
+void BattlescapeState::btnReserveAutoClick(Action *action)
+{
+	_tuReserved = BA_AUTOSHOT;
 }
 
 /**
@@ -880,6 +939,7 @@ void BattlescapeState::updateSoldierInfo(BattleUnit *battleUnit)
 	_numHealth->setValue(battleUnit->getHealth());
 	_barHealth->setMax(battleUnit->getUnit()->getHealth());
 	_barHealth->setValue(battleUnit->getHealth());
+	_barHealth->setValue2(battleUnit->getStunlevel());
 	_numMorale->setValue(battleUnit->getMorale());
 	_barMorale->setMax(100);
 	_barMorale->setValue(battleUnit->getMorale());
@@ -1244,6 +1304,23 @@ void BattlescapeState::handle(Action *action)
 void BattlescapeState::popup(State *state)
 {
 	_popups.push_back(state);
+}
+
+bool BattlescapeState::checkReservedTU(BattleUnit *bu, int tu)
+{
+	if (_tuReserved != BA_NONE &&
+		tu + bu->getActionTUs(_tuReserved, _battleGame->getMainHandWeapon(bu)) > bu->getTimeUnits())
+	{
+		switch (_tuReserved)
+		{
+		case BA_SNAPSHOT: showWarningMessage("STR_TIME_UNITS_RESERVED_FOR_SNAP_SHOT"); break;
+		case BA_AUTOSHOT: showWarningMessage("STR_TIME_UNITS_RESERVED_FOR_AUTO_SHOT"); break;
+		case BA_AIMEDSHOT: showWarningMessage("STR_TIME_UNITS_RESERVED_FOR_AIMED_SHOT"); break;
+		}
+		return false;				
+	}
+
+	return true;
 }
 
 }

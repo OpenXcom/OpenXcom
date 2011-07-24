@@ -28,6 +28,7 @@
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
+#include "../Savegame/Tile.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/SoundSet.h"
 #include "../Engine/Sound.h"
@@ -40,7 +41,7 @@ namespace OpenXcom
 /**
  * Sets up an ExplosionBState.
  */
-ExplosionBState::ExplosionBState(BattlescapeState *parent, Position center, BattleItem *item, BattleUnit *unit) : BattleState(parent), _center(center), _item(item), _unit(unit)
+ExplosionBState::ExplosionBState(BattlescapeState *parent, Position center, BattleItem *item, BattleUnit *unit, Tile *tile) : BattleState(parent), _center(center), _item(item), _unit(unit), _tile(tile)
 {
 
 }
@@ -105,7 +106,14 @@ void ExplosionBState::think()
 			{
 				SavedBattleGame *save = _parent->getGame()->getSavedGame()->getBattleGame();
 				// after the animation is done, the real explosion takes place
-				save->getTerrainModifier()->explode(_center, _item->getRules()->getPower(), _item->getRules()->getDamageType(), 100, _unit);
+				if (_item)
+				{
+					save->getTerrainModifier()->explode(_center, _item->getRules()->getPower(), _item->getRules()->getDamageType(), 100, _unit);
+				}
+				if (_tile)
+				{
+					save->getTerrainModifier()->explode(_center, _tile->getExplosive(), DT_HE, 100, _unit);
+				}
 
 				// now check for new casualties
 				_parent->checkForCasualties(_item, _unit);
@@ -121,6 +129,15 @@ void ExplosionBState::think()
 				}
 				_parent->getMap()->cacheUnits();
 				_parent->popState();
+
+				// check for chained explosions
+				Tile *t = save->getTerrainModifier()->checkForChainedExplosions();
+				if (t)
+				{
+					Position p = Position(t->getPosition().x * 16, t->getPosition().y * 16, t->getPosition().z * 24);
+					_parent->statePushNext(new ExplosionBState(_parent, p, 0, _unit, t));
+				}
+
 				return;
 			}
 		}

@@ -669,6 +669,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	pistol->setFireSound(4);
 	pistol->setAccuracySnap(60);
 	pistol->setTUSnap(18);
+	pistol->setTUAuto(18);
 	pistol->setAccuracyAimed(78);
 	pistol->setTUAimed(30);
 	pistol->getCompatibleAmmo()->push_back("STR_PISTOL_CLIP");
@@ -737,6 +738,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	hcannon->setFireSound(2);
 	hcannon->setAccuracySnap(60);
 	hcannon->setTUSnap(33);
+	hcannon->setTUAuto(33);
 	hcannon->setAccuracyAimed(90);
 	hcannon->setTUAimed(80);
 	hcannon->getCompatibleAmmo()->push_back("STR_HC_AP_AMMO");
@@ -839,6 +841,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	rlauncher->setFireSound(52);
 	rlauncher->setAccuracySnap(55);
 	rlauncher->setTUSnap(45);
+	rlauncher->setTUAuto(45);
 	rlauncher->setAccuracyAimed(115);
 	rlauncher->setTUAimed(75);
 	rlauncher->getCompatibleAmmo()->push_back("STR_SMALL_ROCKET");

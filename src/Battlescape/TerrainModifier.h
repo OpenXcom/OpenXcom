@@ -70,6 +70,7 @@ public:
 	void calculateUnitLighting();
 	/// Explosions.
 	void explode(const Position &center, int power, ItemDamageType type, int maxRadius, BattleUnit *unit);
+	Tile *checkForChainedExplosions();
 	/// Unit opens door?
 	int unitOpensDoor(BattleUnit *unit);
 	/// Close ufo doors.

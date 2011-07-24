@@ -45,7 +45,7 @@ protected:
 	MapData *_objects[4];
 	int _mdsID[4], _mdID[4];
 	int _currentFrame[4];
-	bool _discovered[3], _checked;
+	bool _discovered[3];
 	int _light[LIGHTLAYERS];
 	int _lastLight[LIGHTLAYERS];
 	int _smoke;
@@ -111,6 +111,8 @@ public:
 	void damage(int part, int power);
 	/// Set a "virtual" explosive on this tile, to detonate later.
 	void setExplosive(int power);
+	/// Get explosive power of this tile.
+	int getExplosive();
 	/// Apply the explosive power to the tile parts.
 	void detonate();
 	/// Animated the tile parts.
@@ -141,10 +143,6 @@ public:
 	int getTopItemSprite();
 	/// Decrease fire and smoke timers.
 	void prepareNewTurn();
-	/// Set whether we checked this tile.
-	void setChecked(bool flag);
-	/// Get whether we checked this tile.
-	bool getChecked();
 	/// Get inventory on this tile.
 	std::vector<BattleItem *> *getInventory();
 

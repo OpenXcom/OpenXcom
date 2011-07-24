@@ -22,6 +22,7 @@
 #include <set>
 #include <string>
 #include "../Battlescape/Position.h"
+#include "../Battlescape/BattleScapeState.h"
 #include "Soldier.h"
 
 namespace OpenXcom
@@ -55,10 +56,11 @@ private:
 	int _walkPhase, _fallPhase;
 	std::vector<BattleUnit *> _visibleUnits;
 	std::vector<Tile *> _visibleTiles;
-	int _tu, _energy, _health, _morale;
-	bool _cached, _kneeled;
+	int _tu, _energy, _health, _morale, _stunlevel;
+	bool _cached, _kneeled, _dontReselect;
 	int _armor[5];
 	int _fatalWounds[6];
+	int _fire;
 public:
 	/// Creates a BattleUnit.
 	BattleUnit(Unit *_unit, UnitFaction faction);
@@ -128,6 +130,10 @@ public:
 	int getMorale() const;
 	/// Do damage to the unit.
 	void damage(Position position, int power);
+	/// Do stun to the unit.
+	void stun(int power);
+	/// Gets the unit's stun level.
+	int getStunlevel() const;
 	/// Start falling sequence.
 	void startFalling();
 	/// Increment the falling sequence.
@@ -136,6 +142,8 @@ public:
 	int getFallingPhase() const;
 	/// The unit is out - either dead or unconscious.
 	bool isOut() const;
+	/// Get the number of time units a certain action takes.
+	int getActionTUs(BattleActionType actionType, BattleItem *item);
 	/// Spend time units if it can.
 	bool spendTimeUnits(int tu, bool debugmode);
 	/// Spend energy if it can.
@@ -164,6 +172,14 @@ public:
 	void prepareNewTurn();
 	/// Morale change
 	void moraleChange(int change);
+	/// Don't reselect this unit
+	void dontReselect();
+	/// Check whether reselecting this unit is allowed.
+	bool reselectAllowed();
+	/// Set fire.
+	void setFire(int fire);
+	/// Get fire.
+	int getFire();
 };
 
 }

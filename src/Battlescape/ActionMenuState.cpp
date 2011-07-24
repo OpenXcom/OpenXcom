@@ -58,7 +58,7 @@ ActionMenuState::ActionMenuState(Game *game, BattleAction *action) : State(game)
 	std::wstringstream ss1, ss2;
 
 	// throwing
-	tu = (int)floor(_action->actor->getUnit()->getTimeUnits() * 0.25);
+	tu = _action->actor->getActionTUs(BA_THROW, _action->weapon);
 	ss1 << strAcc.c_str() << (int)floor(_action->actor->getThrowingAccuracy() * 100) << "%";
 	ss2 << strTU.c_str() << tu;
 	_actionMenu[id]->setAction(BA_THROW, _game->getLanguage()->getString("STR_THROW"), ss1.str(), ss2.str(), tu);
@@ -71,7 +71,7 @@ ActionMenuState::ActionMenuState(Game *game, BattleAction *action) : State(game)
 	if ((_action->weapon->getRules()->getBattleType() == BT_GRENADE || _action->weapon->getRules()->getBattleType() == BT_PROXIMITYGRENADE)
 		&& _action->weapon->getExplodeTurn() == 0)
 	{
-		tu = (int)floor(_action->actor->getUnit()->getTimeUnits() * 0.50);
+		tu = _action->actor->getActionTUs(BA_PRIME, _action->weapon);
 		ss2 << strTU.c_str() << tu;
 		_actionMenu[id]->setAction(BA_PRIME, _game->getLanguage()->getString("STR_PRIME_GRENADE"), ss1.str(), ss2.str(), tu);
 		_actionMenu[id]->setVisible(true);
@@ -82,7 +82,7 @@ ActionMenuState::ActionMenuState(Game *game, BattleAction *action) : State(game)
 
 	if (_action->weapon->getRules()->getAccuracyAuto() != 0)
 	{
-		tu = (int)(_action->actor->getUnit()->getTimeUnits() * _action->weapon->getRules()->getTUAuto() / 100);
+		tu = _action->actor->getActionTUs(BA_AUTOSHOT, _action->weapon);
 		ss1 << strAcc.c_str() << (int)floor(_action->actor->getFiringAccuracy(_action->weapon->getRules()->getAccuracyAuto()) * 100) << "%";
 		ss2 << strTU.c_str() << tu;
 		_actionMenu[id]->setAction(BA_AUTOSHOT, _game->getLanguage()->getString("STR_AUTO_SHOT"), ss1.str(), ss2.str(), tu);
@@ -93,7 +93,7 @@ ActionMenuState::ActionMenuState(Game *game, BattleAction *action) : State(game)
 	}
 	if (_action->weapon->getRules()->getAccuracySnap() != 0)
 	{
-		tu = (int)(_action->actor->getUnit()->getTimeUnits() * _action->weapon->getRules()->getTUSnap() / 100);
+		tu = _action->actor->getActionTUs(BA_SNAPSHOT, _action->weapon);
 		ss1 << strAcc.c_str() << (int)floor(_action->actor->getFiringAccuracy(_action->weapon->getRules()->getAccuracySnap()) * 100) << "%";
 		ss2 << strTU.c_str() << tu;
 		_actionMenu[id]->setAction(BA_SNAPSHOT, _game->getLanguage()->getString("STR_SNAP_SHOT"), ss1.str(), ss2.str(), tu);
@@ -104,7 +104,7 @@ ActionMenuState::ActionMenuState(Game *game, BattleAction *action) : State(game)
 	}
 	if (_action->weapon->getRules()->getAccuracyAimed() != 0)
 	{
-		tu = (int)(_action->actor->getUnit()->getTimeUnits() * _action->weapon->getRules()->getTUAimed() / 100);
+		tu = _action->actor->getActionTUs(BA_AIMEDSHOT, _action->weapon);
 		ss1 << strAcc.c_str() << (int)floor(_action->actor->getFiringAccuracy(_action->weapon->getRules()->getAccuracyAimed()) * 100) << "%";
 		ss2 << strTU.c_str() << tu;
 		_actionMenu[id]->setAction(BA_AIMEDSHOT, _game->getLanguage()->getString("STR_AIMED_SHOT"), ss1.str(), ss2.str(), tu);

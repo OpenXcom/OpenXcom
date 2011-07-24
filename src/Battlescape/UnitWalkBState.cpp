@@ -55,7 +55,14 @@ UnitWalkBState::~UnitWalkBState()
 
 void UnitWalkBState::init()
 {
-	_parent->setStateInterval(DEFAULT_WALK_SPEED);
+	if (_parent->getGame()->getSavedGame()->getBattleGame()->getDebugMode())
+	{
+		_parent->setStateInterval(1);
+	}
+	else
+	{
+		_parent->setStateInterval(DEFAULT_WALK_SPEED);
+	}
 	_unit = _parent->getGame()->getSavedGame()->getBattleGame()->getSelectedUnit();
 	_pf = _parent->getGame()->getSavedGame()->getBattleGame()->getPathfinding();
 	_terrain = _parent->getGame()->getSavedGame()->getBattleGame()->getTerrainModifier();
@@ -141,6 +148,12 @@ void UnitWalkBState::think()
 				_result = "STR_NOT_ENOUGH_TIME_UNITS";
 				_pf->abortPath();
 				return;
+			}
+
+			if (_parent->checkReservedTU(_unit, tu) == false)
+			{
+				_pf->abortPath();
+				return;				
 			}
 
 			// we are looking in the wrong way, turn first

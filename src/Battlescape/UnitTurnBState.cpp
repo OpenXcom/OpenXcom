@@ -73,7 +73,16 @@ void UnitTurnBState::init()
 
 void UnitTurnBState::think()
 {
-	if (_unit->spendTimeUnits(1, _parent->getGame()->getSavedGame()->getBattleGame()->getDebugMode()))
+	const int tu = 1; // one turn is 1 tu
+
+	if (_parent->checkReservedTU(_unit, tu) == false)
+	{
+		_unit->abortTurn();
+		_parent->popState();
+		return;				
+	}
+
+	if (_unit->spendTimeUnits(tu, _parent->getGame()->getSavedGame()->getBattleGame()->getDebugMode()))
 	{
 		_unit->turn();
 		_parent->getGame()->getSavedGame()->getBattleGame()->getTerrainModifier()->calculateFOV(_unit);
@@ -85,8 +94,8 @@ void UnitTurnBState::think()
 	}
 	else
 	{
-		_unit->abortTurn();
 		_result = "STR_NOT_ENOUGH_TIME_UNITS";
+		_unit->abortTurn();
 		_parent->popState();
 	}
 }

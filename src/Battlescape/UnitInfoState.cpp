@@ -215,6 +215,7 @@ UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit) : State(game), _unit(
 	_numHealth->setHighContrast(true);
 
 	_barHealth->setColor(Palette::blockOffset(2));
+	_barHealth->setColor2(Palette::blockOffset(5)+2);
 	_barHealth->setScale(1.0);
 
 	_txtFatalWounds->setColor(Palette::blockOffset(3)-1);
@@ -381,6 +382,7 @@ void UnitInfoState::init()
 	_numHealth->setText(ss.str());		
 	_barHealth->setMax(_unit->getUnit()->getHealth());
 	_barHealth->setValue(_unit->getHealth());
+	_barHealth->setValue2(_unit->getStunlevel());
 
 	ss.str(L"");
 	ss << _unit->getFatalWounds();

@@ -371,6 +371,7 @@ int Tile::getShade()
 /**
  * Destroy a part on this tile. We first remove the old object, then replace it with the destroyed one.
  * This is because the object type of the old and new one are not nescessarly the same.
+ * If the destroyed part is an explosive, set the tile's explosive value, which will trigger a chained explosion.
  * @param part
  */
 void Tile::destroy(int part)
@@ -383,6 +384,10 @@ void Tile::destroy(int part)
 		{
 			MapData *dead = originalPart->getDataset()->getObjects()->at(originalPart->getDieMCD());
 			setMapData(dead, dead->getObjectType());
+		}
+		if (originalPart->getExplosive())
+		{
+			setExplosive(originalPart->getExplosive());
 		}
 	}
 	/* check if the floor on the lowest level is gone */
@@ -421,17 +426,21 @@ void Tile::setExplosive(int power)
 	}
 }
 
+int Tile::getExplosive()
+{
+	return _explosive;
+}
+
 /**
  * Apply the explosive power to the tile parts. This is where the actual destruction takes place.
- * Normally the explosive value is set to zero after this.
- * TODO : but with secondary explosions this value is set to the explosive power of the object.
- * TODO : these will be checked later and trigger the secondary explosions.
  */
 void Tile::detonate()
 {
 	int decrease;
+	int explosive = _explosive;
+	_explosive = 0;
 
-	if (_explosive)
+	if (explosive)
 	{
 		// explosions create smoke which only stays 1 or 2 turns
 		addSmoke(1);
@@ -439,12 +448,12 @@ void Tile::detonate()
 		{
 			if(_objects[i])
 			{
-				if ((_explosive) >= _objects[i]->getArmor())
+				if ((explosive) >= _objects[i]->getArmor())
 				{
 					decrease = _objects[i]->getArmor();
 					destroy(i);
 					addSmoke(2);
-					if (_objects[i] && (_explosive - decrease) >= _objects[i]->getArmor())
+					if (_objects[i] && (explosive - decrease) >= _objects[i]->getArmor())
 					{
 						destroy(i);
 					}
@@ -461,7 +470,6 @@ void Tile::detonate()
 				ignite();
 			}
 		}
-		_explosive = 0;
 	}
 }
 
@@ -684,24 +692,6 @@ void Tile::prepareNewTurn()
 		_fire--;
 		if (_fire < 0) _fire = 0;
 	}
-}
-
-/**
- * Set whether we checked this tile.
- * @param flag
- */
-void Tile::setChecked(bool flag)
-{
-	_checked = flag;
-}
-
-/**
- * Get whether we checked this tile.
- * @return flag
- */
-bool Tile::getChecked()
-{
-	return _checked;
 }
 
 /**

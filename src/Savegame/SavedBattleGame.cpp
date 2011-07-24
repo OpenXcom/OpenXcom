@@ -136,7 +136,7 @@ void SavedBattleGame::loadMapResources(ResourcePack *res)
 		(*i)->load(res);
 	}
 
-	int mdsID, mdID;
+	int mdsID = 0, mdID = 0;
 
 	for (int i = 0; i < _height * _length * _width; i++)
 	{
@@ -449,7 +449,7 @@ BattleUnit *SavedBattleGame::selectPreviousPlayerUnit()
  * Select the next player unit TODO move this to BattlescapeState ?
  * @return pointer to BattleUnit.
  */
-BattleUnit *SavedBattleGame::selectNextPlayerUnit()
+BattleUnit *SavedBattleGame::selectNextPlayerUnit(bool checkReselect)
 {
 	std::vector<BattleUnit*>::iterator i = _units.begin();
 	bool bNext = false;
@@ -462,7 +462,7 @@ BattleUnit *SavedBattleGame::selectNextPlayerUnit()
 
 	do
 	{
-		if (bNext && (*i)->getFaction() == _side && !(*i)->isOut())
+		if (bNext && (*i)->getFaction() == _side && !(*i)->isOut() && ((checkReselect && (*i)->reselectAllowed())||!checkReselect))
 		{
 			break;
 		}
@@ -580,6 +580,36 @@ BattleItem *SavedBattleGame::getItemFromUnit(BattleUnit *unit, InventorySlot slo
 	}
 	return 0;
 }
+
+/**
+* Get the "main hand weapon" from the unit.
+* @return
+*/
+BattleItem *SavedBattleGame::getMainHandWeapon(BattleUnit *unit)
+{
+
+	BattleItem *weaponRightHand = getItemFromUnit(unit, RIGHT_HAND);
+	BattleItem *weaponLeftHand = getItemFromUnit(unit, LEFT_HAND);
+
+	// if there is only one weapon, or only one weapon loaded (rules out grenades) it's easy:
+	if (!weaponRightHand || !weaponRightHand->getAmmoItem() || !weaponRightHand->getAmmoItem()->getAmmoQuantity())
+		return weaponLeftHand;
+	if (!weaponLeftHand || !weaponLeftHand->getAmmoItem() || !weaponLeftHand->getAmmoItem()->getAmmoQuantity())
+		return weaponRightHand;
+
+	// otherwise pick the one with the least snapshot TUs
+	int tuRightHand = weaponRightHand->getRules()->getTUSnap();
+	int tuLeftHand = weaponRightHand->getRules()->getTUSnap();
+	if (tuLeftHand >= tuRightHand)
+	{
+		return weaponRightHand;
+	}
+	else
+	{
+		return weaponLeftHand;
+	}
+}
+
 
 /**
  * TODO function header.

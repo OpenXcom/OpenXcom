@@ -21,6 +21,7 @@
 
 #include "BattleState.h"
 #include "Position.h"
+#include "../Ruleset/RuleItem.h"
 
 namespace OpenXcom
 {
@@ -32,10 +33,10 @@ class UnitFallBState : public BattleState
 {
 private:
 	BattleUnit *_unit;
-	bool _instakill;
+	ItemDamageType _damageType;
 public:
 	/// Creates a new UnitFallBState class
-	UnitFallBState(BattlescapeState *parent, BattleUnit *unit, bool instakill);
+	UnitFallBState(BattlescapeState *parent, BattleUnit *unit, ItemDamageType damageType);
 	/// Cleans up the UnitFallBState.
 	~UnitFallBState();
 	/// Initializes the state.

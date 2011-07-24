@@ -281,8 +281,8 @@ void Map::drawTerrain(Surface *surface)
 
 		// if the projectile is outside the viewport - center it back on it
 		convertVoxelToScreen(_projectile->getPosition(), &bulletPositionScreen);
-		if (bulletPositionScreen.x < -_spriteWidth || bulletPositionScreen.x > surface->getWidth() ||
-			bulletPositionScreen.y < -_spriteHeight || bulletPositionScreen.y > surface->getHeight()  )
+		if (bulletPositionScreen.x < 100 || bulletPositionScreen.x > surface->getWidth()-100 ||
+			bulletPositionScreen.y < 100 || bulletPositionScreen.y > surface->getHeight()-100  )
 		{
 			centerOnPosition(Position(bulletLowX, bulletLowY, bulletLowZ), false);
 			_cameraFollowed = true;
@@ -463,6 +463,14 @@ void Map::drawTerrain(Surface *surface)
 							{
 								drawArrow(screenPosition + offset, surface);
 							}
+							if (unit->getFire() > 0)
+							{
+								frameNumber = 4 + (_animFrame / 2);
+								frame = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frameNumber);
+								frame->setX(screenPosition.x);
+								frame->setY(screenPosition.y);
+								frame->blit(surface);
+							}
 						}
 					}
 					// if we can see through the floor, draw the soldier below it if it is on stairs
@@ -481,9 +489,17 @@ void Map::drawTerrain(Surface *surface)
 								frame->setX(screenPosition.x + offset.x);
 								frame->setY(screenPosition.y + offset.y);
 								frame->blit(surface);
-								if (unit == (BattleUnit*)_save->getSelectedUnit() && _cursorType != CT_NONE)
+								if (tunit == (BattleUnit*)_save->getSelectedUnit() && _cursorType != CT_NONE)
 								{
 									drawArrow(screenPosition + offset, surface);
+								}
+								if (tunit->getFire() > 0)
+								{
+									frameNumber = 4 + (_animFrame / 2);
+									frame = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frameNumber);
+									frame->setX(screenPosition.x);
+									frame->setY(screenPosition.y);
+									frame->blit(surface);
 								}
 							}
 						}

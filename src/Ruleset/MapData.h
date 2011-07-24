@@ -61,7 +61,7 @@ private:
 	SpecialTileType _specialType;
 	bool _isUfoDoor, _stopLOS, _isNoFloor, _isBigWall, _isGravLift, _isDoor, _blockFire, _blockSmoke;
 	int _yOffset, _TUWalk, _TUFly, _TUSlide, _terrainLevel, _footstepSound, _dieMCD, _altMCD, _objectType, _lightSource;
-	int _armor, _flammable, _fuel;
+	int _armor, _flammable, _fuel, _explosive;
 	int _sprite[8];
 	int _block[6];
 	int _loftID[12];
@@ -138,6 +138,11 @@ public:
 	int getLoftID(int layer);
 	/// Set the loft index for a certain layer.
 	void setLoftID(int loft, int layer);
+	/// Get the amount of explosive.
+	int getExplosive();
+	/// Set the amount of explosive.
+	void setExplosive(int value);
+
 };
 
 }

@@ -38,7 +38,7 @@ namespace OpenXcom
 /**
  * Sets up an UnitFallBState.
  */
-UnitFallBState::UnitFallBState(BattlescapeState *parent, BattleUnit *unit, bool instakill) : BattleState(parent), _unit(unit), _instakill(instakill)
+UnitFallBState::UnitFallBState(BattlescapeState *parent, BattleUnit *unit, ItemDamageType damageType) : BattleState(parent), _unit(unit), _damageType(damageType)
 {
 	
 }
@@ -53,7 +53,8 @@ UnitFallBState::~UnitFallBState()
 
 void UnitFallBState::init()
 {
-	if (_instakill)
+	// don't show the "fall to death" animation when a unit is blasted with explosives or he is already unconscious
+	if (_damageType == DT_HE || _unit->getStatus() == STATUS_UNCONSCIOUS)
 	{
 		_unit->startFalling();
 		while (_unit->getStatus() == STATUS_FALLING)

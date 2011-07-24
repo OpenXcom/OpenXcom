@@ -121,7 +121,7 @@ public:
 	/// select previous soldier
 	BattleUnit *selectPreviousPlayerUnit();
 	/// select next soldier
-	BattleUnit *selectNextPlayerUnit();
+	BattleUnit *selectNextPlayerUnit(bool checkReselect = false);
 	/// select unit with position on map
 	BattleUnit *selectUnit(const Position& pos);
 	/// select unit with position on map
@@ -132,6 +132,7 @@ public:
 	TerrainModifier *getTerrainModifier();
 	/// get an item from a specific unit and slot
 	BattleItem *getItemFromUnit(BattleUnit *unit, InventorySlot slot);
+	BattleItem *getMainHandWeapon(BattleUnit *unit);
 	UnitFaction getSide() const;
 	int getTurn() const;
 	void endTurn();

@@ -90,6 +90,7 @@ private:
 	int _animFrame;
 	std::list<BattleState*> _states;
 	BattleAction _action;
+	BattleActionType _tuReserved;
 	
 	void endTurn();
 	void handleItemClick(BattleItem *item);
@@ -148,6 +149,14 @@ public:
 	void btnRightHandItemClick(Action *action);
 	/// Handler for clicking a visible unit button.
 	void btnVisibleUnitClick(Action *action);
+	/// Handler for clicking a reserved button.
+	void btnReserveNoneClick(Action *action);
+	/// Handler for clicking a reserved button.
+	void btnReserveSnapClick(Action *action);
+	/// Handler for clicking a reserved button.
+	void btnReserveAimedClick(Action *action);
+	/// Handler for clicking a reserved button.
+	void btnReserveAutoClick(Action *action);
 	/// updates soldier name/rank/tu/energy/health/morale
 	void updateSoldierInfo(BattleUnit *unit);
 	/// handlestates timer.
@@ -178,6 +187,8 @@ public:
 	void popup(State *state);
 	/// Checks for casualties in battle.
 	void checkForCasualties(BattleItem *murderweapon, BattleUnit *murderer);
+	/// Check reserved tu.
+	bool checkReservedTU(BattleUnit *bu, int tu);
 };
 
 }

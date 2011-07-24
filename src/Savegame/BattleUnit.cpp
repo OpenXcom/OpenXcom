@@ -18,6 +18,7 @@
  */
 #define _USE_MATH_DEFINES
 #include "BattleUnit.h"
+#include "BattleItem.h"
 #include <cmath>
 #include "../Engine/Palette.h"
 #include "../Engine/Language.h"
@@ -35,12 +36,13 @@ namespace OpenXcom
  * @param rules Pointer to RuleUnit object.
  * @param faction Which faction the units belongs to.
  */
-BattleUnit::BattleUnit(Unit *unit, UnitFaction faction) : _unit(unit), _faction(faction), _id(0), _pos(Position()), _lastPos(Position()), _direction(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _cached(false), _kneeled(false)
+BattleUnit::BattleUnit(Unit *unit, UnitFaction faction) : _unit(unit), _faction(faction), _id(0), _pos(Position()), _lastPos(Position()), _direction(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _cached(false), _kneeled(false), _dontReselect(false), _fire(0)
 {
 	_tu = unit->getTimeUnits();
 	_energy = unit->getStamina();
 	_health = unit->getHealth();
 	_morale = 100;
+	_stunlevel = 0;
 	_armor[SIDE_FRONT] = unit->getArmor()->getFrontArmor();
 	_armor[SIDE_LEFT] = unit->getArmor()->getSideArmor();
 	_armor[SIDE_RIGHT] = unit->getArmor()->getSideArmor();
@@ -556,6 +558,25 @@ void BattleUnit::damage(Position position, int power)
 }
 
 /**
+ * Do an amount of stun. Can be negative amount = stun recovery.
+ * @param power
+ */
+void BattleUnit::stun(int power)
+{
+	_stunlevel += power;
+	// recover from unconscious
+	if (_status == STATUS_UNCONSCIOUS && _stunlevel < _health && _health > 0)
+	{
+		_status = STATUS_STANDING;
+	}
+}
+
+int BattleUnit::getStunlevel() const
+{
+	return _stunlevel;
+}
+
+/**
  * Intialises the falling sequence. Occurs after death or stunned.
  */
 void BattleUnit::startFalling()
@@ -601,6 +622,32 @@ bool BattleUnit::isOut() const
 {
 	return _status == STATUS_DEAD || _status == STATUS_UNCONSCIOUS;
 }
+
+/**
+ * Get the number of time units a certain action takes.
+ * @param action
+ * @param item
+ * @return TUs
+ */
+int BattleUnit::getActionTUs(BattleActionType actionType, BattleItem *item)
+{
+	switch (actionType)
+	{
+		case BA_PRIME:
+			return (int)floor(getUnit()->getTimeUnits() * 0.50);
+		case BA_THROW:
+			return (int)floor(getUnit()->getTimeUnits() * 0.25);
+		case BA_AUTOSHOT:
+			return (int)(getUnit()->getTimeUnits() * item->getRules()->getTUAuto() / 100);
+		case BA_SNAPSHOT:
+			return (int)(getUnit()->getTimeUnits() * item->getRules()->getTUSnap() / 100);
+		case BA_AIMEDSHOT:
+			return (int)(getUnit()->getTimeUnits() * item->getRules()->getTUAimed() / 100);
+	}
+
+	return 0;
+}
+
 
 /**
  * Spend time units if it can. Return false if it can't.
@@ -793,8 +840,22 @@ void BattleUnit::prepareNewTurn()
 
 	// suffer from fatal wounds
 	_health -= getFatalWounds();
+
+	// suffer from fire
+	if (_fire > 0)
+	{
+		_health -= RNG::generate(5, 10);
+		_fire--;
+	}
+
 	if (_health < 0)
 		_health = 0;
+
+	// recover stun 1pt/turn
+	if (_stunlevel > 0)
+		stun(-1);
+
+	_dontReselect = false;
 }
 
 
@@ -811,6 +872,39 @@ void BattleUnit::moraleChange(int change)
 		_morale = 0;
 }
 
+/**
+ * Mark this unit is not reselectable.
+ */
+void BattleUnit::dontReselect()
+{
+	_dontReselect = true;
+}
 
+/**
+ * Check whether reselecting this unit is allowed.
+ * @return bool
+ */
+bool BattleUnit::reselectAllowed()
+{
+	return !_dontReselect;
+}
+
+/**
+ * Set the amount of turns this unit is on fire. 0 = no fire.
+ * @param fire : amount of turns this tile is on fire.
+ */
+void BattleUnit::setFire(int fire)
+{
+	_fire = fire;
+}
+
+/**
+ * Get the amount of turns this unit is on fire. 0 = no fire.
+ * @return fire : amount of turns this tile is on fire.
+ */
+int BattleUnit::getFire()
+{
+	return _fire;
+}
 
 }

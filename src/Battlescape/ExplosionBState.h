@@ -28,6 +28,7 @@ namespace OpenXcom
 class BattlescapeState;
 class BattleUnit;
 class BattleItem;
+class Tile;
 
 /* Explosion state not only handles explosions, but also bullet impacts! */
 
@@ -37,9 +38,10 @@ private:
 	BattleUnit *_unit;
 	Position _center;
 	BattleItem *_item;
+	Tile *_tile;
 public:
 	/// Creates a new ExplosionBState class
-	ExplosionBState(BattlescapeState *parent, Position center, BattleItem *item, BattleUnit *unit);
+	ExplosionBState(BattlescapeState *parent, Position center, BattleItem *item, BattleUnit *unit, Tile *tile = 0);
 	/// Cleans up the ExplosionBState.
 	~ExplosionBState();
 	/// Initializes the state.
