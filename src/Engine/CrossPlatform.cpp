@@ -33,6 +33,7 @@
 #pragma comment(lib, "shell32.lib")
 #pragma comment(lib, "shlwapi.lib")
 #else
+#include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/param.h>
@@ -63,7 +64,7 @@ std::string getDataFile(const std::string &filename)
 
 	// Try lowercase and uppercase names
 	struct stat info;
-	if (stat(newName.c_str(), &info) == 0)
+	if (stat(newPath.c_str(), &info) == 0)
 	{
 		return newPath;
 	}
@@ -159,20 +160,22 @@ std::wstring findDataFolder()
 		}
 	}
 #else
-	char path[MAXPATHLEN];
+	wchar_t path[MAXPATHLEN];
 	struct stat info;
 
 	// Check shared directory
-	path = "/usr/share/openxcom/"
-	if (stat(path, &info) == 0 && S_ISDIR(info.st_mode))
+	const char* shared = "/usr/share/openxcom/";
+	if (stat(shared, &info) == 0 && S_ISDIR(info.st_mode))
 	{
+		mbstowcs(path, shared, strlen(shared)+1);
 		return path;
 	}
 
 	// Check working directory
-	path = "./DATA/";
-	if (stat(path, &info) == 0 && S_ISDIR(info.st_mode))
+	const char* working = "./DATA/";
+	if (stat(working, &info) == 0 && S_ISDIR(info.st_mode))
 	{
+		mbstowcs(path, working, strlen(working)+1);
 		return path;
 	}
 #endif
@@ -220,24 +223,27 @@ std::wstring findUserFolder()
 		}
 	}
 #else
-	char path[MAXPATHLEN];
+	wchar_t path[MAXPATHLEN];
 	struct stat info;
-
+	
 	// Check HOME directory
 	char *homedir = getenv("HOME");
 	if (homedir)
 	{
-		snprintf(path, MAXPATHLEN, "%s/.openxcom/", homedir);
-		if (stat(path, &info) == 0 && S_ISDIR(info.st_mode))
+		char homePath[MAXPATHLEN];
+		snprintf(homePath, MAXPATHLEN, "%s/.openxcom/", homedir);
+		if (stat(homePath, &info) == 0 && S_ISDIR(info.st_mode))
 		{
+			mbstowcs(path, homePath, strlen(homePath)+1);
 			return path;
 		}
 	}
 
 	// Check working directory
-	path = "./USER/";
-	if (stat(path, &info) == 0 && S_ISDIR(info.st_mode))
+	const char* working = "./USER/";
+	if (stat(working, &info) == 0 && S_ISDIR(info.st_mode))
 	{
+		mbstowcs(path, working, strlen(working)+1);
 		return path;
 	}
 #endif
