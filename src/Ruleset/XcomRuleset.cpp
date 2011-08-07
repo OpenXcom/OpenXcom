@@ -1092,12 +1092,12 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	RuleInventory *rhand = new RuleInventory("STR_RIGHT_HAND");
 	rhand->setX(0);
 	rhand->setY(64);
-	rhand->addSlot(1, 0);
+	rhand->setType(INV_HAND);
 
 	RuleInventory *lhand = new RuleInventory("STR_LEFT_HAND");
 	lhand->setX(128);
 	lhand->setY(64);
-	lhand->setHand(true);
+	lhand->setType(INV_HAND);
 
 	RuleInventory *rleg = new RuleInventory("STR_RIGHT_LEG");
 	rleg->setX(0);
@@ -1134,14 +1134,20 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	belt->addSlot(0, 1);
 	belt->addSlot(3, 1);
 
-	_invs.insert(std::pair<std::string, RuleInventory*>("STR_RIGHT_SHOULDER", rshoulder));
-	_invs.insert(std::pair<std::string, RuleInventory*>("STR_LEFT_SHOULDER", lshoulder));
-	_invs.insert(std::pair<std::string, RuleInventory*>("STR_RIGHT_HAND", rhand));
-	_invs.insert(std::pair<std::string, RuleInventory*>("STR_LEFT_HAND", lhand));
-	_invs.insert(std::pair<std::string, RuleInventory*>("STR_RIGHT_LEG", rleg));
-	_invs.insert(std::pair<std::string, RuleInventory*>("STR_LEFT_LEG", lleg));
-	_invs.insert(std::pair<std::string, RuleInventory*>("STR_BACK_PACK", backpack));
-	_invs.insert(std::pair<std::string, RuleInventory*>("STR_BELT", belt));
+	RuleInventory *ground = new RuleInventory("STR_GROUND");
+	ground->setX(0);
+	ground->setY(152);
+	ground->setType(INV_GROUND);
+
+	_invs.push_back(rshoulder);
+	_invs.push_back(lshoulder);
+	_invs.push_back(rhand);
+	_invs.push_back(lhand);
+	_invs.push_back(rleg);
+	_invs.push_back(lleg);
+	_invs.push_back(backpack);
+	_invs.push_back(belt);
+	_invs.push_back(ground);
 	
 	// Add terrain
 	RuleTerrain *culta = new RuleTerrain("CULTA");
@@ -1733,7 +1739,7 @@ SavedGame *XcomRuleset::newSave(GameDifficulty diff) const
 	skyranger->getItems()->addItem("STR_GRENADE", 8);
 	base->getCrafts()->push_back(skyranger);
 
-	for (int i = 0; i < 2; i++)
+	for (int i = 0; i < 2; ++i)
 	{
 		Craft *interceptor = new Craft(getCraft("STR_INTERCEPTOR"), base, save->getCraftIds());
 		interceptor->setFuel(interceptor->getRules()->getMaxFuel());
@@ -1743,7 +1749,7 @@ SavedGame *XcomRuleset::newSave(GameDifficulty diff) const
 	}
 
 	// Generate soldiers
-	for (int i = 0; i < 8; i++)
+	for (int i = 0; i < 8; ++i)
 	{
 		Soldier *soldier = new Soldier(getSoldier("XCOM"), getArmor("STR_NONE_UC"), &_names);
 		soldier->setCraft(skyranger);

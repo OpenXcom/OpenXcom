@@ -32,6 +32,8 @@
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/Soldier.h"
+#include "Inventory.h"
+#include "../Ruleset/Ruleset.h"
 #include "UnitInfoState.h"
 
 namespace OpenXcom
@@ -56,6 +58,7 @@ InventoryState::InventoryState(Game *game) : State(game)
 	_btnUnload = new InteractiveSurface(32, 25, 288, 32);
 	_btnGround = new InteractiveSurface(32, 15, 289, 137);
 	_btnRank = new InteractiveSurface(26, 23, 0, 0);
+	_inv = new Inventory(_game, 320, 200, 0, 0);
 
 	add(_bg);
 	add(_soldier);
@@ -67,6 +70,7 @@ InventoryState::InventoryState(Game *game) : State(game)
 	add(_btnUnload);
 	add(_btnGround);
 	add(_btnRank);
+	add(_inv);
 
 	// Set up objects
 	_game->getResourcePack()->getSurface("TAC01.SCR")->blit(_bg);
@@ -79,6 +83,9 @@ InventoryState::InventoryState(Game *game) : State(game)
 	_btnPrev->onMouseClick((ActionHandler)&InventoryState::btnPrevClick);
 	_btnNext->onMouseClick((ActionHandler)&InventoryState::btnNextClick);
 	_btnRank->onMouseClick((ActionHandler)&InventoryState::btnRankClick);
+
+	_inv->setRuleInventory(_game->getRuleset()->getInventories());
+	_inv->draw();
 }
 
 /**

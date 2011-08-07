@@ -67,7 +67,7 @@ protected:
 	std::map<std::string, RuleAlien*> _aliens;
 	std::map<std::string, RuleArmor*> _armors;
 	std::map<std::string, ArticleDefinition*> _ufopaediaArticles;
-	std::map<std::string, RuleInventory*> _invs;
+	std::vector<RuleInventory*> _invs;
 	int _costSoldier, _costEngineer, _costScientist, _timePersonnel;
 public:
 	/// Creates a blank ruleset.
@@ -104,8 +104,8 @@ public:
 	RuleArmor *const getArmor(const std::string &name) const;
 	/// Gets Ufopaedia article definition.
 	ArticleDefinition *const getUfopaediaArticle(const std::string &name) const;
-	/// Gets inventory rules.
-	RuleInventory *const getInventory(const std::string &id) const;
+	/// Gets the inventory list.
+	std::vector<RuleInventory*> *const getInventories();
 	/// Gets the cost of a soldier.
 	int getSoldierCost() const;
 	/// Gets the cost of an engineer.

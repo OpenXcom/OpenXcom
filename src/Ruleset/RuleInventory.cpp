@@ -21,14 +21,13 @@
 
 namespace OpenXcom
 {
-// NOTES FOR ME: SLOT SIZE = 16x16, HAND SIZE=32x48
 
 /**
  * Creates a blank ruleset for a certain
  * type of inventory section.
- * @param type String defining the type.
+ * @param id String defining the id.
  */
-RuleInventory::RuleInventory(std::string type): _type(type), _x(0), _y(0), _hand(false), _slotX(), _slotY()
+RuleInventory::RuleInventory(std::string id): _id(id), _x(0), _y(0), _tus(0), _type(INV_SLOT), _slots()
 {
 }
 
@@ -41,9 +40,9 @@ RuleInventory::~RuleInventory()
  * this inventory section. Each section has a unique name.
  * @return Section name.
  */
-std::string RuleInventory::getType() const
+std::string RuleInventory::getId() const
 {
-	return _type;
+	return _id;
 }
 
 /**
@@ -83,23 +82,24 @@ void RuleInventory::setY(int y)
 }
 
 /**
- * Returns whether the inventory section is a hand.
- * A hand only contains one slot but can hold any item.
- * @return Is it a hand?!
+ * Returns the type of the inventory section.
+ * Slot-based contain a limited number of slots.
+ * Hands only contain one slot but can hold any item.
+ * Ground can hold infinite items but don't attach to soldiers.
+ * @return The inventory type.
  */
-bool RuleInventory::getHand() const
+InventoryType RuleInventory::getType() const
 {
-	return _hand;
+	return _type;
 }
 
 /**
- * Changes whether the inventory section is a hand.
- * A hand only contains one slot but can hold any item.
- * @rparam hand Is it a hand?!
+ * Changes the type of the inventory section.
+ * @param type The inventory type.
  */
-void RuleInventory::setHand(bool hand)
+void RuleInventory::setType(InventoryType type)
 {
-	_hand = hand;
+	_type = type;
 }
 
 /**
@@ -110,8 +110,17 @@ void RuleInventory::setHand(bool hand)
  */
 void RuleInventory::addSlot(int x, int y)
 {
-	_slotX.push_back(x);
-	_slotY.push_back(y);
+	struct RuleSlot s = {x, y};
+	_slots.push_back(s);
+}
+
+/**
+ * Gets all the slots in the inventory section.
+ * @return List of slots.
+ */
+std::vector<struct RuleSlot> *const RuleInventory::getSlots()
+{
+	return &_slots;
 }
 
 }

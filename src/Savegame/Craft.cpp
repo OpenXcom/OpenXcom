@@ -80,7 +80,7 @@ void Craft::load(const YAML::Node &node, const Ruleset *rule)
 	node["damage"] >> _damage;
 
 	size = node["weapons"].size();
-	for (unsigned int i = 0; i < size; i++)
+	for (unsigned int i = 0; i < size; ++i)
 	{
 		std::string type;
 		node["weapons"][i]["type"] >> type;

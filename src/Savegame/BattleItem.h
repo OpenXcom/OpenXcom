@@ -21,6 +21,7 @@
 
 #include "../Battlescape/Position.h"
 #include "yaml.h"
+#include <string>
 
 namespace OpenXcom
 {
@@ -28,8 +29,6 @@ namespace OpenXcom
 class Item;
 class RuleItem;
 class BattleUnit;
-
-enum InventorySlot { RIGHT_HAND, LEFT_HAND };
 
 /**
  * Represents a single item in the battlescape.
@@ -43,7 +42,8 @@ private:
 	RuleItem *_rules;
 	Position _position;
 	BattleUnit *_owner, *_previousOwner;
-	InventorySlot _inventorySlot;
+	std::string _inventorySlot;
+	int _inventoryX, _inventoryY;
 	BattleItem *_ammoItem;
 	int _itemProperty[3];
 public:
@@ -74,9 +74,17 @@ public:
 	/// Sets the item's owner.
 	void setOwner(BattleUnit *owner);
 	/// Gets the item's inventory slot.
-	InventorySlot getSlot() const;
+	std::string getSlot() const;
 	/// Sets the item's inventory slot.
-	void setSlot(InventorySlot slot);
+	void setSlot(std::string slot);
+	/// Gets the item's inventory X position.
+	int getSlotX() const;
+	/// Sets the item's inventory X position.
+	void setSlotX(int x);
+	/// Gets the item's inventory Y position.
+	int getSlotY() const;
+	/// Sets the item's inventory Y position.
+	void setSlotY(int y);
 	/// Gets the item's ammo item.
 	BattleItem *getAmmoItem();
 	/// Sets the item's ammo item.

@@ -144,7 +144,7 @@ void Surface::loadSpk(const std::string &filename)
 		if (flag == 65535)
 		{
 			imgFile.read((char*)&flag, sizeof(flag));
-			for (int i = 0; i < flag * 2; i++)
+			for (int i = 0; i < flag * 2; ++i)
 			{
 				setPixelIterative(&x, &y, 0);
 			}
@@ -152,7 +152,7 @@ void Surface::loadSpk(const std::string &filename)
 		else if (flag == 65534)
 		{
 			imgFile.read((char*)&flag, sizeof(flag));
-			for (int i = 0; i < flag * 2; i++)
+			for (int i = 0; i < flag * 2; ++i)
 			{
 				imgFile.read((char*)&value, 1);
 				setPixelIterative(&x, &y, value);

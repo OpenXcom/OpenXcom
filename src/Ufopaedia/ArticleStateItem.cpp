@@ -155,7 +155,7 @@ namespace OpenXcom
 		// AMMO column
 		std::wstringstream ss;
 		
-		for (int i = 0; i<3; i++)
+		for (int i = 0; i<3; ++i)
 		{
 			_txtAmmoType[i] = new Text(80, 10, 200, 24 + i*49);
 			add(_txtAmmoType[i]);
@@ -187,7 +187,7 @@ namespace OpenXcom
 				_txtAmmo->setAlign(ALIGN_CENTER);
 				_txtAmmo->setText(_game->getLanguage()->getString("STR_AMMO").c_str());
 				
-				for (unsigned int i = 0; i < ammo_data->size(); i++)
+				for (unsigned int i = 0; i < ammo_data->size(); ++i)
 				{
 					if (Ufopaedia::isArticleAvailable(_game, (*ammo_data)[i]))
 					{

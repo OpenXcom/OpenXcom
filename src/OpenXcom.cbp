@@ -126,6 +126,8 @@
 		<Unit filename="Battlescape\Explosion.h" />
 		<Unit filename="Battlescape\ExplosionBState.cpp" />
 		<Unit filename="Battlescape\ExplosionBState.h" />
+		<Unit filename="Battlescape\Inventory.cpp" />
+		<Unit filename="Battlescape\Inventory.h" />
 		<Unit filename="Battlescape\InventoryState.cpp" />
 		<Unit filename="Battlescape\InventoryState.h" />
 		<Unit filename="Battlescape\Map.cpp" />

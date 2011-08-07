@@ -1224,7 +1224,7 @@ void Map::cacheUnits()
 				_unitCache.at((*i)->getId())->clear();
 			}
 			unitSprite->setBattleUnit((*i));
-			BattleItem *handItem = _save->getItemFromUnit((*i), RIGHT_HAND);
+			BattleItem *handItem = _save->getItemFromUnit((*i), "STR_RIGHT_HAND");
 			if (handItem)
 			{
 				unitSprite->setBattleItem(handItem);

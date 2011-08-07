@@ -679,7 +679,7 @@ void BattlescapeState::endTurn()
  */
 void BattlescapeState::checkForCasualties(BattleItem *murderweapon, BattleUnit *murderer)
 {
-	// TODO : include rank bonusses and penalties !!
+	// TODO : include rank bonuses and penalties !!
 	for (std::vector<BattleUnit*>::iterator j = _battleGame->getUnits()->begin(); j != _battleGame->getUnits()->end(); ++j)
 	{
 		if ((*j)->getHealth() == 0 && (*j)->getStatus() != STATUS_DEAD && (*j)->getStatus() != STATUS_FALLING)
@@ -760,7 +760,7 @@ void BattlescapeState::btnLeftHandItemClick(Action *action)
 	if (_action.type != BA_NONE) return;
 	if (_battleGame->getSelectedUnit())
 	{
-		BattleItem *leftHandItem = _battleGame->getItemFromUnit(_battleGame->getSelectedUnit(), LEFT_HAND);
+		BattleItem *leftHandItem = _battleGame->getItemFromUnit(_battleGame->getSelectedUnit(), "STR_LEFT_HAND");
 		handleItemClick(leftHandItem);
 	}
 }
@@ -774,7 +774,7 @@ void BattlescapeState::btnRightHandItemClick(Action *action)
 	if (_action.type != BA_NONE) return;
 	if (_battleGame->getSelectedUnit())
 	{
-		BattleItem *rightHandItem = _battleGame->getItemFromUnit(_battleGame->getSelectedUnit(), RIGHT_HAND);
+		BattleItem *rightHandItem = _battleGame->getItemFromUnit(_battleGame->getSelectedUnit(), "STR_RIGHT_HAND");
 		handleItemClick(rightHandItem);
 	}
 }
@@ -944,7 +944,7 @@ void BattlescapeState::updateSoldierInfo(BattleUnit *battleUnit)
 	_barMorale->setMax(100);
 	_barMorale->setValue(battleUnit->getMorale());
 
-	BattleItem *leftHandItem = _battleGame->getItemFromUnit(battleUnit, LEFT_HAND);
+	BattleItem *leftHandItem = _battleGame->getItemFromUnit(battleUnit, "STR_LEFT_HAND");
 	_btnLeftHandItem->clear();
 	_numAmmoLeft->clear();
 	if (leftHandItem)
@@ -953,7 +953,7 @@ void BattlescapeState::updateSoldierInfo(BattleUnit *battleUnit)
 		if (leftHandItem->getAmmoItem())
 			_numAmmoLeft->setValue(leftHandItem->getAmmoItem()->getAmmoQuantity());
 	}
-	BattleItem *rightHandItem = _battleGame->getItemFromUnit(battleUnit, RIGHT_HAND);
+	BattleItem *rightHandItem = _battleGame->getItemFromUnit(battleUnit, "STR_RIGHT_HAND");
 	_btnRightHandItem->clear();
 	_numAmmoRight->clear();
 	if (rightHandItem)
@@ -970,7 +970,7 @@ void BattlescapeState::updateSoldierInfo(BattleUnit *battleUnit)
 		_btnVisibleUnit[j]->show();
 		_numVisibleUnit[j]->show();
 		_visibleUnit[j] = (*i);
-		j++;
+		++j;
 	}
 }
 

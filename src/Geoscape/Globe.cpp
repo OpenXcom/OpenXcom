@@ -189,7 +189,7 @@ Globe::Globe(Game *game, int cenX, int cenY, int width, int height, int x, int y
  */
 Globe::~Globe()
 {
-	for (int i = 1; i < NUM_SHADES; i++)
+	for (int i = 1; i < NUM_SHADES; ++i)
 		delete _texture[i];
 
     delete _blinkTimer;
@@ -290,7 +290,7 @@ double Globe::lastVisibleLat(double lon) const
 bool Globe::insidePolygon(double lon, double lat, Polygon *poly) const
 {
 	bool backFace = true;
-	for (int i = 0; i < poly->getPoints(); i++)
+	for (int i = 0; i < poly->getPoints(); ++i)
 	{
 		backFace = backFace && pointBack(poly->getLongitude(i), poly->getLatitude(i));
 	}
@@ -298,7 +298,7 @@ bool Globe::insidePolygon(double lon, double lat, Polygon *poly) const
 		return false;
 
 	bool c = false;
-	for (int i = 0; i < poly->getPoints(); i++)
+	for (int i = 0; i < poly->getPoints(); ++i)
 	{
 		int j = (i + 1) % poly->getPoints();
 
@@ -349,7 +349,7 @@ void Globe::loadDat(const std::string &filename, std::list<Polygon*> *polygons)
 		}
 		poly = new Polygon(points);
 
-		for (int i = 0, j = 0; i < points; i++)
+		for (int i = 0, j = 0; i < points; ++i)
 		{
 			// Correct X-Com degrees and convert to radians
 			double lonRad = value[j++] * 0.125f * M_PI / 180;
@@ -610,7 +610,7 @@ void Globe::cache(std::list<Polygon*> *polygons, std::list<Polygon*> *cache)
 	{
 		// Is quad on the back face?
 		bool backFace = true;
-		for (int j = 0; j < (*i)->getPoints(); j++)
+		for (int j = 0; j < (*i)->getPoints(); ++j)
 		{
 			backFace = backFace && pointBack((*i)->getLongitude(j), (*i)->getLatitude(j));
 		}
@@ -620,7 +620,7 @@ void Globe::cache(std::list<Polygon*> *polygons, std::list<Polygon*> *cache)
 		Polygon* p = new Polygon(**i);
 
 		// Convert coordinates
-		for (int j = 0; j < p->getPoints(); j++)
+		for (int j = 0; j < p->getPoints(); ++j)
 		{
 			Sint16 x, y;
 			polarToCart(p->getLongitude(j), p->getLatitude(j), &x, &y);
@@ -905,13 +905,13 @@ void Globe::fillLongitudeSegments(double startLon, double endLon, int colourShif
 
 	if (polyPointsX.size()+polyPointsX2.size() > 0)
 	{
-		for (unsigned int i = 0; i < polyPointsX.size(); i++)
+		for (unsigned int i = 0; i < polyPointsX.size(); ++i)
 		{
 			dx[i] = polyPointsX.at(i);
 			dy[i] = polyPointsY.at(i);
 		}
 
-		for (unsigned int i = 0 ; i < polyPointsX2.size() ; i++)
+		for (unsigned int i = 0 ; i < polyPointsX2.size() ; ++i)
 		{
 			dx[i+polyPointsX.size()] = polyPointsX2.at(polyPointsX2.size()-1-i);
 			dy[i+polyPointsX.size()] = polyPointsY2.at(polyPointsX2.size()-1-i);
@@ -963,7 +963,7 @@ void Globe::drawLand()
 		maxLon = -100.0;
 		pole = false;
 		// Convert coordinates
-		for (int j = 0; j < (*i)->getPoints(); j++)
+		for (int j = 0; j < (*i)->getPoints(); ++j)
 		{
 			double tmpLon = (*i)->getLongitude(j);
 			double tmpLat = (*i)->getLatitude(j);
@@ -1017,7 +1017,7 @@ void Globe::drawDetail()
 		for (std::list<Polyline*>::iterator i = _game->getResourcePack()->getPolylines()->begin(); i != _game->getResourcePack()->getPolylines()->end(); ++i)
 		{
 			Sint16 x[2], y[2];
-			for (int j = 0; j < (*i)->getPoints() - 1; j++)
+			for (int j = 0; j < (*i)->getPoints() - 1; ++j)
 			{
 				// Don't draw if polyline is facing back
 				if (pointBack((*i)->getLongitude(j), (*i)->getLatitude(j)) || pointBack((*i)->getLongitude(j + 1), (*i)->getLatitude(j + 1)))

@@ -18,6 +18,7 @@
  */
 #define _USE_MATH_DEFINES
 #include <cmath>
+#include <set>
 #include "TerrainModifier.h"
 #include "SDL.h"
 #include "../Savegame/SavedBattleGame.h"

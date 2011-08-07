@@ -748,6 +748,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Battlescape\Inventory.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\Inventory.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Battlescape\InventoryState.cpp"
 				>
 			</File>

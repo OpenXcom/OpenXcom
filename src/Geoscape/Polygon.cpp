@@ -31,7 +31,7 @@ Polygon::Polygon(int points) : _points(points), _texture(0), _shade(0)
 	_lon = new double[_points];
 	_x = new Sint16[_points];
 	_y = new Sint16[_points];
-	for (int i = 0; i < _points; i++)
+	for (int i = 0; i < _points; ++i)
 	{
 		_lat[i] = 0.0;
 		_lon[i] = 0.0;
@@ -51,7 +51,7 @@ Polygon::Polygon(const Polygon& other)
 	_lon = new double[_points];
 	_x = new Sint16[_points];
 	_y = new Sint16[_points];
-	for (int i = 0; i < _points; i++)
+	for (int i = 0; i < _points; ++i)
 	{
 		_lat[i] = other._lat[i];
 		_lon[i] = other._lon[i];

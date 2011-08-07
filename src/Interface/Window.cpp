@@ -172,7 +172,7 @@ void Window::draw()
 		square.h = getHeight();
 	}
 
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < 5; ++i)
 	{
 		drawRect(&square, color);
 		if (i < 2)

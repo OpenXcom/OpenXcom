@@ -48,7 +48,7 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction) : _unit(unit), _faction(
 	_armor[SIDE_RIGHT] = unit->getArmor()->getSideArmor();
 	_armor[SIDE_REAR] = unit->getArmor()->getRearArmor();
 	_armor[SIDE_UNDER] = unit->getArmor()->getUnderArmor();
-	for (int i = 0; i < 6; i++)
+	for (int i = 0; i < 6; ++i)
 		_fatalWounds[i] = 0;
 }
 
@@ -801,7 +801,7 @@ int BattleUnit::getArmor(UnitSide side)
 int BattleUnit::getFatalWounds()
 {
 	int sum = 0;
-	for (int i = 0; i < 6; i++)
+	for (int i = 0; i < 6; ++i)
 		sum += _fatalWounds[i];
 	return sum;
 }
@@ -905,6 +905,15 @@ void BattleUnit::setFire(int fire)
 int BattleUnit::getFire()
 {
 	return _fire;
+}
+
+/**
+ * Get the pointer to the vector of inventory items.
+ * @return pointer to vector.
+ */
+std::vector<BattleItem*> *BattleUnit::getInventoryItems()
+{
+	return &_inventoryItems;
 }
 
 }

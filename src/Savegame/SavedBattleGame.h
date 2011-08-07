@@ -131,7 +131,7 @@ public:
 	/// get the terrainmodifier object
 	TerrainModifier *getTerrainModifier();
 	/// get an item from a specific unit and slot
-	BattleItem *getItemFromUnit(BattleUnit *unit, InventorySlot slot);
+	BattleItem *getItemFromUnit(BattleUnit *unit, std::string slot);
 	BattleItem *getMainHandWeapon(BattleUnit *unit);
 	UnitFaction getSide() const;
 	int getTurn() const;

@@ -29,6 +29,7 @@ class Surface;
 class Text;
 class InteractiveSurface;
 class SavedBattleGame;
+class Inventory;
 
 /**
  * Screen which displays soldier's inventory.
@@ -40,6 +41,7 @@ private:
 	Text *_txtName, *_txtTus;
 	InteractiveSurface *_btnOk, *_btnPrev, *_btnNext, *_btnUnload, *_btnGround, *_btnRank;
 	SavedBattleGame *_battleGame;
+	Inventory *_inv;
 public:
 	/// Creates the Inventory state.
 	InventoryState(Game *game);

@@ -83,7 +83,7 @@ void SavedBattleGame::load(const YAML::Node &node)
 	node["height"] >> _height;
 
 	size = node["mapdatafiles"].size();
-	for (unsigned int i = 0; i < size; i++)
+	for (unsigned int i = 0; i < size; ++i)
 	{
 		std::string name;
 		node["mapdatafiles"][i] >> name;
@@ -100,7 +100,7 @@ void SavedBattleGame::load(const YAML::Node &node)
 	std::vector<unsigned char> data;
 	node["tiles"] >> s;
 	//Base64Decode(s, data);
-	for (int i = 0; i < _height * _length * _width; i++)
+	for (int i = 0; i < _height * _length * _width; ++i)
 	{
 		if (!empties)
 		{
@@ -138,7 +138,7 @@ void SavedBattleGame::loadMapResources(ResourcePack *res)
 
 	int mdsID = 0, mdID = 0;
 
-	for (int i = 0; i < _height * _length * _width; i++)
+	for (int i = 0; i < _height * _length * _width; ++i)
 	{
 		for (int part = 0; part < 4; part++)
 		{
@@ -179,7 +179,7 @@ void SavedBattleGame::save(YAML::Emitter &out) const
 	Uint16 empties = 0;
 	std::vector<unsigned char> data;
 
-	for (int i = 0; i < _height * _length * _width; i++)
+	for (int i = 0; i < _height * _length * _width; ++i)
 	{
 		if (_tiles[i]->isVoid())
 		{
@@ -569,11 +569,11 @@ std::vector<MapDataSet*> *SavedBattleGame::getMapDataSets()
 * get an item from a specific unit and slot
 * @return
 */
-BattleItem *SavedBattleGame::getItemFromUnit(BattleUnit *unit, InventorySlot slot)
+BattleItem *SavedBattleGame::getItemFromUnit(BattleUnit *unit, std::string slot)
 {
-	for (std::vector<BattleItem*>::iterator i = _items.begin(); i != _items.end(); ++i)
+	for (std::vector<BattleItem*>::iterator i = unit->getInventoryItems()->begin(); i != unit->getInventoryItems()->end(); ++i)
 	{
-		if ((*i)->getOwner() == unit && (*i)->getSlot() == slot)
+		if ((*i)->getSlot() == slot)
 		{
 			return *i;
 		}
@@ -588,8 +588,8 @@ BattleItem *SavedBattleGame::getItemFromUnit(BattleUnit *unit, InventorySlot slo
 BattleItem *SavedBattleGame::getMainHandWeapon(BattleUnit *unit)
 {
 
-	BattleItem *weaponRightHand = getItemFromUnit(unit, RIGHT_HAND);
-	BattleItem *weaponLeftHand = getItemFromUnit(unit, LEFT_HAND);
+	BattleItem *weaponRightHand = getItemFromUnit(unit, "STR_RIGHT_HAND");
+	BattleItem *weaponLeftHand = getItemFromUnit(unit, "STR_LEFT_HAND");
 
 	// if there is only one weapon, or only one weapon loaded (rules out grenades) it's easy:
 	if (!weaponRightHand || !weaponRightHand->getAmmoItem() || !weaponRightHand->getAmmoItem()->getAmmoQuantity())

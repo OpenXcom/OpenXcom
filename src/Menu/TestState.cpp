@@ -47,7 +47,7 @@ void FontToBmp(const std::string &font, int w, int h)
 	clr[0].r = 0;
 	clr[0].g = 0;
 	clr[0].b = 0;
-	for (int i = 1; i < 8; i++)
+	for (int i = 1; i < 8; ++i)
 	{
 		clr[i].r = 256-i*32;
 		clr[i].g = 256-i*32;
@@ -161,7 +161,7 @@ SDL_Surface *TestState::testSurface()
 
 	Uint8 *index = (Uint8 *)surface->pixels;
 	
-	for (int j = 0; j < 25; j++)
+	for (int j = 0; j < 25; ++j)
 		for (int i = 0; i < 256; i++, index++)
 			*index = i;
 

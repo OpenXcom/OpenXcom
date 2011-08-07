@@ -25,6 +25,13 @@
 namespace OpenXcom
 {
 
+struct RuleSlot
+{
+	int x, y;
+};
+
+enum InventoryType { INV_SLOT, INV_HAND, INV_GROUND };
+
 /**
  * Represents a specific section of the inventory,
  * containing information like available slots and
@@ -33,17 +40,17 @@ namespace OpenXcom
 class RuleInventory
 {
 private:
-	std::string _type;
-	int _x, _y;
-	bool _hand;
-	std::vector<int> _slotX, _slotY;
+	std::string _id;
+	int _x, _y, _tus;
+	InventoryType _type;
+	std::vector<struct RuleSlot> _slots;
 public:
 	/// Creates a blank inventory ruleset.
-	RuleInventory(std::string type);
+	RuleInventory(std::string id);
 	/// Cleans up the inventory ruleset.
 	~RuleInventory();
-	/// Gets the inventory's type.
-	std::string getType() const;
+	/// Gets the inventory's id.
+	std::string getId() const;
 	/// Gets the X position of the inventory.
 	int getX() const;
 	/// Sets the X position of the inventory.
@@ -52,12 +59,14 @@ public:
 	int getY() const;
 	/// Sets the Y position of the inventory.
 	void setY(int y);
-	/// Gets if the inventory is a hand.
-	bool getHand() const;
-	/// Sets if the inventory is a hand.
-	void setHand(bool hand);
+	/// Gets the inventory type.
+	InventoryType getType() const;
+	/// Sets the inventory type.
+	void setType(InventoryType type);
 	/// Adds a slot to the inventory.
 	void addSlot(int x, int y);
+	/// Gets all the slots in the inventory.
+	std::vector<struct RuleSlot> *const getSlots();
 };
 
 }

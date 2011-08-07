@@ -62,7 +62,7 @@ void SoundSet::loadCat(const std::string &filename, bool wav)
 	}
 
 	// Load each sound file
-	for (int i = 0; i < sndFile.getAmount(); i++)
+	for (int i = 0; i < sndFile.getAmount(); ++i)
 	{
 		// Read WAV chunk
 		char *sound = sndFile.load(i);

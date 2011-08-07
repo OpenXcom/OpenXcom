@@ -19,7 +19,7 @@
 #ifndef OPENXCOM_BATTLEUNIT_H
 #define OPENXCOM_BATTLEUNIT_H
 
-#include <set>
+#include <vector>
 #include <string>
 #include "../Battlescape/Position.h"
 #include "../Battlescape/BattlescapeState.h"
@@ -61,6 +61,7 @@ private:
 	int _armor[5];
 	int _fatalWounds[6];
 	int _fire;
+	std::vector<BattleItem*> _inventoryItems;
 public:
 	/// Creates a BattleUnit.
 	BattleUnit(Unit *_unit, UnitFaction faction);
@@ -180,6 +181,8 @@ public:
 	void setFire(int fire);
 	/// Get fire.
 	int getFire();
+	/// Get the list of items in the inventory.
+	std::vector<BattleItem*> *getInventoryItems();
 };
 
 }

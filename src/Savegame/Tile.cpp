@@ -35,7 +35,7 @@ namespace OpenXcom
 */
 Tile::Tile(const Position& pos): _smoke(0), _fire(0),  _explosive(0), _pos(pos), _cached(false), _unit(0)
 {
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 4; ++i)
 	{
 		_objects[i] = 0;
 		_currentFrame[i] = 0;
@@ -444,7 +444,7 @@ void Tile::detonate()
 	{
 		// explosions create smoke which only stays 1 or 2 turns
 		addSmoke(1);
-		for (int i = 0; i < 4; i++)
+		for (int i = 0; i < 4; ++i)
 		{
 			if(_objects[i])
 			{
@@ -481,7 +481,7 @@ int Tile::getFlammability()
 {
 	int flam = 255;
 
-	for (int i=0; i < 4; i++)
+	for (int i=0; i < 4; ++i)
 	{
 		if (_objects[i])
 		{
@@ -502,7 +502,7 @@ void Tile::ignite()
 {
 	int fuel = 0;
 
-	for (int i=0; i < 4; i++)
+	for (int i=0; i < 4; ++i)
 	{
 		if (_objects[i])
 		{
@@ -527,7 +527,7 @@ void Tile::ignite()
 void Tile::animate()
 {
 	int newframe;
-	for (int i=0; i < 4; i++)
+	for (int i=0; i < 4; ++i)
 	{
 		if (_objects[i])
 		{
@@ -668,7 +668,7 @@ void Tile::prepareNewTurn()
 	{
 		// fire will be finished in this turn
 		// destroy all objects that burned, and try to ignite again
-		for (int i = 0; i < 4; i++)
+		for (int i = 0; i < 4; ++i)
 		{
 			if(_objects[i])
 			{

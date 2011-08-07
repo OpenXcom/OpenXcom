@@ -366,7 +366,7 @@ void BattlescapeGenerator::addItem(RuleItem *item)
 		// find equipped weapons that can be loaded with this ammo
 		for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 		{
-			BattleItem *weapon = _save->getItemFromUnit((*i), RIGHT_HAND);
+			BattleItem *weapon = _save->getItemFromUnit((*i), "STR_RIGHT_HAND");
 			if (weapon && weapon->getAmmoItem() == 0)
 			{
 				if (weapon->setAmmoItem(bi) == 0)
@@ -379,10 +379,10 @@ void BattlescapeGenerator::addItem(RuleItem *item)
 		// find the first soldier with a free right hand
 		for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 		{
-			if (!_save->getItemFromUnit((*i), RIGHT_HAND))
+			if (!_save->getItemFromUnit((*i), "STR_RIGHT_HAND"))
 			{
 				bi->setOwner((*i));
-				bi->setSlot(RIGHT_HAND);
+				bi->setSlot("STR_RIGHT_HAND");
 				break;
 			}
 		}
@@ -410,7 +410,7 @@ void BattlescapeGenerator::generateMap()
 
 	for (int i = 0; i < 10; ++i)
 	{
-		for (int j = 0; j < 10; j++)
+		for (int j = 0; j < 10; ++j)
 		{
 			blocks[i][j] = 0;
 			landingzone[i][j] = false;
@@ -430,7 +430,7 @@ void BattlescapeGenerator::generateMap()
 
 		for (int i = 0; i < ufoMap->getWidth() / 10; ++i)
 		{
-			for (int j = 0; j < ufoMap->getLength() / 10; j++)
+			for (int j = 0; j < ufoMap->getLength() / 10; ++j)
 			{
 				landingzone[ufoX + i][ufoY + j] = true;
 			}
@@ -450,7 +450,7 @@ void BattlescapeGenerator::generateMap()
 			// check if this place is ok
 			for (int i = 0; i < craftMap->getWidth() / 10; ++i)
 			{
-				for (int j = 0; j < craftMap->getLength() / 10; j++)
+				for (int j = 0; j < craftMap->getLength() / 10; ++j)
 				{
 					if (landingzone[craftX + i][craftY + j])
 					{
@@ -462,7 +462,7 @@ void BattlescapeGenerator::generateMap()
 			if (placed)
 			{
 				for (int i = 0; i < craftMap->getWidth() / 10; ++i)
-					for (int j = 0; j < craftMap->getLength() / 10; j++)
+					for (int j = 0; j < craftMap->getLength() / 10; ++j)
 						landingzone[craftX + i][craftY + j] = true;
 			}
 		}
@@ -672,7 +672,7 @@ void BattlescapeGenerator::loadRMP(MapBlock *mapblock, int xoff, int yoff)
 	while (mapFile.read((char*)&value, sizeof(value)))
 	{
 		Node *node = new Node(nodeOffset + id, Position(xoff + (int)value[1], yoff + (mapblock->getLength() - 1 - (int)value[0]), mapblock->getHeight() - 1 - (int)value[2]), (int)value[3], (int)value[19], (int)value[20], (int)value[21], (int)value[22], (int)value[23]);
-		for (int j=0;j<5;j++)
+		for (int j=0;j<5;++j)
 		{
 			int connectID = (int)((signed char)value[4 + j*3]);
 			if (connectID > -1)

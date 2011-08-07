@@ -27,7 +27,7 @@ namespace OpenXcom
  * Initializes a item of the specified type.
  * @param rules Pointer to ruleset.
  */
-BattleItem::BattleItem(RuleItem *rules) : _rules(rules), _owner(0), _previousOwner(0), _ammoItem(0)
+BattleItem::BattleItem(RuleItem *rules) : _rules(rules), _owner(0), _previousOwner(0), _ammoItem(0), _inventoryX(0), _inventoryY(0)
 {
 	_itemProperty[0] = 0;
 	_itemProperty[1] = 0;
@@ -51,14 +51,11 @@ BattleItem::~BattleItem()
  */
 void BattleItem::load(const YAML::Node &node)
 {
-	int a;
-
 	node["X"] >> _position.x;
 	node["Y"] >> _position.y;
 	node["Z"] >> _position.z;
 
-	node["inventoryslot"] >> a;
-	_inventorySlot = (InventorySlot)a;
+	node["inventoryslot"] >> _inventorySlot;
 }
 
 /**
@@ -75,7 +72,7 @@ void BattleItem::save(YAML::Emitter &out) const
 	out << YAML::Key << "Z" << YAML::Value << _position.z;
 	if (_owner)
 		out << YAML::Key << "owner" << YAML::Value << _owner->getId();
-	out << YAML::Key << "inventoryslot" << YAML::Value << (int)_inventorySlot;
+	out << YAML::Key << "inventoryslot" << YAML::Value << _inventorySlot;
 
 	out << YAML::EndMap;
 }
@@ -161,24 +158,75 @@ void BattleItem::setOwner(BattleUnit *owner)
 {
 	_previousOwner = _owner;
 	_owner = owner;
+	if (_previousOwner != 0)
+	{
+		for (std::vector<BattleItem*>::iterator i = _previousOwner->getInventoryItems()->begin(); i != _previousOwner->getInventoryItems()->end(); ++i)
+		{
+			if ((*i) == this)
+			{
+				_previousOwner->getInventoryItems()->erase(i);
+				break;
+			}
+		}
+	}
+	if (_owner != 0)
+	{
+		_owner->getInventoryItems()->push_back(this);
+	}
 }
 
 /**
  * Gets the item's inventory slot.
- * @return InventorySlot
+ * @return slot id
  */
-InventorySlot BattleItem::getSlot() const
+std::string BattleItem::getSlot() const
 {
 	return _inventorySlot;
 }
 
 /**
  * Sets the item's inventory slot.
- * @param slot InventorySlot
+ * @param slot slot id
  */
-void BattleItem::setSlot(InventorySlot slot)
+void BattleItem::setSlot(std::string slot)
 {
 	_inventorySlot = slot;
+}
+
+/**
+ * Gets the item's inventory X position.
+ * @return X position.
+ */
+int BattleItem::getSlotX() const
+{
+	return _inventoryX;
+}
+
+/**
+ * Sets the item's inventory X position.
+ * @param x X position.
+ */
+void BattleItem::setSlotX(int x)
+{
+	_inventoryX = x;
+}
+
+/**
+ * Gets the item's inventory Y position.
+ * @return Y position.
+ */
+int BattleItem::getSlotY() const
+{
+	return _inventoryY;
+}
+
+/**
+ * Sets the item's inventory Y position.
+ * @param y Y position.
+ */
+void BattleItem::setSlotY(int y)
+{
+	_inventoryY = y;
 }
 
 /**
