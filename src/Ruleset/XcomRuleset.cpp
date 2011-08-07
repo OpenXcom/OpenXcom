@@ -1139,15 +1139,15 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	ground->setY(152);
 	ground->setType(INV_GROUND);
 
-	_invs.push_back(rshoulder);
-	_invs.push_back(lshoulder);
-	_invs.push_back(rhand);
-	_invs.push_back(lhand);
-	_invs.push_back(rleg);
-	_invs.push_back(lleg);
-	_invs.push_back(backpack);
-	_invs.push_back(belt);
-	_invs.push_back(ground);
+	_invs.insert(std::pair<std::string, RuleInventory*>("STR_RIGHT_SHOULDER", rshoulder));
+	_invs.insert(std::pair<std::string, RuleInventory*>("STR_LEFT_SHOULDER", lshoulder));
+	_invs.insert(std::pair<std::string, RuleInventory*>("STR_RIGHT_HAND", rhand));
+	_invs.insert(std::pair<std::string, RuleInventory*>("STR_LEFT_HAND", lhand));
+	_invs.insert(std::pair<std::string, RuleInventory*>("STR_RIGHT_LEG", rleg));
+	_invs.insert(std::pair<std::string, RuleInventory*>("STR_LEFT_LEG", lleg));
+	_invs.insert(std::pair<std::string, RuleInventory*>("STR_BACK_PACK", backpack));
+	_invs.insert(std::pair<std::string, RuleInventory*>("STR_BELT", belt));
+	_invs.insert(std::pair<std::string, RuleInventory*>("STR_GROUND", ground));
 	
 	// Add terrain
 	RuleTerrain *culta = new RuleTerrain("CULTA");

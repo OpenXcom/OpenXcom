@@ -99,9 +99,9 @@ Ruleset::~Ruleset()
 	{
 		delete i->second;
 	}
-	for (std::vector<RuleInventory*>::iterator i = _invs.begin(); i != _invs.end(); ++i)
+	for (std::map<std::string, RuleInventory*>::iterator i = _invs.begin(); i != _invs.end(); ++i)
 	{
-		delete *i;
+		delete i->second;
 	}
 }
 
@@ -299,7 +299,7 @@ ArticleDefinition *const Ruleset::getUfopaediaArticle(const std::string &name) c
  * Returns the list of inventories.
  * @return Pointer to inventory list.
  */
-std::vector<RuleInventory*> *const Ruleset::getInventories()
+std::map<std::string, RuleInventory*> *const Ruleset::getInventories()
 {
 	return &_invs;
 }

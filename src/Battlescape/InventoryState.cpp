@@ -84,8 +84,7 @@ InventoryState::InventoryState(Game *game) : State(game)
 	_btnNext->onMouseClick((ActionHandler)&InventoryState::btnNextClick);
 	_btnRank->onMouseClick((ActionHandler)&InventoryState::btnRankClick);
 
-	_inv->setRuleInventory(_game->getRuleset()->getInventories());
-	_inv->draw();
+	_inv->drawGrid();
 }
 
 /**
@@ -106,7 +105,7 @@ void InventoryState::init()
 	_btnRank->clear();
 
 	_txtName->setText(unit->getUnit()->getName());
-
+	_inv->drawItems();
 	Soldier *s = dynamic_cast<Soldier*>(unit->getUnit());
 	if (s)
 	{

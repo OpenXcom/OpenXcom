@@ -20,13 +20,14 @@
 #define OPENXCOM_INVENTORY_H
 
 #include "../Engine/InteractiveSurface.h"
-#include <vector>
+#include <map>
 
 namespace OpenXcom
 {
 
 class RuleInventory;
 class Game;
+class BattleItem;
 
 /**
  * Interactive view of an inventory.
@@ -37,20 +38,32 @@ class Inventory : public InteractiveSurface
 private:
 	static const int SLOT_W = 16;
 	static const int SLOT_H = 16;
-	static const int HAND_W = 32;
-	static const int HAND_H = 48;
+	static const int HAND_W = 2;
+	static const int HAND_H = 3;
 
 	Game *_game;
-	std::vector<RuleInventory*> *_invs;
+	std::map<std::string, RuleInventory*> *_invs;
+	Surface *_grid, *_items, *_sel;
+	BattleItem *_selItem;
 public:
 	/// Creates a new inventory view at the specified position and size.
 	Inventory(Game *game, int width, int height, int x = 0, int y = 0);
 	/// Cleans up the inventory.
 	~Inventory();
-	/// Sets the ruleset to use for the inventory.
-	void setRuleInventory(std::vector<RuleInventory*> *invs);
+	/// Sets the inventory's palette.
+	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
 	/// Draws the inventory.
 	void draw();
+	/// Draws the inventory grid.
+	void drawGrid();
+	/// Draws the inventory items.
+	void drawItems();
+	/// Blits the inventory onto another surface.
+	void blit(Surface *surface);
+	/// Special handling for mouse hovers.
+	void mouseOver(Action *action, State *state);
+	/// Special handling for mouse clicks.
+	void mouseClick(Action *action, State *state);
 };
 
 }

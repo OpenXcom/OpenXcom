@@ -73,19 +73,17 @@ void InteractiveSurface::handle(Action *action, State *state)
 
 	if (action->getDetails()->type == SDL_MOUSEBUTTONUP || action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
 	{
-		action->setXMouse(action->getDetails()->button.x);
-		action->setYMouse(action->getDetails()->button.y);
+		action->setMouseAction(action->getDetails()->button.x, action->getDetails()->button.y, getX(), getY());
 	}
 	else if (action->getDetails()->type == SDL_MOUSEMOTION)
 	{
-		action->setXMouse(action->getDetails()->motion.x);
-		action->setYMouse(action->getDetails()->motion.y);
+		action->setMouseAction(action->getDetails()->motion.x, action->getDetails()->motion.y, getX(), getY());
 	}
 
-	if (action->getXMouse() != -1 && action->getYMouse() != -1)
+	if (action->isMouseAction())
 	{
-		if ((action->getXMouse() >= getX() * action->getXScale() && action->getXMouse() < (getX() + getWidth()) * action->getXScale()) &&
-			(action->getYMouse() >= getY() * action->getYScale() && action->getYMouse() < (getY() + getHeight()) * action->getYScale()))
+		if ((action->getAbsoluteXMouse() >= getX() && action->getAbsoluteXMouse() < getX() + getWidth()) &&
+			(action->getAbsoluteYMouse() >= getY() && action->getAbsoluteYMouse() < getY() + getHeight()))
 		{
 			if (!_isHovered)
 			{

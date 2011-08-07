@@ -383,7 +383,7 @@ void BattlescapeState::mapClick(Action *action)
 	}
 
 	// don't handle mouseclicks below 140, because they are in the buttons area (it overlaps with map surface)
-	if (action->getYMouse() / action->getYScale() > BUTTONS_AREA) return;
+	if (action->getAbsoluteYMouse() > BUTTONS_AREA) return;
 
 	// don't accept leftclicks if there is no cursor or there is an action busy
 	if (_map->getCursorType() == CT_NONE || !_states.empty()) return;

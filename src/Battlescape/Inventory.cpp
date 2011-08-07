@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Inventory.h"
+#include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleInventory.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Game.h"
@@ -24,6 +25,13 @@
 #include "../Engine/Font.h"
 #include "../Engine/Language.h"
 #include "../Resource/ResourcePack.h"
+#include "../Savegame/SavedGame.h"
+#include "../Savegame/SavedBattleGame.h"
+#include "../Engine/SurfaceSet.h"
+#include "../Savegame/BattleItem.h"
+#include "../Ruleset/RuleItem.h"
+#include "../Savegame/BattleUnit.h"
+#include "../Engine/Action.h"
 
 namespace OpenXcom
 {
@@ -36,89 +44,184 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Inventory::Inventory(Game *game, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _game(game)
+Inventory::Inventory(Game *game, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _game(game), _selItem(0)
 {
+	_grid = new Surface(width, height, x, y);
+	_items = new Surface(width, height, x, y);
+	_sel = new Surface(HAND_W * SLOT_W, HAND_H * SLOT_H, x, y);
+
+	_invs = _game->getRuleset()->getInventories();
 }
 
+/**
+ * Delete inventory surfaces.
+ */
 Inventory::~Inventory()
 {
+	delete _grid;
+	delete _items;
+	delete _sel;
 }
 
-void Inventory::setRuleInventory(std::vector<RuleInventory*> *invs)
+/**
+ * Replaces a certain amount of colors in the inventory's palette.
+ * @param colors Pointer to the set of colors.
+ * @param firstcolor Offset of the first color to replace.
+ * @param ncolors Amount of colors to replace.
+ */
+void Inventory::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 {
-	_invs = invs;
+	Surface::setPalette(colors, firstcolor, ncolors);
+	_grid->setPalette(colors, firstcolor, ncolors);
+	_items->setPalette(colors, firstcolor, ncolors);
+	_sel->setPalette(colors, firstcolor, ncolors);
 }
 
+/**
+ * Draws the inventory elements.
+ */
 void Inventory::draw()
 {
+	drawGrid();
+	drawItems();
+}
+
+/**
+ * Draws the inventory grid for item placement.
+ */
+void Inventory::drawGrid()
+{
+	_grid->clear();
 	Text text = Text(100, 9, 0, 0);
-	text.setPalette(this->getPalette());
+	text.setPalette(_grid->getPalette());
 	text.setFonts(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"));
 	text.setColor(Palette::blockOffset(4)-1);
 	text.setHighContrast(true);
 
 	Uint8 color = Palette::blockOffset(0)+8;
-	for (std::vector<RuleInventory*>::iterator i = _invs->begin(); i != _invs->end(); ++i)
+	for (std::map<std::string, RuleInventory*>::iterator i = _invs->begin(); i != _invs->end(); ++i)
 	{
 		// Draw grid
-		if ((*i)->getType() == INV_SLOT)
+		if (i->second->getType() == INV_SLOT)
 		{
-			for (std::vector<RuleSlot>::iterator j = (*i)->getSlots()->begin(); j != (*i)->getSlots()->end(); ++j)
+			for (std::vector<RuleSlot>::iterator j = i->second->getSlots()->begin(); j != i->second->getSlots()->end(); ++j)
 			{
 				SDL_Rect r;
-				r.x = (*i)->getX() + SLOT_W * j->x;
-				r.y = (*i)->getY() + SLOT_H * j->y;
+				r.x = i->second->getX() + SLOT_W * j->x;
+				r.y = i->second->getY() + SLOT_H * j->y;
 				r.w = SLOT_W + 1;
 				r.h = SLOT_H + 1;
-				this->drawRect(&r, color);
+				_grid->drawRect(&r, color);
 				r.x++;
 				r.y++;
 				r.w -= 2;
 				r.h -= 2;
-				this->drawRect(&r, 0);
+				_grid->drawRect(&r, 0);
 			}
 		}
-		else if ((*i)->getType() == INV_HAND)
+		else if (i->second->getType() == INV_HAND)
 		{
 			SDL_Rect r;
-			r.x = (*i)->getX();
-			r.y = (*i)->getY();
-			r.w = HAND_W + 1;
-			r.h = HAND_H + 1;
-			this->drawRect(&r, color);
+			r.x = i->second->getX();
+			r.y = i->second->getY();
+			r.w = HAND_W * SLOT_W + 1;
+			r.h = HAND_H * SLOT_H + 1;
+			_grid->drawRect(&r, color);
 			r.x++;
 			r.y++;
 			r.w -= 2;
 			r.h -= 2;
-			this->drawRect(&r, 0);
+			_grid->drawRect(&r, 0);
 		}
-		else if ((*i)->getType() == INV_GROUND)
+		else if (i->second->getType() == INV_GROUND)
 		{
-			for (int x = (*i)->getX(); x <= 320; x += SLOT_W)
+			for (int x = i->second->getX(); x <= 320; x += SLOT_W)
 			{
-				for (int y = (*i)->getY(); y <= 200; y += SLOT_H)
+				for (int y = i->second->getY(); y <= 200; y += SLOT_H)
 				{
 					SDL_Rect r;
 					r.x = x;
 					r.y = y;
 					r.w = SLOT_W + 1;
 					r.h = SLOT_H + 1;
-					this->drawRect(&r, color);
+					_grid->drawRect(&r, color);
 					r.x++;
 					r.y++;
 					r.w -= 2;
 					r.h -= 2;
-					this->drawRect(&r, 0);
+					_grid->drawRect(&r, 0);
 				}
 			}
 		}
 
 		// Draw label
-		text.setX((*i)->getX());
-		text.setY((*i)->getY() - text.getFont()->getHeight() - text.getFont()->getSpacing());
-		text.setText(_game->getLanguage()->getString((*i)->getId()));
-		text.blit(this);
+		text.setX(i->second->getX());
+		text.setY(i->second->getY() - text.getFont()->getHeight() - text.getFont()->getSpacing());
+		text.setText(_game->getLanguage()->getString(i->second->getId()));
+		text.blit(_grid);
 	}
+}
+
+/**
+ * Draws the items contained in the soldier's inventory.
+ */
+void Inventory::drawItems()
+{
+	_items->clear();
+	BattleUnit *unit = _game->getSavedGame()->getBattleGame()->getSelectedUnit();
+	if (unit != 0)
+	{
+		for (std::vector<BattleItem*>::iterator i = unit->getInventoryItems()->begin(); i != unit->getInventoryItems()->end(); ++i)
+		{
+			RuleInventory *inv = _invs->find((*i)->getSlot())->second;
+			SurfaceSet *texture = _game->getResourcePack()->getSurfaceSet("BIGOBS.PCK");
+			Surface *frame = texture->getFrame((*i)->getRules()->getBigSprite());
+			if (inv->getType() == INV_SLOT)
+			{
+				frame->setX(inv->getX() + (*i)->getSlotX() * SLOT_W);
+				frame->setY(inv->getY() + (*i)->getSlotY() * SLOT_H);
+			}
+			else if (inv->getType() == INV_HAND)
+			{
+				frame->setX(inv->getX() + (HAND_W - (*i)->getRules()->getInventoryWidth()) * SLOT_W/2);
+				frame->setY(inv->getY() + (HAND_H - (*i)->getRules()->getInventoryHeight()) * SLOT_H/2);
+			}
+			texture->getFrame((*i)->getRules()->getBigSprite())->blit(_items);
+		}
+	}
+}
+
+/**
+ * Blits the inventory elements.
+ * @param surface Pointer to surface to blit onto.
+ */
+void Inventory::blit(Surface *surface)
+{
+	clear();
+	_grid->blit(this);
+	_items->blit(this);
+	_sel->blit(this);
+	Surface::blit(surface);
+}
+
+/**
+ * Moves the selected item.
+ * @param action Pointer to an action.
+ * @param state State that the action handlers belong to.
+ */
+void Inventory::mouseOver(Action *action, State *state)
+{
+	InteractiveSurface::mouseOver(action, state);
+}
+
+/**
+ * Picks up / drops an item.
+ * @param action Pointer to an action.
+ * @param state State that the action handlers belong to.
+ */
+void Inventory::mouseClick(Action *action, State *state)
+{
+	InteractiveSurface::mouseClick(action, state);
 }
 
 }

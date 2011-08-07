@@ -709,8 +709,7 @@ void TextList::mouseOver(Action *action, State *state)
 	if (_selectable)
 	{
 		int h = _font->getHeight() + _font->getSpacing();
-		double y = action->getYMouse() - getY() * action->getYScale();
-		_selRow = _scroll + (int)floor(y / (h * action->getYScale()));
+		_selRow = _scroll + (int)floor(action->getRelativeYMouse() / (h * action->getYScale()));
 
 		if (_selRow < _texts.size())
 		{
