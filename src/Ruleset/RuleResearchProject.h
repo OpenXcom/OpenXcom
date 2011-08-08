@@ -27,18 +27,18 @@ namespace OpenXcom
 /**
    Represent one research project
 */
-class ResearchProject
+class RuleResearchProject
 {
  private:
 	std::wstring _name;
 	std::wstring _description;
 	int _cost;
-	std::vector<ResearchProject *> _dependencys;
+	std::vector<RuleResearchProject *> _dependencys;
 	bool _discovered;
 public:
-	ResearchProject(const std::wstring & name, int cost);
+	RuleResearchProject(const std::wstring & name, int cost);
 	bool isAvailable () const;
-	void addDependency (ResearchProject * rp);
+	void addDependency (RuleResearchProject * rp);
 	bool isDiscovered () const;
 	int getCost() const;
 	void setDiscovered (bool b);

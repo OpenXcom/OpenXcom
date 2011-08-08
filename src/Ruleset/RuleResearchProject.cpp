@@ -3,13 +3,13 @@
 namespace OpenXcom
 {
 
-ResearchProject::ResearchProject(const std::wstring & name, int cost) : _name(name), _cost(cost)
+RuleResearchProject::RuleResearchProject(const std::wstring & name, int cost) : _name(name), _cost(cost)
 {
 }
 
-bool ResearchProject::isAvailable () const
+bool RuleResearchProject::isAvailable () const
 {
-	std::vector<ResearchProject *>::const_iterator iter = _dependencys.begin ();
+	std::vector<RuleResearchProject *>::const_iterator iter = _dependencys.begin ();
 	while (iter != _dependencys.end ())
 	{
 		if (!(*iter)->isDiscovered())
@@ -20,27 +20,27 @@ bool ResearchProject::isAvailable () const
 	return true;
 }
 
-void ResearchProject::addDependency (ResearchProject * rp)
+void RuleResearchProject::addDependency (RuleResearchProject * rp)
 {
 	_dependencys.push_back(rp);
 }
 
-bool ResearchProject::isDiscovered () const
+bool RuleResearchProject::isDiscovered () const
 {
 	return _discovered;
 }
 
-int ResearchProject::getCost() const
+int RuleResearchProject::getCost() const
 {
 	return _cost;
 }
 
-void ResearchProject::setDiscovered (bool b)
+void RuleResearchProject::setDiscovered (bool b)
 {
 	_discovered = b;
 }
 
-const std::wstring & ResearchProject::getName () const
+const std::wstring & RuleResearchProject::getName () const
 {
 	return _name;
 }
