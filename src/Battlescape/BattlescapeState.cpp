@@ -59,6 +59,7 @@
 #include "../Ruleset/RuleItem.h"
 #include "../Engine/Timer.h"
 #include "../Interface/FpsCounter.h"
+#include "../Ruleset/RuleInventory.h"
 #include "../Menu/SaveGameState.h"
 
 namespace OpenXcom
@@ -1082,8 +1083,8 @@ void BattlescapeState::drawItemSprite(BattleItem *item, Surface *surface)
 {
 	SurfaceSet *texture = _game->getResourcePack()->getSurfaceSet("BIGOBS.PCK");
 	Surface *frame = texture->getFrame(item->getRules()->getBigSprite());
-	frame->setX((2 - item->getRules()->getInventoryWidth()) * 8);
-	frame->setY((3 - item->getRules()->getInventoryHeight()) * 8);
+	frame->setX((RuleInventory::HAND_W - item->getRules()->getInventoryWidth()) * RuleInventory::SLOT_W/2);
+	frame->setY((RuleInventory::HAND_H - item->getRules()->getInventoryHeight()) * RuleInventory::SLOT_H/2);
 	texture->getFrame(item->getRules()->getBigSprite())->blit(surface);
 }
 

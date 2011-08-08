@@ -17,7 +17,6 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "RuleInventory.h"
-#include "City.h"
 
 namespace OpenXcom
 {
@@ -121,6 +120,59 @@ void RuleInventory::addSlot(int x, int y)
 std::vector<struct RuleSlot> *const RuleInventory::getSlots()
 {
 	return &_slots;
+}
+
+/**
+ * Gets the slot located in the specified mouse position.
+ * @param x Mouse X position. Returns the slot's X position.
+ * @param y Mouse Y position. Returns the slot's Y position.
+ * @return True if there's a slot there, False otherwise.
+ */
+bool RuleInventory::checkSlotInPosition(int *x, int *y) const
+{
+	int mouseX = *x, mouseY = *y;
+	if (_type == INV_HAND)
+	{
+		for (int xx = 0; xx < HAND_W; ++xx)
+		{
+			for (int yy = 0; yy < HAND_H; ++yy)
+			{
+				if (mouseX >= _x + xx * SLOT_W && mouseX < _x + (xx + 1) * SLOT_W &&
+					mouseY >= _y + yy * SLOT_H && mouseY < _y + (yy + 1) * SLOT_H)
+				{
+					*x = 0;
+					*y = 0;
+					return true;
+				}
+			}
+		}
+	}
+	else
+	{
+		for (std::vector<RuleSlot>::const_iterator i = _slots.begin(); i != _slots.end(); ++i)
+		{
+			if (mouseX >= _x + i->x * SLOT_W && mouseX < _x + (i->x + 1) * SLOT_W &&
+				mouseY >= _y + i->y * SLOT_H && mouseY < _y + (i->y + 1) * SLOT_H)
+			{
+				*x = i->x;
+				*y = i->y;
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+/**
+ * Checks if an item completely fits when
+ * placed in a certain slot.
+ * @param item 
+ * @return True if there's a slot there, False otherwise.
+ */
+bool RuleInventory::fitItemInSlot(BattleItem *item) const
+{
+	// TODO
+	return true;
 }
 
 }

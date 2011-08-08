@@ -83,10 +83,10 @@ namespace OpenXcom
 
 		num = 0;
 		y_pos = y_offset;
-		for (int y = 0; y < defs->facility->getSize(); y++)
+		for (int y = 0; y < defs->facility->getSize(); ++y)
 		{
 			x_pos = x_offset;
-			for (int x = 0; x < defs->facility->getSize(); x++)
+			for (int x = 0; x < defs->facility->getSize(); ++x)
 			{
 				frame = graphic->getFrame(defs->facility->getSpriteShape() + num);
 				frame->setX(x_pos);

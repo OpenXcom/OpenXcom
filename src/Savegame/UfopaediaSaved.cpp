@@ -146,7 +146,7 @@ namespace OpenXcom {
 		ArticleDefinitionList::iterator it;
 		int index = 0;
 
-		for (it=_visible_articles.begin(); it!=_visible_articles.end(); ++it, index++)
+		for (it=_visible_articles.begin(); it!=_visible_articles.end(); ++it, ++index)
 		{
 			if ((*it)->id == article_id)
 			{

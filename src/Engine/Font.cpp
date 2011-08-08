@@ -58,9 +58,9 @@ void Font::load()
 	{
 		SDL_Rect rect;
 		int left = -1, right = -1;
-		for (int x = 0; x < _width; x++)
+		for (int x = 0; x < _width; ++x)
 		{
-			for (int y = (i - FIRST_CHAR) * _height; (y < (i + 1 - FIRST_CHAR) * _height) && (left == -1); y++)
+			for (int y = (i - FIRST_CHAR) * _height; (y < (i + 1 - FIRST_CHAR) * _height) && (left == -1); ++y)
 			{
 				Uint8 pixel = _surface->getPixel(x, y);
 				if (pixel != 0)

@@ -230,6 +230,28 @@ void BattleItem::setSlotY(int y)
 }
 
 /**
+ * Checks if the item is covering a
+ * certain inventory slot.
+ * @param x Slot X position.
+ * @param y Slot Y position.
+ * @return Whether it's covering or not.
+ */
+bool BattleItem::occupiesSlot(int x, int y) const
+{
+	for (int xx = _inventoryX; xx < _inventoryX + _rules->getInventoryWidth(); ++xx)
+	{
+		for (int yy = _inventoryY; yy < _inventoryY + _rules->getInventoryHeight(); ++yy)
+		{
+			if (x == xx && y == yy)
+			{
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+/**
  * Gets the item's ammo item.
  * @return BattleItem
  */

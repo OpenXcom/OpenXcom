@@ -162,7 +162,7 @@ SDL_Surface *TestState::testSurface()
 	Uint8 *index = (Uint8 *)surface->pixels;
 	
 	for (int j = 0; j < 25; ++j)
-		for (int i = 0; i < 256; i++, index++)
+		for (int i = 0; i < 256; i++, ++index)
 			*index = i;
 
 	// Unlock the surface

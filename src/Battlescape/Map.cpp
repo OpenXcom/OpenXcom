@@ -172,8 +172,8 @@ void Map::init()
 	_arrow = new Surface(9, 9);
 	_arrow->setPalette(this->getPalette());
 	_arrow->lock();
-	for (int y = 0; y < 9;y++)
-		for (int x = 0; x < 9; x++)
+	for (int y = 0; y < 9;++y)
+		for (int x = 0; x < 9; ++x)
 			_arrow->setPixel(x, y, pixels[x+(y*9)]);
 	_arrow->unlock();
 

@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Inventory.h"
+#include <cmath>
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleInventory.h"
 #include "../Engine/Palette.h"
@@ -32,6 +33,8 @@
 #include "../Ruleset/RuleItem.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Engine/Action.h"
+#include "../Engine/SoundSet.h"
+#include "../Engine/Sound.h"
 
 namespace OpenXcom
 {
@@ -48,7 +51,7 @@ Inventory::Inventory(Game *game, int width, int height, int x, int y) : Interact
 {
 	_grid = new Surface(width, height, x, y);
 	_items = new Surface(width, height, x, y);
-	_sel = new Surface(HAND_W * SLOT_W, HAND_H * SLOT_H, x, y);
+	_selection = new Surface(RuleInventory::HAND_W * RuleInventory::SLOT_W, RuleInventory::HAND_H * RuleInventory::SLOT_H, x, y);
 
 	_invs = _game->getRuleset()->getInventories();
 }
@@ -60,7 +63,7 @@ Inventory::~Inventory()
 {
 	delete _grid;
 	delete _items;
-	delete _sel;
+	delete _selection;
 }
 
 /**
@@ -74,7 +77,7 @@ void Inventory::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 	Surface::setPalette(colors, firstcolor, ncolors);
 	_grid->setPalette(colors, firstcolor, ncolors);
 	_items->setPalette(colors, firstcolor, ncolors);
-	_sel->setPalette(colors, firstcolor, ncolors);
+	_selection->setPalette(colors, firstcolor, ncolors);
 }
 
 /**
@@ -107,10 +110,10 @@ void Inventory::drawGrid()
 			for (std::vector<RuleSlot>::iterator j = i->second->getSlots()->begin(); j != i->second->getSlots()->end(); ++j)
 			{
 				SDL_Rect r;
-				r.x = i->second->getX() + SLOT_W * j->x;
-				r.y = i->second->getY() + SLOT_H * j->y;
-				r.w = SLOT_W + 1;
-				r.h = SLOT_H + 1;
+				r.x = i->second->getX() + RuleInventory::SLOT_W * j->x;
+				r.y = i->second->getY() + RuleInventory::SLOT_H * j->y;
+				r.w = RuleInventory::SLOT_W + 1;
+				r.h = RuleInventory::SLOT_H + 1;
 				_grid->drawRect(&r, color);
 				r.x++;
 				r.y++;
@@ -124,8 +127,8 @@ void Inventory::drawGrid()
 			SDL_Rect r;
 			r.x = i->second->getX();
 			r.y = i->second->getY();
-			r.w = HAND_W * SLOT_W + 1;
-			r.h = HAND_H * SLOT_H + 1;
+			r.w = RuleInventory::HAND_W * RuleInventory::SLOT_W + 1;
+			r.h = RuleInventory::HAND_H * RuleInventory::SLOT_H + 1;
 			_grid->drawRect(&r, color);
 			r.x++;
 			r.y++;
@@ -135,15 +138,15 @@ void Inventory::drawGrid()
 		}
 		else if (i->second->getType() == INV_GROUND)
 		{
-			for (int x = i->second->getX(); x <= 320; x += SLOT_W)
+			for (int x = i->second->getX(); x <= 320; x += RuleInventory::SLOT_W)
 			{
-				for (int y = i->second->getY(); y <= 200; y += SLOT_H)
+				for (int y = i->second->getY(); y <= 200; y += RuleInventory::SLOT_H)
 				{
 					SDL_Rect r;
 					r.x = x;
 					r.y = y;
-					r.w = SLOT_W + 1;
-					r.h = SLOT_H + 1;
+					r.w = RuleInventory::SLOT_W + 1;
+					r.h = RuleInventory::SLOT_H + 1;
 					_grid->drawRect(&r, color);
 					r.x++;
 					r.y++;
@@ -171,24 +174,72 @@ void Inventory::drawItems()
 	BattleUnit *unit = _game->getSavedGame()->getBattleGame()->getSelectedUnit();
 	if (unit != 0)
 	{
+		SurfaceSet *texture = _game->getResourcePack()->getSurfaceSet("BIGOBS.PCK");
 		for (std::vector<BattleItem*>::iterator i = unit->getInventoryItems()->begin(); i != unit->getInventoryItems()->end(); ++i)
 		{
+			if ((*i) == _selItem)
+				break;
+
 			RuleInventory *inv = _invs->find((*i)->getSlot())->second;
-			SurfaceSet *texture = _game->getResourcePack()->getSurfaceSet("BIGOBS.PCK");
 			Surface *frame = texture->getFrame((*i)->getRules()->getBigSprite());
 			if (inv->getType() == INV_SLOT)
 			{
-				frame->setX(inv->getX() + (*i)->getSlotX() * SLOT_W);
-				frame->setY(inv->getY() + (*i)->getSlotY() * SLOT_H);
+				frame->setX(inv->getX() + (*i)->getSlotX() * RuleInventory::SLOT_W);
+				frame->setY(inv->getY() + (*i)->getSlotY() * RuleInventory::SLOT_H);
 			}
 			else if (inv->getType() == INV_HAND)
 			{
-				frame->setX(inv->getX() + (HAND_W - (*i)->getRules()->getInventoryWidth()) * SLOT_W/2);
-				frame->setY(inv->getY() + (HAND_H - (*i)->getRules()->getInventoryHeight()) * SLOT_H/2);
+				frame->setX(inv->getX() + (RuleInventory::HAND_W - (*i)->getRules()->getInventoryWidth()) * RuleInventory::SLOT_W/2);
+				frame->setY(inv->getY() + (RuleInventory::HAND_H - (*i)->getRules()->getInventoryHeight()) * RuleInventory::SLOT_H/2);
 			}
 			texture->getFrame((*i)->getRules()->getBigSprite())->blit(_items);
 		}
 	}
+}
+
+/**
+ * Checks if there's an inventory item in
+ * the specified inventory position.
+ * @param slot Inventory slot.
+ * @param x X position in slot.
+ * @param y Y position in slot.
+ * @return Item in the slot, or NULL if none.
+ */
+BattleItem *Inventory::getItemInSlot(std::string slot, int x, int y) const
+{
+	BattleUnit *unit = _game->getSavedGame()->getBattleGame()->getSelectedUnit();
+	if (unit != 0)
+	{
+		for (std::vector<BattleItem*>::iterator i = unit->getInventoryItems()->begin(); i != unit->getInventoryItems()->end(); ++i)
+		{
+			if ((*i)->getSlot() == slot)
+			{
+				if (_invs->find(slot)->second->getType() == INV_HAND || (*i)->occupiesSlot(x, y))
+				{
+					return *i;
+				}
+			}
+		}
+	}
+	return 0;
+}
+
+/**
+ * Gets the inventory slot located in the specified mouse position.
+ * @param x Mouse X position. Returns the slot's X position.
+ * @param y Mouse Y position. Returns the slot's Y position.
+ * @return Slot id, or an empty string if none.
+ */
+std::string Inventory::getSlotInPosition(int *x, int *y) const
+{
+	for (std::map<std::string, RuleInventory*>::iterator i = _invs->begin(); i != _invs->end(); ++i)
+	{
+		if (i->second->checkSlotInPosition(x, y))
+		{
+			return i->second->getId();
+		}
+	}
+	return "";
 }
 
 /**
@@ -200,7 +251,7 @@ void Inventory::blit(Surface *surface)
 	clear();
 	_grid->blit(this);
 	_items->blit(this);
-	_sel->blit(this);
+	_selection->blit(this);
 	Surface::blit(surface);
 }
 
@@ -211,6 +262,8 @@ void Inventory::blit(Surface *surface)
  */
 void Inventory::mouseOver(Action *action, State *state)
 {
+	_selection->setX((int)floor(action->getAbsoluteXMouse()));
+	_selection->setY((int)floor(action->getAbsoluteYMouse()));
 	InteractiveSurface::mouseOver(action, state);
 }
 
@@ -221,6 +274,47 @@ void Inventory::mouseOver(Action *action, State *state)
  */
 void Inventory::mouseClick(Action *action, State *state)
 {
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	{
+		int x = (int)floor(action->getAbsoluteXMouse()), y = (int)floor(action->getAbsoluteYMouse());
+		std::string slot = getSlotInPosition(&x, &y);
+		if (slot != "")
+		{
+			BattleItem *item = getItemInSlot(slot, x, y);
+			if (_selItem == 0)
+			{
+				if (item != 0)
+				{
+					_selItem = item;
+					SurfaceSet *texture = _game->getResourcePack()->getSurfaceSet("BIGOBS.PCK");
+					Surface *frame = texture->getFrame(_selItem->getRules()->getBigSprite());
+					frame->setX((RuleInventory::HAND_W - _selItem->getRules()->getInventoryWidth()) * RuleInventory::SLOT_W/2);
+					frame->setY((RuleInventory::HAND_H - _selItem->getRules()->getInventoryHeight()) * RuleInventory::SLOT_H/2);
+					texture->getFrame(_selItem->getRules()->getBigSprite())->blit(_selection);
+					drawItems();
+				}
+			}
+			else
+			{
+				if ((item == 0 || item == _selItem) && _invs->find(slot)->second->fitItemInSlot(_selItem))
+				{
+					_selItem->setSlot(slot);
+					_selItem->setSlotX(x);
+					_selItem->setSlotY(y);
+					_selItem = 0;
+					_selection->clear();
+					drawItems();
+					_game->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(38)->play();
+				}
+			}
+		}
+	}
+	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	{
+		_selItem = 0;
+		_selection->clear();
+		drawItems();
+	}
 	InteractiveSurface::mouseClick(action, state);
 }
 

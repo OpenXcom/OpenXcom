@@ -21,6 +21,7 @@
 
 #include "../Engine/InteractiveSurface.h"
 #include <map>
+#include <string>
 
 namespace OpenXcom
 {
@@ -36,14 +37,9 @@ class BattleItem;
 class Inventory : public InteractiveSurface
 {
 private:
-	static const int SLOT_W = 16;
-	static const int SLOT_H = 16;
-	static const int HAND_W = 2;
-	static const int HAND_H = 3;
-
 	Game *_game;
 	std::map<std::string, RuleInventory*> *_invs;
-	Surface *_grid, *_items, *_sel;
+	Surface *_grid, *_items, *_selection;
 	BattleItem *_selItem;
 public:
 	/// Creates a new inventory view at the specified position and size.
@@ -58,6 +54,10 @@ public:
 	void drawGrid();
 	/// Draws the inventory items.
 	void drawItems();
+	/// Gets the item in the specified slot.
+	BattleItem *getItemInSlot(std::string slot, int x, int y) const;
+	/// Gets the slot in the specified position.
+	std::string getSlotInPosition(int *x, int *y) const;
 	/// Blits the inventory onto another surface.
 	void blit(Surface *surface);
 	/// Special handling for mouse hovers.

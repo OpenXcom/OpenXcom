@@ -24,6 +24,7 @@
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/ArticleDefinition.h"
 #include "../Ruleset/RuleItem.h"
+#include "../Ruleset/RuleInventory.h"
 #include "../Engine/Game.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
@@ -68,8 +69,8 @@ namespace OpenXcom
 		
 		SurfaceSet *texture = _game->getResourcePack()->getSurfaceSet("BIGOBS.PCK");
 		Surface *graphic = texture->getFrame(defs->item->getBigSprite());
-		graphic->setX((2 - defs->item->getInventoryWidth()) * 8);
-		graphic->setY((3 - defs->item->getInventoryHeight()) * 8);
+		graphic->setX((RuleInventory::HAND_W - defs->item->getInventoryWidth()) * RuleInventory::SLOT_W/2);
+		graphic->setY((RuleInventory::HAND_H - defs->item->getInventoryHeight()) * RuleInventory::SLOT_H/2);
 		graphic->blit(_image);
 		
 		std::vector<std::string> *ammo_data = defs->item->getCompatibleAmmo();
@@ -199,8 +200,8 @@ namespace OpenXcom
 						_txtAmmoDamage[i]->setText(ss.str().c_str());
 
 						graphic = texture->getFrame(ammo_rule->getBigSprite());
-						graphic->setX((2 - ammo_rule->getInventoryWidth()) * 8);
-						graphic->setY((3 - ammo_rule->getInventoryHeight()) * 8);
+						graphic->setX((RuleInventory::HAND_W - ammo_rule->getInventoryWidth()) * RuleInventory::SLOT_W/2);
+						graphic->setY((RuleInventory::HAND_H - ammo_rule->getInventoryHeight()) * RuleInventory::SLOT_H/2);
 						graphic->blit(_imageAmmo[i]);
 					}
 				}

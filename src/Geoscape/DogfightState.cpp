@@ -235,11 +235,11 @@ DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo) :
 			minY = connectY;
 			maxY = rangeY;
 		}
-		for (int y = minY; y <= maxY; y++)
+		for (int y = minY; y <= maxY; ++y)
 		{
 			range->setPixel(x1 + x2, y, color);
 		}
-		for (int x = x2; x <= x2 + 2; x++)
+		for (int x = x2; x <= x2 + 2; ++x)
 		{
 			range->setPixel(x, connectY, color);
 		}

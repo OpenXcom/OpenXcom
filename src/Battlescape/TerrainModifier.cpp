@@ -417,9 +417,9 @@ bool TerrainModifier::checkReactionFire(BattleUnit *unit, BattleAction *action)
 void TerrainModifier::addLight(const Position &center, int power, int layer)
 {
 	// only loop through the positive quadrant.
-	for (int x = 0; x <= power; x++)
+	for (int x = 0; x <= power; ++x)
 	{
-		for (int y = 0; y <= power; y++)
+		for (int y = 0; y <= power; ++y)
 		{
 			for (int z = 0; z < _save->getHeight(); z++)
 			{
@@ -1149,9 +1149,9 @@ void TerrainModifier::prepareNewTurn()
 		}
 
 		int z = (*i)->getPosition().z;
-		for (int x = (*i)->getPosition().x-1; x <= (*i)->getPosition().x+1; x++)
+		for (int x = (*i)->getPosition().x-1; x <= (*i)->getPosition().x+1; ++x)
 		{
-			for (int y = (*i)->getPosition().y-1; y <= (*i)->getPosition().y+1; y++)
+			for (int y = (*i)->getPosition().y-1; y <= (*i)->getPosition().y+1; ++y)
 			{
 				Tile *t = _save->getTile(Position(x, y, z));
 				if (t && t->getFire() == 0)
