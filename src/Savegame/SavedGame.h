@@ -37,6 +37,8 @@ class SavedBattleGame;
 class TextList;
 class Language;
 class UfopaediaSaved;
+class RuleResearchProject;
+class ResearchProject;
 
 /**
  * Enumator containing all the possible game difficulties.
@@ -63,6 +65,8 @@ private:
 	int _ufoId, _waypointId;
 	SavedBattleGame *_battleGame;
 	UfopaediaSaved *_ufopaedia;
+	std::vector<RuleResearchProject *> _found;
+	std::map<Base*, ResearchProject *> _researchs;
 public:
 	/// Creates a new save with a certain difficulty.
 	SavedGame(GameDifficulty difficulty);
