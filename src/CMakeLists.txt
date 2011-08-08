@@ -385,6 +385,13 @@ set ( ufopedia_src
 
 set ( openxcom_src main.cpp ${basescape_src} ${battlescape_src} ${engine_src} ${geoscape_src} ${interface_src} ${menu_src} ${resource_src} ${ruleset_src} ${savegame_src} ${ufopedia_src} )
 
+set ( EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin )
+
 add_executable ( openxcom  ${openxcom_src} )
 
 target_link_libraries ( openxcom ${SDL_LIBRARY} ${SDLMIXER_LIBRARY} ${SDLGFX_LIBRARY} ${YAMLCPP_LIBRARY} )
+
+add_custom_command ( TARGET openxcom
+  POST_BUILD
+  COMMAND cmake -E copy_directory ${CMAKE_SOURCE_DIR}/bin/USER ${EXECUTABLE_OUTPUT_PATH}/USER
+  COMMAND cmake -E copy_directory ${CMAKE_SOURCE_DIR}/bin/DATA ${EXECUTABLE_OUTPUT_PATH}/DATA )
