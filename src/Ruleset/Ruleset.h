@@ -69,6 +69,7 @@ protected:
 	std::map<std::string, ArticleDefinition*> _ufopaediaArticles;
 	std::map<std::string, RuleInventory*> _invs;
 	int _costSoldier, _costEngineer, _costScientist, _timePersonnel;
+	std::vector<RuleResearchProject *> _researchProjects;
 public:
 	/// Creates a blank ruleset.
 	Ruleset();
@@ -114,6 +115,7 @@ public:
 	int getScientistCost() const;
 	/// Gets the transfer time of personnel.
 	int getPersonnelTime() const;
+	const std::vector<RuleResearchProject *> & getResearchProjects () const;
 };
 
 }

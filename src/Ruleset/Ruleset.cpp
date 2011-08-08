@@ -305,4 +305,8 @@ RuleInventory *const Ruleset::getInventory(const std::string &id) const
 	return _invs.find(id)->second;
 }
 
+const std::vector<RuleResearchProject *> & Ruleset::getResearchProjects () const
+{
+	return _researchProjects;
+}
 }
