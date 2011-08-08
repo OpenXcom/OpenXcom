@@ -314,7 +314,7 @@ void BasescapeState::btnFacilitiesClick(Action *action)
  */
 void BasescapeState::btnResearchClick(Action *action)
 {
-	//_game->pushState(new ResearchState(_game, _base));
+	_game->pushState(new ResearchState(_game, _base));
 }
 
 /**
