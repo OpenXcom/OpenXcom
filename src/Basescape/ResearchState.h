@@ -42,6 +42,7 @@ private:
 	Window *_window;
 	Text *_txtTitle, *_txtAvailable, *_txtAllocated, *_txtSpace, *_txtProject, *_txtScientists, *_txtProgress;
 	TextList *_lstResearch;
+
 public:
 	/// Creates the Research state.
 	ResearchState(Game *game, Base *base);
@@ -49,6 +50,7 @@ public:
 	~ResearchState();
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
+	void btnNewClick(Action *action);
 };
 
 }

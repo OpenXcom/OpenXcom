@@ -57,6 +57,10 @@ set ( basescape_src
   Basescape/SoldierArmorState.cpp
   Basescape/SoldiersState.cpp
   Basescape/SoldiersState.h
+  Basescape/NewResearchListState.h
+  Basescape/NewResearchListState.cpp
+  Basescape/ResearchProjectState.h
+  Basescape/ResearchProjectState.cpp
 )
 
 set ( battlescape_src 
@@ -304,6 +308,8 @@ set ( ruleset_src
   Ruleset/RuleTerrain.h
   Ruleset/MapData.cpp
   Ruleset/MapData.h
+  Ruleset/RuleResearchProject.h
+  Ruleset/RuleResearchProject.cpp
 )
 
 set ( savegame_src 
@@ -355,6 +361,8 @@ set ( savegame_src
   Savegame/Target.cpp
   Savegame/Unit.h
   Savegame/Unit.cpp
+  Savegame/ResearchProject.h
+  Savegame/ResearchProject.cpp
 )
 
 

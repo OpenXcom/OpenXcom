@@ -28,6 +28,7 @@
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
 #include "../Savegame/Base.h"
+#include "NewResearchListState.h"
 
 namespace OpenXcom
 {
@@ -73,6 +74,7 @@ ResearchState::ResearchState(Game *game, Base *base) : State(game), _base(base)
 	
 	_btnNew->setColor(Palette::blockOffset(15)+9);
 	_btnNew->setText(_game->getLanguage()->getString("STR_NEW_PROJECT"));
+	_btnNew->onMouseClick((ActionHandler)&ResearchState::btnNewClick);
 
 	_btnOk->setColor(Palette::blockOffset(15)+9);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
@@ -114,7 +116,6 @@ ResearchState::ResearchState(Game *game, Base *base) : State(game), _base(base)
 	_lstResearch->setSelectable(true);
 	_lstResearch->setBackground(_window);
 	_lstResearch->setMargin(2);
-	_lstResearch->addRow(3, "Laser Weapons", "30", "Good");
 }
 
 /**
@@ -132,6 +133,11 @@ ResearchState::~ResearchState()
 void ResearchState::btnOkClick(Action *action)
 {
 	_game->popState();
+}
+
+void ResearchState::btnNewClick(Action *action)
+{
+	_game->pushState(new NewResearchListState(_game, _base));
 }
 
 }
