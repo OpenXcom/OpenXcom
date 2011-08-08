@@ -19,6 +19,9 @@
 #ifndef OPENXCOM_RULRESEARCHPROJECT_H
 #define OPENXCOM_RULRESEARCHPROJECT_H
 
+#include <string>
+#include <vector>
+
 namespace OpenXcom
 {
 /**
@@ -39,7 +42,9 @@ public:
 	bool isDiscovered () const;
 	int getCost() const;
 	void setDiscovered (bool b);
-	const std::string & getName () const;
+	const std::wstring & getName () const;
 };
+
+}
 
 #endif
