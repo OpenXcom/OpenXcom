@@ -31,6 +31,7 @@
 #include "../Engine/Language.h"
 #include "../Ruleset/RuleItem.h"
 #include "Transfer.h"
+#include <algorithm>
 
 namespace OpenXcom
 {
@@ -708,6 +709,23 @@ int Base::getFacilityMaintenance() const
 int Base::getMonthlyMaintenace() const
 {
 	return getCraftMaintenance() + getPersonnelMaintenance() + getFacilityMaintenance();
+}
+
+
+const std::vector<ResearchProject *> & Base::GetResearch()
+{
+	return _baseResearchs;
+}
+
+void Base::AddResearch(ResearchProject * project)
+{
+	_baseResearchs.push_back(project);
+}
+
+void Base::RemoveResearch(ResearchProject * project)
+{
+  std::vector<ResearchProject *>::iterator iter = std::find (_baseResearchs.begin (), _baseResearchs.end (), project);
+	_baseResearchs.erase(iter);
 }
 
 }

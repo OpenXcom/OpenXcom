@@ -36,6 +36,7 @@ class Transfer;
 class Language;
 class Ruleset;
 class SavedGame;
+class ResearchProject;
 
 /**
  * Represents a player base on the globe.
@@ -52,6 +53,7 @@ private:
 	std::vector<Transfer*> _transfers;
 	ItemContainer *_items;
 	int _scientists, _engineers;
+	std::vector<ResearchProject *> _baseResearchs;
 public:
 	/// Creates a new base.
 	Base(const Ruleset *rule);
@@ -133,6 +135,9 @@ public:
 	int getFacilityMaintenance() const;
 	/// Gets the base's total monthly maintenance.
 	int getMonthlyMaintenace() const;
+	const std::vector<ResearchProject *> & GetResearch();
+	void AddResearch(ResearchProject *);
+	void RemoveResearch(ResearchProject *);
 };
 
 }
