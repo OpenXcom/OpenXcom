@@ -89,19 +89,12 @@ ResearchState::ResearchState(Game *game, Base *base) : State(game), _base(base)
 
 	_txtAvailable->setColor(Palette::blockOffset(13)+10);
 	_txtAvailable->setSecondaryColor(Palette::blockOffset(13));
-	std::wstringstream ss;
-	ss << _game->getLanguage()->getString("STR_SCIENTISTS_AVAILABLE") << L'\x01' << _base->getAvailableScientists();
-	_txtAvailable->setText(ss.str());
 
 	_txtAllocated->setColor(Palette::blockOffset(13)+10);
 	_txtAllocated->setSecondaryColor(Palette::blockOffset(13));
-	std::wstringstream ss2;
-	ss2 << _game->getLanguage()->getString("STR_SCIENTISTS_ALLOCATED") << L'\x01' << (_base->getTotalScientists() - _base->getAvailableScientists());
-	_txtAllocated->setText(ss2.str());
 
 	_txtSpace->setColor(Palette::blockOffset(13)+10);
 	_txtSpace->setSecondaryColor(Palette::blockOffset(13));
-	_txtSpace->setText(_game->getLanguage()->getString("STR_LABORATORY_SPACE_AVAILABLE"));
 
 	_txtProject->setColor(Palette::blockOffset(13)+10);
 	_txtProject->setText(_game->getLanguage()->getString("STR_RESEARCH_PROJECT"));
@@ -143,6 +136,9 @@ void ResearchState::btnNewClick(Action *action)
 	_game->pushState(new NewResearchListState(_game, _base, (ResearchState*)(this)));
 }
 
+
+extern int getFreeLabSpace (Base * base);
+
 void ResearchState::FillProjectList()
 {
 	const std::vector<ResearchProject *> & baseProjects(_base->GetResearch());
@@ -157,5 +153,14 @@ void ResearchState::FillProjectList()
 		std::wstring wstr = r->getName ();
 		_lstResearch->addRow(3, wstr.c_str(), sstr.str().c_str(), L"Unknown");
 	}
+	std::wstringstream ss;
+	ss << _game->getLanguage()->getString("STR_SCIENTISTS_AVAILABLE") << L'\x01' << _base->getAvailableScientists();
+	_txtAvailable->setText(ss.str());
+	std::wstringstream ss2;
+	ss2 << _game->getLanguage()->getString("STR_SCIENTISTS_ALLOCATED") << L'\x01' << (_base->getTotalScientists() - _base->getAvailableScientists());
+	_txtAllocated->setText(ss2.str());
+	std::wstringstream ss3;
+	ss3 << _game->getLanguage()->getString("STR_LABORATORY_SPACE_AVAILABLE") << L'\x01' << getFreeLabSpace(_base);
+	_txtSpace->setText(ss3.str());
 }
 }
