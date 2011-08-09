@@ -56,7 +56,7 @@ int getAvailableScientist (Base * base)
   return nbFreeScientist;
 }
 
-ResearchProjectState::ResearchProjectState(Game *game, Base *base, RuleResearchProject * rule) : State(game), _base(base), _project(0), _rule(rule)
+ResearchProjectState::ResearchProjectState(Game *game, Base *base, RuleResearchProject * rule) : State(game), _base(base), _project(new ResearchProject(_rule)), _rule(rule)
 {
   buildUi ();
 }
