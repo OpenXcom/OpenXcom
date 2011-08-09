@@ -10,9 +10,26 @@
 #include "../Interface/TextList.h"
 #include "../Savegame/Base.h"
 #include "ResearchProjectState.h"
+#include "../Ruleset/RuleResearchProject.h"
+#include "../Ruleset/Ruleset.h"
 
 namespace OpenXcom
 {
+
+void GetAvailableResearchProjects (std::vector<RuleResearchProject *> & projects, Game * game, Base * base)
+{
+  const std::vector<RuleResearchProject *> & researchProjects = game->getRuleset()->getResearchProjects();
+  std::cout << researchProjects.size () << std::endl;
+  for(std::vector<RuleResearchProject *>::const_iterator iter = researchProjects.begin ();
+      iter != researchProjects.end ();
+      iter++)
+    {
+      if (!(*iter)->isAvailable () || (*iter)->isDiscovered ())
+	continue;
+      projects.push_back (*iter);
+      std::wcout << (*iter)->getName () << std::endl;
+    }
+}
 
 NewResearchListState::NewResearchListState(Game *game, Base *base) : State(game), _base(base)
 {
@@ -61,10 +78,7 @@ NewResearchListState::NewResearchListState(Game *game, Base *base) : State(game)
 	_lstResearch->setMargin(2);
 	_lstResearch->setAlign(ALIGN_CENTER);
 	_lstResearch->onMouseClick((ActionHandler)&NewResearchListState::onSelectProject);
-
-	_lstResearch->addRow(1, L"Laser Weapons");
-	_lstResearch->addRow(1, L"Motion Scanner");
-	_lstResearch->addRow(1, L"Medikit");
+	FillProjectList ();
 }
 
 void NewResearchListState::onSelectProject(Action *action)
@@ -75,5 +89,18 @@ void NewResearchListState::onSelectProject(Action *action)
 void NewResearchListState::btnCancelClick(Action *action)
 {
 	_game->popState();
+}
+
+void NewResearchListState::FillProjectList ()
+{
+	std::vector<RuleResearchProject *> projects;
+	GetAvailableResearchProjects(projects, _game, _base);
+	std::cout << projects.size () << std::endl;
+	for (std::vector<RuleResearchProject *>::iterator it = projects.begin ();
+	     it != projects.end ();
+	     it++)
+	  {
+	    _lstResearch->addRow(1, (*it)->getName ().c_str());
+	  }
 }
 }
