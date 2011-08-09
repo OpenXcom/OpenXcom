@@ -39,6 +39,7 @@ protected:
 	int _x, _y;
 	SDL_Rect _crop;
 	bool _visible, _hidden;
+	SDL_Color *_originalColors;
 public:
 	/// Creates a new surface with the specified size and position.
 	Surface(int width, int height, int x = 0, int y = 0);
@@ -120,6 +121,10 @@ public:
 	void lock();
 	/// Unlocks the surface.
 	void unlock();
+	/// Offsets the surface palette's colors by a set amount.
+	void paletteShift(int off, int mul);
+	/// Restores the original palette.
+	void paletteRestore();
 };
 
 }
