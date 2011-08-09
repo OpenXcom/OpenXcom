@@ -28,4 +28,10 @@ const RuleResearchProject * ResearchProject::GetRuleResearchProject () const
 {
 	return _project;
 }
+
+int ResearchProject::GetAssigned () const
+{
+	return _assigned;
+}
+
 }

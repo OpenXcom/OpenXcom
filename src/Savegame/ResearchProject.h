@@ -17,6 +17,8 @@ public:
 
   void setAssigned (int nb);
 
+  int GetAssigned () const;
+
   const RuleResearchProject * GetRuleResearchProject () const;
 };
 }
