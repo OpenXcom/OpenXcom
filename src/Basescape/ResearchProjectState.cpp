@@ -165,11 +165,23 @@ void ResearchProjectState::SetAssignedScientist(int nb)
 
 void ResearchProjectState::btnMoreClick(Action *action)
 {
+	int assigned = _project->GetAssigned ();
+	if ((getAvailableScientist(_base) - assigned) > 0 && (getFreeLabSpace(_base) - assigned) > 0)
+	{
+		_project->setAssigned(++assigned);
+		SetAssignedScientist(assigned);
+	}
 }
 
 
 void ResearchProjectState::btnLessClick(Action *action)
 {
+	int assigned = _project->GetAssigned ();
+	if (assigned > 0)
+	{
+		_project->setAssigned(--assigned);
+		SetAssignedScientist(assigned);
+	}
 }
 
 }
