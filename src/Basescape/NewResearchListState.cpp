@@ -19,7 +19,6 @@ namespace OpenXcom
 void GetAvailableResearchProjects (std::vector<RuleResearchProject *> & projects, Game * game, Base * base)
 {
   const std::vector<RuleResearchProject *> & researchProjects = game->getRuleset()->getResearchProjects();
-  std::cout << researchProjects.size () << std::endl;
   for(std::vector<RuleResearchProject *>::const_iterator iter = researchProjects.begin ();
       iter != researchProjects.end ();
       iter++)
@@ -27,7 +26,6 @@ void GetAvailableResearchProjects (std::vector<RuleResearchProject *> & projects
       if (!(*iter)->isAvailable () || (*iter)->isDiscovered ())
 	continue;
       projects.push_back (*iter);
-      std::wcout << (*iter)->getName () << std::endl;
     }
 }
 
@@ -83,7 +81,7 @@ NewResearchListState::NewResearchListState(Game *game, Base *base) : State(game)
 
 void NewResearchListState::onSelectProject(Action *action)
 {
-	_game->pushState(new ResearchProjectState(_game, _base));
+	_game->pushState(new ResearchProjectState(_game, _base, _projects[_lstResearch->getSelectedRow()]));
 }
   
 void NewResearchListState::btnCancelClick(Action *action)
@@ -93,11 +91,9 @@ void NewResearchListState::btnCancelClick(Action *action)
 
 void NewResearchListState::FillProjectList ()
 {
-	std::vector<RuleResearchProject *> projects;
-	GetAvailableResearchProjects(projects, _game, _base);
-	std::cout << projects.size () << std::endl;
-	for (std::vector<RuleResearchProject *>::iterator it = projects.begin ();
-	     it != projects.end ();
+	GetAvailableResearchProjects(_projects, _game, _base);
+	for (std::vector<RuleResearchProject *>::iterator it = _projects.begin ();
+	     it != _projects.end ();
 	     it++)
 	  {
 	    _lstResearch->addRow(1, (*it)->getName ().c_str());

@@ -11,13 +11,24 @@
 #include "../Savegame/Base.h"
 #include "../Interface/ImageButton.h"
 #include "../Engine/SurfaceSet.h"
+#include "../Ruleset/RuleResearchProject.h"
+#include "../Savegame/ResearchProject.h"
 
 #include <sstream>
 
 namespace OpenXcom
 {
+  ResearchProjectState::ResearchProjectState(Game *game, Base *base, RuleResearchProject * rule) : State(game), _base(base), _project(0), _rule(rule)
+{
+  buildUi ();
+}
 
-ResearchProjectState::ResearchProjectState(Game *game, Base *base) : State(game), _base(base)
+ResearchProjectState::ResearchProjectState(Game *game, Base *base, ResearchProject * project) : State(game), _base(base), _project(project), _rule(0)
+{
+  buildUi ();
+}
+
+void ResearchProjectState::buildUi ()
 {
 	int width = 220;
 	int height = 140;
@@ -76,14 +87,17 @@ ResearchProjectState::ResearchProjectState(Game *game, Base *base) : State(game)
 	_btnOk->onMouseClick((ActionHandler)&ResearchProjectState::btnOkClick);
 
 	_txtTitle->setSecondaryColor(c);
-	_txtTitle->setText(L"Laser Weapons");
+	_txtTitle->setText(_rule ? _rule->getName() : _project->GetRuleResearchProject ()->getName());
 
 	_txtMore->setText(L"More");
 	_txtLess->setText(L"Less");
 	_btnMore->copy(_window);
 	_btnLess->copy(_window);
 
-	SetAssignedScientist(0);
+	if (_rule)
+	  SetAssignedScientist(0);
+	else
+	  SetAssignedScientist(_project->GetAssigned ());
 
 	_btnMore->setColor(c);
 	_btnLess->setColor(c);

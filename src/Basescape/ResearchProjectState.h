@@ -11,6 +11,8 @@ class Text;
 class TextList;
 class Base;
 class ImageButton;
+class RuleResearchProject;
+class ResearchProject;
 
 class ResearchProjectState : public State
 {
@@ -23,9 +25,13 @@ private:
 	TextList *_lstResearch;
 	std::vector<Text*> texts_;
 	void SetAssignedScientist(int nb);
+	ResearchProject * _project;
+	RuleResearchProject * _rule;
+	void buildUi ();
 public:
 	/// Creates the Research state.
-	ResearchProjectState(Game *game, Base *base);
+	ResearchProjectState(Game *game, Base *base, RuleResearchProject * rule);
+	ResearchProjectState(Game *game, Base *base, ResearchProject * project);
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
 	void btnMoreClick(Action *action);
