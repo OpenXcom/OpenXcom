@@ -16,6 +16,7 @@
 #include "../Savegame/ResearchProject.h"
 #include "../Savegame/BaseFacility.h"
 #include "ResearchState.h"
+#include "NewResearchListState.h"
 
 #include <sstream>
 
@@ -57,12 +58,12 @@ int getAvailableScientist (Base * base)
   return nbFreeScientist;
 }
 
-ResearchProjectState::ResearchProjectState(Game *game, Base *base, RuleResearchProject * rule, ResearchState * researchState) : State(game), _base(base), _project(new ResearchProject(rule)), _rule(rule), _researchState(researchState)
+ResearchProjectState::ResearchProjectState(Game *game, Base *base, RuleResearchProject * rule, ResearchState * researchState, NewResearchListState * newResearchListState) : State(game), _base(base), _project(new ResearchProject(rule)), _rule(rule), _researchState(researchState), _newResearchListState(newResearchListState)
 {
   buildUi ();
 }
 
-ResearchProjectState::ResearchProjectState(Game *game, Base *base, ResearchProject * project, ResearchState * researchState) : State(game), _base(base), _project(project), _rule(0), _researchState(researchState)
+ResearchProjectState::ResearchProjectState(Game *game, Base *base, ResearchProject * project, ResearchState * researchState, NewResearchListState * newResearchListState) : State(game), _base(base), _project(project), _rule(0), _researchState(researchState), _newResearchListState(newResearchListState)
 {
   buildUi ();
 }
@@ -149,6 +150,7 @@ void ResearchProjectState::btnOkClick(Action *action)
 	if (_rule)
 	{
 		_base->AddResearch(_project);
+		_newResearchListState->FillProjectList ();
 	}
 	_researchState->FillProjectList();
 	_game->popState();

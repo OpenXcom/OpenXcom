@@ -146,6 +146,7 @@ void ResearchState::btnNewClick(Action *action)
 void ResearchState::FillProjectList()
 {
 	const std::vector<ResearchProject *> & baseProjects(_base->GetResearch());
+	_lstResearch->clearList();
 	for(std::vector<ResearchProject *>::const_iterator iter = baseProjects.begin ();
 	    iter != baseProjects.end ();
 	    iter++)

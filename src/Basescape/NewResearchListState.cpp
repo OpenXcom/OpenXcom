@@ -102,7 +102,7 @@ NewResearchListState::NewResearchListState(Game *game, Base *base, ResearchState
 
 void NewResearchListState::onSelectProject(Action *action)
 {
-	_game->pushState(new ResearchProjectState(_game, _base, _projects[_lstResearch->getSelectedRow()], _researchState));
+	_game->pushState(new ResearchProjectState(_game, _base, _projects[_lstResearch->getSelectedRow()], _researchState, this));
 }
   
 void NewResearchListState::btnCancelClick(Action *action)
@@ -112,12 +112,21 @@ void NewResearchListState::btnCancelClick(Action *action)
 
 void NewResearchListState::FillProjectList ()
 {
+	_projects.clear();
+	_lstResearch->clearList();
 	GetAvailableResearchProjects(_projects, _game, _base);
-	for (std::vector<RuleResearchProject *>::iterator it = _projects.begin ();
-	     it != _projects.end ();
-	     it++)
-	  {
-	    _lstResearch->addRow(1, (*it)->getName ().c_str());
-	  }
+	if(_projects.empty())
+	{
+		_game->popState();
+	}
+	else
+	{
+		for (std::vector<RuleResearchProject *>::iterator it = _projects.begin ();
+		     it != _projects.end ();
+		     it++)
+	  	{
+	    		_lstResearch->addRow(1, (*it)->getName ().c_str());
+		}
+	}
 }
 }
