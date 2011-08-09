@@ -36,7 +36,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Surface::Surface(int width, int height, int x, int y) : _x(x), _y(y), _visible(true), _hidden(false)
+Surface::Surface(int width, int height, int x, int y) : _x(x), _y(y), _visible(true), _hidden(false), _originalColors(0)
 {
 	_surface = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, 8, 0, 0, 0, 0);
 
@@ -675,5 +675,57 @@ void Surface::unlock()
 {
 	SDL_UnlockSurface(_surface);
 }
+
+/**
+ * Shifts all the colors in the surface's palette by a set amount.
+ * This is a common method in 8bpp games to simulate color
+ * effects for cheap.
+ * @param off Amount to shift.
+ * @param mul Shift multiplier.
+ */
+void Surface::paletteShift(int off, int mul)
+{
+	// store the original palette
+	_originalColors = (SDL_Color *)malloc(sizeof(SDL_Color) * _surface->format->palette->ncolors);
+
+	// create a temporary new palette
+	int ncolors = _surface->format->palette->ncolors - off;
+	SDL_Color *newColors = (SDL_Color *)malloc(sizeof(SDL_Color) * ncolors);
+
+	// do the color shift - while storing the original colors too
+	for (int i = 0; i < _surface->format->palette->ncolors; i++)
+	{
+		_originalColors[i].r = getPalette()[i].r;
+		_originalColors[i].g = getPalette()[i].g;
+		_originalColors[i].b = getPalette()[i].b;
+		if (i * mul + off < _surface->format->palette->ncolors)
+		{
+			newColors[i].r = getPalette()[i * mul + off].r;
+			newColors[i].g = getPalette()[i * mul + off].g;
+			newColors[i].b = getPalette()[i * mul + off].b;
+		}
+	}
+
+	// assign it and free it
+	setPalette(newColors, 0, ncolors);
+	free(newColors);
+	
+	return;
+}
+
+/**
+ * Restores the previously shifted palette.
+ * You have to call it after you've done blitting.
+ */
+void Surface::paletteRestore()
+{
+	if (_originalColors)
+	{
+		setPalette(_originalColors);
+		free(_originalColors);
+		_originalColors = 0;
+	}
+}
+
 
 }

@@ -401,7 +401,8 @@ void Text::draw()
 	{
 		mul = 3;
 	}
-	font->getSurface()->offset(color, -1, -1, mul);
+	font->getSurface()->paletteShift(color, mul);
+
 
 	// Draw each letter one by one
 	for (std::wstring::iterator c = s->begin(); c != s->end(); ++c)
@@ -428,16 +429,16 @@ void Text::draw()
 			}
 			if (*c == 2)
 			{
-				font->getSurface()->offset(-color, -1, -1, mul);
+				font->getSurface()->paletteRestore();
 				font = _small;
-				font->getSurface()->offset(color, -1, -1, mul);
+				font->getSurface()->paletteShift(color, mul);
 			}
 		}
 		else if (*c == 1)
 		{
-			font->getSurface()->offset(-color, -1, -1, mul);
+			font->getSurface()->paletteRestore();
 			color = (color == _color ? _color2 : _color);
-			font->getSurface()->offset(color, -1, -1, mul);
+			font->getSurface()->paletteShift(color, mul);
 		}
 		else
 		{
@@ -454,7 +455,7 @@ void Text::draw()
 	}
 
 	// Revert text color
-	font->getSurface()->offset(-color, -1, -1, mul);
+	font->getSurface()->paletteRestore();
 }
 
 }
