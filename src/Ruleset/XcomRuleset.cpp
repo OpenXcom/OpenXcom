@@ -51,6 +51,7 @@
 #include "../Savegame/UfopaediaSaved.h"
 #include "ArticleDefinition.h"
 #include "RuleInventory.h"
+#include "RuleResearchProject.h"
 
 namespace OpenXcom
 {
@@ -1622,6 +1623,25 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_costEngineer = 25000;
 	_costScientist = 30000;
 	_timePersonnel = 72;
+
+	RuleResearchProject * lw = new RuleResearchProject (L"Laser Weapons", 50);
+	RuleResearchProject * lp = new RuleResearchProject (L"Laser Pistol", 100);
+	RuleResearchProject * lr = new RuleResearchProject (L"Laser Rifle", 300);
+	RuleResearchProject * lc = new RuleResearchProject (L"Laser Canon", 420);
+	RuleResearchProject * ld = new RuleResearchProject (L"Laser Defense", 510);
+	RuleResearchProject * ms = new RuleResearchProject (L"Motion scanner", 180);
+	RuleResearchProject * md = new RuleResearchProject (L"Medikit", 210);
+	ld->addDependency(lc);
+	lc->addDependency(lr);
+	lr->addDependency(lp);
+	lp->addDependency(lw);
+
+	_researchProjects.push_back(lw);
+	_researchProjects.push_back(lp);
+	_researchProjects.push_back(lr);
+	_researchProjects.push_back(lc);
+	_researchProjects.push_back(ms);
+	_researchProjects.push_back(md);
 }
 
 /**
