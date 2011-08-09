@@ -4,7 +4,7 @@
 namespace OpenXcom
 {
 
-ResearchProject::ResearchProject(RuleResearchProject * p) : _project(p), _spent(0)
+ResearchProject::ResearchProject(RuleResearchProject * p) : _project(p), _spent(0), _assigned(0)
 {
 }
 
