@@ -29,6 +29,8 @@
 #include "../Interface/TextList.h"
 #include "../Savegame/Base.h"
 #include "NewResearchListState.h"
+#include "../Savegame/ResearchProject.h"
+#include "../Ruleset/RuleResearchProject.h"
 
 namespace OpenXcom
 {
@@ -116,6 +118,7 @@ ResearchState::ResearchState(Game *game, Base *base) : State(game), _base(base)
 	_lstResearch->setSelectable(true);
 	_lstResearch->setBackground(_window);
 	_lstResearch->setMargin(2);
+	FillProjectList();
 }
 
 /**
@@ -137,7 +140,21 @@ void ResearchState::btnOkClick(Action *action)
 
 void ResearchState::btnNewClick(Action *action)
 {
-	_game->pushState(new NewResearchListState(_game, _base));
+	_game->pushState(new NewResearchListState(_game, _base, (ResearchState*)(this)));
 }
 
+void ResearchState::FillProjectList()
+{
+	const std::vector<ResearchProject *> & baseProjects(_base->GetResearch());
+	for(std::vector<ResearchProject *>::const_iterator iter = baseProjects.begin ();
+	    iter != baseProjects.end ();
+	    iter++)
+	{
+		std::wstringstream sstr;
+		sstr << (*iter)->GetAssigned ();
+		const RuleResearchProject *r = (*iter)->GetRuleResearchProject();
+		std::wstring wstr = r->getName ();
+		_lstResearch->addRow(3, wstr.c_str(), sstr.str().c_str(), L"Unknown");
+	}
+}
 }
