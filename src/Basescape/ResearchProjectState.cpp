@@ -12,13 +12,51 @@
 #include "../Interface/ImageButton.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Ruleset/RuleResearchProject.h"
+#include "../Ruleset/RuleBaseFacility.h"
 #include "../Savegame/ResearchProject.h"
+#include "../Savegame/BaseFacility.h"
 
 #include <sstream>
 
 namespace OpenXcom
 {
-  ResearchProjectState::ResearchProjectState(Game *game, Base *base, RuleResearchProject * rule) : State(game), _base(base), _project(0), _rule(rule)
+int getFreeLabSpace (Base * base)
+{
+  int freeLabSpace = 0;
+  std::vector<BaseFacility*> *const facilities (base->getFacilities());
+  for (std::vector<BaseFacility*>::iterator itFacility = facilities->begin ();
+       itFacility != facilities->end ();
+       itFacility++)
+    {
+      freeLabSpace += (*itFacility)->getRules()->getLaboratories();
+    }
+  
+  const std::vector<ResearchProject *> & researchs (base->GetResearch());
+  for (std::vector<ResearchProject *>::const_iterator itResearch = researchs.begin ();
+       itResearch != researchs.end ();
+       itResearch++)
+    {
+      freeLabSpace -= (*itResearch)->GetAssigned ();
+    }
+       
+  return freeLabSpace;
+}
+
+int getAvailableScientist (Base * base)
+{
+  int nbFreeScientist = base->getScientists();
+  const std::vector<ResearchProject *> & researchs (base->GetResearch());
+  for (std::vector<ResearchProject *>::const_iterator itResearch = researchs.begin ();
+       itResearch != researchs.end ();
+       itResearch++)
+    {
+      nbFreeScientist -= (*itResearch)->GetAssigned ();
+    }
+       
+  return nbFreeScientist;
+}
+
+ResearchProjectState::ResearchProjectState(Game *game, Base *base, RuleResearchProject * rule) : State(game), _base(base), _project(0), _rule(rule)
 {
   buildUi ();
 }
@@ -113,8 +151,8 @@ void ResearchProjectState::btnOkClick(Action *action)
 void ResearchProjectState::SetAssignedScientist(int nb)
 {
 	std::wstringstream s1;
-	int freeScientist = 0;
-	int freeSpaceLab = 0;
+	int freeScientist = getAvailableScientist(_base);
+	int freeSpaceLab = getFreeLabSpace(_base);
 	s1 << L"AVAILABLE SCIENTIST>" << freeScientist - nb;
 	std::wstringstream s2;
 	s2 << L"FREE LAB SPACE>" << freeSpaceLab - nb;
