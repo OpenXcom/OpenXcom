@@ -118,6 +118,7 @@ void NewResearchListState::FillProjectList ()
 	if(_projects.empty())
 	{
 		_game->popState();
+		//FIXME : if no project can be listed when the dialog is created for the first time, this will exit to the base view
 	}
 	else
 	{
