@@ -29,7 +29,7 @@ void GetAvailableResearchProjects (std::vector<RuleResearchProject *> & projects
     }
 }
 
-NewResearchListState::NewResearchListState(Game *game, Base *base) : State(game), _base(base)
+NewResearchListState::NewResearchListState(Game *game, Base *base, ResearchState * researchState) : State(game), _base(base), _researchState(researchState)
 {
 	int width = 220;
 	int height = 140;
@@ -81,7 +81,7 @@ NewResearchListState::NewResearchListState(Game *game, Base *base) : State(game)
 
 void NewResearchListState::onSelectProject(Action *action)
 {
-	_game->pushState(new ResearchProjectState(_game, _base, _projects[_lstResearch->getSelectedRow()]));
+	_game->pushState(new ResearchProjectState(_game, _base, _projects[_lstResearch->getSelectedRow()], _researchState));
 }
   
 void NewResearchListState::btnCancelClick(Action *action)

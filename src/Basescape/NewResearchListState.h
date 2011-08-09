@@ -11,6 +11,7 @@ class Text;
 class TextList;
 class Base;
 class RuleResearchProject;
+class ResearchState;
 
 class NewResearchListState : public State
 {
@@ -23,9 +24,10 @@ private:
 	void onSelectProject(Action *action);
 	void FillProjectList ();
 	std::vector<RuleResearchProject *> _projects;
+	ResearchState * _researchState;
 public:
 	/// Creates the Research state.
-	NewResearchListState(Game *game, Base *base);
+	NewResearchListState(Game *game, Base *base, ResearchState * researchState);
 	void btnCancelClick(Action *action);
 };
 }
