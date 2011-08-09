@@ -32,6 +32,7 @@
 #include "../Ruleset/RuleItem.h"
 #include "Transfer.h"
 #include <algorithm>
+#include "ResearchProject.h"
 
 namespace OpenXcom
 {
@@ -372,7 +373,16 @@ int Base::getTotalSoldiers() const
  */
 int Base::getAvailableScientists() const
 {
-	return _scientists;
+	int nbFreeScientist = getScientists();
+	const std::vector<ResearchProject *> & researchs (GetResearch());
+	for (std::vector<ResearchProject *>::const_iterator itResearch = researchs.begin ();
+	     itResearch != researchs.end ();
+	     itResearch++)
+	{
+		nbFreeScientist -= (*itResearch)->GetAssigned ();
+	}
+       
+	return nbFreeScientist;
 }
 
 /**
@@ -712,7 +722,7 @@ int Base::getMonthlyMaintenace() const
 }
 
 
-const std::vector<ResearchProject *> & Base::GetResearch()
+const std::vector<ResearchProject *> & Base::GetResearch() const
 {
 	return _baseResearchs;
 }

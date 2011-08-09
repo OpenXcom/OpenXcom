@@ -44,20 +44,6 @@ int getFreeLabSpace (Base * base)
   return freeLabSpace;
 }
 
-int getAvailableScientist (Base * base)
-{
-  int nbFreeScientist = base->getScientists();
-  const std::vector<ResearchProject *> & researchs (base->GetResearch());
-  for (std::vector<ResearchProject *>::const_iterator itResearch = researchs.begin ();
-       itResearch != researchs.end ();
-       itResearch++)
-    {
-      nbFreeScientist -= (*itResearch)->GetAssigned ();
-    }
-       
-  return nbFreeScientist;
-}
-
 ResearchProjectState::ResearchProjectState(Game *game, Base *base, RuleResearchProject * rule, ResearchState * researchState, NewResearchListState * newResearchListState) : State(game), _base(base), _project(new ResearchProject(rule)), _rule(rule), _researchState(researchState), _newResearchListState(newResearchListState)
 {
   buildUi ();
@@ -159,7 +145,7 @@ void ResearchProjectState::btnOkClick(Action *action)
 void ResearchProjectState::SetAssignedScientist(int nb)
 {
 	std::wstringstream s1;
-	int freeScientist = getAvailableScientist(_base);
+	int freeScientist = _base->getAvailableScientists();
 	int freeSpaceLab = getFreeLabSpace(_base);
 	s1 << L"AVAILABLE SCIENTIST>" << freeScientist - nb;
 	std::wstringstream s2;
@@ -174,7 +160,7 @@ void ResearchProjectState::SetAssignedScientist(int nb)
 void ResearchProjectState::btnMoreClick(Action *action)
 {
 	int assigned = _project->GetAssigned ();
-	if ((getAvailableScientist(_base) - assigned) > 0 && (getFreeLabSpace(_base) - assigned) > 0)
+	if ((_base->getAvailableScientists() - assigned) > 0 && (getFreeLabSpace(_base) - assigned) > 0)
 	{
 		_project->setAssigned(++assigned);
 		SetAssignedScientist(assigned);
