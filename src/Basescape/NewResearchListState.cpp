@@ -12,21 +12,42 @@
 #include "ResearchProjectState.h"
 #include "../Ruleset/RuleResearchProject.h"
 #include "../Ruleset/Ruleset.h"
+#include "../Savegame/ResearchProject.h"
+
+#include <algorithm>
 
 namespace OpenXcom
 {
 
+struct findRuleResearchProject : public std::unary_function<ResearchProject *,
+							    bool>
+{
+	RuleResearchProject * _toFind;
+	findRuleResearchProject(RuleResearchProject * toFind);
+	bool operator()(ResearchProject *r) const;
+};
+
+findRuleResearchProject::findRuleResearchProject(RuleResearchProject * toFind) : _toFind(toFind)
+{
+}
+
+bool findRuleResearchProject::operator()(ResearchProject *r) const
+{
+	return _toFind == r->GetRuleResearchProject();
+}
+
 void GetAvailableResearchProjects (std::vector<RuleResearchProject *> & projects, Game * game, Base * base)
 {
-  const std::vector<RuleResearchProject *> & researchProjects = game->getRuleset()->getResearchProjects();
-  for(std::vector<RuleResearchProject *>::const_iterator iter = researchProjects.begin ();
-      iter != researchProjects.end ();
-      iter++)
-    {
-      if (!(*iter)->isAvailable () || (*iter)->isDiscovered ())
-	continue;
-      projects.push_back (*iter);
-    }
+	const std::vector<RuleResearchProject *> & researchProjects = game->getRuleset()->getResearchProjects();
+	const std::vector<ResearchProject *> & baseResearchProjects = base->GetResearch();
+	for(std::vector<RuleResearchProject *>::const_iterator iter = researchProjects.begin ();
+	    iter != researchProjects.end ();
+	    iter++)
+	{
+		if (!(*iter)->isAvailable () || (*iter)->isDiscovered () || std::find_if (baseResearchProjects.begin(), baseResearchProjects.end (), findRuleResearchProject(*iter)) != baseResearchProjects.end ())
+			continue;
+		projects.push_back (*iter);
+	}
 }
 
 NewResearchListState::NewResearchListState(Game *game, Base *base, ResearchState * researchState) : State(game), _base(base), _researchState(researchState)
