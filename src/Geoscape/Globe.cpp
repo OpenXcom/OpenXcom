@@ -726,6 +726,17 @@ void Globe::draw()
 }
 
 /**
+ * Only draws what needs updating every tick.
+ */
+void Globe::drawRefresh()
+{
+	clear();
+	drawOcean();
+	drawLand();
+	drawMarkers();
+}
+
+/**
  * Draws a segment of the ocean shade along the longitude.
  * @param startLon Starting longitude.
  * @param endLon Ending longitude.

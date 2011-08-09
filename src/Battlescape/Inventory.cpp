@@ -127,8 +127,8 @@ void Inventory::drawGrid()
 			SDL_Rect r;
 			r.x = i->second->getX();
 			r.y = i->second->getY();
-			r.w = RuleInventory::HAND_W * RuleInventory::SLOT_W + 1;
-			r.h = RuleInventory::HAND_H * RuleInventory::SLOT_H + 1;
+			r.w = RuleInventory::HAND_W * RuleInventory::SLOT_W;
+			r.h = RuleInventory::HAND_H * RuleInventory::SLOT_H;
 			_grid->drawRect(&r, color);
 			r.x++;
 			r.y++;
@@ -243,6 +243,15 @@ std::string Inventory::getSlotInPosition(int *x, int *y) const
 }
 
 /**
+ * Returns the item currently grabbed by the player.
+ * @return Pointer to selected item, or NULL if none.
+ */
+BattleItem *Inventory::getSelectedItem() const
+{
+	return _selItem;
+}
+
+/**
  * Blits the inventory elements.
  * @param surface Pointer to surface to blit onto.
  */
@@ -262,8 +271,8 @@ void Inventory::blit(Surface *surface)
  */
 void Inventory::mouseOver(Action *action, State *state)
 {
-	_selection->setX((int)floor(action->getAbsoluteXMouse()));
-	_selection->setY((int)floor(action->getAbsoluteYMouse()));
+	_selection->setX((int)floor(action->getAbsoluteXMouse()) - _selection->getWidth()/2);
+	_selection->setY((int)floor(action->getAbsoluteYMouse()) - _selection->getHeight()/2);
 	InteractiveSurface::mouseOver(action, state);
 }
 
@@ -276,27 +285,33 @@ void Inventory::mouseClick(Action *action, State *state)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		int x = (int)floor(action->getAbsoluteXMouse()), y = (int)floor(action->getAbsoluteYMouse());
-		std::string slot = getSlotInPosition(&x, &y);
-		if (slot != "")
+		// Pickup item
+		if (_selItem == 0)
 		{
-			BattleItem *item = getItemInSlot(slot, x, y);
-			if (_selItem == 0)
+			int x = (int)floor(action->getAbsoluteXMouse()),
+				y = (int)floor(action->getAbsoluteYMouse());
+			std::string slot = getSlotInPosition(&x, &y);
+			if (slot != "")
 			{
+				BattleItem *item = getItemInSlot(slot, x, y);
 				if (item != 0)
 				{
 					_selItem = item;
-					SurfaceSet *texture = _game->getResourcePack()->getSurfaceSet("BIGOBS.PCK");
-					Surface *frame = texture->getFrame(_selItem->getRules()->getBigSprite());
-					frame->setX((RuleInventory::HAND_W - _selItem->getRules()->getInventoryWidth()) * RuleInventory::SLOT_W/2);
-					frame->setY((RuleInventory::HAND_H - _selItem->getRules()->getInventoryHeight()) * RuleInventory::SLOT_H/2);
-					texture->getFrame(_selItem->getRules()->getBigSprite())->blit(_selection);
+					_selItem->getRules()->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _selection);
 					drawItems();
 				}
 			}
-			else
+		}
+		// Drop item
+		else
+		{
+			int x = _selection->getX() + (RuleInventory::HAND_W - _selItem->getRules()->getInventoryWidth()) * RuleInventory::SLOT_W/2,
+				y = _selection->getY() + (RuleInventory::HAND_H - _selItem->getRules()->getInventoryHeight()) * RuleInventory::SLOT_H/2;
+			std::string slot = getSlotInPosition(&x, &y);
+			if (slot != "")
 			{
-				if ((item == 0 || item == _selItem) && _invs->find(slot)->second->fitItemInSlot(_selItem))
+				BattleItem *item = getItemInSlot(slot, x, y);
+				if ((item == 0 || item == _selItem) && _invs->find(slot)->second->fitItemInSlot(_selItem->getRules(), x, y))
 				{
 					_selItem->setSlot(slot);
 					_selItem->setSlotX(x);
@@ -311,6 +326,7 @@ void Inventory::mouseClick(Action *action, State *state)
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
+		// Return item to original position
 		_selItem = 0;
 		_selection->clear();
 		drawItems();

@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "RuleInventory.h"
+#include "RuleItem.h"
 
 namespace OpenXcom
 {
@@ -166,13 +167,26 @@ bool RuleInventory::checkSlotInPosition(int *x, int *y) const
 /**
  * Checks if an item completely fits when
  * placed in a certain slot.
- * @param item 
+ * @param item Pointer to item ruleset.
+ * @param x Slot X position.
+ * @param y Slot Y position.
  * @return True if there's a slot there, False otherwise.
  */
-bool RuleInventory::fitItemInSlot(BattleItem *item) const
+bool RuleInventory::fitItemInSlot(RuleItem *item, int x, int y) const
 {
-	// TODO
-	return true;
+	if (_type == INV_HAND)
+		return true;
+	int totalSlots = item->getInventoryWidth() * item->getInventoryHeight();
+	int foundSlots = 0;
+	for (std::vector<RuleSlot>::const_iterator i = _slots.begin(); i != _slots.end() && foundSlots < totalSlots; ++i)
+	{
+		if (i->x >= x && i->x <= x + item->getInventoryWidth() - 1 &&
+			i->y >= y && i->y <= y + item->getInventoryHeight() - 1)
+		{
+			foundSlots++;
+		}
+	}
+	return (foundSlots == totalSlots);
 }
 
 }

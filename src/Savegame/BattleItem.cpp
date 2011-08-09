@@ -56,6 +56,8 @@ void BattleItem::load(const YAML::Node &node)
 	node["Z"] >> _position.z;
 
 	node["inventoryslot"] >> _inventorySlot;
+	node["inventoryX"] >> _inventoryX;
+	node["inventoryY"] >> _inventoryY;
 }
 
 /**
@@ -73,6 +75,8 @@ void BattleItem::save(YAML::Emitter &out) const
 	if (_owner)
 		out << YAML::Key << "owner" << YAML::Value << _owner->getId();
 	out << YAML::Key << "inventoryslot" << YAML::Value << _inventorySlot;
+	out << YAML::Key << "inventoryX" << YAML::Value << _inventoryX;
+	out << YAML::Key << "inventoryY" << YAML::Value << _inventoryY;
 
 	out << YAML::EndMap;
 }
@@ -238,17 +242,8 @@ void BattleItem::setSlotY(int y)
  */
 bool BattleItem::occupiesSlot(int x, int y) const
 {
-	for (int xx = _inventoryX; xx < _inventoryX + _rules->getInventoryWidth(); ++xx)
-	{
-		for (int yy = _inventoryY; yy < _inventoryY + _rules->getInventoryHeight(); ++yy)
-		{
-			if (x == xx && y == yy)
-			{
-				return true;
-			}
-		}
-	}
-	return false;
+	return (x >= _inventoryX && x <= _inventoryX + _rules->getInventoryWidth() - 1 &&
+			y >= _inventoryY && y <= _inventoryY + _rules->getInventoryHeight() - 1);
 }
 
 /**

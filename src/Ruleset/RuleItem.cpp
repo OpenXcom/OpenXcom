@@ -17,6 +17,9 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "RuleItem.h"
+#include "RuleInventory.h"
+#include "../Engine/SurfaceSet.h"
+#include "../Engine/Surface.h"
 
 namespace OpenXcom
 {
@@ -492,6 +495,20 @@ int RuleItem::getClipSize() const
 void RuleItem::setClipSize(int size)
 {
 	_clipSize = size;
+}
+
+/**
+ * Draws and centers the hand sprite on a surface
+ * according to its dimensions.
+ * @param texture Pointer to surface set to get the sprite from.
+ * @param surface Pointer to surface to draw to.
+ */
+void RuleItem::drawHandSprite(SurfaceSet *texture, Surface *surface) const
+{
+	Surface *frame = texture->getFrame(this->getBigSprite());
+	frame->setX((RuleInventory::HAND_W - this->getInventoryWidth()) * RuleInventory::SLOT_W/2);
+	frame->setY((RuleInventory::HAND_H - this->getInventoryHeight()) * RuleInventory::SLOT_H/2);
+	texture->getFrame(this->getBigSprite())->blit(surface);
 }
 
 }

@@ -32,7 +32,7 @@ struct RuleSlot
 
 enum InventoryType { INV_SLOT, INV_HAND, INV_GROUND };
 
-class BattleItem;
+class RuleItem;
 
 /**
  * Represents a specific section of the inventory,
@@ -76,7 +76,7 @@ public:
 	/// Checks for a slot in a certain position.
 	bool checkSlotInPosition(int *x, int *y) const;
 	/// Checks if an item fits in a slot.
-	bool fitItemInSlot(BattleItem *item) const;
+	bool fitItemInSlot(RuleItem *item, int x, int y) const;
 };
 
 }

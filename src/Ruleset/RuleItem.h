@@ -28,6 +28,9 @@ enum BattleType { BT_NONE, BT_FIREARM, BT_AMMO, BT_MELEE, BT_GRENADE, BT_PROXIMI
 namespace OpenXcom
 {
 
+class SurfaceSet;
+class Surface;
+
 /**
  * Represents a specific type of item.
  * Contains constant info about an item like
@@ -155,6 +158,8 @@ public:
 	int getClipSize() const;
 	/// Sets the item's ammo amount.
 	void setClipSize(int size);
+	/// Draws the item's hand sprite onto a surface.
+	void drawHandSprite(SurfaceSet *texture, Surface *surface) const;
 };
 
 }

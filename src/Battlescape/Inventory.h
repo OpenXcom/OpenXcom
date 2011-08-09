@@ -58,6 +58,8 @@ public:
 	BattleItem *getItemInSlot(std::string slot, int x, int y) const;
 	/// Gets the slot in the specified position.
 	std::string getSlotInPosition(int *x, int *y) const;
+	/// Gets the currently selected item.
+	BattleItem *getSelectedItem() const;
 	/// Blits the inventory onto another surface.
 	void blit(Surface *surface);
 	/// Special handling for mouse hovers.

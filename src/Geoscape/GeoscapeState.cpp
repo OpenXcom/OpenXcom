@@ -436,7 +436,7 @@ void GeoscapeState::timeAdvance()
 	_pause = false;
 
 	timeDisplay();
-	_globe->draw();
+	_globe->drawRefresh();
 }
 
 /**

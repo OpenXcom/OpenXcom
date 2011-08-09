@@ -94,7 +94,6 @@ private:
 	
 	void endTurn();
 	void handleItemClick(BattleItem *item);
-	void drawItemSprite(BattleItem *item, Surface *surface);
 	void blinkVisibleUnitButtons();
 	void blinkWarningMessage();
 	void showWarningMessage(std::string message);

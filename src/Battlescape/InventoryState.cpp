@@ -34,6 +34,8 @@
 #include "../Savegame/Soldier.h"
 #include "Inventory.h"
 #include "../Ruleset/Ruleset.h"
+#include "../Ruleset/RuleItem.h"
+#include "../Ruleset/RuleInventory.h"
 #include "UnitInfoState.h"
 
 namespace OpenXcom
@@ -52,24 +54,30 @@ InventoryState::InventoryState(Game *game) : State(game)
 	_soldier = new Surface(320, 200, 0, 0);
 	_txtName = new Text(200, 16, 36, 6);
 	_txtTus = new Text(40, 9, 250, 24);
+	_txtItem = new Text(100, 9, 0, 23);
+	_txtAmmo = new Text(40, 24, 272, 64);
 	_btnOk = new InteractiveSurface(35, 22, 237, 1);
 	_btnPrev = new InteractiveSurface(23, 22, 273, 1);
 	_btnNext = new InteractiveSurface(23, 22, 297, 1);
 	_btnUnload = new InteractiveSurface(32, 25, 288, 32);
 	_btnGround = new InteractiveSurface(32, 15, 289, 137);
 	_btnRank = new InteractiveSurface(26, 23, 0, 0);
+	_selAmmo = new Surface(RuleInventory::HAND_W * RuleInventory::SLOT_W, RuleInventory::HAND_H * RuleInventory::SLOT_H, 272, 88);
 	_inv = new Inventory(_game, 320, 200, 0, 0);
 
 	add(_bg);
 	add(_soldier);
 	add(_txtName);
 	add(_txtTus);
+	add(_txtItem);
+	add(_txtAmmo);
 	add(_btnOk);
 	add(_btnPrev);
 	add(_btnNext);
 	add(_btnUnload);
 	add(_btnGround);
 	add(_btnRank);
+	add(_selAmmo);
 	add(_inv);
 
 	// Set up objects
@@ -79,12 +87,24 @@ InventoryState::InventoryState(Game *game) : State(game)
 	_txtName->setBig();
 	_txtName->setHighContrast(true);
 
+	_txtTus->setColor(Palette::blockOffset(4)-1);
+	_txtTus->setSecondaryColor(Palette::blockOffset(1)-1);
+	_txtTus->setHighContrast(true);
+
+	_txtItem->setColor(Palette::blockOffset(3)-1);
+	_txtItem->setHighContrast(true);
+
+	_txtAmmo->setColor(Palette::blockOffset(4)-1);
+	_txtAmmo->setSecondaryColor(Palette::blockOffset(1)-1);
+	_txtAmmo->setHighContrast(true);
+
 	_btnOk->onMouseClick((ActionHandler)&InventoryState::btnOkClick);
 	_btnPrev->onMouseClick((ActionHandler)&InventoryState::btnPrevClick);
 	_btnNext->onMouseClick((ActionHandler)&InventoryState::btnNextClick);
 	_btnRank->onMouseClick((ActionHandler)&InventoryState::btnRankClick);
 
 	_inv->drawGrid();
+	_inv->onMouseClick((ActionHandler)&InventoryState::invClick);
 }
 
 /**
@@ -168,6 +188,44 @@ void InventoryState::btnNextClick(Action *action)
 void InventoryState::btnRankClick(Action *action)
 {
 	_game->pushState(new UnitInfoState(_game, _battleGame->getSelectedUnit()));
+}
+
+/**
+ * Updates item info.
+ * @param action Pointer to an action.
+ */
+void InventoryState::invClick(Action *action)
+{
+	BattleItem *item = _inv->getSelectedItem();
+	_txtItem->setText(L"");
+	_txtAmmo->setText(L"");
+	_selAmmo->clear();
+	if (item != 0)
+	{
+		_txtItem->setText(_game->getLanguage()->getString(item->getRules()->getType()));
+		std::wstringstream ss;
+		if (item->getAmmoItem() != 0)
+		{
+			ss << _game->getLanguage()->getString("STR_AMMO_ROUNDS_LEFT") << L'\x01' << item->getAmmoItem()->getAmmoQuantity();
+			SDL_Rect r;
+			r.x = 0;
+			r.y = 0;
+			r.w = RuleInventory::HAND_W * RuleInventory::SLOT_W;
+			r.h = RuleInventory::HAND_H * RuleInventory::SLOT_H;
+			_selAmmo->drawRect(&r, Palette::blockOffset(0)+8);
+			r.x++;
+			r.y++;
+			r.w -= 2;
+			r.h -= 2;
+			_selAmmo->drawRect(&r, 0);
+			item->getAmmoItem()->getRules()->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _selAmmo);
+		}
+		else if (item->getAmmoQuantity() != 0)
+		{
+			ss << _game->getLanguage()->getString("STR_AMMO_ROUNDS_LEFT") << L'\x01' << item->getAmmoQuantity();
+		}
+		_txtAmmo->setText(ss.str());
+	}
 }
 
 }

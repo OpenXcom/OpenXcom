@@ -59,7 +59,6 @@
 #include "../Ruleset/RuleItem.h"
 #include "../Engine/Timer.h"
 #include "../Interface/FpsCounter.h"
-#include "../Ruleset/RuleInventory.h"
 #include "../Menu/SaveGameState.h"
 
 namespace OpenXcom
@@ -950,7 +949,7 @@ void BattlescapeState::updateSoldierInfo(BattleUnit *battleUnit)
 	_numAmmoLeft->clear();
 	if (leftHandItem)
 	{
-		drawItemSprite(leftHandItem, _btnLeftHandItem);
+		leftHandItem->getRules()->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _btnLeftHandItem);
 		if (leftHandItem->getAmmoItem())
 			_numAmmoLeft->setValue(leftHandItem->getAmmoItem()->getAmmoQuantity());
 	}
@@ -959,7 +958,7 @@ void BattlescapeState::updateSoldierInfo(BattleUnit *battleUnit)
 	_numAmmoRight->clear();
 	if (rightHandItem)
 	{
-		drawItemSprite(rightHandItem, _btnRightHandItem);
+		rightHandItem->getRules()->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _btnRightHandItem);
 		if (rightHandItem->getAmmoItem())
 			_numAmmoRight->setValue(rightHandItem->getAmmoItem()->getAmmoQuantity());
 	}
@@ -1072,20 +1071,6 @@ void BattlescapeState::handleItemClick(BattleItem *item)
 		_action.weapon = item;
 		popup(new ActionMenuState(_game, &_action));
 	}
-}
-
-/**
- * Draws the item's sprite on a surface.
- * @param item the given item
- * @surface surface the given surface
- */
-void BattlescapeState::drawItemSprite(BattleItem *item, Surface *surface)
-{
-	SurfaceSet *texture = _game->getResourcePack()->getSurfaceSet("BIGOBS.PCK");
-	Surface *frame = texture->getFrame(item->getRules()->getBigSprite());
-	frame->setX((RuleInventory::HAND_W - item->getRules()->getInventoryWidth()) * RuleInventory::SLOT_W/2);
-	frame->setY((RuleInventory::HAND_H - item->getRules()->getInventoryHeight()) * RuleInventory::SLOT_H/2);
-	texture->getFrame(item->getRules()->getBigSprite())->blit(surface);
 }
 
 /**

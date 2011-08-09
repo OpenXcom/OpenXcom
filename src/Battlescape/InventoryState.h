@@ -38,10 +38,11 @@ class InventoryState : public State
 {
 private:
 	Surface *_bg, *_soldier;
-	Text *_txtName, *_txtTus;
+	Text *_txtName, *_txtTus, *_txtItem, *_txtAmmo;
 	InteractiveSurface *_btnOk, *_btnPrev, *_btnNext, *_btnUnload, *_btnGround, *_btnRank;
-	SavedBattleGame *_battleGame;
+	Surface *_selAmmo;
 	Inventory *_inv;
+	SavedBattleGame *_battleGame;
 public:
 	/// Creates the Inventory state.
 	InventoryState(Game *game);
@@ -57,6 +58,8 @@ public:
 	void btnNextClick(Action *action);
 	/// Handler for clicking the Rank button.
 	void btnRankClick(Action *action);
+	/// Handler for clicking on the inventory.
+	void invClick(Action *action);
 };
 
 }
