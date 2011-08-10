@@ -28,6 +28,7 @@ namespace OpenXcom
 
 class RuleInventory;
 class Game;
+class WarningMessage;
 class BattleItem;
 
 /**
@@ -40,7 +41,9 @@ private:
 	Game *_game;
 	std::map<std::string, RuleInventory*> *_invs;
 	Surface *_grid, *_items, *_selection;
+	WarningMessage *_warning;
 	BattleItem *_selItem;
+	bool _tu;
 public:
 	/// Creates a new inventory view at the specified position and size.
 	Inventory(Game *game, int width, int height, int x = 0, int y = 0);
@@ -48,6 +51,8 @@ public:
 	~Inventory();
 	/// Sets the inventory's palette.
 	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
+	/// Sets the inventory's Time Unit mode.
+	void setTuMode(bool tu);
 	/// Draws the inventory.
 	void draw();
 	/// Draws the inventory grid.
@@ -60,12 +65,16 @@ public:
 	std::string getSlotInPosition(int *x, int *y) const;
 	/// Gets the currently selected item.
 	BattleItem *getSelectedItem() const;
+	/// Handle timers.
+	void think();
 	/// Blits the inventory onto another surface.
 	void blit(Surface *surface);
 	/// Special handling for mouse hovers.
 	void mouseOver(Action *action, State *state);
 	/// Special handling for mouse clicks.
 	void mouseClick(Action *action, State *state);
+	/// Unloads the selected weapon.
+	void unload();
 };
 
 }

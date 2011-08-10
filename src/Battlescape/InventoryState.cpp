@@ -36,7 +36,6 @@
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/RuleInventory.h"
-#include "WarningMessage.h"
 #include "UnitInfoState.h"
 
 namespace OpenXcom
@@ -45,8 +44,9 @@ namespace OpenXcom
 /**
  * Initializes all the elements in the Inventory screen.
  * @param game Pointer to the core game.
+ * @param tu Inventory Time Unit mode.
  */
-InventoryState::InventoryState(Game *game) : State(game)
+InventoryState::InventoryState(Game *game, bool tu) : State(game), _tu(tu)
 {
 	_battleGame = _game->getSavedGame()->getBattleGame();
 
@@ -65,7 +65,6 @@ InventoryState::InventoryState(Game *game) : State(game)
 	_btnRank = new InteractiveSurface(26, 23, 0, 0);
 	_selAmmo = new Surface(RuleInventory::HAND_W * RuleInventory::SLOT_W, RuleInventory::HAND_H * RuleInventory::SLOT_H, 272, 88);
 	_inv = new Inventory(_game, 320, 200, 0, 0);
-	_warning = new WarningMessage(224, 24, 48, 176);
 
 	add(_bg);
 	add(_soldier);
@@ -81,7 +80,6 @@ InventoryState::InventoryState(Game *game) : State(game)
 	add(_btnRank);
 	add(_selAmmo);
 	add(_inv);
-	add(_warning);
 
 	// Set up objects
 	_game->getResourcePack()->getSurface("TAC01.SCR")->blit(_bg);
@@ -105,12 +103,11 @@ InventoryState::InventoryState(Game *game) : State(game)
 	_btnPrev->onMouseClick((ActionHandler)&InventoryState::btnPrevClick);
 	_btnNext->onMouseClick((ActionHandler)&InventoryState::btnNextClick);
 	_btnRank->onMouseClick((ActionHandler)&InventoryState::btnRankClick);
+	_btnUnload->onMouseClick((ActionHandler)&InventoryState::btnUnloadClick);
 
 	_inv->drawGrid();
+	_inv->setTuMode(_tu);
 	_inv->onMouseClick((ActionHandler)&InventoryState::invClick);
-
-	_warning->setColor(Palette::blockOffset(2));
-	_warning->setTextColor(Palette::blockOffset(1)-1);
 }
 
 /**
@@ -156,6 +153,12 @@ void InventoryState::init()
 		look += ".SPK";
 		_game->getResourcePack()->getSurface(look)->blit(_soldier);
 	}
+	if (_tu)
+	{
+		std::wstringstream ss;
+		ss << _game->getLanguage()->getString("STR_TUS") << L'\x01' << unit->getTimeUnits();
+		_txtTus->setText(ss.str());
+	}
 }
 
 /**
@@ -197,6 +200,18 @@ void InventoryState::btnRankClick(Action *action)
 }
 
 /**
+ * Unloads the selected weapon.
+ * @param action Pointer to an action.
+ */
+void InventoryState::btnUnloadClick(Action *action)
+{
+	if (_inv->getSelectedItem() != 0 && _inv->getSelectedItem()->getAmmoItem() != 0)
+	{
+		_inv->unload();
+	}
+}
+
+/**
  * Updates item info.
  * @param action Pointer to an action.
  */
@@ -231,6 +246,12 @@ void InventoryState::invClick(Action *action)
 			ss << _game->getLanguage()->getString("STR_AMMO_ROUNDS_LEFT") << L'\x01' << item->getAmmoQuantity();
 		}
 		_txtAmmo->setText(ss.str());
+	}
+	if (_tu)
+	{
+		std::wstringstream ss;
+		ss << _game->getLanguage()->getString("STR_TUS") << L'\x01' << _battleGame->getSelectedUnit()->getTimeUnits();
+		_txtTus->setText(ss.str());
 	}
 }
 

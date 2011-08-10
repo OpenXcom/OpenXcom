@@ -35,6 +35,7 @@
 #include "../Engine/Action.h"
 #include "../Engine/SoundSet.h"
 #include "../Engine/Sound.h"
+#include "WarningMessage.h"
 
 namespace OpenXcom
 {
@@ -47,13 +48,18 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Inventory::Inventory(Game *game, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _game(game), _selItem(0)
+Inventory::Inventory(Game *game, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _game(game), _selItem(0), _tu(true)
 {
 	_grid = new Surface(width, height, x, y);
 	_items = new Surface(width, height, x, y);
 	_selection = new Surface(RuleInventory::HAND_W * RuleInventory::SLOT_W, RuleInventory::HAND_H * RuleInventory::SLOT_H, x, y);
+	_warning = new WarningMessage(224, 24, 48, 176);
 
 	_invs = _game->getRuleset()->getInventories();
+
+	_warning->setFonts(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"));
+	_warning->setColor(Palette::blockOffset(2));
+	_warning->setTextColor(Palette::blockOffset(1)-1);
 }
 
 /**
@@ -78,6 +84,18 @@ void Inventory::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 	_grid->setPalette(colors, firstcolor, ncolors);
 	_items->setPalette(colors, firstcolor, ncolors);
 	_selection->setPalette(colors, firstcolor, ncolors);
+	_warning->setPalette(colors, firstcolor, ncolors);
+}
+
+/**
+ * Changes the inventory's Time Units mode.
+ * When True, inventory actions cost soldier time units (for battle).
+ * When False, inventory actions don't cost anything (for pre-equip).
+ * @param tu Time Units mode.
+ */
+void Inventory::setTuMode(bool tu)
+{
+	_tu = tu;
 }
 
 /**
@@ -178,7 +196,7 @@ void Inventory::drawItems()
 		for (std::vector<BattleItem*>::iterator i = unit->getInventoryItems()->begin(); i != unit->getInventoryItems()->end(); ++i)
 		{
 			if ((*i) == _selItem)
-				break;
+				continue;
 
 			RuleInventory *inv = _invs->find((*i)->getSlot())->second;
 			Surface *frame = texture->getFrame((*i)->getRules()->getBigSprite());
@@ -252,6 +270,14 @@ BattleItem *Inventory::getSelectedItem() const
 }
 
 /**
+ * Handle timers.
+ */
+void Inventory::think()
+{
+	_warning->think();
+}
+
+/**
  * Blits the inventory elements.
  * @param surface Pointer to surface to blit onto.
  */
@@ -261,6 +287,7 @@ void Inventory::blit(Surface *surface)
 	_grid->blit(this);
 	_items->blit(this);
 	_selection->blit(this);
+	_warning->blit(this);
 	Surface::blit(surface);
 }
 
@@ -285,6 +312,7 @@ void Inventory::mouseClick(Action *action, State *state)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
+		BattleUnit *unit = _game->getSavedGame()->getBattleGame()->getSelectedUnit();
 		// Pickup item
 		if (_selItem == 0)
 		{
@@ -311,15 +339,81 @@ void Inventory::mouseClick(Action *action, State *state)
 			if (slot != "")
 			{
 				BattleItem *item = getItemInSlot(slot, x, y);
-				if ((item == 0 || item == _selItem) && _invs->find(slot)->second->fitItemInSlot(_selItem->getRules(), x, y))
+				// Put item in empty slot
+				if ((item == 0 || item == _selItem))
 				{
-					_selItem->setSlot(slot);
-					_selItem->setSlotX(x);
-					_selItem->setSlotY(y);
-					_selItem = 0;
-					_selection->clear();
-					drawItems();
-					_game->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(38)->play();
+					bool drop = _invs->find(slot)->second->fitItemInSlot(_selItem->getRules(), x, y);
+					if (_tu && drop && _selItem->getSlot() != slot)
+					{
+						int unitTu = unit->getTimeUnits();
+						int costTu = _invs->find(_selItem->getSlot())->second->getCost(slot);
+						if (unitTu < costTu)
+						{
+							_warning->showMessage(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS"));
+							drop = false;
+						}
+						else
+						{
+							unit->setTimeUnits(unitTu - costTu);
+						}
+					}
+					if (drop)
+					{
+						_selItem->setSlot(slot);
+						_selItem->setSlotX(x);
+						_selItem->setSlotY(y);
+						_selItem = 0;
+						_selection->clear();
+						drawItems();
+						_game->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(38)->play();
+					}
+				}
+				// Put item in weapon
+				else
+				{
+					bool wrong = true;
+					for (std::vector<std::string>::iterator i = item->getRules()->getCompatibleAmmo()->begin(); i != item->getRules()->getCompatibleAmmo()->end(); ++i)
+					{
+						if ((*i) == _selItem->getRules()->getType())
+						{
+							wrong = false;
+							if (item->getAmmoItem() != 0)
+							{
+								_warning->showMessage(_game->getLanguage()->getString("STR_WEAPON_ALREADY_LOADED"));
+							}
+							else
+							{
+								bool load = true;
+								if (_tu)
+								{
+									int unitTu = unit->getTimeUnits();
+									int costTu = 15;
+									if (unitTu < costTu)
+									{
+										_warning->showMessage(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS"));
+										load = false;
+									}
+									else
+									{
+										unit->setTimeUnits(unitTu - costTu);
+									}
+								}
+								if (load)
+								{
+									item->setAmmoItem(_selItem);
+									_selItem->setOwner(0);
+									_selItem = 0;
+									_selection->clear();
+									_game->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(17)->play();
+									drawItems();
+								}
+							}
+						}
+					}
+					if (wrong)
+					{
+						_warning->showMessage(_game->getLanguage()->getString("STR_WRONG_AMMUNITION_FOR_THIS_WEAPON"));
+					}
 				}
 			}
 		}
@@ -332,6 +426,46 @@ void Inventory::mouseClick(Action *action, State *state)
 		drawItems();
 	}
 	InteractiveSurface::mouseClick(action, state);
+}
+
+/**
+ * Unloads the selected weapon, placing the gun
+ * on the right hand and the ammo on the left hand.
+ */
+void Inventory::unload()
+{
+	BattleUnit *unit = _game->getSavedGame()->getBattleGame()->getSelectedUnit();
+
+	// Hands must be free
+	for (std::vector<BattleItem*>::iterator i = unit->getInventoryItems()->begin(); i != unit->getInventoryItems()->end(); ++i)
+	{
+		if (_invs->find((*i)->getSlot())->second->getType() == INV_HAND && (*i) != _selItem)
+			return;
+	}
+
+	if (_tu)
+	{
+		int unitTu = unit->getTimeUnits();
+		int costTu = 8;
+		if (unitTu < costTu)
+		{
+			_warning->showMessage(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS"));
+			return;
+		}
+		else
+		{
+			unit->setTimeUnits(unitTu - costTu);
+		}
+	}
+
+	_selItem->getAmmoItem()->setSlot("STR_LEFT_HAND");
+	_selItem->getAmmoItem()->setOwner(unit);
+	_selItem->setSlot("STR_RIGHT_HAND");
+	_selItem->setOwner(unit);
+	_selItem->setAmmoItem(0);
+	_selItem = 0;
+	_selection->clear();
+	drawItems();
 }
 
 }

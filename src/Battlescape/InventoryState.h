@@ -29,7 +29,6 @@ class Surface;
 class Text;
 class InteractiveSurface;
 class Inventory;
-class WarningMessage;
 class SavedBattleGame;
 
 /**
@@ -43,11 +42,11 @@ private:
 	InteractiveSurface *_btnOk, *_btnPrev, *_btnNext, *_btnUnload, *_btnGround, *_btnRank;
 	Surface *_selAmmo;
 	Inventory *_inv;
-	WarningMessage *_warning;
 	SavedBattleGame *_battleGame;
+	bool _tu;
 public:
 	/// Creates the Inventory state.
-	InventoryState(Game *game);
+	InventoryState(Game *game, bool tu);
 	/// Cleans up the Inventory state.
 	~InventoryState();
 	/// Updates the soldier info.
@@ -60,6 +59,8 @@ public:
 	void btnNextClick(Action *action);
 	/// Handler for clicking the Rank button.
 	void btnRankClick(Action *action);
+	/// Handler for clicking the Unload button.
+	void btnUnloadClick(Action *action);
 	/// Handler for clicking on the inventory.
 	void invClick(Action *action);
 };

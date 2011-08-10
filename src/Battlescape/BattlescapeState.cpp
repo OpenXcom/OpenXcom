@@ -524,7 +524,7 @@ void BattlescapeState::btnInventoryClick(Action *action)
 {
 	if (_battleGame->getSelectedUnit())
 	{
-		_game->pushState(new InventoryState(_game));
+		_game->pushState(new InventoryState(_game, true));
 	}
 }
 
