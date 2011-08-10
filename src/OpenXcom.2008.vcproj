@@ -875,6 +875,14 @@
 				RelativePath=".\Battlescape\UnitWalkBState.h"
 				>
 			</File>
+			<File
+				RelativePath=".\Battlescape\WarningMessage.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\WarningMessage.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Geoscape"

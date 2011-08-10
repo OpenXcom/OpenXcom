@@ -1076,40 +1076,87 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_ufos.insert(std::pair<std::string, RuleUfo*>("STR_BATTLESHIP", battleship));
 
 	// Add inventory
-
 	RuleInventory *rshoulder = new RuleInventory("STR_RIGHT_SHOULDER");
 	rshoulder->setX(16);
 	rshoulder->setY(40);
 	rshoulder->addSlot(0, 0);
 	rshoulder->addSlot(1, 0);
+	rshoulder->addCost("STR_GROUND", 4);
+	rshoulder->addCost("STR_RIGHT_HAND", 3);
+	rshoulder->addCost("STR_LEFT_HAND", 3);
+	rshoulder->addCost("STR_RIGHT_LEG", 12);
+	rshoulder->addCost("STR_LEFT_LEG", 12);
+	rshoulder->addCost("STR_BELT", 10);
+	rshoulder->addCost("STR_LEFT_SHOULDER", 8);
+	rshoulder->addCost("STR_BACKPACK", 16);
 
 	RuleInventory *lshoulder = new RuleInventory("STR_LEFT_SHOULDER");
 	lshoulder->setX(112);
 	lshoulder->setY(40);
 	lshoulder->addSlot(0, 0);
 	lshoulder->addSlot(1, 0);
+	lshoulder->addCost("STR_GROUND", 4);
+	lshoulder->addCost("STR_RIGHT_HAND", 3);
+	lshoulder->addCost("STR_LEFT_HAND", 3);
+	lshoulder->addCost("STR_RIGHT_LEG", 12);
+	lshoulder->addCost("STR_LEFT_LEG", 12);
+	lshoulder->addCost("STR_BELT", 10);
+	lshoulder->addCost("STR_RIGHT_SHOULDER", 8);
+	lshoulder->addCost("STR_BACKPACK", 16);
 
 	RuleInventory *rhand = new RuleInventory("STR_RIGHT_HAND");
 	rhand->setX(0);
 	rhand->setY(64);
 	rhand->setType(INV_HAND);
+	rhand->addCost("STR_GROUND", 2);
+	rhand->addCost("STR_LEFT_HAND", 4);
+	rhand->addCost("STR_RIGHT_LEG", 8);
+	rhand->addCost("STR_LEFT_LEG", 10);
+	rhand->addCost("STR_BELT", 8);
+	rhand->addCost("STR_RIGHT_SHOULDER", 10);
+	rhand->addCost("STR_LEFT_SHOULDER", 10);
+	rhand->addCost("STR_BACKPACK", 14);
 
 	RuleInventory *lhand = new RuleInventory("STR_LEFT_HAND");
 	lhand->setX(128);
 	lhand->setY(64);
 	lhand->setType(INV_HAND);
+	lhand->addCost("STR_GROUND", 2);
+	lhand->addCost("STR_RIGHT_HAND", 4);
+	lhand->addCost("STR_RIGHT_LEG", 10);
+	lhand->addCost("STR_LEFT_LEG", 8);
+	lhand->addCost("STR_BELT", 8);
+	lhand->addCost("STR_RIGHT_SHOULDER", 10);
+	lhand->addCost("STR_LEFT_SHOULDER", 10);
+	lhand->addCost("STR_BACKPACK", 14);
 
 	RuleInventory *rleg = new RuleInventory("STR_RIGHT_LEG");
 	rleg->setX(0);
 	rleg->setY(120);
 	rleg->addSlot(0, 0);
 	rleg->addSlot(1, 0);
+	rleg->addCost("STR_GROUND", 6);
+	rleg->addCost("STR_RIGHT_HAND", 4);
+	rleg->addCost("STR_LEFT_HAND", 6);
+	rleg->addCost("STR_LEFT_LEG", 10);
+	rleg->addCost("STR_BELT", 10);
+	rleg->addCost("STR_RIGHT_SHOULDER", 10);
+	rleg->addCost("STR_LEFT_SHOULDER", 10);
+	rleg->addCost("STR_BACKPACK", 18);
 
 	RuleInventory *lleg = new RuleInventory("STR_LEFT_LEG");
 	lleg->setX(128);
 	lleg->setY(120);
 	lleg->addSlot(0, 0);
 	lleg->addSlot(1, 0);
+	lleg->addCost("STR_GROUND", 6);
+	lleg->addCost("STR_RIGHT_HAND", 6);
+	lleg->addCost("STR_LEFT_HAND", 4);
+	lleg->addCost("STR_RIGHT_LEG", 10);
+	lleg->addCost("STR_BELT", 10);
+	lleg->addCost("STR_RIGHT_SHOULDER", 10);
+	lleg->addCost("STR_LEFT_SHOULDER", 10);
+	lleg->addCost("STR_BACKPACK", 18);
 
 	RuleInventory *backpack = new RuleInventory("STR_BACK_PACK");
 	backpack->setX(192);
@@ -1123,6 +1170,14 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	backpack->addSlot(0, 2);
 	backpack->addSlot(1, 2);
 	backpack->addSlot(2, 2);
+	backpack->addCost("STR_GROUND", 10);
+	backpack->addCost("STR_RIGHT_HAND", 8);
+	backpack->addCost("STR_LEFT_HAND", 8);
+	backpack->addCost("STR_RIGHT_LEG", 16);
+	backpack->addCost("STR_LEFT_LEG", 16);
+	backpack->addCost("STR_BELT", 12);
+	backpack->addCost("STR_RIGHT_SHOULDER", 14);
+	backpack->addCost("STR_LEFT_SHOULDER", 14);
 
 	RuleInventory *belt = new RuleInventory("STR_BELT");
 	belt->setX(192);
@@ -1133,11 +1188,27 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	belt->addSlot(3, 0);
 	belt->addSlot(0, 1);
 	belt->addSlot(3, 1);
+	belt->addCost("STR_GROUND", 6);
+	belt->addCost("STR_RIGHT_HAND", 4);
+	belt->addCost("STR_LEFT_HAND", 4);
+	belt->addCost("STR_RIGHT_LEG", 10);
+	belt->addCost("STR_LEFT_LEG", 10);
+	belt->addCost("STR_RIGHT_SHOULDER", 12);
+	belt->addCost("STR_LEFT_SHOULDER", 12);
+	belt->addCost("STR_BACKPACK", 16);
 
 	RuleInventory *ground = new RuleInventory("STR_GROUND");
 	ground->setX(0);
 	ground->setY(152);
 	ground->setType(INV_GROUND);
+	ground->addCost("STR_RIGHT_HAND", 8);
+	ground->addCost("STR_LEFT_HAND", 8);
+	ground->addCost("STR_RIGHT_LEG", 10);
+	ground->addCost("STR_LEFT_LEG", 10);
+	ground->addCost("STR_BELT", 12);
+	ground->addCost("STR_RIGHT_SHOULDER", 12);
+	ground->addCost("STR_LEFT_SHOULDER", 12);
+	ground->addCost("STR_BACKPACK", 20);
 
 	_invs.insert(std::pair<std::string, RuleInventory*>("STR_RIGHT_SHOULDER", rshoulder));
 	_invs.insert(std::pair<std::string, RuleInventory*>("STR_LEFT_SHOULDER", lshoulder));

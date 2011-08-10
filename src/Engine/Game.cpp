@@ -125,14 +125,7 @@ void Game::run()
 			_init = true;
 
 			// Unpress buttons
-			for (std::vector<Surface*>::iterator i = _states.back()->getSurfaces()->begin(); i < _states.back()->getSurfaces()->end(); ++i)
-			{
-				InteractiveSurface *s = dynamic_cast<InteractiveSurface*>(*i);
-				if (s != 0)
-				{
-					s->unpress(_states.back());
-				}
-			}
+			_states.back()->resetAll();
 
 			// Refresh mouse position
 			SDL_Event ev;

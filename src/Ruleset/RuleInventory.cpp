@@ -27,7 +27,7 @@ namespace OpenXcom
  * type of inventory section.
  * @param id String defining the id.
  */
-RuleInventory::RuleInventory(std::string id): _id(id), _x(0), _y(0), _tus(0), _type(INV_SLOT), _slots()
+RuleInventory::RuleInventory(std::string id): _id(id), _x(0), _y(0), _type(INV_SLOT), _slots(), _costs()
 {
 }
 
@@ -64,7 +64,7 @@ void RuleInventory::setX(int x)
 }
 
 /**
- * Returns the Yposition of the inventory section on the screen.
+ * Returns the Y position of the inventory section on the screen.
  * @return Position in pixels.
  */
 int RuleInventory::getY() const
@@ -73,7 +73,7 @@ int RuleInventory::getY() const
 }
 
 /**
- * Changes the X position of the inventory section on the screen.
+ * Changes the Y position of the inventory section on the screen.
  * @param y Position in pixels.
  */
 void RuleInventory::setY(int y)
@@ -187,6 +187,27 @@ bool RuleInventory::fitItemInSlot(RuleItem *item, int x, int y) const
 		}
 	}
 	return (foundSlots == totalSlots);
+}
+
+/**
+ * Adds a time unit cost to place an item from this
+ * inventory section in another section.
+ * @param slot The new section id.
+ * @param cost The time unit cost.
+ */
+void RuleInventory::addCost(std::string slot, int cost)
+{
+	_costs.insert(std::pair<std::string, int>(slot, cost));
+}
+
+/**
+ * Returns the time unit cost to place an item in another section.
+ * @param slot The new section id.
+ * @return The time unit cost.
+ */
+int RuleInventory::getCost(std::string slot) const
+{
+	return _costs.find(slot)->second;
 }
 
 }

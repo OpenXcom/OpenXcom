@@ -59,6 +59,7 @@
 #include "../Ruleset/RuleItem.h"
 #include "../Engine/Timer.h"
 #include "../Interface/FpsCounter.h"
+#include "WarningMessage.h"
 #include "../Menu/SaveGameState.h"
 
 namespace OpenXcom
@@ -109,8 +110,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 		_numVisibleUnit[i] = new NumberText(15, 12, 306, 132 - (i * 13));
 	}
 	_numVisibleUnit[9]->setX(304); // center number 10
-	_warningMessageBackground = new Surface(224, 24, 48, 176);
-	_txtWarningMessage = new Text(224, 24, 48, 184);
+	_warning = new WarningMessage(224, 24, 48, 176);
 
 	// Create soldier stats summary
 	_txtName = new Text(120, 10, 135, 176);
@@ -198,8 +198,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 		add(_btnVisibleUnit[i]);
 		add(_numVisibleUnit[i]);
 	}
-	add(_warningMessageBackground);
-	add(_txtWarningMessage);
+	add(_warning);
 
 	add(_txtDebug);
 
@@ -249,10 +248,8 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 		_numVisibleUnit[i]->setColor(16);
 		_numVisibleUnit[i]->setValue(i+1);
 	}
-	_txtWarningMessage->setColor(Palette::blockOffset(1)-1);
-	_txtWarningMessage->setHighContrast(true);
-	_txtWarningMessage->setAlign(ALIGN_CENTER);
-	_warningMessageBackground->setVisible(false);
+	_warning->setColor(Palette::blockOffset(2));
+	_warning->setTextColor(Palette::blockOffset(1)-1);
 
 	_txtName->setColor(Palette::blockOffset(8)-1);
 	_txtName->setHighContrast(true);
@@ -335,9 +332,9 @@ void BattlescapeState::think()
 
 	if (_popups.empty())
 	{
+		State::think();
 		_stateTimer->think(this, 0);
 		_animTimer->think(this, 0);
-		_map->think();
 		if (popped)
 		{
 			handleNonTargetAction();
@@ -398,7 +395,7 @@ void BattlescapeState::mapClick(Action *action)
 			//  -= fire weapon or throw =-
 			if (_battleGame->getSelectedUnit()->getTimeUnits() < _action.TU)
 			{
-				showWarningMessage("STR_NOT_ENOUGH_TIME_UNITS");
+				_warning->showMessage(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS"));
 				return;
 			}
 			_action.target = pos;
@@ -857,7 +854,7 @@ void BattlescapeState::handleNonTargetAction()
 			}
 			else
 			{
-				showWarningMessage("STR_NOT_ENOUGH_TIME_UNITS");
+				_warning->showMessage(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS"));
 			}
 		}
 		_action.type = BA_NONE;
@@ -1007,55 +1004,6 @@ void BattlescapeState::blinkVisibleUnitButtons()
 	color += delta;
 }
 
-
-/**
-  * Shift the red color of the warning message.
-  */
-void BattlescapeState::blinkWarningMessage()
-{
-	static int color = 32, delay = 12;
-
-	if (_warningMessageBackground->getVisible() == false)
-		return;
-
-	SDL_Rect square1;
-	square1.x = 0;
-	square1.y = 0;
-	square1.w = 224;
-	square1.h = 48;
-	_warningMessageBackground->drawRect(&square1, color);
-
-	if (color >= 44)
-	{
-		delay--;
-	}
-	else
-	{
-		color++;
-	}
-
-	if (delay == 0)
-	{
-		_warningMessageBackground->setVisible(false);
-		_txtWarningMessage->setVisible(false);
-		color = 32;
-		delay = 12;
-	}
-
-}
-
-/**
-  * Show warning message.
-  * @param message untranslated
-  */
-void BattlescapeState::showWarningMessage(std::string message)
-{
-	std::wstring messageText = _game->getLanguage()->getString(message);
-	_warningMessageBackground->setVisible(true);
-	_txtWarningMessage->setVisible(true);
-	_txtWarningMessage->setText(messageText);
-}
-
 /*
  * This function popups a context sensitive list of actions the user can choose from.
  * Some actions result in a change of gamestate.
@@ -1095,7 +1043,6 @@ void BattlescapeState::animate()
 	_map->animate();
 
 	blinkVisibleUnitButtons();
-	blinkWarningMessage();
 }
 
 /**
@@ -1189,7 +1136,7 @@ void BattlescapeState::popState()
 
 	if (_states.front()->getResult().length() > 0)
 	{
-		showWarningMessage(_states.front()->getResult());
+		_warning->showMessage(_game->getLanguage()->getString(_states.front()->getResult()));
 		actionFailed = true;
 	}
 	_states.pop_front();
@@ -1299,9 +1246,9 @@ bool BattlescapeState::checkReservedTU(BattleUnit *bu, int tu)
 	{
 		switch (_tuReserved)
 		{
-		case BA_SNAPSHOT: showWarningMessage("STR_TIME_UNITS_RESERVED_FOR_SNAP_SHOT"); break;
-		case BA_AUTOSHOT: showWarningMessage("STR_TIME_UNITS_RESERVED_FOR_AUTO_SHOT"); break;
-		case BA_AIMEDSHOT: showWarningMessage("STR_TIME_UNITS_RESERVED_FOR_AIMED_SHOT"); break;
+		case BA_SNAPSHOT: _warning->showMessage(_game->getLanguage()->getString("STR_TIME_UNITS_RESERVED_FOR_SNAP_SHOT")); break;
+		case BA_AUTOSHOT: _warning->showMessage(_game->getLanguage()->getString("STR_TIME_UNITS_RESERVED_FOR_AUTO_SHOT")); break;
+		case BA_AIMEDSHOT: _warning->showMessage(_game->getLanguage()->getString("STR_TIME_UNITS_RESERVED_FOR_AIMED_SHOT")); break;
 		}
 		return false;				
 	}

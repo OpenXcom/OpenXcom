@@ -41,6 +41,7 @@ class Window;
 class BattleState;
 class Timer;
 class ActionMenuItem;
+class WarningMessage;
 
 enum BattleActionType { BA_NONE, BA_PRIME, BA_THROW, BA_AUTOSHOT, BA_SNAPSHOT, BA_AIMEDSHOT, BA_STUN, BA_HIT };
 
@@ -78,8 +79,7 @@ private:
 	InteractiveSurface *_btnVisibleUnit[10];
 	NumberText *_numVisibleUnit[10];
 	BattleUnit *_visibleUnit[10];
-	Surface *_warningMessageBackground;
-	Text *_txtWarningMessage;
+	WarningMessage *_warning;
 
 	Text *_txtName;
 	NumberText *_numTimeUnits, *_numEnergy, *_numHealth, *_numMorale, *_numLayers, *_numAmmoLeft, *_numAmmoRight;
@@ -95,8 +95,6 @@ private:
 	void endTurn();
 	void handleItemClick(BattleItem *item);
 	void blinkVisibleUnitButtons();
-	void blinkWarningMessage();
-	void showWarningMessage(std::string message);
 	//Handles non target actions, like priming a grenade.
 	void handleNonTargetAction();
 	void setupCursor();

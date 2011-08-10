@@ -28,8 +28,9 @@ namespace OpenXcom
 class Surface;
 class Text;
 class InteractiveSurface;
-class SavedBattleGame;
 class Inventory;
+class WarningMessage;
+class SavedBattleGame;
 
 /**
  * Screen which displays soldier's inventory.
@@ -42,6 +43,7 @@ private:
 	InteractiveSurface *_btnOk, *_btnPrev, *_btnNext, *_btnUnload, *_btnGround, *_btnRank;
 	Surface *_selAmmo;
 	Inventory *_inv;
+	WarningMessage *_warning;
 	SavedBattleGame *_battleGame;
 public:
 	/// Creates the Inventory state.

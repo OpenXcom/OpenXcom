@@ -21,6 +21,7 @@
 
 #include <string>
 #include <vector>
+#include <map>
 
 namespace OpenXcom
 {
@@ -43,9 +44,10 @@ class RuleInventory
 {
 private:
 	std::string _id;
-	int _x, _y, _tus;
+	int _x, _y;
 	InventoryType _type;
 	std::vector<struct RuleSlot> _slots;
+	std::map<std::string, int> _costs;
 public:
 	static const int SLOT_W = 16;
 	static const int SLOT_H = 16;
@@ -77,6 +79,10 @@ public:
 	bool checkSlotInPosition(int *x, int *y) const;
 	/// Checks if an item fits in a slot.
 	bool fitItemInSlot(RuleItem *item, int x, int y) const;
+	/// Adds a time unit cost to the inventory.
+	void addCost(std::string slot, int cost);
+	/// Gets a certain cost in the inventory.
+	int getCost(std::string slot) const;
 };
 
 }

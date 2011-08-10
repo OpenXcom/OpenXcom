@@ -536,6 +536,9 @@
     <ClCompile Include="Battlescape\Inventory.cpp">
       <Filter>Battlescape</Filter>
     </ClCompile>
+    <ClCompile Include="Battlescape\WarningMessage.cpp">
+      <Filter>Battlescape</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1072,6 +1075,9 @@
       <Filter>Ruleset</Filter>
     </ClInclude>
     <ClInclude Include="Battlescape\Inventory.h">
+      <Filter>Battlescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Battlescape\WarningMessage.h">
       <Filter>Battlescape</Filter>
     </ClInclude>
   </ItemGroup>

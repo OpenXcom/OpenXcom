@@ -36,6 +36,7 @@
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/RuleInventory.h"
+#include "WarningMessage.h"
 #include "UnitInfoState.h"
 
 namespace OpenXcom
@@ -64,6 +65,7 @@ InventoryState::InventoryState(Game *game) : State(game)
 	_btnRank = new InteractiveSurface(26, 23, 0, 0);
 	_selAmmo = new Surface(RuleInventory::HAND_W * RuleInventory::SLOT_W, RuleInventory::HAND_H * RuleInventory::SLOT_H, 272, 88);
 	_inv = new Inventory(_game, 320, 200, 0, 0);
+	_warning = new WarningMessage(224, 24, 48, 176);
 
 	add(_bg);
 	add(_soldier);
@@ -79,6 +81,7 @@ InventoryState::InventoryState(Game *game) : State(game)
 	add(_btnRank);
 	add(_selAmmo);
 	add(_inv);
+	add(_warning);
 
 	// Set up objects
 	_game->getResourcePack()->getSurface("TAC01.SCR")->blit(_bg);
@@ -105,6 +108,9 @@ InventoryState::InventoryState(Game *game) : State(game)
 
 	_inv->drawGrid();
 	_inv->onMouseClick((ActionHandler)&InventoryState::invClick);
+
+	_warning->setColor(Palette::blockOffset(2));
+	_warning->setTextColor(Palette::blockOffset(1)-1);
 }
 
 /**

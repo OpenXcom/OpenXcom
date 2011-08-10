@@ -158,6 +158,8 @@
 		<Unit filename="Battlescape\UnitTurnBState.h" />
 		<Unit filename="Battlescape\UnitWalkBState.cpp" />
 		<Unit filename="Battlescape\UnitWalkBState.h" />
+		<Unit filename="Battlescape\WarningMessage.cpp" />
+		<Unit filename="Battlescape\WarningMessage.h" />
 		<Unit filename="Engine\Action.cpp" />
 		<Unit filename="Engine\Action.h" />
 		<Unit filename="Engine\CatFile.cpp" />
