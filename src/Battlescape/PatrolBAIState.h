@@ -19,7 +19,7 @@
 #ifndef OPENXCOM_PATROLBAISTATE_H
 #define OPENXCOM_PATROLBAISTATE_H
 
-#include "BattleAIstate.h"
+#include "BattleAIState.h"
 
 namespace OpenXcom
 {

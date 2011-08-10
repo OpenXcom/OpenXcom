@@ -19,7 +19,7 @@
 #ifndef OPENXCOM_AGGROBAISTATE_H
 #define OPENXCOM_AGGROBAISTATE_H
 
-#include "BattleAIstate.h"
+#include "BattleAIState.h"
 
 
 namespace OpenXcom
