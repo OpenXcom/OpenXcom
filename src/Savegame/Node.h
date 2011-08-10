@@ -21,6 +21,9 @@
 
 #include "../Battlescape/Position.h"
 
+#define CRAFTSEGMENT 1000
+#define UFOSEGMENT 2000
+
 namespace OpenXcom
 {
 
@@ -50,8 +53,10 @@ public:
 	Node(int id, Position pos, int segment, int type, int rank, int flags, int reserved, int priority);
 	/// Cleans up the Node.
 	~Node();
+	/// get the node's id
+	int getID() const;
 	/// get the node's paths
-	//NodeLink *getNodeLink(int index);
+	NodeLink *getNodeLink(int index);
 	/// Assigns a link to this node
 	void assignNodeLink(NodeLink *link, int index);
 	/// Gets node's rank.
@@ -60,6 +65,8 @@ public:
 	int getPriority() const;
 	/// Gets the node's position.
 	const Position& getPosition() const;
+	/// Gets the node's segment.
+	int getSegment() const;
 
 };
 

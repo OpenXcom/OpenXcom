@@ -16,32 +16,42 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_NODELINK_H
-#define OPENXCOM_NODELINK_H
+#ifndef OPENXCOM_AGGROBAISTATE_H
+#define OPENXCOM_AGGROBAISTATE_H
+
+#include "BattleAIstate.h"
+
 
 namespace OpenXcom
 {
 
-class Node;
+class SavedBattleGame;
+class BattleUnit;
+class BattlescapeState;
 
 /**
- * Represents a link to another node on the map.
+ * This class is used by the BattleUnit AI.
  */
-class NodeLink
+class AggroBAIState : public BattleAIState
 {
-private:
-	int _connectedNodeID;
-	int _distance;
-	int _travelType;
-	Node *_connectedNode;
+protected:
+	BattleUnit *_aggroTarget;
+	Position _lastKnownPosition;
+	int _timesNotSeen;
 public:
-	/// Creates a nodelink.
-	NodeLink(int connectedNodeID, int distance, int travelType);
-	/// Cleans up the nodelink.
-	~NodeLink();
-	/// Get the connected node id
-	int getConnectedNodeID() const;
-	void setConnectedNodeID(int id);
+	/// Creates a new AggroBAIState linked to the game and a certain unit.
+	AggroBAIState(SavedBattleGame *game, BattleUnit *unit);
+	/// Cleans up the AggroBAIState.
+	~AggroBAIState();
+	/// Enters the state.
+	void enter();
+	/// Exits the state.
+	void exit();
+	/// Runs state functionality every AI cycle.
+	void think(BattleAction *action);
+	/// Sets aggro target, triggered by reaction fire.
+	void setAggroTarget(BattleUnit *unit);
+
 };
 
 }

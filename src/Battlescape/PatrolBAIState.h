@@ -16,32 +16,37 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_NODELINK_H
-#define OPENXCOM_NODELINK_H
+#ifndef OPENXCOM_PATROLBAISTATE_H
+#define OPENXCOM_PATROLBAISTATE_H
+
+#include "BattleAIstate.h"
 
 namespace OpenXcom
 {
 
+class SavedBattleGame;
+class BattleUnit;
+class BattlescapeState;
 class Node;
 
 /**
- * Represents a link to another node on the map.
+ * This is the intial AI state of units, walking around and looking for intruders.
  */
-class NodeLink
+class PatrolBAIState : public BattleAIState
 {
-private:
-	int _connectedNodeID;
-	int _distance;
-	int _travelType;
-	Node *_connectedNode;
+protected:
+	Node *_fromNode, *_toNode;
 public:
-	/// Creates a nodelink.
-	NodeLink(int connectedNodeID, int distance, int travelType);
-	/// Cleans up the nodelink.
-	~NodeLink();
-	/// Get the connected node id
-	int getConnectedNodeID() const;
-	void setConnectedNodeID(int id);
+	/// Creates a new BattleAIState linked to the game and a certain unit.
+	PatrolBAIState(SavedBattleGame *game, BattleUnit *unit, Node *node);
+	/// Cleans up the BattleAIState.
+	~PatrolBAIState();
+	/// Enters the state.
+	void enter();
+	/// Exits the state.
+	void exit();
+	/// Runs state functionality every AI cycle.
+	void think(BattleAction *action);
 };
 
 }

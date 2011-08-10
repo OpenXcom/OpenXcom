@@ -63,7 +63,7 @@ public:
 	/// Calculate the field of view within range of a certain position.
 	void calculateFOV(const Position &position);
 	/// Check reaction fire.
-	bool checkReactionFire(BattleUnit *unit, BattleAction *action);
+	bool checkReactionFire(BattleUnit *unit, BattleAction *action, BattleUnit *potentialVictim = 0, bool recalculateFOV = true);
 	/// Recalculate lighting of the battlescape.
 	void calculateTerrainLighting();
 	/// Recalculate lighting of the battlescape.

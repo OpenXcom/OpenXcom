@@ -281,8 +281,8 @@ void Map::drawTerrain(Surface *surface)
 
 		// if the projectile is outside the viewport - center it back on it
 		convertVoxelToScreen(_projectile->getPosition(), &bulletPositionScreen);
-		if (bulletPositionScreen.x < 100 || bulletPositionScreen.x > surface->getWidth()-100 ||
-			bulletPositionScreen.y < 100 || bulletPositionScreen.y > surface->getHeight()-100  )
+		if (bulletPositionScreen.x < 50 || bulletPositionScreen.x > surface->getWidth()-50 ||
+			bulletPositionScreen.y < 50 || bulletPositionScreen.y > surface->getHeight()-50  )
 		{
 			centerOnPosition(Position(bulletLowX, bulletLowY, bulletLowZ), false);
 			_cameraFollowed = true;
@@ -334,7 +334,7 @@ void Map::drawTerrain(Surface *surface)
 						{
 							if (_cursorType == CT_NORMAL || _cursorType == CT_THROW)
 							{
-								if (unit)
+								if (unit && (unit->getVisible() || _save->getDebugMode()))
 									frameNumber = 1; // yellow box
 								else
 									frameNumber = 0; // red box
@@ -449,7 +449,7 @@ void Map::drawTerrain(Surface *surface)
 					}
 
 					// Draw soldier
-					if (unit && tile->isDiscovered(2))
+					if (unit && (unit->getVisible() || _save->getDebugMode()))
 					{
 						frame = _unitCache.at(unit->getId());
 						if (frame)
@@ -526,7 +526,7 @@ void Map::drawTerrain(Surface *surface)
 						{
 							if (_cursorType == CT_NORMAL || _cursorType == CT_THROW)
 							{
-								if (unit)
+								if (unit && (unit->getVisible() || _save->getDebugMode()))
 									frameNumber = 4; // yellow box
 								else
 									frameNumber = 3; // red box
@@ -815,7 +815,7 @@ void Map::scroll()
 	_mapOffsetX += _scrollX;
 	_mapOffsetY += _scrollY;
 
-	convertScreenToMap((getWidth() / 2), (BUTTONS_AREA / 2), &_centerX, &_centerY);
+	convertScreenToMap((getWidth() / 2), (getHeight() / 2), &_centerX, &_centerY);
 
 	// if center goes out of map bounds, hold the scrolling (may need further tweaking)
 	if (_centerX > _save->getWidth() - 1 || _centerY > _save->getLength() - 1 || _centerX < 0 || _centerY < 0)
@@ -898,9 +898,9 @@ void Map::centerOnPosition(const Position &mapPos, bool redraw)
 	convertMapToScreen(mapPos, &screenPos);
 
 	_mapOffsetX = -(screenPos.x - (getWidth() / 2));
-	_mapOffsetY = -(screenPos.y - (BUTTONS_AREA / 2));
+	_mapOffsetY = -(screenPos.y - (getHeight() / 2));
 
-	convertScreenToMap((getWidth() / 2), (BUTTONS_AREA / 2), &_centerX, &_centerY);
+	convertScreenToMap((getWidth() / 2), (getHeight() / 2), &_centerX, &_centerY);
 
 	_viewHeight = mapPos.z;
 

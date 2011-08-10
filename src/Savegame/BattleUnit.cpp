@@ -23,6 +23,7 @@
 #include "../Engine/Palette.h"
 #include "../Engine/Language.h"
 #include "../Battlescape/Pathfinding.h"
+#include "../Battlescape/BattleAIState.h"
 #include "Alien.h"
 #include "Soldier.h"
 #include "../Ruleset/RuleArmor.h"
@@ -36,7 +37,7 @@ namespace OpenXcom
  * @param rules Pointer to RuleUnit object.
  * @param faction Which faction the units belongs to.
  */
-BattleUnit::BattleUnit(Unit *unit, UnitFaction faction) : _unit(unit), _faction(faction), _id(0), _pos(Position()), _lastPos(Position()), _direction(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _cached(false), _kneeled(false), _dontReselect(false), _fire(0)
+BattleUnit::BattleUnit(Unit *unit, UnitFaction faction) : _unit(unit), _faction(faction), _id(0), _pos(Position()), _lastPos(Position()), _direction(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _cached(false), _kneeled(false), _dontReselect(false), _fire(0), _currentAIState(0), _visible(false)
 {
 	_tu = unit->getTimeUnits();
 	_energy = unit->getStamina();
@@ -631,6 +632,11 @@ bool BattleUnit::isOut() const
  */
 int BattleUnit::getActionTUs(BattleActionType actionType, BattleItem *item)
 {
+	if (item == 0)
+	{
+		return 0;
+	}
+
 	switch (actionType)
 	{
 		case BA_PRIME:
@@ -657,7 +663,7 @@ int BattleUnit::getActionTUs(BattleActionType actionType, BattleItem *item)
  */
 bool BattleUnit::spendTimeUnits(int tu, bool debugmode)
 {
-	if (debugmode) return true;
+	if (debugmode && _faction == FACTION_PLAYER) return true;
 
 	if (tu <= _tu)
 	{
@@ -714,6 +720,8 @@ bool BattleUnit::addToVisibleUnits(BattleUnit *unit)
 			return false;
 		}
 	}
+	if (getFaction() == FACTION_PLAYER)
+		unit->setVisible(true);
 	_visibleUnits.push_back(unit);
 	return true;
 }
@@ -732,6 +740,11 @@ std::vector<BattleUnit*> *BattleUnit::getVisibleUnits()
  */
 void BattleUnit::clearVisibleUnits()
 {
+	if (getFaction() == FACTION_PLAYER)
+	for (std::vector<BattleUnit*>::iterator i = _visibleUnits.begin(); i != _visibleUnits.end(); ++i)
+	{
+		(*i)->setVisible(false);
+	}
 	_visibleUnits.clear();
 }
 
@@ -914,6 +927,62 @@ int BattleUnit::getFire()
 std::vector<BattleItem*> *BattleUnit::getInventoryItems()
 {
 	return &_inventoryItems;
+}
+
+/**
+ * Let AI do their thing.
+ */
+void BattleUnit::think(BattleAction *action)
+{
+	_currentAIState->think(action);
+}
+
+/**
+ * Let AI do their thing.
+ */
+void BattleUnit::setAIState(BattleAIState *aiState)
+{
+	if (_currentAIState)
+	{
+		_currentAIState->exit();
+		delete _currentAIState;
+	}
+	_currentAIState = aiState;
+	_currentAIState->enter();
+}
+
+/**
+ * Let AI do their thing.
+ */
+BattleAIState *BattleUnit::getCurrentAIState()
+{
+	return _currentAIState;
+}
+
+/**
+ * Set whether this unit is visible.
+ * @param flag
+ */
+void BattleUnit::setVisible(bool flag)
+{
+	_visible = flag;
+}
+
+
+/**
+ * Get whether this unit is visible.
+ * @param flag
+ */
+bool BattleUnit::getVisible()
+{
+	if (getFaction() == FACTION_PLAYER)
+	{
+		return true;
+	}
+	else
+	{
+		return _visible;
+	}
 }
 
 }

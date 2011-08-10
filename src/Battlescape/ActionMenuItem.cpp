@@ -29,7 +29,7 @@ namespace OpenXcom
  * @param id the id.
  * @param bigFont pointer to the font.
  */
-ActionMenuItem::ActionMenuItem(State *state, int id, Font *bigFont) : InteractiveSurface(270, 40, 25, 160 - (id*40)), _id(id), _highlighted(false)
+ActionMenuItem::ActionMenuItem(State *state, int id, Font *bigFont, int x, int y) : InteractiveSurface(270, 40, x + 25, y - (id*40)), _id(id), _highlighted(false)
 {
 	_txtDescription = new Text(150, 20, 16, 13);
 	_txtDescription->setFonts(bigFont, 0);

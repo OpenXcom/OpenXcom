@@ -692,6 +692,22 @@
 				>
 			</File>						
 			<File
+				RelativePath=".\Battlescape\AggroBAIState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\AggroBAIState.h"
+				>
+			</File>						
+			<File
+				RelativePath=".\Battlescape\BattleAIState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\BattleAIState.h"
+				>
+			</File>						
+			<File
 				RelativePath=".\Battlescape\BattlescapeGenerator.cpp"
 				>
 			</File>
@@ -793,6 +809,14 @@
 			</File>
 			<File
 				RelativePath=".\Battlescape\PathfindingNode.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\PatrolBAIState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\PatrolBAIState.h"
 				>
 			</File>
 			<File

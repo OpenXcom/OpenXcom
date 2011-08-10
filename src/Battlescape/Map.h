@@ -37,9 +37,6 @@ class BulletSprite;
 class Projectile;
 class Explosion;
 
-// below Y 140 the buttons area starts
-#define BUTTONS_AREA 140
-
 enum CursorType { CT_NONE, CT_NORMAL, CT_AIM, CT_PSI, CT_WAYPOINT, CT_THROW };
 
 /**

@@ -21,6 +21,8 @@
 #include <set>
 #include "TerrainModifier.h"
 #include "SDL.h"
+#include "BattleAIState.h"
+#include "AggroBAIState.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
 #include "../Savegame/BattleUnit.h"
@@ -209,7 +211,7 @@ bool TerrainModifier::calculateFOV(BattleUnit *unit)
 
 	// calculate a visible units checksum - if it changed during this step, the soldier stops walking
 	for (std::vector<BattleUnit*>::iterator i = unit->getVisibleUnits()->begin(); i != unit->getVisibleUnits()->end(); ++i)
-		visibleUnitsChecksum += (*i)->getId();
+		visibleUnitsChecksum += (*i)->getId()+1;
 
 	unit->clearVisibleUnits();
 	
@@ -230,10 +232,8 @@ bool TerrainModifier::calculateFOV(BattleUnit *unit)
 			double vx, vy, vz;
 			int tileX, tileY, tileZ;
 
-			// globalshade goes from 0 to 15 (day -> night), while the viewdistance goes from 20 to 9 (day -> night)
-			objectViewDistance = 20 - _save->getGlobalShade() + 4;
-			if (objectViewDistance > 20)
-				objectViewDistance = 20;
+			// shade goes from 0 to 15 (day -> night), while the viewdistance goes from 20 to 9 (day -> night)
+			objectViewDistance = 20;
 
 			unitViewDistance = objectViewDistance;
 			while (objectViewDistance > 0)
@@ -258,7 +258,7 @@ bool TerrainModifier::calculateFOV(BattleUnit *unit)
 				// vertical blockage by ceilings/floors
 				objectViewDistance -= verticalBlockage(origin, dest, DT_NONE); // line of sight is all or nothing
 
-				if (objectViewDistance > 0 && dest->getShade() < 10)
+				if (objectViewDistance > 0 && dest->getShade() < 10) // shade lower than 10 allows to see a unit
 				{
 					ret = tilesAffected.insert(dest); // check if we had this tile already
 					if (ret.second)
@@ -277,6 +277,11 @@ bool TerrainModifier::calculateFOV(BattleUnit *unit)
 						}
 					}
 				}
+				if (dest->getShade() > 7) // shade higher than 7 decreases the viewdistance
+				{
+					objectViewDistance--;
+				}
+				// smoke blocks the viewdistance of units only
 				unitViewDistance -= int(dest->getSmoke() / 3);
 				origin = dest;
 			}
@@ -285,7 +290,7 @@ bool TerrainModifier::calculateFOV(BattleUnit *unit)
 
 	int newChecksum = 0;
 	for (std::vector<BattleUnit*>::iterator i = unit->getVisibleUnits()->begin(); i != unit->getVisibleUnits()->end(); ++i)
-		newChecksum += (*i)->getId();
+		newChecksum += (*i)->getId()+1;
 
 	return visibleUnitsChecksum < newChecksum;
 }
@@ -317,18 +322,33 @@ bool TerrainModifier::checkForVisibleUnits(BattleUnit *unit, Tile *tile)
 	Position originVoxel, targetVoxel;
 	originVoxel = Position((unit->getPosition().x * 16) + 8, (unit->getPosition().y * 16) + 8, unit->getPosition().z*24);
 	originVoxel.z += -tile->getTerrainLevel();
-	originVoxel.z += unit->isKneeled()?unit->getUnit()->getKneelHeight():unit->getUnit()->getStandHeight();
+	if (unit->isKneeled())
+	{
+		originVoxel.z += unit->getUnit()->getKneelHeight();
+	}
+	else
+	{
+		originVoxel.z += unit->getUnit()->getStandHeight();
+	}
 	bool unitSeen = false;
 
 	targetVoxel = Position((bu->getPosition().x * 16) + 8, (bu->getPosition().y * 16) + 8, bu->getPosition().z*24);
 	int targetMinHeight = targetVoxel.z - _save->getTile(bu->getPosition())->getTerrainLevel();
-	int targetMaxHeight = targetMinHeight + bu->isKneeled()?bu->getUnit()->getKneelHeight():bu->getUnit()->getStandHeight();
+	int targetMaxHeight;
+	if (bu->isKneeled())
+	{
+		 targetMaxHeight = targetMinHeight + bu->getUnit()->getKneelHeight();
+	}
+	else
+	{
+		targetMaxHeight = targetMinHeight + bu->getUnit()->getStandHeight();
+	}
 
 	// scan ray from top to bottom
 	for (int i = targetMaxHeight; i > targetMinHeight; i-=2)
 	{
 		targetVoxel.z = i;
-		int test = calculateLine(originVoxel, targetVoxel, false, 0, 0);
+		int test = calculateLine(originVoxel, targetVoxel, false, 0, unit);
 		Position hitPosition = Position(targetVoxel.x/16, targetVoxel.y/16, targetVoxel.z/24);
 		if (test == -1 || (test == 4 && bu->getPosition() == hitPosition))
 		{
@@ -363,8 +383,9 @@ void TerrainModifier::calculateFOV(const Position &position)
  * If it's higher, a shot is fired when enough time units a weapon and ammo available.
  * @param unit
  * @param action
+ * @param faceToWards a unit faces towards the sniper when it shoots
  */
-bool TerrainModifier::checkReactionFire(BattleUnit *unit, BattleAction *action)
+bool TerrainModifier::checkReactionFire(BattleUnit *unit, BattleAction *action, BattleUnit *potentialVictim, bool recalculateFOV)
 {
 	double highestReactionScore = 0;
 	action->actor = 0;
@@ -375,11 +396,27 @@ bool TerrainModifier::checkReactionFire(BattleUnit *unit, BattleAction *action)
 		return false;
 	}
 
+	if (potentialVictim && RNG::generate(0, 4) == 1 && potentialVictim->getFaction() == FACTION_HOSTILE)
+	{
+		potentialVictim->lookAt(unit->getPosition());
+		while (potentialVictim->getStatus() == STATUS_TURNING)
+		{
+			recalculateFOV = true;
+			potentialVictim->turn();
+		}
+	}
+
 	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
-		if ((*i)->getFaction() != _save->getSide() && !(*i)->isOut())
+		int x = abs(unit->getPosition().x - (*i)->getPosition().x);
+		int y = abs(unit->getPosition().y - (*i)->getPosition().y);
+		int distance = int(floor(sqrt(float(x*x + y*y)) + 0.5));
+		if (distance < 19 && (*i)->getFaction() != _save->getSide() && !(*i)->isOut())
 		{
-			calculateFOV(*i);
+			if (recalculateFOV)
+			{
+				calculateFOV(*i);
+			}
 			for (std::vector<BattleUnit*>::iterator j = (*i)->getVisibleUnits()->begin(); j != (*i)->getVisibleUnits()->end(); ++j)
 			{
 				if ((*j) == unit && (*i)->getReactionScore() > highestReactionScore)
@@ -401,7 +438,32 @@ bool TerrainModifier::checkReactionFire(BattleUnit *unit, BattleAction *action)
 		int tu = action->actor->getActionTUs(action->type, action->weapon);
 		if (action->weapon && action->weapon->getAmmoItem() && action->weapon->getAmmoItem()->getAmmoQuantity())
 		{
-			return action->actor->spendTimeUnits(tu, _save->getDebugMode());
+			if (action->actor->spendTimeUnits(tu, _save->getDebugMode()))
+			{
+				// if the target is hostile, it will aggro
+				if (unit->getFaction() == FACTION_HOSTILE)
+				{
+					AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(unit->getCurrentAIState());
+					if (aggro == 0)
+					{
+						aggro = new AggroBAIState(_save, unit);
+						unit->setAIState(aggro);
+					}
+					aggro->setAggroTarget(action->actor);
+				}
+				// if the shooter is hostile, he will aggro
+				if (action->actor->getFaction() == FACTION_HOSTILE)
+				{
+					AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(action->actor->getCurrentAIState());
+					if (aggro == 0)
+					{
+						aggro = new AggroBAIState(_save, action->actor);
+						action->actor->setAIState(aggro);
+					}
+					aggro->setAggroTarget(unit);
+				}
+				return true;
+			}
 		}
 	}
 

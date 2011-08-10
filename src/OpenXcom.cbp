@@ -112,6 +112,10 @@
 		<Unit filename="Battlescape\ActionMenuItem.h" />
 		<Unit filename="Battlescape\ActionMenuState.cpp" />
 		<Unit filename="Battlescape\ActionMenuState.h" />
+		<Unit filename="Battlescape\AggroBAIState.cpp" />
+		<Unit filename="Battlescape\AggroBAIState.h" />
+		<Unit filename="Battlescape\BattleAIState.cpp" />
+		<Unit filename="Battlescape\BattleAIState.h" />
 		<Unit filename="Battlescape\BattleState.cpp" />
 		<Unit filename="Battlescape\BattleState.h" />
 		<Unit filename="Battlescape\BattlescapeGenerator.cpp" />
@@ -138,6 +142,8 @@
 		<Unit filename="Battlescape\Pathfinding.h" />
 		<Unit filename="Battlescape\PathfindingNode.cpp" />
 		<Unit filename="Battlescape\PathfindingNode.h" />
+		<Unit filename="Battlescape\PatrolBAIState.cpp" />
+		<Unit filename="Battlescape\PatrolBAIState.h" />
 		<Unit filename="Battlescape\Position.cpp" />
 		<Unit filename="Battlescape\Position.h" />
 		<Unit filename="Battlescape\PrimeGrenadeState.cpp" />

@@ -45,7 +45,7 @@ private:
 	std::string _inventorySlot;
 	int _inventoryX, _inventoryY;
 	BattleItem *_ammoItem;
-	int _itemProperty[3];
+	int _explodeTurn, _ammoQuantity;
 public:
 	/// Creates a item of the specified type.
 	BattleItem(RuleItem *rules);

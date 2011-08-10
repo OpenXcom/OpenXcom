@@ -47,6 +47,7 @@
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
 #include "../Engine/CrossPlatform.h"
+#include "PatrolBAIState.h"
 
 namespace OpenXcom
 {
@@ -308,10 +309,11 @@ void BattlescapeGenerator::addAlien(RuleAlien *rules, RuleArmor *armor, NodeRank
 	Node *node;
 	bool bFound = false;
 	unit->setId(_unitCount++);
+	int lastSegment = -1;
 
-	// find a place to spawn, going from highest priority to lowest
+	// find a place to spawn, going from lowest priority to heighest
 	// some randomness is added
-	for (int priority=10; priority > 0 && !bFound; priority--)
+	for (int priority = 1; priority <= 10 && !bFound; priority++)
 	{
 		for (std::vector<Node*>::iterator i = _save->getNodes()->begin(); i != _save->getNodes()->end() && !bFound; ++i)
 		{
@@ -319,10 +321,13 @@ void BattlescapeGenerator::addAlien(RuleAlien *rules, RuleArmor *armor, NodeRank
 			if (node->getRank() == rank
 				&& node->getPriority() == priority
 				&& _save->selectUnit(node->getPosition()) == 0
-				&& (RNG::generate(0,2) == 1))
+				&& (RNG::generate(0,2) == 1)
+				&& lastSegment != node->getSegment())
 			{
+				lastSegment = node->getSegment();
 				unit->setPosition(node->getPosition());
 				_save->getTile(node->getPosition())->setUnit(unit);
+				unit->setAIState(new PatrolBAIState(_game->getSavedGame()->getBattleGame(), unit, node));
 				bFound = true;
 			}
 		}
@@ -330,7 +335,7 @@ void BattlescapeGenerator::addAlien(RuleAlien *rules, RuleArmor *armor, NodeRank
 
 	// second try in case we still haven't found a place to spawn
 	// this time without randomness
-	for (int priority = 10; priority > 0 && !bFound; priority--)
+	for (int priority = 1; priority <= 10 && !bFound; priority++)
 	{
 		for (std::vector<Node*>::iterator i = _save->getNodes()->begin(); i != _save->getNodes()->end() && !bFound; ++i)
 		{
@@ -343,6 +348,7 @@ void BattlescapeGenerator::addAlien(RuleAlien *rules, RuleArmor *armor, NodeRank
 				unit->setPosition(node->getPosition());
 				_save->getTile(node->getPosition())->setUnit(unit);
 				bFound = true;
+				unit->setAIState(new PatrolBAIState(_game->getSavedGame()->getBattleGame(), unit, node));
 				break;
 			}
 		}
@@ -400,6 +406,7 @@ void BattlescapeGenerator::generateMap()
 	int blocksToDo = 0;
 	MapBlock* blocks[10][10];
 	bool landingzone[10][10];
+	int segments[10][10];
 	int craftX = 0, craftY = 0;
 	int ufoX = 0, ufoY = 0;
 	bool placed = false;
@@ -519,16 +526,18 @@ void BattlescapeGenerator::generateMap()
 	}
 
 	/* now load them up */
+	int segment = 0;
 	for (int itY = 0; itY < 10; itY++)
 	{
 		for (int itX = 0; itX < 10; itX++)
 		{
+			segments[itX][itY] = segment;
 			if (blocks[itX][itY] != 0 && blocks[itX][itY] != dummy)
 			{
 				loadMAP(blocks[itX][itY], itX * 10, itY * 10, _terrain);
 				if (!landingzone[itX][itY])
 				{
-					loadRMP(blocks[itX][itY], itX * 10, itY * 10);
+					loadRMP(blocks[itX][itY], itX * 10, itY * 10, segment++);
 				}
 			}
 		}
@@ -542,7 +551,14 @@ void BattlescapeGenerator::generateMap()
 			_save->getMapDataSets()->push_back(*i);
 		}
 		loadMAP(ufoMap, ufoX * 10, ufoY * 10, _ufo->getRules()->getBattlescapeTerrainData());
-		loadRMP(ufoMap, ufoX * 10, ufoY * 10);
+		loadRMP(ufoMap, ufoX * 10, ufoY * 10, UFOSEGMENT);
+		for (int i = 0; i < ufoMap->getWidth() / 10; ++i)
+		{
+			for (int j = 0; j < ufoMap->getLength() / 10; j++)
+			{
+				segments[ufoX + i][ufoY + j] = UFOSEGMENT;
+			}
+		}
 	}
 
 	if (_craft != 0)
@@ -553,7 +569,48 @@ void BattlescapeGenerator::generateMap()
 			_save->getMapDataSets()->push_back(*i);
 		}
 		loadMAP(craftMap, craftX * 10, craftY * 10, _craft->getRules()->getBattlescapeTerrainData(), true);
-		loadRMP(craftMap, craftX * 10, craftY * 10);
+		loadRMP(craftMap, craftX * 10, craftY * 10, CRAFTSEGMENT);
+		for (int i = 0; i < craftMap->getWidth() / 10; ++i)
+		{
+			for (int j = 0; j < craftMap->getLength() / 10; j++)
+			{
+				segments[craftX + i][craftY + j] = CRAFTSEGMENT;
+			}
+		}
+	}
+
+	/* attach nodelinks to each other */
+	for (std::vector<Node*>::iterator i = _save->getNodes()->begin(); i != _save->getNodes()->end(); ++i)
+	{
+		Node *node = (*i);
+		int segmentX = node->getPosition().x / 10;
+		int segmentY = node->getPosition().y / 10;
+		int neighbourSegments[4] = {segments[segmentX+1][segmentY], segments[segmentX][segmentY+1], segments[segmentX-1][segmentY], segments[segmentX][segmentY-1] };
+		int neighbourDirections[4] = { -2, -3, -4, -5 };
+		int neighbourDirectionsInverted[4] = { -4, -5, -2, -3 };
+		for (int j = 0; j < 5; j++)
+		{
+			for (int n = 0; n < 4; n++)
+			{
+				if (node->getNodeLink(j)->getConnectedNodeID() == neighbourDirections[n])
+				{
+					for (std::vector<Node*>::iterator k = _save->getNodes()->begin(); k != _save->getNodes()->end(); ++k)
+					{
+						if ((*k)->getSegment() == neighbourSegments[n])
+						{
+							for (int l = 0; l < 5; l++)
+							{
+								if ((*k)->getNodeLink(l)->getConnectedNodeID() == neighbourDirectionsInverted[n])
+								{
+									(*k)->getNodeLink(l)->setConnectedNodeID(node->getID());
+									node->getNodeLink(j)->setConnectedNodeID((*k)->getID());
+								}
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 
 	/* TODO: map generation for terror sites */
@@ -651,9 +708,10 @@ int BattlescapeGenerator::loadMAP(MapBlock *mapblock, int xoff, int yoff, RuleTe
  * @param mapblock pointer to MapBlock.
  * @param xoff mapblock offset in X direction
  * @param yoff mapblock offset in Y direction
+ * @param segment mapblock segment
  * @sa http://www.ufopaedia.org/index.php?title=ROUTES
  */
-void BattlescapeGenerator::loadRMP(MapBlock *mapblock, int xoff, int yoff)
+void BattlescapeGenerator::loadRMP(MapBlock *mapblock, int xoff, int yoff, int segment)
 {
 	int id = 0;
 	char value[24];
@@ -671,7 +729,7 @@ void BattlescapeGenerator::loadRMP(MapBlock *mapblock, int xoff, int yoff)
 
 	while (mapFile.read((char*)&value, sizeof(value)))
 	{
-		Node *node = new Node(nodeOffset + id, Position(xoff + (int)value[1], yoff + (mapblock->getLength() - 1 - (int)value[0]), mapblock->getHeight() - 1 - (int)value[2]), (int)value[3], (int)value[19], (int)value[20], (int)value[21], (int)value[22], (int)value[23]);
+		Node *node = new Node(nodeOffset + id, Position(xoff + (int)value[1], yoff + (mapblock->getLength() - 1 - (int)value[0]), mapblock->getHeight() - 1 - (int)value[2]), segment, (int)value[19], (int)value[20], (int)value[21], (int)value[22], (int)value[23]);
 		for (int j=0;j<5;++j)
 		{
 			int connectID = (int)((signed char)value[4 + j*3]);
