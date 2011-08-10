@@ -16,9 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#include <sstream>
+#define _USE_MATH_DEFINES
 #include <cmath>
+#include <sstream>
 #include "Map.h"
 #include "BattlescapeState.h"
 #include "NextTurnState.h"
