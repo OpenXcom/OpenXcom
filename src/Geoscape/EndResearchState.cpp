@@ -6,10 +6,29 @@
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
+#include "../Ruleset/RuleResearchProject.h"
+#include "NewPossibleResearchState.h"
+#include <algorithm>
 
 namespace OpenXcom
 {
-EndResearchState::EndResearchState(Game * game, Base * base) : State (game), _base(base)
+extern void GetAvailableResearchProjects (std::vector<RuleResearchProject *> & projects, Game * game, Base * base);
+void getDependableResearch (std::vector<RuleResearchProject *> & dependables, const RuleResearchProject *research, Game * game, Base * base)
+{
+  std::vector<RuleResearchProject *> possibleProjects;
+  GetAvailableResearchProjects(possibleProjects, game, base);
+  for(std::vector<RuleResearchProject *>::iterator iter = possibleProjects.begin ();
+      iter != possibleProjects.end ();
+      iter++)
+    {
+      if (std::find((*iter)->getDependencys().begin (),
+		    (*iter)->getDependencys().end (),
+		    research) != (*iter)->getDependencys().end ())
+	dependables.push_back(*iter);
+    }
+}
+
+EndResearchState::EndResearchState(Game * game, Base * base, const RuleResearchProject * research) : State (game), _base(base), _research(research)
 {
 	_screen = false;
 
@@ -33,8 +52,10 @@ EndResearchState::EndResearchState(Game * game, Base * base) : State (game), _ba
 
 	_btnOk->setColor(Palette::blockOffset(8)+8);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
+	_btnOk->onMouseClick((ActionHandler)&EndResearchState::btnOkClick);
 	_btnReport->setColor(Palette::blockOffset(8)+8);
 	_btnReport->setText(_game->getLanguage()->getString("STR_VIEW_REPORTS"));
+	_btnReport->onMouseClick((ActionHandler)&EndResearchState::btnReportClick);
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setBig();
@@ -44,7 +65,16 @@ EndResearchState::EndResearchState(Game * game, Base * base) : State (game), _ba
 
 void EndResearchState::btnOkClick(Action *action)
 {
-	  _game->popState();
+	  std::vector<RuleResearchProject *> newPossibleResearch;
+	  getDependableResearch (newPossibleResearch, _research, _game, _base);
+	  if (newPossibleResearch.empty ())
+	  {
+	  	  _game->popState();
+	  }
+	  else
+	  {
+	  	  _game->pushState (new NewPossibleResearchState(_game, _base, newPossibleResearch));
+	  }
 }
 
 void EndResearchState::btnReportClick(Action *action)

@@ -9,6 +9,7 @@ class Window;
 class TextButton;
 class Text;
 class Base;
+class RuleResearchProject;
 
 class EndResearchState : public State
 {
@@ -16,8 +17,9 @@ class EndResearchState : public State
 	Text *_txtTitle;
      	TextButton *_btnReport, *_btnOk;
 	Base * _base;
+	const RuleResearchProject * _research;
 public:
-	EndResearchState(Game * game, Base * base);
+	EndResearchState(Game * game, Base * base, const RuleResearchProject * research);
 	void btnOkClick(Action *action);
 	void btnReportClick(Action *action);
 };

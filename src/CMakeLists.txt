@@ -216,6 +216,8 @@ set ( geoscape_src
   Geoscape/GeoscapeState.h
   Geoscape/EndResearchState.h
   Geoscape/EndResearchState.cpp
+  Geoscape/NewPossibleResearchState.h
+  Geoscape/NewPossibleResearchState.cpp
 )
 
 set ( interface_src 

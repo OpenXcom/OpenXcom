@@ -760,7 +760,7 @@ void GeoscapeState::time1Day()
 		{
 			(*i)->RemoveResearch(*iter);
 			const RuleResearchProject * research = (*iter)->GetRuleResearchProject ();
-			_game->pushState(new EndResearchState (_game, *i));
+			_game->pushState(new EndResearchState (_game, *i, research));
 			delete(*iter);
 		}
 
