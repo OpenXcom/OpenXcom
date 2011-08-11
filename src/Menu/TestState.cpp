@@ -62,7 +62,7 @@ void BmpToFont(const std::string &font)
 {
 	std::string dat = "./" + font + ".DAT";
 	std::string bmp = "./" + font + ".BMP";
-	SDL_Surface *s = SDL_LoadBMP(bmp.c_str());
+	//SDL_Surface *s = SDL_LoadBMP(bmp.c_str());
 }
 
 /**

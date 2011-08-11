@@ -207,6 +207,8 @@ void RuleInventory::addCost(std::string slot, int cost)
  */
 int RuleInventory::getCost(std::string slot) const
 {
+	if (slot == _id)
+		return 0;
 	return _costs.find(slot)->second;
 }
 

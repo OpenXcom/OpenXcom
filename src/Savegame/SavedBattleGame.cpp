@@ -17,7 +17,6 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #include "SavedBattleGame.h"
 #include "SavedGame.h"
 #include "Tile.h"

@@ -41,7 +41,7 @@ namespace OpenXcom
 /**
  * Sets up an ExplosionBState.
  */
-ExplosionBState::ExplosionBState(BattlescapeState *parent, Position center, BattleItem *item, BattleUnit *unit, Tile *tile) : BattleState(parent), _center(center), _item(item), _unit(unit), _tile(tile)
+ExplosionBState::ExplosionBState(BattlescapeState *parent, Position center, BattleItem *item, BattleUnit *unit, Tile *tile) : BattleState(parent), _unit(unit), _center(center), _item(item), _tile(tile)
 {
 
 }

@@ -56,8 +56,6 @@ void create()
  */
 void load(const std::string &filename)
 {
-	unsigned int size = 0;
-
 	std::string s = Options::getUserFolder() + filename + ".cfg";
 	std::ifstream fin(s.c_str());
 	if (!fin)

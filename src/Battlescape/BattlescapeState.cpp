@@ -524,7 +524,7 @@ void BattlescapeState::btnInventoryClick(Action *action)
 {
 	if (_battleGame->getSelectedUnit())
 	{
-		_game->pushState(new InventoryState(_game, true));
+		_game->pushState(new InventoryState(_game, !_battleGame->getDebugMode()));
 	}
 }
 
@@ -947,7 +947,7 @@ void BattlescapeState::updateSoldierInfo(BattleUnit *battleUnit)
 	if (leftHandItem)
 	{
 		leftHandItem->getRules()->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _btnLeftHandItem);
-		if (leftHandItem->getAmmoItem())
+		if (leftHandItem->getRules()->getBattleType() == BT_FIREARM)
 			_numAmmoLeft->setValue(leftHandItem->getAmmoItem()->getAmmoQuantity());
 	}
 	BattleItem *rightHandItem = _battleGame->getItemFromUnit(battleUnit, "STR_RIGHT_HAND");
@@ -956,7 +956,7 @@ void BattlescapeState::updateSoldierInfo(BattleUnit *battleUnit)
 	if (rightHandItem)
 	{
 		rightHandItem->getRules()->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _btnRightHandItem);
-		if (rightHandItem->getAmmoItem())
+		if (rightHandItem->getRules()->getBattleType() == BT_FIREARM)
 			_numAmmoRight->setValue(rightHandItem->getAmmoItem()->getAmmoQuantity());
 	}
 
@@ -1249,6 +1249,7 @@ bool BattlescapeState::checkReservedTU(BattleUnit *bu, int tu)
 		case BA_SNAPSHOT: _warning->showMessage(_game->getLanguage()->getString("STR_TIME_UNITS_RESERVED_FOR_SNAP_SHOT")); break;
 		case BA_AUTOSHOT: _warning->showMessage(_game->getLanguage()->getString("STR_TIME_UNITS_RESERVED_FOR_AUTO_SHOT")); break;
 		case BA_AIMEDSHOT: _warning->showMessage(_game->getLanguage()->getString("STR_TIME_UNITS_RESERVED_FOR_AIMED_SHOT")); break;
+		default: ;
 		}
 		return false;				
 	}

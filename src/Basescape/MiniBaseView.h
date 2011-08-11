@@ -36,7 +36,7 @@ class SurfaceSet;
 class MiniBaseView : public InteractiveSurface
 {
 private:
-	static const int MAX_BASES = 8;
+	static const unsigned int MAX_BASES = 8;
 	static const int MINI_SIZE = 14;
 
 	std::vector<Base*> *_bases;

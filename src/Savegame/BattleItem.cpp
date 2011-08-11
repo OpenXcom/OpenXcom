@@ -27,7 +27,7 @@ namespace OpenXcom
  * Initializes a item of the specified type.
  * @param rules Pointer to ruleset.
  */
-BattleItem::BattleItem(RuleItem *rules) : _rules(rules), _owner(0), _previousOwner(0), _ammoItem(0), _inventoryX(0), _inventoryY(0)
+BattleItem::BattleItem(RuleItem *rules) : _rules(rules), _owner(0), _previousOwner(0), _inventorySlot(""), _inventoryX(0), _inventoryY(0), _ammoItem(0)
 {
 	_itemProperty[0] = 0;
 	_itemProperty[1] = 0;
