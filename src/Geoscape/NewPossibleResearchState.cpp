@@ -8,6 +8,7 @@
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
 #include "../Ruleset/RuleResearchProject.h"
+#include "../Basescape/ResearchState.h"
 
 namespace OpenXcom
 {
@@ -40,7 +41,7 @@ NewPossibleResearchState::NewPossibleResearchState(Game * game, Base * base, con
 	_btnOk->onMouseClick((ActionHandler)&NewPossibleResearchState::btnOkClick);
 	_btnSelect->setColor(Palette::blockOffset(8)+8);
 	_btnSelect->setText(_game->getLanguage()->getString("STR_ALLOCATE_RESEARCH"));
-	_btnOk->onMouseClick((ActionHandler)&NewPossibleResearchState::btnSelectClick);
+	_btnSelect->onMouseClick((ActionHandler)&NewPossibleResearchState::btnSelectClick);
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setBig();
@@ -65,9 +66,12 @@ NewPossibleResearchState::NewPossibleResearchState(Game * game, Base * base, con
 
 void NewPossibleResearchState::btnOkClick(Action *action)
 {
+	_game->popState ();
+	_game->popState ();
 }
 
 void NewPossibleResearchState::btnSelectClick(Action *action)
 {
+	_game->pushState (new ResearchState(_game, _base));
 }
 }
