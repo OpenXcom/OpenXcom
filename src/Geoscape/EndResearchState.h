@@ -8,14 +8,16 @@ class Game;
 class Window;
 class TextButton;
 class Text;
+class Base;
 
 class EndResearchState : public State
 {
 	Window *_window;
 	Text *_txtTitle;
      	TextButton *_btnReport, *_btnOk;
+	Base * _base;
 public:
-	EndResearchState(Game * game);
+	EndResearchState(Game * game, Base * base);
 	void btnOkClick(Action *action);
 	void btnReportClick(Action *action);
 };

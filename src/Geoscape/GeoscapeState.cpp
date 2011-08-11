@@ -69,6 +69,7 @@
 #include "../Ufopaedia/Ufopaedia.h"
 #include "../Savegame/ResearchProject.h"
 #include "EndResearchState.h"
+#include "../Ruleset/RuleResearchProject.h"
 
 namespace OpenXcom
 {
@@ -759,7 +760,7 @@ void GeoscapeState::time1Day()
 		{
 			(*i)->RemoveResearch(*iter);
 			const RuleResearchProject * research = (*iter)->GetRuleResearchProject ();
-			_game->pushState(new EndResearchState (_game));
+			_game->pushState(new EndResearchState (_game, *i));
 			delete(*iter);
 		}
 

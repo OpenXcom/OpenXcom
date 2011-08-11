@@ -9,7 +9,7 @@
 
 namespace OpenXcom
 {
-EndResearchState::EndResearchState(Game * game) : State (game)
+EndResearchState::EndResearchState(Game * game, Base * base) : State (game), _base(base)
 {
 	_screen = false;
 
