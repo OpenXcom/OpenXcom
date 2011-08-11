@@ -53,7 +53,7 @@ ResearchProjectState::ResearchProjectState(Game *game, Base *base, ResearchProje
 {
   buildUi ();
 }
-
+std::vector<Text*> texts;
 void ResearchProjectState::buildUi ()
 {
 	int width = 220;
@@ -105,18 +105,25 @@ void ResearchProjectState::buildUi ()
 	add(btn4);
 	
 	// Set up objects
-	Uint8 c = Palette::blockOffset(13)+8;
-	_window->setColor(c);
+	_window->setColor(Palette::blockOffset(13)+8);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
 	_btnOk->setColor(Palette::blockOffset(13)+13);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ResearchProjectState::btnOkClick);
 
-	_txtTitle->setSecondaryColor(c);
+	_txtTitle->setColor(Palette::blockOffset(13)+8);
 	_txtTitle->setText(_rule ? _rule->getName() : _project->GetRuleResearchProject ()->getName());
+
+	 _txtAvailableScientist->setColor(Palette::blockOffset(13)+8);
+	 _txtAvailableSpace->setColor(Palette::blockOffset(13)+8);
+	 _txtAssigned->setColor(Palette::blockOffset(13)+8);
 
 	_txtMore->setText(_game->getLanguage()->getString("STR_INCREASE"));
 	_txtLess->setText(_game->getLanguage()->getString("STR_DECREASE"));
+
+	_txtMore->setColor(Palette::blockOffset(13)+8);
+	_txtLess->setColor(Palette::blockOffset(13)+8);
+
 	_btnMore->copy(_window);
 	_btnLess->copy(_window);
 
@@ -125,8 +132,8 @@ void ResearchProjectState::buildUi ()
 	else
 	  SetAssignedScientist(_project->GetAssigned ());
 
-	_btnMore->setColor(c);
-	_btnLess->setColor(c);
+	// _btnMore->setColor(Palette::blockOffset(13)+8);
+	// _btnLess->setColor(Palette::blockOffset(13)+8);
 	_btnMore->onMouseClick((ActionHandler)&ResearchProjectState::btnMoreClick);
 	_btnLess->onMouseClick((ActionHandler)&ResearchProjectState::btnLessClick);
 }
