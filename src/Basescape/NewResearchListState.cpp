@@ -87,7 +87,7 @@ NewResearchListState::NewResearchListState(Game *game, Base *base, ResearchState
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setText(L"NEW RESEARCH PROJECT"/*_game->getLanguage()->getString("STR_CURRENT_RESEARCH")*/);
+	_txtTitle->setText(_game->getLanguage()->getString("STR_NEW_PROJECT"));
 
 	_lstResearch->setColor(Palette::blockOffset(13));
 

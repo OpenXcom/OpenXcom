@@ -115,8 +115,8 @@ void ResearchProjectState::buildUi ()
 	_txtTitle->setSecondaryColor(c);
 	_txtTitle->setText(_rule ? _rule->getName() : _project->GetRuleResearchProject ()->getName());
 
-	_txtMore->setText(L"More");
-	_txtLess->setText(L"Less");
+	_txtMore->setText(_game->getLanguage()->getString("STR_INCREASE"));
+	_txtLess->setText(_game->getLanguage()->getString("STR_DECREASE"));
 	_btnMore->copy(_window);
 	_btnLess->copy(_window);
 
@@ -147,11 +147,11 @@ void ResearchProjectState::SetAssignedScientist(int nb)
 	std::wstringstream s1;
 	int freeScientist = _base->getAvailableScientists();
 	int freeSpaceLab = getFreeLabSpace(_base);
-	s1 << L"AVAILABLE SCIENTIST>" << freeScientist - nb;
+	s1 << _game->getLanguage()->getString("STR_SCIENTISTS_AVAILABLE") << freeScientist - nb;
 	std::wstringstream s2;
-	s2 << L"FREE LAB SPACE>" << freeSpaceLab - nb;
+	s2 << _game->getLanguage()->getString("STR_LABORATORY_SPACE_AVAILABLE") << freeSpaceLab - nb;
 	std::wstringstream s3;
-	s3 << L"Assigned Scientist>" << nb;
+	s3 << _game->getLanguage()->getString("STR_SCIENTISTS_ALLOCATED") << nb;
 	_txtAvailableScientist->setText(s1.str());
 	_txtAvailableSpace->setText(s2.str());
 	_txtAssigned->setText(s3.str());
