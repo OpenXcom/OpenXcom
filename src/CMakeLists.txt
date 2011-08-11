@@ -214,6 +214,8 @@ set ( geoscape_src
   Geoscape/DogfightState.h
   Geoscape/GeoscapeState.cpp
   Geoscape/GeoscapeState.h
+  Geoscape/EndResearchState.h
+  Geoscape/EndResearchState.cpp
 )
 
 set ( interface_src 

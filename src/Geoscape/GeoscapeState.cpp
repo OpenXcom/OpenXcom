@@ -68,6 +68,7 @@
 #include "../Battlescape/BattlescapeGenerator.h"
 #include "../Ufopaedia/Ufopaedia.h"
 #include "../Savegame/ResearchProject.h"
+#include "EndResearchState.h"
 
 namespace OpenXcom
 {
@@ -757,6 +758,8 @@ void GeoscapeState::time1Day()
 		for(std::vector<ResearchProject*>::const_iterator iter = finished.begin (); iter != finished.end (); ++iter)
 		{
 			(*i)->RemoveResearch(*iter);
+			const RuleResearchProject * research = (*iter)->GetRuleResearchProject ();
+			_game->pushState(new EndResearchState (_game));
 			delete(*iter);
 		}
 
