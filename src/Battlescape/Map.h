@@ -37,9 +37,6 @@ class BulletSprite;
 class Projectile;
 class Explosion;
 
-// below Y 140 the buttons area starts
-#define BUTTONS_AREA 140
-
 enum CursorType { CT_NONE, CT_NORMAL, CT_AIM, CT_PSI, CT_WAYPOINT, CT_THROW };
 
 /**
@@ -48,6 +45,10 @@ enum CursorType { CT_NONE, CT_NORMAL, CT_AIM, CT_PSI, CT_WAYPOINT, CT_THROW };
 class Map : public InteractiveSurface
 {
 private:
+	static const int SCROLL_AMOUNT = 20;
+	static const int SCROLL_BORDER = 5;
+	static const int SCROLL_DIAGONAL_EDGE = 60;
+	static const bool RMB_SCROLL = false;
 	SavedBattleGame *_save;
 	ResourcePack *_res;
 	Timer *_scrollTimer;

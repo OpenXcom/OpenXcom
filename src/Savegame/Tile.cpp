@@ -138,8 +138,8 @@ int Tile::getTUCost(int part, MovementType movementType)
  */
 bool Tile::hasNoFloor()
 {
-	if (_objects[O_FLOOR])
-		return _objects[O_FLOOR]->isNoFloor();
+	if (_objects[MapData::O_FLOOR])
+		return _objects[MapData::O_FLOOR]->isNoFloor();
 	else
 		return true;
 }
@@ -150,8 +150,8 @@ bool Tile::hasNoFloor()
  */
 bool Tile::isBigWall()
 {
-	if (_objects[O_OBJECT])
-		return _objects[O_OBJECT]->isBigWall();
+	if (_objects[MapData::O_OBJECT])
+		return _objects[MapData::O_OBJECT]->isBigWall();
 	else
 		return false;
 }
@@ -164,10 +164,10 @@ int Tile::getTerrainLevel()
 {
 	int level = 0;
 
-	if (_objects[O_FLOOR])
-		level = _objects[O_FLOOR]->getTerrainLevel();
-	if (_objects[O_OBJECT])
-		level += _objects[O_OBJECT]->getTerrainLevel();
+	if (_objects[MapData::O_FLOOR])
+		level = _objects[MapData::O_FLOOR]->getTerrainLevel();
+	if (_objects[MapData::O_OBJECT])
+		level += _objects[MapData::O_OBJECT]->getTerrainLevel();
 
 	return level;
 }
@@ -190,10 +190,10 @@ int Tile::getFootstepSound()
 {
 	int sound = 0;
 
-	if (_objects[O_FLOOR])
-		sound = _objects[O_FLOOR]->getFootstepSound();
-	if (_objects[O_OBJECT])
-		sound = _objects[O_OBJECT]->getFootstepSound();
+	if (_objects[MapData::O_FLOOR])
+		sound = _objects[MapData::O_FLOOR]->getFootstepSound();
+	if (_objects[MapData::O_OBJECT])
+		sound = _objects[MapData::O_OBJECT]->getFootstepSound();
 
 	return sound;
 }
@@ -391,10 +391,10 @@ void Tile::destroy(int part)
 		}
 	}
 	/* check if the floor on the lowest level is gone */
-	if (part == O_FLOOR && getPosition().z == 0 && _objects[O_FLOOR] == 0)
+	if (part == MapData::O_FLOOR && getPosition().z == 0 && _objects[MapData::O_FLOOR] == 0)
 	{
 		/* replace with scourched earth */
-		setMapData(MapDataSet::getScourgedEarthTile(), O_FLOOR);
+		setMapData(MapDataSet::getScourgedEarthTile(), MapData::O_FLOOR);
 	}
 
 

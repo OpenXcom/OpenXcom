@@ -25,8 +25,6 @@
 #include "../Ruleset/MapData.h"
 #include "BattleUnit.h"
 
-#define LIGHTLAYERS 3
-
 namespace OpenXcom
 {
 
@@ -42,6 +40,7 @@ class BattleItem;
 class Tile
 {
 protected:
+	static const int LIGHTLAYERS = 3;
 	MapData *_objects[4];
 	int _mdsID[4], _mdID[4];
 	int _currentFrame[4];

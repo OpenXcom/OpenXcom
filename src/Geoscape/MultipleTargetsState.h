@@ -37,6 +37,11 @@ class GeoscapeState;
 class MultipleTargetsState : public State
 {
 private:
+	static const int OUTER_MARGIN = 3;
+	static const int INNER_MARGIN = 4;
+	static const int BORDER = 5;
+	static const int BUTTON_HEIGHT = 16;
+
 	std::vector<Target*> _targets;
 	Craft *_craft;
 	GeoscapeState *_state;

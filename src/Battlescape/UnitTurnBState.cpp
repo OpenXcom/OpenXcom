@@ -37,7 +37,7 @@ namespace OpenXcom
 /**
  * Sets up an UnitTurnBState.
  */
-UnitTurnBState::UnitTurnBState(BattlescapeState *parent) : BattleState(parent)
+UnitTurnBState::UnitTurnBState(BattlescapeState *parent, BattleAction action) : BattleState(parent), _action(action)
 {
 	
 }
@@ -52,9 +52,9 @@ UnitTurnBState::~UnitTurnBState()
 
 void UnitTurnBState::init()
 {
-	_parent->setStateInterval(DEFAULT_WALK_SPEED);
-	_unit = _parent->getGame()->getSavedGame()->getBattleGame()->getSelectedUnit();
-	_unit->lookAt(_parent->getAction()->target);
+	_parent->setStateInterval(BattlescapeState::DEFAULT_WALK_SPEED);
+	_unit = _action.actor;
+	_unit->lookAt(_action.target);
 	if (_unit->getStatus() != STATUS_TURNING)
 	{
 		// try to open a door

@@ -39,7 +39,7 @@ private:
 	ActionMenuItem *_actionMenu[5];
 public:
 	/// Creates the Action Menu state.
-	ActionMenuState(Game *game, BattleAction *action);
+	ActionMenuState(Game *game, BattleAction *action, int x, int y);
 	/// Cleans up the Action Menu state.
 	~ActionMenuState();
 	/// Handler for clicking a action menu item.

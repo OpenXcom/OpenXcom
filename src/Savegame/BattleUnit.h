@@ -32,6 +32,9 @@ class Tile;
 class BattleItem;
 class Unit;
 class RuleUnit;
+class BattleAIState;
+class BattlescapeState;
+class Node;
 
 enum UnitStatus {STATUS_STANDING, STATUS_WALKING, STATUS_TURNING, STATUS_AIMING, STATUS_FALLING, STATUS_DEAD, STATUS_UNCONSCIOUS};
 enum UnitFaction {FACTION_PLAYER, FACTION_HOSTILE, FACTION_NEUTRAL};
@@ -62,6 +65,8 @@ private:
 	int _fatalWounds[6];
 	int _fire;
 	std::vector<BattleItem*> _inventoryItems;
+	BattleAIState *_currentAIState;
+	bool _visible;
 public:
 	/// Creates a BattleUnit.
 	BattleUnit(Unit *_unit, UnitFaction faction);
@@ -183,6 +188,17 @@ public:
 	int getFire();
 	/// Get the list of items in the inventory.
 	std::vector<BattleItem*> *getInventoryItems();
+	/// Let AI do their thing.
+	void think(BattleAction *action);
+	/// Get current AI state.
+	BattleAIState *getCurrentAIState();
+	/// Set next AI State
+	void setAIState(BattleAIState *aiState);
+	/// Set whether this unit is visible
+	void setVisible(bool flag);
+	/// Get whether this unit is visible
+	bool getVisible();
+
 };
 
 }

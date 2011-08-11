@@ -64,7 +64,7 @@ void UnitFallBState::init()
 	}
 	else
 	{
-		_parent->setStateInterval(DEFAULT_ANIM_SPEED);
+		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
 		_unit->lookAt(3);
 	}
 	if (_unit->getHealth() == 0)

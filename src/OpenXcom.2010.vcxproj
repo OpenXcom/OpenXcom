@@ -136,6 +136,8 @@
     <ClCompile Include="Basescape\TransfersState.cpp" />
     <ClCompile Include="Battlescape\ActionMenuItem.cpp" />
     <ClCompile Include="Battlescape\ActionMenuState.cpp" />
+    <ClCompile Include="Battlescape\AggroBAIState.cpp" />
+    <ClCompile Include="Battlescape\BattleAIState.cpp" />
     <ClCompile Include="Battlescape\BattlescapeGenerator.cpp" />
     <ClCompile Include="Battlescape\BattlescapeState.cpp" />
     <ClCompile Include="Battlescape\BattleState.cpp" />
@@ -149,6 +151,7 @@
     <ClCompile Include="Battlescape\NextTurnState.cpp" />
     <ClCompile Include="Battlescape\Pathfinding.cpp" />
     <ClCompile Include="Battlescape\PathfindingNode.cpp" />
+    <ClCompile Include="Battlescape\PatrolBAIState.cpp" />
     <ClCompile Include="Battlescape\Position.cpp" />
     <ClCompile Include="Battlescape\PrimeGrenadeState.cpp" />
     <ClCompile Include="Battlescape\Projectile.cpp" />
@@ -318,6 +321,8 @@
     <ClInclude Include="Basescape\TransfersState.h" />
     <ClInclude Include="Battlescape\ActionMenuItem.h" />
     <ClInclude Include="Battlescape\ActionMenuState.h" />
+    <ClInclude Include="Battlescape\AggroBAIState.h" />
+    <ClInclude Include="Battlescape\BattleAIState.h" />
     <ClInclude Include="Battlescape\BattlescapeGenerator.h" />
     <ClInclude Include="Battlescape\BattlescapeState.h" />
     <ClInclude Include="Battlescape\BattleState.h" />
@@ -331,6 +336,7 @@
     <ClInclude Include="Battlescape\NextTurnState.h" />
     <ClInclude Include="Battlescape\Pathfinding.h" />
     <ClInclude Include="Battlescape\PathfindingNode.h" />
+    <ClInclude Include="Battlescape\PatrolBAIState.h" />
     <ClInclude Include="Battlescape\Position.h" />
     <ClInclude Include="Battlescape\PrimeGrenadeState.h" />
     <ClInclude Include="Battlescape\Projectile.h" />

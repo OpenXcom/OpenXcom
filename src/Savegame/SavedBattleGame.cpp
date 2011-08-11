@@ -458,6 +458,11 @@ BattleUnit *SavedBattleGame::selectNextPlayerUnit(bool checkReselect)
 	{
 		bNext = true;
 	}
+	else
+	if (checkReselect)
+	{
+		_selectedUnit->dontReselect();
+	}
 
 	do
 	{

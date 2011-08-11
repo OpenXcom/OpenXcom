@@ -16,34 +16,52 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_NODELINK_H
-#define OPENXCOM_NODELINK_H
+#include "BattleAIState.h"
 
 namespace OpenXcom
 {
 
-class Node;
-
 /**
- * Represents a link to another node on the map.
+ * Sets up a BattleAIState.
+ * @param parent pointer to the parent state.
  */
-class NodeLink
+BattleAIState::BattleAIState(SavedBattleGame *game, BattleUnit *unit) : _game(game), _unit(unit)
 {
-private:
-	int _connectedNodeID;
-	int _distance;
-	int _travelType;
-	Node *_connectedNode;
-public:
-	/// Creates a nodelink.
-	NodeLink(int connectedNodeID, int distance, int travelType);
-	/// Cleans up the nodelink.
-	~NodeLink();
-	/// Get the connected node id
-	int getConnectedNodeID() const;
-	void setConnectedNodeID(int id);
-};
 
 }
 
-#endif
+/**
+ * Deletes the BattleAIState.
+ */
+BattleAIState::~BattleAIState()
+{
+	
+}
+
+/**
+ * Enters the current AI state.
+ */
+void BattleAIState::enter()
+{
+
+}
+
+
+/**
+ * Exits the current AI state.
+ */
+void BattleAIState::exit()
+{
+
+}
+
+/**
+ * Runs any code the state needs to keep updating every
+ * AI cycle.
+ */
+void BattleAIState::think(BattleAction *action)
+{
+
+}
+
+}

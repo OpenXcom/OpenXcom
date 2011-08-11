@@ -28,6 +28,7 @@
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
+#include "../Savegame/Tile.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/SoundSet.h"
 #include "../Engine/Sound.h"
@@ -63,7 +64,7 @@ void ProjectileFlyBState::init()
 	BattleItem *weapon = _action.weapon;
 	BattleItem *projectileItem = 0;
 
-	_parent->setStateInterval(DEFAULT_BULLET_SPEED);
+	_parent->setStateInterval(BattlescapeState::DEFAULT_BULLET_SPEED);
 	_unit = _action.actor;
 	_ammo = weapon->getAmmoItem();
 	if (_unit->isOut())
@@ -173,7 +174,8 @@ void ProjectileFlyBState::init()
 	}
 
 	BattleAction action;
-	if (_parent->getGame()->getSavedGame()->getBattleGame()->getTerrainModifier()->checkReactionFire(_unit, &action))
+	BattleUnit *potentialVictim = _parent->getGame()->getSavedGame()->getBattleGame()->getTile(_action.target)->getUnit();
+	if (_parent->getGame()->getSavedGame()->getBattleGame()->getTerrainModifier()->checkReactionFire(_unit, &action, potentialVictim, false))
 	{
 		_parent->statePushBack(new ProjectileFlyBState(_parent, action));
 	}
@@ -199,7 +201,8 @@ void ProjectileFlyBState::think()
 			BattleItem *item = _parent->getMap()->getProjectile()->getItem();
 			_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(38)->play();
 
-			if (ALT_GRENADE && item->getRules()->getBattleType() == BT_GRENADE && item->getExplodeTurn() > 0 && item->getExplodeTurn() <= _parent->getGame()->getSavedGame()->getBattleGame()->getTurn())
+			if (BattlescapeState::ALT_GRENADE && item->getRules()->getBattleType() == BT_GRENADE && item->getExplodeTurn() > 0 &&
+				item->getExplodeTurn() <= _parent->getGame()->getSavedGame()->getBattleGame()->getTurn())
 			{
 				// it's a hot grenade to explode immediatly
 				_parent->statePushNext(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(-1), item, _action.actor));

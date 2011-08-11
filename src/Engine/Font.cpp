@@ -22,9 +22,6 @@
 namespace OpenXcom
 {
 
-// Fonts start with this character
-#define FIRST_CHAR '!'
-
 /**
  * Initializes the font with a blank surface sized big enough to
  * contain all the characters.

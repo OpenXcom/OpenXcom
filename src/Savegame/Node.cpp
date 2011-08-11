@@ -54,6 +54,12 @@ Node::~Node()
 	delete _nodeLinks[4];
 }
 
+/// get the node's id
+int Node::getID() const
+{
+	return _id;
+}
+
 /**
  * Assign a node link to this node.
  * @param link pointer to the link
@@ -89,6 +95,24 @@ int Node::getPriority() const
 const Position& Node::getPosition() const
 {
 	return _pos;
+}
+
+/**
+ * Gets the Node's segment.
+ * @return segment
+ */
+int Node::getSegment() const
+{
+	return _segment;
+}
+
+/**
+ * Gets the Node's nodelink.
+ * @return segment
+ */
+NodeLink *Node::getNodeLink(int index)
+{
+	return _nodeLinks[index];
 }
 
 }

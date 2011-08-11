@@ -23,6 +23,8 @@
 #include "Pathfinding.h"
 #include "BattlescapeState.h"
 #include "Map.h"
+#include "BattleAIState.h"
+#include "AggroBAIState.h"
 #include "../Engine/Game.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/SavedGame.h"
@@ -40,7 +42,7 @@ namespace OpenXcom
 /**
  * Sets up an UnitWalkBState.
  */
-UnitWalkBState::UnitWalkBState(BattlescapeState *parent) : BattleState(parent)
+UnitWalkBState::UnitWalkBState(BattlescapeState *parent, BattleAction action) : BattleState(parent), _action(action)
 {
 	
 }
@@ -61,12 +63,12 @@ void UnitWalkBState::init()
 	}
 	else
 	{
-		_parent->setStateInterval(DEFAULT_WALK_SPEED);
+		_parent->setStateInterval(BattlescapeState::DEFAULT_WALK_SPEED);
 	}
-	_unit = _parent->getGame()->getSavedGame()->getBattleGame()->getSelectedUnit();
+	_unit = _action.actor;
 	_pf = _parent->getGame()->getSavedGame()->getBattleGame()->getPathfinding();
 	_terrain = _parent->getGame()->getSavedGame()->getBattleGame()->getTerrainModifier();
-	_target = _parent->getAction()->target;
+	_target = _action.target;
 	_pf->calculate(_unit, _target);
 }
 
@@ -116,6 +118,15 @@ void UnitWalkBState::think()
 			if (unitspotted)
 			{
 				_pf->abortPath();
+				if (_unit->getFaction() == FACTION_HOSTILE)
+				{
+					AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(_unit->getCurrentAIState());
+					if (aggro == 0)
+					{
+						_unit->setAIState(new AggroBAIState(_parent->getGame()->getSavedGame()->getBattleGame(), _unit));
+					}
+					_parent->handleAI(_unit);
+				}
 				return;
 			}
 			BattleAction action;

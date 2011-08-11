@@ -45,11 +45,6 @@
 #include "../Interface/Text.h"
 #include "../Interface/Cursor.h"
 
-#define SCROLL_AMOUNT 20
-#define SCROLL_BORDER 5
-#define SCROLL_DIAGONAL_EDGE 60
-#define RMB_SCROLL false
-
 /*
   1) Map origin is left corner.
   2) X axis goes downright. (width of the map)
@@ -281,8 +276,8 @@ void Map::drawTerrain(Surface *surface)
 
 		// if the projectile is outside the viewport - center it back on it
 		convertVoxelToScreen(_projectile->getPosition(), &bulletPositionScreen);
-		if (bulletPositionScreen.x < 100 || bulletPositionScreen.x > surface->getWidth()-100 ||
-			bulletPositionScreen.y < 100 || bulletPositionScreen.y > surface->getHeight()-100  )
+		if (bulletPositionScreen.x < 50 || bulletPositionScreen.x > surface->getWidth()-50 ||
+			bulletPositionScreen.y < 50 || bulletPositionScreen.y > surface->getHeight()-50  )
 		{
 			centerOnPosition(Position(bulletLowX, bulletLowY, bulletLowZ), false);
 			_cameraFollowed = true;
@@ -334,7 +329,7 @@ void Map::drawTerrain(Surface *surface)
 						{
 							if (_cursorType == CT_NORMAL || _cursorType == CT_THROW)
 							{
-								if (unit)
+								if (unit && (unit->getVisible() || _save->getDebugMode()))
 									frameNumber = 1; // yellow box
 								else
 									frameNumber = 0; // red box
@@ -449,7 +444,7 @@ void Map::drawTerrain(Surface *surface)
 					}
 
 					// Draw soldier
-					if (unit && tile->isDiscovered(2))
+					if (unit && (unit->getVisible() || _save->getDebugMode()))
 					{
 						frame = _unitCache.at(unit->getId());
 						if (frame)
@@ -526,7 +521,7 @@ void Map::drawTerrain(Surface *surface)
 						{
 							if (_cursorType == CT_NORMAL || _cursorType == CT_THROW)
 							{
-								if (unit)
+								if (unit && (unit->getVisible() || _save->getDebugMode()))
 									frameNumber = 4; // yellow box
 								else
 									frameNumber = 3; // red box
@@ -815,7 +810,7 @@ void Map::scroll()
 	_mapOffsetX += _scrollX;
 	_mapOffsetY += _scrollY;
 
-	convertScreenToMap((getWidth() / 2), (BUTTONS_AREA / 2), &_centerX, &_centerY);
+	convertScreenToMap((getWidth() / 2), (getHeight() / 2), &_centerX, &_centerY);
 
 	// if center goes out of map bounds, hold the scrolling (may need further tweaking)
 	if (_centerX > _save->getWidth() - 1 || _centerY > _save->getLength() - 1 || _centerX < 0 || _centerY < 0)
@@ -898,9 +893,9 @@ void Map::centerOnPosition(const Position &mapPos, bool redraw)
 	convertMapToScreen(mapPos, &screenPos);
 
 	_mapOffsetX = -(screenPos.x - (getWidth() / 2));
-	_mapOffsetY = -(screenPos.y - (BUTTONS_AREA / 2));
+	_mapOffsetY = -(screenPos.y - (getHeight() / 2));
 
-	convertScreenToMap((getWidth() / 2), (BUTTONS_AREA / 2), &_centerX, &_centerY);
+	convertScreenToMap((getWidth() / 2), (getHeight() / 2), &_centerX, &_centerY);
 
 	_viewHeight = mapPos.z;
 
@@ -1076,7 +1071,7 @@ bool Map::cacheTileSprites(int i)
 	{
 
 		/* draw a floor object on the cache (if any) */
-		object = tile->getMapData(O_FLOOR);
+		object = tile->getMapData(MapData::O_FLOOR);
 
 		if (object)
 		{
@@ -1091,7 +1086,7 @@ bool Map::cacheTileSprites(int i)
 			}
 
 			// Draw floor
-			frame = tile->getSprite(O_FLOOR);
+			frame = tile->getSprite(MapData::O_FLOOR);
 			frame->setX(0);
 			frame->setY(-object->getYOffset());
 			frame->blit(_tileFloorCache[i]);
@@ -1104,7 +1099,7 @@ bool Map::cacheTileSprites(int i)
 		}
 
 		/* draw terrain objects on the cache (if any) */
-		if (tile->getMapData(O_WESTWALL) != 0 || tile->getMapData(O_NORTHWALL) != 0 || tile->getMapData(O_OBJECT) != 0 || tile->getTopItemSprite() != -1)
+		if (tile->getMapData(MapData::O_WESTWALL) != 0 || tile->getMapData(MapData::O_NORTHWALL) != 0 || tile->getMapData(MapData::O_OBJECT) != 0 || tile->getTopItemSprite() != -1)
 		{
 			if (_tileWallsCache[i] == 0)
 			{
@@ -1117,24 +1112,24 @@ bool Map::cacheTileSprites(int i)
 			}
 
 			// Draw west wall
-			object = tile->getMapData(O_WESTWALL);
+			object = tile->getMapData(MapData::O_WESTWALL);
 			if (object)
 			{
-				frame = tile->getSprite(O_WESTWALL);
+				frame = tile->getSprite(MapData::O_WESTWALL);
 				frame->setX(0);
 				frame->setY(-object->getYOffset());
 				frame->blit(_tileWallsCache[i]);
 				door = object->isDoor() || object->isUFODoor();
 			}
 			// Draw north wall
-			object = tile->getMapData(O_NORTHWALL);
+			object = tile->getMapData(MapData::O_NORTHWALL);
 			if (object)
 			{
-				frame = tile->getSprite(O_NORTHWALL);
+				frame = tile->getSprite(MapData::O_NORTHWALL);
 				frame->setX(0);
 				frame->setY(-object->getYOffset());
 				// if there is a westwall, cut off some of the north wall (otherwise it will overlap)
-				if (tile->getMapData(O_WESTWALL))
+				if (tile->getMapData(MapData::O_WESTWALL))
 				{
 					frame->setX(frame->getWidth() / 2);
 					frame->getCrop()->x = frame->getWidth() / 2;
@@ -1149,10 +1144,10 @@ bool Map::cacheTileSprites(int i)
 				door = object->isDoor() || object->isUFODoor();
 			}
 			// Draw object
-			object = tile->getMapData(O_OBJECT);
+			object = tile->getMapData(MapData::O_OBJECT);
 			if (object)
 			{
-				frame = tile->getSprite(O_OBJECT);
+				frame = tile->getSprite(MapData::O_OBJECT);
 				frame->setX(0);
 				frame->setY(-object->getYOffset());
 				frame->blit(_tileWallsCache[i]);
@@ -1166,7 +1161,7 @@ bool Map::cacheTileSprites(int i)
 				frame->setX(0);
 				if (object == 0)
 				{
-					object = tile->getMapData(O_FLOOR);
+					object = tile->getMapData(MapData::O_FLOOR);
 				}
 				frame->setY(object->getTerrainLevel());
 				frame->blit(_tileWallsCache[i]);

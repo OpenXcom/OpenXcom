@@ -21,6 +21,8 @@
 #include <set>
 #include "TerrainModifier.h"
 #include "SDL.h"
+#include "BattleAIState.h"
+#include "AggroBAIState.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
 #include "../Savegame/BattleUnit.h"
@@ -109,15 +111,15 @@ void TerrainModifier::calculateTerrainLighting()
 	for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); ++i)
 	{
 		// only floors and objects can light up
-		if (_save->getTiles()[i]->getMapData(O_FLOOR)
-			&& _save->getTiles()[i]->getMapData(O_FLOOR)->getLightSource())
+		if (_save->getTiles()[i]->getMapData(MapData::O_FLOOR)
+			&& _save->getTiles()[i]->getMapData(MapData::O_FLOOR)->getLightSource())
 		{
-			addLight(_save->getTiles()[i]->getPosition(), _save->getTiles()[i]->getMapData(O_FLOOR)->getLightSource(), layer);
+			addLight(_save->getTiles()[i]->getPosition(), _save->getTiles()[i]->getMapData(MapData::O_FLOOR)->getLightSource(), layer);
 		}
-		if (_save->getTiles()[i]->getMapData(O_OBJECT)
-			&& _save->getTiles()[i]->getMapData(O_OBJECT)->getLightSource())
+		if (_save->getTiles()[i]->getMapData(MapData::O_OBJECT)
+			&& _save->getTiles()[i]->getMapData(MapData::O_OBJECT)->getLightSource())
 		{
-			addLight(_save->getTiles()[i]->getPosition(), _save->getTiles()[i]->getMapData(O_OBJECT)->getLightSource(), layer);
+			addLight(_save->getTiles()[i]->getPosition(), _save->getTiles()[i]->getMapData(MapData::O_OBJECT)->getLightSource(), layer);
 		}
 
 		// fires
@@ -209,7 +211,7 @@ bool TerrainModifier::calculateFOV(BattleUnit *unit)
 
 	// calculate a visible units checksum - if it changed during this step, the soldier stops walking
 	for (std::vector<BattleUnit*>::iterator i = unit->getVisibleUnits()->begin(); i != unit->getVisibleUnits()->end(); ++i)
-		visibleUnitsChecksum += (*i)->getId();
+		visibleUnitsChecksum += (*i)->getId()+1;
 
 	unit->clearVisibleUnits();
 	
@@ -230,10 +232,8 @@ bool TerrainModifier::calculateFOV(BattleUnit *unit)
 			double vx, vy, vz;
 			int tileX, tileY, tileZ;
 
-			// globalshade goes from 0 to 15 (day -> night), while the viewdistance goes from 20 to 9 (day -> night)
-			objectViewDistance = 20 - _save->getGlobalShade() + 4;
-			if (objectViewDistance > 20)
-				objectViewDistance = 20;
+			// shade goes from 0 to 15 (day -> night), while the viewdistance goes from 20 to 9 (day -> night)
+			objectViewDistance = 20;
 
 			unitViewDistance = objectViewDistance;
 			while (objectViewDistance > 0)
@@ -258,7 +258,7 @@ bool TerrainModifier::calculateFOV(BattleUnit *unit)
 				// vertical blockage by ceilings/floors
 				objectViewDistance -= verticalBlockage(origin, dest, DT_NONE); // line of sight is all or nothing
 
-				if (objectViewDistance > 0 && dest->getShade() < 10)
+				if (objectViewDistance > 0 && dest->getShade() < 10) // shade lower than 10 allows to see a unit
 				{
 					ret = tilesAffected.insert(dest); // check if we had this tile already
 					if (ret.second)
@@ -277,6 +277,11 @@ bool TerrainModifier::calculateFOV(BattleUnit *unit)
 						}
 					}
 				}
+				if (dest->getShade() > 7) // shade higher than 7 decreases the viewdistance
+				{
+					objectViewDistance--;
+				}
+				// smoke blocks the viewdistance of units only
 				unitViewDistance -= int(dest->getSmoke() / 3);
 				origin = dest;
 			}
@@ -285,7 +290,7 @@ bool TerrainModifier::calculateFOV(BattleUnit *unit)
 
 	int newChecksum = 0;
 	for (std::vector<BattleUnit*>::iterator i = unit->getVisibleUnits()->begin(); i != unit->getVisibleUnits()->end(); ++i)
-		newChecksum += (*i)->getId();
+		newChecksum += (*i)->getId()+1;
 
 	return visibleUnitsChecksum < newChecksum;
 }
@@ -317,18 +322,33 @@ bool TerrainModifier::checkForVisibleUnits(BattleUnit *unit, Tile *tile)
 	Position originVoxel, targetVoxel;
 	originVoxel = Position((unit->getPosition().x * 16) + 8, (unit->getPosition().y * 16) + 8, unit->getPosition().z*24);
 	originVoxel.z += -tile->getTerrainLevel();
-	originVoxel.z += unit->isKneeled()?unit->getUnit()->getKneelHeight():unit->getUnit()->getStandHeight();
+	if (unit->isKneeled())
+	{
+		originVoxel.z += unit->getUnit()->getKneelHeight();
+	}
+	else
+	{
+		originVoxel.z += unit->getUnit()->getStandHeight();
+	}
 	bool unitSeen = false;
 
 	targetVoxel = Position((bu->getPosition().x * 16) + 8, (bu->getPosition().y * 16) + 8, bu->getPosition().z*24);
 	int targetMinHeight = targetVoxel.z - _save->getTile(bu->getPosition())->getTerrainLevel();
-	int targetMaxHeight = targetMinHeight + bu->isKneeled()?bu->getUnit()->getKneelHeight():bu->getUnit()->getStandHeight();
+	int targetMaxHeight;
+	if (bu->isKneeled())
+	{
+		 targetMaxHeight = targetMinHeight + bu->getUnit()->getKneelHeight();
+	}
+	else
+	{
+		targetMaxHeight = targetMinHeight + bu->getUnit()->getStandHeight();
+	}
 
 	// scan ray from top to bottom
 	for (int i = targetMaxHeight; i > targetMinHeight; i-=2)
 	{
 		targetVoxel.z = i;
-		int test = calculateLine(originVoxel, targetVoxel, false, 0, 0);
+		int test = calculateLine(originVoxel, targetVoxel, false, 0, unit);
 		Position hitPosition = Position(targetVoxel.x/16, targetVoxel.y/16, targetVoxel.z/24);
 		if (test == -1 || (test == 4 && bu->getPosition() == hitPosition))
 		{
@@ -363,8 +383,9 @@ void TerrainModifier::calculateFOV(const Position &position)
  * If it's higher, a shot is fired when enough time units a weapon and ammo available.
  * @param unit
  * @param action
+ * @param faceToWards a unit faces towards the sniper when it shoots
  */
-bool TerrainModifier::checkReactionFire(BattleUnit *unit, BattleAction *action)
+bool TerrainModifier::checkReactionFire(BattleUnit *unit, BattleAction *action, BattleUnit *potentialVictim, bool recalculateFOV)
 {
 	double highestReactionScore = 0;
 	action->actor = 0;
@@ -375,11 +396,27 @@ bool TerrainModifier::checkReactionFire(BattleUnit *unit, BattleAction *action)
 		return false;
 	}
 
+	if (potentialVictim && RNG::generate(0, 4) == 1 && potentialVictim->getFaction() == FACTION_HOSTILE)
+	{
+		potentialVictim->lookAt(unit->getPosition());
+		while (potentialVictim->getStatus() == STATUS_TURNING)
+		{
+			recalculateFOV = true;
+			potentialVictim->turn();
+		}
+	}
+
 	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
-		if ((*i)->getFaction() != _save->getSide() && !(*i)->isOut())
+		int x = abs(unit->getPosition().x - (*i)->getPosition().x);
+		int y = abs(unit->getPosition().y - (*i)->getPosition().y);
+		int distance = int(floor(sqrt(float(x*x + y*y)) + 0.5));
+		if (distance < 19 && (*i)->getFaction() != _save->getSide() && !(*i)->isOut())
 		{
-			calculateFOV(*i);
+			if (recalculateFOV)
+			{
+				calculateFOV(*i);
+			}
 			for (std::vector<BattleUnit*>::iterator j = (*i)->getVisibleUnits()->begin(); j != (*i)->getVisibleUnits()->end(); ++j)
 			{
 				if ((*j) == unit && (*i)->getReactionScore() > highestReactionScore)
@@ -401,7 +438,32 @@ bool TerrainModifier::checkReactionFire(BattleUnit *unit, BattleAction *action)
 		int tu = action->actor->getActionTUs(action->type, action->weapon);
 		if (action->weapon && action->weapon->getAmmoItem() && action->weapon->getAmmoItem()->getAmmoQuantity())
 		{
-			return action->actor->spendTimeUnits(tu, _save->getDebugMode());
+			if (action->actor->spendTimeUnits(tu, _save->getDebugMode()))
+			{
+				// if the target is hostile, it will aggro
+				if (unit->getFaction() == FACTION_HOSTILE)
+				{
+					AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(unit->getCurrentAIState());
+					if (aggro == 0)
+					{
+						aggro = new AggroBAIState(_save, unit);
+						unit->setAIState(aggro);
+					}
+					aggro->setAggroTarget(action->actor);
+				}
+				// if the shooter is hostile, he will aggro
+				if (action->actor->getFaction() == FACTION_HOSTILE)
+				{
+					AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(action->actor->getCurrentAIState());
+					if (aggro == 0)
+					{
+						aggro = new AggroBAIState(_save, action->actor);
+						action->actor->setAIState(aggro);
+					}
+					aggro->setAggroTarget(unit);
+				}
+				return true;
+			}
 		}
 	}
 
@@ -534,15 +596,15 @@ void TerrainModifier::explode(const Position &center, int power, ItemDamageType 
 								dest->getUnit()->damage(Position(0, 0, 0), (int)(RNG::generate(power_/2.0, power_*1.5)));
 							// destroy floors above
 							Tile *tileAbove = _save->getTile(Position(tileX, tileY, tileZ+1));
-							if ( tileAbove && tileAbove->getMapData(O_FLOOR) && power_ / 2 >= tileAbove->getMapData(O_FLOOR)->getArmor())
+							if ( tileAbove && tileAbove->getMapData(MapData::O_FLOOR) && power_ / 2 >= tileAbove->getMapData(MapData::O_FLOOR)->getArmor())
 							{
-								tileAbove->destroy(O_FLOOR);
+								tileAbove->destroy(MapData::O_FLOOR);
 							}
 							// very slight chance (0-25%) to minor damage to units above or below explosion
 							if (tileAbove->getUnit())
 								tileAbove->getUnit()->damage(Position(0, 0, 0), (int)(RNG::generate(0.0, power_/4.0)));
 							Tile *tileBelow = _save->getTile(Position(tileX, tileY, tileZ-1));
-							if (tileBelow && !dest->getMapData(O_FLOOR) && tileBelow->getUnit())
+							if (tileBelow && !dest->getMapData(MapData::O_FLOOR) && tileBelow->getUnit())
 								tileBelow->getUnit()->damage(Position(0, 0, 0), (int)(RNG::generate(0.0, power_/4.0)));
 						}
 						if (type == DT_SMOKE)
@@ -629,14 +691,14 @@ int TerrainModifier::verticalBlockage(Tile *startTile, Tile *endTile, ItemDamage
 	{
 		for (int z = startTile->getPosition().z; z > endTile->getPosition().z; z--)
 		{
-			block += blockage(_save->getTile(Position(x, y, z)), O_FLOOR, type);
+			block += blockage(_save->getTile(Position(x, y, z)), MapData::O_FLOOR, type);
 		}
 	}
 	else if (direction > 0) // up
 	{
 		for (int z = startTile->getPosition().z + 1; z <= endTile->getPosition().z; z++)
 		{
-			block += blockage(_save->getTile(Position(x, y, z)), O_FLOOR, type);
+			block += blockage(_save->getTile(Position(x, y, z)), MapData::O_FLOOR, type);
 		}
 	}
 
@@ -668,48 +730,48 @@ int TerrainModifier::horizontalBlockage(Tile *startTile, Tile *endTile, ItemDama
 	switch(direction)
 	{
 	case 0:	// north
-		block = blockage(startTile, O_NORTHWALL, type);
+		block = blockage(startTile, MapData::O_NORTHWALL, type);
 		break;
 	case 1: // north east
-		block = (blockage(startTile,O_NORTHWALL, type) + blockage(endTile,O_WESTWALL, type))/2
-			+ (blockage(_save->getTile(startTile->getPosition() + oneTileEast),O_WESTWALL, type)
-			+ blockage(_save->getTile(startTile->getPosition() + oneTileEast),O_NORTHWALL, type))/2;
-		block += (blockage(_save->getTile(startTile->getPosition() + oneTileNorth),O_OBJECT, type) +
-			      blockage(_save->getTile(startTile->getPosition() + oneTileEast),O_OBJECT, type))/2;
+		block = (blockage(startTile,MapData::O_NORTHWALL, type) + blockage(endTile,MapData::O_WESTWALL, type))/2
+			+ (blockage(_save->getTile(startTile->getPosition() + oneTileEast),MapData::O_WESTWALL, type)
+			+ blockage(_save->getTile(startTile->getPosition() + oneTileEast),MapData::O_NORTHWALL, type))/2;
+		block += (blockage(_save->getTile(startTile->getPosition() + oneTileNorth),MapData::O_OBJECT, type) +
+			      blockage(_save->getTile(startTile->getPosition() + oneTileEast),MapData::O_OBJECT, type))/2;
 		break;
 	case 2: // east
-		block = blockage(endTile,O_WESTWALL, type);
+		block = blockage(endTile,MapData::O_WESTWALL, type);
 		break;
 	case 3: // south east
-		block = (blockage(endTile,O_WESTWALL, type) + blockage(endTile,O_NORTHWALL, type))/2
-			+ (blockage(_save->getTile(startTile->getPosition() + oneTileEast),O_WESTWALL, type)
-			+ blockage(_save->getTile(startTile->getPosition() + oneTileSouth),O_NORTHWALL, type))/2;
-		block += (blockage(_save->getTile(startTile->getPosition() + oneTileSouth),O_OBJECT, type) +
-			      blockage(_save->getTile(startTile->getPosition() + oneTileEast),O_OBJECT, type))/2;
+		block = (blockage(endTile,MapData::O_WESTWALL, type) + blockage(endTile,MapData::O_NORTHWALL, type))/2
+			+ (blockage(_save->getTile(startTile->getPosition() + oneTileEast),MapData::O_WESTWALL, type)
+			+ blockage(_save->getTile(startTile->getPosition() + oneTileSouth),MapData::O_NORTHWALL, type))/2;
+		block += (blockage(_save->getTile(startTile->getPosition() + oneTileSouth),MapData::O_OBJECT, type) +
+			      blockage(_save->getTile(startTile->getPosition() + oneTileEast),MapData::O_OBJECT, type))/2;
 		break;
 	case 4: // south
-		block = blockage(endTile,O_NORTHWALL, type);
+		block = blockage(endTile,MapData::O_NORTHWALL, type);
 		break;
 	case 5: // south west
-		block = (blockage(endTile,O_NORTHWALL, type) + blockage(startTile,O_WESTWALL, type))/2
-			+ (blockage(_save->getTile(startTile->getPosition() + oneTileSouth),O_WESTWALL, type)
-			+ blockage(_save->getTile(startTile->getPosition() + oneTileSouth),O_NORTHWALL, type))/2;
-		block += (blockage(_save->getTile(startTile->getPosition() + oneTileSouth),O_OBJECT, type) +
-			      blockage(_save->getTile(startTile->getPosition() + oneTileWest),O_OBJECT, type))/2;
+		block = (blockage(endTile,MapData::O_NORTHWALL, type) + blockage(startTile,MapData::O_WESTWALL, type))/2
+			+ (blockage(_save->getTile(startTile->getPosition() + oneTileSouth),MapData::O_WESTWALL, type)
+			+ blockage(_save->getTile(startTile->getPosition() + oneTileSouth),MapData::O_NORTHWALL, type))/2;
+		block += (blockage(_save->getTile(startTile->getPosition() + oneTileSouth),MapData::O_OBJECT, type) +
+			      blockage(_save->getTile(startTile->getPosition() + oneTileWest),MapData::O_OBJECT, type))/2;
 		break;
 	case 6: // west
-		block = blockage(startTile,O_WESTWALL, type);
+		block = blockage(startTile,MapData::O_WESTWALL, type);
 		break;
 	case 7: // north west
-		block = (blockage(startTile,O_WESTWALL, type) + blockage(startTile,O_NORTHWALL, type))/2
-			+ (blockage(_save->getTile(startTile->getPosition() + oneTileNorth),O_WESTWALL, type)
-			+ blockage(_save->getTile(startTile->getPosition() + oneTileWest),O_NORTHWALL, type))/2;
-		block += (blockage(_save->getTile(startTile->getPosition() + oneTileNorth),O_OBJECT, type) +
-			      blockage(_save->getTile(startTile->getPosition() + oneTileWest),O_OBJECT, type))/2;
+		block = (blockage(startTile,MapData::O_WESTWALL, type) + blockage(startTile,MapData::O_NORTHWALL, type))/2
+			+ (blockage(_save->getTile(startTile->getPosition() + oneTileNorth),MapData::O_WESTWALL, type)
+			+ blockage(_save->getTile(startTile->getPosition() + oneTileWest),MapData::O_NORTHWALL, type))/2;
+		block += (blockage(_save->getTile(startTile->getPosition() + oneTileNorth),MapData::O_OBJECT, type) +
+			      blockage(_save->getTile(startTile->getPosition() + oneTileWest),MapData::O_OBJECT, type))/2;
 		break;
 	}
 
-	block += blockage(startTile, O_OBJECT, type);
+	block += blockage(startTile, MapData::O_OBJECT, type);
 	return block;
 }
 
@@ -726,7 +788,7 @@ int TerrainModifier::blockage(Tile *tile, const int part, ItemDamageType type)
 
 	if (tile == 0) return 0; // probably outside the map here
 
-	if (part == O_FLOOR && tile->getMapData(O_FLOOR))
+	if (part == MapData::O_FLOOR && tile->getMapData(MapData::O_FLOOR))
 	{
 		// blockage modifiers of floors in ufo only counted for horizontal stuff, so this is kind of an experiment
 		if (type == DT_HE)
@@ -782,49 +844,49 @@ int TerrainModifier::unitOpensDoor(BattleUnit *unit)
 	switch(unit->getDirection())
 	{
 	case 0:	// north
-		door = tile->openDoor(O_NORTHWALL);
+		door = tile->openDoor(MapData::O_NORTHWALL);
 		if (door == 1)
 		{
 			// check for adjacent door(s)
 			tile = _save->getTile(unit->getPosition() + Position(1, 0, 0));
-			if (tile) tile->openDoor(O_NORTHWALL);
+			if (tile) tile->openDoor(MapData::O_NORTHWALL);
 			tile = _save->getTile(unit->getPosition() + Position(-1, 0, 0));
-			if (tile) tile->openDoor(O_NORTHWALL);
+			if (tile) tile->openDoor(MapData::O_NORTHWALL);
 		}
 		break;
 	case 2: // east
 		tile = _save->getTile(tile->getPosition() + Position(1, 0, 0));
-		if (tile) door = tile->openDoor(O_WESTWALL);
+		if (tile) door = tile->openDoor(MapData::O_WESTWALL);
 		if (door == 1)
 		{
 			// check for adjacent door(s)
 			tile = _save->getTile(unit->getPosition() + Position(1, -1, 0));
-			if (tile) tile->openDoor(O_WESTWALL);
+			if (tile) tile->openDoor(MapData::O_WESTWALL);
 			tile = _save->getTile(unit->getPosition() + Position(1, 1, 0));
-			if (tile) tile->openDoor(O_WESTWALL);
+			if (tile) tile->openDoor(MapData::O_WESTWALL);
 		}
 		break;
 	case 4: // south
 		tile = _save->getTile(tile->getPosition() + Position(0, -1, 0));
-		if (tile) door = tile->openDoor(O_NORTHWALL);
+		if (tile) door = tile->openDoor(MapData::O_NORTHWALL);
 		if (door == 1)
 		{
 			// check for adjacent door(s)
 			tile = _save->getTile(unit->getPosition() + Position(1, -1, 0));
-			if (tile) tile->openDoor(O_NORTHWALL);
+			if (tile) tile->openDoor(MapData::O_NORTHWALL);
 			tile = _save->getTile(unit->getPosition() + Position(-1, -1, 0));
-			if (tile) tile->openDoor(O_NORTHWALL);
+			if (tile) tile->openDoor(MapData::O_NORTHWALL);
 		}
 		break;
 	case 6: // west
-		door = tile->openDoor(O_WESTWALL);
+		door = tile->openDoor(MapData::O_WESTWALL);
 		if (door == 1)
 		{
 			// check for adjacent door(s)
 			tile = _save->getTile(unit->getPosition() + Position(0, -1, 0));
-			if (tile) tile->openDoor(O_WESTWALL);
+			if (tile) tile->openDoor(MapData::O_WESTWALL);
 			tile = _save->getTile(unit->getPosition() + Position(0, 1, 0));
-			if (tile) tile->openDoor(O_WESTWALL);
+			if (tile) tile->openDoor(MapData::O_WESTWALL);
 		}
 		break;
 	}
@@ -1053,7 +1115,7 @@ void TerrainModifier::spawnItem(const Position &position, BattleItem *item)
 	if (_save->getTile(p) == 0)
 		return;
 
-	while (_save->getTile(p)->getMapData(O_FLOOR) == 0 && p.z > 0)
+	while (_save->getTile(p)->getMapData(MapData::O_FLOOR) == 0 && p.z > 0)
 	{
 		p.z--;
 	}
