@@ -43,6 +43,7 @@ public:
 	int getCost() const;
 	void setDiscovered (bool b);
 	const std::wstring & getName () const;
+	const std::vector<RuleResearchProject *> & getDependencys () const;
 };
 
 }

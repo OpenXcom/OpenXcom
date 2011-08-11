@@ -45,4 +45,8 @@ const std::wstring & RuleResearchProject::getName () const
 	return _name;
 }
 
+const std::vector<RuleResearchProject *> & RuleResearchProject::getDependencys () const
+{
+	return _dependencys;
+}
 }
