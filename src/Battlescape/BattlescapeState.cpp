@@ -1020,7 +1020,12 @@ void BattlescapeState::updateSoldierInfo(BattleUnit *battleUnit)
 	{
 		leftHandItem->getRules()->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _btnLeftHandItem);
 		if (leftHandItem->getRules()->getBattleType() == BT_FIREARM)
-			_numAmmoLeft->setValue(leftHandItem->getAmmoItem()->getAmmoQuantity());
+		{
+			if (leftHandItem->getAmmoItem())
+				_numAmmoLeft->setValue(leftHandItem->getAmmoItem()->getAmmoQuantity());
+			else
+				_numAmmoLeft->setValue(0);
+		}
 	}
 	BattleItem *rightHandItem = _battleGame->getItemFromUnit(battleUnit, "STR_RIGHT_HAND");
 	_btnRightHandItem->clear();
@@ -1029,7 +1034,12 @@ void BattlescapeState::updateSoldierInfo(BattleUnit *battleUnit)
 	{
 		rightHandItem->getRules()->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _btnRightHandItem);
 		if (rightHandItem->getRules()->getBattleType() == BT_FIREARM)
-			_numAmmoRight->setValue(rightHandItem->getAmmoItem()->getAmmoQuantity());
+		{
+			if (rightHandItem->getAmmoItem())
+				_numAmmoRight->setValue(rightHandItem->getAmmoItem()->getAmmoQuantity());
+			else
+				_numAmmoRight->setValue(0);
+		}
 	}
 
 	_battleGame->getTerrainModifier()->calculateFOV(_battleGame->getSelectedUnit());
