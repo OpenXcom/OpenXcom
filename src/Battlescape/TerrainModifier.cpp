@@ -111,15 +111,15 @@ void TerrainModifier::calculateTerrainLighting()
 	for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); ++i)
 	{
 		// only floors and objects can light up
-		if (_save->getTiles()[i]->getMapData(O_FLOOR)
-			&& _save->getTiles()[i]->getMapData(O_FLOOR)->getLightSource())
+		if (_save->getTiles()[i]->getMapData(MapData::O_FLOOR)
+			&& _save->getTiles()[i]->getMapData(MapData::O_FLOOR)->getLightSource())
 		{
-			addLight(_save->getTiles()[i]->getPosition(), _save->getTiles()[i]->getMapData(O_FLOOR)->getLightSource(), layer);
+			addLight(_save->getTiles()[i]->getPosition(), _save->getTiles()[i]->getMapData(MapData::O_FLOOR)->getLightSource(), layer);
 		}
-		if (_save->getTiles()[i]->getMapData(O_OBJECT)
-			&& _save->getTiles()[i]->getMapData(O_OBJECT)->getLightSource())
+		if (_save->getTiles()[i]->getMapData(MapData::O_OBJECT)
+			&& _save->getTiles()[i]->getMapData(MapData::O_OBJECT)->getLightSource())
 		{
-			addLight(_save->getTiles()[i]->getPosition(), _save->getTiles()[i]->getMapData(O_OBJECT)->getLightSource(), layer);
+			addLight(_save->getTiles()[i]->getPosition(), _save->getTiles()[i]->getMapData(MapData::O_OBJECT)->getLightSource(), layer);
 		}
 
 		// fires
@@ -596,15 +596,15 @@ void TerrainModifier::explode(const Position &center, int power, ItemDamageType 
 								dest->getUnit()->damage(Position(0, 0, 0), (int)(RNG::generate(power_/2.0, power_*1.5)));
 							// destroy floors above
 							Tile *tileAbove = _save->getTile(Position(tileX, tileY, tileZ+1));
-							if ( tileAbove && tileAbove->getMapData(O_FLOOR) && power_ / 2 >= tileAbove->getMapData(O_FLOOR)->getArmor())
+							if ( tileAbove && tileAbove->getMapData(MapData::O_FLOOR) && power_ / 2 >= tileAbove->getMapData(MapData::O_FLOOR)->getArmor())
 							{
-								tileAbove->destroy(O_FLOOR);
+								tileAbove->destroy(MapData::O_FLOOR);
 							}
 							// very slight chance (0-25%) to minor damage to units above or below explosion
 							if (tileAbove->getUnit())
 								tileAbove->getUnit()->damage(Position(0, 0, 0), (int)(RNG::generate(0.0, power_/4.0)));
 							Tile *tileBelow = _save->getTile(Position(tileX, tileY, tileZ-1));
-							if (tileBelow && !dest->getMapData(O_FLOOR) && tileBelow->getUnit())
+							if (tileBelow && !dest->getMapData(MapData::O_FLOOR) && tileBelow->getUnit())
 								tileBelow->getUnit()->damage(Position(0, 0, 0), (int)(RNG::generate(0.0, power_/4.0)));
 						}
 						if (type == DT_SMOKE)
@@ -691,14 +691,14 @@ int TerrainModifier::verticalBlockage(Tile *startTile, Tile *endTile, ItemDamage
 	{
 		for (int z = startTile->getPosition().z; z > endTile->getPosition().z; z--)
 		{
-			block += blockage(_save->getTile(Position(x, y, z)), O_FLOOR, type);
+			block += blockage(_save->getTile(Position(x, y, z)), MapData::O_FLOOR, type);
 		}
 	}
 	else if (direction > 0) // up
 	{
 		for (int z = startTile->getPosition().z + 1; z <= endTile->getPosition().z; z++)
 		{
-			block += blockage(_save->getTile(Position(x, y, z)), O_FLOOR, type);
+			block += blockage(_save->getTile(Position(x, y, z)), MapData::O_FLOOR, type);
 		}
 	}
 
@@ -730,48 +730,48 @@ int TerrainModifier::horizontalBlockage(Tile *startTile, Tile *endTile, ItemDama
 	switch(direction)
 	{
 	case 0:	// north
-		block = blockage(startTile, O_NORTHWALL, type);
+		block = blockage(startTile, MapData::O_NORTHWALL, type);
 		break;
 	case 1: // north east
-		block = (blockage(startTile,O_NORTHWALL, type) + blockage(endTile,O_WESTWALL, type))/2
-			+ (blockage(_save->getTile(startTile->getPosition() + oneTileEast),O_WESTWALL, type)
-			+ blockage(_save->getTile(startTile->getPosition() + oneTileEast),O_NORTHWALL, type))/2;
-		block += (blockage(_save->getTile(startTile->getPosition() + oneTileNorth),O_OBJECT, type) +
-			      blockage(_save->getTile(startTile->getPosition() + oneTileEast),O_OBJECT, type))/2;
+		block = (blockage(startTile,MapData::O_NORTHWALL, type) + blockage(endTile,MapData::O_WESTWALL, type))/2
+			+ (blockage(_save->getTile(startTile->getPosition() + oneTileEast),MapData::O_WESTWALL, type)
+			+ blockage(_save->getTile(startTile->getPosition() + oneTileEast),MapData::O_NORTHWALL, type))/2;
+		block += (blockage(_save->getTile(startTile->getPosition() + oneTileNorth),MapData::O_OBJECT, type) +
+			      blockage(_save->getTile(startTile->getPosition() + oneTileEast),MapData::O_OBJECT, type))/2;
 		break;
 	case 2: // east
-		block = blockage(endTile,O_WESTWALL, type);
+		block = blockage(endTile,MapData::O_WESTWALL, type);
 		break;
 	case 3: // south east
-		block = (blockage(endTile,O_WESTWALL, type) + blockage(endTile,O_NORTHWALL, type))/2
-			+ (blockage(_save->getTile(startTile->getPosition() + oneTileEast),O_WESTWALL, type)
-			+ blockage(_save->getTile(startTile->getPosition() + oneTileSouth),O_NORTHWALL, type))/2;
-		block += (blockage(_save->getTile(startTile->getPosition() + oneTileSouth),O_OBJECT, type) +
-			      blockage(_save->getTile(startTile->getPosition() + oneTileEast),O_OBJECT, type))/2;
+		block = (blockage(endTile,MapData::O_WESTWALL, type) + blockage(endTile,MapData::O_NORTHWALL, type))/2
+			+ (blockage(_save->getTile(startTile->getPosition() + oneTileEast),MapData::O_WESTWALL, type)
+			+ blockage(_save->getTile(startTile->getPosition() + oneTileSouth),MapData::O_NORTHWALL, type))/2;
+		block += (blockage(_save->getTile(startTile->getPosition() + oneTileSouth),MapData::O_OBJECT, type) +
+			      blockage(_save->getTile(startTile->getPosition() + oneTileEast),MapData::O_OBJECT, type))/2;
 		break;
 	case 4: // south
-		block = blockage(endTile,O_NORTHWALL, type);
+		block = blockage(endTile,MapData::O_NORTHWALL, type);
 		break;
 	case 5: // south west
-		block = (blockage(endTile,O_NORTHWALL, type) + blockage(startTile,O_WESTWALL, type))/2
-			+ (blockage(_save->getTile(startTile->getPosition() + oneTileSouth),O_WESTWALL, type)
-			+ blockage(_save->getTile(startTile->getPosition() + oneTileSouth),O_NORTHWALL, type))/2;
-		block += (blockage(_save->getTile(startTile->getPosition() + oneTileSouth),O_OBJECT, type) +
-			      blockage(_save->getTile(startTile->getPosition() + oneTileWest),O_OBJECT, type))/2;
+		block = (blockage(endTile,MapData::O_NORTHWALL, type) + blockage(startTile,MapData::O_WESTWALL, type))/2
+			+ (blockage(_save->getTile(startTile->getPosition() + oneTileSouth),MapData::O_WESTWALL, type)
+			+ blockage(_save->getTile(startTile->getPosition() + oneTileSouth),MapData::O_NORTHWALL, type))/2;
+		block += (blockage(_save->getTile(startTile->getPosition() + oneTileSouth),MapData::O_OBJECT, type) +
+			      blockage(_save->getTile(startTile->getPosition() + oneTileWest),MapData::O_OBJECT, type))/2;
 		break;
 	case 6: // west
-		block = blockage(startTile,O_WESTWALL, type);
+		block = blockage(startTile,MapData::O_WESTWALL, type);
 		break;
 	case 7: // north west
-		block = (blockage(startTile,O_WESTWALL, type) + blockage(startTile,O_NORTHWALL, type))/2
-			+ (blockage(_save->getTile(startTile->getPosition() + oneTileNorth),O_WESTWALL, type)
-			+ blockage(_save->getTile(startTile->getPosition() + oneTileWest),O_NORTHWALL, type))/2;
-		block += (blockage(_save->getTile(startTile->getPosition() + oneTileNorth),O_OBJECT, type) +
-			      blockage(_save->getTile(startTile->getPosition() + oneTileWest),O_OBJECT, type))/2;
+		block = (blockage(startTile,MapData::O_WESTWALL, type) + blockage(startTile,MapData::O_NORTHWALL, type))/2
+			+ (blockage(_save->getTile(startTile->getPosition() + oneTileNorth),MapData::O_WESTWALL, type)
+			+ blockage(_save->getTile(startTile->getPosition() + oneTileWest),MapData::O_NORTHWALL, type))/2;
+		block += (blockage(_save->getTile(startTile->getPosition() + oneTileNorth),MapData::O_OBJECT, type) +
+			      blockage(_save->getTile(startTile->getPosition() + oneTileWest),MapData::O_OBJECT, type))/2;
 		break;
 	}
 
-	block += blockage(startTile, O_OBJECT, type);
+	block += blockage(startTile, MapData::O_OBJECT, type);
 	return block;
 }
 
@@ -788,7 +788,7 @@ int TerrainModifier::blockage(Tile *tile, const int part, ItemDamageType type)
 
 	if (tile == 0) return 0; // probably outside the map here
 
-	if (part == O_FLOOR && tile->getMapData(O_FLOOR))
+	if (part == MapData::O_FLOOR && tile->getMapData(MapData::O_FLOOR))
 	{
 		// blockage modifiers of floors in ufo only counted for horizontal stuff, so this is kind of an experiment
 		if (type == DT_HE)
@@ -844,49 +844,49 @@ int TerrainModifier::unitOpensDoor(BattleUnit *unit)
 	switch(unit->getDirection())
 	{
 	case 0:	// north
-		door = tile->openDoor(O_NORTHWALL);
+		door = tile->openDoor(MapData::O_NORTHWALL);
 		if (door == 1)
 		{
 			// check for adjacent door(s)
 			tile = _save->getTile(unit->getPosition() + Position(1, 0, 0));
-			if (tile) tile->openDoor(O_NORTHWALL);
+			if (tile) tile->openDoor(MapData::O_NORTHWALL);
 			tile = _save->getTile(unit->getPosition() + Position(-1, 0, 0));
-			if (tile) tile->openDoor(O_NORTHWALL);
+			if (tile) tile->openDoor(MapData::O_NORTHWALL);
 		}
 		break;
 	case 2: // east
 		tile = _save->getTile(tile->getPosition() + Position(1, 0, 0));
-		if (tile) door = tile->openDoor(O_WESTWALL);
+		if (tile) door = tile->openDoor(MapData::O_WESTWALL);
 		if (door == 1)
 		{
 			// check for adjacent door(s)
 			tile = _save->getTile(unit->getPosition() + Position(1, -1, 0));
-			if (tile) tile->openDoor(O_WESTWALL);
+			if (tile) tile->openDoor(MapData::O_WESTWALL);
 			tile = _save->getTile(unit->getPosition() + Position(1, 1, 0));
-			if (tile) tile->openDoor(O_WESTWALL);
+			if (tile) tile->openDoor(MapData::O_WESTWALL);
 		}
 		break;
 	case 4: // south
 		tile = _save->getTile(tile->getPosition() + Position(0, -1, 0));
-		if (tile) door = tile->openDoor(O_NORTHWALL);
+		if (tile) door = tile->openDoor(MapData::O_NORTHWALL);
 		if (door == 1)
 		{
 			// check for adjacent door(s)
 			tile = _save->getTile(unit->getPosition() + Position(1, -1, 0));
-			if (tile) tile->openDoor(O_NORTHWALL);
+			if (tile) tile->openDoor(MapData::O_NORTHWALL);
 			tile = _save->getTile(unit->getPosition() + Position(-1, -1, 0));
-			if (tile) tile->openDoor(O_NORTHWALL);
+			if (tile) tile->openDoor(MapData::O_NORTHWALL);
 		}
 		break;
 	case 6: // west
-		door = tile->openDoor(O_WESTWALL);
+		door = tile->openDoor(MapData::O_WESTWALL);
 		if (door == 1)
 		{
 			// check for adjacent door(s)
 			tile = _save->getTile(unit->getPosition() + Position(0, -1, 0));
-			if (tile) tile->openDoor(O_WESTWALL);
+			if (tile) tile->openDoor(MapData::O_WESTWALL);
 			tile = _save->getTile(unit->getPosition() + Position(0, 1, 0));
-			if (tile) tile->openDoor(O_WESTWALL);
+			if (tile) tile->openDoor(MapData::O_WESTWALL);
 		}
 		break;
 	}
@@ -1115,7 +1115,7 @@ void TerrainModifier::spawnItem(const Position &position, BattleItem *item)
 	if (_save->getTile(p) == 0)
 		return;
 
-	while (_save->getTile(p)->getMapData(O_FLOOR) == 0 && p.z > 0)
+	while (_save->getTile(p)->getMapData(MapData::O_FLOOR) == 0 && p.z > 0)
 	{
 		p.z--;
 	}

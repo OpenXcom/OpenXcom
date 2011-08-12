@@ -42,11 +42,6 @@
 namespace OpenXcom
 {
 
-#define OUTER_MARGIN 3
-#define INNER_MARGIN 4
-#define BORDER 5
-#define BUTTON_HEIGHT 16
-
 /**
  * Initializes all the elements in the Multiple Targets window.
  * @param game Pointer to the core game.

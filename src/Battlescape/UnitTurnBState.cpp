@@ -52,7 +52,7 @@ UnitTurnBState::~UnitTurnBState()
 
 void UnitTurnBState::init()
 {
-	_parent->setStateInterval(DEFAULT_WALK_SPEED);
+	_parent->setStateInterval(BattlescapeState::DEFAULT_WALK_SPEED);
 	_unit = _action.actor;
 	_unit->lookAt(_action.target);
 	if (_unit->getStatus() != STATUS_TURNING)

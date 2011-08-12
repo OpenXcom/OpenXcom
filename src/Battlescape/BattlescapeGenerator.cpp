@@ -281,7 +281,7 @@ void BattlescapeGenerator::addSoldier(Soldier *soldier)
 	for (int i = _height * _length * _width - 1; i >= 0; i--)
 	{
 		// to spawn an xcom soldier, there has to be a tile, with a floor, with the starting point attribute and no object in the way
-		if (_save->getTiles()[i] && _save->getTiles()[i]->getMapData(O_FLOOR) && _save->getTiles()[i]->getMapData(O_FLOOR)->getSpecialType() == START_POINT && !_save->getTiles()[i]->getMapData(O_OBJECT))
+		if (_save->getTiles()[i] && _save->getTiles()[i]->getMapData(MapData::O_FLOOR) && _save->getTiles()[i]->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT && !_save->getTiles()[i]->getMapData(MapData::O_OBJECT))
 		{
 			_save->getTileCoords(i, &x, &y, &z);
 			pos = Position(x, y, z);
@@ -551,12 +551,12 @@ void BattlescapeGenerator::generateMap()
 			_save->getMapDataSets()->push_back(*i);
 		}
 		loadMAP(ufoMap, ufoX * 10, ufoY * 10, _ufo->getRules()->getBattlescapeTerrainData());
-		loadRMP(ufoMap, ufoX * 10, ufoY * 10, UFOSEGMENT);
+		loadRMP(ufoMap, ufoX * 10, ufoY * 10, Node::UFOSEGMENT);
 		for (int i = 0; i < ufoMap->getWidth() / 10; ++i)
 		{
 			for (int j = 0; j < ufoMap->getLength() / 10; j++)
 			{
-				segments[ufoX + i][ufoY + j] = UFOSEGMENT;
+				segments[ufoX + i][ufoY + j] = Node::UFOSEGMENT;
 			}
 		}
 	}
@@ -569,12 +569,12 @@ void BattlescapeGenerator::generateMap()
 			_save->getMapDataSets()->push_back(*i);
 		}
 		loadMAP(craftMap, craftX * 10, craftY * 10, _craft->getRules()->getBattlescapeTerrainData(), true);
-		loadRMP(craftMap, craftX * 10, craftY * 10, CRAFTSEGMENT);
+		loadRMP(craftMap, craftX * 10, craftY * 10, Node::CRAFTSEGMENT);
 		for (int i = 0; i < craftMap->getWidth() / 10; ++i)
 		{
 			for (int j = 0; j < craftMap->getLength() / 10; j++)
 			{
-				segments[craftX + i][craftY + j] = CRAFTSEGMENT;
+				segments[craftX + i][craftY + j] = Node::CRAFTSEGMENT;
 			}
 		}
 	}

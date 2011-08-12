@@ -45,11 +45,6 @@
 #include "../Interface/Text.h"
 #include "../Interface/Cursor.h"
 
-#define SCROLL_AMOUNT 20
-#define SCROLL_BORDER 5
-#define SCROLL_DIAGONAL_EDGE 60
-#define RMB_SCROLL false
-
 /*
   1) Map origin is left corner.
   2) X axis goes downright. (width of the map)
@@ -1076,7 +1071,7 @@ bool Map::cacheTileSprites(int i)
 	{
 
 		/* draw a floor object on the cache (if any) */
-		object = tile->getMapData(O_FLOOR);
+		object = tile->getMapData(MapData::O_FLOOR);
 
 		if (object)
 		{
@@ -1091,7 +1086,7 @@ bool Map::cacheTileSprites(int i)
 			}
 
 			// Draw floor
-			frame = tile->getSprite(O_FLOOR);
+			frame = tile->getSprite(MapData::O_FLOOR);
 			frame->setX(0);
 			frame->setY(-object->getYOffset());
 			frame->blit(_tileFloorCache[i]);
@@ -1104,7 +1099,7 @@ bool Map::cacheTileSprites(int i)
 		}
 
 		/* draw terrain objects on the cache (if any) */
-		if (tile->getMapData(O_WESTWALL) != 0 || tile->getMapData(O_NORTHWALL) != 0 || tile->getMapData(O_OBJECT) != 0 || tile->getTopItemSprite() != -1)
+		if (tile->getMapData(MapData::O_WESTWALL) != 0 || tile->getMapData(MapData::O_NORTHWALL) != 0 || tile->getMapData(MapData::O_OBJECT) != 0 || tile->getTopItemSprite() != -1)
 		{
 			if (_tileWallsCache[i] == 0)
 			{
@@ -1117,24 +1112,24 @@ bool Map::cacheTileSprites(int i)
 			}
 
 			// Draw west wall
-			object = tile->getMapData(O_WESTWALL);
+			object = tile->getMapData(MapData::O_WESTWALL);
 			if (object)
 			{
-				frame = tile->getSprite(O_WESTWALL);
+				frame = tile->getSprite(MapData::O_WESTWALL);
 				frame->setX(0);
 				frame->setY(-object->getYOffset());
 				frame->blit(_tileWallsCache[i]);
 				door = object->isDoor() || object->isUFODoor();
 			}
 			// Draw north wall
-			object = tile->getMapData(O_NORTHWALL);
+			object = tile->getMapData(MapData::O_NORTHWALL);
 			if (object)
 			{
-				frame = tile->getSprite(O_NORTHWALL);
+				frame = tile->getSprite(MapData::O_NORTHWALL);
 				frame->setX(0);
 				frame->setY(-object->getYOffset());
 				// if there is a westwall, cut off some of the north wall (otherwise it will overlap)
-				if (tile->getMapData(O_WESTWALL))
+				if (tile->getMapData(MapData::O_WESTWALL))
 				{
 					frame->setX(frame->getWidth() / 2);
 					frame->getCrop()->x = frame->getWidth() / 2;
@@ -1149,10 +1144,10 @@ bool Map::cacheTileSprites(int i)
 				door = object->isDoor() || object->isUFODoor();
 			}
 			// Draw object
-			object = tile->getMapData(O_OBJECT);
+			object = tile->getMapData(MapData::O_OBJECT);
 			if (object)
 			{
-				frame = tile->getSprite(O_OBJECT);
+				frame = tile->getSprite(MapData::O_OBJECT);
 				frame->setX(0);
 				frame->setY(-object->getYOffset());
 				frame->blit(_tileWallsCache[i]);
@@ -1166,7 +1161,7 @@ bool Map::cacheTileSprites(int i)
 				frame->setX(0);
 				if (object == 0)
 				{
-					object = tile->getMapData(O_FLOOR);
+					object = tile->getMapData(MapData::O_FLOOR);
 				}
 				frame->setY(object->getTerrainLevel());
 				frame->blit(_tileWallsCache[i]);

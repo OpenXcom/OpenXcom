@@ -48,8 +48,6 @@ SoldierNamePool::~SoldierNamePool()
  */
 void SoldierNamePool::load(const std::string &filename)
 {
-	unsigned int size = 0;
-
 	std::string s = Options::getDataFolder() + "SoldierName/" + filename + ".nam";
 	std::ifstream fin(s.c_str());
 	if (!fin)
@@ -60,30 +58,30 @@ void SoldierNamePool::load(const std::string &filename)
 	YAML::Node doc;
     parser.GetNextDocument(doc);
 
-	for(YAML::Iterator it = doc["maleFirst"].begin(); it != doc["maleFirst"].end(); it++)
+	for (YAML::Iterator i = doc["maleFirst"].begin(); i != doc["maleFirst"].end(); ++i)
 	{
 		std::string name;
-		*it >> name;
+		*i >> name;
 		_maleFirst.push_back(Language::utf8ToWstr(name));
 	}
-	for(YAML::Iterator it = doc["femaleFirst"].begin(); it != doc["femaleFirst"].end(); it++)
+	for (YAML::Iterator i = doc["femaleFirst"].begin(); i != doc["femaleFirst"].end(); ++i)
 	{
 		std::string name;
-		*it >> name;
+		*i >> name;
 		_femaleFirst.push_back(Language::utf8ToWstr(name));
 	}
-	for(YAML::Iterator it = doc["maleLast"].begin(); it != doc["maleLast"].end(); it++)
+	for (YAML::Iterator i = doc["maleLast"].begin(); i != doc["maleLast"].end(); ++i)
 	{
 		std::string name;
-		*it >> name;
+		*i >> name;
 		_maleLast.push_back(Language::utf8ToWstr(name));
 	}
 	if (const YAML::Node *pName = doc.FindValue("femaleLast"))
 	{
-		for(YAML::Iterator it = doc["femaleLast"].begin(); it != doc["femaleLast"].end(); it++)
+		for (YAML::Iterator i = pName->begin(); i != pName->end(); ++i)
 		{
 			std::string name;
-			*it >> name;
+			*i >> name;
 			_femaleLast.push_back(Language::utf8ToWstr(name));
 		}
 	}

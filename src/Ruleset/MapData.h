@@ -27,11 +27,6 @@ namespace OpenXcom
 
 class MapDataSet;
 
-#define O_FLOOR 0
-#define O_WESTWALL 1
-#define O_NORTHWALL 2
-#define O_OBJECT 3
-
 enum SpecialTileType{TILE=0,
 					START_POINT,
 					ION_BEAM_ACCEL,
@@ -41,7 +36,7 @@ enum SpecialTileType{TILE=0,
 					ALIEN_CLON,
 					ALIEN_LEARN,
 					ALIEN_IMPLANT,
-					UKNOWN09,
+					UNKNOWN09,
 					ALIEN_PLASTICS,
 					EXAM_ROOM,
 					DEAD_TILE,
@@ -66,6 +61,10 @@ private:
 	int _block[6];
 	int _loftID[12];
 public:
+	static const int O_FLOOR = 0;
+	static const int O_WESTWALL = 1;
+	static const int O_NORTHWALL = 2;
+	static const int O_OBJECT = 3;
 	MapData(MapDataSet *dataset);
 	~MapData();
 	/// Get the dataset this object belongs to.

@@ -137,19 +137,19 @@ bool Projectile::calculateTrajectory(double accuracy)
 			}
 		}
 	}
-	else if (tile->getMapData(O_OBJECT) != 0)
+	else if (tile->getMapData(MapData::O_OBJECT) != 0)
 	{
 		targetVoxel = Position(_target.x*16 + 8, _target.y*16 + 8, _target.z*24 + 10);
 	}
-	else if (tile->getMapData(O_NORTHWALL) != 0)
+	else if (tile->getMapData(MapData::O_NORTHWALL) != 0)
 	{
 		targetVoxel = Position(_target.x*16 + 8, _target.y*16 + 16, _target.z*24 + 10);
 	}
-	else if (tile->getMapData(O_WESTWALL) != 0)
+	else if (tile->getMapData(MapData::O_WESTWALL) != 0)
 	{
 		targetVoxel = Position(_target.x*16, _target.y*16 + 8, _target.z*24 + 10);
 	}
-	else if (tile->getMapData(O_FLOOR) != 0)
+	else if (tile->getMapData(MapData::O_FLOOR) != 0)
 	{
 		targetVoxel = Position(_target.x*16 + 8, _target.y*16 + 8, _target.z*24);
 	}

@@ -45,11 +45,6 @@ class WarningMessage;
 
 enum BattleActionType { BA_NONE, BA_TURN, BA_WALK, BA_PRIME, BA_THROW, BA_AUTOSHOT, BA_SNAPSHOT, BA_AIMEDSHOT, BA_STUN, BA_HIT };
 
-#define DEFAULT_WALK_SPEED 40
-#define DEFAULT_BULLET_SPEED 5
-#define DEFAULT_ANIM_SPEED 100
-#define ALT_GRENADE false // set to true if you want to play with the alternative grenade handling
-
 struct BattleAction
 {
 	BattleActionType type;
@@ -101,6 +96,10 @@ private:
 	std::vector<State*> _popups;
 	bool _debugPlay;
 public:
+	static const int DEFAULT_WALK_SPEED = 40;
+	static const int DEFAULT_BULLET_SPEED = 5;
+	static const int DEFAULT_ANIM_SPEED = 100;
+	static const bool ALT_GRENADE = false; // set to true if you want to play with the alternative grenade handling
 	/// Creates the Battlescape state.
 	BattlescapeState(Game *game);
 	/// Cleans up the Battlescape state.

@@ -21,16 +21,12 @@
 
 #include "../Battlescape/Position.h"
 
-#define CRAFTSEGMENT 1000
-#define UFOSEGMENT 2000
-
 namespace OpenXcom
 {
 
 class NodeLink;
 
-enum NodeRank{SCOUT=0, XCOM, SOLDIER, NAVIGATOR, LEADER, ENGINEER, MISC1, MEDIC, MISC2};
-			
+enum NodeRank{SCOUT=0, XCOM, SOLDIER, NAVIGATOR, LEADER, ENGINEER, MISC1, MEDIC, MISC2};	
 
 /**
  * Represents a node/spawnpoint in the battlescape, loaded from RMP files.
@@ -49,6 +45,8 @@ private:
 	int _reserved;
 	int _priority;
 public:
+	static const int CRAFTSEGMENT = 1000;
+	static const int UFOSEGMENT = 2000;
 	/// Creates a Node.
 	Node(int id, Position pos, int segment, int type, int rank, int flags, int reserved, int priority);
 	/// Cleans up the Node.

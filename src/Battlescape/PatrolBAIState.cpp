@@ -98,11 +98,11 @@ void PatrolBAIState::think(BattleAction *action)
 			// look for a new node to walk towards
 			if (_unit->getMorale() > 50)
 			{
-				segment = CRAFTSEGMENT;
+				segment = Node::CRAFTSEGMENT;
 			}
 			else
 			{
-				segment = UFOSEGMENT;
+				segment = Node::UFOSEGMENT;
 			}
 
 			for (std::vector<Node*>::iterator i = _game->getNodes()->begin(); i != _game->getNodes()->end() && !bFound; ++i)

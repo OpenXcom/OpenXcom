@@ -63,7 +63,7 @@ void UnitWalkBState::init()
 	}
 	else
 	{
-		_parent->setStateInterval(DEFAULT_WALK_SPEED);
+		_parent->setStateInterval(BattlescapeState::DEFAULT_WALK_SPEED);
 	}
 	_unit = _action.actor;
 	_pf = _parent->getGame()->getSavedGame()->getBattleGame()->getPathfinding();

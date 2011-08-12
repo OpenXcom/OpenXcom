@@ -153,7 +153,7 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 		_action->TU = _actionMenu[btnID]->getTUs();
 		if (_action->type == BA_PRIME)
 		{
-			if (ALT_GRENADE)
+			if (BattlescapeState::ALT_GRENADE)
 			{
 				_action->value = 1;
 				_game->popState();

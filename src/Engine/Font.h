@@ -37,11 +37,11 @@ class Surface;
 class Font
 {
 private:
+	static const char FIRST_CHAR = '!'; // Fonts start with this character
 	Surface *_surface;
 	int _width, _height, _nchar;
 	std::map<wchar_t, SDL_Rect> _chars;
-	// For some reason the X-Com small font is smooshed together by one pixel...
-	int _spacing;
+	int _spacing; // For some reason the X-Com small font is smooshed together by one pixel...
 public:
 	/// Creates a font with a blank surface.
 	Font(int width, int height, int nchar, int spacing = 0);

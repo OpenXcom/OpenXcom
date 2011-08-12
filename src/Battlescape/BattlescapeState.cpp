@@ -75,7 +75,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 {
 	//game->getScreen()->setScale(1.0);
 	// Create the battlemap view
-	_map = new Map(game->getScreen()->getWidth() / game->getScreen()->getXScale(), game->getScreen()->getHeight() / game->getScreen()->getYScale(), 0, 0);
+	_map = new Map(int(game->getScreen()->getWidth() / game->getScreen()->getXScale()), int(game->getScreen()->getHeight() / game->getScreen()->getYScale()), 0, 0);
 
 	// Create buttonbar
 	//_icons = new Surface(320, 200, 160, 400 - 60);
@@ -445,8 +445,8 @@ void BattlescapeState::mapClick(Action *action)
 
 	// don't handle mouseclicks below 140, because they are in the buttons area (it overlaps with map surface)
 	SDL_Rect *r = _icons->getCrop();
-	int my = int(action->getYMouse() / action->getYScale());
-	int mx = int(action->getXMouse() / action->getXScale());
+	int my = int(action->getAbsoluteYMouse());
+	int mx = int(action->getAbsoluteXMouse());
 	if ( my > _icons->getY() && my < _icons->getY()+r->h && mx > _icons->getX() && mx < _icons->getX()+_icons->getWidth()) return;
 
 
@@ -592,7 +592,7 @@ void BattlescapeState::btnInventoryClick(Action *action)
 {
 	if (_battleGame->getSelectedUnit())
 	{
-		_game->pushState(new InventoryState(_game, true));
+		_game->pushState(new InventoryState(_game, !_battleGame->getDebugMode()));
 	}
 }
 
@@ -1019,7 +1019,7 @@ void BattlescapeState::updateSoldierInfo(BattleUnit *battleUnit)
 	if (leftHandItem)
 	{
 		leftHandItem->getRules()->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _btnLeftHandItem);
-		if (leftHandItem->getAmmoItem())
+		if (leftHandItem->getRules()->getBattleType() == BT_FIREARM)
 			_numAmmoLeft->setValue(leftHandItem->getAmmoItem()->getAmmoQuantity());
 	}
 	BattleItem *rightHandItem = _battleGame->getItemFromUnit(battleUnit, "STR_RIGHT_HAND");
@@ -1028,7 +1028,7 @@ void BattlescapeState::updateSoldierInfo(BattleUnit *battleUnit)
 	if (rightHandItem)
 	{
 		rightHandItem->getRules()->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _btnRightHandItem);
-		if (rightHandItem->getAmmoItem())
+		if (rightHandItem->getRules()->getBattleType() == BT_FIREARM)
 			_numAmmoRight->setValue(rightHandItem->getAmmoItem()->getAmmoQuantity());
 	}
 
@@ -1340,6 +1340,7 @@ bool BattlescapeState::checkReservedTU(BattleUnit *bu, int tu)
 			case BA_SNAPSHOT: _warning->showMessage(_game->getLanguage()->getString("STR_TIME_UNITS_RESERVED_FOR_SNAP_SHOT")); break;
 			case BA_AUTOSHOT: _warning->showMessage(_game->getLanguage()->getString("STR_TIME_UNITS_RESERVED_FOR_AUTO_SHOT")); break;
 			case BA_AIMEDSHOT: _warning->showMessage(_game->getLanguage()->getString("STR_TIME_UNITS_RESERVED_FOR_AIMED_SHOT")); break;
+			default: ;
 			}
 		}
 		return false;				

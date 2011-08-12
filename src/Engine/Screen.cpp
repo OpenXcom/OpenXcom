@@ -29,8 +29,8 @@
 namespace OpenXcom
 {
 
-#define BASE_WIDTH 320.0
-#define BASE_HEIGHT 200.0
+const double Screen::BASE_WIDTH = 320.0;
+const double Screen::BASE_HEIGHT = 200.0;
 
 /**
  * Initializes a new display screen for the game to render contents to.
