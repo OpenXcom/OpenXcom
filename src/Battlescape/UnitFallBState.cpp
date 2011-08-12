@@ -64,6 +64,7 @@ void UnitFallBState::init()
 	}
 	else
 	{
+		_parent->getMap()->centerOnPosition(_unit->getPosition());
 		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
 		_unit->lookAt(3);
 	}

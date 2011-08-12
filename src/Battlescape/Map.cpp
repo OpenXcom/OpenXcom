@@ -69,7 +69,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Map::Map(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _mapOffsetX(-250), _mapOffsetY(250), _viewHeight(0), _cursorType(CT_NORMAL), _animFrame(0), _scrollX(0), _scrollY(0), _RMBDragging(false)
+Map::Map(int width, int height, int x, int y, int visibleMapHeight) : InteractiveSurface(width, height, x, y), _mapOffsetX(-250), _mapOffsetY(250), _viewHeight(0), _cursorType(CT_NORMAL), _animFrame(0), _scrollX(0), _scrollY(0), _RMBDragging(false), _visibleMapHeight(visibleMapHeight)
 {
 	_scrollTimer = new Timer(50);
 	_scrollTimer->onTimer((SurfaceHandler)&Map::scroll);
@@ -172,7 +172,8 @@ void Map::init()
 			_arrow->setPixel(x, y, pixels[x+(y*9)]);
 	_arrow->unlock();
 
-	_buffer = new Surface(this->getWidth() + _spriteWidth*4, this->getHeight() + _spriteHeight*4);
+	// the buffer is the actual surface we draw on - it is bigger than the viewport, this allows for smoother scrolling (less redraws)
+	_buffer = new Surface(this->getWidth() + _spriteWidth*4, _visibleMapHeight + _spriteHeight*4);
 	_buffer->setPalette(this->getPalette());
 
 	for (int i = 0; i < 36; ++i)
@@ -214,7 +215,14 @@ void Map::draw(bool forceRedraw)
 		_buffer->clear();
 		_bufOffsetX = -_spriteWidth*2;
 		_bufOffsetY = -_spriteHeight*2;
-		drawTerrain(_buffer);
+		if ((_save->getSelectedUnit() && _save->getSelectedUnit()->getVisible()) || _save->getSelectedUnit() == 0 || _save->getDebugMode())
+		{
+			drawTerrain(_buffer);
+		}
+		else
+		{
+			drawHiddenMovement(_buffer);
+		}
 	}
 	else
 	{
@@ -613,6 +621,16 @@ void Map::drawTerrain(Surface *surface)
 }
 
 /**
+* Draw the "hidden movement" screen.
+*/
+void Map::drawHiddenMovement(Surface *surface)
+{
+	_game->getResourcePack()->getSurface("TAC00.SCR")->setX(- _bufOffsetX + 5);
+	_game->getResourcePack()->getSurface("TAC00.SCR")->setY(- _bufOffsetY + 5);
+	_game->getResourcePack()->getSurface("TAC00.SCR")->blit(surface);
+}
+
+/**
  * Handles map mouse shortcuts.
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
@@ -893,9 +911,9 @@ void Map::centerOnPosition(const Position &mapPos, bool redraw)
 	convertMapToScreen(mapPos, &screenPos);
 
 	_mapOffsetX = -(screenPos.x - (getWidth() / 2));
-	_mapOffsetY = -(screenPos.y - (getHeight() / 2));
+	_mapOffsetY = -(screenPos.y - (_visibleMapHeight / 2));
 
-	convertScreenToMap((getWidth() / 2), (getHeight() / 2), &_centerX, &_centerY);
+	convertScreenToMap((getWidth() / 2), (_visibleMapHeight / 2), &_centerX, &_centerY);
 
 	_viewHeight = mapPos.z;
 

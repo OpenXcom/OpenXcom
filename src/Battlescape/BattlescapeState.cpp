@@ -74,16 +74,24 @@ namespace OpenXcom
 BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 {
 	//game->getScreen()->setScale(1.0);
-	// Create the battlemap view
-	_map = new Map(int(game->getScreen()->getWidth() / game->getScreen()->getXScale()), int(game->getScreen()->getHeight() / game->getScreen()->getYScale()), 0, 0);
+	int mapWidth = int(game->getScreen()->getWidth() / game->getScreen()->getXScale());
+	int mapHeight = int(game->getScreen()->getHeight() / game->getScreen()->getYScale());
+	int iconsWidth = 320;
+	int iconsHeight = 60;
 
-	// Create buttonbar
-	//_icons = new Surface(320, 200, 160, 400 - 60);
-	_icons = new Surface(320, 200, 0, 200-60);
+	// Create buttonbar - this should be on the centerbottom of the screen
+	// there is some cropping going on here, because the icons image is 320x200 while we only need the bottom of it.
+	_icons = new Surface(320, 200, mapWidth/2 - iconsWidth/2, mapHeight - iconsHeight);
 	SDL_Rect *r = _icons->getCrop();
-	r->y = 140;
-	r->h = 60;
-	r->w = 320;
+	r->y = mapHeight - iconsHeight;
+	r->h = iconsHeight;
+	r->w = iconsWidth;
+
+	// Create the battlemap view
+	// the actual map height is the total height minus the height of the buttonbar
+	int visibleMapHeight = mapHeight - iconsHeight;
+	_map = new Map(mapWidth, mapHeight, 0, 0, visibleMapHeight);
+
 	_numLayers = new NumberText(3, 5, _icons->getX() + 232, _icons->getY() + 10);
 	_rank = new Surface(26, 23, _icons->getX() + 107, _icons->getY() + 37);
 
@@ -405,6 +413,7 @@ void BattlescapeState::handleAI(BattleUnit *unit)
 			}
 			else
 			{
+				_battleGame->selectNextPlayerUnit(false);
 				_debugPlay = true;
 			}
 		}
@@ -720,6 +729,7 @@ void BattlescapeState::endTurn()
 	}
 
 	_battleGame->endTurn();
+
 	// check for chained explosions
 	Tile *t = _battleGame->getTerrainModifier()->checkForChainedExplosions();
 	if (t)
@@ -1239,6 +1249,7 @@ void BattlescapeState::popState()
 				}
 				else
 				{
+					_battleGame->selectNextPlayerUnit(false);
 					_debugPlay = true;
 				}
 			}

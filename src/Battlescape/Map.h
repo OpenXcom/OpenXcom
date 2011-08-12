@@ -74,14 +74,17 @@ private:
 	Projectile *_projectile;
 	std::set<Explosion *> _explosions;
 	bool _cameraFollowed;
+	int _visibleMapHeight;
 
 
 	void minMaxInt(int *value, const int minValue, const int maxValue);
 	bool cacheTileSprites(int i);
 	void convertScreenToMap(int screenX, int screenY, int *mapX, int *mapY);
+	void drawTerrain(Surface *surface);
+	void drawHiddenMovement(Surface *surface);
 public:
 	/// Creates a new map at the specified position and size.
-	Map(int width, int height, int x, int y);
+	Map(int width, int height, int x, int y, int visibleMapHeight);
 	/// Cleans up the map.
 	~Map();
 	/// savedbattlegame contains all game content like Tiles, Soldiers, Items,...
@@ -94,8 +97,6 @@ public:
 	void think();
 	/// draw the surface
 	void draw(bool forceRedraw);
-	/// draws the terrain
-	void drawTerrain(Surface *surface);
 	/// Special handling for mouse clicks.
 	void mouseClick(Action *action, State *state);
 	/// Special handling for mous over
@@ -140,7 +141,7 @@ public:
 	Projectile *getProjectile() const;
 	/// Get explosion set
 	std::set<Explosion*> *getExplosions();
-	///
+	/// Check if the camera was following a bullet.
 	bool didCameraFollow();
 };
 

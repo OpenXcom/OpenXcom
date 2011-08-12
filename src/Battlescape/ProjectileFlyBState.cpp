@@ -128,6 +128,7 @@ void ProjectileFlyBState::init()
 	// add the projectile on the map
 	_parent->getMap()->setProjectile(projectile);
 	// let it calculate a trajectory
+	_projectileImpact = -1;
 	if (_action.type == BA_THROW)
 	{
 		if (projectile->calculateThrow(baseAcc))
@@ -149,7 +150,8 @@ void ProjectileFlyBState::init()
 	}
 	else
 	{
-		if (projectile->calculateTrajectory(_unit->getFiringAccuracy(baseAcc)))
+		_projectileImpact = projectile->calculateTrajectory(_unit->getFiringAccuracy(baseAcc));
+		if (_projectileImpact != -1)
 		{
 				// set the soldier in an aiming position
 				_unit->aim(true);
@@ -175,11 +177,13 @@ void ProjectileFlyBState::init()
 
 	BattleAction action;
 	BattleUnit *potentialVictim = _parent->getGame()->getSavedGame()->getBattleGame()->getTile(_action.target)->getUnit();
-	if (_parent->getGame()->getSavedGame()->getBattleGame()->getTerrainModifier()->checkReactionFire(_unit, &action, potentialVictim, false))
+	if (potentialVictim)
 	{
-		_parent->statePushBack(new ProjectileFlyBState(_parent, action));
+		if (_parent->getGame()->getSavedGame()->getBattleGame()->getTerrainModifier()->checkReactionFire(_unit, &action, potentialVictim, false))
+		{
+			_parent->statePushBack(new ProjectileFlyBState(_parent, action));
+		}
 	}
-
 }
 
 /**
@@ -214,15 +218,18 @@ void ProjectileFlyBState::think()
 		}
 		else
 		{
-			int offset = 0;
-			// explosions impact not inside the voxel but one step back
-			if (_ammo && (
-				_ammo->getRules()->getDamageType() == DT_HE ||
-				_ammo->getRules()->getDamageType() == DT_IN))
+			if (_projectileImpact != 5) // out of map
 			{
-				offset = -1;
+				int offset = 0;
+				// explosions impact not inside the voxel but one step back
+				if (_ammo && (
+					_ammo->getRules()->getDamageType() == DT_HE ||
+					_ammo->getRules()->getDamageType() == DT_IN))
+				{
+					offset = -1;
+				}
+				_parent->statePushNext(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(offset), _ammo, _action.actor));
 			}
-			_parent->statePushNext(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(offset), _ammo, _action.actor));
 		}
 
 		delete _parent->getMap()->getProjectile();

@@ -39,6 +39,8 @@ private:
 	Pathfinding *_pf;
 	TerrainModifier *_terrain;
 	BattleAction _action;
+	void postPathProcedures();
+	void setNormalWalkSpeed();
 public:
 	/// Creates a new UnitWalkBState class
 	UnitWalkBState(BattlescapeState *parent, BattleAction _action);
@@ -54,9 +56,6 @@ public:
 	void think();
 	/// Get the result of the state.
 	std::string getResult() const;
-	/// Post walking procedure
-	void postWalkingProcedures();
-
 };
 
 }
