@@ -162,18 +162,18 @@ void BattleItem::setOwner(BattleUnit *owner)
 	_owner = owner;
 	if (_previousOwner != 0)
 	{
-		for (std::vector<BattleItem*>::iterator i = _previousOwner->getInventoryItems()->begin(); i != _previousOwner->getInventoryItems()->end(); ++i)
+		for (std::vector<BattleItem*>::iterator i = _previousOwner->getInventory()->begin(); i != _previousOwner->getInventory()->end(); ++i)
 		{
 			if ((*i) == this)
 			{
-				_previousOwner->getInventoryItems()->erase(i);
+				_previousOwner->getInventory()->erase(i);
 				break;
 			}
 		}
 	}
 	if (_owner != 0)
 	{
-		_owner->getInventoryItems()->push_back(this);
+		_owner->getInventory()->push_back(this);
 	}
 }
 
@@ -240,8 +240,8 @@ void BattleItem::setSlotY(int y)
  */
 bool BattleItem::occupiesSlot(int x, int y) const
 {
-	return (x >= _inventoryX && x <= _inventoryX + _rules->getInventoryWidth() - 1 &&
-			y >= _inventoryY && y <= _inventoryY + _rules->getInventoryHeight() - 1);
+	return (x >= _inventoryX && x < _inventoryX + _rules->getInventoryWidth() &&
+			y >= _inventoryY && y < _inventoryY + _rules->getInventoryHeight());
 }
 
 /**

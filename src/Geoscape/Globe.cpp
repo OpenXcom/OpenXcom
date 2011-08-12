@@ -765,7 +765,7 @@ void Globe::fillLongitudeSegments(double startLon, double endLon, int colourShif
 	traceLon = startLon;
 
 	// If North pole visible, we want to head south (+1), if South pole, head North (-1)
-	if (!pointBack(traceLon, -M_PI / 2))
+	if (!pointBack(traceLon, -M_PI_2))
 	{
 		direction = 1;
 	}
@@ -779,8 +779,8 @@ void Globe::fillLongitudeSegments(double startLon, double endLon, int colourShif
 	{
 	    // draw fisrt longtitude line from pole
 		traceLon = startLon;
-		dL = (startLan + M_PI/2) / 20;
-		for (traceLat = -M_PI/2; traceLat < startLan; traceLat += dL)
+		dL = (startLan + M_PI_2) / 20;
+		for (traceLat = -M_PI_2; traceLat < startLan; traceLat += dL)
 		{
 			polarToCart(traceLon, traceLat, &x, &y);
 			polyPointsX.push_back(x);
@@ -798,8 +798,8 @@ void Globe::fillLongitudeSegments(double startLon, double endLon, int colourShif
 
 	    // draw second longtitude line from pole
 		traceLon = endLon;
-		dL = (endLan + M_PI/2) / 20;
-		for (traceLat = -M_PI/2; traceLat < endLan; traceLat += dL)
+		dL = (endLan + M_PI_2) / 20;
+		for (traceLat = -M_PI_2; traceLat < endLan; traceLat += dL)
 		{
 			polarToCart(traceLon, traceLat, &x, &y);
 			polyPointsX2.push_back(x);
@@ -846,8 +846,8 @@ void Globe::fillLongitudeSegments(double startLon, double endLon, int colourShif
 	{
 	    // draw fisrt longtitude line from pole
 		traceLon = startLon;
-		dL = (startLan - M_PI/2) / 20;
-		for (traceLat = M_PI/2; traceLat > startLan; traceLat += dL)
+		dL = (startLan - M_PI_2) / 20;
+		for (traceLat = M_PI_2; traceLat > startLan; traceLat += dL)
 		{
 			polarToCart(traceLon, traceLat, &x, &y);
 			polyPointsX.push_back(x);
@@ -868,8 +868,8 @@ void Globe::fillLongitudeSegments(double startLon, double endLon, int colourShif
 
 	    // draw second longtitude line from pole
 		traceLon = endLon;
-		dL = (endLan - M_PI/2) / 20;
-		for (traceLat = M_PI/2; traceLat > endLan; traceLat += dL)
+		dL = (endLan - M_PI_2) / 20;
+		for (traceLat = M_PI_2; traceLat > endLan; traceLat += dL)
 		{
 			polarToCart(traceLon, traceLat, &x, &y);
 			polyPointsX2.push_back(x);
@@ -979,7 +979,7 @@ void Globe::drawLand()
 			double tmpLon = (*i)->getLongitude(j);
 			double tmpLat = (*i)->getLatitude(j);
 
-			if (abs(tmpLat) < (M_PI/2 - 0.0001)) //pole vertexes have no longitude
+			if (abs(tmpLat) < (M_PI_2 - 0.0001)) //pole vertexes have no longitude
 			{
 				if (tmpLon < minLon && tmpLon >= (maxLon - M_PI))
 					minLon = tmpLon;

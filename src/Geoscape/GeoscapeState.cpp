@@ -591,10 +591,10 @@ void GeoscapeState::time30Minutes()
 			break;
 		}
 		u->setLongitude(RNG::generate(0.0, 2*M_PI));
-		u->setLatitude(RNG::generate(-M_PI/2, M_PI/2));
+		u->setLatitude(RNG::generate(-M_PI_2, M_PI_2));
 		Waypoint *w = new Waypoint();
 		w->setLongitude(RNG::generate(0.0, 2*M_PI));
-		w->setLatitude(RNG::generate(-M_PI/2, M_PI/2));
+		w->setLatitude(RNG::generate(-M_PI_2, M_PI_2));
 		u->setDestination(w);
 		u->setSpeed(RNG::generate(u->getRules()->getMaxSpeed() / 4, u->getRules()->getMaxSpeed() / 2));
 		_game->getSavedGame()->getUfos()->push_back(u);

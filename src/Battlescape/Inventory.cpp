@@ -36,6 +36,7 @@
 #include "../Engine/SoundSet.h"
 #include "../Engine/Sound.h"
 #include "WarningMessage.h"
+#include "../Savegame/Tile.h"
 
 namespace OpenXcom
 {
@@ -193,7 +194,8 @@ void Inventory::drawItems()
 	if (unit != 0)
 	{
 		SurfaceSet *texture = _game->getResourcePack()->getSurfaceSet("BIGOBS.PCK");
-		for (std::vector<BattleItem*>::iterator i = unit->getInventoryItems()->begin(); i != unit->getInventoryItems()->end(); ++i)
+		// Soldier items
+		for (std::vector<BattleItem*>::iterator i = unit->getInventory()->begin(); i != unit->getInventory()->end(); ++i)
 		{
 			if ((*i) == _selItem)
 				continue;
@@ -212,6 +214,19 @@ void Inventory::drawItems()
 			}
 			texture->getFrame((*i)->getRules()->getBigSprite())->blit(_items);
 		}
+		// Ground items
+		RuleInventory *inv = _invs->find("STR_GROUND")->second;
+		Tile *tile = _game->getSavedGame()->getBattleGame()->getTile(unit->getPosition());
+		for (std::vector<BattleItem*>::iterator i = tile->getInventory()->begin(); i != tile->getInventory()->end(); ++i)
+		{
+			if ((*i) == _selItem)
+				continue;
+
+			Surface *frame = texture->getFrame((*i)->getRules()->getBigSprite());
+			frame->setX(inv->getX() + (*i)->getSlotX() * RuleInventory::SLOT_W);
+			frame->setY(inv->getY() + (*i)->getSlotY() * RuleInventory::SLOT_H);
+			texture->getFrame((*i)->getRules()->getBigSprite())->blit(_items);
+		}
 	}
 }
 
@@ -228,11 +243,24 @@ BattleItem *Inventory::getItemInSlot(std::string slot, int x, int y) const
 	BattleUnit *unit = _game->getSavedGame()->getBattleGame()->getSelectedUnit();
 	if (unit != 0)
 	{
-		for (std::vector<BattleItem*>::iterator i = unit->getInventoryItems()->begin(); i != unit->getInventoryItems()->end(); ++i)
+		// Soldier items
+		for (std::vector<BattleItem*>::iterator i = unit->getInventory()->begin(); i != unit->getInventory()->end(); ++i)
 		{
 			if ((*i)->getSlot() == slot)
 			{
 				if (_invs->find(slot)->second->getType() == INV_HAND || (*i)->occupiesSlot(x, y))
+				{
+					return *i;
+				}
+			}
+		}
+		// Ground items
+		Tile *tile = _game->getSavedGame()->getBattleGame()->getTile(unit->getPosition());
+		for (std::vector<BattleItem*>::iterator i = tile->getInventory()->begin(); i != tile->getInventory()->end(); ++i)
+		{
+			if ((*i)->getSlot() == slot)
+			{
+				if ((*i)->occupiesSlot(x, y))
 				{
 					return *i;
 				}
@@ -346,6 +374,28 @@ void Inventory::mouseClick(Action *action, State *state)
 					{
 						if (unit->spendTimeUnits(_invs->find(_selItem->getSlot())->second->getCost(slot), !_tu))
 						{
+							// Handle dropping from/to ground.
+							if (slot != _selItem->getSlot())
+							{
+								Tile *tile = _game->getSavedGame()->getBattleGame()->getTile(unit->getPosition());
+								if (_invs->find(slot)->second->getType() == INV_GROUND)
+								{
+									_selItem->setOwner(0);
+									tile->getInventory()->push_back(_selItem);
+								}
+								else if (_invs->find(_selItem->getSlot())->second->getType() == INV_GROUND)
+								{
+									_selItem->setOwner(unit);
+									for (std::vector<BattleItem*>::iterator i = tile->getInventory()->begin(); i != tile->getInventory()->end(); ++i)
+									{
+										if ((*i) == _selItem)
+										{
+											tile->getInventory()->erase(i);
+											break;
+										}
+									}
+								}
+							}
 							_selItem->setSlot(slot);
 							_selItem->setSlotX(x);
 							_selItem->setSlotY(y);
@@ -419,7 +469,7 @@ void Inventory::unload()
 	BattleUnit *unit = _game->getSavedGame()->getBattleGame()->getSelectedUnit();
 
 	// Hands must be free
-	for (std::vector<BattleItem*>::iterator i = unit->getInventoryItems()->begin(); i != unit->getInventoryItems()->end(); ++i)
+	for (std::vector<BattleItem*>::iterator i = unit->getInventory()->begin(); i != unit->getInventory()->end(); ++i)
 	{
 		if (_invs->find((*i)->getSlot())->second->getType() == INV_HAND && (*i) != _selItem)
 			return;
@@ -430,6 +480,18 @@ void Inventory::unload()
 		_selItem->getAmmoItem()->setSlot("STR_LEFT_HAND");
 		_selItem->getAmmoItem()->setOwner(unit);
 		_selItem->setSlot("STR_RIGHT_HAND");
+		if (_selItem->getOwner() == 0)
+		{
+			Tile *tile = _game->getSavedGame()->getBattleGame()->getTile(unit->getPosition());
+			for (std::vector<BattleItem*>::iterator i = tile->getInventory()->begin(); i != tile->getInventory()->end(); ++i)
+			{
+				if ((*i) == _selItem)
+				{
+					tile->getInventory()->erase(i);
+					break;
+				}
+			}
+		}
 		_selItem->setOwner(unit);
 		_selItem->setAmmoItem(0);
 		_selItem = 0;

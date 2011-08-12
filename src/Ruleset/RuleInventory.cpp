@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "RuleInventory.h"
+#include <cmath>
 #include "RuleItem.h"
 
 namespace OpenXcom
@@ -148,6 +149,15 @@ bool RuleInventory::checkSlotInPosition(int *x, int *y) const
 			}
 		}
 	}
+	else if (_type == INV_GROUND)
+	{
+		if (mouseX >= _x && mouseX < 320 && mouseY >= _y && mouseY < 200)
+		{
+			*x = (int)floor(double(mouseX - _x) / SLOT_W);
+			*y = (int)floor(double(mouseY - _y) / SLOT_H);
+			return true;
+		}
+	}
 	else
 	{
 		for (std::vector<RuleSlot>::const_iterator i = _slots.begin(); i != _slots.end(); ++i)
@@ -175,18 +185,37 @@ bool RuleInventory::checkSlotInPosition(int *x, int *y) const
 bool RuleInventory::fitItemInSlot(RuleItem *item, int x, int y) const
 {
 	if (_type == INV_HAND)
-		return true;
-	int totalSlots = item->getInventoryWidth() * item->getInventoryHeight();
-	int foundSlots = 0;
-	for (std::vector<RuleSlot>::const_iterator i = _slots.begin(); i != _slots.end() && foundSlots < totalSlots; ++i)
 	{
-		if (i->x >= x && i->x <= x + item->getInventoryWidth() - 1 &&
-			i->y >= y && i->y <= y + item->getInventoryHeight() - 1)
-		{
-			foundSlots++;
-		}
+		return true;
 	}
-	return (foundSlots == totalSlots);
+	else if (_type == INV_GROUND)
+	{
+		int width = (320 - _x) / SLOT_W;
+		int height = (200 - _y) / SLOT_H;
+		for (int xx = x; xx < x + item->getInventoryWidth(); ++xx)
+		{
+			for (int yy = y; yy < y + item->getInventoryHeight(); ++yy)
+			{
+				if (!(xx >= 0 && xx < width && yy >= 0 && yy < height))
+					return false;
+			}
+		}
+		return true;
+	}
+	else
+	{
+		int totalSlots = item->getInventoryWidth() * item->getInventoryHeight();
+		int foundSlots = 0;
+		for (std::vector<RuleSlot>::const_iterator i = _slots.begin(); i != _slots.end() && foundSlots < totalSlots; ++i)
+		{
+			if (i->x >= x && i->x < x + item->getInventoryWidth() &&
+				i->y >= y && i->y < y + item->getInventoryHeight())
+			{
+				foundSlots++;
+			}
+		}
+		return (foundSlots == totalSlots);
+	}
 }
 
 /**

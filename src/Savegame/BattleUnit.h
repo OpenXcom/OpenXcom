@@ -64,7 +64,7 @@ private:
 	int _armor[5];
 	int _fatalWounds[6];
 	int _fire;
-	std::vector<BattleItem*> _inventoryItems;
+	std::vector<BattleItem*> _inventory;
 	BattleAIState *_currentAIState;
 	bool _visible;
 public:
@@ -187,7 +187,7 @@ public:
 	/// Get fire.
 	int getFire();
 	/// Get the list of items in the inventory.
-	std::vector<BattleItem*> *getInventoryItems();
+	std::vector<BattleItem*> *getInventory();
 	/// Let AI do their thing.
 	void think(BattleAction *action);
 	/// Get current AI state.

@@ -575,7 +575,7 @@ std::vector<MapDataSet*> *SavedBattleGame::getMapDataSets()
 */
 BattleItem *SavedBattleGame::getItemFromUnit(BattleUnit *unit, std::string slot)
 {
-	for (std::vector<BattleItem*>::iterator i = unit->getInventoryItems()->begin(); i != unit->getInventoryItems()->end(); ++i)
+	for (std::vector<BattleItem*>::iterator i = unit->getInventory()->begin(); i != unit->getInventory()->end(); ++i)
 	{
 		if ((*i)->getSlot() == slot)
 		{

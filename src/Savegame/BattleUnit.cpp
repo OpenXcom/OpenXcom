@@ -924,9 +924,9 @@ int BattleUnit::getFire()
  * Get the pointer to the vector of inventory items.
  * @return pointer to vector.
  */
-std::vector<BattleItem*> *BattleUnit::getInventoryItems()
+std::vector<BattleItem*> *BattleUnit::getInventory()
 {
-	return &_inventoryItems;
+	return &_inventory;
 }
 
 /**
