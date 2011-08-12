@@ -214,15 +214,15 @@ bool TerrainModifier::calculateFOV(BattleUnit *unit)
 		visibleUnitsChecksum += (*i)->getId()+1;
 
 	unit->clearVisibleUnits();
-	
+
 	// raytrace up and down
-	for (double fi = startFi; fi <= endFi; fi += 6)
+	for (int fi = startFi; fi <= endFi; fi += 6)
 	{
 		double cos_fi = cos(fi * M_PI / 180.0);
 		double sin_fi = sin(fi * M_PI / 180.0);
 
 		// raytrace every 3 degrees makes sure we cover all tiles in a circle.
-		for (double te = startAngle[unit->getDirection()]; te <= endAngle[unit->getDirection()]; te += 3)
+		for (int te = startAngle[unit->getDirection()]; te <= endAngle[unit->getDirection()]; te += 3)
 		{
 			double cos_te = cos(te * M_PI / 180.0);
 			double sin_te = sin(te * M_PI / 180.0);
@@ -265,7 +265,7 @@ bool TerrainModifier::calculateFOV(BattleUnit *unit)
 					{
 						if (unitViewDistance > 0)
 							checkForVisibleUnits(unit, dest);
-				
+
 						if (unit->getFaction() == FACTION_PLAYER)
 						{
 							dest->setDiscovered(true, 2);
@@ -551,7 +551,7 @@ void TerrainModifier::explode(const Position &center, int power, ItemDamageType 
 		}
 
 		// raytrace every 3 degrees makes sure we cover all tiles in a circle.
-		for (double te = 0; te <= 360; te += 3)
+		for (int te = 0; te <= 360; te += 3)
 		{
 			double cos_te = cos(te * M_PI / 180.0);
 			double sin_te = sin(te * M_PI / 180.0);
