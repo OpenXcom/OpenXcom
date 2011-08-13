@@ -165,7 +165,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 						 {16, 20, 24},
 						 {8, 12, 16},
 						 {0, 4, 8},
-						 {0, 0, 0}};
+						 {0, 0, 1}};
 	_game->setPalette(color, Palette::backPos+16, 16);
 
 	// Fix system colors
@@ -1364,7 +1364,7 @@ bool BattlescapeState::checkReservedTU(BattleUnit *bu, int tu)
 			default: ;
 			}
 		}
-		return false;				
+		return false;
 	}
 
 	return true;

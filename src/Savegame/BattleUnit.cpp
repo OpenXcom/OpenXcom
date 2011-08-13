@@ -740,11 +740,6 @@ std::vector<BattleUnit*> *BattleUnit::getVisibleUnits()
  */
 void BattleUnit::clearVisibleUnits()
 {
-	if (getFaction() == FACTION_PLAYER)
-	for (std::vector<BattleUnit*>::iterator i = _visibleUnits.begin(); i != _visibleUnits.end(); ++i)
-	{
-		(*i)->setVisible(false);
-	}
 	_visibleUnits.clear();
 }
 

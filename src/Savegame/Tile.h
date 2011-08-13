@@ -46,12 +46,10 @@ protected:
 	int _currentFrame[4];
 	bool _discovered[3];
 	int _light[LIGHTLAYERS];
-	int _lastLight[LIGHTLAYERS];
 	int _smoke;
 	int _fire;
 	int _explosive;
 	Position _pos;
-	bool _cached;
 	BattleUnit *_unit;
 	std::vector<BattleItem *> _inventory;
 	int _animationOffset;
@@ -88,10 +86,6 @@ public:
 	bool isUfoDoorOpen(int part);
 	/// Close ufo door.
 	int closeUfoDoor();
-	/// Set the cached flag.
-	void setCached(bool cached);
-	/// Check if tile is cached.
-	bool isCached();
 	/// Sets the black fog of war status of this tile.
 	void setDiscovered(bool flag, int part);
 	/// Gets the black fog of war status of this tile.
@@ -100,8 +94,6 @@ public:
 	void resetLight(int layer);
 	/// Add light to this tile.
 	void addLight(int light, int layer);
-	/// Checks if the light on this tile has changed.
-	void checkForChangedLight(int layer);
 	/// Get the shade amount.
 	int getShade();
 	/// Destroy a tile part.

@@ -114,7 +114,6 @@ void UnitFallBState::think()
 		TerrainModifier *terrain = _parent->getGame()->getSavedGame()->getBattleGame()->getTerrainModifier();
 		convertUnitToCorpse(_unit, terrain);
 		terrain->calculateUnitLighting();
-		_parent->getMap()->cacheTileSprites();
 		_parent->popState();
 	}
 

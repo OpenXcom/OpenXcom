@@ -54,9 +54,6 @@ private:
 	Timer *_scrollTimer;
 	Surface *_arrow;
 	Game *_game;
-	Surface **_tileFloorCache;
-	Surface **_tileWallsCache;
-	int _tileCount;
 	std::vector<Surface *> _unitCache;
 	int _mapOffsetX, _mapOffsetY, _viewHeight;
 	int _bufOffsetX, _bufOffsetY;
@@ -75,6 +72,7 @@ private:
 	std::set<Explosion *> _explosions;
 	bool _cameraFollowed;
 	int _visibleMapHeight;
+	SDL_Color *_shade[16];
 
 
 	void minMaxInt(int *value, const int minValue, const int maxValue);
@@ -131,8 +129,6 @@ public:
 	void setCursorType(CursorType type);
 	/// Get the 3D cursor type.
 	CursorType getCursorType() const;
-	/// Cache tile sprites.
-	void cacheTileSprites();
 	/// Cache units.
 	void cacheUnits();
 	/// Set projectile

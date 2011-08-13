@@ -82,14 +82,6 @@ Map::~Map()
 {
 	delete _scrollTimer;
 
-	for (int i = 0; i < _tileCount; ++i)
-	{
-		delete _tileFloorCache[i];
-		delete _tileWallsCache[i];
-	}
-	delete[] _tileFloorCache;
-	delete[] _tileWallsCache;
-
 	for (std::vector<Surface*>::iterator i = _unitCache.begin(); i != _unitCache.end(); ++i)
 	{
 		delete *i;
@@ -103,6 +95,12 @@ Map::~Map()
 		delete _bullet[i];
 		delete _bulletShadow[i];
 	}
+
+	for (int shade = 0; shade < 16; shade++)
+	{
+		free(_shade[shade]);
+	}
+
 }
 
 /**
@@ -125,15 +123,7 @@ void Map::setSavedGame(SavedBattleGame *save, Game *game)
 {
 	_save = save;
 	_game = game;
-	_tileCount = _save->getHeight() * _save->getLength() * _save->getWidth();
-	_tileFloorCache = new Surface*[_tileCount];
-	_tileWallsCache = new Surface*[_tileCount];
 	_unitCache.clear();
-	for (int i = 0; i < _tileCount; ++i)
-	{
-		_tileFloorCache[i] = 0;
-		_tileWallsCache[i] = 0;
-	}
 	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
 		_unitCache.push_back(0);
@@ -176,15 +166,37 @@ void Map::init()
 	_buffer = new Surface(this->getWidth() + _spriteWidth*4, _visibleMapHeight + _spriteHeight*4);
 	_buffer->setPalette(this->getPalette());
 
+	// create a palette for each shade
+	for (int shade = 0; shade < 16; shade++)
+	{
+		int ncolors = _surface->format->palette->ncolors;
+		_shade[shade] = (SDL_Color *)malloc(sizeof(SDL_Color) * ncolors);
+
+		// do the palette shift
+		for (int i = 0; i < _surface->format->palette->ncolors; i++)
+		{
+			int baseColor = i/16;
+			int originalShade = i%16;
+			int newShade = originalShade + shade;
+			if (newShade > 15)
+			{
+				baseColor = 0;
+				newShade = 15;
+			}
+			_shade[shade][i].r = getPalette()[(baseColor*16) + newShade].r;
+			_shade[shade][i].g = getPalette()[(baseColor*16) + newShade].g;
+			_shade[shade][i].b = getPalette()[(baseColor*16) + newShade].b;
+		}
+	}
+
 	for (int i = 0; i < 36; ++i)
 	{
 		_bullet[i] = new BulletSprite(i);
-		_bullet[i]->setPalette(this->getPalette());
+		_bullet[i]->setPalette(_shade[0]);
 		_bullet[i]->draw();
 		_bulletShadow[i] = new BulletSprite(i);
-		_bulletShadow[i]->setPalette(this->getPalette());
+		_bulletShadow[i]->setPalette(_shade[15]);
 		_bulletShadow[i]->draw();
-		_bulletShadow[i]->setShade(16);
 	}
 
 	_projectile = 0;
@@ -310,17 +322,21 @@ void Map::drawTerrain(Surface *surface)
 					index = _save->getTileIndex(mapPosition); // index used for tile cache
 
 					//dirty =
-					cacheTileSprites(index);
+					//cacheTileSprites(index);
 
 					tile = _save->getTile(mapPosition);
+					int tileShade = tile->getShade();
+
 					// Draw floor
 					if (tile && tile->isDiscovered(2))
 					{
-						frame = _tileFloorCache[index];
+						//frame = _tileFloorCache[index];
+						frame = tile->getSprite(MapData::O_FLOOR);
 						if (frame)
 						{
+							frame->setShade(_shade[tileShade], tileShade);
 							frame->setX(screenPosition.x);
-							frame->setY(screenPosition.y);
+							frame->setY(screenPosition.y - tile->getMapData(MapData::O_FLOOR)->getYOffset());
 							frame->blit(surface);
 						}
                         unit = tile->getUnit();
@@ -363,12 +379,63 @@ void Map::drawTerrain(Surface *surface)
 					// Draw walls
 					if (tile && (tile->isDiscovered(0) || tile->isDiscovered(1)))
 					{
-						frame = _tileWallsCache[index];
-						if (frame)
+						if (tile->getMapData(MapData::O_WESTWALL) != 0 || tile->getMapData(MapData::O_NORTHWALL) != 0 || tile->getMapData(MapData::O_OBJECT) != 0 || tile->getTopItemSprite() != -1)
 						{
-							frame->setX(screenPosition.x);
-							frame->setY(screenPosition.y);
-							frame->blit(surface);
+							// Draw west wall
+							frame = tile->getSprite(MapData::O_WESTWALL);
+							if (frame)
+							{
+								frame->setX(screenPosition.x);
+								frame->setY(screenPosition.y - tile->getMapData(MapData::O_WESTWALL)->getYOffset());
+								if (tile->getMapData(MapData::O_WESTWALL)->isDoor() || tile->getMapData(MapData::O_WESTWALL)->isUFODoor())
+									frame->setShade(_shade[0], 0);
+								else
+									frame->setShade(_shade[tileShade], tileShade);
+								frame->blit(surface);
+							}
+							// Draw north wall
+							frame = tile->getSprite(MapData::O_NORTHWALL);
+							if (frame)
+							{
+								frame->setX(screenPosition.x);
+								frame->setY(screenPosition.y - tile->getMapData(MapData::O_NORTHWALL)->getYOffset());
+								// if there is a westwall, cut off some of the north wall (otherwise it will overlap)
+								if (tile->getMapData(MapData::O_WESTWALL))
+								{
+									frame->setX(screenPosition.x + frame->getWidth() / 2);
+									frame->getCrop()->x = frame->getWidth() / 2;
+									frame->getCrop()->w = frame->getWidth() / 2;
+									frame->getCrop()->h = frame->getHeight();
+								}
+								if (tile->getMapData(MapData::O_NORTHWALL)->isDoor() || tile->getMapData(MapData::O_NORTHWALL)->isUFODoor())
+									frame->setShade(_shade[0], 0);
+								else
+									frame->setShade(_shade[tileShade], tileShade);
+								frame->blit(surface);
+								frame->getCrop()->w = 0;
+								frame->getCrop()->h = 0;
+							}
+							// Draw object
+							frame = tile->getSprite(MapData::O_OBJECT);
+							if (frame)
+							{
+
+								frame->setX(screenPosition.x);
+								frame->setY(screenPosition.y - tile->getMapData(MapData::O_OBJECT)->getYOffset());
+								frame->setShade(_shade[tileShade], tileShade);
+								frame->blit(surface);
+							}
+
+							// draw an item on top of the floor (if any)
+							int sprite = tile->getTopItemSprite();
+							if (sprite != -1)
+							{
+								frame = _res->getSurfaceSet("FLOOROB.PCK")->getFrame(sprite);
+								frame->setX(screenPosition.x);
+								frame->setY(screenPosition.y - tile->getTerrainLevel());
+								frame->setShade(_shade[tileShade], tileShade);
+								frame->blit(surface);
+							}
 						}
 					}
 
@@ -461,6 +528,7 @@ void Map::drawTerrain(Surface *surface)
 							calculateWalkingOffset(unit, &offset);
 							frame->setX(screenPosition.x + offset.x);
 							frame->setY(screenPosition.y + offset.y);
+							frame->setShade(_shade[0], 0);
 							frame->blit(surface);
 							if (unit == (BattleUnit*)_save->getSelectedUnit() && _cursorType != CT_NONE)
 							{
@@ -472,6 +540,7 @@ void Map::drawTerrain(Surface *surface)
 								frame = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frameNumber);
 								frame->setX(screenPosition.x);
 								frame->setY(screenPosition.y);
+								frame->setShade(_shade[0], 0);
 								frame->blit(surface);
 							}
 						}
@@ -491,6 +560,7 @@ void Map::drawTerrain(Surface *surface)
 								offset.y += 24;
 								frame->setX(screenPosition.x + offset.x);
 								frame->setY(screenPosition.y + offset.y);
+								frame->setShade(_shade[0], 0);
 								frame->blit(surface);
 								if (tunit == (BattleUnit*)_save->getSelectedUnit() && _cursorType != CT_NONE)
 								{
@@ -502,6 +572,7 @@ void Map::drawTerrain(Surface *surface)
 									frame = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frameNumber);
 									frame->setX(screenPosition.x);
 									frame->setY(screenPosition.y);
+									frame->setShade(_shade[0], 0);
 									frame->blit(surface);
 								}
 							}
@@ -854,11 +925,10 @@ void Map::animate()
 	_animFrame++;
 	if (_animFrame == 8) _animFrame = 0;
 
-	for (int i = 0; i < _tileCount; ++i)
+	for (int i = 0; i < _save->getWidth()*_save->getHeight()*_save->getLength(); ++i)
 	{
 		_save->getTiles()[i]->animate();
 	}
-	cacheTileSprites();
 	draw(true);
 }
 
@@ -1063,158 +1133,6 @@ CursorType Map::getCursorType() const
 }
 
 /**
- * cacheTileSprites
- */
-void Map::cacheTileSprites()
-{
-	for (int i = 0; i < _tileCount; ++i)
-	{
-		cacheTileSprites(i);
-	}
-
-}
-
-/**
- * Caches 1 tile's sprites.
- * @return false if the tile did not need redrawing.
- */
-bool Map::cacheTileSprites(int i)
-{
-	MapData *object = 0;
-	Surface *frame = 0;
-	Tile *tile = _save->getTiles()[i];
-	bool door = false;
-
-	if(tile && !tile->isCached())
-	{
-
-		/* draw a floor object on the cache (if any) */
-		object = tile->getMapData(MapData::O_FLOOR);
-
-		if (object)
-		{
-			if (_tileFloorCache[i] == 0)
-			{
-				_tileFloorCache[i] = new Surface(_spriteWidth, _spriteHeight);
-				_tileFloorCache[i]->setPalette(this->getPalette());
-			}
-			else
-			{
-				_tileFloorCache[i]->clear();
-			}
-
-			// Draw floor
-			frame = tile->getSprite(MapData::O_FLOOR);
-			frame->setX(0);
-			frame->setY(-object->getYOffset());
-			frame->blit(_tileFloorCache[i]);
-
-			_tileFloorCache[i]->setShade(tile->isDiscovered(2)?tile->getShade():16);
-		}
-		else if (_tileFloorCache[i] != 0)
-		{
-			_tileFloorCache[i]->clear();
-		}
-
-		/* draw terrain objects on the cache (if any) */
-		if (tile->getMapData(MapData::O_WESTWALL) != 0 || tile->getMapData(MapData::O_NORTHWALL) != 0 || tile->getMapData(MapData::O_OBJECT) != 0 || tile->getTopItemSprite() != -1)
-		{
-			if (_tileWallsCache[i] == 0)
-			{
-				_tileWallsCache[i] = new Surface(_spriteWidth, _spriteHeight);
-				_tileWallsCache[i]->setPalette(this->getPalette());
-			}
-			else
-			{
-				_tileWallsCache[i]->clear();
-			}
-
-			// Draw west wall
-			object = tile->getMapData(MapData::O_WESTWALL);
-			if (object)
-			{
-				frame = tile->getSprite(MapData::O_WESTWALL);
-				frame->setX(0);
-				frame->setY(-object->getYOffset());
-				frame->blit(_tileWallsCache[i]);
-				door = object->isDoor() || object->isUFODoor();
-			}
-			// Draw north wall
-			object = tile->getMapData(MapData::O_NORTHWALL);
-			if (object)
-			{
-				frame = tile->getSprite(MapData::O_NORTHWALL);
-				frame->setX(0);
-				frame->setY(-object->getYOffset());
-				// if there is a westwall, cut off some of the north wall (otherwise it will overlap)
-				if (tile->getMapData(MapData::O_WESTWALL))
-				{
-					frame->setX(frame->getWidth() / 2);
-					frame->getCrop()->x = frame->getWidth() / 2;
-					frame->getCrop()->w = frame->getWidth() / 2;
-					frame->getCrop()->h = frame->getHeight();
-				}else
-				{
-					frame->getCrop()->w = 0;
-					frame->getCrop()->h = 0;
-				}
-				frame->blit(_tileWallsCache[i]);
-				door = object->isDoor() || object->isUFODoor();
-			}
-			// Draw object
-			object = tile->getMapData(MapData::O_OBJECT);
-			if (object)
-			{
-				frame = tile->getSprite(MapData::O_OBJECT);
-				frame->setX(0);
-				frame->setY(-object->getYOffset());
-				frame->blit(_tileWallsCache[i]);
-			}
-
-			// draw an item on top of the floor (if any)
-			int sprite = tile->getTopItemSprite();
-			if (sprite != -1)
-			{
-				frame = _res->getSurfaceSet("FLOOROB.PCK")->getFrame(sprite);
-				frame->setX(0);
-				if (object == 0)
-				{
-					object = tile->getMapData(MapData::O_FLOOR);
-				}
-				frame->setY(object->getTerrainLevel());
-				frame->blit(_tileWallsCache[i]);
-			}
-
-			if (door && (tile->isDiscovered(0)||tile->isDiscovered(1))) // don't shade doors too dark, so you can still see them
-			{
-				_tileWallsCache[i]->setShade(0);
-			}
-			else
-			{
-				_tileWallsCache[i]->setShade((tile->isDiscovered(2))?tile->getShade():16);
-			}
-		}
-		else if (_tileWallsCache[i] != 0)
-		{
-			_tileWallsCache[i]->clear();
-		}
-
-		// if lighting changed for a tile, then it also does for a unit standing on it
-		if (tile->getUnit() != 0 && tile->getUnit()->getFaction() != FACTION_PLAYER)
-		{
-			tile->getUnit()->setCached(false);
-		}
-
-		tile->setCached(true);
-		return true;
-	}
-	else
-	{
-		return false;
-	}
-}
-
-/**
  * Check all units if they need to be redrawn.
  */
 void Map::cacheUnits()
@@ -1248,10 +1166,9 @@ void Map::cacheUnits()
 			}
 			unitSprite->setSurfaces(_res->getSurfaceSet((*i)->getUnit()->getArmor()->getSpriteSheet()),
 									_res->getSurfaceSet("HANDOB.PCK"));
+
 			unitSprite->draw();
 			unitSprite->blit(_unitCache.at((*i)->getId()));
-
-			_unitCache.at((*i)->getId())->setShade(_save->getTile((*i)->getPosition())->isDiscovered(2)?_save->getTile((*i)->getPosition())->getShade():16);
 			(*i)->setCached(true);
 		}
 	}

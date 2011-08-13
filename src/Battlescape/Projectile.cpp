@@ -68,9 +68,7 @@ Projectile::Projectile(ResourcePack *res, SavedBattleGame *save, Position origin
 	{
 		_sprite = _res->getSurfaceSet("FLOOROB.PCK")->getFrame(getItem()->getRules()->getFloorSprite());
 		_shadowSprite = new Surface(_sprite->getWidth(), _sprite->getHeight());
-		_shadowSprite->setPalette(_sprite->getPalette());
 		_sprite->blit(_shadowSprite);
-		_shadowSprite->setShade(16);
 	}
 }
 

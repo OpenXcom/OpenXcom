@@ -132,11 +132,6 @@ void TerrainModifier::calculateTerrainLighting()
 
 	// todo: add lighting of items (flares)
 
-	// set changed light tiles to uncached
-	for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); ++i)
-	{
-		_save->getTiles()[i]->checkForChangedLight(layer);
-	}
 }
 
 /**
@@ -166,11 +161,6 @@ void TerrainModifier::calculateUnitLighting()
 		}
 	}
 
-	// set changed light tiles to uncached
-	for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); ++i)
-	{
-		_save->getTiles()[i]->checkForChangedLight(layer);
-	}
 }
 
 /**
@@ -181,8 +171,8 @@ void TerrainModifier::calculateUnitLighting()
 bool TerrainModifier::calculateFOV(BattleUnit *unit)
 {
 	// units see 90 degrees sidewards.
-	double startAngle[8] = { 45, 0, -45, 270, 225, 180, 135, 90 };
-	double endAngle[8] = { 135, 90, 45, 360, 315, 270, 225, 180 };
+	int startAngle[8] = { 45, 0, -45, 270, 225, 180, 135, 90 };
+	int endAngle[8] = { 135, 90, 45, 360, 315, 270, 225, 180 };
 
 	double centerZ = (unit->getPosition().z * 2) + 1.5;
 	double centerX = unit->getPosition().x + 0.5;
@@ -191,8 +181,8 @@ bool TerrainModifier::calculateFOV(BattleUnit *unit)
 	int unitViewDistance;
 
 	// units see 90 degrees down and 60 degrees up.
-	double startFi = -90;
-	double endFi = 60;
+	int startFi = -90;
+	int endFi = 60;
 
 	std::set<Tile*> tilesAffected;
 	std::pair<std::set<Tile*>::iterator,bool> ret;
