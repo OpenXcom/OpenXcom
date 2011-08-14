@@ -150,7 +150,7 @@ void ResearchState::FillProjectList()
 		std::wstringstream sstr;
 		sstr << (*iter)->GetAssigned ();
 		const RuleResearchProject *r = (*iter)->GetRuleResearchProject();
-		std::wstring wstr = r->getName ();
+		std::wstring wstr = _game->getLanguage()->getString(r->getName ());
 		_lstResearch->addRow(3, wstr.c_str(), sstr.str().c_str(), L"Unknown");
 	}
 	std::wstringstream ss;

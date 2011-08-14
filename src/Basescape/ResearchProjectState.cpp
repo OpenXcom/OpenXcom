@@ -112,7 +112,7 @@ void ResearchProjectState::buildUi ()
 	_btnOk->onMouseClick((ActionHandler)&ResearchProjectState::btnOkClick);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+8);
-	_txtTitle->setText(_rule ? _rule->getName() : _project->GetRuleResearchProject ()->getName());
+	_txtTitle->setText(_rule ? _game->getLanguage()->getString(_rule->getName()) : _game->getLanguage()->getString(_project->GetRuleResearchProject ()->getName()));
 
 	 _txtAvailableScientist->setColor(Palette::blockOffset(13)+8);
 	 _txtAvailableSpace->setColor(Palette::blockOffset(13)+8);

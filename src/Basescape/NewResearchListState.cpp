@@ -126,7 +126,7 @@ void NewResearchListState::FillProjectList ()
 		     it != _projects.end ();
 		     it++)
 	  	{
-	    		_lstResearch->addRow(1, (*it)->getName ().c_str());
+			_lstResearch->addRow(1, _game->getLanguage()->getString((*it)->getName ()).c_str());
 		}
 	}
 }

@@ -30,19 +30,19 @@ namespace OpenXcom
 class RuleResearchProject
 {
  private:
-	std::wstring _name;
+	std::string _name;
 	std::wstring _description;
 	int _cost;
 	std::vector<RuleResearchProject *> _dependencys;
 	bool _discovered;
 public:
-	RuleResearchProject(const std::wstring & name, int cost);
+	RuleResearchProject(const std::string & name, int cost);
 	bool isAvailable () const;
 	void addDependency (RuleResearchProject * rp);
 	bool isDiscovered () const;
 	int getCost() const;
 	void setDiscovered (bool b);
-	const std::wstring & getName () const;
+	const std::string & getName () const;
 	const std::vector<RuleResearchProject *> & getDependencys () const;
 };
 

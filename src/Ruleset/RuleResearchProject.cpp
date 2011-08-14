@@ -3,7 +3,7 @@
 namespace OpenXcom
 {
 
-RuleResearchProject::RuleResearchProject(const std::wstring & name, int cost) : _name(name), _cost(cost), _discovered(false)
+RuleResearchProject::RuleResearchProject(const std::string & name, int cost) : _name(name), _cost(cost), _discovered(false)
 {
 }
 
@@ -40,7 +40,7 @@ void RuleResearchProject::setDiscovered (bool b)
 	_discovered = b;
 }
 
-const std::wstring & RuleResearchProject::getName () const
+const std::string & RuleResearchProject::getName () const
 {
 	return _name;
 }

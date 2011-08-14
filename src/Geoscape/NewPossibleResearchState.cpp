@@ -60,7 +60,7 @@ NewPossibleResearchState::NewPossibleResearchState(Game * game, Base * base, con
 	    iter != possibilities.end ();
 	    iter++)
 	{
-		_possibilities->addRow (1, (*iter)->getName ().c_str());
+		_possibilities->addRow (1, _game->getLanguage()->getString((*iter)->getName ()).c_str());
 	}
 }
 

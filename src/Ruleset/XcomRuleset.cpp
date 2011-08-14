@@ -52,9 +52,27 @@
 #include "ArticleDefinition.h"
 #include "RuleInventory.h"
 #include "RuleResearchProject.h"
+#include "../Engine/CrossPlatform.h"
+#include <fstream>
+#include <algorithm>
 
 namespace OpenXcom
 {
+
+  struct findProjectByName : public std::unary_function<RuleResearchProject *,
+							bool>
+  {
+    std::string _name;
+    findProjectByName(const std::string & name);
+    bool operator()(const RuleResearchProject *) const;
+  };
+  findProjectByName::findProjectByName(const std::string & name) : _name(name)
+  {
+  }
+  bool findProjectByName::operator()(const RuleResearchProject *r) const
+  {
+    return r->getName () == _name;
+  }
 
 /**
  * Initializes the X-Com ruleset with all the rules
@@ -1624,24 +1642,35 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_costScientist = 30000;
 	_timePersonnel = 72;
 
-	RuleResearchProject * lw = new RuleResearchProject (L"Laser Weapons", 50);
-	RuleResearchProject * lp = new RuleResearchProject (L"Laser Pistol", 100);
-	RuleResearchProject * lr = new RuleResearchProject (L"Laser Rifle", 300);
-	RuleResearchProject * lc = new RuleResearchProject (L"Laser Canon", 420);
-	RuleResearchProject * ld = new RuleResearchProject (L"Laser Defense", 510);
-	RuleResearchProject * ms = new RuleResearchProject (L"Motion scanner", 180);
-	RuleResearchProject * md = new RuleResearchProject (L"Medikit", 210);
-	ld->addDependency(lc);
-	lc->addDependency(lr);
-	lr->addDependency(lp);
-	lp->addDependency(lw);
+	std::string researchDataFile("research.dat");
+	std::ifstream fin(CrossPlatform::getDataFile(researchDataFile).c_str());
+	YAML::Parser parser(fin);
 
-	_researchProjects.push_back(lw);
-	_researchProjects.push_back(lp);
-	_researchProjects.push_back(lr);
-	_researchProjects.push_back(lc);
-	_researchProjects.push_back(ms);
-	_researchProjects.push_back(md);
+	YAML::Node doc;
+	while(parser.GetNextDocument(doc)) 
+	{
+		for(YAML::Iterator it=doc.begin();it!=doc.end();++it)
+		{
+			std::string name;
+			int cost;
+			std::vector<std::string> deps;
+			(*it)["name"] >> name;
+			(*it)["cost"] >> cost;
+			(*it)["dependencys"] >> deps;
+			RuleResearchProject * r = new RuleResearchProject(name, cost);
+			for(std::vector<std::string>::iterator itDep = deps.begin ();
+			    itDep != deps.end ();
+			    itDep++)
+			{
+				std::vector<RuleResearchProject *>::iterator iter = std::find_if(_researchProjects.begin (),
+												 _researchProjects.end (),
+												 findProjectByName(*itDep));
+				if (iter != _researchProjects.end ())
+					r->addDependency(*iter);
+			}
+			_researchProjects.push_back(r);
+	      }
+	}
 }
 
 /**
