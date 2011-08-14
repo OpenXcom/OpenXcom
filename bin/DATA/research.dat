@@ -1,0 +1,199 @@
+- name: STR_LASER_WEAPONS
+  cost: 50
+  dependencys:
+    []
+- name: STR_LASER_PISTOL
+  cost: 100
+  dependencys:
+    - STR_LASER_WEAPONS
+- name: STR_LASER_RIFLE
+  cost: 300
+  dependencys:
+    - STR_LASER_PISTOL
+- name: STR_LASER_CANNON
+  cost: 420
+  dependencys:
+    - STR_LASER_RIFLE
+- name: STR_MOTION_SCANNER
+  cost: 180
+  dependencys:
+    - STR_PSI_LAB
+- name: STR_MEDI_KIT
+  cost: 210
+  dependencys:
+    []
+- name: STR_ALIEN_ALLOYS
+  cost: 400
+  dependencys:
+    []
+- name: STR_ALIEN_ENTERTAINMENT
+  cost: 150
+  dependencys:
+    []
+- name: STR_ALIEN_FOOD
+  cost: 150
+  dependencys:
+    []
+- name: STR_ALIEN_GRENADE
+  cost: 200
+  dependencys:
+    []
+- name: STR_ALIEN_ORIGINS
+  cost: 300
+  dependencys:
+    []
+- name: STR_ALIEN_REPRODUCTION
+  cost: 150
+  dependencys:
+    []
+- name: STR_ALIEN_SURGERY
+  cost: 150
+  dependencys:
+    []
+- name: STR_BLASTER_BOMB
+  cost: 300
+  dependencys:
+    []
+- name: STR_BLASTER_LAUNCHER
+  cost: 900
+  dependencys:
+    []
+- name: STR_CYDONIA_OR_BUST
+  cost: 600
+  dependencys:
+    - STR_THE_MARTIAN_SOLUTION
+- name: STR_ELERIUM_115
+  cost: 450
+  dependencys:
+    []
+- name: STR_EXAMINATION_ROOM
+  cost: 150
+  dependencys:
+    []
+- name: STR_FLYING_SUIT
+  cost: 330
+  dependencys:
+    - STR_POWER_SUIT
+    - STR_UFO_NAVIGATION
+- name: STR_FUSION_DEFENCE
+  cost: 800
+  dependencys:
+    - STR_BLASTER_LAUNCHER
+    - STR_BLASTER_BOMB
+- name: STR_FUSION_MISSILE
+  cost: 880
+  dependencys:
+    - STR_FUSION_DEFENCE
+- name: STR_GRAV_SHIELD
+  cost: 930
+  dependencys:
+    - STR_NEW_FIGHTER_TRANSPORTER
+- name: STR_HEAVY_LASER
+  cost: 460
+  dependencys:
+    []
+- name: STR_HEAVY_PLASMA
+  cost: 800
+  dependencys:
+    []
+- name: STR_HEAVY_PLASMA_CLIP
+  cost: 400
+  dependencys:
+    []
+- name: STR_HYPER_WAVE_DECODER
+  cost: 670
+  dependencys:
+    []
+- name: STR_MIND_PROBE
+  cost: 600
+  dependencys:
+    []
+- name: STR_MIND_SHIELD
+  cost: 360
+  dependencys:
+    []
+- name: STR_NEW_FIGHTER_CRAFT
+  cost: 600
+  dependencys:
+    - STR_UFO_CONSTRUCTION
+- name: STR_NEW_FIGHTER_TRANSPORTER
+  cost: 700
+  dependencys:
+    - STR_NEW_FIGHTER_CRAFT
+- name: STR_PERSONAL_ARMOR
+  cost: 180
+  dependencys:
+    - STR_ALIEN_ALLOYS
+    - STR_PSI_LAB
+- name: STR_PLASMA_BEAM
+  cost: 660
+  dependencys:
+    - STR_PLASMA_RIFLE
+    - STR_PLASMA_RIFLE_CLIP
+    - STR_HEAVY_PLASMA
+    - STR_HEAVY_PLASMA_CLIP
+- name: STR_PLASMA_DEFENCE
+  cost: 620
+  dependencys:
+    - STR_PLASMA_BEAM
+- name: STR_PLASMA_PISTOL
+  cost: 600
+  dependencys:
+    []
+- name: STR_PLASMA_PISTOL_CLIP
+  cost: 400
+  dependencys:
+    []
+- name: STR_PLASMA_RIFLE
+  cost: 700
+  dependencys:
+    []
+- name: STR_PLASMA_RIFLE_CLIP
+  cost: 400
+  dependencys:
+    []
+- name: STR_POWER_SUIT
+  cost: 205
+  dependencys:
+    - STR_ELERIUM_115
+    - STR_UFO_POWER_SOURCE
+    - STR_PERSONAL_ARMOR
+- name: STR_PSI_AMP
+  cost: 500
+  dependencys:
+    []
+- name: STR_PSI_LAB
+  cost: 420
+  dependencys:
+    []
+- name: STR_SMALL_LAUNCHER
+  cost: 550
+  dependencys:
+    []
+- name: STR_STUN_BOMB
+  cost: 180
+  dependencys:
+    []
+- name: STR_THE_MARTIAN_SOLUTION
+  cost: 500
+  dependencys:
+    - STR_ALIEN_ORIGINS
+- name: STR_UFO_CONSTRUCTION
+  cost: 450
+  dependencys:
+    - STR_ALIEN_ALLOYS
+    - STR_ELERIUM_115
+    - STR_UFO_POWER_SOURCE
+    - STR_UFO_NAVIGATION
+- name: STR_UFO_NAVIGATION
+  cost: 450
+  dependencys:
+    []
+- name: STR_UFO_POWER_SOURCE
+  cost: 450
+  dependencys:
+    []
+- name: STR_ULTIMATE_CRAFT
+  cost: 900
+  dependencys:
+    - STR_NEW_FIGHTER_TRANSPORTER
