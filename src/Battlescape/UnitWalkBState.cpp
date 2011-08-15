@@ -137,7 +137,7 @@ void UnitWalkBState::think()
 		else
 		{
 			// make sure the unit sprites are up to date
-			_parent->getMap()->cacheUnits();
+			_parent->getMap()->cacheUnit(_unit);
 		}
 	}
 
@@ -215,7 +215,7 @@ void UnitWalkBState::think()
 				_parent->popState();
 			}
 			// make sure the unit sprites are up to date
-			_parent->getMap()->cacheUnits();
+			_parent->getMap()->cacheUnit(_unit);
 		}
 		else
 		{
@@ -230,7 +230,7 @@ void UnitWalkBState::think()
 		_unit->turn();
 		unitspotted = _terrain->calculateFOV(_unit);
 		// make sure the unit sprites are up to date
-		_parent->getMap()->cacheUnits();
+		_parent->getMap()->cacheUnit(_unit);
 		if (unitspotted)
 		{
 			_pf->abortPath();
@@ -264,7 +264,7 @@ void UnitWalkBState::postPathProcedures()
 {
 	_terrain->calculateUnitLighting();
 	_terrain->calculateFOV(_unit);
-	_parent->getMap()->cacheUnits();
+	_parent->getMap()->cacheUnit(_unit);
 	_parent->popState();
 }
 

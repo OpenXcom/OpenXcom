@@ -134,8 +134,8 @@ void ProjectileFlyBState::init()
 		if (projectile->calculateThrow(baseAcc))
 		{
 			projectileItem->setOwner(0);
-			_unit->setCached(false);
-			_parent->getMap()->cacheUnits();
+			_unit->setCache(0);
+			_parent->getMap()->cacheUnit(_unit);
 			_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(39)->play();
 		}
 		else
@@ -155,7 +155,7 @@ void ProjectileFlyBState::init()
 		{
 				// set the soldier in an aiming position
 				_unit->aim(true);
-				_parent->getMap()->cacheUnits();
+				_parent->getMap()->cacheUnit(_unit);
 				// and we have a lift-off
 				_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(weapon->getRules()->getFireSound())->play();
 				if (!_parent->getGame()->getSavedGame()->getBattleGame()->getDebugMode() && _ammo->spendBullet() == false)

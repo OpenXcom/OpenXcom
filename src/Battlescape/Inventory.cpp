@@ -381,7 +381,7 @@ void Inventory::mouseClick(Action *action, State *state)
 								if (_invs->find(slot)->second->getType() == INV_GROUND)
 								{
 									_selItem->setOwner(0);
-									tile->getInventory()->push_back(_selItem);
+									tile->addItem(_selItem);
 								}
 								else if (_invs->find(_selItem->getSlot())->second->getType() == INV_GROUND)
 								{

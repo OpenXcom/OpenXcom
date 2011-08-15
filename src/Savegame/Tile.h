@@ -45,7 +45,7 @@ protected:
 	int _mdsID[4], _mdID[4];
 	int _currentFrame[4];
 	bool _discovered[3];
-	int _light[LIGHTLAYERS];
+	int _light[LIGHTLAYERS], _lastLight[LIGHTLAYERS];
 	int _smoke;
 	int _fire;
 	int _explosive;
@@ -53,6 +53,8 @@ protected:
 	BattleUnit *_unit;
 	std::vector<BattleItem *> _inventory;
 	int _animationOffset;
+	Surface *_cache;
+	bool _cacheInvalid;
 public:
 	/// Creates a tile.
 	Tile(const Position& pos);
@@ -136,7 +138,10 @@ public:
 	void prepareNewTurn();
 	/// Get inventory on this tile.
 	std::vector<BattleItem *> *getInventory();
-
+	/// Set the cache sprite.
+	void setCache(Surface *cache);
+	/// If this tile is cached on the battlescape.
+	Surface *getCache(bool *invalid);
 };
 
 }

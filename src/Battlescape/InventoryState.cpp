@@ -124,6 +124,7 @@ InventoryState::~InventoryState()
 void InventoryState::init()
 {
 	BattleUnit *unit = _battleGame->getSelectedUnit();
+	unit->setCache(0);
 	_soldier->clear();
 	_btnRank->clear();
 

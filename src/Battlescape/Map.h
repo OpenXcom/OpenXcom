@@ -54,9 +54,7 @@ private:
 	Timer *_scrollTimer;
 	Surface *_arrow;
 	Game *_game;
-	std::vector<Surface *> _unitCache;
 	int _mapOffsetX, _mapOffsetY, _viewHeight;
-	int _bufOffsetX, _bufOffsetY;
 	int _RMBClickX, _RMBClickY;
 	int _spriteWidth, _spriteHeight;
 	int _selectorX, _selectorY;
@@ -65,7 +63,6 @@ private:
 	int _scrollX, _scrollY;
 	bool _RMBDragging;
 	int _centerX, _centerY;
-	Surface *_buffer;
 	BulletSprite *_bullet[36];
 	BulletSprite *_bulletShadow[36];
 	Projectile *_projectile;
@@ -94,7 +91,7 @@ public:
 	/// handle timers
 	void think();
 	/// draw the surface
-	void draw(bool forceRedraw);
+	void draw();
 	/// Special handling for mouse clicks.
 	void mouseClick(Action *action, State *state);
 	/// Special handling for mous over
@@ -104,7 +101,7 @@ public:
 	/// Scrolls the view (eg when mouse is on the edge of the screen)
 	void scroll();
 	/// rotate the tileframes 0-7
-	void animate();
+	void animate(bool redraw);
 	/// move map layer up
 	void up();
 	/// move map layer down
@@ -129,8 +126,11 @@ public:
 	void setCursorType(CursorType type);
 	/// Get the 3D cursor type.
 	CursorType getCursorType() const;
+	/// Cache tile.
+	Surface *cacheTile(Tile *tile, Surface *cache, int itX, int itY, int itZ);
 	/// Cache units.
 	void cacheUnits();
+	void cacheUnit(BattleUnit *unit);
 	/// Set projectile
 	void setProjectile(Projectile *projectile);
 	/// Get projectile

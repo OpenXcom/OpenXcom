@@ -86,7 +86,7 @@ void UnitTurnBState::think()
 	{
 		_unit->turn();
 		_parent->getGame()->getSavedGame()->getBattleGame()->getTerrainModifier()->calculateFOV(_unit);
-		_parent->getMap()->cacheUnits();
+		_parent->getMap()->cacheUnit(_unit);
 		if (_unit->getStatus() == STATUS_STANDING)
 		{
 			_parent->popState();

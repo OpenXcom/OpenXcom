@@ -164,8 +164,8 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 						 {24, 28, 32},
 						 {16, 20, 24},
 						 {8, 12, 16},
-						 {0, 4, 8},
-						 {0, 0, 1}};
+						 {3, 4, 8},
+						 {3, 3, 6}};
 	_game->setPalette(color, Palette::backPos+16, 16);
 
 	// Fix system colors
@@ -335,7 +335,7 @@ void BattlescapeState::init()
 {
 	_map->focus();
 	_map->cacheUnits();
-	_map->draw(true);
+	_map->draw();
 	updateSoldierInfo(_battleGame->getSelectedUnit());
 }
 
@@ -1121,7 +1121,7 @@ void BattlescapeState::handleState()
 	if (!_states.empty())
 	{
 		_states.front()->think();
-		_map->draw(true); // redraw map
+		_map->draw(); // redraw map
 	}
 }
 
@@ -1132,7 +1132,7 @@ void BattlescapeState::animate()
 {
 	_animFrame++;
 	if (_animFrame == 8) _animFrame = 0;
-	_map->animate();
+	_map->animate(_states.empty());
 
 	blinkVisibleUnitButtons();
 }

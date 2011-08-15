@@ -117,7 +117,7 @@ void UnitFallBState::think()
 		_parent->popState();
 	}
 
-	_parent->getMap()->cacheUnits();
+	_parent->getMap()->cacheUnit(_unit);
 }
 
 /*

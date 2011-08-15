@@ -35,6 +35,7 @@ class RuleUnit;
 class BattleAIState;
 class BattlescapeState;
 class Node;
+class Surface;
 
 enum UnitStatus {STATUS_STANDING, STATUS_WALKING, STATUS_TURNING, STATUS_AIMING, STATUS_FALLING, STATUS_DEAD, STATUS_UNCONSCIOUS};
 enum UnitFaction {FACTION_PLAYER, FACTION_HOSTILE, FACTION_NEUTRAL};
@@ -60,13 +61,15 @@ private:
 	std::vector<BattleUnit *> _visibleUnits;
 	std::vector<Tile *> _visibleTiles;
 	int _tu, _energy, _health, _morale, _stunlevel;
-	bool _cached, _kneeled, _dontReselect;
+	bool _kneeled, _dontReselect;
 	int _armor[5];
 	int _fatalWounds[6];
 	int _fire;
 	std::vector<BattleItem*> _inventory;
 	BattleAIState *_currentAIState;
 	bool _visible;
+	Surface *_cache;
+	bool _cacheInvalid;
 public:
 	/// Creates a BattleUnit.
 	BattleUnit(Unit *_unit, UnitFaction faction);
@@ -117,9 +120,9 @@ public:
 	/// Gets the unit's faction.
 	UnitFaction getFaction() const;
 	/// Set the cached flag.
-	void setCached(bool cached);
+	void setCache(Surface *cache);
 	/// If this unit is cached on the battlescape.
-	bool isCached() const;
+	Surface *getCache(bool *invalid) const;
 	/// Kneel down.
 	void kneel(bool kneeled);
 	/// Is kneeled?
