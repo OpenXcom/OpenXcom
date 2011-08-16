@@ -304,4 +304,14 @@ std::map<std::string, RuleInventory*> *const Ruleset::getInventories()
 	return &_invs;
 }
 
+/**
+ * Returns the rules for a specific inventory.
+ * @param name Inventory name.
+ * @return Inventory ruleset.
+ */
+RuleInventory *const Ruleset::getInventory(const std::string &name) const
+{
+	return _invs.find(name)->second;
+}
+
 }

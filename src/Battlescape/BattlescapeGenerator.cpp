@@ -366,7 +366,6 @@ void BattlescapeGenerator::addAlien(RuleAlien *rules, RuleArmor *armor, NodeRank
 void BattlescapeGenerator::addItem(RuleItem *item)
 {
 	BattleItem *bi = new BattleItem(item);
-
 	if (item->getBattleType() == BT_AMMO)
 	{
 		// find equipped weapons that can be loaded with this ammo
@@ -388,7 +387,7 @@ void BattlescapeGenerator::addItem(RuleItem *item)
 			if (!_save->getItemFromUnit((*i), "STR_RIGHT_HAND"))
 			{
 				bi->setOwner((*i));
-				bi->setSlot("STR_RIGHT_HAND");
+				bi->setSlot(_game->getRuleset()->getInventory("STR_RIGHT_HAND"));
 				break;
 			}
 		}

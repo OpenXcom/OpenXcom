@@ -58,10 +58,12 @@ public:
 	/// Handler for clicking the Next button.
 	void btnNextClick(Action *action);
 	/// Handler for clicking the Rank button.
+	void btnUnloadClick(Action *action);
+	/// Handler for clicking on the Ground -> button.
+	void btnGroundClick(Action *action);
+	/// Handler for clicking on the inventory.
 	void btnRankClick(Action *action);
 	/// Handler for clicking the Unload button.
-	void btnUnloadClick(Action *action);
-	/// Handler for clicking on the inventory.
 	void invClick(Action *action);
 };
 

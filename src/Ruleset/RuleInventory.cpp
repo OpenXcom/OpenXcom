@@ -234,11 +234,11 @@ void RuleInventory::addCost(std::string slot, int cost)
  * @param slot The new section id.
  * @return The time unit cost.
  */
-int RuleInventory::getCost(std::string slot) const
+int RuleInventory::getCost(RuleInventory* slot) const
 {
-	if (slot == _id)
+	if (slot == this)
 		return 0;
-	return _costs.find(slot)->second;
+	return _costs.find(slot->getId())->second;
 }
 
 }

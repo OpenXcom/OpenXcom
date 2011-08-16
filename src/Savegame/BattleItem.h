@@ -21,13 +21,13 @@
 
 #include "../Battlescape/Position.h"
 #include "yaml.h"
-#include <string>
 
 namespace OpenXcom
 {
 
 class Item;
 class RuleItem;
+class RuleInventory;
 class BattleUnit;
 
 /**
@@ -42,7 +42,7 @@ private:
 	RuleItem *_rules;
 	Position _position;
 	BattleUnit *_owner, *_previousOwner;
-	std::string _inventorySlot;
+	RuleInventory *_inventorySlot;
 	int _inventoryX, _inventoryY;
 	BattleItem *_ammoItem;
 	int _explodeTurn, _ammoQuantity;
@@ -74,9 +74,9 @@ public:
 	/// Sets the item's owner.
 	void setOwner(BattleUnit *owner);
 	/// Gets the item's inventory slot.
-	std::string getSlot() const;
+	RuleInventory *getSlot() const;
 	/// Sets the item's inventory slot.
-	void setSlot(std::string slot);
+	void setSlot(RuleInventory *slot);
 	/// Gets the item's inventory X position.
 	int getSlotX() const;
 	/// Sets the item's inventory X position.

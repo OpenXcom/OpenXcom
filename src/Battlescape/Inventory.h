@@ -30,6 +30,7 @@ class RuleInventory;
 class Game;
 class WarningMessage;
 class BattleItem;
+class BattleUnit;
 
 /**
  * Interactive view of an inventory.
@@ -39,11 +40,18 @@ class Inventory : public InteractiveSurface
 {
 private:
 	Game *_game;
-	std::map<std::string, RuleInventory*> *_invs;
 	Surface *_grid, *_items, *_selection;
 	WarningMessage *_warning;
+	BattleUnit *_selUnit;
 	BattleItem *_selItem;
 	bool _tu;
+
+	/// Move item to specified slot.
+	void moveItem(BattleItem *item, RuleInventory *slot, int x, int y);
+	/// Gets the item in the specified slot.
+	BattleItem *getItemInSlot(RuleInventory *slot, int x, int y) const;
+	/// Gets the slot in the specified position.
+	RuleInventory *getSlotInPosition(int *x, int *y) const;
 public:
 	/// Creates a new inventory view at the specified position and size.
 	Inventory(Game *game, int width, int height, int x = 0, int y = 0);
@@ -53,18 +61,18 @@ public:
 	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
 	/// Sets the inventory's Time Unit mode.
 	void setTuMode(bool tu);
+	/// Sets the inventory's selected unit.
+	void setSelectedUnit(BattleUnit *unit);
 	/// Draws the inventory.
 	void draw();
 	/// Draws the inventory grid.
 	void drawGrid();
 	/// Draws the inventory items.
 	void drawItems();
-	/// Gets the item in the specified slot.
-	BattleItem *getItemInSlot(std::string slot, int x, int y) const;
-	/// Gets the slot in the specified position.
-	std::string getSlotInPosition(int *x, int *y) const;
 	/// Gets the currently selected item.
 	BattleItem *getSelectedItem() const;
+	/// Sets the currently selected item.
+	void setSelectedItem(BattleItem *item);
 	/// Handle timers.
 	void think();
 	/// Blits the inventory onto another surface.
@@ -75,6 +83,8 @@ public:
 	void mouseClick(Action *action, State *state);
 	/// Unloads the selected weapon.
 	void unload();
+	/// Arranges items on the ground.
+	void arrangeGround();
 };
 
 }

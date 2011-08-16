@@ -82,7 +82,7 @@ public:
 	/// Adds a time unit cost to the inventory.
 	void addCost(std::string slot, int cost);
 	/// Gets a certain cost in the inventory.
-	int getCost(std::string slot) const;
+	int getCost(RuleInventory *slot) const;
 };
 
 }

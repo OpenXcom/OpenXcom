@@ -683,14 +683,11 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	pclip->setSize(0.1f);
 	pclip->setCost(70);
 	pclip->setBigSprite(4);
-	pclip->setHandSprite(120);
 	pclip->setPower(26);
 	pclip->setDamageType(DT_AP);
 	pclip->setBattleType(BT_AMMO);
 	pclip->setHitAnimation(26);
 	pclip->setHitSound(22);
-	pclip->setInventoryWidth(1);
-	pclip->setInventoryHeight(1);
 	pclip->setClipSize(12);
 	pclip->setWeight(3);
 	
@@ -718,14 +715,11 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	rclip->setSize(0.1f);
 	rclip->setCost(200);
 	rclip->setBigSprite(2);
-	rclip->setHandSprite(120);
 	rclip->setPower(30);
 	rclip->setDamageType(DT_AP);
 	rclip->setBattleType(BT_AMMO);
 	rclip->setHitAnimation(26);
 	rclip->setHitSound(22);
-	rclip->setInventoryWidth(1);
-	rclip->setInventoryHeight(1);
 	rclip->setClipSize(20);
 	rclip->setWeight(3);
 
@@ -754,7 +748,6 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	hcap->setSize(0.1f);
 	hcap->setCost(300);
 	hcap->setBigSprite(12);
-	hcap->setHandSprite(120);
 	hcap->setPower(56);
 	hcap->setDamageType(DT_AP);
 	hcap->setBattleType(BT_AMMO);
@@ -769,7 +762,6 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	hche->setSize(0.1f);
 	hche->setCost(500);
 	hche->setBigSprite(13);
-	hche->setHandSprite(120);
 	hche->setPower(52);
 	hche->setDamageType(DT_HE);
 	hche->setBattleType(BT_AMMO);
@@ -784,7 +776,6 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	hci->setSize(0.1f);
 	hci->setCost(400);
 	hci->setBigSprite(14);
-	hci->setHandSprite(120);
 	hci->setPower(60);
 	hci->setDamageType(DT_IN);
 	hci->setBattleType(BT_AMMO);
@@ -821,7 +812,6 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	acap->setSize(0.1f);
 	acap->setCost(500);
 	acap->setBigSprite(8);
-	acap->setHandSprite(120);
 	acap->setPower(42);
 	acap->setDamageType(DT_AP);
 	acap->setBattleType(BT_AMMO);
@@ -855,7 +845,6 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	srocket->setSize(0.2f);
 	srocket->setCost(600);
 	srocket->setBigSprite(16);
-	srocket->setHandSprite(120);
 	srocket->setPower(75);
 	srocket->setDamageType(DT_HE);
 	srocket->setBattleType(BT_AMMO);
@@ -870,24 +859,18 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	grenade->setSize(0.1f);
 	grenade->setCost(300);
 	grenade->setBigSprite(19);
-	grenade->setHandSprite(120);
 	grenade->setPower(50);
 	grenade->setDamageType(DT_HE);
 	grenade->setBattleType(BT_GRENADE);
-	grenade->setInventoryWidth(1);
-	grenade->setInventoryHeight(1);
 	grenade->setWeight(3);
 
 	RuleItem *sgrenade = new RuleItem("STR_SMOKE_GRENADE");
 	sgrenade->setSize(0.1f);
 	sgrenade->setCost(150);
 	sgrenade->setBigSprite(20);
-	sgrenade->setHandSprite(120);
 	sgrenade->setPower(60);
 	sgrenade->setDamageType(DT_SMOKE);
 	sgrenade->setBattleType(BT_GRENADE);
-	sgrenade->setInventoryWidth(1);
-	sgrenade->setInventoryHeight(1);
 	sgrenade->setWeight(3);
 
 	RuleItem *corpse = new RuleItem("STR_CORPSE");
@@ -928,14 +911,11 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	ppclip->setSize(0.1f);
 	ppclip->setCost(70);
 	ppclip->setBigSprite(34);
-	ppclip->setHandSprite(120);
 	ppclip->setPower(52);
 	ppclip->setDamageType(DT_PLASMA);
 	ppclip->setBattleType(BT_AMMO);
 	ppclip->setHitAnimation(46);
 	ppclip->setHitSound(19);
-	ppclip->setInventoryWidth(1);
-	ppclip->setInventoryHeight(1);
 	ppclip->setClipSize(26);
 	ppclip->setWeight(3);
 

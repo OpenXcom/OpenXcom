@@ -27,6 +27,7 @@
 #include "../Battlescape/TerrainModifier.h"
 #include "../Battlescape/Position.h"
 #include "../Resource/ResourcePack.h"
+#include "../Ruleset/RuleInventory.h"
 
 namespace OpenXcom
 {
@@ -573,11 +574,11 @@ std::vector<MapDataSet*> *SavedBattleGame::getMapDataSets()
 * get an item from a specific unit and slot
 * @return
 */
-BattleItem *SavedBattleGame::getItemFromUnit(BattleUnit *unit, std::string slot)
+BattleItem *SavedBattleGame::getItemFromUnit(BattleUnit *unit, const std::string &slot)
 {
 	for (std::vector<BattleItem*>::iterator i = unit->getInventory()->begin(); i != unit->getInventory()->end(); ++i)
 	{
-		if ((*i)->getSlot() == slot)
+		if ((*i)->getSlot()->getId() == slot)
 		{
 			return *i;
 		}

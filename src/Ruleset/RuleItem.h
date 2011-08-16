@@ -45,7 +45,7 @@ private:
 	int _cost, _time, _weight;
 	int _bigSprite, _floorSprite, _handSprite, _bulletSprite;
 	int _fireSound, _hitSound, _hitAnimation;
-	int _power, _displayPriority, _width, _height;
+	int _power, _displayPriority;
 	std::vector<std::string> _compatibleAmmo;
 	ItemDamageType _damageType;
 	int _accuracyAuto, _accuracySnap, _accuracyAimed, _tuAuto, _tuSnap, _tuAimed;

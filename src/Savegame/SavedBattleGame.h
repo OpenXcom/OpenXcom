@@ -22,6 +22,7 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
+#include <string>
 #include "yaml.h"
 #include "BattleItem.h"
 #include "BattleUnit.h"
@@ -43,6 +44,7 @@ class Pathfinding;
 class TerrainModifier;
 class BattleItem;
 class Item;
+class RuleInventory;
 
 /**
  * Enumator containing all the possible mission types.
@@ -131,7 +133,7 @@ public:
 	/// get the terrainmodifier object
 	TerrainModifier *getTerrainModifier();
 	/// get an item from a specific unit and slot
-	BattleItem *getItemFromUnit(BattleUnit *unit, std::string slot);
+	BattleItem *getItemFromUnit(BattleUnit *unit, const std::string &slot);
 	BattleItem *getMainHandWeapon(BattleUnit *unit);
 	UnitFaction getSide() const;
 	int getTurn() const;

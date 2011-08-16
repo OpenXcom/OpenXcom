@@ -19,6 +19,7 @@
 #include "BattleItem.h"
 #include "BattleUnit.h"
 #include "../Ruleset/RuleItem.h"
+#include "../Ruleset/RuleInventory.h"
 
 namespace OpenXcom
 {
@@ -27,7 +28,7 @@ namespace OpenXcom
  * Initializes a item of the specified type.
  * @param rules Pointer to ruleset.
  */
-BattleItem::BattleItem(RuleItem *rules) : _rules(rules), _owner(0), _previousOwner(0), _inventorySlot(""), _inventoryX(0), _inventoryY(0), _ammoItem(0), _explodeTurn(0), _ammoQuantity(0)
+BattleItem::BattleItem(RuleItem *rules) : _rules(rules), _position(-1, -1, -1), _owner(0), _previousOwner(0), _inventorySlot(0), _inventoryX(0), _inventoryY(0), _ammoItem(0), _explodeTurn(0), _ammoQuantity(0)
 {
 	if (_rules->getBattleType() == BT_AMMO)
 	{
@@ -52,7 +53,7 @@ void BattleItem::load(const YAML::Node &node)
 	node["Y"] >> _position.y;
 	node["Z"] >> _position.z;
 
-	node["inventoryslot"] >> _inventorySlot;
+	node["inventoryslot"] >> _inventorySlot->getId();
 	node["inventoryX"] >> _inventoryX;
 	node["inventoryY"] >> _inventoryY;
 }
@@ -71,7 +72,7 @@ void BattleItem::save(YAML::Emitter &out) const
 	out << YAML::Key << "Z" << YAML::Value << _position.z;
 	if (_owner)
 		out << YAML::Key << "owner" << YAML::Value << _owner->getId();
-	out << YAML::Key << "inventoryslot" << YAML::Value << _inventorySlot;
+	out << YAML::Key << "inventoryslot" << YAML::Value << _inventorySlot->getId();
 	out << YAML::Key << "inventoryX" << YAML::Value << _inventoryX;
 	out << YAML::Key << "inventoryY" << YAML::Value << _inventoryY;
 
@@ -181,7 +182,7 @@ void BattleItem::setOwner(BattleUnit *owner)
  * Gets the item's inventory slot.
  * @return slot id
  */
-std::string BattleItem::getSlot() const
+RuleInventory *BattleItem::getSlot() const
 {
 	return _inventorySlot;
 }
@@ -190,7 +191,7 @@ std::string BattleItem::getSlot() const
  * Sets the item's inventory slot.
  * @param slot slot id
  */
-void BattleItem::setSlot(std::string slot)
+void BattleItem::setSlot(RuleInventory *slot)
 {
 	_inventorySlot = slot;
 }

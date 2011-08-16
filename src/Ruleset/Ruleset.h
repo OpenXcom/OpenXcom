@@ -106,6 +106,8 @@ public:
 	ArticleDefinition *const getUfopaediaArticle(const std::string &name) const;
 	/// Gets the inventory list.
 	std::map<std::string, RuleInventory*> *const getInventories();
+	/// Gets alien unit rules.
+	RuleInventory *const getInventory(const std::string &name) const;
 	/// Gets the cost of a soldier.
 	int getSoldierCost() const;
 	/// Gets the cost of an engineer.
