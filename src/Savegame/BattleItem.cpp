@@ -53,7 +53,7 @@ void BattleItem::load(const YAML::Node &node)
 	node["Y"] >> _position.y;
 	node["Z"] >> _position.z;
 
-	node["inventoryslot"] >> _inventorySlot->getId();
+	//node["inventoryslot"] >> _inventorySlot;
 	node["inventoryX"] >> _inventoryX;
 	node["inventoryY"] >> _inventoryY;
 }
