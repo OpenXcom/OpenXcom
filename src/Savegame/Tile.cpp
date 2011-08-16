@@ -20,6 +20,7 @@
 #include "../Ruleset/MapData.h"
 #include "../Ruleset/MapDataSet.h"
 #include "../Engine/SurfaceSet.h"
+#include "../Engine/Surface.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Exception.h"
 #include "BattleUnit.h"
@@ -33,7 +34,7 @@ namespace OpenXcom
 * constructor
 * @param pos Position.
 */
-Tile::Tile(const Position& pos): _smoke(0), _fire(0),  _explosive(0), _pos(pos), _cached(false), _unit(0)
+Tile::Tile(const Position& pos): _smoke(0), _fire(0),  _explosive(0), _pos(pos), _unit(0), _cache(0), _cacheInvalid(true)
 {
 	for (int i = 0; i < 4; ++i)
 	{
@@ -43,7 +44,7 @@ Tile::Tile(const Position& pos): _smoke(0), _fire(0),  _explosive(0), _pos(pos),
 	for (int layer = 0; layer < LIGHTLAYERS; layer++)
 	{
 		_light[layer] = 0;
-		_lastLight[layer] = 0;
+		_lastLight[layer] = -1;
 	}
 	_discovered[0] = false;
 	_discovered[1] = false;
@@ -57,6 +58,7 @@ Tile::Tile(const Position& pos): _smoke(0), _fire(0),  _explosive(0), _pos(pos),
 Tile::~Tile()
 {
 	_inventory.clear();
+	delete _cache;
 }
 
 /**
@@ -81,7 +83,7 @@ MapData *Tile::getMapData(int part)
 void Tile::setMapData(MapData *dat, int part)
 {
 	_objects[part] = dat;
-	setCached(false);
+	_cacheInvalid = true;
 }
 
 /**
@@ -251,30 +253,11 @@ int Tile::closeUfoDoor()
 		{
 			_currentFrame[part] = 0;
 			retval = 1;
-			setCached(false);
+			_cacheInvalid = true;
 		}
 	}
 
 	return retval;
-}
-
-/**
- * Sets the tile's cache flag. Set when objects or lighting on this tile changed.
- * @param cached
- */
-void Tile::setCached(bool cached)
-{
-	_cached = cached;
-}
-
-/**
- * Check if the tile is still cached in the Map cache.
- * When the tile changes (door/lighting/destroyed), it needs to be re-cached.
- * @return bool
- */
-bool Tile::isCached()
-{
-	return _cached;
 }
 
 /**
@@ -292,11 +275,11 @@ void Tile::setDiscovered(bool flag, int part)
 			_discovered[0] = flag;
 			_discovered[1] = flag;
 		}
-		setCached(false);
+		_cacheInvalid = true;
 		// if light on tile changes, units and objects on it change light too
 		if (_unit != 0)
 		{
-			_unit->setCached(false);
+			_unit->setCache(0);
 		}
 	}
 }
@@ -318,8 +301,8 @@ bool Tile::isDiscovered(int part)
  */
 void Tile::resetLight(int layer)
 {
-	_lastLight[layer] = _light[layer];
 	_light[layer] = 0;
+	_lastLight[layer] = _light[layer];
 }
 
 /**
@@ -331,23 +314,6 @@ void Tile::addLight(int light, int layer)
 {
 	if (_light[layer] < light)
 		_light[layer] = light;
-}
-
-/**
- * Tiles that have their light amount changed, need to be re-cached.
- * @param layer Light is seperated in 3 layers: Ambient, Static and Dynamic.
- */
-void Tile::checkForChangedLight(int layer)
-{
-	if (_lastLight[layer] != _light[layer])
-	{
-		setCached(false);
-		// if light on tile changes, units and objects on it change light too
-		if (_unit != 0)
-		{
-			_unit->setCached(false);
-		}
-	}
 }
 
 /**
@@ -540,10 +506,11 @@ void Tile::animate()
 			{
 				newframe = 0;
 			}
+
 			// only re-cache when the object actually changed.
 			if (_objects[i]->getSprite(_currentFrame[i]) != _objects[i]->getSprite(newframe))
 			{
-				setCached(false);
+				_cacheInvalid = true;
 			}
 			_currentFrame[i] = newframe;
 		}
@@ -557,6 +524,9 @@ void Tile::animate()
  */
 Surface *Tile::getSprite(int part)
 {
+	if (_objects[part] == 0)
+		return 0;
+
 	return _objects[part]->getDataset()->getSurfaceset()->getFrame(_objects[part]->getSprite(_currentFrame[part]));
 }
 
@@ -637,7 +607,7 @@ int Tile::getAnimationOffset()
 void Tile::addItem(BattleItem *item)
 {
 	_inventory.push_back(item);
-	setCached(false);
+	_cacheInvalid = true;
 }
 
 /**
@@ -702,5 +672,43 @@ std::vector<BattleItem *> *Tile::getInventory()
 {
 	return &_inventory;
 }
+
+/**
+ * Sets the tile's cache flag.
+ * Set to true when the unit has to be redrawn from scratch.
+ * @param cached
+ */
+void Tile::setCache(Surface *cache)
+{
+	if (cache == 0)
+	{
+		_cacheInvalid = true;
+	}
+	else
+	{
+		_cache = cache;
+		_cacheInvalid = false;
+	}
+}
+
+/**
+ * Check if the tile is still cached in the Map cache.
+ * When the tile changes it needs to be re-cached.
+ * @return bool
+ */
+Surface *Tile::getCache(bool *invalid)
+{
+	for (int layer = 0; layer < LIGHTLAYERS; layer++)
+	{
+		if (_light[layer] != _lastLight[layer])
+		{
+			_lastLight[layer] = _light[layer];
+			_cacheInvalid = true;
+		}
+	}
+	*invalid = _cacheInvalid;
+	return _cache;
+}
+
 
 }

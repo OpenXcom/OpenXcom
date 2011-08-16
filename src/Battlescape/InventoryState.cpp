@@ -102,13 +102,11 @@ InventoryState::InventoryState(Game *game, bool tu) : State(game), _tu(tu)
 	_btnOk->onMouseClick((ActionHandler)&InventoryState::btnOkClick);
 	_btnPrev->onMouseClick((ActionHandler)&InventoryState::btnPrevClick);
 	_btnNext->onMouseClick((ActionHandler)&InventoryState::btnNextClick);
-	_btnUnload->onMouseClick((ActionHandler)&InventoryState::btnUnloadClick);
-	_btnGround->onMouseClick((ActionHandler)&InventoryState::btnGroundClick);
 	_btnRank->onMouseClick((ActionHandler)&InventoryState::btnRankClick);
+	_btnUnload->onMouseClick((ActionHandler)&InventoryState::btnUnloadClick);
 
-	_inv->draw();
+	_inv->drawGrid();
 	_inv->setTuMode(_tu);
-	_inv->setSelectedUnit(_game->getSavedGame()->getBattleGame()->getSelectedUnit());
 	_inv->onMouseClick((ActionHandler)&InventoryState::invClick);
 }
 
@@ -130,7 +128,7 @@ void InventoryState::init()
 	_btnRank->clear();
 
 	_txtName->setText(unit->getUnit()->getName());
-	_inv->setSelectedUnit(unit);
+	_inv->drawItems();
 	Soldier *s = dynamic_cast<Soldier*>(unit->getUnit());
 	if (s)
 	{
@@ -193,6 +191,15 @@ void InventoryState::btnNextClick(Action *action)
 }
 
 /**
+ * Shows the unit info screen.
+ * @param action Pointer to an action.
+ */
+void InventoryState::btnRankClick(Action *action)
+{
+	_game->pushState(new UnitInfoState(_game, _battleGame->getSelectedUnit()));
+}
+
+/**
  * Unloads the selected weapon.
  * @param action Pointer to an action.
  */
@@ -202,24 +209,6 @@ void InventoryState::btnUnloadClick(Action *action)
 	{
 		_inv->unload();
 	}
-}
-
-/**
- * Shows more ground items / rearranges them.
- * @param action Pointer to an action.
- */
-void InventoryState::btnGroundClick(Action *action)
-{
-	_inv->arrangeGround();
-}
-
-/**
- * Shows the unit info screen.
- * @param action Pointer to an action.
- */
-void InventoryState::btnRankClick(Action *action)
-{
-	_game->pushState(new UnitInfoState(_game, _battleGame->getSelectedUnit()));
 }
 
 /**

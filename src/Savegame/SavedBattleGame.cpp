@@ -646,6 +646,14 @@ void SavedBattleGame::endTurn()
 	if (_side == FACTION_PLAYER)
 	{
 		_side = FACTION_HOSTILE;
+		// hide all aliens
+		for (std::vector<BattleUnit*>::iterator i = _units.begin(); i != _units.end(); ++i)
+		{
+			if ((*i)->getFaction() == _side)
+			{
+				(*i)->setVisible(false);
+			}
+		}
 	}
 	else if (_side == FACTION_HOSTILE)
 	{
@@ -659,6 +667,7 @@ void SavedBattleGame::endTurn()
 		if ((*i)->getFaction() == _side)
 		{
 			(*i)->prepareNewTurn();
+			_terrainModifier->calculateFOV((*i));
 		}
 	}
 

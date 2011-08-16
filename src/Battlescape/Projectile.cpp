@@ -68,9 +68,7 @@ Projectile::Projectile(ResourcePack *res, SavedBattleGame *save, Position origin
 	{
 		_sprite = _res->getSurfaceSet("FLOOROB.PCK")->getFrame(getItem()->getRules()->getFloorSprite());
 		_shadowSprite = new Surface(_sprite->getWidth(), _sprite->getHeight());
-		_shadowSprite->setPalette(_sprite->getPalette());
 		_sprite->blit(_shadowSprite);
-		_shadowSprite->setShade(16);
 	}
 }
 
@@ -87,9 +85,9 @@ Projectile::~Projectile()
 
 /**
  * calculateTrajectory.
- * @return true when a trajectory is possible.
+ * @return the objectnumber(0-3) or unit(4) or out of map (5) or -1(no line of fire)
  */
-bool Projectile::calculateTrajectory(double accuracy)
+int Projectile::calculateTrajectory(double accuracy)
 {
 	Position originVoxel, targetVoxel;
 	int direction;
@@ -155,7 +153,7 @@ bool Projectile::calculateTrajectory(double accuracy)
 	}
 	else
 	{
-		return false; // no line of fire
+		return -1; // no line of fire
 	}
 
 	// apply some accuracy modifiers (todo: calculate this)
@@ -163,9 +161,7 @@ bool Projectile::calculateTrajectory(double accuracy)
 	applyAccuracy(originVoxel, &targetVoxel, accuracy);
 
 	// finally do a line calculation and store this trajectory.
-	_save->getTerrainModifier()->calculateLine(originVoxel, targetVoxel, true, &_trajectory, bu);
-
-	return true;
+	return _save->getTerrainModifier()->calculateLine(originVoxel, targetVoxel, true, &_trajectory, bu);
 }
 
 /**

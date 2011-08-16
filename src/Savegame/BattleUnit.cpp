@@ -21,6 +21,7 @@
 #include "BattleItem.h"
 #include <cmath>
 #include "../Engine/Palette.h"
+#include "../Engine/Surface.h"
 #include "../Engine/Language.h"
 #include "../Battlescape/Pathfinding.h"
 #include "../Battlescape/BattleAIState.h"
@@ -37,7 +38,7 @@ namespace OpenXcom
  * @param rules Pointer to RuleUnit object.
  * @param faction Which faction the units belongs to.
  */
-BattleUnit::BattleUnit(Unit *unit, UnitFaction faction) : _unit(unit), _faction(faction), _id(0), _pos(Position()), _lastPos(Position()), _direction(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _cached(false), _kneeled(false), _dontReselect(false), _fire(0), _currentAIState(0), _visible(false)
+BattleUnit::BattleUnit(Unit *unit, UnitFaction faction) : _unit(unit), _faction(faction), _id(0), _pos(Position()), _lastPos(Position()), _direction(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cache(0), _cacheInvalid(true)
 {
 	_tu = unit->getTimeUnits();
 	_energy = unit->getStamina();
@@ -58,7 +59,7 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction) : _unit(unit), _faction(
  */
 BattleUnit::~BattleUnit()
 {
-
+	delete _cache;
 }
 
 /**
@@ -220,7 +221,7 @@ void BattleUnit::startWalking(int direction, const Position &destination)
 	_walkPhase = 0;
 	_destination = destination;
 	_lastPos = _pos;
-	_cached = false;
+	_cacheInvalid = true;
 	_kneeled = false;
 }
 
@@ -250,7 +251,7 @@ void BattleUnit::keepWalking()
 		_walkPhase = 0;
 	}
 
-	_cached = false;
+	_cacheInvalid = true;
 }
 
 /*
@@ -322,7 +323,7 @@ void BattleUnit::turn()
         }
         if (_direction < 0) _direction = 7;
         if (_direction > 7) _direction = 0;
-		_cached = false;
+		_cacheInvalid = true;
     }
 
 	if (_toDirection == _direction)
@@ -354,9 +355,17 @@ UnitFaction BattleUnit::getFaction() const
  * Set to true when the unit has to be redrawn from scratch.
  * @param cached
  */
-void BattleUnit::setCached(bool cached)
+void BattleUnit::setCache(Surface *cache)
 {
-	_cached = cached;
+	if (cache == 0)
+	{
+		_cacheInvalid = true;
+	}
+	else
+	{
+		_cache = cache;
+		_cacheInvalid = false;
+	}
 }
 
 /**
@@ -364,9 +373,10 @@ void BattleUnit::setCached(bool cached)
  * When the unit changes it needs to be re-cached.
  * @return bool
  */
-bool BattleUnit::isCached() const
+Surface *BattleUnit::getCache(bool *invalid) const
 {
-	return _cached;
+	*invalid = _cacheInvalid;
+	return _cache;
 }
 
 /**
@@ -376,7 +386,7 @@ bool BattleUnit::isCached() const
 void BattleUnit::kneel(bool kneeled)
 {
 	_kneeled = kneeled;
-	setCached(false);
+	_cacheInvalid = true;
 }
 
 /**
@@ -399,7 +409,7 @@ void BattleUnit::aim(bool aiming)
 	else
 		_status = STATUS_STANDING;
 
-	setCached(false);
+	_cacheInvalid = true;
 }
 
 /**
@@ -584,7 +594,7 @@ void BattleUnit::startFalling()
 {
 	_status = STATUS_FALLING;
 	_fallPhase = 0;
-	setCached(false);
+	_cacheInvalid = true;
 }
 
 /**
@@ -601,7 +611,7 @@ void BattleUnit::keepFalling()
 		else
 			_status = STATUS_UNCONSCIOUS;
 	}
-	setCached(false);
+	_cacheInvalid = true;
 }
 
 
@@ -740,11 +750,6 @@ std::vector<BattleUnit*> *BattleUnit::getVisibleUnits()
  */
 void BattleUnit::clearVisibleUnits()
 {
-	if (getFaction() == FACTION_PLAYER)
-	for (std::vector<BattleUnit*>::iterator i = _visibleUnits.begin(); i != _visibleUnits.end(); ++i)
-	{
-		(*i)->setVisible(false);
-	}
 	_visibleUnits.clear();
 }
 

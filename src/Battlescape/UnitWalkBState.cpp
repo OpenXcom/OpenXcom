@@ -57,14 +57,7 @@ UnitWalkBState::~UnitWalkBState()
 
 void UnitWalkBState::init()
 {
-	if (_parent->getGame()->getSavedGame()->getBattleGame()->getDebugMode())
-	{
-		_parent->setStateInterval(1);
-	}
-	else
-	{
-		_parent->setStateInterval(BattlescapeState::DEFAULT_WALK_SPEED);
-	}
+	setNormalWalkSpeed();
 	_unit = _action.actor;
 	_pf = _parent->getGame()->getSavedGame()->getBattleGame()->getPathfinding();
 	_terrain = _parent->getGame()->getSavedGame()->getBattleGame()->getTerrainModifier();
@@ -80,22 +73,25 @@ void UnitWalkBState::think()
 	if (_unit->getStatus() == STATUS_WALKING)
 	{
 
-		// play footstep sound 1
-		if (_unit->getWalkingPhase() == 3)
+		if (_unit->getVisible())
 		{
-			Tile *tile = _parent->getGame()->getSavedGame()->getBattleGame()->getTile(_unit->getPosition());
-			if (tile->getFootstepSound())
+			// play footstep sound 1
+			if (_unit->getWalkingPhase() == 3)
 			{
-				_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(22 + (tile->getFootstepSound()*2))->play();
+				Tile *tile = _parent->getGame()->getSavedGame()->getBattleGame()->getTile(_unit->getPosition());
+				if (tile->getFootstepSound())
+				{
+					_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(22 + (tile->getFootstepSound()*2))->play();
+				}
 			}
-		}
-		// play footstep sound 2
-		if (_unit->getWalkingPhase() == 7)
-		{
-			Tile *tile = _parent->getGame()->getSavedGame()->getBattleGame()->getTile(_unit->getPosition());
-			if (tile->getFootstepSound())
+			// play footstep sound 2
+			if (_unit->getWalkingPhase() == 7)
 			{
-				_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(23 + (tile->getFootstepSound()*2))->play();
+				Tile *tile = _parent->getGame()->getSavedGame()->getBattleGame()->getTile(_unit->getPosition());
+				if (tile->getFootstepSound())
+				{
+					_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(23 + (tile->getFootstepSound()*2))->play();
+				}
 			}
 		}
 
@@ -110,7 +106,7 @@ void UnitWalkBState::think()
 			_parent->getMap()->setViewHeight(_unit->getPosition().z);
 		}
 
-		// is the walking cycle finished?
+		// is the step finished?
 		if (_unit->getStatus() == STATUS_STANDING)
 		{
 			unitspotted = _terrain->calculateFOV(_unit);
@@ -141,13 +137,21 @@ void UnitWalkBState::think()
 		else
 		{
 			// make sure the unit sprites are up to date
-			_parent->getMap()->cacheUnits();
+			_parent->getMap()->cacheUnit(_unit);
 		}
 	}
 
 	// we are just standing around, shouldn't we be walking?
 	if (_unit->getStatus() == STATUS_STANDING)
 	{
+		if (_unit->getVisible())
+		{
+			setNormalWalkSpeed();
+		}
+		else
+		{
+			_parent->setStateInterval(1);
+		}
 		int dir = _pf->getStartDirection();
 		if (dir != -1)
 		{
@@ -211,11 +215,11 @@ void UnitWalkBState::think()
 				_parent->popState();
 			}
 			// make sure the unit sprites are up to date
-			_parent->getMap()->cacheUnits();
+			_parent->getMap()->cacheUnit(_unit);
 		}
 		else
 		{
-			postWalkingProcedures();
+			postPathProcedures();
 			return;
 		}
 	}
@@ -226,7 +230,7 @@ void UnitWalkBState::think()
 		_unit->turn();
 		unitspotted = _terrain->calculateFOV(_unit);
 		// make sure the unit sprites are up to date
-		_parent->getMap()->cacheUnits();
+		_parent->getMap()->cacheUnit(_unit);
 		if (unitspotted)
 		{
 			_pf->abortPath();
@@ -254,14 +258,29 @@ std::string UnitWalkBState::getResult() const
 
 
 /*
- * Handle some calculations when the walking finished.
+ * Handle some calculations when the path is finished.
  */
-void UnitWalkBState::postWalkingProcedures()
+void UnitWalkBState::postPathProcedures()
 {
 	_terrain->calculateUnitLighting();
 	_terrain->calculateFOV(_unit);
-	_parent->getMap()->cacheUnits();
+	_parent->getMap()->cacheUnit(_unit);
 	_parent->popState();
+}
+
+/*
+ * Handle some calculations when the walking finished.
+ */
+void UnitWalkBState::setNormalWalkSpeed()
+{
+	if (_parent->getGame()->getSavedGame()->getBattleGame()->getDebugMode())
+	{
+		_parent->setStateInterval(1);
+	}
+	else
+	{
+		_parent->setStateInterval(BattlescapeState::DEFAULT_WALK_SPEED);
+	}
 }
 
 }

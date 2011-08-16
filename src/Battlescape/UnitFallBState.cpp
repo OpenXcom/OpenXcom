@@ -64,6 +64,7 @@ void UnitFallBState::init()
 	}
 	else
 	{
+		_parent->getMap()->centerOnPosition(_unit->getPosition());
 		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
 		_unit->lookAt(3);
 	}
@@ -113,11 +114,10 @@ void UnitFallBState::think()
 		TerrainModifier *terrain = _parent->getGame()->getSavedGame()->getBattleGame()->getTerrainModifier();
 		convertUnitToCorpse(_unit, terrain);
 		terrain->calculateUnitLighting();
-		_parent->getMap()->cacheTileSprites();
 		_parent->popState();
 	}
 
-	_parent->getMap()->cacheUnits();
+	_parent->getMap()->cacheUnit(_unit);
 }
 
 /*

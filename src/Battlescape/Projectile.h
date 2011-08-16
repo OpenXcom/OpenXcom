@@ -52,8 +52,9 @@ public:
 	Projectile(ResourcePack *res, SavedBattleGame *save, Position origin, Position target, int bulletType, BattleItem *item);
 	/// Cleans up the Projectile.
 	~Projectile();
-	/// Calculates the trajectory.
-	bool calculateTrajectory(double accuracy);
+	/// Calculates the trajectory for straight path.
+	int calculateTrajectory(double accuracy);
+	/// Calculates the trajectory for curved path.
 	bool calculateThrow(double accuracy);
 	/// Move the projectile one step in it's trajectory.
 	bool move();

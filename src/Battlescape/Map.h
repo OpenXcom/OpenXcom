@@ -54,12 +54,7 @@ private:
 	Timer *_scrollTimer;
 	Surface *_arrow;
 	Game *_game;
-	Surface **_tileFloorCache;
-	Surface **_tileWallsCache;
-	int _tileCount;
-	std::vector<Surface *> _unitCache;
 	int _mapOffsetX, _mapOffsetY, _viewHeight;
-	int _bufOffsetX, _bufOffsetY;
 	int _RMBClickX, _RMBClickY;
 	int _spriteWidth, _spriteHeight;
 	int _selectorX, _selectorY;
@@ -68,20 +63,23 @@ private:
 	int _scrollX, _scrollY;
 	bool _RMBDragging;
 	int _centerX, _centerY;
-	Surface *_buffer;
 	BulletSprite *_bullet[36];
 	BulletSprite *_bulletShadow[36];
 	Projectile *_projectile;
 	std::set<Explosion *> _explosions;
 	bool _cameraFollowed;
+	int _visibleMapHeight;
+	SDL_Color *_shade[16];
 
 
 	void minMaxInt(int *value, const int minValue, const int maxValue);
 	bool cacheTileSprites(int i);
 	void convertScreenToMap(int screenX, int screenY, int *mapX, int *mapY);
+	void drawTerrain(Surface *surface);
+	void drawHiddenMovement(Surface *surface);
 public:
 	/// Creates a new map at the specified position and size.
-	Map(int width, int height, int x, int y);
+	Map(int width, int height, int x, int y, int visibleMapHeight);
 	/// Cleans up the map.
 	~Map();
 	/// savedbattlegame contains all game content like Tiles, Soldiers, Items,...
@@ -93,9 +91,7 @@ public:
 	/// handle timers
 	void think();
 	/// draw the surface
-	void draw(bool forceRedraw);
-	/// draws the terrain
-	void drawTerrain(Surface *surface);
+	void draw();
 	/// Special handling for mouse clicks.
 	void mouseClick(Action *action, State *state);
 	/// Special handling for mous over
@@ -105,7 +101,7 @@ public:
 	/// Scrolls the view (eg when mouse is on the edge of the screen)
 	void scroll();
 	/// rotate the tileframes 0-7
-	void animate();
+	void animate(bool redraw);
 	/// move map layer up
 	void up();
 	/// move map layer down
@@ -130,17 +126,18 @@ public:
 	void setCursorType(CursorType type);
 	/// Get the 3D cursor type.
 	CursorType getCursorType() const;
-	/// Cache tile sprites.
-	void cacheTileSprites();
+	/// Cache tile.
+	Surface *cacheTile(Tile *tile, Surface *cache, int itX, int itY, int itZ);
 	/// Cache units.
 	void cacheUnits();
+	void cacheUnit(BattleUnit *unit);
 	/// Set projectile
 	void setProjectile(Projectile *projectile);
 	/// Get projectile
 	Projectile *getProjectile() const;
 	/// Get explosion set
 	std::set<Explosion*> *getExplosions();
-	///
+	/// Check if the camera was following a bullet.
 	bool didCameraFollow();
 };
 

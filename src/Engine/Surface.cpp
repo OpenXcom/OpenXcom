@@ -36,7 +36,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Surface::Surface(int width, int height, int x, int y) : _x(x), _y(y), _visible(true), _hidden(false), _originalColors(0)
+Surface::Surface(int width, int height, int x, int y) : _x(x), _y(y), _visible(true), _hidden(false), _originalColors(0), _lastShade(-1)
 {
 	_surface = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, 8, 0, 0, 0, 0);
 
@@ -260,46 +260,6 @@ void Surface::invert(Uint8 mid)
 }
 
 /**
- * Sets the shade level of the surface.
- * Shade 0 is original color, 16 is black.
- * @param shade Amount to shade.
- */
-void Surface::setShade(int shade)
-{
-	// Lock the surface
-	lock();
-	for (int x = 0, y = 0; x < _surface->w && y < _surface->h;)
-	{
-		Uint8 pixel = getPixel(x, y);
-		if (pixel)
-		{
-			int baseColor = pixel/16;
-			int originalShade = pixel%16;
-			int newShade = originalShade + shade;
-			if (newShade > 15)
-			{
-				baseColor = 0;
-				newShade = 15;
-			}
-			if (originalShade != newShade || baseColor == 0)
-			{
-				pixel = (baseColor*16) + newShade;
-				setPixel(x, y, pixel);
-			}
-		}
-		x++;
-		if (x == getWidth())
-		{
-			y++;
-			x = 0;
-		}
-	}
-
-	// Unlock the surface
-	unlock();
-}
-
-/**
  * Runs any code the surface needs to keep updating every
  * game cycle, like animations and other real-time elements.
  */
@@ -359,38 +319,6 @@ void Surface::copy(Surface *surface)
 	from.w = getWidth();
 	from.h = getHeight();
 	SDL_BlitSurface(surface->getSurface(), &from, _surface, 0);
-}
-
-/**
- * Copies the exact contents of another surface onto the areas that
- * match a certain color, like a mask. Surface sizes must match.
- * @param surface Pointer to surface to copy from.
- * @param mask Color mask to replace with the other surface.
- */
-void Surface::maskedCopy(Surface *surface, Uint8 mask)
-{
-	if (surface->getWidth() != getWidth() || surface->getHeight() != getHeight())
-	{
-		return;
-	}
-
-	// Lock the surface
-	lock();
-
-	for (int x = 0, y = 0; x < getWidth() && y < getHeight();)
-	{
-		if (getPixel(x, y) == mask)
-		{
-			setPixelIterative(&x, &y, surface->getPixel(x, y));
-		}
-		else
-		{
-			setPixelIterative(&x, &y, this->getPixel(x, y));
-		}
-	}
-
-	// Unlock the surface
-	unlock();
 }
 
 /**
@@ -707,7 +635,7 @@ void Surface::paletteShift(int off, int mul)
 	}
 
 	// assign it and free it
-	setPalette(newColors, 0, ncolors);
+	SDL_SetColors(_surface, newColors, 0, ncolors);
 	free(newColors);
 	
 	return;
@@ -721,11 +649,22 @@ void Surface::paletteRestore()
 {
 	if (_originalColors)
 	{
-		setPalette(_originalColors);
+		SDL_SetColors(_surface, _originalColors, 0, 256);
 		free(_originalColors);
 		_originalColors = 0;
 	}
 }
 
+/**
+ * Sets a shade level by changing the palette.
+ */
+void Surface::setShade(SDL_Color *colors, int shade)
+{
+	if (shade != _lastShade) // make sure we don't change the palette unnescessary
+	{
+		SDL_SetColors(_surface, colors, 0, 256);
+		_lastShade = shade;
+	}
+}
 
 }
