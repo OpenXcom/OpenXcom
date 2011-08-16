@@ -132,6 +132,8 @@ public:
 	int getAnimationOffset();
 	/// Add item
 	void addItem(BattleItem *item);
+	/// Remove item
+	void removeItem(BattleItem *item);
 	/// Get top-most item
 	int getTopItemSprite();
 	/// Decrease fire and smoke timers.

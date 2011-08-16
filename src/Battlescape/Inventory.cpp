@@ -252,19 +252,12 @@ void Inventory::moveItem(BattleItem *item, RuleInventory *slot, int x, int y)
 		if (slot->getType() == INV_GROUND)
 		{
 			item->setOwner(0);
-			tile->getInventory()->push_back(_selItem);
+			tile->addItem(_selItem);
 		}
 		else if (_selItem->getSlot()->getType() == INV_GROUND)
 		{
 			item->setOwner(_selUnit);
-			for (std::vector<BattleItem*>::iterator i = tile->getInventory()->begin(); i != tile->getInventory()->end(); ++i)
-			{
-				if ((*i) == item)
-				{
-					tile->getInventory()->erase(i);
-					break;
-				}
-			}
+			tile->removeItem(item);
 		}
 	}
 	item->setSlot(slot);

@@ -611,6 +611,23 @@ void Tile::addItem(BattleItem *item)
 }
 
 /**
+ * Remove an item from the tile.
+ * @param item
+ */
+void Tile::removeItem(BattleItem *item)
+{
+	for (std::vector<BattleItem*>::iterator i = _inventory.begin(); i != _inventory.end(); ++i)
+	{
+		if ((*i) == item)
+		{
+			_inventory.erase(i);
+			break;
+		}
+	}
+	_cacheInvalid = true;
+}
+
+/**
  * Get the topmost item sprite to draw on the battlescape.
  * @return item sprite ID in floorob, or -1 when no item
  */
