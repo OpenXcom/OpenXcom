@@ -536,6 +536,10 @@ Surface *Tile::getSprite(int part)
  */
 void Tile::setUnit(BattleUnit *unit)
 {
+	if (unit != 0)
+	{
+		unit->setTile(this);
+	}
 	_unit = unit;
 }
 

@@ -62,6 +62,7 @@ BattlescapeGenerator::BattlescapeGenerator(Game *game) : _game(game)
 	_res = _game->getResourcePack();
 	_ufo = 0;
 	_craft = 0;
+	_craftInventoryTile = 0;
 }
 
 /**
@@ -206,13 +207,13 @@ void BattlescapeGenerator::run()
 		_save->setSelectedUnit(_save->getUnits()->at(0)); // select first soldier
 
 		// add items that are in the craft
-		/*for (std::map<std::string, int>::iterator i = _craft->getItems()->getContents()->begin(); i != _craft->getItems()->getContents()->end(); ++i)
+		for (std::map<std::string, int>::iterator i = _craft->getItems()->getContents()->begin(); i != _craft->getItems()->getContents()->end(); ++i)
 		{
 			for (int count=0; count < (*i).second; count++)
 				addItem(_game->getRuleset()->getItem((*i).first));
-		}*/
+		}
 		// test data
-		addItem(_game->getRuleset()->getItem("STR_RIFLE"));
+		/*addItem(_game->getRuleset()->getItem("STR_RIFLE"));
 		addItem(_game->getRuleset()->getItem("STR_RIFLE_CLIP"));
 		addItem(_game->getRuleset()->getItem("STR_HEAVY_CANNON"));
 		addItem(_game->getRuleset()->getItem("STR_HC_I_AMMO"));
@@ -224,7 +225,7 @@ void BattlescapeGenerator::run()
 		addItem(_game->getRuleset()->getItem("STR_PISTOL_CLIP"));
 		addItem(_game->getRuleset()->getItem("STR_GRENADE"));
 		addItem(_game->getRuleset()->getItem("STR_GRENADE"));
-		addItem(_game->getRuleset()->getItem("STR_GRENADE"));
+		addItem(_game->getRuleset()->getItem("STR_GRENADE"));*/
 	}
 
 	if (_missionType == MISS_UFORECOVERY)
@@ -288,7 +289,9 @@ void BattlescapeGenerator::addSoldier(Soldier *soldier)
 			if (_save->selectUnit(pos) == 0)
 			{
 				unit->setPosition(pos);
-				_save->getTiles()[i]->setUnit(unit);
+				_save->getTiles()[i]->setUnit(unit); // maybe we should assign all units to the first tile of the skyranger before the inventory pre-equip and then reassign them to their correct tile afterwards?
+				if (_craftInventoryTile == 0)
+					_craftInventoryTile = _save->getTiles()[i];
 				break;
 			}
 		}
@@ -366,8 +369,11 @@ void BattlescapeGenerator::addAlien(RuleAlien *rules, RuleArmor *armor, NodeRank
 void BattlescapeGenerator::addItem(RuleItem *item)
 {
 	BattleItem *bi = new BattleItem(item);
-	if (item->getBattleType() == BT_AMMO)
+	bool placed = false;
+
+	switch (item->getBattleType())
 	{
+	case BT_AMMO:
 		// find equipped weapons that can be loaded with this ammo
 		for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 		{
@@ -375,25 +381,77 @@ void BattlescapeGenerator::addItem(RuleItem *item)
 			if (weapon && weapon->getAmmoItem() == 0)
 			{
 				if (weapon->setAmmoItem(bi) == 0)
+				{
+					placed = true;
 					break;
+				}
 			}
 		}
-	}
-	else
-	{
-		// find the first soldier with a free right hand
+		break;
+	case BT_GRENADE:
+	case BT_PROXIMITYGRENADE:
+		// find the first soldier with a free belt slot to equip grenades
+		for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
+		{
+			if (!_save->getItemFromUnit((*i), "STR_BELT"))
+			{
+				bi->moveToOwner((*i));
+				bi->setSlot(_game->getRuleset()->getInventory("STR_BELT"));
+				placed = true;
+				break;
+			}
+		}
+		break;
+	case BT_FIREARM:
+	case BT_MELEE:
+		// find the first soldier with a free right hand to equip weapons
 		for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 		{
 			if (!_save->getItemFromUnit((*i), "STR_RIGHT_HAND"))
 			{
-				bi->setOwner((*i));
+				bi->moveToOwner((*i));
 				bi->setSlot(_game->getRuleset()->getInventory("STR_RIGHT_HAND"));
+				placed = true;
 				break;
 			}
 		}
+		// maybe we find ammo on the ground to load it with
+		if (placed)
+		{
+			for (std::vector<BattleItem*>::iterator i = _craftInventoryTile->getInventory()->begin(); i != _craftInventoryTile->getInventory()->end(); ++i)
+			{
+				if (bi->setAmmoItem((*i)) == 0)
+				{
+					break;
+				}
+			}
+		}
+		break;
+	case BT_MEDIKIT:
+	case BT_SCANNER:
+		// find the first soldier with a free backpack
+		for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
+		{
+			if (!_save->getItemFromUnit((*i), "STR_BACKPACK"))
+			{
+				bi->moveToOwner((*i));
+				bi->setSlot(_game->getRuleset()->getInventory("STR_BACKPACK"));
+				placed = true;
+				break;
+			}
+		}
+		break;
+	case BT_NONE:
+		break;
 	}
 
 	_save->getItems()->push_back(bi);
+
+	// if we did not auto equip the item, place it on the ground
+	if (!placed)
+	{
+		_craftInventoryTile->addItem(bi);
+	}
 }
 
 /**

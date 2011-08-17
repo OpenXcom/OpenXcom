@@ -71,8 +71,10 @@ public:
 	BattleUnit *getOwner() const;
 	/// Gets the item's previous owner.
 	BattleUnit *getPreviousOwner() const;
-	/// Sets the item's owner.
+	/// Sets the owner.
 	void setOwner(BattleUnit *owner);
+	/// Removes the item from previous owner and moves to new owner.
+	void moveToOwner(BattleUnit *owner);
 	/// Gets the item's inventory slot.
 	RuleInventory *getSlot() const;
 	/// Sets the item's inventory slot.

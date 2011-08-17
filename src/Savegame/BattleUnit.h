@@ -53,6 +53,7 @@ private:
 	UnitFaction _faction;
 	int _id;
 	Position _pos;
+	Tile *_tile;
 	Position _lastPos;
 	int _direction, _toDirection;
 	Position _destination;
@@ -85,7 +86,7 @@ public:
 	void setId(int id);
 	/// Gets the unit's soldier data.
 	Unit *const getUnit() const;
-	/// Sets the unit's position X, Y, Z
+	/// Sets the unit's position
 	void setPosition(const Position& pos);
 	/// Gets the unit's position.
 	const Position& getPosition() const;
@@ -201,6 +202,11 @@ public:
 	void setVisible(bool flag);
 	/// Get whether this unit is visible
 	bool getVisible();
+	/// Sets the unit's tile it's standing on
+	void setTile(Tile *tile);
+	/// Gets the unit's tile.
+	Tile *getTile() const;
+
 
 };
 

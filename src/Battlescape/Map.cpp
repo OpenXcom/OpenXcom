@@ -205,7 +205,7 @@ void Map::think()
 void Map::draw()
 {
 	this->clear();
-	if ((_save->getSelectedUnit() && _save->getSelectedUnit()->getVisible()) || _save->getSelectedUnit() == 0 || _save->getDebugMode())
+	if ((_save->getSelectedUnit() && _save->getSelectedUnit()->getVisible()) || _save->getSelectedUnit() == 0 || _save->getDebugMode() || _projectile || !_explosions.empty())
 	{
 		drawTerrain(this);
 	}
@@ -949,8 +949,8 @@ void Map::calculateWalkingOffset(BattleUnit *unit, Position *offset)
 	{
 		if (phase < midphase)
 		{
-			int fromLevel = _save->getTile(unit->getPosition())->getTerrainLevel();
-			int toLevel = _save->getTile(unit->getDestination())->getTerrainLevel();
+			int fromLevel = unit->getTile()->getTerrainLevel();
+			int toLevel = unit->getTile()->getTerrainLevel();
 			if (unit->getPosition().z > unit->getDestination().z)
 			{
 				// going down a level, so toLevel 0 becomes +24, -8 becomes  16
@@ -982,7 +982,7 @@ void Map::calculateWalkingOffset(BattleUnit *unit, Position *offset)
 	}
 	else
 	{
-		offset->y += _save->getTile(unit->getPosition())->getTerrainLevel();
+		offset->y += unit->getTile()->getTerrainLevel();
 	}
 
 }
@@ -1006,6 +1006,16 @@ CursorType Map::getCursorType() const
 	return _cursorType;
 }
 
+
+/**
+ * Render the actual tile.
+ * @param tile
+ * @param cache
+ * @param itX
+ * @param itY
+ * @param itZ
+ * @return Surface
+ */
 Surface *Map::cacheTile(Tile *tile, Surface *cache, int itX, int itY, int itZ)
 {
 	int tileShade = tile->getShade();
@@ -1133,7 +1143,7 @@ Surface *Map::cacheTile(Tile *tile, Surface *cache, int itX, int itY, int itZ)
 			{
 				temp = _res->getSurfaceSet("FLOOROB.PCK")->getFrame(sprite);
 				temp->setX(0);
-				temp->setY(0 - tile->getTerrainLevel());
+				temp->setY(tile->getTerrainLevel());
 				temp->setShade(_shade[tileShade], tileShade);
 				temp->blit(cache);
 			}

@@ -38,7 +38,7 @@ namespace OpenXcom
  * @param rules Pointer to RuleUnit object.
  * @param faction Which faction the units belongs to.
  */
-BattleUnit::BattleUnit(Unit *unit, UnitFaction faction) : _unit(unit), _faction(faction), _id(0), _pos(Position()), _lastPos(Position()), _direction(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cache(0), _cacheInvalid(true)
+BattleUnit::BattleUnit(Unit *unit, UnitFaction faction) : _unit(unit), _faction(faction), _id(0), _pos(Position()), _tile(0), _lastPos(Position()), _direction(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cache(0), _cacheInvalid(true)
 {
 	_tu = unit->getTimeUnits();
 	_energy = unit->getStamina();
@@ -990,4 +990,23 @@ bool BattleUnit::getVisible()
 	}
 }
 
+/**
+ * Sets the unit's tile it's standing on
+ * @param tile
+ */
+void BattleUnit::setTile(Tile *tile)
+{
+	_tile = tile;
 }
+
+/**
+ * Gets the unit's tile.
+ * @return Tile
+ */
+Tile *BattleUnit::getTile() const
+{
+	return _tile;
+}
+
+}
+

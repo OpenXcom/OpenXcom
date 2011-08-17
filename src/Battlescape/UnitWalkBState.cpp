@@ -78,7 +78,7 @@ void UnitWalkBState::think()
 			// play footstep sound 1
 			if (_unit->getWalkingPhase() == 3)
 			{
-				Tile *tile = _parent->getGame()->getSavedGame()->getBattleGame()->getTile(_unit->getPosition());
+				Tile *tile = _unit->getTile();
 				if (tile->getFootstepSound())
 				{
 					_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(22 + (tile->getFootstepSound()*2))->play();
@@ -87,7 +87,7 @@ void UnitWalkBState::think()
 			// play footstep sound 2
 			if (_unit->getWalkingPhase() == 7)
 			{
-				Tile *tile = _parent->getGame()->getSavedGame()->getBattleGame()->getTile(_unit->getPosition());
+				Tile *tile = _unit->getTile();
 				if (tile->getFootstepSound())
 				{
 					_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(23 + (tile->getFootstepSound()*2))->play();
@@ -100,8 +100,8 @@ void UnitWalkBState::think()
 		// unit moved from one tile to the other, update the tiles
 		if (_unit->getPosition() != _unit->getLastPosition())
 		{
-			_parent->getGame()->getSavedGame()->getBattleGame()->getTile(_unit->getLastPosition())->setUnit(0);
-			_parent->getGame()->getSavedGame()->getBattleGame()->getTile(_unit->getPosition())->setUnit(_unit);
+			_parent->getGame()->getSavedGame()->getBattleGame()->getTile(_unit->getLastPosition())->setUnit(0); //don't change these
+			_parent->getGame()->getSavedGame()->getBattleGame()->getTile(_unit->getPosition())->setUnit(_unit); //don't change these
 			// if the unit changed level, camera changes level with
 			_parent->getMap()->setViewHeight(_unit->getPosition().z);
 		}

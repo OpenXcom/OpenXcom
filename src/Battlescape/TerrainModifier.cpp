@@ -197,7 +197,7 @@ bool TerrainModifier::calculateFOV(BattleUnit *unit)
 
 	// we see the tile we are standing on
 	if (unit->getFaction() == FACTION_PLAYER)
-		_save->getTile(unit->getPosition())->setDiscovered(true, 2);
+		unit->getTile()->setDiscovered(true, 2);
 
 	// calculate a visible units checksum - if it changed during this step, the soldier stops walking
 	for (std::vector<BattleUnit*>::iterator i = unit->getVisibleUnits()->begin(); i != unit->getVisibleUnits()->end(); ++i)
@@ -217,7 +217,7 @@ bool TerrainModifier::calculateFOV(BattleUnit *unit)
 			double cos_te = cos(te * M_PI / 180.0);
 			double sin_te = sin(te * M_PI / 180.0);
 
-			Tile *origin = _save->getTile(unit->getPosition());
+			Tile *origin = unit->getTile();
 			double l = 0;
 			double vx, vy, vz;
 			int tileX, tileY, tileZ;
@@ -830,7 +830,7 @@ int TerrainModifier::vectorToDirection(const Position &vector)
 int TerrainModifier::unitOpensDoor(BattleUnit *unit)
 {
 	int door = -1;
-	Tile *tile = _save->getTile(unit->getPosition());
+	Tile *tile = unit->getTile();
 	switch(unit->getDirection())
 	{
 	case 0:	// north

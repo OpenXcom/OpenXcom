@@ -25,6 +25,7 @@
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/SavedGame.h"
+#include "../Savegame/Tile.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/SoundSet.h"
 #include "../Engine/Sound.h"
@@ -136,9 +137,22 @@ std::string UnitFallBState::getResult() const
 	return _result;
 }
 
+/*
+ * Convert unit to corpse.
+ * @param unit
+ * @param terrain
+ */
 void UnitFallBState::convertUnitToCorpse(BattleUnit *unit, TerrainModifier *terrain)
 {
 	terrain->spawnItem(_unit->getPosition(), new BattleItem(_parent->getGame()->getRuleset()->getItem(_unit->getUnit()->getArmor()->getCorpseItem())));
+	// move inventory from unit to the ground
+	for (std::vector<BattleItem*>::iterator i = _unit->getInventory()->begin(); i != _unit->getInventory()->end();)
+	{
+		_unit->getTile()->addItem(*i);
+		(*i)->setOwner(0);
+		i = _unit->getInventory()->erase(i);
+		++i;
+	}
 }
 
 }

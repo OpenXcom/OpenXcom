@@ -133,7 +133,7 @@ void ProjectileFlyBState::init()
 	{
 		if (projectile->calculateThrow(baseAcc))
 		{
-			projectileItem->setOwner(0);
+			projectileItem->moveToOwner(0);
 			_unit->setCache(0);
 			_parent->getMap()->cacheUnit(_unit);
 			_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(39)->play();

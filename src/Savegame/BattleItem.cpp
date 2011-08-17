@@ -161,6 +161,16 @@ void BattleItem::setOwner(BattleUnit *owner)
 {
 	_previousOwner = _owner;
 	_owner = owner;
+}
+
+/**
+ * Removes the item from previous owner and moves to new owner.
+ * @param owner pointer to Battleunit
+ */
+void BattleItem::moveToOwner(BattleUnit *owner)
+{
+	_previousOwner = _owner;
+	_owner = owner;
 	if (_previousOwner != 0)
 	{
 		for (std::vector<BattleItem*>::iterator i = _previousOwner->getInventory()->begin(); i != _previousOwner->getInventory()->end(); ++i)

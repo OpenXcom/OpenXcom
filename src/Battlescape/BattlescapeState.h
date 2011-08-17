@@ -154,8 +154,10 @@ public:
 	void btnReserveAimedClick(Action *action);
 	/// Handler for clicking a reserved button.
 	void btnReserveAutoClick(Action *action);
+	// playable unit selected?
+	bool playableUnitSelected();
 	/// updates soldier name/rank/tu/energy/health/morale
-	void updateSoldierInfo(BattleUnit *unit);
+	void updateSoldierInfo();
 	/// handlestates timer.
 	void handleState();
 	/// Animate other stuff.

@@ -53,6 +53,7 @@ private:
 	int _worldTexture, _worldShade;
 	MissionType _missionType;
 	int _unitCount;
+	Tile *_craftInventoryTile;
 
 	/// Generate a new battlescape map.
 	void generateMap();

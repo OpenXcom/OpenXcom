@@ -285,7 +285,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_txtDebug->setColor(Palette::blockOffset(8));
 	_txtDebug->setHighContrast(true);
 
-	updateSoldierInfo(_battleGame->getSelectedUnit());
+	updateSoldierInfo();
 	_map->centerOnPosition(_battleGame->getSelectedUnit()->getPosition());
 
 	_btnReserveNone->copy(_icons);
@@ -336,7 +336,7 @@ void BattlescapeState::init()
 	_map->focus();
 	_map->cacheUnits();
 	_map->draw();
-	updateSoldierInfo(_battleGame->getSelectedUnit());
+	updateSoldierInfo();
 }
 
 /**
@@ -417,7 +417,7 @@ void BattlescapeState::handleAI(BattleUnit *unit)
 				_debugPlay = true;
 			}
 		}
-		if (_battleGame->getSelectedUnit())
+		if (playableUnitSelected())
 		{
 			_map->centerOnPosition(_battleGame->getSelectedUnit()->getPosition());
 		}
@@ -495,10 +495,10 @@ void BattlescapeState::mapClick(Action *action)
 				if (unit->getFaction() == _battleGame->getSide())
 				{
 					_battleGame->setSelectedUnit(unit);
-					updateSoldierInfo(unit);
+					updateSoldierInfo();
 				}
 			}
-			else if (_battleGame->getSelectedUnit())
+			else if (playableUnitSelected())
 			{
 			//  -= start walking =-
 				_action.target = pos;
@@ -508,7 +508,7 @@ void BattlescapeState::mapClick(Action *action)
 			}
 		}
 	}
-	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT && _battleGame->getSelectedUnit())
+	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT && playableUnitSelected())
 	{
 		//  -= turn to or open door =-
 		_action.target = pos;
@@ -583,7 +583,7 @@ void BattlescapeState::btnKneelClick(Action *action)
 			bu->kneel(!bu->isKneeled());
 			_battleGame->getTerrainModifier()->calculateFOV(bu);
 			_map->cacheUnits();
-			updateSoldierInfo(bu);
+			updateSoldierInfo();
 			BattleAction action;
 			if (_battleGame->getTerrainModifier()->checkReactionFire(bu, &action, 0, false))
 			{
@@ -599,7 +599,7 @@ void BattlescapeState::btnKneelClick(Action *action)
  */
 void BattlescapeState::btnInventoryClick(Action *action)
 {
-	if (_battleGame->getSelectedUnit())
+	if (playableUnitSelected())
 	{
 		_game->pushState(new InventoryState(_game, !_battleGame->getDebugMode()));
 	}
@@ -611,7 +611,7 @@ void BattlescapeState::btnInventoryClick(Action *action)
  */
 void BattlescapeState::btnCenterClick(Action *action)
 {
-	if (_battleGame->getSelectedUnit())
+	if (playableUnitSelected())
 	{
 		_map->centerOnPosition(_battleGame->getSelectedUnit()->getPosition());
 	}
@@ -624,7 +624,7 @@ void BattlescapeState::btnCenterClick(Action *action)
 void BattlescapeState::btnNextSoldierClick(Action *action)
 {
 	BattleUnit *unit = _battleGame->selectNextPlayerUnit(false);
-	updateSoldierInfo(unit);
+	updateSoldierInfo();
 	if (unit) _map->centerOnPosition(unit->getPosition());
 }
 
@@ -635,7 +635,7 @@ void BattlescapeState::btnNextSoldierClick(Action *action)
 void BattlescapeState::btnNextStopClick(Action *action)
 {
 	BattleUnit *unit = _battleGame->selectNextPlayerUnit(true);
-	updateSoldierInfo(unit);
+	updateSoldierInfo();
 	if (unit) _map->centerOnPosition(unit->getPosition());
 }
 
@@ -740,8 +740,8 @@ void BattlescapeState::endTurn()
 
 	checkForCasualties(0, 0);
 
-	updateSoldierInfo(_battleGame->getSelectedUnit());
-	if (_battleGame->getSelectedUnit())
+	updateSoldierInfo();
+	if (playableUnitSelected())
 	{
 		_map->centerOnPosition(_battleGame->getSelectedUnit()->getPosition());
 	}
@@ -822,7 +822,7 @@ void BattlescapeState::btnAbortClick(Action *action)
  */
 void BattlescapeState::btnStatsClick(Action *action)
 {
-	if (_battleGame->getSelectedUnit())
+	if (playableUnitSelected())
 	{
 		popup(new UnitInfoState(_game, _battleGame->getSelectedUnit()));
 	}
@@ -835,7 +835,7 @@ void BattlescapeState::btnStatsClick(Action *action)
 void BattlescapeState::btnLeftHandItemClick(Action *action)
 {
 	if (_action.type != BA_NONE) return;
-	if (_battleGame->getSelectedUnit())
+	if (playableUnitSelected())
 	{
 		BattleItem *leftHandItem = _battleGame->getItemFromUnit(_battleGame->getSelectedUnit(), "STR_LEFT_HAND");
 		handleItemClick(leftHandItem);
@@ -849,7 +849,7 @@ void BattlescapeState::btnLeftHandItemClick(Action *action)
 void BattlescapeState::btnRightHandItemClick(Action *action)
 {
 	if (_action.type != BA_NONE) return;
-	if (_battleGame->getSelectedUnit())
+	if (playableUnitSelected())
 	{
 		BattleItem *rightHandItem = _battleGame->getItemFromUnit(_battleGame->getSelectedUnit(), "STR_RIGHT_HAND");
 		handleItemClick(rightHandItem);
@@ -938,7 +938,7 @@ void BattlescapeState::handleNonTargetAction()
 			}
 		}
 		_action.type = BA_NONE;
-		updateSoldierInfo(_battleGame->getSelectedUnit());
+		updateSoldierInfo();
 	}
 }
 
@@ -965,11 +965,22 @@ void BattlescapeState::setupCursor()
 }
 
 /**
+ * Whether a playable unit is selected
+ * @return whether a playable unit is selected.
+ */
+bool BattlescapeState::playableUnitSelected()
+{
+	return _battleGame->getSelectedUnit() != 0 && (_battleGame->getSide() == FACTION_PLAYER || _battleGame->getDebugMode());
+}
+
+/**
  * Updates soldier name/rank/tu/energy/health/morale.
  * @param battleUnit Pointer to current unit.
  */
-void BattlescapeState::updateSoldierInfo(BattleUnit *battleUnit)
+void BattlescapeState::updateSoldierInfo()
 {
+	BattleUnit *battleUnit = _battleGame->getSelectedUnit();
+
 	for (int i = 0; i < 10; ++i)
 	{
 		_btnVisibleUnit[i]->hide();
@@ -977,7 +988,7 @@ void BattlescapeState::updateSoldierInfo(BattleUnit *battleUnit)
 		_visibleUnit[i] = 0;
 	}
 
-	if (battleUnit == 0 || (_battleGame->getSide() != FACTION_PLAYER && !_battleGame->getDebugMode()))
+	if (!playableUnitSelected())
 	{
 		_txtName->setText(L"");
 		_rank->clear();
@@ -1279,7 +1290,7 @@ void BattlescapeState::popState()
 		_game->getCursor()->setVisible(true);
 		_battleGame->setSelectedUnit(0);
 	}
-	updateSoldierInfo(_battleGame->getSelectedUnit());
+	updateSoldierInfo();
 }
 
 /**
