@@ -28,7 +28,7 @@ public:
 	/// Creates the Research state.
 	NewResearchListState(Game *game, Base *base, ResearchState * researchState);
 	void btnCancelClick(Action *action);
-	void FillProjectList ();
+	void fillProjectList ();
 };
 }
 

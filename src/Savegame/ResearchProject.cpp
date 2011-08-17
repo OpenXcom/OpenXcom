@@ -24,12 +24,12 @@ void ResearchProject::setAssigned (int nb)
 	_assigned = nb;
 }
 
-const RuleResearchProject * ResearchProject::GetRuleResearchProject () const
+const RuleResearchProject * ResearchProject::getRuleResearchProject () const
 {
 	return _project;
 }
 
-int ResearchProject::GetAssigned () const
+int ResearchProject::getAssigned () const
 {
 	return _assigned;
 }

@@ -12,20 +12,20 @@
 
 namespace OpenXcom
 {
-extern void GetAvailableResearchProjects (std::vector<RuleResearchProject *> & projects, Game * game, Base * base);
+extern void getAvailableResearchProjects (std::vector<RuleResearchProject *> & projects, Game * game, Base * base);
 void getDependableResearch (std::vector<RuleResearchProject *> & dependables, const RuleResearchProject *research, Game * game, Base * base)
 {
-  std::vector<RuleResearchProject *> possibleProjects;
-  GetAvailableResearchProjects(possibleProjects, game, base);
-  for(std::vector<RuleResearchProject *>::iterator iter = possibleProjects.begin ();
-      iter != possibleProjects.end ();
-      iter++)
-    {
-      if (std::find((*iter)->getDependencys().begin (),
-		    (*iter)->getDependencys().end (),
-		    research) != (*iter)->getDependencys().end ())
-	dependables.push_back(*iter);
-    }
+	std::vector<RuleResearchProject *> possibleProjects;
+	getAvailableResearchProjects(possibleProjects, game, base);
+	for(std::vector<RuleResearchProject *>::iterator iter = possibleProjects.begin ();
+	    iter != possibleProjects.end ();
+	    iter++)
+	{
+		if (std::find((*iter)->getDependencys().begin (), (*iter)->getDependencys().end (), research) != (*iter)->getDependencys().end ())
+		{
+			dependables.push_back(*iter);
+		}
+	}
 }
 
 EndResearchState::EndResearchState(Game * game, Base * base, const RuleResearchProject * research) : State (game), _base(base), _research(research)

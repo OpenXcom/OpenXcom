@@ -33,10 +33,10 @@ findRuleResearchProject::findRuleResearchProject(RuleResearchProject * toFind) :
 
 bool findRuleResearchProject::operator()(ResearchProject *r) const
 {
-	return _toFind == r->GetRuleResearchProject();
+	return _toFind == r->getRuleResearchProject();
 }
 
-void GetAvailableResearchProjects (std::vector<RuleResearchProject *> & projects, Game * game, Base * base)
+void getAvailableResearchProjects (std::vector<RuleResearchProject *> & projects, Game * game, Base * base)
 {
 	const std::vector<RuleResearchProject *> & researchProjects = game->getRuleset()->getResearchProjects();
 	const std::vector<ResearchProject *> & baseResearchProjects = base->GetResearch();
@@ -97,7 +97,7 @@ NewResearchListState::NewResearchListState(Game *game, Base *base, ResearchState
 	_lstResearch->setMargin(2);
 	_lstResearch->setAlign(ALIGN_CENTER);
 	_lstResearch->onMouseClick((ActionHandler)&NewResearchListState::onSelectProject);
-	FillProjectList ();
+	fillProjectList ();
 }
 
 void NewResearchListState::onSelectProject(Action *action)
@@ -110,11 +110,11 @@ void NewResearchListState::btnCancelClick(Action *action)
 	_game->popState();
 }
 
-void NewResearchListState::FillProjectList ()
+void NewResearchListState::fillProjectList ()
 {
 	_projects.clear();
 	_lstResearch->clearList();
-	GetAvailableResearchProjects(_projects, _game, _base);
+	getAvailableResearchProjects(_projects, _game, _base);
 	if(_projects.empty())
 	{
 		_game->popState();

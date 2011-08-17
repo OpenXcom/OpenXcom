@@ -51,7 +51,7 @@ public:
 	void btnOkClick(Action *action);
 	void btnNewClick(Action *action);
 	void onSelectProject(Action *action);
-	void FillProjectList();
+	void fillProjectList();
 };
 
 }

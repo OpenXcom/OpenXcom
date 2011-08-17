@@ -40,7 +40,7 @@ int getFreeLabSpace (Base * base)
 	     itResearch != researchs.end ();
 	     itResearch++)
 	{
-		freeLabSpace -= (*itResearch)->GetAssigned ();
+		freeLabSpace -= (*itResearch)->getAssigned ();
 	}
 	return freeLabSpace;
 }
@@ -53,7 +53,7 @@ int getFreeScientist (Base * base)
 	     itResearch != researchs.end ();
 	     itResearch++)
 	{
-		freeScientist -= (*itResearch)->GetAssigned ();
+		freeScientist -= (*itResearch)->getAssigned ();
 	}
        
 	return freeScientist;
@@ -68,7 +68,7 @@ ResearchProjectState::ResearchProjectState(Game *game, Base *base, ResearchProje
 {
 	buildUi ();
 }
-std::vector<Text*> texts;
+
 void ResearchProjectState::buildUi ()
 {
 	int width = 220;
@@ -127,7 +127,7 @@ void ResearchProjectState::buildUi ()
 	_btnOk->onMouseClick((ActionHandler)&ResearchProjectState::btnOkClick);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+8);
-	_txtTitle->setText(_rule ? _game->getLanguage()->getString(_rule->getName()) : _game->getLanguage()->getString(_project->GetRuleResearchProject ()->getName()));
+	_txtTitle->setText(_rule ? _game->getLanguage()->getString(_rule->getName()) : _game->getLanguage()->getString(_project->getRuleResearchProject ()->getName()));
 
 	 _txtAvailableScientist->setColor(Palette::blockOffset(13)+8);
 	 _txtAvailableSpace->setColor(Palette::blockOffset(13)+8);
@@ -157,9 +157,9 @@ void ResearchProjectState::btnOkClick(Action *action)
 {
 	if (_rule)
 	{
-		_newResearchListState->FillProjectList ();
+		_newResearchListState->fillProjectList ();
 	}
-	_researchState->FillProjectList();
+	_researchState->fillProjectList();
 	_game->popState();
 }
 
@@ -172,7 +172,7 @@ void ResearchProjectState::SetAssignedScientist()
 	std::wstringstream s2;
 	s2 << _game->getLanguage()->getString("STR_LABORATORY_SPACE_AVAILABLE") << freeSpaceLab;
 	std::wstringstream s3;
-	s3 << _game->getLanguage()->getString("STR_SCIENTISTS_ALLOCATED") << _project->GetAssigned ();
+	s3 << _game->getLanguage()->getString("STR_SCIENTISTS_ALLOCATED") << _project->getAssigned ();
 	_txtAvailableScientist->setText(s1.str());
 	_txtAvailableSpace->setText(s2.str());
 	_txtAssigned->setText(s3.str());
@@ -180,7 +180,7 @@ void ResearchProjectState::SetAssignedScientist()
 
 void ResearchProjectState::btnMoreClick(Action *action)
 {
-	int assigned = _project->GetAssigned ();
+	int assigned = _project->getAssigned ();
 	int freeScientist = getFreeScientist(_base);
 	int freeSpaceLab = getFreeLabSpace(_base);
 	if(freeScientist > 0 && freeSpaceLab > 0)
@@ -193,7 +193,7 @@ void ResearchProjectState::btnMoreClick(Action *action)
 
 void ResearchProjectState::btnLessClick(Action *action)
 {
-	int assigned = _project->GetAssigned ();
+	int assigned = _project->getAssigned ();
 	if (assigned > 0)
 	{
 		_project->setAssigned(--assigned);

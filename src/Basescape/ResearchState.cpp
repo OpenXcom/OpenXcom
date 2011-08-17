@@ -113,7 +113,7 @@ ResearchState::ResearchState(Game *game, Base *base) : State(game), _base(base)
 	_lstResearch->setBackground(_window);
 	_lstResearch->setMargin(2);
 	_lstResearch->onMouseClick((ActionHandler)&ResearchState::onSelectProject);
-	FillProjectList();
+	fillProjectList();
 }
 
 /**
@@ -146,7 +146,7 @@ void ResearchState::onSelectProject(Action *action)
 
 extern int getFreeLabSpace (Base * base);
 
-void ResearchState::FillProjectList()
+void ResearchState::fillProjectList()
 {
 	const std::vector<ResearchProject *> & baseProjects(_base->GetResearch());
 	_lstResearch->clearList();
@@ -155,8 +155,8 @@ void ResearchState::FillProjectList()
 	    iter++)
 	{
 		std::wstringstream sstr;
-		sstr << (*iter)->GetAssigned ();
-		const RuleResearchProject *r = (*iter)->GetRuleResearchProject();
+		sstr << (*iter)->getAssigned ();
+		const RuleResearchProject *r = (*iter)->getRuleResearchProject();
 		std::wstring wstr = _game->getLanguage()->getString(r->getName ());
 		_lstResearch->addRow(3, wstr.c_str(), sstr.str().c_str(), L"Unknown");
 	}

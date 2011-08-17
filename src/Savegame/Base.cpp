@@ -379,7 +379,7 @@ int Base::getAvailableScientists() const
 	     itResearch != researchs.end ();
 	     itResearch++)
 	{
-		nbFreeScientist -= (*itResearch)->GetAssigned ();
+		nbFreeScientist -= (*itResearch)->getAssigned ();
 	}
        
 	return nbFreeScientist;

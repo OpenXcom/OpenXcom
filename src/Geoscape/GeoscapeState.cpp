@@ -759,7 +759,7 @@ void GeoscapeState::time1Day()
 		for(std::vector<ResearchProject*>::const_iterator iter = finished.begin (); iter != finished.end (); ++iter)
 		{
 			(*i)->RemoveResearch(*iter);
-			const RuleResearchProject * research = (*iter)->GetRuleResearchProject ();
+			const RuleResearchProject * research = (*iter)->getRuleResearchProject ();
 			_game->pushState(new EndResearchState (_game, *i, research));
 			delete(*iter);
 		}
