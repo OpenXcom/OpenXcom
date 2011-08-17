@@ -24,34 +24,49 @@ namespace OpenXcom
 {
 int getFreeLabSpace (Base * base)
 {
-  int freeLabSpace = 0;
-  std::vector<BaseFacility*> *const facilities (base->getFacilities());
-  for (std::vector<BaseFacility*>::iterator itFacility = facilities->begin ();
-       itFacility != facilities->end ();
-       itFacility++)
-    {
-      freeLabSpace += (*itFacility)->getRules()->getLaboratories();
-    }
+	int freeLabSpace = 0;
+	int total = 0;
+	std::vector<BaseFacility*> *const facilities (base->getFacilities());
+	for (std::vector<BaseFacility*>::iterator itFacility = facilities->begin ();
+	     itFacility != facilities->end ();
+	     itFacility++)
+	{
+		freeLabSpace += (*itFacility)->getRules()->getLaboratories();
+	}
+	total = freeLabSpace;
   
-  const std::vector<ResearchProject *> & researchs (base->GetResearch());
-  for (std::vector<ResearchProject *>::const_iterator itResearch = researchs.begin ();
-       itResearch != researchs.end ();
-       itResearch++)
-    {
-      freeLabSpace -= (*itResearch)->GetAssigned ();
-    }
+	const std::vector<ResearchProject *> & researchs (base->GetResearch());
+	for (std::vector<ResearchProject *>::const_iterator itResearch = researchs.begin ();
+	     itResearch != researchs.end ();
+	     itResearch++)
+	{
+		freeLabSpace -= (*itResearch)->GetAssigned ();
+	}
+	return freeLabSpace;
+}
+
+int getFreeScientist (Base * base)
+{
+	int freeScientist = base->getScientists();
+	const std::vector<ResearchProject *> & researchs (base->GetResearch());
+	for (std::vector<ResearchProject *>::const_iterator itResearch = researchs.begin ();
+	     itResearch != researchs.end ();
+	     itResearch++)
+	{
+		freeScientist -= (*itResearch)->GetAssigned ();
+	}
        
-  return freeLabSpace;
+	return freeScientist;
 }
 
 ResearchProjectState::ResearchProjectState(Game *game, Base *base, RuleResearchProject * rule, ResearchState * researchState, NewResearchListState * newResearchListState) : State(game), _base(base), _project(new ResearchProject(rule)), _rule(rule), _researchState(researchState), _newResearchListState(newResearchListState)
 {
-  buildUi ();
+	buildUi ();
 }
 
 ResearchProjectState::ResearchProjectState(Game *game, Base *base, ResearchProject * project, ResearchState * researchState, NewResearchListState * newResearchListState) : State(game), _base(base), _project(project), _rule(0), _researchState(researchState), _newResearchListState(newResearchListState)
 {
-  buildUi ();
+	buildUi ();
 }
 std::vector<Text*> texts;
 void ResearchProjectState::buildUi ()
@@ -128,10 +143,10 @@ void ResearchProjectState::buildUi ()
 	_btnLess->copy(_window);
 
 	if (_rule)
-	  SetAssignedScientist(0);
-	else
-	  SetAssignedScientist(_project->GetAssigned ());
-
+	{
+		_base->AddResearch(_project);
+	}
+	SetAssignedScientist();
 	// _btnMore->setColor(Palette::blockOffset(13)+8);
 	// _btnLess->setColor(Palette::blockOffset(13)+8);
 	_btnMore->onMouseClick((ActionHandler)&ResearchProjectState::btnMoreClick);
@@ -142,23 +157,22 @@ void ResearchProjectState::btnOkClick(Action *action)
 {
 	if (_rule)
 	{
-		_base->AddResearch(_project);
 		_newResearchListState->FillProjectList ();
 	}
 	_researchState->FillProjectList();
 	_game->popState();
 }
 
-void ResearchProjectState::SetAssignedScientist(int nb)
+void ResearchProjectState::SetAssignedScientist()
 {
 	std::wstringstream s1;
-	int freeScientist = _base->getAvailableScientists();
+	int freeScientist = getFreeScientist(_base);
 	int freeSpaceLab = getFreeLabSpace(_base);
-	s1 << _game->getLanguage()->getString("STR_SCIENTISTS_AVAILABLE") << freeScientist - nb;
+	s1 << _game->getLanguage()->getString("STR_SCIENTISTS_AVAILABLE") << freeScientist;
 	std::wstringstream s2;
-	s2 << _game->getLanguage()->getString("STR_LABORATORY_SPACE_AVAILABLE") << freeSpaceLab - nb;
+	s2 << _game->getLanguage()->getString("STR_LABORATORY_SPACE_AVAILABLE") << freeSpaceLab;
 	std::wstringstream s3;
-	s3 << _game->getLanguage()->getString("STR_SCIENTISTS_ALLOCATED") << nb;
+	s3 << _game->getLanguage()->getString("STR_SCIENTISTS_ALLOCATED") << _project->GetAssigned ();
 	_txtAvailableScientist->setText(s1.str());
 	_txtAvailableSpace->setText(s2.str());
 	_txtAssigned->setText(s3.str());
@@ -167,10 +181,12 @@ void ResearchProjectState::SetAssignedScientist(int nb)
 void ResearchProjectState::btnMoreClick(Action *action)
 {
 	int assigned = _project->GetAssigned ();
-	if ((_base->getAvailableScientists() - assigned) > 0 && (getFreeLabSpace(_base) - assigned) > 0)
+	int freeScientist = getFreeScientist(_base);
+	int freeSpaceLab = getFreeLabSpace(_base);
+	if(freeScientist > 0 && freeSpaceLab > 0)
 	{
 		_project->setAssigned(++assigned);
-		SetAssignedScientist(assigned);
+		SetAssignedScientist();
 	}
 }
 
@@ -181,7 +197,7 @@ void ResearchProjectState::btnLessClick(Action *action)
 	if (assigned > 0)
 	{
 		_project->setAssigned(--assigned);
-		SetAssignedScientist(assigned);
+		SetAssignedScientist();
 	}
 }
 

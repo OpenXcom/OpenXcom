@@ -28,7 +28,7 @@ private:
 	ResearchState * _researchState;
 	NewResearchListState * _newResearchListState;
 	std::vector<Text*> texts_;
-	void SetAssignedScientist(int nb);
+	void SetAssignedScientist();
 	ResearchProject * _project;
 	RuleResearchProject * _rule;
 	void buildUi ();
