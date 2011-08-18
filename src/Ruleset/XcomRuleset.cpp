@@ -1647,6 +1647,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	YAML::Parser parser(fin);
 
 	YAML::Node doc;
+	std::map<RuleResearchProject *, std::vector<std::string> > projectDependencys;
 	while(parser.GetNextDocument(doc)) 
 	{
 		for(YAML::Iterator it=doc.begin();it!=doc.end();++it)
@@ -1654,22 +1655,31 @@ XcomRuleset::XcomRuleset() : Ruleset()
 			std::string name;
 			int cost;
 			std::vector<std::string> deps;
+			bool needItem;
 			(*it)["name"] >> name;
 			(*it)["cost"] >> cost;
 			(*it)["dependencys"] >> deps;
+			(*it)["needItem"] >> needItem;
 			RuleResearchProject * r = new RuleResearchProject(name, cost);
-			for(std::vector<std::string>::iterator itDep = deps.begin ();
-			    itDep != deps.end ();
+			r->setNeedItem(needItem);
+			projectDependencys[r] = deps;
+			_researchProjects.push_back(r);
+		}
+		for(std::map<RuleResearchProject *, std::vector<std::string> >::iterator iter = projectDependencys.begin ();
+		    iter != projectDependencys.end ();
+		    iter++)
+		{
+			for(std::vector<std::string>::iterator itDep = iter->second.begin ();
+			    itDep != iter->second.end ();
 			    itDep++)
 			{
-				std::vector<RuleResearchProject *>::iterator iter = std::find_if(_researchProjects.begin (),
+				std::vector<RuleResearchProject *>::iterator it = std::find_if(_researchProjects.begin (),
 												 _researchProjects.end (),
 												 findProjectByName(*itDep));
-				if (iter != _researchProjects.end ())
-					r->addDependency(*iter);
+				if (it != _researchProjects.end ())
+					iter->first->addDependency(*it);
 			}
-			_researchProjects.push_back(r);
-	      }
+		  }
 	}
 }
 

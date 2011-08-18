@@ -13,6 +13,7 @@
 #include "../Ruleset/RuleResearchProject.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Savegame/ResearchProject.h"
+#include "../Savegame/ItemContainer.h"
 
 #include <algorithm>
 
@@ -46,6 +47,14 @@ void getAvailableResearchProjects (std::vector<RuleResearchProject *> & projects
 	{
 		if (!(*iter)->isAvailable () || (*iter)->isDiscovered () || std::find_if (baseResearchProjects.begin(), baseResearchProjects.end (), findRuleResearchProject(*iter)) != baseResearchProjects.end ())
 			continue;
+		if ((*iter)->needItem() && base->getItems()->getItem((*iter)->getName ()) == 0)
+		  {
+		    std::cout << __LINE__ << " => " << (*iter)->getName () << ":" << base->getItems()->getItem((*iter)->getName ()) << std::endl;
+			continue;
+		  }
+		else
+		    std::cout << __LINE__ << " => " << (*iter)->getName () << ":" << base->getItems()->getItem((*iter)->getName ()) << std::endl;
+
 		projects.push_back (*iter);
 	}
 }

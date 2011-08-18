@@ -35,6 +35,7 @@ class RuleResearchProject
 	int _cost;
 	std::vector<RuleResearchProject *> _dependencys;
 	bool _discovered;
+	bool _needItem;
 public:
 	RuleResearchProject(const std::string & name, int cost);
 	bool isAvailable () const;
@@ -44,6 +45,8 @@ public:
 	void setDiscovered (bool b);
 	const std::string & getName () const;
 	const std::vector<RuleResearchProject *> & getDependencys () const;
+	bool needItem() const;
+	void setNeedItem(bool b);
 };
 
 }

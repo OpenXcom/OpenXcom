@@ -49,4 +49,15 @@ const std::vector<RuleResearchProject *> & RuleResearchProject::getDependencys (
 {
 	return _dependencys;
 }
+
+bool RuleResearchProject::needItem() const
+{
+  return _needItem;
+}
+
+void RuleResearchProject::setNeedItem(bool b)
+{
+  _needItem = b;
+}
+
 }
