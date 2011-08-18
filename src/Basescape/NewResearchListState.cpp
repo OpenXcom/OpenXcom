@@ -45,12 +45,22 @@ void getAvailableResearchProjects (std::vector<RuleResearchProject *> & projects
 	    iter != researchProjects.end ();
 	    iter++)
 	{
-		if (!(*iter)->isAvailable () || (*iter)->isDiscovered () || std::find_if (baseResearchProjects.begin(), baseResearchProjects.end (), findRuleResearchProject(*iter)) != baseResearchProjects.end ())
+		if (!(*iter)->isAvailable ())
+		{
 			continue;
+		}
+		if ((*iter)->isDiscovered ())
+		{
+			continue;
+		}
+		if (std::find_if (baseResearchProjects.begin(), baseResearchProjects.end (), findRuleResearchProject(*iter)) != baseResearchProjects.end ())
+		{
+			continue;
+		}
 		if ((*iter)->needItem() && base->getItems()->getItem((*iter)->getName ()) == 0)
-		  {
+		{
 			continue;
-		  }
+		}
 		projects.push_back (*iter);
 	}
 }
