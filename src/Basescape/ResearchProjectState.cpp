@@ -9,7 +9,6 @@
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
 #include "../Savegame/Base.h"
-#include "../Interface/ImageButton.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Ruleset/RuleResearchProject.h"
 #include "../Ruleset/RuleBaseFacility.h"
@@ -17,6 +16,7 @@
 #include "../Savegame/BaseFacility.h"
 #include "ResearchState.h"
 #include "NewResearchListState.h"
+#include "../Interface/ArrowButton.h"
 
 #include <sstream>
 
@@ -94,12 +94,8 @@ void ResearchProjectState::buildUi ()
 	_txtLess = new Text(width - 3 * button_x_border, button_height, start_x + 2*button_x_border, start_y + 9*button_y_border);
 	_btnOk = new TextButton(width - 2 * button_x_border , button_height, start_x + button_x_border, start_y + height - button_height - button_y_border);
 
-	_btnMore = new ImageButton(2*button_x_border, button_height, start_x + 7*button_x_border, start_y + 7*button_y_border);
-	_btnLess = new ImageButton(2*button_x_border, button_height, start_x + 7*button_x_border, start_y + 9*button_y_border);
-	btn1 = new ImageButton(2*button_x_border, button_height, start_x + 9*button_x_border, start_y + 7*button_y_border);
-	btn2 = new ImageButton(2*button_x_border, button_height, start_x + 9*button_x_border, start_y + 9*button_y_border);
-	btn3 = new ImageButton(2*button_x_border, button_height, start_x + 11*button_x_border, start_y + 7*button_y_border);
-	btn4 = new ImageButton(2*button_x_border, button_height, start_x + 11*button_x_border, start_y + 9*button_y_border);
+	_btnMore = new ArrowButton(ARROW_BIG_UP, 1.4*button_x_border, button_height, start_x + 7*button_x_border, start_y + 7*button_y_border);
+	_btnLess = new ArrowButton(ARROW_BIG_DOWN, 1.4*button_x_border, button_height, start_x + 7*button_x_border, start_y + 9*button_y_border);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(1)), Palette::backPos, 16);
@@ -114,10 +110,6 @@ void ResearchProjectState::buildUi ()
 	add(_txtLess);
 	add(_btnMore);
 	add(_btnLess);
-	add(btn1);
-	add(btn2);
-	add(btn3);
-	add(btn4);
 	
 	// Set up objects
 	_window->setColor(Palette::blockOffset(13)+8);
@@ -139,16 +131,13 @@ void ResearchProjectState::buildUi ()
 	_txtMore->setColor(Palette::blockOffset(13)+8);
 	_txtLess->setColor(Palette::blockOffset(13)+8);
 
-	_btnMore->copy(_window);
-	_btnLess->copy(_window);
-
 	if (_rule)
 	{
 		_base->AddResearch(_project);
 	}
 	SetAssignedScientist();
-	// _btnMore->setColor(Palette::blockOffset(13)+8);
-	// _btnLess->setColor(Palette::blockOffset(13)+8);
+	_btnMore->setColor(Palette::blockOffset(13)+8);
+	_btnLess->setColor(Palette::blockOffset(13)+8);
 	_btnMore->onMouseClick((ActionHandler)&ResearchProjectState::btnMoreClick);
 	_btnLess->onMouseClick((ActionHandler)&ResearchProjectState::btnLessClick);
 }

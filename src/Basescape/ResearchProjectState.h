@@ -10,18 +10,18 @@ class Window;
 class Text;
 class TextList;
 class Base;
-class ImageButton;
 class RuleResearchProject;
 class ResearchProject;
 class ResearchState;
 class NewResearchListState;
+class ArrowButton;
 
 class ResearchProjectState : public State
 {
 private:
 	Base *_base;
 	TextButton *_btnOk;
-	ImageButton * _btnMore, *_btnLess, *btn1,*btn2,*btn3,*btn4;
+	ArrowButton * _btnMore, *_btnLess;
 	Window *_window;
 	Text *_txtTitle, *_txtAvailableScientist, *_txtAvailableSpace, *_txtAssigned, *_txtMore, *_txtLess;
 	TextList *_lstResearch;
