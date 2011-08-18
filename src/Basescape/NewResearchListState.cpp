@@ -49,12 +49,8 @@ void getAvailableResearchProjects (std::vector<RuleResearchProject *> & projects
 			continue;
 		if ((*iter)->needItem() && base->getItems()->getItem((*iter)->getName ()) == 0)
 		  {
-		    std::cout << __LINE__ << " => " << (*iter)->getName () << ":" << base->getItems()->getItem((*iter)->getName ()) << std::endl;
 			continue;
 		  }
-		else
-		    std::cout << __LINE__ << " => " << (*iter)->getName () << ":" << base->getItems()->getItem((*iter)->getName ()) << std::endl;
-
 		projects.push_back (*iter);
 	}
 }
