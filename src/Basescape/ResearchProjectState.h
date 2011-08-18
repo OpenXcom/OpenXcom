@@ -15,6 +15,7 @@ class ResearchProject;
 class ResearchState;
 class NewResearchListState;
 class ArrowButton;
+class Timer;
 
 class ResearchProjectState : public State
 {
@@ -32,6 +33,7 @@ private:
 	ResearchProject * _project;
 	RuleResearchProject * _rule;
 	void buildUi ();
+	Timer *_timerMore, *_timerLess;
 public:
 	/// Creates the Research state.
 	ResearchProjectState(Game *game, Base *base, RuleResearchProject * rule, ResearchState * researchState, NewResearchListState * newResearchListState);
@@ -40,6 +42,13 @@ public:
 	void btnOkClick(Action *action);
 	void btnMoreClick(Action *action);
 	void btnLessClick(Action *action);
+	void more();
+	void less();
+	void morePress(Action *action);
+	void moreRelease(Action *action);
+	void lessPress(Action *action);
+	void lessRelease(Action *action);
+	void think();
 };
 }
 

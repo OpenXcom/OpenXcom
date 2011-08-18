@@ -17,6 +17,7 @@
 #include "ResearchState.h"
 #include "NewResearchListState.h"
 #include "../Interface/ArrowButton.h"
+#include "../Engine/Timer.h"
 
 #include <sstream>
 
@@ -140,6 +141,15 @@ void ResearchProjectState::buildUi ()
 	_btnLess->setColor(Palette::blockOffset(13)+8);
 	_btnMore->onMouseClick((ActionHandler)&ResearchProjectState::btnMoreClick);
 	_btnLess->onMouseClick((ActionHandler)&ResearchProjectState::btnLessClick);
+	_btnMore->onMousePress((ActionHandler)&ResearchProjectState::morePress);
+	_btnMore->onMouseRelease((ActionHandler)&ResearchProjectState::moreRelease);
+	_btnLess->onMousePress((ActionHandler)&ResearchProjectState::lessPress);
+	_btnLess->onMouseRelease((ActionHandler)&ResearchProjectState::lessRelease);
+
+	_timerMore = new Timer(50);
+	_timerMore->onTimer((StateHandler)&ResearchProjectState::more);
+	_timerLess = new Timer(50);
+	_timerLess->onTimer((StateHandler)&ResearchProjectState::less);
 }
 
 void ResearchProjectState::btnOkClick(Action *action)
@@ -190,4 +200,41 @@ void ResearchProjectState::btnLessClick(Action *action)
 	}
 }
 
+void ResearchProjectState::morePress(Action *action)
+{
+	_timerMore->start ();
+}
+
+void ResearchProjectState::moreRelease(Action *action)
+{
+	_timerMore->stop ();
+}
+
+void ResearchProjectState::lessPress(Action *action)
+{
+	_timerLess->start ();
+}
+
+void ResearchProjectState::lessRelease(Action *action)
+{
+	_timerLess->stop ();
+}
+
+void ResearchProjectState::more()
+{
+	btnMoreClick(NULL);
+}
+
+void ResearchProjectState::less()
+{
+	btnLessClick(NULL);
+}
+
+void ResearchProjectState::think()
+{
+	State::think();
+	
+	_timerLess->think (this, 0);
+	_timerMore->think (this, 0);
+}
 }
