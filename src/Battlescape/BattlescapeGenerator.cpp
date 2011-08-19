@@ -377,7 +377,7 @@ void BattlescapeGenerator::addItem(RuleItem *item)
 		// find equipped weapons that can be loaded with this ammo
 		for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 		{
-			BattleItem *weapon = _save->getItemFromUnit((*i), "STR_RIGHT_HAND");
+			BattleItem *weapon = (*i)->getItem("STR_RIGHT_HAND");
 			if (weapon && weapon->getAmmoItem() == 0)
 			{
 				if (weapon->setAmmoItem(bi) == 0)
@@ -393,7 +393,7 @@ void BattlescapeGenerator::addItem(RuleItem *item)
 		// find the first soldier with a free belt slot to equip grenades
 		for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 		{
-			if (!_save->getItemFromUnit((*i), "STR_BELT"))
+			if (!(*i)->getItem("STR_BELT"))
 			{
 				bi->moveToOwner((*i));
 				bi->setSlot(_game->getRuleset()->getInventory("STR_BELT"));
@@ -407,7 +407,7 @@ void BattlescapeGenerator::addItem(RuleItem *item)
 		// find the first soldier with a free right hand to equip weapons
 		for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 		{
-			if (!_save->getItemFromUnit((*i), "STR_RIGHT_HAND"))
+			if (!(*i)->getItem("STR_RIGHT_HAND"))
 			{
 				bi->moveToOwner((*i));
 				bi->setSlot(_game->getRuleset()->getInventory("STR_RIGHT_HAND"));
@@ -432,7 +432,7 @@ void BattlescapeGenerator::addItem(RuleItem *item)
 		// find the first soldier with a free backpack
 		for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 		{
-			if (!_save->getItemFromUnit((*i), "STR_BACKPACK"))
+			if (!(*i)->getItem("STR_BACKPACK"))
 			{
 				bi->moveToOwner((*i));
 				bi->setSlot(_game->getRuleset()->getInventory("STR_BACKPACK"));

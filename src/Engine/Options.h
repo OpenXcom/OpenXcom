@@ -32,6 +32,8 @@ namespace Options
 {
 	/// Creates a new set of options.
 	void create();
+	/// Loads options from command line arguments.
+	void loadArgs(int argc, char** args);
 	/// Loads options from YAML.
 	void load(const std::string &filename = "options");
 	/// Saves options to YAML.

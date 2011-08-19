@@ -50,6 +50,7 @@ WarningMessage::WarningMessage(int width, int height, int x, int y) : Surface(wi
 WarningMessage::~WarningMessage()
 {
 	delete _timer;
+	delete _text;
 }
 
 /**

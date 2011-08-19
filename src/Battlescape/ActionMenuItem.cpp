@@ -35,20 +35,20 @@ ActionMenuItem::ActionMenuItem(State *state, int id, Font *bigFont, int x, int y
 	_txtDescription->setFonts(bigFont, 0);
 	_txtDescription->setBig();
 	_txtDescription->setHighContrast(true);
-	_txtDescription->setColor(Palette::blockOffset(0)-1);
+	_txtDescription->setColor(Palette::blockOffset(0));
 	_txtDescription->setVisible(true);
 
 	_txtAcc = new Text(100, 20, 126, 13);
 	_txtAcc->setFonts(bigFont, 0);
 	_txtAcc->setBig();
 	_txtAcc->setHighContrast(true);
-	_txtAcc->setColor(Palette::blockOffset(0)-1);
+	_txtAcc->setColor(Palette::blockOffset(0));
 
 	_txtTU = new Text(100, 20, 195, 13);
 	_txtTU->setFonts(bigFont, 0);
 	_txtTU->setBig();
 	_txtTU->setHighContrast(true);
-	_txtTU->setColor(Palette::blockOffset(0)-1);
+	_txtTU->setColor(Palette::blockOffset(0));
 }
 
 /**

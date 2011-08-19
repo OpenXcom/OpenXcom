@@ -109,7 +109,7 @@ void AggroBAIState::think(BattleAction *action)
 			_timesNotSeen = 0;
 			_lastKnownPosition = _aggroTarget->getPosition();
 			action->target = _aggroTarget->getPosition();
-			action->weapon = _game->getMainHandWeapon(action->actor);
+			action->weapon = action->actor->getMainHandWeapon();
 			int tu = action->actor->getActionTUs(action->type, action->weapon);
 			if (action->weapon && action->weapon->getAmmoItem() && action->weapon->getAmmoItem()->getAmmoQuantity())
 			{

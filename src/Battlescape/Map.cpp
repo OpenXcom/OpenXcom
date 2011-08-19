@@ -42,8 +42,10 @@
 #include "../Ruleset/MapDataSet.h"
 #include "../Ruleset/MapData.h"
 #include "../Ruleset/RuleArmor.h"
-#include "../Interface/Text.h"
+#include "BattlescapeMessage.h"
+#include "../Savegame/SavedGame.h"
 #include "../Interface/Cursor.h"
+#include "../Engine/Game.h"
 
 /*
   1) Map origin is left corner.
@@ -64,15 +66,23 @@ namespace OpenXcom
 
 /**
  * Sets up a map with the specified size and position.
+ * @param game Pointer to the core game.
  * @param width Width in pixels.
  * @param height Height in pixels.
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Map::Map(int width, int height, int x, int y, int visibleMapHeight) : InteractiveSurface(width, height, x, y), _mapOffsetX(-250), _mapOffsetY(250), _viewHeight(0), _selectorX(0), _selectorY(0), _cursorType(CT_NORMAL), _animFrame(0), _scrollX(0), _scrollY(0), _RMBDragging(false), _visibleMapHeight(visibleMapHeight)
+Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) : InteractiveSurface(width, height, x, y), _game(game), _mapOffsetX(-250), _mapOffsetY(250), _viewHeight(0), _selectorX(0), _selectorY(0), _cursorType(CT_NORMAL), _animFrame(0), _scrollX(0), _scrollY(0), _RMBDragging(false), _visibleMapHeight(visibleMapHeight)
 {
 	_scrollTimer = new Timer(50);
 	_scrollTimer->onTimer((SurfaceHandler)&Map::scroll);
+	
+	_res = _game->getResourcePack();
+	_save = _game->getSavedGame()->getBattleGame();
+	_spriteWidth = _res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getWidth();
+	_spriteHeight = _res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getHeight();
+
+	_message = new BattlescapeMessage(width, visibleMapHeight, 0, 0);
 }
 
 /**
@@ -93,33 +103,6 @@ Map::~Map()
 	for (int shade = 0; shade < 16; shade++)
 	{
 		free(_shade[shade]);
-	}
-
-}
-
-/**
- * Changes the pack for the map to get resources for rendering.
- * @param res Pointer to the resource pack.
- */
-void Map::setResourcePack(ResourcePack *res)
-{
-	_res = res;
-	_spriteWidth = res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getWidth();
-	_spriteHeight = res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getHeight();
-}
-
-/**
- * Changes the saved game content for the map to render.
- * @param save Pointer to the saved game.
- * @param game Pointer to the Game.
- */
-void Map::setSavedGame(SavedBattleGame *save, Game *game)
-{
-	_save = save;
-	_game = game;
-	for (std::vector<MapDataSet*>::const_iterator i = _save->getMapDataSets()->begin(); i != _save->getMapDataSets()->end(); ++i)
-	{
-		(*i)->getSurfaceset()->setPalette(this->getPalette());
 	}
 
 }
@@ -211,8 +194,27 @@ void Map::draw()
 	}
 	else
 	{
-		drawHiddenMovement(this);
+		_message->blit(this);
 	}
+}
+
+/**
+ * Replaces a certain amount of colors in the surface's palette.
+ * @param colors Pointer to the set of colors.
+ * @param firstcolor Offset of the first color to replace.
+ * @param ncolors Amount of colors to replace.
+ */
+void Map::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
+{
+	Surface::setPalette(colors, firstcolor, ncolors);
+	for (std::vector<MapDataSet*>::const_iterator i = _save->getMapDataSets()->begin(); i != _save->getMapDataSets()->end(); ++i)
+	{
+		(*i)->getSurfaceset()->setPalette(colors, firstcolor, ncolors);
+	}
+	_message->setPalette(colors, firstcolor, ncolors);
+	_message->setBackground(_res->getSurface("TAC00.SCR"));
+	_message->setFonts(_res->getFont("BIGLETS.DAT"), _res->getFont("SMALLSET.DAT"));
+	_message->setText(_game->getLanguage()->getString("STR_HIDDEN_MOVEMENT"));
 }
 
 /**
@@ -550,16 +552,6 @@ void Map::drawTerrain(Surface *surface)
 		}
 	}
 
-}
-
-/**
-* Draw the "hidden movement" screen.
-*/
-void Map::drawHiddenMovement(Surface *surface)
-{
-	_game->getResourcePack()->getSurface("TAC00.SCR")->setX(5);
-	_game->getResourcePack()->getSurface("TAC00.SCR")->setY(5);
-	_game->getResourcePack()->getSurface("TAC00.SCR")->blit(surface);
 }
 
 /**
@@ -1182,7 +1174,7 @@ void Map::cacheUnit(BattleUnit *unit)
 			cache->setPalette(this->getPalette());
 		}
 		unitSprite->setBattleUnit(unit);
-		BattleItem *handItem = _save->getItemFromUnit(unit, "STR_RIGHT_HAND");
+		BattleItem *handItem = unit->getItem("STR_RIGHT_HAND");
 		if (handItem)
 		{
 			unitSprite->setBattleItem(handItem);

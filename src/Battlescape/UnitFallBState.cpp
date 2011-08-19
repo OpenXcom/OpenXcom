@@ -146,13 +146,12 @@ void UnitFallBState::convertUnitToCorpse(BattleUnit *unit, TerrainModifier *terr
 {
 	terrain->spawnItem(_unit->getPosition(), new BattleItem(_parent->getGame()->getRuleset()->getItem(_unit->getUnit()->getArmor()->getCorpseItem())));
 	// move inventory from unit to the ground
-	for (std::vector<BattleItem*>::iterator i = _unit->getInventory()->begin(); i != _unit->getInventory()->end();)
+	for (std::vector<BattleItem*>::iterator i = _unit->getInventory()->begin(); i != _unit->getInventory()->end(); ++i)
 	{
 		_unit->getTile()->addItem(*i);
 		(*i)->setOwner(0);
-		i = _unit->getInventory()->erase(i);
-		++i;
 	}
+	_unit->getInventory()->clear();
 }
 
 }

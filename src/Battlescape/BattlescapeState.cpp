@@ -80,17 +80,12 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	int iconsHeight = 60;
 
 	// Create buttonbar - this should be on the centerbottom of the screen
-	// there is some cropping going on here, because the icons image is 320x200 while we only need the bottom of it.
-	_icons = new Surface(320, 200, mapWidth/2 - iconsWidth/2, mapHeight - iconsHeight);
-	SDL_Rect *r = _icons->getCrop();
-	r->y = mapHeight - iconsHeight;
-	r->h = iconsHeight;
-	r->w = iconsWidth;
+	_icons = new Surface(iconsWidth, iconsHeight, mapWidth/2 - iconsWidth/2, mapHeight - iconsHeight);
 
 	// Create the battlemap view
 	// the actual map height is the total height minus the height of the buttonbar
 	int visibleMapHeight = mapHeight - iconsHeight;
-	_map = new Map(mapWidth, mapHeight, 0, 0, visibleMapHeight);
+	_map = new Map(_game, mapWidth, mapHeight, 0, 0, visibleMapHeight);
 
 	_numLayers = new NumberText(3, 5, _icons->getX() + 232, _icons->getY() + 10);
 	_rank = new Surface(26, 23, _icons->getX() + 107, _icons->getY() + 37);
@@ -218,13 +213,19 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	add(_txtDebug);
 
 	// Set up objects
-	_game->getResourcePack()->getSurface("ICONS.PCK")->blit(_icons);
 
 	_battleGame = _game->getSavedGame()->getBattleGame();
-	_map->setResourcePack(_game->getResourcePack());
-	_map->setSavedGame(_battleGame, _game);
 	_map->init();
 	_map->onMouseClick((ActionHandler)&BattlescapeState::mapClick);
+
+	// there is some cropping going on here, because the icons image is 320x200 while we only need the bottom of it.
+	Surface *s = _game->getResourcePack()->getSurface("ICONS.PCK");
+	SDL_Rect *r = s->getCrop();
+	r->x = 0;
+	r->y = mapHeight - iconsHeight;
+	r->w = iconsWidth;
+	r->h = iconsHeight;
+	s->blit(_icons);
 
 	_numLayers->setColor(Palette::blockOffset(1)-2);
 	_numLayers->setValue(1);
@@ -264,9 +265,9 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 		_numVisibleUnit[i]->setValue(i+1);
 	}
 	_warning->setColor(Palette::blockOffset(2));
-	_warning->setTextColor(Palette::blockOffset(1)-1);
+	_warning->setTextColor(Palette::blockOffset(1));
 
-	_txtName->setColor(Palette::blockOffset(8)-1);
+	_txtName->setColor(Palette::blockOffset(8));
 	_txtName->setHighContrast(true);
 	_numTimeUnits->setColor(Palette::blockOffset(4));
 	_numEnergy->setColor(Palette::blockOffset(1));
@@ -453,10 +454,9 @@ void BattlescapeState::mapClick(Action *action)
 	}
 
 	// don't handle mouseclicks below 140, because they are in the buttons area (it overlaps with map surface)
-	SDL_Rect *r = _icons->getCrop();
 	int my = int(action->getAbsoluteYMouse());
 	int mx = int(action->getAbsoluteXMouse());
-	if ( my > _icons->getY() && my < _icons->getY()+r->h && mx > _icons->getX() && mx < _icons->getX()+_icons->getWidth()) return;
+	if ( my > _icons->getY() && my < _icons->getY()+_icons->getHeight() && mx > _icons->getX() && mx < _icons->getX()+_icons->getWidth()) return;
 
 
 	// don't accept leftclicks if there is no cursor or there is an action busy
@@ -837,7 +837,7 @@ void BattlescapeState::btnLeftHandItemClick(Action *action)
 	if (_action.type != BA_NONE) return;
 	if (playableUnitSelected())
 	{
-		BattleItem *leftHandItem = _battleGame->getItemFromUnit(_battleGame->getSelectedUnit(), "STR_LEFT_HAND");
+		BattleItem *leftHandItem = _battleGame->getSelectedUnit()->getItem("STR_LEFT_HAND");
 		handleItemClick(leftHandItem);
 	}
 }
@@ -851,7 +851,7 @@ void BattlescapeState::btnRightHandItemClick(Action *action)
 	if (_action.type != BA_NONE) return;
 	if (playableUnitSelected())
 	{
-		BattleItem *rightHandItem = _battleGame->getItemFromUnit(_battleGame->getSelectedUnit(), "STR_RIGHT_HAND");
+		BattleItem *rightHandItem = _battleGame->getSelectedUnit()->getItem("STR_RIGHT_HAND");
 		handleItemClick(rightHandItem);
 	}
 }
@@ -1034,7 +1034,7 @@ void BattlescapeState::updateSoldierInfo()
 	_barMorale->setMax(100);
 	_barMorale->setValue(battleUnit->getMorale());
 
-	BattleItem *leftHandItem = _battleGame->getItemFromUnit(battleUnit, "STR_LEFT_HAND");
+	BattleItem *leftHandItem = battleUnit->getItem("STR_LEFT_HAND");
 	_btnLeftHandItem->clear();
 	_numAmmoLeft->clear();
 	if (leftHandItem)
@@ -1048,7 +1048,7 @@ void BattlescapeState::updateSoldierInfo()
 				_numAmmoLeft->setValue(0);
 		}
 	}
-	BattleItem *rightHandItem = _battleGame->getItemFromUnit(battleUnit, "STR_RIGHT_HAND");
+	BattleItem *rightHandItem = battleUnit->getItem("STR_RIGHT_HAND");
 	_btnRightHandItem->clear();
 	_numAmmoRight->clear();
 	if (rightHandItem)
@@ -1363,7 +1363,7 @@ void BattlescapeState::popup(State *state)
 bool BattlescapeState::checkReservedTU(BattleUnit *bu, int tu)
 {
 	if (_tuReserved != BA_NONE &&
-		tu + bu->getActionTUs(_tuReserved, _battleGame->getMainHandWeapon(bu)) > bu->getTimeUnits())
+		tu + bu->getActionTUs(_tuReserved, bu->getMainHandWeapon()) > bu->getTimeUnits())
 	{
 		if (_battleGame->getSide() == FACTION_PLAYER)
 		{

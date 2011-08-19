@@ -45,11 +45,10 @@ private:
 	BattleUnit *_selUnit;
 	BattleItem *_selItem;
 	bool _tu;
+	int _groundOffset;
 
 	/// Move item to specified slot.
 	void moveItem(BattleItem *item, RuleInventory *slot, int x, int y);
-	/// Gets the item in the specified slot.
-	BattleItem *getItemInSlot(RuleInventory *slot, int x, int y) const;
 	/// Gets the slot in the specified position.
 	RuleInventory *getSlotInPosition(int *x, int *y) const;
 public:

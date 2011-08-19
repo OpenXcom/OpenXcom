@@ -84,19 +84,19 @@ InventoryState::InventoryState(Game *game, bool tu) : State(game), _tu(tu)
 	// Set up objects
 	_game->getResourcePack()->getSurface("TAC01.SCR")->blit(_bg);
 
-	_txtName->setColor(Palette::blockOffset(4)-1);
+	_txtName->setColor(Palette::blockOffset(4));
 	_txtName->setBig();
 	_txtName->setHighContrast(true);
 
-	_txtTus->setColor(Palette::blockOffset(4)-1);
-	_txtTus->setSecondaryColor(Palette::blockOffset(1)-1);
+	_txtTus->setColor(Palette::blockOffset(4));
+	_txtTus->setSecondaryColor(Palette::blockOffset(1));
 	_txtTus->setHighContrast(true);
 
-	_txtItem->setColor(Palette::blockOffset(3)-1);
+	_txtItem->setColor(Palette::blockOffset(3));
 	_txtItem->setHighContrast(true);
 
-	_txtAmmo->setColor(Palette::blockOffset(4)-1);
-	_txtAmmo->setSecondaryColor(Palette::blockOffset(1)-1);
+	_txtAmmo->setColor(Palette::blockOffset(4));
+	_txtAmmo->setSecondaryColor(Palette::blockOffset(1));
 	_txtAmmo->setHighContrast(true);
 
 	_btnOk->onMouseClick((ActionHandler)&InventoryState::btnOkClick);

@@ -49,15 +49,8 @@ int main(int argc, char** args)
 	try
 	{
 #endif
-		// Handles command line arguments
-		for (int i = 1; i < argc; ++i)
-		{
-			if (strcmp(args[i], "-data") == 0 && argc > i + 1)
-				Options::setDataFolder(args[i+1]);
-			if (strcmp(args[i], "-user") == 0 && argc > i + 1)
-				Options::setUserFolder(args[i+1]);
-		}
 		Options::create();
+		Options::loadArgs(argc, args);
 		game = new Game("OpenXcom " + Options::getVersion(), 320, 200, 16);
 		game->getScreen()->setFullscreen(Options::getBool("fullscreen"));
 		game->getScreen()->setResolution(Options::getInt("displayWidth"), Options::getInt("displayHeight"));

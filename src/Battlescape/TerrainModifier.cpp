@@ -424,7 +424,7 @@ bool TerrainModifier::checkReactionFire(BattleUnit *unit, BattleAction *action, 
 		action->type = BA_SNAPSHOT;
 		action->target = unit->getPosition();
 		// lets try and shoot
-		action->weapon = _save->getMainHandWeapon(action->actor);
+		action->weapon = action->actor->getMainHandWeapon();
 		int tu = action->actor->getActionTUs(action->type, action->weapon);
 		if (action->weapon && action->weapon->getAmmoItem() && action->weapon->getAmmoItem()->getAmmoQuantity())
 		{

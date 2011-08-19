@@ -29,6 +29,8 @@
 #include "Soldier.h"
 #include "../Ruleset/RuleArmor.h"
 #include "../Engine/RNG.h"
+#include "../Ruleset/RuleInventory.h"
+#include "Tile.h"
 
 namespace OpenXcom
 {
@@ -640,7 +642,7 @@ bool BattleUnit::isOut() const
  * @param item
  * @return TUs
  */
-int BattleUnit::getActionTUs(BattleActionType actionType, BattleItem *item)
+int BattleUnit::getActionTUs(BattleActionType actionType, BattleItem *item) const
 {
 	if (item == 0)
 	{
@@ -740,7 +742,7 @@ bool BattleUnit::addToVisibleUnits(BattleUnit *unit)
  * Get the pointer to the vector of visible units.
  * @return pointer to vector.
  */
-std::vector<BattleUnit*> *BattleUnit::getVisibleUnits()
+std::vector<BattleUnit*> *const BattleUnit::getVisibleUnits()
 {
 	return &_visibleUnits;
 }
@@ -759,7 +761,7 @@ void BattleUnit::clearVisibleUnits()
  * @param weaponAccuracy
  * @return firing Accuracy
  */
-double BattleUnit::getFiringAccuracy(int weaponAccuracy)
+double BattleUnit::getFiringAccuracy(int weaponAccuracy) const
 {
 	double result = (double)(_unit->getFiringAccuracy()/100.0);
 
@@ -779,7 +781,7 @@ double BattleUnit::getFiringAccuracy(int weaponAccuracy)
  * @param weaponAccuracy
  * @return firing Accuracy
  */
-double BattleUnit::getThrowingAccuracy()
+double BattleUnit::getThrowingAccuracy() const
 {
 	double result = (double)(_unit->getFiringAccuracy()/100.0);
 
@@ -807,7 +809,7 @@ void BattleUnit::setArmor(int armor, UnitSide side)
  * @param side The side of the armor.
  * @return Amount of armor.
  */
-int BattleUnit::getArmor(UnitSide side)
+int BattleUnit::getArmor(UnitSide side) const
 {
 	return _armor[side];
 }
@@ -816,7 +818,7 @@ int BattleUnit::getArmor(UnitSide side)
  * Get total amount of fatal wounds this unit has.
  * @return Number of fatal wounds.
  */
-int BattleUnit::getFatalWounds()
+int BattleUnit::getFatalWounds() const
 {
 	int sum = 0;
 	for (int i = 0; i < 6; ++i)
@@ -920,7 +922,7 @@ void BattleUnit::setFire(int fire)
  * Get the amount of turns this unit is on fire. 0 = no fire.
  * @return fire : amount of turns this tile is on fire.
  */
-int BattleUnit::getFire()
+int BattleUnit::getFire() const
 {
 	return _fire;
 }
@@ -929,7 +931,7 @@ int BattleUnit::getFire()
  * Get the pointer to the vector of inventory items.
  * @return pointer to vector.
  */
-std::vector<BattleItem*> *BattleUnit::getInventory()
+std::vector<BattleItem*> *const BattleUnit::getInventory()
 {
 	return &_inventory;
 }
@@ -959,7 +961,7 @@ void BattleUnit::setAIState(BattleAIState *aiState)
 /**
  * Let AI do their thing.
  */
-BattleAIState *BattleUnit::getCurrentAIState()
+BattleAIState *BattleUnit::getCurrentAIState() const
 {
 	return _currentAIState;
 }
@@ -978,7 +980,7 @@ void BattleUnit::setVisible(bool flag)
  * Get whether this unit is visible.
  * @param flag
  */
-bool BattleUnit::getVisible()
+bool BattleUnit::getVisible() const
 {
 	if (getFaction() == FACTION_PLAYER)
 	{
@@ -1006,6 +1008,101 @@ void BattleUnit::setTile(Tile *tile)
 Tile *BattleUnit::getTile() const
 {
 	return _tile;
+}
+
+/**
+ * Checks if there's an inventory item in
+ * the specified inventory position.
+ * @param slot Inventory slot.
+ * @param x X position in slot.
+ * @param y Y position in slot.
+ * @return Item in the slot, or NULL if none.
+ */
+BattleItem *BattleUnit::getItem(RuleInventory *slot, int x, int y) const
+{
+	// Soldier items
+	if (slot->getType() != INV_GROUND)
+	{
+		for (std::vector<BattleItem*>::const_iterator i = _inventory.begin(); i != _inventory.end(); ++i)
+		{
+			if ((*i)->getSlot() == slot && (*i)->occupiesSlot(x, y))
+			{
+				return *i;
+			}
+		}
+	}
+	// Ground items
+	else if (_tile != 0)
+	{
+		for (std::vector<BattleItem*>::const_iterator i = _tile->getInventory()->begin(); i != _tile->getInventory()->end(); ++i)
+		{
+			if ((*i)->occupiesSlot(x, y))
+			{
+				return *i;
+			}
+		}
+	}
+	return 0;
+}
+
+/**
+ * Checks if there's an inventory item in
+ * the specified inventory position.
+ * @param slot Inventory slot.
+ * @param x X position in slot.
+ * @param y Y position in slot.
+ * @return Item in the slot, or NULL if none.
+ */
+BattleItem *BattleUnit::getItem(const std::string &slot, int x, int y) const
+{
+	// Soldier items
+	for (std::vector<BattleItem*>::const_iterator i = _inventory.begin(); i != _inventory.end(); ++i)
+	{
+		if ((*i)->getSlot() != 0 && (*i)->getSlot()->getId() == slot && (*i)->occupiesSlot(x, y))
+		{
+			return *i;
+		}
+	}
+	// Ground items
+	if (_tile != 0)
+	{
+		for (std::vector<BattleItem*>::const_iterator i = _tile->getInventory()->begin(); i != _tile->getInventory()->end(); ++i)
+		{
+			if ((*i)->getSlot() != 0 && (*i)->getSlot()->getId() == slot && (*i)->occupiesSlot(x, y))
+			{
+				return *i;
+			}
+		}
+	}
+	return 0;
+}
+
+/**
+* Get the "main hand weapon" from the unit.
+* @return Pointer to item.
+*/
+BattleItem *BattleUnit::getMainHandWeapon() const
+{
+	BattleItem *weaponRightHand = getItem("STR_RIGHT_HAND");
+	BattleItem *weaponLeftHand = getItem("STR_LEFT_HAND");
+
+	// if there is only one weapon, or only one weapon loaded (rules out grenades) it's easy:
+	if (!weaponRightHand || !weaponRightHand->getAmmoItem() || !weaponRightHand->getAmmoItem()->getAmmoQuantity())
+		return weaponLeftHand;
+	if (!weaponLeftHand || !weaponLeftHand->getAmmoItem() || !weaponLeftHand->getAmmoItem()->getAmmoQuantity())
+		return weaponRightHand;
+
+	// otherwise pick the one with the least snapshot TUs
+	int tuRightHand = weaponRightHand->getRules()->getTUSnap();
+	int tuLeftHand = weaponRightHand->getRules()->getTUSnap();
+	if (tuLeftHand >= tuRightHand)
+	{
+		return weaponRightHand;
+	}
+	else
+	{
+		return weaponLeftHand;
+	}
 }
 
 }

@@ -251,6 +251,8 @@ void BattleItem::setSlotY(int y)
  */
 bool BattleItem::occupiesSlot(int x, int y) const
 {
+	if (_inventorySlot->getType() == INV_HAND)
+		return true;
 	return (x >= _inventoryX && x < _inventoryX + _rules->getInventoryWidth() &&
 			y >= _inventoryY && y < _inventoryY + _rules->getInventoryHeight());
 }

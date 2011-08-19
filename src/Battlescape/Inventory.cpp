@@ -49,7 +49,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Inventory::Inventory(Game *game, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _game(game), _selUnit(0), _selItem(0), _tu(true)
+Inventory::Inventory(Game *game, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _game(game), _selUnit(0), _selItem(0), _tu(true), _groundOffset(0)
 {
 	_grid = new Surface(width, height, x, y);
 	_items = new Surface(width, height, x, y);
@@ -104,6 +104,7 @@ void Inventory::setTuMode(bool tu)
 void Inventory::setSelectedUnit(BattleUnit *unit)
 {
 	_selUnit = unit;
+	_groundOffset = 999;
 	arrangeGround();
 }
 
@@ -221,14 +222,13 @@ void Inventory::drawItems()
 			texture->getFrame((*i)->getRules()->getBigSprite())->blit(_items);
 		}
 		// Ground items
-		Tile *tile = _selUnit->getTile();
-		for (std::vector<BattleItem*>::iterator i = tile->getInventory()->begin(); i != tile->getInventory()->end(); ++i)
+		for (std::vector<BattleItem*>::iterator i = _selUnit->getTile()->getInventory()->begin(); i != _selUnit->getTile()->getInventory()->end(); ++i)
 		{
-			if ((*i) == _selItem)
+			if ((*i) == _selItem || (*i)->getSlotX() < _groundOffset)
 				continue;
 
 			Surface *frame = texture->getFrame((*i)->getRules()->getBigSprite());
-			frame->setX((*i)->getSlot()->getX() + (*i)->getSlotX() * RuleInventory::SLOT_W);
+			frame->setX((*i)->getSlot()->getX() + ((*i)->getSlotX() - _groundOffset) * RuleInventory::SLOT_W);
 			frame->setY((*i)->getSlot()->getY() + (*i)->getSlotY() * RuleInventory::SLOT_H);
 			texture->getFrame((*i)->getRules()->getBigSprite())->blit(_items);
 		}
@@ -239,69 +239,44 @@ void Inventory::drawItems()
  * Moves an item to a specified slot in the
  * selected player's inventory.
  * @param item Pointer to battle item.
- * @param slot Inventory slot.
+ * @param slot Inventory slot, or NULL if none.
  * @param x X position in slot.
  * @param y Y position in slot.
  */
 void Inventory::moveItem(BattleItem *item, RuleInventory *slot, int x, int y)
 {
-	// Handle dropping from/to ground.
-	if (slot != item->getSlot())
+	// Make items vanish (eg. ammo in weapons)
+	if (slot == 0)
 	{
-		Tile *tile = _selUnit->getTile();
-		if (slot->getType() == INV_GROUND)
+		if (item->getSlot()->getType() == INV_GROUND)
+		{
+			_selUnit->getTile()->removeItem(item);
+		}
+		else
 		{
 			item->moveToOwner(0);
-			tile->addItem(_selItem);
-		}
-		else if (_selItem->getSlot()->getType() == INV_GROUND)
-		{
-			item->moveToOwner(_selUnit);
-			tile->removeItem(item);
 		}
 	}
-	item->setSlot(slot);
-	item->setSlotX(x);
-	item->setSlotY(y);
-}
-
-/**
- * Checks if there's an inventory item in
- * the specified inventory position.
- * @param slot Inventory slot.
- * @param x X position in slot.
- * @param y Y position in slot.
- * @return Item in the slot, or NULL if none.
- */
-BattleItem *Inventory::getItemInSlot(RuleInventory *slot, int x, int y) const
-{
-	if (_selUnit != 0)
+	else
 	{
-		// Soldier items
-		for (std::vector<BattleItem*>::iterator i = _selUnit->getInventory()->begin(); i != _selUnit->getInventory()->end(); ++i)
+		// Handle dropping from/to ground.
+		if (slot != item->getSlot())
 		{
-			if ((*i)->getSlot() == slot)
+			if (slot->getType() == INV_GROUND)
 			{
-				if (slot->getType() == INV_HAND || (*i)->occupiesSlot(x, y))
-				{
-					return *i;
-				}
+				item->moveToOwner(0);
+				_selUnit->getTile()->addItem(item);
+			}
+			else if (item->getSlot()->getType() == INV_GROUND)
+			{
+				item->moveToOwner(_selUnit);
+				_selUnit->getTile()->removeItem(item);
 			}
 		}
-		// Ground items
-		Tile *tile = _selUnit->getTile();
-		for (std::vector<BattleItem*>::iterator i = tile->getInventory()->begin(); i != tile->getInventory()->end(); ++i)
-		{
-			if ((*i)->getSlot() == slot)
-			{
-				if ((*i)->occupiesSlot(x, y))
-				{
-					return *i;
-				}
-			}
-		}
+		item->setSlot(slot);
+		item->setSlotX(x);
+		item->setSlotY(y);
 	}
-	return 0;
 }
 
 /**
@@ -402,7 +377,11 @@ void Inventory::mouseClick(Action *action, State *state)
 			RuleInventory *slot = getSlotInPosition(&x, &y);
 			if (slot != 0)
 			{
-				BattleItem *item = getItemInSlot(slot, x, y);
+				if (slot->getType() == INV_GROUND)
+				{
+					x += _groundOffset;
+				}
+				BattleItem *item = _selUnit->getItem(slot, x, y);
 				if (item != 0)
 				{
 					setSelectedItem(item);
@@ -417,7 +396,11 @@ void Inventory::mouseClick(Action *action, State *state)
 			RuleInventory *slot = getSlotInPosition(&x, &y);
 			if (slot != 0)
 			{
-				BattleItem *item = getItemInSlot(slot, x, y);
+				if (slot->getType() == INV_GROUND)
+				{
+					x += _groundOffset;
+				}
+				BattleItem *item = _selUnit->getItem(slot, x, y);
 				// Put item in empty slot
 				if (item == 0 || item == _selItem)
 				{
@@ -459,7 +442,7 @@ void Inventory::mouseClick(Action *action, State *state)
 						}
 						else if (_selUnit->spendTimeUnits(15, !_tu))
 						{
-							moveItem(_selItem, item->getSlot(), item->getSlotX(), item->getSlotY());
+							moveItem(_selItem, 0, 0, 0);
 							item->setAmmoItem(_selItem);
 							_selItem->moveToOwner(0);
 							setSelectedItem(0);
@@ -517,18 +500,28 @@ void Inventory::unload()
  */
 void Inventory::arrangeGround()
 {
+	RuleInventory *ground = _game->getRuleset()->getInventory("STR_GROUND");
+
 	// Lazy arranging
 	int x = 0;
 	if (_selUnit != 0)
 	{
-		Tile *tile = _selUnit->getTile();
-		for (std::vector<BattleItem*>::iterator i = tile->getInventory()->begin(); i != tile->getInventory()->end(); ++i)
+		for (std::vector<BattleItem*>::iterator i = _selUnit->getTile()->getInventory()->begin(); i != _selUnit->getTile()->getInventory()->end(); ++i)
 		{
-			(*i)->setSlot(_game->getRuleset()->getInventory("STR_GROUND"));
+			(*i)->setSlot(ground);
 			(*i)->setSlotX(x);
 			(*i)->setSlotY(0);
 			x += (*i)->getRules()->getInventoryWidth();
 		}
+	}
+	int slots = (320 - ground->getX()) / RuleInventory::SLOT_W;
+	if (x > _groundOffset + slots)
+	{
+		_groundOffset += slots;
+	}
+	else
+	{
+		_groundOffset = 0;
 	}
 	drawItems();
 }

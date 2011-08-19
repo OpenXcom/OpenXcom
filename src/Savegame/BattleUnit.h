@@ -36,6 +36,7 @@ class BattleAIState;
 class BattlescapeState;
 class Node;
 class Surface;
+class RuleInventory;
 
 enum UnitStatus {STATUS_STANDING, STATUS_WALKING, STATUS_TURNING, STATUS_AIMING, STATUS_FALLING, STATUS_DEAD, STATUS_UNCONSCIOUS};
 enum UnitFaction {FACTION_PLAYER, FACTION_HOSTILE, FACTION_NEUTRAL};
@@ -153,7 +154,7 @@ public:
 	/// The unit is out - either dead or unconscious.
 	bool isOut() const;
 	/// Get the number of time units a certain action takes.
-	int getActionTUs(BattleActionType actionType, BattleItem *item);
+	int getActionTUs(BattleActionType actionType, BattleItem *item) const;
 	/// Spend time units if it can.
 	bool spendTimeUnits(int tu, bool debugmode);
 	/// Spend energy if it can.
@@ -163,19 +164,19 @@ public:
 	/// Add unit to visible units.
 	bool addToVisibleUnits(BattleUnit *unit);
 	/// Get the list of visible units.
-	std::vector<BattleUnit*> *getVisibleUnits();
+	std::vector<BattleUnit*> *const getVisibleUnits();
 	/// Clear visible units.
 	void clearVisibleUnits();
 	/// Calculate firing accuracy.
-	double getFiringAccuracy(int baseAccuracy);
+	double getFiringAccuracy(int baseAccuracy) const;
 	/// Calculate throwing accuracy.
-	double getThrowingAccuracy();
+	double getThrowingAccuracy() const;
 	/// Set armor value.
 	void setArmor(int armor, UnitSide side);
 	/// Get armor value.
-	int getArmor(UnitSide side);
+	int getArmor(UnitSide side) const;
 	/// Get total number of fatal wounds.
-	int getFatalWounds();
+	int getFatalWounds() const;
 	/// Get the current reaction score.
 	double getReactionScore() const;
 	/// Prepare for a new turn.
@@ -189,25 +190,29 @@ public:
 	/// Set fire.
 	void setFire(int fire);
 	/// Get fire.
-	int getFire();
+	int getFire() const;
 	/// Get the list of items in the inventory.
-	std::vector<BattleItem*> *getInventory();
+	std::vector<BattleItem*> *const getInventory();
 	/// Let AI do their thing.
 	void think(BattleAction *action);
 	/// Get current AI state.
-	BattleAIState *getCurrentAIState();
+	BattleAIState *getCurrentAIState() const;
 	/// Set next AI State
 	void setAIState(BattleAIState *aiState);
 	/// Set whether this unit is visible
 	void setVisible(bool flag);
 	/// Get whether this unit is visible
-	bool getVisible();
+	bool getVisible() const;
 	/// Sets the unit's tile it's standing on
 	void setTile(Tile *tile);
 	/// Gets the unit's tile.
 	Tile *getTile() const;
-
-
+	/// Gets the item in the specified slot.
+	BattleItem *getItem(RuleInventory *slot, int x = 0, int y = 0) const;
+	/// Gets the item in the specified slot.
+	BattleItem *getItem(const std::string &slot, int x = 0, int y = 0) const;
+	/// Gets the item in the main hand.
+	BattleItem *getMainHandWeapon() const;
 };
 
 }

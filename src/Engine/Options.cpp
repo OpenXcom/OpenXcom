@@ -51,6 +51,39 @@ void create()
 }
 
 /**
+ * Loads options from a set of command line arguments,
+ * in the format "-option value".
+ * @param argc Number of arguments.
+ * @param args Array of argument strings.
+ */
+void Options::loadArgs(int argc, char** args)
+{
+	for (int i = 1; i < argc; ++i)
+	{
+		if (argc > i + 1)
+		{
+			std::string arg = args[i];
+			if (arg[0] == '-' && argc > i + 1)
+			{
+				std::map<std::string, std::string>::iterator it = _options.find(arg.substr(1, arg.length()-1));
+				if (it != _options.end())
+				{
+					it->second = args[i+1];
+				}
+			}
+			else if (arg == "-data")
+			{
+				_dataFolder = args[i+1];
+			}
+			else if (arg == "-user")
+			{
+				_userFolder = args[i+1];
+			}
+		}
+	}
+}
+
+/**
  * Loads options from a YAML file.
  * @param filename YAML filename.
  */

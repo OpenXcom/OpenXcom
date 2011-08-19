@@ -36,6 +36,7 @@ class BattleUnit;
 class BulletSprite;
 class Projectile;
 class Explosion;
+class BattlescapeMessage;
 
 enum CursorType { CT_NONE, CT_NORMAL, CT_AIM, CT_PSI, CT_WAYPOINT, CT_THROW };
 
@@ -49,11 +50,11 @@ private:
 	static const int SCROLL_BORDER = 5;
 	static const int SCROLL_DIAGONAL_EDGE = 60;
 	static const bool RMB_SCROLL = false;
+	Game *_game;
 	SavedBattleGame *_save;
 	ResourcePack *_res;
 	Timer *_scrollTimer;
 	Surface *_arrow;
-	Game *_game;
 	int _mapOffsetX, _mapOffsetY, _viewHeight;
 	int _RMBClickX, _RMBClickY;
 	int _spriteWidth, _spriteHeight;
@@ -70,28 +71,25 @@ private:
 	bool _cameraFollowed;
 	int _visibleMapHeight;
 	SDL_Color *_shade[16];
-
+	BattlescapeMessage *_message;
 
 	void minMaxInt(int *value, const int minValue, const int maxValue);
 	bool cacheTileSprites(int i);
 	void convertScreenToMap(int screenX, int screenY, int *mapX, int *mapY);
 	void drawTerrain(Surface *surface);
-	void drawHiddenMovement(Surface *surface);
 public:
 	/// Creates a new map at the specified position and size.
-	Map(int width, int height, int x, int y, int visibleMapHeight);
+	Map(Game *game, int width, int height, int x, int y, int visibleMapHeight);
 	/// Cleans up the map.
 	~Map();
-	/// savedbattlegame contains all game content like Tiles, Soldiers, Items,...
-	void setSavedGame(SavedBattleGame *save, Game *game);
-	/// resourcepack contains tilesheets for terrain and units,... for rendering
-	void setResourcePack(ResourcePack *res);
 	/// sets stuff up
 	void init();
 	/// handle timers
 	void think();
 	/// draw the surface
 	void draw();
+	/// Sets the palette.
+	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
 	/// Special handling for mouse clicks.
 	void mouseClick(Action *action, State *state);
 	/// Special handling for mous over
