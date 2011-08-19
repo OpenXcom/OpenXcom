@@ -56,7 +56,7 @@ void create()
  * @param argc Number of arguments.
  * @param args Array of argument strings.
  */
-void Options::loadArgs(int argc, char** args)
+void loadArgs(int argc, char** args)
 {
 	for (int i = 1; i < argc; ++i)
 	{
