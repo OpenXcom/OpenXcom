@@ -501,4 +501,14 @@ UfopaediaSaved *SavedGame::getUfopaedia()
 	return _ufopaedia;
 }
 
+void SavedGame::addFinishedResearch (const RuleResearchProject * r)
+{
+	_found.push_back(r);
+}
+
+const std::vector<const RuleResearchProject *> & SavedGame::getFoundResearch()
+{
+	return _found;
+}
+
 }

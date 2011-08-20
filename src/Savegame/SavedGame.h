@@ -65,7 +65,7 @@ private:
 	int _ufoId, _waypointId;
 	SavedBattleGame *_battleGame;
 	UfopaediaSaved *_ufopaedia;
-	std::vector<RuleResearchProject *> _found;
+	std::vector<const RuleResearchProject *> _found;
 	std::map<Base*, ResearchProject *> _researchs;
 public:
 	/// Creates a new save with a certain difficulty.
@@ -114,6 +114,8 @@ public:
 	void endBattle();
 	/// Gets the current Ufopaedia parameters.
 	UfopaediaSaved *getUfopaedia();
+	void addFinishedResearch (const RuleResearchProject * r);
+	const std::vector<const RuleResearchProject *> & getFoundResearch();
 };
 
 }

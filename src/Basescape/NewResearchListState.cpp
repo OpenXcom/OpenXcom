@@ -37,19 +37,36 @@ bool findRuleResearchProject::operator()(ResearchProject *r) const
 	return _toFind == r->getRuleResearchProject();
 }
 
+bool isResearchAvailable (RuleResearchProject * r, Game * game)
+{
+	std::vector<RuleResearchProject *>::const_iterator iter = r->getDependencys().begin ();
+	const std::vector<const RuleResearchProject *> & found(game->getSavedGame()->getFoundResearch());
+	while (iter != r->getDependencys().end ())
+	{
+		std::vector<const RuleResearchProject *>::const_iterator itFound = std::find(found.begin (), found.end (), *iter);
+		if (itFound == found.end ())
+			return false;
+		iter++;
+	}
+
+	return true;
+}
+
 void getAvailableResearchProjects (std::vector<RuleResearchProject *> & projects, Game * game, Base * base)
 {
+	const std::vector<const RuleResearchProject *> & found(game->getSavedGame()->getFoundResearch());
 	const std::vector<RuleResearchProject *> & researchProjects = game->getRuleset()->getResearchProjects();
 	const std::vector<ResearchProject *> & baseResearchProjects = base->GetResearch();
 	for(std::vector<RuleResearchProject *>::const_iterator iter = researchProjects.begin ();
 	    iter != researchProjects.end ();
 	    iter++)
 	{
-		if (!(*iter)->isAvailable ())
+		if (!isResearchAvailable(*iter, game))
 		{
 			continue;
 		}
-		if ((*iter)->isDiscovered ())
+		std::vector<const RuleResearchProject *>::const_iterator itFound = std::find(found.begin (), found.end (), *iter);
+		if (itFound != found.end ())
 		{
 			continue;
 		}
