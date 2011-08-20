@@ -530,7 +530,15 @@ int Base::getAvailableStores() const
  */
 int Base::getUsedLaboratories() const
 {
-	return 0;
+	const std::vector<ResearchProject *> & researchs (base->GetResearch());
+	int usedLabSpace = 0;
+	for (std::vector<ResearchProject *>::const_iterator itResearch = researchs.begin ();
+	     itResearch != researchs.end ();
+	     itResearch++)
+	{
+		usedLabSpace += (*itResearch)->getAssigned ();
+	}
+	return usedLabSpace;
 }
 
 /**
