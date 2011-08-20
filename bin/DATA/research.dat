@@ -3,90 +3,126 @@
   needItem: false
   dependencys:
     []
+  unlock:
+    []
 - name: STR_LASER_PISTOL
   cost: 100
   needItem: false
   dependencys:
     - STR_LASER_WEAPONS
+  unlock:
+    []
 - name: STR_LASER_RIFLE
   cost: 300
   needItem: false
   dependencys:
     - STR_LASER_PISTOL
+  unlock:
+    []
 - name: STR_LASER_CANNON
   cost: 420
   needItem: false
   dependencys:
     - STR_LASER_RIFLE
+  unlock:
+    []
 - name: STR_MOTION_SCANNER
   cost: 180
   needItem: false
   dependencys:
+    []
+  unlock:
     []
 - name: STR_MEDI_KIT
   cost: 210
   needItem: false
   dependencys:
     []
+  unlock:
+    []
 - name: STR_ALIEN_ALLOYS
   cost: 400
   needItem: true
   dependencys:
+    []
+  unlock:
     []
 - name: STR_ALIEN_ENTERTAINMENT
   cost: 150
   needItem: true
   dependencys:
     []
+  unlock:
+    []
 - name: STR_ALIEN_FOOD
   cost: 150
   needItem: true
   dependencys:
+    []
+  unlock:
     []
 - name: STR_ALIEN_GRENADE
   cost: 200
   needItem: true
   dependencys:
     []
+  unlock:
+    []
 - name: STR_ALIEN_ORIGINS
   cost: 300
   needItem: true
   dependencys:
     []
+  unlock:
+    []
 - name: STR_ALIEN_REPRODUCTION
   cost: 150
-  needItem: false
+  needItem: true
   dependencys:
+    []
+  unlock:
     []
 - name: STR_ALIEN_SURGERY
   cost: 150
   needItem: true
   dependencys:
     []
+  unlock:
+    []
 - name: STR_BLASTER_BOMB
   cost: 300
   needItem: true
   dependencys:
+    []
+  unlock:
     []
 - name: STR_BLASTER_LAUNCHER
   cost: 900
   needItem: true
   dependencys:
     []
+  unlock:
+    []
 - name: STR_CYDONIA_OR_BUST
   cost: 600
   needItem: false
   dependencys:
     - STR_THE_MARTIAN_SOLUTION
+  unlock:
+    []
 - name: STR_ELERIUM_115
   cost: 450
   needItem: true
   dependencys:
     []
+  unlock:
+    []
 - name: STR_EXAMINATION_ROOM
   cost: 150
   needItem: true
   dependencys:
+    []
+  unlock:
     []
 - name: STR_FLYING_SUIT
   cost: 330
@@ -94,67 +130,96 @@
   dependencys:
     - STR_POWER_SUIT
     - STR_UFO_NAVIGATION
+  unlock:
+    []
 - name: STR_FUSION_DEFENCE
   cost: 800
   needItem: false
   dependencys:
     - STR_BLASTER_LAUNCHER
     - STR_BLASTER_BOMB
+  unlock:
+    []
 - name: STR_FUSION_MISSILE
   cost: 880
   needItem: false
   dependencys:
     - STR_FUSION_DEFENCE
+  unlock:
+    []
 - name: STR_GRAV_SHIELD
   cost: 930
   needItem: false
   dependencys:
     - STR_NEW_FIGHTER_TRANSPORTER
+  unlock:
+    []
 - name: STR_HEAVY_LASER
   cost: 460
   needItem: false
   dependencys:
+    - STR_LASER_RIFLE
+  unlock:
     []
 - name: STR_HEAVY_PLASMA
   cost: 800
   needItem: true
   dependencys:
     []
+  unlock:
+    []
 - name: STR_HEAVY_PLASMA_CLIP
   cost: 400
   needItem: true
   dependencys:
     []
+  unlock:
+    []
 - name: STR_HYPER_WAVE_DECODER
   cost: 670
   needItem: false
   dependencys:
+    - STR_FLOATER_NAVIGATOR
+    - STR_SNAKEMAN_NAVIGATOR
+    - STR_MUTON_NAVIGATOR
+    - STR_SECTOID_NAVIGATOR
+  unlock:
     []
 - name: STR_MIND_PROBE
   cost: 600
   needItem: true
   dependencys:
     []
+  unlock:
+    []
 - name: STR_MIND_SHIELD
   cost: 360
   needItem: false
   dependencys:
     - STR_PSI_LAB
+  unlock:
+    []
 - name: STR_NEW_FIGHTER_CRAFT
   cost: 600
   needItem: false
   dependencys:
     - STR_UFO_CONSTRUCTION
+  unlock:
+    []
 - name: STR_NEW_FIGHTER_TRANSPORTER
   cost: 700
   needItem: false
   dependencys:
     - STR_NEW_FIGHTER_CRAFT
+  unlock:
+    []
 - name: STR_PERSONAL_ARMOR
   cost: 180
   needItem: false
   dependencys:
     - STR_ALIEN_ALLOYS
+  unlock:
+    []
 - name: STR_PLASMA_BEAM
   cost: 660
   needItem: false
@@ -163,30 +228,42 @@
     - STR_PLASMA_RIFLE_CLIP
     - STR_HEAVY_PLASMA
     - STR_HEAVY_PLASMA_CLIP
+  unlock:
+    []
 - name: STR_PLASMA_DEFENCE
   cost: 620
   needItem: false
   dependencys:
     - STR_PLASMA_BEAM
+  unlock:
+    []
 - name: STR_PLASMA_PISTOL
   cost: 600
   needItem: true
   dependencys:
+    []
+  unlock:
     []
 - name: STR_PLASMA_PISTOL_CLIP
   cost: 400
   needItem: true
   dependencys:
     []
+  unlock:
+    []
 - name: STR_PLASMA_RIFLE
   cost: 700
   needItem: true
   dependencys:
     []
+  unlock:
+    []
 - name: STR_PLASMA_RIFLE_CLIP
   cost: 400
   needItem: true
   dependencys:
+    []
+  unlock:
     []
 - name: STR_POWER_SUIT
   cost: 205
@@ -195,31 +272,50 @@
     - STR_ELERIUM_115
     - STR_UFO_POWER_SOURCE
     - STR_PERSONAL_ARMOR
+  unlock:
+    []
 - name: STR_PSI_AMP
   cost: 500
   needItem: false
   dependencys:
     - STR_PSI_LAB
+  unlock:
+    []
 - name: STR_PSI_LAB
   cost: 420
   needItem: false
   dependencys:
+    - STR_ETHEREAL_COMMANDER
+    - STR_ETHEREAL_ENGINEER
+    - STR_ETHEREAL_LEADER
+    - STR_ETHEREAL_MEDIC
+    - STR_ETHEREAL_NAVIGATOR
+    - STR_ETHEREAL_SOLDIER
+    - STR_SECTOID_LEADER
+    - STR_SECTOID_COMMANDER
+  unlock:
     []
 - name: STR_SMALL_LAUNCHER
   cost: 550
   needItem: true
   dependencys:
     []
+  unlock:
+    []
 - name: STR_STUN_BOMB
   cost: 180
   needItem: true
   dependencys:
+    []
+  unlock:
     []
 - name: STR_THE_MARTIAN_SOLUTION
   cost: 500
   needItem: false
   dependencys:
     - STR_ALIEN_ORIGINS
+  unlock:
+    []
 - name: STR_UFO_CONSTRUCTION
   cost: 450
   needItem: false
@@ -228,18 +324,308 @@
     - STR_ELERIUM_115
     - STR_UFO_POWER_SOURCE
     - STR_UFO_NAVIGATION
+  unlock:
+    []
 - name: STR_UFO_NAVIGATION
   cost: 450
   needItem: true
   dependencys:
+    []
+  unlock:
     []
 - name: STR_UFO_POWER_SOURCE
   cost: 450
   needItem: true
   dependencys:
     []
+  unlock:
+    []
 - name: STR_ULTIMATE_CRAFT
   cost: 900
   needItem: false
   dependencys:
     - STR_NEW_FIGHTER_TRANSPORTER
+  unlock:
+    []
+- name: STR_ZOMBIE_CORPSE
+  cost: 180
+  needItem: true
+  dependencys:
+    - 
+  unlock:
+    []
+- name: STR_CELATID_CORPSE
+  cost: 180
+  needItem: true
+  dependencys:
+    - 
+  unlock:
+    []
+- name: STR_ETHEREAL_CORPSE
+  cost: 180
+  needItem: true
+  dependencys:
+    - 
+  unlock:
+    []
+- name: STR_SILACOID_CORPSE
+  cost: 180
+  needItem: true
+  dependencys:
+    - 
+  unlock:
+    []
+- name: STR_REAPER_CORPSE
+  cost: 180
+  needItem: true
+  dependencys:
+    - 
+  unlock:
+    []
+- name: STR_SNAKEMAN_CORPSE
+  cost: 180
+  needItem: true
+  dependencys:
+    - 
+  unlock:
+    []
+- name: STR_SECTOID_CORPSE
+  cost: 180
+  needItem: true
+  dependencys:
+    - 
+  unlock:
+    []
+- name: STR_SECTOPOD_CORPSE
+  cost: 180
+  needItem: true
+  dependencys:
+    - 
+  unlock:
+    []
+- name: STR_MUTON_CORPSE
+  cost: 180
+  needItem: true
+  dependencys:
+    - 
+  unlock:
+    []
+- name: STR_FLOATER_CORPSE
+  cost: 180
+  needItem: true
+  dependencys:
+    - 
+  unlock:
+    []
+- name: STR_FLOATER_SOLDIER
+  cost: 192
+  needItem: true
+  dependencys:
+    []
+  unlock:
+    []
+- name: STR_FLOATER_NAVIGATOR
+  cost: 192
+  needItem: true
+  dependencys:
+    []
+  unlock:
+    - STR_HYPER_WAVE_DECODER
+- name: STR_FLOATER_MEDIC
+  cost: 192
+  needItem: true
+  dependencys:
+    []
+  unlock:
+    []
+- name: STR_FLOATER_LEADER
+  cost: 192
+  needItem: true
+  dependencys:
+    []
+  unlock:
+    []
+- name: STR_FLOATER_ENGINEER
+  cost: 192
+  needItem: true
+  dependencys:
+    []
+  unlock:
+    []
+- name: STR_FLOATER_COMMANDER
+  cost: 192
+  needItem: true
+  dependencys:
+    []
+  unlock:
+    []
+
+- name: STR_SNAKEMAN_SOLDIER
+  cost: 192
+  needItem: true
+  dependencys:
+    []
+  unlock:
+    []
+- name: STR_SNAKEMAN_NAVIGATOR
+  cost: 192
+  needItem: true
+  dependencys:
+    []
+  unlock:
+    - STR_HYPER_WAVE_DECODER
+- name: STR_SNAKEMAN_MEDIC
+  cost: 192
+  needItem: true
+  dependencys:
+    []
+  unlock:
+    []
+- name: STR_SNAKEMAN_LEADER
+  cost: 192
+  needItem: true
+  dependencys:
+    []
+  unlock:
+    []
+- name: STR_SNAKEMAN_ENGINEER
+  cost: 192
+  needItem: true
+  dependencys:
+    []
+  unlock:
+    []
+- name: STR_SNAKEMAN_COMMANDER
+  cost: 192
+  needItem: true
+  dependencys:
+    []
+  unlock:
+    []
+- name: STR_MUTON_SOLDIER
+  cost: 192
+  needItem: true
+  dependencys:
+    []
+  unlock:
+    []
+- name: STR_MUTON_NAVIGATOR
+  cost: 192
+  needItem: true
+  dependencys:
+    []
+  unlock:
+    - STR_HYPER_WAVE_DECODER
+- name: STR_MUTON_MEDIC
+  cost: 192
+  needItem: true
+  dependencys:
+    []
+  unlock:
+    []
+- name: STR_MUTON_LEADER
+  cost: 192
+  needItem: true
+  dependencys:
+    []
+  unlock:
+    []
+- name: STR_MUTON_ENGINEER
+  cost: 192
+  needItem: true
+  dependencys:
+    []
+  unlock:
+    []
+- name: STR_MUTON_COMMANDER
+  cost: 192
+  needItem: true
+  dependencys:
+    []
+  unlock:
+    []
+- name: STR_SECTOID_SOLDIER
+  cost: 192
+  needItem: true
+  dependencys:
+    []
+  unlock:
+    []
+- name: STR_SECTOID_NAVIGATOR
+  cost: 192
+  needItem: true
+  dependencys:
+    []
+  unlock:
+    - STR_HYPER_WAVE_DECODER
+- name: STR_SECTOID_MEDIC
+  cost: 192
+  needItem: true
+  dependencys:
+    []
+  unlock:
+    []
+- name: STR_SECTOID_LEADER
+  cost: 192
+  needItem: true
+  dependencys:
+    []
+  unlock:
+    - STR_PSI_LAB
+- name: STR_SECTOID_ENGINEER
+  cost: 192
+  needItem: true
+  dependencys:
+    []
+  unlock:
+    []
+- name: STR_SECTOID_COMMANDER
+  cost: 190
+  needItem: true
+  dependencys:
+    []
+  unlock:
+    - STR_PSI_LAB
+- name: STR_ETHEREAL_SOLDIER
+  cost: 192
+  needItem: true
+  dependencys:
+    []
+  unlock:
+    - STR_PSI_LAB
+- name: STR_ETHEREAL_NAVIGATOR
+  cost: 192
+  needItem: true
+  dependencys:
+    []
+  unlock:
+    - STR_HYPER_WAVE_DECODER
+    - STR_PSI_LAB
+- name: STR_ETHEREAL_MEDIC
+  cost: 192
+  needItem: true
+  dependencys:
+    []
+  unlock:
+    - STR_PSI_LAB
+- name: STR_ETHEREAL_LEADER
+  cost: 192
+  needItem: true
+  dependencys:
+    []
+  unlock:
+    - STR_PSI_LAB
+- name: STR_ETHEREAL_ENGINEER
+  cost: 192
+  needItem: true
+  dependencys:
+    []
+  unlock:
+    - STR_PSI_LAB
+- name: STR_ETHEREAL_COMMANDER
+  cost: 192
+  needItem: true
+  dependencys:
+    []
+  unlock:
+    - STR_PSI_LAB
