@@ -49,6 +49,8 @@ private:
 
 	/// Move item to specified slot.
 	void moveItem(BattleItem *item, RuleInventory *slot, int x, int y);
+	/// Check for item overlap.
+	bool overlapItems(BattleItem *item, RuleInventory *slot, int x, int y) const;
 	/// Gets the slot in the specified position.
 	RuleInventory *getSlotInPosition(int *x, int *y) const;
 public:

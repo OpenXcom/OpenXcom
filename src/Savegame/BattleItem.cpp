@@ -243,18 +243,30 @@ void BattleItem::setSlotY(int y)
 }
 
 /**
- * Checks if the item is covering a
- * certain inventory slot.
+ * Checks if the item is covering certain inventory slot(s).
  * @param x Slot X position.
  * @param y Slot Y position.
+ * @param item Item to check for overlap, or NULL if none.
  * @return Whether it's covering or not.
  */
-bool BattleItem::occupiesSlot(int x, int y) const
+bool BattleItem::occupiesSlot(int x, int y, BattleItem *item) const
 {
+	if (item == this)
+		return false;
 	if (_inventorySlot->getType() == INV_HAND)
 		return true;
-	return (x >= _inventoryX && x < _inventoryX + _rules->getInventoryWidth() &&
-			y >= _inventoryY && y < _inventoryY + _rules->getInventoryHeight());
+	if (item == 0)
+	{
+		return (x >= _inventoryX && x < _inventoryX + _rules->getInventoryWidth() &&
+				y >= _inventoryY && y < _inventoryY + _rules->getInventoryHeight());
+	}
+	else
+	{
+		return !(x >= _inventoryX + _rules->getInventoryWidth() ||
+				x + item->getRules()->getInventoryWidth() <= _inventoryX ||
+				y >= _inventoryY + _rules->getInventoryHeight() ||
+				y + item->getRules()->getInventoryHeight() <= _inventoryY);
+	}
 }
 
 /**

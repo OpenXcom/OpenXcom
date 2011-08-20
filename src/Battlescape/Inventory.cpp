@@ -280,6 +280,40 @@ void Inventory::moveItem(BattleItem *item, RuleInventory *slot, int x, int y)
 }
 
 /**
+ * Checks if an item in a certain slot position would
+ * overlap with any other inventory item.
+ * @param item Pointer to battle item.
+ * @param slot Inventory slot, or NULL if none.
+ * @param x X position in slot.
+ * @param y Y position in slot.
+ * @return If there's overlap.
+ */
+bool Inventory::overlapItems(BattleItem *item, RuleInventory *slot, int x, int y) const
+{
+	if (slot->getType() != INV_GROUND)
+	{
+		for (std::vector<BattleItem*>::const_iterator i = _selUnit->getInventory()->begin(); i != _selUnit->getInventory()->end(); ++i)
+		{
+			if ((*i)->getSlot() == slot && (*i)->occupiesSlot(x, y, item))
+			{
+				return true;
+			}
+		}
+	}
+	else if (_selUnit->getTile() != 0)
+	{
+		for (std::vector<BattleItem*>::const_iterator i = _selUnit->getTile()->getInventory()->begin(); i != _selUnit->getTile()->getInventory()->end(); ++i)
+		{
+			if ((*i)->occupiesSlot(x, y, item))
+			{
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+/**
  * Gets the inventory slot located in the specified mouse position.
  * @param x Mouse X position. Returns the slot's X position.
  * @param y Mouse Y position. Returns the slot's Y position.
@@ -404,7 +438,7 @@ void Inventory::mouseClick(Action *action, State *state)
 				// Put item in empty slot
 				if (item == 0 || item == _selItem)
 				{
-					if (slot->fitItemInSlot(_selItem->getRules(), x, y))
+					if (!overlapItems(_selItem, slot, x, y) && slot->fitItemInSlot(_selItem->getRules(), x, y))
 					{
 						if (_selUnit->spendTimeUnits(_selItem->getSlot()->getCost(slot), !_tu))
 						{
