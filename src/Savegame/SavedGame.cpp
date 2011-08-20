@@ -37,9 +37,19 @@
 #include "Ufo.h"
 #include "Waypoint.h"
 #include "UfopaediaSaved.h"
+#include "../Ruleset/RuleResearchProject.h"
 
 namespace OpenXcom
 {
+
+findRuleResearchProjectByString::findRuleResearchProjectByString(const std::string & toFind) : _toFind(toFind)
+{
+}
+
+bool findRuleResearchProjectByString::operator()(RuleResearchProject *r) const
+{
+	return _toFind == r->getName();
+}
 
 /**
  * Initializes a brand new saved game according to the specified difficulty.
@@ -223,6 +233,23 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 		_battleGame->load(*pName);
 	}
 
+	if (const YAML::Node *pName = doc.FindValue("found"))
+	{
+		const std::vector<RuleResearchProject *> & researchs(rule->getResearchProjects ());
+		for(YAML::Iterator it=pName->begin();it!=pName->end();++it)
+		{
+			std::string research;
+			*it >> research;
+			std::vector<RuleResearchProject *>::const_iterator itResearch = std::find_if(researchs.begin (),
+												     researchs.end (),
+												     findRuleResearchProjectByString(research));
+			if (itResearch != researchs.end ())
+			{
+				_found.push_back(*itResearch);
+			}
+		}
+	}
+
 	fin.close();
 }
 
@@ -297,6 +324,14 @@ void SavedGame::save(const std::string &filename) const
 		out << YAML::Key << "battleGame" << YAML::Value;
 		_battleGame->save(out);
 	}
+
+	out << YAML::Key << "found" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::vector<const RuleResearchProject *>::const_iterator i = _found.begin(); i != _found.end(); ++i)
+	{
+		out << (*i)->getName ();
+	}
+	out << YAML::EndSeq;
 	out << YAML::EndMap;
 
 	sav << out.c_str();

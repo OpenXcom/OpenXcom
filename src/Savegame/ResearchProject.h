@@ -1,9 +1,11 @@
 #ifndef OPENXCOM_RESEARCHPROJECT
 #define OPENXCOM_RESEARCHPROJECT
+#include "yaml.h"
 
 namespace OpenXcom
 {
 class RuleResearchProject;
+class Ruleset;
 
 class ResearchProject
 {
@@ -19,7 +21,13 @@ public:
 
   int getAssigned () const;
 
+  float getSpent () const;
+  void setSpent (float f);
+
   const RuleResearchProject * getRuleResearchProject () const;
+
+  void load(const YAML::Node& node, const Ruleset *rule);
+  void save(YAML::Emitter& out) const;
 };
 }
 #endif

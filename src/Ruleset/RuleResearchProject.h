@@ -45,6 +45,14 @@ public:
 	void setNeedItem(bool b);
 };
 
+struct findRuleResearchProjectByString : public std::unary_function<RuleResearchProject *,
+							    bool>
+{
+	std::string _toFind;
+	findRuleResearchProjectByString(const std::string & toFind);
+	bool operator()(RuleResearchProject *r) const;
+};
+
 }
 
 #endif
