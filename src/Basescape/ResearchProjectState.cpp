@@ -23,27 +23,10 @@
 
 namespace OpenXcom
 {
-int getFreeLabSpace (Base * base)
+
+inline int getFreeLabSpace (Base * base)
 {
-	int freeLabSpace = 0;
-	int total = 0;
-	std::vector<BaseFacility*> *const facilities (base->getFacilities());
-	for (std::vector<BaseFacility*>::iterator itFacility = facilities->begin ();
-	     itFacility != facilities->end ();
-	     itFacility++)
-	{
-		freeLabSpace += (*itFacility)->getRules()->getLaboratories();
-	}
-	total = freeLabSpace;
-  
-	const std::vector<ResearchProject *> & researchs (base->GetResearch());
-	for (std::vector<ResearchProject *>::const_iterator itResearch = researchs.begin ();
-	     itResearch != researchs.end ();
-	     itResearch++)
-	{
-		freeLabSpace -= (*itResearch)->getAssigned ();
-	}
-	return freeLabSpace;
+	return base->getAvailableLaboratories() - base->getUsedLaboratories();
 }
 
 int getFreeScientist (Base * base)
