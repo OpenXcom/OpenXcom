@@ -29,12 +29,22 @@ const std::vector<RuleResearchProject *> & RuleResearchProject::getDependencys (
 
 bool RuleResearchProject::needItem() const
 {
-  return _needItem;
+	return _needItem;
 }
 
 void RuleResearchProject::setNeedItem(bool b)
 {
-  _needItem = b;
+	_needItem = b;
+}
+
+const std::vector<RuleResearchProject *> & RuleResearchProject::getUnlocked () const
+{
+	return _unlocks;
+}
+
+void RuleResearchProject::addUnlocked (RuleResearchProject * rp)
+{
+	_unlocks.push_back(rp);
 }
 
 }

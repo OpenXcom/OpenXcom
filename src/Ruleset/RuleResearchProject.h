@@ -34,6 +34,7 @@ class RuleResearchProject
 	std::wstring _description;
 	int _cost;
 	std::vector<RuleResearchProject *> _dependencys;
+	std::vector<RuleResearchProject *> _unlocks;
 	bool _needItem;
 public:
 	RuleResearchProject(const std::string & name, int cost);
@@ -43,6 +44,8 @@ public:
 	const std::vector<RuleResearchProject *> & getDependencys () const;
 	bool needItem() const;
 	void setNeedItem(bool b);
+	const std::vector<RuleResearchProject *> & getUnlocked () const;
+	void addUnlocked (RuleResearchProject * rp);
 };
 
 struct findRuleResearchProjectByString : public std::unary_function<RuleResearchProject *,
