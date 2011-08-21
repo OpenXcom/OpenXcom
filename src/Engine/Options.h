@@ -43,23 +43,23 @@ namespace Options
 	/// Gets the game's data folder.
 	std::string getDataFolder();
 	/// Sets the game's data folder.
-	void setDataFolder(std::string folder);
+	void setDataFolder(const std::string& folder);
 	/// Gets the game's user folder.
 	std::string getUserFolder();
 	/// Sets the game's user folder.
-	void setUserFolder(std::string folder);
+	void setUserFolder(const std::string& folder);
 	/// Gets a string option.
-	std::string getString(std::string id);
+	std::string getString(const std::string& id);
 	/// Gets an integer option.
-	int getInt(std::string id);
+	int getInt(const std::string& id);
 	/// Gets a boolean option.
-	bool getBool(std::string id);
+	bool getBool(const std::string& id);
 	/// Sets a string option.
-	void setString(std::string id, std::string value);
+	void setString(const std::string& id, const std::string& value);
 	/// Sets an integer option.
-	void setInt(std::string id, int value);
+	void setInt(const std::string& id, int value);
 	/// Sets a boolean option.
-	void setBool(std::string id, bool value);
+	void setBool(const std::string& id, bool value);
 }
 
 }

@@ -35,7 +35,7 @@ Palette::Palette() : _colors(0)
  */
 Palette::~Palette()
 {
-	free(_colors);
+	delete[] _colors;
 }
 
 /**
@@ -49,7 +49,9 @@ Palette::~Palette()
  */
 void Palette::loadDat(const std::string &filename, int ncolors, int offset)
 {
-	_colors = (SDL_Color *)malloc(sizeof(SDL_Color) * ncolors);
+	if(_colors != 0)
+		throw Exception("loadDat can be run only once");
+	_colors = new SDL_Color[ncolors];
 
 	// Load file and put colors in pallete
 	std::ifstream palFile (filename.c_str(), std::ios::in | std::ios::binary);
