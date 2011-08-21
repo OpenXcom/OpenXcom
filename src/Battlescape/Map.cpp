@@ -239,6 +239,12 @@ void Map::drawTerrain(Surface *surface)
 	convertScreenToMap(surface->getWidth(), surface->getHeight(), &endX, &dummy);
 	convertScreenToMap(0, surface->getHeight(), &dummy, &beginY);
 	convertScreenToMap(surface->getWidth(), 0, &dummy, &endY);
+	endY += _viewHeight + 1;
+	beginX -= _viewHeight + 1;
+	if (beginX < 0)
+		beginX = 0;
+	if (endY > _save->getLength() - 1);
+		endY = _save->getLength() - 1;
 
 	// if we got bullet, get the highest x and y tiles to draw it on
 	if (_projectile && !_projectile->getItem())

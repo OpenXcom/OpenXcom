@@ -230,6 +230,15 @@ void ProjectileFlyBState::think()
 				}
 				_parent->statePushNext(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(offset), _ammo, _action.actor));
 			}
+			else
+			{
+				_unit->aim(false);
+				_parent->getMap()->cacheUnits();
+				if (_parent->getMap()->didCameraFollow())
+				{
+					_parent->getMap()->centerOnPosition(_unit->getPosition());
+				}
+			}
 		}
 
 		delete _parent->getMap()->getProjectile();
