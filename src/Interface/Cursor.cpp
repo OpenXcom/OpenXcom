@@ -89,7 +89,7 @@ void Cursor::draw()
 	int x1 = 0, y1 = 0, x2 = getWidth() - 1, y2 = getHeight() - 1;
 
 	lock();
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 4; ++i)
 	{
 		drawLine(x1, y1, x1, y2, color);
 		drawLine(x1, y1, x2, getWidth() - 1, color);

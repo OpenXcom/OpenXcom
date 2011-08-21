@@ -28,6 +28,7 @@
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
+#include "../Savegame/Tile.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/SoundSet.h"
 #include "../Engine/Sound.h"
@@ -63,7 +64,7 @@ void ProjectileFlyBState::init()
 	BattleItem *weapon = _action.weapon;
 	BattleItem *projectileItem = 0;
 
-	_parent->setStateInterval(DEFAULT_BULLET_SPEED);
+	_parent->setStateInterval(BattlescapeState::DEFAULT_BULLET_SPEED);
 	_unit = _action.actor;
 	_ammo = weapon->getAmmoItem();
 	if (_unit->isOut())
@@ -127,13 +128,14 @@ void ProjectileFlyBState::init()
 	// add the projectile on the map
 	_parent->getMap()->setProjectile(projectile);
 	// let it calculate a trajectory
+	_projectileImpact = -1;
 	if (_action.type == BA_THROW)
 	{
 		if (projectile->calculateThrow(baseAcc))
 		{
-			projectileItem->setOwner(0);
-			_unit->setCached(false);
-			_parent->getMap()->cacheUnits();
+			projectileItem->moveToOwner(0);
+			_unit->setCache(0);
+			_parent->getMap()->cacheUnit(_unit);
 			_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(39)->play();
 		}
 		else
@@ -148,11 +150,12 @@ void ProjectileFlyBState::init()
 	}
 	else
 	{
-		if (projectile->calculateTrajectory(_unit->getFiringAccuracy(baseAcc)))
+		_projectileImpact = projectile->calculateTrajectory(_unit->getFiringAccuracy(baseAcc));
+		if (_projectileImpact != -1)
 		{
 				// set the soldier in an aiming position
 				_unit->aim(true);
-				_parent->getMap()->cacheUnits();
+				_parent->getMap()->cacheUnit(_unit);
 				// and we have a lift-off
 				_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(weapon->getRules()->getFireSound())->play();
 				if (!_parent->getGame()->getSavedGame()->getBattleGame()->getDebugMode() && _ammo->spendBullet() == false)
@@ -173,11 +176,14 @@ void ProjectileFlyBState::init()
 	}
 
 	BattleAction action;
-	if (_parent->getGame()->getSavedGame()->getBattleGame()->getTerrainModifier()->checkReactionFire(_unit, &action))
+	BattleUnit *potentialVictim = _parent->getGame()->getSavedGame()->getBattleGame()->getTile(_action.target)->getUnit();
+	if (potentialVictim)
 	{
-		_parent->statePushBack(new ProjectileFlyBState(_parent, action));
+		if (_parent->getGame()->getSavedGame()->getBattleGame()->getTerrainModifier()->checkReactionFire(_unit, &action, potentialVictim, false))
+		{
+			_parent->statePushBack(new ProjectileFlyBState(_parent, action));
+		}
 	}
-
 }
 
 /**
@@ -199,7 +205,8 @@ void ProjectileFlyBState::think()
 			BattleItem *item = _parent->getMap()->getProjectile()->getItem();
 			_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(38)->play();
 
-			if (ALT_GRENADE && item->getRules()->getBattleType() == BT_GRENADE && item->getExplodeTurn() > 0 && item->getExplodeTurn() <= _parent->getGame()->getSavedGame()->getBattleGame()->getTurn())
+			if (BattlescapeState::ALT_GRENADE && item->getRules()->getBattleType() == BT_GRENADE && item->getExplodeTurn() > 0 &&
+				item->getExplodeTurn() <= _parent->getGame()->getSavedGame()->getBattleGame()->getTurn())
 			{
 				// it's a hot grenade to explode immediatly
 				_parent->statePushNext(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(-1), item, _action.actor));
@@ -211,15 +218,27 @@ void ProjectileFlyBState::think()
 		}
 		else
 		{
-			int offset = 0;
-			// explosions impact not inside the voxel but one step back
-			if (_ammo && (
-				_ammo->getRules()->getDamageType() == DT_HE ||
-				_ammo->getRules()->getDamageType() == DT_IN))
+			if (_projectileImpact != 5) // out of map
 			{
-				offset = -1;
+				int offset = 0;
+				// explosions impact not inside the voxel but one step back
+				if (_ammo && (
+					_ammo->getRules()->getDamageType() == DT_HE ||
+					_ammo->getRules()->getDamageType() == DT_IN))
+				{
+					offset = -1;
+				}
+				_parent->statePushNext(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(offset), _ammo, _action.actor));
 			}
-			_parent->statePushNext(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(offset), _ammo, _action.actor));
+			else
+			{
+				_unit->aim(false);
+				_parent->getMap()->cacheUnits();
+				if (_parent->getMap()->didCameraFollow())
+				{
+					_parent->getMap()->centerOnPosition(_unit->getPosition());
+				}
+			}
 		}
 
 		delete _parent->getMap()->getProjectile();

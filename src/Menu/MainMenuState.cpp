@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "MainMenuState.h"
+#include <sstream>
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
@@ -26,6 +27,7 @@
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Engine/Music.h"
+#include "../Engine/Options.h"
 #include "NewGameState.h"
 #include "LoadGameState.h"
 
@@ -73,7 +75,9 @@ MainMenuState::MainMenuState(Game *game) : State(game)
 	_txtTitle->setColor(Palette::blockOffset(8)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
-	_txtTitle->setText(L"OpenXcom\x02v0.2");
+	std::wstring s = L"OpenXcom\x02";
+	s += Language::utf8ToWstr(Options::getVersion());
+	_txtTitle->setText(s);
 
 	// Set music
 	_game->getResourcePack()->getMusic("GMSTORY")->play();

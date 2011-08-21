@@ -59,13 +59,13 @@ NextTurnState::NextTurnState(Game *game, SavedBattleGame *battleGame) : State(ga
 	_window->setColor(Palette::blockOffset(0)+8);
 	_window->setBackground(_game->getResourcePack()->getSurface("TAC00.SCR"));
 
-	_txtTitle->setColor(Palette::blockOffset(0)-1);
+	_txtTitle->setColor(Palette::blockOffset(0));
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setHighContrast(true);
 	_txtTitle->setText(_game->getLanguage()->getString("STR_UFO"));
 
-	_txtTurn->setColor(Palette::blockOffset(0)-1);
+	_txtTurn->setColor(Palette::blockOffset(0));
 	_txtTurn->setBig();
 	_txtTurn->setAlign(ALIGN_CENTER);
 	_txtTurn->setHighContrast(true);
@@ -73,7 +73,7 @@ NextTurnState::NextTurnState(Game *game, SavedBattleGame *battleGame) : State(ga
 	ss << _game->getLanguage()->getString("STR_TURN") << L" " << _battleGame->getTurn();
 	_txtTurn->setText(ss.str());
 
-	_txtSide->setColor(Palette::blockOffset(0)-1);
+	_txtSide->setColor(Palette::blockOffset(0));
 	_txtSide->setBig();
 	_txtSide->setAlign(ALIGN_CENTER);
 	_txtSide->setHighContrast(true);
@@ -81,7 +81,7 @@ NextTurnState::NextTurnState(Game *game, SavedBattleGame *battleGame) : State(ga
 	ss << _game->getLanguage()->getString("STR_SIDE") << _game->getLanguage()->getString((_battleGame->getSide() == FACTION_PLAYER?"STR_XCOM":"STR_ALIENS"));
 	_txtSide->setText(ss.str());
 
-	_txtMessage->setColor(Palette::blockOffset(0)-1);
+	_txtMessage->setColor(Palette::blockOffset(0));
 	_txtMessage->setBig();
 	_txtMessage->setAlign(ALIGN_CENTER);
 	_txtMessage->setHighContrast(true);

@@ -50,8 +50,6 @@ public:
 	State(Game* game);
 	/// Cleans up the state.
 	virtual ~State();
-	/// Gets the state's surfaces.
-	std::vector<Surface*> *const getSurfaces();
 	/// Adds a child element to the state.
 	void add(Surface *surface);
 	/// Gets whether the state is a full-screen.
@@ -64,6 +62,12 @@ public:
 	virtual void think();
 	/// Blits the state to the screen.
 	virtual void blit();
+	/// Hides all the state surfaces.
+	void hideAll();
+	/// Shws all the state surfaces.
+	void showAll();
+	/// Resets all the state surfaces.
+	void resetAll();
 };
 
 }

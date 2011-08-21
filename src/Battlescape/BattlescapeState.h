@@ -41,13 +41,9 @@ class Window;
 class BattleState;
 class Timer;
 class ActionMenuItem;
+class WarningMessage;
 
-enum BattleActionType { BA_NONE, BA_PRIME, BA_THROW, BA_AUTOSHOT, BA_SNAPSHOT, BA_AIMEDSHOT, BA_STUN, BA_HIT };
-
-#define DEFAULT_WALK_SPEED 40
-#define DEFAULT_BULLET_SPEED 20
-#define DEFAULT_ANIM_SPEED 100
-#define ALT_GRENADE false // set to true if you want to play with the alternative grenade handling
+enum BattleActionType { BA_NONE, BA_TURN, BA_WALK, BA_PRIME, BA_THROW, BA_AUTOSHOT, BA_SNAPSHOT, BA_AIMEDSHOT, BA_STUN, BA_HIT };
 
 struct BattleAction
 {
@@ -78,8 +74,7 @@ private:
 	InteractiveSurface *_btnVisibleUnit[10];
 	NumberText *_numVisibleUnit[10];
 	BattleUnit *_visibleUnit[10];
-	Surface *_warningMessageBackground;
-	Text *_txtWarningMessage;
+	WarningMessage *_warning;
 
 	Text *_txtName;
 	NumberText *_numTimeUnits, *_numEnergy, *_numHealth, *_numMorale, *_numLayers, *_numAmmoLeft, *_numAmmoRight;
@@ -94,15 +89,17 @@ private:
 	
 	void endTurn();
 	void handleItemClick(BattleItem *item);
-	void drawItemSprite(BattleItem *item, Surface *surface);
 	void blinkVisibleUnitButtons();
-	void blinkWarningMessage();
-	void showWarningMessage(std::string message);
 	//Handles non target actions, like priming a grenade.
 	void handleNonTargetAction();
 	void setupCursor();
 	std::vector<State*> _popups;
+	bool _debugPlay;
 public:
+	static const int DEFAULT_WALK_SPEED = 40;
+	static const int DEFAULT_BULLET_SPEED = 5;
+	static const int DEFAULT_ANIM_SPEED = 100;
+	static const bool ALT_GRENADE = false; // set to true if you want to play with the alternative grenade handling
 	/// Creates the Battlescape state.
 	BattlescapeState(Game *game);
 	/// Cleans up the Battlescape state.
@@ -157,8 +154,10 @@ public:
 	void btnReserveAimedClick(Action *action);
 	/// Handler for clicking a reserved button.
 	void btnReserveAutoClick(Action *action);
+	// playable unit selected?
+	bool playableUnitSelected();
 	/// updates soldier name/rank/tu/energy/health/morale
-	void updateSoldierInfo(BattleUnit *unit);
+	void updateSoldierInfo();
 	/// handlestates timer.
 	void handleState();
 	/// Animate other stuff.
@@ -177,8 +176,6 @@ public:
 	void popState();
 	/// Set state think interval.
 	void setStateInterval(Uint32 interval);
-	/// Get a pointer to the current action
-	BattleAction *getAction();
 	/// Show debug message.
 	void debug(const std::wstring message);
 	/// Handle keypresses.
@@ -189,6 +186,7 @@ public:
 	void checkForCasualties(BattleItem *murderweapon, BattleUnit *murderer);
 	/// Check reserved tu.
 	bool checkReservedTU(BattleUnit *bu, int tu);
+	void handleAI(BattleUnit *unit);
 };
 
 }

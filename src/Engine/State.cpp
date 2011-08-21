@@ -27,6 +27,7 @@
 #include "../Interface/TextButton.h"
 #include "../Interface/TextEdit.h"
 #include "../Interface/TextList.h"
+#include "../Battlescape/WarningMessage.h"
 
 namespace OpenXcom
 {
@@ -36,7 +37,7 @@ namespace OpenXcom
  * By default states are full-screen.
  * @param game Pointer to the core game.
  */
-State::State(Game *game) : _game(game), _screen(true)
+State::State(Game *game) : _game(game), _surfaces(), _screen(true)
 {
 
 }
@@ -50,15 +51,6 @@ State::~State()
 	{
 		delete *i;
 	}
-}
-
-/**
- * Returns the set of surfaces currently attached to this state.
- * @return List of surfaces.
- */
-std::vector<Surface*> *const State::getSurfaces()
-{
-	return &_surfaces;
 }
 
 /**
@@ -81,6 +73,7 @@ void State::add(Surface *surface)
 	TextButton *tb = dynamic_cast<TextButton*>(surface);
 	TextEdit *te = dynamic_cast<TextEdit*>(surface);
 	TextList *tl = dynamic_cast<TextList*>(surface);
+	WarningMessage *wm = dynamic_cast<WarningMessage*>(surface);
 	if (t)
 	{
 		t->setFonts(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"));
@@ -96,6 +89,10 @@ void State::add(Surface *surface)
 	else if (tl)
 	{
 		tl->setFonts(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"));
+	}
+	else if (wm)
+	{
+		wm->setFonts(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"));
 	}
 
 	_surfaces.push_back(surface);
@@ -133,7 +130,7 @@ void State::init()
  */
 void State::think()
 {
-	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i < _surfaces.end(); ++i)
+	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
 		(*i)->think();
 }
 
@@ -144,7 +141,7 @@ void State::think()
  */
 void State::handle(Action *action)
 {
-	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i < _surfaces.end(); ++i)
+	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
 	{
 		InteractiveSurface* j = dynamic_cast<InteractiveSurface*>(*i);
 		if (j != 0)
@@ -158,8 +155,42 @@ void State::handle(Action *action)
  */
 void State::blit()
 {
-	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i < _surfaces.end(); ++i)
+	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
 		(*i)->blit(_game->getScreen()->getSurface());
+}
+
+/**
+ * Hides all the Surface child elements on display.
+ */
+void State::hideAll()
+{
+	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
+			(*i)->hide();
+}
+
+/**
+ * Shows all the hidden Surface child elements.
+ */
+void State::showAll()
+{
+	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
+		(*i)->show();
+}
+
+/**
+ * Resets the status of all the Surface child elements,
+ * like unpressing buttons.
+ */
+void State::resetAll()
+{
+	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
+	{
+		InteractiveSurface *s = dynamic_cast<InteractiveSurface*>(*i);
+		if (s != 0)
+		{
+			s->unpress(this);
+		}
+	}
 }
 
 }

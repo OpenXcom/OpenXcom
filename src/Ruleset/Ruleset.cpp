@@ -296,13 +296,22 @@ ArticleDefinition *const Ruleset::getUfopaediaArticle(const std::string &name) c
 }
 
 /**
- * Returns the rules for the specified inventory section.
- * @param id Inventory type.
- * @return Rules for the inventory.
+ * Returns the list of inventories.
+ * @return Pointer to inventory list.
  */
-RuleInventory *const Ruleset::getInventory(const std::string &id) const
+std::map<std::string, RuleInventory*> *const Ruleset::getInventories()
 {
-	return _invs.find(id)->second;
+	return &_invs;
+}
+
+/**
+ * Returns the rules for a specific inventory.
+ * @param name Inventory name.
+ * @return Inventory ruleset.
+ */
+RuleInventory *const Ruleset::getInventory(const std::string &name) const
+{
+	return _invs.find(name)->second;
 }
 
 const std::vector<RuleResearchProject *> & Ruleset::getResearchProjects () const

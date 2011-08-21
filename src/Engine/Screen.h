@@ -38,6 +38,8 @@ class Action;
 class Screen
 {
 private:
+	static const double BASE_WIDTH;
+	static const double BASE_HEIGHT;
 	Surface *_surface;
 	SDL_Surface *_screen;
 	double _scaleX, _scaleY;

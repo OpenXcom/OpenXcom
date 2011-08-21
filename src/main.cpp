@@ -21,6 +21,7 @@
 #include "Engine/CrossPlatform.h"
 #include "Engine/Game.h"
 #include "Engine/Screen.h"
+#include "Engine/Options.h"
 #include "Menu/StartState.h"
 
 /** @mainpage
@@ -48,21 +49,11 @@ int main(int argc, char** args)
 	try
 	{
 #endif
-		game = new Game("OpenXcom", 320, 200, 16);
-		
-		// Handles command line arguments
-		int width = 640;
-		int height = 400;
-		for (int i = 1; i < argc; i++)
-		{
-			if (strcmp(args[i], "-fullscreen") == 0)
-				game->getScreen()->setFullscreen(true);
-			if (strcmp(args[i], "-width") == 0 && argc > i + 1)
-				width = atoi(args[i+1]);
-			if (strcmp(args[i], "-height") == 0 && argc > i + 1)
-				height = atoi(args[i+1]);
-		}
-		game->getScreen()->setResolution(width, height);
+		Options::create();
+		Options::loadArgs(argc, args);
+		game = new Game("OpenXcom " + Options::getVersion(), 320, 200, 16);
+		game->getScreen()->setFullscreen(Options::getBool("fullscreen"));
+		game->getScreen()->setResolution(Options::getInt("displayWidth"), Options::getInt("displayHeight"));
 		game->setState(new StartState(game));
 		game->run();
 #ifndef _DEBUG

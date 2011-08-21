@@ -25,6 +25,7 @@
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/SavedGame.h"
+#include "../Savegame/Tile.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/SoundSet.h"
 #include "../Engine/Sound.h"
@@ -64,7 +65,8 @@ void UnitFallBState::init()
 	}
 	else
 	{
-		_parent->setStateInterval(DEFAULT_ANIM_SPEED);
+		_parent->getMap()->centerOnPosition(_unit->getPosition());
+		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
 		_unit->lookAt(3);
 	}
 	if (_unit->getHealth() == 0)
@@ -113,11 +115,10 @@ void UnitFallBState::think()
 		TerrainModifier *terrain = _parent->getGame()->getSavedGame()->getBattleGame()->getTerrainModifier();
 		convertUnitToCorpse(_unit, terrain);
 		terrain->calculateUnitLighting();
-		_parent->getMap()->cacheTileSprites();
 		_parent->popState();
 	}
 
-	_parent->getMap()->cacheUnits();
+	_parent->getMap()->cacheUnit(_unit);
 }
 
 /*
@@ -136,9 +137,21 @@ std::string UnitFallBState::getResult() const
 	return _result;
 }
 
+/*
+ * Convert unit to corpse.
+ * @param unit
+ * @param terrain
+ */
 void UnitFallBState::convertUnitToCorpse(BattleUnit *unit, TerrainModifier *terrain)
 {
 	terrain->spawnItem(_unit->getPosition(), new BattleItem(_parent->getGame()->getRuleset()->getItem(_unit->getUnit()->getArmor()->getCorpseItem())));
+	// move inventory from unit to the ground
+	for (std::vector<BattleItem*>::iterator i = _unit->getInventory()->begin(); i != _unit->getInventory()->end(); ++i)
+	{
+		_unit->getTile()->addItem(*i);
+		(*i)->setOwner(0);
+	}
+	_unit->getInventory()->clear();
 }
 
 }

@@ -702,14 +702,11 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	pclip->setSize(0.1f);
 	pclip->setCost(70);
 	pclip->setBigSprite(4);
-	pclip->setHandSprite(120);
 	pclip->setPower(26);
 	pclip->setDamageType(DT_AP);
 	pclip->setBattleType(BT_AMMO);
 	pclip->setHitAnimation(26);
 	pclip->setHitSound(22);
-	pclip->setInventoryWidth(1);
-	pclip->setInventoryHeight(1);
 	pclip->setClipSize(12);
 	pclip->setWeight(3);
 	
@@ -737,14 +734,11 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	rclip->setSize(0.1f);
 	rclip->setCost(200);
 	rclip->setBigSprite(2);
-	rclip->setHandSprite(120);
 	rclip->setPower(30);
 	rclip->setDamageType(DT_AP);
 	rclip->setBattleType(BT_AMMO);
 	rclip->setHitAnimation(26);
 	rclip->setHitSound(22);
-	rclip->setInventoryWidth(1);
-	rclip->setInventoryHeight(1);
 	rclip->setClipSize(20);
 	rclip->setWeight(3);
 
@@ -763,7 +757,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	hcannon->setTUAimed(80);
 	hcannon->getCompatibleAmmo()->push_back("STR_HC_AP_AMMO");
 	hcannon->getCompatibleAmmo()->push_back("STR_HC_HE_AMMO");
-	hcannon->getCompatibleAmmo()->push_back("STR_HC_IN_AMMO");
+	hcannon->getCompatibleAmmo()->push_back("STR_HC_I_AMMO");
 	hcannon->setBattleType(BT_FIREARM);
 	hcannon->setInventoryWidth(2);
 	hcannon->setInventoryHeight(3);
@@ -773,13 +767,12 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	hcap->setSize(0.1f);
 	hcap->setCost(300);
 	hcap->setBigSprite(12);
-	hcap->setHandSprite(120);
 	hcap->setPower(56);
 	hcap->setDamageType(DT_AP);
 	hcap->setBattleType(BT_AMMO);
 	hcap->setHitAnimation(26);
 	hcap->setHitSound(13);
-	hcap->setInventoryWidth(1);
+	hcap->setInventoryWidth(2);
 	hcap->setInventoryHeight(1);
 	hcap->setClipSize(6);
 	hcap->setWeight(6);
@@ -788,31 +781,29 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	hche->setSize(0.1f);
 	hche->setCost(500);
 	hche->setBigSprite(13);
-	hche->setHandSprite(120);
 	hche->setPower(52);
 	hche->setDamageType(DT_HE);
 	hche->setBattleType(BT_AMMO);
 	hche->setHitAnimation(0);
 	hche->setHitSound(0);
-	hche->setInventoryWidth(1);
+	hche->setInventoryWidth(2);
 	hche->setInventoryHeight(1);
 	hche->setClipSize(6);
 	hche->setWeight(6);
 
-	RuleItem *hcin = new RuleItem("STR_HC_IN_AMMO");
-	hcin->setSize(0.1f);
-	hcin->setCost(400);
-	hcin->setBigSprite(14);
-	hcin->setHandSprite(120);
-	hcin->setPower(60);
-	hcin->setDamageType(DT_IN);
-	hcin->setBattleType(BT_AMMO);
-	hcin->setHitAnimation(0);
-	hcin->setHitSound(0);
-	hcin->setInventoryWidth(1);
-	hcin->setInventoryHeight(1);
-	hcin->setClipSize(6);
-	hcin->setWeight(6);
+	RuleItem *hci = new RuleItem("STR_HC_I_AMMO");
+	hci->setSize(0.1f);
+	hci->setCost(400);
+	hci->setBigSprite(14);
+	hci->setPower(60);
+	hci->setDamageType(DT_IN);
+	hci->setBattleType(BT_AMMO);
+	hci->setHitAnimation(0);
+	hci->setHitSound(0);
+	hci->setInventoryWidth(2);
+	hci->setInventoryHeight(1);
+	hci->setClipSize(6);
+	hci->setWeight(6);
 
 	RuleItem *acannon = new RuleItem("STR_AUTO_CANNON");
 	acannon->setSize(0.3f);
@@ -830,7 +821,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	acannon->setTUAimed(80);
 	acannon->getCompatibleAmmo()->push_back("STR_AC_AP_AMMO");
 	acannon->getCompatibleAmmo()->push_back("STR_AC_HE_AMMO");
-	acannon->getCompatibleAmmo()->push_back("STR_AC_IN_AMMO");
+	acannon->getCompatibleAmmo()->push_back("STR_AC_I_AMMO");
 	acannon->setBattleType(BT_FIREARM);
 	acannon->setInventoryWidth(2);
 	acannon->setInventoryHeight(3);
@@ -840,13 +831,12 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	acap->setSize(0.1f);
 	acap->setCost(500);
 	acap->setBigSprite(8);
-	acap->setHandSprite(120);
 	acap->setPower(42);
 	acap->setDamageType(DT_AP);
 	acap->setBattleType(BT_AMMO);
 	acap->setHitSound(13);
 	acap->setHitAnimation(26);
-	acap->setInventoryWidth(1);
+	acap->setInventoryWidth(2);
 	acap->setInventoryHeight(1);
 	acap->setClipSize(14);
 	acap->setWeight(5);
@@ -874,7 +864,6 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	srocket->setSize(0.2f);
 	srocket->setCost(600);
 	srocket->setBigSprite(16);
-	srocket->setHandSprite(120);
 	srocket->setPower(75);
 	srocket->setDamageType(DT_HE);
 	srocket->setBattleType(BT_AMMO);
@@ -889,24 +878,18 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	grenade->setSize(0.1f);
 	grenade->setCost(300);
 	grenade->setBigSprite(19);
-	grenade->setHandSprite(120);
 	grenade->setPower(50);
 	grenade->setDamageType(DT_HE);
 	grenade->setBattleType(BT_GRENADE);
-	grenade->setInventoryWidth(1);
-	grenade->setInventoryHeight(1);
 	grenade->setWeight(3);
 
 	RuleItem *sgrenade = new RuleItem("STR_SMOKE_GRENADE");
 	sgrenade->setSize(0.1f);
 	sgrenade->setCost(150);
 	sgrenade->setBigSprite(20);
-	sgrenade->setHandSprite(120);
 	sgrenade->setPower(60);
 	sgrenade->setDamageType(DT_SMOKE);
 	sgrenade->setBattleType(BT_GRENADE);
-	sgrenade->setInventoryWidth(1);
-	sgrenade->setInventoryHeight(1);
 	sgrenade->setWeight(3);
 
 	RuleItem *corpse = new RuleItem("STR_CORPSE");
@@ -947,14 +930,11 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	ppclip->setSize(0.1f);
 	ppclip->setCost(70);
 	ppclip->setBigSprite(34);
-	ppclip->setHandSprite(120);
 	ppclip->setPower(52);
 	ppclip->setDamageType(DT_PLASMA);
 	ppclip->setBattleType(BT_AMMO);
 	ppclip->setHitAnimation(46);
 	ppclip->setHitSound(19);
-	ppclip->setInventoryWidth(1);
-	ppclip->setInventoryHeight(1);
 	ppclip->setClipSize(26);
 	ppclip->setWeight(3);
 
@@ -972,7 +952,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_items.insert(std::pair<std::string, RuleItem*>("STR_HEAVY_CANNON", hcannon));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_HC_AP_AMMO", hcap));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_HC_HE_AMMO", hche));
-	_items.insert(std::pair<std::string, RuleItem*>("STR_HC_IN_AMMO", hcin));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_HC_I_AMMO", hci));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_AUTO_CANNON", acannon));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_AC_AP_AMMO", acap));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_ROCKET_LAUNCHER", rlauncher));
@@ -1095,40 +1075,87 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_ufos.insert(std::pair<std::string, RuleUfo*>("STR_BATTLESHIP", battleship));
 
 	// Add inventory
-
 	RuleInventory *rshoulder = new RuleInventory("STR_RIGHT_SHOULDER");
 	rshoulder->setX(16);
 	rshoulder->setY(40);
 	rshoulder->addSlot(0, 0);
 	rshoulder->addSlot(1, 0);
+	rshoulder->addCost("STR_GROUND", 4);
+	rshoulder->addCost("STR_RIGHT_HAND", 3);
+	rshoulder->addCost("STR_LEFT_HAND", 3);
+	rshoulder->addCost("STR_RIGHT_LEG", 12);
+	rshoulder->addCost("STR_LEFT_LEG", 12);
+	rshoulder->addCost("STR_BELT", 10);
+	rshoulder->addCost("STR_LEFT_SHOULDER", 8);
+	rshoulder->addCost("STR_BACKPACK", 16);
 
 	RuleInventory *lshoulder = new RuleInventory("STR_LEFT_SHOULDER");
 	lshoulder->setX(112);
 	lshoulder->setY(40);
 	lshoulder->addSlot(0, 0);
 	lshoulder->addSlot(1, 0);
+	lshoulder->addCost("STR_GROUND", 4);
+	lshoulder->addCost("STR_RIGHT_HAND", 3);
+	lshoulder->addCost("STR_LEFT_HAND", 3);
+	lshoulder->addCost("STR_RIGHT_LEG", 12);
+	lshoulder->addCost("STR_LEFT_LEG", 12);
+	lshoulder->addCost("STR_BELT", 10);
+	lshoulder->addCost("STR_RIGHT_SHOULDER", 8);
+	lshoulder->addCost("STR_BACKPACK", 16);
 
 	RuleInventory *rhand = new RuleInventory("STR_RIGHT_HAND");
 	rhand->setX(0);
 	rhand->setY(64);
-	rhand->addSlot(1, 0);
+	rhand->setType(INV_HAND);
+	rhand->addCost("STR_GROUND", 2);
+	rhand->addCost("STR_LEFT_HAND", 4);
+	rhand->addCost("STR_RIGHT_LEG", 8);
+	rhand->addCost("STR_LEFT_LEG", 10);
+	rhand->addCost("STR_BELT", 8);
+	rhand->addCost("STR_RIGHT_SHOULDER", 10);
+	rhand->addCost("STR_LEFT_SHOULDER", 10);
+	rhand->addCost("STR_BACK_PACK", 14);
 
 	RuleInventory *lhand = new RuleInventory("STR_LEFT_HAND");
 	lhand->setX(128);
 	lhand->setY(64);
-	lhand->setHand(true);
+	lhand->setType(INV_HAND);
+	lhand->addCost("STR_GROUND", 2);
+	lhand->addCost("STR_RIGHT_HAND", 4);
+	lhand->addCost("STR_RIGHT_LEG", 10);
+	lhand->addCost("STR_LEFT_LEG", 8);
+	lhand->addCost("STR_BELT", 8);
+	lhand->addCost("STR_RIGHT_SHOULDER", 10);
+	lhand->addCost("STR_LEFT_SHOULDER", 10);
+	lhand->addCost("STR_BACK_PACK", 14);
 
 	RuleInventory *rleg = new RuleInventory("STR_RIGHT_LEG");
 	rleg->setX(0);
 	rleg->setY(120);
 	rleg->addSlot(0, 0);
 	rleg->addSlot(1, 0);
+	rleg->addCost("STR_GROUND", 6);
+	rleg->addCost("STR_RIGHT_HAND", 4);
+	rleg->addCost("STR_LEFT_HAND", 6);
+	rleg->addCost("STR_LEFT_LEG", 10);
+	rleg->addCost("STR_BELT", 10);
+	rleg->addCost("STR_RIGHT_SHOULDER", 10);
+	rleg->addCost("STR_LEFT_SHOULDER", 10);
+	rleg->addCost("STR_BACK_PACK", 18);
 
 	RuleInventory *lleg = new RuleInventory("STR_LEFT_LEG");
 	lleg->setX(128);
 	lleg->setY(120);
 	lleg->addSlot(0, 0);
 	lleg->addSlot(1, 0);
+	lleg->addCost("STR_GROUND", 6);
+	lleg->addCost("STR_RIGHT_HAND", 6);
+	lleg->addCost("STR_LEFT_HAND", 4);
+	lleg->addCost("STR_RIGHT_LEG", 10);
+	lleg->addCost("STR_BELT", 10);
+	lleg->addCost("STR_RIGHT_SHOULDER", 10);
+	lleg->addCost("STR_LEFT_SHOULDER", 10);
+	lleg->addCost("STR_BACK_PACK", 18);
 
 	RuleInventory *backpack = new RuleInventory("STR_BACK_PACK");
 	backpack->setX(192);
@@ -1142,6 +1169,14 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	backpack->addSlot(0, 2);
 	backpack->addSlot(1, 2);
 	backpack->addSlot(2, 2);
+	backpack->addCost("STR_GROUND", 10);
+	backpack->addCost("STR_RIGHT_HAND", 8);
+	backpack->addCost("STR_LEFT_HAND", 8);
+	backpack->addCost("STR_RIGHT_LEG", 16);
+	backpack->addCost("STR_LEFT_LEG", 16);
+	backpack->addCost("STR_BELT", 12);
+	backpack->addCost("STR_RIGHT_SHOULDER", 14);
+	backpack->addCost("STR_LEFT_SHOULDER", 14);
 
 	RuleInventory *belt = new RuleInventory("STR_BELT");
 	belt->setX(192);
@@ -1152,6 +1187,27 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	belt->addSlot(3, 0);
 	belt->addSlot(0, 1);
 	belt->addSlot(3, 1);
+	belt->addCost("STR_GROUND", 6);
+	belt->addCost("STR_RIGHT_HAND", 4);
+	belt->addCost("STR_LEFT_HAND", 4);
+	belt->addCost("STR_RIGHT_LEG", 10);
+	belt->addCost("STR_LEFT_LEG", 10);
+	belt->addCost("STR_RIGHT_SHOULDER", 12);
+	belt->addCost("STR_LEFT_SHOULDER", 12);
+	belt->addCost("STR_BACK_PACK", 16);
+
+	RuleInventory *ground = new RuleInventory("STR_GROUND");
+	ground->setX(0);
+	ground->setY(152);
+	ground->setType(INV_GROUND);
+	ground->addCost("STR_RIGHT_HAND", 8);
+	ground->addCost("STR_LEFT_HAND", 8);
+	ground->addCost("STR_RIGHT_LEG", 10);
+	ground->addCost("STR_LEFT_LEG", 10);
+	ground->addCost("STR_BELT", 12);
+	ground->addCost("STR_RIGHT_SHOULDER", 12);
+	ground->addCost("STR_LEFT_SHOULDER", 12);
+	ground->addCost("STR_BACK_PACK", 20);
 
 	_invs.insert(std::pair<std::string, RuleInventory*>("STR_RIGHT_SHOULDER", rshoulder));
 	_invs.insert(std::pair<std::string, RuleInventory*>("STR_LEFT_SHOULDER", lshoulder));
@@ -1161,6 +1217,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_invs.insert(std::pair<std::string, RuleInventory*>("STR_LEFT_LEG", lleg));
 	_invs.insert(std::pair<std::string, RuleInventory*>("STR_BACK_PACK", backpack));
 	_invs.insert(std::pair<std::string, RuleInventory*>("STR_BELT", belt));
+	_invs.insert(std::pair<std::string, RuleInventory*>("STR_GROUND", ground));
 	
 	// Add terrain
 	RuleTerrain *culta = new RuleTerrain("CULTA");
@@ -1813,7 +1870,7 @@ SavedGame *XcomRuleset::newSave(GameDifficulty diff) const
 	skyranger->getItems()->addItem("STR_GRENADE", 8);
 	base->getCrafts()->push_back(skyranger);
 
-	for (int i = 0; i < 2; i++)
+	for (int i = 0; i < 2; ++i)
 	{
 		Craft *interceptor = new Craft(getCraft("STR_INTERCEPTOR"), base, save->getCraftIds());
 		interceptor->setFuel(interceptor->getRules()->getMaxFuel());
@@ -1823,7 +1880,7 @@ SavedGame *XcomRuleset::newSave(GameDifficulty diff) const
 	}
 
 	// Generate soldiers
-	for (int i = 0; i < 8; i++)
+	for (int i = 0; i < 8; ++i)
 	{
 		Soldier *soldier = new Soldier(getSoldier("XCOM"), getArmor("STR_NONE_UC"), &_names);
 		soldier->setCraft(skyranger);

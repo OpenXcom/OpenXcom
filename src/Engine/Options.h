@@ -30,18 +30,36 @@ namespace OpenXcom
  */
 namespace Options
 {
-	void load();
-	void save();
+	/// Creates a new set of options.
+	void create();
+	/// Loads options from command line arguments.
+	void loadArgs(int argc, char** args);
+	/// Loads options from YAML.
+	void load(const std::string &filename = "options");
+	/// Saves options to YAML.
+	void save(const std::string &filename = "options");
+	/// Gets the current game version.
+	std::string getVersion();
+	/// Gets the game's data folder.
 	std::string getDataFolder();
-	void setDataFolder(std::string folder);
+	/// Sets the game's data folder.
+	void setDataFolder(const std::string& folder);
+	/// Gets the game's user folder.
 	std::string getUserFolder();
-	void setUserFolder(std::string folder);
-	std::string getString(std::string id);
-	int getInt(std::string id);
-	bool getBool(std::string id);
-	void setString(std::string id, std::string value);
-	void setInt(std::string id, int value);
-	void setBool(std::string id, bool value);
+	/// Sets the game's user folder.
+	void setUserFolder(const std::string& folder);
+	/// Gets a string option.
+	std::string getString(const std::string& id);
+	/// Gets an integer option.
+	int getInt(const std::string& id);
+	/// Gets a boolean option.
+	bool getBool(const std::string& id);
+	/// Sets a string option.
+	void setString(const std::string& id, const std::string& value);
+	/// Sets an integer option.
+	void setInt(const std::string& id, int value);
+	/// Sets a boolean option.
+	void setBool(const std::string& id, bool value);
 }
 
 }

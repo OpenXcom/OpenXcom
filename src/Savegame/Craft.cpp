@@ -80,7 +80,7 @@ void Craft::load(const YAML::Node &node, const Ruleset *rule)
 	node["damage"] >> _damage;
 
 	size = node["weapons"].size();
-	for (unsigned int i = 0; i < size; i++)
+	for (unsigned int i = 0; i < size; ++i)
 	{
 		std::string type;
 		node["weapons"][i]["type"] >> type;
@@ -496,7 +496,7 @@ bool Craft::insideRadarRange(Target *target) const
 {
 	bool inside = false;
 	double newrange = _rules->getRadarRange() * (1 / 60.0) * (M_PI / 180);
-	for (double lon = target->getLongitude() - 2*M_PI; lon <= target->getLongitude() + 2*M_PI; lon += 2*M_PI)
+	for (double lon = target->getLongitude() - 2*M_PI; lon <= target->getLongitude() + 2*M_PI + 0.01; lon += 2*M_PI)
 	{
 		double dLon = lon - _lon;
 		double dLat = target->getLatitude() - _lat;

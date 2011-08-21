@@ -27,9 +27,8 @@ namespace OpenXcom
 
 class Item;
 class RuleItem;
+class RuleInventory;
 class BattleUnit;
-
-enum InventorySlot { RIGHT_HAND, LEFT_HAND };
 
 /**
  * Represents a single item in the battlescape.
@@ -43,9 +42,10 @@ private:
 	RuleItem *_rules;
 	Position _position;
 	BattleUnit *_owner, *_previousOwner;
-	InventorySlot _inventorySlot;
+	RuleInventory *_inventorySlot;
+	int _inventoryX, _inventoryY;
 	BattleItem *_ammoItem;
-	int _itemProperty[3];
+	int _explodeTurn, _ammoQuantity;
 public:
 	/// Creates a item of the specified type.
 	BattleItem(RuleItem *rules);
@@ -71,17 +71,28 @@ public:
 	BattleUnit *getOwner() const;
 	/// Gets the item's previous owner.
 	BattleUnit *getPreviousOwner() const;
-	/// Sets the item's owner.
+	/// Sets the owner.
 	void setOwner(BattleUnit *owner);
+	/// Removes the item from previous owner and moves to new owner.
+	void moveToOwner(BattleUnit *owner);
 	/// Gets the item's inventory slot.
-	InventorySlot getSlot() const;
+	RuleInventory *getSlot() const;
 	/// Sets the item's inventory slot.
-	void setSlot(InventorySlot slot);
+	void setSlot(RuleInventory *slot);
+	/// Gets the item's inventory X position.
+	int getSlotX() const;
+	/// Sets the item's inventory X position.
+	void setSlotX(int x);
+	/// Gets the item's inventory Y position.
+	int getSlotY() const;
+	/// Sets the item's inventory Y position.
+	void setSlotY(int y);
+	/// Checks if the item is occupying a slot.
+	bool occupiesSlot(int x, int y, BattleItem *item = 0) const;
 	/// Gets the item's ammo item.
 	BattleItem *getAmmoItem();
 	/// Sets the item's ammo item.
 	int setAmmoItem(BattleItem *item);
-
 };
 
 }

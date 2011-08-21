@@ -39,6 +39,9 @@ public:
 	NodeLink(int connectedNodeID, int distance, int travelType);
 	/// Cleans up the nodelink.
 	~NodeLink();
+	/// Get the connected node id
+	int getConnectedNodeID() const;
+	void setConnectedNodeID(int id);
 };
 
 }

@@ -177,7 +177,7 @@ DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo) :
 
 	SurfaceSet *set = _game->getResourcePack()->getSurfaceSet("INTICON.PCK");
 
-	for (int i = 0; i < _craft->getRules()->getWeapons(); i++)
+	for (int i = 0; i < _craft->getRules()->getWeapons(); ++i)
 	{
 		CraftWeapon *w = _craft->getWeapons()->at(i);
 		if (w == 0)
@@ -235,11 +235,11 @@ DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo) :
 			minY = connectY;
 			maxY = rangeY;
 		}
-		for (int y = minY; y <= maxY; y++)
+		for (int y = minY; y <= maxY; ++y)
 		{
 			range->setPixel(x1 + x2, y, color);
 		}
-		for (int x = x2; x <= x2 + 2; x++)
+		for (int x = x2; x <= x2 + 2; ++x)
 		{
 			range->setPixel(x, connectY, color);
 		}
@@ -307,7 +307,7 @@ void DogfightState::animate()
 {
 	SDL_Color* pal = _window->getPalette();
 	SDL_Color newpal[16];
-	for (int i = 0; i < 15; i++)
+	for (int i = 0; i < 15; ++i)
 	{
 		newpal[i] = pal[Palette::blockOffset(7) + i + 1];
 	}
@@ -344,7 +344,7 @@ void DogfightState::move()
 	ss << _currentDist;
 	_txtDistance->setText(ss.str());
 
-	for (int i = 0; i < _craft->getRules()->getWeapons(); i++)
+	for (int i = 0; i < _craft->getRules()->getWeapons(); ++i)
 	{
 		CraftWeapon *w = _craft->getWeapons()->at(i);
 		if (w == 0)
@@ -433,7 +433,7 @@ void DogfightState::move()
 	}
 
 	// Draw weapon shots
-	for (int i = 0; i < _craft->getRules()->getWeapons(); i++)
+	for (int i = 0; i < _craft->getRules()->getWeapons(); ++i)
 	{
 		std::vector<int> *wDist = 0;
 		int off = 0;
@@ -449,7 +449,7 @@ void DogfightState::move()
 		}
 		for (std::vector<int>::iterator d = wDist->begin(); d != wDist->end(); ++d)
 		{
-			for (int j = -2; j <= 0; j++)
+			for (int j = -2; j <= 0; ++j)
 			{
 				_battle->setPixel(_battle->getWidth() / 2 + off, _battle->getHeight() - (*d) / 8 + j, Palette::blockOffset(7));
 			}

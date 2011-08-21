@@ -184,7 +184,7 @@ NumberText::NumberText(int width, int height, int x, int y) : Surface(width, hei
  */
 NumberText::~NumberText()
 {
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 10; ++i)
 	{
 		delete _chars[i];
 	}
@@ -237,7 +237,7 @@ Uint8 NumberText::getColor() const
 void NumberText::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 {
 	Surface::setPalette(colors, firstcolor, ncolors);
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 10; ++i)
 	{
 		_chars[i]->setPalette(colors, firstcolor, ncolors);
 	}

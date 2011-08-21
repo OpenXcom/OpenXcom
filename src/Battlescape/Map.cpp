@@ -42,13 +42,10 @@
 #include "../Ruleset/MapDataSet.h"
 #include "../Ruleset/MapData.h"
 #include "../Ruleset/RuleArmor.h"
-#include "../Interface/Text.h"
+#include "BattlescapeMessage.h"
+#include "../Savegame/SavedGame.h"
 #include "../Interface/Cursor.h"
-
-#define SCROLL_AMOUNT 20
-#define SCROLL_BORDER 5
-#define SCROLL_DIAGONAL_EDGE 60
-#define RMB_SCROLL false
+#include "../Engine/Game.h"
 
 /*
   1) Map origin is left corner.
@@ -69,15 +66,23 @@ namespace OpenXcom
 
 /**
  * Sets up a map with the specified size and position.
+ * @param game Pointer to the core game.
  * @param width Width in pixels.
  * @param height Height in pixels.
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Map::Map(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _mapOffsetX(-250), _mapOffsetY(250), _viewHeight(0), _cursorType(CT_NORMAL), _animFrame(0), _scrollX(0), _scrollY(0), _RMBDragging(false)
+Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) : InteractiveSurface(width, height, x, y), _game(game), _mapOffsetX(-250), _mapOffsetY(250), _viewHeight(0), _selectorX(0), _selectorY(0), _cursorType(CT_NORMAL), _animFrame(0), _scrollX(0), _scrollY(0), _RMBDragging(false), _visibleMapHeight(visibleMapHeight)
 {
 	_scrollTimer = new Timer(50);
 	_scrollTimer->onTimer((SurfaceHandler)&Map::scroll);
+	
+	_res = _game->getResourcePack();
+	_save = _game->getSavedGame()->getBattleGame();
+	_spriteWidth = _res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getWidth();
+	_spriteHeight = _res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getHeight();
+
+	_message = new BattlescapeMessage(width, visibleMapHeight, 0, 0);
 }
 
 /**
@@ -87,66 +92,17 @@ Map::~Map()
 {
 	delete _scrollTimer;
 
-	for (int i = 0; i < _tileCount; ++i)
-	{
-		delete _tileFloorCache[i];
-		delete _tileWallsCache[i];
-	}
-	delete[] _tileFloorCache;
-	delete[] _tileWallsCache;
-
-	for (std::vector<Surface*>::iterator i = _unitCache.begin(); i != _unitCache.end(); ++i)
-	{
-		delete *i;
-	}
-
 	delete _arrow;
-	delete _buffer;
 
 	for (int i = 0; i < 36; ++i)
 	{
 		delete _bullet[i];
 		delete _bulletShadow[i];
 	}
-}
 
-/**
- * Changes the pack for the map to get resources for rendering.
- * @param res Pointer to the resource pack.
- */
-void Map::setResourcePack(ResourcePack *res)
-{
-	_res = res;
-	_spriteWidth = res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getWidth();
-	_spriteHeight = res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getHeight();
-}
-
-/**
- * Changes the saved game content for the map to render.
- * @param save Pointer to the saved game.
- * @param game Pointer to the Game.
- */
-void Map::setSavedGame(SavedBattleGame *save, Game *game)
-{
-	_save = save;
-	_game = game;
-	_tileCount = _save->getHeight() * _save->getLength() * _save->getWidth();
-	_tileFloorCache = new Surface*[_tileCount];
-	_tileWallsCache = new Surface*[_tileCount];
-	_unitCache.clear();
-	for (int i = 0; i < _tileCount; ++i)
+	for (int shade = 0; shade < 16; shade++)
 	{
-		_tileFloorCache[i] = 0;
-		_tileWallsCache[i] = 0;
-	}
-	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
-	{
-		_unitCache.push_back(0);
-	}
-
-	for (std::vector<MapDataSet*>::const_iterator i = _save->getMapDataSets()->begin(); i != _save->getMapDataSets()->end(); ++i)
-	{
-		(*i)->getSurfaceset()->setPalette(this->getPalette());
+		free(_shade[shade]);
 	}
 
 }
@@ -172,23 +128,46 @@ void Map::init()
 	_arrow = new Surface(9, 9);
 	_arrow->setPalette(this->getPalette());
 	_arrow->lock();
-	for (int y = 0; y < 9;y++)
-		for (int x = 0; x < 9; x++)
+	for (int y = 0; y < 9;++y)
+		for (int x = 0; x < 9; ++x)
 			_arrow->setPixel(x, y, pixels[x+(y*9)]);
 	_arrow->unlock();
 
-	_buffer = new Surface(this->getWidth() + _spriteWidth*4, this->getHeight() + _spriteHeight*4);
-	_buffer->setPalette(this->getPalette());
+	// create a palette for each shade
+	for (int shade = 0; shade < 16; shade++)
+	{
+		int ncolors = _surface->format->palette->ncolors;
+		_shade[shade] = (SDL_Color *)malloc(sizeof(SDL_Color) * ncolors);
+
+		// do the palette shift
+		for (int i = 0; i < _surface->format->palette->ncolors; i++)
+		{
+			int baseColor = i/16;
+			int originalShade = i%16;
+			int newShade = originalShade + shade;
+			if (newShade > 13) // issue with near black being rendered opaque
+			{
+				_shade[shade][i].r = 3;
+				_shade[shade][i].g = 3;
+				_shade[shade][i].b = 6;
+			}
+			else
+			{
+				_shade[shade][i].r = getPalette()[(baseColor*16) + newShade].r;
+				_shade[shade][i].g = getPalette()[(baseColor*16) + newShade].g;
+				_shade[shade][i].b = getPalette()[(baseColor*16) + newShade].b;
+			}
+		}
+	}
 
 	for (int i = 0; i < 36; ++i)
 	{
 		_bullet[i] = new BulletSprite(i);
-		_bullet[i]->setPalette(this->getPalette());
+		_bullet[i]->setPalette(_shade[0]);
 		_bullet[i]->draw();
 		_bulletShadow[i] = new BulletSprite(i);
-		_bulletShadow[i]->setPalette(this->getPalette());
+		_bulletShadow[i]->setPalette(_shade[15]);
 		_bulletShadow[i]->draw();
-		_bulletShadow[i]->setShade(16);
 	}
 
 	_projectile = 0;
@@ -206,34 +185,36 @@ void Map::think()
  * Draws the whole map, part by part.
  * todo: work with dirty rects
  */
-void Map::draw(bool forceRedraw)
+void Map::draw()
 {
-	static int lastX, lastY;
-
-	if (((_mapOffsetX - lastX) < -_spriteWidth*2 ||
-		(_mapOffsetX - lastX) > _spriteWidth*2 ||
-		(_mapOffsetY - lastY) < -_spriteWidth*2 ||
-		(_mapOffsetY - lastY) > _spriteWidth*2) || forceRedraw)
+	this->clear();
+	if ((_save->getSelectedUnit() && _save->getSelectedUnit()->getVisible()) || _save->getSelectedUnit() == 0 || _save->getDebugMode() || _projectile || !_explosions.empty())
 	{
-		// if the screen moved outside the buffer region, redraw it
-		_buffer->clear();
-		_bufOffsetX = -_spriteWidth*2;
-		_bufOffsetY = -_spriteHeight*2;
-		drawTerrain(_buffer);
+		drawTerrain(this);
 	}
 	else
 	{
-		// if we are still inside buffer region just move the buffer.
-		_bufOffsetX += (_mapOffsetX - lastX);
-		_bufOffsetY += (_mapOffsetY - lastY);
+		_message->blit(this);
 	}
-	_buffer->setX(_bufOffsetX);
-	_buffer->setY(_bufOffsetY);
-	this->clear();
-	_buffer->blit(this);
+}
 
-	lastX = _mapOffsetX;
-	lastY = _mapOffsetY;
+/**
+ * Replaces a certain amount of colors in the surface's palette.
+ * @param colors Pointer to the set of colors.
+ * @param firstcolor Offset of the first color to replace.
+ * @param ncolors Amount of colors to replace.
+ */
+void Map::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
+{
+	Surface::setPalette(colors, firstcolor, ncolors);
+	for (std::vector<MapDataSet*>::const_iterator i = _save->getMapDataSets()->begin(); i != _save->getMapDataSets()->end(); ++i)
+	{
+		(*i)->getSurfaceset()->setPalette(colors, firstcolor, ncolors);
+	}
+	_message->setPalette(colors, firstcolor, ncolors);
+	_message->setBackground(_res->getSurface("TAC00.SCR"));
+	_message->setFonts(_res->getFont("BIGLETS.DAT"), _res->getFont("SMALLSET.DAT"));
+	_message->setText(_game->getLanguage()->getString("STR_HIDDEN_MOVEMENT"));
 }
 
 /**
@@ -242,16 +223,28 @@ void Map::draw(bool forceRedraw)
 void Map::drawTerrain(Surface *surface)
 {
 	int frameNumber = 0;
-	Surface *frame;
+	Surface *cache, *frame;
 	Tile *tile;
 	int beginX = 0, endX = _save->getWidth() - 1;
     int beginY = 0, endY = _save->getLength() - 1;
     int beginZ = 0, endZ = _viewHeight;
 	Position mapPosition, screenPosition, bulletPositionScreen;
 	int bulletLowX=16000, bulletLowY=16000, bulletLowZ=16000, bulletHighX=0, bulletHighY=0, bulletHighZ=0;
-	int index;
-	//bool dirty;
+	int dummy;
 	BattleUnit *unit = 0;
+	bool invalid;
+
+	// get corner map coordinates to give rough boundaries in which tiles to redraw are
+	convertScreenToMap(0, 0, &beginX, &dummy);
+	convertScreenToMap(surface->getWidth(), surface->getHeight(), &endX, &dummy);
+	convertScreenToMap(0, surface->getHeight(), &dummy, &beginY);
+	convertScreenToMap(surface->getWidth(), 0, &dummy, &endY);
+	endY += _viewHeight + 1;
+	beginX -= _viewHeight + 1;
+	if (beginX < 0)
+		beginX = 0;
+	if (endY > _save->getLength() - 1);
+		endY = _save->getLength() - 1;
 
 	// if we got bullet, get the highest x and y tiles to draw it on
 	if (_projectile && !_projectile->getItem())
@@ -281,8 +274,8 @@ void Map::drawTerrain(Surface *surface)
 
 		// if the projectile is outside the viewport - center it back on it
 		convertVoxelToScreen(_projectile->getPosition(), &bulletPositionScreen);
-		if (bulletPositionScreen.x < 100 || bulletPositionScreen.x > surface->getWidth()-100 ||
-			bulletPositionScreen.y < 100 || bulletPositionScreen.y > surface->getHeight()-100  )
+		if (bulletPositionScreen.x < 0 || bulletPositionScreen.x > surface->getWidth() ||
+			bulletPositionScreen.y < 0 || bulletPositionScreen.y > surface->getHeight()  )
 		{
 			centerOnPosition(Position(bulletLowX, bulletLowY, bulletLowZ), false);
 			_cameraFollowed = true;
@@ -297,77 +290,25 @@ void Map::drawTerrain(Surface *surface)
 			{
 				mapPosition = Position(itX, itY, itZ);
 				convertMapToScreen(mapPosition, &screenPosition);
-				screenPosition.x += _mapOffsetX - _bufOffsetX;
-				screenPosition.y += _mapOffsetY - _bufOffsetY;
+				screenPosition.x += _mapOffsetX;
+				screenPosition.y += _mapOffsetY;
 
 				// only render cells that are inside the surface
 				if (screenPosition.x > -_spriteWidth && screenPosition.x < surface->getWidth() + _spriteWidth &&
 					screenPosition.y > -_spriteHeight && screenPosition.y < surface->getHeight() + _spriteHeight )
 				{
-					index = _save->getTileIndex(mapPosition); // index used for tile cache
-
-					//dirty =
-					cacheTileSprites(index);
-
 					tile = _save->getTile(mapPosition);
-					// Draw floor
-					if (tile && tile->isDiscovered(2))
-					{
-						frame = _tileFloorCache[index];
-						if (frame)
-						{
-							frame->setX(screenPosition.x);
-							frame->setY(screenPosition.y);
-							frame->blit(surface);
-						}
-                        unit = tile->getUnit();
-					}
-					else
-					{
-					    unit = 0;
-					}
+					cache = tile->getCache(&invalid);
 
-					// Draw cursor back
-					if (_selectorX == itY && _selectorY == itX && _cursorType != CT_NONE)
+					if (invalid)
 					{
-						if (_viewHeight == itZ)
-						{
-							if (_cursorType == CT_NORMAL || _cursorType == CT_THROW)
-							{
-								if (unit)
-									frameNumber = 1; // yellow box
-								else
-									frameNumber = 0; // red box
-							}
-							if (_cursorType == CT_AIM)
-							{
-								if (unit)
-									frameNumber = 7 + (_animFrame / 2); // yellow animated crosshairs
-								else
-									frameNumber = 6; // red static crosshairs
-							}
-						}
-						else if (_viewHeight > itZ)
-						{
-							frameNumber = 2; // blue box
-						}
-						frame = _res->getSurfaceSet("CURSOR.PCK")->getFrame(frameNumber);
-						frame->setX(screenPosition.x);
-						frame->setY(screenPosition.y);
-						frame->blit(surface);
+						cache = cacheTile(tile, cache, itX, itY, itZ);
+						tile->setCache(cache);
 					}
-
-					// Draw walls
-					if (tile && (tile->isDiscovered(0) || tile->isDiscovered(1)))
-					{
-						frame = _tileWallsCache[index];
-						if (frame)
-						{
-							frame->setX(screenPosition.x);
-							frame->setY(screenPosition.y);
-							frame->blit(surface);
-						}
-					}
+					
+					cache->setX(screenPosition.x);
+					cache->setY(screenPosition.y);
+					cache->blit(surface);
 
 					// check if we got bullet
 					if (_projectile)
@@ -448,16 +389,18 @@ void Map::drawTerrain(Surface *surface)
 						}
 					}
 
+			        unit = tile->getUnit();
 					// Draw soldier
-					if (unit && tile->isDiscovered(2))
+					if (unit && (unit->getVisible() || _save->getDebugMode()))
 					{
-						frame = _unitCache.at(unit->getId());
+						frame = unit->getCache(&invalid);
 						if (frame)
 						{
 							Position offset;
 							calculateWalkingOffset(unit, &offset);
 							frame->setX(screenPosition.x + offset.x);
 							frame->setY(screenPosition.y + offset.y);
+							//frame->setShade(_shade[tile->getShade()], tile->getShade());
 							frame->blit(surface);
 							if (unit == (BattleUnit*)_save->getSelectedUnit() && _cursorType != CT_NONE)
 							{
@@ -476,11 +419,11 @@ void Map::drawTerrain(Surface *surface)
 					// if we can see through the floor, draw the soldier below it if it is on stairs
 					if (itZ > 0 && tile->hasNoFloor())
 					{
-						BattleUnit *tunit = _save->selectUnit(mapPosition + Position(0, 0, -1));
-						Tile *ttile = _save->getTile(mapPosition + Position(0, 0, -1));
+						BattleUnit *tunit = _save->selectUnit(Position(itX, itY, itZ-1));
+						Tile *ttile = _save->getTile(Position(itX, itY, itZ-1));
 						if (tunit && ttile->getTerrainLevel() < 0 && ttile->isDiscovered(2))
 						{
-							frame = _unitCache.at(tunit->getId());
+							frame = tunit->getCache(&invalid);
 							if (frame)
 							{
 								Position offset;
@@ -488,6 +431,7 @@ void Map::drawTerrain(Surface *surface)
 								offset.y += 24;
 								frame->setX(screenPosition.x + offset.x);
 								frame->setY(screenPosition.y + offset.y);
+								//frame->setShade(_shade[tile->getShade()], tile->getShade());
 								frame->blit(surface);
 								if (tunit == (BattleUnit*)_save->getSelectedUnit() && _cursorType != CT_NONE)
 								{
@@ -520,13 +464,13 @@ void Map::drawTerrain(Surface *surface)
 					}
 
 					// Draw cursor front
-					if (_selectorX == itY && _selectorY == itX && _cursorType != CT_NONE)
+					if (_selectorX == itX && _selectorY == itY && _cursorType != CT_NONE)
 					{
 						if (_viewHeight == itZ)
 						{
 							if (_cursorType == CT_NORMAL || _cursorType == CT_THROW)
 							{
-								if (unit)
+								if (unit && (unit->getVisible() || _save->getDebugMode()))
 									frameNumber = 4; // yellow box
 								else
 									frameNumber = 3; // red box
@@ -556,7 +500,6 @@ void Map::drawTerrain(Surface *surface)
 						}
 					}
 
-					tile = _save->getTile(mapPosition);
 					// Draw smoke/fire
 					if (tile->getFire() && tile->isDiscovered(2))
 					{
@@ -774,14 +717,124 @@ void Map::setSelectorPosition(int mx, int my)
 
 	if (!mx && !my) return; // cursor is offscreen
 	convertScreenToMap(mx, my, &_selectorX, &_selectorY);
-	minMaxInt(&_selectorX, 0, _save->getWidth() - 1);
-	minMaxInt(&_selectorY, 0, _save->getLength() - 1);
 
 	if (oldX != _selectorX || oldY != _selectorY)
 	{
-		//draw(false);
-		// todo: when working with dirty rects we can implement smooth mouse movement
+		for (int z=0; z <= _viewHeight; z++)
+		{
+			_save->getTile(Position(oldX, oldY, z))->setCache(0);
+			_save->getTile(Position(_selectorX, _selectorY, z))->setCache(0);
+		}
+		draw();
 	}
+}
+
+
+/**
+ * Handle scrolling.
+ */
+void Map::scroll()
+{
+	_mapOffsetX += _scrollX;
+	_mapOffsetY += _scrollY;
+
+	convertScreenToMap((getWidth() / 2), (getHeight() / 2), &_centerX, &_centerY);
+
+	// if center goes out of map bounds, hold the scrolling (may need further tweaking)
+	if (_centerX > _save->getWidth() - 1 || _centerY > _save->getLength() - 1 || _centerX < 0 || _centerY < 0)
+	{
+		_mapOffsetX -= _scrollX;
+		_mapOffsetY -= _scrollY;
+	}
+
+	if (_RMBDragging)
+	{
+		_RMBDragging = false;
+		_scrollX = 0;
+		_scrollY = 0;
+	}
+	draw();
+}
+
+/**
+ * Handle animating tiles. 8 Frames per animation.
+ */
+void Map::animate(bool redraw)
+{
+	_animFrame++;
+	if (_animFrame == 8) _animFrame = 0;
+
+	for (int i = 0; i < _save->getWidth()*_save->getHeight()*_save->getLength(); ++i)
+	{
+		_save->getTiles()[i]->animate();
+	}
+	if (redraw) draw();
+}
+
+/**
+ * Go one level up.
+ */
+void Map::up()
+{
+	if (_viewHeight < _save->getHeight() - 1)
+	{
+		_viewHeight++;
+		_mapOffsetY += _spriteHeight / 2;
+		for (int z=0; z <= _viewHeight; z++)
+		{
+			_save->getTile(Position(_selectorX, _selectorY, z))->setCache(0);
+		}
+		draw();
+	}
+}
+
+/**
+ * Go one level down.
+ */
+void Map::down()
+{
+	if (_viewHeight > 0)
+	{
+		for (int z=0; z <= _viewHeight; z++)
+		{
+			_save->getTile(Position(_selectorX, _selectorY, z))->setCache(0);
+		}
+		_viewHeight--;
+		_mapOffsetY -= _spriteHeight / 2;
+		draw();
+	}
+}
+
+/**
+ * Set viewheight.
+ * @param viewheight
+ */
+void Map::setViewHeight(int viewheight)
+{
+	_viewHeight = viewheight;
+	minMaxInt(&_viewHeight, 0, _save->getHeight()-1);
+	draw();
+}
+
+
+/**
+ * Center map on a certain position.
+ * @param mapPos Position to center on.
+ */
+void Map::centerOnPosition(const Position &mapPos, bool redraw)
+{
+	Position screenPos;
+
+	convertMapToScreen(mapPos, &screenPos);
+
+	_mapOffsetX = -(screenPos.x - (getWidth() / 2));
+	_mapOffsetY = -(screenPos.y - (_visibleMapHeight / 2));
+
+	convertScreenToMap((getWidth() / 2), (_visibleMapHeight / 2), &_centerX, &_centerY);
+
+	_viewHeight = mapPos.z;
+
+	if (redraw) draw();
 }
 
 /**
@@ -798,113 +851,15 @@ void Map::convertScreenToMap(int screenX, int screenY, int *mapX, int *mapY)
 
 	// calculate the actual x/y pixelposition on a diamond shaped map
 	// taking the view offset into account
-    *mapX = screenX - _mapOffsetX - 2 * screenY + 2 * _mapOffsetY;
-    *mapY = screenY - _mapOffsetY + *mapX / 4;
+    *mapY = screenX - _mapOffsetX - 2 * screenY + 2 * _mapOffsetY;
+    *mapX = screenY - _mapOffsetY + *mapY / 4;
 
 	// to get the row&col itself, divide by the size of a tile
-    *mapY /= (_spriteWidth / 4);
-	*mapX /= _spriteWidth;
-}
+    *mapX /= (_spriteWidth / 4);
+	*mapY /= _spriteWidth;
 
-
-/**
- * Handle scrolling.
- */
-void Map::scroll()
-{
-	_mapOffsetX += _scrollX;
-	_mapOffsetY += _scrollY;
-
-	convertScreenToMap((getWidth() / 2), (BUTTONS_AREA / 2), &_centerX, &_centerY);
-
-	// if center goes out of map bounds, hold the scrolling (may need further tweaking)
-	if (_centerX > _save->getWidth() - 1 || _centerY > _save->getLength() - 1 || _centerX < 0 || _centerY < 0)
-	{
-		_mapOffsetX -= _scrollX;
-		_mapOffsetY -= _scrollY;
-	}
-
-	if (_RMBDragging)
-	{
-		_RMBDragging = false;
-		_scrollX = 0;
-		_scrollY = 0;
-	}
-	draw(false);
-}
-
-/**
- * Handle animating tiles/units/bullets. 8 Frames per animation.
- */
-void Map::animate()
-{
-	_animFrame++;
-	if (_animFrame == 8) _animFrame = 0;
-
-	for (int i = 0; i < _tileCount; ++i)
-	{
-		_save->getTiles()[i]->animate();
-	}
-	cacheTileSprites();
-	draw(true);
-}
-
-/**
- * Go one level up.
- */
-void Map::up()
-{
-	if (_viewHeight < _save->getHeight() - 1)
-	{
-		_viewHeight++;
-		_mapOffsetY += _spriteHeight / 2;
-		draw(true);
-	}
-}
-
-/**
- * Go one level down.
- */
-void Map::down()
-{
-	if (_viewHeight > 0)
-	{
-		_viewHeight--;
-		_mapOffsetY -= _spriteHeight / 2;
-		draw(true);
-	}
-}
-
-/**
- * Set viewheight.
- * @param viewheight
- */
-void Map::setViewHeight(int viewheight)
-{
-	_viewHeight = viewheight;
-	minMaxInt(&_viewHeight, 0, _save->getHeight()-1);
-	draw(true);
-}
-
-
-/**
- * Center map on a certain position.
- * @param mapPos Position to center on.
- */
-void Map::centerOnPosition(const Position &mapPos, bool redraw)
-{
-	Position screenPos;
-
-	convertMapToScreen(mapPos, &screenPos);
-
-	_mapOffsetX = -(screenPos.x - (getWidth() / 2));
-	_mapOffsetY = -(screenPos.y - (BUTTONS_AREA / 2));
-
-	convertScreenToMap((getWidth() / 2), (BUTTONS_AREA / 2), &_centerX, &_centerY);
-
-	_viewHeight = mapPos.z;
-
-	if (redraw) draw(true);
+	minMaxInt(mapX, 0, _save->getLength() - 1);
+	minMaxInt(mapY, 0, _save->getWidth() - 1);
 }
 
 /**
@@ -933,8 +888,8 @@ void Map::convertVoxelToScreen(const Position &voxelPos, Position *screenPos)
 	double dz = voxelPos.z - (mapPosition.z * 24);
 	screenPos->x += (int)(dx + dy - 1);
 	screenPos->y += (int)(((_spriteHeight / 4.0) * 3.0) + (dx / 2.0) - (dy / 2.0) - dz);
-	screenPos->x += _mapOffsetX - _bufOffsetX;
-	screenPos->y += _mapOffsetY - _bufOffsetY;
+	screenPos->x += _mapOffsetX;
+	screenPos->y += _mapOffsetY;
 }
 
 /**
@@ -949,14 +904,13 @@ void Map::drawArrow(const Position &screenPos, Surface *surface)
 }
 
 /**
- * Draws the small arrow above the selected soldier.
+ * Draws the rectangle selector.
  * @param pos pointer to a position
  */
 void Map::getSelectorPosition(Position *pos)
 {
-	// don't know why X and Y are inverted here...
-	pos->x = _selectorY;
-	pos->y = _selectorX;
+	pos->x = _selectorX;
+	pos->y = _selectorY;
 	pos->z = _viewHeight;
 }
 
@@ -993,8 +947,8 @@ void Map::calculateWalkingOffset(BattleUnit *unit, Position *offset)
 	{
 		if (phase < midphase)
 		{
-			int fromLevel = _save->getTile(unit->getPosition())->getTerrainLevel();
-			int toLevel = _save->getTile(unit->getDestination())->getTerrainLevel();
+			int fromLevel = unit->getTile()->getTerrainLevel();
+			int toLevel = unit->getTile()->getTerrainLevel();
 			if (unit->getPosition().z > unit->getDestination().z)
 			{
 				// going down a level, so toLevel 0 becomes +24, -8 becomes  16
@@ -1026,7 +980,7 @@ void Map::calculateWalkingOffset(BattleUnit *unit, Position *offset)
 	}
 	else
 	{
-		offset->y += _save->getTile(unit->getPosition())->getTerrainLevel();
+		offset->y += unit->getTile()->getTerrainLevel();
 	}
 
 }
@@ -1038,6 +992,7 @@ void Map::calculateWalkingOffset(BattleUnit *unit, Position *offset)
 void Map::setCursorType(CursorType type)
 {
 	_cursorType = type;
+	_save->getTile(Position(_selectorX, _selectorY, _viewHeight))->setCache(0);
 }
 
 /**
@@ -1049,156 +1004,150 @@ CursorType Map::getCursorType() const
 	return _cursorType;
 }
 
+
 /**
- * cacheTileSprites
+ * Render the actual tile.
+ * @param tile
+ * @param cache
+ * @param itX
+ * @param itY
+ * @param itZ
+ * @return Surface
  */
-void Map::cacheTileSprites()
+Surface *Map::cacheTile(Tile *tile, Surface *cache, int itX, int itY, int itZ)
 {
-	for (int i = 0; i < _tileCount; ++i)
+	int tileShade = tile->getShade();
+	Surface *temp;
+	BattleUnit *unit;
+	int frameNumber;
+
+	if (!cache) // no cache created yet
 	{
-		cacheTileSprites(i);
+		cache = new Surface(_spriteWidth, _spriteHeight);
+		cache->setPalette(this->getPalette());
+	}
+	cache->clear();
+
+	if (tile->isDiscovered(2))
+	{
+		temp = tile->getSprite(MapData::O_FLOOR);
+		if (temp)
+		{
+			temp->setShade(_shade[tileShade], tileShade);
+			temp->setX(0);
+			temp->setY(0 - tile->getMapData(MapData::O_FLOOR)->getYOffset());
+			temp->blit(cache);
+		}
+        unit = tile->getUnit();
+	}
+	else
+	{
+		unit = 0;
 	}
 
-}
 
-/**
- * Caches 1 tile's sprites.
- * @return false if the tile did not need redrawing.
- */
-bool Map::cacheTileSprites(int i)
-{
-	MapData *object = 0;
-	Surface *frame = 0;
-	Tile *tile = _save->getTiles()[i];
-	bool door = false;
-
-	if(tile && !tile->isCached())
+	// Draw cursor back
+	if (_selectorX == itX && _selectorY == itY && _cursorType != CT_NONE)
 	{
-
-		/* draw a floor object on the cache (if any) */
-		object = tile->getMapData(O_FLOOR);
-
-		if (object)
+		if (_viewHeight == itZ)
 		{
-			if (_tileFloorCache[i] == 0)
+			if (_cursorType == CT_NORMAL || _cursorType == CT_THROW)
 			{
-				_tileFloorCache[i] = new Surface(_spriteWidth, _spriteHeight);
-				_tileFloorCache[i]->setPalette(this->getPalette());
+				if (unit && (unit->getVisible() || _save->getDebugMode()))
+					frameNumber = 1; // yellow box
+				else
+					frameNumber = 0; // red box
 			}
+			if (_cursorType == CT_AIM)
+			{
+				if (unit)
+					frameNumber = 7 + (_animFrame / 2); // yellow animated crosshairs
+				else
+					frameNumber = 6; // red static crosshairs
+			}
+		}
+		else if (_viewHeight > itZ)
+		{
+			frameNumber = 2; // blue box
+		}
+		temp = _res->getSurfaceSet("CURSOR.PCK")->getFrame(frameNumber);
+		temp->setX(0);
+		temp->setY(0);
+		temp->blit(cache);
+	}
+
+	// Draw walls
+	if (!tile->isVoid() && (tile->isDiscovered(0) || tile->isDiscovered(1)))
+	{
+		// Draw west wall
+		temp = tile->getSprite(MapData::O_WESTWALL);
+		if (temp)
+		{
+			temp->setX(0);
+			temp->setY(0 - tile->getMapData(MapData::O_WESTWALL)->getYOffset());
+			if (tile->getMapData(MapData::O_WESTWALL)->isDoor() || tile->getMapData(MapData::O_WESTWALL)->isUFODoor())
+				temp->setShade(_shade[0], 0);
 			else
 			{
-				_tileFloorCache[i]->clear();
+				if (tile->isDiscovered(2))
+					temp->setShade(_shade[tileShade], tileShade);
+				else
+					temp->setShade(_shade[15], 15);
 			}
-
-			// Draw floor
-			frame = tile->getSprite(O_FLOOR);
-			frame->setX(0);
-			frame->setY(-object->getYOffset());
-			frame->blit(_tileFloorCache[i]);
-
-			_tileFloorCache[i]->setShade(tile->isDiscovered(2)?tile->getShade():16);
+			temp->blit(cache);
 		}
-		else if (_tileFloorCache[i] != 0)
+		// Draw north wall
+		temp = tile->getSprite(MapData::O_NORTHWALL);
+		if (temp)
 		{
-			_tileFloorCache[i]->clear();
-		}
-
-		/* draw terrain objects on the cache (if any) */
-		if (tile->getMapData(O_WESTWALL) != 0 || tile->getMapData(O_NORTHWALL) != 0 || tile->getMapData(O_OBJECT) != 0 || tile->getTopItemSprite() != -1)
-		{
-			if (_tileWallsCache[i] == 0)
+			temp->setX(0);
+			temp->setY(0 - tile->getMapData(MapData::O_NORTHWALL)->getYOffset());
+			// if there is a westwall, cut off some of the north wall (otherwise it will overlap)
+			if (tile->getMapData(MapData::O_WESTWALL))
 			{
-				_tileWallsCache[i] = new Surface(_spriteWidth, _spriteHeight);
-				_tileWallsCache[i]->setPalette(this->getPalette());
+				temp->setX(temp->getWidth() / 2);
+				temp->getCrop()->x = temp->getWidth() / 2;
+				temp->getCrop()->w = temp->getWidth() / 2;
+				temp->getCrop()->h = temp->getHeight();
 			}
+			if (tile->getMapData(MapData::O_NORTHWALL)->isDoor() || tile->getMapData(MapData::O_NORTHWALL)->isUFODoor())
+				temp->setShade(_shade[0], 0);
 			else
 			{
-				_tileWallsCache[i]->clear();
+				if (tile->isDiscovered(2))
+					temp->setShade(_shade[tileShade], tileShade);
+				else
+					temp->setShade(_shade[15], 15);
 			}
-
-			// Draw west wall
-			object = tile->getMapData(O_WESTWALL);
-			if (object)
+			temp->blit(cache);
+			temp->getCrop()->w = 0;
+			temp->getCrop()->h = 0;
+		}
+		// Draw object
+		if (tile->isDiscovered(2))
+		{
+			temp = tile->getSprite(MapData::O_OBJECT);
+			if (temp)
 			{
-				frame = tile->getSprite(O_WESTWALL);
-				frame->setX(0);
-				frame->setY(-object->getYOffset());
-				frame->blit(_tileWallsCache[i]);
-				door = object->isDoor() || object->isUFODoor();
-			}
-			// Draw north wall
-			object = tile->getMapData(O_NORTHWALL);
-			if (object)
-			{
-				frame = tile->getSprite(O_NORTHWALL);
-				frame->setX(0);
-				frame->setY(-object->getYOffset());
-				// if there is a westwall, cut off some of the north wall (otherwise it will overlap)
-				if (tile->getMapData(O_WESTWALL))
-				{
-					frame->setX(frame->getWidth() / 2);
-					frame->getCrop()->x = frame->getWidth() / 2;
-					frame->getCrop()->w = frame->getWidth() / 2;
-					frame->getCrop()->h = frame->getHeight();
-				}else
-				{
-					frame->getCrop()->w = 0;
-					frame->getCrop()->h = 0;
-				}
-				frame->blit(_tileWallsCache[i]);
-				door = object->isDoor() || object->isUFODoor();
-			}
-			// Draw object
-			object = tile->getMapData(O_OBJECT);
-			if (object)
-			{
-				frame = tile->getSprite(O_OBJECT);
-				frame->setX(0);
-				frame->setY(-object->getYOffset());
-				frame->blit(_tileWallsCache[i]);
+				temp->setX(0);
+				temp->setY(-tile->getMapData(MapData::O_OBJECT)->getYOffset());
+				temp->setShade(_shade[tileShade], tileShade);
+				temp->blit(cache);
 			}
 
 			// draw an item on top of the floor (if any)
 			int sprite = tile->getTopItemSprite();
 			if (sprite != -1)
 			{
-				frame = _res->getSurfaceSet("FLOOROB.PCK")->getFrame(sprite);
-				frame->setX(0);
-				if (object == 0)
-				{
-					object = tile->getMapData(O_FLOOR);
-				}
-				frame->setY(object->getTerrainLevel());
-				frame->blit(_tileWallsCache[i]);
-			}
-
-			if (door && (tile->isDiscovered(0)||tile->isDiscovered(1))) // don't shade doors too dark, so you can still see them
-			{
-				_tileWallsCache[i]->setShade(0);
-			}
-			else
-			{
-				_tileWallsCache[i]->setShade((tile->isDiscovered(2))?tile->getShade():16);
+				temp = _res->getSurfaceSet("FLOOROB.PCK")->getFrame(sprite);
+				temp->setX(0);
+				temp->setY(tile->getTerrainLevel());
+				temp->setShade(_shade[tileShade], tileShade);
+				temp->blit(cache);
 			}
 		}
-		else if (_tileWallsCache[i] != 0)
-		{
-			_tileWallsCache[i]->clear();
-		}
-
-		// if lighting changed for a tile, then it also does for a unit standing on it
-		if (tile->getUnit() != 0 && tile->getUnit()->getFaction() != FACTION_PLAYER)
-		{
-			tile->getUnit()->setCached(false);
-		}
-
-		tile->setCached(true);
-		return true;
 	}
-	else
-	{
-		return false;
-	}
+	return cache;
 }
 
 /**
@@ -1206,41 +1155,47 @@ bool Map::cacheTileSprites(int i)
  */
 void Map::cacheUnits()
 {
-	UnitSprite *unitSprite = new UnitSprite(_spriteWidth, _spriteHeight, 0, 0);
-	//unitSprite->setSurfaces();
-	unitSprite->setPalette(this->getPalette());
-
 	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
-		if (!(*i)->isCached())
-		{
-			if (_unitCache.at((*i)->getId()) == 0)
-			{
-				_unitCache.at((*i)->getId()) = new Surface(_spriteWidth, _spriteHeight);
-				_unitCache.at((*i)->getId())->setPalette(this->getPalette());
-			}
-			else
-			{
-				_unitCache.at((*i)->getId())->clear();
-			}
-			unitSprite->setBattleUnit((*i));
-			BattleItem *handItem = _save->getItemFromUnit((*i), RIGHT_HAND);
-			if (handItem)
-			{
-				unitSprite->setBattleItem(handItem);
-			}
-			else
-			{
-				unitSprite->setBattleItem(0);
-			}
-			unitSprite->setSurfaces(_res->getSurfaceSet((*i)->getUnit()->getArmor()->getSpriteSheet()),
-									_res->getSurfaceSet("HANDOB.PCK"));
-			unitSprite->draw();
-			unitSprite->blit(_unitCache.at((*i)->getId()));
+		cacheUnit(*i);
+	}
+}
 
-			_unitCache.at((*i)->getId())->setShade(_save->getTile((*i)->getPosition())->isDiscovered(2)?_save->getTile((*i)->getPosition())->getShade():16);
-			(*i)->setCached(true);
+
+/**
+ * Check all units if they need to be redrawn.
+ */
+void Map::cacheUnit(BattleUnit *unit)
+{
+	UnitSprite *unitSprite = new UnitSprite(_spriteWidth, _spriteHeight, 0, 0);
+	unitSprite->setPalette(this->getPalette());
+	bool invalid;
+
+	Surface *cache = unit->getCache(&invalid);
+	if (invalid)
+	{
+		if (!cache) // no cache created yet
+		{
+			cache = new Surface(_spriteWidth, _spriteHeight);
+			cache->setPalette(this->getPalette());
 		}
+		unitSprite->setBattleUnit(unit);
+		BattleItem *handItem = unit->getItem("STR_RIGHT_HAND");
+		if (handItem)
+		{
+			unitSprite->setBattleItem(handItem);
+		}
+		else
+		{
+			unitSprite->setBattleItem(0);
+		}
+		unitSprite->setSurfaces(_res->getSurfaceSet(unit->getUnit()->getArmor()->getSpriteSheet()),
+								_res->getSurfaceSet("HANDOB.PCK"));
+
+		unitSprite->draw();
+		cache->clear();
+		unitSprite->blit(cache);
+		unit->setCache(cache);
 	}
 	delete unitSprite;
 }

@@ -36,7 +36,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Surface::Surface(int width, int height, int x, int y) : _x(x), _y(y), _visible(true), _hidden(false)
+Surface::Surface(int width, int height, int x, int y) : _x(x), _y(y), _visible(true), _hidden(false), _originalColors(0), _lastShade(-1)
 {
 	_surface = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, 8, 0, 0, 0, 0);
 
@@ -144,7 +144,7 @@ void Surface::loadSpk(const std::string &filename)
 		if (flag == 65535)
 		{
 			imgFile.read((char*)&flag, sizeof(flag));
-			for (int i = 0; i < flag * 2; i++)
+			for (int i = 0; i < flag * 2; ++i)
 			{
 				setPixelIterative(&x, &y, 0);
 			}
@@ -152,7 +152,7 @@ void Surface::loadSpk(const std::string &filename)
 		else if (flag == 65534)
 		{
 			imgFile.read((char*)&flag, sizeof(flag));
-			for (int i = 0; i < flag * 2; i++)
+			for (int i = 0; i < flag * 2; ++i)
 			{
 				imgFile.read((char*)&value, 1);
 				setPixelIterative(&x, &y, value);
@@ -260,46 +260,6 @@ void Surface::invert(Uint8 mid)
 }
 
 /**
- * Sets the shade level of the surface.
- * Shade 0 is original color, 16 is black.
- * @param shade Amount to shade.
- */
-void Surface::setShade(int shade)
-{
-	// Lock the surface
-	lock();
-	for (int x = 0, y = 0; x < _surface->w && y < _surface->h;)
-	{
-		Uint8 pixel = getPixel(x, y);
-		if (pixel)
-		{
-			int baseColor = pixel/16;
-			int originalShade = pixel%16;
-			int newShade = originalShade + shade;
-			if (newShade > 15)
-			{
-				baseColor = 0;
-				newShade = 15;
-			}
-			if (originalShade != newShade || baseColor == 0)
-			{
-				pixel = (baseColor*16) + newShade;
-				setPixel(x, y, pixel);
-			}
-		}
-		x++;
-		if (x == getWidth())
-		{
-			y++;
-			x = 0;
-		}
-	}
-
-	// Unlock the surface
-	unlock();
-}
-
-/**
  * Runs any code the surface needs to keep updating every
  * game cycle, like animations and other real-time elements.
  */
@@ -359,38 +319,6 @@ void Surface::copy(Surface *surface)
 	from.w = getWidth();
 	from.h = getHeight();
 	SDL_BlitSurface(surface->getSurface(), &from, _surface, 0);
-}
-
-/**
- * Copies the exact contents of another surface onto the areas that
- * match a certain color, like a mask. Surface sizes must match.
- * @param surface Pointer to surface to copy from.
- * @param mask Color mask to replace with the other surface.
- */
-void Surface::maskedCopy(Surface *surface, Uint8 mask)
-{
-	if (surface->getWidth() != getWidth() || surface->getHeight() != getHeight())
-	{
-		return;
-	}
-
-	// Lock the surface
-	lock();
-
-	for (int x = 0, y = 0; x < getWidth() && y < getHeight();)
-	{
-		if (getPixel(x, y) == mask)
-		{
-			setPixelIterative(&x, &y, surface->getPixel(x, y));
-		}
-		else
-		{
-			setPixelIterative(&x, &y, this->getPixel(x, y));
-		}
-	}
-
-	// Unlock the surface
-	unlock();
 }
 
 /**
@@ -674,6 +602,69 @@ void Surface::lock()
 void Surface::unlock()
 {
 	SDL_UnlockSurface(_surface);
+}
+
+/**
+ * Shifts all the colors in the surface's palette by a set amount.
+ * This is a common method in 8bpp games to simulate color
+ * effects for cheap.
+ * @param off Amount to shift.
+ * @param mul Shift multiplier.
+ */
+void Surface::paletteShift(int off, int mul)
+{
+	// store the original palette
+	_originalColors = (SDL_Color *)malloc(sizeof(SDL_Color) * _surface->format->palette->ncolors);
+
+	// create a temporary new palette
+	int ncolors = _surface->format->palette->ncolors - off;
+	SDL_Color *newColors = (SDL_Color *)malloc(sizeof(SDL_Color) * ncolors);
+
+	// do the color shift - while storing the original colors too
+	for (int i = 0; i < _surface->format->palette->ncolors; i++)
+	{
+		_originalColors[i].r = getPalette()[i].r;
+		_originalColors[i].g = getPalette()[i].g;
+		_originalColors[i].b = getPalette()[i].b;
+		if (i * mul + off < _surface->format->palette->ncolors)
+		{
+			newColors[i].r = getPalette()[i * mul + off].r;
+			newColors[i].g = getPalette()[i * mul + off].g;
+			newColors[i].b = getPalette()[i * mul + off].b;
+		}
+	}
+
+	// assign it and free it
+	SDL_SetColors(_surface, newColors, 0, ncolors);
+	free(newColors);
+	
+	return;
+}
+
+/**
+ * Restores the previously shifted palette.
+ * You have to call it after you've done blitting.
+ */
+void Surface::paletteRestore()
+{
+	if (_originalColors)
+	{
+		SDL_SetColors(_surface, _originalColors, 0, 256);
+		free(_originalColors);
+		_originalColors = 0;
+	}
+}
+
+/**
+ * Sets a shade level by changing the palette.
+ */
+void Surface::setShade(SDL_Color *colors, int shade)
+{
+	if (shade != _lastShade) // make sure we don't change the palette unnescessary
+	{
+		SDL_SetColors(_surface, colors, 0, 256);
+		_lastShade = shade;
+	}
 }
 
 }

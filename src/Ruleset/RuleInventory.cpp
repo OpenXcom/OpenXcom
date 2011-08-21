@@ -17,18 +17,18 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "RuleInventory.h"
-#include "City.h"
+#include <cmath>
+#include "RuleItem.h"
 
 namespace OpenXcom
 {
-// NOTES FOR ME: SLOT SIZE = 16x16, HAND SIZE=32x48
 
 /**
  * Creates a blank ruleset for a certain
  * type of inventory section.
- * @param type String defining the type.
+ * @param id String defining the id.
  */
-RuleInventory::RuleInventory(std::string type): _type(type), _x(0), _y(0), _hand(false), _slotX(), _slotY()
+RuleInventory::RuleInventory(std::string id): _id(id), _x(0), _y(0), _type(INV_SLOT), _slots(), _costs()
 {
 }
 
@@ -41,9 +41,9 @@ RuleInventory::~RuleInventory()
  * this inventory section. Each section has a unique name.
  * @return Section name.
  */
-std::string RuleInventory::getType() const
+std::string RuleInventory::getId() const
 {
-	return _type;
+	return _id;
 }
 
 /**
@@ -65,7 +65,7 @@ void RuleInventory::setX(int x)
 }
 
 /**
- * Returns the Yposition of the inventory section on the screen.
+ * Returns the Y position of the inventory section on the screen.
  * @return Position in pixels.
  */
 int RuleInventory::getY() const
@@ -74,7 +74,7 @@ int RuleInventory::getY() const
 }
 
 /**
- * Changes the X position of the inventory section on the screen.
+ * Changes the Y position of the inventory section on the screen.
  * @param y Position in pixels.
  */
 void RuleInventory::setY(int y)
@@ -83,23 +83,24 @@ void RuleInventory::setY(int y)
 }
 
 /**
- * Returns whether the inventory section is a hand.
- * A hand only contains one slot but can hold any item.
- * @return Is it a hand?!
+ * Returns the type of the inventory section.
+ * Slot-based contain a limited number of slots.
+ * Hands only contain one slot but can hold any item.
+ * Ground can hold infinite items but don't attach to soldiers.
+ * @return The inventory type.
  */
-bool RuleInventory::getHand() const
+InventoryType RuleInventory::getType() const
 {
-	return _hand;
+	return _type;
 }
 
 /**
- * Changes whether the inventory section is a hand.
- * A hand only contains one slot but can hold any item.
- * @rparam hand Is it a hand?!
+ * Changes the type of the inventory section.
+ * @param type The inventory type.
  */
-void RuleInventory::setHand(bool hand)
+void RuleInventory::setType(InventoryType type)
 {
-	_hand = hand;
+	_type = type;
 }
 
 /**
@@ -110,8 +111,137 @@ void RuleInventory::setHand(bool hand)
  */
 void RuleInventory::addSlot(int x, int y)
 {
-	_slotX.push_back(x);
-	_slotY.push_back(y);
+	struct RuleSlot s = {x, y};
+	_slots.push_back(s);
+}
+
+/**
+ * Gets all the slots in the inventory section.
+ * @return List of slots.
+ */
+std::vector<struct RuleSlot> *const RuleInventory::getSlots()
+{
+	return &_slots;
+}
+
+/**
+ * Gets the slot located in the specified mouse position.
+ * @param x Mouse X position. Returns the slot's X position.
+ * @param y Mouse Y position. Returns the slot's Y position.
+ * @return True if there's a slot there, False otherwise.
+ */
+bool RuleInventory::checkSlotInPosition(int *x, int *y) const
+{
+	int mouseX = *x, mouseY = *y;
+	if (_type == INV_HAND)
+	{
+		for (int xx = 0; xx < HAND_W; ++xx)
+		{
+			for (int yy = 0; yy < HAND_H; ++yy)
+			{
+				if (mouseX >= _x + xx * SLOT_W && mouseX < _x + (xx + 1) * SLOT_W &&
+					mouseY >= _y + yy * SLOT_H && mouseY < _y + (yy + 1) * SLOT_H)
+				{
+					*x = 0;
+					*y = 0;
+					return true;
+				}
+			}
+		}
+	}
+	else if (_type == INV_GROUND)
+	{
+		if (mouseX >= _x && mouseX < 320 && mouseY >= _y && mouseY < 200)
+		{
+			*x = (int)floor(double(mouseX - _x) / SLOT_W);
+			*y = (int)floor(double(mouseY - _y) / SLOT_H);
+			return true;
+		}
+	}
+	else
+	{
+		for (std::vector<RuleSlot>::const_iterator i = _slots.begin(); i != _slots.end(); ++i)
+		{
+			if (mouseX >= _x + i->x * SLOT_W && mouseX < _x + (i->x + 1) * SLOT_W &&
+				mouseY >= _y + i->y * SLOT_H && mouseY < _y + (i->y + 1) * SLOT_H)
+			{
+				*x = i->x;
+				*y = i->y;
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+/**
+ * Checks if an item completely fits when
+ * placed in a certain slot.
+ * @param item Pointer to item ruleset.
+ * @param x Slot X position.
+ * @param y Slot Y position.
+ * @return True if there's a slot there, False otherwise.
+ */
+bool RuleInventory::fitItemInSlot(RuleItem *item, int x, int y) const
+{
+	if (_type == INV_HAND)
+	{
+		return true;
+	}
+	else if (_type == INV_GROUND)
+	{
+		int width = (320 - _x) / SLOT_W;
+		int height = (200 - _y) / SLOT_H;
+		int xOffset = 0;
+		while (x >= xOffset + width)
+			xOffset += width;
+		for (int xx = x; xx < x + item->getInventoryWidth(); ++xx)
+		{
+			for (int yy = y; yy < y + item->getInventoryHeight(); ++yy)
+			{
+				if (!(xx >= xOffset && xx < xOffset + width && yy >= 0 && yy < height))
+					return false;
+			}
+		}
+		return true;
+	}
+	else
+	{
+		int totalSlots = item->getInventoryWidth() * item->getInventoryHeight();
+		int foundSlots = 0;
+		for (std::vector<RuleSlot>::const_iterator i = _slots.begin(); i != _slots.end() && foundSlots < totalSlots; ++i)
+		{
+			if (i->x >= x && i->x < x + item->getInventoryWidth() &&
+				i->y >= y && i->y < y + item->getInventoryHeight())
+			{
+				foundSlots++;
+			}
+		}
+		return (foundSlots == totalSlots);
+	}
+}
+
+/**
+ * Adds a time unit cost to place an item from this
+ * inventory section in another section.
+ * @param slot The new section id.
+ * @param cost The time unit cost.
+ */
+void RuleInventory::addCost(std::string slot, int cost)
+{
+	_costs.insert(std::pair<std::string, int>(slot, cost));
+}
+
+/**
+ * Returns the time unit cost to place an item in another section.
+ * @param slot The new section id.
+ * @return The time unit cost.
+ */
+int RuleInventory::getCost(RuleInventory* slot) const
+{
+	if (slot == this)
+		return 0;
+	return _costs.find(slot->getId())->second;
 }
 
 }

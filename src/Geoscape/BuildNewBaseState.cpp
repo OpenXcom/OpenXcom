@@ -153,7 +153,7 @@ void BuildNewBaseState::handle(Action *action)
 void BuildNewBaseState::globeClick(Action *action)
 {
 	double lon, lat;
-	int mouseX = (int)floor(action->getXMouse() / action->getXScale()), mouseY = (int)floor(action->getYMouse() / action->getYScale());
+	int mouseX = (int)floor(action->getAbsoluteXMouse()), mouseY = (int)floor(action->getAbsoluteYMouse());
 	_globe->cartToPolar(mouseX, mouseY, &lon, &lat);
 
 	// Ignore window clicks

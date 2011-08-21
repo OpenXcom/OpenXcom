@@ -141,7 +141,7 @@ void TextButton::draw()
 	square.w = getWidth();
 	square.h = getHeight();
 
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < 5; ++i)
 	{
 		drawRect(&square, color);
 		

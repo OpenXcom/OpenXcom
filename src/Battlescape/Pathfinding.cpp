@@ -86,7 +86,7 @@ void Pathfinding::calculate(BattleUnit *unit, Position &endPosition)
 	Tile *destinationTile = _save->getTile(endPosition);
 
 	// check if destination is not blocked
-	if (isBlocked(destinationTile, O_FLOOR) || isBlocked(destinationTile, O_OBJECT)) return;
+	if (isBlocked(destinationTile, MapData::O_FLOOR) || isBlocked(destinationTile, MapData::O_OBJECT)) return;
 
 	// the following check avoids that the unit walks behind the stairs if we click behind the stairs to make it go up the stairs.
 	// it only works if the unit is on one of the 2 tiles on the stairs, or on the tile right in front of the stairs.
@@ -177,7 +177,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 		return 255;
 
 	// check if the destination tile can be walked over
-	if (isBlocked(destinationTile, O_FLOOR) || isBlocked(destinationTile, O_OBJECT))
+	if (isBlocked(destinationTile, MapData::O_FLOOR) || isBlocked(destinationTile, MapData::O_OBJECT))
 		return 255;
 
 
@@ -211,16 +211,16 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 	}
 
 	// check if the destination tile can be walked over
-	if ((isBlocked(destinationTile, O_FLOOR) || isBlocked(destinationTile, O_OBJECT)) && !fellDown)
+	if ((isBlocked(destinationTile, MapData::O_FLOOR) || isBlocked(destinationTile, MapData::O_OBJECT)) && !fellDown)
 	{
 		return 255;
 	}
 
 	// calculate the cost by adding floor walk cost and object walk cost
-	int cost = destinationTile->getTUCost(O_FLOOR, _movementType);
+	int cost = destinationTile->getTUCost(MapData::O_FLOOR, _movementType);
 	if (!fellDown)
 	{
-		cost += destinationTile->getTUCost(O_OBJECT, _movementType);
+		cost += destinationTile->getTUCost(MapData::O_OBJECT, _movementType);
 	}
 
 	// diagonal walking (uneven directions) costs 50% more tu's
@@ -317,40 +317,40 @@ bool Pathfinding::isBlocked(Tile *startTile, Tile *endTile, const int direction)
 	switch(direction)
 	{
 	case 0:	// north
-		if (isBlocked(startTile, O_NORTHWALL)) return true;
+		if (isBlocked(startTile, MapData::O_NORTHWALL)) return true;
 		break;
 	case 1: // north east
-		if (isBlocked(startTile,O_NORTHWALL)) return true;
-		if (isBlocked(endTile,O_WESTWALL)) return true;
-		if (isBlocked(_save->getTile(startTile->getPosition() + Position(1, 0, 0)),O_WESTWALL)) return true;
-		if (isBlocked(_save->getTile(startTile->getPosition() + Position(1, 0, 0)),O_NORTHWALL)) return true;
+		if (isBlocked(startTile,MapData::O_NORTHWALL)) return true;
+		if (isBlocked(endTile,MapData::O_WESTWALL)) return true;
+		if (isBlocked(_save->getTile(startTile->getPosition() + Position(1, 0, 0)),MapData::O_WESTWALL)) return true;
+		if (isBlocked(_save->getTile(startTile->getPosition() + Position(1, 0, 0)),MapData::O_NORTHWALL)) return true;
 		break;
 	case 2: // east
-		if (isBlocked(endTile,O_WESTWALL)) return true;
+		if (isBlocked(endTile,MapData::O_WESTWALL)) return true;
 		break;
 	case 3: // south east
-		if (isBlocked(endTile,O_WESTWALL)) return true;
-		if (isBlocked(endTile,O_NORTHWALL)) return true;
-		if (isBlocked(_save->getTile(startTile->getPosition() + Position(1, 0, 0)),O_WESTWALL)) return true;
-		if (isBlocked(_save->getTile(startTile->getPosition() + Position(0, -1, 0)),O_NORTHWALL)) return true;
+		if (isBlocked(endTile,MapData::O_WESTWALL)) return true;
+		if (isBlocked(endTile,MapData::O_NORTHWALL)) return true;
+		if (isBlocked(_save->getTile(startTile->getPosition() + Position(1, 0, 0)),MapData::O_WESTWALL)) return true;
+		if (isBlocked(_save->getTile(startTile->getPosition() + Position(0, -1, 0)),MapData::O_NORTHWALL)) return true;
 		break;
 	case 4: // south
-		if (isBlocked(endTile,O_NORTHWALL)) return true;
+		if (isBlocked(endTile,MapData::O_NORTHWALL)) return true;
 		break;
 	case 5: // south west
-		if (isBlocked(endTile,O_NORTHWALL)) return true;
-		if (isBlocked(startTile,O_WESTWALL)) return true;
-		if (isBlocked(_save->getTile(startTile->getPosition() + Position(0, -1, 0)),O_WESTWALL)) return true;
-		if (isBlocked(_save->getTile(startTile->getPosition() + Position(0, -1, 0)),O_NORTHWALL)) return true;
+		if (isBlocked(endTile,MapData::O_NORTHWALL)) return true;
+		if (isBlocked(startTile,MapData::O_WESTWALL)) return true;
+		if (isBlocked(_save->getTile(startTile->getPosition() + Position(0, -1, 0)),MapData::O_WESTWALL)) return true;
+		if (isBlocked(_save->getTile(startTile->getPosition() + Position(0, -1, 0)),MapData::O_NORTHWALL)) return true;
 		break;
 	case 6: // west
-		if (isBlocked(startTile,O_WESTWALL)) return true;
+		if (isBlocked(startTile,MapData::O_WESTWALL)) return true;
 		break;
 	case 7: // north west
-		if (isBlocked(startTile,O_WESTWALL)) return true;
-		if (isBlocked(startTile,O_NORTHWALL)) return true;
-		if (isBlocked(_save->getTile(startTile->getPosition() + Position(0, 1, 0)),O_WESTWALL)) return true;
-		if (isBlocked(_save->getTile(startTile->getPosition() + Position(-1, 0, 0)),O_NORTHWALL)) return true;
+		if (isBlocked(startTile,MapData::O_WESTWALL)) return true;
+		if (isBlocked(startTile,MapData::O_NORTHWALL)) return true;
+		if (isBlocked(_save->getTile(startTile->getPosition() + Position(0, 1, 0)),MapData::O_WESTWALL)) return true;
+		if (isBlocked(_save->getTile(startTile->getPosition() + Position(-1, 0, 0)),MapData::O_NORTHWALL)) return true;
 		break;
 	}
 

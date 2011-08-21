@@ -39,6 +39,8 @@ protected:
 	int _x, _y;
 	SDL_Rect _crop;
 	bool _visible, _hidden;
+	SDL_Color *_originalColors;
+	int _lastShade;
 public:
 	/// Creates a new surface with the specified size and position.
 	Surface(int width, int height, int x = 0, int y = 0);
@@ -56,8 +58,6 @@ public:
 	void offset(int off, int min = -1, int max = -1, int mul = 1);
 	/// Inverts the surface's colors.
 	void invert(Uint8 mid);
-	/// Sets the surface's shade level.
-	void setShade(int shade);
 	/// Runs surface functionality every cycle
 	virtual void think();
 	/// Draws the surface's graphic.
@@ -66,8 +66,6 @@ public:
 	virtual void blit(Surface *surface);
 	/// Copies a portion of another surface into this one.
 	void copy(Surface *surface);
-	/// Copies a portion of another surface according to a mask.
-	void maskedCopy(Surface *surface, Uint8 mask);
     /// Draws a filled rectangle on the surface.
     void drawRect(SDL_Rect *rect, Uint8 color);
     /// Draws a line on the surface.
@@ -120,6 +118,12 @@ public:
 	void lock();
 	/// Unlocks the surface.
 	void unlock();
+	/// Offsets the surface palette's colors by a set amount.
+	void paletteShift(int off, int mul);
+	/// Restores the original palette.
+	void paletteRestore();
+	/// Sets a shade level.
+	void setShade(SDL_Color *colors, int shade);
 };
 
 }

@@ -38,4 +38,14 @@ NodeLink::~NodeLink()
 {
 }
 
+int NodeLink::getConnectedNodeID() const
+{
+	return _connectedNodeID;
+}
+
+void NodeLink::setConnectedNodeID(int id)
+{
+	_connectedNodeID = id;
+}
+
 }

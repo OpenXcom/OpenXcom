@@ -31,6 +31,7 @@
 			</Target>
 		</Build>
 		<Compiler>
+			<Add option="-O2" />
 			<Add option="-Wall" />
 			<Add directory="..\deps\include" />
 			<Add directory="..\deps\include\SDL" />
@@ -47,6 +48,7 @@
 			<Add library="SDL_gfx" />
 			<Add library="SDL_mixer" />
 			<Add library="yaml-cpp" />
+			<Add library="shlwapi" />
 			<Add directory="..\deps\lib" />
 		</Linker>
 		<Unit filename="Basescape\BaseInfoState.cpp" />
@@ -112,6 +114,10 @@
 		<Unit filename="Battlescape\ActionMenuItem.h" />
 		<Unit filename="Battlescape\ActionMenuState.cpp" />
 		<Unit filename="Battlescape\ActionMenuState.h" />
+		<Unit filename="Battlescape\AggroBAIState.cpp" />
+		<Unit filename="Battlescape\AggroBAIState.h" />
+		<Unit filename="Battlescape\BattleAIState.cpp" />
+		<Unit filename="Battlescape\BattleAIState.h" />
 		<Unit filename="Battlescape\BattleState.cpp" />
 		<Unit filename="Battlescape\BattleState.h" />
 		<Unit filename="Battlescape\BattlescapeGenerator.cpp" />
@@ -126,6 +132,8 @@
 		<Unit filename="Battlescape\Explosion.h" />
 		<Unit filename="Battlescape\ExplosionBState.cpp" />
 		<Unit filename="Battlescape\ExplosionBState.h" />
+		<Unit filename="Battlescape\Inventory.cpp" />
+		<Unit filename="Battlescape\Inventory.h" />
 		<Unit filename="Battlescape\InventoryState.cpp" />
 		<Unit filename="Battlescape\InventoryState.h" />
 		<Unit filename="Battlescape\Map.cpp" />
@@ -136,6 +144,8 @@
 		<Unit filename="Battlescape\Pathfinding.h" />
 		<Unit filename="Battlescape\PathfindingNode.cpp" />
 		<Unit filename="Battlescape\PathfindingNode.h" />
+		<Unit filename="Battlescape\PatrolBAIState.cpp" />
+		<Unit filename="Battlescape\PatrolBAIState.h" />
 		<Unit filename="Battlescape\Position.cpp" />
 		<Unit filename="Battlescape\Position.h" />
 		<Unit filename="Battlescape\PrimeGrenadeState.cpp" />
@@ -156,6 +166,8 @@
 		<Unit filename="Battlescape\UnitTurnBState.h" />
 		<Unit filename="Battlescape\UnitWalkBState.cpp" />
 		<Unit filename="Battlescape\UnitWalkBState.h" />
+		<Unit filename="Battlescape\WarningMessage.cpp" />
+		<Unit filename="Battlescape\WarningMessage.h" />
 		<Unit filename="Engine\Action.cpp" />
 		<Unit filename="Engine\Action.h" />
 		<Unit filename="Engine\CatFile.cpp" />
@@ -384,14 +396,20 @@
 		<Unit filename="Savegame\Waypoint.h" />
 		<Unit filename="Ufopaedia\ArticleState.cpp" />
 		<Unit filename="Ufopaedia\ArticleState.h" />
+		<Unit filename="Ufopaedia\ArticleStateBaseFacility.cpp" />
+		<Unit filename="Ufopaedia\ArticleStateBaseFacility.h" />
 		<Unit filename="Ufopaedia\ArticleStateCraft.cpp" />
 		<Unit filename="Ufopaedia\ArticleStateCraft.h" />
 		<Unit filename="Ufopaedia\ArticleStateCraftWeapon.cpp" />
 		<Unit filename="Ufopaedia\ArticleStateCraftWeapon.h" />
+		<Unit filename="Ufopaedia\ArticleStateItem.cpp" />
+		<Unit filename="Ufopaedia\ArticleStateItem.h" />
 		<Unit filename="Ufopaedia\ArticleStateText.cpp" />
 		<Unit filename="Ufopaedia\ArticleStateText.h" />
 		<Unit filename="Ufopaedia\ArticleStateTextImage.cpp" />
 		<Unit filename="Ufopaedia\ArticleStateTextImage.h" />
+		<Unit filename="Ufopaedia\ArticleStateUfo.cpp" />
+		<Unit filename="Ufopaedia\ArticleStateUfo.h" />
 		<Unit filename="Ufopaedia\Ufopaedia.cpp" />
 		<Unit filename="Ufopaedia\Ufopaedia.h" />
 		<Unit filename="Ufopaedia\UfopaediaSelectState.cpp" />

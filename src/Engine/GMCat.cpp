@@ -291,7 +291,7 @@ static int gmext_write_midi (const struct gmstream *stream,
 	// write MIDI file header
 	static const unsigned char midi_file_signature[8] =
 		{ 'M','T','h','d',0,0,0,6 };
-	for (int i=0; i<8; i++)
+	for (int i=0; i<8; ++i)
 		midi.push_back(midi_file_signature[i]);
 	gmext_write_int16(midi, 1);
 	gmext_write_int16(midi, stream->ntracks + 1);
@@ -300,7 +300,7 @@ static int gmext_write_midi (const struct gmstream *stream,
 	// write global tempo track
 	static const unsigned char midi_track_header[8] =
 		{ 'M','T','r','k',0,0,0,11 };
-	for (int i=0; i<8; i++)
+	for (int i=0; i<8; ++i)
 		midi.push_back(midi_track_header[i]);
 	gmext_write_delta(midi, 0);
 	gmext_write_tempo_ev(midi, stream->tempo);
@@ -308,14 +308,14 @@ static int gmext_write_midi (const struct gmstream *stream,
 	gmext_write_end_ev(midi);
 
 	// write tracks
-	for (int j=0; j<stream->ntracks; j++) {
+	for (int j=0; j<stream->ntracks; ++j) {
 
 		// header
-		for (int i=0; i<4; i++)
+		for (int i=0; i<4; ++i)
 			midi.push_back(midi_track_header[i]);
 
 		unsigned int loffset = midi.size();
-		for (int i=0; i<4; i++)
+		for (int i=0; i<4; ++i)
 			midi.push_back(0);
 
 		// initial data
@@ -323,7 +323,7 @@ static int gmext_write_midi (const struct gmstream *stream,
 			{ /* 0, 0xB0, */ 0x78, 0, 0, 0x79, 0, 0, 0x7B, 0 };
 		midi.push_back(0);
 		midi.push_back(0xB0 | stream->tracks[j].channel);
-		for (int i=0; i<8; i++)
+		for (int i=0; i<8; ++i)
 			midi.push_back(midi_track_init[i]);
 
 		// body

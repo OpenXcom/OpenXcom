@@ -22,10 +22,10 @@
 #include "../Engine/Sound.h"
 #include "../Engine/RNG.h"
 
-#define POPUP_SPEED 0.075
-
 namespace OpenXcom
 {
+
+const double Window::POPUP_SPEED = 0.075;
 
 Sound *Window::soundPopup[3] = {0, 0, 0};
 
@@ -69,9 +69,8 @@ void Window::setBackground(Surface *bg)
 {
 	if (_popupStep < 1.0)
 	{
-		for (std::vector<Surface*>::iterator i = _state->getSurfaces()->begin(); i < _state->getSurfaces()->end(); ++i)
-			if ((*i) != this)
-				(*i)->hide();
+		_state->hideAll();
+		show();
 	}
 
 	_bg = bg;
@@ -86,9 +85,8 @@ void Window::setColor(Uint8 color)
 {
 	if (_popupStep < 1.0)
 	{
-		for (std::vector<Surface*>::iterator i = _state->getSurfaces()->begin(); i < _state->getSurfaces()->end(); ++i)
-			if ((*i) != this)
-				(*i)->hide();
+		_state->hideAll();
+		show();
 	}
 
 	_color = color;
@@ -129,9 +127,7 @@ void Window::popup()
 	}
 	else
 	{
-		for (std::vector<Surface*>::iterator i = _state->getSurfaces()->begin(); i < _state->getSurfaces()->end(); ++i)
-			if ((*i) != this)
-				(*i)->show();
+		_state->showAll();
 		_popupStep = 1.0;
 		_timer->stop();
 	}
@@ -172,7 +168,7 @@ void Window::draw()
 		square.h = getHeight();
 	}
 
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < 5; ++i)
 	{
 		drawRect(&square, color);
 		if (i < 2)

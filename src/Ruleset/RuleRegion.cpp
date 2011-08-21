@@ -94,7 +94,7 @@ void RuleRegion::addArea(double lonMin, double lonMax, double latMin, double lat
  */
 bool RuleRegion::insideRegion(double lon, double lat) const
 {
-	for (unsigned int i = 0; i < _lonMin.size(); i++)
+	for (unsigned int i = 0; i < _lonMin.size(); ++i)
 	{
 		bool inLon, inLat;
 
