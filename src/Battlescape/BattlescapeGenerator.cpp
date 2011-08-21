@@ -230,20 +230,47 @@ void BattlescapeGenerator::run()
 
 	if (_missionType == MISS_UFORECOVERY)
 	{
-		// add aliens (should depend on mission type & difficulty level)
-		addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), ENGINEER);
-		addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), NAVIGATOR);
-		addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), SOLDIER);
+		// TODO : this should be in rulesets
+		if (_ufo->getRules()->getType() == "STR_SMALL_SCOUT")
+		{
+			addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), SOLDIER);
+		}
+
+		if (_ufo->getRules()->getType() == "STR_MEDIUM_SCOUT")
+		{
+			addAlien(_game->getRuleset()->getAlien("SECTOID_NAVIGATOR"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), NAVIGATOR);
+			if (RNG::generate(0,100) < 50)
+				addAlien(_game->getRuleset()->getAlien("SECTOID_NAVIGATOR"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), NAVIGATOR);
+			addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), SOLDIER);
+			addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), SOLDIER);
+			if (RNG::generate(0,100) < 50)
+				addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), SOLDIER);
+			if (RNG::generate(0,100) < 50)
+				addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), SOLDIER);
+		}
+
+		if (_ufo->getRules()->getType() == "STR_LARGE_SCOUT")
+		{
+			addAlien(_game->getRuleset()->getAlien("SECTOID_NAVIGATOR"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), NAVIGATOR);
+			if (RNG::generate(0,100) < 50)
+				addAlien(_game->getRuleset()->getAlien("SECTOID_NAVIGATOR"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), NAVIGATOR);
+			addAlien(_game->getRuleset()->getAlien("SECTOID_ENGINEER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), ENGINEER);
+			if (RNG::generate(0,100) < 50)
+				addAlien(_game->getRuleset()->getAlien("SECTOID_ENGINEER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), ENGINEER);
+			int nSoldiers = RNG::generate(1,6);
+			for (int i=0; i < nSoldiers; i++)
+				addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), SOLDIER);
+		}
 	}
 	else
 	{
 		addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), SCOUT);
 		addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), SCOUT);
 		addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), SCOUT);
+		addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), SCOUT);
+		addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), SCOUT);
+		addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), SCOUT);
 	}
-	addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), SCOUT);
-	addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), SCOUT);
-	addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), SCOUT);
 	
 	addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL"));
 	addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL_CLIP"));
