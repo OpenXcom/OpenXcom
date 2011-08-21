@@ -50,7 +50,7 @@ namespace OpenXcom
 XcomResourcePack::XcomResourcePack() : ResourcePack()
 {
 	// Load palettes
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < 5; ++i)
 	{
 		std::stringstream s1, s2;
 		s1 << "GEODATA/PALETTES.DAT";
@@ -69,7 +69,7 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 	std::string font[] = {"BIGLETS.DAT",
 						  "SMALLSET.DAT"};
 	
-	for (int i = 0; i < 2; i++)
+	for (int i = 0; i < 2; ++i)
 	{
 		std::stringstream s;
 		s << "GEODATA/" << font[i];
@@ -88,7 +88,7 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 						  "Italian",
 						  "Spanish"};
 
-	for (int i = 1; i < 5; i++)
+	for (int i = 1; i < 5; ++i)
 	{
 		std::stringstream s1, s2;
 		s1 << "Language/" << lang[i] << ".geo";
@@ -125,7 +125,7 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 						  "GEOBORD.SCR",
 						  "UP_BORD2.SCR"};
 
-	for (int i = 0; i < 19; i++)
+	for (int i = 0; i < 19; ++i)
 	{
 		std::stringstream s;
 		s << "GEOGRAPH/" << scrs[i];
@@ -177,7 +177,7 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 						  "UP042.SPK",
 						  "GRAPHS.SPK"};
 
-	for (int i = 0; i < 43; i++)
+	for (int i = 0; i < 43; ++i)
 	{
 		std::stringstream s;
 		s << "GEOGRAPH/" << spks[i];
@@ -190,7 +190,7 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 						  "INTICON.PCK",
 						  "TEXTURE.DAT"};
 
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 3; ++i)
 	{
 		std::stringstream s;
 		s << "GEOGRAPH/" << sets[i];
@@ -251,7 +251,7 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 
 	Polyline *l = 0;
 	int start = 0;
-	for (int i = 0; lines[i] > -19.999; i++)
+	for (int i = 0; lines[i] > -19.999; ++i)
 	{
 		if (lines[i] < -9.999 && lines[i] > -10.001)
 		{
@@ -260,7 +260,7 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 				_polylines.push_back(l);
 			}
 			int points = 0;
-			for (int j = i + 1; lines[j] > -9.999; j++)
+			for (int j = i + 1; lines[j] > -9.999; ++j)
 			{
 				points++;
 			}
@@ -317,7 +317,7 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 		cat = false;
 	}
 
-	for (int i = 0; i < 14; i++)
+	for (int i = 0; i < 14; ++i)
 	{
 		if (cat)
 		{
@@ -326,7 +326,7 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 		else
 		{
 			_musics[mus[i]] = new Music();
-			for (int j = 0; j < 3; j++)
+			for (int j = 0; j < 3; ++j)
 			{
 				std::stringstream s;
 				s << "SOUND/" << mus[i] << "." << exts[j];
@@ -371,7 +371,7 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 		wav = false;
 	}
 
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 3; ++i)
 	{
 		if (cats == 0)
 		{
@@ -440,7 +440,7 @@ void XcomResourcePack::loadBattlescapeResources()
 	// Load Battlescape Terrain (only blacks are loaded, others are loaded just in time)
 	std::string bsets[] = {"BLANKS.PCK"};
 
-	for (int i = 0; i < 1; i++)
+	for (int i = 0; i < 1; ++i)
 	{
 		std::stringstream s;
 		s << "TERRAIN/" << bsets[i];
@@ -474,7 +474,7 @@ void XcomResourcePack::loadBattlescapeResources()
 							"X_ROB.PCK"
 					 };
 
-	for (int i = 0; i < 20; i++)
+	for (int i = 0; i < 20; ++i)
 	{
 		std::stringstream s;
 		s << "UNITS/" << usets[i];
@@ -497,7 +497,7 @@ void XcomResourcePack::loadBattlescapeResources()
 
 	std::string scrs[] = {"TAC00.SCR"};
 
-	for (int i = 0; i < 1; i++)
+	for (int i = 0; i < 1; ++i)
 	{
 		std::stringstream s;
 		s << "UFOGRAPH/" << scrs[i];
@@ -525,7 +525,7 @@ void XcomResourcePack::loadBattlescapeResources()
 						  "MAN_2.SPK",
 						  "MAN_3.SPK"};
 
-	for (int i = 0; i < 19; i++)
+	for (int i = 0; i < 19; ++i)
 	{
 		std::stringstream s;
 		s << "UFOGRAPH/" << spks[i];

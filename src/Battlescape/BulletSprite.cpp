@@ -85,9 +85,9 @@ BulletSprite::~BulletSprite()
 void BulletSprite::draw()
 {
 	lock();
-	for (int y = 0; y < 3;y++)
+	for (int y = 0; y < 3;++y)
 	{
-		for (int x = 0; x < 3; x++)
+		for (int x = 0; x < 3; ++x)
 		{
 			this->setPixel(x, y, pixels[_type][x+(y*3)]);
 		}

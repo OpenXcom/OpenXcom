@@ -263,7 +263,7 @@ void TextEdit::draw()
 	if (_isFocused && _blink)
 	{
 		int x = 0;
-		for (unsigned int i = 0; i < _caretPos; i++)
+		for (unsigned int i = 0; i < _caretPos; ++i)
 		{
 			if (_value[i] == ' ')
 			{

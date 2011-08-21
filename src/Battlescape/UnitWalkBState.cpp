@@ -23,6 +23,8 @@
 #include "Pathfinding.h"
 #include "BattlescapeState.h"
 #include "Map.h"
+#include "BattleAIState.h"
+#include "AggroBAIState.h"
 #include "../Engine/Game.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/SavedGame.h"
@@ -40,7 +42,7 @@ namespace OpenXcom
 /**
  * Sets up an UnitWalkBState.
  */
-UnitWalkBState::UnitWalkBState(BattlescapeState *parent) : BattleState(parent)
+UnitWalkBState::UnitWalkBState(BattlescapeState *parent, BattleAction action) : BattleState(parent), _action(action)
 {
 	
 }
@@ -55,18 +57,11 @@ UnitWalkBState::~UnitWalkBState()
 
 void UnitWalkBState::init()
 {
-	if (_parent->getGame()->getSavedGame()->getBattleGame()->getDebugMode())
-	{
-		_parent->setStateInterval(1);
-	}
-	else
-	{
-		_parent->setStateInterval(DEFAULT_WALK_SPEED);
-	}
-	_unit = _parent->getGame()->getSavedGame()->getBattleGame()->getSelectedUnit();
+	setNormalWalkSpeed();
+	_unit = _action.actor;
 	_pf = _parent->getGame()->getSavedGame()->getBattleGame()->getPathfinding();
 	_terrain = _parent->getGame()->getSavedGame()->getBattleGame()->getTerrainModifier();
-	_target = _parent->getAction()->target;
+	_target = _action.target;
 	_pf->calculate(_unit, _target);
 }
 
@@ -78,22 +73,25 @@ void UnitWalkBState::think()
 	if (_unit->getStatus() == STATUS_WALKING)
 	{
 
-		// play footstep sound 1
-		if (_unit->getWalkingPhase() == 3)
+		if (_unit->getVisible())
 		{
-			Tile *tile = _parent->getGame()->getSavedGame()->getBattleGame()->getTile(_unit->getPosition());
-			if (tile->getFootstepSound())
+			// play footstep sound 1
+			if (_unit->getWalkingPhase() == 3)
 			{
-				_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(22 + (tile->getFootstepSound()*2))->play();
+				Tile *tile = _unit->getTile();
+				if (tile->getFootstepSound())
+				{
+					_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(22 + (tile->getFootstepSound()*2))->play();
+				}
 			}
-		}
-		// play footstep sound 2
-		if (_unit->getWalkingPhase() == 7)
-		{
-			Tile *tile = _parent->getGame()->getSavedGame()->getBattleGame()->getTile(_unit->getPosition());
-			if (tile->getFootstepSound())
+			// play footstep sound 2
+			if (_unit->getWalkingPhase() == 7)
 			{
-				_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(23 + (tile->getFootstepSound()*2))->play();
+				Tile *tile = _unit->getTile();
+				if (tile->getFootstepSound())
+				{
+					_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(23 + (tile->getFootstepSound()*2))->play();
+				}
 			}
 		}
 
@@ -102,13 +100,13 @@ void UnitWalkBState::think()
 		// unit moved from one tile to the other, update the tiles
 		if (_unit->getPosition() != _unit->getLastPosition())
 		{
-			_parent->getGame()->getSavedGame()->getBattleGame()->getTile(_unit->getLastPosition())->setUnit(0);
-			_parent->getGame()->getSavedGame()->getBattleGame()->getTile(_unit->getPosition())->setUnit(_unit);
+			_parent->getGame()->getSavedGame()->getBattleGame()->getTile(_unit->getLastPosition())->setUnit(0); //don't change these
+			_parent->getGame()->getSavedGame()->getBattleGame()->getTile(_unit->getPosition())->setUnit(_unit); //don't change these
 			// if the unit changed level, camera changes level with
 			_parent->getMap()->setViewHeight(_unit->getPosition().z);
 		}
 
-		// is the walking cycle finished?
+		// is the step finished?
 		if (_unit->getStatus() == STATUS_STANDING)
 		{
 			unitspotted = _terrain->calculateFOV(_unit);
@@ -116,6 +114,15 @@ void UnitWalkBState::think()
 			if (unitspotted)
 			{
 				_pf->abortPath();
+				if (_unit->getFaction() == FACTION_HOSTILE)
+				{
+					AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(_unit->getCurrentAIState());
+					if (aggro == 0)
+					{
+						_unit->setAIState(new AggroBAIState(_parent->getGame()->getSavedGame()->getBattleGame(), _unit));
+					}
+					_parent->handleAI(_unit);
+				}
 				return;
 			}
 			BattleAction action;
@@ -130,13 +137,21 @@ void UnitWalkBState::think()
 		else
 		{
 			// make sure the unit sprites are up to date
-			_parent->getMap()->cacheUnits();
+			_parent->getMap()->cacheUnit(_unit);
 		}
 	}
 
 	// we are just standing around, shouldn't we be walking?
 	if (_unit->getStatus() == STATUS_STANDING)
 	{
+		if (_unit->getVisible())
+		{
+			setNormalWalkSpeed();
+		}
+		else
+		{
+			_parent->setStateInterval(1);
+		}
 		int dir = _pf->getStartDirection();
 		if (dir != -1)
 		{
@@ -200,11 +215,11 @@ void UnitWalkBState::think()
 				_parent->popState();
 			}
 			// make sure the unit sprites are up to date
-			_parent->getMap()->cacheUnits();
+			_parent->getMap()->cacheUnit(_unit);
 		}
 		else
 		{
-			postWalkingProcedures();
+			postPathProcedures();
 			return;
 		}
 	}
@@ -215,7 +230,7 @@ void UnitWalkBState::think()
 		_unit->turn();
 		unitspotted = _terrain->calculateFOV(_unit);
 		// make sure the unit sprites are up to date
-		_parent->getMap()->cacheUnits();
+		_parent->getMap()->cacheUnit(_unit);
 		if (unitspotted)
 		{
 			_pf->abortPath();
@@ -243,14 +258,29 @@ std::string UnitWalkBState::getResult() const
 
 
 /*
- * Handle some calculations when the walking finished.
+ * Handle some calculations when the path is finished.
  */
-void UnitWalkBState::postWalkingProcedures()
+void UnitWalkBState::postPathProcedures()
 {
 	_terrain->calculateUnitLighting();
 	_terrain->calculateFOV(_unit);
-	_parent->getMap()->cacheUnits();
+	_parent->getMap()->cacheUnit(_unit);
 	_parent->popState();
+}
+
+/*
+ * Handle some calculations when the walking finished.
+ */
+void UnitWalkBState::setNormalWalkSpeed()
+{
+	if (_parent->getGame()->getSavedGame()->getBattleGame()->getDebugMode())
+	{
+		_parent->setStateInterval(1);
+	}
+	else
+	{
+		_parent->setStateInterval(BattlescapeState::DEFAULT_WALK_SPEED);
+	}
 }
 
 }

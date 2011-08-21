@@ -19,6 +19,7 @@
 #include "BattleItem.h"
 #include "BattleUnit.h"
 #include "../Ruleset/RuleItem.h"
+#include "../Ruleset/RuleInventory.h"
 
 namespace OpenXcom
 {
@@ -27,11 +28,8 @@ namespace OpenXcom
  * Initializes a item of the specified type.
  * @param rules Pointer to ruleset.
  */
-BattleItem::BattleItem(RuleItem *rules) : _rules(rules), _owner(0), _previousOwner(0), _ammoItem(0)
+BattleItem::BattleItem(RuleItem *rules) : _rules(rules), _position(-1, -1, -1), _owner(0), _previousOwner(0), _inventorySlot(0), _inventoryX(0), _inventoryY(0), _ammoItem(0), _explodeTurn(0), _ammoQuantity(0)
 {
-	_itemProperty[0] = 0;
-	_itemProperty[1] = 0;
-	_itemProperty[2] = 0;
 	if (_rules->getBattleType() == BT_AMMO)
 	{
 		setAmmoQuantity(_rules->getClipSize());
@@ -51,14 +49,13 @@ BattleItem::~BattleItem()
  */
 void BattleItem::load(const YAML::Node &node)
 {
-	int a;
-
 	node["X"] >> _position.x;
 	node["Y"] >> _position.y;
 	node["Z"] >> _position.z;
 
-	node["inventoryslot"] >> a;
-	_inventorySlot = (InventorySlot)a;
+	//node["inventoryslot"] >> _inventorySlot;
+	node["inventoryX"] >> _inventoryX;
+	node["inventoryY"] >> _inventoryY;
 }
 
 /**
@@ -75,7 +72,9 @@ void BattleItem::save(YAML::Emitter &out) const
 	out << YAML::Key << "Z" << YAML::Value << _position.z;
 	if (_owner)
 		out << YAML::Key << "owner" << YAML::Value << _owner->getId();
-	out << YAML::Key << "inventoryslot" << YAML::Value << (int)_inventorySlot;
+	out << YAML::Key << "inventoryslot" << YAML::Value << _inventorySlot->getId();
+	out << YAML::Key << "inventoryX" << YAML::Value << _inventoryX;
+	out << YAML::Key << "inventoryY" << YAML::Value << _inventoryY;
 
 	out << YAML::EndMap;
 }
@@ -95,7 +94,7 @@ RuleItem *const BattleItem::getRules() const
  */
 int BattleItem::getExplodeTurn() const
 {
-	return _itemProperty[0];
+	return _explodeTurn;
 }
 
 /**
@@ -104,7 +103,7 @@ int BattleItem::getExplodeTurn() const
  */
 void BattleItem::setExplodeTurn(int turn)
 {
-	_itemProperty[0] = turn;
+	_explodeTurn = turn;
 }
 
 /**
@@ -113,7 +112,7 @@ void BattleItem::setExplodeTurn(int turn)
  */
 int BattleItem::getAmmoQuantity() const
 {
-	return _itemProperty[0];
+	return _ammoQuantity;
 }
 
 /**
@@ -122,17 +121,18 @@ int BattleItem::getAmmoQuantity() const
  */
 void BattleItem::setAmmoQuantity(int qty)
 {
-	_itemProperty[0] = qty;
+	_ammoQuantity = qty;
 }
 
 /**
  * Changes the quantity of ammo in this item.
  * @param qty Ammo quantity.
+ * @return bool Got bullets left?
  */
 bool BattleItem::spendBullet()
 {
-	_itemProperty[0]--;
-	if (_itemProperty[0] == 0)
+	_ammoQuantity--;
+	if (_ammoQuantity == 0)
 		return false;
 	else
 		return true;
@@ -164,21 +164,109 @@ void BattleItem::setOwner(BattleUnit *owner)
 }
 
 /**
- * Gets the item's inventory slot.
- * @return InventorySlot
+ * Removes the item from previous owner and moves to new owner.
+ * @param owner pointer to Battleunit
  */
-InventorySlot BattleItem::getSlot() const
+void BattleItem::moveToOwner(BattleUnit *owner)
+{
+	_previousOwner = _owner;
+	_owner = owner;
+	if (_previousOwner != 0)
+	{
+		for (std::vector<BattleItem*>::iterator i = _previousOwner->getInventory()->begin(); i != _previousOwner->getInventory()->end(); ++i)
+		{
+			if ((*i) == this)
+			{
+				_previousOwner->getInventory()->erase(i);
+				break;
+			}
+		}
+	}
+	if (_owner != 0)
+	{
+		_owner->getInventory()->push_back(this);
+	}
+}
+
+/**
+ * Gets the item's inventory slot.
+ * @return slot id
+ */
+RuleInventory *BattleItem::getSlot() const
 {
 	return _inventorySlot;
 }
 
 /**
  * Sets the item's inventory slot.
- * @param slot InventorySlot
+ * @param slot slot id
  */
-void BattleItem::setSlot(InventorySlot slot)
+void BattleItem::setSlot(RuleInventory *slot)
 {
 	_inventorySlot = slot;
+}
+
+/**
+ * Gets the item's inventory X position.
+ * @return X position.
+ */
+int BattleItem::getSlotX() const
+{
+	return _inventoryX;
+}
+
+/**
+ * Sets the item's inventory X position.
+ * @param x X position.
+ */
+void BattleItem::setSlotX(int x)
+{
+	_inventoryX = x;
+}
+
+/**
+ * Gets the item's inventory Y position.
+ * @return Y position.
+ */
+int BattleItem::getSlotY() const
+{
+	return _inventoryY;
+}
+
+/**
+ * Sets the item's inventory Y position.
+ * @param y Y position.
+ */
+void BattleItem::setSlotY(int y)
+{
+	_inventoryY = y;
+}
+
+/**
+ * Checks if the item is covering certain inventory slot(s).
+ * @param x Slot X position.
+ * @param y Slot Y position.
+ * @param item Item to check for overlap, or NULL if none.
+ * @return Whether it's covering or not.
+ */
+bool BattleItem::occupiesSlot(int x, int y, BattleItem *item) const
+{
+	if (item == this)
+		return false;
+	if (_inventorySlot->getType() == INV_HAND)
+		return true;
+	if (item == 0)
+	{
+		return (x >= _inventoryX && x < _inventoryX + _rules->getInventoryWidth() &&
+				y >= _inventoryY && y < _inventoryY + _rules->getInventoryHeight());
+	}
+	else
+	{
+		return !(x >= _inventoryX + _rules->getInventoryWidth() ||
+				x + item->getRules()->getInventoryWidth() <= _inventoryX ||
+				y >= _inventoryY + _rules->getInventoryHeight() ||
+				y + item->getRules()->getInventoryHeight() <= _inventoryY);
+	}
 }
 
 /**

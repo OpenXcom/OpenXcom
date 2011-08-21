@@ -412,7 +412,7 @@ void GeoscapeState::timeAdvance()
 		timeSpan = 12 * 5 * 6 * 2 * 24;
 	}
 
-	for (int i = 0; i < timeSpan && !_pause; i++)
+	for (int i = 0; i < timeSpan && !_pause; ++i)
 	{
 		TimeTrigger trigger;
 		trigger = _game->getSavedGame()->getTime()->advance();
@@ -436,7 +436,7 @@ void GeoscapeState::timeAdvance()
 	_pause = false;
 
 	timeDisplay();
-	_globe->draw();
+	_globe->drawRefresh();
 }
 
 /**
@@ -591,10 +591,10 @@ void GeoscapeState::time30Minutes()
 			break;
 		}
 		u->setLongitude(RNG::generate(0.0, 2*M_PI));
-		u->setLatitude(RNG::generate(-M_PI/2, M_PI/2));
+		u->setLatitude(RNG::generate(-M_PI_2, M_PI_2));
 		Waypoint *w = new Waypoint();
 		w->setLongitude(RNG::generate(0.0, 2*M_PI));
-		w->setLatitude(RNG::generate(-M_PI/2, M_PI/2));
+		w->setLatitude(RNG::generate(-M_PI_2, M_PI_2));
 		u->setDestination(w);
 		u->setSpeed(RNG::generate(u->getRules()->getMaxSpeed() / 4, u->getRules()->getMaxSpeed() / 2));
 		_game->getSavedGame()->getUfos()->push_back(u);
@@ -802,7 +802,7 @@ Globe *const GeoscapeState::getGlobe() const
 
 void GeoscapeState::globeClick(Action *action)
 {
-	int mouseX = (int)floor(action->getXMouse() / action->getXScale()), mouseY = (int)floor(action->getYMouse() / action->getYScale());
+	int mouseX = (int)floor(action->getAbsoluteXMouse()), mouseY = (int)floor(action->getAbsoluteYMouse());
 
 	// Clicking markers on the globe
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
@@ -854,7 +854,7 @@ void GeoscapeState::btnGraphsClick(Action *action)
 	bgen->setMissionType(MISS_TERROR);
 	//bgen->setMissionType(MISS_UFOASSAULT);
 	bgen->setWorldTexture(1);
-	bgen->setWorldShade(1);
+	bgen->setWorldShade(0);
 	bgen->setCraft(_game->getSavedGame()->getBases()->at(0)->getCrafts()->at(0));
 	bgen->run();
 	delete bgen;

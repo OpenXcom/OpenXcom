@@ -28,6 +28,7 @@ namespace OpenXcom
 class Surface;
 class Text;
 class InteractiveSurface;
+class Inventory;
 class SavedBattleGame;
 
 /**
@@ -37,12 +38,15 @@ class InventoryState : public State
 {
 private:
 	Surface *_bg, *_soldier;
-	Text *_txtName, *_txtTus;
+	Text *_txtName, *_txtTus, *_txtItem, *_txtAmmo;
 	InteractiveSurface *_btnOk, *_btnPrev, *_btnNext, *_btnUnload, *_btnGround, *_btnRank;
+	Surface *_selAmmo;
+	Inventory *_inv;
 	SavedBattleGame *_battleGame;
+	bool _tu;
 public:
 	/// Creates the Inventory state.
-	InventoryState(Game *game);
+	InventoryState(Game *game, bool tu);
 	/// Cleans up the Inventory state.
 	~InventoryState();
 	/// Updates the soldier info.
@@ -54,7 +58,13 @@ public:
 	/// Handler for clicking the Next button.
 	void btnNextClick(Action *action);
 	/// Handler for clicking the Rank button.
+	void btnUnloadClick(Action *action);
+	/// Handler for clicking on the Ground -> button.
+	void btnGroundClick(Action *action);
+	/// Handler for clicking on the inventory.
 	void btnRankClick(Action *action);
+	/// Handler for clicking the Unload button.
+	void invClick(Action *action);
 };
 
 }

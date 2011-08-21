@@ -35,7 +35,7 @@ Palette::Palette() : _colors(0)
  */
 Palette::~Palette()
 {
-	free(_colors);
+	delete[] _colors;
 }
 
 /**
@@ -49,7 +49,9 @@ Palette::~Palette()
  */
 void Palette::loadDat(const std::string &filename, int ncolors, int offset)
 {
-	_colors = (SDL_Color *)malloc(sizeof(SDL_Color) * ncolors);
+	if(_colors != 0)
+		throw Exception("loadDat can be run only once");
+	_colors = new SDL_Color[ncolors];
 
 	// Load file and put colors in pallete
 	std::ifstream palFile (filename.c_str(), std::ios::in | std::ios::binary);
@@ -63,12 +65,12 @@ void Palette::loadDat(const std::string &filename, int ncolors, int offset)
 	
 	Uint8 value[3];
 
-	for (int j = 0; j < ncolors && palFile.read((char*)value, 3); j++)
+	for (int i = 0; i < ncolors && palFile.read((char*)value, 3); ++i)
 	{
 		// Correct X-Com colors to RGB colors
-		_colors[j].r = value[0] * 4;
-		_colors[j].g = value[1] * 4;
-		_colors[j].b = value[2] * 4;
+		_colors[i].r = value[0] * 4;
+		_colors[i].g = value[1] * 4;
+		_colors[i].b = value[2] * 4;
 	}
 
 	palFile.close();

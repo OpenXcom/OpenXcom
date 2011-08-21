@@ -692,6 +692,22 @@
 				>
 			</File>						
 			<File
+				RelativePath=".\Battlescape\AggroBAIState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\AggroBAIState.h"
+				>
+			</File>						
+			<File
+				RelativePath=".\Battlescape\BattleAIState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\BattleAIState.h"
+				>
+			</File>						
+			<File
 				RelativePath=".\Battlescape\BattlescapeGenerator.cpp"
 				>
 			</File>
@@ -748,6 +764,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Battlescape\Inventory.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\Inventory.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Battlescape\InventoryState.cpp"
 				>
 			</File>
@@ -785,6 +809,14 @@
 			</File>
 			<File
 				RelativePath=".\Battlescape\PathfindingNode.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\PatrolBAIState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\PatrolBAIState.h"
 				>
 			</File>
 			<File
@@ -865,6 +897,14 @@
 			</File>
 			<File
 				RelativePath=".\Battlescape\UnitWalkBState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\WarningMessage.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\WarningMessage.h"
 				>
 			</File>
 		</Filter>

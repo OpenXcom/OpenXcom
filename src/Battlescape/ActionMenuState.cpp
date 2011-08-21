@@ -38,14 +38,14 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param action Pointer to the action.
  */
-ActionMenuState::ActionMenuState(Game *game, BattleAction *action) : State(game), _action(action)
+ActionMenuState::ActionMenuState(Game *game, BattleAction *action, int x, int y) : State(game), _action(action)
 {
 	_screen = false;
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_4")->getColors());
 
 	for (int i = 0; i < 5; ++i)
 	{
-		_actionMenu[i] = new ActionMenuItem(this, i, _game->getResourcePack()->getFont("BIGLETS.DAT"));
+		_actionMenu[i] = new ActionMenuItem(this, i, _game->getResourcePack()->getFont("BIGLETS.DAT"), x, y);
 		add(_actionMenu[i]);
 		_actionMenu[i]->setVisible(false);
 		_actionMenu[i]->onMouseClick((ActionHandler)&ActionMenuState::btnActionMenuItemClick);
@@ -153,7 +153,7 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 		_action->TU = _actionMenu[btnID]->getTUs();
 		if (_action->type == BA_PRIME)
 		{
-			if (ALT_GRENADE)
+			if (BattlescapeState::ALT_GRENADE)
 			{
 				_action->value = 1;
 				_game->popState();

@@ -21,6 +21,7 @@
 
 #include "BattleState.h"
 #include "Position.h"
+#include "BattlescapeState.h"
 
 namespace OpenXcom
 {
@@ -37,9 +38,12 @@ private:
 	BattleUnit *_unit;
 	Pathfinding *_pf;
 	TerrainModifier *_terrain;
+	BattleAction _action;
+	void postPathProcedures();
+	void setNormalWalkSpeed();
 public:
 	/// Creates a new UnitWalkBState class
-	UnitWalkBState(BattlescapeState *parent);
+	UnitWalkBState(BattlescapeState *parent, BattleAction _action);
 	/// Cleans up the UnitWalkBState.
 	~UnitWalkBState();
 	/// Set the target to walk to.
@@ -52,9 +56,6 @@ public:
 	void think();
 	/// Get the result of the state.
 	std::string getResult() const;
-	/// Post walking procedure
-	void postWalkingProcedures();
-
 };
 
 }

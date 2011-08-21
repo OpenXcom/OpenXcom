@@ -20,6 +20,7 @@
 #include "../Ruleset/MapData.h"
 #include "../Ruleset/MapDataSet.h"
 #include "../Engine/SurfaceSet.h"
+#include "../Engine/Surface.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Exception.h"
 #include "BattleUnit.h"
@@ -33,9 +34,9 @@ namespace OpenXcom
 * constructor
 * @param pos Position.
 */
-Tile::Tile(const Position& pos): _smoke(0), _fire(0),  _explosive(0), _pos(pos), _cached(false), _unit(0)
+Tile::Tile(const Position& pos): _smoke(0), _fire(0),  _explosive(0), _pos(pos), _unit(0), _cache(0), _cacheInvalid(true)
 {
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 4; ++i)
 	{
 		_objects[i] = 0;
 		_currentFrame[i] = 0;
@@ -43,7 +44,7 @@ Tile::Tile(const Position& pos): _smoke(0), _fire(0),  _explosive(0), _pos(pos),
 	for (int layer = 0; layer < LIGHTLAYERS; layer++)
 	{
 		_light[layer] = 0;
-		_lastLight[layer] = 0;
+		_lastLight[layer] = -1;
 	}
 	_discovered[0] = false;
 	_discovered[1] = false;
@@ -57,6 +58,7 @@ Tile::Tile(const Position& pos): _smoke(0), _fire(0),  _explosive(0), _pos(pos),
 Tile::~Tile()
 {
 	_inventory.clear();
+	delete _cache;
 }
 
 /**
@@ -81,7 +83,7 @@ MapData *Tile::getMapData(int part)
 void Tile::setMapData(MapData *dat, int part)
 {
 	_objects[part] = dat;
-	setCached(false);
+	_cacheInvalid = true;
 }
 
 /**
@@ -138,8 +140,8 @@ int Tile::getTUCost(int part, MovementType movementType)
  */
 bool Tile::hasNoFloor()
 {
-	if (_objects[O_FLOOR])
-		return _objects[O_FLOOR]->isNoFloor();
+	if (_objects[MapData::O_FLOOR])
+		return _objects[MapData::O_FLOOR]->isNoFloor();
 	else
 		return true;
 }
@@ -150,8 +152,8 @@ bool Tile::hasNoFloor()
  */
 bool Tile::isBigWall()
 {
-	if (_objects[O_OBJECT])
-		return _objects[O_OBJECT]->isBigWall();
+	if (_objects[MapData::O_OBJECT])
+		return _objects[MapData::O_OBJECT]->isBigWall();
 	else
 		return false;
 }
@@ -164,10 +166,10 @@ int Tile::getTerrainLevel()
 {
 	int level = 0;
 
-	if (_objects[O_FLOOR])
-		level = _objects[O_FLOOR]->getTerrainLevel();
-	if (_objects[O_OBJECT])
-		level += _objects[O_OBJECT]->getTerrainLevel();
+	if (_objects[MapData::O_FLOOR])
+		level = _objects[MapData::O_FLOOR]->getTerrainLevel();
+	if (_objects[MapData::O_OBJECT])
+		level += _objects[MapData::O_OBJECT]->getTerrainLevel();
 
 	return level;
 }
@@ -190,10 +192,10 @@ int Tile::getFootstepSound()
 {
 	int sound = 0;
 
-	if (_objects[O_FLOOR])
-		sound = _objects[O_FLOOR]->getFootstepSound();
-	if (_objects[O_OBJECT])
-		sound = _objects[O_OBJECT]->getFootstepSound();
+	if (_objects[MapData::O_FLOOR])
+		sound = _objects[MapData::O_FLOOR]->getFootstepSound();
+	if (_objects[MapData::O_OBJECT])
+		sound = _objects[MapData::O_OBJECT]->getFootstepSound();
 
 	return sound;
 }
@@ -251,30 +253,11 @@ int Tile::closeUfoDoor()
 		{
 			_currentFrame[part] = 0;
 			retval = 1;
-			setCached(false);
+			_cacheInvalid = true;
 		}
 	}
 
 	return retval;
-}
-
-/**
- * Sets the tile's cache flag. Set when objects or lighting on this tile changed.
- * @param cached
- */
-void Tile::setCached(bool cached)
-{
-	_cached = cached;
-}
-
-/**
- * Check if the tile is still cached in the Map cache.
- * When the tile changes (door/lighting/destroyed), it needs to be re-cached.
- * @return bool
- */
-bool Tile::isCached()
-{
-	return _cached;
 }
 
 /**
@@ -292,11 +275,11 @@ void Tile::setDiscovered(bool flag, int part)
 			_discovered[0] = flag;
 			_discovered[1] = flag;
 		}
-		setCached(false);
+		_cacheInvalid = true;
 		// if light on tile changes, units and objects on it change light too
 		if (_unit != 0)
 		{
-			_unit->setCached(false);
+			_unit->setCache(0);
 		}
 	}
 }
@@ -318,8 +301,8 @@ bool Tile::isDiscovered(int part)
  */
 void Tile::resetLight(int layer)
 {
-	_lastLight[layer] = _light[layer];
 	_light[layer] = 0;
+	_lastLight[layer] = _light[layer];
 }
 
 /**
@@ -331,23 +314,6 @@ void Tile::addLight(int light, int layer)
 {
 	if (_light[layer] < light)
 		_light[layer] = light;
-}
-
-/**
- * Tiles that have their light amount changed, need to be re-cached.
- * @param layer Light is seperated in 3 layers: Ambient, Static and Dynamic.
- */
-void Tile::checkForChangedLight(int layer)
-{
-	if (_lastLight[layer] != _light[layer])
-	{
-		setCached(false);
-		// if light on tile changes, units and objects on it change light too
-		if (_unit != 0)
-		{
-			_unit->setCached(false);
-		}
-	}
 }
 
 /**
@@ -391,10 +357,10 @@ void Tile::destroy(int part)
 		}
 	}
 	/* check if the floor on the lowest level is gone */
-	if (part == O_FLOOR && getPosition().z == 0 && _objects[O_FLOOR] == 0)
+	if (part == MapData::O_FLOOR && getPosition().z == 0 && _objects[MapData::O_FLOOR] == 0)
 	{
 		/* replace with scourched earth */
-		setMapData(MapDataSet::getScourgedEarthTile(), O_FLOOR);
+		setMapData(MapDataSet::getScourgedEarthTile(), MapData::O_FLOOR);
 	}
 
 
@@ -444,7 +410,7 @@ void Tile::detonate()
 	{
 		// explosions create smoke which only stays 1 or 2 turns
 		addSmoke(1);
-		for (int i = 0; i < 4; i++)
+		for (int i = 0; i < 4; ++i)
 		{
 			if(_objects[i])
 			{
@@ -481,7 +447,7 @@ int Tile::getFlammability()
 {
 	int flam = 255;
 
-	for (int i=0; i < 4; i++)
+	for (int i=0; i < 4; ++i)
 	{
 		if (_objects[i])
 		{
@@ -502,7 +468,7 @@ void Tile::ignite()
 {
 	int fuel = 0;
 
-	for (int i=0; i < 4; i++)
+	for (int i=0; i < 4; ++i)
 	{
 		if (_objects[i])
 		{
@@ -527,7 +493,7 @@ void Tile::ignite()
 void Tile::animate()
 {
 	int newframe;
-	for (int i=0; i < 4; i++)
+	for (int i=0; i < 4; ++i)
 	{
 		if (_objects[i])
 		{
@@ -540,10 +506,11 @@ void Tile::animate()
 			{
 				newframe = 0;
 			}
+
 			// only re-cache when the object actually changed.
 			if (_objects[i]->getSprite(_currentFrame[i]) != _objects[i]->getSprite(newframe))
 			{
-				setCached(false);
+				_cacheInvalid = true;
 			}
 			_currentFrame[i] = newframe;
 		}
@@ -557,6 +524,9 @@ void Tile::animate()
  */
 Surface *Tile::getSprite(int part)
 {
+	if (_objects[part] == 0)
+		return 0;
+
 	return _objects[part]->getDataset()->getSurfaceset()->getFrame(_objects[part]->getSprite(_currentFrame[part]));
 }
 
@@ -566,6 +536,10 @@ Surface *Tile::getSprite(int part)
  */
 void Tile::setUnit(BattleUnit *unit)
 {
+	if (unit != 0)
+	{
+		unit->setTile(this);
+	}
 	_unit = unit;
 }
 
@@ -637,7 +611,24 @@ int Tile::getAnimationOffset()
 void Tile::addItem(BattleItem *item)
 {
 	_inventory.push_back(item);
-	setCached(false);
+	_cacheInvalid = true;
+}
+
+/**
+ * Remove an item from the tile.
+ * @param item
+ */
+void Tile::removeItem(BattleItem *item)
+{
+	for (std::vector<BattleItem*>::iterator i = _inventory.begin(); i != _inventory.end(); ++i)
+	{
+		if ((*i) == item)
+		{
+			_inventory.erase(i);
+			break;
+		}
+	}
+	_cacheInvalid = true;
 }
 
 /**
@@ -668,7 +659,7 @@ void Tile::prepareNewTurn()
 	{
 		// fire will be finished in this turn
 		// destroy all objects that burned, and try to ignite again
-		for (int i = 0; i < 4; i++)
+		for (int i = 0; i < 4; ++i)
 		{
 			if(_objects[i])
 			{
@@ -702,5 +693,43 @@ std::vector<BattleItem *> *Tile::getInventory()
 {
 	return &_inventory;
 }
+
+/**
+ * Sets the tile's cache flag.
+ * Set to true when the unit has to be redrawn from scratch.
+ * @param cached
+ */
+void Tile::setCache(Surface *cache)
+{
+	if (cache == 0)
+	{
+		_cacheInvalid = true;
+	}
+	else
+	{
+		_cache = cache;
+		_cacheInvalid = false;
+	}
+}
+
+/**
+ * Check if the tile is still cached in the Map cache.
+ * When the tile changes it needs to be re-cached.
+ * @return bool
+ */
+Surface *Tile::getCache(bool *invalid)
+{
+	for (int layer = 0; layer < LIGHTLAYERS; layer++)
+	{
+		if (_light[layer] != _lastLight[layer])
+		{
+			_lastLight[layer] = _light[layer];
+			_cacheInvalid = true;
+		}
+	}
+	*invalid = _cacheInvalid;
+	return _cache;
+}
+
 
 }

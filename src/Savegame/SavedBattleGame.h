@@ -22,6 +22,7 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
+#include <string>
 #include "yaml.h"
 #include "BattleItem.h"
 #include "BattleUnit.h"
@@ -43,6 +44,7 @@ class Pathfinding;
 class TerrainModifier;
 class BattleItem;
 class Item;
+class RuleInventory;
 
 /**
  * Enumator containing all the possible mission types.
@@ -85,7 +87,7 @@ public:
 	/// initiliases pathfinding and terrainmodifier
 	void initUtilities(ResourcePack *res);
 	/// Gets the game's mapdatafiles.
-	std::vector<MapDataSet*> *getMapDataSets();
+	std::vector<MapDataSet*> *const getMapDataSets();
 	/// Set the mission type.
 	void setMissionType(MissionType missionType);
 	/// Get the mission type.
@@ -95,27 +97,27 @@ public:
 	/// Get the global shade.
 	int getGlobalShade() const;
 	/// Gets pointer to the tiles, a tile is the smallest component of battlescape.
-	Tile **getTiles();
+	Tile **getTiles() const;
 	/// Get pointer to the list of nodes.
-	std::vector<Node*> *getNodes();
+	std::vector<Node*> *const getNodes();
 	/// Get pointer to the list of items.
-	std::vector<BattleItem*> *getItems();
+	std::vector<BattleItem*> *const getItems();
 	/// Get pointer to the list of units.
-	std::vector<BattleUnit*> *getUnits();
+	std::vector<BattleUnit*> *const getUnits();
 	/// Gets terrain width.
-	int getWidth();
+	int getWidth() const;
 	/// Gets terrain length.
-	int getLength();
+	int getLength() const;
 	/// Gets terrain height.
-	int getHeight();
+	int getHeight() const;
 	/// Conversion between coordinates and the tile index.
-	int getTileIndex(const Position& pos);
+	int getTileIndex(const Position& pos) const;
 	/// Conversion between tile index and coordinates.
-	void getTileCoords(int index, int *x, int *y, int *z);
+	void getTileCoords(int index, int *x, int *y, int *z) const;
 	/// Gets the tile at certain position.
-	Tile *getTile(const Position& pos);
+	Tile *getTile(const Position& pos) const;
 	/// get the currently selected unit
-	BattleUnit *getSelectedUnit();
+	BattleUnit *getSelectedUnit() const;
 	/// set the currently selected unit
 	void setSelectedUnit(BattleUnit *unit);
 	/// select previous soldier
@@ -127,12 +129,9 @@ public:
 	/// select unit with position on map
 	BattleUnit *selectUnit(Tile *tile);
 	/// get the pathfinding object
-	Pathfinding *getPathfinding();
+	Pathfinding *const getPathfinding() const;
 	/// get the terrainmodifier object
-	TerrainModifier *getTerrainModifier();
-	/// get an item from a specific unit and slot
-	BattleItem *getItemFromUnit(BattleUnit *unit, InventorySlot slot);
-	BattleItem *getMainHandWeapon(BattleUnit *unit);
+	TerrainModifier *const getTerrainModifier() const;
 	UnitFaction getSide() const;
 	int getTurn() const;
 	void endTurn();

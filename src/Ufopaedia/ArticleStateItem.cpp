@@ -66,11 +66,7 @@ namespace OpenXcom
 		_image = new Surface(32, 48, 157, 5);
 		add(_image);
 		
-		SurfaceSet *texture = _game->getResourcePack()->getSurfaceSet("BIGOBS.PCK");
-		Surface *graphic = texture->getFrame(defs->item->getBigSprite());
-		graphic->setX((2 - defs->item->getInventoryWidth()) * 8);
-		graphic->setY((3 - defs->item->getInventoryHeight()) * 8);
-		graphic->blit(_image);
+		defs->item->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _image);
 		
 		std::vector<std::string> *ammo_data = defs->item->getCompatibleAmmo();
 
@@ -155,7 +151,7 @@ namespace OpenXcom
 		// AMMO column
 		std::wstringstream ss;
 		
-		for (int i = 0; i<3; i++)
+		for (int i = 0; i<3; ++i)
 		{
 			_txtAmmoType[i] = new Text(80, 10, 200, 24 + i*49);
 			add(_txtAmmoType[i]);
@@ -187,7 +183,7 @@ namespace OpenXcom
 				_txtAmmo->setAlign(ALIGN_CENTER);
 				_txtAmmo->setText(_game->getLanguage()->getString("STR_AMMO").c_str());
 				
-				for (unsigned int i = 0; i < ammo_data->size(); i++)
+				for (unsigned int i = 0; i < ammo_data->size(); ++i)
 				{
 					if (Ufopaedia::isArticleAvailable(_game, (*ammo_data)[i]))
 					{
@@ -198,10 +194,7 @@ namespace OpenXcom
 						ss << ammo_rule->getPower();
 						_txtAmmoDamage[i]->setText(ss.str().c_str());
 
-						graphic = texture->getFrame(ammo_rule->getBigSprite());
-						graphic->setX((2 - ammo_rule->getInventoryWidth()) * 8);
-						graphic->setY((3 - ammo_rule->getInventoryHeight()) * 8);
-						graphic->blit(_imageAmmo[i]);
+						ammo_rule->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _imageAmmo[i]);
 					}
 				}
 				break;

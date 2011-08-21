@@ -42,6 +42,7 @@ enum WindowPopup { POPUP_NONE, POPUP_HORIZONTAL, POPUP_VERTICAL, POPUP_BOTH };
 class Window : public Surface
 {
 private:
+	static const double POPUP_SPEED;
 	Surface *_bg;
 	Uint8 _color;
 	WindowPopup _popup;
@@ -50,9 +51,9 @@ private:
 	State *_state;
 public:
 	static Sound *soundPopup[3];
-	/// Creates a new window with the specified size and position
+	/// Creates a new window with the specified size and position.
 	Window(State *state, int width, int height, int x = 0, int y = 0, WindowPopup popup = POPUP_NONE);
-	/// Cleans up the window
+	/// Cleans up the window.
 	~Window();
 	/// Sets the background surface.
 	void setBackground(Surface *bg);

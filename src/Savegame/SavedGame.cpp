@@ -153,7 +153,7 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
     parser.GetNextDocument(doc);
 	std::string v;
 	doc["version"] >> v;
-	if (v != "0.2")
+	if (v != Options::getVersion())
 	{
 		throw Exception("Version mismatch");
 	}
@@ -167,7 +167,7 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	doc["funds"] >> _funds;
 
 	size = doc["countries"].size();
-	for (unsigned int i = 0; i < size; i++)
+	for (unsigned int i = 0; i < size; ++i)
 	{
 		std::string type;
 		doc["countries"][i]["type"] >> type;
@@ -177,7 +177,7 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	}
 
 	size = doc["regions"].size();
-	for (unsigned int i = 0; i < size; i++)
+	for (unsigned int i = 0; i < size; ++i)
 	{
 		std::string type;
 		doc["regions"][i]["type"] >> type;
@@ -187,7 +187,7 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	}
 
 	size = doc["ufos"].size();
-	for (unsigned int i = 0; i < size; i++)
+	for (unsigned int i = 0; i < size; ++i)
 	{
 		std::string type;
 		doc["ufos"][i]["type"] >> type;
@@ -199,7 +199,7 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	doc["craftId"] >> _craftId;
 
 	size = doc["waypoints"].size();
-	for (unsigned int i = 0; i < size; i++)
+	for (unsigned int i = 0; i < size; ++i)
 	{
 		Waypoint *w = new Waypoint();
 		w->load(doc["waypoints"][i]);
@@ -210,7 +210,7 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	doc["waypointId"] >> _waypointId;
 
 	size = doc["bases"].size();
-	for (unsigned int i = 0; i < size; i++)
+	for (unsigned int i = 0; i < size; ++i)
 	{
 		Base *b = new Base(rule);
 		b->load(doc["bases"][i], this);
@@ -244,7 +244,7 @@ void SavedGame::save(const std::string &filename) const
 	// Saves the brief game info used in the saves list
 	out << YAML::BeginDoc;
 	out << YAML::BeginMap;
-	out << YAML::Key << "version" << YAML::Value << "0.2";
+	out << YAML::Key << "version" << YAML::Value << Options::getVersion();
 	out << YAML::Key << "time" << YAML::Value;
 	_time->save(out);
 	out << YAML::EndMap;

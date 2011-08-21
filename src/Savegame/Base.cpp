@@ -79,7 +79,7 @@ void Base::load(const YAML::Node &node, SavedGame *save)
 	_name = Language::utf8ToWstr(name);
 
 	size = node["facilities"].size();
-	for (unsigned int i = 0; i < size; i++)
+	for (unsigned int i = 0; i < size; ++i)
 	{
 		int x, y;
 		node["facilities"][i]["x"] >> x;
@@ -92,7 +92,7 @@ void Base::load(const YAML::Node &node, SavedGame *save)
 	}
 
 	size = node["crafts"].size();
-	for (unsigned int i = 0; i < size; i++)
+	for (unsigned int i = 0; i < size; ++i)
 	{
 		std::string type;
 		node["crafts"][i]["type"] >> type;
@@ -135,7 +135,7 @@ void Base::load(const YAML::Node &node, SavedGame *save)
 	}
 
 	size = node["soldiers"].size();
-	for (unsigned int i = 0; i < size; i++)
+	for (unsigned int i = 0; i < size; ++i)
 	{
 		Soldier *s = new Soldier(_rule->getSoldier("XCOM"), _rule->getArmor("STR_NONE_UC"));
 		s->load(node["soldiers"][i]);
@@ -162,7 +162,7 @@ void Base::load(const YAML::Node &node, SavedGame *save)
 	node["engineers"] >> _engineers;
 
 	size = node["transfers"].size();
-	for (unsigned int i = 0; i < size; i++)
+	for (unsigned int i = 0; i < size; ++i)
 	{
 		int hours;
 		node["transfers"][i]["hours"] >> hours;

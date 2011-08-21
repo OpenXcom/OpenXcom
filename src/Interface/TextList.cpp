@@ -113,7 +113,7 @@ void TextList::addRow(int cols, ...)
 	std::vector<Text*> temp;
 	int rowX = 0;
 
-	for (int i = 0; i < cols; i++)
+	for (int i = 0; i < cols; ++i)
 	{
 		// Place text
 		Text* txt = new Text(_columns[i], _font->getHeight(), _margin + rowX, getY());
@@ -204,7 +204,7 @@ void TextList::setColumns(int cols, ...)
 	va_list args;
 	va_start(args, cols);
 
-	for (int i = 0; i < cols; i++)
+	for (int i = 0; i < cols; ++i)
 	{
 		_columns.push_back(va_arg(args, int));
 	}
@@ -567,7 +567,7 @@ void TextList::updateArrows()
 void TextList::draw()
 {
 	clear();
-	for (unsigned int i = _scroll; i < _texts.size() && i < _scroll + _visibleRows; i++)
+	for (unsigned int i = _scroll; i < _texts.size() && i < _scroll + _visibleRows; ++i)
 	{
 		for (std::vector<Text*>::iterator j = _texts[i].begin(); j < _texts[i].end(); ++j)
 		{
@@ -594,7 +594,7 @@ void TextList::blit(Surface *surface)
 		_down->blit(surface);
 		if (_arrowPos != -1)
 		{
-			for (unsigned int i = _scroll; i < _texts.size() && i < _scroll + _visibleRows; i++)
+			for (unsigned int i = _scroll; i < _texts.size() && i < _scroll + _visibleRows; ++i)
 			{
 				_arrowLeft[i]->setY(getY() + (i - _scroll) * (_font->getHeight() + _font->getSpacing()));
 				_arrowLeft[i]->blit(surface);
@@ -617,7 +617,7 @@ void TextList::handle(Action *action, State *state)
 	_down->handle(action, state);
 	if (_arrowPos != -1)
 	{
-		for (unsigned int i = _scroll; i < _texts.size() && i < _scroll + _visibleRows; i++)
+		for (unsigned int i = _scroll; i < _texts.size() && i < _scroll + _visibleRows; ++i)
 		{
 			_arrowLeft[i]->handle(action, state);
 			_arrowRight[i]->handle(action, state);
@@ -709,8 +709,7 @@ void TextList::mouseOver(Action *action, State *state)
 	if (_selectable)
 	{
 		int h = _font->getHeight() + _font->getSpacing();
-		double y = action->getYMouse() - getY() * action->getYScale();
-		_selRow = _scroll + (int)floor(y / (h * action->getYScale()));
+		_selRow = _scroll + (int)floor(action->getRelativeYMouse() / (h * action->getYScale()));
 
 		if (_selRow < _texts.size())
 		{

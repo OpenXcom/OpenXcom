@@ -141,7 +141,7 @@ double MovingTarget::getRadianSpeed() const
 double MovingTarget::getDistance(Target *target, double *dLon, double *dLat) const
 {
 	double minLength = 2*M_PI, lat = target->getLatitude();
-	for (double lon = target->getLongitude() - 2*M_PI; lon <= target->getLongitude() + 2*M_PI; lon += 2*M_PI)
+	for (double lon = target->getLongitude() - 2*M_PI; lon <= target->getLongitude() + 2*M_PI + 0.01; lon += 2*M_PI)
 	{
 		double dx = lon - _lon;
 		double dy = lat - _lat;

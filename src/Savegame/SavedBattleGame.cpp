@@ -17,7 +17,6 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #include "SavedBattleGame.h"
 #include "SavedGame.h"
 #include "Tile.h"
@@ -83,7 +82,7 @@ void SavedBattleGame::load(const YAML::Node &node)
 	node["height"] >> _height;
 
 	size = node["mapdatafiles"].size();
-	for (unsigned int i = 0; i < size; i++)
+	for (unsigned int i = 0; i < size; ++i)
 	{
 		std::string name;
 		node["mapdatafiles"][i] >> name;
@@ -100,7 +99,7 @@ void SavedBattleGame::load(const YAML::Node &node)
 	std::vector<unsigned char> data;
 	node["tiles"] >> s;
 	//Base64Decode(s, data);
-	for (int i = 0; i < _height * _length * _width; i++)
+	for (int i = 0; i < _height * _length * _width; ++i)
 	{
 		if (!empties)
 		{
@@ -138,7 +137,7 @@ void SavedBattleGame::loadMapResources(ResourcePack *res)
 
 	int mdsID = 0, mdID = 0;
 
-	for (int i = 0; i < _height * _length * _width; i++)
+	for (int i = 0; i < _height * _length * _width; ++i)
 	{
 		for (int part = 0; part < 4; part++)
 		{
@@ -179,7 +178,7 @@ void SavedBattleGame::save(YAML::Emitter &out) const
 	Uint16 empties = 0;
 	std::vector<unsigned char> data;
 
-	for (int i = 0; i < _height * _length * _width; i++)
+	for (int i = 0; i < _height * _length * _width; ++i)
 	{
 		if (_tiles[i]->isVoid())
 		{
@@ -242,7 +241,7 @@ void SavedBattleGame::save(YAML::Emitter &out) const
  * Gets a pointer to the array of tiles.
  * @return A pointer to Tile array.
  */
-Tile **SavedBattleGame::getTiles()
+Tile **SavedBattleGame::getTiles() const
 {
 	return _tiles;
 }
@@ -320,7 +319,7 @@ int SavedBattleGame::getGlobalShade() const
  * Gets the map width.
  * @return Width in tiles.
  */
-int SavedBattleGame::getWidth()
+int SavedBattleGame::getWidth() const
 {
 	return _width;
 }
@@ -329,7 +328,7 @@ int SavedBattleGame::getWidth()
  * Gets the map length.
  * @return Length in tiles.
  */
-int SavedBattleGame::getLength()
+int SavedBattleGame::getLength() const
 {
 	return _length;
 }
@@ -338,7 +337,7 @@ int SavedBattleGame::getLength()
  * Gets the map height.
  * @return Height in layers.
  */
-int SavedBattleGame::getHeight()
+int SavedBattleGame::getHeight() const
 {
 	return _height;
 }
@@ -348,7 +347,7 @@ int SavedBattleGame::getHeight()
  * @param pos position
  * @return Unique index.
  */
-int SavedBattleGame::getTileIndex(const Position& pos)
+int SavedBattleGame::getTileIndex(const Position& pos) const
 {
 	return pos.z * _length * _width + pos.y * _width + pos.x;
 }
@@ -361,7 +360,7 @@ int SavedBattleGame::getTileIndex(const Position& pos)
  * @param z pointer to Z coordinate.
  * @return Unique index.
  */
-void SavedBattleGame::getTileCoords(int index, int *x, int *y, int *z)
+void SavedBattleGame::getTileCoords(int index, int *x, int *y, int *z) const
 {
 	*z = index / (_length * _width);
 	*y = (index % (_length * _width)) / _width;
@@ -373,7 +372,7 @@ void SavedBattleGame::getTileCoords(int index, int *x, int *y, int *z)
  * @param pos position
  * @return Pointer to tile.
  */
-Tile *SavedBattleGame::getTile(const Position& pos)
+Tile *SavedBattleGame::getTile(const Position& pos) const
 {
 	if (pos.x < 0 || pos.y < 0 || pos.z < 0
 		|| pos.x >= _width || pos.y >= _length || pos.z >= _height)
@@ -386,7 +385,7 @@ Tile *SavedBattleGame::getTile(const Position& pos)
  * Gets the currently selected unit
  * @return pointer to BattleUnit.
  */
-BattleUnit *SavedBattleGame::getSelectedUnit()
+BattleUnit *SavedBattleGame::getSelectedUnit() const
 {
 	return _selectedUnit;
 }
@@ -459,6 +458,11 @@ BattleUnit *SavedBattleGame::selectNextPlayerUnit(bool checkReselect)
 	{
 		bNext = true;
 	}
+	else
+	if (checkReselect)
+	{
+		_selectedUnit->dontReselect();
+	}
 
 	do
 	{
@@ -515,7 +519,7 @@ BattleUnit *SavedBattleGame::selectUnit(const Position& pos)
  * Gets the list of nodes.
  * @return pointer to the list of nodes
  */
-std::vector<Node*> *SavedBattleGame::getNodes()
+std::vector<Node*> *const SavedBattleGame::getNodes()
 {
 	return &_nodes;
 }
@@ -524,7 +528,7 @@ std::vector<Node*> *SavedBattleGame::getNodes()
  * Gets the list of units.
  * @return pointer to the list of units
  */
-std::vector<BattleUnit*> *SavedBattleGame::getUnits()
+std::vector<BattleUnit*> *const SavedBattleGame::getUnits()
 {
 	return &_units;
 }
@@ -533,7 +537,7 @@ std::vector<BattleUnit*> *SavedBattleGame::getUnits()
  * Gets the list of items.
  * @return pointer to the list of items
  */
-std::vector<BattleItem*> *SavedBattleGame::getItems()
+std::vector<BattleItem*> *const SavedBattleGame::getItems()
 {
 	return &_items;
 }
@@ -542,7 +546,7 @@ std::vector<BattleItem*> *SavedBattleGame::getItems()
  * Get the pathfinding object.
  * @return pointer to the pathfinding object
  */
-Pathfinding *SavedBattleGame::getPathfinding()
+Pathfinding *const SavedBattleGame::getPathfinding() const
 {
 	return _pathfinding;
 }
@@ -551,7 +555,7 @@ Pathfinding *SavedBattleGame::getPathfinding()
  * Get the terrain modifier object.
  * @return pointer to the terrain modifier object
  */
-TerrainModifier *SavedBattleGame::getTerrainModifier()
+TerrainModifier *const SavedBattleGame::getTerrainModifier() const
 {
 	return _terrainModifier;
 }
@@ -560,56 +564,10 @@ TerrainModifier *SavedBattleGame::getTerrainModifier()
 * gets a pointer to the array of mapblock
 * @return pointer to the array of mapblocks
 */
-std::vector<MapDataSet*> *SavedBattleGame::getMapDataSets()
+std::vector<MapDataSet*> *const SavedBattleGame::getMapDataSets()
 {
 	return &_mapDataFiles;
 }
-
-/**
-* get an item from a specific unit and slot
-* @return
-*/
-BattleItem *SavedBattleGame::getItemFromUnit(BattleUnit *unit, InventorySlot slot)
-{
-	for (std::vector<BattleItem*>::iterator i = _items.begin(); i != _items.end(); ++i)
-	{
-		if ((*i)->getOwner() == unit && (*i)->getSlot() == slot)
-		{
-			return *i;
-		}
-	}
-	return 0;
-}
-
-/**
-* Get the "main hand weapon" from the unit.
-* @return
-*/
-BattleItem *SavedBattleGame::getMainHandWeapon(BattleUnit *unit)
-{
-
-	BattleItem *weaponRightHand = getItemFromUnit(unit, RIGHT_HAND);
-	BattleItem *weaponLeftHand = getItemFromUnit(unit, LEFT_HAND);
-
-	// if there is only one weapon, or only one weapon loaded (rules out grenades) it's easy:
-	if (!weaponRightHand || !weaponRightHand->getAmmoItem() || !weaponRightHand->getAmmoItem()->getAmmoQuantity())
-		return weaponLeftHand;
-	if (!weaponLeftHand || !weaponLeftHand->getAmmoItem() || !weaponLeftHand->getAmmoItem()->getAmmoQuantity())
-		return weaponRightHand;
-
-	// otherwise pick the one with the least snapshot TUs
-	int tuRightHand = weaponRightHand->getRules()->getTUSnap();
-	int tuLeftHand = weaponRightHand->getRules()->getTUSnap();
-	if (tuLeftHand >= tuRightHand)
-	{
-		return weaponRightHand;
-	}
-	else
-	{
-		return weaponLeftHand;
-	}
-}
-
 
 /**
  * TODO function header.
@@ -641,6 +599,14 @@ void SavedBattleGame::endTurn()
 	if (_side == FACTION_PLAYER)
 	{
 		_side = FACTION_HOSTILE;
+		// hide all aliens
+		for (std::vector<BattleUnit*>::iterator i = _units.begin(); i != _units.end(); ++i)
+		{
+			if ((*i)->getFaction() == _side)
+			{
+				(*i)->setVisible(false);
+			}
+		}
 	}
 	else if (_side == FACTION_HOSTILE)
 	{
@@ -654,6 +620,7 @@ void SavedBattleGame::endTurn()
 		if ((*i)->getFaction() == _side)
 		{
 			(*i)->prepareNewTurn();
+			_terrainModifier->calculateFOV((*i));
 		}
 	}
 

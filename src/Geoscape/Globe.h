@@ -127,6 +127,8 @@ public:
 	void rotate();
 	/// Draws the whole globe.
 	void draw();
+	/// Refreshes the globe.
+	void drawRefresh();
 	/// Draws the ocean of the globe.
 	void drawOcean();
 	/// Draws the land of the globe.

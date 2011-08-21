@@ -21,12 +21,16 @@
 #include "BattleItem.h"
 #include <cmath>
 #include "../Engine/Palette.h"
+#include "../Engine/Surface.h"
 #include "../Engine/Language.h"
 #include "../Battlescape/Pathfinding.h"
+#include "../Battlescape/BattleAIState.h"
 #include "Alien.h"
 #include "Soldier.h"
 #include "../Ruleset/RuleArmor.h"
 #include "../Engine/RNG.h"
+#include "../Ruleset/RuleInventory.h"
+#include "Tile.h"
 
 namespace OpenXcom
 {
@@ -36,7 +40,7 @@ namespace OpenXcom
  * @param rules Pointer to RuleUnit object.
  * @param faction Which faction the units belongs to.
  */
-BattleUnit::BattleUnit(Unit *unit, UnitFaction faction) : _unit(unit), _faction(faction), _id(0), _pos(Position()), _lastPos(Position()), _direction(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _cached(false), _kneeled(false), _dontReselect(false), _fire(0)
+BattleUnit::BattleUnit(Unit *unit, UnitFaction faction) : _unit(unit), _faction(faction), _id(0), _pos(Position()), _tile(0), _lastPos(Position()), _direction(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cache(0), _cacheInvalid(true)
 {
 	_tu = unit->getTimeUnits();
 	_energy = unit->getStamina();
@@ -48,7 +52,7 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction) : _unit(unit), _faction(
 	_armor[SIDE_RIGHT] = unit->getArmor()->getSideArmor();
 	_armor[SIDE_REAR] = unit->getArmor()->getRearArmor();
 	_armor[SIDE_UNDER] = unit->getArmor()->getUnderArmor();
-	for (int i = 0; i < 6; i++)
+	for (int i = 0; i < 6; ++i)
 		_fatalWounds[i] = 0;
 }
 
@@ -57,7 +61,7 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction) : _unit(unit), _faction(
  */
 BattleUnit::~BattleUnit()
 {
-
+	delete _cache;
 }
 
 /**
@@ -219,7 +223,7 @@ void BattleUnit::startWalking(int direction, const Position &destination)
 	_walkPhase = 0;
 	_destination = destination;
 	_lastPos = _pos;
-	_cached = false;
+	_cacheInvalid = true;
 	_kneeled = false;
 }
 
@@ -249,7 +253,7 @@ void BattleUnit::keepWalking()
 		_walkPhase = 0;
 	}
 
-	_cached = false;
+	_cacheInvalid = true;
 }
 
 /*
@@ -321,7 +325,7 @@ void BattleUnit::turn()
         }
         if (_direction < 0) _direction = 7;
         if (_direction > 7) _direction = 0;
-		_cached = false;
+		_cacheInvalid = true;
     }
 
 	if (_toDirection == _direction)
@@ -353,9 +357,17 @@ UnitFaction BattleUnit::getFaction() const
  * Set to true when the unit has to be redrawn from scratch.
  * @param cached
  */
-void BattleUnit::setCached(bool cached)
+void BattleUnit::setCache(Surface *cache)
 {
-	_cached = cached;
+	if (cache == 0)
+	{
+		_cacheInvalid = true;
+	}
+	else
+	{
+		_cache = cache;
+		_cacheInvalid = false;
+	}
 }
 
 /**
@@ -363,9 +375,10 @@ void BattleUnit::setCached(bool cached)
  * When the unit changes it needs to be re-cached.
  * @return bool
  */
-bool BattleUnit::isCached() const
+Surface *BattleUnit::getCache(bool *invalid) const
 {
-	return _cached;
+	*invalid = _cacheInvalid;
+	return _cache;
 }
 
 /**
@@ -375,7 +388,7 @@ bool BattleUnit::isCached() const
 void BattleUnit::kneel(bool kneeled)
 {
 	_kneeled = kneeled;
-	setCached(false);
+	_cacheInvalid = true;
 }
 
 /**
@@ -398,7 +411,7 @@ void BattleUnit::aim(bool aiming)
 	else
 		_status = STATUS_STANDING;
 
-	setCached(false);
+	_cacheInvalid = true;
 }
 
 /**
@@ -583,7 +596,7 @@ void BattleUnit::startFalling()
 {
 	_status = STATUS_FALLING;
 	_fallPhase = 0;
-	setCached(false);
+	_cacheInvalid = true;
 }
 
 /**
@@ -600,7 +613,7 @@ void BattleUnit::keepFalling()
 		else
 			_status = STATUS_UNCONSCIOUS;
 	}
-	setCached(false);
+	_cacheInvalid = true;
 }
 
 
@@ -629,8 +642,13 @@ bool BattleUnit::isOut() const
  * @param item
  * @return TUs
  */
-int BattleUnit::getActionTUs(BattleActionType actionType, BattleItem *item)
+int BattleUnit::getActionTUs(BattleActionType actionType, BattleItem *item) const
 {
+	if (item == 0)
+	{
+		return 0;
+	}
+
 	switch (actionType)
 	{
 		case BA_PRIME:
@@ -643,9 +661,9 @@ int BattleUnit::getActionTUs(BattleActionType actionType, BattleItem *item)
 			return (int)(getUnit()->getTimeUnits() * item->getRules()->getTUSnap() / 100);
 		case BA_AIMEDSHOT:
 			return (int)(getUnit()->getTimeUnits() * item->getRules()->getTUAimed() / 100);
+		default:
+			return 0;
 	}
-
-	return 0;
 }
 
 
@@ -657,7 +675,7 @@ int BattleUnit::getActionTUs(BattleActionType actionType, BattleItem *item)
  */
 bool BattleUnit::spendTimeUnits(int tu, bool debugmode)
 {
-	if (debugmode) return true;
+	if (debugmode && _faction == FACTION_PLAYER) return true;
 
 	if (tu <= _tu)
 	{
@@ -714,6 +732,8 @@ bool BattleUnit::addToVisibleUnits(BattleUnit *unit)
 			return false;
 		}
 	}
+	if (getFaction() == FACTION_PLAYER)
+		unit->setVisible(true);
 	_visibleUnits.push_back(unit);
 	return true;
 }
@@ -722,7 +742,7 @@ bool BattleUnit::addToVisibleUnits(BattleUnit *unit)
  * Get the pointer to the vector of visible units.
  * @return pointer to vector.
  */
-std::vector<BattleUnit*> *BattleUnit::getVisibleUnits()
+std::vector<BattleUnit*> *const BattleUnit::getVisibleUnits()
 {
 	return &_visibleUnits;
 }
@@ -741,7 +761,7 @@ void BattleUnit::clearVisibleUnits()
  * @param weaponAccuracy
  * @return firing Accuracy
  */
-double BattleUnit::getFiringAccuracy(int weaponAccuracy)
+double BattleUnit::getFiringAccuracy(int weaponAccuracy) const
 {
 	double result = (double)(_unit->getFiringAccuracy()/100.0);
 
@@ -761,7 +781,7 @@ double BattleUnit::getFiringAccuracy(int weaponAccuracy)
  * @param weaponAccuracy
  * @return firing Accuracy
  */
-double BattleUnit::getThrowingAccuracy()
+double BattleUnit::getThrowingAccuracy() const
 {
 	double result = (double)(_unit->getFiringAccuracy()/100.0);
 
@@ -789,7 +809,7 @@ void BattleUnit::setArmor(int armor, UnitSide side)
  * @param side The side of the armor.
  * @return Amount of armor.
  */
-int BattleUnit::getArmor(UnitSide side)
+int BattleUnit::getArmor(UnitSide side) const
 {
 	return _armor[side];
 }
@@ -798,10 +818,10 @@ int BattleUnit::getArmor(UnitSide side)
  * Get total amount of fatal wounds this unit has.
  * @return Number of fatal wounds.
  */
-int BattleUnit::getFatalWounds()
+int BattleUnit::getFatalWounds() const
 {
 	int sum = 0;
-	for (int i = 0; i < 6; i++)
+	for (int i = 0; i < 6; ++i)
 		sum += _fatalWounds[i];
 	return sum;
 }
@@ -902,9 +922,188 @@ void BattleUnit::setFire(int fire)
  * Get the amount of turns this unit is on fire. 0 = no fire.
  * @return fire : amount of turns this tile is on fire.
  */
-int BattleUnit::getFire()
+int BattleUnit::getFire() const
 {
 	return _fire;
 }
 
+/**
+ * Get the pointer to the vector of inventory items.
+ * @return pointer to vector.
+ */
+std::vector<BattleItem*> *const BattleUnit::getInventory()
+{
+	return &_inventory;
 }
+
+/**
+ * Let AI do their thing.
+ */
+void BattleUnit::think(BattleAction *action)
+{
+	_currentAIState->think(action);
+}
+
+/**
+ * Let AI do their thing.
+ */
+void BattleUnit::setAIState(BattleAIState *aiState)
+{
+	if (_currentAIState)
+	{
+		_currentAIState->exit();
+		delete _currentAIState;
+	}
+	_currentAIState = aiState;
+	_currentAIState->enter();
+}
+
+/**
+ * Let AI do their thing.
+ */
+BattleAIState *BattleUnit::getCurrentAIState() const
+{
+	return _currentAIState;
+}
+
+/**
+ * Set whether this unit is visible.
+ * @param flag
+ */
+void BattleUnit::setVisible(bool flag)
+{
+	_visible = flag;
+}
+
+
+/**
+ * Get whether this unit is visible.
+ * @param flag
+ */
+bool BattleUnit::getVisible() const
+{
+	if (getFaction() == FACTION_PLAYER)
+	{
+		return true;
+	}
+	else
+	{
+		return _visible;
+	}
+}
+
+/**
+ * Sets the unit's tile it's standing on
+ * @param tile
+ */
+void BattleUnit::setTile(Tile *tile)
+{
+	_tile = tile;
+}
+
+/**
+ * Gets the unit's tile.
+ * @return Tile
+ */
+Tile *BattleUnit::getTile() const
+{
+	return _tile;
+}
+
+/**
+ * Checks if there's an inventory item in
+ * the specified inventory position.
+ * @param slot Inventory slot.
+ * @param x X position in slot.
+ * @param y Y position in slot.
+ * @return Item in the slot, or NULL if none.
+ */
+BattleItem *BattleUnit::getItem(RuleInventory *slot, int x, int y) const
+{
+	// Soldier items
+	if (slot->getType() != INV_GROUND)
+	{
+		for (std::vector<BattleItem*>::const_iterator i = _inventory.begin(); i != _inventory.end(); ++i)
+		{
+			if ((*i)->getSlot() == slot && (*i)->occupiesSlot(x, y))
+			{
+				return *i;
+			}
+		}
+	}
+	// Ground items
+	else if (_tile != 0)
+	{
+		for (std::vector<BattleItem*>::const_iterator i = _tile->getInventory()->begin(); i != _tile->getInventory()->end(); ++i)
+		{
+			if ((*i)->occupiesSlot(x, y))
+			{
+				return *i;
+			}
+		}
+	}
+	return 0;
+}
+
+/**
+ * Checks if there's an inventory item in
+ * the specified inventory position.
+ * @param slot Inventory slot.
+ * @param x X position in slot.
+ * @param y Y position in slot.
+ * @return Item in the slot, or NULL if none.
+ */
+BattleItem *BattleUnit::getItem(const std::string &slot, int x, int y) const
+{
+	// Soldier items
+	for (std::vector<BattleItem*>::const_iterator i = _inventory.begin(); i != _inventory.end(); ++i)
+	{
+		if ((*i)->getSlot() != 0 && (*i)->getSlot()->getId() == slot && (*i)->occupiesSlot(x, y))
+		{
+			return *i;
+		}
+	}
+	// Ground items
+	if (_tile != 0)
+	{
+		for (std::vector<BattleItem*>::const_iterator i = _tile->getInventory()->begin(); i != _tile->getInventory()->end(); ++i)
+		{
+			if ((*i)->getSlot() != 0 && (*i)->getSlot()->getId() == slot && (*i)->occupiesSlot(x, y))
+			{
+				return *i;
+			}
+		}
+	}
+	return 0;
+}
+
+/**
+* Get the "main hand weapon" from the unit.
+* @return Pointer to item.
+*/
+BattleItem *BattleUnit::getMainHandWeapon() const
+{
+	BattleItem *weaponRightHand = getItem("STR_RIGHT_HAND");
+	BattleItem *weaponLeftHand = getItem("STR_LEFT_HAND");
+
+	// if there is only one weapon, or only one weapon loaded (rules out grenades) it's easy:
+	if (!weaponRightHand || !weaponRightHand->getAmmoItem() || !weaponRightHand->getAmmoItem()->getAmmoQuantity())
+		return weaponLeftHand;
+	if (!weaponLeftHand || !weaponLeftHand->getAmmoItem() || !weaponLeftHand->getAmmoItem()->getAmmoQuantity())
+		return weaponRightHand;
+
+	// otherwise pick the one with the least snapshot TUs
+	int tuRightHand = weaponRightHand->getRules()->getTUSnap();
+	int tuLeftHand = weaponRightHand->getRules()->getTUSnap();
+	if (tuLeftHand >= tuRightHand)
+	{
+		return weaponRightHand;
+	}
+	else
+	{
+		return weaponLeftHand;
+	}
+}
+
+}
+
