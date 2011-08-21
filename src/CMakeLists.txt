@@ -108,6 +108,18 @@ set ( battlescape_src
   Battlescape/UnitWalkBState.cpp
   Battlescape/NextTurnState.cpp
   Battlescape/NextTurnState.h
+  Battlescape/AggroBAIState.cpp
+  Battlescape/AggroBAIState.h
+  Battlescape/BattleAIState.cpp
+  Battlescape/BattleAIState.h
+  Battlescape/BattlescapeMessage.cpp
+  Battlescape/BattlescapeMessage.h
+  Battlescape/Inventory.cpp
+  Battlescape/Inventory.h
+  Battlescape/PatrolBAIState.cpp
+  Battlescape/PatrolBAIState.h
+  Battlescape/WarningMessage.cpp
+  Battlescape/WarningMessage.h
 )
 
 set ( engine_src 
