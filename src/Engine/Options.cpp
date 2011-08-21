@@ -144,7 +144,7 @@ std::string getDataFolder()
 	return _dataFolder;
 }
 
-void setDataFolder(std::string folder)
+void setDataFolder(const std::string& folder)
 {
 	_dataFolder = folder;
 }
@@ -154,17 +154,17 @@ std::string getUserFolder()
 	return _userFolder;
 }
 
-void setUserFolder(std::string folder)
+void setUserFolder(const std::string& folder)
 {
 	_userFolder = folder;
 }
 
-std::string getString(std::string id)
+std::string getString(const std::string& id)
 {
 	return _options[id];
 }
 
-int getInt(std::string id)
+int getInt(const std::string& id)
 {
 	std::stringstream ss;
 	int value;
@@ -173,7 +173,7 @@ int getInt(std::string id)
 	return value;
 }
 
-bool getBool(std::string id)
+bool getBool(const std::string& id)
 {
 	std::stringstream ss;
 	bool value;
@@ -182,19 +182,19 @@ bool getBool(std::string id)
 	return value;
 }
 
-void setString(std::string id, std::string value)
+void setString(const std::string& id, const std::string& value)
 {
 	_options[id] = value;
 }
 
-void setInt(std::string id, int value)
+void setInt(const std::string& id, int value)
 {
 	std::stringstream ss;
 	ss << std::dec << value;
 	_options[id] = ss.str();
 }
 
-void setBool(std::string id, bool value)
+void setBool(const std::string& id, bool value)
 {
 	std::stringstream ss;
 	ss << std::boolalpha << value;
