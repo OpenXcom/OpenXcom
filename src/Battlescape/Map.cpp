@@ -243,7 +243,7 @@ void Map::drawTerrain(Surface *surface)
 	beginX -= _viewHeight + 1;
 	if (beginX < 0)
 		beginX = 0;
-	if (endY > _save->getLength() - 1);
+	if (endY > _save->getLength() - 1)
 		endY = _save->getLength() - 1;
 
 	// if we got bullet, get the highest x and y tiles to draw it on
@@ -992,7 +992,11 @@ void Map::calculateWalkingOffset(BattleUnit *unit, Position *offset)
 void Map::setCursorType(CursorType type)
 {
 	_cursorType = type;
-	_save->getTile(Position(_selectorX, _selectorY, _viewHeight))->setCache(0);
+	for (int z=0; z <= _viewHeight; z++)
+	{
+		_save->getTile(Position(_selectorX, _selectorY, z))->setCache(0);
+	}
+
 }
 
 /**
