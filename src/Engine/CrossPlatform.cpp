@@ -40,6 +40,7 @@
 #include <stdlib.h>
 #include <sys/param.h>
 #include <sys/types.h>
+#include <pwd.h>
 #endif
 
 namespace OpenXcom
