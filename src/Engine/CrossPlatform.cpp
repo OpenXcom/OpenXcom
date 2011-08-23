@@ -35,6 +35,7 @@
 #pragma comment(lib, "shlwapi.lib")
 #else
 #include <string.h>
+#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/param.h>
@@ -165,7 +166,11 @@ std::string findDataFolder(bool exists)
 	struct stat info;
 
 	// Check shared directory
+#ifdef __apple__
+	const char* shared = "/Users/Shared/OpenXcom/";
+#else
 	const char* shared = "/usr/share/openxcom/";
+#endif
 	if (!exists || (stat(shared, &info) == 0 && S_ISDIR(info.st_mode)))
 	{
 		return shared;
@@ -226,11 +231,20 @@ std::string findUserFolder(bool exists)
 	struct stat info;
 	
 	// Check HOME directory
-	char *homedir = getenv("HOME");
-	if (homedir)
+	char *home = getenv("HOME");
+    if (!home)
+    {
+		struct passwd* pwd = getpwuid(getuid());
+		home = pwd->pw_dir;
+    }
+	if (home)
 	{
 		char homePath[MAXPATHLEN];
-		snprintf(homePath, MAXPATHLEN, "%s/.openxcom/", homedir);
+#ifdef __apple__
+		snprintf(homePath, MAXPATHLEN, "%s/Library/Application Support/OpenXcom/", home);
+#else
+		snprintf(homePath, MAXPATHLEN, "%s/.openxcom/", home);
+#endif
 		if (!exists || (stat(homePath, &info) == 0 && S_ISDIR(info.st_mode)))
 		{
 			return homePath;
