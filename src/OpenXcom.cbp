@@ -122,6 +122,10 @@
 		<Unit filename="Battlescape\BattleState.h" />
 		<Unit filename="Battlescape\BattlescapeGenerator.cpp" />
 		<Unit filename="Battlescape\BattlescapeGenerator.h" />
+		<Unit filename="Battlescape\BattlescapeMessage.cpp" />
+		<Unit filename="Battlescape\BattlescapeMessage.h" />
+		<Unit filename="Battlescape\BattlescapeOptionsState.cpp" />
+		<Unit filename="Battlescape\BattlescapeOptionsState.h" />
 		<Unit filename="Battlescape\BattlescapeState.cpp" />
 		<Unit filename="Battlescape\BattlescapeState.h" />
 		<Unit filename="Battlescape\BriefingCrashState.cpp" />

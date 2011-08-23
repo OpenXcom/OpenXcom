@@ -26,6 +26,7 @@
 #include <windows.h>
 #include <shlobj.h>
 #include <shlwapi.h>
+#include <direct.h>
 #ifndef SHGFP_TYPE_CURRENT
 	#define SHGFP_TYPE_CURRENT 0
 #endif
@@ -244,6 +245,21 @@ std::string findUserFolder(bool exists)
 	}
 #endif
 	return "";
+}
+
+/**
+ * Creates a folder at the specified path.
+ * @note Only creates the last folder on the path.
+ * @param path Full path.
+ * @return Error code.
+ */
+int createFolder(const char *path)
+{
+#ifdef _WIN32
+	return _mkdir(path);
+#else
+	return mkdir(path, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+#endif
 }
 
 }

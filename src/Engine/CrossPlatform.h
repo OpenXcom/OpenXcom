@@ -40,6 +40,8 @@ namespace CrossPlatform
 	std::string findDataFolder(bool exists);
 	/// Finds the game's user folder in the system.
 	std::string findUserFolder(bool exists);
+	/// Creates a folder.
+	int createFolder(const char *path);
 }
 
 }

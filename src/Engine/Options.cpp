@@ -21,7 +21,6 @@
 #include <map>
 #include <sstream>
 #include <fstream>
-#include <direct.h>
 #include "yaml.h"
 #include "Exception.h"
 #include "CrossPlatform.h"
@@ -109,7 +108,7 @@ void init(int argc, char** args)
 		if (_userFolder == "")
 		{
 			_userFolder = CrossPlatform::findUserFolder(false);
-			_mkdir(Options::getUserFolder().c_str());
+			CrossPlatform::createFolder(Options::getUserFolder().c_str());
 			save();
 		}
 		// Load existing options
