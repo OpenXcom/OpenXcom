@@ -21,23 +21,25 @@
 #include <map>
 #include <sstream>
 #include <fstream>
+#include <direct.h>
 #include "yaml.h"
 #include "Exception.h"
+#include "CrossPlatform.h"
 
 namespace OpenXcom
 {
 namespace Options
 {
 	
-std::string _version = "0.2";
-std::string _dataFolder = "./DATA/";
-std::string _userFolder = "./USER/";
+std::string _version = "0.3";
+std::string _dataFolder = "";
+std::string _userFolder = "";
 std::map<std::string, std::string> _options;
 
 /**
  * Creates a default set of options based on the system.
  */
-void create()
+void createDefault()
 {
 #ifdef DINGOO
 	setInt("displayWidth", 320);
@@ -81,6 +83,41 @@ void loadArgs(int argc, char** args)
 			}
 		}
 	}
+	if (_userFolder != "")
+	{
+		load();
+	}
+}
+
+/**
+ * Handles the initialization of setting up default options
+ * and finding and loading any existing ones.
+ */
+void init(int argc, char** args)
+{
+	createDefault();
+	loadArgs(argc, args);
+	if (_dataFolder == "")
+	{
+		_dataFolder = CrossPlatform::findDataFolder(true);
+		// Missing data folder is handled in StartState
+	}
+	if (_userFolder == "")
+	{
+		_userFolder = CrossPlatform::findUserFolder(true);
+		// Create user folder and save options
+		if (_userFolder == "")
+		{
+			_userFolder = CrossPlatform::findUserFolder(false);
+			_mkdir(Options::getUserFolder().c_str());
+			save();
+		}
+		// Load existing options
+		else
+		{
+			load();
+		}
+	}
 }
 
 /**
@@ -93,19 +130,14 @@ void load(const std::string &filename)
 	std::ifstream fin(s.c_str());
 	if (!fin)
 	{
-		throw Exception("Failed to load options");
+		//throw Exception("Failed to load options");
+		return;
 	}
     YAML::Parser parser(fin);
 	YAML::Node doc;
 
     parser.GetNextDocument(doc);
-	std::string v;
-	doc["version"] >> v;
-	if (v != _version)
-	{
-		throw Exception("Version mismatch");
-	}
-	doc["options"] >> _options;
+	doc >> _options;
 
 	fin.close();
 }
@@ -125,10 +157,7 @@ void save(const std::string &filename)
 	YAML::Emitter out;
 
 	out << YAML::BeginDoc;
-	out << YAML::BeginMap;
-	out << YAML::Key << "version" << YAML::Value << _version;
-	out << YAML::Key << "options" << YAML::Value << _options;
-	out << YAML::EndMap;
+	out << _options;
 
 	sav << out.c_str();
 	sav.close();
@@ -144,19 +173,9 @@ std::string getDataFolder()
 	return _dataFolder;
 }
 
-void setDataFolder(const std::string& folder)
-{
-	_dataFolder = folder;
-}
-
 std::string getUserFolder()
 {
 	return _userFolder;
-}
-
-void setUserFolder(const std::string& folder)
-{
-	_userFolder = folder;
 }
 
 std::string getString(const std::string& id)

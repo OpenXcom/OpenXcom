@@ -37,9 +37,9 @@ namespace CrossPlatform
 	/// Displays an error message.
 	void showError(const std::wstring &error);
 	/// Finds the game's data folder in the system.
-	std::wstring findDataFolder();
+	std::string findDataFolder(bool exists);
 	/// Finds the game's user folder in the system.
-	std::wstring findUserFolder();
+	std::string findUserFolder(bool exists);
 }
 
 }

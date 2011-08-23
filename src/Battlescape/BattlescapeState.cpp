@@ -63,6 +63,7 @@
 #include "../Interface/FpsCounter.h"
 #include "WarningMessage.h"
 #include "../Menu/SaveGameState.h"
+#include "BattlescapeOptionsState.h"
 
 namespace OpenXcom
 {
@@ -654,7 +655,7 @@ void BattlescapeState::btnShowLayersClick(Action *action)
  */
 void BattlescapeState::btnHelpClick(Action *action)
 {
-
+	_game->pushState(new BattlescapeOptionsState(_game));
 }
 
 /**
@@ -1326,7 +1327,8 @@ void BattlescapeState::handle(Action *action)
 
 		if (action->getDetails()->type == SDL_KEYDOWN)
 		{
-				// "d" - enable debug mode
+#ifdef _DEBUG
+			// "d" - enable debug mode
 			if (action->getDetails()->key.keysym.sym == SDLK_d)
 			{
 				_battleGame->setDebugMode();
@@ -1338,7 +1340,7 @@ void BattlescapeState::handle(Action *action)
 			{
 				_game->pushState(new SaveGameState(_game));
 			}
-
+#endif
 		}
 	}
 

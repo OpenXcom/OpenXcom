@@ -49,8 +49,7 @@ int main(int argc, char** args)
 	try
 	{
 #endif
-		Options::create();
-		Options::loadArgs(argc, args);
+		Options::init(argc, args);
 		game = new Game("OpenXcom " + Options::getVersion(), 320, 200, 16);
 		game->getScreen()->setFullscreen(Options::getBool("fullscreen"));
 		game->getScreen()->setResolution(Options::getInt("displayWidth"), Options::getInt("displayHeight"));
@@ -64,6 +63,7 @@ int main(int argc, char** args)
 		exit(EXIT_FAILURE);
 	}
 #endif
-
+	// Comment this for faster exit.
+	//delete game;
 	return EXIT_SUCCESS;
 }

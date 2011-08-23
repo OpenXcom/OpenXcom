@@ -125,6 +125,21 @@ ActionMenuState::~ActionMenuState()
 }
 
 /**
+ * Closes the window on right-click.
+ * @param action Pointer to an action.
+ */
+void ActionMenuState::handle(Action *action)
+{
+	State::handle(action);
+
+	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN && action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	{
+		_game->popState();
+	}
+
+}
+
+/**
  * Execute the action corresponding with this action menu item.
  * @param action Pointer to an action.
  */

@@ -122,108 +122,106 @@ void showError(const std::wstring &error)
 /**
  * Checks a bunch of predefined paths for the Data folder according
  * to the system and returns the full path.
+ * @param exists Check if the folder actually exists.
  * @return Full path to Data folder.
  */
-std::wstring findDataFolder()
+std::string findDataFolder(bool exists)
 {
 #ifdef _WIN32
-	WCHAR path[MAX_PATH];
+	char path[MAX_PATH];
 
 	// Check in AppData folder
-    if (SUCCEEDED(SHGetFolderPathW(NULL, CSIDL_COMMON_APPDATA, NULL, SHGFP_TYPE_CURRENT, path)))
+    if (SUCCEEDED(SHGetFolderPathA(NULL, CSIDL_COMMON_APPDATA, NULL, SHGFP_TYPE_CURRENT, path)))
 	{
-		PathAppendW(path, L"OpenXcom");
-		if ((GetFileAttributesW(path) & FILE_ATTRIBUTE_DIRECTORY) != 0)
+		PathAppendA(path, "OpenXcom\\");
+		if (!exists || PathIsDirectoryA(path))
 		{
 			return path;
 		}
 	}
 
 	// Check in binary directory
-	if (GetModuleFileNameW(NULL, path, MAX_PATH) != 0)
+	if (GetModuleFileNameA(NULL, path, MAX_PATH) != 0)
 	{
-		PathRemoveFileSpecW(path);
-		PathAppendW(path, L"DATA");
-		if ((GetFileAttributesW(path) & FILE_ATTRIBUTE_DIRECTORY) != 0)
+		PathRemoveFileSpecA(path);
+		PathAppendA(path, "DATA\\");
+		if (!exists || PathIsDirectoryA(path))
 		{
 			return path;
 		}
 	}
 
 	// Check in working directory
-	if (GetCurrentDirectoryW(MAX_PATH, path) != 0)
+	if (GetCurrentDirectoryA(MAX_PATH, path) != 0)
 	{
-		PathAppendW(path, L"DATA");
-		if ((GetFileAttributesW(path) & FILE_ATTRIBUTE_DIRECTORY) != 0)
+		PathAppendA(path, "DATA\\");
+		if (!exists || PathIsDirectoryA(path))
 		{
 			return path;
 		}
 	}
 #else
-	wchar_t path[MAXPATHLEN];
 	struct stat info;
 
 	// Check shared directory
 	const char* shared = "/usr/share/openxcom/";
-	if (stat(shared, &info) == 0 && S_ISDIR(info.st_mode))
+	if (!exists || (stat(shared, &info) == 0 && S_ISDIR(info.st_mode)))
 	{
-		mbstowcs(path, shared, strlen(shared)+1);
-		return path;
+		return shared;
 	}
 
 	// Check working directory
 	const char* working = "./DATA/";
-	if (stat(working, &info) == 0 && S_ISDIR(info.st_mode))
+	if (!exists || (stat(working, &info) == 0 && S_ISDIR(info.st_mode)))
 	{
-		mbstowcs(path, working, strlen(working)+1);
-		return path;
+		return working;
 	}
 #endif
-	return L"";
+	return "";
 }
 
 /**
  * Checks a bunch of predefined paths for the User folder according
  * to the system and returns the full path.
+ * @param exists Check if the folder actually exists.
  * @return Full path to User folder.
  */
-std::wstring findUserFolder()
+std::string findUserFolder(bool exists)
 {
 #ifdef _WIN32
-	WCHAR path[MAX_PATH];
+	char path[MAX_PATH];
 
 	// Check in Documents folder
-    if (SUCCEEDED(SHGetFolderPathW(NULL, CSIDL_PERSONAL, NULL, SHGFP_TYPE_CURRENT, path)))
+    if (SUCCEEDED(SHGetFolderPathA(NULL, CSIDL_PERSONAL, NULL, SHGFP_TYPE_CURRENT, path)))
 	{
-		PathAppendW(path, L"OpenXcom");
-		if ((GetFileAttributesW(path) & FILE_ATTRIBUTE_DIRECTORY) != 0)
+		PathAppendA(path, "OpenXcom\\");
+		if (!exists || PathIsDirectoryA(path))
 		{
 			return path;
 		}
 	}
 
 	// Check in binary directory
-	if (GetModuleFileNameW(NULL, path, MAX_PATH) != 0)
+	if (GetModuleFileNameA(NULL, path, MAX_PATH) != 0)
 	{
-		PathRemoveFileSpecW(path);
-		PathAppendW(path, L"USER");
-		if ((GetFileAttributesW(path) & FILE_ATTRIBUTE_DIRECTORY) != 0)
+		PathRemoveFileSpecA(path);
+		PathAppendA(path, "USER\\");
+		if (!exists || PathIsDirectoryA(path))
 		{
 			return path;
 		}
 	}
 
 	// Check in working directory
-	if (GetCurrentDirectoryW(MAX_PATH, path) != 0)
+	if (GetCurrentDirectoryA(MAX_PATH, path) != 0)
 	{
-		PathAppendW(path, L"USER");
-		if ((GetFileAttributesW(path) & FILE_ATTRIBUTE_DIRECTORY) != 0)
+		PathAppendA(path, "USER\\");
+		if (!exists || PathIsDirectoryA(path))
 		{
 			return path;
 		}
 	}
 #else
-	wchar_t path[MAXPATHLEN];
 	struct stat info;
 	
 	// Check HOME directory
@@ -232,22 +230,20 @@ std::wstring findUserFolder()
 	{
 		char homePath[MAXPATHLEN];
 		snprintf(homePath, MAXPATHLEN, "%s/.openxcom/", homedir);
-		if (stat(homePath, &info) == 0 && S_ISDIR(info.st_mode))
+		if (!exists || (stat(homePath, &info) == 0 && S_ISDIR(info.st_mode)))
 		{
-			mbstowcs(path, homePath, strlen(homePath)+1);
-			return path;
+			return homePath;
 		}
 	}
 
 	// Check working directory
 	const char* working = "./USER/";
-	if (stat(working, &info) == 0 && S_ISDIR(info.st_mode))
+	if (!exists || (stat(working, &info) == 0 && S_ISDIR(info.st_mode)))
 	{
-		mbstowcs(path, working, strlen(working)+1);
-		return path;
+		return working;
 	}
 #endif
-	return L"";
+	return "";
 }
 
 }

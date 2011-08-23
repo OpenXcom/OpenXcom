@@ -83,6 +83,18 @@ Uint8 TextButton::getColor() const
 void TextButton::setFonts(Font *big, Font *small)
 {
 	_text->setFonts(big, small);
+	draw();
+}
+
+/**
+ * Enables/disables high contrast color. Mostly used for
+ * Battlescape text.
+ * @param contrast High contrast setting.
+ */
+void TextButton::setHighContrast(bool contrast)
+{
+	_text->setHighContrast(contrast);
+	draw();
 }
 
 /**

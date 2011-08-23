@@ -30,10 +30,8 @@ namespace OpenXcom
  */
 namespace Options
 {
-	/// Creates a new set of options.
-	void create();
-	/// Loads options from command line arguments.
-	void loadArgs(int argc, char** args);
+	/// Initializes the options settings.
+	void init(int argc, char** args);
 	/// Loads options from YAML.
 	void load(const std::string &filename = "options");
 	/// Saves options to YAML.
@@ -42,12 +40,8 @@ namespace Options
 	std::string getVersion();
 	/// Gets the game's data folder.
 	std::string getDataFolder();
-	/// Sets the game's data folder.
-	void setDataFolder(const std::string& folder);
 	/// Gets the game's user folder.
 	std::string getUserFolder();
-	/// Sets the game's user folder.
-	void setUserFolder(const std::string& folder);
 	/// Gets a string option.
 	std::string getString(const std::string& id);
 	/// Gets an integer option.

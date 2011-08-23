@@ -53,6 +53,8 @@ public:
 	Uint8 getColor() const;
 	/// Sets the text button's various fonts.
 	void setFonts(Font *big, Font *small);
+	/// Sets the text button's high contrast color setting.
+	void setHighContrast(bool contrast);
 	/// Sets the text button's text.
 	void setText(const std::wstring &text);
 	/// Gets the text button's text.
