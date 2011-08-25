@@ -413,9 +413,37 @@ set ( EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin )
 
 add_executable ( openxcom  ${openxcom_src} )
 
+# Extra link flags for windows. they need to be before the SDL/YAML link flags. Otherwise, you will get strange link errors('Undefined reference to WinMain@16')
+if ( WIN32 )
+  target_link_libraries ( openxcom advapi32.lib shell32.lib shlwapi.lib mingw32 -mwindows SDLMain )
+endif ()
 target_link_libraries ( openxcom ${SDL_LIBRARY} ${SDLMIXER_LIBRARY} ${SDLGFX_LIBRARY} ${YAMLCPP_LIBRARY} )
 
 add_custom_command ( TARGET openxcom
   POST_BUILD
   COMMAND cmake -E copy_directory ${CMAKE_SOURCE_DIR}/bin/USER ${EXECUTABLE_OUTPUT_PATH}/USER
   COMMAND cmake -E copy_directory ${CMAKE_SOURCE_DIR}/bin/DATA ${EXECUTABLE_OUTPUT_PATH}/DATA )
+
+# Copy Windows DLL to bin folder
+if ( WIN32 )
+  file ( GLOB Windows_dll "${CMAKE_SOURCE_DIR}/deps/lib/*.dll" )
+  foreach ( dll ${Windows_dll} )
+    add_custom_command ( TARGET openxcom
+      POST_BUILD
+      COMMAND cmake -E copy ${dll} ${EXECUTABLE_OUTPUT_PATH} )
+  endforeach()
+endif ()
+
+#Setup source group for IDE
+if ( MSVC )
+  source_group ( "Basescape" ${basescape_src} )
+  source_group ( "Battlescape" ${battlescape_src} )
+  source_group ( "Engine" ${engine_src} )
+  source_group ( "Geoscape" ${geoscape_src} )
+  source_group ( "Interface" ${interface_src} )
+  source_group ( "Menu" ${menu_src} )
+  source_group ( "Resource" ${resource_src} )
+  source_group ( "Ruleset" ${ruleset_src} )
+  source_group ( "SaveGame" ${savegame_src} )
+  source_group ( "Ufopedia" ${ufopedia_src} )
+endif ()
