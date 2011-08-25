@@ -18,6 +18,7 @@
  */
 
 #include "Options.h"
+#include "SDL_mixer.h"
 #include <map>
 #include <sstream>
 #include <fstream>
@@ -49,6 +50,15 @@ void createDefault()
 	setInt("displayHeight", 400);
 	setBool("fullscreen", false);
 #endif
+	setInt("soundVolume", MIX_MAX_VOLUME);
+	setInt("musicVolume", MIX_MAX_VOLUME);
+	setInt("battleScrollSpeed", 24); // 40, 32, 24, 16, 8
+	setInt("battleScrollType", SCROLL_AUTO);
+	setInt("battleFireSpeed", 20); // 30, 25, 20, 15, 10, 5
+	setInt("battleXcomSpeed", 40); // 60, 50, 40, 30, 20, 10
+	setInt("battleAlienSpeed", 40); // 60, 50, 40, 30, 20, 10
+	// set to true if you want to play with the alternative grenade handling
+	setBool("battleAltGrenade", false);
 }
 
 /**
@@ -91,6 +101,8 @@ void loadArgs(int argc, char** args)
 /**
  * Handles the initialization of setting up default options
  * and finding and loading any existing ones.
+ * @param argc Number of arguments.
+ * @param args Array of argument strings.
  */
 void init(int argc, char** args)
 {
@@ -136,7 +148,13 @@ void load(const std::string &filename)
 	YAML::Node doc;
 
     parser.GetNextDocument(doc);
-	doc >> _options;
+	for (YAML::Iterator i = doc.begin(); i != doc.end(); ++i)
+	{
+		std::string key, value;
+		i.first() >> key;
+		i.second() >> value;
+		_options[key] = value;
+	}
 
 	fin.close();
 }
@@ -162,26 +180,50 @@ void save(const std::string &filename)
 	sav.close();
 }
 
+/**
+ * Returns the game's version in x.x format.
+ * @return String with version number.
+ */
 std::string getVersion()
 {
 	return _version;
 }
 
+/**
+ * Returns the game's Data folder where resources
+ * and X-Com files are loaded from.
+ * @return Full path to Data folder.
+ */
 std::string getDataFolder()
 {
 	return _dataFolder;
 }
 
+/**
+ * Returns the game's User folder where settings
+ * and saves are stored in.
+ * @return Full path to User folder.
+ */
 std::string getUserFolder()
 {
 	return _userFolder;
 }
 
+/**
+ * Returns an option in string format.
+ * @param id Option ID.
+ * @return Option value.
+ */
 std::string getString(const std::string& id)
 {
 	return _options[id];
 }
 
+/**
+ * Returns an option in integer format.
+ * @param id Option ID.
+ * @return Option value.
+ */
 int getInt(const std::string& id)
 {
 	std::stringstream ss;
@@ -191,6 +233,11 @@ int getInt(const std::string& id)
 	return value;
 }
 
+/**
+ * Returns an option in boolean format.
+ * @param id Option ID.
+ * @return Option value.
+ */
 bool getBool(const std::string& id)
 {
 	std::stringstream ss;
@@ -200,11 +247,21 @@ bool getBool(const std::string& id)
 	return value;
 }
 
+/**
+ * Changes an option in string format.
+ * @param id Option ID.
+ * @param value New option value.
+ */
 void setString(const std::string& id, const std::string& value)
 {
 	_options[id] = value;
 }
 
+/**
+ * Changes an option in integer format.
+ * @param id Option ID.
+ * @param value New option value.
+ */
 void setInt(const std::string& id, int value)
 {
 	std::stringstream ss;
@@ -212,6 +269,11 @@ void setInt(const std::string& id, int value)
 	_options[id] = ss.str();
 }
 
+/**
+ * Changes an option in boolean format.
+ * @param id Option ID.
+ * @param value New option value.
+ */
 void setBool(const std::string& id, bool value)
 {
 	std::stringstream ss;

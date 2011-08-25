@@ -39,7 +39,7 @@ private:
 	Window *_window;
 	Text *_txtTitle;
 	Text *_txtScrollSpeed;
-	TextButton *_btnScrollSpeed1, *_btnScrollSpeed2, *_btnScrollSpeed3, *_btnScrollSpeed4, *_btnScrollSpeed5;
+	TextButton *_scrollSpeed, *_btnScrollSpeed1, *_btnScrollSpeed2, *_btnScrollSpeed3, *_btnScrollSpeed4, *_btnScrollSpeed5;
 	Text *_txtScrollType, *_txtTriggerScroll, *_txtAutoScroll;
 	TextButton *_scrollType, *_btnScrollType1, *_btnScrollType2;
 	Text *_txtFireSpeed;

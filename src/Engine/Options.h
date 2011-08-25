@@ -25,6 +25,11 @@ namespace OpenXcom
 {
 
 /**
+ * Enumeration for the battlescape scrolling types.
+ */
+enum ScrollType { SCROLL_TRIGGER, SCROLL_AUTO, SCROLL_RMB };
+
+/**
  * Container for all the various global game options
  * and customizable settings.
  */

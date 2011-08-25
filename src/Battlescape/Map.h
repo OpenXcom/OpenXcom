@@ -46,10 +46,9 @@ enum CursorType { CT_NONE, CT_NORMAL, CT_AIM, CT_PSI, CT_WAYPOINT, CT_THROW };
 class Map : public InteractiveSurface
 {
 private:
-	static const int SCROLL_AMOUNT = 20;
 	static const int SCROLL_BORDER = 5;
 	static const int SCROLL_DIAGONAL_EDGE = 60;
-	static const bool RMB_SCROLL = false;
+	static const int SCROLL_INTERVAL = 50;
 	Game *_game;
 	SavedBattleGame *_save;
 	ResourcePack *_res;

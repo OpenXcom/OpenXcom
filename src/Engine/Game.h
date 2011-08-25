@@ -63,6 +63,8 @@ public:
 	void run();
 	/// Quits the game.
 	void quit();
+	/// Sets the game's audio volume.
+	void setVolume(int sound, int music);
 	/// Gets the game's display screen.
 	Screen *const getScreen() const;
 	/// Gets the game's cursor.

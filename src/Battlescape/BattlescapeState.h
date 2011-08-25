@@ -96,10 +96,7 @@ private:
 	std::vector<State*> _popups;
 	bool _debugPlay;
 public:
-	static const int DEFAULT_WALK_SPEED = 40;
-	static const int DEFAULT_BULLET_SPEED = 5;
 	static const int DEFAULT_ANIM_SPEED = 100;
-	static const bool ALT_GRENADE = false; // set to true if you want to play with the alternative grenade handling
 	/// Creates the Battlescape state.
 	BattlescapeState(Game *game);
 	/// Cleans up the Battlescape state.

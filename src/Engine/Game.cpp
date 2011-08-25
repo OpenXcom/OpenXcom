@@ -192,6 +192,20 @@ void Game::quit()
 }
 
 /**
+ * Changes the audio volume of the music and
+ * sound effect channels.
+ * @param sound Sound volume, from 0 to MIX_MAX_VOLUME.
+ * @param music Music volume, from 0 to MIX_MAX_VOLUME.
+ */
+void Game::setVolume(int sound, int music)
+{
+	if (sound >= 0)
+		Mix_Volume(-1, sound);
+	if (music >= 0)
+		Mix_VolumeMusic(music);
+}
+
+/**
  * Returns the display screen used by the game.
  * @return Pointer to the screen.
  */

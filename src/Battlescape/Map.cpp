@@ -45,7 +45,7 @@
 #include "BattlescapeMessage.h"
 #include "../Savegame/SavedGame.h"
 #include "../Interface/Cursor.h"
-#include "../Engine/Game.h"
+#include "../Engine/Options.h"
 
 /*
   1) Map origin is left corner.
@@ -74,7 +74,7 @@ namespace OpenXcom
  */
 Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) : InteractiveSurface(width, height, x, y), _game(game), _mapOffsetX(-250), _mapOffsetY(250), _viewHeight(0), _selectorX(0), _selectorY(0), _cursorType(CT_NORMAL), _animFrame(0), _scrollX(0), _scrollY(0), _RMBDragging(false), _visibleMapHeight(visibleMapHeight)
 {
-	_scrollTimer = new Timer(50);
+	_scrollTimer = new Timer(SCROLL_INTERVAL);
 	_scrollTimer->onTimer((SurfaceHandler)&Map::scroll);
 	
 	_res = _game->getResourcePack();
@@ -601,7 +601,7 @@ void Map::mouseOver(Action *action, State *state)
 	int posY = action->getYMouse();
 
 	// handle RMB dragging
-	if ((action->getDetails()->motion.state & SDL_BUTTON(SDL_BUTTON_RIGHT)) && RMB_SCROLL)
+	if ((action->getDetails()->motion.state & SDL_BUTTON(SDL_BUTTON_RIGHT)) && Options::getInt("battleScrollType") == SCROLL_RMB)
 	{
 		_RMBDragging = true;
 		_scrollX = (int)(-(double)(_RMBClickX - posX) * (action->getXScale() * 2));
@@ -609,33 +609,33 @@ void Map::mouseOver(Action *action, State *state)
 		_RMBClickX = posX;
 		_RMBClickY = posY;
 	}
+	// handle scrolling with mouse at edge of screen
 	else
 	{
-		// handle scrolling with mouse at edge of screen
 		if (posX < (SCROLL_BORDER * action->getXScale()) && posX > 0)
 		{
-			_scrollX = SCROLL_AMOUNT;
+			_scrollX = Options::getInt("battleScrollSpeed");
 			// if close to top or bottom, also scroll diagonally
 			if (posY < (SCROLL_DIAGONAL_EDGE * action->getYScale()) && posY > 0)
 			{
-				_scrollY = SCROLL_AMOUNT;
+				_scrollY = Options::getInt("battleScrollSpeed");
 			}
 			else if (posY > (getHeight() - SCROLL_DIAGONAL_EDGE) * action->getYScale())
 			{
-				_scrollY = -SCROLL_AMOUNT;
+				_scrollY = -Options::getInt("battleScrollSpeed");
 			}
 		}
 		else if (posX > (getWidth() - SCROLL_BORDER) * action->getXScale())
 		{
-			_scrollX = -SCROLL_AMOUNT;
+			_scrollX = -Options::getInt("battleScrollSpeed");
 			// if close to top or bottom, also scroll diagonally
 			if (posY < (SCROLL_DIAGONAL_EDGE * action->getYScale()) && posY > 0)
 			{
-				_scrollY = SCROLL_AMOUNT;
+				_scrollY = Options::getInt("battleScrollSpeed");
 			}
 			else if (posY > (getHeight() - SCROLL_DIAGONAL_EDGE) * action->getYScale())
 			{
-				_scrollY = -SCROLL_AMOUNT;
+				_scrollY = -Options::getInt("battleScrollSpeed");
 			}
 		}
 		else if (posX)
@@ -645,28 +645,28 @@ void Map::mouseOver(Action *action, State *state)
 
 		if (posY < (SCROLL_BORDER * action->getYScale()) && posY > 0)
 		{
-			_scrollY = SCROLL_AMOUNT;
+			_scrollY = Options::getInt("battleScrollSpeed");
 			// if close to left or right edge, also scroll diagonally
 			if (posX < (SCROLL_DIAGONAL_EDGE * action->getXScale()) && posX > 0)
 			{
-				_scrollX = SCROLL_AMOUNT;
+				_scrollX = Options::getInt("battleScrollSpeed");
 			}
 			else if (posX > (getWidth() - SCROLL_DIAGONAL_EDGE) * action->getXScale())
 			{
-				_scrollX = -SCROLL_AMOUNT;
+				_scrollX = -Options::getInt("battleScrollSpeed");
 			}
 		}
 		else if (posY > (getHeight() - SCROLL_BORDER) * action->getYScale())
 		{
-			_scrollY = -SCROLL_AMOUNT;
+			_scrollY = -Options::getInt("battleScrollSpeed");
 			// if close to left or right edge, also scroll diagonally
 			if (posX < (SCROLL_DIAGONAL_EDGE * action->getXScale()) && posX > 0)
 			{
-				_scrollX = SCROLL_AMOUNT;
+				_scrollX = Options::getInt("battleScrollSpeed");
 			}
 			else if (posX > (getWidth() - SCROLL_DIAGONAL_EDGE) * action->getXScale())
 			{
-				_scrollX = -SCROLL_AMOUNT;
+				_scrollX = -Options::getInt("battleScrollSpeed");
 			}
 		}
 		else if (posY && _scrollX == 0)

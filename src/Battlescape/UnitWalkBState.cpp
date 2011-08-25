@@ -34,7 +34,7 @@
 #include "../Engine/SoundSet.h"
 #include "../Engine/Sound.h"
 #include "../Engine/RNG.h"
-
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -279,7 +279,10 @@ void UnitWalkBState::setNormalWalkSpeed()
 	}
 	else
 	{
-		_parent->setStateInterval(BattlescapeState::DEFAULT_WALK_SPEED);
+		if (_unit->getFaction() == FACTION_PLAYER)
+			_parent->setStateInterval(Options::getInt("battleXcomSpeed"));
+		else
+			_parent->setStateInterval(Options::getInt("battleAlienSpeed"));
 	}
 }
 
