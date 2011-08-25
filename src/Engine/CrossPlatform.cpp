@@ -28,7 +28,7 @@
 #include <shlwapi.h>
 #include <direct.h>
 #ifndef SHGFP_TYPE_CURRENT
-	#define SHGFP_TYPE_CURRENT 0
+#define SHGFP_TYPE_CURRENT 0
 #endif
 #pragma comment(lib, "advapi32.lib")
 #pragma comment(lib, "shell32.lib")
@@ -167,7 +167,7 @@ std::string findDataFolder(bool exists)
 	struct stat info;
 
 	// Check shared directory
-#ifdef __apple__
+#ifdef __APPLE__
 	const char* shared = "/Users/Shared/OpenXcom/";
 #else
 	const char* shared = "/usr/share/openxcom/";
@@ -241,7 +241,7 @@ std::string findUserFolder(bool exists)
 	if (home)
 	{
 		char homePath[MAXPATHLEN];
-#ifdef __apple__
+#ifdef __APPLE__
 		snprintf(homePath, MAXPATHLEN, "%s/Library/Application Support/OpenXcom/", home);
 #else
 		snprintf(homePath, MAXPATHLEN, "%s/.openxcom/", home);
