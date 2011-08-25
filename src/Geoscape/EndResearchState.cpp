@@ -8,6 +8,7 @@
 #include "../Interface/Text.h"
 #include "../Ruleset/RuleResearchProject.h"
 #include "NewPossibleResearchState.h"
+#include "../Ufopaedia/Ufopaedia.h"
 #include <algorithm>
 
 namespace OpenXcom
@@ -79,6 +80,8 @@ void EndResearchState::btnOkClick(Action *action)
 
 void EndResearchState::btnReportClick(Action *action)
 {
+	std::string name (_research->getName ());
+	Ufopaedia::openArticle(_game, name);
 }
 
 }
