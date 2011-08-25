@@ -66,16 +66,16 @@ EndResearchState::EndResearchState(Game * game, Base * base, const RuleResearchP
 
 void EndResearchState::btnOkClick(Action *action)
 {
-	  std::vector<RuleResearchProject *> newPossibleResearch;
-	  getDependableResearch (newPossibleResearch, _research, _game, _base);
-	  if (newPossibleResearch.empty ())
-	  {
-	  	  _game->popState();
-	  }
-	  else
-	  {
-	  	  _game->pushState (new NewPossibleResearchState(_game, _base, newPossibleResearch));
-	  }
+	std::vector<RuleResearchProject *> newPossibleResearch;
+	getDependableResearch (newPossibleResearch, _research, _game, _base);
+	if (newPossibleResearch.empty ())
+	{
+		_game->popState();
+	}
+	else
+	{
+		_game->pushState (new NewPossibleResearchState(_game, _base, newPossibleResearch));
+	}
 }
 
 void EndResearchState::btnReportClick(Action *action)
