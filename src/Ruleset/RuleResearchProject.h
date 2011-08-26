@@ -25,7 +25,8 @@
 namespace OpenXcom
 {
 /**
-   Represent one research project
+   Represent one research project.
+   Dependency and unlock. Dependency is the list of RuleResearchProject which must be discovered before a RuleResearchProject became available. Unlock  are used to immediately unlock a RuleResearchProject(even if not all dependency have been researched).
 */
 class RuleResearchProject
 {
