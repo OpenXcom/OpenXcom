@@ -846,8 +846,7 @@ void GeoscapeState::btnBasesClick(Action *action)
  */
 void GeoscapeState::btnGraphsClick(Action *action)
 {
-	//_game->pushState(new GraphsState(_game));
-
+#ifdef _DEBUG
 	/* Daiky: uncomment this bit to start a terror mission */
 	_game->getSavedGame()->setBattleGame(new SavedBattleGame());
 	BattlescapeGenerator *bgen = new BattlescapeGenerator(_game);
@@ -860,6 +859,9 @@ void GeoscapeState::btnGraphsClick(Action *action)
 	delete bgen;
 	_music = false;
 	_game->pushState(new BattlescapeState(_game));
+#else
+	_game->pushState(new GraphsState(_game));
+#endif
 }
 
 /**

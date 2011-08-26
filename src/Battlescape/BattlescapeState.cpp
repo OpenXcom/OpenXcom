@@ -60,9 +60,11 @@
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Engine/Timer.h"
+#include "../Engine/Options.h"
 #include "../Interface/FpsCounter.h"
 #include "WarningMessage.h"
 #include "../Menu/SaveGameState.h"
+#include "BattlescapeOptionsState.h"
 
 namespace OpenXcom
 {
@@ -77,7 +79,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	int mapWidth = int(game->getScreen()->getWidth() / game->getScreen()->getXScale());
 	int mapHeight = int(game->getScreen()->getHeight() / game->getScreen()->getYScale());
 	int iconsWidth = 320;
-	int iconsHeight = 60;
+	int iconsHeight = 56;
 
 	// Create buttonbar - this should be on the centerbottom of the screen
 	_icons = new Surface(iconsWidth, iconsHeight, mapWidth/2 - iconsWidth/2, mapHeight - iconsHeight);
@@ -87,55 +89,55 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	int visibleMapHeight = mapHeight - iconsHeight;
 	_map = new Map(_game, mapWidth, mapHeight, 0, 0, visibleMapHeight);
 
-	_numLayers = new NumberText(3, 5, _icons->getX() + 232, _icons->getY() + 10);
-	_rank = new Surface(26, 23, _icons->getX() + 107, _icons->getY() + 37);
+	_numLayers = new NumberText(3, 5, _icons->getX() + 232, _icons->getY() + 6);
+	_rank = new Surface(26, 23, _icons->getX() + 107, _icons->getY() + 33);
 
 	// Create buttons
-	_btnUnitUp = new InteractiveSurface(32, 16, _icons->getX() + 48, _icons->getY() + 4);
-	_btnUnitDown = new InteractiveSurface(32, 16, _icons->getX() + 48, _icons->getY() + 20);
-	_btnMapUp = new InteractiveSurface(32, 16, _icons->getX() + 80, _icons->getY() + 4);
-	_btnMapDown = new InteractiveSurface(32, 16, _icons->getX() + 80, _icons->getY() + 20);
-	_btnShowMap = new InteractiveSurface(32, 16, _icons->getX() + 112, _icons->getY() + 4);
-	_btnKneel = new InteractiveSurface(32, 16, _icons->getX() + 112, _icons->getY() + 20);
-	_btnInventory = new InteractiveSurface(32, 16, _icons->getX() + 144, _icons->getY() + 4);
-	_btnCenter = new InteractiveSurface(32, 16, _icons->getX() + 144, _icons->getY() + 20);
-	_btnNextSoldier = new InteractiveSurface(32, 16, _icons->getX() + 176, _icons->getY() + 4);
-	_btnNextStop = new InteractiveSurface(32, 16, _icons->getX() + 176, _icons->getY() + 20);
-	_btnShowLayers = new InteractiveSurface(32, 16, _icons->getX() + 208, _icons->getY() + 4);
-	_btnHelp = new InteractiveSurface(32, 16, _icons->getX() + 208, _icons->getY() + 20);
-	_btnEndTurn = new InteractiveSurface(32, 16, _icons->getX() + 240, _icons->getY() + 4);
-	_btnAbort = new InteractiveSurface(32, 16, _icons->getX() + 240, _icons->getY() + 20);
-	_btnStats = new InteractiveSurface(166, 24, _icons->getX() + 106, _icons->getY() + 36);
-	_btnReserveNone = new ImageButton(28, 11, _icons->getX() + 49, _icons->getY() + 37);
-	_btnReserveSnap = new ImageButton(28, 11, _icons->getX() + 78, _icons->getY() + 37);
-	_btnReserveAimed = new ImageButton(28, 11, _icons->getX() + 49, _icons->getY() + 49);
-	_btnReserveAuto = new ImageButton(28, 11, _icons->getX() + 78, _icons->getY() + 49);
-	_btnLeftHandItem = new InteractiveSurface(32, 48, _icons->getX() + 8, _icons->getY() + 9);
-	_numAmmoLeft = new NumberText(30, 5, _icons->getX() + 8, _icons->getY() + 9);
-	_btnRightHandItem = new InteractiveSurface(32, 48, _icons->getX() + 280, _icons->getY() + 9);
-	_numAmmoRight = new NumberText(30, 5, _icons->getX() + 280, _icons->getY() + 9);
+	_btnUnitUp = new InteractiveSurface(32, 16, _icons->getX() + 48, _icons->getY());
+	_btnUnitDown = new InteractiveSurface(32, 16, _icons->getX() + 48, _icons->getY() + 16);
+	_btnMapUp = new InteractiveSurface(32, 16, _icons->getX() + 80, _icons->getY());
+	_btnMapDown = new InteractiveSurface(32, 16, _icons->getX() + 80, _icons->getY() + 16);
+	_btnShowMap = new InteractiveSurface(32, 16, _icons->getX() + 112, _icons->getY());
+	_btnKneel = new InteractiveSurface(32, 16, _icons->getX() + 112, _icons->getY() + 16);
+	_btnInventory = new InteractiveSurface(32, 16, _icons->getX() + 144, _icons->getY());
+	_btnCenter = new InteractiveSurface(32, 16, _icons->getX() + 144, _icons->getY() + 16);
+	_btnNextSoldier = new InteractiveSurface(32, 16, _icons->getX() + 176, _icons->getY());
+	_btnNextStop = new InteractiveSurface(32, 16, _icons->getX() + 176, _icons->getY() + 16);
+	_btnShowLayers = new InteractiveSurface(32, 16, _icons->getX() + 208, _icons->getY());
+	_btnHelp = new InteractiveSurface(32, 16, _icons->getX() + 208, _icons->getY() + 16);
+	_btnEndTurn = new InteractiveSurface(32, 16, _icons->getX() + 240, _icons->getY());
+	_btnAbort = new InteractiveSurface(32, 16, _icons->getX() + 240, _icons->getY() + 16);
+	_btnStats = new InteractiveSurface(166, 24, _icons->getX() + 106, _icons->getY() + 32);
+	_btnReserveNone = new ImageButton(28, 11, _icons->getX() + 49, _icons->getY() + 33);
+	_btnReserveSnap = new ImageButton(28, 11, _icons->getX() + 78, _icons->getY() + 33);
+	_btnReserveAimed = new ImageButton(28, 11, _icons->getX() + 49, _icons->getY() + 45);
+	_btnReserveAuto = new ImageButton(28, 11, _icons->getX() + 78, _icons->getY() + 45);
+	_btnLeftHandItem = new InteractiveSurface(32, 48, _icons->getX() + 8, _icons->getY() + 5);
+	_numAmmoLeft = new NumberText(30, 5, _icons->getX() + 8, _icons->getY() + 5);
+	_btnRightHandItem = new InteractiveSurface(32, 48, _icons->getX() + 280, _icons->getY() + 5);
+	_numAmmoRight = new NumberText(30, 5, _icons->getX() + 280, _icons->getY() + 5);
 	for (int i = 0; i < 10; ++i)
 	{
 		_btnVisibleUnit[i] = new InteractiveSurface(15, 12, 300, 128 - (i * 13));
 		_numVisibleUnit[i] = new NumberText(15, 12, 306, 132 - (i * 13));
 	}
 	_numVisibleUnit[9]->setX(304); // center number 10
-	_warning = new WarningMessage(224, 24, _icons->getX() + 48, _icons->getY() + 36);
+	_warning = new WarningMessage(224, 24, _icons->getX() + 48, _icons->getY() + 32);
 
 	// Create soldier stats summary
-	_txtName = new Text(120, 10, _icons->getX() + 135, _icons->getY() + 36);
+	_txtName = new Text(120, 10, _icons->getX() + 135, _icons->getY() + 32);
 
-	_numTimeUnits = new NumberText(15, 5, _icons->getX() + 136, _icons->getY() + 46);
-	_barTimeUnits = new Bar(102, 3, _icons->getX() + 170, _icons->getY() + 45);
+	_numTimeUnits = new NumberText(15, 5, _icons->getX() + 136, _icons->getY() + 42);
+	_barTimeUnits = new Bar(102, 3, _icons->getX() + 170, _icons->getY() + 41);
 
-	_numEnergy = new NumberText(15, 5, _icons->getX() + 154, _icons->getY() + 46);
-	_barEnergy = new Bar(102, 3, _icons->getX() + 170, _icons->getY() + 49);
+	_numEnergy = new NumberText(15, 5, _icons->getX() + 154, _icons->getY() + 42);
+	_barEnergy = new Bar(102, 3, _icons->getX() + 170, _icons->getY() + 45);
 
-	_numHealth = new NumberText(15, 5, _icons->getX() + 136, _icons->getY() + 54);
-	_barHealth= new Bar(102, 3, _icons->getX() + 170, _icons->getY() + 53);
+	_numHealth = new NumberText(15, 5, _icons->getX() + 136, _icons->getY() + 50);
+	_barHealth= new Bar(102, 3, _icons->getX() + 170, _icons->getY() + 49);
 
-	_numMorale = new NumberText(15, 5, _icons->getX() + 154, _icons->getY() + 54);
-	_barMorale = new Bar(102, 3, _icons->getX() + 170, _icons->getY() + 57);
+	_numMorale = new NumberText(15, 5, _icons->getX() + 154, _icons->getY() + 50);
+	_barMorale = new Bar(102, 3, _icons->getX() + 170, _icons->getY() + 53);
 
 	_txtDebug = new Text(300, 10, 20, 0);
 
@@ -654,7 +656,7 @@ void BattlescapeState::btnShowLayersClick(Action *action)
  */
 void BattlescapeState::btnHelpClick(Action *action)
 {
-
+	_game->pushState(new BattlescapeOptionsState(_game));
 }
 
 /**
@@ -698,7 +700,7 @@ void BattlescapeState::endTurn()
 	}
 
 	// check for hot grenades in the hands (by default grenades don't explode in soldiers hands)
-	if (ALT_GRENADE)
+	if (Options::getBool("battleAltGrenade"))
 	{
 		for (std::vector<BattleUnit*>::iterator i = _battleGame->getUnits()->begin(); i != _battleGame->getUnits()->end(); ++i)
 		{
@@ -1326,7 +1328,8 @@ void BattlescapeState::handle(Action *action)
 
 		if (action->getDetails()->type == SDL_KEYDOWN)
 		{
-				// "d" - enable debug mode
+#ifdef _DEBUG
+			// "d" - enable debug mode
 			if (action->getDetails()->key.keysym.sym == SDLK_d)
 			{
 				_battleGame->setDebugMode();
@@ -1338,7 +1341,7 @@ void BattlescapeState::handle(Action *action)
 			{
 				_game->pushState(new SaveGameState(_game));
 			}
-
+#endif
 		}
 	}
 

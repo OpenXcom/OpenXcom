@@ -21,9 +21,7 @@
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
-#include "../Engine/Font.h"
 #include "../Engine/Palette.h"
-#include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Engine/Action.h"
@@ -45,9 +43,6 @@ NextTurnState::NextTurnState(Game *game, SavedBattleGame *battleGame) : State(ga
 	_txtTurn = new Text(320, 16, 0, 90);
 	_txtSide = new Text(320, 16, 0, 107);
 	_txtMessage = new Text(320, 16, 0, 130);
-	
-	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
 
 	add(_window);
 	add(_txtTitle);
@@ -95,7 +90,6 @@ NextTurnState::~NextTurnState()
 {
 	
 }
-
 
 /**
  * Closes the window.

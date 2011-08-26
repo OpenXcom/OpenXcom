@@ -16,7 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include <cstring>
 #include <exception>
 #include "Engine/CrossPlatform.h"
 #include "Engine/Game.h"
@@ -49,11 +48,11 @@ int main(int argc, char** args)
 	try
 	{
 #endif
-		Options::create();
-		Options::loadArgs(argc, args);
+		Options::init(argc, args);
 		game = new Game("OpenXcom " + Options::getVersion(), 320, 200, 16);
 		game->getScreen()->setFullscreen(Options::getBool("fullscreen"));
 		game->getScreen()->setResolution(Options::getInt("displayWidth"), Options::getInt("displayHeight"));
+		game->setVolume(Options::getInt("soundVolume"), Options::getInt("musicVolume"));
 		game->setState(new StartState(game));
 		game->run();
 #ifndef _DEBUG
@@ -64,6 +63,9 @@ int main(int argc, char** args)
 		exit(EXIT_FAILURE);
 	}
 #endif
+	Options::save();
 
+	// Comment this for faster exit.
+	delete game;
 	return EXIT_SUCCESS;
 }
