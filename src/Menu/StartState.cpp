@@ -86,9 +86,13 @@ void StartState::think()
 			std::cerr << e.what() << std::endl;
 			_load = LOADING_FAILED;
 			_surface->clear();
-			_surface->drawString(0, 0, e.what(), 1);
-			_surface->drawString(0, 16, "Make sure X-Com is in the DATA subfolder", 1);
-			_surface->drawString(0, 192, "Press any key to quit", 1);
+			_surface->drawString(0, 0, "ERROR:", 1);
+			_surface->drawString(0, 8, e.what(), 1);
+			_surface->drawString(0, 32, "Can't find some required X-Com data", 1);
+			_surface->drawString(0, 40, "files. Make sure you installed OpenXcom", 1);
+			_surface->drawString(0, 48, "correctly.", 1);
+			_surface->drawString(0, 72, "Check the README for more details.", 1);
+			_surface->drawString(76, 192, "Press any key to quit", 1);
 		}
 		break;
 	case LOADING_NONE:

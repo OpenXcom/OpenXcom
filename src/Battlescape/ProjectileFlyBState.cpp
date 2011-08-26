@@ -33,6 +33,7 @@
 #include "../Engine/SoundSet.h"
 #include "../Engine/Sound.h"
 #include "../Ruleset/RuleItem.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -64,7 +65,7 @@ void ProjectileFlyBState::init()
 	BattleItem *weapon = _action.weapon;
 	BattleItem *projectileItem = 0;
 
-	_parent->setStateInterval(BattlescapeState::DEFAULT_BULLET_SPEED);
+	_parent->setStateInterval(Options::getInt("battleFireSpeed"));
 	_unit = _action.actor;
 	_ammo = weapon->getAmmoItem();
 	if (_unit->isOut())
@@ -205,7 +206,7 @@ void ProjectileFlyBState::think()
 			BattleItem *item = _parent->getMap()->getProjectile()->getItem();
 			_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(38)->play();
 
-			if (BattlescapeState::ALT_GRENADE && item->getRules()->getBattleType() == BT_GRENADE && item->getExplodeTurn() > 0 &&
+			if (Options::getBool("battleAltGrenade") && item->getRules()->getBattleType() == BT_GRENADE && item->getExplodeTurn() > 0 &&
 				item->getExplodeTurn() <= _parent->getGame()->getSavedGame()->getBattleGame()->getTurn())
 			{
 				// it's a hot grenade to explode immediatly

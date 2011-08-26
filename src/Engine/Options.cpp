@@ -18,26 +18,28 @@
  */
 
 #include "Options.h"
+#include "SDL_mixer.h"
 #include <map>
 #include <sstream>
 #include <fstream>
 #include "yaml.h"
 #include "Exception.h"
+#include "CrossPlatform.h"
 
 namespace OpenXcom
 {
 namespace Options
 {
 	
-std::string _version = "0.2";
-std::string _dataFolder = "./DATA/";
-std::string _userFolder = "./USER/";
+std::string _version = "0.3";
+std::string _dataFolder = "";
+std::string _userFolder = "";
 std::map<std::string, std::string> _options;
 
 /**
  * Creates a default set of options based on the system.
  */
-void create()
+void createDefault()
 {
 #ifdef DINGOO
 	setInt("displayWidth", 320);
@@ -48,6 +50,15 @@ void create()
 	setInt("displayHeight", 400);
 	setBool("fullscreen", false);
 #endif
+	setInt("soundVolume", MIX_MAX_VOLUME);
+	setInt("musicVolume", MIX_MAX_VOLUME);
+	setInt("battleScrollSpeed", 24); // 40, 32, 24, 16, 8
+	setInt("battleScrollType", SCROLL_AUTO);
+	setInt("battleFireSpeed", 20); // 30, 25, 20, 15, 10, 5
+	setInt("battleXcomSpeed", 40); // 60, 50, 40, 30, 20, 10
+	setInt("battleAlienSpeed", 40); // 60, 50, 40, 30, 20, 10
+	// set to true if you want to play with the alternative grenade handling
+	setBool("battleAltGrenade", false);
 }
 
 /**
@@ -81,6 +92,43 @@ void loadArgs(int argc, char** args)
 			}
 		}
 	}
+	if (_userFolder != "")
+	{
+		load();
+	}
+}
+
+/**
+ * Handles the initialization of setting up default options
+ * and finding and loading any existing ones.
+ * @param argc Number of arguments.
+ * @param args Array of argument strings.
+ */
+void init(int argc, char** args)
+{
+	createDefault();
+	loadArgs(argc, args);
+	if (_dataFolder == "")
+	{
+		_dataFolder = CrossPlatform::findDataFolder(true);
+		// Missing data folder is handled in StartState
+	}
+	if (_userFolder == "")
+	{
+		_userFolder = CrossPlatform::findUserFolder(true);
+		// Create user folder and save options
+		if (_userFolder == "")
+		{
+			_userFolder = CrossPlatform::findUserFolder(false);
+			CrossPlatform::createFolder(Options::getUserFolder().c_str());
+			save();
+		}
+		// Load existing options
+		else
+		{
+			load();
+		}
+	}
 }
 
 /**
@@ -93,19 +141,20 @@ void load(const std::string &filename)
 	std::ifstream fin(s.c_str());
 	if (!fin)
 	{
-		throw Exception("Failed to load options");
+		//throw Exception("Failed to load options");
+		return;
 	}
     YAML::Parser parser(fin);
 	YAML::Node doc;
 
     parser.GetNextDocument(doc);
-	std::string v;
-	doc["version"] >> v;
-	if (v != _version)
+	for (YAML::Iterator i = doc.begin(); i != doc.end(); ++i)
 	{
-		throw Exception("Version mismatch");
+		std::string key, value;
+		i.first() >> key;
+		i.second() >> value;
+		_options[key] = value;
 	}
-	doc["options"] >> _options;
 
 	fin.close();
 }
@@ -125,45 +174,56 @@ void save(const std::string &filename)
 	YAML::Emitter out;
 
 	out << YAML::BeginDoc;
-	out << YAML::BeginMap;
-	out << YAML::Key << "version" << YAML::Value << _version;
-	out << YAML::Key << "options" << YAML::Value << _options;
-	out << YAML::EndMap;
+	out << _options;
 
 	sav << out.c_str();
 	sav.close();
 }
 
+/**
+ * Returns the game's version in x.x format.
+ * @return String with version number.
+ */
 std::string getVersion()
 {
 	return _version;
 }
 
+/**
+ * Returns the game's Data folder where resources
+ * and X-Com files are loaded from.
+ * @return Full path to Data folder.
+ */
 std::string getDataFolder()
 {
 	return _dataFolder;
 }
 
-void setDataFolder(const std::string& folder)
-{
-	_dataFolder = folder;
-}
-
+/**
+ * Returns the game's User folder where settings
+ * and saves are stored in.
+ * @return Full path to User folder.
+ */
 std::string getUserFolder()
 {
 	return _userFolder;
 }
 
-void setUserFolder(const std::string& folder)
-{
-	_userFolder = folder;
-}
-
+/**
+ * Returns an option in string format.
+ * @param id Option ID.
+ * @return Option value.
+ */
 std::string getString(const std::string& id)
 {
 	return _options[id];
 }
 
+/**
+ * Returns an option in integer format.
+ * @param id Option ID.
+ * @return Option value.
+ */
 int getInt(const std::string& id)
 {
 	std::stringstream ss;
@@ -173,6 +233,11 @@ int getInt(const std::string& id)
 	return value;
 }
 
+/**
+ * Returns an option in boolean format.
+ * @param id Option ID.
+ * @return Option value.
+ */
 bool getBool(const std::string& id)
 {
 	std::stringstream ss;
@@ -182,11 +247,21 @@ bool getBool(const std::string& id)
 	return value;
 }
 
+/**
+ * Changes an option in string format.
+ * @param id Option ID.
+ * @param value New option value.
+ */
 void setString(const std::string& id, const std::string& value)
 {
 	_options[id] = value;
 }
 
+/**
+ * Changes an option in integer format.
+ * @param id Option ID.
+ * @param value New option value.
+ */
 void setInt(const std::string& id, int value)
 {
 	std::stringstream ss;
@@ -194,6 +269,11 @@ void setInt(const std::string& id, int value)
 	_options[id] = ss.str();
 }
 
+/**
+ * Changes an option in boolean format.
+ * @param id Option ID.
+ * @param value New option value.
+ */
 void setBool(const std::string& id, bool value)
 {
 	std::stringstream ss;
