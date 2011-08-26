@@ -124,6 +124,8 @@ set ( battlescape_src
   Battlescape/PatrolBAIState.h
   Battlescape/WarningMessage.cpp
   Battlescape/WarningMessage.h
+  Battlescape/BattlescapeOptionsState.cpp
+  Battlescape/BattlescapeOptionsState.h
 )
 
 set ( engine_src 
