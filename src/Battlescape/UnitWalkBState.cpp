@@ -57,8 +57,8 @@ UnitWalkBState::~UnitWalkBState()
 
 void UnitWalkBState::init()
 {
-	setNormalWalkSpeed();
 	_unit = _action.actor;
+	setNormalWalkSpeed();
 	_pf = _parent->getGame()->getSavedGame()->getBattleGame()->getPathfinding();
 	_terrain = _parent->getGame()->getSavedGame()->getBattleGame()->getTerrainModifier();
 	_target = _action.target;
