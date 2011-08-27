@@ -45,6 +45,7 @@ private:
 	double _scaleX, _scaleY;
 	Uint32 _flags;
 	bool _fullscreen;
+	int _zoomSurfaceY(SDL_Surface * src, SDL_Surface * dst, int flipx, int flipy);
 public:
 	/// Creates a new display screen with the specified resolution.
 	Screen(int width, int height, int bpp);

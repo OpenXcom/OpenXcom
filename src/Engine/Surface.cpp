@@ -667,4 +667,57 @@ void Surface::setShade(SDL_Color *colors, int shade)
 	}
 }
 
+
+/**
+ * Specific blit function to blit battlescape terrain data in different shades in a fast way.
+ * Notice there is no surface locking here - you have to make sure you lock the surface yourself
+ * at the start of blitting and unlock it when done.
+ * @param surface to blit to
+ * @param x
+ * @param y
+ * @param off
+ * @param half some tiles are blitted only the right half
+ */
+void Surface::blitNShade(Surface *surface, int x, int y, int off, bool half)
+{
+	// get Width and Height only once
+	int w = getWidth();
+	int h = getHeight();
+	int dw = surface->getWidth();
+	int dh = surface->getHeight();
+
+	// get src and dest memory (so there's no need to use getPixel & setPixel)
+	Uint8* src = (Uint8*) getSurface()->pixels;
+	Uint8* dest = (Uint8*) surface->getSurface()->pixels;
+
+	int spitch = getSurface()->pitch;
+	int dpitch = surface->getSurface()->pitch;
+
+	for (int ix = 0, iy = 0; ix < w && iy < h;)
+	{
+		if (!half || ix > 15)
+		{
+			Uint8 pixel = src[iy * spitch + ix];
+			int baseColor = pixel/16;
+			int newShade = pixel%16 + off;
+			if (newShade > 15) 
+			{
+				// so dark it would flip over to another color - make it black instead
+				baseColor = 0;
+				newShade = 15;
+			}
+			if (pixel > 0 && (y + iy) > 0 && (x + ix) > 0 && (y + iy) < dh && (x + ix) < dw)
+			{
+				dest[(y + iy) * dpitch + (x + ix)] = (baseColor*16) + newShade;
+			}
+		}
+		ix++;
+		if (ix == w)
+		{
+			iy++;
+			ix = 0;
+		}
+	}
+}
+
 }

@@ -29,6 +29,8 @@ namespace OpenXcom
 class BattleUnit;
 class TerrainModifier;
 
+/* Refactoring tip : UnitDieBState */
+
 class UnitFallBState : public BattleState
 {
 private:

@@ -95,6 +95,118 @@ void Screen::handle(Action *action)
 }
 
 /**
+ * @brief Internal 8 bit Zoomer without smoothing.
+ * 
+ * Zooms 8bit palette/Y 'src' surface to 'dst' surface.
+ * Assumes src and dst surfaces are of 8 bit depth.
+ * Assumes dst surface was allocated with the correct dimensions.
+ * 
+ * @param src The surface to zoom (input).
+ * @param dst The zoomed surface (output).
+ * @param flipx Flag indicating if the image should be horizontally flipped.
+ * @param flipy Flag indicating if the image should be vertically flipped.
+ * 
+ * @return 0 for success or -1 for error.
+ */
+int Screen::_zoomSurfaceY(SDL_Surface * src, SDL_Surface * dst, int flipx, int flipy)
+{
+	int x, y;
+	Uint32 *sax, *say, *csax, *csay;
+	int csx, csy;
+	Uint8 *sp, *dp, *csp;
+	int dgap;
+
+	/*
+	* Allocate memory for row increments 
+	*/
+	if ((sax = (Uint32 *) malloc((dst->w + 1) * sizeof(Uint32))) == NULL) {
+		return (-1);
+	}
+	if ((say = (Uint32 *) malloc((dst->h + 1) * sizeof(Uint32))) == NULL) {
+		free(sax);
+		return (-1);
+	}
+
+	/*
+	* Pointer setup 
+	*/
+	sp = csp = (Uint8 *) src->pixels;
+	dp = (Uint8 *) dst->pixels;
+	dgap = dst->pitch - dst->w;
+
+	if (flipx) csp += (src->w-1);
+	if (flipy) csp  = ( (Uint8*)csp + src->pitch*(src->h-1) );
+
+	/*
+	* Precalculate row increments 
+	*/
+	csx = 0;
+	csax = sax;
+	for (x = 0; x < dst->w; x++) {
+		csx += src->w;
+		*csax = 0;
+		while (csx >= dst->w) {
+			csx -= dst->w;
+			(*csax)++;
+		}
+		csax++;
+	}
+	csy = 0;
+	csay = say;
+	for (y = 0; y < dst->h; y++) {
+		csy += src->h;
+		*csay = 0;
+		while (csy >= dst->h) {
+			csy -= dst->h;
+			(*csay)++;
+		}
+		csay++;
+	}
+
+	/*
+	* Draw 
+	*/
+	csay = say;
+	for (y = 0; y < dst->h; y++) {
+		csax = sax;
+		sp = csp;
+		for (x = 0; x < dst->w; x++) {
+			/*
+			* Draw 
+			*/
+			*dp = *sp;
+			/*
+			* Advance source pointers 
+			*/
+			sp += (*csax) * (flipx ? -1 : 1);
+			csax++;
+			/*
+			* Advance destination pointer 
+			*/
+			dp++;
+		}
+		/*
+		* Advance source pointer (for row) 
+		*/
+		csp += ((*csay) * src->pitch) * (flipy ? -1 : 1);
+		csay++;
+
+		/*
+		* Advance destination pointers 
+		*/
+		dp += dgap;
+	}
+
+	/*
+	* Remove temp arrays 
+	*/
+	free(sax);
+	free(say);
+
+	return (0);
+}
+
+/**
  * Renders the buffer's contents onto the screen, applying
  * any necessary filters or conversions in the process.
  * If the scaling factor is bigger than 1, the entire contents
@@ -105,9 +217,7 @@ void Screen::flip()
 {
 	if (getWidth() != BASE_WIDTH || getHeight() != BASE_HEIGHT)
 	{
-		SDL_Surface* zoom = zoomSurface(_surface->getSurface(), _scaleX, _scaleY, 0);
-		SDL_BlitSurface(zoom, 0, _screen, 0);
-		SDL_FreeSurface(zoom);
+		_zoomSurfaceY(_surface->getSurface(), _screen, 0, 0);
 	}
 	else
 	{
