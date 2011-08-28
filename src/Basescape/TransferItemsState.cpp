@@ -223,10 +223,10 @@ void TransferItemsState::completeTransfer()
 				{
 					if (*s == _soldiers[i])
 					{
-						_baseFrom->getSoldiers()->erase(s);
 						Transfer *t = new Transfer(time);
 						t->setSoldier(*s);
 						_baseTo->getTransfers()->push_back(t);
+						s = _baseFrom->getSoldiers()->erase(s);
 						break;
 					}
 				}
@@ -241,10 +241,10 @@ void TransferItemsState::completeTransfer()
 				{
 					if ((*s)->getCraft() == craft)
 					{
-						_baseFrom->getSoldiers()->erase(s);
 						Transfer *t = new Transfer(time);
 						t->setSoldier(*s);
 						_baseTo->getTransfers()->push_back(t);
+						s = _baseFrom->getSoldiers()->erase(s);
 					}
 				}
 
@@ -253,10 +253,10 @@ void TransferItemsState::completeTransfer()
 				{
 					if (*c == craft)
 					{
-						_baseFrom->getCrafts()->erase(c);
 						Transfer *t = new Transfer(time);
 						t->setCraft(*c);
 						_baseTo->getTransfers()->push_back(t);
+						c = _baseFrom->getCrafts()->erase(c);
 						break;
 					}
 				}
