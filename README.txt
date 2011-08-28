@@ -1,94 +1,145 @@
-#########################################
-OpenXcom v0.2
-by SupSuper
-#########################################
+#################
+# OpenXcom v0.3 #
+#################
 
 OpenXcom is an open-source reimplementation of the popular
 UFO: Enemy Unknown (X-Com: UFO Defense in USA) videogame by
 Microprose, licensed under the GPL and written in C++ / SDL.
-See more info at the website: http://openxcom.ninex.info
+See more info at the website: http://openxcom.org
 
-1. For players
+Uses modified code from SDL and SDL_gfx.
+
+1. Installation
 ================
 
-1.1. Windows users
--------------------
+OpenXcom requires the original X-Com resources (any version).
+If you have the Steam version, you can find the X-Com game
+folder in "Steam\steamapps\common\xcom ufo defense\XCOM".
 
-Extract the ZIP into a folder of your choice and copy the
-contents of your X-Com folder into the DATA subfolder.
+When installing manually, copy the X-Com subfolders (GEODATA,
+GEOGRAPH, MAPS, ROUTES, SOUND, TERRAIN, UFOGRAPH, UFOINTRO,
+UNITS) to OpenXcom's Data folder in one of the following paths:
 
-Run OpenXcom.exe to play.
+- <working directory>\DATA\
+- <binary directory>\DATA\
+- C:\Documents and Settings\All Users\Application Data\OpenXcom (Windows 2000/XP)
+- C:\ProgramData\OpenXcom (Windows Vista/7)
+- <application resources>\DATA (Mac OS X)
+- /usr/share/openxcom (Linux)
+- <working directory>
 
-1.2. Mac users
----------------
+You can also specify your own path by passing the command-line
+argument "-data <data path>" when running OpenXcom. The resources
+must be in the same folder as the OpenXcom data.
 
-Extract the ZIP into a folder of your choice and copy the
-contents of your X-Com folder into the application’s DATA
-resource (right click on the application >
-Show Package Contents > Contents > Resources > DATA).
+1.1. Windows
+-------------
 
-Run OpenXcom.app to play.
+It's recommended you copy the resources to the DATA subfolder.
+The installer will automatically detect a Steam installation
+and copy the resources as necessary.
 
-1.3. Linux users
------------------
+1.2. Mac OS X
+--------------
 
-The game requires the following libraries:
-- SDL (libsdl1.2): http://www.libsdl.org
-- SDL_mixer (libsdl-mixer1.2): http://www.libsdl.org/projects/SDL_mixer/
-- SDL_gfx (libsdl-gfx1.2): http://www.ferzkopp.net/joomla/content/view/19/14/
-- yaml-cpp: http://code.google.com/p/yaml-cpp/
+It's recommended you copy the resources to the application's DATA
+resource (right click the application > Show Package Contents >
+Contents > Resources > DATA).
+
+1.3. Linux
+-----------
+
+OpenXcom requires the following libraries:
+
+- SDL (libsdl1.2):
+http://www.libsdl.org
+- SDL_mixer (libsdl-mixer1.2):
+http://www.libsdl.org/projects/SDL_mixer/
+- TiMidity++ (timidity):
+http://timidity.sourceforge.net/
+- SDL_gfx (libsdl-gfx1.2), version 2.0.22 or later:
+http://www.ferzkopp.net/joomla/content/view/19/14/
+- yaml-cpp, version 0.2.6 or later:
+http://code.google.com/p/yaml-cpp/
 
 Check your distribution's package manager or the library
 website on how to install them.
 
-NOTE: You need SDL_gfx 2.0.22 or later to properly view
-the game. Earlier versions will experience graphical
-glitches.
+If installing through a package manager, you should copy
+the resources to /usr/share/openxcom, otherwise the
+DATA subfolder is preferred.
 
-Extract the TAR into a folder of your choice and copy the
-contents of your X-Com folder into the DATA subfolder.
 
-Run openxcom to play.
+2. Customization
+=================
 
-1.4. Options
+OpenXcom creates a User folder with all the user screenshots,
+savegames and options in one of the following paths:
+
+- <working directory>\USER\
+- <binary directory>\USER\
+- C:\My Documents\OpenXcom (Windows 9x/ME)
+- C:\Documents and Settings\<username>\My Documents\OpenXcom (Windows 2000/XP)
+- C:\Users\<username>\Documents\OpenXcom (Windows Vista/7)
+- ~/Library/Application Support/OpenXcom (Mac OS X)
+- ~/.openxcom (Linux)
+- <working directory>
+
+You can also specify your own path by passing the command-line
+argument "-user <user path>" when running OpenXcom.
+
+2.1. Options
 -------------
-You can use the following command-line arguments to
-change the game's internal settings:
 
-"-fullscreen" - starts the game in full-screen mode
-instead of in a window.
+OpenXcom stores various game settings in the options.cfg
+YAML file stored in the User folder, which can be easily
+edited with any text editor. You can also pass command
+line arguments in the form "-<option name> <option value>".
 
-"-width w -height h" - resizes the game screen to that
-resolution. Since the original resolution is tiny, by default
-the game runs at 640x400 resolution (2x size). You can
-use this to make the game bigger to suit your tastes.
-Be careful though, the game will only work in full-screen
-if you use a resolution supported by your system.
+WARNING: Editing the options manually with invalid values
+can cause incorrect behaviour or game crashes.
 
-You can also use the following keyboard shortcuts:
+2.2. Keyboard Shortcuts
+------------------------
 
-F5 - Saves screenshot to USER folder.
-F12 - Turns on/off FPS counter.
+F5 - Turns on/off FPS counter in top-left corner.
+
+F12 - Saves BMP screenshot to User folder.
+
 ALT-ENTER - Turns on/off fullscreen mode.
 
-You can also use custom music if you have issues with
-the default game MIDIs. The game will play any music file
-in MIDI, MP3 or OGG format that matches the original filenames
-in the Windows version (GMGEO1, GMGEO2, GMSTORY, etc).
+2.3. Custom Music
+------------------
+
+If you don't like or have trouble getting the original X-Com
+music to work, you can use your own by putting it in
+the SOUND subfolder of the Data folder with the same filename
+as the original (GMGEO1, GMGEO2, GMSTORY, etc). The formats
+supported are MIDI, MP3 and OGG.
 
 
-2. For developers
-===================
+3. Development
+===============
 
-The game requires the following developer libraries:
-- SDL: http://www.libsdl.org
-- SDL_mixer: http://www.libsdl.org/projects/SDL_mixer/
-- SDL_gfx: http://www.ferzkopp.net/joomla/content/view/19/14/
-- yaml-cpp: http://code.google.com/p/yaml-cpp/
+OpenXcom requires the following developer libraries:
+- SDL (libsdl1.2):
+http://www.libsdl.org
+- SDL_mixer (libsdl-mixer1.2):
+http://www.libsdl.org/projects/SDL_mixer/
+- SDL_gfx (libsdl-gfx1.2), version 2.0.22 or later:
+http://www.ferzkopp.net/joomla/content/view/19/14/
+- yaml-cpp, version 0.2.6 or later:
+http://code.google.com/p/yaml-cpp/
 
-The source code includes a Visual C++ project, a Code::Blocks
-project and a Linux makefile.
+The source code has been tested on Windows/Mac/Linux and
+includes the following:
+- Microsoft Visual C++ 2008 project.
+- Microsoft Visual C++ 2010 project.
+- XCode project (check the website).
+- Code::Blocks project.
+- Eclipse project.
+- Linux makefile.
 
 More detailed compiling instructions and pre-compiled
 dependencies are available at:
-http://openxcom.ninex.info/index.php/compiling/
+http://openxcom.org/index.php/compiling/

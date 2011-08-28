@@ -207,6 +207,7 @@ void Screen::setFullscreen(bool full)
 	{
 		_flags &= ~SDL_FULLSCREEN;
 	}
+	Options::setBool("fullscreen", _fullscreen);
 	setResolution(getWidth(), getHeight());
 }
 
