@@ -95,7 +95,8 @@ void Screen::handle(Action *action)
 }
 
 /**
- * @brief Internal 8 bit Zoomer without smoothing.
+ * Internal 8 bit Zoomer without smoothing.
+ * Source code originally from SDL_gfx (LGPL) with permission by author.
  * 
  * Zooms 8bit palette/Y 'src' surface to 'dst' surface.
  * Assumes src and dst surfaces are of 8 bit depth.
@@ -105,7 +106,6 @@ void Screen::handle(Action *action)
  * @param dst The zoomed surface (output).
  * @param flipx Flag indicating if the image should be horizontally flipped.
  * @param flipy Flag indicating if the image should be vertically flipped.
- * 
  * @return 0 for success or -1 for error.
  */
 int Screen::_zoomSurfaceY(SDL_Surface * src, SDL_Surface * dst, int flipx, int flipy)
