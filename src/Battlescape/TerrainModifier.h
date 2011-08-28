@@ -40,6 +40,8 @@ class Tile;
 class TerrainModifier
 {
 private:
+	static const int MAX_VIEW_DISTANCE = 20;
+	static const int MAX_DARKNESS_TO_SEE_UNITS = 9;
 	SavedBattleGame *_save;
 	std::vector<Uint16> *_voxelData;
 	void addLight(const Position &center, int power, int layer);
@@ -47,8 +49,9 @@ private:
 	int horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageType type);
 	int verticalBlockage(Tile *startTile, Tile *endTile, ItemDamageType type);
 	int vectorToDirection(const Position &vector);
-	int voxelCheck(const Position& voxel, BattleUnit *excludeUnit);
-	bool checkForVisibleUnits(BattleUnit *unit, Tile *tile);
+	int voxelCheck(const Position& voxel, BattleUnit *excludeUnit, bool excludeAllUnits = false);
+	bool checkIfUnitVisible(BattleUnit *currentUnit, BattleUnit *otherUnit);
+	bool checkIfTileVisible(BattleUnit *currentUnit, Tile *tile);
 public:
 	/// Creates a new TerrainModifier class.
 	TerrainModifier(SavedBattleGame *save, std::vector<Uint16> *voxelData);
@@ -58,8 +61,10 @@ public:
 	void calculateSunShading();
 	/// Calculate sun shading of a single tile.
 	void calculateSunShading(Tile *tile);
-	/// Calculate the visible tiles of a unit.
-	bool calculateFOV(BattleUnit *unit);
+	/// Calculate the visible tiles from a units view point.
+	void calculateFOVTerrain(BattleUnit *unit);
+	/// Calculate the visible units from a units view pointt.
+	bool calculateFOVUnits(BattleUnit *unit);
 	/// Calculate the field of view within range of a certain position.
 	void calculateFOV(const Position &position);
 	/// Check reaction fire.
@@ -70,7 +75,8 @@ public:
 	void calculateUnitLighting();
 	/// Explosions.
 	void explode(const Position &center, int power, ItemDamageType type, int maxRadius, BattleUnit *unit);
-	Tile *checkForChainedExplosions();
+	/// Check if a destroyed tile starts an explosion.
+	Tile *checkForTerrainExplosions();
 	/// Unit opens door?
 	int unitOpensDoor(BattleUnit *unit);
 	/// Close ufo doors.
