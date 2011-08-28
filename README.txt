@@ -7,7 +7,7 @@ UFO: Enemy Unknown (X-Com: UFO Defense in USA) videogame by
 Microprose, licensed under the GPL and written in C++ / SDL.
 See more info at the website: http://openxcom.org
 
-Uses modified code from SDL and SDL_gfx.
+Uses modified code from SDL_gfx (LGPL) with permission from author.
 
 1. Installation
 ================
