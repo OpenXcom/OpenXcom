@@ -42,7 +42,7 @@
 namespace OpenXcom
 {
 
-inline int getFreeLabSpace (Base * base)
+int getFreeLabSpace (Base * base)
 {
 	return base->getAvailableLaboratories() - base->getUsedLaboratories();
 }
