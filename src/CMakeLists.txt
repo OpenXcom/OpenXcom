@@ -417,7 +417,7 @@ add_executable ( openxcom  ${openxcom_src} )
 install ( TARGETS openxcom RUNTIME DESTINATION bin )
 # Extra link flags for windows. they need to be before the SDL/YAML link flags. Otherwise, you will get strange link errors('Undefined reference to WinMain@16')
 if ( WIN32 )
-  target_link_libraries ( openxcom advapi32.lib shell32.lib shlwapi.lib mingw32 -mwindows SDLMain )
+  target_link_libraries ( openxcom advapi32.lib shell32.lib shlwapi.lib mingw32 -mwindows SDLmain )
 endif ()
 target_link_libraries ( openxcom ${SDL_LIBRARY} ${SDLMIXER_LIBRARY} ${SDLGFX_LIBRARY} ${YAMLCPP_LIBRARY} )
 
@@ -429,7 +429,7 @@ install ( DIRECTORY ${CMAKE_SOURCE_DIR}/bin/DATA DESTINATION bin )
 
 # Copy Windows DLL to bin folder
 if ( WIN32 )
-  file ( GLOB Windows_dll "${CMAKE_SOURCE_DIR}/deps/lib/*.dll" )
+  file ( GLOB Windows_dll "${DEPS_DIR}/lib/*.dll" )
   foreach ( dll ${Windows_dll} )
     add_custom_command ( TARGET openxcom
       POST_BUILD
