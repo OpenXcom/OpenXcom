@@ -24,14 +24,14 @@
 namespace OpenXcom
 {
 
-ResearchProject::ResearchProject(RuleResearchProject * p) : _project(p), _spent(0), _assigned(0)
+ResearchProject::ResearchProject(RuleResearchProject * p, float f) : _project(p), _spent(0), _assigned(0), _cost(f)
 {
 }
 
 bool ResearchProject::step()
 {
 	_spent += _assigned;
-	if (_spent >= _project->getCost())
+	if (_spent >= getCost())
 	{
 		return true;
 	}
@@ -63,14 +63,27 @@ void ResearchProject::setSpent (float f)
 	_spent = f;
 }
 
+float ResearchProject::getCost() const
+{
+	return _cost;
+}
+
+void ResearchProject::setCost(float f)
+{
+	_cost = f;
+}
+
 void ResearchProject::load(const YAML::Node& node, const Ruleset *rule)
 {
 	int assigned;
 	float spent;
+	float cost;
 	node["assigned"] >> assigned;
 	node["spent"] >> spent;
+	node["cost"] >> cost;
 	setAssigned(assigned);
 	setSpent(spent);
+	setCost(cost);
 }
 
 void ResearchProject::save(YAML::Emitter& out) const
@@ -79,6 +92,7 @@ void ResearchProject::save(YAML::Emitter& out) const
 	out << YAML::Key << "project" << YAML::Value << getRuleResearchProject ()->getName ();
 	out << YAML::Key << "assigned" << YAML::Value << getAssigned ();
 	out << YAML::Key << "spent" << YAML::Value << getSpent ();
+	out << YAML::Key << "cost" << YAML::Value << getCost ();
 	out << YAML::EndMap;
 }
 }

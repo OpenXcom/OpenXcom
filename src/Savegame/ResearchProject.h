@@ -30,8 +30,9 @@ class ResearchProject
   RuleResearchProject * _project;
   int _assigned;
   float _spent;
+  float _cost;
 public:
-  ResearchProject(RuleResearchProject * p);
+  ResearchProject(RuleResearchProject * p, float f = 0.0f);
 
   bool step();
 
@@ -41,6 +42,9 @@ public:
 
   float getSpent () const;
   void setSpent (float f);
+
+  float getCost() const;
+  void setCost(float f);
 
   const RuleResearchProject * getRuleResearchProject () const;
 
