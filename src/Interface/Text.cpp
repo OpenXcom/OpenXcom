@@ -116,6 +116,7 @@ void Text::setFonts(Font *big, Font *small)
 	_big = big;
 	_small = small;
 	_font = _small;
+	processText();
 }
 
 /**

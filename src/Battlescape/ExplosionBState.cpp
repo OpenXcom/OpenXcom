@@ -130,8 +130,8 @@ void ExplosionBState::think()
 				_parent->getMap()->cacheUnits();
 				_parent->popState();
 
-				// check for chained explosions
-				Tile *t = save->getTerrainModifier()->checkForChainedExplosions();
+				// check for terrain explosions
+				Tile *t = save->getTerrainModifier()->checkForTerrainExplosions();
 				if (t)
 				{
 					Position p = Position(t->getPosition().x * 16, t->getPosition().y * 16, t->getPosition().z * 24);

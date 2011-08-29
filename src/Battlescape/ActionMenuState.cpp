@@ -27,6 +27,7 @@
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/BattleItem.h"
 #include "../Ruleset/RuleItem.h"
+#include "../Engine/Options.h"
 #include "ActionMenuItem.h"
 #include "PrimeGrenadeState.h"
 
@@ -125,6 +126,21 @@ ActionMenuState::~ActionMenuState()
 }
 
 /**
+ * Closes the window on right-click.
+ * @param action Pointer to an action.
+ */
+void ActionMenuState::handle(Action *action)
+{
+	State::handle(action);
+
+	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN && action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	{
+		_game->popState();
+	}
+
+}
+
+/**
  * Execute the action corresponding with this action menu item.
  * @param action Pointer to an action.
  */
@@ -153,7 +169,7 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 		_action->TU = _actionMenu[btnID]->getTUs();
 		if (_action->type == BA_PRIME)
 		{
-			if (BattlescapeState::ALT_GRENADE)
+			if (Options::getBool("battleAltGrenade"))
 			{
 				_action->value = 1;
 				_game->popState();

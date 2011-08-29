@@ -620,8 +620,9 @@ void SavedBattleGame::endTurn()
 		if ((*i)->getFaction() == _side)
 		{
 			(*i)->prepareNewTurn();
-			_terrainModifier->calculateFOV((*i));
 		}
+		_terrainModifier->calculateFOVTerrain(*i);
+		_terrainModifier->calculateFOVUnits(*i);
 	}
 
 	_selectedUnit = 0;

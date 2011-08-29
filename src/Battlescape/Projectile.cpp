@@ -67,8 +67,6 @@ Projectile::Projectile(ResourcePack *res, SavedBattleGame *save, Position origin
 	if (item)
 	{
 		_sprite = _res->getSurfaceSet("FLOOROB.PCK")->getFrame(getItem()->getRules()->getFloorSprite());
-		_shadowSprite = new Surface(_sprite->getWidth(), _sprite->getHeight());
-		_sprite->blit(_shadowSprite);
 	}
 }
 
@@ -77,10 +75,7 @@ Projectile::Projectile(ResourcePack *res, SavedBattleGame *save, Position origin
  */
 Projectile::~Projectile()
 {
-	if (_item)
-	{
-		delete _shadowSprite;
-	}
+
 }
 
 /**
@@ -210,7 +205,7 @@ bool Projectile::calculateThrow(double accuracy)
 	// apply some accuracy modifiers
 	if (accuracy > 100)
 		accuracy = 100;
-	static const double maxDeviation = 0.09;
+	static const double maxDeviation = 0.08;
 	static const double minDeviation = 0;
 	double baseDeviation = (maxDeviation - (maxDeviation * accuracy / 100.0)) + minDeviation;
 	double deviation = RNG::boxMuller(0, baseDeviation);
@@ -232,9 +227,9 @@ bool Projectile::calculateThrow(double accuracy)
 void Projectile::applyAccuracy(const Position& origin, Position *target, double accuracy)
 {
 	// maxDeviation is the max angle deviation for accuracy 0% in degrees
-	static const double maxDeviation = 8.0;
-	// minDeviation is the max angle deviation for accuracy 100% in degrees
-	static const double minDeviation = 0.2;
+	static const double maxDeviation = 7.0;
+	// minDeviation is the min angle deviation for accuracy 100% in degrees
+	static const double minDeviation = 0.01;
 	// maxRange is the maximum range a projectile shall ever travel in voxel space
 	static const double maxRange = 16*1000; // 1000 tiles
 
@@ -308,19 +303,23 @@ int Projectile::getParticle(int i)
 	return _trail[_bulletType][i];
 }
 
+/**
+ * Get the project tile item.
+ * Returns 0 when there is no item thrown.
+ * @return pointer to BattleItem
+ */
 BattleItem *Projectile::getItem() const
 {
 	return _item;
 }
 
+/**
+ * Get the bullet sprite.
+ * @return pointer to Surface
+ */
 Surface *Projectile::getSprite() const
 {
 	return _sprite;
-}
-
-Surface *Projectile::getShadowSprite() const
-{
-	return _shadowSprite;
 }
 
 }

@@ -1414,7 +1414,6 @@ XcomRuleset::XcomRuleset() : Ruleset()
 
 	_soldiers.insert(std::pair<std::string, RuleSoldier*>("XCOM", xcom));
 
-	
 	RuleAlien *sectoidSoldier = new RuleAlien("SECTOID_SOLDIER", "STR_SECTOID", "STR_LIVE_SOLDIER");
 	sectoidSoldier->setArmor("SECTOID_ARMOR0");
 	s1.tu = 54;
@@ -1431,7 +1430,41 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	sectoidSoldier->setStats(s1);
 	sectoidSoldier->setVoxelParameters(16, 12, 2);
 
+	RuleAlien *sectoidEngineer = new RuleAlien("SECTOID_ENGINEER", "STR_SECTOID", "STR_LIVE_ENGINEER");
+	sectoidEngineer->setArmor("SECTOID_ARMOR0");
+	s1.tu = 54;
+	s1.stamina = 90;
+	s1.health = 30;
+	s1.bravery = 80;
+	s1.reactions = 63;
+	s1.firing = 52;
+	s1.throwing = 58;
+	s1.strength = 30;
+	s1.psiStrength = 40;
+	s1.psiSkill = 0;
+	s1.melee = 76;
+	sectoidEngineer->setStats(s1);
+	sectoidEngineer->setVoxelParameters(16, 12, 2);
+
+	RuleAlien *sectoidNavigator = new RuleAlien("SECTOID_NAVIGATOR", "STR_SECTOID", "STR_LIVE_NAVIGATOR");
+	sectoidNavigator->setArmor("SECTOID_ARMOR0");
+	s1.tu = 54;
+	s1.stamina = 90;
+	s1.health = 30;
+	s1.bravery = 80;
+	s1.reactions = 63;
+	s1.firing = 52;
+	s1.throwing = 58;
+	s1.strength = 30;
+	s1.psiStrength = 40;
+	s1.psiSkill = 0;
+	s1.melee = 76;
+	sectoidNavigator->setStats(s1);
+	sectoidNavigator->setVoxelParameters(16, 12, 2);
+
 	_aliens.insert(std::pair<std::string, RuleAlien*>("SECTOID_SOLDIER", sectoidSoldier));
+	_aliens.insert(std::pair<std::string, RuleAlien*>("SECTOID_ENGINEER", sectoidEngineer));
+	_aliens.insert(std::pair<std::string, RuleAlien*>("SECTOID_NAVIGATOR", sectoidNavigator));
 
 	// create Ufopaedia article definitions
 	int sort_key = 1;

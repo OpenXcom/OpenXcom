@@ -714,7 +714,23 @@
 			<File
 				RelativePath=".\Battlescape\BattlescapeGenerator.h"
 				>
-			</File>	
+			</File>
+			<File
+				RelativePath=".\Battlescape\BattlescapeMessage.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\BattlescapeMessage.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\BattlescapeOptionsState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\BattlescapeOptionsState.h"
+				>
+			</File>
 			<File
 				RelativePath=".\Battlescape\BattlescapeState.cpp"
 				>

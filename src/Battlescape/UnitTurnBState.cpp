@@ -30,6 +30,7 @@
 #include "../Engine/Sound.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Language.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -52,8 +53,11 @@ UnitTurnBState::~UnitTurnBState()
 
 void UnitTurnBState::init()
 {
-	_parent->setStateInterval(BattlescapeState::DEFAULT_WALK_SPEED);
 	_unit = _action.actor;
+	if (_unit->getFaction() == FACTION_PLAYER)
+		_parent->setStateInterval(Options::getInt("battleXcomSpeed"));
+	else
+		_parent->setStateInterval(Options::getInt("battleAlienSpeed"));
 	_unit->lookAt(_action.target);
 	if (_unit->getStatus() != STATUS_TURNING)
 	{
@@ -85,7 +89,8 @@ void UnitTurnBState::think()
 	if (_unit->spendTimeUnits(tu, _parent->getGame()->getSavedGame()->getBattleGame()->getDebugMode()))
 	{
 		_unit->turn();
-		_parent->getGame()->getSavedGame()->getBattleGame()->getTerrainModifier()->calculateFOV(_unit);
+		_parent->getGame()->getSavedGame()->getBattleGame()->getTerrainModifier()->calculateFOVTerrain(_unit);
+		_parent->getGame()->getSavedGame()->getBattleGame()->getTerrainModifier()->calculateFOVUnits(_unit);
 		_parent->getMap()->cacheUnit(_unit);
 		if (_unit->getStatus() == STATUS_STANDING)
 		{

@@ -31,6 +31,7 @@ class BattleItem;
 class Tile;
 
 /* Explosion state not only handles explosions, but also bullet impacts! */
+/* Refactoring tip : ImpactBState */
 
 class ExplosionBState : public BattleState
 {

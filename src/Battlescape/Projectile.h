@@ -45,7 +45,7 @@ private:
 	unsigned int _position;
 	static const int _trail[11][36];
 	int _bulletType;
-	Surface *_sprite, *_shadowSprite;
+	Surface *_sprite;
 	void applyAccuracy(const Position& origin, Position *target, double accuracy);
 public:
 	/// Creates a new Projectile.
@@ -64,8 +64,8 @@ public:
 	int getParticle(int i);
 	/// Get the item
 	BattleItem *getItem() const;
+	/// Get the sprite
 	Surface *getSprite() const;
-	Surface *getShadowSprite() const;
 };
 
 }

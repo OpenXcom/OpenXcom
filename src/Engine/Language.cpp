@@ -143,6 +143,22 @@ std::string Language::wstrToUtf8(const std::wstring& src)
 }
 
 /**
+ * Replaces every instance of a substring.
+ * @param str The string to modify.
+ * @param find The substring to find.
+ * @param replace The substring to replace it with.
+ */
+void Language::replace(std::string &str, const std::string &find, const std::string &replace)
+{
+	for (size_t i = str.find(find); i != std::string::npos;)
+	{
+		str.replace(i, find.length(), replace);
+		++i;
+		i = str.find(find, i);
+	}
+}
+
+/**
  * Loads pairs of null-terminated strings contained in
  * a raw text file into the Language. Each pair is made of
  * an ID and a localized string.
@@ -167,7 +183,7 @@ void Language::loadLng(const std::string &filename)
 
 	while (txtFile.read(&value, 1))
 	{
-		if (value != '\0')
+		if (value != '\n')
 		{
 			buffer += value;
 		}
@@ -189,6 +205,8 @@ void Language::loadLng(const std::string &filename)
 				// Get string
 				else
 				{
+					replace(buffer, "{NEWLINE}", "\n");
+					replace(buffer, "{SMALLLINE}", "\x02");
 					bufstr = utf8ToWstr(buffer);
 					_strings[bufid] = bufstr;
 				}
