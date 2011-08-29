@@ -64,16 +64,13 @@ private:
 	bool _RMBDragging;
 	int _centerX, _centerY;
 	BulletSprite *_bullet[36];
-	BulletSprite *_bulletShadow[36];
 	Projectile *_projectile;
 	std::set<Explosion *> _explosions;
 	bool _cameraFollowed;
 	int _visibleMapHeight;
-	SDL_Color *_shade[16];
 	BattlescapeMessage *_message;
 
 	void minMaxInt(int *value, const int minValue, const int maxValue);
-	bool cacheTileSprites(int i);
 	void convertScreenToMap(int screenX, int screenY, int *mapX, int *mapY);
 	void drawTerrain(Surface *surface);
 public:
@@ -113,8 +110,6 @@ public:
 	void convertVoxelToScreen(const Position &voxelPos, Position *screenPos);
 	/// Sets the battlescape selector position relative to mouseposition.
 	void setSelectorPosition(int mx, int my);
-	/// Draws the small arrow above the selected soldier.
-	void drawArrow(const Position &pos, Surface *surface);
 	/// Get the currently selected position.
 	void getSelectorPosition(Position *pos);
 	/// Calculate the offset of a soldier, when it is walking in the middle of 2 tiles.
@@ -123,10 +118,9 @@ public:
 	void setCursorType(CursorType type);
 	/// Get the 3D cursor type.
 	CursorType getCursorType() const;
-	/// Cache tile.
-	Surface *cacheTile(Tile *tile, Surface *cache, int itX, int itY, int itZ);
 	/// Cache units.
 	void cacheUnits();
+	/// Cache unit.
 	void cacheUnit(BattleUnit *unit);
 	/// Set projectile
 	void setProjectile(Projectile *projectile);

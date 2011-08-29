@@ -34,7 +34,7 @@ namespace OpenXcom
 * constructor
 * @param pos Position.
 */
-Tile::Tile(const Position& pos): _smoke(0), _fire(0),  _explosive(0), _pos(pos), _unit(0), _cache(0), _cacheInvalid(true)
+Tile::Tile(const Position& pos): _smoke(0), _fire(0),  _explosive(0), _pos(pos), _unit(0)
 {
 	for (int i = 0; i < 4; ++i)
 	{
@@ -58,7 +58,6 @@ Tile::Tile(const Position& pos): _smoke(0), _fire(0),  _explosive(0), _pos(pos),
 Tile::~Tile()
 {
 	_inventory.clear();
-	delete _cache;
 }
 
 /**
@@ -83,7 +82,6 @@ MapData *Tile::getMapData(int part)
 void Tile::setMapData(MapData *dat, int part)
 {
 	_objects[part] = dat;
-	_cacheInvalid = true;
 }
 
 /**
@@ -231,6 +229,7 @@ int Tile::openDoor(int part)
 
 /**
  * Check if the ufo door is open or opening. Used for visibility/light blocking checks.
+ * This function assumes that there never are 2 doors on 1 tile or a door and another wall on 1 tile.
  * @param part
  * @return bool
  */
@@ -253,7 +252,6 @@ int Tile::closeUfoDoor()
 		{
 			_currentFrame[part] = 0;
 			retval = 1;
-			_cacheInvalid = true;
 		}
 	}
 
@@ -275,7 +273,6 @@ void Tile::setDiscovered(bool flag, int part)
 			_discovered[0] = flag;
 			_discovered[1] = flag;
 		}
-		_cacheInvalid = true;
 		// if light on tile changes, units and objects on it change light too
 		if (_unit != 0)
 		{
@@ -506,12 +503,6 @@ void Tile::animate()
 			{
 				newframe = 0;
 			}
-
-			// only re-cache when the object actually changed.
-			if (_objects[i]->getSprite(_currentFrame[i]) != _objects[i]->getSprite(newframe))
-			{
-				_cacheInvalid = true;
-			}
 			_currentFrame[i] = newframe;
 		}
 	}
@@ -611,7 +602,6 @@ int Tile::getAnimationOffset()
 void Tile::addItem(BattleItem *item)
 {
 	_inventory.push_back(item);
-	_cacheInvalid = true;
 }
 
 /**
@@ -628,7 +618,6 @@ void Tile::removeItem(BattleItem *item)
 			break;
 		}
 	}
-	_cacheInvalid = true;
 }
 
 /**
@@ -693,43 +682,5 @@ std::vector<BattleItem *> *Tile::getInventory()
 {
 	return &_inventory;
 }
-
-/**
- * Sets the tile's cache flag.
- * Set to true when the unit has to be redrawn from scratch.
- * @param cached
- */
-void Tile::setCache(Surface *cache)
-{
-	if (cache == 0)
-	{
-		_cacheInvalid = true;
-	}
-	else
-	{
-		_cache = cache;
-		_cacheInvalid = false;
-	}
-}
-
-/**
- * Check if the tile is still cached in the Map cache.
- * When the tile changes it needs to be re-cached.
- * @return bool
- */
-Surface *Tile::getCache(bool *invalid)
-{
-	for (int layer = 0; layer < LIGHTLAYERS; layer++)
-	{
-		if (_light[layer] != _lastLight[layer])
-		{
-			_lastLight[layer] = _light[layer];
-			_cacheInvalid = true;
-		}
-	}
-	*invalid = _cacheInvalid;
-	return _cache;
-}
-
 
 }

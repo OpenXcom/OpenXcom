@@ -124,6 +124,8 @@ public:
 	void paletteRestore();
 	/// Sets a shade level.
 	void setShade(SDL_Color *colors, int shade);
+	/// Specific blit function to blit battlescape terrain data in different shades in a fast way.
+	void blitNShade(Surface *surface, int x, int y, int off, bool half = false);
 };
 
 }

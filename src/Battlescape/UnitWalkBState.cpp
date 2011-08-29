@@ -57,8 +57,8 @@ UnitWalkBState::~UnitWalkBState()
 
 void UnitWalkBState::init()
 {
-	setNormalWalkSpeed();
 	_unit = _action.actor;
+	setNormalWalkSpeed();
 	_pf = _parent->getGame()->getSavedGame()->getBattleGame()->getPathfinding();
 	_terrain = _parent->getGame()->getSavedGame()->getBattleGame()->getTerrainModifier();
 	_target = _action.target;
@@ -109,8 +109,9 @@ void UnitWalkBState::think()
 		// is the step finished?
 		if (_unit->getStatus() == STATUS_STANDING)
 		{
-			unitspotted = _terrain->calculateFOV(_unit);
 			_terrain->calculateUnitLighting();
+			_terrain->calculateFOVTerrain(_unit);
+			unitspotted = _terrain->calculateFOVUnits(_unit);		
 			if (unitspotted)
 			{
 				_pf->abortPath();
@@ -228,7 +229,8 @@ void UnitWalkBState::think()
 	if (_unit->getStatus() == STATUS_TURNING)
 	{
 		_unit->turn();
-		unitspotted = _terrain->calculateFOV(_unit);
+		_terrain->calculateFOVTerrain(_unit);
+		unitspotted = _terrain->calculateFOVUnits(_unit);		
 		// make sure the unit sprites are up to date
 		_parent->getMap()->cacheUnit(_unit);
 		if (unitspotted)
@@ -263,7 +265,8 @@ std::string UnitWalkBState::getResult() const
 void UnitWalkBState::postPathProcedures()
 {
 	_terrain->calculateUnitLighting();
-	_terrain->calculateFOV(_unit);
+	_terrain->calculateFOVTerrain(_unit);
+	_terrain->calculateFOVUnits(_unit);		
 	_parent->getMap()->cacheUnit(_unit);
 	_parent->popState();
 }

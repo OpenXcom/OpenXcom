@@ -583,7 +583,9 @@ void BattlescapeState::btnKneelClick(Action *action)
 		if (checkReservedTU(bu, tu) && bu->spendTimeUnits(tu, _battleGame->getDebugMode()))
 		{
 			bu->kneel(!bu->isKneeled());
-			_battleGame->getTerrainModifier()->calculateFOV(bu);
+			// kneeling or standing up can reveil new terrain or units. I guess.
+			_battleGame->getTerrainModifier()->calculateFOVTerrain(bu);
+			_battleGame->getTerrainModifier()->calculateFOVUnits(bu);
 			_map->cacheUnits();
 			updateSoldierInfo();
 			BattleAction action;
@@ -732,8 +734,8 @@ void BattlescapeState::endTurn()
 
 	_battleGame->endTurn();
 
-	// check for chained explosions
-	Tile *t = _battleGame->getTerrainModifier()->checkForChainedExplosions();
+	// check for terrain explosions
+	Tile *t = _battleGame->getTerrainModifier()->checkForTerrainExplosions();
 	if (t)
 	{
 		Position p = Position(t->getPosition().x * 16, t->getPosition().y * 16, t->getPosition().z * 24);
@@ -1065,7 +1067,7 @@ void BattlescapeState::updateSoldierInfo()
 		}
 	}
 
-	_battleGame->getTerrainModifier()->calculateFOV(_battleGame->getSelectedUnit());
+	_battleGame->getTerrainModifier()->calculateFOVUnits(_battleGame->getSelectedUnit());
 	int j = 0;
 	for (std::vector<BattleUnit*>::iterator i = battleUnit->getVisibleUnits()->begin(); i != battleUnit->getVisibleUnits()->end(); ++i)
 	{
