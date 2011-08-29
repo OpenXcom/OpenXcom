@@ -164,11 +164,44 @@ void TerrainModifier::calculateUnitLighting()
 }
 
 /**
- * Calculates line of sight of a soldier. For every visible tile fog of war is removed.
- * @param unit
- * @return true when new aliens spotted
+ * Adds circular light pattern starting from center and loosing power with distance travelled.
+ * @param center
+ * @param power
+ * @param layer Light is seperated in 3 layers: Ambient, Static and Dynamic.
  */
-bool TerrainModifier::calculateFOV(BattleUnit *unit)
+void TerrainModifier::addLight(const Position &center, int power, int layer)
+{
+	// only loop through the positive quadrant.
+	for (int x = 0; x <= power; ++x)
+	{
+		for (int y = 0; y <= power; ++y)
+		{
+			for (int z = 0; z < _save->getHeight(); z++)
+			{
+				int distance = int(floor(sqrt(float(x*x + y*y)) + 0.5));
+
+				if (_save->getTile(Position(center.x + x,center.y + y, z)))
+					_save->getTile(Position(center.x + x,center.y + y, z))->addLight(power - distance, layer);
+
+				if (_save->getTile(Position(center.x - x,center.y - y, z)))
+					_save->getTile(Position(center.x - x,center.y - y, z))->addLight(power - distance, layer);
+
+				if (_save->getTile(Position(center.x - x,center.y + y, z)))
+					_save->getTile(Position(center.x - x,center.y + y, z))->addLight(power - distance, layer);
+
+				if (_save->getTile(Position(center.x + x,center.y - y, z)))
+					_save->getTile(Position(center.x + x,center.y - y, z))->addLight(power - distance, layer);
+			}
+		}
+	}
+}
+
+
+/**
+ * Calculates line of sight of a soldier versus terrain. For every visible tile fog of war is removed.
+ * @param unit
+ */
+void TerrainModifier::calculateFOVTerrain(BattleUnit *unit)
 {
 	// units see 90 degrees sidewards.
 	int startAngle[8] = { 45, 0, -45, 270, 225, 180, 135, 90 };
@@ -178,7 +211,6 @@ bool TerrainModifier::calculateFOV(BattleUnit *unit)
 	double centerX = unit->getPosition().x + 0.5;
 	double centerY = unit->getPosition().y + 0.5;
 	int objectViewDistance;
-	int unitViewDistance;
 
 	// units see 90 degrees down and 60 degrees up.
 	int startFi = -90;
@@ -187,23 +219,19 @@ bool TerrainModifier::calculateFOV(BattleUnit *unit)
 	std::set<Tile*> tilesAffected;
 	std::pair<std::set<Tile*>::iterator,bool> ret;
 
-
-	int visibleUnitsChecksum = 0;
-
 	if (unit->getPosition().z == 0)
 	{
 		startFi = 0;
 	}
 
+	// non players don't care about terrain FOV
+	if (unit->getFaction() != FACTION_PLAYER)
+	{
+		return;
+	}
+
 	// we see the tile we are standing on
-	if (unit->getFaction() == FACTION_PLAYER)
-		unit->getTile()->setDiscovered(true, 2);
-
-	// calculate a visible units checksum - if it changed during this step, the soldier stops walking
-	for (std::vector<BattleUnit*>::iterator i = unit->getVisibleUnits()->begin(); i != unit->getVisibleUnits()->end(); ++i)
-		visibleUnitsChecksum += (*i)->getId()+1;
-
-	unit->clearVisibleUnits();
+	unit->getTile()->setDiscovered(true, 2);
 
 	// raytrace up and down
 	for (int fi = startFi; fi <= endFi; fi += 6)
@@ -222,10 +250,7 @@ bool TerrainModifier::calculateFOV(BattleUnit *unit)
 			double vx, vy, vz;
 			int tileX, tileY, tileZ;
 
-			// shade goes from 0 to 15 (day -> night), while the viewdistance goes from 20 to 9 (day -> night)
-			objectViewDistance = 20;
-
-			unitViewDistance = objectViewDistance;
+			objectViewDistance = MAX_VIEW_DISTANCE;
 			while (objectViewDistance > 0)
 			{
 				l++;
@@ -243,127 +268,220 @@ bool TerrainModifier::calculateFOV(BattleUnit *unit)
 				if (!dest) break; // out of map!
 
 				// horizontal blockage by walls
-				objectViewDistance -= horizontalBlockage(origin, dest, DT_NONE); // line of sight is all or nothing
+				objectViewDistance -= horizontalBlockage(origin, dest, DT_NONE);
 
 				// vertical blockage by ceilings/floors
-				objectViewDistance -= verticalBlockage(origin, dest, DT_NONE); // line of sight is all or nothing
+				objectViewDistance -= verticalBlockage(origin, dest, DT_NONE);
 
-				if (objectViewDistance > 0 && dest->getShade() < 10) // shade lower than 10 allows to see a unit
+				if (objectViewDistance > 0)
 				{
 					ret = tilesAffected.insert(dest); // check if we had this tile already
 					if (ret.second)
 					{
-						if (unitViewDistance > 0)
-							checkForVisibleUnits(unit, dest);
-
-						if (unit->getFaction() == FACTION_PLAYER)
-						{
-							dest->setDiscovered(true, 2);
-							// walls to the east or south of a visible tile, we see that too
-							Tile* t = _save->getTile(Position(tileX + 1, tileY, tileZ));
-							if (t) t->setDiscovered(true, 0);
-							t = _save->getTile(Position(tileX, tileY - 1, tileZ));
-							if (t) t->setDiscovered(true, 1);
-						}
+						dest->setDiscovered(true, 2);
+						// walls to the east or south of a visible tile, we see that too
+						Tile* t = _save->getTile(Position(tileX + 1, tileY, tileZ));
+						if (t) t->setDiscovered(true, 0);
+						t = _save->getTile(Position(tileX, tileY - 1, tileZ));
+						if (t) t->setDiscovered(true, 1);
 					}
 				}
-				if (dest->getShade() > 7) // shade higher than 7 decreases the viewdistance
-				{
-					objectViewDistance--;
-				}
-				// smoke blocks the viewdistance of units only
-				unitViewDistance -= int(dest->getSmoke() / 3);
 				origin = dest;
 			}
 		}
 	}
+}
 
+/**
+ * Calculates line of sight of a soldier versus units.
+ * @param unit
+ * @return true when new aliens spotted
+ */
+bool TerrainModifier::calculateFOVUnits(BattleUnit *unit)
+{
+	int visibleUnitsChecksum = 0;
+	Position center = unit->getPosition();
+	Position test;
+	bool swap = (unit->getDirection()==0 || unit->getDirection()==4);
+	int signX[8] = { +1, +1, +1, +1, -1, -1, -1, -1 };
+	int signY[8] = { +1, +1, +1, -1, -1, -1, +1, +1 };
+	int y1, y2;
+
+	// calculate a visible units checksum - if it changed during this step, the soldier stops walking
+	for (std::vector<BattleUnit*>::iterator i = unit->getVisibleUnits()->begin(); i != unit->getVisibleUnits()->end(); ++i)
+		visibleUnitsChecksum += (*i)->getId()+1;
+
+	unit->clearVisibleUnits();
+
+	for (int x = 0; x <= MAX_VIEW_DISTANCE; ++x)
+	{
+		if (unit->getDirection()%2)
+		{
+			y1 = 0;
+			y2 = MAX_VIEW_DISTANCE - x;
+		}
+		else
+		{
+			y1 = -x;
+			y2 = x;
+		}
+		for (int y = y1; y <= y2; ++y)
+		{
+			for (int z = 0; z < _save->getHeight(); z++)
+			{
+				int distance = int(floor(sqrt(float(x*x + y*y)) + 0.5));
+				test.z = z;
+				if (distance <= MAX_VIEW_DISTANCE)
+				{
+					test.x = center.x + signX[unit->getDirection()]*(swap?y:x);
+					test.y = center.y + signY[unit->getDirection()]*(swap?x:y);
+					if (_save->getTile(test))
+					{
+						checkIfUnitVisible(unit, _save->getTile(test)->getUnit());
+					}
+				}
+			}
+		}
+	}
+	
 	int newChecksum = 0;
 	for (std::vector<BattleUnit*>::iterator i = unit->getVisibleUnits()->begin(); i != unit->getVisibleUnits()->end(); ++i)
 		newChecksum += (*i)->getId()+1;
 
 	return visibleUnitsChecksum < newChecksum;
+
 }
+
 
 /**
  * Check for an opposing unit on this tile
- * @param unit
- * @param tile
+ * @param currentUnit the watcher
+ * @param otherUnit the unit to check for
  */
-bool TerrainModifier::checkForVisibleUnits(BattleUnit *unit, Tile *tile)
+bool TerrainModifier::checkIfUnitVisible(BattleUnit *currentUnit, BattleUnit *otherUnit)
 {
-	BattleUnit *bu = tile->getUnit();
-
-	if (bu == 0 || bu->isOut())
+	// only check if unit is alive
+	if (otherUnit == 0 || otherUnit->isOut())
 	{
 		return false;
 	}
 
-	if (unit->getFaction() == FACTION_PLAYER && (bu->getFaction() == FACTION_PLAYER || bu->getFaction() == FACTION_NEUTRAL))
+	// only check for opposing factions
+	if (currentUnit->getFaction() == FACTION_PLAYER && (otherUnit->getFaction() == FACTION_PLAYER || otherUnit->getFaction() == FACTION_NEUTRAL))
 	{
 		return false;
 	}
 
-	if (unit->getFaction() == FACTION_HOSTILE && bu->getFaction() == FACTION_HOSTILE)
+	if (currentUnit->getFaction() == FACTION_HOSTILE && otherUnit->getFaction() == FACTION_HOSTILE)
 	{
 		return false;
 	}
 
+	// if the tile is too dark, we can't see the unit
+	if (_save->getTile(otherUnit->getPosition())->getShade() > MAX_DARKNESS_TO_SEE_UNITS)
+	{
+		return false;
+	}
+
+	// determine the origin and target voxels for the raytrace
 	Position originVoxel, targetVoxel;
-	originVoxel = Position((unit->getPosition().x * 16) + 8, (unit->getPosition().y * 16) + 8, unit->getPosition().z*24);
-	originVoxel.z += -tile->getTerrainLevel();
-	if (unit->isKneeled())
+	std::vector<Position> _trajectory;
+	originVoxel = Position((currentUnit->getPosition().x * 16) + 8, (currentUnit->getPosition().y * 16) + 8, currentUnit->getPosition().z*24);
+	originVoxel.z += -_save->getTile(currentUnit->getPosition())->getTerrainLevel();
+	if (currentUnit->isKneeled())
 	{
-		originVoxel.z += unit->getUnit()->getKneelHeight();
+		originVoxel.z += currentUnit->getUnit()->getKneelHeight();
 	}
 	else
 	{
-		originVoxel.z += unit->getUnit()->getStandHeight();
+		originVoxel.z += currentUnit->getUnit()->getStandHeight();
 	}
 	bool unitSeen = false;
 
-	targetVoxel = Position((bu->getPosition().x * 16) + 8, (bu->getPosition().y * 16) + 8, bu->getPosition().z*24);
-	int targetMinHeight = targetVoxel.z - _save->getTile(bu->getPosition())->getTerrainLevel();
+	targetVoxel = Position((otherUnit->getPosition().x * 16) + 8, (otherUnit->getPosition().y * 16) + 8, otherUnit->getPosition().z*24);
+	int targetMinHeight = targetVoxel.z - _save->getTile(otherUnit->getPosition())->getTerrainLevel();
 	int targetMaxHeight;
-	if (bu->isKneeled())
+	if (otherUnit->isKneeled())
 	{
-		 targetMaxHeight = targetMinHeight + bu->getUnit()->getKneelHeight();
+		 targetMaxHeight = targetMinHeight + otherUnit->getUnit()->getKneelHeight();
 	}
 	else
 	{
-		targetMaxHeight = targetMinHeight + bu->getUnit()->getStandHeight();
+		targetMaxHeight = targetMinHeight + otherUnit->getUnit()->getStandHeight();
 	}
 
 	// scan ray from top to bottom
 	for (int i = targetMaxHeight; i > targetMinHeight; i-=2)
 	{
 		targetVoxel.z = i;
-		int test = calculateLine(originVoxel, targetVoxel, false, 0, unit);
-		Position hitPosition = Position(targetVoxel.x/16, targetVoxel.y/16, targetVoxel.z/24);
-		if (test == -1 || (test == 4 && bu->getPosition() == hitPosition))
+		_trajectory.clear();
+		int test = calculateLine(originVoxel, targetVoxel, false, &_trajectory, currentUnit);
+		if (test == 4)
+		{
+			Position hitPosition = Position(_trajectory.at(0).x/16, _trajectory.at(0).y/16, _trajectory.at(0).z/24);
+			if (otherUnit->getPosition() == hitPosition)
+			{
+				unitSeen = true;
+				break;
+			}
+		}
+		if (test == -1)
 		{
 			unitSeen = true;
-			unit->addToVisibleUnits(bu);
 			break;
+		}
+	}
+
+	if (unitSeen)
+	{
+		// now check if we really see it taking into account smoke tiles
+		// initial smoke "density" of a smoke grenade is around 10 per tile
+		// we do density/2 to get the decay of visibility, so in fresh smoke we only have 4 tiles of visibility
+		_trajectory.clear();
+		calculateLine(originVoxel, targetVoxel, true, &_trajectory, currentUnit);
+		Tile *t = _save->getTile(currentUnit->getPosition());
+		int maxViewDistance = MAX_VIEW_DISTANCE - (t->getSmoke()/2);
+		for (unsigned int i = 0; i < _trajectory.size(); i++)
+		{
+			if (t != _save->getTile(Position(_trajectory.at(i).x/16,_trajectory.at(i).y/16, _trajectory.at(i).z/24)))
+			{
+				t = _save->getTile(Position(_trajectory.at(i).x/16,_trajectory.at(i).y/16, _trajectory.at(i).z/24));
+				maxViewDistance -= t->getSmoke()/2;
+			}
+		}
+		int x = abs(currentUnit->getPosition().x - otherUnit->getPosition().x);
+		int y = abs(currentUnit->getPosition().y - otherUnit->getPosition().y);
+		int distance = int(floor(sqrt(float(x*x + y*y)) + 0.5));
+		if (distance <= maxViewDistance)
+		{
+			currentUnit->addToVisibleUnits(otherUnit);
+		}
+		else
+		{
+			unitSeen = false;
 		}
 	}
 
 	return unitSeen;
 }
 
-
 /**
- * Calculates line of sight of a soldiers within range of the Position.
- * TODO: review this, because it is recalculating all soldiers.
+ * Calculates line of sight of a soldiers within range of the Position
+ * (used when terrain has changed, which can reveil new parts of terrain or units)
  * @param position
  */
 void TerrainModifier::calculateFOV(const Position &position)
 {
 	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
-		if ((*i)->getFaction() == _save->getSide())
+		int x = abs(position.x - (*i)->getPosition().x);
+		int y = abs(position.y - (*i)->getPosition().y);
+		int distance = int(floor(sqrt(float(x*x + y*y)) + 0.5));
+
+		if (distance < 20 && (*i)->getFaction() == _save->getSide())
 		{
-			calculateFOV(*i);
+			calculateFOVTerrain(*i);
+			calculateFOVUnits(*i);
 		}
 	}
 }
@@ -386,6 +504,13 @@ bool TerrainModifier::checkReactionFire(BattleUnit *unit, BattleAction *action, 
 		return false;
 	}
 
+	// from time to time just don't do a reaction shot
+	// (implemented this after doing lots of test cycles - in the original x-com on average we get to see far less reaction shots although the formula used is the one on UFOPAEDIA)
+	if (RNG::generate(0, 4) == 1)
+	{
+		return false;
+	}
+
 	if (potentialVictim && RNG::generate(0, 4) == 1 && potentialVictim->getFaction() == FACTION_HOSTILE)
 	{
 		potentialVictim->lookAt(unit->getPosition());
@@ -396,6 +521,9 @@ bool TerrainModifier::checkReactionFire(BattleUnit *unit, BattleAction *action, 
 		}
 	}
 
+	// we reset the unit to false here - if it is seen by any unit in range below the unit becomes visible again
+	unit->setVisible(false);
+
 	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
 		int x = abs(unit->getPosition().x - (*i)->getPosition().x);
@@ -405,7 +533,7 @@ bool TerrainModifier::checkReactionFire(BattleUnit *unit, BattleAction *action, 
 		{
 			if (recalculateFOV)
 			{
-				calculateFOV(*i);
+				calculateFOVUnits(*i);
 			}
 			for (std::vector<BattleUnit*>::iterator j = (*i)->getVisibleUnits()->begin(); j != (*i)->getVisibleUnits()->end(); ++j)
 			{
@@ -458,39 +586,6 @@ bool TerrainModifier::checkReactionFire(BattleUnit *unit, BattleAction *action, 
 	}
 
 	return false;
-}
-
-/**
- * Adds circular light pattern starting from center and loosing power with distance travelled.
- * @param center
- * @param power
- * @param layer Light is seperated in 3 layers: Ambient, Static and Dynamic.
- */
-void TerrainModifier::addLight(const Position &center, int power, int layer)
-{
-	// only loop through the positive quadrant.
-	for (int x = 0; x <= power; ++x)
-	{
-		for (int y = 0; y <= power; ++y)
-		{
-			for (int z = 0; z < _save->getHeight(); z++)
-			{
-				int distance = int(floor(sqrt(float(x*x + y*y)) + 0.5));
-
-				if (_save->getTile(Position(center.x + x,center.y + y, z)))
-					_save->getTile(Position(center.x + x,center.y + y, z))->addLight(power - distance, layer);
-
-				if (_save->getTile(Position(center.x - x,center.y - y, z)))
-					_save->getTile(Position(center.x - x,center.y - y, z))->addLight(power - distance, layer);
-
-				if (_save->getTile(Position(center.x - x,center.y + y, z)))
-					_save->getTile(Position(center.x - x,center.y + y, z))->addLight(power - distance, layer);
-
-				if (_save->getTile(Position(center.x + x,center.y - y, z)))
-					_save->getTile(Position(center.x + x,center.y - y, z))->addLight(power - distance, layer);
-			}
-		}
-	}
 }
 
 /**
@@ -599,7 +694,7 @@ void TerrainModifier::explode(const Position &center, int power, ItemDamageType 
 						}
 						if (type == DT_SMOKE)
 						{
-							// smoke from explosions always stay 10 to 20 turns
+							// smoke from explosions always stay 6 to 14 turns - power of a smoke grenade is 60
 							if (dest->getSmoke() < 10)
 							{
 								dest->addSmoke(RNG::generate(power_/10, 14));
@@ -635,7 +730,6 @@ void TerrainModifier::explode(const Position &center, int power, ItemDamageType 
 		}
 	}
 
-	// recalculate line of sight (to optimise: only units in range)
 	calculateFOV(center);
 	calculateTerrainLighting(); // fires could have been started
 }
@@ -645,7 +739,7 @@ void TerrainModifier::explode(const Position &center, int power, ItemDamageType 
  * May be due a direct hit, other explosion or fire.
  * @return tile on which a explosion occured
  */
-Tile *TerrainModifier::checkForChainedExplosions()
+Tile *TerrainModifier::checkForTerrainExplosions()
 {
 
 	for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); ++i)
@@ -881,7 +975,6 @@ int TerrainModifier::unitOpensDoor(BattleUnit *unit)
 		break;
 	}
 
-
 	if (door == 0 || door == 1)
 	{
 		_save->getTerrainModifier()->calculateFOV(tile->getPosition());
@@ -1048,7 +1141,7 @@ int TerrainModifier::calculateParabola(const Position& origin, const Position& t
  * check if we hit a voxel.
  * @return the objectnumber(0-3) or unit(4) or out of map (5) or -1(hit nothing)
  */
-int TerrainModifier::voxelCheck(const Position& voxel, BattleUnit *excludeUnit)
+int TerrainModifier::voxelCheck(const Position& voxel, BattleUnit *excludeUnit, bool excludeAllUnits)
 {
 
 	Tile *tile = _save->getTile(Position(voxel.x/16, voxel.y/16, voxel.z/24));
@@ -1058,17 +1151,20 @@ int TerrainModifier::voxelCheck(const Position& voxel, BattleUnit *excludeUnit)
 		return 5;
 	}
 
-	BattleUnit *unit = tile->getUnit();
-	if (unit != 0 && unit != excludeUnit)
+	if (!excludeAllUnits)
 	{
-		if ((voxel.z%24) < (unit->isKneeled()?unit->getUnit()->getKneelHeight():unit->getUnit()->getStandHeight()))
+		BattleUnit *unit = tile->getUnit();
+		if (unit != 0 && unit != excludeUnit)
 		{
-			int x = 15 - voxel.x%16;
-			int y = 15 - voxel.y%16;
-			int idx = (unit->getUnit()->gotLoftemps() * 16) + y;
-			if ((_voxelData->at(idx) & (1 << x))==(1 << x))
+			if ((voxel.z%24) < (unit->isKneeled()?unit->getUnit()->getKneelHeight():unit->getUnit()->getStandHeight()))
 			{
-				return 4;
+				int x = 15 - voxel.x%16;
+				int y = 15 - voxel.y%16;
+				int idx = (unit->getUnit()->gotLoftemps() * 16) + y;
+				if ((_voxelData->at(idx) & (1 << x))==(1 << x))
+				{
+					return 4;
+				}
 			}
 		}
 	}

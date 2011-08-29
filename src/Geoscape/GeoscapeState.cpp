@@ -873,7 +873,7 @@ void GeoscapeState::btnGraphsClick(Action *action)
 	bgen->setMissionType(MISS_TERROR);
 	//bgen->setMissionType(MISS_UFOASSAULT);
 	bgen->setWorldTexture(1);
-	bgen->setWorldShade(0);
+	bgen->setWorldShade(2);
 	bgen->setCraft(_game->getSavedGame()->getBases()->at(0)->getCrafts()->at(0));
 	bgen->run();
 	delete bgen;

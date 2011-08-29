@@ -43,6 +43,8 @@ public:
 	static std::string wstrToUtf8(const std::wstring& src);
 	/// Converts a UTF-8 string to wide-string.
 	static std::wstring utf8ToWstr(const std::string& src);
+	/// Replaces a substring.
+	static void replace(std::string &str, const std::string &find, const std::string &replace);
 	/// Loads an OpenXcom language file.
 	void loadLng(const std::string &filename);
 	/// Gets the language's name.

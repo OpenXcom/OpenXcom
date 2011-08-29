@@ -49,7 +49,7 @@ int main(int argc, char** args)
 	{
 #endif
 		Options::init(argc, args);
-		game = new Game("OpenXcom " + Options::getVersion(), 320, 200, 16);
+		game = new Game("OpenXcom " + Options::getVersion(), 320, 200, 8);
 		game->getScreen()->setFullscreen(Options::getBool("fullscreen"));
 		game->getScreen()->setResolution(Options::getInt("displayWidth"), Options::getInt("displayHeight"));
 		game->setVolume(Options::getInt("soundVolume"), Options::getInt("musicVolume"));

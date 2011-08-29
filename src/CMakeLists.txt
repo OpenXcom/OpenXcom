@@ -414,7 +414,7 @@ set ( openxcom_src main.cpp ${basescape_src} ${battlescape_src} ${engine_src} ${
 set ( EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin )
 
 add_executable ( openxcom  ${openxcom_src} )
-
+install ( TARGETS openxcom RUNTIME DESTINATION bin )
 # Extra link flags for windows. they need to be before the SDL/YAML link flags. Otherwise, you will get strange link errors('Undefined reference to WinMain@16')
 if ( WIN32 )
   target_link_libraries ( openxcom advapi32.lib shell32.lib shlwapi.lib mingw32 -mwindows SDLMain )
@@ -425,6 +425,7 @@ add_custom_command ( TARGET openxcom
   POST_BUILD
   COMMAND cmake -E copy_directory ${CMAKE_SOURCE_DIR}/bin/USER ${EXECUTABLE_OUTPUT_PATH}/USER
   COMMAND cmake -E copy_directory ${CMAKE_SOURCE_DIR}/bin/DATA ${EXECUTABLE_OUTPUT_PATH}/DATA )
+install ( DIRECTORY ${CMAKE_SOURCE_DIR}/bin/DATA DESTINATION bin )
 
 # Copy Windows DLL to bin folder
 if ( WIN32 )
@@ -433,6 +434,7 @@ if ( WIN32 )
     add_custom_command ( TARGET openxcom
       POST_BUILD
       COMMAND cmake -E copy ${dll} ${EXECUTABLE_OUTPUT_PATH} )
+    install ( FILES ${dll} DESTINATION bin)
   endforeach()
 endif ()
 
