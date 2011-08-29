@@ -36,6 +36,7 @@
 #include "NewResearchListState.h"
 #include "../Interface/ArrowButton.h"
 #include "../Engine/Timer.h"
+#include "../Engine/RNG.h"
 
 #include <sstream>
 
@@ -61,7 +62,7 @@ int getFreeScientist (Base * base)
 	return freeScientist;
 }
 
-ResearchProjectState::ResearchProjectState(Game *game, Base *base, RuleResearchProject * rule, ResearchState * researchState, NewResearchListState * newResearchListState) : State(game), _base(base), _project(new ResearchProject(rule)), _rule(rule), _researchState(researchState), _newResearchListState(newResearchListState)
+ResearchProjectState::ResearchProjectState(Game *game, Base *base, RuleResearchProject * rule, ResearchState * researchState, NewResearchListState * newResearchListState) : State(game), _base(base), _project(new ResearchProject(rule, rule->getCost() * OpenXcom::RNG::generate(0.5f, 1.5f))), _rule(rule), _researchState(researchState), _newResearchListState(newResearchListState)
 {
 	buildUi ();
 }
