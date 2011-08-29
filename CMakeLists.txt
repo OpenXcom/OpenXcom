@@ -3,6 +3,8 @@ project ( OpenXcom )
 cmake_minimum_required ( VERSION 2.8 )
 set ( CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}" )
 
+include ( CPack )
+
 # Add check for library (SDL_gfx, yaml-cpp )
 if ( IS_DIRECTORY ${CMAKE_SOURCE_DIR}/deps )
    include_directories ( ${CMAKE_SOURCE_DIR}/deps/include/SDL ${CMAKE_SOURCE_DIR}/deps/include/yaml-cpp ${CMAKE_SOURCE_DIR}/deps/include )
