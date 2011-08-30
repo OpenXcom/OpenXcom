@@ -693,31 +693,32 @@ void Surface::blitNShade(Surface *surface, int x, int y, int off, bool half)
 	int spitch = getSurface()->pitch;
 	int dpitch = surface->getSurface()->pitch;
 
-	for (int ix = 0, iy = 0; ix < w && iy < h;)
-	{
-		if (!half || ix > 15)
+	
+	const int start_x = std::max((half)? 16 : 0, -x);
+	const int start_y = std::max(0, -y);
+	const int end_x = std::min( w, dw - x);
+	const int end_y = std::min( h, dh - y);
+	
+	int dest_y = (y + start_y) * dpitch + x;
+	int src_y = start_y * spitch;
+	//for (int ix = start_x, iy = start_y; ix < end_x && iy < end_y;)
+	for(int iy = start_y; iy < end_y; ++iy, dest_y += dpitch, src_y += spitch)
+		for(int ix = start_x; ix<end_x; ++ix)
 		{
-			Uint8 pixel = src[iy * spitch + ix];
-			int baseColor = pixel/16;
-			int newShade = pixel%16 + off;
-			if (newShade > 15) 
+			int pixel = src[src_y + ix];
+			if(pixel)
 			{
-				// so dark it would flip over to another color - make it black instead
-				baseColor = 0;
-				newShade = 15;
-			}
-			if (pixel > 0 && (y + iy) > 0 && (x + ix) > 0 && (y + iy) < dh && (x + ix) < dw)
-			{
-				dest[(y + iy) * dpitch + (x + ix)] = (baseColor*16) + newShade;
+				int baseColor = pixel>>4;
+				int newShade = (pixel&15) + off;
+				if (newShade > 15) 
+				{
+					// so dark it would flip over to another color - make it black instead
+					baseColor = 0;
+					newShade = 15;
+				}
+				dest[dest_y + ix] = (baseColor<<4) | newShade;
 			}
 		}
-		ix++;
-		if (ix == w)
-		{
-			iy++;
-			ix = 0;
-		}
-	}
 }
 
 }
