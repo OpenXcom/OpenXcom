@@ -145,6 +145,36 @@ void ResearchState::onSelectProject(Action *action)
 }
 
 extern int getFreeLabSpace (Base * base);
+const float PROGRESS_LIMIT_UNKNOWN = 0.333f;
+const float PROGRESS_LIMIT_POOR = 0.008;
+const float PROGRESS_LIMIT_AVERAGE = 0.14f;
+const float PROGRESS_LIMIT_GOOD = 0.26f;
+std::string getResearchProgress (const ResearchProject * p)
+{
+	float progress = p->getSpent () / p->getRuleResearchProject ()->getCost();
+	if (progress < PROGRESS_LIMIT_UNKNOWN)
+	{
+		return "STR_UNKNOWN";
+	}
+	else
+	{
+		float rating = p->getAssigned ();
+		rating /= p->getRuleResearchProject ()->getCost();
+		if (rating < PROGRESS_LIMIT_POOR)
+		{
+			return "STR_POOR";
+		}
+		else if (rating < PROGRESS_LIMIT_AVERAGE)
+		{
+			return "STR_AVERAGE";
+		}
+		else if (rating < PROGRESS_LIMIT_GOOD)
+		{
+			return "STR_GOOD";
+		}
+		return "STR_EXCELLENT";
+	}
+}
 
 void ResearchState::fillProjectList()
 {
@@ -158,7 +188,7 @@ void ResearchState::fillProjectList()
 		sstr << (*iter)->getAssigned ();
 		const RuleResearchProject *r = (*iter)->getRuleResearchProject();
 		std::wstring wstr = _game->getLanguage()->getString(r->getName ());
-		_lstResearch->addRow(3, wstr.c_str(), sstr.str().c_str(), L"Unknown");
+		_lstResearch->addRow(3, wstr.c_str(), sstr.str().c_str(), _game->getLanguage()->getString(getResearchProgress(*iter)).c_str());
 	}
 	std::wstringstream ss;
 	ss << _game->getLanguage()->getString("STR_SCIENTISTS_AVAILABLE") << L'\x01' << _base->getAvailableScientists();
