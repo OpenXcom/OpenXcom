@@ -39,7 +39,7 @@ namespace OpenXcom
 	ArticleStateBaseFacility::ArticleStateBaseFacility(Game *game, ArticleDefinitionBaseFacility *defs) : ArticleState(game, defs->id)
 	{
 		// add screen elements
-		_txtTitle = new Text(140, 32, 10, 24);
+		_txtTitle = new Text(190, 32, 10, 24);
 		
 		// Set palette
 		_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());

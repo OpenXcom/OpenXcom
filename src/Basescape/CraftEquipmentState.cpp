@@ -91,13 +91,15 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, unsigned int cr
 	_txtStores->setText(_game->getLanguage()->getString("STR_STORES"));
 
 	_txtAvailable->setColor(Palette::blockOffset(15)+1);
+	_txtAvailable->setSecondaryColor(Palette::blockOffset(13));
 	std::wstringstream ss;
-	ss << _game->getLanguage()->getString("STR_SPACE_AVAILABLE") << c->getRules()->getSoldiers() - c->getNumSoldiers();
+	ss << _game->getLanguage()->getString("STR_SPACE_AVAILABLE") << L'\x01'<< c->getRules()->getSoldiers() - c->getNumSoldiers();
 	_txtAvailable->setText(ss.str());
 
 	_txtUsed->setColor(Palette::blockOffset(15)+1);
+	_txtUsed->setSecondaryColor(Palette::blockOffset(13));
 	std::wstringstream ss2;
-	ss2 << _game->getLanguage()->getString("STR_SPACE_USED") << c->getNumSoldiers();
+	ss2 << _game->getLanguage()->getString("STR_SPACE_USED") << L'\x01'<< c->getNumSoldiers();
 	_txtUsed->setText(ss2.str());
 
 	_lstEquipment->setColor(Palette::blockOffset(13)+10);

@@ -38,7 +38,7 @@ namespace OpenXcom
 	ArticleStateCraftWeapon::ArticleStateCraftWeapon(Game *game, ArticleDefinitionCraftWeapon *defs) : ArticleState(game, defs->id)
 	{
 		// add screen elements
-		_txtTitle = new Text(140, 32, 5, 24);
+		_txtTitle = new Text(200, 32, 5, 24);
 		
 		// Set palette
 		_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_4")->getColors());
@@ -60,12 +60,12 @@ namespace OpenXcom
 		_txtTitle->setWordWrap(true);
 		_txtTitle->setText(Ufopaedia::buildText(_game, defs->title));
 		
-		_lstInfo = new TextList(210, 111, 5, 80);
+		_lstInfo = new TextList(220, 111, 5, 80);
 		add(_lstInfo);
 		
 		std::wstringstream ss;
 		_lstInfo->setColor(Palette::blockOffset(14)+15);
-		_lstInfo->setColumns(2, 134, 70);
+		_lstInfo->setColumns(2, 150, 70);
 		_lstInfo->setDot(true);
 		_lstInfo->setBig();
 		

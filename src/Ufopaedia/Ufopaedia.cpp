@@ -35,8 +35,6 @@
 // these are for runStandalone...
 #include "../Resource/ResourcePack.h"
 #include "../Ruleset/XcomRuleset.h"
-#include "../Engine/Options.h"
-#include <sstream>
 
 namespace OpenXcom
 {
@@ -175,11 +173,7 @@ namespace OpenXcom
 	void Ufopaedia::runStandalone(Game *game)
 	{
 		// set game language
-		std::stringstream ss;
-		ss << Options::getDataFolder() << "Language/English.lng";
-		Language *l = new Language();
-		l->loadLng(ss.str());
-		game->setLanguage(l);
+		game->loadLanguage("English");
 		
 		// init game
 		game->setRuleset(new XcomRuleset());
