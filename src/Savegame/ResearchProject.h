@@ -27,29 +27,29 @@ class Ruleset;
 
 class ResearchProject
 {
-  RuleResearchProject * _project;
-  int _assigned;
-  float _spent;
-  float _cost;
+	RuleResearchProject * _project;
+	int _assigned;
+	float _spent;
+	float _cost;
 public:
-  ResearchProject(RuleResearchProject * p, float f = 0.0f);
+	ResearchProject(RuleResearchProject * p, float f = 0.0f);
 
-  bool step();
+	bool step();
 
-  void setAssigned (int nb);
+	void setAssigned (int nb);
 
-  int getAssigned () const;
+	int getAssigned () const;
 
-  float getSpent () const;
-  void setSpent (float f);
+	float getSpent () const;
+	void setSpent (float f);
 
-  float getCost() const;
-  void setCost(float f);
+	float getCost() const;
+	void setCost(float f);
 
-  const RuleResearchProject * getRuleResearchProject () const;
+	const RuleResearchProject * getRuleResearchProject () const;
 
-  void load(const YAML::Node& node, const Ruleset *rule);
-  void save(YAML::Emitter& out) const;
+	void load(const YAML::Node& node, const Ruleset *rule);
+	void save(YAML::Emitter& out) const;
 };
 }
 #endif
