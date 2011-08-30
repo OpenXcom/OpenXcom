@@ -77,7 +77,7 @@ void getAvailableResearchProjects (std::vector<RuleResearchProject *> & projects
 {
 	const std::vector<const RuleResearchProject *> & found(game->getSavedGame()->getFoundResearch());
 	const std::vector<RuleResearchProject *> & researchProjects = game->getRuleset()->getResearchProjects();
-	const std::vector<ResearchProject *> & baseResearchProjects = base->GetResearch();
+	const std::vector<ResearchProject *> & baseResearchProjects = base->getResearch();
 	std::vector<const RuleResearchProject *> unlockeds;
 	for(std::vector<const RuleResearchProject *>::const_iterator it = found.begin ();
 	    it != found.end ();

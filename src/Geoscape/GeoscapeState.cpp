@@ -749,7 +749,7 @@ void GeoscapeState::time1Day()
 			}
 		}
 		std::vector<ResearchProject*> finished;
-		for(std::vector<ResearchProject*>::const_iterator iter = (*i)->GetResearch().begin (); iter != (*i)->GetResearch().end (); ++iter)
+		for(std::vector<ResearchProject*>::const_iterator iter = (*i)->getResearch().begin (); iter != (*i)->getResearch().end (); ++iter)
 		{
 			if((*iter)->step())
 			{
@@ -758,7 +758,7 @@ void GeoscapeState::time1Day()
 		}
 		for(std::vector<ResearchProject*>::const_iterator iter = finished.begin (); iter != finished.end (); ++iter)
 		{
-			(*i)->RemoveResearch(*iter);
+			(*i)->removeResearch(*iter);
 			const RuleResearchProject * research = (*iter)->getRuleResearchProject ();
 			_game->pushState(new EndResearchState (_game, *i, research));
 			_game->getSavedGame()->addFinishedResearch(research);

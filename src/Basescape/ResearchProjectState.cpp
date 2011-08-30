@@ -51,7 +51,7 @@ int getFreeLabSpace (Base * base)
 int getFreeScientist (Base * base)
 {
 	int freeScientist = base->getScientists();
-	const std::vector<ResearchProject *> & researchs (base->GetResearch());
+	const std::vector<ResearchProject *> & researchs (base->getResearch());
 	for (std::vector<ResearchProject *>::const_iterator itResearch = researchs.begin ();
 	     itResearch != researchs.end ();
 	     itResearch++)
@@ -136,7 +136,7 @@ void ResearchProjectState::buildUi ()
 
 	if (_rule)
 	{
-		_base->AddResearch(_project);
+		_base->addResearch(_project);
 	}
 	SetAssignedScientist();
 	_btnMore->setColor(Palette::blockOffset(13)+8);

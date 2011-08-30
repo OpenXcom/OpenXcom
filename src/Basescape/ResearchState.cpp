@@ -140,7 +140,7 @@ void ResearchState::btnNewClick(Action *action)
 
 void ResearchState::onSelectProject(Action *action)
 {
-	const std::vector<ResearchProject *> & baseProjects(_base->GetResearch());
+	const std::vector<ResearchProject *> & baseProjects(_base->getResearch());
 	_game->pushState(new ResearchProjectState(_game, _base, baseProjects[_lstResearch->getSelectedRow()], this, NULL));
 }
 
@@ -178,7 +178,7 @@ std::string getResearchProgress (const ResearchProject * p)
 
 void ResearchState::fillProjectList()
 {
-	const std::vector<ResearchProject *> & baseProjects(_base->GetResearch());
+	const std::vector<ResearchProject *> & baseProjects(_base->getResearch());
 	_lstResearch->clearList();
 	for(std::vector<ResearchProject *>::const_iterator iter = baseProjects.begin ();
 	    iter != baseProjects.end ();

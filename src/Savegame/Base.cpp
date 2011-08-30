@@ -398,7 +398,7 @@ int Base::getTotalSoldiers() const
 int Base::getAvailableScientists() const
 {
 	int nbFreeScientist = getScientists();
-	const std::vector<ResearchProject *> & researchs (GetResearch());
+	const std::vector<ResearchProject *> & researchs (getResearch());
 	for (std::vector<ResearchProject *>::const_iterator itResearch = researchs.begin ();
 	     itResearch != researchs.end ();
 	     itResearch++)
@@ -530,7 +530,7 @@ int Base::getAvailableStores() const
  */
 int Base::getUsedLaboratories() const
 {
-	const std::vector<ResearchProject *> & researchs (GetResearch());
+	const std::vector<ResearchProject *> & researchs (getResearch());
 	int usedLabSpace = 0;
 	for (std::vector<ResearchProject *>::const_iterator itResearch = researchs.begin ();
 	     itResearch != researchs.end ();
@@ -754,17 +754,17 @@ int Base::getMonthlyMaintenace() const
 }
 
 
-const std::vector<ResearchProject *> & Base::GetResearch() const
+const std::vector<ResearchProject *> & Base::getResearch() const
 {
 	return _baseResearchs;
 }
 
-void Base::AddResearch(ResearchProject * project)
+void Base::addResearch(ResearchProject * project)
 {
 	_baseResearchs.push_back(project);
 }
 
-void Base::RemoveResearch(ResearchProject * project)
+void Base::removeResearch(ResearchProject * project)
 {
   std::vector<ResearchProject *>::iterator iter = std::find (_baseResearchs.begin (), _baseResearchs.end (), project);
 	_baseResearchs.erase(iter);
