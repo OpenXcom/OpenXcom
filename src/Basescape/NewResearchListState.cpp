@@ -178,19 +178,12 @@ void NewResearchListState::fillProjectList ()
 	_projects.clear();
 	_lstResearch->clearList();
 	getAvailableResearchProjects(_projects, _game, _base);
-	if(_projects.empty())
+	for (std::vector<RuleResearchProject *>::iterator it = _projects.begin ();
+	     it != _projects.end ();
+	     it++)
 	{
-		_game->popState();
-		//FIXME : if no project can be listed when the dialog is created for the first time, this will exit to the base view
+		_lstResearch->addRow(1, _game->getLanguage()->getString((*it)->getName ()).c_str());
 	}
-	else
-	{
-		for (std::vector<RuleResearchProject *>::iterator it = _projects.begin ();
-		     it != _projects.end ();
-		     it++)
-	  	{
-			_lstResearch->addRow(1, _game->getLanguage()->getString((*it)->getName ()).c_str());
-		}
-	}
+	_lstResearch->draw();
 }
 }
