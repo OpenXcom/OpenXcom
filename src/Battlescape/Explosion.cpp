@@ -60,7 +60,6 @@ bool Explosion::animate()
 
 /**
  * Get the current position in voxel space.
- * @param offset
  * @return position in voxel space.
  */
 Position Explosion::getPosition() const
