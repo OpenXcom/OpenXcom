@@ -33,6 +33,7 @@ namespace OpenXcom
 /**
  * Initializes all the elements in a Cannot Rearm window.
  * @param game Pointer to the core game.
+ * @param state Pointer to the Geoscape state.
  * @param ammo Ammo missing.
  * @param craft Craft rearming.
  * @param base Base the craft belongs to.

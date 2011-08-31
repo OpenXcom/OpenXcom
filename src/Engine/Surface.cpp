@@ -657,6 +657,8 @@ void Surface::paletteRestore()
 
 /**
  * Sets a shade level by changing the palette.
+ * @param colors Pointer to palette.
+ * @param shade Shade value.
  */
 void Surface::setShade(SDL_Color *colors, int shade)
 {

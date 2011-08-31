@@ -167,6 +167,7 @@ void Language::replace(std::string &str, const std::string &find, const std::str
  * Gets all the languages found in the
  * data folder and adds them to a text list.
  * @param list Text list.
+ * @return List of language filenames.
  */
 std::vector<std::string> Language::getList(TextList *list)
 {

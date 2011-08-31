@@ -543,6 +543,7 @@ void Craft::refuel()
 /**
  * Rearms the craft's weapons by adding ammo every hour
  * while it's docked in the base.
+ * @return The ammo ID missing for rearming, or "" if none.
  */
 std::string Craft::rearm()
 {
