@@ -638,7 +638,7 @@ bool BattleUnit::isOut() const
 
 /**
  * Get the number of time units a certain action takes.
- * @param action
+ * @param actionType
  * @param item
  * @return TUs
  */

@@ -326,7 +326,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 }
 
 /**
- *
+ * Delete battlescapestate.
  */
 BattlescapeState::~BattlescapeState()
 {
@@ -334,6 +334,9 @@ BattlescapeState::~BattlescapeState()
 	delete _animTimer;
 }
 
+/**
+ * Init battlescapestate.
+ */
 void BattlescapeState::init()
 {
 	_map->focus();
@@ -1361,9 +1364,9 @@ void BattlescapeState::popup(State *state)
 
 /**
  * Check against reserved time units.
- * @param bu
- * @param tu
- * @return bool
+ * @param bu Pointer to the unit.
+ * @param tu Number of time units to check.
+ * @return bool Whether or not we got enough time units.
  */
 bool BattlescapeState::checkReservedTU(BattleUnit *bu, int tu)
 {

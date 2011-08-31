@@ -103,15 +103,18 @@ void SavedBattleGame::load(const YAML::Node &node)
 	{
 		if (!empties)
 		{
-			if (data[dp++] == 0xFF)
+			if (data[dp] == 0xFF)
 			{
-				empties = data[dp++];
+				dp++;
+				empties = data[dp];
+				dp++;
 			}
 			else
 			{
 				for (int part = 0; part < 4; part++)
 				{
-					_tiles[i]->load(data[dp++], data[dp++], part);
+					_tiles[i]->load(data[dp], data[dp+1], part);
+					dp += 2;
 				}
 			}
 		}
