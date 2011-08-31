@@ -144,8 +144,6 @@ void ResearchProjectState::buildUi ()
 	SetAssignedScientist();
 	_btnMore->setColor(Palette::blockOffset(13)+8);
 	_btnLess->setColor(Palette::blockOffset(13)+8);
-	_btnMore->onMouseClick((ActionHandler)&ResearchProjectState::btnMoreClick);
-	_btnLess->onMouseClick((ActionHandler)&ResearchProjectState::btnLessClick);
 	_btnMore->onMousePress((ActionHandler)&ResearchProjectState::morePress);
 	_btnMore->onMouseRelease((ActionHandler)&ResearchProjectState::moreRelease);
 	_btnLess->onMousePress((ActionHandler)&ResearchProjectState::lessPress);
