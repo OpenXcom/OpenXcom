@@ -60,11 +60,13 @@ NewPossibleResearchState::NewPossibleResearchState(Game * game, Base * base, con
 	_btnSelect->setColor(Palette::blockOffset(8)+8);
 	_btnSelect->setText(_game->getLanguage()->getString("STR_ALLOCATE_RESEARCH"));
 	_btnSelect->onMouseClick((ActionHandler)&NewPossibleResearchState::btnSelectClick);
-
-	_txtTitle->setColor(Palette::blockOffset(8)+5);
-	_txtTitle->setBig();
-	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setText(_game->getLanguage()->getString("STR_WE_CAN_NOW_RESEARCH"));
+	if (!possibilities.empty ())
+	{
+		_txtTitle->setColor(Palette::blockOffset(8)+5);
+		_txtTitle->setBig();
+		_txtTitle->setAlign(ALIGN_CENTER);
+		_txtTitle->setText(_game->getLanguage()->getString("STR_WE_CAN_NOW_RESEARCH"));
+	}
 
 	_possibilities->setColor(Palette::blockOffset(8)+10);
 	_possibilities->setArrowColor(Palette::blockOffset(8)+8);
