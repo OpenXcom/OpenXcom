@@ -117,22 +117,23 @@ void ResearchProjectState::buildUi ()
 	// Set up objects
 	_window->setColor(Palette::blockOffset(13)+8);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
-	_btnOk->setColor(Palette::blockOffset(13)+13);
-	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)&ResearchProjectState::btnOkClick);
-
-	_txtTitle->setColor(Palette::blockOffset(13)+8);
+	_txtTitle->setColor(Palette::blockOffset(13)+5);
 	_txtTitle->setText(_rule ? _game->getLanguage()->getString(_rule->getName()) : _game->getLanguage()->getString(_project->getRuleResearchProject ()->getName()));
+	_txtAvailableScientist->setColor(Palette::blockOffset(13)+5);
+	_txtAvailableScientist->setSecondaryColor(Palette::blockOffset(13));
 
-	 _txtAvailableScientist->setColor(Palette::blockOffset(13)+8);
-	 _txtAvailableSpace->setColor(Palette::blockOffset(13)+8);
-	 _txtAssigned->setColor(Palette::blockOffset(13)+8);
+	_txtAvailableSpace->setColor(Palette::blockOffset(13)+5);
+	_txtAvailableSpace->setSecondaryColor(Palette::blockOffset(13));
+
+	_txtAssigned->setColor(Palette::blockOffset(13)+5);
+	_txtAssigned->setSecondaryColor(Palette::blockOffset(13));
 
 	_txtMore->setText(_game->getLanguage()->getString("STR_INCREASE"));
 	_txtLess->setText(_game->getLanguage()->getString("STR_DECREASE"));
 
-	_txtMore->setColor(Palette::blockOffset(13)+8);
-	_txtLess->setColor(Palette::blockOffset(13)+8);
+	_txtMore->setColor(Palette::blockOffset(13)+5);
+	_txtLess->setColor(Palette::blockOffset(13)+5);
+
 	_txtMore->setBig();
 	_txtLess->setBig();
 
@@ -154,6 +155,10 @@ void ResearchProjectState::buildUi ()
 	_timerMore->onTimer((StateHandler)&ResearchProjectState::more);
 	_timerLess = new Timer(50);
 	_timerLess->onTimer((StateHandler)&ResearchProjectState::less);
+
+	_btnOk->setColor(Palette::blockOffset(13)+13);
+	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
+	_btnOk->onMouseClick((ActionHandler)&ResearchProjectState::btnOkClick);
 }
 
 void ResearchProjectState::btnOkClick(Action *action)
