@@ -176,9 +176,9 @@ void ResearchProjectState::SetAssignedScientist()
 	std::wstringstream s1;
 	int freeScientist = getFreeScientist(_base);
 	int freeSpaceLab = getFreeLabSpace(_base);
-	s1 << _game->getLanguage()->getString("STR_SCIENTISTS_AVAILABLE") << freeScientist;
+	s1 << _game->getLanguage()->getString("STR_SCIENTISTS_AVAILABLE_UC") << freeScientist;
 	std::wstringstream s2;
-	s2 << _game->getLanguage()->getString("STR_LABORATORY_SPACE_AVAILABLE") << freeSpaceLab;
+	s2 << _game->getLanguage()->getString("STR_LABORATORY_SPACE_AVAILABLE_UC") << freeSpaceLab;
 	std::wstringstream s3;
 	s3 << _game->getLanguage()->getString("STR_SCIENTISTS_ALLOCATED") << _project->getAssigned ();
 	_txtAvailableScientist->setText(s1.str());
