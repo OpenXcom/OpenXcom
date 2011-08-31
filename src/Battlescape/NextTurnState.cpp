@@ -39,10 +39,10 @@ NextTurnState::NextTurnState(Game *game, SavedBattleGame *battleGame) : State(ga
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
-	_txtTitle = new Text(320, 16, 0, 65);
-	_txtTurn = new Text(320, 16, 0, 90);
-	_txtSide = new Text(320, 16, 0, 107);
-	_txtMessage = new Text(320, 16, 0, 130);
+	_txtTitle = new Text(320, 16, 0, 68);
+	_txtTurn = new Text(320, 16, 0, 92);
+	_txtSide = new Text(320, 16, 0, 108);
+	_txtMessage = new Text(320, 16, 0, 132);
 
 	add(_window);
 	add(_txtTitle);

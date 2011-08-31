@@ -171,6 +171,10 @@ void InventoryState::init()
 void InventoryState::btnOkClick(Action *action)
 {
 	_game->popState();
+	if (!_tu)
+	{
+		_battleGame->resetUnitTiles();
+	}
 }
 
 /**

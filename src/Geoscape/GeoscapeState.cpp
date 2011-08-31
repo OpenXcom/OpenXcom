@@ -854,6 +854,7 @@ void GeoscapeState::btnGraphsClick(Action *action)
 	bgen->run();
 	delete bgen;
 	_music = false;
+	_game->getSavedGame()->getBattleGame()->resetUnitTiles();
 	_game->pushState(new BattlescapeState(_game));
 #else
 	_game->pushState(new GraphsState(_game));
