@@ -97,8 +97,8 @@ void ResearchProjectState::buildUi ()
 	_txtLess = new Text(width - 3 * button_x_border, button_height, start_x + 2*button_x_border, start_y + 9*button_y_border);
 	_btnOk = new TextButton(width - 2 * button_x_border , button_height, start_x + button_x_border, start_y + height - button_height - button_y_border);
 
-	_btnMore = new ArrowButton(ARROW_BIG_UP, 1.4*button_x_border, button_height, start_x + 7*button_x_border, start_y + 7*button_y_border);
-	_btnLess = new ArrowButton(ARROW_BIG_DOWN, 1.4*button_x_border, button_height, start_x + 7*button_x_border, start_y + 9*button_y_border);
+	_btnMore = new ArrowButton(ARROW_BIG_UP, 1.4*button_x_border, button_height, start_x + 12*button_x_border, start_y + 7*button_y_border);
+	_btnLess = new ArrowButton(ARROW_BIG_DOWN, 1.4*button_x_border, button_height, start_x + 12*button_x_border, start_y + 9*button_y_border);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(1)), Palette::backPos, 16);
@@ -133,6 +133,8 @@ void ResearchProjectState::buildUi ()
 
 	_txtMore->setColor(Palette::blockOffset(13)+8);
 	_txtLess->setColor(Palette::blockOffset(13)+8);
+	_txtMore->setBig();
+	_txtLess->setBig();
 
 	if (_rule)
 	{
