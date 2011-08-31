@@ -226,7 +226,7 @@ void TransferItemsState::completeTransfer()
 						Transfer *t = new Transfer(time);
 						t->setSoldier(*s);
 						_baseTo->getTransfers()->push_back(t);
-						s = _baseFrom->getSoldiers()->erase(s);
+						_baseFrom->getSoldiers()->erase(s);
 						break;
 					}
 				}
@@ -237,7 +237,7 @@ void TransferItemsState::completeTransfer()
 				Craft *craft =  _crafts[i - _soldiers.size()];
 
 				// Transfer soldiers inside craft
-				for (std::vector<Soldier*>::iterator s = _baseFrom->getSoldiers()->begin(); s != _baseFrom->getSoldiers()->end(); ++s)
+				for (std::vector<Soldier*>::iterator s = _baseFrom->getSoldiers()->begin(); s != _baseFrom->getSoldiers()->end();)
 				{
 					if ((*s)->getCraft() == craft)
 					{
@@ -245,6 +245,10 @@ void TransferItemsState::completeTransfer()
 						t->setSoldier(*s);
 						_baseTo->getTransfers()->push_back(t);
 						s = _baseFrom->getSoldiers()->erase(s);
+					}
+					else
+					{
+						++s;
 					}
 				}
 
@@ -256,7 +260,7 @@ void TransferItemsState::completeTransfer()
 						Transfer *t = new Transfer(time);
 						t->setCraft(*c);
 						_baseTo->getTransfers()->push_back(t);
-						c = _baseFrom->getCrafts()->erase(c);
+						_baseFrom->getCrafts()->erase(c);
 						break;
 					}
 				}

@@ -1627,6 +1627,13 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	article_item_ammo.sort_key = sort_key++;
 	
 	_ufopaediaArticles[article_item_ammo.id] = new ArticleDefinitionItem(article_item_ammo);
+
+	article_item_ammo.id = "STR_HC_I_AMMO";
+	article_item_ammo.title = "STR_HC_I_AMMO";
+	article_item_ammo.item = _items[article_item_ammo.id];
+	article_item_ammo.sort_key = sort_key++;
+	
+	_ufopaediaArticles[article_item_ammo.id] = new ArticleDefinitionItem(article_item_ammo);
 	
 	article_item.id = "STR_GRENADE";
 	article_item.title = "STR_GRENADE";
@@ -1941,6 +1948,7 @@ SavedGame *XcomRuleset::newSave(GameDifficulty diff) const
 	save->getUfopaedia()->insertArticle(getUfopaediaArticle("STR_HEAVY_CANNON"));	
 	save->getUfopaedia()->insertArticle(getUfopaediaArticle("STR_HC_AP_AMMO"));
 	save->getUfopaedia()->insertArticle(getUfopaediaArticle("STR_HC_HE_AMMO"));
+	save->getUfopaedia()->insertArticle(getUfopaediaArticle("STR_HC_I_AMMO"));
 	save->getUfopaedia()->insertArticle(getUfopaediaArticle("STR_GRENADE"));
 	save->getUfopaedia()->insertArticle(getUfopaediaArticle("STR_SMOKE_GRENADE"));
 

@@ -17,15 +17,13 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "LanguageState.h"
-#include <sstream>
 #include "../Engine/Game.h"
-#include "../Engine/Options.h"
 #include "../Resource/ResourcePack.h"
-#include "../Engine/Language.h"
 #include "../Engine/Font.h"
 #include "../Engine/Palette.h"
-#include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
+#include "../Interface/TextList.h"
+#include "../Engine/Language.h"
 #include "MainMenuState.h"
 
 namespace OpenXcom
@@ -39,46 +37,28 @@ LanguageState::LanguageState(Game *game) : State(game)
 {
 	// Create objects
 	_window = new Window(this, 256, 160, 32, 20, POPUP_BOTH);
-	_btnEnglish = new TextButton(192, 20, 64, 34);
-	_btnGerman = new TextButton(192, 20, 64, 62);
-	_btnFrench = new TextButton(192, 20, 64, 90);
-	_btnItalian = new TextButton(192, 20, 64, 118);
-	_btnSpanish = new TextButton(192, 20, 64, 146);
+	_lstLanguages = new TextList(192, 166, 64, 34);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
 	
 	add(_window);
-	add(_btnEnglish);
-	add(_btnGerman);
-	add(_btnFrench);
-	add(_btnItalian);
-	add(_btnSpanish);
+	add(_lstLanguages);
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(8)+8);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
-	
-	_btnEnglish->setColor(Palette::blockOffset(8)+8);
-	_btnEnglish->setText(L"ENGLISH");
-	_btnEnglish->onMouseClick((ActionHandler)&LanguageState::btnEnglishClick);
-	
-	_btnGerman->setColor(Palette::blockOffset(8)+8);
-	_btnGerman->setText(L"DEUTSCH");
-	_btnGerman->onMouseClick((ActionHandler)&LanguageState::btnGermanClick);
 
-	_btnFrench->setColor(Palette::blockOffset(8)+8);
-	_btnFrench->setText(L"FRANCAIS");
-	_btnFrench->onMouseClick((ActionHandler)&LanguageState::btnFrenchClick);
+	_lstLanguages->setColor(Palette::blockOffset(8)+10);
+	_lstLanguages->setColumns(1, 192);
+	_lstLanguages->setSelectable(true);
+	_lstLanguages->setBackground(_window);
+	_lstLanguages->setMargin(2);
+	_lstLanguages->setAlign(ALIGN_CENTER);
+	_lstLanguages->onMouseClick((ActionHandler)&LanguageState::lstLanguagesClick);
 
-	_btnItalian->setColor(Palette::blockOffset(8)+8);
-	_btnItalian->setText(L"ITALIANO");
-	_btnItalian->onMouseClick((ActionHandler)&LanguageState::btnItalianClick);
-
-	_btnSpanish->setColor(Palette::blockOffset(8)+8);
-	_btnSpanish->setText(L"ESPANOL");
-	_btnSpanish->onMouseClick((ActionHandler)&LanguageState::btnSpanishClick);
+	_langs = Language::getList(_lstLanguages);
 }
 
 /**
@@ -89,64 +69,15 @@ LanguageState::~LanguageState()
 	
 }
 
-void LanguageState::changeLanguage(const std::string &lang)
+/**
+ * Sets the selected language and opens
+ * the Main Menu window.
+ * @param action Pointer to an action.
+ */
+void LanguageState::lstLanguagesClick(Action *action)
 {
-	std::stringstream ss;
-	ss << Options::getDataFolder() << "Language/" << lang;
-	Language *l = new Language();
-	l->loadLng(ss.str());
-	_game->setLanguage(l);
+	_game->loadLanguage(_langs[_lstLanguages->getSelectedRow()]);
 	_game->setState(new MainMenuState(_game));
-}
-
-/**
- * Sets the language to English and opens
- * the Main Menu window.
- * @param action Pointer to an action.
- */
-void LanguageState::btnEnglishClick(Action *action)
-{
-	changeLanguage("English.lng");
-}
-
-/**
- * Sets the language to German and opens
- * the Main Menu window.
- * @param action Pointer to an action.
- */
-void LanguageState::btnGermanClick(Action *action)
-{
-	changeLanguage("German.lng");
-}
-
-/**
- * Sets the language to French and opens
- * the Main Menu window.
- * @param action Pointer to an action.
- */
-void LanguageState::btnFrenchClick(Action *action)
-{
-	changeLanguage("French.lng");
-}
-
-/**
- * Sets the language to Italian and opens
- * the Main Menu window.
- * @param action Pointer to an action.
- */
-void LanguageState::btnItalianClick(Action *action)
-{
-	changeLanguage("Italian.lng");
-}
-
-/**
- * Sets the language to Spanish and opens
- * the Main Menu window.
- * @param action Pointer to an action.
- */
-void LanguageState::btnSpanishClick(Action *action)
-{
-	changeLanguage("Spanish.lng");
 }
 
 }

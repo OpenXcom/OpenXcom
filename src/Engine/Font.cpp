@@ -17,10 +17,15 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Font.h"
+#include <fstream>
+#include "Exception.h"
 #include "Surface.h"
+#include "Language.h"
 
 namespace OpenXcom
 {
+
+std::wstring Font::_index = L"";
 
 /**
  * Initializes the font with a blank surface sized big enough to
@@ -30,9 +35,9 @@ namespace OpenXcom
  * @param nchar Number of characters the font contains.
  * @param spacing Horizontal spacing between each character.
  */
-Font::Font(int width, int height, int nchar, int spacing) : _width(width), _height(height), _nchar(nchar), _chars(), _spacing(spacing)
+Font::Font(int width, int height, int spacing) : _width(width), _height(height), _chars(), _spacing(spacing)
 {
-	_surface = new Surface(width, height*nchar);
+	_surface = new Surface(width, height * _index.length());
 }
 
 /**
@@ -51,13 +56,13 @@ Font::~Font()
 void Font::load()
 {
 	_surface->lock();
-	for (unsigned char i = FIRST_CHAR; i < FIRST_CHAR + _nchar; ++i)
+	for (unsigned int i = 0; i < _index.length(); ++i)
 	{
 		SDL_Rect rect;
 		int left = -1, right = -1;
 		for (int x = 0; x < _width; ++x)
 		{
-			for (int y = (i - FIRST_CHAR) * _height; (y < (i + 1 - FIRST_CHAR) * _height) && (left == -1); ++y)
+			for (int y = i * _height; y < (i + 1) * _height && left == -1; ++y)
 			{
 				Uint8 pixel = _surface->getPixel(x, y);
 				if (pixel != 0)
@@ -66,9 +71,9 @@ void Font::load()
 				}
 			}
 		}
-		for (int x = _width - 1; x >= 0; x--)
+		for (int x = _width - 1; x >= 0; --x)
 		{
-			for (int y = (i + 1 - FIRST_CHAR) * _height - 1; (y >= (i - FIRST_CHAR) * _height) && (right == -1); y--)
+			for (int y = (i + 1) * _height - 1; y >= i * _height && right == -1; --y)
 			{
 				Uint8 pixel = _surface->getPixel(x, y);
 				if (pixel != 0)
@@ -78,13 +83,44 @@ void Font::load()
 			}
 		}
 		rect.x = left;
-		rect.y = (i - FIRST_CHAR) * _height;
+		rect.y = i * _height;
 		rect.w = right - left + 1;
 		rect.h = _height;
 
-		_chars[i] = rect;
+		_chars[_index[i]] = rect;
 	}
 	_surface->unlock();
+}
+
+/**
+ * Loads the characters contained in each font
+ * from a UTF-8 file to use as the index.
+ * @param filename Filename of the index file.
+ */
+void Font::loadIndex(const std::string &filename)
+{
+	_index = L"";
+
+	std::ifstream txtFile (filename.c_str(), std::ios::in | std::ios::binary);
+	if (!txtFile)
+	{
+		throw Exception("Failed to load index");
+	}
+
+	char value;
+	std::string buffer;
+	while (txtFile.read(&value, 1))
+	{
+		buffer += value;
+	}
+
+	if (!txtFile.eof())
+	{
+		throw Exception("Invalid data from file");
+	}
+
+	_index = Language::utf8ToWstr(buffer);
+	txtFile.close();
 }
 
 /**

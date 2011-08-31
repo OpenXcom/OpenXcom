@@ -52,6 +52,7 @@ void createDefault()
 #endif
 	setInt("soundVolume", MIX_MAX_VOLUME);
 	setInt("musicVolume", MIX_MAX_VOLUME);
+	setString("language", "");
 	setInt("battleScrollSpeed", 24); // 8, 16, 24, 32, 40
 	setInt("battleScrollType", SCROLL_AUTO);
 	setInt("battleFireSpeed", 20); // 30, 25, 20, 15, 10, 5

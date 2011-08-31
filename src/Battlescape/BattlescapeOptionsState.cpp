@@ -48,13 +48,13 @@ BattlescapeOptionsState::BattlescapeOptionsState(Game *game) : State(game)
 	_btnScrollSpeed4 = new TextButton(22, 26, 88, 42);
 	_btnScrollSpeed5 = new TextButton(22, 30, 112, 42);
 
-	_txtScrollType = new Text(120, 9, 150, 32);
-	_txtTriggerScroll = new Text(80, 9, 182, 45);
-	_txtAutoScroll = new Text(80, 9, 182, 61);
+	_txtScrollType = new Text(160, 9, 150, 32);
+	_txtTriggerScroll = new Text(130, 9, 182, 45);
+	_txtAutoScroll = new Text(130, 9, 182, 61);
 	_btnScrollType1 = new TextButton(30, 14, 150, 42);
 	_btnScrollType2 = new TextButton(30, 14, 150, 58);
 
-	_txtFireSpeed = new Text(120, 9, 16, 74);
+	_txtFireSpeed = new Text(200, 9, 16, 74);
 	_btnFireSpeed1 = new TextButton(22, 12, 16, 84);
 	_btnFireSpeed2 = new TextButton(28, 12, 40, 84);
 	_btnFireSpeed3 = new TextButton(36, 12, 70, 84);
@@ -62,7 +62,7 @@ BattlescapeOptionsState::BattlescapeOptionsState(Game *game) : State(game)
 	_btnFireSpeed5 = new TextButton(56, 12, 155, 84);
 	_btnFireSpeed6 = new TextButton(69, 12, 213, 84);
 
-	_txtXcomSpeed = new Text(120, 9, 16, 106);
+	_txtXcomSpeed = new Text(200, 9, 16, 106);
 	_btnXcomSpeed1 = new TextButton(22, 12, 16, 116);
 	_btnXcomSpeed2 = new TextButton(28, 12, 40, 116);
 	_btnXcomSpeed3 = new TextButton(36, 12, 70, 116);
@@ -70,7 +70,7 @@ BattlescapeOptionsState::BattlescapeOptionsState(Game *game) : State(game)
 	_btnXcomSpeed5 = new TextButton(56, 12, 155, 116);
 	_btnXcomSpeed6 = new TextButton(69, 12, 213, 116);
 
-	_txtAlienSpeed = new Text(120, 9, 16, 138);
+	_txtAlienSpeed = new Text(200, 9, 16, 138);
 	_btnAlienSpeed1 = new TextButton(22, 12, 16, 148);
 	_btnAlienSpeed2 = new TextButton(28, 12, 40, 148);
 	_btnAlienSpeed3 = new TextButton(36, 12, 70, 148);

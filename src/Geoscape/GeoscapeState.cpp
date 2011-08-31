@@ -158,30 +158,6 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(fa
 	// Set up objects
 	_game->getResourcePack()->getSurface("GEOBORD.SCR")->blit(_bg);
 
-	Surface* sidebar = 0;
-	if (_game->getLanguage()->getName() == L"DEUTSCH")
-	{
-		sidebar = _game->getResourcePack()->getSurface("German.geo");
-	}
-	else if (_game->getLanguage()->getName() == L"FRANCAIS")
-	{
-		sidebar = _game->getResourcePack()->getSurface("French.geo");
-	}
-	else if (_game->getLanguage()->getName() == L"ITALIANO")
-	{
-		sidebar = _game->getResourcePack()->getSurface("Italian.geo");
-	}
-	else if (_game->getLanguage()->getName() == L"ESPANOL")
-	{
-		sidebar = _game->getResourcePack()->getSurface("Spanish.geo");
-	}
-	if (sidebar != 0)
-	{
-		sidebar->setX(320 - sidebar->getWidth());
-		sidebar->setY(0);
-		sidebar->blit(_bg);
-	}
-
 	_btnIntercept->copy(_bg);
 	_btnIntercept->setColor(Palette::blockOffset(15)+8);
 	_btnIntercept->onMouseClick((ActionHandler)&GeoscapeState::btnInterceptClick);

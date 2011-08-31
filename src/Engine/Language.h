@@ -20,10 +20,13 @@
 #define OPENXCOM_LANGUAGE_H
 
 #include <map>
+#include <vector>
 #include <string>
 
 namespace OpenXcom
 {
+
+class TextList;
 
 /**
  * Contains strings used throughout the game for localization.
@@ -45,6 +48,8 @@ public:
 	static std::wstring utf8ToWstr(const std::string& src);
 	/// Replaces a substring.
 	static void replace(std::string &str, const std::string &find, const std::string &replace);
+	/// Gets list of languages in the data directory.
+	static std::vector<std::string> getList(TextList *list);
 	/// Loads an OpenXcom language file.
 	void loadLng(const std::string &filename);
 	/// Gets the language's name.

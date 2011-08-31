@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Game.h"
+#include <sstream>
 #include "SDL_mixer.h"
 #include "State.h"
 #include "Screen.h"
@@ -30,6 +31,8 @@
 #include "Action.h"
 #include "Exception.h"
 #include "InteractiveSurface.h"
+#include "Options.h"
+#include "CrossPlatform.h"
 
 namespace OpenXcom
 {
@@ -75,6 +78,9 @@ Game::Game(const std::string &title, int width, int height, int bpp) : _screen(0
 
 	// Create fps counter
 	_fpsCounter = new FpsCounter(15, 5, 0, 0);
+
+	// Create blank language
+	_lang = new Language();
 }
 
 /**
@@ -304,12 +310,25 @@ Language *const Game::getLanguage() const
 
 /**
  * Changes the language currently in use by the game.
- * @param lang Pointer to the language.
+ * @param filename Filename of the language file.
  */
-void Game::setLanguage(Language *lang)
+void Game::loadLanguage(const std::string &filename)
 {
-	delete _lang;
-	_lang = lang;
+	std::stringstream ss, ss2;
+	ss << "Language/" << filename << ".lng";
+	ss2 << "Language/" << filename << ".geo";
+	_lang->loadLng(CrossPlatform::getDataFile(ss.str()));
+
+	Surface *sidebar = new Surface(64, 154);
+	if (CrossPlatform::getDataFile(ss2.str()) != "")
+	{
+		sidebar->loadScr(CrossPlatform::getDataFile(ss2.str()));
+	}
+	sidebar->setX(256);
+	sidebar->setY(0);
+	sidebar->blit(_res->getSurface("GEOBORD.SCR"));
+
+	Options::setString("language", filename);
 }
 
 /**

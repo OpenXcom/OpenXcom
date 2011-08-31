@@ -66,35 +66,21 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 	_palettes[s2.str()]->loadDat(CrossPlatform::getDataFile(s1.str()), 128);
 	
 	// Load fonts
-	std::string font[] = {"BIGLETS.DAT",
-						  "SMALLSET.DAT"};
+	Font::loadIndex(CrossPlatform::getDataFile("Language/Font.dat"));
+
+	std::string font[] = {"Big.fnt",
+						  "Small.fnt"};
 	
 	for (int i = 0; i < 2; ++i)
 	{
 		std::stringstream s;
-		s << "GEODATA/" << font[i];
-		if (font[i] == "BIGLETS.DAT")
-			_fonts[font[i]] = new Font(16, 16, 173);
-		else if (font[i] == "SMALLSET.DAT")
-			_fonts[font[i]] = new Font(8, 9, 173, -1);
+		s << "Language/" << font[i];
+		if (font[i] == "Big.fnt")
+			_fonts[font[i]] = new Font(16, 16, 0);
+		else if (font[i] == "Small.fnt")
+			_fonts[font[i]] = new Font(8, 9, -1);
 		_fonts[font[i]]->getSurface()->loadScr(CrossPlatform::getDataFile(s.str()));
 		_fonts[font[i]]->load();
-	}
-		
-	// Load language graphics
-	std::string lang[] = {"English",
-						  "French",
-						  "German",
-						  "Italian",
-						  "Spanish"};
-
-	for (int i = 1; i < 5; ++i)
-	{
-		std::stringstream s1, s2;
-		s1 << "Language/" << lang[i] << ".geo";
-		s2 << lang[i] << ".geo";
-		_surfaces[s2.str()] = new Surface(64, 154);
-		_surfaces[s2.str()]->loadScr(CrossPlatform::getDataFile(s1.str()));
 	}
 
 	// Load surfaces

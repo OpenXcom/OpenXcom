@@ -372,8 +372,8 @@ void TextList::setSmall()
 }
 
 /**
- * If enabled, the text in different columns will be separated by dots.
- * Otherwise, it will only be separated by blank space.
+ * If enabled, the columns will match the text width.
+ * Otherwise, they will have a fixed width.
  * @param condensed True for condensed layout, False for table layout.
  */
 void TextList::setCondensed(bool condensed)

@@ -56,7 +56,7 @@ Inventory::Inventory(Game *game, int width, int height, int x, int y) : Interact
 	_selection = new Surface(RuleInventory::HAND_W * RuleInventory::SLOT_W, RuleInventory::HAND_H * RuleInventory::SLOT_H, x, y);
 	_warning = new WarningMessage(224, 24, 48, 176);
 
-	_warning->setFonts(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"));
+	_warning->setFonts(_game->getResourcePack()->getFont("Big.fnt"), _game->getResourcePack()->getFont("Small.fnt"));
 	_warning->setColor(Palette::blockOffset(2));
 	_warning->setTextColor(Palette::blockOffset(1)-1);
 }
@@ -125,7 +125,7 @@ void Inventory::drawGrid()
 	_grid->clear();
 	Text text = Text(100, 9, 0, 0);
 	text.setPalette(_grid->getPalette());
-	text.setFonts(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"));
+	text.setFonts(_game->getResourcePack()->getFont("Big.fnt"), _game->getResourcePack()->getFont("Small.fnt"));
 	text.setColor(Palette::blockOffset(4)-1);
 	text.setHighContrast(true);
 

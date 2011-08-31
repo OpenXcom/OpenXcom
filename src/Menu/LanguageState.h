@@ -19,14 +19,15 @@
 #ifndef OPENXCOM_LANGUAGESTATE_H
 #define OPENXCOM_LANGUAGESTATE_H
 
+#include <vector>
 #include <string>
 #include "../Engine/State.h"
 
 namespace OpenXcom
 {
 
-class TextButton;
 class Window;
+class TextList;
 
 /**
  * Language window that lets the player pick a
@@ -35,25 +36,16 @@ class Window;
 class LanguageState : public State
 {
 private:
-	TextButton *_btnEnglish, *_btnGerman, *_btnFrench, *_btnItalian, *_btnSpanish;
 	Window *_window;
+	TextList *_lstLanguages;
+	std::vector<std::string> _langs;
 public:
 	/// Creates the Start state.
 	LanguageState(Game *game);
 	/// Cleans up the Start state.
 	~LanguageState();
-	/// Changes the game language.
-	void changeLanguage(const std::string &lang);
-	/// Handler for clicking the English button.
-	void btnEnglishClick(Action *action);
-	/// Handler for clicking the Deutsche button.
-	void btnGermanClick(Action *action);
-	/// Handler for clicking the Francais button.
-	void btnFrenchClick(Action *action);
-	/// Handler for clicking the Italiano button.
-	void btnItalianClick(Action *action);
-	/// Handler for clicking the Espanol button.
-	void btnSpanishClick(Action *action);
+	/// Handler for clicking the Language list.
+	void lstLanguagesClick(Action *action);
 };
 
 }
