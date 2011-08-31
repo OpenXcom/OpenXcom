@@ -317,9 +317,10 @@ void BattlescapeGenerator::addSoldier(Soldier *soldier)
 			if (_save->selectUnit(pos) == 0)
 			{
 				unit->setPosition(pos);
-				_save->getTiles()[i]->setUnit(unit); // maybe we should assign all units to the first tile of the skyranger before the inventory pre-equip and then reassign them to their correct tile afterwards?
 				if (_craftInventoryTile == 0)
 					_craftInventoryTile = _save->getTiles()[i];
+				_craftInventoryTile->setUnit(unit);
+				//_save->getTiles()[i]->setUnit(unit); // maybe we should assign all units to the first tile of the skyranger before the inventory pre-equip and then reassign them to their correct tile afterwards?
 				break;
 			}
 		}

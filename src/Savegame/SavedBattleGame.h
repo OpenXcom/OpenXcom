@@ -132,13 +132,20 @@ public:
 	Pathfinding *const getPathfinding() const;
 	/// get the terrainmodifier object
 	TerrainModifier *const getTerrainModifier() const;
+	/// get the playing side
 	UnitFaction getSide() const;
+	/// get the turn number
 	int getTurn() const;
+	/// end the turn
 	void endTurn();
+	/// set debug mode
 	void setDebugMode();
+	/// get debug mode
 	bool getDebugMode() const;
+	/// load map resources
 	void loadMapResources(ResourcePack *res);
-
+	/// resets tiles units are standing on
+	void resetUnitTiles();
 };
 
 }

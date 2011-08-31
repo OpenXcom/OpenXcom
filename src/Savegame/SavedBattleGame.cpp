@@ -124,9 +124,8 @@ void SavedBattleGame::load(const YAML::Node &node)
 }
 
 /**
- * TODO function header.
- * @param
- * @return
+ * Loads the resources required by the map in the battle save.
+ * @param res Pointer to resource pack.
  */
 void SavedBattleGame::loadMapResources(ResourcePack *res)
 {
@@ -269,9 +268,8 @@ void SavedBattleGame::initMap(int width, int length, int height)
 }
 
 /**
- * TODO function header.
- * @param
- * @return
+ * Initializes the map utilities.
+ * @param res Pointer to resource pack.
  */
 void SavedBattleGame::initUtilities(ResourcePack *res)
 {
@@ -570,9 +568,8 @@ std::vector<MapDataSet*> *const SavedBattleGame::getMapDataSets()
 }
 
 /**
- * TODO function header.
- * @param
- * @return
+ * Gets the side currently playing.
+ * @return Unit faction.
  */
 UnitFaction SavedBattleGame::getSide() const
 {
@@ -580,9 +577,8 @@ UnitFaction SavedBattleGame::getSide() const
 }
 
 /**
- * TODO function header.
- * @param
- * @return
+ * Gets the current turn number.
+ * @return Turn.
  */
 int SavedBattleGame::getTurn() const
 {
@@ -590,9 +586,7 @@ int SavedBattleGame::getTurn() const
 }
 
 /**
- * TODO function header.
- * @param
- * @return
+ * Ends the current turn and progresses to the next one.
  */
 void SavedBattleGame::endTurn()
 {
@@ -630,9 +624,7 @@ void SavedBattleGame::endTurn()
 }
 
 /**
- * TODO function header.
- * @param
- * @return
+ * Turns on debug mode.
  */
 void SavedBattleGame::setDebugMode()
 {
@@ -645,14 +637,23 @@ void SavedBattleGame::setDebugMode()
 }
 
 /**
- * TODO function header.
- * @param
- * @return
+ * Gets the current debug mode.
+ * @return Debug mode.
  */
 bool SavedBattleGame::getDebugMode() const
 {
 	return _debugMode;
 }
 
+/**
+ * Resets all the units to their current standing tile.
+ */
+void SavedBattleGame::resetUnitTiles()
+{
+	for (std::vector<BattleUnit*>::iterator i = _units.begin(); i != _units.end(); ++i)
+	{
+		getTile((*i)->getPosition())->setUnit(*i);
+	}
+}
 
 }
