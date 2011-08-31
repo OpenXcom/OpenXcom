@@ -86,7 +86,9 @@ void getAvailableResearchProjects (std::vector<RuleResearchProject *> & projects
 		for(std::vector<RuleResearchProject *>::const_iterator itUnlocked = (*it)->getUnlocked ().begin ();
 		    itUnlocked != (*it)->getUnlocked ().end ();
 		    itUnlocked++)
+		{
 			unlockeds.push_back(*itUnlocked);
+		}
 	}
 	for(std::vector<RuleResearchProject *>::const_iterator iter = researchProjects.begin ();
 	    iter != researchProjects.end ();
