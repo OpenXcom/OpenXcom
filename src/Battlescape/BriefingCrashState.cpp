@@ -28,7 +28,11 @@
 #include "../Interface/Text.h"
 #include "../Savegame/Craft.h"
 #include "../Engine/Music.h"
-#include "../Battlescape/BattlescapeState.h"
+#include "../Savegame/SavedGame.h"
+#include "../Savegame/SavedBattleGame.h"
+#include "BattlescapeState.h"
+#include "NextTurnState.h"
+#include "InventoryState.h"
 
 namespace OpenXcom
 {
@@ -104,6 +108,8 @@ void BriefingCrashState::btnOkClick(Action *action)
 {
 	_game->popState();
 	_game->pushState(new BattlescapeState(_game));
+	_game->pushState(new NextTurnState(_game, _game->getSavedGame()->getBattleGame()));
+	_game->pushState(new InventoryState(_game, false));
 }
 
 }
