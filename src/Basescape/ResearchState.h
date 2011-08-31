@@ -20,6 +20,7 @@
 #define OPENXCOM_RESEARCHSTATE_H
 
 #include "../Engine/State.h"
+#include <string>
 
 namespace OpenXcom
 {
@@ -42,6 +43,7 @@ private:
 	Window *_window;
 	Text *_txtTitle, *_txtAvailable, *_txtAllocated, *_txtSpace, *_txtProject, *_txtScientists, *_txtProgress;
 	TextList *_lstResearch;
+	std::string _toRestore;
 public:
 	/// Creates the Research state.
 	ResearchState(Game *game, Base *base);
@@ -52,6 +54,7 @@ public:
 	void btnNewClick(Action *action);
 	void onSelectProject(Action *action);
 	void fillProjectList();
+	void setPaletteToRestore(const std::string & palette);
 };
 
 }
