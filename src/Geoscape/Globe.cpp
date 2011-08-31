@@ -1051,7 +1051,7 @@ void Globe::drawDetail()
 	{
 		Text *label = new Text(80, 9, 0, 0);
 		label->setPalette(getPalette());
-		label->setFonts(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"));
+		label->setFonts(_game->getResourcePack()->getFont("Big.fnt"), _game->getResourcePack()->getFont("Small.fnt"));
 		label->setAlign(ALIGN_CENTER);
 		label->setColor(Palette::blockOffset(15)-1);
 
@@ -1079,7 +1079,7 @@ void Globe::drawDetail()
 	{
 		Text *label = new Text(80, 9, 0, 0);
 		label->setPalette(getPalette());
-		label->setFonts(_game->getResourcePack()->getFont("BIGLETS.DAT"), _game->getResourcePack()->getFont("SMALLSET.DAT"));
+		label->setFonts(_game->getResourcePack()->getFont("Big.fnt"), _game->getResourcePack()->getFont("Small.fnt"));
 		label->setAlign(ALIGN_CENTER);
 		label->setColor(Palette::blockOffset(8)+10);
 

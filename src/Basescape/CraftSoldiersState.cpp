@@ -93,13 +93,15 @@ CraftSoldiersState::CraftSoldiersState(Game *game, Base *base, unsigned int craf
 	_txtCraft->setText(_game->getLanguage()->getString("STR_CRAFT"));
 
 	_txtAvailable->setColor(Palette::blockOffset(15)+6);
+	_txtAvailable->setSecondaryColor(Palette::blockOffset(13));
 	std::wstringstream ss;
-	ss << _game->getLanguage()->getString("STR_SPACE_AVAILABLE") << c->getRules()->getSoldiers() - c->getNumSoldiers();
+	ss << _game->getLanguage()->getString("STR_SPACE_AVAILABLE") << L'\x01' << c->getRules()->getSoldiers() - c->getNumSoldiers();
 	_txtAvailable->setText(ss.str());
 
 	_txtUsed->setColor(Palette::blockOffset(15)+6);
+	_txtUsed->setSecondaryColor(Palette::blockOffset(13));
 	std::wstringstream ss2;
-	ss2 << _game->getLanguage()->getString("STR_SPACE_USED") << c->getNumSoldiers();
+	ss2 << _game->getLanguage()->getString("STR_SPACE_USED") << L'\x01' << c->getNumSoldiers();
 	_txtUsed->setText(ss2.str());
 
 	_lstSoldiers->setColor(Palette::blockOffset(13)+10);
@@ -189,10 +191,10 @@ void CraftSoldiersState::lstSoldiersClick(Action *action)
 	_lstSoldiers->draw();
 
 	std::wstringstream ss;
-	ss << _game->getLanguage()->getString("STR_SPACE_AVAILABLE") << c->getRules()->getSoldiers() - c->getNumSoldiers();
+	ss << _game->getLanguage()->getString("STR_SPACE_AVAILABLE") << L'\x01' << c->getRules()->getSoldiers() - c->getNumSoldiers();
 	_txtAvailable->setText(ss.str());
 	std::wstringstream ss2;
-	ss2 << _game->getLanguage()->getString("STR_SPACE_USED") << c->getNumSoldiers();
+	ss2 << _game->getLanguage()->getString("STR_SPACE_USED") << L'\x01' << c->getNumSoldiers();
 	_txtUsed->setText(ss2.str());
 }
 

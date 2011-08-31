@@ -97,10 +97,6 @@ void TerrainModifier::calculateTerrainLighting()
 	const int layer = 1; // Static lighting layer.
 	const int fireLightPower = 15; // amount of light a fire generates
 
-	// during daytime don't calculate lighting
-	if (_save->getGlobalShade() < 1)
-		return;
-
 	// reset all light to 0 first
 	for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); ++i)
 	{
@@ -141,10 +137,6 @@ void TerrainModifier::calculateUnitLighting()
 {
 	const int layer = 2; // Dynamic lighting layer.
 	const int personalLightPower = 15; // amount of light a unit generates
-
-	// during daytime don't calculate lighting
-	if (_save->getGlobalShade() < 1)
-		return;
 
 	// reset all light to 0 first
 	for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); ++i)

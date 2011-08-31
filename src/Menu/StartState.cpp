@@ -17,15 +17,16 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "StartState.h"
-#include <iostream>
 #include "SDL.h"
 #include "../Engine/Game.h"
 #include "../Engine/Action.h"
 #include "../Resource/XcomResourcePack.h"
 #include "../Engine/Surface.h"
 #include "../Engine/Exception.h"
+#include "../Engine/Options.h"
 #include "TestState.h"
 #include "NoteState.h"
+#include "MainMenuState.h"
 
 namespace OpenXcom
 {
@@ -83,13 +84,12 @@ void StartState::think()
 		}
 		catch (Exception &e)
 		{
-			std::cerr << e.what() << std::endl;
 			_load = LOADING_FAILED;
 			_surface->clear();
 			_surface->drawString(0, 0, "ERROR:", 1);
 			_surface->drawString(0, 8, e.what(), 1);
-			_surface->drawString(0, 32, "Can't find some required X-Com data", 1);
-			_surface->drawString(0, 40, "files. Make sure you installed OpenXcom", 1);
+			_surface->drawString(0, 32, "Can't find a required X-Com data file.", 1);
+			_surface->drawString(0, 40, "Make sure you installed OpenXcom", 1);
 			_surface->drawString(0, 48, "correctly.", 1);
 			_surface->drawString(0, 72, "Check the README for more details.", 1);
 			_surface->drawString(76, 192, "Press any key to quit", 1);
@@ -99,8 +99,16 @@ void StartState::think()
 		_load = LOADING_STARTED;
 		break;
 	case LOADING_SUCCESSFUL:
-		//_game->setState(new TestState(_game));
-		_game->setState(new NoteState(_game));
+		if (Options::getString("language") == "")
+		{
+			//_game->setState(new TestState(_game));
+			_game->setState(new NoteState(_game));
+		}
+		else
+		{
+			_game->loadLanguage(Options::getString("language"));
+			_game->setState(new MainMenuState(_game));
+		}
 		break;
 	default:
 		break;

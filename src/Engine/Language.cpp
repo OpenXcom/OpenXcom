@@ -19,7 +19,10 @@
 #include "Language.h"
 #include <iostream>
 #include <fstream>
+#include "../dirent.h"
 #include "Exception.h"
+#include "Options.h"
+#include "../Interface/TextList.h"
 
 namespace OpenXcom
 {
@@ -58,7 +61,8 @@ std::wstring Language::utf8ToWstr(const std::string& src)
 		unsigned char c = (unsigned char)src[i];
 		if (c <= 0x7f) //first byte
 		{
-			if (bytes){
+			if (bytes)
+			{
 				dest.push_back(err);
 				bytes = 0;
 			}
@@ -91,7 +95,8 @@ std::wstring Language::utf8ToWstr(const std::string& src)
 			bytes = 3;
 			w = c & 0x07;
 		}
-		else{
+		else
+		{
 			dest.push_back(err);
 			bytes = 0;
 		}
@@ -121,20 +126,20 @@ std::string Language::wstrToUtf8(const std::wstring& src)
 		else if (w <= 0x7ff)
 		{
 			dest.push_back(0xc0 | ((w >> 6)& 0x1f));
-			dest.push_back(0x80| (w & 0x3f));
+			dest.push_back(0x80 | (w & 0x3f));
 		}
 		else if (w <= 0xffff)
 		{
 			dest.push_back(0xe0 | ((w >> 12)& 0x0f));
-			dest.push_back(0x80| ((w >> 6) & 0x3f));
-			dest.push_back(0x80| (w & 0x3f));
+			dest.push_back(0x80 | ((w >> 6) & 0x3f));
+			dest.push_back(0x80 | (w & 0x3f));
 		}
 		else if (w <= 0x10ffff)
 		{
 			dest.push_back(0xf0 | ((w >> 18)& 0x07));
-			dest.push_back(0x80| ((w >> 12) & 0x3f));
-			dest.push_back(0x80| ((w >> 6) & 0x3f));
-			dest.push_back(0x80| (w & 0x3f));
+			dest.push_back(0x80 | ((w >> 12) & 0x3f));
+			dest.push_back(0x80 | ((w >> 6) & 0x3f));
+			dest.push_back(0x80 | (w & 0x3f));
 		}
 		else
 			dest.push_back('?');
@@ -159,8 +164,60 @@ void Language::replace(std::string &str, const std::string &find, const std::str
 }
 
 /**
- * Loads pairs of null-terminated strings contained in
- * a raw text file into the Language. Each pair is made of
+ * Gets all the languages found in the
+ * data folder and adds them to a text list.
+ * @param list Text list.
+ */
+std::vector<std::string> Language::getList(TextList *list)
+{
+	std::vector<std::string> langs;
+	std::string dir = Options::getDataFolder() + "Language/";
+	DIR *dp = opendir(dir.c_str());
+    if (dp == 0)
+	{
+        throw Exception("Failed to open language directory");
+    }
+
+    struct dirent *dirp;
+    while ((dirp = readdir(dp)) != 0)
+	{
+		std::string file = dirp->d_name;
+		// Check if it's a valid language
+		if (file.find(".lng") == std::string::npos)
+		{
+			continue;
+		}
+		std::string fullname = dir + file;
+		std::ifstream fin(fullname.c_str(), std::ios::in | std::ios::binary);
+		if (!fin)
+		{
+		    closedir(dp);
+			throw Exception("Failed to load language");
+		}
+		char value;
+		std::string langname;
+		while (fin.read(&value, 1))
+		{
+			if (value != '\n')
+			{
+				langname += value;
+			}
+			else
+			{
+				break;
+			}
+		}
+		fin.close();
+		list->addRow(1, Language::utf8ToWstr(langname).c_str());
+		langs.push_back(file.substr(0, file.length()-4));
+    }
+    closedir(dp);
+	return langs;
+}
+
+/**
+ * Loads pairs of strings separated by linebreaks contained
+ * in a text file into the Language. Each pair is made of
  * an ID and a localized string.
  * @param filename Filename of the LNG file.
  * @sa <a href="../language_id.html">Reference Table</a>
@@ -169,7 +226,6 @@ void Language::loadLng(const std::string &filename)
 {
 	_strings.clear();
 
-	// Load file and put text in map
 	std::ifstream txtFile (filename.c_str(), std::ios::in | std::ios::binary);
 	if (!txtFile)
 	{

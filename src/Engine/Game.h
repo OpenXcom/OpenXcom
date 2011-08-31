@@ -81,8 +81,8 @@ public:
 	void popState();
 	/// Gets the currently loaded language.
 	Language *const getLanguage() const;
-	/// Sets a new language for the game.
-	void setLanguage(Language *lang);
+	/// Loads a new language for the game.
+	void loadLanguage(const std::string &filename);
 	/// Gets the currently loaded resource pack.
 	ResourcePack *const getResourcePack() const;
 	/// Sets a new resource pack for the game.

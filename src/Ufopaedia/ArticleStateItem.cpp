@@ -73,22 +73,22 @@ namespace OpenXcom
 		// SHOT STATS TABLE (for firearms only)
 		if (defs->item->getBattleType() == BT_FIREARM)
 		{
-			_txtShotType = new Text(80, 10, 8, 67);
+			_txtShotType = new Text(75, 16, 8, 66);
 			add(_txtShotType);
 			_txtShotType->setColor(Palette::blockOffset(14)+15);
-			_txtShotType->setAlign(ALIGN_LEFT);
+			_txtShotType->setWordWrap(true);
 			_txtShotType->setText(_game->getLanguage()->getString("STR_SHOT_TYPE").c_str());
 			
-			_txtAccuracy = new Text(80, 10, 88, 67);
+			_txtAccuracy = new Text(50, 16, 88, 66);
 			add(_txtAccuracy);
 			_txtAccuracy->setColor(Palette::blockOffset(14)+15);
-			_txtAccuracy->setAlign(ALIGN_LEFT);
+			_txtAccuracy->setWordWrap(true);
 			_txtAccuracy->setText(_game->getLanguage()->getString("STR_ACCURACY_UC").c_str());
 			
-			_txtTuCost = new Text(80, 10, 140, 67);
+			_txtTuCost = new Text(75, 16, 140, 66);
 			add(_txtTuCost);
 			_txtTuCost->setColor(Palette::blockOffset(14)+15);
-			_txtTuCost->setAlign(ALIGN_LEFT);
+			_txtTuCost->setWordWrap(true);
 			_txtTuCost->setText(_game->getLanguage()->getString("STR_TU_COST").c_str());
 			
 			_lstInfo = new TextList(185, 55, 8, 82);

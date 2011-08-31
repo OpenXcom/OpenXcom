@@ -46,7 +46,7 @@ ActionMenuState::ActionMenuState(Game *game, BattleAction *action, int x, int y)
 
 	for (int i = 0; i < 5; ++i)
 	{
-		_actionMenu[i] = new ActionMenuItem(this, i, _game->getResourcePack()->getFont("BIGLETS.DAT"), x, y);
+		_actionMenu[i] = new ActionMenuItem(this, i, _game->getResourcePack()->getFont("Big.fnt"), x, y);
 		add(_actionMenu[i]);
 		_actionMenu[i]->setVisible(false);
 		_actionMenu[i]->onMouseClick((ActionHandler)&ActionMenuState::btnActionMenuItemClick);
