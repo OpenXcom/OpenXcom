@@ -29,6 +29,10 @@ class Text;
 class Base;
 class RuleResearchProject;
 
+/**
+ * Window which inform the player that a research project is finished.
+ * Allow him to view information about the project(Ufopaedia).
+ */
 class EndResearchState : public State
 {
 	Window *_window;

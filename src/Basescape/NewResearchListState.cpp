@@ -55,6 +55,9 @@ bool findRuleResearchProject::operator()(ResearchProject *r) const
 	return _toFind == r->getRuleResearchProject();
 }
 
+/**
+   Check wether a ResearchProject is available.
+*/
 bool isResearchAvailable (RuleResearchProject * r, Game * game, const std::vector<const RuleResearchProject *> & unlockeds)
 {
 	std::vector<RuleResearchProject *>::const_iterator iter = r->getDependencys().begin ();
@@ -73,6 +76,9 @@ bool isResearchAvailable (RuleResearchProject * r, Game * game, const std::vecto
 	return true;
 }
 
+/**
+   Get the list of available ResearchProject for a Base.
+*/
 void getAvailableResearchProjects (std::vector<RuleResearchProject *> & projects, Game * game, Base * base)
 {
 	const std::vector<const RuleResearchProject *> & found(game->getSavedGame()->getFoundResearch());

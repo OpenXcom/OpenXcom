@@ -31,6 +31,9 @@ class Base;
 class RuleResearchProject;
 class ResearchState;
 
+/**
+   Window which display possible research projects.
+*/
 class NewResearchListState : public State
 {
 private:

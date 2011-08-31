@@ -35,6 +35,9 @@ class NewResearchListState;
 class ArrowButton;
 class Timer;
 
+/**
+   Window which allow to change number of assigned scientist to a project.
+*/
 class ResearchProjectState : public State
 {
 private:

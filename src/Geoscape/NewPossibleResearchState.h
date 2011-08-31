@@ -30,6 +30,10 @@ class Base;
 class TextList;
 class RuleResearchProject;
 
+/**
+   Window which inform the player of new possible research projects.
+   Also allow to go to the ResearchState to dispatch available scientist.
+ */
 class NewPossibleResearchState : public State
 {
 	Window *_window;

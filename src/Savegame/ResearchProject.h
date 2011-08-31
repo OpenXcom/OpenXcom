@@ -25,6 +25,10 @@ namespace OpenXcom
 class RuleResearchProject;
 class Ruleset;
 
+/**
+   Represent a ResearchProject
+   Contain information about assigned scientist, time already spent and cost of the project.
+*/
 class ResearchProject
 {
 	RuleResearchProject * _project;
@@ -37,7 +41,6 @@ public:
 	bool step();
 
 	void setAssigned (int nb);
-
 	int getAssigned () const;
 
 	float getSpent () const;

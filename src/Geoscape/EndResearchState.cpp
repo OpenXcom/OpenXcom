@@ -32,6 +32,9 @@
 namespace OpenXcom
 {
 extern void getAvailableResearchProjects (std::vector<RuleResearchProject *> & projects, Game * game, Base * base);
+/**
+   Get the list of newly available research projects.
+*/
 void getDependableResearch (std::vector<RuleResearchProject *> & dependables, const RuleResearchProject *research, Game * game, Base * base)
 {
 	std::vector<RuleResearchProject *> possibleProjects;
