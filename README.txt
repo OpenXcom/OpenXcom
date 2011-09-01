@@ -115,7 +115,8 @@ If you don't like or have trouble getting the original X-Com
 music to work, you can use your own by putting it in
 the SOUND subfolder of the Data folder with the same filename
 as the original (GMGEO1, GMGEO2, GMSTORY, etc). The formats
-supported are MIDI, MP3 and OGG.
+supported are MIDI, MP3 and OGG. You might need to delete the
+original music (including GM.CAT) for it to work.
 
 
 3. Development
