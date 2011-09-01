@@ -42,7 +42,7 @@ MapData::~MapData()
 * Get the dataset this object belongs to.
 * @return Pointer to MapDataSet.
 */
-MapDataSet *MapData::getDataset()
+MapDataSet *MapData::getDataset() const
 {
 	return _dataset;
 }
@@ -52,7 +52,7 @@ MapDataSet *MapData::getDataset()
 * @param frameID Animation frame 0-7
 * @return the original sprite index
 */
-int MapData::getSprite(int frameID)
+int MapData::getSprite(int frameID) const
 {
 	return _sprite[frameID];
 }
@@ -71,7 +71,7 @@ void MapData::setSprite(int frameID, int value)
   * Get whether this is an animated ufo door.
   * @return bool 
   */
-bool MapData::isUFODoor()
+bool MapData::isUFODoor() const
 {
 	return _isUfoDoor;
 }
@@ -80,7 +80,7 @@ bool MapData::isUFODoor()
   * Get whether this is a floor.
   * @return bool 
   */
-bool MapData::isNoFloor()
+bool MapData::isNoFloor() const
 {
 	return _isNoFloor;
 }
@@ -89,7 +89,7 @@ bool MapData::isNoFloor()
   * Get whether this is a big wall, which blocks all surrounding paths.
   * @return bool 
   */
-bool MapData::isBigWall()
+bool MapData::isBigWall() const
 {
 	if (_terrainLevel < 0) return false; // this is a hack for eg. Skyranger Ramps
 	return _isBigWall;
@@ -99,7 +99,7 @@ bool MapData::isBigWall()
   * Get whether this is a normal door.
   * @return bool 
   */
-bool MapData::isDoor()
+bool MapData::isDoor() const
 {
 	return _isDoor;
 }
@@ -132,7 +132,7 @@ void MapData::setFlags(bool isUfoDoor, bool stopLOS, bool isNoFloor, bool isBigW
   * @param type
   * @return blockage (0-255)
   */
-int MapData::getBlock(ItemDamageType type)
+int MapData::getBlock(ItemDamageType type) const
 {
 	if (type == DT_NONE)
 		return _block[1];
@@ -171,7 +171,7 @@ void MapData::setBlockValue(int lightBlock, int visionBlock, int HEBlock, int sm
   * Get the Y offset for drawing.
   * @return int height in pixels
   */
-int MapData::getYOffset()
+int MapData::getYOffset() const
 {
 	return _yOffset;
 }
@@ -189,7 +189,7 @@ void MapData::setYOffset(int value)
   * Gets the Y offset for drawing.
   * @return int height in pixels
   */
-SpecialTileType MapData::getSpecialType()
+SpecialTileType MapData::getSpecialType() const
 {
 	return _specialType;
 }
@@ -198,7 +198,7 @@ SpecialTileType MapData::getSpecialType()
   * Get the type of object.
   * @return 0-3
   */
-int MapData::getObjectType()
+int MapData::getObjectType() const
 {
 	return _objectType;
 }
@@ -219,7 +219,7 @@ void MapData::setSpecialType(int value, int otype)
  * @param movementType
  * @return TU cost
  */
-int MapData::getTUCost(MovementType movementType)
+int MapData::getTUCost(MovementType movementType) const
 {
 	switch (movementType)
 	{
@@ -253,7 +253,7 @@ void MapData::setTUCosts(int walk, int fly, int slide)
   * Add this to the graphical Y offset of units or objects on this tile.
   * @return Y offset
   */
-int MapData::getTerrainLevel()
+int MapData::getTerrainLevel() const
 {
 	return _terrainLevel;
 }
@@ -271,7 +271,7 @@ void MapData::setTerrainLevel(int value)
   * Get index to the footstep sound.
   * @return sound ID
   */
-int MapData::getFootstepSound()
+int MapData::getFootstepSound() const
 {
 	return _footstepSound;
 }
@@ -289,7 +289,7 @@ void MapData::setFootstepSound(int value)
   * Get the alternative object ID.
   * @return object ID 
   */
-int MapData::getAltMCD()
+int MapData::getAltMCD() const
 {
 	return _altMCD;
 }
@@ -307,7 +307,7 @@ void MapData::setAltMCD(int value)
   * Get the dead object ID.
   * @return object ID 
   */
-int MapData::getDieMCD()
+int MapData::getDieMCD() const
 {
 	return _dieMCD;
 }
@@ -325,7 +325,7 @@ void MapData::setDieMCD(int value)
   * Get the amount of light the object is emitting.
   * @return lightsource
   */
-int MapData::getLightSource()
+int MapData::getLightSource() const
 {
 	return _lightSource;
 }
@@ -343,14 +343,14 @@ void MapData::setLightSource(int value)
   * Get the amount of armor.
   * @return armor
   */
-int MapData::getArmor()
+int MapData::getArmor() const
 {
 	return _armor;
 }
 
 /**
   * Set the amount of armor.
-  * @value armor
+  * @param value armor
   */
 void MapData::setArmor(int value)
 {
@@ -361,14 +361,14 @@ void MapData::setArmor(int value)
   * Get the amount of flammable.
   * @return armor
   */
-int MapData::getFlammable()
+int MapData::getFlammable() const
 {
 	return _flammable;
 }
 
 /**
   * Set the amount of flammable.
-  * @value armor
+  * @param value armor
   */
 void MapData::setFlammable(int value)
 {
@@ -379,14 +379,14 @@ void MapData::setFlammable(int value)
   * Get the amount of fuel.
   * @return fuel
   */
-int MapData::getFuel()
+int MapData::getFuel() const
 {
 	return _fuel;
 }
 
 /**
   * Set the amount of fuel.
-  * @value fuel
+  * @param value fuel
   */
 void MapData::setFuel(int value)
 {
@@ -394,7 +394,7 @@ void MapData::setFuel(int value)
 }
 
 /// Get the loft index for a certain layer.
-int MapData::getLoftID(int layer)
+int MapData::getLoftID(int layer) const
 {
 	return _loftID[layer];
 }
@@ -409,14 +409,14 @@ void MapData::setLoftID(int loft, int layer)
   * Get the amount of explosive.
   * @return armor
   */
-int MapData::getExplosive()
+int MapData::getExplosive() const
 {
 	return _explosive;
 }
 
 /**
   * Set the amount of explosive.
-  * @value armor
+  * @param value armor
   */
 void MapData::setExplosive(int value)
 {

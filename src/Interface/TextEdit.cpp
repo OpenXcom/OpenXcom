@@ -32,7 +32,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-TextEdit::TextEdit(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _value(L""), _blink(true), _ascii('A'), _caretPos(0)
+TextEdit::TextEdit(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _value(L""), _blink(true), _ascii(L'A'), _caretPos(0)
 {
 	_validButton = SDL_BUTTON_LEFT;
 
@@ -194,7 +194,7 @@ Uint8 TextEdit::getColor() const
 /**
  * Changes the secondary color used to render the text. The text
  * switches between the primary and secondary color whenever there's
- * a \x01 in the string.
+ * a 0x01 in the string.
  * @param color Color value.
  */
 void TextEdit::setSecondaryColor(Uint8 color)
@@ -332,16 +332,16 @@ void TextEdit::keyboardPress(Action *action, State *state)
 #ifdef DINGOO
 	case SDLK_UP:
 		_ascii++;
-		if (_ascii > '~')
+		if (_ascii > L'~')
 		{
-			_ascii = ' ';
+			_ascii = L' ';
 		}
 		break;
 	case SDLK_DOWN:
 		_ascii--;
-		if (_ascii < ' ')
+		if (_ascii < L' ')
 		{
-			_ascii = '~';
+			_ascii = L'~';
 		}
 		break;
 	case SDLK_LEFT:
@@ -396,14 +396,14 @@ void TextEdit::keyboardPress(Action *action, State *state)
 	default:
 		if (action->getDetails()->key.keysym.unicode != 0)
 		{
-			if (action->getDetails()->key.keysym.unicode >= ' ' && action->getDetails()->key.keysym.unicode <= '~' && !exceedsMaxWidth((wchar_t)action->getDetails()->key.keysym.unicode))
+			if (action->getDetails()->key.keysym.unicode >= L' ' && action->getDetails()->key.keysym.unicode <= L'~' && !exceedsMaxWidth((wchar_t)action->getDetails()->key.keysym.unicode))
 			{
-			    _value.insert(_caretPos, 1, (wchar_t) action->getDetails()->key.keysym.unicode);
+			    _value.insert(_caretPos, 1, (wchar_t)action->getDetails()->key.keysym.unicode);
 				_caretPos++;
 			}
 		}
-	}
 #endif
+	}
 	draw();
 
 	InteractiveSurface::keyboardPress(action, state);

@@ -125,8 +125,7 @@ void BattleItem::setAmmoQuantity(int qty)
 }
 
 /**
- * Changes the quantity of ammo in this item.
- * @param qty Ammo quantity.
+ * Spends a bullet from the ammo in this item.
  * @return bool Got bullets left?
  */
 bool BattleItem::spendBullet()
@@ -280,6 +279,7 @@ BattleItem *BattleItem::getAmmoItem()
 
 /**
  * Sets the item's ammo item.
+ * @param item BattleItem
  * @return -2 when ammo doesn't fit, or -1 when weapon already contains ammo
  */
 int BattleItem::setAmmoItem(BattleItem *item)

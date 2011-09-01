@@ -107,7 +107,7 @@ namespace OpenXcom {
 		int loop_over = 0;
 		do
 		{
-			if (_current_index <= 0)
+			if (_current_index == 0)
 			{
 				// goto last
 				_current_index = _visible_articles.size() - 1;

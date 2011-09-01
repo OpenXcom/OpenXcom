@@ -88,7 +88,7 @@ double generate(double min, double max)
  */
 double boxMuller(double m, double s)	
 {
-	double x1, x2, w, y1;
+	double y1;
 	static double y2;
 	static int use_last = 0;
 
@@ -99,6 +99,7 @@ double boxMuller(double m, double s)
 	}
 	else
 	{
+		double x1, x2, w;
 		do {
 			x1 = 2.0 * generate(0.0, 1.0) - 1.0;
 			x2 = 2.0 * generate(0.0, 1.0) - 1.0;

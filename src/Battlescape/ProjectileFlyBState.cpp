@@ -41,7 +41,7 @@ namespace OpenXcom
 /**
  * Sets up an ProjectileFlyBState.
  */
-ProjectileFlyBState::ProjectileFlyBState(BattlescapeState *parent, BattleAction action) : BattleState(parent), _action(action)
+ProjectileFlyBState::ProjectileFlyBState(BattlescapeState *parent, BattleAction action) : BattleState(parent), _unit(0), _ammo(0), _action(action), _projectileImpact(0)
 {
 
 }

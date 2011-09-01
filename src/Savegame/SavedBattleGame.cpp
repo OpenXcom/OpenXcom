@@ -446,7 +446,9 @@ BattleUnit *SavedBattleGame::selectPreviousPlayerUnit()
 }
 
 /**
- * Select the next player unit TODO move this to BattlescapeState ?
+ * Select the next player unit.
+ * TODO move this to BattlescapeState ?
+ * @param checkReselect Don't reselect unit.
  * @return pointer to BattleUnit.
  */
 BattleUnit *SavedBattleGame::selectNextPlayerUnit(bool checkReselect)

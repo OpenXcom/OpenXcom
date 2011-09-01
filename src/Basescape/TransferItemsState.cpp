@@ -489,7 +489,7 @@ void TransferItemsState::decrease()
  * Gets the total cost of the current transfer.
  * @return Total cost.
  */
-int TransferItemsState::getTotal()
+int TransferItemsState::getTotal() const
 {
 	return _total;
 }

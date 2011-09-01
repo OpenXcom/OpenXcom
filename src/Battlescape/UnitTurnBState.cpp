@@ -38,7 +38,7 @@ namespace OpenXcom
 /**
  * Sets up an UnitTurnBState.
  */
-UnitTurnBState::UnitTurnBState(BattlescapeState *parent, BattleAction action) : BattleState(parent), _action(action)
+UnitTurnBState::UnitTurnBState(BattlescapeState *parent, BattleAction action) : BattleState(parent), _unit(0), _action(action)
 {
 	
 }

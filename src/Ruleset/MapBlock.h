@@ -43,17 +43,17 @@ public:
 	MapBlock(RuleTerrain *terrain, std::string name, int width, int length, bool landingZone);
 	~MapBlock();
 	/// Gets the mapblock's name (used for MAP generation).
-	std::string getName();
+	std::string getName() const;
 	/// Gets the mapblock's width.
-	int getWidth();
+	int getWidth() const;
 	/// Get the mapblock's length.
-	int getLength();
+	int getLength() const;
 	/// Get the mapblock's height.
-	int getHeight();
+	int getHeight() const;
 	/// Set the mapblock's height.
 	void setHeight(int height);
 	/// Returns whether this mapblock is a landingzone.
-	bool isLandingZone();
+	bool isLandingZone() const;
 };
 
 }

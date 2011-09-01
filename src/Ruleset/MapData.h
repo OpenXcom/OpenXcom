@@ -68,77 +68,77 @@ public:
 	MapData(MapDataSet *dataset);
 	~MapData();
 	/// Get the dataset this object belongs to.
-	MapDataSet *getDataset();
+	MapDataSet *getDataset() const;
 	/// Get the sprite index for a certain frame.
-	int getSprite(int frameID);
+	int getSprite(int frameID) const;
 	/// Set the sprite index for a certain frame.
 	void setSprite(int frameID, int value);
 	/// Get whether this is an animated ufo door.
-	bool isUFODoor();
+	bool isUFODoor() const;
 	/// Can we walk over it.
-	bool isNoFloor();
+	bool isNoFloor() const;
 	/// Can we walk over it.
-	bool isBigWall();
+	bool isBigWall() const;
 	/// Is a normal door.
-	bool isDoor();
+	bool isDoor() const;
 	/// Sets all kinds of flags.
 	void setFlags(bool isUfoDoor, bool stopLOS, bool isNoFloor, bool isBigWall, bool isGravLift, bool isDoor, bool blockFire, bool blockSmoke);
 	/// Get the amount of blockage of a certain type.
-	int getBlock(ItemDamageType type);
+	int getBlock(ItemDamageType type) const;
 	/// Sets the amount of blockage for all types.
 	void setBlockValue(int lightBlock, int visionBlock, int HEBlock, int smokeBlock, int fireBlock, int gasBlock);
 	/// Gets the offset on the Y axis when drawing this object.
-	int getYOffset();
+	int getYOffset() const;
 	/// Sets the offset on the Y axis for drawing this object.
 	void setYOffset(int value);
 	/// Gets info about special tile types
-	SpecialTileType getSpecialType();
+	SpecialTileType getSpecialType() const;
 	/// Get the type of tile.
-	int getObjectType();
+	int getObjectType() const;
 	/// Sets a special tile type and object type.
 	void setSpecialType(int value, int otype);
 	/// Get TU cost to move over the object.
-	int getTUCost(MovementType movementType);
+	int getTUCost(MovementType movementType) const;
 	/// Set TU cost to move over the object.
 	void setTUCosts(int walk, int fly, int slide);
 	/// Add this to the graphical Y offset of units or objects on this tile.
-	int getTerrainLevel();
+	int getTerrainLevel() const;
 	/// Sets Y offset for units/objects on this tile.
 	void setTerrainLevel(int value);
 	/// Get the index to the footstep sound.
-	int getFootstepSound();
+	int getFootstepSound() const;
 	/// Set the index to the footstep sound.
 	void setFootstepSound(int value);
 	/// Get the alternative object ID
-	int getAltMCD();
+	int getAltMCD() const;
 	/// Set the alternative object ID
 	void setAltMCD(int value);
 	/// Get the dead object ID
-	int getDieMCD();
+	int getDieMCD() const;
 	/// Set the dead object ID
 	void setDieMCD(int value);
 	/// Get the amount of light the object is emitting.
-	int getLightSource();
+	int getLightSource() const;
 	/// Set the amount of light the object is emitting.
 	void setLightSource(int value);
 	/// Get the amount of armor.
-	int getArmor();
+	int getArmor() const;
 	/// Set the amount of armor.
 	void setArmor(int value);
 	/// Get the amount of flammable.
-	int getFlammable();
+	int getFlammable() const;
 	/// Set the amount of flammable.
 	void setFlammable(int value);
 	/// Get the amount of fuel.
-	int getFuel();
+	int getFuel() const;
 	/// Set the amount of fuel.
 	void setFuel(int value);
 	/// Get the loft index for a certain layer.
-	int getLoftID(int layer);
+	int getLoftID(int layer) const;
 	/// Set the loft index for a certain layer.
 	void setLoftID(int loft, int layer);
 	/// Get the amount of explosive.
-	int getExplosive();
+	int getExplosive() const;
 	/// Set the amount of explosive.
 	void setExplosive(int value);
 

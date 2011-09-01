@@ -59,6 +59,7 @@ Surface::Surface(int width, int height, int x, int y) : _x(x), _y(y), _visible(t
  */
 Surface::Surface(const Surface& other)
 {
+	_surface = SDL_ConvertSurface(other._surface, other._surface->format, other._surface->flags);
 	_x = other._x;
 	_y = other._y;
 	_crop.w = other._crop.w;
@@ -67,7 +68,8 @@ Surface::Surface(const Surface& other)
 	_crop.y = other._crop.y;
 	_visible = other._visible;
 	_hidden = other._hidden;
-	_surface = SDL_ConvertSurface(other._surface, other._surface->format, other._surface->flags);
+	_originalColors = other._originalColors;
+	_lastShade = other._lastShade;
 }
 
 /**

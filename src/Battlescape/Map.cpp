@@ -720,7 +720,7 @@ void Map::mouseOver(Action *action, State *state)
  * @param minimum value
  * @param maximum value
  */
-void Map::minMaxInt(int *value, const int minValue, const int maxValue)
+void Map::minMaxInt(int *value, const int minValue, const int maxValue) const
 {
 	if (*value < minValue)
 	{
@@ -858,7 +858,7 @@ void Map::centerOnPosition(const Position &mapPos, bool redraw)
  * @param mapX map x position
  * @param mapY map y position
  */
-void Map::convertScreenToMap(int screenX, int screenY, int *mapX, int *mapY)
+void Map::convertScreenToMap(int screenX, int screenY, int *mapX, int *mapY) const
 {
 	// add half a tileheight to the mouseposition per layer we are above the floor
     screenY += -_spriteHeight + (_viewHeight + 1) * (_spriteHeight / 2);
@@ -881,7 +881,7 @@ void Map::convertScreenToMap(int screenX, int screenY, int *mapX, int *mapY)
  * @param mapPos X,Y,Z coordinates on the map.
  * @param screenPos to screen position.
  */
-void Map::convertMapToScreen(const Position &mapPos, Position *screenPos)
+void Map::convertMapToScreen(const Position &mapPos, Position *screenPos) const
 {
 	screenPos->z = 0; // not used
 	screenPos->x = mapPos.x * (_spriteWidth / 2) + mapPos.y * (_spriteWidth / 2);
@@ -893,7 +893,7 @@ void Map::convertMapToScreen(const Position &mapPos, Position *screenPos)
  * @param mapPos X,Y,Z coordinates on the map.
  * @param screenPos to screen position.
  */
-void Map::convertVoxelToScreen(const Position &voxelPos, Position *screenPos)
+void Map::convertVoxelToScreen(const Position &voxelPos, Position *screenPos) const
 {
 	Position mapPosition = Position(voxelPos.x / 16, voxelPos.y / 16, voxelPos.z / 24);
 	convertMapToScreen(mapPosition, screenPos);
@@ -910,7 +910,7 @@ void Map::convertVoxelToScreen(const Position &voxelPos, Position *screenPos)
  * Draws the rectangle selector.
  * @param pos pointer to a position
  */
-void Map::getSelectorPosition(Position *pos)
+void Map::getSelectorPosition(Position *pos) const
 {
 	pos->x = _selectorX;
 	pos->y = _selectorY;

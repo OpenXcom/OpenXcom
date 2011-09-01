@@ -34,7 +34,7 @@ MapData *MapDataSet::_scourgedTile = 0;
 /**
 * MapDataSet construction.
 */
-MapDataSet::MapDataSet(std::string name, int size):_name(name), _size(size), _objects(), _loaded(false)
+MapDataSet::MapDataSet(std::string name, int size) : _name(name), _size(size), _objects(), _surfaceSet(0), _loaded(false)
 {
 }
 
@@ -50,7 +50,7 @@ MapDataSet::~MapDataSet()
 * Gets the MapDataSet name (string).
 * @return name.
 */
-std::string MapDataSet::getName()
+std::string MapDataSet::getName() const
 {
 	return _name;
 }
@@ -59,7 +59,7 @@ std::string MapDataSet::getName()
 * Gets the MapDataSet size.
 * @return size in number of records.
 */
-int MapDataSet::getSize()
+int MapDataSet::getSize() const
 {
 	return _size;
 }
@@ -76,7 +76,7 @@ std::vector<MapData*> *MapDataSet::getObjects()
 /**
 * @return pointer to the surfaceset
 */
-SurfaceSet *MapDataSet::getSurfaceset()
+SurfaceSet *MapDataSet::getSurfaceset() const
 {
 	return _surfaceSet;
 }

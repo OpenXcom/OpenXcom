@@ -47,7 +47,7 @@ namespace OpenXcom
 	
 	public:
 		/// return the article id
-		std::string getId() { return _id; }
+		std::string getId() const { return _id; }
 
 	protected:
 		

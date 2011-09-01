@@ -90,7 +90,7 @@ public:
 	/// Decreases the quantity of an item.
 	void decrease();
 	/// Gets the total of the transfer.
-	int getTotal();
+	int getTotal() const;
 };
 
 }

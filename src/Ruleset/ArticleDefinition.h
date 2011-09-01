@@ -62,7 +62,7 @@ namespace OpenXcom
 		virtual ~ArticleDefinition();
 
 		/// get the type of article definition.
-		UfopaediaTypeId getType();
+		UfopaediaTypeId getType() const;
 		
 		std::string id;
 		std::string title;

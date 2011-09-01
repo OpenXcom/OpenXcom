@@ -37,7 +37,7 @@ namespace OpenXcom
 
 /**
  * Initializes a BattleUnit.
- * @param rules Pointer to RuleUnit object.
+ * @param unit Pointer to Unit object.
  * @param faction Which faction the units belongs to.
  */
 BattleUnit::BattleUnit(Unit *unit, UnitFaction faction) : _unit(unit), _faction(faction), _id(0), _pos(Position()), _tile(0), _lastPos(Position()), _direction(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cache(0), _cacheInvalid(true)
@@ -73,7 +73,6 @@ void BattleUnit::load(const YAML::Node &node)
 	int a = 0;
 
 	node["id"] >> _id;
-	std::string name;
 	node["faction"] >> a;
 	_faction = (UnitFaction)a;
 	node["status"] >> a;
@@ -138,8 +137,8 @@ void BattleUnit::setId(int id)
 }
 
 /**
- * Returns the ruleset for the unit's type.
- * @return Pointer to ruleset.
+ * Returns the BattleUnit's unit.
+ * @return Pointer to unit.
  */
 Unit *const BattleUnit::getUnit() const
 {
@@ -206,7 +205,7 @@ int BattleUnit::getDirection() const
  * Gets the unit's status.
  * @return the unit's status
  */
-UnitStatus BattleUnit::getStatus()
+UnitStatus BattleUnit::getStatus() const
 {
 	return _status;
 }
@@ -276,7 +275,7 @@ int BattleUnit::getDiagonalWalkingPhase() const
 
 /**
  * Look at a point.
- * @param point.
+ * @param point
  */
 void BattleUnit::lookAt(const Position &point)
 {
@@ -295,7 +294,7 @@ void BattleUnit::lookAt(const Position &point)
 
 /**
  * Look at a direction.
- * @param direction.
+ * @param direction
  */
 void BattleUnit::lookAt(int direction)
 {
@@ -355,7 +354,7 @@ UnitFaction BattleUnit::getFaction() const
 /**
  * Sets the unit's cache flag.
  * Set to true when the unit has to be redrawn from scratch.
- * @param cached
+ * @param cache
  */
 void BattleUnit::setCache(Surface *cache)
 {
@@ -373,7 +372,8 @@ void BattleUnit::setCache(Surface *cache)
 /**
  * Check if the unit is still cached in the Map cache.
  * When the unit changes it needs to be re-cached.
- * @return bool
+ * @param invalid
+ * @return cache
  */
 Surface *BattleUnit::getCache(bool *invalid) const
 {
@@ -383,7 +383,7 @@ Surface *BattleUnit::getCache(bool *invalid) const
 
 /**
  * Kneel down.
- * @param to kneel or to stand up
+ * @param kneeled to kneel or to stand up
  */
 void BattleUnit::kneel(bool kneeled)
 {
@@ -459,7 +459,7 @@ void BattleUnit::damage(Position position, int power)
 {
 	int damage;
 	UnitSide side;
-	int impactheight, x=8, y=8;
+	int impactheight;
 	UnitBodyPart bodypart;
 
 	if (power <= 0)
@@ -474,6 +474,7 @@ void BattleUnit::damage(Position position, int power)
 	else
 	{
 		// normalize x and y
+		int x = 8, y = 8;
 		switch(_direction)
 		{
 		case 0: // heading north, all is the same
@@ -722,6 +723,7 @@ void BattleUnit::setTimeUnits(int tu)
 /**
  * Add this unit to the list of visible units. Returns true if this is a new one.
  * @param unit
+ * @return
  */
 bool BattleUnit::addToVisibleUnits(BattleUnit *unit)
 {
@@ -778,8 +780,7 @@ double BattleUnit::getFiringAccuracy(int weaponAccuracy) const
 /**
  * Calculate throwing accuracy.
  * Formula = accuracyStat * woundsPenalty(% health) * critWoundsPenalty (-10%/wound)
- * @param weaponAccuracy
- * @return firing Accuracy
+ * @return throwing Accuracy
  */
 double BattleUnit::getThrowingAccuracy() const
 {
@@ -904,7 +905,7 @@ void BattleUnit::dontReselect()
  * Check whether reselecting this unit is allowed.
  * @return bool
  */
-bool BattleUnit::reselectAllowed()
+bool BattleUnit::reselectAllowed() const
 {
 	return !_dontReselect;
 }
@@ -938,6 +939,7 @@ std::vector<BattleItem*> *const BattleUnit::getInventory()
 
 /**
  * Let AI do their thing.
+ * @param action AI action.
  */
 void BattleUnit::think(BattleAction *action)
 {
@@ -945,7 +947,8 @@ void BattleUnit::think(BattleAction *action)
 }
 
 /**
- * Let AI do their thing.
+ * Changes the current AI state.
+ * @param aiState Pointer to AI state.
  */
 void BattleUnit::setAIState(BattleAIState *aiState)
 {
@@ -959,7 +962,8 @@ void BattleUnit::setAIState(BattleAIState *aiState)
 }
 
 /**
- * Let AI do their thing.
+ * Returns the current AI state.
+ * @return Pointer to AI state.
  */
 BattleAIState *BattleUnit::getCurrentAIState() const
 {
@@ -978,7 +982,7 @@ void BattleUnit::setVisible(bool flag)
 
 /**
  * Get whether this unit is visible.
- * @param flag
+ * @return flag
  */
 bool BattleUnit::getVisible() const
 {

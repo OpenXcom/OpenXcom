@@ -98,7 +98,7 @@ public:
 	/// Gets the unit's direction.
 	int getDirection() const;
 	/// Gets the unit's status.
-	UnitStatus getStatus();
+	UnitStatus getStatus() const;
 	/// Start the walkingPhase
 	void startWalking(int direction, const Position &destination);
 	/// Increase the walkingPhase
@@ -186,7 +186,7 @@ public:
 	/// Don't reselect this unit
 	void dontReselect();
 	/// Check whether reselecting this unit is allowed.
-	bool reselectAllowed();
+	bool reselectAllowed() const;
 	/// Set fire.
 	void setFire(int fire);
 	/// Get fire.

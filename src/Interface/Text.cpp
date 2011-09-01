@@ -221,7 +221,7 @@ Uint8 Text::getColor() const
 /**
  * Changes the secondary color used to render the text. The text
  * switches between the primary and secondary color whenever there's
- * a \x01 in the string.
+ * a 0x01 in the string.
  * @param color Color value.
  */
 void Text::setSecondaryColor(Uint8 color)

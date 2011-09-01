@@ -32,7 +32,7 @@ namespace OpenXcom
  * @param game pointer to the game.
  * @param unit pointer to the unit.
  */
-AggroBAIState::AggroBAIState(SavedBattleGame *game, BattleUnit *unit) : BattleAIState(game, unit), _aggroTarget(0)
+AggroBAIState::AggroBAIState(SavedBattleGame *game, BattleUnit *unit) : BattleAIState(game, unit), _aggroTarget(0), _timesNotSeen(0)
 {
 
 }

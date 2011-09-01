@@ -24,7 +24,7 @@ namespace OpenXcom
 /**
 * MapBlock construction
 */
-MapBlock::MapBlock(RuleTerrain *terrain, std::string name, int width, int length, bool landingZone):_terrain(terrain), _name(name), _width(width), _length(length), _landingZone(landingZone)
+MapBlock::MapBlock(RuleTerrain *terrain, std::string name, int width, int length, bool landingZone):_terrain(terrain), _name(name), _width(width), _length(length), _height(0), _landingZone(landingZone)
 {
 }
 
@@ -39,7 +39,7 @@ MapBlock::~MapBlock()
 * Gets the MapBlock name (string).
 * @return name
 */
-std::string MapBlock::getName()
+std::string MapBlock::getName() const
 {
 	return _name;
 }
@@ -48,7 +48,7 @@ std::string MapBlock::getName()
 * Gets the MapBlock width.
 * @return width in tiles.
 */
-int MapBlock::getWidth()
+int MapBlock::getWidth() const
 {
 	return _width;
 }
@@ -57,7 +57,7 @@ int MapBlock::getWidth()
 * Gets the MapBlock length.
 * @return length in tiles.
 */
-int MapBlock::getLength()
+int MapBlock::getLength() const
 {
 	return _length;
 }
@@ -75,7 +75,7 @@ void MapBlock::setHeight(int height)
 * Gets the MapBlock height.
 * @return height
 */
-int MapBlock::getHeight()
+int MapBlock::getHeight() const
 {
 	return _height;
 }
@@ -84,7 +84,7 @@ int MapBlock::getHeight()
 * Is this mapblock usable as a landingzone.
 * @return bool whether usable as landingzone.
 */
-bool MapBlock::isLandingZone()
+bool MapBlock::isLandingZone() const
 {
 	return _landingZone;
 }
