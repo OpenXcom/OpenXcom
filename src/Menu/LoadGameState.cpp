@@ -149,13 +149,15 @@ void LoadGameState::lstSavesClick(Action *action)
 	{
 		std::cerr << "ERROR: " << e.what() << std::endl;
 		_game->pushState(new GeoscapeErrorState(_game, "STR_LOAD_UNSUCCESSFUL"));
-		delete r, s;
+		delete r;
+		delete s;
 	}
 	catch (YAML::Exception &e)
 	{
 		std::cerr << "ERROR: " << e.what() << std::endl;
 		_game->pushState(new GeoscapeErrorState(_game, "STR_LOAD_UNSUCCESSFUL"));
-		delete r, s;
+		delete r;
+		delete s;
 	}
 }
 
