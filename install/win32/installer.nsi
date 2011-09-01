@@ -121,6 +121,7 @@ Section "Game Files" SecMain
 	File "..\..\bin\smpeg.dll"
 	File "..\..\bin\msvcp100.dll"
 	File "..\..\bin\msvcr100.dll"
+	File "..\..\bin\yaml-cpp.dll"
 	File "..\..\COPYING"
 	File "..\..\README.txt"
 	
@@ -155,13 +156,23 @@ Section "Game Files" SecMain
 	
 	SetOutPath "$INSTDIR\DATA\Language"
 	
+	File "..\..\bin\DATA\Language\Big.fnt"
+	File "..\..\bin\DATA\Language\Czech.lng"
 	File "..\..\bin\DATA\Language\English.lng"
+	File "..\..\bin\DATA\Language\EnglishUk.lng"
+	File "..\..\bin\DATA\Language\Font.dat"
 	File "..\..\bin\DATA\Language\French.geo"
 	File "..\..\bin\DATA\Language\French.lng"
 	File "..\..\bin\DATA\Language\German.geo"
 	File "..\..\bin\DATA\Language\German.lng"
 	File "..\..\bin\DATA\Language\Italian.geo"
 	File "..\..\bin\DATA\Language\Italian.lng"
+	File "..\..\bin\DATA\Language\Polish.geo"
+	File "..\..\bin\DATA\Language\Polish.lng"
+	File "..\..\bin\DATA\Language\Romanian.lng"
+	File "..\..\bin\DATA\Language\Russian.geo"
+	File "..\..\bin\DATA\Language\Russian.lng"
+	File "..\..\bin\DATA\Language\Small.fnt"
 	File "..\..\bin\DATA\Language\Spanish.geo"
 	File "..\..\bin\DATA\Language\Spanish.lng"
 	
@@ -228,10 +239,6 @@ SectionEnd
 ;--------------------------------
 ;Uninstaller Sections
 
-Section /o "un.Delete User Files" UnUser
-	Delete "$INSTDIR\USER\*.*"
-SectionEnd
-
 Section "un.Delete X-Com Data" UnData
 	RMDir /r "$INSTDIR\DATA"
 SectionEnd
@@ -251,24 +258,39 @@ Section "-un.Main"
 	Delete "$INSTDIR\smpeg.dll"
 	Delete "$INSTDIR\msvcp100.dll"
 	Delete "$INSTDIR\msvcr100.dll"
+	Delete "$INSTDIR\yaml-cpp.dll"
 	Delete "$INSTDIR\COPYING"
 	Delete "$INSTDIR\README.txt"
 	
 	Delete "$INSTDIR\DATA\README.txt"
+	Delete "$INSTDIR\DATA\Language\Big.fnt"
+	Delete "$INSTDIR\DATA\Language\Czech.lng"
 	Delete "$INSTDIR\DATA\Language\English.lng"
+	Delete "$INSTDIR\DATA\Language\EnglishUk.lng"
+	Delete "$INSTDIR\DATA\Language\Font.dat"
 	Delete "$INSTDIR\DATA\Language\French.geo"
 	Delete "$INSTDIR\DATA\Language\French.lng"
 	Delete "$INSTDIR\DATA\Language\German.geo"
 	Delete "$INSTDIR\DATA\Language\German.lng"
 	Delete "$INSTDIR\DATA\Language\Italian.geo"
 	Delete "$INSTDIR\DATA\Language\Italian.lng"
+	Delete "$INSTDIR\DATA\Language\Polish.geo"
+	Delete "$INSTDIR\DATA\Language\Polish.lng"
+	Delete "$INSTDIR\DATA\Language\Romanian.lng"
+	Delete "$INSTDIR\DATA\Language\Russian.geo"
+	Delete "$INSTDIR\DATA\Language\Russian.lng"
+	Delete "$INSTDIR\DATA\Language\Small.fnt"
 	Delete "$INSTDIR\DATA\Language\Spanish.geo"
 	Delete "$INSTDIR\DATA\Language\Spanish.lng"
 	RMDir "$INSTDIR\DATA\Language"
+	Delete "$INSTDIR\DATA\SoldierName\American.nam"
+	Delete "$INSTDIR\DATA\SoldierName\British.nam"
+	Delete "$INSTDIR\DATA\SoldierName\French.nam"
+	Delete "$INSTDIR\DATA\SoldierName\German.nam"
+	Delete "$INSTDIR\DATA\SoldierName\Japanese.nam"
+	Delete "$INSTDIR\DATA\SoldierName\Russian.nam"
+	RMDir "$INSTDIR\DATA\SoldierName"
 	RMDir "$INSTDIR\DATA"
-	
-	Delete "$INSTDIR\USER\README.txt"
-	RMDir "$INSTDIR\USER"
 
 	Delete "$INSTDIR\Uninstall.exe"
 	RMDir "$INSTDIR"
@@ -291,12 +313,10 @@ SectionEnd
 ;Uninstaller Descriptions
 
 	;Language strings
-	LangString DESC_UnUser ${LANG_ENGLISH} "Deletes all savegames, screenshots, options, etc."
 	LangString DESC_UnData ${LANG_ENGLISH} "Deletes the copied X-Com resources."
 
 	;Assign language strings to sections
 	!insertmacro MUI_UNFUNCTION_DESCRIPTION_BEGIN
-		!insertmacro MUI_DESCRIPTION_TEXT ${UnUser} $(DESC_UnUser)
 		!insertmacro MUI_DESCRIPTION_TEXT ${UnData} $(DESC_UnData)
 	!insertmacro MUI_UNFUNCTION_DESCRIPTION_END
 
