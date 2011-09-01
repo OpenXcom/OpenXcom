@@ -49,7 +49,7 @@ CannotRearmState::CannotRearmState(Game *game, GeoscapeState *state, const std::
 	_txtMessage = new Text(226, 80, 47, 50);
 	
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
 
 	add(_window);
 	add(_btnOk);

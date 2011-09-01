@@ -79,23 +79,23 @@ namespace OpenXcom
 			_txtShotType->setWordWrap(true);
 			_txtShotType->setText(_game->getLanguage()->getString("STR_SHOT_TYPE").c_str());
 			
-			_txtAccuracy = new Text(50, 16, 88, 66);
+			_txtAccuracy = new Text(50, 16, 108, 66);
 			add(_txtAccuracy);
 			_txtAccuracy->setColor(Palette::blockOffset(14)+15);
 			_txtAccuracy->setWordWrap(true);
 			_txtAccuracy->setText(_game->getLanguage()->getString("STR_ACCURACY_UC").c_str());
 			
-			_txtTuCost = new Text(75, 16, 140, 66);
+			_txtTuCost = new Text(75, 16, 160, 66);
 			add(_txtTuCost);
 			_txtTuCost->setColor(Palette::blockOffset(14)+15);
 			_txtTuCost->setWordWrap(true);
 			_txtTuCost->setText(_game->getLanguage()->getString("STR_TU_COST").c_str());
 			
-			_lstInfo = new TextList(185, 55, 8, 82);
+			_lstInfo = new TextList(204, 55, 8, 82);
 			add(_lstInfo);
 			
 			_lstInfo->setColor(Palette::blockOffset(15)+4); // color for %-data!
-			_lstInfo->setColumns(3, 80, 52, 52);
+			_lstInfo->setColumns(3, 100, 52, 52);
 			_lstInfo->setBig();
 			
 			int current_row = 0;
@@ -106,7 +106,7 @@ namespace OpenXcom
 								 Text::formatPercentage(defs->item->getAccuracyAuto()).c_str(),
 								 Text::formatPercentage(defs->item->getTUAuto()).c_str());
 				_lstInfo->getCell(current_row, 0)->setColor(Palette::blockOffset(14)+15);
-				current_row += 1;
+				current_row++;
 			}
 								 
 			if (defs->item->getAccuracySnap()>0)
@@ -116,7 +116,7 @@ namespace OpenXcom
 								 Text::formatPercentage(defs->item->getAccuracySnap()).c_str(),
 								 Text::formatPercentage(defs->item->getTUSnap()).c_str());
 				_lstInfo->getCell(current_row, 0)->setColor(Palette::blockOffset(14)+15);
-				current_row += 1;
+				current_row++;
 			}
 			
 			if (defs->item->getAccuracyAimed()>0)
@@ -126,7 +126,7 @@ namespace OpenXcom
 								 Text::formatPercentage(defs->item->getAccuracyAimed()).c_str(),
 								 Text::formatPercentage(defs->item->getTUAimed()).c_str());
 				_lstInfo->getCell(current_row, 0)->setColor(Palette::blockOffset(14)+15);
-				current_row += 1;
+				current_row++;
 			}
 			
 			_lstInfo->draw();
@@ -177,7 +177,7 @@ namespace OpenXcom
 				_txtDamage->setAlign(ALIGN_CENTER);
 				_txtDamage->setText(_game->getLanguage()->getString("STR_DAMAGE_UC").c_str());
 				
-				_txtAmmo = new Text(35, 10, 280, 7);
+				_txtAmmo = new Text(45, 10, 270, 7);
 				add(_txtAmmo);
 				_txtAmmo->setColor(Palette::blockOffset(14)+15);
 				_txtAmmo->setAlign(ALIGN_CENTER);

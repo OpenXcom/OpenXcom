@@ -465,6 +465,10 @@ void Craft::think()
 				{
 					full++;
 				}
+				else
+				{
+					(*i)->setRearming(true);
+				}
 			}
 
 			if (_damage > 0)
@@ -574,8 +578,8 @@ std::string Craft::rearm()
 }
 
 /**
- * Gets the craft's battlescape status.
- * @return bool
+ * Returns the craft's battlescape status.
+ * @return Is the craft on the battlescape?
  */
 bool Craft::isInBattlescape() const
 {
@@ -583,8 +587,8 @@ bool Craft::isInBattlescape() const
 }
 
 /**
- * Sets the craft's battlescape status.
- * @param inbattle .
+ * Changes the craft's battlescape status.
+ * @param inbattle True if it's in battle, False otherwise.
  */
 void Craft::setInBattlescape(bool inbattle)
 {
