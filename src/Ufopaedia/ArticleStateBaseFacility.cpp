@@ -125,7 +125,10 @@ namespace OpenXcom
 		std::wstringstream ss;
 		ss.str(L"");ss.clear();
 		ss << defs->facility->getBuildTime();
-		ss << _game->getLanguage()->getString("STR_DAYS");
+		if (defs->facility->getBuildTime() != 1)
+			ss << _game->getLanguage()->getString("STR_DAYS");
+		else
+			ss << _game->getLanguage()->getString("STR_DAY");
 		_lstInfo->addRow(2, _game->getLanguage()->getString("STR_CONSTRUCTION_TIME").c_str(), ss.str().c_str());
 		_lstInfo->getCell(0, 1)->setColor(Palette::blockOffset(13)+0);
 		

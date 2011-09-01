@@ -48,7 +48,7 @@ TransfersState::TransfersState(Game *game, Base *base) : State(game), _base(base
 	_btnOk = new TextButton(272, 16, 24, 166);
 	_txtTitle = new Text(278, 16, 21, 18);
 	_txtItem = new Text(114, 8, 26, 34);
-	_txtQuantity = new Text(44, 8, 141, 34);
+	_txtQuantity = new Text(54, 8, 131, 34);
 	_txtArrivalTime = new Text(112, 8, 186, 34);
 	_lstTransfers = new TextList(256, 112, 24, 50);
 

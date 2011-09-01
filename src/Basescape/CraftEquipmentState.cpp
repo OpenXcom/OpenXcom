@@ -121,10 +121,15 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, unsigned int cr
 	_items.push_back("STR_HEAVY_CANNON");
 	_items.push_back("STR_HC_AP_AMMO");
 	_items.push_back("STR_HC_HE_AMMO");
+	_items.push_back("STR_HC_I_AMMO");
 	_items.push_back("STR_AUTO_CANNON");
 	_items.push_back("STR_AC_AP_AMMO");
+	_items.push_back("STR_AC_HE_AMMO");
+	_items.push_back("STR_AC_I_AMMO");
 	_items.push_back("STR_ROCKET_LAUNCHER");
 	_items.push_back("STR_SMALL_ROCKET");
+	_items.push_back("STR_LARGE_ROCKET");
+	_items.push_back("STR_INCENDIARY_ROCKET");
 	_items.push_back("STR_GRENADE");
 	_items.push_back("STR_SMOKE_GRENADE");
 

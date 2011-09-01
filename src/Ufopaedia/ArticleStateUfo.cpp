@@ -38,7 +38,7 @@ namespace OpenXcom
 	ArticleStateUfo::ArticleStateUfo(Game *game, ArticleDefinitionUfo *defs) : ArticleState(game, defs->id)
 	{
 		// add screen elements
-		_txtTitle = new Text(140, 32, 5, 24);
+		_txtTitle = new Text(160, 32, 5, 24);
 		
 		// Set palette
 		_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());

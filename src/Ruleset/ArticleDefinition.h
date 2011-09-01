@@ -116,6 +116,7 @@ namespace OpenXcom
 		ArticleDefinitionCraftWeapon();
 		
 		std::string image_id;
+		std::string text;
 		RuleCraftWeapon *weapon;
 	};
 	

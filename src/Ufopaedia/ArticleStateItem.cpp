@@ -217,6 +217,7 @@ namespace OpenXcom
 				text_field->setText(_game->getLanguage()->getString("STR_ARMOR_PIERCING").c_str());
 				break;
 			case DT_HE:
+			case DT_SMOKE:
 				text_field->setText(_game->getLanguage()->getString("STR_HIGH_EXPLOSIVE_UC").c_str());
 				break;
 			case DT_IN:
