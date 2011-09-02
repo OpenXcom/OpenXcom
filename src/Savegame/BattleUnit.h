@@ -72,6 +72,7 @@ private:
 	bool _visible;
 	Surface *_cache;
 	bool _cacheInvalid;
+	int _expBravery, _expReactions, _expFiring, _expThrowing, _expPsiSkill, _expMelee;
 public:
 	/// Creates a BattleUnit.
 	BattleUnit(Unit *_unit, UnitFaction faction);

@@ -1235,7 +1235,7 @@ void BattlescapeState::popState()
 
 	if (_states.empty()) return;
 
-	if (_states.front()->getResult().length() > 0)
+	if (_states.front()->getResult().length() > 0 && _battleGame->getSide() == FACTION_PLAYER)
 	{
 		_warning->showMessage(_game->getLanguage()->getString(_states.front()->getResult()));
 		actionFailed = true;

@@ -661,4 +661,20 @@ void SavedBattleGame::resetUnitTiles()
 	}
 }
 
+/**
+ * Removes an item from the game. Eg. when ammo item is depleted.
+ * @param item The Item to remove.
+ */
+void SavedBattleGame::removeItem(BattleItem *item)
+{
+	for (std::vector<BattleItem*>::iterator i = _items.begin(); i != _items.end(); ++i)
+	{
+		if (*i == item)
+		{
+			_items.erase(i);
+			break;
+		}
+	}
+}
+
 }
