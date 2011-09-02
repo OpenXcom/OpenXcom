@@ -52,9 +52,7 @@ int getFreeScientist (Base * base)
 {
 	int freeScientist = base->getScientists();
 	const std::vector<ResearchProject *> & researchs (base->getResearch());
-	for (std::vector<ResearchProject *>::const_iterator itResearch = researchs.begin ();
-	     itResearch != researchs.end ();
-	     itResearch++)
+	for (std::vector<ResearchProject *>::const_iterator itResearch = researchs.begin (); itResearch != researchs.end (); ++itResearch)
 	{
 		freeScientist -= (*itResearch)->getAssigned ();
 	}

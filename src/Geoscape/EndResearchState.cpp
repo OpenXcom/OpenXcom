@@ -39,9 +39,7 @@ void getDependableResearch (std::vector<RuleResearchProject *> & dependables, co
 {
 	std::vector<RuleResearchProject *> possibleProjects;
 	getAvailableResearchProjects(possibleProjects, game, base);
-	for(std::vector<RuleResearchProject *>::iterator iter = possibleProjects.begin ();
-	    iter != possibleProjects.end ();
-	    iter++)
+	for(std::vector<RuleResearchProject *>::iterator iter = possibleProjects.begin (); iter != possibleProjects.end (); ++iter)
 	{
 		if (std::find((*iter)->getDependencys().begin (), (*iter)->getDependencys().end (), research) != (*iter)->getDependencys().end ())
 		{

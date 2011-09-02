@@ -85,20 +85,14 @@ void getAvailableResearchProjects (std::vector<RuleResearchProject *> & projects
 	const std::vector<RuleResearchProject *> & researchProjects = game->getRuleset()->getResearchProjects();
 	const std::vector<ResearchProject *> & baseResearchProjects = base->getResearch();
 	std::vector<const RuleResearchProject *> unlockeds;
-	for(std::vector<const RuleResearchProject *>::const_iterator it = found.begin ();
-	    it != found.end ();
-	    it++)
+	for(std::vector<const RuleResearchProject *>::const_iterator it = found.begin (); it != found.end (); ++it)
 	{
-		for(std::vector<RuleResearchProject *>::const_iterator itUnlocked = (*it)->getUnlocked ().begin ();
-		    itUnlocked != (*it)->getUnlocked ().end ();
-		    itUnlocked++)
+		for(std::vector<RuleResearchProject *>::const_iterator itUnlocked = (*it)->getUnlocked ().begin (); itUnlocked != (*it)->getUnlocked ().end (); ++itUnlocked)
 		{
 			unlockeds.push_back(*itUnlocked);
 		}
 	}
-	for(std::vector<RuleResearchProject *>::const_iterator iter = researchProjects.begin ();
-	    iter != researchProjects.end ();
-	    iter++)
+	for(std::vector<RuleResearchProject *>::const_iterator iter = researchProjects.begin (); iter != researchProjects.end (); ++iter)
 	{
 		if (!isResearchAvailable(*iter, game, unlockeds))
 		{
@@ -186,9 +180,7 @@ void NewResearchListState::fillProjectList ()
 	_projects.clear();
 	_lstResearch->clearList();
 	getAvailableResearchProjects(_projects, _game, _base);
-	for (std::vector<RuleResearchProject *>::iterator it = _projects.begin ();
-	     it != _projects.end ();
-	     it++)
+	for (std::vector<RuleResearchProject *>::iterator it = _projects.begin (); it != _projects.end (); ++it)
 	{
 		_lstResearch->addRow(1, _game->getLanguage()->getString((*it)->getName ()).c_str());
 	}

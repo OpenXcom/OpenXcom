@@ -76,9 +76,7 @@ NewPossibleResearchState::NewPossibleResearchState(Game * game, Base * base, con
 	_possibilities->setMargin(2);
 	_possibilities->setBig();
 	_possibilities->setAlign(ALIGN_CENTER);
-	for(std::vector<RuleResearchProject *>::const_iterator iter = possibilities.begin ();
-	    iter != possibilities.end ();
-	    iter++)
+	for(std::vector<RuleResearchProject *>::const_iterator iter = possibilities.begin (); iter != possibilities.end (); ++iter)
 	{
 		_possibilities->addRow (1, _game->getLanguage()->getString((*iter)->getName ()).c_str());
 	}

@@ -184,9 +184,7 @@ void ResearchState::fillProjectList()
 {
 	const std::vector<ResearchProject *> & baseProjects(_base->getResearch());
 	_lstResearch->clearList();
-	for(std::vector<ResearchProject *>::const_iterator iter = baseProjects.begin ();
-	    iter != baseProjects.end ();
-	    iter++)
+	for(std::vector<ResearchProject *>::const_iterator iter = baseProjects.begin (); iter != baseProjects.end (); ++iter)
 	{
 		std::wstringstream sstr;
 		sstr << (*iter)->getAssigned ();
