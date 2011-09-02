@@ -27,7 +27,7 @@
 FIND_PATH(YAMLCPP_INCLUDE_DIR yaml.h
   HINTS
   $ENV{YAMLCPPDIR}
-  PATH_SUFFIXES include
+  PATH_SUFFIXES include/yaml-cpp include
   PATHS
   ~/Library/Frameworks
   /Library/Frameworks
