@@ -72,7 +72,7 @@ namespace OpenXcom
 		add(_lstInfo);
 		
 		_lstInfo->setColor(Palette::blockOffset(14)+15);
-		_lstInfo->setColumns(2, 100, 40);
+		_lstInfo->setColumns(2, 120, 40);
 		_lstInfo->setCondensed(true);
 
 		std::wstringstream ss;

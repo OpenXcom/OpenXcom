@@ -34,11 +34,13 @@ namespace OpenXcom
 * constructor
 * @param pos Position.
 */
-Tile::Tile(const Position& pos): _smoke(0), _fire(0),  _explosive(0), _pos(pos), _unit(0)
+Tile::Tile(const Position& pos): _smoke(0), _fire(0),  _explosive(0), _pos(pos), _unit(0), _animationOffset(0)
 {
 	for (int i = 0; i < 4; ++i)
 	{
 		_objects[i] = 0;
+		_mdsID[i] = 0;
+		_mdID[i] = 0;
 		_currentFrame[i] = 0;
 	}
 	for (int layer = 0; layer < LIGHTLAYERS; layer++)
@@ -46,10 +48,10 @@ Tile::Tile(const Position& pos): _smoke(0), _fire(0),  _explosive(0), _pos(pos),
 		_light[layer] = 0;
 		_lastLight[layer] = -1;
 	}
-	_discovered[0] = false;
-	_discovered[1] = false;
-	_discovered[2] = false;
-
+	for (int i = 0; i < 3; ++i)
+	{
+		_discovered[i] = false;
+	}
 }
 
 /**
@@ -65,7 +67,7 @@ Tile::~Tile()
  * @param part the part 0-3.
  * @return pointer to mapdata
  */
-MapData *Tile::getMapData(int part)
+MapData *Tile::getMapData(int part) const
 {
 	if (part < 0 || part > 3)
 	{
@@ -102,18 +104,17 @@ void Tile::load(int mdsID, int mdID, int part)
  * @param mdID MapData ID
  * @param part the part number
  */
-void Tile::getSaveGameData(int *mdsID, int *mdID, int part)
+void Tile::getSaveGameData(int *mdsID, int *mdID, int part) const
 {
 	*mdsID = _mdsID[part];
 	*mdID = _mdID[part];
 }
 
-
 /**
  * Gets wether this tile has no objects. Note that we can have a unit or smoke on this tile.
  * @return bool True if there is nothing but air on this tile.
  */
-bool Tile::isVoid()
+bool Tile::isVoid() const
 {
 	return _objects[0] == 0 && _objects[1] == 0 && _objects[2] == 0 && _objects[3] == 0;
 }
@@ -124,7 +125,7 @@ bool Tile::isVoid()
  * @param movementType
  * @return TU cost
  */
-int Tile::getTUCost(int part, MovementType movementType)
+int Tile::getTUCost(int part, MovementType movementType) const
 {
 	if (_objects[part])
 		return _objects[part]->getTUCost(movementType);
@@ -136,7 +137,7 @@ int Tile::getTUCost(int part, MovementType movementType)
  * Whether this tile has a floor or not. If no object defined as floor, it has no floor.
  * @return bool
  */
-bool Tile::hasNoFloor()
+bool Tile::hasNoFloor() const
 {
 	if (_objects[MapData::O_FLOOR])
 		return _objects[MapData::O_FLOOR]->isNoFloor();
@@ -148,7 +149,7 @@ bool Tile::hasNoFloor()
  * Whether this tile has a big wall.
  * @return bool
  */
-bool Tile::isBigWall()
+bool Tile::isBigWall() const
 {
 	if (_objects[MapData::O_OBJECT])
 		return _objects[MapData::O_OBJECT]->isBigWall();
@@ -160,7 +161,7 @@ bool Tile::isBigWall()
  * If an object stand on this tile, this returns how high the unit is it standing.
  * @return the level in pixels
  */
-int Tile::getTerrainLevel()
+int Tile::getTerrainLevel() const
 {
 	int level = 0;
 
@@ -186,7 +187,7 @@ const Position& Tile::getPosition() const
  * Gets the tile's footstep sound.
  * @return sound ID
  */
-int Tile::getFootstepSound()
+int Tile::getFootstepSound() const
 {
 	int sound = 0;
 
@@ -233,7 +234,7 @@ int Tile::openDoor(int part)
  * @param part
  * @return bool
  */
-bool Tile::isUfoDoorOpen(int part)
+bool Tile::isUfoDoorOpen(int part) const
 {
 	if (_objects[part] && _objects[part]->isUFODoor() && _currentFrame[part] != 0)
 	{
@@ -286,7 +287,7 @@ void Tile::setDiscovered(bool flag, int part)
  * @param part 0-2 westwall/northwall/content+floor
  * @return bool True = discovered the tile.
  */
-bool Tile::isDiscovered(int part)
+bool Tile::isDiscovered(int part) const
 {
 	return _discovered[part];
 }
@@ -318,7 +319,7 @@ void Tile::addLight(int light, int layer)
  * Shade level is the inverse of light level. So a maximum amount of light (15) returns shade level 0.
  * @return shade
  */
-int Tile::getShade()
+int Tile::getShade() const
 {
 	int light = 0;
 
@@ -389,7 +390,7 @@ void Tile::setExplosive(int power)
 	}
 }
 
-int Tile::getExplosive()
+int Tile::getExplosive() const
 {
 	return _explosive;
 }
@@ -399,7 +400,6 @@ int Tile::getExplosive()
  */
 void Tile::detonate()
 {
-	int decrease;
 	int explosive = _explosive;
 	_explosive = 0;
 
@@ -413,7 +413,7 @@ void Tile::detonate()
 			{
 				if ((explosive) >= _objects[i]->getArmor())
 				{
-					decrease = _objects[i]->getArmor();
+					int decrease = _objects[i]->getArmor();
 					destroy(i);
 					addSmoke(2);
 					if (_objects[i] && (explosive - decrease) >= _objects[i]->getArmor())
@@ -440,7 +440,7 @@ void Tile::detonate()
  * Flammability of a tile is the lowest flammability of it's objects.
  * @return Flammability : the lower the value, the higher the chance the tile/object catches fire.
  */
-int Tile::getFlammability()
+int Tile::getFlammability() const
 {
 	int flam = 255;
 
@@ -513,7 +513,7 @@ void Tile::animate()
  * @param part
  * @return Pointer to the sprite.
  */
-Surface *Tile::getSprite(int part)
+Surface *Tile::getSprite(int part) const
 {
 	if (_objects[part] == 0)
 		return 0;
@@ -538,7 +538,7 @@ void Tile::setUnit(BattleUnit *unit)
  * Get the unit on this tile.
  * @return BattleUnit.
  */
-BattleUnit *Tile::getUnit()
+BattleUnit *Tile::getUnit() const
 {
 	if (_unit != 0 && _unit->isOut())
 		return 0;
@@ -560,7 +560,7 @@ void Tile::setFire(int fire)
  * Get the amount of turns this tile is on fire. 0 = no fire.
  * @return fire : amount of turns this tile is on fire.
  */
-int Tile::getFire()
+int Tile::getFire() const
 {
 	return _fire;
 }
@@ -580,7 +580,7 @@ void Tile::addSmoke(int smoke)
  * Get the amount of turns this tile is smoking. 0 = no smoke.
  * @return smoke : amount of turns this tile is smoking.
  */
-int Tile::getSmoke()
+int Tile::getSmoke() const
 {
 	return _smoke;
 }
@@ -590,7 +590,7 @@ int Tile::getSmoke()
  * To void fire and smoke animations of different tiles moving nice in sync - it looks fake.
  * @return offset
  */
-int Tile::getAnimationOffset()
+int Tile::getAnimationOffset() const
 {
 	return _animationOffset;
 }
@@ -624,7 +624,7 @@ void Tile::removeItem(BattleItem *item)
  * Get the topmost item sprite to draw on the battlescape.
  * @return item sprite ID in floorob, or -1 when no item
  */
-int Tile::getTopItemSprite()
+int Tile::getTopItemSprite() const
 {
 	if (!_inventory.empty())
 	{

@@ -44,7 +44,7 @@ public:
 	UnitSprite(int width, int height, int x, int y);
 	/// Cleans up the UnitSprite.
 	~UnitSprite();
-	/// Surfacesets for rendering.
+	/// Sets surfacesets for rendering.
 	void setSurfaces(SurfaceSet *unitSurface, SurfaceSet *itemSurface);
 	/// Sets the battleunit to be rendered.
 	void setBattleUnit(BattleUnit *unit);

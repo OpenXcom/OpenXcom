@@ -38,6 +38,7 @@ namespace OpenXcom
 /**
  * Initializes all the elements in the Items Arriving window.
  * @param game Pointer to the core game.
+ * @param state Pointer to the Geoscape state.
  */
 ItemsArrivingState::ItemsArrivingState(Game *game, GeoscapeState *state) : State(game), _state(state)
 {

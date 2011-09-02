@@ -19,7 +19,6 @@
 #ifndef OPENXCOM_RULEARMOR_H
 #define OPENXCOM_RULEARMOR_H
 
-#include <vector>
 #include <string>
 
 namespace OpenXcom
@@ -29,7 +28,6 @@ namespace OpenXcom
  * Represents a specific type of armor. (why the american spelling? - it's just shorter :)
  * Not only soldier armor, but also alien armor - some alien races wear Soldier Armor, Leader Armor or Commander Armor
  * depending on their rank.
- * @sa Craft
  */
 class RuleArmor
 {

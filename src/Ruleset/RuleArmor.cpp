@@ -25,8 +25,9 @@ namespace OpenXcom
  * Creates a blank ruleset for a certain
  * type of armor.
  * @param type String defining the type.
+ * @param spriteSheet Spritesheet used to render the unit.
  */
-RuleArmor::RuleArmor(std::string type, std::string spriteSheet) : _type(type), _spriteSheet(spriteSheet)
+RuleArmor::RuleArmor(std::string type, std::string spriteSheet) : _type(type), _spriteSheet(spriteSheet), _corpseItem(""), _frontArmor(0), _sideArmor(0), _rearArmor(0), _underArmor(0)
 {
 
 }
@@ -42,7 +43,7 @@ RuleArmor::~RuleArmor()
 /**
  * Returns the language string that names
  * this armor. Each armor has a unique name. Coveralls, Power Suit,...
- * @return Craft name.
+ * @return Armor name.
  */
 std::string RuleArmor::getType() const
 {

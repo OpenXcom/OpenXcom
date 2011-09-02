@@ -41,21 +41,21 @@ public:
 	/// Cleans up the PathfindingNode.
 	~PathfindingNode();
 	/// Get the node position
-	const Position &getPosition();
+	const Position &getPosition() const;
 	/// Reset node.
 	void reset();
 	/// Check node.
 	void check(int tuCost, int stepsNum, PathfindingNode* prevNode, int prevDir);
 	/// is checked?
-	bool isChecked();
+	bool isChecked() const;
 	/// get TU cost
-	int getTUCost();
+	int getTUCost() const;
 	/// get steps num
-	int getStepsNum();
+	int getStepsNum() const;
 	/// get previous node
-	PathfindingNode* getPrevNode();
+	PathfindingNode* getPrevNode() const;
 	/// get previous walking direction
-	int getPrevDir();
+	int getPrevDir() const;
 };
 
 }

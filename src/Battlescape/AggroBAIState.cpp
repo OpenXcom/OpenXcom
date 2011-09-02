@@ -29,9 +29,10 @@ namespace OpenXcom
 
 /**
  * Sets up a BattleAIState.
- * @param parent pointer to the parent state.
+ * @param game pointer to the game.
+ * @param unit pointer to the unit.
  */
-AggroBAIState::AggroBAIState(SavedBattleGame *game, BattleUnit *unit) : BattleAIState(game, unit), _aggroTarget(0)
+AggroBAIState::AggroBAIState(SavedBattleGame *game, BattleUnit *unit) : BattleAIState(game, unit), _aggroTarget(0), _timesNotSeen(0)
 {
 
 }
@@ -65,6 +66,7 @@ void AggroBAIState::exit()
 /**
  * Runs any code the state needs to keep updating every
  * AI cycle.
+ * @param action (possible) AI action to execute after thinking is done.
  */
 void AggroBAIState::think(BattleAction *action)
 {
@@ -125,6 +127,10 @@ void AggroBAIState::think(BattleAction *action)
 
 }
 
+/**
+ * Sets the aggro target to be used by the AI.
+ * @param unit Pointer to the unit.
+ */
 void AggroBAIState::setAggroTarget(BattleUnit *unit)
 {
 	_timesNotSeen = 0;

@@ -729,7 +729,6 @@ int BattlescapeGenerator::loadMAP(MapBlock *mapblock, int xoff, int yoff, RuleTe
 	unsigned char value[4];
 	std::stringstream filename;
 	filename << "MAPS/" << mapblock->getName() << ".MAP";
-	std::string mapDataFileName;
 	int terrainObjectID;
 
 	// Load file

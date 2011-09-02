@@ -108,7 +108,8 @@ int Node::getSegment() const
 
 /**
  * Gets the Node's nodelink.
- * @return segment
+ * @param index 0-4
+ * @return nodelink
  */
 NodeLink *Node::getNodeLink(int index)
 {

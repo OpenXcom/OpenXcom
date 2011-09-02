@@ -86,7 +86,7 @@ namespace OpenXcom {
 				// goto first
 				_current_index = 0;
 				// infinite loop saver
-				loop_over += 1;
+				loop_over++;
 			}
 			else
 			{
@@ -107,12 +107,12 @@ namespace OpenXcom {
 		int loop_over = 0;
 		do
 		{
-			if (_current_index <= 0)
+			if (_current_index == 0)
 			{
 				// goto last
 				_current_index = _visible_articles.size() - 1;
 				// infinite loop saver
-				loop_over += 1;
+				loop_over++;
 			}
 			else
 			{

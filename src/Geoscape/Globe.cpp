@@ -914,7 +914,7 @@ void Globe::fillLongitudeSegments(double startLon, double endLon, int colourShif
 	dx = new Sint16[polyPointsX.size()+polyPointsX2.size()];
 	dy = new Sint16[polyPointsX.size()+polyPointsX2.size()];
 
-	if (polyPointsX.size()+polyPointsX2.size() > 0)
+	if (!polyPointsX.empty() || !polyPointsX2.empty())
 	{
 		for (unsigned int i = 0; i < polyPointsX.size(); ++i)
 		{

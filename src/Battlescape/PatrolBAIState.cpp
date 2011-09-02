@@ -30,7 +30,6 @@ namespace OpenXcom
 
 /**
  * Sets up a PatrolBAIState.
- * @param parent pointer to the parent state.
  */
 PatrolBAIState::PatrolBAIState(SavedBattleGame *game, BattleUnit *unit, Node *node) : BattleAIState(game, unit), _fromNode(node), _toNode(0)
 {
@@ -81,7 +80,6 @@ void PatrolBAIState::think(BattleAction *action)
 
 	Node *node;
 	bool bFound = false;
-	int segment;
 
 	if (_toNode != 0 && _unit->getPosition() == _toNode->getPosition())
 	{
@@ -96,6 +94,7 @@ void PatrolBAIState::think(BattleAction *action)
 			|| _game->getMissionType() == MISS_UFOASSAULT)
 		{
 			// look for a new node to walk towards
+			int segment;
 			if (_unit->getMorale() > 50)
 			{
 				segment = Node::CRAFTSEGMENT;

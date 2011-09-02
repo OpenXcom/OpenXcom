@@ -53,13 +53,13 @@ public:
 	/// Sets the voxel parameters.
 	void setVoxelParameters(int standHeight, int kneelHeight, int loftemps);
 	/// 
-	UnitStats getStats();
+	UnitStats getStats() const;
 	/// 
-	int getStandHeight();
+	int getStandHeight() const;
 	/// 
-	int getKneelHeight();
+	int getKneelHeight() const;
 	/// 
-	int gotLoftemps();
+	int gotLoftemps() const;
 	///
 	std::string getArmor() const;
 	std::string getRace() const;

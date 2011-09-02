@@ -42,7 +42,7 @@ namespace OpenXcom
 /**
  * Sets up an UnitWalkBState.
  */
-UnitWalkBState::UnitWalkBState(BattlescapeState *parent, BattleAction action) : BattleState(parent), _action(action)
+UnitWalkBState::UnitWalkBState(BattlescapeState *parent, BattleAction action) : BattleState(parent), _unit(0), _pf(0), _terrain(0), _action(action)
 {
 	
 }

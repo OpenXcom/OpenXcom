@@ -460,7 +460,7 @@ bool TerrainModifier::checkIfUnitVisible(BattleUnit *currentUnit, BattleUnit *ot
 /**
  * Calculates line of sight of a soldiers within range of the Position
  * (used when terrain has changed, which can reveil new parts of terrain or units)
- * @param position
+ * @param position Position of the changed terrain.
  */
 void TerrainModifier::calculateFOV(const Position &position)
 {
@@ -483,7 +483,8 @@ void TerrainModifier::calculateFOV(const Position &position)
  * If it's higher, a shot is fired when enough time units a weapon and ammo available.
  * @param unit
  * @param action
- * @param faceToWards a unit faces towards the sniper when it shoots
+ * @param potentialVictim The unit that is targetted when shot.
+ * @param recalculateFOV Whether to recalculate first the FOV of the units within range.
  */
 bool TerrainModifier::checkReactionFire(BattleUnit *unit, BattleAction *action, BattleUnit *potentialVictim, bool recalculateFOV)
 {
@@ -584,10 +585,11 @@ bool TerrainModifier::checkReactionFire(BattleUnit *unit, BattleAction *action, 
  * HE, smoke and fire explodes in a circular pattern on 1 level only. HE however damages floor tiles of the above level. Not the units on it.
  * HE destroys an object if its armor is lower than the explosive power, then it's HE blockage is applied for further propagation.
  * See http://www.ufopaedia.org/index.php?title=Explosions for more info.
- * @param center
- * @param power
- * @param affector
- * @param maxRadius
+ * @param center Center of the explosion in voxelspace.
+ * @param power Power of the explosion.
+ * @param type The damage type of the explosion.
+ * @param maxRadius The maximum radius othe explosion.
+ * @param unit The unit that caused the explosion.
  */
 void TerrainModifier::explode(const Position &center, int power, ItemDamageType type, int maxRadius, BattleUnit *unit)
 {
@@ -747,10 +749,10 @@ Tile *TerrainModifier::checkForTerrainExplosions()
 /**
  * The amount of power that is blocked going from one tile to another on a different level.
  * Can cross more than one level. Only floor tiles are taken into account.
- * @param startTile
- * @param endTile
- * @param affector
- * @return amount of blockage
+ * @param startTile The tile where the power starts.
+ * @param endTile The adjecant tile where the power ends.
+ * @param type The type of power/damage.
+ * @return Amount of blockage of this power.
  */
 int TerrainModifier::verticalBlockage(Tile *startTile, Tile *endTile, ItemDamageType type)
 {
@@ -783,9 +785,9 @@ int TerrainModifier::verticalBlockage(Tile *startTile, Tile *endTile, ItemDamage
 
 /**
  * The amount of power that is blocked going from one tile to another on the same level.
- * @param startTile
- * @param endTile
- * @param affector
+ * @param startTile The tile where the power starts.
+ * @param endTile The adjecant tile where the power ends.
+ * @param type The type of power/damage.
  * @return amount of blockage
  */
 int TerrainModifier::horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageType type)
@@ -853,9 +855,9 @@ int TerrainModifier::horizontalBlockage(Tile *startTile, Tile *endTile, ItemDama
 
 /*
  * The amount this certain wall or floor-part of the tile blocks.
- * @param tile
- * @param part
- * @param affector
+ * @param startTile The tile where the power starts.
+ * @param part The part of the tile the power needs to go through.
+ * @param type The type of power/damage.
  * @return amount of blockage
  */
 int TerrainModifier::blockage(Tile *tile, const int part, ItemDamageType type)
@@ -980,6 +982,8 @@ int TerrainModifier::unitOpensDoor(BattleUnit *unit)
  * @param origin
  * @param target
  * @param storeTrajectory true will store the whole trajectory - otherwise it just stores the last position.
+ * @param trajector A vector of positions in which the trajectory is stored.
+ * @param excludeUnit Excludes this unit in the collision detection.
  * @return the objectnumber(0-3) or unit(4) or out of map (5) or -1(hit nothing)
  */
 int TerrainModifier::calculateLine(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit)
@@ -1130,7 +1134,10 @@ int TerrainModifier::calculateParabola(const Position& origin, const Position& t
 }
 
 /**
- * check if we hit a voxel.
+ * Check if we hit a voxel.
+ * @param voxel The voxel to check.
+ * @param excludeUnit Don't do checks on this unit.
+ * @param excludeAllUnits Don't do checks on any unit.
  * @return the objectnumber(0-3) or unit(4) or out of map (5) or -1(hit nothing)
  */
 int TerrainModifier::voxelCheck(const Position& voxel, BattleUnit *excludeUnit, bool excludeAllUnits)
@@ -1182,8 +1189,8 @@ int TerrainModifier::voxelCheck(const Position& voxel, BattleUnit *excludeUnit, 
 
 /**
  * Add item & affect with gravity.
- * @param position
- * @param item
+ * @param position Position to spawn the item.
+ * @param item Pointer to the item.
  */
 void TerrainModifier::spawnItem(const Position &position, BattleItem *item)
 {

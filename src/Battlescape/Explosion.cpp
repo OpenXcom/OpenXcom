@@ -27,7 +27,7 @@ namespace OpenXcom
  * @param startFrame A startframe - can be used to offset different explosions at different frames.
  * @param big Flag to indicate it is a bullet hit(false), or a real explosion(true).
  */
-Explosion::Explosion(Position position, int startFrame, bool big) : _position(position), _currentFrame(startFrame), _startFrame(startFrame), _big(big)
+Explosion::Explosion(Position position, int startFrame, bool big) : _res(0), _save(0), _item(0), _position(position), _currentFrame(startFrame), _startFrame(startFrame), _big(big)
 {
 
 }
@@ -60,7 +60,6 @@ bool Explosion::animate()
 
 /**
  * Get the current position in voxel space.
- * @param offset
  * @return position in voxel space.
  */
 Position Explosion::getPosition() const
@@ -72,7 +71,7 @@ Position Explosion::getPosition() const
  * Get the current frame in the animation.
  * @return frame number.
  */
-int Explosion::getCurrentFrame()
+int Explosion::getCurrentFrame() const
 {
 	return _currentFrame;
 }
@@ -81,7 +80,7 @@ int Explosion::getCurrentFrame()
  * Return flag to indicate it is a bullet hit(false), or a real explosion(true).
  * @return big
  */
-bool Explosion::isBig()
+bool Explosion::isBig() const
 {
 	return _big;
 }

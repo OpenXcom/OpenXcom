@@ -32,7 +32,6 @@ std::wstring Font::_index = L"";
  * contain all the characters.
  * @param width Width in pixels of each character.
  * @param height Height in pixels of each character.
- * @param nchar Number of characters the font contains.
  * @param spacing Horizontal spacing between each character.
  */
 Font::Font(int width, int height, int spacing) : _width(width), _height(height), _chars(), _spacing(spacing)
@@ -62,7 +61,7 @@ void Font::load()
 		int left = -1, right = -1;
 		for (int x = 0; x < _width; ++x)
 		{
-			for (int y = i * _height; y < (i + 1) * _height && left == -1; ++y)
+			for (unsigned int y = i * _height; y < (i + 1) * _height && left == -1; ++y)
 			{
 				Uint8 pixel = _surface->getPixel(x, y);
 				if (pixel != 0)
@@ -73,7 +72,7 @@ void Font::load()
 		}
 		for (int x = _width - 1; x >= 0; --x)
 		{
-			for (int y = (i + 1) * _height - 1; y >= i * _height && right == -1; --y)
+			for (unsigned int y = (i + 1) * _height - 1; y >= i * _height && right == -1; --y)
 			{
 				Uint8 pixel = _surface->getPixel(x, y);
 				if (pixel != 0)

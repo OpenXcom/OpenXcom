@@ -99,7 +99,7 @@ void StartState::think()
 		_load = LOADING_STARTED;
 		break;
 	case LOADING_SUCCESSFUL:
-		if (Options::getString("language") == "")
+		if (Options::getString("language") == "" || Options::getString("language") == "~")
 		{
 			//_game->setState(new TestState(_game));
 			_game->setState(new NoteState(_game));

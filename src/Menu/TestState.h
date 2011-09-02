@@ -43,7 +43,6 @@ class TestState : public State
 {
 private:
 	SurfaceSet *_set;
-	Surface *_surf;
 	TextButton *_button;
 	Window *_window;
 	Text *_text;

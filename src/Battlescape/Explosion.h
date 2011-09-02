@@ -52,9 +52,9 @@ public:
 	/// Get the current position in voxel space.
 	Position getPosition() const;
 	/// Get a the current frame.
-	int getCurrentFrame();
+	int getCurrentFrame() const;
 	/// Is big?
-	bool isBig();
+	bool isBig() const;
 };
 
 }

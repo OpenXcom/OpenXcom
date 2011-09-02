@@ -326,7 +326,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 }
 
 /**
- *
+ * Delete battlescapestate.
  */
 BattlescapeState::~BattlescapeState()
 {
@@ -334,6 +334,9 @@ BattlescapeState::~BattlescapeState()
 	delete _animTimer;
 }
 
+/**
+ * Init battlescapestate.
+ */
 void BattlescapeState::init()
 {
 	_map->focus();
@@ -979,7 +982,6 @@ bool BattlescapeState::playableUnitSelected()
 
 /**
  * Updates soldier name/rank/tu/energy/health/morale.
- * @param battleUnit Pointer to current unit.
  */
 void BattlescapeState::updateSoldierInfo()
 {
@@ -1145,8 +1147,6 @@ void BattlescapeState::handleState()
  */
 void BattlescapeState::animate()
 {
-	_animFrame++;
-	if (_animFrame == 8) _animFrame = 0;
 	_map->animate(_states.empty());
 
 	blinkVisibleUnitButtons();
@@ -1154,6 +1154,7 @@ void BattlescapeState::animate()
 
 /**
  * Get pointer to the game. Some states need this info.
+ * @return Pointer to game.
  */
 Game *BattlescapeState::getGame() const
 {
@@ -1162,6 +1163,7 @@ Game *BattlescapeState::getGame() const
 
 /**
  * Get pointer to the map. Some states need this info.
+ * @return Pointer to map.
  */
 Map *BattlescapeState::getMap() const
 {
@@ -1361,9 +1363,9 @@ void BattlescapeState::popup(State *state)
 
 /**
  * Check against reserved time units.
- * @param bu
- * @param tu
- * @return bool
+ * @param bu Pointer to the unit.
+ * @param tu Number of time units to check.
+ * @return bool Whether or not we got enough time units.
  */
 bool BattlescapeState::checkReservedTU(BattleUnit *bu, int tu)
 {

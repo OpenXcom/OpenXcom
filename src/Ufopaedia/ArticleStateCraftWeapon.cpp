@@ -59,13 +59,21 @@ namespace OpenXcom
 		_txtTitle->setAlign(ALIGN_LEFT);
 		_txtTitle->setWordWrap(true);
 		_txtTitle->setText(Ufopaedia::buildText(_game, defs->title));
+
+		_txtInfo = new Text(310, 32, 5, 160);
+		add(_txtInfo);
 		
-		_lstInfo = new TextList(220, 111, 5, 80);
+		_txtInfo->setColor(Palette::blockOffset(14)+15);
+		_txtInfo->setAlign(ALIGN_LEFT);
+		_txtInfo->setWordWrap(true);
+		_txtInfo->setText(Ufopaedia::buildText(_game, defs->text));
+		
+		_lstInfo = new TextList(250, 111, 5, 80);
 		add(_lstInfo);
 		
 		std::wstringstream ss;
 		_lstInfo->setColor(Palette::blockOffset(14)+15);
-		_lstInfo->setColumns(2, 150, 70);
+		_lstInfo->setColumns(2, 180, 70);
 		_lstInfo->setDot(true);
 		_lstInfo->setBig();
 		

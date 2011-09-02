@@ -94,6 +94,9 @@ void UnitFallBState::init()
 	think();
 }
 
+/*
+ * Think!
+ */
 void UnitFallBState::think()
 {
 	if (_unit->getStatus() == STATUS_TURNING)

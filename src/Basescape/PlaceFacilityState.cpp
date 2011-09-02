@@ -76,7 +76,6 @@ PlaceFacilityState::PlaceFacilityState(Game *game, Base *base, RuleBaseFacility 
 	_window->setColor(Palette::blockOffset(13)+13);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 	
-	_view->setFonts(_game->getResourcePack()->getFont("Big.fnt"), _game->getResourcePack()->getFont("Small.fnt"));
 	_view->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
 	_view->setBase(_base);
 	_view->setSelectable(rule->getSize());
@@ -102,7 +101,11 @@ PlaceFacilityState::PlaceFacilityState(Game *game, Base *base, RuleBaseFacility 
 	_numTime->setColor(Palette::blockOffset(13));
 	_numTime->setBig();
 	std::wstringstream ss;
-	ss << _rule->getBuildTime() << _game->getLanguage()->getString("STR_DAYS");
+	ss << _rule->getBuildTime();
+	if (_rule->getBuildTime() != 1)
+		ss << _game->getLanguage()->getString("STR_DAYS");
+	else
+		ss << _game->getLanguage()->getString("STR_DAY");
 	_numTime->setText(ss.str());
 
 	_txtMaintenance->setColor(Palette::blockOffset(13)+10);

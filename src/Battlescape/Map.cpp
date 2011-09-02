@@ -146,7 +146,6 @@ void Map::think()
 
 /**
  * Draws the whole map, part by part.
- * todo: work with dirty rects
  */
 void Map::draw()
 {
@@ -183,6 +182,7 @@ void Map::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 /**
 * Draw the terrain.
 * Keep this function as optimised as possible. It's big to minimise overhead of function calls.
+* @param surface The surface to draw on.
 */
 void Map::drawTerrain(Surface *surface)
 {
@@ -720,7 +720,7 @@ void Map::mouseOver(Action *action, State *state)
  * @param minimum value
  * @param maximum value
  */
-void Map::minMaxInt(int *value, const int minValue, const int maxValue)
+void Map::minMaxInt(int *value, const int minValue, const int maxValue) const
 {
 	if (*value < minValue)
 	{
@@ -779,6 +779,7 @@ void Map::scroll()
 
 /**
  * Handle animating tiles. 8 Frames per animation.
+ * @param redraw Redraw the battlescape?
  */
 void Map::animate(bool redraw)
 {
@@ -857,7 +858,7 @@ void Map::centerOnPosition(const Position &mapPos, bool redraw)
  * @param mapX map x position
  * @param mapY map y position
  */
-void Map::convertScreenToMap(int screenX, int screenY, int *mapX, int *mapY)
+void Map::convertScreenToMap(int screenX, int screenY, int *mapX, int *mapY) const
 {
 	// add half a tileheight to the mouseposition per layer we are above the floor
     screenY += -_spriteHeight + (_viewHeight + 1) * (_spriteHeight / 2);
@@ -880,7 +881,7 @@ void Map::convertScreenToMap(int screenX, int screenY, int *mapX, int *mapY)
  * @param mapPos X,Y,Z coordinates on the map.
  * @param screenPos to screen position.
  */
-void Map::convertMapToScreen(const Position &mapPos, Position *screenPos)
+void Map::convertMapToScreen(const Position &mapPos, Position *screenPos) const
 {
 	screenPos->z = 0; // not used
 	screenPos->x = mapPos.x * (_spriteWidth / 2) + mapPos.y * (_spriteWidth / 2);
@@ -892,7 +893,7 @@ void Map::convertMapToScreen(const Position &mapPos, Position *screenPos)
  * @param mapPos X,Y,Z coordinates on the map.
  * @param screenPos to screen position.
  */
-void Map::convertVoxelToScreen(const Position &voxelPos, Position *screenPos)
+void Map::convertVoxelToScreen(const Position &voxelPos, Position *screenPos) const
 {
 	Position mapPosition = Position(voxelPos.x / 16, voxelPos.y / 16, voxelPos.z / 24);
 	convertMapToScreen(mapPosition, screenPos);
@@ -909,7 +910,7 @@ void Map::convertVoxelToScreen(const Position &voxelPos, Position *screenPos)
  * Draws the rectangle selector.
  * @param pos pointer to a position
  */
-void Map::getSelectorPosition(Position *pos)
+void Map::getSelectorPosition(Position *pos) const
 {
 	pos->x = _selectorX;
 	pos->y = _selectorY;
@@ -1018,7 +1019,8 @@ void Map::cacheUnits()
 }
 
 /**
- * Check all units if they need to be redrawn.
+ * Check if a certain unit needs to be redrawn.
+ * @param unit Pointer to battleUnit
  */
 void Map::cacheUnit(BattleUnit *unit)
 {
@@ -1082,6 +1084,11 @@ std::set<Explosion*> *Map::getExplosions()
 	return &_explosions;
 }
 
+/**
+ * Check if the camera did follow a projectile.
+ * It is used to put the camera back to it's original position after the projectile has reached it's destination.
+ * @return bool Whether it did or not.
+ */
 bool Map::didCameraFollow()
 {
 	bool value = _cameraFollowed;

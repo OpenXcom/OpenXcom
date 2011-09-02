@@ -67,7 +67,7 @@ std::vector<MapDataSet*> *RuleTerrain::getMapDataSets()
 * gets the terrain name (string)
 * @return name
 */
-std::string RuleTerrain::getName()
+std::string RuleTerrain::getName() const
 {
 	return _name;
 }
@@ -104,12 +104,12 @@ MapBlock* RuleTerrain::getRandomMapBlock(int maxsize, bool landingzone)
 * @param id the id in the terrain
 * @return pointer to object
 */
-MapData *RuleTerrain::getMapData(int id)
+MapData *RuleTerrain::getMapData(int id) const
 {
 	MapDataSet* mdf = 0;
 	int relativeID = id;
 
-	for (std::vector<MapDataSet*>::iterator i = _mapDataFiles.begin(); i != _mapDataFiles.end(); ++i)
+	for (std::vector<MapDataSet*>::const_iterator i = _mapDataFiles.begin(); i != _mapDataFiles.end(); ++i)
 	{
 		mdf = *i;
 		if (relativeID- mdf->getSize() < 0)

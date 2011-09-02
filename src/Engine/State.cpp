@@ -27,6 +27,7 @@
 #include "../Interface/TextButton.h"
 #include "../Interface/TextEdit.h"
 #include "../Interface/TextList.h"
+#include "../Basescape/BaseView.h"
 #include "../Battlescape/WarningMessage.h"
 
 namespace OpenXcom
@@ -74,6 +75,7 @@ void State::add(Surface *surface)
 	TextEdit *te = dynamic_cast<TextEdit*>(surface);
 	TextList *tl = dynamic_cast<TextList*>(surface);
 	WarningMessage *wm = dynamic_cast<WarningMessage*>(surface);
+	BaseView *bv = dynamic_cast<BaseView*>(surface);
 	if (t)
 	{
 		t->setFonts(_game->getResourcePack()->getFont("Big.fnt"), _game->getResourcePack()->getFont("Small.fnt"));
@@ -89,6 +91,10 @@ void State::add(Surface *surface)
 	else if (tl)
 	{
 		tl->setFonts(_game->getResourcePack()->getFont("Big.fnt"), _game->getResourcePack()->getFont("Small.fnt"));
+	}
+	else if (bv)
+	{
+		bv->setFonts(_game->getResourcePack()->getFont("Big.fnt"), _game->getResourcePack()->getFont("Small.fnt"));
 	}
 	else if (wm)
 	{
