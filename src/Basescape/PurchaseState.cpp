@@ -37,6 +37,7 @@
 #include "../Savegame/Transfer.h"
 #include "../Savegame/Craft.h"
 #include "../Savegame/Soldier.h"
+#include "../Savegame/ItemContainer.h"
 #include "PurchaseErrorState.h"
 
 namespace OpenXcom
@@ -116,7 +117,7 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 	_lstItems->setColor(Palette::blockOffset(13)+10);
 	_lstItems->setArrowColor(Palette::blockOffset(13)+13);
 	_lstItems->setArrowColumn(227, ARROW_VERTICAL);
-	_lstItems->setColumns(3, 162, 92, 32);
+	_lstItems->setColumns(4, 152, 58, 44, 32);
 	_lstItems->setSelectable(true);
 	_lstItems->setBackground(_window);
 	_lstItems->setMargin(2);
@@ -140,28 +141,49 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 	_items.push_back("STR_HEAVY_CANNON");
 	_items.push_back("STR_HC_AP_AMMO");
 	_items.push_back("STR_HC_HE_AMMO");
+	_items.push_back("STR_HC_I_AMMO");
 	_items.push_back("STR_AUTO_CANNON");
 	_items.push_back("STR_AC_AP_AMMO");
+	_items.push_back("STR_AC_HE_AMMO");
+	_items.push_back("STR_AC_I_AMMO");
 	_items.push_back("STR_ROCKET_LAUNCHER");
 	_items.push_back("STR_SMALL_ROCKET");
+	_items.push_back("STR_LARGE_ROCKET");
+	_items.push_back("STR_INCENDIARY_ROCKET");
 	_items.push_back("STR_GRENADE");
 	_items.push_back("STR_SMOKE_GRENADE");
 
 	_qtys.push_back(0);
-	_lstItems->addRow(3, _game->getLanguage()->getString("STR_SOLDIER").c_str(), Text::formatFunding(_game->getRuleset()->getSoldierCost() * 2).c_str(), L"0");
+	std::wstringstream ss;
+	ss << _base->getTotalSoldiers();
+	_lstItems->addRow(4, _game->getLanguage()->getString("STR_SOLDIER").c_str(), Text::formatFunding(_game->getRuleset()->getSoldierCost() * 2).c_str(), ss.str().c_str(), L"0");
 	_qtys.push_back(0);
-	_lstItems->addRow(3, _game->getLanguage()->getString("STR_SCIENTIST").c_str(), Text::formatFunding(_game->getRuleset()->getScientistCost() * 2).c_str(), L"0");
+	std::wstringstream ss2;
+	ss2 << _base->getTotalScientists();
+	_lstItems->addRow(4, _game->getLanguage()->getString("STR_SCIENTIST").c_str(), Text::formatFunding(_game->getRuleset()->getScientistCost() * 2).c_str(), ss2.str().c_str(), L"0");
 	_qtys.push_back(0);
-	_lstItems->addRow(3, _game->getLanguage()->getString("STR_ENGINEER").c_str(), Text::formatFunding(_game->getRuleset()->getEngineerCost() * 2).c_str(), L"0");
+	std::wstringstream ss3;
+	ss3 << _base->getTotalEngineers();
+	_lstItems->addRow(4, _game->getLanguage()->getString("STR_ENGINEER").c_str(), Text::formatFunding(_game->getRuleset()->getEngineerCost() * 2).c_str(), ss3.str().c_str(), L"0");
 	for (std::vector<std::string>::iterator i = _crafts.begin(); i != _crafts.end(); ++i)
 	{
 		_qtys.push_back(0);
-		_lstItems->addRow(3, _game->getLanguage()->getString(*i).c_str(), Text::formatFunding(_game->getRuleset()->getCraft(*i)->getCost()).c_str(), L"0");
+		int crafts = 0;
+		for (std::vector<Craft*>::iterator c = _base->getCrafts()->begin(); c != _base->getCrafts()->end(); ++c)
+		{
+			if ((*c)->getRules()->getType() == *i)
+				crafts++;
+		}
+		std::wstringstream ss4;
+		ss4 << crafts;
+		_lstItems->addRow(4, _game->getLanguage()->getString(*i).c_str(), Text::formatFunding(_game->getRuleset()->getCraft(*i)->getCost()).c_str(), ss4.str().c_str(), L"0");
 	}
 	for (std::vector<std::string>::iterator i = _items.begin(); i != _items.end(); ++i)
 	{
 		_qtys.push_back(0);
-		_lstItems->addRow(3, _game->getLanguage()->getString(*i).c_str(), Text::formatFunding(_game->getRuleset()->getItem(*i)->getCost()).c_str(), L"0");
+		std::wstringstream ss5;
+		ss5 << _base->getItems()->getItem(*i);
+		_lstItems->addRow(4, _game->getLanguage()->getString(*i).c_str(), Text::formatFunding(_game->getRuleset()->getItem(*i)->getCost()).c_str(), ss5.str().c_str(), L"0");
 	}
 
 	_timerInc = new Timer(50);
@@ -373,7 +395,7 @@ void PurchaseState::increase()
 		_qtys[_sel]++;
 		std::wstringstream ss;
 		ss << _qtys[_sel];
-		_lstItems->getCell(_sel, 2)->setText(ss.str());
+		_lstItems->getCell(_sel, 3)->setText(ss.str());
 		_lstItems->draw();
 		_total += getPrice();
 		std::wstring s = _game->getLanguage()->getString("STR_COST_OF_PURCHASES");
@@ -407,7 +429,7 @@ void PurchaseState::decrease()
 		_qtys[_sel]--;
 		std::wstringstream ss;
 		ss << _qtys[_sel];
-		_lstItems->getCell(_sel, 2)->setText(ss.str());
+		_lstItems->getCell(_sel, 3)->setText(ss.str());
 		_lstItems->draw();
 		_total -= getPrice();
 		std::wstring s = _game->getLanguage()->getString("STR_COST_OF_PURCHASES");

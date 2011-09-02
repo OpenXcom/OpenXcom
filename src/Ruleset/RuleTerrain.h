@@ -46,7 +46,7 @@ public:
 	RuleTerrain(const std::string &name);
 	~RuleTerrain();
 	/// Gets the terrain's name (used for MAP generation).
-	std::string getName();
+	std::string getName() const;
 	/// Gets the terrain's mapblocks.
 	std::vector<MapBlock*> *getMapBlocks();
 	/// Gets the terrain's mapdatafiles.
@@ -54,7 +54,7 @@ public:
 	/// Gets a random mapblock.
 	MapBlock *getRandomMapBlock(int maxsize, bool landingzone);
 	/// Get the mapdata object.
-	MapData *getMapData(int id);
+	MapData *getMapData(int id) const;
 };
 
 }

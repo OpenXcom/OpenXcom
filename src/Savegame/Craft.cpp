@@ -465,6 +465,10 @@ void Craft::think()
 				{
 					full++;
 				}
+				else
+				{
+					(*i)->setRearming(true);
+				}
 			}
 
 			if (_damage > 0)
@@ -543,6 +547,7 @@ void Craft::refuel()
 /**
  * Rearms the craft's weapons by adding ammo every hour
  * while it's docked in the base.
+ * @return The ammo ID missing for rearming, or "" if none.
  */
 std::string Craft::rearm()
 {
@@ -573,8 +578,8 @@ std::string Craft::rearm()
 }
 
 /**
- * Gets the craft's battlescape status.
- * @return bool
+ * Returns the craft's battlescape status.
+ * @return Is the craft on the battlescape?
  */
 bool Craft::isInBattlescape() const
 {
@@ -582,8 +587,8 @@ bool Craft::isInBattlescape() const
 }
 
 /**
- * Sets the craft's battlescape status.
- * @param inbattle .
+ * Changes the craft's battlescape status.
+ * @param inbattle True if it's in battle, False otherwise.
  */
 void Craft::setInBattlescape(bool inbattle)
 {

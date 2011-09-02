@@ -22,8 +22,6 @@
 namespace OpenXcom
 {
 
-class Node;
-
 /**
  * Represents a link to another node on the map.
  */
@@ -33,7 +31,6 @@ private:
 	int _connectedNodeID;
 	int _distance;
 	int _travelType;
-	Node *_connectedNode;
 public:
 	/// Creates a nodelink.
 	NodeLink(int connectedNodeID, int distance, int travelType);

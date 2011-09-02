@@ -50,9 +50,9 @@ public:
 	/// Assign an action to it.
 	void setAction(BattleActionType action, std::wstring description, std::wstring accuracy, std::wstring timeunits, int tu);
 	/// Get the assigned action.
-	BattleActionType getAction();
+	BattleActionType getAction() const;
 	/// Get the assigned action TUs.
-	int getTUs();
+	int getTUs() const;
 	/// Set the palettes.
 	void setPalette(SDL_Color *colors, int firstcolor, int ncolors);
 	/// Redraw it.

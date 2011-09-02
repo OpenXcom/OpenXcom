@@ -59,43 +59,43 @@ public:
 	/// Cleans up a tile.
 	~Tile();
 	/// Gets a pointer to the mapdata for a specific part of the tile.
-	MapData *getMapData(int part);
+	MapData *getMapData(int part) const;
 	/// Sets the pointer to the mapdata for a specific part of the tile
 	void setMapData(MapData *dat, int part);
 	/// Sets the IDs to the mapdata for a specific part of the tile
 	void load(int mdsID, int mdID, int part);
 	/// Gets the IDs to the mapdata for a specific part of the tile
-	void getSaveGameData(int *mdsID, int *mdID, int part);
+	void getSaveGameData(int *mdsID, int *mdID, int part) const;
 	/// Gets wether this tile has no objects
-	bool isVoid();
+	bool isVoid() const;
 	/// Get the TU cost to walk over a certain part of the tile.
-	int getTUCost(int part, MovementType movementType);
+	int getTUCost(int part, MovementType movementType) const;
 	/// Checks if this tile has a floor.
-	bool hasNoFloor();
+	bool hasNoFloor() const;
 	/// Checks if this tile is a big wall.
-	bool isBigWall();
+	bool isBigWall() const;
 	/// Get terrain level.
-	int getTerrainLevel();
+	int getTerrainLevel() const;
 	/// Gets the tile's position.
 	const Position& getPosition() const;
 	/// Gets the floor object footstep sound.
-	int getFootstepSound();
+	int getFootstepSound() const;
 	/// Open a door, returns the ID, 0(normal), 1(ufo) or -1 if no door opened.
 	int openDoor(int part);
 	/// Check if ufo door is open.
-	bool isUfoDoorOpen(int part);
+	bool isUfoDoorOpen(int part) const;
 	/// Close ufo door.
 	int closeUfoDoor();
 	/// Sets the black fog of war status of this tile.
 	void setDiscovered(bool flag, int part);
 	/// Gets the black fog of war status of this tile.
-	bool isDiscovered(int part);
+	bool isDiscovered(int part) const;
 	/// Reset light to zero for this tile.
 	void resetLight(int layer);
 	/// Add light to this tile.
 	void addLight(int light, int layer);
 	/// Get the shade amount.
-	int getShade();
+	int getShade() const;
 	/// Destroy a tile part.
 	void destroy(int part);
 	/// Damage a tile part.
@@ -103,37 +103,37 @@ public:
 	/// Set a "virtual" explosive on this tile, to detonate later.
 	void setExplosive(int power);
 	/// Get explosive power of this tile.
-	int getExplosive();
+	int getExplosive() const;
 	/// Apply the explosive power to the tile parts.
 	void detonate();
 	/// Animated the tile parts.
 	void animate();
 	/// Get object sprites.
-	Surface *getSprite(int part);
+	Surface *getSprite(int part) const;
 	/// Set a unit on this tile.
 	void setUnit(BattleUnit *unit);
 	/// Get the unit on this tile.
-	BattleUnit *getUnit();
+	BattleUnit *getUnit() const;
 	/// Set fire.
 	void setFire(int fire);
 	/// Get fire.
-	int getFire();
+	int getFire() const;
 	/// Set smoke.
 	void addSmoke(int smoke);
 	/// Get smoke.
-	int getSmoke();
+	int getSmoke() const;
 	/// Get flammability.
-	int getFlammability();
+	int getFlammability() const;
 	/// Sets the objects on the tile on fire.
 	void ignite();
 	/// Get fire and smoke animation offset.
-	int getAnimationOffset();
+	int getAnimationOffset() const;
 	/// Add item
 	void addItem(BattleItem *item);
 	/// Remove item
 	void removeItem(BattleItem *item);
 	/// Get top-most item
-	int getTopItemSprite();
+	int getTopItemSprite() const;
 	/// Decrease fire and smoke timers.
 	void prepareNewTurn();
 	/// Get inventory on this tile.

@@ -283,20 +283,19 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 						 "GMSTORY",
 						 "GMTACTIC",
 						 "GMWIN"};
-	std::string exts[] = {"OGG", "MP3", "MID"};
+	std::string exts[] = {"ogg", "mp3", "mid"};
 	int tracks[] = {3, 6, 0, 18, 2, 19, 20, 21, 10, 8, 9, 12, 17, 11};
 
 	// Check which music version is available
 	bool cat = true;
 	GMCatFile *gmcat = 0;
 
-	std::stringstream musDos;
-	musDos << "SOUND/GM.CAT";
+	std::string musDos = "SOUND/GM.CAT";
 	struct stat musInfo;
-	if (stat(CrossPlatform::getDataFile(musDos.str()).c_str(), &musInfo) == 0)
+	if (stat(CrossPlatform::getDataFile(musDos).c_str(), &musInfo) == 0)
 	{
 		cat = true;
-		gmcat = new GMCatFile(CrossPlatform::getDataFile(musDos.str()).c_str());
+		gmcat = new GMCatFile(CrossPlatform::getDataFile(musDos).c_str());
 	}
 	else
 	{

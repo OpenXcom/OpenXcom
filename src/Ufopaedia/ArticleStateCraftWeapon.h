@@ -42,6 +42,7 @@ namespace OpenXcom
 		
 	protected:
 		Text *_txtTitle;
+		Text *_txtInfo;
 		TextList *_lstInfo;
 	};
 }

@@ -157,7 +157,7 @@ void SelectDestinationState::globeClick(Action *action)
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
 		std::vector<Target*> v = _globe->getTargets(mouseX, mouseY, true);
-		if (v.size() == 0)
+		if (v.empty())
 		{
 			Waypoint *w = new Waypoint();
 			w->setLongitude(lon);

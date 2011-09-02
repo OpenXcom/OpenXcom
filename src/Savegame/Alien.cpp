@@ -26,16 +26,17 @@ namespace OpenXcom
 {
 
 /**
- * Initializes a new blank soldier.
+ * Initializes a new blank alien.
  */
-Alien::Alien()
+Alien::Alien() : Unit(), _rules(0), _lang(0)
 {
 }
 
 /**
- * Initializes a new soldier with random stats and a name
- * pulled from a set of SoldierNamePool's.
- * @param names List of name pools.
+ * Initializes a new alien with stats pulled from a ruleset.
+ * @param rules Alien ruleset.
+ * @param armor Alien armor.
+ * @param lang Current language.
  */
 Alien::Alien(RuleAlien *rules, RuleArmor *armor, Language *lang) : Unit(armor), _rules(rules), _lang(lang)
 {
@@ -61,7 +62,7 @@ std::wstring Alien::getName() const
 }
 
 /**
- * Returns the soldier's amount of time units.
+ * Returns the alien's amount of time units.
  * @return Time units.
  */
 int Alien::getTimeUnits() const
@@ -70,7 +71,7 @@ int Alien::getTimeUnits() const
 }
 
 /**
- * Returns the soldier's amount of stamina.
+ * Returns the alien's amount of stamina.
  * @return Stamina.
  */
 int Alien::getStamina() const
@@ -79,7 +80,7 @@ int Alien::getStamina() const
 }
 
 /**
- * Returns the soldier's amount of health.
+ * Returns the alien's amount of health.
  * @return Health.
  */
 int Alien::getHealth() const
@@ -88,7 +89,7 @@ int Alien::getHealth() const
 }
 
 /**
- * Returns the soldier's amount of bravery.
+ * Returns the alien's amount of bravery.
  * @return Bravery.
  */
 int Alien::getBravery() const
@@ -97,7 +98,7 @@ int Alien::getBravery() const
 }
 
 /**
- * Returns the soldier's amount of reactions.
+ * Returns the alien's amount of reactions.
  * @return Reactions.
  */
 int Alien::getReactions() const
@@ -106,7 +107,7 @@ int Alien::getReactions() const
 }
 
 /**
- * Returns the soldier's amount of firing accuracy.
+ * Returns the alien's amount of firing accuracy.
  * @return Firing accuracy.
  */
 int Alien::getFiringAccuracy() const
@@ -115,7 +116,7 @@ int Alien::getFiringAccuracy() const
 }
 
 /**
- * Returns the soldier's amount of throwing accuracy.
+ * Returns the alien's amount of throwing accuracy.
  * @return Throwing accuracy.
  */
 int Alien::getThrowingAccuracy() const
@@ -124,7 +125,7 @@ int Alien::getThrowingAccuracy() const
 }
 
 /**
- * Returns the soldier's amount of strength.
+ * Returns the alien's amount of strength.
  * @return Strength.
  */
 int Alien::getStrength() const
@@ -133,7 +134,7 @@ int Alien::getStrength() const
 }
 
 /**
- * Returns the soldier's rules.
+ * Returns the alien's rules.
  * @return rulealien
  */
 RuleAlien *Alien::getRules() const
@@ -142,7 +143,7 @@ RuleAlien *Alien::getRules() const
 }
 
 /**
- * Returns the soldier's stand height.
+ * Returns the alien's stand height.
  * @return stand height
  */ 
 int Alien::getStandHeight() const
@@ -151,7 +152,7 @@ int Alien::getStandHeight() const
 }
 
 /**
- * Returns the soldier's kneel height.
+ * Returns the alien's kneel height.
  * @return kneel height
  */
 int Alien::getKneelHeight() const
@@ -159,7 +160,7 @@ int Alien::getKneelHeight() const
 	return _rules->getKneelHeight();
 }
 /**
- * Returns the soldier's loftemps ID.
+ * Returns the alien's loftemps ID.
  * @return loftemps ID
  */
 int Alien::gotLoftemps() const

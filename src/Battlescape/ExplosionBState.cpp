@@ -40,6 +40,11 @@ namespace OpenXcom
 
 /**
  * Sets up an ExplosionBState.
+ * @param parent Pointer to the BattleScape.
+ * @param center Center position in voxelspace.
+ * @param item Item involved in the explosion (eg grenade)
+ * @param unit Unit involved in the explosion (eg unit throwing the grenade)
+ * @param tile Tile the explosion is on.
  */
 ExplosionBState::ExplosionBState(BattlescapeState *parent, Position center, BattleItem *item, BattleUnit *unit, Tile *tile) : BattleState(parent), _unit(unit), _center(center), _item(item), _tile(tile)
 {

@@ -804,7 +804,7 @@ void GeoscapeState::globeClick(Action *action)
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
 		std::vector<Target*> v = _globe->getTargets(mouseX, mouseY, false);
-		if (v.size() > 0)
+		if (!v.empty())
 		{
 			_game->pushState(new MultipleTargetsState(_game, v, 0, this));
 		}

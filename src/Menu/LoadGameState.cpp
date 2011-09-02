@@ -128,12 +128,13 @@ void LoadGameState::btnCancelClick(Action *action)
  */
 void LoadGameState::lstSavesClick(Action *action)
 {
+	Ruleset *r = new XcomRuleset();
+	SavedGame *s = new SavedGame(DIFF_BEGINNER);
 	try
 	{
-		_game->setRuleset(new XcomRuleset());
-		SavedGame *s = new SavedGame(DIFF_BEGINNER);
-		s->load(Language::wstrToUtf8(_lstSaves->getCell(_lstSaves->getSelectedRow(), 0)->getText()), _game->getRuleset());
+		s->load(Language::wstrToUtf8(_lstSaves->getCell(_lstSaves->getSelectedRow(), 0)->getText()), r);
 		_game->setSavedGame(s);
+		_game->setRuleset(r);
 		if (_game->getSavedGame()->getBattleGame() == 0)
 		{
 			_game->setState(new GeoscapeState(_game));
@@ -148,11 +149,15 @@ void LoadGameState::lstSavesClick(Action *action)
 	{
 		std::cerr << "ERROR: " << e.what() << std::endl;
 		_game->pushState(new GeoscapeErrorState(_game, "STR_LOAD_UNSUCCESSFUL"));
+		delete r;
+		delete s;
 	}
 	catch (YAML::Exception &e)
 	{
 		std::cerr << "ERROR: " << e.what() << std::endl;
 		_game->pushState(new GeoscapeErrorState(_game, "STR_LOAD_UNSUCCESSFUL"));
+		delete r;
+		delete s;
 	}
 }
 

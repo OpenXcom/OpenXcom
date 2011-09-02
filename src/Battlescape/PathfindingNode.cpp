@@ -43,7 +43,7 @@ PathfindingNode::~PathfindingNode()
 * Get the node position
 * @return node position
 */
-const Position &PathfindingNode::getPosition()
+const Position &PathfindingNode::getPosition() const
 {
 	return _pos;
 }
@@ -74,7 +74,7 @@ void PathfindingNode::check(int tuCost, int stepsNum, PathfindingNode* prevNode,
 * Is checked?
 * @return bool 
 */
-bool PathfindingNode::isChecked()
+bool PathfindingNode::isChecked() const
 {
 	return _checked;
 }
@@ -83,7 +83,7 @@ bool PathfindingNode::isChecked()
  * Get TU cost.
  * @return cost
  */
-int PathfindingNode::getTUCost()
+int PathfindingNode::getTUCost() const
 {
 	return _tuCost;
 }
@@ -92,7 +92,7 @@ int PathfindingNode::getTUCost()
  * Get steps num
  * @return steps num
  */
-int PathfindingNode::getStepsNum()
+int PathfindingNode::getStepsNum() const
 {
 	return _stepsNum;
 }
@@ -101,7 +101,7 @@ int PathfindingNode::getStepsNum()
  * Get previous node
  * @return pointer to previous node
  */
-PathfindingNode* PathfindingNode::getPrevNode()
+PathfindingNode* PathfindingNode::getPrevNode() const
 {
 	return _prevNode;
 }
@@ -110,7 +110,7 @@ PathfindingNode* PathfindingNode::getPrevNode()
  * Get previous walking direction how we got on this node.
  * @return previous vector
  */
-int PathfindingNode::getPrevDir()
+int PathfindingNode::getPrevDir() const
 {
 	return _prevDir;
 }

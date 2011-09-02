@@ -35,31 +35,31 @@ private:
 	RuleAlien *_rules;
 	Language *_lang;
 public:
-	/// Creates a new Alien.
+	/// Creates a new alien.
 	Alien();
-	/// Creates a new Alien with specific rules and armor.
+	/// Creates a new alien with specific rules and armor.
 	Alien(RuleAlien *rules, RuleArmor *armor, Language *lang);
-	/// Cleans up the Alien.
+	/// Cleans up the alien.
 	~Alien();
-	/// Gets the Alien's name.
+	/// Gets the alien's name.
 	std::wstring getName() const;
-	/// Gets the Alien's time units.
+	/// Gets the alien's time units.
 	int getTimeUnits() const;
-	/// Gets the Alien's stamina.
+	/// Gets the alien's stamina.
 	int getStamina() const;
-	/// Gets the Alien's health.
+	/// Gets the alien's health.
 	int getHealth() const;
-	/// Gets the Alien's bravery.
+	/// Gets the alien's bravery.
 	int getBravery() const;
-	/// Gets the Alien's reactions.
+	/// Gets the alien's reactions.
 	int getReactions() const;
-	/// Gets the Alien's firing accuracy.
+	/// Gets the alien's firing accuracy.
 	int getFiringAccuracy() const;
-	/// Gets the Alien's throwing accuracy.
+	/// Gets the alien's throwing accuracy.
 	int getThrowingAccuracy() const;
-	/// Gets the Alien's strength.
+	/// Gets the alien's strength.
 	int getStrength() const;
-	/// Gets the Alien's rules.
+	/// Gets the alien's rules.
 	RuleAlien *getRules() const;
 	/// Gets the alien's stand height.
 	int getStandHeight() const;

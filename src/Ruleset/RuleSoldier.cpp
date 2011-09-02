@@ -26,7 +26,7 @@ namespace OpenXcom
  * type of craft.
  * @param type String defining the type.
  */
-RuleSoldier::RuleSoldier(std::string type) : _type(type)
+RuleSoldier::RuleSoldier(std::string type) : _type(type), _armor(""), _standHeight(0), _kneelHeight(0), _loftemps(0)
 {
 	
 }
@@ -68,27 +68,27 @@ void RuleSoldier::setVoxelParameters(int standHeight, int kneelHeight, int lofte
 	_loftemps = loftemps;
 }
 
-UnitStats RuleSoldier::getMinStats()
+UnitStats RuleSoldier::getMinStats() const
 {
 	return _minStats;
 }
 /// 
-UnitStats RuleSoldier::getMaxStats()
+UnitStats RuleSoldier::getMaxStats() const
 {
 	return _maxStats;
 }
 /// 
-int RuleSoldier::getStandHeight()
+int RuleSoldier::getStandHeight() const
 {
 	return _standHeight;
 }
 /// 
-int RuleSoldier::getKneelHeight()
+int RuleSoldier::getKneelHeight() const
 {
 	return _kneelHeight;
 }
 /// 
-int RuleSoldier::gotLoftemps()
+int RuleSoldier::gotLoftemps() const
 {
 	return _loftemps;
 }

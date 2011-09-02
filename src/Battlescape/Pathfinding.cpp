@@ -31,7 +31,7 @@ namespace OpenXcom
  * Sets up a Pathfinding.
  * @param save pointer to SavedBattleGame object.
  */
-Pathfinding::Pathfinding(SavedBattleGame *save) : _save(save), _nodes()
+Pathfinding::Pathfinding(SavedBattleGame *save) : _save(save), _nodes(), _unit(0)
 {
 	_size = _save->getHeight() * _save->getLength() * _save->getWidth();
 	/* allocate the array and the objects in it */

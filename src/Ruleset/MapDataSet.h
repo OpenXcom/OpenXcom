@@ -52,13 +52,13 @@ public:
 	/// Loads voxeldata from a DAT file.
 	static void loadLOFTEMPS(const std::string &filename, std::vector<Uint16> *voxelData);
 	/// Get the dataset name (used for MAP generation).
-	std::string getName();
+	std::string getName() const;
 	/// Get the dataset size.
-	int getSize();
+	int getSize() const;
 	/// Get objects in this dataset.
 	std::vector<MapData*> *getObjects();
 	/// Get surfaces in this dataset.
-	SurfaceSet *getSurfaceset();
+	SurfaceSet *getSurfaceset() const;
 	/// Load the objects from an MCD file.
 	void load(ResourcePack *res);
 	///	Unload to free memory.

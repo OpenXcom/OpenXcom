@@ -41,10 +41,9 @@ namespace OpenXcom
 {
 
 /**
- * Initializes all the elements in the Soldier Info screen.
+ * Initializes all the elements in the Unit Info screen.
  * @param game Pointer to the core game.
- * @param base Pointer to the base to get info from.
- * @param soldier ID of the selected soldier.
+ * @param unit Pointer to the selected unit.
  */
 UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit) : State(game), _unit(unit)
 {
@@ -349,7 +348,7 @@ UnitInfoState::~UnitInfoState()
 }
 
 /**
- * The soldier names can change
+ * The unit info can change
  * after going into other screens.
  */
 void UnitInfoState::init()

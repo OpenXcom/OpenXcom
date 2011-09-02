@@ -23,7 +23,6 @@ namespace OpenXcom
 
 /**
  * Sets up a BattleAIState.
- * @param parent pointer to the parent state.
  */
 BattleAIState::BattleAIState(SavedBattleGame *game, BattleUnit *unit) : _game(game), _unit(unit)
 {

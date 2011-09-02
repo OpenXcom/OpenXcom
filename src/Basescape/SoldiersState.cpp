@@ -49,7 +49,7 @@ SoldiersState::SoldiersState(Game *game, Base *base) : State(game), _base(base)
 	_txtTitle = new Text(310, 16, 5, 8);
 	_txtName = new Text(114, 9, 16, 32);
 	_txtRank = new Text(102, 9, 130, 32);
-	_txtCraft = new Text(82, 9, 232, 32);
+	_txtCraft = new Text(82, 9, 222, 32);
 	_lstSoldiers = new TextList(288, 128, 8, 40);
 
 	// Set palette
@@ -87,7 +87,7 @@ SoldiersState::SoldiersState(Game *game, Base *base) : State(game), _base(base)
 
 	_lstSoldiers->setColor(Palette::blockOffset(13)+10);
 	_lstSoldiers->setArrowColor(Palette::blockOffset(15)+4);
-	_lstSoldiers->setColumns(3, 114, 102, 64);
+	_lstSoldiers->setColumns(3, 114, 92, 74);
 	_lstSoldiers->setSelectable(true);
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setMargin(8);

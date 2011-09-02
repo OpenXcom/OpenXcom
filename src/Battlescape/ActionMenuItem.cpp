@@ -26,10 +26,12 @@ namespace OpenXcom
 /**
  * Sets up an Action menu item.
  * @param state the parent state.
- * @param id the id.
+ * @param id the unique identifier of the menu item.
  * @param bigFont pointer to the font.
+ * @param x position on the x-axis.
+ * @param y position on the y-asis.
  */
-ActionMenuItem::ActionMenuItem(State *state, int id, Font *bigFont, int x, int y) : InteractiveSurface(270, 40, x + 25, y - (id*40)), _id(id), _highlighted(false)
+ActionMenuItem::ActionMenuItem(State *state, int id, Font *bigFont, int x, int y) : InteractiveSurface(270, 40, x + 25, y - (id*40)), _id(id), _highlighted(false), _action(BA_NONE), _tu(0)
 {
 	_txtDescription = new Text(150, 20, 16, 13);
 	_txtDescription->setFonts(bigFont, 0);
@@ -65,6 +67,7 @@ ActionMenuItem::~ActionMenuItem()
  * @param description the actions description
  * @param accuracy the actions accuracy, including the Acc> prefix
  * @param timeunits the timeunits string, incliding the TUs> prefix
+ * @param tu the timeunits value
  */
 void ActionMenuItem::setAction(BattleActionType action, std::wstring description, std::wstring accuracy, std::wstring timeunits, int tu)
 {
@@ -83,7 +86,7 @@ void ActionMenuItem::setAction(BattleActionType action, std::wstring description
  * Get the action that was linked to this menu item.
  * @return action
  */
-BattleActionType ActionMenuItem::getAction()
+BattleActionType ActionMenuItem::getAction() const
 {
 	return _action;
 }
@@ -92,7 +95,7 @@ BattleActionType ActionMenuItem::getAction()
  * Get the action tus that was linked to this menu item.
  * @return tu
  */
-int ActionMenuItem::getTUs()
+int ActionMenuItem::getTUs() const
 {
 	return _tu;
 }

@@ -30,8 +30,7 @@ Unit::Unit() : _armor(0)
 }
 
 /**
- * Initializes a new unit with rules and armor.
- * @param rules
+ * Initializes a new unit with armor.
  * @param armor
  */
 Unit::Unit(RuleArmor *armor) : _armor(armor)
@@ -49,7 +48,7 @@ Unit::~Unit()
 
 /**
  * Returns the unit's armor.
- * @return rules.
+ * @return armor.
  */
 RuleArmor * Unit::getArmor() const
 {

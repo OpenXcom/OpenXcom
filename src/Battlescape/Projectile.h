@@ -61,7 +61,7 @@ public:
 	/// Get the current position in voxel space.
 	Position getPosition(int offset = 0) const;
 	/// Get a particle from the particle array.
-	int getParticle(int i);
+	int getParticle(int i) const;
 	/// Get the item
 	BattleItem *getItem() const;
 	/// Get the sprite

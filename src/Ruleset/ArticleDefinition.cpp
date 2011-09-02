@@ -39,7 +39,7 @@ namespace OpenXcom
 	 * Get the article definition type. (Text, TextImage, Craft, ...)
 	 * @returns The type of article definition of this instance.
 	 */
-	UfopaediaTypeId ArticleDefinition::getType()
+	UfopaediaTypeId ArticleDefinition::getType() const
 	{
 		return _type_id;
 	}
@@ -81,7 +81,7 @@ namespace OpenXcom
 	/**
 	 * Constructor (only setting type of base class)
 	 */
-	ArticleDefinitionTextImage::ArticleDefinitionTextImage() : ArticleDefinition(UFOPAEDIA_TYPE_TEXTIMAGE)
+	ArticleDefinitionTextImage::ArticleDefinitionTextImage() : ArticleDefinition(UFOPAEDIA_TYPE_TEXTIMAGE), text_width(0)
 	{}
 
 	/**

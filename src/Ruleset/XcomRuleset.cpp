@@ -841,6 +841,34 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	acap->setClipSize(14);
 	acap->setWeight(5);
 
+	RuleItem *ache = new RuleItem("STR_AC_HE_AMMO");
+	ache->setSize(0.1f);
+	ache->setCost(700);
+	ache->setBigSprite(9);
+	ache->setPower(44);
+	ache->setDamageType(DT_HE);
+	ache->setBattleType(BT_AMMO);
+	ache->setHitSound(0);
+	ache->setHitAnimation(0);
+	ache->setInventoryWidth(2);
+	ache->setInventoryHeight(1);
+	ache->setClipSize(14);
+	ache->setWeight(5);
+
+	RuleItem *aci = new RuleItem("STR_AC_I_AMMO");
+	aci->setSize(0.1f);
+	aci->setCost(650);
+	aci->setBigSprite(10);
+	aci->setPower(42);
+	aci->setDamageType(DT_IN);
+	aci->setBattleType(BT_AMMO);
+	aci->setHitSound(0);
+	aci->setHitAnimation(0);
+	aci->setInventoryWidth(2);
+	aci->setInventoryHeight(1);
+	aci->setClipSize(14);
+	aci->setWeight(5);
+
 	RuleItem *rlauncher = new RuleItem("STR_ROCKET_LAUNCHER");
 	rlauncher->setSize(0.4f);
 	rlauncher->setCost(4000);
@@ -855,6 +883,8 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	rlauncher->setAccuracyAimed(115);
 	rlauncher->setTUAimed(75);
 	rlauncher->getCompatibleAmmo()->push_back("STR_SMALL_ROCKET");
+	rlauncher->getCompatibleAmmo()->push_back("STR_LARGE_ROCKET");
+	rlauncher->getCompatibleAmmo()->push_back("STR_INCENDIARY_ROCKET");
 	rlauncher->setBattleType(BT_FIREARM);
 	rlauncher->setInventoryWidth(2);
 	rlauncher->setInventoryHeight(3);
@@ -873,6 +903,34 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	srocket->setInventoryHeight(3);
 	srocket->setClipSize(1);
 	srocket->setWeight(6);
+
+	RuleItem *lrocket = new RuleItem("STR_LARGE_ROCKET");
+	lrocket->setSize(0.2f);
+	lrocket->setCost(900);
+	lrocket->setBigSprite(17);
+	lrocket->setPower(100);
+	lrocket->setDamageType(DT_HE);
+	lrocket->setBattleType(BT_AMMO);
+	lrocket->setHitSound(0);
+	lrocket->setHitAnimation(0);
+	lrocket->setInventoryWidth(1);
+	lrocket->setInventoryHeight(3);
+	lrocket->setClipSize(1);
+	lrocket->setWeight(8);
+
+	RuleItem *irocket = new RuleItem("STR_INCENDIARY_ROCKET");
+	irocket->setSize(0.2f);
+	irocket->setCost(1200);
+	irocket->setBigSprite(18);
+	irocket->setPower(90);
+	irocket->setDamageType(DT_IN);
+	irocket->setBattleType(BT_AMMO);
+	irocket->setHitSound(0);
+	irocket->setHitAnimation(0);
+	irocket->setInventoryWidth(1);
+	irocket->setInventoryHeight(3);
+	irocket->setClipSize(1);
+	irocket->setWeight(8);
 
 	RuleItem *grenade = new RuleItem("STR_GRENADE");
 	grenade->setSize(0.1f);
@@ -955,8 +1013,12 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_items.insert(std::pair<std::string, RuleItem*>("STR_HC_I_AMMO", hci));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_AUTO_CANNON", acannon));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_AC_AP_AMMO", acap));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_AC_HE_AMMO", ache));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_AC_I_AMMO", aci));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_ROCKET_LAUNCHER", rlauncher));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_SMALL_ROCKET", srocket));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_LARGE_ROCKET", lrocket));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_INCENDIARY_ROCKET", irocket));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_GRENADE", grenade));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_SMOKE_GRENADE", sgrenade));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_CORPSE", corpse));
@@ -1535,6 +1597,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	article_craft_weapon.id = "STR_STINGRAY";
 	article_craft_weapon.title = "STR_STINGRAY";
 	article_craft_weapon.image_id = "UP006.SPK";
+	article_craft_weapon.text = "STR_STINGRAY_UFOPEDIA";
 	article_craft_weapon.weapon = _craftWeapons[article_craft_weapon.id];
 	article_craft_weapon.sort_key = sort_key++;
 	
@@ -1543,6 +1606,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	article_craft_weapon.id = "STR_AVALANCHE";
 	article_craft_weapon.title = "STR_AVALANCHE";
 	article_craft_weapon.image_id = "UP007.SPK";
+	article_craft_weapon.text = "STR_AVALANCHE_UFOPEDIA";
 	article_craft_weapon.weapon = _craftWeapons[article_craft_weapon.id];
 	article_craft_weapon.sort_key = sort_key++;
 	
@@ -1551,6 +1615,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	article_craft_weapon.id = "STR_CANNON_UC";
 	article_craft_weapon.title = "STR_CANNON_UC";
 	article_craft_weapon.image_id = "UP008.SPK";
+	article_craft_weapon.text = "STR_CANNON_UFOPEDIA";
 	article_craft_weapon.weapon = _craftWeapons[article_craft_weapon.id];
 	article_craft_weapon.sort_key = sort_key++;
 	
@@ -1559,6 +1624,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	article_craft_weapon.id = "STR_FUSION_BALL_UC";
 	article_craft_weapon.title = "STR_FUSION_BALL_UC";
 	article_craft_weapon.image_id = "UP009.SPK";
+	article_craft_weapon.text = "STR_FUSION_BALL_UFOPEDIA";
 	article_craft_weapon.weapon = _craftWeapons[article_craft_weapon.id];
 	article_craft_weapon.sort_key = sort_key++;
 	
@@ -1567,6 +1633,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	article_craft_weapon.id = "STR_LASER_CANNON_UC";
 	article_craft_weapon.title = "STR_LASER_CANNON_UC";
 	article_craft_weapon.image_id = "UP010.SPK";
+	article_craft_weapon.text = "STR_LASER_CANNON_UFOPEDIA";
 	article_craft_weapon.weapon = _craftWeapons[article_craft_weapon.id];
 	article_craft_weapon.sort_key = sort_key++;
 	
@@ -1575,6 +1642,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	article_craft_weapon.id = "STR_PLASMA_BEAM_UC";
 	article_craft_weapon.title = "STR_PLASMA_BEAM_UC";
 	article_craft_weapon.image_id = "UP011.SPK";
+	article_craft_weapon.text = "STR_PLASMA_BEAM_UFOPEDIA";
 	article_craft_weapon.weapon = _craftWeapons[article_craft_weapon.id];
 	article_craft_weapon.sort_key = sort_key++;
 	

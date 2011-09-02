@@ -70,8 +70,8 @@ private:
 	int _visibleMapHeight;
 	BattlescapeMessage *_message;
 
-	void minMaxInt(int *value, const int minValue, const int maxValue);
-	void convertScreenToMap(int screenX, int screenY, int *mapX, int *mapY);
+	void minMaxInt(int *value, const int minValue, const int maxValue) const;
+	void convertScreenToMap(int screenX, int screenY, int *mapX, int *mapY) const;
 	void drawTerrain(Surface *surface);
 public:
 	/// Creates a new map at the specified position and size.
@@ -105,13 +105,13 @@ public:
 	/// Center map on a unit.
 	void centerOnPosition(const Position &pos, bool redraw = true);
 	/// Converts map coordinates to screen coordinates.
-	void convertMapToScreen(const Position &mapPos, Position *screenPos);
+	void convertMapToScreen(const Position &mapPos, Position *screenPos) const;
 	/// Converts voxel coordinates to screen coordinates.
-	void convertVoxelToScreen(const Position &voxelPos, Position *screenPos);
+	void convertVoxelToScreen(const Position &voxelPos, Position *screenPos) const;
 	/// Sets the battlescape selector position relative to mouseposition.
 	void setSelectorPosition(int mx, int my);
 	/// Get the currently selected position.
-	void getSelectorPosition(Position *pos);
+	void getSelectorPosition(Position *pos) const;
 	/// Calculate the offset of a soldier, when it is walking in the middle of 2 tiles.
 	void calculateWalkingOffset(BattleUnit *unit, Position *offset);
 	/// Set the 3D cursor type.

@@ -38,7 +38,8 @@ namespace OpenXcom
 /**
  * Creates a ruleset with blank sets of rules.
  */
-Ruleset::Ruleset() : _names(), _countries(), _regions(), _facilities(), _crafts(), _craftWeapons(), _items(), _ufos(), _terrains(), _mapDataFiles(), _soldiers(), _aliens(), _invs(), _costSoldier(0), _costEngineer(0), _costScientist(0)
+Ruleset::Ruleset() : _names(), _countries(), _regions(), _facilities(), _crafts(), _craftWeapons(), _items(), _ufos(),
+					 _terrains(), _mapDataFiles(), _soldiers(), _aliens(), _invs(), _costSoldier(0), _costEngineer(0), _costScientist(0), _timePersonnel(0)
 {
 }
 

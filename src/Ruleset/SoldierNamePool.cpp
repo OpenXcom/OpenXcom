@@ -23,7 +23,7 @@
 #include "../Engine/RNG.h"
 #include "../Engine/Language.h"
 #include "../Engine/Exception.h"
-#include "../Engine/Options.h"
+#include "../Engine/CrossPlatform.h"
 
 namespace OpenXcom
 {
@@ -48,7 +48,7 @@ SoldierNamePool::~SoldierNamePool()
  */
 void SoldierNamePool::load(const std::string &filename)
 {
-	std::string s = Options::getDataFolder() + "SoldierName/" + filename + ".nam";
+	std::string s = CrossPlatform::getDataFile("SoldierName/" + filename + ".nam");
 	std::ifstream fin(s.c_str());
 	if (!fin)
 	{

@@ -82,7 +82,6 @@ private:
 	Timer *_stateTimer, *_animTimer;
 	SavedBattleGame *_battleGame;
 	Text *_txtDebug;
-	int _animFrame;
 	std::list<BattleState*> _states;
 	BattleAction _action;
 	BattleActionType _tuReserved;

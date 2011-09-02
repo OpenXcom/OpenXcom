@@ -40,7 +40,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-UnitSprite::UnitSprite(int width, int height, int x, int y) : Surface(width, height, x, y), _unit(0), _item(0)
+UnitSprite::UnitSprite(int width, int height, int x, int y) : Surface(width, height, x, y), _unit(0), _item(0), _unitSurface(0), _itemSurface(0)
 {
 
 
@@ -55,8 +55,9 @@ UnitSprite::~UnitSprite()
 }
 
 /**
- * Changes the pack for the UnitSprite to get resources for rendering.
- * @param res Pointer to the resource pack.
+ * Changes the surface sets for the UnitSprite to get resources for rendering.
+ * @param unitSurface Pointer to the unit surface set.
+ * @param itemSurface Pointer to the item surface set.
  */
 void UnitSprite::setSurfaces(SurfaceSet *unitSurface, SurfaceSet *itemSurface)
 {

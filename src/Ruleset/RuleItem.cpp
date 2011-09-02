@@ -196,7 +196,7 @@ bool RuleItem::getTwoHanded() const
 
 /**
  * Changes whether this item is held with two hands.
- * @param equip Is it two-handed?
+ * @param flag Is it two-handed?
  */
 void RuleItem::setTwoHanded(bool flag)
 {
@@ -223,7 +223,7 @@ void RuleItem::setBulletSprite(int sprite)
 
 /**
  * Returns the item's fire sound.
- * @return Sprite reference.
+ * @return Sound id.
  */
 int RuleItem::getFireSound() const
 {
@@ -231,8 +231,8 @@ int RuleItem::getFireSound() const
 }
 
 /**
- * Changes the item's fire sound..
- * @param sprite Sprite reference.
+ * Changes the item's fire sound.
+ * @param sound Sound id.
  */
 void RuleItem::setFireSound(int sound)
 {
@@ -241,7 +241,7 @@ void RuleItem::setFireSound(int sound)
 
 /**
  * Returns the item's hit sound.
- * @return Sprite reference.
+ * @return Sound id.
  */
 int RuleItem::getHitSound() const
 {
@@ -249,8 +249,8 @@ int RuleItem::getHitSound() const
 }
 
 /**
- * Changes the item's fire sound..
- * @param sprite Sprite reference.
+ * Changes the item's fire sound.
+ * @param sound Sound id.
  */
 void RuleItem::setHitSound(int sound)
 {
@@ -259,7 +259,7 @@ void RuleItem::setHitSound(int sound)
 
 /**
  * Returns the item's hit sound.
- * @return Sprite reference.
+ * @return Sound id.
  */
 int RuleItem::getHitAnimation() const
 {
@@ -267,8 +267,8 @@ int RuleItem::getHitAnimation() const
 }
 
 /**
- * Changes the item's fire sound.
- * @param sprite Sprite reference.
+ * Changes the item's hit animation.
+ * @param animation Animation id.
  */
 void RuleItem::setHitAnimation(int animation)
 {
@@ -348,8 +348,8 @@ void RuleItem::setAccuracyAimed(int accuracy)
 }
 
 /**
- * Returns the item's accuracy for snapshots.
- * @return Accuracy the item's accuracy for snapshots.
+ * Returns the item's time units for snapshots.
+ * @return item's time units for snapshots.
  */
 int RuleItem::getTUSnap() const
 {
@@ -357,8 +357,8 @@ int RuleItem::getTUSnap() const
 }
 
 /**
- * Sets the item's accuracy for snapshots.
- * @param accuracy item's accuracy for snapshots.
+ * Sets the item's time units for snapshots.
+ * @param tu item's time units for snapshots.
  */
 void RuleItem::setTUSnap(int tu)
 {
@@ -366,8 +366,8 @@ void RuleItem::setTUSnap(int tu)
 }
 
 /**
- * Returns the item's accuracy for autoshots.
- * @return Accuracy the item's accuracy for autoshots.
+ * Returns the item's time units for autoshots.
+ * @return item's time units for autoshots.
  */
 int RuleItem::getTUAuto() const
 {
@@ -375,8 +375,8 @@ int RuleItem::getTUAuto() const
 }
 
 /**
- * Sets the item's accuracy for autoshots.
- * @param accuracy item's accuracy for autoshots.
+ * Sets the item's time units for autoshots.
+ * @param tu item's time units for autoshots.
  */
 void RuleItem::setTUAuto(int tu)
 {
@@ -384,8 +384,8 @@ void RuleItem::setTUAuto(int tu)
 }
 
 /**
- * Returns the item's accuracy for aimed shots.
- * @return Accuracy the item's accuracy for aimed sthos.
+ * Returns the item's time units for aimed shots.
+ * @return item's time units for aimed sthos.
  */
 int RuleItem::getTUAimed() const
 {
@@ -393,8 +393,8 @@ int RuleItem::getTUAimed() const
 }
 
 /**
- * Sets the item's accuracy for aimed shot.
- * @param accuracy item's accuracy for aimed shots.
+ * Sets the item's time units for aimed shot.
+ * @param tu item's time units for aimed shots.
  */
 void RuleItem::setTUAimed(int tu)
 {
@@ -421,7 +421,7 @@ ItemDamageType RuleItem::getDamageType() const
 
 /**
  * Sets the item's damage type.
- * @param damagetype the item's damage type.
+ * @param damageType the item's damage type.
  */
 void RuleItem::setDamageType(ItemDamageType damageType)
 {

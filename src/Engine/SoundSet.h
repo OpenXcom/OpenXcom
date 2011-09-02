@@ -35,7 +35,6 @@ class Sound;
 class SoundSet
 {
 private:
-	int _width, _height;
 	std::vector<Sound*> _sounds;
 public:
 	/// Crates a sound set.
