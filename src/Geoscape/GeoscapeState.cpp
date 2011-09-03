@@ -67,6 +67,7 @@
 #include "../Battlescape/BattlescapeState.h"
 #include "../Battlescape/BattlescapeGenerator.h"
 #include "../Ufopaedia/Ufopaedia.h"
+#include "../Savegame/Production.h"
 
 namespace OpenXcom
 {
@@ -697,6 +698,22 @@ void GeoscapeState::time1Hour()
 	if (window)
 	{
 		popup(new ItemsArrivingState(_game, this));
+	}
+	// Handle Production
+	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
+	{
+		std::vector<Production*> toRemove;
+		for (std::vector<Production*>::const_iterator j = (*i)->getProductions().begin(); j != (*i)->getProductions().end(); ++j)
+		{
+			if((*j)->step((*i), _game->getSavedGame()))
+			{
+				toRemove.push_back(*j);
+			}
+		}
+		for (std::vector<Production*>::iterator j = toRemove.begin(); j != toRemove.end(); ++j)
+		{
+			(*i)->removeProduction (*j);
+		}
 	}
 }
 
