@@ -33,6 +33,7 @@
 #include "../Ruleset/RuleManufactureInfo.h"
 #include "Transfer.h"
 #include "Production.h"
+#include <algorithm>
 
 namespace OpenXcom
 {
@@ -729,6 +730,14 @@ void Base::addProduction (Production * p)
 
 void Base::removeProduction (Production * p)
 {
+	std::vector<Production *>::iterator iter = std::find (_productions.begin (),
+							      _productions.end (),
+							      p);
+	if (iter == _productions.end ())
+	{
+		return;
+	}
+	_productions.erase(iter);
 }
 
 const std::vector<Production *> & Base::getProductions () const
