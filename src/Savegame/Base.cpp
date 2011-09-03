@@ -31,6 +31,7 @@
 #include "../Engine/Language.h"
 #include "../Ruleset/RuleItem.h"
 #include "Transfer.h"
+#include "Production.h"
 
 namespace OpenXcom
 {
@@ -399,7 +400,12 @@ int Base::getTotalScientists() const
  */
 int Base::getAvailableEngineers() const
 {
-	return _engineers;
+	int available = _engineers;
+	for (std::vector<Production *>::const_iterator iter = _productions.begin (); iter != _productions.end (); ++iter)
+	{
+		available -= (*iter)->getAssignedEngineers();
+	}
+	return available;
 }
 
 /**
