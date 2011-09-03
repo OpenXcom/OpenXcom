@@ -167,6 +167,7 @@ void ProductionState::buildUi()
 
 void ProductionState::btnStopClick (Action * action)
 {
+	_base->removeProduction(_production);
 	exitState();
 }
 
