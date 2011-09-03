@@ -50,6 +50,7 @@ public:
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
 	void btnNewProductionClick(Action * action);
+	void fillProductionList();
 };
 
 }
