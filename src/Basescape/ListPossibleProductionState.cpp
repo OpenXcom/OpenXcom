@@ -100,6 +100,7 @@ void ListPossibleProductionState::lstProdClick (Action * action)
 
 void ListPossibleProductionState::fillProductionList()
 {
+	_lstManufacture->clearList();
 	const std::map<std::string, RuleItem *> & items (_game->getRuleset()->getItems ());
 	const std::vector<Production *> productions (_base->getProductions ());
 
