@@ -30,6 +30,7 @@
 #include "Waypoint.h"
 #include "../Engine/Language.h"
 #include "../Ruleset/RuleItem.h"
+#include "../Ruleset/RuleManufactureInfo.h"
 #include "Transfer.h"
 #include "Production.h"
 
@@ -529,7 +530,12 @@ int Base::getAvailableLaboratories() const
  */
 int Base::getUsedWorkshops() const
 {
-	return 0;
+	int usedWorkShop = 0;
+	for (std::vector<Production *>::const_iterator iter = _productions.begin (); iter != _productions.end (); ++iter)
+	{
+		usedWorkShop += ((*iter)->getAssignedEngineers() + (*iter)->getRuleItem()->getManufactureInfo()->getRequiredSpace ());
+	}
+	return usedWorkShop;
 }
 
 /**
