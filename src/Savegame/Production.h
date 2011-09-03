@@ -18,6 +18,7 @@ public:
 	void setAssignedEngineers (int);
 	bool step(Base * b, SavedGame * g, bool & newItemPossible);
 	const RuleItem * getRuleItem() const;
+	void startItem(Base * b, SavedGame * g);
 private:
 	RuleItem * _item;
 	int _todo;

@@ -48,11 +48,6 @@ bool Production::step(Base * b, SavedGame * g, bool & newItemPossible)
 	if (done < getNumberOfItemDone ())
 	{
 		b->getItems ()->addItem(_item->getType (), 1);
-		g->setFunds(g->getFunds() - _item->getManufactureInfo()->getManufactureCost ());
-		for(std::map<std::string,int>::const_iterator iter = getRuleItem()->getManufactureInfo()->getNeededItems ().begin (); iter != getRuleItem()->getManufactureInfo()->getNeededItems ().end (); ++iter)
-		{
-			b->getItems ()->removeItem(iter->first, iter->second);
-		}
 	}
 	if (getNumberOfItemDone () >= _todo)
 	{
@@ -66,6 +61,7 @@ bool Production::step(Base * b, SavedGame * g, bool & newItemPossible)
 		{
 			newItemPossible &= (b->getItems ()->getItem(iter->first) >= iter->second);
 		}
+		startItem(b, g);
 	}
 	return false;
 }
@@ -78,5 +74,14 @@ int Production::getNumberOfItemDone () const
 const RuleItem * Production::getRuleItem() const
 {
 	return _item;
+}
+
+void Production::startItem(Base * b, SavedGame * g)
+{
+	g->setFunds(g->getFunds() - _item->getManufactureInfo()->getManufactureCost ());
+	for(std::map<std::string,int>::const_iterator iter = getRuleItem()->getManufactureInfo()->getNeededItems ().begin (); iter != getRuleItem()->getManufactureInfo()->getNeededItems ().end (); ++iter)
+	{
+		b->getItems ()->removeItem(iter->first, iter->second);
+	}
 }
 };

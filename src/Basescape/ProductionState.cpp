@@ -173,6 +173,10 @@ void ProductionState::btnStopClick (Action * action)
 
 void ProductionState::btnOkClick (Action * action)
 {
+	if(_item)
+	{
+		_production->startItem(_base, _game->getSavedGame());
+	}
 	exitState();
 }
 
