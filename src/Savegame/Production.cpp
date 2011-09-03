@@ -41,8 +41,9 @@ void Production::setAssignedEngineers (int engineers)
 	_engineers = engineers;
 }
 
-bool Production::step(Base * b, SavedGame * g, bool & newItemPossible)
+bool Production::step(Base * b, SavedGame * g, productionEnd_e & endType)
 {
+	endType = PRODUCTION_END_MAX;
 	int done = getNumberOfItemDone ();
 	_timeSpent += _engineers;
 	if (done < getNumberOfItemDone ())
@@ -51,19 +52,31 @@ bool Production::step(Base * b, SavedGame * g, bool & newItemPossible)
 	}
 	if (getNumberOfItemDone () >= _todo)
 	{
+		endType = PRODUCTION_END_COMPLETE;
 		return true;
 	}
 	else
 	{
 		// We need to ensure that player has enough cash/item to produce a new unit
-		newItemPossible = (g->getFunds() > _item->getManufactureInfo()->getManufactureCost ());
+		if(g->getFunds() < _item->getManufactureInfo()->getManufactureCost ())
+		{
+			endType = PRODUCTION_END_NOT_ENOUGH_MONEY;
+		}
 		for(std::map<std::string,int>::const_iterator iter = getRuleItem()->getManufactureInfo()->getNeededItems ().begin (); iter != getRuleItem()->getManufactureInfo()->getNeededItems ().end (); ++iter)
 		{
-			newItemPossible &= (b->getItems ()->getItem(iter->first) >= iter->second);
+			if (b->getItems ()->getItem(iter->first) < iter->second)
+			{
+				endType = PRODUCTION_END_NOT_ENOUGH_MATERIALS;
+			}
 		}
-		if(newItemPossible)
+		if(endType == PRODUCTION_END_MAX)
 		{
 			startItem(b, g);
+		}
+		else
+		{
+
+			return true;
 		}
 	}
 	return false;

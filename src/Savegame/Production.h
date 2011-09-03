@@ -8,6 +8,7 @@ namespace OpenXcom
 class RuleItem;
 class Base;
 class SavedGame;
+enum productionEnd_e { PRODUCTION_END_COMPLETE, PRODUCTION_END_NOT_ENOUGH_MONEY, PRODUCTION_END_NOT_ENOUGH_MATERIALS, PRODUCTION_END_MAX };
 class Production
 {
 public:
@@ -19,7 +20,7 @@ public:
 	int getNumberOfItemDone () const;
 	int getAssignedEngineers() const;
 	void setAssignedEngineers (int);
-	bool step(Base * b, SavedGame * g, bool & newItemPossible);
+	bool step(Base * b, SavedGame * g, productionEnd_e & endType);
 	const RuleItem * getRuleItem() const;
 	void startItem(Base * b, SavedGame * g);
 	void save(YAML::Emitter &out);
