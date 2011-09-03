@@ -85,7 +85,22 @@ ListPossibleProductionState::ListPossibleProductionState(Game *game, Base *base,
 	_btnOk->setColor(Palette::blockOffset(13)+13);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ListPossibleProductionState::btnOkClick);
-	const std::map<std::string, RuleItem *> & items (game->getRuleset()->getItems ());
+	fillProductionList();
+}
+
+void ListPossibleProductionState::btnOkClick(Action * action)
+{
+	_game->popState();
+}
+
+void ListPossibleProductionState::lstProdClick (Action * action)
+{
+	_game->pushState(new ProductionStartState(_game, _base, _possibleProductions[_lstManufacture->getSelectedRow()], _manufactureState));
+}
+
+void ListPossibleProductionState::fillProductionList()
+{
+	const std::map<std::string, RuleItem *> & items (_game->getRuleset()->getItems ());
 	const std::vector<Production *> productions (_base->getProductions ());
 
 	for(std::map<std::string, RuleItem *>::const_iterator iter = items.begin ();
@@ -104,16 +119,5 @@ ListPossibleProductionState::ListPossibleProductionState(Game *game, Base *base,
 		_lstManufacture->addRow(2, _game->getLanguage()->getString(iter->first).c_str(), L"Unknown");
 		_possibleProductions.push_back(iter->second);
 	}
-
-}
-
-void ListPossibleProductionState::btnOkClick(Action * action)
-{
-	_game->popState();
-}
-
-void ListPossibleProductionState::lstProdClick (Action * action)
-{
-	_game->pushState(new ProductionStartState(_game, _base, _possibleProductions[_lstManufacture->getSelectedRow()], _manufactureState));
 }
 }

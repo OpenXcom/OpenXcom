@@ -29,6 +29,7 @@ public:
 	ListPossibleProductionState(Game *game, Base *base, ManufactureState * manufactureState);
 	void btnOkClick(Action * action);
 	void lstProdClick (Action * action);
+	void fillProductionList();
 };
 }
 #endif
