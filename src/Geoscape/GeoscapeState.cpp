@@ -705,7 +705,9 @@ void GeoscapeState::time1Hour()
 		std::vector<Production*> toRemove;
 		for (std::vector<Production*>::const_iterator j = (*i)->getProductions().begin(); j != (*i)->getProductions().end(); ++j)
 		{
-			if((*j)->step((*i), _game->getSavedGame()))
+			bool newItemPossible(true);
+			bool finished((*j)->step((*i), _game->getSavedGame(), newItemPossible));
+			if(finished || !newItemPossible)
 			{
 				toRemove.push_back(*j);
 			}
