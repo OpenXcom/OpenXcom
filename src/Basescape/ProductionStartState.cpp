@@ -12,6 +12,7 @@
 #include "../Savegame/Base.h"
 #include "../Savegame/ItemContainer.h"
 #include "ProductionState.h"
+#include "../Savegame/SavedGame.h"
 #include <sstream>
 
 namespace OpenXcom
@@ -75,7 +76,7 @@ ProductionStartState::ProductionStartState(Game * game, Base * base, RuleItem * 
 	_btnCancel->onMouseClick((ActionHandler)&ProductionStartState::btnCancelClick);
 	
 	const std::map<std::string, int> & neededItems (_item->getManufactureInfo()->getNeededItems());
-	bool productionPossible (true);
+	bool productionPossible (game->getSavedGame()->getFunds() > _item->getManufactureInfo()->getManufactureCost ());
 	if (!neededItems.empty())
 	{
 		_txtNeedeItemsTitle = new Text (width - 4 * button_x_border, button_height, start_x + button_x_border * 2, start_y + button_y_border * 6);
