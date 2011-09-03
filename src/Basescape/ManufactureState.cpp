@@ -194,6 +194,7 @@ void ManufactureState::fillProductionList()
 		}
 		_lstManufacture->addRow (6, _game->getLanguage()->getString((*iter)->getRuleItem()->getType()).c_str(), s1.str().c_str(), s2.str().c_str(), s3.str().c_str(), s4.str().c_str(), s5.str().c_str());
 	}
+	_lstManufacture->draw();
 	std::wstringstream ss;
 	ss << _game->getLanguage()->getString("STR_ENGINEERS_AVAILABLE") << L'\x01' << _base->getAvailableEngineers();
 	_txtAvailable->setText(ss.str());
