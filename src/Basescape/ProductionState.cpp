@@ -31,6 +31,10 @@ int getFreeEngineers (Base * base)
 
 ProductionState::ProductionState (Game * game, Base * base, RuleItem * item, ManufactureState * manufactureState) : State (game), _base(base), _item(item), _manufactureState(manufactureState)
 {
+	buildUi();
+}
+void ProductionState::buildUi()
+{
 	_screen = false;
 	int width = 320;
 	int height = 170;

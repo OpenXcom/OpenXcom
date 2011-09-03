@@ -43,6 +43,7 @@ private:
 	void onLessUnit(Action * action);
 	void setAssignedEngineer();
 	void think();
+	void buildUi();
 public:
 	ProductionState (Game * game, Base * base, RuleItem * _item, ManufactureState * manufactureState);
 };
