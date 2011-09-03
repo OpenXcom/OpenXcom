@@ -100,19 +100,12 @@ ManufactureState::ManufactureState(Game *game, Base *base) : State(game), _base(
 
 	_txtAvailable->setColor(Palette::blockOffset(15)+6);
 	_txtAvailable->setSecondaryColor(Palette::blockOffset(13));
-	std::wstringstream ss;
-	ss << _game->getLanguage()->getString("STR_ENGINEERS_AVAILABLE") << L'\x01' << _base->getAvailableEngineers();
-	_txtAvailable->setText(ss.str());
 
 	_txtAllocated->setColor(Palette::blockOffset(15)+6);
 	_txtAllocated->setSecondaryColor(Palette::blockOffset(13));
-	std::wstringstream ss2;
-	ss2 << _game->getLanguage()->getString("STR_ENGINEERS_ALLOCATED") << L'\x01' << (_base->getTotalEngineers() - _base->getAvailableEngineers());
-	_txtAllocated->setText(ss2.str());
 
 	_txtSpace->setColor(Palette::blockOffset(15)+6);
 	_txtSpace->setSecondaryColor(Palette::blockOffset(13));
-	_txtSpace->setText(_game->getLanguage()->getString("STR_WORKSHOP_SPACE_AVAILABLE"));
 
 	_txtFunds->setColor(Palette::blockOffset(15)+6);
 	_txtFunds->setSecondaryColor(Palette::blockOffset(13));
@@ -199,5 +192,14 @@ void ManufactureState::fillProductionList()
 		}
 		_lstManufacture->addRow (6, _game->getLanguage()->getString((*iter)->getRuleItem()->getType()).c_str(), s1.str().c_str(), s2.str().c_str(), s3.str().c_str(), s4.str().c_str(), s5.str().c_str());
 	}
+	std::wstringstream ss;
+	ss << _game->getLanguage()->getString("STR_ENGINEERS_AVAILABLE") << L'\x01' << _base->getAvailableEngineers();
+	_txtAvailable->setText(ss.str());
+	std::wstringstream ss2;
+	ss2 << _game->getLanguage()->getString("STR_ENGINEERS_ALLOCATED") << L'\x01' << (_base->getTotalEngineers() - _base->getAvailableEngineers());
+	_txtAllocated->setText(ss2.str());
+	std::wstringstream ss3;
+	ss3 << _game->getLanguage()->getString("STR_WORKSHOP_SPACE_AVAILABLE") << _base->getAvailableWorkshops() - _base->getUsedWorkshops();
+	_txtSpace->setText(ss3.str());
 }
 }
