@@ -41,7 +41,7 @@ void Production::setAssignedEngineers (int engineers)
 	_engineers = engineers;
 }
 
-bool Production::step(Base * b, SavedGame * g)
+bool Production::step(Base * b, SavedGame * g, bool & newItemPossible)
 {
 	int done = getNumberOfItemDone ();
 	_timeSpent += _engineers;
@@ -49,10 +49,23 @@ bool Production::step(Base * b, SavedGame * g)
 	{
 		b->getItems ()->addItem(_item->getType (), 1);
 		g->setFunds(g->getFunds() - _item->getManufactureInfo()->getManufactureCost ());
+		for(std::map<std::string,int>::const_iterator iter = getRuleItem()->getManufactureInfo()->getNeededItems ().begin (); iter != getRuleItem()->getManufactureInfo()->getNeededItems ().end (); ++iter)
+		{
+			b->getItems ()->removeItem(iter->first, iter->second);
+		}
 	}
 	if (getNumberOfItemDone () >= _todo)
 	{
 		return true;
+	}
+	else
+	{
+		// We need to ensure that player has enough cash/item to produce a new unit
+		newItemPossible = (g->getFunds() > _item->getManufactureInfo()->getManufactureCost ());
+		for(std::map<std::string,int>::const_iterator iter = getRuleItem()->getManufactureInfo()->getNeededItems ().begin (); iter != getRuleItem()->getManufactureInfo()->getNeededItems ().end (); ++iter)
+		{
+			newItemPossible &= (b->getItems ()->getItem(iter->first) >= iter->second);
+		}
 	}
 	return false;
 }

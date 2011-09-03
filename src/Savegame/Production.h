@@ -16,7 +16,7 @@ public:
 	int getNumberOfItemDone () const;
 	int getAssignedEngineers() const;
 	void setAssignedEngineers (int);
-	bool step(Base * b, SavedGame * g);
+	bool step(Base * b, SavedGame * g, bool & newItemPossible);
 	const RuleItem * getRuleItem() const;
 private:
 	RuleItem * _item;
