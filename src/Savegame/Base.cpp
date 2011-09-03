@@ -173,6 +173,21 @@ void Base::load(const YAML::Node &node, SavedGame *save)
 		t->load(node["transfers"][i], this, _rule);
 		_transfers.push_back(t);
 	}
+
+	size = node["productions"].size();
+	const std::map<std::string, RuleItem *> & items(_rule->getItems ());
+	for (unsigned int i = 0; i < size; i++)
+	{
+		std::string item;
+		node["productions"][i]["item"] >> item;
+		std::map<std::string, RuleItem *>::const_iterator itItem = items.find(item);
+		if (itItem != items.end ())
+		{
+			Production *p = new Production(itItem->second, 0);
+			p->load(node["productions"][i]);
+			_productions.push_back(p);
+		}
+	}
 }
 
 /**
@@ -211,6 +226,14 @@ void Base::save(YAML::Emitter &out) const
 	out << YAML::Key << "transfers" << YAML::Value;
 	out << YAML::BeginSeq;
 	for (std::vector<Transfer*>::const_iterator i = _transfers.begin(); i != _transfers.end(); ++i)
+	{
+		(*i)->save(out);
+	}
+	out << YAML::EndSeq;
+
+	out << YAML::Key << "productions" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::vector<Production*>::const_iterator i = _productions.begin(); i != _productions.end(); ++i)
 	{
 		(*i)->save(out);
 	}

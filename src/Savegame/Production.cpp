@@ -87,4 +87,27 @@ void Production::startItem(Base * b, SavedGame * g)
 		b->getItems ()->removeItem(iter->first, iter->second);
 	}
 }
+
+void Production::save(YAML::Emitter &out)
+{
+	out << YAML::BeginMap;
+	out << YAML::Key << "item" << YAML::Value << getRuleItem ()->getType ();
+	out << YAML::Key << "assigned" << YAML::Value << getAssignedEngineers ();
+	out << YAML::Key << "spent" << YAML::Value << getTimeSpent ();
+	out << YAML::Key << "todo" << YAML::Value << getNumberOfItemTodo ();
+	out << YAML::EndMap;
+}
+
+void Production::load(const YAML::Node &node)
+{
+	int assigned;
+	int spent;
+	int todo;
+	node["assigned"] >> assigned;
+	node["spent"] >> spent;
+	node["todo"] >> todo;
+	setAssignedEngineers(assigned);
+	setTimeSpent(spent);
+	setNumberOfItemTodo(todo);
+}
 };

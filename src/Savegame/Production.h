@@ -1,5 +1,8 @@
 #ifndef OPENXCOM_PRODUCTION
 #define OPENXCOM_PRODUCTION
+
+#include "yaml.h"
+
 namespace OpenXcom
 {
 class RuleItem;
@@ -19,6 +22,8 @@ public:
 	bool step(Base * b, SavedGame * g, bool & newItemPossible);
 	const RuleItem * getRuleItem() const;
 	void startItem(Base * b, SavedGame * g);
+	void save(YAML::Emitter &out);
+	void load(const YAML::Node &node);
 private:
 	RuleItem * _item;
 	int _todo;
