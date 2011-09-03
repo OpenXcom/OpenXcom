@@ -710,4 +710,17 @@ int Base::getMonthlyMaintenace() const
 	return getCraftMaintenance() + getPersonnelMaintenance() + getFacilityMaintenance();
 }
 
+void Base::addProduction (Production * p)
+{
+	_productions.push_back(p);
+}
+
+void Base::removeProduction (Production * p)
+{
+}
+
+const std::vector<Production *> & Base::getProductions () const
+{
+	return _productions;
+}
 }
