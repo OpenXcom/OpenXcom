@@ -29,10 +29,16 @@ int getFreeEngineers (Base * base)
 	return freeEngineers;
 }
 
-ProductionState::ProductionState (Game * game, Base * base, RuleItem * item, ManufactureState * manufactureState) : State (game), _base(base), _item(item), _manufactureState(manufactureState)
+ProductionState::ProductionState (Game * game, Base * base, RuleItem * item, ManufactureState * manufactureState) : State (game), _base(base), _item(item), _production(0), _manufactureState(manufactureState)
 {
 	buildUi();
 }
+
+ProductionState::ProductionState (Game * game, Base * base, Production * production, ManufactureState * manufactureState) : State (game), _base(base), _item(0), _production(production), _manufactureState(manufactureState)
+{
+	buildUi();
+}
+
 void ProductionState::buildUi()
 {
 	_screen = false;
@@ -88,7 +94,7 @@ void ProductionState::buildUi()
 	_window->setColor(Palette::blockOffset(15)+4);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
 	_txtTitle->setColor(Palette::blockOffset(15)+1);
-	_txtTitle->setText(_game->getLanguage()->getString(_item->getType()));
+	_txtTitle->setText(_game->getLanguage()->getString(_item ? _item->getType() : _production->getRuleItem()->getType()));
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 
@@ -142,8 +148,11 @@ void ProductionState::buildUi()
 	_btnStop->setColor(Palette::blockOffset(13)+13);
 	_btnStop->setText(_game->getLanguage()->getString("STR_STOP_PRODUCTION"));
 	_btnStop->onMouseClick((ActionHandler)&ProductionState::btnOkClick);
-	_production = new Production (_item, 0);
-	_base->addProduction(_production);
+	if(!_production)
+	{
+		_production = new Production (_item, 0);
+		_base->addProduction(_production);
+	}
 	setAssignedEngineer();
 	
 	_timerMoreEngineer = new Timer(30);

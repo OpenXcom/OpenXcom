@@ -34,6 +34,7 @@
 #include "../Ruleset/RuleManufactureInfo.h"
 #include "../Savegame/Production.h"
 #include "ListPossibleProductionState.h"
+#include "ProductionState.h"
 
 namespace OpenXcom
 {
@@ -137,6 +138,7 @@ ManufactureState::ManufactureState(Game *game, Base *base) : State(game), _base(
 	_lstManufacture->setSelectable(true);
 	_lstManufacture->setBackground(_window);
 	_lstManufacture->setMargin(1);
+	_lstManufacture->onMouseClick((ActionHandler)&ManufactureState::lstManufactureClick);
 	fillProductionList();
 }
 
@@ -201,5 +203,11 @@ void ManufactureState::fillProductionList()
 	std::wstringstream ss3;
 	ss3 << _game->getLanguage()->getString("STR_WORKSHOP_SPACE_AVAILABLE") << _base->getAvailableWorkshops() - _base->getUsedWorkshops();
 	_txtSpace->setText(ss3.str());
+}
+
+void ManufactureState::lstManufactureClick(Action * action)
+{
+	const std::vector<Production *> productions(_base->getProductions ());
+	_game->pushState(new ProductionState(_game, _base, productions[_lstManufacture->getSelectedRow()], this));
 }
 }

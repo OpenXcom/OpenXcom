@@ -46,6 +46,7 @@ private:
 	void buildUi();
 public:
 	ProductionState (Game * game, Base * base, RuleItem * _item, ManufactureState * manufactureState);
+	ProductionState (Game * game, Base * base, Production * production, ManufactureState * manufactureState);
 };
 }
 #endif
