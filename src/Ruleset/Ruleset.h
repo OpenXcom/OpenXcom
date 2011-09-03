@@ -116,6 +116,7 @@ public:
 	int getScientistCost() const;
 	/// Gets the transfer time of personnel.
 	int getPersonnelTime() const;
+	const std::map<std::string, RuleItem*> & getItems () const;
 };
 
 }

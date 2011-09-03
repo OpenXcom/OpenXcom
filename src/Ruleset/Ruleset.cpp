@@ -315,4 +315,8 @@ RuleInventory *const Ruleset::getInventory(const std::string &name) const
 	return _invs.find(name)->second;
 }
 
+const std::map<std::string, RuleItem*> & Ruleset::getItems () const
+{
+	return _items;
+}
 }
