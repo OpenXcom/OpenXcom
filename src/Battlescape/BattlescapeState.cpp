@@ -630,9 +630,7 @@ void BattlescapeState::btnCenterClick(Action *action)
  */
 void BattlescapeState::btnNextSoldierClick(Action *action)
 {
-	BattleUnit *unit = _battleGame->selectNextPlayerUnit(false);
-	updateSoldierInfo();
-	if (unit) _map->centerOnPosition(unit->getPosition());
+	selectNextPlayerUnit(false);
 }
 
 /**
@@ -641,9 +639,21 @@ void BattlescapeState::btnNextSoldierClick(Action *action)
  */
 void BattlescapeState::btnNextStopClick(Action *action)
 {
-	BattleUnit *unit = _battleGame->selectNextPlayerUnit(true);
+	selectNextPlayerUnit(true);
+}
+
+/**
+ * Select next soldier.
+ * @param checkReselect When true, don't reselect current unit.
+ */
+void BattlescapeState::selectNextPlayerUnit(bool checkReselect)
+{
+	BattleUnit *unit = _battleGame->selectNextPlayerUnit(checkReselect);
 	updateSoldierInfo();
 	if (unit) _map->centerOnPosition(unit->getPosition());
+	_action.targeting = false;
+	_action.type = BA_NONE;
+	setupCursor();
 }
 
 /**
@@ -683,6 +693,7 @@ void BattlescapeState::endTurn()
 
 	_debugPlay = false;
 	_tuReserved = BA_NONE;
+	_reserve = _btnReserveNone;
 	_action.type = BA_NONE;
 
 	// check for hot grenades on the ground
