@@ -61,7 +61,10 @@ bool Production::step(Base * b, SavedGame * g, bool & newItemPossible)
 		{
 			newItemPossible &= (b->getItems ()->getItem(iter->first) >= iter->second);
 		}
-		startItem(b, g);
+		if(newItemPossible)
+		{
+			startItem(b, g);
+		}
 	}
 	return false;
 }
