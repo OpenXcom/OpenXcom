@@ -147,7 +147,7 @@ void ProductionState::buildUi()
 
 	_btnStop->setColor(Palette::blockOffset(13)+13);
 	_btnStop->setText(_game->getLanguage()->getString("STR_STOP_PRODUCTION"));
-	_btnStop->onMouseClick((ActionHandler)&ProductionState::btnOkClick);
+	_btnStop->onMouseClick((ActionHandler)&ProductionState::btnStopClick);
 	if(!_production)
 	{
 		_production = new Production (_item, 0);
