@@ -318,6 +318,8 @@ set ( ruleset_src
   Ruleset/RuleTerrain.h
   Ruleset/MapData.cpp
   Ruleset/MapData.h
+  Ruleset/RuleManufactureInfo.h
+  Ruleset/RuleManufactureInfo.cpp
 )
 
 set ( savegame_src 
