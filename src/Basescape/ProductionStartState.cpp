@@ -11,6 +11,7 @@
 #include "../Ruleset/RuleManufactureInfo.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/ItemContainer.h"
+#include "ProductionState.h"
 #include <sstream>
 
 namespace OpenXcom
@@ -133,5 +134,6 @@ void ProductionStartState::btnCancelClick(Action * action)
 
 void ProductionStartState::btnStartClick(Action * action)
 {
+	_game->pushState(new ProductionState(_game, _base, _item));
 }
 }

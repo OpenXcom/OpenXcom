@@ -61,6 +61,8 @@ set ( basescape_src
   Basescape/ListPossibleProductionState.cpp
   Basescape/ProductionStartState.h
   Basescape/ProductionStartState.cpp
+  Basescape/ProductionState.h
+  Basescape/ProductionState.cpp
 )
 
 set ( battlescape_src 
