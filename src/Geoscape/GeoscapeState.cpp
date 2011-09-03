@@ -68,6 +68,7 @@
 #include "../Battlescape/BattlescapeGenerator.h"
 #include "../Ufopaedia/Ufopaedia.h"
 #include "../Savegame/Production.h"
+#include "../Ruleset/RuleItem.h"
 
 namespace OpenXcom
 {
@@ -715,6 +716,7 @@ void GeoscapeState::time1Hour()
 		for (std::vector<Production*>::iterator j = toRemove.begin(); j != toRemove.end(); ++j)
 		{
 			(*i)->removeProduction (*j);
+			_game->pushState(new ProductionCompleteState(_game, _game->getLanguage()->getString((*j)->getRuleItem()->getType()), (*i)->getName()));
 		}
 	}
 }
