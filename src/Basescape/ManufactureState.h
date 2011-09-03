@@ -49,6 +49,7 @@ public:
 	~ManufactureState();
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
+	void btnNewProductionClick(Action * action);
 };
 
 }

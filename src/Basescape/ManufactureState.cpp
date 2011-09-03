@@ -29,6 +29,11 @@
 #include "../Interface/TextList.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/SavedGame.h"
+#include "../Ruleset/Ruleset.h"
+#include "../Ruleset/RuleItem.h"
+#include "../Ruleset/RuleManufactureInfo.h"
+#include "../Savegame/Production.h"
+#include "ListPossibleProductionState.h"
 
 namespace OpenXcom
 {
@@ -55,7 +60,7 @@ ManufactureState::ManufactureState(Game *game, Base *base) : State(game), _base(
 	_txtTotal = new Text(42, 18, 180, 44);
 	_txtCost = new Text(42, 27, 223, 44);
 	_txtTimeLeft = new Text(54, 18, 265, 44);
-	_lstManufacture = new TextList(288, 100, 8, 80);
+	_lstManufacture = new TextList(288, 90, 8, 80);
 	
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
@@ -82,6 +87,7 @@ ManufactureState::ManufactureState(Game *game, Base *base) : State(game), _base(
 	
 	_btnNew->setColor(Palette::blockOffset(13)+13);
 	_btnNew->setText(_game->getLanguage()->getString("STR_NEW_PRODUCTION"));
+	_btnNew->onMouseClick((ActionHandler)&ManufactureState::btnNewProductionClick);
 
 	_btnOk->setColor(Palette::blockOffset(13)+13);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
@@ -138,7 +144,6 @@ ManufactureState::ManufactureState(Game *game, Base *base) : State(game), _base(
 	_lstManufacture->setSelectable(true);
 	_lstManufacture->setBackground(_window);
 	_lstManufacture->setMargin(1);
-	_lstManufacture->addRow(6, "Laser Rifle", "30", "2", "8", "$40 000", "5/2");
 }
 
 /**
@@ -158,4 +163,8 @@ void ManufactureState::btnOkClick(Action *action)
 	_game->popState();
 }
 
+void ManufactureState::btnNewProductionClick(Action * action)
+{
+	_game->pushState(new ListPossibleProductionState(_game, _base));
+}
 }
