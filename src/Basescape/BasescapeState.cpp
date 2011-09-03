@@ -323,7 +323,7 @@ void BasescapeState::btnResearchClick(Action *action)
  */
 void BasescapeState::btnManufactureClick(Action *action)
 {
-	//_game->pushState(new ManufactureState(_game, _base));
+	_game->pushState(new ManufactureState(_game, _base));
 }
 
 /**
