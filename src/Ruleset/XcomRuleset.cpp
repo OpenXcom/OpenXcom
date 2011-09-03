@@ -51,6 +51,7 @@
 #include "../Savegame/UfopaediaSaved.h"
 #include "ArticleDefinition.h"
 #include "RuleInventory.h"
+#include "RuleManufactureInfo.h"
 
 namespace OpenXcom
 {
@@ -977,6 +978,46 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	ppclip->setClipSize(26);
 	ppclip->setWeight(3);
 
+	RuleItem *lp = new RuleItem("STR_LASER_PISTOL");
+	lp->setSize(0.1f);
+	lp->setCost(70);
+	lp->setBigSprite(34);
+	lp->setPower(52);
+	lp->setDamageType(DT_PLASMA);
+	lp->setBattleType(BT_AMMO);
+	lp->setHitAnimation(46);
+	lp->setHitSound(19);
+	lp->setClipSize(26);
+	lp->setWeight(3);
+	lp->setManufactureInfo(new RuleManufactureInfo(2, 300, 8000));
+
+	RuleItem *aa = new RuleItem("STR_ALIEN_ALLOYS");
+	aa->setSize(0.1f);
+	aa->setCost(70);
+	aa->setBigSprite(34);
+	aa->setPower(52);
+	aa->setDamageType(DT_PLASMA);
+	aa->setBattleType(BT_AMMO);
+	aa->setHitAnimation(46);
+	aa->setHitSound(19);
+	aa->setClipSize(26);
+	aa->setWeight(3);
+	aa->setManufactureInfo(new RuleManufactureInfo(2, 300, 8000));
+
+	RuleItem *pa = new RuleItem("STR_PERSONAL_ARMOR");
+	pa->setSize(0.1f);
+	pa->setCost(70);
+	pa->setBigSprite(34);
+	pa->setPower(52);
+	pa->setDamageType(DT_PLASMA);
+	pa->setBattleType(BT_AMMO);
+	pa->setHitAnimation(46);
+	pa->setHitSound(19);
+	pa->setClipSize(26);
+	pa->setWeight(3);
+	RuleManufactureInfo * info = new RuleManufactureInfo(2, 300, 8000);
+	info->addNeededItem("STR_ALIEN_ALLOYS", 4);
+	pa->setManufactureInfo(info);
 
 	_items.insert(std::pair<std::string, RuleItem*>("STR_STINGRAY_LAUNCHER", slauncher));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_AVALANCHE_LAUNCHER", alauncher));
@@ -1006,7 +1047,10 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_items.insert(std::pair<std::string, RuleItem*>("STR_SECTOID_CORPSE", scorpse));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_PLASMA_PISTOL", ppistol));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_PLASMA_PISTOL_CLIP", ppclip));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_LASER_PISTOL", lp));
 
+	_items.insert(std::pair<std::string, RuleItem*>("STR_ALIEN_ALLOYS", aa));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_PERSONAL_ARMOR", pa));
 	// Add UFOs
 	RuleUfo *sscout = new RuleUfo("STR_SMALL_SCOUT");
 	sscout->setSize("STR_VERY_SMALL");
