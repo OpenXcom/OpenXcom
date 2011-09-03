@@ -21,6 +21,7 @@
 
 #include <string>
 #include "../Engine/State.h"
+#include "../Savegame/Production.h"
 
 namespace OpenXcom
 {
@@ -28,7 +29,6 @@ namespace OpenXcom
 class TextButton;
 class Window;
 class Text;
-
 /**
  * Window used to notify the player when
  * a production is completed.
@@ -39,9 +39,10 @@ private:
 	TextButton *_btnOk;
 	Window *_window;
 	Text *_txtMessage;
+	productionEnd_e _endType;
 public:
 	/// Creates the Production Complete state.
-	ProductionCompleteState(Game *game, const std::wstring &item, const std::wstring &base);
+	ProductionCompleteState(Game *game, const std::wstring &item, const std::wstring &base, productionEnd_e endType = PRODUCTION_END_COMPLETE);
 	/// Cleans up the Production Complete state.
 	~ProductionCompleteState();
 	/// Updates the palette.

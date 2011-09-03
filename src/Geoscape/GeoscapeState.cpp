@@ -703,20 +703,19 @@ void GeoscapeState::time1Hour()
 	// Handle Production
 	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
 	{
-		std::vector<Production*> toRemove;
+		std::map<Production*, productionEnd_e> toRemove;
 		for (std::vector<Production*>::const_iterator j = (*i)->getProductions().begin(); j != (*i)->getProductions().end(); ++j)
 		{
-			bool newItemPossible(true);
-			bool finished((*j)->step((*i), _game->getSavedGame(), newItemPossible));
-			if(finished || !newItemPossible)
+			productionEnd_e end;
+			if((*j)->step((*i), _game->getSavedGame(), end))
 			{
-				toRemove.push_back(*j);
+				toRemove[(*j)] = end;
 			}
 		}
-		for (std::vector<Production*>::iterator j = toRemove.begin(); j != toRemove.end(); ++j)
+		for (std::map<Production*, productionEnd_e>::iterator j = toRemove.begin(); j != toRemove.end(); ++j)
 		{
-			(*i)->removeProduction (*j);
-			_game->pushState(new ProductionCompleteState(_game, _game->getLanguage()->getString((*j)->getRuleItem()->getType()), (*i)->getName()));
+			(*i)->removeProduction (j->first);
+			_game->pushState(new ProductionCompleteState(_game, _game->getLanguage()->getString(j->first->getRuleItem()->getType()), (*i)->getName(), j->second));
 		}
 	}
 }

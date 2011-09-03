@@ -35,14 +35,14 @@ namespace OpenXcom
  * @param item Item that finished producing.
  * @param base Base the item belongs to.
  */
-ProductionCompleteState::ProductionCompleteState(Game *game, const std::wstring &item, const std::wstring &base) : State(game)
+ProductionCompleteState::ProductionCompleteState(Game *game, const std::wstring &item, const std::wstring &base, productionEnd_e endType) : State(game)
 {
 	_screen = false;
 
 	// Create objects
 	_window = new Window(this, 256, 160, 32, 20, POPUP_BOTH);
 	_btnOk = new TextButton(120, 18, 100, 154);
-	_txtMessage = new Text(246, 80, 37, 50);
+	_txtMessage = new Text(246, 110, 37, 35);
 	
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
@@ -64,11 +64,28 @@ ProductionCompleteState::ProductionCompleteState(Game *game, const std::wstring 
 	_txtMessage->setVerticalAlign(ALIGN_MIDDLE);
 	_txtMessage->setBig();
 	_txtMessage->setWordWrap(true);
-	std::wstring s = _game->getLanguage()->getString("STR_PRODUCTION_OF");
+	std::wstring s;
+	switch(endType)
+	{
+	case PRODUCTION_END_COMPLETE:
+		s = _game->getLanguage()->getString("STR_PRODUCTION_OF");
+		break;
+	case PRODUCTION_END_NOT_ENOUGH_MONEY:
+		s = _game->getLanguage()->getString("STR_NOT_ENOUGH_MONEY_TO_PRODUCE");
+		break;
+	case PRODUCTION_END_NOT_ENOUGH_MATERIALS:
+		s = _game->getLanguage()->getString("STR_NOT_ENOUGH_SPECIAL_MATERIALS_TO_PRODUCE");
+		break;
+	default:
+		assert(false);
+	}
 	s += item;
 	s += _game->getLanguage()->getString("STR__AT__");
 	s += base;
-	s += _game->getLanguage()->getString("STR_IS_COMPLETE");
+	if(endType == PRODUCTION_END_COMPLETE)
+	{
+		s += _game->getLanguage()->getString("STR_IS_COMPLETE");
+	}
 	_txtMessage->setText(s);
 }
 
