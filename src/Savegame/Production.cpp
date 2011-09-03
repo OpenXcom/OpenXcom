@@ -62,4 +62,8 @@ int Production::getNumberOfItemDone () const
 	return _timeSpent / _item->getManufactureInfo()->getManufactureTime ();
 }
 
+const RuleItem * Production::getRuleItem() const
+{
+	return _item;
+}
 };
