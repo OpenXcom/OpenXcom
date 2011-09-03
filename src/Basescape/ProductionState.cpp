@@ -275,7 +275,7 @@ void ProductionState::onMoreUnit(Action * action)
 void ProductionState::onLessUnit(Action * action)
 {
 	int less = _production->getNumberOfItemTodo ();
-	if(less > 0)
+	if(less > (_production->getNumberOfItemDone () + 1))
 	{
 		_production->setNumberOfItemTodo (--less);
 		setAssignedEngineer();	
