@@ -30,6 +30,7 @@ namespace OpenXcom
 
 class SurfaceSet;
 class Surface;
+class RuleManufactureInfo;
 
 /**
  * Represents a specific type of item.
@@ -53,6 +54,7 @@ private:
 	BattleType _battleType;
 	bool _twoHanded, _waypoint;
 	int _invWidth, _invHeight;
+	RuleManufactureInfo * _manufactureInfo;
 public:
 	/// Creates a blank item ruleset.
 	RuleItem(std::string type);
@@ -160,6 +162,8 @@ public:
 	void setClipSize(int size);
 	/// Draws the item's hand sprite onto a surface.
 	void drawHandSprite(SurfaceSet *texture, Surface *surface) const;
+	void setManufactureInfo(RuleManufactureInfo *);
+	const RuleManufactureInfo * getManufactureInfo() const;
 };
 
 }
