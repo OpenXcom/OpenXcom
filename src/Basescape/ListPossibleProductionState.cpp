@@ -9,6 +9,7 @@
 #include "../Resource/ResourcePack.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/Ruleset.h"
+#include "ProductionStartState.h"
 
 namespace OpenXcom
 {
@@ -86,5 +87,6 @@ void ListPossibleProductionState::btnOkClick(Action * action)
 
 void ListPossibleProductionState::lstProdClick (Action * action)
 {
+	_game->pushState(new ProductionStartState(_game, _base, _possibleProductions[_lstManufacture->getSelectedRow()]));
 }
 }
