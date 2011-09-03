@@ -10,9 +10,29 @@
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/Ruleset.h"
 #include "ProductionStartState.h"
+#include "../Savegame/Production.h"
+#include "../Savegame/Base.h"
+#include <algorithm>
 
 namespace OpenXcom
 {
+struct equalProduction : public std::unary_function<Production *,
+						    bool>
+{
+	RuleItem * _item;
+	equalProduction(RuleItem * item);
+	bool operator()(const Production * p) const;
+};
+
+equalProduction::equalProduction(RuleItem * item) : _item(item)
+{
+}
+
+bool equalProduction::operator()(const Production * p) const
+{
+	return p->getRuleItem() == _item;
+}
+
 ListPossibleProductionState::ListPossibleProductionState(Game *game, Base *base, ManufactureState * manufactureState) : State(game), _base(base), _manufactureState(manufactureState)
 {
 	int width = 320;
@@ -66,6 +86,8 @@ ListPossibleProductionState::ListPossibleProductionState(Game *game, Base *base,
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ListPossibleProductionState::btnOkClick);
 	const std::map<std::string, RuleItem *> & items (game->getRuleset()->getItems ());
+	const std::vector<Production *> productions (_base->getProductions ());
+
 	for(std::map<std::string, RuleItem *>::const_iterator iter = items.begin ();
 	    iter != items.end ();
 	    ++iter)
@@ -74,6 +96,11 @@ ListPossibleProductionState::ListPossibleProductionState(Game *game, Base *base,
 		{
 			continue;
 		}
+		 if(std::find_if(productions.begin (), productions.end (), equalProduction(iter->second)) != productions.end ())
+		{
+			continue;
+		}
+
 		_lstManufacture->addRow(2, _game->getLanguage()->getString(iter->first).c_str(), L"Unknown");
 		_possibleProductions.push_back(iter->second);
 	}
