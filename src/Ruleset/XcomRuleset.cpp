@@ -1019,6 +1019,19 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	info->addNeededItem("STR_ALIEN_ALLOYS", 4);
 	pa->setManufactureInfo(info);
 
+	RuleItem *lr = new RuleItem("STR_LASER_RIFLE");
+	lr->setSize(0.1f);
+	lr->setCost(70);
+	lr->setBigSprite(34);
+	lr->setPower(52);
+	lr->setDamageType(DT_PLASMA);
+	lr->setBattleType(BT_AMMO);
+	lr->setHitAnimation(46);
+	lr->setHitSound(19);
+	lr->setClipSize(26);
+	lr->setWeight(3);
+	lr->setManufactureInfo(new RuleManufactureInfo(2, 300, 8000000));
+
 	_items.insert(std::pair<std::string, RuleItem*>("STR_STINGRAY_LAUNCHER", slauncher));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_AVALANCHE_LAUNCHER", alauncher));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_CANNON", icannon));
@@ -1051,6 +1064,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 
 	_items.insert(std::pair<std::string, RuleItem*>("STR_ALIEN_ALLOYS", aa));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_PERSONAL_ARMOR", pa));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_LASER_RIFLE", lr));
 	// Add UFOs
 	RuleUfo *sscout = new RuleUfo("STR_SMALL_SCOUT");
 	sscout->setSize("STR_VERY_SMALL");
