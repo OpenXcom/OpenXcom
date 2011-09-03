@@ -167,14 +167,22 @@ void ProductionState::buildUi()
 
 void ProductionState::btnStopClick (Action * action)
 {
-	_manufactureState->fillProductionList();
-	_game->popState();
+	exitState();
 }
 
 void ProductionState::btnOkClick (Action * action)
 {
+	exitState();
+}
+
+void ProductionState::exitState()
+{
 	_manufactureState->fillProductionList();
 	_game->popState();
+	if(_item)
+	{
+		_game->popState();
+	}
 }
 
 void ProductionState::setAssignedEngineer()

@@ -44,6 +44,7 @@ private:
 	void setAssignedEngineer();
 	void think();
 	void buildUi();
+	void exitState();
 public:
 	ProductionState (Game * game, Base * base, RuleItem * _item, ManufactureState * manufactureState);
 	ProductionState (Game * game, Base * base, Production * production, ManufactureState * manufactureState);
