@@ -16,7 +16,7 @@
 
 namespace OpenXcom
 {
-ProductionStartState::ProductionStartState(Game * game, Base * base, RuleItem * item) : State(game), _base(base), _item(item)
+ProductionStartState::ProductionStartState(Game * game, Base * base, RuleItem * item, ManufactureState * manufactureState) : State(game), _base(base), _item(item), _manufactureState(manufactureState)
 {
 	_screen = false;
 	int width = 320;
@@ -134,6 +134,6 @@ void ProductionStartState::btnCancelClick(Action * action)
 
 void ProductionStartState::btnStartClick(Action * action)
 {
-	_game->pushState(new ProductionState(_game, _base, _item));
+	_game->pushState(new ProductionState(_game, _base, _item, _manufactureState));
 }
 }

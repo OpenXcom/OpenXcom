@@ -12,6 +12,7 @@ class Window;
 class Text;
 class TextList;
 class RuleItem;
+class ManufactureState;
 
 class ListPossibleProductionState : public State
 {
@@ -21,10 +22,11 @@ private:
 	Window *_window;
 	Text *_txtTitle, *_txtItem, *_txtCategory;
 	TextList *_lstManufacture;
+	ManufactureState * _manufactureState;
 	std::vector<RuleItem *> _possibleProductions;
 
 public:
-	ListPossibleProductionState(Game *game, Base *base);
+	ListPossibleProductionState(Game *game, Base *base, ManufactureState * manufactureState);
 	void btnOkClick(Action * action);
 	void lstProdClick (Action * action);
 };

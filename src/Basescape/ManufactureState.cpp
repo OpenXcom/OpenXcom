@@ -166,7 +166,7 @@ void ManufactureState::btnOkClick(Action *action)
 
 void ManufactureState::btnNewProductionClick(Action * action)
 {
-	_game->pushState(new ListPossibleProductionState(_game, _base));
+	_game->pushState(new ListPossibleProductionState(_game, _base, this));
 }
 
 void ManufactureState::fillProductionList()

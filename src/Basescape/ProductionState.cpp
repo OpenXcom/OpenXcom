@@ -13,6 +13,7 @@
 #include "../Savegame/Base.h"
 #include "../Savegame/Production.h"
 #include "../Engine/Timer.h"
+#include "ManufactureState.h"
 
 namespace OpenXcom
 {
@@ -28,7 +29,7 @@ int getFreeEngineers (Base * base)
 	return freeEngineers;
 }
 
-ProductionState::ProductionState (Game * game, Base * base, RuleItem * item) : State (game), _base(base), _item(item)
+ProductionState::ProductionState (Game * game, Base * base, RuleItem * item, ManufactureState * manufactureState) : State (game), _base(base), _item(item), _manufactureState(manufactureState)
 {
 	_screen = false;
 	int width = 320;
@@ -153,11 +154,13 @@ ProductionState::ProductionState (Game * game, Base * base, RuleItem * item) : S
 
 void ProductionState::btnStopClick (Action * action)
 {
+	_manufactureState->fillProductionList();
 	_game->popState();
 }
 
 void ProductionState::btnOkClick (Action * action)
 {
+	_manufactureState->fillProductionList();
 	_game->popState();
 }
 

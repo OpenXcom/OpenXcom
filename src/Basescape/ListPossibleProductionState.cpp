@@ -13,7 +13,7 @@
 
 namespace OpenXcom
 {
-ListPossibleProductionState::ListPossibleProductionState(Game *game, Base *base) : State(game), _base(base)
+ListPossibleProductionState::ListPossibleProductionState(Game *game, Base *base, ManufactureState * manufactureState) : State(game), _base(base), _manufactureState(manufactureState)
 {
 	int width = 320;
 	int height = 140;
@@ -87,6 +87,6 @@ void ListPossibleProductionState::btnOkClick(Action * action)
 
 void ListPossibleProductionState::lstProdClick (Action * action)
 {
-	_game->pushState(new ProductionStartState(_game, _base, _possibleProductions[_lstManufacture->getSelectedRow()]));
+	_game->pushState(new ProductionStartState(_game, _base, _possibleProductions[_lstManufacture->getSelectedRow()], _manufactureState));
 }
 }
