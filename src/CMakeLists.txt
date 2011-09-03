@@ -371,6 +371,8 @@ set ( savegame_src
   Savegame/Target.cpp
   Savegame/Unit.h
   Savegame/Unit.cpp
+  Savegame/Production.h
+  Savegame/Production.cpp
 )
 
 
