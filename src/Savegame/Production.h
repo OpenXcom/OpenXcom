@@ -14,7 +14,7 @@ public:
 	int getTimeSpent () const;
 	void setTimeSpent (int);
 	int getNumberOfItemDone () const;
-	int getAssignedEngineers();
+	int getAssignedEngineers() const;
 	void setAssignedEngineers (int);
 	bool step(Base * b, SavedGame * g);
 private:

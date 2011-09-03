@@ -31,7 +31,7 @@ void Production::setTimeSpent (int done)
 	_timeSpent = done;
 }
 
-int Production::getAssignedEngineers()
+int Production::getAssignedEngineers() const
 {
 	return _engineers;
 }
