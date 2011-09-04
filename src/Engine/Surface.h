@@ -40,7 +40,6 @@ protected:
 	SDL_Rect _crop;
 	bool _visible, _hidden;
 	SDL_Color *_originalColors;
-	int _lastShade;
 public:
 	/// Creates a new surface with the specified size and position.
 	Surface(int width, int height, int x = 0, int y = 0);
@@ -122,8 +121,6 @@ public:
 	void paletteShift(int off, int mul);
 	/// Restores the original palette.
 	void paletteRestore();
-	/// Sets a shade level.
-	void setShade(SDL_Color *colors, int shade);
 	/// Specific blit function to blit battlescape terrain data in different shades in a fast way.
 	void blitNShade(Surface *surface, int x, int y, int off, bool half = false);
 };

@@ -146,6 +146,8 @@ public:
 	void loadMapResources(ResourcePack *res);
 	/// resets tiles units are standing on
 	void resetUnitTiles();
+	/// Removes an item from the game.
+	void removeItem(BattleItem *item);
 };
 
 }

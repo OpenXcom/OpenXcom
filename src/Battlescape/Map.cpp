@@ -951,7 +951,7 @@ void Map::calculateWalkingOffset(BattleUnit *unit, Position *offset)
 		if (phase < midphase)
 		{
 			int fromLevel = unit->getTile()->getTerrainLevel();
-			int toLevel = unit->getTile()->getTerrainLevel();
+			int toLevel = _save->getTile(unit->getDestination())->getTerrainLevel();
 			if (unit->getPosition().z > unit->getDestination().z)
 			{
 				// going down a level, so toLevel 0 becomes +24, -8 becomes  16
