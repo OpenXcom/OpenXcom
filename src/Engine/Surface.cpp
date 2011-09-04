@@ -36,7 +36,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Surface::Surface(int width, int height, int x, int y) : _x(x), _y(y), _visible(true), _hidden(false), _originalColors(0), _lastShade(-1)
+Surface::Surface(int width, int height, int x, int y) : _x(x), _y(y), _visible(true), _hidden(false), _originalColors(0)
 {
 	_surface = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, 8, 0, 0, 0, 0);
 
@@ -69,7 +69,6 @@ Surface::Surface(const Surface& other)
 	_visible = other._visible;
 	_hidden = other._hidden;
 	_originalColors = other._originalColors;
-	_lastShade = other._lastShade;
 }
 
 /**
@@ -658,21 +657,6 @@ void Surface::paletteRestore()
 }
 
 /**
- * Sets a shade level by changing the palette.
- * @param colors Pointer to palette.
- * @param shade Shade value.
- */
-void Surface::setShade(SDL_Color *colors, int shade)
-{
-	if (shade != _lastShade) // make sure we don't change the palette unnescessary
-	{
-		SDL_SetColors(_surface, colors, 0, 256);
-		_lastShade = shade;
-	}
-}
-
-
-/**
  * Specific blit function to blit battlescape terrain data in different shades in a fast way.
  * Notice there is no surface locking here - you have to make sure you lock the surface yourself
  * at the start of blitting and unlock it when done.
@@ -696,16 +680,14 @@ void Surface::blitNShade(Surface *surface, int x, int y, int off, bool half)
 
 	int spitch = getSurface()->pitch;
 	int dpitch = surface->getSurface()->pitch;
-
 	
-	const int start_x = std::max((half)? 16 : 0, -x);
+	const int start_x = std::max((half)? w/2 : 0, -x);
 	const int start_y = std::max(0, -y);
 	const int end_x = std::min( w, dw - x);
 	const int end_y = std::min( h, dh - y);
 	
 	int dest_y = (y + start_y) * dpitch + x;
 	int src_y = start_y * spitch;
-	//for (int ix = start_x, iy = start_y; ix < end_x && iy < end_y;)
 	for(int iy = start_y; iy < end_y; ++iy, dest_y += dpitch, src_y += spitch)
 		for(int ix = start_x; ix<end_x; ++ix)
 		{

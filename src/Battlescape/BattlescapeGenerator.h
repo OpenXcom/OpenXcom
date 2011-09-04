@@ -62,9 +62,11 @@ private:
 	/// Add a soldier to the game
 	void addSoldier(Soldier *soldier);
 	/// Add an alien to the game
-	void addAlien(RuleAlien *rules, RuleArmor *armor, NodeRank rank);
+	BattleUnit *addAlien(RuleAlien *rules, RuleArmor *armor, NodeRank rank);
 	/// Add an item to the game
 	void addItem(RuleItem *item);
+	// Add an item to a unit
+	void addItem(RuleItem *item, BattleUnit *unit);
 	/// loads an XCOM MAP file
 	int loadMAP(MapBlock *mapblock, int xoff, int yoff, RuleTerrain *terrain, bool discovered = false);
 	/// loads an XCOM RMP file
