@@ -267,7 +267,7 @@ void Inventory::moveItem(BattleItem *item, RuleInventory *slot, int x, int y)
 				item->moveToOwner(0);
 				_selUnit->getTile()->addItem(item);
 			}
-			else if (item->getSlot()->getType() == INV_GROUND)
+			else if (item->getSlot() == 0 || item->getSlot()->getType() == INV_GROUND)
 			{
 				item->moveToOwner(_selUnit);
 				_selUnit->getTile()->removeItem(item);

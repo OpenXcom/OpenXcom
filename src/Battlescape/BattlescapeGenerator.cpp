@@ -228,64 +228,90 @@ void BattlescapeGenerator::run()
 		addItem(_game->getRuleset()->getItem("STR_GRENADE"));*/
 	}
 
+	BattleUnit *unit;
 	if (_missionType == MISS_UFORECOVERY)
 	{
 		// TODO : this should be in rulesets
 		if (_ufo->getRules()->getType() == "STR_SMALL_SCOUT")
 		{
-			addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), SOLDIER);
+			unit = addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), SOLDIER);
+			addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL"), unit);
+			addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL_CLIP"), unit);
 		}
 
 		if (_ufo->getRules()->getType() == "STR_MEDIUM_SCOUT")
 		{
-			addAlien(_game->getRuleset()->getAlien("SECTOID_NAVIGATOR"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), NAVIGATOR);
+			unit = addAlien(_game->getRuleset()->getAlien("SECTOID_NAVIGATOR"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), NAVIGATOR);
+			addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL"), unit);
+			addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL_CLIP"), unit);
 			if (RNG::generate(0,100) < 50)
-				addAlien(_game->getRuleset()->getAlien("SECTOID_NAVIGATOR"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), NAVIGATOR);
-			addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), SOLDIER);
-			addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), SCOUT);
+			{
+				unit = addAlien(_game->getRuleset()->getAlien("SECTOID_NAVIGATOR"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), NAVIGATOR);
+				addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL"), unit);
+				addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL_CLIP"), unit);
+			}
+			unit = addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), SOLDIER);
+			addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL"), unit);
+			addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL_CLIP"), unit);
+			unit = addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), SCOUT);
+			addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL"), unit);
+			addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL_CLIP"), unit);
 			if (RNG::generate(0,100) < 50)
-				addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), SCOUT);
+			{
+				unit = addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), SCOUT);
+				addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL"), unit);
+				addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL_CLIP"), unit);
+			}
 			if (RNG::generate(0,100) < 50)
-				addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), SCOUT);
+			{
+				unit = addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), SCOUT);
+				addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL"), unit);
+				addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL_CLIP"), unit);
+			}
 		}
 
 		if (_ufo->getRules()->getType() == "STR_LARGE_SCOUT")
 		{
-			addAlien(_game->getRuleset()->getAlien("SECTOID_NAVIGATOR"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), NAVIGATOR);
+			unit = addAlien(_game->getRuleset()->getAlien("SECTOID_NAVIGATOR"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), NAVIGATOR);
+			addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL"), unit);
+			addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL_CLIP"), unit);
 			if (RNG::generate(0,100) < 50)
-				addAlien(_game->getRuleset()->getAlien("SECTOID_NAVIGATOR"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), NAVIGATOR);
-			addAlien(_game->getRuleset()->getAlien("SECTOID_ENGINEER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), ENGINEER);
+			{
+				unit = addAlien(_game->getRuleset()->getAlien("SECTOID_NAVIGATOR"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), NAVIGATOR);
+				addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL"), unit);
+				addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL_CLIP"), unit);
+			}
+			unit = addAlien(_game->getRuleset()->getAlien("SECTOID_ENGINEER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), ENGINEER);
+			addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL"), unit);
+			addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL_CLIP"), unit);
 			if (RNG::generate(0,100) < 50)
-				addAlien(_game->getRuleset()->getAlien("SECTOID_ENGINEER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), ENGINEER);
-			addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), SOLDIER);
+			{
+				unit = addAlien(_game->getRuleset()->getAlien("SECTOID_ENGINEER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), ENGINEER);
+				addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL"), unit);
+				addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL_CLIP"), unit);
+			}
+			unit = addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), SOLDIER);
+			addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL"), unit);
+			addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL_CLIP"), unit);
 			int nSoldiers = RNG::generate(0,5);
 			for (int i=0; i < nSoldiers; i++)
-				addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), SCOUT);
+			{
+				unit = addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), SCOUT);
+				addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL"), unit);
+				addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL_CLIP"), unit);
+			}
 		}
 	}
 	else
 	{
-		addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), SCOUT);
-		addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), SCOUT);
-		addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), SCOUT);
-		addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), SCOUT);
-		addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), SCOUT);
-		addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), SCOUT);
+		for (int i=0; i < 5; i++)
+		{
+			unit = addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), SCOUT);
+			addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL"), unit);
+			addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL_CLIP"), unit);
+		}
 	}
 	
-	addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL"));
-	addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL_CLIP"));
-	addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL"));
-	addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL_CLIP"));
-	addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL"));
-	addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL_CLIP"));
-	addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL"));
-	addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL_CLIP"));
-	addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL"));
-	addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL_CLIP"));
-	addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL"));
-	addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL_CLIP"));
-
 	// set shade (alien bases are a little darker, sites depend on worldshade)
 	int worldshades[8] = { 0, 1, 2, 3, 5, 7, 9 , 15 };
 	_save->setGlobalShade(worldshades[_worldShade]);
@@ -335,7 +361,7 @@ void BattlescapeGenerator::addSoldier(Soldier *soldier)
  * @param armor The armor of the alien.
  * @param rank The rank of the alien, used for spawn point search.
  */
-void BattlescapeGenerator::addAlien(RuleAlien *rules, RuleArmor *armor, NodeRank rank)
+BattleUnit *BattlescapeGenerator::addAlien(RuleAlien *rules, RuleArmor *armor, NodeRank rank)
 {
 	BattleUnit *unit = new BattleUnit(new Alien(rules, armor, _game->getLanguage()), FACTION_HOSTILE);
 	Node *node;
@@ -389,6 +415,8 @@ void BattlescapeGenerator::addAlien(RuleAlien *rules, RuleArmor *armor, NodeRank
 	unit->setDirection(RNG::generate(0,7));
 
 	_save->getUnits()->push_back(unit);
+
+	return unit;
 }
 
 /**
@@ -451,6 +479,7 @@ void BattlescapeGenerator::addItem(RuleItem *item)
 			{
 				if (bi->setAmmoItem((*i)) == 0)
 				{
+					_craftInventoryTile->removeItem(*i);
 					break;
 				}
 			}
@@ -482,6 +511,79 @@ void BattlescapeGenerator::addItem(RuleItem *item)
 		_craftInventoryTile->addItem(bi);
 	}
 }
+
+
+/**
+ * Adds an item to the game and assign it to a soldier?.
+ * @param item pointer to the Item
+ */
+void BattlescapeGenerator::addItem(RuleItem *item, BattleUnit *unit)
+{
+	BattleItem *bi = new BattleItem(item);
+	bool placed = false;
+
+	switch (item->getBattleType())
+	{
+	case BT_AMMO:
+		// find equipped weapons that can be loaded with this ammo
+		if (unit->getItem("STR_RIGHT_HAND") && unit->getItem("STR_RIGHT_HAND")->getAmmoItem() == 0)
+		{
+			if (unit->getItem("STR_RIGHT_HAND")->setAmmoItem(bi) == 0)
+			{
+				placed = true;
+			}
+		}
+		else if (!unit->getItem("STR_BELT"))
+		{
+			bi->moveToOwner(unit);
+			bi->setSlot(_game->getRuleset()->getInventory("STR_BELT"));
+			placed = true;
+		}
+		break;
+	case BT_GRENADE:
+	case BT_PROXIMITYGRENADE:
+		if (!unit->getItem("STR_BELT"))
+		{
+			bi->moveToOwner(unit);
+			bi->setSlot(_game->getRuleset()->getInventory("STR_BELT"));
+			placed = true;
+		}
+		break;
+	case BT_FIREARM:
+	case BT_MELEE:
+		if (!unit->getItem("STR_RIGHT_HAND"))
+		{
+			bi->moveToOwner(unit);
+			bi->setSlot(_game->getRuleset()->getInventory("STR_RIGHT_HAND"));
+			placed = true;
+		}
+		break;
+	case BT_MEDIKIT:
+	case BT_SCANNER:
+		if (!unit->getItem("STR_BACKPACK"))
+		{
+			bi->moveToOwner(unit);
+			bi->setSlot(_game->getRuleset()->getInventory("STR_BACKPACK"));
+			placed = true;
+		}
+		break;
+	case BT_NONE:
+		break;
+	}
+
+	
+
+	// if we did not auto equip the item, place it on the ground
+	if (!placed)
+	{
+		delete bi;
+	}
+	else
+	{
+		_save->getItems()->push_back(bi);
+	}
+}
+
 
 /**
  * Generates a map (set of tiles) for a new battlescape game.

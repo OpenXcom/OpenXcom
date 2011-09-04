@@ -161,7 +161,7 @@ void ProjectileFlyBState::init()
 				_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(weapon->getRules()->getFireSound())->play();
 				if (!_parent->getGame()->getSavedGame()->getBattleGame()->getDebugMode() && _ammo->spendBullet() == false)
 				{
-					//_parent->getGame()->getSavedGame()->getBattleGame()->getItems()->erase(_parent->getSelectedItem()->getAmmoItem());
+					_parent->getGame()->getSavedGame()->getBattleGame()->removeItem(_ammo);
 					weapon->setAmmoItem(0);
 				}
 		}

@@ -75,7 +75,6 @@ private:
 	NumberText *_numVisibleUnit[10];
 	BattleUnit *_visibleUnit[10];
 	WarningMessage *_warning;
-
 	Text *_txtName;
 	NumberText *_numTimeUnits, *_numEnergy, *_numHealth, *_numMorale, *_numLayers, *_numAmmoLeft, *_numAmmoRight;
 	Bar *_barTimeUnits, *_barEnergy, *_barHealth, *_barMorale;
@@ -85,15 +84,15 @@ private:
 	std::list<BattleState*> _states;
 	BattleAction _action;
 	BattleActionType _tuReserved;
-	
+	std::vector<State*> _popups;
+	bool _debugPlay;
+
+	void selectNextPlayerUnit(bool checkReselect);
 	void endTurn();
 	void handleItemClick(BattleItem *item);
 	void blinkVisibleUnitButtons();
-	//Handles non target actions, like priming a grenade.
 	void handleNonTargetAction();
 	void setupCursor();
-	std::vector<State*> _popups;
-	bool _debugPlay;
 public:
 	static const int DEFAULT_ANIM_SPEED = 100;
 	/// Creates the Battlescape state.

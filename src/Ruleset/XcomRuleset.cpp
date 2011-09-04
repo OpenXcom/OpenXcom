@@ -873,7 +873,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	rlauncher->setSize(0.4f);
 	rlauncher->setCost(4000);
 	rlauncher->setBigSprite(15);
-	rlauncher->setHandSprite(9);
+	rlauncher->setHandSprite(8*9);
 	rlauncher->setTwoHanded(true);
 	rlauncher->setBulletSprite(0);
 	rlauncher->setFireSound(52);
