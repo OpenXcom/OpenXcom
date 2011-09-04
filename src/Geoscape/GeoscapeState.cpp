@@ -716,6 +716,7 @@ void GeoscapeState::time1Hour()
 		{
 			(*i)->removeProduction (j->first);
 			_game->pushState(new ProductionCompleteState(_game, _game->getLanguage()->getString(j->first->getRuleItem()->getType()), (*i)->getName(), j->second));
+			timerReset();
 		}
 	}
 }
