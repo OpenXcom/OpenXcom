@@ -99,7 +99,9 @@ void ProductionState::buildUi()
 	_txtTitle->setAlign(ALIGN_CENTER);
 
 	_txtAvailableEngineer->setColor(Palette::blockOffset(15)+1);
+	_txtAvailableEngineer->setSecondaryColor(Palette::blockOffset(13));
 	_txtAvailableSpace->setColor(Palette::blockOffset(15)+1);
+	_txtAvailableSpace->setSecondaryColor(Palette::blockOffset(13));
 	
 	_txtAllocatedEngineer->setColor(Palette::blockOffset(15)+1);
 	_txtAllocatedEngineer->setText(_game->getLanguage()->getString("STR_ENGINEERS__ALLOCATED"));
@@ -195,16 +197,16 @@ void ProductionState::setAssignedEngineer()
 	int availableEngineer = getFreeEngineers(_base);
 	int availableWorkSpace = _base->getAvailableWorkshops() - _base->getUsedWorkshops();
 	std::wstringstream s1;
-	s1 << _game->getLanguage()->getString("STR_ENGINEERS_AVAILABLE_UC") << availableEngineer;
+	s1 << _game->getLanguage()->getString("STR_ENGINEERS_AVAILABLE_UC") << L"\x01" << availableEngineer;
 	_txtAvailableEngineer->setText(s1.str());
 	std::wstringstream s2;
-	s2 << _game->getLanguage()->getString("STR_SPACE_AVAILABLE") << availableWorkSpace;
+	s2 << _game->getLanguage()->getString("STR_SPACE_AVAILABLE") << L"\x01" << availableWorkSpace;
 	_txtAvailableSpace->setText(s2.str());
 	std::wstringstream s3;
-	s3 << ">" << _production->getAssignedEngineers();
+	s3 << L">\x01" << _production->getAssignedEngineers();
 	_txtAllocated->setText(s3.str());
 	std::wstringstream s4;
-	s4 << ">" << _production->getNumberOfItemTodo ();
+	s4 << L">\x01" << _production->getNumberOfItemTodo ();
 	_txtTodo->setText(s4.str());
 }
 
