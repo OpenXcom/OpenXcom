@@ -61,14 +61,14 @@ bool findRuleResearchProject::operator()(ResearchProject *r) const
 bool isResearchAvailable (RuleResearchProject * r, Game * game, const std::vector<const RuleResearchProject *> & unlockeds)
 {
 	std::vector<RuleResearchProject *>::const_iterator iter = r->getDependencys().begin ();
-	const std::vector<const RuleResearchProject *> & found(game->getSavedGame()->getFoundResearch());
+	const std::vector<const RuleResearchProject *> & discovereds(game->getSavedGame()->getDiscoveredResearchs());
 	if(std::find(unlockeds.begin (), unlockeds.end (),
 		     r) != unlockeds.end ())
 	  return true;
 	while (iter != r->getDependencys().end ())
 	{
-		std::vector<const RuleResearchProject *>::const_iterator itFound = std::find(found.begin (), found.end (), *iter);
-		if (itFound == found.end ())
+		std::vector<const RuleResearchProject *>::const_iterator itDiscovered = std::find(discovereds.begin (), discovereds.end (), *iter);
+		if (itDiscovered == discovereds.end ())
 			return false;
 		iter++;
 	}
@@ -81,11 +81,11 @@ bool isResearchAvailable (RuleResearchProject * r, Game * game, const std::vecto
 */
 void getAvailableResearchProjects (std::vector<RuleResearchProject *> & projects, Game * game, Base * base)
 {
-	const std::vector<const RuleResearchProject *> & found(game->getSavedGame()->getFoundResearch());
+	const std::vector<const RuleResearchProject *> & discovereds(game->getSavedGame()->getDiscoveredResearchs());
 	const std::vector<RuleResearchProject *> & researchProjects = game->getRuleset()->getResearchProjects();
 	const std::vector<ResearchProject *> & baseResearchProjects = base->getResearch();
 	std::vector<const RuleResearchProject *> unlockeds;
-	for(std::vector<const RuleResearchProject *>::const_iterator it = found.begin (); it != found.end (); ++it)
+	for(std::vector<const RuleResearchProject *>::const_iterator it = discovereds.begin (); it != discovereds.end (); ++it)
 	{
 		for(std::vector<RuleResearchProject *>::const_iterator itUnlocked = (*it)->getUnlocked ().begin (); itUnlocked != (*it)->getUnlocked ().end (); ++itUnlocked)
 		{
@@ -98,8 +98,8 @@ void getAvailableResearchProjects (std::vector<RuleResearchProject *> & projects
 		{
 			continue;
 		}
-		std::vector<const RuleResearchProject *>::const_iterator itFound = std::find(found.begin (), found.end (), *iter);
-		if (itFound != found.end ())
+		std::vector<const RuleResearchProject *>::const_iterator itDiscovered = std::find(discovereds.begin (), discovereds.end (), *iter);
+		if (itDiscovered != discovereds.end ())
 		{
 			continue;
 		}

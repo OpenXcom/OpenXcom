@@ -65,7 +65,7 @@ private:
 	int _ufoId, _waypointId;
 	SavedBattleGame *_battleGame;
 	UfopaediaSaved *_ufopaedia;
-	std::vector<const RuleResearchProject *> _found;
+	std::vector<const RuleResearchProject *> _discovereds;
 	std::map<Base*, ResearchProject *> _researchs;
 public:
 	/// Creates a new save with a certain difficulty.
@@ -117,7 +117,7 @@ public:
 	/// Add a finished ResearchProject
 	void addFinishedResearch (const RuleResearchProject * r);
 	/// Get the list of already discovered research projects
-	const std::vector<const RuleResearchProject *> & getFoundResearch();
+	const std::vector<const RuleResearchProject *> & getDiscoveredResearchs();
 };
 
 }

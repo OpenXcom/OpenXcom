@@ -240,12 +240,10 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 		{
 			std::string research;
 			*it >> research;
-			std::vector<RuleResearchProject *>::const_iterator itResearch = std::find_if(researchs.begin (),
-												     researchs.end (),
-												     findRuleResearchProjectByString(research));
+			std::vector<RuleResearchProject *>::const_iterator itResearch = std::find_if(researchs.begin (), researchs.end (), findRuleResearchProjectByString(research));
 			if (itResearch != researchs.end ())
 			{
-				_found.push_back(*itResearch);
+				_discovereds.push_back(*itResearch);
 			}
 		}
 	}
@@ -327,7 +325,7 @@ void SavedGame::save(const std::string &filename) const
 
 	out << YAML::Key << "found" << YAML::Value;
 	out << YAML::BeginSeq;
-	for (std::vector<const RuleResearchProject *>::const_iterator i = _found.begin(); i != _found.end(); ++i)
+	for (std::vector<const RuleResearchProject *>::const_iterator i = _discovereds.begin(); i != _discovereds.end(); ++i)
 	{
 		out << (*i)->getName ();
 	}
@@ -542,16 +540,16 @@ UfopaediaSaved *SavedGame::getUfopaedia()
 */
 void SavedGame::addFinishedResearch (const RuleResearchProject * r)
 {
-	_found.push_back(r);
+	_discovereds.push_back(r);
 }
 
 /**
    Returns the list of already discovered ResearchProject
  * @return the list of already discovered ResearchProject
 */
-const std::vector<const RuleResearchProject *> & SavedGame::getFoundResearch()
+const std::vector<const RuleResearchProject *> & SavedGame::getDiscoveredResearchs()
 {
-	return _found;
+	return _discovereds;
 }
 
 }
