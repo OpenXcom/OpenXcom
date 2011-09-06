@@ -91,6 +91,7 @@ void ResearchProjectState::buildUi ()
 	_txtAvailableScientist = new Text(width - 2 * button_x_border, button_height, start_x + button_x_border, start_y + 3*button_y_border);
 	_txtAvailableSpace = new Text(width - 2 * button_x_border, button_height, start_x + button_x_border, start_y + 4*button_y_border);
 	_txtAssigned = new Text(width - 2 * button_x_border, button_height, start_x + 2*button_x_border, start_y + 5*button_y_border);
+	_txtAssignedValue = new Text(2 * button_x_border, button_height, start_x + 11*button_x_border, start_y + 5*button_y_border);
 	_txtMore = new Text(width - 3 * button_x_border, button_height, start_x + 2*button_x_border, start_y + 7*button_y_border);
 	_txtLess = new Text(width - 3 * button_x_border, button_height, start_x + 2*button_x_border, start_y + 9*button_y_border);
 	_btnOk = new TextButton(width - 2 * button_x_border , button_height, start_x + button_x_border, start_y + height - button_height - button_y_border);
@@ -107,6 +108,7 @@ void ResearchProjectState::buildUi ()
 	add(_txtAvailableScientist);
 	add(_txtAvailableSpace);
 	add(_txtAssigned);
+	add(_txtAssignedValue);
 	add(_txtMore);
 	add(_txtLess);
 	add(_btnMore);
@@ -124,7 +126,10 @@ void ResearchProjectState::buildUi ()
 	_txtAvailableSpace->setSecondaryColor(Palette::blockOffset(13));
 
 	_txtAssigned->setColor(Palette::blockOffset(13)+5);
-	_txtAssigned->setSecondaryColor(Palette::blockOffset(13));
+	_txtAssigned->setText(_game->getLanguage()->getString("STR_SCIENTISTS_ALLOCATED"));
+	_txtAssignedValue->setColor(Palette::blockOffset(13));
+	_txtAssignedValue->setBig();
+	_txtAssignedValue->setX(_txtAssigned->getX() + _txtAssigned->getTextWidth() + _txtAssignedValue->getFont()->getSpacing());
 
 	_txtMore->setText(_game->getLanguage()->getString("STR_INCREASE"));
 	_txtLess->setText(_game->getLanguage()->getString("STR_DECREASE"));
@@ -176,10 +181,10 @@ void ResearchProjectState::SetAssignedScientist()
 	std::wstringstream s2;
 	s2 << _game->getLanguage()->getString("STR_LABORATORY_SPACE_AVAILABLE_UC") << L'\x01' << freeSpaceLab;
 	std::wstringstream s3;
-	s3 << _game->getLanguage()->getString("STR_SCIENTISTS_ALLOCATED") << _project->getAssigned ();
+	s3 << _project->getAssigned ();
 	_txtAvailableScientist->setText(s1.str());
 	_txtAvailableSpace->setText(s2.str());
-	_txtAssigned->setText(s3.str());
+	_txtAssignedValue->setText(s3.str());
 }
 
 void ResearchProjectState::btnMoreClick(Action *action)

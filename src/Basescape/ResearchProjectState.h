@@ -45,7 +45,7 @@ private:
 	TextButton *_btnOk;
 	ArrowButton * _btnMore, *_btnLess;
 	Window *_window;
-	Text *_txtTitle, *_txtAvailableScientist, *_txtAvailableSpace, *_txtAssigned, *_txtMore, *_txtLess;
+	Text *_txtTitle, *_txtAvailableScientist, *_txtAvailableSpace, *_txtAssigned, *_txtMore, *_txtLess, * _txtAssignedValue;
 	TextList *_lstResearch;
 	ResearchState * _researchState;
 	NewResearchListState * _newResearchListState;
