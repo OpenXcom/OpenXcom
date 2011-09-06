@@ -777,7 +777,7 @@ void Base::addResearch(ResearchProject * project)
 */
 void Base::removeResearch(ResearchProject * project)
 {
-  std::vector<ResearchProject *>::iterator iter = std::find (_baseResearchs.begin (), _baseResearchs.end (), project);
+	std::vector<ResearchProject *>::iterator iter = std::find (_baseResearchs.begin (), _baseResearchs.end (), project);
 	_baseResearchs.erase(iter);
 }
 
