@@ -117,6 +117,7 @@ public:
 	int getScientistCost() const;
 	/// Gets the transfer time of personnel.
 	int getPersonnelTime() const;
+	/// Get the list of ResearchProjects
 	const std::vector<RuleResearchProject *> & getResearchProjects () const;
 };
 

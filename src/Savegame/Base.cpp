@@ -753,17 +753,28 @@ int Base::getMonthlyMaintenace() const
 	return getCraftMaintenance() + getPersonnelMaintenance() + getFacilityMaintenance();
 }
 
-
+/**
+ * Returns the list of all base's ResearchProject
+ * @return list of base's ResearchProject
+*/
 const std::vector<ResearchProject *> & Base::getResearch() const
 {
 	return _baseResearchs;
 }
 
+/**
+ * Add A new ResearchProject to Base
+ * @param project The project to add
+*/
 void Base::addResearch(ResearchProject * project)
 {
 	_baseResearchs.push_back(project);
 }
 
+/**
+ * Remove a ResearchProject from base
+ * @param project the project to remove
+*/
 void Base::removeResearch(ResearchProject * project)
 {
   std::vector<ResearchProject *>::iterator iter = std::find (_baseResearchs.begin (), _baseResearchs.end (), project);

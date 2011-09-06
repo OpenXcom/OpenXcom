@@ -28,6 +28,10 @@ ResearchProject::ResearchProject(RuleResearchProject * p, float f) : _project(p)
 {
 }
 
+/**
+ * Called every day to compute time spent on this ResearchProject
+ * @return true if the ResearchProject is finished
+*/
 bool ResearchProject::step()
 {
 	_spent += _assigned;
@@ -38,6 +42,10 @@ bool ResearchProject::step()
 	return false;
 }
   
+/**
+ * Changes the number of scientist to the ResearchProject
+ * @param nb number of scientist assigned to this ResearchProject
+ */
 void ResearchProject::setAssigned (int nb)
 {
 	_assigned = nb;
@@ -48,31 +56,56 @@ const RuleResearchProject * ResearchProject::getRuleResearchProject () const
 	return _project;
 }
 
+/**
+ * Returns the number of scientist assigned to this project
+ * @return Number of assigned scientist.
+ */
 int ResearchProject::getAssigned () const
 {
 	return _assigned;
 }
 
+/**
+ * Returns the time already spent on this project
+ * @return the time already spent on this ResearchProject(in man/day)
+ */
 float ResearchProject::getSpent () const
 {
 	return _spent;
 }
 
+/**
+ * Changes the cost of the ResearchProject
+ * @param f new project cost(in man/day)
+ */
 void ResearchProject::setSpent (float f)
 {
 	_spent = f;
 }
 
+/**
+ * Returns the cost of the ResearchProject
+ * @return the cost of the ResearchProject(in man/day)
+ */
 float ResearchProject::getCost() const
 {
 	return _cost;
 }
 
+/**
+ * Changes the cost of the ResearchProject
+ * @param f new project cost(in man/day)
+ */
 void ResearchProject::setCost(float f)
 {
 	_cost = f;
 }
 
+/**
+ * Loads the research project from a YAML file.
+ * @param node YAML node.
+ * @param rule Ruleset for the saved game.
+ */
 void ResearchProject::load(const YAML::Node& node, const Ruleset *rule)
 {
 	int assigned;
@@ -86,6 +119,10 @@ void ResearchProject::load(const YAML::Node& node, const Ruleset *rule)
 	setCost(cost);
 }
 
+/**
+ * Saves the research project to a YAML file.
+ * @param out YAML emitter.
+ */
 void ResearchProject::save(YAML::Emitter& out) const
 {
 	out << YAML::BeginMap;

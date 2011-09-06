@@ -25,41 +25,71 @@ RuleResearchProject::RuleResearchProject(const std::string & name, int cost) : _
 {
 }
 
+/**
+ * Add a ResearchProject must be discoved before this researchProject
+ * @param rp a pointer to a ResearchProject
+*/
 void RuleResearchProject::addDependency (RuleResearchProject * rp)
 {
 	_dependencys.push_back(rp);
 }
 
+/**
+   Get the cost of this ResearchProject
+   @return cost of this ResearchProject(in man/day)
+*/
 int RuleResearchProject::getCost() const
 {
 	return _cost;
 }
 
+/**
+   Get the name of this ResearchProject
+   @return name of this ResearchProject
+*/
 const std::string & RuleResearchProject::getName () const
 {
 	return _name;
 }
 
+/**
+   Get the list of dependencies
+   @return the list of ResearchProject that must be discovered before this one
+*/
 const std::vector<RuleResearchProject *> & RuleResearchProject::getDependencys () const
 {
 	return _dependencys;
 }
 
+/**
+   Does this ResearchProject need a corresponding Item to be researched ?
+   @return true if the ResearchProject need a corresponding item
+*/
 bool RuleResearchProject::needItem() const
 {
 	return _needItem;
 }
 
+/**
+   Change if this ResearchProject need a corresponding Item to be researched.
+*/
 void RuleResearchProject::setNeedItem(bool b)
 {
 	_needItem = b;
 }
 
+/**
+   @return The list of ResearchProject unlocked by this research project.
+*/
 const std::vector<RuleResearchProject *> & RuleResearchProject::getUnlocked () const
 {
 	return _unlocks;
 }
 
+/**
+ * Add a ResearchProject which can be unlocked by this researchProject
+ * @param rp a pointer to a ResearchProject
+*/
 void RuleResearchProject::addUnlocked (RuleResearchProject * rp)
 {
 	_unlocks.push_back(rp);

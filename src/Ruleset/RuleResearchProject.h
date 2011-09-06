@@ -39,13 +39,21 @@ class RuleResearchProject
 	bool _needItem;
 public:
 	RuleResearchProject(const std::string & name, int cost);
+	/// Add a Dependency
 	void addDependency (RuleResearchProject * rp);
+	/// Get time needed to discover this ResearchProject
 	int getCost() const;
+	/// Get the research name
 	const std::string & getName () const;
+	/// Get the research dependencys
 	const std::vector<RuleResearchProject *> & getDependencys () const;
+	/// Does this ResearchProject need a corresponding Item to be researched ?
 	bool needItem() const;
+	/// Set if this ResearchProject need a corresponding Item to be researched.
 	void setNeedItem(bool b);
+	/// Get the list of ResearchProjects unlocked by this research
 	const std::vector<RuleResearchProject *> & getUnlocked () const;
+	/// Add a ResearchProject which can be unlocked
 	void addUnlocked (RuleResearchProject * rp);
 };
 

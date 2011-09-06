@@ -114,7 +114,9 @@ public:
 	void endBattle();
 	/// Gets the current Ufopaedia parameters.
 	UfopaediaSaved *getUfopaedia();
+	/// Add a finished ResearchProject
 	void addFinishedResearch (const RuleResearchProject * r);
+	/// Get the list of already discovered research projects
 	const std::vector<const RuleResearchProject *> & getFoundResearch();
 };
 

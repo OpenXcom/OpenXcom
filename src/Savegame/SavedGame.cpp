@@ -536,11 +536,19 @@ UfopaediaSaved *SavedGame::getUfopaedia()
 	return _ufopaedia;
 }
 
+/**
+ * Add a ResearchProject to the list of already discovered ResearchProject
+ * @param r The newly found ResearchProject
+*/
 void SavedGame::addFinishedResearch (const RuleResearchProject * r)
 {
 	_found.push_back(r);
 }
 
+/**
+   Returns the list of already discovered ResearchProject
+ * @return the list of already discovered ResearchProject
+*/
 const std::vector<const RuleResearchProject *> & SavedGame::getFoundResearch()
 {
 	return _found;

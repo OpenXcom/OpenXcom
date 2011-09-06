@@ -135,8 +135,11 @@ public:
 	int getFacilityMaintenance() const;
 	/// Gets the base's total monthly maintenance.
 	int getMonthlyMaintenace() const;
+	/// Get the list of base's ResearchProject
 	const std::vector<ResearchProject *> & getResearch() const;
+	/// Add a new ResearchProject to the Base
 	void addResearch(ResearchProject *);
+	/// Remove a ResearchProject from the Base
 	void removeResearch(ResearchProject *);
 };
 

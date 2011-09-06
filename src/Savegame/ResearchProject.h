@@ -37,21 +37,25 @@ class ResearchProject
 	float _cost;
 public:
 	ResearchProject(RuleResearchProject * p, float f = 0.0f);
-
+	/// Game logic. Called every new day to compute time spent.
 	bool step();
-
+	/// set the number of scientist assigned to this ResearchProject
 	void setAssigned (int nb);
+	/// get the number of scientist assigned to this ResearchProject
 	int getAssigned () const;
-
+	/// get time already spent on this ResearchProject
 	float getSpent () const;
+	/// set time already spent on this ResearchProject
 	void setSpent (float f);
-
+	/// get time cost of this ResearchProject
 	float getCost() const;
+	/// set time cost of this ResearchProject
 	void setCost(float f);
-
+	/// get the ResearchProject Ruleset
 	const RuleResearchProject * getRuleResearchProject () const;
-
+	/// load the ResearchProject from YAML
 	void load(const YAML::Node& node, const Ruleset *rule);
+	/// save the ResearchProject to YAML
 	void save(YAML::Emitter& out) const;
 };
 }
