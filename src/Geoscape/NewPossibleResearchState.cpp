@@ -38,8 +38,8 @@ NewPossibleResearchState::NewPossibleResearchState(Game * game, Base * base, con
 	_window = new Window(this, 280, 180, 20, 10, POPUP_BOTH);
 	_btnOk = new TextButton(180, 13, 70, 150);
 	_btnSelect = new TextButton(180, 13, 70, 165);
-	_txtTitle = new Text(200, 30, 60, 30);
-	_possibilities = new TextList(160, 80, 80, 60);
+	_txtTitle = new Text(200, 40, 60, 30);
+	_possibilities = new TextList(160, 70, 80, 70);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
@@ -64,6 +64,7 @@ NewPossibleResearchState::NewPossibleResearchState(Game * game, Base * base, con
 	{
 		_txtTitle->setColor(Palette::blockOffset(8)+5);
 		_txtTitle->setBig();
+		_txtTitle->setWordWrap(true);
 		_txtTitle->setAlign(ALIGN_CENTER);
 		_txtTitle->setText(_game->getLanguage()->getString("STR_WE_CAN_NOW_RESEARCH"));
 	}
