@@ -656,6 +656,134 @@ void Surface::paletteRestore()
 	}
 }
 
+
+
+
+
+struct FramePart
+{
+	Uint8* const orgin;
+	//change postition of graphic
+	int off_x, off_y;
+	
+	//draw only pixel in that range
+	int begin_x, end_x;
+	int begin_y, end_y;
+	
+	const int pitch;
+	
+	inline FramePart(Surface* s): orgin((Uint8*) s->getSurface()->pixels), 
+					off_x(s->getX()), off_y(s->getY()),
+					begin_x(0), end_x(s->getWidth()),
+					begin_y(0), end_y(s->getHeight()),
+					pitch(s->getSurface()->pitch)
+	{
+		
+	}
+	inline FramePart(Surface* s, int x, int y): orgin((Uint8*) s->getSurface()->pixels), 
+					off_x(x), off_y(y),
+					begin_x(0), end_x(s->getWidth()),
+					begin_y(0), end_y(s->getHeight()),
+					pitch(s->getSurface()->pitch)
+	{
+		
+	}
+	inline FramePart(const FramePart& f): orgin(f.orgin), 
+					off_x(f.off_x), off_y(f.off_y),
+					begin_x(f.begin_x), end_x(f.end_x),
+					begin_y(f.begin_y), end_y(f.end_y),
+					pitch(f.pitch)
+	{
+		
+	}
+	
+	inline Uint8* getBegin() const
+	{
+		return orgin + ((begin_y)*pitch + begin_x);
+	}
+	inline int size_x() const
+	{
+		return end_x - begin_x;
+	}
+	inline int size_y() const
+	{
+		return end_y - begin_y;
+	}
+	
+	static inline void intersection(int& begin_a, int& end_a, int& begin_b, int& end_b, int offset)
+	{
+		int begin = begin_a + offset;
+		int end = end_a + offset;
+		if(begin > end_b || begin_b > end)
+		{			
+			//intersection is empty
+			end_a = begin_a;
+			end_b = begin_b;
+		}
+		else
+		{
+			begin = std::max(begin, begin_b); 
+			end = std::min(end, end_b);
+			begin_a = begin - offset;
+			end_a = end - offset; 
+			begin_b = begin;
+			end_b = end; 
+		}
+	}
+	static inline void intersection(FramePart& a, FramePart& b)
+	{
+		intersection(a.begin_x, a.end_x, b.begin_x, b.end_x, a.off_x - b.off_x);
+		intersection(a.begin_y, a.end_y, b.begin_y, b.end_y, a.off_y - b.off_y);
+	}
+};
+
+
+template<typename ColorFunc, typename ShadeArg1, typename ShadeArg2, typename ShadeArg3>
+void blit_draw(const FramePart& dest_frame, const FramePart& src_frame, ShadeArg1 arg1, ShadeArg2 arg2, ShadeArg3 arg3)
+{
+	FramePart dest = dest_frame;
+	FramePart src = src_frame;
+	FramePart::intersection(dest, src);
+	
+	int end_x = src.size_x();
+	int end_y = src.size_y();
+	
+	Uint8* src_start_pos = src.getBegin();
+	Uint8* dest_start_pos = dest.getBegin();
+	Uint8* src_curr;
+	Uint8* dest_curr;
+	for(int iy = 0; iy < end_y; ++iy, src_start_pos += src.pitch, dest_start_pos += dest.pitch)
+	{
+		src_curr = src_start_pos;
+		dest_curr = dest_start_pos;
+		for(int ix = 0; ix<end_x; ++ix, ++src_curr, ++dest_curr)
+		{
+			*dest_curr = ColorFunc::func(*dest_curr, *src_curr, arg1, arg2, arg3);
+		}
+	}
+}
+
+struct ShadeColor
+{
+	static inline Uint8 func(const Uint8& dest, const Uint8& src, int off, int, int)
+	{
+		if(src)
+		{
+			int newShade = (src&15) + off;
+			if (newShade > 15) 
+			{
+				// so dark it would flip over to another color - make it black instead
+				return 15;
+			}
+			else
+			{
+				return (src & (15<<4)) | newShade;
+			}
+		}
+		return dest;
+	}
+};
+
 /**
  * Specific blit function to blit battlescape terrain data in different shades in a fast way.
  * Notice there is no surface locking here - you have to make sure you lock the surface yourself
@@ -668,43 +796,13 @@ void Surface::paletteRestore()
  */
 void Surface::blitNShade(Surface *surface, int x, int y, int off, bool half)
 {
-	// get Width and Height only once
-	int w = getWidth();
-	int h = getHeight();
-	int dw = surface->getWidth();
-	int dh = surface->getHeight();
-
-	// get src and dest memory (so there's no need to use getPixel & setPixel)
-	Uint8* src = (Uint8*) getSurface()->pixels;
-	Uint8* dest = (Uint8*) surface->getSurface()->pixels;
-
-	int spitch = getSurface()->pitch;
-	int dpitch = surface->getSurface()->pitch;
+	FramePart dest(surface);
+	FramePart src(this, x, y);
+	if(half)
+		src.begin_x = src.end_x/2;
 	
-	const int start_x = std::max((half)? w/2 : 0, -x);
-	const int start_y = std::max(0, -y);
-	const int end_x = std::min( w, dw - x);
-	const int end_y = std::min( h, dh - y);
-	
-	int dest_y = (y + start_y) * dpitch + x;
-	int src_y = start_y * spitch;
-	for(int iy = start_y; iy < end_y; ++iy, dest_y += dpitch, src_y += spitch)
-		for(int ix = start_x; ix<end_x; ++ix)
-		{
-			int pixel = src[src_y + ix];
-			if(pixel)
-			{
-				int baseColor = pixel>>4;
-				int newShade = (pixel&15) + off;
-				if (newShade > 15) 
-				{
-					// so dark it would flip over to another color - make it black instead
-					baseColor = 0;
-					newShade = 15;
-				}
-				dest[dest_y + ix] = (baseColor<<4) | newShade;
-			}
-		}
+	blit_draw<ShadeColor>(dest, src, off, 0, 0);
 }
+
 
 }
