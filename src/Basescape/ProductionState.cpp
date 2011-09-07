@@ -247,7 +247,7 @@ void ProductionState::lessUnitPress(Action * action)
 
 void ProductionState::lessUnitRelease(Action * action)
 {
-	_timerMoreUnit->stop();
+	_timerLessUnit->stop();
 }
 
 void ProductionState::onMoreEngineer(Action * action)
