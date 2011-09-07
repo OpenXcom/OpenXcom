@@ -64,6 +64,10 @@ Base::~Base()
 	{
 		delete *i;
 	}
+	for (std::vector<Production *>::iterator i = _productions.begin (); i != _productions.end (); ++i)
+	{
+		delete *i;
+	}
 	delete _items;
 }
 
