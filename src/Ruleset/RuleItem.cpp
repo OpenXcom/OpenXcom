@@ -20,6 +20,7 @@
 #include "RuleInventory.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Surface.h"
+#include "RuleManufactureInfo.h"
 
 namespace OpenXcom
 {
@@ -40,7 +41,10 @@ RuleItem::RuleItem(std::string type) : _type(type), _size(0.0), _cost(0), _time(
  */
 RuleItem::~RuleItem()
 {
-	delete(_manufactureInfo);
+	if (_manufactureInfo)
+	{
+		delete(_manufactureInfo);
+	}
 }
 
 /**
