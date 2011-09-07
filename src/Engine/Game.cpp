@@ -322,6 +322,7 @@ void Game::loadLanguage(const std::string &filename)
 	Surface *sidebar = new Surface(64, 154);
 	if (CrossPlatform::getDataFile(ss2.str()) != "")
 	{
+		sidebar->setPalette(_res->getSurface("GEOBORD.SCR")->getPalette());
 		sidebar->loadScr(CrossPlatform::getDataFile(ss2.str()));
 	}
 	sidebar->setX(256);
