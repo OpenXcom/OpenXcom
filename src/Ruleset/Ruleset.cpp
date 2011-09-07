@@ -31,6 +31,7 @@
 #include "RuleAlien.h"
 #include "ArticleDefinition.h"
 #include "RuleInventory.h"
+#include "RuleResearchProject.h"
 
 namespace OpenXcom
 {
@@ -103,6 +104,10 @@ Ruleset::~Ruleset()
 	for (std::map<std::string, RuleInventory*>::iterator i = _invs.begin(); i != _invs.end(); ++i)
 	{
 		delete i->second;
+	}
+	for(std::vector<RuleResearchProject *>::const_iterator i = _researchProjects.begin (); i != _researchProjects.end (); ++i)
+	{
+		delete *i;
 	}
 }
 

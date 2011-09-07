@@ -65,6 +65,10 @@ Base::~Base()
 		delete *i;
 	}
 	delete _items;
+	for (std::vector<ResearchProject*>::iterator i = _baseResearchs.begin(); i != _baseResearchs.end(); ++i)
+	{
+		delete *i;
+	}
 }
 
 /**
