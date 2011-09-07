@@ -52,7 +52,7 @@ ListPossibleProductionState::ListPossibleProductionState(Game *game, Base *base,
 	_txtCategory = new Text (5 * button_x_border, button_height, start_x + 17 * button_x_border, start_y + 3 * button_y_border);
 	_lstManufacture = new TextList(width - 4 * button_x_border, height - 3.1f * button_height - 2 * button_y_border, start_x + button_x_border, start_y + 2.5f * button_height);
 
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(1)), Palette::backPos, 16);
+	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
 
 	add(_window);
 	add(_btnOk);

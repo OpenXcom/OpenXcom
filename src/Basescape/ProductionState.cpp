@@ -71,7 +71,7 @@ void ProductionState::buildUi()
 	_btnUnitDown = new ArrowButton (ARROW_BIG_DOWN, 1.5f*button_x_border, button_height, width - 4*button_x_border, start_y + 7.5f * button_height);
 	_txtAllocated = new Text(button_width, 2*button_height, width - button_width - 5*button_x_border, start_y + 4 * button_height);
 	_txtTodo = new Text(button_width, 2*button_height, width - 5*button_x_border, start_y + 4 * button_height);
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(1)), Palette::backPos, 16);
+	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
 	
 	add(_window);
 	add(_txtTitle);
