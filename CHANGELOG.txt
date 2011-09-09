@@ -1,0 +1,136 @@
+Version 0.4 (??-??-????)
+-------------------------
+New features:
+- ?
+
+Bugfixes:
+- Two duplicating ammo bugs.
+- Wrong rocket launcher hand sprite.
+- "Not enough time units" during alien turn.
+- Bug where alien weapons are given to the soldiers.
+- Target mode is canceled when switching unit.
+- Reserve time unit button is reset when starting new turn.
+- Minor drawing glitch visible when walking down the skyranger ramp.
+- Geoscape sidebar didn't show up on first start on some languages.
+- Bug with line of sight inside UFOs along diagonal walls.
+- Bug with pathfinding inside UFOs along diagonal walls.
+- Aliens not black when in undiscoverd terrain.
+- Issue with turn and shoot.
+- Too many reaction fires from autoshot (each shot had a chance of a reaction shot which is wrong).
+- Unit selection arrow showed up during alien turn.
+- Double sliding door didn't open when walking diagonally.
+- Energy usage not calculated correctly.
+- Missing text in Monthly Report.
+
+Version 0.3 (01-09-2011)
+-------------------------
+New features:
+- Basescape: 
+-- Craft rearming.
+-- Craft equipping.
+-- Purchase/Recruit.
+-- Sell/Sack.
+-- Base transfers.
+- Battlescape: 
+-- Battle turns.
+-- Item equipping, firing, throwing.
+-- Environment: fire, smoke, explosions, damage, kills.
+-- Unit stats.
+-- Inventory.
+-- AI Phase 1 (patrol, aggro).
+- New languages: Czech, English (UK), Polish, Romanian, Russian.
+- Support for custom font characters and full Unicode.
+- Options.
+- Platform-specific folders.
+- Partial Ufopaedia.
+- Externalized soldier names.
+- Nag screen only shows once.
+- Swapped F5 and F12 keys.
+- Movable caret in text input.
+- Stores column in Purchase screen.
+
+Bugfixes:
+- Bug in Geoscape pathfinding.
+- Incorrect language names.
+- Cross-platform bug when loading PCK files.
+- Invisible loading errors.
+- Incorrect mouse events.
+- Missing strings.
+- Various UI issues.
+- Various translation issues.
+- Bug in craft rearming.
+- FPS Counter didn’t always show up properly.
+- Crash sites didn’t vanish properly.
+- Failing to load a game could crash the Geoscape.
+- Games weren’t always saved properly.
+- Monthly report didn’t show correct date.
+- Crafts in base view weren’t positioned correctly.
+- Music loading issues.
+- Various battlescape fixes.
+- Various performance improvements.
+
+Version 0.2 (28-01-2011)
+-------------------------
+New features:
+- Battlescape! 
+-- Crash site missions.
+-- Map generation.
+-- Pathfinding.
+-- Alien placement.
+-- Basic lighting.
+-- Basic fog of war.
+- New language format (with Spanish and Italian languages).
+- Crude Unicode support.
+- Windows installer for all your lazy needs!
+- Load/save infinite games.
+- Screenshot, FPS Counter and Fullscreen keys.
+- Any-resolution scaling.
+- Support for DOS music.
+- Being able to remove bases (Access Lift).
+- Friendly start reminder.
+
+Bugfixes:
+- Bug in cursor rendering.
+- Removed unused strings and trademarked game names.
+- Craft maintenance bugs.
+- Bug in text list alignment.
+- Bug in bar rendering.
+- Crash when a UFO intercepted by multiple craft was destroyed.
+- Incorrect text in some screens.
+- Some localized strings didn't fit on screen.
+- Palette bugs.
+- Various memory leaks.
+- Being able to click on globe through windows.
+- Bugs with multiple-target display.
+- Various fixes to globe rendering.
+- Big in text word-wrapping.
+- Reorganized country/region data.
+- Added OK button to Base Name window for people having trouble with Enter key.
+- Removed preloading of every language (only one language is used at once, what was I thinking!).
+- Bug in pixel blitting.
+- Improved error handling.
+- Probably many other minor fixes.
+
+Version 0.1 (17-11-2010)
+-------------------------
+First release!
+- Geoscape:
+-- Fully-controllable globe.
+-- Globe details like country borders and names.
+-- Day/night effect.
+-- Initial base placement.
+-- Basic UFO spawning and detection.
+-- Craft interception with fuel consumption and basic dogfights.
+-- Craft repairing/refuelling/rearming.
+-- Funding overview.
+-- Monthly funding.
+-- Scroll-wheel support.
+- Basescape:
+-- Full base view with facilities.
+-- Building new bases with access lift placement.
+-- Base information.
+-- Base stores.
+-- Soldier stats (with randomly generated soldiers).
+-- Craft info and equipping.
+-- Facility building/removal.
+-- Scroll-wheel support.
