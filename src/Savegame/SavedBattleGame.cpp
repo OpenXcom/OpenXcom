@@ -620,8 +620,7 @@ void SavedBattleGame::endTurn()
 		{
 			(*i)->prepareNewTurn();
 		}
-		_terrainModifier->calculateFOVTerrain(*i);
-		_terrainModifier->calculateFOVUnits(*i);
+		_terrainModifier->calculateFOV(*i);
 	}
 
 	_selectedUnit = 0;

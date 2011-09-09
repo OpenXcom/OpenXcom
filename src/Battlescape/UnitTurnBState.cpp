@@ -89,8 +89,7 @@ void UnitTurnBState::think()
 	if (_unit->spendTimeUnits(tu, _parent->getGame()->getSavedGame()->getBattleGame()->getDebugMode()))
 	{
 		_unit->turn();
-		_parent->getGame()->getSavedGame()->getBattleGame()->getTerrainModifier()->calculateFOVTerrain(_unit);
-		_parent->getGame()->getSavedGame()->getBattleGame()->getTerrainModifier()->calculateFOVUnits(_unit);
+		_parent->getGame()->getSavedGame()->getBattleGame()->getTerrainModifier()->calculateFOV(_unit);
 		_parent->getMap()->cacheUnit(_unit);
 		if (_unit->getStatus() == STATUS_STANDING)
 		{
