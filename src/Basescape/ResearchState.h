@@ -55,6 +55,7 @@ public:
 	void onSelectProject(Action *action);
 	void fillProjectList();
 	void setPaletteToRestore(const std::string & palette);
+	void init ();
 };
 
 }

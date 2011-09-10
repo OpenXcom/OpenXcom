@@ -60,12 +60,12 @@ int getFreeScientist (Base * base)
 	return freeScientist;
 }
 
-ResearchProjectState::ResearchProjectState(Game *game, Base *base, RuleResearchProject * rule, ResearchState * researchState, NewResearchListState * newResearchListState) : State(game), _base(base), _project(new ResearchProject(rule, rule->getCost() * OpenXcom::RNG::generate(0.5f, 1.5f))), _rule(rule), _researchState(researchState), _newResearchListState(newResearchListState)
+ResearchProjectState::ResearchProjectState(Game *game, Base *base, RuleResearchProject * rule) : State(game), _base(base), _project(new ResearchProject(rule, rule->getCost() * OpenXcom::RNG::generate(0.5f, 1.5f))), _rule(rule)
 {
 	buildUi ();
 }
 
-ResearchProjectState::ResearchProjectState(Game *game, Base *base, ResearchProject * project, ResearchState * researchState, NewResearchListState * newResearchListState) : State(game), _base(base), _project(project), _rule(0), _researchState(researchState), _newResearchListState(newResearchListState)
+ResearchProjectState::ResearchProjectState(Game *game, Base *base, ResearchProject * project) : State(game), _base(base), _project(project), _rule(0)
 {
 	buildUi ();
 }
@@ -164,11 +164,6 @@ void ResearchProjectState::buildUi ()
 
 void ResearchProjectState::btnOkClick(Action *action)
 {
-	if (_rule)
-	{
-		_newResearchListState->fillProjectList ();
-	}
-	_researchState->fillProjectList();
 	_game->popState();
 }
 

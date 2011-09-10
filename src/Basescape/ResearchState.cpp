@@ -139,13 +139,18 @@ void ResearchState::btnOkClick(Action *action)
 
 void ResearchState::btnNewClick(Action *action)
 {
-	_game->pushState(new NewResearchListState(_game, _base, (ResearchState*)(this)));
+	_game->pushState(new NewResearchListState(_game, _base));
 }
 
 void ResearchState::onSelectProject(Action *action)
 {
 	const std::vector<ResearchProject *> & baseProjects(_base->getResearch());
-	_game->pushState(new ResearchProjectState(_game, _base, baseProjects[_lstResearch->getSelectedRow()], this, NULL));
+	_game->pushState(new ResearchProjectState(_game, _base, baseProjects[_lstResearch->getSelectedRow()]));
+}
+
+void ResearchState::init()
+{
+	fillProjectList();
 }
 
 extern int getFreeLabSpace (Base * base);

@@ -47,8 +47,6 @@ private:
 	Window *_window;
 	Text *_txtTitle, *_txtAvailableScientist, *_txtAvailableSpace, *_txtAssigned, *_txtMore, *_txtLess, * _txtAssignedValue;
 	TextList *_lstResearch;
-	ResearchState * _researchState;
-	NewResearchListState * _newResearchListState;
 	std::vector<Text*> texts_;
 	void SetAssignedScientist();
 	ResearchProject * _project;
@@ -57,8 +55,8 @@ private:
 	Timer *_timerMore, *_timerLess;
 public:
 	/// Creates the Research state.
-	ResearchProjectState(Game *game, Base *base, RuleResearchProject * rule, ResearchState * researchState, NewResearchListState * newResearchListState);
-	ResearchProjectState(Game *game, Base *base, ResearchProject * project, ResearchState * researchState, NewResearchListState * newResearchListState);
+	ResearchProjectState(Game *game, Base *base, RuleResearchProject * rule);
+	ResearchProjectState(Game *game, Base *base, ResearchProject * project);
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
 	void btnMoreClick(Action *action);

@@ -44,12 +44,12 @@ private:
 	TextList *_lstResearch;
 	void onSelectProject(Action *action);
 	std::vector<RuleResearchProject *> _projects;
-	ResearchState * _researchState;
 public:
 	/// Creates the Research state.
-	NewResearchListState(Game *game, Base *base, ResearchState * researchState);
+	NewResearchListState(Game *game, Base *base);
 	void btnCancelClick(Action *action);
 	void fillProjectList ();
+	void init();
 };
 }
 
