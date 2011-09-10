@@ -30,91 +30,10 @@
 #include "ResearchProjectState.h"
 #include "../Ruleset/RuleResearchProject.h"
 #include "../Ruleset/Ruleset.h"
-#include "../Savegame/ResearchProject.h"
-#include "../Savegame/ItemContainer.h"
-
 #include <algorithm>
 
 namespace OpenXcom
 {
-
-struct findRuleResearchProject : public std::unary_function<ResearchProject *,
-							    bool>
-{
-	RuleResearchProject * _toFind;
-	findRuleResearchProject(RuleResearchProject * toFind);
-	bool operator()(ResearchProject *r) const;
-};
-
-findRuleResearchProject::findRuleResearchProject(RuleResearchProject * toFind) : _toFind(toFind)
-{
-}
-
-bool findRuleResearchProject::operator()(ResearchProject *r) const
-{
-	return _toFind == r->getRuleResearchProject();
-}
-
-/**
-   Check wether a ResearchProject is available.
-*/
-bool isResearchAvailable (RuleResearchProject * r, Game * game, const std::vector<const RuleResearchProject *> & unlockeds)
-{
-	std::vector<RuleResearchProject *>::const_iterator iter = r->getDependencys().begin ();
-	const std::vector<const RuleResearchProject *> & discovereds(game->getSavedGame()->getDiscoveredResearchs());
-	if(std::find(unlockeds.begin (), unlockeds.end (),
-		     r) != unlockeds.end ())
-	  return true;
-	while (iter != r->getDependencys().end ())
-	{
-		std::vector<const RuleResearchProject *>::const_iterator itDiscovered = std::find(discovereds.begin (), discovereds.end (), *iter);
-		if (itDiscovered == discovereds.end ())
-			return false;
-		iter++;
-	}
-
-	return true;
-}
-
-/**
-   Get the list of available ResearchProject for a Base.
-*/
-void getAvailableResearchProjects (std::vector<RuleResearchProject *> & projects, Game * game, Base * base)
-{
-	const std::vector<const RuleResearchProject *> & discovereds(game->getSavedGame()->getDiscoveredResearchs());
-	const std::map<std::string, RuleResearchProject *> & researchProjects = game->getRuleset()->getResearchProjects();
-	const std::vector<ResearchProject *> & baseResearchProjects = base->getResearch();
-	std::vector<const RuleResearchProject *> unlockeds;
-	for(std::vector<const RuleResearchProject *>::const_iterator it = discovereds.begin (); it != discovereds.end (); ++it)
-	{
-		for(std::vector<RuleResearchProject *>::const_iterator itUnlocked = (*it)->getUnlocked ().begin (); itUnlocked != (*it)->getUnlocked ().end (); ++itUnlocked)
-		{
-			unlockeds.push_back(*itUnlocked);
-		}
-	}
-	for(std::map<std::string, RuleResearchProject *>::const_iterator iter = researchProjects.begin (); iter != researchProjects.end (); ++iter)
-	{
-		if (!isResearchAvailable(iter->second, game, unlockeds))
-		{
-			continue;
-		}
-		std::vector<const RuleResearchProject *>::const_iterator itDiscovered = std::find(discovereds.begin (), discovereds.end (), iter->second);
-		if (itDiscovered != discovereds.end ())
-		{
-			continue;
-		}
-		if (std::find_if (baseResearchProjects.begin(), baseResearchProjects.end (), findRuleResearchProject(iter->second)) != baseResearchProjects.end ())
-		{
-			continue;
-		}
-		if (iter->second->needItem() && base->getItems()->getItem(iter->second->getName ()) == 0)
-		{
-			continue;
-		}
-		projects.push_back (iter->second);
-	}
-}
-
 NewResearchListState::NewResearchListState(Game *game, Base *base) : State(game), _base(base)
 {
 	int width = 220;
@@ -183,7 +102,7 @@ void NewResearchListState::fillProjectList ()
 {
 	_projects.clear();
 	_lstResearch->clearList();
-	getAvailableResearchProjects(_projects, _game, _base);
+	_game->getSavedGame()->getAvailableResearchProjects(_projects, _game->getRuleset() , _base);
 	for (std::vector<RuleResearchProject *>::iterator it = _projects.begin (); it != _projects.end (); ++it)
 	{
 		_lstResearch->addRow(1, _game->getLanguage()->getString((*it)->getName ()).c_str());

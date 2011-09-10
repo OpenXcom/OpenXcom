@@ -28,26 +28,10 @@
 #include "NewPossibleResearchState.h"
 #include "../Ufopaedia/Ufopaedia.h"
 #include <algorithm>
+#include "../Savegame/SavedGame.h"
 
 namespace OpenXcom
 {
-extern void getAvailableResearchProjects (std::vector<RuleResearchProject *> & projects, Game * game, Base * base);
-/**
-   Get the list of newly available research projects.
-*/
-void getDependableResearch (std::vector<RuleResearchProject *> & dependables, const RuleResearchProject *research, Game * game, Base * base)
-{
-	std::vector<RuleResearchProject *> possibleProjects;
-	getAvailableResearchProjects(possibleProjects, game, base);
-	for(std::vector<RuleResearchProject *>::iterator iter = possibleProjects.begin (); iter != possibleProjects.end (); ++iter)
-	{
-		if (std::find((*iter)->getDependencys().begin (), (*iter)->getDependencys().end (), research) != (*iter)->getDependencys().end ())
-		{
-			dependables.push_back(*iter);
-		}
-	}
-}
-
 EndResearchState::EndResearchState(Game * game, Base * base, const RuleResearchProject * research) : State (game), _base(base), _research(research)
 {
 	_screen = false;
@@ -86,7 +70,7 @@ EndResearchState::EndResearchState(Game * game, Base * base, const RuleResearchP
 void EndResearchState::btnOkClick(Action *action)
 {
 	std::vector<RuleResearchProject *> newPossibleResearch;
-	getDependableResearch (newPossibleResearch, _research, _game, _base);
+	_game->getSavedGame()->getDependableResearch (newPossibleResearch, _research, _game->getRuleset(), _base);
 	_game->pushState (new NewPossibleResearchState(_game, _base, newPossibleResearch));
 }
 
