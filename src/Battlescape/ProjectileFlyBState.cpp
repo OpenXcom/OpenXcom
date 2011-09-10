@@ -41,7 +41,7 @@ namespace OpenXcom
 /**
  * Sets up an ProjectileFlyBState.
  */
-ProjectileFlyBState::ProjectileFlyBState(BattlescapeState *parent, BattleAction action) : BattleState(parent), _unit(0), _ammo(0), _action(action), _projectileImpact(0)
+ProjectileFlyBState::ProjectileFlyBState(BattlescapeState *parent, BattleAction action) : BattleState(parent), _unit(0), _ammo(0), _action(action), _projectileImpact(0), _initialized(false)
 {
 
 }
@@ -56,16 +56,25 @@ ProjectileFlyBState::~ProjectileFlyBState()
 
 /**
  * init sequence:
- * - create a projectile sprite & add it to the map
- * - calculate it's trajectory
+ * - check if shot is valid
+ * - calculate base accuracy
  */
 void ProjectileFlyBState::init()
 {
-	int baseAcc;
-	BattleItem *weapon = _action.weapon;
-	BattleItem *projectileItem = 0;
+	if (_initialized) return;
+	_initialized = true;
 
-	_parent->setStateInterval(Options::getInt("battleFireSpeed"));
+	BattleItem *weapon = _action.weapon;
+	_projectileItem = 0;
+	_autoshotCounter = 0;
+
+	if (_action.actor->getTimeUnits() < _action.TU)
+	{
+		_result = "STR_NOT_ENOUGH_TIME_UNITS";
+		_parent->popState();
+		return;
+	}
+
 	_unit = _action.actor;
 	_ammo = weapon->getAmmoItem();
 	if (_unit->isOut())
@@ -93,15 +102,13 @@ void ProjectileFlyBState::init()
 	switch (_action.type)
 	{
 	case BA_AUTOSHOT:
-		baseAcc = weapon->getRules()->getAccuracyAuto();
-		//_parent->setStateInterval(DEFAULT_BULLET_SPEED/2); // a little faster
+		_baseAcc = weapon->getRules()->getAccuracyAuto();
 		break;
 	case BA_SNAPSHOT:
-		baseAcc = weapon->getRules()->getAccuracySnap();
+		_baseAcc = weapon->getRules()->getAccuracySnap();
 		break;
 	case BA_AIMEDSHOT:
-		baseAcc = weapon->getRules()->getAccuracyAimed();
-		//_parent->setStateInterval(DEFAULT_BULLET_SPEED*1.5); // a little slower
+		_baseAcc = weapon->getRules()->getAccuracyAimed();
 		break;
 	case BA_THROW:
 		if (!validThrowRange())
@@ -111,30 +118,52 @@ void ProjectileFlyBState::init()
 			_parent->popState();
 			return;
 		}
-		baseAcc = (int)(_unit->getThrowingAccuracy()*100.0);
-		projectileItem = weapon;
+		_baseAcc = (int)(_unit->getThrowingAccuracy()*100.0);
+		_projectileItem = weapon;
 		break;
     default:
-        baseAcc = 0;
+        _baseAcc = 0;
 	}
 
+	createNewProjectile();
+
+	BattleAction action;
+	BattleUnit *potentialVictim = _parent->getGame()->getSavedGame()->getBattleGame()->getTile(_action.target)->getUnit();
+	if (potentialVictim)
+	{
+		if (_parent->getGame()->getSavedGame()->getBattleGame()->getTerrainModifier()->checkReactionFire(_unit, &action, potentialVictim, false))
+		{
+			_parent->statePushBack(new ProjectileFlyBState(_parent, action));
+		}
+	}
+}
+
+/**
+ * - create a projectile sprite & add it to the map
+ * - calculate it's trajectory
+ */
+void ProjectileFlyBState::createNewProjectile()
+{
 	// create a new projectile
 	Projectile *projectile = new Projectile(_parent->getGame()->getResourcePack(),
 									_parent->getGame()->getSavedGame()->getBattleGame(),
 									_unit->getPosition(),
 									_action.target,
-									weapon->getRules()->getBulletSprite(),
-									projectileItem
+									_action.weapon->getRules()->getBulletSprite(),
+									_projectileItem
 									);
+	_autoshotCounter++;
 	// add the projectile on the map
 	_parent->getMap()->setProjectile(projectile);
+	_parent->setStateInterval(Options::getInt("battleFireSpeed"));
+
 	// let it calculate a trajectory
 	_projectileImpact = -1;
 	if (_action.type == BA_THROW)
 	{
-		if (projectile->calculateThrow(baseAcc))
+		if (projectile->calculateThrow(_baseAcc))
 		{
-			projectileItem->moveToOwner(0);
+			_projectileItem->moveToOwner(0);
 			_unit->setCache(0);
 			_parent->getMap()->cacheUnit(_unit);
 			_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(39)->play();
@@ -151,18 +180,18 @@ void ProjectileFlyBState::init()
 	}
 	else
 	{
-		_projectileImpact = projectile->calculateTrajectory(_unit->getFiringAccuracy(baseAcc));
+		_projectileImpact = projectile->calculateTrajectory(_unit->getFiringAccuracy(_baseAcc));
 		if (_projectileImpact != -1)
 		{
 				// set the soldier in an aiming position
 				_unit->aim(true);
 				_parent->getMap()->cacheUnit(_unit);
 				// and we have a lift-off
-				_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(weapon->getRules()->getFireSound())->play();
+				_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(_action.weapon->getRules()->getFireSound())->play();
 				if (!_parent->getGame()->getSavedGame()->getBattleGame()->getDebugMode() && _ammo->spendBullet() == false)
 				{
 					_parent->getGame()->getSavedGame()->getBattleGame()->removeItem(_ammo);
-					weapon->setAmmoItem(0);
+					_action.weapon->setAmmoItem(0);
 				}
 		}
 		else
@@ -175,16 +204,6 @@ void ProjectileFlyBState::init()
 			return;
 		}
 	}
-
-	BattleAction action;
-	BattleUnit *potentialVictim = _parent->getGame()->getSavedGame()->getBattleGame()->getTile(_action.target)->getUnit();
-	if (potentialVictim)
-	{
-		if (_parent->getGame()->getSavedGame()->getBattleGame()->getTerrainModifier()->checkReactionFire(_unit, &action, potentialVictim, false))
-		{
-			_parent->statePushBack(new ProjectileFlyBState(_parent, action));
-		}
-	}
 }
 
 /**
@@ -194,59 +213,71 @@ void ProjectileFlyBState::init()
  */
 void ProjectileFlyBState::think()
 {
-	if(!_parent->getMap()->getProjectile()->move())
+	if (_parent->getMap()->getProjectile() == 0)
 	{
-		// impact !
-		if (_action.type == BA_THROW)
+		if (_action.type == BA_AUTOSHOT && _autoshotCounter < 3)
 		{
-			Position pos = _parent->getMap()->getProjectile()->getPosition(-1);
-			pos.x /= 16;
-			pos.y /= 16;
-			pos.z /= 24;
-			BattleItem *item = _parent->getMap()->getProjectile()->getItem();
-			_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(38)->play();
-
-			if (Options::getBool("battleAltGrenade") && item->getRules()->getBattleType() == BT_GRENADE && item->getExplodeTurn() > 0 &&
-				item->getExplodeTurn() <= _parent->getGame()->getSavedGame()->getBattleGame()->getTurn())
-			{
-				// it's a hot grenade to explode immediatly
-				_parent->statePushNext(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(-1), item, _action.actor));
-			}
-			else
-			{
-				_parent->getGame()->getSavedGame()->getBattleGame()->getTerrainModifier()->spawnItem(pos, item);
-			}
+			createNewProjectile();
 		}
 		else
 		{
-			if (_projectileImpact != 5) // out of map
+			_parent->popState();
+		}
+	}
+	else
+	{
+		if(!_parent->getMap()->getProjectile()->move())
+		{
+			// impact !
+			if (_action.type == BA_THROW)
 			{
-				int offset = 0;
-				// explosions impact not inside the voxel but one step back
-				if (_ammo && (
-					_ammo->getRules()->getDamageType() == DT_HE ||
-					_ammo->getRules()->getDamageType() == DT_IN))
+				Position pos = _parent->getMap()->getProjectile()->getPosition(-1);
+				pos.x /= 16;
+				pos.y /= 16;
+				pos.z /= 24;
+				BattleItem *item = _parent->getMap()->getProjectile()->getItem();
+				_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(38)->play();
+
+				if (Options::getBool("battleAltGrenade") && item->getRules()->getBattleType() == BT_GRENADE && item->getExplodeTurn() > 0 &&
+					item->getExplodeTurn() <= _parent->getGame()->getSavedGame()->getBattleGame()->getTurn())
 				{
-					offset = -1;
+					// it's a hot grenade to explode immediatly
+					_parent->statePushFront(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(-1), item, _action.actor));
 				}
-				_parent->statePushNext(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(offset), _ammo, _action.actor));
+				else
+				{
+					_parent->getGame()->getSavedGame()->getBattleGame()->getTerrainModifier()->spawnItem(pos, item);
+				}
 			}
 			else
 			{
-				_unit->aim(false);
-				_parent->getMap()->cacheUnits();
-				if (_parent->getMap()->didCameraFollow())
+				if (_projectileImpact != 5) // out of map
 				{
-					_parent->getMap()->centerOnPosition(_unit->getPosition());
+					int offset = 0;
+					// explosions impact not inside the voxel but one step back
+					if (_ammo && (
+						_ammo->getRules()->getDamageType() == DT_HE ||
+						_ammo->getRules()->getDamageType() == DT_IN))
+					{
+						offset = -1;
+					}
+					_parent->statePushFront(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(offset), _ammo, _action.actor));
+				}
+				else
+				{
+					_unit->aim(false);
+					_parent->getMap()->cacheUnits();
+					if (_parent->getMap()->didCameraFollow() && _parent->getGame()->getSavedGame()->getBattleGame()->getSide() == FACTION_PLAYER)
+					{
+						_parent->getMap()->centerOnPosition(_parent->getGame()->getSavedGame()->getBattleGame()->getSelectedUnit()->getPosition());
+					}
 				}
 			}
+
+			delete _parent->getMap()->getProjectile();
+			_parent->getMap()->setProjectile(0);
 		}
-
-		delete _parent->getMap()->getProjectile();
-		_parent->getMap()->setProjectile(0);
-		_parent->popState();
 	}
-
 }
 
 /*

@@ -99,7 +99,7 @@ void AggroBAIState::think(BattleAction *action)
 	else
 	{
 		// from time to time, don't shoot him, but just move a bit around
-		if (RNG::generate(1,6) == 1)
+		if (RNG::generate(1,10) == 1)
 		{
 			action->type = BA_WALK;
 			action->target = _unit->getPosition();

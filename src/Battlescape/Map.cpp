@@ -277,6 +277,7 @@ void Map::drawTerrain(Surface *surface)
 					}
 					else
 					{
+						tileShade = 15;
 						unit = 0;
 					}
 
@@ -349,7 +350,7 @@ void Map::drawTerrain(Surface *surface)
 							}
 						}
 						// Draw object
-						if (tile->isDiscovered(2))
+						if (tile->isDiscovered(2) || (tile->getMapData(MapData::O_OBJECT) && tile->getMapData(MapData::O_OBJECT)->isBigWall() && (tile->isDiscovered(0) || tile->isDiscovered(1))))
 						{
 							tmpSurface = tile->getSprite(MapData::O_OBJECT);
 							if (tmpSurface)
@@ -446,7 +447,7 @@ void Map::drawTerrain(Surface *surface)
 							Position offset;
 							calculateWalkingOffset(unit, &offset);
 							tmpSurface->blitNShade(surface, screenPosition.x + offset.x, screenPosition.y + offset.y, tileShade);
-							if (unit == (BattleUnit*)_save->getSelectedUnit() && _cursorType != CT_NONE)
+							if (unit == (BattleUnit*)_save->getSelectedUnit() && _save->getSide() == FACTION_PLAYER)
 							{
 								_arrow->blitNShade(surface, screenPosition.x + offset.x + (_spriteWidth / 2) - (_arrow->getWidth() / 2), screenPosition.y + offset.y - _arrow->getHeight() + _animFrame, 0);
 							}
@@ -472,7 +473,7 @@ void Map::drawTerrain(Surface *surface)
 								calculateWalkingOffset(tunit, &offset);
 								offset.y += 24;
 								tmpSurface->blitNShade(surface, screenPosition.x + offset.x, screenPosition.y + offset.y, tileShade);
-								if (tunit == (BattleUnit*)_save->getSelectedUnit() && _cursorType != CT_NONE)
+								if (tunit == (BattleUnit*)_save->getSelectedUnit() && _save->getSide() == FACTION_PLAYER)
 								{
 									_arrow->blitNShade(surface, screenPosition.x + offset.x + (_spriteWidth / 2) - (_arrow->getWidth() / 2), screenPosition.y + offset.y - _arrow->getHeight() + _animFrame, 0);
 								}

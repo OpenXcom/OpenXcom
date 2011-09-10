@@ -698,7 +698,7 @@ bool BattleUnit::spendTimeUnits(int tu, bool debugmode)
 bool BattleUnit::spendEnergy(int tu, bool debugmode)
 {
 	if (debugmode) return true;
-	int eu = tu / 3;
+	int eu = tu / 2;
 
 	if (eu <= _energy)
 	{
@@ -853,7 +853,7 @@ void BattleUnit::prepareNewTurn()
 
 	// recover energy
 	int ENRecovery = _unit->getTimeUnits() / 3;
-	// Each fatal wound to the body reduces the soldier's energy by 10%.
+	// Each fatal wound to the body reduces the soldier's energy recovery by 10%.
 	ENRecovery -= (_energy * (_fatalWounds[BODYPART_TORSO] * 10))/100;
 	_energy += ENRecovery;
 	if (_energy > _unit->getStamina())

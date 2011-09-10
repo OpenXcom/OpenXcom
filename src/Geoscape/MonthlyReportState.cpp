@@ -101,14 +101,14 @@ MonthlyReportState::MonthlyReportState(Game *game) : State(game)
 	_txtMonth->setText(ss.str());
 
 	std::wstringstream ss2;
-	ss << _game->getLanguage()->getString("STR_MONTHLY_RATING") << L'\x01' << 0;
+	ss2 << _game->getLanguage()->getString("STR_MONTHLY_RATING") << L'\x01' << 0;
 
 	_txtRating->setColor(Palette::blockOffset(15)-1);
 	_txtRating->setSecondaryColor(Palette::blockOffset(8)+10);
 	_txtRating->setText(ss2.str());
 
 	std::wstringstream ss3;
-	ss << _game->getLanguage()->getString("STR_FUNDING_CHANGE") << L'\x01' << 0;
+	ss3 << _game->getLanguage()->getString("STR_FUNDING_CHANGE") << L'\x01' << 0;
 
 	_txtChange->setColor(Palette::blockOffset(15)-1);
 	_txtChange->setSecondaryColor(Palette::blockOffset(8)+10);
