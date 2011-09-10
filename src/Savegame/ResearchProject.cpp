@@ -24,7 +24,7 @@
 namespace OpenXcom
 {
 
-ResearchProject::ResearchProject(RuleResearchProject * p, int c) : _project(p), _spent(0), _assigned(0), _cost(c)
+ResearchProject::ResearchProject(RuleResearchProject * p, int c) : _project(p), _assigned(0), _spent(0), _cost(c)
 {
 }
 
