@@ -41,16 +41,6 @@
 
 namespace OpenXcom
 {
-
-findRuleResearchProjectByString::findRuleResearchProjectByString(const std::string & toFind) : _toFind(toFind)
-{
-}
-
-bool findRuleResearchProjectByString::operator()(RuleResearchProject *r) const
-{
-	return _toFind == r->getName();
-}
-
 /**
  * Initializes a brand new saved game according to the specified difficulty.
  * @param difficulty Game difficulty.
@@ -235,15 +225,15 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 
 	if (const YAML::Node *pName = doc.FindValue("found"))
 	{
-		const std::vector<RuleResearchProject *> & researchs(rule->getResearchProjects ());
+		const std::map<std::string, RuleResearchProject *> & researchs(rule->getResearchProjects ());
 		for(YAML::Iterator it=pName->begin();it!=pName->end();++it)
 		{
 			std::string research;
 			*it >> research;
-			std::vector<RuleResearchProject *>::const_iterator itResearch = std::find_if(researchs.begin (), researchs.end (), findRuleResearchProjectByString(research));
+			std::map<std::string, RuleResearchProject *>::const_iterator itResearch = researchs.find(research);
 			if (itResearch != researchs.end ())
 			{
-				_discovereds.push_back(*itResearch);
+				_discovereds.push_back(itResearch->second);
 			}
 		}
 	}

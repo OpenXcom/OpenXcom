@@ -179,15 +179,15 @@ void Base::load(const YAML::Node &node, SavedGame *save)
 	}
 
 	size = node["research"].size();
-	const std::vector<RuleResearchProject *> & researchs(_rule->getResearchProjects ());
+	const std::map<std::string, RuleResearchProject *> & researchs(_rule->getResearchProjects ());
 	for (unsigned int i = 0; i < size; i++)
 	{
 		std::string research;
 		node["research"][i]["project"] >> research;
-		std::vector<RuleResearchProject *>::const_iterator itResearch = std::find_if(researchs.begin (), researchs.end (), findRuleResearchProjectByString(research));
+		std::map<std::string, RuleResearchProject *>::const_iterator itResearch = researchs.find (research);
 		if (itResearch != researchs.end ())
 		{
-			ResearchProject *r = new ResearchProject(*itResearch);
+			ResearchProject *r = new ResearchProject(itResearch->second);
 			r->load(node["research"][i], _rule);
 			_baseResearchs.push_back(r);
 		}

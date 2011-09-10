@@ -105,9 +105,9 @@ Ruleset::~Ruleset()
 	{
 		delete i->second;
 	}
-	for(std::vector<RuleResearchProject *>::const_iterator i = _researchProjects.begin (); i != _researchProjects.end (); ++i)
+	for(std::map<std::string, RuleResearchProject *>::const_iterator i = _researchProjects.begin (); i != _researchProjects.end (); ++i)
 	{
-		delete *i;
+		delete i->second;
 	}
 }
 
@@ -324,7 +324,7 @@ RuleInventory *const Ruleset::getInventory(const std::string &name) const
  * Returns the list of ResearchProject
  * @return The list of ResearchProject ruleset
  */
-const std::vector<RuleResearchProject *> & Ruleset::getResearchProjects () const
+const std::map<std::string, RuleResearchProject *> & Ruleset::getResearchProjects () const
 {
 	return _researchProjects;
 }

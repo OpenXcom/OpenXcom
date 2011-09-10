@@ -58,22 +58,6 @@
 
 namespace OpenXcom
 {
-
-  struct findProjectByName : public std::unary_function<RuleResearchProject *,
-							bool>
-  {
-    std::string _name;
-    findProjectByName(const std::string & name);
-    bool operator()(const RuleResearchProject *) const;
-  };
-  findProjectByName::findProjectByName(const std::string & name) : _name(name)
-  {
-  }
-  bool findProjectByName::operator()(const RuleResearchProject *r) const
-  {
-    return r->getName () == _name;
-  }
-
 /**
  * Initializes the X-Com ruleset with all the rules
  * mimicking the original game.
@@ -1832,7 +1816,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 			r->setNeedItem(needItem);
 			projectDependencys[r] = deps;
 			unlocks[r] = unlock;
-			_researchProjects.push_back(r);
+			_researchProjects[r->getName ()] = r;
 		}
 		for(std::map<RuleResearchProject *, std::vector<std::string> >::iterator iter = projectDependencys.begin ();
 		    iter != projectDependencys.end ();
@@ -1842,11 +1826,11 @@ XcomRuleset::XcomRuleset() : Ruleset()
 			    itDep != iter->second.end ();
 			    itDep++)
 			{
-				std::vector<RuleResearchProject *>::iterator it = std::find_if(_researchProjects.begin (),
-												 _researchProjects.end (),
-												 findProjectByName(*itDep));
+				std::map<std::string, RuleResearchProject *>::iterator it = _researchProjects.find(*itDep);
 				if (it != _researchProjects.end ())
-					iter->first->addDependency(*it);
+				{
+					iter->first->addDependency(it->second);
+				}
 			}
 		  }
 		for(std::map<RuleResearchProject *, std::vector<std::string> >::iterator iter = unlocks.begin ();
@@ -1857,12 +1841,10 @@ XcomRuleset::XcomRuleset() : Ruleset()
 			    itDep != iter->second.end ();
 			    itDep++)
 			{
-				std::vector<RuleResearchProject *>::iterator it = std::find_if(_researchProjects.begin (),
-												 _researchProjects.end (),
-												 findProjectByName(*itDep));
+				std::map<std::string, RuleResearchProject *>::iterator it = _researchProjects.find(*itDep);
 				if (it != _researchProjects.end ())
 				{
-					iter->first->addUnlocked(*it);
+					iter->first->addUnlocked(it->second);
 				}
 			}
 		  }

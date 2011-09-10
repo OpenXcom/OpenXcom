@@ -82,7 +82,7 @@ bool isResearchAvailable (RuleResearchProject * r, Game * game, const std::vecto
 void getAvailableResearchProjects (std::vector<RuleResearchProject *> & projects, Game * game, Base * base)
 {
 	const std::vector<const RuleResearchProject *> & discovereds(game->getSavedGame()->getDiscoveredResearchs());
-	const std::vector<RuleResearchProject *> & researchProjects = game->getRuleset()->getResearchProjects();
+	const std::map<std::string, RuleResearchProject *> & researchProjects = game->getRuleset()->getResearchProjects();
 	const std::vector<ResearchProject *> & baseResearchProjects = base->getResearch();
 	std::vector<const RuleResearchProject *> unlockeds;
 	for(std::vector<const RuleResearchProject *>::const_iterator it = discovereds.begin (); it != discovereds.end (); ++it)
@@ -92,26 +92,26 @@ void getAvailableResearchProjects (std::vector<RuleResearchProject *> & projects
 			unlockeds.push_back(*itUnlocked);
 		}
 	}
-	for(std::vector<RuleResearchProject *>::const_iterator iter = researchProjects.begin (); iter != researchProjects.end (); ++iter)
+	for(std::map<std::string, RuleResearchProject *>::const_iterator iter = researchProjects.begin (); iter != researchProjects.end (); ++iter)
 	{
-		if (!isResearchAvailable(*iter, game, unlockeds))
+		if (!isResearchAvailable(iter->second, game, unlockeds))
 		{
 			continue;
 		}
-		std::vector<const RuleResearchProject *>::const_iterator itDiscovered = std::find(discovereds.begin (), discovereds.end (), *iter);
+		std::vector<const RuleResearchProject *>::const_iterator itDiscovered = std::find(discovereds.begin (), discovereds.end (), iter->second);
 		if (itDiscovered != discovereds.end ())
 		{
 			continue;
 		}
-		if (std::find_if (baseResearchProjects.begin(), baseResearchProjects.end (), findRuleResearchProject(*iter)) != baseResearchProjects.end ())
+		if (std::find_if (baseResearchProjects.begin(), baseResearchProjects.end (), findRuleResearchProject(iter->second)) != baseResearchProjects.end ())
 		{
 			continue;
 		}
-		if ((*iter)->needItem() && base->getItems()->getItem((*iter)->getName ()) == 0)
+		if (iter->second->needItem() && base->getItems()->getItem(iter->second->getName ()) == 0)
 		{
 			continue;
 		}
-		projects.push_back (*iter);
+		projects.push_back (iter->second);
 	}
 }
 
