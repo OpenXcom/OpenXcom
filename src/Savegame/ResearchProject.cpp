@@ -24,7 +24,7 @@
 namespace OpenXcom
 {
 
-ResearchProject::ResearchProject(RuleResearchProject * p, float f) : _project(p), _spent(0), _assigned(0), _cost(f)
+ResearchProject::ResearchProject(RuleResearchProject * p, int c) : _project(p), _spent(0), _assigned(0), _cost(c)
 {
 }
 
@@ -69,25 +69,25 @@ int ResearchProject::getAssigned () const
  * Returns the time already spent on this project
  * @return the time already spent on this ResearchProject(in man/day)
  */
-float ResearchProject::getSpent () const
+int ResearchProject::getSpent () const
 {
 	return _spent;
 }
 
 /**
  * Changes the cost of the ResearchProject
- * @param f new project cost(in man/day)
+ * @param spent new project cost(in man/day)
  */
-void ResearchProject::setSpent (float f)
+void ResearchProject::setSpent (int spent)
 {
-	_spent = f;
+	_spent = spent;
 }
 
 /**
  * Returns the cost of the ResearchProject
  * @return the cost of the ResearchProject(in man/day)
  */
-float ResearchProject::getCost() const
+int ResearchProject::getCost() const
 {
 	return _cost;
 }
@@ -96,7 +96,7 @@ float ResearchProject::getCost() const
  * Changes the cost of the ResearchProject
  * @param f new project cost(in man/day)
  */
-void ResearchProject::setCost(float f)
+void ResearchProject::setCost(int f)
 {
 	_cost = f;
 }
@@ -109,8 +109,8 @@ void ResearchProject::setCost(float f)
 void ResearchProject::load(const YAML::Node& node, const Ruleset *rule)
 {
 	int assigned;
-	float spent;
-	float cost;
+	int spent;
+	int cost;
 	node["assigned"] >> assigned;
 	node["spent"] >> spent;
 	node["cost"] >> cost;

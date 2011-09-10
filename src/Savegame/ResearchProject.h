@@ -33,10 +33,10 @@ class ResearchProject
 {
 	RuleResearchProject * _project;
 	int _assigned;
-	float _spent;
-	float _cost;
+	int _spent;
+	int _cost;
 public:
-	ResearchProject(RuleResearchProject * p, float f = 0.0f);
+	ResearchProject(RuleResearchProject * p, int c = 0);
 	/// Game logic. Called every new day to compute time spent.
 	bool step();
 	/// set the number of scientist assigned to this ResearchProject
@@ -44,13 +44,13 @@ public:
 	/// get the number of scientist assigned to this ResearchProject
 	int getAssigned () const;
 	/// get time already spent on this ResearchProject
-	float getSpent () const;
+	int getSpent () const;
 	/// set time already spent on this ResearchProject
-	void setSpent (float f);
+	void setSpent (int spent);
 	/// get time cost of this ResearchProject
-	float getCost() const;
+	int getCost() const;
 	/// set time cost of this ResearchProject
-	void setCost(float f);
+	void setCost(int f);
 	/// get the ResearchProject Ruleset
 	const RuleResearchProject * getRuleResearchProject () const;
 	/// load the ResearchProject from YAML
