@@ -110,8 +110,7 @@ void UnitWalkBState::think()
 		if (_unit->getStatus() == STATUS_STANDING)
 		{
 			_terrain->calculateUnitLighting();
-			_terrain->calculateFOVTerrain(_unit);
-			unitspotted = _terrain->calculateFOVUnits(_unit);		
+			unitspotted = _terrain->calculateFOV(_unit);		
 			if (unitspotted)
 			{
 				_pf->abortPath();
@@ -229,8 +228,7 @@ void UnitWalkBState::think()
 	if (_unit->getStatus() == STATUS_TURNING)
 	{
 		_unit->turn();
-		_terrain->calculateFOVTerrain(_unit);
-		unitspotted = _terrain->calculateFOVUnits(_unit);		
+		unitspotted = _terrain->calculateFOV(_unit);		
 		// make sure the unit sprites are up to date
 		_parent->getMap()->cacheUnit(_unit);
 		if (unitspotted)
@@ -265,8 +263,7 @@ std::string UnitWalkBState::getResult() const
 void UnitWalkBState::postPathProcedures()
 {
 	_terrain->calculateUnitLighting();
-	_terrain->calculateFOVTerrain(_unit);
-	_terrain->calculateFOVUnits(_unit);		
+	_terrain->calculateFOV(_unit);		
 	_parent->getMap()->cacheUnit(_unit);
 	_parent->popState();
 }
