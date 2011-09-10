@@ -141,6 +141,10 @@ public:
 	void addResearch(ResearchProject *);
 	/// Remove a ResearchProject from the Base
 	void removeResearch(ResearchProject *);
+	/// Get the number of available scientist.
+	int getFreeScientist () const;
+	/// Get the number of available space lab(not used by a ResearchProject)
+	int getFreeLaboratories () const;
 };
 
 }

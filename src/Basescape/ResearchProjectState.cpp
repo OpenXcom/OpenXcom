@@ -40,23 +40,6 @@
 namespace OpenXcom
 {
 
-int getFreeLabSpace (Base * base)
-{
-	return base->getAvailableLaboratories() - base->getUsedLaboratories();
-}
-
-int getFreeScientist (Base * base)
-{
-	int freeScientist = base->getScientists();
-	const std::vector<ResearchProject *> & researchs (base->getResearch());
-	for (std::vector<ResearchProject *>::const_iterator itResearch = researchs.begin (); itResearch != researchs.end (); ++itResearch)
-	{
-		freeScientist -= (*itResearch)->getAssigned ();
-	}
-       
-	return freeScientist;
-}
-
 ResearchProjectState::ResearchProjectState(Game *game, Base *base, RuleResearchProject * rule) : State(game), _base(base), _project(new ResearchProject(rule, rule->getCost() * OpenXcom::RNG::generate(0.5f, 1.5f))), _rule(rule)
 {
 	buildUi ();
@@ -167,8 +150,8 @@ void ResearchProjectState::btnOkClick(Action *action)
 void ResearchProjectState::SetAssignedScientist()
 {
 	std::wstringstream s1;
-	int freeScientist = getFreeScientist(_base);
-	int freeSpaceLab = getFreeLabSpace(_base);
+	int freeScientist = _base->getFreeScientist();
+	int freeSpaceLab = _base->getFreeLaboratories();
 	s1 << _game->getLanguage()->getString("STR_SCIENTISTS_AVAILABLE_UC") << L'\x01' << freeScientist;
 	std::wstringstream s2;
 	s2 << _game->getLanguage()->getString("STR_LABORATORY_SPACE_AVAILABLE_UC") << L'\x01' << freeSpaceLab;
@@ -182,8 +165,8 @@ void ResearchProjectState::SetAssignedScientist()
 void ResearchProjectState::btnMoreClick(Action *action)
 {
 	int assigned = _project->getAssigned ();
-	int freeScientist = getFreeScientist(_base);
-	int freeSpaceLab = getFreeLabSpace(_base);
+	int freeScientist = _base->getFreeScientist();
+	int freeSpaceLab = _base->getFreeLaboratories();
 	if(freeScientist > 0 && freeSpaceLab > 0)
 	{
 		_project->setAssigned(++assigned);

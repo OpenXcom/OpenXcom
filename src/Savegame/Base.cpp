@@ -789,4 +789,22 @@ void Base::removeResearch(ResearchProject * project)
 	_baseResearchs.erase(iter);
 }
 
+/**
+ * Return the number of scientist not assigned to a ResearchProject
+ * @return the number of scientist not assigned to a ResearchProject
+*/
+int Base::getFreeScientist () const
+{
+	return getScientists() - getUsedLaboratories();
+}
+
+/**
+ * Return laboratories space not used by a ResearchProject
+ * @return laboratories space not used by a ResearchProject
+*/
+int Base::getFreeLaboratories () const
+{
+	return getAvailableLaboratories() - getUsedLaboratories();
+}
+
 }
