@@ -66,7 +66,7 @@ NewResearchListState::NewResearchListState(Game *game, Base *base) : State(game)
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
 	
 	_btnCancel->setColor(Palette::blockOffset(15)+9);
-	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL"));
+	_btnCancel->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnCancel->onMouseClick((ActionHandler)&NewResearchListState::btnCancelClick);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
