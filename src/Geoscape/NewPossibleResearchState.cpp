@@ -26,7 +26,7 @@
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
 #include "../Ruleset/RuleResearchProject.h"
-#include "../Basescape/ResearchState.h"
+#include "GeoResearchState.h"
 
 namespace OpenXcom
 {
@@ -86,14 +86,13 @@ NewPossibleResearchState::NewPossibleResearchState(Game * game, Base * base, con
 void NewPossibleResearchState::btnOkClick(Action *action)
 {
 	_game->popState ();
-	_game->popState ();
 }
 
 void NewPossibleResearchState::btnSelectClick(Action *action)
 {
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
-	ResearchState * s = new ResearchState(_game, _base);
+	ResearchState * s = new GeoResearchState(_game, _base);
 	s->setPaletteToRestore("PALETTES.DAT_0");
 	_game->pushState (s);
 }

@@ -70,6 +70,7 @@
 #include "../Savegame/ResearchProject.h"
 #include "EndResearchState.h"
 #include "../Ruleset/RuleResearchProject.h"
+#include "NewPossibleResearchState.h"
 
 namespace OpenXcom
 {
@@ -736,8 +737,11 @@ void GeoscapeState::time1Day()
 		{
 			(*i)->removeResearch(*iter);
 			const RuleResearchProject * research = (*iter)->getRuleResearchProject ();
-			popup(new EndResearchState (_game, *i, research));
 			_game->getSavedGame()->addFinishedResearch(research, _game->getRuleset ());
+			std::vector<RuleResearchProject *> newPossibleResearch;
+			_game->getSavedGame()->getDependableResearch (newPossibleResearch, (*iter)->getRuleResearchProject(), _game->getRuleset(), *i);
+			_game->pushState (new NewPossibleResearchState(_game, *i, newPossibleResearch));
+			_game->pushState (new EndResearchState (_game, *i, research));
 			delete(*iter);
 		}
 

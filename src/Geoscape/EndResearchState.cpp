@@ -25,10 +25,8 @@
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Ruleset/RuleResearchProject.h"
-#include "NewPossibleResearchState.h"
 #include "../Ufopaedia/Ufopaedia.h"
 #include <algorithm>
-#include "../Savegame/SavedGame.h"
 
 namespace OpenXcom
 {
@@ -69,9 +67,7 @@ EndResearchState::EndResearchState(Game * game, Base * base, const RuleResearchP
 
 void EndResearchState::btnOkClick(Action *action)
 {
-	std::vector<RuleResearchProject *> newPossibleResearch;
-	_game->getSavedGame()->getDependableResearch (newPossibleResearch, _research, _game->getRuleset(), _base);
-	_game->pushState (new NewPossibleResearchState(_game, _base, newPossibleResearch));
+	_game->popState ();
 }
 
 void EndResearchState::btnReportClick(Action *action)
