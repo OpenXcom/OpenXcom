@@ -158,7 +158,6 @@ void ResearchState::init()
 	fillProjectList();
 }
 
-extern int getFreeLabSpace (Base * base);
 /**
  * Fill list with Base ResearchProject. Also update count of available lab space and available/allocated scientist.
 */
