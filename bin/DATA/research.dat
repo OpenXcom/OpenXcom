@@ -224,10 +224,8 @@
   cost: 660
   needItem: false
   dependencys:
-    - STR_PLASMA_RIFLE
-    - STR_PLASMA_RIFLE_CLIP
-    - STR_HEAVY_PLASMA
-    - STR_HEAVY_PLASMA_CLIP
+    - STR_PLASMA_BEAM_DEP1
+    - STR_PLASMA_BEAM_DEP2
   unlock:
     []
 - name: STR_PLASMA_DEFENCE
@@ -629,3 +627,19 @@
     []
   unlock:
     - STR_PSI_LAB
+- name: STR_PLASMA_BEAM_DEP1
+  cost: 0
+  needItem: false
+  dependencys:
+    - STR_HEAVY_PLASMA
+    - STR_HEAVY_PLASMA_CLIP
+  unlock:
+    - STR_PLASMA_BEAM
+- name: STR_PLASMA_BEAM_DEP2
+  cost: 0
+  needItem: false
+  dependencys:
+    - STR_PLASMA_RIFLE
+    - STR_PLASMA_RIFLE_CLIP
+  unlock:
+    - STR_PLASMA_BEAM
