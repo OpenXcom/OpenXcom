@@ -59,8 +59,6 @@ public:
 	ResearchProjectState(Game *game, Base *base, ResearchProject * project);
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
-	void btnMoreClick(Action *action);
-	void btnLessClick(Action *action);
 	/// Function called every time the _timerMore timer is triggered.
 	void more();
 	/// Function called every time the _timerLess timer is triggered.

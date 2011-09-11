@@ -184,29 +184,6 @@ void ResearchProjectState::SetAssignedScientist()
 	_txtAssignedValue->setText(s3.str());
 }
 
-void ResearchProjectState::btnMoreClick(Action *action)
-{
-	int assigned = _project->getAssigned ();
-	int freeScientist = _base->getFreeScientist();
-	int freeSpaceLab = _base->getFreeLaboratories();
-	if(freeScientist > 0 && freeSpaceLab > 0)
-	{
-		_project->setAssigned(++assigned);
-		SetAssignedScientist();
-	}
-}
-
-
-void ResearchProjectState::btnLessClick(Action *action)
-{
-	int assigned = _project->getAssigned ();
-	if (assigned > 0)
-	{
-		_project->setAssigned(--assigned);
-		SetAssignedScientist();
-	}
-}
-
 /**
  * Start the timeMore timer
  * @param action a Pointer to an Action
@@ -248,7 +225,14 @@ void ResearchProjectState::lessRelease(Action *action)
  */
 void ResearchProjectState::more()
 {
-	btnMoreClick(NULL);
+	int assigned = _project->getAssigned ();
+	int freeScientist = _base->getFreeScientist();
+	int freeSpaceLab = _base->getFreeLaboratories();
+	if(freeScientist > 0 && freeSpaceLab > 0)
+	{
+		_project->setAssigned(++assigned);
+		SetAssignedScientist();
+	}
 }
 
 /**
@@ -256,7 +240,12 @@ void ResearchProjectState::more()
  */
 void ResearchProjectState::less()
 {
-	btnLessClick(NULL);
+	int assigned = _project->getAssigned ();
+	if (assigned > 0)
+	{
+		_project->setAssigned(--assigned);
+		SetAssignedScientist();
+	}
 }
 
 /**
