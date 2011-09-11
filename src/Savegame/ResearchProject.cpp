@@ -23,6 +23,10 @@
 
 namespace OpenXcom
 {
+const float PROGRESS_LIMIT_UNKNOWN = 0.333f;
+const float PROGRESS_LIMIT_POOR = 0.008;
+const float PROGRESS_LIMIT_AVERAGE = 0.14f;
+const float PROGRESS_LIMIT_GOOD = 0.26f;
 
 ResearchProject::ResearchProject(RuleResearchProject * p, int c) : _project(p), _assigned(0), _spent(0), _cost(c)
 {
@@ -131,5 +135,36 @@ void ResearchProject::save(YAML::Emitter& out) const
 	out << YAML::Key << "spent" << YAML::Value << getSpent ();
 	out << YAML::Key << "cost" << YAML::Value << getCost ();
 	out << YAML::EndMap;
+}
+
+/**
+ * Return a string describing Research progress.
+ * @return a string describing Research progress.
+*/
+std::string ResearchProject::getResearchProgress () const
+{
+	float progress = getSpent () / getRuleResearchProject ()->getCost();
+	if (progress < PROGRESS_LIMIT_UNKNOWN)
+	{
+		return "STR_UNKNOWN";
+	}
+	else
+	{
+		float rating = getAssigned ();
+		rating /= getRuleResearchProject ()->getCost();
+		if (rating < PROGRESS_LIMIT_POOR)
+		{
+			return "STR_POOR";
+		}
+		else if (rating < PROGRESS_LIMIT_AVERAGE)
+		{
+			return "STR_AVERAGE";
+		}
+		else if (rating < PROGRESS_LIMIT_GOOD)
+		{
+			return "STR_GOOD";
+		}
+		return "STR_EXCELLENT";
+	}
 }
 }

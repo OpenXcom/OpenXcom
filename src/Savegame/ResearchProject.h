@@ -57,6 +57,8 @@ public:
 	void load(const YAML::Node& node, const Ruleset *rule);
 	/// save the ResearchProject to YAML
 	void save(YAML::Emitter& out) const;
+	/// Get a string describing current progess.
+	std::string getResearchProgress () const;
 };
 }
 #endif
