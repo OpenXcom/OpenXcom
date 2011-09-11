@@ -38,7 +38,7 @@ class NewResearchListState : public State
 {
 private:
 	Base *_base;
-	TextButton *_btnCancel;
+	TextButton *_btnOK;
 	Window *_window;
 	Text *_txtTitle;
 	TextList *_lstResearch;
@@ -47,7 +47,7 @@ private:
 public:
 	/// Creates the Research state.
 	NewResearchListState(Game *game, Base *base);
-	void btnCancelClick(Action *action);
+	void btnOKClick(Action *action);
 	void fillProjectList ();
 	void init();
 };

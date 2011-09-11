@@ -49,7 +49,7 @@ NewResearchListState::NewResearchListState(Game *game, Base *base) : State(game)
 
 	_screen = false;
 	_window = new Window(this, width, height, start_x, start_y, POPUP_BOTH);
-	_btnCancel = new TextButton(width - 2 * button_x_border , button_height, start_x + button_x_border, start_y + height - button_height - button_y_border);
+	_btnOK = new TextButton(width - 2 * button_x_border , button_height, start_x + button_x_border, start_y + height - button_height - button_y_border);
 	_txtTitle = new Text(width - 2 * button_x_border, button_height, start_x + button_x_border, start_y + button_y_border);
 	_lstResearch = new TextList(width - 2 * button_x_border, height - 2 * button_height - 2 * button_y_border, start_x + button_x_border, start_y + button_y_border + button_height);
 	
@@ -57,7 +57,7 @@ NewResearchListState::NewResearchListState(Game *game, Base *base) : State(game)
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(1)), Palette::backPos, 16);
 
 	add(_window);
-	add(_btnCancel);
+	add(_btnOK);
 	add(_txtTitle);
 	add(_lstResearch);
 
@@ -65,9 +65,9 @@ NewResearchListState::NewResearchListState(Game *game, Base *base) : State(game)
 	_window->setColor(Palette::blockOffset(13)+13);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
 	
-	_btnCancel->setColor(Palette::blockOffset(15)+9);
-	_btnCancel->setText(_game->getLanguage()->getString("STR_OK"));
-	_btnCancel->onMouseClick((ActionHandler)&NewResearchListState::btnCancelClick);
+	_btnOK->setColor(Palette::blockOffset(15)+9);
+	_btnOK->setText(_game->getLanguage()->getString("STR_OK"));
+	_btnOK->onMouseClick((ActionHandler)&NewResearchListState::btnOKClick);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);
@@ -93,7 +93,7 @@ void NewResearchListState::onSelectProject(Action *action)
 	_game->pushState(new ResearchProjectState(_game, _base, _projects[_lstResearch->getSelectedRow()]));
 }
   
-void NewResearchListState::btnCancelClick(Action *action)
+void NewResearchListState::btnOKClick(Action *action)
 {
 	_game->popState();
 }
