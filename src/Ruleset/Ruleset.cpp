@@ -17,6 +17,10 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Ruleset.h"
+#include <fstream>
+#include "yaml.h"
+#include "../Engine/Options.h"
+#include "../Engine/Exception.h"
 #include "SoldierNamePool.h"
 #include "RuleCountry.h"
 #include "RuleRegion.h"
@@ -104,6 +108,30 @@ Ruleset::~Ruleset()
 	{
 		delete i->second;
 	}
+}
+
+/**
+ * Loads a ruleset's contents from a YAML file.
+ * @param filename YAML filename.
+ */
+void Ruleset::load(const std::string &filename)
+{
+	std::string s = Options::getDataFolder() + "Ruleset/" + filename + ".rul";
+	std::ifstream fin(s.c_str());
+	if (!fin)
+	{
+		throw Exception("Failed to load ruleset");
+	}
+    YAML::Parser parser(fin);
+	YAML::Node doc;
+
+	parser.GetNextDocument(doc);
+	for (YAML::Iterator i = doc.begin(); i != doc.end(); ++i)
+	{
+
+	}
+
+	fin.close();
 }
 
 /**
