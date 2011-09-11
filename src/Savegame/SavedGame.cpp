@@ -547,9 +547,24 @@ UfopaediaSaved *SavedGame::getUfopaedia()
  * Add a ResearchProject to the list of already discovered ResearchProject
  * @param r The newly found ResearchProject
 */
-void SavedGame::addFinishedResearch (const RuleResearchProject * r)
+void SavedGame::addFinishedResearch (const RuleResearchProject * r, Ruleset * ruleset)
 {
 	_discovereds.push_back(r);
+	if(ruleset)
+	{
+		std::vector<RuleResearchProject*> availableResearch;
+		for(std::vector<Base*>::const_iterator it = _bases.begin (); it != _bases.end (); ++it)
+		{
+			getDependableResearchBasic(availableResearch, r, ruleset, *it);
+		}
+		for(std::vector<RuleResearchProject*>::iterator it = availableResearch.begin (); it != availableResearch.end (); ++it)
+		{
+			if((*it)->getCost() == 0)
+			{
+				addFinishedResearch(*it, ruleset);
+			}
+		}
+	}
 }
 
 /**
@@ -632,7 +647,7 @@ bool SavedGame::isResearchAvailable (RuleResearchProject * r, const std::vector<
 }
 
 /**
-   Get the list of newly available research projects once a ResearchProject has been completed.
+   Get the list of newly available research projects once a ResearchProject has been completed. This function check for fake ResearchProject.
    * @param dependables the list of RuleResearchProject which are now available.
    * @param research The RuleResearchProject which has just been discovered
    * @param ruleset the Game Ruleset
@@ -640,15 +655,46 @@ bool SavedGame::isResearchAvailable (RuleResearchProject * r, const std::vector<
 */
 void SavedGame::getDependableResearch (std::vector<RuleResearchProject *> & dependables, const RuleResearchProject *research, Ruleset * ruleset, Base * base)
 {
-	std::vector<RuleResearchProject *> possibleProjects;
-	getAvailableResearchProjects(possibleProjects, ruleset, base);
-	for(std::vector<RuleResearchProject *>::iterator iter = possibleProjects.begin (); iter != possibleProjects.end (); ++iter)
+	getDependableResearchBasic(dependables, research, ruleset, base);
+	for(std::vector<const RuleResearchProject *>::const_iterator iter = _discovereds.begin (); iter != _discovereds.end (); ++iter)
 	{
-		if (std::find((*iter)->getDependencys().begin (), (*iter)->getDependencys().end (), research) != (*iter)->getDependencys().end ())
+		if((*iter)->getCost() == 0)
 		{
-			dependables.push_back(*iter);
+			if (std::find((*iter)->getDependencys().begin (), (*iter)->getDependencys().end (), research) != (*iter)->getDependencys().end ())
+			{
+				getDependableResearchBasic(dependables, *iter, ruleset, base);
+			}
 		}
 	}
 }
 
+/**
+   Get the list of newly available research projects once a ResearchProject has been completed. This function doesn't check for fake ResearchProject.
+   * @param dependables the list of RuleResearchProject which are now available.
+   * @param research The RuleResearchProject which has just been discovered
+   * @param ruleset the Game Ruleset
+   * @param base a pointer to a Base
+*/
+void SavedGame::getDependableResearchBasic (std::vector<RuleResearchProject *> & dependables, const RuleResearchProject *research, Ruleset * ruleset, Base * base)
+{
+	std::vector<RuleResearchProject *> possibleProjects;
+	getAvailableResearchProjects(possibleProjects, ruleset, base);
+	for(std::vector<RuleResearchProject *>::iterator iter = possibleProjects.begin (); iter != possibleProjects.end (); ++iter)
+	{
+		if (std::find((*iter)->getDependencys().begin (), (*iter)->getDependencys().end (), research) != (*iter)->getDependencys().end () 
+		    || 
+		    std::find((*iter)->getUnlocked().begin (), (*iter)->getUnlocked().end (), research) != (*iter)->getUnlocked().end ()
+			)
+		{
+				dependables.push_back(*iter);
+			if ((*iter)->getCost() == 0)
+			{
+				getDependableResearchBasic(dependables, *iter, ruleset, base);
+			}
+			else
+			{
+			}
+		}
+	}
+}
 }

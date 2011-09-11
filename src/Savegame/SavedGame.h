@@ -70,6 +70,7 @@ private:
 
 	/// Check wether a ResearchProject can be researched
 	bool isResearchAvailable (RuleResearchProject * r, const std::vector<const RuleResearchProject *> & unlockeds);
+	void getDependableResearchBasic (std::vector<RuleResearchProject *> & dependables, const RuleResearchProject *research, Ruleset * ruleset, Base * base);
 public:
 	/// Creates a new save with a certain difficulty.
 	SavedGame(GameDifficulty difficulty);
@@ -118,7 +119,7 @@ public:
 	/// Gets the current Ufopaedia parameters.
 	UfopaediaSaved *getUfopaedia();
 	/// Add a finished ResearchProject
-	void addFinishedResearch (const RuleResearchProject * r);
+	void addFinishedResearch (const RuleResearchProject * r, Ruleset * ruleset = NULL);
 	/// Get the list of already discovered research projects
 	const std::vector<const RuleResearchProject *> & getDiscoveredResearchs();
 	/// Get the list of ResearchProject which can be researched in a Base

@@ -737,7 +737,7 @@ void GeoscapeState::time1Day()
 			(*i)->removeResearch(*iter);
 			const RuleResearchProject * research = (*iter)->getRuleResearchProject ();
 			popup(new EndResearchState (_game, *i, research));
-			_game->getSavedGame()->addFinishedResearch(research);
+			_game->getSavedGame()->addFinishedResearch(research, _game->getRuleset ());
 			delete(*iter);
 		}
 

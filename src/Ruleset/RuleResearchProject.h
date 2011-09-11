@@ -27,6 +27,12 @@ namespace OpenXcom
 /**
    Represent one research project.
    Dependency and unlock. Dependency is the list of RuleResearchProject which must be discovered before a RuleResearchProject became available. Unlock  are used to immediately unlock a RuleResearchProject(even if not all dependency have been researched).
+
+   Fake ResearchProject. A RuleResearchProject is fake one, if t's cost is 0. They are used to to create check point in the dependency tree.
+   For example if we have a Research E which need either A & B or C & D. We create 2 fake research project:
+   * F which need A & B
+   * G which need C & D
+   both F and G can unlock E.
 */
 class RuleResearchProject
 {
