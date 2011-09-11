@@ -132,17 +132,27 @@ void ResearchState::btnOkClick(Action *action)
 	_game->popState();
 }
 
+/**
+ * Returns to the previous screen.
+ * @param action Pointer to an action.
+ */
 void ResearchState::btnNewClick(Action *action)
 {
 	_game->pushState(new NewResearchListState(_game, _base));
 }
 
+/**
+ * Display list of possible ResearchProject
+*/
 void ResearchState::onSelectProject(Action *action)
 {
 	const std::vector<ResearchProject *> & baseProjects(_base->getResearch());
 	_game->pushState(new ResearchProjectState(_game, _base, baseProjects[_lstResearch->getSelectedRow()]));
 }
 
+/**
+ * Init State
+*/
 void ResearchState::init()
 {
 	fillProjectList();
@@ -180,6 +190,10 @@ std::string getResearchProgress (const ResearchProject * p)
 	}
 }
 
+
+/**
+ * Fill list with Base ResearchProject. Also update count of available lab space and available/allocated scientist.
+*/
 void ResearchState::fillProjectList()
 {
 	const std::vector<ResearchProject *> & baseProjects(_base->getResearch());

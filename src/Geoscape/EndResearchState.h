@@ -41,8 +41,11 @@ class EndResearchState : public State
 	Base * _base;
 	const RuleResearchProject * _research;
 public:
+	/// Creates the EndResearch state.
 	EndResearchState(Game * game, Base * base, const RuleResearchProject * research);
+	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
+	/// Handler for clicking the Report button.
 	void btnReportClick(Action *action);
 };
 }

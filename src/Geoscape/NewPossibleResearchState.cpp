@@ -30,6 +30,12 @@
 
 namespace OpenXcom
 {
+/**
+ * Initializes all the elements in the EndResearch screen.
+ * @param game Pointer to the core game.
+ * @param base Pointer to the base to get info from.
+ * @param possibilities List of newly possible ResearchProject
+ */
 NewPossibleResearchState::NewPossibleResearchState(Game * game, Base * base, const std::vector<RuleResearchProject *> & possibilities) : State (game), _base(base)
 {
 	_screen = false;
@@ -83,11 +89,19 @@ NewPossibleResearchState::NewPossibleResearchState(Game * game, Base * base, con
 	}
 }
 
+/**
+ * return to the previous screen
+ * @param action Pointer to an action.
+ */
 void NewPossibleResearchState::btnOkClick(Action *action)
 {
 	_game->popState ();
 }
 
+/**
+ * Open the ResearchState so the player can dispatch available scientist.
+ * @param action Pointer to an action.
+ */
 void NewPossibleResearchState::btnSelectClick(Action *action)
 {
 	// Set palette

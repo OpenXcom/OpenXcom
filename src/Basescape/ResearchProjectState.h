@@ -54,19 +54,26 @@ private:
 	void buildUi ();
 	Timer *_timerMore, *_timerLess;
 public:
-	/// Creates the Research state.
+	/// Creates the ResearchProject state.
 	ResearchProjectState(Game *game, Base *base, RuleResearchProject * rule);
 	ResearchProjectState(Game *game, Base *base, ResearchProject * project);
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
 	void btnMoreClick(Action *action);
 	void btnLessClick(Action *action);
+	/// Function called every time the _timerMore timer is triggered.
 	void more();
+	/// Function called every time the _timerLess timer is triggered.
 	void less();
+	/// Handler for pressing the More button.
 	void morePress(Action *action);
+	/// Handler for releasing the More button.
 	void moreRelease(Action *action);
+	/// Handler for pressing the Less button.
 	void lessPress(Action *action);
+	/// Handler for releasing the Less button.
 	void lessRelease(Action *action);
+	/// Runs state functionality every cycle(used to update the timer).
 	void think();
 };
 }

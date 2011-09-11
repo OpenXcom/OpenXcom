@@ -42,8 +42,11 @@ class NewPossibleResearchState : public State
      	TextButton *_btnSelect, *_btnOk;
 	Base * _base;
 public:
+	/// Creates the NewPossibleResearch state.
 	NewPossibleResearchState(Game * game, Base * base, const std::vector<RuleResearchProject *> & possibilities);
+	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
+	/// Handler for clicking the Allocate Scientist button.
 	void btnSelectClick(Action *action);
 };
 }

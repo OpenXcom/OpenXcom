@@ -45,10 +45,13 @@ private:
 	void onSelectProject(Action *action);
 	std::vector<RuleResearchProject *> _projects;
 public:
-	/// Creates the Research state.
+	/// Creates the New research list state.
 	NewResearchListState(Game *game, Base *base);
+	/// Handler for clicking the OK button
 	void btnOKClick(Action *action);
+	/// Fill the ResearchProject list with possible ResearchProject.
 	void fillProjectList ();
+	/// Initializes the state.
 	void init();
 };
 }

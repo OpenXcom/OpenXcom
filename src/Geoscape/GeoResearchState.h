@@ -11,8 +11,11 @@ namespace OpenXcom
 class GeoResearchState : public ResearchState
 {
 public:
-	~GeoResearchState();
+	/// Create the Research screen
 	GeoResearchState(Game *game, Base *base);
+	/// Cleans up the Research state.
+	~GeoResearchState();
+	/// Handler for clicking the OK button
 	void btnOkClick(Action *action);
 };
 

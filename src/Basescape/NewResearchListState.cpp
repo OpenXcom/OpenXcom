@@ -34,6 +34,11 @@
 
 namespace OpenXcom
 {
+/**
+ * Initializes all the elements in the Research list screen.
+ * @param game Pointer to the core game.
+ * @param base Pointer to the base to get info from.
+ */
 NewResearchListState::NewResearchListState(Game *game, Base *base) : State(game), _base(base)
 {
 	int width = 220;
@@ -83,21 +88,35 @@ NewResearchListState::NewResearchListState(Game *game, Base *base) : State(game)
 	_lstResearch->onMouseClick((ActionHandler)&NewResearchListState::onSelectProject);
 }
 
+/**
+ * initialize screen(Fill list)
+ */
 void NewResearchListState::init()
 {
 	fillProjectList ();
 }
 
+/**
+ * Select the RuleResearchProject to work on.
+ * @param action Pointer to an action.
+ */
 void NewResearchListState::onSelectProject(Action *action)
 {
 	_game->pushState(new ResearchProjectState(_game, _base, _projects[_lstResearch->getSelectedRow()]));
 }
   
+/**
+ * Returns to the previous screen.
+ * @param action Pointer to an action.
+ */
 void NewResearchListState::btnOKClick(Action *action)
 {
 	_game->popState();
 }
 
+/**
+ * Fill list with possible ResearchProject
+ */
 void NewResearchListState::fillProjectList ()
 {
 	_projects.clear();

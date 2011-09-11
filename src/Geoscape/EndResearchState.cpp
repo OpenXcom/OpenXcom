@@ -30,6 +30,11 @@
 
 namespace OpenXcom
 {
+/**
+ * Initializes all the elements in the EndResearch screen.
+ * @param game Pointer to the core game.
+ * @param base Pointer to the base to get info from.
+ */
 EndResearchState::EndResearchState(Game * game, Base * base, const RuleResearchProject * research) : State (game), _base(base), _research(research)
 {
 	_screen = false;
@@ -65,11 +70,19 @@ EndResearchState::EndResearchState(Game * game, Base * base, const RuleResearchP
 	_txtTitle->setText(_game->getLanguage()->getString("STR_RESEARCH_COMPLETED"));
 }
 
+/**
+ * return to the previous screen
+ * @param action Pointer to an action.
+ */
 void EndResearchState::btnOkClick(Action *action)
 {
 	_game->popState ();
 }
 
+/**
+ * open the Ufopeadia to the entry about the Research.
+ * @param action Pointer to an action.
+ */
 void EndResearchState::btnReportClick(Action *action)
 {
 	std::string name (_research->getName ());

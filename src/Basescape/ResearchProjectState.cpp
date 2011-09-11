@@ -40,16 +40,31 @@
 namespace OpenXcom
 {
 
+/**
+ * Initializes all the elements in the ResearchProject screen.
+ * @param game Pointer to the core game.
+ * @param base Pointer to the base to get info from.
+ * @param rule A RuleResearchProject which will be used to create a new ResearchProject
+ */
 ResearchProjectState::ResearchProjectState(Game *game, Base *base, RuleResearchProject * rule) : State(game), _base(base), _project(new ResearchProject(rule, rule->getCost() * OpenXcom::RNG::generate(0.5f, 1.5f))), _rule(rule)
 {
 	buildUi ();
 }
 
+/**
+ * Initializes all the elements in the ResearchProject screen.
+ * @param game Pointer to the core game.
+ * @param base Pointer to the base to get info from.
+ * @param project A ResearchProject to modify
+ */
 ResearchProjectState::ResearchProjectState(Game *game, Base *base, ResearchProject * project) : State(game), _base(base), _project(project), _rule(0)
 {
 	buildUi ();
 }
 
+/**
+ * Build dialog
+ */
 void ResearchProjectState::buildUi ()
 {
 	int width = 220;
@@ -142,11 +157,18 @@ void ResearchProjectState::buildUi ()
 	_btnOk->onMouseClick((ActionHandler)&ResearchProjectState::btnOkClick);
 }
 
+/**
+ * Returns to the previous screen.
+ * @param action Pointer to an action.
+ */
 void ResearchProjectState::btnOkClick(Action *action)
 {
 	_game->popState();
 }
 
+/**
+ * update count of assigned/free scientis, and available space lab
+ */
 void ResearchProjectState::SetAssignedScientist()
 {
 	std::wstringstream s1;
@@ -185,36 +207,61 @@ void ResearchProjectState::btnLessClick(Action *action)
 	}
 }
 
+/**
+ * Start the timeMore timer
+ * @param action a Pointer to an Action
+ */
 void ResearchProjectState::morePress(Action *action)
 {
 	_timerMore->start ();
 }
 
+/**
+ * Stop the timeMore timer
+ * @param action a Pointer to an Action
+ */
 void ResearchProjectState::moreRelease(Action *action)
 {
 	_timerMore->stop ();
 }
 
+/**
+ * Start the timeLess timer
+ * @param action a Pointer to an Action
+ */
 void ResearchProjectState::lessPress(Action *action)
 {
 	_timerLess->start ();
 }
 
+/**
+ * Stop the timeLess timer
+ * @param action a Pointer to an Action
+ */
 void ResearchProjectState::lessRelease(Action *action)
 {
 	_timerLess->stop ();
 }
 
+/**
+ * Add one scientist to the project if possible
+ */
 void ResearchProjectState::more()
 {
 	btnMoreClick(NULL);
 }
 
+/**
+ * Remove one scientist to the project if possible
+ */
 void ResearchProjectState::less()
 {
 	btnLessClick(NULL);
 }
 
+/**
+ * Runs state functionality every cycle(used to update the timer).
+ */
 void ResearchProjectState::think()
 {
 	State::think();

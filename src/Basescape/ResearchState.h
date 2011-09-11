@@ -50,9 +50,13 @@ public:
 	~ResearchState();
 	/// Handler for clicking the OK button.
 	virtual void btnOkClick(Action *action);
+	/// Handler for clicking the New Research button.
 	void btnNewClick(Action *action);
+	/// Handler for clicking the ResearchProject list.
 	void onSelectProject(Action *action);
+	/// Fill the ResearchProject list with Base ResearchProject.
 	void fillProjectList();
+	/// Initializes the state.
 	void init ();
 };
 
