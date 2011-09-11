@@ -50,7 +50,7 @@ public:
 	/// Cleans up the Research state.
 	~ResearchState();
 	/// Handler for clicking the OK button.
-	void btnOkClick(Action *action);
+	virtual void btnOkClick(Action *action);
 	void btnNewClick(Action *action);
 	void onSelectProject(Action *action);
 	void fillProjectList();
