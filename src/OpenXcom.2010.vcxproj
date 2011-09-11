@@ -99,6 +99,7 @@
       <DataExecutionPrevention>
       </DataExecutionPrevention>
       <TargetMachine>MachineX86</TargetMachine>
+      <Profile>false</Profile>
     </Link>
     <PostBuildEvent>
       <Command>copy /y ..\deps\lib\*.dll ..\bin\</Command>
@@ -134,6 +135,7 @@
     <ClCompile Include="Basescape\TransferConfirmState.cpp" />
     <ClCompile Include="Basescape\TransferItemsState.cpp" />
     <ClCompile Include="Basescape\TransfersState.cpp" />
+    <ClCompile Include="Battlescape\AbortMissionState.cpp" />
     <ClCompile Include="Battlescape\ActionMenuItem.cpp" />
     <ClCompile Include="Battlescape\ActionMenuState.cpp" />
     <ClCompile Include="Battlescape\AggroBAIState.cpp" />
@@ -321,6 +323,7 @@
     <ClInclude Include="Basescape\TransferConfirmState.h" />
     <ClInclude Include="Basescape\TransferItemsState.h" />
     <ClInclude Include="Basescape\TransfersState.h" />
+    <ClInclude Include="Battlescape\AbortMissionState.h" />
     <ClInclude Include="Battlescape\ActionMenuItem.h" />
     <ClInclude Include="Battlescape\ActionMenuState.h" />
     <ClInclude Include="Battlescape\AggroBAIState.h" />

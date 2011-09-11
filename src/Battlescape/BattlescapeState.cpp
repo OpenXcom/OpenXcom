@@ -22,6 +22,7 @@
 #include "Map.h"
 #include "BattlescapeState.h"
 #include "NextTurnState.h"
+#include "AbortMissionState.h"
 #include "BattleState.h"
 #include "UnitTurnBState.h"
 #include "UnitWalkBState.h"
@@ -831,10 +832,7 @@ void BattlescapeState::checkForCasualties(BattleItem *murderweapon, BattleUnit *
  */
 void BattlescapeState::btnAbortClick(Action *action)
 {
-	_game->getSavedGame()->endBattle();
-	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
-	_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
-	_game->popState();
+	_game->pushState(new AbortMissionState(_game, _battleGame));
 }
 
 /**
