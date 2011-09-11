@@ -121,11 +121,6 @@ ResearchState::ResearchState(Game *game, Base *base) : State(game), _base(base)
  */
 ResearchState::~ResearchState()
 {
-	// restore palette if needed
-	if (!_toRestore.empty ())
-	{
-		_game->setPalette(_game->getResourcePack()->getPalette(_toRestore)->getColors());
-	}
 }
 
 /**
@@ -206,10 +201,5 @@ void ResearchState::fillProjectList()
 	std::wstringstream ss3;
 	ss3 << _game->getLanguage()->getString("STR_LABORATORY_SPACE_AVAILABLE") << L'\x01' << _base->getFreeLaboratories();
 	_txtSpace->setText(ss3.str());
-}
-
-void ResearchState::setPaletteToRestore(const std::string & palette)
-{
-	_toRestore = palette;
 }
 }

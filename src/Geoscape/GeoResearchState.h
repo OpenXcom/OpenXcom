@@ -11,6 +11,7 @@ namespace OpenXcom
 class GeoResearchState : public ResearchState
 {
 public:
+	~GeoResearchState();
 	GeoResearchState(Game *game, Base *base);
 	void btnOkClick(Action *action);
 };

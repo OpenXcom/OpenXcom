@@ -92,8 +92,6 @@ void NewPossibleResearchState::btnSelectClick(Action *action)
 {
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
-	ResearchState * s = new GeoResearchState(_game, _base);
-	s->setPaletteToRestore("PALETTES.DAT_0");
-	_game->pushState (s);
+	_game->pushState (new GeoResearchState(_game, _base));
 }
 }
