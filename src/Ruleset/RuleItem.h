@@ -162,7 +162,9 @@ public:
 	void setClipSize(int size);
 	/// Draws the item's hand sprite onto a surface.
 	void drawHandSprite(SurfaceSet *texture, Surface *surface) const;
+	/// Set Item ManufactureInfo
 	void setManufactureInfo(RuleManufactureInfo *);
+	/// Get Item ManufactureInfo
 	const RuleManufactureInfo * getManufactureInfo() const;
 };
 

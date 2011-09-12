@@ -17,6 +17,11 @@
 
 namespace OpenXcom
 {
+/**
+ * Initializes all the elements in the productions start screen
+ * @param game Pointer to the core game.
+ * @param base Pointer to the base to get info from.
+ */
 ProductionStartState::ProductionStartState(Game * game, Base * base, RuleItem * item) : State(game), _base(base), _item(item)
 {
 	_screen = false;
@@ -130,11 +135,19 @@ ProductionStartState::ProductionStartState(Game * game, Base * base, RuleItem * 
 	}
 }
 
+/**
+ * Return to previous screen
+ * @param action a pointer to an Action
+*/
 void ProductionStartState::btnCancelClick(Action * action)
 {
 	_game->popState();
 }
 
+/**
+ * Go to the Production settings screen
+ * @param action a pointer to an Action
+*/
 void ProductionStartState::btnStartClick(Action * action)
 {
 	_game->pushState(new ProductionState(_game, _base, _item));

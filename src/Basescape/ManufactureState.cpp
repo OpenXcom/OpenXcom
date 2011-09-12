@@ -164,11 +164,18 @@ void ManufactureState::btnOkClick(Action *action)
 	_game->popState();
 }
 
+/**
+ * Open the screen with the list of possible productions
+ * @param action Pointer to an action.
+*/
 void ManufactureState::btnNewProductionClick(Action * action)
 {
 	_game->pushState(new ListPossibleProductionState(_game, _base));
 }
 
+/**
+ * Fill the list of base production's
+*/
 void ManufactureState::fillProductionList()
 {
 	const std::vector<Production *> productions(_base->getProductions ());
@@ -211,6 +218,10 @@ void ManufactureState::fillProductionList()
 	_txtSpace->setText(ss3.str());
 }
 
+/**
+ * Open the screen displaying production settings.
+ * @param action Pointer to an action.
+*/
 void ManufactureState::lstManufactureClick(Action * action)
 {
 	const std::vector<Production *> productions(_base->getProductions ());

@@ -12,6 +12,9 @@ class TextButton;
 class Text;
 class TextList;
 
+/**
+ * Screen which display needed elements to start productions(items/required workshop state/cost to build a unit, ...).
+*/
 class ProductionStartState : public State
 {
 private:
@@ -22,8 +25,11 @@ private:
 	Text * _txtTitle, * _txtManHour, * _txtCost, * _txtWorkSpace, * _txtNeedeItemsTitle, * _txtItemNameColumn, * _txtUnitRequiredColumn, * _txtUnitAvailableColumn;
 	TextList * _lstNeededItems;
 public:
+	/// Create the State
 	ProductionStartState(Game * game, Base * base, RuleItem * item);
+	/// Handler for the Cancel button
 	void btnCancelClick(Action * action);
+	/// Handler for the start button
 	void btnStartClick(Action * action);
 };
 }

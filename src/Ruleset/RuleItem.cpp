@@ -519,11 +519,19 @@ void RuleItem::drawHandSprite(SurfaceSet *texture, Surface *surface) const
 	texture->getFrame(this->getBigSprite())->blit(surface);
 }
 
+/**
+ * Change the manufacture info for this item
+ * param info A pointer to the Manufacture info
+*/
 void RuleItem::setManufactureInfo(RuleManufactureInfo * info)
 {
 	_manufactureInfo = info;
 }
 
+/**
+ * Get the item ManufactureInfo
+ * @return the Item ManufactureInfo. NULL mean that the item can't be manufactured.
+*/
 const RuleManufactureInfo * RuleItem::getManufactureInfo() const
 {
 	return _manufactureInfo;

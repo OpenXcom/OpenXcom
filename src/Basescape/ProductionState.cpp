@@ -28,16 +28,31 @@ int getFreeEngineers (Base * base)
 	return freeEngineers;
 }
 
+/**
+ * Initialize all elements in the Production settings screen(new Production)
+ * @param game Pointer to the core game.
+ * @param base Pointer to the base to get info from.
+ * @param item the RuleItem to produce
+*/
 ProductionState::ProductionState (Game * game, Base * base, RuleItem * item) : State (game), _base(base), _item(item), _production(0)
 {
 	buildUi();
 }
 
+/**
+ * Initialize all elements in the Production settings screen(modifying Production)
+ * @param game Pointer to the core game.
+ * @param base Pointer to the base to get info from.
+ * @param production the Production to modify
+*/
 ProductionState::ProductionState (Game * game, Base * base, Production * production) : State (game), _base(base), _item(0), _production(production)
 {
 	buildUi();
 }
 
+/**
+ * build screen User Interface
+*/
 void ProductionState::buildUi()
 {
 	_screen = false;
@@ -166,12 +181,20 @@ void ProductionState::buildUi()
 	_timerLessUnit->onTimer((StateHandler)&ProductionState::onLessUnit);
 }
 
+/**
+ * Stop this Production. Return to previous screen
+ * @param action a pointer to an Action
+*/
 void ProductionState::btnStopClick (Action * action)
 {
 	_base->removeProduction(_production);
 	exitState();
 }
 
+/**
+ * Start this Production(if new). Return to previous screen
+ * @param action a pointer to an Action
+*/
 void ProductionState::btnOkClick (Action * action)
 {
 	if(_item)
@@ -181,6 +204,9 @@ void ProductionState::btnOkClick (Action * action)
 	exitState();
 }
 
+/**
+ * Return to previous screen
+*/
 void ProductionState::exitState()
 {
 	_game->popState();
@@ -190,6 +216,9 @@ void ProductionState::exitState()
 	}
 }
 
+/**
+ * Update display of assigned/available engineer/workshop space
+ */
 void ProductionState::setAssignedEngineer()
 {
 	int availableEngineer = getFreeEngineers(_base);
@@ -208,46 +237,82 @@ void ProductionState::setAssignedEngineer()
 	_txtTodo->setText(s4.str());
 }
 
+/**
+ * Start the timerMoreEngineer
+ * @param action a pointer to an Action
+*/
 void ProductionState::moreEngineerPress(Action * action)
 {
 	_timerMoreEngineer->start();
 }
 
+/**
+ * Stop the timerMoreEngineer
+ * @param action a pointer to an Action
+*/
 void ProductionState::moreEngineerRelease(Action * action)
 {
 	_timerMoreEngineer->stop();
 }
 
+/**
+ * Start the timerLessEngineer
+ * @param action a pointer to an Action
+*/
 void ProductionState::lessEngineerPress(Action * action)
 {
 	_timerLessEngineer->start();
 }
 
+/**
+ * Stop the timerLessEngineer
+ * @param action a pointer to an Action
+*/
 void ProductionState::lessEngineerRelease(Action * action)
 {
 	_timerLessEngineer->stop();
 }
 
+/**
+ * Start the timerMoreUnit
+ * @param action a pointer to an Action
+*/
 void ProductionState::moreUnitPress(Action * action)
 {
 	_timerMoreUnit->start();
 }
 
+/**
+ * Stop the timerMoreUnit
+ * @param action a pointer to an Action
+*/
 void ProductionState::moreUnitRelease(Action * action)
 {
 	_timerMoreUnit->stop();
 }
 
+/**
+ * Start the timerLessUnit
+ * @param action a pointer to an Action
+*/
 void ProductionState::lessUnitPress(Action * action)
 {
 	_timerLessUnit->start();
 }
 
+/**
+ * Stop the timerLessUnit
+ * @param action a pointer to an Action
+*/
 void ProductionState::lessUnitRelease(Action * action)
 {
 	_timerLessUnit->stop();
 }
 
+/**
+ * Assign one more engineer(if possible)
+ * @param action a pointer to an Action
+ */
 void ProductionState::onMoreEngineer(Action * action)
 {
 	int assigned = _production->getAssignedEngineers();
@@ -260,6 +325,10 @@ void ProductionState::onMoreEngineer(Action * action)
 	}
 }
 
+/**
+ * Remove one engineer(if possible)
+ * @param action a pointer to an Action
+ */
 void ProductionState::onLessEngineer(Action * action)
 {
 	int assigned = _production->getAssignedEngineers();
@@ -270,6 +339,10 @@ void ProductionState::onLessEngineer(Action * action)
 	}
 }
 
+/**
+ * Build one more unit
+ * @param action a pointer to an Action
+ */
 void ProductionState::onMoreUnit(Action * action)
 {
 	int more = _production->getNumberOfItemTodo ();
@@ -277,6 +350,10 @@ void ProductionState::onMoreUnit(Action * action)
 	setAssignedEngineer();	
 }
 
+/**
+ * Build one less unit(if possible)
+ * @param action a pointer to an Action
+ */
 void ProductionState::onLessUnit(Action * action)
 {
 	int less = _production->getNumberOfItemTodo ();
@@ -287,6 +364,9 @@ void ProductionState::onLessUnit(Action * action)
 	}
 }
 
+/**
+ * Runs state functionality every cycle(used to update the timer).
+ */
 void ProductionState::think()
 {
 	State::think();

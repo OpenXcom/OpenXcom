@@ -14,6 +14,9 @@ class TextList;
 class RuleItem;
 class ManufactureState;
 
+/**
+ * Screen which list possible productions.
+ */
 class ListPossibleProductionState : public State
 {
 private:
@@ -28,9 +31,13 @@ private:
 public:
 	/// Create the state
 	ListPossibleProductionState(Game *game, Base *base);
+	/// Initialize state
 	void init ();
+	/// Handler for clicking the OK button
 	void btnOkClick(Action * action);
+	/// Handler for clicking on the list
 	void lstProdClick (Action * action);
+	/// Fill the list with Base production's
 	void fillProductionList();
 };
 }

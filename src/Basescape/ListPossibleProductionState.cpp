@@ -33,6 +33,11 @@ bool equalProduction::operator()(const Production * p) const
 	return p->getRuleItem() == _item;
 }
 
+/**
+ * Initializes all the elements in the productions list screen.
+ * @param game Pointer to the core game.
+ * @param base Pointer to the base to get info from.
+ */
 ListPossibleProductionState::ListPossibleProductionState(Game *game, Base *base) : State(game), _base(base)
 {
 	int width = 320;
@@ -87,21 +92,36 @@ ListPossibleProductionState::ListPossibleProductionState(Game *game, Base *base)
 	_btnOk->onMouseClick((ActionHandler)&ListPossibleProductionState::btnOkClick);
 }
 
+/**
+   Initialize state(fill list of possible productions)
+*/
 void ListPossibleProductionState::init ()
 {
 	fillProductionList();
 }
 
+/**
+ * Return to previous screen
+ * @param action a pointer to an Action
+*/
 void ListPossibleProductionState::btnOkClick(Action * action)
 {
 	_game->popState();
 }
 
+/**
+ * Open the Production settings screen
+ * @param action a pointer to an Action
+*/
 void ListPossibleProductionState::lstProdClick (Action * action)
 {
 	_game->pushState(new ProductionStartState(_game, _base, _possibleProductions[_lstManufacture->getSelectedRow()]));
 }
 
+
+/**
+ * Fill the list of possible productions
+ */
 void ListPossibleProductionState::fillProductionList()
 {
 	_lstManufacture->clearList();
