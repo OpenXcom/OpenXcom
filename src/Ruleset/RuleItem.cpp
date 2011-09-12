@@ -32,7 +32,7 @@ namespace OpenXcom
 RuleItem::RuleItem(std::string type) : _type(type), _size(0.0), _cost(0), _time(24), _weight(0), _bigSprite(-1), _floorSprite(-1), _handSprite(120), _bulletSprite(-1),
 									   _fireSound(-1), _hitSound(-1), _hitAnimation(0), _power(0), _displayPriority(0), _compatibleAmmo(), _damageType(DT_NONE),
 									   _accuracyAuto(0), _accuracySnap(0), _accuracyAimed(0), _tuAuto(0), _tuSnap(0), _tuAimed(0), _clipSize(0), _accuracyMelee(0), _tuMelee(0),
-				       _battleType(BT_NONE), _twoHanded(false), _waypoint(false), _invWidth(1), _invHeight(1), _manufactureInfo(0)
+				       _battleType(BT_NONE), _twoHanded(false), _waypoint(false), _invWidth(1), _invHeight(1), _manufactureInfo(0), _category("")
 {
 }
 
@@ -535,5 +535,23 @@ void RuleItem::setManufactureInfo(RuleManufactureInfo * info)
 const RuleManufactureInfo * RuleItem::getManufactureInfo() const
 {
 	return _manufactureInfo;
+}
+
+/**
+ * Change the item category
+ * @param c The new item category's
+ */
+void RuleItem::setCategory(const std::string & c)
+{
+	_category = c;
+}
+
+/**
+ * Get the item category
+ * @return the item category's
+*/
+const std::string & RuleItem::getCategory () const
+{
+	return _category;
 }
 }

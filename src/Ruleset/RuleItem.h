@@ -55,6 +55,7 @@ private:
 	bool _twoHanded, _waypoint;
 	int _invWidth, _invHeight;
 	RuleManufactureInfo * _manufactureInfo;
+	std::string _category;
 public:
 	/// Creates a blank item ruleset.
 	RuleItem(std::string type);
@@ -166,6 +167,10 @@ public:
 	void setManufactureInfo(RuleManufactureInfo *);
 	/// Get Item ManufactureInfo
 	const RuleManufactureInfo * getManufactureInfo() const;
+	/// Set the item category
+	void setCategory(const std::string & c);
+	/// Get the item category
+	const std::string & getCategory () const;
 };
 
 }
