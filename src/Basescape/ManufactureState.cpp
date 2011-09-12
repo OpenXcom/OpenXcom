@@ -150,6 +150,11 @@ ManufactureState::~ManufactureState()
 	
 }
 
+void ManufactureState::init ()
+{
+	fillProductionList();
+}
+
 /**
  * Returns to the previous screen.
  * @param action Pointer to an action.
@@ -161,7 +166,7 @@ void ManufactureState::btnOkClick(Action *action)
 
 void ManufactureState::btnNewProductionClick(Action * action)
 {
-	_game->pushState(new ListPossibleProductionState(_game, _base, this));
+	_game->pushState(new ListPossibleProductionState(_game, _base));
 }
 
 void ManufactureState::fillProductionList()
@@ -209,6 +214,6 @@ void ManufactureState::fillProductionList()
 void ManufactureState::lstManufactureClick(Action * action)
 {
 	const std::vector<Production *> productions(_base->getProductions ());
-	_game->pushState(new ProductionState(_game, _base, productions[_lstManufacture->getSelectedRow()], this));
+	_game->pushState(new ProductionState(_game, _base, productions[_lstManufacture->getSelectedRow()]));
 }
 }

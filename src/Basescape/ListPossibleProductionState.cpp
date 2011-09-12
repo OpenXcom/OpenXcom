@@ -33,7 +33,7 @@ bool equalProduction::operator()(const Production * p) const
 	return p->getRuleItem() == _item;
 }
 
-ListPossibleProductionState::ListPossibleProductionState(Game *game, Base *base, ManufactureState * manufactureState) : State(game), _base(base), _manufactureState(manufactureState)
+ListPossibleProductionState::ListPossibleProductionState(Game *game, Base *base) : State(game), _base(base)
 {
 	int width = 320;
 	int height = 140;
@@ -85,6 +85,10 @@ ListPossibleProductionState::ListPossibleProductionState(Game *game, Base *base,
 	_btnOk->setColor(Palette::blockOffset(13)+13);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ListPossibleProductionState::btnOkClick);
+}
+
+void ListPossibleProductionState::init ()
+{
 	fillProductionList();
 }
 
@@ -95,12 +99,13 @@ void ListPossibleProductionState::btnOkClick(Action * action)
 
 void ListPossibleProductionState::lstProdClick (Action * action)
 {
-	_game->pushState(new ProductionStartState(_game, _base, _possibleProductions[_lstManufacture->getSelectedRow()], _manufactureState));
+	_game->pushState(new ProductionStartState(_game, _base, _possibleProductions[_lstManufacture->getSelectedRow()]));
 }
 
 void ListPossibleProductionState::fillProductionList()
 {
 	_lstManufacture->clearList();
+	_possibleProductions.clear();
 	const std::map<std::string, RuleItem *> & items (_game->getRuleset()->getItems ());
 	const std::vector<Production *> productions (_base->getProductions ());
 

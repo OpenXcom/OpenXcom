@@ -26,7 +26,9 @@ private:
 	std::vector<RuleItem *> _possibleProductions;
 
 public:
-	ListPossibleProductionState(Game *game, Base *base, ManufactureState * manufactureState);
+	/// Create the state
+	ListPossibleProductionState(Game *game, Base *base);
+	void init ();
 	void btnOkClick(Action * action);
 	void lstProdClick (Action * action);
 	void fillProductionList();

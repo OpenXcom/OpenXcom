@@ -13,7 +13,6 @@ class TextButton;
 class RuleItem;
 class Production;
 class Timer;
-class ManufactureState;
 
 class ProductionState : public State
 {
@@ -21,7 +20,6 @@ private:
 	Production * _production;
 	RuleItem * _item;
 	Base * _base;
-	ManufactureState * _manufactureState;
 	Window * _window;
 	ArrowButton * _btnUnitUp, * _btnUnitDown, * _btnEngineerUp, * _btnEngineerDown;
 	TextButton * _btnStop, * _btnOk;
@@ -46,8 +44,8 @@ private:
 	void buildUi();
 	void exitState();
 public:
-	ProductionState (Game * game, Base * base, RuleItem * _item, ManufactureState * manufactureState);
-	ProductionState (Game * game, Base * base, Production * production, ManufactureState * manufactureState);
+	ProductionState (Game * game, Base * base, RuleItem * _item);
+	ProductionState (Game * game, Base * base, Production * production);
 };
 }
 #endif
