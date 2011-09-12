@@ -135,9 +135,13 @@ public:
 	int getFacilityMaintenance() const;
 	/// Gets the base's total monthly maintenance.
 	int getMonthlyMaintenace() const;
+	/// Add a new Production to Base
 	void addProduction (Production * p);
+	/// Remove a Base Production's
 	void removeProduction (Production * p);
+	/// Get the list of Base Production's
 	const std::vector<Production *> & getProductions () const;
+	/// Get the count of free engineers
 	int getFreeEngineers () const;
 };
 

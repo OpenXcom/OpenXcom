@@ -750,11 +750,19 @@ int Base::getMonthlyMaintenace() const
 	return getCraftMaintenance() + getPersonnelMaintenance() + getFacilityMaintenance();
 }
 
+/**
+ * Add a new Production to the Base
+ * @param p A pointer to a Production
+*/
 void Base::addProduction (Production * p)
 {
 	_productions.push_back(p);
 }
 
+/**
+ * Remove a Production from the Base
+ * @param p A pointer to a Production
+*/
 void Base::removeProduction (Production * p)
 {
 	std::vector<Production *>::iterator iter = std::find (_productions.begin (),
@@ -767,11 +775,19 @@ void Base::removeProduction (Production * p)
 	_productions.erase(iter);
 }
 
+/**
+ * Get the list of Base Production's
+ * @return the list of Base Production's
+ */
 const std::vector<Production *> & Base::getProductions () const
 {
 	return _productions;
 }
 
+/**
+ * Get the count of free engineers(not assigned to a Production)
+ * @return the count of free engineers
+ */
 int Base::getFreeEngineers () const
 {
 	int freeEngineers = getEngineers();
