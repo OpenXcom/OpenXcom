@@ -765,9 +765,7 @@ void Base::addProduction (Production * p)
 */
 void Base::removeProduction (Production * p)
 {
-	std::vector<Production *>::iterator iter = std::find (_productions.begin (),
-							      _productions.end (),
-							      p);
+	std::vector<Production *>::iterator iter = std::find (_productions.begin (), _productions.end (), p);
 	if (iter == _productions.end ())
 	{
 		return;
