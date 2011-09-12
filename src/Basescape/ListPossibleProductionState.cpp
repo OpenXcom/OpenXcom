@@ -137,12 +137,12 @@ void ListPossibleProductionState::fillProductionList()
 		{
 			continue;
 		}
-		 if(std::find_if(productions.begin (), productions.end (), equalProduction(iter->second)) != productions.end ())
+		if(std::find_if(productions.begin (), productions.end (), equalProduction(iter->second)) != productions.end ())
 		{
 			continue;
 		}
 
-		_lstManufacture->addRow(2, _game->getLanguage()->getString(iter->first).c_str(), L"Unknown");
+		_lstManufacture->addRow(2, _game->getLanguage()->getString(iter->first).c_str(), _game->getLanguage()->getString(iter->second->getCategory ()).c_str());
 		_possibleProductions.push_back(iter->second);
 	}
 }
