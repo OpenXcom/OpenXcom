@@ -989,6 +989,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	lp->setHitSound(19);
 	lp->setClipSize(26);
 	lp->setWeight(3);
+	lp->setCategory ("STR_WEAPON");
 	lp->setManufactureInfo(new RuleManufactureInfo(2, 300, 8000));
 
 	RuleItem *aa = new RuleItem("STR_ALIEN_ALLOYS");
@@ -1003,6 +1004,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	aa->setClipSize(26);
 	aa->setWeight(3);
 	aa->setManufactureInfo(new RuleManufactureInfo(2, 300, 8000));
+	aa->setCategory ("STR_EQUIPMENT");
 
 	RuleItem *pa = new RuleItem("STR_PERSONAL_ARMOR");
 	pa->setSize(0.1f);
@@ -1015,6 +1017,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	pa->setHitSound(19);
 	pa->setClipSize(26);
 	pa->setWeight(3);
+	pa->setCategory ("STR_EQUIPMENT");
 	RuleManufactureInfo * info = new RuleManufactureInfo(2, 300, 8000);
 	info->addNeededItem("STR_ALIEN_ALLOYS", 4);
 	pa->setManufactureInfo(info);
@@ -1030,6 +1033,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	lr->setHitSound(19);
 	lr->setClipSize(26);
 	lr->setWeight(3);
+	lr->setCategory ("STR_WEAPON");
 	lr->setManufactureInfo(new RuleManufactureInfo(2, 300, 8000000));
 
 	_items.insert(std::pair<std::string, RuleItem*>("STR_STINGRAY_LAUNCHER", slauncher));
