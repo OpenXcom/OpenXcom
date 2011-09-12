@@ -771,4 +771,16 @@ const std::vector<Production *> & Base::getProductions () const
 {
 	return _productions;
 }
+
+int Base::getFreeEngineers () const
+{
+	int freeEngineers = getEngineers();
+	const std::vector<Production *> & productions (getProductions());
+	for (std::vector<Production *>::const_iterator itProduction = productions.begin (); itProduction != productions.end (); ++itProduction)
+	{
+		freeEngineers -= (*itProduction)->getAssignedEngineers ();
+	}
+
+	return freeEngineers;
+}
 }

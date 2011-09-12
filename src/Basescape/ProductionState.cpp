@@ -16,18 +16,6 @@
 
 namespace OpenXcom
 {
-int getFreeEngineers (Base * base)
-{
-	int freeEngineers = base->getEngineers();
-	const std::vector<Production *> & productions (base->getProductions());
-	for (std::vector<Production *>::const_iterator itProduction = productions.begin (); itProduction != productions.end (); ++itProduction)
-	{
-		freeEngineers -= (*itProduction)->getAssignedEngineers ();
-	}
-       
-	return freeEngineers;
-}
-
 /**
  * Initialize all elements in the Production settings screen(new Production)
  * @param game Pointer to the core game.
@@ -221,7 +209,7 @@ void ProductionState::exitState()
  */
 void ProductionState::setAssignedEngineer()
 {
-	int availableEngineer = getFreeEngineers(_base);
+	int availableEngineer = _base->getFreeEngineers();
 	int availableWorkSpace = _base->getAvailableWorkshops() - _base->getUsedWorkshops();
 	std::wstringstream s1;
 	s1 << _game->getLanguage()->getString("STR_ENGINEERS_AVAILABLE_UC") << L"\x01" << availableEngineer;
@@ -316,7 +304,7 @@ void ProductionState::lessUnitRelease(Action * action)
 void ProductionState::onMoreEngineer(Action * action)
 {
 	int assigned = _production->getAssignedEngineers();
-	int availableEngineer = getFreeEngineers(_base);
+	int availableEngineer = _base->getFreeEngineers();
 	int availableWorkSpace = _base->getAvailableWorkshops() - _base->getUsedWorkshops();
 	if (availableEngineer > 0 && availableWorkSpace > 0)
 	{

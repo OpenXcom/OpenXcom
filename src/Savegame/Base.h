@@ -138,6 +138,7 @@ public:
 	void addProduction (Production * p);
 	void removeProduction (Production * p);
 	const std::vector<Production *> & getProductions () const;
+	int getFreeEngineers () const;
 };
 
 }
