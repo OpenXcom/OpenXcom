@@ -214,6 +214,8 @@ public:
 	BattleItem *getItem(const std::string &slot, int x = 0, int y = 0) const;
 	/// Gets the item in the main hand.
 	BattleItem *getMainHandWeapon() const;
+	/// Check if this unit is in the exit area
+	bool isInExitArea() const;
 };
 
 }

@@ -676,6 +676,14 @@
 			Name="Battlescape"
 			>
 			<File
+				RelativePath=".\Battlescape\AbortMissionState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\AbortMissionState.h"
+				>
+			</File>				
+			<File
 				RelativePath=".\Battlescape\ActionMenuItem.cpp"
 				>
 			</File>

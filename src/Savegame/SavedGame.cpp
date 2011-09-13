@@ -138,8 +138,6 @@ void SavedGame::getList(TextList *list, Language *lang)
  */
 void SavedGame::load(const std::string &filename, Ruleset *rule)
 {
-	unsigned int size = 0;
-
 	std::string s = Options::getUserFolder() + filename + ".sav";
 	std::ifstream fin(s.c_str());
 	if (!fin)
@@ -166,54 +164,49 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	_difficulty = (GameDifficulty)a;
 	doc["funds"] >> _funds;
 
-	size = doc["countries"].size();
-	for (unsigned int i = 0; i < size; ++i)
+	for (YAML::Iterator i = doc["countries"].begin(); i != doc["countries"].end(); ++i)
 	{
 		std::string type;
-		doc["countries"][i]["type"] >> type;
+		i.second()["type"] >> type;
 		Country *c = new Country(rule->getCountry(type), false);
-		c->load(doc["countries"][i]);
+		c->load(i.second());
 		_countries.push_back(c);
 	}
 
-	size = doc["regions"].size();
-	for (unsigned int i = 0; i < size; ++i)
+	for (YAML::Iterator i = doc["regions"].begin(); i != doc["regions"].end(); ++i)
 	{
 		std::string type;
-		doc["regions"][i]["type"] >> type;
+		i.second()["type"] >> type;
 		Region *r = new Region(rule->getRegion(type));
-		r->load(doc["regions"][i]);
+		r->load(i.second());
 		_regions.push_back(r);
 	}
 
-	size = doc["ufos"].size();
-	for (unsigned int i = 0; i < size; ++i)
+	for (YAML::Iterator i = doc["ufos"].begin(); i != doc["ufos"].end(); ++i)
 	{
 		std::string type;
-		doc["ufos"][i]["type"] >> type;
+		i.second()["type"] >> type;
 		Ufo *u = new Ufo(rule->getUfo(type));
-		u->load(doc["ufos"][i]);
+		u->load(i.second());
 		_ufos.push_back(u);
 	}
 
 	doc["craftId"] >> _craftId;
 
-	size = doc["waypoints"].size();
-	for (unsigned int i = 0; i < size; ++i)
+	for (YAML::Iterator i = doc["waypoints"].begin(); i != doc["waypoints"].end(); ++i)
 	{
 		Waypoint *w = new Waypoint();
-		w->load(doc["waypoints"][i]);
+		w->load(i.second());
 		_waypoints.push_back(w);
 	}
 
 	doc["ufoId"] >> _ufoId;
 	doc["waypointId"] >> _waypointId;
 
-	size = doc["bases"].size();
-	for (unsigned int i = 0; i < size; ++i)
+	for (YAML::Iterator i = doc["bases"].begin(); i != doc["bases"].end(); ++i)
 	{
 		Base *b = new Base(rule);
-		b->load(doc["bases"][i], this);
+		b->load(i.second(), this);
 		_bases.push_back(b);
 	}
 
