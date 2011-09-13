@@ -122,6 +122,8 @@ set ( battlescape_src
   Battlescape/WarningMessage.h
   Battlescape/BattlescapeOptionsState.cpp
   Battlescape/BattlescapeOptionsState.h
+  Battlescape/AbortMissionState.cpp
+  Battlescape/AbortMissionState.h
 )
 
 set ( engine_src 
