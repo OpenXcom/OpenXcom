@@ -484,12 +484,7 @@ void BattlescapeState::mapClick(Action *action)
 			_map->setCursorType(CT_NONE);
 			_game->getCursor()->setVisible(false);
 			_states.push_back(new ProjectileFlyBState(this, _action));
-			if (_action.type == BA_AUTOSHOT) // TODO - this is not very good, an autoshot gets 3 reaction shots this way
-			{
-				_states.push_back(new ProjectileFlyBState(this, _action));
-				_states.push_back(new ProjectileFlyBState(this, _action));
-			}
-			statePushFront(new UnitTurnBState(this, _action));
+			statePushFront(new UnitTurnBState(this, _action)); // first of all turn towards the target
 		}
 		else
 		{
@@ -587,8 +582,7 @@ void BattlescapeState::btnKneelClick(Action *action)
 		{
 			bu->kneel(!bu->isKneeled());
 			// kneeling or standing up can reveil new terrain or units. I guess.
-			_battleGame->getTerrainModifier()->calculateFOVTerrain(bu);
-			_battleGame->getTerrainModifier()->calculateFOVUnits(bu);
+			_battleGame->getTerrainModifier()->calculateFOV(bu);
 			_map->cacheUnits();
 			updateSoldierInfo();
 			BattleAction action;
@@ -747,6 +741,15 @@ void BattlescapeState::endTurn()
 	}
 
 	_battleGame->endTurn();
+
+	if (_battleGame->getSide() == FACTION_PLAYER)
+	{
+		setupCursor();
+	}
+	else
+	{
+		_map->setCursorType(CT_NONE);
+	}
 
 	// check for terrain explosions
 	Tile *t = _battleGame->getTerrainModifier()->checkForTerrainExplosions();
@@ -1080,7 +1083,7 @@ void BattlescapeState::updateSoldierInfo()
 		}
 	}
 
-	_battleGame->getTerrainModifier()->calculateFOVUnits(_battleGame->getSelectedUnit());
+	_battleGame->getTerrainModifier()->calculateFOV(_battleGame->getSelectedUnit());
 	int j = 0;
 	for (std::vector<BattleUnit*>::iterator i = battleUnit->getVisibleUnits()->begin(); i != battleUnit->getVisibleUnits()->end(); ++i)
 	{

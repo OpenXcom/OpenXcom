@@ -46,7 +46,7 @@ private:
 	/// Gets the node at certain position.
 	PathfindingNode *getNode(const Position& pos);
 	/// whether a tile blocks a certain movementType
-	bool isBlocked(Tile *tile, const int part);
+	bool isBlocked(Tile *tile, const int part, const int direction = -1);
 	bool isBlocked(Tile *startTile, Tile *endTile, const int direction);
 	bool canFallDown(Tile *destinationTile);
 	bool isOnStairs(const Position &startPosition, const Position &endPosition);

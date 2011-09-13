@@ -45,7 +45,7 @@ private:
 	SavedBattleGame *_save;
 	std::vector<Uint16> *_voxelData;
 	void addLight(const Position &center, int power, int layer);
-	int blockage(Tile *tile, const int part, ItemDamageType type);
+	int blockage(Tile *tile, const int part, ItemDamageType type, int direction = -1);
 	int horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageType type);
 	int verticalBlockage(Tile *startTile, Tile *endTile, ItemDamageType type);
 	int vectorToDirection(const Position &vector);
@@ -61,10 +61,8 @@ public:
 	void calculateSunShading();
 	/// Calculate sun shading of a single tile.
 	void calculateSunShading(Tile *tile);
-	/// Calculate the visible tiles from a units view point.
-	void calculateFOVTerrain(BattleUnit *unit);
-	/// Calculate the visible units from a units view pointt.
-	bool calculateFOVUnits(BattleUnit *unit);
+	/// Calculate the field of view from a units view point.
+	bool calculateFOV(BattleUnit *unit);
 	/// Calculate the field of view within range of a certain position.
 	void calculateFOV(const Position &position);
 	/// Check reaction fire.
@@ -82,7 +80,7 @@ public:
 	/// Close ufo doors.
 	int closeUfoDoors();
 	/// Calculate line.
-	int calculateLine(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit);
+	int calculateLine(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, bool doVoxelCheck = true);
 	/// Calculate a parabola trajectory.
 	int calculateParabola(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, double curvature, double accuracy);
 	/// Add item & affect with gravity.

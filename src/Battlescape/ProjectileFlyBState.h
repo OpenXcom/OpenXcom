@@ -37,7 +37,12 @@ private:
 	bool validThrowRange();
 	BattleItem *_ammo;
 	BattleAction _action;
+	BattleItem *_projectileItem;
+	int _baseAcc;
+	int _autoshotCounter;
 	int _projectileImpact;
+	void createNewProjectile();
+	bool _initialized;
 public:
 	/// Creates a new ProjectileFly class
 	ProjectileFlyBState(BattlescapeState *parent, BattleAction action);
