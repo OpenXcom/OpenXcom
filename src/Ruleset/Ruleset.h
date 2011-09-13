@@ -74,6 +74,8 @@ public:
 	Ruleset();
 	/// Cleans up the ruleset.
 	virtual ~Ruleset();
+	/// Loads a ruleset from YAML.
+	void load(const std::string &filename);
 	/// Generates the starting saved game.
 	virtual SavedGame *newSave(GameDifficulty diff) const;
 	/// Gets the pool list for soldier names.

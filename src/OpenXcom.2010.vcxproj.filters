@@ -554,6 +554,9 @@
     <ClCompile Include="Battlescape\BattlescapeOptionsState.cpp">
       <Filter>Battlescape</Filter>
     </ClCompile>
+    <ClCompile Include="Battlescape\AbortMissionState.cpp">
+      <Filter>Battlescape</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1108,6 +1111,9 @@
       <Filter>Battlescape</Filter>
     </ClInclude>
     <ClInclude Include="Battlescape\BattlescapeOptionsState.h">
+      <Filter>Battlescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Battlescape\AbortMissionState.h">
       <Filter>Battlescape</Filter>
     </ClInclude>
   </ItemGroup>

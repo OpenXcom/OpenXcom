@@ -561,7 +561,7 @@ void TerrainModifier::explode(const Position &center, int power, ItemDamageType 
 				if (!dest) break; // out of map!
 
 				// horizontal blockage by walls
-				power_ -= horizontalBlockage(origin, dest, type);
+				power_ -= (horizontalBlockage(origin, dest, type) + verticalBlockage(origin, dest, type));
 
 				if (power_ > 0)
 				{
@@ -673,9 +673,14 @@ int TerrainModifier::verticalBlockage(Tile *startTile, Tile *endTile, ItemDamage
 
 	if (direction < 0) // down
 	{
-		for (int z = startTile->getPosition().z; z > endTile->getPosition().z; z--)
+		if (x != endTile->getPosition().x || y != endTile->getPosition().y)
 		{
-			block += blockage(_save->getTile(Position(x, y, z)), MapData::O_FLOOR, type);
+			x = endTile->getPosition().x;
+			y = endTile->getPosition().y;
+			for (int z = startTile->getPosition().z; z > endTile->getPosition().z; z--)
+			{
+				block += blockage(_save->getTile(Position(x, y, z)), MapData::O_FLOOR, type);
+			}
 		}
 	}
 	else if (direction > 0) // up
@@ -683,6 +688,15 @@ int TerrainModifier::verticalBlockage(Tile *startTile, Tile *endTile, ItemDamage
 		for (int z = startTile->getPosition().z + 1; z <= endTile->getPosition().z; z++)
 		{
 			block += blockage(_save->getTile(Position(x, y, z)), MapData::O_FLOOR, type);
+		}
+		if (x != endTile->getPosition().x || y != endTile->getPosition().y)
+		{
+			x = endTile->getPosition().x;
+			y = endTile->getPosition().y;
+			for (int z = startTile->getPosition().z + 1; z <= endTile->getPosition().z; z++)
+			{
+				block += blockage(_save->getTile(Position(x, y, z)), MapData::O_FLOOR, type);
+			}
 		}
 	}
 
@@ -1011,7 +1025,8 @@ int TerrainModifier::calculateLine(const Position& origin, const Position& targe
 		}
 		else
 		{
-			int result = horizontalBlockage(_save->getTile(lastPoint), _save->getTile(Position(cx, cy, cz)), DT_NONE);
+			int result = horizontalBlockage(_save->getTile(lastPoint), _save->getTile(Position(cx, cy, cz)), DT_NONE)
+				       + verticalBlockage(_save->getTile(lastPoint), _save->getTile(Position(cx, cy, cz)), DT_NONE);
 			if (result != 0)
 			{
 				return result;

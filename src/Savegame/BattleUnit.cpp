@@ -1109,5 +1109,14 @@ BattleItem *BattleUnit::getMainHandWeapon() const
 	}
 }
 
+/**
+* Check if this unit is in the exit area.
+* @return Is in the exit area?
+*/
+bool BattleUnit::isInExitArea() const
+{
+	return _tile->getMapData(MapData::O_FLOOR) && (_tile->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT);
+}
+
 }
 
