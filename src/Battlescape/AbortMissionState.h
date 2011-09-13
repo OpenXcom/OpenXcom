@@ -19,7 +19,6 @@
 #ifndef OPENXCOM_ABORTMISSION_H
 #define OPENXCOM_ABORTMISSION_H
 
-#include <vector>
 #include "../Engine/State.h"
 
 namespace OpenXcom

@@ -27,7 +27,6 @@ namespace OpenXcom
 {
 	class Game;
 	class Text;
-	class TextList;
 	class ArticleDefinitionCraft;
 	
 	/**
@@ -45,7 +44,7 @@ namespace OpenXcom
 	protected:
 		Text *_txtTitle;
 		Text *_txtInfo;
-		TextList *_lstInfo;
+		Text *_txtStats;
 	};
 }
 

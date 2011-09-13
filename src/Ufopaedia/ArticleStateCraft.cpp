@@ -30,7 +30,6 @@
 #include "../Resource/ResourcePack.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
-#include "../Interface/TextList.h"
 
 namespace OpenXcom
 {
@@ -68,50 +67,21 @@ namespace OpenXcom
 		_txtInfo->setWordWrap(true);
 		_txtInfo->setText(Ufopaedia::buildText(_game, defs->text));
 
-		_lstInfo = new TextList(defs->rect_stats.width, defs->rect_stats.height, defs->rect_stats.x, defs->rect_stats.y);
-		add(_lstInfo);
+		_txtStats = new Text(defs->rect_stats.width, defs->rect_stats.height, defs->rect_stats.x, defs->rect_stats.y);
+		add(_txtStats);
 		
-		_lstInfo->setColor(Palette::blockOffset(14)+15);
-		_lstInfo->setColumns(2, 120, 40);
-		_lstInfo->setCondensed(true);
+		_txtStats->setColor(Palette::blockOffset(14)+15);
+		_txtStats->setSecondaryColor(Palette::blockOffset(15)+4);
 
 		std::wstringstream ss;
-		ss.str(L"");ss.clear();
-		ss << defs->craft->getMaxSpeed();
-		_lstInfo->addRow(2, _game->getLanguage()->getString("STR_MAXIMUM_SPEED_UC").c_str(), ss.str().c_str());
-		_lstInfo->getCell(0, 1)->setColor(Palette::blockOffset(15)+4);
-
-		ss.str(L"");ss.clear();
-		ss << defs->craft->getAcceleration();
-		_lstInfo->addRow(2, _game->getLanguage()->getString("STR_ACCELERATION").c_str(), ss.str().c_str());
-		_lstInfo->getCell(1, 1)->setColor(Palette::blockOffset(15)+4);
-		
-		ss.str(L"");ss.clear();
-		ss << defs->craft->getMaxFuel();
-		_lstInfo->addRow(2, _game->getLanguage()->getString("STR_FUEL_CAPACITY").c_str(), ss.str().c_str());
-		_lstInfo->getCell(2, 1)->setColor(Palette::blockOffset(15)+4);
-
-		ss.str(L"");ss.clear();
-		ss << defs->craft->getWeapons();
-		_lstInfo->addRow(2, _game->getLanguage()->getString("STR_WEAPON_PODS").c_str(), ss.str().c_str());
-		_lstInfo->getCell(3, 1)->setColor(Palette::blockOffset(15)+4);
-
-		ss.str(L"");ss.clear();
-		ss << defs->craft->getMaxDamage();
-		_lstInfo->addRow(2, _game->getLanguage()->getString("STR_DAMAGE_CAPACITY_UC").c_str(), ss.str().c_str());
-		_lstInfo->getCell(4, 1)->setColor(Palette::blockOffset(15)+4);
-		
-		ss.str(L"");ss.clear();
-		ss << defs->craft->getSoldiers();
-		_lstInfo->addRow(2, _game->getLanguage()->getString("STR_CARGO_SPACE").c_str(), ss.str().c_str());
-		_lstInfo->getCell(5, 1)->setColor(Palette::blockOffset(15)+4);
-		
-		ss.str(L"");ss.clear();
-		ss << defs->craft->getHWPs();
-		_lstInfo->addRow(2, _game->getLanguage()->getString("STR_HWP_CAPACITY").c_str(), ss.str().c_str());
-		_lstInfo->getCell(6, 1)->setColor(Palette::blockOffset(15)+4);
-
-		_lstInfo->draw();
+		ss << _game->getLanguage()->getString("STR_MAXIMUM_SPEED_UC") << L'\x01' << defs->craft->getMaxSpeed() << L'\x01' << L'\n';
+		ss << _game->getLanguage()->getString("STR_ACCELERATION") << L'\x01' << defs->craft->getAcceleration() << L'\x01' << L'\n';
+		ss << _game->getLanguage()->getString("STR_FUEL_CAPACITY") << L'\x01' << defs->craft->getMaxFuel() << L'\x01' << L'\n';
+		ss << _game->getLanguage()->getString("STR_WEAPON_PODS") << L'\x01' << defs->craft->getWeapons() << L'\x01' << L'\n';
+		ss << _game->getLanguage()->getString("STR_DAMAGE_CAPACITY_UC") << L'\x01' << defs->craft->getMaxDamage() << L'\x01' << L'\n';
+		ss << _game->getLanguage()->getString("STR_CARGO_SPACE") << L'\x01' << defs->craft->getSoldiers() << L'\x01' << L'\n';
+		ss << _game->getLanguage()->getString("STR_HWP_CAPACITY") << L'\x01' << defs->craft->getHWPs();
+		_txtStats->setText(ss.str());
 	}
 	
 	ArticleStateCraft::~ArticleStateCraft()

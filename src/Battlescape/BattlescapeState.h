@@ -22,6 +22,7 @@
 #include "../Engine/State.h"
 #include "Position.h"
 #include <list>
+#include <vector>
 #include <string>
 
 namespace OpenXcom

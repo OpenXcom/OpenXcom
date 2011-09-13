@@ -19,7 +19,6 @@
 #ifndef OPENXCOM_INVENTORYSTATE_H
 #define OPENXCOM_INVENTORYSTATE_H
 
-#include <vector>
 #include "../Engine/State.h"
 
 namespace OpenXcom
