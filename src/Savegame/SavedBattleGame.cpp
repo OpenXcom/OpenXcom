@@ -36,7 +36,29 @@ namespace OpenXcom
  */
 SavedBattleGame::SavedBattleGame() : _tiles(), _nodes(), _units(), _side(FACTION_PLAYER), _turn(1), _debugMode(false)
 {
-
+	_debriefingStats.push_back(new DebriefingStat("STR_ALIENS_KILLED", false));
+	_debriefingStats.push_back(new DebriefingStat("STR_ALIEN_CORPSES_RECOVERED", false));
+	_debriefingStats.push_back(new DebriefingStat("STR_LIVE_ALIENS_RECOVERED", false));
+	_debriefingStats.push_back(new DebriefingStat("STR_ALIEN_ARTIFACTS_RECOVERED", false));
+	_debriefingStats.push_back(new DebriefingStat("STR_ALIEN_BASE_CONTROL_DESTROYED", false));
+	_debriefingStats.push_back(new DebriefingStat("STR_CIVILIANS_KILLED_BY_ALIENS", false));
+	_debriefingStats.push_back(new DebriefingStat("STR_CIVILIANS_KILLED_BY_XCOM_OPERATIVES", false));
+	_debriefingStats.push_back(new DebriefingStat("STR_CIVILIANS_SAVED", false));
+	_debriefingStats.push_back(new DebriefingStat("STR_XCOM_OPERATIVES_KILLED", false));
+	_debriefingStats.push_back(new DebriefingStat("STR_XCOM_OPERATIVES_RETIRED_THROUGH_INJURY", false));
+	_debriefingStats.push_back(new DebriefingStat("STR_XCOM_OPERATIVES_MISSING_IN_ACTION", false));
+	_debriefingStats.push_back(new DebriefingStat("STR_TANKS_DESTROYED", false));
+	_debriefingStats.push_back(new DebriefingStat("STR_XCOM_CRAFT_LOST", false));
+	_debriefingStats.push_back(new DebriefingStat("STR_UFO_POWER_SOURCE", true));
+	_debriefingStats.push_back(new DebriefingStat("STR_UFO_NAVIGATION", true));
+	_debriefingStats.push_back(new DebriefingStat("STR_UFO_CONSTRUCTION", true));
+	_debriefingStats.push_back(new DebriefingStat("STR_ALIEN_FOOD", true));
+	_debriefingStats.push_back(new DebriefingStat("STR_ALIEN_REPRODUCTION", true));
+	_debriefingStats.push_back(new DebriefingStat("STR_ALIEN_ENTERTAINMENT", true));
+	_debriefingStats.push_back(new DebriefingStat("STR_ALIEN_SURGERY", true));
+	_debriefingStats.push_back(new DebriefingStat("STR_EXAMINATION_ROOM", true));
+	_debriefingStats.push_back(new DebriefingStat("STR_ALIEN_ALLOYS", true));
+	_debriefingStats.push_back(new DebriefingStat("STR_ELERIUM_115", true));
 }
 
 /**
@@ -61,6 +83,11 @@ SavedBattleGame::~SavedBattleGame()
 	}
 
 	for (std::vector<BattleItem*>::iterator i = _items.begin(); i != _items.end(); ++i)
+	{
+		delete *i;
+	}
+
+	for (std::vector<DebriefingStat*>::iterator i = _debriefingStats.begin(); i != _debriefingStats.end(); ++i)
 	{
 		delete *i;
 	}
@@ -674,6 +701,105 @@ void SavedBattleGame::removeItem(BattleItem *item)
 			break;
 		}
 	}
+}
+
+
+/**
+ * Add to debriefing stats.
+ * @param name The untranslated name of the stat.
+ * @param quantity The quantity to add.
+ * @param score The score to add.
+ */
+void SavedBattleGame::addStat(const std::string &name, int quantity, int score)
+{
+	for (std::vector<DebriefingStat*>::iterator i = _debriefingStats.begin(); i != _debriefingStats.end(); ++i)
+	{
+		if ((*i)->item == name)
+		{
+			(*i)->qty = (*i)->qty + quantity;
+			(*i)->score = (*i)->score + score;
+			break;
+		}
+	}
+}
+
+/**
+ * Get a list of debriefing stats.
+ * @return A map of debriefing stats.
+ */
+std::vector<DebriefingStat*> *SavedBattleGame::getDebriefingStats()
+{
+	return &_debriefingStats;
+}
+
+/** 
+ * Prepares debriefing: gathers Aliens, Corpses, Artefacts, UFO Components.
+ * Adds the items to the craft.
+ * Also calculates the soldiers experience, and possible promotions.
+ * If aborted, only the things on the exit area are recovered.
+ *
+ */
+void SavedBattleGame::prepareDebriefing(bool aborted)
+{
+	_aborted = aborted;
+
+	// run through all tiles to recover UFO components and items
+	if (!_aborted)
+	{
+		for (int i = 0; i < _height * _length * _width; ++i)
+		{
+			for (int part = 0; part < 4; part++)
+			{
+				if (_tiles[i]->getMapData(part))
+				{
+					switch (_tiles[i]->getMapData(part)->getSpecialType())
+					{
+					case UFO_POWER_SOURCE:
+						addStat("STR_UFO_POWER_SOURCE", 1, 1); break;
+					case DESTROY_OBJECTIVE:break; // this is the brain
+					case UFO_NAVIGATION:
+						addStat("STR_UFO_NAVIGATION", 1, 1); break;
+					case ALIEN_FOOD:
+						addStat("STR_ALIEN_FOOD", 1, 1); break;
+					case ALIEN_REPRODUCTION:
+						addStat("STR_ALIEN_REPRODUCTION", 1, 1); break;
+					case ALIEN_ENTERTAINMENT:
+						addStat("STR_ALIEN_ENTERTAINMENT", 1, 1); break;
+					case ALIEN_SURGERY:
+						addStat("STR_ALIEN_SURGERY", 1, 1); break;
+					case UNKNOWN09:
+						addStat("STR_UFO_CONSTRUCTION", 1, 1); break;
+					case ALIEN_ALLOYS:
+						addStat("STR_ALIEN_ALLOYS", 1, 1); break;
+					case EXAM_ROOM:
+						addStat("STR_EXAMINATION_ROOM", 1, 1); break;
+					}
+
+				}
+			}
+		}
+
+		// alien alloys recovery values are divided by 10 or devided by 150 in case of an alien base
+		int divider = _missionType==MISS_ALIENBASE?150:10;
+		for (std::vector<DebriefingStat*>::iterator i = _debriefingStats.begin(); i != _debriefingStats.end(); ++i)
+		{
+			if ((*i)->item == "STR_ALIEN_ALLOYS")
+			{
+				(*i)->qty = (*i)->qty / divider;
+				(*i)->score = (*i)->score / divider;
+				break;
+			}
+		}
+	}
+}
+
+/**
+ * Is the mission aborted or succesful.
+ * @return bool.
+ */
+bool SavedBattleGame::isAborted()
+{
+	return _aborted;
 }
 
 }

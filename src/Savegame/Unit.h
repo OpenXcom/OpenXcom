@@ -73,7 +73,9 @@ public:
 	/// Get the unit's kneel height.
 	virtual int getKneelHeight() const = 0;
 	/// Get the unit's loft ID.
-	virtual int gotLoftemps() const = 0;
+	virtual int getLoftemps() const = 0;
+	/// Get the unit's value.
+	virtual int getValue() const = 0;
 
 };
 

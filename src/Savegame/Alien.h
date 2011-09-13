@@ -66,7 +66,9 @@ public:
 	/// Gets the alien's kneel height.
 	int getKneelHeight() const;
 	/// Gets the alien's loft ID.
-	int gotLoftemps() const;
+	int getLoftemps() const;
+	/// Gets the alien's value.
+	int getValue() const;
 };
 
 }

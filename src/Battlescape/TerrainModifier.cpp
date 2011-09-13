@@ -1139,7 +1139,7 @@ int TerrainModifier::voxelCheck(const Position& voxel, BattleUnit *excludeUnit, 
 			{
 				int x = 15 - voxel.x%16;
 				int y = 15 - voxel.y%16;
-				int idx = (unit->getUnit()->gotLoftemps() * 16) + y;
+				int idx = (unit->getUnit()->getLoftemps() * 16) + y;
 				if ((_voxelData->at(idx) & (1 << x))==(1 << x))
 				{
 					return 4;

@@ -26,7 +26,7 @@ namespace OpenXcom
  * type of craft.
  * @param type String defining the type.
  */
-RuleAlien::RuleAlien(std::string type, std::string race, std::string rank) : _type(type), _race(race), _rank(rank), _armor(""), _standHeight(0), _kneelHeight(0), _loftemps(0)
+RuleAlien::RuleAlien(std::string type, std::string race, std::string rank) : _type(type), _race(race), _rank(rank), _armor(""), _standHeight(0), _kneelHeight(0), _loftemps(0), _value(0)
 {
 	
 }
@@ -83,7 +83,7 @@ int RuleAlien::getKneelHeight() const
 	return _kneelHeight;
 }
 /// 
-int RuleAlien::gotLoftemps() const
+int RuleAlien::getLoftemps() const
 {
 	return _loftemps;
 }
@@ -102,5 +102,16 @@ std::string RuleAlien::getRank() const
 {
 	return _rank;
 }
+
+void RuleAlien::setValue(int value)
+{
+	_value = value;
+}
+
+int RuleAlien::getValue() const
+{
+	return _value;
+}
+
 
 }

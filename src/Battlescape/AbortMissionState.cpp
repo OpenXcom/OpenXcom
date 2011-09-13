@@ -126,6 +126,7 @@ AbortMissionState::~AbortMissionState()
  */
 void AbortMissionState::btnOkClick(Action *action)
 {
+	_battleGame->prepareDebriefing(true);
 	_game->getSavedGame()->endBattle();
 	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
 	_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
