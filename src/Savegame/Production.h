@@ -26,7 +26,7 @@ namespace OpenXcom
 class RuleItem;
 class Base;
 class SavedGame;
-enum productionEnd_e { PRODUCTION_END_COMPLETE, PRODUCTION_END_NOT_ENOUGH_MONEY, PRODUCTION_END_NOT_ENOUGH_MATERIALS, PRODUCTION_END_MAX };
+enum productionProgress_e { PRODUCTION_PROGRESS_NOT_COMPLETE, PRODUCTION_PROGRESS_COMPLETE, PRODUCTION_PROGRESS_NOT_ENOUGH_MONEY, PRODUCTION_PROGRESS_NOT_ENOUGH_MATERIALS, PRODUCTION_PROGRESS_MAX };
 class Production
 {
 public:
@@ -38,7 +38,7 @@ public:
 	int getNumberOfItemDone () const;
 	int getAssignedEngineers() const;
 	void setAssignedEngineers (int);
-	bool step(Base * b, SavedGame * g, productionEnd_e & endType);
+	productionProgress_e step(Base * b, SavedGame * g);
 	const RuleItem * getRuleItem() const;
 	void startItem(Base * b, SavedGame * g);
 	void save(YAML::Emitter &out);

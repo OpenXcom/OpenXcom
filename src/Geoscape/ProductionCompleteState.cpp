@@ -35,7 +35,7 @@ namespace OpenXcom
  * @param item Item that finished producing.
  * @param base Base the item belongs to.
  */
-ProductionCompleteState::ProductionCompleteState(Game *game, const std::wstring &item, const std::wstring &base, productionEnd_e endType) : State(game)
+ProductionCompleteState::ProductionCompleteState(Game *game, const std::wstring &item, const std::wstring &base, productionProgress_e endType) : State(game)
 {
 	_screen = false;
 
@@ -67,13 +67,13 @@ ProductionCompleteState::ProductionCompleteState(Game *game, const std::wstring 
 	std::wstring s;
 	switch(endType)
 	{
-	case PRODUCTION_END_COMPLETE:
+	case PRODUCTION_PROGRESS_COMPLETE:
 		s = _game->getLanguage()->getString("STR_PRODUCTION_OF");
 		break;
-	case PRODUCTION_END_NOT_ENOUGH_MONEY:
+	case PRODUCTION_PROGRESS_NOT_ENOUGH_MONEY:
 		s = _game->getLanguage()->getString("STR_NOT_ENOUGH_MONEY_TO_PRODUCE");
 		break;
-	case PRODUCTION_END_NOT_ENOUGH_MATERIALS:
+	case PRODUCTION_PROGRESS_NOT_ENOUGH_MATERIALS:
 		s = _game->getLanguage()->getString("STR_NOT_ENOUGH_SPECIAL_MATERIALS_TO_PRODUCE");
 		break;
 	default:
@@ -82,7 +82,7 @@ ProductionCompleteState::ProductionCompleteState(Game *game, const std::wstring 
 	s += item;
 	s += _game->getLanguage()->getString("STR__AT__");
 	s += base;
-	if(endType == PRODUCTION_END_COMPLETE)
+	if(endType == PRODUCTION_PROGRESS_COMPLETE)
 	{
 		s += _game->getLanguage()->getString("STR_IS_COMPLETE");
 	}
