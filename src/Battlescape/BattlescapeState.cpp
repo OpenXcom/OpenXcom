@@ -66,6 +66,7 @@
 #include "WarningMessage.h"
 #include "../Menu/SaveGameState.h"
 #include "BattlescapeOptionsState.h"
+#include "MiniMapState.h"
 
 namespace OpenXcom
 {
@@ -566,7 +567,8 @@ void BattlescapeState::btnMapDownClick(Action *action)
  */
 void BattlescapeState::btnShowMapClick(Action *action)
 {
-
+	//MiniMapState
+	_game->pushState (new MiniMapState (_game, _map));
 }
 
 /**
