@@ -60,6 +60,7 @@ private:
 	int _sprite[8];
 	int _block[6];
 	int _loftID[12];
+	unsigned short _miniMapIndex;
 public:
 	static const int O_FLOOR = 0;
 	static const int O_WESTWALL = 1;
@@ -141,7 +142,10 @@ public:
 	int getExplosive() const;
 	/// Set the amount of explosive.
 	void setExplosive(int value);
-
+	/// Set the MiniMap index
+	void setMiniMapIndex(unsigned short i);
+	/// Get the MiniMap index
+	unsigned short getMiniMapIndex() const;
 };
 
 }
