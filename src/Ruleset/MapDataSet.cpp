@@ -212,6 +212,7 @@ void MapDataSet::load(ResourcePack *res)
 		to->setFlammable((int)mcd.Flammable);
 		to->setFuel((int)mcd.Fuel);
 		to->setExplosive((int)mcd.HE_Strength);
+		to->setMiniMapIndex (mcd.ScanG);
 
 		for (int layer = 0; layer < 12; layer++)
 		{
