@@ -115,4 +115,17 @@ int MiniMapView::getDisplayedLevel ()
 	return _lvl;
 }
 
+void MiniMapView::setDisplayedLevel (int level)
+{
+	_lvl = level;
+}
+
+void MiniMapView::setCenter(int x, int y)
+{
+	_startX = x - ((getWidth () / CELL_WIDTH) / 2);
+	_startY = y - ((getHeight () / CELL_HEIGHT) / 2);
+	if(_startX < 0) _startX = 0;
+	if(_startY < 0) _startY = 0;
+}
+
 }
