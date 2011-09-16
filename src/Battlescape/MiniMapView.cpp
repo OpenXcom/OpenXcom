@@ -50,13 +50,14 @@ void MiniMapView::draw()
 			{
 				Position p (px, py, lvl--);
 				t = battle->getTile(p);
-				if (t)
+				if (!t)
 				{
-					int i = 3;
-					while (!data && i >= 0)
-					{
-						data = t->getMapData(i--);
-					}
+					continue;
+				}
+				int i = 3;
+				while (!data && i >= 0)
+				{
+					data = t->getMapData(i--);
 				}
 			}
 			Surface * s = 0;
