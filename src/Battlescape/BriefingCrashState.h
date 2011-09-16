@@ -19,7 +19,6 @@
 #ifndef OPENXCOM_BRIEFINGCRASHSTATE_H
 #define OPENXCOM_BRIEFINGCRASHSTATE_H
 
-#include <vector>
 #include "../Engine/State.h"
 
 namespace OpenXcom

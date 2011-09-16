@@ -820,11 +820,39 @@ void BattlescapeState::checkForCasualties(BattleItem *murderweapon, BattleUnit *
 				statePushNext(new UnitFallBState(this, (*j), murderweapon->getRules()->getDamageType()));
 			else
 				statePushNext(new UnitFallBState(this, (*j), DT_AP));
+
+			if (victim->getFaction() == FACTION_HOSTILE)
+				_battleGame->addStat("STR_ALIENS_KILLED", 1, victim->getUnit()->getValue());
+			else if (victim->getFaction() == FACTION_PLAYER)
+				_battleGame->addStat("STR_XCOM_OPERATIVES_KILLED", 1, -victim->getUnit()->getValue());
 		}
 		else if ((*j)->getStunlevel() >= (*j)->getHealth() && (*j)->getStatus() != STATUS_DEAD && (*j)->getStatus() != STATUS_UNCONSCIOUS && (*j)->getStatus() != STATUS_FALLING)
 		{
 				statePushNext(new UnitFallBState(this, (*j), DT_STUN));
 		}
+	}
+
+	// if all units from either faction are killed - the mission is over.
+	int liveAliens = 0;
+	int liveSoldiers = 0;
+	for (std::vector<BattleUnit*>::iterator j = _battleGame->getUnits()->begin(); j != _battleGame->getUnits()->end(); ++j)
+	{
+		if (!(*j)->isOut())
+		{
+			if ((*j)->getFaction() == FACTION_HOSTILE)
+				liveAliens++;
+			if ((*j)->getFaction() == FACTION_PLAYER)
+				liveSoldiers++;
+		}
+	}
+
+	if (liveAliens == 0 || liveSoldiers == 0)
+	{
+		_battleGame->prepareDebriefing(false);
+		_game->getSavedGame()->endBattle();
+		_game->getCursor()->setColor(Palette::blockOffset(15)+12);
+		_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
+		_game->popState();
 	}
 }
 

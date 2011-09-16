@@ -1472,6 +1472,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	s1.melee = 76;
 	sectoidSoldier->setStats(s1);
 	sectoidSoldier->setVoxelParameters(16, 12, 2);
+	sectoidSoldier->setValue(10);
 
 	RuleAlien *sectoidEngineer = new RuleAlien("SECTOID_ENGINEER", "STR_SECTOID", "STR_LIVE_ENGINEER");
 	sectoidEngineer->setArmor("SECTOID_ARMOR0");
@@ -1488,6 +1489,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	s1.melee = 76;
 	sectoidEngineer->setStats(s1);
 	sectoidEngineer->setVoxelParameters(16, 12, 2);
+	sectoidEngineer->setValue(16);
 
 	RuleAlien *sectoidNavigator = new RuleAlien("SECTOID_NAVIGATOR", "STR_SECTOID", "STR_LIVE_NAVIGATOR");
 	sectoidNavigator->setArmor("SECTOID_ARMOR0");
@@ -1504,6 +1506,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	s1.melee = 76;
 	sectoidNavigator->setStats(s1);
 	sectoidNavigator->setVoxelParameters(16, 12, 2);
+	sectoidNavigator->setValue(12);
 
 	_aliens.insert(std::pair<std::string, RuleAlien*>("SECTOID_SOLDIER", sectoidSoldier));
 	_aliens.insert(std::pair<std::string, RuleAlien*>("SECTOID_ENGINEER", sectoidEngineer));

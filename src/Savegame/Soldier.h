@@ -108,7 +108,9 @@ public:
 	/// Gets the soldier's kneel height.
 	int getKneelHeight() const;
 	/// Gets the soldier's loft ID.
-	int gotLoftemps() const;
+	int getLoftemps() const;
+	/// Gets the soldier's value.
+	int getValue() const;
 };
 
 }

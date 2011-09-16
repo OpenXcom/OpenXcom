@@ -18,6 +18,7 @@
  */
 #include "AbortMissionState.h"
 #include <sstream>
+#include <vector>
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
@@ -43,12 +44,12 @@ AbortMissionState::AbortMissionState(Game *game, SavedBattleGame *battleGame) : 
 {
 	// Create objects
 	_screen = false;
-	_window = new Window(this, 320, 150, 0, 0);
-	_txtInExit = new Text(320, 16, 0, 68);
-	_txtOutsideExit = new Text(320, 16, 0, 92);
-	_txtAbort = new Text(320, 16, 0, 108);
-	_btnOk = new TextButton(50, 12, 68, 124);
-	_btnCancel = new TextButton(50, 12, 138, 124);
+	_window = new Window(this, 320, 144, 0, 0);
+	_txtInExit = new Text(250, 16, 60, 25);
+	_txtOutsideExit = new Text(250, 16, 60, 50);
+	_txtAbort = new Text(320, 16, 0, 75);
+	_btnOk = new TextButton(120, 16, 16, 110);
+	_btnCancel = new TextButton(120, 16, 184, 110);
 
 	add(_window);
 	add(_txtInExit);
@@ -81,7 +82,6 @@ AbortMissionState::AbortMissionState(Game *game, SavedBattleGame *battleGame) : 
 
 	_txtInExit->setColor(Palette::blockOffset(0));
 	_txtInExit->setBig();
-	_txtInExit->setAlign(ALIGN_CENTER);
 	_txtInExit->setHighContrast(true);
 	std::wstringstream ss;
 	ss << inExitArea << _game->getLanguage()->getString("STR_UNITS_IN_EXIT_AREA");
@@ -89,7 +89,6 @@ AbortMissionState::AbortMissionState(Game *game, SavedBattleGame *battleGame) : 
 
 	_txtOutsideExit->setColor(Palette::blockOffset(0));
 	_txtOutsideExit->setBig();
-	_txtOutsideExit->setAlign(ALIGN_CENTER);
 	_txtOutsideExit->setHighContrast(true);
 	ss.str(L"");
 	ss << outExitArea << _game->getLanguage()->getString("STR_UNITS_OUTSIDE_EXIT_AREA");
@@ -101,12 +100,14 @@ AbortMissionState::AbortMissionState(Game *game, SavedBattleGame *battleGame) : 
 	_txtAbort->setHighContrast(true);
 	_txtAbort->setText(_game->getLanguage()->getString("STR_ABORT_MISSION"));
 
-	_btnOk->setColor(Palette::blockOffset(0));
+	_btnOk->setColor(Palette::blockOffset(0)+3);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
+	_btnOk->setHighContrast(true);
 	_btnOk->onMouseClick((ActionHandler)&AbortMissionState::btnOkClick);
 
-	_btnCancel->setColor(Palette::blockOffset(0));
+	_btnCancel->setColor(Palette::blockOffset(0)+3);
 	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
+	_btnCancel->setHighContrast(true);
 	_btnCancel->onMouseClick((ActionHandler)&AbortMissionState::btnCancelClick);
 
 }
@@ -125,6 +126,7 @@ AbortMissionState::~AbortMissionState()
  */
 void AbortMissionState::btnOkClick(Action *action)
 {
+	_battleGame->prepareDebriefing(true);
 	_game->getSavedGame()->endBattle();
 	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
 	_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);

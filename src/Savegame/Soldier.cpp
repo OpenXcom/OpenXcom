@@ -366,9 +366,29 @@ int Soldier::getKneelHeight() const
  * Returns the soldier's loftemps ID.
  * @return loftemps ID
  */
-int Soldier::gotLoftemps() const
+int Soldier::getLoftemps() const
 {
 	return _rules->gotLoftemps();
+}
+
+/**
+ * Returns the soldier's value.
+ * @return value
+ */
+int Soldier::getValue() const
+{
+	int rankbonus = 0;
+
+	switch (_rank)
+	{
+	case RANK_SQUADDIE: rankbonus = 1; break;
+	case RANK_SERGEANT: rankbonus = 1; break;
+	case RANK_CAPTAIN: rankbonus = 1; break;
+	case RANK_COLONEL: rankbonus = 1; break;
+	case RANK_COMMANDER: rankbonus = 1; break;
+	}
+
+	return 20 + _missions + rankbonus;
 }
 
 }

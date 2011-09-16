@@ -50,6 +50,7 @@ class RuleInventory;
  * Enumator containing all the possible mission types.
  */
 enum MissionType { MISS_UFORECOVERY, MISS_UFOASSAULT, MISS_TERROR, MISS_ALIENBASE, MISS_BASEDEFENSE, MISS_CYDONIA };
+struct DebriefingStat { DebriefingStat(std::string _item, bool recovery) : item(_item), qty(0), score(0), recovery(recovery) {}; std::string item; int qty; int score; bool recovery; };
 
 /**
  * The battlescape data that gets written to disk when the game is saved.
@@ -73,6 +74,9 @@ private:
 	UnitFaction _side;
 	int _turn;
 	bool _debugMode;
+	std::vector<DebriefingStat*> _debriefingStats;
+	std::vector<DebriefingStat*> _ufoRecoveryStats;
+	bool _aborted;
 public:
 	/// Creates a new battle save, based on current generic save.
 	SavedBattleGame();
@@ -148,6 +152,14 @@ public:
 	void resetUnitTiles();
 	/// Removes an item from the game.
 	void removeItem(BattleItem *item);
+	/// Add to debriefing stats.
+	void addStat(const std::string &name, int quantity, int score);
+	/// Get a list of debriefing stats.
+	std::vector<DebriefingStat*> *getDebriefingStats();
+	/// Prepares debriefing.
+	void prepareDebriefing(bool aborted);
+	/// Whether the mission was aborted.
+	bool isAborted();
 };
 
 }

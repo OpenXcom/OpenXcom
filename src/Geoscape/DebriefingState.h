@@ -16,39 +16,37 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_ABORTMISSION_H
-#define OPENXCOM_ABORTMISSION_H
+#ifndef OPENXCOM_DEBRIEFINGSTATE_H
+#define OPENXCOM_DEBRIEFINGSTATE_H
 
 #include "../Engine/State.h"
 
 namespace OpenXcom
 {
 
+class TextButton;
 class Window;
 class Text;
-class TextButton;
-class SavedBattleGame;
+class TextList;
 
 /**
- * Screen which asks for confirmation to abort mission.
+ * Debriefing screen shown after a Battlescape
+ * mission that displays the results.
  */
-class AbortMissionState : public State
+class DebriefingState : public State
 {
 private:
+	TextButton *_btnOk;
 	Window *_window;
-	Text *_txtInExit, *_txtOutsideExit, *_txtAbort;
-	TextButton *_btnOk, *_btnCancel;
-	SavedBattleGame *_battleGame;
+	Text *_txtTitle, *_txtItem, *_txtQuantity, *_txtScore, *_txtUfoRecovery, *_txtRating;
+	TextList *_lstStats, *_lstUfoRecovery, *_lstTotal;
 public:
-	/// Creates the Abort Mission state.
-	AbortMissionState(Game *game, SavedBattleGame *battleGame);
-	/// Cleans up the Abort Mission state.
-	~AbortMissionState();
+	/// Creates the Debriefing state.
+	DebriefingState(Game *game);
+	/// Cleans up the Debriefing state.
+	~DebriefingState();
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
-	/// Handler for clicking the Cancel button.
-	void btnCancelClick(Action *action);
-
 };
 
 }
