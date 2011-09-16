@@ -11,6 +11,8 @@
 
 namespace OpenXcom
 {
+const int CELL_WIDTH = 4;
+const int CELL_HEIGHT = 4;
 
 MiniMapView::MiniMapView(int w, int h, int x, int y, Game * game, Map * map) : InteractiveSurface(w, h, x, y), _game(game), _map(map), _startX(0),  _startY(0), _lvl(0)
 {
@@ -26,23 +28,18 @@ void MiniMapView::blit(Surface *surface)
 void MiniMapView::draw()
 {
 	SavedBattleGame * battle = _game->getSavedGame()->getBattleGame();
-	int rwidth = 4;
-	int rheight = 4;
 	SurfaceSet * set = _game->getResourcePack()->getSurfaceSet("SCANG.DAT");
 	int py = _startY;
-	int beginX = 0, dummy, beginY = 0;
-	_map->convertScreenToMap(0, 0, &beginX, &dummy);
-	_map->convertScreenToMap(0, _map->getHeight(), &dummy, &beginY);
-	for (int y = getHeight () - rheight; y >= 0; y-=rheight)
+	for (int y = getHeight () - CELL_HEIGHT; y >= 0; y-=CELL_HEIGHT)
 	{
 		int px = _startX;
-		for (int x = 0; x < getWidth (); x += rwidth)
+		for (int x = 0; x < getWidth (); x += CELL_WIDTH)
 		{
 			SDL_Rect r;
 			r.x = x;
 			r.y = y;
-			r.w = rwidth;
-			r.h = rheight;
+			r.w = CELL_WIDTH;
+			r.h = CELL_HEIGHT;
 			MapData * data = 0;
 			int lvl = _lvl;
 			Tile * t = 0;
