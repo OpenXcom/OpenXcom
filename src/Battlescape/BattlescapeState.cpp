@@ -66,6 +66,7 @@
 #include "WarningMessage.h"
 #include "../Menu/SaveGameState.h"
 #include "BattlescapeOptionsState.h"
+#include "DebriefingState.h"
 
 namespace OpenXcom
 {
@@ -846,11 +847,9 @@ void BattlescapeState::checkForCasualties(BattleItem *murderweapon, BattleUnit *
 
 	if (liveAliens == 0 || liveSoldiers == 0)
 	{
-		_battleGame->prepareDebriefing(false);
-		_game->getSavedGame()->endBattle();
-		_game->getCursor()->setColor(Palette::blockOffset(15)+12);
-		_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
-		_game->popState();
+		if (liveSoldiers == 0)
+			_battleGame->addStat("STR_XCOM_CRAFT_LOST", 1, -200);
+		finishBattle(false);
 	}
 }
 
@@ -860,7 +859,7 @@ void BattlescapeState::checkForCasualties(BattleItem *murderweapon, BattleUnit *
  */
 void BattlescapeState::btnAbortClick(Action *action)
 {
-	_game->pushState(new AbortMissionState(_game, _battleGame));
+	_game->pushState(new AbortMissionState(_game, _battleGame, this));
 }
 
 /**
@@ -1426,6 +1425,21 @@ bool BattlescapeState::checkReservedTU(BattleUnit *bu, int tu)
 	}
 
 	return true;
+}
+
+/**
+ * Finishes up the current battle, shuts down the battlescape
+ * and presents the debriefing the screen for the mission.
+ * @param abort Was the mission aborted?
+ */
+void BattlescapeState::finishBattle(bool abort)
+{
+	_game->popState();
+	_game->pushState(new DebriefingState(_game));
+	_battleGame->prepareDebriefing(abort);
+	_game->getSavedGame()->endBattle();
+	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
+	_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
 }
 
 }

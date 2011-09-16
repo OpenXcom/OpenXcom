@@ -480,9 +480,6 @@ void SavedGame::endBattle()
 			break;
 		}
 	}
-
-	// bye save game, battle is over
-	setBattleGame(0);
 }
 
 /**

@@ -772,6 +772,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Battlescape\DebriefingState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\DebriefingState.h"
+				>
+			</File>	
+			<File
 				RelativePath=".\Battlescape\Explosion.cpp"
 				>
 			</File>

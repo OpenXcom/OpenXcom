@@ -1,7 +1,9 @@
 Version 0.4 (??-??-????)
 -------------------------
 New features:
-- ?
+- Battlescape:
+-- Abort screen
+-- Debriefing screen
 
 Bugfixes:
 - Two duplicating ammo bugs.
@@ -21,6 +23,8 @@ Bugfixes:
 - Double sliding door didn't open when walking diagonally.
 - Energy usage not calculated correctly.
 - Missing text in Monthly Report.
+- Ground items showing up in soldier's hands.
+- Improved interface performance.
 
 Version 0.3 (01-09-2011)
 -------------------------

@@ -31,16 +31,17 @@
 #include "../Savegame/SavedGame.h"
 #include "../Interface/Cursor.h"
 #include "../Interface/FpsCounter.h"
+#include "BattlescapeState.h"
 
 namespace OpenXcom
 {
 
 /**
- * Initializes all the elements in the Abort Mission screen.
+ * Initializes all the elements in the Abort Mission window.
  * @param game Pointer to the core game.
  * @param battleGame Pointer to the saved game.
  */
-AbortMissionState::AbortMissionState(Game *game, SavedBattleGame *battleGame) : State(game), _battleGame(battleGame)
+AbortMissionState::AbortMissionState(Game *game, SavedBattleGame *battleGame, BattlescapeState *state) : State(game), _battleGame(battleGame), _state(state), _inExitArea(0), _outExitArea(0)
 {
 	// Create objects
 	_screen = false;
@@ -59,19 +60,17 @@ AbortMissionState::AbortMissionState(Game *game, SavedBattleGame *battleGame) : 
 	add(_btnCancel);
 
 	// Calculate values
-	int inExitArea = 0;
-	int outExitArea = 0;
 	for (std::vector<BattleUnit*>::iterator i = _battleGame->getUnits()->begin(); i != _battleGame->getUnits()->end(); ++i)
 	{
 		if ((*i)->getFaction() == FACTION_PLAYER && (*i)->getStatus() != STATUS_DEAD)
 		{
 			if ((*i)->isInExitArea())
 			{
-				inExitArea++;
+				_inExitArea++;
 			}
 			else
 			{
-				outExitArea++;
+				_outExitArea++;
 			}
 		}
 	}
@@ -84,14 +83,14 @@ AbortMissionState::AbortMissionState(Game *game, SavedBattleGame *battleGame) : 
 	_txtInExit->setBig();
 	_txtInExit->setHighContrast(true);
 	std::wstringstream ss;
-	ss << inExitArea << _game->getLanguage()->getString("STR_UNITS_IN_EXIT_AREA");
+	ss << _inExitArea << _game->getLanguage()->getString("STR_UNITS_IN_EXIT_AREA");
 	_txtInExit->setText(ss.str());
 
 	_txtOutsideExit->setColor(Palette::blockOffset(0));
 	_txtOutsideExit->setBig();
 	_txtOutsideExit->setHighContrast(true);
 	ss.str(L"");
-	ss << outExitArea << _game->getLanguage()->getString("STR_UNITS_OUTSIDE_EXIT_AREA");
+	ss << _outExitArea << _game->getLanguage()->getString("STR_UNITS_OUTSIDE_EXIT_AREA");
 	_txtOutsideExit->setText(ss.str());
 
 	_txtAbort->setColor(Palette::blockOffset(0));
@@ -126,12 +125,11 @@ AbortMissionState::~AbortMissionState()
  */
 void AbortMissionState::btnOkClick(Action *action)
 {
-	_battleGame->prepareDebriefing(true);
-	_game->getSavedGame()->endBattle();
-	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
-	_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
+	_battleGame->addStat("STR_XCOM_OPERATIVES_MISSING_IN_ACTION", _outExitArea, -20 * _outExitArea);
+	if (_inExitArea == 0)
+		_battleGame->addStat("STR_XCOM_CRAFT_LOST", 1, -200);
 	_game->popState();
-	_game->popState();
+	_state->finishBattle(true);
 }
 
 /**

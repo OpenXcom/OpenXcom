@@ -284,7 +284,7 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 						 "GMTACTIC",
 						 "GMWIN"};
 	std::string exts[] = {"ogg", "mp3", "mid"};
-	int tracks[] = {3, 6, 0, 18, 2, 19, 20, 21, 10, 8, 9, 12, 17, 11};
+	int tracks[] = {3, 6, 0, 18, 2, 19, 20, 21, 10, 9, 8, 12, 17, 11};
 
 	// Check which music version is available
 	bool cat = true;

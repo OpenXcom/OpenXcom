@@ -48,16 +48,6 @@ ArrowButton::~ArrowButton()
 }
 
 /**
- * Changes the color for the arrow button.
- * @param color Color value.
- */
-void ArrowButton::setColor(Uint8 color)
-{
-	ImageButton::setColor(color);
-	draw();
-}
-
-/**
  * Changes the text associated with the arrow button.
  * This makes the button scroll that list.
  * @param list Pointer to text list.
@@ -72,6 +62,7 @@ void ArrowButton::setTextList(TextList *list)
  */
 void ArrowButton::draw()
 {
+	Surface::draw();
 	lock();
 
 	// Draw button

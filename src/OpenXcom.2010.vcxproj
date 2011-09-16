@@ -147,6 +147,7 @@
     <ClCompile Include="Battlescape\BattleState.cpp" />
     <ClCompile Include="Battlescape\BriefingCrashState.cpp" />
     <ClCompile Include="Battlescape\BulletSprite.cpp" />
+    <ClCompile Include="Battlescape\DebriefingState.cpp" />
     <ClCompile Include="Battlescape\Explosion.cpp" />
     <ClCompile Include="Battlescape\ExplosionBState.cpp" />
     <ClCompile Include="Battlescape\Inventory.cpp" />
@@ -335,6 +336,7 @@
     <ClInclude Include="Battlescape\BattleState.h" />
     <ClInclude Include="Battlescape\BriefingCrashState.h" />
     <ClInclude Include="Battlescape\BulletSprite.h" />
+    <ClInclude Include="Battlescape\DebriefingState.h" />
     <ClInclude Include="Battlescape\Explosion.h" />
     <ClInclude Include="Battlescape\ExplosionBState.h" />
     <ClInclude Include="Battlescape\Inventory.h" />

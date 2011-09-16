@@ -105,7 +105,7 @@ void FpsCounter::update()
 	int fps = (int)floor((double)_frames / _timer->getTime() * 1000);
 	_text->setValue(fps);
 	_frames = 0;
-	draw();
+	_redraw = true;
 }
 
 /**
@@ -113,7 +113,7 @@ void FpsCounter::update()
  */
 void FpsCounter::draw()
 {
-	clear();
+	Surface::draw();
 	_text->blit(this);
 }
 

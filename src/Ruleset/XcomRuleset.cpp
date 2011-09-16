@@ -486,6 +486,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	skyranger->setHWPs(3);
 	skyranger->setRefuelRate(50);
 	skyranger->setTransferTime(72);
+	skyranger->setScore(200);
 
 	RuleTerrain *ruleTerrain = new RuleTerrain("PLANE");
 	skyranger->setBattlescapeTerrainData(ruleTerrain);
@@ -503,6 +504,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	lightning->setSoldiers(12);
 	lightning->setHWPs(0);
 	lightning->setRefuelRate(5);
+	lightning->setScore(300);
 
 	RuleCraft* avenger = new RuleCraft("STR_AVENGER");
 	avenger->setSprite(2);
@@ -514,6 +516,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	avenger->setSoldiers(26);
 	avenger->setHWPs(4);
 	avenger->setRefuelRate(5);
+	avenger->setScore(400);
 
 	RuleCraft* interceptor = new RuleCraft("STR_INTERCEPTOR");
 	interceptor->setSprite(3);
@@ -527,6 +530,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	interceptor->setHWPs(0);
 	interceptor->setRefuelRate(50);
 	interceptor->setTransferTime(96);
+	interceptor->setScore(250);
 
 	RuleCraft* firestorm = new RuleCraft("STR_FIRESTORM");
 	firestorm->setSprite(4);
@@ -538,6 +542,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	firestorm->setSoldiers(0);
 	firestorm->setHWPs(0);
 	firestorm->setRefuelRate(5);
+	firestorm->setScore(250);
 
 	_crafts.insert(std::pair<std::string, RuleCraft*>("STR_SKYRANGER", skyranger));
 	_crafts.insert(std::pair<std::string, RuleCraft*>("STR_LIGHTNING", lightning));

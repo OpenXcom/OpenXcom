@@ -36,7 +36,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Surface::Surface(int width, int height, int x, int y) : _x(x), _y(y), _visible(true), _hidden(false), _originalColors(0)
+Surface::Surface(int width, int height, int x, int y) : _x(x), _y(y), _visible(true), _hidden(false), _redraw(false), _originalColors(0)
 {
 	_surface = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, 8, 0, 0, 0, 0);
 
@@ -270,12 +270,15 @@ void Surface::think()
 }
 
 /**
- * Draws the graphic that the surface contains and
- * gets blitted onto other surfaces.
+ * Draws the graphic that the surface contains before it
+ * gets blitted onto other surfaces. The surface is only
+ * redrawn if the flag is set by a property change, to
+ * avoid unecessary drawing.
  */
 void Surface::draw()
 {
-
+	_redraw = false;
+	clear();
 }
 
 /**
@@ -289,6 +292,9 @@ void Surface::blit(Surface *surface)
 {
 	if (_visible && !_hidden)
 	{
+		if (_redraw)
+			draw();
+
 		SDL_Rect* cropper;
 		SDL_Rect target;
 		if (_crop.w == 0 && _crop.h == 0)

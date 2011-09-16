@@ -29,6 +29,7 @@
 #include "../Interface/TextList.h"
 #include "../Engine/Music.h"
 #include "../Savegame/SavedGame.h"
+#include "../Savegame/SavedBattleGame.h"
 
 namespace OpenXcom
 {
@@ -93,7 +94,6 @@ DebriefingState::DebriefingState(Game *game) : State(game)
 	_txtUfoRecovery->setText(_game->getLanguage()->getString("STR_UFO_RECOVERY"));
 
 	_txtRating->setColor(Palette::blockOffset(8)+5);
-	_txtRating->setText(_game->getLanguage()->getString("STR_RATING"));
 
 	_lstStats->setColor(Palette::blockOffset(15)-1);
 	_lstStats->setSecondaryColor(Palette::blockOffset(8)+10);
@@ -106,8 +106,70 @@ DebriefingState::DebriefingState(Game *game) : State(game)
 	_lstUfoRecovery->setDot(true);
 
 	_lstTotal->setColor(Palette::blockOffset(8)+5);
-	_lstTotal->setColumns(2, 224, 64);
-	_lstTotal->setDot(true);
+	_lstTotal->setColumns(2, 244, 64);
+	_lstTotal->setDot(true);	
+	
+	int total = 0, statsY = 0, recoveryY = 0;
+	std::vector<DebriefingStat*> *stats = _game->getSavedGame()->getBattleGame()->getDebriefingStats();
+	for (std::vector<DebriefingStat*>::iterator i = stats->begin(); i != stats->end(); ++i)
+	{
+		if ((*i)->qty == 0)
+			continue;
+
+		std::wstringstream ss, ss2;
+		ss << L'\x01' << (*i)->qty << L'\x01';
+		ss2 << L'\x01' << (*i)->score;
+		total += (*i)->score;
+		if ((*i)->recovery)
+		{
+			_lstUfoRecovery->addRow(3, _game->getLanguage()->getString((*i)->item).c_str(), ss.str().c_str(), ss2.str().c_str());
+			recoveryY += 8;
+		}
+		else
+		{
+			_lstStats->addRow(3, _game->getLanguage()->getString((*i)->item).c_str(), ss.str().c_str(), ss2.str().c_str());
+			statsY += 8;
+		}
+	}
+	std::wstringstream ss3;
+	ss3 << total;
+	_lstTotal->addRow(2, _game->getLanguage()->getString("STR_TOTAL_UC").c_str(), ss3.str().c_str());
+
+	if (recoveryY > 0)
+	{
+		_txtUfoRecovery->setY(_lstStats->getY() + statsY + 5);
+		_lstUfoRecovery->setY(_txtUfoRecovery->getY() + 8);
+		_lstTotal->setY(_lstUfoRecovery->getY() + recoveryY + 5);
+	}
+	else
+	{
+		_txtUfoRecovery->setText(L"");
+		_lstTotal->setY(_lstStats->getY() + statsY + 5);
+	}
+
+	// Calculate rating
+	std::wstring rating = _game->getLanguage()->getString("STR_RATING");
+	if (total <= -200)
+	{
+		rating += _game->getLanguage()->getString("STR_RATING_TERRIBLE");
+	}
+	else if (total <= 0)
+	{
+		rating += _game->getLanguage()->getString("STR_RATING_POOR");
+	}
+	else if (total <= 200)
+	{
+		rating += _game->getLanguage()->getString("STR_RATING_OK");
+	}
+	else if (total <= 500)
+	{
+		rating += _game->getLanguage()->getString("STR_RATING_GOOD");
+	}
+	else
+	{
+		rating += _game->getLanguage()->getString("STR_RATING_EXCELLENT");
+	}
+	_txtRating->setText(rating);
 
 	// Set music
 	_game->getResourcePack()->getMusic("GMMARS")->play();
@@ -127,6 +189,9 @@ DebriefingState::~DebriefingState()
  */
 void DebriefingState::btnOkClick(Action *action)
 {
+	// bye save game, battle is over
+	_game->getSavedGame()->setBattleGame(0);
+
 	_game->popState();
 }
 

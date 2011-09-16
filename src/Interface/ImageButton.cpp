@@ -48,6 +48,7 @@ ImageButton::~ImageButton()
 void ImageButton::setColor(Uint8 color)
 {
 	_color = color;
+	_redraw = true;
 }
 
 /**
@@ -69,6 +70,14 @@ void ImageButton::setGroup(ImageButton **group)
 	_group = group;
 	if (_group != 0 && *_group == this)
 		invert(_color);
+}
+
+/**
+ *
+ */
+void ImageButton::draw()
+{
+	;
 }
 
 /**
