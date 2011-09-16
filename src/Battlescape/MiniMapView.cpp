@@ -106,6 +106,11 @@ void MiniMapView::down ()
 void MiniMapView::mouseClick (Action *action, State *state)
 {
 	InteractiveSurface::mouseClick(action, state);
+	int x = 0, y = 0;
+	int origX = action->getRelativeXMouse();
+	int origY = action->getRelativeYMouse();
+	convertScreenToMiniMap(origX, origY, x, y);
+	setCenter(x, y);
 	draw();
 }
 
@@ -127,4 +132,9 @@ void MiniMapView::setCenter(int x, int y)
 	if(_startY < 0) _startY = 0;
 }
 
+void MiniMapView::convertScreenToMiniMap (int xOrig, int yOrig, int & x, int & y)
+{
+	x = xOrig / CELL_WIDTH;
+	y = (getHeight () / CELL_HEIGHT) - (yOrig / CELL_HEIGHT);
+}
 }
