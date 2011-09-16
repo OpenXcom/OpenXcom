@@ -22,16 +22,15 @@ endif
 # Compiler settings
 CXXFLAGS ?= -Wall -O2
 CXXFLAGS += $(addprefix -D,$(TARGET))
-CXXFLAGS += `$(PKG-CONFIG) --cflags sdl yaml-cpp`
+CXXFLAGS += $(shell $(PKG-CONFIG) --cflags sdl yaml-cpp)
 
-LDFLAGS ?= -lSDL_gfx -lSDL_mixer
-LDFLAGS += `$(PKG-CONFIG) --libs sdl yaml-cpp`
+LIBS = $(shell $(PKG-CONFIG) --libs sdl yaml-cpp) -lSDL_gfx -lSDL_mixer
 
 # Rules
 all: $(BINDIR)$(BIN)
 
 $(BINDIR)$(BIN): $(OBJS)
-	$(CXX) $(OBJS) $(LDFLAGS) -o $(BINDIR)$(BIN)
+	$(CXX) $(OBJS) $(LDFLAGS) $(LIBS) -o $(BINDIR)$(BIN)
 
 $(OBJDIR)%.o:: %.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
