@@ -23,6 +23,8 @@ public:
 	void up ();
 	void down ();
 	int getDisplayedLevel ();
+	void setDisplayedLevel (int level);
+	void setCenter(int x, int y);
 };
 
 }
