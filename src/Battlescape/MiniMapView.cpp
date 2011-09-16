@@ -14,6 +14,7 @@ namespace OpenXcom
 
 MiniMapView::MiniMapView(int w, int h, int x, int y, Game * game, Map * map) : InteractiveSurface(w, h, x, y), _game(game), _map(map), _startX(0),  _startY(0), _lvl(0)
 {
+	setCenter(_map->getCenterX (), _map->getCenterY());
 }
 
 void MiniMapView::blit(Surface *surface)
