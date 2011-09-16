@@ -14,7 +14,7 @@ namespace OpenXcom
 const int CELL_WIDTH = 4;
 const int CELL_HEIGHT = 4;
 
-MiniMapView::MiniMapView(int w, int h, int x, int y, Game * game, Map * map) : InteractiveSurface(w, h, x, y), _game(game), _map(map), _startX(0),  _startY(0), _lvl(0)
+MiniMapView::MiniMapView(int w, int h, int x, int y, Game * game, Map * map) : InteractiveSurface(w, h, x, y), _game(game), _map(map), _startX(0),  _startY(0), _lvl(_map->getViewHeight())
 {
 	setCenter(_map->getCenterX (), _map->getCenterY());
 }
