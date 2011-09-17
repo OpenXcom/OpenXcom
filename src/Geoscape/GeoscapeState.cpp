@@ -740,8 +740,9 @@ void GeoscapeState::time1Day()
 			_game->getSavedGame()->addFinishedResearch(research, _game->getRuleset ());
 			std::vector<RuleResearchProject *> newPossibleResearch;
 			_game->getSavedGame()->getDependableResearch (newPossibleResearch, (*iter)->getRuleResearchProject(), _game->getRuleset(), *i);
-			_game->pushState (new NewPossibleResearchState(_game, *i, newPossibleResearch));
-			_game->pushState (new EndResearchState (_game, *i, research));
+			timerReset();
+			popup(new EndResearchState (_game, research));
+			popup(new NewPossibleResearchState(_game, *i, newPossibleResearch));
 			delete(*iter);
 		}
 

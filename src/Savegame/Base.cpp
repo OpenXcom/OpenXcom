@@ -178,18 +178,21 @@ void Base::load(const YAML::Node &node, SavedGame *save)
 		_transfers.push_back(t);
 	}
 
-	size = node["research"].size();
-	const std::map<std::string, RuleResearchProject *> & researchs(_rule->getResearchProjects ());
-	for (unsigned int i = 0; i < size; i++)
+	if (const YAML::Node *pName = node.FindValue("research"))
 	{
-		std::string research;
-		node["research"][i]["project"] >> research;
-		std::map<std::string, RuleResearchProject *>::const_iterator itResearch = researchs.find (research);
-		if (itResearch != researchs.end ())
+		size = node["research"].size();
+		const std::map<std::string, RuleResearchProject *> & researchs(_rule->getResearchProjects ());
+		for (unsigned int i = 0; i < size; i++)
 		{
-			ResearchProject *r = new ResearchProject(itResearch->second);
-			r->load(node["research"][i], _rule);
-			_baseResearchs.push_back(r);
+			std::string research;
+			node["research"][i]["project"] >> research;
+			std::map<std::string, RuleResearchProject *>::const_iterator itResearch = researchs.find (research);
+			if (itResearch != researchs.end ())
+			{
+				ResearchProject *r = new ResearchProject(itResearch->second);
+				r->load(node["research"][i], _rule);
+				_baseResearchs.push_back(r);
+			}
 		}
 	}
 }

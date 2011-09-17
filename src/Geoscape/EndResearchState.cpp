@@ -35,18 +35,18 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-EndResearchState::EndResearchState(Game * game, Base * base, const RuleResearchProject * research) : State (game), _base(base), _research(research)
+EndResearchState::EndResearchState(Game * game, const RuleResearchProject * research) : State (game), _research(research)
 {
 	_screen = false;
 
 	// Create objects
-	_window = new Window(this, 210, 140, 70, 30, POPUP_BOTH);
-	_btnOk = new TextButton(80, 16, 80, 145);
-	_btnReport = new TextButton(80, 16, 190, 145);
-	_txtTitle = new Text(200, 16, 80, 90);
+	_window = new Window(this, 224, 140, 48, 30, POPUP_BOTH);
+	_btnOk = new TextButton(80, 16, 64, 146);
+	_btnReport = new TextButton(80, 16, 176, 146);
+	_txtTitle = new Text(224, 16, 48, 88);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
+	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
 
 	add(_window);
 	add(_btnOk);
@@ -54,7 +54,7 @@ EndResearchState::EndResearchState(Game * game, Base * base, const RuleResearchP
 	add(_txtTitle);
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(8)+8);
+	_window->setColor(Palette::blockOffset(15)+2);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(8)+8);
@@ -64,10 +64,18 @@ EndResearchState::EndResearchState(Game * game, Base * base, const RuleResearchP
 	_btnReport->setText(_game->getLanguage()->getString("STR_VIEW_REPORTS"));
 	_btnReport->onMouseClick((ActionHandler)&EndResearchState::btnReportClick);
 
-	_txtTitle->setColor(Palette::blockOffset(8)+5);
+	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(_game->getLanguage()->getString("STR_RESEARCH_COMPLETED"));
+}
+
+/**
+ * Resets the palette.
+ */
+void EndResearchState::init()
+{
+	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
 }
 
 /**
@@ -85,6 +93,7 @@ void EndResearchState::btnOkClick(Action *action)
  */
 void EndResearchState::btnReportClick(Action *action)
 {
+	_game->popState();
 	std::string name (_research->getName ());
 	Ufopaedia::openArticle(_game, name);
 }

@@ -57,6 +57,7 @@ ResearchState::ResearchState(Game *game, Base *base) : State(game), _base(base)
 	_lstResearch = new TextList(288, 120, 8, 54);
 	
 	// Set palette
+	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(1)), Palette::backPos, 16);
 
 	add(_window);

@@ -560,6 +560,24 @@
     <ClCompile Include="Battlescape\DebriefingState.cpp">
       <Filter>Battlescape</Filter>
     </ClCompile>
+    <ClCompile Include="Basescape\NewResearchListState.cpp">
+      <Filter>Basescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Basescape\ResearchProjectState.cpp">
+      <Filter>Basescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Geoscape\NewPossibleResearchState.cpp">
+      <Filter>Geoscape</Filter>
+    </ClCompile>
+    <ClCompile Include="Ruleset\RuleResearchProject.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
+    <ClCompile Include="Savegame\ResearchProject.cpp">
+      <Filter>Savegame</Filter>
+    </ClCompile>
+    <ClCompile Include="Geoscape\EndResearchState.cpp">
+      <Filter>Geoscape</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1121,6 +1139,24 @@
     </ClInclude>
     <ClInclude Include="Battlescape\DebriefingState.h">
       <Filter>Battlescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Basescape\NewResearchListState.h">
+      <Filter>Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Basescape\ResearchProjectState.h">
+      <Filter>Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Geoscape\NewPossibleResearchState.h">
+      <Filter>Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\RuleResearchProject.h">
+      <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Savegame\ResearchProject.h">
+      <Filter>Savegame</Filter>
+    </ClInclude>
+    <ClInclude Include="Geoscape\EndResearchState.h">
+      <Filter>Geoscape</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

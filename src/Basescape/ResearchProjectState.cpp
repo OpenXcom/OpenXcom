@@ -46,7 +46,7 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param rule A RuleResearchProject which will be used to create a new ResearchProject
  */
-ResearchProjectState::ResearchProjectState(Game *game, Base *base, RuleResearchProject * rule) : State(game), _base(base), _project(new ResearchProject(rule, rule->getCost() * OpenXcom::RNG::generate(0.5f, 1.5f))), _rule(rule)
+ResearchProjectState::ResearchProjectState(Game *game, Base *base, RuleResearchProject * rule) : State(game), _base(base), _project(new ResearchProject(rule, int(rule->getCost() * OpenXcom::RNG::generate(50, 150)/100))), _rule(rule)
 {
 	buildUi ();
 }
@@ -67,43 +67,38 @@ ResearchProjectState::ResearchProjectState(Game *game, Base *base, ResearchProje
  */
 void ResearchProjectState::buildUi ()
 {
-	int width = 220;
+	int width = 230;
 	int height = 140;
 	int max_width = 320;
 	int max_height = 200;
 	int start_x = (max_width - width) / 2;
 	int start_y = (max_height - height) / 2;
 	
-	int button_x_border = 10;
+	int button_x_border = 16;
 	int button_y_border = 10;
 	int button_height = 16;
 
 	_screen = false;
-	_window = new Window(this, width, height, start_x, start_y/*, POPUP_BOTH*/);
+	_window = new Window(this, width, height, start_x, start_y);
 
 	_txtTitle = new Text(width - 2 * button_x_border, button_height, start_x + button_x_border, start_y + button_y_border);
 	
 	_txtAvailableScientist = new Text(width - 2 * button_x_border, button_height, start_x + button_x_border, start_y + 3*button_y_border);
 	_txtAvailableSpace = new Text(width - 2 * button_x_border, button_height, start_x + button_x_border, start_y + 4*button_y_border);
-	_txtAssigned = new Text(width - 2 * button_x_border, button_height, start_x + 2*button_x_border, start_y + 5*button_y_border);
-	_txtAssignedValue = new Text(2 * button_x_border, button_height, start_x + 11*button_x_border, start_y + 5*button_y_border);
-	_txtMore = new Text(width - 3 * button_x_border, button_height, start_x + 2*button_x_border, start_y + 7*button_y_border);
-	_txtLess = new Text(width - 3 * button_x_border, button_height, start_x + 2*button_x_border, start_y + 9*button_y_border);
+	_txtAllocatedScientist = new Text(width - 2 * button_x_border, button_height, start_x + button_x_border, start_y + 5*button_y_border);
+	_txtMore = new Text(width - 3 * button_x_border, button_height, start_x + 2.5*button_x_border + 8, start_y + 7*button_y_border);
+	_txtLess = new Text(width - 3 * button_x_border, button_height, start_x + 2.5*button_x_border + 8, start_y + 9*button_y_border);
 	_btnOk = new TextButton(width - 2 * button_x_border , button_height, start_x + button_x_border, start_y + height - button_height - button_y_border);
 
-	_btnMore = new ArrowButton(ARROW_BIG_UP, 1.4*button_x_border, button_height, start_x + 12*button_x_border, start_y + 7*button_y_border);
-	_btnLess = new ArrowButton(ARROW_BIG_DOWN, 1.4*button_x_border, button_height, start_x + 12*button_x_border, start_y + 9*button_y_border);
-
-	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(1)), Palette::backPos, 16);
+	_btnMore = new ArrowButton(ARROW_BIG_UP, button_x_border - 3, button_height - 2, start_x + 10*button_x_border, start_y + 7*button_y_border);
+	_btnLess = new ArrowButton(ARROW_BIG_DOWN, button_x_border - 3, button_height - 2, start_x + 10*button_x_border, start_y + 9*button_y_border);
 
 	add(_window);
 	add(_btnOk);
 	add(_txtTitle);
 	add(_txtAvailableScientist);
 	add(_txtAvailableSpace);
-	add(_txtAssigned);
-	add(_txtAssignedValue);
+	add(_txtAllocatedScientist);
 	add(_txtMore);
 	add(_txtLess);
 	add(_btnMore);
@@ -113,6 +108,7 @@ void ResearchProjectState::buildUi ()
 	_window->setColor(Palette::blockOffset(13)+8);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
 	_txtTitle->setColor(Palette::blockOffset(13)+5);
+	_txtTitle->setBig();
 	_txtTitle->setText(_rule ? _game->getLanguage()->getString(_rule->getName()) : _game->getLanguage()->getString(_project->getRuleResearchProject ()->getName()));
 	_txtAvailableScientist->setColor(Palette::blockOffset(13)+5);
 	_txtAvailableScientist->setSecondaryColor(Palette::blockOffset(13));
@@ -120,11 +116,9 @@ void ResearchProjectState::buildUi ()
 	_txtAvailableSpace->setColor(Palette::blockOffset(13)+5);
 	_txtAvailableSpace->setSecondaryColor(Palette::blockOffset(13));
 
-	_txtAssigned->setColor(Palette::blockOffset(13)+5);
-	_txtAssigned->setText(_game->getLanguage()->getString("STR_SCIENTISTS_ALLOCATED"));
-	_txtAssignedValue->setColor(Palette::blockOffset(13));
-	_txtAssignedValue->setBig();
-	_txtAssignedValue->setX(_txtAssigned->getX() + _txtAssigned->getTextWidth() + _txtAssignedValue->getFont()->getSpacing());
+	_txtAllocatedScientist->setColor(Palette::blockOffset(13)+5);
+	_txtAllocatedScientist->setSecondaryColor(Palette::blockOffset(13));
+	_txtAllocatedScientist->setBig();
 
 	_txtMore->setText(_game->getLanguage()->getString("STR_INCREASE"));
 	_txtLess->setText(_game->getLanguage()->getString("STR_DECREASE"));
@@ -167,21 +161,19 @@ void ResearchProjectState::btnOkClick(Action *action)
 }
 
 /**
- * update count of assigned/free scientis, and available space lab
+ * update count of assigned/free scientist, and available space lab
  */
 void ResearchProjectState::SetAssignedScientist()
 {
 	std::wstringstream s1;
-	int freeScientist = _base->getFreeScientist();
-	int freeSpaceLab = _base->getFreeLaboratories();
-	s1 << _game->getLanguage()->getString("STR_SCIENTISTS_AVAILABLE_UC") << L'\x01' << freeScientist;
+	s1 << _game->getLanguage()->getString("STR_SCIENTISTS_AVAILABLE_UC") << L'\x01' << _base->getFreeScientist();
 	std::wstringstream s2;
-	s2 << _game->getLanguage()->getString("STR_LABORATORY_SPACE_AVAILABLE_UC") << L'\x01' << freeSpaceLab;
+	s2 << _game->getLanguage()->getString("STR_LABORATORY_SPACE_AVAILABLE_UC") << L'\x01' << _base->getFreeLaboratories();
 	std::wstringstream s3;
-	s3 << _project->getAssigned ();
+	s3 << _game->getLanguage()->getString("STR_SCIENTISTS_ALLOCATED") << L'\x01' << _project->getAssigned ();
 	_txtAvailableScientist->setText(s1.str());
 	_txtAvailableSpace->setText(s2.str());
-	_txtAssignedValue->setText(s3.str());
+	_txtAllocatedScientist->setText(s3.str());
 }
 
 /**

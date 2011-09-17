@@ -45,7 +45,7 @@ private:
 	TextButton *_btnOk;
 	ArrowButton * _btnMore, *_btnLess;
 	Window *_window;
-	Text *_txtTitle, *_txtAvailableScientist, *_txtAvailableSpace, *_txtAssigned, *_txtMore, *_txtLess, * _txtAssignedValue;
+	Text *_txtTitle, *_txtAvailableScientist, *_txtAvailableSpace, *_txtAllocatedScientist, *_txtMore, *_txtLess;
 	TextList *_lstResearch;
 	std::vector<Text*> texts_;
 	void SetAssignedScientist();

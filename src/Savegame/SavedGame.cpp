@@ -186,27 +186,27 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	for (YAML::Iterator i = doc["countries"].begin(); i != doc["countries"].end(); ++i)
 	{
 		std::string type;
-		i.second()["type"] >> type;
+		(*i)["type"] >> type;
 		Country *c = new Country(rule->getCountry(type), false);
-		c->load(i.second());
+		c->load(*i);
 		_countries.push_back(c);
 	}
 
 	for (YAML::Iterator i = doc["regions"].begin(); i != doc["regions"].end(); ++i)
 	{
 		std::string type;
-		i.second()["type"] >> type;
+		(*i)["type"] >> type;
 		Region *r = new Region(rule->getRegion(type));
-		r->load(i.second());
+		r->load(*i);
 		_regions.push_back(r);
 	}
 
 	for (YAML::Iterator i = doc["ufos"].begin(); i != doc["ufos"].end(); ++i)
 	{
 		std::string type;
-		i.second()["type"] >> type;
+		(*i)["type"] >> type;
 		Ufo *u = new Ufo(rule->getUfo(type));
-		u->load(i.second());
+		u->load(*i);
 		_ufos.push_back(u);
 	}
 
@@ -215,7 +215,7 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	for (YAML::Iterator i = doc["waypoints"].begin(); i != doc["waypoints"].end(); ++i)
 	{
 		Waypoint *w = new Waypoint();
-		w->load(i.second());
+		w->load(*i);
 		_waypoints.push_back(w);
 	}
 
@@ -225,7 +225,7 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	for (YAML::Iterator i = doc["bases"].begin(); i != doc["bases"].end(); ++i)
 	{
 		Base *b = new Base(rule);
-		b->load(i.second(), this);
+		b->load(*i, this);
 		_bases.push_back(b);
 	}
 

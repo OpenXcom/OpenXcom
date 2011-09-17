@@ -126,6 +126,10 @@ set ( battlescape_src
   Battlescape/WarningMessage.h
   Battlescape/BattlescapeOptionsState.cpp
   Battlescape/BattlescapeOptionsState.h
+  Battlescape/AbortMissionState.cpp
+  Battlescape/AbortMissionState.h
+  Battlescape/DebriefingState.cpp
+  Battlescape/DebriefingState.h
 )
 
 set ( engine_src 
@@ -232,8 +236,6 @@ set ( geoscape_src
   Geoscape/EndResearchState.cpp
   Geoscape/NewPossibleResearchState.h
   Geoscape/NewPossibleResearchState.cpp
-  Geoscape/GeoResearchState.h
-  Geoscape/GeoResearchState.cpp
 )
 
 set ( interface_src 
