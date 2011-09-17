@@ -44,6 +44,7 @@ void MiniMapView::draw()
 			MapData * data = 0;
 			int lvl = _lvl;
 			Tile * t = 0;
+			BattleUnit *unit = 0;
 			while ((!t || !data) && lvl >= 0)
 			{
 				Position p (px, py, lvl--);
@@ -69,6 +70,27 @@ void MiniMapView::draw()
 			}
 			else
 			{
+				s->blitNShade(this, x, y, 0);
+			}
+			if(t)
+			{
+				unit = t->getUnit();
+			}
+			if (unit && unit->getVisible())
+			{
+				int unitSpriteId;
+				switch (unit->getFaction())
+				{
+				case FACTION_HOSTILE:
+					unitSpriteId = 6;
+					break;
+				case FACTION_NEUTRAL:
+					unitSpriteId = 4;
+					break;
+				default:
+					unitSpriteId = 0;
+				}
+				s = set->getFrame (unitSpriteId);
 				s->blitNShade(this, x, y, 0);
 			}
 			px++;
