@@ -79,6 +79,13 @@ void MiniMapView::draw()
 			if (unit && unit->getVisible())
 			{
 				int unitSpriteId;
+				//minimap sprite index:
+				// * 0-2   : Xcom soldier
+				// * 3-5   : Civilian
+				// * 6-8   : alien
+				// * 9-11  :
+				// * 12-23 : Xcom HWP
+				// * 24-35 : Alien big terror unit(cyberdisk, ...)
 				switch (unit->getFaction())
 				{
 				case FACTION_HOSTILE:
