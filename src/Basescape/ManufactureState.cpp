@@ -58,6 +58,7 @@ ManufactureState::ManufactureState(Game *game, Base *base) : State(game), _base(
 	_lstManufacture = new TextList(288, 100, 8, 80);
 	
 	// Set palette
+	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
 
 	add(_window);

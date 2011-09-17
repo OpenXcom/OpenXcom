@@ -45,7 +45,7 @@ SavedBattleGame::SavedBattleGame() : _tiles(), _nodes(), _units(), _side(FACTION
 	_debriefingStats.push_back(new DebriefingStat("STR_CIVILIANS_KILLED_BY_XCOM_OPERATIVES", false));
 	_debriefingStats.push_back(new DebriefingStat("STR_CIVILIANS_SAVED", false));
 	_debriefingStats.push_back(new DebriefingStat("STR_XCOM_OPERATIVES_KILLED", false));
-	_debriefingStats.push_back(new DebriefingStat("STR_XCOM_OPERATIVES_RETIRED_THROUGH_INJURY", false));
+	//_debriefingStats.push_back(new DebriefingStat("STR_XCOM_OPERATIVES_RETIRED_THROUGH_INJURY", false));
 	_debriefingStats.push_back(new DebriefingStat("STR_XCOM_OPERATIVES_MISSING_IN_ACTION", false));
 	_debriefingStats.push_back(new DebriefingStat("STR_TANKS_DESTROYED", false));
 	_debriefingStats.push_back(new DebriefingStat("STR_XCOM_CRAFT_LOST", false));

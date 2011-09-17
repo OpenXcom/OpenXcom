@@ -360,6 +360,7 @@ void SoldierInfoState::edtSoldierKeyPress(Action *action)
  */
 void SoldierInfoState::btnOkClick(Action *action)
 {
+	_base->getSoldiers()->at(_soldier)->setName(_edtSoldier->getText());
 	_game->popState();
 }
 

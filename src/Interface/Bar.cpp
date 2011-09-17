@@ -49,7 +49,7 @@ Bar::~Bar()
 void Bar::setColor(Uint8 color)
 {
 	_color = color;
-	draw();
+	_redraw = true;
 }
 
 /**
@@ -68,7 +68,7 @@ Uint8 Bar::getColor() const
 void Bar::setColor2(Uint8 color)
 {
 	_color2 = color;
-	draw();
+	_redraw = true;
 }
 
 /**
@@ -87,7 +87,7 @@ Uint8 Bar::getColor2() const
 void Bar::setScale(double scale)
 {
 	_scale = scale;
-	draw();
+	_redraw = true;
 }
 
 /**
@@ -106,7 +106,7 @@ double Bar::getScale() const
 void Bar::setMax(double max)
 {
 	_max = max;
-	draw();
+	_redraw = true;
 }
 
 /**
@@ -125,7 +125,7 @@ double Bar::getMax() const
 void Bar::setValue(double value)
 {
 	_value = value;
-	draw();
+	_redraw = true;
 }
 
 /**
@@ -144,7 +144,7 @@ double Bar::getValue() const
 void Bar::setValue2(double value)
 {
 	_value2 = value;
-	draw();
+	_redraw = true;
 }
 
 /**
@@ -173,7 +173,7 @@ void Bar::setSecondValueOnTop(bool onTop)
 void Bar::setInvert(bool invert)
 {
 	_invert = invert;
-	draw();
+	_redraw = true;
 }
 
 /**
@@ -182,8 +182,7 @@ void Bar::setInvert(bool invert)
  */
 void Bar::draw()
 {
-	clear();
-
+	Surface::draw();
 	SDL_Rect square;
 
 	square.x = 0;

@@ -57,9 +57,6 @@ PrimeGrenadeState::PrimeGrenadeState(Game *game, BattleAction *action) : State(g
 		_number[i] = new Text(20, 20, x+((i%8)*24), y+((i/8)*25));
 	}
 
-	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_4")->getColors());
-
 	// Set up objects
 	SDL_Rect square;
 	square.x = 0;
@@ -68,7 +65,6 @@ PrimeGrenadeState::PrimeGrenadeState(Game *game, BattleAction *action) : State(g
 	square.h = _bg->getHeight();
 	add(_bg);
 	_bg->drawRect(&square, Palette::blockOffset(6)+9);
-	_bg->draw();
 
 	add(_window);
 	_window->setColor(Palette::blockOffset(6)+11);
@@ -95,7 +91,6 @@ PrimeGrenadeState::PrimeGrenadeState(Game *game, BattleAction *action) : State(g
 		square.w = _button[i]->getWidth()-2;
 		square.h = _button[i]->getHeight()-2;
 		_button[i]->drawRect(&square, Palette::blockOffset(2)+12);
-		_button[i]->draw();
 
 		std::wstringstream ss;
 		ss << i;
@@ -118,14 +113,6 @@ PrimeGrenadeState::PrimeGrenadeState(Game *game, BattleAction *action) : State(g
 PrimeGrenadeState::~PrimeGrenadeState()
 {
 
-}
-
-/**
- *
- */
-void PrimeGrenadeState::init()
-{
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_4")->getColors());
 }
 
 

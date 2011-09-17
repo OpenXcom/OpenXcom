@@ -1067,19 +1067,22 @@ BattleItem *BattleUnit::getItem(RuleInventory *slot, int x, int y) const
 BattleItem *BattleUnit::getItem(const std::string &slot, int x, int y) const
 {
 	// Soldier items
-	for (std::vector<BattleItem*>::const_iterator i = _inventory.begin(); i != _inventory.end(); ++i)
+	if (slot != "STR_GROUND")
 	{
-		if ((*i)->getSlot() != 0 && (*i)->getSlot()->getId() == slot && (*i)->occupiesSlot(x, y))
+		for (std::vector<BattleItem*>::const_iterator i = _inventory.begin(); i != _inventory.end(); ++i)
 		{
-			return *i;
+			if ((*i)->getSlot() != 0 && (*i)->getSlot()->getId() == slot && (*i)->occupiesSlot(x, y))
+			{
+				return *i;
+			}
 		}
 	}
 	// Ground items
-	if (_tile != 0)
+	else if (_tile != 0)
 	{
 		for (std::vector<BattleItem*>::const_iterator i = _tile->getInventory()->begin(); i != _tile->getInventory()->end(); ++i)
 		{
-			if ((*i)->getSlot() != 0 && (*i)->getSlot()->getId() == slot && (*i)->occupiesSlot(x, y))
+			if ((*i)->getSlot() != 0 && (*i)->occupiesSlot(x, y))
 			{
 				return *i;
 			}

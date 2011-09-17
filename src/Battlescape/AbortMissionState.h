@@ -28,6 +28,7 @@ class Window;
 class Text;
 class TextButton;
 class SavedBattleGame;
+class BattlescapeState;
 
 /**
  * Screen which asks for confirmation to abort mission.
@@ -39,9 +40,11 @@ private:
 	Text *_txtInExit, *_txtOutsideExit, *_txtAbort;
 	TextButton *_btnOk, *_btnCancel;
 	SavedBattleGame *_battleGame;
+	BattlescapeState *_state;
+	int _inExitArea, _outExitArea;
 public:
 	/// Creates the Abort Mission state.
-	AbortMissionState(Game *game, SavedBattleGame *battleGame);
+	AbortMissionState(Game *game, SavedBattleGame *battleGame, BattlescapeState *state);
 	/// Cleans up the Abort Mission state.
 	~AbortMissionState();
 	/// Handler for clicking the OK button.

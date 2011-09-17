@@ -51,10 +51,13 @@
 #include "../Savegame/UfopaediaSaved.h"
 #include "ArticleDefinition.h"
 #include "RuleInventory.h"
+#include "RuleResearchProject.h"
+#include "../Engine/CrossPlatform.h"
+#include <fstream>
+#include <algorithm>
 
 namespace OpenXcom
 {
-
 /**
  * Initializes the X-Com ruleset with all the rules
  * mimicking the original game.
@@ -486,6 +489,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	skyranger->setHWPs(3);
 	skyranger->setRefuelRate(50);
 	skyranger->setTransferTime(72);
+	skyranger->setScore(200);
 
 	RuleTerrain *ruleTerrain = new RuleTerrain("PLANE");
 	skyranger->setBattlescapeTerrainData(ruleTerrain);
@@ -503,6 +507,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	lightning->setSoldiers(12);
 	lightning->setHWPs(0);
 	lightning->setRefuelRate(5);
+	lightning->setScore(300);
 
 	RuleCraft* avenger = new RuleCraft("STR_AVENGER");
 	avenger->setSprite(2);
@@ -514,6 +519,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	avenger->setSoldiers(26);
 	avenger->setHWPs(4);
 	avenger->setRefuelRate(5);
+	avenger->setScore(400);
 
 	RuleCraft* interceptor = new RuleCraft("STR_INTERCEPTOR");
 	interceptor->setSprite(3);
@@ -527,6 +533,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	interceptor->setHWPs(0);
 	interceptor->setRefuelRate(50);
 	interceptor->setTransferTime(96);
+	interceptor->setScore(250);
 
 	RuleCraft* firestorm = new RuleCraft("STR_FIRESTORM");
 	firestorm->setSprite(4);
@@ -538,6 +545,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	firestorm->setSoldiers(0);
 	firestorm->setHWPs(0);
 	firestorm->setRefuelRate(5);
+	firestorm->setScore(250);
 
 	_crafts.insert(std::pair<std::string, RuleCraft*>("STR_SKYRANGER", skyranger));
 	_crafts.insert(std::pair<std::string, RuleCraft*>("STR_LIGHTNING", lightning));
@@ -1790,6 +1798,65 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_costEngineer = 25000;
 	_costScientist = 30000;
 	_timePersonnel = 72;
+
+	std::string researchDataFile("research.dat");
+	std::ifstream fin(CrossPlatform::getDataFile(researchDataFile).c_str());
+	YAML::Parser parser(fin);
+
+	YAML::Node doc;
+	std::map<RuleResearchProject *, std::vector<std::string> > projectDependencys;
+	std::map<RuleResearchProject *, std::vector<std::string> > unlocks;
+	while(parser.GetNextDocument(doc)) 
+	{
+		for(YAML::Iterator it=doc.begin();it!=doc.end();++it)
+		{
+			std::string name;
+			int cost;
+			std::vector<std::string> deps;
+			std::vector<std::string> unlock;
+			bool needItem;
+			(*it)["name"] >> name;
+			(*it)["cost"] >> cost;
+			(*it)["dependencys"] >> deps;
+			(*it)["needItem"] >> needItem;
+			(*it)["unlock"] >> unlock;
+			RuleResearchProject * r = new RuleResearchProject(name, cost);
+			r->setNeedItem(needItem);
+			projectDependencys[r] = deps;
+			unlocks[r] = unlock;
+			_researchProjects[r->getName ()] = r;
+		}
+		for(std::map<RuleResearchProject *, std::vector<std::string> >::iterator iter = projectDependencys.begin ();
+		    iter != projectDependencys.end ();
+		    iter++)
+		{
+			for(std::vector<std::string>::iterator itDep = iter->second.begin ();
+			    itDep != iter->second.end ();
+			    itDep++)
+			{
+				std::map<std::string, RuleResearchProject *>::iterator it = _researchProjects.find(*itDep);
+				if (it != _researchProjects.end ())
+				{
+					iter->first->addDependency(it->second);
+				}
+			}
+		  }
+		for(std::map<RuleResearchProject *, std::vector<std::string> >::iterator iter = unlocks.begin ();
+		    iter != unlocks.end ();
+		    iter++)
+		{
+			for(std::vector<std::string>::iterator itDep = iter->second.begin ();
+			    itDep != iter->second.end ();
+			    itDep++)
+			{
+				std::map<std::string, RuleResearchProject *>::iterator it = _researchProjects.find(*itDep);
+				if (it != _researchProjects.end ())
+				{
+					iter->first->addUnlocked(it->second);
+				}
+			}
+		  }
+	}
 }
 
 /**

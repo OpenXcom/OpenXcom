@@ -31,6 +31,9 @@
 #include "../Engine/Language.h"
 #include "../Ruleset/RuleItem.h"
 #include "Transfer.h"
+#include <algorithm>
+#include "ResearchProject.h"
+#include "../Ruleset/RuleResearchProject.h"
 
 namespace OpenXcom
 {
@@ -62,6 +65,10 @@ Base::~Base()
 		delete *i;
 	}
 	delete _items;
+	for (std::vector<ResearchProject*>::iterator i = _baseResearchs.begin(); i != _baseResearchs.end(); ++i)
+	{
+		delete *i;
+	}
 }
 
 /**
@@ -170,6 +177,24 @@ void Base::load(const YAML::Node &node, SavedGame *save)
 		t->load(node["transfers"][i], this, _rule);
 		_transfers.push_back(t);
 	}
+
+	if (const YAML::Node *pName = node.FindValue("research"))
+	{
+		size = node["research"].size();
+		const std::map<std::string, RuleResearchProject *> & researchs(_rule->getResearchProjects ());
+		for (unsigned int i = 0; i < size; i++)
+		{
+			std::string research;
+			node["research"][i]["project"] >> research;
+			std::map<std::string, RuleResearchProject *>::const_iterator itResearch = researchs.find (research);
+			if (itResearch != researchs.end ())
+			{
+				ResearchProject *r = new ResearchProject(itResearch->second);
+				r->load(node["research"][i], _rule);
+				_baseResearchs.push_back(r);
+			}
+		}
+	}
 }
 
 /**
@@ -208,6 +233,14 @@ void Base::save(YAML::Emitter &out) const
 	out << YAML::Key << "transfers" << YAML::Value;
 	out << YAML::BeginSeq;
 	for (std::vector<Transfer*>::const_iterator i = _transfers.begin(); i != _transfers.end(); ++i)
+	{
+		(*i)->save(out);
+	}
+	out << YAML::EndSeq;
+
+	out << YAML::Key << "research" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::vector<ResearchProject*>::const_iterator i = _baseResearchs.begin(); i != _baseResearchs.end(); ++i)
 	{
 		(*i)->save(out);
 	}
@@ -371,7 +404,16 @@ int Base::getTotalSoldiers() const
  */
 int Base::getAvailableScientists() const
 {
-	return _scientists;
+	int nbFreeScientist = getScientists();
+	const std::vector<ResearchProject *> & researchs (getResearch());
+	for (std::vector<ResearchProject *>::const_iterator itResearch = researchs.begin ();
+	     itResearch != researchs.end ();
+	     itResearch++)
+	{
+		nbFreeScientist -= (*itResearch)->getAssigned ();
+	}
+       
+	return nbFreeScientist;
 }
 
 /**
@@ -495,7 +537,15 @@ int Base::getAvailableStores() const
  */
 int Base::getUsedLaboratories() const
 {
-	return 0;
+	const std::vector<ResearchProject *> & researchs (getResearch());
+	int usedLabSpace = 0;
+	for (std::vector<ResearchProject *>::const_iterator itResearch = researchs.begin ();
+	     itResearch != researchs.end ();
+	     itResearch++)
+	{
+		usedLabSpace += (*itResearch)->getAssigned ();
+	}
+	return usedLabSpace;
 }
 
 /**
@@ -708,6 +758,56 @@ int Base::getFacilityMaintenance() const
 int Base::getMonthlyMaintenace() const
 {
 	return getCraftMaintenance() + getPersonnelMaintenance() + getFacilityMaintenance();
+}
+
+/**
+ * Returns the list of all base's ResearchProject
+ * @return list of base's ResearchProject
+*/
+const std::vector<ResearchProject *> & Base::getResearch() const
+{
+	return _baseResearchs;
+}
+
+/**
+ * Add A new ResearchProject to Base
+ * @param project The project to add
+*/
+void Base::addResearch(ResearchProject * project)
+{
+	_baseResearchs.push_back(project);
+}
+
+/**
+ * Remove a ResearchProject from base
+ * @param project the project to remove
+*/
+void Base::removeResearch(ResearchProject * project)
+{
+	std::vector<ResearchProject *>::iterator iter = std::find (_baseResearchs.begin (), _baseResearchs.end (), project);
+	if(iter == _baseResearchs.end ())
+	{
+		return ;
+	}
+	_baseResearchs.erase(iter);
+}
+
+/**
+ * Return the number of scientist not assigned to a ResearchProject
+ * @return the number of scientist not assigned to a ResearchProject
+*/
+int Base::getFreeScientist () const
+{
+	return getScientists() - getUsedLaboratories();
+}
+
+/**
+ * Return laboratories space not used by a ResearchProject
+ * @return laboratories space not used by a ResearchProject
+*/
+int Base::getFreeLaboratories () const
+{
+	return getAvailableLaboratories() - getUsedLaboratories();
 }
 
 }

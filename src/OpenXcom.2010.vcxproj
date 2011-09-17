@@ -121,10 +121,12 @@
     <ClCompile Include="Basescape\ManufactureState.cpp" />
     <ClCompile Include="Basescape\MiniBaseView.cpp" />
     <ClCompile Include="Basescape\MonthlyCostsState.cpp" />
+    <ClCompile Include="Basescape\NewResearchListState.cpp" />
     <ClCompile Include="Basescape\PlaceFacilityState.cpp" />
     <ClCompile Include="Basescape\PlaceLiftState.cpp" />
     <ClCompile Include="Basescape\PurchaseErrorState.cpp" />
     <ClCompile Include="Basescape\PurchaseState.cpp" />
+    <ClCompile Include="Basescape\ResearchProjectState.cpp" />
     <ClCompile Include="Basescape\ResearchState.cpp" />
     <ClCompile Include="Basescape\SellState.cpp" />
     <ClCompile Include="Basescape\SoldierArmorState.cpp" />
@@ -147,6 +149,7 @@
     <ClCompile Include="Battlescape\BattleState.cpp" />
     <ClCompile Include="Battlescape\BriefingCrashState.cpp" />
     <ClCompile Include="Battlescape\BulletSprite.cpp" />
+    <ClCompile Include="Battlescape\DebriefingState.cpp" />
     <ClCompile Include="Battlescape\Explosion.cpp" />
     <ClCompile Include="Battlescape\ExplosionBState.cpp" />
     <ClCompile Include="Battlescape\Inventory.cpp" />
@@ -196,9 +199,11 @@
     <ClCompile Include="Geoscape\ConfirmNewBaseState.cpp" />
     <ClCompile Include="Geoscape\CraftPatrolState.cpp" />
     <ClCompile Include="Geoscape\DogfightState.cpp" />
+    <ClCompile Include="Geoscape\EndResearchState.cpp" />
     <ClCompile Include="Geoscape\FundingState.cpp" />
     <ClCompile Include="Geoscape\GeoscapeCraftState.cpp" />
     <ClCompile Include="Geoscape\GeoscapeErrorState.cpp" />
+    <ClCompile Include="Geoscape\NewPossibleResearchState.cpp" />
     <ClCompile Include="Geoscape\ProductionCompleteState.cpp" />
     <ClCompile Include="Geoscape\GeoscapeState.cpp" />
     <ClCompile Include="Geoscape\Globe.cpp" />
@@ -251,6 +256,7 @@
     <ClCompile Include="Ruleset\RuleInventory.cpp" />
     <ClCompile Include="Ruleset\RuleItem.cpp" />
     <ClCompile Include="Ruleset\RuleRegion.cpp" />
+    <ClCompile Include="Ruleset\RuleResearchProject.cpp" />
     <ClCompile Include="Ruleset\Ruleset.cpp" />
     <ClCompile Include="Ruleset\RuleSoldier.cpp" />
     <ClCompile Include="Ruleset\RuleUfo.cpp" />
@@ -270,6 +276,7 @@
     <ClCompile Include="Savegame\MovingTarget.cpp" />
     <ClCompile Include="Savegame\NodeLink.cpp" />
     <ClCompile Include="Savegame\Region.cpp" />
+    <ClCompile Include="Savegame\ResearchProject.cpp" />
     <ClCompile Include="Savegame\SavedBattleGame.cpp" />
     <ClCompile Include="Savegame\SavedGame.cpp" />
     <ClCompile Include="Savegame\Soldier.cpp" />
@@ -309,10 +316,12 @@
     <ClInclude Include="Basescape\ManufactureState.h" />
     <ClInclude Include="Basescape\MiniBaseView.h" />
     <ClInclude Include="Basescape\MonthlyCostsState.h" />
+    <ClInclude Include="Basescape\NewResearchListState.h" />
     <ClInclude Include="Basescape\PlaceFacilityState.h" />
     <ClInclude Include="Basescape\PlaceLiftState.h" />
     <ClInclude Include="Basescape\PurchaseErrorState.h" />
     <ClInclude Include="Basescape\PurchaseState.h" />
+    <ClInclude Include="Basescape\ResearchProjectState.h" />
     <ClInclude Include="Basescape\ResearchState.h" />
     <ClInclude Include="Basescape\SellState.h" />
     <ClInclude Include="Basescape\SoldierArmorState.h" />
@@ -335,6 +344,7 @@
     <ClInclude Include="Battlescape\BattleState.h" />
     <ClInclude Include="Battlescape\BriefingCrashState.h" />
     <ClInclude Include="Battlescape\BulletSprite.h" />
+    <ClInclude Include="Battlescape\DebriefingState.h" />
     <ClInclude Include="Battlescape\Explosion.h" />
     <ClInclude Include="Battlescape\ExplosionBState.h" />
     <ClInclude Include="Battlescape\Inventory.h" />
@@ -385,9 +395,11 @@
     <ClInclude Include="Geoscape\ConfirmNewBaseState.h" />
     <ClInclude Include="Geoscape\CraftPatrolState.h" />
     <ClInclude Include="Geoscape\DogfightState.h" />
+    <ClInclude Include="Geoscape\EndResearchState.h" />
     <ClInclude Include="Geoscape\FundingState.h" />
     <ClInclude Include="Geoscape\GeoscapeCraftState.h" />
     <ClInclude Include="Geoscape\GeoscapeErrorState.h" />
+    <ClInclude Include="Geoscape\NewPossibleResearchState.h" />
     <ClInclude Include="Geoscape\ProductionCompleteState.h" />
     <ClInclude Include="Geoscape\GeoscapeState.h" />
     <ClInclude Include="Geoscape\Globe.h" />
@@ -440,6 +452,7 @@
     <ClInclude Include="Ruleset\RuleInventory.h" />
     <ClInclude Include="Ruleset\RuleItem.h" />
     <ClInclude Include="Ruleset\RuleRegion.h" />
+    <ClInclude Include="Ruleset\RuleResearchProject.h" />
     <ClInclude Include="Ruleset\Ruleset.h" />
     <ClInclude Include="Ruleset\RuleSoldier.h" />
     <ClInclude Include="Ruleset\RuleUfo.h" />
@@ -459,6 +472,7 @@
     <ClInclude Include="Savegame\MovingTarget.h" />
     <ClInclude Include="Savegame\NodeLink.h" />
     <ClInclude Include="Savegame\Region.h" />
+    <ClInclude Include="Savegame\ResearchProject.h" />
     <ClInclude Include="Savegame\SavedBattleGame.h" />
     <ClInclude Include="Savegame\SavedGame.h" />
     <ClInclude Include="Savegame\Soldier.h" />

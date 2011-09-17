@@ -66,6 +66,7 @@
 #include "WarningMessage.h"
 #include "../Menu/SaveGameState.h"
 #include "BattlescapeOptionsState.h"
+#include "DebriefingState.h"
 #include "MiniMapState.h"
 
 namespace OpenXcom
@@ -848,11 +849,9 @@ void BattlescapeState::checkForCasualties(BattleItem *murderweapon, BattleUnit *
 
 	if (liveAliens == 0 || liveSoldiers == 0)
 	{
-		_battleGame->prepareDebriefing(false);
-		_game->getSavedGame()->endBattle();
-		_game->getCursor()->setColor(Palette::blockOffset(15)+12);
-		_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
-		_game->popState();
+		if (liveSoldiers == 0)
+			_battleGame->addStat("STR_XCOM_CRAFT_LOST", 1, -200);
+		finishBattle(false);
 	}
 }
 
@@ -862,7 +861,7 @@ void BattlescapeState::checkForCasualties(BattleItem *murderweapon, BattleUnit *
  */
 void BattlescapeState::btnAbortClick(Action *action)
 {
-	_game->pushState(new AbortMissionState(_game, _battleGame));
+	_game->pushState(new AbortMissionState(_game, _battleGame, this));
 }
 
 /**
@@ -1031,31 +1030,31 @@ void BattlescapeState::updateSoldierInfo()
 
 	for (int i = 0; i < 10; ++i)
 	{
-		_btnVisibleUnit[i]->hide();
-		_numVisibleUnit[i]->hide();
+		_btnVisibleUnit[i]->setVisible(false);
+		_numVisibleUnit[i]->setVisible(false);
 		_visibleUnit[i] = 0;
 	}
 
+	_rank->setVisible(playableUnitSelected());
+	_numTimeUnits->setVisible(playableUnitSelected());
+	_barTimeUnits->setVisible(playableUnitSelected());
+	_barTimeUnits->setVisible(playableUnitSelected());
+	_numEnergy->setVisible(playableUnitSelected());
+	_barEnergy->setVisible(playableUnitSelected());
+	_barEnergy->setVisible(playableUnitSelected());
+	_numHealth->setVisible(playableUnitSelected());
+	_barHealth->setVisible(playableUnitSelected());
+	_barHealth->setVisible(playableUnitSelected());
+	_numMorale->setVisible(playableUnitSelected());
+	_barMorale->setVisible(playableUnitSelected());
+	_barMorale->setVisible(playableUnitSelected());
+	_btnLeftHandItem->setVisible(playableUnitSelected());
+	_btnRightHandItem->setVisible(playableUnitSelected());
+	_numAmmoLeft->setVisible(playableUnitSelected());
+	_numAmmoRight->setVisible(playableUnitSelected());
 	if (!playableUnitSelected())
 	{
 		_txtName->setText(L"");
-		_rank->clear();
-		_numTimeUnits->clear();
-		_barTimeUnits->clear();
-		_barTimeUnits->clear();
-		_numEnergy->clear();
-		_barEnergy->clear();
-		_barEnergy->clear();
-		_numHealth->clear();
-		_barHealth->clear();
-		_barHealth->clear();
-		_numMorale->clear();
-		_barMorale->clear();
-		_barMorale->clear();
-		_btnLeftHandItem->clear();
-		_btnRightHandItem->clear();
-		_numAmmoLeft->clear();
-		_numAmmoRight->clear();
 		return;
 	}
 
@@ -1084,12 +1083,13 @@ void BattlescapeState::updateSoldierInfo()
 
 	BattleItem *leftHandItem = battleUnit->getItem("STR_LEFT_HAND");
 	_btnLeftHandItem->clear();
-	_numAmmoLeft->clear();
+	_numAmmoLeft->setVisible(false);
 	if (leftHandItem)
 	{
 		leftHandItem->getRules()->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _btnLeftHandItem);
 		if (leftHandItem->getRules()->getBattleType() == BT_FIREARM)
 		{
+			_numAmmoLeft->setVisible(true);
 			if (leftHandItem->getAmmoItem())
 				_numAmmoLeft->setValue(leftHandItem->getAmmoItem()->getAmmoQuantity());
 			else
@@ -1098,12 +1098,13 @@ void BattlescapeState::updateSoldierInfo()
 	}
 	BattleItem *rightHandItem = battleUnit->getItem("STR_RIGHT_HAND");
 	_btnRightHandItem->clear();
-	_numAmmoRight->clear();
+	_numAmmoRight->setVisible(false);
 	if (rightHandItem)
 	{
 		rightHandItem->getRules()->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _btnRightHandItem);
 		if (rightHandItem->getRules()->getBattleType() == BT_FIREARM)
 		{
+			_numAmmoRight->setVisible(true);
 			if (rightHandItem->getAmmoItem())
 				_numAmmoRight->setValue(rightHandItem->getAmmoItem()->getAmmoQuantity());
 			else
@@ -1115,8 +1116,8 @@ void BattlescapeState::updateSoldierInfo()
 	int j = 0;
 	for (std::vector<BattleUnit*>::iterator i = battleUnit->getVisibleUnits()->begin(); i != battleUnit->getVisibleUnits()->end(); ++i)
 	{
-		_btnVisibleUnit[j]->show();
-		_numVisibleUnit[j]->show();
+		_btnVisibleUnit[j]->setVisible(true);
+		_numVisibleUnit[j]->setVisible(true);
 		_visibleUnit[j] = (*i);
 		++j;
 	}
@@ -1428,6 +1429,21 @@ bool BattlescapeState::checkReservedTU(BattleUnit *bu, int tu)
 	}
 
 	return true;
+}
+
+/**
+ * Finishes up the current battle, shuts down the battlescape
+ * and presents the debriefing the screen for the mission.
+ * @param abort Was the mission aborted?
+ */
+void BattlescapeState::finishBattle(bool abort)
+{
+	_game->popState();
+	_game->pushState(new DebriefingState(_game));
+	_battleGame->prepareDebriefing(abort);
+	_game->getSavedGame()->endBattle();
+	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
+	_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
 }
 
 }

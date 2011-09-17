@@ -64,7 +64,7 @@ void TextEdit::focus()
 		_caretPos = _value.length();
 		_blink = true;
 		_timer->start();
-		draw();
+		_redraw = true;
 	}
 	InteractiveSurface::focus();
 }
@@ -107,7 +107,7 @@ void TextEdit::setFonts(Font *big, Font *small)
 void TextEdit::setText(const std::wstring &text)
 {
 	_value = text;
-	draw();
+	_redraw = true;
 }
 
 /**
@@ -239,7 +239,7 @@ void TextEdit::think()
 void TextEdit::blink()
 {
 	_blink = !_blink;
-	draw();
+	_redraw = true;
 }
 
 /**
@@ -248,6 +248,7 @@ void TextEdit::blink()
  */
 void TextEdit::draw()
 {
+	Surface::draw();
 	_text->setText(_value);
 #ifdef DINGOO
 	std::wstring newValue = _value;
@@ -404,7 +405,7 @@ void TextEdit::keyboardPress(Action *action, State *state)
 		}
 #endif
 	}
-	draw();
+	_redraw = true;
 
 	InteractiveSurface::keyboardPress(action, state);
 }

@@ -182,7 +182,10 @@ public:
 	void checkForCasualties(BattleItem *murderweapon, BattleUnit *murderer);
 	/// Check reserved tu.
 	bool checkReservedTU(BattleUnit *bu, int tu);
+	/// Handles unit AI.
 	void handleAI(BattleUnit *unit);
+	/// Finishes a battle.
+	void finishBattle(bool abort);
 };
 
 }

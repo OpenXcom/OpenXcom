@@ -28,6 +28,10 @@
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
 #include "../Savegame/Base.h"
+#include "NewResearchListState.h"
+#include "../Savegame/ResearchProject.h"
+#include "../Ruleset/RuleResearchProject.h"
+#include "ResearchProjectState.h"
 
 namespace OpenXcom
 {
@@ -53,6 +57,7 @@ ResearchState::ResearchState(Game *game, Base *base) : State(game), _base(base)
 	_lstResearch = new TextList(288, 120, 8, 54);
 	
 	// Set palette
+	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(1)), Palette::backPos, 16);
 
 	add(_window);
@@ -73,6 +78,7 @@ ResearchState::ResearchState(Game *game, Base *base) : State(game), _base(base)
 	
 	_btnNew->setColor(Palette::blockOffset(15)+9);
 	_btnNew->setText(_game->getLanguage()->getString("STR_NEW_PROJECT"));
+	_btnNew->onMouseClick((ActionHandler)&ResearchState::btnNewClick);
 
 	_btnOk->setColor(Palette::blockOffset(15)+9);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
@@ -85,19 +91,12 @@ ResearchState::ResearchState(Game *game, Base *base) : State(game), _base(base)
 
 	_txtAvailable->setColor(Palette::blockOffset(13)+10);
 	_txtAvailable->setSecondaryColor(Palette::blockOffset(13));
-	std::wstringstream ss;
-	ss << _game->getLanguage()->getString("STR_SCIENTISTS_AVAILABLE") << L'\x01' << _base->getAvailableScientists();
-	_txtAvailable->setText(ss.str());
 
 	_txtAllocated->setColor(Palette::blockOffset(13)+10);
 	_txtAllocated->setSecondaryColor(Palette::blockOffset(13));
-	std::wstringstream ss2;
-	ss2 << _game->getLanguage()->getString("STR_SCIENTISTS_ALLOCATED") << L'\x01' << (_base->getTotalScientists() - _base->getAvailableScientists());
-	_txtAllocated->setText(ss2.str());
 
 	_txtSpace->setColor(Palette::blockOffset(13)+10);
 	_txtSpace->setSecondaryColor(Palette::blockOffset(13));
-	_txtSpace->setText(_game->getLanguage()->getString("STR_LABORATORY_SPACE_AVAILABLE"));
 
 	_txtProject->setColor(Palette::blockOffset(13)+10);
 	_txtProject->setText(_game->getLanguage()->getString("STR_RESEARCH_PROJECT"));
@@ -114,7 +113,8 @@ ResearchState::ResearchState(Game *game, Base *base) : State(game), _base(base)
 	_lstResearch->setSelectable(true);
 	_lstResearch->setBackground(_window);
 	_lstResearch->setMargin(2);
-	_lstResearch->addRow(3, "Laser Weapons", "30", "Good");
+	_lstResearch->onMouseClick((ActionHandler)&ResearchState::onSelectProject);
+	fillProjectList();
 }
 
 /**
@@ -122,7 +122,6 @@ ResearchState::ResearchState(Game *game, Base *base) : State(game), _base(base)
  */
 ResearchState::~ResearchState()
 {
-	
 }
 
 /**
@@ -134,4 +133,55 @@ void ResearchState::btnOkClick(Action *action)
 	_game->popState();
 }
 
+/**
+ * Returns to the previous screen.
+ * @param action Pointer to an action.
+ */
+void ResearchState::btnNewClick(Action *action)
+{
+	_game->pushState(new NewResearchListState(_game, _base));
+}
+
+/**
+ * Display list of possible ResearchProject
+*/
+void ResearchState::onSelectProject(Action *action)
+{
+	const std::vector<ResearchProject *> & baseProjects(_base->getResearch());
+	_game->pushState(new ResearchProjectState(_game, _base, baseProjects[_lstResearch->getSelectedRow()]));
+}
+
+/**
+ * Init State
+*/
+void ResearchState::init()
+{
+	fillProjectList();
+}
+
+/**
+ * Fill list with Base ResearchProject. Also update count of available lab space and available/allocated scientist.
+*/
+void ResearchState::fillProjectList()
+{
+	const std::vector<ResearchProject *> & baseProjects(_base->getResearch());
+	_lstResearch->clearList();
+	for(std::vector<ResearchProject *>::const_iterator iter = baseProjects.begin (); iter != baseProjects.end (); ++iter)
+	{
+		std::wstringstream sstr;
+		sstr << (*iter)->getAssigned ();
+		const RuleResearchProject *r = (*iter)->getRuleResearchProject();
+		std::wstring wstr = _game->getLanguage()->getString(r->getName ());
+		_lstResearch->addRow(3, wstr.c_str(), sstr.str().c_str(), _game->getLanguage()->getString((*iter)->getResearchProgress()).c_str());
+	}
+	std::wstringstream ss;
+	ss << _game->getLanguage()->getString("STR_SCIENTISTS_AVAILABLE") << L'\x01' << _base->getAvailableScientists();
+	_txtAvailable->setText(ss.str());
+	std::wstringstream ss2;
+	ss2 << _game->getLanguage()->getString("STR_SCIENTISTS_ALLOCATED") << L'\x01' << (_base->getTotalScientists() - _base->getAvailableScientists());
+	_txtAllocated->setText(ss2.str());
+	std::wstringstream ss3;
+	ss3 << _game->getLanguage()->getString("STR_LABORATORY_SPACE_AVAILABLE") << L'\x01' << _base->getFreeLaboratories();
+	_txtSpace->setText(ss3.str());
+}
 }

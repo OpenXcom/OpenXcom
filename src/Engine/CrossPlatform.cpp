@@ -170,7 +170,7 @@ std::string findDataFolder(bool exists)
 #ifdef __APPLE__
 	const char* shared = "/Users/Shared/OpenXcom/";
 #else
-	const char* shared = "/usr/share/openxcom/";
+	const char* shared = DATADIR;
 #endif
 	if (!exists || (stat(shared, &info) == 0 && S_ISDIR(info.st_mode)))
 	{

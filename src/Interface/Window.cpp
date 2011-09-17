@@ -74,7 +74,7 @@ void Window::setBackground(Surface *bg)
 	}
 
 	_bg = bg;
-	draw();
+	_redraw = true;
 }
 
 /**
@@ -90,7 +90,7 @@ void Window::setColor(Uint8 color)
 	}
 
 	_color = color;
-	draw();
+	_redraw = true;
 }
 
 /**
@@ -131,7 +131,7 @@ void Window::popup()
 		_popupStep = 1.0;
 		_timer->stop();
 	}
-	draw();
+	_redraw = true;
 }
 
 /**
@@ -142,6 +142,7 @@ void Window::popup()
  */
 void Window::draw()
 {
+	Surface::draw();
 	SDL_Rect square;
 	Uint8 color = _color;
 

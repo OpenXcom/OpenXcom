@@ -61,7 +61,7 @@ void TextButton::setColor(Uint8 color)
 {
 	_color = color;
 	_text->setColor(_color - 3);
-	draw();
+	_redraw = true;
 }
 
 /**
@@ -83,7 +83,7 @@ Uint8 TextButton::getColor() const
 void TextButton::setFonts(Font *big, Font *small)
 {
 	_text->setFonts(big, small);
-	draw();
+	_redraw = true;
 }
 
 /**
@@ -94,7 +94,7 @@ void TextButton::setFonts(Font *big, Font *small)
 void TextButton::setHighContrast(bool contrast)
 {
 	_text->setHighContrast(contrast);
-	draw();
+	_redraw = true;
 }
 
 /**
@@ -104,7 +104,7 @@ void TextButton::setHighContrast(bool contrast)
 void TextButton::setText(const std::wstring &text)
 {
 	_text->setText(text);
-	draw();
+	_redraw = true;
 }
 
 /**
@@ -124,7 +124,7 @@ std::wstring TextButton::getText() const
 void TextButton::setGroup(TextButton **group)
 {
 	_group = group;
-	draw();
+	_redraw = true;
 }
 
 /**
@@ -145,6 +145,7 @@ void TextButton::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
  */
 void TextButton::draw()
 {
+	Surface::draw();
 	SDL_Rect square;
 	int color = _color - 2;
 
@@ -196,7 +197,6 @@ void TextButton::draw()
 	}
 	_text->setInvert(press);
 
-	_text->draw();
 	_text->blit(this);
 }
 
@@ -218,7 +218,7 @@ void TextButton::mousePress(Action *action, State *state)
 	}
 
 	InteractiveSurface::mousePress(action, state);
-	draw();
+	_redraw = true;
 }
 
 /**
@@ -229,7 +229,7 @@ void TextButton::mousePress(Action *action, State *state)
 void TextButton::mouseRelease(Action *action, State *state)
 {
 	InteractiveSurface::mouseRelease(action, state);
-	draw();
+	_redraw = true;
 }
 
 }

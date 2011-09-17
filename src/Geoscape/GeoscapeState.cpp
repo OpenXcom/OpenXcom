@@ -67,6 +67,10 @@
 #include "../Battlescape/BattlescapeState.h"
 #include "../Battlescape/BattlescapeGenerator.h"
 #include "../Ufopaedia/Ufopaedia.h"
+#include "../Savegame/ResearchProject.h"
+#include "EndResearchState.h"
+#include "../Ruleset/RuleResearchProject.h"
+#include "NewPossibleResearchState.h"
 
 namespace OpenXcom
 {
@@ -706,7 +710,7 @@ void GeoscapeState::time1Hour()
  */
 void GeoscapeState::time1Day()
 {
-	// Handle facility construction
+	// Handle facility construction and science project
 	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
 	{
 		for (std::vector<BaseFacility*>::iterator j = (*i)->getFacilities()->begin(); j != (*i)->getFacilities()->end(); ++j)
@@ -721,6 +725,27 @@ void GeoscapeState::time1Day()
 				}
 			}
 		}
+		std::vector<ResearchProject*> finished;
+		for(std::vector<ResearchProject*>::const_iterator iter = (*i)->getResearch().begin (); iter != (*i)->getResearch().end (); ++iter)
+		{
+			if((*iter)->step())
+			{
+				finished.push_back(*iter);
+			}
+		}
+		for(std::vector<ResearchProject*>::const_iterator iter = finished.begin (); iter != finished.end (); ++iter)
+		{
+			(*i)->removeResearch(*iter);
+			const RuleResearchProject * research = (*iter)->getRuleResearchProject ();
+			_game->getSavedGame()->addFinishedResearch(research, _game->getRuleset ());
+			std::vector<RuleResearchProject *> newPossibleResearch;
+			_game->getSavedGame()->getDependableResearch (newPossibleResearch, (*iter)->getRuleResearchProject(), _game->getRuleset(), *i);
+			timerReset();
+			popup(new EndResearchState (_game, research));
+			popup(new NewPossibleResearchState(_game, *i, newPossibleResearch));
+			delete(*iter);
+		}
+
 	}
 }
 
