@@ -411,6 +411,7 @@ void BaseInfoState::miniClick(Action *action)
  */
 void BaseInfoState::btnOkClick(Action *action)
 {
+	_base->setName(_edtBase->getText());
 	_game->popState();
 }
 
