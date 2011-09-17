@@ -51,10 +51,13 @@
 #include "../Savegame/UfopaediaSaved.h"
 #include "ArticleDefinition.h"
 #include "RuleInventory.h"
+#include "RuleResearchProject.h"
+#include "../Engine/CrossPlatform.h"
+#include <fstream>
+#include <algorithm>
 
 namespace OpenXcom
 {
-
 /**
  * Initializes the X-Com ruleset with all the rules
  * mimicking the original game.
@@ -1795,6 +1798,65 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_costEngineer = 25000;
 	_costScientist = 30000;
 	_timePersonnel = 72;
+
+	std::string researchDataFile("research.dat");
+	std::ifstream fin(CrossPlatform::getDataFile(researchDataFile).c_str());
+	YAML::Parser parser(fin);
+
+	YAML::Node doc;
+	std::map<RuleResearchProject *, std::vector<std::string> > projectDependencys;
+	std::map<RuleResearchProject *, std::vector<std::string> > unlocks;
+	while(parser.GetNextDocument(doc)) 
+	{
+		for(YAML::Iterator it=doc.begin();it!=doc.end();++it)
+		{
+			std::string name;
+			int cost;
+			std::vector<std::string> deps;
+			std::vector<std::string> unlock;
+			bool needItem;
+			(*it)["name"] >> name;
+			(*it)["cost"] >> cost;
+			(*it)["dependencys"] >> deps;
+			(*it)["needItem"] >> needItem;
+			(*it)["unlock"] >> unlock;
+			RuleResearchProject * r = new RuleResearchProject(name, cost);
+			r->setNeedItem(needItem);
+			projectDependencys[r] = deps;
+			unlocks[r] = unlock;
+			_researchProjects[r->getName ()] = r;
+		}
+		for(std::map<RuleResearchProject *, std::vector<std::string> >::iterator iter = projectDependencys.begin ();
+		    iter != projectDependencys.end ();
+		    iter++)
+		{
+			for(std::vector<std::string>::iterator itDep = iter->second.begin ();
+			    itDep != iter->second.end ();
+			    itDep++)
+			{
+				std::map<std::string, RuleResearchProject *>::iterator it = _researchProjects.find(*itDep);
+				if (it != _researchProjects.end ())
+				{
+					iter->first->addDependency(it->second);
+				}
+			}
+		  }
+		for(std::map<RuleResearchProject *, std::vector<std::string> >::iterator iter = unlocks.begin ();
+		    iter != unlocks.end ();
+		    iter++)
+		{
+			for(std::vector<std::string>::iterator itDep = iter->second.begin ();
+			    itDep != iter->second.end ();
+			    itDep++)
+			{
+				std::map<std::string, RuleResearchProject *>::iterator it = _researchProjects.find(*itDep);
+				if (it != _researchProjects.end ())
+				{
+					iter->first->addUnlocked(it->second);
+				}
+			}
+		  }
+	}
 }
 
 /**

@@ -37,6 +37,8 @@ class SavedBattleGame;
 class TextList;
 class Language;
 class UfopaediaSaved;
+class RuleResearchProject;
+class ResearchProject;
 
 /**
  * Enumator containing all the possible game difficulties.
@@ -63,6 +65,12 @@ private:
 	int _ufoId, _waypointId;
 	SavedBattleGame *_battleGame;
 	UfopaediaSaved *_ufopaedia;
+	std::vector<const RuleResearchProject *> _discovereds;
+	std::map<Base*, ResearchProject *> _researchs;
+
+	/// Check wether a ResearchProject can be researched
+	bool isResearchAvailable (RuleResearchProject * r, const std::vector<const RuleResearchProject *> & unlockeds);
+	void getDependableResearchBasic (std::vector<RuleResearchProject *> & dependables, const RuleResearchProject *research, Ruleset * ruleset, Base * base);
 public:
 	/// Creates a new save with a certain difficulty.
 	SavedGame(GameDifficulty difficulty);
@@ -110,6 +118,14 @@ public:
 	void endBattle();
 	/// Gets the current Ufopaedia parameters.
 	UfopaediaSaved *getUfopaedia();
+	/// Add a finished ResearchProject
+	void addFinishedResearch (const RuleResearchProject * r, Ruleset * ruleset = NULL);
+	/// Get the list of already discovered research projects
+	const std::vector<const RuleResearchProject *> & getDiscoveredResearchs();
+	/// Get the list of ResearchProject which can be researched in a Base
+	void getAvailableResearchProjects (std::vector<RuleResearchProject *> & projects, Ruleset * ruleset, Base * base);
+	///Get the list of newly available research projects once a research has been completed.
+	void getDependableResearch (std::vector<RuleResearchProject *> & dependables, const RuleResearchProject *research, Ruleset * ruleset, Base * base);
 };
 
 }

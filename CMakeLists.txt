@@ -1,0 +1,50 @@
+project ( OpenXcom )
+
+cmake_minimum_required ( VERSION 2.8 )
+set ( CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}" )
+
+if ( WIN32 )
+  set ( default_deps_dir "${CMAKE_SOURCE_DIR}/deps" )
+endif ()
+
+set ( DEPS_DIR "${default_deps_dir}" CACHE STRING "Deps directory" )
+include ( CPack )
+
+# Add check for library (SDL_gfx, yaml-cpp )
+if ( IS_DIRECTORY ${DEPS_DIR} )
+   include_directories ( ${DEPS_DIR}/include/SDL ${DEPS_DIR}/include/yaml-cpp ${DEPS_DIR}/include )
+   link_directories ( ${DEPS_DIR}/lib )
+   set( SDL_LIBRARY SDL )
+   set ( SDLGFX_LIBRARY SDL_gfx )
+   set ( SDLMIXER_LIBRARY SDL_mixer )
+   set ( YAMLCPP_LIBRARY yaml-cpp )
+else ( )
+  find_package ( SDL2 COMPONENTS mixer gfx )
+  find_package ( Yaml_cpp )
+
+  if ( NOT SDL_FOUND )
+    message ( FATAL_ERROR "SDL is needed" )
+  else ()
+    include_directories ( ${SDL_INCLUDE_DIR} )
+  endif ()
+
+  if ( NOT SDLMIXER_FOUND )
+    message ( FATAL_ERROR "SDL_mixer is needed" )
+  else ()
+    include_directories ( ${SDLMIXER_INCLUDE_DIR} )
+  endif ()
+
+  if ( NOT SDLGFX_FOUND )
+    message ( FATAL_ERROR "SDL_gfx is needed" )
+  else ()
+    include_directories ( ${SDLGFX_INCLUDE_DIR} )
+  endif ()
+
+  if ( NOT YAMLCPP_FOUND )
+    message ( FATAL_ERROR "yaml-cpp is needed" )
+  else ()
+    include_directories ( ${YAMLCPP_INCLUDE_DIR} )
+  endif ( NOT YAMLCPP_FOUND )
+endif()
+
+add_subdirectory ( src )

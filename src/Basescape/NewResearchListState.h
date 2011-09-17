@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2011 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -16,11 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_RESEARCHSTATE_H
-#define OPENXCOM_RESEARCHSTATE_H
-
+#ifndef OPENXCOM_NEWRESEARCHLISTSTATE_H
+#define OPENXCOM_NEWRESEARCHLISTSTATE_H
 #include "../Engine/State.h"
-#include <string>
 
 namespace OpenXcom
 {
@@ -30,36 +28,32 @@ class Window;
 class Text;
 class TextList;
 class Base;
+class RuleResearchProject;
+class ResearchState;
 
 /**
- * Research screen that lets the player manage
- * all the researching operations of a base.
- */
-class ResearchState : public State
+   Window which display possible research projects.
+*/
+class NewResearchListState : public State
 {
 private:
 	Base *_base;
-	TextButton *_btnNew, *_btnOk;
+	TextButton *_btnOK;
 	Window *_window;
-	Text *_txtTitle, *_txtAvailable, *_txtAllocated, *_txtSpace, *_txtProject, *_txtScientists, *_txtProgress;
+	Text *_txtTitle;
 	TextList *_lstResearch;
-public:
-	/// Creates the Research state.
-	ResearchState(Game *game, Base *base);
-	/// Cleans up the Research state.
-	~ResearchState();
-	/// Handler for clicking the OK button.
-	virtual void btnOkClick(Action *action);
-	/// Handler for clicking the New Research button.
-	void btnNewClick(Action *action);
-	/// Handler for clicking the ResearchProject list.
 	void onSelectProject(Action *action);
-	/// Fill the ResearchProject list with Base ResearchProject.
-	void fillProjectList();
+	std::vector<RuleResearchProject *> _projects;
+public:
+	/// Creates the New research list state.
+	NewResearchListState(Game *game, Base *base);
+	/// Handler for clicking the OK button
+	void btnOKClick(Action *action);
+	/// Fill the ResearchProject list with possible ResearchProject.
+	void fillProjectList ();
 	/// Initializes the state.
-	void init ();
+	void init();
 };
-
 }
 
 #endif
