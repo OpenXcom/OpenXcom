@@ -4,6 +4,7 @@
 TARGET =
 
 # Directories and files
+DATADIR = /usr/shared/openxcom/
 OBJDIR = ../obj/
 BINDIR = ../bin/
 SRCS = $(wildcard *.cpp */*.cpp)
@@ -22,6 +23,7 @@ endif
 # Compiler settings
 CXXFLAGS ?= -Wall -O2
 CXXFLAGS += $(addprefix -D,$(TARGET))
+CXXFLAGS += -DDATADIR=\"$(DATADIR)\"
 CXXFLAGS += $(shell $(PKG-CONFIG) --cflags sdl yaml-cpp)
 
 LIBS = $(shell $(PKG-CONFIG) --libs sdl yaml-cpp) -lSDL_gfx -lSDL_mixer
