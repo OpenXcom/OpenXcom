@@ -13,6 +13,7 @@ namespace OpenXcom
 {
 const int CELL_WIDTH = 4;
 const int CELL_HEIGHT = 4;
+const int MAX_LEVEL = 3;
 
 MiniMapView::MiniMapView(int w, int h, int x, int y, Game * game, Map * map) : InteractiveSurface(w, h, x, y), _game(game), _map(map), _startX(0),  _startY(0), _lvl(_map->getViewHeight())
 {
@@ -78,11 +79,10 @@ void MiniMapView::draw()
 
 void MiniMapView::up ()
 {
-	const int MAX_LEVEL = 3;
 	_lvl++;
 	if (_lvl > MAX_LEVEL)
 	{
-		_lvl = MAX_LEVEL;
+		_lvl = 0;
 	}
 	else
 	{
@@ -95,7 +95,7 @@ void MiniMapView::down ()
 	_lvl--;
 	if (_lvl < 0)
 	{
-		_lvl = 0;
+		_lvl = MAX_LEVEL;
 	}
 	else
 	{
