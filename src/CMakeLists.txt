@@ -428,6 +428,8 @@ if ( "${CMAKE_BUILD_TYPE}" STREQUAL "Debug" AND CMAKE_COMPILER_IS_GNUCXX )
   add_definitions ( -Wall )
 endif()
 
+add_definitions ( -DDATADIR="${CMAKE_INSTALL_PREFIX}/share/openxcom" )
+
 set ( openxcom_src main.cpp ${basescape_src} ${battlescape_src} ${engine_src} ${geoscape_src} ${interface_src} ${menu_src} ${resource_src} ${ruleset_src} ${savegame_src} ${ufopedia_src} )
 
 set ( EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin )
