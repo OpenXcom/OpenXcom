@@ -373,6 +373,8 @@ int Soldier::getLoftemps() const
 
 /**
  * Returns the soldier's value.
+ * Determines the victory point loss if he dies on a mission and
+ * may also affect the likelihood and severity of allied morale checks.
  * @return value
  */
 int Soldier::getValue() const
@@ -381,11 +383,10 @@ int Soldier::getValue() const
 
 	switch (_rank)
 	{
-	case RANK_SQUADDIE: rankbonus = 1; break;
-	case RANK_SERGEANT: rankbonus = 1; break;
-	case RANK_CAPTAIN: rankbonus = 1; break;
-	case RANK_COLONEL: rankbonus = 1; break;
-	case RANK_COMMANDER: rankbonus = 1; break;
+	case RANK_SERGEANT:  rankbonus =  1; break;
+	case RANK_CAPTAIN:   rankbonus =  3; break;
+	case RANK_COLONEL:   rankbonus =  6; break;
+	case RANK_COMMANDER: rankbonus = 10; break;
 	}
 
 	return 20 + _missions + rankbonus;
