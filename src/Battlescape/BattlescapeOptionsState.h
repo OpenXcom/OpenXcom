@@ -19,7 +19,6 @@
 #ifndef OPENXCOM_BATTLESCAPEOPTIONSSTATE_H
 #define OPENXCOM_BATTLESCAPEOPTIONSSTATE_H
 
-#include <vector>
 #include "../Engine/State.h"
 
 namespace OpenXcom

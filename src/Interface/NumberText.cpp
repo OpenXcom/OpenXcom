@@ -197,7 +197,7 @@ NumberText::~NumberText()
 void NumberText::setValue(unsigned int value)
 {
 	_value = value;
-	draw();
+	_redraw = true;
 }
 
 /**
@@ -216,7 +216,7 @@ unsigned int NumberText::getValue() const
 void NumberText::setColor(Uint8 color)
 {
 	_color = color;
-	draw();
+	_redraw = true;
 }
 
 /**
@@ -248,8 +248,7 @@ void NumberText::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
  */
 void NumberText::draw()
 {
-	clear();
-
+	Surface::draw();
 	std::stringstream ss;
 	ss << _value;
 	std::string s = ss.str();

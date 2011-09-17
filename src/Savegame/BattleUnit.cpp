@@ -71,24 +71,27 @@ BattleUnit::~BattleUnit()
 void BattleUnit::load(const YAML::Node &node)
 {
 	int a = 0;
-
+ 
 	node["id"] >> _id;
+	std::string name;
 	node["faction"] >> a;
 	_faction = (UnitFaction)a;
 	node["status"] >> a;
 	_status = (UnitStatus)a;
-
 	node["X"] >> _pos.x;
 	node["Y"] >> _pos.y;
 	node["Z"] >> _pos.z;
 	node["direction"] >> _direction;
-
 	node["tu"] >> _tu;
 	node["health"] >> _health;
 	node["energy"] >> _energy;
 	node["morale"] >> _morale;
-
 	node["kneeled"] >> _kneeled;
+	for (int i=0; i < 5; i++)
+		node["armor"][i] >> _armor[i];
+	for (int i=0; i < 6; i++)
+		node["fatalWounds"][i] >> _fatalWounds[i];
+	node["fire"] >> _fire;
 }
 
 /**
@@ -98,23 +101,27 @@ void BattleUnit::load(const YAML::Node &node)
 void BattleUnit::save(YAML::Emitter &out) const
 {
 	out << YAML::BeginMap;
-
+ 
 	out << YAML::Key << "id" << YAML::Value << _id;
 	out << YAML::Key << "faction" << YAML::Value << _faction;
 	out << YAML::Key << "status" << YAML::Value << _status;
-
 	out << YAML::Key << "X" << YAML::Value << _pos.x;
 	out << YAML::Key << "Y" << YAML::Value << _pos.y;
 	out << YAML::Key << "Z" << YAML::Value << _pos.z;
 	out << YAML::Key << "direction" << YAML::Value << _direction;
-
 	out << YAML::Key << "tu" << YAML::Value << _tu;
 	out << YAML::Key << "health" << YAML::Value << _health;
 	out << YAML::Key << "energy" << YAML::Value << _energy;
 	out << YAML::Key << "morale" << YAML::Value << _morale;
-
 	out << YAML::Key << "kneeled" << YAML::Value << _kneeled;
-
+	out << YAML::Key << "armor" << YAML::Value;
+	out << YAML::Flow;
+	for (int i=0; i < 5; i++) out << _armor[i];
+	out << YAML::Key << "fatalWounds" << YAML::Value;
+	out << YAML::Flow;
+	for (int i=0; i < 6; i++) out << _fatalWounds[i];
+	out << YAML::Key << "fire" << YAML::Value << _fire;
+               
 	out << YAML::EndMap;
 }
 
@@ -1060,19 +1067,22 @@ BattleItem *BattleUnit::getItem(RuleInventory *slot, int x, int y) const
 BattleItem *BattleUnit::getItem(const std::string &slot, int x, int y) const
 {
 	// Soldier items
-	for (std::vector<BattleItem*>::const_iterator i = _inventory.begin(); i != _inventory.end(); ++i)
+	if (slot != "STR_GROUND")
 	{
-		if ((*i)->getSlot() != 0 && (*i)->getSlot()->getId() == slot && (*i)->occupiesSlot(x, y))
+		for (std::vector<BattleItem*>::const_iterator i = _inventory.begin(); i != _inventory.end(); ++i)
 		{
-			return *i;
+			if ((*i)->getSlot() != 0 && (*i)->getSlot()->getId() == slot && (*i)->occupiesSlot(x, y))
+			{
+				return *i;
+			}
 		}
 	}
 	// Ground items
-	if (_tile != 0)
+	else if (_tile != 0)
 	{
 		for (std::vector<BattleItem*>::const_iterator i = _tile->getInventory()->begin(); i != _tile->getInventory()->end(); ++i)
 		{
-			if ((*i)->getSlot() != 0 && (*i)->getSlot()->getId() == slot && (*i)->occupiesSlot(x, y))
+			if ((*i)->getSlot() != 0 && (*i)->occupiesSlot(x, y))
 			{
 				return *i;
 			}

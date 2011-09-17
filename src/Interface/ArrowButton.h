@@ -45,8 +45,6 @@ public:
 	ArrowButton(ArrowShape shape, int width, int height, int x = 0, int y = 0);
 	/// Cleans up the arrow button.
 	~ArrowButton();
-	/// Sets the arrow button's color.
-	void setColor(Uint8 color);
 	/// Sets the arrow button's list.
 	void setTextList(TextList *list);
 	/// Handles the timers.

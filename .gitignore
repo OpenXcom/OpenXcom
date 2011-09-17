@@ -1,3 +1,18 @@
+# autotools
+aclocal.m4
+m4/
+missing
+install-sh
+config.status
+configure
+./Makefile
+Makefile.in
+depcomp
+.deps/
+*.tar.gz
+*.tar.xz
+openxcom
+# basics
 *.o
 .DS_Store
 Thumbs.db

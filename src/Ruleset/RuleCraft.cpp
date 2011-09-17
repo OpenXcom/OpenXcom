@@ -27,7 +27,7 @@ namespace OpenXcom
  * type of craft.
  * @param type String defining the type.
  */
-RuleCraft::RuleCraft(std::string type) : _type(type), _sprite(-1), _fuelMax(0), _damageMax(0), _speedMax(0), _accel(0), _weapons(0), _soldiers(0), _hwps(0), _cost(0), _repair(1), _refuel(1), _range(600), _time(0), _battlescapeTerrainData(0)
+RuleCraft::RuleCraft(std::string type) : _type(type), _sprite(-1), _fuelMax(0), _damageMax(0), _speedMax(0), _accel(0), _weapons(0), _soldiers(0), _hwps(0), _cost(0), _repair(1), _refuel(1), _range(600), _time(0), _score(0), _battlescapeTerrainData(0)
 {
 
 }
@@ -306,6 +306,26 @@ int RuleCraft::getTransferTime() const
 void RuleCraft::setTransferTime(int time)
 {
 	_time = time;
+}
+
+/**
+ * Returns the amount of score you lose
+ * when this craft is destroyed.
+ * @return Score in points.
+ */
+int RuleCraft::getScore() const
+{
+	return _score;
+}
+
+/**
+ * Changes the amount of score you lose
+ * when this craft is destroyed.
+ * @param score Score in points.
+ */
+void RuleCraft::setScore(int score)
+{
+	_score = score;
 }
 
 /**

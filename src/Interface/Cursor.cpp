@@ -68,7 +68,7 @@ void Cursor::handle(Action *action)
 void Cursor::setColor(Uint8 color)
 {
 	_color = color;
-	draw();
+	_redraw = true;
 }
 
 /**
@@ -85,6 +85,7 @@ Uint8 Cursor::getColor() const
  */
 void Cursor::draw()
 {
+	Surface::draw();
 	Uint8 color = _color;
 	int x1 = 0, y1 = 0, x2 = getWidth() - 1, y2 = getHeight() - 1;
 

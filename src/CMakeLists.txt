@@ -57,6 +57,10 @@ set ( basescape_src
   Basescape/SoldierArmorState.cpp
   Basescape/SoldiersState.cpp
   Basescape/SoldiersState.h
+  Basescape/NewResearchListState.h
+  Basescape/NewResearchListState.cpp
+  Basescape/ResearchProjectState.h
+  Basescape/ResearchProjectState.cpp
   Basescape/ListPossibleProductionState.h
   Basescape/ListPossibleProductionState.cpp
   Basescape/ProductionStartState.h
@@ -130,6 +134,8 @@ set ( battlescape_src
   Battlescape/BattlescapeOptionsState.h
   Battlescape/AbortMissionState.cpp
   Battlescape/AbortMissionState.h
+  Battlescape/DebriefingState.cpp
+  Battlescape/DebriefingState.h
 )
 
 set ( engine_src 
@@ -232,6 +238,10 @@ set ( geoscape_src
   Geoscape/DogfightState.h
   Geoscape/GeoscapeState.cpp
   Geoscape/GeoscapeState.h
+  Geoscape/EndResearchState.h
+  Geoscape/EndResearchState.cpp
+  Geoscape/NewPossibleResearchState.h
+  Geoscape/NewPossibleResearchState.cpp
 )
 
 set ( interface_src 
@@ -326,6 +336,8 @@ set ( ruleset_src
   Ruleset/RuleTerrain.h
   Ruleset/MapData.cpp
   Ruleset/MapData.h
+  Ruleset/RuleResearchProject.h
+  Ruleset/RuleResearchProject.cpp
   Ruleset/RuleManufactureInfo.h
   Ruleset/RuleManufactureInfo.cpp
 )
@@ -379,6 +391,8 @@ set ( savegame_src
   Savegame/Target.cpp
   Savegame/Unit.h
   Savegame/Unit.cpp
+  Savegame/ResearchProject.h
+  Savegame/ResearchProject.cpp
   Savegame/Production.h
   Savegame/Production.cpp
 )

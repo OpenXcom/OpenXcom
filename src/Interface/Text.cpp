@@ -161,7 +161,7 @@ void Text::setWordWrap(bool wrap)
 void Text::setInvert(bool invert)
 {
 	_invert = invert;
-	draw();
+	_redraw = true;
 }
 
 /**
@@ -172,7 +172,7 @@ void Text::setInvert(bool invert)
 void Text::setHighContrast(bool contrast)
 {
 	_contrast = contrast;
-	draw();
+	_redraw = true;
 }
 
 /**
@@ -183,7 +183,7 @@ void Text::setHighContrast(bool contrast)
 void Text::setAlign(TextHAlign align)
 {
 	_align = align;
-	draw();
+	_redraw = true;
 }
 
 /**
@@ -194,7 +194,7 @@ void Text::setAlign(TextHAlign align)
 void Text::setVerticalAlign(TextVAlign valign)
 {
 	_valign = valign;
-	draw();
+	_redraw = true;
 }
 
 /**
@@ -206,7 +206,7 @@ void Text::setVerticalAlign(TextVAlign valign)
 void Text::setColor(Uint8 color)
 {
 	_color = color;
-	draw();
+	_redraw = true;
 }
 
 /**
@@ -227,7 +227,7 @@ Uint8 Text::getColor() const
 void Text::setSecondaryColor(Uint8 color)
 {
 	_color2 = color;
-	draw();
+	_redraw = true;
 }
 
 /**
@@ -339,7 +339,7 @@ void Text::processText()
 		}
 	}
 
-	draw();
+	_redraw = true;
 }
 
 /**
@@ -348,8 +348,7 @@ void Text::processText()
  */
 void Text::draw()
 {
-	clear();
-
+	Surface::draw();
 	if (_text.empty() || _font == 0)
 	{
 		return;

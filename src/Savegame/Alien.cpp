@@ -163,9 +163,18 @@ int Alien::getKneelHeight() const
  * Returns the alien's loftemps ID.
  * @return loftemps ID
  */
-int Alien::gotLoftemps() const
+int Alien::getLoftemps() const
 {
-	return _rules->gotLoftemps();
+	return _rules->getLoftemps();
+}
+
+/**
+ * Returns the alien's value.
+ * @return value
+ */
+int Alien::getValue() const
+{
+	return _rules->getValue();
 }
 
 }

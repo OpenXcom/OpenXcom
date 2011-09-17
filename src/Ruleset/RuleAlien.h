@@ -39,6 +39,7 @@ private:
 	UnitStats _stats;
 	std::string _armor;
 	int _standHeight, _kneelHeight, _loftemps;
+	int _value;
 public:
 	/// Creates a blank unit ruleset.
 	RuleAlien(std::string type, std::string race, std::string rank);
@@ -59,11 +60,13 @@ public:
 	/// 
 	int getKneelHeight() const;
 	/// 
-	int gotLoftemps() const;
+	int getLoftemps() const;
 	///
 	std::string getArmor() const;
 	std::string getRace() const;
 	std::string getRank() const;
+	void setValue(int value);
+	int getValue() const;
 };
 
 }

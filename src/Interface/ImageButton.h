@@ -47,6 +47,8 @@ public:
 	Uint8 getColor() const;
 	/// Sets the image button's group.
 	void setGroup(ImageButton **group);
+	/// Draws the image button.
+	void draw();
 	/// Special handling for mouse presses.
 	void mousePress(Action *action, State *state);
 	/// Special handling for mouse releases.

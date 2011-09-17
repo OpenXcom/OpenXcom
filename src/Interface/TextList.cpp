@@ -187,7 +187,7 @@ void TextList::addRow(int cols, ...)
 		_arrowRight.push_back(a2);
 	}
 
-	draw();
+	_redraw = true;
 	va_end(args);
 	updateArrows();
 }
@@ -533,7 +533,7 @@ void TextList::scrollUp()
 	if (_texts.size() > _visibleRows && _scroll > 0)
 	{
 		_scroll--;
-		draw();
+		_redraw = true;
 	}
 	updateArrows();
 }
@@ -546,7 +546,7 @@ void TextList::scrollDown()
 	if (_texts.size() > _visibleRows && _scroll < _texts.size() - _visibleRows)
 	{
 		_scroll++;
-		draw();
+		_redraw = true;
 	}
 	updateArrows();
 }
@@ -566,7 +566,7 @@ void TextList::updateArrows()
  */
 void TextList::draw()
 {
-	clear();
+	Surface::draw();
 	for (unsigned int i = _scroll; i < _texts.size() && i < _scroll + _visibleRows; ++i)
 	{
 		for (std::vector<Text*>::iterator j = _texts[i].begin(); j < _texts[i].end(); ++j)

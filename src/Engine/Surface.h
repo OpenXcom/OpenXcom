@@ -38,7 +38,7 @@ protected:
 	SDL_Surface *_surface;
 	int _x, _y;
 	SDL_Rect _crop;
-	bool _visible, _hidden;
+	bool _visible, _hidden, _redraw;
 	SDL_Color *_originalColors;
 public:
 	/// Creates a new surface with the specified size and position.
