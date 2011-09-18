@@ -50,10 +50,8 @@ public:
 	void setBattleUnit(BattleUnit *unit);
 	/// Sets the battleitem to be rendered.
 	void setBattleItem(BattleItem *item);
-	/// Draw the surface.
+	/// Draw the unit.
 	void draw();
-	/// Blit the surface.
-	void blit(Surface *surface);
 };
 
 }

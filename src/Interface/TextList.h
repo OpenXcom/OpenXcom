@@ -65,8 +65,14 @@ public:
 	~TextList();
 	/// Unpresses the surface.
 	void unpress(State *state);
-	/// Gets a certain cell in the text list.
-	Text *const getCell(int row, int col) const;
+	/// Sets the text color of a certain cell.
+	void setCellColor(int row, int column, Uint8 color);
+	/// Sets the text color of a certain row.
+	void setRowColor(int row, Uint8 color);
+	/// Gets the text of a certain cell.
+	std::wstring getCellText(int row, int column) const;
+	/// Sets the text of a certain cell.
+	void setCellText(int row, int column, const std::wstring &text);
 	/// Adds a new row to the text list.
 	void addRow(int cols, ...);
 	/// Sets the columns in the text list.

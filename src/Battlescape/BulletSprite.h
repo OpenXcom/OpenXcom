@@ -38,10 +38,8 @@ public:
 	BulletSprite(int type);
 	/// Cleans up the BulletSprite.
 	~BulletSprite();
-	/// Draw the surface.
+	/// Draw the bullet.
 	void draw();
-	/// Blit the surface.
-	void blit(Surface *surface);
 };
 
 }

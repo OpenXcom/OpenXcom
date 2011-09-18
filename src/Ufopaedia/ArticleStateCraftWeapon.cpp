@@ -81,24 +81,22 @@ namespace OpenXcom
 		ss << defs->weapon->getDamage();
 		
 		_lstInfo->addRow(2, _game->getLanguage()->getString("STR_DAMAGE").c_str(), ss.str().c_str());
-		_lstInfo->getCell(0, 1)->setColor(Palette::blockOffset(15)+4);
+		_lstInfo->setCellColor(0, 1, Palette::blockOffset(15)+4);
 		
 		ss.str(L"");ss.clear();
 		ss << defs->weapon->getRange() << _game->getLanguage()->getString("STR_KM").c_str();
 		_lstInfo->addRow(2, _game->getLanguage()->getString("STR_RANGE").c_str(), ss.str().c_str());
-		_lstInfo->getCell(1, 1)->setColor(Palette::blockOffset(15)+4);
+		_lstInfo->setCellColor(1, 1, Palette::blockOffset(15)+4);
 		
 		ss.str(L"");ss.clear();
 		ss << defs->weapon->getAccuracy() << "%";
 		_lstInfo->addRow(2, _game->getLanguage()->getString("STR_ACCURACY").c_str(), ss.str().c_str());
-		_lstInfo->getCell(2, 1)->setColor(Palette::blockOffset(15)+4);
+		_lstInfo->setCellColor(2, 1, Palette::blockOffset(15)+4);
 		
 		ss.str(L"");ss.clear();
 		ss << defs->weapon->getStandardReload() << _game->getLanguage()->getString("STR_S").c_str();
 		_lstInfo->addRow(2, _game->getLanguage()->getString("STR_RE_LOAD_TIME").c_str(), ss.str().c_str());
-		_lstInfo->getCell(3, 1)->setColor(Palette::blockOffset(15)+4);
-		
-		_lstInfo->draw();
+		_lstInfo->setCellColor(3, 1, Palette::blockOffset(15)+4);
 	}
 	
 	ArticleStateCraftWeapon::~ArticleStateCraftWeapon()

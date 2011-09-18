@@ -170,15 +170,12 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, unsigned int cr
 			{
 				color = Palette::blockOffset(13);
 			}
-			_lstEquipment->getCell(row, 0)->setColor(color);
-			_lstEquipment->getCell(row, 1)->setColor(color);
-			_lstEquipment->getCell(row, 2)->setColor(color);
+			_lstEquipment->setRowColor(row, color);
 
 			++i;
 			row++;
 		}
 	}
-	_lstEquipment->draw();
 
 	_timerLeft = new Timer(50);
 	_timerLeft->onTimer((StateHandler)&CraftEquipmentState::moveLeft);
@@ -282,12 +279,9 @@ void CraftEquipmentState::updateQuantity()
 	{
 		color = Palette::blockOffset(13);
 	}
-	_lstEquipment->getCell(_sel, 0)->setColor(color);
-	_lstEquipment->getCell(_sel, 1)->setColor(color);
-	_lstEquipment->getCell(_sel, 1)->setText(ss.str());
-	_lstEquipment->getCell(_sel, 2)->setColor(color);
-	_lstEquipment->getCell(_sel, 2)->setText(ss2.str());
-	_lstEquipment->draw();
+	_lstEquipment->setRowColor(_sel, color);
+	_lstEquipment->setCellText(_sel, 1, ss.str());
+	_lstEquipment->setCellText(_sel, 2, ss2.str());
 }
 
 /**

@@ -130,7 +130,6 @@ void Map::init()
 	{
 		_bullet[i] = new BulletSprite(i);
 		_bullet[i]->setPalette(this->getPalette());
-		_bullet[i]->draw();
 	}
 
 	_projectile = 0;
@@ -149,7 +148,7 @@ void Map::think()
  */
 void Map::draw()
 {
-	this->clear();
+	Surface::draw();
 	if ((_save->getSelectedUnit() && _save->getSelectedUnit()->getVisible()) || _save->getSelectedUnit() == 0 || _save->getDebugMode() || _projectile || !_explosions.empty())
 	{
 		drawTerrain(this);
@@ -747,7 +746,7 @@ void Map::setSelectorPosition(int mx, int my)
 
 	if (oldX != _selectorX || oldY != _selectorY)
 	{
-		draw();
+		_redraw = true;
 	}
 }
 
@@ -775,7 +774,7 @@ void Map::scroll()
 		_scrollX = 0;
 		_scrollY = 0;
 	}
-	draw();
+	_redraw = true;
 }
 
 /**
@@ -791,7 +790,7 @@ void Map::animate(bool redraw)
 	{
 		_save->getTiles()[i]->animate();
 	}
-	if (redraw) draw();
+	if (redraw) _redraw = true;
 }
 
 /**
@@ -803,7 +802,7 @@ void Map::up()
 	{
 		_viewHeight++;
 		_mapOffsetY += _spriteHeight / 2;
-		draw();
+		_redraw = true;
 	}
 }
 
@@ -816,7 +815,7 @@ void Map::down()
 	{
 		_viewHeight--;
 		_mapOffsetY -= _spriteHeight / 2;
-		draw();
+		_redraw = true;
 	}
 }
 
@@ -828,7 +827,7 @@ void Map::setViewHeight(int viewheight)
 {
 	_viewHeight = viewheight;
 	minMaxInt(&_viewHeight, 0, _save->getHeight()-1);
-	draw();
+	_redraw = true;
 }
 
 
@@ -849,7 +848,7 @@ void Map::centerOnPosition(const Position &mapPos, bool redraw)
 
 	_viewHeight = mapPos.z;
 
-	if (redraw) draw();
+	if (redraw) _redraw = true;
 }
 
 /**
@@ -1050,7 +1049,6 @@ void Map::cacheUnit(BattleUnit *unit)
 		unitSprite->setSurfaces(_res->getSurfaceSet(unit->getUnit()->getArmor()->getSpriteSheet()),
 								_res->getSurfaceSet("HANDOB.PCK"));
 
-		unitSprite->draw();
 		cache->clear();
 		unitSprite->blit(cache);
 		unit->setCache(cache);

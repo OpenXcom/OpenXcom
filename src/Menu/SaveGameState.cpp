@@ -175,10 +175,8 @@ void SaveGameState::btnCancelClick(Action *action)
  */
 void SaveGameState::lstSavesClick(Action *action)
 {
-	Text *t = _lstSaves->getCell(_lstSaves->getSelectedRow(), 0);
-	_selected = Language::wstrToUtf8(t->getText());
-	t->setText(L"");
-	_lstSaves->draw();
+	_selected = Language::wstrToUtf8(_lstSaves->getCellText(_lstSaves->getSelectedRow(), 0));
+	_lstSaves->setCellText(_lstSaves->getSelectedRow(), 0, L"");
 	if (_lstSaves->getSelectedRow() == 0)
 	{
 		_edtSave->setText(L"");
@@ -188,8 +186,8 @@ void SaveGameState::lstSavesClick(Action *action)
 	{
 		_edtSave->setText(Language::utf8ToWstr(_selected));
 	}
-	_edtSave->setX(_lstSaves->getX() + t->getX());
-	_edtSave->setY(_lstSaves->getY() + t->getY());
+	_edtSave->setX(_lstSaves->getX());
+	_edtSave->setY(_lstSaves->getY() + _lstSaves->getSelectedRow() * 8);
 	_edtSave->setVisible(true);
 	_edtSave->focus();
 }

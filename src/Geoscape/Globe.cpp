@@ -588,7 +588,7 @@ std::vector<Target*> Globe::getTargets(int x, int y, bool craft) const
 void Globe::cachePolygons()
 {
 	cache(_game->getResourcePack()->getPolygons(), &_cacheLand);
-	draw();
+	_redraw = true;
 }
 
 /**
@@ -718,7 +718,7 @@ void Globe::rotate()
  */
 void Globe::draw()
 {
-	clear();
+	Surface::draw();
 	drawOcean();
 	drawLand();
 	drawDetail();
