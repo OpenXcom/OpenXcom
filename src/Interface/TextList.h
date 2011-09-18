@@ -46,7 +46,7 @@ private:
 	unsigned int _scroll, _visibleRows;
 	Uint8 _color, _color2;
 	TextHAlign _align;
-	bool _dot, _selectable, _condensed;
+	bool _dot, _selectable, _condensed, _contrast;
 	unsigned int _selRow;
 	Surface *_bg, *_selector;
 	ArrowButton *_up, *_down;
@@ -83,6 +83,8 @@ public:
 	void setSecondaryColor(Uint8 color);
 	/// Gets the secondary color of the text list.
 	Uint8 getSecondaryColor() const;
+	/// Sets the text list's high contrast color setting.
+	void setHighContrast(bool contrast);
 	/// Sets the text horizontal alignment of the text list.
 	void setAlign(TextHAlign align);
 	/// Sets whether to separate columns with dots.

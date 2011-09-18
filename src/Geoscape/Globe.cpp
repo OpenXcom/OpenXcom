@@ -76,7 +76,7 @@ Globe::Globe(Game *game, int cenX, int cenY, int width, int height, int x, int y
 	_radius.push_back(90);
 	_radius.push_back(120);
 	_radius.push_back(180);
-	_radius.push_back(280);
+	_radius.push_back(360);
 	_radius.push_back(450);
 	_radius.push_back(720);
 
