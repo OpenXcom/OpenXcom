@@ -36,11 +36,15 @@ class RuleResearchProject;
  */
 class NewPossibleResearchState : public State
 {
+private:
 	Window *_window;
+protected:
 	Text *_txtTitle;
 	TextList * _lstPossibilities;
-    TextButton *_btnResearch, *_btnOk;
 	Base * _base;
+	TextButton *_btnAllocate, *_btnOk;
+	NewPossibleResearchState(Game * game, Base * base);
+	void buildUi ();
 public:
 	/// Creates the NewPossibleResearch state.
 	NewPossibleResearchState(Game * game, Base * base, const std::vector<RuleResearchProject *> & possibilities);
@@ -49,7 +53,7 @@ public:
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
 	/// Handler for clicking the Allocate Research button.
-	void btnResearchClick(Action *action);
+	virtual void btnAllocateClick(Action *action);
 };
 }
 #endif

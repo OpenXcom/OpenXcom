@@ -34,16 +34,40 @@ namespace OpenXcom
  * Initializes all the elements in the EndResearch screen.
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
+ */
+NewPossibleResearchState::NewPossibleResearchState(Game * game, Base * base) : State (game), _base(base)
+{
+	buildUi();
+}
+
+/**
+ * Initializes all the elements in the EndResearch screen.
+ * @param game Pointer to the core game.
+ * @param base Pointer to the base to get info from.
  * @param possibilities List of newly possible ResearchProject
  */
 NewPossibleResearchState::NewPossibleResearchState(Game * game, Base * base, const std::vector<RuleResearchProject *> & possibilities) : State (game), _base(base)
+{
+	buildUi();
+	if (!possibilities.empty ())
+	{
+		_txtTitle->setText(_game->getLanguage()->getString("STR_WE_CAN_NOW_RESEARCH"));
+	}
+
+	for(std::vector<RuleResearchProject *>::const_iterator iter = possibilities.begin (); iter != possibilities.end (); ++iter)
+	{
+		_lstPossibilities->addRow (1, _game->getLanguage()->getString((*iter)->getName ()).c_str());
+	}
+}
+
+void NewPossibleResearchState::buildUi ()
 {
 	_screen = false;
 
 	// Create objects
 	_window = new Window(this, 288, 180, 16, 10);
 	_btnOk = new TextButton(160, 14, 80, 149);
-	_btnResearch = new TextButton(160, 14, 80, 165);
+	_btnAllocate = new TextButton(160, 14, 80, 165);
 	_txtTitle = new Text(288, 40, 16, 20);
 	_lstPossibilities = new TextList(288, 80, 16, 56);
 
@@ -52,7 +76,7 @@ NewPossibleResearchState::NewPossibleResearchState(Game * game, Base * base, con
 
 	add(_window);
 	add(_btnOk);
-	add(_btnResearch);
+	add(_btnAllocate);
 	add(_txtTitle);
 	add(_lstPossibilities);
 
@@ -63,25 +87,17 @@ NewPossibleResearchState::NewPossibleResearchState(Game * game, Base * base, con
 	_btnOk->setColor(Palette::blockOffset(8)+8);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&NewPossibleResearchState::btnOkClick);
-	_btnResearch->setColor(Palette::blockOffset(8)+8);
-	_btnResearch->setText(_game->getLanguage()->getString("STR_ALLOCATE_RESEARCH"));
-	_btnResearch->onMouseClick((ActionHandler)&NewPossibleResearchState::btnResearchClick);
+	_btnAllocate->setColor(Palette::blockOffset(8)+8);
+	_btnAllocate->setText(_game->getLanguage()->getString("STR_ALLOCATE_RESEARCH"));
+	_btnAllocate->onMouseClick((ActionHandler)&NewPossibleResearchState::btnAllocateClick);
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
-	if (!possibilities.empty ())
-	{
-		_txtTitle->setText(_game->getLanguage()->getString("STR_WE_CAN_NOW_RESEARCH"));
-	}
 
 	_lstPossibilities->setColor(Palette::blockOffset(8)+10);
 	_lstPossibilities->setColumns(1, 288);
 	_lstPossibilities->setBig();
 	_lstPossibilities->setAlign(ALIGN_CENTER);
-	for(std::vector<RuleResearchProject *>::const_iterator iter = possibilities.begin (); iter != possibilities.end (); ++iter)
-	{
-		_lstPossibilities->addRow (1, _game->getLanguage()->getString((*iter)->getName ()).c_str());
-	}
 }
 
 /**
@@ -105,7 +121,7 @@ void NewPossibleResearchState::btnOkClick(Action *action)
  * Open the ResearchState so the player can dispatch available scientist.
  * @param action Pointer to an action.
  */
-void NewPossibleResearchState::btnResearchClick(Action *action)
+void NewPossibleResearchState::btnAllocateClick(Action *action)
 {
 	_game->popState();
 	_game->pushState (new ResearchState(_game, _base));
