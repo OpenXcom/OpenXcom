@@ -22,6 +22,7 @@
 #include "../Engine/Palette.h"
 #include "../Engine/Action.h"
 #include "../Engine/Timer.h"
+#include "../Engine/Options.h"
 #include "NumberText.h"
 
 namespace OpenXcom
@@ -36,7 +37,7 @@ namespace OpenXcom
  */
 FpsCounter::FpsCounter(int width, int height, int x, int y) : Surface(width, height, x, y), _frames(0)
 {
-	_visible = false;
+	_visible = Options::getBool("fpsCounter");
 
 	_timer = new Timer(1000);
 	_timer->onTimer((SurfaceHandler)&FpsCounter::update);
@@ -85,6 +86,7 @@ void FpsCounter::handle(Action *action)
 	if (action->getDetails()->type == SDL_KEYDOWN && action->getDetails()->key.keysym.sym == SDLK_F5)
 	{
 		_visible = !_visible;
+		Options::setBool("fpsCounter", _visible);
 	}
 }
 

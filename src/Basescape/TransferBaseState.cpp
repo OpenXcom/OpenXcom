@@ -115,12 +115,11 @@ TransferBaseState::TransferBaseState(Game *game, Base *base) : State(game), _bas
 			}
 
 			_lstBases->addRow(2, (*i)->getName().c_str(), area.c_str());
-			_lstBases->getCell(row, 1)->setColor(Palette::blockOffset(13)+5);
+			_lstBases->setCellColor(row, 1, Palette::blockOffset(13)+5);
 			_bases.push_back(*i);
 			row++;
 		}
 	}
-	_lstBases->draw();
 }
 
 /**

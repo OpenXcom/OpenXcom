@@ -121,12 +121,9 @@ CraftArmorState::CraftArmorState(Game *game, Base *base, unsigned int craft) : S
 		{
 			color = Palette::blockOffset(13)+10;
 		}
-		_lstSoldiers->getCell(row, 0)->setColor(color);
-		_lstSoldiers->getCell(row, 1)->setColor(color);
-		_lstSoldiers->getCell(row, 2)->setColor(color);
+		_lstSoldiers->setRowColor(row, color);
 		row++;
 	}
-	_lstSoldiers->draw();
 }
 
 /**

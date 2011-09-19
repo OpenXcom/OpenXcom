@@ -82,6 +82,8 @@
 		<Unit filename="Basescape\MiniBaseView.h" />
 		<Unit filename="Basescape\MonthlyCostsState.cpp" />
 		<Unit filename="Basescape\MonthlyCostsState.h" />
+		<Unit filename="Basescape\NewResearchState.cpp" />
+		<Unit filename="Basescape\NewResearchState.h" />
 		<Unit filename="Basescape\PlaceFacilityState.cpp" />
 		<Unit filename="Basescape\PlaceFacilityState.h" />
 		<Unit filename="Basescape\PlaceLiftState.cpp" />
@@ -234,6 +236,8 @@
 		<Unit filename="Geoscape\CraftPatrolState.h" />
 		<Unit filename="Geoscape\DogfightState.cpp" />
 		<Unit filename="Geoscape\DogfightState.h" />
+		<Unit filename="Geoscape\EndResearchState.cpp" />
+		<Unit filename="Geoscape\EndResearchState.h" />
 		<Unit filename="Geoscape\FundingState.cpp" />
 		<Unit filename="Geoscape\FundingState.h" />
 		<Unit filename="Geoscape\GeoscapeCraftState.cpp" />
@@ -254,8 +258,10 @@
 		<Unit filename="Geoscape\LowFuelState.h" />
 		<Unit filename="Geoscape\MonthlyReportState.cpp" />
 		<Unit filename="Geoscape\MonthlyReportState.h" />
-		<Unit filename="Geoscape\MultipleTargetsState.cpp" />
-		<Unit filename="Geoscape\MultipleTargetsState.h" />
+		<Unit filename="Geoscape\NewPossibleResearchState.cpp" />
+		<Unit filename="Geoscape\NewPossibleResearchState.h" />
+		<Unit filename="Geoscape\ProductionCompleteState.cpp" />
+		<Unit filename="Geoscape\ProductionCompleteState.h" />
 		<Unit filename="Geoscape\OptionsState.cpp" />
 		<Unit filename="Geoscape\OptionsState.h" />
 		<Unit filename="Geoscape\Polygon.cpp" />
@@ -342,6 +348,8 @@
 		<Unit filename="Ruleset\RuleItem.h" />
 		<Unit filename="Ruleset\RuleRegion.cpp" />
 		<Unit filename="Ruleset\RuleRegion.h" />
+		<Unit filename="Ruleset\RuleResearchProject.cpp" />
+		<Unit filename="Ruleset\RuleResearchProject.h" />
 		<Unit filename="Ruleset\RuleSoldier.cpp" />
 		<Unit filename="Ruleset\RuleSoldier.h" />
 		<Unit filename="Ruleset\RuleTerrain.cpp" />
@@ -382,6 +390,8 @@
 		<Unit filename="Savegame\NodeLink.h" />
 		<Unit filename="Savegame\Region.cpp" />
 		<Unit filename="Savegame\Region.h" />
+		<Unit filename="Savegame\ResearchProject.cpp" />
+		<Unit filename="Savegame\ResearchProject.h" />
 		<Unit filename="Savegame\SavedBattleGame.cpp" />
 		<Unit filename="Savegame\SavedBattleGame.h" />
 		<Unit filename="Savegame\SavedGame.cpp" />

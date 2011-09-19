@@ -27,6 +27,7 @@
 #include "../Interface/Text.h"
 #include "../Engine/Action.h"
 #include "../Engine/Options.h"
+#include "../Menu/SaveGameState.h"
 
 namespace OpenXcom
 {
@@ -38,7 +39,7 @@ namespace OpenXcom
 BattlescapeOptionsState::BattlescapeOptionsState(Game *game) : State(game)
 {
 	// Create objects
-	_window = new Window(this, 320, 200, 0, 0);
+	_window = new Window(this, 320, 200, 0, 0, POPUP_BOTH);
 	_txtTitle = new Text(320, 16, 0, 16);
 
 	_txtScrollSpeed = new Text(120, 9, 16, 32);
@@ -340,7 +341,7 @@ BattlescapeOptionsState::BattlescapeOptionsState(Game *game) : State(game)
 
 	_btnSave->setColor(Palette::blockOffset(0)+3);
 	_btnSave->setHighContrast(true);
-	_btnSave->setText(_game->getLanguage()->getString("STR_NOT_AVAILABLE"));
+	_btnSave->setText(_game->getLanguage()->getString("STR_SAVE_GAME"));
 	_btnSave->onMouseClick((ActionHandler)&BattlescapeOptionsState::btnSaveClick);
 }
 
@@ -423,7 +424,7 @@ void BattlescapeOptionsState::btnOkClick(Action *action)
  */
 void BattlescapeOptionsState::btnSaveClick(Action *action)
 {
-	;
+	_game->pushState(new SaveGameState(_game, false));
 }
 
 }

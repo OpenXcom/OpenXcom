@@ -560,6 +560,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Basescape\NewResearchListState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\NewResearchListState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Basescape\PlaceFacilityState.cpp"
 				>
 			</File>
@@ -589,6 +597,14 @@
 			</File>
 			<File
 				RelativePath=".\Basescape\PurchaseErrorState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\ResearchProjectState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\ResearchProjectState.h"
 				>
 			</File>
 			<File
@@ -1016,6 +1032,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Geoscape\EndResearchState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\EndResearchState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Geoscape\FundingState.cpp"
 				>
 			</File>
@@ -1037,14 +1061,6 @@
 			</File>
 			<File
 				RelativePath=".\Geoscape\GeoscapeErrorState.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Geoscape\ProductionCompleteState.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Geoscape\ProductionCompleteState.h"
 				>
 			</File>
 			<File
@@ -1112,6 +1128,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Geoscape\NewPossibleResearchState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\NewPossibleResearchState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Geoscape\OptionsState.cpp"
 				>
 			</File>
@@ -1133,6 +1157,14 @@
 			</File>
 			<File
 				RelativePath=".\Geoscape\Polyline.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\ProductionCompleteState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\ProductionCompleteState.h"
 				>
 			</File>
 			<File
@@ -1444,6 +1476,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Savegame\ResearchProject.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\ResearchProject.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Savegame\SavedBattleGame.cpp"
 				>
 			</File>
@@ -1657,6 +1697,14 @@
 			</File>
 			<File
 				RelativePath=".\Ruleset\RuleRegion.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\RuleResearchProject.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\RuleResearchProject.h"
 				>
 			</File>
 			<File

@@ -76,7 +76,7 @@ Globe::Globe(Game *game, int cenX, int cenY, int width, int height, int x, int y
 	_radius.push_back(90);
 	_radius.push_back(120);
 	_radius.push_back(180);
-	_radius.push_back(280);
+	_radius.push_back(360);
 	_radius.push_back(450);
 	_radius.push_back(720);
 
@@ -588,7 +588,7 @@ std::vector<Target*> Globe::getTargets(int x, int y, bool craft) const
 void Globe::cachePolygons()
 {
 	cache(_game->getResourcePack()->getPolygons(), &_cacheLand);
-	draw();
+	_redraw = true;
 }
 
 /**
@@ -718,7 +718,7 @@ void Globe::rotate()
  */
 void Globe::draw()
 {
-	clear();
+	Surface::draw();
 	drawOcean();
 	drawLand();
 	drawDetail();

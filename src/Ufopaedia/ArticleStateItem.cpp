@@ -105,7 +105,7 @@ namespace OpenXcom
 								 _game->getLanguage()->getString("STR_AUTO").c_str(), 
 								 Text::formatPercentage(defs->item->getAccuracyAuto()).c_str(),
 								 Text::formatPercentage(defs->item->getTUAuto()).c_str());
-				_lstInfo->getCell(current_row, 0)->setColor(Palette::blockOffset(14)+15);
+				_lstInfo->setCellColor(current_row, 0, Palette::blockOffset(14)+15);
 				current_row++;
 			}
 								 
@@ -115,7 +115,7 @@ namespace OpenXcom
 								 _game->getLanguage()->getString("STR_SNAP").c_str(), 
 								 Text::formatPercentage(defs->item->getAccuracySnap()).c_str(),
 								 Text::formatPercentage(defs->item->getTUSnap()).c_str());
-				_lstInfo->getCell(current_row, 0)->setColor(Palette::blockOffset(14)+15);
+				_lstInfo->setCellColor(current_row, 0, Palette::blockOffset(14)+15);
 				current_row++;
 			}
 			
@@ -125,11 +125,9 @@ namespace OpenXcom
 								 _game->getLanguage()->getString("STR_AIMED").c_str(), 
 								 Text::formatPercentage(defs->item->getAccuracyAimed()).c_str(),
 								 Text::formatPercentage(defs->item->getTUAimed()).c_str());
-				_lstInfo->getCell(current_row, 0)->setColor(Palette::blockOffset(14)+15);
+				_lstInfo->setCellColor(current_row, 0, Palette::blockOffset(14)+15);
 				current_row++;
 			}
-			
-			_lstInfo->draw();
 
 			// text_info is BELOW the info table
 			_txtInfo = new Text((ammo_data->size()<3 ? 300 : 180), 60, 8, 138);

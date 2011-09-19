@@ -64,7 +64,6 @@
 #include "../Engine/Options.h"
 #include "../Interface/FpsCounter.h"
 #include "WarningMessage.h"
-#include "../Menu/SaveGameState.h"
 #include "BattlescapeOptionsState.h"
 #include "DebriefingState.h"
 #include "MiniMapState.h"
@@ -1381,12 +1380,6 @@ void BattlescapeState::handle(Action *action)
 			{
 				_battleGame->setDebugMode();
 				debug(L"Debug Mode");
-			}
-
-			// "s" - save game
-			if (action->getDetails()->key.keysym.sym == SDLK_s)
-			{
-				_game->pushState(new SaveGameState(_game));
 			}
 #endif
 		}

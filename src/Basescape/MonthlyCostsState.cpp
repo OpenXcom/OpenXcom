@@ -136,8 +136,7 @@ MonthlyCostsState::MonthlyCostsState(Game *game, Base *base) : State(game), _bas
 	_lstMaintenance->setColumns(2, 240, 60);
 	_lstMaintenance->setDot(true);
 	_lstMaintenance->addRow(2, _game->getLanguage()->getString("STR_BASE_MAINTENANCE").c_str(), Text::formatFunding(_base->getFacilityMaintenance()).c_str());
-	_lstMaintenance->getCell(0, 0)->setColor(Palette::blockOffset(15)+1);
-	_lstMaintenance->draw();
+	_lstMaintenance->setCellColor(0, 0, Palette::blockOffset(15)+1);
 
 	_lstTotal->setColor(Palette::blockOffset(13));
 	_lstTotal->setColumns(2, 45, 55);

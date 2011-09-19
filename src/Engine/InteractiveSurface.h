@@ -26,7 +26,7 @@
 namespace OpenXcom
 {
 
-typedef State &(State::*ActionHandler)(Action*);
+typedef void (State::* ActionHandler)(Action*);
 
 /**
  * Surface that the user can interact with.

@@ -132,7 +132,7 @@ void LoadGameState::lstSavesClick(Action *action)
 	SavedGame *s = new SavedGame(DIFF_BEGINNER);
 	try
 	{
-		s->load(Language::wstrToUtf8(_lstSaves->getCell(_lstSaves->getSelectedRow(), 0)->getText()), r);
+		s->load(Language::wstrToUtf8(_lstSaves->getCellText(_lstSaves->getSelectedRow(), 0)), r);
 		_game->setSavedGame(s);
 		_game->setRuleset(r);
 		if (_game->getSavedGame()->getBattleGame() == 0)

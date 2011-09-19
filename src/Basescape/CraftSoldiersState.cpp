@@ -139,12 +139,9 @@ CraftSoldiersState::CraftSoldiersState(Game *game, Base *base, unsigned int craf
 		{
 			color = Palette::blockOffset(13)+10;
 		}
-		_lstSoldiers->getCell(row, 0)->setColor(color);
-		_lstSoldiers->getCell(row, 1)->setColor(color);
-		_lstSoldiers->getCell(row, 2)->setColor(color);
+		_lstSoldiers->setRowColor(row, color);
 		row++;
 	}
-	_lstSoldiers->draw();
 }
 
 /**
@@ -176,19 +173,16 @@ void CraftSoldiersState::lstSoldiersClick(Action *action)
 	if (s->getCraft() == c)
 	{
 		s->setCraft(0);
-		_lstSoldiers->getCell(row, 2)->setText(_game->getLanguage()->getString("STR_NONE_UC"));
+		_lstSoldiers->setCellText(row, 2, _game->getLanguage()->getString("STR_NONE_UC"));
 		color = Palette::blockOffset(13)+10;
 	}
 	else
 	{
 		s->setCraft(c);
-		_lstSoldiers->getCell(row, 2)->setText(c->getName(_game->getLanguage()));
+		_lstSoldiers->setCellText(row, 2, c->getName(_game->getLanguage()));
 		color = Palette::blockOffset(13);
 	}
-	_lstSoldiers->getCell(row, 0)->setColor(color);
-	_lstSoldiers->getCell(row, 1)->setColor(color);
-	_lstSoldiers->getCell(row, 2)->setColor(color);
-	_lstSoldiers->draw();
+	_lstSoldiers->setRowColor(row, color);
 
 	std::wstringstream ss;
 	ss << _game->getLanguage()->getString("STR_SPACE_AVAILABLE") << L'\x01' << c->getRules()->getSoldiers() - c->getNumSoldiers();
