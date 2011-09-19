@@ -72,6 +72,8 @@ openxcom_SOURCES = \
 	src/Basescape/MiniBaseView.h \
 	src/Basescape/MonthlyCostsState.cpp \
 	src/Basescape/MonthlyCostsState.h \
+	src/Basescape/NewResearchListState.cpp \
+	src/Basescape/NewResearchListState.h \
 	src/Basescape/PlaceFacilityState.cpp \
 	src/Basescape/PlaceFacilityState.h \
 	src/Basescape/PlaceLiftState.cpp \
@@ -80,6 +82,8 @@ openxcom_SOURCES = \
 	src/Basescape/PurchaseErrorState.h \
 	src/Basescape/PurchaseState.cpp \
 	src/Basescape/PurchaseState.h \
+	src/Basescape/ResearchProjectState.cpp \
+	src/Basescape/ResearchProjectState.h \
 	src/Basescape/ResearchState.cpp \
 	src/Basescape/ResearchState.h \
 	src/Basescape/SellState.cpp \
@@ -124,6 +128,8 @@ openxcom_SOURCES = \
 	src/Battlescape/BriefingCrashState.h \
 	src/Battlescape/BulletSprite.cpp \
 	src/Battlescape/BulletSprite.h \
+	src/Battlescape/DebriefingState.cpp \
+	src/Battlescape/DebriefingState.h \
 	src/Battlescape/ExplosionBState.cpp \
 	src/Battlescape/ExplosionBState.h \
 	src/Battlescape/Explosion.cpp \
@@ -221,10 +227,10 @@ openxcom_SOURCES = \
 	src/Geoscape/ConfirmNewBaseState.h \
 	src/Geoscape/CraftPatrolState.cpp \
 	src/Geoscape/CraftPatrolState.h \
-	src/Geoscape/DebriefingState.cpp \
-	src/Geoscape/DebriefingState.h \
 	src/Geoscape/DogfightState.cpp \
 	src/Geoscape/DogfightState.h \
+	src/Geoscape/EndResearchState.cpp \
+	src/Geoscape/EndResearchState.h \
 	src/Geoscape/FundingState.cpp \
 	src/Geoscape/FundingState.h \
 	src/Geoscape/GeoscapeCraftState.cpp \
@@ -247,6 +253,8 @@ openxcom_SOURCES = \
 	src/Geoscape/MonthlyReportState.h \
 	src/Geoscape/MultipleTargetsState.cpp \
 	src/Geoscape/MultipleTargetsState.h \
+	src/Geoscape/NewPossibleResearchState.cpp \
+	src/Geoscape/NewPossibleResearchState.h \
 	src/Geoscape/OptionsState.cpp \
 	src/Geoscape/OptionsState.h \
 	src/Geoscape/Polygon.cpp \
@@ -333,6 +341,8 @@ openxcom_SOURCES = \
 	src/Ruleset/RuleInventory.h \
 	src/Ruleset/RuleItem.cpp \
 	src/Ruleset/RuleItem.h \
+	src/Ruleset/RuleResearchProject.cpp \
+	src/Ruleset/RuleResearchProject.h \
 	src/Ruleset/RuleRegion.cpp \
 	src/Ruleset/RuleRegion.h \
 	src/Ruleset/Ruleset.cpp \
@@ -375,6 +385,8 @@ openxcom_SOURCES = \
 	src/Savegame/NodeLink.h \
 	src/Savegame/Region.cpp \
 	src/Savegame/Region.h \
+	src/Savegame/ResearchProject.cpp \
+	src/Savegame/ResearchProject.h \
 	src/Savegame/SavedBattleGame.cpp \
 	src/Savegame/SavedBattleGame.h \
 	src/Savegame/SavedGame.cpp \
