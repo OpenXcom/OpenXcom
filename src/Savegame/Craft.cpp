@@ -72,23 +72,24 @@ Craft::~Craft()
  */
 void Craft::load(const YAML::Node &node, const Ruleset *rule)
 {
-	unsigned int size = 0;
-
 	MovingTarget::load(node);
 	node["id"] >> _id;
 	node["fuel"] >> _fuel;
 	node["damage"] >> _damage;
 
-	size = node["weapons"].size();
-	for (unsigned int i = 0; i < size; ++i)
+	for (YAML::Iterator i = node["weapons"].begin(); i != node["weapons"].end(); ++i)
 	{
 		std::string type;
-		node["weapons"][i]["type"] >> type;
+		(*i)["type"] >> type;
 		if (type != "0")
 		{
 			CraftWeapon *w = new CraftWeapon(rule->getCraftWeapon(type), 0);
-			w->load(node["weapons"][i]);
-			_weapons[i] = w;
+			w->load(*i);
+			_weapons.push_back(w);
+		}
+		else
+		{
+			_weapons.push_back(0);
 		}
 	}
 

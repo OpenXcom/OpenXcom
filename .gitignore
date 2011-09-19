@@ -62,8 +62,7 @@ bin/DATA/TERRAIN/
 bin/DATA/UFOGRAPH/
 bin/DATA/UFOINTRO/
 bin/DATA/UNITS/
-bin/USER/*.bmp
-bin/USER/*.sav
+bin/USER/
 deps/
 docs/html/
 build/
