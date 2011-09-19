@@ -41,8 +41,9 @@ namespace OpenXcom
 /**
  * Initializes all the elements in the Save Game screen.
  * @param game Pointer to the core game.
+ * @param geo True to use Geoscape palette, false to use Battlescape palette.
  */
-SaveGameState::SaveGameState(Game *game) : State(game), _selected("")
+SaveGameState::SaveGameState(Game *game, bool geo) : State(game), _selected(""), _geo(geo)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0, POPUP_BOTH);
@@ -55,7 +56,10 @@ SaveGameState::SaveGameState(Game *game) : State(game), _selected("")
 	_edtSave = new TextEdit(168, 9, 0, 0);
 	
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
+	if (_geo)
+	{
+		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
+	}
 
 	add(_window);
 	add(_btnCancel);
@@ -67,29 +71,64 @@ SaveGameState::SaveGameState(Game *game) : State(game), _selected("")
 	add(_edtSave);
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(8)+8);
-	_window->setBackground(game->getResourcePack()->getSurface("BACK01.SCR"));
+	if (_geo)
+	{
+		_window->setColor(Palette::blockOffset(8)+8);
+		_window->setBackground(game->getResourcePack()->getSurface("BACK01.SCR"));
+		
+		_btnCancel->setColor(Palette::blockOffset(8)+8);
 
-	_btnCancel->setColor(Palette::blockOffset(8)+8);
+		_txtTitle->setColor(Palette::blockOffset(15)-1);
+		_txtName->setColor(Palette::blockOffset(15)-1);
+		_txtTime->setColor(Palette::blockOffset(15)-1);
+		_txtDate->setColor(Palette::blockOffset(15)-1);
+		
+		_lstSaves->setColor(Palette::blockOffset(8)+10);
+		_lstSaves->setArrowColor(Palette::blockOffset(8)+8);
+		
+		_edtSave->setColor(Palette::blockOffset(8)+10);
+	}
+	else
+	{
+		_window->setColor(Palette::blockOffset(0)+8);
+		_window->setBackground(_game->getResourcePack()->getSurface("TAC00.SCR"));
+
+		_btnCancel->setColor(Palette::blockOffset(0)+3);
+		_btnCancel->setHighContrast(true);
+
+		_txtTitle->setColor(Palette::blockOffset(0));
+		_txtTitle->setHighContrast(true);
+
+		_txtName->setColor(Palette::blockOffset(0));
+		_txtName->setHighContrast(true);
+
+		_txtTime->setColor(Palette::blockOffset(0));
+		_txtTime->setHighContrast(true);
+
+		_txtDate->setColor(Palette::blockOffset(0));
+		_txtDate->setHighContrast(true);
+		
+		_lstSaves->setColor(Palette::blockOffset(0));
+		_lstSaves->setArrowColor(Palette::blockOffset(0)+3);
+		_lstSaves->setHighContrast(true);
+		
+		_edtSave->setColor(Palette::blockOffset(0));
+		_edtSave->setHighContrast(true);
+	}
+
 	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&SaveGameState::btnCancelClick);
 
-	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(_game->getLanguage()->getString("STR_SELECT_SAVE_POSITION"));
 
-	_txtName->setColor(Palette::blockOffset(15)-1);
 	_txtName->setText(_game->getLanguage()->getString("STR_NAME"));
 
-	_txtTime->setColor(Palette::blockOffset(15)-1);
 	_txtTime->setText(_game->getLanguage()->getString("STR_TIME"));
 
-	_txtDate->setColor(Palette::blockOffset(15)-1);
 	_txtDate->setText(_game->getLanguage()->getString("STR_DATE"));
-	
-	_lstSaves->setColor(Palette::blockOffset(8)+10);
-	_lstSaves->setArrowColor(Palette::blockOffset(8)+8);
+
 	_lstSaves->setColumns(5, 168, 30, 30, 30, 30);
 	_lstSaves->setSelectable(true);
 	_lstSaves->setBackground(_window);
@@ -98,7 +137,6 @@ SaveGameState::SaveGameState(Game *game) : State(game), _selected("")
 	_lstSaves->addRow(1, L"<NEW SAVED GAME>");
 	SavedGame::getList(_lstSaves, _game->getLanguage());
 
-	_edtSave->setColor(Palette::blockOffset(8)+10);
 	_edtSave->setVisible(false);
 	_edtSave->onKeyboardPress((ActionHandler)&SaveGameState::edtSaveKeyPress);
 }
@@ -116,7 +154,10 @@ SaveGameState::~SaveGameState()
  */
 void SaveGameState::init()
 {
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
+	if (_geo)
+	{
+		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
+	}
 }
 
 /**
@@ -134,10 +175,8 @@ void SaveGameState::btnCancelClick(Action *action)
  */
 void SaveGameState::lstSavesClick(Action *action)
 {
-	Text *t = _lstSaves->getCell(_lstSaves->getSelectedRow(), 0);
-	_selected = Language::wstrToUtf8(t->getText());
-	t->setText(L"");
-	_lstSaves->draw();
+	_selected = Language::wstrToUtf8(_lstSaves->getCellText(_lstSaves->getSelectedRow(), 0));
+	_lstSaves->setCellText(_lstSaves->getSelectedRow(), 0, L"");
 	if (_lstSaves->getSelectedRow() == 0)
 	{
 		_edtSave->setText(L"");
@@ -147,8 +186,8 @@ void SaveGameState::lstSavesClick(Action *action)
 	{
 		_edtSave->setText(Language::utf8ToWstr(_selected));
 	}
-	_edtSave->setX(_lstSaves->getX() + t->getX());
-	_edtSave->setY(_lstSaves->getY() + t->getY());
+	_edtSave->setX(_lstSaves->getX());
+	_edtSave->setY(_lstSaves->getY() + _lstSaves->getSelectedRow() * 8);
 	_edtSave->setVisible(true);
 	_edtSave->focus();
 }

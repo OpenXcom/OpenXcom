@@ -34,8 +34,8 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-TextList::TextList(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _texts(), _columns(), _big(0), _small(0), _font(0), _scroll(0), _visibleRows(0), _color(0), _align(ALIGN_LEFT), _dot(false), _selectable(false), _condensed(false), _selRow(0), _bg(0), _selector(0), _margin(0),
-																									_arrowLeft(), _arrowRight(), _arrowPos(-1), _arrowType(ARROW_VERTICAL), _leftClick(0), _leftPress(0), _leftRelease(0), _rightClick(0), _rightPress(0), _rightRelease(0)
+TextList::TextList(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _texts(), _columns(), _big(0), _small(0), _font(0), _scroll(0), _visibleRows(0), _color(0), _align(ALIGN_LEFT), _dot(false), _selectable(false), _condensed(false), _contrast(false),
+																								   _selRow(0), _bg(0), _selector(0), _margin(0), _arrowLeft(), _arrowRight(), _arrowPos(-1), _arrowType(ARROW_VERTICAL), _leftClick(0), _leftPress(0), _leftRelease(0), _rightClick(0), _rightPress(0), _rightRelease(0)
 {
 	_up = new ArrowButton(ARROW_BIG_UP, 13, 14, getX() + getWidth() + 4, getY() + 1);
 	_up->setVisible(false);
@@ -88,16 +88,52 @@ void TextList::unpress(State *state)
 }
 
 /**
- * Returns a pointer to a certain Text object in the list.
- * Useful for customizing or getting values off an individual cell.
- * @note If a Text is changed, a redraw needs to be manually requested.
+ * Changes the color of a specific Text object in the list.
  * @param row Row number.
  * @param col Column number.
- * @return Pointer to the requested Text.
+ * @param color Text color.
  */
-Text *const TextList::getCell(int row, int col) const
+void TextList::setCellColor(int row, int column, Uint8 color)
 {
-	return _texts[row][col];
+	_texts[row][column]->setColor(color);
+}
+
+/**
+ * Changes the text color of a specific row in the list.
+ * @param row Row number.
+ * @param col Column number.
+ * @param color Text color.
+ */
+void TextList::setRowColor(int row, Uint8 color)
+{
+	for (std::vector<Text*>::iterator i = _texts[row].begin(); i < _texts[row].end(); ++i)
+	{
+		(*i)->setColor(color);
+	}
+	_redraw = true;
+}
+
+/**
+ * Returns the text of a specific Text object in the list.
+ * @param row Row number.
+ * @param col Column number.
+ * @param color Text color.
+ */
+std::wstring TextList::getCellText(int row, int column) const
+{
+	return _texts[row][column]->getText();
+}
+
+/**
+ * Returns the text of a specific Text object in the list.
+ * @param row Row number.
+ * @param col Column number.
+ * @param color Text color.
+ */
+void TextList::setCellText(int row, int column, const std::wstring &text)
+{
+	_texts[row][column]->setText(text);
+	_redraw = true;
 }
 
 /**
@@ -122,6 +158,7 @@ void TextList::addRow(int cols, ...)
 		txt->setColor(_color);
 		txt->setSecondaryColor(_color2);
 		txt->setAlign(_align);
+		txt->setHighContrast(_contrast);
 		if (_font == _big)
 		{
 			txt->setBig();
@@ -303,6 +340,16 @@ void TextList::setSecondaryColor(Uint8 color)
 Uint8 TextList::getSecondaryColor() const
 {
 	return _color2;
+}
+
+/**
+ * Enables/disables high contrast color. Mostly used for
+ * Battlescape text.
+ * @param contrast High contrast setting.
+ */
+void TextList::setHighContrast(bool contrast)
+{
+	_contrast = contrast;
 }
 
 /**

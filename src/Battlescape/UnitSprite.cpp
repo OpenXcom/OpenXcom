@@ -63,6 +63,7 @@ void UnitSprite::setSurfaces(SurfaceSet *unitSurface, SurfaceSet *itemSurface)
 {
 	_unitSurface = unitSurface;
 	_itemSurface = itemSurface;
+	_redraw = true;
 }
 
 /**
@@ -72,6 +73,7 @@ void UnitSprite::setSurfaces(SurfaceSet *unitSurface, SurfaceSet *itemSurface)
 void UnitSprite::setBattleUnit(BattleUnit *unit)
 {
 	_unit = unit;
+	_redraw = true;
 }
 
 /**
@@ -81,6 +83,7 @@ void UnitSprite::setBattleUnit(BattleUnit *unit)
 void UnitSprite::setBattleItem(BattleItem *item)
 {
 	_item = item;
+	_redraw = true;
 }
 
 /**
@@ -89,6 +92,7 @@ void UnitSprite::setBattleItem(BattleItem *item)
  */
 void UnitSprite::draw()
 {
+	Surface::draw();
 	Surface *torso = 0, *legs = 0, *leftArm = 0, *rightArm = 0, *item = 0;
 
 	// magic numbers
@@ -102,7 +106,6 @@ void UnitSprite::draw()
 	const int offY[8] = { -6, -3, 0, 2, 0, -4, -7, -9 };
 	const int offYKneel = 4;
 
-	clear();
 	Soldier *soldier = dynamic_cast<Soldier*>(_unit->getUnit());
 
 	if (_unit->isOut())
@@ -228,15 +231,6 @@ void UnitSprite::draw()
 	case 6: rightArm->blit(this); legs->blit(this); item?item->blit(this):void(); torso->blit(this); leftArm->blit(this); break;
 	case 7: item?item->blit(this):void(); leftArm->blit(this); rightArm->blit(this); legs->blit(this); torso->blit(this); break;
 	}
-}
-
-/**
- * Blits the unit onto another surface. 
- * @param surface Pointer to another surface.
- */
-void UnitSprite::blit(Surface *surface)
-{
-	Surface::blit(surface);
 }
 
 }

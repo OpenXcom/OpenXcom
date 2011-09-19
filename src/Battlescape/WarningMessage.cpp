@@ -103,7 +103,7 @@ void WarningMessage::showMessage(std::wstring msg)
 {
 	_text->setText(msg);
 	_fade = 0;
-	draw();
+	_redraw = true;
 	setVisible(true);
 	_timer->start();
 }
@@ -122,7 +122,7 @@ void WarningMessage::think()
 void WarningMessage::fade()
 {
 	_fade++;
-	draw();
+	_redraw = true;
 	if (_fade == 24)
 	{
 		setVisible(false);
@@ -135,7 +135,7 @@ void WarningMessage::fade()
  */
 void WarningMessage::draw()
 {
-	clear();
+	Surface::draw();
 
 	SDL_Rect square1;
 	square1.x = 0;

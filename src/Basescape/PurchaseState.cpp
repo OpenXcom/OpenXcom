@@ -395,8 +395,7 @@ void PurchaseState::increase()
 		_qtys[_sel]++;
 		std::wstringstream ss;
 		ss << _qtys[_sel];
-		_lstItems->getCell(_sel, 3)->setText(ss.str());
-		_lstItems->draw();
+		_lstItems->setCellText(_sel, 3, ss.str());
 		_total += getPrice();
 		std::wstring s = _game->getLanguage()->getString("STR_COST_OF_PURCHASES");
 		s += L'\x01' + Text::formatFunding(_total);
@@ -429,8 +428,7 @@ void PurchaseState::decrease()
 		_qtys[_sel]--;
 		std::wstringstream ss;
 		ss << _qtys[_sel];
-		_lstItems->getCell(_sel, 3)->setText(ss.str());
-		_lstItems->draw();
+		_lstItems->setCellText(_sel, 3, ss.str());
 		_total -= getPrice();
 		std::wstring s = _game->getLanguage()->getString("STR_COST_OF_PURCHASES");
 		s += L'\x01' + Text::formatFunding(_total);

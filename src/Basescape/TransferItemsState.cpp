@@ -446,8 +446,7 @@ void TransferItemsState::increase()
 		_qtys[_sel]++;
 		std::wstringstream ss;
 		ss << _qtys[_sel];
-		_lstItems->getCell(_sel, 2)->setText(ss.str());
-		_lstItems->draw();
+		_lstItems->setCellText(_sel, 2, ss.str());
 		_total += getCost();
 	}
 }
@@ -479,8 +478,7 @@ void TransferItemsState::decrease()
 		_qtys[_sel]--;
 		std::wstringstream ss;
 		ss << _qtys[_sel];
-		_lstItems->getCell(_sel, 2)->setText(ss.str());
-		_lstItems->draw();
+		_lstItems->setCellText(_sel, 2, ss.str());
 		_total -= getCost();
 	}
 }
