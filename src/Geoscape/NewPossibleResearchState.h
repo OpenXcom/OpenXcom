@@ -43,7 +43,9 @@ protected:
 	TextList * _lstPossibilities;
 	Base * _base;
 	TextButton *_btnAllocate, *_btnOk;
+	/// Creates the NewPossibleResearch state.
 	NewPossibleResearchState(Game * game, Base * base);
+	/// Build dialog
 	void buildUi ();
 public:
 	/// Creates the NewPossibleResearch state.

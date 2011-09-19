@@ -11,6 +11,12 @@
 
 namespace OpenXcom
 {
+/**
+ * Initializes all the elements in the NewPossibleProductionState screen.
+ * @param game Pointer to the core game.
+ * @param base Pointer to the base to get info from.
+ * @param project The completed ResearchProject
+ */
 NewPossibleProductionState::NewPossibleProductionState(Game * game, Base * base,RuleResearchProject * project) : NewPossibleResearchState(game, base)
 {
 	_btnAllocate->setText(_game->getLanguage()->getString("STR_ALLOCATE_MANUFACTURE"));
@@ -18,6 +24,10 @@ NewPossibleProductionState::NewPossibleProductionState(Game * game, Base * base,
 	_lstPossibilities->addRow (1, _game->getLanguage()->getString(project->getName()).c_str());
 }
 
+/**
+ * Open the ManufactureState so the player can dispatch available engineers.
+ * @param action Pointer to an action.
+ */
 void NewPossibleProductionState::btnAllocateClick(Action *action)
 {
 	_game->popState ();

@@ -60,6 +60,9 @@ NewPossibleResearchState::NewPossibleResearchState(Game * game, Base * base, con
 	}
 }
 
+/**
+ * Build dialog
+*/
 void NewPossibleResearchState::buildUi ()
 {
 	_screen = false;
