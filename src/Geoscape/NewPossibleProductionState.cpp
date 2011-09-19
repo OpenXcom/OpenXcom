@@ -18,15 +18,9 @@ NewPossibleProductionState::NewPossibleProductionState(Game * game, Base * base,
 	_lstPossibilities->addRow (1, _game->getLanguage()->getString(project->getName()).c_str());
 }
 
-void NewPossibleProductionState::btnOkClick(Action *action)
-{
-	_game->popState ();
-}
-
 void NewPossibleProductionState::btnAllocateClick(Action *action)
 {
 	_game->popState ();
-	//_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
 	_game->pushState (new ManufactureState(_game, _base));
 }
 }
