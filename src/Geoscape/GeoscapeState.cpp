@@ -73,6 +73,7 @@
 #include "NewPossibleResearchState.h"
 #include "../Savegame/Production.h"
 #include "../Ruleset/RuleItem.h"
+#include "NewPossibleProductionState.h"
 
 namespace OpenXcom
 {
@@ -753,6 +754,7 @@ void GeoscapeState::time1Day()
 				finished.push_back(*iter);
 			}
 		}
+		const std::map<std::string, RuleItem *> & items (_game->getRuleset()->getItems ());
 		for(std::vector<ResearchProject*>::const_iterator iter = finished.begin (); iter != finished.end (); ++iter)
 		{
 			(*i)->removeResearch(*iter);
@@ -760,12 +762,16 @@ void GeoscapeState::time1Day()
 			_game->getSavedGame()->addFinishedResearch(research, _game->getRuleset ());
 			std::vector<RuleResearchProject *> newPossibleResearch;
 			_game->getSavedGame()->getDependableResearch (newPossibleResearch, (*iter)->getRuleResearchProject(), _game->getRuleset(), *i);
-			timerReset();
 			popup(new EndResearchState (_game, research));
 			popup(new NewPossibleResearchState(_game, *i, newPossibleResearch));
+			std::map<std::string, RuleItem *>::const_iterator itItem = items.find (research->getName ());
+			if (itItem != items.end () && itItem->second->getManufactureInfo())
+			{
+				popup(new NewPossibleProductionState (_game, *i, const_cast<RuleResearchProject *>(research)));
+			}
+			timerReset();
 			delete(*iter);
 		}
-
 	}
 }
 
