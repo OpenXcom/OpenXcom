@@ -46,7 +46,7 @@ private:
 	unsigned int _scroll, _visibleRows;
 	Uint8 _color, _color2;
 	TextHAlign _align;
-	bool _dot, _selectable, _condensed;
+	bool _dot, _selectable, _condensed, _contrast;
 	unsigned int _selRow;
 	Surface *_bg, *_selector;
 	ArrowButton *_up, *_down;
@@ -65,8 +65,14 @@ public:
 	~TextList();
 	/// Unpresses the surface.
 	void unpress(State *state);
-	/// Gets a certain cell in the text list.
-	Text *const getCell(int row, int col) const;
+	/// Sets the text color of a certain cell.
+	void setCellColor(int row, int column, Uint8 color);
+	/// Sets the text color of a certain row.
+	void setRowColor(int row, Uint8 color);
+	/// Gets the text of a certain cell.
+	std::wstring getCellText(int row, int column) const;
+	/// Sets the text of a certain cell.
+	void setCellText(int row, int column, const std::wstring &text);
 	/// Adds a new row to the text list.
 	void addRow(int cols, ...);
 	/// Sets the columns in the text list.
@@ -83,6 +89,8 @@ public:
 	void setSecondaryColor(Uint8 color);
 	/// Gets the secondary color of the text list.
 	Uint8 getSecondaryColor() const;
+	/// Sets the text list's high contrast color setting.
+	void setHighContrast(bool contrast);
 	/// Sets the text horizontal alignment of the text list.
 	void setAlign(TextHAlign align);
 	/// Sets whether to separate columns with dots.

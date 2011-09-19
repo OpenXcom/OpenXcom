@@ -102,7 +102,7 @@ void BaseView::setBase(Base *base)
 		}
 	}
 
-	draw();
+	_redraw = true;
 }
 
 /**
@@ -348,6 +348,8 @@ void BaseView::blink()
  */
 void BaseView::draw()
 {
+	Surface::draw();
+
 	// Draw grid squares
 	for (int x = 0; x < 8; ++x)
 	{

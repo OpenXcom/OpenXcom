@@ -124,13 +124,10 @@ void SoldiersState::init()
 		_lstSoldiers->addRow(3, (*i)->getName().c_str(), _game->getLanguage()->getString((*i)->getRankString()).c_str(), s.c_str());
 		if ((*i)->getCraft() == 0)
 		{
-			_lstSoldiers->getCell(row, 0)->setColor(Palette::blockOffset(15)+6);
-			_lstSoldiers->getCell(row, 1)->setColor(Palette::blockOffset(15)+6);
-			_lstSoldiers->getCell(row, 2)->setColor(Palette::blockOffset(15)+6);
+			_lstSoldiers->setRowColor(row, Palette::blockOffset(15)+6);
 		}
 		row++;
 	}
-	_lstSoldiers->draw();
 }
 
 /**

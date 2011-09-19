@@ -130,19 +130,17 @@ namespace OpenXcom
 		else
 			ss << _game->getLanguage()->getString("STR_DAY");
 		_lstInfo->addRow(2, _game->getLanguage()->getString("STR_CONSTRUCTION_TIME").c_str(), ss.str().c_str());
-		_lstInfo->getCell(0, 1)->setColor(Palette::blockOffset(13)+0);
+		_lstInfo->setCellColor(0, 1, Palette::blockOffset(13)+0);
 		
 		ss.str(L"");ss.clear();
 		ss << Text::formatFunding(defs->facility->getBuildCost());
 		_lstInfo->addRow(2, _game->getLanguage()->getString("STR_CONSTRUCTION_COST").c_str(), ss.str().c_str());
-		_lstInfo->getCell(1, 1)->setColor(Palette::blockOffset(13)+0);
+		_lstInfo->setCellColor(1, 1, Palette::blockOffset(13)+0);
 		
 		ss.str(L"");ss.clear();
 		ss << Text::formatFunding(defs->facility->getMonthlyCost());
 		_lstInfo->addRow(2, _game->getLanguage()->getString("STR_MAINTENANCE_COST").c_str(), ss.str().c_str());
-		_lstInfo->getCell(2, 1)->setColor(Palette::blockOffset(13)+0);
-		
-		_lstInfo->draw();
+		_lstInfo->setCellColor(2, 1, Palette::blockOffset(13)+0);
 	}
 	
 	ArticleStateBaseFacility::~ArticleStateBaseFacility()

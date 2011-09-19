@@ -117,7 +117,7 @@ void OptionsState::btnLoadClick(Action *action)
  */
 void OptionsState::btnSaveClick(Action *action)
 {
-	_game->pushState(new SaveGameState(_game));
+	_game->pushState(new SaveGameState(_game, true));
 }
 
 /**

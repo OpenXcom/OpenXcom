@@ -44,9 +44,10 @@ private:
 	TextList *_lstSaves;
 	TextEdit *_edtSave;
 	std::string _selected;
+	bool _geo;
 public:
 	/// Creates the Save Game state.
-	SaveGameState(Game *game);
+	SaveGameState(Game *game, bool geo);
 	/// Cleans up the Save Game state.
 	~SaveGameState();
 	/// Updates the palette.

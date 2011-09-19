@@ -55,7 +55,7 @@ MiniBaseView::~MiniBaseView()
 void MiniBaseView::setBases(std::vector<Base*> *bases)
 {
 	_bases = bases;
-	draw();
+	_redraw = true;
 }
 
 /**
@@ -85,7 +85,7 @@ unsigned int MiniBaseView::getHoveredBase() const
 void MiniBaseView::setSelectedBase(unsigned int base)
 {
 	_base = base;
-	draw();
+	_redraw = true;
 }
 
 /**
@@ -94,7 +94,7 @@ void MiniBaseView::setSelectedBase(unsigned int base)
  */
 void MiniBaseView::draw()
 {
-	clear();
+	Surface::draw();
 	for (unsigned int i = 0; i < MAX_BASES; ++i)
 	{
 		// Draw base squares

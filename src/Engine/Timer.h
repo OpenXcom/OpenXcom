@@ -26,8 +26,8 @@
 namespace OpenXcom
 {
 
-typedef State &(State::*StateHandler)();
-typedef Surface &(Surface::*SurfaceHandler)();
+typedef void (State::* StateHandler)();
+typedef void (Surface::* SurfaceHandler)();
 
 /**
  * Timer used to run code in fixed intervals.

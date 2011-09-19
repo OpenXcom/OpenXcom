@@ -69,6 +69,7 @@ const int BulletSprite::pixels[37][9] = {
  */
 BulletSprite::BulletSprite(int type) : Surface(3, 3), _type(type)
 {
+	draw();
 }
 
 /**
@@ -84,6 +85,7 @@ BulletSprite::~BulletSprite()
  */
 void BulletSprite::draw()
 {
+	Surface::draw();
 	lock();
 	for (int y = 0; y < 3;++y)
 	{
@@ -93,15 +95,6 @@ void BulletSprite::draw()
 		}
 	}
 	unlock();
-}
-
-/**
- * Blits the BulletSprite onto another surface. 
- * @param surface Pointer to another surface.
- */
-void BulletSprite::blit(Surface *surface)
-{
-	Surface::blit(surface);
 }
 
 }
