@@ -130,6 +130,10 @@ set ( battlescape_src
   Battlescape/AbortMissionState.h
   Battlescape/DebriefingState.cpp
   Battlescape/DebriefingState.h
+  Battlescape/MiniMapView.h
+  Battlescape/MiniMapView.cpp
+  Battlescape/MiniMapState.h
+  Battlescape/MiniMapState.cpp
 )
 
 set ( engine_src 
