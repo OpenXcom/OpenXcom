@@ -132,6 +132,10 @@ set ( battlescape_src
   Battlescape/InfoboxState.h
   Battlescape/TileEngine.cpp
   Battlescape/TileEngine.h
+  Battlescape/MiniMapView.h
+  Battlescape/MiniMapView.cpp
+  Battlescape/MiniMapState.h
+  Battlescape/MiniMapState.cpp
 )
 
 set ( engine_src
