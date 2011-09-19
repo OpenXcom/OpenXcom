@@ -146,10 +146,10 @@ void ListPossibleProductionState::fillProductionList()
 	_possibleProductions.clear();
 	const std::map<std::string, RuleItem *> & items (_game->getRuleset()->getItems ());
 	const std::vector<Production *> productions (_base->getProductions ());
+	const std::map<std::string, RuleResearchProject *> & allResearchs (_game->getRuleset()->getResearchProjects ());
+	const std::vector<const RuleResearchProject *> & discovereds (_game->getSavedGame ()->getDiscoveredResearchs ());
 
-	for(std::map<std::string, RuleItem *>::const_iterator iter = items.begin ();
-	    iter != items.end ();
-	    ++iter)
+	for(std::map<std::string, RuleItem *>::const_iterator iter = items.begin (); iter != items.end (); ++iter)
 	{
 		if(!iter->second->getManufactureInfo())
 		{
@@ -158,6 +158,11 @@ void ListPossibleProductionState::fillProductionList()
 		if(std::find_if(productions.begin (), productions.end (), equalProduction(iter->second)) != productions.end ())
 		{
 			continue;
+		}
+		std::map<std::string, RuleResearchProject *>::const_iterator itResearch = allResearchs.find(iter->first);
+		if(itResearch != allResearchs.end () && std::find(discovereds.begin (), discovereds.end (), itResearch->second) == discovereds.end ())
+		{
+		 	continue;
 		}
 
 		_lstManufacture->addRow(2, _game->getLanguage()->getString(iter->first).c_str(), _game->getLanguage()->getString(iter->second->getCategory ()).c_str());
