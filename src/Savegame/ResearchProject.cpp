@@ -108,9 +108,8 @@ void ResearchProject::setCost(int f)
 /**
  * Loads the research project from a YAML file.
  * @param node YAML node.
- * @param rule Ruleset for the saved game.
  */
-void ResearchProject::load(const YAML::Node& node, const Ruleset *rule)
+void ResearchProject::load(const YAML::Node& node)
 {
 	int assigned;
 	int spent;
