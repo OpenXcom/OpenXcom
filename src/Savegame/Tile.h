@@ -25,6 +25,7 @@
 #include "../Ruleset/MapData.h"
 #include "BattleUnit.h"
 
+
 namespace OpenXcom
 {
 
@@ -60,9 +61,9 @@ public:
 	/// Cleans up a tile.
 	~Tile();
 	/// Load the tile to yaml
-	void Tile::load(const YAML::Node &node);
+	void load(const YAML::Node &node);
 	/// Saves the tile to yaml
-	void Tile::save(YAML::Emitter &out) const;
+	void save(YAML::Emitter &out) const;
 	/// Gets a pointer to the mapdata for a specific part of the tile.
 	MapData *getMapData(int part) const;
 	/// Sets the pointer to the mapdata for a specific part of the tile
