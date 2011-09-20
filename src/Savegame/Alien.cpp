@@ -28,7 +28,7 @@ namespace OpenXcom
 /**
  * Initializes a new blank alien.
  */
-Alien::Alien() : Unit(), _rules(0), _lang(0)
+Alien::Alien() : Unit(), _rules(0)
 {
 }
 
@@ -38,7 +38,7 @@ Alien::Alien() : Unit(), _rules(0), _lang(0)
  * @param armor Alien armor.
  * @param lang Current language.
  */
-Alien::Alien(RuleAlien *rules, RuleArmor *armor, Language *lang) : Unit(armor), _rules(rules), _lang(lang)
+Alien::Alien(RuleAlien *rules, RuleArmor *armor) : Unit(armor), _rules(rules)
 {
 }
 
@@ -53,11 +53,14 @@ Alien::~Alien()
  * Returns the Alien's full name.
  * @return Soldier name.
  */
-std::wstring Alien::getName() const
+std::wstring Alien::getName(Language *lang) const
 {
 	std::wstringstream name;
-	name << _lang->getString(_rules->getRace());
-	name << _lang->getString(_rules->getRank());
+	if (lang)
+	{
+		name << lang->getString(_rules->getRace());
+		name << lang->getString(_rules->getRank());
+	}
 	return name.str();
 }
 

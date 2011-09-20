@@ -186,6 +186,8 @@ public:
 	void handleAI(BattleUnit *unit);
 	/// Finishes a battle.
 	void finishBattle(bool abort);
+	/// Add item & affect with gravity.
+	void dropItem(const Position &position, BattleItem *item, bool newItem = false);
 };
 
 }

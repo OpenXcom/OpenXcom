@@ -19,6 +19,8 @@
 #ifndef OPENXCOM_NODELINK_H
 #define OPENXCOM_NODELINK_H
 
+#include "yaml.h"
+
 namespace OpenXcom
 {
 
@@ -36,6 +38,10 @@ public:
 	NodeLink(int connectedNodeID, int distance, int travelType);
 	/// Cleans up the nodelink.
 	~NodeLink();
+	/// Loads the node from YAML.
+	void load(const YAML::Node& node);
+	/// Saves the node to YAML.
+	void save(YAML::Emitter& out) const;
 	/// Get the connected node id
 	int getConnectedNodeID() const;
 	void setConnectedNodeID(int id);

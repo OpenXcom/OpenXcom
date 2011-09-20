@@ -246,7 +246,7 @@ void ProjectileFlyBState::think()
 				}
 				else
 				{
-					_parent->getGame()->getSavedGame()->getBattleGame()->getTerrainModifier()->spawnItem(pos, item);
+					_parent->dropItem(pos, item);
 				}
 			}
 			else

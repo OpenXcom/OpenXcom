@@ -125,9 +125,6 @@ AbortMissionState::~AbortMissionState()
  */
 void AbortMissionState::btnOkClick(Action *action)
 {
-	_battleGame->addStat("STR_XCOM_OPERATIVES_MISSING_IN_ACTION", _outExitArea, -20 * _outExitArea);
-	if (_inExitArea == 0)
-		_battleGame->addStat("STR_XCOM_CRAFT_LOST", 1, -200);
 	_game->popState();
 	_state->finishBattle(true);
 }

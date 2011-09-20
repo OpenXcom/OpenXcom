@@ -216,6 +216,8 @@ public:
 	BattleItem *getMainHandWeapon() const;
 	/// Check if this unit is in the exit area
 	bool isInExitArea() const;
+	/// Gets the unit height taking into account kneeling/standing.
+	int getHeight() const;
 };
 
 }

@@ -41,6 +41,10 @@ public:
 	BattleAIState(SavedBattleGame *game, BattleUnit *unit);
 	/// Cleans up the BattleAIState.
 	virtual ~BattleAIState();
+	/// Loads the AI state from YAML.
+	virtual void load(const YAML::Node& node);
+	/// Saves the AI state to YAML.
+	virtual void save(YAML::Emitter& out) const;
 	/// Enters the state.
 	virtual void enter();
 	/// Exits the state.

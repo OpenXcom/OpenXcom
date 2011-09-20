@@ -212,6 +212,9 @@ void BattlescapeGenerator::run()
 			for (int count=0; count < (*i).second; count++)
 				addItem(_game->getRuleset()->getItem((*i).first));
 		}
+
+		//_craft->getItems()->getContents()->clear();
+
 		// test data
 		/*addItem(_game->getRuleset()->getItem("STR_RIFLE"));
 		addItem(_game->getRuleset()->getItem("STR_RIFLE_CLIP"));
@@ -363,7 +366,7 @@ void BattlescapeGenerator::addSoldier(Soldier *soldier)
  */
 BattleUnit *BattlescapeGenerator::addAlien(RuleAlien *rules, RuleArmor *armor, NodeRank rank)
 {
-	BattleUnit *unit = new BattleUnit(new Alien(rules, armor, _game->getLanguage()), FACTION_HOSTILE);
+	BattleUnit *unit = new BattleUnit(new Alien(rules, armor), FACTION_HOSTILE);
 	Node *node;
 	bool bFound = false;
 	unit->setId(_unitCount++);
@@ -425,7 +428,7 @@ BattleUnit *BattlescapeGenerator::addAlien(RuleAlien *rules, RuleArmor *armor, N
  */
 void BattlescapeGenerator::addItem(RuleItem *item)
 {
-	BattleItem *bi = new BattleItem(item);
+	BattleItem *bi = new BattleItem(item, _save->getCurrentItemId());
 	bool placed = false;
 
 	switch (item->getBattleType())
@@ -508,6 +511,7 @@ void BattlescapeGenerator::addItem(RuleItem *item)
 	// if we did not auto equip the item, place it on the ground
 	if (!placed)
 	{
+		bi->setSlot(_game->getRuleset()->getInventory("STR_GROUND"));
 		_craftInventoryTile->addItem(bi);
 	}
 }
@@ -519,7 +523,7 @@ void BattlescapeGenerator::addItem(RuleItem *item)
  */
 void BattlescapeGenerator::addItem(RuleItem *item, BattleUnit *unit)
 {
-	BattleItem *bi = new BattleItem(item);
+	BattleItem *bi = new BattleItem(item, _save->getCurrentItemId());
 	bool placed = false;
 
 	switch (item->getBattleType())
@@ -602,6 +606,9 @@ void BattlescapeGenerator::generateMap()
 	MapBlock* dummy = new MapBlock(_terrain, "dummy", 0, 0, false);
 	MapBlock* craftMap = 0;
 	MapBlock* ufoMap = 0;
+
+	int mapDataSetIDOffset = 0;
+	int craftDataSetIDOffset = 0;
 
 	for (int i = 0; i < 10; ++i)
 	{
@@ -711,6 +718,7 @@ void BattlescapeGenerator::generateMap()
 	{
 		(*i)->load(_res);
 		_save->getMapDataSets()->push_back(*i);
+		mapDataSetIDOffset++;
 	}
 
 	/* now load them up */
@@ -722,7 +730,7 @@ void BattlescapeGenerator::generateMap()
 			segments[itX][itY] = segment;
 			if (blocks[itX][itY] != 0 && blocks[itX][itY] != dummy)
 			{
-				loadMAP(blocks[itX][itY], itX * 10, itY * 10, _terrain);
+				loadMAP(blocks[itX][itY], itX * 10, itY * 10, _terrain, 0);
 				if (!landingzone[itX][itY])
 				{
 					loadRMP(blocks[itX][itY], itX * 10, itY * 10, segment++);
@@ -737,8 +745,9 @@ void BattlescapeGenerator::generateMap()
 		{
 			(*i)->load(_res);
 			_save->getMapDataSets()->push_back(*i);
+			craftDataSetIDOffset++;
 		}
-		loadMAP(ufoMap, ufoX * 10, ufoY * 10, _ufo->getRules()->getBattlescapeTerrainData());
+		loadMAP(ufoMap, ufoX * 10, ufoY * 10, _ufo->getRules()->getBattlescapeTerrainData(), mapDataSetIDOffset);
 		loadRMP(ufoMap, ufoX * 10, ufoY * 10, Node::UFOSEGMENT);
 		for (int i = 0; i < ufoMap->getWidth() / 10; ++i)
 		{
@@ -756,7 +765,7 @@ void BattlescapeGenerator::generateMap()
 			(*i)->load(_res);
 			_save->getMapDataSets()->push_back(*i);
 		}
-		loadMAP(craftMap, craftX * 10, craftY * 10, _craft->getRules()->getBattlescapeTerrainData(), true);
+		loadMAP(craftMap, craftX * 10, craftY * 10, _craft->getRules()->getBattlescapeTerrainData(), mapDataSetIDOffset + craftDataSetIDOffset, true);
 		loadRMP(craftMap, craftX * 10, craftY * 10, Node::CRAFTSEGMENT);
 		for (int i = 0; i < craftMap->getWidth() / 10; ++i)
 		{
@@ -823,7 +832,7 @@ void BattlescapeGenerator::generateMap()
  * @sa http://www.ufopaedia.org/index.php?title=MAPS
  * @note Y-axis is in reverse order
  */
-int BattlescapeGenerator::loadMAP(MapBlock *mapblock, int xoff, int yoff, RuleTerrain *terrain, bool discovered)
+int BattlescapeGenerator::loadMAP(MapBlock *mapblock, int xoff, int yoff, RuleTerrain *terrain, int mapDataSetOffset, bool discovered)
 {
 	int width, length, height;
 	int x = xoff, y = yoff, z = 0;
@@ -855,13 +864,16 @@ int BattlescapeGenerator::loadMAP(MapBlock *mapblock, int xoff, int yoff, RuleTe
 			terrainObjectID = (int)((unsigned char)value[part]);
 			if (terrainObjectID>0)
 			{
-				_save->getTile(Position(x, y, z))->setMapData(terrain->getMapData(terrainObjectID),part);
+				int mapDataSetID = mapDataSetOffset;
+				int mapDataID = terrainObjectID;
+				MapData *md = terrain->getMapData(&mapDataID, &mapDataSetID);
+				_save->getTile(Position(x, y, z))->setMapData(md, mapDataID, mapDataSetID, part);
 			}
 			// if the part is empty and it's not a floor, remove it
 			// it prevents growing grass in UFOs
 			if (terrainObjectID == 0 && part > 0)
 			{
-				_save->getTile(Position(x, y, z))->setMapData(0,part);
+				_save->getTile(Position(x, y, z))->setMapData(0, -1, -1, part);
 			}
 		}
 		_save->getTile(Position(x, y, z))->setDiscovered(discovered, 2);

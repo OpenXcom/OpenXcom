@@ -486,18 +486,6 @@ void Map::drawTerrain(Surface *surface)
 						}
 					}
 
-					// check if we gots explosions
-					for (std::set<Explosion*>::const_iterator i = _explosions.begin(); i != _explosions.end(); ++i)
-					{
-						if (!(*i)->isBig())
-						{
-							Position voxelPos = (*i)->getPosition();
-							convertVoxelToScreen(voxelPos, &bulletPositionScreen);
-							tmpSurface = _res->getSurfaceSet("SMOKE.PCK")->getFrame((*i)->getCurrentFrame());
-							tmpSurface->blitNShade(surface, bulletPositionScreen.x - 15, bulletPositionScreen.y - 15, 0);
-						}
-					}
-
 					// Draw cursor front
 					if (_selectorX == itX && _selectorY == itY && _cursorType != CT_NONE)
 					{
@@ -580,6 +568,13 @@ void Map::drawTerrain(Surface *surface)
 			{
 				centerOnPosition(Position(voxelPos.x/16, voxelPos.y/16, voxelPos.z/24), false);
 			}
+		}
+		else
+		{
+			Position voxelPos = (*i)->getPosition();
+			convertVoxelToScreen(voxelPos, &bulletPositionScreen);
+			tmpSurface = _res->getSurfaceSet("SMOKE.PCK")->getFrame((*i)->getCurrentFrame());
+			tmpSurface->blitNShade(surface, bulletPositionScreen.x - 15, bulletPositionScreen.y - 15, 0);
 		}
 	}
 

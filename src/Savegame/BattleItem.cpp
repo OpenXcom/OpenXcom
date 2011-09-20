@@ -18,6 +18,7 @@
  */
 #include "BattleItem.h"
 #include "BattleUnit.h"
+#include "Tile.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/RuleInventory.h"
 
@@ -28,12 +29,13 @@ namespace OpenXcom
  * Initializes a item of the specified type.
  * @param rules Pointer to ruleset.
  */
-BattleItem::BattleItem(RuleItem *rules) : _rules(rules), _position(-1, -1, -1), _owner(0), _previousOwner(0), _inventorySlot(0), _inventoryX(0), _inventoryY(0), _ammoItem(0), _explodeTurn(0), _ammoQuantity(0)
+BattleItem::BattleItem(RuleItem *rules, int *id) : _id(*id), _rules(rules), _owner(0), _previousOwner(0), _inventorySlot(0), _inventoryX(0), _inventoryY(0), _ammoItem(0), _explodeTurn(0), _ammoQuantity(0), _tile(0)
 {
 	if (_rules->getBattleType() == BT_AMMO)
 	{
 		setAmmoQuantity(_rules->getClipSize());
 	}
+	(*id)++;
 }
 
 /**
@@ -49,13 +51,10 @@ BattleItem::~BattleItem()
  */
 void BattleItem::load(const YAML::Node &node)
 {
-	node["X"] >> _position.x;
-	node["Y"] >> _position.y;
-	node["Z"] >> _position.z;
-
 	//node["inventoryslot"] >> _inventorySlot;
 	node["inventoryX"] >> _inventoryX;
 	node["inventoryY"] >> _inventoryY;
+	node["ammoqty"] >> _ammoQuantity;
 }
 
 /**
@@ -67,14 +66,44 @@ void BattleItem::save(YAML::Emitter &out) const
 	out << YAML::BeginMap;
 
 	out << YAML::Key << "type" << YAML::Value << _rules->getType();
-	out << YAML::Key << "X" << YAML::Value << _position.x;
-	out << YAML::Key << "Y" << YAML::Value << _position.y;
-	out << YAML::Key << "Z" << YAML::Value << _position.z;
 	if (_owner)
+	{
 		out << YAML::Key << "owner" << YAML::Value << _owner->getId();
-	out << YAML::Key << "inventoryslot" << YAML::Value << _inventorySlot->getId();
+	}
+	else
+	{
+		out << YAML::Key << "owner" << YAML::Value << -1;
+	}
+	if (_inventorySlot)
+	{
+		out << YAML::Key << "inventoryslot" << YAML::Value << _inventorySlot->getId();
+	}
+	else
+	{
+		out << YAML::Key << "inventoryslot" << YAML::Value << "NULL";
+	}
 	out << YAML::Key << "inventoryX" << YAML::Value << _inventoryX;
 	out << YAML::Key << "inventoryY" << YAML::Value << _inventoryY;
+
+	out << YAML::Key << "position" << YAML::Value << YAML::Flow;
+	if (_tile)
+	{
+		out << YAML::BeginSeq << _tile->getPosition().x << _tile->getPosition().y << _tile->getPosition().z << YAML::EndSeq;
+	}
+	else
+	{
+		out << YAML::BeginSeq << -1 << -1 << -1 << YAML::EndSeq;
+	}
+	out << YAML::Key << "ammoqty" << YAML::Value << _ammoQuantity;
+	if (_ammoItem)
+	{
+		out << YAML::Key << "ammoItem" << YAML::Value << _ammoItem->getId();
+	}
+	else
+	{
+		out << YAML::Key << "ammoItem" << YAML::Value << -1;
+	}
+
 
 	out << YAML::EndMap;
 }
@@ -303,6 +332,30 @@ int BattleItem::setAmmoItem(BattleItem *item)
 	}
 
 	return -2;
+}
+
+
+/**
+ * Gets the item's tile.
+ * @return Tile
+ */
+Tile *BattleItem::getTile() const
+{
+	return _tile;
+}
+
+/**
+ * Sets the item's tile.
+ * @param Tile
+ */
+void BattleItem::setTile(Tile *tile)
+{
+	_tile = tile;
+}
+
+int BattleItem::getId() const
+{
+	return _id;
 }
 
 }
