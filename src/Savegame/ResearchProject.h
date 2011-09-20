@@ -54,7 +54,7 @@ public:
 	/// get the ResearchProject Ruleset
 	const RuleResearchProject * getRuleResearchProject () const;
 	/// load the ResearchProject from YAML
-	void load(const YAML::Node& node, const Ruleset *rule);
+	void load(const YAML::Node& node);
 	/// save the ResearchProject to YAML
 	void save(YAML::Emitter& out) const;
 	/// Get a string describing current progess.

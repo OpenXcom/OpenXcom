@@ -340,12 +340,22 @@ std::map<std::string, RuleInventory*> *const Ruleset::getInventories()
 
 /**
  * Returns the rules for a specific inventory.
- * @param name Inventory name.
+ * @param id Inventory type.
  * @return Inventory ruleset.
  */
-RuleInventory *const Ruleset::getInventory(const std::string &name) const
+RuleInventory *const Ruleset::getInventory(const std::string &id) const
 {
-	return _invs.find(name)->second;
+	return _invs.find(id)->second;
+}
+
+/**
+ * Returns the rules for the specified research project.
+ * @param id Research project type.
+ * @return Rules for the research project.
+ */
+RuleResearchProject *Ruleset::getResearchProject (const std::string &id) const
+{
+	return _researchProjects.find(id)->second;
 }
 
 /**
@@ -356,4 +366,5 @@ const std::map<std::string, RuleResearchProject *> & Ruleset::getResearchProject
 {
 	return _researchProjects;
 }
+
 }

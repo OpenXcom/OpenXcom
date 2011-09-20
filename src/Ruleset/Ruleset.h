@@ -109,8 +109,8 @@ public:
 	ArticleDefinition *const getUfopaediaArticle(const std::string &name) const;
 	/// Gets the inventory list.
 	std::map<std::string, RuleInventory*> *const getInventories();
-	/// Gets alien unit rules.
-	RuleInventory *const getInventory(const std::string &name) const;
+	/// Gets the ruleset for a specific inventory.
+	RuleInventory *const getInventory(const std::string &id) const;
 	/// Gets the cost of a soldier.
 	int getSoldierCost() const;
 	/// Gets the cost of an engineer.
@@ -119,7 +119,9 @@ public:
 	int getScientistCost() const;
 	/// Gets the transfer time of personnel.
 	int getPersonnelTime() const;
-	/// Get the list of ResearchProjects
+	/// Gets the ruleset for a specific research project.
+	RuleResearchProject *getResearchProject (const std::string &id) const;
+	/// Get the list of all research projects.
 	const std::map<std::string, RuleResearchProject *> & getResearchProjects () const;
 };
 
