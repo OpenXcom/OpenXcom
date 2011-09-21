@@ -69,10 +69,10 @@ CraftSoldiersState::CraftSoldiersState(Game *game, Base *base, unsigned int craf
 	add(_lstSoldiers);
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(15)+9);
+	_window->setColor(Palette::blockOffset(15)+6);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK02.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(13)+13);
+	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&CraftSoldiersState::btnOkClick);
 
@@ -105,7 +105,7 @@ CraftSoldiersState::CraftSoldiersState(Game *game, Base *base, unsigned int craf
 	_txtUsed->setText(ss2.str());
 
 	_lstSoldiers->setColor(Palette::blockOffset(13)+10);
-	_lstSoldiers->setArrowColor(Palette::blockOffset(15)+9);
+	_lstSoldiers->setArrowColor(Palette::blockOffset(15)+6);
 	_lstSoldiers->setColumns(3, 114, 92, 74);
 	_lstSoldiers->setSelectable(true);
 	_lstSoldiers->setBackground(_window);

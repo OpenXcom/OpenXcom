@@ -51,10 +51,10 @@ BasescapeErrorState::BasescapeErrorState(Game *game, std::string str) : State(ga
 	add(_txtError);
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(15)+4);
+	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(15)+4);
+	_btnOk->setColor(Palette::blockOffset(15)+1);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&BasescapeErrorState::btnOkClick);
 

@@ -64,10 +64,10 @@ TransferBaseState::TransferBaseState(Game *game, Base *base) : State(game), _bas
 	add(_lstBases);
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(13)+8);
+	_window->setColor(Palette::blockOffset(13)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
-	_btnCancel->setColor(Palette::blockOffset(13)+8);
+	_btnCancel->setColor(Palette::blockOffset(13)+5);
 	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)&TransferBaseState::btnCancelClick);
 
@@ -91,7 +91,7 @@ TransferBaseState::TransferBaseState(Game *game, Base *base) : State(game), _bas
 	_txtArea->setBig();
 
 	_lstBases->setColor(Palette::blockOffset(15)+1);
-	_lstBases->setArrowColor(Palette::blockOffset(13)+8);
+	_lstBases->setArrowColor(Palette::blockOffset(13)+5);
 	_lstBases->setColumns(2, 130, 116);
 	_lstBases->setSelectable(true);
 	_lstBases->setBackground(_window);

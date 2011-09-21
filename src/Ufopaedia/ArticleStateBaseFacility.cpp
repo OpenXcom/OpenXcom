@@ -51,9 +51,9 @@ namespace OpenXcom
 		
 		// Set up objects
 		_game->getResourcePack()->getSurface("BACK09.SCR")->blit(_bg);
-		_btnOk->setColor(Palette::blockOffset(4)+2);
-		_btnPrev->setColor(Palette::blockOffset(4)+2);
-		_btnNext->setColor(Palette::blockOffset(4)+2);
+		_btnOk->setColor(Palette::blockOffset(4));
+		_btnPrev->setColor(Palette::blockOffset(4));
+		_btnNext->setColor(Palette::blockOffset(4));
 		
 		_txtTitle->setColor(Palette::blockOffset(13)+10);
 		_txtTitle->setBig();

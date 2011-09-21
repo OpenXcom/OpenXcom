@@ -93,10 +93,10 @@ BuildNewBaseState::BuildNewBaseState(Game *game, Base *base, Globe *globe, bool 
 
 	_btnZoomOut->onMouseClick((ActionHandler)&BuildNewBaseState::btnZoomOutClick);
 
-	_window->setColor(Palette::blockOffset(15)+2);
+	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
-	_btnCancel->setColor(Palette::blockOffset(15)+2);
+	_btnCancel->setColor(Palette::blockOffset(15)-1);
 	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&BuildNewBaseState::btnCancelClick);
 

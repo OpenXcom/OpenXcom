@@ -41,6 +41,7 @@ private:
 	Uint8 _color;
 	Text *_text;
 	TextButton **_group;
+	bool _contrast;
 public:
 	static Sound *soundPress;
 	/// Creates a new text button with the specified size and position.

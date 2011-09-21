@@ -293,19 +293,19 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_map->centerOnPosition(_battleGame->getSelectedUnit()->getPosition());
 
 	_btnReserveNone->copy(_icons);
-	_btnReserveNone->setColor(Palette::blockOffset(4)+6);
+	_btnReserveNone->setColor(Palette::blockOffset(4)+3);
 	_btnReserveNone->setGroup(&_reserve);
 
 	_btnReserveSnap->copy(_icons);
-	_btnReserveSnap->setColor(Palette::blockOffset(2)+6);
+	_btnReserveSnap->setColor(Palette::blockOffset(2)+3);
 	_btnReserveSnap->setGroup(&_reserve);
 
 	_btnReserveAimed->copy(_icons);
-	_btnReserveAimed->setColor(Palette::blockOffset(2)+6);
+	_btnReserveAimed->setColor(Palette::blockOffset(2)+3);
 	_btnReserveAimed->setGroup(&_reserve);
 
 	_btnReserveAuto->copy(_icons);
-	_btnReserveAuto->setColor(Palette::blockOffset(2)+6);
+	_btnReserveAuto->setColor(Palette::blockOffset(2)+3);
 	_btnReserveAuto->setGroup(&_reserve);
 
 	// Set music

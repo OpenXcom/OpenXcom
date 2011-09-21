@@ -64,14 +64,14 @@ ConfirmNewBaseState::ConfirmNewBaseState(Game *game, Base *base, Globe *globe) :
 	add(_txtArea);
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(15)+2);
+	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(15)+2);
+	_btnOk->setColor(Palette::blockOffset(15)-1);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ConfirmNewBaseState::btnOkClick);
 
-	_btnCancel->setColor(Palette::blockOffset(15)+2);
+	_btnCancel->setColor(Palette::blockOffset(15)-1);
 	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&ConfirmNewBaseState::btnCancelClick);
 

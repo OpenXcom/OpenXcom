@@ -66,10 +66,10 @@ LoadGameState::LoadGameState(Game *game) : State(game)
 	add(_lstSaves);
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(8)+8);
+	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(game->getResourcePack()->getSurface("BACK01.SCR"));
 
-	_btnCancel->setColor(Palette::blockOffset(8)+8);
+	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&LoadGameState::btnCancelClick);
 
@@ -88,7 +88,6 @@ LoadGameState::LoadGameState(Game *game) : State(game)
 	_txtDate->setText(_game->getLanguage()->getString("STR_DATE"));
 	
 	_lstSaves->setColor(Palette::blockOffset(8)+10);
-	_lstSaves->setArrowColor(Palette::blockOffset(8)+8);
 	_lstSaves->setColumns(5, 168, 30, 30, 30, 30);
 	_lstSaves->setSelectable(true);
 	_lstSaves->setBackground(_window);

@@ -101,22 +101,22 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 	add(_txtRedirect);
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(15)+2);
+	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK12.SCR"));
 
-	_btnBase->setColor(Palette::blockOffset(8)+8);
+	_btnBase->setColor(Palette::blockOffset(8)+5);
 	_btnBase->setText(_game->getLanguage()->getString("STR_RETURN_TO_BASE"));
 	_btnBase->onMouseClick((ActionHandler)&GeoscapeCraftState::btnBaseClick);
 
-	_btnTarget->setColor(Palette::blockOffset(8)+8);
+	_btnTarget->setColor(Palette::blockOffset(8)+5);
 	_btnTarget->setText(_game->getLanguage()->getString("STR_SELECT_NEW_TARGET"));
 	_btnTarget->onMouseClick((ActionHandler)&GeoscapeCraftState::btnTargetClick);
 
-	_btnPatrol->setColor(Palette::blockOffset(8)+8);
+	_btnPatrol->setColor(Palette::blockOffset(8)+5);
 	_btnPatrol->setText(_game->getLanguage()->getString("STR_PATROL"));
 	_btnPatrol->onMouseClick((ActionHandler)&GeoscapeCraftState::btnPatrolClick);
 
-	_btnCancel->setColor(Palette::blockOffset(8)+8);
+	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&GeoscapeCraftState::btnCancelClick);
 

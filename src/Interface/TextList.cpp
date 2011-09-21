@@ -313,6 +313,8 @@ void TextList::setFonts(Font *big, Font *small)
 void TextList::setColor(Uint8 color)
 {
 	_color = color;
+	_up->setColor(color);
+	_down->setColor(color);
 }
 
 /**

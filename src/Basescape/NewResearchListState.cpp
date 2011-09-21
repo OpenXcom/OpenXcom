@@ -64,10 +64,10 @@ NewResearchListState::NewResearchListState(Game *game, Base *base) : State(game)
 	add(_lstResearch);
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(13)+13);
+	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
 	
-	_btnOK->setColor(Palette::blockOffset(15)+9);
+	_btnOK->setColor(Palette::blockOffset(15)+6);
 	_btnOK->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOK->onMouseClick((ActionHandler)&NewResearchListState::btnOKClick);
 

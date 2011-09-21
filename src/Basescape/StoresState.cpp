@@ -64,10 +64,10 @@ StoresState::StoresState(Game *game, Base *base) : State(game), _base(base)
 	add(_lstStores);
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(13)+13);
+	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(13)+13);
+	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&StoresState::btnOkClick);
 
@@ -86,7 +86,6 @@ StoresState::StoresState(Game *game, Base *base) : State(game), _base(base)
 	_txtSpaceUsed->setText(_game->getLanguage()->getString("STR_SPACE_USED"));
 
 	_lstStores->setColor(Palette::blockOffset(13)+10);
-	_lstStores->setArrowColor(Palette::blockOffset(13)+13);
 	_lstStores->setColumns(3, 162, 92, 32);
 	_lstStores->setSelectable(true);
 	_lstStores->setBackground(_window);

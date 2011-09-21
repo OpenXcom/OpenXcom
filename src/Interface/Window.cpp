@@ -38,7 +38,7 @@ Sound *Window::soundPopup[3] = {0, 0, 0};
  * @param y Y position in pixels.
  * @param popup Popup animation.
  */
-Window::Window(State *state, int width, int height, int x, int y, WindowPopup popup) : Surface(width, height, x, y), _bg(0), _color(0), _popup(popup), _popupStep(0.0), _state(state)
+Window::Window(State *state, int width, int height, int x, int y, WindowPopup popup) : Surface(width, height, x, y), _bg(0), _color(0), _popup(popup), _popupStep(0.0), _state(state), _contrast(false), _screen(false)
 {
 	_timer = new Timer(10);
 	_timer->onTimer((SurfaceHandler)&Window::popup);
@@ -50,6 +50,12 @@ Window::Window(State *state, int width, int height, int x, int y, WindowPopup po
 	else
 	{
 		_timer->start();
+		if (_state != 0)
+		{
+			_screen = state->isScreen();
+			if (_screen)
+				_state->toggleScreen();
+		}
 	}
 }
 
@@ -70,7 +76,7 @@ void Window::setBackground(Surface *bg)
 	if (_popupStep < 1.0)
 	{
 		_state->hideAll();
-		show();
+		setHidden(false);
 	}
 
 	_bg = bg;
@@ -86,7 +92,7 @@ void Window::setColor(Uint8 color)
 	if (_popupStep < 1.0)
 	{
 		_state->hideAll();
-		show();
+		setHidden(false);
 	}
 
 	_color = color;
@@ -100,6 +106,17 @@ void Window::setColor(Uint8 color)
 Uint8 Window::getColor() const
 {
 	return _color;
+}
+
+/**
+ * Enables/disables high contrast color. Mostly used for
+ * Battlescape UI.
+ * @param contrast High contrast setting.
+ */
+void Window::setHighContrast(bool contrast)
+{
+	_contrast = contrast;
+	_redraw = true;
 }
 
 /**
@@ -119,7 +136,9 @@ void Window::popup()
 	{
 		int sound = RNG::generate(0, 2);
 		if (soundPopup[sound] != 0)
+		{
 			soundPopup[sound]->play();
+		}
 	}
 	if (_popupStep < 1.0)
 	{
@@ -127,6 +146,10 @@ void Window::popup()
 	}
 	else
 	{
+		if (_screen)
+		{
+			_state->toggleScreen();
+		}
 		_state->showAll();
 		_popupStep = 1.0;
 		_timer->stop();
@@ -144,9 +167,13 @@ void Window::draw()
 {
 	Surface::draw();
 	SDL_Rect square;
-	Uint8 color = _color;
+	int mul = 1;
+	if (_contrast)
+	{
+		mul = 2;
+	}
 
-	clear();
+	Uint8 color = _color + 3 * mul;
 
 	if (_popup == POPUP_HORIZONTAL || _popup == POPUP_BOTH)
 	{
@@ -173,9 +200,9 @@ void Window::draw()
 	{
 		drawRect(&square, color);
 		if (i < 2)
-			color--;
+			color -= 1 * mul;
 		else
-			color++;
+			color += 1 * mul;
 		square.x++;
 		square.y++;
 		if (square.w >= 2)

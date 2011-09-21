@@ -52,9 +52,9 @@ namespace OpenXcom
 		
 		// Set up objects
 		_game->getResourcePack()->getSurface("BACK08.SCR")->blit(_bg);
-		_btnOk->setColor(Palette::blockOffset(9)+2);
-		_btnPrev->setColor(Palette::blockOffset(9)+2);
-		_btnNext->setColor(Palette::blockOffset(9)+2);
+		_btnOk->setColor(Palette::blockOffset(9));
+		_btnPrev->setColor(Palette::blockOffset(9));
+		_btnNext->setColor(Palette::blockOffset(9));
 		
 		_txtTitle->setColor(Palette::blockOffset(14)+15);
 		_txtTitle->setBig();
@@ -94,7 +94,7 @@ namespace OpenXcom
 			_lstInfo = new TextList(204, 55, 8, 82);
 			add(_lstInfo);
 			
-			_lstInfo->setColor(Palette::blockOffset(15)+4); // color for %-data!
+			_lstInfo->setColor(Palette::blockOffset(15)+1); // color for %-data!
 			_lstInfo->setColumns(3, 100, 52, 52);
 			_lstInfo->setBig();
 			

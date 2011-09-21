@@ -76,7 +76,8 @@ AbortMissionState::AbortMissionState(Game *game, SavedBattleGame *battleGame, Ba
 	}
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(0)+8);
+	_window->setColor(Palette::blockOffset(0));
+	_window->setHighContrast(true);
 	_window->setBackground(_game->getResourcePack()->getSurface("TAC00.SCR"));
 
 	_txtInExit->setColor(Palette::blockOffset(0));
@@ -99,12 +100,12 @@ AbortMissionState::AbortMissionState(Game *game, SavedBattleGame *battleGame, Ba
 	_txtAbort->setHighContrast(true);
 	_txtAbort->setText(_game->getLanguage()->getString("STR_ABORT_MISSION"));
 
-	_btnOk->setColor(Palette::blockOffset(0)+3);
+	_btnOk->setColor(Palette::blockOffset(0));
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->setHighContrast(true);
 	_btnOk->onMouseClick((ActionHandler)&AbortMissionState::btnOkClick);
 
-	_btnCancel->setColor(Palette::blockOffset(0)+3);
+	_btnCancel->setColor(Palette::blockOffset(0));
 	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
 	_btnCancel->setHighContrast(true);
 	_btnCancel->onMouseClick((ActionHandler)&AbortMissionState::btnCancelClick);

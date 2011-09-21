@@ -48,7 +48,6 @@ ImageButton::~ImageButton()
 void ImageButton::setColor(Uint8 color)
 {
 	_color = color;
-	_redraw = true;
 }
 
 /**
@@ -69,15 +68,7 @@ void ImageButton::setGroup(ImageButton **group)
 {
 	_group = group;
 	if (_group != 0 && *_group == this)
-		invert(_color);
-}
-
-/**
- *
- */
-void ImageButton::draw()
-{
-	;
+		invert(_color + 3);
 }
 
 /**
@@ -90,10 +81,10 @@ void ImageButton::mousePress(Action *action, State *state)
 {
 	if (_group != 0)
 	{
-		(*_group)->invert((*_group)->getColor());
+		(*_group)->invert((*_group)->getColor() + 3);
 		*_group = this;
 	}
-	invert(_color);
+	invert(_color + 3);
 	InteractiveSurface::mousePress(action, state);
 }
 
@@ -105,7 +96,7 @@ void ImageButton::mousePress(Action *action, State *state)
 void ImageButton::mouseRelease(Action *action, State *state)
 {
 	if (_group == 0)
-		invert(_color);
+		invert(_color + 3);
 	InteractiveSurface::mouseRelease(action, state);
 }
 

@@ -73,14 +73,14 @@ ResearchState::ResearchState(Game *game, Base *base) : State(game), _base(base)
 	add(_lstResearch);
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(13)+13);
+	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
 	
-	_btnNew->setColor(Palette::blockOffset(15)+9);
+	_btnNew->setColor(Palette::blockOffset(15)+6);
 	_btnNew->setText(_game->getLanguage()->getString("STR_NEW_PROJECT"));
 	_btnNew->onMouseClick((ActionHandler)&ResearchState::btnNewClick);
 
-	_btnOk->setColor(Palette::blockOffset(15)+9);
+	_btnOk->setColor(Palette::blockOffset(15)+6);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ResearchState::btnOkClick);
 
@@ -108,7 +108,7 @@ ResearchState::ResearchState(Game *game, Base *base) : State(game), _base(base)
 	_txtProgress->setText(_game->getLanguage()->getString("STR_PROGRESS"));
 
 	_lstResearch->setColor(Palette::blockOffset(15)+6);
-	_lstResearch->setArrowColor(Palette::blockOffset(13)+13);
+	_lstResearch->setArrowColor(Palette::blockOffset(13)+10);
 	_lstResearch->setColumns(3, 158, 82, 46);
 	_lstResearch->setSelectable(true);
 	_lstResearch->setBackground(_window);

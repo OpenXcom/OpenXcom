@@ -60,14 +60,14 @@ DismantleFacilityState::DismantleFacilityState(Game *game, Base *base, BaseFacil
 	add(_txtFacility);
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(15)+4);
+	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(15)+9);
+	_btnOk->setColor(Palette::blockOffset(15)+6);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&DismantleFacilityState::btnOkClick);
 
-	_btnCancel->setColor(Palette::blockOffset(15)+9);
+	_btnCancel->setColor(Palette::blockOffset(15)+6);
 	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&DismantleFacilityState::btnCancelClick);
 

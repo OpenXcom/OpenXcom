@@ -54,6 +54,8 @@ public:
 	void add(Surface *surface);
 	/// Gets whether the state is a full-screen.
 	bool isScreen() const;
+	/// Toggles whether the state is a full-screen.
+	void toggleScreen();
 	/// Initializes the state.
 	virtual void init();
 	/// Handles any events.
