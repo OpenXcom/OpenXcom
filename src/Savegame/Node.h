@@ -20,6 +20,7 @@
 #define OPENXCOM_NODE_H
 
 #include "../Battlescape/Position.h"
+#include "yaml.h"
 
 namespace OpenXcom
 {
@@ -48,9 +49,14 @@ public:
 	static const int CRAFTSEGMENT = 1000;
 	static const int UFOSEGMENT = 2000;
 	/// Creates a Node.
+	Node();
 	Node(int id, Position pos, int segment, int type, int rank, int flags, int reserved, int priority);
 	/// Cleans up the Node.
 	~Node();
+	/// Loads the node from YAML.
+	void load(const YAML::Node& node);
+	/// Saves the node to YAML.
+	void save(YAML::Emitter& out) const;
 	/// get the node's id
 	int getID() const;
 	/// get the node's paths

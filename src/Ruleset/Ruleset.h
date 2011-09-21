@@ -62,7 +62,7 @@ protected:
 	std::map<std::string, RuleItem*> _items;
 	std::map<std::string, RuleUfo*> _ufos;
 	std::map<std::string, RuleTerrain*> _terrains;
-	std::map<std::string, MapDataSet*> _mapDataFiles;
+	std::map<std::string, MapDataSet*> _mapDataSets;
 	std::map<std::string, RuleSoldier*> _soldiers;
 	std::map<std::string, RuleAlien*> _aliens;
 	std::map<std::string, RuleArmor*> _armors;

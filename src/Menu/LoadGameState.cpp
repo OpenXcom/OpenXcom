@@ -141,7 +141,9 @@ void LoadGameState::lstSavesClick(Action *action)
 		else
 		{
 			_game->getSavedGame()->getBattleGame()->loadMapResources(_game->getResourcePack());
-			_game->setState(new BattlescapeState(_game));
+			_game->popState();
+			_game->pushState(new GeoscapeState(_game));
+			_game->pushState(new BattlescapeState(_game));
 		}
 	}
 	catch (Exception &e)

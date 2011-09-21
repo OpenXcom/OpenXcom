@@ -1,9 +1,14 @@
 Version 0.4 (??-??-????)
 -------------------------
 New features:
+- Basescape:
+-- Research screens.
+
 - Battlescape:
--- Abort screen
--- Debriefing screen
+-- Abort screen.
+-- Debriefing screen.
+-- Battlescape save game.
+
 
 Bugfixes:
 - Two duplicating ammo bugs.

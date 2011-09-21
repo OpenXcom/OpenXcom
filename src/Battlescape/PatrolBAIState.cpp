@@ -45,6 +45,52 @@ PatrolBAIState::~PatrolBAIState()
 }
 
 /**
+ * Loads the AI state from a YAML file.
+ * @param node YAML node.
+ */
+void PatrolBAIState::load(const YAML::Node &node)
+{
+	int fromnodeID, tonodeID;
+	node["fromnode"] >> fromnodeID;
+	node["tonode"] >> tonodeID;
+	if (fromnodeID != -1)
+	{
+		_fromNode = _game->getNodes()->at(fromnodeID);
+	}
+	if (tonodeID != -1)
+	{
+		_toNode = _game->getNodes()->at(tonodeID);
+	}
+}
+
+/**
+ * Saves the AI state to a YAML file.
+ * @param out YAML emitter.
+ */
+void PatrolBAIState::save(YAML::Emitter &out) const
+{
+	out << YAML::BeginMap;
+	out << YAML::Key << "state" << YAML::Value << "PATROL";
+	if (_fromNode)
+	{
+		out << YAML::Key << "fromnode" << YAML::Value << _fromNode->getID();
+	}
+	else
+	{
+		out << YAML::Key << "fromnode" << YAML::Value << -1;
+	}
+	if (_toNode)
+	{
+		out << YAML::Key << "tonode" << YAML::Value << _toNode->getID();
+	}
+	else
+	{
+		out << YAML::Key << "tonode" << YAML::Value << -1;
+	}
+	out << YAML::EndMap;
+}
+
+/**
  * Enters the current AI state.
  */
 void PatrolBAIState::enter()

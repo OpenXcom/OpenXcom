@@ -55,7 +55,7 @@ Soldier::Soldier(RuleSoldier *rules, RuleArmor *armor) : Unit(armor), _name(L"")
  * @param armor Soldier armor.
  * @param names List of name pools.
  */
-Soldier::Soldier(RuleSoldier *rules, RuleArmor *armor, const std::vector<SoldierNamePool*> *names) : Unit(armor), _rules(rules), _rank(RANK_ROOKIE), _craft(0), _missions(0), _kills(0)
+Soldier::Soldier(RuleSoldier *rules, RuleArmor *armor, const std::vector<SoldierNamePool*> *names, int *id) : Unit(armor), _rules(rules), _rank(RANK_ROOKIE), _craft(0), _missions(0), _kills(0), _id(*id)
 {
 	UnitStats minStats = rules->getMinStats();
 	UnitStats maxStats = rules->getMaxStats();
@@ -78,6 +78,8 @@ Soldier::Soldier(RuleSoldier *rules, RuleArmor *armor, const std::vector<Soldier
 	_name = names->at(RNG::generate(0, names->size()-1))->genName(&gender);
 	_gender = (SoldierGender)gender;
 	_look = (SoldierLook)RNG::generate(0, 3);
+
+	(*id)++; // increase id for next soldier
 }
 
 /**
@@ -94,6 +96,7 @@ Soldier::~Soldier()
 void Soldier::load(const YAML::Node &node)
 {
 	int a = 0;
+	node["id"] >> _id;
 	std::string name;
 	node["name"] >> name;
 	_name = Language::utf8ToWstr(name);
@@ -126,6 +129,7 @@ void Soldier::load(const YAML::Node &node)
 void Soldier::save(YAML::Emitter &out) const
 {
 	out << YAML::BeginMap;
+	out << YAML::Key << "id" << YAML::Value << _id;
 	out << YAML::Key << "name" << YAML::Value << Language::wstrToUtf8(_name);
 	out << YAML::Key << "tu" << YAML::Value << _initialStats.tu;
 	out << YAML::Key << "stamina" << YAML::Value << _initialStats.stamina;
@@ -155,7 +159,7 @@ void Soldier::save(YAML::Emitter &out) const
  * Returns the soldier's full name.
  * @return Soldier name.
  */
-std::wstring Soldier::getName() const
+std::wstring Soldier::getName(Language *lang) const
 {
 	return _name;
 }
@@ -390,6 +394,16 @@ int Soldier::getValue() const
 	}
 
 	return 20 + _missions + rankbonus;
+}
+
+/**
+ * Returns the soldier's unique ID. Each soldier
+ * can be identified by its ID. (not it's name)
+ * @return Unique ID.
+ */
+int Soldier::getId() const
+{
+	return _id;
 }
 
 }

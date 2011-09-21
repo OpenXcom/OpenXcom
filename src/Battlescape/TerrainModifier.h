@@ -83,8 +83,6 @@ public:
 	int calculateLine(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, bool doVoxelCheck = true);
 	/// Calculate a parabola trajectory.
 	int calculateParabola(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, double curvature, double accuracy);
-	/// Add item & affect with gravity.
-	void spawnItem(const Position &position, BattleItem *item);
 	/// New turn preparations.
 	void prepareNewTurn();
 };

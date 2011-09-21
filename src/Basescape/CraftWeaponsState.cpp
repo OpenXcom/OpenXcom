@@ -91,7 +91,7 @@ CraftWeaponsState::CraftWeaponsState(Game *game, Base *base, unsigned int craft,
 	_txtQuantity->setText(_game->getLanguage()->getString("STR_QUANTITY_UC"));
 
 	_txtAmmunition->setColor(Palette::blockOffset(15)+6);
-	_txtAmmunition->setText(_game->getLanguage()->getString("STR_AMMUNITION"));
+	_txtAmmunition->setText(_game->getLanguage()->getString("STR_AMMUNITION_UC"));
 
 	_txtAvailable->setColor(Palette::blockOffset(15)+6);
 	_txtAvailable->setText(_game->getLanguage()->getString("STR_AVAILABLE"));
