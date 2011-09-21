@@ -16,7 +16,6 @@ class MiniMapView : public InteractiveSurface
 	int _startY;
 	int _lvl;
 	void mouseClick (Action *action, State *state);
-	void convertScreenToMiniMap (int xOrig, int yOrig, int & x, int & y);
 public:
 	MiniMapView(int w, int h, int x, int y, Game * game, Map * map);
 	void draw();

@@ -135,11 +135,10 @@ void MiniMapView::down ()
 void MiniMapView::mouseClick (Action *action, State *state)
 {
 	InteractiveSurface::mouseClick(action, state);
-	int x = 0, y = 0;
-	int origX = action->getRelativeXMouse();
-	int origY = action->getRelativeYMouse();
-	convertScreenToMiniMap(origX, origY, x, y);
-	setCenter(x, y);
+	int origX = action->getRelativeXMouse() / action->getXScale();
+	int origY = action->getRelativeYMouse() / action->getYScale();
+	_startY -= (origY / CELL_HEIGHT) - ((getHeight () / 2) / CELL_HEIGHT);
+	_startX += (origX / CELL_HEIGHT) - ((getWidth () / 2) / CELL_HEIGHT);
 	draw();
 }
 
@@ -157,13 +156,5 @@ void MiniMapView::setCenter(int x, int y)
 {
 	_startX = x - ((getWidth () / CELL_WIDTH) / 2);
 	_startY = y - ((getHeight () / CELL_HEIGHT) / 2);
-	if(_startX < 0) _startX = 0;
-	if(_startY < 0) _startY = 0;
-}
-
-void MiniMapView::convertScreenToMiniMap (int xOrig, int yOrig, int & x, int & y)
-{
-	x = xOrig / CELL_WIDTH;
-	y = (getHeight () / CELL_HEIGHT) - (yOrig / CELL_HEIGHT);
 }
 }
