@@ -231,6 +231,8 @@ public:
 	void addMeleeExp();
 	/// Check if unit eligible for squaddie promotion.
 	bool postMissionProcedures();
+	/// Get the sprite index for the minimap
+	int getMiniMapSpriteIndex () const;
 };
 
 }
