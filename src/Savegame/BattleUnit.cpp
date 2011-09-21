@@ -1166,5 +1166,33 @@ int BattleUnit::getHeight() const
 	return isKneeled()?_unit->getKneelHeight():_unit->getStandHeight();
 }
 
+/**
+ * Get the unit's minimap sprite index. Used to display the unit on the minimap
+ * @return the unit minimap index
+ */
+int BattleUnit::getMiniMapSpriteIndex () const
+{
+	int unitSpriteId;
+	//minimap sprite index:
+	// * 0-2   : Xcom soldier
+	// * 3-5   : Civilian
+	// * 6-8   : alien
+	// * 9-11  :
+	// * 12-23 : Xcom HWP
+	// * 24-35 : Alien big terror unit(cyberdisk, ...)
+	switch (getFaction())
+	{
+	case FACTION_HOSTILE:
+		unitSpriteId = 6;
+		break;
+	case FACTION_NEUTRAL:
+		unitSpriteId = 4;
+		break;
+	default:
+		unitSpriteId = 0;
+	}
+	return unitSpriteId;
+}
+
 }
 

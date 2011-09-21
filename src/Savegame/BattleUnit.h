@@ -218,6 +218,8 @@ public:
 	bool isInExitArea() const;
 	/// Gets the unit height taking into account kneeling/standing.
 	int getHeight() const;
+	/// Get the sprite index for the minimap
+	int getMiniMapSpriteIndex () const;
 };
 
 }
