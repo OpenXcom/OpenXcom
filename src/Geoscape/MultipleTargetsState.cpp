@@ -74,10 +74,10 @@ MultipleTargetsState::MultipleTargetsState(Game *game, std::vector<Target*> targ
 		add(_lstTargets);
 
 		// Set up objects
-		_window->setColor(Palette::blockOffset(8)+8);
+		_window->setColor(Palette::blockOffset(8)+5);
 		_window->setBackground(_game->getResourcePack()->getSurface("BACK15.SCR"));
 
-		_btnCancel->setColor(Palette::blockOffset(8)+8);
+		_btnCancel->setColor(Palette::blockOffset(8)+5);
 		_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
 		_btnCancel->onMouseClick((ActionHandler)&MultipleTargetsState::btnCancelClick);
 

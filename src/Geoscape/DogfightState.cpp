@@ -608,7 +608,7 @@ void DogfightState::maximumDistance()
  * the text timeout counter.
  * @param status New status text.
  */
-void DogfightState::setStatus(std::string status)
+void DogfightState::setStatus(const std::string &status)
 {
 	_txtStatus->setText(_game->getLanguage()->getString(status));
 	_timeout = 50;

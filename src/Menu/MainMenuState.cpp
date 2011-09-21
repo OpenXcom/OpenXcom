@@ -58,18 +58,18 @@ MainMenuState::MainMenuState(Game *game) : State(game)
 	add(_txtTitle);
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(8)+8);
+	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
-	_btnNew->setColor(Palette::blockOffset(8)+8);
+	_btnNew->setColor(Palette::blockOffset(8)+5);
 	_btnNew->setText(_game->getLanguage()->getString("STR_NEW_GAME"));
 	_btnNew->onMouseClick((ActionHandler)&MainMenuState::btnNewClick);
 
-	_btnLoad->setColor(Palette::blockOffset(8)+8);
+	_btnLoad->setColor(Palette::blockOffset(8)+5);
 	_btnLoad->setText(_game->getLanguage()->getString("STR_LOAD_SAVED_GAME"));
 	_btnLoad->onMouseClick((ActionHandler)&MainMenuState::btnLoadClick);
 
-	_btnQuit->setColor(Palette::blockOffset(8)+8);
+	_btnQuit->setColor(Palette::blockOffset(8)+5);
 	_btnQuit->setText(_game->getLanguage()->getString("STR_QUIT"));
 	_btnQuit->onMouseClick((ActionHandler)&MainMenuState::btnQuitClick);
 

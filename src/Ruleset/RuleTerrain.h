@@ -39,7 +39,7 @@ class MapData;
 class RuleTerrain
 {
 private:
-	std::vector<MapDataSet*> _mapDataFiles;
+	std::vector<MapDataSet*> _mapDataSets;
 	std::vector<MapBlock*> _mapBlocks;
 	std::string _name;
 public:
@@ -54,7 +54,7 @@ public:
 	/// Gets a random mapblock.
 	MapBlock *getRandomMapBlock(int maxsize, bool landingzone);
 	/// Get the mapdata object.
-	MapData *getMapData(int id) const;
+	MapData *getMapData(int *id, int *mapDataSetID) const;
 };
 
 }

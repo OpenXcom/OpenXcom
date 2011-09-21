@@ -72,10 +72,10 @@ CraftWeaponsState::CraftWeaponsState(Game *game, Base *base, unsigned int craft,
 	add(_lstWeapons);
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(15)+9);
+	_window->setColor(Palette::blockOffset(15)+6);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK14.SCR"));
 
-	_btnCancel->setColor(Palette::blockOffset(15)+9);
+	_btnCancel->setColor(Palette::blockOffset(15)+6);
 	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&CraftWeaponsState::btnCancelClick);
 
@@ -91,13 +91,13 @@ CraftWeaponsState::CraftWeaponsState(Game *game, Base *base, unsigned int craft,
 	_txtQuantity->setText(_game->getLanguage()->getString("STR_QUANTITY_UC"));
 
 	_txtAmmunition->setColor(Palette::blockOffset(15)+6);
-	_txtAmmunition->setText(_game->getLanguage()->getString("STR_AMMUNITION"));
+	_txtAmmunition->setText(_game->getLanguage()->getString("STR_AMMUNITION_UC"));
 
 	_txtAvailable->setColor(Palette::blockOffset(15)+6);
 	_txtAvailable->setText(_game->getLanguage()->getString("STR_AVAILABLE"));
 
 	_lstWeapons->setColor(Palette::blockOffset(13)+10);
-	_lstWeapons->setArrowColor(Palette::blockOffset(15)+9);
+	_lstWeapons->setArrowColor(Palette::blockOffset(15)+6);
 	_lstWeapons->setColumns(3, 94, 50, 36);
 	_lstWeapons->setSelectable(true);
 	_lstWeapons->setBackground(_window);

@@ -41,7 +41,7 @@ private:
 	int _radarRange, _radarChance, _defence, _hitRatio;
 public:
 	/// Creates a blank facility ruleset.
-	RuleBaseFacility(std::string type);
+	RuleBaseFacility(const std::string &type);
 	/// Cleans up the facility ruleset.
 	~RuleBaseFacility();
 	/// Gets the facility's type.

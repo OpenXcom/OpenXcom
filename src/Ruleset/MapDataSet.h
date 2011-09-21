@@ -47,7 +47,7 @@ private:
 	static MapData *_blankTile;
 	static MapData *_scourgedTile;
 public:
-	MapDataSet(std::string name, int size = 0);
+	MapDataSet(const std::string &name, int size = 0);
 	~MapDataSet();
 	/// Loads voxeldata from a DAT file.
 	static void loadLOFTEMPS(const std::string &filename, std::vector<Uint16> *voxelData);

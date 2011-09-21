@@ -56,26 +56,26 @@ NewGameState::NewGameState(Game *game) : State(game)
 	add(_txtTitle);
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(8)+8);
+	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
-	_btnBeginner->setColor(Palette::blockOffset(8)+8);
+	_btnBeginner->setColor(Palette::blockOffset(8)+5);
 	_btnBeginner->setText(_game->getLanguage()->getString("STR_1_BEGINNER"));
 	_btnBeginner->onMouseClick((ActionHandler)&NewGameState::btnBeginnerClick);
 
-	_btnExperienced->setColor(Palette::blockOffset(8)+8);
+	_btnExperienced->setColor(Palette::blockOffset(8)+5);
 	_btnExperienced->setText(_game->getLanguage()->getString("STR_2_EXPERIENCED"));
 	_btnExperienced->onMouseClick((ActionHandler)&NewGameState::btnExperiencedClick);
 
-	_btnVeteran->setColor(Palette::blockOffset(8)+8);
+	_btnVeteran->setColor(Palette::blockOffset(8)+5);
 	_btnVeteran->setText(_game->getLanguage()->getString("STR_3_VETERAN"));
 	_btnVeteran->onMouseClick((ActionHandler)&NewGameState::btnVeteranClick);
 
-	_btnGenius->setColor(Palette::blockOffset(8)+8);
+	_btnGenius->setColor(Palette::blockOffset(8)+5);
 	_btnGenius->setText(_game->getLanguage()->getString("STR_4_GENIUS"));
 	_btnGenius->onMouseClick((ActionHandler)&NewGameState::btnGeniusClick);
 
-	_btnSuperhuman->setColor(Palette::blockOffset(8)+8);
+	_btnSuperhuman->setColor(Palette::blockOffset(8)+5);
 	_btnSuperhuman->setText(_game->getLanguage()->getString("STR_5_SUPERHUMAN"));
 	_btnSuperhuman->onMouseClick((ActionHandler)&NewGameState::btnSuperhumanClick);
 

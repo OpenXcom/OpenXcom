@@ -49,6 +49,7 @@ private:
 	double _popupStep;
 	Timer *_timer;
 	State *_state;
+	bool _contrast, _screen;
 public:
 	static Sound *soundPopup[3];
 	/// Creates a new window with the specified size and position.
@@ -61,6 +62,8 @@ public:
 	void setColor(Uint8 color);
 	/// Gets the border color.
 	Uint8 getColor() const;
+	/// Sets the high contrast color setting.
+	void setHighContrast(bool contrast);
 	/// Handles the timers.
 	void think();
 	/// Popups the window.

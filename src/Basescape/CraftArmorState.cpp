@@ -65,10 +65,10 @@ CraftArmorState::CraftArmorState(Game *game, Base *base, unsigned int craft) : S
 	add(_lstSoldiers);
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(13)+13);
+	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK14.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(13)+13);
+	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&CraftArmorState::btnOkClick);
 
@@ -86,7 +86,6 @@ CraftArmorState::CraftArmorState(Game *game, Base *base, unsigned int craft) : S
 	_txtArmor->setText(_game->getLanguage()->getString("STR_ARMOR"));
 
 	_lstSoldiers->setColor(Palette::blockOffset(13)+10);
-	_lstSoldiers->setArrowColor(Palette::blockOffset(13)+13);
 	_lstSoldiers->setColumns(3, 114, 80, 86);
 	_lstSoldiers->setSelectable(true);
 	_lstSoldiers->setBackground(_window);

@@ -46,6 +46,50 @@ AggroBAIState::~AggroBAIState()
 }
 
 /**
+ * Loads the AI state from a YAML file.
+ * @param node YAML node.
+ */
+void AggroBAIState::load(const YAML::Node &node)
+{
+	int targetID;
+	node["aggrotarget"] >> targetID;
+	if (targetID != -1)
+	{
+		for (std::vector<BattleUnit*>::iterator j = _game->getUnits()->begin(); j != _game->getUnits()->end(); ++j)
+		{
+			if ((*j)->getId() == targetID)
+				_aggroTarget = (*j);
+		}
+	}
+	node["lastKnownPosition"][0] >> _lastKnownPosition.x;
+	node["lastKnownPosition"][1] >> _lastKnownPosition.y;
+	node["lastKnownPosition"][2] >> _lastKnownPosition.z;
+	node["timesNotSeen"] >> _timesNotSeen;
+}
+
+/**
+ * Saves the AI state to a YAML file.
+ * @param out YAML emitter.
+ */
+void AggroBAIState::save(YAML::Emitter &out) const
+{
+	out << YAML::BeginMap;
+	out << YAML::Key << "state" << YAML::Value << "AGGRO";
+	if (_aggroTarget)
+	{
+		out << YAML::Key << "aggrotarget" << YAML::Value << _aggroTarget->getId();
+	}
+	else
+	{
+		out << YAML::Key << "aggrotarget" << YAML::Value << -1;
+	}
+	out << YAML::Key << "lastKnownPosition" << YAML::Value << YAML::Flow;
+	out << YAML::BeginSeq << _lastKnownPosition.x << _lastKnownPosition.y << _lastKnownPosition.z << YAML::EndSeq;
+	out << YAML::Key << "timesNotSeen" << YAML::Value << _timesNotSeen;
+	out << YAML::EndMap;
+}
+
+/**
  * Enters the current AI state.
  */
 void AggroBAIState::enter()

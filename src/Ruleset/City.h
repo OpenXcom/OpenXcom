@@ -35,7 +35,7 @@ private:
 	double _lon, _lat;
 public:
 	/// Creates a new city at a certain position.
-	City(std::string name, double lon, double lat);
+	City(const std::string &name, double lon, double lat);
 	/// Cleans up the city.
 	~City();
 	/// Gets the city's name.

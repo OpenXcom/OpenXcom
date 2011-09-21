@@ -70,10 +70,10 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, unsigned int cr
 	add(_lstEquipment);
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(15)+4);
+	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK04.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(15)+4);
+	_btnOk->setColor(Palette::blockOffset(15)+1);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&CraftEquipmentState::btnOkClick);
 
@@ -103,7 +103,7 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, unsigned int cr
 	_txtUsed->setText(ss2.str());
 
 	_lstEquipment->setColor(Palette::blockOffset(13)+10);
-	_lstEquipment->setArrowColor(Palette::blockOffset(15)+4);
+	_lstEquipment->setArrowColor(Palette::blockOffset(15)+1);
 	_lstEquipment->setArrowColumn(203, ARROW_HORIZONTAL);
 	_lstEquipment->setColumns(3, 154, 85, 41);
 	_lstEquipment->setSelectable(true);

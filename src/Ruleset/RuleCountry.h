@@ -37,7 +37,7 @@ private:
 	double _labelLon, _labelLat;
 public:
 	/// Creates a blank country ruleset.
-	RuleCountry(std::string type);
+	RuleCountry(const std::string &type);
 	/// Cleans up the country ruleset.
 	~RuleCountry();
 	/// Gets the country's type.

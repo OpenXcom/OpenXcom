@@ -28,7 +28,7 @@ namespace OpenXcom
  * type of inventory section.
  * @param id String defining the id.
  */
-RuleInventory::RuleInventory(std::string id): _id(id), _x(0), _y(0), _type(INV_SLOT), _slots(), _costs()
+RuleInventory::RuleInventory(const std::string &id): _id(id), _x(0), _y(0), _type(INV_SLOT), _slots(), _costs()
 {
 }
 
@@ -227,7 +227,7 @@ bool RuleInventory::fitItemInSlot(RuleItem *item, int x, int y) const
  * @param slot The new section id.
  * @param cost The time unit cost.
  */
-void RuleInventory::addCost(std::string slot, int cost)
+void RuleInventory::addCost(const std::string &slot, int cost)
 {
 	_costs.insert(std::pair<std::string, int>(slot, cost));
 }

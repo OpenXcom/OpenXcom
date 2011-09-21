@@ -51,7 +51,8 @@ NextTurnState::NextTurnState(Game *game, SavedBattleGame *battleGame) : State(ga
 	add(_txtMessage);
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(0)+8);
+	_window->setColor(Palette::blockOffset(0));
+	_window->setHighContrast(true);
 	_window->setBackground(_game->getResourcePack()->getSurface("TAC00.SCR"));
 
 	_txtTitle->setColor(Palette::blockOffset(0));

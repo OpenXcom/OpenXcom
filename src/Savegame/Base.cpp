@@ -682,7 +682,7 @@ int Base::getLongRangeDetection() const
  * @param craft Craft type.
  * @return Number of craft.
  */
-int Base::getCraftCount(std::string craft) const
+int Base::getCraftCount(const std::string &craft) const
 {
 	int total = 0;
 	for (std::vector<Craft*>::const_iterator i = _crafts.begin(); i != _crafts.end(); ++i)

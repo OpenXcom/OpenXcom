@@ -147,7 +147,7 @@ std::string UnitFallBState::getResult() const
  */
 void UnitFallBState::convertUnitToCorpse(BattleUnit *unit, TerrainModifier *terrain)
 {
-	terrain->spawnItem(_unit->getPosition(), new BattleItem(_parent->getGame()->getRuleset()->getItem(_unit->getUnit()->getArmor()->getCorpseItem())));
+	_parent->dropItem(_unit->getPosition(), new BattleItem(_parent->getGame()->getRuleset()->getItem(_unit->getUnit()->getArmor()->getCorpseItem()),_parent->getGame()->getSavedGame()->getBattleGame()->getCurrentItemId()), true);
 	// move inventory from unit to the ground
 	for (std::vector<BattleItem*>::iterator i = _unit->getInventory()->begin(); i != _unit->getInventory()->end(); ++i)
 	{

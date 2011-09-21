@@ -74,7 +74,7 @@ public:
 	/// Gets the craft's status.
 	std::string getStatus() const;
 	/// Sets the craft's status.
-	void setStatus(std::string status);
+	void setStatus(const std::string &status);
 	/// Sets the craft's destination.
 	void setDestination(Target *dest);
 	/// Gets the craft's amount of weapons.

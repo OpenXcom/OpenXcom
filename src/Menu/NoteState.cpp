@@ -50,10 +50,10 @@ NoteState::NoteState(Game *game) : State(game)
 	add(_txtTitle);
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(8)+8);
+	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(8)+8);
+	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(L"OK");
 	_btnOk->onMouseClick((ActionHandler)&NoteState::btnOkClick);
 

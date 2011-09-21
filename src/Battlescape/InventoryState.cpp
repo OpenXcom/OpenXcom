@@ -130,7 +130,7 @@ void InventoryState::init()
 	_soldier->clear();
 	_btnRank->clear();
 
-	_txtName->setText(unit->getUnit()->getName());
+	_txtName->setText(unit->getUnit()->getName(_game->getLanguage()));
 	_inv->setSelectedUnit(unit);
 	Soldier *s = dynamic_cast<Soldier*>(unit->getUnit());
 	if (s)

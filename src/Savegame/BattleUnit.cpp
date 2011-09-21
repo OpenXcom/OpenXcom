@@ -40,7 +40,7 @@ namespace OpenXcom
  * @param unit Pointer to Unit object.
  * @param faction Which faction the units belongs to.
  */
-BattleUnit::BattleUnit(Unit *unit, UnitFaction faction) : _unit(unit), _faction(faction), _id(0), _pos(Position()), _tile(0), _lastPos(Position()), _direction(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cache(0), _cacheInvalid(true)
+BattleUnit::BattleUnit(Unit *unit, UnitFaction faction) : _unit(unit), _faction(faction), _id(0), _pos(Position()), _tile(0), _lastPos(Position()), _direction(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cache(0), _cacheInvalid(true), _expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expMelee(0)
 {
 	_tu = unit->getTimeUnits();
 	_energy = unit->getStamina();
@@ -78,9 +78,9 @@ void BattleUnit::load(const YAML::Node &node)
 	_faction = (UnitFaction)a;
 	node["status"] >> a;
 	_status = (UnitStatus)a;
-	node["X"] >> _pos.x;
-	node["Y"] >> _pos.y;
-	node["Z"] >> _pos.z;
+	node["position"][0] >> _pos.x;
+	node["position"][1] >> _pos.y;
+	node["position"][2] >> _pos.z;
 	node["direction"] >> _direction;
 	node["tu"] >> _tu;
 	node["health"] >> _health;
@@ -91,7 +91,13 @@ void BattleUnit::load(const YAML::Node &node)
 		node["armor"][i] >> _armor[i];
 	for (int i=0; i < 6; i++)
 		node["fatalWounds"][i] >> _fatalWounds[i];
-	node["fire"] >> _fire;
+	node["expBravery"] >> _expBravery;
+	node["expReactions"] >> _expReactions;
+	node["expFiring"] >> _expFiring;
+	node["expThrowing"] >> _expThrowing;
+	node["expPsiSkill"] >> _expPsiSkill;
+	node["expMelee"] >> _expMelee;
+
 }
 
 /**
@@ -104,10 +110,19 @@ void BattleUnit::save(YAML::Emitter &out) const
  
 	out << YAML::Key << "id" << YAML::Value << _id;
 	out << YAML::Key << "faction" << YAML::Value << _faction;
+	Soldier *soldier = dynamic_cast<Soldier*>(this->getUnit());
+	if (soldier != 0)
+	{
+		out << YAML::Key << "soldierId" << YAML::Value << soldier->getId();
+	}
+	else
+	{
+		out << YAML::Key << "soldierId" << YAML::Value << -1;
+	}
+	out << YAML::Key << "name" << YAML::Value << Language::wstrToUtf8(_unit->getName(0));
 	out << YAML::Key << "status" << YAML::Value << _status;
-	out << YAML::Key << "X" << YAML::Value << _pos.x;
-	out << YAML::Key << "Y" << YAML::Value << _pos.y;
-	out << YAML::Key << "Z" << YAML::Value << _pos.z;
+	out << YAML::Key << "position" << YAML::Value << YAML::Flow;
+	out << YAML::BeginSeq << _pos.x << _pos.y << _pos.z << YAML::EndSeq;
 	out << YAML::Key << "direction" << YAML::Value << _direction;
 	out << YAML::Key << "tu" << YAML::Value << _tu;
 	out << YAML::Key << "health" << YAML::Value << _health;
@@ -115,12 +130,26 @@ void BattleUnit::save(YAML::Emitter &out) const
 	out << YAML::Key << "morale" << YAML::Value << _morale;
 	out << YAML::Key << "kneeled" << YAML::Value << _kneeled;
 	out << YAML::Key << "armor" << YAML::Value;
-	out << YAML::Flow;
+	out << YAML::Flow << YAML::BeginSeq;
 	for (int i=0; i < 5; i++) out << _armor[i];
+	out << YAML::EndSeq;
 	out << YAML::Key << "fatalWounds" << YAML::Value;
-	out << YAML::Flow;
+	out << YAML::Flow << YAML::BeginSeq;
 	for (int i=0; i < 6; i++) out << _fatalWounds[i];
+	out << YAML::EndSeq;
 	out << YAML::Key << "fire" << YAML::Value << _fire;
+	out << YAML::Key << "expBravery" << YAML::Value << _expBravery;
+	out << YAML::Key << "expReactions" << YAML::Value << _expReactions;
+	out << YAML::Key << "expFiring" << YAML::Value << _expFiring;
+	out << YAML::Key << "expThrowing" << YAML::Value << _expThrowing;
+	out << YAML::Key << "expPsiSkill" << YAML::Value << _expPsiSkill;
+	out << YAML::Key << "expMelee" << YAML::Value << _expMelee;
+
+	if (getCurrentAIState())
+	{
+		out << YAML::Key << "AI" << YAML::Value;
+		getCurrentAIState()->save(out);
+	}
                
 	out << YAML::EndMap;
 }
@@ -530,7 +559,7 @@ void BattleUnit::damage(Position position, int power)
 			side = SIDE_FRONT;
 	}
 
-	impactheight = 10*position.z/(isKneeled()?_unit->getKneelHeight():_unit->getStandHeight());
+	impactheight = 10*position.z/getHeight();
 
 	if (impactheight > 4 && impactheight < 7) // torso
 	{
@@ -1126,6 +1155,15 @@ BattleItem *BattleUnit::getMainHandWeapon() const
 bool BattleUnit::isInExitArea() const
 {
 	return _tile->getMapData(MapData::O_FLOOR) && (_tile->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT);
+}
+
+/**
+* Gets the unit height taking into account kneeling/standing.
+* @return Unit's height.
+*/
+int BattleUnit::getHeight() const
+{
+	return isKneeled()?_unit->getKneelHeight():_unit->getStandHeight();
 }
 
 }

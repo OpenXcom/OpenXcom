@@ -38,7 +38,7 @@ private:
 	std::string _launcher, _clip;
 public:
 	/// Creates a blank craft weapon ruleset.
-	RuleCraftWeapon(std::string type);
+	RuleCraftWeapon(const std::string &type);
 	/// Cleans up the craft weapon ruleset.
 	~RuleCraftWeapon();
 	/// Gets the craft weapon's type.
@@ -86,11 +86,11 @@ public:
 	/// Gets the craft weapon's launcher item.
 	std::string getLauncherItem() const;
 	/// Sets the craft weapon's launcher item.
-	void setLauncherItem(std::string launcher);
+	void setLauncherItem(const std::string &launcher);
 	/// Gets the craft weapon's clip item.
 	std::string getClipItem() const;
 	/// Sets the craft weapon's clip item.
-	void setClipItem(std::string clip);
+	void setClipItem(const std::string &clip);
 };
 
 }

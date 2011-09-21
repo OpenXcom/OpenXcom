@@ -45,6 +45,7 @@ class TerrainModifier;
 class BattleItem;
 class Item;
 class RuleInventory;
+class Ruleset;
 
 /**
  * Enumator containing all the possible mission types.
@@ -61,7 +62,7 @@ class SavedBattleGame
 {
 private:
 	int _width, _length, _height;
-	std::vector<MapDataSet*> _mapDataFiles;
+	std::vector<MapDataSet*> _mapDataSets;
 	Tile **_tiles; 
 	BattleUnit *_selectedUnit;
 	std::vector<Node*> _nodes;
@@ -77,13 +78,16 @@ private:
 	std::vector<DebriefingStat*> _debriefingStats;
 	std::vector<DebriefingStat*> _ufoRecoveryStats;
 	bool _aborted;
+	int _itemId;
+	/// Add to debriefing stats.
+	void addStat(const std::string &name, int quantity, int score);
 public:
 	/// Creates a new battle save, based on current generic save.
 	SavedBattleGame();
 	/// Cleans up the saved game.
 	~SavedBattleGame();
 	/// Loads a saved battle game from YAML.
-	void load(const YAML::Node& node);
+	void load(const YAML::Node& node, Ruleset *rule, SavedGame* savedGame);
 	/// Saves a saved battle game to YAML.
 	void save(YAML::Emitter& out) const;
 	/// Set the dimensions of the map and initializes it.
@@ -152,14 +156,15 @@ public:
 	void resetUnitTiles();
 	/// Removes an item from the game.
 	void removeItem(BattleItem *item);
-	/// Add to debriefing stats.
-	void addStat(const std::string &name, int quantity, int score);
 	/// Get a list of debriefing stats.
 	std::vector<DebriefingStat*> *getDebriefingStats();
 	/// Prepares debriefing.
 	void prepareDebriefing(bool aborted);
 	/// Whether the mission was aborted.
 	bool isAborted();
+	/// Gets the current item ID.
+	int *getCurrentItemId();
+
 };
 
 }

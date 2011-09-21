@@ -43,6 +43,7 @@ class Soldier : public Unit
 {
 private:
 	std::wstring _name;
+	int _id;
 	RuleSoldier *_rules;
 	UnitStats _initialStats, _currentStats;
 	SoldierRank _rank;
@@ -54,7 +55,7 @@ public:
 	/// Creates a new soldier.
 	Soldier(RuleSoldier *rules, RuleArmor *armor);
 	/// Creates a new soldier with random stats.
-	Soldier(RuleSoldier *rules, RuleArmor *armor, const std::vector<SoldierNamePool*> *names);
+	Soldier(RuleSoldier *rules, RuleArmor *armor, const std::vector<SoldierNamePool*> *names, int *id);
 	/// Cleans up the soldier.
 	~Soldier();
 	/// Initialises 
@@ -64,7 +65,7 @@ public:
 	/// Saves the soldier to YAML.
 	void save(YAML::Emitter& out) const;
 	/// Gets the soldier's name.
-	std::wstring getName() const;
+	std::wstring getName(Language *lang = 0) const;
 	/// Sets the soldier's name.
 	void setName(const std::wstring &name);
 	/// Gets the soldier's craft.
@@ -111,6 +112,8 @@ public:
 	int getLoftemps() const;
 	/// Gets the soldier's value.
 	int getValue() const;
+	/// Gets the soldier's unique ID.
+	int getId() const;
 };
 
 }

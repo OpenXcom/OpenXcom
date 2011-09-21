@@ -89,6 +89,10 @@ public:
 	void setY(int y);
 	/// Gets the Y position of the surface.
 	int getY() const;
+	/// Sets the surface's visibility.
+	void setVisible(bool visible);
+	/// Gets the surface's visibility.
+	bool getVisible() const;
 	/// Resets the cropping rectangle for the surface.
 	void resetCrop();
 	/// Gets the cropping rectangle for the surface.
@@ -105,14 +109,8 @@ public:
 	int getWidth() const;
 	/// Gets the surface's height.
 	int getHeight() const;
-	/// Sets the surface's visibility.
-	void setVisible(bool visible);
-	/// Gets the surface's visibility.
-	bool getVisible() const;
-	/// Hides the surface.
-	void hide();
-	/// Shows the surface.
-	void show();
+	/// Sets the surface's special hidden flag.
+	void setHidden(bool hidden);
 	/// Locks the surface.
 	void lock();
 	/// Unlocks the surface.

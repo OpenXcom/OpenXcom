@@ -57,7 +57,7 @@ namespace OpenXcom
 		add(_btnOk);
 		add(_lstSelection);
 
-		_window->setColor(Palette::blockOffset(15)+2);
+		_window->setColor(Palette::blockOffset(15)-1);
 		_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
 		_txtTitle->setColor(Palette::blockOffset(8)+10);
@@ -65,12 +65,12 @@ namespace OpenXcom
 		_txtTitle->setAlign(ALIGN_CENTER);
 		_txtTitle->setText(_game->getLanguage()->getString("STR_SELECT_ITEM"));
 
-		_btnOk->setColor(Palette::blockOffset(15)+2);
+		_btnOk->setColor(Palette::blockOffset(15)-1);
 		_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 		_btnOk->onMouseClick((ActionHandler)&UfopaediaSelectState::btnOkClick);
 
 		_lstSelection->setColor(Palette::blockOffset(8)+5);
-		_lstSelection->setArrowColor(Palette::blockOffset(15)+2);
+		_lstSelection->setArrowColor(Palette::blockOffset(15)-1);
 		_lstSelection->setColumns(1, 206);
 		_lstSelection->setSelectable(true);
 		_lstSelection->setBackground(_window);

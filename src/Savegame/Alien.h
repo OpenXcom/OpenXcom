@@ -33,16 +33,15 @@ class Alien : public Unit
 {
 private:
 	RuleAlien *_rules;
-	Language *_lang;
 public:
 	/// Creates a new alien.
 	Alien();
 	/// Creates a new alien with specific rules and armor.
-	Alien(RuleAlien *rules, RuleArmor *armor, Language *lang);
+	Alien(RuleAlien *rules, RuleArmor *armor);
 	/// Cleans up the alien.
 	~Alien();
 	/// Gets the alien's name.
-	std::wstring getName() const;
+	std::wstring getName(Language *lang) const;
 	/// Gets the alien's time units.
 	int getTimeUnits() const;
 	/// Gets the alien's stamina.

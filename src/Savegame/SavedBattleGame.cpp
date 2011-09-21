@@ -22,11 +22,18 @@
 #include "Tile.h"
 #include "Node.h"
 #include "SDL.h"
+#include "Unit.h"
+#include "Alien.h"
 #include "../Ruleset/MapDataSet.h"
 #include "../Battlescape/Pathfinding.h"
 #include "../Battlescape/TerrainModifier.h"
 #include "../Battlescape/Position.h"
 #include "../Resource/ResourcePack.h"
+#include "../Ruleset/Ruleset.h"
+#include "../Engine/Language.h"
+#include "../Ruleset/RuleInventory.h"
+#include "../Battlescape/PatrolBAIState.h"
+#include "../Battlescape/AggroBAIState.h"
 
 namespace OpenXcom
 {
@@ -34,7 +41,7 @@ namespace OpenXcom
 /**
  * Initializes a brand new battlescape saved game.
  */
-SavedBattleGame::SavedBattleGame() : _tiles(), _nodes(), _units(), _side(FACTION_PLAYER), _turn(1), _debugMode(false)
+SavedBattleGame::SavedBattleGame() : _tiles(), _selectedUnit(0), _nodes(), _units(), _items(), _pathfinding(0), _terrainModifier(0), _missionType(MISS_TERROR), _side(FACTION_PLAYER), _turn(1), _debugMode(false), _aborted(false), _itemId(0)
 {
 	_debriefingStats.push_back(new DebriefingStat("STR_ALIENS_KILLED", false));
 	_debriefingStats.push_back(new DebriefingStat("STR_ALIEN_CORPSES_RECOVERED", false));
@@ -100,54 +107,145 @@ SavedBattleGame::~SavedBattleGame()
  * Loads the saved battle game from a YAML file.
  * @param node YAML node.
  */
-void SavedBattleGame::load(const YAML::Node &node)
+void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* savedGame)
 {
 	unsigned int size = 0;
+	int a;
+	int selectedUnit = 0;
 
 	node["width"] >> _width;
 	node["length"] >> _length;
 	node["height"] >> _height;
+	node["globalshade"] >> _globalShade;
+	node["selectedUnit"] >> selectedUnit;
 
-	size = node["mapdatafiles"].size();
-	for (unsigned int i = 0; i < size; ++i)
+	for (YAML::Iterator i = node["mapdatasets"].begin(); i != node["mapdatasets"].end(); ++i)
 	{
 		std::string name;
-		node["mapdatafiles"][i] >> name;
+		*i >> name;
 		MapDataSet *mds = new MapDataSet(name);
-		_mapDataFiles.push_back(mds);
+		_mapDataSets.push_back(mds);
 	}
 
 	initMap(_width, _length, _height);
 
-	int empties = 0;
-	int dp = 0;
-	
-	std::string s;
-	std::vector<unsigned char> data;
-	node["tiles"] >> s;
-	//Base64Decode(s, data);
-	for (int i = 0; i < _height * _length * _width; ++i)
+	for (YAML::Iterator i = node["tiles"].begin(); i != node["tiles"].end(); ++i)
 	{
-		if (!empties)
+		Position pos;
+		(*i)["position"][0] >> pos.x;
+		(*i)["position"][1] >> pos.y;
+		(*i)["position"][2] >> pos.z;
+		getTile(pos)->load((*i));
+	}
+
+	for (YAML::Iterator i = node["nodes"].begin(); i != node["nodes"].end(); ++i)
+	{
+		Node *n = new Node();
+		n->load(*i);
+		_nodes.push_back(n);
+	}
+
+	for (YAML::Iterator i = node["units"].begin(); i != node["units"].end(); ++i)
+	{
+		UnitFaction faction;
+
+		(*i)["faction"] >> a;
+		faction = (UnitFaction)a;
+
+		(*i)["soldierId"] >> a;
+
+		Unit *unit;
+		if (a != -1) // Unit is linked to a geoscape soldier
 		{
-			if (data[dp] == 0xFF)
-			{
-				dp++;
-				empties = data[dp];
-				dp++;
-			}
-			else
-			{
-				for (int part = 0; part < 4; part++)
-				{
-					_tiles[i]->load(data[dp], data[dp+1], part);
-					dp += 2;
-				}
-			}
+			// look up the matching soldier
+			unit = savedGame->getSoldier(a);
 		}
 		else
 		{
-			empties--;
+			// create a new Alien Unit.
+			unit = new Alien(rule->getAlien("SECTOID_SOLDIER"), rule->getArmor("SECTOID_ARMOR0"));
+		}
+		BattleUnit *b = new BattleUnit(unit, faction);
+		b->load(*i);
+		_units.push_back(b);
+		if (faction == FACTION_PLAYER)
+		{
+			if (b->getId() == selectedUnit)
+				_selectedUnit = b;
+		}
+		else
+		{
+			std::string state;
+			BattleAIState *aiState;
+			(*i)["AI"]["state"] >> state;
+			if (state == "PATROL")
+			{
+				aiState = new PatrolBAIState(this, b, 0);
+			}
+			if (state == "AGGRO")
+			{
+				aiState = new AggroBAIState(this, b);
+			}
+			aiState->load((*i)["AI"]);
+			b->setAIState(aiState);
+		}
+	}
+
+	// matches up tiles and units
+	resetUnitTiles();
+
+	for (YAML::Iterator i = node["items"].begin(); i != node["items"].end(); ++i)
+	{
+		std::string type;
+		(*i)["type"] >> type;
+		if (type != "0")
+		{
+			BattleItem *item = new BattleItem(rule->getItem(type), &_itemId);
+			item->load(*i);
+			(*i)["inventoryslot"] >> type;
+			if (type != "NULL")
+				item->setSlot(rule->getInventory(type));
+			(*i)["owner"] >> a;
+
+			// match up items and units
+			for (std::vector<BattleUnit*>::iterator bu = _units.begin(); bu != _units.end(); ++bu)
+			{
+				if ((*bu)->getId() == a)
+				{
+					item->moveToOwner(*bu);
+					break;
+				}
+			}
+
+			// match up items and tiles
+			if (item->getSlot() && item->getSlot()->getType() == INV_GROUND)
+			{
+				Position pos;
+				(*i)["position"][0] >> pos.x;
+				(*i)["position"][1] >> pos.y;
+				(*i)["position"][2] >> pos.z;
+				if (pos.x != -1)
+					getTile(pos)->addItem(item);
+			}
+			_items.push_back(item);
+		}
+	}
+
+	// tie ammo items to their weapons, running through the items again
+	std::vector<BattleItem*>::iterator weaponi = _items.begin();
+	for (YAML::Iterator i = node["items"].begin(); i != node["items"].end(); ++i, ++weaponi)
+	{
+		(*i)["ammoItem"] >> a;
+		if (a != -1)
+		{
+			for (std::vector<BattleItem*>::iterator ammoi = _items.begin(); ammoi != _items.end(); ++ammoi)
+			{
+				if ((*ammoi)->getId() == a)
+				{
+					(*weaponi)->setAmmoItem((*ammoi));
+					break;
+				}
+			}
 		}
 	}
 
@@ -159,25 +257,33 @@ void SavedBattleGame::load(const YAML::Node &node)
  */
 void SavedBattleGame::loadMapResources(ResourcePack *res)
 {
-	for (std::vector<MapDataSet*>::const_iterator i = _mapDataFiles.begin(); i != _mapDataFiles.end(); ++i)
+	for (std::vector<MapDataSet*>::const_iterator i = _mapDataSets.begin(); i != _mapDataSets.end(); ++i)
 	{
 		(*i)->load(res);
 	}
 
-	int mdsID = 0, mdID = 0;
+	int mdsID, mdID;
 
 	for (int i = 0; i < _height * _length * _width; ++i)
 	{
 		for (int part = 0; part < 4; part++)
 		{
-			if (mdsID || mdID)
+			_tiles[i]->getMapData(&mdID, &mdsID, part);
+			if (mdID != -1 && mdsID != -1)
 			{
-				_tiles[i]->getSaveGameData(&mdsID, &mdID, part);
-				_tiles[i]->setMapData(_mapDataFiles[mdsID]->getObjects()->at(mdID), part);
+				_tiles[i]->setMapData(_mapDataSets[mdsID]->getObjects()->at(mdID), mdID, mdsID, part);
 			}
 		}
 	}
 
+	initUtilities(res);
+	getTerrainModifier()->calculateSunShading();
+	getTerrainModifier()->calculateTerrainLighting();
+	getTerrainModifier()->calculateUnitLighting();
+	for (std::vector<BattleUnit*>::iterator bu = _units.begin(); bu != _units.end(); ++bu)
+	{
+		_terrainModifier->calculateFOV(*bu);
+	}
 }
 
 /**
@@ -191,61 +297,35 @@ void SavedBattleGame::save(YAML::Emitter &out) const
 	out << YAML::Key << "width" << YAML::Value << _width;
 	out << YAML::Key << "length" << YAML::Value << _length;
 	out << YAML::Key << "height" << YAML::Value << _height;
+	out << YAML::Key << "globalshade" << YAML::Value << _globalShade;
+	out << YAML::Key << "selectedUnit" << YAML::Value << (_selectedUnit?_selectedUnit->getId():-1);
 
-	out << YAML::Key << "mapdatafiles" << YAML::Value;
+	out << YAML::Key << "mapdatasets" << YAML::Value;
 	out << YAML::BeginSeq;
-	for (std::vector<MapDataSet*>::const_iterator i = _mapDataFiles.begin(); i != _mapDataFiles.end(); ++i)
+	for (std::vector<MapDataSet*>::const_iterator i = _mapDataSets.begin(); i != _mapDataSets.end(); ++i)
 	{
 		out << (*i)->getName();
 	}
 	out << YAML::EndSeq;
 
-	/* Every tile is 8 bytes, 2 bytes per object(ground,west,north,object) */
-	/* 1 byte for the datafile ID, 1 byte for the relative object ID in that file */
-	/* Value 0xFF means the next two bytes are the number of empty objects */
-	/* The binary data is then base64 encoded to save as a string */
-	Uint16 empties = 0;
-	std::vector<unsigned char> data;
-
+	out << YAML::Key << "tiles" << YAML::Value;
+	out << YAML::BeginSeq;
 	for (int i = 0; i < _height * _length * _width; ++i)
 	{
-		if (_tiles[i]->isVoid())
+		if (!_tiles[i]->isVoid())
 		{
-			empties++;
-		}
-		else
-		{
-			// if we had empty tiles before
-			// write them now
-			if (empties)
-			{
-				data.push_back(0xFF);
-				data.push_back((unsigned char)empties);
-				empties = 0;
-			}
-			// now write 4x2 bytes
-			for (int part = 0; part < 4; part++)
-			{
-				if (_tiles[i]->getMapData(part))
-				{
-					MapDataSet *mds = _tiles[i]->getMapData(part)->getDataset();
-					data.push_back((Uint8)(std::find(_mapDataFiles.begin(), _mapDataFiles.end(), mds) - _mapDataFiles.begin()));
-					data.push_back((Uint8)(std::find(mds->getObjects()->begin(), mds->getObjects()->end(), _tiles[i]->getMapData(part)) - mds->getObjects()->begin()));
-				}
-				else
-				{
-					data.push_back(0);
-					data.push_back(0);
-				}
-			}
+			_tiles[i]->save(out);
 		}
 	}
-	if (empties)
+	out << YAML::EndSeq;
+
+	out << YAML::Key << "nodes" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::vector<Node*>::const_iterator i = _nodes.begin(); i != _nodes.end(); ++i)
 	{
-		data.push_back(0xFF);
-		data.push_back((unsigned char)empties);
+		(*i)->save(out);
 	}
-	//out << YAML::Key << "tiles" << YAML::Value << YAML::Binary(&data[0], data.size());
+	out << YAML::EndSeq;
 
 	out << YAML::Key << "units" << YAML::Value;
 	out << YAML::BeginSeq;
@@ -596,7 +676,7 @@ TerrainModifier *const SavedBattleGame::getTerrainModifier() const
 */
 std::vector<MapDataSet*> *const SavedBattleGame::getMapDataSets()
 {
-	return &_mapDataFiles;
+	return &_mapDataSets;
 }
 
 /**
@@ -683,7 +763,8 @@ void SavedBattleGame::resetUnitTiles()
 {
 	for (std::vector<BattleUnit*>::iterator i = _units.begin(); i != _units.end(); ++i)
 	{
-		getTile((*i)->getPosition())->setUnit(*i);
+		if (!(*i)->isOut())
+			getTile((*i)->getPosition())->setUnit(*i);
 	}
 }
 
@@ -742,6 +823,45 @@ std::vector<DebriefingStat*> *SavedBattleGame::getDebriefingStats()
 void SavedBattleGame::prepareDebriefing(bool aborted)
 {
 	_aborted = aborted;
+	int playerInExitArea = 0;
+
+	// lets see what happens with units
+	for (std::vector<BattleUnit*>::iterator j = getUnits()->begin(); j != getUnits()->end(); ++j)
+	{
+		UnitStatus status = (*j)->getStatus();
+		UnitFaction faction = (*j)->getFaction();
+		int value = (*j)->getUnit()->getValue();
+
+		if (status == STATUS_DEAD)
+		{
+			if (faction == FACTION_HOSTILE)
+			{
+				addStat("STR_ALIENS_KILLED", 1, value);
+			}
+			if (faction == FACTION_PLAYER)
+			{
+				addStat("STR_XCOM_OPERATIVES_KILLED", 1, -value);
+			}
+		}
+		else if (status == STATUS_UNCONSCIOUS)
+		{
+			if (faction == FACTION_HOSTILE && !aborted)
+			{
+				addStat("STR_LIVE_ALIENS_RECOVERED", 1, value);
+			}
+		}
+		else if (faction == FACTION_PLAYER)
+		{
+			if ((*j)->isInExitArea())
+				playerInExitArea++;
+			else
+				addStat("STR_XCOM_OPERATIVES_MISSING_IN_ACTION", 1, -value);
+		}
+	}
+	if (playerInExitArea == 0)
+	{
+		addStat("STR_XCOM_CRAFT_LOST", 1, -200);
+	}
 
 	// run through all tiles to recover UFO components and items
 	if (!_aborted)
@@ -801,5 +921,16 @@ bool SavedBattleGame::isAborted()
 {
 	return _aborted;
 }
+
+
+/**
+ * Gets the current item ID.
+ * @return Current item ID pointer.
+ */
+int *SavedBattleGame::getCurrentItemId()
+{
+	return &_itemId;
+}
+
 
 }

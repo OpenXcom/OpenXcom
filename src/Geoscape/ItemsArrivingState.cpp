@@ -67,14 +67,14 @@ ItemsArrivingState::ItemsArrivingState(Game *game, GeoscapeState *state) : State
 	add(_lstTransfers);
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(8)+8);
+	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(8)+8);
+	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ItemsArrivingState::btnOkClick);
 
-	_btnOk5Secs->setColor(Palette::blockOffset(8)+8);
+	_btnOk5Secs->setColor(Palette::blockOffset(8)+5);
 	_btnOk5Secs->setText(_game->getLanguage()->getString("STR_OK_5_SECS"));
 	_btnOk5Secs->onMouseClick((ActionHandler)&ItemsArrivingState::btnOk5SecsClick);
 
@@ -93,7 +93,6 @@ ItemsArrivingState::ItemsArrivingState(Game *game, GeoscapeState *state) : State
 	_txtDestination->setText(_game->getLanguage()->getString("STR_DESTINATION"));
 
 	_lstTransfers->setColor(Palette::blockOffset(8)+10);
-	_lstTransfers->setArrowColor(Palette::blockOffset(8)+8);
 	_lstTransfers->setColumns(3, 165, 25, 98);
 	_lstTransfers->setSelectable(true);
 	_lstTransfers->setBackground(_window);

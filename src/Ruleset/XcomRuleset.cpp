@@ -448,33 +448,33 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_facilities.insert(std::pair<std::string, RuleBaseFacility*>("STR_MISSILE_DEFENSES", missile));
 
 	// Add mapdatafiles
-	_mapDataFiles.insert(std::pair<std::string, MapDataSet*>("AVENGER",new MapDataSet("AVENGER",59)));
-	_mapDataFiles.insert(std::pair<std::string, MapDataSet*>("BARN",new MapDataSet("BARN",29)));
-	_mapDataFiles.insert(std::pair<std::string, MapDataSet*>("BLANKS",new MapDataSet("BLANKS",2)));
-	_mapDataFiles.insert(std::pair<std::string, MapDataSet*>("BRAIN",new MapDataSet("BRAIN",4)));
-	_mapDataFiles.insert(std::pair<std::string, MapDataSet*>("CULTIVAT",new MapDataSet("CULTIVAT",37)));
-	_mapDataFiles.insert(std::pair<std::string, MapDataSet*>("DESERT",new MapDataSet("DESERT",66)));
-	_mapDataFiles.insert(std::pair<std::string, MapDataSet*>("FOREST",new MapDataSet("FOREST",83)));
-	_mapDataFiles.insert(std::pair<std::string, MapDataSet*>("FRNITURE",new MapDataSet("FRNITURE",26)));
-	_mapDataFiles.insert(std::pair<std::string, MapDataSet*>("JUNGLE",new MapDataSet("JUNGLE",82)));
-	_mapDataFiles.insert(std::pair<std::string, MapDataSet*>("LIGHTNIN",new MapDataSet("LIGHTNIN",42)));
-	_mapDataFiles.insert(std::pair<std::string, MapDataSet*>("MARS",new MapDataSet("MARS",36)));
-	_mapDataFiles.insert(std::pair<std::string, MapDataSet*>("MOUNT",new MapDataSet("MOUNT",78)));
-	_mapDataFiles.insert(std::pair<std::string, MapDataSet*>("PLANE",new MapDataSet("PLANE",65)));
-	_mapDataFiles.insert(std::pair<std::string, MapDataSet*>("POLAR",new MapDataSet("POLAR",81)));
-	_mapDataFiles.insert(std::pair<std::string, MapDataSet*>("ROADS",new MapDataSet("ROADS",23)));
-	_mapDataFiles.insert(std::pair<std::string, MapDataSet*>("UFO1",new MapDataSet("UFO1",20)));
-	_mapDataFiles.insert(std::pair<std::string, MapDataSet*>("URBAN",new MapDataSet("URBAN",112)));
-	_mapDataFiles.insert(std::pair<std::string, MapDataSet*>("URBITS",new MapDataSet("URBITS",25)));
-	_mapDataFiles.insert(std::pair<std::string, MapDataSet*>("U_BASE",new MapDataSet("U_BASE",67)));
-	_mapDataFiles.insert(std::pair<std::string, MapDataSet*>("U_BITS",new MapDataSet("U_BITS",8)));
-	_mapDataFiles.insert(std::pair<std::string, MapDataSet*>("U_DISEC2",new MapDataSet("U_DISEC2",17)));
-	_mapDataFiles.insert(std::pair<std::string, MapDataSet*>("U_EXT02",new MapDataSet("U_EXT02",34)));
-	_mapDataFiles.insert(std::pair<std::string, MapDataSet*>("U_OPER2",new MapDataSet("U_OPER2",15)));
-	_mapDataFiles.insert(std::pair<std::string, MapDataSet*>("U_PODS",new MapDataSet("U_PODS",11)));
-	_mapDataFiles.insert(std::pair<std::string, MapDataSet*>("U_WALL02",new MapDataSet("U_WALL02",47)));
-	_mapDataFiles.insert(std::pair<std::string, MapDataSet*>("XBASE1",new MapDataSet("XBASE1",97)));
-	_mapDataFiles.insert(std::pair<std::string, MapDataSet*>("XBASE2",new MapDataSet("XBASE2",62)));
+	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("AVENGER",new MapDataSet("AVENGER",59)));
+	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("BARN",new MapDataSet("BARN",29)));
+	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("BLANKS",new MapDataSet("BLANKS",2)));
+	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("BRAIN",new MapDataSet("BRAIN",4)));
+	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("CULTIVAT",new MapDataSet("CULTIVAT",37)));
+	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("DESERT",new MapDataSet("DESERT",66)));
+	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("FOREST",new MapDataSet("FOREST",83)));
+	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("FRNITURE",new MapDataSet("FRNITURE",26)));
+	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("JUNGLE",new MapDataSet("JUNGLE",82)));
+	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("LIGHTNIN",new MapDataSet("LIGHTNIN",42)));
+	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("MARS",new MapDataSet("MARS",36)));
+	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("MOUNT",new MapDataSet("MOUNT",78)));
+	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("PLANE",new MapDataSet("PLANE",65)));
+	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("POLAR",new MapDataSet("POLAR",81)));
+	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("ROADS",new MapDataSet("ROADS",23)));
+	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("UFO1",new MapDataSet("UFO1",20)));
+	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("URBAN",new MapDataSet("URBAN",112)));
+	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("URBITS",new MapDataSet("URBITS",25)));
+	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("U_BASE",new MapDataSet("U_BASE",67)));
+	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("U_BITS",new MapDataSet("U_BITS",8)));
+	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("U_DISEC2",new MapDataSet("U_DISEC2",17)));
+	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("U_EXT02",new MapDataSet("U_EXT02",34)));
+	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("U_OPER2",new MapDataSet("U_OPER2",15)));
+	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("U_PODS",new MapDataSet("U_PODS",11)));
+	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("U_WALL02",new MapDataSet("U_WALL02",47)));
+	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("XBASE1",new MapDataSet("XBASE1",97)));
+	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("XBASE2",new MapDataSet("XBASE2",62)));
 
 	// Add crafts
 	RuleCraft* skyranger = new RuleCraft("STR_SKYRANGER");
@@ -1980,7 +1980,7 @@ SavedGame *XcomRuleset::newSave(GameDifficulty diff) const
 	// Generate soldiers
 	for (int i = 0; i < 8; ++i)
 	{
-		Soldier *soldier = new Soldier(getSoldier("XCOM"), getArmor("STR_NONE_UC"), &_names);
+		Soldier *soldier = new Soldier(getSoldier("XCOM"), getArmor("STR_NONE_UC"), &_names, save->getSoldierId());
 		soldier->setCraft(skyranger);
 		base->getSoldiers()->push_back(soldier);
 	}

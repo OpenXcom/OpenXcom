@@ -70,14 +70,14 @@ ConfirmLandingState::ConfirmLandingState(Game *game, Craft *craft, int texture, 
 	add(_txtBegin);
 	
 	// Set up objects
-	_window->setColor(Palette::blockOffset(8)+8);
+	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK15.SCR"));
 
-	_btnYes->setColor(Palette::blockOffset(8)+8);
+	_btnYes->setColor(Palette::blockOffset(8)+5);
 	_btnYes->setText(_game->getLanguage()->getString("STR_YES"));
 	_btnYes->onMouseClick((ActionHandler)&ConfirmLandingState::btnYesClick);
 
-	_btnNo->setColor(Palette::blockOffset(8)+8);
+	_btnNo->setColor(Palette::blockOffset(8)+5);
 	_btnNo->setText(_game->getLanguage()->getString("STR_NO"));
 	_btnNo->onMouseClick((ActionHandler)&ConfirmLandingState::btnNoClick);
 

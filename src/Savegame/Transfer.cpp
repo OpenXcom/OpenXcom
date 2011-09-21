@@ -151,7 +151,7 @@ std::string Transfer::getItems() const
  * @param id Item identifier.
  * @param qty Item quantity.
  */
-void Transfer::setItems(std::string id, int qty)
+void Transfer::setItems(const std::string &id, int qty)
 {
 	_itemId = id;
 	_itemQty = qty;

@@ -166,7 +166,7 @@ void Text::setInvert(bool invert)
 
 /**
  * Enables/disables high contrast color. Mostly used for
- * Battlescape text.
+ * Battlescape UI.
  * @param contrast High contrast setting.
  */
 void Text::setHighContrast(bool contrast)
@@ -401,8 +401,8 @@ void Text::draw()
 	{
 		mul = 3;
 	}
-	font->getSurface()->paletteShift(color, mul);
 
+	font->getSurface()->paletteShift(color, mul);
 
 	// Draw each letter one by one
 	for (std::wstring::iterator c = s->begin(); c != s->end(); ++c)
@@ -451,7 +451,7 @@ void Text::draw()
 	}
 	if (_invert)
 	{
-		this->invert(_color + 3);
+		this->invert(_color + 3 * mul);
 	}
 
 	// Revert text color
