@@ -54,7 +54,7 @@ public:
 	static const int HAND_W = 2;
 	static const int HAND_H = 3;
 	/// Creates a blank inventory ruleset.
-	RuleInventory(std::string id);
+	RuleInventory(const std::string &id);
 	/// Cleans up the inventory ruleset.
 	~RuleInventory();
 	/// Gets the inventory's id.
@@ -80,7 +80,7 @@ public:
 	/// Checks if an item fits in a slot.
 	bool fitItemInSlot(RuleItem *item, int x, int y) const;
 	/// Adds a time unit cost to the inventory.
-	void addCost(std::string slot, int cost);
+	void addCost(const std::string &slot, int cost);
 	/// Gets a certain cost in the inventory.
 	int getCost(RuleInventory *slot) const;
 };

@@ -26,7 +26,7 @@ namespace OpenXcom
  * type of country.
  * @param type String defining the type.
  */
-RuleCountry::RuleCountry(std::string type) : _type(type), _fundingMin(0), _fundingMax(0), _labelLon(0.0), _labelLat(0.0)
+RuleCountry::RuleCountry(const std::string &type) : _type(type), _fundingMin(0), _fundingMax(0), _labelLon(0.0), _labelLat(0.0)
 {
 }
 

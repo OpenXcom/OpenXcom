@@ -457,6 +457,15 @@ void TextList::setMargin(int margin)
 }
 
 /**
+ * Returns the margin of the text in the list.
+ * @return Margin in pixels.
+ */
+int TextList::getMargin() const
+{
+	return _margin;
+}
+
+/**
  * Changes the color of the arrow buttons in the list.
  * @param color Color value.
  */

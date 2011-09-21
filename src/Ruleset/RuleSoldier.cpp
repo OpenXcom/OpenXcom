@@ -26,7 +26,7 @@ namespace OpenXcom
  * type of craft.
  * @param type String defining the type.
  */
-RuleSoldier::RuleSoldier(std::string type) : _type(type), _armor(""), _standHeight(0), _kneelHeight(0), _loftemps(0)
+RuleSoldier::RuleSoldier(const std::string &type) : _type(type), _armor(""), _standHeight(0), _kneelHeight(0), _loftemps(0)
 {
 	
 }
@@ -56,7 +56,7 @@ void RuleSoldier::setStats(struct UnitStats minStats, struct UnitStats maxStats)
 }
 
 
-void RuleSoldier::setArmor(std::string armor)
+void RuleSoldier::setArmor(const std::string &armor)
 {
 	_armor = armor;
 }

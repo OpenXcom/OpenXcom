@@ -25,7 +25,7 @@ namespace OpenXcom
  * Creates a blank ruleset for a certain type of craft weapon.
  * @param type String defining the type.
  */
-RuleCraftWeapon::RuleCraftWeapon(std::string type) : _type(type), _sprite(-1), _sound(-1), _damage(0), _range(0), _accuracy(0), _reloadCautious(0), _reloadStandard(0), _reloadAggressive(0), _ammoMax(0), _rearm(1)
+RuleCraftWeapon::RuleCraftWeapon(const std::string &type) : _type(type), _sprite(-1), _sound(-1), _damage(0), _range(0), _accuracy(0), _reloadCautious(0), _reloadStandard(0), _reloadAggressive(0), _ammoMax(0), _rearm(1)
 {
 }
 
@@ -259,7 +259,7 @@ std::string RuleCraftWeapon::getLauncherItem() const
  * equip this craft weapon.
  * @param launcher Item name.
  */
-void RuleCraftWeapon::setLauncherItem(std::string launcher)
+void RuleCraftWeapon::setLauncherItem(const std::string &launcher)
 {
 	_launcher = launcher;
 }
@@ -279,7 +279,7 @@ std::string RuleCraftWeapon::getClipItem() const
  * load this craft weapon with ammo.
  * @param clip Item name.
  */
-void RuleCraftWeapon::setClipItem(std::string clip)
+void RuleCraftWeapon::setClipItem(const std::string &clip)
 {
 	_clip = clip;
 }

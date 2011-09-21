@@ -186,7 +186,7 @@ void SaveGameState::lstSavesClick(Action *action)
 	{
 		_edtSave->setText(Language::utf8ToWstr(_selected));
 	}
-	_edtSave->setX(_lstSaves->getX());
+	_edtSave->setX(_lstSaves->getX() + _lstSaves->getMargin());
 	_edtSave->setY(_lstSaves->getY() + _lstSaves->getSelectedRow() * 8);
 	_edtSave->setVisible(true);
 	_edtSave->focus();

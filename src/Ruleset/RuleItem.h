@@ -55,7 +55,7 @@ private:
 	int _invWidth, _invHeight;
 public:
 	/// Creates a blank item ruleset.
-	RuleItem(std::string type);
+	RuleItem(const std::string &type);
 	/// Cleans up the item ruleset.
 	~RuleItem();
 	/// Gets the item's type.

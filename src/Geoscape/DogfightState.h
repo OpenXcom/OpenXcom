@@ -74,7 +74,7 @@ public:
 	// Sets the craft to maximum distance.
 	void maximumDistance();
 	/// Changes the status text.
-	void setStatus(std::string status);
+	void setStatus(const std::string &status);
 	/// Handler for clicking the Minimize button.
 	void btnMinimizeClick(Action *action);
 	/// Handler for clicking the Standoff button.

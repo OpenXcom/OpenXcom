@@ -40,7 +40,7 @@ private:
 	int _standHeight, _kneelHeight, _loftemps;
 public:
 	/// Creates a blank unit ruleset.
-	RuleSoldier(std::string type);
+	RuleSoldier(const std::string &type);
 	/// Cleans up the unit ruleset.
 	~RuleSoldier();
 	/// Gets the unit's type.
@@ -48,7 +48,7 @@ public:
 	/// Sets the unit's stats.
 	void setStats(struct UnitStats minStats, struct UnitStats maxStats);
 	/// Sets the unit default armor.
-	void setArmor(std::string armor);
+	void setArmor(const std::string &armor);
 	/// Sets the voxel parameters.
 	void setVoxelParameters(int standHeight, int kneelHeight, int loftemps);
 	/// 

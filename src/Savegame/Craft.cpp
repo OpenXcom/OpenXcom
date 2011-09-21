@@ -208,7 +208,7 @@ std::string Craft::getStatus() const
  * Changes the current status of the craft.
  * @param status Status string.
  */
-void Craft::setStatus(std::string status)
+void Craft::setStatus(const std::string &status)
 {
 	_status = status;
 }

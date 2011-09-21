@@ -27,7 +27,7 @@ namespace OpenXcom
  * type of region.
  * @param type String defining the type.
  */
-RuleRegion::RuleRegion(std::string type): _type(type), _cost(0), _lonMin(), _lonMax(), _latMin(), _latMax(), _cities()
+RuleRegion::RuleRegion(const std::string &type): _type(type), _cost(0), _lonMin(), _lonMax(), _latMin(), _latMax(), _cities()
 {
 }
 
