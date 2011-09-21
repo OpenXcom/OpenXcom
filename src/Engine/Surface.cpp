@@ -248,7 +248,7 @@ void Surface::invert(Uint8 mid)
 		Uint8 pixel = getPixel(x, y);
 		if (pixel > 0)
 		{
-			setPixelIterative(&x, &y, pixel + 2 * (mid - pixel));
+			setPixelIterative(&x, &y, pixel + 2 * ((int)mid - (int)pixel));
 		}
 		else
 		{
@@ -438,6 +438,25 @@ int Surface::getY() const
 }
 
 /**
+ * Changes the visibility of the surface. A hidden surface
+ * isn't blitted nor receives events.
+ * @param visible New visibility.
+ */
+void Surface::setVisible(bool visible)
+{
+	_visible = visible;
+}
+
+/**
+ * Returns the visible state of the surface.
+ * @return Current visibility.
+ */
+bool Surface::getVisible() const
+{
+	return _visible;
+}
+
+/**
  * Resets the cropping rectangle set for this surface,
  * so the whole surface is blitted.
  */
@@ -552,42 +571,14 @@ int Surface::getHeight() const
 }
 
 /**
- * Changes the visibility of the surface. A hidden surface
- * isn't blitted nor receives events.
- * @param visible New visibility.
+ * This is a separate visibility setting intended
+ * for temporary effects like window popups,
+ * so as to not override the default visibility setting.
+ * @note Do not confuse with setVisible!
  */
-void Surface::setVisible(bool visible)
+void Surface::setHidden(bool hidden)
 {
-	_visible = visible;
-}
-
-/**
- * Returns the visible state of the surface.
- * @return Current visibility.
- */
-bool Surface::getVisible() const
-{
-	return _visible;
-}
-
-/**
- * Hides the surface if it's visible. This is a separate
- * visibility setting intended for temporary effects,
- * so as to not override the actual visibility setting.
- */
-void Surface::hide()
-{
-	_hidden = true;
-}
-
-/**
- * Shows the surface if it's not invisible. This is a separate
- * visibility setting intended for temporary effects,
- * so as to not override the actual visibility setting.
- */
-void Surface::show()
-{
-	_hidden = false;
+	_hidden = hidden;
 }
 
 /**

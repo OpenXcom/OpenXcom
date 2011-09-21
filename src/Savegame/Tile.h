@@ -25,6 +25,7 @@
 #include "../Ruleset/MapData.h"
 #include "BattleUnit.h"
 
+
 namespace OpenXcom
 {
 
@@ -42,7 +43,8 @@ class Tile
 protected:
 	static const int LIGHTLAYERS = 3;
 	MapData *_objects[4];
-	int _mdsID[4], _mdID[4];
+	int _mapDataID[4];
+	int _mapDataSetID[4];
 	int _currentFrame[4];
 	bool _discovered[3];
 	int _light[LIGHTLAYERS], _lastLight[LIGHTLAYERS];
@@ -58,14 +60,16 @@ public:
 	Tile(const Position& pos);
 	/// Cleans up a tile.
 	~Tile();
+	/// Load the tile to yaml
+	void load(const YAML::Node &node);
+	/// Saves the tile to yaml
+	void save(YAML::Emitter &out) const;
 	/// Gets a pointer to the mapdata for a specific part of the tile.
 	MapData *getMapData(int part) const;
 	/// Sets the pointer to the mapdata for a specific part of the tile
-	void setMapData(MapData *dat, int part);
-	/// Sets the IDs to the mapdata for a specific part of the tile
-	void load(int mdsID, int mdID, int part);
+	void setMapData(MapData *dat, int mapDataID, int mapDataSetID, int part);
 	/// Gets the IDs to the mapdata for a specific part of the tile
-	void getSaveGameData(int *mdsID, int *mdID, int part) const;
+	void getMapData(int *mapDataID, int *mapDataSetID, int part) const;
 	/// Gets wether this tile has no objects
 	bool isVoid() const;
 	/// Get the TU cost to walk over a certain part of the tile.

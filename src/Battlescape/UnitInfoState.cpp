@@ -367,7 +367,7 @@ void UnitInfoState::init()
 		ss << _game->getLanguage()->getString(soldier->getRankString());
 		ss << " ";
 	}
-	ss << _unit->getUnit()->getName();
+	ss << _unit->getUnit()->getName(_game->getLanguage());
 	_txtName->setText(ss.str());
 
 	ss.str(L"");

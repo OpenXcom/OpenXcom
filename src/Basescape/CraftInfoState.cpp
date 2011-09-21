@@ -97,30 +97,30 @@ CraftInfoState::CraftInfoState(Game *game, Base *base, unsigned int craft) : Sta
 	add(_equip);
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(13)+13);
+	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK14.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(13)+13);
+	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&CraftInfoState::btnOkClick);
 
-	_btnW1->setColor(Palette::blockOffset(13)+13);
+	_btnW1->setColor(Palette::blockOffset(13)+10);
 	_btnW1->setText(L"1");
 	_btnW1->onMouseClick((ActionHandler)&CraftInfoState::btnW1Click);
 
-	_btnW2->setColor(Palette::blockOffset(13)+13);
+	_btnW2->setColor(Palette::blockOffset(13)+10);
 	_btnW2->setText(L"2");
 	_btnW2->onMouseClick((ActionHandler)&CraftInfoState::btnW2Click);
 
-	_btnCrew->setColor(Palette::blockOffset(13)+13);
+	_btnCrew->setColor(Palette::blockOffset(13)+10);
 	_btnCrew->setText(_game->getLanguage()->getString("STR_CREW"));
 	_btnCrew->onMouseClick((ActionHandler)&CraftInfoState::btnCrewClick);
 
-	_btnEquip->setColor(Palette::blockOffset(13)+13);
+	_btnEquip->setColor(Palette::blockOffset(13)+10);
 	_btnEquip->setText(_game->getLanguage()->getString("STR_EQUIPMENT_UC"));
 	_btnEquip->onMouseClick((ActionHandler)&CraftInfoState::btnEquipClick);
 
-	_btnArmor->setColor(Palette::blockOffset(13)+13);
+	_btnArmor->setColor(Palette::blockOffset(13)+10);
 	_btnArmor->setText(_game->getLanguage()->getString("STR_ARMOR"));
 	_btnArmor->onMouseClick((ActionHandler)&CraftInfoState::btnArmorClick);
 

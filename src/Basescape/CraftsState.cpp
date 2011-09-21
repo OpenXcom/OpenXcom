@@ -69,10 +69,10 @@ CraftsState::CraftsState(Game *game, Base *base) : State(game), _base(base)
 	add(_lstCrafts);
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(15)+4);
+	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK14.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(13)+13);
+	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&CraftsState::btnOkClick);
 
@@ -102,7 +102,7 @@ CraftsState::CraftsState(Game *game, Base *base) : State(game), _base(base)
 	_txtHwp->setText(_game->getLanguage()->getString("STR_HWPS"));
 
 	_lstCrafts->setColor(Palette::blockOffset(13)+10);
-	_lstCrafts->setArrowColor(Palette::blockOffset(15)+4);
+	_lstCrafts->setArrowColor(Palette::blockOffset(15)+1);
 	_lstCrafts->setColumns(5, 94, 65, 47, 46, 28);
 	_lstCrafts->setSelectable(true);
 	_lstCrafts->setBackground(_window);

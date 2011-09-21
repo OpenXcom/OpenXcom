@@ -33,6 +33,7 @@ struct UnitStats
 };
 
 class RuleArmor;
+class Language;
 
 /**
  * Represents a unit which is mostly just an abstract class to access common attributes/functions for both Soldiers and Aliens.
@@ -51,7 +52,7 @@ public:
 	/// Gets the unit's armor.
 	RuleArmor *getArmor() const;
 	/// Gets the unit's name.
-	virtual std::wstring getName() const = 0;
+	virtual std::wstring getName(Language *lang) const = 0;
 	/// Gets the unit's time units.
 	virtual int getTimeUnits() const = 0;
 	/// Gets the unit's stamina.

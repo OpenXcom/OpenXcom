@@ -141,19 +141,19 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, unsigned int soldier)
 	// Set up objects
 	_game->getResourcePack()->getSurface("BACK06.SCR")->blit(_bg);
 
-	_btnOk->setColor(Palette::blockOffset(15)+9);
+	_btnOk->setColor(Palette::blockOffset(15)+6);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&SoldierInfoState::btnOkClick);
 
-	_btnPrev->setColor(Palette::blockOffset(15)+9);
+	_btnPrev->setColor(Palette::blockOffset(15)+6);
 	_btnPrev->setText(L"<<");
 	_btnPrev->onMouseClick((ActionHandler)&SoldierInfoState::btnPrevClick);
 
-	_btnNext->setColor(Palette::blockOffset(15)+9);
+	_btnNext->setColor(Palette::blockOffset(15)+6);
 	_btnNext->setText(L">>");
 	_btnNext->onMouseClick((ActionHandler)&SoldierInfoState::btnNextClick);
 
-	_btnArmor->setColor(Palette::blockOffset(15)+9);
+	_btnArmor->setColor(Palette::blockOffset(15)+6);
 	_btnArmor->setText(_game->getLanguage()->getString("STR_ARMOR"));
 	_btnArmor->onMouseClick((ActionHandler)&SoldierInfoState::btnArmorClick);
 

@@ -41,7 +41,7 @@ private:
 	std::vector<City*> _cities;
 public:
 	/// Creates a blank region ruleset.
-	RuleRegion(std::string type);
+	RuleRegion(const std::string &type);
 	/// Cleans up the region ruleset.
 	~RuleRegion();
 	/// Gets the region's type.

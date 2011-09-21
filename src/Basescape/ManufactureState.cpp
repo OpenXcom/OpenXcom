@@ -78,13 +78,13 @@ ManufactureState::ManufactureState(Game *game, Base *base) : State(game), _base(
 	add(_lstManufacture);
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(15)+9);
+	_window->setColor(Palette::blockOffset(15)+6);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
 	
-	_btnNew->setColor(Palette::blockOffset(13)+13);
+	_btnNew->setColor(Palette::blockOffset(13)+10);
 	_btnNew->setText(_game->getLanguage()->getString("STR_NEW_PRODUCTION"));
 
-	_btnOk->setColor(Palette::blockOffset(13)+13);
+	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ManufactureState::btnOkClick);
 
@@ -134,7 +134,7 @@ ManufactureState::ManufactureState(Game *game, Base *base) : State(game), _base(
 	_txtTimeLeft->setText(_game->getLanguage()->getString("STR_DAYS_HOURS_LEFT"));
 	
 	_lstManufacture->setColor(Palette::blockOffset(13)+10);
-	_lstManufacture->setArrowColor(Palette::blockOffset(15)+9);
+	_lstManufacture->setArrowColor(Palette::blockOffset(15)+6);
 	_lstManufacture->setColumns(6, 105, 39, 45, 27, 47, 24);
 	_lstManufacture->setSelectable(true);
 	_lstManufacture->setBackground(_window);

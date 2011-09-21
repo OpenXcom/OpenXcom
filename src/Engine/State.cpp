@@ -118,6 +118,16 @@ bool State::isScreen() const
 }
 
 /**
+ * Toggles the full-screen flag. Used by windows to
+ * keep the previous screen is display while the window
+ * is still "popping up".
+ */
+void State::toggleScreen()
+{
+	_screen = !_screen;
+}
+
+/**
  * Initializes the state and its child elements. This is
  * used for settings that have to be reset everytime the
  * state is returned to focus (eg. palettes), so can't
@@ -171,7 +181,7 @@ void State::blit()
 void State::hideAll()
 {
 	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
-			(*i)->hide();
+			(*i)->setHidden(true);
 }
 
 /**
@@ -180,7 +190,7 @@ void State::hideAll()
 void State::showAll()
 {
 	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
-		(*i)->show();
+		(*i)->setHidden(false);
 }
 
 /**

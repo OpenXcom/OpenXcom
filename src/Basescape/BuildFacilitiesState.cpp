@@ -58,10 +58,10 @@ BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base, State *state)
 	add(_lstFacilities);
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(13)+8);
+	_window->setColor(Palette::blockOffset(13)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(13)+8);
+	_btnOk->setColor(Palette::blockOffset(13)+5);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&BuildFacilitiesState::btnOkClick);
 
@@ -71,7 +71,6 @@ BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base, State *state)
 	_txtTitle->setText(_game->getLanguage()->getString("STR_INSTALLATION"));
 
 	_lstFacilities->setColor(Palette::blockOffset(13)+5);
-	_lstFacilities->setArrowColor(Palette::blockOffset(13)+8);
 	_lstFacilities->setColumns(1, 115);
 	_lstFacilities->setSelectable(true);
 	_lstFacilities->setBackground(_window);

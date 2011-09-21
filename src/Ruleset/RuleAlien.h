@@ -42,7 +42,7 @@ private:
 	int _value;
 public:
 	/// Creates a blank unit ruleset.
-	RuleAlien(std::string type, std::string race, std::string rank);
+	RuleAlien(const std::string &type, std::string race, std::string rank);
 	/// Cleans up the unit ruleset.
 	~RuleAlien();
 	/// Gets the unit's type.
@@ -50,7 +50,7 @@ public:
 	/// Sets the unit's stats.
 	void setStats(struct UnitStats stats);
 	/// Sets the unit default armor.
-	void setArmor(std::string armor);
+	void setArmor(const std::string &armor);
 	/// Sets the voxel parameters.
 	void setVoxelParameters(int standHeight, int kneelHeight, int loftemps);
 	/// 

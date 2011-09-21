@@ -38,6 +38,31 @@ NodeLink::~NodeLink()
 {
 }
 
+/**
+ * Loads the UFO from a YAML file.
+ * @param node YAML node.
+ */
+void NodeLink::load(const YAML::Node &node)
+{
+	node["connectedNodeId"] >> _connectedNodeID;
+	node["distance"] >> _distance;
+	node["travelType"] >> _travelType;
+}
+
+/**
+ * Saves the UFO to a YAML file.
+ * @param out YAML emitter.
+ */
+void NodeLink::save(YAML::Emitter &out) const
+{
+	out << YAML::BeginMap;
+	out << YAML::Key << "connectedNodeId" << YAML::Value << _connectedNodeID;
+	out << YAML::Key << "distance" << YAML::Value << _distance;
+	out << YAML::Key << "travelType" << YAML::Value << _travelType;
+	out << YAML::EndMap;
+}
+
+
 int NodeLink::getConnectedNodeID() const
 {
 	return _connectedNodeID;

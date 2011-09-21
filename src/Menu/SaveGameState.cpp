@@ -46,7 +46,10 @@ namespace OpenXcom
 SaveGameState::SaveGameState(Game *game, bool geo) : State(game), _selected(""), _geo(geo)
 {
 	// Create objects
-	_window = new Window(this, 320, 200, 0, 0, POPUP_BOTH);
+	WindowPopup p = POPUP_BOTH;
+	if (!geo)
+		p = POPUP_NONE;
+	_window = new Window(this, 320, 200, 0, 0, p);
 	_btnCancel = new TextButton(80, 16, 120, 172);
 	_txtTitle = new Text(310, 16, 5, 8);
 	_txtName = new Text(150, 9, 16, 24);
@@ -73,27 +76,30 @@ SaveGameState::SaveGameState(Game *game, bool geo) : State(game), _selected(""),
 	// Set up objects
 	if (_geo)
 	{
-		_window->setColor(Palette::blockOffset(8)+8);
+		_window->setColor(Palette::blockOffset(8)+5);
 		_window->setBackground(game->getResourcePack()->getSurface("BACK01.SCR"));
 		
-		_btnCancel->setColor(Palette::blockOffset(8)+8);
+		_btnCancel->setColor(Palette::blockOffset(8)+5);
 
 		_txtTitle->setColor(Palette::blockOffset(15)-1);
+
 		_txtName->setColor(Palette::blockOffset(15)-1);
+
 		_txtTime->setColor(Palette::blockOffset(15)-1);
+
 		_txtDate->setColor(Palette::blockOffset(15)-1);
 		
 		_lstSaves->setColor(Palette::blockOffset(8)+10);
-		_lstSaves->setArrowColor(Palette::blockOffset(8)+8);
 		
 		_edtSave->setColor(Palette::blockOffset(8)+10);
 	}
 	else
 	{
-		_window->setColor(Palette::blockOffset(0)+8);
+		_window->setColor(Palette::blockOffset(0));
+		_window->setHighContrast(true);
 		_window->setBackground(_game->getResourcePack()->getSurface("TAC00.SCR"));
 
-		_btnCancel->setColor(Palette::blockOffset(0)+3);
+		_btnCancel->setColor(Palette::blockOffset(0));
 		_btnCancel->setHighContrast(true);
 
 		_txtTitle->setColor(Palette::blockOffset(0));
@@ -109,7 +115,6 @@ SaveGameState::SaveGameState(Game *game, bool geo) : State(game), _selected(""),
 		_txtDate->setHighContrast(true);
 		
 		_lstSaves->setColor(Palette::blockOffset(0));
-		_lstSaves->setArrowColor(Palette::blockOffset(0)+3);
 		_lstSaves->setHighContrast(true);
 		
 		_edtSave->setColor(Palette::blockOffset(0));
@@ -186,7 +191,7 @@ void SaveGameState::lstSavesClick(Action *action)
 	{
 		_edtSave->setText(Language::utf8ToWstr(_selected));
 	}
-	_edtSave->setX(_lstSaves->getX());
+	_edtSave->setX(_lstSaves->getX() + _lstSaves->getMargin());
 	_edtSave->setY(_lstSaves->getY() + _lstSaves->getSelectedRow() * 8);
 	_edtSave->setVisible(true);
 	_edtSave->focus();

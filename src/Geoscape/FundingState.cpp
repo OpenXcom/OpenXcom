@@ -61,10 +61,10 @@ FundingState::FundingState(Game *game) : State(game)
 	add(_lstCountries);
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(15)+2);
+	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(15)+2);
+	_btnOk->setColor(Palette::blockOffset(15)-1);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&FundingState::btnOkClick);
 

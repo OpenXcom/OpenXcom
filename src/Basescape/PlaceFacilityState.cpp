@@ -73,7 +73,7 @@ PlaceFacilityState::PlaceFacilityState(Game *game, Base *base, RuleBaseFacility 
 	add(_numMaintenance);
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(13)+13);
+	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 	
 	_view->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
@@ -81,7 +81,7 @@ PlaceFacilityState::PlaceFacilityState(Game *game, Base *base, RuleBaseFacility 
 	_view->setSelectable(rule->getSize());
 	_view->onMouseClick((ActionHandler)&PlaceFacilityState::viewClick);
 
-	_btnCancel->setColor(Palette::blockOffset(13)+13);
+	_btnCancel->setColor(Palette::blockOffset(13)+10);
 	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)&PlaceFacilityState::btnCancelClick);
 

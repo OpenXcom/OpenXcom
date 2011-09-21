@@ -313,6 +313,8 @@ void TextList::setFonts(Font *big, Font *small)
 void TextList::setColor(Uint8 color)
 {
 	_color = color;
+	_up->setColor(color);
+	_down->setColor(color);
 }
 
 /**
@@ -454,6 +456,15 @@ void TextList::setBackground(Surface *bg)
 void TextList::setMargin(int margin)
 {
 	_margin = margin;
+}
+
+/**
+ * Returns the margin of the text in the list.
+ * @return Margin in pixels.
+ */
+int TextList::getMargin() const
+{
+	return _margin;
 }
 
 /**

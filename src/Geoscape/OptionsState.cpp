@@ -59,22 +59,22 @@ OptionsState::OptionsState(Game *game) : State(game)
 	add(_txtTitle);
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(15)+2);
+	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
-	_btnLoad->setColor(Palette::blockOffset(15)+2);
+	_btnLoad->setColor(Palette::blockOffset(15)-1);
 	_btnLoad->setText(_game->getLanguage()->getString("STR_LOAD_GAME"));
 	_btnLoad->onMouseClick((ActionHandler)&OptionsState::btnLoadClick);
 
-	_btnSave->setColor(Palette::blockOffset(15)+2);
+	_btnSave->setColor(Palette::blockOffset(15)-1);
 	_btnSave->setText(_game->getLanguage()->getString("STR_SAVE_GAME"));
 	_btnSave->onMouseClick((ActionHandler)&OptionsState::btnSaveClick);
 
-	_btnAbandon->setColor(Palette::blockOffset(15)+2);
+	_btnAbandon->setColor(Palette::blockOffset(15)-1);
 	_btnAbandon->setText(_game->getLanguage()->getString("STR_ABANDON_GAME"));
 	_btnAbandon->onMouseClick((ActionHandler)&OptionsState::btnAbandonClick);
 
-	_btnCancel->setColor(Palette::blockOffset(15)+2);
+	_btnCancel->setColor(Palette::blockOffset(15)-1);
 	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&OptionsState::btnCancelClick);
 

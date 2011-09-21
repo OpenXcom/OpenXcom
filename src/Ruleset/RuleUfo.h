@@ -42,7 +42,7 @@ private:
 	RuleTerrain *_battlescapeTerrainData;
 public:
 	/// Creates a blank UFO ruleset.
-	RuleUfo(std::string type);
+	RuleUfo(const std::string &type);
 	/// Cleans up the UFO ruleset.
 	~RuleUfo();
 	/// Gets the UFO's type.
@@ -50,7 +50,7 @@ public:
 	/// Gets the UFO's size.
 	std::string getSize() const;
 	/// Sets the UFO's size.
-	void setSize(std::string size);
+	void setSize(const std::string &size);
 	/// Gets the UFO's radius.
 	int getRadius() const;
 	/// Gets the UFO's sprite.

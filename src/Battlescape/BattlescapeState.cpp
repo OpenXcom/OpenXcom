@@ -294,19 +294,19 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_map->centerOnPosition(_battleGame->getSelectedUnit()->getPosition());
 
 	_btnReserveNone->copy(_icons);
-	_btnReserveNone->setColor(Palette::blockOffset(4)+6);
+	_btnReserveNone->setColor(Palette::blockOffset(4)+3);
 	_btnReserveNone->setGroup(&_reserve);
 
 	_btnReserveSnap->copy(_icons);
-	_btnReserveSnap->setColor(Palette::blockOffset(2)+6);
+	_btnReserveSnap->setColor(Palette::blockOffset(2)+3);
 	_btnReserveSnap->setGroup(&_reserve);
 
 	_btnReserveAimed->copy(_icons);
-	_btnReserveAimed->setColor(Palette::blockOffset(2)+6);
+	_btnReserveAimed->setColor(Palette::blockOffset(2)+3);
 	_btnReserveAimed->setGroup(&_reserve);
 
 	_btnReserveAuto->copy(_icons);
-	_btnReserveAuto->setColor(Palette::blockOffset(2)+6);
+	_btnReserveAuto->setColor(Palette::blockOffset(2)+3);
 	_btnReserveAuto->setGroup(&_reserve);
 
 	// Set music
@@ -820,11 +820,6 @@ void BattlescapeState::checkForCasualties(BattleItem *murderweapon, BattleUnit *
 				statePushNext(new UnitFallBState(this, (*j), murderweapon->getRules()->getDamageType()));
 			else
 				statePushNext(new UnitFallBState(this, (*j), DT_AP));
-
-			if (victim->getFaction() == FACTION_HOSTILE)
-				_battleGame->addStat("STR_ALIENS_KILLED", 1, victim->getUnit()->getValue());
-			else if (victim->getFaction() == FACTION_PLAYER)
-				_battleGame->addStat("STR_XCOM_OPERATIVES_KILLED", 1, -victim->getUnit()->getValue());
 		}
 		else if ((*j)->getStunlevel() >= (*j)->getHealth() && (*j)->getStatus() != STATUS_DEAD && (*j)->getStatus() != STATUS_UNCONSCIOUS && (*j)->getStatus() != STATUS_FALLING)
 		{
@@ -848,8 +843,6 @@ void BattlescapeState::checkForCasualties(BattleItem *murderweapon, BattleUnit *
 
 	if (liveAliens == 0 || liveSoldiers == 0)
 	{
-		if (liveSoldiers == 0)
-			_battleGame->addStat("STR_XCOM_CRAFT_LOST", 1, -200);
 		finishBattle(false);
 	}
 }
@@ -1059,7 +1052,7 @@ void BattlescapeState::updateSoldierInfo()
 
 	_action.actor = battleUnit;
 
-	_txtName->setText(battleUnit->getUnit()->getName());
+	_txtName->setText(battleUnit->getUnit()->getName(_game->getLanguage()));
 	Soldier *soldier = dynamic_cast<Soldier*>(battleUnit->getUnit());
 	if (soldier != 0)
 	{
@@ -1432,11 +1425,40 @@ bool BattlescapeState::checkReservedTU(BattleUnit *bu, int tu)
 void BattlescapeState::finishBattle(bool abort)
 {
 	_game->popState();
-	_game->pushState(new DebriefingState(_game));
 	_battleGame->prepareDebriefing(abort);
+	_game->pushState(new DebriefingState(_game));
 	_game->getSavedGame()->endBattle();
 	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
 	_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
+}
+
+/**
+ * Drop item to the floor & affect with gravity.
+ * @param position Position to spawn the item.
+ * @param item Pointer to the item.
+ * @param newItem Bool whether this is a new item.
+ */
+void BattlescapeState::dropItem(const Position &position, BattleItem *item, bool newItem)
+{
+	Position p = position;
+
+	// don't spawn anything outside of bounds
+	if (_battleGame->getTile(p) == 0)
+		return;
+
+	while (_battleGame->getTile(p)->getMapData(MapData::O_FLOOR) == 0 && p.z > 0)
+	{
+		p.z--;
+	}
+
+	_battleGame->getTile(p)->addItem(item);
+
+	if(newItem)
+	{
+		_battleGame->getItems()->push_back(item);
+	}
+
+	item->setSlot(_game->getRuleset()->getInventory("STR_GROUND"));
 }
 
 }

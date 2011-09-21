@@ -63,7 +63,7 @@ public:
 	/// Gets the items of the transfer.
 	std::string getItems() const;
 	/// Sets the items of the transfer.
-	void setItems(std::string id, int qty = 1);
+	void setItems(const std::string &id, int qty = 1);
 	/// Sets the scientists of the transfer.
 	void setScientists(int scientists);
 	/// Sets the engineers of the transfer.

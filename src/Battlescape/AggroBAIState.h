@@ -43,6 +43,10 @@ public:
 	AggroBAIState(SavedBattleGame *game, BattleUnit *unit);
 	/// Cleans up the AggroBAIState.
 	~AggroBAIState();
+	/// Loads the AI state from YAML.
+	void load(const YAML::Node& node);
+	/// Saves the AI state to YAML.
+	void save(YAML::Emitter& out) const;
 	/// Enters the state.
 	void enter();
 	/// Exits the state.
@@ -51,6 +55,8 @@ public:
 	void think(BattleAction *action);
 	/// Sets aggro target, triggered by reaction fire.
 	void setAggroTarget(BattleUnit *unit);
+	/// Get the aggro target, for savegame
+	BattleUnit *getAggroTarget();
 
 };
 

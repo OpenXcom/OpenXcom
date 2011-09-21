@@ -48,16 +48,16 @@ namespace OpenXcom
 		
 		// Set up objects
 		_game->getResourcePack()->getSurface("BACK10.SCR")->blit(_bg);
-		_btnOk->setColor(Palette::blockOffset(5)+3);
-		_btnPrev->setColor(Palette::blockOffset(5)+3);
-		_btnNext->setColor(Palette::blockOffset(5)+3);
+		_btnOk->setColor(Palette::blockOffset(5));
+		_btnPrev->setColor(Palette::blockOffset(5));
+		_btnNext->setColor(Palette::blockOffset(5));
 		
 		_txtTitle->setColor(Palette::blockOffset(15)+4);
 		_txtTitle->setBig();
 		_txtTitle->setAlign(ALIGN_LEFT);
 		_txtTitle->setText(Ufopaedia::buildText(_game, defs->title));
 
-		_txtInfo->setColor(Palette::blockOffset(14)+15);
+		_txtInfo->setColor(Palette::blockOffset(15)-1);
 		_txtInfo->setAlign(ALIGN_LEFT);
 		_txtInfo->setWordWrap(true);
 		_txtInfo->setText(Ufopaedia::buildText(_game, defs->text));

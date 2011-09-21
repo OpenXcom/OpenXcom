@@ -40,6 +40,7 @@
 #include "../Ruleset/RuleResearchProject.h"
 #include "ResearchProject.h"
 #include "ItemContainer.h"
+#include "Soldier.h"
 
 namespace OpenXcom
 {
@@ -64,7 +65,7 @@ bool findRuleResearchProject::operator()(ResearchProject *r) const
  * Initializes a brand new saved game according to the specified difficulty.
  * @param difficulty Game difficulty.
  */
-SavedGame::SavedGame(GameDifficulty difficulty) : _difficulty(difficulty), _funds(0), _countries(), _regions(), _bases(), _ufos(), _craftId(), _waypoints(), _ufoId(1), _waypointId(1), _battleGame(0)
+SavedGame::SavedGame(GameDifficulty difficulty) : _difficulty(difficulty), _funds(0), _countries(), _regions(), _bases(), _ufos(), _craftId(), _waypoints(), _ufoId(1), _waypointId(1), _battleGame(0), _soldierId(1)
 {
 	RNG::init();
 	_time = new GameTime(6, 1, 1, 1999, 12, 0, 0);
@@ -221,6 +222,7 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 
 	doc["ufoId"] >> _ufoId;
 	doc["waypointId"] >> _waypointId;
+	doc["soldierId"] >> _soldierId;
 
 	for (YAML::Iterator i = doc["bases"].begin(); i != doc["bases"].end(); ++i)
 	{
@@ -232,7 +234,7 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	if (const YAML::Node *pName = doc.FindValue("battleGame"))
 	{
 		_battleGame = new SavedBattleGame();
-		_battleGame->load(*pName);
+		_battleGame->load(*pName, rule, this);
 	}
 
 	if (const YAML::Node *pName = doc.FindValue("found"))
@@ -319,6 +321,7 @@ void SavedGame::save(const std::string &filename) const
 	out << YAML::EndSeq;
 	out << YAML::Key << "ufoId" << YAML::Value << _ufoId;
 	out << YAML::Key << "waypointId" << YAML::Value << _waypointId;
+	out << YAML::Key << "soldierId" << YAML::Value << _soldierId;
 	if (_battleGame != 0)
 	{
 		out << YAML::Key << "battleGame" << YAML::Value;
@@ -687,4 +690,34 @@ void SavedGame::getDependableResearchBasic (std::vector<RuleResearchProject *> &
 		}
 	}
 }
+
+/**
+ * Returns the latest soldier ID.
+ * @return Pointer to ID value.
+ */
+int *const SavedGame::getSoldierId()
+{
+	return &_soldierId;
+}
+
+/**
+ * Returns pointer to the Soldier given it's unique ID.
+ * @param id A soldier's unique id.
+ * @return Pointer to Soldier.
+ */
+Soldier *const SavedGame::getSoldier(int id)
+{
+	for (std::vector<Base*>::iterator i = _bases.begin(); i != _bases.end(); ++i)
+	{
+		for (std::vector<Soldier*>::iterator j = (*i)->getSoldiers()->begin(); j != (*i)->getSoldiers()->end(); ++j)
+		{
+			if ((*j)->getId() == id)
+			{
+				return (*j);
+			}
+		}
+	}
+	return 0;
+}
+
 }

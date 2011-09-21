@@ -38,6 +38,23 @@ BattleAIState::~BattleAIState()
 }
 
 /**
+ * Loads the AI state from a YAML file.
+ * @param node YAML node.
+ */
+void BattleAIState::load(const YAML::Node &node)
+{
+}
+
+/**
+ * Saves the AI state to a YAML file.
+ * @param out YAML emitter.
+ */
+void BattleAIState::save(YAML::Emitter &out) const
+{
+}
+
+
+/**
  * Enters the current AI state.
  */
 void BattleAIState::enter()

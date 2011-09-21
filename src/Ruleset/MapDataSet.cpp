@@ -34,7 +34,7 @@ MapData *MapDataSet::_scourgedTile = 0;
 /**
 * MapDataSet construction.
 */
-MapDataSet::MapDataSet(std::string name, int size) : _name(name), _size(size), _objects(), _surfaceSet(0), _loaded(false)
+MapDataSet::MapDataSet(const std::string &name, int size) : _name(name), _size(size), _objects(), _surfaceSet(0), _loaded(false)
 {
 }
 

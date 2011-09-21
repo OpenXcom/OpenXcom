@@ -287,27 +287,12 @@ bool TerrainModifier::checkIfUnitVisible(BattleUnit *currentUnit, BattleUnit *ot
 	std::vector<Position> _trajectory;
 	originVoxel = Position((currentUnit->getPosition().x * 16) + 8, (currentUnit->getPosition().y * 16) + 8, currentUnit->getPosition().z*24);
 	originVoxel.z += -_save->getTile(currentUnit->getPosition())->getTerrainLevel();
-	if (currentUnit->isKneeled())
-	{
-		originVoxel.z += currentUnit->getUnit()->getKneelHeight();
-	}
-	else
-	{
-		originVoxel.z += currentUnit->getUnit()->getStandHeight();
-	}
+	originVoxel.z += currentUnit->getHeight();
 	bool unitSeen = false;
 
 	targetVoxel = Position((otherUnit->getPosition().x * 16) + 8, (otherUnit->getPosition().y * 16) + 8, otherUnit->getPosition().z*24);
 	int targetMinHeight = targetVoxel.z - _save->getTile(otherUnit->getPosition())->getTerrainLevel();
-	int targetMaxHeight;
-	if (otherUnit->isKneeled())
-	{
-		 targetMaxHeight = targetMinHeight + otherUnit->getUnit()->getKneelHeight();
-	}
-	else
-	{
-		targetMaxHeight = targetMinHeight + otherUnit->getUnit()->getStandHeight();
-	}
+	int targetMaxHeight = targetMinHeight + otherUnit->getHeight();
 
 	// scan ray from top to bottom
 	for (int i = targetMaxHeight; i > targetMinHeight; i-=2)
@@ -1135,7 +1120,7 @@ int TerrainModifier::voxelCheck(const Position& voxel, BattleUnit *excludeUnit, 
 		BattleUnit *unit = tile->getUnit();
 		if (unit != 0 && unit != excludeUnit)
 		{
-			if ((voxel.z%24) < (unit->isKneeled()?unit->getUnit()->getKneelHeight():unit->getUnit()->getStandHeight()))
+			if ((voxel.z%24) < unit->getHeight())
 			{
 				int x = 15 - voxel.x%16;
 				int y = 15 - voxel.y%16;
@@ -1165,27 +1150,6 @@ int TerrainModifier::voxelCheck(const Position& voxel, BattleUnit *excludeUnit, 
 		}
 	}
 	return -1;
-}
-
-/**
- * Add item & affect with gravity.
- * @param position Position to spawn the item.
- * @param item Pointer to the item.
- */
-void TerrainModifier::spawnItem(const Position &position, BattleItem *item)
-{
-	Position p = position;
-
-	// don't spawn anything outside of bounds
-	if (_save->getTile(p) == 0)
-		return;
-
-	while (_save->getTile(p)->getMapData(MapData::O_FLOOR) == 0 && p.z > 0)
-	{
-		p.z--;
-	}
-
-	_save->getTile(p)->addItem(item);
 }
 
 /**

@@ -57,13 +57,13 @@ NewPossibleResearchState::NewPossibleResearchState(Game * game, Base * base, con
 	add(_lstPossibilities);
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(15)+2);
+	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(8)+8);
+	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&NewPossibleResearchState::btnOkClick);
-	_btnResearch->setColor(Palette::blockOffset(8)+8);
+	_btnResearch->setColor(Palette::blockOffset(8)+5);
 	_btnResearch->setText(_game->getLanguage()->getString("STR_ALLOCATE_RESEARCH"));
 	_btnResearch->onMouseClick((ActionHandler)&NewPossibleResearchState::btnResearchClick);
 	_txtTitle->setColor(Palette::blockOffset(15)-1);

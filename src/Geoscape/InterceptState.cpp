@@ -69,10 +69,10 @@ InterceptState::InterceptState(Game *game, Globe *globe, Base *base) : State(gam
 	add(_lstCrafts);
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(15)+2);
+	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK12.SCR"));
 
-	_btnCancel->setColor(Palette::blockOffset(8)+8);
+	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)&InterceptState::btnCancelClick);
 
@@ -95,7 +95,6 @@ InterceptState::InterceptState(Game *game, Globe *globe, Base *base) : State(gam
 
 	_lstCrafts->setColor(Palette::blockOffset(15)-1);
 	_lstCrafts->setSecondaryColor(Palette::blockOffset(8)+10);
-	_lstCrafts->setArrowColor(Palette::blockOffset(15)+2);
 	_lstCrafts->setColumns(4, 86, 65, 85, 46);
 	_lstCrafts->setSelectable(true);
 	_lstCrafts->setBackground(_window);

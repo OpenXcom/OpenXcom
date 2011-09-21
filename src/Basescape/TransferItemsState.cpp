@@ -78,14 +78,14 @@ TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo)
 	add(_lstItems);
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(13)+13);
+	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(15)+9);
+	_btnOk->setColor(Palette::blockOffset(15)+6);
 	_btnOk->setText(_game->getLanguage()->getString("STR_TRANSFER"));
 	_btnOk->onMouseClick((ActionHandler)&TransferItemsState::btnOkClick);
 
-	_btnCancel->setColor(Palette::blockOffset(15)+9);
+	_btnCancel->setColor(Palette::blockOffset(15)+6);
 	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)&TransferItemsState::btnCancelClick);
 
@@ -107,7 +107,7 @@ TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo)
 	_txtAmountDestination->setText(_game->getLanguage()->getString("STR_AMOUNT_AT_DESTINATION"));
 
 	_lstItems->setColor(Palette::blockOffset(15)+1);
-	_lstItems->setArrowColor(Palette::blockOffset(13)+13);
+	_lstItems->setArrowColor(Palette::blockOffset(13)+10);
 	_lstItems->setArrowColumn(193, ARROW_VERTICAL);
 	_lstItems->setColumns(4, 162, 58, 55, 11);
 	_lstItems->setSelectable(true);
