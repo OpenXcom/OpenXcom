@@ -94,7 +94,7 @@ namespace OpenXcom
 			_lstInfo = new TextList(204, 55, 8, 82);
 			add(_lstInfo);
 			
-			_lstInfo->setColor(Palette::blockOffset(15)+1); // color for %-data!
+			_lstInfo->setColor(Palette::blockOffset(15)-2); // color for %-data!
 			_lstInfo->setColumns(3, 100, 52, 52);
 			_lstInfo->setBig();
 			

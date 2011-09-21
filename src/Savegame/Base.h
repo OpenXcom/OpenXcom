@@ -53,7 +53,7 @@ private:
 	std::vector<Transfer*> _transfers;
 	ItemContainer *_items;
 	int _scientists, _engineers;
-	std::vector<ResearchProject *> _baseResearchs;
+	std::vector<ResearchProject *> _research;
 public:
 	/// Creates a new base.
 	Base(const Ruleset *rule);

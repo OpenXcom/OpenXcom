@@ -231,25 +231,17 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 		_bases.push_back(b);
 	}
 
+	for(YAML::Iterator it=doc["discovered"].begin();it!=doc["discovered"].end();++it)
+	{
+		std::string research;
+		*it >> research;
+		_discovered.push_back(rule->getResearchProject(research));
+	}
+
 	if (const YAML::Node *pName = doc.FindValue("battleGame"))
 	{
 		_battleGame = new SavedBattleGame();
 		_battleGame->load(*pName, rule, this);
-	}
-
-	if (const YAML::Node *pName = doc.FindValue("found"))
-	{
-		const std::map<std::string, RuleResearchProject *> & researchs(rule->getResearchProjects ());
-		for(YAML::Iterator it=pName->begin();it!=pName->end();++it)
-		{
-			std::string research;
-			*it >> research;
-			std::map<std::string, RuleResearchProject *>::const_iterator itResearch = researchs.find(research);
-			if (itResearch != researchs.end ())
-			{
-				_discovereds.push_back(itResearch->second);
-			}
-		}
 	}
 
 	fin.close();
@@ -319,6 +311,13 @@ void SavedGame::save(const std::string &filename) const
 		(*i)->save(out);
 	}
 	out << YAML::EndSeq;
+	out << YAML::Key << "discovered" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::vector<const RuleResearchProject *>::const_iterator i = _discovered.begin(); i != _discovered.end(); ++i)
+	{
+		out << (*i)->getName ();
+	}
+	out << YAML::EndSeq;
 	out << YAML::Key << "ufoId" << YAML::Value << _ufoId;
 	out << YAML::Key << "waypointId" << YAML::Value << _waypointId;
 	out << YAML::Key << "soldierId" << YAML::Value << _soldierId;
@@ -327,16 +326,7 @@ void SavedGame::save(const std::string &filename) const
 		out << YAML::Key << "battleGame" << YAML::Value;
 		_battleGame->save(out);
 	}
-
-	out << YAML::Key << "found" << YAML::Value;
-	out << YAML::BeginSeq;
-	for (std::vector<const RuleResearchProject *>::const_iterator i = _discovereds.begin(); i != _discovereds.end(); ++i)
-	{
-		out << (*i)->getName ();
-	}
-	out << YAML::EndSeq;
 	out << YAML::EndMap;
-
 	sav << out.c_str();
 	sav.close();
 }
@@ -542,7 +532,7 @@ UfopaediaSaved *SavedGame::getUfopaedia()
 */
 void SavedGame::addFinishedResearch (const RuleResearchProject * r, Ruleset * ruleset)
 {
-	_discovereds.push_back(r);
+	_discovered.push_back(r);
 	if(ruleset)
 	{
 		std::vector<RuleResearchProject*> availableResearch;
@@ -566,7 +556,7 @@ void SavedGame::addFinishedResearch (const RuleResearchProject * r, Ruleset * ru
 */
 const std::vector<const RuleResearchProject *> & SavedGame::getDiscoveredResearchs()
 {
-	return _discovereds;
+	return _discovered;
 }
 
 /**
@@ -649,7 +639,7 @@ bool SavedGame::isResearchAvailable (RuleResearchProject * r, const std::vector<
 void SavedGame::getDependableResearch (std::vector<RuleResearchProject *> & dependables, const RuleResearchProject *research, Ruleset * ruleset, Base * base)
 {
 	getDependableResearchBasic(dependables, research, ruleset, base);
-	for(std::vector<const RuleResearchProject *>::const_iterator iter = _discovereds.begin (); iter != _discovereds.end (); ++iter)
+	for(std::vector<const RuleResearchProject *>::const_iterator iter = _discovered.begin (); iter != _discovered.end (); ++iter)
 	{
 		if((*iter)->getCost() == 0)
 		{

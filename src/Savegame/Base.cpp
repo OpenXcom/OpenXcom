@@ -65,7 +65,7 @@ Base::~Base()
 		delete *i;
 	}
 	delete _items;
-	for (std::vector<ResearchProject*>::iterator i = _baseResearchs.begin(); i != _baseResearchs.end(); ++i)
+	for (std::vector<ResearchProject*>::iterator i = _research.begin(); i != _research.end(); ++i)
 	{
 		delete *i;
 	}
@@ -176,16 +176,13 @@ void Base::load(const YAML::Node &node, SavedGame *save)
 		_transfers.push_back(t);
 	}
 
-	if (const YAML::Node *pName = node.FindValue("research"))
+	for (YAML::Iterator i = node["research"].begin(); i != node["research"].end(); ++i)
 	{
-		for (YAML::Iterator i = node["research"].begin(); i != node["research"].end(); ++i)
-		{
-			std::string research;
-			(*i)["project"] >> research;
-			ResearchProject *r = new ResearchProject(_rule->getResearchProject(research));
-			r->load(*i);
-			_baseResearchs.push_back(r);
-		}
+		std::string research;
+		(*i)["project"] >> research;
+		ResearchProject *r = new ResearchProject(_rule->getResearchProject(research));
+		r->load(*i);
+		_research.push_back(r);
 	}
 }
 
@@ -232,7 +229,7 @@ void Base::save(YAML::Emitter &out) const
 
 	out << YAML::Key << "research" << YAML::Value;
 	out << YAML::BeginSeq;
-	for (std::vector<ResearchProject*>::const_iterator i = _baseResearchs.begin(); i != _baseResearchs.end(); ++i)
+	for (std::vector<ResearchProject*>::const_iterator i = _research.begin(); i != _research.end(); ++i)
 	{
 		(*i)->save(out);
 	}
@@ -758,7 +755,7 @@ int Base::getMonthlyMaintenace() const
 */
 const std::vector<ResearchProject *> & Base::getResearch() const
 {
-	return _baseResearchs;
+	return _research;
 }
 
 /**
@@ -767,7 +764,7 @@ const std::vector<ResearchProject *> & Base::getResearch() const
 */
 void Base::addResearch(ResearchProject * project)
 {
-	_baseResearchs.push_back(project);
+	_research.push_back(project);
 }
 
 /**
@@ -776,12 +773,12 @@ void Base::addResearch(ResearchProject * project)
 */
 void Base::removeResearch(ResearchProject * project)
 {
-	std::vector<ResearchProject *>::iterator iter = std::find (_baseResearchs.begin (), _baseResearchs.end (), project);
-	if(iter == _baseResearchs.end ())
+	std::vector<ResearchProject *>::iterator iter = std::find (_research.begin (), _research.end (), project);
+	if(iter == _research.end ())
 	{
 		return ;
 	}
-	_baseResearchs.erase(iter);
+	_research.erase(iter);
 }
 
 /**

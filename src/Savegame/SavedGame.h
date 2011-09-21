@@ -66,10 +66,9 @@ private:
 	int _ufoId, _waypointId, _soldierId;
 	SavedBattleGame *_battleGame;
 	UfopaediaSaved *_ufopaedia;
-	std::vector<const RuleResearchProject *> _discovereds;
-	std::map<Base*, ResearchProject *> _researchs;
+	std::vector<const RuleResearchProject *> _discovered;
 
-	/// Check wether a ResearchProject can be researched
+	/// Check whether a ResearchProject can be researched
 	bool isResearchAvailable (RuleResearchProject * r, const std::vector<const RuleResearchProject *> & unlockeds);
 	void getDependableResearchBasic (std::vector<RuleResearchProject *> & dependables, const RuleResearchProject *research, Ruleset * ruleset, Base * base);
 public:
