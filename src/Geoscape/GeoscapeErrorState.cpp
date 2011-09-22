@@ -51,10 +51,10 @@ GeoscapeErrorState::GeoscapeErrorState(Game *game, std::string str) : State(game
 	add(_txtMessage);
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(8)+13);
+	_window->setColor(Palette::blockOffset(8)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(8)+13);
+	_btnOk->setColor(Palette::blockOffset(8)+10);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&GeoscapeErrorState::btnOkClick);
 
