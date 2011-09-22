@@ -10,6 +10,7 @@
 #include "../Ruleset/MapDataSet.h"
 #include "../Interface/Text.h"
 #include "MiniMapView.h"
+#include "Map.h"
 #include <sstream>
 
 namespace OpenXcom
@@ -41,6 +42,7 @@ MiniMapState::MiniMapState (Game * game, Map * map) : State (game), _map (map), 
 
 void MiniMapState::btnOkClick (Action * action)
 {
+	_map->setViewHeight(_miniMapView->getDisplayedLevel ());
 	_game->popState();
 }
 
