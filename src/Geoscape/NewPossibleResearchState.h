@@ -36,9 +36,8 @@ class RuleResearchProject;
  */
 class NewPossibleResearchState : public State
 {
-private:
-	Window *_window;
 protected:
+	Window *_window;
 	Text *_txtTitle;
 	TextList * _lstPossibilities;
 	Base * _base;

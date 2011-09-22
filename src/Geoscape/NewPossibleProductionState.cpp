@@ -20,6 +20,7 @@
 #include "../Interface/TextButton.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
+#include "../Interface/Window.h"
 #include "../Engine/Game.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Language.h"
@@ -37,6 +38,7 @@ namespace OpenXcom
  */
 NewPossibleProductionState::NewPossibleProductionState(Game * game, Base * base,RuleResearchProject * project) : NewPossibleResearchState(game, base)
 {
+	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
 	_btnAllocate->setText(_game->getLanguage()->getString("STR_ALLOCATE_MANUFACTURE"));
 	_txtTitle->setText(_game->getLanguage()->getString("STR_WE_CAN_NOW_PRODUCE"));
 	_lstPossibilities->addRow (1, _game->getLanguage()->getString(project->getName()).c_str());
