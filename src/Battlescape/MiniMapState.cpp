@@ -4,6 +4,7 @@
 #include "../Engine/InteractiveSurface.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Resource/ResourcePack.h"
+#include "../Engine/Palette.h"
 #include "../Engine/CrossPlatform.h"
 #include "../Savegame/SavedGame.h"
 #include "../Ruleset/MapDataSet.h"
@@ -32,6 +33,7 @@ MiniMapState::MiniMapState (Game * game, Map * map) : State (game), _map (map), 
 	btnLvlDwn->onMouseClick((ActionHandler)&MiniMapState::btnLevelDownClick);
 	btnOk->onMouseClick((ActionHandler)&MiniMapState::btnOkClick);
 	_txtLevel->setBig();
+	_txtLevel->setColor(Palette::blockOffset(4));
 	std::wstringstream s;
 	s << dynamic_cast<MiniMapView *>(_miniMapView)->getDisplayedLevel ();
 	_txtLevel->setText(s.str());	
