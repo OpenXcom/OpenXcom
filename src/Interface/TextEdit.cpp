@@ -138,6 +138,7 @@ void TextEdit::setWordWrap(bool wrap)
 void TextEdit::setInvert(bool invert)
 {
 	_text->setInvert(invert);
+	_caret->setInvert(invert);
 }
 
 /**
@@ -148,6 +149,7 @@ void TextEdit::setInvert(bool invert)
 void TextEdit::setHighContrast(bool contrast)
 {
 	_text->setHighContrast(contrast);
+	_caret->setHighContrast(contrast);
 }
 
 /**
