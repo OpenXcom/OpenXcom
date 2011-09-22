@@ -35,7 +35,7 @@ MiniMapState::MiniMapState (Game * game, Map * map) : State (game), _map (map), 
 	_txtLevel->setBig();
 	_txtLevel->setColor(Palette::blockOffset(4));
 	std::wstringstream s;
-	s << dynamic_cast<MiniMapView *>(_miniMapView)->getDisplayedLevel ();
+	s << _miniMapView->getDisplayedLevel ();
 	_txtLevel->setText(s.str());	
 }
 
@@ -46,17 +46,17 @@ void MiniMapState::btnOkClick (Action * action)
 
 void MiniMapState::btnLevelUpClick (Action * action)
 {
-	dynamic_cast<MiniMapView *>(_miniMapView)->up ();
+	_miniMapView->up ();
 	std::wstringstream s;
-	s << dynamic_cast<MiniMapView *>(_miniMapView)->getDisplayedLevel ();
+	s << _miniMapView->getDisplayedLevel ();
 	_txtLevel->setText(s.str());	
 }
 
 void MiniMapState::btnLevelDownClick (Action * action)
 {
-	dynamic_cast<MiniMapView *>(_miniMapView)->down ();
+	_miniMapView->down ();
 	std::wstringstream s;
-	s << dynamic_cast<MiniMapView *>(_miniMapView)->getDisplayedLevel ();
+	s << _miniMapView->getDisplayedLevel ();
 	_txtLevel->setText(s.str());
 }
 }
