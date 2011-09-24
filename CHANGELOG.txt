@@ -8,6 +8,7 @@ New features:
 -- Abort screen.
 -- Debriefing screen.
 -- Battlescape save game.
+-- Panicking units.
 
 
 Bugfixes:
@@ -30,6 +31,7 @@ Bugfixes:
 - Missing text in Monthly Report.
 - Ground items showing up in soldier's hands.
 - Improved interface performance.
+- Bug with seeing through undiscovered floors.
 
 Version 0.3 (01-09-2011)
 -------------------------

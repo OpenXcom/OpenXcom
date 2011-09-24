@@ -264,21 +264,22 @@ void Map::drawTerrain(Surface *surface)
 					screenPosition.y > -_spriteHeight && screenPosition.y < surface->getHeight() + _spriteHeight )
 				{
 					tile = _save->getTile(mapPosition);
-					tileShade = tile->getShade();
 
-					// Draw floor
 					if (tile->isDiscovered(2))
 					{
-						tmpSurface = tile->getSprite(MapData::O_FLOOR);
-						if (tmpSurface)
-							tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y - tile->getMapData(MapData::O_FLOOR)->getYOffset(), tileShade);
-						unit = tile->getUnit();
+						tileShade = tile->getShade();
 					}
 					else
 					{
 						tileShade = 15;
 						unit = 0;
 					}
+
+					// Draw floor
+					tmpSurface = tile->getSprite(MapData::O_FLOOR);
+					if (tmpSurface)
+						tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y - tile->getMapData(MapData::O_FLOOR)->getYOffset(), tileShade);
+					unit = tile->getUnit();
 
 					// Draw cursor back
 					if (_selectorX == itX && _selectorY == itY && _cursorType != CT_NONE)
@@ -318,12 +319,7 @@ void Map::drawTerrain(Surface *surface)
 							if (tile->getMapData(MapData::O_WESTWALL)->isDoor() || tile->getMapData(MapData::O_WESTWALL)->isUFODoor())
 								wallShade = 0;
 							else
-							{
-								if (tile->isDiscovered(2))
-									wallShade = tileShade;
-								else
-									wallShade = 15;
-							}
+								wallShade = tileShade;
 							tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y - tile->getMapData(MapData::O_WESTWALL)->getYOffset(), wallShade);
 						}
 						// Draw north wall
@@ -333,12 +329,7 @@ void Map::drawTerrain(Surface *surface)
 							if (tile->getMapData(MapData::O_NORTHWALL)->isDoor() || tile->getMapData(MapData::O_NORTHWALL)->isUFODoor())
 								wallShade = 0;
 							else
-							{
-								if (tile->isDiscovered(2))
-									wallShade = tileShade;
-								else
-									wallShade = 15;
-							}
+								wallShade = tileShade;
 							if (tile->getMapData(MapData::O_WESTWALL))
 							{
 								tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y - tile->getMapData(MapData::O_NORTHWALL)->getYOffset(), wallShade, true);
@@ -360,7 +351,7 @@ void Map::drawTerrain(Surface *surface)
 							if (sprite != -1)
 							{
 								tmpSurface = _res->getSurfaceSet("FLOOROB.PCK")->getFrame(sprite);
-								tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y - tile->getTerrainLevel(), tileShade);
+								tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y + tile->getTerrainLevel(), tileShade);
 							}
 						}
 					}
