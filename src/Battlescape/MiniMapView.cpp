@@ -15,18 +15,34 @@ const int CELL_WIDTH = 4;
 const int CELL_HEIGHT = 4;
 const int MAX_LEVEL = 3;
 
+/**
+ * Initializes all the elements in the MiniMapView.
+ * @param w the MiniMapView width
+ * @param h the MiniMapView height
+ * @param x the MiniMapView x origin
+ * @param y the MiniMapView y origin
+ * @param game Pointer to the core game.
+ * @param map The Battlescape map
+*/
 MiniMapView::MiniMapView(int w, int h, int x, int y, Game * game, Map * map) : InteractiveSurface(w, h, x, y), _game(game), _map(map), _startX(0),  _startY(0), _lvl(_map->getViewHeight())
 {
 	_startX = _map->getCenterX () - ((getWidth () / CELL_WIDTH) / 2);
 	_startY = _map->getCenterY() - ((getHeight () / CELL_HEIGHT) / 2);
 }
 
+/**
+ * Blits this surface onto another one
+ * @param surface Pointer to surface to blit onto.
+ */
 void MiniMapView::blit(Surface *surface)
 {
 	draw();
 	InteractiveSurface::blit (surface);
 }
 
+/**
+ * Draw the minimap
+ */
 void MiniMapView::draw()
 {
 	SavedBattleGame * battle = _game->getSavedGame()->getBattleGame();
@@ -88,6 +104,9 @@ void MiniMapView::draw()
 	}
 }
 
+/**
+ * Increment the displayed level
+ */
 void MiniMapView::up ()
 {
 	_lvl++;
@@ -101,6 +120,9 @@ void MiniMapView::up ()
 	}
 }
 
+/**
+ * Decrement the displayed level
+ */
 void MiniMapView::down ()
 {
 	_lvl--;
@@ -114,6 +136,11 @@ void MiniMapView::down ()
 	}
 }
 
+/**
+ * Handle click on the minimap. Will change the minimap center to the clicked point
+ * @param action Pointer to an action.
+ * @param state State that the action handlers belong to.
+*/
 void MiniMapView::mouseClick (Action *action, State *state)
 {
 	InteractiveSurface::mouseClick(action, state);
@@ -124,11 +151,19 @@ void MiniMapView::mouseClick (Action *action, State *state)
 	draw();
 }
 
+/**
+ * Get the displayed level
+ * @return the displayed level
+*/
 int MiniMapView::getDisplayedLevel ()
 {
 	return _lvl;
 }
 
+/**
+ * Change the displayed level
+ * @param level the new displayed level
+*/
 void MiniMapView::setDisplayedLevel (int level)
 {
 	_lvl = level;
