@@ -1081,16 +1081,28 @@ bool Map::didCameraFollow()
 	return value;
 }
 
+/**
+ * Get the displayed level
+ * @return the displayed layer
+*/
 int Map::getViewHeight() const
 {
 	return _viewHeight;
 }
 
+/**
+ * Get the X displayed map center
+ * @return the X displayed map center
+*/
 int Map::getCenterX() const
 {
 	return _centerX;
 }
 
+/**
+ * Get the Y displayed map center
+ * @return the Y displayed map center
+*/
 int Map::getCenterY() const
 {
 	return _centerY;
