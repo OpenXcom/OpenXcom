@@ -22,7 +22,6 @@ public:
 	void btnOkClick (Action * action);
 	void btnLevelUpClick (Action * action);
 	void btnLevelDownClick (Action * action);
-	void mapClick ();
 };
 }
 
