@@ -88,7 +88,7 @@ void MiniMapView::draw()
 				{
 					continue;
 				}
-				int i = 3;
+				int i = MAX_LEVEL;
 				while (!data && i >= 0)
 				{
 					data = t->getMapData(i--);
