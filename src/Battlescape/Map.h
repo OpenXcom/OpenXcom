@@ -130,8 +130,11 @@ public:
 	std::set<Explosion*> *getExplosions();
 	/// Check if the camera was following a bullet.
 	bool didCameraFollow();
+	/// Get the map displayed level
 	int getViewHeight() const;
+	/// Get the center X of displayed map
 	int getCenterX() const;
+	/// Get the center Y of displayed map
 	int getCenterY() const;
 };
 
