@@ -158,7 +158,7 @@ void UnitWalkBState::think()
 			Position destination;
 			int tu = _pf->getTUCost(_unit->getPosition(), dir, &destination, _unit);
 
-			if (tu > _unit->getTimeUnits())
+			if (tu > _unit->getTimeUnits() && !_parent->dontSpendTUs())
 			{
 				_result = "STR_NOT_ENOUGH_TIME_UNITS";
 				_pf->abortPath();
@@ -197,9 +197,9 @@ void UnitWalkBState::think()
 
 			// now start moving
 			dir = _pf->dequeuePath();
-			if (_unit->spendTimeUnits(tu, _parent->getGame()->getSavedGame()->getBattleGame()->getDebugMode()))
+			if (_unit->spendTimeUnits(tu, _parent->dontSpendTUs()))
 			{
-				if (_unit->spendEnergy(tu, _parent->getGame()->getSavedGame()->getBattleGame()->getDebugMode()))
+				if (_unit->spendEnergy(tu, _parent->dontSpendTUs()))
 				{
 					_unit->startWalking(dir, destination);
 				}

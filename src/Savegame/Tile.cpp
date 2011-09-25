@@ -147,7 +147,7 @@ void Tile::getMapData(int *mapDataID, int *mapDataSetID, int part) const
  */
 bool Tile::isVoid() const
 {
-	return _objects[0] == 0 && _objects[1] == 0 && _objects[2] == 0 && _objects[3] == 0;
+	return _objects[0] == 0 && _objects[1] == 0 && _objects[2] == 0 && _objects[3] == 0 && _smoke == 0;
 }
 
 /**
@@ -300,10 +300,10 @@ void Tile::setDiscovered(bool flag, int part)
 	if (_discovered[part] != flag)
 	{
 		_discovered[part] = flag;
-		if (part == 2)
+		if (part == 2 && flag == true)
 		{
-			_discovered[0] = flag;
-			_discovered[1] = flag;
+			_discovered[0] = true;
+			_discovered[1] = true;
 		}
 		// if light on tile changes, units and objects on it change light too
 		if (_unit != 0)

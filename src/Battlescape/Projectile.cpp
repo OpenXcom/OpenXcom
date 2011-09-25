@@ -228,7 +228,7 @@ bool Projectile::calculateThrow(double accuracy)
 void Projectile::applyAccuracy(const Position& origin, Position *target, double accuracy)
 {
 	// maxDeviation is the max angle deviation for accuracy 0% in degrees
-	static const double maxDeviation = 7.0;
+	static const double maxDeviation = 6.0;
 	// minDeviation is the min angle deviation for accuracy 100% in degrees
 	static const double minDeviation = 0.01;
 	// maxRange is the maximum range a projectile shall ever travel in voxel space

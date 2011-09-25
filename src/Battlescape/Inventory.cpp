@@ -547,6 +547,7 @@ void Inventory::arrangeGround()
 			(*i)->setSlotY(0);
 			x += (*i)->getRules()->getInventoryWidth();
 		}
+
 	}
 	int slots = (320 - ground->getX()) / RuleInventory::SLOT_W;
 	if (x > _groundOffset + slots)

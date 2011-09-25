@@ -67,8 +67,11 @@ void ProjectileFlyBState::init()
 	BattleItem *weapon = _action.weapon;
 	_projectileItem = 0;
 	_autoshotCounter = 0;
+	
+	if (!weapon) // can't shoot without weapon
+		return;
 
-	if (_action.actor->getTimeUnits() < _action.TU)
+	if (_action.actor->getTimeUnits() < _action.TU && !_parent->dontSpendTUs())
 	{
 		_result = "STR_NOT_ENOUGH_TIME_UNITS";
 		_parent->popState();
@@ -129,7 +132,7 @@ void ProjectileFlyBState::init()
 
 	BattleAction action;
 	BattleUnit *potentialVictim = _parent->getGame()->getSavedGame()->getBattleGame()->getTile(_action.target)->getUnit();
-	if (potentialVictim)
+	if (potentialVictim && potentialVictim->getFaction() != _unit->getFaction())
 	{
 		if (_parent->getGame()->getSavedGame()->getBattleGame()->getTerrainModifier()->checkReactionFire(_unit, &action, potentialVictim, false))
 		{
