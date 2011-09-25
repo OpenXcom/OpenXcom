@@ -8,6 +8,7 @@ New features:
 -- Abort screen.
 -- Debriefing screen.
 -- Battlescape save game.
+-- Panicking units.
 
 
 Bugfixes:
@@ -30,6 +31,14 @@ Bugfixes:
 - Missing text in Monthly Report.
 - Ground items showing up in soldier's hands.
 - Improved interface performance.
+- Bug with seeing through undiscovered floors.
+- Updated the Rank Bonus values used to calculate soldier "value".
+- Apply changes to the base / soldier name when user presses OK.
+- Incorrect globe zoom levels.
+- Incorrect UI strings.
+- Updated Romanian translation.
+- Incorrect colors in Battlescape UI.
+- Crash when starting mission on back side of globe.
 
 Version 0.3 (01-09-2011)
 -------------------------

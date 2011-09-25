@@ -957,54 +957,68 @@ void Globe::drawOcean()
 }
 
 /**
- * Renders the land, taking all the visible world polygons
- * and shading them according to the time of day.
+ * Calculates the shade of a polygon based
+ * on its coordinates and current game time.
+ * @param p Pointer to polygon.
+ * @return Shade value (0-7).
  */
-void Globe::drawLand()
+int Globe::getShade(Polygon *p) const
 {
 	int _shades[] = {3, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3,
 					 4, 5, 6, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 6, 5, 4};
 	double minLon = 100.0, maxLon = -100.0, curTime = _game->getSavedGame()->getTime()->getDaylight();
+	bool pole = false;
+
+	// Convert coordinates
+	for (int j = 0; j < p->getPoints(); ++j)
+	{
+		double tmpLon = p->getLongitude(j);
+		double tmpLat = p->getLatitude(j);
+
+		if (abs(tmpLat) < (M_PI_2 - 0.0001)) //pole vertexes have no longitude
+		{
+			if (tmpLon < minLon && tmpLon >= (maxLon - M_PI))
+				minLon = tmpLon;
+			if (tmpLon > maxLon && tmpLon <= (minLon + M_PI))
+				maxLon = tmpLon;
+		}
+		else
+		{
+			pole = true;
+		}
+	}
+
+	int shade = (int)((curTime + (((minLon + maxLon) / 2) / (2 * M_PI))) * NUM_LANDSHADES);
+	shade = _shades[shade % NUM_LANDSHADES];
+	if (pole)
+	{
+		shade = (int)(shade * 0.6 + 4 * (1 - 0.6)); // twilight zone
+	}
+	return shade;
+}
+
+
+/**
+ * Renders the land, taking all the visible world polygons
+ * and texturing and shading them accordingly.
+ */
+void Globe::drawLand()
+{
 	Sint16 x[4], y[4];
-	bool pole;
 
 	for (std::list<Polygon*>::iterator i = _cacheLand.begin(); i != _cacheLand.end(); ++i)
 	{
-		minLon = 100.0;
-		maxLon = -100.0;
-		pole = false;
 		// Convert coordinates
 		for (int j = 0; j < (*i)->getPoints(); ++j)
 		{
-			double tmpLon = (*i)->getLongitude(j);
-			double tmpLat = (*i)->getLatitude(j);
-
-			if (abs(tmpLat) < (M_PI_2 - 0.0001)) //pole vertexes have no longitude
-			{
-				if (tmpLon < minLon && tmpLon >= (maxLon - M_PI))
-					minLon = tmpLon;
-				if (tmpLon > maxLon && tmpLon <= (minLon + M_PI))
-					maxLon = tmpLon;
-			}
-			else
-			{
-				pole = true;
-			}
-
 			x[j] = (*i)->getX(j);
 			y[j] = (*i)->getY(j);
 		}
 
 		// Apply textures according to zoom and shade
 		int zoom = (2 - (int)floor(_zoom / 2.0)) * NUM_TEXTURES;
-		int shade = (int)((curTime + (((minLon + maxLon) / 2) / (2 * M_PI))) * NUM_LANDSHADES);
-		shade = _shades[shade % NUM_LANDSHADES];
-		if (pole)
-		{
-			shade = (int)(shade * 0.6 + 4 * (1 - 0.6)); // twilight zone
-		}
+		int shade = getShade(*i);
 		drawTexturedPolygon(x, y, (*i)->getPoints(), _texture[shade]->getFrame((*i)->getTexture() + zoom), 0, 0);
-		(*i)->setShade(shade);
 	}
 }
 
@@ -1284,12 +1298,12 @@ void Globe::keyboardPress(Action *action, State *state)
 void Globe::getPolygonTextureAndShade(double lon, double lat, int *texture, int *shade)
 {
 	*texture = -1;
-	for (std::list<Polygon*>::iterator i = _cacheLand.begin(); i != _cacheLand.end(); ++i)
+	for (std::list<Polygon*>::iterator i = _game->getResourcePack()->getPolygons()->begin(); i != _game->getResourcePack()->getPolygons()->end(); ++i)
 	{
-		if(insidePolygon(lon, lat, *i))
+		if (insidePolygon(lon, lat, *i))
 		{
-			*texture = ((Polygon*)(*i))->getTexture();
-			*shade = ((Polygon*)(*i))->getShade();
+			*texture = (*i)->getTexture();
+			*shade = getShade(*i);
 			return;
 		}
 	}
