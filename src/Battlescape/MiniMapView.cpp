@@ -17,7 +17,8 @@ const int MAX_LEVEL = 3;
 
 MiniMapView::MiniMapView(int w, int h, int x, int y, Game * game, Map * map) : InteractiveSurface(w, h, x, y), _game(game), _map(map), _startX(0),  _startY(0), _lvl(_map->getViewHeight())
 {
-	setCenter(_map->getCenterX (), _map->getCenterY());
+	_startX = _map->getCenterX () - ((getWidth () / CELL_WIDTH) / 2);
+	_startY = _map->getCenterY() - ((getHeight () / CELL_HEIGHT) / 2);
 }
 
 void MiniMapView::blit(Surface *surface)
@@ -131,11 +132,5 @@ int MiniMapView::getDisplayedLevel ()
 void MiniMapView::setDisplayedLevel (int level)
 {
 	_lvl = level;
-}
-
-void MiniMapView::setCenter(int x, int y)
-{
-	_startX = x - ((getWidth () / CELL_WIDTH) / 2);
-	_startY = y - ((getHeight () / CELL_HEIGHT) / 2);
 }
 }
