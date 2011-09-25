@@ -768,7 +768,7 @@ bool SavedGame::handlePromotions()
  * @param Rank to inspect.
  * @return The highest scoring soldier of that rank.
  */
-Soldier *SavedGame::inspectSoldiers(int *total, SoldierRank rank)
+Soldier *SavedGame::inspectSoldiers(int *total, int rank)
 {
 	int highestScore = 0;
 	Soldier *highestRanked = 0;
@@ -778,7 +778,7 @@ Soldier *SavedGame::inspectSoldiers(int *total, SoldierRank rank)
 	{
 		for (std::vector<Soldier*>::iterator j = (*i)->getSoldiers()->begin(); j != (*i)->getSoldiers()->end(); ++j)
 		{
-			if ((*j)->getRank() == rank)
+			if ((*j)->getRank() == (SoldierRank)rank)
 			{
 				(*total)++;
 				int v1 = (*j)->getHealth() + (*j)->getStamina() + 2 * ( (*j)->getReactions() + 10 * (10 - (*j)->getBravery()) );

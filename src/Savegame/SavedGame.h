@@ -40,7 +40,6 @@ class UfopaediaSaved;
 class RuleResearchProject;
 class ResearchProject;
 class Soldier;
-enum SoldierRank;
 
 /**
  * Enumator containing all the possible game difficulties.
@@ -134,7 +133,7 @@ public:
 	/// Handles the higher promotions.
 	bool handlePromotions();
 	/// Checks how many soldiers of a rank exist and which one has the highest score.
-	Soldier *inspectSoldiers(int *total, SoldierRank rank);
+	Soldier *inspectSoldiers(int *total, int rank);
 };
 
 }
