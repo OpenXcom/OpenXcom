@@ -15,6 +15,11 @@
 
 namespace OpenXcom
 {
+/**
+ * Initializes all the elements in the MiniMapState screen.
+ * @param game Pointer to the core game.
+ * @param map The Battlescape map
+*/
 MiniMapState::MiniMapState (Game * game, Map * map) : State (game), _map (map), _displayedLevel(0)
 {
 	_surface = new InteractiveSurface(320, 200);
@@ -40,12 +45,20 @@ MiniMapState::MiniMapState (Game * game, Map * map) : State (game), _map (map), 
 	_txtLevel->setText(s.str());	
 }
 
+/**
+ * return to the previous screen
+ * @param action Pointer to an action.
+ */
 void MiniMapState::btnOkClick (Action * action)
 {
 	_map->setViewHeight(_miniMapView->getDisplayedLevel ());
 	_game->popState();
 }
 
+/**
+ * Change the currently displayed minimap level
+ * @param action Pointer to an action.
+ */
 void MiniMapState::btnLevelUpClick (Action * action)
 {
 	_miniMapView->up ();
@@ -54,6 +67,10 @@ void MiniMapState::btnLevelUpClick (Action * action)
 	_txtLevel->setText(s.str());	
 }
 
+/**
+ * Change the currently displayed minimap level
+ * @param action Pointer to an action.
+ */
 void MiniMapState::btnLevelDownClick (Action * action)
 {
 	_miniMapView->down ();
