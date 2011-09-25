@@ -108,6 +108,7 @@ void NewPossibleResearchState::buildUi ()
  */
 void NewPossibleResearchState::init()
 {
+	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(1)), Palette::backPos, 16);
 }
 
