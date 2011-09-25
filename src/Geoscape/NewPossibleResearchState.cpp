@@ -71,7 +71,7 @@ void NewPossibleResearchState::buildUi ()
 	_window = new Window(this, 288, 180, 16, 10);
 	_btnOk = new TextButton(160, 14, 80, 149);
 	_btnAllocate = new TextButton(160, 14, 80, 165);
-	_txtTitle = new Text(288, 40, 16, 20);
+	_txtTitle = new Text(248, 50, 36, 20);
 	_lstPossibilities = new TextList(288, 80, 16, 56);
 
 	// Set palette
@@ -96,6 +96,7 @@ void NewPossibleResearchState::buildUi ()
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
+	_txtTitle->setWordWrap(true);
 
 	_lstPossibilities->setColor(Palette::blockOffset(8)+10);
 	_lstPossibilities->setColumns(1, 288);
