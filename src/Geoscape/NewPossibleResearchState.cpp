@@ -92,6 +92,7 @@ void NewPossibleResearchState::buildUi ()
 	_btnOk->onMouseClick((ActionHandler)&NewPossibleResearchState::btnOkClick);
 	_btnAllocate->setColor(Palette::blockOffset(8)+5);
 	_btnAllocate->onMouseClick((ActionHandler)&NewPossibleResearchState::btnAllocateClick);
+	_btnAllocate->setText(_game->getLanguage()->getString("STR_ALLOCATE_RESEARCH"));
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
