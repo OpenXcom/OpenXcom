@@ -53,4 +53,13 @@ void NewPossibleProductionState::btnAllocateClick(Action *action)
 	_game->popState ();
 	_game->pushState (new ManufactureState(_game, _base));
 }
+
+/**
+ * Resets the palette.
+ */
+void NewPossibleProductionState::init ()
+{
+	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
+	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
+}
 }

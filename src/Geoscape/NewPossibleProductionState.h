@@ -34,6 +34,8 @@ public:
 	NewPossibleProductionState(Game * game, Base * base, RuleResearchProject * projct);
 	/// Handler for clicking the Allocate Production button.
 	void btnAllocateClick(Action *action);
+	/// Updates the palette.
+	void init ();
 };
 }
 #endif
