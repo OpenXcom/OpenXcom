@@ -845,26 +845,26 @@ void SavedBattleGame::prepareDebriefing(bool aborted)
 		}
 		else if (status == STATUS_UNCONSCIOUS)
 		{
-			if (faction == FACTION_HOSTILE && !aborted)
+			if (faction == FACTION_HOSTILE && (!aborted || (*j)->isInExitArea()))
 			{
 				addStat("STR_LIVE_ALIENS_RECOVERED", 1, value);
 			}
 		}
 		else if (faction == FACTION_PLAYER)
 		{
-			if ((*j)->isInExitArea())
+			if ((*j)->isInExitArea() || !aborted)
 				playerInExitArea++;
 			else
 				addStat("STR_XCOM_OPERATIVES_MISSING_IN_ACTION", 1, -value);
 		}
 	}
-	if (playerInExitArea == 0)
+	if (playerInExitArea == 0 && aborted)
 	{
 		addStat("STR_XCOM_CRAFT_LOST", 1, -200);
 	}
 
 	// run through all tiles to recover UFO components and items
-	if (!_aborted)
+	if (!aborted)
 	{
 		for (int i = 0; i < _height * _length * _width; ++i)
 		{

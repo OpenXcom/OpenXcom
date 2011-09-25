@@ -86,7 +86,7 @@ private:
 	BattleAction _action;
 	BattleActionType _tuReserved;
 	std::vector<State*> _popups;
-	bool _debugPlay;
+	bool _debugPlay, _playerPanicHandled;
 
 	void selectNextPlayerUnit(bool checkReselect);
 	void endTurn();
@@ -94,6 +94,8 @@ private:
 	void blinkVisibleUnitButtons();
 	void handleNonTargetAction();
 	void setupCursor();
+	bool handlePanickingPlayer();
+	bool handlePanickingUnit(BattleUnit *unit);
 public:
 	static const int DEFAULT_ANIM_SPEED = 100;
 	/// Creates the Battlescape state.
@@ -179,7 +181,9 @@ public:
 	/// Displays a popup window.
 	void popup(State *state);
 	/// Checks for casualties in battle.
-	void checkForCasualties(BattleItem *murderweapon, BattleUnit *murderer);
+	bool checkForCasualties(BattleItem *murderweapon, BattleUnit *murderer);
+	/// Checks if a unit panics.
+	void checkForPanic(BattleUnit *unit);
 	/// Check reserved tu.
 	bool checkReservedTU(BattleUnit *bu, int tu);
 	/// Handles unit AI.
@@ -188,6 +192,8 @@ public:
 	void finishBattle(bool abort);
 	/// Add item & affect with gravity.
 	void dropItem(const Position &position, BattleItem *item, bool newItem = false);
+	/// Check whether TUs should be spent.
+	bool dontSpendTUs();
 };
 
 }

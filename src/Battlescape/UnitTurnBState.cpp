@@ -86,7 +86,7 @@ void UnitTurnBState::think()
 		return;				
 	}
 
-	if (_unit->spendTimeUnits(tu, _parent->getGame()->getSavedGame()->getBattleGame()->getDebugMode()))
+	if (_unit->spendTimeUnits(tu, _parent->dontSpendTUs()))
 	{
 		_unit->turn();
 		_parent->getGame()->getSavedGame()->getBattleGame()->getTerrainModifier()->calculateFOV(_unit);

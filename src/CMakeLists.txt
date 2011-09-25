@@ -130,6 +130,8 @@ set ( battlescape_src
   Battlescape/AbortMissionState.h
   Battlescape/DebriefingState.cpp
   Battlescape/DebriefingState.h
+  Battlescape/InfoboxState.cpp
+  Battlescape/InfoboxState.h
 )
 
 set ( engine_src 

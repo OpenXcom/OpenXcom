@@ -888,12 +888,15 @@ void BattleUnit::prepareNewTurn()
 	setTimeUnits(TURecovery);
 
 	// recover energy
-	int ENRecovery = _unit->getTimeUnits() / 3;
-	// Each fatal wound to the body reduces the soldier's energy recovery by 10%.
-	ENRecovery -= (_energy * (_fatalWounds[BODYPART_TORSO] * 10))/100;
-	_energy += ENRecovery;
-	if (_energy > _unit->getStamina())
-		_energy = _unit->getStamina();
+	if (!isOut())
+	{
+		int ENRecovery = _unit->getTimeUnits() / 3;
+		// Each fatal wound to the body reduces the soldier's energy recovery by 10%.
+		ENRecovery -= (_energy * (_fatalWounds[BODYPART_TORSO] * 10))/100;
+		_energy += ENRecovery;
+		if (_energy > _unit->getStamina())
+			_energy = _unit->getStamina();
+	}
 
 	// suffer from fatal wounds
 	_health -= getFatalWounds();
@@ -911,6 +914,23 @@ void BattleUnit::prepareNewTurn()
 	// recover stun 1pt/turn
 	if (_stunlevel > 0)
 		stun(-1);
+
+	if (!isOut())
+	{
+		int chance = 100 - (2 * getMorale());
+		if (RNG::generate(1,100) <= chance)
+		{
+			int type = RNG::generate(0,100);
+			_status = (type<=33?STATUS_BERSERK:STATUS_PANICKING); // 33% chance of berserk, panic can mean freeze or flee, but that is determined later
+		}
+		else
+		{
+			// succesfully avoided panic
+			// increase bravery experience counter
+			if (chance > 1)
+				_expBravery++;
+		}
+	}
 
 	_dontReselect = false;
 }
