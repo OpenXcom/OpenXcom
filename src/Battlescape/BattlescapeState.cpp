@@ -809,7 +809,6 @@ void BattlescapeState::endTurn()
  */
 bool BattlescapeState::checkForCasualties(BattleItem *murderweapon, BattleUnit *murderer)
 {
-	// TODO : include rank bonuses and penalties !!
 	for (std::vector<BattleUnit*>::iterator j = _battleGame->getUnits()->begin(); j != _battleGame->getUnits()->end(); ++j)
 	{
 		if ((*j)->getHealth() == 0 && (*j)->getStatus() != STATUS_DEAD && (*j)->getStatus() != STATUS_FALLING)
@@ -823,6 +822,11 @@ bool BattlescapeState::checkForCasualties(BattleItem *murderweapon, BattleUnit *
 					(victim->getFaction() == FACTION_HOSTILE && murderer->getFaction() == FACTION_PLAYER))
 				{
 					murderer->moraleChange(+20);
+					Soldier *s = dynamic_cast<Soldier*>(murderer->getUnit());
+					if (s != 0)
+					{
+						s->addKillCount();
+					}
 				}
 				// murderer will get a penalty with friendly fire
 				if (victim->getFaction() == murderer->getFaction())

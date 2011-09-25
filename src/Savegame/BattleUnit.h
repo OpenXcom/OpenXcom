@@ -73,6 +73,7 @@ private:
 	Surface *_cache;
 	bool _cacheInvalid;
 	int _expBravery, _expReactions, _expFiring, _expThrowing, _expPsiSkill, _expMelee;
+	int improveStat(int exp);
 public:
 	/// Creates a BattleUnit.
 	BattleUnit(Unit *_unit, UnitFaction faction);
@@ -218,6 +219,18 @@ public:
 	bool isInExitArea() const;
 	/// Gets the unit height taking into account kneeling/standing.
 	int getHeight() const;
+	/// Adds one to the reaction exp counter.
+	void addReactionExp();
+	/// Adds one to the firing exp counter.
+	void addFiringExp();
+	/// Adds one to the throwing exp counter.
+	void addThrowingExp();
+	/// Adds one to the psi exp counter.
+	void addPsiExp();
+	/// Adds one to the melee exp counter.
+	void addMeleeExp();
+	/// Check if unit eligible for squaddie promotion.
+	bool postMissionProcedures();
 };
 
 }

@@ -170,6 +170,7 @@ void ProjectileFlyBState::createNewProjectile()
 			_unit->setCache(0);
 			_parent->getMap()->cacheUnit(_unit);
 			_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(39)->play();
+			_unit->addThrowingExp();
 		}
 		else
 		{

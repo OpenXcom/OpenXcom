@@ -51,6 +51,7 @@ private:
 	SoldierGender _gender;
 	SoldierLook _look;
 	int _missions, _kills;
+	bool _recentlyPromoted;
 public:
 	/// Creates a new soldier.
 	Soldier(RuleSoldier *rules, RuleArmor *armor);
@@ -76,6 +77,10 @@ public:
 	std::string getRankString() const;
 	/// Gets a sprite version of the soldier's rank.
 	int getRankSprite() const;
+	/// Gets the soldier's rank.
+	SoldierRank getRank() const;
+	/// Increase the soldier's military rank.
+	void promoteRank();
 	/// Gets the soldier's time units.
 	int getTimeUnits() const;
 	/// Gets the soldier's stamina.
@@ -90,6 +95,8 @@ public:
 	int getFiringAccuracy() const;
 	/// Gets the soldier's throwing accuracy.
 	int getThrowingAccuracy() const;
+	/// Gets the soldier's melee accuracy.
+	int getMeleeAccuracy() const;
 	/// Gets the soldier's strength.
 	int getStrength() const;
 	/// Gets the soldier's missions.
@@ -114,6 +121,13 @@ public:
 	int getValue() const;
 	/// Gets the soldier's unique ID.
 	int getId() const;
+	/// Add a mission to the counter.
+	void addMissionCount();
+	/// Add a kill to the counter.
+	void addKillCount();
+	/// Get pointer to current stats.
+	UnitStats *getCurrentStats();
+
 };
 
 }

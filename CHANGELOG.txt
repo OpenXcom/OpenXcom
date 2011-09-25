@@ -9,6 +9,7 @@ New features:
 -- Debriefing screen.
 -- Battlescape save game.
 -- Panicking units.
+-- Skill increase and promotions.
 
 
 Bugfixes:

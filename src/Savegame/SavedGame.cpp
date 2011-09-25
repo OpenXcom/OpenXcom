@@ -710,4 +710,91 @@ Soldier *const SavedGame::getSoldier(int id)
 	return 0;
 }
 
+/**
+ * Handles the higher promotions (not the rookie-squaddie ones).
+ * @return Whether or not some promotions happened - to show the promotions screen.
+ */
+bool SavedGame::handlePromotions()
+{
+	int soldiersPromoted = 0;
+	int soldiersTotal = 0;
+
+	for (std::vector<Base*>::iterator i = _bases.begin(); i != _bases.end(); ++i)
+	{
+		soldiersTotal += (*i)->getSoldiers()->size();
+	}
+	Soldier *highestRanked;
+	
+	// now determine the number of positions we have of each rank,
+	// and the soldier with the heighest promotion score of the rank below it
+
+	int filledPositions = 0, filledPositions2 = 0;
+	highestRanked = inspectSoldiers(&filledPositions, RANK_COMMANDER);
+	highestRanked = inspectSoldiers(&filledPositions2, RANK_COLONEL);
+	if (filledPositions < 1 && filledPositions2 > 0)
+	{
+		// only promote one colonel to commander
+		highestRanked->promoteRank();
+		soldiersPromoted++;
+	}
+	highestRanked = inspectSoldiers(&filledPositions, RANK_COLONEL);
+	highestRanked = inspectSoldiers(&filledPositions2, RANK_CAPTAIN);
+	if (filledPositions < (soldiersTotal / 23) && filledPositions2 > 0)
+	{
+		highestRanked->promoteRank();
+		soldiersPromoted++;
+	}
+	highestRanked = inspectSoldiers(&filledPositions, RANK_CAPTAIN);
+	highestRanked = inspectSoldiers(&filledPositions2, RANK_SERGEANT);
+	if (filledPositions < (soldiersTotal / 11) && filledPositions2 > 0)
+	{
+		highestRanked->promoteRank();
+		soldiersPromoted++;
+	}
+	highestRanked = inspectSoldiers(&filledPositions, RANK_SERGEANT);
+	highestRanked = inspectSoldiers(&filledPositions2, RANK_SQUADDIE);
+	if (filledPositions < (soldiersTotal / 5) && filledPositions2 > 0)
+	{
+		highestRanked->promoteRank();
+		soldiersPromoted++;
+	}
+
+	return soldiersPromoted > 0;
+}
+
+/**
+ * Checks how many soldiers of a rank exist and which one has the highest score.
+ * @param Pointer to an int to store the total in.
+ * @param Rank to inspect.
+ * @return The highest scoring soldier of that rank.
+ */
+Soldier *SavedGame::inspectSoldiers(int *total, SoldierRank rank)
+{
+	int highestScore = 0;
+	Soldier *highestRanked = 0;
+
+	for (std::vector<Base*>::iterator i = _bases.begin(); i != _bases.end(); ++i)
+	{
+		for (std::vector<Soldier*>::iterator j = (*i)->getSoldiers()->begin(); j != (*i)->getSoldiers()->end(); ++j)
+		{
+			if ((*j)->getRank() == rank)
+			{
+				(*total)++;
+				int v1 = (*j)->getHealth() + (*j)->getStamina() + 2 * ( (*j)->getReactions() + 10 * (10 - (*j)->getBravery()) );
+				int v2 =  2 * v1 + 3*( (*j)->getTimeUnits() + 2*( (*j)->getFiringAccuracy() ) );
+				int v3 = v2 + (*j)->getMeleeAccuracy() + (*j)->getThrowingAccuracy() + (*j)->getStrength();
+				//if (PsiSkill>0) c3 += PsiStrength + 2* PsiSkill
+				int score = v3 + 10 * ( (*j)->getMissions() + (*j)->getKills() );
+				if (score > highestScore)
+				{
+					highestScore = score;
+					highestRanked = (*j);
+				}
+			}
+		}
+	}
+
+	return highestRanked;
+}
+
 }
