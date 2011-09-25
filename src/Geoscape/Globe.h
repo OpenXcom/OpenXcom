@@ -76,6 +76,8 @@ private:
 	void cache(std::list<Polygon*> *polygons, std::list<Polygon*> *cache);
 	/// Fills the ocean longitude segments.
 	void fillLongitudeSegments(double startLon, double endLon, int colourShift);
+	/// Gets the shade of a land polygon.
+	int getShade(Polygon *p) const;
 public:
 	/// Creates a new globe at the specified position and size.
 	Globe(Game *game, int cenX, int cenY, int width, int height, int x = 0, int y = 0);

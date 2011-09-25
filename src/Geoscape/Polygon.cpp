@@ -25,7 +25,7 @@ namespace OpenXcom
  * Initializes the polygon with arrays to store each point's coordinates.
  * @param points Number of points.
  */
-Polygon::Polygon(int points) : _points(points), _texture(0), _shade(0)
+Polygon::Polygon(int points) : _points(points), _texture(0)
 {
 	_lat = new double[_points];
 	_lon = new double[_points];
@@ -59,7 +59,6 @@ Polygon::Polygon(const Polygon& other)
 		_y[i] = other._y[i];
 	}
 	_texture = other._texture;
-	_shade = other._shade;
 }
 
 /**
@@ -179,24 +178,6 @@ void Polygon::setTexture(int tex)
 int Polygon::getPoints() const
 {
 	return _points;
-}
-
-/**
- * Returns the shade on this polygon.
- * @return Shade.
- */
-int Polygon::getShade() const
-{
-	return _shade;
-}
-
-/**
- * Sets the shade on this polygon.
- * @param shade Shade.
- */
-void Polygon::setShade(int shade)
-{
-	_shade = shade;
 }
 
 }

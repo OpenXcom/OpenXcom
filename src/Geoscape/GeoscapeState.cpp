@@ -472,7 +472,7 @@ void GeoscapeState::time5Seconds()
 						{
 							// look up polygons texture
 							int texture, shade;
-							_globe->getPolygonTextureAndShade(u->getLongitude(),u->getLatitude(), &texture, &shade);
+							_globe->getPolygonTextureAndShade(u->getLongitude(), u->getLatitude(), &texture, &shade);
 							_music = false;
 							timerReset();
 							popup(new ConfirmLandingState(_game, *j, texture, shade));
