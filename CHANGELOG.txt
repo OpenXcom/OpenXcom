@@ -40,6 +40,7 @@ Bugfixes:
 - Updated Romanian translation.
 - Incorrect colors in Battlescape UI.
 - Crash when starting mission on back side of globe.
+- Endless number of soldiers in Skyranger.
 
 Version 0.3 (01-09-2011)
 -------------------------

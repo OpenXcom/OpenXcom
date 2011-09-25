@@ -729,7 +729,7 @@ bool SavedGame::handlePromotions()
 	// and the soldier with the heighest promotion score of the rank below it
 
 	int filledPositions = 0, filledPositions2 = 0;
-	highestRanked = inspectSoldiers(&filledPositions, RANK_COMMANDER);
+	inspectSoldiers(&filledPositions, RANK_COMMANDER);
 	highestRanked = inspectSoldiers(&filledPositions2, RANK_COLONEL);
 	if (filledPositions < 1 && filledPositions2 > 0)
 	{
@@ -737,21 +737,21 @@ bool SavedGame::handlePromotions()
 		highestRanked->promoteRank();
 		soldiersPromoted++;
 	}
-	highestRanked = inspectSoldiers(&filledPositions, RANK_COLONEL);
+	inspectSoldiers(&filledPositions, RANK_COLONEL);
 	highestRanked = inspectSoldiers(&filledPositions2, RANK_CAPTAIN);
 	if (filledPositions < (soldiersTotal / 23) && filledPositions2 > 0)
 	{
 		highestRanked->promoteRank();
 		soldiersPromoted++;
 	}
-	highestRanked = inspectSoldiers(&filledPositions, RANK_CAPTAIN);
+	inspectSoldiers(&filledPositions, RANK_CAPTAIN);
 	highestRanked = inspectSoldiers(&filledPositions2, RANK_SERGEANT);
 	if (filledPositions < (soldiersTotal / 11) && filledPositions2 > 0)
 	{
 		highestRanked->promoteRank();
 		soldiersPromoted++;
 	}
-	highestRanked = inspectSoldiers(&filledPositions, RANK_SERGEANT);
+	inspectSoldiers(&filledPositions, RANK_SERGEANT);
 	highestRanked = inspectSoldiers(&filledPositions2, RANK_SQUADDIE);
 	if (filledPositions < (soldiersTotal / 5) && filledPositions2 > 0)
 	{
@@ -759,7 +759,7 @@ bool SavedGame::handlePromotions()
 		soldiersPromoted++;
 	}
 
-	return soldiersPromoted > 0;
+	return (soldiersPromoted > 0);
 }
 
 /**
@@ -772,6 +772,7 @@ Soldier *SavedGame::inspectSoldiers(int *total, SoldierRank rank)
 {
 	int highestScore = 0;
 	Soldier *highestRanked = 0;
+	*total = 0;
 
 	for (std::vector<Base*>::iterator i = _bases.begin(); i != _bases.end(); ++i)
 	{
