@@ -326,7 +326,9 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_action.targeting = false;
 	_tuReserved = BA_NONE;
 	_debugPlay = false;
+	_playerPanicHandled = true;
 }
+
 
 /**
  * Delete battlescapestate.
@@ -400,6 +402,7 @@ void BattlescapeState::think()
 			{
 				_playerPanicHandled = handlePanickingPlayer();
 			}
+
 		}
 
 	}
@@ -1312,6 +1315,7 @@ void BattlescapeState::popState()
 		{
 			_action.actor->spendTimeUnits(_action.TU, dontSpendTUs());
 		}
+		// after throwing the cursor returns, otherwise it stays in targeting mode
 		if (_action.type == BA_THROW && !actionFailed)
 		{
 			_action.targeting = false;
@@ -1516,6 +1520,7 @@ bool BattlescapeState::handlePanickingUnit(BattleUnit *unit)
 	UnitStatus status = unit->getStatus();
 	if (status != STATUS_PANICKING && status != STATUS_BERSERK) return false;
 	unit->setVisible(true);
+	_map->centerOnPosition(unit->getPosition());
 
 	std::wstringstream ss;
 	ss << unit->getUnit()->getName(_game->getLanguage()) << L'\n' << _game->getLanguage()->getString(status==STATUS_PANICKING?"STR_HAS_PANICKED":"STR_HAS_GONE_BERSERK");
@@ -1523,13 +1528,11 @@ bool BattlescapeState::handlePanickingUnit(BattleUnit *unit)
 
 	unit->abortTurn(); //makes the unit go to status STANDING :p
 
-	int dropweapons = RNG::generate(0,100);
 	int flee = RNG::generate(0,100);
 	switch (status)
 	{
-	case STATUS_PANICKING: // 1/2 chance to drop weapons and 1/2 chance try to flee
-
-		if (dropweapons <= 50)
+	case STATUS_PANICKING: // 1/2 chance to freeze and 1/2 chance try to flee
+		if (flee <= 50)
 		{
 			BattleItem *item = unit->getItem("STR_RIGHT_HAND");
 			if (item)
@@ -1544,42 +1547,30 @@ bool BattlescapeState::handlePanickingUnit(BattleUnit *unit)
 				item->moveToOwner(0);
 			}
 			unit->setCache(0);
-		}
-
-		if (flee <= 50)
-		{
 			_action.actor = unit;
 			_action.target = Position(unit->getPosition().x + RNG::generate(-5,5), unit->getPosition().y + RNG::generate(-5,5), unit->getPosition().z);
 			statePushBack(new UnitWalkBState(this, _action));
 		}
 		break;
-	case STATUS_BERSERK: // berserk - do some weird turning around and then pick the closest unit to shoot towards
-		_action.actor = unit;
+	case STATUS_BERSERK: // berserk - do some weird turning around and then aggro towards an enemy unit or shoot towards random place
 		for (int i= 0; i < 4; i++)
 		{
+			_action.actor = unit;
 			_action.target = Position(unit->getPosition().x + RNG::generate(-5,5), unit->getPosition().y + RNG::generate(-5,5), unit->getPosition().z);
 			statePushBack(new UnitTurnBState(this, _action));
 		}
-		int mindistance = 10000;
-		for (std::vector<BattleUnit*>::iterator i = _battleGame->getUnits()->begin(); i != _battleGame->getUnits()->end(); ++i)
+		for (std::vector<BattleUnit*>::iterator j = unit->getVisibleUnits()->begin(); j != unit->getVisibleUnits()->end(); ++j)
 		{
-			int x = abs(unit->getPosition().x - (*i)->getPosition().x);
-			int y = abs(unit->getPosition().y - (*i)->getPosition().y);
-			int distance = int(floor(sqrt(float(x*x + y*y)) + 0.5));
-
-			if (distance < mindistance && (*i) != unit && !(*i)->isOut())
-			{
-				_action.target = (*i)->getPosition();
-				mindistance = distance;
-			}
+			_action.target = (*j)->getPosition();
+			statePushBack(new UnitTurnBState(this, _action));
 		}
-		statePushBack(new UnitTurnBState(this, _action));
 		_action.type = BA_SNAPSHOT;
 		_action.weapon = unit->getMainHandWeapon();
-		for (int i= 0; i < 6; i++)
+		for (int i= 0; i < 10; i++)
 		{
 			statePushBack(new ProjectileFlyBState(this, _action));
 		}
+		_action.type = BA_NONE;
 		break;
 	}
 	unit->setTimeUnits(0);
