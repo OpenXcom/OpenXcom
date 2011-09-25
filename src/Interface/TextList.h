@@ -109,6 +109,8 @@ public:
 	int getSelectedRow() const;
 	/// Sets the margin of the text list.
 	void setMargin(int margin);
+	/// Gets the margin of the text list.
+	int getMargin() const;
 	/// Sets the arrow color of the text list.
 	void setArrowColor(Uint8 color);
 	/// Sets the arrow column of the text list.

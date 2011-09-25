@@ -57,14 +57,14 @@ CannotRearmState::CannotRearmState(Game *game, GeoscapeState *state, const std::
 	add(_txtMessage);
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(15)+2);
+	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK12.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(8)+8);
+	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&CannotRearmState::btnOkClick);
 
-	_btnOk5Secs->setColor(Palette::blockOffset(8)+8);
+	_btnOk5Secs->setColor(Palette::blockOffset(8)+5);
 	_btnOk5Secs->setText(_game->getLanguage()->getString("STR_OK_5_SECS"));
 	_btnOk5Secs->onMouseClick((ActionHandler)&CannotRearmState::btnOk5SecsClick);
 

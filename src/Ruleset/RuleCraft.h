@@ -43,7 +43,7 @@ private:
 	RuleTerrain *_battlescapeTerrainData;
 public:
 	/// Creates a blank craft ruleset.
-	RuleCraft(std::string type);
+	RuleCraft(const std::string &type);
 	/// Cleans up the craft ruleset.
 	~RuleCraft();
 	/// Gets the craft's type.

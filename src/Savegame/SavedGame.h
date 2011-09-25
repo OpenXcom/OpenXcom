@@ -39,6 +39,7 @@ class Language;
 class UfopaediaSaved;
 class RuleResearchProject;
 class ResearchProject;
+class Soldier;
 
 /**
  * Enumator containing all the possible game difficulties.
@@ -62,13 +63,12 @@ private:
 	std::vector<Ufo*> _ufos;
 	std::map<std::string, int> _craftId;
 	std::vector<Waypoint*> _waypoints;
-	int _ufoId, _waypointId;
+	int _ufoId, _waypointId, _soldierId;
 	SavedBattleGame *_battleGame;
 	UfopaediaSaved *_ufopaedia;
-	std::vector<const RuleResearchProject *> _discovereds;
-	std::map<Base*, ResearchProject *> _researchs;
+	std::vector<const RuleResearchProject *> _discovered;
 
-	/// Check wether a ResearchProject can be researched
+	/// Check whether a ResearchProject can be researched
 	bool isResearchAvailable (RuleResearchProject * r, const std::vector<const RuleResearchProject *> & unlockeds);
 	void getDependableResearchBasic (std::vector<RuleResearchProject *> & dependables, const RuleResearchProject *research, Ruleset * ruleset, Base * base);
 public:
@@ -126,6 +126,10 @@ public:
 	void getAvailableResearchProjects (std::vector<RuleResearchProject *> & projects, Ruleset * ruleset, Base * base);
 	///Get the list of newly available research projects once a research has been completed.
 	void getDependableResearch (std::vector<RuleResearchProject *> & dependables, const RuleResearchProject *research, Ruleset * ruleset, Base * base);
+	/// Gets the current soldier ID.
+	int *const getSoldierId();
+	/// Gets the soldier matching this ID.
+	Soldier *const getSoldier(int id);
 };
 
 }

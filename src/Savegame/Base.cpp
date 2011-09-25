@@ -71,7 +71,7 @@ Base::~Base()
 		delete *i;
 	}
 	delete _items;
-	for (std::vector<ResearchProject*>::iterator i = _baseResearchs.begin(); i != _baseResearchs.end(); ++i)
+	for (std::vector<ResearchProject*>::iterator i = _research.begin(); i != _research.end(); ++i)
 	{
 		delete *i;
 	}
@@ -84,34 +84,30 @@ Base::~Base()
  */
 void Base::load(const YAML::Node &node, SavedGame *save)
 {
-	unsigned int size = 0;
-
 	Target::load(node);
 	std::string name;
 	node["name"] >> name;
 	_name = Language::utf8ToWstr(name);
 
-	size = node["facilities"].size();
-	for (unsigned int i = 0; i < size; ++i)
+	for (YAML::Iterator i = node["facilities"].begin(); i != node["facilities"].end(); ++i)
 	{
 		int x, y;
-		node["facilities"][i]["x"] >> x;
-		node["facilities"][i]["y"] >> y;
+		(*i)["x"] >> x;
+		(*i)["y"] >> y;
 		std::string type;
-		node["facilities"][i]["type"] >> type;
+		(*i)["type"] >> type;
 		BaseFacility *f = new BaseFacility(_rule->getBaseFacility(type), this, x, y);
-		f->load(node["facilities"][i]);
+		f->load(*i);
 		_facilities.push_back(f);
 	}
 
-	size = node["crafts"].size();
-	for (unsigned int i = 0; i < size; ++i)
+	for (YAML::Iterator i = node["crafts"].begin(); i != node["crafts"].end(); ++i)
 	{
 		std::string type;
-		node["crafts"][i]["type"] >> type;
+		(*i)["type"] >> type;
 		Craft *c = new Craft(_rule->getCraft(type), this);
-		c->load(node["crafts"][i], _rule);
-		if (const YAML::Node *pName = node["crafts"][i].FindValue("dest"))
+		c->load(*i, _rule);
+		if (const YAML::Node *pName = (*i).FindValue("dest"))
 		{
 			std::string type;
 			int id;
@@ -123,22 +119,22 @@ void Base::load(const YAML::Node &node, SavedGame *save)
 			}
 			else if (type == "STR_UFO")
 			{
-				for (std::vector<Ufo*>::iterator i = save->getUfos()->begin(); i != save->getUfos()->end(); ++i)
+				for (std::vector<Ufo*>::iterator j = save->getUfos()->begin(); j != save->getUfos()->end(); ++j)
 				{
-					if ((*i)->getId() == id)
+					if ((*j)->getId() == id)
 					{
-						c->setDestination(*i);
+						c->setDestination(*j);
 						break;
 					}
 				}
 			}
 			else if (type == "STR_WAYPOINT")
 			{
-				for (std::vector<Waypoint*>::iterator i = save->getWaypoints()->begin(); i != save->getWaypoints()->end(); ++i)
+				for (std::vector<Waypoint*>::iterator j = save->getWaypoints()->begin(); j != save->getWaypoints()->end(); ++j)
 				{
-					if ((*i)->getId() == id)
+					if ((*j)->getId() == id)
 					{
-						c->setDestination(*i);
+						c->setDestination(*j);
 						break;
 					}
 				}
@@ -147,25 +143,28 @@ void Base::load(const YAML::Node &node, SavedGame *save)
 		_crafts.push_back(c);
 	}
 
-	size = node["soldiers"].size();
-	for (unsigned int i = 0; i < size; ++i)
+	for (YAML::Iterator i = node["soldiers"].begin(); i != node["soldiers"].end(); ++i)
 	{
 		Soldier *s = new Soldier(_rule->getSoldier("XCOM"), _rule->getArmor("STR_NONE_UC"));
-		s->load(node["soldiers"][i]);
-		if (const YAML::Node *pName = node["soldiers"][i].FindValue("craft"))
+		s->load(*i);
+		if (const YAML::Node *pName = (*i).FindValue("craft"))
 		{
 			std::string type;
 			int id;
 			(*pName)["type"] >> type;
 			(*pName)["id"] >> id;
-			for (std::vector<Craft*>::iterator i = _crafts.begin(); i != _crafts.end(); ++i)
+			for (std::vector<Craft*>::iterator j = _crafts.begin(); j != _crafts.end(); ++j)
 			{
-				if ((*i)->getRules()->getType() == type && (*i)->getId() == id)
+				if ((*j)->getRules()->getType() == type && (*j)->getId() == id)
 				{
-					s->setCraft(*i);
+					s->setCraft(*j);
 					break;
 				}
 			}
+		}
+		else
+		{
+			s->setCraft(0);
 		}
 		_soldiers.push_back(s);
 	}
@@ -174,44 +173,33 @@ void Base::load(const YAML::Node &node, SavedGame *save)
 	node["scientists"] >> _scientists;
 	node["engineers"] >> _engineers;
 
-	size = node["transfers"].size();
-	for (unsigned int i = 0; i < size; ++i)
+	for (YAML::Iterator i = node["transfers"].begin(); i != node["transfers"].end(); ++i)
 	{
 		int hours;
-		node["transfers"][i]["hours"] >> hours;
+		(*i)["hours"] >> hours;
 		Transfer *t = new Transfer(hours);
-		t->load(node["transfers"][i], this, _rule);
+		t->load(*i, this, _rule);
 		_transfers.push_back(t);
 	}
 
-	if (const YAML::Node *pName = node.FindValue("research"))
+	for (YAML::Iterator i = node["research"].begin(); i != node["research"].end(); ++i)
 	{
-		size = node["research"].size();
-		const std::map<std::string, RuleResearchProject *> & researchs(_rule->getResearchProjects ());
-		for (unsigned int i = 0; i < size; i++)
-		{
-			std::string research;
-			node["research"][i]["project"] >> research;
-			std::map<std::string, RuleResearchProject *>::const_iterator itResearch = researchs.find (research);
-			if (itResearch != researchs.end ())
-			{
-				ResearchProject *r = new ResearchProject(itResearch->second);
-				r->load(node["research"][i], _rule);
-				_baseResearchs.push_back(r);
-			}
-		}
+		std::string research;
+		(*i)["project"] >> research;
+		ResearchProject *r = new ResearchProject(_rule->getResearchProject(research));
+		r->load(*i);
+		_research.push_back(r);
 	}
-	size = node["productions"].size();
 	const std::map<std::string, RuleItem *> & items(_rule->getItems ());
-	for (unsigned int i = 0; i < size; i++)
+	for (YAML::Iterator i = node["productions"].begin(); i != node["productions"].end(); ++i)
 	{
 		std::string item;
-		node["productions"][i]["item"] >> item;
+		(*i)["item"] >> item;
 		std::map<std::string, RuleItem *>::const_iterator itItem = items.find(item);
 		if (itItem != items.end ())
 		{
 			Production *p = new Production(itItem->second, 0);
-			p->load(node["productions"][i]);
+			p->load(*i);
 			_productions.push_back(p);
 		}
 	}
@@ -260,7 +248,7 @@ void Base::save(YAML::Emitter &out) const
 
 	out << YAML::Key << "research" << YAML::Value;
 	out << YAML::BeginSeq;
-	for (std::vector<ResearchProject*>::const_iterator i = _baseResearchs.begin(); i != _baseResearchs.end(); ++i)
+	for (std::vector<ResearchProject*>::const_iterator i = _research.begin(); i != _research.end(); ++i)
 	{
 		(*i)->save(out);
 	}
@@ -728,7 +716,7 @@ int Base::getLongRangeDetection() const
  * @param craft Craft type.
  * @return Number of craft.
  */
-int Base::getCraftCount(std::string craft) const
+int Base::getCraftCount(const std::string &craft) const
 {
 	int total = 0;
 	for (std::vector<Craft*>::const_iterator i = _crafts.begin(); i != _crafts.end(); ++i)
@@ -804,7 +792,7 @@ int Base::getMonthlyMaintenace() const
 */
 const std::vector<ResearchProject *> & Base::getResearch() const
 {
-	return _baseResearchs;
+	return _research;
 }
 
 /**
@@ -813,7 +801,7 @@ const std::vector<ResearchProject *> & Base::getResearch() const
 */
 void Base::addResearch(ResearchProject * project)
 {
-	_baseResearchs.push_back(project);
+	_research.push_back(project);
 }
 
 /**
@@ -822,12 +810,12 @@ void Base::addResearch(ResearchProject * project)
 */
 void Base::removeResearch(ResearchProject * project)
 {
-	std::vector<ResearchProject *>::iterator iter = std::find (_baseResearchs.begin (), _baseResearchs.end (), project);
-	if(iter == _baseResearchs.end ())
+	std::vector<ResearchProject *>::iterator iter = std::find (_research.begin (), _research.end (), project);
+	if(iter == _research.end ())
 	{
 		return ;
 	}
-	_baseResearchs.erase(iter);
+	_research.erase(iter);
 }
 
 /**

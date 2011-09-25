@@ -163,51 +163,51 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(fa
 	_game->getResourcePack()->getSurface("GEOBORD.SCR")->blit(_bg);
 
 	_btnIntercept->copy(_bg);
-	_btnIntercept->setColor(Palette::blockOffset(15)+8);
+	_btnIntercept->setColor(Palette::blockOffset(15)+5);
 	_btnIntercept->onMouseClick((ActionHandler)&GeoscapeState::btnInterceptClick);
 
 	_btnBases->copy(_bg);
-	_btnBases->setColor(Palette::blockOffset(15)+8);
+	_btnBases->setColor(Palette::blockOffset(15)+5);
 	_btnBases->onMouseClick((ActionHandler)&GeoscapeState::btnBasesClick);
 
 	_btnGraphs->copy(_bg);
-	_btnGraphs->setColor(Palette::blockOffset(15)+8);
+	_btnGraphs->setColor(Palette::blockOffset(15)+5);
 	_btnGraphs->onMouseClick((ActionHandler)&GeoscapeState::btnGraphsClick);
 
 	_btnUfopaedia->copy(_bg);
-	_btnUfopaedia->setColor(Palette::blockOffset(15)+8);
+	_btnUfopaedia->setColor(Palette::blockOffset(15)+5);
 	_btnUfopaedia->onMouseClick((ActionHandler)&GeoscapeState::btnUfopaediaClick);
 
 	_btnOptions->copy(_bg);
-	_btnOptions->setColor(Palette::blockOffset(15)+8);
+	_btnOptions->setColor(Palette::blockOffset(15)+5);
 	_btnOptions->onMouseClick((ActionHandler)&GeoscapeState::btnOptionsClick);
 
 	_btnFunding->copy(_bg);
-	_btnFunding->setColor(Palette::blockOffset(15)+8);
+	_btnFunding->setColor(Palette::blockOffset(15)+5);
 	_btnFunding->onMouseClick((ActionHandler)&GeoscapeState::btnFundingClick);
 
 	_btn5Secs->copy(_bg);
-	_btn5Secs->setColor(Palette::blockOffset(15)+8);
+	_btn5Secs->setColor(Palette::blockOffset(15)+5);
 	_btn5Secs->setGroup(&_timeSpeed);
 
 	_btn1Min->copy(_bg);
-	_btn1Min->setColor(Palette::blockOffset(15)+8);
+	_btn1Min->setColor(Palette::blockOffset(15)+5);
 	_btn1Min->setGroup(&_timeSpeed);
 
 	_btn5Mins->copy(_bg);
-	_btn5Mins->setColor(Palette::blockOffset(15)+8);
+	_btn5Mins->setColor(Palette::blockOffset(15)+5);
 	_btn5Mins->setGroup(&_timeSpeed);
 
 	_btn30Mins->copy(_bg);
-	_btn30Mins->setColor(Palette::blockOffset(15)+8);
+	_btn30Mins->setColor(Palette::blockOffset(15)+5);
 	_btn30Mins->setGroup(&_timeSpeed);
 
 	_btn1Hour->copy(_bg);
-	_btn1Hour->setColor(Palette::blockOffset(15)+8);
+	_btn1Hour->setColor(Palette::blockOffset(15)+5);
 	_btn1Hour->setGroup(&_timeSpeed);
 
 	_btn1Day->copy(_bg);
-	_btn1Day->setColor(Palette::blockOffset(15)+8);
+	_btn1Day->setColor(Palette::blockOffset(15)+5);
 	_btn1Day->setGroup(&_timeSpeed);
 
 	_btnRotateLeft->onMousePress((ActionHandler)&GeoscapeState::btnRotateLeftPress);
@@ -475,7 +475,7 @@ void GeoscapeState::time5Seconds()
 						{
 							// look up polygons texture
 							int texture, shade;
-							_globe->getPolygonTextureAndShade(u->getLongitude(),u->getLatitude(), &texture, &shade);
+							_globe->getPolygonTextureAndShade(u->getLongitude(), u->getLatitude(), &texture, &shade);
 							_music = false;
 							timerReset();
 							popup(new ConfirmLandingState(_game, *j, texture, shade));

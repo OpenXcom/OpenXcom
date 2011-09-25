@@ -94,7 +94,7 @@ int Projectile::calculateTrajectory(double accuracy)
 	originVoxel = Position(_origin.x*16, _origin.y*16, _origin.z*24);
 	originVoxel.z += -_save->getTile(_origin)->getTerrainLevel();
 	BattleUnit *bu = _save->getTile(_origin)->getUnit();
-	originVoxel.z += bu->isKneeled()?bu->getUnit()->getKneelHeight():bu->getUnit()->getStandHeight();
+	originVoxel.z += bu->getHeight();
 	originVoxel.z -= 3;
 	if (originVoxel.z >= (_origin.z + 1)*24)
 	{
@@ -172,7 +172,7 @@ bool Projectile::calculateThrow(double accuracy)
 	originVoxel = Position(_origin.x*16 + 8, _origin.y*16 + 8, _origin.z*24);
 	originVoxel.z += -_save->getTile(_origin)->getTerrainLevel();
 	BattleUnit *bu = _save->getTile(_origin)->getUnit();
-	originVoxel.z += bu->isKneeled()?bu->getUnit()->getKneelHeight():bu->getUnit()->getStandHeight();
+	originVoxel.z += bu->getHeight();
 	originVoxel.z -= 3;
 	if (originVoxel.z >= (_origin.z + 1)*24)
 	{
@@ -228,7 +228,7 @@ bool Projectile::calculateThrow(double accuracy)
 void Projectile::applyAccuracy(const Position& origin, Position *target, double accuracy)
 {
 	// maxDeviation is the max angle deviation for accuracy 0% in degrees
-	static const double maxDeviation = 7.0;
+	static const double maxDeviation = 6.0;
 	// minDeviation is the min angle deviation for accuracy 100% in degrees
 	static const double minDeviation = 0.01;
 	// maxRange is the maximum range a projectile shall ever travel in voxel space

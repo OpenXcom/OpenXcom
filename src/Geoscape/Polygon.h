@@ -34,9 +34,7 @@ class Polygon
 private:
 	double *_lat, *_lon;
 	Sint16 *_x, *_y;
-	int _points;
-	int _texture;
-	int _shade;
+	int _points, _texture;
 public:
 	/// Creates a polygon with a number of points.
 	Polygon(int points);
@@ -66,10 +64,6 @@ public:
 	void setTexture(int tex);
 	/// Gets the number of points of the polygon.
 	int getPoints() const;
-	/// Gets the shade of the polygon.
-	int getShade() const;
-	/// Sets the shade of the polygon.
-	void setShade(int shade);
 };
 
 }

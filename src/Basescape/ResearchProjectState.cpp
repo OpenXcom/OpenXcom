@@ -105,7 +105,7 @@ void ResearchProjectState::buildUi ()
 	add(_btnLess);
 	
 	// Set up objects
-	_window->setColor(Palette::blockOffset(13)+8);
+	_window->setColor(Palette::blockOffset(13)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
 	_txtTitle->setColor(Palette::blockOffset(13)+5);
 	_txtTitle->setBig();
@@ -134,8 +134,8 @@ void ResearchProjectState::buildUi ()
 		_base->addResearch(_project);
 	}
 	SetAssignedScientist();
-	_btnMore->setColor(Palette::blockOffset(13)+8);
-	_btnLess->setColor(Palette::blockOffset(13)+8);
+	_btnMore->setColor(Palette::blockOffset(13)+5);
+	_btnLess->setColor(Palette::blockOffset(13)+5);
 	_btnMore->onMousePress((ActionHandler)&ResearchProjectState::morePress);
 	_btnMore->onMouseRelease((ActionHandler)&ResearchProjectState::moreRelease);
 	_btnLess->onMousePress((ActionHandler)&ResearchProjectState::lessPress);
@@ -146,7 +146,7 @@ void ResearchProjectState::buildUi ()
 	_timerLess = new Timer(50);
 	_timerLess->onTimer((StateHandler)&ResearchProjectState::less);
 
-	_btnOk->setColor(Palette::blockOffset(13)+13);
+	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ResearchProjectState::btnOkClick);
 }

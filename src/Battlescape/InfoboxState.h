@@ -14,37 +14,42 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
+ * along with OpenXcom.  If not, see <http:///www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_NODELINK_H
-#define OPENXCOM_NODELINK_H
+#ifndef OPENXCOM_INFOBOXSTATE_H
+#define OPENXCOM_INFOBOXSTATE_H
 
-#include "yaml.h"
+#include "../Engine/State.h"
+#include "BattlescapeState.h"
 
 namespace OpenXcom
 {
 
+class Game;
+class Text;
+class Timer;
+
 /**
- * Represents a link to another node on the map.
+ * Window that briefly shows an info like : Yasuaki Okamoto Has Panicked. It disappears after 2 seconds.
  */
-class NodeLink
+class InfoboxState : public State
 {
 private:
-	int _connectedNodeID;
-	int _distance;
-	int _travelType;
+	Text *_text;
+	Window *_window;
+	Timer *_timer;
 public:
-	/// Creates a nodelink.
-	NodeLink(int connectedNodeID, int distance, int travelType);
-	/// Cleans up the nodelink.
-	~NodeLink();
-	/// Loads the node from YAML.
-	void load(const YAML::Node& node);
-	/// Saves the node to YAML.
-	void save(YAML::Emitter& out) const;
-	/// Get the connected node id
-	int getConnectedNodeID() const;
-	void setConnectedNodeID(int id);
+	static const int INFOBOX_DELAY = 2000;
+	/// Creates the Infobox state.
+	InfoboxState(Game *game, const std::wstring &msg);
+	/// Cleans up the Infobox state.
+	~InfoboxState();
+	/// Handles the timers.
+	void think();
+	/// Closes the window.
+	void close();
+	void draw();
+
 };
 
 }

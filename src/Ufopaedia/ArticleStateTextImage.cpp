@@ -61,7 +61,7 @@ namespace OpenXcom
 		_txtInfo = new Text(160, 160, 5, 25 + text_height);
 		add(_txtInfo);
 		
-		_txtInfo->setColor(Palette::blockOffset(14)+15);
+		_txtInfo->setColor(Palette::blockOffset(15)-1);
 		_txtInfo->setAlign(ALIGN_LEFT);
 		_txtInfo->setWordWrap(true);
 		_txtInfo->setText(Ufopaedia::buildText(_game, defs->text));

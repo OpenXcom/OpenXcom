@@ -64,10 +64,10 @@ TransfersState::TransfersState(Game *game, Base *base) : State(game), _base(base
 	add(_lstTransfers);
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(15)+9);
+	_window->setColor(Palette::blockOffset(15)+6);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(15)+9);
+	_btnOk->setColor(Palette::blockOffset(15)+6);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&TransfersState::btnOkClick);
 
@@ -86,7 +86,7 @@ TransfersState::TransfersState(Game *game, Base *base) : State(game), _base(base
 	_txtArrivalTime->setText(_game->getLanguage()->getString("STR_ARRIVAL_TIME_HOURS"));
 
 	_lstTransfers->setColor(Palette::blockOffset(13)+10);
-	_lstTransfers->setArrowColor(Palette::blockOffset(15)+9);
+	_lstTransfers->setArrowColor(Palette::blockOffset(15)+6);
 	_lstTransfers->setColumns(3, 155, 55, 46);
 	_lstTransfers->setSelectable(true);
 	_lstTransfers->setBackground(_window);

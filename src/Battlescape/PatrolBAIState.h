@@ -41,6 +41,10 @@ public:
 	PatrolBAIState(SavedBattleGame *game, BattleUnit *unit, Node *node);
 	/// Cleans up the BattleAIState.
 	~PatrolBAIState();
+	/// Loads the AI state from YAML.
+	void load(const YAML::Node& node);
+	/// Saves the AI state to YAML.
+	void save(YAML::Emitter& out) const;
 	/// Enters the state.
 	void enter();
 	/// Exits the state.

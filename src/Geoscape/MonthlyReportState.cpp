@@ -59,7 +59,7 @@ MonthlyReportState::MonthlyReportState(Game *game) : State(game)
 	add(_txtDesc);
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(15)+2);
+	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(8)+13);

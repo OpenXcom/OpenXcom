@@ -44,7 +44,7 @@ namespace OpenXcom
  * Creates a ruleset with blank sets of rules.
  */
 Ruleset::Ruleset() : _names(), _countries(), _regions(), _facilities(), _crafts(), _craftWeapons(), _items(), _ufos(),
-					 _terrains(), _mapDataFiles(), _soldiers(), _aliens(), _invs(), _costSoldier(0), _costEngineer(0), _costScientist(0), _timePersonnel(0)
+					 _terrains(), _mapDataSets(), _soldiers(), _aliens(), _invs(), _costSoldier(0), _costEngineer(0), _costScientist(0), _timePersonnel(0)
 {
 }
 
@@ -89,7 +89,7 @@ Ruleset::~Ruleset()
 	{
 		delete i->second;
 	}
-	for (std::map<std::string, MapDataSet*>::iterator i = _mapDataFiles.begin(); i != _mapDataFiles.end(); ++i)
+	for (std::map<std::string, MapDataSet*>::iterator i = _mapDataSets.begin(); i != _mapDataSets.end(); ++i)
 	{
 		delete i->second;
 	}
@@ -246,7 +246,7 @@ RuleTerrain *const Ruleset::getTerrain(const std::string &name) const
  */
 MapDataSet *const Ruleset::getMapDataSet(const std::string &name) const
 {
-	return _mapDataFiles.find(name)->second;
+	return _mapDataSets.find(name)->second;
 }
 
 /**
@@ -340,12 +340,22 @@ std::map<std::string, RuleInventory*> *const Ruleset::getInventories()
 
 /**
  * Returns the rules for a specific inventory.
- * @param name Inventory name.
+ * @param id Inventory type.
  * @return Inventory ruleset.
  */
-RuleInventory *const Ruleset::getInventory(const std::string &name) const
+RuleInventory *const Ruleset::getInventory(const std::string &id) const
 {
-	return _invs.find(name)->second;
+	return _invs.find(id)->second;
+}
+
+/**
+ * Returns the rules for the specified research project.
+ * @param id Research project type.
+ * @return Rules for the research project.
+ */
+RuleResearchProject *Ruleset::getResearchProject (const std::string &id) const
+{
+	return _researchProjects.find(id)->second;
 }
 
 /**

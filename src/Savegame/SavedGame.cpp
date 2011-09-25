@@ -40,6 +40,7 @@
 #include "../Ruleset/RuleResearchProject.h"
 #include "ResearchProject.h"
 #include "ItemContainer.h"
+#include "Soldier.h"
 
 namespace OpenXcom
 {
@@ -64,7 +65,7 @@ bool findRuleResearchProject::operator()(ResearchProject *r) const
  * Initializes a brand new saved game according to the specified difficulty.
  * @param difficulty Game difficulty.
  */
-SavedGame::SavedGame(GameDifficulty difficulty) : _difficulty(difficulty), _funds(0), _countries(), _regions(), _bases(), _ufos(), _craftId(), _waypoints(), _ufoId(1), _waypointId(1), _battleGame(0)
+SavedGame::SavedGame(GameDifficulty difficulty) : _difficulty(difficulty), _funds(0), _countries(), _regions(), _bases(), _ufos(), _craftId(), _waypoints(), _ufoId(1), _waypointId(1), _battleGame(0), _soldierId(1)
 {
 	RNG::init();
 	_time = new GameTime(6, 1, 1, 1999, 12, 0, 0);
@@ -221,6 +222,7 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 
 	doc["ufoId"] >> _ufoId;
 	doc["waypointId"] >> _waypointId;
+	doc["soldierId"] >> _soldierId;
 
 	for (YAML::Iterator i = doc["bases"].begin(); i != doc["bases"].end(); ++i)
 	{
@@ -229,25 +231,17 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 		_bases.push_back(b);
 	}
 
+	for(YAML::Iterator it=doc["discovered"].begin();it!=doc["discovered"].end();++it)
+	{
+		std::string research;
+		*it >> research;
+		_discovered.push_back(rule->getResearchProject(research));
+	}
+
 	if (const YAML::Node *pName = doc.FindValue("battleGame"))
 	{
 		_battleGame = new SavedBattleGame();
-		_battleGame->load(*pName);
-	}
-
-	if (const YAML::Node *pName = doc.FindValue("found"))
-	{
-		const std::map<std::string, RuleResearchProject *> & researchs(rule->getResearchProjects ());
-		for(YAML::Iterator it=pName->begin();it!=pName->end();++it)
-		{
-			std::string research;
-			*it >> research;
-			std::map<std::string, RuleResearchProject *>::const_iterator itResearch = researchs.find(research);
-			if (itResearch != researchs.end ())
-			{
-				_discovereds.push_back(itResearch->second);
-			}
-		}
+		_battleGame->load(*pName, rule, this);
 	}
 
 	fin.close();
@@ -317,23 +311,22 @@ void SavedGame::save(const std::string &filename) const
 		(*i)->save(out);
 	}
 	out << YAML::EndSeq;
+	out << YAML::Key << "discovered" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::vector<const RuleResearchProject *>::const_iterator i = _discovered.begin(); i != _discovered.end(); ++i)
+	{
+		out << (*i)->getName ();
+	}
+	out << YAML::EndSeq;
 	out << YAML::Key << "ufoId" << YAML::Value << _ufoId;
 	out << YAML::Key << "waypointId" << YAML::Value << _waypointId;
+	out << YAML::Key << "soldierId" << YAML::Value << _soldierId;
 	if (_battleGame != 0)
 	{
 		out << YAML::Key << "battleGame" << YAML::Value;
 		_battleGame->save(out);
 	}
-
-	out << YAML::Key << "found" << YAML::Value;
-	out << YAML::BeginSeq;
-	for (std::vector<const RuleResearchProject *>::const_iterator i = _discovereds.begin(); i != _discovereds.end(); ++i)
-	{
-		out << (*i)->getName ();
-	}
-	out << YAML::EndSeq;
 	out << YAML::EndMap;
-
 	sav << out.c_str();
 	sav.close();
 }
@@ -539,7 +532,7 @@ UfopaediaSaved *SavedGame::getUfopaedia()
 */
 void SavedGame::addFinishedResearch (const RuleResearchProject * r, Ruleset * ruleset)
 {
-	_discovereds.push_back(r);
+	_discovered.push_back(r);
 	if(ruleset)
 	{
 		std::vector<RuleResearchProject*> availableResearch;
@@ -563,7 +556,7 @@ void SavedGame::addFinishedResearch (const RuleResearchProject * r, Ruleset * ru
 */
 const std::vector<const RuleResearchProject *> & SavedGame::getDiscoveredResearchs()
 {
-	return _discovereds;
+	return _discovered;
 }
 
 /**
@@ -646,7 +639,7 @@ bool SavedGame::isResearchAvailable (RuleResearchProject * r, const std::vector<
 void SavedGame::getDependableResearch (std::vector<RuleResearchProject *> & dependables, const RuleResearchProject *research, Ruleset * ruleset, Base * base)
 {
 	getDependableResearchBasic(dependables, research, ruleset, base);
-	for(std::vector<const RuleResearchProject *>::const_iterator iter = _discovereds.begin (); iter != _discovereds.end (); ++iter)
+	for(std::vector<const RuleResearchProject *>::const_iterator iter = _discovered.begin (); iter != _discovered.end (); ++iter)
 	{
 		if((*iter)->getCost() == 0)
 		{
@@ -687,4 +680,34 @@ void SavedGame::getDependableResearchBasic (std::vector<RuleResearchProject *> &
 		}
 	}
 }
+
+/**
+ * Returns the latest soldier ID.
+ * @return Pointer to ID value.
+ */
+int *const SavedGame::getSoldierId()
+{
+	return &_soldierId;
+}
+
+/**
+ * Returns pointer to the Soldier given it's unique ID.
+ * @param id A soldier's unique id.
+ * @return Pointer to Soldier.
+ */
+Soldier *const SavedGame::getSoldier(int id)
+{
+	for (std::vector<Base*>::iterator i = _bases.begin(); i != _bases.end(); ++i)
+	{
+		for (std::vector<Soldier*>::iterator j = (*i)->getSoldiers()->begin(); j != (*i)->getSoldiers()->end(); ++j)
+		{
+			if ((*j)->getId() == id)
+			{
+				return (*j);
+			}
+		}
+	}
+	return 0;
+}
+
 }

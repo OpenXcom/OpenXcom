@@ -77,14 +77,14 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 	add(_lstItems);
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(13)+13);
+	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(13)+13);
+	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&PurchaseState::btnOkClick);
 
-	_btnCancel->setColor(Palette::blockOffset(13)+13);
+	_btnCancel->setColor(Palette::blockOffset(13)+10);
 	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)&PurchaseState::btnCancelClick);
 
@@ -115,7 +115,6 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 	_txtQuantity->setText(_game->getLanguage()->getString("STR_QUANTITY_UC"));
 
 	_lstItems->setColor(Palette::blockOffset(13)+10);
-	_lstItems->setArrowColor(Palette::blockOffset(13)+13);
 	_lstItems->setArrowColumn(227, ARROW_VERTICAL);
 	_lstItems->setColumns(4, 152, 58, 44, 32);
 	_lstItems->setSelectable(true);
@@ -229,7 +228,7 @@ void PurchaseState::btnOkClick(Action *action)
 				for (int s = 0; s < _qtys[i]; s++)
 				{
 					Transfer *t = new Transfer(_game->getRuleset()->getPersonnelTime());
-					t->setSoldier(new Soldier(_game->getRuleset()->getSoldier("XCOM"), _game->getRuleset()->getArmor("STR_NONE_UC"), _game->getRuleset()->getPools()));
+					t->setSoldier(new Soldier(_game->getRuleset()->getSoldier("XCOM"), _game->getRuleset()->getArmor("STR_NONE_UC"), _game->getRuleset()->getPools(), _game->getSavedGame()->getSoldierId()));
 					_base->getTransfers()->push_back(t);
 				}
 			}

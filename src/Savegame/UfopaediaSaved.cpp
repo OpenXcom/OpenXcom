@@ -50,7 +50,7 @@ namespace OpenXcom {
 	 * @param section Article section to find, e.g. "XCOM Crafts & Armaments", "Alien Lifeforms", etc.
 	 * @param data Article definition list object to fill data in.
 	 */
-	void UfopaediaSaved::getSectionList(std::string section, ArticleDefinitionList &data)
+	void UfopaediaSaved::getSectionList(const std::string &section, ArticleDefinitionList &data)
 	{
 		ArticleDefinitionList::iterator it;
 
@@ -130,7 +130,7 @@ namespace OpenXcom {
 	 * @param article_id Article id to find.
 	 * @returns true, if article id was found.
 	 */
-	bool UfopaediaSaved::isArticleAvailable(std::string &article_id)
+	bool UfopaediaSaved::isArticleAvailable(const std::string &article_id)
 	{
 		return (-1 != getArticleIndex(article_id));
 	}
@@ -141,7 +141,7 @@ namespace OpenXcom {
 	 * @param article_id Article id to find.
 	 * @returns Index of the given article id in the internal list, -1 if not found.
 	 */
-	int UfopaediaSaved::getArticleIndex(std::string &article_id)
+	int UfopaediaSaved::getArticleIndex(const std::string &article_id)
 	{
 		ArticleDefinitionList::iterator it;
 		int index = 0;

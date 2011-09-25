@@ -66,6 +66,8 @@
 #include "WarningMessage.h"
 #include "BattlescapeOptionsState.h"
 #include "DebriefingState.h"
+#include "../Engine/RNG.h"
+#include "InfoboxState.h"
 
 namespace OpenXcom
 {
@@ -293,19 +295,19 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_map->centerOnPosition(_battleGame->getSelectedUnit()->getPosition());
 
 	_btnReserveNone->copy(_icons);
-	_btnReserveNone->setColor(Palette::blockOffset(4)+6);
+	_btnReserveNone->setColor(Palette::blockOffset(4)+3);
 	_btnReserveNone->setGroup(&_reserve);
 
 	_btnReserveSnap->copy(_icons);
-	_btnReserveSnap->setColor(Palette::blockOffset(2)+6);
+	_btnReserveSnap->setColor(Palette::blockOffset(2)+3);
 	_btnReserveSnap->setGroup(&_reserve);
 
 	_btnReserveAimed->copy(_icons);
-	_btnReserveAimed->setColor(Palette::blockOffset(2)+6);
+	_btnReserveAimed->setColor(Palette::blockOffset(2)+3);
 	_btnReserveAimed->setGroup(&_reserve);
 
 	_btnReserveAuto->copy(_icons);
-	_btnReserveAuto->setColor(Palette::blockOffset(2)+6);
+	_btnReserveAuto->setColor(Palette::blockOffset(2)+3);
 	_btnReserveAuto->setGroup(&_reserve);
 
 	// Set music
@@ -324,7 +326,9 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_action.targeting = false;
 	_tuReserved = BA_NONE;
 	_debugPlay = false;
+	_playerPanicHandled = true;
 }
+
 
 /**
  * Delete battlescapestate.
@@ -344,6 +348,8 @@ void BattlescapeState::init()
 	_map->cacheUnits();
 	_map->draw();
 	updateSoldierInfo();
+	if (_battleGame->getSide() == FACTION_PLAYER)
+		_playerPanicHandled = false;
 }
 
 /**
@@ -371,13 +377,34 @@ void BattlescapeState::think()
 		_game->pushState(*_popups.begin());
 		_popups.erase(_popups.begin());
 		popped = true;
+		return;
 	}
 
-	// it's the alien side, and nothing is happening
-	if (_battleGame->getSide() != FACTION_PLAYER && _states.empty() && !_debugPlay)
+	// nothing is happening - see if we need some alien AI or units panicking or what have you
+	if (_states.empty())
 	{
-		if (_battleGame->getSelectedUnit())
-			handleAI(_battleGame->getSelectedUnit());
+		// it's a non player side (ALIENS or CIVILIANS)
+		if (_battleGame->getSide() != FACTION_PLAYER)
+		{
+			if (!_debugPlay)
+			{
+				if (_battleGame->getSelectedUnit())
+				{
+					if (!handlePanickingUnit(_battleGame->getSelectedUnit()))
+						handleAI(_battleGame->getSelectedUnit());
+				}
+			}
+		}
+		else
+		{
+			// it's a player side && we have not handled all panicking units
+			if (!_playerPanicHandled)
+			{
+				_playerPanicHandled = handlePanickingPlayer();
+			}
+
+		}
+
 	}
 
 }
@@ -395,7 +422,6 @@ void BattlescapeState::handleAI(BattleUnit *unit)
 	unit->think(&_action);
 	if (_action.type == BA_WALK)
 	{
-		_tuReserved = BA_SNAPSHOT; // aliens are not dumb :)
 		statePushBack(new UnitWalkBState(this, _action));
 	}
 
@@ -424,7 +450,7 @@ void BattlescapeState::handleAI(BattleUnit *unit)
 				_debugPlay = true;
 			}
 		}
-		if (playableUnitSelected())
+		if (_battleGame->getSelectedUnit())
 		{
 			_map->centerOnPosition(_battleGame->getSelectedUnit()->getPosition());
 		}
@@ -687,8 +713,6 @@ void BattlescapeState::endTurn()
 	Position p;
 
 	_debugPlay = false;
-	_tuReserved = BA_NONE;
-	_reserve = _btnReserveNone;
 	_action.type = BA_NONE;
 
 	// check for hot grenades on the ground
@@ -760,13 +784,19 @@ void BattlescapeState::endTurn()
 		statePushNext(new ExplosionBState(this, p, 0, 0, t));
 	}
 
-	checkForCasualties(0, 0);
+	bool bBattleIsOver = checkForCasualties(0, 0);
+	if (bBattleIsOver)
+	{
+		return;
+	}
 
 	updateSoldierInfo();
+
 	if (playableUnitSelected())
 	{
 		_map->centerOnPosition(_battleGame->getSelectedUnit()->getPosition());
 	}
+
 	_game->pushState(new NextTurnState(_game, _battleGame));
 }
 
@@ -775,8 +805,9 @@ void BattlescapeState::endTurn()
  * Checks for casualties and adjusts morale accordingly.
  * @param murderweapon
  * @param murderer
+ * @return Whether the battle is finished.
  */
-void BattlescapeState::checkForCasualties(BattleItem *murderweapon, BattleUnit *murderer)
+bool BattlescapeState::checkForCasualties(BattleItem *murderweapon, BattleUnit *murderer)
 {
 	// TODO : include rank bonuses and penalties !!
 	for (std::vector<BattleUnit*>::iterator j = _battleGame->getUnits()->begin(); j != _battleGame->getUnits()->end(); ++j)
@@ -818,11 +849,6 @@ void BattlescapeState::checkForCasualties(BattleItem *murderweapon, BattleUnit *
 				statePushNext(new UnitFallBState(this, (*j), murderweapon->getRules()->getDamageType()));
 			else
 				statePushNext(new UnitFallBState(this, (*j), DT_AP));
-
-			if (victim->getFaction() == FACTION_HOSTILE)
-				_battleGame->addStat("STR_ALIENS_KILLED", 1, victim->getUnit()->getValue());
-			else if (victim->getFaction() == FACTION_PLAYER)
-				_battleGame->addStat("STR_XCOM_OPERATIVES_KILLED", 1, -victim->getUnit()->getValue());
 		}
 		else if ((*j)->getStunlevel() >= (*j)->getHealth() && (*j)->getStatus() != STATUS_DEAD && (*j)->getStatus() != STATUS_UNCONSCIOUS && (*j)->getStatus() != STATUS_FALLING)
 		{
@@ -846,10 +872,11 @@ void BattlescapeState::checkForCasualties(BattleItem *murderweapon, BattleUnit *
 
 	if (liveAliens == 0 || liveSoldiers == 0)
 	{
-		if (liveSoldiers == 0)
-			_battleGame->addStat("STR_XCOM_CRAFT_LOST", 1, -200);
 		finishBattle(false);
+		return true;
 	}
+
+	return false;
 }
 
 /**
@@ -973,7 +1000,7 @@ void BattlescapeState::handleNonTargetAction()
 	{
 		if (_action.type == BA_PRIME && _action.value > -1)
 		{
-			if (_action.actor->spendTimeUnits(_action.TU, _game->getSavedGame()->getBattleGame()->getDebugMode()))
+			if (_action.actor->spendTimeUnits(_action.TU, dontSpendTUs()))
 			{
 				_action.weapon->setExplodeTurn(_game->getSavedGame()->getBattleGame()->getTurn() + _action.value);
 			}
@@ -1057,7 +1084,7 @@ void BattlescapeState::updateSoldierInfo()
 
 	_action.actor = battleUnit;
 
-	_txtName->setText(battleUnit->getUnit()->getName());
+	_txtName->setText(battleUnit->getUnit()->getName(_game->getLanguage()));
 	Soldier *soldier = dynamic_cast<Soldier*>(battleUnit->getUnit());
 	if (soldier != 0)
 	{
@@ -1275,7 +1302,7 @@ void BattlescapeState::popState()
 
 	if (_states.empty()) return;
 
-	if (_states.front()->getResult().length() > 0 && _battleGame->getSide() == FACTION_PLAYER)
+	if (_states.front()->getResult().length() > 0 && _battleGame->getSide() == FACTION_PLAYER && !dontSpendTUs())
 	{
 		_warning->showMessage(_game->getLanguage()->getString(_states.front()->getResult()));
 		actionFailed = true;
@@ -1286,8 +1313,9 @@ void BattlescapeState::popState()
 	{
 		if (_action.targeting && _battleGame->getSelectedUnit() && !actionFailed)
 		{
-			_action.actor->spendTimeUnits(_action.TU, _battleGame->getDebugMode());
+			_action.actor->spendTimeUnits(_action.TU, dontSpendTUs());
 		}
+		// after throwing the cursor returns, otherwise it stays in targeting mode
 		if (_action.type == BA_THROW && !actionFailed)
 		{
 			_action.targeting = false;
@@ -1403,6 +1431,8 @@ void BattlescapeState::popup(State *state)
  */
 bool BattlescapeState::checkReservedTU(BattleUnit *bu, int tu)
 {
+	if (dontSpendTUs() || _battleGame->getSide() != FACTION_PLAYER) return true; // aliens don't reserve TUs
+
 	if (_tuReserved != BA_NONE &&
 		tu + bu->getActionTUs(_tuReserved, bu->getMainHandWeapon()) > bu->getTimeUnits())
 	{
@@ -1430,11 +1460,137 @@ bool BattlescapeState::checkReservedTU(BattleUnit *bu, int tu)
 void BattlescapeState::finishBattle(bool abort)
 {
 	_game->popState();
-	_game->pushState(new DebriefingState(_game));
 	_battleGame->prepareDebriefing(abort);
+	_game->pushState(new DebriefingState(_game));
 	_game->getSavedGame()->endBattle();
 	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
 	_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
+}
+
+/**
+ * Drop item to the floor & affect with gravity.
+ * @param position Position to spawn the item.
+ * @param item Pointer to the item.
+ * @param newItem Bool whether this is a new item.
+ */
+void BattlescapeState::dropItem(const Position &position, BattleItem *item, bool newItem)
+{
+	Position p = position;
+
+	// don't spawn anything outside of bounds
+	if (_battleGame->getTile(p) == 0)
+		return;
+
+	while (_battleGame->getTile(p)->getMapData(MapData::O_FLOOR) == 0 && p.z > 0)
+	{
+		p.z--;
+	}
+
+	_battleGame->getTile(p)->addItem(item);
+
+	if(newItem)
+	{
+		_battleGame->getItems()->push_back(item);
+	}
+
+	item->setSlot(_game->getRuleset()->getInventory("STR_GROUND"));
+	item->setOwner(0);
+}
+
+/**
+ * Pick the first soldier from the list in status panic.
+ * @return True when all panicking is over.
+ */
+bool BattlescapeState::handlePanickingPlayer()
+{
+	for (std::vector<BattleUnit*>::iterator j = _battleGame->getUnits()->begin(); j != _battleGame->getUnits()->end(); ++j)
+	{
+		if (handlePanickingUnit(*j))
+			return false;
+	}
+	return true;
+}
+
+/**
+ * Cmmon function for panicking units.
+ * @return False when unit not in panicking mode.
+ */
+bool BattlescapeState::handlePanickingUnit(BattleUnit *unit)
+{
+	UnitStatus status = unit->getStatus();
+	if (status != STATUS_PANICKING && status != STATUS_BERSERK) return false;
+	unit->setVisible(true);
+	_map->centerOnPosition(unit->getPosition());
+
+	std::wstringstream ss;
+	ss << unit->getUnit()->getName(_game->getLanguage()) << L'\n' << _game->getLanguage()->getString(status==STATUS_PANICKING?"STR_HAS_PANICKED":"STR_HAS_GONE_BERSERK");
+	_game->pushState(new InfoboxState(_game, ss.str()));
+
+	unit->abortTurn(); //makes the unit go to status STANDING :p
+
+	int flee = RNG::generate(0,100);
+	switch (status)
+	{
+	case STATUS_PANICKING: // 1/2 chance to freeze and 1/2 chance try to flee
+		if (flee <= 50)
+		{
+			BattleItem *item = unit->getItem("STR_RIGHT_HAND");
+			if (item)
+			{
+				dropItem(unit->getPosition(), item);
+				item->moveToOwner(0);
+			}
+			item = unit->getItem("STR_LEFT_HAND");
+			if (item)
+			{
+				dropItem(unit->getPosition(), item);
+				item->moveToOwner(0);
+			}
+			unit->setCache(0);
+			_action.actor = unit;
+			_action.target = Position(unit->getPosition().x + RNG::generate(-5,5), unit->getPosition().y + RNG::generate(-5,5), unit->getPosition().z);
+			statePushBack(new UnitWalkBState(this, _action));
+		}
+		break;
+	case STATUS_BERSERK: // berserk - do some weird turning around and then aggro towards an enemy unit or shoot towards random place
+		for (int i= 0; i < 4; i++)
+		{
+			_action.actor = unit;
+			_action.target = Position(unit->getPosition().x + RNG::generate(-5,5), unit->getPosition().y + RNG::generate(-5,5), unit->getPosition().z);
+			statePushBack(new UnitTurnBState(this, _action));
+		}
+		for (std::vector<BattleUnit*>::iterator j = unit->getVisibleUnits()->begin(); j != unit->getVisibleUnits()->end(); ++j)
+		{
+			_action.target = (*j)->getPosition();
+			statePushBack(new UnitTurnBState(this, _action));
+		}
+		_action.type = BA_SNAPSHOT;
+		_action.weapon = unit->getMainHandWeapon();
+		for (int i= 0; i < 10; i++)
+		{
+			statePushBack(new ProjectileFlyBState(this, _action));
+		}
+		_action.type = BA_NONE;
+		break;
+	}
+	unit->setTimeUnits(0);
+	unit->moraleChange(+15);
+
+	return true;
+}
+
+/**
+ * TUs are not spent when handling panicking mode or in debug mode.
+ * @return Whether TUs are spent or not.
+ */
+bool BattlescapeState::dontSpendTUs()
+{
+	if (_battleGame->getDebugMode())
+		return true;
+	if (!_playerPanicHandled)
+		return true;
+
+	return false;
 }
 
 }

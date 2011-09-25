@@ -39,8 +39,8 @@ Tile::Tile(const Position& pos): _smoke(0), _fire(0),  _explosive(0), _pos(pos),
 	for (int i = 0; i < 4; ++i)
 	{
 		_objects[i] = 0;
-		_mdsID[i] = 0;
-		_mdID[i] = 0;
+		_mapDataID[i] = -1;
+		_mapDataSetID[i] = -1;
 		_currentFrame[i] = 0;
 	}
 	for (int layer = 0; layer < LIGHTLAYERS; layer++)
@@ -63,6 +63,47 @@ Tile::~Tile()
 }
 
 /**
+ * Load the tile from a YAML node.
+ * @param node YAML node.
+ */
+void Tile::load(const YAML::Node &node)
+{
+	//node["position"][0] >> _pos.x;
+	//node["position"][1] >> _pos.y;
+	//node["position"][2] >> _pos.z;
+	for (int i =0; i < 4; i++)
+	{
+		node["mapDataID"][i] >> _mapDataID[i];
+		node["mapDataSetID"][i] >> _mapDataSetID[i];
+	}
+	node["fire"] >> _fire;
+	node["smoke"] >> _smoke;
+	node["discovered"][0] >> _discovered[0];
+	node["discovered"][1] >> _discovered[1];
+	node["discovered"][2] >> _discovered[2];
+}
+
+/**
+ * Saves the tile to a YAML node.
+ * @param out YAML emitter.
+ */
+void Tile::save(YAML::Emitter &out) const
+{
+	out << YAML::BeginMap;
+	out << YAML::Key << "position" << YAML::Value << YAML::Flow;
+	out << YAML::BeginSeq << _pos.x << _pos.y << _pos.z << YAML::EndSeq;
+	out << YAML::Key << "mapDataID" << YAML::Value << YAML::Flow;
+	out << YAML::BeginSeq << _mapDataID[0] << _mapDataID[1] << _mapDataID[2] << _mapDataID[3] << YAML::EndSeq;
+	out << YAML::Key << "mapDataSetID" << YAML::Value << YAML::Flow;
+	out << YAML::BeginSeq << _mapDataSetID[0] << _mapDataSetID[1] << _mapDataSetID[2] << _mapDataSetID[3] << YAML::EndSeq;
+	out << YAML::Key << "smoke" << YAML::Value << _smoke;
+	out << YAML::Key << "fire" << YAML::Value << _fire;
+	out << YAML::Key << "discovered" << YAML::Value << YAML::Flow;
+	out << YAML::BeginSeq << _discovered[0] << _discovered[1] << _discovered[2] << YAML::EndSeq;
+	out << YAML::EndMap;
+}
+
+/**
  * Get the MapData pointer of a part of the tile.
  * @param part the part 0-3.
  * @return pointer to mapdata
@@ -79,35 +120,25 @@ MapData *Tile::getMapData(int part) const
 /**
  * Set the MapData references of part 0 to 3.
  * @param dat pointer to the data object
+ * @param newObjectID The ID in the total list of the objects of this battlegame.
  * @param part the part number
  */
-void Tile::setMapData(MapData *dat, int part)
+void Tile::setMapData(MapData *dat, int mapDataID, int mapDataSetID, int part)
 {
 	_objects[part] = dat;
-}
-
-/**
- * Set the MapData references of part 0 to 3.
- * @param mdsID MapDataSet ID
- * @param mdID MapData ID
- * @param part the part number
- */
-void Tile::load(int mdsID, int mdID, int part)
-{
-	_mdsID[part] = mdsID;
-	_mdID[part] = mdID;
+	_mapDataID[part] = mapDataID;
+	_mapDataSetID[part] = mapDataSetID;
 }
 
 /**
  * get the MapData references of part 0 to 3.
- * @param mdsID MapDataSet ID
- * @param mdID MapData ID
  * @param part the part number
+ * @return the object ID
  */
-void Tile::getSaveGameData(int *mdsID, int *mdID, int part) const
+void Tile::getMapData(int *mapDataID, int *mapDataSetID, int part) const
 {
-	*mdsID = _mdsID[part];
-	*mdID = _mdID[part];
+	*mapDataID = _mapDataID[part];
+	*mapDataSetID = _mapDataSetID[part];
 }
 
 /**
@@ -116,7 +147,7 @@ void Tile::getSaveGameData(int *mdsID, int *mdID, int part) const
  */
 bool Tile::isVoid() const
 {
-	return _objects[0] == 0 && _objects[1] == 0 && _objects[2] == 0 && _objects[3] == 0;
+	return _objects[0] == 0 && _objects[1] == 0 && _objects[2] == 0 && _objects[3] == 0 && _smoke == 0;
 }
 
 /**
@@ -211,9 +242,9 @@ int Tile::openDoor(int part)
 
 	if (_objects[part]->isDoor())
 	{
-		setMapData(_objects[part]->getDataset()->getObjects()->at(_objects[part]->getAltMCD()),
+		setMapData(_objects[part]->getDataset()->getObjects()->at(_objects[part]->getAltMCD()), _objects[part]->getAltMCD(), _mapDataSetID[part],
 				   _objects[part]->getDataset()->getObjects()->at(_objects[part]->getAltMCD())->getObjectType());
-		setMapData(0, part);
+		setMapData(0, -1, -1, part);
 		return 0;
 	}
 	if (_objects[part]->isUFODoor() && _currentFrame[part] == 0) // ufo door part 0 - door is closed
@@ -269,10 +300,10 @@ void Tile::setDiscovered(bool flag, int part)
 	if (_discovered[part] != flag)
 	{
 		_discovered[part] = flag;
-		if (part == 2)
+		if (part == 2 && flag == true)
 		{
-			_discovered[0] = flag;
-			_discovered[1] = flag;
+			_discovered[0] = true;
+			_discovered[1] = true;
 		}
 		// if light on tile changes, units and objects on it change light too
 		if (_unit != 0)
@@ -343,11 +374,12 @@ void Tile::destroy(int part)
 	if (_objects[part])
 	{
 		MapData *originalPart = _objects[part];
-		setMapData(0, part);
+		int originalMapDataSetID = _mapDataSetID[part];
+		setMapData(0, -1, -1, part);
 		if (originalPart->getDieMCD())
 		{
 			MapData *dead = originalPart->getDataset()->getObjects()->at(originalPart->getDieMCD());
-			setMapData(dead, dead->getObjectType());
+			setMapData(dead, originalPart->getDieMCD(), originalMapDataSetID, dead->getObjectType());
 		}
 		if (originalPart->getExplosive())
 		{
@@ -358,10 +390,8 @@ void Tile::destroy(int part)
 	if (part == MapData::O_FLOOR && getPosition().z == 0 && _objects[MapData::O_FLOOR] == 0)
 	{
 		/* replace with scourched earth */
-		setMapData(MapDataSet::getScourgedEarthTile(), MapData::O_FLOOR);
+		setMapData(MapDataSet::getScourgedEarthTile(), 1, 0, MapData::O_FLOOR);
 	}
-
-
 }
 
 /* damage terrain  - check against armor*/
@@ -602,6 +632,7 @@ int Tile::getAnimationOffset() const
 void Tile::addItem(BattleItem *item)
 {
 	_inventory.push_back(item);
+	item->setTile(this);
 }
 
 /**
@@ -618,6 +649,7 @@ void Tile::removeItem(BattleItem *item)
 			break;
 		}
 	}
+	item->setTile(0);
 }
 
 /**

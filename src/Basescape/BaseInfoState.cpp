@@ -156,19 +156,19 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 	}
 	_mini->onMouseClick((ActionHandler)&BaseInfoState::miniClick);
 
-	_btnOk->setColor(Palette::blockOffset(15)+9);
+	_btnOk->setColor(Palette::blockOffset(15)+6);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&BaseInfoState::btnOkClick);
 
-	_btnTransfers->setColor(Palette::blockOffset(15)+9);
+	_btnTransfers->setColor(Palette::blockOffset(15)+6);
 	_btnTransfers->setText(_game->getLanguage()->getString("STR_TRANSFERS_UC"));
 	_btnTransfers->onMouseClick((ActionHandler)&BaseInfoState::btnTransfersClick);
 
-	_btnStores->setColor(Palette::blockOffset(15)+9);
+	_btnStores->setColor(Palette::blockOffset(15)+6);
 	_btnStores->setText(_game->getLanguage()->getString("STR_STORES_UC"));
 	_btnStores->onMouseClick((ActionHandler)&BaseInfoState::btnStoresClick);
 
-	_btnMonthlyCosts->setColor(Palette::blockOffset(15)+9);
+	_btnMonthlyCosts->setColor(Palette::blockOffset(15)+6);
 	_btnMonthlyCosts->setText(_game->getLanguage()->getString("STR_MONTHLY_COSTS"));
 	_btnMonthlyCosts->onMouseClick((ActionHandler)&BaseInfoState::btnMonthlyCostsClick);
 

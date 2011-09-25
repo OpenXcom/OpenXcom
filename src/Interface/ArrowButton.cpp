@@ -48,6 +48,16 @@ ArrowButton::~ArrowButton()
 }
 
 /**
+ * Changes the color for the image button.
+ * @param color Color value.
+ */
+void ArrowButton::setColor(Uint8 color)
+{
+	ImageButton::setColor(color);
+	_redraw = true;
+}
+
+/**
  * Changes the text associated with the arrow button.
  * This makes the button scroll that list.
  * @param list Pointer to text list.
@@ -67,7 +77,7 @@ void ArrowButton::draw()
 
 	// Draw button
 	SDL_Rect square;
-	int color = _color - 1;
+	int color = _color + 2;
 
 	square.x = 0;
 	square.y = 0;
@@ -78,21 +88,21 @@ void ArrowButton::draw()
 
 	square.x++;
 	square.y++;
-	color = _color + 2;
+	color = _color + 5;
 
 	drawRect(&square, color);
 
 	square.w--;
 	square.h--;
-	color = _color + 1;
+	color = _color + 4;
 
 	drawRect(&square, color);
 
-	setPixel(0, 0, _color - 2);
-	setPixel(0, getHeight() - 1, _color + 1);
-	setPixel(getWidth() - 1, 0, _color + 1);
+	setPixel(0, 0, _color + 1);
+	setPixel(0, getHeight() - 1, _color + 4);
+	setPixel(getWidth() - 1, 0, _color + 4);
 
-	color = _color - 2;
+	color = _color + 1;
 
 	if (_shape == ARROW_BIG_UP)
 	{

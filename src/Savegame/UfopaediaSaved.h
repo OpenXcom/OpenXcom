@@ -55,7 +55,7 @@ namespace OpenXcom
 		void insertArticle(ArticleDefinition *article);
 		
 		/// check if an article is available.
-		bool isArticleAvailable(std::string &article_id);
+		bool isArticleAvailable(const std::string &article_id);
 		
 		/// open Ufopaedia with selection dialog.
 		void setCurrentArticle(ArticleDefinition *article);
@@ -67,18 +67,18 @@ namespace OpenXcom
 		ArticleDefinition *goPrevArticle();
 		
 		/// load a vector with article ids that are currently visible of a given section.
-		void getSectionList(std::string section, ArticleDefinitionList &data);
+		void getSectionList(const std::string &section, ArticleDefinitionList &data);
 		
 		/// TODO: get current visible article list as storeable data (for save).
-		void getSavegameProperties(std::string &info) const;
+		void getSavegameProperties(const std::string &info) const;
 		
 		/// TODO: set current visible article list from stored data (on load).
-		void setSavegameProperties(std::string &info);
+		void setSavegameProperties(const std::string &info);
 
 	protected:
 		
 		/// get index of the given article id in the visible list.
-		int getArticleIndex(std::string &article_id);
+		int getArticleIndex(const std::string &article_id);
 	};
 	
 }

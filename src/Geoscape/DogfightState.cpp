@@ -134,36 +134,36 @@ DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo) :
 	_btnMinimize->onMouseClick((ActionHandler)&DogfightState::btnMinimizeClick);
 
 	_btnStandoff->copy(_window);
-	_btnStandoff->setColor(Palette::blockOffset(5)+4);
+	_btnStandoff->setColor(Palette::blockOffset(5)+1);
 	_btnStandoff->setGroup(&_mode);
 	_btnStandoff->onMouseClick((ActionHandler)&DogfightState::btnStandoffClick);
 
 	_btnCautious->copy(_window);
-	_btnCautious->setColor(Palette::blockOffset(5)+4);
+	_btnCautious->setColor(Palette::blockOffset(5)+1);
 	_btnCautious->setGroup(&_mode);
 	_btnCautious->onMouseClick((ActionHandler)&DogfightState::btnCautiousClick);
 
 	_btnStandard->copy(_window);
-	_btnStandard->setColor(Palette::blockOffset(5)+4);
+	_btnStandard->setColor(Palette::blockOffset(5)+1);
 	_btnStandard->setGroup(&_mode);
 	_btnStandard->onMouseClick((ActionHandler)&DogfightState::btnStandardClick);
 
 	_btnAggressive->copy(_window);
-	_btnAggressive->setColor(Palette::blockOffset(5)+4);
+	_btnAggressive->setColor(Palette::blockOffset(5)+1);
 	_btnAggressive->setGroup(&_mode);
 	_btnAggressive->onMouseClick((ActionHandler)&DogfightState::btnAggressiveClick);
 
 	_btnDisengage->copy(_window);
-	_btnDisengage->setColor(Palette::blockOffset(5)+4);
+	_btnDisengage->setColor(Palette::blockOffset(5)+1);
 	_btnDisengage->onMouseClick((ActionHandler)&DogfightState::btnDisengageClick);
 	_btnDisengage->setGroup(&_mode);
 
 	_btnUfo->copy(_window);
-	_btnUfo->setColor(Palette::blockOffset(5)+4);
+	_btnUfo->setColor(Palette::blockOffset(5)+1);
 	_btnUfo->onMouseClick((ActionHandler)&DogfightState::btnUfoClick);
 
 	_btnUfo->copy(_window);
-	_btnUfo->setColor(Palette::blockOffset(5)+4);
+	_btnUfo->setColor(Palette::blockOffset(5)+1);
 
 	_txtAmmo1->setColor(Palette::blockOffset(5)+9);
 
@@ -608,7 +608,7 @@ void DogfightState::maximumDistance()
  * the text timeout counter.
  * @param status New status text.
  */
-void DogfightState::setStatus(std::string status)
+void DogfightState::setStatus(const std::string &status)
 {
 	_txtStatus->setText(_game->getLanguage()->getString(status));
 	_timeout = 50;

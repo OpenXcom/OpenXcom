@@ -65,10 +65,10 @@ SoldierArmorState::SoldierArmorState(Game *game, Base *base, unsigned int soldie
 	add(_lstArmor);
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(13)+13);
+	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK14.SCR"));
 
-	_btnCancel->setColor(Palette::blockOffset(13)+8);
+	_btnCancel->setColor(Palette::blockOffset(13)+5);
 	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&SoldierArmorState::btnCancelClick);
 
@@ -88,7 +88,7 @@ SoldierArmorState::SoldierArmorState(Game *game, Base *base, unsigned int soldie
 	_txtQuantity->setText(_game->getLanguage()->getString("STR_QUANTITY_UC"));
 
 	_lstArmor->setColor(Palette::blockOffset(13));
-	_lstArmor->setArrowColor(Palette::blockOffset(13)+8);
+	_lstArmor->setArrowColor(Palette::blockOffset(13)+5);
 	_lstArmor->setColumns(2, 112, 41);
 	_lstArmor->setSelectable(true);
 	_lstArmor->setBackground(_window);

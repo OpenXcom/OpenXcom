@@ -55,14 +55,14 @@ AbandonGameState::AbandonGameState(Game *game) : State(game)
 	add(_txtTitle);
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(15)+2);
+	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
-	_btnYes->setColor(Palette::blockOffset(15)+2);
+	_btnYes->setColor(Palette::blockOffset(15)-1);
 	_btnYes->setText(_game->getLanguage()->getString("STR_YES"));
 	_btnYes->onMouseClick((ActionHandler)&AbandonGameState::btnYesClick);
 
-	_btnNo->setColor(Palette::blockOffset(15)+2);
+	_btnNo->setColor(Palette::blockOffset(15)-1);
 	_btnNo->setText(_game->getLanguage()->getString("STR_NO"));
 	_btnNo->onMouseClick((ActionHandler)&AbandonGameState::btnNoClick);
 

@@ -29,6 +29,7 @@ class Item;
 class RuleItem;
 class RuleInventory;
 class BattleUnit;
+class Tile;
 
 /**
  * Represents a single item in the battlescape.
@@ -39,16 +40,17 @@ class BattleUnit;
 class BattleItem
 {
 private:
+	int _id;
 	RuleItem *_rules;
-	Position _position;
 	BattleUnit *_owner, *_previousOwner;
+	Tile *_tile;
 	RuleInventory *_inventorySlot;
 	int _inventoryX, _inventoryY;
 	BattleItem *_ammoItem;
 	int _explodeTurn, _ammoQuantity;
 public:
 	/// Creates a item of the specified type.
-	BattleItem(RuleItem *rules);
+	BattleItem(RuleItem *rules, int *id);
 	/// Cleans up the item.
 	~BattleItem();
 	/// Loads the item from YAML.
@@ -93,6 +95,13 @@ public:
 	BattleItem *getAmmoItem();
 	/// Sets the item's ammo item.
 	int setAmmoItem(BattleItem *item);
+	/// Gets the item's tile.
+	Tile *getTile() const;
+	/// Sets the tile.
+	void setTile(Tile *tile);
+	/// Gets it's unique id.
+	int getId() const;
+
 };
 
 }

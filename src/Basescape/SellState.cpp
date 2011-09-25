@@ -78,14 +78,14 @@ SellState::SellState(Game *game, Base *base) : State(game), _base(base), _qtys()
 	add(_lstItems);
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(13)+13);
+	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(13)+13);
+	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(_game->getLanguage()->getString("STR_SELL_SACK"));
 	_btnOk->onMouseClick((ActionHandler)&SellState::btnOkClick);
 
-	_btnCancel->setColor(Palette::blockOffset(13)+13);
+	_btnCancel->setColor(Palette::blockOffset(13)+10);
 	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)&SellState::btnCancelClick);
 
@@ -117,7 +117,6 @@ SellState::SellState(Game *game, Base *base) : State(game), _base(base), _qtys()
 	_txtValue->setText(_game->getLanguage()->getString("STR_VALUE"));
 
 	_lstItems->setColor(Palette::blockOffset(13)+10);
-	_lstItems->setArrowColor(Palette::blockOffset(13)+13);
 	_lstItems->setArrowColumn(189, ARROW_VERTICAL);
 	_lstItems->setColumns(4, 156, 62, 28, 40);
 	_lstItems->setSelectable(true);

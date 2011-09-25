@@ -22,6 +22,12 @@
 namespace OpenXcom
 {
 
+
+Node::Node()
+{
+	
+}
+
 /**
  * Initializes a Node.
  * @param id
@@ -54,7 +60,69 @@ Node::~Node()
 	delete _nodeLinks[4];
 }
 
-/// get the node's id
+/**
+ * Loads the UFO from a YAML file.
+ * @param node YAML node.
+ */
+void Node::load(const YAML::Node &node)
+{
+	int a = 0;
+	node["position"][0] >> _pos.x;
+	node["position"][1] >> _pos.y;
+	node["position"][2] >> _pos.z;
+	node["id"] >> _id;
+	node["segment"] >> _segment;
+	node["rank"] >> _rank;
+	node["flags"] >> _flags;
+	node["reserved"] >> _reserved;
+	node["priority"] >> _priority;
+	for (int i=0; i < 5; i++)
+	{
+		node["links"][i]["connectedNodeId"] >> a;
+		_nodeLinks[i] = new NodeLink(a, 0, 0);
+		_nodeLinks[i]->load(node["links"][i]);
+	}
+}
+
+/**
+ * Saves the UFO to a YAML file.
+ * @param out YAML emitter.
+ */
+void Node::save(YAML::Emitter &out) const
+{
+	out << YAML::BeginMap;
+	out << YAML::Key << "id" << YAML::Value << _id;
+	out << YAML::Key << "position" << YAML::Value << YAML::Flow;
+	out << YAML::BeginSeq << _pos.x << _pos.y << _pos.z << YAML::EndSeq;
+	out << YAML::Key << "segment" << YAML::Value << _segment;
+	out << YAML::Key << "type" << YAML::Value << _type;
+	out << YAML::Key << "rank" << YAML::Value << _rank;
+	out << YAML::Key << "flags" << YAML::Value << _flags;
+	out << YAML::Key << "reserved" << YAML::Value << _reserved;
+	out << YAML::Key << "priority" << YAML::Value << _priority;
+	out << YAML::Key << "links" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (int i=0; i < 5; i++)
+	{
+		if (_nodeLinks[i])
+		{
+			_nodeLinks[i]->save(out);
+		}
+		else
+		{
+			out << YAML::BeginMap;
+			out << YAML::Key << "connectedNodeId" << YAML::Value << -1;
+			out << YAML::EndMap;
+		}
+	}
+	out << YAML::EndSeq;
+	out << YAML::EndMap;
+}
+
+/**
+ * Get the node's id
+ * @return unique id
+ */
 int Node::getID() const
 {
 	return _id;

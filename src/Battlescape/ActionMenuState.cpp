@@ -44,7 +44,6 @@ namespace OpenXcom
 ActionMenuState::ActionMenuState(Game *game, BattleAction *action, int x, int y) : State(game), _action(action)
 {
 	_screen = false;
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_4")->getColors());
 
 	for (int i = 0; i < 5; ++i)
 	{

@@ -62,7 +62,7 @@ protected:
 	std::map<std::string, RuleItem*> _items;
 	std::map<std::string, RuleUfo*> _ufos;
 	std::map<std::string, RuleTerrain*> _terrains;
-	std::map<std::string, MapDataSet*> _mapDataFiles;
+	std::map<std::string, MapDataSet*> _mapDataSets;
 	std::map<std::string, RuleSoldier*> _soldiers;
 	std::map<std::string, RuleAlien*> _aliens;
 	std::map<std::string, RuleArmor*> _armors;
@@ -109,8 +109,8 @@ public:
 	ArticleDefinition *const getUfopaediaArticle(const std::string &name) const;
 	/// Gets the inventory list.
 	std::map<std::string, RuleInventory*> *const getInventories();
-	/// Gets alien unit rules.
-	RuleInventory *const getInventory(const std::string &name) const;
+	/// Gets the ruleset for a specific inventory.
+	RuleInventory *const getInventory(const std::string &id) const;
 	/// Gets the cost of a soldier.
 	int getSoldierCost() const;
 	/// Gets the cost of an engineer.
@@ -119,7 +119,9 @@ public:
 	int getScientistCost() const;
 	/// Gets the transfer time of personnel.
 	int getPersonnelTime() const;
-	/// Get the list of ResearchProjects
+	/// Gets the ruleset for a specific research project.
+	RuleResearchProject *getResearchProject (const std::string &id) const;
+	/// Get the list of all research projects.
 	const std::map<std::string, RuleResearchProject *> & getResearchProjects () const;
 	const std::map<std::string, RuleItem*> & getItems () const;
 };

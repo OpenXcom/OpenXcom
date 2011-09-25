@@ -37,7 +37,7 @@ private:
 
 public:
 	/// Creates a blank armor ruleset.
-	RuleArmor(std::string type, std::string spriteSheet);
+	RuleArmor(const std::string &type, std::string spriteSheet);
 	/// Cleans up the armor ruleset.
 	~RuleArmor();
 	/// Gets the armor's type.
@@ -55,7 +55,7 @@ public:
 	/// get the under armor level.
 	int getUnderArmor() const;
 	/// Set the corpse item.
-	void setCorpseItem(std::string corpseItem);
+	void setCorpseItem(const std::string &corpseItem);
 	/// Get the corpse item.
 	std::string getCorpseItem() const;
 };

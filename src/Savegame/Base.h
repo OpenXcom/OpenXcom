@@ -54,7 +54,7 @@ private:
 	std::vector<Transfer*> _transfers;
 	ItemContainer *_items;
 	int _scientists, _engineers;
-	std::vector<ResearchProject *> _baseResearchs;
+	std::vector<ResearchProject *> _research;
 	std::vector<Production *> _productions;
 public:
 	/// Creates a new base.
@@ -128,7 +128,7 @@ public:
 	/// Gets the base's long range detection.
 	int getLongRangeDetection() const;
 	/// Gets the base's crafts of a certain type.
-	int getCraftCount(std::string craft) const;
+	int getCraftCount(const std::string &craft) const;
 	/// Gets the base's craft maintenance.
 	int getCraftMaintenance() const;
 	/// Gets the base's personnel maintenance.
