@@ -192,6 +192,8 @@ void DebriefingState::btnOkClick(Action *action)
 	// bye save game, battle is over
 	_game->getSavedGame()->setBattleGame(0);
 
+	bool showPromotionsScreen = _game->getSavedGame()->handlePromotions();
+
 	_game->popState();
 }
 

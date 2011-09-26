@@ -818,12 +818,11 @@ std::vector<DebriefingStat*> *SavedBattleGame::getDebriefingStats()
  * Adds the items to the craft.
  * Also calculates the soldiers experience, and possible promotions.
  * If aborted, only the things on the exit area are recovered.
- *
  */
 void SavedBattleGame::prepareDebriefing(bool aborted)
 {
 	_aborted = aborted;
-	int playerInExitArea = 0;
+	int playerInExitArea = 0; // if this stays 0 the craft is lost...
 
 	// lets see what happens with units
 	for (std::vector<BattleUnit*>::iterator j = getUnits()->begin(); j != getUnits()->end(); ++j)
@@ -853,9 +852,14 @@ void SavedBattleGame::prepareDebriefing(bool aborted)
 		else if (faction == FACTION_PLAYER)
 		{
 			if ((*j)->isInExitArea() || !aborted)
+			{
 				playerInExitArea++;
+				(*j)->postMissionProcedures();
+			}
 			else
+			{
 				addStat("STR_XCOM_OPERATIVES_MISSING_IN_ACTION", 1, -value);
+			}
 		}
 	}
 	if (playerInExitArea == 0 && aborted)
@@ -911,6 +915,7 @@ void SavedBattleGame::prepareDebriefing(bool aborted)
 			}
 		}
 	}
+
 }
 
 /**

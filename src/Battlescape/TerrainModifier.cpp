@@ -433,6 +433,7 @@ bool TerrainModifier::checkReactionFire(BattleUnit *unit, BattleAction *action, 
 
 	if (action->actor && highestReactionScore > unit->getReactionScore())
 	{
+		action->actor->addReactionExp();
 		action->type = BA_SNAPSHOT;
 		action->target = unit->getPosition();
 		// lets try and shoot
@@ -484,7 +485,7 @@ bool TerrainModifier::checkReactionFire(BattleUnit *unit, BattleAction *action, 
  */
 void TerrainModifier::explode(const Position &center, int power, ItemDamageType type, int maxRadius, BattleUnit *unit)
 {
-	if (type == DT_AP || type == DT_PLASMA)
+	if (type == DT_AP || type == DT_PLASMA || type == DT_LASER)
 	{
 		int part = voxelCheck(center, unit);
 		if (part >= 0 && part <= 3)
@@ -504,6 +505,8 @@ void TerrainModifier::explode(const Position &center, int power, ItemDamageType 
 			{
 				_save->getTile(Position(center.x/16, center.y/16, center.z/24))->getUnit()->stun(RNG::generate(0, rndPower/4));
 			}
+
+			unit->addFiringExp();
 		}
 	}
 	else
