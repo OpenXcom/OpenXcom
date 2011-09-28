@@ -21,6 +21,7 @@
 
 #include <vector>
 #include <string>
+#include "yaml.h"
 
 namespace OpenXcom
 {
@@ -104,6 +105,8 @@ public:
 	int getScore() const;
 	/// Sets the craft's score.
 	void setScore(int score);
+	/// Loads craft data from YAML.
+	void load(const YAML::Node& node);
 	/// Gets the craft's terrain data.
 	RuleTerrain *getBattlescapeTerrainData();
 	/// Sets the craft's terrain data.

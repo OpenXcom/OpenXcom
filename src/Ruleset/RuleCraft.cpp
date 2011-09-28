@@ -346,4 +346,74 @@ void RuleCraft::setBattlescapeTerrainData(RuleTerrain *terrain)
 	_battlescapeTerrainData = terrain;
 }
 
+/**
+ * Loads the craft from a YAML file.
+ * @param node YAML node.
+ */
+void RuleCraft::load(const YAML::Node &node)
+{
+	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
+	{
+		std::string key;
+		i.first() >> key;
+		if (key == "type")
+		{
+			i.second() >> _type;
+		}
+		if (key == "sprite")
+		{
+			i.second() >> _sprite;
+		}
+		else if (key == "fuelMax")
+		{
+			i.second() >> _fuelMax;
+		}
+		else if (key == "damageMax")
+		{
+			i.second() >> _damageMax;
+		}
+		else if (key == "speedMax")
+		{
+			i.second() >> _speedMax;
+		}
+		else if (key == "accel")
+		{
+			i.second() >> _accel;
+		}
+		else if (key == "weapons")
+		{
+			i.second() >> _weapons;
+		}
+		else if (key == "soldiers")
+		{
+			i.second() >> _soldiers;
+		}
+		else if (key == "hwps")
+		{
+			i.second() >> _hwps;
+		}
+		else if (key == "cost")
+		{
+			i.second() >> _cost;
+		}
+		else if (key == "repair")
+		{
+			i.second() >> _repair;
+		}
+		else if (key == "refuel")
+		{
+			i.second() >> _refuel;
+		}
+		else if (key == "time")
+		{
+			i.second() >> _time;
+		}
+		else if (key == "score")
+		{
+			i.second() >> _score;
+		}
+	}
 }
+
+}
+

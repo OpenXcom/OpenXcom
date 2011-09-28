@@ -125,9 +125,9 @@ void Ruleset::load(const std::string &filename)
 	std::ifstream fin(s.c_str());
 	if (!fin)
 	{
-		throw Exception("Failed to load ruleset");
+		throw Exception("Failed to load ruleset.");
 	}
-    YAML::Parser parser(fin);
+	YAML::Parser parser(fin);
 	YAML::Node doc;
 
 	parser.GetNextDocument(doc);
