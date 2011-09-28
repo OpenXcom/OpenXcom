@@ -1186,5 +1186,125 @@ int BattleUnit::getHeight() const
 	return isKneeled()?_unit->getKneelHeight():_unit->getStandHeight();
 }
 
+/**
+* Adds one to the reaction exp counter.
+*/
+void BattleUnit::addReactionExp()
+{
+	_expReactions++;
+}
+
+/**
+* Adds one to the firing exp counter.
+*/
+void BattleUnit::addFiringExp()
+{
+	_expFiring++;
+}
+
+/**
+* Adds one to the firing exp counter.
+*/
+void BattleUnit::addThrowingExp()
+{
+	_expThrowing++;
+}
+
+/**
+* Adds one to the firing exp counter.
+*/
+void BattleUnit::addPsiExp()
+{
+	_expPsiSkill++;
+}
+
+/**
+* Adds one to the firing exp counter.
+*/
+void BattleUnit::addMeleeExp()
+{
+	_expMelee++;
+}
+
+/**
+* Check if unit eligible for squaddie promotion. If yes, promote the unit.
+* Increase the mission counter. Calculate the experience increases.
+* @return True if the soldier was eligible for squaddie promotion.
+*/
+bool BattleUnit::postMissionProcedures()
+{
+	Soldier *s = dynamic_cast<Soldier*>(_unit);
+	if (s == 0)
+	{
+		return false;
+	}
+
+	s->addMissionCount();
+
+	UnitStats *stats = s->getCurrentStats();
+
+	if (_expBravery && stats->bravery < 100)
+	{
+		if (_expBravery > RNG::generate(0,10)) stats->bravery += 10;
+	}
+	if (_expReactions && stats->reactions < 100)
+	{
+		stats->reactions += improveStat(_expReactions);
+	}
+	if (_expFiring && stats->firing < 120)
+	{
+		stats->firing += improveStat(_expFiring);
+	}
+	if (_expMelee && stats->melee < 120)
+	{
+		stats->melee += improveStat(_expMelee);
+	}
+	if (_expThrowing && stats->throwing < 120)
+	{
+		stats->throwing += improveStat(_expThrowing);
+	}
+	if (_expPsiSkill && stats->psiSkill < 100)
+	{
+		stats->psiSkill += improveStat(_expPsiSkill);
+	}
+
+	/* TODO wound recovery :  Soldier->Wound_Recovery_Days = v / 2 + randmod(v) (v = UnitRef->BaseHPs - UnitRef->CurHP) */
+
+	if (_expBravery || _expReactions || _expFiring || _expPsiSkill || _expMelee)
+	{
+		if (s->getRank() == RANK_ROOKIE)
+			s->promoteRank();
+		int v;
+		v = 80 - stats->tu;
+		if (v > 0) stats->tu += RNG::generate(0, v/10 + 2);
+		v = 60 - stats->health;
+		if (v > 0) stats->health += RNG::generate(0, v/10 + 2);
+		v = 70 - stats->strength;
+		if (v > 0) stats->strength += RNG::generate(0, v/10 + 2);
+		v = 100 - stats->stamina;
+		if (v > 0) stats->stamina += RNG::generate(0, v/10 + 2);
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+/**
+* Converts the number of experience to the stat increase.
+* @param Experience counter.
+* @return Stat increase.
+*/
+int BattleUnit::improveStat(int exp)
+{
+	double v = 4;
+	if (exp < 3) v = 1;
+	if (exp < 6) v = 2;
+	if (exp < 10) v = 3;
+	return (int)(v/2.0 + RNG::generate(0.0, v));
+}
+
+
 }
 

@@ -31,7 +31,7 @@ namespace OpenXcom
  * @param rules Soldier ruleset.
  * @param armor Soldier armor.
  */
-Soldier::Soldier(RuleSoldier *rules, RuleArmor *armor) : Unit(armor), _name(L""), _rules(rules), _rank(RANK_ROOKIE), _craft(0), _gender(GENDER_MALE), _look(LOOK_BLONDE), _missions(0), _kills(0)
+Soldier::Soldier(RuleSoldier *rules, RuleArmor *armor) : Unit(armor), _name(L""), _rules(rules), _rank(RANK_ROOKIE), _craft(0), _gender(GENDER_MALE), _look(LOOK_BLONDE), _missions(0), _kills(0), _recentlyPromoted(false)
 {
 	_initialStats.bravery = 0;
 	_initialStats.firing = 0;
@@ -232,6 +232,29 @@ int Soldier::getRankSprite() const
 	return 42 + _rank;
 }
 
+
+/**
+ * Returns the soldier's military rank.
+ * @return Rank enum.
+ */
+SoldierRank Soldier::getRank() const
+{
+	return _rank;
+}
+
+/**
+ * Increase the soldier's military rank.
+ */
+void Soldier::promoteRank()
+{
+	_rank = (SoldierRank)((int)_rank + 1);
+	if (_rank > RANK_SQUADDIE)
+	{
+		// only promotions above SQUADDIE are worth to be mentioned
+		_recentlyPromoted = true;
+	}
+}
+
 /**
  * Returns the soldier's amount of time units.
  * @return Time units.
@@ -293,6 +316,15 @@ int Soldier::getFiringAccuracy() const
 int Soldier::getThrowingAccuracy() const
 {
 	return _currentStats.throwing;
+}
+
+/**
+ * Returns the soldier's amount of melee accuracy.
+ * @return Melee accuracy.
+ */
+int Soldier::getMeleeAccuracy() const
+{
+	return _currentStats.melee;
 }
 
 /**
@@ -404,6 +436,30 @@ int Soldier::getValue() const
 int Soldier::getId() const
 {
 	return _id;
+}
+
+/**
+ * Add a mission to the counter.
+ */
+void Soldier::addMissionCount()
+{
+	_missions++;
+}
+
+/**
+ * Add a kill to the counter.
+ */
+void Soldier::addKillCount()
+{
+	_kills++;
+}
+
+/**
+ * Get pointer to current stats.
+ */
+UnitStats *Soldier::getCurrentStats()
+{
+	return &_currentStats;
 }
 
 }

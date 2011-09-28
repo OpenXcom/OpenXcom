@@ -169,14 +169,14 @@ void CraftSoldiersState::lstSoldiersClick(Action *action)
 	int row = _lstSoldiers->getSelectedRow();
 	Craft *c = _base->getCrafts()->at(_craft);
 	Soldier *s = _base->getSoldiers()->at(_lstSoldiers->getSelectedRow());
-	Uint8 color;
+	Uint8 color = Palette::blockOffset(13)+10;
 	if (s->getCraft() == c)
 	{
 		s->setCraft(0);
 		_lstSoldiers->setCellText(row, 2, _game->getLanguage()->getString("STR_NONE_UC"));
 		color = Palette::blockOffset(13)+10;
 	}
-	else
+	else if (c->getRules()->getSoldiers() - c->getNumSoldiers() > 0)
 	{
 		s->setCraft(c);
 		_lstSoldiers->setCellText(row, 2, c->getName(_game->getLanguage()));

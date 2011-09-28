@@ -20,6 +20,7 @@
 #define OPENXCOM_RULECOUNTRY_H
 
 #include <string>
+#include "yaml.h"
 
 namespace OpenXcom
 {
@@ -40,6 +41,10 @@ public:
 	RuleCountry(const std::string &type);
 	/// Cleans up the country ruleset.
 	~RuleCountry();
+	/// Loads the country from YAML.
+	void load(const YAML::Node& node);
+	/// Saves the country to YAML.
+	void save(YAML::Emitter& out) const;
 	/// Gets the country's type.
 	std::string getType() const;
 	/// Gets the country's minimum funding.

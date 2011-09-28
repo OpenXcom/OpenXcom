@@ -38,6 +38,54 @@ RuleCountry::~RuleCountry()
 }
 
 /**
+ * Loads the country type from a YAML file.
+ * @param node YAML node.
+ */
+void RuleCountry::load(const YAML::Node &node)
+{
+	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
+	{
+		std::string key;
+		i.first() >> key;
+		if (key == "type")
+		{
+			i.second() >> _type;
+		}
+		if (key == "fundingMin")
+		{
+			i.second() >> _fundingMin;
+		}
+		else if (key == "fundingMax")
+		{
+			i.second() >> _fundingMax;
+		}
+		else if (key == "labelLon")
+		{
+			i.second() >> _labelLon;
+		}
+		else if (key == "labelLat")
+		{
+			i.second() >> _labelLat;
+		}
+	}
+}
+
+/**
+ * Saves the country type to a YAML file.
+ * @param out YAML emitter.
+ */
+void RuleCountry::save(YAML::Emitter &out) const
+{
+	out << YAML::BeginMap;
+	out << YAML::Key << "type" << YAML::Value << _type;
+	out << YAML::Key << "fundingMin" << YAML::Value << _fundingMin;
+	out << YAML::Key << "fundingMax" << YAML::Value << _fundingMax;
+	out << YAML::Key << "labelLon" << YAML::Value << _labelLon;
+	out << YAML::Key << "labelLat" << YAML::Value << _labelLat;
+	out << YAML::EndMap;
+}
+
+/**
  * Returns the language string that names
  * this country. Each country type
  * has a unique name.

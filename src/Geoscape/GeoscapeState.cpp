@@ -848,6 +848,7 @@ void GeoscapeState::btnBasesClick(Action *action)
 void GeoscapeState::btnGraphsClick(Action *action)
 {
 #ifdef _DEBUG
+	_game->getRuleset()->save("UfoBase");
 	/* Daiky: uncomment this bit to start a terror mission */
 	_game->getSavedGame()->setBattleGame(new SavedBattleGame());
 	BattlescapeGenerator *bgen = new BattlescapeGenerator(_game);
