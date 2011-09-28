@@ -402,7 +402,10 @@ void Text::draw()
 		mul = 3;
 	}
 
-	font->getSurface()->paletteShift(color, mul);
+	// Invert text by inverting the font palette on index 3 (font palettes use indices 1-5)
+	int mid = _invert ? 3 : 0;
+
+	font->getSurface()->paletteShift(color, mul, mid);
 
 	// Draw each letter one by one
 	for (std::wstring::iterator c = s->begin(); c != s->end(); ++c)
@@ -431,14 +434,14 @@ void Text::draw()
 			{
 				font->getSurface()->paletteRestore();
 				font = _small;
-				font->getSurface()->paletteShift(color, mul);
+				font->getSurface()->paletteShift(color, mul, mid);
 			}
 		}
 		else if (*c == 1)
 		{
 			font->getSurface()->paletteRestore();
 			color = (color == _color ? _color2 : _color);
-			font->getSurface()->paletteShift(color, mul);
+			font->getSurface()->paletteShift(color, mul, mid);
 		}
 		else
 		{
@@ -448,10 +451,6 @@ void Text::draw()
 			chr->blit(this);
 			x += chr->getCrop()->w + font->getSpacing();
 		}
-	}
-	if (_invert)
-	{
-		this->invert(_color + 3 * mul);
 	}
 
 	// Revert text color
