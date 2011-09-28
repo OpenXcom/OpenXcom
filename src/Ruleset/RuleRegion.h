@@ -21,6 +21,7 @@
 
 #include <string>
 #include <vector>
+#include "yaml.h"
 
 namespace OpenXcom
 {
@@ -44,6 +45,10 @@ public:
 	RuleRegion(const std::string &type);
 	/// Cleans up the region ruleset.
 	~RuleRegion();
+	/// Loads the region from YAML.
+	void load(const YAML::Node& node);
+	/// Saves the region to YAML.
+	void save(YAML::Emitter& out) const;
 	/// Gets the region's type.
 	std::string getType() const;
 	/// Gets the region's base cost.
