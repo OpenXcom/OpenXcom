@@ -604,32 +604,35 @@ void Surface::unlock()
 
 /**
  * Shifts all the colors in the surface's palette by a set amount.
+ * Optionally inverts the colors according to a middle point as well.
  * This is a common method in 8bpp games to simulate color
  * effects for cheap.
  * @param off Amount to shift.
  * @param mul Shift multiplier.
+ * @param mid Optional middle point used to invert palette. If 0, palette is not inverted
  */
-void Surface::paletteShift(int off, int mul)
+void Surface::paletteShift(int off, int mul, int mid)
 {
+	int ncolors = _surface->format->palette->ncolors;
+
 	// store the original palette
-	_originalColors = (SDL_Color *)malloc(sizeof(SDL_Color) * _surface->format->palette->ncolors);
+	_originalColors = (SDL_Color *)malloc(sizeof(SDL_Color) * ncolors);
 
 	// create a temporary new palette
-	int ncolors = _surface->format->palette->ncolors - off;
 	SDL_Color *newColors = (SDL_Color *)malloc(sizeof(SDL_Color) * ncolors);
 
 	// do the color shift - while storing the original colors too
-	for (int i = 0; i < _surface->format->palette->ncolors; i++)
+	for (int i = 0; i < ncolors; i++)
 	{
+		int inverseOffset = mid ? 2 * (mid - i) : 0;
+		int j = (i * mul + off + inverseOffset + ncolors) % ncolors;
+
 		_originalColors[i].r = getPalette()[i].r;
 		_originalColors[i].g = getPalette()[i].g;
 		_originalColors[i].b = getPalette()[i].b;
-		if (i * mul + off < _surface->format->palette->ncolors)
-		{
-			newColors[i].r = getPalette()[i * mul + off].r;
-			newColors[i].g = getPalette()[i * mul + off].g;
-			newColors[i].b = getPalette()[i * mul + off].b;
-		}
+		newColors[i].r = getPalette()[j].r;
+		newColors[i].g = getPalette()[j].g;
+		newColors[i].b = getPalette()[j].b;
 	}
 
 	// assign it and free it
