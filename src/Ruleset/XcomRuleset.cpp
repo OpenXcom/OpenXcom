@@ -1717,6 +1717,17 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_ufopaediaArticles[article_item.id] = new ArticleDefinitionItem(article_item);
 	
 	
+	ArticleDefinitionArmor article_armor;
+	article_armor.section = UFOPAEDIA_WEAPONS_AND_EQUIPMENT;
+	
+	article_armor.id = "STR_PERSONAL_ARMOR";
+	article_armor.title = "STR_PERSONAL_ARMOR_UC";
+	article_armor.armor = _armors["STR_PERSONAL_ARMOR_UC"]; // FIXME: this is not good, using _UC terms as IDs! 
+	article_armor.sort_key = sort_key++;
+	
+	_ufopaediaArticles[article_armor.id] = new ArticleDefinitionArmor(article_armor);
+	
+	
 	// ALIEN ARTIFACTS
 	
 
@@ -2014,6 +2025,7 @@ SavedGame *XcomRuleset::newSave(GameDifficulty diff) const
 	save->getUfopaedia()->insertArticle(getUfopaediaArticle("STR_HC_I_AMMO"));
 	save->getUfopaedia()->insertArticle(getUfopaediaArticle("STR_GRENADE"));
 	save->getUfopaedia()->insertArticle(getUfopaediaArticle("STR_SMOKE_GRENADE"));
+	save->getUfopaedia()->insertArticle(getUfopaediaArticle("STR_PERSONAL_ARMOR"));
 
 	
 	save->getUfopaedia()->insertArticle(getUfopaediaArticle("STR_SECTOID"));

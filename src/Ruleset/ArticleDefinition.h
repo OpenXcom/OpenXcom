@@ -30,6 +30,7 @@ namespace OpenXcom
 	class RuleBaseFacility;
 	class RuleItem;
 	class RuleUfo;
+	class RuleArmor;
 	
 	/// define article types
 	enum UfopaediaTypeId {
@@ -191,6 +192,20 @@ namespace OpenXcom
 		
 		RuleUfo *ufo;
 		std::string text;
+	};
+	
+	/**
+	 * ArticleDefinitionArmor defines articles for Armor, e.g. Personal Armor, Flying Suit, etc.
+	 * They have an image (found ???) and a stats block.
+	 */
+	
+	class ArticleDefinitionArmor : public ArticleDefinition
+	{
+	public:
+		/// Constructor
+		ArticleDefinitionArmor();
+		
+		RuleArmor *armor;
 	};
 	
 }
