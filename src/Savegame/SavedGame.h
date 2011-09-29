@@ -114,8 +114,6 @@ public:
 	SavedBattleGame *const getBattleGame();
 	/// Sets the current battle game.
 	void setBattleGame(SavedBattleGame *battleGame);
-	/// Handles the end battle stuff.
-	void endBattle();
 	/// Gets the current Ufopaedia parameters.
 	UfopaediaSaved *getUfopaedia();
 	/// Add a finished ResearchProject

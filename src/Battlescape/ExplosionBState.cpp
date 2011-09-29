@@ -20,8 +20,8 @@
 #include "ExplosionBState.h"
 #include "BattlescapeState.h"
 #include "Explosion.h"
-#include "TerrainModifier.h"
-#include "UnitFallBState.h"
+#include "TileEngine.h"
+#include "UnitDieBState.h"
 #include "Map.h"
 #include "../Engine/Game.h"
 #include "../Savegame/BattleUnit.h"
@@ -113,11 +113,11 @@ void ExplosionBState::think()
 				// after the animation is done, the real explosion takes place
 				if (_item)
 				{
-					save->getTerrainModifier()->explode(_center, _item->getRules()->getPower(), _item->getRules()->getDamageType(), 100, _unit);
+					save->getTileEngine()->explode(_center, _item->getRules()->getPower(), _item->getRules()->getDamageType(), 100, _unit);
 				}
 				if (_tile)
 				{
-					save->getTerrainModifier()->explode(_center, _tile->getExplosive(), DT_HE, 100, _unit);
+					save->getTileEngine()->explode(_center, _tile->getExplosive(), DT_HE, 100, _unit);
 				}
 
 				// now check for new casualties
@@ -136,7 +136,7 @@ void ExplosionBState::think()
 				_parent->popState();
 
 				// check for terrain explosions
-				Tile *t = save->getTerrainModifier()->checkForTerrainExplosions();
+				Tile *t = save->getTileEngine()->checkForTerrainExplosions();
 				if (t)
 				{
 					Position p = Position(t->getPosition().x * 16, t->getPosition().y * 16, t->getPosition().z * 24);

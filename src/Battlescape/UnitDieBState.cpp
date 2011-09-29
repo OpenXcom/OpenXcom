@@ -17,8 +17,8 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "UnitFallBState.h"
-#include "TerrainModifier.h"
+#include "UnitDieBState.h"
+#include "TileEngine.h"
 #include "BattlescapeState.h"
 #include "Map.h"
 #include "../Engine/Game.h"
@@ -37,22 +37,22 @@ namespace OpenXcom
 {
 
 /**
- * Sets up an UnitFallBState.
+ * Sets up an UnitDieBState.
  */
-UnitFallBState::UnitFallBState(BattlescapeState *parent, BattleUnit *unit, ItemDamageType damageType) : BattleState(parent), _unit(unit), _damageType(damageType)
+UnitDieBState::UnitDieBState(BattlescapeState *parent, BattleUnit *unit, ItemDamageType damageType, bool noSound) : BattleState(parent), _unit(unit), _damageType(damageType), _noSound(noSound)
 {
 	
 }
 
 /**
- * Deletes the UnitFallBState.
+ * Deletes the UnitDieBState.
  */
-UnitFallBState::~UnitFallBState()
+UnitDieBState::~UnitDieBState()
 {
 
 }
 
-void UnitFallBState::init()
+void UnitDieBState::init()
 {
 	// don't show the "fall to death" animation when a unit is blasted with explosives or he is already unconscious
 	if (_damageType == DT_HE || _unit->getStatus() == STATUS_UNCONSCIOUS)
@@ -69,7 +69,7 @@ void UnitFallBState::init()
 		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
 		_unit->lookAt(3);
 	}
-	if (_unit->getHealth() == 0)
+	if (_unit->getHealth() == 0 && !_noSound)
 	{
 		// soldiers have 3 screams depending on gender
 		Soldier *s = dynamic_cast<Soldier*>(_unit->getUnit());
@@ -97,7 +97,7 @@ void UnitFallBState::init()
 /*
  * Think!
  */
-void UnitFallBState::think()
+void UnitDieBState::think()
 {
 	if (_unit->getStatus() == STATUS_TURNING)
 	{
@@ -115,7 +115,7 @@ void UnitFallBState::think()
 	if (_unit->isOut())
 	{
 		_unit->keepFalling();
-		TerrainModifier *terrain = _parent->getGame()->getSavedGame()->getBattleGame()->getTerrainModifier();
+		TileEngine *terrain = _parent->getGame()->getSavedGame()->getBattleGame()->getTileEngine();
 		convertUnitToCorpse(_unit, terrain);
 		terrain->calculateUnitLighting();
 		_parent->popState();
@@ -127,7 +127,7 @@ void UnitFallBState::think()
 /*
  * Unit falling cannot be cancelled.
  */
-void UnitFallBState::cancel()
+void UnitDieBState::cancel()
 {
 }
 
@@ -135,7 +135,7 @@ void UnitFallBState::cancel()
  * Get the action result. Returns error messages or an empty string when everything went fine.
  * @return returnmessage Empty when everything is fine.
  */
-std::string UnitFallBState::getResult() const
+std::string UnitDieBState::getResult() const
 {
 	return _result;
 }
@@ -145,7 +145,7 @@ std::string UnitFallBState::getResult() const
  * @param unit
  * @param terrain
  */
-void UnitFallBState::convertUnitToCorpse(BattleUnit *unit, TerrainModifier *terrain)
+void UnitDieBState::convertUnitToCorpse(BattleUnit *unit, TileEngine *terrain)
 {
 	_parent->dropItem(_unit->getPosition(), new BattleItem(_parent->getGame()->getRuleset()->getItem(_unit->getUnit()->getArmor()->getCorpseItem()),_parent->getGame()->getSavedGame()->getBattleGame()->getCurrentItemId()), true);
 

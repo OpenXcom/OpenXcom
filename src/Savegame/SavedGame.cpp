@@ -487,37 +487,6 @@ void SavedGame::setBattleGame(SavedBattleGame *battleGame)
 }
 
 /**
- * Handles the end battle stuff.
- */
-void SavedGame::endBattle()
-{
-	// craft goes back home
-	for (std::vector<Base*>::iterator i = _bases.begin(); i != _bases.end(); ++i)
-	{
-		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); ++j)
-		{
-			if ((*j)->isInBattlescape())
-			{
-				(*j)->returnToBase();
-				(*j)->setLowFuel(true);
-				(*j)->setInBattlescape(false);
-			}
-		}
-	}
-
-	// UFO crash/landing site disappears
-	for (std::vector<Ufo*>::iterator i = _ufos.begin(); i != _ufos.end(); ++i)
-	{
-		if ((*i)->isInBattlescape())
-		{
-			delete *i;
-			_ufos.erase(i);
-			break;
-		}
-	}
-}
-
-/**
  * Get pointer to the ufopaedia object.
  * @return Pointer to the ufopaedia object.
  */

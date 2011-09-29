@@ -181,7 +181,7 @@ public:
 	/// Displays a popup window.
 	void popup(State *state);
 	/// Checks for casualties in battle.
-	bool checkForCasualties(BattleItem *murderweapon, BattleUnit *murderer);
+	bool checkForCasualties(BattleItem *murderweapon, BattleUnit *murderer, bool noSound = false);
 	/// Checks if a unit panics.
 	void checkForPanic(BattleUnit *unit);
 	/// Check reserved tu.

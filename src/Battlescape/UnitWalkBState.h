@@ -29,7 +29,7 @@ namespace OpenXcom
 class BattleUnit;
 class Pathfinding;
 class BattlescapeState;
-class TerrainModifier;
+class TileEngine;
 
 class UnitWalkBState : public BattleState
 {
@@ -37,7 +37,7 @@ private:
 	Position _target;
 	BattleUnit *_unit;
 	Pathfinding *_pf;
-	TerrainModifier *_terrain;
+	TileEngine *_terrain;
 	BattleAction _action;
 	void postPathProcedures();
 	void setNormalWalkSpeed();

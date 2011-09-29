@@ -21,7 +21,7 @@
 #include "ProjectileFlyBState.h"
 #include "ExplosionBState.h"
 #include "Projectile.h"
-#include "TerrainModifier.h"
+#include "TileEngine.h"
 #include "Map.h"
 #include "../Engine/Game.h"
 #include "../Savegame/BattleUnit.h"
@@ -134,7 +134,7 @@ void ProjectileFlyBState::init()
 	BattleUnit *potentialVictim = _parent->getGame()->getSavedGame()->getBattleGame()->getTile(_action.target)->getUnit();
 	if (potentialVictim && potentialVictim->getFaction() != _unit->getFaction())
 	{
-		if (_parent->getGame()->getSavedGame()->getBattleGame()->getTerrainModifier()->checkReactionFire(_unit, &action, potentialVictim, false))
+		if (_parent->getGame()->getSavedGame()->getBattleGame()->getTileEngine()->checkReactionFire(_unit, &action, potentialVictim, false))
 		{
 			_parent->statePushBack(new ProjectileFlyBState(_parent, action));
 		}

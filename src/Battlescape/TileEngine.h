@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_TERRAINMODIFIER_H
-#define OPENXCOM_TERRAINMODIFIER_H
+#ifndef OPENXCOM_TILEENGINE_H
+#define OPENXCOM_TILEENGINE_H
 
 #include <vector>
 #include "Position.h"
@@ -37,7 +37,7 @@ class Tile;
  * A utility class that modifies tile properties on a battlescape map. This includes lighting, destruction, smoke, fire, fog of war.
  * Note that this function does not handle any sounds or animations.
  */
-class TerrainModifier
+class TileEngine
 {
 private:
 	static const int MAX_VIEW_DISTANCE = 20;
@@ -53,10 +53,10 @@ private:
 	bool checkIfUnitVisible(BattleUnit *currentUnit, BattleUnit *otherUnit);
 	bool checkIfTileVisible(BattleUnit *currentUnit, Tile *tile);
 public:
-	/// Creates a new TerrainModifier class.
-	TerrainModifier(SavedBattleGame *save, std::vector<Uint16> *voxelData);
-	/// Cleans up the TerrainModifier.
-	~TerrainModifier();
+	/// Creates a new TileEngine class.
+	TileEngine(SavedBattleGame *save, std::vector<Uint16> *voxelData);
+	/// Cleans up the TileEngine.
+	~TileEngine();
 	/// Calculate sun shading of the whole map.
 	void calculateSunShading();
 	/// Calculate sun shading of a single tile.

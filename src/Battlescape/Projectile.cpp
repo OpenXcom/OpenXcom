@@ -19,7 +19,7 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include "Projectile.h"
-#include "TerrainModifier.h"
+#include "TileEngine.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Surface.h"
 #include "../Battlescape/Position.h"
@@ -120,13 +120,13 @@ int Projectile::calculateTrajectory(double accuracy)
 		{
 			// first try is at half the unit height 
 			targetVoxel = Position(_target.x*16 + 8, _target.y*16 + 8, _target.z*24 + tile->getUnit()->getUnit()->getStandHeight()/2);
-			int test = _save->getTerrainModifier()->calculateLine(originVoxel, targetVoxel, false, &_trajectory, bu);
+			int test = _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, false, &_trajectory, bu);
 			_trajectory.clear();
 			if (test != 4)
 			{
 				// did not hit a unit, try at different heights
 				targetVoxel = Position(_target.x*16 + 8, _target.y*16 + 8, _target.z*24 + (tile->getUnit()->getUnit()->getStandHeight()*3)/4);
-				test = _save->getTerrainModifier()->calculateLine(originVoxel, targetVoxel, false, &_trajectory, bu);
+				test = _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, false, &_trajectory, bu);
 				_trajectory.clear();
 			}
 		}
@@ -157,7 +157,7 @@ int Projectile::calculateTrajectory(double accuracy)
 	applyAccuracy(originVoxel, &targetVoxel, accuracy);
 
 	// finally do a line calculation and store this trajectory.
-	return _save->getTerrainModifier()->calculateLine(originVoxel, targetVoxel, true, &_trajectory, bu);
+	return _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, true, &_trajectory, bu);
 }
 
 /**
@@ -187,7 +187,7 @@ bool Projectile::calculateThrow(double accuracy)
 	double curvature = 1.0;
 	while (!foundCurve && curvature < 5.0)
 	{
-		_save->getTerrainModifier()->calculateParabola(originVoxel, targetVoxel, false, &_trajectory, bu, curvature, 1.0);
+		_save->getTileEngine()->calculateParabola(originVoxel, targetVoxel, false, &_trajectory, bu, curvature, 1.0);
 		if ((int)_trajectory.at(0).x/16 == (int)targetVoxel.x/16 && (int)_trajectory.at(0).y/16 == (int)targetVoxel.y/16)
 		{
 			foundCurve = true;
@@ -213,7 +213,7 @@ bool Projectile::calculateThrow(double accuracy)
 
 	_trajectory.clear();
 	// finally do a line calculation and store this trajectory.
-	_save->getTerrainModifier()->calculateParabola(originVoxel, targetVoxel, true, &_trajectory, bu, curvature, 1.0 + deviation);
+	_save->getTileEngine()->calculateParabola(originVoxel, targetVoxel, true, &_trajectory, bu, curvature, 1.0 + deviation);
 
 	return true;
 }

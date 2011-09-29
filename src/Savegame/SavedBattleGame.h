@@ -41,7 +41,7 @@ class BattleUnit;
 class Soldier;
 class Position;
 class Pathfinding;
-class TerrainModifier;
+class TileEngine;
 class BattleItem;
 class Item;
 class RuleInventory;
@@ -51,7 +51,6 @@ class Ruleset;
  * Enumator containing all the possible mission types.
  */
 enum MissionType { MISS_UFORECOVERY, MISS_UFOASSAULT, MISS_TERROR, MISS_ALIENBASE, MISS_BASEDEFENSE, MISS_CYDONIA };
-struct DebriefingStat { DebriefingStat(std::string _item, bool recovery) : item(_item), qty(0), score(0), recovery(recovery) {}; std::string item; int qty; int score; bool recovery; };
 
 /**
  * The battlescape data that gets written to disk when the game is saved.
@@ -69,18 +68,14 @@ private:
 	std::vector<BattleUnit*> _units;
 	std::vector<BattleItem*> _items;
 	Pathfinding *_pathfinding;
-	TerrainModifier *_terrainModifier;
+	TileEngine *_tileEngine;
 	MissionType _missionType;
 	int _globalShade;
 	UnitFaction _side;
 	int _turn;
 	bool _debugMode;
-	std::vector<DebriefingStat*> _debriefingStats;
-	std::vector<DebriefingStat*> _ufoRecoveryStats;
 	bool _aborted;
 	int _itemId;
-	/// Add to debriefing stats.
-	void addStat(const std::string &name, int quantity, int score);
 public:
 	/// Creates a new battle save, based on current generic save.
 	SavedBattleGame();
@@ -92,7 +87,7 @@ public:
 	void save(YAML::Emitter& out) const;
 	/// Set the dimensions of the map and initializes it.
 	void initMap(int width, int length, int height);
-	/// initiliases pathfinding and terrainmodifier
+	/// initiliases pathfinding and tileengine
 	void initUtilities(ResourcePack *res);
 	/// Gets the game's mapdatafiles.
 	std::vector<MapDataSet*> *const getMapDataSets();
@@ -138,8 +133,8 @@ public:
 	BattleUnit *selectUnit(Tile *tile);
 	/// get the pathfinding object
 	Pathfinding *const getPathfinding() const;
-	/// get the terrainmodifier object
-	TerrainModifier *const getTerrainModifier() const;
+	/// get a pointer to the tileengine
+	TileEngine *const getTileEngine() const;
 	/// get the playing side
 	UnitFaction getSide() const;
 	/// get the turn number
@@ -156,10 +151,8 @@ public:
 	void resetUnitTiles();
 	/// Removes an item from the game.
 	void removeItem(BattleItem *item);
-	/// Get a list of debriefing stats.
-	std::vector<DebriefingStat*> *getDebriefingStats();
-	/// Prepares debriefing.
-	void prepareDebriefing(bool aborted);
+	/// Whether the mission was aborted.
+	void setAborted(bool flag);
 	/// Whether the mission was aborted.
 	bool isAborted();
 	/// Gets the current item ID.
