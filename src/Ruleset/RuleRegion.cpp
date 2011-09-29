@@ -56,7 +56,7 @@ void RuleRegion::load(const YAML::Node &node)
 		{
 			i.second() >> _type;
 		}
-		if (key == "cost")
+		else if (key == "cost")
 		{
 			i.second() >> _cost;
 		}

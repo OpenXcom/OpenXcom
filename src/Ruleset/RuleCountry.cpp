@@ -51,7 +51,7 @@ void RuleCountry::load(const YAML::Node &node)
 		{
 			i.second() >> _type;
 		}
-		if (key == "fundingMin")
+		else if (key == "fundingMin")
 		{
 			i.second() >> _fundingMin;
 		}

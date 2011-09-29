@@ -20,6 +20,7 @@
 #define OPENXCOM_RULEBASEFACILITY_H
 
 #include <string>
+#include "yaml.h"
 
 namespace OpenXcom
 {
@@ -35,7 +36,7 @@ class RuleBaseFacility
 private:
 	std::string _type;
 	int _spriteShape, _spriteFacility;
-	bool _lift;
+	bool _lift, _hyper, _mind, _grav;
 	int _size, _buildCost, _buildTime, _monthlyCost;
 	int _storage, _personnel, _aliens, _crafts, _labs, _workshops, _psiLabs;
 	int _radarRange, _radarChance, _defence, _hitRatio;
@@ -44,6 +45,10 @@ public:
 	RuleBaseFacility(const std::string &type);
 	/// Cleans up the facility ruleset.
 	~RuleBaseFacility();
+	/// Loads the facility from YAML.
+	void load(const YAML::Node& node);
+	/// Saves the facility to YAML.
+	void save(YAML::Emitter& out) const;
 	/// Gets the facility's type.
 	std::string getType() const;
 	/// Gets the facility's shape sprite.
@@ -58,10 +63,22 @@ public:
 	int getSize() const;
 	/// Sets the facility's size.
 	void setSize(int size);
-	/// Gets if the facility is a lift.
+	/// Gets if the facility is an access lift.
 	bool getLift() const;
-	/// Sets if the facility is a lift.
+	/// Sets if the facility is an access lift.
 	void setLift(bool lift);
+	/// Gets if the facility has hyperwave detection.
+	bool getHyperwave() const;
+	/// Sets if the facility has hyperwave detection.
+	void setHyperwave(bool hyper);
+	/// Gets if the facility is a mind shield.
+	bool getMindShield() const;
+	/// Sets if the facility is a mind shield.
+	void setMindShield(bool mind);
+	/// Gets if the facility is a grav shield.
+	bool getGravShield() const;
+	/// Sets if the facility is a grav shield.
+	void setGravShield(bool grav);
 	/// Gets the facility's construction cost.
 	int getBuildCost() const;
 	/// Sets the facility's construction cost.

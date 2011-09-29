@@ -175,6 +175,26 @@ void Ruleset::load(const std::string &filename)
 				rule->load(j.second());
 			}
 		}
+		else if (key == "facilities")
+		{
+			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
+			{
+				std::string type;
+				j.second()["type"] >> type;
+				RuleBaseFacility *rule;
+				if (_facilities.find(type) != _facilities.end())
+				{
+					rule = _facilities[type];
+				}
+				else
+				{
+					rule = new RuleBaseFacility(type);
+					_facilities[type] = rule;
+					_facilitiesIndex.push_back(type);
+				}
+				rule->load(j.second());
+			}
+		}
 	}
 
 	fin.close();
@@ -207,6 +227,13 @@ void Ruleset::save(const std::string &filename) const
 	out << YAML::Key << "regions" << YAML::Value;
 	out << YAML::BeginSeq;
 	for (std::map<std::string, RuleRegion*>::const_iterator i = _regions.begin(); i != _regions.end(); ++i)
+	{
+		i->second->save(out);
+	}
+	out << YAML::EndSeq;
+	out << YAML::Key << "facilities" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::map<std::string, RuleBaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); ++i)
 	{
 		i->second->save(out);
 	}
