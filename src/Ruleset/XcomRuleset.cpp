@@ -985,6 +985,10 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	ppclip->setClipSize(26);
 	ppclip->setWeight(3);
 
+	RuleItem *alloys = new RuleItem("STR_ALIEN_ALLOYS");
+	alloys->setSize(0.1f);
+	alloys->setCost(6500);
+	alloys->setTransferTime(96);
 
 	_items.insert(std::pair<std::string, RuleItem*>("STR_STINGRAY_LAUNCHER", slauncher));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_AVALANCHE_LAUNCHER", alauncher));
@@ -1014,6 +1018,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_items.insert(std::pair<std::string, RuleItem*>("STR_SECTOID_CORPSE", scorpse));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_PLASMA_PISTOL", ppistol));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_PLASMA_PISTOL_CLIP", ppclip));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_ALIEN_ALLOYS", alloys));
 
 	// Add UFOs
 	RuleUfo *sscout = new RuleUfo("STR_SMALL_SCOUT");

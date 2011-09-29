@@ -28,10 +28,10 @@
 #include "UnitWalkBState.h"
 #include "ProjectileFlyBState.h"
 #include "ExplosionBState.h"
-#include "TerrainModifier.h"
+#include "TileEngine.h"
 #include "ActionMenuState.h"
 #include "UnitInfoState.h"
-#include "UnitFallBState.h"
+#include "UnitDieBState.h"
 #include "InventoryState.h"
 #include "AggroBAIState.h"
 #include "PatrolBAIState.h"
@@ -327,6 +327,8 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_tuReserved = BA_NONE;
 	_debugPlay = false;
 	_playerPanicHandled = true;
+
+	checkForCasualties(0, 0, true);
 }
 
 
@@ -609,11 +611,11 @@ void BattlescapeState::btnKneelClick(Action *action)
 		{
 			bu->kneel(!bu->isKneeled());
 			// kneeling or standing up can reveil new terrain or units. I guess.
-			_battleGame->getTerrainModifier()->calculateFOV(bu);
+			_battleGame->getTileEngine()->calculateFOV(bu);
 			_map->cacheUnits();
 			updateSoldierInfo();
 			BattleAction action;
-			if (_battleGame->getTerrainModifier()->checkReactionFire(bu, &action, 0, false))
+			if (_battleGame->getTileEngine()->checkReactionFire(bu, &action, 0, false))
 			{
 				statePushBack(new ProjectileFlyBState(this, action));
 			}
@@ -760,7 +762,7 @@ void BattlescapeState::endTurn()
 	}
 
 
-	if (_battleGame->getTerrainModifier()->closeUfoDoors())
+	if (_battleGame->getTileEngine()->closeUfoDoors())
 	{
 		_game->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(21)->play(); // ufo door closed
 	}
@@ -777,7 +779,7 @@ void BattlescapeState::endTurn()
 	}
 
 	// check for terrain explosions
-	Tile *t = _battleGame->getTerrainModifier()->checkForTerrainExplosions();
+	Tile *t = _battleGame->getTileEngine()->checkForTerrainExplosions();
 	if (t)
 	{
 		Position p = Position(t->getPosition().x * 16, t->getPosition().y * 16, t->getPosition().z * 24);
@@ -807,7 +809,7 @@ void BattlescapeState::endTurn()
  * @param murderer
  * @return Whether the battle is finished.
  */
-bool BattlescapeState::checkForCasualties(BattleItem *murderweapon, BattleUnit *murderer)
+bool BattlescapeState::checkForCasualties(BattleItem *murderweapon, BattleUnit *murderer, bool noSound)
 {
 	for (std::vector<BattleUnit*>::iterator j = _battleGame->getUnits()->begin(); j != _battleGame->getUnits()->end(); ++j)
 	{
@@ -850,13 +852,20 @@ bool BattlescapeState::checkForCasualties(BattleItem *murderweapon, BattleUnit *
 			}
 
 			if (murderweapon)
-				statePushNext(new UnitFallBState(this, (*j), murderweapon->getRules()->getDamageType()));
+			{
+				statePushNext(new UnitDieBState(this, (*j), murderweapon->getRules()->getDamageType(), noSound));
+			}
 			else
-				statePushNext(new UnitFallBState(this, (*j), DT_AP));
+			{
+				if (noSound)
+					statePushNext(new UnitDieBState(this, (*j), DT_HE, noSound)); // simulate instant death
+				else
+					statePushNext(new UnitDieBState(this, (*j), DT_AP, noSound)); // do a die animation
+			}
 		}
 		else if ((*j)->getStunlevel() >= (*j)->getHealth() && (*j)->getStatus() != STATUS_DEAD && (*j)->getStatus() != STATUS_UNCONSCIOUS && (*j)->getStatus() != STATUS_FALLING)
 		{
-				statePushNext(new UnitFallBState(this, (*j), DT_STUN));
+				statePushNext(new UnitDieBState(this, (*j), DT_STUN, noSound));
 		}
 	}
 
@@ -1140,7 +1149,7 @@ void BattlescapeState::updateSoldierInfo()
 		}
 	}
 
-	_battleGame->getTerrainModifier()->calculateFOV(_battleGame->getSelectedUnit());
+	_battleGame->getTileEngine()->calculateFOV(_battleGame->getSelectedUnit());
 	int j = 0;
 	for (std::vector<BattleUnit*>::iterator i = battleUnit->getVisibleUnits()->begin(); i != battleUnit->getVisibleUnits()->end(); ++i)
 	{
@@ -1464,9 +1473,8 @@ bool BattlescapeState::checkReservedTU(BattleUnit *bu, int tu)
 void BattlescapeState::finishBattle(bool abort)
 {
 	_game->popState();
-	_battleGame->prepareDebriefing(abort);
+	_battleGame->setAborted(abort);
 	_game->pushState(new DebriefingState(_game));
-	_game->getSavedGame()->endBattle();
 	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
 	_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
 }

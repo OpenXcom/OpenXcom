@@ -26,7 +26,7 @@
 #include "Alien.h"
 #include "../Ruleset/MapDataSet.h"
 #include "../Battlescape/Pathfinding.h"
-#include "../Battlescape/TerrainModifier.h"
+#include "../Battlescape/TileEngine.h"
 #include "../Battlescape/Position.h"
 #include "../Resource/ResourcePack.h"
 #include "../Ruleset/Ruleset.h"
@@ -41,31 +41,8 @@ namespace OpenXcom
 /**
  * Initializes a brand new battlescape saved game.
  */
-SavedBattleGame::SavedBattleGame() : _tiles(), _selectedUnit(0), _nodes(), _units(), _items(), _pathfinding(0), _terrainModifier(0), _missionType(MISS_TERROR), _side(FACTION_PLAYER), _turn(1), _debugMode(false), _aborted(false), _itemId(0)
+SavedBattleGame::SavedBattleGame() : _tiles(), _selectedUnit(0), _nodes(), _units(), _items(), _pathfinding(0), _tileEngine(0), _missionType(MISS_TERROR), _side(FACTION_PLAYER), _turn(1), _debugMode(false), _aborted(false), _itemId(0)
 {
-	_debriefingStats.push_back(new DebriefingStat("STR_ALIENS_KILLED", false));
-	_debriefingStats.push_back(new DebriefingStat("STR_ALIEN_CORPSES_RECOVERED", false));
-	_debriefingStats.push_back(new DebriefingStat("STR_LIVE_ALIENS_RECOVERED", false));
-	_debriefingStats.push_back(new DebriefingStat("STR_ALIEN_ARTIFACTS_RECOVERED", false));
-	_debriefingStats.push_back(new DebriefingStat("STR_ALIEN_BASE_CONTROL_DESTROYED", false));
-	_debriefingStats.push_back(new DebriefingStat("STR_CIVILIANS_KILLED_BY_ALIENS", false));
-	_debriefingStats.push_back(new DebriefingStat("STR_CIVILIANS_KILLED_BY_XCOM_OPERATIVES", false));
-	_debriefingStats.push_back(new DebriefingStat("STR_CIVILIANS_SAVED", false));
-	_debriefingStats.push_back(new DebriefingStat("STR_XCOM_OPERATIVES_KILLED", false));
-	//_debriefingStats.push_back(new DebriefingStat("STR_XCOM_OPERATIVES_RETIRED_THROUGH_INJURY", false));
-	_debriefingStats.push_back(new DebriefingStat("STR_XCOM_OPERATIVES_MISSING_IN_ACTION", false));
-	_debriefingStats.push_back(new DebriefingStat("STR_TANKS_DESTROYED", false));
-	_debriefingStats.push_back(new DebriefingStat("STR_XCOM_CRAFT_LOST", false));
-	_debriefingStats.push_back(new DebriefingStat("STR_UFO_POWER_SOURCE", true));
-	_debriefingStats.push_back(new DebriefingStat("STR_UFO_NAVIGATION", true));
-	_debriefingStats.push_back(new DebriefingStat("STR_UFO_CONSTRUCTION", true));
-	_debriefingStats.push_back(new DebriefingStat("STR_ALIEN_FOOD", true));
-	_debriefingStats.push_back(new DebriefingStat("STR_ALIEN_REPRODUCTION", true));
-	_debriefingStats.push_back(new DebriefingStat("STR_ALIEN_ENTERTAINMENT", true));
-	_debriefingStats.push_back(new DebriefingStat("STR_ALIEN_SURGERY", true));
-	_debriefingStats.push_back(new DebriefingStat("STR_EXAMINATION_ROOM", true));
-	_debriefingStats.push_back(new DebriefingStat("STR_ALIEN_ALLOYS", true));
-	_debriefingStats.push_back(new DebriefingStat("STR_ELERIUM_115", true));
 }
 
 /**
@@ -94,13 +71,8 @@ SavedBattleGame::~SavedBattleGame()
 		delete *i;
 	}
 
-	for (std::vector<DebriefingStat*>::iterator i = _debriefingStats.begin(); i != _debriefingStats.end(); ++i)
-	{
-		delete *i;
-	}
-
 	delete _pathfinding;
-	delete _terrainModifier;
+	delete _tileEngine;
 }
 
 /**
@@ -277,12 +249,12 @@ void SavedBattleGame::loadMapResources(ResourcePack *res)
 	}
 
 	initUtilities(res);
-	getTerrainModifier()->calculateSunShading();
-	getTerrainModifier()->calculateTerrainLighting();
-	getTerrainModifier()->calculateUnitLighting();
+	getTileEngine()->calculateSunShading();
+	getTileEngine()->calculateTerrainLighting();
+	getTileEngine()->calculateUnitLighting();
 	for (std::vector<BattleUnit*>::iterator bu = _units.begin(); bu != _units.end(); ++bu)
 	{
-		_terrainModifier->calculateFOV(*bu);
+		_tileEngine->calculateFOV(*bu);
 	}
 }
 
@@ -384,7 +356,7 @@ void SavedBattleGame::initMap(int width, int length, int height)
 void SavedBattleGame::initUtilities(ResourcePack *res)
 {
 	_pathfinding = new Pathfinding(this);
-	_terrainModifier = new TerrainModifier(this, res->getVoxelData());
+	_tileEngine = new TileEngine(this, res->getVoxelData());
 }
 
 /**
@@ -665,9 +637,9 @@ Pathfinding *const SavedBattleGame::getPathfinding() const
  * Get the terrain modifier object.
  * @return pointer to the terrain modifier object
  */
-TerrainModifier *const SavedBattleGame::getTerrainModifier() const
+TileEngine *const SavedBattleGame::getTileEngine() const
 {
-	return _terrainModifier;
+	return _tileEngine;
 }
 
 /**
@@ -716,7 +688,7 @@ void SavedBattleGame::endTurn()
 	}
 	else if (_side == FACTION_HOSTILE)
 	{
-		_terrainModifier->prepareNewTurn();
+		_tileEngine->prepareNewTurn();
 		_turn++;
 		_side = FACTION_PLAYER;
 	}
@@ -727,7 +699,7 @@ void SavedBattleGame::endTurn()
 		{
 			(*i)->prepareNewTurn();
 		}
-		_terrainModifier->calculateFOV(*i);
+		_tileEngine->calculateFOV(*i);
 	}
 
 	_selectedUnit = 0;
@@ -784,138 +756,13 @@ void SavedBattleGame::removeItem(BattleItem *item)
 	}
 }
 
-
 /**
- * Add to debriefing stats.
- * @param name The untranslated name of the stat.
- * @param quantity The quantity to add.
- * @param score The score to add.
+ * Is the mission aborted or succesful.
+ * @param bool.
  */
-void SavedBattleGame::addStat(const std::string &name, int quantity, int score)
+void SavedBattleGame::setAborted(bool flag)
 {
-	for (std::vector<DebriefingStat*>::iterator i = _debriefingStats.begin(); i != _debriefingStats.end(); ++i)
-	{
-		if ((*i)->item == name)
-		{
-			(*i)->qty = (*i)->qty + quantity;
-			(*i)->score = (*i)->score + score;
-			break;
-		}
-	}
-}
-
-/**
- * Get a list of debriefing stats.
- * @return A map of debriefing stats.
- */
-std::vector<DebriefingStat*> *SavedBattleGame::getDebriefingStats()
-{
-	return &_debriefingStats;
-}
-
-/** 
- * Prepares debriefing: gathers Aliens, Corpses, Artefacts, UFO Components.
- * Adds the items to the craft.
- * Also calculates the soldiers experience, and possible promotions.
- * If aborted, only the things on the exit area are recovered.
- */
-void SavedBattleGame::prepareDebriefing(bool aborted)
-{
-	_aborted = aborted;
-	int playerInExitArea = 0; // if this stays 0 the craft is lost...
-
-	// lets see what happens with units
-	for (std::vector<BattleUnit*>::iterator j = getUnits()->begin(); j != getUnits()->end(); ++j)
-	{
-		UnitStatus status = (*j)->getStatus();
-		UnitFaction faction = (*j)->getFaction();
-		int value = (*j)->getUnit()->getValue();
-
-		if (status == STATUS_DEAD)
-		{
-			if (faction == FACTION_HOSTILE)
-			{
-				addStat("STR_ALIENS_KILLED", 1, value);
-			}
-			if (faction == FACTION_PLAYER)
-			{
-				addStat("STR_XCOM_OPERATIVES_KILLED", 1, -value);
-			}
-		}
-		else if (status == STATUS_UNCONSCIOUS)
-		{
-			if (faction == FACTION_HOSTILE && (!aborted || (*j)->isInExitArea()))
-			{
-				addStat("STR_LIVE_ALIENS_RECOVERED", 1, value);
-			}
-		}
-		else if (faction == FACTION_PLAYER)
-		{
-			if ((*j)->isInExitArea() || !aborted)
-			{
-				playerInExitArea++;
-				(*j)->postMissionProcedures();
-			}
-			else
-			{
-				addStat("STR_XCOM_OPERATIVES_MISSING_IN_ACTION", 1, -value);
-			}
-		}
-	}
-	if (playerInExitArea == 0 && aborted)
-	{
-		addStat("STR_XCOM_CRAFT_LOST", 1, -200);
-	}
-
-	// run through all tiles to recover UFO components and items
-	if (!aborted)
-	{
-		for (int i = 0; i < _height * _length * _width; ++i)
-		{
-			for (int part = 0; part < 4; part++)
-			{
-				if (_tiles[i]->getMapData(part))
-				{
-					switch (_tiles[i]->getMapData(part)->getSpecialType())
-					{
-					case UFO_POWER_SOURCE:
-						addStat("STR_UFO_POWER_SOURCE", 1, 1); break;
-					case DESTROY_OBJECTIVE:break; // this is the brain
-					case UFO_NAVIGATION:
-						addStat("STR_UFO_NAVIGATION", 1, 1); break;
-					case ALIEN_FOOD:
-						addStat("STR_ALIEN_FOOD", 1, 1); break;
-					case ALIEN_REPRODUCTION:
-						addStat("STR_ALIEN_REPRODUCTION", 1, 1); break;
-					case ALIEN_ENTERTAINMENT:
-						addStat("STR_ALIEN_ENTERTAINMENT", 1, 1); break;
-					case ALIEN_SURGERY:
-						addStat("STR_ALIEN_SURGERY", 1, 1); break;
-					case UNKNOWN09:
-						addStat("STR_UFO_CONSTRUCTION", 1, 1); break;
-					case ALIEN_ALLOYS:
-						addStat("STR_ALIEN_ALLOYS", 1, 1); break;
-					case EXAM_ROOM:
-						addStat("STR_EXAMINATION_ROOM", 1, 1); break;
-					}
-
-				}
-			}
-		}
-
-		// alien alloys recovery values are divided by 10 or devided by 150 in case of an alien base
-		int divider = _missionType==MISS_ALIENBASE?150:10;
-		for (std::vector<DebriefingStat*>::iterator i = _debriefingStats.begin(); i != _debriefingStats.end(); ++i)
-		{
-			if ((*i)->item == "STR_ALIEN_ALLOYS")
-			{
-				(*i)->qty = (*i)->qty / divider;
-				(*i)->score = (*i)->score / divider;
-				break;
-			}
-		}
-	}
-
+	_aborted = flag;
 }
 
 /**
@@ -926,7 +773,6 @@ bool SavedBattleGame::isAborted()
 {
 	return _aborted;
 }
-
 
 /**
  * Gets the current item ID.

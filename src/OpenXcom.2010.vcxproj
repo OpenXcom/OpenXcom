@@ -165,8 +165,8 @@
     <ClCompile Include="Battlescape\Projectile.cpp" />
     <ClCompile Include="Battlescape\ProjectileFlyBState.cpp" />
     <ClCompile Include="Battlescape\UnitInfoState.cpp" />
-    <ClCompile Include="Battlescape\TerrainModifier.cpp" />
-    <ClCompile Include="Battlescape\UnitFallBState.cpp" />
+    <ClCompile Include="Battlescape\TileEngine.cpp" />
+    <ClCompile Include="Battlescape\UnitDieBState.cpp" />
     <ClCompile Include="Battlescape\UnitSprite.cpp" />
     <ClCompile Include="Battlescape\UnitTurnBState.cpp" />
     <ClCompile Include="Battlescape\UnitWalkBState.cpp" />
@@ -361,8 +361,8 @@
     <ClInclude Include="Battlescape\Projectile.h" />
     <ClInclude Include="Battlescape\ProjectileFlyBState.h" />
     <ClInclude Include="Battlescape\UnitInfoState.h" />
-    <ClInclude Include="Battlescape\TerrainModifier.h" />
-    <ClInclude Include="Battlescape\UnitFallBState.h" />
+    <ClInclude Include="Battlescape\TileEngine.h" />
+    <ClInclude Include="Battlescape\UnitDieBState.h" />
     <ClInclude Include="Battlescape\UnitSprite.h" />
     <ClInclude Include="Battlescape\UnitTurnBState.h" />
     <ClInclude Include="Battlescape\UnitWalkBState.h" />

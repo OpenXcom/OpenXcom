@@ -18,7 +18,7 @@
  */
 
 #include "UnitTurnBState.h"
-#include "TerrainModifier.h"
+#include "TileEngine.h"
 #include "BattlescapeState.h"
 #include "Map.h"
 #include "../Engine/Game.h"
@@ -62,7 +62,7 @@ void UnitTurnBState::init()
 	if (_unit->getStatus() != STATUS_TURNING)
 	{
 		// try to open a door
-		int door = _parent->getGame()->getSavedGame()->getBattleGame()->getTerrainModifier()->unitOpensDoor(_unit);
+		int door = _parent->getGame()->getSavedGame()->getBattleGame()->getTileEngine()->unitOpensDoor(_unit);
 		if (door == 0)
 		{
 			_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(3)->play(); // normal door
@@ -89,7 +89,7 @@ void UnitTurnBState::think()
 	if (_unit->spendTimeUnits(tu, _parent->dontSpendTUs()))
 	{
 		_unit->turn();
-		_parent->getGame()->getSavedGame()->getBattleGame()->getTerrainModifier()->calculateFOV(_unit);
+		_parent->getGame()->getSavedGame()->getBattleGame()->getTileEngine()->calculateFOV(_unit);
 		_parent->getMap()->cacheUnit(_unit);
 		if (_unit->getStatus() == STATUS_STANDING)
 		{

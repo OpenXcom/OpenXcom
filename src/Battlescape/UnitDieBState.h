@@ -27,20 +27,21 @@ namespace OpenXcom
 {
 
 class BattleUnit;
-class TerrainModifier;
+class TileEngine;
 
 /* Refactoring tip : UnitDieBState */
 
-class UnitFallBState : public BattleState
+class UnitDieBState : public BattleState
 {
 private:
 	BattleUnit *_unit;
 	ItemDamageType _damageType;
+	bool _noSound;
 public:
-	/// Creates a new UnitFallBState class
-	UnitFallBState(BattlescapeState *parent, BattleUnit *unit, ItemDamageType damageType);
-	/// Cleans up the UnitFallBState.
-	~UnitFallBState();
+	/// Creates a new UnitDieBState class
+	UnitDieBState(BattlescapeState *parent, BattleUnit *unit, ItemDamageType damageType, bool noSound);
+	/// Cleans up the UnitDieBState.
+	~UnitDieBState();
 	/// Initializes the state.
 	void init();
 	/// Handles a cancels request.
@@ -50,7 +51,7 @@ public:
 	/// Get the result of the state.
 	std::string getResult() const;
 	/// Convert a unit to a corpse.
-	void convertUnitToCorpse(BattleUnit *unit, TerrainModifier *terrain);
+	void convertUnitToCorpse(BattleUnit *unit, TileEngine *terrain);
 };
 
 }
