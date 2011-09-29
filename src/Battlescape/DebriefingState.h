@@ -20,6 +20,7 @@
 #define OPENXCOM_DEBRIEFINGSTATE_H
 
 #include "../Engine/State.h"
+#include <string>
 
 namespace OpenXcom
 {
