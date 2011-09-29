@@ -52,7 +52,7 @@ void City::load(const YAML::Node &node)
 		{
 			i.second() >> _name;
 		}
-		if (key == "lon")
+		else if (key == "lon")
 		{
 			i.second() >> _lon;
 		}
