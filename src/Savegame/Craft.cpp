@@ -77,6 +77,7 @@ void Craft::load(const YAML::Node &node, const Ruleset *rule)
 	node["fuel"] >> _fuel;
 	node["damage"] >> _damage;
 
+	unsigned int j = 0;
 	for (YAML::Iterator i = node["weapons"].begin(); i != node["weapons"].end(); ++i)
 	{
 		std::string type;
@@ -85,11 +86,7 @@ void Craft::load(const YAML::Node &node, const Ruleset *rule)
 		{
 			CraftWeapon *w = new CraftWeapon(rule->getCraftWeapon(type), 0);
 			w->load(*i);
-			_weapons.push_back(w);
-		}
-		else
-		{
-			_weapons.push_back(0);
+			_weapons[j++] = w;
 		}
 	}
 
