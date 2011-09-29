@@ -415,5 +415,31 @@ void RuleCraft::load(const YAML::Node &node)
 	}
 }
 
+/**
+ * Saves the craft to a YAML file.
+ * @param out YAML emitter.
+ */
+void RuleCraft::save(YAML::Emitter &out) const
+{
+	out << YAML::BeginMap;
+	out << YAML::Key << "type" << YAML::Value << _type;
+	out << YAML::Key << "sprite" << YAML::Value << _sprite;
+	out << YAML::Key << "fuelMax" << YAML::Value << _fuelMax;
+	out << YAML::Key << "damageMax" << YAML::Value << _damageMax;
+	out << YAML::Key << "speedMax" << YAML::Value << _speedMax;
+	out << YAML::Key << "accel" << YAML::Value << _accel;
+	out << YAML::Key << "weapons" << YAML::Value << _weapons;
+	out << YAML::Key << "soldiers" << YAML::Value << _soldiers;
+	out << YAML::Key << "hwps" << YAML::Value << _hwps;
+	out << YAML::Key << "cost" << YAML::Value << _cost;
+	out << YAML::Key << "repair" << YAML::Value << _repair;
+	out << YAML::Key << "refuel" << YAML::Value << _refuel;
+	out << YAML::Key << "range" << YAML::Value << _range;
+	out << YAML::Key << "time" << YAML::Value << _time;
+	out << YAML::Key << "score" << YAML::Value << _score;
+	out << YAML::EndMap;
+}
+
+
 }
 

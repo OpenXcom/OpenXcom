@@ -107,6 +107,8 @@ public:
 	void setScore(int score);
 	/// Loads craft data from YAML.
 	void load(const YAML::Node& node);
+	/// Saves the craft data to YAML.
+	void save(YAML::Emitter& out) const;
 	/// Gets the craft's terrain data.
 	RuleTerrain *getBattlescapeTerrainData();
 	/// Sets the craft's terrain data.
