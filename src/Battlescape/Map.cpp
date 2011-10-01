@@ -23,7 +23,7 @@
 #include "UnitSprite.h"
 #include "Position.h"
 #include "Pathfinding.h"
-#include "TerrainModifier.h"
+#include "TileEngine.h"
 #include "Projectile.h"
 #include "BulletSprite.h"
 #include "Explosion.h"

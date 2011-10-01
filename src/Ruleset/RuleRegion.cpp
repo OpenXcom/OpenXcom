@@ -43,6 +43,75 @@ RuleRegion::~RuleRegion()
 }
 
 /**
+ * Loads the region type from a YAML file.
+ * @param node YAML node.
+ */
+void RuleRegion::load(const YAML::Node &node)
+{
+	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
+	{
+		std::string key;
+		i.first() >> key;
+		if (key == "type")
+		{
+			i.second() >> _type;
+		}
+		else if (key == "cost")
+		{
+			i.second() >> _cost;
+		}
+		else if (key == "lonMin")
+		{
+			i.second() >> _lonMin;
+		}
+		else if (key == "lonMax")
+		{
+			i.second() >> _lonMax;
+		}
+		else if (key == "latMin")
+		{
+			i.second() >> _latMin;
+		}
+		else if (key == "latMax")
+		{
+			i.second() >> _latMax;
+		}
+		else if (key == "cities")
+		{
+			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
+			{
+				City *rule = new City("", 0.0, 0.0);
+				rule->load(j.second());
+				_cities.push_back(rule);
+			}
+		}
+	}
+}
+
+/**
+ * Saves the region type to a YAML file.
+ * @param out YAML emitter.
+ */
+void RuleRegion::save(YAML::Emitter &out) const
+{
+	out << YAML::BeginMap;
+	out << YAML::Key << "type" << YAML::Value << _type;
+	out << YAML::Key << "cost" << YAML::Value << _cost;
+	out << YAML::Key << "lonMin" << YAML::Value << _lonMin;
+	out << YAML::Key << "lonMax" << YAML::Value << _lonMax;
+	out << YAML::Key << "latMin" << YAML::Value << _latMin;
+	out << YAML::Key << "latMax" << YAML::Value << _latMax;
+	out << YAML::Key << "cities" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::vector<City*>::const_iterator i = _cities.begin(); i != _cities.end(); ++i)
+	{
+		(*i)->save(out);
+	}
+	out << YAML::EndSeq;
+	out << YAML::EndMap;
+}
+
+/**
  * Returns the language string that names
  * this region. Each region type
  * has a unique name.

@@ -166,10 +166,10 @@
 		<Unit filename="Battlescape\Projectile.h" />
 		<Unit filename="Battlescape\ProjectileFlyBState.cpp" />
 		<Unit filename="Battlescape\ProjectileFlyBState.h" />
-		<Unit filename="Battlescape\TerrainModifier.cpp" />
-		<Unit filename="Battlescape\TerrainModifier.h" />
-		<Unit filename="Battlescape\UnitFallBState.cpp" />
-		<Unit filename="Battlescape\UnitFallBState.h" />
+		<Unit filename="Battlescape\TileEngine.cpp" />
+		<Unit filename="Battlescape\TileEngine.h" />
+		<Unit filename="Battlescape\UnitDieBState.cpp" />
+		<Unit filename="Battlescape\UnitDieBState.h" />
 		<Unit filename="Battlescape\UnitInfoState.cpp" />
 		<Unit filename="Battlescape\UnitInfoState.h" />
 		<Unit filename="Battlescape\UnitSprite.cpp" />

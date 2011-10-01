@@ -133,10 +133,114 @@ void Ruleset::load(const std::string &filename)
 	parser.GetNextDocument(doc);
 	for (YAML::Iterator i = doc.begin(); i != doc.end(); ++i)
 	{
-
+		std::string key;
+		i.first() >> key;
+		if (key == "countries")
+		{
+			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
+			{
+				std::string type;
+				j.second()["type"] >> type;
+				RuleCountry *rule;
+				if (_countries.find(type) != _countries.end())
+				{
+					rule = _countries[type];
+				}
+				else
+				{
+					rule = new RuleCountry(type);
+					_countries[type] = rule;
+					_countriesIndex.push_back(type);
+				}
+				rule->load(j.second());
+			}
+		}
+		else if (key == "regions")
+		{
+			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
+			{
+				std::string type;
+				j.second()["type"] >> type;
+				RuleRegion *rule;
+				if (_regions.find(type) != _regions.end())
+				{
+					rule = _regions[type];
+				}
+				else
+				{
+					rule = new RuleRegion(type);
+					_regions[type] = rule;
+					_regionsIndex.push_back(type);
+				}
+				rule->load(j.second());
+			}
+		}
+		else if (key == "facilities")
+		{
+			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
+			{
+				std::string type;
+				j.second()["type"] >> type;
+				RuleBaseFacility *rule;
+				if (_facilities.find(type) != _facilities.end())
+				{
+					rule = _facilities[type];
+				}
+				else
+				{
+					rule = new RuleBaseFacility(type);
+					_facilities[type] = rule;
+					_facilitiesIndex.push_back(type);
+				}
+				rule->load(j.second());
+			}
+		}
 	}
 
 	fin.close();
+}
+
+/**
+ * Saves a ruleset's contents to a YAML file.
+ * @param filename YAML filename.
+ */
+void Ruleset::save(const std::string &filename) const
+{
+	std::string s = Options::getDataFolder() + "Ruleset/" + filename + ".rul";
+	std::ofstream sav(s.c_str());
+	if (!sav)
+	{
+		throw Exception("Failed to save ruleset");
+	}
+
+	YAML::Emitter out;
+
+	out << YAML::BeginDoc;
+	out << YAML::BeginMap;
+	out << YAML::Key << "countries" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::map<std::string, RuleCountry*>::const_iterator i = _countries.begin(); i != _countries.end(); ++i)
+	{
+		i->second->save(out);
+	}
+	out << YAML::EndSeq;
+	out << YAML::Key << "regions" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::map<std::string, RuleRegion*>::const_iterator i = _regions.begin(); i != _regions.end(); ++i)
+	{
+		i->second->save(out);
+	}
+	out << YAML::EndSeq;
+	out << YAML::Key << "facilities" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::map<std::string, RuleBaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); ++i)
+	{
+		i->second->save(out);
+	}
+	out << YAML::EndSeq;
+	out << YAML::EndMap;
+	sav << out.c_str();
+	sav.close();
 }
 
 /**

@@ -19,7 +19,7 @@
 
 #include "UnitWalkBState.h"
 #include "ProjectileFlyBState.h"
-#include "TerrainModifier.h"
+#include "TileEngine.h"
 #include "Pathfinding.h"
 #include "BattlescapeState.h"
 #include "Map.h"
@@ -60,7 +60,7 @@ void UnitWalkBState::init()
 	_unit = _action.actor;
 	setNormalWalkSpeed();
 	_pf = _parent->getGame()->getSavedGame()->getBattleGame()->getPathfinding();
-	_terrain = _parent->getGame()->getSavedGame()->getBattleGame()->getTerrainModifier();
+	_terrain = _parent->getGame()->getSavedGame()->getBattleGame()->getTileEngine();
 	_target = _action.target;
 	_pf->calculate(_unit, _target);
 }

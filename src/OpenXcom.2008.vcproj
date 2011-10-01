@@ -908,11 +908,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Battlescape\TerrainModifier.cpp"
+				RelativePath=".\Battlescape\TileEngine.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Battlescape\TerrainModifier.h"
+				RelativePath=".\Battlescape\TileEngine.h"
 				>
 			</File>
 			<File
@@ -924,11 +924,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Battlescape\UnitFallBState.cpp"
+				RelativePath=".\Battlescape\UnitDieBState.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Battlescape\UnitFallBState.h"
+				RelativePath=".\Battlescape\UnitDieBState.h"
 				>
 			</File>
 			<File

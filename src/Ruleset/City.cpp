@@ -39,6 +39,44 @@ City::~City()
 }
 
 /**
+ * Loads the region type from a YAML file.
+ * @param node YAML node.
+ */
+void City::load(const YAML::Node &node)
+{
+	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
+	{
+		std::string key;
+		i.first() >> key;
+		if (key == "name")
+		{
+			i.second() >> _name;
+		}
+		else if (key == "lon")
+		{
+			i.second() >> _lon;
+		}
+		else if (key == "lat")
+		{
+			i.second() >> _lat;
+		}
+	}
+}
+
+/**
+ * Saves the region type to a YAML file.
+ * @param out YAML emitter.
+ */
+void City::save(YAML::Emitter &out) const
+{
+	out << YAML::BeginMap;
+	out << YAML::Key << "name" << YAML::Value << _name;
+	out << YAML::Key << "lon" << YAML::Value << _lon;
+	out << YAML::Key << "lat" << YAML::Value << _lat;
+	out << YAML::EndMap;
+}
+
+/**
  * Returns the name of the city.
  * @return City name.
  */

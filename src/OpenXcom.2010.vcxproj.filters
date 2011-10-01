@@ -338,9 +338,6 @@
     <ClCompile Include="Battlescape\PathfindingNode.cpp">
       <Filter>Battlescape</Filter>
     </ClCompile>
-    <ClCompile Include="Battlescape\TerrainModifier.cpp">
-      <Filter>Battlescape</Filter>
-    </ClCompile>
     <ClCompile Include="Savegame\BattleItem.cpp">
       <Filter>Savegame</Filter>
     </ClCompile>
@@ -470,9 +467,6 @@
     <ClCompile Include="Geoscape\ProductionCompleteState.cpp">
       <Filter>Geoscape</Filter>
     </ClCompile>
-    <ClCompile Include="Battlescape\UnitFallBState.cpp">
-      <Filter>Battlescape</Filter>
-    </ClCompile>
     <ClCompile Include="Ufopaedia\ArticleStateCraft.cpp">
       <Filter>Ufopaedia</Filter>
     </ClCompile>
@@ -579,6 +573,12 @@
       <Filter>Geoscape</Filter>
     </ClCompile>
     <ClCompile Include="Battlescape\InfoboxState.cpp">
+      <Filter>Battlescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Battlescape\TileEngine.cpp">
+      <Filter>Battlescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Battlescape\UnitDieBState.cpp">
       <Filter>Battlescape</Filter>
     </ClCompile>
   </ItemGroup>
@@ -920,9 +920,6 @@
     <ClInclude Include="Battlescape\PathfindingNode.h">
       <Filter>Battlescape</Filter>
     </ClInclude>
-    <ClInclude Include="Battlescape\TerrainModifier.h">
-      <Filter>Battlescape</Filter>
-    </ClInclude>
     <ClInclude Include="Savegame\BattleItem.h">
       <Filter>Savegame</Filter>
     </ClInclude>
@@ -1053,9 +1050,6 @@
     <ClInclude Include="Geoscape\ProductionCompleteState.h">
       <Filter>Geoscape</Filter>
     </ClInclude>
-    <ClInclude Include="Battlescape\UnitFallBState.h">
-      <Filter>Battlescape</Filter>
-    </ClInclude>
     <ClInclude Include="Ufopaedia\ArticleStateCraft.h">
       <Filter>Ufopaedia</Filter>
     </ClInclude>
@@ -1162,6 +1156,12 @@
       <Filter>Geoscape</Filter>
     </ClInclude>
     <ClInclude Include="Battlescape\InfoboxState.h">
+      <Filter>Battlescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Battlescape\TileEngine.h">
+      <Filter>Battlescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Battlescape\UnitDieBState.h">
       <Filter>Battlescape</Filter>
     </ClInclude>
   </ItemGroup>

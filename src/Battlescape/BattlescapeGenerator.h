@@ -71,6 +71,7 @@ private:
 	int loadMAP(MapBlock *mapblock, int xoff, int yoff, RuleTerrain *terrain, int objectIDOffset, bool discovered = false);
 	/// loads an XCOM RMP file
 	void loadRMP(MapBlock *mapblock, int xoff, int yoff, int segment);
+	void explodePowerSources();
 public:
 	/// Creates a new BattlescapeGenerator class
 	BattlescapeGenerator(Game *game);

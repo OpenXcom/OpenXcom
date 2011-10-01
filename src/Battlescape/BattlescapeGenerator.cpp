@@ -19,7 +19,7 @@
 #include <fstream>
 #include <sstream>
 #include "BattlescapeGenerator.h"
-#include "TerrainModifier.h"
+#include "TileEngine.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
@@ -315,13 +315,18 @@ void BattlescapeGenerator::run()
 		}
 	}
 	
+	if (_missionType == MISS_UFORECOVERY)
+	{
+		explodePowerSources();
+	}
+
 	// set shade (alien bases are a little darker, sites depend on worldshade)
 	int worldshades[8] = { 0, 1, 2, 3, 5, 7, 9 , 15 };
 	_save->setGlobalShade(worldshades[_worldShade]);
 
-	_save->getTerrainModifier()->calculateSunShading();
-	_save->getTerrainModifier()->calculateTerrainLighting();
-	_save->getTerrainModifier()->calculateUnitLighting();
+	_save->getTileEngine()->calculateSunShading();
+	_save->getTileEngine()->calculateTerrainLighting();
+	_save->getTileEngine()->calculateUnitLighting();
 }
 
 /**
@@ -948,6 +953,24 @@ void BattlescapeGenerator::loadRMP(MapBlock *mapblock, int xoff, int yoff, int s
 	}
 
 	mapFile.close();
+}
+
+/**
+ * When a UFO crashes, there is a 75% chance for each powersource to explode.
+ */
+void BattlescapeGenerator::explodePowerSources()
+{
+	for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); ++i)
+	{
+		if (_save->getTiles()[i]->getMapData(MapData::O_OBJECT) && _save->getTiles()[i]->getMapData(MapData::O_OBJECT)->getSpecialType() == UFO_POWER_SOURCE && RNG::generate(0,100) < 75)
+		{
+			Position pos;
+			pos.x = _save->getTiles()[i]->getPosition().x*16;
+			pos.y = _save->getTiles()[i]->getPosition().y*16;
+			pos.z = (_save->getTiles()[i]->getPosition().z*24) +12;
+			_save->getTileEngine()->explode(pos, 180+RNG::generate(0,70), DT_HE, 11, 0);
+		}
+	}
 }
 
 }

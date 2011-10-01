@@ -718,11 +718,8 @@ void Globe::rotate()
  */
 void Globe::draw()
 {
-	Surface::draw();
-	drawOcean();
-	drawLand();
+	drawRefresh();
 	drawDetail();
-	drawMarkers();
 }
 
 /**
@@ -730,7 +727,7 @@ void Globe::draw()
  */
 void Globe::drawRefresh()
 {
-	clear();
+	Surface::draw();
 	drawOcean();
 	drawLand();
 	drawMarkers();

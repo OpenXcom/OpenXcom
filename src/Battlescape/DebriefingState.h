@@ -20,6 +20,7 @@
 #define OPENXCOM_DEBRIEFINGSTATE_H
 
 #include "../Engine/State.h"
+#include <string>
 
 namespace OpenXcom
 {
@@ -29,6 +30,9 @@ class Window;
 class Text;
 class TextList;
 
+struct DebriefingStat { DebriefingStat(std::string _item, bool recovery) : item(_item), qty(0), score(0), recovery(recovery) {}; std::string item; int qty; int score; bool recovery; };
+
+
 /**
  * Debriefing screen shown after a Battlescape
  * mission that displays the results.
@@ -36,10 +40,13 @@ class TextList;
 class DebriefingState : public State
 {
 private:
+	std::vector<DebriefingStat*> _stats;
 	TextButton *_btnOk;
 	Window *_window;
 	Text *_txtTitle, *_txtItem, *_txtQuantity, *_txtScore, *_txtUfoRecovery, *_txtRating;
 	TextList *_lstStats, *_lstUfoRecovery, *_lstTotal;
+	void addStat(const std::string &name, int quantity, int score);
+	void prepareDebriefing();
 public:
 	/// Creates the Debriefing state.
 	DebriefingState(Game *game);

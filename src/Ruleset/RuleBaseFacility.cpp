@@ -26,7 +26,7 @@ namespace OpenXcom
  * type of base facility.
  * @param type String defining the type.
  */
-RuleBaseFacility::RuleBaseFacility(const std::string &type) : _type(type), _spriteShape(-1), _spriteFacility(-1), _lift(false), _size(1), _buildCost(0), _buildTime(0), _monthlyCost(0), _storage(0), _personnel(0), _aliens(0), _crafts(0), _labs(0), _workshops(0), _psiLabs(0), _radarRange(0), _radarChance(0), _defence(0), _hitRatio(0)
+RuleBaseFacility::RuleBaseFacility(const std::string &type) : _type(type), _spriteShape(-1), _spriteFacility(-1), _lift(false), _hyper(false), _mind(false), _grav(false), _size(1), _buildCost(0), _buildTime(0), _monthlyCost(0), _storage(0), _personnel(0), _aliens(0), _crafts(0), _labs(0), _workshops(0), _psiLabs(0), _radarRange(0), _radarChance(0), _defence(0), _hitRatio(0)
 {
 }
 
@@ -35,6 +35,139 @@ RuleBaseFacility::RuleBaseFacility(const std::string &type) : _type(type), _spri
  */
 RuleBaseFacility::~RuleBaseFacility()
 {
+}
+
+/**
+ * Loads the region type from a YAML file.
+ * @param node YAML node.
+ */
+void RuleBaseFacility::load(const YAML::Node &node)
+{
+	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
+	{
+		std::string key;
+		i.first() >> key;
+		if (key == "type")
+		{
+			i.second() >> _type;
+		}
+		else if (key == "spriteShape")
+		{
+			i.second() >> _spriteShape;
+		}
+		else if (key == "spriteFacility")
+		{
+			i.second() >> _spriteFacility;
+		}
+		else if (key == "lift")
+		{
+			i.second() >> _lift;
+		}
+		else if (key == "hyper")
+		{
+			i.second() >> _hyper;
+		}
+		else if (key == "mind")
+		{
+			i.second() >> _mind;
+		}
+		else if (key == "grav")
+		{
+			i.second() >> _grav;
+		}
+		else if (key == "size")
+		{
+			i.second() >> _size;
+		}
+		else if (key == "buildCost")
+		{
+			i.second() >> _buildCost;
+		}
+		else if (key == "buildTime")
+		{
+			i.second() >> _buildTime;
+		}
+		else if (key == "monthlyCost")
+		{
+			i.second() >> _monthlyCost;
+		}
+		else if (key == "storage")
+		{
+			i.second() >> _storage;
+		}
+		else if (key == "personnel")
+		{
+			i.second() >> _personnel;
+		}
+		else if (key == "aliens")
+		{
+			i.second() >> _aliens;
+		}
+		else if (key == "crafts")
+		{
+			i.second() >> _crafts;
+		}
+		else if (key == "labs")
+		{
+			i.second() >> _labs;
+		}
+		else if (key == "workshops")
+		{
+			i.second() >> _workshops;
+		}
+		else if (key == "psiLabs")
+		{
+			i.second() >> _psiLabs;
+		}
+		else if (key == "radarRange")
+		{
+			i.second() >> _radarRange;
+		}
+		else if (key == "radarChance")
+		{
+			i.second() >> _radarChance;
+		}
+		else if (key == "defence")
+		{
+			i.second() >> _defence;
+		}
+		else if (key == "hitRatio")
+		{
+			i.second() >> _hitRatio;
+		}
+	}
+}
+
+/**
+ * Saves the region type to a YAML file.
+ * @param out YAML emitter.
+ */
+void RuleBaseFacility::save(YAML::Emitter &out) const
+{
+	out << YAML::BeginMap;
+	out << YAML::Key << "type" << YAML::Value << _type;
+	out << YAML::Key << "spriteShape" << YAML::Value << _spriteShape;
+	out << YAML::Key << "spriteFacility" << YAML::Value << _spriteFacility;
+	out << YAML::Key << "lift" << YAML::Value << _lift;
+	out << YAML::Key << "hyper" << YAML::Value << _hyper;
+	out << YAML::Key << "mind" << YAML::Value << _mind;
+	out << YAML::Key << "grav" << YAML::Value << _grav;
+	out << YAML::Key << "size" << YAML::Value << _size;
+	out << YAML::Key << "buildCost" << YAML::Value << _buildCost;
+	out << YAML::Key << "buildTime" << YAML::Value << _buildTime;
+	out << YAML::Key << "monthlyCost" << YAML::Value << _monthlyCost;
+	out << YAML::Key << "storage" << YAML::Value << _storage;
+	out << YAML::Key << "personnel" << YAML::Value << _personnel;
+	out << YAML::Key << "aliens" << YAML::Value << _aliens;
+	out << YAML::Key << "crafts" << YAML::Value << _crafts;
+	out << YAML::Key << "labs" << YAML::Value << _labs;
+	out << YAML::Key << "workshops" << YAML::Value << _workshops;
+	out << YAML::Key << "psiLabs" << YAML::Value << _psiLabs;
+	out << YAML::Key << "radarRange" << YAML::Value << _radarRange;
+	out << YAML::Key << "radarChance" << YAML::Value << _radarChance;
+	out << YAML::Key << "defence" << YAML::Value << _defence;
+	out << YAML::Key << "hitRatio" << YAML::Value << _hitRatio;
+	out << YAML::EndMap;
 }
 
 /**
@@ -120,11 +253,69 @@ bool RuleBaseFacility::getLift() const
 /**
  * Changes whether this facility is the core access lift
  * of a base.
- * @param lift Lift state.
+ * @param lift Lift flag.
  */
 void RuleBaseFacility::setLift(bool lift)
 {
 	_lift = lift;
+}
+
+/**
+ * Returns whether this facility has hyperwave detection
+ * capabilities. This allows it to get extra details about UFOs.
+ * @return Hyperwave flag.
+ */
+bool RuleBaseFacility::getHyperwave() const
+{
+	return _hyper;
+}
+
+/**
+ * Changes whether this facility has hyperwave detection
+ * capabilities.
+ * @param hyper Hyperwave flag.
+ */
+void RuleBaseFacility::setHyperwave(bool hyper)
+{
+	_hyper = hyper;
+}
+
+/**
+ * Returns whether this facility has a mind shield,
+ * which covers your base from alien detection.
+ * @return Mind Shield flag.
+ */
+bool RuleBaseFacility::getMindShield() const
+{
+	return _mind;
+}
+
+/**
+ * Changes whether this facility has a mind shield.
+ * @param mind Mind Shield flag.
+ */
+void RuleBaseFacility::setMindShield(bool mind)
+{
+	_mind = mind;
+}
+
+/**
+ * Returns whether this facility has a grav shield,
+ * which doubles base defense's fire ratio.
+ * @return Grav Shield flag.
+ */
+bool RuleBaseFacility::getGravShield() const
+{
+	return _grav;
+}
+
+/**
+ * Changes whether this facility has a grav shield.
+ * @param grav Grav Shield flag.
+ */
+void RuleBaseFacility::setGravShield(bool grav)
+{
+	_grav = grav;
 }
 
 /**
