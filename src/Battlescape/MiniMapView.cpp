@@ -120,6 +120,23 @@ void MiniMapView::draw()
 		}
 		py++;
 	}
+	int centerX = getWidth() / 2;
+	int centerY = getHeight() / 2;
+	Uint8 color = 1;
+	int xOffset = CELL_WIDTH / 2;
+	int yOffset = CELL_HEIGHT / 2;
+	drawLine(centerX - CELL_WIDTH, centerY - CELL_HEIGHT,
+		 centerX - xOffset, centerY - yOffset,
+		 color); // top left
+	drawLine(centerX + xOffset, centerY - yOffset,
+		 centerX + CELL_WIDTH, centerY - CELL_HEIGHT,
+		 color); // top right
+	drawLine(centerX - CELL_WIDTH, centerY + CELL_HEIGHT,
+		 centerX - xOffset, centerY + yOffset,
+		 color); // bottom left
+	drawLine(centerX + CELL_WIDTH, centerY + CELL_HEIGHT,
+		 centerX + xOffset, centerY + yOffset,
+		 color); //bottom right
 }
 
 /**
