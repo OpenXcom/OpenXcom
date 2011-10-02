@@ -38,11 +38,11 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param map The Battlescape map
 */
-MiniMapState::MiniMapState (Game * game, Map * map) : State (game), _map (map), _displayedLevel(0)
+MiniMapState::MiniMapState (Game * game, Map * map, SavedBattleGame * battleGame) : State (game), _map (map), _displayedLevel(0)
 {
 	_surface = new InteractiveSurface(320, 200);
 	_surface->loadSpk(CrossPlatform::getDataFile("UFOGRAPH/SCANBORD.PCK"));
-	_miniMapView = new MiniMapView(224, 150, 46, 15, game, map);
+	_miniMapView = new MiniMapView(224, 150, 46, 15, game, map, battleGame);
 	InteractiveSurface * btnLvlUp = new InteractiveSurface(18, 20, 24, 62);
 	InteractiveSurface * btnLvlDwn = new InteractiveSurface(18, 20, 24, 88);
 	InteractiveSurface * btnOk = new InteractiveSurface(32, 32, 275, 145);
