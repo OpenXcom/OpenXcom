@@ -67,8 +67,8 @@ namespace OpenXcom
 XcomRuleset::XcomRuleset() : Ruleset()
 {
 	// first load the game config(s)
-	std::string s = Options::getUserFolder() + "config" + ".dat";
-	std::ifstream fins(s.c_str());
+	std::string configDataFile("config.dat");
+	std::ifstream fins(CrossPlatform::getDataFile(configDataFile).c_str());
 	if (!fins)
 	{
 		throw Exception("Failed to load savegame");
