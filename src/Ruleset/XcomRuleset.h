@@ -41,6 +41,17 @@ private:
 	void initBaseFacilities(YAML::Node &doc);
 	// 
 	void initMapDataFiles(YAML::Node &doc);
+	// initCrafts
+	void initCrafts(YAML::Node &doc);
+	//
+	void initCraftWeapons(YAML::Node &doc);
+	//
+	void initItems(YAML::Node &doc);
+	//
+	void initUFOs(YAML::Node &doc);
+
+	//
+	RuleTerrain *getTerrainFromYAML(YAML::Iterator &terrains);
 public:
 	/// Creates the X-Com ruleset.
 	XcomRuleset();
