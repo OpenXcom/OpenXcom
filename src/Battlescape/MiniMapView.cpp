@@ -105,7 +105,7 @@ void MiniMapView::draw()
 			}
 			else
 			{
-				s->blitNShade(this, x, y, 0);
+				s->blitNShade(this, x, y, t->getShade());
 			}
 			if(t)
 			{
