@@ -37,6 +37,7 @@ class MiniMapView : public InteractiveSurface
 	int _startY;
 	int _lvl;
 	SavedBattleGame * _battleGame;
+	int _frame;
 	/// Handle clicking on the MiniMap
 	void mouseClick (Action *action, State *state);
 public:
@@ -54,6 +55,8 @@ public:
 	int getDisplayedLevel ();
 	/// Set the displayed minimap level
 	void setDisplayedLevel (int level);
+	/// update minimap animation
+	void animate();
 };
 
 }

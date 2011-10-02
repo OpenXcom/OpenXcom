@@ -32,6 +32,7 @@ namespace OpenXcom
 const int CELL_WIDTH = 4;
 const int CELL_HEIGHT = 4;
 const int MAX_LEVEL = 3;
+const int MAX_FRAME = 2;
 
 /**
  * Initializes all the elements in the MiniMapView.
@@ -46,7 +47,7 @@ const int MAX_LEVEL = 3;
 MiniMapView::MiniMapView(int w, int h, int x, int y, Game * game, Map * map, SavedBattleGame * battleGame) : InteractiveSurface(w, h, x, y), _game(game), _map(map), _startX(0),  _startY(0), _lvl(_map->getViewHeight()), _battleGame(battleGame)
 {
 	_startX = _map->getCenterX () - ((getWidth () / CELL_WIDTH) / 2);
-	_startY = _map->getCenterY() - ((getHeight () / CELL_HEIGHT) / 2);
+	_startY = _map->getCenterY () - ((getHeight () / CELL_HEIGHT) / 2);
 }
 
 /**
@@ -74,6 +75,7 @@ void MiniMapView::draw()
 	{
 		battleUnits[(*it)->getTile()] = *it;
 	}
+
 	for (int y = getHeight () - CELL_HEIGHT; y >= 0; y-=CELL_HEIGHT)
 	{
 		int px = _startX;
@@ -117,7 +119,7 @@ void MiniMapView::draw()
 			std::map<Tile *, BattleUnit *>::iterator itTile =  battleUnits.find (t);
 			if(itTile != battleUnits.end () && itTile->second->getVisible())
 			{
-				s = set->getFrame (itTile->second->getMiniMapSpriteIndex ()+o);
+				s = set->getFrame (itTile->second->getMiniMapSpriteIndex ()+_frame);
 				s->blitNShade(this, x, y, 0);
 			}
 			px++;
@@ -206,5 +208,17 @@ int MiniMapView::getDisplayedLevel ()
 void MiniMapView::setDisplayedLevel (int level)
 {
 	_lvl = level;
+}
+
+/**
+ * Update minimap animation
+*/
+void MiniMapView::animate()
+{
+	_frame++;
+	if(_frame > MAX_FRAME)
+	{
+		_frame = 0;
+	}
 }
 }

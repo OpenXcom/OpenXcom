@@ -27,6 +27,7 @@ class Map;
 class InteractiveSurface;
 class Text;
 class MiniMapView;
+class Timer;
 class SavedBattleGame;
 
 /**
@@ -39,6 +40,9 @@ class MiniMapState : public State
 	MiniMapView * _miniMapView;
 	int _displayedLevel;
 	Text * _txtLevel;
+	Timer *_timerAnimate;
+	/// Handle Minimap animation
+	void animate();
 public:
 	/// Create the MiniMapState
 	MiniMapState (Game * game, Map * map, SavedBattleGame * battleGame);
@@ -48,6 +52,8 @@ public:
 	void btnLevelUpClick (Action * action);
 	/// Handler for the one level down button
 	void btnLevelDownClick (Action * action);
+	/// Handle timers
+	void think ();
 };
 }
 
