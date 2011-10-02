@@ -29,6 +29,7 @@
 #include "../Interface/Text.h"
 #include "MiniMapView.h"
 #include "Map.h"
+#include "../Engine/Timer.h"
 #include <sstream>
 
 namespace OpenXcom
@@ -60,7 +61,10 @@ MiniMapState::MiniMapState (Game * game, Map * map, SavedBattleGame * battleGame
 	_txtLevel->setColor(Palette::blockOffset(4));
 	std::wstringstream s;
 	s << _miniMapView->getDisplayedLevel ();
-	_txtLevel->setText(s.str());	
+	_txtLevel->setText(s.str());
+	_timerAnimate = new Timer(125);
+	_timerAnimate->onTimer((StateHandler)&MiniMapState::animate);
+	_timerAnimate->start();
 }
 
 /**
@@ -82,7 +86,7 @@ void MiniMapState::btnLevelUpClick (Action * action)
 	_miniMapView->up ();
 	std::wstringstream s;
 	s << _miniMapView->getDisplayedLevel ();
-	_txtLevel->setText(s.str());	
+	_txtLevel->setText(s.str());
 }
 
 /**
@@ -95,5 +99,22 @@ void MiniMapState::btnLevelDownClick (Action * action)
 	std::wstringstream s;
 	s << _miniMapView->getDisplayedLevel ();
 	_txtLevel->setText(s.str());
+}
+
+/**
+ * Animation handler. Update the minimap view animation
+*/
+void MiniMapState::animate()
+{
+	_miniMapView->animate();
+}
+
+/**
+ * Handle timers
+*/
+void MiniMapState::think ()
+{
+	State::think();
+	_timerAnimate->think(this, 0);
 }
 }
