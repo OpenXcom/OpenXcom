@@ -21,6 +21,7 @@
 
 #include "Ruleset.h"
 #include "yaml.h"
+#include "../Savegame/Unit.h"
 
 namespace OpenXcom
 {
@@ -49,7 +50,18 @@ private:
 	void initItems(YAML::Node &doc);
 	//
 	void initUFOs(YAML::Node &doc);
-
+	//
+	void initInventory(YAML::Node &doc);
+	//
+	void initTerrains(YAML::Node &doc);
+	//
+	void initArmors(YAML::Node &doc);
+	//
+	void initSoldiers(YAML::Node &doc);
+	//
+	void initAliens(YAML::Node &doc);
+	//
+	OpenXcom::UnitStats getStatsFromYAML(YAML::Iterator &statsIterator);
 	//
 	RuleTerrain *getTerrainFromYAML(YAML::Iterator &terrains);
 public:

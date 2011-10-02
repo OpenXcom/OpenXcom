@@ -105,399 +105,17 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	initUFOs(d);
 
 	// Add inventory
-	RuleInventory *rshoulder = new RuleInventory("STR_RIGHT_SHOULDER");
-	rshoulder->setX(16);
-	rshoulder->setY(40);
-	rshoulder->addSlot(0, 0);
-	rshoulder->addSlot(1, 0);
-	rshoulder->addCost("STR_GROUND", 4);
-	rshoulder->addCost("STR_RIGHT_HAND", 3);
-	rshoulder->addCost("STR_LEFT_HAND", 3);
-	rshoulder->addCost("STR_RIGHT_LEG", 12);
-	rshoulder->addCost("STR_LEFT_LEG", 12);
-	rshoulder->addCost("STR_BELT", 10);
-	rshoulder->addCost("STR_LEFT_SHOULDER", 8);
-	rshoulder->addCost("STR_BACKPACK", 16);
-
-	RuleInventory *lshoulder = new RuleInventory("STR_LEFT_SHOULDER");
-	lshoulder->setX(112);
-	lshoulder->setY(40);
-	lshoulder->addSlot(0, 0);
-	lshoulder->addSlot(1, 0);
-	lshoulder->addCost("STR_GROUND", 4);
-	lshoulder->addCost("STR_RIGHT_HAND", 3);
-	lshoulder->addCost("STR_LEFT_HAND", 3);
-	lshoulder->addCost("STR_RIGHT_LEG", 12);
-	lshoulder->addCost("STR_LEFT_LEG", 12);
-	lshoulder->addCost("STR_BELT", 10);
-	lshoulder->addCost("STR_RIGHT_SHOULDER", 8);
-	lshoulder->addCost("STR_BACKPACK", 16);
-
-	RuleInventory *rhand = new RuleInventory("STR_RIGHT_HAND");
-	rhand->setX(0);
-	rhand->setY(64);
-	rhand->setType(INV_HAND);
-	rhand->addCost("STR_GROUND", 2);
-	rhand->addCost("STR_LEFT_HAND", 4);
-	rhand->addCost("STR_RIGHT_LEG", 8);
-	rhand->addCost("STR_LEFT_LEG", 10);
-	rhand->addCost("STR_BELT", 8);
-	rhand->addCost("STR_RIGHT_SHOULDER", 10);
-	rhand->addCost("STR_LEFT_SHOULDER", 10);
-	rhand->addCost("STR_BACK_PACK", 14);
-
-	RuleInventory *lhand = new RuleInventory("STR_LEFT_HAND");
-	lhand->setX(128);
-	lhand->setY(64);
-	lhand->setType(INV_HAND);
-	lhand->addCost("STR_GROUND", 2);
-	lhand->addCost("STR_RIGHT_HAND", 4);
-	lhand->addCost("STR_RIGHT_LEG", 10);
-	lhand->addCost("STR_LEFT_LEG", 8);
-	lhand->addCost("STR_BELT", 8);
-	lhand->addCost("STR_RIGHT_SHOULDER", 10);
-	lhand->addCost("STR_LEFT_SHOULDER", 10);
-	lhand->addCost("STR_BACK_PACK", 14);
-
-	RuleInventory *rleg = new RuleInventory("STR_RIGHT_LEG");
-	rleg->setX(0);
-	rleg->setY(120);
-	rleg->addSlot(0, 0);
-	rleg->addSlot(1, 0);
-	rleg->addCost("STR_GROUND", 6);
-	rleg->addCost("STR_RIGHT_HAND", 4);
-	rleg->addCost("STR_LEFT_HAND", 6);
-	rleg->addCost("STR_LEFT_LEG", 10);
-	rleg->addCost("STR_BELT", 10);
-	rleg->addCost("STR_RIGHT_SHOULDER", 10);
-	rleg->addCost("STR_LEFT_SHOULDER", 10);
-	rleg->addCost("STR_BACK_PACK", 18);
-
-	RuleInventory *lleg = new RuleInventory("STR_LEFT_LEG");
-	lleg->setX(128);
-	lleg->setY(120);
-	lleg->addSlot(0, 0);
-	lleg->addSlot(1, 0);
-	lleg->addCost("STR_GROUND", 6);
-	lleg->addCost("STR_RIGHT_HAND", 6);
-	lleg->addCost("STR_LEFT_HAND", 4);
-	lleg->addCost("STR_RIGHT_LEG", 10);
-	lleg->addCost("STR_BELT", 10);
-	lleg->addCost("STR_RIGHT_SHOULDER", 10);
-	lleg->addCost("STR_LEFT_SHOULDER", 10);
-	lleg->addCost("STR_BACK_PACK", 18);
-
-	RuleInventory *backpack = new RuleInventory("STR_BACK_PACK");
-	backpack->setX(192);
-	backpack->setY(40);
-	backpack->addSlot(0, 0);
-	backpack->addSlot(1, 0);
-	backpack->addSlot(2, 0);
-	backpack->addSlot(0, 1);
-	backpack->addSlot(1, 1);
-	backpack->addSlot(2, 1);
-	backpack->addSlot(0, 2);
-	backpack->addSlot(1, 2);
-	backpack->addSlot(2, 2);
-	backpack->addCost("STR_GROUND", 10);
-	backpack->addCost("STR_RIGHT_HAND", 8);
-	backpack->addCost("STR_LEFT_HAND", 8);
-	backpack->addCost("STR_RIGHT_LEG", 16);
-	backpack->addCost("STR_LEFT_LEG", 16);
-	backpack->addCost("STR_BELT", 12);
-	backpack->addCost("STR_RIGHT_SHOULDER", 14);
-	backpack->addCost("STR_LEFT_SHOULDER", 14);
-
-	RuleInventory *belt = new RuleInventory("STR_BELT");
-	belt->setX(192);
-	belt->setY(104);
-	belt->addSlot(0, 0);
-	belt->addSlot(1, 0);
-	belt->addSlot(2, 0);
-	belt->addSlot(3, 0);
-	belt->addSlot(0, 1);
-	belt->addSlot(3, 1);
-	belt->addCost("STR_GROUND", 6);
-	belt->addCost("STR_RIGHT_HAND", 4);
-	belt->addCost("STR_LEFT_HAND", 4);
-	belt->addCost("STR_RIGHT_LEG", 10);
-	belt->addCost("STR_LEFT_LEG", 10);
-	belt->addCost("STR_RIGHT_SHOULDER", 12);
-	belt->addCost("STR_LEFT_SHOULDER", 12);
-	belt->addCost("STR_BACK_PACK", 16);
-
-	RuleInventory *ground = new RuleInventory("STR_GROUND");
-	ground->setX(0);
-	ground->setY(152);
-	ground->setType(INV_GROUND);
-	ground->addCost("STR_RIGHT_HAND", 8);
-	ground->addCost("STR_LEFT_HAND", 8);
-	ground->addCost("STR_RIGHT_LEG", 10);
-	ground->addCost("STR_LEFT_LEG", 10);
-	ground->addCost("STR_BELT", 12);
-	ground->addCost("STR_RIGHT_SHOULDER", 12);
-	ground->addCost("STR_LEFT_SHOULDER", 12);
-	ground->addCost("STR_BACK_PACK", 20);
-
-	_invs.insert(std::pair<std::string, RuleInventory*>("STR_RIGHT_SHOULDER", rshoulder));
-	_invs.insert(std::pair<std::string, RuleInventory*>("STR_LEFT_SHOULDER", lshoulder));
-	_invs.insert(std::pair<std::string, RuleInventory*>("STR_RIGHT_HAND", rhand));
-	_invs.insert(std::pair<std::string, RuleInventory*>("STR_LEFT_HAND", lhand));
-	_invs.insert(std::pair<std::string, RuleInventory*>("STR_RIGHT_LEG", rleg));
-	_invs.insert(std::pair<std::string, RuleInventory*>("STR_LEFT_LEG", lleg));
-	_invs.insert(std::pair<std::string, RuleInventory*>("STR_BACK_PACK", backpack));
-	_invs.insert(std::pair<std::string, RuleInventory*>("STR_BELT", belt));
-	_invs.insert(std::pair<std::string, RuleInventory*>("STR_GROUND", ground));
+	initInventory(d);
 	
 	// Add terrain
-	RuleTerrain *culta = new RuleTerrain("CULTA");
-	culta->getMapDataSets()->push_back(getMapDataSet("BLANKS"));
-	culta->getMapDataSets()->push_back(getMapDataSet("CULTIVAT"));
-	culta->getMapDataSets()->push_back(getMapDataSet("BARN"));
-	culta->getMapBlocks()->push_back(new MapBlock(culta,"CULTA00",10,10,true));
-	//culta->getMapBlocks()->push_back(new MapBlock(culta,"CULTA0B",10,10,false));
-	culta->getMapBlocks()->push_back(new MapBlock(culta,"CULTA01",10,10,false));
-	culta->getMapBlocks()->push_back(new MapBlock(culta,"CULTA02",10,10,false));
-	culta->getMapBlocks()->push_back(new MapBlock(culta,"CULTA03",10,10,false));
-	culta->getMapBlocks()->push_back(new MapBlock(culta,"CULTA04",10,10,false));
-	culta->getMapBlocks()->push_back(new MapBlock(culta,"CULTA05",10,10,false));
-	culta->getMapBlocks()->push_back(new MapBlock(culta,"CULTA06",10,10,false));
-	culta->getMapBlocks()->push_back(new MapBlock(culta,"CULTA07",10,10,true));
-	culta->getMapBlocks()->push_back(new MapBlock(culta,"CULTA08",10,10,false));
-	culta->getMapBlocks()->push_back(new MapBlock(culta,"CULTA09",10,10,false));
-	culta->getMapBlocks()->push_back(new MapBlock(culta,"CULTA10",10,10,false));
-	culta->getMapBlocks()->push_back(new MapBlock(culta,"CULTA11",10,10,true));
-	culta->getMapBlocks()->push_back(new MapBlock(culta,"CULTA12",10,10,false));
-	culta->getMapBlocks()->push_back(new MapBlock(culta,"CULTA13",10,10,false));
-	culta->getMapBlocks()->push_back(new MapBlock(culta,"CULTA14",10,10,false));
-	culta->getMapBlocks()->push_back(new MapBlock(culta,"CULTA15",10,10,false));
-	culta->getMapBlocks()->push_back(new MapBlock(culta,"CULTA16",10,10,false));
-	culta->getMapBlocks()->push_back(new MapBlock(culta,"CULTA17",10,10,false));
-	culta->getMapBlocks()->push_back(new MapBlock(culta,"CULTA18",10,10,false));
-	RuleTerrain *jungle = new RuleTerrain("JUNGLE");
-	jungle->getMapDataSets()->push_back(getMapDataSet("BLANKS"));
-	jungle->getMapDataSets()->push_back(getMapDataSet("JUNGLE"));
-	jungle->getMapBlocks()->push_back(new MapBlock(jungle,"JUNGLE00",10,10,true));
-	jungle->getMapBlocks()->push_back(new MapBlock(jungle,"JUNGLE01",10,10,true));
-	jungle->getMapBlocks()->push_back(new MapBlock(jungle,"JUNGLE02",10,10,true));
-	jungle->getMapBlocks()->push_back(new MapBlock(jungle,"JUNGLE03",10,10,false));
-	jungle->getMapBlocks()->push_back(new MapBlock(jungle,"JUNGLE04",10,10,false));
-	jungle->getMapBlocks()->push_back(new MapBlock(jungle,"JUNGLE05",10,10,false));
-	jungle->getMapBlocks()->push_back(new MapBlock(jungle,"JUNGLE06",10,10,false));
-	jungle->getMapBlocks()->push_back(new MapBlock(jungle,"JUNGLE07",10,10,false));
-	jungle->getMapBlocks()->push_back(new MapBlock(jungle,"JUNGLE08",10,10,false));
-	jungle->getMapBlocks()->push_back(new MapBlock(jungle,"JUNGLE09",10,10,false));
-	jungle->getMapBlocks()->push_back(new MapBlock(jungle,"JUNGLE10",10,10,false));
-	jungle->getMapBlocks()->push_back(new MapBlock(jungle,"JUNGLE11",10,10,false));
-	RuleTerrain *forest = new RuleTerrain("FOREST");
-	forest->getMapDataSets()->push_back(getMapDataSet("BLANKS"));
-	forest->getMapDataSets()->push_back(getMapDataSet("FOREST"));
-	forest->getMapBlocks()->push_back(new MapBlock(forest,"FOREST00",10,10,true));
-	forest->getMapBlocks()->push_back(new MapBlock(forest,"FOREST01",10,10,true));
-	forest->getMapBlocks()->push_back(new MapBlock(forest,"FOREST02",10,10,false));
-	forest->getMapBlocks()->push_back(new MapBlock(forest,"FOREST03",10,10,false));
-	forest->getMapBlocks()->push_back(new MapBlock(forest,"FOREST04",10,10,false));
-	forest->getMapBlocks()->push_back(new MapBlock(forest,"FOREST05",10,10,false));
-	forest->getMapBlocks()->push_back(new MapBlock(forest,"FOREST06",10,10,false));
-	forest->getMapBlocks()->push_back(new MapBlock(forest,"FOREST07",10,10,false));
-	forest->getMapBlocks()->push_back(new MapBlock(forest,"FOREST08",10,10,false));
-	forest->getMapBlocks()->push_back(new MapBlock(forest,"FOREST09",10,10,false));
-	forest->getMapBlocks()->push_back(new MapBlock(forest,"FOREST10",20,20,false));
-	forest->getMapBlocks()->push_back(new MapBlock(forest,"FOREST11",20,20,false));
-	RuleTerrain *desert = new RuleTerrain("DESERT");
-	desert->getMapDataSets()->push_back(getMapDataSet("BLANKS"));
-	desert->getMapDataSets()->push_back(getMapDataSet("DESERT"));
-	desert->getMapBlocks()->push_back(new MapBlock(desert,"DESERT00",10,10,true));
-	desert->getMapBlocks()->push_back(new MapBlock(desert,"DESERT01",10,10,true));
-	desert->getMapBlocks()->push_back(new MapBlock(desert,"DESERT02",10,10,true));
-	desert->getMapBlocks()->push_back(new MapBlock(desert,"DESERT03",10,10,false));
-	desert->getMapBlocks()->push_back(new MapBlock(desert,"DESERT04",10,10,false));
-	desert->getMapBlocks()->push_back(new MapBlock(desert,"DESERT05",10,10,false));
-	desert->getMapBlocks()->push_back(new MapBlock(desert,"DESERT06",10,10,false));
-	desert->getMapBlocks()->push_back(new MapBlock(desert,"DESERT07",10,10,false));
-	desert->getMapBlocks()->push_back(new MapBlock(desert,"DESERT08",10,10,false));
-	desert->getMapBlocks()->push_back(new MapBlock(desert,"DESERT09",20,20,false));
-	desert->getMapBlocks()->push_back(new MapBlock(desert,"DESERT10",20,20,false));
-	desert->getMapBlocks()->push_back(new MapBlock(desert,"DESERT11",20,20,false));
-	RuleTerrain *mount = new RuleTerrain("MOUNT");
-	mount->getMapDataSets()->push_back(getMapDataSet("BLANKS"));
-	mount->getMapDataSets()->push_back(getMapDataSet("MOUNT"));
-	mount->getMapBlocks()->push_back(new MapBlock(mount,"MOUNT00",10,10,true));
-	mount->getMapBlocks()->push_back(new MapBlock(mount,"MOUNT01",10,10,true));
-	mount->getMapBlocks()->push_back(new MapBlock(mount,"MOUNT02",10,10,true));
-	mount->getMapBlocks()->push_back(new MapBlock(mount,"MOUNT03",10,10,false));
-	mount->getMapBlocks()->push_back(new MapBlock(mount,"MOUNT04",10,10,false));
-	mount->getMapBlocks()->push_back(new MapBlock(mount,"MOUNT05",10,10,false));
-	mount->getMapBlocks()->push_back(new MapBlock(mount,"MOUNT06",10,10,false));
-	mount->getMapBlocks()->push_back(new MapBlock(mount,"MOUNT07",10,10,false));
-	mount->getMapBlocks()->push_back(new MapBlock(mount,"MOUNT08",10,10,false));
-	mount->getMapBlocks()->push_back(new MapBlock(mount,"MOUNT09",10,10,false));
-	mount->getMapBlocks()->push_back(new MapBlock(mount,"MOUNT10",10,10,false));
-	mount->getMapBlocks()->push_back(new MapBlock(mount,"MOUNT11",20,20,false));
-	mount->getMapBlocks()->push_back(new MapBlock(mount,"MOUNT12",20,20,false));
-	RuleTerrain *polar = new RuleTerrain("POLAR");
-	polar->getMapDataSets()->push_back(getMapDataSet("BLANKS"));
-	polar->getMapDataSets()->push_back(getMapDataSet("POLAR"));
-	polar->getMapBlocks()->push_back(new MapBlock(polar,"POLAR00",10,10,true));
-	polar->getMapBlocks()->push_back(new MapBlock(polar,"POLAR01",10,10,true));
-	polar->getMapBlocks()->push_back(new MapBlock(polar,"POLAR02",10,10,true));
-	polar->getMapBlocks()->push_back(new MapBlock(polar,"POLAR03",10,10,false));
-	polar->getMapBlocks()->push_back(new MapBlock(polar,"POLAR04",10,10,false));
-	polar->getMapBlocks()->push_back(new MapBlock(polar,"POLAR05",10,10,false));
-	polar->getMapBlocks()->push_back(new MapBlock(polar,"POLAR06",10,10,false));
-	polar->getMapBlocks()->push_back(new MapBlock(polar,"POLAR07",10,10,false));
-	polar->getMapBlocks()->push_back(new MapBlock(polar,"POLAR08",10,10,false));
-	polar->getMapBlocks()->push_back(new MapBlock(polar,"POLAR09",10,10,false));
-	polar->getMapBlocks()->push_back(new MapBlock(polar,"POLAR10",10,10,false));
-	polar->getMapBlocks()->push_back(new MapBlock(polar,"POLAR11",10,10,false));
-	polar->getMapBlocks()->push_back(new MapBlock(polar,"POLAR12",20,20,false));
-	polar->getMapBlocks()->push_back(new MapBlock(polar,"POLAR13",20,20,false));
-	RuleTerrain *mars = new RuleTerrain("MARS");
-	mars->getMapDataSets()->push_back(getMapDataSet("BLANKS"));
-	mars->getMapDataSets()->push_back(getMapDataSet("MARS"));
-	mars->getMapDataSets()->push_back(getMapDataSet("U_WALL02"));
-	mars->getMapBlocks()->push_back(new MapBlock(mars,"MARS00",10,10,true));
-	RuleTerrain *urban = new RuleTerrain("URBAN");
-	urban->getMapDataSets()->push_back(getMapDataSet("BLANKS"));
-	urban->getMapDataSets()->push_back(getMapDataSet("ROADS"));
-	urban->getMapDataSets()->push_back(getMapDataSet("URBITS"));
-	urban->getMapDataSets()->push_back(getMapDataSet("URBAN"));
-	urban->getMapDataSets()->push_back(getMapDataSet("FRNITURE"));
-	//urban->getMapBlocks()->push_back(new MapBlock(urban,"URBAN00",10,10,false));
-	//urban->getMapBlocks()->push_back(new MapBlock(urban,"URBAN01",10,10,false));
-	//urban->getMapBlocks()->push_back(new MapBlock(urban,"URBAN02",10,10,false));
-	urban->getMapBlocks()->push_back(new MapBlock(urban,"URBAN03",10,10,true));
-	urban->getMapBlocks()->push_back(new MapBlock(urban,"URBAN04",10,10,true));
-	urban->getMapBlocks()->push_back(new MapBlock(urban,"URBAN05",20,20,false));
-	urban->getMapBlocks()->push_back(new MapBlock(urban,"URBAN06",20,20,false));
-	urban->getMapBlocks()->push_back(new MapBlock(urban,"URBAN07",20,20,false));
-	urban->getMapBlocks()->push_back(new MapBlock(urban,"URBAN08",20,20,false));
-	urban->getMapBlocks()->push_back(new MapBlock(urban,"URBAN09",20,20,false));
-	urban->getMapBlocks()->push_back(new MapBlock(urban,"URBAN14",10,10,false));
-	urban->getMapBlocks()->push_back(new MapBlock(urban,"URBAN15",10,10,false));
-	urban->getMapBlocks()->push_back(new MapBlock(urban,"URBAN16",10,10,false));
-	urban->getMapBlocks()->push_back(new MapBlock(urban,"URBAN17",10,10,false));
-	urban->getMapBlocks()->push_back(new MapBlock(urban,"URBAN18",10,10,false));
-
-	_terrains.insert(std::pair<std::string, RuleTerrain*>("CULTA",culta));
-	_terrains.insert(std::pair<std::string, RuleTerrain*>("JUNGLE",jungle));
-	_terrains.insert(std::pair<std::string, RuleTerrain*>("FOREST",forest));
-	_terrains.insert(std::pair<std::string, RuleTerrain*>("DESERT",desert));
-	_terrains.insert(std::pair<std::string, RuleTerrain*>("MOUNT",mount));
-	_terrains.insert(std::pair<std::string, RuleTerrain*>("POLAR",polar));
-	_terrains.insert(std::pair<std::string, RuleTerrain*>("MARS",mars));
-	_terrains.insert(std::pair<std::string, RuleTerrain*>("URBAN",urban));
+	initTerrains(d);
 
 	// Add armor
-	RuleArmor *coveralls = new RuleArmor("STR_NONE_UC", "XCOM_0.PCK");
-	coveralls->setArmor(12, 8, 5, 2);
-	coveralls->setCorpseItem("STR_CORPSE");
-
-	RuleArmor *personalArmor = new RuleArmor("STR_PERSONAL_ARMOR_UC", "XCOM_1.PCK");
-	personalArmor->setArmor(50, 40, 40, 30);
-
-	RuleArmor *powerSuit = new RuleArmor("STR_POWER_SUIT_UC", "XCOM_2.PCK");
-	powerSuit->setArmor(100, 80, 70, 60);
-
-	RuleArmor *flyingSuit = new RuleArmor("STR_FLYING_SUIT_UC", "XCOM_2.PCK");
-	flyingSuit->setArmor(110, 90, 80, 70);
-
-	RuleArmor *sectoidSoldierArmor = new RuleArmor("SECTOID_ARMOR0", "SECTOID.PCK");
-	sectoidSoldierArmor->setArmor(4, 3, 2, 2);
-	sectoidSoldierArmor->setCorpseItem("STR_SECTOID_CORPSE");
-
-	_armors.insert(std::pair<std::string, RuleArmor*>("STR_NONE_UC", coveralls));
-	_armors.insert(std::pair<std::string, RuleArmor*>("STR_PERSONAL_ARMOR_UC", personalArmor));
-	_armors.insert(std::pair<std::string, RuleArmor*>("STR_POWER_SUIT_UC" ,powerSuit));
-	_armors.insert(std::pair<std::string, RuleArmor*>("STR_FLYING_SUIT_UC", flyingSuit));
-	_armors.insert(std::pair<std::string, RuleArmor*>("SECTOID_ARMOR0", sectoidSoldierArmor));
+	initArmors(d);
 
 	// Add units
-	RuleSoldier *xcom = new RuleSoldier("XCOM");
-	xcom->setArmor("STR_NONE_UC");
-	UnitStats s1;
-	s1.tu = 50;
-	s1.stamina = 40;
-	s1.health = 25;
-	s1.bravery = 10;
-	s1.reactions = 30;
-	s1.firing = 40;
-	s1.throwing = 50;
-	s1.strength = 20;
-	s1.psiStrength = 0;
-	s1.psiSkill = 16;
-	s1.melee = 20;
-	UnitStats s2;
-	s2.tu = 60;
-	s2.stamina = 70;
-	s2.health = 40;
-	s2.bravery = 60;
-	s2.reactions = 60;
-	s2.firing = 70;
-	s2.throwing = 80;
-	s2.strength = 40;
-	s2.psiStrength = 100;
-	s2.psiSkill = 24;
-	s2.melee = 40;
-	xcom->setStats(s1, s2);
-	xcom->setVoxelParameters(22, 14, 3);
-
-	_soldiers.insert(std::pair<std::string, RuleSoldier*>("XCOM", xcom));
-
-	RuleAlien *sectoidSoldier = new RuleAlien("SECTOID_SOLDIER", "STR_SECTOID", "STR_LIVE_SOLDIER");
-	sectoidSoldier->setArmor("SECTOID_ARMOR0");
-	s1.tu = 54;
-	s1.stamina = 90;
-	s1.health = 30;
-	s1.bravery = 80;
-	s1.reactions = 63;
-	s1.firing = 52;
-	s1.throwing = 58;
-	s1.strength = 30;
-	s1.psiStrength = 40;
-	s1.psiSkill = 0;
-	s1.melee = 76;
-	sectoidSoldier->setStats(s1);
-	sectoidSoldier->setVoxelParameters(16, 12, 2);
-	sectoidSoldier->setValue(10);
-
-	RuleAlien *sectoidEngineer = new RuleAlien("SECTOID_ENGINEER", "STR_SECTOID", "STR_LIVE_ENGINEER");
-	sectoidEngineer->setArmor("SECTOID_ARMOR0");
-	s1.tu = 54;
-	s1.stamina = 90;
-	s1.health = 30;
-	s1.bravery = 80;
-	s1.reactions = 63;
-	s1.firing = 52;
-	s1.throwing = 58;
-	s1.strength = 30;
-	s1.psiStrength = 40;
-	s1.psiSkill = 0;
-	s1.melee = 76;
-	sectoidEngineer->setStats(s1);
-	sectoidEngineer->setVoxelParameters(16, 12, 2);
-	sectoidEngineer->setValue(16);
-
-	RuleAlien *sectoidNavigator = new RuleAlien("SECTOID_NAVIGATOR", "STR_SECTOID", "STR_LIVE_NAVIGATOR");
-	sectoidNavigator->setArmor("SECTOID_ARMOR0");
-	s1.tu = 54;
-	s1.stamina = 90;
-	s1.health = 30;
-	s1.bravery = 80;
-	s1.reactions = 63;
-	s1.firing = 52;
-	s1.throwing = 58;
-	s1.strength = 30;
-	s1.psiStrength = 40;
-	s1.psiSkill = 0;
-	s1.melee = 76;
-	sectoidNavigator->setStats(s1);
-	sectoidNavigator->setVoxelParameters(16, 12, 2);
-	sectoidNavigator->setValue(12);
-
-	_aliens.insert(std::pair<std::string, RuleAlien*>("SECTOID_SOLDIER", sectoidSoldier));
-	_aliens.insert(std::pair<std::string, RuleAlien*>("SECTOID_ENGINEER", sectoidEngineer));
-	_aliens.insert(std::pair<std::string, RuleAlien*>("SECTOID_NAVIGATOR", sectoidNavigator));
+	initSoldiers(d);
+	initAliens(d);
 
 	// create Ufopaedia article definitions
 	int sort_key = 1;
@@ -1423,6 +1041,185 @@ void XcomRuleset::initUFOs(YAML::Node &doc)
 	}
 }
 
+void XcomRuleset::initInventory(YAML::Node &doc)
+{
+	for (YAML::Iterator i = doc["inventorySlots"].begin(); i != doc["inventorySlots"].end(); ++i)
+	{
+		std::string name;
+		(*i)["name"] >> name;
+		int x;
+		(*i)["x"] >> x;
+		int y;
+		(*i)["y"] >> y;
+
+		RuleInventory *inventorySlot = new RuleInventory("STR_GROUND");
+		inventorySlot->setX(x);
+		inventorySlot->setY(y);
+
+		if((*i).FindValue("type")) 
+		{
+			int type;
+			(*i)["type"] >> type;
+			inventorySlot->setType((InventoryType)type);
+		}
+
+		if((*i).FindValue("slots")) 
+		{
+			for (YAML::Iterator slots = (*i)["slots"].begin(); slots != (*i)["slots"].end(); ++slots)
+			{
+				int x;
+				(*slots)["x"] >> x;
+				int y;
+				(*slots)["y"] >> y;
+				inventorySlot->addSlot(x, y);
+			}
+		}
+
+		for (YAML::Iterator costs = (*i)["costs"].begin(); costs != (*i)["costs"].end(); ++costs)
+		{
+			std::string slot;
+			(*costs)["slot"] >> slot;
+			int cost;
+			(*costs)["cost"] >> cost;
+			inventorySlot->addCost(slot, cost);
+		}
+
+		_invs.insert(std::pair<std::string, RuleInventory*>(name, inventorySlot));
+	}
+}
+
+void XcomRuleset::initTerrains(YAML::Node &doc)
+{
+	for (YAML::Iterator i = doc["terrains"].begin(); i != doc["terrains"].end(); ++i)
+	{
+		RuleTerrain *terrain = getTerrainFromYAML(i);
+
+		_terrains.insert(std::pair<std::string, RuleTerrain*>(terrain->getName(),terrain));
+	}
+}
+
+void XcomRuleset::initArmors(YAML::Node &doc)
+{
+	for (YAML::Iterator i = doc["armors"].begin(); i != doc["armors"].end(); ++i)
+	{
+		std::string type;
+		(*i)["type"] >> type;
+		std::string spriteSheet;
+		(*i)["spriteSheet"] >> spriteSheet;
+		int front;
+		(*i)["front"] >> front;
+		int side;
+		(*i)["side"] >> side;
+		int rear;
+		(*i)["rear"] >> rear;
+		int under;
+		(*i)["under"] >> under;
+
+		RuleArmor *armor = new RuleArmor(type, spriteSheet);
+		armor->setArmor(front, side, rear, under);
+
+		if((*i).FindValue("corpseItem")) 
+		{
+			std::string corpseItem;
+			(*i)["corpseItem"] >> corpseItem;
+			armor->setCorpseItem(corpseItem);
+		}
+
+		_armors.insert(std::pair<std::string, RuleArmor*>(type, armor));
+	}
+}
+
+void XcomRuleset::initSoldiers(YAML::Node &doc)
+{
+	for (YAML::Iterator i = doc["soldiers"].begin(); i != doc["soldiers"].end(); ++i)
+	{
+		std::string name;
+		(*i)["name"] >> name;
+		std::string armor;
+		(*i)["armor"] >> armor;
+		int standHeight;
+		(*i)["standHeight"] >> standHeight;
+		int kneelHeight;
+		(*i)["kneelHeight"] >> kneelHeight;
+		int loftemps;
+		(*i)["loftemps"] >> loftemps;
+
+		RuleSoldier *xcom = new RuleSoldier(name);
+		xcom->setArmor(armor);
+		xcom->setVoxelParameters(standHeight, kneelHeight, loftemps);
+
+		UnitStats stats [] = {UnitStats(), UnitStats()};
+		int counter = 0;
+		for (YAML::Iterator statsIterator = (*i)["stats"].begin(); statsIterator != (*i)["stats"].end(); ++statsIterator)
+		{
+			stats[counter] = getStatsFromYAML(statsIterator);
+
+			counter++;
+			if(counter >= 2)
+				break;
+		}
+
+		xcom->setStats(stats[0], stats[1]);
+
+		_soldiers.insert(std::pair<std::string, RuleSoldier*>(name, xcom));
+	}
+}
+
+void XcomRuleset::initAliens(YAML::Node &doc)
+{
+	for (YAML::Iterator i = doc["aliens"].begin(); i != doc["aliens"].end(); ++i)
+	{
+		std::string name;
+		(*i)["name"] >> name;
+		std::string race;
+		(*i)["race"] >> race;
+		std::string rank;
+		(*i)["rank"] >> rank;
+		std::string armor;
+		(*i)["armor"] >> armor;
+		int standHeight;
+		(*i)["standHeight"] >> standHeight;
+		int kneelHeight;
+		(*i)["kneelHeight"] >> kneelHeight;
+		int loftemps;
+		(*i)["loftemps"] >> loftemps;
+		int value;
+		(*i)["value"] >> value;
+
+		RuleAlien *alien = new RuleAlien(name, race, rank);
+		alien->setArmor(armor);
+		alien->setVoxelParameters(standHeight, kneelHeight, loftemps);
+		alien->setValue(value);
+
+		UnitStats s1;
+		for (YAML::Iterator statsIterator = (*i)["stats"].begin(); statsIterator != (*i)["stats"].end(); ++statsIterator)
+		{
+			s1 = getStatsFromYAML(statsIterator);
+			break;
+		}
+		alien->setStats(s1);
+		
+		_aliens.insert(std::pair<std::string, RuleAlien*>(name, alien));
+	}
+}
+
+UnitStats XcomRuleset::getStatsFromYAML(YAML::Iterator &statsIterator)
+{
+	UnitStats stats;
+	(*statsIterator)["tu"] >> stats.tu;
+	(*statsIterator)["stamina"] >> stats.stamina;
+	(*statsIterator)["health"] >> stats.health;
+	(*statsIterator)["bravery"] >> stats.bravery;
+	(*statsIterator)["reactions"] >> stats.reactions;
+	(*statsIterator)["firing"] >> stats.firing;
+	(*statsIterator)["throwing"] >> stats.throwing;
+	(*statsIterator)["strength"] >> stats.strength;
+	(*statsIterator)["psiStrength"] >> stats.psiStrength;
+	(*statsIterator)["psiSkill"] >> stats.psiSkill;
+	(*statsIterator)["melee"] >> stats.melee;
+
+	return stats;
+}
 
 RuleTerrain* XcomRuleset::getTerrainFromYAML(YAML::Iterator &terrains)
 {
