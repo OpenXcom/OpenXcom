@@ -1,0 +1,580 @@
+nameFiles:
+    - file: American
+    - file: British
+    - file: French
+    - file: German
+    - file: Japanese
+    - file: Russian
+
+countries:
+    - country: STR_USA
+      minFunding: 600
+      maxFunding: 1200
+      longitude: 4.53786
+      latitude: -0.698132
+    - country: STR_RUSSIA
+      minFunding: 230
+      maxFunding: 460
+      longitude: 1.0472
+      latitude: -1.0472
+    - country: STR_UK
+      minFunding: 240
+      maxFunding: 480
+      longitude: 6.24828
+      latitude: -0.935933
+    - country: STR_FRANCE
+      minFunding: 320
+      maxFunding: 640
+      longitude: 0.0436332
+      latitude: -0.811578
+    - country: STR_GERMANY
+      minFunding: 250
+      maxFunding: 500
+      longitude: 0.200713
+      latitude: -0.872665
+    - country: STR_ITALY
+      minFunding: 160
+      maxFunding: 320
+      longitude: 0.218166
+      latitude: -0.765763
+    - country: STR_SPAIN
+      minFunding: 140
+      maxFunding: 280
+      longitude: 6.23955
+      latitude: -0.743947
+    - country: STR_CHINA
+      minFunding: 245
+      maxFunding: 490
+      longitude: 1.74533
+      latitude: -0.610865
+    - country: STR_JAPAN
+      minFunding: 400
+      maxFunding: 800
+      longitude: 2.40855
+      latitude: -0.667588
+    - country: STR_INDIA
+      minFunding: 150
+      maxFunding: 300
+      longitude: 1.39626
+      latitude: -0.418879
+    - country: STR_BRAZIL
+      minFunding: 300
+      maxFunding: 600
+      longitude: 5.32325
+      latitude: 0.0872665
+    - country: STR_AUSTRALIA
+      minFunding: 280
+      maxFunding: 560
+      longitude: 2.35619
+      latitude: 0.436332
+    - country: STR_NIGERIA
+      minFunding: 180
+      maxFunding: 360
+      longitude: 0.1309
+      latitude: -0.174533
+    - country: STR_SOUTH_AFRICA
+      minFunding: 230
+      maxFunding: 460
+      longitude: 0.436332
+      latitude: 0.523599
+    - country: STR_EGYPT
+      minFunding: 230
+      maxFunding: 460
+      longitude: 0.506145
+      latitude: -0.453786
+    - country: STR_CANADA
+      minFunding: 230
+      maxFunding: 460
+      longitude: 4.53786
+      latitude: -0.959931
+
+regions:
+    - region: STR_NORTH_AMERICA
+      baseCost: 800000
+      cities:
+          - city: STR_NEW_YORK
+            longitude: 4.99382
+            latitude: -0.711222
+          - city: STR_WASHINGTON
+            longitude: 4.9371
+            latitude: -0.676315
+          - city: STR_LOS_ANGELES
+            longitude: 4.21933
+            latitude: -0.595594
+          - city: STR_MONTREAL
+            longitude: 4.9611
+            latitude: -0.794125
+          - city: STR_HAVANA
+            longitude: 4.84547
+            latitude: -0.392699
+          - city: STR_MEXICO_CITY
+            longitude: 4.55313
+            latitude: -0.338158
+          - city: STR_CHICAGO
+            longitude: 4.75384
+            latitude: -0.730857
+          - city: STR_VANCOUVER
+            longitude: 4.13207
+            latitude: -0.861756
+          - city: STR_DALLAS
+            longitude: 4.59676
+            latitude: -0.571595
+      areas:
+          - longitudeMin: 3.40339
+            longitudeMax: 5.32107
+            latitudeMin: -1.22173
+            latitudeMax: -0.962113
+          - longitudeMin: 4.01426
+            longitudeMax: 5.32107
+            latitudeMin: -0.959931
+            latitudeMax: -0.52578
+          - longitudeMin: 4.18879
+            longitudeMax: 5.23381
+            latitudeMin: -0.523599
+            latitudeMax: -0.176715
+    - region: STR_ARCTIC
+      baseCost: 950000
+      cities:
+        []
+      areas:
+          - longitudeMin: 0
+            longitudeMax: 6.281
+            latitudeMin: -1.5708
+            latitudeMax: -1.22391
+    - region: STR_ANTARCTICA
+      baseCost: 950000
+      cities:
+        []
+      areas:
+          - longitudeMin: 0
+            longitudeMax: 6.281
+            latitudeMin: 1.0472
+            latitudeMax: 1.5708
+    - region: STR_SOUTH_AMERICA
+      baseCost: 600000
+      cities:
+          - city: STR_BRASILIA
+            longitude: 5.44761
+            latitude: 0.274889
+          - city: STR_BOGOTA
+            longitude: 4.98946
+            latitude: -0.0785398
+          - city: STR_BUENOS_AIRES
+            longitude: 5.27962
+            latitude: 0.602139
+          - city: STR_SANTIAGO
+            longitude: 5.05055
+            latitude: 0.582504
+          - city: STR_RIO_DE_JANEIRO
+            longitude: 5.53051
+            latitude: 0.399244
+          - city: STR_LIMA
+            longitude: 4.93928
+            latitude: 0.20944
+          - city: STR_CARACAS
+            longitude: 5.116
+            latitude: -0.18326
+      areas:
+          - longitudeMin: 4.71239
+            longitudeMax: 5.49561
+            latitudeMin: -0.174533
+            latitudeMax: -0.00218166
+          - longitudeMin: 4.79966
+            longitudeMax: 5.7574
+            latitudeMin: 0
+            latitudeMax: 0.259618
+          - longitudeMin: 4.79966
+            longitudeMax: 5.67014
+            latitudeMin: 0.261799
+            latitudeMax: 1.04502
+    - region: STR_EUROPE
+      baseCost: 1000000
+      cities:
+          - city: STR_LONDON
+            longitude: 6.281
+            latitude: -0.898845
+          - city: STR_PARIS
+            longitude: 0.0414516
+            latitude: -0.850848
+          - city: STR_BERLIN
+            longitude: 0.233438
+            latitude: -0.916298
+          - city: STR_MOSCOW
+            longitude: 0.65668
+            latitude: -0.973021
+          - city: STR_ROME
+            longitude: 0.218166
+            latitude: -0.730857
+          - city: STR_MADRID
+            longitude: 6.21774
+            latitude: -0.704677
+          - city: STR_BUDAPEST
+            longitude: 0.333794
+            latitude: -0.829031
+      areas:
+          - longitudeMin: 5.84685
+            longitudeMax: 1.04502
+            latitudeMin: -1.22173
+            latitudeMax: -0.613047
+    - region: STR_NORTH_AFRICA
+      baseCost: 650000
+      cities:
+          - city: STR_LAGOS
+            longitude: 0.0545415
+            latitude: -0.113446
+          - city: STR_CAIRO
+            longitude: 0.545415
+            latitude: -0.523599
+          - city: STR_CASABLANCA
+            longitude: 6.1501
+            latitude: -0.584685
+      areas:
+          - longitudeMin: 5.84685
+            longitudeMax: 0.69595
+            latitudeMin: -0.610865
+            latitudeMax: -0.263981
+          - longitudeMin: 5.84685
+            longitudeMax: 0.957749
+            latitudeMin: -0.261799
+            latitudeMax: -0.00218166
+    - region: STR_SOUTHERN_AFRICA
+      baseCost: 550000
+      cities:
+          - city: STR_PRETORIA
+            longitude: 0.490874
+            latitude: 0.458149
+          - city: STR_NAIROBI
+            longitude: 0.641409
+            latitude: 0.0218166
+          - city: STR_CAPE_TOWN
+            longitude: 0.322886
+            latitude: 0.593412
+          - city: STR_KINSHASA
+            longitude: 0.268344
+            latitude: 0.0763582
+      areas:
+          - longitudeMin: 0.0872665
+            longitudeMax: 0.957749
+            latitudeMin: 0
+            latitudeMax: 0.69595
+    - region: STR_CENTRAL_ASIA
+      baseCost: 500000
+      cities:
+          - city: STR_ANKARA
+            longitude: 0.571595
+            latitude: -0.69595
+          - city: STR_DELHI
+            longitude: 1.34827
+            latitude: -0.4996
+          - city: STR_KARACHI
+            longitude: 1.16937
+            latitude: -0.434151
+          - city: STR_BAGHDAD
+            longitude: 0.776672
+            latitude: -0.580322
+          - city: STR_TEHRAN
+            longitude: 0.898845
+            latitude: -0.621774
+          - city: STR_BOMBAY
+            longitude: 1.27627
+            latitude: -0.329431
+          - city: STR_CALCUTTA
+            longitude: 1.54243
+            latitude: -0.394881
+      areas:
+          - longitudeMin: 0.698132
+            longitudeMax: 1.21955
+            latitudeMin: -0.610865
+            latitudeMax: -0.263981
+          - longitudeMin: 1.0472
+            longitudeMax: 1.56861
+            latitudeMin: -0.872665
+            latitudeMax: -0.613047
+          - longitudeMin: 1.22173
+            longitudeMax: 1.56861
+            latitudeMin: -0.610865
+            latitudeMax: -0.0894481
+    - region: STR_SOUTH_EAST_ASIA
+      baseCost: 750000
+      cities:
+          - city: STR_TOKYO
+            longitude: 2.4391
+            latitude: -0.621774
+          - city: STR_BEIJING
+            longitude: 2.03113
+            latitude: -0.69595
+          - city: STR_BANGKOK
+            longitude: 1.75624
+            latitude: -0.237801
+          - city: STR_MANILA
+            longitude: 2.11185
+            latitude: -0.255254
+          - city: STR_SEOUL
+            longitude: 2.21657
+            latitude: -0.654498
+          - city: STR_SINGAPORE
+            longitude: 1.81296
+            latitude: -0.0239983
+          - city: STR_JAKARTA
+            longitude: 1.86314
+            latitude: 0.109083
+          - city: STR_SHANGHAI
+            longitude: 2.12058
+            latitude: -0.545415
+          - city: STR_HONG_KONG
+            longitude: 1.99186
+            latitude: -0.388336
+      areas:
+          - longitudeMin: 1.5708
+            longitudeMax: 1.83041
+            latitudeMin: -0.872665
+            latitudeMax: 0.172351
+          - longitudeMin: 1.8326
+            longitudeMax: 2.61581
+            latitudeMin: -0.872665
+            latitudeMax: -0.0894481
+    - region: STR_SIBERIA
+      baseCost: 800000
+      cities:
+          - city: STR_NOVOSIBIRSK
+            longitude: 1.44426
+            latitude: -0.959931
+      areas:
+          - longitudeMin: 1.0472
+            longitudeMax: 3.13941
+            latitudeMin: -1.22173
+            latitudeMax: -0.874846
+    - region: STR_AUSTRALASIA
+      baseCost: 750000
+      cities:
+          - city: STR_CANBERRA
+            longitude: 2.60272
+            latitude: 0.61741
+          - city: STR_WELLINGTON
+            longitude: 3.05651
+            latitude: 0.719948
+          - city: STR_MELBOURNE
+            longitude: 2.53073
+            latitude: 0.661043
+          - city: STR_PERTH
+            longitude: 2.02022
+            latitude: 0.558505
+      areas:
+          - longitudeMin: 1.8326
+            longitudeMax: 3.13941
+            latitudeMin: -0.0872665
+            latitudeMax: 1.04502
+    - region: STR_PACIFIC
+      baseCost: 600000
+      cities:
+          []
+      areas:
+          - longitudeMin: 3.14159
+            longitudeMax: 3.40121
+            latitudeMin: -1.22173
+            latitudeMax: -0.962113
+          - longitudeMin: 3.14159
+            longitudeMax: 4.01208
+            latitudeMin: -0.959931
+            latitudeMax: -0.52578
+          - longitudeMin: 3.14159
+            longitudeMax: 4.18661
+            latitudeMin: -0.523599
+            latitudeMax: -0.176715
+          - longitudeMin: 3.14159
+            longitudeMax: 4.71021
+            latitudeMin: -0.174533
+            latitudeMax: -0.00218166
+          - longitudeMin: 3.14159
+            longitudeMax: 4.79747
+            latitudeMin: 0
+            latitudeMax: 1.04502
+          - longitudeMin: 2.61799
+            longitudeMax: 3.13941
+            latitudeMin: -0.872665
+            latitudeMax: -0.0894481
+    - region: STR_NORTH_ATLANTIC
+      baseCost: 500000
+      cities:
+          []
+      areas:
+          - longitudeMin: 5.32325
+            longitudeMax: 5.84467
+            latitudeMin: -1.22173
+            latitudeMax: -0.52578
+          - longitudeMin: 5.23599
+            longitudeMax: 5.84467
+            latitudeMin: -0.523599
+            latitudeMax: -0.176715
+          - longitudeMin: 5.49779
+            longitudeMax: 5.84467
+            latitudeMin: -0.174533
+            latitudeMax: -0.00218166
+    - region: STR_SOUTH_ATLANTIC
+      baseCost: 500000
+      cities:
+          []
+      areas:
+          - longitudeMin: 5.75959
+            longitudeMax: 0.0850848
+            latitudeMin: 0
+            latitudeMax: 0.259618
+          - longitudeMin: 5.67232
+            longitudeMax: 0.0850848
+            latitudeMin: 0.261799
+            latitudeMax: 1.04502
+          - longitudeMin: 0.0872665
+            longitudeMax: 0.959931
+            latitudeMin: 0.698132
+            latitudeMax: 1.04502
+    - region: STR_INDIAN_OCEAN
+      baseCost: 500000
+      cities:
+          []
+      areas:
+          - longitudeMin: 0.959931
+            longitudeMax: 1.21955
+            latitudeMin: -0.261799
+            latitudeMax: 0.172351
+          - longitudeMin: 1.22173
+            longitudeMax: 1.56861
+            latitudeMin: -0.0872665
+            latitudeMax: 0.172351
+          - longitudeMin: 0.959931
+            longitudeMax: 1.83041
+            latitudeMin: 0.174533
+            latitudeMax: 1.04502
+
+baseFacilities:
+    - facility: STR_ACCESS_LIFT
+      spriteShape: 2
+      spriteFacility: 17
+      buildCost: 300000
+      buildTime: 1
+      monthlyCost: 4000
+      isLift: true
+    - facility: STR_LIVING_QUARTERS
+      spriteShape: 1
+      spriteFacility: 18
+      buildCost: 400000
+      buildTime: 16
+      monthlyCost: 10000
+      personnel: 50
+    - facility: STR_LABORATORY
+      spriteShape: 1
+      spriteFacility: 19
+      buildCost: 750000
+      buildTime: 26
+      monthlyCost: 30000
+      laboratorySpace: 50
+    - facility: STR_WORKSHOP
+      spriteShape: 1
+      spriteFacility: 20
+      buildCost: 800000
+      buildTime: 32
+      monthlyCost: 35000
+      workshopSpace: 50
+    - facility: STR_GENERAL_STORES
+      spriteShape: 1
+      spriteFacility: 24
+      buildCost: 150000
+      buildTime: 10
+      monthlyCost: 5000
+      storageSpace: 50
+    - facility: STR_ALIEN_CONTAINMENT
+      spriteShape: 1
+      spriteFacility: 25
+      buildCost: 400000
+      buildTime: 18
+      monthlyCost: 15000
+      aliensSpace: 10
+    - facility: STR_HANGAR
+      spriteShape: 9
+      spriteFacility: 9
+      buildCost: 200000
+      buildTime: 25
+      monthlyCost: 25000
+      size: 2
+      craftsSpace: 1
+    - facility: STR_SMALL_RADAR_SYSTEM
+      spriteShape: 2
+      spriteFacility: 21
+      buildCost: 500000
+      buildTime: 12
+      monthlyCost: 10000
+      radarRange: 1500
+      radarChance: 10
+    - facility: STR_LARGE_RADAR_SYSTEM
+      spriteShape: 1
+      spriteFacility: 22
+      buildCost: 800000
+      buildTime: 25
+      monthlyCost: 15000
+      radarRange: 2250
+      radarChance: 20
+    - facility: STR_MISSILE_DEFENSES
+      spriteShape: 2
+      spriteFacility: 23
+      buildCost: 200000
+      buildTime: 16
+      monthlyCost: 5000
+      defenceValue: 500
+      hitRatio: 50
+
+mapDataFiles:
+    - file: AVENGER
+      size: 59
+    - file: BARN
+      size: 29
+    - file: BLANKS
+      size: 2
+    - file: BRAIN
+      size: 4
+    - file: CULTIVAT
+      size: 37
+    - file: DESERT
+      size: 66
+    - file: FOREST
+      size: 83
+    - file: FRNITURE
+      size: 26
+    - file: JUNGLE
+      size: 82
+    - file: LIGHTNIN
+      size: 42
+    - file: MARS
+      size: 36
+    - file: MOUNT
+      size: 78
+    - file: PLANE
+      size: 65
+    - file: POLAR
+      size: 81
+    - file: ROADS
+      size: 23
+    - file: UFO1
+      size: 20
+    - file: URBAN
+      size: 112
+    - file: URBITS
+      size: 25
+    - file: U_BASE
+      size: 67
+    - file: U_BITS
+      size: 8
+    - file: U_DISEC2
+      size: 17
+    - file: U_EXT02
+      size: 34
+    - file: U_OPER2
+      size: 15
+    - file: U_PODS
+      size: 11
+    - file: U_WALL02
+      size: 47
+    - file: XBASE1
+      size: 97
+    - file: XBASE2
+      size: 62
+
+      

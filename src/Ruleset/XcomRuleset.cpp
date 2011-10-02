@@ -53,6 +53,8 @@
 #include "RuleInventory.h"
 #include "RuleResearchProject.h"
 #include "../Engine/CrossPlatform.h"
+#include "../Engine/Exception.h"
+#include "../Engine/Options.h"
 #include <fstream>
 #include <algorithm>
 
@@ -64,417 +66,31 @@ namespace OpenXcom
  */
 XcomRuleset::XcomRuleset() : Ruleset()
 {
+	// first load the game config(s)
+	std::string s = Options::getUserFolder() + "config" + ".dat";
+	std::ifstream fins(s.c_str());
+	if (!fins)
+	{
+		throw Exception("Failed to load savegame");
+	}
+    YAML::Parser p(fins);
+	YAML::Node d;
+	p.GetNextDocument(d);
+
 	// Add soldier names
-	SoldierNamePool *american = new SoldierNamePool();
-	american->load("American");
-	_names.push_back(american);
-
-	SoldierNamePool *british = new SoldierNamePool();
-	british->load("British");
-	_names.push_back(british);
-
-	SoldierNamePool *french = new SoldierNamePool();
-	french->load("French");
-	_names.push_back(french);
-
-	SoldierNamePool *german = new SoldierNamePool();
-	german->load("German");
-	_names.push_back(german);
-
-	SoldierNamePool *japanese = new SoldierNamePool();
-	japanese->load("Japanese");
-	_names.push_back(japanese);
-
-	SoldierNamePool *russian = new SoldierNamePool();
-	russian->load("Russian");
-	_names.push_back(russian);
+	initNames(d);
 
 	// Add countries
-	RuleCountry *usa = new RuleCountry("STR_USA");
-	usa->setMinFunding(600);
-	usa->setMaxFunding(1200);
-	usa->setLabelLongitude(4.53786);
-	usa->setLabelLatitude(-0.698132);
-
-	RuleCountry *russia = new RuleCountry("STR_RUSSIA");
-	russia->setMinFunding(230);
-	russia->setMaxFunding(460);
-	russia->setLabelLongitude(1.0472);
-	russia->setLabelLatitude(-1.0472);
-
-	RuleCountry *uk = new RuleCountry("STR_UK");
-	uk->setMinFunding(240);
-	uk->setMaxFunding(480);
-	uk->setLabelLongitude(6.24828);
-	uk->setLabelLatitude(-0.935933);
-
-	RuleCountry *france = new RuleCountry("STR_FRANCE");
-	france->setMinFunding(320);
-	france->setMaxFunding(640);
-	france->setLabelLongitude(0.0436332);
-	france->setLabelLatitude(-0.811578);
-
-	RuleCountry *germany = new RuleCountry("STR_GERMANY");
-	germany->setMinFunding(250);
-	germany->setMaxFunding(500);
-	germany->setLabelLongitude(0.200713);
-	germany->setLabelLatitude(-0.872665);
-
-	RuleCountry *italy = new RuleCountry("STR_ITALY");
-	italy->setMinFunding(160);
-	italy->setMaxFunding(320);
-	italy->setLabelLongitude(0.218166);
-	italy->setLabelLatitude(-0.765763);
-
-	RuleCountry *spain = new RuleCountry("STR_SPAIN");
-	spain->setMinFunding(140);
-	spain->setMaxFunding(280);
-	spain->setLabelLongitude(6.23955);
-	spain->setLabelLatitude(-0.743947);
-
-	RuleCountry *china = new RuleCountry("STR_CHINA");
-	china->setMinFunding(245);
-	china->setMaxFunding(490);
-	china->setLabelLongitude(1.74533);
-	china->setLabelLatitude(-0.610865);
-
-	RuleCountry *japan = new RuleCountry("STR_JAPAN");
-	japan->setMinFunding(400);
-	japan->setMaxFunding(800);
-	japan->setLabelLongitude(2.40855);
-	japan->setLabelLatitude(-0.667588);
-
-	RuleCountry *india = new RuleCountry("STR_INDIA");
-	india->setMinFunding(150);
-	india->setMaxFunding(300);
-	india->setLabelLongitude(1.39626);
-	india->setLabelLatitude(-0.418879);
-
-	RuleCountry *brazil = new RuleCountry("STR_BRAZIL");
-	brazil->setMinFunding(300);
-	brazil->setMaxFunding(600);
-	brazil->setLabelLongitude(5.32325);
-	brazil->setLabelLatitude(0.0872665);
-
-	RuleCountry *australia = new RuleCountry("STR_AUSTRALIA");
-	australia->setMinFunding(280);
-	australia->setMaxFunding(560);
-	australia->setLabelLongitude(2.35619);
-	australia->setLabelLatitude(0.436332);
-
-	RuleCountry *nigeria = new RuleCountry("STR_NIGERIA");
-	nigeria->setMinFunding(180);
-	nigeria->setMaxFunding(360);
-	nigeria->setLabelLongitude(0.1309);
-	nigeria->setLabelLatitude(-0.174533);
-
-	RuleCountry *africa = new RuleCountry("STR_SOUTH_AFRICA");
-	africa->setMinFunding(230);
-	africa->setMaxFunding(460);
-	africa->setLabelLongitude(0.436332);
-	africa->setLabelLatitude(0.523599);
-
-	RuleCountry *egypt = new RuleCountry("STR_EGYPT");
-	egypt->setMinFunding(230);
-	egypt->setMaxFunding(460);
-	egypt->setLabelLongitude(0.506145);
-	egypt->setLabelLatitude(-0.453786);
-
-	RuleCountry *canada = new RuleCountry("STR_CANADA");
-	canada->setMinFunding(230);
-	canada->setMaxFunding(460);
-	canada->setLabelLongitude(4.53786);
-	canada->setLabelLatitude(-0.959931);
-
-	_countries.insert(std::pair<std::string, RuleCountry*>("STR_USA", usa));
-	_countries.insert(std::pair<std::string, RuleCountry*>("STR_RUSSIA", russia));
-	_countries.insert(std::pair<std::string, RuleCountry*>("STR_UK", uk));
-	_countries.insert(std::pair<std::string, RuleCountry*>("STR_FRANCE", france));
-	_countries.insert(std::pair<std::string, RuleCountry*>("STR_GERMANY", germany));
-	_countries.insert(std::pair<std::string, RuleCountry*>("STR_ITALY", italy));
-	_countries.insert(std::pair<std::string, RuleCountry*>("STR_SPAIN", spain));
-	_countries.insert(std::pair<std::string, RuleCountry*>("STR_CHINA", china));
-	_countries.insert(std::pair<std::string, RuleCountry*>("STR_JAPAN", japan));
-	_countries.insert(std::pair<std::string, RuleCountry*>("STR_INDIA", india));
-	_countries.insert(std::pair<std::string, RuleCountry*>("STR_BRAZIL", brazil));
-	_countries.insert(std::pair<std::string, RuleCountry*>("STR_AUSTRALIA", australia));
-	_countries.insert(std::pair<std::string, RuleCountry*>("STR_NIGERIA", nigeria));
-	_countries.insert(std::pair<std::string, RuleCountry*>("STR_SOUTH_AFRICA", africa));
-	_countries.insert(std::pair<std::string, RuleCountry*>("STR_EGYPT", egypt));
-	_countries.insert(std::pair<std::string, RuleCountry*>("STR_CANADA", canada));
+	initCountries(d);
 
 	// Add regions
-	RuleRegion* namerica = new RuleRegion("STR_NORTH_AMERICA");
-	namerica->setBaseCost(800000);
-	namerica->addArea(3.40339, 5.32107, -1.22173, -0.962113);
-	namerica->addArea(4.01426, 5.32107, -0.959931, -0.52578);
-	namerica->addArea(4.18879, 5.23381, -0.523599, -0.176715);
-	namerica->getCities()->push_back(new City("STR_NEW_YORK", 4.99382, -0.711222));
-	namerica->getCities()->push_back(new City("STR_WASHINGTON", 4.9371, -0.676315));
-	namerica->getCities()->push_back(new City("STR_LOS_ANGELES", 4.21933, -0.595594));
-	namerica->getCities()->push_back(new City("STR_MONTREAL", 4.9611, -0.794125));
-	namerica->getCities()->push_back(new City("STR_HAVANA", 4.84547, -0.392699));
-	namerica->getCities()->push_back(new City("STR_MEXICO_CITY", 4.55313, -0.338158));
-	namerica->getCities()->push_back(new City("STR_CHICAGO", 4.75384, -0.730857));
-	namerica->getCities()->push_back(new City("STR_VANCOUVER", 4.13207, -0.861756));
-	namerica->getCities()->push_back(new City("STR_DALLAS", 4.59676, -0.571595));
-	
-	RuleRegion* arctic = new RuleRegion("STR_ARCTIC");
-	arctic->setBaseCost(950000);
-	arctic->addArea(0, 6.281, -1.5708, -1.22391);
-	
-	RuleRegion* antarctica = new RuleRegion("STR_ANTARCTICA");
-	antarctica->setBaseCost(900000);
-	antarctica->addArea(0, 6.281, 1.0472, 1.5708);
-	
-	RuleRegion* samerica = new RuleRegion("STR_SOUTH_AMERICA");
-	samerica->setBaseCost(600000);
-	samerica->addArea(4.71239, 5.49561, -0.174533, -0.00218166);
-	samerica->addArea(4.79966, 5.7574, 0, 0.259618);
-	samerica->addArea(4.79966, 5.67014, 0.261799, 1.04502);
-	samerica->getCities()->push_back(new City("STR_BRASILIA", 5.44761, 0.274889));
-	samerica->getCities()->push_back(new City("STR_BOGOTA", 4.98946, -0.0785398));
-	samerica->getCities()->push_back(new City("STR_BUENOS_AIRES", 5.27962, 0.602139));
-	samerica->getCities()->push_back(new City("STR_SANTIAGO", 5.05055, 0.582504));
-	samerica->getCities()->push_back(new City("STR_RIO_DE_JANEIRO", 5.53051, 0.399244));
-	samerica->getCities()->push_back(new City("STR_LIMA", 4.93928, 0.20944));
-	samerica->getCities()->push_back(new City("STR_CARACAS", 5.116, -0.18326));
-	
-	RuleRegion* europe = new RuleRegion("STR_EUROPE");
-	europe->setBaseCost(1000000);
-	europe->addArea(5.84685, 1.04502, -1.22173, -0.613047);
-	europe->getCities()->push_back(new City("STR_LONDON", 6.281, -0.898845));
-	europe->getCities()->push_back(new City("STR_PARIS", 0.0414516, -0.850848));
-	europe->getCities()->push_back(new City("STR_BERLIN", 0.233438, -0.916298));
-	europe->getCities()->push_back(new City("STR_MOSCOW", 0.65668, -0.973021));
-	europe->getCities()->push_back(new City("STR_ROME", 0.218166, -0.730857));
-	europe->getCities()->push_back(new City("STR_MADRID", 6.21774, -0.704677));
-	europe->getCities()->push_back(new City("STR_BUDAPEST", 0.333794, -0.829031));
-	
-	RuleRegion* nafrica = new RuleRegion("STR_NORTH_AFRICA");
-	nafrica->setBaseCost(650000);
-	nafrica->addArea(5.84685, 0.69595, -0.610865, -0.263981);
-	nafrica->addArea(5.84685, 0.957749, -0.261799, -0.00218166);
-	nafrica->getCities()->push_back(new City("STR_LAGOS", 0.0545415, -0.113446));
-	nafrica->getCities()->push_back(new City("STR_CAIRO", 0.545415, -0.523599));
-	nafrica->getCities()->push_back(new City("STR_CASABLANCA", 6.1501, -0.584685));
-	
-	RuleRegion* safrica = new RuleRegion("STR_SOUTHERN_AFRICA");
-	safrica->setBaseCost(550000);
-	safrica->addArea(0.0872665, 0.957749, 0, 0.69595);
-	safrica->getCities()->push_back(new City("STR_PRETORIA", 0.490874, 0.458149));
-	safrica->getCities()->push_back(new City("STR_NAIROBI", 0.641409, 0.0218166));
-	safrica->getCities()->push_back(new City("STR_CAPE_TOWN", 0.322886, 0.593412));
-	safrica->getCities()->push_back(new City("STR_KINSHASA", 0.268344, 0.0763582));
-	
-	RuleRegion* casia = new RuleRegion("STR_CENTRAL_ASIA");
-	casia->setBaseCost(500000);
-	casia->addArea(0.698132, 1.21955, -0.610865, -0.263981);
-	casia->addArea(1.0472, 1.56861, -0.872665, -0.613047);
-	casia->addArea(1.22173, 1.56861, -0.610865, -0.0894481);
-	casia->getCities()->push_back(new City("STR_ANKARA", 0.571595, -0.69595));
-	casia->getCities()->push_back(new City("STR_DELHI", 1.34827, -0.4996));
-	casia->getCities()->push_back(new City("STR_KARACHI", 1.16937, -0.434151));
-	casia->getCities()->push_back(new City("STR_BAGHDAD", 0.776672, -0.580322));
-	casia->getCities()->push_back(new City("STR_TEHRAN", 0.898845, -0.621774));
-	casia->getCities()->push_back(new City("STR_BOMBAY", 1.27627, -0.329431));
-	casia->getCities()->push_back(new City("STR_CALCUTTA", 1.54243, -0.394881));
-	
-	RuleRegion* seasia = new RuleRegion("STR_SOUTH_EAST_ASIA");
-	seasia->setBaseCost(750000);
-	seasia->addArea(1.5708, 1.83041, -0.872665, 0.172351);
-	seasia->addArea(1.8326, 2.61581, -0.872665, -0.0894481);
-	seasia->getCities()->push_back(new City("STR_TOKYO", 2.4391, -0.621774));
-	seasia->getCities()->push_back(new City("STR_BEIJING", 2.03113, -0.69595));
-	seasia->getCities()->push_back(new City("STR_BANGKOK", 1.75624, -0.237801));
-	seasia->getCities()->push_back(new City("STR_MANILA", 2.11185, -0.255254));
-	seasia->getCities()->push_back(new City("STR_SEOUL", 2.21657, -0.654498));
-	seasia->getCities()->push_back(new City("STR_SINGAPORE", 1.81296, -0.0239983));
-	seasia->getCities()->push_back(new City("STR_JAKARTA", 1.86314, 0.109083));
-	seasia->getCities()->push_back(new City("STR_SHANGHAI", 2.12058, -0.545415));
-	seasia->getCities()->push_back(new City("STR_HONG_KONG", 1.99186, -0.388336));
-	
-	RuleRegion* siberia = new RuleRegion("STR_SIBERIA");
-	siberia->setBaseCost(800000);
-	siberia->addArea(1.0472, 3.13941, -1.22173, -0.874846);
-	siberia->getCities()->push_back(new City("STR_NOVOSIBIRSK", 1.44426, -0.959931));
-	
-	RuleRegion* australasia = new RuleRegion("STR_AUSTRALASIA");
-	australasia->setBaseCost(750000);
-	//australasia->addArea(1.8326, 3.13941, -0.0872665, 0.870483);
-	australasia->addArea(1.8326, 3.13941, -0.0872665, 1.04502);
-	australasia->getCities()->push_back(new City("STR_CANBERRA", 2.60272, 0.61741));
-	australasia->getCities()->push_back(new City("STR_WELLINGTON", 3.05651, 0.719948));
-	australasia->getCities()->push_back(new City("STR_MELBOURNE", 2.53073, 0.661043));
-	australasia->getCities()->push_back(new City("STR_PERTH", 2.02022, 0.558505));
-	
-	RuleRegion* pacific = new RuleRegion("STR_PACIFIC");
-	pacific->setBaseCost(600000);
-	pacific->addArea(3.14159, 3.40121, -1.22173, -0.962113);
-	pacific->addArea(3.14159, 4.01208, -0.959931, -0.52578);
-	pacific->addArea(3.14159, 4.18661, -0.523599, -0.176715);
-	pacific->addArea(3.14159, 4.71021, -0.174533, -0.00218166);
-	pacific->addArea(3.14159, 4.79747, 0, 1.04502);
-	pacific->addArea(2.61799, 3.13941, -0.872665, -0.0894481);
-	
-	RuleRegion* natlantic = new RuleRegion("STR_NORTH_ATLANTIC");
-	natlantic->setBaseCost(500000);
-	natlantic->addArea(5.32325, 5.84467, -1.22173, -0.52578);
-	natlantic->addArea(5.23599, 5.84467, -0.523599, -0.176715);
-	natlantic->addArea(5.49779, 5.84467, -0.174533, -0.00218166);
-	
-	RuleRegion* satlantic = new RuleRegion("STR_SOUTH_ATLANTIC");
-	satlantic->setBaseCost(500000);
-	satlantic->addArea(5.75959, 0.0850848, 0, 0.259618);
-	satlantic->addArea(5.67232, 0.0850848, 0.261799, 1.04502);
-	satlantic->addArea(0.0872665, 0.959931, 0.698132, 1.04502);
-	
-	RuleRegion* indian = new RuleRegion("STR_INDIAN_OCEAN");
-	indian->setBaseCost(500000);
-	indian->addArea(0.959931, 1.21955, -0.261799, 0.172351);
-	indian->addArea(1.22173, 1.56861, -0.0872665, 0.172351);
-	indian->addArea(0.959931, 1.83041, 0.174533, 1.04502);
-	
-	_regions.insert(std::pair<std::string, RuleRegion*>("STR_NORTH_AMERICA", namerica));
-	_regions.insert(std::pair<std::string, RuleRegion*>("STR_ARCTIC", arctic));
-	_regions.insert(std::pair<std::string, RuleRegion*>("STR_ANTARCTICA", antarctica));
-	_regions.insert(std::pair<std::string, RuleRegion*>("STR_SOUTH_AMERICA", samerica));
-	_regions.insert(std::pair<std::string, RuleRegion*>("STR_EUROPE", europe));
-	_regions.insert(std::pair<std::string, RuleRegion*>("STR_NORTH_AFRICA", nafrica));
-	_regions.insert(std::pair<std::string, RuleRegion*>("STR_SOUTHERN_AFRICA", safrica));
-	_regions.insert(std::pair<std::string, RuleRegion*>("STR_CENTRAL_ASIA", casia));
-	_regions.insert(std::pair<std::string, RuleRegion*>("STR_SOUTH_EAST_ASIA", seasia));
-	_regions.insert(std::pair<std::string, RuleRegion*>("STR_SIBERIA", siberia));
-	_regions.insert(std::pair<std::string, RuleRegion*>("STR_AUSTRALASIA", australasia));
-	_regions.insert(std::pair<std::string, RuleRegion*>("STR_PACIFIC", pacific));
-	_regions.insert(std::pair<std::string, RuleRegion*>("STR_NORTH_ATLANTIC", natlantic));
-	_regions.insert(std::pair<std::string, RuleRegion*>("STR_SOUTH_ATLANTIC", satlantic));
-	_regions.insert(std::pair<std::string, RuleRegion*>("STR_INDIAN_OCEAN", indian));
+	initRegions(d);
 
 	// Add base facilities
-	RuleBaseFacility *lift = new RuleBaseFacility("STR_ACCESS_LIFT");
-	lift->setSpriteShape(2);
-	lift->setSpriteFacility(17);
-	lift->setBuildCost(300000);
-	lift->setBuildTime(1);
-	lift->setMonthlyCost(4000);
-	lift->setLift(true);
-
-	RuleBaseFacility *quarters = new RuleBaseFacility("STR_LIVING_QUARTERS");
-	quarters->setSpriteShape(1);
-	quarters->setSpriteFacility(18);
-	quarters->setBuildCost(400000);
-	quarters->setBuildTime(16);
-	quarters->setMonthlyCost(10000);
-	quarters->setPersonnel(50);
-
-	RuleBaseFacility *lab = new RuleBaseFacility("STR_LABORATORY");
-	lab->setSpriteShape(1);
-	lab->setSpriteFacility(19);
-	lab->setBuildCost(750000);
-	lab->setBuildTime(26);
-	lab->setMonthlyCost(30000);
-	lab->setLaboratories(50);
-
-	RuleBaseFacility *workshop = new RuleBaseFacility("STR_WORKSHOP");
-	workshop->setSpriteShape(1);
-	workshop->setSpriteFacility(20);
-	workshop->setBuildCost(800000);
-	workshop->setBuildTime(32);
-	workshop->setMonthlyCost(35000);
-	workshop->setWorkshops(50);
-
-	RuleBaseFacility *stores = new RuleBaseFacility("STR_GENERAL_STORES");
-	stores->setSpriteShape(1);
-	stores->setSpriteFacility(24);
-	stores->setBuildCost(150000);
-	stores->setBuildTime(10);
-	stores->setMonthlyCost(5000);
-	stores->setStorage(50);
-
-	RuleBaseFacility *aliens = new RuleBaseFacility("STR_ALIEN_CONTAINMENT");
-	aliens->setSpriteShape(1);
-	aliens->setSpriteFacility(25);
-	aliens->setBuildCost(400000);
-	aliens->setBuildTime(18);
-	aliens->setMonthlyCost(15000);
-	aliens->setAliens(10);
-
-	RuleBaseFacility *hangar = new RuleBaseFacility("STR_HANGAR");
-	hangar->setSpriteShape(9);
-	hangar->setSpriteFacility(9);
-	hangar->setSize(2);
-	hangar->setBuildCost(200000);
-	hangar->setBuildTime(25);
-	hangar->setMonthlyCost(25000);
-	hangar->setCrafts(1);
-
-	RuleBaseFacility *sRadar = new RuleBaseFacility("STR_SMALL_RADAR_SYSTEM");
-	sRadar->setSpriteShape(2);
-	sRadar->setSpriteFacility(21);
-	sRadar->setBuildCost(500000);
-	sRadar->setBuildTime(12);
-	sRadar->setMonthlyCost(10000);
-	sRadar->setRadarRange(1500);
-	sRadar->setRadarChance(10);
-
-	RuleBaseFacility *lRadar = new RuleBaseFacility("STR_LARGE_RADAR_SYSTEM");
-	lRadar->setSpriteShape(1);
-	lRadar->setSpriteFacility(22);
-	lRadar->setBuildCost(800000);
-	lRadar->setBuildTime(25);
-	lRadar->setMonthlyCost(15000);
-	lRadar->setRadarRange(2250);
-	lRadar->setRadarChance(20);
-
-	RuleBaseFacility *missile = new RuleBaseFacility("STR_MISSILE_DEFENSES");
-	missile->setSpriteShape(2);
-	missile->setSpriteFacility(23);
-	missile->setBuildCost(200000);
-	missile->setBuildTime(16);
-	missile->setMonthlyCost(5000);
-	missile->setDefenceValue(500);
-	missile->setHitRatio(50);
-
-	_facilities.insert(std::pair<std::string, RuleBaseFacility*>("STR_ACCESS_LIFT", lift));
-	_facilities.insert(std::pair<std::string, RuleBaseFacility*>("STR_LIVING_QUARTERS", quarters));
-	_facilities.insert(std::pair<std::string, RuleBaseFacility*>("STR_LABORATORY", lab));
-	_facilities.insert(std::pair<std::string, RuleBaseFacility*>("STR_WORKSHOP", workshop));
-	_facilities.insert(std::pair<std::string, RuleBaseFacility*>("STR_GENERAL_STORES", stores));
-	_facilities.insert(std::pair<std::string, RuleBaseFacility*>("STR_ALIEN_CONTAINMENT", aliens));
-	_facilities.insert(std::pair<std::string, RuleBaseFacility*>("STR_HANGAR", hangar));
-	_facilities.insert(std::pair<std::string, RuleBaseFacility*>("STR_SMALL_RADAR_SYSTEM", sRadar));
-	_facilities.insert(std::pair<std::string, RuleBaseFacility*>("STR_LARGE_RADAR_SYSTEM", lRadar));
-	_facilities.insert(std::pair<std::string, RuleBaseFacility*>("STR_MISSILE_DEFENSES", missile));
+	initBaseFacilities(d);
 
 	// Add mapdatafiles
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("AVENGER",new MapDataSet("AVENGER",59)));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("BARN",new MapDataSet("BARN",29)));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("BLANKS",new MapDataSet("BLANKS",2)));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("BRAIN",new MapDataSet("BRAIN",4)));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("CULTIVAT",new MapDataSet("CULTIVAT",37)));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("DESERT",new MapDataSet("DESERT",66)));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("FOREST",new MapDataSet("FOREST",83)));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("FRNITURE",new MapDataSet("FRNITURE",26)));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("JUNGLE",new MapDataSet("JUNGLE",82)));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("LIGHTNIN",new MapDataSet("LIGHTNIN",42)));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("MARS",new MapDataSet("MARS",36)));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("MOUNT",new MapDataSet("MOUNT",78)));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("PLANE",new MapDataSet("PLANE",65)));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("POLAR",new MapDataSet("POLAR",81)));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("ROADS",new MapDataSet("ROADS",23)));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("UFO1",new MapDataSet("UFO1",20)));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("URBAN",new MapDataSet("URBAN",112)));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("URBITS",new MapDataSet("URBITS",25)));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("U_BASE",new MapDataSet("U_BASE",67)));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("U_BITS",new MapDataSet("U_BITS",8)));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("U_DISEC2",new MapDataSet("U_DISEC2",17)));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("U_EXT02",new MapDataSet("U_EXT02",34)));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("U_OPER2",new MapDataSet("U_OPER2",15)));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("U_PODS",new MapDataSet("U_PODS",11)));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("U_WALL02",new MapDataSet("U_WALL02",47)));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("XBASE1",new MapDataSet("XBASE1",97)));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("XBASE2",new MapDataSet("XBASE2",62)));
+	initMapDataFiles(d);
 
 	// Add crafts
 	RuleCraft* skyranger = new RuleCraft("STR_SKYRANGER");
@@ -1869,6 +1485,212 @@ XcomRuleset::XcomRuleset() : Ruleset()
  */
 XcomRuleset::~XcomRuleset()
 {
+}
+
+void XcomRuleset::initNames(YAML::Node &doc)
+{
+	for (YAML::Iterator i = doc["nameFiles"].begin(); i != doc["nameFiles"].end(); ++i)
+	{
+		std::string nameFile;
+		(*i)["file"] >> nameFile;
+
+		SoldierNamePool *pool = new SoldierNamePool();
+		pool->load(nameFile);
+		_names.push_back(pool);
+	}
+}
+
+void XcomRuleset::initCountries(YAML::Node &doc)
+{
+	for (YAML::Iterator i = doc["countries"].begin(); i != doc["countries"].end(); ++i)
+	{
+		std::string countryStr;
+		(*i)["country"] >> countryStr;
+		int minFunding;
+		(*i)["minFunding"] >> minFunding;
+		int maxFunding;
+		(*i)["maxFunding"] >> maxFunding;
+		double longitude;
+		(*i)["longitude"] >> longitude;
+		double latitude;
+		(*i)["latitude"] >> latitude;
+		
+		RuleCountry *country = new RuleCountry(countryStr);
+		country->setMinFunding(minFunding);
+		country->setMaxFunding(maxFunding);
+		country->setLabelLongitude(longitude);
+		country->setLabelLatitude(latitude);
+
+		_countries.insert(std::pair<std::string, RuleCountry*>(countryStr, country));
+	}
+}
+
+void XcomRuleset::initRegions(YAML::Node &doc)
+{
+	for (YAML::Iterator i = doc["regions"].begin(); i != doc["regions"].end(); ++i)
+	{
+		std::string regionStr;
+		(*i)["region"] >> regionStr;
+		int baseCost;
+		(*i)["baseCost"] >> baseCost;
+		
+		RuleRegion* region = new RuleRegion(regionStr);
+		region->setBaseCost(baseCost);
+
+		for (YAML::Iterator cities = (*i)["cities"].begin(); cities != (*i)["cities"].end(); ++cities)
+		{
+			std::string cityStr;
+			(*cities)["city"] >> cityStr;
+			double longitude;
+			(*cities)["longitude"] >> longitude;
+			double latitude;
+			(*cities)["latitude"] >> latitude;
+
+			region->getCities()->push_back(new City(cityStr, longitude, latitude));
+		}
+
+		for (YAML::Iterator areas = (*i)["areas"].begin(); areas != (*i)["areas"].end(); ++areas)
+		{
+			double longitudeMin;
+			(*areas)["longitudeMin"] >> longitudeMin;
+			double longitudeMax;
+			(*areas)["longitudeMax"] >> longitudeMax;
+			double latitudeMin;
+			(*areas)["latitudeMin"] >> latitudeMin;
+			double latitudeMax;
+			(*areas)["latitudeMax"] >> latitudeMax;
+
+			region->addArea(longitudeMin, longitudeMax, latitudeMin, latitudeMax);
+		}
+
+		_regions.insert(std::pair<std::string, RuleRegion*>(regionStr, region));
+	}
+}
+
+void XcomRuleset::initBaseFacilities(YAML::Node &doc)
+{
+	for (YAML::Iterator i = doc["baseFacilities"].begin(); i != doc["baseFacilities"].end(); ++i)
+	{
+		std::string facilityStr;
+		(*i)["facility"] >> facilityStr;
+		int spriteShape;
+		(*i)["spriteShape"] >> spriteShape;
+		int spriteFacility;
+		(*i)["spriteFacility"] >> spriteFacility;
+		int buildTime;
+		(*i)["buildTime"] >> buildTime;
+		int buildCost;
+		(*i)["buildCost"] >> buildCost;
+		int monthlyCost;
+		(*i)["monthlyCost"] >> monthlyCost;
+
+		RuleBaseFacility *facility = new RuleBaseFacility(facilityStr);
+		facility->setSpriteShape(spriteShape);
+		facility->setSpriteFacility(spriteFacility);
+		facility->setBuildCost(buildCost);
+		facility->setBuildTime(buildTime);
+		facility->setMonthlyCost(monthlyCost);
+
+		// optional values
+		if(const YAML::Node *pName = (*i).FindValue("isLift")) 
+		{
+			bool isLift;
+			(*i)["isLift"] >> isLift;
+			facility->setLift(isLift);
+		}
+
+		if(const YAML::Node *pName = (*i).FindValue("personnel")) 
+		{
+			int personnel;
+			(*i)["personnel"] >> personnel;
+			facility->setPersonnel(personnel);
+		}
+		
+		if(const YAML::Node *pName = (*i).FindValue("laboratorySpace")) 
+		{
+			int laboratorySpace;
+			(*i)["laboratorySpace"] >> laboratorySpace;
+			facility->setLaboratories(laboratorySpace);
+		}
+
+		if(const YAML::Node *pName = (*i).FindValue("workshopSpace")) 
+		{
+			int workshopSpace;
+			(*i)["workshopSpace"] >> workshopSpace;
+			facility->setWorkshops(workshopSpace);
+		}
+
+		if(const YAML::Node *pName = (*i).FindValue("storageSpace")) 
+		{
+			int storageSpace;
+			(*i)["storageSpace"] >> storageSpace;
+			facility->setStorage(storageSpace);
+		}
+
+		if(const YAML::Node *pName = (*i).FindValue("aliensSpace")) 
+		{
+			int aliensSpace;
+			(*i)["aliensSpace"] >> aliensSpace;
+			facility->setAliens(aliensSpace);
+		}
+
+		if(const YAML::Node *pName = (*i).FindValue("size")) 
+		{
+			int size;
+			(*i)["size"] >> size;
+			facility->setSize(size);
+		}
+
+		if(const YAML::Node *pName = (*i).FindValue("craftsSpace")) 
+		{
+			int craftsSpace;
+			(*i)["craftsSpace"] >> craftsSpace;
+			facility->setCrafts(craftsSpace);
+		}
+
+		if(const YAML::Node *pName = (*i).FindValue("radarRange")) 
+		{
+			int radarRange;
+			(*i)["radarRange"] >> radarRange;
+			facility->setRadarRange(radarRange);
+		}
+
+		if(const YAML::Node *pName = (*i).FindValue("radarChance")) 
+		{
+			int radarChance;
+			(*i)["radarChance"] >> radarChance;
+			facility->setRadarChance(radarChance);
+		}
+
+		if(const YAML::Node *pName = (*i).FindValue("defenceValue")) 
+		{
+			int defenceValue;
+			(*i)["defenceValue"] >> defenceValue;
+			facility->setDefenceValue(defenceValue);
+		}
+
+		if(const YAML::Node *pName = (*i).FindValue("hitRatio")) 
+		{
+			int hitRatio;
+			(*i)["hitRatio"] >> hitRatio;
+			facility->setHitRatio(hitRatio);
+		}
+
+		_facilities.insert(std::pair<std::string, RuleBaseFacility*>(facilityStr, facility));
+	}
+}
+
+void XcomRuleset::initMapDataFiles(YAML::Node &doc)
+{
+	for (YAML::Iterator i = doc["mapDataFiles"].begin(); i != doc["mapDataFiles"].end(); ++i)
+	{
+		std::string file;
+		(*i)["file"] >> file;
+		int size;
+		(*i)["size"] >> size;
+
+		_mapDataSets.insert(std::pair<std::string, MapDataSet*>(file,new MapDataSet(file, size)));
+	}
 }
 
 /**

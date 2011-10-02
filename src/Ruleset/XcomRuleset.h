@@ -20,6 +20,7 @@
 #define OPENXCOM_XCOMRULESET_H
 
 #include "Ruleset.h"
+#include "yaml.h"
 
 namespace OpenXcom
 {
@@ -29,6 +30,17 @@ namespace OpenXcom
  */
 class XcomRuleset : public Ruleset
 {
+private:
+	// loads the name files from config
+	void initNames(YAML::Node &doc);
+	// loads the countries from config
+	void initCountries(YAML::Node &doc);
+	// loads the regions from config
+	void initRegions(YAML::Node &doc);
+	// loads the regions from config
+	void initBaseFacilities(YAML::Node &doc);
+	// 
+	void initMapDataFiles(YAML::Node &doc);
 public:
 	/// Creates the X-Com ruleset.
 	XcomRuleset();

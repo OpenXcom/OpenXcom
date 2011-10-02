@@ -52,7 +52,7 @@ void SoldierNamePool::load(const std::string &filename)
 	std::ifstream fin(s.c_str());
 	if (!fin)
 	{
-		throw Exception("Failed to load name pool");
+		throw Exception("Failed to load name pool '" + filename + "'");
 	}
     YAML::Parser parser(fin);
 	YAML::Node doc;
