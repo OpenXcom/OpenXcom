@@ -594,7 +594,7 @@ void BattlescapeState::btnMapDownClick(Action *action)
 void BattlescapeState::btnShowMapClick(Action *action)
 {
 	//MiniMapState
-	_game->pushState (new MiniMapState (_game, _map));
+	_game->pushState (new MiniMapState (_game, _map, _battleGame));
 }
 
 /**

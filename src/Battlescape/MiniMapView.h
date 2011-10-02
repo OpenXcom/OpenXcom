@@ -25,6 +25,7 @@ namespace OpenXcom
 {
 class Game;
 class Map;
+class SavedBattleGame;
 /**
    MiniMapView is the class used to display the map in the MiniMapState
 */
@@ -35,11 +36,12 @@ class MiniMapView : public InteractiveSurface
 	int _startX;
 	int _startY;
 	int _lvl;
+	SavedBattleGame * _battleGame;
 	/// Handle clicking on the MiniMap
 	void mouseClick (Action *action, State *state);
 public:
 	/// Create the MiniMapView
-	MiniMapView(int w, int h, int x, int y, Game * game, Map * map);
+	MiniMapView(int w, int h, int x, int y, Game * game, Map * map, SavedBattleGame * battleGame);
 	/// Draw the minimap
 	void draw();
 	/// Blit the minimap to another surface

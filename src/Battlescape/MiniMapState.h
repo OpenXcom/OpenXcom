@@ -27,6 +27,7 @@ class Map;
 class InteractiveSurface;
 class Text;
 class MiniMapView;
+class SavedBattleGame;
 
 /**
    The MiniMap is a representation of a Battlescape map. Allow to see more of the map.
@@ -40,7 +41,7 @@ class MiniMapState : public State
 	Text * _txtLevel;
 public:
 	/// Create the MiniMapState
-	MiniMapState (Game * game, Map * map);
+	MiniMapState (Game * game, Map * map, SavedBattleGame * battleGame);
 	/// Handler for the OK button
 	void btnOkClick (Action * action);
 	/// Handler for the one level up button

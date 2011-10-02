@@ -1197,9 +1197,13 @@ int BattleUnit::getMiniMapSpriteIndex () const
 	// * 0-2   : Xcom soldier
 	// * 3-5   : Civilian
 	// * 6-8   : alien
-	// * 9-11  :
+	// * 9-11  : Dead unit
 	// * 12-23 : Xcom HWP
 	// * 24-35 : Alien big terror unit(cyberdisk, ...)
+	if (getStatus() == STATUS_DEAD)
+	{
+		return 9;
+	}
 	switch (getFaction())
 	{
 	case FACTION_HOSTILE:

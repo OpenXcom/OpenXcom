@@ -41,8 +41,9 @@ const int MAX_LEVEL = 3;
  * @param y the MiniMapView y origin
  * @param game Pointer to the core game.
  * @param map The Battlescape map
+ * @param battleGame Pointer to the SavedBattleGame
 */
-MiniMapView::MiniMapView(int w, int h, int x, int y, Game * game, Map * map) : InteractiveSurface(w, h, x, y), _game(game), _map(map), _startX(0),  _startY(0), _lvl(_map->getViewHeight())
+MiniMapView::MiniMapView(int w, int h, int x, int y, Game * game, Map * map, SavedBattleGame * battleGame) : InteractiveSurface(w, h, x, y), _game(game), _map(map), _startX(0),  _startY(0), _lvl(_map->getViewHeight()), _battleGame(battleGame)
 {
 	_startX = _map->getCenterX () - ((getWidth () / CELL_WIDTH) / 2);
 	_startY = _map->getCenterY() - ((getHeight () / CELL_HEIGHT) / 2);
@@ -66,6 +67,13 @@ void MiniMapView::draw()
 	SavedBattleGame * battle = _game->getSavedGame()->getBattleGame();
 	SurfaceSet * set = _game->getResourcePack()->getSurfaceSet("SCANG.DAT");
 	int py = _startY;
+	std::map<Tile *, BattleUnit *> battleUnits;
+	std::vector<BattleUnit*> *const units (_battleGame->getUnits());
+	// We can't access dead units from tiles. So we first compute a list of all battle units and their corresponding tile. We will use this later to display units on the minimap
+	for(std::vector<BattleUnit*>::const_iterator it = units->begin (); it != units->end (); ++it)
+	{
+		battleUnits[(*it)->getTile()] = *it;
+	}
 	for (int y = getHeight () - CELL_HEIGHT; y >= 0; y-=CELL_HEIGHT)
 	{
 		int px = _startX;
@@ -79,7 +87,6 @@ void MiniMapView::draw()
 			MapData * data = 0;
 			int lvl = _lvl;
 			Tile * t = 0;
-			BattleUnit *unit = 0;
 			while ((!t || !data) && lvl >= 0)
 			{
 				Position p (px, py, lvl--);
@@ -107,13 +114,10 @@ void MiniMapView::draw()
 			{
 				s->blitNShade(this, x, y, t->getShade());
 			}
-			if(t)
+			std::map<Tile *, BattleUnit *>::iterator itTile =  battleUnits.find (t);
+			if(itTile != battleUnits.end () && itTile->second->getVisible())
 			{
-				unit = t->getUnit();
-			}
-			if (unit && unit->getVisible())
-			{
-				s = set->getFrame (unit->getMiniMapSpriteIndex ());
+				s = set->getFrame (itTile->second->getMiniMapSpriteIndex ()+o);
 				s->blitNShade(this, x, y, 0);
 			}
 			px++;
