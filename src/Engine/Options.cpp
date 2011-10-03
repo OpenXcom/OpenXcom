@@ -61,6 +61,7 @@ void createDefault()
 	// set to true if you want to play with the alternative grenade handling
 	setBool("battleAltGrenade", false);
 	setBool("fpsCounter", false);
+	setString("modFolder", "");
 }
 
 /**
@@ -112,7 +113,7 @@ void init(int argc, char** args)
 	loadArgs(argc, args);
 	if (_dataFolder == "")
 	{
-		_dataFolder = CrossPlatform::findDataFolder(true);
+		_dataFolder = CrossPlatform::findDataFolder(true, _options["modFolder"]);
 		// Missing data folder is handled in StartState
 	}
 	if (_userFolder == "")
@@ -129,6 +130,10 @@ void init(int argc, char** args)
 		else
 		{
 			load();
+			if (_options["modFolder"] != "")
+			{
+				_dataFolder = CrossPlatform::findDataFolder(true, _options["modFolder"]);
+			}
 		}
 	}
 }
@@ -157,6 +162,10 @@ void load(const std::string &filename)
 		i.second() >> value;
 		_options[key] = value;
 	}
+
+	//check for empty directory
+	if (_options["modFolder"].c_str()[0] == L'\x7E')
+		_options["modFolder"] = "";
 
 	fin.close();
 }
