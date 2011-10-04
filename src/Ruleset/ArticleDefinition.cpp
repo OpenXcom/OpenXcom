@@ -102,4 +102,10 @@ namespace OpenXcom
 	ArticleDefinitionUfo::ArticleDefinitionUfo() : ArticleDefinition(UFOPAEDIA_TYPE_UFO), ufo(0)
 	{}
 	
+	/**
+	 * Constructor (only setting type of base class)
+	 */
+	ArticleDefinitionArmor::ArticleDefinitionArmor() : ArticleDefinition(UFOPAEDIA_TYPE_ARMOR), armor(0)
+	{}
+	
 }
