@@ -26,6 +26,7 @@
 #include "ArticleStateCraft.h"
 #include "ArticleStateCraftWeapon.h"
 #include "ArticleStateItem.h"
+#include "ArticleStateArmor.h"
 #include "ArticleStateText.h"
 #include "ArticleStateTextImage.h"
 #include "ArticleStateUfo.h"
@@ -77,6 +78,9 @@ namespace OpenXcom
 				break;
 			case UFOPAEDIA_TYPE_ITEM:
 				return new ArticleStateItem(game, static_cast<ArticleDefinitionItem *> (article));
+				break;
+			case UFOPAEDIA_TYPE_ARMOR:
+				return new ArticleStateArmor(game, static_cast<ArticleDefinitionArmor *> (article));
 				break;
 			case UFOPAEDIA_TYPE_BASE_FACILITY:
 				return new ArticleStateBaseFacility(game, static_cast<ArticleDefinitionBaseFacility *> (article));
