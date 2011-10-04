@@ -228,18 +228,30 @@ bool Projectile::calculateThrow(double accuracy)
 void Projectile::applyAccuracy(const Position& origin, Position *target, double accuracy)
 {
 	// maxDeviation is the max angle deviation for accuracy 0% in degrees
-	static const double maxDeviation = 6.0;
+	double maxDeviation = 2.5;
 	// minDeviation is the min angle deviation for accuracy 100% in degrees
-	static const double minDeviation = 0.01;
+	double minDeviation = 0.4;
 	// maxRange is the maximum range a projectile shall ever travel in voxel space
 	static const double maxRange = 16*1000; // 1000 tiles
+
+	// above a certain range, the min deviation increases 0.1 per 10 voxels
+	// this is to add in certain limits even with 100% firing accuracy you are not a sniper-god
+	int xdiff = origin.x - target->x;
+	int ydiff = origin.y - target->y;
+	double realDistance = sqrt((double)(xdiff*xdiff)+(double)(ydiff*ydiff));
+	if (realDistance > accuracy*200)
+	{
+		minDeviation += (realDistance - accuracy*200)/100.0;
+	}
+
 
 	double dRot, dTilt;
 	double rotation, tilt;
 	double baseDeviation = (maxDeviation - (maxDeviation * accuracy)) + minDeviation;
+	if (baseDeviation < 0) baseDeviation = 0;
 	// the angle deviations are spread using a normal distribution between 0 and baseDeviation
 	dRot = RNG::boxMuller(0, baseDeviation);
-	dTilt = RNG::boxMuller(0, baseDeviation / 2.0);
+	dTilt = RNG::boxMuller(0, baseDeviation / 2.0); // tilt deviation is halved
 	rotation = atan2(double(target->y - origin.y), double(target->x - origin.x)) * 180 / M_PI;
 	tilt = atan2(double(target->z - origin.z),
 		sqrt(double(target->x - origin.x)*double(target->x - origin.x)+double(target->y - origin.y)*double(target->y - origin.y))) * 180 / M_PI;

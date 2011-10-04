@@ -290,6 +290,7 @@
     <ClCompile Include="Savegame\UfopaediaSaved.cpp" />
     <ClCompile Include="Savegame\Waypoint.cpp" />
     <ClCompile Include="Ufopaedia\ArticleState.cpp" />
+    <ClCompile Include="Ufopaedia\ArticleStateArmor.cpp" />
     <ClCompile Include="Ufopaedia\ArticleStateBaseFacility.cpp" />
     <ClCompile Include="Ufopaedia\ArticleStateCraft.cpp" />
     <ClCompile Include="Ufopaedia\ArticleStateCraftWeapon.cpp" />
@@ -487,6 +488,7 @@
     <ClInclude Include="Savegame\UfopaediaSaved.h" />
     <ClInclude Include="Savegame\Waypoint.h" />
     <ClInclude Include="Ufopaedia\ArticleState.h" />
+    <ClInclude Include="Ufopaedia\ArticleStateArmor.h" />
     <ClInclude Include="Ufopaedia\ArticleStateBaseFacility.h" />
     <ClInclude Include="Ufopaedia\ArticleStateCraft.h" />
     <ClInclude Include="Ufopaedia\ArticleStateCraftWeapon.h" />
