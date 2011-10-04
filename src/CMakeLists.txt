@@ -420,7 +420,9 @@ if ( "${CMAKE_BUILD_TYPE}" STREQUAL "Debug" AND CMAKE_COMPILER_IS_GNUCXX )
   add_definitions ( -Wall )
 endif()
 
-add_definitions ( -DDATADIR="${CMAKE_INSTALL_PREFIX}/share/openxcom/" )
+if ( NOT WIN32 )
+  add_definitions ( -DDATADIR="${CMAKE_INSTALL_PREFIX}/share/openxcom/" )
+endif ()
 
 set ( openxcom_src main.cpp ${basescape_src} ${battlescape_src} ${engine_src} ${geoscape_src} ${interface_src} ${menu_src} ${resource_src} ${ruleset_src} ${savegame_src} ${ufopedia_src} )
 
@@ -430,9 +432,10 @@ add_executable ( openxcom  ${openxcom_src} )
 install ( TARGETS openxcom RUNTIME DESTINATION bin )
 # Extra link flags for windows. they need to be before the SDL/YAML link flags. Otherwise, you will get strange link errors('Undefined reference to WinMain@16')
 if ( WIN32 )
-  target_link_libraries ( openxcom advapi32.lib shell32.lib shlwapi.lib mingw32 -mwindows SDLmain )
+  target_link_libraries ( openxcom advapi32.lib shell32.lib shlwapi.lib mingw32 -mwindows SDLmain -static )
+  set ( SDLMIXER_LIBRARY "${SDLMIXER_LIBRARY} -lwinmm" )
 endif ()
-target_link_libraries ( openxcom ${SDL_LIBRARY} ${SDLMIXER_LIBRARY} ${SDLGFX_LIBRARY} ${YAMLCPP_LIBRARY} )
+target_link_libraries ( openxcom ${SDLMIXER_LIBRARY} ${SDLGFX_LIBRARY} ${SDL_LIBRARY} ${YAMLCPP_LIBRARY} )
 
 add_custom_command ( TARGET openxcom
   POST_BUILD

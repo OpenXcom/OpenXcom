@@ -45,7 +45,7 @@ private:
 	SavedBattleGame *_save;
 	std::vector<Uint16> *_voxelData;
 	void addLight(const Position &center, int power, int layer);
-	int blockage(Tile *tile, const int part, ItemDamageType type, int direction = -1);
+	int blockage(Tile *tile, const int part, ItemDamageType type);
 	int horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageType type);
 	int verticalBlockage(Tile *startTile, Tile *endTile, ItemDamageType type);
 	int vectorToDirection(const Position &vector);

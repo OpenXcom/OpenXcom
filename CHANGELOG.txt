@@ -10,7 +10,8 @@ New features:
 -- Battlescape save game.
 -- Panicking units.
 -- Skill increase and promotions.
-
+-- Added fall TU cost.
+-- Increased accuracy of bullets for short range shots, lower accuracy for long range shots.
 
 Bugfixes:
 - Two duplicating ammo bugs.
