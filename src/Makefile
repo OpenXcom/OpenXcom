@@ -4,7 +4,7 @@
 TARGET =
 
 # Directories and files
-DATADIR = /usr/shared/openxcom/
+DATADIR = /usr/share/openxcom/
 OBJDIR = ../obj/
 BINDIR = ../bin/
 SRCS = $(wildcard *.cpp */*.cpp)

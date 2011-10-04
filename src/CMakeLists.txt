@@ -1,4 +1,4 @@
-set ( basescape_src 
+set ( basescape_src
   Basescape/BaseView.cpp
   Basescape/BaseView.h
   Basescape/CraftSoldiersState.cpp
@@ -63,7 +63,7 @@ set ( basescape_src
   Basescape/ResearchProjectState.cpp
 )
 
-set ( battlescape_src 
+set ( battlescape_src
   Battlescape/ActionMenuState.cpp
   Battlescape/ActionMenuState.h
   Battlescape/PathfindingNode.cpp
@@ -88,8 +88,6 @@ set ( battlescape_src
   Battlescape/PrimeGrenadeState.h
   Battlescape/UnitInfoState.h
   Battlescape/UnitInfoState.cpp
-  Battlescape/TerrainModifier.cpp
-  Battlescape/TerrainModifier.h
   Battlescape/BattlescapeState.cpp
   Battlescape/BattlescapeState.h
   Battlescape/BattlescapeGenerator.h
@@ -98,8 +96,8 @@ set ( battlescape_src
   Battlescape/BulletSprite.cpp
   Battlescape/Projectile.cpp
   Battlescape/Projectile.h
-  Battlescape/UnitFallBState.h
-  Battlescape/UnitFallBState.cpp
+  Battlescape/UnitDieBState.h
+  Battlescape/UnitDieBState.cpp
   Battlescape/Explosion.cpp
   Battlescape/Explosion.h
   Battlescape/InventoryState.cpp
@@ -132,9 +130,11 @@ set ( battlescape_src
   Battlescape/DebriefingState.h
   Battlescape/InfoboxState.cpp
   Battlescape/InfoboxState.h
+  Battlescape/TileEngine.cpp
+  Battlescape/TileEngine.h
 )
 
-set ( engine_src 
+set ( engine_src
   Engine/State.h
   Engine/State.cpp
   Engine/CatFile.cpp
@@ -177,7 +177,7 @@ set ( engine_src
   Engine/Screen.h
 )
 
-set ( geoscape_src 
+set ( geoscape_src
   Geoscape/GeoscapeCraftState.cpp
   Geoscape/GeoscapeCraftState.h
   Geoscape/UfoDetectedState.h
@@ -240,7 +240,7 @@ set ( geoscape_src
   Geoscape/NewPossibleResearchState.cpp
 )
 
-set ( interface_src 
+set ( interface_src
   Interface/Window.cpp
   Interface/Window.h
   Interface/NumberText.cpp
@@ -265,7 +265,7 @@ set ( interface_src
   Interface/Cursor.cpp
 )
 
-set ( menu_src 
+set ( menu_src
   Menu/StartState.cpp
   Menu/StartState.h
   Menu/NoteState.cpp
@@ -284,14 +284,14 @@ set ( menu_src
   Menu/NewGameState.h
 )
 
-set ( resource_src 
+set ( resource_src
   Resource/ResourcePack.h
   Resource/ResourcePack.cpp
   Resource/XcomResourcePack.cpp
   Resource/XcomResourcePack.h
 )
 
-set ( ruleset_src 
+set ( ruleset_src
   Ruleset/RuleCraft.cpp
   Ruleset/RuleCraft.h
   Ruleset/XcomRuleset.cpp
@@ -336,7 +336,7 @@ set ( ruleset_src
   Ruleset/RuleResearchProject.cpp
 )
 
-set ( savegame_src 
+set ( savegame_src
   Savegame/BattleItem.h
   Savegame/BattleItem.cpp
   Savegame/Ufo.cpp
@@ -390,7 +390,7 @@ set ( savegame_src
 )
 
 
-set ( ufopedia_src 
+set ( ufopedia_src
   Ufopaedia/ArticleStateBaseFacility.cpp
   Ufopaedia/ArticleStateBaseFacility.h
   Ufopaedia/UfopaediaStartState.cpp
@@ -420,6 +420,10 @@ if ( "${CMAKE_BUILD_TYPE}" STREQUAL "Debug" AND CMAKE_COMPILER_IS_GNUCXX )
   add_definitions ( -Wall )
 endif()
 
+if ( NOT WIN32 )
+  add_definitions ( -DDATADIR="${CMAKE_INSTALL_PREFIX}/share/openxcom/" )
+endif ()
+
 set ( openxcom_src main.cpp ${basescape_src} ${battlescape_src} ${engine_src} ${geoscape_src} ${interface_src} ${menu_src} ${resource_src} ${ruleset_src} ${savegame_src} ${ufopedia_src} )
 
 set ( EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin )
@@ -428,9 +432,10 @@ add_executable ( openxcom  ${openxcom_src} )
 install ( TARGETS openxcom RUNTIME DESTINATION bin )
 # Extra link flags for windows. they need to be before the SDL/YAML link flags. Otherwise, you will get strange link errors('Undefined reference to WinMain@16')
 if ( WIN32 )
-  target_link_libraries ( openxcom advapi32.lib shell32.lib shlwapi.lib mingw32 -mwindows SDLmain )
+  target_link_libraries ( openxcom advapi32.lib shell32.lib shlwapi.lib mingw32 -mwindows SDLmain -static )
+  set ( SDLMIXER_LIBRARY "${SDLMIXER_LIBRARY} -lwinmm" )
 endif ()
-target_link_libraries ( openxcom ${SDL_LIBRARY} ${SDLMIXER_LIBRARY} ${SDLGFX_LIBRARY} ${YAMLCPP_LIBRARY} )
+target_link_libraries ( openxcom ${SDLMIXER_LIBRARY} ${SDLGFX_LIBRARY} ${SDL_LIBRARY} ${YAMLCPP_LIBRARY} )
 
 add_custom_command ( TARGET openxcom
   POST_BUILD
