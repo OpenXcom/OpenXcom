@@ -417,6 +417,8 @@ set ( ufopedia_src
   Ufopaedia/ArticleStateCraftWeapon.cpp
   Ufopaedia/ArticleStateTextImage.cpp
   Ufopaedia/ArticleStateTextImage.h
+  Ufopaedia/ArticleStateArmor.cpp
+  Ufopaedia/ArticleStateArmor.h
 )
 
 if ( "${CMAKE_BUILD_TYPE}" STREQUAL "Debug" AND CMAKE_COMPILER_IS_GNUCXX )
