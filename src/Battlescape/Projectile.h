@@ -21,6 +21,7 @@
 
 #include <vector>
 #include "Position.h"
+#include "BattleScapeState.h"
 
 namespace OpenXcom
 {
@@ -39,17 +40,16 @@ class Projectile
 private:
 	ResourcePack *_res;
 	SavedBattleGame *_save;
-	BattleItem *_item;
-	Position _origin, _target;
+	BattleAction _action;
+	Position _origin;
 	std::vector<Position> _trajectory;
 	unsigned int _position;
 	static const int _trail[11][36];
-	int _bulletType;
 	Surface *_sprite;
 	void applyAccuracy(const Position& origin, Position *target, double accuracy);
 public:
 	/// Creates a new Projectile.
-	Projectile(ResourcePack *res, SavedBattleGame *save, Position origin, Position target, int bulletType, BattleItem *item);
+	Projectile(ResourcePack *res, SavedBattleGame *save, BattleAction action);
 	/// Cleans up the Projectile.
 	~Projectile();
 	/// Calculates the trajectory for straight path.

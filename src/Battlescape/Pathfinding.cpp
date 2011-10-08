@@ -222,10 +222,6 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 	{
 		cost += destinationTile->getTUCost(MapData::O_OBJECT, _movementType);
 	}
-	else
-	{
-		cost += 6; // falling down costs time units
-	}
 
 	// diagonal walking (uneven directions) costs 50% more tu's
 	if (direction & 1)
