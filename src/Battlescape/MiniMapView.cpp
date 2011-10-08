@@ -44,7 +44,7 @@ const int MAX_FRAME = 2;
  * @param map The Battlescape map
  * @param battleGame Pointer to the SavedBattleGame
 */
-MiniMapView::MiniMapView(int w, int h, int x, int y, Game * game, Map * map, SavedBattleGame * battleGame) : InteractiveSurface(w, h, x, y), _game(game), _map(map), _startX(0),  _startY(0), _lvl(_map->getViewHeight()), _battleGame(battleGame)
+MiniMapView::MiniMapView(int w, int h, int x, int y, Game * game, Map * map, SavedBattleGame * battleGame) : InteractiveSurface(w, h, x, y), _game(game), _map(map), _startX(0),  _startY(0), _lvl(_map->getViewHeight()), _battleGame(battleGame), _frame(0)
 {
 	_startX = _map->getCenterX () - ((getWidth () / CELL_WIDTH) / 2);
 	_startY = _map->getCenterY () - ((getHeight () / CELL_HEIGHT) / 2);
