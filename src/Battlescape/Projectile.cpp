@@ -35,6 +35,7 @@
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
 #include "../Engine/RNG.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -63,12 +64,14 @@ const int Projectile::_trail[11][36] = {
  * @param bulletType A number that corresponds to the type of bullet this is.
  * @param item Pointer to item that produced the bullet.
  */
-Projectile::Projectile(ResourcePack *res, SavedBattleGame *save, Position origin, Position target, int bulletType, BattleItem *item) : _res(res), _save(save), _item(item), _origin(origin), _target(target), _position(0), _bulletType(bulletType)
+Projectile::Projectile(ResourcePack *res, SavedBattleGame *save, BattleAction action) : _res(res), _save(save), _action(action), _position(0)
 {
-	if (item)
+	if (_action.weapon && _action.type == BA_THROW)
 	{
 		_sprite = _res->getSurfaceSet("FLOOROB.PCK")->getFrame(getItem()->getRules()->getFloorSprite());
 	}
+
+	_origin = _action.actor->getPosition();
 }
 
 /**
@@ -108,24 +111,24 @@ int Projectile::calculateTrajectory(double accuracy)
 	// aim at the center of the unit, the object, the walls or the floor (in that priority)
 	// if there is no LOF to the center, try elsewhere (more outward).
 	// Store this target voxel.
-	Tile *tile = _save->getTile(_target);
+	Tile *tile = _save->getTile(_action.target);
 	if (tile->getUnit() != 0)
 	{
-		if (_origin == _target)
+		if (_origin == _action.target)
 		{
 			// don't shoot at yourself but shoot at the floor
-			targetVoxel = Position(_target.x*16 + 8, _target.y*16 + 8, _target.z*24);
+			targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24);
 		}
 		else
 		{
 			// first try is at half the unit height 
-			targetVoxel = Position(_target.x*16 + 8, _target.y*16 + 8, _target.z*24 + tile->getUnit()->getUnit()->getStandHeight()/2);
+			targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + tile->getUnit()->getUnit()->getStandHeight()/2);
 			int test = _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, false, &_trajectory, bu);
 			_trajectory.clear();
 			if (test != 4)
 			{
-				// did not hit a unit, try at different heights
-				targetVoxel = Position(_target.x*16 + 8, _target.y*16 + 8, _target.z*24 + (tile->getUnit()->getUnit()->getStandHeight()*3)/4);
+				// did not hit a unit, try at different heights (for ex: unit behind a window can only be hit in the head)
+				targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + (tile->getUnit()->getUnit()->getStandHeight()*3)/4);
 				test = _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, false, &_trajectory, bu);
 				_trajectory.clear();
 			}
@@ -133,19 +136,19 @@ int Projectile::calculateTrajectory(double accuracy)
 	}
 	else if (tile->getMapData(MapData::O_OBJECT) != 0)
 	{
-		targetVoxel = Position(_target.x*16 + 8, _target.y*16 + 8, _target.z*24 + 10);
+		targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + 10);
 	}
 	else if (tile->getMapData(MapData::O_NORTHWALL) != 0)
 	{
-		targetVoxel = Position(_target.x*16 + 8, _target.y*16 + 16, _target.z*24 + 10);
+		targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 16, _action.target.z*24 + 10);
 	}
 	else if (tile->getMapData(MapData::O_WESTWALL) != 0)
 	{
-		targetVoxel = Position(_target.x*16, _target.y*16 + 8, _target.z*24 + 10);
+		targetVoxel = Position(_action.target.x*16, _action.target.y*16 + 8, _action.target.z*24 + 10);
 	}
 	else if (tile->getMapData(MapData::O_FLOOR) != 0)
 	{
-		targetVoxel = Position(_target.x*16 + 8, _target.y*16 + 8, _target.z*24);
+		targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24);
 	}
 	else
 	{
@@ -181,7 +184,7 @@ bool Projectile::calculateThrow(double accuracy)
 
 	// determine the target voxel.
 	// aim at the center of the floor
-	targetVoxel = Position(_target.x*16 + 8, _target.y*16 + 8, _target.z*24 + 2);
+	targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + 2);
 
 	// we try 4 different curvatures to try and reach our goal.
 	double curvature = 1.0;
@@ -227,28 +230,45 @@ bool Projectile::calculateThrow(double accuracy)
  */
 void Projectile::applyAccuracy(const Position& origin, Position *target, double accuracy)
 {
+	// maxRange is the maximum range a projectile shall ever travel in voxel space
+	static const double maxRange = 16*1000; // 1000 tiles
+
+	/*
+	This modifies the accuracy based on the distance from the target. The accuracy decreases linearly (2% per tile or 0.125% per voxel) when shooting beyond the limit of the firing mode:
+	auto shot: 7 tiles or 112 voxels
+	snap shot: 15 tiles or 240 voxels
+	aimed shot: no penalty
+	*/
+	if (Options::getBool("battleRangeBasedAccuracy"))
+	{
+		int xdiff = origin.x - target->x;
+		int ydiff = origin.y - target->y;
+		double realDistance = sqrt((double)(xdiff*xdiff)+(double)(ydiff*ydiff));
+		if (_action.type == BA_AUTOSHOT && realDistance > 112)
+		{
+			accuracy -= 0.00125 * (realDistance - 112);
+		}
+		if (_action.type == BA_SNAPSHOT && realDistance > 240)
+		{
+			accuracy -= 0.00125 * (realDistance - 240);
+		}
+	}
+
+	// check if we hit
+	if (RNG::generate(0.0, 1.0) < accuracy)
+	{
+		return; // bullet does not deviate from perfect path
+	}
+
+	/* now lets make the bullet deviate from perfect path */
+
 	// maxDeviation is the max angle deviation for accuracy 0% in degrees
 	double maxDeviation = 2.5;
 	// minDeviation is the min angle deviation for accuracy 100% in degrees
 	double minDeviation = 0.4;
-	// maxRange is the maximum range a projectile shall ever travel in voxel space
-	static const double maxRange = 16*1000; // 1000 tiles
-
-	// above a certain range, the min deviation increases 0.1 per 10 voxels
-	// this is to add in certain limits even with 100% firing accuracy you are not a sniper-god
-	int xdiff = origin.x - target->x;
-	int ydiff = origin.y - target->y;
-	double realDistance = sqrt((double)(xdiff*xdiff)+(double)(ydiff*ydiff));
-	if (realDistance > accuracy*200)
-	{
-		minDeviation += (realDistance - accuracy*200)/100.0;
-	}
-
-
 	double dRot, dTilt;
 	double rotation, tilt;
 	double baseDeviation = (maxDeviation - (maxDeviation * accuracy)) + minDeviation;
-	if (baseDeviation < 0) baseDeviation = 0;
 	// the angle deviations are spread using a normal distribution between 0 and baseDeviation
 	dRot = RNG::boxMuller(0, baseDeviation);
 	dTilt = RNG::boxMuller(0, baseDeviation / 2.0); // tilt deviation is halved
@@ -259,7 +279,7 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 	rotation += dRot;
 	tilt += dTilt;
 	// calculate new target
-	// this can be very far out of the map, but we don't care about that right now
+	// this new target can be very far out of the map, but we don't care about that right now
 	double cos_fi = cos(tilt * M_PI / 180.0);
 	double sin_fi = sin(tilt * M_PI / 180.0);
 	double cos_te = cos(rotation * M_PI / 180.0);
@@ -313,7 +333,7 @@ Position Projectile::getPosition(int offset) const
  */
 int Projectile::getParticle(int i) const
 {
-	return _trail[_bulletType][i];
+	return _trail[_action.weapon->getRules()->getBulletSprite()][i];
 }
 
 /**
@@ -323,7 +343,10 @@ int Projectile::getParticle(int i) const
  */
 BattleItem *Projectile::getItem() const
 {
-	return _item;
+	if (_action.type == BA_THROW)
+		return _action.weapon;
+	else
+		return 0;
 }
 
 /**
