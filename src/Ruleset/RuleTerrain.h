@@ -19,9 +19,9 @@
 #ifndef OPENXCOM_RULETERRAIN_H
 #define OPENXCOM_RULETERRAIN_H
 
-#include <map>
 #include <vector>
 #include <string>
+#include "yaml.h"
 
 namespace OpenXcom
 {
@@ -29,6 +29,7 @@ namespace OpenXcom
 class MapBlock;
 class MapDataSet;
 class MapData;
+class Ruleset;
 
 /**
  * Represents a specific type of Battlescape Terrain.
@@ -45,6 +46,10 @@ private:
 public:
 	RuleTerrain(const std::string &name);
 	~RuleTerrain();
+	/// Loads the terrain from YAML.
+	void load(const YAML::Node& node, const Ruleset *ruleset);
+	/// Saves the terrain to YAML.
+	void save(YAML::Emitter& out) const;
 	/// Gets the terrain's name (used for MAP generation).
 	std::string getName() const;
 	/// Gets the terrain's mapblocks.

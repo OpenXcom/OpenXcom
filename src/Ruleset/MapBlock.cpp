@@ -36,6 +36,54 @@ MapBlock::~MapBlock()
 }
 
 /**
+ * Loads the map block from a YAML file.
+ * @param node YAML node.
+ */
+void MapBlock::load(const YAML::Node &node)
+{
+	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
+	{
+		std::string key;
+		i.first() >> key;
+		if (key == "name")
+		{
+			i.second() >> _name;
+		}
+		else if (key == "width")
+		{
+			i.second() >> _width;
+		}
+		else if (key == "length")
+		{
+			i.second() >> _length;
+		}
+		else if (key == "height")
+		{
+			i.second() >> _height;
+		}
+		else if (key == "landingZone")
+		{
+			i.second() >> _landingZone;
+		}
+	}
+}
+
+/**
+ * Saves the map block to a YAML file.
+ * @param out YAML emitter.
+ */
+void MapBlock::save(YAML::Emitter &out) const
+{
+	out << YAML::BeginMap;
+	out << YAML::Key << "name" << YAML::Value << _name;
+	out << YAML::Key << "width" << YAML::Value << _width;
+	out << YAML::Key << "length" << YAML::Value << _length;
+	out << YAML::Key << "height" << YAML::Value << _height;
+	out << YAML::Key << "landingZone" << YAML::Value << _landingZone;
+	out << YAML::EndMap;
+}
+
+/**
 * Gets the MapBlock name (string).
 * @return name
 */

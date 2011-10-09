@@ -27,6 +27,7 @@ namespace OpenXcom
 {
 
 class RuleTerrain;
+class Ruleset;
 
 /**
  * Represents a specific type of craft.
@@ -47,6 +48,10 @@ public:
 	RuleCraft(const std::string &type);
 	/// Cleans up the craft ruleset.
 	~RuleCraft();
+	/// Loads craft data from YAML.
+	void load(const YAML::Node& node, const Ruleset *ruleset);
+	/// Saves the craft data to YAML.
+	void save(YAML::Emitter& out) const;
 	/// Gets the craft's type.
 	std::string getType() const;
 	/// Gets the craft's sprite.
@@ -105,10 +110,6 @@ public:
 	int getScore() const;
 	/// Sets the craft's score.
 	void setScore(int score);
-	/// Loads craft data from YAML.
-	void load(const YAML::Node& node);
-	/// Saves the craft data to YAML.
-	void save(YAML::Emitter& out) const;
 	/// Gets the craft's terrain data.
 	RuleTerrain *getBattlescapeTerrainData();
 	/// Sets the craft's terrain data.

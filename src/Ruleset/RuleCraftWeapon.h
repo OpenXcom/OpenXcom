@@ -20,6 +20,7 @@
 #define OPENXCOM_RULECRAFTWEAPON_H
 
 #include <string>
+#include "yaml.h"
 
 namespace OpenXcom
 {
@@ -34,13 +35,17 @@ class RuleCraftWeapon
 {
 private:
 	std::string _type;
-	int _sprite, _sound, _damage, _range, _accuracy, _reloadCautious, _reloadStandard, _reloadAggressive, _ammoMax, _rearm;
+	int _sprite, _sound, _damage, _range, _accuracy, _reloadCautious, _reloadStandard, _reloadAggressive, _ammoMax, _rearmRate;
 	std::string _launcher, _clip;
 public:
 	/// Creates a blank craft weapon ruleset.
 	RuleCraftWeapon(const std::string &type);
 	/// Cleans up the craft weapon ruleset.
 	~RuleCraftWeapon();
+	/// Loads craft weapon data from YAML.
+	void load(const YAML::Node& node);
+	/// Saves the craft weapon data to YAML.
+	void save(YAML::Emitter& out) const;
 	/// Gets the craft weapon's type.
 	std::string getType() const;
 	/// Gets the craft weapon's sprite.

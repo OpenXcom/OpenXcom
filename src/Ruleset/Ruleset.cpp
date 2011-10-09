@@ -195,6 +195,65 @@ void Ruleset::load(const std::string &filename)
 				rule->load(j.second());
 			}
 		}
+		else if (key == "mapDataSets")
+		{
+			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
+			{
+				std::string type;
+				j.second()["name"] >> type;
+				MapDataSet *rule;
+				if (_mapDataSets.find(type) != _mapDataSets.end())
+				{
+					rule = _mapDataSets[type];
+				}
+				else
+				{
+					rule = new MapDataSet("", 0);
+					_mapDataSets[type] = rule;
+				}
+				rule->load(j.second());
+			}
+		}
+		else if (key == "crafts")
+		{
+			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
+			{
+				std::string type;
+				j.second()["type"] >> type;
+				RuleCraft *rule;
+				if (_crafts.find(type) != _crafts.end())
+				{
+					rule = _crafts[type];
+				}
+				else
+				{
+					rule = new RuleCraft(type);
+					_crafts[type] = rule;
+					_craftsIndex.push_back(type);
+				}
+				rule->load(j.second(), this);
+			}
+		}
+		else if (key == "craftWeapons")
+		{
+			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
+			{
+				std::string type;
+				j.second()["type"] >> type;
+				RuleCraftWeapon *rule;
+				if (_craftWeapons.find(type) != _craftWeapons.end())
+				{
+					rule = _craftWeapons[type];
+				}
+				else
+				{
+					rule = new RuleCraftWeapon(type);
+					_craftWeapons[type] = rule;
+					_craftWeaponsIndex.push_back(type);
+				}
+				rule->load(j.second());
+			}
+		}
 	}
 
 	fin.close();
@@ -234,6 +293,27 @@ void Ruleset::save(const std::string &filename) const
 	out << YAML::Key << "facilities" << YAML::Value;
 	out << YAML::BeginSeq;
 	for (std::map<std::string, RuleBaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); ++i)
+	{
+		i->second->save(out);
+	}
+	out << YAML::EndSeq;
+	out << YAML::Key << "mapDataSets" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::map<std::string, MapDataSet*>::const_iterator i = _mapDataSets.begin(); i != _mapDataSets.end(); ++i)
+	{
+		i->second->save(out);
+	}
+	out << YAML::EndSeq;
+	out << YAML::Key << "crafts" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::map<std::string, RuleCraft*>::const_iterator i = _crafts.begin(); i != _crafts.end(); ++i)
+	{
+		i->second->save(out);
+	}
+	out << YAML::EndSeq;
+	out << YAML::Key << "craftWeapons" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::map<std::string, RuleCraftWeapon*>::const_iterator i = _craftWeapons.begin(); i != _craftWeapons.end(); ++i)
 	{
 		i->second->save(out);
 	}
