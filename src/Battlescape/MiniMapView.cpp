@@ -80,17 +80,17 @@ void MiniMapView::draw()
 	{
 		battleUnits[(*it)->getTile()] = *it;
 	}
+	SDL_Rect current;
+	current.x = current.y = 0;
+	current.w = getWidth ();
+	current.h = getHeight ();
+	drawRect(&current, 0);
 
 	for (int y = getHeight () - CELL_HEIGHT; y >= 0; y-=CELL_HEIGHT)
 	{
 		int px = _startX;
 		for (int x = 0; x < getWidth (); x += CELL_WIDTH)
 		{
-			SDL_Rect r;
-			r.x = x;
-			r.y = y;
-			r.w = CELL_WIDTH;
-			r.h = CELL_HEIGHT;
 			MapData * data = 0;
 			int lvl = _lvl;
 			Tile * t = 0;
@@ -113,11 +113,7 @@ void MiniMapView::draw()
 			{
 				s = set->getFrame (data->getMiniMapIndex()+35);
 			}
-			if(!s || !t->isDiscovered(2))
-			{
-				drawRect(&r, 0);
-			}
-			else
+			if(s && t->isDiscovered(2))
 			{
 				s->blitNShade(this, x, y, t->getShade());
 			}
