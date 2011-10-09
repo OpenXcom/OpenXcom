@@ -21,7 +21,7 @@
 
 #include <vector>
 #include "Position.h"
-#include "BattleScapeState.h"
+#include "BattlescapeState.h"
 
 namespace OpenXcom
 {
