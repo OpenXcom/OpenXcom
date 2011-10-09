@@ -70,6 +70,11 @@ void MiniMapView::draw()
 	int py = _startY;
 	std::map<Tile *, BattleUnit *> battleUnits;
 	std::vector<BattleUnit*> *const units (_battleGame->getUnits());
+
+	if(!set)
+	{
+		return;
+	}
 	// We can't access dead units from tiles. So we first compute a list of all battle units and their corresponding tile. We will use this later to display units on the minimap
 	for(std::vector<BattleUnit*>::const_iterator it = units->begin (); it != units->end (); ++it)
 	{
@@ -104,7 +109,7 @@ void MiniMapView::draw()
 				}
 			}
 			Surface * s = 0;
-			if(data && set)
+			if(data)
 			{
 				s = set->getFrame (data->getMiniMapIndex()+35);
 			}
