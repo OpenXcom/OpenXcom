@@ -1415,28 +1415,33 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_terrains.insert(std::pair<std::string, RuleTerrain*>("URBAN",urban));
 
 	// Add armor
-	RuleArmor *coveralls = new RuleArmor("STR_NONE_UC", "XCOM_0.PCK");
+	RuleArmor *coveralls = new RuleArmor("STR_NONE_UC", "XCOM_0.PCK", 0);
 	coveralls->setArmor(12, 8, 5, 2);
 	coveralls->setCorpseItem("STR_CORPSE");
 
-	RuleArmor *personalArmor = new RuleArmor("STR_PERSONAL_ARMOR_UC", "XCOM_1.PCK");
+	RuleArmor *personalArmor = new RuleArmor("STR_PERSONAL_ARMOR_UC", "XCOM_1.PCK", 0);
 	personalArmor->setArmor(50, 40, 40, 30);
 
-	RuleArmor *powerSuit = new RuleArmor("STR_POWER_SUIT_UC", "XCOM_2.PCK");
+	RuleArmor *powerSuit = new RuleArmor("STR_POWER_SUIT_UC", "XCOM_2.PCK", 0);
 	powerSuit->setArmor(100, 80, 70, 60);
 
-	RuleArmor *flyingSuit = new RuleArmor("STR_FLYING_SUIT_UC", "XCOM_2.PCK");
+	RuleArmor *flyingSuit = new RuleArmor("STR_FLYING_SUIT_UC", "XCOM_2.PCK", 0);
 	flyingSuit->setArmor(110, 90, 80, 70);
 
-	RuleArmor *sectoidSoldierArmor = new RuleArmor("SECTOID_ARMOR0", "SECTOID.PCK");
+	RuleArmor *sectoidSoldierArmor = new RuleArmor("SECTOID_ARMOR0", "SECTOID.PCK", 0);
 	sectoidSoldierArmor->setArmor(4, 3, 2, 2);
 	sectoidSoldierArmor->setCorpseItem("STR_SECTOID_CORPSE");
+
+	RuleArmor *floaterSoldierArmor = new RuleArmor("FLOATER_ARMOR0", "FLOATER.PCK", 1);
+	floaterSoldierArmor->setArmor(8, 6, 4, 12);
+	floaterSoldierArmor->setCorpseItem("STR_FLOATER_CORPSE");
 
 	_armors.insert(std::pair<std::string, RuleArmor*>("STR_NONE_UC", coveralls));
 	_armors.insert(std::pair<std::string, RuleArmor*>("STR_PERSONAL_ARMOR_UC", personalArmor));
 	_armors.insert(std::pair<std::string, RuleArmor*>("STR_POWER_SUIT_UC" ,powerSuit));
 	_armors.insert(std::pair<std::string, RuleArmor*>("STR_FLYING_SUIT_UC", flyingSuit));
 	_armors.insert(std::pair<std::string, RuleArmor*>("SECTOID_ARMOR0", sectoidSoldierArmor));
+	_armors.insert(std::pair<std::string, RuleArmor*>("FLOATER_ARMOR0", floaterSoldierArmor));
 
 	// Add units
 	RuleSoldier *xcom = new RuleSoldier("XCOM");
@@ -1521,9 +1526,27 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	sectoidNavigator->setVoxelParameters(16, 12, 2);
 	sectoidNavigator->setValue(12);
 
+	RuleAlien *floaterSoldier = new RuleAlien("FLOATER_SOLDIER", "STR_FLOATER", "STR_LIVE_FLOATER");
+	floaterSoldier->setArmor("FLOATER_ARMOR0");
+	s1.tu = 50;
+	s1.stamina = 90;
+	s1.health = 35;
+	s1.bravery = 80;
+	s1.reactions = 50;
+	s1.firing = 50;
+	s1.throwing = 58;
+	s1.strength = 40;
+	s1.psiStrength = 35;
+	s1.psiSkill = 0;
+	s1.melee = 70;
+	floaterSoldier->setStats(s1);
+	floaterSoldier->setVoxelParameters(21, 16, 3);
+	floaterSoldier->setValue(12);
+
 	_aliens.insert(std::pair<std::string, RuleAlien*>("SECTOID_SOLDIER", sectoidSoldier));
 	_aliens.insert(std::pair<std::string, RuleAlien*>("SECTOID_ENGINEER", sectoidEngineer));
 	_aliens.insert(std::pair<std::string, RuleAlien*>("SECTOID_NAVIGATOR", sectoidNavigator));
+	_aliens.insert(std::pair<std::string, RuleAlien*>("FLOATER_SOLDIER", floaterSoldier));
 
 	// create Ufopaedia article definitions
 	int sort_key = 1;

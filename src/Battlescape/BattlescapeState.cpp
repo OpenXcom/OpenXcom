@@ -48,6 +48,7 @@
 #include "../Engine/Action.h"
 #include "../Resource/ResourcePack.h"
 #include "../Interface/Cursor.h"
+#include "../Interface/FpsCounter.h"
 #include "../Interface/Text.h"
 #include "../Interface/Bar.h"
 #include "../Interface/ImageButton.h"
@@ -62,7 +63,6 @@
 #include "../Ruleset/RuleItem.h"
 #include "../Engine/Timer.h"
 #include "../Engine/Options.h"
-#include "../Interface/FpsCounter.h"
 #include "WarningMessage.h"
 #include "BattlescapeOptionsState.h"
 #include "DebriefingState.h"
@@ -800,6 +800,7 @@ void BattlescapeState::endTurn()
 	}
 
 	_game->pushState(new NextTurnState(_game, _battleGame));
+
 }
 
 
@@ -867,26 +868,6 @@ bool BattlescapeState::checkForCasualties(BattleItem *murderweapon, BattleUnit *
 		{
 				statePushNext(new UnitDieBState(this, (*j), DT_STUN, noSound));
 		}
-	}
-
-	// if all units from either faction are killed - the mission is over.
-	int liveAliens = 0;
-	int liveSoldiers = 0;
-	for (std::vector<BattleUnit*>::iterator j = _battleGame->getUnits()->begin(); j != _battleGame->getUnits()->end(); ++j)
-	{
-		if (!(*j)->isOut())
-		{
-			if ((*j)->getFaction() == FACTION_HOSTILE)
-				liveAliens++;
-			if ((*j)->getFaction() == FACTION_PLAYER)
-				liveSoldiers++;
-		}
-	}
-
-	if (liveAliens == 0 || liveSoldiers == 0)
-	{
-		finishBattle(false);
-		return true;
 	}
 
 	return false;

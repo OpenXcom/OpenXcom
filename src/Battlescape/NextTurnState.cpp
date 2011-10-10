@@ -26,6 +26,9 @@
 #include "../Interface/Text.h"
 #include "../Engine/Action.h"
 #include "../Savegame/SavedBattleGame.h"
+#include "DebriefingState.h"
+#include "../Interface/Cursor.h"
+#include "../Interface/FpsCounter.h"
 
 namespace OpenXcom
 {
@@ -103,8 +106,30 @@ void NextTurnState::handle(Action *action)
 	if (action->getDetails()->type == SDL_KEYDOWN || action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
 	{
 		_game->popState();
-	}
 
+		// if all units from either faction are killed - the mission is over.
+		int liveAliens = 0;
+		int liveSoldiers = 0;
+		for (std::vector<BattleUnit*>::iterator j = _battleGame->getUnits()->begin(); j != _battleGame->getUnits()->end(); ++j)
+		{
+			if (!(*j)->isOut())
+			{
+				if ((*j)->getFaction() == FACTION_HOSTILE)
+					liveAliens++;
+				if ((*j)->getFaction() == FACTION_PLAYER)
+					liveSoldiers++;
+			}
+		}
+
+		if (liveAliens == 0 || liveSoldiers == 0)
+		{
+			_game->popState();
+			_battleGame->setAborted(abort);
+			_game->pushState(new DebriefingState(_game));
+			_game->getCursor()->setColor(Palette::blockOffset(15)+12);
+			_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
+		}
+	}
 }
 
 }

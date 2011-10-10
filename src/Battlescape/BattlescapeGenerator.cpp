@@ -309,7 +309,7 @@ void BattlescapeGenerator::run()
 	{
 		for (int i=0; i < 5; i++)
 		{
-			unit = addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), SCOUT);
+			unit = addAlien(_game->getRuleset()->getAlien("FLOATER_SOLDIER"), _game->getRuleset()->getArmor("FLOATER_ARMOR0"), SCOUT);
 			addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL"), unit);
 			addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL_CLIP"), unit);
 		}

@@ -33,11 +33,11 @@ class RuleArmor
 {
 private:
 	std::string _type, _spriteSheet, _corpseItem;
-	int _frontArmor, _sideArmor, _rearArmor, _underArmor;
+	int _frontArmor, _sideArmor, _rearArmor, _underArmor, _drawingRoutine;
 
 public:
 	/// Creates a blank armor ruleset.
-	RuleArmor(const std::string &type, std::string spriteSheet);
+	RuleArmor(const std::string &type, std::string spriteSheet, int drawingRoutine);
 	/// Cleans up the armor ruleset.
 	~RuleArmor();
 	/// Gets the armor's type.
@@ -58,6 +58,8 @@ public:
 	void setCorpseItem(const std::string &corpseItem);
 	/// Get the corpse item.
 	std::string getCorpseItem() const;
+	/// Get the battlescape drawing routine ID.
+	int getDrawingRoutine() const;
 };
 
 }

@@ -93,17 +93,35 @@ void UnitSprite::setBattleItem(BattleItem *item)
 void UnitSprite::draw()
 {
 	Surface::draw();
-	Surface *torso = 0, *legs = 0, *leftArm = 0, *rightArm = 0, *item = 0;
 
+	switch (_unit->getUnit()->getArmor()->getDrawingRoutine())
+	{
+	case 0:
+		drawRoutine0();
+		break;
+	case 1:
+		drawRoutine1();
+		break;
+	}
+
+}
+
+/**
+ * Drawing routine for xcom soldiers in overalls and Sectoids.
+ */
+void UnitSprite::drawRoutine0()
+{
+
+	Surface *torso = 0, *legs = 0, *leftArm = 0, *rightArm = 0, *item = 0;
 	// magic numbers
 	const int maleTorso = 32, femaleTorso = 267, legsStand = 16, legsKneel = 24, die = 264;
 	const int larmStand = 0, rarmStand = 8, rarm1H = 232, larm2H = 240, ramr2H = 248, rarmShoot = 256;
 	const int legsWalk[8] = { 56, 56+24, 56+24*2, 56+24*3, 56+24*4, 56+24*5, 56+24*6, 56+24*7 };
 	const int larmWalk[8] = { 40, 40+24, 40+24*2, 40+24*3, 40+24*4, 40+24*5, 40+24*6, 40+24*7 };
 	const int rarmWalk[8] = { 48, 48+24, 48+24*2, 48+24*3, 48+24*4, 48+24*5, 48+24*6, 48+24*7 };
-	const int yoffWalk[8] = {1, 0, -1, 0, 1, 0, -1, 0};
-	const int offX[8] = { 8, 10, 7, 4, -9, -11, -7, -3 };
-	const int offY[8] = { -6, -3, 0, 2, 0, -4, -7, -9 };
+	const int yoffWalk[8] = {1, 0, -1, 0, 1, 0, -1, 0}; // bobbing up and down
+	const int offX[8] = { 8, 10, 7, 4, -9, -11, -7, -3 }; // for the weapons
+	const int offY[8] = { -6, -3, 0, 2, 0, -4, -7, -9 }; // for the weapons
 	const int offYKneel = 4;
 
 	Soldier *soldier = dynamic_cast<Soldier*>(_unit->getUnit());
@@ -230,6 +248,121 @@ void UnitSprite::draw()
 	case 5: rightArm->blit(this); legs->blit(this); item?item->blit(this):void(); torso->blit(this); leftArm->blit(this); break;
 	case 6: rightArm->blit(this); legs->blit(this); item?item->blit(this):void(); torso->blit(this); leftArm->blit(this); break;
 	case 7: item?item->blit(this):void(); leftArm->blit(this); rightArm->blit(this); legs->blit(this); torso->blit(this); break;
+	}
+}
+
+
+/**
+ * Drawing routine for floaters.
+ */
+void UnitSprite::drawRoutine1()
+{
+
+	Surface *torso = 0, *leftArm = 0, *rightArm = 0, *item = 0;
+	// magic numbers
+	const int stand = 16, walk = 24, die = 64;
+	const int larm = 8, rarm = 0, larm2H = 67, ramr2H = 75, rarmShoot = 83, rarm1H= 91; // note that arms are switched vs "normal" sheets
+	const int yoffWalk[8] = {0, 0, 0, 0, 0, 0, 0, 0}; // bobbing up and down
+	const int offX[8] = { 8, 10, 7, 4, -9, -11, -7, -3 }; // for the weapons
+	const int offY[8] = { -6, -3, 0, 2, 0, -4, -7, -9 }; // for the weapons
+	 
+	if (_unit->isOut())
+	{
+		// unit is drawn as an item
+		return;
+	}
+
+	if (_unit->getStatus() == STATUS_FALLING)
+	{
+		torso = _unitSurface->getFrame(die + _unit->getFallingPhase());
+		torso->blit(this);
+		return;
+	}
+
+
+	leftArm = _unitSurface->getFrame(larm + _unit->getDirection());
+	rightArm = _unitSurface->getFrame(rarm + _unit->getDirection());
+	// when walking, torso(fixed sprite) has to be animated up/down
+	if (_unit->getStatus() == STATUS_WALKING)
+	{
+		torso = _unitSurface->getFrame(walk + (5 * _unit->getDirection()) + (_unit->getWalkingPhase() / 1.6)); // floater only has 5 walk animations instead of 8
+		torso->setY(yoffWalk[_unit->getWalkingPhase()]);
+	}
+	else
+	{
+		torso = _unitSurface->getFrame(stand + _unit->getDirection());
+	}
+
+	// holding an item
+	if (_item)
+	{
+		// draw handob item
+		if (_unit->getStatus() == STATUS_AIMING)
+		{
+			int dir = (_unit->getDirection() + 2)%8;
+			item = _itemSurface->getFrame(_item->getRules()->getHandSprite() + dir);
+			item->setX(offX[_unit->getDirection()]);
+			item->setY(offY[_unit->getDirection()]);
+		}
+		else
+		{
+			item = _itemSurface->getFrame(_item->getRules()->getHandSprite() + _unit->getDirection());
+			item->setX(0);
+			item->setY(0);
+		}
+
+		// draw arms holding the item
+		if (_item->getRules()->getTwoHanded())
+		{
+			leftArm = _unitSurface->getFrame(larm2H + _unit->getDirection());
+			if (_unit->getStatus() == STATUS_AIMING)
+			{
+				rightArm = _unitSurface->getFrame(rarmShoot + _unit->getDirection());
+			}
+			else
+			{
+				rightArm = _unitSurface->getFrame(ramr2H + _unit->getDirection());
+			}
+		}
+		else
+		{
+			rightArm = _unitSurface->getFrame(rarm1H + _unit->getDirection());
+		}
+
+		// the fixed arm(s) have to be animated together up/down when walking
+		if (_unit->getStatus() == STATUS_WALKING)
+		{
+			item->setY(yoffWalk[_unit->getWalkingPhase()]);
+			rightArm->setY(yoffWalk[_unit->getWalkingPhase()]);
+			if (_item->getRules()->getTwoHanded())
+				leftArm->setY(yoffWalk[_unit->getWalkingPhase()]);
+		}
+	}
+
+	if (_unit->getStatus() != STATUS_WALKING)
+	{
+		leftArm->setY(0);
+		rightArm->setY(0);
+		torso->setY(0);
+	}
+
+	// items are calculated for soldier height (22) - some aliens are smaller, so item is drawn lower.
+	/*if (item)
+	{
+		item->setY(item->getY() + (22 - _unit->getUnit()->getStandHeight()));
+	}*/
+
+	// blit order depends on unit direction
+	switch (_unit->getDirection())
+	{
+	case 0: leftArm->blit(this); item?item->blit(this):void(); torso->blit(this); rightArm->blit(this); break;
+	case 1: leftArm->blit(this); torso->blit(this); item?item->blit(this):void(); rightArm->blit(this); break;
+	case 2: leftArm->blit(this); torso->blit(this); item?item->blit(this):void(); rightArm->blit(this); break;
+	case 3: torso->blit(this); leftArm->blit(this); rightArm->blit(this); item?item->blit(this):void(); break;
+	case 4: rightArm->blit(this); torso->blit(this); leftArm->blit(this); item?item->blit(this):void(); break;
+	case 5: rightArm->blit(this); item?item->blit(this):void(); torso->blit(this); leftArm->blit(this); break;
+	case 6: rightArm->blit(this); item?item->blit(this):void(); torso->blit(this); leftArm->blit(this); break;
+	case 7: item?item->blit(this):void(); leftArm->blit(this); rightArm->blit(this); torso->blit(this); break;
 	}
 }
 
