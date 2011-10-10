@@ -90,6 +90,9 @@ BaseNameState::~BaseNameState()
  */
 void BaseNameState::nameBase()
 {
+	if(_edtName->getText().length() == 0)
+		return;
+
 	_base->setName(_edtName->getText());
 	_game->popState();
 	_game->popState();

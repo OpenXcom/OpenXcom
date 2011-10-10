@@ -1,0 +1,1955 @@
+nameFiles:
+    - file: American
+    - file: British
+    - file: French
+    - file: German
+    - file: Japanese
+    - file: Russian
+
+countries:
+    - country: STR_USA
+      minFunding: 600
+      maxFunding: 1200
+      longitude: 4.53786
+      latitude: -0.698132
+    - country: STR_RUSSIA
+      minFunding: 230
+      maxFunding: 460
+      longitude: 1.0472
+      latitude: -1.0472
+    - country: STR_UK
+      minFunding: 240
+      maxFunding: 480
+      longitude: 6.24828
+      latitude: -0.935933
+    - country: STR_FRANCE
+      minFunding: 320
+      maxFunding: 640
+      longitude: 0.0436332
+      latitude: -0.811578
+    - country: STR_GERMANY
+      minFunding: 250
+      maxFunding: 500
+      longitude: 0.200713
+      latitude: -0.872665
+    - country: STR_ITALY
+      minFunding: 160
+      maxFunding: 320
+      longitude: 0.218166
+      latitude: -0.765763
+    - country: STR_SPAIN
+      minFunding: 140
+      maxFunding: 280
+      longitude: 6.23955
+      latitude: -0.743947
+    - country: STR_CHINA
+      minFunding: 245
+      maxFunding: 490
+      longitude: 1.74533
+      latitude: -0.610865
+    - country: STR_JAPAN
+      minFunding: 400
+      maxFunding: 800
+      longitude: 2.40855
+      latitude: -0.667588
+    - country: STR_INDIA
+      minFunding: 150
+      maxFunding: 300
+      longitude: 1.39626
+      latitude: -0.418879
+    - country: STR_BRAZIL
+      minFunding: 300
+      maxFunding: 600
+      longitude: 5.32325
+      latitude: 0.0872665
+    - country: STR_AUSTRALIA
+      minFunding: 280
+      maxFunding: 560
+      longitude: 2.35619
+      latitude: 0.436332
+    - country: STR_NIGERIA
+      minFunding: 180
+      maxFunding: 360
+      longitude: 0.1309
+      latitude: -0.174533
+    - country: STR_SOUTH_AFRICA
+      minFunding: 230
+      maxFunding: 460
+      longitude: 0.436332
+      latitude: 0.523599
+    - country: STR_EGYPT
+      minFunding: 230
+      maxFunding: 460
+      longitude: 0.506145
+      latitude: -0.453786
+    - country: STR_CANADA
+      minFunding: 230
+      maxFunding: 460
+      longitude: 4.53786
+      latitude: -0.959931
+
+regions:
+    - region: STR_NORTH_AMERICA
+      baseCost: 800000
+      cities:
+        - city: STR_NEW_YORK
+          longitude: 4.99382
+          latitude: -0.711222
+        - city: STR_WASHINGTON
+          longitude: 4.9371
+          latitude: -0.676315
+        - city: STR_LOS_ANGELES
+          longitude: 4.21933
+          latitude: -0.595594
+        - city: STR_MONTREAL
+          longitude: 4.9611
+          latitude: -0.794125
+        - city: STR_HAVANA
+          longitude: 4.84547
+          latitude: -0.392699
+        - city: STR_MEXICO_CITY
+          longitude: 4.55313
+          latitude: -0.338158
+        - city: STR_CHICAGO
+          longitude: 4.75384
+          latitude: -0.730857
+        - city: STR_VANCOUVER
+          longitude: 4.13207
+          latitude: -0.861756
+        - city: STR_DALLAS
+          longitude: 4.59676
+          latitude: -0.571595
+      areas:
+        - longitudeMin: 3.40339
+          longitudeMax: 5.32107
+          latitudeMin: -1.22173
+          latitudeMax: -0.962113
+        - longitudeMin: 4.01426
+          longitudeMax: 5.32107
+          latitudeMin: -0.959931
+          latitudeMax: -0.52578
+        - longitudeMin: 4.18879
+          longitudeMax: 5.23381
+          latitudeMin: -0.523599
+          latitudeMax: -0.176715
+    - region: STR_ARCTIC
+      baseCost: 950000
+      cities:
+        []
+      areas:
+        - longitudeMin: 0
+          longitudeMax: 6.281
+          latitudeMin: -1.5708
+          latitudeMax: -1.22391
+    - region: STR_ANTARCTICA
+      baseCost: 950000
+      cities:
+        []
+      areas:
+          - longitudeMin: 0
+            longitudeMax: 6.281
+            latitudeMin: 1.0472
+            latitudeMax: 1.5708
+    - region: STR_SOUTH_AMERICA
+      baseCost: 600000
+      cities:
+          - city: STR_BRASILIA
+            longitude: 5.44761
+            latitude: 0.274889
+          - city: STR_BOGOTA
+            longitude: 4.98946
+            latitude: -0.0785398
+          - city: STR_BUENOS_AIRES
+            longitude: 5.27962
+            latitude: 0.602139
+          - city: STR_SANTIAGO
+            longitude: 5.05055
+            latitude: 0.582504
+          - city: STR_RIO_DE_JANEIRO
+            longitude: 5.53051
+            latitude: 0.399244
+          - city: STR_LIMA
+            longitude: 4.93928
+            latitude: 0.20944
+          - city: STR_CARACAS
+            longitude: 5.116
+            latitude: -0.18326
+      areas:
+          - longitudeMin: 4.71239
+            longitudeMax: 5.49561
+            latitudeMin: -0.174533
+            latitudeMax: -0.00218166
+          - longitudeMin: 4.79966
+            longitudeMax: 5.7574
+            latitudeMin: 0
+            latitudeMax: 0.259618
+          - longitudeMin: 4.79966
+            longitudeMax: 5.67014
+            latitudeMin: 0.261799
+            latitudeMax: 1.04502
+    - region: STR_EUROPE
+      baseCost: 1000000
+      cities:
+          - city: STR_LONDON
+            longitude: 6.281
+            latitude: -0.898845
+          - city: STR_PARIS
+            longitude: 0.0414516
+            latitude: -0.850848
+          - city: STR_BERLIN
+            longitude: 0.233438
+            latitude: -0.916298
+          - city: STR_MOSCOW
+            longitude: 0.65668
+            latitude: -0.973021
+          - city: STR_ROME
+            longitude: 0.218166
+            latitude: -0.730857
+          - city: STR_MADRID
+            longitude: 6.21774
+            latitude: -0.704677
+          - city: STR_BUDAPEST
+            longitude: 0.333794
+            latitude: -0.829031
+      areas:
+          - longitudeMin: 5.84685
+            longitudeMax: 1.04502
+            latitudeMin: -1.22173
+            latitudeMax: -0.613047
+    - region: STR_NORTH_AFRICA
+      baseCost: 650000
+      cities:
+          - city: STR_LAGOS
+            longitude: 0.0545415
+            latitude: -0.113446
+          - city: STR_CAIRO
+            longitude: 0.545415
+            latitude: -0.523599
+          - city: STR_CASABLANCA
+            longitude: 6.1501
+            latitude: -0.584685
+      areas:
+          - longitudeMin: 5.84685
+            longitudeMax: 0.69595
+            latitudeMin: -0.610865
+            latitudeMax: -0.263981
+          - longitudeMin: 5.84685
+            longitudeMax: 0.957749
+            latitudeMin: -0.261799
+            latitudeMax: -0.00218166
+    - region: STR_SOUTHERN_AFRICA
+      baseCost: 550000
+      cities:
+          - city: STR_PRETORIA
+            longitude: 0.490874
+            latitude: 0.458149
+          - city: STR_NAIROBI
+            longitude: 0.641409
+            latitude: 0.0218166
+          - city: STR_CAPE_TOWN
+            longitude: 0.322886
+            latitude: 0.593412
+          - city: STR_KINSHASA
+            longitude: 0.268344
+            latitude: 0.0763582
+      areas:
+          - longitudeMin: 0.0872665
+            longitudeMax: 0.957749
+            latitudeMin: 0
+            latitudeMax: 0.69595
+    - region: STR_CENTRAL_ASIA
+      baseCost: 500000
+      cities:
+          - city: STR_ANKARA
+            longitude: 0.571595
+            latitude: -0.69595
+          - city: STR_DELHI
+            longitude: 1.34827
+            latitude: -0.4996
+          - city: STR_KARACHI
+            longitude: 1.16937
+            latitude: -0.434151
+          - city: STR_BAGHDAD
+            longitude: 0.776672
+            latitude: -0.580322
+          - city: STR_TEHRAN
+            longitude: 0.898845
+            latitude: -0.621774
+          - city: STR_BOMBAY
+            longitude: 1.27627
+            latitude: -0.329431
+          - city: STR_CALCUTTA
+            longitude: 1.54243
+            latitude: -0.394881
+      areas:
+          - longitudeMin: 0.698132
+            longitudeMax: 1.21955
+            latitudeMin: -0.610865
+            latitudeMax: -0.263981
+          - longitudeMin: 1.0472
+            longitudeMax: 1.56861
+            latitudeMin: -0.872665
+            latitudeMax: -0.613047
+          - longitudeMin: 1.22173
+            longitudeMax: 1.56861
+            latitudeMin: -0.610865
+            latitudeMax: -0.0894481
+    - region: STR_SOUTH_EAST_ASIA
+      baseCost: 750000
+      cities:
+          - city: STR_TOKYO
+            longitude: 2.4391
+            latitude: -0.621774
+          - city: STR_BEIJING
+            longitude: 2.03113
+            latitude: -0.69595
+          - city: STR_BANGKOK
+            longitude: 1.75624
+            latitude: -0.237801
+          - city: STR_MANILA
+            longitude: 2.11185
+            latitude: -0.255254
+          - city: STR_SEOUL
+            longitude: 2.21657
+            latitude: -0.654498
+          - city: STR_SINGAPORE
+            longitude: 1.81296
+            latitude: -0.0239983
+          - city: STR_JAKARTA
+            longitude: 1.86314
+            latitude: 0.109083
+          - city: STR_SHANGHAI
+            longitude: 2.12058
+            latitude: -0.545415
+          - city: STR_HONG_KONG
+            longitude: 1.99186
+            latitude: -0.388336
+      areas:
+          - longitudeMin: 1.5708
+            longitudeMax: 1.83041
+            latitudeMin: -0.872665
+            latitudeMax: 0.172351
+          - longitudeMin: 1.8326
+            longitudeMax: 2.61581
+            latitudeMin: -0.872665
+            latitudeMax: -0.0894481
+    - region: STR_SIBERIA
+      baseCost: 800000
+      cities:
+          - city: STR_NOVOSIBIRSK
+            longitude: 1.44426
+            latitude: -0.959931
+      areas:
+          - longitudeMin: 1.0472
+            longitudeMax: 3.13941
+            latitudeMin: -1.22173
+            latitudeMax: -0.874846
+    - region: STR_AUSTRALASIA
+      baseCost: 750000
+      cities:
+          - city: STR_CANBERRA
+            longitude: 2.60272
+            latitude: 0.61741
+          - city: STR_WELLINGTON
+            longitude: 3.05651
+            latitude: 0.719948
+          - city: STR_MELBOURNE
+            longitude: 2.53073
+            latitude: 0.661043
+          - city: STR_PERTH
+            longitude: 2.02022
+            latitude: 0.558505
+      areas:
+          - longitudeMin: 1.8326
+            longitudeMax: 3.13941
+            latitudeMin: -0.0872665
+            latitudeMax: 1.04502
+    - region: STR_PACIFIC
+      baseCost: 600000
+      cities:
+          []
+      areas:
+          - longitudeMin: 3.14159
+            longitudeMax: 3.40121
+            latitudeMin: -1.22173
+            latitudeMax: -0.962113
+          - longitudeMin: 3.14159
+            longitudeMax: 4.01208
+            latitudeMin: -0.959931
+            latitudeMax: -0.52578
+          - longitudeMin: 3.14159
+            longitudeMax: 4.18661
+            latitudeMin: -0.523599
+            latitudeMax: -0.176715
+          - longitudeMin: 3.14159
+            longitudeMax: 4.71021
+            latitudeMin: -0.174533
+            latitudeMax: -0.00218166
+          - longitudeMin: 3.14159
+            longitudeMax: 4.79747
+            latitudeMin: 0
+            latitudeMax: 1.04502
+          - longitudeMin: 2.61799
+            longitudeMax: 3.13941
+            latitudeMin: -0.872665
+            latitudeMax: -0.0894481
+    - region: STR_NORTH_ATLANTIC
+      baseCost: 500000
+      cities:
+          []
+      areas:
+          - longitudeMin: 5.32325
+            longitudeMax: 5.84467
+            latitudeMin: -1.22173
+            latitudeMax: -0.52578
+          - longitudeMin: 5.23599
+            longitudeMax: 5.84467
+            latitudeMin: -0.523599
+            latitudeMax: -0.176715
+          - longitudeMin: 5.49779
+            longitudeMax: 5.84467
+            latitudeMin: -0.174533
+            latitudeMax: -0.00218166
+    - region: STR_SOUTH_ATLANTIC
+      baseCost: 500000
+      cities:
+          []
+      areas:
+          - longitudeMin: 5.75959
+            longitudeMax: 0.0850848
+            latitudeMin: 0
+            latitudeMax: 0.259618
+          - longitudeMin: 5.67232
+            longitudeMax: 0.0850848
+            latitudeMin: 0.261799
+            latitudeMax: 1.04502
+          - longitudeMin: 0.0872665
+            longitudeMax: 0.959931
+            latitudeMin: 0.698132
+            latitudeMax: 1.04502
+    - region: STR_INDIAN_OCEAN
+      baseCost: 500000
+      cities:
+          []
+      areas:
+          - longitudeMin: 0.959931
+            longitudeMax: 1.21955
+            latitudeMin: -0.261799
+            latitudeMax: 0.172351
+          - longitudeMin: 1.22173
+            longitudeMax: 1.56861
+            latitudeMin: -0.0872665
+            latitudeMax: 0.172351
+          - longitudeMin: 0.959931
+            longitudeMax: 1.83041
+            latitudeMin: 0.174533
+            latitudeMax: 1.04502
+
+baseFacilities:
+    - facility: STR_ACCESS_LIFT
+      spriteShape: 2
+      spriteFacility: 17
+      buildCost: 300000
+      buildTime: 1
+      monthlyCost: 4000
+      isLift: true
+    - facility: STR_LIVING_QUARTERS
+      spriteShape: 1
+      spriteFacility: 18
+      buildCost: 400000
+      buildTime: 16
+      monthlyCost: 10000
+      personnel: 50
+    - facility: STR_LABORATORY
+      spriteShape: 1
+      spriteFacility: 19
+      buildCost: 750000
+      buildTime: 26
+      monthlyCost: 30000
+      laboratorySpace: 50
+    - facility: STR_WORKSHOP
+      spriteShape: 1
+      spriteFacility: 20
+      buildCost: 800000
+      buildTime: 32
+      monthlyCost: 35000
+      workshopSpace: 50
+    - facility: STR_GENERAL_STORES
+      spriteShape: 1
+      spriteFacility: 24
+      buildCost: 150000
+      buildTime: 10
+      monthlyCost: 5000
+      storageSpace: 50
+    - facility: STR_ALIEN_CONTAINMENT
+      spriteShape: 1
+      spriteFacility: 25
+      buildCost: 400000
+      buildTime: 18
+      monthlyCost: 15000
+      aliensSpace: 10
+    - facility: STR_HANGAR
+      spriteShape: 9
+      spriteFacility: 9
+      buildCost: 200000
+      buildTime: 25
+      monthlyCost: 25000
+      size: 2
+      craftsSpace: 1
+    - facility: STR_SMALL_RADAR_SYSTEM
+      spriteShape: 2
+      spriteFacility: 21
+      buildCost: 500000
+      buildTime: 12
+      monthlyCost: 10000
+      radarRange: 1500
+      radarChance: 10
+    - facility: STR_LARGE_RADAR_SYSTEM
+      spriteShape: 1
+      spriteFacility: 22
+      buildCost: 800000
+      buildTime: 25
+      monthlyCost: 15000
+      radarRange: 2250
+      radarChance: 20
+    - facility: STR_MISSILE_DEFENSES
+      spriteShape: 2
+      spriteFacility: 23
+      buildCost: 200000
+      buildTime: 16
+      monthlyCost: 5000
+      defenceValue: 500
+      hitRatio: 50
+
+mapDataFiles:
+    - file: AVENGER
+      size: 59
+    - file: BARN
+      size: 29
+    - file: BLANKS
+      size: 2
+    - file: BRAIN
+      size: 4
+    - file: CULTIVAT
+      size: 37
+    - file: DESERT
+      size: 66
+    - file: FOREST
+      size: 83
+    - file: FRNITURE
+      size: 26
+    - file: JUNGLE
+      size: 82
+    - file: LIGHTNIN
+      size: 42
+    - file: MARS
+      size: 36
+    - file: MOUNT
+      size: 78
+    - file: PLANE
+      size: 65
+    - file: POLAR
+      size: 81
+    - file: ROADS
+      size: 23
+    - file: UFO1
+      size: 20
+    - file: URBAN
+      size: 112
+    - file: URBITS
+      size: 25
+    - file: U_BASE
+      size: 67
+    - file: U_BITS
+      size: 8
+    - file: U_DISEC2
+      size: 17
+    - file: U_EXT02
+      size: 34
+    - file: U_OPER2
+      size: 15
+    - file: U_PODS
+      size: 11
+    - file: U_WALL02
+      size: 47
+    - file: XBASE1
+      size: 97
+    - file: XBASE2
+      size: 62
+
+crafts:
+    - craft: STR_SKYRANGER
+      sprite: 0
+      maxSpeed: 760
+      acceleration: 2
+      maxFuel: 1500
+      weapons: 0
+      maxDamage: 150
+      soldiers: 14
+      cost: 500000
+      HWPs: 3
+      refuelRate: 50
+      transferTime: 72
+      score: 200
+      terrains:
+          - terrain: PLANE
+            mapDataSets:
+                - name: BLANKS
+                - name: PLANE
+            mapBlocks:
+                - name: PLANE
+                  width: 10
+                  length: 20
+                  landingZone: true
+    - craft: STR_LIGHTNING
+      sprite: 1
+      maxSpeed: 3100
+      acceleration: 9
+      maxFuel: 30
+      weapons: 1
+      maxDamage: 800
+      soldiers: 12
+      HWPs: 0
+      refuelRate: 5
+      score: 300
+    - craft: STR_AVENGER
+      sprite: 2
+      maxSpeed: 5400
+      acceleration: 10
+      maxFuel: 60
+      weapons: 2
+      maxDamage: 1200
+      soldiers: 26
+      HWPs: 4
+      refuelRate: 5
+      score: 400
+    - craft: STR_INTERCEPTOR
+      sprite: 3
+      maxSpeed: 2100
+      acceleration: 3
+      maxFuel: 1000
+      weapons: 2
+      maxDamage: 100
+      soldiers: 0
+      cost: 600000
+      HWPs: 0
+      refuelRate: 50
+      transferTime: 96
+      score: 250
+    - craft: STR_FIRESTORM
+      sprite: 4
+      maxSpeed: 4200
+      acceleration: 9
+      maxFuel: 20
+      weapons: 2
+      maxDamage: 50
+      soldiers: 0
+      HWPs: 0
+      refuelRate: 5
+      score: 250
+
+craftWeapons:
+    - weapon: STR_STINGRAY
+      sprite: 0
+      sound: 8
+      damage: 70
+      range: 30
+      accuracy: 70
+      cautiousReload: 32
+      standardReload: 24
+      aggressiveReload: 16
+      ammoMax: 6
+      launcherItem: STR_STINGRAY_LAUNCHER
+      clipItem: STR_STINGRAY_MISSILES
+    - weapon: STR_AVALANCHE
+      sprite: 1
+      sound: 8
+      damage: 100
+      range: 60
+      accuracy: 80
+      cautiousReload: 48
+      standardReload: 36
+      aggressiveReload: 24
+      ammoMax: 3
+      launcherItem: STR_AVALANCHE_LAUNCHER
+      clipItem: STR_AVALANCHE_MISSILES
+    - weapon: STR_CANNON_UC
+      sprite: 2
+      sound: 4
+      damage: 10
+      range: 10
+      accuracy: 25
+      cautiousReload: 2
+      standardReload: 2
+      aggressiveReload: 2
+      ammoMax: 200
+      rearmRate: 50
+      launcherItem: STR_CANNON
+      clipItem: STR_CANNON_ROUNDS_X50
+    - weapon: STR_LASER_CANNON_UC
+      sprite: 4
+      sound: 5
+      damage: 70
+      range: 21
+      accuracy: 35
+      cautiousReload: 12
+      standardReload: 12
+      aggressiveReload: 12
+      ammoMax: 99
+      launcherItem: STR_LASER_CANNON
+    - weapon: STR_PLASMA_BEAM_UC
+      sprite: 5
+      sound: 9
+      damage: 140
+      range: 52
+      accuracy: 50
+      cautiousReload: 12
+      standardReload: 12
+      aggressiveReload: 12
+      ammoMax: 100
+      launcherItem: STR_PLASMA_BEAM
+    - weapon: STR_FUSION_BALL_UC
+      sprite: 3
+      sound: 7
+      damage: 230
+      range: 65
+      accuracy: 100
+      cautiousReload: 32
+      standardReload: 24
+      aggressiveReload: 16
+      ammoMax: 2
+      launcherItem: STR_FUSION_BALL_LAUNCHER
+      clipItem: STR_FUSION_BALL
+
+items:
+    - name: STR_STINGRAY_LAUNCHER
+      size: 0.8
+      cost: 16000
+      transferTime: 48
+    - name: STR_AVALANCHE_LAUNCHER
+      size: 1.0
+      cost: 17000
+      transferTime: 48
+    - name: STR_CANNON
+      size: 1.5
+      cost: 30000
+      transferTime: 48
+    - name: STR_STINGRAY_MISSILES
+      size: 0.4
+      cost: 3000
+      transferTime: 48
+    - name: STR_AVALANCHE_MISSILES
+      size: 1.5
+      cost: 9000
+      transferTime: 48
+    - name: STR_CANNON_ROUNDS_X50
+      size: 0
+      cost: 1240
+      transferTime: 96
+    - name: STR_PISTOL
+      size: 0.1f
+      cost: 800
+      bigSprite: 3
+      handSprite: 96
+      bulletSprite: 1
+      fireSound: 4
+      accuracySnap: 60
+      TUSnap: 18
+      accuracyAuto: 60
+      TUAuto: 18
+      accuracyAimed: 78
+      TUAimed: 30
+      compatibleAmmoTypes:
+          - ammo: STR_PISTOL_CLIP
+      battleType: 1 # BT_NONE=0, BT_FIREARM=1, BT_AMMO=2, BT_MELEE=3, BT_GRENADE=4, BT_PROXIMITYGRENADE=5, BT_MEDIKIT=6, BT_SCANNER=7
+      inventoryWidth: 1
+      inventoryHeight: 2
+      weight: 5
+    - name: STR_PISTOL_CLIP
+      size: 0.1f
+      cost: 70
+      bigSprite: 4
+      power: 26
+      damageType: 1 # DT_NONE=0, DT_AP=1, DT_IN=2, DT_HE=3, DT_LASER=4, DT_PLASMA=5, DT_STUN=6, DT_MELEE=7, DT_ACID=8, DT_SMOKE=9
+      battleType: 2 # BT_NONE=0, BT_FIREARM=1, BT_AMMO=2, BT_MELEE=3, BT_GRENADE=4, BT_PROXIMITYGRENADE=5, BT_MEDIKIT=6, BT_SCANNER=7
+      hitAnimation: 26
+      hitSound: 22
+      clipSize: 12
+      weight: 3
+    - name: STR_RIFLE
+      size: 0.2f
+      cost: 3000
+      bigSprite: 1
+      handSprite: 0
+      twoHanded: true
+      bulletSprite: 2
+      fireSound: 4
+      accuracySnap: 60
+      TUSnap: 25
+      accuracyAuto: 35
+      TUAuto: 35
+      accuracyAimed: 110
+      TUAimed: 80
+      compatibleAmmoTypes:
+          - ammo: STR_RIFLE_CLIP
+      battleType: 1 # BT_NONE=0, BT_FIREARM=1, BT_AMMO=2, BT_MELEE=3, BT_GRENADE=4, BT_PROXIMITYGRENADE=5, BT_MEDIKIT=6, BT_SCANNER=7
+      inventoryWidth: 1
+      inventoryHeight: 3
+      weight: 8
+    - name: STR_RIFLE_CLIP
+      size: 0.1f
+      cost: 200
+      bigSprite: 2
+      power: 30
+      damageType: 1 # DT_NONE=0, DT_AP=1, DT_IN=2, DT_HE=3, DT_LASER=4, DT_PLASMA=5, DT_STUN=6, DT_MELEE=7, DT_ACID=8, DT_SMOKE=9
+      battleType: 2 # BT_NONE=0, BT_FIREARM=1, BT_AMMO=2, BT_MELEE=3, BT_GRENADE=4, BT_PROXIMITYGRENADE=5, BT_MEDIKIT=6, BT_SCANNER=7
+      hitAnimation: 26
+      hitSound: 22
+      clipSize: 20
+      weight: 3
+    - name: STR_HEAVY_CANNON
+      size: 0.3f
+      cost: 6400
+      bigSprite: 11
+      handSprite: 24
+      twoHanded: true
+      bulletSprite: 4
+      fireSound: 2
+      accuracySnap: 60
+      TUSnap: 33
+      accuracyAuto: 60
+      TUAuto: 33
+      accuracyAimed: 90
+      TUAimed: 80
+      compatibleAmmoTypes:
+          - ammo: STR_HC_AP_AMMO
+          - ammo: STR_HC_HE_AMMO
+          - ammo: STR_HC_I_AMMO
+      battleType: 1 # BT_NONE=0, BT_FIREARM=1, BT_AMMO=2, BT_MELEE=3, BT_GRENADE=4, BT_PROXIMITYGRENADE=5, BT_MEDIKIT=6, BT_SCANNER=7
+      inventoryWidth: 2
+      inventoryHeight: 3
+      weight: 18
+    - name: STR_HC_AP_AMMO
+      size: 0.1f
+      cost: 300
+      bigSprite: 12
+      power: 56
+      damageType: 1 # DT_NONE=0, DT_AP=1, DT_IN=2, DT_HE=3, DT_LASER=4, DT_PLASMA=5, DT_STUN=6, DT_MELEE=7, DT_ACID=8, DT_SMOKE=9
+      battleType: 2 # BT_NONE=0, BT_FIREARM=1, BT_AMMO=2, BT_MELEE=3, BT_GRENADE=4, BT_PROXIMITYGRENADE=5, BT_MEDIKIT=6, BT_SCANNER=7
+      hitAnimation: 26
+      hitSound: 13
+      inventoryWidth: 2
+      inventoryHeight: 1
+      clipSize: 6
+      weight: 6
+    - name: STR_HC_HE_AMMO
+      size: 0.1f
+      cost: 500
+      bigSprite: 13
+      power: 52
+      damageType: 3 # DT_NONE=0, DT_AP=1, DT_IN=2, DT_HE=3, DT_LASER=4, DT_PLASMA=5, DT_STUN=6, DT_MELEE=7, DT_ACID=8, DT_SMOKE=9
+      battleType: 2 # BT_NONE=0, BT_FIREARM=1, BT_AMMO=2, BT_MELEE=3, BT_GRENADE=4, BT_PROXIMITYGRENADE=5, BT_MEDIKIT=6, BT_SCANNER=7
+      hitAnimation: 0
+      hitSound: 0
+      inventoryWidth: 2
+      inventoryHeight: 1
+      clipSize: 6
+      weight: 6
+    - name: STR_HC_I_AMMO
+      size: 0.1f
+      cost: 400
+      bigSprite: 14
+      power: 60
+      damageType: 2 # DT_NONE=0, DT_AP=1, DT_IN=2, DT_HE=3, DT_LASER=4, DT_PLASMA=5, DT_STUN=6, DT_MELEE=7, DT_ACID=8, DT_SMOKE=9
+      battleType: 2 # BT_NONE=0, BT_FIREARM=1, BT_AMMO=2, BT_MELEE=3, BT_GRENADE=4, BT_PROXIMITYGRENADE=5, BT_MEDIKIT=6, BT_SCANNER=7
+      hitAnimation: 0
+      hitSound: 0
+      inventoryWidth: 2
+      inventoryHeight: 1
+      clipSize: 6
+      weight: 6
+    - name: STR_AUTO_CANNON
+      size: 0.3f
+      cost: 13500
+      bigSprite: 7
+      handSprite: 32
+      twoHanded: true
+      bulletSprite: 3
+      fireSound: 2
+      accuracySnap: 56
+      TUSnap: 33
+      accuracyAuto: 32
+      TUAuto: 40
+      accuracyAimed: 82
+      TUAimed: 80
+      compatibleAmmoTypes:
+          - ammo: STR_AC_AP_AMMO
+          - ammo: STR_AC_HE_AMMO
+          - ammo: STR_AC_I_AMMO
+      battleType: 1 # BT_NONE=0, BT_FIREARM=1, BT_AMMO=2, BT_MELEE=3, BT_GRENADE=4, BT_PROXIMITYGRENADE=5, BT_MEDIKIT=6, BT_SCANNER=7
+      inventoryWidth: 2
+      inventoryHeight: 3
+      weight: 19
+    - name: STR_AC_AP_AMMO
+      size: 0.1f
+      cost: 500
+      bigSprite: 8
+      power: 42
+      damageType: 1 # DT_NONE=0, DT_AP=1, DT_IN=2, DT_HE=3, DT_LASER=4, DT_PLASMA=5, DT_STUN=6, DT_MELEE=7, DT_ACID=8, DT_SMOKE=9
+      battleType: 2 # BT_NONE=0, BT_FIREARM=1, BT_AMMO=2, BT_MELEE=3, BT_GRENADE=4, BT_PROXIMITYGRENADE=5, BT_MEDIKIT=6, BT_SCANNER=7
+      hitAnimation: 26
+      hitSound: 13
+      inventoryWidth: 2
+      inventoryHeight: 1
+      clipSize: 14
+      weight: 5
+    - name: STR_AC_HE_AMMO
+      size: 0.1f
+      cost: 700
+      bigSprite: 9
+      power: 44
+      damageType: 3 # DT_NONE=0, DT_AP=1, DT_IN=2, DT_HE=3, DT_LASER=4, DT_PLASMA=5, DT_STUN=6, DT_MELEE=7, DT_ACID=8, DT_SMOKE=9
+      battleType: 2 # BT_NONE=0, BT_FIREARM=1, BT_AMMO=2, BT_MELEE=3, BT_GRENADE=4, BT_PROXIMITYGRENADE=5, BT_MEDIKIT=6, BT_SCANNER=7
+      hitAnimation: 0
+      hitSound: 0
+      inventoryWidth: 2
+      inventoryHeight: 1
+      clipSize: 14
+      weight: 5
+    - name: STR_AC_I_AMMO
+      size: 0.1f
+      cost: 650
+      bigSprite: 10
+      power: 42
+      damageType: 2 # DT_NONE=0, DT_AP=1, DT_IN=2, DT_HE=3, DT_LASER=4, DT_PLASMA=5, DT_STUN=6, DT_MELEE=7, DT_ACID=8, DT_SMOKE=9
+      battleType: 2 # BT_NONE=0, BT_FIREARM=1, BT_AMMO=2, BT_MELEE=3, BT_GRENADE=4, BT_PROXIMITYGRENADE=5, BT_MEDIKIT=6, BT_SCANNER=7
+      hitAnimation: 0
+      hitSound: 0
+      inventoryWidth: 2
+      inventoryHeight: 1
+      clipSize: 14
+      weight: 5
+    - name: STR_ROCKET_LAUNCHER
+      size: 0.4f
+      cost: 4000
+      bigSprite: 15
+      handSprite: 72
+      twoHanded: true
+      bulletSprite: 0
+      fireSound: 52
+      accuracySnap: 55
+      TUSnap: 45
+      accuracyAuto: 55
+      TUAuto: 45
+      accuracyAimed: 115
+      TUAimed: 75
+      compatibleAmmoTypes:
+          - ammo: STR_SMALL_ROCKET
+          - ammo: STR_LARGE_ROCKET
+          - ammo: STR_INCENDIARY_ROCKET
+      battleType: 1 # BT_NONE=0, BT_FIREARM=1, BT_AMMO=2, BT_MELEE=3, BT_GRENADE=4, BT_PROXIMITYGRENADE=5, BT_MEDIKIT=6, BT_SCANNER=7
+      inventoryWidth: 2
+      inventoryHeight: 3
+      weight: 10
+    - name: STR_SMALL_ROCKET
+      size: 0.2f
+      cost: 600
+      bigSprite: 16
+      power: 75
+      damageType: 3 # DT_NONE=0, DT_AP=1, DT_IN=2, DT_HE=3, DT_LASER=4, DT_PLASMA=5, DT_STUN=6, DT_MELEE=7, DT_ACID=8, DT_SMOKE=9
+      battleType: 2 # BT_NONE=0, BT_FIREARM=1, BT_AMMO=2, BT_MELEE=3, BT_GRENADE=4, BT_PROXIMITYGRENADE=5, BT_MEDIKIT=6, BT_SCANNER=7
+      hitAnimation: 0
+      hitSound: 0
+      inventoryWidth: 1
+      inventoryHeight: 3
+      clipSize: 1
+      weight: 6
+    - name: STR_LARGE_ROCKET
+      size: 0.2f
+      cost: 900
+      bigSprite: 17
+      power: 100
+      damageType: 3 # DT_NONE=0, DT_AP=1, DT_IN=2, DT_HE=3, DT_LASER=4, DT_PLASMA=5, DT_STUN=6, DT_MELEE=7, DT_ACID=8, DT_SMOKE=9
+      battleType: 2 # BT_NONE=0, BT_FIREARM=1, BT_AMMO=2, BT_MELEE=3, BT_GRENADE=4, BT_PROXIMITYGRENADE=5, BT_MEDIKIT=6, BT_SCANNER=7
+      hitAnimation: 0
+      hitSound: 0
+      inventoryWidth: 1
+      inventoryHeight: 3
+      clipSize: 1
+      weight: 8
+    - name: STR_INCENDIARY_ROCKET
+      size: 0.2f
+      cost: 1200
+      bigSprite: 18
+      power: 90
+      damageType: 2 # DT_NONE=0, DT_AP=1, DT_IN=2, DT_HE=3, DT_LASER=4, DT_PLASMA=5, DT_STUN=6, DT_MELEE=7, DT_ACID=8, DT_SMOKE=9
+      battleType: 2 # BT_NONE=0, BT_FIREARM=1, BT_AMMO=2, BT_MELEE=3, BT_GRENADE=4, BT_PROXIMITYGRENADE=5, BT_MEDIKIT=6, BT_SCANNER=7
+      hitAnimation: 0
+      hitSound: 0
+      inventoryWidth: 1
+      inventoryHeight: 3
+      clipSize: 1
+      weight: 8
+    - name: STR_GRENADE
+      size: 0.1f
+      cost: 300
+      bigSprite: 19
+      power: 50
+      damageType: 3 # DT_NONE=0, DT_AP=1, DT_IN=2, DT_HE=3, DT_LASER=4, DT_PLASMA=5, DT_STUN=6, DT_MELEE=7, DT_ACID=8, DT_SMOKE=9
+      battleType: 4 # BT_NONE=0, BT_FIREARM=1, BT_AMMO=2, BT_MELEE=3, BT_GRENADE=4, BT_PROXIMITYGRENADE=5, BT_MEDIKIT=6, BT_SCANNER=7
+      weight: 3
+    - name: STR_SMOKE_GRENADE
+      size: 0.1f
+      cost: 150
+      bigSprite: 20
+      power: 60
+      damageType: 9 # DT_NONE=0, DT_AP=1, DT_IN=2, DT_HE=3, DT_LASER=4, DT_PLASMA=5, DT_STUN=6, DT_MELEE=7, DT_ACID=8, DT_SMOKE=9
+      battleType: 4 # BT_NONE=0, BT_FIREARM=1, BT_AMMO=2, BT_MELEE=3, BT_GRENADE=4, BT_PROXIMITYGRENADE=5, BT_MEDIKIT=6, BT_SCANNER=7
+      weight: 3
+    - name: STR_PLASMA_PISTOL
+      size: 0.1f
+      cost: 800
+      bigSprite: 32
+      handSprite: 104
+      floorSprite: 31
+      bulletSprite: 8
+      fireSound: 18
+      accuracySnap: 65
+      TUSnap: 30
+      accuracyAuto: 50
+      TUAuto: 30
+      accuracyAimed: 85
+      TUAimed: 60
+      compatibleAmmoTypes:
+          - ammo: STR_PLASMA_PISTOL_CLIP
+      battleType: 1 # BT_NONE=0, BT_FIREARM=1, BT_AMMO=2, BT_MELEE=3, BT_GRENADE=4, BT_PROXIMITYGRENADE=5, BT_MEDIKIT=6, BT_SCANNER=7
+      inventoryWidth: 1
+      inventoryHeight: 2
+      weight: 3
+    - name: STR_PLASMA_PISTOL_CLIP
+      size: 0.1f
+      cost: 70
+      bigSprite: 34
+      power: 52
+      damageType: 5 # DT_NONE=0, DT_AP=1, DT_IN=2, DT_HE=3, DT_LASER=4, DT_PLASMA=5, DT_STUN=6, DT_MELEE=7, DT_ACID=8, DT_SMOKE=9
+      battleType: 2 # BT_NONE=0, BT_FIREARM=1, BT_AMMO=2, BT_MELEE=3, BT_GRENADE=4, BT_PROXIMITYGRENADE=5, BT_MEDIKIT=6, BT_SCANNER=7
+      hitAnimation: 46
+      hitSound: 19
+      clipSize: 26
+      weight: 3
+    - name: STR_CORPSE
+      bigSprite: 45
+      floorSprite: 39
+      inventoryWidth: 2
+      inventoryHeight: 3
+      weight: 22
+    - name: STR_SECTOID_CORPSE
+      bigSprite: 46
+      floorSprite: 42
+      inventoryWidth: 2
+      inventoryHeight: 3
+      weight: 30
+    - name: STR_ALIEN_ALLOYS
+      size: 0.1
+      cost: 6500
+      transferTime: 96
+
+UFOs:
+    - name: STR_SMALL_SCOUT
+      size: STR_VERY_SMALL
+      sprite: 0
+      maxSpeed: 2200
+      acceleration: 12
+      maxDamage: 50
+      score: 50
+      terrains:
+          - terrain: UFO1A
+            mapDataSets:
+                - name: BLANKS
+                - name: UFO1
+            mapBlocks:
+                - name: UFO1A
+                  width: 10
+                  length: 10
+                  landingZone: true
+    - name: STR_MEDIUM_SCOUT
+      size: STR_SMALL
+      sprite: 1
+      maxSpeed: 2400
+      acceleration: 9
+      weaponPower: 20
+      weaponRange: 15
+      maxDamage: 200
+      score: 75
+      terrains:
+          - terrain: UFO_110
+            mapDataSets:
+                - name: BLANKS
+                - name: U_EXT02
+                - name: U_WALL02
+                - name: U_BITS
+            mapBlocks:
+                - name: UFO_110
+                  width: 10
+                  length: 10
+                  landingZone: true
+    - name: STR_LARGE_SCOUT
+      size: STR_SMALL
+      sprite: 2
+      maxSpeed: 2700
+      acceleration: 9
+      weaponPower: 20
+      weaponRange: 34
+      maxDamage: 250
+      score: 125
+      terrains:
+          - terrain: UFO_120
+            mapDataSets:
+                - name: BLANKS
+                - name: U_EXT02
+                - name: U_WALL02
+                - name: U_BITS
+            mapBlocks:
+                - name: UFO_120
+                  width: 20
+                  length: 20
+                  landingZone: true
+    - name: STR_ABDUCTER
+      size: STR_MEDIUM
+      sprite: 3
+      maxSpeed: 4000
+      acceleration: 8
+      weaponPower: 40
+      weaponRange: 22
+      maxDamage: 500
+      score: 250
+    - name: STR_HARVESTER
+      size: STR_MEDIUM
+      sprite: 4
+      maxSpeed: 4300
+      acceleration: 8
+      weaponPower: 40
+      weaponRange: 20
+      maxDamage: 500
+      score: 250
+    - name: STR_SUPPLY_SHIP
+      size: STR_LARGE
+      sprite: 5
+      maxSpeed: 3200
+      acceleration: 6
+      weaponPower: 60
+      weaponRange: 36
+      maxDamage: 2200
+      score: 400
+    - name: STR_TERROR_SHIP
+      size: STR_LARGE
+      sprite: 6
+      maxSpeed: 4800
+      acceleration: 6
+      weaponPower: 120
+      weaponRange: 42
+      maxDamage: 1200
+      score: 500
+    - name: STR_BATTLESHIP
+      size: STR_VERY_LARGE
+      sprite: 7
+      maxSpeed: 5000
+      acceleration: 6
+      weaponPower: 148
+      weaponRange: 65
+      maxDamage: 3200
+      score: 700
+
+inventorySlots:
+    - name: STR_RIGHT_SHOULDER
+      x: 16
+      y: 40
+      slots:
+          - x: 0
+            y: 0
+          - x: 1
+            y: 0
+      costs:
+          - slot: STR_GROUND
+            cost: 4
+          - slot: STR_RIGHT_HAND
+            cost: 3
+          - slot: STR_LEFT_HAND
+            cost: 3
+          - slot: STR_RIGHT_LEG
+            cost: 12
+          - slot: STR_LEFT_LEG
+            cost: 12
+          - slot: STR_BELT
+            cost: 10
+          - slot: STR_LEFT_SHOULDER
+            cost: 8
+          - slot: STR_BACKPACK
+            cost: 16
+    - name: STR_LEFT_SHOULDER
+      x: 112
+      y: 40
+      slots:
+          - x: 0
+            y: 0
+          - x: 1
+            y: 0
+      costs:
+          - slot: STR_GROUND
+            cost: 4
+          - slot: STR_RIGHT_HAND
+            cost: 3
+          - slot: STR_LEFT_HAND
+            cost: 3
+          - slot: STR_RIGHT_LEG
+            cost: 12
+          - slot: STR_LEFT_LEG
+            cost: 12
+          - slot: STR_BELT
+            cost: 10
+          - slot: STR_RIGHT_SHOULDER
+            cost: 8
+          - slot: STR_BACKPACK
+            cost: 16
+    - name: STR_RIGHT_HAND
+      x: 0
+      y: 64
+      type: 1 # INV_SLOT=0, INV_HAND=1, INV_GROUND=2
+      costs:
+          - slot: STR_GROUND
+            cost: 2
+          - slot: STR_LEFT_HAND
+            cost: 4
+          - slot: STR_RIGHT_LEG
+            cost: 8
+          - slot: STR_LEFT_LEG
+            cost: 10
+          - slot: STR_BELT
+            cost: 8
+          - slot: STR_RIGHT_SHOULDER
+            cost: 10
+          - slot: STR_LEFT_SHOULDER
+            cost: 10
+          - slot: STR_BACKPACK
+            cost: 14
+    - name: STR_LEFT_HAND
+      x: 128
+      y: 64
+      type: 1 # INV_SLOT=0, INV_HAND=1, INV_GROUND=2
+      costs:
+          - slot: STR_GROUND
+            cost: 2
+          - slot: STR_RIGHT_HAND
+            cost: 4
+          - slot: STR_RIGHT_LEG
+            cost: 10
+          - slot: STR_LEFT_LEG
+            cost: 8
+          - slot: STR_BELT
+            cost: 8
+          - slot: STR_RIGHT_SHOULDER
+            cost: 10
+          - slot: STR_LEFT_SHOULDER
+            cost: 10
+          - slot: STR_BACKPACK
+            cost: 14
+    - name: STR_RIGHT_LEG
+      x: 0
+      y: 120
+      slots:
+          - x: 0
+            y: 0
+          - x: 1
+            y: 0
+      costs:
+          - slot: STR_GROUND
+            cost: 6
+          - slot: STR_RIGHT_HAND
+            cost: 4
+          - slot: STR_LEFT_HAND
+            cost: 6
+          - slot: STR_LEFT_LEG
+            cost: 10
+          - slot: STR_BELT
+            cost: 10
+          - slot: STR_RIGHT_SHOULDER
+            cost: 10
+          - slot: STR_LEFT_SHOULDER
+            cost: 10
+          - slot: STR_BACKPACK
+            cost: 18
+    - name: STR_LEFT_LEG
+      x: 128
+      y: 120
+      slots:
+          - x: 0
+            y: 0
+          - x: 1
+            y: 0
+      costs:
+          - slot: STR_GROUND
+            cost: 6
+          - slot: STR_RIGHT_HAND
+            cost: 6
+          - slot: STR_LEFT_HAND
+            cost: 4
+          - slot: STR_RIGHT_LEG
+            cost: 10
+          - slot: STR_BELT
+            cost: 10
+          - slot: STR_RIGHT_SHOULDER
+            cost: 10
+          - slot: STR_LEFT_SHOULDER
+            cost: 10
+          - slot: STR_BACKPACK
+            cost: 18
+    - name: STR_BACK_PACK
+      x: 192
+      y: 40
+      slots:
+          - x: 0
+            y: 0
+          - x: 1
+            y: 0
+          - x: 2
+            y: 0
+          - x: 0
+            y: 1
+          - x: 1
+            y: 1
+          - x: 2
+            y: 1
+          - x: 0
+            y: 2
+          - x: 1
+            y: 2
+          - x: 2
+            y: 2
+      costs:
+          - slot: STR_GROUND
+            cost: 10
+          - slot: STR_RIGHT_HAND
+            cost: 8
+          - slot: STR_LEFT_HAND
+            cost: 8
+          - slot: STR_RIGHT_LEG
+            cost: 16
+          - slot: STR_LEFT_LEG
+            cost: 16
+          - slot: STR_BELT
+            cost: 12
+          - slot: STR_RIGHT_SHOULDER
+            cost: 14
+          - slot: STR_LEFT_SHOULDER
+            cost: 14
+    - name: STR_BELT
+      x: 192
+      y: 104
+      slots:
+          - x: 0
+            y: 0
+          - x: 1
+            y: 0
+          - x: 2
+            y: 0
+          - x: 3
+            y: 0
+          - x: 0
+            y: 1
+          - x: 1
+            y: 1
+          - x: 2
+            y: 1
+          - x: 3
+            y: 1
+      costs:
+          - slot: STR_GROUND
+            cost: 6
+          - slot: STR_RIGHT_HAND
+            cost: 4
+          - slot: STR_LEFT_HAND
+            cost: 4
+          - slot: STR_RIGHT_LEG
+            cost: 10
+          - slot: STR_LEFT_LEG
+            cost: 10
+          - slot: STR_RIGHT_SHOULDER
+            cost: 12
+          - slot: STR_LEFT_SHOULDER
+            cost: 12
+          - slot: STR_BACK_PACK
+            cost: 16
+    - name: STR_GROUND
+      x: 0
+      y: 152
+      type: 2 # INV_SLOT=0, INV_HAND=1, INV_GROUND=2
+      costs:
+          - slot: STR_RIGHT_HAND
+            cost: 8
+          - slot: STR_LEFT_HAND
+            cost: 8
+          - slot: STR_RIGHT_LEG
+            cost: 10
+          - slot: STR_LEFT_LEG
+            cost: 10
+          - slot: STR_BELT
+            cost: 12
+          - slot: STR_RIGHT_SHOULDER
+            cost: 12
+          - slot: STR_LEFT_SHOULDER
+            cost: 12
+          - slot: STR_BACK_PACK
+            cost: 20
+
+terrains:
+    - terrain: CULTA
+      mapDataSets:
+        - name: BLANKS
+        - name: CULTIVAT
+        - name: BARN
+      mapBlocks:
+        - name: CULTA00
+          width: 10
+          length: 10
+          landingZone: true
+        - name: CULTA01
+          width: 10
+          length: 10
+          landingZone: false
+        - name: CULTA02
+          width: 10
+          length: 10
+          landingZone: false
+        - name: CULTA03
+          width: 10
+          length: 10
+          landingZone: false
+        - name: CULTA04
+          width: 10
+          length: 10
+          landingZone: false
+        - name: CULTA05
+          width: 10
+          length: 10
+          landingZone: false
+        - name: CULTA06
+          width: 10
+          length: 10
+          landingZone: false
+        - name: CULTA07
+          width: 10
+          length: 10
+          landingZone: true
+        - name: CULTA08
+          width: 10
+          length: 10
+          landingZone: false
+        - name: CULTA09
+          width: 10
+          length: 10
+          landingZone: false
+        - name: CULTA10
+          width: 10
+          length: 10
+          landingZone: false
+        - name: CULTA11
+          width: 10
+          length: 10
+          landingZone: true
+        - name: CULTA12
+          width: 10
+          length: 10
+          landingZone: false
+        - name: CULTA13
+          width: 10
+          length: 10
+          landingZone: false
+        - name: CULTA14
+          width: 10
+          length: 10
+          landingZone: false
+        - name: CULTA15
+          width: 10
+          length: 10
+          landingZone: false
+        - name: CULTA16
+          width: 10
+          length: 10
+          landingZone: false
+        - name: CULTA17
+          width: 10
+          length: 10
+          landingZone: false
+        - name: CULTA18
+          width: 10
+          length: 10
+          landingZone: false
+    - terrain: JUNGLE
+      mapDataSets:
+        - name: BLANKS
+        - name: JUNGLE
+      mapBlocks:
+        - name: JUNGLE00
+          width: 10
+          length: 10
+          landingZone: true
+        - name: JUNGLE01
+          width: 10
+          length: 10
+          landingZone: true
+        - name: JUNGLE02
+          width: 10
+          length: 10
+          landingZone: true
+        - name: JUNGLE03
+          width: 10
+          length: 10
+          landingZone: false
+        - name: JUNGLE04
+          width: 10
+          length: 10
+          landingZone: false
+        - name: JUNGLE05
+          width: 10
+          length: 10
+          landingZone: false
+        - name: JUNGLE06
+          width: 10
+          length: 10
+          landingZone: false
+        - name: JUNGLE07
+          width: 10
+          length: 10
+          landingZone: false
+        - name: JUNGLE08
+          width: 10
+          length: 10
+          landingZone: false
+        - name: JUNGLE09
+          width: 10
+          length: 10
+          landingZone: false
+        - name: JUNGLE10
+          width: 10
+          length: 10
+          landingZone: false
+        - name: JUNGLE11
+          width: 10
+          length: 10
+          landingZone: false
+    - terrain: FOREST
+      mapDataSets:
+        - name: BLANKS
+        - name: FOREST
+      mapBlocks:
+        - name: FOREST00
+          width: 10
+          length: 10
+          landingZone: true
+        - name: FOREST01
+          width: 10
+          length: 10
+          landingZone: true
+        - name: FOREST02
+          width: 10
+          length: 10
+          landingZone: false
+        - name: FOREST03
+          width: 10
+          length: 10
+          landingZone: false
+        - name: FOREST04
+          width: 10
+          length: 10
+          landingZone: false
+        - name: FOREST05
+          width: 10
+          length: 10
+          landingZone: false
+        - name: FOREST06
+          width: 10
+          length: 10
+          landingZone: false
+        - name: FOREST07
+          width: 10
+          length: 10
+          landingZone: false
+        - name: FOREST08
+          width: 10
+          length: 10
+          landingZone: false
+        - name: FOREST09
+          width: 10
+          length: 10
+          landingZone: false
+        - name: FOREST10
+          width: 10
+          length: 10
+          landingZone: false
+        - name: FOREST11
+          width: 10
+          length: 10
+          landingZone: false
+    - terrain: DESERT
+      mapDataSets:
+        - name: BLANKS
+        - name: DESERT
+      mapBlocks:
+        - name: DESERT00
+          width: 10
+          length: 10
+          landingZone: true
+        - name: DESERT01
+          width: 10
+          length: 10
+          landingZone: true
+        - name: DESERT02
+          width: 10
+          length: 10
+          landingZone: true
+        - name: DESERT03
+          width: 10
+          length: 10
+          landingZone: false
+        - name: DESERT04
+          width: 10
+          length: 10
+          landingZone: false
+        - name: DESERT05
+          width: 10
+          length: 10
+          landingZone: false
+        - name: DESERT06
+          width: 10
+          length: 10
+          landingZone: false
+        - name: DESERT07
+          width: 10
+          length: 10
+          landingZone: false
+        - name: DESERT08
+          width: 10
+          length: 10
+          landingZone: false
+        - name: DESERT09
+          width: 10
+          length: 10
+          landingZone: false
+        - name: DESERT10
+          width: 10
+          length: 10
+          landingZone: false
+        - name: DESERT11
+          width: 10
+          length: 10
+          landingZone: false
+    - terrain: MOUNT
+      mapDataSets:
+        - name: BLANKS
+        - name: MOUNT
+      mapBlocks:
+        - name: MOUNT00
+          width: 10
+          length: 10
+          landingZone: true
+        - name: MOUNT01
+          width: 10
+          length: 10
+          landingZone: true
+        - name: MOUNT02
+          width: 10
+          length: 10
+          landingZone: true
+        - name: MOUNT03
+          width: 10
+          length: 10
+          landingZone: false
+        - name: MOUNT04
+          width: 10
+          length: 10
+          landingZone: false
+        - name: MOUNT05
+          width: 10
+          length: 10
+          landingZone: false
+        - name: MOUNT06
+          width: 10
+          length: 10
+          landingZone: false
+        - name: MOUNT07
+          width: 10
+          length: 10
+          landingZone: false
+        - name: MOUNT08
+          width: 10
+          length: 10
+          landingZone: false
+        - name: MOUNT09
+          width: 10
+          length: 10
+          landingZone: false
+        - name: MOUNT10
+          width: 10
+          length: 10
+          landingZone: false
+        - name: MOUNT11
+          width: 10
+          length: 10
+          landingZone: false
+        - name: MOUNT12
+          width: 10
+          length: 10
+          landingZone: false
+    - terrain: POLAR
+      mapDataSets:
+        - name: BLANKS
+        - name: POLAR
+      mapBlocks:
+        - name: POLAR00
+          width: 10
+          length: 10
+          landingZone: true
+        - name: POLAR01
+          width: 10
+          length: 10
+          landingZone: true
+        - name: POLAR02
+          width: 10
+          length: 10
+          landingZone: true
+        - name: POLAR03
+          width: 10
+          length: 10
+          landingZone: false
+        - name: POLAR04
+          width: 10
+          length: 10
+          landingZone: false
+        - name: POLAR05
+          width: 10
+          length: 10
+          landingZone: false
+        - name: POLAR06
+          width: 10
+          length: 10
+          landingZone: false
+        - name: POLAR07
+          width: 10
+          length: 10
+          landingZone: false
+        - name: POLAR08
+          width: 10
+          length: 10
+          landingZone: false
+        - name: POLAR09
+          width: 10
+          length: 10
+          landingZone: false
+        - name: POLAR10
+          width: 10
+          length: 10
+          landingZone: false
+        - name: POLAR11
+          width: 10
+          length: 10
+          landingZone: false
+        - name: POLAR12
+          width: 20
+          length: 20
+          landingZone: false
+        - name: POLAR13
+          width: 20
+          length: 20
+          landingZone: false
+    - terrain: MARS
+      mapDataSets:
+        - name: BLANKS
+        - name: MARS
+        - name: U_WALL02
+      mapBlocks:
+        - name: MARS00
+          width: 10
+          length: 10
+          landingZone: true
+    - terrain: URBAN
+      mapDataSets:
+        - name: BLANKS
+        - name: ROADS
+        - name: URBITS
+        - name: URBAN
+        - name: FRNITURE
+      mapBlocks:
+        - name: URBAN03
+          width: 10
+          length: 10
+          landingZone: true
+        - name: URBAN04
+          width: 10
+          length: 10
+          landingZone: true
+        - name: URBAN05
+          width: 20
+          length: 20
+          landingZone: false
+        - name: URBAN06
+          width: 20
+          length: 20
+          landingZone: false
+        - name: URBAN07
+          width: 20
+          length: 20
+          landingZone: false
+        - name: URBAN08
+          width: 20
+          length: 20
+          landingZone: false
+        - name: URBAN09
+          width: 20
+          length: 20
+          landingZone: false
+        - name: URBAN14
+          width: 10
+          length: 10
+          landingZone: false
+        - name: URBAN15
+          width: 10
+          length: 10
+          landingZone: false
+        - name: URBAN16
+          width: 10
+          length: 10
+          landingZone: false
+        - name: URBAN17
+          width: 10
+          length: 10
+          landingZone: false
+        - name: URBAN18
+          width: 10
+          length: 10
+          landingZone: false
+
+armors:
+    - type: STR_NONE_UC
+      spriteSheet: XCOM_0.PCK
+      front: 12
+      side: 8
+      rear: 5
+      under: 2
+      corpseItem: STR_CORPSE
+    - type: STR_PERSONAL_ARMOR_UC
+      spriteSheet: XCOM_1.PCK
+      front: 50
+      side: 40
+      rear: 40
+      under: 30
+    - type: STR_POWER_SUIT_UC
+      spriteSheet: XCOM_2.PCK
+      front: 100
+      side: 80
+      rear: 70
+      under: 60
+    - type: STR_FLYING_SUIT_UC
+      spriteSheet: XCOM_2.PCK
+      front: 110
+      side: 90
+      rear: 80
+      under: 70
+    - type: SECTOID_ARMOR0
+      spriteSheet: SECTOID.PCK
+      front: 4
+      side: 3
+      rear: 2
+      under: 2
+      corpseItem: STR_SECTOID_CORPSE
+
+soldiers:
+    - name: XCOM
+      armor: STR_NONE_UC
+      standHeight: 22
+      kneelHeight: 14
+      loftemps: 3
+      stats: # one set of stats is absolute stats, two is min/max, others are ignored
+        - tu: 50
+          stamina: 40
+          health: 25
+          bravery: 10
+          reactions: 30
+          firing: 40
+          throwing: 50
+          strength: 20
+          psiStrength: 0
+          psiSkill: 16
+          melee: 20
+        - tu: 60
+          stamina: 70
+          health: 40
+          bravery: 60
+          reactions: 60
+          firing: 70
+          throwing: 80
+          strength: 40
+          psiStrength: 100
+          psiSkill: 24
+          melee: 40
+
+aliens:
+    - name: SECTOID_SOLDIER
+      race: STR_SECTOID
+      rank: STR_LIVE_SOLDIER
+      armor: SECTOID_ARMOR0
+      value: 10
+      standHeight: 16
+      kneelHeight: 12
+      loftemps: 2
+      stats: # one set of stats is absolute stats, two is min/max, others are ignored
+        - tu: 54
+          stamina: 90
+          health: 30
+          bravery: 80
+          reactions: 63
+          firing: 52
+          throwing: 58
+          strength: 30
+          psiStrength: 40
+          psiSkill: 0
+          melee: 76
+    - name: SECTOID_ENGINEER
+      race: STR_SECTOID
+      rank: STR_LIVE_ENGINEER
+      armor: SECTOID_ARMOR0
+      value: 10
+      standHeight: 16
+      kneelHeight: 12
+      loftemps: 2
+      stats: # one set of stats is absolute stats, two is min/max, others are ignored
+        - tu: 54
+          stamina: 90
+          health: 30
+          bravery: 80
+          reactions: 63
+          firing: 52
+          throwing: 58
+          strength: 30
+          psiStrength: 40
+          psiSkill: 0
+          melee: 76
+    - name: SECTOID_NAVIGATOR
+      race: STR_SECTOID
+      rank: STR_LIVE_NAVIGATOR
+      armor: SECTOID_ARMOR0
+      value: 12
+      standHeight: 16
+      kneelHeight: 12
+      loftemps: 2
+      stats: # one set of stats is absolute stats, two is min/max, others are ignored
+        - tu: 54
+          stamina: 90
+          health: 30
+          bravery: 80
+          reactions: 63
+          firing: 52
+          throwing: 58
+          strength: 30
+          psiStrength: 40
+          psiSkill: 0
+          melee: 76

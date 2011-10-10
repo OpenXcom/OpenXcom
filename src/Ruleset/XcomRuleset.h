@@ -20,6 +20,8 @@
 #define OPENXCOM_XCOMRULESET_H
 
 #include "Ruleset.h"
+#include "yaml.h"
+#include "../Savegame/Unit.h"
 
 namespace OpenXcom
 {
@@ -29,6 +31,39 @@ namespace OpenXcom
  */
 class XcomRuleset : public Ruleset
 {
+private:
+	// loads the name files from config
+	void initNames(YAML::Node &doc);
+	// loads the countries from config
+	void initCountries(YAML::Node &doc);
+	// loads the regions from config
+	void initRegions(YAML::Node &doc);
+	// loads the regions from config
+	void initBaseFacilities(YAML::Node &doc);
+	// 
+	void initMapDataFiles(YAML::Node &doc);
+	// initCrafts
+	void initCrafts(YAML::Node &doc);
+	//
+	void initCraftWeapons(YAML::Node &doc);
+	//
+	void initItems(YAML::Node &doc);
+	//
+	void initUFOs(YAML::Node &doc);
+	//
+	void initInventory(YAML::Node &doc);
+	//
+	void initTerrains(YAML::Node &doc);
+	//
+	void initArmors(YAML::Node &doc);
+	//
+	void initSoldiers(YAML::Node &doc);
+	//
+	void initAliens(YAML::Node &doc);
+	//
+	OpenXcom::UnitStats getStatsFromYAML(YAML::Iterator &statsIterator);
+	//
+	RuleTerrain *getTerrainFromYAML(YAML::Iterator &terrains);
 public:
 	/// Creates the X-Com ruleset.
 	XcomRuleset();
