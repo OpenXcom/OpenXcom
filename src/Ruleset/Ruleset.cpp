@@ -254,6 +254,26 @@ void Ruleset::load(const std::string &filename)
 				rule->load(j.second());
 			}
 		}
+		else if (key == "items")
+		{
+			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
+			{
+				std::string type;
+				j.second()["type"] >> type;
+				RuleItem *rule;
+				if (_items.find(type) != _items.end())
+				{
+					rule = _items[type];
+				}
+				else
+				{
+					rule = new RuleItem(type);
+					_items[type] = rule;
+					_itemsIndex.push_back(type);
+				}
+				rule->load(j.second());
+			}
+		}
 	}
 
 	fin.close();
@@ -314,6 +334,13 @@ void Ruleset::save(const std::string &filename) const
 	out << YAML::Key << "craftWeapons" << YAML::Value;
 	out << YAML::BeginSeq;
 	for (std::map<std::string, RuleCraftWeapon*>::const_iterator i = _craftWeapons.begin(); i != _craftWeapons.end(); ++i)
+	{
+		i->second->save(out);
+	}
+	out << YAML::EndSeq;
+	out << YAML::Key << "items" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::map<std::string, RuleItem*>::const_iterator i = _items.begin(); i != _items.end(); ++i)
 	{
 		i->second->save(out);
 	}

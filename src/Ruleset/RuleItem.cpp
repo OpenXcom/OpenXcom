@@ -29,7 +29,7 @@ namespace OpenXcom
  * @param type String defining the type.
  */
 RuleItem::RuleItem(const std::string &type) : _type(type), _size(0.0), _cost(0), _time(24), _weight(0), _bigSprite(-1), _floorSprite(-1), _handSprite(120), _bulletSprite(-1),
-									   _fireSound(-1), _hitSound(-1), _hitAnimation(0), _power(0), _displayPriority(0), _compatibleAmmo(), _damageType(DT_NONE),
+									   _fireSound(-1), _hitSound(-1), _hitAnimation(0), _power(0), _priority(0), _compatibleAmmo(), _damageType(DT_NONE),
 									   _accuracyAuto(0), _accuracySnap(0), _accuracyAimed(0), _tuAuto(0), _tuSnap(0), _tuAimed(0), _clipSize(0), _accuracyMelee(0), _tuMelee(0),
 									   _battleType(BT_NONE), _twoHanded(false), _waypoint(false), _invWidth(1), _invHeight(1)
 {
@@ -40,6 +40,182 @@ RuleItem::RuleItem(const std::string &type) : _type(type), _size(0.0), _cost(0),
  */
 RuleItem::~RuleItem()
 {
+}
+
+/**
+ * Loads the item from a YAML file.
+ * @param node YAML node.
+ */
+void RuleItem::load(const YAML::Node &node)
+{
+	int a = 0;
+	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
+	{
+		std::string key;
+		i.first() >> key;
+		if (key == "type")
+		{
+			i.second() >> _type;
+		}
+		else if (key == "size")
+		{
+			i.second() >> _size;
+		}
+		else if (key == "cost")
+		{
+			i.second() >> _cost;
+		}
+		else if (key == "time")
+		{
+			i.second() >> _time;
+		}
+		else if (key == "weight")
+		{
+			i.second() >> _weight;
+		}
+		else if (key == "bigSprite")
+		{
+			i.second() >> _bigSprite;
+		}
+		else if (key == "floorSprite")
+		{
+			i.second() >> _floorSprite;
+		}
+		else if (key == "handSprite")
+		{
+			i.second() >> _handSprite;
+		}
+		else if (key == "bulletSprite")
+		{
+			i.second() >> _bulletSprite;
+		}
+		else if (key == "fireSound")
+		{
+			i.second() >> _fireSound;
+		}
+		else if (key == "hitSound")
+		{
+			i.second() >> _hitSound;
+		}
+		else if (key == "hitAnimation")
+		{
+			i.second() >> _hitAnimation;
+		}
+		else if (key == "power")
+		{
+			i.second() >> _power;
+		}
+		else if (key == "priority")
+		{
+			i.second() >> _priority;
+		}
+		else if (key == "compatibleAmmo")
+		{
+			i.second() >> _compatibleAmmo;
+		}
+		else if (key == "damageType")
+		{
+			i.second() >> a;
+			_damageType = (ItemDamageType)a;
+		}
+		else if (key == "accuracyAuto")
+		{
+			i.second() >> _accuracyAuto;
+		}
+		else if (key == "accuracySnap")
+		{
+			i.second() >> _accuracySnap;
+		}
+		else if (key == "accuracyAimed")
+		{
+			i.second() >> _accuracyAimed;
+		}
+		else if (key == "tuAuto")
+		{
+			i.second() >> _tuAuto;
+		}
+		else if (key == "tuSnap")
+		{
+			i.second() >> _tuSnap;
+		}
+		else if (key == "tuAimed")
+		{
+			i.second() >> _tuAimed;
+		}
+		else if (key == "clipSize")
+		{
+			i.second() >> _clipSize;
+		}
+		else if (key == "accuracyMeee")
+		{
+			i.second() >> _accuracyMelee;
+		}
+		else if (key == "tuMelee")
+		{
+			i.second() >> _tuMelee;
+		}
+		else if (key == "battleType")
+		{
+			i.second() >> a;
+			_battleType = (BattleType)a;
+		}
+		else if (key == "twoHanded")
+		{
+			i.second() >> _twoHanded;
+		}
+		else if (key == "waypoint")
+		{
+			i.second() >> _waypoint;
+		}
+		else if (key == "invWidth")
+		{
+			i.second() >> _invWidth;
+		}
+		else if (key == "invHeight")
+		{
+			i.second() >> _invHeight;
+		}
+	}
+}
+
+/**
+ * Saves the item to a YAML file.
+ * @param out YAML emitter.
+ */
+void RuleItem::save(YAML::Emitter &out) const
+{
+	out << YAML::BeginMap;
+	out << YAML::Key << "type" << YAML::Value << _type;
+	out << YAML::Key << "size" << YAML::Value << _size;
+	out << YAML::Key << "cost" << YAML::Value << _cost;
+	out << YAML::Key << "time" << YAML::Value << _time;
+	out << YAML::Key << "weight" << YAML::Value << _weight;
+	out << YAML::Key << "bigSprite" << YAML::Value << _bigSprite;
+	out << YAML::Key << "floorSprite" << YAML::Value << _floorSprite;
+	out << YAML::Key << "handSprite" << YAML::Value << _handSprite;
+	out << YAML::Key << "bulletSprite" << YAML::Value << _bulletSprite;
+	out << YAML::Key << "fireSound" << YAML::Value << _fireSound;
+	out << YAML::Key << "hitSound" << YAML::Value << _hitSound;
+	out << YAML::Key << "hitAnimation" << YAML::Value << _hitAnimation;
+	out << YAML::Key << "power" << YAML::Value << _power;
+	out << YAML::Key << "priority" << YAML::Value << _priority;
+	out << YAML::Key << "compatibleAmmo" << YAML::Value << _compatibleAmmo;
+	out << YAML::Key << "damageType" << YAML::Value << _damageType;
+	out << YAML::Key << "accuracyAuto" << YAML::Value << _accuracyAuto;
+	out << YAML::Key << "accuracySnap" << YAML::Value << _accuracySnap;
+	out << YAML::Key << "accuracyAimed" << YAML::Value << _accuracyAimed;
+	out << YAML::Key << "tuAuto" << YAML::Value << _tuAuto;
+	out << YAML::Key << "tuSnap" << YAML::Value << _tuSnap;
+	out << YAML::Key << "tuAimed" << YAML::Value << _tuAimed;
+	out << YAML::Key << "clipSize" << YAML::Value << _clipSize;
+	out << YAML::Key << "accuracyMelee" << YAML::Value << _accuracyMelee;
+	out << YAML::Key << "tuMelee" << YAML::Value << _tuMelee;
+	out << YAML::Key << "battleType" << YAML::Value << _battleType;
+	out << YAML::Key << "twoHanded" << YAML::Value << _twoHanded;
+	out << YAML::Key << "waypoint" << YAML::Value << _waypoint;
+	out << YAML::Key << "invWidth" << YAML::Value << _invWidth;
+	out << YAML::Key << "invHeight" << YAML::Value << _invHeight;
+	out << YAML::EndMap;
 }
 
 /**
