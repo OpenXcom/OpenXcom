@@ -39,6 +39,8 @@ private:
 	BattleItem *_item;
 	SurfaceSet *_unitSurface;
 	SurfaceSet *_itemSurface;
+	void drawRoutine0();
+	void drawRoutine1();
 public:
 	/// Creates a new UnitSprite at the specified position and size.
 	UnitSprite(int width, int height, int x, int y);

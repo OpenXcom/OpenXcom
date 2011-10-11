@@ -27,7 +27,7 @@ namespace OpenXcom
  * @param type String defining the type.
  * @param spriteSheet Spritesheet used to render the unit.
  */
-RuleArmor::RuleArmor(const std::string &type, std::string spriteSheet) : _type(type), _spriteSheet(spriteSheet), _corpseItem(""), _frontArmor(0), _sideArmor(0), _rearArmor(0), _underArmor(0)
+RuleArmor::RuleArmor(const std::string &type, std::string spriteSheet, int drawingRoutine) : _type(type), _spriteSheet(spriteSheet), _corpseItem(""), _frontArmor(0), _sideArmor(0), _rearArmor(0), _underArmor(0), _drawingRoutine(drawingRoutine)
 {
 
 }
@@ -95,6 +95,10 @@ std::string RuleArmor::getCorpseItem() const
 {
 	return _corpseItem;
 }
-
+/// get the drawing routine ID.
+int RuleArmor::getDrawingRoutine() const
+{
+	return _drawingRoutine;
+}
 
 }
