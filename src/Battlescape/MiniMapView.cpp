@@ -46,8 +46,10 @@ const int MAX_FRAME = 2;
 */
 MiniMapView::MiniMapView(int w, int h, int x, int y, Game * game, Map * map, SavedBattleGame * battleGame) : InteractiveSurface(w, h, x, y), _game(game), _map(map), _startX(0),  _startY(0), _lvl(_map->getViewHeight()), _battleGame(battleGame), _frame(0)
 {
+#ifndef _DEBUG
 	_startX = _map->getCenterX () - ((getWidth () / CELL_WIDTH) / 2);
 	_startY = _map->getCenterY () - ((getHeight () / CELL_HEIGHT) / 2);
+#endif
 }
 
 /**
