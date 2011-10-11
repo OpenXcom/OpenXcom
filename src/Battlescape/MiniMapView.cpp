@@ -50,6 +50,13 @@ MiniMapView::MiniMapView(int w, int h, int x, int y, Game * game, Map * map, Sav
 	_startX = _map->getCenterX () - ((getWidth () / CELL_WIDTH) / 2);
 	_startY = _map->getCenterY () - ((getHeight () / CELL_HEIGHT) / 2);
 #endif
+	// We can't access dead units from tiles. So we first compute a list of all battle units and their corresponding tile. We will use this later to display units on the minimap
+	std::vector<BattleUnit*> *const units (_battleGame->getUnits());
+	for(std::vector<BattleUnit*>::const_iterator it = units->begin (); it != units->end (); ++it)
+	{
+		_battleUnits[(*it)->getTile()] = *it;
+	}
+	_set = _game->getResourcePack()->getSurfaceSet("SCANG.DAT");
 }
 
 /**
@@ -67,67 +74,56 @@ void MiniMapView::blit(Surface *surface)
  */
 void MiniMapView::draw()
 {
-	SavedBattleGame * battle = _game->getSavedGame()->getBattleGame();
-	SurfaceSet * set = _game->getResourcePack()->getSurfaceSet("SCANG.DAT");
-	int py = _startY;
-	std::map<Tile *, BattleUnit *> battleUnits;
-	std::vector<BattleUnit*> *const units (_battleGame->getUnits());
-
-	if(!set)
+	if(!_set)
 	{
 		return;
-	}
-	// We can't access dead units from tiles. So we first compute a list of all battle units and their corresponding tile. We will use this later to display units on the minimap
-	for(std::vector<BattleUnit*>::const_iterator it = units->begin (); it != units->end (); ++it)
-	{
-		battleUnits[(*it)->getTile()] = *it;
 	}
 	SDL_Rect current;
 	current.x = current.y = 0;
 	current.w = getWidth ();
 	current.h = getHeight ();
 	drawRect(&current, 0);
-
-	for (int y = getHeight () - CELL_HEIGHT; y >= 0; y-=CELL_HEIGHT)
+	for (int lvl = 0; lvl <= _lvl; lvl++)
 	{
-		int px = _startX;
-		for (int x = 0; x < getWidth (); x += CELL_WIDTH)
+		int py = _startY;
+		for (int y = getHeight () - CELL_HEIGHT; y >= 0; y-=CELL_HEIGHT)
 		{
-			MapData * data = 0;
-			int lvl = _lvl;
-			Tile * t = 0;
-			while ((!t || !data) && lvl >= 0)
+			int px = _startX;
+			for (int x = 0; x < getWidth (); x += CELL_WIDTH)
 			{
-				Position p (px, py, lvl--);
-				t = battle->getTile(p);
-				if (!t)
+				MapData * data = 0;
+				Tile * t = 0;
+				Position p (px, py, lvl);
+				t = _battleGame->getTile(p);
+				if (!t || !t->isDiscovered(2))
 				{
+					px++;
 					continue;
 				}
-				int i = MAX_LEVEL;
-				while (!data && i >= 0)
+				for(int i = 0; i < 4; i++)
 				{
-					data = t->getMapData(i--);
+					data = t->getMapData(i);
+
+					Surface * s = 0;
+					if(data)
+					{
+						s = _set->getFrame (data->getMiniMapIndex()+35);
+					}
+					if(s)
+					{
+						s->blitNShade(this, x, y, t->getShade());
+					}
 				}
+				std::map<Tile *, BattleUnit *>::iterator itTile =  _battleUnits.find (t);
+				if(itTile != _battleUnits.end () && itTile->second->getVisible())
+				{
+					Surface * s = _set->getFrame (itTile->second->getMiniMapSpriteIndex ()+_frame);
+					s->blitNShade(this, x, y, 0);
+				}
+				px++;
 			}
-			Surface * s = 0;
-			if(data)
-			{
-				s = set->getFrame (data->getMiniMapIndex()+35);
-			}
-			if(s && t->isDiscovered(2))
-			{
-				s->blitNShade(this, x, y, t->getShade());
-			}
-			std::map<Tile *, BattleUnit *>::iterator itTile =  battleUnits.find (t);
-			if(itTile != battleUnits.end () && itTile->second->getVisible())
-			{
-				s = set->getFrame (itTile->second->getMiniMapSpriteIndex ()+_frame);
-				s->blitNShade(this, x, y, 0);
-			}
-			px++;
+			py++;
 		}
-		py++;
 	}
 	int centerX = getWidth() / 2;
 	int centerY = getHeight() / 2;

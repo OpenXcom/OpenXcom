@@ -20,12 +20,16 @@
 #define OPENXCOM_MINIMAPVIEW_H
 
 #include "../Engine/InteractiveSurface.h"
+#include <map>
 
 namespace OpenXcom
 {
 class Game;
 class Map;
 class SavedBattleGame;
+class Tile;
+class BattleUnit;
+class SurfaceSet;
 /**
    MiniMapView is the class used to display the map in the MiniMapState
 */
@@ -38,6 +42,8 @@ class MiniMapView : public InteractiveSurface
 	int _lvl;
 	SavedBattleGame * _battleGame;
 	int _frame;
+	std::map<Tile *, BattleUnit *> _battleUnits;
+	SurfaceSet * _set;
 	/// Handle clicking on the MiniMap
 	void mouseClick (Action *action, State *state);
 public:
