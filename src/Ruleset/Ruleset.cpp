@@ -208,7 +208,7 @@ void Ruleset::load(const std::string &filename)
 				}
 				else
 				{
-					rule = new MapDataSet("", 0);
+					rule = new MapDataSet(type, 0);
 					_mapDataSets[type] = rule;
 				}
 				rule->load(j.second());
@@ -272,6 +272,44 @@ void Ruleset::load(const std::string &filename)
 					_itemsIndex.push_back(type);
 				}
 				rule->load(j.second());
+			}
+		}
+		else if (key == "ufos")
+		{
+			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
+			{
+				std::string type;
+				j.second()["type"] >> type;
+				RuleUfo *rule;
+				if (_ufos.find(type) != _ufos.end())
+				{
+					rule = _ufos[type];
+				}
+				else
+				{
+					rule = new RuleUfo(type);
+					_ufos[type] = rule;
+				}
+				rule->load(j.second(), this);
+			}
+		}
+		else if (key == "terrains")
+		{
+			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
+			{
+				std::string type;
+				j.second()["name"] >> type;
+				RuleTerrain *rule;
+				if (_terrains.find(type) != _terrains.end())
+				{
+					rule = _terrains[type];
+				}
+				else
+				{
+					rule = new RuleTerrain(type);
+					_terrains[type] = rule;
+				}
+				rule->load(j.second(), this);
 			}
 		}
 	}
@@ -341,6 +379,20 @@ void Ruleset::save(const std::string &filename) const
 	out << YAML::Key << "items" << YAML::Value;
 	out << YAML::BeginSeq;
 	for (std::map<std::string, RuleItem*>::const_iterator i = _items.begin(); i != _items.end(); ++i)
+	{
+		i->second->save(out);
+	}
+	out << YAML::EndSeq;
+	out << YAML::Key << "ufos" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::map<std::string, RuleUfo*>::const_iterator i = _ufos.begin(); i != _ufos.end(); ++i)
+	{
+		i->second->save(out);
+	}
+	out << YAML::EndSeq;
+	out << YAML::Key << "terrains" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::map<std::string, RuleTerrain*>::const_iterator i = _terrains.begin(); i != _terrains.end(); ++i)
 	{
 		i->second->save(out);
 	}

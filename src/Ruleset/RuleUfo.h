@@ -19,13 +19,14 @@
 #ifndef OPENXCOM_RULEUFO_H
 #define OPENXCOM_RULEUFO_H
 
-#include <vector>
 #include <string>
+#include "yaml.h"
 
 namespace OpenXcom
 {
 
 class RuleTerrain;
+class Ruleset;
 
 /**
  * Represents a specific type of UFO.
@@ -45,6 +46,10 @@ public:
 	RuleUfo(const std::string &type);
 	/// Cleans up the UFO ruleset.
 	~RuleUfo();
+	/// Loads UFO data from YAML.
+	void load(const YAML::Node& node, const Ruleset *ruleset);
+	/// Saves the UFO data to YAML.
+	void save(YAML::Emitter& out) const;
 	/// Gets the UFO's type.
 	std::string getType() const;
 	/// Gets the UFO's size.
