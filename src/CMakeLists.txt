@@ -423,7 +423,7 @@ set ( ufopedia_src
 
 if ( "${CMAKE_BUILD_TYPE}" STREQUAL "Debug" AND CMAKE_COMPILER_IS_GNUCXX )
 # Enable more GCC warnings if we are doing a Debug build.
-  add_definitions ( -Wall )
+  add_definitions ( -Wall -D_DEBUG )
 endif()
 
 if ( NOT WIN32 )
