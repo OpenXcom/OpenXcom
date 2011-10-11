@@ -799,7 +799,7 @@ void BattlescapeState::endTurn()
 		_map->centerOnPosition(_battleGame->getSelectedUnit()->getPosition());
 	}
 
-	_game->pushState(new NextTurnState(_game, _battleGame));
+	_game->pushState(new NextTurnState(_game, _battleGame, this));
 
 }
 
@@ -1488,6 +1488,12 @@ void BattlescapeState::dropItem(const Position &position, BattleItem *item, bool
 
 	item->setSlot(_game->getRuleset()->getInventory("STR_GROUND"));
 	item->setOwner(0);
+
+	if (item->getRules()->getBattleType() == BT_FLARE)
+	{
+		_battleGame->getTileEngine()->calculateTerrainLighting();
+	}
+
 }
 
 /**

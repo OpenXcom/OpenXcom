@@ -86,7 +86,6 @@ DebriefingState::DebriefingState(Game *game) : State(game)
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setBig();
-	_txtTitle->setText(_game->getLanguage()->getString("STR_UFO_IS_RECOVERED"));
 
 	_txtItem->setColor(Palette::blockOffset(8)+5);
 	_txtItem->setText(_game->getLanguage()->getString("STR_ITEM"));
@@ -370,11 +369,12 @@ void DebriefingState::prepareDebriefing()
 				 ++i;
 			}
 		}
-	}
-
-	// run through all tiles to recover UFO components and items
-	if (!aborted && playersSurvived > 0)
+		_txtTitle->setText(_game->getLanguage()->getString("STR_CRAFT_IS_LOST"));
+	} else
+	if (!aborted && playersSurvived > 0) 	// RECOVER UFO : run through all tiles to recover UFO components and items
 	{
+		_txtTitle->setText(_game->getLanguage()->getString("STR_UFO_IS_RECOVERED"));
+
 		for (int i = 0; i < battle->getHeight() * battle->getLength() * battle->getWidth(); ++i)
 		{
 			for (int part = 0; part < 4; part++)
@@ -424,6 +424,10 @@ void DebriefingState::prepareDebriefing()
 				base->getItems()->addItem((*i)->item, (*i)->qty);
 			}*/
 		}
+	}
+	else
+	{
+		_txtTitle->setText(_game->getLanguage()->getString("STR_UFO_IS_NOT_RECOVERED"));
 	}
 
 }

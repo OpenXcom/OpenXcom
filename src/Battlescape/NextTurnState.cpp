@@ -38,7 +38,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param battleGame Pointer to the saved game.
  */
-NextTurnState::NextTurnState(Game *game, SavedBattleGame *battleGame) : State(game), _battleGame(battleGame)
+NextTurnState::NextTurnState(Game *game, SavedBattleGame *battleGame, BattlescapeState *state) : State(game), _battleGame(battleGame), _state(state)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
@@ -123,11 +123,7 @@ void NextTurnState::handle(Action *action)
 
 		if (liveAliens == 0 || liveSoldiers == 0)
 		{
-			_game->popState();
-			_battleGame->setAborted(abort);
-			_game->pushState(new DebriefingState(_game));
-			_game->getCursor()->setColor(Palette::blockOffset(15)+12);
-			_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
+			_state->finishBattle(false);
 		}
 	}
 }

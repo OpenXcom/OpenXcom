@@ -930,6 +930,17 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	grenade->setBattleType(BT_GRENADE);
 	grenade->setWeight(3);
 
+	RuleItem *flare = new RuleItem("STR_ELECTRO_FLARE");
+	flare->setSize(0.1f);
+	flare->setCost(60);
+	flare->setBigSprite(55);
+	flare->setFloorSprite(72);
+	flare->setPower(15);
+	flare->setDamageType(DT_NONE);
+	flare->setBattleType(BT_FLARE);
+	flare->setWeight(3);
+
+
 	RuleItem *sgrenade = new RuleItem("STR_SMOKE_GRENADE");
 	sgrenade->setSize(0.1f);
 	sgrenade->setCost(150);
@@ -1019,6 +1030,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_items.insert(std::pair<std::string, RuleItem*>("STR_PLASMA_PISTOL", ppistol));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_PLASMA_PISTOL_CLIP", ppclip));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_ALIEN_ALLOYS", alloys));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_ELECTRO_FLARE", flare));
 
 	// Add UFOs
 	RuleUfo *sscout = new RuleUfo("STR_SMALL_SCOUT");
@@ -2005,6 +2017,7 @@ SavedGame *XcomRuleset::newSave(GameDifficulty diff) const
 	skyranger->getItems()->addItem("STR_HC_AP_AMMO", 2);
 	skyranger->getItems()->addItem("STR_HC_HE_AMMO", 2);
 	skyranger->getItems()->addItem("STR_GRENADE", 8);
+	skyranger->getItems()->addItem("STR_ELECTRO_FLARE", 4);
 	base->getCrafts()->push_back(skyranger);
 
 	for (int i = 0; i < 2; ++i)

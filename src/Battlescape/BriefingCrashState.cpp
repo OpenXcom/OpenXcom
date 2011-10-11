@@ -107,8 +107,9 @@ BriefingCrashState::~BriefingCrashState()
 void BriefingCrashState::btnOkClick(Action *action)
 {
 	_game->popState();
-	_game->pushState(new BattlescapeState(_game));
-	_game->pushState(new NextTurnState(_game, _game->getSavedGame()->getBattleGame()));
+	BattlescapeState *bs = new BattlescapeState(_game);
+	_game->pushState(bs);
+	_game->pushState(new NextTurnState(_game, _game->getSavedGame()->getBattleGame(), bs));
 	_game->pushState(new InventoryState(_game, false));
 }
 
