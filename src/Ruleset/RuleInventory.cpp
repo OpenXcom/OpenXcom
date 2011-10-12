@@ -23,6 +23,18 @@
 namespace OpenXcom
 {
 
+void operator >> (const YAML::Node& node, RuleSlot& s)
+{
+    node[0] >> s.x;
+    node[1] >> s.y;
+}
+YAML::Emitter& operator << (YAML::Emitter& out, const RuleSlot& s)
+{
+	out << YAML::Flow;
+	out << YAML::BeginSeq << s.x << s.y << YAML::EndSeq;
+	return out;
+}
+
 /**
  * Creates a blank ruleset for a certain
  * type of inventory section.
@@ -34,6 +46,61 @@ RuleInventory::RuleInventory(const std::string &id): _id(id), _x(0), _y(0), _typ
 
 RuleInventory::~RuleInventory()
 {
+}
+
+/**
+ * Loads the inventory from a YAML file.
+ * @param node YAML node.
+ */
+void RuleInventory::load(const YAML::Node &node)
+{
+	int a = 0;
+	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
+	{
+		std::string key;
+		i.first() >> key;
+		if (key == "id")
+		{
+			i.second() >> _id;
+		}
+		else if (key == "x")
+		{
+			i.second() >> _x;
+		}
+		else if (key == "y")
+		{
+			i.second() >> _y;
+		}
+		else if (key == "type")
+		{
+			i.second() >> a;
+			_type = (InventoryType)a;
+		}
+		else if (key == "slots")
+		{
+			i.second() >> _slots;
+		}
+		else if (key == "costs")
+		{
+			i.second() >> _costs;
+		}
+	}
+}
+
+/**
+ * Saves the inventory to a YAML file.
+ * @param out YAML emitter.
+ */
+void RuleInventory::save(YAML::Emitter &out) const
+{
+	out << YAML::BeginMap;
+	out << YAML::Key << "id" << YAML::Value << _id;
+	out << YAML::Key << "x" << YAML::Value << _x;
+	out << YAML::Key << "y" << YAML::Value << _y;
+	out << YAML::Key << "type" << YAML::Value << _type;
+	out << YAML::Key << "slots" << YAML::Value << _slots;
+	out << YAML::Key << "costs" << YAML::Value << _costs;
+	out << YAML::EndMap;
 }
 
 /**

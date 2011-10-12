@@ -293,6 +293,25 @@ void Ruleset::load(const std::string &filename)
 				rule->load(j.second(), this);
 			}
 		}
+		else if (key == "invs")
+		{
+			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
+			{
+				std::string type;
+				j.second()["id"] >> type;
+				RuleInventory *rule;
+				if (_invs.find(type) != _invs.end())
+				{
+					rule = _invs[type];
+				}
+				else
+				{
+					rule = new RuleInventory(type);
+					_invs[type] = rule;
+				}
+				rule->load(j.second());
+			}
+		}
 		else if (key == "terrains")
 		{
 			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
@@ -311,6 +330,22 @@ void Ruleset::load(const std::string &filename)
 				}
 				rule->load(j.second(), this);
 			}
+		}
+		else if (key == "costSoldier")
+		{
+			i.second() >> _costSoldier;
+		}
+		else if (key == "costEngineer")
+		{
+			i.second() >> _costEngineer;
+		}
+		else if (key == "costScientist")
+		{
+			i.second() >> _costScientist;
+		}
+		else if (key == "timePersonnel")
+		{
+			i.second() >> _timePersonnel;
 		}
 	}
 
@@ -390,6 +425,13 @@ void Ruleset::save(const std::string &filename) const
 		i->second->save(out);
 	}
 	out << YAML::EndSeq;
+	out << YAML::Key << "invs" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::map<std::string, RuleInventory*>::const_iterator i = _invs.begin(); i != _invs.end(); ++i)
+	{
+		i->second->save(out);
+	}
+	out << YAML::EndSeq;
 	out << YAML::Key << "terrains" << YAML::Value;
 	out << YAML::BeginSeq;
 	for (std::map<std::string, RuleTerrain*>::const_iterator i = _terrains.begin(); i != _terrains.end(); ++i)
@@ -397,6 +439,10 @@ void Ruleset::save(const std::string &filename) const
 		i->second->save(out);
 	}
 	out << YAML::EndSeq;
+	out << YAML::Key << "costSoldier" << YAML::Value << _costSoldier;
+	out << YAML::Key << "costEngineer" << YAML::Value << _costEngineer;
+	out << YAML::Key << "costScientist" << YAML::Value << _costScientist;
+	out << YAML::Key << "timePersonnel" << YAML::Value << _timePersonnel;
 	out << YAML::EndMap;
 	sav << out.c_str();
 	sav.close();

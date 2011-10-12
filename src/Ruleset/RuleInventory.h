@@ -22,6 +22,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include "yaml.h"
 
 namespace OpenXcom
 {
@@ -57,6 +58,10 @@ public:
 	RuleInventory(const std::string &id);
 	/// Cleans up the inventory ruleset.
 	~RuleInventory();
+	/// Loads inventory data from YAML.
+	void load(const YAML::Node& node);
+	/// Saves the inventory data to YAML.
+	void save(YAML::Emitter& out) const;
 	/// Gets the inventory's id.
 	std::string getId() const;
 	/// Gets the X position of the inventory.
