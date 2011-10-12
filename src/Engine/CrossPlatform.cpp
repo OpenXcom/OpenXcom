@@ -128,15 +128,22 @@ void showError(const std::wstring &error)
  * @param exists Check if the folder actually exists.
  * @return Full path to Data folder.
  */
-std::string findDataFolder(bool exists)
+std::string findDataFolder(bool exists, std::string &subfolder)
 {
 #ifdef _WIN32
 	char path[MAX_PATH];
+	std::string subfolder_path;
 
+	std::replace(subfolder.begin(), subfolder.end(), '/', '\\');
 	// Check in AppData folder
-    if (SUCCEEDED(SHGetFolderPathA(NULL, CSIDL_COMMON_APPDATA, NULL, SHGFP_TYPE_CURRENT, path)))
+	if (SUCCEEDED(SHGetFolderPathA(NULL, CSIDL_COMMON_APPDATA, NULL, SHGFP_TYPE_CURRENT, path)))
 	{
-		PathAppendA(path, "OpenXcom\\");
+		subfolder_path = "OpenXcom\\";
+		if (subfolder != "")
+		{
+			subfolder_path = subfolder_path + subfolder + "\\";
+		}
+		PathAppendA(path, subfolder_path.c_str());
 		if (!exists || PathIsDirectoryA(path))
 		{
 			return path;
@@ -147,7 +154,12 @@ std::string findDataFolder(bool exists)
 	if (GetModuleFileNameA(NULL, path, MAX_PATH) != 0)
 	{
 		PathRemoveFileSpecA(path);
-		PathAppendA(path, "DATA\\");
+		subfolder_path = "DATA\\";
+		if (subfolder != "")
+		{
+			subfolder_path = subfolder_path+subfolder+"\\";
+		}
+		PathAppendA(path, subfolder_path.c_str());
 		if (!exists || PathIsDirectoryA(path))
 		{
 			return path;
@@ -157,7 +169,12 @@ std::string findDataFolder(bool exists)
 	// Check in working directory
 	if (GetCurrentDirectoryA(MAX_PATH, path) != 0)
 	{
-		PathAppendA(path, "DATA\\");
+		subfolder_path = "DATA\\";
+		if (subfolder != "")
+		{
+			subfolder_path = subfolder_path+subfolder+"\\";
+		}
+		PathAppendA(path, subfolder_path.c_str());
 		if (!exists || PathIsDirectoryA(path))
 		{
 			return path;
@@ -166,11 +183,21 @@ std::string findDataFolder(bool exists)
 #else
 	struct stat info;
 
-	// Check shared directory
+// Check shared directory - APPLE needs attention!
 #ifdef __APPLE__
-	const char* shared = "/Users/Shared/OpenXcom/";
-#else
-	const char* shared = DATADIR;
+	std::string path = "/Users/Shared/OpenXcom/";	
+	subfolder_path = "DATA/";
+	if (subfolder != "")
+	{
+		subfolder_path = subfolder_path+subfolder+"/";
+	}
+	PathAppendA(path, subfolder_path.c_str());
+	const char* shared = path;
+#else	
+	std::string path = DATADIR;
+	if (subfolder != "")
+		path = path + subfolder + "/";
+	const char* shared = path.c_str();
 #endif
 	if (!exists || (stat(shared, &info) == 0 && S_ISDIR(info.st_mode)))
 	{
@@ -178,7 +205,10 @@ std::string findDataFolder(bool exists)
 	}
 
 	// Check working directory
-	const char* working = "./DATA/";
+	path = "./DATA/";
+	if (subfolder != "")
+		path = path + subfolder + "/";
+	const char* working = path.c_str();
 	if (!exists || (stat(working, &info) == 0 && S_ISDIR(info.st_mode)))
 	{
 		return working;
