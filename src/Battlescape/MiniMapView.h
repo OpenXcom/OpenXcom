@@ -20,6 +20,7 @@
 #define OPENXCOM_MINIMAPVIEW_H
 
 #include "../Engine/InteractiveSurface.h"
+#include "Position.h"
 #include <map>
 
 namespace OpenXcom
@@ -63,6 +64,8 @@ public:
 	void setDisplayedLevel (int level);
 	/// update minimap animation
 	void animate();
+	/// Return the minimap center position
+	Position getCenter();
 };
 
 }

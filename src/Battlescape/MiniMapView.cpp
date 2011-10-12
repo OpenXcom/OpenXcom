@@ -220,4 +220,16 @@ void MiniMapView::animate()
 		_frame = 0;
 	}
 }
+
+/**
+ * Get the minimap center position
+ * @return the minimap center
+*/
+Position MiniMapView::getCenter()
+{
+	Position p(_startX + ((getWidth () / 2) / CELL_HEIGHT),
+		   _startY + ((getHeight () / 2) / CELL_HEIGHT),
+		   _lvl);
+	return p;
+}
 }

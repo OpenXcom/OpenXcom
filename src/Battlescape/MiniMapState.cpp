@@ -73,7 +73,7 @@ MiniMapState::MiniMapState (Game * game, Map * map, SavedBattleGame * battleGame
  */
 void MiniMapState::btnOkClick (Action * action)
 {
-	_map->setViewHeight(_miniMapView->getDisplayedLevel ());
+	_map->centerOnPosition(_miniMapView->getCenter ());
 	_game->popState();
 }
 
