@@ -33,6 +33,7 @@
 #include "MapDataSet.h"
 #include "RuleSoldier.h"
 #include "RuleAlien.h"
+#include "RuleArmor.h"
 #include "ArticleDefinition.h"
 #include "RuleInventory.h"
 #include "RuleResearchProject.h"
@@ -98,6 +99,10 @@ Ruleset::~Ruleset()
 		delete i->second;
 	}
 	for (std::map<std::string, RuleAlien*>::iterator i = _aliens.begin(); i != _aliens.end(); ++i)
+	{
+		delete i->second;
+	}
+	for (std::map<std::string, RuleArmor*>::iterator i = _armors.begin(); i != _armors.end(); ++i)
 	{
 		delete i->second;
 	}
@@ -331,6 +336,26 @@ void Ruleset::load(const std::string &filename)
 				rule->load(j.second(), this);
 			}
 		}
+		else if (key == "armors")
+		{
+			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
+			{
+				std::string type;
+				j.second()["type"] >> type;
+				RuleArmor *rule;
+				if (_armors.find(type) != _armors.end())
+				{
+					rule = _armors[type];
+				}
+				else
+				{
+					rule = new RuleArmor(type, "", 0);
+					_armors[type] = rule;
+					_armorsIndex.push_back(type);
+				}
+				rule->load(j.second());
+			}
+		}
 		else if (key == "costSoldier")
 		{
 			i.second() >> _costSoldier;
@@ -435,6 +460,13 @@ void Ruleset::save(const std::string &filename) const
 	out << YAML::Key << "terrains" << YAML::Value;
 	out << YAML::BeginSeq;
 	for (std::map<std::string, RuleTerrain*>::const_iterator i = _terrains.begin(); i != _terrains.end(); ++i)
+	{
+		i->second->save(out);
+	}
+	out << YAML::EndSeq;
+	out << YAML::Key << "armors" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::map<std::string, RuleArmor*>::const_iterator i = _armors.begin(); i != _armors.end(); ++i)
 	{
 		i->second->save(out);
 	}

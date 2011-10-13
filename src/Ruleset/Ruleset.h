@@ -70,7 +70,7 @@ protected:
 	std::map<std::string, RuleInventory*> _invs;
 	int _costSoldier, _costEngineer, _costScientist, _timePersonnel;
 	std::map<std::string, RuleResearchProject *> _researchProjects;
-	std::vector<std::string> _countriesIndex, _regionsIndex, _facilitiesIndex, _craftsIndex, _craftWeaponsIndex, _itemsIndex;
+	std::vector<std::string> _countriesIndex, _regionsIndex, _facilitiesIndex, _craftsIndex, _craftWeaponsIndex, _itemsIndex, _armorsIndex, _researchIndex;
 public:
 	/// Creates a blank ruleset.
 	Ruleset();
