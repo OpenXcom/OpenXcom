@@ -37,6 +37,7 @@
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/RuleInventory.h"
 #include "UnitInfoState.h"
+#include "TileEngine.h"
 
 namespace OpenXcom
 {
@@ -175,6 +176,7 @@ void InventoryState::btnOkClick(Action *action)
 	{
 		_battleGame->resetUnitTiles();
 	}
+	_battleGame->getTileEngine()->calculateTerrainLighting(); // dropping/picking up flares
 }
 
 /**

@@ -19,8 +19,7 @@
 #ifndef OPENXCOM_MAPDATA_H
 #define OPENXCOM_MAPDATA_H
 
-#include <string>
-#include "../Ruleset/RuleItem.h"
+#include "RuleItem.h"
 
 namespace OpenXcom
 {

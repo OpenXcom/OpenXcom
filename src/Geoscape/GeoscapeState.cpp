@@ -848,14 +848,13 @@ void GeoscapeState::btnBasesClick(Action *action)
 void GeoscapeState::btnGraphsClick(Action *action)
 {
 #ifdef _DEBUG
-	_game->getRuleset()->save("UfoBase");
 	/* Daiky: uncomment this bit to start a terror mission */
 	_game->getSavedGame()->setBattleGame(new SavedBattleGame());
 	BattlescapeGenerator *bgen = new BattlescapeGenerator(_game);
 	bgen->setMissionType(MISS_TERROR);
 	//bgen->setMissionType(MISS_UFOASSAULT);
 	bgen->setWorldTexture(1);
-	bgen->setWorldShade(2);
+	bgen->setWorldShade(7);
 	bgen->setCraft(_game->getSavedGame()->getBases()->at(0)->getCrafts()->at(0));
 	bgen->run();
 	delete bgen;
@@ -900,7 +899,11 @@ void GeoscapeState::btnFundingClick(Action *action)
  */
 void GeoscapeState::btnRotateLeftPress(Action *action)
 {
+#ifdef _DEBUG
+	_game->getRuleset()->save("UfoBase");
+#else
 	_globe->rotateLeft();
+#endif
 }
 
 /**

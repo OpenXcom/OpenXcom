@@ -172,7 +172,7 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 		{
 			if (Options::getBool("battleAltGrenade"))
 			{
-				_action->value = 1;
+				_action->value = 0;
 				_game->popState();
 			}
 			else

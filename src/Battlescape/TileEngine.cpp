@@ -124,9 +124,15 @@ void TileEngine::calculateTerrainLighting()
 			addLight(_save->getTiles()[i]->getPosition(), fireLightPower, layer);
 		}
 
-	}
+		for (std::vector<BattleItem*>::iterator it = _save->getTiles()[i]->getInventory()->begin(); it != _save->getTiles()[i]->getInventory()->end(); ++it)
+		{
+			if ((*it)->getRules()->getBattleType() == BT_FLARE)
+			{
+				addLight(_save->getTiles()[i]->getPosition(), (*it)->getRules()->getPower(), layer);
+			}
+		}
 
-	// todo: add lighting of items (flares)
+	}
 
 }
 
@@ -573,12 +579,6 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 							{
 								tileAbove->destroy(MapData::O_FLOOR);
 							}
-							// very slight chance (0-25%) to minor damage to units above or below explosion
-							if (tileAbove->getUnit())
-								tileAbove->getUnit()->damage(Position(0, 0, 0), (int)(RNG::generate(0.0, power_/4.0)));
-							Tile *tileBelow = _save->getTile(Position(tileX, tileY, tileZ-1));
-							if (tileBelow && !dest->getMapData(MapData::O_FLOOR) && tileBelow->getUnit())
-								tileBelow->getUnit()->damage(Position(0, 0, 0), (int)(RNG::generate(0.0, power_/4.0)));
 						}
 						if (type == DT_SMOKE)
 						{

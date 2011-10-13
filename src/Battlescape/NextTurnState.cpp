@@ -26,6 +26,9 @@
 #include "../Interface/Text.h"
 #include "../Engine/Action.h"
 #include "../Savegame/SavedBattleGame.h"
+#include "DebriefingState.h"
+#include "../Interface/Cursor.h"
+#include "../Interface/FpsCounter.h"
 
 namespace OpenXcom
 {
@@ -35,7 +38,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param battleGame Pointer to the saved game.
  */
-NextTurnState::NextTurnState(Game *game, SavedBattleGame *battleGame) : State(game), _battleGame(battleGame)
+NextTurnState::NextTurnState(Game *game, SavedBattleGame *battleGame, BattlescapeState *state) : State(game), _battleGame(battleGame), _state(state)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
@@ -103,8 +106,26 @@ void NextTurnState::handle(Action *action)
 	if (action->getDetails()->type == SDL_KEYDOWN || action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
 	{
 		_game->popState();
-	}
 
+		// if all units from either faction are killed - the mission is over.
+		int liveAliens = 0;
+		int liveSoldiers = 0;
+		for (std::vector<BattleUnit*>::iterator j = _battleGame->getUnits()->begin(); j != _battleGame->getUnits()->end(); ++j)
+		{
+			if (!(*j)->isOut())
+			{
+				if ((*j)->getFaction() == FACTION_HOSTILE)
+					liveAliens++;
+				if ((*j)->getFaction() == FACTION_PLAYER)
+					liveSoldiers++;
+			}
+		}
+
+		if (liveAliens == 0 || liveSoldiers == 0)
+		{
+			_state->finishBattle(false);
+		}
+	}
 }
 
 }

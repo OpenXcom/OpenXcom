@@ -930,6 +930,17 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	grenade->setBattleType(BT_GRENADE);
 	grenade->setWeight(3);
 
+	RuleItem *flare = new RuleItem("STR_ELECTRO_FLARE");
+	flare->setSize(0.1f);
+	flare->setCost(60);
+	flare->setBigSprite(55);
+	flare->setFloorSprite(72);
+	flare->setPower(15);
+	flare->setDamageType(DT_NONE);
+	flare->setBattleType(BT_FLARE);
+	flare->setWeight(3);
+
+
 	RuleItem *sgrenade = new RuleItem("STR_SMOKE_GRENADE");
 	sgrenade->setSize(0.1f);
 	sgrenade->setCost(150);
@@ -1019,6 +1030,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_items.insert(std::pair<std::string, RuleItem*>("STR_PLASMA_PISTOL", ppistol));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_PLASMA_PISTOL_CLIP", ppclip));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_ALIEN_ALLOYS", alloys));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_ELECTRO_FLARE", flare));
 
 	// Add UFOs
 	RuleUfo *sscout = new RuleUfo("STR_SMALL_SCOUT");
@@ -1415,28 +1427,33 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_terrains.insert(std::pair<std::string, RuleTerrain*>("URBAN",urban));
 
 	// Add armor
-	RuleArmor *coveralls = new RuleArmor("STR_NONE_UC", "XCOM_0.PCK");
+	RuleArmor *coveralls = new RuleArmor("STR_NONE_UC", "XCOM_0.PCK", 0);
 	coveralls->setArmor(12, 8, 5, 2);
 	coveralls->setCorpseItem("STR_CORPSE");
 
-	RuleArmor *personalArmor = new RuleArmor("STR_PERSONAL_ARMOR_UC", "XCOM_1.PCK");
+	RuleArmor *personalArmor = new RuleArmor("STR_PERSONAL_ARMOR_UC", "XCOM_1.PCK", 0);
 	personalArmor->setArmor(50, 40, 40, 30);
 
-	RuleArmor *powerSuit = new RuleArmor("STR_POWER_SUIT_UC", "XCOM_2.PCK");
+	RuleArmor *powerSuit = new RuleArmor("STR_POWER_SUIT_UC", "XCOM_2.PCK", 0);
 	powerSuit->setArmor(100, 80, 70, 60);
 
-	RuleArmor *flyingSuit = new RuleArmor("STR_FLYING_SUIT_UC", "XCOM_2.PCK");
+	RuleArmor *flyingSuit = new RuleArmor("STR_FLYING_SUIT_UC", "XCOM_2.PCK", 0);
 	flyingSuit->setArmor(110, 90, 80, 70);
 
-	RuleArmor *sectoidSoldierArmor = new RuleArmor("SECTOID_ARMOR0", "SECTOID.PCK");
+	RuleArmor *sectoidSoldierArmor = new RuleArmor("SECTOID_ARMOR0", "SECTOID.PCK", 0);
 	sectoidSoldierArmor->setArmor(4, 3, 2, 2);
 	sectoidSoldierArmor->setCorpseItem("STR_SECTOID_CORPSE");
+
+	RuleArmor *floaterSoldierArmor = new RuleArmor("FLOATER_ARMOR0", "FLOATER.PCK", 1);
+	floaterSoldierArmor->setArmor(8, 6, 4, 12);
+	floaterSoldierArmor->setCorpseItem("STR_FLOATER_CORPSE");
 
 	_armors.insert(std::pair<std::string, RuleArmor*>("STR_NONE_UC", coveralls));
 	_armors.insert(std::pair<std::string, RuleArmor*>("STR_PERSONAL_ARMOR_UC", personalArmor));
 	_armors.insert(std::pair<std::string, RuleArmor*>("STR_POWER_SUIT_UC" ,powerSuit));
 	_armors.insert(std::pair<std::string, RuleArmor*>("STR_FLYING_SUIT_UC", flyingSuit));
 	_armors.insert(std::pair<std::string, RuleArmor*>("SECTOID_ARMOR0", sectoidSoldierArmor));
+	_armors.insert(std::pair<std::string, RuleArmor*>("FLOATER_ARMOR0", floaterSoldierArmor));
 
 	// Add units
 	RuleSoldier *xcom = new RuleSoldier("XCOM");
@@ -1521,9 +1538,27 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	sectoidNavigator->setVoxelParameters(16, 12, 2);
 	sectoidNavigator->setValue(12);
 
+	RuleAlien *floaterSoldier = new RuleAlien("FLOATER_SOLDIER", "STR_FLOATER", "STR_LIVE_FLOATER");
+	floaterSoldier->setArmor("FLOATER_ARMOR0");
+	s1.tu = 50;
+	s1.stamina = 90;
+	s1.health = 35;
+	s1.bravery = 80;
+	s1.reactions = 50;
+	s1.firing = 50;
+	s1.throwing = 58;
+	s1.strength = 40;
+	s1.psiStrength = 35;
+	s1.psiSkill = 0;
+	s1.melee = 70;
+	floaterSoldier->setStats(s1);
+	floaterSoldier->setVoxelParameters(21, 16, 3);
+	floaterSoldier->setValue(12);
+
 	_aliens.insert(std::pair<std::string, RuleAlien*>("SECTOID_SOLDIER", sectoidSoldier));
 	_aliens.insert(std::pair<std::string, RuleAlien*>("SECTOID_ENGINEER", sectoidEngineer));
 	_aliens.insert(std::pair<std::string, RuleAlien*>("SECTOID_NAVIGATOR", sectoidNavigator));
+	_aliens.insert(std::pair<std::string, RuleAlien*>("FLOATER_SOLDIER", floaterSoldier));
 
 	// create Ufopaedia article definitions
 	int sort_key = 1;
@@ -1982,6 +2017,7 @@ SavedGame *XcomRuleset::newSave(GameDifficulty diff) const
 	skyranger->getItems()->addItem("STR_HC_AP_AMMO", 2);
 	skyranger->getItems()->addItem("STR_HC_HE_AMMO", 2);
 	skyranger->getItems()->addItem("STR_GRENADE", 8);
+	skyranger->getItems()->addItem("STR_ELECTRO_FLARE", 4);
 	base->getCrafts()->push_back(skyranger);
 
 	for (int i = 0; i < 2; ++i)

@@ -40,6 +40,88 @@ RuleUfo::~RuleUfo()
 }
 
 /**
+ * Loads the UFO from a YAML file.
+ * @param node YAML node.
+ * @param rule Ruleset for the craft.
+ */
+void RuleUfo::load(const YAML::Node &node, const Ruleset *ruleset)
+{
+	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
+	{
+		std::string key;
+		i.first() >> key;
+		if (key == "type")
+		{
+			i.second() >> _type;
+		}
+		else if (key == "size")
+		{
+			i.second() >> _size;
+		}
+		else if (key == "sprite")
+		{
+			i.second() >> _sprite;
+		}
+		else if (key == "damageMax")
+		{
+			i.second() >> _damageMax;
+		}
+		else if (key == "speedMax")
+		{
+			i.second() >> _speedMax;
+		}
+		else if (key == "accel")
+		{
+			i.second() >> _accel;
+		}
+		else if (key == "power")
+		{
+			i.second() >> _power;
+		}
+		else if (key == "range")
+		{
+			i.second() >> _range;
+		}
+		else if (key == "score")
+		{
+			i.second() >> _score;
+		}
+		else if (key == "battlescapeTerrainData")
+		{
+			std::string name;
+			i.second()["name"] >> name;
+			RuleTerrain *rule = new RuleTerrain(name);
+			rule->load(i.second(), ruleset);
+		}
+	}
+}
+
+/**
+ * Saves the UFO to a YAML file.
+ * @param out YAML emitter.
+ */
+void RuleUfo::save(YAML::Emitter &out) const
+{
+	out << YAML::BeginMap;
+	out << YAML::Key << "type" << YAML::Value << _type;
+	out << YAML::Key << "size" << YAML::Value << _size;
+	out << YAML::Key << "sprite" << YAML::Value << _sprite;
+	out << YAML::Key << "damageMax" << YAML::Value << _damageMax;
+	out << YAML::Key << "speedMax" << YAML::Value << _speedMax;
+	out << YAML::Key << "accel" << YAML::Value << _accel;
+	out << YAML::Key << "power" << YAML::Value << _power;
+	out << YAML::Key << "range" << YAML::Value << _range;
+	out << YAML::Key << "score" << YAML::Value << _score;
+	if (_battlescapeTerrainData != 0)
+	{
+		out << YAML::Key << "battlescapeTerrainData" << YAML::Value;
+		_battlescapeTerrainData->save(out);
+	}
+	out << YAML::EndMap;
+}
+
+
+/**
  * Returns the language string that names
  * this UFO. Each UFO type has a unique name.
  * @return Ufo name.

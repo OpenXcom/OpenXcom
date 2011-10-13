@@ -41,6 +41,113 @@ RuleCraft::~RuleCraft()
 }
 
 /**
+ * Loads the craft from a YAML file.
+ * @param node YAML node.
+ * @param rule Ruleset for the craft.
+ */
+void RuleCraft::load(const YAML::Node &node, const Ruleset *ruleset)
+{
+	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
+	{
+		std::string key;
+		i.first() >> key;
+		if (key == "type")
+		{
+			i.second() >> _type;
+		}
+		else if (key == "sprite")
+		{
+			i.second() >> _sprite;
+		}
+		else if (key == "fuelMax")
+		{
+			i.second() >> _fuelMax;
+		}
+		else if (key == "damageMax")
+		{
+			i.second() >> _damageMax;
+		}
+		else if (key == "speedMax")
+		{
+			i.second() >> _speedMax;
+		}
+		else if (key == "accel")
+		{
+			i.second() >> _accel;
+		}
+		else if (key == "weapons")
+		{
+			i.second() >> _weapons;
+		}
+		else if (key == "soldiers")
+		{
+			i.second() >> _soldiers;
+		}
+		else if (key == "hwps")
+		{
+			i.second() >> _hwps;
+		}
+		else if (key == "cost")
+		{
+			i.second() >> _cost;
+		}
+		else if (key == "repair")
+		{
+			i.second() >> _repair;
+		}
+		else if (key == "refuel")
+		{
+			i.second() >> _refuel;
+		}
+		else if (key == "time")
+		{
+			i.second() >> _time;
+		}
+		else if (key == "score")
+		{
+			i.second() >> _score;
+		}
+		else if (key == "battlescapeTerrainData")
+		{
+			std::string name;
+			i.second()["name"] >> name;
+			RuleTerrain *rule = new RuleTerrain(name);
+			rule->load(i.second(), ruleset);
+		}
+	}
+}
+
+/**
+ * Saves the craft to a YAML file.
+ * @param out YAML emitter.
+ */
+void RuleCraft::save(YAML::Emitter &out) const
+{
+	out << YAML::BeginMap;
+	out << YAML::Key << "type" << YAML::Value << _type;
+	out << YAML::Key << "sprite" << YAML::Value << _sprite;
+	out << YAML::Key << "fuelMax" << YAML::Value << _fuelMax;
+	out << YAML::Key << "damageMax" << YAML::Value << _damageMax;
+	out << YAML::Key << "speedMax" << YAML::Value << _speedMax;
+	out << YAML::Key << "accel" << YAML::Value << _accel;
+	out << YAML::Key << "weapons" << YAML::Value << _weapons;
+	out << YAML::Key << "soldiers" << YAML::Value << _soldiers;
+	out << YAML::Key << "hwps" << YAML::Value << _hwps;
+	out << YAML::Key << "cost" << YAML::Value << _cost;
+	out << YAML::Key << "repair" << YAML::Value << _repair;
+	out << YAML::Key << "refuel" << YAML::Value << _refuel;
+	out << YAML::Key << "range" << YAML::Value << _range;
+	out << YAML::Key << "time" << YAML::Value << _time;
+	out << YAML::Key << "score" << YAML::Value << _score;
+	if (_battlescapeTerrainData != 0)
+	{
+		out << YAML::Key << "battlescapeTerrainData" << YAML::Value;
+		_battlescapeTerrainData->save(out);
+	}
+	out << YAML::EndMap;
+}
+
+/**
  * Returns the language string that names
  * this craft. Each craft type has a unique name.
  * @return Craft name.
@@ -344,100 +451,6 @@ RuleTerrain *RuleCraft::getBattlescapeTerrainData()
 void RuleCraft::setBattlescapeTerrainData(RuleTerrain *terrain)
 {
 	_battlescapeTerrainData = terrain;
-}
-
-/**
- * Loads the craft from a YAML file.
- * @param node YAML node.
- */
-void RuleCraft::load(const YAML::Node &node)
-{
-	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
-	{
-		std::string key;
-		i.first() >> key;
-		if (key == "type")
-		{
-			i.second() >> _type;
-		}
-		if (key == "sprite")
-		{
-			i.second() >> _sprite;
-		}
-		else if (key == "fuelMax")
-		{
-			i.second() >> _fuelMax;
-		}
-		else if (key == "damageMax")
-		{
-			i.second() >> _damageMax;
-		}
-		else if (key == "speedMax")
-		{
-			i.second() >> _speedMax;
-		}
-		else if (key == "accel")
-		{
-			i.second() >> _accel;
-		}
-		else if (key == "weapons")
-		{
-			i.second() >> _weapons;
-		}
-		else if (key == "soldiers")
-		{
-			i.second() >> _soldiers;
-		}
-		else if (key == "hwps")
-		{
-			i.second() >> _hwps;
-		}
-		else if (key == "cost")
-		{
-			i.second() >> _cost;
-		}
-		else if (key == "repair")
-		{
-			i.second() >> _repair;
-		}
-		else if (key == "refuel")
-		{
-			i.second() >> _refuel;
-		}
-		else if (key == "time")
-		{
-			i.second() >> _time;
-		}
-		else if (key == "score")
-		{
-			i.second() >> _score;
-		}
-	}
-}
-
-/**
- * Saves the craft to a YAML file.
- * @param out YAML emitter.
- */
-void RuleCraft::save(YAML::Emitter &out) const
-{
-	out << YAML::BeginMap;
-	out << YAML::Key << "type" << YAML::Value << _type;
-	out << YAML::Key << "sprite" << YAML::Value << _sprite;
-	out << YAML::Key << "fuelMax" << YAML::Value << _fuelMax;
-	out << YAML::Key << "damageMax" << YAML::Value << _damageMax;
-	out << YAML::Key << "speedMax" << YAML::Value << _speedMax;
-	out << YAML::Key << "accel" << YAML::Value << _accel;
-	out << YAML::Key << "weapons" << YAML::Value << _weapons;
-	out << YAML::Key << "soldiers" << YAML::Value << _soldiers;
-	out << YAML::Key << "hwps" << YAML::Value << _hwps;
-	out << YAML::Key << "cost" << YAML::Value << _cost;
-	out << YAML::Key << "repair" << YAML::Value << _repair;
-	out << YAML::Key << "refuel" << YAML::Value << _refuel;
-	out << YAML::Key << "range" << YAML::Value << _range;
-	out << YAML::Key << "time" << YAML::Value << _time;
-	out << YAML::Key << "score" << YAML::Value << _score;
-	out << YAML::EndMap;
 }
 
 }

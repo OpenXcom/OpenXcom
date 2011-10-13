@@ -47,6 +47,39 @@ MapDataSet::~MapDataSet()
 }
 
 /**
+ * Loads the map data set from a YAML file.
+ * @param node YAML node.
+ */
+void MapDataSet::load(const YAML::Node &node)
+{
+	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
+	{
+		std::string key;
+		i.first() >> key;
+		if (key == "name")
+		{
+			i.second() >> _name;
+		}
+		else if (key == "size")
+		{
+			i.second() >> _size;
+		}
+	}
+}
+
+/**
+ * Saves the map data set to a YAML file.
+ * @param out YAML emitter.
+ */
+void MapDataSet::save(YAML::Emitter &out) const
+{
+	out << YAML::BeginMap;
+	out << YAML::Key << "name" << YAML::Value << _name;
+	out << YAML::Key << "size" << YAML::Value << _size;
+	out << YAML::EndMap;
+}
+
+/**
 * Gets the MapDataSet name (string).
 * @return name.
 */

@@ -27,6 +27,7 @@ namespace OpenXcom
 class Window;
 class Text;
 class SavedBattleGame;
+class BattlescapeState;
 
 /**
  * Screen which announces the next turn.
@@ -37,9 +38,10 @@ private:
 	Window *_window;
 	Text *_txtTitle, *_txtTurn, *_txtSide, *_txtMessage;
 	SavedBattleGame *_battleGame;
+	BattlescapeState *_state;
 public:
 	/// Creates the Next Turn state.
-	NextTurnState(Game *game, SavedBattleGame *battleGame);
+	NextTurnState(Game *game, SavedBattleGame *battleGame, BattlescapeState *state);
 	/// Cleans up the Next Turn state.
 	~NextTurnState();
 	/// Handler for clicking anything.

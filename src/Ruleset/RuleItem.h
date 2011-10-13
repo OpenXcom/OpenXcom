@@ -21,9 +21,10 @@
 
 #include <string>
 #include <vector>
+#include "yaml.h"
 
 enum ItemDamageType { DT_NONE, DT_AP, DT_IN, DT_HE, DT_LASER, DT_PLASMA, DT_STUN, DT_MELEE, DT_ACID, DT_SMOKE };
-enum BattleType { BT_NONE, BT_FIREARM, BT_AMMO, BT_MELEE, BT_GRENADE, BT_PROXIMITYGRENADE, BT_MEDIKIT, BT_SCANNER };
+enum BattleType { BT_NONE, BT_FIREARM, BT_AMMO, BT_MELEE, BT_GRENADE, BT_PROXIMITYGRENADE, BT_MEDIKIT, BT_SCANNER, BT_MINDPROBE, BT_PSIAMP, BT_FLARE };
 
 namespace OpenXcom
 {
@@ -45,7 +46,7 @@ private:
 	int _cost, _time, _weight;
 	int _bigSprite, _floorSprite, _handSprite, _bulletSprite;
 	int _fireSound, _hitSound, _hitAnimation;
-	int _power, _displayPriority;
+	int _power, _priority;
 	std::vector<std::string> _compatibleAmmo;
 	ItemDamageType _damageType;
 	int _accuracyAuto, _accuracySnap, _accuracyAimed, _tuAuto, _tuSnap, _tuAimed;
@@ -58,6 +59,10 @@ public:
 	RuleItem(const std::string &type);
 	/// Cleans up the item ruleset.
 	~RuleItem();
+	/// Loads item data from YAML.
+	void load(const YAML::Node& node);
+	/// Saves the item data to YAML.
+	void save(YAML::Emitter& out) const;
 	/// Gets the item's type.
 	std::string getType() const;
 	/// Gets the item's size.

@@ -20,6 +20,7 @@
 #define OPENXCOM_MAPBLOCK_H
 
 #include <string>
+#include "yaml.h"
 
 namespace OpenXcom
 {
@@ -42,6 +43,10 @@ private:
 public:
 	MapBlock(RuleTerrain *terrain, std::string name, int width, int length, bool landingZone);
 	~MapBlock();
+	/// Loads the map block from YAML.
+	void load(const YAML::Node& node);
+	/// Saves the map block to YAML.
+	void save(YAML::Emitter& out) const;
 	/// Gets the mapblock's name (used for MAP generation).
 	std::string getName() const;
 	/// Gets the mapblock's width.

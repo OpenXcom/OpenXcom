@@ -25,7 +25,7 @@ namespace OpenXcom
  * Creates a blank ruleset for a certain type of craft weapon.
  * @param type String defining the type.
  */
-RuleCraftWeapon::RuleCraftWeapon(const std::string &type) : _type(type), _sprite(-1), _sound(-1), _damage(0), _range(0), _accuracy(0), _reloadCautious(0), _reloadStandard(0), _reloadAggressive(0), _ammoMax(0), _rearm(1)
+RuleCraftWeapon::RuleCraftWeapon(const std::string &type) : _type(type), _sprite(-1), _sound(-1), _damage(0), _range(0), _accuracy(0), _reloadCautious(0), _reloadStandard(0), _reloadAggressive(0), _ammoMax(0), _rearmRate(1)
 {
 }
 
@@ -34,6 +34,94 @@ RuleCraftWeapon::RuleCraftWeapon(const std::string &type) : _type(type), _sprite
  */
 RuleCraftWeapon::~RuleCraftWeapon()
 {
+}
+
+/**
+ * Loads the craft weapon from a YAML file.
+ * @param node YAML node.
+ */
+void RuleCraftWeapon::load(const YAML::Node &node)
+{
+	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
+	{
+		std::string key;
+		i.first() >> key;
+		if (key == "type")
+		{
+			i.second() >> _type;
+		}
+		else if (key == "sprite")
+		{
+			i.second() >> _sprite;
+		}
+		else if (key == "sound")
+		{
+			i.second() >> _sound;
+		}
+		else if (key == "damage")
+		{
+			i.second() >> _damage;
+		}
+		else if (key == "range")
+		{
+			i.second() >> _range;
+		}
+		else if (key == "accuracy")
+		{
+			i.second() >> _accuracy;
+		}
+		else if (key == "reloadCautious")
+		{
+			i.second() >> _reloadCautious;
+		}
+		else if (key == "reloadStandard")
+		{
+			i.second() >> _reloadStandard;
+		}
+		else if (key == "reloadAggressive")
+		{
+			i.second() >> _reloadAggressive;
+		}
+		else if (key == "ammoMax")
+		{
+			i.second() >> _ammoMax;
+		}
+		else if (key == "rearmRate")
+		{
+			i.second() >> _rearmRate;
+		}
+		else if (key == "launcher")
+		{
+			i.second() >> _launcher;
+		}
+		else if (key == "clip")
+		{
+			i.second() >> _clip;
+		}
+	}
+}
+
+/**
+ * Saves the craft weapon to a YAML file.
+ * @param out YAML emitter.
+ */
+void RuleCraftWeapon::save(YAML::Emitter &out) const
+{
+	out << YAML::BeginMap;
+	out << YAML::Key << "type" << YAML::Value << _type;
+	out << YAML::Key << "sprite" << YAML::Value << _sprite;
+	out << YAML::Key << "sound" << YAML::Value << _sound;
+	out << YAML::Key << "damage" << YAML::Value << _damage;
+	out << YAML::Key << "range" << YAML::Value << _range;
+	out << YAML::Key << "accuracy" << YAML::Value << _accuracy;
+	out << YAML::Key << "reloadCautious" << YAML::Value << _reloadCautious;
+	out << YAML::Key << "reloadStandard" << YAML::Value << _reloadStandard;
+	out << YAML::Key << "reloadAggressive" << YAML::Value << _reloadAggressive;
+	out << YAML::Key << "ammoMax" << YAML::Value << _ammoMax;
+	out << YAML::Key << "rearmRate" << YAML::Value << _rearmRate;
+	out << YAML::Key << "launcher" << YAML::Value << _launcher;
+	out << YAML::Key << "clip" << YAML::Value << _clip;
+	out << YAML::EndMap;
 }
 
 /**
@@ -231,7 +319,7 @@ void RuleCraftWeapon::setAmmoMax(int ammo)
  */
 int RuleCraftWeapon::getRearmRate() const
 {
-	return _rearm;
+	return _rearmRate;
 }
 
 /**
@@ -241,7 +329,7 @@ int RuleCraftWeapon::getRearmRate() const
  */
 void RuleCraftWeapon::setRearmRate(int rearm)
 {
-	_rearm = rearm;
+	_rearmRate = rearm;
 }
 
 /**

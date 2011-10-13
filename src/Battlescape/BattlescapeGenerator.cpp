@@ -99,6 +99,8 @@ void BattlescapeGenerator::setUfo(Ufo *ufo)
  */
 void BattlescapeGenerator::setWorldTexture(int texture)
 {
+	if (texture > 12) texture = 12;
+	if (texture < 0) texture = 0;
 	_worldTexture = texture;
 }
 
@@ -108,6 +110,8 @@ void BattlescapeGenerator::setWorldTexture(int texture)
  */
 void BattlescapeGenerator::setWorldShade(int shade)
 {
+	if (shade > 7) shade = 7;
+	if (shade < 0) shade = 0;
 	_worldShade = shade;
 }
 
@@ -309,7 +313,7 @@ void BattlescapeGenerator::run()
 	{
 		for (int i=0; i < 5; i++)
 		{
-			unit = addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), SCOUT);
+			unit = addAlien(_game->getRuleset()->getAlien("FLOATER_SOLDIER"), _game->getRuleset()->getArmor("FLOATER_ARMOR0"), SCOUT);
 			addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL"), unit);
 			addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL_CLIP"), unit);
 		}

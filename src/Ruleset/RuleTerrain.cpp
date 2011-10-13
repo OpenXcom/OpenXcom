@@ -17,12 +17,11 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <sstream>
-#include <iostream>
 #include "RuleTerrain.h"
 #include "MapBlock.h"
 #include "MapDataSet.h"
 #include "../Engine/RNG.h"
+#include "Ruleset.h"
 
 namespace OpenXcom
 {
@@ -43,6 +42,69 @@ RuleTerrain::~RuleTerrain()
 	{
 		delete *i;
 	}
+}
+
+/**
+ * Loads the terrain from a YAML file.
+ * @param node YAML node.
+ * @param rule Ruleset for the terrain.
+ */
+void RuleTerrain::load(const YAML::Node &node, const Ruleset *ruleset)
+{
+	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
+	{
+		std::string key;
+		i.first() >> key;
+		if (key == "name")
+		{
+			i.second() >> _name;
+		}
+		else if (key == "mapDataSets")
+		{
+			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
+			{
+				std::string name;
+				j.second() >> name;
+				_mapDataSets.push_back(ruleset->getMapDataSet(name));
+			}
+		}
+		else if (key == "mapBlocks")
+		{
+			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
+			{
+				std::string name;
+				j.second()["name"] >> name;
+				MapBlock *map = new MapBlock(this, name, 0, 0, false);
+				map->load(j.second());
+				_mapBlocks.push_back(map);
+			}
+		}
+	}
+}
+
+/**
+ * Saves the terrain to a YAML file.
+ * @param out YAML emitter.
+ */
+void RuleTerrain::save(YAML::Emitter &out) const
+{
+	out << YAML::BeginMap;
+	out << YAML::Key << "name" << YAML::Value << _name;
+	out << YAML::Key << "mapDataSets" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::vector<MapDataSet*>::const_iterator i = _mapDataSets.begin(); i != _mapDataSets.end(); ++i)
+	{
+		out << (*i)->getName();
+	}
+	out << YAML::EndSeq;
+	out << YAML::Key << "mapBlocks" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::vector<MapBlock*>::const_iterator i = _mapBlocks.begin(); i != _mapBlocks.end(); ++i)
+	{
+		(*i)->save(out);
+	}
+	out << YAML::EndSeq;
+	out << YAML::EndMap;
 }
 
 /**
