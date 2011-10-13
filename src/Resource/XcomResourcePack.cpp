@@ -196,7 +196,10 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 			_sets[sets[i]]->loadDat(CrossPlatform::getDataFile(s.str()));
 		}
 	}
-
+	_sets["SCANG.DAT"] = new SurfaceSet(4, 4);
+	std::stringstream scang;
+	scang << "GEODATA/" << "SCANG.DAT";
+	_sets["SCANG.DAT"]->loadDat (CrossPlatform::getDataFile(scang.str()));
 	// Load polygons
 	std::stringstream s;
 	s << "GEODATA/" << "WORLD.DAT";

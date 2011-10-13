@@ -68,6 +68,7 @@
 #include "DebriefingState.h"
 #include "../Engine/RNG.h"
 #include "InfoboxState.h"
+#include "MiniMapState.h"
 
 namespace OpenXcom
 {
@@ -594,7 +595,8 @@ void BattlescapeState::btnMapDownClick(Action *action)
  */
 void BattlescapeState::btnShowMapClick(Action *action)
 {
-
+	//MiniMapState
+	_game->pushState (new MiniMapState (_game, _map, _battleGame));
 }
 
 /**
