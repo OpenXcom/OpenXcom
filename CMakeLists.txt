@@ -47,4 +47,7 @@ else ( )
   endif ( NOT YAMLCPP_FOUND )
 endif()
 
+# Read version number
+set (file "${CMAKE_SOURCE_DIR}/src/Engine/Options.cpp" )
+string ( REGEX MATCH "[.]*_version = \"([0-9]).([0-9])" version_line "${lines}" )
 add_subdirectory ( src )
