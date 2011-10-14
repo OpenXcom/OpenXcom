@@ -8,7 +8,6 @@ if ( WIN32 )
 endif ()
 
 set ( DEPS_DIR "${default_deps_dir}" CACHE STRING "Deps directory" )
-include ( CPack )
 
 # Add check for library (SDL_gfx, yaml-cpp )
 if ( IS_DIRECTORY ${DEPS_DIR} )
@@ -50,4 +49,14 @@ endif()
 # Read version number
 set (file "${CMAKE_SOURCE_DIR}/src/Engine/Options.cpp" )
 string ( REGEX MATCH "[.]*_version = \"([0-9]).([0-9])" version_line "${lines}" )
+set ( CPACK_PACKAGE_VERSION_MAJOR ${CMAKE_MATCH_1} )
+set ( CPACK_PACKAGE_VERSION_MINOR ${CMAKE_MATCH_2} )
+set ( CPACK_PACKAGE_VERSION_PATCH "" )
+set ( CPACK_PACKAGE_VENDOR "The OpenXcom project" )
+set ( CPACK_RESOURCE_FILE_README "${CMAKE_SOURCE_DIR}/README.txt" )
+set ( CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/COPYING" )
+set ( CPACK_PACKAGE_CONTACT "The OpenXcom project" )
+set ( CPACK_DEBIAN_PACKAGE_MAINTAINER "The OpenXcom project" )
+include ( CPack )
+
 add_subdirectory ( src )
