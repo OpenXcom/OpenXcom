@@ -20,6 +20,7 @@
 #define OPENXCOM_RULEARMOR_H
 
 #include <string>
+#include "yaml.h"
 
 namespace OpenXcom
 {
@@ -40,6 +41,10 @@ public:
 	RuleArmor(const std::string &type, std::string spriteSheet, int drawingRoutine);
 	/// Cleans up the armor ruleset.
 	~RuleArmor();
+	/// Loads armor data from YAML.
+	void load(const YAML::Node& node);
+	/// Saves the armor data to YAML.
+	void save(YAML::Emitter& out) const;
 	/// Gets the armor's type.
 	std::string getType() const;
 	/// Gets the unit's sprite sheet.

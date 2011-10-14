@@ -41,6 +41,69 @@ RuleArmor::~RuleArmor()
 }
 
 /**
+ * Loads the armor from a YAML file.
+ * @param node YAML node.
+ */
+void RuleArmor::load(const YAML::Node &node)
+{
+	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
+	{
+		std::string key;
+		i.first() >> key;
+		if (key == "type")
+		{
+			i.second() >> _type;
+		}
+		else if (key == "spriteSheet")
+		{
+			i.second() >> _spriteSheet;
+		}
+		else if (key == "corpseItem")
+		{
+			i.second() >> _corpseItem;
+		}
+		else if (key == "frontArmor")
+		{
+			i.second() >> _frontArmor;
+		}
+		else if (key == "sideArmor")
+		{
+			i.second() >> _sideArmor;
+		}
+		else if (key == "rearArmor")
+		{
+			i.second() >> _rearArmor;
+		}
+		else if (key == "underArmor")
+		{
+			i.second() >> _underArmor;
+		}
+		else if (key == "drawingRoutine")
+		{
+			i.second() >> _drawingRoutine;
+		}
+	}
+}
+
+/**
+ * Saves the armor to a YAML file.
+ * @param out YAML emitter.
+ */
+void RuleArmor::save(YAML::Emitter &out) const
+{
+	out << YAML::BeginMap;
+	out << YAML::Key << "type" << YAML::Value << _type;
+	out << YAML::Key << "spriteSheet" << YAML::Value << _spriteSheet;
+	out << YAML::Key << "corpseItem" << YAML::Value << _corpseItem;
+	out << YAML::Key << "frontArmor" << YAML::Value << _frontArmor;
+	out << YAML::Key << "sideArmor" << YAML::Value << _sideArmor;
+	out << YAML::Key << "rearArmor" << YAML::Value << _rearArmor;
+	out << YAML::Key << "underArmor" << YAML::Value << _underArmor;
+	out << YAML::Key << "drawingRoutine" << YAML::Value << _drawingRoutine;
+	out << YAML::EndMap;
+}
+
+/**
  * Returns the language string that names
  * this armor. Each armor has a unique name. Coveralls, Power Suit,...
  * @return Armor name.
