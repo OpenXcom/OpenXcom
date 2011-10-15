@@ -443,6 +443,19 @@ if ( CMAKE_COMPILER_IS_GNUCXX AND ( "${CMAKE_BUILD_TYPE}" STREQUAL "Debug" OR EN
     endif ( FATAL_WARNING )
 endif()
 
+if ( MSVC )
+  if ( ENABLE_WARNING )
+    add_definitions ( /W${MSVC_WARNING_LEVEL} )
+  else ()
+    # Set warning levels for Debug and Release With debug info
+    set ( CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /W${MSVC_WARNING_LEVEL}" )
+    set ( CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} /W${MSVC_WARNING_LEVEL}" )
+  endif ()
+  if ( FATAL_WARNING )
+    add_definitions ( /WX )
+  endif ( FATAL_WARNING )
+endif ()
+
 if ( NOT WIN32 )
   add_definitions ( -DDATADIR="${CMAKE_INSTALL_PREFIX}/share/openxcom/" )
 else ()
