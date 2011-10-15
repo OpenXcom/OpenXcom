@@ -417,9 +417,27 @@ set ( ufopedia_src
   Ufopaedia/ArticleStateArmor.h
 )
 
-if ( "${CMAKE_BUILD_TYPE}" STREQUAL "Debug" AND CMAKE_COMPILER_IS_GNUCXX )
-# Enable more GCC warnings if we are doing a Debug build.
-  add_definitions ( -Wall )
+if ( CMAKE_COMPILER_IS_GNUCXX AND ( "${CMAKE_BUILD_TYPE}" STREQUAL "Debug" OR ENABLE_WARNING) )
+    # Enable more GCC warnings if we are doing a Debug build or requested.
+    add_definitions ( -Wall
+      -Wsign-compare
+      -Winit-self
+      -Wmissing-include-dirs
+      -Wunknown-pragmas
+      -Wmissing-format-attribute
+      -Wredundant-decls
+      -Winline
+      -Wformat-security
+      -Wtype-limits
+      -Wclobbered
+      -Wempty-body
+      -Wlogical-op
+      -Wuninitialized
+      -Wshadow
+# Those two warnings options actually generates way too much warning. Should be enabled later.
+#      -Wignored-qualifiers
+#      -Weffc++
+      )
 endif()
 
 if ( NOT WIN32 )

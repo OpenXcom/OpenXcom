@@ -49,6 +49,7 @@ endif()
 # Read version number
 option ( DEV_BUILD "Developement Build. Turn off for release" ON )
 option ( BUILD_PACKAGE "Add need rules to build packages" ON )
+option ( ENABLE_WARNING "Always show warnings(even for release build" OFF )
 if ( BUILD_PACKAGE )
   set ( file "${CMAKE_SOURCE_DIR}/src/Engine/Options.cpp" )
   file ( READ ${file} lines )
