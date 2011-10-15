@@ -438,6 +438,9 @@ if ( CMAKE_COMPILER_IS_GNUCXX AND ( "${CMAKE_BUILD_TYPE}" STREQUAL "Debug" OR EN
 #      -Wignored-qualifiers
 #      -Weffc++
       )
+    if ( FATAL_WARNING )
+      add_definitions ( -Werror )
+    endif ( FATAL_WARNING )
 endif()
 
 if ( NOT WIN32 )
