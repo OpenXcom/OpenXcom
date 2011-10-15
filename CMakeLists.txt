@@ -47,6 +47,7 @@ else ( )
 endif()
 
 # Read version number
+option ( DEV_BUILD "Developement Build. Turn off for release" ON )
 option ( BUILD_PACKAGE "Add need rules to build packages" ON )
 if ( BUILD_PACKAGE )
   set ( file "${CMAKE_SOURCE_DIR}/src/Engine/Options.cpp" )
@@ -55,6 +56,31 @@ if ( BUILD_PACKAGE )
   set ( CPACK_PACKAGE_VERSION_MAJOR ${CMAKE_MATCH_1} )
   set ( CPACK_PACKAGE_VERSION_MINOR ${CMAKE_MATCH_2} )
   set ( CPACK_PACKAGE_VERSION_PATCH "" )
+  find_package ( Git )
+  if ( GIT_FOUND )
+    message("git found: ${GIT_EXECUTABLE}")
+    execute_process ( COMMAND ${GIT_EXECUTABLE} describe --dirty
+      WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+      OUTPUT_VARIABLE git_describe_out
+      ERROR_VARIABLE git_describe_error
+      RESULT_VARIABLE git_describe_result
+      )
+    string ( REGEX MATCH "([a-z|0-9|.]*)-([0-9]*)-([a-z|0-9]*)([-|a-z]*)" git_commit "${git_describe_out}" )
+    set ( git_tag ${CMAKE_MATCH_1} )
+    set ( git_nb_commit ${CMAKE_MATCH_2} )
+    set ( git_commit ${CMAKE_MATCH_3} )
+    set ( git_dirty ${CMAKE_MATCH_4} )
+  endif()
+
+  if ( DEV_BUILD )
+    # Append the commit to version number
+    set ( CPACK_PACKAGE_VERSION_PATCH "${git_commit}${git_dirty}" )
+  else ()
+    string ( LENGTH "${git_dirty}" is_dirty )
+    if ( ${is_dirty} GREATER 0 )
+      message ( FATAL_ERROR "Released package should be built from a clean tree" )
+    endif ()
+  endif ( DEV_BUILD )
   set ( CPACK_PACKAGE_VENDOR "The OpenXcom project" )
   set ( CPACK_RESOURCE_FILE_README "${CMAKE_SOURCE_DIR}/README.txt" )
   set ( CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/COPYING" )
@@ -62,6 +88,7 @@ if ( BUILD_PACKAGE )
   set ( CPACK_DEBIAN_PACKAGE_MAINTAINER "The OpenXcom project" )
   include ( CPack )
   message ( "version:${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}"
+)
 endif()
 
 add_subdirectory ( src )
