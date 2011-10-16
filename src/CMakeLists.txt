@@ -431,32 +431,80 @@ set ( ufopedia_src
   Ufopaedia/ArticleStateArmor.h
 )
 
-if ( "${CMAKE_BUILD_TYPE}" STREQUAL "Debug" AND CMAKE_COMPILER_IS_GNUCXX )
-# Enable more GCC warnings if we are doing a Debug build.
-  add_definitions ( -Wall -D_DEBUG )
+if ( CMAKE_COMPILER_IS_GNUCXX AND "${CMAKE_BUILD_TYPE}" STREQUAL "Debug" )
+  add_definitions ( -D_DEBUG )
+endif ()
+if ( CMAKE_COMPILER_IS_GNUCXX AND ( "${CMAKE_BUILD_TYPE}" STREQUAL "Debug" OR ENABLE_WARNING) )
+    # Enable more GCC warnings if we are doing a Debug build or requested.
+    add_definitions ( -Wall
+      -Wsign-compare
+      -Winit-self
+      -Wmissing-include-dirs
+      -Wunknown-pragmas
+      -Wmissing-format-attribute
+      -Wredundant-decls
+      -Winline
+      -Wformat-security
+      -Wtype-limits
+      -Wclobbered
+      -Wempty-body
+      -Wlogical-op
+      -Wuninitialized
+      -Wshadow
+# Those two warnings options actually generates way too much warning. Should be enabled later.
+#      -Wignored-qualifiers
+#      -Weffc++
+      )
+    if ( FATAL_WARNING )
+      add_definitions ( -Werror )
+    endif ( FATAL_WARNING )
 endif()
+
+if ( MSVC )
+  if ( ENABLE_WARNING )
+    add_definitions ( /W${MSVC_WARNING_LEVEL} )
+  else ()
+    # Set warning levels for Debug and Release With debug info
+    set ( CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /W${MSVC_WARNING_LEVEL}" )
+    set ( CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} /W${MSVC_WARNING_LEVEL}" )
+  endif ()
+  if ( FATAL_WARNING )
+    add_definitions ( /WX )
+  endif ( FATAL_WARNING )
+endif ()
 
 if ( NOT WIN32 )
   add_definitions ( -DDATADIR="${CMAKE_INSTALL_PREFIX}/share/openxcom/" )
+else ()
+  set ( application_type WIN32 )
 endif ()
 
 set ( openxcom_src main.cpp ${basescape_src} ${battlescape_src} ${engine_src} ${geoscape_src} ${interface_src} ${menu_src} ${resource_src} ${ruleset_src} ${savegame_src} ${ufopedia_src} )
 
 set ( EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin )
 
-add_executable ( openxcom  ${openxcom_src} )
+add_executable ( openxcom  ${application_type} ${openxcom_src} )
 install ( TARGETS openxcom RUNTIME DESTINATION bin )
 # Extra link flags for windows. they need to be before the SDL/YAML link flags. Otherwise, you will get strange link errors('Undefined reference to WinMain@16')
 if ( WIN32 )
-  target_link_libraries ( openxcom advapi32.lib shell32.lib shlwapi.lib mingw32 -mwindows SDLmain -static )
-  set ( SDLMIXER_LIBRARY "${SDLMIXER_LIBRARY} -lwinmm" )
+  set ( basic_windows_libs advapi32.lib shell32.lib shlwapi.lib )
+  if ( MINGW )
+    set ( basic_windows_libs ${basic_windows_libs} mingw32 -mwindows )
+    set ( static_flags  -static )
+    set ( SDLMIXER_LIBRARY "${SDLMIXER_LIBRARY} -lwinmm" )
+  endif ()
+  if ( MSVC )
+    set_target_properties ( openxcom
+      PROPERTIES PREFIX ../ )
+  endif ()
+  set ( system_libs ${basic_windows_libs} SDLmain ${static_flags} )
 endif ()
-target_link_libraries ( openxcom ${SDLMIXER_LIBRARY} ${SDLGFX_LIBRARY} ${SDL_LIBRARY} ${YAMLCPP_LIBRARY} )
+target_link_libraries ( openxcom ${system_libs} ${SDLMIXER_LIBRARY} ${SDLGFX_LIBRARY} ${SDL_LIBRARY} ${YAMLCPP_LIBRARY} )
 
 add_custom_command ( TARGET openxcom
   POST_BUILD
-  COMMAND cmake -E copy_directory ${CMAKE_SOURCE_DIR}/bin/USER ${EXECUTABLE_OUTPUT_PATH}/USER
-  COMMAND cmake -E copy_directory ${CMAKE_SOURCE_DIR}/bin/DATA ${EXECUTABLE_OUTPUT_PATH}/DATA )
+  COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/bin/USER ${EXECUTABLE_OUTPUT_PATH}/USER
+  COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/bin/DATA ${EXECUTABLE_OUTPUT_PATH}/DATA )
 install ( DIRECTORY ${CMAKE_SOURCE_DIR}/bin/DATA DESTINATION bin )
 
 # Copy Windows DLL to bin folder
@@ -465,21 +513,21 @@ if ( WIN32 )
   foreach ( dll ${Windows_dll} )
     add_custom_command ( TARGET openxcom
       POST_BUILD
-      COMMAND cmake -E copy ${dll} ${EXECUTABLE_OUTPUT_PATH} )
+      COMMAND ${CMAKE_COMMAND} -E copy ${dll} ${EXECUTABLE_OUTPUT_PATH} )
     install ( FILES ${dll} DESTINATION bin)
   endforeach()
 endif ()
 
 #Setup source group for IDE
 if ( MSVC )
-  source_group ( "Basescape" ${basescape_src} )
-  source_group ( "Battlescape" ${battlescape_src} )
-  source_group ( "Engine" ${engine_src} )
-  source_group ( "Geoscape" ${geoscape_src} )
-  source_group ( "Interface" ${interface_src} )
-  source_group ( "Menu" ${menu_src} )
-  source_group ( "Resource" ${resource_src} )
-  source_group ( "Ruleset" ${ruleset_src} )
-  source_group ( "SaveGame" ${savegame_src} )
-  source_group ( "Ufopedia" ${ufopedia_src} )
+  source_group ( "Basescape" FILES ${basescape_src} )
+  source_group ( "Battlescape" FILES ${battlescape_src} )
+  source_group ( "Engine" FILES ${engine_src} )
+  source_group ( "Geoscape" FILES ${geoscape_src} )
+  source_group ( "Interface" FILES ${interface_src} )
+  source_group ( "Menu" FILES ${menu_src} )
+  source_group ( "Resource" FILES ${resource_src} )
+  source_group ( "Ruleset" FILES ${ruleset_src} )
+  source_group ( "SaveGame" FILES ${savegame_src} )
+  source_group ( "Ufopedia" FILES ${ufopedia_src} )
 endif ()
