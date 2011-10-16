@@ -423,4 +423,21 @@ void MapData::setExplosive(int value)
 	_explosive = value;
 }
 
+/**
+* Set the SCANG.DAT index for minimap.
+* @param i the minimap index
+*/
+void MapData::setMiniMapIndex(unsigned short i)
+{
+	_miniMapIndex = i;
+}
+
+/**
+* Get the SCANG.DAT index for minimap.
+* @return the minimap index
+*/
+unsigned short MapData::getMiniMapIndex() const
+{
+	return _miniMapIndex;
+}
 }

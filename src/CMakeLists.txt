@@ -132,6 +132,10 @@ set ( battlescape_src
   Battlescape/InfoboxState.h
   Battlescape/TileEngine.cpp
   Battlescape/TileEngine.h
+  Battlescape/MiniMapView.h
+  Battlescape/MiniMapView.cpp
+  Battlescape/MiniMapState.h
+  Battlescape/MiniMapState.cpp
 )
 
 set ( engine_src
@@ -413,11 +417,13 @@ set ( ufopedia_src
   Ufopaedia/ArticleStateCraftWeapon.cpp
   Ufopaedia/ArticleStateTextImage.cpp
   Ufopaedia/ArticleStateTextImage.h
+  Ufopaedia/ArticleStateArmor.cpp
+  Ufopaedia/ArticleStateArmor.h
 )
 
 if ( "${CMAKE_BUILD_TYPE}" STREQUAL "Debug" AND CMAKE_COMPILER_IS_GNUCXX )
 # Enable more GCC warnings if we are doing a Debug build.
-  add_definitions ( -Wall )
+  add_definitions ( -Wall -D_DEBUG )
 endif()
 
 if ( NOT WIN32 )
