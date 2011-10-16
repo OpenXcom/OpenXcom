@@ -584,6 +584,12 @@
     <ClCompile Include="Ufopaedia\ArticleStateArmor.cpp">
       <Filter>Ufopaedia</Filter>
     </ClCompile>
+    <ClCompile Include="Battlescape\MiniMapState.cpp">
+      <Filter>Battlescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Battlescape\MiniMapView.cpp">
+      <Filter>Battlescape</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1169,6 +1175,12 @@
     </ClInclude>
     <ClInclude Include="Ufopaedia\ArticleStateArmor.h">
       <Filter>Ufopaedia</Filter>
+    </ClInclude>
+    <ClInclude Include="Battlescape\MiniMapState.h">
+      <Filter>Battlescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Battlescape\MiniMapView.h">
+      <Filter>Battlescape</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

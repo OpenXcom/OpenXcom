@@ -156,6 +156,8 @@
     <ClCompile Include="Battlescape\Inventory.cpp" />
     <ClCompile Include="Battlescape\InventoryState.cpp" />
     <ClCompile Include="Battlescape\Map.cpp" />
+    <ClCompile Include="Battlescape\MiniMapState.cpp" />
+    <ClCompile Include="Battlescape\MiniMapView.cpp" />
     <ClCompile Include="Battlescape\NextTurnState.cpp" />
     <ClCompile Include="Battlescape\Pathfinding.cpp" />
     <ClCompile Include="Battlescape\PathfindingNode.cpp" />
@@ -353,6 +355,8 @@
     <ClInclude Include="Battlescape\Inventory.h" />
     <ClInclude Include="Battlescape\InventoryState.h" />
     <ClInclude Include="Battlescape\Map.h" />
+    <ClInclude Include="Battlescape\MiniMapState.h" />
+    <ClInclude Include="Battlescape\MiniMapView.h" />
     <ClInclude Include="Battlescape\NextTurnState.h" />
     <ClInclude Include="Battlescape\Pathfinding.h" />
     <ClInclude Include="Battlescape\PathfindingNode.h" />
