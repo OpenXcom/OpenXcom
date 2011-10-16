@@ -43,7 +43,6 @@ class MiniMapView : public InteractiveSurface
 	int _lvl;
 	SavedBattleGame * _battleGame;
 	int _frame;
-	std::map<Tile *, BattleUnit *> _battleUnits;
 	SurfaceSet * _set;
 	/// Handle clicking on the MiniMap
 	void mouseClick (Action *action, State *state);

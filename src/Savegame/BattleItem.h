@@ -43,6 +43,7 @@ private:
 	int _id;
 	RuleItem *_rules;
 	BattleUnit *_owner, *_previousOwner;
+	BattleUnit *_unit;
 	Tile *_tile;
 	RuleInventory *_inventorySlot;
 	int _inventoryX, _inventoryY;
@@ -101,6 +102,10 @@ public:
 	void setTile(Tile *tile);
 	/// Gets it's unique id.
 	int getId() const;
+	/// Gets the corpse's unit.
+	BattleUnit *getUnit() const;
+	/// Sets the corpse's unit.
+	void setUnit(BattleUnit *unit);
 
 };
 

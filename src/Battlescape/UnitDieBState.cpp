@@ -141,13 +141,15 @@ std::string UnitDieBState::getResult() const
 }
 
 /*
- * Convert unit to corpse.
+ * Convert unit to corpse(item).
  * @param unit
  * @param terrain
  */
 void UnitDieBState::convertUnitToCorpse(BattleUnit *unit, TileEngine *terrain)
 {
-	_parent->dropItem(_unit->getPosition(), new BattleItem(_parent->getGame()->getRuleset()->getItem(_unit->getUnit()->getArmor()->getCorpseItem()),_parent->getGame()->getSavedGame()->getBattleGame()->getCurrentItemId()), true);
+	BattleItem *corpse = new BattleItem(_parent->getGame()->getRuleset()->getItem(_unit->getUnit()->getArmor()->getCorpseItem()),_parent->getGame()->getSavedGame()->getBattleGame()->getCurrentItemId());
+	corpse->setUnit(unit);
+	_parent->dropItem(_unit->getPosition(), corpse, true);
 
 	// move inventory from unit to the ground
 	for (std::vector<BattleItem*>::iterator i = _unit->getInventory()->begin(); i != _unit->getInventory()->end(); ++i)
@@ -155,6 +157,10 @@ void UnitDieBState::convertUnitToCorpse(BattleUnit *unit, TileEngine *terrain)
 		_parent->dropItem(_unit->getPosition(), (*i));
 	}
 	_unit->getInventory()->clear();
+
+	// remove unit-tile link
+	_unit->setTile(0);
+	_parent->getGame()->getSavedGame()->getBattleGame()->getTile(_unit->getPosition())->setUnit(0);
 }
 
 }

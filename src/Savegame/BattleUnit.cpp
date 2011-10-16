@@ -1319,17 +1319,17 @@ int BattleUnit::getMiniMapSpriteIndex () const
 	// * 9-11  : Dead unit
 	// * 12-23 : Xcom HWP
 	// * 24-35 : Alien big terror unit(cyberdisk, ...)
-	if (getStatus() == STATUS_DEAD)
+	if (isOut())
 	{
 		return 9;
 	}
 	switch (getFaction())
 	{
 	case FACTION_HOSTILE:
-		unitSpriteId = 6;
+		unitSpriteId = 3;
 		break;
 	case FACTION_NEUTRAL:
-		unitSpriteId = 4;
+		unitSpriteId = 6;
 		break;
 	default:
 		unitSpriteId = 0;

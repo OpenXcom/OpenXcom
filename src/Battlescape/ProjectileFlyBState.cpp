@@ -216,7 +216,7 @@ void ProjectileFlyBState::think()
 {
 	if (_parent->getMap()->getProjectile() == 0)
 	{
-		if (_action.type == BA_AUTOSHOT && _autoshotCounter < 3)
+		if (_action.type == BA_AUTOSHOT && _autoshotCounter < 3 && !_action.actor->isOut())
 		{
 			createNewProjectile();
 		}

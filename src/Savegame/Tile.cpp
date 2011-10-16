@@ -565,15 +565,12 @@ void Tile::setUnit(BattleUnit *unit)
 }
 
 /**
- * Get the unit on this tile.
+ * Get the (alive) unit on this tile.
  * @return BattleUnit.
  */
 BattleUnit *Tile::getUnit() const
 {
-	if (_unit != 0 && _unit->isOut())
-		return 0;
-	else
-		return _unit;
+	return _unit;
 }
 
 /**

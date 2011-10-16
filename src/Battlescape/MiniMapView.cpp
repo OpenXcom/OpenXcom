@@ -50,12 +50,6 @@ MiniMapView::MiniMapView(int w, int h, int x, int y, Game * game, Map * map, Sav
 	_startX = _map->getCenterX () - ((getWidth () / CELL_WIDTH) / 2);
 	_startY = _map->getCenterY () - ((getHeight () / CELL_HEIGHT) / 2);
 #endif
-	// We can't access dead units from tiles. So we first compute a list of all battle units and their corresponding tile. We will use this later to display units on the minimap
-	std::vector<BattleUnit*> *const units (_battleGame->getUnits());
-	for(std::vector<BattleUnit*>::const_iterator it = units->begin (); it != units->end (); ++it)
-	{
-		_battleUnits[(*it)->getTile()] = *it;
-	}
 	_set = _game->getResourcePack()->getSurfaceSet("SCANG.DAT");
 }
 
@@ -114,12 +108,26 @@ void MiniMapView::draw()
 						s->blitNShade(this, x, y, t->getShade());
 					}
 				}
-				std::map<Tile *, BattleUnit *>::iterator itTile =  _battleUnits.find (t);
-				if(itTile != _battleUnits.end () && itTile->second->getVisible())
+
+				// alive units
+				if (t->getUnit() && t->getUnit()->getVisible())
 				{
-					Surface * s = _set->getFrame (itTile->second->getMiniMapSpriteIndex ()+_frame);
+					Surface * s = _set->getFrame (t->getUnit()->getMiniMapSpriteIndex () + _frame);
 					s->blitNShade(this, x, y, 0);
 				}
+				else
+				{
+					// or perhaps (at least one) corpse on this tile?
+					for (std::vector<BattleItem*>::iterator it = t->getInventory()->begin(); it != t->getInventory()->end(); ++it)
+					{
+						if ((*it)->getUnit())
+						{
+							Surface * s = _set->getFrame ((*it)->getUnit()->getMiniMapSpriteIndex () + _frame);
+							s->blitNShade(this, x, y, 0);
+						}
+					}
+				}
+
 				px++;
 			}
 			py++;

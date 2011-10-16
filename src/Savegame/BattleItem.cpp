@@ -29,7 +29,7 @@ namespace OpenXcom
  * Initializes a item of the specified type.
  * @param rules Pointer to ruleset.
  */
-BattleItem::BattleItem(RuleItem *rules, int *id) : _id(*id), _rules(rules), _owner(0), _previousOwner(0), _inventorySlot(0), _inventoryX(0), _inventoryY(0), _ammoItem(0), _explodeTurn(0), _ammoQuantity(0), _tile(0)
+BattleItem::BattleItem(RuleItem *rules, int *id) : _id(*id), _rules(rules), _owner(0), _previousOwner(0), _inventorySlot(0), _inventoryX(0), _inventoryY(0), _ammoItem(0), _explodeTurn(0), _ammoQuantity(0), _tile(0), _unit(0)
 {
 	if (_rules->getBattleType() == BT_AMMO)
 	{
@@ -356,6 +356,24 @@ void BattleItem::setTile(Tile *tile)
 int BattleItem::getId() const
 {
 	return _id;
+}
+
+/**
+ * Gets the corpse's unit.
+ * @return BattleUnit
+ */
+BattleUnit *BattleItem::getUnit() const
+{
+	return _unit;
+}
+
+/**
+ * Sets the corpse's unit.
+ * @param unit
+ */
+void BattleItem::setUnit(BattleUnit *unit)
+{
+	_unit = unit;
 }
 
 }
