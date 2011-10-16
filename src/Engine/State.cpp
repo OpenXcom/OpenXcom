@@ -157,7 +157,7 @@ void State::think()
  */
 void State::handle(Action *action)
 {
-	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
+	for (std::vector<Surface*>::reverse_iterator i = _surfaces.rbegin(); i != _surfaces.rend(); ++i)
 	{
 		InteractiveSurface* j = dynamic_cast<InteractiveSurface*>(*i);
 		if (j != 0)

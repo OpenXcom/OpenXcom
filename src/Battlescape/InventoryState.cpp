@@ -241,7 +241,14 @@ void InventoryState::invClick(Action *action)
 	_selAmmo->clear();
 	if (item != 0)
 	{
-		_txtItem->setText(_game->getLanguage()->getString(item->getRules()->getType()));
+		if (item->getUnit() && item->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
+		{
+			_txtItem->setText(item->getUnit()->getUnit()->getName(_game->getLanguage()));
+		}
+		else
+		{
+			_txtItem->setText(_game->getLanguage()->getString(item->getRules()->getType()));
+		}
 		std::wstringstream ss;
 		if (item->getAmmoItem() != 0)
 		{

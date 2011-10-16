@@ -949,6 +949,8 @@ void BattlescapeState::btnVisibleUnitClick(Action *action)
 	{
 		_map->centerOnPosition(_visibleUnit[btnID]->getPosition());
 	}
+
+	action->getDetails()->type = SDL_NOEVENT; // consume the event
 }
 
 /**
