@@ -156,10 +156,6 @@ openxcom_SOURCES = \
 	src/Battlescape/ProjectileFlyBState.cpp \
 	src/Battlescape/ProjectileFlyBState.h \
 	src/Battlescape/Projectile.h \
-	src/Battlescape/TerrainModifier.cpp \
-	src/Battlescape/TerrainModifier.h \
-	src/Battlescape/UnitFallBState.cpp \
-	src/Battlescape/UnitFallBState.h \
 	src/Battlescape/UnitInfoState.cpp \
 	src/Battlescape/UnitInfoState.h \
 	src/Battlescape/UnitSprite.cpp \
@@ -170,6 +166,12 @@ openxcom_SOURCES = \
 	src/Battlescape/UnitWalkBState.h \
 	src/Battlescape/WarningMessage.cpp \
 	src/Battlescape/WarningMessage.h \
+	src/Battlescape/TileEngine.cpp \
+	src/Battlescape/TileEngine.h \
+	src/Battlescape/UnitDieBState.cpp \
+	src/Battlescape/UnitDieBState.h \
+	src/Battlescape/InfoboxState.cpp \
+	src/Battlescape/InfoboxState.h \
 	src/dirent.h \
 	src/Engine/Action.cpp \
 	src/Engine/Action.h \
@@ -423,6 +425,8 @@ openxcom_SOURCES = \
 	src/Ufopaedia/ArticleStateTextImage.h \
 	src/Ufopaedia/ArticleStateUfo.cpp \
 	src/Ufopaedia/ArticleStateUfo.h \
+	src/Ufopaedia/ArticleStateArmor.cpp \
+	src/Ufopaedia/ArticleStateArmor.h \
 	src/Ufopaedia/Ufopaedia.cpp \
 	src/Ufopaedia/Ufopaedia.h \
 	src/Ufopaedia/UfopaediaSelectState.cpp \
