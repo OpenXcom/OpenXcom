@@ -100,4 +100,5 @@ if ( BUILD_PACKAGE )
 )
 endif()
 
+add_subdirectory ( docs )
 add_subdirectory ( src )
