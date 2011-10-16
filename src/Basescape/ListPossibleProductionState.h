@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2011 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -16,41 +16,47 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_PRODUCTIONCOMPLETESTATE_H
-#define OPENXCOM_PRODUCTIONCOMPLETESTATE_H
+#ifndef OPENXCOM_LISTPOSSIBLEPRODUCTIONSTATE_H
+#define OPENXCOM_LISTPOSSIBLEPRODUCTIONSTATE_H
 
-#include <string>
 #include "../Engine/State.h"
-#include "../Savegame/Production.h"
+#include <vector>
 
 namespace OpenXcom
 {
-
+class Base;
 class TextButton;
 class Window;
 class Text;
+class TextList;
+class RuleItem;
+class ManufactureState;
+
 /**
- * Window used to notify the player when
- * a production is completed.
+ * Screen which list possible productions.
  */
-class ProductionCompleteState : public State
+class ListPossibleProductionState : public State
 {
 private:
+	Base *_base;
 	TextButton *_btnOk;
 	Window *_window;
-	Text *_txtMessage;
-	productionProgress_e _endType;
+	Text *_txtTitle, *_txtItem, *_txtCategory;
+	TextList *_lstManufacture;
+	ManufactureState * _manufactureState;
+	std::vector<RuleItem *> _possibleProductions;
+
 public:
-	/// Creates the Production Complete state.
-	ProductionCompleteState(Game *game, const std::wstring &item, const std::wstring &base, productionProgress_e endType = PRODUCTION_PROGRESS_COMPLETE);
-	/// Cleans up the Production Complete state.
-	~ProductionCompleteState();
-	/// Updates the palette.
-	void init();
-	/// Handler for clicking the OK button.
-	void btnOkClick(Action *action);
+	/// Create the state
+	ListPossibleProductionState(Game *game, Base *base);
+	/// Initialize state
+	void init ();
+	/// Handler for clicking the OK button
+	void btnOkClick(Action * action);
+	/// Handler for clicking on the list
+	void lstProdClick (Action * action);
+	/// Fill the list with Base production's
+	void fillProductionList();
 };
-
 }
-
 #endif

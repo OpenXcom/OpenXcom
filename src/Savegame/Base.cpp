@@ -30,10 +30,13 @@
 #include "Waypoint.h"
 #include "../Engine/Language.h"
 #include "../Ruleset/RuleItem.h"
+#include "../Ruleset/RuleManufactureInfo.h"
 #include "Transfer.h"
 #include <algorithm>
 #include "ResearchProject.h"
 #include "../Ruleset/RuleResearchProject.h"
+#include "Production.h"
+#include <algorithm>
 
 namespace OpenXcom
 {
@@ -61,6 +64,10 @@ Base::~Base()
 		delete *i;
 	}
 	for (std::vector<Craft*>::iterator i = _crafts.begin(); i != _crafts.end(); ++i)
+	{
+		delete *i;
+	}
+	for (std::vector<Production *>::iterator i = _productions.begin (); i != _productions.end (); ++i)
 	{
 		delete *i;
 	}
@@ -184,6 +191,21 @@ void Base::load(const YAML::Node &node, SavedGame *save)
 		r->load(*i);
 		_research.push_back(r);
 	}
+
+	size = node["productions"].size();
+	const std::map<std::string, RuleItem *> & items(_rule->getItems ());
+	for (unsigned int i = 0; i < size; i++)
+	{
+		std::string item;
+		node["productions"][i]["item"] >> item;
+		std::map<std::string, RuleItem *>::const_iterator itItem = items.find(item);
+		if (itItem != items.end ())
+		{
+			Production *p = new Production(itItem->second, 0);
+			p->load(node["productions"][i]);
+			_productions.push_back(p);
+		}
+	}
 }
 
 /**
@@ -230,6 +252,14 @@ void Base::save(YAML::Emitter &out) const
 	out << YAML::Key << "research" << YAML::Value;
 	out << YAML::BeginSeq;
 	for (std::vector<ResearchProject*>::const_iterator i = _research.begin(); i != _research.end(); ++i)
+	{
+		(*i)->save(out);
+	}
+	out << YAML::EndSeq;
+
+	out << YAML::Key << "productions" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::vector<Production*>::const_iterator i = _productions.begin(); i != _productions.end(); ++i)
 	{
 		(*i)->save(out);
 	}
@@ -430,7 +460,12 @@ int Base::getTotalScientists() const
  */
 int Base::getAvailableEngineers() const
 {
-	return _engineers;
+	int available = _engineers;
+	for (std::vector<Production *>::const_iterator iter = _productions.begin (); iter != _productions.end (); ++iter)
+	{
+		available -= (*iter)->getAssignedEngineers();
+	}
+	return available;
 }
 
 /**
@@ -562,7 +597,12 @@ int Base::getAvailableLaboratories() const
  */
 int Base::getUsedWorkshops() const
 {
-	return 0;
+	int usedWorkShop = 0;
+	for (std::vector<Production *>::const_iterator iter = _productions.begin (); iter != _productions.end (); ++iter)
+	{
+		usedWorkShop += ((*iter)->getAssignedEngineers() + (*iter)->getRuleItem()->getManufactureInfo()->getRequiredSpace ());
+	}
+	return usedWorkShop;
 }
 
 /**
@@ -756,6 +796,13 @@ int Base::getMonthlyMaintenace() const
 const std::vector<ResearchProject *> & Base::getResearch() const
 {
 	return _research;
+/**
+ * Add a new Production to the Base
+ * @param p A pointer to a Production
+*/
+void Base::addProduction (Production * p)
+{
+	_productions.push_back(p);
 }
 
 /**
@@ -799,4 +846,44 @@ int Base::getFreeLaboratories () const
 	return getAvailableLaboratories() - getUsedLaboratories();
 }
 
+}
+
+/**
+ * Remove a Production from the Base
+ * @param p A pointer to a Production
+*/
+void Base::removeProduction (Production * p)
+{
+	std::vector<Production *>::iterator iter = std::find (_productions.begin (), _productions.end (), p);
+	if (iter == _productions.end ())
+	{
+		return;
+	}
+	_productions.erase(iter);
+}
+
+/**
+ * Get the list of Base Production's
+ * @return the list of Base Production's
+ */
+const std::vector<Production *> & Base::getProductions () const
+{
+	return _productions;
+}
+
+/**
+ * Get the count of free engineers(not assigned to a Production)
+ * @return the count of free engineers
+ */
+int Base::getFreeEngineers () const
+{
+	int freeEngineers = getEngineers();
+	const std::vector<Production *> & productions (getProductions());
+	for (std::vector<Production *>::const_iterator itProduction = productions.begin (); itProduction != productions.end (); ++itProduction)
+	{
+		freeEngineers -= (*itProduction)->getAssignedEngineers ();
+	}
+
+	return freeEngineers;
+}
 }

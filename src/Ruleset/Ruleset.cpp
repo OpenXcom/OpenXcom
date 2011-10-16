@@ -708,4 +708,8 @@ const std::map<std::string, RuleResearchProject *> & Ruleset::getResearchProject
 	return _researchProjects;
 }
 
+const std::map<std::string, RuleItem*> & Ruleset::getItems () const
+{
+	return _items;
+}
 }

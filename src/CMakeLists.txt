@@ -61,6 +61,12 @@ set ( basescape_src
   Basescape/NewResearchListState.cpp
   Basescape/ResearchProjectState.h
   Basescape/ResearchProjectState.cpp
+  Basescape/ListPossibleProductionState.h
+  Basescape/ListPossibleProductionState.cpp
+  Basescape/ProductionStartState.h
+  Basescape/ProductionStartState.cpp
+  Basescape/ProductionState.h
+  Basescape/ProductionState.cpp
 )
 
 set ( battlescape_src
@@ -338,6 +344,8 @@ set ( ruleset_src
   Ruleset/MapData.h
   Ruleset/RuleResearchProject.h
   Ruleset/RuleResearchProject.cpp
+  Ruleset/RuleManufactureInfo.h
+  Ruleset/RuleManufactureInfo.cpp
 )
 
 set ( savegame_src
@@ -391,6 +399,8 @@ set ( savegame_src
   Savegame/Unit.cpp
   Savegame/ResearchProject.h
   Savegame/ResearchProject.cpp
+  Savegame/Production.h
+  Savegame/Production.cpp
 )
 
 

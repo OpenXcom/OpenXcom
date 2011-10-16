@@ -37,6 +37,7 @@ class Language;
 class Ruleset;
 class SavedGame;
 class ResearchProject;
+class Production;
 
 /**
  * Represents a player base on the globe.
@@ -54,6 +55,7 @@ private:
 	ItemContainer *_items;
 	int _scientists, _engineers;
 	std::vector<ResearchProject *> _research;
+	std::vector<Production *> _productions;
 public:
 	/// Creates a new base.
 	Base(const Ruleset *rule);
@@ -145,6 +147,14 @@ public:
 	int getFreeScientist () const;
 	/// Get the number of available space lab(not used by a ResearchProject)
 	int getFreeLaboratories () const;
+	/// Add a new Production to Base
+	void addProduction (Production * p);
+	/// Remove a Base Production's
+	void removeProduction (Production * p);
+	/// Get the list of Base Production's
+	const std::vector<Production *> & getProductions () const;
+	/// Get the count of free engineers
+	int getFreeEngineers () const;
 };
 
 }

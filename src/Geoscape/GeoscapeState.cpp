@@ -71,6 +71,8 @@
 #include "EndResearchState.h"
 #include "../Ruleset/RuleResearchProject.h"
 #include "NewPossibleResearchState.h"
+#include "../Savegame/Production.h"
+#include "../Ruleset/RuleItem.h"
 
 namespace OpenXcom
 {
@@ -701,6 +703,24 @@ void GeoscapeState::time1Hour()
 	if (window)
 	{
 		popup(new ItemsArrivingState(_game, this));
+	}
+	// Handle Production
+	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
+	{
+		std::map<Production*, productionProgress_e> toRemove;
+		for (std::vector<Production*>::const_iterator j = (*i)->getProductions().begin(); j != (*i)->getProductions().end(); ++j)
+		{
+			toRemove[(*j)] = (*j)->step((*i), _game->getSavedGame());
+		}
+		for (std::map<Production*, productionProgress_e>::iterator j = toRemove.begin(); j != toRemove.end(); ++j)
+		{
+			if (j->second > PRODUCTION_PROGRESS_NOT_COMPLETE)
+			{
+				(*i)->removeProduction (j->first);
+				_game->pushState(new ProductionCompleteState(_game, _game->getLanguage()->getString(j->first->getRuleItem()->getType()), (*i)->getName(), j->second));
+				timerReset();
+			}
+		}
 	}
 }
 

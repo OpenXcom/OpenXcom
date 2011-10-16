@@ -55,6 +55,7 @@
 #include "../Engine/CrossPlatform.h"
 #include <fstream>
 #include <algorithm>
+#include "RuleManufactureInfo.h"
 
 namespace OpenXcom
 {
@@ -1000,6 +1001,63 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	alloys->setSize(0.1f);
 	alloys->setCost(6500);
 	alloys->setTransferTime(96);
+	RuleItem *lp = new RuleItem("STR_LASER_PISTOL");
+	lp->setSize(0.1f);
+	lp->setCost(70);
+	lp->setBigSprite(34);
+	lp->setPower(52);
+	lp->setDamageType(DT_PLASMA);
+	lp->setBattleType(BT_AMMO);
+	lp->setHitAnimation(46);
+	lp->setHitSound(19);
+	lp->setClipSize(26);
+	lp->setWeight(3);
+	lp->setCategory ("STR_WEAPON");
+	lp->setManufactureInfo(new RuleManufactureInfo(2, 300, 8000));
+
+	RuleItem *aa = new RuleItem("STR_ALIEN_ALLOYS");
+	aa->setSize(0.1f);
+	aa->setCost(70);
+	aa->setBigSprite(34);
+	aa->setPower(52);
+	aa->setDamageType(DT_PLASMA);
+	aa->setBattleType(BT_AMMO);
+	aa->setHitAnimation(46);
+	aa->setHitSound(19);
+	aa->setClipSize(26);
+	aa->setWeight(3);
+	aa->setManufactureInfo(new RuleManufactureInfo(2, 300, 8000));
+	aa->setCategory ("STR_EQUIPMENT");
+
+	RuleItem *pa = new RuleItem("STR_PERSONAL_ARMOR");
+	pa->setSize(0.1f);
+	pa->setCost(70);
+	pa->setBigSprite(34);
+	pa->setPower(52);
+	pa->setDamageType(DT_PLASMA);
+	pa->setBattleType(BT_AMMO);
+	pa->setHitAnimation(46);
+	pa->setHitSound(19);
+	pa->setClipSize(26);
+	pa->setWeight(3);
+	pa->setCategory ("STR_EQUIPMENT");
+	RuleManufactureInfo * info = new RuleManufactureInfo(2, 300, 8000);
+	info->addNeededItem("STR_ALIEN_ALLOYS", 4);
+	pa->setManufactureInfo(info);
+
+	RuleItem *lr = new RuleItem("STR_LASER_RIFLE");
+	lr->setSize(0.1f);
+	lr->setCost(70);
+	lr->setBigSprite(34);
+	lr->setPower(52);
+	lr->setDamageType(DT_PLASMA);
+	lr->setBattleType(BT_AMMO);
+	lr->setHitAnimation(46);
+	lr->setHitSound(19);
+	lr->setClipSize(26);
+	lr->setWeight(3);
+	lr->setCategory ("STR_WEAPON");
+	lr->setManufactureInfo(new RuleManufactureInfo(2, 300, 8000000));
 
 	_items.insert(std::pair<std::string, RuleItem*>("STR_STINGRAY_LAUNCHER", slauncher));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_AVALANCHE_LAUNCHER", alauncher));
@@ -1031,7 +1089,11 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_items.insert(std::pair<std::string, RuleItem*>("STR_PLASMA_PISTOL_CLIP", ppclip));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_ALIEN_ALLOYS", alloys));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_ELECTRO_FLARE", flare));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_LASER_PISTOL", lp));
 
+	_items.insert(std::pair<std::string, RuleItem*>("STR_ALIEN_ALLOYS", aa));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_PERSONAL_ARMOR", pa));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_LASER_RIFLE", lr));
 	// Add UFOs
 	RuleUfo *sscout = new RuleUfo("STR_SMALL_SCOUT");
 	sscout->setSize("STR_VERY_SMALL");

@@ -149,8 +149,13 @@ BasescapeState::BasescapeState(Game *game, Base *base, Globe *globe) : State(gam
 	_btnResearch->setText(_game->getLanguage()->getString("STR_RESEARCH"));
 	_btnResearch->onMouseClick((ActionHandler)&BasescapeState::btnResearchClick);
 
+<<<<<<< HEAD
 	_btnManufacture->setColor(Palette::blockOffset(13)+5);
 	_btnManufacture->setText(_game->getLanguage()->getString("STR_NOT_AVAILABLE"));
+=======
+	_btnManufacture->setColor(Palette::blockOffset(13)+8);
+	_btnManufacture->setText(_game->getLanguage()->getString("STR_MANUFACTURE"));
+>>>>>>> production_cmake
 	_btnManufacture->onMouseClick((ActionHandler)&BasescapeState::btnManufactureClick);
 
 	_btnTransfer->setColor(Palette::blockOffset(13)+5);
@@ -323,7 +328,7 @@ void BasescapeState::btnResearchClick(Action *action)
  */
 void BasescapeState::btnManufactureClick(Action *action)
 {
-	//_game->pushState(new ManufactureState(_game, _base));
+	_game->pushState(new ManufactureState(_game, _base));
 }
 
 /**
