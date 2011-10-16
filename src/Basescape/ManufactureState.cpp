@@ -134,13 +134,8 @@ ManufactureState::ManufactureState(Game *game, Base *base) : State(game), _base(
 	_txtTimeLeft->setText(_game->getLanguage()->getString("STR_DAYS_HOURS_LEFT"));
 	
 	_lstManufacture->setColor(Palette::blockOffset(13)+10);
-<<<<<<< HEAD
-	_lstManufacture->setArrowColor(Palette::blockOffset(15)+6);
-	_lstManufacture->setColumns(6, 105, 39, 45, 27, 47, 24);
-=======
 	_lstManufacture->setArrowColor(Palette::blockOffset(15)+9);
 	_lstManufacture->setColumns(6, 105, 39, 45, 27, 47, 40);
->>>>>>> production_cmake
 	_lstManufacture->setSelectable(true);
 	_lstManufacture->setBackground(_window);
 	_lstManufacture->setMargin(1);

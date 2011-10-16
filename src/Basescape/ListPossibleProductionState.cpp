@@ -142,6 +142,7 @@ void ListPossibleProductionState::lstProdClick (Action * action)
  */
 void ListPossibleProductionState::fillProductionList()
 {
+	/*
 	_lstManufacture->clearList();
 	_possibleProductions.clear();
 	const std::map<std::string, RuleItem *> & items (_game->getRuleset()->getItems ());
@@ -163,5 +164,7 @@ void ListPossibleProductionState::fillProductionList()
 		_lstManufacture->addRow(2, _game->getLanguage()->getString(iter->first).c_str(), _game->getLanguage()->getString(iter->second->getCategory ()).c_str());
 		_possibleProductions.push_back(iter->second);
 	}
+	*/
 }
+
 }

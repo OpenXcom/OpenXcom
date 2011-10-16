@@ -192,19 +192,13 @@ void Base::load(const YAML::Node &node, SavedGame *save)
 		_research.push_back(r);
 	}
 
-	size = node["productions"].size();
-	const std::map<std::string, RuleItem *> & items(_rule->getItems ());
-	for (unsigned int i = 0; i < size; i++)
+	for (YAML::Iterator i = node["productions"].begin(); i != node["productions"].end(); ++i)
 	{
 		std::string item;
-		node["productions"][i]["item"] >> item;
-		std::map<std::string, RuleItem *>::const_iterator itItem = items.find(item);
-		if (itItem != items.end ())
-		{
-			Production *p = new Production(itItem->second, 0);
-			p->load(node["productions"][i]);
-			_productions.push_back(p);
-		}
+		(*i)["item"] >> item;
+		Production *p = new Production(_rule->getItem(item), 0);
+		p->load(*i);
+		_productions.push_back(p);
 	}
 }
 
@@ -796,6 +790,8 @@ int Base::getMonthlyMaintenace() const
 const std::vector<ResearchProject *> & Base::getResearch() const
 {
 	return _research;
+}
+
 /**
  * Add a new Production to the Base
  * @param p A pointer to a Production
@@ -844,8 +840,6 @@ int Base::getFreeScientist () const
 int Base::getFreeLaboratories () const
 {
 	return getAvailableLaboratories() - getUsedLaboratories();
-}
-
 }
 
 /**

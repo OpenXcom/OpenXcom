@@ -118,12 +118,15 @@
     <ClCompile Include="Basescape\CraftsState.cpp" />
     <ClCompile Include="Basescape\CraftWeaponsState.cpp" />
     <ClCompile Include="Basescape\DismantleFacilityState.cpp" />
+    <ClCompile Include="Basescape\ListPossibleProductionState.cpp" />
     <ClCompile Include="Basescape\ManufactureState.cpp" />
     <ClCompile Include="Basescape\MiniBaseView.cpp" />
     <ClCompile Include="Basescape\MonthlyCostsState.cpp" />
     <ClCompile Include="Basescape\NewResearchListState.cpp" />
     <ClCompile Include="Basescape\PlaceFacilityState.cpp" />
     <ClCompile Include="Basescape\PlaceLiftState.cpp" />
+    <ClCompile Include="Basescape\ProductionStartState.cpp" />
+    <ClCompile Include="Basescape\ProductionState.cpp" />
     <ClCompile Include="Basescape\PurchaseErrorState.cpp" />
     <ClCompile Include="Basescape\PurchaseState.cpp" />
     <ClCompile Include="Basescape\ResearchProjectState.cpp" />
@@ -258,6 +261,7 @@
     <ClCompile Include="Ruleset\RuleCraftWeapon.cpp" />
     <ClCompile Include="Ruleset\RuleInventory.cpp" />
     <ClCompile Include="Ruleset\RuleItem.cpp" />
+    <ClCompile Include="Ruleset\RuleManufactureInfo.cpp" />
     <ClCompile Include="Ruleset\RuleRegion.cpp" />
     <ClCompile Include="Ruleset\RuleResearchProject.cpp" />
     <ClCompile Include="Ruleset\Ruleset.cpp" />
@@ -278,6 +282,7 @@
     <ClCompile Include="Savegame\ItemContainer.cpp" />
     <ClCompile Include="Savegame\MovingTarget.cpp" />
     <ClCompile Include="Savegame\NodeLink.cpp" />
+    <ClCompile Include="Savegame\Production.cpp" />
     <ClCompile Include="Savegame\Region.cpp" />
     <ClCompile Include="Savegame\ResearchProject.cpp" />
     <ClCompile Include="Savegame\SavedBattleGame.cpp" />
@@ -317,12 +322,15 @@
     <ClInclude Include="Basescape\CraftsState.h" />
     <ClInclude Include="Basescape\CraftWeaponsState.h" />
     <ClInclude Include="Basescape\DismantleFacilityState.h" />
+    <ClInclude Include="Basescape\ListPossibleProductionState.h" />
     <ClInclude Include="Basescape\ManufactureState.h" />
     <ClInclude Include="Basescape\MiniBaseView.h" />
     <ClInclude Include="Basescape\MonthlyCostsState.h" />
     <ClInclude Include="Basescape\NewResearchListState.h" />
     <ClInclude Include="Basescape\PlaceFacilityState.h" />
     <ClInclude Include="Basescape\PlaceLiftState.h" />
+    <ClInclude Include="Basescape\ProductionStartState.h" />
+    <ClInclude Include="Basescape\ProductionState.h" />
     <ClInclude Include="Basescape\PurchaseErrorState.h" />
     <ClInclude Include="Basescape\PurchaseState.h" />
     <ClInclude Include="Basescape\ResearchProjectState.h" />
@@ -458,6 +466,7 @@
     <ClInclude Include="Ruleset\RuleCraftWeapon.h" />
     <ClInclude Include="Ruleset\RuleInventory.h" />
     <ClInclude Include="Ruleset\RuleItem.h" />
+    <ClInclude Include="Ruleset\RuleManufactureInfo.h" />
     <ClInclude Include="Ruleset\RuleRegion.h" />
     <ClInclude Include="Ruleset\RuleResearchProject.h" />
     <ClInclude Include="Ruleset\Ruleset.h" />
@@ -478,6 +487,7 @@
     <ClInclude Include="Savegame\ItemContainer.h" />
     <ClInclude Include="Savegame\MovingTarget.h" />
     <ClInclude Include="Savegame\NodeLink.h" />
+    <ClInclude Include="Savegame\Production.h" />
     <ClInclude Include="Savegame\Region.h" />
     <ClInclude Include="Savegame\ResearchProject.h" />
     <ClInclude Include="Savegame\SavedBattleGame.h" />
