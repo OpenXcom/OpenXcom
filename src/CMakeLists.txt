@@ -417,6 +417,9 @@ set ( ufopedia_src
   Ufopaedia/ArticleStateArmor.h
 )
 
+if ( CMAKE_COMPILER_IS_GNUCXX AND "${CMAKE_BUILD_TYPE}" STREQUAL "Debug" )
+  add_definitions ( -D_DEBUG )
+endif ()
 if ( CMAKE_COMPILER_IS_GNUCXX AND ( "${CMAKE_BUILD_TYPE}" STREQUAL "Debug" OR ENABLE_WARNING) )
     # Enable more GCC warnings if we are doing a Debug build or requested.
     add_definitions ( -Wall
