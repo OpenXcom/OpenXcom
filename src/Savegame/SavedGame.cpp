@@ -140,7 +140,7 @@ void SavedGame::getList(TextList *list, Language *lang)
 	{
 		std::string file = dirp->d_name;
 		// Check if it's a valid save
-		if (file.find(".sav") == std::string::npos)
+		if (file.size() < 4 || file.rfind(".sav") != file.size() - 4)
 		{
 			continue;
 		}
