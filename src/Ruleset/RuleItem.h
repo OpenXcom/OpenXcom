@@ -55,8 +55,6 @@ private:
 	BattleType _battleType;
 	bool _twoHanded, _waypoint;
 	int _invWidth, _invHeight;
-	RuleManufactureInfo * _manufactureInfo;
-	std::string _category;
 public:
 	/// Creates a blank item ruleset.
 	RuleItem(const std::string &type);
@@ -168,14 +166,6 @@ public:
 	void setClipSize(int size);
 	/// Draws the item's hand sprite onto a surface.
 	void drawHandSprite(SurfaceSet *texture, Surface *surface) const;
-	/// Set Item ManufactureInfo
-	void setManufactureInfo(RuleManufactureInfo *);
-	/// Get Item ManufactureInfo
-	const RuleManufactureInfo * getManufactureInfo() const;
-	/// Set the item category
-	void setCategory(const std::string & c);
-	/// Get the item category
-	const std::string & getCategory () const;
 };
 
 }

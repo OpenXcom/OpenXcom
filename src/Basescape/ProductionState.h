@@ -28,7 +28,7 @@ class Window;
 class Text;
 class ArrowButton;
 class TextButton;
-class RuleItem;
+class RuleManufactureInfo;
 class Production;
 class Timer;
 
@@ -39,7 +39,7 @@ class ProductionState : public State
 {
 private:
 	Production * _production;
-	RuleItem * _item;
+	RuleManufactureInfo * _item;
 	Base * _base;
 	Window * _window;
 	ArrowButton * _btnUnitUp, * _btnUnitDown, * _btnEngineerUp, * _btnEngineerDown;
@@ -67,13 +67,13 @@ private:
 	/// Handler for releasing the less unit button
 	void lessUnitRelease(Action * action);
 	/// Add one engineer to production (if possible)
-	void onMoreEngineer(Action * action);
+	void onMoreEngineer();
 	/// Remove one engineer to production (if possible)
-	void onLessEngineer(Action * action);
+	void onLessEngineer();
 	/// Increase count of number of unit to do
-	void onMoreUnit(Action * action);
+	void onMoreUnit();
 	/// Decrease count of number of unit to do(if possible)
-	void onLessUnit(Action * action);
+	void onLessUnit();
 	/// Update display of assigned/available engineer, workshop space
 	void setAssignedEngineer();
 	/// Runs state functionality every cycle.
@@ -84,7 +84,7 @@ private:
 	void exitState();
 public:
 	/// Create the State(new production)
-	ProductionState (Game * game, Base * base, RuleItem * _item);
+	ProductionState (Game * game, Base * base, RuleManufactureInfo * _item);
 	/// Create the State(modify production)
 	ProductionState (Game * game, Base * base, Production * production);
 };

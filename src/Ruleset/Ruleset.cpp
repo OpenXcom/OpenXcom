@@ -37,6 +37,7 @@
 #include "ArticleDefinition.h"
 #include "RuleInventory.h"
 #include "RuleResearchProject.h"
+#include "RuleManufactureInfo.h"
 
 namespace OpenXcom
 {
@@ -114,7 +115,11 @@ Ruleset::~Ruleset()
 	{
 		delete i->second;
 	}
-	for(std::map<std::string, RuleResearchProject *>::const_iterator i = _researchProjects.begin (); i != _researchProjects.end (); ++i)
+	for (std::map<std::string, RuleResearchProject *>::const_iterator i = _researchProjects.begin (); i != _researchProjects.end (); ++i)
+	{
+		delete i->second;
+	}
+	for (std::map<std::string, RuleManufactureInfo *>::const_iterator i = _manufacture.begin (); i != _manufacture.end (); ++i)
 	{
 		delete i->second;
 	}
@@ -700,12 +705,31 @@ RuleResearchProject *Ruleset::getResearchProject (const std::string &id) const
 }
 
 /**
- * Returns the list of ResearchProject
- * @return The list of ResearchProject ruleset
+ * Returns the list of research projects.
+ * @return The list of research projects.
  */
 const std::map<std::string, RuleResearchProject *> & Ruleset::getResearchProjects () const
 {
 	return _researchProjects;
+}
+
+/**
+ * Returns the rules for the specified manufacture project.
+ * @param id Manufacture project type.
+ * @return Rules for the manufacture project.
+ */
+RuleManufactureInfo *Ruleset::getManufactureProject (const std::string &id) const
+{
+	return _manufacture.find(id)->second;
+}
+
+/**
+ * Returns the list of manufacture projects.
+ * @return The list of manufacture projects.
+ */
+const std::map<std::string, RuleManufactureInfo *> & Ruleset::getManufactureProjects () const
+{
+	return _manufacture;
 }
 
 }

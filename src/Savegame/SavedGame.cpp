@@ -41,6 +41,8 @@
 #include "ResearchProject.h"
 #include "ItemContainer.h"
 #include "Soldier.h"
+#include "../Ruleset/RuleManufactureInfo.h"
+#include "Production.h"
 
 namespace OpenXcom
 {
@@ -49,16 +51,33 @@ struct findRuleResearchProject : public std::unary_function<ResearchProject *,
 {
 	RuleResearchProject * _toFind;
 	findRuleResearchProject(RuleResearchProject * toFind);
-	bool operator()(ResearchProject *r) const;
+	bool operator()(const ResearchProject *r) const;
 };
 
 findRuleResearchProject::findRuleResearchProject(RuleResearchProject * toFind) : _toFind(toFind)
 {
 }
 
-bool findRuleResearchProject::operator()(ResearchProject *r) const
+bool findRuleResearchProject::operator()(const ResearchProject *r) const
 {
 	return _toFind == r->getRuleResearchProject();
+}
+
+struct equalProduction : public std::unary_function<Production *,
+						    bool>
+{
+	RuleManufactureInfo * _item;
+	equalProduction(RuleManufactureInfo * item);
+	bool operator()(const Production * p) const;
+};
+
+equalProduction::equalProduction(RuleManufactureInfo * item) : _item(item)
+{
+}
+
+bool equalProduction::operator()(const Production * p) const
+{
+	return p->getRuleManufactureInfo() == _item;
 }
 
 /**
@@ -523,7 +542,7 @@ void SavedGame::addFinishedResearch (const RuleResearchProject * r, Ruleset * ru
    Returns the list of already discovered ResearchProject
  * @return the list of already discovered ResearchProject
 */
-const std::vector<const RuleResearchProject *> & SavedGame::getDiscoveredResearchs()
+const std::vector<const RuleResearchProject *> & SavedGame::getDiscoveredResearchs() const
 {
 	return _discovered;
 }
@@ -534,7 +553,7 @@ const std::vector<const RuleResearchProject *> & SavedGame::getDiscoveredResearc
    * @param ruleset the Game Ruleset
    * @param base a pointer to a Base
 */
-void SavedGame::getAvailableResearchProjects (std::vector<RuleResearchProject *> & projects, Ruleset * ruleset, Base * base)
+void SavedGame::getAvailableResearchProjects (std::vector<RuleResearchProject *> & projects, Ruleset * ruleset, Base * base) const
 {
 	const std::vector<const RuleResearchProject *> & discovereds(getDiscoveredResearchs());
 	const std::map<std::string, RuleResearchProject *> & researchProjects = ruleset->getResearchProjects();
@@ -571,12 +590,40 @@ void SavedGame::getAvailableResearchProjects (std::vector<RuleResearchProject *>
 }
 
 /**
+   Get the list of RuleManufactureInfo which can be manufacture in a Base.
+   * @param productions the list of Productions which are available.
+   * @param ruleset the Game Ruleset
+   * @param base a pointer to a Base
+*/
+void SavedGame::getAvailableProductions (std::vector<RuleManufactureInfo *> & productions, Ruleset * ruleset, Base * base) const
+{
+	const std::vector<const RuleResearchProject *> & discovereds(getDiscoveredResearchs());
+	const std::map<std::string, RuleManufactureInfo *> & items (ruleset->getManufactureProjects ());
+	const std::vector<Production *> baseProductions (base->getProductions ());
+
+	for(std::map<std::string, RuleManufactureInfo *>::const_iterator iter = items.begin ();
+	    iter != items.end ();
+	    ++iter)
+	{
+		if(std::find(discovereds.begin (), discovereds.end (), ruleset->getResearchProject(iter->first)) == discovereds.end ())
+		{
+		 	continue;
+		}
+		if(std::find_if(baseProductions.begin (), baseProductions.end (), equalProduction(iter->second)) != baseProductions.end ())
+		{
+			continue;
+		}
+		productions.push_back(iter->second);
+	}
+}
+
+/**
    Check wether a ResearchProject can be researched.
    * @param r the RuleResearchProject to test.
    * @param unlockeds the list of currently unlocked RuleResearchProject
    * @return true if the RuleResearchProject can be researched
 */
-bool SavedGame::isResearchAvailable (RuleResearchProject * r, const std::vector<const RuleResearchProject *> & unlockeds)
+bool SavedGame::isResearchAvailable (RuleResearchProject * r, const std::vector<const RuleResearchProject *> & unlockeds) const
 {
 	std::vector<RuleResearchProject *>::const_iterator iter = r->getDependencys().begin ();
 	const std::vector<const RuleResearchProject *> & discovereds(getDiscoveredResearchs());
@@ -605,7 +652,7 @@ bool SavedGame::isResearchAvailable (RuleResearchProject * r, const std::vector<
    * @param ruleset the Game Ruleset
    * @param base a pointer to a Base
 */
-void SavedGame::getDependableResearch (std::vector<RuleResearchProject *> & dependables, const RuleResearchProject *research, Ruleset * ruleset, Base * base)
+void SavedGame::getDependableResearch (std::vector<RuleResearchProject *> & dependables, const RuleResearchProject *research, Ruleset * ruleset, Base * base) const
 {
 	getDependableResearchBasic(dependables, research, ruleset, base);
 	for(std::vector<const RuleResearchProject *>::const_iterator iter = _discovered.begin (); iter != _discovered.end (); ++iter)
@@ -627,7 +674,7 @@ void SavedGame::getDependableResearch (std::vector<RuleResearchProject *> & depe
    * @param ruleset the Game Ruleset
    * @param base a pointer to a Base
 */
-void SavedGame::getDependableResearchBasic (std::vector<RuleResearchProject *> & dependables, const RuleResearchProject *research, Ruleset * ruleset, Base * base)
+void SavedGame::getDependableResearchBasic (std::vector<RuleResearchProject *> & dependables, const RuleResearchProject *research, Ruleset * ruleset, Base * base) const
 {
 	std::vector<RuleResearchProject *> possibleProjects;
 	getAvailableResearchProjects(possibleProjects, ruleset, base);
@@ -664,11 +711,11 @@ int *const SavedGame::getSoldierId()
  * @param id A soldier's unique id.
  * @return Pointer to Soldier.
  */
-Soldier *const SavedGame::getSoldier(int id)
+Soldier *const SavedGame::getSoldier(int id) const
 {
-	for (std::vector<Base*>::iterator i = _bases.begin(); i != _bases.end(); ++i)
+	for (std::vector<Base*>::const_iterator i = _bases.begin(); i != _bases.end(); ++i)
 	{
-		for (std::vector<Soldier*>::iterator j = (*i)->getSoldiers()->begin(); j != (*i)->getSoldiers()->end(); ++j)
+		for (std::vector<Soldier*>::const_iterator j = (*i)->getSoldiers()->begin(); j != (*i)->getSoldiers()->end(); ++j)
 		{
 			if ((*j)->getId() == id)
 			{

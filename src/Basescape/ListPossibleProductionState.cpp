@@ -25,7 +25,7 @@
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
 #include "../Resource/ResourcePack.h"
-#include "../Ruleset/RuleItem.h"
+#include "../Ruleset/RuleManufactureInfo.h"
 #include "../Ruleset/Ruleset.h"
 #include "ProductionStartState.h"
 #include "../Savegame/Production.h"
@@ -34,22 +34,6 @@
 
 namespace OpenXcom
 {
-struct equalProduction : public std::unary_function<Production *,
-						    bool>
-{
-	RuleItem * _item;
-	equalProduction(RuleItem * item);
-	bool operator()(const Production * p) const;
-};
-
-equalProduction::equalProduction(RuleItem * item) : _item(item)
-{
-}
-
-bool equalProduction::operator()(const Production * p) const
-{
-	return p->getRuleItem() == _item;
-}
 
 /**
  * Initializes all the elements in the productions list screen.
@@ -84,7 +68,7 @@ ListPossibleProductionState::ListPossibleProductionState(Game *game, Base *base)
 	add(_txtCategory);
 	add(_lstManufacture);
 
-	_window->setColor(Palette::blockOffset(15)+4);
+	_window->setColor(Palette::blockOffset(15)+6);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
 	_txtTitle->setColor(Palette::blockOffset(15)+1);
 	_txtTitle->setText(_game->getLanguage()->getString("STR_PRODUCTION_ITEMS"));
@@ -105,7 +89,7 @@ ListPossibleProductionState::ListPossibleProductionState(Game *game, Base *base)
 	_lstManufacture->setColor(Palette::blockOffset(13));
 	_lstManufacture->onMouseClick((ActionHandler)&ListPossibleProductionState::lstProdClick);
 
-	_btnOk->setColor(Palette::blockOffset(13)+13);
+	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ListPossibleProductionState::btnOkClick);
 }
@@ -142,29 +126,14 @@ void ListPossibleProductionState::lstProdClick (Action * action)
  */
 void ListPossibleProductionState::fillProductionList()
 {
-	/*
 	_lstManufacture->clearList();
 	_possibleProductions.clear();
-	const std::map<std::string, RuleItem *> & items (_game->getRuleset()->getItems ());
-	const std::vector<Production *> productions (_base->getProductions ());
+	_game->getSavedGame()->getAvailableProductions(_possibleProductions, _game->getRuleset(), _base);
 
-	for(std::map<std::string, RuleItem *>::const_iterator iter = items.begin ();
-	    iter != items.end ();
-	    ++iter)
+	for (std::vector<RuleManufactureInfo *>::iterator it = _possibleProductions.begin (); it != _possibleProductions.end (); ++it)
 	{
-		if(!iter->second->getManufactureInfo())
-		{
-			continue;
-		}
-		if(std::find_if(productions.begin (), productions.end (), equalProduction(iter->second)) != productions.end ())
-		{
-			continue;
-		}
-
-		_lstManufacture->addRow(2, _game->getLanguage()->getString(iter->first).c_str(), _game->getLanguage()->getString(iter->second->getCategory ()).c_str());
-		_possibleProductions.push_back(iter->second);
+		_lstManufacture->addRow(2, _game->getLanguage()->getString((*it)->getName()).c_str(), _game->getLanguage()->getString((*it)->getCategory ()).c_str());
 	}
-	*/
 }
 
 }

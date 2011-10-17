@@ -20,7 +20,6 @@
 #include "RuleInventory.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Surface.h"
-#include "RuleManufactureInfo.h"
 
 namespace OpenXcom
 {
@@ -32,7 +31,7 @@ namespace OpenXcom
 RuleItem::RuleItem(const std::string &type) : _type(type), _size(0.0), _cost(0), _time(24), _weight(0), _bigSprite(-1), _floorSprite(-1), _handSprite(120), _bulletSprite(-1),
 									   _fireSound(-1), _hitSound(-1), _hitAnimation(0), _power(0), _priority(0), _compatibleAmmo(), _damageType(DT_NONE),
 									   _accuracyAuto(0), _accuracySnap(0), _accuracyAimed(0), _tuAuto(0), _tuSnap(0), _tuAimed(0), _clipSize(0), _accuracyMelee(0), _tuMelee(0),
-				       _battleType(BT_NONE), _twoHanded(false), _waypoint(false), _invWidth(1), _invHeight(1), _manufactureInfo(0), _category("")
+				       _battleType(BT_NONE), _twoHanded(false), _waypoint(false), _invWidth(1), _invHeight(1)
 {
 }
 
@@ -41,10 +40,6 @@ RuleItem::RuleItem(const std::string &type) : _type(type), _size(0.0), _cost(0),
  */
 RuleItem::~RuleItem()
 {
-	if (_manufactureInfo)
-	{
-		delete(_manufactureInfo);
-	}
 }
 
 /**
@@ -695,39 +690,4 @@ void RuleItem::drawHandSprite(SurfaceSet *texture, Surface *surface) const
 	texture->getFrame(this->getBigSprite())->blit(surface);
 }
 
-/**
- * Change the manufacture info for this item
- * param info A pointer to the Manufacture info
-*/
-void RuleItem::setManufactureInfo(RuleManufactureInfo * info)
-{
-	_manufactureInfo = info;
-}
-
-/**
- * Get the item ManufactureInfo
- * @return the Item ManufactureInfo. NULL mean that the item can't be manufactured.
-*/
-const RuleManufactureInfo * RuleItem::getManufactureInfo() const
-{
-	return _manufactureInfo;
-}
-
-/**
- * Change the item category
- * @param c The new item category's
- */
-void RuleItem::setCategory(const std::string & c)
-{
-	_category = c;
-}
-
-/**
- * Get the item category
- * @return the item category's
-*/
-const std::string & RuleItem::getCategory () const
-{
-	return _category;
-}
 }

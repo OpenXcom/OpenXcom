@@ -29,7 +29,7 @@ class TextButton;
 class Window;
 class Text;
 class TextList;
-class RuleItem;
+class RuleManufactureInfo;
 class ManufactureState;
 
 /**
@@ -44,7 +44,7 @@ private:
 	Text *_txtTitle, *_txtItem, *_txtCategory;
 	TextList *_lstManufacture;
 	ManufactureState * _manufactureState;
-	std::vector<RuleItem *> _possibleProductions;
+	std::vector<RuleManufactureInfo *> _possibleProductions;
 
 public:
 	/// Create the state

@@ -30,7 +30,6 @@
 #include "../Savegame/Base.h"
 #include "../Savegame/SavedGame.h"
 #include "../Ruleset/Ruleset.h"
-#include "../Ruleset/RuleItem.h"
 #include "../Ruleset/RuleManufactureInfo.h"
 #include "../Savegame/Production.h"
 #include "ListPossibleProductionState.h"
@@ -190,11 +189,11 @@ void ManufactureState::fillProductionList()
 		std::wstringstream s3;
 		s3 << (*iter)->getNumberOfItemTodo();
 		std::wstringstream s4;
-		s4 << (*iter)->getRuleItem()->getManufactureInfo()->getManufactureCost();
+		s4 << (*iter)->getRuleManufactureInfo()->getManufactureCost();
 		std::wstringstream s5;
 		if ((*iter)->getAssignedEngineers() > 0)
 		{
-			int timeLeft = (*iter)->getNumberOfItemTodo () * (*iter)->getRuleItem()->getManufactureInfo()->getManufactureTime() - (*iter)->getTimeSpent ();
+			int timeLeft = (*iter)->getNumberOfItemTodo () * (*iter)->getRuleManufactureInfo()->getManufactureTime() - (*iter)->getTimeSpent ();
 			timeLeft /= (*iter)->getAssignedEngineers();
 			float dayLeft = timeLeft / 24.0f;
 			int hours = (dayLeft - static_cast<int>(dayLeft)) * 24;
@@ -205,7 +204,7 @@ void ManufactureState::fillProductionList()
 
 			s5 << L"-";
 		}
-		_lstManufacture->addRow (6, _game->getLanguage()->getString((*iter)->getRuleItem()->getType()).c_str(), s1.str().c_str(), s2.str().c_str(), s3.str().c_str(), s4.str().c_str(), s5.str().c_str());
+		_lstManufacture->addRow (6, _game->getLanguage()->getString((*iter)->getRuleManufactureInfo()->getName()).c_str(), s1.str().c_str(), s2.str().c_str(), s3.str().c_str(), s4.str().c_str(), s5.str().c_str());
 	}
 	_lstManufacture->draw();
 	std::wstringstream ss;
@@ -215,7 +214,7 @@ void ManufactureState::fillProductionList()
 	ss2 << _game->getLanguage()->getString("STR_ENGINEERS_ALLOCATED") << L'\x01' << (_base->getTotalEngineers() - _base->getAvailableEngineers());
 	_txtAllocated->setText(ss2.str());
 	std::wstringstream ss3;
-	ss3 << _game->getLanguage()->getString("STR_WORKSHOP_SPACE_AVAILABLE") << _base->getAvailableWorkshops() - _base->getUsedWorkshops();
+	ss3 << _game->getLanguage()->getString("STR_WORKSHOP_SPACE_AVAILABLE") << L'\x01' << _base->getAvailableWorkshops() - _base->getUsedWorkshops();
 	_txtSpace->setText(ss3.str());
 }
 
@@ -228,4 +227,5 @@ void ManufactureState::lstManufactureClick(Action * action)
 	const std::vector<Production *> productions(_base->getProductions ());
 	_game->pushState(new ProductionState(_game, _base, productions[_lstManufacture->getSelectedRow()]));
 }
+
 }

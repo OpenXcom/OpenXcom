@@ -29,9 +29,19 @@ namespace OpenXcom
 */
 class RuleManufactureInfo
 {
+private:
+	std::map<std::string, int> _neededItems;
+	int _space, _time, _cost;
+	std::string _category, _name;
 public:
 	/// Create ManufactureInfo
-	RuleManufactureInfo(int workspace, int time, int cost);
+	RuleManufactureInfo(const std::string &name);
+	///Get the manufacture name
+	std::string getName () const;
+	///Set the manufacture category
+	void setCategory (const std::string &category);
+	///Get the manufacture category
+	std::string getCategory () const;
 	///Set the required workshop space
 	void setRequiredSpace (int);
 	///Get the required workshop space
@@ -48,11 +58,7 @@ public:
 	const std::map<std::string, int> & getNeededItems() const;
 	///Add one required item
 	void addNeededItem (std::string type, int quantity);
-private:
-	int _requiredWorkspace;
-	std::map<std::string, int> _neededItems;
-	int _manufactureTime;
-	int _manufactureCost;
 };
+
 }
 #endif

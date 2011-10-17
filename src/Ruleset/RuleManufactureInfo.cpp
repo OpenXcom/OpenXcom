@@ -22,21 +22,46 @@ namespace OpenXcom
 {
 /**
  * Create a new ManufactureInfo
- * @param workspace Required workshop space
- * @param time Required time(in man/hour) to manufacture one item
- * @param cost Cost to manufacture one item
+ * @param name The unique manufacture name
 */
-RuleManufactureInfo::RuleManufactureInfo(int workspace, int time, int cost) : _requiredWorkspace(workspace), _manufactureTime(time), _manufactureCost(cost)
+RuleManufactureInfo::RuleManufactureInfo(const std::string &name) : _name(name)
 {
 }
 
 /**
+ * Get the unique name of the manufacture
+ * @return the name
+*/
+std::string RuleManufactureInfo::getName () const
+{
+	return _name;
+}
+
+/**
+ * Change the category shown in the manufacture list
+ * @param category The new category
+*/
+void RuleManufactureInfo::setCategory (const std::string &category)
+{
+	_category = category;
+}
+
+/**
+ * Get the category shown in the manufacture list
+ * @return the category
+*/
+std::string RuleManufactureInfo::getCategory () const
+{
+	return _category;
+}
+
+/**
  * Change required workshop space
- * param workspace The new required workspace
+ * @param workspace The new required workspace
 */
 void RuleManufactureInfo::setRequiredSpace (int workspace)
 {
-	_requiredWorkspace = workspace;
+	_space = workspace;
 }
 
 /**
@@ -45,7 +70,7 @@ void RuleManufactureInfo::setRequiredSpace (int workspace)
 */
 int RuleManufactureInfo::getRequiredSpace () const
 {
-	return _requiredWorkspace;
+	return _space;
 }
 
 /**
@@ -54,7 +79,7 @@ int RuleManufactureInfo::getRequiredSpace () const
 */
 void RuleManufactureInfo::setManufactureTime (int time)
 {
-	_manufactureTime = time;
+	_time = time;
 }
 
 /**
@@ -63,7 +88,7 @@ void RuleManufactureInfo::setManufactureTime (int time)
 */
 int RuleManufactureInfo::getManufactureTime () const
 {
-	return _manufactureTime;
+	return _time;
 }
 
 /**
@@ -72,7 +97,7 @@ int RuleManufactureInfo::getManufactureTime () const
 */
 void RuleManufactureInfo::setManufactureCost (int cost)
 {
-	_manufactureCost = cost;
+	_cost = cost;
 }
 
 /**
@@ -81,7 +106,7 @@ void RuleManufactureInfo::setManufactureCost (int cost)
 */
 int RuleManufactureInfo::getManufactureCost () const
 {
-	return _manufactureCost;
+	return _cost;
 }
 
 /**

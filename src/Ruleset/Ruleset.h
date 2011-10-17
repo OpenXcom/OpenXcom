@@ -43,6 +43,8 @@ class RuleAlien;
 class RuleArmor;
 class ArticleDefinition;
 class RuleInventory;
+class RuleResearchProject;
+class RuleManufactureInfo;
 
 /**
  * Set of rules and stats for a game.
@@ -70,7 +72,8 @@ protected:
 	std::map<std::string, RuleInventory*> _invs;
 	int _costSoldier, _costEngineer, _costScientist, _timePersonnel;
 	std::map<std::string, RuleResearchProject *> _researchProjects;
-	std::vector<std::string> _countriesIndex, _regionsIndex, _facilitiesIndex, _craftsIndex, _craftWeaponsIndex, _itemsIndex, _armorsIndex, _researchIndex;
+	std::map<std::string, RuleManufactureInfo *> _manufacture;
+	std::vector<std::string> _countriesIndex, _regionsIndex, _facilitiesIndex, _craftsIndex, _craftWeaponsIndex, _itemsIndex, _armorsIndex, _researchIndex, _manufactureIndex;
 public:
 	/// Creates a blank ruleset.
 	Ruleset();
@@ -126,6 +129,10 @@ public:
 	RuleResearchProject *getResearchProject (const std::string &id) const;
 	/// Get the list of all research projects.
 	const std::map<std::string, RuleResearchProject *> & getResearchProjects () const;
+	/// Gets the ruleset for a specific manufacture project.
+	RuleManufactureInfo *getManufactureProject (const std::string &id) const;
+	/// Get the list of all manufacture projects.
+	const std::map<std::string, RuleManufactureInfo *> & getManufactureProjects () const;
 };
 
 }

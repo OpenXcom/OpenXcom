@@ -196,7 +196,7 @@ void Base::load(const YAML::Node &node, SavedGame *save)
 	{
 		std::string item;
 		(*i)["item"] >> item;
-		Production *p = new Production(_rule->getItem(item), 0);
+		Production *p = new Production(_rule->getManufactureProject(item), 0);
 		p->load(*i);
 		_productions.push_back(p);
 	}
@@ -594,7 +594,7 @@ int Base::getUsedWorkshops() const
 	int usedWorkShop = 0;
 	for (std::vector<Production *>::const_iterator iter = _productions.begin (); iter != _productions.end (); ++iter)
 	{
-		usedWorkShop += ((*iter)->getAssignedEngineers() + (*iter)->getRuleItem()->getManufactureInfo()->getRequiredSpace ());
+		usedWorkShop += ((*iter)->getAssignedEngineers() + (*iter)->getRuleManufactureInfo()->getRequiredSpace ());
 	}
 	return usedWorkShop;
 }

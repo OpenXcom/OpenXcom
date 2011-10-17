@@ -26,7 +26,6 @@
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
 #include "../Resource/ResourcePack.h"
-#include "../Ruleset/RuleItem.h"
 #include "../Ruleset/RuleManufactureInfo.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/Production.h"
@@ -38,9 +37,9 @@ namespace OpenXcom
  * Initialize all elements in the Production settings screen(new Production)
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
- * @param item the RuleItem to produce
+ * @param item the RuleManufactureInfo to produce
 */
-ProductionState::ProductionState (Game * game, Base * base, RuleItem * item) : State (game), _base(base), _item(item), _production(0)
+ProductionState::ProductionState (Game * game, Base * base, RuleManufactureInfo * item) : State (game), _base(base), _item(item), _production(0)
 {
 	buildUi();
 }
@@ -111,10 +110,10 @@ void ProductionState::buildUi()
 	add(_btnUnitDown);
 	add(_btnOk);
 	add(_btnStop);
-	_window->setColor(Palette::blockOffset(15)+4);
+	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
 	_txtTitle->setColor(Palette::blockOffset(15)+1);
-	_txtTitle->setText(_game->getLanguage()->getString(_item ? _item->getType() : _production->getRuleItem()->getType()));
+	_txtTitle->setText(_game->getLanguage()->getString(_item ? _item->getName() : _production->getRuleManufactureInfo()->getName()));
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 
@@ -142,19 +141,19 @@ void ProductionState::buildUi()
 	_txtEngineerUp->setText(_game->getLanguage()->getString("STR_INCREASE_UC"));
 	_txtEngineerDown->setColor(Palette::blockOffset(15)+1);
 	_txtEngineerDown->setText(_game->getLanguage()->getString("STR_DECREASE_UC"));
-	_btnEngineerUp->setColor(Palette::blockOffset(15)+4);
+	_btnEngineerUp->setColor(Palette::blockOffset(15)+1);
 	_btnEngineerUp->onMousePress((ActionHandler)&ProductionState::moreEngineerPress);
 	_btnEngineerUp->onMouseRelease((ActionHandler)&ProductionState::moreEngineerRelease);
 
-	_btnEngineerDown->setColor(Palette::blockOffset(15)+4);
+	_btnEngineerDown->setColor(Palette::blockOffset(15)+1);
 	_btnEngineerDown->onMousePress((ActionHandler)&ProductionState::lessEngineerPress);
 	_btnEngineerDown->onMouseRelease((ActionHandler)&ProductionState::lessEngineerRelease);
 
-	_btnUnitUp->setColor(Palette::blockOffset(15)+4);
+	_btnUnitUp->setColor(Palette::blockOffset(15)+1);
 	_btnUnitUp->onMousePress((ActionHandler)&ProductionState::moreUnitPress);
 	_btnUnitUp->onMouseRelease((ActionHandler)&ProductionState::moreUnitRelease);
 
-	_btnUnitDown->setColor(Palette::blockOffset(15)+4);
+	_btnUnitDown->setColor(Palette::blockOffset(15)+1);
 	_btnUnitDown->onMousePress((ActionHandler)&ProductionState::lessUnitPress);
 	_btnUnitDown->onMouseRelease((ActionHandler)&ProductionState::lessUnitRelease);
 
@@ -163,11 +162,11 @@ void ProductionState::buildUi()
 	_txtUnitDown->setColor(Palette::blockOffset(15)+1);
 	_txtUnitDown->setText(_game->getLanguage()->getString("STR_DECREASE_UC"));
 
-	_btnOk->setColor(Palette::blockOffset(13)+13);
+	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ProductionState::btnOkClick);
 
-	_btnStop->setColor(Palette::blockOffset(13)+13);
+	_btnStop->setColor(Palette::blockOffset(13)+10);
 	_btnStop->setText(_game->getLanguage()->getString("STR_STOP_PRODUCTION"));
 	_btnStop->onMouseClick((ActionHandler)&ProductionState::btnStopClick);
 	if(!_production)
@@ -317,9 +316,8 @@ void ProductionState::lessUnitRelease(Action * action)
 
 /**
  * Assign one more engineer(if possible)
- * @param action a pointer to an Action
  */
-void ProductionState::onMoreEngineer(Action * action)
+void ProductionState::onMoreEngineer()
 {
 	int assigned = _production->getAssignedEngineers();
 	int availableEngineer = _base->getFreeEngineers();
@@ -333,9 +331,8 @@ void ProductionState::onMoreEngineer(Action * action)
 
 /**
  * Remove one engineer(if possible)
- * @param action a pointer to an Action
  */
-void ProductionState::onLessEngineer(Action * action)
+void ProductionState::onLessEngineer()
 {
 	int assigned = _production->getAssignedEngineers();
 	if(assigned > 0)
@@ -347,9 +344,8 @@ void ProductionState::onLessEngineer(Action * action)
 
 /**
  * Build one more unit
- * @param action a pointer to an Action
  */
-void ProductionState::onMoreUnit(Action * action)
+void ProductionState::onMoreUnit()
 {
 	int more = _production->getNumberOfItemTodo ();
 	_production->setNumberOfItemTodo (++more);
@@ -358,9 +354,8 @@ void ProductionState::onMoreUnit(Action * action)
 
 /**
  * Build one less unit(if possible)
- * @param action a pointer to an Action
  */
-void ProductionState::onLessUnit(Action * action)
+void ProductionState::onLessUnit()
 {
 	int less = _production->getNumberOfItemTodo ();
 	if(less > (_production->getNumberOfItemDone () + 1))

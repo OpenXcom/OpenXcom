@@ -997,10 +997,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	ppclip->setClipSize(26);
 	ppclip->setWeight(3);
 
-	RuleItem *alloys = new RuleItem("STR_ALIEN_ALLOYS");
-	alloys->setSize(0.1f);
-	alloys->setCost(6500);
-	alloys->setTransferTime(96);
+	// Dummy entries for manufacture
 	RuleItem *lp = new RuleItem("STR_LASER_PISTOL");
 	lp->setSize(0.1f);
 	lp->setCost(70);
@@ -1012,12 +1009,16 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	lp->setHitSound(19);
 	lp->setClipSize(26);
 	lp->setWeight(3);
-	lp->setCategory ("STR_WEAPON");
-	lp->setManufactureInfo(new RuleManufactureInfo(2, 300, 8000));
+
+	RuleManufactureInfo *mlp = new RuleManufactureInfo("STR_LASER_PISTOL");
+	mlp->setCategory("STR_WEAPON");
+	mlp->setRequiredSpace(2);
+	mlp->setManufactureTime(300);
+	mlp->setManufactureCost(8000);
 
 	RuleItem *aa = new RuleItem("STR_ALIEN_ALLOYS");
 	aa->setSize(0.1f);
-	aa->setCost(70);
+	aa->setCost(650);
 	aa->setBigSprite(34);
 	aa->setPower(52);
 	aa->setDamageType(DT_PLASMA);
@@ -1026,8 +1027,12 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	aa->setHitSound(19);
 	aa->setClipSize(26);
 	aa->setWeight(3);
-	aa->setManufactureInfo(new RuleManufactureInfo(2, 300, 8000));
-	aa->setCategory ("STR_EQUIPMENT");
+
+	RuleManufactureInfo *maa = new RuleManufactureInfo("STR_ALIEN_ALLOYS");
+	maa->setCategory("STR_EQUIPMENT");
+	maa->setRequiredSpace(2);
+	maa->setManufactureTime(300);
+	maa->setManufactureCost(8000);
 
 	RuleItem *pa = new RuleItem("STR_PERSONAL_ARMOR");
 	pa->setSize(0.1f);
@@ -1040,10 +1045,12 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	pa->setHitSound(19);
 	pa->setClipSize(26);
 	pa->setWeight(3);
-	pa->setCategory ("STR_EQUIPMENT");
-	RuleManufactureInfo * info = new RuleManufactureInfo(2, 300, 8000);
-	info->addNeededItem("STR_ALIEN_ALLOYS", 4);
-	pa->setManufactureInfo(info);
+
+	RuleManufactureInfo *mpa = new RuleManufactureInfo("STR_PERSONAL_ARMOR");
+	mpa->setCategory("STR_EQUIPMENT");
+	mpa->setRequiredSpace(2);
+	mpa->setManufactureTime(300);
+	mpa->setManufactureCost(8000);
 
 	RuleItem *lr = new RuleItem("STR_LASER_RIFLE");
 	lr->setSize(0.1f);
@@ -1056,8 +1063,12 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	lr->setHitSound(19);
 	lr->setClipSize(26);
 	lr->setWeight(3);
-	lr->setCategory ("STR_WEAPON");
-	lr->setManufactureInfo(new RuleManufactureInfo(2, 300, 8000000));
+
+	RuleManufactureInfo *mlr = new RuleManufactureInfo("STR_LASER_RIFLE");
+	mlr->setCategory("STR_WEAPON");
+	mlr->setRequiredSpace(2);
+	mlr->setManufactureTime(300);
+	mlr->setManufactureCost(8000000);
 
 	_items.insert(std::pair<std::string, RuleItem*>("STR_STINGRAY_LAUNCHER", slauncher));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_AVALANCHE_LAUNCHER", alauncher));
@@ -1087,13 +1098,17 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_items.insert(std::pair<std::string, RuleItem*>("STR_SECTOID_CORPSE", scorpse));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_PLASMA_PISTOL", ppistol));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_PLASMA_PISTOL_CLIP", ppclip));
-	_items.insert(std::pair<std::string, RuleItem*>("STR_ALIEN_ALLOYS", alloys));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_ELECTRO_FLARE", flare));
-	_items.insert(std::pair<std::string, RuleItem*>("STR_LASER_PISTOL", lp));
-
+	
 	_items.insert(std::pair<std::string, RuleItem*>("STR_ALIEN_ALLOYS", aa));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_LASER_PISTOL", lp));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_PERSONAL_ARMOR", pa));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_LASER_RIFLE", lr));
+	_manufacture.insert(std::pair<std::string, RuleManufactureInfo*>("STR_ALIEN_ALLOYS", maa));
+	_manufacture.insert(std::pair<std::string, RuleManufactureInfo*>("STR_LASER_PISTOL", mlp));
+	_manufacture.insert(std::pair<std::string, RuleManufactureInfo*>("STR_PERSONAL_ARMOR", mpa));
+	_manufacture.insert(std::pair<std::string, RuleManufactureInfo*>("STR_LASER_RIFLE", mlr));
+
 	// Add UFOs
 	RuleUfo *sscout = new RuleUfo("STR_SMALL_SCOUT");
 	sscout->setSize("STR_VERY_SMALL");
@@ -1906,12 +1921,13 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	
 	_ufopaediaArticles[article_ufo.id] = new ArticleDefinitionUfo(article_ufo);
 	
-	
+	// General values
 	_costSoldier = 20000;
 	_costEngineer = 25000;
 	_costScientist = 30000;
 	_timePersonnel = 72;
 
+	// Add research
 	std::string researchDataFile("research.dat");
 	std::ifstream fin(CrossPlatform::getDataFile(researchDataFile).c_str());
 	YAML::Parser parser(fin);

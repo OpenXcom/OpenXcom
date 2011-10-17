@@ -40,6 +40,7 @@ class UfopaediaSaved;
 class RuleResearchProject;
 class ResearchProject;
 class Soldier;
+class RuleManufactureInfo;
 
 /**
  * Enumator containing all the possible game difficulties.
@@ -69,8 +70,8 @@ private:
 	std::vector<const RuleResearchProject *> _discovered;
 
 	/// Check whether a ResearchProject can be researched
-	bool isResearchAvailable (RuleResearchProject * r, const std::vector<const RuleResearchProject *> & unlockeds);
-	void getDependableResearchBasic (std::vector<RuleResearchProject *> & dependables, const RuleResearchProject *research, Ruleset * ruleset, Base * base);
+	bool isResearchAvailable (RuleResearchProject * r, const std::vector<const RuleResearchProject *> & unlockeds) const;
+	void getDependableResearchBasic (std::vector<RuleResearchProject *> & dependables, const RuleResearchProject *research, Ruleset * ruleset, Base * base) const;
 public:
 	/// Creates a new save with a certain difficulty.
 	SavedGame(GameDifficulty difficulty);
@@ -119,15 +120,17 @@ public:
 	/// Add a finished ResearchProject
 	void addFinishedResearch (const RuleResearchProject * r, Ruleset * ruleset = NULL);
 	/// Get the list of already discovered research projects
-	const std::vector<const RuleResearchProject *> & getDiscoveredResearchs();
+	const std::vector<const RuleResearchProject *> & getDiscoveredResearchs() const;
 	/// Get the list of ResearchProject which can be researched in a Base
-	void getAvailableResearchProjects (std::vector<RuleResearchProject *> & projects, Ruleset * ruleset, Base * base);
+	void getAvailableResearchProjects (std::vector<RuleResearchProject *> & projects, Ruleset * ruleset, Base * base) const;
+	/// Get the list of Productions which can be manufactured in a Base
+	void getAvailableProductions (std::vector<RuleManufactureInfo *> & productions, Ruleset * ruleset, Base * base) const;
 	///Get the list of newly available research projects once a research has been completed.
-	void getDependableResearch (std::vector<RuleResearchProject *> & dependables, const RuleResearchProject *research, Ruleset * ruleset, Base * base);
+	void getDependableResearch (std::vector<RuleResearchProject *> & dependables, const RuleResearchProject *research, Ruleset * ruleset, Base * base) const;
 	/// Gets the current soldier ID.
-	int *const getSoldierId();
+	int *const getSoldierId() ;
 	/// Gets the soldier matching this ID.
-	Soldier *const getSoldier(int id);
+	Soldier *const getSoldier(int id) const;
 	/// Handles the higher promotions.
 	bool handlePromotions();
 	/// Checks how many soldiers of a rank exist and which one has the highest score.

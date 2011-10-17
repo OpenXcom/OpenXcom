@@ -72,7 +72,7 @@
 #include "../Ruleset/RuleResearchProject.h"
 #include "NewPossibleResearchState.h"
 #include "../Savegame/Production.h"
-#include "../Ruleset/RuleItem.h"
+#include "../Ruleset/RuleManufactureInfo.h"
 
 namespace OpenXcom
 {
@@ -717,7 +717,7 @@ void GeoscapeState::time1Hour()
 			if (j->second > PRODUCTION_PROGRESS_NOT_COMPLETE)
 			{
 				(*i)->removeProduction (j->first);
-				_game->pushState(new ProductionCompleteState(_game, _game->getLanguage()->getString(j->first->getRuleItem()->getType()), (*i)->getName(), j->second));
+				_game->pushState(new ProductionCompleteState(_game, _game->getLanguage()->getString(j->first->getRuleManufactureInfo()->getName()), (*i)->getName(), j->second));
 				timerReset();
 			}
 		}

@@ -24,7 +24,7 @@
 namespace OpenXcom
 {
 class Base;
-class RuleItem;
+class RuleManufactureInfo;
 class Window;
 class TextButton;
 class Text;
@@ -37,14 +37,14 @@ class ProductionStartState : public State
 {
 private:
 	Base * _base;
-	RuleItem * _item;
+	RuleManufactureInfo * _item;
 	Window * _window;
 	TextButton * _btnCancel, * _btnStart;
-	Text * _txtTitle, * _txtManHour, * _txtCost, * _txtWorkSpace, * _txtNeedeItemsTitle, * _txtItemNameColumn, * _txtUnitRequiredColumn, * _txtUnitAvailableColumn;
+	Text * _txtTitle, * _txtManHour, * _txtCost, * _txtWorkSpace, * _txtNeededItemsTitle, * _txtItemNameColumn, * _txtUnitRequiredColumn, * _txtUnitAvailableColumn;
 	TextList * _lstNeededItems;
 public:
 	/// Create the State
-	ProductionStartState(Game * game, Base * base, RuleItem * item);
+	ProductionStartState(Game * game, Base * base, RuleManufactureInfo * item);
 	/// Handler for the Cancel button
 	void btnCancelClick(Action * action);
 	/// Handler for the start button

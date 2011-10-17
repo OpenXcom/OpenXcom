@@ -18,14 +18,13 @@
  */
 #include "Production.h"
 #include "../Ruleset/RuleManufactureInfo.h"
-#include "../Ruleset/RuleItem.h"
 #include "Base.h"
 #include "SavedGame.h"
 #include "ItemContainer.h"
 
 namespace OpenXcom
 {
-Production::Production (RuleItem * item, int todo) : _item(item), _todo(todo), _timeSpent(0), _engineers(0)
+Production::Production (RuleManufactureInfo * item, int todo) : _item(item), _todo(todo), _timeSpent(0), _engineers(0)
 {
 }
 
@@ -65,7 +64,7 @@ productionProgress_e Production::step(Base * b, SavedGame * g)
 	_timeSpent += _engineers;
 	if (done < getNumberOfItemDone ())
 	{
-		b->getItems ()->addItem(_item->getType (), 1);
+		b->getItems ()->addItem(_item->getName (), 1);
 	}
 	if (getNumberOfItemDone () >= _todo)
 	{
@@ -74,11 +73,11 @@ productionProgress_e Production::step(Base * b, SavedGame * g)
 	else if (done < getNumberOfItemDone ())
 	{
 		// We need to ensure that player has enough cash/item to produce a new unit
-		if(g->getFunds() < _item->getManufactureInfo()->getManufactureCost ())
+		if(g->getFunds() < _item->getManufactureCost ())
 		{
 			return PRODUCTION_PROGRESS_NOT_ENOUGH_MONEY;
 		}
-		for(std::map<std::string,int>::const_iterator iter = getRuleItem()->getManufactureInfo()->getNeededItems ().begin (); iter != getRuleItem()->getManufactureInfo()->getNeededItems ().end (); ++iter)
+		for(std::map<std::string,int>::const_iterator iter = _item->getNeededItems ().begin (); iter != _item->getNeededItems ().end (); ++iter)
 		{
 			if (b->getItems ()->getItem(iter->first) < iter->second)
 			{
@@ -95,18 +94,18 @@ productionProgress_e Production::step(Base * b, SavedGame * g)
 
 int Production::getNumberOfItemDone () const
 {
-	return _timeSpent / _item->getManufactureInfo()->getManufactureTime ();
+	return _timeSpent / _item->getManufactureTime ();
 }
 
-const RuleItem * Production::getRuleItem() const
+const RuleManufactureInfo * Production::getRuleManufactureInfo() const
 {
 	return _item;
 }
 
 void Production::startItem(Base * b, SavedGame * g)
 {
-	g->setFunds(g->getFunds() - _item->getManufactureInfo()->getManufactureCost ());
-	for(std::map<std::string,int>::const_iterator iter = getRuleItem()->getManufactureInfo()->getNeededItems ().begin (); iter != getRuleItem()->getManufactureInfo()->getNeededItems ().end (); ++iter)
+	g->setFunds(g->getFunds() - _item->getManufactureCost ());
+	for(std::map<std::string,int>::const_iterator iter = _item->getNeededItems ().begin (); iter != _item->getNeededItems ().end (); ++iter)
 	{
 		b->getItems ()->removeItem(iter->first, iter->second);
 	}
@@ -115,7 +114,7 @@ void Production::startItem(Base * b, SavedGame * g)
 void Production::save(YAML::Emitter &out)
 {
 	out << YAML::BeginMap;
-	out << YAML::Key << "item" << YAML::Value << getRuleItem ()->getType ();
+	out << YAML::Key << "item" << YAML::Value << getRuleManufactureInfo ()->getName ();
 	out << YAML::Key << "assigned" << YAML::Value << getAssignedEngineers ();
 	out << YAML::Key << "spent" << YAML::Value << getTimeSpent ();
 	out << YAML::Key << "todo" << YAML::Value << getNumberOfItemTodo ();
