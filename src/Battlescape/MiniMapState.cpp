@@ -59,12 +59,14 @@ MiniMapState::MiniMapState (Game * game, Map * map, SavedBattleGame * battleGame
 	btnOk->onMouseClick((ActionHandler)&MiniMapState::btnOkClick);
 	_txtLevel->setBig();
 	_txtLevel->setColor(Palette::blockOffset(4));
+	_txtLevel->setHighContrast(true);
 	std::wstringstream s;
 	s << _miniMapView->getDisplayedLevel ();
 	_txtLevel->setText(s.str());
 	_timerAnimate = new Timer(125);
 	_timerAnimate->onTimer((StateHandler)&MiniMapState::animate);
 	_timerAnimate->start();
+	_miniMapView->draw();
 }
 
 /**

@@ -54,20 +54,11 @@ MiniMapView::MiniMapView(int w, int h, int x, int y, Game * game, Map * map, Sav
 }
 
 /**
- * Blits this surface onto another one
- * @param surface Pointer to surface to blit onto.
- */
-void MiniMapView::blit(Surface *surface)
-{
-	draw();
-	InteractiveSurface::blit (surface);
-}
-
-/**
  * Draw the minimap
  */
 void MiniMapView::draw()
 {
+	InteractiveSurface::draw();
 	if(!_set)
 	{
 		return;
@@ -162,10 +153,7 @@ void MiniMapView::up ()
 	{
 		_lvl = 0;
 	}
-	else
-	{
-		draw();
-	}
+	_redraw = true;
 }
 
 /**
@@ -178,10 +166,7 @@ void MiniMapView::down ()
 	{
 		_lvl = MAX_LEVEL;
 	}
-	else
-	{
-		draw();
-	}
+	_redraw = true;
 }
 
 /**
@@ -196,7 +181,7 @@ void MiniMapView::mouseClick (Action *action, State *state)
 	int origY = action->getRelativeYMouse() / action->getYScale();
 	_startY -= (origY / CELL_HEIGHT) - ((getHeight () / 2) / CELL_HEIGHT);
 	_startX += (origX / CELL_HEIGHT) - ((getWidth () / 2) / CELL_HEIGHT);
-	draw();
+	_redraw = true;
 }
 
 /**
@@ -227,6 +212,7 @@ void MiniMapView::animate()
 	{
 		_frame = 0;
 	}
+	_redraw = true;
 }
 
 /**

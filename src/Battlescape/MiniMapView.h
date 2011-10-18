@@ -51,8 +51,6 @@ public:
 	MiniMapView(int w, int h, int x, int y, Game * game, Map * map, SavedBattleGame * battleGame);
 	/// Draw the minimap
 	void draw();
-	/// Blit the minimap to another surface
-	void blit(Surface *surface);
 	/// Change the displayed minimap level
 	void up ();
 	/// Change the displayed minimap level
