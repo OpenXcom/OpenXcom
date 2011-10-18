@@ -5,7 +5,7 @@ missing
 install-sh
 config.status
 configure
-./Makefile
+Makefile
 Makefile.in
 depcomp
 .deps/

@@ -24,6 +24,25 @@ AC_LANG([C++])
 AC_PROG_CXX
 PKG_PROG_PKG_CONFIG([0.24])
 
+# ================
+# Check for cflags
+# ================
+AC_ARG_ENABLE([werror],
+        [AS_HELP_STRING([--disable-werror], [Treat all warnings as errors, useful for development])],
+        [enable_werror="$enableval"],
+        [enable_werror=yes]
+)
+AS_IF([test x"$enable_werror" != "xno"], [
+        CFLAGS="$CFLAGS -Werror"
+        CXXFLAGS="$CXXFLAGS -Werror"
+])
+AS_IF([test x"$GCC" = xyes], [
+        # Be tough with warnings and produce less careless code
+        CFLAGS="$CFLAGS -Wall -pedantic"
+        CXXFLAGS="$CXXFLAGS -Wall -pedantic"
+	LDFLAGS="$LDFLAGS -Wl,--as-needed"
+])
+
 # ==================
 # Check dependencies
 # ==================
@@ -31,5 +50,14 @@ PKG_CHECK_MODULES([SDL],[sdl SDL_mixer SDL_gfx])
 PKG_CHECK_MODULES([YAML],[yaml-cpp])
 
 AC_CONFIG_FILES([Makefile])
-
 AC_OUTPUT
+
+# ==============================================
+# Display final informations about configuration
+# ==============================================
+AC_MSG_NOTICE([
+==============================================================================
+Build configuration:
+        werror:          ${enable_werror}
+==============================================================================
+])

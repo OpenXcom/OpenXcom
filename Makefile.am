@@ -1,5 +1,6 @@
 EXTRA_DIST = autogen.sh docs/Doxyfile docs/language_id.html \
-	src/Makefile src/OpenXcom.*
+	src/Makefile src/OpenXcom.* \
+	src/CMakeLists.txt docs/CMakeLists.txt CMakeLists.txt
 
 pkgdata_DATA = bin/DATA/README.txt
 
@@ -35,7 +36,6 @@ name_DATA = \
 	bin/DATA/SoldierName/Russian.nam
 
 bin_PROGRAMS = openxcom
-openxcom_LDFLAGS = -Wl,--as-needed
 openxcom_LDADD = $(SDL_LIBS) $(YAML_LIBS)
 openxcom_CXXFLAGS = -Wall \
 	$(SDL_CFLAGS) \
@@ -66,6 +66,8 @@ openxcom_SOURCES = \
 	src/Basescape/CraftWeaponsState.h \
 	src/Basescape/DismantleFacilityState.cpp \
 	src/Basescape/DismantleFacilityState.h \
+	src/Basescape/ListPossibleProductionState.cpp \
+	src/Basescape/ListPossibleProductionState.h \
 	src/Basescape/ManufactureState.cpp \
 	src/Basescape/ManufactureState.h \
 	src/Basescape/MiniBaseView.cpp \
@@ -78,6 +80,10 @@ openxcom_SOURCES = \
 	src/Basescape/PlaceFacilityState.h \
 	src/Basescape/PlaceLiftState.cpp \
 	src/Basescape/PlaceLiftState.h \
+	src/Basescape/ProductionStartState.cpp \
+	src/Basescape/ProductionStartState.h \
+	src/Basescape/ProductionState.cpp \
+	src/Basescape/ProductionState.h \
 	src/Basescape/PurchaseErrorState.cpp \
 	src/Basescape/PurchaseErrorState.h \
 	src/Basescape/PurchaseState.cpp \
@@ -140,6 +146,10 @@ openxcom_SOURCES = \
 	src/Battlescape/InventoryState.h \
 	src/Battlescape/Map.cpp \
 	src/Battlescape/Map.h \
+	src/Battlescape/MiniMapState.cpp \
+	src/Battlescape/MiniMapState.h \
+	src/Battlescape/MiniMapView.cpp \
+	src/Battlescape/MiniMapView.h \
 	src/Battlescape/NextTurnState.cpp \
 	src/Battlescape/NextTurnState.h \
 	src/Battlescape/Pathfinding.cpp \
@@ -343,6 +353,8 @@ openxcom_SOURCES = \
 	src/Ruleset/RuleInventory.h \
 	src/Ruleset/RuleItem.cpp \
 	src/Ruleset/RuleItem.h \
+	src/Ruleset/RuleManufactureInfo.cpp \
+	src/Ruleset/RuleManufactureInfo.h \
 	src/Ruleset/RuleResearchProject.cpp \
 	src/Ruleset/RuleResearchProject.h \
 	src/Ruleset/RuleRegion.cpp \
@@ -385,6 +397,8 @@ openxcom_SOURCES = \
 	src/Savegame/Node.h \
 	src/Savegame/NodeLink.cpp \
 	src/Savegame/NodeLink.h \
+	src/Savegame/Production.cpp \
+	src/Savegame/Production.h \
 	src/Savegame/Region.cpp \
 	src/Savegame/Region.h \
 	src/Savegame/ResearchProject.cpp \
