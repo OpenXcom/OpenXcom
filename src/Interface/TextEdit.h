@@ -92,8 +92,8 @@ public:
 	void mousePress(Action *action, State *state);
 	/// Special handling for keyboard presses.
 	void keyboardPress(Action *action, State *state);
-        /// Set the text edit's caret at the end of it.
-        void caretEnd();
+	/// Set the text edit's caret at the end of it.
+	void caretAtEnd();
 };
 
 }

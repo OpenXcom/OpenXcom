@@ -412,9 +412,9 @@ void TextEdit::keyboardPress(Action *action, State *state)
 	InteractiveSurface::keyboardPress(action, state);
 }
 
-void TextEdit::caretEnd()
+void TextEdit::caretAtEnd()
 {
-        _caretPos = _value.length();
+	_caretPos = _value.length();
 }
 
 }
