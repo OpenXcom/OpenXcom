@@ -185,29 +185,34 @@ void SaveGameState::lstSavesClick(Action *action)
 {       
 	_previousSelectedRow = _selectedRow;
 	_selectedRow = _lstSaves->getSelectedRow();
-	if (_previousSelectedRow != _selectedRow || _previousSelectedRow != -1)
+	
+	switch (_previousSelectedRow)
 	{
-		_lstSaves->clearList();    
-		_lstSaves->addRow(1, L"<NEW SAVED GAME>");
-		SavedGame::getList(_lstSaves, _game->getLanguage());
-
-		_selected = Language::wstrToUtf8(_lstSaves->getCellText(_lstSaves->getSelectedRow(), 0));
-		_lstSaves->setCellText(_lstSaves->getSelectedRow(), 0, L"");
-		if (_lstSaves->getSelectedRow() == 0)
-		{
-			_edtSave->setText(L"");
-			_selected = "";
-		}
-		else
-		{
-			_edtSave->setText(Language::utf8ToWstr(_selected));
-		}
-		_edtSave->setX(_lstSaves->getX() + _lstSaves->getMargin());
-		_edtSave->setY(_lstSaves->getY() + _lstSaves->getSelectedRow() * 8);
-		_edtSave->setVisible(true);
-		_edtSave->focus();
-		_edtSave->caretAtEnd();
+		case -1:	// first click on the savegame list
+			break;
+		case 0:
+			_lstSaves->setCellText(_previousSelectedRow	, 0, L"<NEW SAVED GAME>");
+			break;
+		default:
+			_lstSaves->setCellText(_previousSelectedRow	, 0, Language::utf8ToWstr(_selected));
 	}
+
+	_selected = Language::wstrToUtf8(_lstSaves->getCellText(_lstSaves->getSelectedRow(), 0));
+	_lstSaves->setCellText(_lstSaves->getSelectedRow(), 0, L"");
+	if (_lstSaves->getSelectedRow() == 0)
+	{
+		_edtSave->setText(L"");
+		_selected = "";
+	}
+	else
+	{
+		_edtSave->setText(Language::utf8ToWstr(_selected));
+	}
+	_edtSave->setX(_lstSaves->getX() + _lstSaves->getMargin());
+	_edtSave->setY(_lstSaves->getY() + _lstSaves->getSelectedRow() * 8);
+	_edtSave->setVisible(true);
+	_edtSave->focus();
+	//_edtSave->caretAtEnd();
 }
 
 /**
@@ -220,7 +225,7 @@ void SaveGameState::edtSaveKeyPress(Action *action)
 	{
 		try
 		{
-			if (_selected != "")
+			if (_selectedRow > 0)
 			{
 				std::string oldName = Options::getUserFolder() + _selected + ".sav";
 				std::string newName = Options::getUserFolder() + Language::wstrToUtf8(_edtSave->getText()) + ".sav";

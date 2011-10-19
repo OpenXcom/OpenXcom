@@ -107,6 +107,7 @@ void TextEdit::setFonts(Font *big, Font *small)
 void TextEdit::setText(const std::wstring &text)
 {
 	_value = text;
+	_caretPos = _value.length();
 	_redraw = true;
 }
 
@@ -410,11 +411,6 @@ void TextEdit::keyboardPress(Action *action, State *state)
 	_redraw = true;
 
 	InteractiveSurface::keyboardPress(action, state);
-}
-
-void TextEdit::caretAtEnd()
-{
-	_caretPos = _value.length();
 }
 
 }
