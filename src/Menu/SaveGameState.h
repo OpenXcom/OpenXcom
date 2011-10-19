@@ -45,6 +45,7 @@ private:
 	TextEdit *_edtSave;
 	std::string _selected;
 	bool _geo;
+	int _previousSelectedRow, _selectedRow;
 public:
 	/// Creates the Save Game state.
 	SaveGameState(Game *game, bool geo);

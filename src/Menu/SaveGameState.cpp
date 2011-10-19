@@ -63,6 +63,9 @@ SaveGameState::SaveGameState(Game *game, bool geo) : State(game), _selected(""),
 	{
 		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
 	}
+        
+	_previousSelectedRow = -1;
+	_selectedRow = -1;
 
 	add(_window);
 	add(_btnCancel);
@@ -95,7 +98,7 @@ SaveGameState::SaveGameState(Game *game, bool geo) : State(game), _selected(""),
 	}
 	else
 	{
-		_window->setColor(Palette::blockOffset(0));
+        	_window->setColor(Palette::blockOffset(0));
 		_window->setHighContrast(true);
 		_window->setBackground(_game->getResourcePack()->getSurface("TAC00.SCR"));
 
@@ -179,7 +182,21 @@ void SaveGameState::btnCancelClick(Action *action)
  * @param action Pointer to an action.
  */
 void SaveGameState::lstSavesClick(Action *action)
-{
+{       
+	_previousSelectedRow = _selectedRow;
+	_selectedRow = _lstSaves->getSelectedRow();
+	
+	switch (_previousSelectedRow)
+	{
+		case -1:	// first click on the savegame list
+			break;
+		case 0:
+			_lstSaves->setCellText(_previousSelectedRow	, 0, L"<NEW SAVED GAME>");
+			break;
+		default:
+			_lstSaves->setCellText(_previousSelectedRow	, 0, Language::utf8ToWstr(_selected));
+	}
+
 	_selected = Language::wstrToUtf8(_lstSaves->getCellText(_lstSaves->getSelectedRow(), 0));
 	_lstSaves->setCellText(_lstSaves->getSelectedRow(), 0, L"");
 	if (_lstSaves->getSelectedRow() == 0)
@@ -195,6 +212,7 @@ void SaveGameState::lstSavesClick(Action *action)
 	_edtSave->setY(_lstSaves->getY() + _lstSaves->getSelectedRow() * 8);
 	_edtSave->setVisible(true);
 	_edtSave->focus();
+	//_edtSave->caretAtEnd();
 }
 
 /**
@@ -207,7 +225,7 @@ void SaveGameState::edtSaveKeyPress(Action *action)
 	{
 		try
 		{
-			if (_selected != "")
+			if (_selectedRow > 0)
 			{
 				std::string oldName = Options::getUserFolder() + _selected + ".sav";
 				std::string newName = Options::getUserFolder() + Language::wstrToUtf8(_edtSave->getText()) + ".sav";

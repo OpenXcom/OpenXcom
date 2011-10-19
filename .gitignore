@@ -67,3 +67,5 @@ deps/
 docs/html/
 build/
 Dependencies/
+#Ignore Vim swap files
+*.swp
