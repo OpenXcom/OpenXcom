@@ -63,6 +63,9 @@ SaveGameState::SaveGameState(Game *game, bool geo) : State(game), _selected(""),
 	{
 		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
 	}
+        
+        _previousSelectedRow = -1;
+        _selectedRow = -1;
 
 	add(_window);
 	add(_btnCancel);
@@ -95,7 +98,7 @@ SaveGameState::SaveGameState(Game *game, bool geo) : State(game), _selected(""),
 	}
 	else
 	{
-		_window->setColor(Palette::blockOffset(0));
+        	_window->setColor(Palette::blockOffset(0));
 		_window->setHighContrast(true);
 		_window->setBackground(_game->getResourcePack()->getSurface("TAC00.SCR"));
 
@@ -179,22 +182,32 @@ void SaveGameState::btnCancelClick(Action *action)
  * @param action Pointer to an action.
  */
 void SaveGameState::lstSavesClick(Action *action)
-{
-	_selected = Language::wstrToUtf8(_lstSaves->getCellText(_lstSaves->getSelectedRow(), 0));
-	_lstSaves->setCellText(_lstSaves->getSelectedRow(), 0, L"");
-	if (_lstSaves->getSelectedRow() == 0)
-	{
-		_edtSave->setText(L"");
-		_selected = "";
-	}
-	else
-	{
-		_edtSave->setText(Language::utf8ToWstr(_selected));
-	}
-	_edtSave->setX(_lstSaves->getX() + _lstSaves->getMargin());
-	_edtSave->setY(_lstSaves->getY() + _lstSaves->getSelectedRow() * 8);
-	_edtSave->setVisible(true);
-	_edtSave->focus();
+{       
+        _previousSelectedRow = _selectedRow;
+        _selectedRow = _lstSaves->getSelectedRow();
+        if (_previousSelectedRow != _selectedRow || _previousSelectedRow == -1)
+        {
+                _lstSaves->clearList();    
+                _lstSaves->addRow(1, L"<NEW SAVED GAME>");
+                SavedGame::getList(_lstSaves, _game->getLanguage());
+    
+                _selected = Language::wstrToUtf8(_lstSaves->getCellText(_lstSaves->getSelectedRow(), 0));
+                _lstSaves->setCellText(_lstSaves->getSelectedRow(), 0, L"");
+                if (_lstSaves->getSelectedRow() == 0)
+                {
+                        _edtSave->setText(L"");
+                        _selected = "";
+                }
+                else
+                {
+                        _edtSave->setText(Language::utf8ToWstr(_selected));
+                }
+                _edtSave->setX(_lstSaves->getX() + _lstSaves->getMargin());
+                _edtSave->setY(_lstSaves->getY() + _lstSaves->getSelectedRow() * 8);
+                _edtSave->caretEnd();
+                _edtSave->setVisible(true);
+                _edtSave->focus();
+        }
 }
 
 /**
