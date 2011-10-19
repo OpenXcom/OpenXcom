@@ -319,7 +319,7 @@ bool TextEdit::exceedsMaxWidth(wchar_t c)
 void TextEdit::mousePress(Action *action, State *state)
 {
 	focus();
-	InteractiveSurface::mousePress(action, state);
+        InteractiveSurface::mousePress(action, state);
 }
 
 /**
@@ -410,6 +410,11 @@ void TextEdit::keyboardPress(Action *action, State *state)
 	_redraw = true;
 
 	InteractiveSurface::keyboardPress(action, state);
+}
+
+void TextEdit::caretEnd()
+{
+        _caretPos = _value.length();
 }
 
 }
