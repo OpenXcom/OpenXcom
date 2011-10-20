@@ -19,7 +19,7 @@
 #include "Language.h"
 #include <iostream>
 #include <fstream>
-#include "../dirent.h"
+#include "CrossPlatform.h"
 #include "Exception.h"
 #include "Options.h"
 #include "../Interface/TextList.h"
@@ -171,48 +171,43 @@ void Language::replace(std::string &str, const std::string &find, const std::str
  */
 std::vector<std::string> Language::getList(TextList *list)
 {
-	std::vector<std::string> langs;
-	std::string dir = Options::getDataFolder() + "Language/";
-	DIR *dp = opendir(dir.c_str());
-    if (dp == 0)
-	{
-        throw Exception("Failed to open language directory");
-    }
+	std::vector<std::string> langs = CrossPlatform::getFolderContents(Options::getDataFolder() + "Language/", "lng");
 
-    struct dirent *dirp;
-    while ((dirp = readdir(dp)) != 0)
+	for (std::vector<std::string>::iterator i = langs.begin(); i != langs.end(); ++i)
 	{
-		std::string file = dirp->d_name;
-		// Check if it's a valid language
-		if (file.find(".lng") == std::string::npos)
+		std::string file = (*i);
+		std::string fullname = Options::getDataFolder() + "Language/" + file;
+		std::ifstream fin(fullname.c_str(), std::ios::in | std::ios::binary);
+		try
 		{
+			if (!fin)
+			{
+				throw Exception("Failed to load language");
+			}
+			char value;
+			std::string langname;
+			while (fin.read(&value, 1))
+			{
+				if (value != '\n')
+				{
+					langname += value;
+				}
+				else
+				{
+					break;
+				}
+			}
+			fin.close();
+			list->addRow(1, Language::utf8ToWstr(langname).c_str());
+			(*i) = file.substr(0, file.length()-4);
+		}
+		catch (Exception &e)
+		{
+			std::cerr << e.what() << std::endl;
+			i = langs.erase(i);
 			continue;
 		}
-		std::string fullname = dir + file;
-		std::ifstream fin(fullname.c_str(), std::ios::in | std::ios::binary);
-		if (!fin)
-		{
-		    closedir(dp);
-			throw Exception("Failed to load language");
-		}
-		char value;
-		std::string langname;
-		while (fin.read(&value, 1))
-		{
-			if (value != '\n')
-			{
-				langname += value;
-			}
-			else
-			{
-				break;
-			}
-		}
-		fin.close();
-		list->addRow(1, Language::utf8ToWstr(langname).c_str());
-		langs.push_back(file.substr(0, file.length()-4));
     }
-    closedir(dp);
 	return langs;
 }
 

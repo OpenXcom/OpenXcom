@@ -20,6 +20,7 @@
 #include <iostream>
 #include <algorithm>
 #include <sys/stat.h>
+#include "../dirent.h"
 #include "Exception.h"
 #include "Options.h"
 #ifdef _WIN32
@@ -275,6 +276,56 @@ int createFolder(const char *path)
 #else
 	return mkdir(path, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 #endif
+}
+
+/**
+ * Gets the name of all the files
+ * contained in a certain folder.
+ * @param path Full path to folder.
+ * @param ext Extension of files ("" if it doesn't matter).
+ */
+std::vector<std::string> getFolderContents(const std::string &path, const std::string &ext)
+{
+	std::vector<std::string> files;
+
+	DIR *dp = opendir(path.c_str());
+    if (dp == 0)
+	{
+        throw Exception("Failed to open saves directory");
+    }
+
+    struct dirent *dirp;
+    while ((dirp = readdir(dp)) != 0)
+	{
+		std::string file = dirp->d_name;
+
+		if (file == "." || file == "..")
+		{
+			continue;
+		}
+		if (!ext.empty())
+		{
+			if (file.length() >= ext.length() + 1)
+			{
+				std::string end = file.substr(file.length() - ext.length() - 1);
+				if (end != "." + ext)
+				{
+					continue;
+				}
+			}
+			else
+			{
+				continue;
+			}
+		}
+
+		files.push_back(file);
+	}
+    closedir(dp);
+#ifndef _WIN32
+	std::sort(files.begin(), files.end());
+#endif
+	return files;
 }
 
 }

@@ -20,6 +20,7 @@
 #define OPENXCOM_CROSSPLATFORM_H
 
 #include <string>
+#include <vector>
 
 namespace OpenXcom
 {
@@ -42,6 +43,8 @@ namespace CrossPlatform
 	std::string findUserFolder(bool exists);
 	/// Creates a folder.
 	int createFolder(const char *path);
+	/// Returns the list of files in a folder.
+	std::vector<std::string> getFolderContents(const std::string &path, const std::string &ext = "");
 }
 
 }

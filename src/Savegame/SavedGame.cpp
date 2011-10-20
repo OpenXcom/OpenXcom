@@ -20,7 +20,6 @@
 #include <fstream>
 #include <sstream>
 #include <iomanip>
-#include "../dirent.h"
 #include "yaml.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Engine/RNG.h"
@@ -28,6 +27,7 @@
 #include "../Interface/TextList.h"
 #include "../Engine/Exception.h"
 #include "../Engine/Options.h"
+#include "../Engine/CrossPlatform.h"
 #include "SavedBattleGame.h"
 #include "GameTime.h"
 #include "Country.h"
@@ -129,44 +129,45 @@ SavedGame::~SavedGame()
  */
 void SavedGame::getList(TextList *list, Language *lang)
 {
-	DIR *dp = opendir(Options::getUserFolder().c_str());
-    if (dp == 0)
-	{
-        throw Exception("Failed to open saves directory");
-    }
+	std::vector<std::string> saves = CrossPlatform::getFolderContents(Options::getUserFolder(), "sav");
 
-    struct dirent *dirp;
-    while ((dirp = readdir(dp)) != 0)
+	for (std::vector<std::string>::iterator i = saves.begin(); i != saves.end(); ++i)
 	{
-		std::string file = dirp->d_name;
-		// Check if it's a valid save
-		if (file.size() < 4 || file.rfind(".sav") != file.size() - 4)
-		{
-			continue;
-		}
+		std::string file = (*i);
 		std::string fullname = Options::getUserFolder() + file;
 		std::ifstream fin(fullname.c_str());
-		if (!fin)
+		try
 		{
-		    closedir(dp);
-			throw Exception("Failed to load savegame");
-		}
-		YAML::Parser parser(fin);
-		YAML::Node doc;
+			if (!fin)
+			{
+				throw Exception("Failed to load savegame");
+			}
+			YAML::Parser parser(fin);
+			YAML::Node doc;
 
-		parser.GetNextDocument(doc);
-		GameTime time = GameTime(6, 1, 1, 1999, 12, 0, 0);
-		time.load(doc["time"]);
-		std::stringstream saveTime;
-		std::wstringstream saveDay, saveMonth, saveYear;
-		saveTime << time.getHour() << ":" << std::setfill('0') << std::setw(2) << time.getMinute();
-		saveDay << time.getDay() << lang->getString(time.getDayString());
-		saveMonth << lang->getString(time.getMonthString());
-		saveYear << time.getYear();
-		list->addRow(5, Language::utf8ToWstr(file.substr(0, file.length()-4)).c_str(), Language::utf8ToWstr(saveTime.str()).c_str(), saveDay.str().c_str(), saveMonth.str().c_str(), saveYear.str().c_str());
-		fin.close();
+			parser.GetNextDocument(doc);
+			GameTime time = GameTime(6, 1, 1, 1999, 12, 0, 0);
+			time.load(doc["time"]);
+			std::stringstream saveTime;
+			std::wstringstream saveDay, saveMonth, saveYear;
+			saveTime << time.getHour() << ":" << std::setfill('0') << std::setw(2) << time.getMinute();
+			saveDay << time.getDay() << lang->getString(time.getDayString());
+			saveMonth << lang->getString(time.getMonthString());
+			saveYear << time.getYear();
+			list->addRow(5, Language::utf8ToWstr(file.substr(0, file.length()-4)).c_str(), Language::utf8ToWstr(saveTime.str()).c_str(), saveDay.str().c_str(), saveMonth.str().c_str(), saveYear.str().c_str());
+			fin.close();
+		}
+		catch (Exception &e)
+		{
+			std::cerr << e.what() << std::endl;
+			continue;
+		}
+		catch (YAML::Exception &e)
+		{
+			std::cerr << e.what() << std::endl;
+			continue;
+		}
     }
-    closedir(dp);
 }
 
 /**
