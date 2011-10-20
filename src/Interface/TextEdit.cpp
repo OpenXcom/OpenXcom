@@ -107,6 +107,7 @@ void TextEdit::setFonts(Font *big, Font *small)
 void TextEdit::setText(const std::wstring &text)
 {
 	_value = text;
+	_caretPos = _value.length();
 	_redraw = true;
 }
 
@@ -319,7 +320,7 @@ bool TextEdit::exceedsMaxWidth(wchar_t c)
 void TextEdit::mousePress(Action *action, State *state)
 {
 	focus();
-	InteractiveSurface::mousePress(action, state);
+        InteractiveSurface::mousePress(action, state);
 }
 
 /**
