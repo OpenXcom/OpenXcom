@@ -11,6 +11,7 @@ New features:
 -- Panicking units.
 -- Skill increase and promotions.
 -- Ranged based accuracy is now optional (see UFO Extender for details on Ranged Based Accuracy).
+-- Minimap.
 
 Bugfixes:
 - Two duplicating ammo bugs.
@@ -41,6 +42,7 @@ Bugfixes:
 - Incorrect colors in Battlescape UI.
 - Crash when starting mission on back side of globe.
 - Endless number of soldiers in Skyranger.
+- Clicking visible enemy units clicks other stuff too.
 
 Version 0.3 (01-09-2011)
 -------------------------

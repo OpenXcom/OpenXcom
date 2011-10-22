@@ -723,7 +723,7 @@ int TileEngine::horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageTyp
 			+ (blockage(_save->getTile(startTile->getPosition() + oneTileEast),MapData::O_WESTWALL, type)
 			+ blockage(_save->getTile(startTile->getPosition() + oneTileEast),MapData::O_NORTHWALL, type))/2;
 		block += (blockage(_save->getTile(startTile->getPosition() + oneTileNorth),MapData::O_OBJECT, type) +
-			      blockage(_save->getTile(startTile->getPosition() + oneTileEast),MapData::O_OBJECT, type))/2;
+			      blockage(_save->getTile(startTile->getPosition() + oneTileEast),MapData::O_OBJECT, type)) < 510?0:255;
 		break;
 	case 2: // east
 		block = blockage(endTile,MapData::O_WESTWALL, type);
@@ -733,7 +733,7 @@ int TileEngine::horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageTyp
 			+ (blockage(_save->getTile(startTile->getPosition() + oneTileEast),MapData::O_WESTWALL, type)
 			+ blockage(_save->getTile(startTile->getPosition() + oneTileSouth),MapData::O_NORTHWALL, type))/2;
 		block += (blockage(_save->getTile(startTile->getPosition() + oneTileSouth),MapData::O_OBJECT, type) +
-			      blockage(_save->getTile(startTile->getPosition() + oneTileEast),MapData::O_OBJECT, type))/2;
+			      blockage(_save->getTile(startTile->getPosition() + oneTileEast),MapData::O_OBJECT, type)) < 510?0:255;
 		break;
 	case 4: // south
 		block = blockage(endTile,MapData::O_NORTHWALL, type);
@@ -743,7 +743,7 @@ int TileEngine::horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageTyp
 			+ (blockage(_save->getTile(startTile->getPosition() + oneTileSouth),MapData::O_WESTWALL, type)
 			+ blockage(_save->getTile(startTile->getPosition() + oneTileSouth),MapData::O_NORTHWALL, type))/2;
 		block += (blockage(_save->getTile(startTile->getPosition() + oneTileSouth),MapData::O_OBJECT, type) +
-			      blockage(_save->getTile(startTile->getPosition() + oneTileWest),MapData::O_OBJECT, type))/2;
+			      blockage(_save->getTile(startTile->getPosition() + oneTileWest),MapData::O_OBJECT, type)) < 510?0:255;
 		break;
 	case 6: // west
 		block = blockage(startTile,MapData::O_WESTWALL, type);
@@ -753,12 +753,12 @@ int TileEngine::horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageTyp
 			+ (blockage(_save->getTile(startTile->getPosition() + oneTileNorth),MapData::O_WESTWALL, type)
 			+ blockage(_save->getTile(startTile->getPosition() + oneTileWest),MapData::O_NORTHWALL, type))/2;
 		block += (blockage(_save->getTile(startTile->getPosition() + oneTileNorth),MapData::O_OBJECT, type) +
-			      blockage(_save->getTile(startTile->getPosition() + oneTileWest),MapData::O_OBJECT, type))/2;
+			      blockage(_save->getTile(startTile->getPosition() + oneTileWest),MapData::O_OBJECT, type)) < 510?0:255;
 		break;
 	}
 
 	block += blockage(startTile,MapData::O_OBJECT, type);
-
+	
 	return block;
 }
 

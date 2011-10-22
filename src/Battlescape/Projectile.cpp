@@ -252,15 +252,6 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 			accuracy -= 0.00125 * (realDistance - 240);
 		}
 	}
-
-	// check if we hit
-	if (RNG::generate(0.0, 1.0) < accuracy)
-	{
-		return; // bullet does not deviate from perfect path
-	}
-
-	/* now lets make the bullet deviate from perfect path */
-
 	// maxDeviation is the max angle deviation for accuracy 0% in degrees
 	double maxDeviation = 2.5;
 	// minDeviation is the min angle deviation for accuracy 100% in degrees
@@ -269,8 +260,18 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 	double rotation, tilt;
 	double baseDeviation = (maxDeviation - (maxDeviation * accuracy)) + minDeviation;
 	// the angle deviations are spread using a normal distribution between 0 and baseDeviation
-	dRot = RNG::boxMuller(0, baseDeviation);
-	dTilt = RNG::boxMuller(0, baseDeviation / 2.0); // tilt deviation is halved
+	// check if we hit
+	if (RNG::generate(0.0, 1.0) < accuracy)
+	{
+		// we hit, so no deviation
+		dRot = 0;
+		dTilt = 0;
+	}
+	else
+	{
+		dRot = RNG::boxMuller(0, baseDeviation);
+		dTilt = RNG::boxMuller(0, baseDeviation / 2.0); // tilt deviation is halved
+	}
 	rotation = atan2(double(target->y - origin.y), double(target->x - origin.x)) * 180 / M_PI;
 	tilt = atan2(double(target->z - origin.z),
 		sqrt(double(target->x - origin.x)*double(target->x - origin.x)+double(target->y - origin.y)*double(target->y - origin.y))) * 180 / M_PI;
