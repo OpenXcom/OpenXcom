@@ -105,7 +105,7 @@ int Projectile::calculateTrajectory(double accuracy)
 	}
 	direction = bu->getDirection();
 	originVoxel.x += dirXshift[direction];
-	originVoxel.y += 15-dirYshift[direction];
+	originVoxel.y += dirYshift[direction];
 	// determine the target voxel.
 	// aim at the center of the unit, the object, the walls or the floor (in that priority)
 	// if there is no LOF to the center, try elsewhere (more outward).
@@ -139,7 +139,7 @@ int Projectile::calculateTrajectory(double accuracy)
 	}
 	else if (tile->getMapData(MapData::O_NORTHWALL) != 0)
 	{
-		targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 16, _action.target.z*24 + 10);
+		targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16, _action.target.z*24 + 10);
 	}
 	else if (tile->getMapData(MapData::O_WESTWALL) != 0)
 	{

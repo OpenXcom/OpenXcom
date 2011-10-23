@@ -653,16 +653,19 @@ void Tile::removeItem(BattleItem *item)
  * Get the topmost item sprite to draw on the battlescape.
  * @return item sprite ID in floorob, or -1 when no item
  */
-int Tile::getTopItemSprite() const
+int Tile::getTopItemSprite()
 {
-	if (!_inventory.empty())
+	int biggestWeight = 0;
+	int biggestItem = -1;
+	for (std::vector<BattleItem*>::iterator i = _inventory.begin(); i != _inventory.end(); ++i)
 	{
-		return _inventory.at(0)->getRules()->getFloorSprite();
+		if ((*i)->getRules()->getWeight() > biggestWeight)
+		{
+			biggestWeight = (*i)->getRules()->getWeight();
+			biggestItem = (*i)->getRules()->getFloorSprite();
+		}
 	}
-	else
-	{
-		return -1;
-	}
+	return biggestItem;
 }
 
 /**

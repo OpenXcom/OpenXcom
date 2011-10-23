@@ -965,6 +965,13 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	scorpse->setInventoryHeight(3);
 	scorpse->setWeight(30);
 
+	RuleItem *fcorpse = new RuleItem("STR_FLOATER_CORPSE");
+	fcorpse->setBigSprite(52);
+	fcorpse->setFloorSprite(48);
+	fcorpse->setInventoryWidth(2);
+	fcorpse->setInventoryHeight(3);
+	fcorpse->setWeight(30);
+
 	RuleItem *ppistol = new RuleItem("STR_PLASMA_PISTOL");
 	ppistol->setSize(0.1f);
 	ppistol->setCost(800);
@@ -1096,6 +1103,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_items.insert(std::pair<std::string, RuleItem*>("STR_SMOKE_GRENADE", sgrenade));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_CORPSE", corpse));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_SECTOID_CORPSE", scorpse));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_FLOATER_CORPSE", fcorpse));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_PLASMA_PISTOL", ppistol));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_PLASMA_PISTOL_CLIP", ppclip));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_ELECTRO_FLARE", flare));
@@ -1615,7 +1623,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	sectoidNavigator->setVoxelParameters(16, 12, 2);
 	sectoidNavigator->setValue(12);
 
-	RuleAlien *floaterSoldier = new RuleAlien("FLOATER_SOLDIER", "STR_FLOATER", "STR_LIVE_FLOATER");
+	RuleAlien *floaterSoldier = new RuleAlien("FLOATER_SOLDIER", "STR_FLOATER", "STR_LIVE_SOLDIER");
 	floaterSoldier->setArmor("FLOATER_ARMOR0");
 	s1.tu = 50;
 	s1.stamina = 90;

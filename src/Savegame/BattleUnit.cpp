@@ -317,10 +317,41 @@ void BattleUnit::lookAt(const Position &point)
 {
 	double ox = point.x - _pos.x;
 	double oy = point.y - _pos.y;
-	double angle = atan2(ox, oy);
-	if (angle < 0) angle += (M_PI*2); // convert to a range from 0 to M_PI*2
-	_toDirection = (int)((angle/(M_PI_4))+M_PI_4/2.0); // convert to 8 directions, somewhat rounded
-	if (_toDirection > 7) _toDirection = 7;
+	double angle = atan2(ox, -oy);
+	// divide the pie in 4 angles each at 1/8th before each quarter
+	double pie[4] = {(M_PI_4 * 4.0) - M_PI_4 / 2.0, (M_PI_4 * 3.0) - M_PI_4 / 2.0, (M_PI_4 * 2.0) - M_PI_4 / 2.0, (M_PI_4 * 1.0) - M_PI_4 / 2.0};
+	if (angle > pie[0] || angle < -pie[0])
+	{
+		_toDirection = 4;
+	}
+	else if (angle > pie[1])
+	{
+		_toDirection = 3;
+	}
+	else if (angle > pie[2])
+	{
+		_toDirection = 2;
+	}
+	else if (angle > pie[3])
+	{
+		_toDirection = 1;
+	}
+	else if (angle < -pie[1])
+	{
+		_toDirection = 5;
+	}
+	else if (angle < -pie[2])
+	{
+		_toDirection = 6;
+	}
+	else if (angle < -pie[3])
+	{
+		_toDirection = 7;
+	}
+	else if (angle < pie[0])
+	{
+		_toDirection = 0;
+	}
 
 	if (_toDirection != _direction)
 	{

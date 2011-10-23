@@ -240,7 +240,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 void Pathfinding::directionToVector(const int direction, Position *vector)
 {
 	int x[8] = {0, 1, 1, 1, 0, -1, -1, -1};
-	int y[8] = {1, 1, 0, -1, -1, -1, 0, 1};
+	int y[8] = {-1, -1, 0, 1, 1, 1, 0, -1};
 	vector->x = x[direction];
 	vector->y = y[direction];
 	vector->z = 0;
@@ -315,9 +315,9 @@ bool Pathfinding::isBlocked(Tile *startTile, Tile *endTile, const int direction)
 	if (startTile->getTerrainLevel() - endTile->getTerrainLevel() > 8)
 		return true;
 
-	static const Position oneTileNorth = Position(0, 1, 0);
+	static const Position oneTileNorth = Position(0, -1, 0);
 	static const Position oneTileEast = Position(1, 0, 0);
-	static const Position oneTileSouth = Position(0, -1, 0);
+	static const Position oneTileSouth = Position(0, 1, 0);
 	static const Position oneTileWest = Position(-1, 0, 0);
 	Position pos1 (startTile->getPosition());
 
@@ -402,16 +402,16 @@ bool Pathfinding::canFallDown(Tile *here)
 bool Pathfinding::isOnStairs(const Position &startPosition, const Position &endPosition)
 {
 	//condition 1 : endposition has to the south a terrainlevel -16 object (upper part of the stairs)
-	if (_save->getTile(endPosition + Position(0, -1, 0)) && _save->getTile(endPosition + Position(0, -1, 0))->getTerrainLevel() == -16)
+	if (_save->getTile(endPosition + Position(0, 1, 0)) && _save->getTile(endPosition + Position(0, 1, 0))->getTerrainLevel() == -16)
 	{
 		// condition 2 : one position further to the south there has to be a terrainlevel -8 object (lower part of the stairs)
-		if (_save->getTile(endPosition + Position(0, -2, 0)) && _save->getTile(endPosition + Position(0, -2, 0))->getTerrainLevel() != -8)
+		if (_save->getTile(endPosition + Position(0, 2, 0)) && _save->getTile(endPosition + Position(0, 2, 0))->getTerrainLevel() != -8)
 		{
 			return false;
 		}
 
 		// condition 3 : the start position has to be on either of the 3 tiles to the south of the endposition
-		if (startPosition == endPosition + Position(0, -1, 0) || startPosition == endPosition + Position(0, -2, 0) || startPosition == endPosition + Position(0, -3, 0))
+		if (startPosition == endPosition + Position(0, 1, 0) || startPosition == endPosition + Position(0, 2, 0) || startPosition == endPosition + Position(0, 3, 0))
 		{
 			return true;
 		}

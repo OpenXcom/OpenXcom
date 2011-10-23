@@ -137,7 +137,7 @@ public:
 	/// Remove item
 	void removeItem(BattleItem *item);
 	/// Get top-most item
-	int getTopItemSprite() const;
+	int getTopItemSprite();
 	/// Decrease fire and smoke timers.
 	void prepareNewTurn();
 	/// Get inventory on this tile.

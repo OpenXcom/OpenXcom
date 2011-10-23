@@ -207,7 +207,7 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 	Position test;
 	bool swap = (unit->getDirection()==0 || unit->getDirection()==4);
 	int signX[8] = { +1, +1, +1, +1, -1, -1, -1, -1 };
-	int signY[8] = { +1, +1, +1, -1, -1, -1, +1, +1 };
+	int signY[8] = { -1, -1, -1, +1, +1, +1, -1, -1 };
 	int y1, y2;
 
 	// calculate a visible units checksum - if it changed during this step, the soldier stops walking
@@ -700,9 +700,9 @@ int TileEngine::verticalBlockage(Tile *startTile, Tile *endTile, ItemDamageType 
  */
 int TileEngine::horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageType type)
 {
-	static const Position oneTileNorth = Position(0, 1, 0);
+	static const Position oneTileNorth = Position(0, -1, 0);
 	static const Position oneTileEast = Position(1, 0, 0);
-	static const Position oneTileSouth = Position(0, -1, 0);
+	static const Position oneTileSouth = Position(0, 1, 0);
 	static const Position oneTileWest = Position(-1, 0, 0);
 
 	// safety check
@@ -811,8 +811,8 @@ int TileEngine::blockage(Tile *tile, const int part, ItemDamageType type)
 int TileEngine::vectorToDirection(const Position &vector)
 {
 	int x[8] = {0, 1, 1, 1, 0, -1, -1, -1};
-	int y[8] = {1, 1, 0, -1, -1, -1, 0, 1};
-	for (int i=0;i<9;++i)
+	int y[8] = {-1, -1, 0, 1, 1, 1, 0, -1};
+	for (int i = 0; i < 8; ++i)
 	{
 		if (x[i] == vector.x && y[i] == vector.y)
 			return i;
@@ -851,22 +851,22 @@ int TileEngine::unitOpensDoor(BattleUnit *unit)
 		if (door == 1)
 		{
 			// check for adjacent door(s)
-			tile = _save->getTile(unit->getPosition() + Position(1, -1, 0));
-			if (tile) tile->openDoor(MapData::O_WESTWALL);
 			tile = _save->getTile(unit->getPosition() + Position(1, 1, 0));
+			if (tile) tile->openDoor(MapData::O_WESTWALL);
+			tile = _save->getTile(unit->getPosition() + Position(1, -1, 0));
 			if (tile) tile->openDoor(MapData::O_WESTWALL);
 		}
 	}
 	if ((unit->getDirection() == 4 || unit->getDirection() == 5 || unit->getDirection() == 3) && door == -1) // south, southwest or southeast
 	{
-		tile = _save->getTile(unit->getPosition() + Position(0, -1, 0));
+		tile = _save->getTile(unit->getPosition() + Position(0, 1, 0));
 		if (tile) door = tile->openDoor(MapData::O_NORTHWALL);
 		if (door == 1)
 		{
 			// check for adjacent door(s)
-			tile = _save->getTile(unit->getPosition() + Position(1, -1, 0));
+			tile = _save->getTile(unit->getPosition() + Position(1, 1, 0));
 			if (tile) tile->openDoor(MapData::O_NORTHWALL);
-			tile = _save->getTile(unit->getPosition() + Position(-1, -1, 0));
+			tile = _save->getTile(unit->getPosition() + Position(-1, 1, 0));
 			if (tile) tile->openDoor(MapData::O_NORTHWALL);
 		}
 	}
@@ -876,9 +876,9 @@ int TileEngine::unitOpensDoor(BattleUnit *unit)
 		if (door == 1)
 		{
 			// check for adjacent door(s)
-			tile = _save->getTile(unit->getPosition() + Position(0, -1, 0));
-			if (tile) tile->openDoor(MapData::O_WESTWALL);
 			tile = _save->getTile(unit->getPosition() + Position(0, 1, 0));
+			if (tile) tile->openDoor(MapData::O_WESTWALL);
+			tile = _save->getTile(unit->getPosition() + Position(0, -1, 0));
 			if (tile) tile->openDoor(MapData::O_WESTWALL);
 		}
 	}
@@ -952,7 +952,7 @@ int TileEngine::calculateLine(const Position& origin, const Position& target, bo
     z = z0;
 
     //step through longest delta (which we have swapped to x)
-    for (x = x0; x != x1; x += step_x)
+    for (x = x0; x != (x1+step_x); x += step_x)
 	{
         //copy position
         cx = x;    cy = y;    cz = z;
@@ -990,7 +990,7 @@ int TileEngine::calculateLine(const Position& origin, const Position& target, bo
 			// walls to the east or south of a visible tile, we see that too
 			Tile* t = _save->getTile(Position(cx + 1, cy, cz));
 			if (t) t->setDiscovered(true, 0);
-			t = _save->getTile(Position(cx, cy - 1, cz));
+			t = _save->getTile(Position(cx, cy + 1, cz));
 			if (t) t->setDiscovered(true, 1);
 
 			lastPoint = Position(cx, cy, cz);
@@ -1092,8 +1092,8 @@ int TileEngine::voxelCheck(const Position& voxel, BattleUnit *excludeUnit, bool 
 		{
 			if ((voxel.z%24) < unit->getHeight())
 			{
-				int x = 15 - voxel.x%16;
-				int y = 15 - voxel.y%16;
+				int x = voxel.x%16;
+				int y = voxel.y%16;
 				int idx = (unit->getUnit()->getLoftemps() * 16) + y;
 				if ((_voxelData->at(idx) & (1 << x))==(1 << x))
 				{
@@ -1111,7 +1111,7 @@ int TileEngine::voxelCheck(const Position& voxel, BattleUnit *excludeUnit, bool 
 		if (mp != 0)
 		{
 			int x = 15 - voxel.x%16;
-			int y = 15 - voxel.y%16;
+			int y = voxel.y%16;
 			int idx = (mp->getLoftID((voxel.z%24)/2)*16) + y;
 			if ((_voxelData->at(idx) & (1 << x))==(1 << x))
 			{

@@ -345,7 +345,7 @@ void BattlescapeGenerator::addSoldier(Soldier *soldier)
 	Position pos;
 	int x, y, z;
 
-	for (int i = _height * _length * _width - 1; i >= 0; i--)
+	for (int i = 0; i < _height * _length * _width; i++)
 	{
 		// to spawn an xcom soldier, there has to be a tile, with a floor, with the starting point attribute and no object in the way
 		if (_save->getTiles()[i] && _save->getTiles()[i]->getMapData(MapData::O_FLOOR) && _save->getTiles()[i]->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT && !_save->getTiles()[i]->getMapData(MapData::O_OBJECT))
@@ -863,7 +863,6 @@ int BattlescapeGenerator::loadMAP(MapBlock *mapblock, int xoff, int yoff, RuleTe
 	width = (int)size[1];
 	height = (int)size[2];
 	z += height - 1;
-	y += length - 1;
 	mapblock->setHeight(height);
 
 	while (mapFile.read((char*)&value, sizeof(value)))
@@ -892,11 +891,11 @@ int BattlescapeGenerator::loadMAP(MapBlock *mapblock, int xoff, int yoff, RuleTe
 		if (x == (width + xoff))
 		{
 			x = xoff;
-			y--;
+			y++;
 		}
-		if (y == yoff - 1)
+		if (y == (length + yoff))
 		{
-			y = length - 1 + yoff;
+			y = yoff;
 			z--;
 		}
 	}
@@ -937,7 +936,7 @@ void BattlescapeGenerator::loadRMP(MapBlock *mapblock, int xoff, int yoff, int s
 
 	while (mapFile.read((char*)&value, sizeof(value)))
 	{
-		Node *node = new Node(nodeOffset + id, Position(xoff + (int)value[1], yoff + (mapblock->getLength() - 1 - (int)value[0]), mapblock->getHeight() - 1 - (int)value[2]), segment, (int)value[19], (int)value[20], (int)value[21], (int)value[22], (int)value[23]);
+		Node *node = new Node(nodeOffset + id, Position(xoff + (int)value[1], yoff + (int)value[0], mapblock->getHeight() - 1 - (int)value[2]), segment, (int)value[19], (int)value[20], (int)value[21], (int)value[22], (int)value[23]);
 		for (int j=0;j<5;++j)
 		{
 			int connectID = (int)((signed char)value[4 + j*3]);

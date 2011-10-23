@@ -48,17 +48,16 @@
 #include "../Engine/Options.h"
 
 /*
-  1) Map origin is left corner.
+  1) Map origin is top corner.
   2) X axis goes downright. (width of the map)
-  3) Y axis goes upright. (length of the map
+  3) Y axis goes downleft. (length of the map
   4) Z axis goes up (height of the map)
 
-          y+
+           0,0
 			/\
-	    0,0/  \
+	    y+ /  \ x+
 		   \  /
 		    \/
-          x+
 */
 
 namespace OpenXcom
@@ -200,15 +199,15 @@ void Map::drawTerrain(Surface *surface)
 
 	// get corner map coordinates to give rough boundaries in which tiles to redraw are
 	convertScreenToMap(0, 0, &beginX, &dummy);
+	convertScreenToMap(surface->getWidth(), 0, &dummy, &beginY);
 	convertScreenToMap(surface->getWidth(), surface->getHeight(), &endX, &dummy);
-	convertScreenToMap(0, surface->getHeight(), &dummy, &beginY);
-	convertScreenToMap(surface->getWidth(), 0, &dummy, &endY);
-	endY += _viewHeight + 1;
-	beginX -= _viewHeight + 1;
+	convertScreenToMap(0, surface->getHeight(), &dummy, &endY);
+	beginY -= (_viewHeight * 2);
+	beginX -= (_viewHeight * 2);
 	if (beginX < 0)
 		beginX = 0;
-	if (endY > _save->getLength() - 1)
-		endY = _save->getLength() - 1;
+	if (beginY < 0)
+		beginY = 0;
 
 	// if we got bullet, get the highest x and y tiles to draw it on
 	if (_projectile && !_projectile->getItem())
@@ -252,7 +251,7 @@ void Map::drawTerrain(Surface *surface)
 	{
         for (int itX = beginX; itX <= endX; itX++)
 		{
-            for (int itY = endY; itY >= beginY; itY--)
+            for (int itY = beginY; itY <= endY; itY++)
 			{
 				mapPosition = Position(itX, itY, itZ);
 				convertMapToScreen(mapPosition, &screenPosition);
@@ -271,7 +270,7 @@ void Map::drawTerrain(Surface *surface)
 					}
 					else
 					{
-						tileShade = 15;
+						tileShade = 16;
 						unit = 0;
 					}
 
@@ -847,12 +846,12 @@ void Map::centerOnPosition(const Position &mapPos, bool redraw)
 void Map::convertScreenToMap(int screenX, int screenY, int *mapX, int *mapY) const
 {
 	// add half a tileheight to the mouseposition per layer we are above the floor
-    screenY += -_spriteHeight + (_viewHeight + 1) * (_spriteHeight / 2);
+    screenY += (-_spriteWidth/2) + (_viewHeight) * (_spriteWidth);
 
 	// calculate the actual x/y pixelposition on a diamond shaped map
 	// taking the view offset into account
-    *mapY = screenX - _mapOffsetX - 2 * screenY + 2 * _mapOffsetY;
-    *mapX = screenY - _mapOffsetY + *mapY / 4;
+    *mapY = - screenX + _mapOffsetX + 2 * screenY - 2 * _mapOffsetY;
+    *mapX = screenY - _mapOffsetY - *mapY / 4 - (_spriteWidth/4);
 
 	// to get the row&col itself, divide by the size of a tile
     *mapX /= (_spriteWidth / 4);
@@ -870,8 +869,8 @@ void Map::convertScreenToMap(int screenX, int screenY, int *mapX, int *mapY) con
 void Map::convertMapToScreen(const Position &mapPos, Position *screenPos) const
 {
 	screenPos->z = 0; // not used
-	screenPos->x = mapPos.x * (_spriteWidth / 2) + mapPos.y * (_spriteWidth / 2);
-	screenPos->y = mapPos.x * (_spriteWidth / 4) - mapPos.y * (_spriteWidth / 4) - mapPos.z * ((_spriteHeight + _spriteWidth / 4) / 2);
+	screenPos->x = mapPos.x * (_spriteWidth / 2) - mapPos.y * (_spriteWidth / 2);
+	screenPos->y = mapPos.x * (_spriteWidth / 4) + mapPos.y * (_spriteWidth / 4) - mapPos.z * ((_spriteHeight + _spriteWidth / 4) / 2);
 }
 
 /**
@@ -886,8 +885,8 @@ void Map::convertVoxelToScreen(const Position &voxelPos, Position *screenPos) co
 	double dx = voxelPos.x - (mapPosition.x * 16);
 	double dy = voxelPos.y - (mapPosition.y * 16);
 	double dz = voxelPos.z - (mapPosition.z * 24);
-	screenPos->x += (int)(dx + dy - 1);
-	screenPos->y += (int)(((_spriteHeight / 4.0) * 3.0) + (dx / 2.0) - (dy / 2.0) - dz);
+	screenPos->x += (int)(dx - dy) + (_spriteWidth/2);
+	screenPos->y += (int)(((_spriteHeight / 2.0)) + (dx / 2.0) + (dy / 2.0) - dz);
 	screenPos->x += _mapOffsetX;
 	screenPos->y += _mapOffsetY;
 }
