@@ -71,7 +71,7 @@ void MiniMapView::draw()
 	for (int lvl = 0; lvl <= _lvl; lvl++)
 	{
 		int py = _startY;
-		for (int y = getHeight () - CELL_HEIGHT; y >= 0; y-=CELL_HEIGHT)
+		for (int y = 0; y < getHeight (); y += CELL_HEIGHT)
 		{
 			int px = _startX;
 			for (int x = 0; x < getWidth (); x += CELL_WIDTH)
@@ -179,7 +179,7 @@ void MiniMapView::mouseClick (Action *action, State *state)
 	InteractiveSurface::mouseClick(action, state);
 	int origX = action->getRelativeXMouse() / action->getXScale();
 	int origY = action->getRelativeYMouse() / action->getYScale();
-	_startY -= (origY / CELL_HEIGHT) - ((getHeight () / 2) / CELL_HEIGHT);
+	_startY += (origY / CELL_HEIGHT) - ((getHeight () / 2) / CELL_HEIGHT);
 	_startX += (origX / CELL_HEIGHT) - ((getWidth () / 2) / CELL_HEIGHT);
 	_redraw = true;
 }
