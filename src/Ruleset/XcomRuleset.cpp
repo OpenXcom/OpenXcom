@@ -2091,6 +2091,7 @@ SavedGame *XcomRuleset::newSave(GameDifficulty diff) const
 	base->getItems()->addItem("STR_SMALL_ROCKET", 4);
 	base->getItems()->addItem("STR_GRENADE", 5);
 	base->getItems()->addItem("STR_SMOKE_GRENADE", 5);
+	base->getItems()->addItem("STR_ELECTRO_FLARE", 5);
 
 	// Add crafts
 	Craft *skyranger = new Craft(getCraft("STR_SKYRANGER"), base, save->getCraftIds());
@@ -2103,7 +2104,6 @@ SavedGame *XcomRuleset::newSave(GameDifficulty diff) const
 	skyranger->getItems()->addItem("STR_HC_AP_AMMO", 2);
 	skyranger->getItems()->addItem("STR_HC_HE_AMMO", 2);
 	skyranger->getItems()->addItem("STR_GRENADE", 8);
-	skyranger->getItems()->addItem("STR_ELECTRO_FLARE", 4);
 	base->getCrafts()->push_back(skyranger);
 
 	for (int i = 0; i < 2; ++i)

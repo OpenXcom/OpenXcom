@@ -21,6 +21,7 @@
 #include "TileEngine.h"
 #include "BattlescapeState.h"
 #include "Map.h"
+#include "Camera.h"
 #include "../Engine/Game.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/SavedBattleGame.h"
@@ -65,7 +66,7 @@ void UnitDieBState::init()
 	}
 	else
 	{
-		_parent->getMap()->centerOnPosition(_unit->getPosition());
+		_parent->getMap()->getCamera()->centerOnPosition(_unit->getPosition());
 		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
 		_unit->lookAt(3);
 	}

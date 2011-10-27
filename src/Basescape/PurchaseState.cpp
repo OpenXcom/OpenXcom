@@ -151,6 +151,7 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 	_items.push_back("STR_INCENDIARY_ROCKET");
 	_items.push_back("STR_GRENADE");
 	_items.push_back("STR_SMOKE_GRENADE");
+	_items.push_back("STR_ELECTRO_FLARE");
 
 	_qtys.push_back(0);
 	std::wstringstream ss;

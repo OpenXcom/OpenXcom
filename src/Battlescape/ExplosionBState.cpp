@@ -123,14 +123,10 @@ void ExplosionBState::think()
 				// now check for new casualties
 				_parent->checkForCasualties(_item, _unit);
 
-				// if this explosion was caused by a unit shooting, now it's the time to put the gun down and put the camera back on the shooter
+				// if this explosion was caused by a unit shooting, now it's the time to put the gun down
 				if (_unit && !_unit->isOut())
 				{
 					_unit->aim(false);
-					if (_parent->getMap()->didCameraFollow())
-					{
-						_parent->getMap()->centerOnPosition(_unit->getPosition());
-					}
 				}
 				_parent->getMap()->cacheUnits();
 				_parent->popState();

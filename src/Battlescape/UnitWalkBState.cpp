@@ -23,6 +23,7 @@
 #include "Pathfinding.h"
 #include "BattlescapeState.h"
 #include "Map.h"
+#include "Camera.h"
 #include "BattleAIState.h"
 #include "AggroBAIState.h"
 #include "../Engine/Game.h"
@@ -103,7 +104,7 @@ void UnitWalkBState::think()
 			_parent->getGame()->getSavedGame()->getBattleGame()->getTile(_unit->getLastPosition())->setUnit(0); //don't change these
 			_parent->getGame()->getSavedGame()->getBattleGame()->getTile(_unit->getPosition())->setUnit(_unit); //don't change these
 			// if the unit changed level, camera changes level with
-			_parent->getMap()->setViewHeight(_unit->getPosition().z);
+			_parent->getMap()->getCamera()->setViewHeight(_unit->getPosition().z);
 		}
 
 		// is the step finished?

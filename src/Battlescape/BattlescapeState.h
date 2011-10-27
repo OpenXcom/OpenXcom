@@ -194,6 +194,8 @@ public:
 	void dropItem(const Position &position, BattleItem *item, bool newItem = false);
 	/// Check whether TUs should be spent.
 	bool dontSpendTUs();
+	/// Handle kneeling action.
+	void kneel(BattleUnit *bu);
 };
 
 }

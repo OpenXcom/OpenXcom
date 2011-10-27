@@ -27,7 +27,6 @@ namespace OpenXcom
 
 class ResourcePack;
 class SavedBattleGame;
-class Timer;
 class Surface;
 class MapData;
 class Position;
@@ -37,6 +36,8 @@ class BulletSprite;
 class Projectile;
 class Explosion;
 class BattlescapeMessage;
+class Camera;
+class Timer;
 
 enum CursorType { CT_NONE, CT_NORMAL, CT_AIM, CT_PSI, CT_WAYPOINT, CT_THROW };
 
@@ -46,32 +47,22 @@ enum CursorType { CT_NONE, CT_NORMAL, CT_AIM, CT_PSI, CT_WAYPOINT, CT_THROW };
 class Map : public InteractiveSurface
 {
 private:
-	static const int SCROLL_BORDER = 5;
-	static const int SCROLL_DIAGONAL_EDGE = 60;
 	static const int SCROLL_INTERVAL = 50;
+	Timer *_scrollTimer;
 	Game *_game;
 	SavedBattleGame *_save;
 	ResourcePack *_res;
-	Timer *_scrollTimer;
 	Surface *_arrow;
-	int _mapOffsetX, _mapOffsetY, _viewHeight;
-	int _RMBClickX, _RMBClickY;
 	int _spriteWidth, _spriteHeight;
 	int _selectorX, _selectorY;
 	CursorType _cursorType;
 	int _animFrame;
-	int _scrollX, _scrollY;
-	bool _RMBDragging;
-	int _centerX, _centerY;
 	BulletSprite *_bullet[36];
 	Projectile *_projectile;
 	std::set<Explosion *> _explosions;
-	bool _cameraFollowed;
-	int _visibleMapHeight;
 	BattlescapeMessage *_message;
-
-	void minMaxInt(int *value, const int minValue, const int maxValue) const;
-	void convertScreenToMap(int screenX, int screenY, int *mapX, int *mapY) const;
+	Camera *_camera;
+	int _visibleMapHeight;
 	void drawTerrain(Surface *surface);
 public:
 	/// Creates a new map at the specified position and size.
@@ -92,22 +83,8 @@ public:
 	void mouseOver(Action *action, State *state);
 	/// Special handling for key presses.
 	void keyboardPress(Action *action, State *state);
-	/// Scrolls the view (eg when mouse is on the edge of the screen)
-	void scroll();
 	/// rotate the tileframes 0-7
 	void animate(bool redraw);
-	/// move map layer up
-	void up();
-	/// move map layer down
-	void down();
-	/// set view height
-	void setViewHeight(int viewheight);
-	/// Center map on a unit.
-	void centerOnPosition(const Position &pos, bool redraw = true);
-	/// Converts map coordinates to screen coordinates.
-	void convertMapToScreen(const Position &mapPos, Position *screenPos) const;
-	/// Converts voxel coordinates to screen coordinates.
-	void convertVoxelToScreen(const Position &voxelPos, Position *screenPos) const;
 	/// Sets the battlescape selector position relative to mouseposition.
 	void setSelectorPosition(int mx, int my);
 	/// Get the currently selected position.
@@ -128,14 +105,10 @@ public:
 	Projectile *getProjectile() const;
 	/// Get explosion set
 	std::set<Explosion*> *getExplosions();
-	/// Check if the camera was following a bullet.
-	bool didCameraFollow();
-	/// Get the map displayed level
-	int getViewHeight() const;
-	/// Get the center X of displayed map
-	int getCenterX() const;
-	/// Get the center Y of displayed map
-	int getCenterY() const;
+	/// Get pointer to camera
+	Camera *getCamera();
+	void scroll();
+
 };
 
 }

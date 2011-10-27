@@ -20,6 +20,7 @@
 #include <cmath>
 #include <fstream>
 #include "Map.h"
+#include "Camera.h"
 #include "UnitSprite.h"
 #include "Position.h"
 #include "Pathfinding.h"
@@ -71,17 +72,18 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) : InteractiveSurface(width, height, x, y), _game(game), _mapOffsetX(-250), _mapOffsetY(250), _viewHeight(0), _selectorX(0), _selectorY(0), _cursorType(CT_NORMAL), _animFrame(0), _scrollX(0), _scrollY(0), _RMBDragging(false), _visibleMapHeight(visibleMapHeight)
+Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) : InteractiveSurface(width, height, x, y), _game(game), _selectorX(0), _selectorY(0), _cursorType(CT_NORMAL), _animFrame(0), _visibleMapHeight(visibleMapHeight)
 {
-	_scrollTimer = new Timer(SCROLL_INTERVAL);
-	_scrollTimer->onTimer((SurfaceHandler)&Map::scroll);
-	
 	_res = _game->getResourcePack();
-	_save = _game->getSavedGame()->getBattleGame();
 	_spriteWidth = _res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getWidth();
 	_spriteHeight = _res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getHeight();
-
+	_save = _game->getSavedGame()->getBattleGame();
 	_message = new BattlescapeMessage(width, visibleMapHeight, 0, 0);
+	_camera = new Camera(_spriteWidth, _spriteHeight, _save->getWidth(), _save->getLength(), _save->getHeight(), this, visibleMapHeight);
+	_scrollTimer = new Timer(SCROLL_INTERVAL);
+	_scrollTimer->onTimer((SurfaceHandler)&Map::scroll);
+	_camera->setScrollTimer(_scrollTimer);
+
 }
 
 /**
@@ -189,7 +191,7 @@ void Map::drawTerrain(Surface *surface)
 	Tile *tile;
 	int beginX = 0, endX = _save->getWidth() - 1;
     int beginY = 0, endY = _save->getLength() - 1;
-    int beginZ = 0, endZ = _viewHeight;
+	int beginZ = 0, endZ = _camera->getViewHeight();
 	Position mapPosition, screenPosition, bulletPositionScreen;
 	int bulletLowX=16000, bulletLowY=16000, bulletLowZ=16000, bulletHighX=0, bulletHighY=0, bulletHighZ=0;
 	int dummy;
@@ -198,12 +200,12 @@ void Map::drawTerrain(Surface *surface)
 	int tileShade, wallShade;
 
 	// get corner map coordinates to give rough boundaries in which tiles to redraw are
-	convertScreenToMap(0, 0, &beginX, &dummy);
-	convertScreenToMap(surface->getWidth(), 0, &dummy, &beginY);
-	convertScreenToMap(surface->getWidth(), surface->getHeight(), &endX, &dummy);
-	convertScreenToMap(0, surface->getHeight(), &dummy, &endY);
-	beginY -= (_viewHeight * 2);
-	beginX -= (_viewHeight * 2);
+	_camera->convertScreenToMap(0, 0, &beginX, &dummy);
+	_camera->convertScreenToMap(surface->getWidth(), 0, &dummy, &beginY);
+	_camera->convertScreenToMap(surface->getWidth(), surface->getHeight(), &endX, &dummy);
+	_camera->convertScreenToMap(0, surface->getHeight(), &dummy, &endY);
+	beginY -= (_camera->getViewHeight() * 2);
+	beginX -= (_camera->getViewHeight() * 2);
 	if (beginX < 0)
 		beginX = 0;
 	if (beginY < 0)
@@ -236,12 +238,11 @@ void Map::drawTerrain(Surface *surface)
 		bulletHighZ = bulletHighZ / 24;
 
 		// if the projectile is outside the viewport - center it back on it
-		convertVoxelToScreen(_projectile->getPosition(), &bulletPositionScreen);
+		_camera->convertVoxelToScreen(_projectile->getPosition(), &bulletPositionScreen);
 		if (bulletPositionScreen.x < 0 || bulletPositionScreen.x > surface->getWidth() ||
 			bulletPositionScreen.y < 0 || bulletPositionScreen.y > surface->getHeight()  )
 		{
-			centerOnPosition(Position(bulletLowX, bulletLowY, bulletLowZ), false);
-			_cameraFollowed = true;
+			_camera->centerOnPosition(Position(bulletLowX, bulletLowY, bulletLowZ));
 		}
 	}
 
@@ -254,9 +255,8 @@ void Map::drawTerrain(Surface *surface)
             for (int itY = beginY; itY <= endY; itY++)
 			{
 				mapPosition = Position(itX, itY, itZ);
-				convertMapToScreen(mapPosition, &screenPosition);
-				screenPosition.x += _mapOffsetX;
-				screenPosition.y += _mapOffsetY;
+				_camera->convertMapToScreen(mapPosition, &screenPosition);
+				screenPosition += _camera->getMapOffset();
 
 				// only render cells that are inside the surface
 				if (screenPosition.x > -_spriteWidth && screenPosition.x < surface->getWidth() + _spriteWidth &&
@@ -283,7 +283,7 @@ void Map::drawTerrain(Surface *surface)
 					// Draw cursor back
 					if (_selectorX == itX && _selectorY == itY && _cursorType != CT_NONE)
 					{
-						if (_viewHeight == itZ)
+						if (_camera->getViewHeight() == itZ)
 						{
 							if (_cursorType == CT_NORMAL || _cursorType == CT_THROW)
 							{
@@ -300,7 +300,7 @@ void Map::drawTerrain(Surface *surface)
 									frameNumber = 6; // red static crosshairs
 							}
 						}
-						else if (_viewHeight > itZ)
+						else if (_camera->getViewHeight() > itZ)
 						{
 							frameNumber = 2; // blue box
 						}
@@ -373,7 +373,7 @@ void Map::drawTerrain(Surface *surface)
 									voxelPos.x / 16 <= mapPosition.x+1 &&
 									voxelPos.y / 16 <= mapPosition.y+1 )
 								{
-									convertVoxelToScreen(voxelPos, &bulletPositionScreen);
+									_camera->convertVoxelToScreen(voxelPos, &bulletPositionScreen);
 									tmpSurface->blitNShade(surface, bulletPositionScreen.x - 16, bulletPositionScreen.y - 26, 15);
 								}
 							}
@@ -382,7 +382,7 @@ void Map::drawTerrain(Surface *surface)
 							if (voxelPos.x / 16 == mapPosition.x &&
 								voxelPos.y / 16 == mapPosition.y )
 							{
-								convertVoxelToScreen(voxelPos, &bulletPositionScreen);
+								_camera->convertVoxelToScreen(voxelPos, &bulletPositionScreen);
 								tmpSurface->blitNShade(surface, bulletPositionScreen.x - 16, bulletPositionScreen.y - 26, 0);
 							}
 						}
@@ -403,7 +403,7 @@ void Map::drawTerrain(Surface *surface)
 											if (voxelPos.x / 16 == mapPosition.x &&
 												voxelPos.y / 16 == mapPosition.y)
 											{
-												convertVoxelToScreen(voxelPos, &bulletPositionScreen);
+												_camera->convertVoxelToScreen(voxelPos, &bulletPositionScreen);
 												_bullet[_projectile->getParticle(i)]->blitNShade(surface, bulletPositionScreen.x, bulletPositionScreen.y, 15);
 											}
 										}
@@ -417,7 +417,7 @@ void Map::drawTerrain(Surface *surface)
 										if (voxelPos.x / 16 == mapPosition.x &&
 											voxelPos.y / 16 == mapPosition.y )
 										{
-											convertVoxelToScreen(voxelPos, &bulletPositionScreen);
+											_camera->convertVoxelToScreen(voxelPos, &bulletPositionScreen);
 											_bullet[_projectile->getParticle(i)]->blitNShade(surface, bulletPositionScreen.x, bulletPositionScreen.y, 0);
 										}
 									}
@@ -479,7 +479,7 @@ void Map::drawTerrain(Surface *surface)
 					// Draw cursor front
 					if (_selectorX == itX && _selectorY == itY && _cursorType != CT_NONE)
 					{
-						if (_viewHeight == itZ)
+						if (_camera->getViewHeight() == itZ)
 						{
 							if (_cursorType == CT_NORMAL || _cursorType == CT_THROW)
 							{
@@ -496,13 +496,13 @@ void Map::drawTerrain(Surface *surface)
 									frameNumber = 6; // red static crosshairs
 							}
 						}
-						else if (_viewHeight > itZ)
+						else if (_camera->getViewHeight() > itZ)
 						{
 							frameNumber = 5; // blue box
 						}
 						tmpSurface = _res->getSurfaceSet("CURSOR.PCK")->getFrame(frameNumber);
 						tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y, 0);
-						if (_cursorType == CT_THROW && _viewHeight == itZ)
+						if (_cursorType == CT_THROW && _camera->getViewHeight() == itZ)
 						{
 							tmpSurface = _res->getSurfaceSet("CURSOR.PCK")->getFrame(15 + (_animFrame / 4));
 							tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y, 0);
@@ -549,20 +549,20 @@ void Map::drawTerrain(Surface *surface)
 		if ((*i)->isBig())
 		{
 			Position voxelPos = (*i)->getPosition();
-			convertVoxelToScreen(voxelPos, &bulletPositionScreen);
+			_camera->convertVoxelToScreen(voxelPos, &bulletPositionScreen);
 			tmpSurface = _res->getSurfaceSet("X1.PCK")->getFrame((*i)->getCurrentFrame());
 			tmpSurface->blitNShade(surface, bulletPositionScreen.x - 64, bulletPositionScreen.y - 64, 0);
 			// if the projectile is outside the viewport - center it back on it
 			if (bulletPositionScreen.x < -_spriteWidth || bulletPositionScreen.x > surface->getWidth() ||
 				bulletPositionScreen.y < -_spriteHeight || bulletPositionScreen.y > surface->getHeight()  )
 			{
-				centerOnPosition(Position(voxelPos.x/16, voxelPos.y/16, voxelPos.z/24), false);
+				_camera->centerOnPosition(Position(voxelPos.x/16, voxelPos.y/16, voxelPos.z/24));
 			}
 		}
 		else
 		{
 			Position voxelPos = (*i)->getPosition();
-			convertVoxelToScreen(voxelPos, &bulletPositionScreen);
+			_camera->convertVoxelToScreen(voxelPos, &bulletPositionScreen);
 			tmpSurface = _res->getSurfaceSet("SMOKE.PCK")->getFrame((*i)->getCurrentFrame());
 			tmpSurface->blitNShade(surface, bulletPositionScreen.x - 15, bulletPositionScreen.y - 15, 0);
 		}
@@ -579,14 +579,7 @@ void Map::drawTerrain(Surface *surface)
 void Map::mouseClick(Action *action, State *state)
 {
 	InteractiveSurface::mouseClick(action, state);
-	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
-	{
-		up();
-	}
-	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
-	{
-		down();
-	}
+	_camera->mouseClick(action, state);
 }
 
 /**
@@ -596,8 +589,6 @@ void Map::mouseClick(Action *action, State *state)
  */
 void Map::keyboardPress(Action *action, State *state)
 {
-	//Position pos;
-	//getSelectorPosition(&pos);
 	InteractiveSurface::keyboardPress(action, state);
 }
 
@@ -611,111 +602,11 @@ void Map::mouseOver(Action *action, State *state)
 	int posX = action->getXMouse();
 	int posY = action->getYMouse();
 
-	// handle RMB dragging
-	if ((action->getDetails()->motion.state & SDL_BUTTON(SDL_BUTTON_RIGHT)) && Options::getInt("battleScrollType") == SCROLL_RMB)
-	{
-		_RMBDragging = true;
-		_scrollX = (int)(-(double)(_RMBClickX - posX) * (action->getXScale() * 2));
-		_scrollY = (int)(-(double)(_RMBClickY - posY) * (action->getYScale() * 2));
-		_RMBClickX = posX;
-		_RMBClickY = posY;
-	}
-	// handle scrolling with mouse at edge of screen
-	else
-	{
-		if (posX < (SCROLL_BORDER * action->getXScale()) && posX > 0)
-		{
-			_scrollX = Options::getInt("battleScrollSpeed");
-			// if close to top or bottom, also scroll diagonally
-			if (posY < (SCROLL_DIAGONAL_EDGE * action->getYScale()) && posY > 0)
-			{
-				_scrollY = Options::getInt("battleScrollSpeed");
-			}
-			else if (posY > (getHeight() - SCROLL_DIAGONAL_EDGE) * action->getYScale())
-			{
-				_scrollY = -Options::getInt("battleScrollSpeed");
-			}
-		}
-		else if (posX > (getWidth() - SCROLL_BORDER) * action->getXScale())
-		{
-			_scrollX = -Options::getInt("battleScrollSpeed");
-			// if close to top or bottom, also scroll diagonally
-			if (posY < (SCROLL_DIAGONAL_EDGE * action->getYScale()) && posY > 0)
-			{
-				_scrollY = Options::getInt("battleScrollSpeed");
-			}
-			else if (posY > (getHeight() - SCROLL_DIAGONAL_EDGE) * action->getYScale())
-			{
-				_scrollY = -Options::getInt("battleScrollSpeed");
-			}
-		}
-		else if (posX)
-		{
-			_scrollX = 0;
-		}
-
-		if (posY < (SCROLL_BORDER * action->getYScale()) && posY > 0)
-		{
-			_scrollY = Options::getInt("battleScrollSpeed");
-			// if close to left or right edge, also scroll diagonally
-			if (posX < (SCROLL_DIAGONAL_EDGE * action->getXScale()) && posX > 0)
-			{
-				_scrollX = Options::getInt("battleScrollSpeed");
-			}
-			else if (posX > (getWidth() - SCROLL_DIAGONAL_EDGE) * action->getXScale())
-			{
-				_scrollX = -Options::getInt("battleScrollSpeed");
-			}
-		}
-		else if (posY > (getHeight() - SCROLL_BORDER) * action->getYScale())
-		{
-			_scrollY = -Options::getInt("battleScrollSpeed");
-			// if close to left or right edge, also scroll diagonally
-			if (posX < (SCROLL_DIAGONAL_EDGE * action->getXScale()) && posX > 0)
-			{
-				_scrollX = Options::getInt("battleScrollSpeed");
-			}
-			else if (posX > (getWidth() - SCROLL_DIAGONAL_EDGE) * action->getXScale())
-			{
-				_scrollX = -Options::getInt("battleScrollSpeed");
-			}
-		}
-		else if (posY && _scrollX == 0)
-		{
-			_scrollY = 0;
-		}
-	}
-
-	if ((_scrollX || _scrollY) && !_scrollTimer->isRunning())
-	{
-		_scrollTimer->start();
-	}
-	else if ((!_scrollX && !_scrollY) && _scrollTimer->isRunning())
-	{
-		_scrollTimer->stop();
-	}
+	_camera->mouseOver(action, state);
 
 	setSelectorPosition((int)((double)posX / action->getXScale()), (int)((double)posY / action->getYScale()));
 }
 
-
-/**
- * Sets the value to min if it is below min, sets value to max if above max.
- * @param value pointer to the value
- * @param minimum value
- * @param maximum value
- */
-void Map::minMaxInt(int *value, const int minValue, const int maxValue) const
-{
-	if (*value < minValue)
-	{
-		*value = minValue;
-	}
-	else if (*value > maxValue)
-	{
-		*value = maxValue;
-	}
-}
 
 /**
  * Sets the selector to a certain tile on the map.
@@ -727,39 +618,12 @@ void Map::setSelectorPosition(int mx, int my)
 	int oldX = _selectorX, oldY = _selectorY;
 
 	if (!mx && !my) return; // cursor is offscreen
-	convertScreenToMap(mx, my, &_selectorX, &_selectorY);
+	_camera->convertScreenToMap(mx, my, &_selectorX, &_selectorY);
 
 	if (oldX != _selectorX || oldY != _selectorY)
 	{
 		_redraw = true;
 	}
-}
-
-
-/**
- * Handle scrolling.
- */
-void Map::scroll()
-{
-	_mapOffsetX += _scrollX;
-	_mapOffsetY += _scrollY;
-
-	convertScreenToMap((getWidth() / 2), (getHeight() / 2), &_centerX, &_centerY);
-
-	// if center goes out of map bounds, hold the scrolling (may need further tweaking)
-	if (_centerX > _save->getWidth() - 1 || _centerY > _save->getLength() - 1 || _centerX < 0 || _centerY < 0)
-	{
-		_mapOffsetX -= _scrollX;
-		_mapOffsetY -= _scrollY;
-	}
-
-	if (_RMBDragging)
-	{
-		_RMBDragging = false;
-		_scrollX = 0;
-		_scrollY = 0;
-	}
-	_redraw = true;
 }
 
 /**
@@ -779,119 +643,6 @@ void Map::animate(bool redraw)
 }
 
 /**
- * Go one level up.
- */
-void Map::up()
-{
-	if (_viewHeight < _save->getHeight() - 1)
-	{
-		_viewHeight++;
-		_mapOffsetY += _spriteHeight / 2;
-		_redraw = true;
-	}
-}
-
-/**
- * Go one level down.
- */
-void Map::down()
-{
-	if (_viewHeight > 0)
-	{
-		_viewHeight--;
-		_mapOffsetY -= _spriteHeight / 2;
-		_redraw = true;
-	}
-}
-
-/**
- * Set viewheight.
- * @param viewheight
- */
-void Map::setViewHeight(int viewheight)
-{
-	_viewHeight = viewheight;
-	minMaxInt(&_viewHeight, 0, _save->getHeight()-1);
-	_redraw = true;
-}
-
-
-/**
- * Center map on a certain position.
- * @param mapPos Position to center on.
- */
-void Map::centerOnPosition(const Position &mapPos, bool redraw)
-{
-	Position screenPos;
-
-	convertMapToScreen(mapPos, &screenPos);
-
-	_mapOffsetX = -(screenPos.x - (getWidth() / 2));
-	_mapOffsetY = -(screenPos.y - (_visibleMapHeight / 2));
-
-	convertScreenToMap((getWidth() / 2), (_visibleMapHeight / 2), &_centerX, &_centerY);
-
-	_viewHeight = mapPos.z;
-
-	if (redraw) _redraw = true;
-}
-
-/**
- * Converts screen coordinates to map coordinates.
- * @param screenX screen x position
- * @param screenY screen y position
- * @param mapX map x position
- * @param mapY map y position
- */
-void Map::convertScreenToMap(int screenX, int screenY, int *mapX, int *mapY) const
-{
-	// add half a tileheight to the mouseposition per layer we are above the floor
-    screenY += (-_spriteWidth/2) + (_viewHeight) * (_spriteWidth);
-
-	// calculate the actual x/y pixelposition on a diamond shaped map
-	// taking the view offset into account
-    *mapY = - screenX + _mapOffsetX + 2 * screenY - 2 * _mapOffsetY;
-    *mapX = screenY - _mapOffsetY - *mapY / 4 - (_spriteWidth/4);
-
-	// to get the row&col itself, divide by the size of a tile
-    *mapX /= (_spriteWidth / 4);
-	*mapY /= _spriteWidth;
-
-	minMaxInt(mapX, 0, _save->getLength() - 1);
-	minMaxInt(mapY, 0, _save->getWidth() - 1);
-}
-
-/**
- * Convert map coordinates X,Y,Z to screen positions X, Y.
- * @param mapPos X,Y,Z coordinates on the map.
- * @param screenPos to screen position.
- */
-void Map::convertMapToScreen(const Position &mapPos, Position *screenPos) const
-{
-	screenPos->z = 0; // not used
-	screenPos->x = mapPos.x * (_spriteWidth / 2) - mapPos.y * (_spriteWidth / 2);
-	screenPos->y = mapPos.x * (_spriteWidth / 4) + mapPos.y * (_spriteWidth / 4) - mapPos.z * ((_spriteHeight + _spriteWidth / 4) / 2);
-}
-
-/**
- * Convert map coordinates X,Y,Z to screen positions X, Y.
- * @param mapPos X,Y,Z coordinates on the map.
- * @param screenPos to screen position.
- */
-void Map::convertVoxelToScreen(const Position &voxelPos, Position *screenPos) const
-{
-	Position mapPosition = Position(voxelPos.x / 16, voxelPos.y / 16, voxelPos.z / 24);
-	convertMapToScreen(mapPosition, screenPos);
-	double dx = voxelPos.x - (mapPosition.x * 16);
-	double dy = voxelPos.y - (mapPosition.y * 16);
-	double dz = voxelPos.z - (mapPosition.z * 24);
-	screenPos->x += (int)(dx - dy) + (_spriteWidth/2);
-	screenPos->y += (int)(((_spriteHeight / 2.0)) + (dx / 2.0) + (dy / 2.0) - dz);
-	screenPos->x += _mapOffsetX;
-	screenPos->y += _mapOffsetY;
-}
-
-/**
  * Draws the rectangle selector.
  * @param pos pointer to a position
  */
@@ -899,7 +650,7 @@ void Map::getSelectorPosition(Position *pos) const
 {
 	pos->x = _selectorX;
 	pos->y = _selectorY;
-	pos->z = _viewHeight;
+	pos->z = _camera->getViewHeight();
 }
 
 /**
@@ -1069,41 +820,20 @@ std::set<Explosion*> *Map::getExplosions()
 }
 
 /**
- * Check if the camera did follow a projectile.
- * It is used to put the camera back to it's original position after the projectile has reached it's destination.
- * @return bool Whether it did or not.
- */
-bool Map::didCameraFollow()
+ * Get pointer to camera
+ * @return pointer to camera
+*/
+Camera *Map::getCamera()
 {
-	bool value = _cameraFollowed;
-	_cameraFollowed = false;
-	return value;
+	return _camera;
 }
 
 /**
- * Get the displayed level
- * @return the displayed layer
+ * Timers only work on surfaces so we have to pass this on to the camera object.
 */
-int Map::getViewHeight() const
+void Map::scroll()
 {
-	return _viewHeight;
+	_camera->scroll();
 }
 
-/**
- * Get the X displayed map center
- * @return the X displayed map center
-*/
-int Map::getCenterX() const
-{
-	return _centerX;
-}
-
-/**
- * Get the Y displayed map center
- * @return the Y displayed map center
-*/
-int Map::getCenterY() const
-{
-	return _centerY;
-}
 }

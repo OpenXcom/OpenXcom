@@ -136,6 +136,8 @@
 		<Unit filename="Battlescape\BriefingCrashState.h" />
 		<Unit filename="Battlescape\BulletSprite.cpp" />
 		<Unit filename="Battlescape\BulletSprite.h" />
+		<Unit filename="Battlescape\Camera.cpp" />
+		<Unit filename="Battlescape\Camera.h" />
 		<Unit filename="Battlescape\DebriefingState.cpp" />
 		<Unit filename="Battlescape\DebriefingState.h" />
 		<Unit filename="Battlescape\Explosion.cpp" />
