@@ -27,7 +27,7 @@ namespace OpenXcom
  * @param type String defining the type.
  * @param spriteSheet Spritesheet used to render the unit.
  */
-RuleArmor::RuleArmor(const std::string &type, std::string spriteSheet, int drawingRoutine) : _type(type), _spriteSheet(spriteSheet), _corpseItem(""), _frontArmor(0), _sideArmor(0), _rearArmor(0), _underArmor(0), _drawingRoutine(drawingRoutine)
+RuleArmor::RuleArmor(const std::string &type, std::string spriteSheet, int drawingRoutine, MovementType movementType, int size) : _type(type), _spriteSheet(spriteSheet), _corpseItem(""), _frontArmor(0), _sideArmor(0), _rearArmor(0), _underArmor(0), _drawingRoutine(drawingRoutine), _movementType(movementType), _size(size)
 {
 
 }
@@ -46,6 +46,8 @@ RuleArmor::~RuleArmor()
  */
 void RuleArmor::load(const YAML::Node &node)
 {
+	int a = 0;
+
 	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
 	{
 		std::string key;
@@ -82,6 +84,15 @@ void RuleArmor::load(const YAML::Node &node)
 		{
 			i.second() >> _drawingRoutine;
 		}
+		else if (key == "movementType")
+		{
+			i.second() >> a;
+			_movementType = (MovementType)a;
+		}
+		else if (key == "size")
+		{
+			i.second() >> _size;
+		}
 	}
 }
 
@@ -91,6 +102,7 @@ void RuleArmor::load(const YAML::Node &node)
  */
 void RuleArmor::save(YAML::Emitter &out) const
 {
+
 	out << YAML::BeginMap;
 	out << YAML::Key << "type" << YAML::Value << _type;
 	out << YAML::Key << "spriteSheet" << YAML::Value << _spriteSheet;
@@ -100,6 +112,8 @@ void RuleArmor::save(YAML::Emitter &out) const
 	out << YAML::Key << "rearArmor" << YAML::Value << _rearArmor;
 	out << YAML::Key << "underArmor" << YAML::Value << _underArmor;
 	out << YAML::Key << "drawingRoutine" << YAML::Value << _drawingRoutine;
+	out << YAML::Key << "movementType" << YAML::Value << _movementType;
+	out << YAML::Key << "size" << YAML::Value << _size;
 	out << YAML::EndMap;
 }
 
@@ -162,6 +176,17 @@ std::string RuleArmor::getCorpseItem() const
 int RuleArmor::getDrawingRoutine() const
 {
 	return _drawingRoutine;
+}
+/// Get whether the armor can fly.
+MovementType RuleArmor::getMovementType() const
+{
+	return _movementType;
+}
+
+/// Get whether the armor can fly.
+int RuleArmor::getSize() const
+{
+	return _size;
 }
 
 }

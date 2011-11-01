@@ -240,7 +240,7 @@ void Map::drawTerrain(Surface *surface)
 		// if the projectile is outside the viewport - center it back on it
 		_camera->convertVoxelToScreen(_projectile->getPosition(), &bulletPositionScreen);
 		if (bulletPositionScreen.x < 0 || bulletPositionScreen.x > surface->getWidth() ||
-			bulletPositionScreen.y < 0 || bulletPositionScreen.y > surface->getHeight()  )
+			bulletPositionScreen.y < 0 || bulletPositionScreen.y > _visibleMapHeight  )
 		{
 			_camera->centerOnPosition(Position(bulletLowX, bulletLowY, bulletLowZ));
 		}
@@ -277,7 +277,7 @@ void Map::drawTerrain(Surface *surface)
 					// Draw floor
 					tmpSurface = tile->getSprite(MapData::O_FLOOR);
 					if (tmpSurface)
-						tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y - tile->getMapData(MapData::O_FLOOR)->getYOffset(), tileShade);
+						tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y - tile->getMapData(MapData::O_FLOOR)->getYOffset(), tileShade, false, tile->getMarkerColor());
 					unit = tile->getUnit();
 
 					// Draw cursor back
@@ -667,7 +667,13 @@ void Map::calculateWalkingOffset(BattleUnit *unit, Position *offset)
 	int midphase = 4 + 4 * (dir % 2);
 	int endphase = 8 + 8 * (dir % 2);
 
-	if (unit->getStatus() == STATUS_WALKING)
+	if (unit->getVerticalDirection())
+	{
+		midphase = 4;
+		endphase = 8;
+	}
+	else
+	if ((unit->getStatus() == STATUS_WALKING || unit->getStatus() == STATUS_FLYING))
 	{
 		if (phase < midphase)
 		{
@@ -682,7 +688,7 @@ void Map::calculateWalkingOffset(BattleUnit *unit, Position *offset)
 	}
 
 	// If we are walking in between tiles, interpolate it's terrain level.
-	if (unit->getStatus() == STATUS_WALKING)
+	if (unit->getStatus() == STATUS_WALKING || unit->getStatus() == STATUS_FLYING)
 	{
 		if (phase < midphase)
 		{
@@ -712,7 +718,7 @@ void Map::calculateWalkingOffset(BattleUnit *unit, Position *offset)
 			}else if (unit->getLastPosition().z < unit->getDestination().z)
 			{
 				// going up a level, so fromLevel 0 becomes +24, -8 becomes 16
-				fromLevel = -24*(unit->getDestination().z - unit->getLastPosition().z) + abs(fromLevel);
+				fromLevel = 24*(unit->getDestination().z - unit->getLastPosition().z) - abs(fromLevel);
 			}
 			offset->y += ((fromLevel * (endphase - phase)) / endphase) + ((toLevel * (phase)) / endphase);
 		}

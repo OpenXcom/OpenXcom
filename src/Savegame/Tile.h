@@ -55,6 +55,7 @@ protected:
 	BattleUnit *_unit;
 	std::vector<BattleItem *> _inventory;
 	int _animationOffset;
+	int _markerColor;
 public:
 	/// Creates a tile.
 	Tile(const Position& pos);
@@ -142,6 +143,11 @@ public:
 	void prepareNewTurn();
 	/// Get inventory on this tile.
 	std::vector<BattleItem *> *getInventory();
+	/// Set the tile marker color.
+	void setMarkerColor(int color);
+	/// Get the tile marker color.
+	int getMarkerColor();
+
 };
 
 }

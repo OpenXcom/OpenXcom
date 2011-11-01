@@ -1162,11 +1162,17 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	lscout->setScore(125);
 	ruleTerrain = new RuleTerrain("UFO_120");
 	lscout->setBattlescapeTerrainData(ruleTerrain);
-	ruleTerrain->getMapDataSets()->push_back(getMapDataSet("BLANKS"));
+	/*ruleTerrain->getMapDataSets()->push_back(getMapDataSet("BLANKS"));
 	ruleTerrain->getMapDataSets()->push_back(getMapDataSet("U_EXT02"));
 	ruleTerrain->getMapDataSets()->push_back(getMapDataSet("U_WALL02"));
 	ruleTerrain->getMapDataSets()->push_back(getMapDataSet("U_BITS"));
-	ruleTerrain->getMapBlocks()->push_back(new MapBlock(ruleTerrain,"UFO_120",20,20,true));
+	ruleTerrain->getMapBlocks()->push_back(new MapBlock(ruleTerrain,"UFO_120",20,20,true));*/
+	ruleTerrain->getMapDataSets()->push_back(getMapDataSet("BLANKS"));
+	ruleTerrain->getMapDataSets()->push_back(getMapDataSet("U_EXT02"));
+	ruleTerrain->getMapDataSets()->push_back(getMapDataSet("U_WALL02"));
+	ruleTerrain->getMapDataSets()->push_back(getMapDataSet("U_DISEC2"));
+	ruleTerrain->getMapDataSets()->push_back(getMapDataSet("U_BITS"));
+	ruleTerrain->getMapBlocks()->push_back(new MapBlock(ruleTerrain,"UFO_130",20,20,true));
 
 	RuleUfo *abducter = new RuleUfo("STR_ABDUCTER");
 	abducter->setSize("STR_MEDIUM");
@@ -1522,14 +1528,14 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	RuleArmor *powerSuit = new RuleArmor("STR_POWER_SUIT_UC", "XCOM_2.PCK", 0);
 	powerSuit->setArmor(100, 80, 70, 60);
 
-	RuleArmor *flyingSuit = new RuleArmor("STR_FLYING_SUIT_UC", "XCOM_2.PCK", 0);
+	RuleArmor *flyingSuit = new RuleArmor("STR_FLYING_SUIT_UC", "XCOM_2.PCK", 0, MT_FLY);
 	flyingSuit->setArmor(110, 90, 80, 70);
 
 	RuleArmor *sectoidSoldierArmor = new RuleArmor("SECTOID_ARMOR0", "SECTOID.PCK", 0);
 	sectoidSoldierArmor->setArmor(4, 3, 2, 2);
 	sectoidSoldierArmor->setCorpseItem("STR_SECTOID_CORPSE");
 
-	RuleArmor *floaterSoldierArmor = new RuleArmor("FLOATER_ARMOR0", "FLOATER.PCK", 1);
+	RuleArmor *floaterSoldierArmor = new RuleArmor("FLOATER_ARMOR0", "FLOATER.PCK", 1, MT_FLY);
 	floaterSoldierArmor->setArmor(8, 6, 4, 12);
 	floaterSoldierArmor->setCorpseItem("STR_FLOATER_CORPSE");
 

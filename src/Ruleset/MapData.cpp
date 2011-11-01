@@ -105,6 +105,15 @@ bool MapData::isDoor() const
 }
 
 /**
+  * Get whether this is a grav lift.
+  * @return bool 
+  */
+bool MapData::isGravLift() const
+{
+	return _isGravLift;
+}
+
+/**
   * Set all kinds of flags.
   * @param isUfoDoor
   * @param stopLOS

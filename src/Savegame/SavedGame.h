@@ -134,7 +134,7 @@ public:
 	/// Handles the higher promotions.
 	bool handlePromotions();
 	/// Checks how many soldiers of a rank exist and which one has the highest score.
-	Soldier *inspectSoldiers(int *total, int rank);
+	void inspectSoldiers(Soldier **highestRanked, int *total, int rank);
 };
 
 }

@@ -40,7 +40,7 @@ namespace OpenXcom
  * @param unit Pointer to Unit object.
  * @param faction Which faction the units belongs to.
  */
-BattleUnit::BattleUnit(Unit *unit, UnitFaction faction) : _unit(unit), _faction(faction), _id(0), _pos(Position()), _tile(0), _lastPos(Position()), _direction(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cache(0), _cacheInvalid(true), _expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expMelee(0)
+BattleUnit::BattleUnit(Unit *unit, UnitFaction faction) : _unit(unit), _faction(faction), _id(0), _pos(Position()), _tile(0), _lastPos(Position()), _direction(0), _verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cache(0), _cacheInvalid(true), _expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expMelee(0)
 {
 	_tu = unit->getTimeUnits();
 	_energy = unit->getStamina();
@@ -229,12 +229,21 @@ void BattleUnit::setDirection(int direction)
 }
 
 /**
- * Changes the BattleUnit's direction.
+ * Gets the BattleUnit's (horizontal) direction.
  * @return direction
  */
 int BattleUnit::getDirection() const
 {
 	return _direction;
+}
+
+/**
+ * Gets the BattleUnit's vertical direction. This is when going up or down.
+ * @return direction
+ */
+int BattleUnit::getVerticalDirection() const
+{
+	return _verticalDirection;
 }
 
 /**
@@ -253,8 +262,20 @@ UnitStatus BattleUnit::getStatus() const
  */
 void BattleUnit::startWalking(int direction, const Position &destination)
 {
-	_direction = direction;
-	_status = STATUS_WALKING;
+	if (direction < Pathfinding::DIR_UP)
+	{
+		_direction = direction;
+		_status = STATUS_WALKING;
+	}
+	else
+	{
+		_verticalDirection = direction;
+		_status = STATUS_FLYING;
+	}
+
+	if (!_tile->getMapData(MapData::O_FLOOR))
+		_status = STATUS_FLYING;
+
 	_walkPhase = 0;
 	_destination = destination;
 	_lastPos = _pos;
@@ -268,9 +289,17 @@ void BattleUnit::startWalking(int direction, const Position &destination)
 void BattleUnit::keepWalking()
 {
 	int middle, end;
-	// diagonal walking takes double the steps
-	middle = 4 + 4 * (_direction % 2);
-	end = 8 + 8 * (_direction % 2);
+	if (_verticalDirection)
+	{
+		middle = 4;
+		end = 8;
+	}
+	else
+	{
+		// diagonal walking takes double the steps
+		middle = 4 + 4 * (_direction % 2);
+		end = 8 + 8 * (_direction % 2);
+	}
 
 	_walkPhase++;
 
@@ -286,6 +315,7 @@ void BattleUnit::keepWalking()
 		// we officially reached our destination tile
 		_status = STATUS_STANDING;
 		_walkPhase = 0;
+		_verticalDirection = 0;
 	}
 
 	_cacheInvalid = true;
@@ -1090,6 +1120,12 @@ bool BattleUnit::getVisible() const
 void BattleUnit::setTile(Tile *tile)
 {
 	_tile = tile;
+
+	// unit could have changed from flying to walking or vice versa
+	if (_status == STATUS_WALKING && !_tile->getMapData(MapData::O_FLOOR))
+		_status = STATUS_FLYING;
+	else if (_status == STATUS_FLYING && _tile->getMapData(MapData::O_FLOOR))
+		_status = STATUS_WALKING;
 }
 
 /**

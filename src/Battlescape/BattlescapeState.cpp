@@ -36,6 +36,7 @@
 #include "InventoryState.h"
 #include "AggroBAIState.h"
 #include "PatrolBAIState.h"
+#include "Pathfinding.h"
 #include "../Engine/Game.h"
 #include "../Engine/Music.h"
 #include "../Engine/Language.h"
@@ -426,6 +427,7 @@ void BattlescapeState::handleAI(BattleUnit *unit)
 	unit->think(&_action);
 	if (_action.type == BA_WALK)
 	{
+		_battleGame->getPathfinding()->calculate(_action.actor, _action.target);
 		statePushBack(new UnitWalkBState(this, _action));
 	}
 
@@ -468,9 +470,14 @@ void BattlescapeState::handleAI(BattleUnit *unit)
  */
 void BattlescapeState::mapClick(Action *action)
 {
+	bool bPreviewed = Options::getBool("battlePreviewPath");
+
 	// right-click aborts walking state
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
+		if (_battleGame->getPathfinding()->removePreview() && bPreviewed)
+			return;
+
 		if (_states.empty())
 		{
 			if (_action.targeting)
@@ -531,15 +538,27 @@ void BattlescapeState::mapClick(Action *action)
 			}
 			else if (playableUnitSelected())
 			{
-			//  -= start walking =-
+				if (_action.target != pos && bPreviewed)
+					_battleGame->getPathfinding()->removePreview();
 				_action.target = pos;
-				_map->setCursorType(CT_NONE);
-				_game->getCursor()->setVisible(false);
-				if (_battleGame->getSelectedUnit()->isKneeled())
+				_battleGame->getPathfinding()->calculate(_action.actor, _action.target);
+				if (bPreviewed && !_battleGame->getPathfinding()->previewPath())
 				{
-					kneel(_battleGame->getSelectedUnit());
+					_battleGame->getPathfinding()->removePreview();
+					bPreviewed = false;
 				}
-				statePushBack(new UnitWalkBState(this, _action));
+
+				if (!bPreviewed)
+				{
+					//  -= start walking =-
+					_map->setCursorType(CT_NONE);
+					_game->getCursor()->setVisible(false);
+					if (_battleGame->getSelectedUnit()->isKneeled())
+					{
+						kneel(_battleGame->getSelectedUnit());
+					}
+					statePushBack(new UnitWalkBState(this, _action));
+				}
 			}
 		}
 	}
@@ -558,10 +577,19 @@ void BattlescapeState::mapClick(Action *action)
  */
 void BattlescapeState::btnUnitUpClick(Action *action)
 {
-	/*Pathfinding *pf = _battleGame->getPathfinding();
-	Position start = _battleGame->getSelectedUnit()->getPosition();
-	Position end = start + Position(0, 0, +1);
-	pf->calculate(_battleGame->getSelectedUnit(), end);*/
+	if (playableUnitSelected() && _battleGame->getPathfinding()->validateUpDown(_battleGame->getSelectedUnit(), _battleGame->getSelectedUnit()->getPosition(), Pathfinding::DIR_UP)) 
+	{
+		_action.target = _battleGame->getSelectedUnit()->getPosition();
+		_action.target.z++;
+		_map->setCursorType(CT_NONE);
+		_game->getCursor()->setVisible(false);
+		if (_battleGame->getSelectedUnit()->isKneeled())
+		{
+			kneel(_battleGame->getSelectedUnit());
+		}
+		_battleGame->getPathfinding()->calculate(_action.actor, _action.target);
+		statePushBack(new UnitWalkBState(this, _action));
+	}
 }
 
 /**
@@ -570,10 +598,20 @@ void BattlescapeState::btnUnitUpClick(Action *action)
  */
 void BattlescapeState::btnUnitDownClick(Action *action)
 {
-	/*Pathfinding *pf = _battleGame->getPathfinding();
-	Position start = _battleGame->getSelectedUnit()->getPosition();
-	Position end = start + Position(0, 0, -1);
-	pf->calculate((BattleUnit*)_battleGame->getSelectedUnit(), end);*/
+	if (playableUnitSelected() && _battleGame->getPathfinding()->validateUpDown(_battleGame->getSelectedUnit(), _battleGame->getSelectedUnit()->getPosition(), Pathfinding::DIR_DOWN))
+	{
+	//  -= start walking =-
+		_action.target = _battleGame->getSelectedUnit()->getPosition();
+		_action.target.z--;
+		_map->setCursorType(CT_NONE);
+		_game->getCursor()->setVisible(false);
+		if (_battleGame->getSelectedUnit()->isKneeled())
+		{
+			kneel(_battleGame->getSelectedUnit());
+		}
+		_battleGame->getPathfinding()->calculate(_action.actor, _action.target);
+		statePushBack(new UnitWalkBState(this, _action));
+	}
 }
 
 /**
@@ -1574,6 +1612,7 @@ bool BattlescapeState::handlePanickingUnit(BattleUnit *unit)
 			unit->setCache(0);
 			_action.actor = unit;
 			_action.target = Position(unit->getPosition().x + RNG::generate(-5,5), unit->getPosition().y + RNG::generate(-5,5), unit->getPosition().z);
+			_battleGame->getPathfinding()->calculate(_action.actor, _action.target);
 			statePushBack(new UnitWalkBState(this, _action));
 		}
 		break;

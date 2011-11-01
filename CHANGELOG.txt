@@ -12,7 +12,10 @@ New features:
 -- Skill increase and promotions.
 -- Ranged based accuracy is now optional (see UFO Extender for details on Ranged Based Accuracy).
 -- Minimap.
-
+-- Flying units.
+-- Grav lifts.
+-- Optional pathfinding preview.
+ 
 Bugfixes:
 - Two duplicating ammo bugs.
 - Wrong rocket launcher hand sprite.

@@ -24,6 +24,7 @@
 #include "../Savegame/Node.h"
 #include "../Savegame/NodeLink.h"
 #include "../Engine/RNG.h"
+#include "../Ruleset/RuleArmor.h"
 
 namespace OpenXcom
 {
@@ -155,7 +156,10 @@ void PatrolBAIState::think(BattleAction *action)
 				node = *i;
 				if (node->getSegment() == segment
 					&& (!_fromNode || (_fromNode && node->getRank() >= _fromNode->getRank()))
-					&& _game->selectUnit(node->getPosition()) == 0)
+					&& _game->selectUnit(node->getPosition()) == 0
+					&& ((node->getType() & Node::TYPE_FLYING) == 0 || _unit->getUnit()->getArmor()->getMovementType() == MT_FLY) // flying units can spawn everywhere, for others the flying-only flag needs to be 0
+					&& ((node->getType() & Node::TYPE_SMALL) == 0 || _unit->getUnit()->getArmor()->getSize() == 1) // small units can spawn everywhere, for others the small-only flag needs to be 0
+					)
 				{
 					_toNode = node;
 					bFound = true;
@@ -177,7 +181,10 @@ void PatrolBAIState::think(BattleAction *action)
 					{
 						node = _game->getNodes()->at(_fromNode->getNodeLink(i)->getConnectedNodeID());
 						if (node->getRank() >= _fromNode->getRank()-2
-							&& _game->selectUnit(node->getPosition()) == 0)
+							&& _game->selectUnit(node->getPosition()) == 0
+							&& ((node->getType() & Node::TYPE_FLYING) == 0 || _unit->getUnit()->getArmor()->getMovementType() == MT_FLY) // flying units can spawn everywhere, for others the flying-only flag needs to be 0
+							&& ((node->getType() & Node::TYPE_SMALL) == 0 || _unit->getUnit()->getArmor()->getSize() == 1) // small units can spawn everywhere, for others the small-only flag needs to be 0
+							)
 						{
 							_toNode = node;
 							bFound = true;
@@ -197,7 +204,10 @@ void PatrolBAIState::think(BattleAction *action)
 					int x = abs(_unit->getPosition().x - node->getPosition().x);
 					int y = abs(_unit->getPosition().y - node->getPosition().y);
 					int distance = int(floor(sqrt(float(x*x + y*y)) + 0.5));
-					if (distance < closest)
+					if (distance < closest
+					&& ((node->getType() & Node::TYPE_FLYING) == 0 || _unit->getUnit()->getArmor()->getMovementType() == MT_FLY) // flying units can spawn everywhere, for others the flying-only flag needs to be 0
+					&& ((node->getType() & Node::TYPE_SMALL) == 0 || _unit->getUnit()->getArmor()->getSize() == 1) // small units can spawn everywhere, for others the small-only flag needs to be 0
+					)
 					{
 						_toNode = node;
 					}

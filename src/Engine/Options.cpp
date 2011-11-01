@@ -60,6 +60,7 @@ void createDefault()
 	setInt("battleAlienSpeed", 40); // 60, 50, 40, 30, 20, 10
 	// set to true if you want to play with the alternative grenade handling
 	setBool("battleAltGrenade", false);
+	setBool("battlePreviewPath", false);
 	setBool("battleRangeBasedAccuracy", false);
 	setBool("fpsCounter", false);
 }

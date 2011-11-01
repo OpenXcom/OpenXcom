@@ -22,6 +22,7 @@
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
 #include "../Ruleset/MapData.h"
+#include "../Ruleset/RuleArmor.h"
 #include "../Savegame/BattleUnit.h"
 
 namespace OpenXcom
@@ -31,7 +32,7 @@ namespace OpenXcom
  * Sets up a Pathfinding.
  * @param save pointer to SavedBattleGame object.
  */
-Pathfinding::Pathfinding(SavedBattleGame *save) : _save(save), _nodes(), _unit(0)
+Pathfinding::Pathfinding(SavedBattleGame *save) : _save(save), _nodes(), _unit(0), _pathPreviewed(false)
 {
 	_size = _save->getHeight() * _save->getLength() * _save->getWidth();
 	/* allocate the array and the objects in it */
@@ -42,7 +43,6 @@ Pathfinding::Pathfinding(SavedBattleGame *save) : _save(save), _nodes(), _unit(0
 		_save->getTileCoords(i, &x, &y, &z);
 		_nodes[i] = new PathfindingNode(Position(x, y, z));
 	}
-
 }
 
 /**
@@ -74,13 +74,14 @@ PathfindingNode *Pathfinding::getNode(const Position& pos)
  * @param endPosition
  */
 
-void Pathfinding::calculate(BattleUnit *unit, Position &endPosition)
+void Pathfinding::calculate(BattleUnit *unit, Position endPosition)
 {
 	std::list<PathfindingNode*> openList;
+	PathfindingNode *currentNode, *nextNode;
 	Position currentPos, nextPos, startPosition = unit->getPosition();
-	int tuCost;
+	int tuCost, totalTuCost = 0;
 
-	_movementType = MT_WALK; // should be parameter
+	_movementType = unit->getUnit()->getArmor()->getMovementType();
 	_unit = unit;
 
 	Tile *destinationTile = _save->getTile(endPosition);
@@ -97,12 +98,16 @@ void Pathfinding::calculate(BattleUnit *unit, Position &endPosition)
 	}
 
 	// check if we have floor, else lower destination (for non flying units only, because otherwise they never reached this place)
-	while (canFallDown(destinationTile))
+	while (canFallDown(destinationTile) && 	_movementType != MT_FLY)
 	{
 		endPosition.z--;
 		destinationTile = _save->getTile(endPosition);
 	}
 
+	_path.clear();
+
+	if (startPosition.z == endPosition.z && bresenhamPath(startPosition, endPosition))
+		return;
 
 	_path.clear();
 
@@ -117,24 +122,27 @@ void Pathfinding::calculate(BattleUnit *unit, Position &endPosition)
 	// if the open list is empty, we've reached the end
     while(!openList.empty())
 	{
+		currentPos = openList.front()->getPosition();
+		currentNode = getNode(currentPos);
 		// this algorithm expands in all directions
-        for (int direction = 0; direction < 8; direction++)
+        for (int direction = 0; direction < 10; direction++)
 		{
-			currentPos = openList.front()->getPosition();
             tuCost = getTUCost(currentPos, direction, &nextPos, unit);
-            if(tuCost < 255)
+            if(tuCost < 255) // check if we can go to this node (ie is not blocked)
 			{
-				if( (!getNode(nextPos)->isChecked() ||
-                getNode(nextPos)->getTUCost() > getNode(currentPos)->getTUCost() + tuCost) &&
-                (!getNode(endPosition)->isChecked() ||
-                getNode(endPosition)->getTUCost() > getNode(currentPos)->getTUCost() + tuCost)
+				nextNode = getNode(nextPos);
+				totalTuCost = currentNode->getTUCost() + tuCost;
+				// if we haven't checked this node, or the current cost tu cost is lower than our previous path, push this node in the open list to visit later.
+				if( (!nextNode->isChecked() || nextNode->getTUCost() > totalTuCost)
+					&& // this will keep pushing back nodes, as long as we did not reach the end position or there are still possible shorter paths
+					(!getNode(endPosition)->isChecked() || getNode(endPosition)->getTUCost() > totalTuCost)
                 )
 				{
-					getNode(nextPos)->check(getNode(currentPos)->getTUCost() + tuCost,
-											getNode(currentPos)->getStepsNum() + 1,
-											getNode(currentPos),
-											direction);
-					openList.push_back(getNode(nextPos));
+					nextNode->check(totalTuCost,
+									currentNode->getStepsNum() + 1,
+									currentNode,
+									direction);
+					openList.push_back(nextNode);
                 }
             }
         }
@@ -168,9 +176,12 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 	directionToVector(direction, endPosition);
 	*endPosition += startPosition;
 	bool fellDown = false;
+	bool triedStairs = false;
 
 	Tile *startTile = _save->getTile(startPosition);
 	Tile *destinationTile = _save->getTile(*endPosition);
+
+	int cost = 0;
 
 	// this means the destination is probably outside the map
 	if (!destinationTile)
@@ -181,15 +192,32 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 		return 255;
 
 
-	// check if we can go this way
-	if (isBlocked(startTile, destinationTile, direction))
-		return 255;
+	if (direction < DIR_UP)
+	{
+		// check if we can go this way
+		if (isBlocked(startTile, destinationTile, direction))
+			return 255;
+	}
+	else
+	{
+		// check if we can go up or down through gravlift or fly
+		if (validateUpDown(unit, startPosition, direction))
+		{
+			cost += 4; // vertical movement
+		}
+		else
+		{
+			return 255;
+		}
+	}
+
 
 	// if we are on a stairs try to go up a level
 	if (startTile->getTerrainLevel() < -12)
 	{
 		endPosition->z++;
 		destinationTile = _save->getTile(*endPosition);
+		triedStairs = true;
 	}
 
 	// this means the destination is probably outside the map
@@ -197,7 +225,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 		return 255;
 
 	// check if we have floor, else fall down
-	while (canFallDown(destinationTile))
+	while (canFallDown(destinationTile) && (_movementType != MT_FLY || triedStairs))
 	{
 		endPosition->z--;
 		destinationTile = _save->getTile(*endPosition);
@@ -207,7 +235,10 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 	// if we don't want to fall down and there is no floor, it ends here
 	if (!fellDown && destinationTile->hasNoFloor())
 	{
-		return 255;
+		if (_movementType != MT_FLY)
+			return 255;
+		else
+			cost = 4;
 	}
 
 	// check if the destination tile can be walked over
@@ -217,7 +248,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 	}
 
 	// calculate the cost by adding floor walk cost and object walk cost
-	int cost = destinationTile->getTUCost(MapData::O_FLOOR, _movementType);
+	cost += destinationTile->getTUCost(MapData::O_FLOOR, _movementType);
 	if (!fellDown)
 	{
 		cost += destinationTile->getTUCost(MapData::O_OBJECT, _movementType);
@@ -239,11 +270,12 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
  */
 void Pathfinding::directionToVector(const int direction, Position *vector)
 {
-	int x[8] = {0, 1, 1, 1, 0, -1, -1, -1};
-	int y[8] = {-1, -1, 0, 1, 1, 1, 0, -1};
+	int x[10] = {0, 1, 1, 1, 0, -1, -1, -1,0,0};
+	int y[10] = {-1, -1, 0, 1, 1, 1, 0, -1,0,0};
+	int z[10] = {0, 0, 0, 0, 0, 0, 0, 0, 1, -1};
 	vector->x = x[direction];
 	vector->y = y[direction];
-	vector->z = 0;
+	vector->z = z[direction];
 }
 
 /*
@@ -257,7 +289,7 @@ int Pathfinding::getStartDirection()
 }
 
 /*
- * Dequeue next path direction.
+ * Dequeue next path direction. Ie returns direction and removes from queue.
  * @return direction where the unit needs to go next, -1 if it's the end of the path.
  */
 int Pathfinding::dequeuePath()
@@ -430,6 +462,189 @@ bool Pathfinding::isOnStairs(const Position &startPosition, const Position &endP
 		}
 	}
 	return false;
+}
+
+/**
+ * Check for the up/down button if the movement is valid. Either is a grav lift or the unit can fly and there are no obstructions.
+ * @param bu Pointer to unit.
+ * @param direction Up or Down
+ * @return bool Whether it's valid.
+ */
+bool Pathfinding::validateUpDown(BattleUnit *bu, Position startPosition, const int direction)
+{
+	Position endPosition;
+	directionToVector(direction, &endPosition);
+	endPosition += startPosition;
+	Tile *startTile = _save->getTile(startPosition);
+	Tile *destinationTile = _save->getTile(endPosition);
+	if (startTile->getMapData(MapData::O_FLOOR) && destinationTile && destinationTile->getMapData(MapData::O_FLOOR) &&
+		(startTile->getMapData(MapData::O_FLOOR)->isGravLift() && destinationTile->getMapData(MapData::O_FLOOR)->isGravLift()))
+	{
+		return true;
+	}
+	else
+	{
+		if (bu->getUnit()->getArmor()->getMovementType() == MT_FLY)
+		{
+			if ((direction == DIR_UP && destinationTile && !destinationTile->getMapData(MapData::O_FLOOR)) // flying up only possible when there is no roof
+				|| (direction == DIR_DOWN && destinationTile && !startTile->getMapData(MapData::O_FLOOR)) // flying down only possible when there is no floor
+				)
+			{
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
+
+/*
+ * Preview path, marks tiles.
+ */
+bool Pathfinding::previewPath(bool bRemove)
+{
+	if (_path.empty())
+		return false;
+
+	if (!bRemove && _pathPreviewed)
+		return false;
+
+	_pathPreviewed = !bRemove;
+
+	Position pos = _unit->getPosition();
+	Position destination;
+	int tus = _unit->getTimeUnits();
+
+	for (std::vector<int>::reverse_iterator i = _path.rbegin(); i != _path.rend(); ++i)
+	{
+		int dir = *i;
+		int tu = getTUCost(pos, dir, &destination, _unit); // gets tu cost, but also gets the destination position.
+		tus -= tu;
+		pos = destination;
+		_save->getTile(pos)->setMarkerColor(bRemove?0:(tus>0?4:3));
+	}
+	return true;
+}
+
+/*
+ * Preview path, unmarks tiles.
+ */
+bool Pathfinding::removePreview()
+{
+	if (!_pathPreviewed)
+		return false;
+	previewPath(true);
+	return true;
+}
+
+// this works in only x/y plane
+bool Pathfinding::bresenhamPath(const Position& origin, const Position& target)
+{
+	int xd[8] = {0, 1, 1, 1, 0, -1, -1, -1};
+	int yd[8] = {-1, -1, 0, 1, 1, 1, 0, -1};
+
+	int x, x0, x1, delta_x, step_x;
+    int y, y0, y1, delta_y, step_y;
+    int z, z0, z1, delta_z, step_z;
+    int swap_xy, swap_xz;
+    int drift_xy, drift_xz;
+    int cx, cy, cz;
+	Position lastPoint(origin);
+	int dir;
+	int lastTUCost = -1;
+	Position nextPoint;
+
+    //start and end points
+    x0 = origin.x;     x1 = target.x;
+    y0 = origin.y;     y1 = target.y;
+    z0 = origin.z;     z1 = target.z;
+
+    //'steep' xy Line, make longest delta x plane
+    swap_xy = abs(y1 - y0) > abs(x1 - x0);
+    if (swap_xy)
+	{
+        std::swap(x0, y0);
+        std::swap(x1, y1);
+	}
+
+    //do same for xz
+    swap_xz = abs(z1 - z0) > abs(x1 - x0);
+    if (swap_xz)
+	{
+        std::swap(x0, z0);
+		std::swap(x1, z1);
+	}
+
+    //delta is Length in each plane
+    delta_x = abs(x1 - x0);
+    delta_y = abs(y1 - y0);
+    delta_z = abs(z1 - z0);
+
+    //drift controls when to step in 'shallow' planes
+    //starting value keeps Line centred
+    drift_xy  = (delta_x / 2);
+    drift_xz  = (delta_x / 2);
+
+    //direction of line
+	step_x = 1;  if (x0 > x1) {  step_x = -1; }
+	step_y = 1;  if (y0 > y1) {  step_y = -1; }
+	step_z = 1;  if (z0 > z1) {  step_z = -1; }
+
+    //starting point
+    y = y0;
+    z = z0;
+
+    //step through longest delta (which we have swapped to x)
+    for (x = x0; x != (x1+step_x); x += step_x)
+	{
+        //copy position
+        cx = x;    cy = y;    cz = z;
+
+        //unswap (in reverse)
+        if (swap_xz) std::swap(cx, cz);
+        if (swap_xy) std::swap(cx, cy);
+
+		if (x != x0 || y != y0 || z != z0)
+		{
+			nextPoint = Position(cx, cy, cz);
+			// get direction
+			for (dir = 0; dir < 8; ++dir)
+			{
+				if (xd[dir] == cx-lastPoint.x && yd[dir] == cy-lastPoint.y) break;
+			}
+            int tuCost = getTUCost(lastPoint, dir, &nextPoint, _unit);
+			if (tuCost < 255 && (tuCost == lastTUCost || (dir&1 && tuCost == lastTUCost*1.5) || (!(dir&1) && tuCost*1.5 == lastTUCost) || lastTUCost == -1))
+			{
+				_path.push_back(dir);
+			}
+			else
+			{
+				return false;
+			}
+			lastTUCost = tuCost;
+			lastPoint = Position(cx, cy, cz);
+		}
+        //update progress in other planes
+        drift_xy = drift_xy - delta_y;
+        drift_xz = drift_xz - delta_z;
+
+        //step in y plane
+        if (drift_xy < 0)
+		{
+            y = y + step_y;
+            drift_xy = drift_xy + delta_x;
+		}
+
+        //same in z
+        if (drift_xz < 0)
+		{
+            z = z + step_z;
+            drift_xz = drift_xz + delta_x;
+		}
+	}
+
+	return true;
 }
 
 

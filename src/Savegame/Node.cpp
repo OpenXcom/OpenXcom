@@ -184,4 +184,13 @@ NodeLink *Node::getNodeLink(int index)
 	return _nodeLinks[index];
 }
 
+/**
+ * Gets the Node's type.
+ * @return type
+ */
+int Node::getType() const
+{
+	return _type;
+}
+
 }
