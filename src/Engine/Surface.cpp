@@ -665,14 +665,16 @@ void Surface::paletteRestore()
  * @param y
  * @param off
  * @param half some tiles are blitted only the right half
+ * @param newBaseColor Attention: the actual color + 1, because 0 is no new base color.
  */
-void Surface::blitNShade(Surface *surface, int x, int y, int off, bool half)
+void Surface::blitNShade(Surface *surface, int x, int y, int off, bool half, int newBaseColor)
 {
 	// get Width and Height only once
 	int w = getWidth();
 	int h = getHeight();
 	int dw = surface->getWidth();
 	int dh = surface->getHeight();
+	int baseColor;
 
 	// get src and dest memory (so there's no need to use getPixel & setPixel)
 	Uint8* src = (Uint8*) getSurface()->pixels;
@@ -694,7 +696,11 @@ void Surface::blitNShade(Surface *surface, int x, int y, int off, bool half)
 			int pixel = src[src_y + ix];
 			if(pixel)
 			{
-				int baseColor = pixel>>4;
+				if (newBaseColor)
+					baseColor = newBaseColor - 1;
+				else
+					baseColor = pixel>>4;
+
 				int newShade = (pixel&15) + off;
 				if (newShade > 15) 
 				{

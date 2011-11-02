@@ -788,6 +788,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Battlescape\Camera.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\Camera.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Battlescape\DebriefingState.cpp"
 				>
 			</File>

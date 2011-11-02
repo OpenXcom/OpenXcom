@@ -81,6 +81,8 @@ public:
 	bool isBigWall() const;
 	/// Is a normal door.
 	bool isDoor() const;
+	/// Is a grav lift.
+	bool isGravLift() const;
 	/// Sets all kinds of flags.
 	void setFlags(bool isUfoDoor, bool stopLOS, bool isNoFloor, bool isBigWall, bool isGravLift, bool isDoor, bool blockFire, bool blockSmoke);
 	/// Get the amount of blockage of a certain type.

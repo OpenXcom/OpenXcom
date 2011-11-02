@@ -23,6 +23,7 @@
 #include "Pathfinding.h"
 #include "BattlescapeState.h"
 #include "Map.h"
+#include "Camera.h"
 #include "BattleAIState.h"
 #include "AggroBAIState.h"
 #include "../Engine/Game.h"
@@ -62,7 +63,6 @@ void UnitWalkBState::init()
 	_pf = _parent->getGame()->getSavedGame()->getBattleGame()->getPathfinding();
 	_terrain = _parent->getGame()->getSavedGame()->getBattleGame()->getTileEngine();
 	_target = _action.target;
-	_pf->calculate(_unit, _target);
 }
 
 void UnitWalkBState::think()
@@ -70,10 +70,10 @@ void UnitWalkBState::think()
 	bool unitspotted = false;
 
 	// during a walking cycle we make step sounds
-	if (_unit->getStatus() == STATUS_WALKING)
+	if (_unit->getStatus() == STATUS_WALKING || _unit->getStatus() == STATUS_FLYING)
 	{
 
-		if (_unit->getVisible())
+		if (_unit->getVisible() && _unit->getStatus() == STATUS_WALKING)
 		{
 			// play footstep sound 1
 			if (_unit->getWalkingPhase() == 3)
@@ -103,7 +103,7 @@ void UnitWalkBState::think()
 			_parent->getGame()->getSavedGame()->getBattleGame()->getTile(_unit->getLastPosition())->setUnit(0); //don't change these
 			_parent->getGame()->getSavedGame()->getBattleGame()->getTile(_unit->getPosition())->setUnit(_unit); //don't change these
 			// if the unit changed level, camera changes level with
-			_parent->getMap()->setViewHeight(_unit->getPosition().z);
+			_parent->getMap()->getCamera()->setViewHeight(_unit->getPosition().z);
 		}
 
 		// is the step finished?
@@ -156,7 +156,7 @@ void UnitWalkBState::think()
 		if (dir != -1)
 		{
 			Position destination;
-			int tu = _pf->getTUCost(_unit->getPosition(), dir, &destination, _unit);
+			int tu = _pf->getTUCost(_unit->getPosition(), dir, &destination, _unit); // gets tu cost, but also gets the destination position.
 
 			if (tu > _unit->getTimeUnits() && !_parent->dontSpendTUs())
 			{
@@ -173,7 +173,7 @@ void UnitWalkBState::think()
 
 			// we are looking in the wrong way, turn first
 			// we are not using the turn state, because turning during walking costs no tu
-			if (dir != _unit->getDirection()) 
+			if (dir != _unit->getDirection() && dir < Pathfinding::DIR_UP) 
 			{
 				_unit->lookAt(dir);
 				return;

@@ -21,6 +21,7 @@
 
 #include <string>
 #include "yaml.h"
+#include "MapData.h"
 
 namespace OpenXcom
 {
@@ -35,10 +36,12 @@ class RuleArmor
 private:
 	std::string _type, _spriteSheet, _corpseItem;
 	int _frontArmor, _sideArmor, _rearArmor, _underArmor, _drawingRoutine;
+	MovementType _movementType;
+	int _size;
 
 public:
 	/// Creates a blank armor ruleset.
-	RuleArmor(const std::string &type, std::string spriteSheet, int drawingRoutine);
+	RuleArmor(const std::string &type, std::string spriteSheet, int drawingRoutine, MovementType _movementType = MT_WALK, int size = 1);
 	/// Cleans up the armor ruleset.
 	~RuleArmor();
 	/// Loads armor data from YAML.
@@ -65,6 +68,10 @@ public:
 	std::string getCorpseItem() const;
 	/// Get the battlescape drawing routine ID.
 	int getDrawingRoutine() const;
+	/// Get whether the armor can fly.
+	MovementType getMovementType() const;
+	/// Get whether this is a normal or big unit.
+	int getSize() const;
 };
 
 }

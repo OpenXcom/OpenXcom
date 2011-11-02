@@ -48,6 +48,8 @@ private:
 public:
 	static const int CRAFTSEGMENT = 1000;
 	static const int UFOSEGMENT = 2000;
+	static const int TYPE_FLYING = 0x01;
+	static const int TYPE_SMALL = 0x02;
 	/// Creates a Node.
 	Node();
 	Node(int id, Position pos, int segment, int type, int rank, int flags, int reserved, int priority);
@@ -71,7 +73,8 @@ public:
 	const Position& getPosition() const;
 	/// Gets the node's segment.
 	int getSegment() const;
-
+	/// Gets the node's type.
+	int getType() const;
 };
 
 }

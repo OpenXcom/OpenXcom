@@ -29,6 +29,7 @@
 #include "../Interface/Text.h"
 #include "MiniMapView.h"
 #include "Map.h"
+#include "Camera.h"
 #include "../Engine/Timer.h"
 #include <sstream>
 
@@ -75,7 +76,7 @@ MiniMapState::MiniMapState (Game * game, Map * map, SavedBattleGame * battleGame
  */
 void MiniMapState::btnOkClick (Action * action)
 {
-	_map->centerOnPosition(_miniMapView->getCenter ());
+	_map->getCamera()->centerOnPosition(_miniMapView->getCenter ());
 	_game->popState();
 }
 

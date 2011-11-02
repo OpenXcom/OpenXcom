@@ -171,6 +171,12 @@ bool Projectile::calculateThrow(double accuracy)
 	Position originVoxel, targetVoxel;
 	bool foundCurve = false;
 
+	// object blocking - can't throw here
+	if (_save->getTile(_action.target) && _save->getTile(_action.target)->getMapData(MapData::O_OBJECT) && _save->getTile(_action.target)->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)
+	{
+		return false;
+	}
+
 	originVoxel = Position(_origin.x*16 + 8, _origin.y*16 + 8, _origin.z*24);
 	originVoxel.z += -_save->getTile(_origin)->getTerrainLevel();
 	BattleUnit *bu = _save->getTile(_origin)->getUnit();
@@ -180,6 +186,7 @@ bool Projectile::calculateThrow(double accuracy)
 	{
 		_origin.z++;
 	}
+
 
 	// determine the target voxel.
 	// aim at the center of the floor
@@ -216,6 +223,19 @@ bool Projectile::calculateThrow(double accuracy)
 	_trajectory.clear();
 	// finally do a line calculation and store this trajectory.
 	_save->getTileEngine()->calculateParabola(originVoxel, targetVoxel, true, &_trajectory, bu, curvature, 1.0 + deviation);
+
+	Position endPoint = _trajectory.at(_trajectory.size() - 1);
+	endPoint.x /= 16;
+	endPoint.y /= 16;
+	endPoint.z /= 24;
+	// check if the item would land on a tile with a blocking object, if so then we let it fly without deviation, it must land on a valid tile in that case
+	if (_save->getTile(endPoint) && _save->getTile(endPoint)->getMapData(MapData::O_OBJECT) && _save->getTile(endPoint)->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)
+	{
+		_trajectory.clear();
+		// finally do a line calculation and store this trajectory.
+		_save->getTileEngine()->calculateParabola(originVoxel, targetVoxel, true, &_trajectory, bu, curvature, 1.0);
+	}
+
 
 	return true;
 }

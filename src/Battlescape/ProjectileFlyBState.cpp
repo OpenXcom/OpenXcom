@@ -267,10 +267,6 @@ void ProjectileFlyBState::think()
 				{
 					_unit->aim(false);
 					_parent->getMap()->cacheUnits();
-					if (_parent->getMap()->didCameraFollow() && _parent->getGame()->getSavedGame()->getBattleGame()->getSide() == FACTION_PLAYER)
-					{
-						_parent->getMap()->centerOnPosition(_parent->getGame()->getSavedGame()->getBattleGame()->getSelectedUnit()->getPosition());
-					}
 				}
 			}
 

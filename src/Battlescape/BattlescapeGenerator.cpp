@@ -43,6 +43,7 @@
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/MapDataSet.h"
 #include "../Ruleset/MapData.h"
+#include "../Ruleset/RuleArmor.h"
 #include "../Resource/XcomResourcePack.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
@@ -313,7 +314,7 @@ void BattlescapeGenerator::run()
 	{
 		for (int i=0; i < 5; i++)
 		{
-			unit = addAlien(_game->getRuleset()->getAlien("FLOATER_SOLDIER"), _game->getRuleset()->getArmor("FLOATER_ARMOR0"), SCOUT);
+			unit = addAlien(_game->getRuleset()->getAlien("FLOATER_SOLDIER"), _game->getRuleset()->getArmor("FLOATER_ARMOR0"), SOLDIER);
 			addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL"), unit);
 			addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL_CLIP"), unit);
 		}
@@ -380,6 +381,8 @@ BattleUnit *BattlescapeGenerator::addAlien(RuleAlien *rules, RuleArmor *armor, N
 	bool bFound = false;
 	unit->setId(_unitCount++);
 	int lastSegment = -1;
+	int size = unit->getUnit()->getArmor()->getSize();
+	MovementType mt = unit->getUnit()->getArmor()->getMovementType();
 
 	// find a place to spawn, going from lowest priority to heighest
 	// some randomness is added
@@ -390,9 +393,12 @@ BattleUnit *BattlescapeGenerator::addAlien(RuleAlien *rules, RuleArmor *armor, N
 			node = *i;
 			if (node->getRank() == rank
 				&& node->getPriority() == priority
-				&& _save->selectUnit(node->getPosition()) == 0
 				&& (RNG::generate(0,2) == 1)
-				&& lastSegment != node->getSegment())
+				&& lastSegment != node->getSegment()
+				&& _save->selectUnit(node->getPosition()) == 0
+				&& ((node->getType() & Node::TYPE_FLYING) == 0 || mt == MT_FLY) // flying units can spawn everywhere, for others the flying-only flag needs to be 0
+				&& ((node->getType() & Node::TYPE_SMALL) == 0 || size == 1) // small units can spawn everywhere, for others the small-only flag needs to be 0
+				)
 			{
 				lastSegment = node->getSegment();
 				unit->setPosition(node->getPosition());
@@ -413,6 +419,30 @@ BattleUnit *BattlescapeGenerator::addAlien(RuleAlien *rules, RuleArmor *armor, N
 			if (node->getRank() == rank
 				&& node->getPriority() == priority
 				&& _save->selectUnit(node->getPosition()) == 0
+				&& ((node->getType() & Node::TYPE_FLYING) == 0 || mt == MT_FLY) // flying units can spawn everywhere, for others the flying-only flag needs to be 0
+				&& ((node->getType() & Node::TYPE_SMALL) == 0 || size == 1) // small units can spawn everywhere, for others the small-only flag needs to be 0
+				)
+			{
+				unit->setPosition(node->getPosition());
+				_save->getTile(node->getPosition())->setUnit(unit);
+				bFound = true;
+				unit->setAIState(new PatrolBAIState(_game->getSavedGame()->getBattleGame(), unit, node));
+				break;
+			}
+		}
+	}
+
+	// third try in case we still haven't found a place to spawn
+	// this time without rank
+	for (int priority = 1; priority <= 10 && !bFound; priority++)
+	{
+		for (std::vector<Node*>::iterator i = _save->getNodes()->begin(); i != _save->getNodes()->end() && !bFound; ++i)
+		{
+			node = *i;
+			if (node->getPriority() == priority
+				&& _save->selectUnit(node->getPosition()) == 0
+				&& ((node->getType() & Node::TYPE_FLYING) == 0 || mt == MT_FLY) // flying units can spawn everywhere, for others the flying-only flag needs to be 0
+				&& ((node->getType() & Node::TYPE_SMALL) == 0 || size == 1) // small units can spawn everywhere, for others the small-only flag needs to be 0
 				)
 			{
 				unit->setPosition(node->getPosition());
@@ -936,7 +966,7 @@ void BattlescapeGenerator::loadRMP(MapBlock *mapblock, int xoff, int yoff, int s
 
 	while (mapFile.read((char*)&value, sizeof(value)))
 	{
-		Node *node = new Node(nodeOffset + id, Position(xoff + (int)value[1], yoff + (int)value[0], mapblock->getHeight() - 1 - (int)value[2]), segment, (int)value[19], (int)value[20], (int)value[21], (int)value[22], (int)value[23]);
+		Node *node = new Node(nodeOffset + id, Position(xoff + (int)value[0], yoff + (int)value[1], mapblock->getHeight() - 1 - (int)value[2]), segment, (int)value[19], (int)value[20], (int)value[21], (int)value[22], (int)value[23]);
 		for (int j=0;j<5;++j)
 		{
 			int connectID = (int)((signed char)value[4 + j*3]);

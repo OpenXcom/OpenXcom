@@ -51,13 +51,16 @@ private:
 	bool canFallDown(Tile *destinationTile);
 	bool isOnStairs(const Position &startPosition, const Position &endPosition);
 	BattleUnit *_unit;
+	bool _pathPreviewed;
 public:
+	static const int DIR_UP = 8;
+	static const int DIR_DOWN = 9;
 	/// Creates a new Pathfinding class
 	Pathfinding(SavedBattleGame *save);
 	/// Cleans up the Pathfinding.
 	~Pathfinding();
 	/// Calculate the shortest path.
-	void calculate(BattleUnit *unit, Position &endPosition);
+	void calculate(BattleUnit *unit, Position endPosition);
 	/// Converts direction to a vector.
 	static void directionToVector(const int direction, Position *vector);
 	/// Check whether a path is ready gives the first direction.
@@ -68,6 +71,11 @@ public:
 	int getTUCost(const Position &startPosition, const int direction, Position *endPosition, BattleUnit *unit);
 	/// Abort the current path.
 	void abortPath();
+	bool validateUpDown(BattleUnit *bu, Position startPosition, const int direction);
+	bool previewPath(bool bRemove = false);
+	bool removePreview();
+	bool bresenhamPath(const Position& origin, const Position& target);
+
 };
 
 }

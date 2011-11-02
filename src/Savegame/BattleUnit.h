@@ -38,7 +38,7 @@ class Node;
 class Surface;
 class RuleInventory;
 
-enum UnitStatus {STATUS_STANDING, STATUS_WALKING, STATUS_TURNING, STATUS_AIMING, STATUS_FALLING, STATUS_DEAD, STATUS_UNCONSCIOUS, STATUS_PANICKING, STATUS_BERSERK};
+enum UnitStatus {STATUS_STANDING, STATUS_WALKING, STATUS_FLYING, STATUS_TURNING, STATUS_AIMING, STATUS_FALLING, STATUS_DEAD, STATUS_UNCONSCIOUS, STATUS_PANICKING, STATUS_BERSERK};
 enum UnitFaction {FACTION_PLAYER, FACTION_HOSTILE, FACTION_NEUTRAL};
 enum UnitSide {SIDE_FRONT, SIDE_LEFT, SIDE_RIGHT, SIDE_REAR, SIDE_UNDER};
 enum UnitBodyPart {BODYPART_HEAD, BODYPART_TORSO, BODYPART_RIGHTARM, BODYPART_LEFTARM, BODYPART_RIGHTLEG, BODYPART_LEFTLEG};
@@ -57,6 +57,7 @@ private:
 	Tile *_tile;
 	Position _lastPos;
 	int _direction, _toDirection;
+	int _verticalDirection;
 	Position _destination;
 	UnitStatus _status;
 	int _walkPhase, _fallPhase;
@@ -99,6 +100,8 @@ public:
 	void setDirection(int direction);
 	/// Gets the unit's direction.
 	int getDirection() const;
+	/// Gets the unit's vertical direction.
+	int getVerticalDirection() const;
 	/// Gets the unit's status.
 	UnitStatus getStatus() const;
 	/// Start the walkingPhase

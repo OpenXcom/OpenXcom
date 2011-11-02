@@ -20,6 +20,7 @@
 #include <cmath>
 #include <sstream>
 #include "Map.h"
+#include "Camera.h"
 #include "BattlescapeState.h"
 #include "NextTurnState.h"
 #include "AbortMissionState.h"
@@ -35,6 +36,7 @@
 #include "InventoryState.h"
 #include "AggroBAIState.h"
 #include "PatrolBAIState.h"
+#include "Pathfinding.h"
 #include "../Engine/Game.h"
 #include "../Engine/Music.h"
 #include "../Engine/Language.h"
@@ -293,7 +295,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_txtDebug->setHighContrast(true);
 
 	updateSoldierInfo();
-	_map->centerOnPosition(_battleGame->getSelectedUnit()->getPosition());
+	_map->getCamera()->centerOnPosition(_battleGame->getSelectedUnit()->getPosition());
 
 	_btnReserveNone->copy(_icons);
 	_btnReserveNone->setColor(Palette::blockOffset(4)+3);
@@ -425,6 +427,7 @@ void BattlescapeState::handleAI(BattleUnit *unit)
 	unit->think(&_action);
 	if (_action.type == BA_WALK)
 	{
+		_battleGame->getPathfinding()->calculate(_action.actor, _action.target);
 		statePushBack(new UnitWalkBState(this, _action));
 	}
 
@@ -455,7 +458,7 @@ void BattlescapeState::handleAI(BattleUnit *unit)
 		}
 		if (_battleGame->getSelectedUnit())
 		{
-			_map->centerOnPosition(_battleGame->getSelectedUnit()->getPosition());
+			_map->getCamera()->centerOnPosition(_battleGame->getSelectedUnit()->getPosition());
 		}
 	}
 }
@@ -467,9 +470,14 @@ void BattlescapeState::handleAI(BattleUnit *unit)
  */
 void BattlescapeState::mapClick(Action *action)
 {
+	bool bPreviewed = Options::getBool("battlePreviewPath");
+
 	// right-click aborts walking state
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
+		if (_battleGame->getPathfinding()->removePreview() && bPreviewed)
+			return;
+
 		if (_states.empty())
 		{
 			if (_action.targeting)
@@ -530,11 +538,27 @@ void BattlescapeState::mapClick(Action *action)
 			}
 			else if (playableUnitSelected())
 			{
-			//  -= start walking =-
+				if (_action.target != pos && bPreviewed)
+					_battleGame->getPathfinding()->removePreview();
 				_action.target = pos;
-				_map->setCursorType(CT_NONE);
-				_game->getCursor()->setVisible(false);
-				statePushBack(new UnitWalkBState(this, _action));
+				_battleGame->getPathfinding()->calculate(_action.actor, _action.target);
+				if (bPreviewed && !_battleGame->getPathfinding()->previewPath())
+				{
+					_battleGame->getPathfinding()->removePreview();
+					bPreviewed = false;
+				}
+
+				if (!bPreviewed)
+				{
+					//  -= start walking =-
+					_map->setCursorType(CT_NONE);
+					_game->getCursor()->setVisible(false);
+					if (_battleGame->getSelectedUnit()->isKneeled())
+					{
+						kneel(_battleGame->getSelectedUnit());
+					}
+					statePushBack(new UnitWalkBState(this, _action));
+				}
 			}
 		}
 	}
@@ -553,10 +577,19 @@ void BattlescapeState::mapClick(Action *action)
  */
 void BattlescapeState::btnUnitUpClick(Action *action)
 {
-	/*Pathfinding *pf = _battleGame->getPathfinding();
-	Position start = _battleGame->getSelectedUnit()->getPosition();
-	Position end = start + Position(0, 0, +1);
-	pf->calculate(_battleGame->getSelectedUnit(), end);*/
+	if (playableUnitSelected() && _battleGame->getPathfinding()->validateUpDown(_battleGame->getSelectedUnit(), _battleGame->getSelectedUnit()->getPosition(), Pathfinding::DIR_UP)) 
+	{
+		_action.target = _battleGame->getSelectedUnit()->getPosition();
+		_action.target.z++;
+		_map->setCursorType(CT_NONE);
+		_game->getCursor()->setVisible(false);
+		if (_battleGame->getSelectedUnit()->isKneeled())
+		{
+			kneel(_battleGame->getSelectedUnit());
+		}
+		_battleGame->getPathfinding()->calculate(_action.actor, _action.target);
+		statePushBack(new UnitWalkBState(this, _action));
+	}
 }
 
 /**
@@ -565,10 +598,20 @@ void BattlescapeState::btnUnitUpClick(Action *action)
  */
 void BattlescapeState::btnUnitDownClick(Action *action)
 {
-	/*Pathfinding *pf = _battleGame->getPathfinding();
-	Position start = _battleGame->getSelectedUnit()->getPosition();
-	Position end = start + Position(0, 0, -1);
-	pf->calculate((BattleUnit*)_battleGame->getSelectedUnit(), end);*/
+	if (playableUnitSelected() && _battleGame->getPathfinding()->validateUpDown(_battleGame->getSelectedUnit(), _battleGame->getSelectedUnit()->getPosition(), Pathfinding::DIR_DOWN))
+	{
+	//  -= start walking =-
+		_action.target = _battleGame->getSelectedUnit()->getPosition();
+		_action.target.z--;
+		_map->setCursorType(CT_NONE);
+		_game->getCursor()->setVisible(false);
+		if (_battleGame->getSelectedUnit()->isKneeled())
+		{
+			kneel(_battleGame->getSelectedUnit());
+		}
+		_battleGame->getPathfinding()->calculate(_action.actor, _action.target);
+		statePushBack(new UnitWalkBState(this, _action));
+	}
 }
 
 /**
@@ -577,7 +620,7 @@ void BattlescapeState::btnUnitDownClick(Action *action)
  */
 void BattlescapeState::btnMapUpClick(Action *action)
 {
-	_map->up();
+	_map->getCamera()->up();
 }
 
 /**
@@ -586,7 +629,7 @@ void BattlescapeState::btnMapUpClick(Action *action)
  */
 void BattlescapeState::btnMapDownClick(Action *action)
 {
-	_map->down();
+	_map->getCamera()->down();
 }
 
 /**
@@ -608,8 +651,20 @@ void BattlescapeState::btnKneelClick(Action *action)
 	BattleUnit *bu = _battleGame->getSelectedUnit();
 	if (bu)
 	{
-		int tu = bu->isKneeled()?8:4;
-		if (checkReservedTU(bu, tu) && bu->spendTimeUnits(tu, _battleGame->getDebugMode()))
+		kneel(bu);
+	}
+}
+
+/**
+ * Kneel/Standup.
+ * @param bu Pointer to a unit.
+ */
+void BattlescapeState::kneel(BattleUnit *bu)
+{
+	int tu = bu->isKneeled()?8:4;
+	if (checkReservedTU(bu, tu))
+	{
+		if (bu->spendTimeUnits(tu, _battleGame->getDebugMode()))
 		{
 			bu->kneel(!bu->isKneeled());
 			// kneeling or standing up can reveil new terrain or units. I guess.
@@ -622,9 +677,12 @@ void BattlescapeState::btnKneelClick(Action *action)
 				statePushBack(new ProjectileFlyBState(this, action));
 			}
 		}
+		else
+		{
+			_warning->showMessage(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS"));
+		}
 	}
 }
-
 /**
  * Go to soldier info screen.
  * @param action Pointer to an action.
@@ -645,7 +703,7 @@ void BattlescapeState::btnCenterClick(Action *action)
 {
 	if (playableUnitSelected())
 	{
-		_map->centerOnPosition(_battleGame->getSelectedUnit()->getPosition());
+		_map->getCamera()->centerOnPosition(_battleGame->getSelectedUnit()->getPosition());
 	}
 }
 
@@ -675,7 +733,7 @@ void BattlescapeState::selectNextPlayerUnit(bool checkReselect)
 {
 	BattleUnit *unit = _battleGame->selectNextPlayerUnit(checkReselect);
 	updateSoldierInfo();
-	if (unit) _map->centerOnPosition(unit->getPosition());
+	if (unit) _map->getCamera()->centerOnPosition(unit->getPosition());
 	_action.targeting = false;
 	_action.type = BA_NONE;
 	setupCursor();
@@ -706,6 +764,8 @@ void BattlescapeState::btnHelpClick(Action *action)
  */
 void BattlescapeState::btnEndTurnClick(Action *action)
 {
+	_action.targeting = false;
+	_action.type = BA_NONE;
 	statePushBack(0);
 }
 
@@ -798,7 +858,7 @@ void BattlescapeState::endTurn()
 
 	if (playableUnitSelected())
 	{
-		_map->centerOnPosition(_battleGame->getSelectedUnit()->getPosition());
+		_map->getCamera()->centerOnPosition(_battleGame->getSelectedUnit()->getPosition());
 	}
 
 	_game->pushState(new NextTurnState(_game, _battleGame, this));
@@ -947,7 +1007,7 @@ void BattlescapeState::btnVisibleUnitClick(Action *action)
 
 	if (btnID != -1)
 	{
-		_map->centerOnPosition(_visibleUnit[btnID]->getPosition());
+		_map->getCamera()->centerOnPosition(_visibleUnit[btnID]->getPosition());
 	}
 
 	action->getDetails()->type = SDL_NOEVENT; // consume the event
@@ -1338,7 +1398,7 @@ void BattlescapeState::popState()
 			}
 			if (_battleGame->getSelectedUnit())
 			{
-				_map->centerOnPosition(_battleGame->getSelectedUnit()->getPosition());
+				_map->getCamera()->centerOnPosition(_battleGame->getSelectedUnit()->getPosition());
 			}
 		}
 	}
@@ -1523,7 +1583,7 @@ bool BattlescapeState::handlePanickingUnit(BattleUnit *unit)
 	UnitStatus status = unit->getStatus();
 	if (status != STATUS_PANICKING && status != STATUS_BERSERK) return false;
 	unit->setVisible(true);
-	_map->centerOnPosition(unit->getPosition());
+	_map->getCamera()->centerOnPosition(unit->getPosition());
 
 	std::wstringstream ss;
 	ss << unit->getUnit()->getName(_game->getLanguage()) << L'\n' << _game->getLanguage()->getString(status==STATUS_PANICKING?"STR_HAS_PANICKED":"STR_HAS_GONE_BERSERK");
@@ -1552,6 +1612,7 @@ bool BattlescapeState::handlePanickingUnit(BattleUnit *unit)
 			unit->setCache(0);
 			_action.actor = unit;
 			_action.target = Position(unit->getPosition().x + RNG::generate(-5,5), unit->getPosition().y + RNG::generate(-5,5), unit->getPosition().z);
+			_battleGame->getPathfinding()->calculate(_action.actor, _action.target);
 			statePushBack(new UnitWalkBState(this, _action));
 		}
 		break;

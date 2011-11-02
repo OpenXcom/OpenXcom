@@ -34,7 +34,7 @@ namespace OpenXcom
 * constructor
 * @param pos Position.
 */
-Tile::Tile(const Position& pos): _smoke(0), _fire(0),  _explosive(0), _pos(pos), _unit(0), _animationOffset(0)
+Tile::Tile(const Position& pos): _smoke(0), _fire(0),  _explosive(0), _pos(pos), _unit(0), _animationOffset(0), _markerColor(0)
 {
 	for (int i = 0; i < 4; ++i)
 	{
@@ -713,6 +713,24 @@ void Tile::prepareNewTurn()
 std::vector<BattleItem *> *Tile::getInventory()
 {
 	return &_inventory;
+}
+
+/**
+ * Set the marker color on this tile.
+ * @param color
+ */
+void Tile::setMarkerColor(int color)
+{
+	_markerColor = color;
+}
+
+/**
+ * Get the marker color on this tile.
+ * @return color
+ */
+int Tile::getMarkerColor()
+{
+	return _markerColor;
 }
 
 }
