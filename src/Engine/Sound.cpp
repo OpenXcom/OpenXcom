@@ -20,6 +20,7 @@
 #include <iostream>
 #include "SDL.h"
 #include "Exception.h"
+#include "Options.h"
 
 namespace OpenXcom
 {
@@ -72,7 +73,7 @@ void Sound::load(const void *data, unsigned int size)
  */
 void Sound::play() const
 {
-	if (_sound != 0 && Mix_PlayChannel(-1, _sound, 0) == -1)
+	if (!Options::getBool("mute") && _sound != 0 && Mix_PlayChannel(-1, _sound, 0) == -1)
 	{
 		std::cerr << Mix_GetError() << std::endl;
 	}

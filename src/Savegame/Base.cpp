@@ -417,16 +417,7 @@ int Base::getTotalSoldiers() const
  */
 int Base::getAvailableScientists() const
 {
-	int nbFreeScientist = getScientists();
-	const std::vector<ResearchProject *> & researchs (getResearch());
-	for (std::vector<ResearchProject *>::const_iterator itResearch = researchs.begin ();
-	     itResearch != researchs.end ();
-	     itResearch++)
-	{
-		nbFreeScientist -= (*itResearch)->getAssigned ();
-	}
-       
-	return nbFreeScientist;
+	return getScientists();
 }
 
 /**
@@ -444,6 +435,13 @@ int Base::getTotalScientists() const
 			total += (*i)->getQuantity();
 		}
 	}
+	const std::vector<ResearchProject *> & researchs (getResearch());
+	for (std::vector<ResearchProject *>::const_iterator itResearch = researchs.begin ();
+	     itResearch != researchs.end ();
+	     itResearch++)
+	{
+		total += (*itResearch)->getAssigned ();
+	}
 	return total;
 }
 
@@ -454,12 +452,7 @@ int Base::getTotalScientists() const
  */
 int Base::getAvailableEngineers() const
 {
-	int available = _engineers;
-	for (std::vector<Production *>::const_iterator iter = _productions.begin (); iter != _productions.end (); ++iter)
-	{
-		available -= (*iter)->getAssignedEngineers();
-	}
-	return available;
+	return getEngineers();
 }
 
 /**
@@ -476,6 +469,10 @@ int Base::getTotalEngineers() const
 		{
 			total += (*i)->getQuantity();
 		}
+	}
+	for (std::vector<Production *>::const_iterator iter = _productions.begin (); iter != _productions.end (); ++iter)
+	{
+		total += (*iter)->getAssignedEngineers();
 	}
 	return total;
 }
@@ -654,6 +651,55 @@ int Base::getAvailableHangars() const
 }
 
 /**
+ * Return laboratories space not used by a ResearchProject
+ * @return laboratories space not used by a ResearchProject
+*/
+int Base::getFreeLaboratories () const
+{
+	return getAvailableLaboratories() - getUsedLaboratories();
+}
+
+/**
+ * Return workshop space not used by a Production
+ * @return workshop space not used by a Production
+*/
+int Base::getFreeWorkshops () const
+{
+	return getAvailableWorkshops() - getUsedWorkshops();
+}
+
+/**
+ * Returns the amount of scientists currently in use.
+ * @return Amount of scientists.
+*/
+int Base::getAllocatedScientists() const
+{
+	int total = 0;
+	const std::vector<ResearchProject *> & researchs (getResearch());
+	for (std::vector<ResearchProject *>::const_iterator itResearch = researchs.begin ();
+	     itResearch != researchs.end ();
+	     itResearch++)
+	{
+		total += (*itResearch)->getAssigned ();
+	}
+	return total;
+}
+
+/**
+ * Returns the amount of engineers currently in use.
+ * @return Amount of engineers.
+*/
+int Base::getAllocatedEngineers() const
+{
+	int total = 0;
+	for (std::vector<Production *>::const_iterator iter = _productions.begin (); iter != _productions.end (); ++iter)
+	{
+		total += (*iter)->getAssignedEngineers();
+	}
+	return total;
+}
+
+/**
  * Returns the total defence value of all
  * the facilities in the base.
  * @return Defence value.
@@ -816,30 +862,12 @@ void Base::addResearch(ResearchProject * project)
 */
 void Base::removeResearch(ResearchProject * project)
 {
+	_scientists += project->getAssigned();
 	std::vector<ResearchProject *>::iterator iter = std::find (_research.begin (), _research.end (), project);
-	if(iter == _research.end ())
+	if(iter != _research.end ())
 	{
-		return ;
+		_research.erase(iter);
 	}
-	_research.erase(iter);
-}
-
-/**
- * Return the number of scientist not assigned to a ResearchProject
- * @return the number of scientist not assigned to a ResearchProject
-*/
-int Base::getFreeScientist () const
-{
-	return getScientists() - getUsedLaboratories();
-}
-
-/**
- * Return laboratories space not used by a ResearchProject
- * @return laboratories space not used by a ResearchProject
-*/
-int Base::getFreeLaboratories () const
-{
-	return getAvailableLaboratories() - getUsedLaboratories();
 }
 
 /**
@@ -848,12 +876,12 @@ int Base::getFreeLaboratories () const
 */
 void Base::removeProduction (Production * p)
 {
+	_engineers += p->getAssignedEngineers();
 	std::vector<Production *>::iterator iter = std::find (_productions.begin (), _productions.end (), p);
 	if (iter == _productions.end ())
 	{
-		return;
+		_productions.erase(iter);
 	}
-	_productions.erase(iter);
 }
 
 /**
@@ -865,19 +893,4 @@ const std::vector<Production *> & Base::getProductions () const
 	return _productions;
 }
 
-/**
- * Get the count of free engineers(not assigned to a Production)
- * @return the count of free engineers
- */
-int Base::getFreeEngineers () const
-{
-	int freeEngineers = getEngineers();
-	const std::vector<Production *> & productions (getProductions());
-	for (std::vector<Production *>::const_iterator itProduction = productions.begin (); itProduction != productions.end (); ++itProduction)
-	{
-		freeEngineers -= (*itProduction)->getAssignedEngineers ();
-	}
-
-	return freeEngineers;
-}
 }

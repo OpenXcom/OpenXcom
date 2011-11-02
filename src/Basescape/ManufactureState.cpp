@@ -211,10 +211,10 @@ void ManufactureState::fillProductionList()
 	ss << _game->getLanguage()->getString("STR_ENGINEERS_AVAILABLE") << L'\x01' << _base->getAvailableEngineers();
 	_txtAvailable->setText(ss.str());
 	std::wstringstream ss2;
-	ss2 << _game->getLanguage()->getString("STR_ENGINEERS_ALLOCATED") << L'\x01' << (_base->getTotalEngineers() - _base->getAvailableEngineers());
+	ss2 << _game->getLanguage()->getString("STR_ENGINEERS_ALLOCATED") << L'\x01' << _base->getAllocatedEngineers();
 	_txtAllocated->setText(ss2.str());
 	std::wstringstream ss3;
-	ss3 << _game->getLanguage()->getString("STR_WORKSHOP_SPACE_AVAILABLE") << L'\x01' << _base->getAvailableWorkshops() - _base->getUsedWorkshops();
+	ss3 << _game->getLanguage()->getString("STR_WORKSHOP_SPACE_AVAILABLE") << L'\x01' << _base->getFreeWorkshops();
 	_txtSpace->setText(ss3.str());
 }
 

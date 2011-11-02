@@ -226,8 +226,8 @@ void ProductionState::exitState()
  */
 void ProductionState::setAssignedEngineer()
 {
-	int availableEngineer = _base->getFreeEngineers();
-	int availableWorkSpace = _base->getAvailableWorkshops() - _base->getUsedWorkshops();
+	int availableEngineer = _base->getAvailableEngineers();
+	int availableWorkSpace = _base->getFreeWorkshops();
 	std::wstringstream s1;
 	s1 << _game->getLanguage()->getString("STR_ENGINEERS_AVAILABLE_UC") << L"\x01" << availableEngineer;
 	_txtAvailableEngineer->setText(s1.str());
@@ -320,11 +320,12 @@ void ProductionState::lessUnitRelease(Action * action)
 void ProductionState::onMoreEngineer()
 {
 	int assigned = _production->getAssignedEngineers();
-	int availableEngineer = _base->getFreeEngineers();
-	int availableWorkSpace = _base->getAvailableWorkshops() - _base->getUsedWorkshops();
+	int availableEngineer = _base->getAvailableEngineers();
+	int availableWorkSpace = _base->getFreeWorkshops();
 	if (availableEngineer > 0 && availableWorkSpace > 0)
 	{
 		_production->setAssignedEngineers(++assigned);
+		_base->setEngineers(_base->getEngineers()-1);
 		setAssignedEngineer();
 	}
 }
@@ -338,6 +339,7 @@ void ProductionState::onLessEngineer()
 	if(assigned > 0)
 	{
 		_production->setAssignedEngineers(--assigned);
+		_base->setEngineers(_base->getEngineers()+1);
 		setAssignedEngineer();
 	}
 }

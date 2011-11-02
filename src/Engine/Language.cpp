@@ -173,7 +173,7 @@ std::vector<std::string> Language::getList(TextList *list)
 {
 	std::vector<std::string> langs = CrossPlatform::getFolderContents(Options::getDataFolder() + "Language/", "lng");
 
-	for (std::vector<std::string>::iterator i = langs.begin(); i != langs.end(); ++i)
+	for (std::vector<std::string>::iterator i = langs.begin(); i != langs.end();)
 	{
 		std::string file = (*i);
 		std::string fullname = Options::getDataFolder() + "Language/" + file;
@@ -200,6 +200,7 @@ std::vector<std::string> Language::getList(TextList *list)
 			fin.close();
 			list->addRow(1, Language::utf8ToWstr(langname).c_str());
 			(*i) = file.substr(0, file.length()-4);
+			++i;
 		}
 		catch (Exception &e)
 		{

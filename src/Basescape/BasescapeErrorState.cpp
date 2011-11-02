@@ -32,9 +32,10 @@ namespace OpenXcom
 /**
  * Initializes all the elements in a Basescape error window.
  * @param game Pointer to the core game.
- * @param str Error message to display.
+ * @param msg Error message to display.
+ * @param bg Background to display.
  */
-BasescapeErrorState::BasescapeErrorState(Game *game, std::string str) : State(game)
+BasescapeErrorState::BasescapeErrorState(Game *game, const std::string &msg, const std::string &bg) : State(game)
 {
 	_screen = false;
 
@@ -52,7 +53,7 @@ BasescapeErrorState::BasescapeErrorState(Game *game, std::string str) : State(ga
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)+1);
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
+	_window->setBackground(_game->getResourcePack()->getSurface(bg));
 
 	_btnOk->setColor(Palette::blockOffset(15)+1);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
@@ -63,7 +64,7 @@ BasescapeErrorState::BasescapeErrorState(Game *game, std::string str) : State(ga
 	_txtError->setVerticalAlign(ALIGN_MIDDLE);
 	_txtError->setBig();
 	_txtError->setWordWrap(true);
-	_txtError->setText(_game->getLanguage()->getString(str));
+	_txtError->setText(_game->getLanguage()->getString(msg));
 }
 
 /**

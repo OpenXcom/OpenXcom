@@ -28,6 +28,7 @@
 #include "../Engine/Music.h"
 #include "../Engine/GMCat.h"
 #include "../Engine/SoundSet.h"
+#include "../Engine/Options.h"
 #include "../Geoscape/Globe.h"
 #include "../Geoscape/Polygon.h"
 #include "../Geoscape/Polyline.h"
@@ -271,113 +272,116 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 	}
 	_polylines.push_back(l);
 
-	// Load musics
-	std::string mus[] = {"GMDEFEND",
-						 "GMENBASE",
-						 "GMGEO1",
-						 "GMGEO2",
-						 "GMINTER",
-						 "GMINTRO1",
-						 "GMINTRO2",
-						 "GMINTRO3",
-						 "GMLOSE",
-						 "GMMARS",
-						 "GMNEWMAR",
-						 "GMSTORY",
-						 "GMTACTIC",
-						 "GMWIN"};
-	std::string exts[] = {"ogg", "mp3", "mid"};
-	int tracks[] = {3, 6, 0, 18, 2, 19, 20, 21, 10, 9, 8, 12, 17, 11};
-
-	// Check which music version is available
-	bool cat = true;
-	GMCatFile *gmcat = 0;
-
-	std::string musDos = "SOUND/GM.CAT";
-	struct stat musInfo;
-	if (stat(CrossPlatform::getDataFile(musDos).c_str(), &musInfo) == 0)
+	if (!Options::getBool("mute"))
 	{
-		cat = true;
-		gmcat = new GMCatFile(CrossPlatform::getDataFile(musDos).c_str());
-	}
-	else
-	{
-		cat = false;
-	}
+		// Load musics
+		std::string mus[] = {"GMDEFEND",
+							 "GMENBASE",
+							 "GMGEO1",
+							 "GMGEO2",
+							 "GMINTER",
+							 "GMINTRO1",
+							 "GMINTRO2",
+							 "GMINTRO3",
+							 "GMLOSE",
+							 "GMMARS",
+							 "GMNEWMAR",
+							 "GMSTORY",
+							 "GMTACTIC",
+							 "GMWIN"};
+		std::string exts[] = {"ogg", "mp3", "mid"};
+		int tracks[] = {3, 6, 0, 18, 2, 19, 20, 21, 10, 9, 8, 12, 17, 11};
 
-	for (int i = 0; i < 14; ++i)
-	{
-		if (cat)
+		// Check which music version is available
+		bool cat = true;
+		GMCatFile *gmcat = 0;
+
+		std::string musDos = "SOUND/GM.CAT";
+		struct stat musInfo;
+		if (stat(CrossPlatform::getDataFile(musDos).c_str(), &musInfo) == 0)
 		{
-			_musics[mus[i]] = gmcat->loadMIDI(tracks[i]);
+			cat = true;
+			gmcat = new GMCatFile(CrossPlatform::getDataFile(musDos).c_str());
 		}
 		else
 		{
-			_musics[mus[i]] = new Music();
-			for (int j = 0; j < 3; ++j)
+			cat = false;
+		}
+
+		for (int i = 0; i < 14; ++i)
+		{
+			if (cat)
 			{
-				std::stringstream s;
-				s << "SOUND/" << mus[i] << "." << exts[j];
-				struct stat info;
-				if (stat(CrossPlatform::getDataFile(s.str()).c_str(), &info) == 0) 
+				_musics[mus[i]] = gmcat->loadMIDI(tracks[i]);
+			}
+			else
+			{
+				_musics[mus[i]] = new Music();
+				for (int j = 0; j < 3; ++j)
 				{
-					_musics[mus[i]]->load(CrossPlatform::getDataFile(s.str()));
-					break;
+					std::stringstream s;
+					s << "SOUND/" << mus[i] << "." << exts[j];
+					struct stat info;
+					if (stat(CrossPlatform::getDataFile(s.str()).c_str(), &info) == 0) 
+					{
+						_musics[mus[i]]->load(CrossPlatform::getDataFile(s.str()));
+						break;
+					}
 				}
 			}
 		}
-	}
-	delete gmcat;
+		delete gmcat;
 
-	// Load sounds
-	std::string catsId[] = {"GEO.CAT",
-							"BATTLE.CAT",
-							"INTRO.CAT"};
-	std::string catsDos[] = {"SOUND2.CAT",
-							 "SOUND1.CAT",
-							 "INTRO.CAT"};
-	std::string catsWin[] = {"SAMPLE.CAT",
-							 "SAMPLE2.CAT",
-							 "SAMPLE3.CAT"};
+		// Load sounds
+		std::string catsId[] = {"GEO.CAT",
+								"BATTLE.CAT",
+								"INTRO.CAT"};
+		std::string catsDos[] = {"SOUND2.CAT",
+								 "SOUND1.CAT",
+								 "INTRO.CAT"};
+		std::string catsWin[] = {"SAMPLE.CAT",
+								 "SAMPLE2.CAT",
+								 "SAMPLE3.CAT"};
 
-	// Check which sound version is available
-	std::string *cats = 0;
-	bool wav = true;
+		// Check which sound version is available
+		std::string *cats = 0;
+		bool wav = true;
 
-	std::stringstream win, dos;
-	win << "SOUND/" << catsWin[0];
-	dos << "SOUND/" << catsDos[0];
-	struct stat sndInfo;
-	if (stat(CrossPlatform::getDataFile(win.str()).c_str(), &sndInfo) == 0)
-	{
-		cats = catsWin;
-		wav = true;
-	}
-	else if (stat(CrossPlatform::getDataFile(dos.str()).c_str(), &sndInfo) == 0)
-	{
-		cats = catsDos;
-		wav = false;
-	}
-
-	for (int i = 0; i < 3; ++i)
-	{
-		if (cats == 0)
+		std::stringstream win, dos;
+		win << "SOUND/" << catsWin[0];
+		dos << "SOUND/" << catsDos[0];
+		struct stat sndInfo;
+		if (stat(CrossPlatform::getDataFile(win.str()).c_str(), &sndInfo) == 0)
 		{
-			_sounds[catsId[i]] = new SoundSet();
+			cats = catsWin;
+			wav = true;
 		}
-		else
+		else if (stat(CrossPlatform::getDataFile(dos.str()).c_str(), &sndInfo) == 0)
 		{
-			std::stringstream s;
-			s << "SOUND/" << cats[i];
-			_sounds[catsId[i]] = new SoundSet();
-			_sounds[catsId[i]]->loadCat(CrossPlatform::getDataFile(s.str()), wav);
+			cats = catsDos;
+			wav = false;
 		}
-	}
 
-	TextButton::soundPress = _sounds["GEO.CAT"]->getSound(0);
-	Window::soundPopup[0] = _sounds["GEO.CAT"]->getSound(1);
-	Window::soundPopup[1] = _sounds["GEO.CAT"]->getSound(2);
-	Window::soundPopup[2] = _sounds["GEO.CAT"]->getSound(3);
+		for (int i = 0; i < 3; ++i)
+		{
+			if (cats == 0)
+			{
+				_sounds[catsId[i]] = new SoundSet();
+			}
+			else
+			{
+				std::stringstream s;
+				s << "SOUND/" << cats[i];
+				_sounds[catsId[i]] = new SoundSet();
+				_sounds[catsId[i]]->loadCat(CrossPlatform::getDataFile(s.str()), wav);
+			}
+		}
+
+		TextButton::soundPress = _sounds["GEO.CAT"]->getSound(0);
+		Window::soundPopup[0] = _sounds["GEO.CAT"]->getSound(1);
+		Window::soundPopup[1] = _sounds["GEO.CAT"]->getSound(2);
+		Window::soundPopup[2] = _sounds["GEO.CAT"]->getSound(3);
+	}
 
 	loadBattlescapeResources(); // TODO load this at battlescape start, unload at battlescape end?
 }

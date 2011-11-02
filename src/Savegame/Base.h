@@ -121,6 +121,14 @@ public:
 	int getUsedHangars() const;
 	/// Gets the base's available hangars.
 	int getAvailableHangars() const;
+	/// Get the number of available space lab (not used by a ResearchProject)
+	int getFreeLaboratories () const;
+	/// Get the number of available space lab (not used by a Production)
+	int getFreeWorkshops () const;
+
+	int getAllocatedScientists() const;
+
+	int getAllocatedEngineers() const;
 	/// Gets the base's defence value.
 	int getDefenceValue() const;
 	/// Gets the base's short range detection.
@@ -143,18 +151,12 @@ public:
 	void addResearch(ResearchProject *);
 	/// Remove a ResearchProject from the Base
 	void removeResearch(ResearchProject *);
-	/// Get the number of available scientist.
-	int getFreeScientist () const;
-	/// Get the number of available space lab(not used by a ResearchProject)
-	int getFreeLaboratories () const;
 	/// Add a new Production to Base
 	void addProduction (Production * p);
 	/// Remove a Base Production's
 	void removeProduction (Production * p);
 	/// Get the list of Base Production's
 	const std::vector<Production *> & getProductions () const;
-	/// Get the count of free engineers
-	int getFreeEngineers () const;
 };
 
 }

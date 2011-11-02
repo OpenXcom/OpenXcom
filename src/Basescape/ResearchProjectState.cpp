@@ -166,7 +166,7 @@ void ResearchProjectState::btnOkClick(Action *action)
 void ResearchProjectState::SetAssignedScientist()
 {
 	std::wstringstream s1;
-	s1 << _game->getLanguage()->getString("STR_SCIENTISTS_AVAILABLE_UC") << L'\x01' << _base->getFreeScientist();
+	s1 << _game->getLanguage()->getString("STR_SCIENTISTS_AVAILABLE_UC") << L'\x01' << _base->getAvailableScientists();
 	std::wstringstream s2;
 	s2 << _game->getLanguage()->getString("STR_LABORATORY_SPACE_AVAILABLE_UC") << L'\x01' << _base->getFreeLaboratories();
 	std::wstringstream s3;
@@ -218,11 +218,12 @@ void ResearchProjectState::lessRelease(Action *action)
 void ResearchProjectState::more()
 {
 	int assigned = _project->getAssigned ();
-	int freeScientist = _base->getFreeScientist();
+	int freeScientist = _base->getAvailableScientists();
 	int freeSpaceLab = _base->getFreeLaboratories();
 	if(freeScientist > 0 && freeSpaceLab > 0)
 	{
 		_project->setAssigned(++assigned);
+		_base->setScientists(_base->getScientists()-1);
 		SetAssignedScientist();
 	}
 }
@@ -236,6 +237,7 @@ void ResearchProjectState::less()
 	if (assigned > 0)
 	{
 		_project->setAssigned(--assigned);
+		_base->setScientists(_base->getScientists()+1);
 		SetAssignedScientist();
 	}
 }

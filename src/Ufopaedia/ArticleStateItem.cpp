@@ -94,7 +94,7 @@ namespace OpenXcom
 			_lstInfo = new TextList(204, 55, 8, 82);
 			add(_lstInfo);
 			
-			_lstInfo->setColor(Palette::blockOffset(15)-2); // color for %-data!
+			_lstInfo->setColor(Palette::blockOffset(15)+4); // color for %-data!
 			_lstInfo->setColumns(3, 100, 52, 52);
 			_lstInfo->setBig();
 			
@@ -151,12 +151,12 @@ namespace OpenXcom
 		
 		for (int i = 0; i<3; ++i)
 		{
-			_txtAmmoType[i] = new Text(80, 10, 200, 24 + i*49);
+			_txtAmmoType[i] = new Text(90, 9, 200, 24 + i*49);
 			add(_txtAmmoType[i]);
 			_txtAmmoType[i]->setColor(Palette::blockOffset(14)+15);
 			_txtAmmoType[i]->setAlign(ALIGN_CENTER);
 			
-			_txtAmmoDamage[i] = new Text(80, 14, 200, 40 + i*49);
+			_txtAmmoDamage[i] = new Text(90, 16, 200, 40 + i*49);
 			add(_txtAmmoDamage[i]);
 			_txtAmmoDamage[i]->setColor(Palette::blockOffset(2));
 			_txtAmmoDamage[i]->setAlign(ALIGN_CENTER);

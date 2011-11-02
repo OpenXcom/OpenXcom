@@ -178,7 +178,7 @@ void ResearchState::fillProjectList()
 	ss << _game->getLanguage()->getString("STR_SCIENTISTS_AVAILABLE") << L'\x01' << _base->getAvailableScientists();
 	_txtAvailable->setText(ss.str());
 	std::wstringstream ss2;
-	ss2 << _game->getLanguage()->getString("STR_SCIENTISTS_ALLOCATED") << L'\x01' << (_base->getTotalScientists() - _base->getAvailableScientists());
+	ss2 << _game->getLanguage()->getString("STR_SCIENTISTS_ALLOCATED") << L'\x01' << _base->getAllocatedScientists();
 	_txtAllocated->setText(ss2.str());
 	std::wstringstream ss3;
 	ss3 << _game->getLanguage()->getString("STR_LABORATORY_SPACE_AVAILABLE") << L'\x01' << _base->getFreeLaboratories();

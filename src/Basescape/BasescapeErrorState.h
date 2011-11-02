@@ -41,7 +41,7 @@ private:
 	Text *_txtError;
 public:
 	/// Creates the Basescape Error state.
-	BasescapeErrorState(Game *game, std::string str);
+	BasescapeErrorState(Game *game, const std::string &msg, const std::string &bg = "BACK13.SCR");
 	/// Cleans up the Basescape Error state.
 	~BasescapeErrorState();
 	/// Handler for clicking the OK button.

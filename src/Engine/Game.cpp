@@ -18,6 +18,7 @@
  */
 #include "Game.h"
 #include <sstream>
+#include <iostream>
 #include "SDL_mixer.h"
 #include "State.h"
 #include "Screen.h"
@@ -50,17 +51,32 @@ namespace OpenXcom
 Game::Game(const std::string &title, int width, int height, int bpp) : _screen(0), _cursor(0), _lang(0), _states(), _deleted(), _res(0), _save(0), _rules(0), _quit(false), _init(false)
 {
 	// Initialize SDL
-	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
+	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
 		throw Exception(SDL_GetError());
 	}
 
-	// Initialize SDL_mixer
-	if (Mix_OpenAudio(22050, AUDIO_S16SYS, 2, 1024) != 0)
+	if (!Options::getBool("mute"))
 	{
-		throw Exception(Mix_GetError());
+		// Initialize SDL_mixer
+		if (SDL_InitSubSystem(SDL_INIT_AUDIO) < 0)
+		{
+			std::cerr << SDL_GetError() << std::endl;
+			Options::setBool("mute", true);
+		}
+		else
+		{
+			if (Mix_OpenAudio(22050, AUDIO_S16SYS, 2, 1024) != 0)
+			{
+				std::cerr << Mix_GetError() << std::endl;
+				Options::setBool("mute", true);
+			}
+			else
+			{
+				Mix_AllocateChannels(16);
+			}
+		}
 	}
-	Mix_AllocateChannels(16);
 
 	// Set the window caption
 	SDL_WM_SetCaption(title.c_str(), 0);
@@ -205,10 +221,13 @@ void Game::quit()
  */
 void Game::setVolume(int sound, int music)
 {
-	if (sound >= 0)
-		Mix_Volume(-1, sound);
-	if (music >= 0)
-		Mix_VolumeMusic(music);
+	if (!Options::getBool("mute"))
+	{
+		if (sound >= 0)
+			Mix_Volume(-1, sound);
+		if (music >= 0)
+			Mix_VolumeMusic(music);
+	}
 }
 
 /**

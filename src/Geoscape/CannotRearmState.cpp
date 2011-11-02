@@ -95,7 +95,7 @@ CannotRearmState::~CannotRearmState()
  */
 void CannotRearmState::init()
 {
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
 }
 
 /**

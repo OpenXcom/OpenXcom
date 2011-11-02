@@ -50,6 +50,7 @@ void createDefault()
 	setInt("displayHeight", 400);
 	setBool("fullscreen", false);
 #endif
+	setBool("mute", false);
 	setInt("soundVolume", MIX_MAX_VOLUME);
 	setInt("musicVolume", MIX_MAX_VOLUME);
 	setString("language", "");

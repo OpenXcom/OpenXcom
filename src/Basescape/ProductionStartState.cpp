@@ -115,7 +115,7 @@ ProductionStartState::ProductionStartState(Game * game, Base * base, RuleManufac
 	_btnCancel->onMouseClick((ActionHandler)&ProductionStartState::btnCancelClick);
 	
 	const std::map<std::string, int> & neededItems (_item->getNeededItems());
-	int availableWorkSpace = _base->getAvailableWorkshops() - _base->getUsedWorkshops();
+	int availableWorkSpace = _base->getFreeWorkshops();
 	bool productionPossible (game->getSavedGame()->getFunds() > _item->getManufactureCost ());
 	productionPossible &= (availableWorkSpace > 0);
 		
