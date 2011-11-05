@@ -38,9 +38,9 @@ class Timer;
 class ProductionState : public State
 {
 private:
-	Production * _production;
-	RuleManufactureInfo * _item;
 	Base * _base;
+	RuleManufactureInfo * _item;
+	Production * _production;
 	Window * _window;
 	ArrowButton * _btnUnitUp, * _btnUnitDown, * _btnEngineerUp, * _btnEngineerDown;
 	TextButton * _btnStop, * _btnOk;

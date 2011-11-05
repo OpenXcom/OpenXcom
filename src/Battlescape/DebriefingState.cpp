@@ -199,8 +199,6 @@ DebriefingState::~DebriefingState()
  */
 void DebriefingState::btnOkClick(Action *action)
 {
-	bool showPromotionsScreen = _game->getSavedGame()->handlePromotions();
-
 	_game->getSavedGame()->setBattleGame(0);
 	_game->popState();
 }
