@@ -66,35 +66,33 @@ std::string getDataFile(const std::string &filename)
 #endif
 	std::string newPath = Options::getDataFolder() + filename;
 
-	// Try lowercase and uppercase names
+	// Try all various case mutations
+	// Normal unmangled
 	struct stat info;
 	if (stat(newPath.c_str(), &info) == 0)
 	{
 		return newPath;
 	}
-	else
+	
+	// UPPERCASE
+	std::transform(newName.begin(), newName.end(), newName.begin(), toupper);
+	newPath = Options::getDataFolder() + newName;
+	if (stat(newPath.c_str(), &info) == 0)
 	{
-		std::transform(newName.begin(), newName.end(), newName.begin(), toupper);
-		newPath = Options::getDataFolder() + newName;
-		if (stat(newPath.c_str(), &info) == 0)
-		{
-			return newPath;
-		}
-		else
-		{
-			std::transform(newName.begin(), newName.end(), newName.begin(), tolower);
-			newPath = Options::getDataFolder() + newName;
-			if (stat(newPath.c_str(), &info) == 0)
-			{
-				return newPath;
-			}
-			else
-			{
-				//throw Exception("Couldn't find " + filename);
-				return "";
-			}
-		}
+		return newPath;
 	}
+
+	// lowercase
+	std::transform(newName.begin(), newName.end(), newName.begin(), tolower);
+	newPath = Options::getDataFolder() + newName;
+	if (stat(newPath.c_str(), &info) == 0)
+	{
+		return newPath;
+	}
+
+	// If we got here nothing can help us
+	// throw Exception("Couldn't find " + filename);
+	return "";
 }
 
 /**
@@ -135,7 +133,7 @@ std::string findDataFolder(bool exists)
 	char path[MAX_PATH];
 
 	// Check in AppData folder
-    if (SUCCEEDED(SHGetFolderPathA(NULL, CSIDL_COMMON_APPDATA, NULL, SHGFP_TYPE_CURRENT, path)))
+	if (SUCCEEDED(SHGetFolderPathA(NULL, CSIDL_COMMON_APPDATA, NULL, SHGFP_TYPE_CURRENT, path)))
 	{
 		PathAppendA(path, "OpenXcom\\");
 		if (!exists || PathIsDirectoryA(path))
@@ -200,7 +198,7 @@ std::string findUserFolder(bool exists)
 	char path[MAX_PATH];
 
 	// Check in Documents folder
-    if (SUCCEEDED(SHGetFolderPathA(NULL, CSIDL_PERSONAL, NULL, SHGFP_TYPE_CURRENT, path)))
+	if (SUCCEEDED(SHGetFolderPathA(NULL, CSIDL_PERSONAL, NULL, SHGFP_TYPE_CURRENT, path)))
 	{
 		PathAppendA(path, "OpenXcom\\");
 		if (!exists || PathIsDirectoryA(path))
@@ -234,12 +232,12 @@ std::string findUserFolder(bool exists)
 	
 	// Check HOME directory
 	char *home = getenv("HOME");
-    if (!home)
-    {
+	if (!home)
+	{
 		struct passwd* pwd = getpwuid(getuid());
 		home = pwd->pw_dir;
-    }
-	if (home)
+	}
+	else
 	{
 		char homePath[MAXPATHLEN];
 #ifdef __APPLE__
@@ -289,13 +287,13 @@ std::vector<std::string> getFolderContents(const std::string &path, const std::s
 	std::vector<std::string> files;
 
 	DIR *dp = opendir(path.c_str());
-    if (dp == 0)
+	if (dp == 0)
 	{
-        throw Exception("Failed to open saves directory");
-    }
+		throw Exception("Failed to open saves directory");
+	}
 
-    struct dirent *dirp;
-    while ((dirp = readdir(dp)) != 0)
+	struct dirent *dirp;
+	while ((dirp = readdir(dp)) != 0)
 	{
 		std::string file = dirp->d_name;
 
@@ -321,7 +319,7 @@ std::vector<std::string> getFolderContents(const std::string &path, const std::s
 
 		files.push_back(file);
 	}
-    closedir(dp);
+	closedir(dp);
 #ifndef _WIN32
 	std::sort(files.begin(), files.end());
 #endif
