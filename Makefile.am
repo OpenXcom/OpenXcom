@@ -2,7 +2,9 @@ EXTRA_DIST = autogen.sh docs/Doxyfile docs/language_id.html \
 	src/Makefile src/OpenXcom.* \
 	src/CMakeLists.txt docs/CMakeLists.txt CMakeLists.txt
 
-pkgdata_DATA = bin/DATA/README.txt
+pkgdata_DATA = \
+	bin/DATA/README.txt \
+	bin/DATA/research.dat
 
 languagedir = $(pkgdatadir)/Language
 language_DATA = \
@@ -52,6 +54,8 @@ openxcom_SOURCES = \
 	src/Basescape/BaseView.h \
 	src/Basescape/BuildFacilitiesState.cpp \
 	src/Basescape/BuildFacilitiesState.h \
+	src/Battlescape/Camera.cpp \
+	src/Battlescape/Camera.h \
 	src/Basescape/CraftArmorState.cpp \
 	src/Basescape/CraftArmorState.h \
 	src/Basescape/CraftEquipmentState.cpp \
