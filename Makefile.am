@@ -54,8 +54,6 @@ openxcom_SOURCES = \
 	src/Basescape/BaseView.h \
 	src/Basescape/BuildFacilitiesState.cpp \
 	src/Basescape/BuildFacilitiesState.h \
-	src/Battlescape/Camera.cpp \
-	src/Battlescape/Camera.h \
 	src/Basescape/CraftArmorState.cpp \
 	src/Basescape/CraftArmorState.h \
 	src/Basescape/CraftEquipmentState.cpp \
@@ -138,6 +136,8 @@ openxcom_SOURCES = \
 	src/Battlescape/BriefingCrashState.h \
 	src/Battlescape/BulletSprite.cpp \
 	src/Battlescape/BulletSprite.h \
+	src/Battlescape/Camera.cpp \
+	src/Battlescape/Camera.h \
 	src/Battlescape/DebriefingState.cpp \
 	src/Battlescape/DebriefingState.h \
 	src/Battlescape/ExplosionBState.cpp \
