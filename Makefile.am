@@ -1,7 +1,3 @@
-EXTRA_DIST = autogen.sh docs/Doxyfile docs/language_id.html \
-	src/Makefile src/OpenXcom.* \
-	src/CMakeLists.txt docs/CMakeLists.txt CMakeLists.txt
-
 pkgdata_DATA = \
 	bin/DATA/README.txt \
 	bin/DATA/research.dat
@@ -39,7 +35,7 @@ name_DATA = \
 
 bin_PROGRAMS = openxcom
 openxcom_LDADD = $(SDL_LIBS) $(YAML_LIBS)
-openxcom_CXXFLAGS = -Wall \
+openxcom_CXXFLAGS = \
 	$(SDL_CFLAGS) \
 	$(YAML_CFLAGS) \
 	-DDATADIR=\"$(pkgdatadir)\"
@@ -451,3 +447,9 @@ openxcom_SOURCES = \
 	src/Ufopaedia/UfopaediaSelectState.h \
 	src/Ufopaedia/UfopaediaStartState.cpp \
 	src/Ufopaedia/UfopaediaStartState.h
+
+EXTRA_DIST = autogen.sh docs/Doxyfile docs/language_id.html \
+	README.txt CHANGELOG.txt \
+	src/Makefile src/OpenXcom.* \
+	src/CMakeLists.txt docs/CMakeLists.txt CMakeLists.txt cmake/* \
+	$(pkgdata_DATA) $(language_DATA) $(name_DATA)
