@@ -48,7 +48,7 @@ AS_IF([test x"$GCC" = xyes], [
 AC_ARG_WITH(docs,
 	[AS_HELP_STRING([--without-docs], [Do not build documentation])],
 	[with_docs="$withval"],
-	[AS_IF([test "x$native_win32" = "xyes"], [with_docs=no], [with_docs=yes])]
+	[with_docs=yes]
 )
 AS_IF([test "x$with_docs" != "xno"], [
 	AC_PATH_PROG(DOXYGEN, [doxygen])
