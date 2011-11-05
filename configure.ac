@@ -42,6 +42,19 @@ AS_IF([test x"$GCC" = xyes], [
 	LDFLAGS="$LDFLAGS -Wl,--as-needed"
 ])
 
+# ============
+# Debug switch
+# ============
+AC_ARG_ENABLE([debug],
+	[AS_HELP_STRING([--enable-debug], [Turn on debugging])],
+	[enable_debug="$enableval"],
+	[enable_debug=no]
+)
+AS_IF([test "x$enable_debug" = "xyes"], [
+	DEBUG_CFLAGS="-D_DEBUG -g"
+])
+AC_SUBST(DEBUG_CFLAGS)
+
 # =============
 # Documentation
 # =============
@@ -79,6 +92,7 @@ AC_OUTPUT
 AC_MSG_NOTICE([
 ==============================================================================
 Build configuration:
+	debug:	${enable_debug}
 	docs:	${build_docs}
 	werror:	${enable_werror}
 ==============================================================================
