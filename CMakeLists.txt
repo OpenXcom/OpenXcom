@@ -1,7 +1,7 @@
 project ( OpenXcom )
 
 cmake_minimum_required ( VERSION 2.8 )
-set ( CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}" )
+set ( CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules" )
 
 option ( DEV_BUILD "Developement Build. Turn off for release" ON )
 option ( BUILD_PACKAGE "Add need rules to build packages" ON )
