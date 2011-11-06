@@ -20,6 +20,7 @@
 #define OPENXCOM_OPTIONS_H
 
 #include <string>
+#include <vector>
 
 namespace OpenXcom
 {
@@ -43,8 +44,10 @@ namespace Options
 	void save(const std::string &filename = "options");
 	/// Gets the current game version.
 	std::string getVersion();
-	/// Gets the game's data folder.
+	/// Gets the game's main data folder.
 	std::string getDataFolder();
+	// Get the list of game's data folder.
+	const std::vector<std::string> & getDataFolders();
 	/// Gets the game's user folder.
 	std::string getUserFolder();
 	/// Gets a string option.

@@ -45,6 +45,8 @@ namespace CrossPlatform
 	int createFolder(const char *path);
 	/// Returns the list of files in a folder.
 	std::vector<std::string> getFolderContents(const std::string &path, const std::string &ext = "");
+	// Split string containing a list of path
+	void splitPathList(const std::string & str, std::vector<std::string> & splitted);
 }
 
 }

@@ -48,9 +48,63 @@ namespace OpenXcom
 {
 namespace CrossPlatform
 {
+/**
+ * Split a string containing a list of path to a vector of string. path need to be separated by ':'
+ * @param str the string to split
+ * @param splitted the list of paths
+*/
+void splitPathList(const std::string & str, std::vector<std::string> & splitted)
+{
+	std::size_t start = 0;
+	std::size_t end;
+	do
+	{
+		end = str.find(':', start+1);
+		if(end > str.size ())
+			splitted.push_back(str.substr(start));
+		else
+			splitted.push_back(str.substr(start,
+						   end - start));
+		start = end+1;
+	}
+	while(end < str.size ());
+}
 
 /**
- * Takes a filename and tries to find it in the game's DATA folder,
+ * Helper to check if one path contain the asked file
+*/
+bool checkPath (const std::string & dir, std::string & newName)
+{
+	// Try lowercase and uppercase names
+	std::string newPath = dir + newName;
+	struct stat info;
+	if (stat(newPath.c_str(), &info) == 0)
+	{
+		return true;
+	}
+	else
+	{
+		std::transform(newName.begin(), newName.end(), newName.begin(), toupper);
+		newPath = dir + newName;
+		if (stat(newPath.c_str(), &info) == 0)
+		{
+			return true;
+		}
+		else
+		{
+			std::transform(newName.begin(), newName.end(), newName.begin(), tolower);
+			newPath = dir + newName;
+			if (stat(newPath.c_str(), &info) == 0)
+			{
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+/**
+ * Takes a filename and tries to find it in the game's DATA folders,
  * accounting for the system's case-sensitivity and path style.
  * @param filename Original filename.
  * @return Correct filename or exception if it doesn't exist.
@@ -64,37 +118,19 @@ std::string getDataFile(const std::string &filename)
 #ifdef _WIN32
 	std::replace(newName.begin(), newName.end(), '/', '\\');
 #endif
-	std::string newPath = Options::getDataFolder() + filename;
-
-	// Try lowercase and uppercase names
-	struct stat info;
-	if (stat(newPath.c_str(), &info) == 0)
+	const std::vector<std::string> & paths(Options::getDataFolders());
+	std::vector<std::string>::const_iterator it = paths.begin ();
+	bool found = false;
+	while (!found && it < paths.end ())
 	{
-		return newPath;
-	}
-	else
-	{
-		std::transform(newName.begin(), newName.end(), newName.begin(), toupper);
-		newPath = Options::getDataFolder() + newName;
-		if (stat(newPath.c_str(), &info) == 0)
+		std::string file = filename;
+		if(checkPath(*it, file))
 		{
-			return newPath;
+			return (*it + file);
 		}
-		else
-		{
-			std::transform(newName.begin(), newName.end(), newName.begin(), tolower);
-			newPath = Options::getDataFolder() + newName;
-			if (stat(newPath.c_str(), &info) == 0)
-			{
-				return newPath;
-			}
-			else
-			{
-				//throw Exception("Couldn't find " + filename);
-				return "";
-			}
-		}
+		it++;
 	}
+	return "";
 }
 
 /**
