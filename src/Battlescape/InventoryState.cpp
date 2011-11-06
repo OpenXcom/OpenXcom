@@ -118,7 +118,7 @@ InventoryState::InventoryState(Game *game, bool tu) : State(game), _tu(tu)
  */
 InventoryState::~InventoryState()
 {
-	
+
 }
 
 /**

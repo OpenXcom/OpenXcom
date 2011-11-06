@@ -30,7 +30,7 @@ namespace OpenXcom
 {
 namespace Options
 {
-	
+
 std::string _version = "0.3";
 std::string _dataFolder = "";
 std::string _userFolder = "";
@@ -149,10 +149,10 @@ void load(const std::string &filename)
 		//throw Exception("Failed to load options");
 		return;
 	}
-    YAML::Parser parser(fin);
+	YAML::Parser parser(fin);
 	YAML::Node doc;
 
-    parser.GetNextDocument(doc);
+	parser.GetNextDocument(doc);
 	for (YAML::Iterator i = doc.begin(); i != doc.end(); ++i)
 	{
 		std::string key, value;

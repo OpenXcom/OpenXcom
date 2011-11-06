@@ -57,13 +57,13 @@ SaveGameState::SaveGameState(Game *game, bool geo) : State(game), _selected(""),
 	_txtDate = new Text(30, 9, 214, 24);
 	_lstSaves = new TextList(288, 128, 8, 32);
 	_edtSave = new TextEdit(168, 9, 0, 0);
-	
+
 	// Set palette
 	if (_geo)
 	{
 		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
 	}
-        
+
 	_previousSelectedRow = -1;
 	_selectedRow = -1;
 
@@ -81,7 +81,7 @@ SaveGameState::SaveGameState(Game *game, bool geo) : State(game), _selected(""),
 	{
 		_window->setColor(Palette::blockOffset(8)+5);
 		_window->setBackground(game->getResourcePack()->getSurface("BACK01.SCR"));
-		
+
 		_btnCancel->setColor(Palette::blockOffset(8)+5);
 
 		_txtTitle->setColor(Palette::blockOffset(15)-1);
@@ -91,14 +91,14 @@ SaveGameState::SaveGameState(Game *game, bool geo) : State(game), _selected(""),
 		_txtTime->setColor(Palette::blockOffset(15)-1);
 
 		_txtDate->setColor(Palette::blockOffset(15)-1);
-		
+
 		_lstSaves->setColor(Palette::blockOffset(8)+10);
-		
+
 		_edtSave->setColor(Palette::blockOffset(8)+10);
 	}
 	else
 	{
-        	_window->setColor(Palette::blockOffset(0));
+			_window->setColor(Palette::blockOffset(0));
 		_window->setHighContrast(true);
 		_window->setBackground(_game->getResourcePack()->getSurface("TAC00.SCR"));
 
@@ -116,10 +116,10 @@ SaveGameState::SaveGameState(Game *game, bool geo) : State(game), _selected(""),
 
 		_txtDate->setColor(Palette::blockOffset(0));
 		_txtDate->setHighContrast(true);
-		
+
 		_lstSaves->setColor(Palette::blockOffset(0));
 		_lstSaves->setHighContrast(true);
-		
+
 		_edtSave->setColor(Palette::blockOffset(0));
 		_edtSave->setHighContrast(true);
 	}
@@ -154,7 +154,7 @@ SaveGameState::SaveGameState(Game *game, bool geo) : State(game), _selected(""),
  */
 SaveGameState::~SaveGameState()
 {
-	
+
 }
 
 /**
@@ -182,10 +182,10 @@ void SaveGameState::btnCancelClick(Action *action)
  * @param action Pointer to an action.
  */
 void SaveGameState::lstSavesClick(Action *action)
-{       
+{
 	_previousSelectedRow = _selectedRow;
 	_selectedRow = _lstSaves->getSelectedRow();
-	
+
 	switch (_previousSelectedRow)
 	{
 		case -1:	// first click on the savegame list

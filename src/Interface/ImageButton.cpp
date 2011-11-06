@@ -38,7 +38,7 @@ ImageButton::ImageButton(int width, int height, int x, int y) : InteractiveSurfa
  */
 ImageButton::~ImageButton()
 {
-	
+
 }
 
 /**

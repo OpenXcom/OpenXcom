@@ -28,17 +28,17 @@ namespace OpenXcom
 	class Game;
 	class Text;
 	class ArticleStateTextImage;
-	
+
 	/**
 	 * ArticleStateTextImage has a title, text block and a background image.
 	 */
-	
+
 	class ArticleStateTextImage : public ArticleState
 	{
 	public:
 		ArticleStateTextImage(Game *game, ArticleDefinitionTextImage *defs);
 		virtual ~ArticleStateTextImage();
-		
+
 	protected:
 		Text *_txtTitle;
 		Text *_txtInfo;

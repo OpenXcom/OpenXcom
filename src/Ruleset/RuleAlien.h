@@ -53,13 +53,13 @@ public:
 	void setArmor(const std::string &armor);
 	/// Sets the voxel parameters.
 	void setVoxelParameters(int standHeight, int kneelHeight, int loftemps);
-	/// 
+	///
 	UnitStats getStats() const;
-	/// 
+	///
 	int getStandHeight() const;
-	/// 
+	///
 	int getKneelHeight() const;
-	/// 
+	///
 	int getLoftemps() const;
 	///
 	std::string getArmor() const;

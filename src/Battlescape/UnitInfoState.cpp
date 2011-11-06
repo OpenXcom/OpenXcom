@@ -94,27 +94,27 @@ UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit) : State(game), _unit(
 	// 131
 
 	// 141
-	
+
 	_txtFrontArmour = new Text(120, 9, 8, 151);
 	_numFrontArmour= new Text(18, 9, 150, 151);
 	_barFrontArmour = new Bar(170, 5, 170, 152);
-	
+
 	_txtLeftArmour = new Text(120, 9, 8, 161);
 	_numLeftArmour = new Text(18, 9, 150, 161);
 	_barLeftArmour = new Bar(170, 5, 170, 162);
-	
+
 	_txtRightArmour = new Text(120, 9, 8, 171);
 	_numRightArmour = new Text(18, 9, 150, 171);
 	_barRightArmour = new Bar(170, 5, 170, 172);
-	
+
 	_txtRearArmour = new Text(120, 9, 8, 181);
 	_numRearArmour = new Text(18, 9, 150, 181);
 	_barRearArmour = new Bar(170, 5, 170, 182);
-	
+
 	_txtUnderArmour = new Text(120, 9, 8, 191);
 	_numUnderArmour = new Text(18, 9, 150, 191);
 	_barUnderArmour = new Bar(170, 5, 170, 192);
-	
+
 	add(_bg);
 	add(_txtName);
 
@@ -344,7 +344,7 @@ UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit) : State(game), _unit(
  */
 UnitInfoState::~UnitInfoState()
 {
-	
+
 }
 
 /**
@@ -357,7 +357,7 @@ void UnitInfoState::init()
 
 	std::wstringstream ss;
 	ss << _unit->getTimeUnits();
-	_numTimeUnits->setText(ss.str());		
+	_numTimeUnits->setText(ss.str());
 	_barTimeUnits->setMax(_unit->getUnit()->getTimeUnits());
 	_barTimeUnits->setValue(_unit->getTimeUnits());
 
@@ -372,86 +372,86 @@ void UnitInfoState::init()
 
 	ss.str(L"");
 	ss << _unit->getEnergy();
-	_numEnergy->setText(ss.str());		
+	_numEnergy->setText(ss.str());
 	_barEnergy->setMax(_unit->getUnit()->getStamina());
 	_barEnergy->setValue(_unit->getEnergy());
 
 	ss.str(L"");
 	ss << _unit->getHealth();
-	_numHealth->setText(ss.str());		
+	_numHealth->setText(ss.str());
 	_barHealth->setMax(_unit->getUnit()->getHealth());
 	_barHealth->setValue(_unit->getHealth());
 	_barHealth->setValue2(_unit->getStunlevel());
 
 	ss.str(L"");
 	ss << _unit->getFatalWounds();
-	_numFatalWounds->setText(ss.str());		
+	_numFatalWounds->setText(ss.str());
 	_barFatalWounds->setMax(_unit->getFatalWounds());
 	_barFatalWounds->setValue(_unit->getFatalWounds());
 
 	ss.str(L"");
 	ss << _unit->getUnit()->getBravery();
-	_numBravery->setText(ss.str());		
+	_numBravery->setText(ss.str());
 	_barBravery->setMax(_unit->getUnit()->getBravery());
 	_barBravery->setValue(_unit->getUnit()->getBravery());
 
 	ss.str(L"");
 	ss << _unit->getMorale();
-	_numMorale->setText(ss.str());		
+	_numMorale->setText(ss.str());
 	_barMorale->setMax(100);
 	_barMorale->setValue(_unit->getMorale());
 
 	ss.str(L"");
 	ss << _unit->getUnit()->getReactions();
-	_numReactions->setText(ss.str());		
+	_numReactions->setText(ss.str());
 	_barReactions->setMax(_unit->getUnit()->getReactions());
 	_barReactions->setValue(_unit->getUnit()->getReactions());
 
 	ss.str(L"");
 	ss << _unit->getUnit()->getFiringAccuracy();
-	_numFiring->setText(ss.str());		
+	_numFiring->setText(ss.str());
 	_barFiring->setMax(_unit->getUnit()->getFiringAccuracy());
 	_barFiring->setValue(_unit->getUnit()->getFiringAccuracy());
 
 	ss.str(L"");
 	ss << _unit->getUnit()->getThrowingAccuracy();
-	_numThrowing->setText(ss.str());		
+	_numThrowing->setText(ss.str());
 	_barThrowing->setMax(_unit->getUnit()->getThrowingAccuracy());
 	_barThrowing->setValue(_unit->getUnit()->getThrowingAccuracy());
 
 	ss.str(L"");
 	ss << _unit->getUnit()->getStrength();
-	_numStrength->setText(ss.str());		
+	_numStrength->setText(ss.str());
 	_barStrength->setMax(_unit->getUnit()->getStrength());
 	_barStrength->setValue(_unit->getUnit()->getStrength());
 
 	ss.str(L"");
 	ss << _unit->getArmor(SIDE_FRONT);
-	_numFrontArmour->setText(ss.str());		
+	_numFrontArmour->setText(ss.str());
 	_barFrontArmour->setMax(_unit->getUnit()->getArmor()->getFrontArmor());
 	_barFrontArmour->setValue(_unit->getArmor(SIDE_FRONT));
 
 	ss.str(L"");
 	ss << _unit->getArmor(SIDE_LEFT);
-	_numLeftArmour->setText(ss.str());		
+	_numLeftArmour->setText(ss.str());
 	_barLeftArmour->setMax(_unit->getUnit()->getArmor()->getSideArmor());
 	_barLeftArmour->setValue(_unit->getArmor(SIDE_LEFT));
 
 	ss.str(L"");
 	ss << _unit->getArmor(SIDE_RIGHT);
-	_numRightArmour->setText(ss.str());		
+	_numRightArmour->setText(ss.str());
 	_barRightArmour->setMax(_unit->getUnit()->getArmor()->getSideArmor());
 	_barRightArmour->setValue(_unit->getArmor(SIDE_RIGHT));
 
 	ss.str(L"");
 	ss << _unit->getArmor(SIDE_REAR);
-	_numRearArmour->setText(ss.str());		
+	_numRearArmour->setText(ss.str());
 	_barRearArmour->setMax(_unit->getUnit()->getArmor()->getRearArmor());
 	_barRearArmour->setValue(_unit->getArmor(SIDE_REAR));
 
 	ss.str(L"");
 	ss << _unit->getArmor(SIDE_UNDER);
-	_numUnderArmour->setText(ss.str());		
+	_numUnderArmour->setText(ss.str());
 	_barUnderArmour->setMax(_unit->getUnit()->getArmor()->getUnderArmor());
 	_barUnderArmour->setValue(_unit->getArmor(SIDE_UNDER));
 }

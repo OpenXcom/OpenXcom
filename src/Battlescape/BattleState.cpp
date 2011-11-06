@@ -35,7 +35,7 @@ BattleState::BattleState(BattlescapeState *parent) : _parent(parent), _result(""
  */
 BattleState::~BattleState()
 {
-	
+
 }
 
 /**

@@ -47,7 +47,7 @@ CannotRearmState::CannotRearmState(Game *game, GeoscapeState *state, const std::
 	_btnOk = new TextButton(100, 18, 48, 150);
 	_btnOk5Secs = new TextButton(100, 18, 172, 150);
 	_txtMessage = new Text(226, 80, 47, 50);
-	
+
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
 
@@ -87,7 +87,7 @@ CannotRearmState::CannotRearmState(Game *game, GeoscapeState *state, const std::
  */
 CannotRearmState::~CannotRearmState()
 {
-	
+
 }
 
 /**

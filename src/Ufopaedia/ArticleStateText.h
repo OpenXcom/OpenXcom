@@ -28,11 +28,11 @@ namespace OpenXcom
 	class Game;
 	class Text;
 	class ArticleDefinitionText;
-	
+
 	/**
 	 * ArticleStateText has only a caption and a text.
 	 */
-	
+
 	class ArticleStateText : public ArticleState
 	{
 	public:

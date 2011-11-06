@@ -630,9 +630,9 @@ void TextList::draw()
 		for (std::vector<Text*>::iterator j = _texts[i].begin(); j < _texts[i].end(); ++j)
 		{
 			(*j)->setY((i - _scroll) * (_font->getHeight() + _font->getSpacing()));
-            (*j)->blit(this);
-        }
-    }
+			(*j)->blit(this);
+		}
+	}
 }
 
 /**

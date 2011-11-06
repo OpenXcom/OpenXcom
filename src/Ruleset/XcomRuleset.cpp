@@ -219,15 +219,15 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	namerica->getCities()->push_back(new City("STR_CHICAGO", 4.75384, -0.730857));
 	namerica->getCities()->push_back(new City("STR_VANCOUVER", 4.13207, -0.861756));
 	namerica->getCities()->push_back(new City("STR_DALLAS", 4.59676, -0.571595));
-	
+
 	RuleRegion* arctic = new RuleRegion("STR_ARCTIC");
 	arctic->setBaseCost(950000);
 	arctic->addArea(0, 6.281, -1.5708, -1.22391);
-	
+
 	RuleRegion* antarctica = new RuleRegion("STR_ANTARCTICA");
 	antarctica->setBaseCost(900000);
 	antarctica->addArea(0, 6.281, 1.0472, 1.5708);
-	
+
 	RuleRegion* samerica = new RuleRegion("STR_SOUTH_AMERICA");
 	samerica->setBaseCost(600000);
 	samerica->addArea(4.71239, 5.49561, -0.174533, -0.00218166);
@@ -240,7 +240,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	samerica->getCities()->push_back(new City("STR_RIO_DE_JANEIRO", 5.53051, 0.399244));
 	samerica->getCities()->push_back(new City("STR_LIMA", 4.93928, 0.20944));
 	samerica->getCities()->push_back(new City("STR_CARACAS", 5.116, -0.18326));
-	
+
 	RuleRegion* europe = new RuleRegion("STR_EUROPE");
 	europe->setBaseCost(1000000);
 	europe->addArea(5.84685, 1.04502, -1.22173, -0.613047);
@@ -251,7 +251,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	europe->getCities()->push_back(new City("STR_ROME", 0.218166, -0.730857));
 	europe->getCities()->push_back(new City("STR_MADRID", 6.21774, -0.704677));
 	europe->getCities()->push_back(new City("STR_BUDAPEST", 0.333794, -0.829031));
-	
+
 	RuleRegion* nafrica = new RuleRegion("STR_NORTH_AFRICA");
 	nafrica->setBaseCost(650000);
 	nafrica->addArea(5.84685, 0.69595, -0.610865, -0.263981);
@@ -259,7 +259,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	nafrica->getCities()->push_back(new City("STR_LAGOS", 0.0545415, -0.113446));
 	nafrica->getCities()->push_back(new City("STR_CAIRO", 0.545415, -0.523599));
 	nafrica->getCities()->push_back(new City("STR_CASABLANCA", 6.1501, -0.584685));
-	
+
 	RuleRegion* safrica = new RuleRegion("STR_SOUTHERN_AFRICA");
 	safrica->setBaseCost(550000);
 	safrica->addArea(0.0872665, 0.957749, 0, 0.69595);
@@ -267,7 +267,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	safrica->getCities()->push_back(new City("STR_NAIROBI", 0.641409, 0.0218166));
 	safrica->getCities()->push_back(new City("STR_CAPE_TOWN", 0.322886, 0.593412));
 	safrica->getCities()->push_back(new City("STR_KINSHASA", 0.268344, 0.0763582));
-	
+
 	RuleRegion* casia = new RuleRegion("STR_CENTRAL_ASIA");
 	casia->setBaseCost(500000);
 	casia->addArea(0.698132, 1.21955, -0.610865, -0.263981);
@@ -280,7 +280,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	casia->getCities()->push_back(new City("STR_TEHRAN", 0.898845, -0.621774));
 	casia->getCities()->push_back(new City("STR_BOMBAY", 1.27627, -0.329431));
 	casia->getCities()->push_back(new City("STR_CALCUTTA", 1.54243, -0.394881));
-	
+
 	RuleRegion* seasia = new RuleRegion("STR_SOUTH_EAST_ASIA");
 	seasia->setBaseCost(750000);
 	seasia->addArea(1.5708, 1.83041, -0.872665, 0.172351);
@@ -294,12 +294,12 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	seasia->getCities()->push_back(new City("STR_JAKARTA", 1.86314, 0.109083));
 	seasia->getCities()->push_back(new City("STR_SHANGHAI", 2.12058, -0.545415));
 	seasia->getCities()->push_back(new City("STR_HONG_KONG", 1.99186, -0.388336));
-	
+
 	RuleRegion* siberia = new RuleRegion("STR_SIBERIA");
 	siberia->setBaseCost(800000);
 	siberia->addArea(1.0472, 3.13941, -1.22173, -0.874846);
 	siberia->getCities()->push_back(new City("STR_NOVOSIBIRSK", 1.44426, -0.959931));
-	
+
 	RuleRegion* australasia = new RuleRegion("STR_AUSTRALASIA");
 	australasia->setBaseCost(750000);
 	//australasia->addArea(1.8326, 3.13941, -0.0872665, 0.870483);
@@ -308,7 +308,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	australasia->getCities()->push_back(new City("STR_WELLINGTON", 3.05651, 0.719948));
 	australasia->getCities()->push_back(new City("STR_MELBOURNE", 2.53073, 0.661043));
 	australasia->getCities()->push_back(new City("STR_PERTH", 2.02022, 0.558505));
-	
+
 	RuleRegion* pacific = new RuleRegion("STR_PACIFIC");
 	pacific->setBaseCost(600000);
 	pacific->addArea(3.14159, 3.40121, -1.22173, -0.962113);
@@ -317,25 +317,25 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	pacific->addArea(3.14159, 4.71021, -0.174533, -0.00218166);
 	pacific->addArea(3.14159, 4.79747, 0, 1.04502);
 	pacific->addArea(2.61799, 3.13941, -0.872665, -0.0894481);
-	
+
 	RuleRegion* natlantic = new RuleRegion("STR_NORTH_ATLANTIC");
 	natlantic->setBaseCost(500000);
 	natlantic->addArea(5.32325, 5.84467, -1.22173, -0.52578);
 	natlantic->addArea(5.23599, 5.84467, -0.523599, -0.176715);
 	natlantic->addArea(5.49779, 5.84467, -0.174533, -0.00218166);
-	
+
 	RuleRegion* satlantic = new RuleRegion("STR_SOUTH_ATLANTIC");
 	satlantic->setBaseCost(500000);
 	satlantic->addArea(5.75959, 0.0850848, 0, 0.259618);
 	satlantic->addArea(5.67232, 0.0850848, 0.261799, 1.04502);
 	satlantic->addArea(0.0872665, 0.959931, 0.698132, 1.04502);
-	
+
 	RuleRegion* indian = new RuleRegion("STR_INDIAN_OCEAN");
 	indian->setBaseCost(500000);
 	indian->addArea(0.959931, 1.21955, -0.261799, 0.172351);
 	indian->addArea(1.22173, 1.56861, -0.0872665, 0.172351);
 	indian->addArea(0.959931, 1.83041, 0.174533, 1.04502);
-	
+
 	_regions.insert(std::pair<std::string, RuleRegion*>("STR_NORTH_AMERICA", namerica));
 	_regions.insert(std::pair<std::string, RuleRegion*>("STR_ARCTIC", arctic));
 	_regions.insert(std::pair<std::string, RuleRegion*>("STR_ANTARCTICA", antarctica));
@@ -699,7 +699,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	pclip->setHitSound(22);
 	pclip->setClipSize(12);
 	pclip->setWeight(3);
-	
+
 	RuleItem *rifle = new RuleItem("STR_RIFLE");
 	rifle->setSize(0.2f);
 	rifle->setCost(3000);
@@ -816,7 +816,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	acannon->setInventoryWidth(2);
 	acannon->setInventoryHeight(3);
 	acannon->setWeight(19);
-	
+
 	RuleItem *acap = new RuleItem("STR_AC_AP_AMMO");
 	acap->setSize(0.1f);
 	acap->setCost(500);
@@ -1107,7 +1107,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_items.insert(std::pair<std::string, RuleItem*>("STR_PLASMA_PISTOL", ppistol));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_PLASMA_PISTOL_CLIP", ppclip));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_ELECTRO_FLARE", flare));
-	
+
 	_items.insert(std::pair<std::string, RuleItem*>("STR_ALIEN_ALLOYS", aa));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_LASER_PISTOL", lp));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_PERSONAL_ARMOR", pa));
@@ -1377,7 +1377,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_invs.insert(std::pair<std::string, RuleInventory*>("STR_BACK_PACK", backpack));
 	_invs.insert(std::pair<std::string, RuleInventory*>("STR_BELT", belt));
 	_invs.insert(std::pair<std::string, RuleInventory*>("STR_GROUND", ground));
-	
+
 	// Add terrain
 	RuleTerrain *culta = new RuleTerrain("CULTA");
 	culta->getMapDataSets()->push_back(getMapDataSet("BLANKS"));
@@ -1653,7 +1653,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 
 	// create Ufopaedia article definitions
 	int sort_key = 1;
-	
+
 	// XCOM CRAFT AND ARMAMENT
 	ArticleDefinitionCraft article_craft;
 	article_craft.section = UFOPAEDIA_XCOM_CRAFT_ARMAMENT;
@@ -1666,9 +1666,9 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	article_craft.craft = _crafts[article_craft.id];
 	article_craft.rect_stats.set(160, 5, 140, 60);
 	article_craft.sort_key = sort_key++;
-	
+
 	_ufopaediaArticles[article_craft.id] = new ArticleDefinitionCraft(article_craft);
-	
+
 	article_craft.id = "STR_LIGHTNING";
 	article_craft.title = "STR_LIGHTNING";
 	article_craft.image_id = "UP003.SPK";
@@ -1677,9 +1677,9 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	article_craft.craft = _crafts[article_craft.id];
 	article_craft.rect_stats.set(5, 132, 140, 60);
 	article_craft.sort_key = sort_key++;
-	
+
 	_ufopaediaArticles[article_craft.id] = new ArticleDefinitionCraft(article_craft);
-	
+
 	article_craft.id = "STR_AVENGER";
 	article_craft.title = "STR_AVENGER";
 	article_craft.image_id = "UP001.SPK";
@@ -1688,7 +1688,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	article_craft.craft = _crafts[article_craft.id];
 	article_craft.rect_stats.set(160, 5, 140, 60);
 	article_craft.sort_key = sort_key++;
-	
+
 	_ufopaediaArticles[article_craft.id] = new ArticleDefinitionCraft(article_craft);
 
 	article_craft.id = "STR_INTERCEPTOR";
@@ -1699,9 +1699,9 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	article_craft.craft = _crafts[article_craft.id];
 	article_craft.rect_stats.set(5, 110, 140, 60);
 	article_craft.sort_key = sort_key++;
-	
+
 	_ufopaediaArticles[article_craft.id] = new ArticleDefinitionCraft(article_craft);
-	
+
 	article_craft.id = "STR_FIRESTORM";
 	article_craft.title = "STR_FIRESTORM";
 	article_craft.image_id = "UP005.SPK";
@@ -1710,173 +1710,173 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	article_craft.craft = _crafts[article_craft.id];
 	article_craft.rect_stats.set(160, 5, 140, 60);
 	article_craft.sort_key = sort_key++;
-	
+
 	_ufopaediaArticles[article_craft.id] = new ArticleDefinitionCraft(article_craft);
 
-	
+
 	ArticleDefinitionCraftWeapon article_craft_weapon;
 	article_craft_weapon.section = UFOPAEDIA_XCOM_CRAFT_ARMAMENT;
-	
+
 	article_craft_weapon.id = "STR_STINGRAY";
 	article_craft_weapon.title = "STR_STINGRAY";
 	article_craft_weapon.image_id = "UP006.SPK";
 	article_craft_weapon.text = "STR_STINGRAY_UFOPEDIA";
 	article_craft_weapon.weapon = _craftWeapons[article_craft_weapon.id];
 	article_craft_weapon.sort_key = sort_key++;
-	
+
 	_ufopaediaArticles[article_craft_weapon.id] = new ArticleDefinitionCraftWeapon(article_craft_weapon);
-	
+
 	article_craft_weapon.id = "STR_AVALANCHE";
 	article_craft_weapon.title = "STR_AVALANCHE";
 	article_craft_weapon.image_id = "UP007.SPK";
 	article_craft_weapon.text = "STR_AVALANCHE_UFOPEDIA";
 	article_craft_weapon.weapon = _craftWeapons[article_craft_weapon.id];
 	article_craft_weapon.sort_key = sort_key++;
-	
+
 	_ufopaediaArticles[article_craft_weapon.id] = new ArticleDefinitionCraftWeapon(article_craft_weapon);
-	
+
 	article_craft_weapon.id = "STR_CANNON_UC";
 	article_craft_weapon.title = "STR_CANNON_UC";
 	article_craft_weapon.image_id = "UP008.SPK";
 	article_craft_weapon.text = "STR_CANNON_UFOPEDIA";
 	article_craft_weapon.weapon = _craftWeapons[article_craft_weapon.id];
 	article_craft_weapon.sort_key = sort_key++;
-	
+
 	_ufopaediaArticles[article_craft_weapon.id] = new ArticleDefinitionCraftWeapon(article_craft_weapon);
-	
+
 	article_craft_weapon.id = "STR_FUSION_BALL_UC";
 	article_craft_weapon.title = "STR_FUSION_BALL_UC";
 	article_craft_weapon.image_id = "UP009.SPK";
 	article_craft_weapon.text = "STR_FUSION_BALL_UFOPEDIA";
 	article_craft_weapon.weapon = _craftWeapons[article_craft_weapon.id];
 	article_craft_weapon.sort_key = sort_key++;
-	
+
 	_ufopaediaArticles[article_craft_weapon.id] = new ArticleDefinitionCraftWeapon(article_craft_weapon);
-	
+
 	article_craft_weapon.id = "STR_LASER_CANNON_UC";
 	article_craft_weapon.title = "STR_LASER_CANNON_UC";
 	article_craft_weapon.image_id = "UP010.SPK";
 	article_craft_weapon.text = "STR_LASER_CANNON_UFOPEDIA";
 	article_craft_weapon.weapon = _craftWeapons[article_craft_weapon.id];
 	article_craft_weapon.sort_key = sort_key++;
-	
+
 	_ufopaediaArticles[article_craft_weapon.id] = new ArticleDefinitionCraftWeapon(article_craft_weapon);
-	
+
 	article_craft_weapon.id = "STR_PLASMA_BEAM_UC";
 	article_craft_weapon.title = "STR_PLASMA_BEAM_UC";
 	article_craft_weapon.image_id = "UP011.SPK";
 	article_craft_weapon.text = "STR_PLASMA_BEAM_UFOPEDIA";
 	article_craft_weapon.weapon = _craftWeapons[article_craft_weapon.id];
 	article_craft_weapon.sort_key = sort_key++;
-	
+
 	_ufopaediaArticles[article_craft_weapon.id] = new ArticleDefinitionCraftWeapon(article_craft_weapon);
-	
-	
+
+
 	// HEAVY WEAPONS PLATFORMS
-	
-	
+
+
 	// WEAPONS AND EQUIPMENT
 	ArticleDefinitionItem article_item;
 	article_item.section = UFOPAEDIA_WEAPONS_AND_EQUIPMENT;
-	
+
 	ArticleDefinitionItem article_item_ammo;
 	article_item_ammo.section = UFOPAEDIA_NOT_AVAILABLE;
-	
+
 	article_item.id = "STR_PISTOL";
 	article_item.title = "STR_PISTOL";
 	article_item.text = "STR_PISTOL_UFOPEDIA";
 	article_item.item = _items[article_item.id];
 	article_item.sort_key = sort_key++;
-	
+
 	_ufopaediaArticles[article_item.id] = new ArticleDefinitionItem(article_item);
-	
+
 	article_item_ammo.id = "STR_PISTOL_CLIP";
 	article_item_ammo.title = "STR_PISTOL_CLIP";
 	article_item_ammo.item = _items[article_item_ammo.id];
 	article_item_ammo.sort_key = sort_key++;
-	
+
 	_ufopaediaArticles[article_item_ammo.id] = new ArticleDefinitionItem(article_item_ammo);
-	
+
 	article_item.id = "STR_HEAVY_CANNON";
 	article_item.title = "STR_HEAVY_CANNON";
 	article_item.text = "STR_HEAVY_CANNON_UFOPEDIA";
 	article_item.item = _items[article_item.id];
 	article_item.sort_key = sort_key++;
-	
+
 	_ufopaediaArticles[article_item.id] = new ArticleDefinitionItem(article_item);
-	
+
 	article_item_ammo.id = "STR_HC_AP_AMMO";
 	article_item_ammo.title = "STR_HC_AP_AMMO";
 	article_item_ammo.item = _items[article_item_ammo.id];
 	article_item_ammo.sort_key = sort_key++;
-	
+
 	_ufopaediaArticles[article_item_ammo.id] = new ArticleDefinitionItem(article_item_ammo);
-	
+
 	article_item_ammo.id = "STR_HC_HE_AMMO";
 	article_item_ammo.title = "STR_HC_HE_AMMO";
 	article_item_ammo.item = _items[article_item_ammo.id];
 	article_item_ammo.sort_key = sort_key++;
-	
+
 	_ufopaediaArticles[article_item_ammo.id] = new ArticleDefinitionItem(article_item_ammo);
 
 	article_item_ammo.id = "STR_HC_I_AMMO";
 	article_item_ammo.title = "STR_HC_I_AMMO";
 	article_item_ammo.item = _items[article_item_ammo.id];
 	article_item_ammo.sort_key = sort_key++;
-	
+
 	_ufopaediaArticles[article_item_ammo.id] = new ArticleDefinitionItem(article_item_ammo);
-	
+
 	article_item.id = "STR_GRENADE";
 	article_item.title = "STR_GRENADE";
 	article_item.text = "STR_GRENADE_UFOPEDIA";
 	article_item.item = _items[article_item.id];
 	article_item.sort_key = sort_key++;
-	
+
 	_ufopaediaArticles[article_item.id] = new ArticleDefinitionItem(article_item);
-	
+
 	article_item.id = "STR_SMOKE_GRENADE";
 	article_item.title = "STR_SMOKE_GRENADE";
 	article_item.text = "STR_SMOKE_GRENADE_UFOPEDIA";
 	article_item.item = _items[article_item.id];
 	article_item.sort_key = sort_key++;
-	
+
 	_ufopaediaArticles[article_item.id] = new ArticleDefinitionItem(article_item);
-	
-	
+
+
 	ArticleDefinitionArmor article_armor;
 	article_armor.section = UFOPAEDIA_WEAPONS_AND_EQUIPMENT;
-	
+
 	article_armor.id = "STR_PERSONAL_ARMOR";
 	article_armor.title = "STR_PERSONAL_ARMOR_UC";
-	article_armor.armor = _armors["STR_PERSONAL_ARMOR_UC"]; // FIXME: this is not good, using _UC terms as IDs! 
+	article_armor.armor = _armors["STR_PERSONAL_ARMOR_UC"]; // FIXME: this is not good, using _UC terms as IDs!
 	article_armor.sort_key = sort_key++;
-	
+
 	_ufopaediaArticles[article_armor.id] = new ArticleDefinitionArmor(article_armor);
-	
-	
+
+
 	// ALIEN ARTIFACTS
-	
+
 
 	// BASE FACILITIES
 	ArticleDefinitionBaseFacility article_facility;
 	article_facility.section = UFOPAEDIA_BASE_FACILITIES;
-	
+
 	article_facility.id = "STR_ACCESS_LIFT";
 	article_facility.title = "STR_ACCESS_LIFT";
 	article_facility.text = "STR_ACCESS_LIFT_UFOPEDIA";
 	article_facility.facility = _facilities[article_facility.id];
 	article_facility.sort_key = sort_key++;
-	
+
 	_ufopaediaArticles[article_facility.id] = new ArticleDefinitionBaseFacility(article_facility);
-	
+
 	article_facility.id = "STR_HANGAR";
 	article_facility.title = "STR_HANGAR";
 	article_facility.text = "STR_HANGAR_UFOPEDIA";
 	article_facility.facility = _facilities[article_facility.id];
 	article_facility.sort_key = sort_key++;
-	
+
 	_ufopaediaArticles[article_facility.id] = new ArticleDefinitionBaseFacility(article_facility);
-	
+
 
 	// ALIEN LIFE FORMS
 	ArticleDefinitionTextImage article_textimage;
@@ -1890,7 +1890,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	article_textimage.sort_key = sort_key++;
 
 	_ufopaediaArticles[article_textimage.id] = new ArticleDefinitionTextImage(article_textimage);
-	
+
 	article_textimage.id = "STR_SNAKEMAN";
 	article_textimage.title = "STR_SNAKEMAN";
 	article_textimage.image_id = "UP030.SPK";
@@ -1899,7 +1899,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 
 	_ufopaediaArticles[article_textimage.id] = new ArticleDefinitionTextImage(article_textimage);
 
-	
+
 	// ALIEN RESEARCH
 	ArticleDefinitionText article_text;
 	article_text.section = UFOPAEDIA_ALIEN_RESEARCH;
@@ -1908,23 +1908,23 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	article_text.title = "STR_ALIEN_ORIGINS";
 	article_text.text = "STR_ALIEN_ORIGINS_UFOPEDIA";
 	article_text.sort_key = sort_key++;
-	
+
 	_ufopaediaArticles[article_text.id] = new ArticleDefinitionText(article_text);
 
-	
+
 	// UFO COMPONENTS
-	
-	
+
+
 	// UFOs
 	ArticleDefinitionUfo article_ufo;
 	article_ufo.section = UFOPAEDIA_UFOS;
-	
+
 	article_ufo.id = "STR_SMALL_SCOUT";
 	article_ufo.title = "STR_SMALL_SCOUT";
 	article_ufo.text = "STR_SMALL_SCOUT_UFOPEDIA";
 	article_ufo.ufo = _ufos[article_ufo.id];
 	article_ufo.sort_key = sort_key++;
-	
+
 	_ufopaediaArticles[article_ufo.id] = new ArticleDefinitionUfo(article_ufo);
 
 	article_ufo.id = "STR_HARVESTER";
@@ -1932,9 +1932,9 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	article_ufo.text = "STR_HARVESTER_UFOPEDIA";
 	article_ufo.ufo = _ufos[article_ufo.id];
 	article_ufo.sort_key = sort_key++;
-	
+
 	_ufopaediaArticles[article_ufo.id] = new ArticleDefinitionUfo(article_ufo);
-	
+
 	// General values
 	_costSoldier = 20000;
 	_costEngineer = 25000;
@@ -1949,7 +1949,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	YAML::Node doc;
 	std::map<RuleResearchProject *, std::vector<std::string> > projectDependencys;
 	std::map<RuleResearchProject *, std::vector<std::string> > unlocks;
-	while(parser.GetNextDocument(doc)) 
+	while(parser.GetNextDocument(doc))
 	{
 		for(YAML::Iterator it=doc.begin();it!=doc.end();++it)
 		{
@@ -1970,12 +1970,12 @@ XcomRuleset::XcomRuleset() : Ruleset()
 			_researchProjects[r->getName ()] = r;
 		}
 		for(std::map<RuleResearchProject *, std::vector<std::string> >::iterator iter = projectDependencys.begin ();
-		    iter != projectDependencys.end ();
-		    iter++)
+			iter != projectDependencys.end ();
+			iter++)
 		{
 			for(std::vector<std::string>::iterator itDep = iter->second.begin ();
-			    itDep != iter->second.end ();
-			    itDep++)
+				itDep != iter->second.end ();
+				itDep++)
 			{
 				std::map<std::string, RuleResearchProject *>::iterator it = _researchProjects.find(*itDep);
 				if (it != _researchProjects.end ())
@@ -1985,12 +1985,12 @@ XcomRuleset::XcomRuleset() : Ruleset()
 			}
 		  }
 		for(std::map<RuleResearchProject *, std::vector<std::string> >::iterator iter = unlocks.begin ();
-		    iter != unlocks.end ();
-		    iter++)
+			iter != unlocks.end ();
+			iter++)
 		{
 			for(std::vector<std::string>::iterator itDep = iter->second.begin ();
-			    itDep != iter->second.end ();
-			    itDep++)
+				itDep != iter->second.end ();
+				itDep++)
 			{
 				std::map<std::string, RuleResearchProject *>::iterator it = _researchProjects.find(*itDep);
 				if (it != _researchProjects.end ())
@@ -2054,7 +2054,7 @@ SavedGame *XcomRuleset::newSave(GameDifficulty diff) const
 	save->getRegions()->push_back(new Region(getRegion("STR_NORTH_ATLANTIC")));
 	save->getRegions()->push_back(new Region(getRegion("STR_SOUTH_ATLANTIC")));
 	save->getRegions()->push_back(new Region(getRegion("STR_INDIAN_OCEAN")));
-	
+
 	// Set up craft IDs
 	save->getCraftIds()->insert(std::pair<std::string, int>("STR_SKYRANGER", 1));
 	save->getCraftIds()->insert(std::pair<std::string, int>("STR_LIGHTNING", 1));
@@ -2147,7 +2147,7 @@ SavedGame *XcomRuleset::newSave(GameDifficulty diff) const
 
 	save->getUfopaedia()->insertArticle(getUfopaediaArticle("STR_PISTOL"));
 	save->getUfopaedia()->insertArticle(getUfopaediaArticle("STR_PISTOL_CLIP"));
-	save->getUfopaedia()->insertArticle(getUfopaediaArticle("STR_HEAVY_CANNON"));	
+	save->getUfopaedia()->insertArticle(getUfopaediaArticle("STR_HEAVY_CANNON"));
 	save->getUfopaedia()->insertArticle(getUfopaediaArticle("STR_HC_AP_AMMO"));
 	save->getUfopaedia()->insertArticle(getUfopaediaArticle("STR_HC_HE_AMMO"));
 	save->getUfopaedia()->insertArticle(getUfopaediaArticle("STR_HC_I_AMMO"));
@@ -2155,11 +2155,11 @@ SavedGame *XcomRuleset::newSave(GameDifficulty diff) const
 	save->getUfopaedia()->insertArticle(getUfopaediaArticle("STR_SMOKE_GRENADE"));
 	save->getUfopaedia()->insertArticle(getUfopaediaArticle("STR_PERSONAL_ARMOR"));
 
-	
+
 	save->getUfopaedia()->insertArticle(getUfopaediaArticle("STR_SECTOID"));
 //	save->getUfopaedia()->insertArticle(getUfopaediaArticle("STR_SNAKEMAN"));
 	save->getUfopaedia()->insertArticle(getUfopaediaArticle("STR_ALIEN_ORIGINS"));
-	
+
 	save->getUfopaedia()->insertArticle(getUfopaediaArticle("STR_ACCESS_LIFT"));
 	save->getUfopaedia()->insertArticle(getUfopaediaArticle("STR_HANGAR"));
 

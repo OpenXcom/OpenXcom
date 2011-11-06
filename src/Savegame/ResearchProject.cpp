@@ -45,7 +45,7 @@ bool ResearchProject::step()
 	}
 	return false;
 }
-  
+
 /**
  * Changes the number of scientist to the ResearchProject
  * @param nb number of scientist assigned to this ResearchProject

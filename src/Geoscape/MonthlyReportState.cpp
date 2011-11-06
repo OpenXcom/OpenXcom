@@ -69,7 +69,7 @@ MonthlyReportState::MonthlyReportState(Game *game) : State(game)
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
 	_txtTitle->setText(_game->getLanguage()->getString("STR_XCOM_PROJECT_MONTHLY_REPORT"));
-	
+
 	int month = _game->getSavedGame()->getTime()->getMonth() - 1, year = _game->getSavedGame()->getTime()->getYear();
 	if (month == 0)
 	{
@@ -124,7 +124,7 @@ MonthlyReportState::MonthlyReportState(Game *game) : State(game)
  */
 MonthlyReportState::~MonthlyReportState()
 {
-	
+
 }
 
 /**

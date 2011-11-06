@@ -54,11 +54,11 @@
   3) Y axis goes downleft. (length of the map
   4) Z axis goes up (height of the map)
 
-           0,0
+		   0,0
 			/\
-	    y+ /  \ x+
+		y+ /  \ x+
 		   \  /
-		    \/
+			\/
 */
 
 namespace OpenXcom
@@ -111,7 +111,7 @@ void Map::init()
 	int b = 15; // black
 	int pixels[81] = { 0, 0, b, b, b, b, b, 0, 0,
 					   0, 0, b, f, f, f, b, 0, 0,
-				       0, 0, b, f, f, f, b, 0, 0,
+					   0, 0, b, f, f, f, b, 0, 0,
 					   b, b, b, f, f, f, b, b, b,
 					   b, f, f, f, f, f, f, f, b,
 					   0, b, f, f, f, f, f, b, 0,
@@ -190,7 +190,7 @@ void Map::drawTerrain(Surface *surface)
 	Surface *tmpSurface;
 	Tile *tile;
 	int beginX = 0, endX = _save->getWidth() - 1;
-    int beginY = 0, endY = _save->getLength() - 1;
+	int beginY = 0, endY = _save->getLength() - 1;
 	int beginZ = 0, endZ = _camera->getViewHeight();
 	Position mapPosition, screenPosition, bulletPositionScreen;
 	int bulletLowX=16000, bulletLowY=16000, bulletLowZ=16000, bulletHighX=0, bulletHighY=0, bulletHighZ=0;
@@ -248,11 +248,11 @@ void Map::drawTerrain(Surface *surface)
 
 	surface->lock();
 
-    for (int itZ = beginZ; itZ <= endZ; itZ++)
+	for (int itZ = beginZ; itZ <= endZ; itZ++)
 	{
-        for (int itX = beginX; itX <= endX; itX++)
+		for (int itX = beginX; itX <= endX; itX++)
 		{
-            for (int itY = beginY; itY <= endY; itY++)
+			for (int itY = beginY; itY <= endY; itY++)
 			{
 				mapPosition = Position(itX, itY, itZ);
 				_camera->convertMapToScreen(mapPosition, &screenPosition);
@@ -426,7 +426,7 @@ void Map::drawTerrain(Surface *surface)
 						}
 					}
 
-			        unit = tile->getUnit();
+					unit = tile->getUnit();
 					// Draw soldier
 					if (unit && (unit->getVisible() || _save->getDebugMode()))
 					{

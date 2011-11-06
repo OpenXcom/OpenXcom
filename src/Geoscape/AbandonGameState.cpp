@@ -45,7 +45,7 @@ AbandonGameState::AbandonGameState(Game *game) : State(game)
 	_btnYes = new TextButton(50, 20, 38, 140);
 	_btnNo = new TextButton(50, 20, 168, 140);
 	_txtTitle = new Text(206, 15, 25, 70);
-	
+
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
 
@@ -79,7 +79,7 @@ AbandonGameState::AbandonGameState(Game *game) : State(game)
  */
 AbandonGameState::~AbandonGameState()
 {
-	
+
 }
 
 /**

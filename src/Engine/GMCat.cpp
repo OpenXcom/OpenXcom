@@ -26,7 +26,7 @@ namespace OpenXcom
 static inline unsigned read_uint32_le (const unsigned char *p)
 {
 return ((unsigned) p[0]) + (((unsigned) p[1]) << 8)
-    + (((unsigned) p[2]) << 16) + (((unsigned) p[3]) << 24);
+	+ (((unsigned) p[2]) << 16) + (((unsigned) p[3]) << 24);
 }
 
 /// MIDI sequence.
@@ -191,10 +191,10 @@ static int gmext_write_sequence (std::vector<unsigned char> &midi,
 			cmd = *data++;
 			left--;
 			switch (cmd) {
-				case 0xFF:      // end track
-				case 0xFD:      // end subsequence
+				case 0xFF:	  // end track
+				case 0xFD:	  // end subsequence
 					return 0;
-				case 0xFE:      // insert subsequence
+				case 0xFE:	  // insert subsequence
 					if (!left--)
 						return -1;
 					if (*data >= stream->nsubs)
@@ -211,7 +211,7 @@ static int gmext_write_sequence (std::vector<unsigned char> &midi,
 					cmd &= 0xF0;
 			}
 		} else if (cmd == 0)
-			return -1;      // invalid running mode
+			return -1;	  // invalid running mode
 
 		if (!left--)
 			return -1;
@@ -235,7 +235,7 @@ static int gmext_write_sequence (std::vector<unsigned char> &midi,
 
 			case 0xC0:
 				if (data1 == 0x7E)
-					return 0;       // restart stream
+					return 0;	   // restart stream
 				status->patch = data1;
 				if ((data1 == 0x57) || (data1 == 0x3F))
 					data1 = 0x3E;
@@ -275,7 +275,7 @@ static int gmext_write_sequence (std::vector<unsigned char> &midi,
 				midi.push_back(data2);
 				} break;
 
-			default:        // unhandled cmd byte
+			default:		// unhandled cmd byte
 				return -1;
 		}
 

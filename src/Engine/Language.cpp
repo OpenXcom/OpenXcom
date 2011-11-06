@@ -208,7 +208,7 @@ std::vector<std::string> Language::getList(TextList *list)
 			i = langs.erase(i);
 			continue;
 		}
-    }
+	}
 	return langs;
 }
 

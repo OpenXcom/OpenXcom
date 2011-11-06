@@ -25,7 +25,7 @@ namespace OpenXcom
 
 Node::Node()
 {
-	
+
 }
 
 /**

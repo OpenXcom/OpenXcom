@@ -61,12 +61,12 @@ ConfirmDestinationState::ConfirmDestinationState(Game *game, Craft *craft, Targe
 	{
 		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
 	}
-	
+
 	add(_window);
 	add(_btnOk);
 	add(_btnCancel);
 	add(_txtTarget);
-	
+
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK12.SCR"));
@@ -99,7 +99,7 @@ ConfirmDestinationState::ConfirmDestinationState(Game *game, Craft *craft, Targe
  */
 ConfirmDestinationState::~ConfirmDestinationState()
 {
-	
+
 }
 
 /**

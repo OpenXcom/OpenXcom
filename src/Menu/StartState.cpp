@@ -63,7 +63,7 @@ StartState::StartState(Game *game) : State(game), _load(LOADING_NONE)
  */
 StartState::~StartState()
 {
-	
+
 }
 
 /**

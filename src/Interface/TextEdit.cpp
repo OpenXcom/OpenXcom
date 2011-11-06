@@ -259,7 +259,7 @@ void TextEdit::draw()
 	{
 		newValue += _ascii;
 		_text->setText(newValue);
-    }
+	}
 #endif
 	clear();
 	_text->blit(this);
@@ -280,7 +280,7 @@ void TextEdit::draw()
 		}
 		_caret->setX(x);
 		_caret->blit(this);
-    }
+	}
 #endif
 }
 
@@ -320,7 +320,7 @@ bool TextEdit::exceedsMaxWidth(wchar_t c)
 void TextEdit::mousePress(Action *action, State *state)
 {
 	focus();
-        InteractiveSurface::mousePress(action, state);
+		InteractiveSurface::mousePress(action, state);
 }
 
 /**
@@ -361,37 +361,37 @@ void TextEdit::keyboardPress(Action *action, State *state)
 		}
 		break;
 #else
-    case SDLK_LEFT:
-        if (_caretPos > 0)
+	case SDLK_LEFT:
+		if (_caretPos > 0)
 		{
 			_caretPos--;
 		}
-        break;
-    case SDLK_RIGHT:
+		break;
+	case SDLK_RIGHT:
 		if (_caretPos < _value.length())
 		{
 			_caretPos++;
 		}
-        break;
-    case SDLK_HOME:
-        _caretPos = 0;
-        break;
-    case SDLK_END:
-        _caretPos = _value.length();
-        break;
+		break;
+	case SDLK_HOME:
+		_caretPos = 0;
+		break;
+	case SDLK_END:
+		_caretPos = _value.length();
+		break;
 	case SDLK_BACKSPACE:
 		if (_caretPos > 0)
 		{
 			_value.erase(_caretPos - 1, 1);
 			_caretPos--;
-        }
+		}
 		break;
 	case SDLK_DELETE:
-        if (_caretPos < _value.length())
+		if (_caretPos < _value.length())
 		{
 			_value.erase(_caretPos, 1);
-        }
-	    break;
+		}
+		break;
 	case SDLK_RETURN:
 		_isFocused = false;
 		_blink = false;
@@ -402,7 +402,7 @@ void TextEdit::keyboardPress(Action *action, State *state)
 		{
 			if (action->getDetails()->key.keysym.unicode >= L' ' && action->getDetails()->key.keysym.unicode <= L'~' && !exceedsMaxWidth((wchar_t)action->getDetails()->key.keysym.unicode))
 			{
-			    _value.insert(_caretPos, 1, (wchar_t)action->getDetails()->key.keysym.unicode);
+				_value.insert(_caretPos, 1, (wchar_t)action->getDetails()->key.keysym.unicode);
 				_caretPos++;
 			}
 		}

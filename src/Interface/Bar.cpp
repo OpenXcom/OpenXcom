@@ -192,11 +192,11 @@ void Bar::draw()
 
 	if (_invert)
 	{
-        drawRect(&square, _color); 
+		drawRect(&square, _color);
 	}
 	else
 	{
-        drawRect(&square, _color + 4);
+		drawRect(&square, _color + 4);
 	}
 
 	square.y++;
@@ -204,9 +204,9 @@ void Bar::draw()
 	square.h -= 2;
 
 	drawRect(&square, 0);
-	
+
 	if (_invert)
-    {
+	{
 		if (_secondOnTop)
 		{
 			square.w = (Uint16)(_scale * _value);
@@ -221,9 +221,9 @@ void Bar::draw()
 			square.w = (Uint16)(_scale * _value);
 			drawRect(&square, _color + 4);
 		}
-    }
+	}
 	else
-    {
+	{
 		if (_secondOnTop)
 		{
 			square.w = (Uint16)(_scale * _value);
@@ -238,7 +238,7 @@ void Bar::draw()
 			square.w = (Uint16)(_scale * _value);
 			drawRect(&square, _color);
 		}
-    }
+	}
 }
 
 }

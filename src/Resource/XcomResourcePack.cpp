@@ -65,13 +65,13 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 	s2 << "BACKPALS.DAT";
 	_palettes[s2.str()] = new Palette();
 	_palettes[s2.str()]->loadDat(CrossPlatform::getDataFile(s1.str()), 128);
-	
+
 	// Load fonts
 	Font::loadIndex(CrossPlatform::getDataFile("Language/Font.dat"));
 
 	std::string font[] = {"Big.fnt",
 						  "Small.fnt"};
-	
+
 	for (int i = 0; i < 2; ++i)
 	{
 		std::stringstream s;
@@ -322,7 +322,7 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 					std::stringstream s;
 					s << "SOUND/" << mus[i] << "." << exts[j];
 					struct stat info;
-					if (stat(CrossPlatform::getDataFile(s.str()).c_str(), &info) == 0) 
+					if (stat(CrossPlatform::getDataFile(s.str()).c_str(), &info) == 0)
 					{
 						_musics[mus[i]]->load(CrossPlatform::getDataFile(s.str()));
 						break;

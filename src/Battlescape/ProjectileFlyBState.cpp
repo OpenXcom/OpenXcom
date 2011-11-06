@@ -67,7 +67,7 @@ void ProjectileFlyBState::init()
 	BattleItem *weapon = _action.weapon;
 	_projectileItem = 0;
 	_autoshotCounter = 0;
-	
+
 	if (!weapon) // can't shoot without weapon
 		return;
 
@@ -124,8 +124,8 @@ void ProjectileFlyBState::init()
 		_baseAcc = (int)(_unit->getThrowingAccuracy()*100.0);
 		_projectileItem = weapon;
 		break;
-    default:
-        _baseAcc = 0;
+	default:
+		_baseAcc = 0;
 	}
 
 	createNewProjectile();
@@ -293,7 +293,7 @@ std::string ProjectileFlyBState::getResult() const
 }
 
 /*
- * Validate the throwing range. 
+ * Validate the throwing range.
  * @return true when range is valid.
  */
 bool ProjectileFlyBState::validThrowRange()

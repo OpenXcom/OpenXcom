@@ -51,7 +51,7 @@ BriefingCrashState::BriefingCrashState(Game *game, Craft *craft) : State(game), 
 	_txtUfo = new Text(274, 16, 16, 40);
 	_txtCraft = new Text(274, 16, 16, 56);
 	_txtBriefing = new Text(274, 64, 16, 72);
-	
+
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
 
@@ -97,7 +97,7 @@ BriefingCrashState::BriefingCrashState(Game *game, Craft *craft) : State(game), 
  */
 BriefingCrashState::~BriefingCrashState()
 {
-	
+
 }
 
 /**

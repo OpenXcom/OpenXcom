@@ -97,7 +97,7 @@ void Surface::loadScr(const std::string &filename)
 
 	// Lock the surface
 	lock();
-	
+
 	Uint8 value;
 	int x = 0, y = 0;
 
@@ -135,7 +135,7 @@ void Surface::loadSpk(const std::string &filename)
 
 	// Lock the surface
 	lock();
-	
+
 	Uint16 flag;
 	Uint8 value;
 	int x = 0, y = 0;
@@ -197,7 +197,7 @@ void Surface::offset(int off, int min, int max, int mul)
 
 	// Lock the surface
 	lock();
-	
+
 	for (int x = 0, y = 0; x < getWidth() && y < getHeight();)
 	{
 		Uint8 pixel = getPixel(x, y);
@@ -335,7 +335,7 @@ void Surface::copy(Surface *surface)
  */
 void Surface::drawRect(SDL_Rect *rect, Uint8 color)
 {
-    SDL_FillRect(_surface, rect, color);
+	SDL_FillRect(_surface, rect, color);
 }
 
 /**
@@ -348,7 +348,7 @@ void Surface::drawRect(SDL_Rect *rect, Uint8 color)
  */
 void Surface::drawLine(Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, Uint8 color)
 {
-    lineColor(_surface, x1, y1, x2, y2, Palette::getRGBA(getPalette(), color));
+	lineColor(_surface, x1, y1, x2, y2, Palette::getRGBA(getPalette(), color));
 }
 
 /**
@@ -360,7 +360,7 @@ void Surface::drawLine(Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, Uint8 color)
  */
 void Surface::drawCircle(Sint16 x, Sint16 y, Sint16 r, Uint8 color)
 {
-    filledCircleColor(_surface, x, y, r, Palette::getRGBA(getPalette(), color));
+	filledCircleColor(_surface, x, y, r, Palette::getRGBA(getPalette(), color));
 }
 
 /**
@@ -372,7 +372,7 @@ void Surface::drawCircle(Sint16 x, Sint16 y, Sint16 r, Uint8 color)
  */
 void Surface::drawPolygon(Sint16 *x, Sint16 *y, int n, Uint8 color)
 {
-    filledPolygonColor(_surface, x, y, n, Palette::getRGBA(getPalette(), color));
+	filledPolygonColor(_surface, x, y, n, Palette::getRGBA(getPalette(), color));
 }
 
 /**
@@ -386,7 +386,7 @@ void Surface::drawPolygon(Sint16 *x, Sint16 *y, int n, Uint8 color)
  */
 void Surface::drawTexturedPolygon(Sint16 *x, Sint16 *y, int n, Surface *texture, int dx, int dy)
 {
-    texturedPolygon(_surface, x, y, n, texture->getSurface(), dx, dy);
+	texturedPolygon(_surface, x, y, n, texture->getSurface(), dx, dy);
 }
 
 /**
@@ -398,7 +398,7 @@ void Surface::drawTexturedPolygon(Sint16 *x, Sint16 *y, int n, Surface *texture,
  */
 void Surface::drawString(Sint16 x, Sint16 y, const char *s, Uint8 color)
 {
-    stringColor(_surface, x, y, s, Palette::getRGBA(getPalette(), color));
+	stringColor(_surface, x, y, s, Palette::getRGBA(getPalette(), color));
 }
 
 /**
@@ -510,7 +510,7 @@ void Surface::setPixel(int x, int y, Uint8 pixel)
 	{
 		return;
 	}
-    ((Uint8 *)_surface->pixels)[y * _surface->pitch + x * _surface->format->BytesPerPixel] = pixel;
+	((Uint8 *)_surface->pixels)[y * _surface->pitch + x * _surface->format->BytesPerPixel] = pixel;
 }
 
 /**
@@ -523,7 +523,7 @@ void Surface::setPixel(int x, int y, Uint8 pixel)
  */
 void Surface::setPixelIterative(int *x, int *y, Uint8 pixel)
 {
-    setPixel(*x, *y, pixel);
+	setPixel(*x, *y, pixel);
 	(*x)++;
 	if (*x == getWidth())
 	{
@@ -540,7 +540,7 @@ void Surface::setPixelIterative(int *x, int *y, Uint8 pixel)
  */
 Uint8 Surface::getPixel(int x, int y) const
 {
-    return ((Uint8 *)_surface->pixels)[y * _surface->pitch + x * _surface->format->BytesPerPixel];
+	return ((Uint8 *)_surface->pixels)[y * _surface->pitch + x * _surface->format->BytesPerPixel];
 }
 
 /**
@@ -638,7 +638,7 @@ void Surface::paletteShift(int off, int mul, int mid)
 	// assign it and free it
 	SDL_SetColors(_surface, newColors, 0, ncolors);
 	free(newColors);
-	
+
 	return;
 }
 
@@ -682,12 +682,12 @@ void Surface::blitNShade(Surface *surface, int x, int y, int off, bool half, int
 
 	int spitch = getSurface()->pitch;
 	int dpitch = surface->getSurface()->pitch;
-	
+
 	const int start_x = std::max((half)? w/2 : 0, -x);
 	const int start_y = std::max(0, -y);
 	const int end_x = std::min( w, dw - x);
 	const int end_y = std::min( h, dh - y);
-	
+
 	int dest_y = (y + start_y) * dpitch + x;
 	int src_y = start_y * spitch;
 	for(int iy = start_y; iy < end_y; ++iy, dest_y += dpitch, src_y += spitch)
@@ -702,7 +702,7 @@ void Surface::blitNShade(Surface *surface, int x, int y, int off, bool half, int
 					baseColor = pixel>>4;
 
 				int newShade = (pixel&15) + off;
-				if (newShade > 15) 
+				if (newShade > 15)
 				{
 					// so dark it would flip over to another color - make it black instead
 					baseColor = 0;

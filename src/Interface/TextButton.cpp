@@ -165,7 +165,7 @@ void TextButton::draw()
 	for (int i = 0; i < 5; ++i)
 	{
 		drawRect(&square, color);
-		
+
 		if (i % 2 == 0)
 		{
 			square.x++;
@@ -192,7 +192,7 @@ void TextButton::draw()
 			break;
 		}
 	}
-	
+
 	bool press;
 	if (_group == 0)
 		press = _isPressed;

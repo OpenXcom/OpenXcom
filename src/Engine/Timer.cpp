@@ -95,7 +95,7 @@ void Timer::think(State* state, Surface* surface)
 			if (surface != 0 && _surface != 0)
 			{
 				(surface->*_surface)();
-			}			
+			}
 			_start = SDL_GetTicks();
 		}
 	}

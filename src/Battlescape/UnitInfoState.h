@@ -30,7 +30,7 @@ class Bar;
 class Surface;
 
 /**
- * Unit Info screen that shows all the 
+ * Unit Info screen that shows all the
  * info of a specific unit.
  */
 class UnitInfoState : public State

@@ -55,7 +55,7 @@ ResearchState::ResearchState(Game *game, Base *base) : State(game), _base(base)
 	_txtScientists = new Text(144, 9, 115, 44);
 	_txtProgress = new Text(64, 9, 250, 44);
 	_lstResearch = new TextList(288, 120, 8, 54);
-	
+
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(1)), Palette::backPos, 16);
@@ -75,7 +75,7 @@ ResearchState::ResearchState(Game *game, Base *base) : State(game), _base(base)
 	// Set up objects
 	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
-	
+
 	_btnNew->setColor(Palette::blockOffset(15)+6);
 	_btnNew->setText(_game->getLanguage()->getString("STR_NEW_PROJECT"));
 	_btnNew->onMouseClick((ActionHandler)&ResearchState::btnNewClick);

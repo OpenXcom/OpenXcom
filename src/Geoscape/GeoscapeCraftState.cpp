@@ -78,7 +78,7 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 	_txtW2Name = new Text(120, 9, 32, 100);
 	_txtW2Ammo = new Text(60, 9, 164, 100);
 	_txtRedirect = new Text(230, 16, 13, 108);
-	
+
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
 
@@ -196,7 +196,7 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 	_txtW1Name->setSecondaryColor(Palette::blockOffset(8)+5);
 	std::wstringstream ss7;
 	ss7 << _game->getLanguage()->getString("STR_WEAPON_1") << L'\x01';
-	
+
 	_txtW1Ammo->setColor(Palette::blockOffset(15)-1);
 	_txtW1Ammo->setSecondaryColor(Palette::blockOffset(8)+5);
 	std::wstringstream ss8;
@@ -208,7 +208,7 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 
 		ss7 << _game->getLanguage()->getString(w1->getRules()->getType());
 		_txtW1Name->setText(ss7.str());
-		
+
 		ss8 << w1->getAmmo();
 		_txtW1Ammo->setText(ss8.str());
 	}
@@ -223,7 +223,7 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 	_txtW2Name->setSecondaryColor(Palette::blockOffset(8)+5);
 	std::wstringstream ss9;
 	ss9 << _game->getLanguage()->getString("STR_WEAPON_2") << L'\x01';
-	
+
 	_txtW2Ammo->setColor(Palette::blockOffset(15)-1);
 	_txtW2Ammo->setSecondaryColor(Palette::blockOffset(8)+5);
 	std::wstringstream ss10;
@@ -235,7 +235,7 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 
 		ss9 << _game->getLanguage()->getString(w2->getRules()->getType());
 		_txtW2Name->setText(ss9.str());
-		
+
 		ss10 << w2->getAmmo();
 		_txtW2Ammo->setText(ss10.str());
 	}
@@ -274,7 +274,7 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
  */
 GeoscapeCraftState::~GeoscapeCraftState()
 {
-	
+
 }
 
 /**

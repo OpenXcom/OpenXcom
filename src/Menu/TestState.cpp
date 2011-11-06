@@ -78,7 +78,7 @@ void BmpToFont(const std::string &font)
 		clr[i].b = 256-i*32;
 	}
 	s->setPalette(clr, 0, 8);
-	
+
 	SDL_BlitSurface(orig, 0, s->getSurface(), 0);
 
 	std::ofstream out (dat.c_str(), std::ios::out | std::ios::binary);
@@ -106,7 +106,7 @@ TestState::TestState(Game *game) : State(game)
 	_list = new TextList(300, 180, 10, 10);
 	_set = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
 	_set->getFrame(1);
-	
+
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
@@ -119,10 +119,10 @@ TestState::TestState(Game *game) : State(game)
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK04.SCR"));
-	
+
 	_button->setColor(Palette::blockOffset(15)+1);
 	_button->setText(L"LOLOLOL");
-	
+
 	_text->setColor(Palette::blockOffset(15)+1);
 	//_text->setBig();
 	_text->setWordWrap(true);
@@ -135,7 +135,7 @@ TestState::TestState(Game *game) : State(game)
 	_list->addRow(2, L"a", L"b");
 	_list->addRow(3, L"lol", L"welp", L"yo");
 	_list->addRow(1, L"0123456789");
-	
+
 	_i = 0;
 
 	//FontToBmp("../../fonts/BIGLETS_R", 16, 16);
@@ -148,7 +148,7 @@ TestState::TestState(Game *game) : State(game)
 
 TestState::~TestState()
 {
-	
+
 }
 
 void TestState::think()
@@ -180,7 +180,7 @@ SDL_Surface *TestState::testSurface()
 
 	// Create surface
 	surface = SDL_CreateRGBSurface(SDL_HWSURFACE, 256, 25, 8, 0, 0, 0, 0);
-	
+
 	if (surface == 0)
 	{
 		throw Exception(SDL_GetError());
@@ -190,7 +190,7 @@ SDL_Surface *TestState::testSurface()
 	SDL_LockSurface(surface);
 
 	Uint8 *index = (Uint8 *)surface->pixels;
-	
+
 	for (int j = 0; j < 25; ++j)
 		for (int i = 0; i < 256; i++, ++index)
 			*index = i;

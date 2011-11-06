@@ -34,80 +34,80 @@
 
 namespace OpenXcom
 {
-	
+
 	ArticleStateArmor::ArticleStateArmor(Game *game, ArticleDefinitionArmor *defs) : ArticleState(game, defs->id)
 	{
 		// add screen elements
 		_txtTitle = new Text(300, 32, 5, 24);
-		
+
 		// Set palette
 		_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_4")->getColors());
-		
+
 		ArticleState::initLayout();
-		
+
 		// add other elements
 		add(_txtTitle);
-		
+
 		// Set up objects
 		_btnOk->setColor(Palette::blockOffset(0)+15);
 		_btnPrev->setColor(Palette::blockOffset(0)+15);
 		_btnNext->setColor(Palette::blockOffset(0)+15);
-		
+
 		_txtTitle->setColor(Palette::blockOffset(14)+15);
 		_txtTitle->setBig();
 		_txtTitle->setAlign(ALIGN_LEFT);
 		_txtTitle->setWordWrap(true);
 		_txtTitle->setText(Ufopaedia::buildText(_game, defs->title));
-		
+
 		_image = new Surface(320, 200, 0, 0);
 		add(_image);
-		
+
 		std::string look = "MAN_1M0.SPK";
 		// TODO: add this background sprite to RuleArmor
 		// personal armor: MAN_1M0.SKP
 		// power suit: MAN_2.SPK
 		// flying suit: MAN_3.SPK
-		
+
 		_game->getResourcePack()->getSurface(look)->blit(_image);
-		
-		
+
+
 		_lstInfo = new TextList(150, 60, 150, 69);
 		add(_lstInfo);
-		
+
 		_lstInfo->setColor(Palette::blockOffset(14)+15);
 		_lstInfo->setColumns(2, 125, 25);
 		_lstInfo->setDot(true);
-		
+
 		std::wstringstream ss;
 		ss.str(L"");ss.clear();
 		ss << defs->armor->getFrontArmor();
 		_lstInfo->addRow(2, _game->getLanguage()->getString("STR_FRONT_ARMOR").c_str(), ss.str().c_str());
 		_lstInfo->setCellColor(0, 1, Palette::blockOffset(15)+4);
-		
+
 		ss.str(L"");ss.clear();
 		ss << defs->armor->getSideArmor();
 		_lstInfo->addRow(2, _game->getLanguage()->getString("STR_LEFT_ARMOR").c_str(), ss.str().c_str());
 		_lstInfo->setCellColor(1, 1, Palette::blockOffset(15)+4);
-		
+
 		ss.str(L"");ss.clear();
 		ss << defs->armor->getSideArmor();
 		_lstInfo->addRow(2, _game->getLanguage()->getString("STR_RIGHT_ARMOR").c_str(), ss.str().c_str());
 		_lstInfo->setCellColor(2, 1, Palette::blockOffset(15)+4);
-		
+
 		ss.str(L"");ss.clear();
 		ss << defs->armor->getRearArmor();
 		_lstInfo->addRow(2, _game->getLanguage()->getString("STR_REAR_ARMOR").c_str(), ss.str().c_str());
 		_lstInfo->setCellColor(3, 1, Palette::blockOffset(15)+4);
-		
+
 		ss.str(L"");ss.clear();
 		ss << defs->armor->getUnderArmor();
 		_lstInfo->addRow(2, _game->getLanguage()->getString("STR_UNDER_ARMOR").c_str(), ss.str().c_str());
 		_lstInfo->setCellColor(4, 1, Palette::blockOffset(15)+4);
-		
+
 		_lstInfo->draw();
 	}
-	
+
 	ArticleStateArmor::~ArticleStateArmor()
 	{}
-	
+
 }

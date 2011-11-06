@@ -32,7 +32,7 @@ class TextEdit;
 class Bar;
 
 /**
- * Soldier Info screen that shows all the 
+ * Soldier Info screen that shows all the
  * info of a specific soldier.
  */
 class SoldierInfoState : public State

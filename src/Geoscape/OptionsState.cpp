@@ -47,7 +47,7 @@ OptionsState::OptionsState(Game *game) : State(game)
 	_btnAbandon = new TextButton(180, 20, 38, 110);
 	_btnCancel = new TextButton(180, 20, 38, 140);
 	_txtTitle = new Text(206, 15, 25, 32);
-	
+
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
 
@@ -89,7 +89,7 @@ OptionsState::OptionsState(Game *game) : State(game)
  */
 OptionsState::~OptionsState()
 {
-	
+
 }
 
 /**

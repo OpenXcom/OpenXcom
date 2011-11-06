@@ -34,7 +34,7 @@ BattleAIState::BattleAIState(SavedBattleGame *game, BattleUnit *unit) : _game(ga
  */
 BattleAIState::~BattleAIState()
 {
-	
+
 }
 
 /**

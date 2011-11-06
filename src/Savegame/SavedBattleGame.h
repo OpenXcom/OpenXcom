@@ -62,7 +62,7 @@ class SavedBattleGame
 private:
 	int _width, _length, _height;
 	std::vector<MapDataSet*> _mapDataSets;
-	Tile **_tiles; 
+	Tile **_tiles;
 	BattleUnit *_selectedUnit;
 	std::vector<Node*> _nodes;
 	std::vector<BattleUnit*> _units;

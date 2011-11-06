@@ -43,7 +43,7 @@ BasescapeErrorState::BasescapeErrorState(Game *game, const std::string &msg, con
 	_window = new Window(this, 256, 160, 32, 20, POPUP_BOTH);
 	_btnOk = new TextButton(120, 18, 100, 154);
 	_txtError = new Text(234, 80, 44, 50);
-	
+
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
 
@@ -72,7 +72,7 @@ BasescapeErrorState::BasescapeErrorState(Game *game, const std::string &msg, con
  */
 BasescapeErrorState::~BasescapeErrorState()
 {
-	
+
 }
 
 /**
