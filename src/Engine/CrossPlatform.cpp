@@ -225,6 +225,32 @@ std::string findDataFolder(bool exists)
 }
 
 /**
+ * Checks a bunch of predefined paths for data folders according
+ * to the system.
+ * @param exists Check if the folder actually exists.
+ * @param dirs list of game data folders
+ */
+void findDataFolders(bool exists, std::vector<std::string> & dirs)
+{
+	dirs.push_back(findDataFolder(exists));
+	char * openxcomDataDirs = getenv("OPENXCOM_DATA_DIRS");
+	if(openxcomDataDirs)
+	{
+		std::vector<std::string> envDirs;
+		splitPathList(openxcomDataDirs, envDirs);
+		struct stat info;
+		for(std::vector<std::string>::iterator i = envDirs.begin (); i != envDirs.end (); ++i)
+		{
+			if (exists && (stat(i->c_str(), &info) == 0 && S_ISDIR(info.st_mode)))
+			{
+				continue;
+			}
+			dirs.push_back(*i);
+		}
+	}
+}
+
+/**
  * Checks a bunch of predefined paths for the User folder according
  * to the system and returns the full path.
  * @param exists Check if the folder actually exists.

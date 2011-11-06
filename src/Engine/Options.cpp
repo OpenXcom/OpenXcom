@@ -115,7 +115,7 @@ void init(int argc, char** args)
 	loadArgs(argc, args);
 	if (_dataFolders.empty())
 	{
-		_dataFolders.push_back(CrossPlatform::findDataFolder(true));
+		CrossPlatform::findDataFolders(true, _dataFolders);
 		// Missing data folder is handled in StartState
 	}
 	if (_userFolder == "")
