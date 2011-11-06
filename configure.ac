@@ -38,7 +38,7 @@ AS_IF([test x"$enable_werror" != "xno"], [
 ])
 AS_IF([test x"$GCC" = xyes], [
 	# Be tough with warnings and produce less careless code
-	CFLAGS="$CXXFLAGS -Wall -pedantic -Weffc++"
+	CFLAGS="$CFLAGS -Wall -pedantic -Weffc++"
 	LDFLAGS="$LDFLAGS -Wl,--as-needed"
 ])
 
