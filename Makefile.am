@@ -456,8 +456,7 @@ openxcom_SOURCES = \
 	src/Ufopaedia/UfopaediaStartState.cpp \
 	src/Ufopaedia/UfopaediaStartState.h
 
-EXTRA_DIST = autogen.sh \
-	src/Makefile src/OpenXcom.* \
+EXTRA_DIST = autogen.sh src/OpenXcom.* \
 	src/CMakeLists.txt docs/CMakeLists.txt CMakeLists.txt cmake/* \
 	$(doc_DATA) $(pkgdata_DATA) $(language_DATA) $(name_DATA)
 
