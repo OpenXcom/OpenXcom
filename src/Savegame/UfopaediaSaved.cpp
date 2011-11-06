@@ -92,7 +92,7 @@ namespace OpenXcom {
 			{
 				_current_index++;
 			}
-		} 
+		}
 		while (loop_over<2 && (_visible_articles[_current_index]->section == UFOPAEDIA_NOT_AVAILABLE));
 
 		return _visible_articles[_current_index];
@@ -118,7 +118,7 @@ namespace OpenXcom {
 			{
 				_current_index--;
 			}
-		} 
+		}
 		while (loop_over<2 && (_visible_articles[_current_index]->section == UFOPAEDIA_NOT_AVAILABLE));
 
 		return _visible_articles[_current_index];

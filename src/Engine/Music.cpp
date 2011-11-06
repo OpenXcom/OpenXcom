@@ -46,7 +46,7 @@ Music::~Music()
 void Music::load(const std::string &filename)
 {
 	_music = Mix_LoadMUS(filename.c_str());
-	if (_music == 0) 
+	if (_music == 0)
 	{
 		throw Exception(Mix_GetError());
 	}

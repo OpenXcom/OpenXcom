@@ -30,18 +30,18 @@ namespace OpenXcom
 	class Text;
 	class TextList;
 	class ArticleDefinitionBaseFacility;
-	
+
 	/**
 	 * ArticleStateBaseFacility has a caption, text, preview image and a stats block.
 	 * The facility image is found using the RuleBasefacility class.
 	 */
-	
+
 	class ArticleStateBaseFacility : public ArticleState
 	{
 	public:
 		ArticleStateBaseFacility(Game *game, ArticleDefinitionBaseFacility *article_defs);
 		virtual ~ArticleStateBaseFacility();
-		
+
 	protected:
 		Surface *_image;
 		Text *_txtTitle;

@@ -31,21 +31,21 @@ namespace OpenXcom
 	class TextList;
 	class ArticleDefinitionItem;
 	class RuleItem;
-	
+
 	/**
 	 * ArticleStateItem has a caption, text, preview image and a stats block.
 	 * The facility image is found using the RuleBasefacility class.
 	 */
-	
+
 	class ArticleStateItem : public ArticleState
 	{
 	public:
 		ArticleStateItem(Game *game, ArticleDefinitionItem *article_defs);
 		virtual ~ArticleStateItem();
-		
+
 	protected:
 		void setDamageTypeText(Text *text_field, RuleItem *ammo_rule);
-		
+
 		Surface *_image;
 		Text *_txtTitle;
 		Text *_txtInfo;

@@ -44,7 +44,7 @@ Cursor::Cursor(int width, int height, int x, int y) : Surface(width, height, x, 
  */
 Cursor::~Cursor()
 {
-	
+
 }
 
 /**

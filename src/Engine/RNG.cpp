@@ -86,13 +86,13 @@ double generate(double min, double max)
  * @param s standard deviation
  * @return normally distributed value.
  */
-double boxMuller(double m, double s)	
+double boxMuller(double m, double s)
 {
 	double y1;
 	static double y2;
 	static int use_last = 0;
 
-	if (use_last)		        /* use value from previous call */
+	if (use_last)				/* use value from previous call */
 	{
 		y1 = y2;
 		use_last = 0;

@@ -45,7 +45,7 @@ private:
 	std::vector<Target*> _targets;
 	Craft *_craft;
 	GeoscapeState *_state;
-	
+
 	Window *_window;
 	TextButton *_btnCancel;
 	TextList *_lstTargets;

@@ -148,7 +148,7 @@ RuleAlien *Alien::getRules() const
 /**
  * Returns the alien's stand height.
  * @return stand height
- */ 
+ */
 int Alien::getStandHeight() const
 {
 	return _rules->getStandHeight();

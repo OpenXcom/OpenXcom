@@ -59,7 +59,7 @@ SelectDestinationState::SelectDestinationState(Game *game, Craft *craft, Globe *
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
-	
+
 	add(_btnRotateLeft);
 	add(_btnRotateRight);
 	add(_btnRotateUp);
@@ -70,7 +70,7 @@ SelectDestinationState::SelectDestinationState(Game *game, Craft *craft, Globe *
 	add(_window);
 	add(_btnCancel);
 	add(_txtTitle);
-	
+
 	// Set up objects
 	_globe->onMouseClick((ActionHandler)&SelectDestinationState::globeClick);
 
@@ -106,7 +106,7 @@ SelectDestinationState::SelectDestinationState(Game *game, Craft *craft, Globe *
  */
 SelectDestinationState::~SelectDestinationState()
 {
-	
+
 }
 
 /**
@@ -146,7 +146,7 @@ void SelectDestinationState::globeClick(Action *action)
 	double lon, lat;
 	int mouseX = (int)floor(action->getAbsoluteXMouse()), mouseY = (int)floor(action->getAbsoluteYMouse());
 	_globe->cartToPolar(mouseX, mouseY, &lon, &lat);
-	
+
 	// Ignore window clicks
 	if (mouseY < 28)
 	{

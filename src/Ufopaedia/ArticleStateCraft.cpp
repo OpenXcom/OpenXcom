@@ -33,26 +33,26 @@
 
 namespace OpenXcom
 {
-	
+
 	ArticleStateCraft::ArticleStateCraft(Game *game, ArticleDefinitionCraft *defs) : ArticleState(game, defs->id)
 	{
 		// add screen elements
 		_txtTitle = new Text(140, 32, 5, 24);
-		
+
 		// Set palette
 		_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_3")->getColors());
-		
+
 		ArticleState::initLayout();
-		
+
 		// add other elements
 		add(_txtTitle);
-		
+
 		// Set up objects
 		_game->getResourcePack()->getSurface(defs->image_id)->blit(_bg);
 		_btnOk->setColor(Palette::blockOffset(15)-1);
 		_btnPrev->setColor(Palette::blockOffset(15)-1);
 		_btnNext->setColor(Palette::blockOffset(15)-1);
-		
+
 		_txtTitle->setColor(Palette::blockOffset(14)+15);
 		_txtTitle->setBig();
 		_txtTitle->setAlign(ALIGN_LEFT);
@@ -61,7 +61,7 @@ namespace OpenXcom
 
 		_txtInfo = new Text(defs->rect_text.width, defs->rect_text.height, defs->rect_text.x, defs->rect_text.y);
 		add(_txtInfo);
-		
+
 		_txtInfo->setColor(Palette::blockOffset(14)+15);
 		_txtInfo->setAlign(ALIGN_LEFT);
 		_txtInfo->setWordWrap(true);
@@ -69,7 +69,7 @@ namespace OpenXcom
 
 		_txtStats = new Text(defs->rect_stats.width, defs->rect_stats.height, defs->rect_stats.x, defs->rect_stats.y);
 		add(_txtStats);
-		
+
 		_txtStats->setColor(Palette::blockOffset(14)+15);
 		_txtStats->setSecondaryColor(Palette::blockOffset(15)+4);
 
@@ -83,8 +83,8 @@ namespace OpenXcom
 		ss << _game->getLanguage()->getString("STR_HWP_CAPACITY") << L'\x01' << defs->craft->getHWPs();
 		_txtStats->setText(ss.str());
 	}
-	
+
 	ArticleStateCraft::~ArticleStateCraft()
 	{}
-	
+
 }

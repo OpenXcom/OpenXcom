@@ -34,7 +34,7 @@ class Text;
 class Bar;
 
 /**
- * Base Info screen that shows all the 
+ * Base Info screen that shows all the
  * stats of a base from the Basescape.
  */
 class BaseInfoState : public State
@@ -42,7 +42,7 @@ class BaseInfoState : public State
 private:
 	Base *_base;
 	BasescapeState *_state;
-	
+
 	Surface *_bg;
 	MiniBaseView *_mini;
 	TextButton *_btnOk, *_btnTransfers, *_btnStores, *_btnMonthlyCosts;

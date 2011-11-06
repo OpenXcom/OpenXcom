@@ -71,7 +71,7 @@ BattleUnit::~BattleUnit()
 void BattleUnit::load(const YAML::Node &node)
 {
 	int a = 0;
- 
+
 	node["id"] >> _id;
 	std::string name;
 	node["faction"] >> a;
@@ -107,7 +107,7 @@ void BattleUnit::load(const YAML::Node &node)
 void BattleUnit::save(YAML::Emitter &out) const
 {
 	out << YAML::BeginMap;
- 
+
 	out << YAML::Key << "id" << YAML::Value << _id;
 	out << YAML::Key << "faction" << YAML::Value << _faction;
 	Soldier *soldier = dynamic_cast<Soldier*>(this->getUnit());
@@ -150,7 +150,7 @@ void BattleUnit::save(YAML::Emitter &out) const
 		out << YAML::Key << "AI" << YAML::Value;
 		getCurrentAIState()->save(out);
 	}
-               
+
 	out << YAML::EndMap;
 }
 
@@ -404,25 +404,25 @@ void BattleUnit::lookAt(int direction)
  */
 void BattleUnit::turn()
 {
-    int a = _toDirection - _direction;
-    if (a != 0) {
-        if (a > 0) {
-            if (a <= 4) {
-                _direction++;
-            } else {
-                _direction--;
-            }
-        } else {
-            if (a > -4) {
-                _direction--;
-            } else {
-                _direction++;
-            }
-        }
-        if (_direction < 0) _direction = 7;
-        if (_direction > 7) _direction = 0;
+	int a = _toDirection - _direction;
+	if (a != 0) {
+		if (a > 0) {
+			if (a <= 4) {
+				_direction++;
+			} else {
+				_direction--;
+			}
+		} else {
+			if (a > -4) {
+				_direction--;
+			} else {
+				_direction++;
+			}
+		}
+		if (_direction < 0) _direction = 7;
+		if (_direction > 7) _direction = 0;
 		_cacheInvalid = true;
-    }
+	}
 
 	if (_toDirection == _direction)
 	{
@@ -931,7 +931,7 @@ int BattleUnit::getFatalWounds() const
  */
 double BattleUnit::getReactionScore() const
 {
-	//(Reactions Stat) × (Current Time Units / Max TUs) 
+	//(Reactions Stat) × (Current Time Units / Max TUs)
 	double score = ((double)_unit->getReactions() * (double)getTimeUnits()) / (double)_unit->getTimeUnits();
 	return score;
 }

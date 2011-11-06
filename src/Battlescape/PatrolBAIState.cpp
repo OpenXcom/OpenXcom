@@ -42,7 +42,7 @@ PatrolBAIState::PatrolBAIState(SavedBattleGame *game, BattleUnit *unit, Node *no
  */
 PatrolBAIState::~PatrolBAIState()
 {
-	
+
 }
 
 /**
@@ -96,7 +96,7 @@ void PatrolBAIState::save(YAML::Emitter &out) const
  */
 void PatrolBAIState::enter()
 {
-	
+
 }
 
 

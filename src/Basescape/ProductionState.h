@@ -62,7 +62,7 @@ private:
 	void lessEngineerPress(Action * action);
 	/// Handler for releasing the less engineer button
 	void lessEngineerRelease(Action * action);
-	/// Handler for pressing the less unit button 
+	/// Handler for pressing the less unit button
 	void lessUnitPress(Action * action);
 	/// Handler for releasing the less unit button
 	void lessUnitRelease(Action * action);

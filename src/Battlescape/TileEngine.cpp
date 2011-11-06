@@ -248,7 +248,7 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 			}
 		}
 	}
-	
+
 	int newChecksum = 0;
 	for (std::vector<BattleUnit*>::iterator i = unit->getVisibleUnits()->begin(); i != unit->getVisibleUnits()->end(); ++i)
 		newChecksum += (*i)->getId()+1;
@@ -723,7 +723,7 @@ int TileEngine::horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageTyp
 			+ (blockage(_save->getTile(startTile->getPosition() + oneTileEast),MapData::O_WESTWALL, type)
 			+ blockage(_save->getTile(startTile->getPosition() + oneTileEast),MapData::O_NORTHWALL, type))/2;
 		block += (blockage(_save->getTile(startTile->getPosition() + oneTileNorth),MapData::O_OBJECT, type) +
-			      blockage(_save->getTile(startTile->getPosition() + oneTileEast),MapData::O_OBJECT, type)) < 510?0:255;
+				  blockage(_save->getTile(startTile->getPosition() + oneTileEast),MapData::O_OBJECT, type)) < 510?0:255;
 		break;
 	case 2: // east
 		block = blockage(endTile,MapData::O_WESTWALL, type);
@@ -733,7 +733,7 @@ int TileEngine::horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageTyp
 			+ (blockage(_save->getTile(startTile->getPosition() + oneTileEast),MapData::O_WESTWALL, type)
 			+ blockage(_save->getTile(startTile->getPosition() + oneTileSouth),MapData::O_NORTHWALL, type))/2;
 		block += (blockage(_save->getTile(startTile->getPosition() + oneTileSouth),MapData::O_OBJECT, type) +
-			      blockage(_save->getTile(startTile->getPosition() + oneTileEast),MapData::O_OBJECT, type)) < 510?0:255;
+				  blockage(_save->getTile(startTile->getPosition() + oneTileEast),MapData::O_OBJECT, type)) < 510?0:255;
 		break;
 	case 4: // south
 		block = blockage(endTile,MapData::O_NORTHWALL, type);
@@ -743,7 +743,7 @@ int TileEngine::horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageTyp
 			+ (blockage(_save->getTile(startTile->getPosition() + oneTileSouth),MapData::O_WESTWALL, type)
 			+ blockage(_save->getTile(startTile->getPosition() + oneTileSouth),MapData::O_NORTHWALL, type))/2;
 		block += (blockage(_save->getTile(startTile->getPosition() + oneTileSouth),MapData::O_OBJECT, type) +
-			      blockage(_save->getTile(startTile->getPosition() + oneTileWest),MapData::O_OBJECT, type)) < 510?0:255;
+				  blockage(_save->getTile(startTile->getPosition() + oneTileWest),MapData::O_OBJECT, type)) < 510?0:255;
 		break;
 	case 6: // west
 		block = blockage(startTile,MapData::O_WESTWALL, type);
@@ -753,12 +753,12 @@ int TileEngine::horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageTyp
 			+ (blockage(_save->getTile(startTile->getPosition() + oneTileNorth),MapData::O_WESTWALL, type)
 			+ blockage(_save->getTile(startTile->getPosition() + oneTileWest),MapData::O_NORTHWALL, type))/2;
 		block += (blockage(_save->getTile(startTile->getPosition() + oneTileNorth),MapData::O_OBJECT, type) +
-			      blockage(_save->getTile(startTile->getPosition() + oneTileWest),MapData::O_OBJECT, type)) < 510?0:255;
+				  blockage(_save->getTile(startTile->getPosition() + oneTileWest),MapData::O_OBJECT, type)) < 510?0:255;
 		break;
 	}
 
 	block += blockage(startTile,MapData::O_OBJECT, type);
-	
+
 	return block;
 }
 
@@ -824,9 +824,9 @@ int TileEngine::vectorToDirection(const Position &vector)
  * Soldier opens a door (if any) by rightclick, or by walking through it. The unit has to face in the right direction.
  * @param unit
  * @return -1 there is no door, you can walk through.
- *          0 normal door opened, make a squeeky sound and you can walk through.
- *          1 ufo door is starting to open, make a woosh sound, don't walk through.
- *          3 ufo door is still opening, don't walk through it yet. (have patience, futuristic technology...)
+ *		  0 normal door opened, make a squeeky sound and you can walk through.
+ *		  1 ufo door is starting to open, make a woosh sound, don't walk through.
+ *		  3 ufo door is still opening, don't walk through it yet. (have patience, futuristic technology...)
  */
 int TileEngine::unitOpensDoor(BattleUnit *unit)
 {
@@ -904,68 +904,68 @@ int TileEngine::unitOpensDoor(BattleUnit *unit)
 int TileEngine::calculateLine(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, bool doVoxelCheck)
 {
 	int x, x0, x1, delta_x, step_x;
-    int y, y0, y1, delta_y, step_y;
-    int z, z0, z1, delta_z, step_z;
-    int swap_xy, swap_xz;
-    int drift_xy, drift_xz;
-    int cx, cy, cz;
+	int y, y0, y1, delta_y, step_y;
+	int z, z0, z1, delta_z, step_z;
+	int swap_xy, swap_xz;
+	int drift_xy, drift_xz;
+	int cx, cy, cz;
 	Position lastPoint(origin);
 
-    //start and end points
-    x0 = origin.x;     x1 = target.x;
-    y0 = origin.y;     y1 = target.y;
-    z0 = origin.z;     z1 = target.z;
+	//start and end points
+	x0 = origin.x;	 x1 = target.x;
+	y0 = origin.y;	 y1 = target.y;
+	z0 = origin.z;	 z1 = target.z;
 
-    //'steep' xy Line, make longest delta x plane
-    swap_xy = abs(y1 - y0) > abs(x1 - x0);
-    if (swap_xy)
+	//'steep' xy Line, make longest delta x plane
+	swap_xy = abs(y1 - y0) > abs(x1 - x0);
+	if (swap_xy)
 	{
-        std::swap(x0, y0);
-        std::swap(x1, y1);
+		std::swap(x0, y0);
+		std::swap(x1, y1);
 	}
 
-    //do same for xz
-    swap_xz = abs(z1 - z0) > abs(x1 - x0);
-    if (swap_xz)
+	//do same for xz
+	swap_xz = abs(z1 - z0) > abs(x1 - x0);
+	if (swap_xz)
 	{
-        std::swap(x0, z0);
+		std::swap(x0, z0);
 		std::swap(x1, z1);
 	}
 
-    //delta is Length in each plane
-    delta_x = abs(x1 - x0);
-    delta_y = abs(y1 - y0);
-    delta_z = abs(z1 - z0);
+	//delta is Length in each plane
+	delta_x = abs(x1 - x0);
+	delta_y = abs(y1 - y0);
+	delta_z = abs(z1 - z0);
 
-    //drift controls when to step in 'shallow' planes
-    //starting value keeps Line centred
-    drift_xy  = (delta_x / 2);
-    drift_xz  = (delta_x / 2);
+	//drift controls when to step in 'shallow' planes
+	//starting value keeps Line centred
+	drift_xy  = (delta_x / 2);
+	drift_xz  = (delta_x / 2);
 
-    //direction of line
+	//direction of line
 	step_x = 1;  if (x0 > x1) {  step_x = -1; }
 	step_y = 1;  if (y0 > y1) {  step_y = -1; }
 	step_z = 1;  if (z0 > z1) {  step_z = -1; }
 
-    //starting point
-    y = y0;
-    z = z0;
+	//starting point
+	y = y0;
+	z = z0;
 
-    //step through longest delta (which we have swapped to x)
-    for (x = x0; x != (x1+step_x); x += step_x)
+	//step through longest delta (which we have swapped to x)
+	for (x = x0; x != (x1+step_x); x += step_x)
 	{
-        //copy position
-        cx = x;    cy = y;    cz = z;
+		//copy position
+		cx = x;	cy = y;	cz = z;
 
-        //unswap (in reverse)
-        if (swap_xz) std::swap(cx, cz);
-        if (swap_xy) std::swap(cx, cy);
+		//unswap (in reverse)
+		if (swap_xz) std::swap(cx, cz);
+		if (swap_xy) std::swap(cx, cy);
 
 		if (storeTrajectory)
 		{
 			trajectory->push_back(Position(cx, cy, cz));
 		}
-        //passes through this point?
+		//passes through this point?
 		if (doVoxelCheck)
 		{
 			int result = voxelCheck(Position(cx, cy, cz), excludeUnit);
@@ -981,7 +981,7 @@ int TileEngine::calculateLine(const Position& origin, const Position& target, bo
 		else
 		{
 			int result = horizontalBlockage(_save->getTile(lastPoint), _save->getTile(Position(cx, cy, cz)), DT_NONE)
-				       + verticalBlockage(_save->getTile(lastPoint), _save->getTile(Position(cx, cy, cz)), DT_NONE);
+					   + verticalBlockage(_save->getTile(lastPoint), _save->getTile(Position(cx, cy, cz)), DT_NONE);
 			if (result != 0)
 			{
 				return result;
@@ -995,22 +995,22 @@ int TileEngine::calculateLine(const Position& origin, const Position& target, bo
 
 			lastPoint = Position(cx, cy, cz);
 		}
-        //update progress in other planes
-        drift_xy = drift_xy - delta_y;
-        drift_xz = drift_xz - delta_z;
+		//update progress in other planes
+		drift_xy = drift_xy - delta_y;
+		drift_xz = drift_xz - delta_z;
 
-        //step in y plane
-        if (drift_xy < 0)
+		//step in y plane
+		if (drift_xy < 0)
 		{
-            y = y + step_y;
-            drift_xy = drift_xy + delta_x;
+			y = y + step_y;
+			drift_xy = drift_xy + delta_x;
 		}
 
-        //same in z
-        if (drift_xz < 0)
+		//same in z
+		if (drift_xz < 0)
 		{
-            z = z + step_z;
-            drift_xz = drift_xz + delta_x;
+			z = z + step_z;
+			drift_xz = drift_xz + delta_x;
 		}
 	}
 
@@ -1029,31 +1029,31 @@ int TileEngine::calculateLine(const Position& origin, const Position& target, bo
  */
 int TileEngine::calculateParabola(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, double curvature, double accuracy)
 {
-    double ro = sqrt((double)((target.x - origin.x) * (target.x - origin.x) + (target.y - origin.y) * (target.y - origin.y) + (target.z - origin.z) * (target.z - origin.z)));
+	double ro = sqrt((double)((target.x - origin.x) * (target.x - origin.x) + (target.y - origin.y) * (target.y - origin.y) + (target.z - origin.z) * (target.z - origin.z)));
 
-    double fi = acos((double)(target.z - origin.z) / ro);
-    double te = atan2((double)(target.y - origin.y), (double)(target.x - origin.x));
+	double fi = acos((double)(target.z - origin.z) / ro);
+	double te = atan2((double)(target.y - origin.y), (double)(target.x - origin.x));
 
 	fi *= accuracy;
 	te *= accuracy;
 
-    double zA = sqrt(ro)*curvature;
-    double zK = 4.0 * zA / ro / ro;
+	double zA = sqrt(ro)*curvature;
+	double zK = 4.0 * zA / ro / ro;
 
-    int x = origin.x;
+	int x = origin.x;
 	int y = origin.y;
 	int z = origin.z;
-    int i = 8;
+	int i = 8;
 
-    while (z > 0) {
-        x = (int)((double)origin.x + (double)i * cos(te) * sin(fi));
-        y = (int)((double)origin.y + (double)i * sin(te) * sin(fi));
-        z = (int)((double)origin.z + (double)i * cos(fi) - zK * ((double)i - ro / 2.0) * ((double)i - ro / 2.0) + zA);
+	while (z > 0) {
+		x = (int)((double)origin.x + (double)i * cos(te) * sin(fi));
+		y = (int)((double)origin.y + (double)i * sin(te) * sin(fi));
+		z = (int)((double)origin.z + (double)i * cos(fi) - zK * ((double)i - ro / 2.0) * ((double)i - ro / 2.0) + zA);
 		if (storeTrajectory)
 		{
 			trajectory->push_back(Position(x, y, z));
 		}
-        //passes through this point?
+		//passes through this point?
 		int result = voxelCheck(Position(x, y, z), excludeUnit);
 		if (result != -1)
 		{
@@ -1063,8 +1063,8 @@ int TileEngine::calculateParabola(const Position& origin, const Position& target
 			}
 			return result;
 		}
-        ++i;
-    }
+		++i;
+	}
 	return -1;
 }
 

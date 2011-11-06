@@ -35,7 +35,7 @@ GraphsState::GraphsState(Game *game) : State(game)
 	// Create objects
 	_bg = new Surface(320, 200, 0, 0);
 	_btnGeoscape = new InteractiveSurface(32, 24, 288, 0);
-	
+
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_2")->getColors());
 
@@ -53,7 +53,7 @@ GraphsState::GraphsState(Game *game) : State(game)
  */
 GraphsState::~GraphsState()
 {
-	
+
 }
 
 /**

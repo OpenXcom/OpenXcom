@@ -45,7 +45,7 @@ namespace OpenXcom
  */
 UnitWalkBState::UnitWalkBState(BattlescapeState *parent, BattleAction action) : BattleState(parent), _unit(0), _pf(0), _terrain(0), _action(action)
 {
-	
+
 }
 
 /**
@@ -110,7 +110,7 @@ void UnitWalkBState::think()
 		if (_unit->getStatus() == STATUS_STANDING)
 		{
 			_terrain->calculateUnitLighting();
-			unitspotted = _terrain->calculateFOV(_unit);		
+			unitspotted = _terrain->calculateFOV(_unit);
 			if (unitspotted)
 			{
 				_pf->abortPath();
@@ -168,12 +168,12 @@ void UnitWalkBState::think()
 			if (_parent->checkReservedTU(_unit, tu) == false)
 			{
 				_pf->abortPath();
-				return;				
+				return;
 			}
 
 			// we are looking in the wrong way, turn first
 			// we are not using the turn state, because turning during walking costs no tu
-			if (dir != _unit->getDirection() && dir < Pathfinding::DIR_UP) 
+			if (dir != _unit->getDirection() && dir < Pathfinding::DIR_UP)
 			{
 				_unit->lookAt(dir);
 				return;
@@ -228,7 +228,7 @@ void UnitWalkBState::think()
 	if (_unit->getStatus() == STATUS_TURNING)
 	{
 		_unit->turn();
-		unitspotted = _terrain->calculateFOV(_unit);		
+		unitspotted = _terrain->calculateFOV(_unit);
 		// make sure the unit sprites are up to date
 		_parent->getMap()->cacheUnit(_unit);
 		if (unitspotted)
@@ -263,7 +263,7 @@ std::string UnitWalkBState::getResult() const
 void UnitWalkBState::postPathProcedures()
 {
 	_terrain->calculateUnitLighting();
-	_terrain->calculateFOV(_unit);		
+	_terrain->calculateFOV(_unit);
 	_parent->getMap()->cacheUnit(_unit);
 	_parent->popState();
 }

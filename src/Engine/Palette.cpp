@@ -62,7 +62,7 @@ void Palette::loadDat(const std::string &filename, int ncolors, int offset)
 
 	// Move pointer to proper pallete
 	palFile.seekg(offset, std::ios::beg);
-	
+
 	Uint8 value[3];
 
 	for (int i = 0; i < ncolors && palFile.read((char*)value, 3); ++i)

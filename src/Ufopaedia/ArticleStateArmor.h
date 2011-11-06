@@ -30,18 +30,18 @@ namespace OpenXcom
 	class Text;
 	class TextList;
 	class ArticleDefinitionArmor;
-	
+
 	/**
 	 * ArticleStateArmor has a caption, preview image and a stats block.
 	 * The image is found using the RuleArmor class.
 	 */
-	
+
 	class ArticleStateArmor : public ArticleState
 	{
 	public:
 		ArticleStateArmor(Game *game, ArticleDefinitionArmor *article_defs);
 		virtual ~ArticleStateArmor();
-		
+
 	protected:
 		Surface *_image;
 		Text *_txtTitle;

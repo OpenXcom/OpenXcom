@@ -47,7 +47,7 @@ Sound::~Sound()
 void Sound::load(const std::string &filename)
 {
 	_sound = Mix_LoadWAV(filename.c_str());
-	if (_sound == 0) 
+	if (_sound == 0)
 	{
 		throw Exception(Mix_GetError());
 	}

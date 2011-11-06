@@ -56,7 +56,7 @@ MonthlyCostsState::MonthlyCostsState(Game *game, Base *base) : State(game), _bas
 	_lstSalaries = new TextList(300, 30, 10, 88);
 	_lstMaintenance = new TextList(300, 9, 10, 120);
 	_lstTotal = new TextList(100, 9, 205, 136);
-	
+
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
 
@@ -86,7 +86,7 @@ MonthlyCostsState::MonthlyCostsState(Game *game, Base *base) : State(game), _bas
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(_game->getLanguage()->getString("STR_MONTHLY_COSTS"));
-	
+
 	_txtCost->setColor(Palette::blockOffset(15)+1);
 	_txtCost->setText(_game->getLanguage()->getString("STR_COST_PER_UNIT"));
 
@@ -149,7 +149,7 @@ MonthlyCostsState::MonthlyCostsState(Game *game, Base *base) : State(game), _bas
  */
 MonthlyCostsState::~MonthlyCostsState()
 {
-	
+
 }
 
 /**

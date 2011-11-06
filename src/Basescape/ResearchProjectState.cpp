@@ -73,7 +73,7 @@ void ResearchProjectState::buildUi ()
 	int max_height = 200;
 	int start_x = (max_width - width) / 2;
 	int start_y = (max_height - height) / 2;
-	
+
 	int button_x_border = 16;
 	int button_y_border = 10;
 	int button_height = 16;
@@ -82,7 +82,7 @@ void ResearchProjectState::buildUi ()
 	_window = new Window(this, width, height, start_x, start_y);
 
 	_txtTitle = new Text(width - 2 * button_x_border, button_height, start_x + button_x_border, start_y + button_y_border);
-	
+
 	_txtAvailableScientist = new Text(width - 2 * button_x_border, button_height, start_x + button_x_border, start_y + 3*button_y_border);
 	_txtAvailableSpace = new Text(width - 2 * button_x_border, button_height, start_x + button_x_border, start_y + 4*button_y_border);
 	_txtAllocatedScientist = new Text(width - 2 * button_x_border, button_height, start_x + button_x_border, start_y + 5*button_y_border);
@@ -103,7 +103,7 @@ void ResearchProjectState::buildUi ()
 	add(_txtLess);
 	add(_btnMore);
 	add(_btnLess);
-	
+
 	// Set up objects
 	_window->setColor(Palette::blockOffset(13)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
@@ -248,7 +248,7 @@ void ResearchProjectState::less()
 void ResearchProjectState::think()
 {
 	State::think();
-	
+
 	_timerLess->think (this, 0);
 	_timerMore->think (this, 0);
 }

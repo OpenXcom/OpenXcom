@@ -47,7 +47,7 @@ PlaceLiftState::PlaceLiftState(Game *game, Base *base, Globe *globe) : State(gam
 	// Create objects
 	_view = new BaseView(192, 192, 0, 8);
 	_txtTitle = new Text(180, 9, 10, 0);
-	
+
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
 
@@ -70,7 +70,7 @@ PlaceLiftState::PlaceLiftState(Game *game, Base *base, Globe *globe) : State(gam
  */
 PlaceLiftState::~PlaceLiftState()
 {
-	
+
 }
 
 /**

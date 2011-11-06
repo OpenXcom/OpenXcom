@@ -103,7 +103,7 @@ void InteractiveSurface::handle(Action *action, State *state)
 	}
 
 	if (!_isPressed && action->getDetails()->type == SDL_MOUSEBUTTONDOWN && (_validButton == 0 || _validButton == action->getDetails()->button.button))
-	{		
+	{
 		if (_isHovered)
 		{
 			_isPressed = true;

@@ -43,7 +43,7 @@ ProductionCompleteState::ProductionCompleteState(Game *game, const std::wstring 
 	_window = new Window(this, 256, 160, 32, 20, POPUP_BOTH);
 	_btnOk = new TextButton(120, 18, 100, 154);
 	_txtMessage = new Text(246, 110, 37, 35);
-	
+
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
 
@@ -94,7 +94,7 @@ ProductionCompleteState::ProductionCompleteState(Game *game, const std::wstring 
  */
 ProductionCompleteState::~ProductionCompleteState()
 {
-	
+
 }
 
 /**

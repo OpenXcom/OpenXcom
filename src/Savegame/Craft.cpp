@@ -504,7 +504,7 @@ bool Craft::insideRadarRange(Target *target) const
 		double dLat = target->getLatitude() - _lat;
 		inside = inside || (dLon * dLon + dLat * dLat <= newrange * newrange);
 	}
-    return inside;
+	return inside;
 }
 
 /**

@@ -42,7 +42,7 @@ namespace OpenXcom
  */
 UnitDieBState::UnitDieBState(BattlescapeState *parent, BattleUnit *unit, ItemDamageType damageType, bool noSound) : BattleState(parent), _unit(unit), _damageType(damageType), _noSound(noSound)
 {
-	
+
 }
 
 /**
@@ -112,7 +112,7 @@ void UnitDieBState::think()
 	{
 		_unit->keepFalling();
 	}
-	
+
 	if (_unit->isOut())
 	{
 		_unit->keepFalling();

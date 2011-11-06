@@ -145,7 +145,7 @@ bool BaseFacility::insideRadarRange(Target *target) const
 		double dLat = target->getLatitude() - _base->getLatitude();
 		inside = inside || (dLon * dLon + dLat * dLat <= newrange * newrange);
 	}
-    return inside;
+	return inside;
 }
 
 /**

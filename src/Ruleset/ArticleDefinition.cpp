@@ -34,7 +34,7 @@ namespace OpenXcom
 	 */
 	ArticleDefinition::~ArticleDefinition()
 	{}
-	
+
 	/**
 	 * Get the article definition type. (Text, TextImage, Craft, ...)
 	 * @returns The type of article definition of this instance.
@@ -43,13 +43,13 @@ namespace OpenXcom
 	{
 		return _type_id;
 	}
-	
-	/** 
+
+	/**
 	 * Constructor
 	 */
 	ArticleDefinitionRect::ArticleDefinitionRect() : x(0), y(0), width(0), height(0) {}
-	
-	/** 
+
+	/**
 	 * Set the rectangle parameters in a function
 	 */
 	void ArticleDefinitionRect::set(int set_x, int set_y, int set_width, int set_height)
@@ -59,25 +59,25 @@ namespace OpenXcom
 		width = set_width;
 		height = set_height;
 	}
-	
+
 	/**
 	 * Constructor (only setting type of base class)
 	 */
 	ArticleDefinitionCraft::ArticleDefinitionCraft() : ArticleDefinition(UFOPAEDIA_TYPE_CRAFT), craft(0)
 	{}
-	
+
 	/**
 	 * Constructor (only setting type of base class)
 	 */
 	ArticleDefinitionCraftWeapon::ArticleDefinitionCraftWeapon() : ArticleDefinition(UFOPAEDIA_TYPE_CRAFT_WEAPON), weapon(0)
 	{}
-	
+
 	/**
 	 * Constructor (only setting type of base class)
 	 */
 	ArticleDefinitionText::ArticleDefinitionText() : ArticleDefinition(UFOPAEDIA_TYPE_TEXT)
 	{}
-	
+
 	/**
 	 * Constructor (only setting type of base class)
 	 */
@@ -89,23 +89,23 @@ namespace OpenXcom
 	 */
 	ArticleDefinitionBaseFacility::ArticleDefinitionBaseFacility() : ArticleDefinition(UFOPAEDIA_TYPE_BASE_FACILITY), facility(0)
 	{}
-	
+
 	/**
 	 * Constructor (only setting type of base class)
 	 */
 	ArticleDefinitionItem::ArticleDefinitionItem() : ArticleDefinition(UFOPAEDIA_TYPE_ITEM), item(0)
 	{}
-	
+
 	/**
 	 * Constructor (only setting type of base class)
 	 */
 	ArticleDefinitionUfo::ArticleDefinitionUfo() : ArticleDefinition(UFOPAEDIA_TYPE_UFO), ufo(0)
 	{}
-	
+
 	/**
 	 * Constructor (only setting type of base class)
 	 */
 	ArticleDefinitionArmor::ArticleDefinitionArmor() : ArticleDefinition(UFOPAEDIA_TYPE_ARMOR), armor(0)
 	{}
-	
+
 }

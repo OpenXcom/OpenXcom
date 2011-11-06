@@ -192,8 +192,8 @@ Globe::~Globe()
 	for (int i = 1; i < NUM_SHADES; ++i)
 		delete _texture[i];
 
-    delete _blinkTimer;
-    delete _rotTimer;
+	delete _blinkTimer;
+	delete _rotTimer;
 	delete _countries;
 	delete _markers;
 	delete _mkXcomBase;
@@ -276,7 +276,7 @@ bool Globe::pointBack(double lon, double lat) const
 double Globe::lastVisibleLat(double lon) const
 {
 //	double c = cos(_cenLat) * cos(lat) * cos(lon - _cenLon) + sin(_cenLat) * sin(lat);
-//        tan(lat) = -cos(_cenLat) * cos(lon - _cenLon)/sin(_cenLat) ;
+//		tan(lat) = -cos(_cenLat) * cos(lon - _cenLon)/sin(_cenLat) ;
 	return atan(-cos(_cenLat) * cos(lon - _cenLon)/sin(_cenLat));
 }
 
@@ -755,7 +755,7 @@ void Globe::fillLongitudeSegments(double startLon, double endLon, int colourShif
 		bigLonAperture = 1;
 	}
 
-    // find two latitudes where
+	// find two latitudes where
 	startLan = lastVisibleLat(startLon);
 	endLan   = lastVisibleLat(endLon);
 
@@ -774,7 +774,7 @@ void Globe::fillLongitudeSegments(double startLon, double endLon, int colourShif
 	// Draw globe depending on the direction
 	if (direction == 1)
 	{
-	    // draw fisrt longtitude line from pole
+		// draw fisrt longtitude line from pole
 		traceLon = startLon;
 		dL = (startLan + M_PI_2) / 20;
 		for (traceLat = -M_PI_2; traceLat < startLan; traceLat += dL)
@@ -784,7 +784,7 @@ void Globe::fillLongitudeSegments(double startLon, double endLon, int colourShif
 			polyPointsY.push_back(y);
 		}
 
-        // if aperture of longtitude is big then we need find first angle of sector
+		// if aperture of longtitude is big then we need find first angle of sector
 		if (bigLonAperture)
 		{
 			sx = x - _cenX;
@@ -793,7 +793,7 @@ void Globe::fillLongitudeSegments(double startLon, double endLon, int colourShif
 			if (sx < 0) angle1 += M_PI;
 		}
 
-	    // draw second longtitude line from pole
+		// draw second longtitude line from pole
 		traceLon = endLon;
 		dL = (endLan + M_PI_2) / 20;
 		for (traceLat = -M_PI_2; traceLat < endLan; traceLat += dL)
@@ -803,7 +803,7 @@ void Globe::fillLongitudeSegments(double startLon, double endLon, int colourShif
 			polyPointsY2.push_back(y);
 		}
 
-        // if aperture of longtitudes is big we need find second angle of sector and draw pie of circle between two longtitudes
+		// if aperture of longtitudes is big we need find second angle of sector and draw pie of circle between two longtitudes
 		if (bigLonAperture)
 		{
 			sx = x - _cenX;
@@ -814,10 +814,10 @@ void Globe::fillLongitudeSegments(double startLon, double endLon, int colourShif
 				angle2 += M_PI;
 			}
 
-		    // draw sector part of circle
-            if (angle1 > angle2)
-		    {
-                dL = (angle1 - angle2) / 20;
+			// draw sector part of circle
+			if (angle1 > angle2)
+			{
+				dL = (angle1 - angle2) / 20;
 				for (double a = angle2 + dL / 2; a < angle1; a += dL)
 				{
 					x = _cenX + (Sint16)floor(_radius[_zoom] * cos(a));
@@ -825,9 +825,9 @@ void Globe::fillLongitudeSegments(double startLon, double endLon, int colourShif
 					polyPointsX2.push_back(x);
 					polyPointsY2.push_back(y);
 				}
-		    }
+			}
 			else
-            {
+			{
 				dL = (2*M_PI + angle1 - angle2) / 20;
 				for (double a = angle2 + dL / 2; a < 2*M_PI + angle1; a += dL)
 				{
@@ -841,7 +841,7 @@ void Globe::fillLongitudeSegments(double startLon, double endLon, int colourShif
 	}
 	else // another direction
 	{
-	    // draw fisrt longtitude line from pole
+		// draw fisrt longtitude line from pole
 		traceLon = startLon;
 		dL = (startLan - M_PI_2) / 20;
 		for (traceLat = M_PI_2; traceLat > startLan; traceLat += dL)
@@ -851,7 +851,7 @@ void Globe::fillLongitudeSegments(double startLon, double endLon, int colourShif
 			polyPointsY.push_back(y);
 		}
 
-        // if aperture of longtitude is big then we need find first angle of sector of pie between longtitudes
+		// if aperture of longtitude is big then we need find first angle of sector of pie between longtitudes
 		if (bigLonAperture)
 		{
 			sx = x - _cenX;
@@ -863,7 +863,7 @@ void Globe::fillLongitudeSegments(double startLon, double endLon, int colourShif
 			}
 		}
 
-	    // draw second longtitude line from pole
+		// draw second longtitude line from pole
 		traceLon = endLon;
 		dL = (endLan - M_PI_2) / 20;
 		for (traceLat = M_PI_2; traceLat > endLan; traceLat += dL)
@@ -873,7 +873,7 @@ void Globe::fillLongitudeSegments(double startLon, double endLon, int colourShif
 			polyPointsY2.push_back(y);
 		}
 
-        // if aperture of longtitudes is big we need find second angle of sector and draw pie of circle between two longtitudes
+		// if aperture of longtitudes is big we need find second angle of sector and draw pie of circle between two longtitudes
 		if (bigLonAperture)
 		{
 			sx = x - _cenX;
@@ -893,9 +893,9 @@ void Globe::fillLongitudeSegments(double startLon, double endLon, int colourShif
 					polyPointsX.push_back(x);
 					polyPointsY.push_back(y);
 				}
-		    }
+			}
 			else
-            {
+			{
 				dL = (2*M_PI + angle2 - angle1) / 20;
 				for (double a = angle1 + dL / 2; a < 2*M_PI + angle2; a += dL)
 				{

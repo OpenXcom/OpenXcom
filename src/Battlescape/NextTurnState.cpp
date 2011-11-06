@@ -92,7 +92,7 @@ NextTurnState::NextTurnState(Game *game, SavedBattleGame *battleGame, Battlescap
  */
 NextTurnState::~NextTurnState()
 {
-	
+
 }
 
 /**

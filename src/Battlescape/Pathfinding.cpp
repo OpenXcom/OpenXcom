@@ -116,19 +116,19 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition)
 		_nodes[i]->reset();
 
 	// start position is the first one in our "open" list
-    openList.push_back(getNode(startPosition));
-    openList.front()->check(0, 0, 0, 0);
+	openList.push_back(getNode(startPosition));
+	openList.front()->check(0, 0, 0, 0);
 
 	// if the open list is empty, we've reached the end
-    while(!openList.empty())
+	while(!openList.empty())
 	{
 		currentPos = openList.front()->getPosition();
 		currentNode = getNode(currentPos);
 		// this algorithm expands in all directions
-        for (int direction = 0; direction < 10; direction++)
+		for (int direction = 0; direction < 10; direction++)
 		{
-            tuCost = getTUCost(currentPos, direction, &nextPos, unit);
-            if(tuCost < 255) // check if we can go to this node (ie is not blocked)
+			tuCost = getTUCost(currentPos, direction, &nextPos, unit);
+			if(tuCost < 255) // check if we can go to this node (ie is not blocked)
 			{
 				nextNode = getNode(nextPos);
 				totalTuCost = currentNode->getTUCost() + tuCost;
@@ -136,28 +136,28 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition)
 				if( (!nextNode->isChecked() || nextNode->getTUCost() > totalTuCost)
 					&& // this will keep pushing back nodes, as long as we did not reach the end position or there are still possible shorter paths
 					(!getNode(endPosition)->isChecked() || getNode(endPosition)->getTUCost() > totalTuCost)
-                )
+				)
 				{
 					nextNode->check(totalTuCost,
 									currentNode->getStepsNum() + 1,
 									currentNode,
 									direction);
 					openList.push_back(nextNode);
-                }
-            }
-        }
+				}
+			}
+		}
 		openList.pop_front();
-    }
+	}
 
-    if(!getNode(endPosition)->isChecked()) return;
+	if(!getNode(endPosition)->isChecked()) return;
 
-    //Backward tracking of the path
-    PathfindingNode* pf = getNode(endPosition);
-    for (int i = getNode(endPosition)->getStepsNum(); i > 0; i--)
+	//Backward tracking of the path
+	PathfindingNode* pf = getNode(endPosition);
+	for (int i = getNode(endPosition)->getStepsNum(); i > 0; i--)
 	{
 		_path.push_back(pf->getPrevDir());
-        pf=pf->getPrevNode();
-    }
+		pf=pf->getPrevNode();
+	}
 
 }
 
@@ -415,7 +415,7 @@ bool Pathfinding::canFallDown(Tile *here)
 		_save->selectUnit(here->getPosition() + Position(0, 0, -1)) != _unit)
 		return false;
 
-	if (_save->getTile(here->getPosition() + Position(0, 0, -1))->getMapData(MapData::O_OBJECT)  
+	if (_save->getTile(here->getPosition() + Position(0, 0, -1))->getMapData(MapData::O_OBJECT)
 		&& _save->getTile(here->getPosition() + Position(0, 0, -1))->getMapData(MapData::O_OBJECT)->getTerrainLevel() == 0)
 		return false;
 
@@ -545,65 +545,65 @@ bool Pathfinding::bresenhamPath(const Position& origin, const Position& target)
 	int yd[8] = {-1, -1, 0, 1, 1, 1, 0, -1};
 
 	int x, x0, x1, delta_x, step_x;
-    int y, y0, y1, delta_y, step_y;
-    int z, z0, z1, delta_z, step_z;
-    int swap_xy, swap_xz;
-    int drift_xy, drift_xz;
-    int cx, cy, cz;
+	int y, y0, y1, delta_y, step_y;
+	int z, z0, z1, delta_z, step_z;
+	int swap_xy, swap_xz;
+	int drift_xy, drift_xz;
+	int cx, cy, cz;
 	Position lastPoint(origin);
 	int dir;
 	int lastTUCost = -1;
 	Position nextPoint;
 
-    //start and end points
-    x0 = origin.x;     x1 = target.x;
-    y0 = origin.y;     y1 = target.y;
-    z0 = origin.z;     z1 = target.z;
+	//start and end points
+	x0 = origin.x;	 x1 = target.x;
+	y0 = origin.y;	 y1 = target.y;
+	z0 = origin.z;	 z1 = target.z;
 
-    //'steep' xy Line, make longest delta x plane
-    swap_xy = abs(y1 - y0) > abs(x1 - x0);
-    if (swap_xy)
+	//'steep' xy Line, make longest delta x plane
+	swap_xy = abs(y1 - y0) > abs(x1 - x0);
+	if (swap_xy)
 	{
-        std::swap(x0, y0);
-        std::swap(x1, y1);
+		std::swap(x0, y0);
+		std::swap(x1, y1);
 	}
 
-    //do same for xz
-    swap_xz = abs(z1 - z0) > abs(x1 - x0);
-    if (swap_xz)
+	//do same for xz
+	swap_xz = abs(z1 - z0) > abs(x1 - x0);
+	if (swap_xz)
 	{
-        std::swap(x0, z0);
+		std::swap(x0, z0);
 		std::swap(x1, z1);
 	}
 
-    //delta is Length in each plane
-    delta_x = abs(x1 - x0);
-    delta_y = abs(y1 - y0);
-    delta_z = abs(z1 - z0);
+	//delta is Length in each plane
+	delta_x = abs(x1 - x0);
+	delta_y = abs(y1 - y0);
+	delta_z = abs(z1 - z0);
 
-    //drift controls when to step in 'shallow' planes
-    //starting value keeps Line centred
-    drift_xy  = (delta_x / 2);
-    drift_xz  = (delta_x / 2);
+	//drift controls when to step in 'shallow' planes
+	//starting value keeps Line centred
+	drift_xy  = (delta_x / 2);
+	drift_xz  = (delta_x / 2);
 
-    //direction of line
+	//direction of line
 	step_x = 1;  if (x0 > x1) {  step_x = -1; }
 	step_y = 1;  if (y0 > y1) {  step_y = -1; }
 	step_z = 1;  if (z0 > z1) {  step_z = -1; }
 
-    //starting point
-    y = y0;
-    z = z0;
+	//starting point
+	y = y0;
+	z = z0;
 
-    //step through longest delta (which we have swapped to x)
-    for (x = x0; x != (x1+step_x); x += step_x)
+	//step through longest delta (which we have swapped to x)
+	for (x = x0; x != (x1+step_x); x += step_x)
 	{
-        //copy position
-        cx = x;    cy = y;    cz = z;
+		//copy position
+		cx = x;	cy = y;	cz = z;
 
-        //unswap (in reverse)
-        if (swap_xz) std::swap(cx, cz);
-        if (swap_xy) std::swap(cx, cy);
+		//unswap (in reverse)
+		if (swap_xz) std::swap(cx, cz);
+		if (swap_xy) std::swap(cx, cy);
 
 		if (x != x0 || y != y0 || z != z0)
 		{
@@ -613,7 +613,7 @@ bool Pathfinding::bresenhamPath(const Position& origin, const Position& target)
 			{
 				if (xd[dir] == cx-lastPoint.x && yd[dir] == cy-lastPoint.y) break;
 			}
-            int tuCost = getTUCost(lastPoint, dir, &nextPoint, _unit);
+			int tuCost = getTUCost(lastPoint, dir, &nextPoint, _unit);
 			if (tuCost < 255 && (tuCost == lastTUCost || (dir&1 && tuCost == lastTUCost*1.5) || (!(dir&1) && tuCost*1.5 == lastTUCost) || lastTUCost == -1))
 			{
 				_path.push_back(dir);
@@ -625,22 +625,22 @@ bool Pathfinding::bresenhamPath(const Position& origin, const Position& target)
 			lastTUCost = tuCost;
 			lastPoint = Position(cx, cy, cz);
 		}
-        //update progress in other planes
-        drift_xy = drift_xy - delta_y;
-        drift_xz = drift_xz - delta_z;
+		//update progress in other planes
+		drift_xy = drift_xy - delta_y;
+		drift_xz = drift_xz - delta_z;
 
-        //step in y plane
-        if (drift_xy < 0)
+		//step in y plane
+		if (drift_xy < 0)
 		{
-            y = y + step_y;
-            drift_xy = drift_xy + delta_x;
+			y = y + step_y;
+			drift_xy = drift_xy + delta_x;
 		}
 
-        //same in z
-        if (drift_xz < 0)
+		//same in z
+		if (drift_xz < 0)
 		{
-            z = z + step_z;
-            drift_xz = drift_xz + delta_x;
+			z = z + step_z;
+			drift_xz = drift_xz + delta_x;
 		}
 	}
 

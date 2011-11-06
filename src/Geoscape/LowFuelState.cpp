@@ -48,7 +48,7 @@ LowFuelState::LowFuelState(Game *game, Craft *craft, GeoscapeState *state) : Sta
 	_btnOk5Secs = new TextButton(90, 18, 136, 120);
 	_txtTitle = new Text(214, 16, 21, 60);
 	_txtMessage = new Text(214, 16, 21, 90);
-	
+
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
 
@@ -79,7 +79,7 @@ LowFuelState::LowFuelState(Game *game, Craft *craft, GeoscapeState *state) : Sta
 	_txtMessage->setAlign(ALIGN_CENTER);
 	_txtMessage->setText(_game->getLanguage()->getString("STR_IS_LOW_ON_FUEL_RETURNING_TO_BASE"));
 
-	
+
 }
 
 /**
@@ -87,7 +87,7 @@ LowFuelState::LowFuelState(Game *game, Craft *craft, GeoscapeState *state) : Sta
  */
 LowFuelState::~LowFuelState()
 {
-	
+
 }
 
 /**

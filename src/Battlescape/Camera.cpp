@@ -282,15 +282,15 @@ void Camera::centerOnPosition(const Position &mapPos)
 void Camera::convertScreenToMap(int screenX, int screenY, int *mapX, int *mapY) const
 {
 	// add half a tileheight to the mouseposition per layer we are above the floor
-    screenY += (-_spriteWidth/2) + (_mapOffset.z) * (_spriteWidth);
+	screenY += (-_spriteWidth/2) + (_mapOffset.z) * (_spriteWidth);
 
 	// calculate the actual x/y pixelposition on a diamond shaped map
 	// taking the view offset into account
-    *mapY = - screenX + _mapOffset.x + 2 * screenY - 2 * _mapOffset.y;
-    *mapX = screenY - _mapOffset.y - *mapY / 4 - (_spriteWidth/4);
+	*mapY = - screenX + _mapOffset.x + 2 * screenY - 2 * _mapOffset.y;
+	*mapX = screenY - _mapOffset.y - *mapY / 4 - (_spriteWidth/4);
 
 	// to get the row&col itself, divide by the size of a tile
-    *mapX /= (_spriteWidth / 4);
+	*mapX /= (_spriteWidth / 4);
 	*mapY /= _spriteWidth;
 
 	minMaxInt(mapX, 0, _mapLength - 1);

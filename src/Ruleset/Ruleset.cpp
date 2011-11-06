@@ -137,7 +137,7 @@ void Ruleset::load(const std::string &filename)
 	{
 		throw Exception("Failed to load ruleset");
 	}
-    YAML::Parser parser(fin);
+	YAML::Parser parser(fin);
 	YAML::Node doc;
 
 	parser.GetNextDocument(doc);

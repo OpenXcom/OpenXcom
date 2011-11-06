@@ -61,7 +61,7 @@ UfoDetectedState::UfoDetectedState(Game *game, Ufo *ufo, GeoscapeState *state, b
 	_txtUfo = new Text(160, 16, 48, 56);
 	_txtDetected = new Text(80, 8, 48, 72);
 	_lstInfo = new TextList(176, 32, 48, 82);
-	
+
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
 
@@ -97,7 +97,7 @@ UfoDetectedState::UfoDetectedState(Game *game, Ufo *ufo, GeoscapeState *state, b
 	_txtUfo->setColor(Palette::blockOffset(8)+5);
 	_txtUfo->setBig();
 	_txtUfo->setText(_ufo->getName(_game->getLanguage()));
-	
+
 	_lstInfo->setColor(Palette::blockOffset(8)+5);
 	_lstInfo->setColumns(2, 82, 94);
 	_lstInfo->setDot(true);
@@ -118,7 +118,7 @@ UfoDetectedState::UfoDetectedState(Game *game, Ufo *ufo, GeoscapeState *state, b
  */
 UfoDetectedState::~UfoDetectedState()
 {
-	
+
 }
 
 /**

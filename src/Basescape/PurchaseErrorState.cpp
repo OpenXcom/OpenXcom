@@ -68,7 +68,7 @@ PurchaseErrorState::PurchaseErrorState(Game *game, std::string str) : State(game
  */
 PurchaseErrorState::~PurchaseErrorState()
 {
-	
+
 }
 
 /**

@@ -40,7 +40,7 @@ namespace OpenXcom
  */
 UnitTurnBState::UnitTurnBState(BattlescapeState *parent, BattleAction action) : BattleState(parent), _unit(0), _action(action)
 {
-	
+
 }
 
 /**
@@ -83,7 +83,7 @@ void UnitTurnBState::think()
 	{
 		_unit->abortTurn();
 		_parent->popState();
-		return;				
+		return;
 	}
 
 	if (_unit->spendTimeUnits(tu, _parent->dontSpendTUs()))

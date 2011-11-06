@@ -30,18 +30,18 @@ namespace OpenXcom
 	class Text;
 	class TextList;
 	class ArticleDefinitionUfo;
-	
+
 	/**
 	 * ArticleStateUfo has a caption, text, preview image and a stats block.
 	 * The UFO image is found using the RuleUfo class.
 	 */
-	
+
 	class ArticleStateUfo : public ArticleState
 	{
 	public:
 		ArticleStateUfo(Game *game, ArticleDefinitionUfo *article_defs);
 		virtual ~ArticleStateUfo();
-		
+
 	protected:
 		Surface *_image;
 		Text *_txtTitle;

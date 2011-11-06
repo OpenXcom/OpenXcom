@@ -27,7 +27,7 @@ namespace OpenXcom
 
 class NodeLink;
 
-enum NodeRank{SCOUT=0, XCOM, SOLDIER, NAVIGATOR, LEADER, ENGINEER, MISC1, MEDIC, MISC2};	
+enum NodeRank{SCOUT=0, XCOM, SOLDIER, NAVIGATOR, LEADER, ENGINEER, MISC1, MEDIC, MISC2};
 
 /**
  * Represents a node/spawnpoint in the battlescape, loaded from RMP files.

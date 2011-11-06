@@ -40,7 +40,7 @@ NoteState::NoteState(Game *game) : State(game)
 	_window = new Window(this, 256, 130, 32, 35, POPUP_BOTH);
 	_btnOk = new TextButton(192, 20, 64, 136);
 	_txtTitle = new Text(240, 70, 40, 45);
-	
+
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
@@ -69,7 +69,7 @@ NoteState::NoteState(Game *game) : State(game)
  */
 NoteState::~NoteState()
 {
-	
+
 }
 
 /**

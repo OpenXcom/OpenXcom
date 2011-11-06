@@ -73,7 +73,7 @@ std::string getDataFile(const std::string &filename)
 	{
 		return newPath;
 	}
-	
+
 	// UPPERCASE
 	std::transform(newName.begin(), newName.end(), newName.begin(), toupper);
 	newPath = Options::getDataFolder() + newName;
@@ -229,7 +229,7 @@ std::string findUserFolder(bool exists)
 	}
 #else
 	struct stat info;
-	
+
 	// Check HOME directory
 	char *home = getenv("HOME");
 	if (!home)

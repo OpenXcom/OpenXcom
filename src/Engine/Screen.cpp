@@ -97,11 +97,11 @@ void Screen::handle(Action *action)
 /**
  * Internal 8 bit Zoomer without smoothing.
  * Source code originally from SDL_gfx (LGPL) with permission by author.
- * 
+ *
  * Zooms 8bit palette/Y 'src' surface to 'dst' surface.
  * Assumes src and dst surfaces are of 8 bit depth.
  * Assumes dst surface was allocated with the correct dimensions.
- * 
+ *
  * @param src The surface to zoom (input).
  * @param dst The zoomed surface (output).
  * @param flipx Flag indicating if the image should be horizontally flipped.
@@ -117,7 +117,7 @@ int Screen::_zoomSurfaceY(SDL_Surface * src, SDL_Surface * dst, int flipx, int f
 	int dgap;
 
 	/*
-	* Allocate memory for row increments 
+	* Allocate memory for row increments
 	*/
 	if ((sax = (Uint32 *) malloc((dst->w + 1) * sizeof(Uint32))) == NULL) {
 		return (-1);
@@ -128,7 +128,7 @@ int Screen::_zoomSurfaceY(SDL_Surface * src, SDL_Surface * dst, int flipx, int f
 	}
 
 	/*
-	* Pointer setup 
+	* Pointer setup
 	*/
 	sp = csp = (Uint8 *) src->pixels;
 	dp = (Uint8 *) dst->pixels;
@@ -138,7 +138,7 @@ int Screen::_zoomSurfaceY(SDL_Surface * src, SDL_Surface * dst, int flipx, int f
 	if (flipy) csp  = ( (Uint8*)csp + src->pitch*(src->h-1) );
 
 	/*
-	* Precalculate row increments 
+	* Precalculate row increments
 	*/
 	csx = 0;
 	csax = sax;
@@ -164,7 +164,7 @@ int Screen::_zoomSurfaceY(SDL_Surface * src, SDL_Surface * dst, int flipx, int f
 	}
 
 	/*
-	* Draw 
+	* Draw
 	*/
 	csay = say;
 	for (y = 0; y < dst->h; y++) {
@@ -172,33 +172,33 @@ int Screen::_zoomSurfaceY(SDL_Surface * src, SDL_Surface * dst, int flipx, int f
 		sp = csp;
 		for (x = 0; x < dst->w; x++) {
 			/*
-			* Draw 
+			* Draw
 			*/
 			*dp = *sp;
 			/*
-			* Advance source pointers 
+			* Advance source pointers
 			*/
 			sp += (*csax) * (flipx ? -1 : 1);
 			csax++;
 			/*
-			* Advance destination pointer 
+			* Advance destination pointer
 			*/
 			dp++;
 		}
 		/*
-		* Advance source pointer (for row) 
+		* Advance source pointer (for row)
 		*/
 		csp += ((*csay) * src->pitch) * (flipy ? -1 : 1);
 		csay++;
 
 		/*
-		* Advance destination pointers 
+		* Advance destination pointers
 		*/
 		dp += dgap;
 	}
 
 	/*
-	* Remove temp arrays 
+	* Remove temp arrays
 	*/
 	free(sax);
 	free(say);
@@ -225,9 +225,9 @@ void Screen::flip()
 	}
 
 	if (SDL_Flip(_screen) == -1)
-    {
-        throw Exception(SDL_GetError());
-    }
+	{
+		throw Exception(SDL_GetError());
+	}
 }
 
 /**

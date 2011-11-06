@@ -319,7 +319,7 @@ void BattlescapeGenerator::run()
 			addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL_CLIP"), unit);
 		}
 	}
-	
+
 	if (_missionType == MISS_UFORECOVERY)
 	{
 		explodePowerSources();
@@ -614,7 +614,7 @@ void BattlescapeGenerator::addItem(RuleItem *item, BattleUnit *unit)
 		break;
 	}
 
-	
+
 
 	// if we did not auto equip the item, place it on the ground
 	if (!placed)
