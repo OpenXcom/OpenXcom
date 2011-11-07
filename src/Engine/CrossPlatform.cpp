@@ -48,6 +48,76 @@ namespace OpenXcom
 {
 namespace CrossPlatform
 {
+#ifdef XDG_FOLDERS
+const std::string DEFAULT_XDG_DATA_HOME = ".local/share/";
+const std::string DEFAULT_XDG_DATA_DIRS = "/usr/share/:/usr/local/share/";
+const std::string OPENXCOM_SUFFIX = "openxcom";
+#endif
+namespace
+{
+#ifndef _WIN32
+/**
+ * Get user home folder
+ * @return home folder of the current user
+*/
+std::string getHomeFolder()
+{
+	char *home = getenv("HOME");
+	if (!home)
+	{
+		struct passwd* pwd = getpwuid(getuid());
+		home = pwd->pw_dir;
+	}
+	return std::string(home) + '/';
+}
+#endif
+
+/**
+ * Check folders
+ * @param value The folders list to check(separated by ':')
+ * @param exists Check if the folder actually exists.
+ * @param dirs the list of folders to populate
+ * @param suffix a suffix to add to each path
+ */
+inline void checkFolders(const std::string & value, bool exists, std::vector<std::string> & dirs, const std::string & suffix = "")
+{
+	std::vector<std::string> envDirs;
+	splitPathList(value, envDirs);
+	struct stat info;
+	for(std::vector<std::string>::iterator i = envDirs.begin (); i != envDirs.end (); ++i)
+	{
+		std::string dir = *i;
+		if(!suffix.empty())
+		{
+			dir += "/" + suffix + "/";
+		}
+		if (exists && (stat(dir.c_str(), &info) != 0 || !S_ISDIR(info.st_mode)))
+		{
+			continue;
+		}
+		dirs.push_back(dir);
+	}
+}
+
+/**
+ * Check folders from an environment variable
+ * @param env The environment value to check
+ * @param exists Check if the folder actually exists.
+ * @param dirs the list of folders to populate
+ * @param suffix a suffix to add to each path
+ * @return true if the environment variable was defined, false otherwise
+ */
+inline bool foldersFromEnv(const std::string & env, bool exists, std::vector<std::string> & dirs, const std::string & suffix = "")
+{
+	char * envValue = getenv(env.c_str());
+	if(!envValue)
+	{
+		return false;
+	}
+	checkFolders(envValue, exists, dirs, suffix);
+	return true;
+}
+}
 /**
  * Split a string containing a list of path to a vector of string. path need to be separated by ':'
  * @param str the string to split
@@ -232,22 +302,18 @@ std::string findDataFolder(bool exists)
  */
 void findDataFolders(bool exists, std::vector<std::string> & dirs)
 {
-	dirs.push_back(findDataFolder(exists));
-	char * openxcomDataDirs = getenv("OPENXCOM_DATA_DIRS");
-	if(openxcomDataDirs)
+#ifdef XDG_FOLDERS
+	if(!foldersFromEnv("XDG_DATA_HOME", exists, dirs, OPENXCOM_SUFFIX))
 	{
-		std::vector<std::string> envDirs;
-		splitPathList(openxcomDataDirs, envDirs);
-		struct stat info;
-		for(std::vector<std::string>::iterator i = envDirs.begin (); i != envDirs.end (); ++i)
-		{
-			if (exists && (stat(i->c_str(), &info) == 0 && S_ISDIR(info.st_mode)))
-			{
-				continue;
-			}
-			dirs.push_back(*i);
-		}
+		checkFolders(getHomeFolder()+DEFAULT_XDG_DATA_HOME, exists, dirs, OPENXCOM_SUFFIX);
 	}
+	if(!foldersFromEnv("XDG_DATA_DIRS", exists, dirs, OPENXCOM_SUFFIX))
+	{
+		checkFolders(DEFAULT_XDG_DATA_DIRS, exists, dirs, OPENXCOM_SUFFIX);
+	}
+#endif
+	dirs.push_back(findDataFolder(exists));
+	foldersFromEnv("OPENXCOM_DATA_DIRS", exists, dirs);
 }
 
 /**
@@ -292,22 +358,28 @@ std::string findUserFolder(bool exists)
 		}
 	}
 #else
+#ifdef XDG_FOLDERS
+	std::vector<std::string> dirs;
+	if(!foldersFromEnv("XDG_DATA_HOME", exists, dirs, OPENXCOM_SUFFIX))
+	{
+		checkFolders(getHomeFolder()+DEFAULT_XDG_DATA_HOME, exists, dirs, OPENXCOM_SUFFIX);
+	}
+	if (!dirs.empty())
+	{
+		return dirs[0];
+	}
+#else
 	struct stat info;
-	
+
 	// Check HOME directory
-	char *home = getenv("HOME");
-    if (!home)
-    {
-		struct passwd* pwd = getpwuid(getuid());
-		home = pwd->pw_dir;
-    }
-	if (home)
+	std::string home = getHomeFolder();
+	if (!home.empty())
 	{
 		char homePath[MAXPATHLEN];
 #ifdef __APPLE__
-		snprintf(homePath, MAXPATHLEN, "%s/Library/Application Support/OpenXcom/", home);
+		snprintf(homePath, MAXPATHLEN, "%s/Library/Application Support/OpenXcom/", home.c_str());
 #else
-		snprintf(homePath, MAXPATHLEN, "%s/.openxcom/", home);
+		snprintf(homePath, MAXPATHLEN, "%s/.openxcom/", home.c_str());
 #endif
 		if (!exists || (stat(homePath, &info) == 0 && S_ISDIR(info.st_mode)))
 		{
@@ -321,6 +393,7 @@ std::string findUserFolder(bool exists)
 	{
 		return working;
 	}
+#endif
 #endif
 	return "";
 }
