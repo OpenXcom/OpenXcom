@@ -47,6 +47,8 @@ namespace CrossPlatform
 	std::vector<std::string> getFolderContents(const std::string &path, const std::string &ext = "");
 	// Split string containing a list of path
 	void splitPathList(const std::string & str, std::vector<std::string> & splitted);
+	/// Find  the configuration folder
+	std::string getConfigFolder(bool exists);
 }
 
 }

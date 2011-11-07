@@ -51,6 +51,8 @@ namespace CrossPlatform
 #ifdef XDG_FOLDERS
 const std::string DEFAULT_XDG_DATA_HOME = ".local/share/";
 const std::string DEFAULT_XDG_DATA_DIRS = "/usr/share/:/usr/local/share/";
+const std::string DEFAULT_XDG_CONFIG_HOME = ".config/";
+const std::string DEFAULT_XDG_CONFIG_DIRS = "/etc/xdg/";
 const std::string OPENXCOM_SUFFIX = "openxcom";
 #endif
 namespace
@@ -463,5 +465,35 @@ std::vector<std::string> getFolderContents(const std::string &path, const std::s
 	return files;
 }
 
+/**
+ * Checks a bunch of predefined paths for the config folder according
+ * to the system and returns the full path.
+ * @param exists Check if the folder actually exists.
+ * @return Full path to User folder.
+ */
+std::string getConfigFolder(bool exists)
+{
+#ifdef XDG_FOLDERS
+	std::vector<std::string> dirs;
+	if(!foldersFromEnv("XDG_CONFIG_HOME", exists, dirs, OPENXCOM_SUFFIX))
+	{
+		checkFolders(getHomeFolder()+DEFAULT_XDG_CONFIG_HOME, exists, dirs, OPENXCOM_SUFFIX);
+		if (!dirs.empty())
+		{
+			return dirs[0];
+		}
+	}
+	if(!foldersFromEnv("XDG_CONFIG_DIRS", exists, dirs, OPENXCOM_SUFFIX))
+	{
+		checkFolders(DEFAULT_XDG_CONFIG_DIRS, exists, dirs, OPENXCOM_SUFFIX);
+		if (!dirs.empty())
+		{
+			return dirs[0];
+		}
+	}
+	return "";
+#endif
+	return findUserFolder(exists);
+}
 }
 }

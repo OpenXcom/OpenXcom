@@ -121,11 +121,17 @@ void init(int argc, char** args)
 	if (_userFolder == "")
 	{
 		_userFolder = CrossPlatform::findUserFolder(true);
-		// Create user folder and save options
+		std::string configFolder = CrossPlatform::getConfigFolder(true);
 		if (_userFolder == "")
 		{
 			_userFolder = CrossPlatform::findUserFolder(false);
-			CrossPlatform::createFolder(Options::getUserFolder().c_str());
+			CrossPlatform::createFolder(_userFolder.c_str());
+		}
+		// Create user folder and save options
+		if (configFolder == "")
+		{
+			configFolder = CrossPlatform::getConfigFolder(false);
+			CrossPlatform::createFolder(configFolder.c_str());
 			save();
 		}
 		// Load existing options
@@ -142,7 +148,7 @@ void init(int argc, char** args)
  */
 void load(const std::string &filename)
 {
-	std::string s = Options::getUserFolder() + filename + ".cfg";
+	std::string s = CrossPlatform::getConfigFolder(true) + filename + ".cfg";
 	std::ifstream fin(s.c_str());
 	if (!fin)
 	{
@@ -170,7 +176,7 @@ void load(const std::string &filename)
  */
 void save(const std::string &filename)
 {
-	std::string s = Options::getUserFolder() + filename + ".cfg";
+	std::string s = CrossPlatform::getConfigFolder(true) + filename + ".cfg";
 	std::ofstream sav(s.c_str());
 	if (!sav)
 	{
