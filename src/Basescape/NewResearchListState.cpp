@@ -47,7 +47,7 @@ NewResearchListState::NewResearchListState(Game *game, Base *base) : State(game)
 	int max_height = 200;
 	int start_x = (max_width - width) / 2;
 	int start_y = (max_height - height) / 2;
-	
+
 	int button_x_border = 8;
 	int button_y_border = 8;
 	int button_height = 16;
@@ -57,7 +57,7 @@ NewResearchListState::NewResearchListState(Game *game, Base *base) : State(game)
 	_btnOK = new TextButton(width - 2 * button_x_border, button_height, start_x + button_x_border, start_y + height - button_height - button_y_border);
 	_txtTitle = new Text(width - 2 * button_x_border, button_height, start_x + button_x_border, start_y + button_y_border);
 	_lstResearch = new TextList(width - 4 * button_x_border, height - 2 * button_height - 2 * button_y_border, start_x + button_x_border, start_y + button_y_border + button_height);
-	
+
 	add(_window);
 	add(_btnOK);
 	add(_txtTitle);
@@ -66,7 +66,7 @@ NewResearchListState::NewResearchListState(Game *game, Base *base) : State(game)
 	// Set up objects
 	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
-	
+
 	_btnOK->setColor(Palette::blockOffset(15)+6);
 	_btnOK->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOK->onMouseClick((ActionHandler)&NewResearchListState::btnOKClick);
@@ -100,7 +100,7 @@ void NewResearchListState::onSelectProject(Action *action)
 {
 	_game->pushState(new ResearchProjectState(_game, _base, _projects[_lstResearch->getSelectedRow()]));
 }
-  
+
 /**
  * Returns to the previous screen.
  * @param action Pointer to an action.

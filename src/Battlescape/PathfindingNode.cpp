@@ -72,14 +72,14 @@ void PathfindingNode::check(int tuCost, int stepsNum, PathfindingNode* prevNode,
 
 /**
 * Is checked?
-* @return bool 
+* @return bool
 */
 bool PathfindingNode::isChecked() const
 {
 	return _checked;
 }
 
-/** 
+/**
  * Get TU cost.
  * @return cost
  */

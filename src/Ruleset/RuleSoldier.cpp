@@ -28,7 +28,7 @@ namespace OpenXcom
  */
 RuleSoldier::RuleSoldier(const std::string &type) : _type(type), _armor(""), _standHeight(0), _kneelHeight(0), _loftemps(0)
 {
-	
+
 }
 
 /**
@@ -36,7 +36,7 @@ RuleSoldier::RuleSoldier(const std::string &type) : _type(type), _armor(""), _st
  */
 RuleSoldier::~RuleSoldier()
 {
-	
+
 }
 
 /**
@@ -72,22 +72,22 @@ UnitStats RuleSoldier::getMinStats() const
 {
 	return _minStats;
 }
-/// 
+///
 UnitStats RuleSoldier::getMaxStats() const
 {
 	return _maxStats;
 }
-/// 
+///
 int RuleSoldier::getStandHeight() const
 {
 	return _standHeight;
 }
-/// 
+///
 int RuleSoldier::getKneelHeight() const
 {
 	return _kneelHeight;
 }
-/// 
+///
 int RuleSoldier::gotLoftemps() const
 {
 	return _loftemps;

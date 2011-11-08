@@ -53,7 +53,7 @@ LoadGameState::LoadGameState(Game *game) : State(game)
 	_txtTime = new Text(30, 9, 184, 24);
 	_txtDate = new Text(30, 9, 214, 24);
 	_lstSaves = new TextList(288, 128, 8, 32);
-	
+
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
 
@@ -86,7 +86,7 @@ LoadGameState::LoadGameState(Game *game) : State(game)
 
 	_txtDate->setColor(Palette::blockOffset(15)-1);
 	_txtDate->setText(_game->getLanguage()->getString("STR_DATE"));
-	
+
 	_lstSaves->setColor(Palette::blockOffset(8)+10);
 	_lstSaves->setColumns(5, 168, 30, 30, 30, 30);
 	_lstSaves->setSelectable(true);
@@ -101,7 +101,7 @@ LoadGameState::LoadGameState(Game *game) : State(game)
  */
 LoadGameState::~LoadGameState()
 {
-	
+
 }
 
 /**

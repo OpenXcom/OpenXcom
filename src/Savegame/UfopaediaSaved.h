@@ -26,7 +26,7 @@
 namespace OpenXcom
 {
 	class ArticleDefinition;
-	
+
 	/**
 	 * This class encapsulates the saved game properties concerning Ufopaedia.
 	 * It holds a list of available articles in sorted order, it can deliver a
@@ -34,53 +34,53 @@ namespace OpenXcom
 	 * keeps track of the current viewed article index for prev/next navigation.
 	 * Save game state can be stored/loaded.
 	 */
-	
+
 	class UfopaediaSaved
 	{
 	protected:
 		/// article ids that are currently visible to the user.
 		ArticleDefinitionList _visible_articles;
-		
+
 		/// current selected article index (for prev/next navigation).
 		unsigned int _current_index;
-		
+
 	public:
 		/// Ufopaedia constructor.
 		UfopaediaSaved();
-		
+
 		/// Ufopaedia destructor.
 		virtual ~UfopaediaSaved();
-		
+
 		/// insert article into _visible_articles.
 		void insertArticle(ArticleDefinition *article);
-		
+
 		/// check if an article is available.
 		bool isArticleAvailable(const std::string &article_id);
-		
+
 		/// open Ufopaedia with selection dialog.
 		void setCurrentArticle(ArticleDefinition *article);
-		
+
 		/// article navigation to next article.
 		ArticleDefinition *goNextArticle();
-		
+
 		/// article navigation to previous article.
 		ArticleDefinition *goPrevArticle();
-		
+
 		/// load a vector with article ids that are currently visible of a given section.
 		void getSectionList(const std::string &section, ArticleDefinitionList &data);
-		
+
 		/// TODO: get current visible article list as storeable data (for save).
 		void getSavegameProperties(const std::string &info) const;
-		
+
 		/// TODO: set current visible article list from stored data (on load).
 		void setSavegameProperties(const std::string &info);
 
 	protected:
-		
+
 		/// get index of the given article id in the visible list.
 		int getArticleIndex(const std::string &article_id);
 	};
-	
+
 }
 
 #endif

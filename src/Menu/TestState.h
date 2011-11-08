@@ -48,7 +48,7 @@ private:
 	Text *_text;
 	TextList *_list;
 	int _i;
-	
+
 	/// Creates a surface with every color in the palette.
 	SDL_Surface *testSurface();
 public:

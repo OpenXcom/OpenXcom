@@ -42,7 +42,7 @@ AggroBAIState::AggroBAIState(SavedBattleGame *game, BattleUnit *unit) : BattleAI
  */
 AggroBAIState::~AggroBAIState()
 {
-	
+
 }
 
 /**

@@ -59,7 +59,7 @@ public:
 	Soldier(RuleSoldier *rules, RuleArmor *armor, const std::vector<SoldierNamePool*> *names, int *id);
 	/// Cleans up the soldier.
 	~Soldier();
-	/// Initialises 
+	/// Initialises
 	void initStatsIncrease();
 	/// Loads the soldier from YAML.
 	void load(const YAML::Node& node);

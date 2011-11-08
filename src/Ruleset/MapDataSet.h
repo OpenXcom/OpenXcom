@@ -68,7 +68,7 @@ public:
 	void load(ResourcePack *res);
 	///	Unload to free memory.
 	void unload();
-	/// 
+	///
 	static MapData *getBlankFloorTile();
 	static MapData *getScourgedEarthTile();
 };

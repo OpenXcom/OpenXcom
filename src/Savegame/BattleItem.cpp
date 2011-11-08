@@ -167,7 +167,7 @@ bool BattleItem::spendBullet()
 }
 
 /**
- * Gets the item's owner. 
+ * Gets the item's owner.
  * @return pointer to Battleunit
  */
 BattleUnit *BattleItem::getOwner() const
@@ -182,7 +182,7 @@ BattleUnit *BattleItem::getPreviousOwner() const
 }
 
 /**
- * Sets the item's owner. 
+ * Sets the item's owner.
  * @param owner pointer to Battleunit
  */
 void BattleItem::setOwner(BattleUnit *owner)

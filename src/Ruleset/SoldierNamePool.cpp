@@ -54,9 +54,9 @@ void SoldierNamePool::load(const std::string &filename)
 	{
 		throw Exception("Failed to load name pool");
 	}
-    YAML::Parser parser(fin);
+	YAML::Parser parser(fin);
 	YAML::Node doc;
-    parser.GetNextDocument(doc);
+	parser.GetNextDocument(doc);
 
 	for (YAML::Iterator i = doc["maleFirst"].begin(); i != doc["maleFirst"].end(); ++i)
 	{
@@ -89,7 +89,7 @@ void SoldierNamePool::load(const std::string &filename)
 	{
 		_femaleLast = _maleLast;
 	}
-		
+
 	fin.close();
 }
 

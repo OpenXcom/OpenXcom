@@ -113,8 +113,8 @@ DebriefingState::DebriefingState(Game *game) : State(game)
 
 	_lstTotal->setColor(Palette::blockOffset(8)+5);
 	_lstTotal->setColumns(2, 244, 64);
-	_lstTotal->setDot(true);	
-	
+	_lstTotal->setDot(true);
+
 	prepareDebriefing();
 
 	int total = 0, statsY = 0, recoveryY = 0;
@@ -199,8 +199,6 @@ DebriefingState::~DebriefingState()
  */
 void DebriefingState::btnOkClick(Action *action)
 {
-	bool showPromotionsScreen = _game->getSavedGame()->handlePromotions();
-
 	_game->getSavedGame()->setBattleGame(0);
 	_game->popState();
 }
@@ -226,7 +224,7 @@ void DebriefingState::addStat(const std::string &name, int quantity, int score)
 	}
 }
 
-/** 
+/**
  * Prepares debriefing: gathers Aliens, Corpses, Artefacts, UFO Components.
  * Adds the items to the craft.
  * Also calculates the soldiers experience, and possible promotions.

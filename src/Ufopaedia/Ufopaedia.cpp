@@ -48,7 +48,7 @@ namespace OpenXcom
 	{
 		// TODO: get definition from Ruleset and add it to UPSaved...
 	}
-	
+
 	/**
 	 * Checks, if an article has already been released.
 	 * @param game Pointer to actual game.
@@ -59,7 +59,7 @@ namespace OpenXcom
 	{
 		return game->getSavedGame()->getUfopaedia()->isArticleAvailable(article_id);
 	}
-	
+
 	/**
 	 * Creates a new article state dependent on the given article definition.
 	 * @param game Pointer to actual game.
@@ -97,7 +97,7 @@ namespace OpenXcom
 		}
 		return 0;
 	}
-	
+
 	/**
 	 * Set UPSaved index and open the new state.
 	 * @param game Pointer to actual game.
@@ -119,7 +119,7 @@ namespace OpenXcom
 	{
 		// TODO: look if article id is available!
 	}
-	
+
 	/**
 	 * Open Ufopaedia start state, presenting the section selection buttons.
 	 * @param game Pointer to actual game.
@@ -128,7 +128,7 @@ namespace OpenXcom
 	{
 		game->pushState(new UfopaediaStartState(game));
 	}
-	
+
 	/**
 	 * Open the next article in the list. Loops to the first.
 	 * @param game Pointer to actual game.
@@ -142,7 +142,7 @@ namespace OpenXcom
 			game->pushState(createArticleState(game, article));
 		}
 	}
-	
+
 	/**
 	 * Open the previous article in the list. Loops to the last.
 	 * @param game Pointer to actual game.
@@ -156,9 +156,9 @@ namespace OpenXcom
 			game->pushState(createArticleState(game, article));
 		}
 	}
-	
+
 	/**
-	 * Build a string from a string template. A template can be a concatenation of string ids, 
+	 * Build a string from a string template. A template can be a concatenation of string ids,
 	 * f.i. "STR_SECTOID + STR_AUTOPSY". Maybe must add constant for whitepace also.
 	 * @param game Pointer to actual game.
 	 * @param str_template String containing the text constants
@@ -169,7 +169,7 @@ namespace OpenXcom
 		// TODO: actually parse the template string.
 		return game->getLanguage()->getString(str_template);
 	}
-	
+
 	/**
 	 * Open Ufopaedia to test it without starting a whole game.
 	 * @param game Pointer to actual game.
@@ -178,13 +178,13 @@ namespace OpenXcom
 	{
 		// set game language
 		game->loadLanguage("English");
-		
+
 		// init game
 		game->setRuleset(new XcomRuleset());
 		game->setSavedGame(game->getRuleset()->newSave(DIFF_BEGINNER));
-		
+
 		// open Ufopaedia
 		open(game);
 	}
-	
+
 }

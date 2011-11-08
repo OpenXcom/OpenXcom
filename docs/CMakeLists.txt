@@ -4,13 +4,15 @@ find_program ( DOXYGEN_EXECUTABLE
 
 if ( NOT ( DOXYGEN_EXECUTABLE MATCHES "NOTFOUND" ) )
   message ( "Found doxygen:${DOXYGEN_EXECUTABLE}" )
+  set ( top_srcdir "${CMAKE_SOURCE_DIR}" )
+  configure_file (
+	    "${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in"
+	    "${CMAKE_CURRENT_BINARY_DIR}/Doxyfile"
+  )
+
   file ( READ
-    "${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile"
-    doxyfile )
-  string ( REPLACE
-    "INPUT                  = ../src"
-    "INPUT                  = ${CMAKE_SOURCE_DIR}/src"
-    cmake_doxyfile "${doxyfile}" )
+  "${CMAKE_CURRENT_BINARY_DIR}/Doxyfile"
+    cmake_doxyfile )
 
   if ( NOT ("${CPACK_PACKAGE_VERSION_PATCH}" STREQUAL "" ) )
     set ( VERSION_EXTRA ".${CPACK_PACKAGE_VERSION_PATCH}" )

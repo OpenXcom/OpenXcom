@@ -30,36 +30,36 @@ namespace OpenXcom
 	class Action;
 	class Surface;
 	class TextButton;
-	
+
 	/**
 	 * UfopaediaArticle is the base class for all articles of various types.
-	 * 
+	 *
 	 * It encapsulates the basic characteristics.
 	 */
-	
+
 	class ArticleState : public State
 	{
 	protected:
-		/// constructor (protected, so it can only be instantiated by derived classes) 
+		/// constructor (protected, so it can only be instantiated by derived classes)
 		ArticleState(Game *game, std::string article_id);
 		/// destructor
 		virtual ~ArticleState();
-	
+
 	public:
 		/// return the article id
 		std::string getId() const { return _id; }
 
 	protected:
-		
+
 		/// screen layout helpers
 		void initLayout();
-		
+
 		/// callback for OK button
 		void btnOkClick(Action *action);
-		
+
 		/// callback for PREV button
 		void btnPrevClick(Action *action);
-		
+
 		/// callback for NEXT button
 		void btnNextClick(Action *action);
 		/// the article id

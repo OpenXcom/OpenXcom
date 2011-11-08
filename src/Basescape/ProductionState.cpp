@@ -91,7 +91,7 @@ void ProductionState::buildUi()
 	_txtAllocated = new Text(button_width, 2*button_height, width - button_width - 5*button_x_border, start_y + 4 * button_height);
 	_txtTodo = new Text(button_width, 2*button_height, width - 5*button_x_border, start_y + 4 * button_height);
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
-	
+
 	add(_window);
 	add(_txtTitle);
 	add(_txtAvailableEngineer);
@@ -121,7 +121,7 @@ void ProductionState::buildUi()
 	_txtAvailableEngineer->setSecondaryColor(Palette::blockOffset(13));
 	_txtAvailableSpace->setColor(Palette::blockOffset(15)+1);
 	_txtAvailableSpace->setSecondaryColor(Palette::blockOffset(13));
-	
+
 	_txtAllocatedEngineer->setColor(Palette::blockOffset(15)+1);
 	_txtAllocatedEngineer->setText(_game->getLanguage()->getString("STR_ENGINEERS__ALLOCATED"));
 	_txtAllocatedEngineer->setBig();
@@ -175,7 +175,7 @@ void ProductionState::buildUi()
 		_base->addProduction(_production);
 	}
 	setAssignedEngineer();
-	
+
 	_timerMoreEngineer = new Timer(30);
 	_timerLessEngineer = new Timer(30);
 	_timerMoreUnit = new Timer(30);
@@ -351,7 +351,7 @@ void ProductionState::onMoreUnit()
 {
 	int more = _production->getNumberOfItemTodo ();
 	_production->setNumberOfItemTodo (++more);
-	setAssignedEngineer();	
+	setAssignedEngineer();
 }
 
 /**
@@ -363,7 +363,7 @@ void ProductionState::onLessUnit()
 	if(less > (_production->getNumberOfItemDone () + 1))
 	{
 		_production->setNumberOfItemTodo (--less);
-		setAssignedEngineer();	
+		setAssignedEngineer();
 	}
 }
 

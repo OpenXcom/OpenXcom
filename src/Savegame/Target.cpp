@@ -110,7 +110,7 @@ void Target::setLatitude(double lat)
 }
 
 /**
- * Returns the list of crafts currently 
+ * Returns the list of crafts currently
  * following this target.
  * @return Pointer to list of crafts.
  */

@@ -81,7 +81,6 @@ SavedBattleGame::~SavedBattleGame()
  */
 void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* savedGame)
 {
-	unsigned int size = 0;
 	int a;
 	int selectedUnit = 0;
 
@@ -154,9 +153,13 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 			{
 				aiState = new PatrolBAIState(this, b, 0);
 			}
-			if (state == "AGGRO")
+			else if (state == "AGGRO")
 			{
 				aiState = new AggroBAIState(this, b);
+			}
+			else
+			{
+				continue;
 			}
 			aiState->load((*i)["AI"]);
 			b->setAIState(aiState);

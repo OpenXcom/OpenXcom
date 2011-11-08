@@ -69,7 +69,7 @@ void MapData::setSprite(int frameID, int value)
 
 /**
   * Get whether this is an animated ufo door.
-  * @return bool 
+  * @return bool
   */
 bool MapData::isUFODoor() const
 {
@@ -78,7 +78,7 @@ bool MapData::isUFODoor() const
 
 /**
   * Get whether this is a floor.
-  * @return bool 
+  * @return bool
   */
 bool MapData::isNoFloor() const
 {
@@ -87,7 +87,7 @@ bool MapData::isNoFloor() const
 
 /**
   * Get whether this is a big wall, which blocks all surrounding paths.
-  * @return bool 
+  * @return bool
   */
 bool MapData::isBigWall() const
 {
@@ -97,7 +97,7 @@ bool MapData::isBigWall() const
 
 /**
   * Get whether this is a normal door.
-  * @return bool 
+  * @return bool
   */
 bool MapData::isDoor() const
 {
@@ -106,7 +106,7 @@ bool MapData::isDoor() const
 
 /**
   * Get whether this is a grav lift.
-  * @return bool 
+  * @return bool
   */
 bool MapData::isGravLift() const
 {
@@ -146,13 +146,13 @@ int MapData::getBlock(ItemDamageType type) const
 	if (type == DT_NONE)
 		return _block[1];
 	if (type == DT_HE)
-		return _block[2]; 
+		return _block[2];
 	if (type == DT_SMOKE)
-		return _block[3]; 
+		return _block[3];
 	if (type == DT_IN)
-		return _block[4]; 
+		return _block[4];
 	if (type == DT_STUN)
-		return _block[5]; 
+		return _block[5];
 
 	return 0;
 }
@@ -296,7 +296,7 @@ void MapData::setFootstepSound(int value)
 
 /**
   * Get the alternative object ID.
-  * @return object ID 
+  * @return object ID
   */
 int MapData::getAltMCD() const
 {
@@ -314,7 +314,7 @@ void MapData::setAltMCD(int value)
 
 /**
   * Get the dead object ID.
-  * @return object ID 
+  * @return object ID
   */
 int MapData::getDieMCD() const
 {

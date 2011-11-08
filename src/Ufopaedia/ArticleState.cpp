@@ -32,7 +32,7 @@ namespace OpenXcom
 	 * @param game Pointer to current game.
 	 * @param article_id The article id of this article state instance.
 	 */
-	ArticleState::ArticleState(Game *game, std::string article_id) : 
+	ArticleState::ArticleState(Game *game, std::string article_id) :
 		State(game), _id(article_id)
 	{
 		// init background and navigation eleemnts
@@ -57,7 +57,7 @@ namespace OpenXcom
 		add(_btnOk);
 		add(_btnPrev);
 		add(_btnNext);
-		
+
 		_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 		_btnOk->onMouseClick((ActionHandler)&ArticleState::btnOkClick);
 		_btnPrev->setText(L"<<");
@@ -65,7 +65,7 @@ namespace OpenXcom
 		_btnNext->setText(L">>");
 		_btnNext->onMouseClick((ActionHandler)&ArticleState::btnNextClick);
 	}
-	
+
 	/**
 	 * Returns to the previous screen.
 	 * @param action Pointer to an action.
@@ -74,7 +74,7 @@ namespace OpenXcom
 	{
 		_game->popState();
 	}
-	
+
 	/**
 	 * Shows the previous available article.
 	 * @param action Pointer to an action.
@@ -83,7 +83,7 @@ namespace OpenXcom
 	{
 		Ufopaedia::prev(_game);
 	}
-	
+
 	/**
 	 * Shows the next available article. Loops to the first.
 	 * @param action Pointer to an action.
@@ -92,5 +92,5 @@ namespace OpenXcom
 	{
 		Ufopaedia::next(_game);
 	}
-	
+
 }

@@ -92,7 +92,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, unsigned int soldier)
 	_txtStrength = new Text(120, 9, 6, 166);
 	_numStrength = new Text(18, 9, 131, 166);
 	_barStrength = new Bar(170, 7, 150, 166);
-	
+
 	add(_bg);
 	add(_rank);
 	add(_btnOk);
@@ -137,7 +137,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, unsigned int soldier)
 	add(_txtStrength);
 	add(_numStrength);
 	add(_barStrength);
-	
+
 	// Set up objects
 	_game->getResourcePack()->getSurface("BACK06.SCR")->blit(_bg);
 
@@ -165,7 +165,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, unsigned int soldier)
 
 	_txtRank->setColor(Palette::blockOffset(13)+10);
 	_txtRank->setSecondaryColor(Palette::blockOffset(13));
-	
+
 	_txtMissions->setColor(Palette::blockOffset(13)+10);
 	_txtMissions->setSecondaryColor(Palette::blockOffset(13));
 
@@ -254,7 +254,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, unsigned int soldier)
  */
 SoldierInfoState::~SoldierInfoState()
 {
-	
+
 }
 
 /**
@@ -273,49 +273,49 @@ void SoldierInfoState::init()
 
 	std::wstringstream ss;
 	ss << s->getTimeUnits();
-	_numTimeUnits->setText(ss.str());		
+	_numTimeUnits->setText(ss.str());
 	_barTimeUnits->setMax(s->getTimeUnits());
 	_barTimeUnits->setValue(s->getTimeUnits());
 
 	std::wstringstream ss2;
 	ss2 << s->getStamina();
-	_numStamina->setText(ss2.str());		
+	_numStamina->setText(ss2.str());
 	_barStamina->setMax(s->getStamina());
 	_barStamina->setValue(s->getStamina());
 
 	std::wstringstream ss3;
 	ss3 << s->getHealth();
-	_numHealth->setText(ss3.str());		
+	_numHealth->setText(ss3.str());
 	_barHealth->setMax(s->getHealth());
 	_barHealth->setValue(s->getHealth());
 
 	std::wstringstream ss4;
 	ss4 << s->getBravery();
-	_numBravery->setText(ss4.str());		
+	_numBravery->setText(ss4.str());
 	_barBravery->setMax(s->getBravery());
 	_barBravery->setValue(s->getBravery());
 
 	std::wstringstream ss5;
 	ss5 << s->getReactions();
-	_numReactions->setText(ss5.str());		
+	_numReactions->setText(ss5.str());
 	_barReactions->setMax(s->getReactions());
 	_barReactions->setValue(s->getReactions());
 
 	std::wstringstream ss6;
 	ss6 << s->getFiringAccuracy();
-	_numFiring->setText(ss6.str());		
+	_numFiring->setText(ss6.str());
 	_barFiring->setMax(s->getFiringAccuracy());
 	_barFiring->setValue(s->getFiringAccuracy());
 
 	std::wstringstream ss7;
 	ss7 << s->getThrowingAccuracy();
-	_numThrowing->setText(ss7.str());		
+	_numThrowing->setText(ss7.str());
 	_barThrowing->setMax(s->getThrowingAccuracy());
 	_barThrowing->setValue(s->getThrowingAccuracy());
 
 	std::wstringstream ss8;
 	ss8 << s->getStrength();
-	_numStrength->setText(ss8.str());		
+	_numStrength->setText(ss8.str());
 	_barStrength->setMax(s->getStrength());
 	_barStrength->setValue(s->getStrength());
 

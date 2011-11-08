@@ -103,7 +103,7 @@ SoldierArmorState::SoldierArmorState(Game *game, Base *base, unsigned int soldie
  */
 SoldierArmorState::~SoldierArmorState()
 {
-	
+
 }
 
 /**

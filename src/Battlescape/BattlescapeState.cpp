@@ -577,7 +577,7 @@ void BattlescapeState::mapClick(Action *action)
  */
 void BattlescapeState::btnUnitUpClick(Action *action)
 {
-	if (playableUnitSelected() && _battleGame->getPathfinding()->validateUpDown(_battleGame->getSelectedUnit(), _battleGame->getSelectedUnit()->getPosition(), Pathfinding::DIR_UP)) 
+	if (playableUnitSelected() && _battleGame->getPathfinding()->validateUpDown(_battleGame->getSelectedUnit(), _battleGame->getSelectedUnit()->getPosition(), Pathfinding::DIR_UP))
 	{
 		_action.target = _battleGame->getSelectedUnit()->getPosition();
 		_action.target.z++;

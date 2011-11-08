@@ -351,7 +351,7 @@ BattlescapeOptionsState::BattlescapeOptionsState(Game *game) : State(game)
  */
 BattlescapeOptionsState::~BattlescapeOptionsState()
 {
-	
+
 }
 
 /**

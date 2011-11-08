@@ -30,26 +30,26 @@
 
 namespace OpenXcom
 {
-	
+
 	ArticleStateTextImage::ArticleStateTextImage(Game *game, ArticleDefinitionTextImage *defs) : ArticleState(game, defs->id)
 	{
 		// add screen elements
 		_txtTitle = new Text(140, 32, 5, 24);
-		
+
 		// Set palette
 		_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_3")->getColors());
-		
+
 		ArticleState::initLayout();
-		
+
 		// add other elements
 		add(_txtTitle);
-		
+
 		// Set up objects
 		_game->getResourcePack()->getSurface(defs->image_id)->blit(_bg);
 		_btnOk->setColor(Palette::blockOffset(5)+3);
 		_btnPrev->setColor(Palette::blockOffset(5)+3);
 		_btnNext->setColor(Palette::blockOffset(5)+3);
-		
+
 		_txtTitle->setColor(Palette::blockOffset(15)+4);
 		_txtTitle->setBig();
 		_txtTitle->setAlign(ALIGN_LEFT);
@@ -57,17 +57,17 @@ namespace OpenXcom
 		_txtTitle->setText(Ufopaedia::buildText(_game, defs->title));
 
 		int text_height = _txtTitle->getTextHeight();
-		
+
 		_txtInfo = new Text(160, 160, 5, 25 + text_height);
 		add(_txtInfo);
-		
+
 		_txtInfo->setColor(Palette::blockOffset(15)-1);
 		_txtInfo->setAlign(ALIGN_LEFT);
 		_txtInfo->setWordWrap(true);
 		_txtInfo->setText(Ufopaedia::buildText(_game, defs->text));
 	}
-	
+
 	ArticleStateTextImage::~ArticleStateTextImage()
 	{}
-	
+
 }

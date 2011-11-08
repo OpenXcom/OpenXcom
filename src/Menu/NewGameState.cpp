@@ -46,7 +46,7 @@ NewGameState::NewGameState(Game *game) : State(game)
 	_btnGenius = new TextButton(160, 18, 80, 130);
 	_btnSuperhuman = new TextButton(160, 18, 80, 155);
 	_txtTitle = new Text(192, 10, 64, 30);
-	
+
 	add(_window);
 	add(_btnBeginner);
 	add(_btnExperienced);
@@ -90,7 +90,7 @@ NewGameState::NewGameState(Game *game) : State(game)
  */
 NewGameState::~NewGameState()
 {
-	
+
 }
 
 /**

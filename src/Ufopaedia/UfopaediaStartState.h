@@ -31,18 +31,18 @@ namespace OpenXcom
 	class Window;
 	class Text;
 	class TextButton;
-	
+
 	/**
 	 * UfopaediaStartState is the screen that opens when clicking Ufopaedia button in Geoscape.
 	 * Presents buttons to all sections of Ufopaedia, opening a UfopaediaSelectState on click.
 	 */
-	
+
 	class UfopaediaStartState : public State
 	{
 	public:
 		UfopaediaStartState(Game *game);
 		virtual ~UfopaediaStartState();
-		
+
 	protected:
 		Window *_window;
 		Text *_txtTitle;
@@ -56,7 +56,7 @@ namespace OpenXcom
 		TextButton *_btnAlienResearch;
 		TextButton *_btnUfoComponents;
 		TextButton *_btnUfos;
-		
+
 		// navigation callbacks
 		void btnOkClick(Action *action);
 		void btnCraftArmamentClick(Action *action);

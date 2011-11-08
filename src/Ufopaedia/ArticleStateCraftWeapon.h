@@ -29,17 +29,17 @@ namespace OpenXcom
 	class Text;
 	class TextList;
 	class ArticleDefinitionCraftWeapon;
-	
+
 	/**
 	 * ArticleStateCraftWeapon has a caption, background image and a stats block.
 	 */
-	
+
 	class ArticleStateCraftWeapon : public ArticleState
 	{
 	public:
 		ArticleStateCraftWeapon(Game *game, ArticleDefinitionCraftWeapon *article_defs);
 		virtual ~ArticleStateCraftWeapon();
-		
+
 	protected:
 		Text *_txtTitle;
 		Text *_txtInfo;

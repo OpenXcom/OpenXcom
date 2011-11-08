@@ -61,7 +61,7 @@ ManufactureState::ManufactureState(Game *game, Base *base) : State(game), _base(
 	_txtCost = new Text(42, 27, 223, 44);
 	_txtTimeLeft = new Text(54, 18, 265, 44);
 	_lstManufacture = new TextList(300, 90, 8, 80);
-	
+
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
@@ -85,7 +85,7 @@ ManufactureState::ManufactureState(Game *game, Base *base) : State(game), _base(
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)+6);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
-	
+
 	_btnNew->setColor(Palette::blockOffset(13)+10);
 	_btnNew->setText(_game->getLanguage()->getString("STR_NEW_PRODUCTION"));
 	_btnNew->onMouseClick((ActionHandler)&ManufactureState::btnNewProductionClick);
@@ -131,7 +131,7 @@ ManufactureState::ManufactureState(Game *game, Base *base) : State(game), _base(
 
 	_txtTimeLeft->setColor(Palette::blockOffset(15)+1);
 	_txtTimeLeft->setText(_game->getLanguage()->getString("STR_DAYS_HOURS_LEFT"));
-	
+
 	_lstManufacture->setColor(Palette::blockOffset(13)+10);
 	_lstManufacture->setArrowColor(Palette::blockOffset(15)+9);
 	_lstManufacture->setColumns(6, 105, 39, 45, 27, 47, 40);
@@ -147,7 +147,7 @@ ManufactureState::ManufactureState(Game *game, Base *base) : State(game), _base(
  */
 ManufactureState::~ManufactureState()
 {
-	
+
 }
 
 void ManufactureState::init ()

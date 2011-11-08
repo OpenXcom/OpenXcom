@@ -117,7 +117,7 @@ AbortMissionState::AbortMissionState(Game *game, SavedBattleGame *battleGame, Ba
  */
 AbortMissionState::~AbortMissionState()
 {
-	
+
 }
 
 /**

@@ -265,7 +265,7 @@ void UnitSprite::drawRoutine1()
 	const int yoffWalk[8] = {0, 0, 0, 0, 0, 0, 0, 0}; // bobbing up and down
 	const int offX[8] = { 8, 10, 7, 4, -9, -11, -7, -3 }; // for the weapons
 	const int offY[8] = { -6, -3, 0, 2, 0, -4, -7, -9 }; // for the weapons
-	 
+
 	if (_unit->isOut())
 	{
 		// unit is drawn as an item

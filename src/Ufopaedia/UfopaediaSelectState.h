@@ -32,17 +32,17 @@ namespace OpenXcom
 	class Text;
 	class TextButton;
 	class TextList;
-	
+
 	/**
 	 * UfopaediaSelectState is the screen that lists articles of a given type.
 	 */
-	
+
 	class UfopaediaSelectState : public State
 	{
 	public:
 		UfopaediaSelectState(Game *game, std::string section);
 		virtual ~UfopaediaSelectState();
-		
+
 	protected:
 		std::string _section;
 		Window *_window;
@@ -50,7 +50,7 @@ namespace OpenXcom
 		TextButton *_btnOk;
 		TextList *_lstSelection;
 		ArticleDefinitionList _article_list;
-		
+
 		/// Handler for clicking the OK button
 		void btnOkClick(Action *action);
 		/// Handler for clicking the selection list.

@@ -94,7 +94,7 @@ void SurfaceSet::loadPck(const std::string &pck, const std::string &tab)
 	}
 
 	// Load PCX and put pixels in surfaces
-    std::ifstream imgFile (pck.c_str(), std::ios::in | std::ios::binary);
+	std::ifstream imgFile (pck.c_str(), std::ios::in | std::ios::binary);
 	if (!imgFile)
 	{
 		throw Exception("Failed to load PCK");

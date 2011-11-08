@@ -38,9 +38,9 @@ class Timer;
 class ProductionState : public State
 {
 private:
-	Production * _production;
-	RuleManufactureInfo * _item;
 	Base * _base;
+	RuleManufactureInfo * _item;
+	Production * _production;
 	Window * _window;
 	ArrowButton * _btnUnitUp, * _btnUnitDown, * _btnEngineerUp, * _btnEngineerDown;
 	TextButton * _btnStop, * _btnOk;
@@ -62,7 +62,7 @@ private:
 	void lessEngineerPress(Action * action);
 	/// Handler for releasing the less engineer button
 	void lessEngineerRelease(Action * action);
-	/// Handler for pressing the less unit button 
+	/// Handler for pressing the less unit button
 	void lessUnitPress(Action * action);
 	/// Handler for releasing the less unit button
 	void lessUnitRelease(Action * action);

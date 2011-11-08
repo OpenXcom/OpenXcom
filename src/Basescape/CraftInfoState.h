@@ -31,7 +31,7 @@ class Text;
 class Surface;
 
 /**
- * Craft Info screen that shows all the 
+ * Craft Info screen that shows all the
  * info of a specific craft.
  */
 class CraftInfoState : public State

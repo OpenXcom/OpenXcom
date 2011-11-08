@@ -49,7 +49,7 @@ BaseNameState::BaseNameState(Game *game, Base *base, Globe *globe, bool first) :
 	_btnOk = new TextButton(162, 12, 47, 118);
 	_txtTitle = new Text(182, 16, 37, 70);
 	_edtName = new TextEdit(136, 16, 54, 94);
-	
+
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
 
@@ -82,7 +82,7 @@ BaseNameState::BaseNameState(Game *game, Base *base, Globe *globe, bool first) :
  */
 BaseNameState::~BaseNameState()
 {
-	
+
 }
 
 /**

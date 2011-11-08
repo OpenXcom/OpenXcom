@@ -28,7 +28,7 @@ namespace OpenXcom
  */
 RuleAlien::RuleAlien(const std::string &type, std::string race, std::string rank) : _type(type), _race(race), _rank(rank), _armor(""), _standHeight(0), _kneelHeight(0), _loftemps(0), _value(0)
 {
-	
+
 }
 
 /**
@@ -36,7 +36,7 @@ RuleAlien::RuleAlien(const std::string &type, std::string race, std::string rank
  */
 RuleAlien::~RuleAlien()
 {
-	
+
 }
 
 /**
@@ -71,18 +71,18 @@ UnitStats RuleAlien::getStats() const
 {
 	return _stats;
 }
-/// 
+///
 
 int RuleAlien::getStandHeight() const
 {
 	return _standHeight;
 }
-/// 
+///
 int RuleAlien::getKneelHeight() const
 {
 	return _kneelHeight;
 }
-/// 
+///
 int RuleAlien::getLoftemps() const
 {
 	return _loftemps;

@@ -47,7 +47,7 @@
 namespace OpenXcom
 {
 struct findRuleResearchProject : public std::unary_function<ResearchProject *,
-							    bool>
+								bool>
 {
 	RuleResearchProject * _toFind;
 	findRuleResearchProject(RuleResearchProject * toFind);
@@ -64,7 +64,7 @@ bool findRuleResearchProject::operator()(const ResearchProject *r) const
 }
 
 struct equalProduction : public std::unary_function<Production *,
-						    bool>
+							bool>
 {
 	RuleManufactureInfo * _item;
 	equalProduction(RuleManufactureInfo * item);
@@ -167,7 +167,7 @@ void SavedGame::getList(TextList *list, Language *lang)
 			std::cerr << e.what() << std::endl;
 			continue;
 		}
-    }
+	}
 }
 
 /**
@@ -184,11 +184,11 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	{
 		throw Exception("Failed to load savegame");
 	}
-    YAML::Parser parser(fin);
+	YAML::Parser parser(fin);
 	YAML::Node doc;
 
 	// Get brief save info
-    parser.GetNextDocument(doc);
+	parser.GetNextDocument(doc);
 	std::string v;
 	doc["version"] >> v;
 	if (v != Options::getVersion())
@@ -603,8 +603,8 @@ void SavedGame::getAvailableProductions (std::vector<RuleManufactureInfo *> & pr
 	const std::vector<Production *> baseProductions (base->getProductions ());
 
 	for(std::map<std::string, RuleManufactureInfo *>::const_iterator iter = items.begin ();
-	    iter != items.end ();
-	    ++iter)
+		iter != items.end ();
+		++iter)
 	{
 		if(std::find(discovereds.begin (), discovereds.end (), ruleset->getResearchProject(iter->first)) == discovereds.end ())
 		{
@@ -629,7 +629,7 @@ bool SavedGame::isResearchAvailable (RuleResearchProject * r, const std::vector<
 	std::vector<RuleResearchProject *>::const_iterator iter = r->getDependencys().begin ();
 	const std::vector<const RuleResearchProject *> & discovereds(getDiscoveredResearchs());
 	if(std::find(unlockeds.begin (), unlockeds.end (),
-		     r) != unlockeds.end ())
+			 r) != unlockeds.end ())
 	{
 		return true;
 	}
@@ -681,9 +681,9 @@ void SavedGame::getDependableResearchBasic (std::vector<RuleResearchProject *> &
 	getAvailableResearchProjects(possibleProjects, ruleset, base);
 	for(std::vector<RuleResearchProject *>::iterator iter = possibleProjects.begin (); iter != possibleProjects.end (); ++iter)
 	{
-		if (std::find((*iter)->getDependencys().begin (), (*iter)->getDependencys().end (), research) != (*iter)->getDependencys().end () 
-		    || 
-		    std::find((*iter)->getUnlocked().begin (), (*iter)->getUnlocked().end (), research) != (*iter)->getUnlocked().end ()
+		if (std::find((*iter)->getDependencys().begin (), (*iter)->getDependencys().end (), research) != (*iter)->getDependencys().end ()
+			||
+			std::find((*iter)->getUnlocked().begin (), (*iter)->getUnlocked().end (), research) != (*iter)->getUnlocked().end ()
 			)
 		{
 				dependables.push_back(*iter);
@@ -741,7 +741,7 @@ bool SavedGame::handlePromotions()
 		soldiersTotal += (*i)->getSoldiers()->size();
 	}
 	Soldier *highestRanked = 0;
-	
+
 	// now determine the number of positions we have of each rank,
 	// and the soldier with the heighest promotion score of the rank below it
 

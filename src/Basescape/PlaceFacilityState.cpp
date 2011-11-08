@@ -57,7 +57,7 @@ PlaceFacilityState::PlaceFacilityState(Game *game, Base *base, RuleBaseFacility 
 	_numTime = new Text(110, 16, 202, 98);
 	_txtMaintenance = new Text(110, 9, 202, 118);
 	_numMaintenance = new Text(110, 16, 202, 126);
-	
+
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
 
@@ -75,7 +75,7 @@ PlaceFacilityState::PlaceFacilityState(Game *game, Base *base, RuleBaseFacility 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
-	
+
 	_view->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
 	_view->setBase(_base);
 	_view->setSelectable(rule->getSize());
@@ -121,7 +121,7 @@ PlaceFacilityState::PlaceFacilityState(Game *game, Base *base, RuleBaseFacility 
  */
 PlaceFacilityState::~PlaceFacilityState()
 {
-	
+
 }
 
 /**

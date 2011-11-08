@@ -42,7 +42,7 @@ UfoLostState::UfoLostState(Game *game, std::wstring id) : State(game), _id(id)
 	_window = new Window(this, 192, 104, 32, 48, POPUP_BOTH);
 	_btnOk = new TextButton(60, 12, 98, 112);
 	_txtTitle = new Text(160, 30, 48, 72);
-	
+
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
 
@@ -72,7 +72,7 @@ UfoLostState::UfoLostState(Game *game, std::wstring id) : State(game), _id(id)
  */
 UfoLostState::~UfoLostState()
 {
-	
+
 }
 
 /**

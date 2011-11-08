@@ -59,7 +59,7 @@ ProductionStartState::ProductionStartState(Game * game, Base * base, RuleManufac
 	_txtManHour = new Text (width - 4 * button_x_border, button_height, start_x + button_x_border * 2, start_y + button_y_border * 3);
 	_txtCost = new Text (width - 4 * button_x_border, button_height, start_x + button_x_border * 2, start_y + button_y_border * 4);
 	_txtWorkSpace = new Text (width - 4 * button_x_border, button_height, start_x + button_x_border * 2, start_y + button_y_border * 5);
-	
+
 	_txtNeededItemsTitle = new Text (width - 4 * button_x_border, button_height, start_x + button_x_border * 2, start_y + button_y_border * 6);
 	_txtItemNameColumn = new Text (6 * button_x_border, button_height, start_x + button_x_border * 3, start_y + button_y_border * 7);
 	_txtUnitRequiredColumn = new Text (6 * button_x_border, button_height, start_x + button_x_border * 14, start_y + button_y_border * 7);
@@ -69,7 +69,7 @@ ProductionStartState::ProductionStartState(Game * game, Base * base, RuleManufac
 	_btnStart = new TextButton (button_width, button_height, width - button_width - button_x_border, start_y + height - button_height - button_y_border);
 
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
-	
+
 	add(_window);
 	add(_txtTitle);
 	add(_txtManHour);
@@ -113,12 +113,12 @@ ProductionStartState::ProductionStartState(Game * game, Base * base, RuleManufac
 	_btnCancel->setColor(Palette::blockOffset(13)+10);
 	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&ProductionStartState::btnCancelClick);
-	
+
 	const std::map<std::string, int> & neededItems (_item->getNeededItems());
 	int availableWorkSpace = _base->getFreeWorkshops();
 	bool productionPossible (game->getSavedGame()->getFunds() > _item->getManufactureCost ());
 	productionPossible &= (availableWorkSpace > 0);
-		
+
 	_txtNeededItemsTitle->setColor(Palette::blockOffset(13)+10);
 	_txtNeededItemsTitle->setText(_game->getLanguage()->getString("STR_SPECIAL_MATERIALS_REQUIRED"));
 	_txtNeededItemsTitle->setAlign(ALIGN_CENTER);
@@ -128,7 +128,7 @@ ProductionStartState::ProductionStartState(Game * game, Base * base, RuleManufac
 	_txtUnitRequiredColumn->setText(_game->getLanguage()->getString("STR_UNITS_REQUIRED"));
 	_txtUnitAvailableColumn->setColor(Palette::blockOffset(13)+10);
 	_txtUnitAvailableColumn->setText(_game->getLanguage()->getString("STR_UNITS_AVAILABLE"));
-	
+
 	_lstNeededItems->setColumns(3, 12 * button_x_border, 8 * button_x_border, 8 * button_x_border);
 	_lstNeededItems->setBackground(_window);
 	_lstNeededItems->setMargin(2);

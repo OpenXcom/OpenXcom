@@ -25,8 +25,8 @@ namespace OpenXcom
 
 void operator >> (const YAML::Node& node, RuleSlot& s)
 {
-    node[0] >> s.x;
-    node[1] >> s.y;
+	node[0] >> s.x;
+	node[1] >> s.y;
 }
 YAML::Emitter& operator << (YAML::Emitter& out, const RuleSlot& s)
 {

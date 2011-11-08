@@ -161,12 +161,12 @@ void BaseView::setSelectable(int size)
 		r.h = _selector->getHeight();
 		r.x = 0;
 		r.y = 0;
-        _selector->drawRect(&r, Palette::blockOffset(1));
+		_selector->drawRect(&r, Palette::blockOffset(1));
 		r.w -= 2;
 		r.h -= 2;
 		r.x++;
 		r.y++;
-        _selector->drawRect(&r, 0);
+		_selector->drawRect(&r, 0);
 		_selector->setVisible(false);
 	}
 	else
@@ -324,12 +324,12 @@ void BaseView::blink()
 			r.h = _selector->getHeight();
 			r.x = 0;
 			r.y = 0;
-            _selector->drawRect(&r, Palette::blockOffset(1));
+			_selector->drawRect(&r, Palette::blockOffset(1));
 			r.w -= 2;
 			r.h -= 2;
 			r.x++;
 			r.y++;
-            _selector->drawRect(&r, 0);
+			_selector->drawRect(&r, 0);
 		}
 		else
 		{
@@ -337,7 +337,7 @@ void BaseView::blink()
 			r.h = _selector->getHeight();
 			r.x = 0;
 			r.y = 0;
-            _selector->drawRect(&r, 0);
+			_selector->drawRect(&r, 0);
 		}
 	}
 }

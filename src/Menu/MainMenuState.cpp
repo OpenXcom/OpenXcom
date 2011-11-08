@@ -46,7 +46,7 @@ MainMenuState::MainMenuState(Game *game) : State(game)
 	_btnLoad = new TextButton(192, 20, 64, 118);
 	_btnQuit = new TextButton(192, 20, 64, 146);
 	_txtTitle = new Text(256, 30, 32, 45);
-	
+
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
@@ -89,7 +89,7 @@ MainMenuState::MainMenuState(Game *game) : State(game)
  */
 MainMenuState::~MainMenuState()
 {
-	
+
 }
 
 /**

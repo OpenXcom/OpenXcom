@@ -42,7 +42,7 @@ LanguageState::LanguageState(Game *game) : State(game)
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
-	
+
 	add(_window);
 	add(_lstLanguages);
 
@@ -66,7 +66,7 @@ LanguageState::LanguageState(Game *game) : State(game)
  */
 LanguageState::~LanguageState()
 {
-	
+
 }
 
 /**

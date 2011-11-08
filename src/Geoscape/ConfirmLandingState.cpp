@@ -60,7 +60,7 @@ ConfirmLandingState::ConfirmLandingState(Game *game, Craft *craft, int texture, 
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)), Palette::backPos, 16);
-	
+
 	add(_window);
 	add(_btnYes);
 	add(_btnNo);
@@ -68,7 +68,7 @@ ConfirmLandingState::ConfirmLandingState(Game *game, Craft *craft, int texture, 
 	add(_txtTarget);
 	add(_txtReady);
 	add(_txtBegin);
-	
+
 	// Set up objects
 	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK15.SCR"));
@@ -107,7 +107,7 @@ ConfirmLandingState::ConfirmLandingState(Game *game, Craft *craft, int texture, 
  */
 ConfirmLandingState::~ConfirmLandingState()
 {
-	
+
 }
 
 /**

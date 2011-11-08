@@ -120,7 +120,7 @@ int Projectile::calculateTrajectory(double accuracy)
 		}
 		else
 		{
-			// first try is at half the unit height 
+			// first try is at half the unit height
 			targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + tile->getUnit()->getUnit()->getStandHeight()/2);
 			int test = _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, false, &_trajectory, bu);
 			_trajectory.clear();

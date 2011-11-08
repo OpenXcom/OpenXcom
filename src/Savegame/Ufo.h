@@ -43,7 +43,7 @@ private:
 	bool _detected;
 	int _hoursCrashed;
 	bool _inBattlescape;
-	
+
 	/// Calculates a new speed vector to the destination.
 	void calculateSpeed();
 public:
