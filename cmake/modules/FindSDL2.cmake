@@ -255,9 +255,21 @@ macro ( FindSDL_component _component )
       SDL_${UPPERCOMPONENT}_MINOR
       SDL_${UPPERCOMPONENT}_MICRO )
 
+    set ( SDL_${UPPERCOMPONENT}_LIBRARY_DIRS "" )
+    foreach( my_sdl_lib ${SDL${UPPERCOMPONENT}_LIBRARY} )
+      get_filename_component(_sdl_my_lib_path "${my_sdl_lib}" PATH)
+      list(APPEND SDL_${UPPERCOMPONENT}_LIBRARY_DIRS ${_sdl_my_lib_path})
+    endforeach()
+    list(REMOVE_DUPLICATES SDL_${UPPERCOMPONENT}_LIBRARY_DIRS)
   endif ()
 endmacro ()
 
+set ( SDL_LIBRARY_DIRS "" )
+foreach( my_sdl_lib ${SDL_LIBRARY} )
+  get_filename_component(_sdl_my_lib_path "${my_sdl_lib}" PATH)
+  list(APPEND SDL_LIBRARY_DIRS ${_sdl_my_lib_path})
+endforeach()
+list(REMOVE_DUPLICATES SDL_LIBRARY_DIRS)
 
 foreach ( component ${SDL2_FIND_COMPONENTS} )
   FindSDL_component ( ${component} )

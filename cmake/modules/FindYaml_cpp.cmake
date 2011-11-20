@@ -4,10 +4,6 @@
 # YAMLCPP_FOUND, if false, do not try to link to SDL
 # YAMLCPP_INCLUDE_DIR, where to find SDL/SDL.h
 #
-# $SDLDIR is an environment variable that would
-# correspond to the ./configure --prefix=$SDLDIR
-# used in building SDL.
-#
 # Created by Guillaume Chevallereau. This was influenced by the FindSDL.cmake 
 # module.
 
@@ -62,3 +58,9 @@ IF(YAMLCPP_LIBRARY AND YAMLCPP_INCLUDE_DIR)
   SET(YAMLCPP_INCLUDE_DIR "${YAMLCPP_INCLUDE_DIR};${YAMLCPP_INCLUDE_DIR}/..")
 ENDIF(YAMLCPP_LIBRARY AND YAMLCPP_INCLUDE_DIR)
 
+set ( YAMLCPP_LIBRARY_DIRS "" )
+foreach( my_yamlcpp_lib ${YAMLCPP_LIBRARY} )
+  get_filename_component(_yamlcpp_my_lib_path "${my_yamlcpp_lib}" PATH)
+  list(APPEND YAMLCPP_LIBRARY_DIRS ${_yamlcpp_my_lib_path})
+endforeach()
+list(REMOVE_DUPLICATES YAMLCPP_LIBRARY_DIRS)
