@@ -183,14 +183,36 @@ IF(SDL_LIBRARY_TEMP)
   SET(SDL_FOUND "YES")
 ENDIF(SDL_LIBRARY_TEMP)
 
+macro ( find_sdl_version _header_file _COMPONENT_NAME _major _minor _micro )
+  file ( READ ${_header_file} lines )
+
+  set ( define_base "SDL_${_COMPONENT_NAME}" )
+  if ( "${_COMPONENT_NAME}" STREQUAL "" )
+    set ( define_base "SDL" )
+  endif ()
+
+  string ( REGEX MATCH "#define ${define_base}_MAJOR[A-Z|_]*[ |	]([0-9])" sdl_comp_version "${lines}" )
+  set ( ${_major} ${CMAKE_MATCH_1} )
+  string ( REGEX MATCH "#define ${define_base}_MINOR[A-Z|_]*[ |	]([0-9])" sdl_comp_version1 "${lines}" )
+  set ( ${_minor} ${CMAKE_MATCH_1} )
+  string ( REGEX MATCH "#define ${define_base}_PATCHLEVEL[ |	]*([0-9]*)" sdl_comp_version2 "${lines}" )
+  set ( ${_micro} ${CMAKE_MATCH_1} )
+  if ( "${${_micro}}" STREQUAL "" )
+    string ( REGEX MATCH "#define ${define_base}_MICRO[A-Z|_]*[ |	]*([0-9]*)" sdl_comp_version2 "${lines}" )
+    set ( ${_micro} ${CMAKE_MATCH_1} )
+  endif ()
+endmacro ()
+
 macro ( FindSDL_component _component )
   string ( TOUPPER ${_component} UPPERCOMPONENT )
   set ( SDL${UPPERCOMPONENT}_FOUND "NO" )
   set ( SDL_header_name SDL_${_component}.h )
+  set ( SDL_COMPONENT_NAME ${UPPERCOMPONENT} )
 
   #Special case for SDL_gfx. This seems to be the only library where the main header is not SDL_${lib}.h.
   if ( ${UPPERCOMPONENT} STREQUAL "GFX" )
     set ( SDL_header_name SDL_gfxPrimitives.h )
+    set ( SDL_COMPONENT_NAME GFXPRIMITIVES )
   endif ()
 
   find_path ( SDL${UPPERCOMPONENT}_INCLUDE_DIR ${SDL_header_name}
@@ -225,9 +247,24 @@ macro ( FindSDL_component _component )
 
   if ( SDL${UPPERCOMPONENT}_LIBRARY AND SDL${UPPERCOMPONENT}_INCLUDE_DIR )
     set ( SDL${UPPERCOMPONENT}_FOUND "YES" )
+    set ( SDL${UPPERCOMPONENT}_MAINHEADER "${SDL${UPPERCOMPONENT}_INCLUDE_DIR}/${SDL_header_name}" )
+
+    find_sdl_version ( "${SDL${UPPERCOMPONENT}_MAINHEADER}"
+      "${SDL_COMPONENT_NAME}"
+      SDL_${UPPERCOMPONENT}_MAJOR
+      SDL_${UPPERCOMPONENT}_MINOR
+      SDL_${UPPERCOMPONENT}_MICRO )
+
   endif ()
 endmacro ()
+
 
 foreach ( component ${SDL2_FIND_COMPONENTS} )
   FindSDL_component ( ${component} )
 endforeach()
+
+find_sdl_version ( "${SDL_INCLUDE_DIR}/SDL_version.h"
+  ""
+  SDL_MAJOR
+  SDL_MINOR
+  SDL_MICRO )
