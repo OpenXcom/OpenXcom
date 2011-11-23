@@ -103,6 +103,7 @@ if ( BUILD_PACKAGE )
   set ( CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/COPYING" )
   set ( CPACK_PACKAGE_CONTACT "The OpenXcom project(http://www.openxcom.org)" )
   include ( deb )
+  include ( rpm )
   include ( nsis )
   include ( CPack )
   message ( "version:${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}"
