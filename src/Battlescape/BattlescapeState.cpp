@@ -63,6 +63,7 @@
 #include "../Savegame/BattleItem.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleItem.h"
+#include "../Ruleset/RuleArmor.h"
 #include "../Engine/Timer.h"
 #include "../Engine/Options.h"
 #include "WarningMessage.h"
@@ -294,9 +295,6 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_txtDebug->setColor(Palette::blockOffset(8));
 	_txtDebug->setHighContrast(true);
 
-	updateSoldierInfo();
-	_map->getCamera()->centerOnPosition(_battleGame->getSelectedUnit()->getPosition());
-
 	_btnReserveNone->copy(_icons);
 	_btnReserveNone->setColor(Palette::blockOffset(4)+3);
 	_btnReserveNone->setGroup(&_reserve);
@@ -331,6 +329,9 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_debugPlay = false;
 	_playerPanicHandled = true;
 
+	updateSoldierInfo();
+	_map->getCamera()->centerOnPosition(_battleGame->getSelectedUnit()->getPosition());
+	setupCursor();
 	checkForCasualties(0, 0, true);
 }
 
@@ -859,6 +860,7 @@ void BattlescapeState::endTurn()
 	if (playableUnitSelected())
 	{
 		_map->getCamera()->centerOnPosition(_battleGame->getSelectedUnit()->getPosition());
+		setupCursor();
 	}
 
 	_game->pushState(new NextTurnState(_game, _battleGame, this));
@@ -1090,7 +1092,7 @@ void BattlescapeState::setupCursor()
 	}
 	else
 	{
-		_map->setCursorType(CT_NORMAL);
+		_map->setCursorType(CT_NORMAL, _action.actor->getUnit()->getArmor()->getSize());
 	}
 }
 
@@ -1418,7 +1420,7 @@ void BattlescapeState::popState()
 	{
 		_action.targeting = false;
 		_action.type = BA_NONE;
-		_map->setCursorType(CT_NORMAL);
+		_map->setCursorType(CT_NORMAL, _action.actor->getUnit()->getArmor()->getSize());
 		_game->getCursor()->setVisible(true);
 		_battleGame->setSelectedUnit(0);
 	}

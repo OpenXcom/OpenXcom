@@ -26,7 +26,7 @@
 #include "../Savegame/ItemContainer.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/Soldier.h"
-#include "../Savegame/Alien.h"
+#include "../Savegame/GenUnit.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/Ufo.h"
@@ -44,6 +44,7 @@
 #include "../Ruleset/MapDataSet.h"
 #include "../Ruleset/MapData.h"
 #include "../Ruleset/RuleArmor.h"
+#include "../Ruleset/RuleGenUnit.h"
 #include "../Resource/XcomResourcePack.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
@@ -203,13 +204,24 @@ void BattlescapeGenerator::run()
 
 	if (_craft != 0)
 	{
+		// add vehicles that are in the craft - a vehicle is actually an item, which you will never see as it is converted to a unit
+		//addVehicle(_game->getRuleset()->getGenUnit("TANK_CANNON"));
+
 		// add soldiers that are in the craft
-		for (std::vector<Soldier*>::iterator i = _craft->getBase()->getSoldiers()->begin(); i != _craft->getBase()->getSoldiers()->end(); ++i)
+		/*for (std::vector<Soldier*>::iterator i = _craft->getBase()->getSoldiers()->begin(); i != _craft->getBase()->getSoldiers()->end(); ++i)
 		{
 			if ((*i)->getCraft() == _craft)
-				addSoldier((*i));
+				addSoldier(*i);
+		}*/
+		_save->setSelectedUnit(_save->getUnits()->at(0)); // select first unit
+
+		// maybe we should assign all units to the first tile of the skyranger before the inventory pre-equip and then reassign them to their correct tile afterwards?
+		for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
+		{
+			if ((*i)->getFaction() == FACTION_PLAYER)
+				_craftInventoryTile->setUnit(*i);
 		}
-		_save->setSelectedUnit(_save->getUnits()->at(0)); // select first soldier
+		
 
 		// add items that are in the craft
 		for (std::map<std::string, int>::iterator i = _craft->getItems()->getContents()->begin(); i != _craft->getItems()->getContents()->end(); ++i)
@@ -239,40 +251,40 @@ void BattlescapeGenerator::run()
 	BattleUnit *unit;
 	if (_missionType == MISS_UFORECOVERY)
 	{
-		// TODO : this should be in rulesets
+		// TODO : this should be in rulesets 
 		if (_ufo->getRules()->getType() == "STR_SMALL_SCOUT")
 		{
-			unit = addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), SOLDIER);
+			unit = addAlien(_game->getRuleset()->getGenUnit("SECTOID_SOLDIER"), SOLDIER);
 			addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL"), unit);
 			addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL_CLIP"), unit);
 		}
 
 		if (_ufo->getRules()->getType() == "STR_MEDIUM_SCOUT")
 		{
-			unit = addAlien(_game->getRuleset()->getAlien("SECTOID_NAVIGATOR"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), NAVIGATOR);
+			unit = addAlien(_game->getRuleset()->getGenUnit("SECTOID_NAVIGATOR"), NAVIGATOR);
 			addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL"), unit);
 			addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL_CLIP"), unit);
 			if (RNG::generate(0,100) < 50)
 			{
-				unit = addAlien(_game->getRuleset()->getAlien("SECTOID_NAVIGATOR"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), NAVIGATOR);
+				unit = addAlien(_game->getRuleset()->getGenUnit("SECTOID_NAVIGATOR"), NAVIGATOR);
 				addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL"), unit);
 				addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL_CLIP"), unit);
 			}
-			unit = addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), SOLDIER);
+			unit = addAlien(_game->getRuleset()->getGenUnit("SECTOID_SOLDIER"), SOLDIER);
 			addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL"), unit);
 			addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL_CLIP"), unit);
-			unit = addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), SCOUT);
+			unit = addAlien(_game->getRuleset()->getGenUnit("SECTOID_SOLDIER"), SCOUT);
 			addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL"), unit);
 			addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL_CLIP"), unit);
 			if (RNG::generate(0,100) < 50)
 			{
-				unit = addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), SCOUT);
+				unit = addAlien(_game->getRuleset()->getGenUnit("SECTOID_SOLDIER"), SCOUT);
 				addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL"), unit);
 				addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL_CLIP"), unit);
 			}
 			if (RNG::generate(0,100) < 50)
 			{
-				unit = addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), SCOUT);
+				unit = addAlien(_game->getRuleset()->getGenUnit("SECTOID_SOLDIER"), SCOUT);
 				addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL"), unit);
 				addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL_CLIP"), unit);
 			}
@@ -280,31 +292,31 @@ void BattlescapeGenerator::run()
 
 		if (_ufo->getRules()->getType() == "STR_LARGE_SCOUT")
 		{
-			unit = addAlien(_game->getRuleset()->getAlien("SECTOID_NAVIGATOR"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), NAVIGATOR);
+			unit = addAlien(_game->getRuleset()->getGenUnit("SECTOID_NAVIGATOR"), NAVIGATOR);
 			addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL"), unit);
 			addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL_CLIP"), unit);
 			if (RNG::generate(0,100) < 50)
 			{
-				unit = addAlien(_game->getRuleset()->getAlien("SECTOID_NAVIGATOR"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), NAVIGATOR);
+				unit = addAlien(_game->getRuleset()->getGenUnit("SECTOID_NAVIGATOR"), NAVIGATOR);
 				addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL"), unit);
 				addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL_CLIP"), unit);
 			}
-			unit = addAlien(_game->getRuleset()->getAlien("SECTOID_ENGINEER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), ENGINEER);
+			unit = addAlien(_game->getRuleset()->getGenUnit("SECTOID_ENGINEER"), ENGINEER);
 			addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL"), unit);
 			addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL_CLIP"), unit);
 			if (RNG::generate(0,100) < 50)
 			{
-				unit = addAlien(_game->getRuleset()->getAlien("SECTOID_ENGINEER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), ENGINEER);
+				unit = addAlien(_game->getRuleset()->getGenUnit("SECTOID_ENGINEER"), ENGINEER);
 				addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL"), unit);
 				addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL_CLIP"), unit);
 			}
-			unit = addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), SOLDIER);
+			unit = addAlien(_game->getRuleset()->getGenUnit("SECTOID_SOLDIER"), SOLDIER);
 			addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL"), unit);
 			addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL_CLIP"), unit);
 			int nSoldiers = RNG::generate(0,5);
 			for (int i=0; i < nSoldiers; i++)
 			{
-				unit = addAlien(_game->getRuleset()->getAlien("SECTOID_SOLDIER"), _game->getRuleset()->getArmor("SECTOID_ARMOR0"), SCOUT);
+				unit = addAlien(_game->getRuleset()->getGenUnit("SECTOID_SOLDIER"), SCOUT);
 				addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL"), unit);
 				addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL_CLIP"), unit);
 			}
@@ -314,7 +326,7 @@ void BattlescapeGenerator::run()
 	{
 		for (int i=0; i < 5; i++)
 		{
-			unit = addAlien(_game->getRuleset()->getAlien("FLOATER_SOLDIER"), _game->getRuleset()->getArmor("FLOATER_ARMOR0"), SOLDIER);
+			unit = addAlien(_game->getRuleset()->getGenUnit("FLOATER_SOLDIER"), SOLDIER);
 			addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL"), unit);
 			addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL_CLIP"), unit);
 		}
@@ -351,15 +363,13 @@ void BattlescapeGenerator::addSoldier(Soldier *soldier)
 		// to spawn an xcom soldier, there has to be a tile, with a floor, with the starting point attribute and no object in the way
 		if (_save->getTiles()[i] && _save->getTiles()[i]->getMapData(MapData::O_FLOOR) && _save->getTiles()[i]->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT && !_save->getTiles()[i]->getMapData(MapData::O_OBJECT))
 		{
+			if (_craftInventoryTile == 0)
+				_craftInventoryTile = _save->getTiles()[i];
+
 			_save->getTileCoords(i, &x, &y, &z);
 			pos = Position(x, y, z);
-			if (_save->selectUnit(pos) == 0)
+			if (_save->getTileEngine()->setUnitPosition(unit, pos))
 			{
-				unit->setPosition(pos);
-				if (_craftInventoryTile == 0)
-					_craftInventoryTile = _save->getTiles()[i];
-				_craftInventoryTile->setUnit(unit);
-				//_save->getTiles()[i]->setUnit(unit); // maybe we should assign all units to the first tile of the skyranger before the inventory pre-equip and then reassign them to their correct tile afterwards?
 				break;
 			}
 		}
@@ -370,13 +380,13 @@ void BattlescapeGenerator::addSoldier(Soldier *soldier)
 
 /**
  * Adds an alien to the game and place him on a free spawnpoint.
- * @param rules pointer to the RuleAlien which holds info about alien .
+ * @param rules pointer to the RuleGenUnit which holds info about alien .
  * @param armor The armor of the alien.
  * @param rank The rank of the alien, used for spawn point search.
  */
-BattleUnit *BattlescapeGenerator::addAlien(RuleAlien *rules, RuleArmor *armor, NodeRank rank)
+BattleUnit *BattlescapeGenerator::addAlien(RuleGenUnit *rules, NodeRank rank)
 {
-	BattleUnit *unit = new BattleUnit(new Alien(rules, armor), FACTION_HOSTILE);
+	BattleUnit *unit = new BattleUnit(new GenUnit(rules, _game->getRuleset()->getArmor(rules->getArmor())), FACTION_HOSTILE);
 	Node *node;
 	bool bFound = false;
 	unit->setId(_unitCount++);
@@ -395,16 +405,15 @@ BattleUnit *BattlescapeGenerator::addAlien(RuleAlien *rules, RuleArmor *armor, N
 				&& node->getPriority() == priority
 				&& (RNG::generate(0,2) == 1)
 				&& lastSegment != node->getSegment()
-				&& _save->selectUnit(node->getPosition()) == 0
 				&& ((node->getType() & Node::TYPE_FLYING) == 0 || mt == MT_FLY) // flying units can spawn everywhere, for others the flying-only flag needs to be 0
 				&& ((node->getType() & Node::TYPE_SMALL) == 0 || size == 1) // small units can spawn everywhere, for others the small-only flag needs to be 0
 				)
 			{
-				lastSegment = node->getSegment();
-				unit->setPosition(node->getPosition());
-				_save->getTile(node->getPosition())->setUnit(unit);
-				unit->setAIState(new PatrolBAIState(_game->getSavedGame()->getBattleGame(), unit, node));
-				bFound = true;
+				if (_save->getTileEngine()->setUnitPosition(unit, node->getPosition()))
+				{
+					lastSegment = node->getSegment();
+					bFound = true;
+				}
 			}
 		}
 	}
@@ -418,16 +427,15 @@ BattleUnit *BattlescapeGenerator::addAlien(RuleAlien *rules, RuleArmor *armor, N
 			node = *i;
 			if (node->getRank() == rank
 				&& node->getPriority() == priority
-				&& _save->selectUnit(node->getPosition()) == 0
 				&& ((node->getType() & Node::TYPE_FLYING) == 0 || mt == MT_FLY) // flying units can spawn everywhere, for others the flying-only flag needs to be 0
 				&& ((node->getType() & Node::TYPE_SMALL) == 0 || size == 1) // small units can spawn everywhere, for others the small-only flag needs to be 0
 				)
 			{
-				unit->setPosition(node->getPosition());
-				_save->getTile(node->getPosition())->setUnit(unit);
-				bFound = true;
-				unit->setAIState(new PatrolBAIState(_game->getSavedGame()->getBattleGame(), unit, node));
-				break;
+				if (_save->getTileEngine()->setUnitPosition(unit, node->getPosition()))
+				{
+					bFound = true;
+					break;
+				}
 			}
 		}
 	}
@@ -440,26 +448,59 @@ BattleUnit *BattlescapeGenerator::addAlien(RuleAlien *rules, RuleArmor *armor, N
 		{
 			node = *i;
 			if (node->getPriority() == priority
-				&& _save->selectUnit(node->getPosition()) == 0
 				&& ((node->getType() & Node::TYPE_FLYING) == 0 || mt == MT_FLY) // flying units can spawn everywhere, for others the flying-only flag needs to be 0
 				&& ((node->getType() & Node::TYPE_SMALL) == 0 || size == 1) // small units can spawn everywhere, for others the small-only flag needs to be 0
 				)
 			{
-				unit->setPosition(node->getPosition());
-				_save->getTile(node->getPosition())->setUnit(unit);
-				bFound = true;
-				unit->setAIState(new PatrolBAIState(_game->getSavedGame()->getBattleGame(), unit, node));
-				break;
+				if (_save->getTileEngine()->setUnitPosition(unit, node->getPosition()))
+				{
+					bFound = true;
+					break;
+				}
 			}
 		}
 	}
 
+	unit->setAIState(new PatrolBAIState(_game->getSavedGame()->getBattleGame(), unit, node));
 	unit->setDirection(RNG::generate(0,7));
 
 	_save->getUnits()->push_back(unit);
 
 	return unit;
 }
+
+/**
+ * Adds a HWP vehicle to the game and place him on a free spawnpoint.
+ * @param soldier pointer to the Soldier
+ */
+void BattlescapeGenerator::addVehicle(RuleGenUnit *rules)
+{
+	BattleUnit *unit = new BattleUnit(new GenUnit(rules, _game->getRuleset()->getArmor(rules->getArmor())), FACTION_PLAYER);
+	unit->setId(_unitCount++);
+
+	Position pos;
+	int x, y, z;
+
+	for (int i = 0; i < _height * _length * _width; i++)
+	{
+		// to spawn an xcom soldier, there has to be a tile, with a floor, with the starting point attribute and no object in the way
+		if (_save->getTiles()[i] && _save->getTiles()[i]->getMapData(MapData::O_FLOOR) && _save->getTiles()[i]->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT && !_save->getTiles()[i]->getMapData(MapData::O_OBJECT))
+		{
+			if (_craftInventoryTile == 0)
+				_craftInventoryTile = _save->getTiles()[i];
+
+			_save->getTileCoords(i, &x, &y, &z);
+			pos = Position(x, y, z);
+			if (_save->getTileEngine()->setUnitPosition(unit, pos))
+			{
+				break;
+			}
+		}
+	}
+
+	_save->getUnits()->push_back(unit);
+}
+
 
 /**
  * Adds an item to the game and assign it to a soldier?.
@@ -613,8 +654,6 @@ void BattlescapeGenerator::addItem(RuleItem *item, BattleUnit *unit)
 	case BT_NONE:
 		break;
 	}
-
-
 
 	// if we did not auto equip the item, place it on the ground
 	if (!placed)

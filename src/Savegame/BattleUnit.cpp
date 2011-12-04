@@ -25,7 +25,7 @@
 #include "../Engine/Language.h"
 #include "../Battlescape/Pathfinding.h"
 #include "../Battlescape/BattleAIState.h"
-#include "Alien.h"
+#include "GenUnit.h"
 #include "Soldier.h"
 #include "../Ruleset/RuleArmor.h"
 #include "../Engine/RNG.h"
@@ -40,7 +40,7 @@ namespace OpenXcom
  * @param unit Pointer to Unit object.
  * @param faction Which faction the units belongs to.
  */
-BattleUnit::BattleUnit(Unit *unit, UnitFaction faction) : _unit(unit), _faction(faction), _id(0), _pos(Position()), _tile(0), _lastPos(Position()), _direction(0), _verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cache(0), _cacheInvalid(true), _expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expMelee(0)
+BattleUnit::BattleUnit(Unit *unit, UnitFaction faction) : _unit(unit), _faction(faction), _id(0), _pos(Position()), _tile(0), _lastPos(Position()), _direction(0), _directionTurret(0), _toDirectionTurret(0),  _verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true), _expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expMelee(0), _turretType(-1)
 {
 	_tu = unit->getTimeUnits();
 	_energy = unit->getStamina();
@@ -54,6 +54,8 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction) : _unit(unit), _faction(
 	_armor[SIDE_UNDER] = unit->getArmor()->getUnderArmor();
 	for (int i = 0; i < 6; ++i)
 		_fatalWounds[i] = 0;
+	for (int i = 0; i < 5; ++i)
+		_cache[i] = 0;
 }
 
 /**
@@ -61,7 +63,8 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction) : _unit(unit), _faction(
  */
 BattleUnit::~BattleUnit()
 {
-	delete _cache;
+	for (int i = 0; i < 5; ++i)
+		delete _cache[i];
 }
 
 /**
@@ -219,13 +222,14 @@ const Position& BattleUnit::getDestination() const
 }
 
 /**
- * Changes the BattleUnit's direction.
+ * Changes the BattleUnit's direction. Only used for initial unit placement.
  * @param direction
  */
 void BattleUnit::setDirection(int direction)
 {
 	_direction = direction;
 	_toDirection = direction;
+	_directionTurret = direction;
 }
 
 /**
@@ -235,6 +239,15 @@ void BattleUnit::setDirection(int direction)
 int BattleUnit::getDirection() const
 {
 	return _direction;
+}
+
+/**
+ * Gets the BattleUnit's turret direction.
+ * @return direction
+ */
+int BattleUnit::getTurretDirection() const
+{
+	return _directionTurret;
 }
 
 /**
@@ -343,49 +356,63 @@ int BattleUnit::getDiagonalWalkingPhase() const
  * Look at a point.
  * @param point
  */
-void BattleUnit::lookAt(const Position &point)
+void BattleUnit::lookAt(const Position &point, bool turret)
 {
 	double ox = point.x - _pos.x;
 	double oy = point.y - _pos.y;
 	double angle = atan2(ox, -oy);
 	// divide the pie in 4 angles each at 1/8th before each quarter
 	double pie[4] = {(M_PI_4 * 4.0) - M_PI_4 / 2.0, (M_PI_4 * 3.0) - M_PI_4 / 2.0, (M_PI_4 * 2.0) - M_PI_4 / 2.0, (M_PI_4 * 1.0) - M_PI_4 / 2.0};
+	int dir = 0;
+
 	if (angle > pie[0] || angle < -pie[0])
 	{
-		_toDirection = 4;
+		dir = 4;
 	}
 	else if (angle > pie[1])
 	{
-		_toDirection = 3;
+		dir = 3;
 	}
 	else if (angle > pie[2])
 	{
-		_toDirection = 2;
+		dir = 2;
 	}
 	else if (angle > pie[3])
 	{
-		_toDirection = 1;
+		dir = 1;
 	}
 	else if (angle < -pie[1])
 	{
-		_toDirection = 5;
+		dir = 5;
 	}
 	else if (angle < -pie[2])
 	{
-		_toDirection = 6;
+		dir = 6;
 	}
 	else if (angle < -pie[3])
 	{
-		_toDirection = 7;
+		dir = 7;
 	}
 	else if (angle < pie[0])
 	{
-		_toDirection = 0;
+		dir = 0;
 	}
 
-	if (_toDirection != _direction)
+	if (turret)
 	{
-		_status = STATUS_TURNING;
+		_toDirectionTurret = dir;
+		if (_toDirectionTurret != _directionTurret)
+		{
+			_status = STATUS_TURNING;
+		}
+	}
+	else
+	{
+		_toDirection = dir;
+		if (_toDirection != _direction)
+		{
+			_status = STATUS_TURNING;
+		}
 	}
 }
 
@@ -402,32 +429,55 @@ void BattleUnit::lookAt(int direction)
 /**
  * Advances the turning towards the target direction.
  */
-void BattleUnit::turn()
+void BattleUnit::turn(bool turret)
 {
-	int a = _toDirection - _direction;
+	int a = 0;
+
+	if (turret)
+		a = _toDirectionTurret - _directionTurret;
+	else
+		a = _toDirection - _direction;
+
 	if (a != 0) {
 		if (a > 0) {
 			if (a <= 4) {
-				_direction++;
+				if (!turret) _direction++;
+				_directionTurret++;
 			} else {
-				_direction--;
+				if (!turret) _direction--;
+				_directionTurret--;
 			}
 		} else {
 			if (a > -4) {
-				_direction--;
+				if (!turret) _direction--;
+				_directionTurret--;
 			} else {
-				_direction++;
+				if (!turret) _direction++;
+				_directionTurret++;
 			}
 		}
 		if (_direction < 0) _direction = 7;
 		if (_direction > 7) _direction = 0;
+		if (_directionTurret < 0) _directionTurret = 7;
+		if (_directionTurret > 7) _directionTurret = 0;
 		_cacheInvalid = true;
 	}
 
-	if (_toDirection == _direction)
+	if (turret)
 	{
-		// we officially reached our destination
-		_status = STATUS_STANDING;
+		if (_toDirectionTurret == _directionTurret)
+		{
+			// we officially reached our destination
+			_status = STATUS_STANDING;
+		}
+	}
+	else
+	{
+		if (_toDirection == _direction)
+		{
+			// we officially reached our destination
+			_status = STATUS_STANDING;
+		}
 	}
 }
 
@@ -453,7 +503,7 @@ UnitFaction BattleUnit::getFaction() const
  * Set to true when the unit has to be redrawn from scratch.
  * @param cache
  */
-void BattleUnit::setCache(Surface *cache)
+void BattleUnit::setCache(Surface *cache, int part)
 {
 	if (cache == 0)
 	{
@@ -461,7 +511,7 @@ void BattleUnit::setCache(Surface *cache)
 	}
 	else
 	{
-		_cache = cache;
+		_cache[part] = cache;
 		_cacheInvalid = false;
 	}
 }
@@ -472,10 +522,10 @@ void BattleUnit::setCache(Surface *cache)
  * @param invalid
  * @return cache
  */
-Surface *BattleUnit::getCache(bool *invalid) const
+Surface *BattleUnit::getCache(bool *invalid, int part) const
 {
 	*invalid = _cacheInvalid;
-	return _cache;
+	return _cache[part];
 }
 
 /**
@@ -1403,5 +1453,25 @@ int BattleUnit::getMiniMapSpriteIndex () const
 	}
 	return unitSpriteId;
 }
+
+/**
+  * Set the turret type. -1 is no turret.
+  * @param turretType
+  */
+void BattleUnit::setTurretType(int turretType)
+{
+	_turretType = turretType;
+}
+
+/**
+  * Get the turret type. -1 is no turret.
+  * @return type
+  */
+int BattleUnit::getTurretType() const
+{
+	return 0;
+	//return _turretType;
+}
+
 }
 

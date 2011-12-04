@@ -32,7 +32,7 @@
 #include "MapBlock.h"
 #include "MapDataSet.h"
 #include "RuleSoldier.h"
-#include "RuleAlien.h"
+#include "RuleGenUnit.h"
 #include "RuleArmor.h"
 #include "SoldierNamePool.h"
 #include "../Savegame/Region.h"
@@ -972,6 +972,13 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	fcorpse->setInventoryHeight(3);
 	fcorpse->setWeight(30);
 
+	RuleItem *tcorpse = new RuleItem("STR_TANK_CORPSE");
+	fcorpse->setBigSprite(0);
+	fcorpse->setFloorSprite(68);
+	fcorpse->setInventoryWidth(7);
+	fcorpse->setInventoryHeight(7);
+	fcorpse->setWeight(100);
+
 	RuleItem *ppistol = new RuleItem("STR_PLASMA_PISTOL");
 	ppistol->setSize(0.1f);
 	ppistol->setCost(800);
@@ -1104,6 +1111,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_items.insert(std::pair<std::string, RuleItem*>("STR_CORPSE", corpse));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_SECTOID_CORPSE", scorpse));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_FLOATER_CORPSE", fcorpse));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_TANK_CORPSE", tcorpse));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_PLASMA_PISTOL", ppistol));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_PLASMA_PISTOL_CLIP", ppclip));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_ELECTRO_FLARE", flare));
@@ -1518,7 +1526,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_terrains.insert(std::pair<std::string, RuleTerrain*>("URBAN",urban));
 
 	// Add armor
-	RuleArmor *coveralls = new RuleArmor("STR_NONE_UC", "XCOM_0.PCK", 0);
+	RuleArmor *coveralls = new RuleArmor("STR_NONE_UC", "XCOM_0.PCK", 0, MT_WALK);
 	coveralls->setArmor(12, 8, 5, 2);
 	coveralls->setCorpseItem("STR_CORPSE");
 
@@ -1539,12 +1547,17 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	floaterSoldierArmor->setArmor(8, 6, 4, 12);
 	floaterSoldierArmor->setCorpseItem("STR_FLOATER_CORPSE");
 
+	RuleArmor *tankArmor = new RuleArmor("TANK_ARMOR", "TANKS.PCK", 2, MT_WALK, 2);
+	tankArmor->setArmor(90, 75, 60, 60);
+	tankArmor->setCorpseItem("STR_TANK_CORPSE");
+
 	_armors.insert(std::pair<std::string, RuleArmor*>("STR_NONE_UC", coveralls));
 	_armors.insert(std::pair<std::string, RuleArmor*>("STR_PERSONAL_ARMOR_UC", personalArmor));
 	_armors.insert(std::pair<std::string, RuleArmor*>("STR_POWER_SUIT_UC" ,powerSuit));
 	_armors.insert(std::pair<std::string, RuleArmor*>("STR_FLYING_SUIT_UC", flyingSuit));
 	_armors.insert(std::pair<std::string, RuleArmor*>("SECTOID_ARMOR0", sectoidSoldierArmor));
 	_armors.insert(std::pair<std::string, RuleArmor*>("FLOATER_ARMOR0", floaterSoldierArmor));
+	_armors.insert(std::pair<std::string, RuleArmor*>("TANK_ARMOR", tankArmor));
 
 	// Add units
 	RuleSoldier *xcom = new RuleSoldier("XCOM");
@@ -1578,7 +1591,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 
 	_soldiers.insert(std::pair<std::string, RuleSoldier*>("XCOM", xcom));
 
-	RuleAlien *sectoidSoldier = new RuleAlien("SECTOID_SOLDIER", "STR_SECTOID", "STR_LIVE_SOLDIER");
+	RuleGenUnit *sectoidSoldier = new RuleGenUnit("SECTOID_SOLDIER", "STR_SECTOID", "STR_LIVE_SOLDIER");
 	sectoidSoldier->setArmor("SECTOID_ARMOR0");
 	s1.tu = 54;
 	s1.stamina = 90;
@@ -1595,7 +1608,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	sectoidSoldier->setVoxelParameters(16, 12, 2);
 	sectoidSoldier->setValue(10);
 
-	RuleAlien *sectoidEngineer = new RuleAlien("SECTOID_ENGINEER", "STR_SECTOID", "STR_LIVE_ENGINEER");
+	RuleGenUnit *sectoidEngineer = new RuleGenUnit("SECTOID_ENGINEER", "STR_SECTOID", "STR_LIVE_ENGINEER");
 	sectoidEngineer->setArmor("SECTOID_ARMOR0");
 	s1.tu = 54;
 	s1.stamina = 90;
@@ -1612,7 +1625,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	sectoidEngineer->setVoxelParameters(16, 12, 2);
 	sectoidEngineer->setValue(16);
 
-	RuleAlien *sectoidNavigator = new RuleAlien("SECTOID_NAVIGATOR", "STR_SECTOID", "STR_LIVE_NAVIGATOR");
+	RuleGenUnit *sectoidNavigator = new RuleGenUnit("SECTOID_NAVIGATOR", "STR_SECTOID", "STR_LIVE_NAVIGATOR");
 	sectoidNavigator->setArmor("SECTOID_ARMOR0");
 	s1.tu = 54;
 	s1.stamina = 90;
@@ -1629,7 +1642,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	sectoidNavigator->setVoxelParameters(16, 12, 2);
 	sectoidNavigator->setValue(12);
 
-	RuleAlien *floaterSoldier = new RuleAlien("FLOATER_SOLDIER", "STR_FLOATER", "STR_LIVE_SOLDIER");
+	RuleGenUnit *floaterSoldier = new RuleGenUnit("FLOATER_SOLDIER", "STR_FLOATER", "STR_LIVE_SOLDIER");
 	floaterSoldier->setArmor("FLOATER_ARMOR0");
 	s1.tu = 50;
 	s1.stamina = 90;
@@ -1646,10 +1659,28 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	floaterSoldier->setVoxelParameters(21, 16, 3);
 	floaterSoldier->setValue(12);
 
-	_aliens.insert(std::pair<std::string, RuleAlien*>("SECTOID_SOLDIER", sectoidSoldier));
-	_aliens.insert(std::pair<std::string, RuleAlien*>("SECTOID_ENGINEER", sectoidEngineer));
-	_aliens.insert(std::pair<std::string, RuleAlien*>("SECTOID_NAVIGATOR", sectoidNavigator));
-	_aliens.insert(std::pair<std::string, RuleAlien*>("FLOATER_SOLDIER", floaterSoldier));
+	RuleGenUnit *tankCannon = new RuleGenUnit("STR_TANK_CANNON", "STR_TANK_CANNON", "");
+	tankCannon->setArmor("TANK_ARMOR");
+	s1.tu = 70;
+	s1.stamina = 100;
+	s1.health = 90;
+	s1.bravery = 110;
+	s1.reactions = 20;
+	s1.firing = 60;
+	s1.throwing = 0;
+	s1.strength = 60;
+	s1.psiStrength = 100;
+	s1.psiSkill = 0;
+	s1.melee = 0;
+	tankCannon->setStats(s1);
+	tankCannon->setVoxelParameters(15, 15, 4);
+	tankCannon->setValue(20);
+
+	_genUnits.insert(std::pair<std::string, RuleGenUnit*>("SECTOID_SOLDIER", sectoidSoldier));
+	_genUnits.insert(std::pair<std::string, RuleGenUnit*>("SECTOID_ENGINEER", sectoidEngineer));
+	_genUnits.insert(std::pair<std::string, RuleGenUnit*>("SECTOID_NAVIGATOR", sectoidNavigator));
+	_genUnits.insert(std::pair<std::string, RuleGenUnit*>("FLOATER_SOLDIER", floaterSoldier));
+	_genUnits.insert(std::pair<std::string, RuleGenUnit*>("TANK_CANNON", tankCannon));
 
 	// create Ufopaedia article definitions
 	int sort_key = 1;
@@ -2124,7 +2155,8 @@ SavedGame *XcomRuleset::newSave(GameDifficulty diff) const
 	// Generate soldiers
 	for (int i = 0; i < 8; ++i)
 	{
-		Soldier *soldier = new Soldier(getSoldier("XCOM"), getArmor("STR_NONE_UC"), &_names, save->getSoldierId());
+		//Soldier *soldier = new Soldier(getSoldier("XCOM"), getArmor("STR_NONE_UC"), &_names, save->getSoldierId());
+		Soldier *soldier = new Soldier(getSoldier("XCOM"), getArmor("TANK_ARMOR0"), &_names, save->getSoldierId());
 		soldier->setCraft(skyranger);
 		base->getSoldiers()->push_back(soldier);
 	}

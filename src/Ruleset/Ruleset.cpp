@@ -32,7 +32,7 @@
 #include "RuleTerrain.h"
 #include "MapDataSet.h"
 #include "RuleSoldier.h"
-#include "RuleAlien.h"
+#include "RuleGenUnit.h"
 #include "RuleArmor.h"
 #include "ArticleDefinition.h"
 #include "RuleInventory.h"
@@ -46,7 +46,7 @@ namespace OpenXcom
  * Creates a ruleset with blank sets of rules.
  */
 Ruleset::Ruleset() : _names(), _countries(), _regions(), _facilities(), _crafts(), _craftWeapons(), _items(), _ufos(),
-					 _terrains(), _mapDataSets(), _soldiers(), _aliens(), _invs(), _costSoldier(0), _costEngineer(0), _costScientist(0), _timePersonnel(0)
+					 _terrains(), _mapDataSets(), _soldiers(), _genUnits(), _invs(), _costSoldier(0), _costEngineer(0), _costScientist(0), _timePersonnel(0)
 {
 }
 
@@ -99,7 +99,7 @@ Ruleset::~Ruleset()
 	{
 		delete i->second;
 	}
-	for (std::map<std::string, RuleAlien*>::iterator i = _aliens.begin(); i != _aliens.end(); ++i)
+	for (std::map<std::string, RuleGenUnit*>::iterator i = _genUnits.begin(); i != _genUnits.end(); ++i)
 	{
 		delete i->second;
 	}
@@ -610,9 +610,9 @@ RuleSoldier *const Ruleset::getSoldier(const std::string &name) const
  * @param name Unit name.
  * @return Rules for the units.
  */
-RuleAlien *const Ruleset::getAlien(const std::string &name) const
+RuleGenUnit *const Ruleset::getGenUnit(const std::string &name) const
 {
-	return _aliens.find(name)->second;
+	return _genUnits.find(name)->second;
 }
 
 /**

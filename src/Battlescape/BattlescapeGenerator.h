@@ -34,7 +34,7 @@ class RuleSet;
 class Soldier;
 class RuleArmor;
 class RuleItem;
-class RuleAlien;
+class RuleGenUnit;
 class Game;
 
 /**
@@ -62,7 +62,8 @@ private:
 	/// Add a soldier to the game
 	void addSoldier(Soldier *soldier);
 	/// Add an alien to the game
-	BattleUnit *addAlien(RuleAlien *rules, RuleArmor *armor, NodeRank rank);
+	BattleUnit *addAlien(RuleGenUnit *rules, NodeRank rank);
+	void addVehicle(RuleGenUnit *rules);
 	/// Add an item to the game
 	void addItem(RuleItem *item);
 	// Add an item to a unit

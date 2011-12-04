@@ -422,14 +422,8 @@
     <ClCompile Include="Ruleset\RuleArmor.cpp">
       <Filter>Ruleset</Filter>
     </ClCompile>
-    <ClCompile Include="Savegame\Alien.cpp">
-      <Filter>Savegame</Filter>
-    </ClCompile>
     <ClCompile Include="Savegame\Unit.cpp">
       <Filter>Savegame</Filter>
-    </ClCompile>
-    <ClCompile Include="Ruleset\RuleAlien.cpp">
-      <Filter>Ruleset</Filter>
     </ClCompile>
     <ClCompile Include="Ruleset\RuleSoldier.cpp">
       <Filter>Ruleset</Filter>
@@ -607,6 +601,12 @@
     </ClCompile>
     <ClCompile Include="Battlescape\Camera.cpp">
       <Filter>Battlescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Ruleset\RuleGenUnit.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
+    <ClCompile Include="Savegame\GenUnit.cpp">
+      <Filter>Savegame</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1032,14 +1032,8 @@
     <ClInclude Include="Ruleset\RuleArmor.h">
       <Filter>Ruleset</Filter>
     </ClInclude>
-    <ClInclude Include="Savegame\Alien.h">
-      <Filter>Savegame</Filter>
-    </ClInclude>
     <ClInclude Include="Savegame\Unit.h">
       <Filter>Savegame</Filter>
-    </ClInclude>
-    <ClInclude Include="Ruleset\RuleAlien.h">
-      <Filter>Ruleset</Filter>
     </ClInclude>
     <ClInclude Include="Ruleset\RuleSoldier.h">
       <Filter>Ruleset</Filter>
@@ -1217,6 +1211,12 @@
     </ClInclude>
     <ClInclude Include="Battlescape\Camera.h">
       <Filter>Battlescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\RuleGenUnit.h">
+      <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Savegame\GenUnit.h">
+      <Filter>Savegame</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -177,87 +177,110 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 	*endPosition += startPosition;
 	bool fellDown = false;
 	bool triedStairs = false;
-
-	Tile *startTile = _save->getTile(startPosition);
-	Tile *destinationTile = _save->getTile(*endPosition);
-
+	int size = _unit->getUnit()->getArmor()->getSize() - 1;
 	int cost = 0;
 
-	// this means the destination is probably outside the map
-	if (!destinationTile)
-		return 255;
 
-	// check if the destination tile can be walked over
-	if (isBlocked(destinationTile, MapData::O_FLOOR) || isBlocked(destinationTile, MapData::O_OBJECT))
-		return 255;
-
-
-	if (direction < DIR_UP)
+	for (int x = size; x >= 0; x--)
 	{
-		// check if we can go this way
-		if (isBlocked(startTile, destinationTile, direction))
-			return 255;
-	}
-	else
-	{
-		// check if we can go up or down through gravlift or fly
-		if (validateUpDown(unit, startPosition, direction))
+		for (int y = size; y >= 0; y--)
 		{
-			cost += 4; // vertical movement
+
+			Tile *startTile = _save->getTile(startPosition + Position(x,y,0));
+			Tile *destinationTile = _save->getTile(*endPosition + Position(x,y,0));
+
+			cost = 0;
+			// this means the destination is probably outside the map
+			if (!destinationTile)
+				return 255;
+
+			// check if the destination tile can be walked over
+			if (isBlocked(destinationTile, MapData::O_FLOOR) || isBlocked(destinationTile, MapData::O_OBJECT))
+				return 255;
+
+
+			if (direction < DIR_UP)
+			{
+				// check if we can go this way
+				if (isBlocked(startTile, destinationTile, direction))
+					return 255;
+				if (startTile->getTerrainLevel() - destinationTile->getTerrainLevel() > 8 && x==0 && y==0)
+					return 255;
+
+			}
+			else
+			{
+				// check if we can go up or down through gravlift or fly
+				if (validateUpDown(unit, startPosition, direction))
+				{
+					cost += 4; // vertical movement
+				}
+				else
+				{
+					return 255;
+				}
+			}
+
+
+			// if we are on a stairs try to go up a level
+			if (startTile->getTerrainLevel() < -12 && x==0 && y==0)
+			{
+				endPosition->z++;
+				destinationTile = _save->getTile(*endPosition);
+				triedStairs = true;
+			}
+
+			// this means the destination is probably outside the map
+			if (!destinationTile)
+				return 255;
+
+			// check if we have floor, else fall down
+			while (canFallDown(destinationTile) && (_movementType != MT_FLY || triedStairs) && x==0 && y==0)
+			{
+				endPosition->z--;
+				destinationTile = _save->getTile(*endPosition);
+				fellDown = true;
+			}
+
+			// if we don't want to fall down and there is no floor, it ends here
+			if (!fellDown && destinationTile->hasNoFloor() && x==0 && y==0)
+			{
+				if (_movementType != MT_FLY)
+					return 255;
+				else
+					cost = 4;
+			}
+
+			// check if the destination tile can be walked over
+			if ((isBlocked(destinationTile, MapData::O_FLOOR) || isBlocked(destinationTile, MapData::O_OBJECT)) && !fellDown)
+			{
+				return 255;
+			}
+
+			// calculate the cost by adding floor walk cost and object walk cost
+			cost += destinationTile->getTUCost(MapData::O_FLOOR, _movementType);
+			if (!fellDown)
+			{
+				cost += destinationTile->getTUCost(MapData::O_OBJECT, _movementType);
+			}
+
+			// diagonal walking (uneven directions) costs 50% more tu's
+			if (direction & 1)
+			{
+				cost = (int)((double)cost * 1.5);
+			}
+
 		}
-		else
-		{
-			return 255;
-		}
 	}
 
-
-	// if we are on a stairs try to go up a level
-	if (startTile->getTerrainLevel() < -12)
+	// for bigger sized units, check the path between part 1,1 and part 0,0 at end position
+	if (size)
 	{
-		endPosition->z++;
-		destinationTile = _save->getTile(*endPosition);
-		triedStairs = true;
-	}
-
-	// this means the destination is probably outside the map
-	if (!destinationTile)
-		return 255;
-
-	// check if we have floor, else fall down
-	while (canFallDown(destinationTile) && (_movementType != MT_FLY || triedStairs))
-	{
-		endPosition->z--;
-		destinationTile = _save->getTile(*endPosition);
-		fellDown = true;
-	}
-
-	// if we don't want to fall down and there is no floor, it ends here
-	if (!fellDown && destinationTile->hasNoFloor())
-	{
-		if (_movementType != MT_FLY)
-			return 255;
-		else
-			cost = 4;
-	}
-
-	// check if the destination tile can be walked over
-	if ((isBlocked(destinationTile, MapData::O_FLOOR) || isBlocked(destinationTile, MapData::O_OBJECT)) && !fellDown)
-	{
-		return 255;
-	}
-
-	// calculate the cost by adding floor walk cost and object walk cost
-	cost += destinationTile->getTUCost(MapData::O_FLOOR, _movementType);
-	if (!fellDown)
-	{
-		cost += destinationTile->getTUCost(MapData::O_OBJECT, _movementType);
-	}
-
-	// diagonal walking (uneven directions) costs 50% more tu's
-	if (direction & 1)
-	{
-		cost = (int)((double)cost * 1.5);
+			Tile *startTile = _save->getTile(*endPosition + Position(1,1,0));
+			Tile *destinationTile = _save->getTile(*endPosition);
+			int tmpDirection = 7;
+			if (isBlocked(startTile, destinationTile, tmpDirection))
+				return 255;
 	}
 
 	return cost;
@@ -344,8 +367,6 @@ bool Pathfinding::isBlocked(Tile *startTile, Tile *endTile, const int direction)
 	// so we can not jump to the highest part of the stairs from the floor
 	// stairs terrainlevel goes typically -8 -16 (2 steps) or -4 -12 -20 (3 steps)
 	// this "maximum jump height" is therefore set to 8
-	if (startTile->getTerrainLevel() - endTile->getTerrainLevel() > 8)
-		return true;
 
 	static const Position oneTileNorth = Position(0, -1, 0);
 	static const Position oneTileEast = Position(1, 0, 0);

@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_RULEALIEN_H
-#define OPENXCOM_RULEALIEN_H
+#ifndef OPENXCOM_RULEGENUNIT_H
+#define OPENXCOM_RULEGENUNIT_H
 
 #include <string>
 #include "../Savegame/Unit.h"
@@ -26,11 +26,10 @@ namespace OpenXcom
 {
 
 /**
- * Represents the creation data for a specific type of unit.
- * This info is copied to either Soldier for x-com soldiers or BattleUnit for aliens and civilians.
- * @sa Soldier BattleUnit
+ * Represents the static data for a unit that is generated on the battlescape, this includes: HWPs, aliens and civilians.
+ * @sa GenUnit Soldier BattleUnit
  */
-class RuleAlien
+class RuleGenUnit
 {
 private:
 	std::string _type;
@@ -42,9 +41,9 @@ private:
 	int _value;
 public:
 	/// Creates a blank unit ruleset.
-	RuleAlien(const std::string &type, std::string race, std::string rank);
+	RuleGenUnit(const std::string &type, std::string race, std::string rank);
 	/// Cleans up the unit ruleset.
-	~RuleAlien();
+	~RuleGenUnit();
 	/// Gets the unit's type.
 	std::string getType() const;
 	/// Sets the unit's stats.
@@ -53,19 +52,23 @@ public:
 	void setArmor(const std::string &armor);
 	/// Sets the voxel parameters.
 	void setVoxelParameters(int standHeight, int kneelHeight, int loftemps);
-	///
+	/// Get the unit's stats.
 	UnitStats getStats() const;
-	///
+	/// Get the unit's height when standing.
 	int getStandHeight() const;
-	///
+	/// Get the unit's height when kneeling.
 	int getKneelHeight() const;
-	///
+	/// Get the 3D templates
 	int getLoftemps() const;
-	///
+	/// Get the armor type.
 	std::string getArmor() const;
+	/// Get the alien race type.
 	std::string getRace() const;
+	/// Get the alien rank.
 	std::string getRank() const;
+	/// Set the value - for score calculation.
 	void setValue(int value);
+	/// Get the value - for score calculation.
 	int getValue() const;
 };
 

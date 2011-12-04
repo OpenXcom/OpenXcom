@@ -36,6 +36,7 @@
 #include "../Engine/Sound.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Options.h"
+#include "../Ruleset/RuleArmor.h"
 
 namespace OpenXcom
 {
@@ -75,22 +76,37 @@ void UnitWalkBState::think()
 
 		if (_unit->getVisible() && _unit->getStatus() == STATUS_WALKING)
 		{
-			// play footstep sound 1
-			if (_unit->getWalkingPhase() == 3)
+			if (_unit->getUnit()->getArmor()->getSize() > 1)
 			{
-				Tile *tile = _unit->getTile();
-				if (tile->getFootstepSound())
+				// play hwp engine sound
+				if (_unit->getWalkingPhase() == 0)
 				{
-					_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(22 + (tile->getFootstepSound()*2))->play();
+					// conventional tank
+					if (_unit->getUnit()->getArmor()->getMovementType() == MT_WALK)
+						_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(14)->play();
+					else // cyberdisc
+						_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(40)->play();
 				}
 			}
-			// play footstep sound 2
-			if (_unit->getWalkingPhase() == 7)
+			else
 			{
-				Tile *tile = _unit->getTile();
-				if (tile->getFootstepSound())
+				// play footstep sound 1
+				if (_unit->getWalkingPhase() == 3)
 				{
-					_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(23 + (tile->getFootstepSound()*2))->play();
+					Tile *tile = _unit->getTile();
+					if (tile->getFootstepSound())
+					{
+						_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(22 + (tile->getFootstepSound()*2))->play();
+					}
+				}
+				// play footstep sound 2
+				if (_unit->getWalkingPhase() == 7)
+				{
+					Tile *tile = _unit->getTile();
+					if (tile->getFootstepSound())
+					{
+						_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(23 + (tile->getFootstepSound()*2))->play();
+					}
 				}
 			}
 		}
@@ -100,8 +116,22 @@ void UnitWalkBState::think()
 		// unit moved from one tile to the other, update the tiles
 		if (_unit->getPosition() != _unit->getLastPosition())
 		{
-			_parent->getGame()->getSavedGame()->getBattleGame()->getTile(_unit->getLastPosition())->setUnit(0); //don't change these
-			_parent->getGame()->getSavedGame()->getBattleGame()->getTile(_unit->getPosition())->setUnit(_unit); //don't change these
+			int size = _unit->getUnit()->getArmor()->getSize() - 1;
+			for (int x = size; x >= 0; x--)
+			{
+				for (int y = size; y >= 0; y--)
+				{
+					_parent->getGame()->getSavedGame()->getBattleGame()->getTile(_unit->getLastPosition() + Position(x,y,0))->setUnit(0);
+				}
+			}
+			for (int x = size; x >= 0; x--)
+			{
+				for (int y = size; y >= 0; y--)
+				{
+					_parent->getGame()->getSavedGame()->getBattleGame()->getTile(_unit->getPosition() + Position(x,y,0))->setUnit(_unit);
+				}
+			}
+
 			// if the unit changed level, camera changes level with
 			_parent->getMap()->getCamera()->setViewHeight(_unit->getPosition().z);
 		}

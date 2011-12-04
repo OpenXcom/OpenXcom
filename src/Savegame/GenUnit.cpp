@@ -16,9 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "Alien.h"
+#include "GenUnit.h"
 #include <sstream>
-#include "../Ruleset/RuleAlien.h"
+#include "../Ruleset/RuleGenUnit.h"
 #include "../Engine/Language.h"
 
 
@@ -26,34 +26,34 @@ namespace OpenXcom
 {
 
 /**
- * Initializes a new blank alien.
+ * Initializes a new blank generated unit.
  */
-Alien::Alien() : Unit(), _rules(0)
+GenUnit::GenUnit() : Unit(), _rules(0)
 {
 }
 
 /**
- * Initializes a new alien with stats pulled from a ruleset.
- * @param rules Alien ruleset.
- * @param armor Alien armor.
+ * Initializes a new generated unit with stats pulled from a ruleset.
+ * @param rules generated unit ruleset.
+ * @param armor generated unit armor.
  * @param lang Current language.
  */
-Alien::Alien(RuleAlien *rules, RuleArmor *armor) : Unit(armor), _rules(rules)
+GenUnit::GenUnit(RuleGenUnit *rules, RuleArmor *armor) : Unit(armor), _rules(rules)
 {
 }
 
 /**
  *
  */
-Alien::~Alien()
+GenUnit::~GenUnit()
 {
 }
 
 /**
- * Returns the Alien's full name.
- * @return Soldier name.
+ * Returns the generated unit's full name. HWPs and civilians don't have a rank.
+ * @return name.
  */
-std::wstring Alien::getName(Language *lang) const
+std::wstring GenUnit::getName(Language *lang) const
 {
 	std::wstringstream name;
 	if (lang)
@@ -65,117 +65,117 @@ std::wstring Alien::getName(Language *lang) const
 }
 
 /**
- * Returns the alien's amount of time units.
+ * Returns the generated unit's amount of base time units.
  * @return Time units.
  */
-int Alien::getTimeUnits() const
+int GenUnit::getTimeUnits() const
 {
 	return _rules->getStats().tu;
 }
 
 /**
- * Returns the alien's amount of stamina.
+ * Returns the generated unit's amount of base stamina.
  * @return Stamina.
  */
-int Alien::getStamina() const
+int GenUnit::getStamina() const
 {
 	return _rules->getStats().stamina;
 }
 
 /**
- * Returns the alien's amount of health.
+ * Returns the generated unit's amount of base health.
  * @return Health.
  */
-int Alien::getHealth() const
+int GenUnit::getHealth() const
 {
 	return _rules->getStats().health;
 }
 
 /**
- * Returns the alien's amount of bravery.
+ * Returns the generated unit's amount of bravery.
  * @return Bravery.
  */
-int Alien::getBravery() const
+int GenUnit::getBravery() const
 {
 	return _rules->getStats().bravery;
 }
 
 /**
- * Returns the alien's amount of reactions.
+ * Returns the generated unit's amount of reactions.
  * @return Reactions.
  */
-int Alien::getReactions() const
+int GenUnit::getReactions() const
 {
 	return _rules->getStats().reactions;
 }
 
 /**
- * Returns the alien's amount of firing accuracy.
+ * Returns the generated unit's amount of firing accuracy.
  * @return Firing accuracy.
  */
-int Alien::getFiringAccuracy() const
+int GenUnit::getFiringAccuracy() const
 {
 	return _rules->getStats().firing;
 }
 
 /**
- * Returns the alien's amount of throwing accuracy.
+ * Returns the generated unit's amount of throwing accuracy.
  * @return Throwing accuracy.
  */
-int Alien::getThrowingAccuracy() const
+int GenUnit::getThrowingAccuracy() const
 {
 	return _rules->getStats().throwing;
 }
 
 /**
- * Returns the alien's amount of strength.
+ * Returns the generated unit's amount of strength.
  * @return Strength.
  */
-int Alien::getStrength() const
+int GenUnit::getStrength() const
 {
 	return _rules->getStats().strength;
 }
 
 /**
- * Returns the alien's rules.
- * @return rulealien
+ * Returns the generated unit's rules.
+ * @return RuleGenUnit
  */
-RuleAlien *Alien::getRules() const
+RuleGenUnit *GenUnit::getRules() const
 {
 	return _rules;
 }
 
 /**
- * Returns the alien's stand height.
+ * Returns the generated unit's stand height.
  * @return stand height
  */
-int Alien::getStandHeight() const
+int GenUnit::getStandHeight() const
 {
 	return _rules->getStandHeight();
 }
 
 /**
- * Returns the alien's kneel height.
+ * Returns the generated unit's kneel height.
  * @return kneel height
  */
-int Alien::getKneelHeight() const
+int GenUnit::getKneelHeight() const
 {
 	return _rules->getKneelHeight();
 }
 /**
- * Returns the alien's loftemps ID.
+ * Returns the generated unit's loftemps ID.
  * @return loftemps ID
  */
-int Alien::getLoftemps() const
+int GenUnit::getLoftemps() const
 {
 	return _rules->getLoftemps();
 }
 
 /**
- * Returns the alien's value.
+ * Returns the generated unit's value.
  * @return value
  */
-int Alien::getValue() const
+int GenUnit::getValue() const
 {
 	return _rules->getValue();
 }

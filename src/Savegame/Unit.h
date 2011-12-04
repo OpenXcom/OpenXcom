@@ -36,7 +36,7 @@ class RuleArmor;
 class Language;
 
 /**
- * Represents a unit which is mostly just an abstract class to access common attributes/functions for both Soldiers and Aliens.
+ * Represents a unit which is mostly just an abstract class to access common attributes/functions for both Soldiers and Generated Units.
  */
 class Unit
 {

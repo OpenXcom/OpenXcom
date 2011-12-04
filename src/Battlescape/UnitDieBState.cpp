@@ -72,22 +72,30 @@ void UnitDieBState::init()
 	}
 	if (_unit->getHealth() == 0 && !_noSound)
 	{
-		// soldiers have 3 screams depending on gender
 		Soldier *s = dynamic_cast<Soldier*>(_unit->getUnit());
 		if (s)
 		{
-			if (s->getGender() == GENDER_MALE)
+			if (_unit->getUnit()->getArmor()->getSize() > 1)
 			{
-				_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(RNG::generate(41,43))->play();
+				// HWP destroy sound
+				_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(23)->play();
 			}
 			else
 			{
-				_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(RNG::generate(44,46))->play();
+				// soldiers have screams depending on gender
+				if (s->getGender() == GENDER_MALE)
+				{
+					_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(RNG::generate(41,43))->play();
+				}
+				else
+				{
+					_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(RNG::generate(44,46))->play();
+				}
 			}
 		}
 		else
 		{
-			// todo get death sound from rulealien
+			// todo get death sound from RuleGenUnit
 			_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(10)->play();
 		}
 	}
@@ -161,7 +169,15 @@ void UnitDieBState::convertUnitToCorpse(BattleUnit *unit, TileEngine *terrain)
 
 	// remove unit-tile link
 	_unit->setTile(0);
-	_parent->getGame()->getSavedGame()->getBattleGame()->getTile(_unit->getPosition())->setUnit(0);
+
+	int size = _unit->getUnit()->getArmor()->getSize() - 1;
+	for (int x = size; x >= 0; x--)
+	{
+		for (int y = size; y >= 0; y--)
+		{
+			_parent->getGame()->getSavedGame()->getBattleGame()->getTile(_unit->getPosition() + Position(x,y,0))->setUnit(0);
+		}
+	}
 }
 
 }

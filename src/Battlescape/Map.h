@@ -56,6 +56,7 @@ private:
 	int _spriteWidth, _spriteHeight;
 	int _selectorX, _selectorY;
 	CursorType _cursorType;
+	int _cursorSize;
 	int _animFrame;
 	BulletSprite *_bullet[36];
 	Projectile *_projectile;
@@ -92,7 +93,7 @@ public:
 	/// Calculate the offset of a soldier, when it is walking in the middle of 2 tiles.
 	void calculateWalkingOffset(BattleUnit *unit, Position *offset);
 	/// Set the 3D cursor type.
-	void setCursorType(CursorType type);
+	void setCursorType(CursorType type, int size = 1);
 	/// Get the 3D cursor type.
 	CursorType getCursorType() const;
 	/// Cache units.

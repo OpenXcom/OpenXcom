@@ -24,18 +24,19 @@
 #include "../Engine/Surface.h"
 #include "../Battlescape/Position.h"
 #include "../Resource/ResourcePack.h"
-#include "../Ruleset/RuleAlien.h"
+#include "../Ruleset/RuleGenUnit.h"
 #include "../Ruleset/RuleSoldier.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/MapData.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/Soldier.h"
-#include "../Savegame/Alien.h"
+#include "../Savegame/GenUnit.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Options.h"
+#include "../Ruleset/RuleArmor.h"
 
 namespace OpenXcom
 {
@@ -92,11 +93,17 @@ int Projectile::calculateTrajectory(double accuracy)
 	int direction;
 	int dirYshift[8] = {1, 1, 8, 15, 15, 15, 8, 1 };
 	int dirXshift[8] = {8, 14, 15, 15, 8, 1, 1, 1 };
-	// large units : x2
 
 	originVoxel = Position(_origin.x*16, _origin.y*16, _origin.z*24);
 	originVoxel.z += -_save->getTile(_origin)->getTerrainLevel();
 	BattleUnit *bu = _save->getTile(_origin)->getUnit();
+
+	if (bu->getUnit()->getArmor()->getSize() > 1)
+	{
+		originVoxel.x += 8;
+		originVoxel.y += 8;
+	}
+
 	originVoxel.z += bu->getHeight();
 	originVoxel.z -= 3;
 	if (originVoxel.z >= (_origin.z + 1)*24)
@@ -104,6 +111,8 @@ int Projectile::calculateTrajectory(double accuracy)
 		_origin.z++;
 	}
 	direction = bu->getDirection();
+	if (bu->getTurretType() != -1)
+		direction = bu->getTurretDirection();
 	originVoxel.x += dirXshift[direction];
 	originVoxel.y += dirYshift[direction];
 	// determine the target voxel.

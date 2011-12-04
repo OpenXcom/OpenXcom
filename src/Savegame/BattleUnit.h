@@ -57,6 +57,7 @@ private:
 	Tile *_tile;
 	Position _lastPos;
 	int _direction, _toDirection;
+	int _directionTurret, _toDirectionTurret;
 	int _verticalDirection;
 	Position _destination;
 	UnitStatus _status;
@@ -71,10 +72,11 @@ private:
 	std::vector<BattleItem*> _inventory;
 	BattleAIState *_currentAIState;
 	bool _visible;
-	Surface *_cache;
+	Surface *_cache[5]; // for large units there are 4 parts + turret
 	bool _cacheInvalid;
 	int _expBravery, _expReactions, _expFiring, _expThrowing, _expPsiSkill, _expMelee;
 	int improveStat(int exp);
+	int _turretType;
 public:
 	/// Creates a BattleUnit.
 	BattleUnit(Unit *_unit, UnitFaction faction);
@@ -100,6 +102,8 @@ public:
 	void setDirection(int direction);
 	/// Gets the unit's direction.
 	int getDirection() const;
+	/// Gets the unit's turret direction.
+	int getTurretDirection() const;
 	/// Gets the unit's vertical direction.
 	int getVerticalDirection() const;
 	/// Gets the unit's status.
@@ -115,11 +119,11 @@ public:
 	/// Gets the unit's destination when walking
 	const Position &getDestination() const;
 	/// Look at a certain point.
-	void lookAt(const Position &point);
+	void lookAt(const Position &point, bool turret = false);
 	/// Look at a certain direction.
 	void lookAt(int direction);
 	/// Turn to the destination direction.
-	void turn();
+	void turn(bool turret = false);
 	/// Abort turning.
 	void abortTurn();
 	/// Gets the soldier's gender.
@@ -127,9 +131,9 @@ public:
 	/// Gets the unit's faction.
 	UnitFaction getFaction() const;
 	/// Set the cached flag.
-	void setCache(Surface *cache);
+	void setCache(Surface *cache, int part = 0);
 	/// If this unit is cached on the battlescape.
-	Surface *getCache(bool *invalid) const;
+	Surface *getCache(bool *invalid, int part = 0) const;
 	/// Kneel down.
 	void kneel(bool kneeled);
 	/// Is kneeled?
@@ -236,6 +240,10 @@ public:
 	bool postMissionProcedures();
 	/// Get the sprite index for the minimap
 	int getMiniMapSpriteIndex () const;
+	/// Set the turret type. -1 is no turret.
+	void setTurretType(int turretType);
+	/// Get the turret type. -1 is no turret.
+	int getTurretType() const;
 };
 
 }

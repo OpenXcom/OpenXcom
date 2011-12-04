@@ -27,12 +27,13 @@
 #include "../Savegame/Tile.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/Soldier.h"
-#include "../Savegame/Alien.h"
+#include "../Savegame/GenUnit.h"
 #include "../Engine/RNG.h"
 #include "../Ruleset/MapDataSet.h"
 #include "../Ruleset/MapData.h"
-#include "../Ruleset/RuleAlien.h"
+#include "../Ruleset/RuleGenUnit.h"
 #include "../Ruleset/RuleSoldier.h"
+#include "../Ruleset/RuleArmor.h"
 #include "../Resource/ResourcePack.h"
 
 namespace OpenXcom
@@ -1090,7 +1091,7 @@ int TileEngine::voxelCheck(const Position& voxel, BattleUnit *excludeUnit, bool 
 		BattleUnit *unit = tile->getUnit();
 		if (unit != 0 && unit != excludeUnit)
 		{
-			if ((voxel.z%24) < unit->getHeight())
+			if ((voxel.z%24) < unit->getHeight() && (voxel.z%24) > 1)
 			{
 				int x = voxel.x%16;
 				int y = voxel.y%16;
@@ -1246,6 +1247,44 @@ void TileEngine::prepareNewTurn()
 		calculateTerrainLighting(); // fires could have been stopped
 	}
 
+}
+
+
+/**
+ * Function handles the placement of units on the map. This handles large units that are placed on multiple tiles.
+ * @return Whether the unit could be succesfully placed or not.
+ */
+bool TileEngine::setUnitPosition(BattleUnit *bu, const Position &position, bool testOnly)
+{
+	int size = bu->getUnit()->getArmor()->getSize() - 1;
+
+	// first check if the tiles are occupied
+	for (int x = size; x >= 0; x--)
+	{
+		for (int y = size; y >= 0; y--)
+		{
+			if (_save->getTile(position + Position(x,y,0))->getUnit() != 0 && _save->getTile(position + Position(x,y,0))->getUnit() != bu)
+			{
+				return false;
+			}
+		}
+	}
+
+	if (testOnly) return true;
+
+	for (int x = size; x >= 0; x--)
+	{
+		for (int y = size; y >= 0; y--)
+		{
+			if (x==0 && y==0)
+			{
+				bu->setPosition(position + Position(x,y,0));
+			}
+			_save->getTile(position + Position(x,y,0))->setUnit(bu);
+		}
+	}
+
+	return true;
 }
 
 }

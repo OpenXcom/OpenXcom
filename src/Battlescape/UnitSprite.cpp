@@ -23,7 +23,7 @@
 #include "../Battlescape/Position.h"
 #include "../Resource/ResourcePack.h"
 #include "../Ruleset/RuleSoldier.h"
-#include "../Ruleset/RuleAlien.h"
+#include "../Ruleset/RuleGenUnit.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/RuleArmor.h"
 #include "../Savegame/BattleUnit.h"
@@ -40,7 +40,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-UnitSprite::UnitSprite(int width, int height, int x, int y) : Surface(width, height, x, y), _unit(0), _item(0), _unitSurface(0), _itemSurface(0)
+UnitSprite::UnitSprite(int width, int height, int x, int y) : Surface(width, height, x, y), _unit(0), _item(0), _unitSurface(0), _itemSurface(0), _part(0), _animationFrame(0)
 {
 
 
@@ -69,11 +69,13 @@ void UnitSprite::setSurfaces(SurfaceSet *unitSurface, SurfaceSet *itemSurface)
 /**
  * Links this sprite to a BattleUnit to get the data for rendering.
  * @param unit Pointer to the BattleUnit.
+ * @param part The part number for large units.
  */
-void UnitSprite::setBattleUnit(BattleUnit *unit)
+void UnitSprite::setBattleUnit(BattleUnit *unit, int part)
 {
 	_unit = unit;
 	_redraw = true;
+	_part = part;
 }
 
 /**
@@ -86,6 +88,14 @@ void UnitSprite::setBattleItem(BattleItem *item)
 	_redraw = true;
 }
 
+/**
+ * Sets the animation frame for animated units.
+ * @param frame.
+ */
+void UnitSprite::setAnimationFrame(int frame)
+{
+	_animationFrame = frame;
+}
 /**
  * Draws a unit, using the drawing rules of the unit.
  * This function is called by Map, for each unit on the screen.
@@ -101,6 +111,12 @@ void UnitSprite::draw()
 		break;
 	case 1:
 		drawRoutine1();
+		break;
+	case 2:
+		drawRoutine2();
+		break;
+	case 3:
+		drawRoutine3();
 		break;
 	}
 
@@ -364,6 +380,73 @@ void UnitSprite::drawRoutine1()
 	case 6: rightArm->blit(this); item?item->blit(this):void(); torso->blit(this); leftArm->blit(this); break;
 	case 7: item?item->blit(this):void(); leftArm->blit(this); rightArm->blit(this); torso->blit(this); break;
 	}
+}
+
+/**
+ * Drawing routine for x-com tanks.
+ */
+void UnitSprite::drawRoutine2()
+{
+	if (_unit->isOut())
+	{
+		// unit is drawn as an item
+		return;
+	}
+
+	int hoverTank = 0;
+	if (_unit->getUnit()->getArmor()->getMovementType() == MT_FLY)
+	{
+		hoverTank = 32;
+	}
+
+	Surface *s = 0;
+	int turret = _unit->getTurretType();
+
+	// draw the animated propulsion below the hwp
+	if (_part > 0 && hoverTank != 0)
+	{
+		s = _unitSurface->getFrame(104 + ((_part-1) * 8) + _animationFrame);
+		s->blit(this);
+	}
+
+	// draw the tank itself
+	s = _unitSurface->getFrame(hoverTank + (_part * 8) + _unit->getDirection());
+	s->blit(this);
+
+	// draw the turret, together with the last part
+	if (_part == 3 && turret != -1)
+	{
+		s = _unitSurface->getFrame(64 + (turret * 8) + _unit->getTurretDirection());
+		s->setX(0);
+		s->setY(-4);
+		s->blit(this);
+	}
+
+}
+
+/**
+ * Drawing routine for cyberdiscs.
+ */
+void UnitSprite::drawRoutine3()
+{
+	if (_unit->isOut())
+	{
+		// unit is drawn as an item
+		return;
+	}
+
+	Surface *s = 0;
+	
+	// draw the animated propulsion below the hwp
+	if (_part > 0)
+	{
+		s = _unitSurface->getFrame(32 + ((_part-1) * 8) + _animationFrame);
+		s->blit(this);
+	}
+
+	s = _unitSurface->getFrame((_part * 8) + _unit->getDirection());
+
+	s->blit(this);
 }
 
 }

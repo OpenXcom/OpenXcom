@@ -31,6 +31,7 @@
 #include "../Engine/RNG.h"
 #include "../Engine/Language.h"
 #include "../Engine/Options.h"
+#include "../Ruleset/RuleArmor.h"
 
 namespace OpenXcom
 {
@@ -58,7 +59,12 @@ void UnitTurnBState::init()
 		_parent->setStateInterval(Options::getInt("battleXcomSpeed"));
 	else
 		_parent->setStateInterval(Options::getInt("battleAlienSpeed"));
-	_unit->lookAt(_action.target);
+
+	// if the unit has a turret and we are turning during targeting, then only the turret turns
+	turret = (_unit->getTurretType() != -1) && _action.targeting;
+
+	_unit->lookAt(_action.target, turret);
+
 	if (_unit->getStatus() != STATUS_TURNING)
 	{
 		// try to open a door
@@ -88,7 +94,7 @@ void UnitTurnBState::think()
 
 	if (_unit->spendTimeUnits(tu, _parent->dontSpendTUs()))
 	{
-		_unit->turn();
+		_unit->turn(turret);
 		_parent->getGame()->getSavedGame()->getBattleGame()->getTileEngine()->calculateFOV(_unit);
 		_parent->getMap()->cacheUnit(_unit);
 		if (_unit->getStatus() == STATUS_STANDING)

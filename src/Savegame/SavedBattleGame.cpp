@@ -23,13 +23,14 @@
 #include "Node.h"
 #include "SDL.h"
 #include "Unit.h"
-#include "Alien.h"
+#include "GenUnit.h"
 #include "../Ruleset/MapDataSet.h"
 #include "../Battlescape/Pathfinding.h"
 #include "../Battlescape/TileEngine.h"
 #include "../Battlescape/Position.h"
 #include "../Resource/ResourcePack.h"
 #include "../Ruleset/Ruleset.h"
+#include "../Ruleset/RuleArmor.h"
 #include "../Engine/Language.h"
 #include "../Ruleset/RuleInventory.h"
 #include "../Battlescape/PatrolBAIState.h"
@@ -133,8 +134,8 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 		}
 		else
 		{
-			// create a new Alien Unit.
-			unit = new Alien(rule->getAlien("SECTOID_SOLDIER"), rule->getArmor("SECTOID_ARMOR0"));
+			// create a new Unit.
+			unit = new GenUnit(rule->getGenUnit("SECTOID_SOLDIER"), rule->getArmor("SECTOID_ARMOR0"));
 		}
 		BattleUnit *b = new BattleUnit(unit, faction);
 		b->load(*i);
@@ -732,15 +733,25 @@ bool SavedBattleGame::getDebugMode() const
 }
 
 /**
- * Resets all the units to their current standing tile.
+ * Resets all the units to their current standing tile(s).
  */
 void SavedBattleGame::resetUnitTiles()
 {
-	for (std::vector<BattleUnit*>::iterator i = _units.begin(); i != _units.end(); ++i)
+	/*for (std::vector<BattleUnit*>::iterator i = _units.begin(); i != _units.end(); ++i)
 	{
 		if (!(*i)->isOut())
-			getTile((*i)->getPosition())->setUnit(*i);
-	}
+		{
+			int size = (*i)->getUnit()->getArmor()->getSize() - 1;
+
+			for (int x = size; x >= 0; x--)
+			{
+				for (int y = size; y >= 0; y--)
+				{
+					getTile((*i)->getPosition() + Position(x,y,0))->setUnit((*i));
+				}
+			}
+		}
+	}*/
 }
 
 /**

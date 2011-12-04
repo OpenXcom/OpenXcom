@@ -39,8 +39,11 @@ private:
 	BattleItem *_item;
 	SurfaceSet *_unitSurface;
 	SurfaceSet *_itemSurface;
+	int _part, _animationFrame;
 	void drawRoutine0();
 	void drawRoutine1();
+	void drawRoutine2();
+	void drawRoutine3();
 public:
 	/// Creates a new UnitSprite at the specified position and size.
 	UnitSprite(int width, int height, int x, int y);
@@ -49,9 +52,11 @@ public:
 	/// Sets surfacesets for rendering.
 	void setSurfaces(SurfaceSet *unitSurface, SurfaceSet *itemSurface);
 	/// Sets the battleunit to be rendered.
-	void setBattleUnit(BattleUnit *unit);
+	void setBattleUnit(BattleUnit *unit, int part = 0);
 	/// Sets the battleitem to be rendered.
 	void setBattleItem(BattleItem *item);
+	/// Sets the animation frame.
+	void setAnimationFrame(int frame);
 	/// Draw the unit.
 	void draw();
 };

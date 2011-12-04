@@ -16,57 +16,57 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_ALIEN_H
-#define OPENXCOM_ALIEN_H
+#ifndef OPENXCOM_GENUNIT_H
+#define OPENXCOM_GENUNIT_H
 
 #include <string>
 #include "Unit.h"
 
 namespace OpenXcom
 {
-	class RuleAlien;
+	class RuleGenUnit;
 	class Language;
 /**
- * Represents an alien's base class. It doesn't hold actual attributes as it just uses RuleUnit for that.
+ * Represents a unit that is generated on the battlescape, this includes: HWPs, aliens and civilians.
  */
-class Alien : public Unit
+class GenUnit : public Unit
 {
 private:
-	RuleAlien *_rules;
+	RuleGenUnit *_rules;
 public:
-	/// Creates a new alien.
-	Alien();
-	/// Creates a new alien with specific rules and armor.
-	Alien(RuleAlien *rules, RuleArmor *armor);
-	/// Cleans up the alien.
-	~Alien();
-	/// Gets the alien's name.
+	/// Creates a new generated unit.
+	GenUnit();
+	/// Creates a new generated unit with specific rules and armor.
+	GenUnit(RuleGenUnit *rules, RuleArmor *armor);
+	/// Cleans up the generated unit.
+	~GenUnit();
+	/// Gets the generated unit's name.
 	std::wstring getName(Language *lang) const;
-	/// Gets the alien's time units.
+	/// Gets the generated unit's time units.
 	int getTimeUnits() const;
-	/// Gets the alien's stamina.
+	/// Gets the generated unit's stamina.
 	int getStamina() const;
-	/// Gets the alien's health.
+	/// Gets the generated unit's health.
 	int getHealth() const;
-	/// Gets the alien's bravery.
+	/// Gets the generated unit's bravery.
 	int getBravery() const;
-	/// Gets the alien's reactions.
+	/// Gets the generated unit's reactions.
 	int getReactions() const;
-	/// Gets the alien's firing accuracy.
+	/// Gets the generated unit's firing accuracy.
 	int getFiringAccuracy() const;
-	/// Gets the alien's throwing accuracy.
+	/// Gets the generated unit's throwing accuracy.
 	int getThrowingAccuracy() const;
-	/// Gets the alien's strength.
+	/// Gets the generated unit's strength.
 	int getStrength() const;
-	/// Gets the alien's rules.
-	RuleAlien *getRules() const;
-	/// Gets the alien's stand height.
+	/// Gets the generated unit's rules.
+	RuleGenUnit *getRules() const;
+	/// Gets the generated unit's stand height.
 	int getStandHeight() const;
-	/// Gets the alien's kneel height.
+	/// Gets the generated unit's kneel height.
 	int getKneelHeight() const;
-	/// Gets the alien's loft ID.
+	/// Gets the generated unit's loft ID.
 	int getLoftemps() const;
-	/// Gets the alien's value.
+	/// Gets the generated unit's value.
 	int getValue() const;
 };
 
