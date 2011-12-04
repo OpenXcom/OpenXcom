@@ -63,7 +63,7 @@ private:
 	void addSoldier(Soldier *soldier);
 	/// Add an alien to the game
 	BattleUnit *addAlien(RuleGenUnit *rules, NodeRank rank);
-	void addVehicle(RuleGenUnit *rules);
+	BattleUnit *addVehicle(RuleGenUnit *rules);
 	/// Add an item to the game
 	void addItem(RuleItem *item);
 	// Add an item to a unit

@@ -208,11 +208,11 @@ void BattlescapeGenerator::run()
 		//addVehicle(_game->getRuleset()->getGenUnit("TANK_CANNON"));
 
 		// add soldiers that are in the craft
-		/*for (std::vector<Soldier*>::iterator i = _craft->getBase()->getSoldiers()->begin(); i != _craft->getBase()->getSoldiers()->end(); ++i)
+		for (std::vector<Soldier*>::iterator i = _craft->getBase()->getSoldiers()->begin(); i != _craft->getBase()->getSoldiers()->end(); ++i)
 		{
 			if ((*i)->getCraft() == _craft)
 				addSoldier(*i);
-		}*/
+		}
 		_save->setSelectedUnit(_save->getUnits()->at(0)); // select first unit
 
 		// maybe we should assign all units to the first tile of the skyranger before the inventory pre-equip and then reassign them to their correct tile afterwards?
@@ -222,7 +222,6 @@ void BattlescapeGenerator::run()
 				_craftInventoryTile->setUnit(*i);
 		}
 		
-
 		// add items that are in the craft
 		for (std::map<std::string, int>::iterator i = _craft->getItems()->getContents()->begin(); i != _craft->getItems()->getContents()->end(); ++i)
 		{
@@ -381,8 +380,8 @@ void BattlescapeGenerator::addSoldier(Soldier *soldier)
 /**
  * Adds an alien to the game and place him on a free spawnpoint.
  * @param rules pointer to the RuleGenUnit which holds info about alien .
- * @param armor The armor of the alien.
  * @param rank The rank of the alien, used for spawn point search.
+ * @return pointer to the created unit.
  */
 BattleUnit *BattlescapeGenerator::addAlien(RuleGenUnit *rules, NodeRank rank)
 {
@@ -471,9 +470,10 @@ BattleUnit *BattlescapeGenerator::addAlien(RuleGenUnit *rules, NodeRank rank)
 
 /**
  * Adds a HWP vehicle to the game and place him on a free spawnpoint.
- * @param soldier pointer to the Soldier
+ * @param rules Pointer to the ruleset.
+ * @return pointer to the created unit.
  */
-void BattlescapeGenerator::addVehicle(RuleGenUnit *rules)
+BattleUnit *BattlescapeGenerator::addVehicle(RuleGenUnit *rules)
 {
 	BattleUnit *unit = new BattleUnit(new GenUnit(rules, _game->getRuleset()->getArmor(rules->getArmor())), FACTION_PLAYER);
 	unit->setId(_unitCount++);
@@ -499,6 +499,7 @@ void BattlescapeGenerator::addVehicle(RuleGenUnit *rules)
 	}
 
 	_save->getUnits()->push_back(unit);
+	return unit;
 }
 
 
