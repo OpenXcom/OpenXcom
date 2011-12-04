@@ -51,6 +51,26 @@ FIND_LIBRARY(YAMLCPP_LIBRARY
   /opt
 )
 
+if ( APPLE )
+  if ( NOT YAMLCPP_LIBRARY )
+    FIND_LIBRARY(YAMLCPP_LIBRARY 
+      NAMES YAML
+      HINTS
+      $ENV{YAMLCPPDIR}
+      PATH_SUFFIXES lib64 lib
+      PATHS
+      ~/Library/Frameworks
+      /Library/Frameworks
+      /usr/local
+      /usr
+      /sw
+      /opt/local
+      /opt/csw
+      /opt
+      )
+  endif ()
+endif ()
+
 SET(YAMLCPP_FOUND "NO")
 
 IF(YAMLCPP_LIBRARY AND YAMLCPP_INCLUDE_DIR)

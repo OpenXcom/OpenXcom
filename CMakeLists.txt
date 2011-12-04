@@ -13,6 +13,14 @@ if ( WIN32 )
   set ( default_deps_dir "${CMAKE_SOURCE_DIR}/deps" )
 endif ()
 
+if ( APPLE )
+  set ( MACOS_SDLMAIN_M_PATH "${CMAKE_SOURCE_DIR}" CACHE STRING "Path to SDLMain.m file" )
+  option ( CREATE_BUNDLE "Create a MACOS bundle application" ON )
+  if ( NOT EXISTS "${MACOS_SDLMAIN_M_PATH}" )
+    message ( FATAL_ERROR "On MacOS, SDLMain.m is needed. please set the MACOS_SDLMAIN_M_PATH variable" )
+  endif ()
+endif ()
+
 set ( DEPS_DIR "${default_deps_dir}" CACHE STRING "Deps directory" )
 
 # Add check for library (SDL_gfx, yaml-cpp )
