@@ -345,8 +345,6 @@ openxcom_SOURCES = \
 	src/Ruleset/MapData.h \
 	src/Ruleset/MapDataSet.cpp \
 	src/Ruleset/MapDataSet.h \
-	src/Ruleset/RuleAlien.cpp \
-	src/Ruleset/RuleAlien.h \
 	src/Ruleset/RuleArmor.cpp \
 	src/Ruleset/RuleArmor.h \
 	src/Ruleset/RuleBaseFacility.cpp \
@@ -357,6 +355,8 @@ openxcom_SOURCES = \
 	src/Ruleset/RuleCraft.h \
 	src/Ruleset/RuleCraftWeapon.cpp \
 	src/Ruleset/RuleCraftWeapon.h \
+	src/Ruleset/RuleGenUnit.cpp \
+	src/Ruleset/RuleGenUnit.h \
 	src/Ruleset/RuleInventory.cpp \
 	src/Ruleset/RuleInventory.h \
 	src/Ruleset/RuleItem.cpp \
@@ -379,8 +379,6 @@ openxcom_SOURCES = \
 	src/Ruleset/SoldierNamePool.h \
 	src/Ruleset/XcomRuleset.cpp \
 	src/Ruleset/XcomRuleset.h \
-	src/Savegame/Alien.cpp \
-	src/Savegame/Alien.h \
 	src/Savegame/Base.cpp \
 	src/Savegame/BaseFacility.cpp \
 	src/Savegame/BaseFacility.h \
@@ -397,6 +395,8 @@ openxcom_SOURCES = \
 	src/Savegame/CraftWeapon.h \
 	src/Savegame/GameTime.cpp \
 	src/Savegame/GameTime.h \
+	src/Savegame/GenUnit.cpp \
+	src/Savegame/GenUnit.h \
 	src/Savegame/ItemContainer.cpp \
 	src/Savegame/ItemContainer.h \
 	src/Savegame/MovingTarget.cpp \
