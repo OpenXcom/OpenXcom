@@ -320,10 +320,10 @@ set ( ruleset_src
   Ruleset/RuleItem.cpp
   Ruleset/RuleCraftWeapon.cpp
   Ruleset/RuleCraftWeapon.h
+  Ruleset/RuleGenUnit.cpp
+  Ruleset/RuleGenUnit.h
   Ruleset/RuleInventory.h
   Ruleset/RuleInventory.cpp
-  Ruleset/RuleAlien.h
-  Ruleset/RuleAlien.cpp
   Ruleset/MapBlock.h
   Ruleset/MapBlock.cpp
   Ruleset/RuleBaseFacility.cpp
@@ -367,8 +367,6 @@ set ( savegame_src
   Savegame/BaseFacility.cpp
   Savegame/Craft.cpp
   Savegame/Craft.h
-  Savegame/Alien.cpp
-  Savegame/Alien.h
   Savegame/Country.cpp
   Savegame/Country.h
   Savegame/NodeLink.cpp
@@ -383,6 +381,8 @@ set ( savegame_src
   Savegame/ItemContainer.h
   Savegame/GameTime.cpp
   Savegame/GameTime.h
+  Savegame/GenUnit.cpp
+  Savegame/GenUnit.h
   Savegame/Tile.cpp
   Savegame/Tile.h
   Savegame/CraftWeapon.cpp
