@@ -201,11 +201,15 @@ void BattlescapeGenerator::run()
 
 	// lets generate the map now and store it inside the tile objects
 	generateMap();
+	BattleUnit *unit;
 
 	if (_craft != 0)
 	{
 		// add vehicles that are in the craft - a vehicle is actually an item, which you will never see as it is converted to a unit
-		//addVehicle(_game->getRuleset()->getGenUnit("TANK_CANNON"));
+		// however the item itself becomes the weapon it "holds".
+		unit = addVehicle(_game->getRuleset()->getGenUnit("TANK_CANNON"));
+		addItem(_game->getRuleset()->getItem("STR_TANK_CANNON"), unit);
+		addItem(_game->getRuleset()->getItem("STR_HWP_CANNON_SHELLS"), unit);
 
 		// add soldiers that are in the craft
 		for (std::vector<Soldier*>::iterator i = _craft->getBase()->getSoldiers()->begin(); i != _craft->getBase()->getSoldiers()->end(); ++i)
@@ -247,7 +251,7 @@ void BattlescapeGenerator::run()
 		addItem(_game->getRuleset()->getItem("STR_GRENADE"));*/
 	}
 
-	BattleUnit *unit;
+	
 	if (_missionType == MISS_UFORECOVERY)
 	{
 		// TODO : this should be in rulesets 

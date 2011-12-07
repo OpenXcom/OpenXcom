@@ -973,11 +973,11 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	fcorpse->setWeight(30);
 
 	RuleItem *tcorpse = new RuleItem("STR_TANK_CORPSE");
-	fcorpse->setBigSprite(0);
-	fcorpse->setFloorSprite(68);
-	fcorpse->setInventoryWidth(7);
-	fcorpse->setInventoryHeight(7);
-	fcorpse->setWeight(100);
+	tcorpse->setBigSprite(0);
+	tcorpse->setFloorSprite(68);
+	tcorpse->setInventoryWidth(7);
+	tcorpse->setInventoryHeight(7);
+	tcorpse->setWeight(100);
 
 	RuleItem *ppistol = new RuleItem("STR_PLASMA_PISTOL");
 	ppistol->setSize(0.1f);
@@ -1010,6 +1010,40 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	ppclip->setHitSound(19);
 	ppclip->setClipSize(26);
 	ppclip->setWeight(3);
+
+	RuleItem *tankc = new RuleItem("STR_TANK_CANNON");
+	tankc->setSize(0.1f);
+	tankc->setCost(420000);
+	tankc->setBigSprite(43);
+	tankc->setHandSprite(0);
+	tankc->setFloorSprite(0);
+	tankc->setBulletSprite(4);
+	tankc->setFireSound(2);
+	tankc->setAccuracyAuto(0);
+	tankc->setTUAuto(0);
+	tankc->setAccuracySnap(60);
+	tankc->setTUSnap(33);
+	tankc->setAccuracyAimed(90);
+	tankc->setTUAimed(80);
+	tankc->getCompatibleAmmo()->push_back("STR_HWP_CANNON_SHELLS");
+	tankc->setBattleType(BT_FIREARM);
+	tankc->setInventoryWidth(2);
+	tankc->setInventoryHeight(3);
+	tankc->setWeight(1);
+
+	RuleItem *tankcs = new RuleItem("STR_HWP_CANNON_SHELLS");
+	tankcs->setSize(0.1f);
+	tankcs->setCost(200);
+	tankcs->setBigSprite(12);
+	tankcs->setPower(60);
+	tankcs->setDamageType(DT_AP);
+	tankcs->setBattleType(BT_AMMO);
+	tankcs->setHitAnimation(26);
+	tankcs->setHitSound(13);
+	tankcs->setInventoryWidth(2);
+	tankcs->setInventoryHeight(1);
+	tankcs->setClipSize(30);
+	tankcs->setWeight(1);
 
 	// Dummy entries for manufacture
 	RuleItem *lp = new RuleItem("STR_LASER_PISTOL");
@@ -1115,11 +1149,15 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_items.insert(std::pair<std::string, RuleItem*>("STR_PLASMA_PISTOL", ppistol));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_PLASMA_PISTOL_CLIP", ppclip));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_ELECTRO_FLARE", flare));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_TANK_CANNON", tankc));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_HWP_CANNON_SHELLS", tankcs));
 
 	_items.insert(std::pair<std::string, RuleItem*>("STR_ALIEN_ALLOYS", aa));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_LASER_PISTOL", lp));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_PERSONAL_ARMOR", pa));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_LASER_RIFLE", lr));
+
+
 	_manufacture.insert(std::pair<std::string, RuleManufactureInfo*>("STR_ALIEN_ALLOYS", maa));
 	_manufacture.insert(std::pair<std::string, RuleManufactureInfo*>("STR_LASER_PISTOL", mlp));
 	_manufacture.insert(std::pair<std::string, RuleManufactureInfo*>("STR_PERSONAL_ARMOR", mpa));
@@ -2155,8 +2193,7 @@ SavedGame *XcomRuleset::newSave(GameDifficulty diff) const
 	// Generate soldiers
 	for (int i = 0; i < 8; ++i)
 	{
-		//Soldier *soldier = new Soldier(getSoldier("XCOM"), getArmor("STR_NONE_UC"), &_names, save->getSoldierId());
-		Soldier *soldier = new Soldier(getSoldier("XCOM"), getArmor("TANK_ARMOR0"), &_names, save->getSoldierId());
+		Soldier *soldier = new Soldier(getSoldier("XCOM"), getArmor("STR_NONE_UC"), &_names, save->getSoldierId());
 		soldier->setCraft(skyranger);
 		base->getSoldiers()->push_back(soldier);
 	}
