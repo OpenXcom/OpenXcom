@@ -380,6 +380,26 @@ void RuleItem::setTwoHanded(bool flag)
 }
 
 /**
+ * Returns whether this item is a fixed weapon.
+ * You can't move/throw/drop fixed weapons - ie. HWP turrets.
+ * @return Is it fixed weapon?
+ */
+bool RuleItem::getFixed() const
+{
+	return _fixed;
+}
+
+/**
+ * Changes whether this item is a fixed weapon.
+ * You can't move/throw/drop fixed weapons - ie. HWP turrets.
+ * @param flag Is it a fixed weapon?
+ */
+void RuleItem::setFixed(bool flag)
+{
+	_fixed = flag;
+}
+
+/**
  * Returns the item's bullet sprite reference.
  * @return Sprite reference.
  */

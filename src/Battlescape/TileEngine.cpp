@@ -505,12 +505,14 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 		{
 			// power 0 - 200%
 			int rndPower = RNG::generate(0, power*2); // RNG::boxMuller(power, power/3)
-			_save->getTile(Position(center.x/16, center.y/16, center.z/24))->getUnit()->damage(Position(center.x%16, center.y%16, center.z%24), rndPower);
+			BattleUnit *bu = _save->getTile(Position(center.x/16, center.y/16, center.z/24))->getUnit();
+			
+			bu->damage(Position(center.x%16, center.y%16, center.z%24), rndPower);
 
 			// conventional weapons can cause additional stun damage
 			if (type == DT_AP)
 			{
-				_save->getTile(Position(center.x/16, center.y/16, center.z/24))->getUnit()->stun(RNG::generate(0, rndPower/4));
+				bu->stun(RNG::generate(0, rndPower/4));
 			}
 
 			unit->addFiringExp();
