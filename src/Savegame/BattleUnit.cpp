@@ -716,6 +716,7 @@ void BattleUnit::damage(Position position, int power)
 		if (_health < 0)
 			_health = 0;
 	}
+	_needPainKiller = true;
 }
 
 /**
@@ -1473,5 +1474,57 @@ int BattleUnit::getTurretType() const
 	//return _turretType;
 }
 
+/**
+ * Get the amount of fatal wound for a body part
+ * @param part The body part (in the range 0-5)
+ * @return The amount of fatal wound of a body part
+ */
+int BattleUnit::getFatalWound(int part) const
+{
+	if (part < 0 || part > 5)
+		return 0;
+	return _fatalWounds[part];
+}
+
+/**
+ * Heal a fatal wound of the soldier
+ * @param part the body part to heal
+ * @param healAmount the amount of fatal wound healed
+ * @param healthAmount The amount of health to add to soldier health
+ */
+void BattleUnit::heal(int part, int healAmount, int healthAmount)
+{
+	if (part < 0 || part > 5)
+		return;
+	if(!_fatalWounds[part])
+		return;
+	_fatalWounds[part] -= healAmount;
+	_health += healthAmount;
+}
+
+/**
+ * Restore soldier morale
+ */
+void BattleUnit::painKillers ()
+{
+	if (!getFatalWounds() || !_needPainKiller)
+	{
+		return ;
+	}
+	_needPainKiller = false;
+	int lostHealth = _unit->getHealth() - _health;
+	_morale += lostHealth;
+}
+
+/**
+ * Restore soldier energy and reducce stun level
+ * @param energy The amount of energy to add
+ * @param s The amount of stun level to reduce
+ */
+void BattleUnit::stimulant (int energy, int s)
+{
+	_energy += energy;
+	stun (s * -1);
+}
 }
 
