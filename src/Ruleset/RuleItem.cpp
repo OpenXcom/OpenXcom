@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2011 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -31,7 +31,8 @@ namespace OpenXcom
 RuleItem::RuleItem(const std::string &type) : _type(type), _size(0.0), _cost(0), _time(24), _weight(0), _bigSprite(-1), _floorSprite(-1), _handSprite(120), _bulletSprite(-1),
 									   _fireSound(-1), _hitSound(-1), _hitAnimation(0), _power(0), _priority(0), _compatibleAmmo(), _damageType(DT_NONE),
 									   _accuracyAuto(0), _accuracySnap(0), _accuracyAimed(0), _tuAuto(0), _tuSnap(0), _tuAimed(0), _clipSize(0), _accuracyMelee(0), _tuMelee(0),
-					   _battleType(BT_NONE), _twoHanded(false), _waypoint(false), _invWidth(1), _invHeight(1)
+					   _battleType(BT_NONE), _twoHanded(false), _waypoint(false), _invWidth(1), _invHeight(1),
+					   _painKiller(0), _heal(0), _stimulant(0), _healAmount(0), _healthAmount(0), _energy(0), _stun(0), _tuMedikit(0)
 {
 }
 
@@ -690,4 +691,147 @@ void RuleItem::drawHandSprite(SurfaceSet *texture, Surface *surface) const
 	texture->getFrame(this->getBigSprite())->blit(surface);
 }
 
+/**
+ * Set the heal quantity of item
+ * @param heal the new heal quantity
+ */
+void RuleItem::setHealQuantity (int heal)
+{
+	_heal = heal;
+}
+
+/**
+ * Get the heal quantity of item
+ * @return The new heal quantity
+ */
+int RuleItem::getHealQuantity () const
+{
+	return _heal;
+}
+
+/**
+ * Set the pain killer quantity of item
+ * @param pk the new pain killer quantity
+ */
+void RuleItem::setPainKillerQuantity (int pk)
+{
+	_painKiller = pk;
+}
+
+/**
+ * Get the pain killer quantity of item
+ * @return The new pain killer quantity
+ */
+int RuleItem::getPainKillerQuantity () const
+{
+	return _painKiller;
+}
+
+/**
+ * Set the stimulant quantity of item
+ * @param stimulant the new stimulant quantity
+ */
+void RuleItem::setStimulantQuantity (int stimulant)
+{
+	_stimulant = stimulant;
+}
+
+/**
+ * Get the stimulant quantity of item
+ * @return The new stimulant quantity
+ */
+int RuleItem::getStimulantQuantity () const
+{
+	return _stimulant;
+}
+
+/**
+ * Get the amount of fatal wound healed per usage
+ * @return The amount of fatal wound healed
+ */
+int RuleItem::getHealAmount () const
+{
+	return _healAmount;
+}
+
+/**
+ * Get the amount of health added to wounded soldier health
+ * @return The amount of health to add
+ */
+int RuleItem::getHealthAmount () const
+{
+	return _healthAmount;
+}
+
+/**
+ * Set the amount of fatal wound healed per usage
+ * @param h The amount of fatal wound healed
+ */
+void RuleItem::setHealAmount (int h)
+{
+	_healAmount = h;
+}
+
+/**
+ * Set the amount of health added to wounded soldier health
+ * @param h The amount of health to add
+ */
+void RuleItem::setHealthAmount (int h)
+{
+	_healthAmount = h;
+}
+
+/**
+ * Get the amount of energy added to soldier energy
+ * @return The amount of energy to add
+ */
+int RuleItem::getEnergy () const
+{
+	return _energy;
+}
+
+/**
+ * Get the amount of stun removed to soldier stun level
+ * @return The amount of stun to remove
+ */
+int RuleItem::getStun () const
+{
+	return _stun;
+}
+
+/**
+ * Set the amount of energy added to soldier energy
+ * @param e The amount of energy to add
+ */
+void RuleItem::setEnergy (int e)
+{
+	_energy = e;
+}
+
+/**
+ * Set the amount of stun removed to soldier stun level
+ * @param s The amount of stun to remove
+ */
+void RuleItem::setStun (int s)
+{
+	_stun = s;
+}
+
+/**
+ * Get the amount to Time Unit used by medikit
+ * @return The amount to Time Unit used by medikit
+ */
+int RuleItem::getTUMedikit() const
+{
+	return _tuMedikit;
+}
+
+/**
+ * Set the amount to Time Unit used by medikit
+ * @param tu The amount to Time Unit used by medikit
+ */
+void RuleItem::setTUMedikit(int tu)
+{
+	_tuMedikit = tu;
+}
 }
