@@ -36,7 +36,7 @@ class ActionMenuState : public State
 {
 private:
 	BattleAction *_action;
-	ActionMenuItem *_actionMenu[5];
+	ActionMenuItem *_actionMenu[6];
 public:
 	/// Creates the Action Menu state.
 	ActionMenuState(Game *game, BattleAction *action, int x, int y);
