@@ -1254,7 +1254,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	rshoulder->addCost("STR_LEFT_LEG", 12);
 	rshoulder->addCost("STR_BELT", 10);
 	rshoulder->addCost("STR_LEFT_SHOULDER", 8);
-	rshoulder->addCost("STR_BACKPACK", 16);
+	rshoulder->addCost("STR_BACK_PACK", 16);
 
 	RuleInventory *lshoulder = new RuleInventory("STR_LEFT_SHOULDER");
 	lshoulder->setX(112);
@@ -1268,7 +1268,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	lshoulder->addCost("STR_LEFT_LEG", 12);
 	lshoulder->addCost("STR_BELT", 10);
 	lshoulder->addCost("STR_RIGHT_SHOULDER", 8);
-	lshoulder->addCost("STR_BACKPACK", 16);
+	lshoulder->addCost("STR_BACK_PACK", 16);
 
 	RuleInventory *rhand = new RuleInventory("STR_RIGHT_HAND");
 	rhand->setX(0);

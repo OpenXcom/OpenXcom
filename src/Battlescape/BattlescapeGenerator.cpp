@@ -574,10 +574,10 @@ void BattlescapeGenerator::addItem(RuleItem *item)
 		// find the first soldier with a free backpack
 		for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 		{
-			if (!(*i)->getItem("STR_BACKPACK"))
+			if (!(*i)->getItem("STR_BACK_PACK"))
 			{
 				bi->moveToOwner((*i));
-				bi->setSlot(_game->getRuleset()->getInventory("STR_BACKPACK"));
+				bi->setSlot(_game->getRuleset()->getInventory("STR_BACK_PACK"));
 				placed = true;
 				break;
 			}
@@ -645,10 +645,10 @@ void BattlescapeGenerator::addItem(RuleItem *item, BattleUnit *unit)
 		break;
 	case BT_MEDIKIT:
 	case BT_SCANNER:
-		if (!unit->getItem("STR_BACKPACK"))
+		if (!unit->getItem("STR_BACK_PACK"))
 		{
 			bi->moveToOwner(unit);
-			bi->setSlot(_game->getRuleset()->getInventory("STR_BACKPACK"));
+			bi->setSlot(_game->getRuleset()->getInventory("STR_BACK_PACK"));
 			placed = true;
 		}
 		break;
