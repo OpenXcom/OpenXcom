@@ -878,7 +878,7 @@ void Base::removeProduction (Production * p)
 {
 	_engineers += p->getAssignedEngineers();
 	std::vector<Production *>::iterator iter = std::find (_productions.begin (), _productions.end (), p);
-	if (iter == _productions.end ())
+	if (iter != _productions.end ())
 	{
 		_productions.erase(iter);
 	}
