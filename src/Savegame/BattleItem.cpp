@@ -60,6 +60,9 @@ void BattleItem::load(const YAML::Node &node)
 	node["inventoryX"] >> _inventoryX;
 	node["inventoryY"] >> _inventoryY;
 	node["ammoqty"] >> _ammoQuantity;
+	node["painKiller"] >> _painKiller;
+	node["heal"] >> _heal;
+	node["stimulant"] >> _stimulant;
 }
 
 /**
@@ -109,6 +112,9 @@ void BattleItem::save(YAML::Emitter &out) const
 		out << YAML::Key << "ammoItem" << YAML::Value << -1;
 	}
 
+	out << YAML::Key << "painKiller" << YAML::Value << _painKiller;
+	out << YAML::Key << "heal" << YAML::Value << _heal;
+	out << YAML::Key << "stimulant" << YAML::Value << _stimulant;
 
 	out << YAML::EndMap;
 }

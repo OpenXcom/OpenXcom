@@ -176,6 +176,38 @@ void RuleItem::load(const YAML::Node &node)
 		{
 			i.second() >> _invHeight;
 		}
+		else if (key == "painKiller")
+		{
+			i.second() >> _painKiller;
+		}
+		else if (key == "heal")
+		{
+			i.second() >> _heal;
+		}
+		else if (key == "stimulant")
+		{
+			i.second() >> _stimulant;
+		}
+		else if (key == "healAmount")
+		{
+			i.second() >> _healAmount;
+		}
+		else if (key == "healthAmount")
+		{
+			i.second() >> _healthAmount;
+		}
+		else if (key == "stun")
+		{
+			i.second() >> _stun;
+		}
+		else if (key == "energy")
+		{
+			i.second() >> _energy;
+		}
+		else if (key == "tuMedikit")
+		{
+			i.second() >> _tuMedikit;
+		}
 	}
 }
 
@@ -216,6 +248,14 @@ void RuleItem::save(YAML::Emitter &out) const
 	out << YAML::Key << "waypoint" << YAML::Value << _waypoint;
 	out << YAML::Key << "invWidth" << YAML::Value << _invWidth;
 	out << YAML::Key << "invHeight" << YAML::Value << _invHeight;
+	out << YAML::Key << "painKiller" << YAML::Value << _painKiller;
+	out << YAML::Key << "heal" << YAML::Value << _heal;
+	out << YAML::Key << "stimulant" << YAML::Value << _stimulant;
+	out << YAML::Key << "healAmount" << YAML::Value << _healAmount;
+	out << YAML::Key << "healthAmount" << YAML::Value << _healthAmount;
+	out << YAML::Key << "stun" << YAML::Value << _stun;
+	out << YAML::Key << "energy" << YAML::Value << _energy;
+	out << YAML::Key << "tuMedikit" << YAML::Value << _tuMedikit;
 	out << YAML::EndMap;
 }
 
