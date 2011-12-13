@@ -752,6 +752,10 @@ void SavedBattleGame::resetUnitTiles()
 			}
 
 		}
+		if ((*i)->getFaction() == FACTION_PLAYER)
+		{
+			(*i)->setVisible(true);
+		}
 	}
 }
 

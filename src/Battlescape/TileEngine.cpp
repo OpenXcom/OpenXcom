@@ -507,12 +507,12 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 			int rndPower = RNG::generate(0, power*2); // RNG::boxMuller(power, power/3)
 			BattleUnit *bu = _save->getTile(Position(center.x/16, center.y/16, center.z/24))->getUnit();
 			
-			bu->damage(Position(center.x%16, center.y%16, center.z%24), rndPower);
+			bu->damage(Position(center.x%16, center.y%16, center.z%24), rndPower, type);
 
 			// conventional weapons can cause additional stun damage
 			if (type == DT_AP)
 			{
-				bu->stun(RNG::generate(0, rndPower/4));
+				bu->damage(Position(center.x%16, center.y%16, center.z%24), RNG::generate(0, rndPower/4), DT_STUN);
 			}
 
 			unit->addFiringExp();
@@ -575,7 +575,7 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 						{
 							// power 50 - 150%
 							if (dest->getUnit())
-								dest->getUnit()->damage(Position(0, 0, 0), (int)(RNG::generate(power_/2.0, power_*1.5)));
+								dest->getUnit()->damage(Position(0, 0, 0), (int)(RNG::generate(power_/2.0, power_*1.5)), type);
 							// destroy floors above
 							Tile *tileAbove = _save->getTile(Position(tileX, tileY, tileZ+1));
 							if ( tileAbove && tileAbove->getMapData(MapData::O_FLOOR) && power_ / 2 >= tileAbove->getMapData(MapData::O_FLOOR)->getArmor())
@@ -599,7 +599,7 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 							}
 							if (dest->getUnit())
 							{
-								dest->getUnit()->damage(Position(0, 0, 0), RNG::generate(0, power_/3)); // immediate IN damage
+								dest->getUnit()->damage(Position(0, 0, 0), RNG::generate(0, power_/3), type); // immediate IN damage
 								dest->getUnit()->setFire(RNG::generate(1, 5)); // catch fire and burn for 1-5 rounds
 							}
 						}
@@ -1175,7 +1175,7 @@ void TileEngine::prepareNewTurn()
 		if ((*i)->getUnit())
 		{
 			// units in smoke suffer stun
-			(*i)->getUnit()->stun(((*i)->getSmoke()/5)+1);
+			(*i)->getUnit()->damage(Position(), ((*i)->getSmoke()/5)+1, DT_STUN);
 		}
 
 		Tile *t = _save->getTile(Position(x+spreadX, y+spreadY, z));
@@ -1204,7 +1204,7 @@ void TileEngine::prepareNewTurn()
 		if ((*i)->getUnit())
 		{
 			// units on a flaming tile suffer damage
-			(*i)->getUnit()->damage(Position(0,0,0), RNG::generate(1,12));
+			(*i)->getUnit()->damage(Position(0,0,0), RNG::generate(1,12), DT_IN);
 			// units on a flaming tile can catch fire 33% chance
 			if (RNG::generate(0,2) == 1)
 			{

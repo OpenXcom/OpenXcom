@@ -220,10 +220,14 @@ void BattlescapeGenerator::run()
 		_save->setSelectedUnit(_save->getUnits()->at(0)); // select first unit
 
 		// maybe we should assign all units to the first tile of the skyranger before the inventory pre-equip and then reassign them to their correct tile afterwards?
+		// fix: make them invisible, they are made visible afterwards.
 		for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 		{
 			if ((*i)->getFaction() == FACTION_PLAYER)
+			{
 				_craftInventoryTile->setUnit(*i);
+				(*i)->setVisible(false);
+			}
 		}
 		
 		// add items that are in the craft

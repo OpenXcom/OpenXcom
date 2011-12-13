@@ -1588,6 +1588,8 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	RuleArmor *tankArmor = new RuleArmor("TANK_ARMOR", "TANKS.PCK", 2, MT_WALK, 2);
 	tankArmor->setArmor(90, 75, 60, 60);
 	tankArmor->setCorpseItem("STR_TANK_CORPSE");
+	tankArmor->setDamageModifier(0, DT_STUN);
+	tankArmor->setMechanical(true);
 
 	_armors.insert(std::pair<std::string, RuleArmor*>("STR_NONE_UC", coveralls));
 	_armors.insert(std::pair<std::string, RuleArmor*>("STR_PERSONAL_ARMOR_UC", personalArmor));

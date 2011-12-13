@@ -24,6 +24,7 @@
 #include "../Battlescape/Position.h"
 #include "../Battlescape/BattlescapeState.h"
 #include "Soldier.h"
+#include "../Ruleset/RuleItem.h"
 
 namespace OpenXcom
 {
@@ -72,7 +73,7 @@ private:
 	std::vector<BattleItem*> _inventory;
 	BattleAIState *_currentAIState;
 	bool _visible;
-	Surface *_cache[5]; // for large units there are 4 parts + turret
+	Surface *_cache[5];
 	bool _cacheInvalid;
 	int _expBravery, _expReactions, _expFiring, _expThrowing, _expPsiSkill, _expMelee;
 	int improveStat(int exp);
@@ -149,9 +150,9 @@ public:
 	/// Gets the unit's bravery.
 	int getMorale() const;
 	/// Do damage to the unit.
-	void damage(Position position, int power);
-	/// Do stun to the unit.
-	void stun(int power);
+	void damage(Position position, int power, ItemDamageType type);
+	/// Heal stun level of the unit.
+	void healStun(int power);
 	/// Gets the unit's stun level.
 	int getStunlevel() const;
 	/// Start falling sequence.

@@ -75,6 +75,19 @@ void UnitDieBState::init()
 		Soldier *s = dynamic_cast<Soldier*>(_unit->getUnit());
 		if (s)
 		{
+			// soldiers have screams depending on gender
+			if (s->getGender() == GENDER_MALE)
+			{
+				_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(RNG::generate(41,43))->play();
+			}
+			else
+			{
+				_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(RNG::generate(44,46))->play();
+			}
+		}
+		else
+		{
+			// todo get death sound from RuleGenUnit
 			if (_unit->getUnit()->getArmor()->getSize() > 1)
 			{
 				// HWP destroy sound
@@ -82,21 +95,8 @@ void UnitDieBState::init()
 			}
 			else
 			{
-				// soldiers have screams depending on gender
-				if (s->getGender() == GENDER_MALE)
-				{
-					_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(RNG::generate(41,43))->play();
-				}
-				else
-				{
-					_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(RNG::generate(44,46))->play();
-				}
+				_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(10)->play();
 			}
-		}
-		else
-		{
-			// todo get death sound from RuleGenUnit
-			_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(10)->play();
 		}
 	}
 
@@ -156,10 +156,6 @@ std::string UnitDieBState::getResult() const
  */
 void UnitDieBState::convertUnitToCorpse(BattleUnit *unit, TileEngine *terrain)
 {
-	BattleItem *corpse = new BattleItem(_parent->getGame()->getRuleset()->getItem(_unit->getUnit()->getArmor()->getCorpseItem()),_parent->getGame()->getSavedGame()->getBattleGame()->getCurrentItemId());
-	corpse->setUnit(unit);
-	_parent->dropItem(_unit->getPosition(), corpse, true);
-
 	// move inventory from unit to the ground
 	for (std::vector<BattleItem*>::iterator i = _unit->getInventory()->begin(); i != _unit->getInventory()->end(); ++i)
 	{
@@ -176,6 +172,10 @@ void UnitDieBState::convertUnitToCorpse(BattleUnit *unit, TileEngine *terrain)
 		for (int y = size; y >= 0; y--)
 		{
 			_parent->getGame()->getSavedGame()->getBattleGame()->getTile(_unit->getPosition() + Position(x,y,0))->setUnit(0);
+
+			BattleItem *corpse = new BattleItem(_parent->getGame()->getRuleset()->getItem(_unit->getUnit()->getArmor()->getCorpseItem()),_parent->getGame()->getSavedGame()->getBattleGame()->getCurrentItemId());
+			corpse->setUnit(unit);
+			_parent->dropItem(_unit->getPosition() + Position(x,y,0), corpse, true);
 		}
 	}
 }

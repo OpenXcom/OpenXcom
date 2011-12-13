@@ -27,7 +27,7 @@ namespace OpenXcom
  * @param race String defining the race.
  * @param rank String defining the rank.
  */
-RuleGenUnit::RuleGenUnit(const std::string &type, std::string race, std::string rank) : _type(type), _race(race), _rank(rank), _armor(""), _standHeight(0), _kneelHeight(0), _loftemps(0), _value(0)
+RuleGenUnit::RuleGenUnit(const std::string &type, std::string race, std::string rank) : _type(type), _race(race), _rank(rank), _armor(""), _standHeight(0), _kneelHeight(0), _loftemps(0), _value(0), _deathSound(0)
 {
 
 }
@@ -160,5 +160,22 @@ int RuleGenUnit::getValue() const
 	return _value;
 }
 
+/**
+ * Set the unit's death sound.
+ * @param id.
+ */
+void RuleGenUnit::setDeathSound(int id)
+{
+	_deathSound = id;
+}
+
+/**
+ * Get the unit's death sound.
+ * @return id.
+ */
+int RuleGenUnit::getDeathSound() const
+{
+	return _deathSound;
+}
 
 }

@@ -38,7 +38,7 @@ private:
 	UnitStats _stats;
 	std::string _armor;
 	int _standHeight, _kneelHeight, _loftemps;
-	int _value;
+	int _value, _deathSound;
 public:
 	/// Creates a blank unit ruleset.
 	RuleGenUnit(const std::string &type, std::string race, std::string rank);
@@ -70,6 +70,10 @@ public:
 	void setValue(int value);
 	/// Get the value - for score calculation.
 	int getValue() const;
+	/// Set the death sound id.
+	void setDeathSound(int id);
+	/// Get the death sound id.
+	int getDeathSound() const;
 };
 
 }

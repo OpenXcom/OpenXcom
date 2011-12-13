@@ -521,29 +521,36 @@ bool Pathfinding::validateUpDown(BattleUnit *bu, Position startPosition, const i
 
 
 /*
- * Preview path, marks tiles.
- */
+* Preview path, marks tiles.
+*/
 bool Pathfinding::previewPath(bool bRemove)
 {
 	if (_path.empty())
 		return false;
-
+ 
 	if (!bRemove && _pathPreviewed)
 		return false;
-
+ 
 	_pathPreviewed = !bRemove;
-
+ 
 	Position pos = _unit->getPosition();
 	Position destination;
 	int tus = _unit->getTimeUnits();
-
+	int size = _unit->getUnit()->getArmor()->getSize() - 1;
+ 
 	for (std::vector<int>::reverse_iterator i = _path.rbegin(); i != _path.rend(); ++i)
 	{
 		int dir = *i;
 		int tu = getTUCost(pos, dir, &destination, _unit); // gets tu cost, but also gets the destination position.
 		tus -= tu;
 		pos = destination;
-		_save->getTile(pos)->setMarkerColor(bRemove?0:(tus>0?4:3));
+		for (int x = size; x >= 0; x--)
+		{
+			for (int y = size; y >= 0; y--)
+			{
+				_save->getTile(pos + Position(x,y,0))->setMarkerColor(bRemove?0:(tus>0?4:3));           
+			}
+		}
 	}
 	return true;
 }
