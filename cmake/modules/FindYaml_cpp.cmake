@@ -4,10 +4,6 @@
 # YAMLCPP_FOUND, if false, do not try to link to SDL
 # YAMLCPP_INCLUDE_DIR, where to find SDL/SDL.h
 #
-# $SDLDIR is an environment variable that would
-# correspond to the ./configure --prefix=$SDLDIR
-# used in building SDL.
-#
 # Created by Guillaume Chevallereau. This was influenced by the FindSDL.cmake 
 # module.
 
@@ -55,6 +51,26 @@ FIND_LIBRARY(YAMLCPP_LIBRARY
   /opt
 )
 
+if ( APPLE )
+  if ( NOT YAMLCPP_LIBRARY )
+    FIND_LIBRARY(YAMLCPP_LIBRARY 
+      NAMES YAML
+      HINTS
+      $ENV{YAMLCPPDIR}
+      PATH_SUFFIXES lib64 lib
+      PATHS
+      ~/Library/Frameworks
+      /Library/Frameworks
+      /usr/local
+      /usr
+      /sw
+      /opt/local
+      /opt/csw
+      /opt
+      )
+  endif ()
+endif ()
+
 SET(YAMLCPP_FOUND "NO")
 
 IF(YAMLCPP_LIBRARY AND YAMLCPP_INCLUDE_DIR)
@@ -62,3 +78,9 @@ IF(YAMLCPP_LIBRARY AND YAMLCPP_INCLUDE_DIR)
   SET(YAMLCPP_INCLUDE_DIR "${YAMLCPP_INCLUDE_DIR};${YAMLCPP_INCLUDE_DIR}/..")
 ENDIF(YAMLCPP_LIBRARY AND YAMLCPP_INCLUDE_DIR)
 
+set ( YAMLCPP_LIBRARY_DIRS "" )
+foreach( my_yamlcpp_lib ${YAMLCPP_LIBRARY} )
+  get_filename_component(_yamlcpp_my_lib_path "${my_yamlcpp_lib}" PATH)
+  list(APPEND YAMLCPP_LIBRARY_DIRS ${_yamlcpp_my_lib_path})
+endforeach()
+list(REMOVE_DUPLICATES YAMLCPP_LIBRARY_DIRS)
