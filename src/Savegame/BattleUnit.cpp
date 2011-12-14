@@ -1537,7 +1537,7 @@ void BattleUnit::painKillers ()
 void BattleUnit::stimulant (int energy, int s)
 {
 	_energy += energy;
-	stun (s * -1);
+	healStun (s);
 }
 }
 
