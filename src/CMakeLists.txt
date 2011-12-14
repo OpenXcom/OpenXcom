@@ -487,10 +487,25 @@ endif ()
 
 set ( openxcom_src main.cpp ${basescape_src} ${battlescape_src} ${engine_src} ${geoscape_src} ${interface_src} ${menu_src} ${resource_src} ${ruleset_src} ${savegame_src} ${ufopedia_src} )
 
-set ( EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin )
+set ( install_dest RUNTIME )
+set ( set_exec_path ON )
+set ( install_dest_dir bin )
+if ( APPLE )
+  set ( openxcom_src ${openxcom_src} ${MACOS_SDLMAIN_M_PATH} )
+  if ( CREATE_BUNDLE )
+    set ( application_type MACOSX_BUNDLE )
+    set ( EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR} )
+    set ( install_dest BUNDLE )
+    set ( set_exec_path OFF )
+    set ( install_dest_dir "" )
+  endif ()
+endif ()
+if ( set_exec_path )
+  set ( EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin )
+endif ()
 
 add_executable ( openxcom  ${application_type} ${openxcom_src} )
-install ( TARGETS openxcom RUNTIME DESTINATION bin )
+install ( TARGETS openxcom ${install_dest} DESTINATION bin )
 # Extra link flags for windows. they need to be before the SDL/YAML link flags. Otherwise, you will get strange link errors('Undefined reference to WinMain@16')
 if ( WIN32 )
   set ( basic_windows_libs advapi32.lib shell32.lib shlwapi.lib )
@@ -522,6 +537,32 @@ if ( WIN32 )
       COMMAND ${CMAKE_COMMAND} -E copy ${dll} ${EXECUTABLE_OUTPUT_PATH} )
     install ( FILES ${dll} DESTINATION bin)
   endforeach()
+endif ()
+
+if ( APPLE AND CREATE_BUNDLE )
+  list ( APPEND frameworks "${SDLGFX_LIBRARY}" )
+  list ( APPEND frameworks "${SDLMIXER_LIBRARY}" )
+  list ( APPEND frameworks "${SDL_LIBRARY}" )
+  list ( APPEND frameworks "${YAMLCPP_LIBRARY}" )
+
+  foreach ( framework ${frameworks} )
+    get_filename_component ( framework_name ${framework} NAME )
+    if ( EXISTS "${framework}" )
+      if ( "${CMAKE_GENERATOR}" STREQUAL "Xcode" )
+	add_custom_command ( TARGET openxcom
+	  POST_BUILD
+	  COMMAND ${CMAKE_COMMAND} -E make_directory ${EXECUTABLE_OUTPUT_PATH}/Debug/openxcom.app/Contents/Frameworks/${framework_name}
+	  COMMAND ${CMAKE_COMMAND} -E copy_directory ${framework} ${EXECUTABLE_OUTPUT_PATH}/Debug/openxcom.app/Contents/Frameworks/${framework_name}
+	  COMMAND ${CMAKE_COMMAND} -E make_directory ${EXECUTABLE_OUTPUT_PATH}/Release/openxcom.app/Contents/Frameworks/${framework_name}
+	  COMMAND ${CMAKE_COMMAND} -E copy_directory ${framework} ${EXECUTABLE_OUTPUT_PATH}/Release/openxcom.app/Contents/Frameworks/${framework_name} )
+      else ()
+	add_custom_command ( TARGET openxcom
+	  POST_BUILD
+	  COMMAND ${CMAKE_COMMAND} -E make_directory ${EXECUTABLE_OUTPUT_PATH}/openxcom.app/Contents/Frameworks/${framework_name}
+	  COMMAND ${CMAKE_COMMAND} -E copy_directory ${framework} ${EXECUTABLE_OUTPUT_PATH}/openxcom.app/Contents/Frameworks/${framework_name} )
+      endif ()
+    endif ()
+  endforeach ()
 endif ()
 
 #Setup source group for IDE

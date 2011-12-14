@@ -22,6 +22,7 @@
 #include <string>
 #include "yaml.h"
 #include "MapData.h"
+#include "RuleItem.h"
 
 namespace OpenXcom
 {
@@ -38,7 +39,8 @@ private:
 	int _frontArmor, _sideArmor, _rearArmor, _underArmor, _drawingRoutine;
 	MovementType _movementType;
 	int _size;
-
+	float _damageModifier[8];
+	bool _mechanical;
 public:
 	/// Creates a blank armor ruleset.
 	RuleArmor(const std::string &type, std::string spriteSheet, int drawingRoutine, MovementType _movementType = MT_WALK, int size = 1);
@@ -72,6 +74,14 @@ public:
 	MovementType getMovementType() const;
 	/// Get whether this is a normal or big unit.
 	int getSize() const;
+	/// Sets damage modifier. Only need to set when <> 1
+	void setDamageModifier(float dm, ItemDamageType dt);
+	/// Gets damage modifier.
+	float getDamageModifier(ItemDamageType dt);
+	/// Sets whether this is a mechanical unit.
+	void setMechanical(bool flag);
+	/// Gets whether this is a mechanical unit.
+	bool isMechanical();
 };
 
 }

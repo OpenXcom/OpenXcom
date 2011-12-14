@@ -31,7 +31,7 @@ namespace OpenXcom
 RuleItem::RuleItem(const std::string &type) : _type(type), _size(0.0), _cost(0), _time(24), _weight(0), _bigSprite(-1), _floorSprite(-1), _handSprite(120), _bulletSprite(-1),
 									   _fireSound(-1), _hitSound(-1), _hitAnimation(0), _power(0), _priority(0), _compatibleAmmo(), _damageType(DT_NONE),
 									   _accuracyAuto(0), _accuracySnap(0), _accuracyAimed(0), _tuAuto(0), _tuSnap(0), _tuAimed(0), _clipSize(0), _accuracyMelee(0), _tuMelee(0),
-					   _battleType(BT_NONE), _twoHanded(false), _waypoint(false), _invWidth(1), _invHeight(1),
+					   _battleType(BT_NONE), _twoHanded(false), _waypoint(false), _fixedWeapon(false), _invWidth(1), _invHeight(1),
 					   _painKiller(0), _heal(0), _stimulant(0), _healAmount(0), _healthAmount(0), _energy(0), _stun(0), _tuMedikit(0)
 {
 }
@@ -418,6 +418,26 @@ bool RuleItem::getTwoHanded() const
 void RuleItem::setTwoHanded(bool flag)
 {
 	_twoHanded = flag;
+}
+
+/**
+ * Returns whether this item is a fixed weapon.
+ * You can't move/throw/drop fixed weapons - ie. HWP turrets.
+ * @return Is it fixed weapon?
+ */
+bool RuleItem::getFixed() const
+{
+	return _fixedWeapon;
+}
+
+/**
+ * Changes whether this item is a fixed weapon.
+ * You can't move/throw/drop fixed weapons - ie. HWP turrets.
+ * @param flag Is it a fixed weapon?
+ */
+void RuleItem::setFixed(bool flag)
+{
+	_fixedWeapon = flag;
 }
 
 /**

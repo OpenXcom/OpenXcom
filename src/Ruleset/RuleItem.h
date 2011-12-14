@@ -53,7 +53,7 @@ private:
 	int _accuracyAuto, _accuracySnap, _accuracyAimed, _tuAuto, _tuSnap, _tuAimed;
 	int _clipSize, _accuracyMelee, _tuMelee;
 	BattleType _battleType;
-	bool _twoHanded, _waypoint;
+	bool _twoHanded, _waypoint, _fixedWeapon;
 	int _invWidth, _invHeight;
 	int _painKiller, _heal, _stimulant;
 	int _healAmount, _healthAmount;
@@ -102,6 +102,10 @@ public:
 	bool getTwoHanded() const;
 	/// Sets if the item is two-handed.
 	void setTwoHanded(bool flag);
+	/// Gets if the item is fixed.
+	bool getFixed() const;
+	/// Sets if the item is fixed.
+	void setFixed(bool flag);
 	/// Gets the item's bullet sprite reference.
 	int getBulletSprite() const;
 	/// Sets the item's bulet sprite reference.

@@ -201,11 +201,15 @@ void BattlescapeGenerator::run()
 
 	// lets generate the map now and store it inside the tile objects
 	generateMap();
+	BattleUnit *unit;
 
 	if (_craft != 0)
 	{
 		// add vehicles that are in the craft - a vehicle is actually an item, which you will never see as it is converted to a unit
-		//addVehicle(_game->getRuleset()->getGenUnit("TANK_CANNON"));
+		// however the item itself becomes the weapon it "holds".
+		unit = addVehicle(_game->getRuleset()->getGenUnit("TANK_CANNON"));
+		addItem(_game->getRuleset()->getItem("STR_TANK_CANNON"), unit);
+		addItem(_game->getRuleset()->getItem("STR_HWP_CANNON_SHELLS"), unit);
 
 		// add soldiers that are in the craft
 		for (std::vector<Soldier*>::iterator i = _craft->getBase()->getSoldiers()->begin(); i != _craft->getBase()->getSoldiers()->end(); ++i)
@@ -216,10 +220,14 @@ void BattlescapeGenerator::run()
 		_save->setSelectedUnit(_save->getUnits()->at(0)); // select first unit
 
 		// maybe we should assign all units to the first tile of the skyranger before the inventory pre-equip and then reassign them to their correct tile afterwards?
+		// fix: make them invisible, they are made visible afterwards.
 		for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 		{
 			if ((*i)->getFaction() == FACTION_PLAYER)
+			{
 				_craftInventoryTile->setUnit(*i);
+				(*i)->setVisible(false);
+			}
 		}
 		
 		// add items that are in the craft
@@ -247,7 +255,7 @@ void BattlescapeGenerator::run()
 		addItem(_game->getRuleset()->getItem("STR_GRENADE"));*/
 	}
 
-	BattleUnit *unit;
+	
 	if (_missionType == MISS_UFORECOVERY)
 	{
 		// TODO : this should be in rulesets 
@@ -574,10 +582,10 @@ void BattlescapeGenerator::addItem(RuleItem *item)
 		// find the first soldier with a free backpack
 		for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 		{
-			if (!(*i)->getItem("STR_BACKPACK"))
+			if (!(*i)->getItem("STR_BACK_PACK"))
 			{
 				bi->moveToOwner((*i));
-				bi->setSlot(_game->getRuleset()->getInventory("STR_BACKPACK"));
+				bi->setSlot(_game->getRuleset()->getInventory("STR_BACK_PACK"));
 				placed = true;
 				break;
 			}
@@ -645,10 +653,10 @@ void BattlescapeGenerator::addItem(RuleItem *item, BattleUnit *unit)
 		break;
 	case BT_MEDIKIT:
 	case BT_SCANNER:
-		if (!unit->getItem("STR_BACKPACK"))
+		if (!unit->getItem("STR_BACK_PACK"))
 		{
 			bi->moveToOwner(unit);
-			bi->setSlot(_game->getRuleset()->getInventory("STR_BACKPACK"));
+			bi->setSlot(_game->getRuleset()->getInventory("STR_BACK_PACK"));
 			placed = true;
 		}
 		break;

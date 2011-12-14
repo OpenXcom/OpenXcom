@@ -601,8 +601,9 @@ int BattleUnit::getMorale() const
  * Do an amount of damage.
  * @param position The position defines which part of armor and/or bodypart is hit.
  * @param power
+ * @param type
  */
-void BattleUnit::damage(Position position, int power)
+void BattleUnit::damage(Position position, int power, ItemDamageType type)
 {
 	int damage;
 	UnitSide side;
@@ -614,47 +615,55 @@ void BattleUnit::damage(Position position, int power)
 		return;
 	}
 
+	power *= _unit->getArmor()->getDamageModifier(type);
+
+	if (type == DT_STUN)
+	{
+		_stunlevel += power;
+		return;
+	}
+
 	if (position == Position(0, 0, 0))
 	{
 		side = SIDE_UNDER;
 	}
 	else
 	{
-		// normalize x and y
+		// normalize x and y towards north
 		int x = 8, y = 8;
 		switch(_direction)
 		{
-		case 0: // heading north, all is the same
+		case 0: // heading north
 			x = position.x;
-			y = position.y;
+			y = 15 - position.y;
 			break;
 		case 1: // somewhere in between 0 and 2
-			x = (position.x + (15 - position.y))/2;
-			y = (position.y + position.x)/2;
+			x = (position.x + position.y)/2;
+			y = ((15 - position.y) + position.x)/2;
 			break;
 		case 2: // heading east
 			x = 15 - position.y;
-			y = position.x;
+			y = 15 - position.x;
 			break;
 		case 3:
-			x = ((15 - position.y) + (15 - position.x))/2;
-			y = (position.x + (15 - position.y))/2;
+			x = (position.y + (15 - position.x))/2;
+			y = (position.x + position.y)/2;
 			break;
-		case 4: // heading south, both axis inversed
+		case 4: // heading south
 			x = 15 - position.x;
-			y = 15 - position.y;
+			y = position.y;
 			break;
 		case 5:
-			x = ((15 - position.x) + position.y)/2;
-			y = ((15 - position.y) + (15 - position.x))/2;
+			x = ((15 - position.x) + (15 - position.y))/2;
+			y = (position.y + (15 - position.x))/2;
 			break;
 		case 6: // heading west
-			x = position.y;
+			x = 15 - position.y;
 			y = 15 - position.x;
 			break;
 		case 7:
-			x = (position.y + position.x)/2;
-			y = ((15 - position.x) + position.y)/2;
+			x = ((15 - position.y) + position.x)/2;
+			y = ((15 - position.x) + (15 - position.y))/2;
 			break;
 		}
 		// determine side
@@ -702,13 +711,15 @@ void BattleUnit::damage(Position position, int power)
 
 	if (damage > 0)
 	{
-		// fatal wounds
-		if (RNG::generate(0,damage) > 2)
-			_fatalWounds[bodypart] += RNG::generate(1,3);
+		if (!_unit->getArmor()->isMechanical())
+		{
+			// fatal wounds
+			if (RNG::generate(0,damage) > 2)
+				_fatalWounds[bodypart] += RNG::generate(1,3);
 
-		if (_fatalWounds[bodypart])
-			moraleChange(-_fatalWounds[bodypart]);
-
+			if (_fatalWounds[bodypart])
+				moraleChange(-_fatalWounds[bodypart]);
+		}
 		// armor damage
 		setArmor(getArmor(side) - (damage+5)/10, side);
 		// health damage
@@ -720,12 +731,12 @@ void BattleUnit::damage(Position position, int power)
 }
 
 /**
- * Do an amount of stun. Can be negative amount = stun recovery.
+ * Do an amount of stun recovery.
  * @param power
  */
-void BattleUnit::stun(int power)
+void BattleUnit::healStun(int power)
 {
-	_stunlevel += power;
+	_stunlevel -= power;
 	// recover from unconscious
 	if (_status == STATUS_UNCONSCIOUS && _stunlevel < _health && _health > 0)
 	{
@@ -1025,7 +1036,7 @@ void BattleUnit::prepareNewTurn()
 
 	// recover stun 1pt/turn
 	if (_stunlevel > 0)
-		stun(-1);
+		healStun(1);
 
 	if (!isOut())
 	{
@@ -1054,6 +1065,8 @@ void BattleUnit::prepareNewTurn()
  */
 void BattleUnit::moraleChange(int change)
 {
+	if (_unit->getArmor()->isMechanical()) return;
+
 	_morale += change;
 	if (_morale > 100)
 		_morale = 100;

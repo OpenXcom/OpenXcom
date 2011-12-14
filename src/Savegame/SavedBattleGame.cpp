@@ -737,21 +737,26 @@ bool SavedBattleGame::getDebugMode() const
  */
 void SavedBattleGame::resetUnitTiles()
 {
-	/*for (std::vector<BattleUnit*>::iterator i = _units.begin(); i != _units.end(); ++i)
+	for (std::vector<BattleUnit*>::iterator i = _units.begin(); i != _units.end(); ++i)
 	{
 		if (!(*i)->isOut())
 		{
 			int size = (*i)->getUnit()->getArmor()->getSize() - 1;
-
 			for (int x = size; x >= 0; x--)
 			{
 				for (int y = size; y >= 0; y--)
 				{
-					getTile((*i)->getPosition() + Position(x,y,0))->setUnit((*i));
+					Tile *t = getTile((*i)->getPosition() + Position(x,y,0));
+					t->setUnit((*i));
 				}
 			}
+
 		}
-	}*/
+		if ((*i)->getFaction() == FACTION_PLAYER)
+		{
+			(*i)->setVisible(true);
+		}
+	}
 }
 
 /**

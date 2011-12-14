@@ -535,6 +535,9 @@ void BattlescapeState::mapClick(Action *action)
 				{
 					_battleGame->setSelectedUnit(unit);
 					updateSoldierInfo();
+					_action.targeting = false;
+					_action.type = BA_NONE;
+					setupCursor();
 				}
 			}
 			else if (playableUnitSelected())
