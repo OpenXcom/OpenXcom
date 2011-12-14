@@ -55,6 +55,10 @@ private:
 	BattleType _battleType;
 	bool _twoHanded, _waypoint, _fixedWeapon;
 	int _invWidth, _invHeight;
+	int _painKiller, _heal, _stimulant;
+	int _healAmount, _healthAmount;
+	int _stun, _energy;
+	int _tuUse;
 public:
 	/// Creates a blank item ruleset.
 	RuleItem(const std::string &type);
@@ -170,6 +174,38 @@ public:
 	void setClipSize(int size);
 	/// Draws the item's hand sprite onto a surface.
 	void drawHandSprite(SurfaceSet *texture, Surface *surface) const;
+	/// Set medikit heal quantity
+	void setHealQuantity (int heal);
+	/// Get medikit heal quantity
+	int getHealQuantity () const;
+	/// Set medikit pain killer quantity
+	void setPainKillerQuantity (int pk);
+	/// Get medikit pain killer quantity
+	int getPainKillerQuantity () const;
+	/// Set medikit stimulant quantity
+	void setStimulantQuantity (int stimulant);
+	/// Get medikit stimulant quantity
+	int getStimulantQuantity () const;
+	/// Get medikit heal amount per shot
+	int getHealAmount () const;
+	/// Get medikit health amount per shot
+	int getHealthAmount () const;
+	/// Set medikit heal amount per shot
+	void setHealAmount (int h);
+	/// Set medikit health amount per shot
+	void setHealthAmount (int h);
+	/// Get medikit energy amount per shot
+	int getEnergy () const;
+	/// Get medikit stun amount per shot
+	int getStun () const;
+	/// Set medikit energy amount per shot
+	void setEnergy (int e);
+	/// Set medikit stun amount per shot
+	void setStun (int s);
+	/// Get use Time Unit use
+	int getTUUse() const;
+	/// Set use Time Unit use
+	void setTUUse(int tu);
 };
 
 }

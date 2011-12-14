@@ -49,6 +49,7 @@ private:
 	int _inventoryX, _inventoryY;
 	BattleItem *_ammoItem;
 	int _explodeTurn, _ammoQuantity;
+	int _painKiller, _heal, _stimulant;
 public:
 	/// Creates a item of the specified type.
 	BattleItem(RuleItem *rules, int *id);
@@ -106,7 +107,18 @@ public:
 	BattleUnit *getUnit() const;
 	/// Sets the corpse's unit.
 	void setUnit(BattleUnit *unit);
-
+	/// Set medikit Heal quantity
+	void setHealQuantity (int heal);
+	/// Get medikit heal quantity
+	int getHealQuantity () const;
+	/// Set medikit pain killers quantity
+	void setPainKillerQuantity (int pk);
+	/// Get medikit pain killers quantity
+	int getPainKillerQuantity () const;
+	/// Set medikit stimulant quantity
+	void setStimulantQuantity (int stimulant);
+	/// Get medikit stimulant quantity
+	int getStimulantQuantity () const;
 };
 
 }

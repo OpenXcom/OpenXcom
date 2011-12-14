@@ -121,6 +121,8 @@ public:
 	void paletteRestore();
 	/// Specific blit function to blit battlescape terrain data in different shades in a fast way.
 	void blitNShade(Surface *surface, int x, int y, int off, bool half = false, int newBaseColor = 0);
+	/// Invalidate the surface: force it to be redrawn
+	void invalidate();
 };
 
 }
