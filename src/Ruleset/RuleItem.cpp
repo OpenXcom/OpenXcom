@@ -32,7 +32,7 @@ RuleItem::RuleItem(const std::string &type) : _type(type), _size(0.0), _cost(0),
 									   _fireSound(-1), _hitSound(-1), _hitAnimation(0), _power(0), _priority(0), _compatibleAmmo(), _damageType(DT_NONE),
 									   _accuracyAuto(0), _accuracySnap(0), _accuracyAimed(0), _tuAuto(0), _tuSnap(0), _tuAimed(0), _clipSize(0), _accuracyMelee(0), _tuMelee(0),
 					   _battleType(BT_NONE), _twoHanded(false), _waypoint(false), _fixedWeapon(false), _invWidth(1), _invHeight(1),
-					   _painKiller(0), _heal(0), _stimulant(0), _healAmount(0), _healthAmount(0), _energy(0), _stun(0), _tuMedikit(0)
+					   _painKiller(0), _heal(0), _stimulant(0), _healAmount(0), _healthAmount(0), _energy(0), _stun(0), _tuUse(0)
 {
 }
 
@@ -204,9 +204,9 @@ void RuleItem::load(const YAML::Node &node)
 		{
 			i.second() >> _energy;
 		}
-		else if (key == "tuMedikit")
+		else if (key == "tuUse")
 		{
-			i.second() >> _tuMedikit;
+			i.second() >> _tuUse;
 		}
 	}
 }
@@ -255,7 +255,7 @@ void RuleItem::save(YAML::Emitter &out) const
 	out << YAML::Key << "healthAmount" << YAML::Value << _healthAmount;
 	out << YAML::Key << "stun" << YAML::Value << _stun;
 	out << YAML::Key << "energy" << YAML::Value << _energy;
-	out << YAML::Key << "tuMedikit" << YAML::Value << _tuMedikit;
+	out << YAML::Key << "tuUse" << YAML::Value << _tuUse;
 	out << YAML::EndMap;
 }
 
@@ -878,20 +878,20 @@ void RuleItem::setStun (int s)
 }
 
 /**
- * Get the amount to Time Unit used by medikit
- * @return The amount to Time Unit used by medikit
+ * Get the amount of Time Unit needed to use this item
+ * @return The amount of Time Unit needed to use this item
  */
-int RuleItem::getTUMedikit() const
+int RuleItem::getTUUse() const
 {
-	return _tuMedikit;
+	return _tuUse;
 }
 
 /**
- * Set the amount to Time Unit used by medikit
- * @param tu The amount to Time Unit used by medikit
+ * Set the amount of Time Unit needed to use this item
+ * @param tu The amount of Time Unit needed to use this item
  */
-void RuleItem::setTUMedikit(int tu)
+void RuleItem::setTUUse(int tu)
 {
-	_tuMedikit = tu;
+	_tuUse = tu;
 }
 }

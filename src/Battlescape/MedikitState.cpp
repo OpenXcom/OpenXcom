@@ -180,13 +180,13 @@ void MedikitState::onHealClick(Action * action)
 {
 	int heal = _item->getHealQuantity();
 	RuleItem *rule = _item->getRules();
-	if (heal == 0 || _unit->getTimeUnits () < rule->getTUMedikit())
+	if (heal == 0 || _unit->getTimeUnits () < rule->getTUUse())
 	{
 		return;
 	}
 	_targetUnit->heal(_medikitView->getSelectedPart(), rule->getHealAmount(), rule->getHealthAmount());
 	_item->setHealQuantity(--heal);
-	_unit->spendTimeUnits (rule->getTUMedikit(), false);
+	_unit->spendTimeUnits (rule->getTUUse(), false);
 	_medikitView->invalidate();
 	update();
 }
@@ -199,7 +199,7 @@ void MedikitState::onStimulantClick(Action * action)
 {
 	int stimulant = _item->getStimulantQuantity();
 	RuleItem *rule = _item->getRules();
-	if (stimulant == 0 || _unit->getTimeUnits () < rule->getTUMedikit())
+	if (stimulant == 0 || _unit->getTimeUnits () < rule->getTUUse())
 	{
 		return;
 	}
@@ -209,7 +209,7 @@ void MedikitState::onStimulantClick(Action * action)
 		return;
 	}
 	_targetUnit->stimulant(rule->getEnergy(), rule->getStun());
-	_unit->spendTimeUnits (rule->getTUMedikit(), false);
+	_unit->spendTimeUnits (rule->getTUUse(), false);
 	_item->setStimulantQuantity(--stimulant);
 	update();
 }
@@ -222,11 +222,11 @@ void MedikitState::onPainKillerClick(Action * action)
 {
 	int pk = _item->getPainKillerQuantity();
 	RuleItem *rule = _item->getRules();
-	if (pk == 0 || _unit->getTimeUnits () < rule->getTUMedikit())
+	if (pk == 0 || _unit->getTimeUnits () < rule->getTUUse())
 	{
 		return;
 	}
-	_unit->spendTimeUnits (rule->getTUMedikit(), false);
+	_unit->spendTimeUnits (rule->getTUUse(), false);
 	_item->setPainKillerQuantity(--pk);
 	update();
 }

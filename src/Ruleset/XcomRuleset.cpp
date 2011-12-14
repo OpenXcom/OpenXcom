@@ -1131,7 +1131,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	medikit->setCost(70);
 	medikit->setBigSprite(24);
 	medikit->setWeight(5);
-	medikit->setTUMedikit(10);
+	medikit->setTUUse(10);
 
 	RuleManufactureInfo *mdd = new RuleManufactureInfo("STR_MEDI_KIT");
 	mdd->setCategory("STR_EQUIPMENT");

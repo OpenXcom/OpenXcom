@@ -119,9 +119,9 @@ ActionMenuState::ActionMenuState(Game *game, BattleAction *action, int x, int y)
 		ss1.str(L"");
 		ss2.str(L"");
 	}
-	if (_action->weapon->getRules()->getTUMedikit() != 0)
+	if (_action->weapon->getRules()->getTUUse() != 0)
 	{
-		tu = _action->weapon->getRules()->getTUMedikit();
+		tu = _action->weapon->getRules()->getTUUse();
 		ss2 << strTU.c_str() << tu;
 		_actionMenu[id]->setAction(BA_MEDIKIT, _game->getLanguage()->getString("STR_USE_MEDI_KIT"), L"", ss2.str(), tu);
 		_actionMenu[id]->setVisible(true);

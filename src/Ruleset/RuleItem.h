@@ -58,7 +58,7 @@ private:
 	int _painKiller, _heal, _stimulant;
 	int _healAmount, _healthAmount;
 	int _stun, _energy;
-	int _tuMedikit;
+	int _tuUse;
 public:
 	/// Creates a blank item ruleset.
 	RuleItem(const std::string &type);
@@ -202,10 +202,10 @@ public:
 	void setEnergy (int e);
 	/// Set medikit stun amount per shot
 	void setStun (int s);
-	/// Get medikit Time Unit use
-	int getTUMedikit() const;
-	/// Set medikit Time Unit use
-	void setTUMedikit(int tu);
+	/// Get use Time Unit use
+	int getTUUse() const;
+	/// Set use Time Unit use
+	void setTUUse(int tu);
 };
 
 }
