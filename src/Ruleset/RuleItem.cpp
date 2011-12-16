@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2011 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -31,7 +31,8 @@ namespace OpenXcom
 RuleItem::RuleItem(const std::string &type) : _type(type), _size(0.0), _cost(0), _time(24), _weight(0), _bigSprite(-1), _floorSprite(-1), _handSprite(120), _bulletSprite(-1),
 									   _fireSound(-1), _hitSound(-1), _hitAnimation(0), _power(0), _priority(0), _compatibleAmmo(), _damageType(DT_NONE),
 									   _accuracyAuto(0), _accuracySnap(0), _accuracyAimed(0), _tuAuto(0), _tuSnap(0), _tuAimed(0), _clipSize(0), _accuracyMelee(0), _tuMelee(0),
-					   _battleType(BT_NONE), _twoHanded(false), _waypoint(false), _fixedWeapon(false), _invWidth(1), _invHeight(1)
+					   _battleType(BT_NONE), _twoHanded(false), _waypoint(false), _fixedWeapon(false), _invWidth(1), _invHeight(1),
+					   _painKiller(0), _heal(0), _stimulant(0), _healAmount(0), _healthAmount(0), _energy(0), _stun(0), _tuUse(0)
 {
 }
 
@@ -175,6 +176,38 @@ void RuleItem::load(const YAML::Node &node)
 		{
 			i.second() >> _invHeight;
 		}
+		else if (key == "painKiller")
+		{
+			i.second() >> _painKiller;
+		}
+		else if (key == "heal")
+		{
+			i.second() >> _heal;
+		}
+		else if (key == "stimulant")
+		{
+			i.second() >> _stimulant;
+		}
+		else if (key == "healAmount")
+		{
+			i.second() >> _healAmount;
+		}
+		else if (key == "healthAmount")
+		{
+			i.second() >> _healthAmount;
+		}
+		else if (key == "stun")
+		{
+			i.second() >> _stun;
+		}
+		else if (key == "energy")
+		{
+			i.second() >> _energy;
+		}
+		else if (key == "tuUse")
+		{
+			i.second() >> _tuUse;
+		}
 	}
 }
 
@@ -215,6 +248,14 @@ void RuleItem::save(YAML::Emitter &out) const
 	out << YAML::Key << "waypoint" << YAML::Value << _waypoint;
 	out << YAML::Key << "invWidth" << YAML::Value << _invWidth;
 	out << YAML::Key << "invHeight" << YAML::Value << _invHeight;
+	out << YAML::Key << "painKiller" << YAML::Value << _painKiller;
+	out << YAML::Key << "heal" << YAML::Value << _heal;
+	out << YAML::Key << "stimulant" << YAML::Value << _stimulant;
+	out << YAML::Key << "healAmount" << YAML::Value << _healAmount;
+	out << YAML::Key << "healthAmount" << YAML::Value << _healthAmount;
+	out << YAML::Key << "stun" << YAML::Value << _stun;
+	out << YAML::Key << "energy" << YAML::Value << _energy;
+	out << YAML::Key << "tuUse" << YAML::Value << _tuUse;
 	out << YAML::EndMap;
 }
 
@@ -710,4 +751,147 @@ void RuleItem::drawHandSprite(SurfaceSet *texture, Surface *surface) const
 	texture->getFrame(this->getBigSprite())->blit(surface);
 }
 
+/**
+ * Set the heal quantity of item
+ * @param heal the new heal quantity
+ */
+void RuleItem::setHealQuantity (int heal)
+{
+	_heal = heal;
+}
+
+/**
+ * Get the heal quantity of item
+ * @return The new heal quantity
+ */
+int RuleItem::getHealQuantity () const
+{
+	return _heal;
+}
+
+/**
+ * Set the pain killer quantity of item
+ * @param pk the new pain killer quantity
+ */
+void RuleItem::setPainKillerQuantity (int pk)
+{
+	_painKiller = pk;
+}
+
+/**
+ * Get the pain killer quantity of item
+ * @return The new pain killer quantity
+ */
+int RuleItem::getPainKillerQuantity () const
+{
+	return _painKiller;
+}
+
+/**
+ * Set the stimulant quantity of item
+ * @param stimulant the new stimulant quantity
+ */
+void RuleItem::setStimulantQuantity (int stimulant)
+{
+	_stimulant = stimulant;
+}
+
+/**
+ * Get the stimulant quantity of item
+ * @return The new stimulant quantity
+ */
+int RuleItem::getStimulantQuantity () const
+{
+	return _stimulant;
+}
+
+/**
+ * Get the amount of fatal wound healed per usage
+ * @return The amount of fatal wound healed
+ */
+int RuleItem::getHealAmount () const
+{
+	return _healAmount;
+}
+
+/**
+ * Get the amount of health added to wounded soldier health
+ * @return The amount of health to add
+ */
+int RuleItem::getHealthAmount () const
+{
+	return _healthAmount;
+}
+
+/**
+ * Set the amount of fatal wound healed per usage
+ * @param h The amount of fatal wound healed
+ */
+void RuleItem::setHealAmount (int h)
+{
+	_healAmount = h;
+}
+
+/**
+ * Set the amount of health added to wounded soldier health
+ * @param h The amount of health to add
+ */
+void RuleItem::setHealthAmount (int h)
+{
+	_healthAmount = h;
+}
+
+/**
+ * Get the amount of energy added to soldier energy
+ * @return The amount of energy to add
+ */
+int RuleItem::getEnergy () const
+{
+	return _energy;
+}
+
+/**
+ * Get the amount of stun removed to soldier stun level
+ * @return The amount of stun to remove
+ */
+int RuleItem::getStun () const
+{
+	return _stun;
+}
+
+/**
+ * Set the amount of energy added to soldier energy
+ * @param e The amount of energy to add
+ */
+void RuleItem::setEnergy (int e)
+{
+	_energy = e;
+}
+
+/**
+ * Set the amount of stun removed to soldier stun level
+ * @param s The amount of stun to remove
+ */
+void RuleItem::setStun (int s)
+{
+	_stun = s;
+}
+
+/**
+ * Get the amount of Time Unit needed to use this item
+ * @return The amount of Time Unit needed to use this item
+ */
+int RuleItem::getTUUse() const
+{
+	return _tuUse;
+}
+
+/**
+ * Set the amount of Time Unit needed to use this item
+ * @param tu The amount of Time Unit needed to use this item
+ */
+void RuleItem::setTUUse(int tu)
+{
+	_tuUse = tu;
+}
 }

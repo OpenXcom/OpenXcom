@@ -713,4 +713,11 @@ void Surface::blitNShade(Surface *surface, int x, int y, int off, bool half, int
 		}
 }
 
+/**
+ * Set the surface to be redrawn
+ */
+void Surface::invalidate()
+{
+	_redraw = true;
+}
 }

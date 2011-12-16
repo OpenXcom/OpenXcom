@@ -190,6 +190,10 @@ openxcom_SOURCES = \
 	src/Battlescape/UnitDieBState.h \
 	src/Battlescape/InfoboxState.cpp \
 	src/Battlescape/InfoboxState.h \
+	src/Battlescape/MedikitView.cpp \
+	src/Battlescape/MedikitView.h \
+	src/Battlescape/MedikitState.cpp \
+	src/Battlescape/MedikitState.h \
 	src/dirent.h \
 	src/Engine/Action.cpp \
 	src/Engine/Action.h \

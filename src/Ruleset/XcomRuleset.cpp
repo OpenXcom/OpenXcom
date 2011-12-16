@@ -1118,6 +1118,27 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	mlr->setManufactureTime(300);
 	mlr->setManufactureCost(8000000);
 
+	RuleItem *medikit = new RuleItem("STR_MEDI_KIT");
+	medikit->setHealQuantity(10);
+	medikit->setPainKillerQuantity(10);
+	medikit->setStimulantQuantity(10);
+	medikit->setBattleType(BT_MEDIKIT);
+	medikit->setHealAmount(1);
+	medikit->setHealthAmount(3);
+	medikit->setEnergy (10);
+	medikit->setStun (4);
+	medikit->setSize(0.2f);
+	medikit->setCost(70);
+	medikit->setBigSprite(24);
+	medikit->setWeight(5);
+	medikit->setTUUse(10);
+
+	RuleManufactureInfo *mdd = new RuleManufactureInfo("STR_MEDI_KIT");
+	mdd->setCategory("STR_EQUIPMENT");
+	mdd->setRequiredSpace(2);
+	mdd->setManufactureTime(420);
+	mdd->setManufactureCost(28000);
+
 	_items.insert(std::pair<std::string, RuleItem*>("STR_STINGRAY_LAUNCHER", slauncher));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_AVALANCHE_LAUNCHER", alauncher));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_CANNON", icannon));
@@ -1156,12 +1177,14 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_items.insert(std::pair<std::string, RuleItem*>("STR_LASER_PISTOL", lp));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_PERSONAL_ARMOR", pa));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_LASER_RIFLE", lr));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_MEDI_KIT", medikit));
 
 
 	_manufacture.insert(std::pair<std::string, RuleManufactureInfo*>("STR_ALIEN_ALLOYS", maa));
 	_manufacture.insert(std::pair<std::string, RuleManufactureInfo*>("STR_LASER_PISTOL", mlp));
 	_manufacture.insert(std::pair<std::string, RuleManufactureInfo*>("STR_PERSONAL_ARMOR", mpa));
 	_manufacture.insert(std::pair<std::string, RuleManufactureInfo*>("STR_LASER_RIFLE", mlr));
+	_manufacture.insert(std::pair<std::string, RuleManufactureInfo*>("STR_MEDI_KIT", mdd));
 
 	// Add UFOs
 	RuleUfo *sscout = new RuleUfo("STR_SMALL_SCOUT");

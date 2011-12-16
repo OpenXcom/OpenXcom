@@ -29,11 +29,16 @@ namespace OpenXcom
  * Initializes a item of the specified type.
  * @param rules Pointer to ruleset.
  */
-BattleItem::BattleItem(RuleItem *rules, int *id) : _id(*id), _rules(rules), _owner(0), _previousOwner(0), _inventorySlot(0), _inventoryX(0), _inventoryY(0), _ammoItem(0), _explodeTurn(0), _ammoQuantity(0), _tile(0), _unit(0)
+BattleItem::BattleItem(RuleItem *rules, int *id) : _id(*id), _rules(rules), _owner(0), _previousOwner(0), _inventorySlot(0), _inventoryX(0), _inventoryY(0), _ammoItem(0), _explodeTurn(0), _ammoQuantity(0), _tile(0), _unit(0), _painKiller(0), _heal(0), _stimulant(0)
 {
 	if (_rules->getBattleType() == BT_AMMO)
 	{
 		setAmmoQuantity(_rules->getClipSize());
+	} else if (_rules && _rules->getBattleType() == BT_MEDIKIT)
+	{
+		setHealQuantity (_rules->getHealQuantity ());
+		setPainKillerQuantity (_rules->getPainKillerQuantity ());
+		setStimulantQuantity (_rules->getStimulantQuantity ());
 	}
 	(*id)++;
 }
@@ -55,6 +60,9 @@ void BattleItem::load(const YAML::Node &node)
 	node["inventoryX"] >> _inventoryX;
 	node["inventoryY"] >> _inventoryY;
 	node["ammoqty"] >> _ammoQuantity;
+	node["painKiller"] >> _painKiller;
+	node["heal"] >> _heal;
+	node["stimulant"] >> _stimulant;
 }
 
 /**
@@ -104,6 +112,9 @@ void BattleItem::save(YAML::Emitter &out) const
 		out << YAML::Key << "ammoItem" << YAML::Value << -1;
 	}
 
+	out << YAML::Key << "painKiller" << YAML::Value << _painKiller;
+	out << YAML::Key << "heal" << YAML::Value << _heal;
+	out << YAML::Key << "stimulant" << YAML::Value << _stimulant;
 
 	out << YAML::EndMap;
 }
@@ -376,4 +387,57 @@ void BattleItem::setUnit(BattleUnit *unit)
 	_unit = unit;
 }
 
+/**
+ * Set the heal quantity of item
+ * @param heal the new heal quantity
+ */
+void BattleItem::setHealQuantity (int heal)
+{
+	_heal = heal;
+}
+
+/**
+ * Get the heal quantity of item
+ * @return The new heal quantity
+ */
+int BattleItem::getHealQuantity () const
+{
+	return _heal;
+}
+
+/**
+ * Set the pain killer quantity of item
+ * @param pk the new pain killer quantity
+ */
+void BattleItem::setPainKillerQuantity (int pk)
+{
+	_painKiller = pk;
+}
+
+/**
+ * Get the pain killer quantity of item
+ * @return The new pain killer quantity
+ */
+int BattleItem::getPainKillerQuantity () const
+{
+	return _painKiller;
+}
+
+/**
+ * Set the stimulant quantity of item
+ * @param stimulant the new stimulant quantity
+ */
+void BattleItem::setStimulantQuantity (int stimulant)
+{
+	_stimulant = stimulant;
+}
+
+/**
+ * Get the stimulant quantity of item
+ * @return The new stimulant quantity
+ */
+int BattleItem::getStimulantQuantity () const
+{
+	return _stimulant;
+}
 }

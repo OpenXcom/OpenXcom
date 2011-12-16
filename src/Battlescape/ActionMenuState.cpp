@@ -30,6 +30,10 @@
 #include "../Engine/Options.h"
 #include "ActionMenuItem.h"
 #include "PrimeGrenadeState.h"
+#include "MedikitState.h"
+#include "../Savegame/SavedGame.h"
+#include "../Savegame/SavedBattleGame.h"
+#include "../Savegame/Tile.h"
 
 namespace OpenXcom
 {
@@ -45,7 +49,7 @@ ActionMenuState::ActionMenuState(Game *game, BattleAction *action, int x, int y)
 {
 	_screen = false;
 
-	for (int i = 0; i < 5; ++i)
+	for (int i = 0; i < 6; ++i)
 	{
 		_actionMenu[i] = new ActionMenuItem(this, i, _game->getResourcePack()->getFont("Big.fnt"), x, y);
 		add(_actionMenu[i]);
@@ -115,6 +119,15 @@ ActionMenuState::ActionMenuState(Game *game, BattleAction *action, int x, int y)
 		ss1.str(L"");
 		ss2.str(L"");
 	}
+	if (_action->weapon->getRules()->getTUUse() != 0)
+	{
+		tu = _action->weapon->getRules()->getTUUse();
+		ss2 << strTU.c_str() << tu;
+		_actionMenu[id]->setAction(BA_MEDIKIT, _game->getLanguage()->getString("STR_USE_MEDI_KIT"), L"", ss2.str(), tu);
+		_actionMenu[id]->setVisible(true);
+		id++;
+		ss2.str(L"");
+	}
 
 }
 
@@ -178,6 +191,72 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 			else
 			{
 				_game->pushState(new PrimeGrenadeState(_game, _action));
+			}
+		}
+		else if (_action->type == BA_MEDIKIT)
+		{
+			BattleUnit *targetUnit = NULL;
+			std::vector<BattleUnit*> *const units (_game->getSavedGame()->getBattleGame()->getUnits());
+			for(std::vector<BattleUnit*>::const_iterator i = units->begin (); i != units->end () && !targetUnit; ++i)
+			{
+				if (*i == _action->actor)
+				{
+					continue;
+				}
+				if ((*i)->getTile () != _action->actor->getTile ())
+				{
+					continue;
+				}
+				if ((*i)->getStatus () != STATUS_UNCONSCIOUS)
+				{
+					continue;
+				}
+				targetUnit = *i;
+			}
+			if (!targetUnit)
+			{
+				Position p = _action->actor->getPosition();
+				switch (_action->actor->getDirection())
+				{
+				case 0:
+					p.y--;
+					break;
+				case 1:
+					p.x++;
+					p.y--;
+					break;
+				case 2:
+					p.x++;
+					break;
+				case 3:
+					p.x++;
+					p.y++;
+					break;
+				case 4:
+					p.y++;
+					break;
+				case 5:
+					p.x--;
+					p.y++;
+					break;
+				case 6:
+					p.x--;
+					break;
+				case 7:
+					p.y--;
+					p.x--;
+					break;
+				}
+				Tile * tile (_game->getSavedGame()->getBattleGame()->getTile(p));
+				targetUnit = tile->getUnit ();
+			}
+			if (targetUnit)
+			{
+				_game->pushState (new MedikitState (_game, targetUnit, _action->actor, _action->weapon));
+			}
+			else
+			{
+				_game->popState();
 			}
 		}
 		else

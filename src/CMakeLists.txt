@@ -144,6 +144,10 @@ set ( battlescape_src
   Battlescape/MiniMapView.cpp
   Battlescape/MiniMapState.h
   Battlescape/MiniMapState.cpp
+  Battlescape/MedikitState.cpp
+  Battlescape/MedikitState.h
+  Battlescape/MedikitView.cpp
+  Battlescape/MedikitView.h
 )
 
 set ( engine_src
