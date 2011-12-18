@@ -608,6 +608,12 @@
     <ClCompile Include="Savegame\GenUnit.cpp">
       <Filter>Savegame</Filter>
     </ClCompile>
+    <ClCompile Include="Battlescape\MedikitState.cpp">
+      <Filter>Battlescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Battlescape\MedikitView.cpp">
+      <Filter>Battlescape</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1217,6 +1223,12 @@
     </ClInclude>
     <ClInclude Include="Savegame\GenUnit.h">
       <Filter>Savegame</Filter>
+    </ClInclude>
+    <ClInclude Include="Battlescape\MedikitState.h">
+      <Filter>Battlescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Battlescape\MedikitView.h">
+      <Filter>Battlescape</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

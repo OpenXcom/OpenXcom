@@ -1249,6 +1249,36 @@ void TileEngine::prepareNewTurn()
 		calculateTerrainLighting(); // fires could have been stopped
 	}
 
+	reviveUnconsciousUnits();
+
+}
+
+/**
+ * Units that are unconscious but shouldn't are revived, they need a tile to stand on. The unit's current position could be occupied.
+ * We will search in all directions for a free tile, if not found, the unit stays unconscious...
+ */
+void TileEngine::reviveUnconsciousUnits()
+{
+	int xd[9] = {0, 0, 1, 1, 1, 0, -1, -1, -1};
+	int yd[9] = {0, -1, -1, 0, 1, 1, 1, 0, -1};
+
+	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
+	{
+		Position originalPosition = (*i)->getPosition();
+		for (int dir = 0; dir < 9 && (*i)->getStatus() == STATUS_UNCONSCIOUS && (*i)->getStunlevel() < (*i)->getHealth() && (*i)->getHealth() > 0; dir++)
+		{
+			if (_save->getTile(originalPosition + Position(xd[dir],yd[dir],0))->getUnit() == 0)
+			{
+				// recover from unconscious
+				(*i)->setPosition(originalPosition + Position(xd[dir],yd[dir],0));
+				_save->getTile(originalPosition + Position(xd[dir],yd[dir],0))->setUnit(*i);
+				(*i)->turn(false); // makes the unit stand up again
+				(*i)->setCache(0);
+				calculateFOV((*i));
+				calculateUnitLighting();
+			}
+		}
+	}
 }
 
 

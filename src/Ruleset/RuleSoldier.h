@@ -63,6 +63,7 @@ public:
 	int gotLoftemps() const;
 	///
 	std::string getArmor() const;
+
 };
 
 }

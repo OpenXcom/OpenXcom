@@ -1132,6 +1132,9 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	medikit->setBigSprite(24);
 	medikit->setWeight(5);
 	medikit->setTUUse(10);
+	medikit->setInventoryWidth(1);
+	medikit->setInventoryHeight(2);
+	medikit->setFloorSprite(24);
 
 	RuleManufactureInfo *mdd = new RuleManufactureInfo("STR_MEDI_KIT");
 	mdd->setCategory("STR_EQUIPMENT");
@@ -1612,7 +1615,6 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	tankArmor->setArmor(90, 75, 60, 60);
 	tankArmor->setCorpseItem("STR_TANK_CORPSE");
 	tankArmor->setDamageModifier(0, DT_STUN);
-	tankArmor->setMechanical(true);
 
 	_armors.insert(std::pair<std::string, RuleArmor*>("STR_NONE_UC", coveralls));
 	_armors.insert(std::pair<std::string, RuleArmor*>("STR_PERSONAL_ARMOR_UC", personalArmor));

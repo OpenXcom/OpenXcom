@@ -240,7 +240,7 @@ void BattlescapeGenerator::run()
 		//_craft->getItems()->getContents()->clear();
 
 		// test data
-		/*addItem(_game->getRuleset()->getItem("STR_RIFLE"));
+		/*addItem(_game->getRuleset()->getItem("STR_MEDI_KIT"));
 		addItem(_game->getRuleset()->getItem("STR_RIFLE_CLIP"));
 		addItem(_game->getRuleset()->getItem("STR_HEAVY_CANNON"));
 		addItem(_game->getRuleset()->getItem("STR_HC_I_AMMO"));
@@ -539,9 +539,12 @@ void BattlescapeGenerator::addItem(RuleItem *item)
 		break;
 	case BT_GRENADE:
 	case BT_PROXIMITYGRENADE:
+	case BT_SCANNER:
 		// find the first soldier with a free belt slot to equip grenades
 		for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 		{
+			if ((*i)->getUnit()->getArmor()->getSize() > 1) continue;
+
 			if (!(*i)->getItem("STR_BELT"))
 			{
 				bi->moveToOwner((*i));
@@ -578,14 +581,17 @@ void BattlescapeGenerator::addItem(RuleItem *item)
 		}
 		break;
 	case BT_MEDIKIT:
-	case BT_SCANNER:
-		// find the first soldier with a free backpack
+		// find the first soldier with a free belt for medikit (2 spaces)
 		for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 		{
-			if (!(*i)->getItem("STR_BACK_PACK"))
+			if ((*i)->getUnit()->getArmor()->getSize() > 1) continue;
+
+			if (!(*i)->getItem("STR_BELT",3,0))
 			{
 				bi->moveToOwner((*i));
-				bi->setSlot(_game->getRuleset()->getInventory("STR_BACK_PACK"));
+				bi->setSlot(_game->getRuleset()->getInventory("STR_BELT"));
+				bi->setSlotX(3);
+				bi->setSlotY(0);
 				placed = true;
 				break;
 			}

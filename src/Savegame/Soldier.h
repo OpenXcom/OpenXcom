@@ -127,6 +127,10 @@ public:
 	void addKillCount();
 	/// Get pointer to current stats.
 	UnitStats *getCurrentStats();
+	/// Get wether the unit is affected by fatal wounds.
+	bool isWoundable() const;
+	/// Get wether the unit is affected by fear.
+	bool isFearable() const;
 
 };
 

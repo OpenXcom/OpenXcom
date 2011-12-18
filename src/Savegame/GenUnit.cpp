@@ -180,4 +180,22 @@ int GenUnit::getValue() const
 	return _rules->getValue();
 }
 
+/**
+ * Returns wether the unit is affected by fatal wounds.
+ * @return bool
+ */
+bool GenUnit::isWoundable() const
+{
+	return false;
+}
+
+/**
+ * Returns wether the unit is affected by fear..
+ * @return bool
+ */
+bool GenUnit::isFearable() const
+{
+	return false;
+}
+
 }

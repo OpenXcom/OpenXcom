@@ -85,6 +85,7 @@ public:
 	int calculateParabola(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, double curvature, double accuracy);
 	/// New turn preparations.
 	void prepareNewTurn();
+	void reviveUnconsciousUnits();
 	bool setUnitPosition(BattleUnit *bu, const Position &position, bool testOnly = false);
 };
 
