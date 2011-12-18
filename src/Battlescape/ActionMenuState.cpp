@@ -34,6 +34,7 @@
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
+#include "Pathfinding.h"
 
 namespace OpenXcom
 {
@@ -199,63 +200,27 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 			std::vector<BattleUnit*> *const units (_game->getSavedGame()->getBattleGame()->getUnits());
 			for(std::vector<BattleUnit*>::const_iterator i = units->begin (); i != units->end () && !targetUnit; ++i)
 			{
-				if (*i == _action->actor)
+				// we can heal a unit that is at the same position, unconscious and healable(=woundable)
+				if ((*i)->getPosition() == _action->actor->getPosition() && *i != _action->actor && (*i)->getStatus () == STATUS_UNCONSCIOUS && (*i)->getUnit()->isWoundable())
 				{
-					continue;
+					targetUnit = *i;
 				}
-				if ((*i)->getTile () != _action->actor->getTile ())
-				{
-					continue;
-				}
-				if ((*i)->getStatus () != STATUS_UNCONSCIOUS)
-				{
-					continue;
-				}
-				targetUnit = *i;
 			}
 			if (!targetUnit)
 			{
-				Position p = _action->actor->getPosition();
-				switch (_action->actor->getDirection())
-				{
-				case 0:
-					p.y--;
-					break;
-				case 1:
-					p.x++;
-					p.y--;
-					break;
-				case 2:
-					p.x++;
-					break;
-				case 3:
-					p.x++;
-					p.y++;
-					break;
-				case 4:
-					p.y++;
-					break;
-				case 5:
-					p.x--;
-					p.y++;
-					break;
-				case 6:
-					p.x--;
-					break;
-				case 7:
-					p.y--;
-					p.x--;
-					break;
-				}
-				Tile * tile (_game->getSavedGame()->getBattleGame()->getTile(p));
-				targetUnit = tile->getUnit ();
+				Position p;
+				Pathfinding::directionToVector(_action->actor->getDirection(), &p);
+				Tile * tile (_game->getSavedGame()->getBattleGame()->getTile(_action->actor->getPosition() + p));
+				if (tile->getUnit() && tile->getUnit()->getUnit()->isWoundable())
+					targetUnit = tile->getUnit();
 			}
 			if (targetUnit)
 			{
-				_game->pushState (new MedikitState (_game, targetUnit, _action->actor, _action->weapon));
+				_game->pushState (new MedikitState (_game, targetUnit, _action));
 			}
 			else
 			{
+				_action->result = "STR_THERE_IS_NO_ONE_THERE";
 				_game->popState();
 			}
 		}

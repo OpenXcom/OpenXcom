@@ -693,7 +693,7 @@ void BattlescapeState::kneel(BattleUnit *bu)
  */
 void BattlescapeState::btnInventoryClick(Action *action)
 {
-	if (playableUnitSelected())
+	if (playableUnitSelected() && _battleGame->getSelectedUnit()->getUnit()->getArmor()->getSize() == 1)
 	{
 		_game->pushState(new InventoryState(_game, !_battleGame->getDebugMode()));
 	}
@@ -1071,6 +1071,15 @@ void BattlescapeState::handleNonTargetAction()
 			{
 				_warning->showMessage(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS"));
 			}
+		}
+		if (_action.type == BA_MEDIKIT)
+		{
+			if (_action.result.length() > 0)
+			{
+				_warning->showMessage(_game->getLanguage()->getString(_action.result));
+				_action.result = "";
+			}
+			_battleGame->getTileEngine()->reviveUnconsciousUnits();
 		}
 		_action.type = BA_NONE;
 		updateSoldierInfo();

@@ -711,7 +711,7 @@ void BattleUnit::damage(Position position, int power, ItemDamageType type)
 
 	if (damage > 0)
 	{
-		if (!_unit->getArmor()->isMechanical())
+		if (_unit->isWoundable())
 		{
 			// fatal wounds
 			if (RNG::generate(0,damage) > 2)
@@ -737,11 +737,7 @@ void BattleUnit::damage(Position position, int power, ItemDamageType type)
 void BattleUnit::healStun(int power)
 {
 	_stunlevel -= power;
-	// recover from unconscious
-	if (_status == STATUS_UNCONSCIOUS && _stunlevel < _health && _health > 0)
-	{
-		_status = STATUS_STANDING;
-	}
+	if (_stunlevel < 0) _stunlevel = 0;
 }
 
 int BattleUnit::getStunlevel() const
@@ -1065,7 +1061,7 @@ void BattleUnit::prepareNewTurn()
  */
 void BattleUnit::moraleChange(int change)
 {
-	if (_unit->getArmor()->isMechanical()) return;
+	if (!_unit->isFearable()) return;
 
 	_morale += change;
 	if (_morale > 100)

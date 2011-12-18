@@ -133,6 +133,7 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, unsigned int cr
 	_items.push_back("STR_GRENADE");
 	_items.push_back("STR_SMOKE_GRENADE");
 	_items.push_back("STR_ELECTRO_FLARE");
+	_items.push_back("STR_MEDI_KIT");
 
 	int row = 0;
 	for (std::vector<std::string>::iterator i = _items.begin(); i != _items.end();)

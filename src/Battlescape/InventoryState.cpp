@@ -36,6 +36,7 @@
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/RuleInventory.h"
+#include "../Ruleset/RuleArmor.h"
 #include "UnitInfoState.h"
 #include "TileEngine.h"
 
@@ -127,6 +128,11 @@ InventoryState::~InventoryState()
 void InventoryState::init()
 {
 	BattleUnit *unit = _battleGame->getSelectedUnit();
+	while (_battleGame->getSelectedUnit()->getUnit()->getArmor()->getSize() > 1)
+	{
+		unit = _battleGame->selectNextPlayerUnit();
+	}
+
 	unit->setCache(0);
 	_soldier->clear();
 	_btnRank->clear();

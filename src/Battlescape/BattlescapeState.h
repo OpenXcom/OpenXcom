@@ -55,6 +55,7 @@ struct BattleAction
 	int TU;
 	bool targeting;
 	int value;
+	std::string result;
 };
 
 

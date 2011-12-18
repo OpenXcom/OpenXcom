@@ -27,7 +27,7 @@ namespace OpenXcom
  * @param type String defining the type.
  * @param spriteSheet Spritesheet used to render the unit.
  */
-RuleArmor::RuleArmor(const std::string &type, std::string spriteSheet, int drawingRoutine, MovementType movementType, int size) : _type(type), _spriteSheet(spriteSheet), _corpseItem(""), _frontArmor(0), _sideArmor(0), _rearArmor(0), _underArmor(0), _drawingRoutine(drawingRoutine), _movementType(movementType), _size(size), _mechanical(false)
+RuleArmor::RuleArmor(const std::string &type, std::string spriteSheet, int drawingRoutine, MovementType movementType, int size) : _type(type), _spriteSheet(spriteSheet), _corpseItem(""), _frontArmor(0), _sideArmor(0), _rearArmor(0), _underArmor(0), _drawingRoutine(drawingRoutine), _movementType(movementType), _size(size)
 {
 	for (int i=0; i < 8; i++)
 		_damageModifier[i] = 1.0;
@@ -251,26 +251,6 @@ void RuleArmor::setDamageModifier(float dm, ItemDamageType dt)
 float RuleArmor::getDamageModifier(ItemDamageType dt)
 {
 	return _damageModifier[(int)dt];
-}
-
-/**
- * Sets whether this is a mechanical unit.
- * Mechanical units can't get fatal wounds, stun damage, morale changes and energy is 100% each turn.
- * @param Is mechanical unit?
- */
-void RuleArmor::setMechanical(bool flag)
-{
-	_mechanical = flag;
-}
-
-/**
- * Gets whether this is a mechanical unit.
- * Mechanical units can't get fatal wounds, stun damage, morale changes and energy is 100% each turn.
- * @return Is mechanical unit?
- */
-bool RuleArmor::isMechanical()
-{
-	return _mechanical;
 }
 
 }

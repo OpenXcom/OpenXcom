@@ -462,4 +462,22 @@ UnitStats *Soldier::getCurrentStats()
 	return &_currentStats;
 }
 
+/**
+ * Returns wether the unit is affected by fatal wounds.
+ * @return bool
+ */
+bool Soldier::isWoundable() const
+{
+	return true;
+}
+
+/**
+ * Returns wether the unit is affected by fear..
+ * @return bool
+ */
+bool Soldier::isFearable() const
+{
+	return true;
+}
+
 }
