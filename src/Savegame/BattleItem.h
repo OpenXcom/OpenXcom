@@ -95,6 +95,7 @@ public:
 	bool occupiesSlot(int x, int y, BattleItem *item = 0) const;
 	/// Gets the item's ammo item.
 	BattleItem *getAmmoItem();
+	bool needsAmmo() const;
 	/// Sets the item's ammo item.
 	int setAmmoItem(BattleItem *item);
 	/// Gets the item's tile.

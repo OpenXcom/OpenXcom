@@ -1049,20 +1049,57 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	RuleItem *lp = new RuleItem("STR_LASER_PISTOL");
 	lp->setSize(0.1f);
 	lp->setCost(70);
-	lp->setBigSprite(34);
-	lp->setPower(52);
-	lp->setDamageType(DT_PLASMA);
-	lp->setBattleType(BT_AMMO);
-	lp->setHitAnimation(46);
-	lp->setHitSound(19);
-	lp->setClipSize(26);
-	lp->setWeight(3);
 
-	RuleManufactureInfo *mlp = new RuleManufactureInfo("STR_LASER_PISTOL");
-	mlp->setCategory("STR_WEAPON");
-	mlp->setRequiredSpace(2);
-	mlp->setManufactureTime(300);
-	mlp->setManufactureCost(8000);
+	lp->setBigSprite(5);
+	lp->setHandSprite(8*14);
+	lp->setFloorSprite(5);
+	lp->setBulletSprite(5);
+	lp->setHitAnimation(36);
+
+	lp->setFireSound(11);
+	lp->setHitSound(19);
+	lp->setPower(52);
+	lp->setDamageType(DT_LASER);
+	lp->setBattleType(BT_FIREARM);
+	lp->setClipSize(-1);
+	lp->setWeight(3);
+	lp->setAccuracyAuto(50);
+	lp->setTUAuto(30);
+	lp->setAccuracySnap(65);
+	lp->setTUSnap(30);
+	lp->setAccuracyAimed(85);
+	lp->setTUAimed(60);
+	lp->setInventoryWidth(1);
+	lp->setInventoryHeight(2);
+
+	RuleItem *lr = new RuleItem("STR_LASER_RIFLE");
+	lr->setSize(0.1f);
+	lr->setCost(70);
+
+	lr->setBigSprite(0);
+	lr->setHandSprite(8*1);
+	lr->setFloorSprite(0);
+	lr->setBulletSprite(6);
+	lr->setHitAnimation(36);
+
+	lr->setFireSound(11);
+	lr->setHitSound(19);
+	lr->setPower(52);
+	lr->setDamageType(DT_LASER);
+	lr->setBattleType(BT_FIREARM);
+	lr->setClipSize(-1);
+	lr->setWeight(3);
+	lr->setAccuracyAuto(50);
+	lr->setTUAuto(30);
+	lr->setAccuracySnap(65);
+	lr->setTUSnap(30);
+	lr->setAccuracyAimed(85);
+	lr->setTUAimed(60);
+	lr->setInventoryWidth(1);
+	lr->setInventoryHeight(3);
+	lr->setTwoHanded(true);
+
+
 
 	RuleItem *aa = new RuleItem("STR_ALIEN_ALLOYS");
 	aa->setSize(0.1f);
@@ -1076,12 +1113,6 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	aa->setClipSize(26);
 	aa->setWeight(3);
 
-	RuleManufactureInfo *maa = new RuleManufactureInfo("STR_ALIEN_ALLOYS");
-	maa->setCategory("STR_EQUIPMENT");
-	maa->setRequiredSpace(2);
-	maa->setManufactureTime(300);
-	maa->setManufactureCost(8000);
-
 	RuleItem *pa = new RuleItem("STR_PERSONAL_ARMOR");
 	pa->setSize(0.1f);
 	pa->setCost(70);
@@ -1093,30 +1124,6 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	pa->setHitSound(19);
 	pa->setClipSize(26);
 	pa->setWeight(3);
-
-	RuleManufactureInfo *mpa = new RuleManufactureInfo("STR_PERSONAL_ARMOR");
-	mpa->setCategory("STR_EQUIPMENT");
-	mpa->setRequiredSpace(2);
-	mpa->setManufactureTime(300);
-	mpa->setManufactureCost(8000);
-
-	RuleItem *lr = new RuleItem("STR_LASER_RIFLE");
-	lr->setSize(0.1f);
-	lr->setCost(70);
-	lr->setBigSprite(34);
-	lr->setPower(52);
-	lr->setDamageType(DT_PLASMA);
-	lr->setBattleType(BT_AMMO);
-	lr->setHitAnimation(46);
-	lr->setHitSound(19);
-	lr->setClipSize(26);
-	lr->setWeight(3);
-
-	RuleManufactureInfo *mlr = new RuleManufactureInfo("STR_LASER_RIFLE");
-	mlr->setCategory("STR_WEAPON");
-	mlr->setRequiredSpace(2);
-	mlr->setManufactureTime(300);
-	mlr->setManufactureCost(8000000);
 
 	RuleItem *medikit = new RuleItem("STR_MEDI_KIT");
 	medikit->setHealQuantity(10);
@@ -1135,6 +1142,31 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	medikit->setInventoryWidth(1);
 	medikit->setInventoryHeight(2);
 	medikit->setFloorSprite(24);
+
+	RuleManufactureInfo *mlp = new RuleManufactureInfo("STR_LASER_PISTOL");
+	mlp->setCategory("STR_WEAPON");
+	mlp->setRequiredSpace(2);
+	mlp->setManufactureTime(300);
+	mlp->setManufactureCost(8000);
+
+	RuleManufactureInfo *maa = new RuleManufactureInfo("STR_ALIEN_ALLOYS");
+	maa->setCategory("STR_EQUIPMENT");
+	maa->setRequiredSpace(2);
+	maa->setManufactureTime(300);
+	maa->setManufactureCost(8000);
+
+	RuleManufactureInfo *mpa = new RuleManufactureInfo("STR_PERSONAL_ARMOR");
+	mpa->setCategory("STR_EQUIPMENT");
+	mpa->setRequiredSpace(2);
+	mpa->setManufactureTime(300);
+	mpa->setManufactureCost(8000);
+
+
+	RuleManufactureInfo *mlr = new RuleManufactureInfo("STR_LASER_RIFLE");
+	mlr->setCategory("STR_WEAPON");
+	mlr->setRequiredSpace(2);
+	mlr->setManufactureTime(300);
+	mlr->setManufactureCost(8000000);
 
 	RuleManufactureInfo *mdd = new RuleManufactureInfo("STR_MEDI_KIT");
 	mdd->setCategory("STR_EQUIPMENT");

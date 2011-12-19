@@ -1479,8 +1479,7 @@ void BattleUnit::setTurretType(int turretType)
   */
 int BattleUnit::getTurretType() const
 {
-	return 0;
-	//return _turretType;
+	return _turretType;
 }
 
 /**

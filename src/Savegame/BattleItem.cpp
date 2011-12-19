@@ -41,6 +41,13 @@ BattleItem::BattleItem(RuleItem *rules, int *id) : _id(*id), _rules(rules), _own
 		setStimulantQuantity (_rules->getStimulantQuantity ());
 	}
 	(*id)++;
+
+	// weapon does not need ammo, ammo item points to weapon
+	if (_rules->getClipSize() == -1)
+	{
+		_ammoItem = this;
+		setAmmoQuantity(99999);
+	}
 }
 
 /**
@@ -318,12 +325,23 @@ BattleItem *BattleItem::getAmmoItem()
 }
 
 /**
+ * Gets the item's ammo item.
+ * @return BattleItem
+ */
+bool BattleItem::needsAmmo() const
+{
+	return !(_ammoItem == this); // no ammo for this weapon is needed
+}
+
+/**
  * Sets the item's ammo item.
  * @param item BattleItem
  * @return -2 when ammo doesn't fit, or -1 when weapon already contains ammo
  */
 int BattleItem::setAmmoItem(BattleItem *item)
 {
+	if (!needsAmmo()) return -2;
+
 	if (item == 0)
 	{
 		_ammoItem = 0;
