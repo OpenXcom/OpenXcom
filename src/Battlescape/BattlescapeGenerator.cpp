@@ -210,6 +210,7 @@ void BattlescapeGenerator::run()
 		unit = addVehicle(_game->getRuleset()->getGenUnit("TANK_CANNON"));
 		addItem(_game->getRuleset()->getItem("STR_TANK_CANNON"), unit);
 		addItem(_game->getRuleset()->getItem("STR_HWP_CANNON_SHELLS"), unit);
+		unit->setTurretType(0);
 
 		// add soldiers that are in the craft
 		for (std::vector<Soldier*>::iterator i = _craft->getBase()->getSoldiers()->begin(); i != _craft->getBase()->getSoldiers()->end(); ++i)
@@ -230,6 +231,13 @@ void BattlescapeGenerator::run()
 			}
 		}
 		
+		// test data - uncomment to easely debug a certain item
+		/*addItem(_game->getRuleset()->getItem("STR_LASER_RIFLE"));
+		addItem(_game->getRuleset()->getItem("STR_LASER_PISTOL"));
+		addItem(_game->getRuleset()->getItem("STR_MEDI_KIT"));
+		addItem(_game->getRuleset()->getItem("STR_SMOKE_GRENADE"));
+		addItem(_game->getRuleset()->getItem("STR_ELECTRO_FLARE"));*/
+
 		// add items that are in the craft
 		for (std::map<std::string, int>::iterator i = _craft->getItems()->getContents()->begin(); i != _craft->getItems()->getContents()->end(); ++i)
 		{
@@ -239,20 +247,6 @@ void BattlescapeGenerator::run()
 
 		//_craft->getItems()->getContents()->clear();
 
-		// test data
-		/*addItem(_game->getRuleset()->getItem("STR_MEDI_KIT"));
-		addItem(_game->getRuleset()->getItem("STR_RIFLE_CLIP"));
-		addItem(_game->getRuleset()->getItem("STR_HEAVY_CANNON"));
-		addItem(_game->getRuleset()->getItem("STR_HC_I_AMMO"));
-		addItem(_game->getRuleset()->getItem("STR_ROCKET_LAUNCHER"));
-		addItem(_game->getRuleset()->getItem("STR_SMALL_ROCKET"));
-		addItem(_game->getRuleset()->getItem("STR_GRENADE"));
-		addItem(_game->getRuleset()->getItem("STR_SMOKE_GRENADE"));
-		addItem(_game->getRuleset()->getItem("STR_PISTOL"));
-		addItem(_game->getRuleset()->getItem("STR_PISTOL_CLIP"));
-		addItem(_game->getRuleset()->getItem("STR_GRENADE"));
-		addItem(_game->getRuleset()->getItem("STR_GRENADE"));
-		addItem(_game->getRuleset()->getItem("STR_GRENADE"));*/
 	}
 
 	

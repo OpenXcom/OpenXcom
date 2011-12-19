@@ -211,7 +211,7 @@ void InventoryState::btnNextClick(Action *action)
  */
 void InventoryState::btnUnloadClick(Action *action)
 {
-	if (_inv->getSelectedItem() != 0 && _inv->getSelectedItem()->getAmmoItem() != 0)
+	if (_inv->getSelectedItem() != 0 && _inv->getSelectedItem()->getAmmoItem() != 0 && _inv->getSelectedItem()->needsAmmo())
 	{
 		_inv->unload();
 	}
@@ -256,7 +256,7 @@ void InventoryState::invClick(Action *action)
 			_txtItem->setText(_game->getLanguage()->getString(item->getRules()->getType()));
 		}
 		std::wstringstream ss;
-		if (item->getAmmoItem() != 0)
+		if (item->getAmmoItem() != 0 && item->needsAmmo())
 		{
 			ss << _game->getLanguage()->getString("STR_AMMO_ROUNDS_LEFT") << L'\x01' << item->getAmmoItem()->getAmmoQuantity();
 			SDL_Rect r;
@@ -272,7 +272,7 @@ void InventoryState::invClick(Action *action)
 			_selAmmo->drawRect(&r, 0);
 			item->getAmmoItem()->getRules()->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _selAmmo);
 		}
-		else if (item->getAmmoQuantity() != 0)
+		else if (item->getAmmoQuantity() != 0 && item->needsAmmo())
 		{
 			ss << _game->getLanguage()->getString("STR_AMMO_ROUNDS_LEFT") << L'\x01' << item->getAmmoQuantity();
 		}
