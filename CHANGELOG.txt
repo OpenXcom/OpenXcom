@@ -15,6 +15,10 @@ New features:
 -- Flying units.
 -- Grav lifts.
 -- Optional pathfinding preview.
+-- Medikits.
+-- Laser weapons.
+-- Large units.
+
  
 Bugfixes:
 - Two duplicating ammo bugs.
@@ -46,6 +50,9 @@ Bugfixes:
 - Crash when starting mission on back side of globe.
 - Endless number of soldiers in Skyranger.
 - Clicking visible enemy units clicks other stuff too.
+- Fixed lazy ground inventory arrangement.
+- Aliens do not suffer from fatal wounds anymore.
+- Improved straight line pathfinding in battlescape.
 
 Version 0.3 (01-09-2011)
 -------------------------
