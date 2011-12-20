@@ -536,23 +536,60 @@ void Inventory::arrangeGround()
 {
 	RuleInventory *ground = _game->getRuleset()->getInventory("STR_GROUND");
 
-	// Lazy arranging
+	int slotsX = (320 - ground->getX()) / RuleInventory::SLOT_W;
+	int slotsY = (200 - ground->getY()) / RuleInventory::SLOT_H;
 	int x = 0;
+	int y = 0;
+	bool ok = false;
+	int xLastItem = 0;
+
 	if (_selUnit != 0)
 	{
+		// first move all items out of the way - a big number in X direction
 		for (std::vector<BattleItem*>::iterator i = _selUnit->getTile()->getInventory()->begin(); i != _selUnit->getTile()->getInventory()->end(); ++i)
 		{
 			(*i)->setSlot(ground);
-			(*i)->setSlotX(x);
+			(*i)->setSlotX(1000000);
 			(*i)->setSlotY(0);
-			x += (*i)->getRules()->getInventoryWidth();
 		}
 
+		// now for each item, find the most topleft position that is not occupied and will fit
+		for (std::vector<BattleItem*>::iterator i = _selUnit->getTile()->getInventory()->begin(); i != _selUnit->getTile()->getInventory()->end(); ++i)
+		{
+			x = 0;
+			y = 0;
+			ok = false;
+			while (!ok)
+			{
+				ok = true; // assume we can put the item here, if one of the following checks fails, we can't.
+				for (int xd = 0; xd < (*i)->getRules()->getInventoryWidth() && ok; xd++)
+				{
+					for (int yd = 0; yd < (*i)->getRules()->getInventoryHeight() && ok; yd++)
+					{
+						ok = _selUnit->getItem(ground, x + xd, y + yd) == 0;
+					}
+				}
+				if (ok)
+				{
+					(*i)->setSlotX(x);
+					(*i)->setSlotY(y);
+					xLastItem = x + (*i)->getRules()->getInventoryWidth();
+				}
+				else
+				{
+					y++;
+					if (y > slotsY - (*i)->getRules()->getInventoryHeight())
+					{
+						y = 0;
+						x++;
+					}
+				}
+			}
+		}
 	}
-	int slots = (320 - ground->getX()) / RuleInventory::SLOT_W;
-	if (x > _groundOffset + slots)
+	if (xLastItem > _groundOffset + slotsX)
 	{
-		_groundOffset += slots;
+		_groundOffset += slotsX;
 	}
 	else
 	{
@@ -560,6 +597,5 @@ void Inventory::arrangeGround()
 	}
 	drawItems();
 }
-
 
 }
