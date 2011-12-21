@@ -156,26 +156,43 @@ std::string UnitDieBState::getResult() const
  */
 void UnitDieBState::convertUnitToCorpse(BattleUnit *unit, TileEngine *terrain)
 {
-	// move inventory from unit to the ground
-	for (std::vector<BattleItem*>::iterator i = _unit->getInventory()->begin(); i != _unit->getInventory()->end(); ++i)
+	int size = _unit->getUnit()->getArmor()->getSize() - 1;
+
+	// move inventory from unit to the ground for non-large units
+	if (size == 0)
 	{
-		_parent->dropItem(_unit->getPosition(), (*i));
+		for (std::vector<BattleItem*>::iterator i = _unit->getInventory()->begin(); i != _unit->getInventory()->end(); ++i)
+		{
+			_parent->dropItem(_unit->getPosition(), (*i));
+		}
 	}
 	_unit->getInventory()->clear();
 
 	// remove unit-tile link
 	_unit->setTile(0);
 
-	int size = _unit->getUnit()->getArmor()->getSize() - 1;
-	for (int x = size; x >= 0; x--)
+	if (size == 0)
 	{
-		for (int y = size; y >= 0; y--)
+		_parent->getGame()->getSavedGame()->getBattleGame()->getTile(_unit->getPosition())->setUnit(0);
+		BattleItem *corpse = new BattleItem(_parent->getGame()->getRuleset()->getItem(_unit->getUnit()->getArmor()->getCorpseItem()),_parent->getGame()->getSavedGame()->getBattleGame()->getCurrentItemId());
+		corpse->setUnit(unit);
+		_parent->dropItem(_unit->getPosition(), corpse, true);
+	}
+	else
+	{
+		int i = 1;
+		for (int y = 0; y <= size; y++)
 		{
-			_parent->getGame()->getSavedGame()->getBattleGame()->getTile(_unit->getPosition() + Position(x,y,0))->setUnit(0);
-
-			BattleItem *corpse = new BattleItem(_parent->getGame()->getRuleset()->getItem(_unit->getUnit()->getArmor()->getCorpseItem()),_parent->getGame()->getSavedGame()->getBattleGame()->getCurrentItemId());
-			corpse->setUnit(unit);
-			_parent->dropItem(_unit->getPosition() + Position(x,y,0), corpse, true);
+			for (int x = 0; x <= size; x++)
+			{
+				_parent->getGame()->getSavedGame()->getBattleGame()->getTile(_unit->getPosition() + Position(x,y,0))->setUnit(0);
+				std::stringstream ss;
+				ss << _unit->getUnit()->getArmor()->getCorpseItem() << i;
+				BattleItem *corpse = new BattleItem(_parent->getGame()->getRuleset()->getItem(ss.str()),_parent->getGame()->getSavedGame()->getBattleGame()->getCurrentItemId());
+				//corpse->setUnit(unit); // no need for this, because large units never can be revived as they don't go unconscious
+				_parent->dropItem(_unit->getPosition() + Position(x,y,0), corpse, true);
+				i++;
+			}
 		}
 	}
 }

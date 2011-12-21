@@ -721,7 +721,7 @@ void BattleUnit::damage(Position position, int power, ItemDamageType type)
 				moraleChange(-_fatalWounds[bodypart]);
 		}
 		// armor damage
-		setArmor(getArmor(side) - (damage+5)/10, side);
+		setArmor(getArmor(side) - (damage/10) - 1, side);
 		// health damage
 		_health -= damage;
 		if (_health < 0)

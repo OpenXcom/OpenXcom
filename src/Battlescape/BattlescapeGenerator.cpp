@@ -232,11 +232,11 @@ void BattlescapeGenerator::run()
 		}
 		
 		// test data - uncomment to easely debug a certain item
-		/*addItem(_game->getRuleset()->getItem("STR_LASER_RIFLE"));
+		addItem(_game->getRuleset()->getItem("STR_LASER_RIFLE"));
 		addItem(_game->getRuleset()->getItem("STR_LASER_PISTOL"));
 		addItem(_game->getRuleset()->getItem("STR_MEDI_KIT"));
 		addItem(_game->getRuleset()->getItem("STR_SMOKE_GRENADE"));
-		addItem(_game->getRuleset()->getItem("STR_ELECTRO_FLARE"));*/
+		addItem(_game->getRuleset()->getItem("STR_ELECTRO_FLARE"));
 
 		// add items that are in the craft
 		for (std::map<std::string, int>::iterator i = _craft->getItems()->getContents()->begin(); i != _craft->getItems()->getContents()->end(); ++i)

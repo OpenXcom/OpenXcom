@@ -972,13 +972,6 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	fcorpse->setInventoryHeight(3);
 	fcorpse->setWeight(30);
 
-	RuleItem *tcorpse = new RuleItem("STR_TANK_CORPSE");
-	tcorpse->setBigSprite(0);
-	tcorpse->setFloorSprite(68);
-	tcorpse->setInventoryWidth(7);
-	tcorpse->setInventoryHeight(7);
-	tcorpse->setWeight(100);
-
 	RuleItem *ppistol = new RuleItem("STR_PLASMA_PISTOL");
 	ppistol->setSize(0.1f);
 	ppistol->setCost(800);
@@ -1045,56 +1038,79 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	tankcs->setClipSize(30);
 	tankcs->setWeight(1);
 
-	// Dummy entries for manufacture
+	RuleItem *tcorpse1 = new RuleItem("STR_TANK_CORPSE_1");
+	tcorpse1->setBigSprite(43);
+	tcorpse1->setFloorSprite(68);
+	tcorpse1->setInventoryWidth(0);
+	tcorpse1->setInventoryHeight(0);
+	tcorpse1->setWeight(100);
+
+	RuleItem *tcorpse2 = new RuleItem("STR_TANK_CORPSE_2");
+	tcorpse2->setBigSprite(43);
+	tcorpse2->setFloorSprite(69);
+	tcorpse2->setInventoryWidth(0);
+	tcorpse2->setInventoryHeight(0);
+	tcorpse2->setWeight(100);
+
+	RuleItem *tcorpse3 = new RuleItem("STR_TANK_CORPSE_3");
+	tcorpse3->setBigSprite(43);
+	tcorpse3->setFloorSprite(70);
+	tcorpse3->setInventoryWidth(0);
+	tcorpse3->setInventoryHeight(0);
+	tcorpse3->setWeight(100);
+
+	RuleItem *tcorpse4 = new RuleItem("STR_TANK_CORPSE_4");
+	tcorpse4->setBigSprite(43);
+	tcorpse4->setFloorSprite(71);
+	tcorpse4->setInventoryWidth(0);
+	tcorpse4->setInventoryHeight(0);
+	tcorpse4->setWeight(100);
+
 	RuleItem *lp = new RuleItem("STR_LASER_PISTOL");
 	lp->setSize(0.1f);
 	lp->setCost(70);
-
 	lp->setBigSprite(5);
 	lp->setHandSprite(8*14);
 	lp->setFloorSprite(5);
 	lp->setBulletSprite(5);
 	lp->setHitAnimation(36);
-
 	lp->setFireSound(11);
 	lp->setHitSound(19);
-	lp->setPower(52);
+	lp->setPower(46);
 	lp->setDamageType(DT_LASER);
 	lp->setBattleType(BT_FIREARM);
 	lp->setClipSize(-1);
-	lp->setWeight(3);
-	lp->setAccuracyAuto(50);
-	lp->setTUAuto(30);
-	lp->setAccuracySnap(65);
-	lp->setTUSnap(30);
-	lp->setAccuracyAimed(85);
-	lp->setTUAimed(60);
+	lp->setWeight(7);
+	lp->setAccuracyAuto(28);
+	lp->setTUAuto(25);
+	lp->setAccuracySnap(40);
+	lp->setTUSnap(20);
+	lp->setAccuracyAimed(68);
+	lp->setTUAimed(55);
 	lp->setInventoryWidth(1);
 	lp->setInventoryHeight(2);
 
 	RuleItem *lr = new RuleItem("STR_LASER_RIFLE");
 	lr->setSize(0.1f);
 	lr->setCost(70);
-
 	lr->setBigSprite(0);
 	lr->setHandSprite(8*1);
 	lr->setFloorSprite(0);
 	lr->setBulletSprite(6);
 	lr->setHitAnimation(36);
-
 	lr->setFireSound(11);
 	lr->setHitSound(19);
-	lr->setPower(52);
+	lr->setPower(60);
 	lr->setDamageType(DT_LASER);
 	lr->setBattleType(BT_FIREARM);
 	lr->setClipSize(-1);
-	lr->setWeight(3);
-	lr->setAccuracyAuto(50);
-	lr->setTUAuto(30);
+	lr->setWeight(8);
+	lr->setAccuracyAuto(46);
+	lr->setTUAuto(34);
 	lr->setAccuracySnap(65);
-	lr->setTUSnap(30);
-	lr->setAccuracyAimed(85);
-	lr->setTUAimed(60);
+	lr->setTUSnap(25);
+	lr->setAccuracyAimed(100);
+	lr->setTUAimed(50);
 	lr->setInventoryWidth(1);
 	lr->setInventoryHeight(3);
 	lr->setTwoHanded(true);
@@ -1143,6 +1159,49 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	medikit->setInventoryHeight(2);
 	medikit->setFloorSprite(24);
 
+	_items.insert(std::pair<std::string, RuleItem*>("STR_STINGRAY_LAUNCHER", slauncher));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_AVALANCHE_LAUNCHER", alauncher));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_CANNON", icannon));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_STINGRAY_MISSILES", smissile));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_AVALANCHE_MISSILES", amissile));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_CANNON_ROUNDS_X50", crounds));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_PISTOL", pistol));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_PISTOL_CLIP", pclip));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_RIFLE", rifle));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_RIFLE_CLIP", rclip));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_HEAVY_CANNON", hcannon));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_HC_AP_AMMO", hcap));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_HC_HE_AMMO", hche));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_HC_I_AMMO", hci));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_AUTO_CANNON", acannon));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_AC_AP_AMMO", acap));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_AC_HE_AMMO", ache));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_AC_I_AMMO", aci));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_ROCKET_LAUNCHER", rlauncher));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_SMALL_ROCKET", srocket));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_LARGE_ROCKET", lrocket));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_INCENDIARY_ROCKET", irocket));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_GRENADE", grenade));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_SMOKE_GRENADE", sgrenade));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_CORPSE", corpse));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_SECTOID_CORPSE", scorpse));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_FLOATER_CORPSE", fcorpse));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_TANK_CORPSE_1", tcorpse1));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_TANK_CORPSE_2", tcorpse2));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_TANK_CORPSE_3", tcorpse3));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_TANK_CORPSE_4", tcorpse4));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_PLASMA_PISTOL", ppistol));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_PLASMA_PISTOL_CLIP", ppclip));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_ELECTRO_FLARE", flare));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_TANK_CANNON", tankc));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_HWP_CANNON_SHELLS", tankcs));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_ALIEN_ALLOYS", aa));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_LASER_PISTOL", lp));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_PERSONAL_ARMOR", pa));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_LASER_RIFLE", lr));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_MEDI_KIT", medikit));
+
+
 	RuleManufactureInfo *mlp = new RuleManufactureInfo("STR_LASER_PISTOL");
 	mlp->setCategory("STR_WEAPON");
 	mlp->setRequiredSpace(2);
@@ -1173,47 +1232,6 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	mdd->setRequiredSpace(2);
 	mdd->setManufactureTime(420);
 	mdd->setManufactureCost(28000);
-
-	_items.insert(std::pair<std::string, RuleItem*>("STR_STINGRAY_LAUNCHER", slauncher));
-	_items.insert(std::pair<std::string, RuleItem*>("STR_AVALANCHE_LAUNCHER", alauncher));
-	_items.insert(std::pair<std::string, RuleItem*>("STR_CANNON", icannon));
-	_items.insert(std::pair<std::string, RuleItem*>("STR_STINGRAY_MISSILES", smissile));
-	_items.insert(std::pair<std::string, RuleItem*>("STR_AVALANCHE_MISSILES", amissile));
-	_items.insert(std::pair<std::string, RuleItem*>("STR_CANNON_ROUNDS_X50", crounds));
-	_items.insert(std::pair<std::string, RuleItem*>("STR_PISTOL", pistol));
-	_items.insert(std::pair<std::string, RuleItem*>("STR_PISTOL_CLIP", pclip));
-	_items.insert(std::pair<std::string, RuleItem*>("STR_RIFLE", rifle));
-	_items.insert(std::pair<std::string, RuleItem*>("STR_RIFLE_CLIP", rclip));
-	_items.insert(std::pair<std::string, RuleItem*>("STR_HEAVY_CANNON", hcannon));
-	_items.insert(std::pair<std::string, RuleItem*>("STR_HC_AP_AMMO", hcap));
-	_items.insert(std::pair<std::string, RuleItem*>("STR_HC_HE_AMMO", hche));
-	_items.insert(std::pair<std::string, RuleItem*>("STR_HC_I_AMMO", hci));
-	_items.insert(std::pair<std::string, RuleItem*>("STR_AUTO_CANNON", acannon));
-	_items.insert(std::pair<std::string, RuleItem*>("STR_AC_AP_AMMO", acap));
-	_items.insert(std::pair<std::string, RuleItem*>("STR_AC_HE_AMMO", ache));
-	_items.insert(std::pair<std::string, RuleItem*>("STR_AC_I_AMMO", aci));
-	_items.insert(std::pair<std::string, RuleItem*>("STR_ROCKET_LAUNCHER", rlauncher));
-	_items.insert(std::pair<std::string, RuleItem*>("STR_SMALL_ROCKET", srocket));
-	_items.insert(std::pair<std::string, RuleItem*>("STR_LARGE_ROCKET", lrocket));
-	_items.insert(std::pair<std::string, RuleItem*>("STR_INCENDIARY_ROCKET", irocket));
-	_items.insert(std::pair<std::string, RuleItem*>("STR_GRENADE", grenade));
-	_items.insert(std::pair<std::string, RuleItem*>("STR_SMOKE_GRENADE", sgrenade));
-	_items.insert(std::pair<std::string, RuleItem*>("STR_CORPSE", corpse));
-	_items.insert(std::pair<std::string, RuleItem*>("STR_SECTOID_CORPSE", scorpse));
-	_items.insert(std::pair<std::string, RuleItem*>("STR_FLOATER_CORPSE", fcorpse));
-	_items.insert(std::pair<std::string, RuleItem*>("STR_TANK_CORPSE", tcorpse));
-	_items.insert(std::pair<std::string, RuleItem*>("STR_PLASMA_PISTOL", ppistol));
-	_items.insert(std::pair<std::string, RuleItem*>("STR_PLASMA_PISTOL_CLIP", ppclip));
-	_items.insert(std::pair<std::string, RuleItem*>("STR_ELECTRO_FLARE", flare));
-	_items.insert(std::pair<std::string, RuleItem*>("STR_TANK_CANNON", tankc));
-	_items.insert(std::pair<std::string, RuleItem*>("STR_HWP_CANNON_SHELLS", tankcs));
-
-	_items.insert(std::pair<std::string, RuleItem*>("STR_ALIEN_ALLOYS", aa));
-	_items.insert(std::pair<std::string, RuleItem*>("STR_LASER_PISTOL", lp));
-	_items.insert(std::pair<std::string, RuleItem*>("STR_PERSONAL_ARMOR", pa));
-	_items.insert(std::pair<std::string, RuleItem*>("STR_LASER_RIFLE", lr));
-	_items.insert(std::pair<std::string, RuleItem*>("STR_MEDI_KIT", medikit));
-
 
 	_manufacture.insert(std::pair<std::string, RuleManufactureInfo*>("STR_ALIEN_ALLOYS", maa));
 	_manufacture.insert(std::pair<std::string, RuleManufactureInfo*>("STR_LASER_PISTOL", mlp));
@@ -1645,7 +1663,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 
 	RuleArmor *tankArmor = new RuleArmor("TANK_ARMOR", "TANKS.PCK", 2, MT_WALK, 2);
 	tankArmor->setArmor(90, 75, 60, 60);
-	tankArmor->setCorpseItem("STR_TANK_CORPSE");
+	tankArmor->setCorpseItem("STR_TANK_CORPSE_");
 	tankArmor->setDamageModifier(0, DT_STUN);
 
 	_armors.insert(std::pair<std::string, RuleArmor*>("STR_NONE_UC", coveralls));
