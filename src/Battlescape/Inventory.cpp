@@ -224,7 +224,8 @@ void Inventory::drawItems()
 		// Ground items
 		for (std::vector<BattleItem*>::iterator i = _selUnit->getTile()->getInventory()->begin(); i != _selUnit->getTile()->getInventory()->end(); ++i)
 		{
-			if ((*i) == _selItem || (*i)->getSlotX() < _groundOffset)
+			// note that you can make items invisible by setting their width or height to 0 (for example used with tank corpse items)
+			if ((*i) == _selItem || (*i)->getSlotX() < _groundOffset || (*i)->getRules()->getInventoryHeight() == 0 || (*i)->getRules()->getInventoryWidth() == 0)
 				continue;
 
 			Surface *frame = texture->getFrame((*i)->getRules()->getBigSprite());
