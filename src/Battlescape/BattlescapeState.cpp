@@ -1072,7 +1072,7 @@ void BattlescapeState::handleNonTargetAction()
 				_warning->showMessage(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS"));
 			}
 		}
-		if (_action.type == BA_MEDIKIT)
+		if (_action.type == BA_USE)
 		{
 			if (_action.result.length() > 0)
 			{

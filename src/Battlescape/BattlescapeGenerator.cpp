@@ -232,6 +232,7 @@ void BattlescapeGenerator::run()
 		}
 		
 		// test data - uncomment to easely debug a certain item
+		addItem(_game->getRuleset()->getItem("STR_MOTION_SCANNER"));
 		addItem(_game->getRuleset()->getItem("STR_LASER_RIFLE"));
 		addItem(_game->getRuleset()->getItem("STR_LASER_PISTOL"));
 		addItem(_game->getRuleset()->getItem("STR_MEDI_KIT"));

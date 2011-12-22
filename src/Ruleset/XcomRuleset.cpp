@@ -941,7 +941,6 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	flare->setBattleType(BT_FLARE);
 	flare->setWeight(3);
 
-
 	RuleItem *sgrenade = new RuleItem("STR_SMOKE_GRENADE");
 	sgrenade->setSize(0.1f);
 	sgrenade->setCost(150);
@@ -1005,7 +1004,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	ppclip->setWeight(3);
 
 	RuleItem *tankc = new RuleItem("STR_TANK_CANNON");
-	tankc->setSize(0.1f);
+	tankc->setSize(6.0f);
 	tankc->setCost(420000);
 	tankc->setBigSprite(43);
 	tankc->setHandSprite(0);
@@ -1023,6 +1022,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	tankc->setInventoryWidth(2);
 	tankc->setInventoryHeight(3);
 	tankc->setWeight(1);
+	tankc->setFixed(true);
 
 	RuleItem *tankcs = new RuleItem("STR_HWP_CANNON_SHELLS");
 	tankcs->setSize(0.1f);
@@ -1091,7 +1091,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	lp->setInventoryHeight(2);
 
 	RuleItem *lr = new RuleItem("STR_LASER_RIFLE");
-	lr->setSize(0.1f);
+	lr->setSize(0.2f);
 	lr->setCost(70);
 	lr->setBigSprite(0);
 	lr->setHandSprite(8*1);
@@ -1115,8 +1115,6 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	lr->setInventoryHeight(3);
 	lr->setTwoHanded(true);
 
-
-
 	RuleItem *aa = new RuleItem("STR_ALIEN_ALLOYS");
 	aa->setSize(0.1f);
 	aa->setCost(650);
@@ -1130,7 +1128,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	aa->setWeight(3);
 
 	RuleItem *pa = new RuleItem("STR_PERSONAL_ARMOR");
-	pa->setSize(0.1f);
+	pa->setSize(0.8f);
 	pa->setCost(70);
 	pa->setBigSprite(34);
 	pa->setPower(52);
@@ -1150,14 +1148,25 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	medikit->setHealthAmount(3);
 	medikit->setEnergy (10);
 	medikit->setStun (4);
-	medikit->setSize(0.2f);
-	medikit->setCost(70);
+	medikit->setSize(0.1f);
+	medikit->setCost(91200);
 	medikit->setBigSprite(24);
 	medikit->setWeight(5);
 	medikit->setTUUse(10);
 	medikit->setInventoryWidth(1);
 	medikit->setInventoryHeight(2);
 	medikit->setFloorSprite(24);
+
+	RuleItem *scanner = new RuleItem("STR_MOTION_SCANNER");
+	scanner->setBattleType(BT_SCANNER);
+	scanner->setSize(0.1f);
+	scanner->setCost(91200);
+	scanner->setBigSprite(23);
+	scanner->setWeight(3);
+	scanner->setTUUse(25);
+	scanner->setInventoryWidth(1);
+	scanner->setInventoryHeight(1);
+	scanner->setFloorSprite(23);
 
 	_items.insert(std::pair<std::string, RuleItem*>("STR_STINGRAY_LAUNCHER", slauncher));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_AVALANCHE_LAUNCHER", alauncher));
@@ -1200,6 +1209,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_items.insert(std::pair<std::string, RuleItem*>("STR_PERSONAL_ARMOR", pa));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_LASER_RIFLE", lr));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_MEDI_KIT", medikit));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_MOTION_SCANNER", scanner));
 
 
 	RuleManufactureInfo *mlp = new RuleManufactureInfo("STR_LASER_PISTOL");
@@ -1233,11 +1243,18 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	mdd->setManufactureTime(420);
 	mdd->setManufactureCost(28000);
 
+	RuleManufactureInfo *msc = new RuleManufactureInfo("STR_MOTION_SCANNER");
+	msc->setCategory("STR_EQUIPMENT");
+	msc->setRequiredSpace(2);
+	msc->setManufactureTime(440);
+	msc->setManufactureCost(34000);
+
 	_manufacture.insert(std::pair<std::string, RuleManufactureInfo*>("STR_ALIEN_ALLOYS", maa));
 	_manufacture.insert(std::pair<std::string, RuleManufactureInfo*>("STR_LASER_PISTOL", mlp));
 	_manufacture.insert(std::pair<std::string, RuleManufactureInfo*>("STR_PERSONAL_ARMOR", mpa));
 	_manufacture.insert(std::pair<std::string, RuleManufactureInfo*>("STR_LASER_RIFLE", mlr));
 	_manufacture.insert(std::pair<std::string, RuleManufactureInfo*>("STR_MEDI_KIT", mdd));
+	_manufacture.insert(std::pair<std::string, RuleManufactureInfo*>("STR_MOTION_SCANNER", msc));
 
 	// Add UFOs
 	RuleUfo *sscout = new RuleUfo("STR_SMALL_SCOUT");

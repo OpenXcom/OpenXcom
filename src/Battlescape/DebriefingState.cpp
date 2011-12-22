@@ -299,6 +299,7 @@ void DebriefingState::prepareDebriefing()
 		UnitStatus status = (*j)->getStatus();
 		UnitFaction faction = (*j)->getFaction();
 		int value = (*j)->getUnit()->getValue();
+		Soldier *soldier = dynamic_cast<Soldier*>((*j)->getUnit());
 
 		if (status == STATUS_DEAD)
 		{
@@ -308,15 +309,23 @@ void DebriefingState::prepareDebriefing()
 			}
 			if (faction == FACTION_PLAYER)
 			{
-				addStat("STR_XCOM_OPERATIVES_KILLED", 1, -value);
-				for (std::vector<Soldier*>::iterator i = base->getSoldiers()->begin(); i != base->getSoldiers()->end(); ++i)
+				if (soldier != 0)
 				{
-					if ((*i) == dynamic_cast<Soldier*>((*j)->getUnit()))
+					addStat("STR_XCOM_OPERATIVES_KILLED", 1, -value);
+					for (std::vector<Soldier*>::iterator i = base->getSoldiers()->begin(); i != base->getSoldiers()->end(); ++i)
 					{
-						delete (*i);
-						base->getSoldiers()->erase(i);
-						break;
+						if ((*i) == soldier)
+						{
+							delete (*i);
+							base->getSoldiers()->erase(i);
+							break;
+						}
 					}
+				}
+				else
+				{
+					// non soldier player = tank
+					addStat("STR_TANKS_DESTROYED", 1, -value);
 				}
 			}
 		}

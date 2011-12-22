@@ -817,6 +817,8 @@ int BattleUnit::getActionTUs(BattleActionType actionType, BattleItem *item) cons
 			return (int)(getUnit()->getTimeUnits() * item->getRules()->getTUSnap() / 100);
 		case BA_AIMEDSHOT:
 			return (int)(getUnit()->getTimeUnits() * item->getRules()->getTUAimed() / 100);
+		case BA_USE:
+			return (int)(getUnit()->getTimeUnits() * item->getRules()->getTUUse() / 100);
 		default:
 			return 0;
 	}
