@@ -44,6 +44,8 @@
 #include "../Savegame/Ufo.h"
 #include "../Savegame/Craft.h"
 #include "../Savegame/Waypoint.h"
+#include "../Engine/ShaderMove.h"
+#include "../Engine/ShaderRepeat.h"
 
 namespace OpenXcom
 {
@@ -52,6 +54,176 @@ const double Globe::QUAD_LONGITUDE = 0.05;
 const double Globe::QUAD_LATITUDE = 0.2;
 const double Globe::ROTATE_LONGITUDE = 0.25;
 const double Globe::ROTATE_LATITUDE = 0.15;
+
+class GlobeStaticData
+{
+	std::vector<double> radius;
+	std::vector<std::vector<Cord> > ziemia;
+	std::vector<Sint16> losowy_szum;
+	
+	std::vector<ShaderMove<Cord>* > earth;
+	ShaderRepeat<Sint16>* random_noise;
+public: 
+	const std::pair<int,int> erde_xy;
+	
+	
+	
+	inline Cord circle_norm(double ox, double oy, double r, double x, double y)
+	{
+		const double limit = r*r;
+		const double norm = 1./r;
+		Cord ret;
+		ret.x = (x-ox);
+		ret.y = (y-oy);
+		const double temp = (ret.x)*(ret.x) + (ret.y)*(ret.y);
+		if(limit > temp)
+		{
+			ret.x *= norm;
+			ret.y *= norm;
+			ret.z = sqrt(limit - temp)*norm;
+			return ret;
+		}
+		else
+		{
+			ret.x = 0.;
+			ret.y = 0.;
+			ret.z = 0.;
+			return ret;
+		}
+	}
+	
+	
+	GlobeStaticData():
+			erde_xy(std::make_pair(300, 200))
+	{
+		
+		radius.push_back(90);
+		radius.push_back(120);
+		radius.push_back(180);
+		radius.push_back(280);
+		radius.push_back(450);
+		radius.push_back(720);
+		ziemia.resize(radius.size());
+		
+		for(int r = 0; r<radius.size(); ++r)
+		{
+			ziemia[r].resize(erde_xy.first * erde_xy.second);
+			for(int j=0; j<erde_xy.second; ++j)
+				for(int i=0; i<erde_xy.first; ++i)
+				{
+					ziemia[r][erde_xy.first*j + i] = circle_norm(erde_xy.first/2, erde_xy.second/2, radius[r], i+.5, j+.5);
+				}
+			earth.push_back(new ShaderMove<Cord>(ziemia[r], erde_xy.first, erde_xy.second));
+			earth[r]->setMove(-erde_xy.first/2, -erde_xy.second/2);
+		}
+		
+		const int zufall_xy = 60;
+		losowy_szum.resize(zufall_xy * zufall_xy);
+		for(int i=0; i< losowy_szum.size(); ++i)
+			losowy_szum[i] = rand()%20;
+		random_noise = new ShaderRepeat<Sint16>(losowy_szum, zufall_xy, zufall_xy );
+		
+	}
+	~GlobeStaticData()
+	{
+		for(int i=0; i< earth.size(); ++i)
+			delete earth[i];
+		delete random_noise;
+	}
+	
+	inline const ShaderMove<Cord >& getEarthShape(int zoom)
+	{
+		return *earth[zoom];
+	}
+	inline const ShaderRepeat<Sint16>& getNoise()
+	{
+		return *random_noise;
+	}
+	inline double getRadius(int zoom)
+	{
+		return radius[zoom];
+	}
+	inline int getRadiusSize()
+	{
+		return radius.size();
+	}
+};
+
+GlobeStaticData static_data;
+
+
+struct Ocean
+{
+	static inline Uint8 func(const Uint8& dest, const Cord& src, const int&, const int&, const int&)
+	{
+		return (src.z > 0. )? Palette::blockOffset(12) + 0 : dest;
+	}
+};
+
+struct CreateShadow
+{
+	static inline Uint8 getShadowValue(const Uint8& dest, const Cord& earth, const Cord& sun, const Sint16& noise)
+	{
+		Cord temp = earth;
+		//diff
+		temp -= sun;
+		//norm
+		temp.x *= temp.x;
+		temp.y *= temp.y;
+		temp.z *= temp.z;
+		temp.x += temp.z + temp.y;
+		temp.x = sqrt(temp.x);
+		//we have norm of distans betwen 2 vectors in `x`
+		temp.x -= sqrt(2);
+		temp.x *= 500.;
+		temp.x -= noise;
+		if(temp.x > 0.)
+		{
+			const Sint16 val = (temp.x> 31.)? 31 : (Sint16)temp.x;
+			const int d = dest & helper::ColorGroup;
+			if(d ==  Palette::blockOffset(12) || d ==  Palette::blockOffset(13))
+			{
+				//this pixel is ocean
+				return Palette::blockOffset(12) + val;
+			}
+			else
+			{
+				//this pixel is land
+				const int s = (val>>2);
+				const int e = dest+s;
+				if(e > d + helper::ColorShade)
+					return d + helper::ColorShade;
+				return e;
+			}
+		}
+		else
+		{
+			const int d = dest & helper::ColorGroup;
+			if(d ==  Palette::blockOffset(12) || d ==  Palette::blockOffset(13))
+			{
+				//this pixel is ocean
+				return Palette::blockOffset(12);
+			}
+			else
+			{
+				//this pixel is land
+				return dest;
+			}
+		}
+	}
+	
+	static inline Uint8 func(const Uint8& dest, const Cord& earth, const Cord& sun, const Sint16& noise, const int&)
+	{
+		if(dest && earth.z)
+		{
+			return getShadowValue(dest, earth, sun, noise);
+		}
+		else
+			return 0;
+	}
+};
+
+
 
 /**
  * Sets up a globe with the specified size and position.
@@ -63,22 +235,9 @@ const double Globe::ROTATE_LATITUDE = 0.15;
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Globe::Globe(Game *game, int cenX, int cenY, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _radius(), _cenLon(-0.01), _cenLat(-0.1), _rotLon(0.0), _rotLat(0.0), _cenX(cenX), _cenY(cenY), _zoom(0), _game(game), _blink(true), _detail(true), _cacheLand()
+Globe::Globe(Game *game, int cenX, int cenY, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _cenLon(-0.01), _cenLat(-0.1), _rotLon(0.0), _rotLat(0.0), _cenX(cenX), _cenY(cenY), _zoom(0), _game(game), _blink(true), _detail(true), _cacheLand()
 {
-	_texture[0] = _game->getResourcePack()->getSurfaceSet("TEXTURE.DAT");
-	for (int shade = 1; shade < NUM_SHADES; shade++)
-	{
-		_texture[shade] = new SurfaceSet(*_texture[0]);
-		for (int f = 0; f < _texture[shade]->getTotalFrames(); f++)
-			_texture[shade]->getFrame(f)->offset(shade);
-	}
-
-	_radius.push_back(90);
-	_radius.push_back(120);
-	_radius.push_back(180);
-	_radius.push_back(360);
-	_radius.push_back(450);
-	_radius.push_back(720);
+	_texture = new SurfaceSet(*_game->getResourcePack()->getSurfaceSet("TEXTURE.DAT"));
 
 	_countries = new Surface(width, height, x, y);
 	_markers = new Surface(width, height, x, y);
@@ -189,8 +348,7 @@ Globe::Globe(Game *game, int cenX, int cenY, int width, int height, int x, int y
  */
 Globe::~Globe()
 {
-	for (int i = 1; i < NUM_SHADES; ++i)
-		delete _texture[i];
+	delete _texture;
 
 	delete _blinkTimer;
 	delete _rotTimer;
@@ -223,8 +381,8 @@ Globe::~Globe()
 void Globe::polarToCart(double lon, double lat, Sint16 *x, Sint16 *y) const
 {
 	// Orthographic projection
-	*x = _cenX + (Sint16)floor(_radius[_zoom] * cos(lat) * sin(lon - _cenLon));
-	*y = _cenY + (Sint16)floor(_radius[_zoom] * (cos(_cenLat) * sin(lat) - sin(_cenLat) * cos(lat) * cos(lon - _cenLon)));
+	*x = _cenX + (Sint16)floor(static_data.getRadius(_zoom) * cos(lat) * sin(lon - _cenLon));
+	*y = _cenY + (Sint16)floor(static_data.getRadius(_zoom) * (cos(_cenLat) * sin(lat) - sin(_cenLat) * cos(lat) * cos(lon - _cenLon)));
 }
 
 /**
@@ -242,7 +400,7 @@ void Globe::cartToPolar(Sint16 x, Sint16 y, double *lon, double *lat) const
 	y -= _cenY;
 
 	double rho = sqrt((double)(x*x + y*y));
-	double c = asin(rho / (_radius[_zoom]));
+	double c = asin(rho / (static_data.getRadius(_zoom)));
 
 	*lat = asin((y * sin(c) * cos(_cenLat)) / rho + cos(c) * sin(_cenLat));
 	*lon = atan2(x * sin(c),(rho * cos(_cenLat) * cos(c) - y * sin(_cenLat) * sin(c))) + _cenLon;
@@ -422,7 +580,7 @@ void Globe::rotateStop()
  */
 void Globe::zoomIn()
 {
-	if (_zoom < _radius.size() - 1)
+	if (_zoom < static_data.getRadiusSize() - 1)
 	{
 		_zoom++;
 		cachePolygons();
@@ -455,7 +613,7 @@ void Globe::zoomMin()
  */
 void Globe::zoomMax()
 {
-	_zoom = _radius.size() - 1;
+	_zoom = static_data.getRadiusSize() - 1;
 	cachePolygons();
 }
 
@@ -641,10 +799,9 @@ void Globe::cache(std::list<Polygon*> *polygons, std::list<Polygon*> *cache)
 void Globe::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 {
 	Surface::setPalette(colors, firstcolor, ncolors);
-	for (int shade = 0; shade < NUM_SHADES; shade++)
-	{
-		_texture[shade]->setPalette(colors, firstcolor, ncolors);
-	}
+	
+	_texture->setPalette(colors, firstcolor, ncolors);
+	
 	_countries->setPalette(colors, firstcolor, ncolors);
 	_markers->setPalette(colors, firstcolor, ncolors);
 	_mkXcomBase->setPalette(colors, firstcolor, ncolors);
@@ -730,269 +887,24 @@ void Globe::drawRefresh()
 	Surface::draw();
 	drawOcean();
 	drawLand();
+	drawShadow();
 	drawMarkers();
 }
 
-/**
- * Draws a segment of the ocean shade along the longitude.
- * @param startLon Starting longitude.
- * @param endLon Ending longitude.
- * @param colourShift Colour shade.
- */
-void Globe::fillLongitudeSegments(double startLon, double endLon, int colourShift)
-{
-	double traceLon, traceLat, endLan, startLan;
-	double dL; // dL - delta of Latitude and used as delta of pie
-	Sint16 direction, x, y;
-	std::vector<Sint16> polyPointsX, polyPointsY, polyPointsX2, polyPointsY2;
-	Sint16 *dx, *dy;
-	double sx, sy;
-	double angle1 = 0.0, angle2 = 0.0;
-	bool bigLonAperture = false;
-
-	if (abs(startLon-endLon) > 1)
-	{
-		bigLonAperture = 1;
-	}
-
-	// find two latitudes where
-	startLan = lastVisibleLat(startLon);
-	endLan   = lastVisibleLat(endLon);
-
-	traceLon = startLon;
-
-	// If North pole visible, we want to head south (+1), if South pole, head North (-1)
-	if (!pointBack(traceLon, -M_PI_2))
-	{
-		direction = 1;
-	}
-	else
-	{
-		direction = -1;
-	}
-
-	// Draw globe depending on the direction
-	if (direction == 1)
-	{
-		// draw fisrt longtitude line from pole
-		traceLon = startLon;
-		dL = (startLan + M_PI_2) / 20;
-		for (traceLat = -M_PI_2; traceLat < startLan; traceLat += dL)
-		{
-			polarToCart(traceLon, traceLat, &x, &y);
-			polyPointsX.push_back(x);
-			polyPointsY.push_back(y);
-		}
-
-		// if aperture of longtitude is big then we need find first angle of sector
-		if (bigLonAperture)
-		{
-			sx = x - _cenX;
-			sy = y - _cenY;
-			angle1 = atan(sy / sx);
-			if (sx < 0) angle1 += M_PI;
-		}
-
-		// draw second longtitude line from pole
-		traceLon = endLon;
-		dL = (endLan + M_PI_2) / 20;
-		for (traceLat = -M_PI_2; traceLat < endLan; traceLat += dL)
-		{
-			polarToCart(traceLon, traceLat, &x, &y);
-			polyPointsX2.push_back(x);
-			polyPointsY2.push_back(y);
-		}
-
-		// if aperture of longtitudes is big we need find second angle of sector and draw pie of circle between two longtitudes
-		if (bigLonAperture)
-		{
-			sx = x - _cenX;
-			sy = y - _cenY;
-			angle2 = atan(sy/sx);
-			if (sx < 0)
-			{
-				angle2 += M_PI;
-			}
-
-			// draw sector part of circle
-			if (angle1 > angle2)
-			{
-				dL = (angle1 - angle2) / 20;
-				for (double a = angle2 + dL / 2; a < angle1; a += dL)
-				{
-					x = _cenX + (Sint16)floor(_radius[_zoom] * cos(a));
-					y = _cenY + (Sint16)floor(_radius[_zoom] * sin(a));
-					polyPointsX2.push_back(x);
-					polyPointsY2.push_back(y);
-				}
-			}
-			else
-			{
-				dL = (2*M_PI + angle1 - angle2) / 20;
-				for (double a = angle2 + dL / 2; a < 2*M_PI + angle1; a += dL)
-				{
-					x = _cenX + (Sint16)floor(_radius[_zoom] * cos(a));
-					y = _cenY + (Sint16)floor(_radius[_zoom] * sin(a));
-					polyPointsX2.push_back(x);
-					polyPointsY2.push_back(y);
-				}
-			}
-		}
-	}
-	else // another direction
-	{
-		// draw fisrt longtitude line from pole
-		traceLon = startLon;
-		dL = (startLan - M_PI_2) / 20;
-		for (traceLat = M_PI_2; traceLat > startLan; traceLat += dL)
-		{
-			polarToCart(traceLon, traceLat, &x, &y);
-			polyPointsX.push_back(x);
-			polyPointsY.push_back(y);
-		}
-
-		// if aperture of longtitude is big then we need find first angle of sector of pie between longtitudes
-		if (bigLonAperture)
-		{
-			sx = x - _cenX;
-			sy = y - _cenY;
-			angle1 = atan(sy / sx);
-			if (sx < 0)
-			{
-				angle1 += M_PI;
-			}
-		}
-
-		// draw second longtitude line from pole
-		traceLon = endLon;
-		dL = (endLan - M_PI_2) / 20;
-		for (traceLat = M_PI_2; traceLat > endLan; traceLat += dL)
-		{
-			polarToCart(traceLon, traceLat, &x, &y);
-			polyPointsX2.push_back(x);
-			polyPointsY2.push_back(y);
-		}
-
-		// if aperture of longtitudes is big we need find second angle of sector and draw pie of circle between two longtitudes
-		if (bigLonAperture)
-		{
-			sx = x - _cenX;
-			sy = y - _cenY;
-			angle2 = atan(sy / sx);
-			if (sx < 0)
-			{
-				angle2 += M_PI;
-			}
-			if (angle2 > angle1)
-			{
-				dL = (angle2 - angle1) / 20;
-				for (double a = angle1 + dL / 2; a < angle2; a += dL)
-				{
-					x = _cenX + (Sint16)floor(_radius[_zoom] * cos(a));
-					y = _cenY + (Sint16)floor(_radius[_zoom] * sin(a));
-					polyPointsX.push_back(x);
-					polyPointsY.push_back(y);
-				}
-			}
-			else
-			{
-				dL = (2*M_PI + angle2 - angle1) / 20;
-				for (double a = angle1 + dL / 2; a < 2*M_PI + angle2; a += dL)
-				{
-					x = _cenX + (Sint16)floor(_radius[_zoom] * cos(a));
-					y = _cenY + (Sint16)floor(_radius[_zoom] * sin(a));
-					polyPointsX.push_back(x);
-					polyPointsY.push_back(y);
-				}
-			}
-		}
-	}
-
-	dx = new Sint16[polyPointsX.size()+polyPointsX2.size()];
-	dy = new Sint16[polyPointsX.size()+polyPointsX2.size()];
-
-	if (!polyPointsX.empty() || !polyPointsX2.empty())
-	{
-		for (unsigned int i = 0; i < polyPointsX.size(); ++i)
-		{
-			dx[i] = polyPointsX.at(i);
-			dy[i] = polyPointsY.at(i);
-		}
-
-		for (unsigned int i = 0 ; i < polyPointsX2.size() ; ++i)
-		{
-			dx[i+polyPointsX.size()] = polyPointsX2.at(polyPointsX2.size()-1-i);
-			dy[i+polyPointsX.size()] = polyPointsY2.at(polyPointsX2.size()-1-i);
-		}
-		drawPolygon(dx, dy, polyPointsX.size()+polyPointsX2.size(), Palette::blockOffset(12) + colourShift);
-	}
-
-	delete[] dx;
-	delete[] dy;
-}
 
 /**
  * Renders the ocean, shading it according to the time of day.
  */
 void Globe::drawOcean()
 {
-	double curTime = _game->getSavedGame()->getTime()->getDaylight();
-	double dayLon = -curTime * 2*M_PI;
-	double nightLon = dayLon + M_PI;
-
 	lock();
-
-	drawCircle(_cenX, _cenY, (Sint16)floor(_radius[_zoom]), Palette::blockOffset(12)+28);
-
-	fillLongitudeSegments(dayLon   + QUAD_LONGITUDE, nightLon - QUAD_LONGITUDE, 0);
-	fillLongitudeSegments(dayLon - QUAD_LONGITUDE, dayLon, 16);
-	fillLongitudeSegments(dayLon, dayLon + QUAD_LONGITUDE, 8);
-	fillLongitudeSegments(nightLon - QUAD_LONGITUDE, nightLon, 8);
-	fillLongitudeSegments(nightLon, nightLon + QUAD_LONGITUDE, 16);
-
+	ShaderMove<Cord> earth(static_data.getEarthShape(_zoom));
+	earth.addMove(_cenX, _cenY);
+	ShaderDraw<Ocean>(ShaderSurface(this), earth);
 	unlock();
 }
 
-/**
- * Calculates the shade of a polygon based
- * on its coordinates and current game time.
- * @param p Pointer to polygon.
- * @return Shade value (0-7).
- */
-int Globe::getShade(Polygon *p) const
-{
-	int _shades[] = {3, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3,
-					 4, 5, 6, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 6, 5, 4};
-	double minLon = 100.0, maxLon = -100.0, curTime = _game->getSavedGame()->getTime()->getDaylight();
-	bool pole = false;
 
-	// Convert coordinates
-	for (int j = 0; j < p->getPoints(); ++j)
-	{
-		double tmpLon = p->getLongitude(j);
-		double tmpLat = p->getLatitude(j);
-
-		if (abs(tmpLat) < (M_PI_2 - 0.0001)) //pole vertexes have no longitude
-		{
-			if (tmpLon < minLon && tmpLon >= (maxLon - M_PI))
-				minLon = tmpLon;
-			if (tmpLon > maxLon && tmpLon <= (minLon + M_PI))
-				maxLon = tmpLon;
-		}
-		else
-		{
-			pole = true;
-		}
-	}
-
-	int shade = (int)((curTime + (((minLon + maxLon) / 2) / (2 * M_PI))) * NUM_LANDSHADES);
-	shade = _shades[shade % NUM_LANDSHADES];
-	if (pole)
-	{
-		shade = (int)(shade * 0.6 + 4 * (1 - 0.6)); // twilight zone
-	}
-	return shade;
-}
 
 
 /**
@@ -1014,9 +926,49 @@ void Globe::drawLand()
 
 		// Apply textures according to zoom and shade
 		int zoom = (2 - (int)floor(_zoom / 2.0)) * NUM_TEXTURES;
-		int shade = getShade(*i);
-		drawTexturedPolygon(x, y, (*i)->getPoints(), _texture[shade]->getFrame((*i)->getTexture() + zoom), 0, 0);
+		drawTexturedPolygon(x, y, (*i)->getPoints(), _texture->getFrame((*i)->getTexture() + zoom), 0, 0);
 	}
+}
+
+/**
+ * Get position of sun from point on globe
+ * @param lon lontidue of position
+ * @param lat latitude of position 
+ * @return position of sun
+ */
+Cord Globe::getSunDirection(double lon, double lat) const
+{
+	const double curTime = _game->getSavedGame()->getTime()->getDaylight();
+	const double rot = curTime* 2*M_PI;
+	
+	const double sun = - 0.26 * cos( M_PI*( 1. - (_game->getSavedGame()->getTime()->getMonth()*31 + _game->getSavedGame()->getTime()->getDay())/178.));
+	const double sun_min = 1. - sun;
+	
+	Cord sun_direction(cos(rot+lon), sin(rot+lon)*-sin(lat), sin(rot+lon)*cos(lat));
+
+	Cord pole(0, cos(lat), sin(lat));
+
+	sun_direction *= sun_min;
+	pole *= sun;
+	sun_direction += pole;
+	double norm = sun_direction.norm();
+	//norm should be always greater than 0
+	norm = 1./norm;
+	sun_direction *=norm;
+	return sun_direction;
+}
+
+
+void Globe::drawShadow()
+{
+	
+	ShaderMove<Cord> earth(static_data.getEarthShape(_zoom));
+	earth.addMove(_cenX, _cenY);
+	
+	lock();
+	ShaderDraw<CreateShadow>(ShaderSurface(this), earth, ShaderScalar(getSunDirection(_cenLon, _cenLat)), static_data.getNoise());
+	unlock();
+		
 }
 
 /**
@@ -1295,12 +1247,12 @@ void Globe::keyboardPress(Action *action, State *state)
 void Globe::getPolygonTextureAndShade(double lon, double lat, int *texture, int *shade)
 {
 	*texture = -1;
+	*shade = CreateShadow::getShadowValue(0, Cord(0.,0.,1.), getSunDirection(lon, lat), 0);
 	for (std::list<Polygon*>::iterator i = _game->getResourcePack()->getPolygons()->begin(); i != _game->getResourcePack()->getPolygons()->end(); ++i)
 	{
 		if (insidePolygon(lon, lat, *i))
 		{
 			*texture = (*i)->getTexture();
-			*shade = getShade(*i);
 			return;
 		}
 	}
