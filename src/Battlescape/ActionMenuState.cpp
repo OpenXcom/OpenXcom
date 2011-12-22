@@ -64,15 +64,18 @@ ActionMenuState::ActionMenuState(Game *game, BattleAction *action, int x, int y)
 	std::wstring strTU = _game->getLanguage()->getString("STR_TUS");
 	std::wstringstream ss1, ss2;
 
-	// throwing
-	tu = _action->actor->getActionTUs(BA_THROW, _action->weapon);
-	ss1 << strAcc.c_str() << (int)floor(_action->actor->getThrowingAccuracy() * 100) << "%";
-	ss2 << strTU.c_str() << tu;
-	_actionMenu[id]->setAction(BA_THROW, _game->getLanguage()->getString("STR_THROW"), ss1.str(), ss2.str(), tu);
-	_actionMenu[id]->setVisible(true);
-	id++;
-	ss1.str(L"");
-	ss2.str(L"");
+	// throwing (if not a fixed weapon)
+	if (!_action->weapon->getRules()->getFixed())
+	{
+		tu = _action->actor->getActionTUs(BA_THROW, _action->weapon);
+		ss1 << strAcc.c_str() << (int)floor(_action->actor->getThrowingAccuracy() * 100) << "%";
+		ss2 << strTU.c_str() << tu;
+		_actionMenu[id]->setAction(BA_THROW, _game->getLanguage()->getString("STR_THROW"), ss1.str(), ss2.str(), tu);
+		_actionMenu[id]->setVisible(true);
+		id++;
+		ss1.str(L"");
+		ss2.str(L"");
+	}
 
 	// priming
 	if ((_action->weapon->getRules()->getBattleType() == BT_GRENADE || _action->weapon->getRules()->getBattleType() == BT_PROXIMITYGRENADE)
@@ -120,11 +123,23 @@ ActionMenuState::ActionMenuState(Game *game, BattleAction *action, int x, int y)
 		ss1.str(L"");
 		ss2.str(L"");
 	}
-	if (_action->weapon->getRules()->getTUUse() != 0)
+
+	// special items
+	if (_action->weapon->getRules()->getBattleType() == BT_MEDIKIT)
 	{
 		tu = _action->weapon->getRules()->getTUUse();
 		ss2 << strTU.c_str() << tu;
-		_actionMenu[id]->setAction(BA_MEDIKIT, _game->getLanguage()->getString("STR_USE_MEDI_KIT"), L"", ss2.str(), tu);
+		_actionMenu[id]->setAction(BA_USE, _game->getLanguage()->getString("STR_USE_MEDI_KIT"), L"", ss2.str(), tu);
+		_actionMenu[id]->setVisible(true);
+		id++;
+		ss2.str(L"");
+	}
+
+	if (_action->weapon->getRules()->getBattleType() == BT_SCANNER)
+	{
+		tu = _action->actor->getActionTUs(BA_USE, _action->weapon);
+		ss2 << strTU.c_str() << tu;
+		_actionMenu[id]->setAction(BA_USE, _game->getLanguage()->getString("STR_USE_SCANNER"), L"", ss2.str(), tu);
 		_actionMenu[id]->setVisible(true);
 		id++;
 		ss2.str(L"");
@@ -194,7 +209,7 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 				_game->pushState(new PrimeGrenadeState(_game, _action));
 			}
 		}
-		else if (_action->type == BA_MEDIKIT)
+		else if (_action->type == BA_USE && _action->weapon->getRules()->getBattleType() == BT_MEDIKIT)
 		{
 			BattleUnit *targetUnit = NULL;
 			std::vector<BattleUnit*> *const units (_game->getSavedGame()->getBattleGame()->getUnits());
@@ -223,6 +238,11 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 				_action->result = "STR_THERE_IS_NO_ONE_THERE";
 				_game->popState();
 			}
+		}
+		else if (_action->type == BA_USE && _action->weapon->getRules()->getBattleType() == BT_SCANNER)
+		{
+			_action->result = "STR_THERE_IS_NO_ONE_THERE";
+			_game->popState();
 		}
 		else
 		{
