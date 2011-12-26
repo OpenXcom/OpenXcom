@@ -40,7 +40,7 @@ namespace OpenXcom
  * @param unit Pointer to Unit object.
  * @param faction Which faction the units belongs to.
  */
-BattleUnit::BattleUnit(Unit *unit, UnitFaction faction) : _unit(unit), _faction(faction), _id(0), _pos(Position()), _tile(0), _lastPos(Position()), _direction(0), _directionTurret(0), _toDirectionTurret(0),  _verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true), _expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expMelee(0), _turretType(-1)
+BattleUnit::BattleUnit(Unit *unit, UnitFaction faction) : _unit(unit), _faction(faction), _id(0), _pos(Position()), _tile(0), _lastPos(Position()), _direction(0), _directionTurret(0), _toDirectionTurret(0),  _verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true), _expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expMelee(0), _turretType(-1), _motionPoints(0)
 {
 	_tu = unit->getTimeUnits();
 	_energy = unit->getStamina();
@@ -329,6 +329,22 @@ void BattleUnit::keepWalking()
 		_status = STATUS_STANDING;
 		_walkPhase = 0;
 		_verticalDirection = 0;
+
+		// motion points calculation for the motion scanner blips
+		if (_unit->getArmor()->getSize() > 1)
+		{
+			_motionPoints += 30;
+		}
+		else
+		{
+			// sectoids actually have less motion points
+			// but instead of create yet another variable, 
+			// I used the height of the unit instead (logical)
+			if (_unit->getStandHeight() > 16)
+				_motionPoints += 4;
+			else
+				_motionPoints += 3;
+		}
 	}
 
 	_cacheInvalid = true;
@@ -1054,6 +1070,7 @@ void BattleUnit::prepareNewTurn()
 	}
 
 	_dontReselect = false;
+	_motionPoints = 0;
 }
 
 
@@ -1536,5 +1553,17 @@ void BattleUnit::stimulant (int energy, int s)
 	_energy += energy;
 	healStun (s);
 }
+
+
+/**
+ * Get motion points for the motion scanner. More points
+ * is a larger blip on the scanner.
+ * @return points.
+ */
+int BattleUnit::getMotionPoints() const
+{
+	return _motionPoints;
+}
+
 }
 

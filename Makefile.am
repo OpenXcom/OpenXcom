@@ -194,6 +194,10 @@ openxcom_SOURCES = \
 	src/Battlescape/MedikitView.h \
 	src/Battlescape/MedikitState.cpp \
 	src/Battlescape/MedikitState.h \
+	src/Battlescape/ScannerView.cpp \
+	src/Battlescape/ScannerView.h \
+	src/Battlescape/ScannerState.cpp \
+	src/Battlescape/ScannerState.h \
 	src/dirent.h \
 	src/Engine/Action.cpp \
 	src/Engine/Action.h \

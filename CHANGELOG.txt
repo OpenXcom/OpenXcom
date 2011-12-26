@@ -3,6 +3,7 @@ Version 0.4 (??-??-????)
 New features:
 - Basescape:
 -- Research screens.
+-- Manufacture screens.
 
 - Battlescape:
 -- Abort screen.
@@ -18,6 +19,7 @@ New features:
 -- Medikits.
 -- Laser weapons.
 -- Large units.
+-- Motion scanner.
 
  
 Bugfixes:
