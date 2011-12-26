@@ -134,8 +134,11 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 		}
 		else
 		{
+			std::string type, armor;
+			(*i)["genUnitType"] >> type;
+			(*i)["genUnitArmor"] >> armor;
 			// create a new Unit.
-			unit = new GenUnit(rule->getGenUnit("SECTOID_SOLDIER"), rule->getArmor("SECTOID_ARMOR0"));
+			unit = new GenUnit(rule->getGenUnit(type), rule->getArmor(armor));
 		}
 		BattleUnit *b = new BattleUnit(unit, faction);
 		b->load(*i);

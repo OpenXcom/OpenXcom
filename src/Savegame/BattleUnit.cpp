@@ -28,6 +28,7 @@
 #include "GenUnit.h"
 #include "Soldier.h"
 #include "../Ruleset/RuleArmor.h"
+#include "../Ruleset/RuleGenUnit.h"
 #include "../Engine/RNG.h"
 #include "../Ruleset/RuleInventory.h"
 #include "Tile.h"
@@ -100,6 +101,7 @@ void BattleUnit::load(const YAML::Node &node)
 	node["expThrowing"] >> _expThrowing;
 	node["expPsiSkill"] >> _expPsiSkill;
 	node["expMelee"] >> _expMelee;
+	node["turretType"] >> _turretType;
 
 }
 
@@ -121,6 +123,8 @@ void BattleUnit::save(YAML::Emitter &out) const
 	else
 	{
 		out << YAML::Key << "soldierId" << YAML::Value << -1;
+		out << YAML::Key << "genUnitType" << YAML::Value << ((GenUnit*)_unit)->getRules()->getType();
+		out << YAML::Key << "genUnitArmor" << YAML::Value << ((GenUnit*)_unit)->getRules()->getArmor();
 	}
 	out << YAML::Key << "name" << YAML::Value << Language::wstrToUtf8(_unit->getName(0));
 	out << YAML::Key << "status" << YAML::Value << _status;
@@ -147,6 +151,7 @@ void BattleUnit::save(YAML::Emitter &out) const
 	out << YAML::Key << "expThrowing" << YAML::Value << _expThrowing;
 	out << YAML::Key << "expPsiSkill" << YAML::Value << _expPsiSkill;
 	out << YAML::Key << "expMelee" << YAML::Value << _expMelee;
+	out << YAML::Key << "turretType" << YAML::Value << _turretType;
 
 	if (getCurrentAIState())
 	{

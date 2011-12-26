@@ -1791,7 +1791,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	floaterSoldier->setVoxelParameters(21, 16, 3);
 	floaterSoldier->setValue(12);
 
-	RuleGenUnit *tankCannon = new RuleGenUnit("STR_TANK_CANNON", "STR_TANK_CANNON", "");
+	RuleGenUnit *tankCannon = new RuleGenUnit("TANK_CANNON", "STR_TANK_CANNON", "");
 	tankCannon->setArmor("TANK_ARMOR");
 	s1.tu = 70;
 	s1.stamina = 100;
