@@ -79,6 +79,7 @@ private:
 	int improveStat(int exp);
 	int _turretType;
 	bool _needPainKiller;
+	int _motionPoints;
 public:
 	/// Creates a BattleUnit.
 	BattleUnit(Unit *_unit, UnitFaction faction);
@@ -254,6 +255,9 @@ public:
 	void painKillers ();
 	/// Give stimulant to this unit
 	void stimulant (int energy, int stun);
+	/// Get motion points for the motion scanner.
+	int getMotionPoints() const;
+
 };
 
 }

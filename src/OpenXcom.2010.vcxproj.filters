@@ -614,6 +614,12 @@
     <ClCompile Include="Battlescape\MedikitView.cpp">
       <Filter>Battlescape</Filter>
     </ClCompile>
+    <ClCompile Include="Battlescape\ScannerState.cpp">
+      <Filter>Battlescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Battlescape\ScannerView.cpp">
+      <Filter>Battlescape</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1228,6 +1234,12 @@
       <Filter>Battlescape</Filter>
     </ClInclude>
     <ClInclude Include="Battlescape\MedikitView.h">
+      <Filter>Battlescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Battlescape\ScannerState.h">
+      <Filter>Battlescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Battlescape\ScannerView.h">
       <Filter>Battlescape</Filter>
     </ClInclude>
   </ItemGroup>

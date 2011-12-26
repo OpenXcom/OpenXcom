@@ -172,6 +172,8 @@
     <ClCompile Include="Battlescape\PrimeGrenadeState.cpp" />
     <ClCompile Include="Battlescape\Projectile.cpp" />
     <ClCompile Include="Battlescape\ProjectileFlyBState.cpp" />
+    <ClCompile Include="Battlescape\ScannerState.cpp" />
+    <ClCompile Include="Battlescape\ScannerView.cpp" />
     <ClCompile Include="Battlescape\UnitInfoState.cpp" />
     <ClCompile Include="Battlescape\TileEngine.cpp" />
     <ClCompile Include="Battlescape\UnitDieBState.cpp" />
@@ -379,6 +381,8 @@
     <ClInclude Include="Battlescape\PrimeGrenadeState.h" />
     <ClInclude Include="Battlescape\Projectile.h" />
     <ClInclude Include="Battlescape\ProjectileFlyBState.h" />
+    <ClInclude Include="Battlescape\ScannerState.h" />
+    <ClInclude Include="Battlescape\ScannerView.h" />
     <ClInclude Include="Battlescape\UnitInfoState.h" />
     <ClInclude Include="Battlescape\TileEngine.h" />
     <ClInclude Include="Battlescape\UnitDieBState.h" />

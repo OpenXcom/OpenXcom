@@ -31,6 +31,7 @@
 #include "ActionMenuItem.h"
 #include "PrimeGrenadeState.h"
 #include "MedikitState.h"
+#include "ScannerState.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
@@ -241,8 +242,16 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 		}
 		else if (_action->type == BA_USE && _action->weapon->getRules()->getBattleType() == BT_SCANNER)
 		{
-			_action->result = "STR_THERE_IS_NO_ONE_THERE";
-			_game->popState();
+			// spend TUs first, then show the scanner
+			if (_action->actor->spendTimeUnits (_action->TU, false))
+			{
+				_game->pushState (new ScannerState (_game, _action));
+			}
+			else
+			{
+				_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
+				_game->popState();
+			}
 		}
 		else
 		{

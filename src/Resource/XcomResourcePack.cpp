@@ -201,10 +201,6 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 	std::stringstream scang;
 	scang << "GEODATA/" << "SCANG.DAT";
 	_sets["SCANG.DAT"]->loadDat (CrossPlatform::getDataFile(scang.str()));
-	_sets["MEDIBITS.DAT"] = new SurfaceSet(52, 58);
-	std::stringstream medibits;
-	medibits << "UFOGRAPH/" << "MEDIBITS.DAT";
-	_sets["MEDIBITS.DAT"]->loadDat (CrossPlatform::getDataFile(medibits.str()));
 	// Load polygons
 	std::stringstream s;
 	s << "GEODATA/" << "WORLD.DAT";
@@ -432,6 +428,25 @@ void XcomResourcePack::loadBattlescapeResources()
 	_surfaces["UNIBORD.PCK"] = new Surface(320, 200);
 	_surfaces["UNIBORD.PCK"]->loadSpk(CrossPlatform::getDataFile(s.str()));
 
+	s.str("");
+	_sets["MEDIBITS.DAT"] = new SurfaceSet(52, 58);
+	s << "UFOGRAPH/" << "MEDIBITS.DAT";
+	_sets["MEDIBITS.DAT"]->loadDat (CrossPlatform::getDataFile(s.str()));
+
+	s.str("");
+	_sets["DETBLOB.DAT"] = new SurfaceSet(16, 16);
+	s << "UFOGRAPH/" << "DETBLOB.DAT";
+	_sets["DETBLOB.DAT"]->loadDat (CrossPlatform::getDataFile(s.str()));
+
+	s.str("");
+	s << "UFOGRAPH/" << "DETBORD.PCK";
+	_surfaces["DETBORD.PCK"] = new Surface(320, 200);
+	_surfaces["DETBORD.PCK"]->loadSpk(CrossPlatform::getDataFile(s.str()));
+
+	s.str("");
+	s << "UFOGRAPH/" << "DETBORD2.PCK";
+	_surfaces["DETBORD2.PCK"] = new Surface(320, 200);
+	_surfaces["DETBORD2.PCK"]->loadSpk(CrossPlatform::getDataFile(s.str()));
 
 	// Load Battlescape Terrain (only blacks are loaded, others are loaded just in time)
 	std::string bsets[] = {"BLANKS.PCK"};

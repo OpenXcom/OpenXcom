@@ -148,6 +148,10 @@ set ( battlescape_src
   Battlescape/MedikitState.h
   Battlescape/MedikitView.cpp
   Battlescape/MedikitView.h
+  Battlescape/ScannerState.cpp
+  Battlescape/ScannerState.h
+  Battlescape/ScannerView.cpp
+  Battlescape/ScannerView.h
 )
 
 set ( engine_src
