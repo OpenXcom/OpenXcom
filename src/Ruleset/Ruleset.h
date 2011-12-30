@@ -45,6 +45,8 @@ class ArticleDefinition;
 class RuleInventory;
 class RuleResearchProject;
 class RuleManufactureInfo;
+class RuleAlienRace;
+class RuleAlienDeployment;
 
 /**
  * Set of rules and stats for a game.
@@ -67,6 +69,8 @@ protected:
 	std::map<std::string, MapDataSet*> _mapDataSets;
 	std::map<std::string, RuleSoldier*> _soldiers;
 	std::map<std::string, RuleGenUnit*> _genUnits;
+	std::map<std::string, RuleAlienRace*> _alienRaces;
+	std::map<std::string, RuleAlienDeployment*> _alienDeployments;
 	std::map<std::string, RuleArmor*> _armors;
 	std::map<std::string, ArticleDefinition*> _ufopaediaArticles;
 	std::map<std::string, RuleInventory*> _invs;
@@ -109,6 +113,10 @@ public:
 	RuleSoldier *const getSoldier(const std::string &name) const;
 	/// Gets generated unit rules.
 	RuleGenUnit *const getGenUnit(const std::string &name) const;
+	/// Gets alien race rules.
+	RuleAlienRace *const getAlienRace(const std::string &name) const;
+	/// Gets deployment rules.
+	RuleAlienDeployment *const getDeployment(const std::string &name) const;
 	/// Gets armor rules.
 	RuleArmor *const getArmor(const std::string &name) const;
 	/// Gets Ufopaedia article definition.

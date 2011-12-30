@@ -128,6 +128,8 @@ void ConfirmLandingState::btnYesClick(Action *action)
 		bgen->setWorldShade(_shade);
 		bgen->setCraft(_craft);
 		bgen->setUfo(u);
+		bgen->setAlienRace("STR_SECTOID");
+		bgen->setAlienItemlevel(0);
 		bgen->run();
 		delete bgen;
 

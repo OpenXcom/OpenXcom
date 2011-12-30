@@ -86,6 +86,7 @@ void BattleUnit::load(const YAML::Node &node)
 	node["position"][1] >> _pos.y;
 	node["position"][2] >> _pos.z;
 	node["direction"] >> _direction;
+	node["directionTurret"] >> _directionTurret;
 	node["tu"] >> _tu;
 	node["health"] >> _health;
 	node["energy"] >> _energy;
@@ -131,6 +132,7 @@ void BattleUnit::save(YAML::Emitter &out) const
 	out << YAML::Key << "position" << YAML::Value << YAML::Flow;
 	out << YAML::BeginSeq << _pos.x << _pos.y << _pos.z << YAML::EndSeq;
 	out << YAML::Key << "direction" << YAML::Value << _direction;
+	out << YAML::Key << "directionTurret" << YAML::Value << _directionTurret;
 	out << YAML::Key << "tu" << YAML::Value << _tu;
 	out << YAML::Key << "health" << YAML::Value << _health;
 	out << YAML::Key << "energy" << YAML::Value << _energy;

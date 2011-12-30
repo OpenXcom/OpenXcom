@@ -35,6 +35,8 @@ class Soldier;
 class RuleArmor;
 class RuleItem;
 class RuleGenUnit;
+class RuleAlienRace;
+class RuleAlienDeployment;
 class Game;
 
 /**
@@ -54,6 +56,8 @@ private:
 	MissionType _missionType;
 	int _unitCount;
 	Tile *_craftInventoryTile;
+	std::string _alienRace;
+	int _alienItemLevel;
 
 	/// Generate a new battlescape map.
 	void generateMap();
@@ -62,7 +66,8 @@ private:
 	/// Add a soldier to the game
 	void addSoldier(Soldier *soldier);
 	/// Add an alien to the game
-	BattleUnit *addAlien(RuleGenUnit *rules, NodeRank rank);
+	BattleUnit *addAlien(RuleGenUnit *rules, int alienRank, bool outside);
+	BattleUnit *addCivilian(RuleGenUnit *rules);
 	BattleUnit *addVehicle(RuleGenUnit *rules);
 	/// Add an item to the game
 	void addItem(RuleItem *item);
@@ -73,6 +78,8 @@ private:
 	/// loads an XCOM RMP file
 	void loadRMP(MapBlock *mapblock, int xoff, int yoff, int segment);
 	void explodePowerSources();
+	void deployAliens(RuleAlienRace *race, RuleAlienDeployment *deployment);
+	Node *getSpawnNode(int nodeRank, BattleUnit *unit);
 public:
 	/// Creates a new BattlescapeGenerator class
 	BattlescapeGenerator(Game *game);
@@ -88,6 +95,10 @@ public:
 	void setWorldShade(int shade);
 	/// Set the mission type.
 	void setMissionType(MissionType missionType);
+	/// Set the alien race.
+	void setAlienRace(std::string alienRace);
+	/// Set the alien item level.
+	void setAlienItemlevel(int alienItemLevel);
 	/// Runs the generator.
 	void run();
 

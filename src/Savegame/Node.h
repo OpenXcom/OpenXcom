@@ -27,7 +27,7 @@ namespace OpenXcom
 
 class NodeLink;
 
-enum NodeRank{SCOUT=0, XCOM, SOLDIER, NAVIGATOR, LEADER, ENGINEER, MISC1, MEDIC, MISC2};
+enum NodeRank{NR_SCOUT=0, NR_XCOM, NR_SOLDIER, NR_NAVIGATOR, NR_LEADER, NR_ENGINEER, NR_MISC1, NR_MEDIC, NR_MISC2};
 
 /**
  * Represents a node/spawnpoint in the battlescape, loaded from RMP files.
@@ -48,8 +48,8 @@ private:
 public:
 	static const int CRAFTSEGMENT = 1000;
 	static const int UFOSEGMENT = 2000;
-	static const int TYPE_FLYING = 0x01;
-	static const int TYPE_SMALL = 0x02;
+	static const int TYPE_FLYING = 0x01; // non-flying unit can not spawn here when this bit is set
+	static const int TYPE_SMALL = 0x02; // large unit can not spawn here when this bit is set
 	/// Creates a Node.
 	Node();
 	Node(int id, Position pos, int segment, int type, int rank, int flags, int reserved, int priority);

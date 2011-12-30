@@ -356,6 +356,10 @@ set ( ruleset_src
   Ruleset/RuleResearchProject.cpp
   Ruleset/RuleManufactureInfo.h
   Ruleset/RuleManufactureInfo.cpp
+  Ruleset/RuleAlienDeployment.h
+  Ruleset/RuleAlienDeployment.cpp
+  Ruleset/RuleAlienRace.h
+  Ruleset/RuleAlienRace.cpp
 )
 
 set ( savegame_src

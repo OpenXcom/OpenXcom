@@ -28,6 +28,7 @@ namespace OpenXcom
 class RuleTerrain;
 class Ruleset;
 
+
 /**
  * Represents a specific type of UFO.
  * Contains constant info about a UFO like
@@ -86,8 +87,9 @@ public:
 	int getScore() const;
 	/// Sets the UFO's score.
 	void setScore(int score);
-	/// stuff needed to draw this UFO on the battlescape
+	/// Sets the battlescape terrain data ruleset for this UFO
 	RuleTerrain *getBattlescapeTerrainData();
+	/// Gets the battlescape terrain data ruleset for this UFO
 	void setBattlescapeTerrainData(RuleTerrain *t);
 };
 

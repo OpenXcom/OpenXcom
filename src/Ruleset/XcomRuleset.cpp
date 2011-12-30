@@ -56,6 +56,8 @@
 #include <fstream>
 #include <algorithm>
 #include "RuleManufactureInfo.h"
+#include "RuleAlienRace.h"
+#include "RuleAlienDeployment.h"
 
 namespace OpenXcom
 {
@@ -1301,17 +1303,11 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	lscout->setScore(125);
 	ruleTerrain = new RuleTerrain("UFO_120");
 	lscout->setBattlescapeTerrainData(ruleTerrain);
-	/*ruleTerrain->getMapDataSets()->push_back(getMapDataSet("BLANKS"));
-	ruleTerrain->getMapDataSets()->push_back(getMapDataSet("U_EXT02"));
-	ruleTerrain->getMapDataSets()->push_back(getMapDataSet("U_WALL02"));
-	ruleTerrain->getMapDataSets()->push_back(getMapDataSet("U_BITS"));
-	ruleTerrain->getMapBlocks()->push_back(new MapBlock(ruleTerrain,"UFO_120",20,20,true));*/
 	ruleTerrain->getMapDataSets()->push_back(getMapDataSet("BLANKS"));
 	ruleTerrain->getMapDataSets()->push_back(getMapDataSet("U_EXT02"));
 	ruleTerrain->getMapDataSets()->push_back(getMapDataSet("U_WALL02"));
-	ruleTerrain->getMapDataSets()->push_back(getMapDataSet("U_DISEC2"));
 	ruleTerrain->getMapDataSets()->push_back(getMapDataSet("U_BITS"));
-	ruleTerrain->getMapBlocks()->push_back(new MapBlock(ruleTerrain,"UFO_130",20,20,true));
+	ruleTerrain->getMapBlocks()->push_back(new MapBlock(ruleTerrain,"UFO_120",20,20,true));
 
 	RuleUfo *abducter = new RuleUfo("STR_ABDUCTER");
 	abducter->setSize("STR_MEDIUM");
@@ -1322,6 +1318,14 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	abducter->setWeaponRange(22);
 	abducter->setMaxDamage(500);
 	abducter->setScore(250);
+	ruleTerrain = new RuleTerrain("UFO_130");
+	abducter->setBattlescapeTerrainData(ruleTerrain);
+	ruleTerrain->getMapDataSets()->push_back(getMapDataSet("BLANKS"));
+	ruleTerrain->getMapDataSets()->push_back(getMapDataSet("U_EXT02"));
+	ruleTerrain->getMapDataSets()->push_back(getMapDataSet("U_WALL02"));
+	ruleTerrain->getMapDataSets()->push_back(getMapDataSet("U_DISEC2"));
+	ruleTerrain->getMapDataSets()->push_back(getMapDataSet("U_BITS"));
+	ruleTerrain->getMapBlocks()->push_back(new MapBlock(ruleTerrain,"UFO_130",20,20,true));
 
 	RuleUfo *harvester = new RuleUfo("STR_HARVESTER");
 	harvester->setSize("STR_MEDIUM");
@@ -1371,6 +1375,151 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_ufos.insert(std::pair<std::string, RuleUfo*>("STR_SUPPLY_SHIP", supply));
 	_ufos.insert(std::pair<std::string, RuleUfo*>("STR_TERROR_SHIP", terror));
 	_ufos.insert(std::pair<std::string, RuleUfo*>("STR_BATTLESHIP", battleship));
+
+	/* deployment data */
+	/* items that not yet exist in the ruleset are put in comment */
+	RuleAlienDeployment *asscout = new RuleAlienDeployment("STR_SMALL_SCOUT");
+	DeploymentData dd;
+	dd.alienRank = AR_SOLDIER;
+	dd.lowQty = 1;
+	dd.highQty = 1;
+	dd.dQty = 0;
+	dd.percentageOutsideUFO = 50;
+	ItemSet is;
+	is.items.push_back("STR_PLASMA_PISTOL");
+	is.items.push_back("STR_PLASMA_PISTOL_CLIP");
+	is.items.push_back("STR_PLASMA_PISTOL_CLIP");
+	//is.items.push_back("STR_MIND_PROBE");
+	dd.itemSets.push_back(is);
+	is.items.clear();
+	is.items.push_back("STR_PLASMA_RIFLE");
+	is.items.push_back("STR_PLASMA_RIFLE_CLIP");
+	is.items.push_back("STR_PLASMA_RIFLE_CLIP");
+	is.items.push_back("STR_MIND_PROBE");
+	dd.itemSets.push_back(is);
+	is.items.clear();
+	is.items.push_back("STR_HEAVY_PLASMA");
+	is.items.push_back("STR_HEAVY_PLASMA_CLIP");
+	is.items.push_back("STR_MIND_PROBE");
+	dd.itemSets.push_back(is);
+	asscout->getDeploymentData()->push_back(dd);
+
+	RuleAlienDeployment *amscout = new RuleAlienDeployment("STR_MEDIUM_SCOUT");
+	dd.alienRank = AR_SOLDIER;
+	dd.lowQty = 2;
+	dd.highQty = 4;
+	dd.dQty = 2;
+	dd.percentageOutsideUFO = 60;
+	is.items.clear();
+	is.items.push_back("STR_PLASMA_PISTOL");
+	is.items.push_back("STR_PLASMA_PISTOL_CLIP");
+	is.items.push_back("STR_PLASMA_PISTOL_CLIP");
+	dd.itemSets.push_back(is);
+	is.items.clear();
+	is.items.push_back("STR_PLASMA_RIFLE");
+	is.items.push_back("STR_PLASMA_RIFLE_CLIP");
+	is.items.push_back("STR_PLASMA_RIFLE_CLIP");
+	dd.itemSets.push_back(is);
+	is.items.clear();
+	is.items.push_back("STR_HEAVY_PLASMA");
+	is.items.push_back("STR_HEAVY_PLASMA_CLIP");
+	is.items.push_back("STR_ALIEN_GRENADE");
+	dd.itemSets.push_back(is);
+	amscout->getDeploymentData()->push_back(dd);
+
+	dd.alienRank = AR_NAVIGATOR;
+	dd.lowQty = 1;
+	dd.highQty = 2;
+	dd.dQty = 1;
+	dd.percentageOutsideUFO = 20;
+	is.items.clear();
+	is.items.push_back("STR_PLASMA_PISTOL");
+	is.items.push_back("STR_PLASMA_PISTOL_CLIP");
+	//is.items.push_back("STR_MIND_PROBE");
+	dd.itemSets.push_back(is);
+	is.items.clear();
+	is.items.push_back("STR_PLASMA_RIFLE");
+	is.items.push_back("STR_PLASMA_RIFLE_CLIP");
+	dd.itemSets.push_back(is);
+	is.items.clear();
+	is.items.push_back("STR_HEAVY_PLASMA");
+	is.items.push_back("STR_HEAVY_PLASMA_CLIP");
+	dd.itemSets.push_back(is);
+	amscout->getDeploymentData()->push_back(dd);
+
+	RuleAlienDeployment *alscout = new RuleAlienDeployment("STR_LARGE_SCOUT");
+	dd.alienRank = AR_SOLDIER;
+	dd.lowQty = 1;
+	dd.highQty = 3;
+	dd.dQty = 5;
+	dd.percentageOutsideUFO = 65;
+	is.items.clear();
+	is.items.push_back("STR_PLASMA_PISTOL");
+	is.items.push_back("STR_PLASMA_PISTOL_CLIP");
+	is.items.push_back("STR_PLASMA_PISTOL_CLIP");
+	dd.itemSets.push_back(is);
+	is.items.clear();
+	is.items.push_back("STR_PLASMA_RIFLE");
+	is.items.push_back("STR_PLASMA_RIFLE_CLIP");
+	is.items.push_back("STR_PLASMA_RIFLE_CLIP");
+	dd.itemSets.push_back(is);
+	is.items.clear();
+	is.items.push_back("STR_HEAVY_PLASMA");
+	is.items.push_back("STR_HEAVY_PLASMA_CLIP");
+	is.items.push_back("STR_HEAVY_PLASMA_CLIP");
+	dd.itemSets.push_back(is);
+	alscout->getDeploymentData()->push_back(dd);
+
+	dd.alienRank = AR_NAVIGATOR;
+	dd.lowQty = 1;
+	dd.highQty = 1;
+	dd.dQty = 1;
+	dd.percentageOutsideUFO = 25;
+	is.items.clear();
+	is.items.push_back("STR_PLASMA_PISTOL");
+	is.items.push_back("STR_PLASMA_PISTOL_CLIP");
+	//is.items.push_back("STR_MIND_PROBE");
+	dd.itemSets.push_back(is);
+	is.items.clear();
+	is.items.push_back("STR_PLASMA_RIFLE");
+	is.items.push_back("STR_PLASMA_RIFLE_CLIP");
+	is.items.push_back("STR_PLASMA_RIFLE_CLIP");
+	dd.itemSets.push_back(is);
+	is.items.clear();
+	is.items.push_back("STR_HEAVY_PLASMA");
+	is.items.push_back("STR_HEAVY_PLASMA_CLIP");
+	is.items.push_back("STR_HEAVY_PLASMA_CLIP");
+	is.items.push_back("STR_ALIEN_GRENADE");
+	dd.itemSets.push_back(is);
+	alscout->getDeploymentData()->push_back(dd);
+
+	dd.alienRank = AR_ENGINEER;
+	dd.lowQty = 1;
+	dd.highQty = 2;
+	dd.dQty = 1;
+	dd.percentageOutsideUFO = 35;
+	is.items.clear();
+	is.items.push_back("STR_PLASMA_PISTOL");
+	is.items.push_back("STR_PLASMA_PISTOL_CLIP");
+	//is.items.push_back("STR_MIND_PROBE");
+	dd.itemSets.push_back(is);
+	is.items.clear();
+	is.items.push_back("STR_PLASMA_RIFLE");
+	is.items.push_back("STR_PLASMA_RIFLE_CLIP");
+	is.items.push_back("STR_PLASMA_RIFLE_CLIP");
+	is.items.push_back("STR_MIND_PROBE");
+	dd.itemSets.push_back(is);
+	is.items.clear();
+	is.items.push_back("STR_SMALL_LAUNCHER");
+	is.items.push_back("STR_STUN_MISSLE");
+	is.items.push_back("STR_STUN_MISSLE");
+	is.items.push_back("STR_STUN_MISSLE");
+	dd.itemSets.push_back(is);
+	alscout->getDeploymentData()->push_back(dd);
+
+	_alienDeployments.insert(std::pair<std::string, RuleAlienDeployment*>("STR_SMALL_SCOUT", asscout));
+	_alienDeployments.insert(std::pair<std::string, RuleAlienDeployment*>("STR_MEDIUM_SCOUT", amscout));
+	_alienDeployments.insert(std::pair<std::string, RuleAlienDeployment*>("STR_LARGE_SCOUT", alscout));
 
 	// Add inventory
 	RuleInventory *rshoulder = new RuleInventory("STR_RIGHT_SHOULDER");
@@ -1813,6 +1962,38 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_genUnits.insert(std::pair<std::string, RuleGenUnit*>("SECTOID_NAVIGATOR", sectoidNavigator));
 	_genUnits.insert(std::pair<std::string, RuleGenUnit*>("FLOATER_SOLDIER", floaterSoldier));
 	_genUnits.insert(std::pair<std::string, RuleGenUnit*>("TANK_CANNON", tankCannon));
+
+	/*
+	1         2         3         4         5         6         7          8
+	sect_com, sect_lea, sect_eng, sect_med, sect_nav, sect_sol, cyberdisk, cyberdisk
+	snak_com, snak_lea, snak_eng, snak_sol, snak_nav, snak_sol, chryssalid,chryssalid
+	ethe_com, ethe_lea, ethe_lea, ethe_lea, ethe_lea, ethe_sol, sectopod,  sectopod
+	muto_sol, muto_sol, muto_eng, muto_sol, muto_nav, muto_sol, celatid,   silacoid
+	floa_com, floa_lea, floa_eng, floa_med, floa_nav, floa_sol, reaper,    reaper
+	ethe_sol, ethe_lea, ethe_com, chyssalid,silacoid, celatid,  sectopod,  floa_sol
+	*/
+
+	RuleAlienRace *arSectoid = new RuleAlienRace("STR_SECTOID");
+	arSectoid->addMember("SECTOID_COMMANDER");
+	arSectoid->addMember("SECTOID_LEADER");
+	arSectoid->addMember("SECTOID_ENGINEER");
+	arSectoid->addMember("SECTOID_MEDIC");
+	arSectoid->addMember("SECTOID_NAVIGATOR");
+	arSectoid->addMember("SECTOID_SOLDIER");
+	arSectoid->addMember("CYBERDISC");
+	arSectoid->addMember("CYBERDISC");
+	RuleAlienRace *arFloater = new RuleAlienRace("STR_FLOATER");
+	arFloater->addMember("FLOATER_COMMANDER");
+	arFloater->addMember("FLOATER_LEADER");
+	arFloater->addMember("FLOATER_ENGINEER");
+	arFloater->addMember("FLOATER_MEDIC");
+	arFloater->addMember("FLOATER_NAVIGATOR");
+	arFloater->addMember("FLOATER_SOLDIER");
+	arFloater->addMember("REAPER");
+	arFloater->addMember("REAPER");
+	_alienRaces.insert(std::pair<std::string, RuleAlienRace*>("STR_SECTOID", arSectoid));
+	_alienRaces.insert(std::pair<std::string, RuleAlienRace*>("STR_FLOATER", arFloater));
+
 
 	// create Ufopaedia article definitions
 	int sort_key = 1;
