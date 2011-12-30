@@ -45,6 +45,8 @@
 #include "../Ruleset/MapData.h"
 #include "../Ruleset/RuleArmor.h"
 #include "../Ruleset/RuleGenUnit.h"
+#include "../Ruleset/RuleAlienRace.h"
+#include "../Ruleset/RuleAlienDeployment.h"
 #include "../Resource/XcomResourcePack.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
@@ -118,13 +120,33 @@ void BattlescapeGenerator::setWorldShade(int shade)
 }
 
 /**
+ * Sets the alien race on the mission. This is used to determine the various alien types to spawn.
+ * @param alienRace Alien (main)race.
+ */
+void BattlescapeGenerator::setAlienRace(std::string alienRace)
+{
+	_alienRace = alienRace;
+}
+
+/**
+ * Sets the alien item level. This is used to determine how advanced the equipment of the aliens will be.
+ * - this value should be from 0 to 3.
+ * - at a certain number of months higher item levels appear more and more and lower ones will gradually disappear
+ * - how quick a race evolves varies per race? TODO
+ * @param alienItemLevel AlienItemLevel.
+ */
+void BattlescapeGenerator::setAlienItemlevel(int alienItemLevel)
+{
+	_alienItemLevel = alienItemLevel;
+}
+
+/**
  * Sets the mission type. This is used to determine the various elements of the battle.
  * @param missionType MissionType.
  */
 void BattlescapeGenerator::setMissionType(MissionType missionType)
 {
 	_missionType = missionType;
-	_save->setMissionType(missionType);
 }
 
 /**
@@ -253,82 +275,13 @@ void BattlescapeGenerator::run()
 	
 	if (_missionType == MISS_UFORECOVERY)
 	{
-		// TODO : this should be in rulesets 
-		if (_ufo->getRules()->getType() == "STR_SMALL_SCOUT")
-		{
-			unit = addAlien(_game->getRuleset()->getGenUnit("SECTOID_SOLDIER"), SOLDIER);
-			addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL"), unit);
-			addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL_CLIP"), unit);
-		}
-
-		if (_ufo->getRules()->getType() == "STR_MEDIUM_SCOUT")
-		{
-			unit = addAlien(_game->getRuleset()->getGenUnit("SECTOID_NAVIGATOR"), NAVIGATOR);
-			addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL"), unit);
-			addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL_CLIP"), unit);
-			if (RNG::generate(0,100) < 50)
-			{
-				unit = addAlien(_game->getRuleset()->getGenUnit("SECTOID_NAVIGATOR"), NAVIGATOR);
-				addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL"), unit);
-				addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL_CLIP"), unit);
-			}
-			unit = addAlien(_game->getRuleset()->getGenUnit("SECTOID_SOLDIER"), SOLDIER);
-			addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL"), unit);
-			addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL_CLIP"), unit);
-			unit = addAlien(_game->getRuleset()->getGenUnit("SECTOID_SOLDIER"), SCOUT);
-			addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL"), unit);
-			addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL_CLIP"), unit);
-			if (RNG::generate(0,100) < 50)
-			{
-				unit = addAlien(_game->getRuleset()->getGenUnit("SECTOID_SOLDIER"), SCOUT);
-				addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL"), unit);
-				addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL_CLIP"), unit);
-			}
-			if (RNG::generate(0,100) < 50)
-			{
-				unit = addAlien(_game->getRuleset()->getGenUnit("SECTOID_SOLDIER"), SCOUT);
-				addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL"), unit);
-				addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL_CLIP"), unit);
-			}
-		}
-
-		if (_ufo->getRules()->getType() == "STR_LARGE_SCOUT")
-		{
-			unit = addAlien(_game->getRuleset()->getGenUnit("SECTOID_NAVIGATOR"), NAVIGATOR);
-			addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL"), unit);
-			addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL_CLIP"), unit);
-			if (RNG::generate(0,100) < 50)
-			{
-				unit = addAlien(_game->getRuleset()->getGenUnit("SECTOID_NAVIGATOR"), NAVIGATOR);
-				addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL"), unit);
-				addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL_CLIP"), unit);
-			}
-			unit = addAlien(_game->getRuleset()->getGenUnit("SECTOID_ENGINEER"), ENGINEER);
-			addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL"), unit);
-			addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL_CLIP"), unit);
-			if (RNG::generate(0,100) < 50)
-			{
-				unit = addAlien(_game->getRuleset()->getGenUnit("SECTOID_ENGINEER"), ENGINEER);
-				addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL"), unit);
-				addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL_CLIP"), unit);
-			}
-			unit = addAlien(_game->getRuleset()->getGenUnit("SECTOID_SOLDIER"), SOLDIER);
-			addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL"), unit);
-			addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL_CLIP"), unit);
-			int nSoldiers = RNG::generate(0,5);
-			for (int i=0; i < nSoldiers; i++)
-			{
-				unit = addAlien(_game->getRuleset()->getGenUnit("SECTOID_SOLDIER"), SCOUT);
-				addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL"), unit);
-				addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL_CLIP"), unit);
-			}
-		}
+		deployAliens(_game->getRuleset()->getAlienRace(_alienRace), _game->getRuleset()->getDeployment(_ufo->getRules()->getType()));
 	}
 	else
 	{
-		for (int i=0; i < 5; i++)
+		for (int i=0; i < 14; i++)
 		{
-			unit = addAlien(_game->getRuleset()->getGenUnit("FLOATER_SOLDIER"), SOLDIER);
+			unit = addAlien(_game->getRuleset()->getGenUnit("FLOATER_SOLDIER"), AR_TERRORIST, true);
 			addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL"), unit);
 			addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL_CLIP"), unit);
 		}
@@ -381,95 +334,143 @@ void BattlescapeGenerator::addSoldier(Soldier *soldier)
 }
 
 /**
+ * Deploy the aliens, according to the alien deployment rules.
+ * @param race Pointer to the alien race.
+ * @param deployment Pointer to the deployment ruels.
+ */
+void BattlescapeGenerator::deployAliens(RuleAlienRace *race, RuleAlienDeployment *deployment)
+{
+	for (std::vector<DeploymentData>::iterator d = deployment->getDeploymentData()->begin(); d != deployment->getDeploymentData()->end(); ++d)
+	{
+		std::string alienName = race->getMember((*d).alienRank);
+		// TODO: make this depend on difficulty level
+		int quantity = (*d).lowQty + RNG::generate(0, (*d).dQty);
+		for (int i = 0; i < quantity; i++)
+		{
+			bool outside = RNG::generate(0,99) < (*d).percentageOutsideUFO;
+			BattleUnit *unit = addAlien(_game->getRuleset()->getGenUnit(alienName), (*d).alienRank, outside);
+			for (std::vector<std::string>::iterator it = (*d).itemSets.at(_alienItemLevel).items.begin(); it != (*d).itemSets.at(_alienItemLevel).items.end(); ++it)
+			{
+				RuleItem *ruleItem = _game->getRuleset()->getItem((*it));
+				if (ruleItem)
+				{
+					addItem(ruleItem, unit);
+				}
+			}
+		}
+	}
+}
+
+/**
  * Adds an alien to the game and place him on a free spawnpoint.
  * @param rules pointer to the RuleGenUnit which holds info about alien .
- * @param rank The rank of the alien, used for spawn point search.
+ * @param alienRank The rank of the alien, used for spawn point search.
+ * @param outside Whether the alien should spawn outside or inside the UFO.
  * @return pointer to the created unit.
  */
-BattleUnit *BattlescapeGenerator::addAlien(RuleGenUnit *rules, NodeRank rank)
+BattleUnit *BattlescapeGenerator::addAlien(RuleGenUnit *rules, int alienRank, bool outside)
 {
 	BattleUnit *unit = new BattleUnit(new GenUnit(rules, _game->getRuleset()->getArmor(rules->getArmor())), FACTION_HOSTILE);
-	Node *node;
-	bool bFound = false;
 	unit->setId(_unitCount++);
-	int lastSegment = -1;
-	int size = unit->getUnit()->getArmor()->getSize();
-	MovementType mt = unit->getUnit()->getArmor()->getMovementType();
 
-	// find a place to spawn, going from lowest priority to heighest
-	// some randomness is added
-	for (int priority = 1; priority <= 10 && !bFound; priority++)
+	Node *node = 0;
+
+	/* following data is the order in wich certain alien ranks spawn on certain node ranks */
+	/* note that they all can fall back to rank 0 nodes - which is scout (outside ufo) */
+
+	int nodeRank[8][7] = { { 4, 3, 5, 8, 7, 2, 0 }, // commander
+	{ 4, 3, 5, 8, 7, 2, 0 }, // leader
+	{ 5, 4, 3, 2, 7, 8, 0 }, //engineer
+	{ 7, 6, 2, 8, 3, 4, 0 }, //medic
+	{ 3, 4, 5, 2, 7, 8, 0 }, //navigator
+	{ 2, 5, 3, 4, 6, 8, 0 }, //soldier
+	{ 2, 5, 3, 4, 6, 8, 0 } }; //terrorist
+
+	for (int i = 0; i < 7 && node == 0; i++)
 	{
-		for (std::vector<Node*>::iterator i = _save->getNodes()->begin(); i != _save->getNodes()->end() && !bFound; ++i)
-		{
-			node = *i;
-			if (node->getRank() == rank
-				&& node->getPriority() == priority
-				&& (RNG::generate(0,2) == 1)
-				&& lastSegment != node->getSegment()
-				&& ((node->getType() & Node::TYPE_FLYING) == 0 || mt == MT_FLY) // flying units can spawn everywhere, for others the flying-only flag needs to be 0
-				&& ((node->getType() & Node::TYPE_SMALL) == 0 || size == 1) // small units can spawn everywhere, for others the small-only flag needs to be 0
-				)
-			{
-				if (_save->getTileEngine()->setUnitPosition(unit, node->getPosition()))
-				{
-					lastSegment = node->getSegment();
-					bFound = true;
-				}
-			}
-		}
+		if (outside)
+			node = getSpawnNode(0, unit); // when alien is instructed to spawn outside, we only look for node 0 spawnpoints
+		else
+			node = getSpawnNode(nodeRank[alienRank][i], unit);
 	}
 
-	// second try in case we still haven't found a place to spawn
-	// this time without randomness
-	for (int priority = 1; priority <= 10 && !bFound; priority++)
+	if (node)
 	{
-		for (std::vector<Node*>::iterator i = _save->getNodes()->begin(); i != _save->getNodes()->end() && !bFound; ++i)
-		{
-			node = *i;
-			if (node->getRank() == rank
-				&& node->getPriority() == priority
-				&& ((node->getType() & Node::TYPE_FLYING) == 0 || mt == MT_FLY) // flying units can spawn everywhere, for others the flying-only flag needs to be 0
-				&& ((node->getType() & Node::TYPE_SMALL) == 0 || size == 1) // small units can spawn everywhere, for others the small-only flag needs to be 0
-				)
-			{
-				if (_save->getTileEngine()->setUnitPosition(unit, node->getPosition()))
-				{
-					bFound = true;
-					break;
-				}
-			}
-		}
+		_save->getTileEngine()->setUnitPosition(unit, node->getPosition());
+		unit->setAIState(new PatrolBAIState(_game->getSavedGame()->getBattleGame(), unit, node));
+		unit->setDirection(RNG::generate(0,7));
 	}
 
-	// third try in case we still haven't found a place to spawn
-	// this time without rank
-	for (int priority = 1; priority <= 10 && !bFound; priority++)
-	{
-		for (std::vector<Node*>::iterator i = _save->getNodes()->begin(); i != _save->getNodes()->end() && !bFound; ++i)
-		{
-			node = *i;
-			if (node->getPriority() == priority
-				&& ((node->getType() & Node::TYPE_FLYING) == 0 || mt == MT_FLY) // flying units can spawn everywhere, for others the flying-only flag needs to be 0
-				&& ((node->getType() & Node::TYPE_SMALL) == 0 || size == 1) // small units can spawn everywhere, for others the small-only flag needs to be 0
-				)
-			{
-				if (_save->getTileEngine()->setUnitPosition(unit, node->getPosition()))
-				{
-					bFound = true;
-					break;
-				}
-			}
-		}
-	}
-
-	unit->setAIState(new PatrolBAIState(_game->getSavedGame()->getBattleGame(), unit, node));
-	unit->setDirection(RNG::generate(0,7));
 
 	_save->getUnits()->push_back(unit);
 
 	return unit;
 }
+
+/**
+ * Adds a civilian to the game and place him on a free spawnpoint.
+ * @param rules pointer to the RuleGenUnit which holds info about civilian .
+ * @return pointer to the created unit.
+ */
+BattleUnit *BattlescapeGenerator::addCivilian(RuleGenUnit *rules)
+{
+	BattleUnit *unit = new BattleUnit(new GenUnit(rules, _game->getRuleset()->getArmor(rules->getArmor())), FACTION_NEUTRAL);
+	unit->setId(_unitCount++);
+
+	Node *node = getSpawnNode(0, unit);
+
+	if (node)
+	{
+		_save->getTileEngine()->setUnitPosition(unit, node->getPosition());
+		unit->setAIState(new PatrolBAIState(_game->getSavedGame()->getBattleGame(), unit, node));
+		unit->setDirection(RNG::generate(0,7));
+	}
+
+	_save->getUnits()->push_back(unit);
+
+	return unit;
+}
+
+/**
+ * Finds a fitting node where a unit can spawn.
+ * @param nodeRank Rank of the node (is not rank of the alien!).
+ * @param unit Pointer to the unit (to get its position)
+ * @return pointer to the choosen node.
+ */
+Node *BattlescapeGenerator::getSpawnNode(int nodeRank, BattleUnit *unit)
+{
+	Node *n = 0;
+
+	for (std::vector<Node*>::iterator i = _save->getNodes()->begin(); i != _save->getNodes()->end(); ++i)
+	{
+		if ((*i)->getRank() == nodeRank										// ranks must match
+			&& (!((*i)->getType() & Node::TYPE_SMALL) 
+				|| unit->getUnit()->getArmor()->getSize() == 1)				// the small unit bit is not set or the unit is small
+			&& (!((*i)->getType() & Node::TYPE_FLYING) 
+				|| unit->getUnit()->getArmor()->getMovementType() == MT_FLY)// the flying unit bit is not set or the unit can fly
+			&& (*i)->getPriority() > 0										// priority 0 is no spawnplace
+			&& _save->getTileEngine()->setUnitPosition(unit, (*i)->getPosition(), true))	// check if not already occupied
+		{
+			// we can spawn here - but we continue searching, as we may find better (priority wise)
+			if (n == 0)
+			{
+				n = *i;
+			}
+			else
+			{
+				// either the priority is heigher then it is going to be this one,
+				// or the priority is the same, then there is a 33% chance we choose this node over the last one
+				if ((*i)->getPriority() > n->getPriority() || ((*i)->getPriority() == n->getPriority() && (RNG::generate(0,2) == 1)))
+				{
+					n = *i;
+				}
+			}
+		}
+	}
+
+	return n;
+}
+
 
 /**
  * Adds a HWP vehicle to the game and place him on a free spawnpoint.
@@ -506,8 +507,10 @@ BattleUnit *BattlescapeGenerator::addVehicle(RuleGenUnit *rules)
 }
 
 
+ /*** TODO - refactoring - the two below functions are very similar, should try to join them ***/
+
 /**
- * Adds an item to the game and assign it to a soldier?.
+ * Adds an item to the game.
  * @param item pointer to the Item
  */
 void BattlescapeGenerator::addItem(RuleItem *item)
@@ -608,8 +611,9 @@ void BattlescapeGenerator::addItem(RuleItem *item)
 
 
 /**
- * Adds an item to the game and assign it to a soldier?.
+ * Adds an item to the game and assign it to a unit.
  * @param item pointer to the Item
+ * @param unit pointer to the Unit
  */
 void BattlescapeGenerator::addItem(RuleItem *item, BattleUnit *unit)
 {

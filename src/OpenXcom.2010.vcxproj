@@ -258,6 +258,8 @@
     <ClCompile Include="Ruleset\MapBlock.cpp" />
     <ClCompile Include="Ruleset\MapDataSet.cpp" />
     <ClCompile Include="Ruleset\MapData.cpp" />
+    <ClCompile Include="Ruleset\RuleAlienDeployment.cpp" />
+    <ClCompile Include="Ruleset\RuleAlienRace.cpp" />
     <ClCompile Include="Ruleset\RuleGenUnit.cpp" />
     <ClCompile Include="Ruleset\RuleArmor.cpp" />
     <ClCompile Include="Ruleset\RuleBaseFacility.cpp" />
@@ -468,6 +470,8 @@
     <ClInclude Include="Ruleset\MapBlock.h" />
     <ClInclude Include="Ruleset\MapDataSet.h" />
     <ClInclude Include="Ruleset\MapData.h" />
+    <ClInclude Include="Ruleset\RuleAlienDeployment.h" />
+    <ClInclude Include="Ruleset\RuleAlienRace.h" />
     <ClInclude Include="Ruleset\RuleGenUnit.h" />
     <ClInclude Include="Ruleset\RuleArmor.h" />
     <ClInclude Include="Ruleset\RuleBaseFacility.h" />

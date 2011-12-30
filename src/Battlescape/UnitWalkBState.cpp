@@ -26,6 +26,7 @@
 #include "Camera.h"
 #include "BattleAIState.h"
 #include "AggroBAIState.h"
+#include "ExplosionBState.h"
 #include "../Engine/Game.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/SavedGame.h"
@@ -81,10 +82,10 @@ void UnitWalkBState::think()
 				// play hwp engine sound
 				if (_unit->getWalkingPhase() == 0)
 				{
-					// conventional tank
+					// tank with threads "walks"
 					if (_unit->getUnit()->getArmor()->getMovementType() == MT_WALK)
 						_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(14)->play();
-					else // cyberdisc
+					else // hovering tank hovers
 						_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(40)->play();
 				}
 			}
@@ -139,11 +140,16 @@ void UnitWalkBState::think()
 		// is the step finished?
 		if (_unit->getStatus() == STATUS_STANDING)
 		{
+			// move our personal lighting with us
 			_terrain->calculateUnitLighting();
+
+			// check if we can spot new units
 			unitspotted = _terrain->calculateFOV(_unit);
 			if (unitspotted)
 			{
 				_pf->abortPath();
+
+				// a hostile unit will aggro on the new unit if it sees one
 				if (_unit->getFaction() == FACTION_HOSTILE)
 				{
 					AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(_unit->getCurrentAIState());
@@ -155,7 +161,35 @@ void UnitWalkBState::think()
 				}
 				return;
 			}
+
 			BattleAction action;
+			
+			// check for proximity grenades (for large units, we need to check every tile it occupies)
+			// TODO : actually it needs to test within a range (of 1 tile) around the grenade instead on the tile itself...
+			int size = _unit->getUnit()->getArmor()->getSize() - 1;
+			for (int x = size; x >= 0; x--)
+			{
+				for (int y = size; y >= 0; y--)
+				{
+					Tile *t = _parent->getGame()->getSavedGame()->getBattleGame()->getTile(_unit->getPosition() + Position(x,y,0));
+					for (std::vector<BattleItem*>::iterator i = t->getInventory()->begin(); i != t->getInventory()->end(); ++i)
+					{
+						if ((*i)->getRules()->getBattleType() == BT_PROXIMITYGRENADE && (*i)->getExplodeTurn() > 0)
+						{
+							Position p;
+							p.x = t->getPosition().x*16 + 8;
+							p.y = t->getPosition().y*16 + 8;
+							p.z = t->getPosition().z*24 + t->getTerrainLevel();
+							_parent->statePushBack(new ExplosionBState(_parent, p, (*i), (*i)->getPreviousOwner()));
+							t->getInventory()->erase(i);
+							return;
+						}
+					}
+
+				}
+			}
+
+			// check for reaction fire
 			if (_terrain->checkReactionFire(_unit, &action))
 			{
 				_parent->statePushBack(new ProjectileFlyBState(_parent, action));

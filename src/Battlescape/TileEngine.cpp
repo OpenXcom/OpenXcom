@@ -591,7 +591,7 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 								dest->addSmoke(RNG::generate(power_/10, 14));
 							}
 						}
-						if (type == DT_IN)
+						if (type == DT_IN && !dest->isVoid())
 						{
 							if (dest->getFire() == 0)
 							{

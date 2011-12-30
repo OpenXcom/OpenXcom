@@ -200,7 +200,7 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 		_action->TU = _actionMenu[btnID]->getTUs();
 		if (_action->type == BA_PRIME)
 		{
-			if (Options::getBool("battleAltGrenade"))
+			if (Options::getBool("battleAltGrenade") || _action->weapon->getRules()->getBattleType() == BT_PROXIMITYGRENADE)
 			{
 				_action->value = 0;
 				_game->popState();

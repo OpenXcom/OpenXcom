@@ -33,6 +33,8 @@
 #include "MapDataSet.h"
 #include "RuleSoldier.h"
 #include "RuleGenUnit.h"
+#include "RuleAlienRace.h"
+#include "RuleAlienDeployment.h"
 #include "RuleArmor.h"
 #include "ArticleDefinition.h"
 #include "RuleInventory.h"
@@ -558,11 +560,14 @@ RuleCraftWeapon *const Ruleset::getCraftWeapon(const std::string &id) const
 /**
  * Returns the rules for the specified item.
  * @param id Item type.
- * @return Rules for the item.
+ * @return Rules for the item. Or 0 when the item is not found.
  */
 RuleItem *const Ruleset::getItem(const std::string &id) const
 {
-	return _items.find(id)->second;
+	if (_items.find(id) != _items.end())
+		return _items.find(id)->second;
+	else
+		return 0;
 }
 
 /**
@@ -613,6 +618,26 @@ RuleSoldier *const Ruleset::getSoldier(const std::string &name) const
 RuleGenUnit *const Ruleset::getGenUnit(const std::string &name) const
 {
 	return _genUnits.find(name)->second;
+}
+
+/**
+ * Returns the info about a specific alien race
+ * @param name Race name.
+ * @return Rules for the race.
+ */
+RuleAlienRace *const Ruleset::getAlienRace(const std::string &name) const
+{
+	return _alienRaces.find(name)->second;
+}
+
+/**
+ * Returns the info about a specific deployment
+ * @param name Deployment name.
+ * @return Rules for the deployment.
+ */
+RuleAlienDeployment *const Ruleset::getDeployment(const std::string &name) const
+{
+	return _alienDeployments.find(name)->second;
 }
 
 /**
