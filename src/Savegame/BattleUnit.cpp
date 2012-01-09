@@ -319,6 +319,13 @@ void BattleUnit::keepWalking()
 		// diagonal walking takes double the steps
 		middle = 4 + 4 * (_direction % 2);
 		end = 8 + 8 * (_direction % 2);
+		if (_unit->getArmor()->getSize() > 1)
+		{
+			if (_direction < 1 || _direction > 4)
+				middle = end;
+			else
+				middle = 1;
+		}
 	}
 
 	_walkPhase++;
@@ -1054,6 +1061,14 @@ void BattleUnit::prepareNewTurn()
 
 	if (_health < 0)
 		_health = 0;
+
+	// if unit is dead, AI state should be gone
+	if (_health == 0 && _currentAIState)
+	{
+		_currentAIState->exit();
+		delete _currentAIState;
+		_currentAIState = 0;
+	}
 
 	// recover stun 1pt/turn
 	if (_stunlevel > 0)

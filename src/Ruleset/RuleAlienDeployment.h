@@ -57,6 +57,7 @@ class RuleAlienDeployment
 private:
 	std::string _type;
 	std::vector<DeploymentData> _data;
+	int _width, _length, _height;
 public:
 	/// Creates a blank Alien Deployment ruleset.
 	RuleAlienDeployment(const std::string &type);
@@ -70,6 +71,10 @@ public:
 	std::string getType() const;
 	/// Gets a pointer to the data.
 	std::vector<DeploymentData>* getDeploymentData();
+	/// Set dimensions.
+	void setDimensions(int width, int length, int height);
+	/// Get dimensions.
+	void getDimensions(int *width, int *length, int *height);
 };
 
 }

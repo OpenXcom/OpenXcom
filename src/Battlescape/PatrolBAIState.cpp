@@ -22,7 +22,6 @@
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Node.h"
-#include "../Savegame/NodeLink.h"
 #include "../Engine/RNG.h"
 #include "../Ruleset/RuleArmor.h"
 
@@ -105,7 +104,7 @@ void PatrolBAIState::enter()
  */
 void PatrolBAIState::exit()
 {
-
+	if (_toNode) _toNode->free();
 }
 
 /**
@@ -117,12 +116,10 @@ void PatrolBAIState::think(BattleAction *action)
 	/*
 	Patrolling is mainly walking from one node to another node until bumping into hostiles
 	There are a few rules:
-	- generally the rank of the to-node can not be lower than the one of the from-node
-		- exception: a soldier can become a scout, the moment another scout is killed by hostiles (the killed scout's to-node will become the new scout's to-node)
+	- if the from node is a rank 0 node (scout) the to node must be a rank 0 node (scouts stay outside)
+
 	- a to-node can only be allocated for one unit, if it's already allocated, it will walk towards a random connected node, if no free connected node, stand still
-	- scouts will always walk in the general direction of the landed x-com craft (CRAFTSEGMENT)
-		- exception: when morale is low they run towards the ufo (UFOSEGMENT)
-		- probably other rules for terror and base missions...
+
 	*/
 
 	Node *node;
@@ -132,93 +129,50 @@ void PatrolBAIState::think(BattleAction *action)
 	{
 		// destination reached
 		_fromNode = _toNode;
+		_toNode->free();
 		_toNode = 0;
+	}
+
+	if (_fromNode == 0)
+	{
+		// assume closest node as "from node"
+		int closest = 1000000;
+		for (std::vector<Node*>::iterator i = _game->getNodes()->begin(); i != _game->getNodes()->end(); ++i)
+		{
+			node = *i;
+			int x = abs(_unit->getPosition().x - node->getPosition().x);
+			int y = abs(_unit->getPosition().y - node->getPosition().y);
+			int distance = int(floor(sqrt(float(x*x + y*y)) + 0.5));
+			if (distance < closest)
+			{
+				_fromNode = node;
+			}
+		}
 	}
 
 	if (_toNode == 0)
 	{
-		if (_game->getMissionType() == MISS_UFORECOVERY
-			|| _game->getMissionType() == MISS_UFOASSAULT)
+		// look for a new node to walk towards
+		bool scout = true;
+		if (_game->getMissionType() == "STR_UFO_CRASH_RECOVERY"
+			|| _game->getMissionType() == "STR_UFO_GROUND_ASSAULT")
 		{
-			// look for a new node to walk towards
-			int segment;
-			if (_unit->getMorale() > 50)
+			// after turn 20 or if the morale is low, everyone moves out the UFO and scout
+			if (_unit->getMorale() < 50 || _game->getTurn() > 20 || _fromNode->getRank() == 0)
 			{
-				segment = Node::CRAFTSEGMENT;
+				scout = true;
 			}
 			else
 			{
-				segment = Node::UFOSEGMENT;
-			}
-
-			for (std::vector<Node*>::iterator i = _game->getNodes()->begin(); i != _game->getNodes()->end() && !bFound; ++i)
-			{
-				node = *i;
-				if (node->getSegment() == segment
-					&& (!_fromNode || (_fromNode && node->getRank() >= _fromNode->getRank()))
-					&& _game->selectUnit(node->getPosition()) == 0
-					&& ((node->getType() & Node::TYPE_FLYING) == 0 || _unit->getUnit()->getArmor()->getMovementType() == MT_FLY) // flying units can spawn everywhere, for others the flying-only flag needs to be 0
-					&& ((node->getType() & Node::TYPE_SMALL) == 0 || _unit->getUnit()->getArmor()->getSize() == 1) // small units can spawn everywhere, for others the small-only flag needs to be 0
-					)
-				{
-					_toNode = node;
-					bFound = true;
-					break;
-				}
+				scout = false;
 			}
 		}
-
-		if (!bFound)
-		{
-			if (_fromNode)
-			{
-				// walk towards a connected node
-				int iters = 0;
-				while(!bFound && iters < 100)
-				{
-					int i = RNG::generate(0, 4);
-					if (_fromNode->getNodeLink(i)->getConnectedNodeID() > -1)
-					{
-						node = _game->getNodes()->at(_fromNode->getNodeLink(i)->getConnectedNodeID());
-						if (node->getRank() >= _fromNode->getRank()-2
-							&& _game->selectUnit(node->getPosition()) == 0
-							&& ((node->getType() & Node::TYPE_FLYING) == 0 || _unit->getUnit()->getArmor()->getMovementType() == MT_FLY) // flying units can spawn everywhere, for others the flying-only flag needs to be 0
-							&& ((node->getType() & Node::TYPE_SMALL) == 0 || _unit->getUnit()->getArmor()->getSize() == 1) // small units can spawn everywhere, for others the small-only flag needs to be 0
-							)
-						{
-							_toNode = node;
-							bFound = true;
-							break;
-						}
-					}
-					iters++;
-				}
-			}
-			else
-			{
-				// TODO : walk towards closest node
-				int closest = 1000000;
-				for (std::vector<Node*>::iterator i = _game->getNodes()->begin(); i != _game->getNodes()->end(); ++i)
-				{
-					node = *i;
-					int x = abs(_unit->getPosition().x - node->getPosition().x);
-					int y = abs(_unit->getPosition().y - node->getPosition().y);
-					int distance = int(floor(sqrt(float(x*x + y*y)) + 0.5));
-					if (distance < closest
-					&& ((node->getType() & Node::TYPE_FLYING) == 0 || _unit->getUnit()->getArmor()->getMovementType() == MT_FLY) // flying units can spawn everywhere, for others the flying-only flag needs to be 0
-					&& ((node->getType() & Node::TYPE_SMALL) == 0 || _unit->getUnit()->getArmor()->getSize() == 1) // small units can spawn everywhere, for others the small-only flag needs to be 0
-					)
-					{
-						_toNode = node;
-					}
-				}
-			}
-		}
-
+		_toNode = _game->getPatrolNode(scout, _unit, _fromNode);
 	}
 
 	if (_toNode != 0)
 	{
+		_toNode->allocate();
 		action->actor = _unit;
 		action->type = BA_WALK;
 		action->target = _toNode->getPosition();

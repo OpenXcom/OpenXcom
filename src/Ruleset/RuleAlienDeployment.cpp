@@ -55,7 +55,7 @@ YAML::Emitter& operator << (YAML::Emitter& out, const DeploymentData& s)
  * type of deployment data.
  * @param type String defining the type.
  */
-RuleAlienDeployment::RuleAlienDeployment(const std::string &type) : _type(type), _data()
+RuleAlienDeployment::RuleAlienDeployment(const std::string &type) : _type(type), _data(), _width(0), _length(0), _height(0)
 {
 }
 
@@ -85,6 +85,18 @@ void RuleAlienDeployment::load(const YAML::Node &node, const Ruleset *ruleset)
 		{
 			i.second() >> _data;
 		}
+		else if (key == "width")
+		{
+			i.second() >> _width;
+		}
+		else if (key == "length")
+		{
+			i.second() >> _length;
+		}
+		else if (key == "height")
+		{
+			i.second() >> _height;
+		}
 	}
 }
 
@@ -97,6 +109,9 @@ void RuleAlienDeployment::save(YAML::Emitter &out) const
 	out << YAML::BeginMap;
 	out << YAML::Key << "type" << YAML::Value << _type;
 	out << YAML::Key << "data" << YAML::Value << _data;
+	out << YAML::Key << "width" << YAML::Value << _width;
+	out << YAML::Key << "length" << YAML::Value << _length;
+	out << YAML::Key << "height" << YAML::Value << _height;
 	out << YAML::EndMap;
 }
 
@@ -111,10 +126,27 @@ std::string RuleAlienDeployment::getType() const
 	return _type;
 }
 
-	/// Gets a pointer to the data.
+/// Gets a pointer to the data.
 std::vector<DeploymentData>* RuleAlienDeployment::getDeploymentData()
 {
 	return &_data;
 }
+
+/// Set dimensions.
+void RuleAlienDeployment::setDimensions(int width, int length, int height)
+{
+	_width = width;
+	_length = length;
+	_height = height;
+}
+
+/// Get dimensions.
+void RuleAlienDeployment::getDimensions(int *width, int *length, int *height)
+{
+	*width = _width;
+	*length = _length;
+	*height = _height;
+}
+
 
 }

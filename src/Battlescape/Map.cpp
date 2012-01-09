@@ -695,6 +695,14 @@ void Map::calculateWalkingOffset(BattleUnit *unit, Position *offset)
 	int midphase = 4 + 4 * (dir % 2);
 	int endphase = 8 + 8 * (dir % 2);
 
+	if (unit->getUnit()->getArmor()->getSize() > 1)
+	{
+		if (dir < 1 || dir > 4)
+			midphase = endphase;
+		else
+			midphase = 1;
+	}
+
 	if (unit->getVerticalDirection())
 	{
 		midphase = 4;

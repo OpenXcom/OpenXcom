@@ -48,11 +48,6 @@ class RuleInventory;
 class Ruleset;
 
 /**
- * Enumator containing all the possible mission types.
- */
-enum MissionType { MISS_UFORECOVERY, MISS_UFOASSAULT, MISS_TERROR, MISS_ALIENBASE, MISS_BASEDEFENSE, MISS_CYDONIA };
-
-/**
  * The battlescape data that gets written to disk when the game is saved.
  * A saved game holds all the variable info in a game like mapdata
  * soldiers, items, etc.
@@ -69,7 +64,7 @@ private:
 	std::vector<BattleItem*> _items;
 	Pathfinding *_pathfinding;
 	TileEngine *_tileEngine;
-	MissionType _missionType;
+	std::string _missionType;
 	int _globalShade;
 	UnitFaction _side;
 	int _turn;
@@ -92,9 +87,9 @@ public:
 	/// Gets the game's mapdatafiles.
 	std::vector<MapDataSet*> *const getMapDataSets();
 	/// Set the mission type.
-	void setMissionType(MissionType missionType);
+	void setMissionType(const std::string missionType);
 	/// Get the mission type.
-	MissionType getMissionType() const;
+	std::string getMissionType() const;
 	/// Set the global shade.
 	void setGlobalShade(int shade);
 	/// Get the global shade.
@@ -157,6 +152,9 @@ public:
 	bool isAborted();
 	/// Gets the current item ID.
 	int *getCurrentItemId();
+	/// Gets a spawn node.
+	Node *getSpawnNode(int nodeRank, BattleUnit *unit);
+	Node *getPatrolNode(bool scout, BattleUnit *unit, Node *fromNode);
 
 };
 

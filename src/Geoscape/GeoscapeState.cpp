@@ -869,13 +869,15 @@ void GeoscapeState::btnGraphsClick(Action *action)
 {
 #ifdef _DEBUG
 	/* Daiky: uncomment this bit to start a terror mission */
-	_game->getSavedGame()->setBattleGame(new SavedBattleGame());
+	SavedBattleGame *bgame = new SavedBattleGame();
+	_game->getSavedGame()->setBattleGame(bgame);
+	bgame->setMissionType("STR_TERROR_MISSION");
 	BattlescapeGenerator *bgen = new BattlescapeGenerator(_game);
-	bgen->setMissionType(MISS_TERROR);
-	//bgen->setMissionType(MISS_UFOASSAULT);
 	bgen->setWorldTexture(1);
 	bgen->setWorldShade(0);
 	bgen->setCraft(_game->getSavedGame()->getBases()->at(0)->getCrafts()->at(0));
+	bgen->setAlienRace("STR_SECTOID");
+	bgen->setAlienItemlevel(0);
 	bgen->run();
 	delete bgen;
 	_music = false;
