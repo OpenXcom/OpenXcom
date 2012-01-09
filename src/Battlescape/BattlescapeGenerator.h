@@ -53,7 +53,6 @@ private:
 	RuleTerrain *_terrain;
 	int _width, _length, _height;
 	int _worldTexture, _worldShade;
-	MissionType _missionType;
 	int _unitCount;
 	Tile *_craftInventoryTile;
 	std::string _alienRace;
@@ -79,7 +78,6 @@ private:
 	void loadRMP(MapBlock *mapblock, int xoff, int yoff, int segment);
 	void explodePowerSources();
 	void deployAliens(RuleAlienRace *race, RuleAlienDeployment *deployment);
-	Node *getSpawnNode(int nodeRank, BattleUnit *unit);
 public:
 	/// Creates a new BattlescapeGenerator class
 	BattlescapeGenerator(Game *game);
@@ -93,8 +91,6 @@ public:
 	void setWorldTexture(int texture);
 	/// Sets the polygon shade.
 	void setWorldShade(int shade);
-	/// Set the mission type.
-	void setMissionType(MissionType missionType);
 	/// Set the alien race.
 	void setAlienRace(std::string alienRace);
 	/// Set the alien item level.

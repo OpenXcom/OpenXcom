@@ -143,49 +143,35 @@ void UnitWalkBState::think()
 			// move our personal lighting with us
 			_terrain->calculateUnitLighting();
 
-			// check if we can spot new units
-			unitspotted = _terrain->calculateFOV(_unit);
-			if (unitspotted)
-			{
-				_pf->abortPath();
-
-				// a hostile unit will aggro on the new unit if it sees one
-				if (_unit->getFaction() == FACTION_HOSTILE)
-				{
-					AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(_unit->getCurrentAIState());
-					if (aggro == 0)
-					{
-						_unit->setAIState(new AggroBAIState(_parent->getGame()->getSavedGame()->getBattleGame(), _unit));
-					}
-					_parent->handleAI(_unit);
-				}
-				return;
-			}
-
 			BattleAction action;
 			
-			// check for proximity grenades (for large units, we need to check every tile it occupies)
-			// TODO : actually it needs to test within a range (of 1 tile) around the grenade instead on the tile itself...
+			// check for proximity grenades (1 tile around the unit in every direction) (for large units, we need to check every tile it occupies)
 			int size = _unit->getUnit()->getArmor()->getSize() - 1;
 			for (int x = size; x >= 0; x--)
 			{
 				for (int y = size; y >= 0; y--)
 				{
-					Tile *t = _parent->getGame()->getSavedGame()->getBattleGame()->getTile(_unit->getPosition() + Position(x,y,0));
-					for (std::vector<BattleItem*>::iterator i = t->getInventory()->begin(); i != t->getInventory()->end(); ++i)
+					for (int tx = -1; tx < 2; tx++)
 					{
-						if ((*i)->getRules()->getBattleType() == BT_PROXIMITYGRENADE && (*i)->getExplodeTurn() > 0)
+						for (int ty = -1; ty < 2; ty++)
 						{
-							Position p;
-							p.x = t->getPosition().x*16 + 8;
-							p.y = t->getPosition().y*16 + 8;
-							p.z = t->getPosition().z*24 + t->getTerrainLevel();
-							_parent->statePushBack(new ExplosionBState(_parent, p, (*i), (*i)->getPreviousOwner()));
-							t->getInventory()->erase(i);
-							return;
+							Tile *t = _parent->getGame()->getSavedGame()->getBattleGame()->getTile(_unit->getPosition() + Position(x,y,0) + Position(tx,ty,0));
+							if (t)
+							for (std::vector<BattleItem*>::iterator i = t->getInventory()->begin(); i != t->getInventory()->end(); ++i)
+							{
+								if ((*i)->getRules()->getBattleType() == BT_PROXIMITYGRENADE && (*i)->getExplodeTurn() > 0)
+								{
+									Position p;
+									p.x = t->getPosition().x*16 + 8;
+									p.y = t->getPosition().y*16 + 8;
+									p.z = t->getPosition().z*24 + t->getTerrainLevel();
+									_parent->statePushNext(new ExplosionBState(_parent, p, (*i), (*i)->getPreviousOwner()));
+									t->getInventory()->erase(i);
+									return;
+								}
+							}
 						}
 					}
-
 				}
 			}
 
@@ -208,6 +194,25 @@ void UnitWalkBState::think()
 	// we are just standing around, shouldn't we be walking?
 	if (_unit->getStatus() == STATUS_STANDING)
 	{
+		// check if we can spot new units
+		unitspotted = _terrain->calculateFOV(_unit);
+		if (unitspotted)
+		{
+			_pf->abortPath();
+
+			// a hostile unit will aggro on the new unit if it sees one - it will not start walking
+			if (_unit->getFaction() == FACTION_HOSTILE)
+			{
+				AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(_unit->getCurrentAIState());
+				if (aggro == 0)
+				{
+					_unit->setAIState(new AggroBAIState(_parent->getGame()->getSavedGame()->getBattleGame(), _unit));
+				}
+				_parent->handleAI(_unit);
+			}
+			return;
+		}
+
 		if (_unit->getVisible())
 		{
 			setNormalWalkSpeed();

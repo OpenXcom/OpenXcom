@@ -45,6 +45,7 @@ private:
 	int _flags;
 	int _reserved;
 	int _priority;
+	bool _allocated;
 public:
 	static const int CRAFTSEGMENT = 1000;
 	static const int UFOSEGMENT = 2000;
@@ -75,6 +76,9 @@ public:
 	int getSegment() const;
 	/// Gets the node's type.
 	int getType() const;
+	bool isAllocated() const;
+	void allocate();
+	void free();
 };
 
 }

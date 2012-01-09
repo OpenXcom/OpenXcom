@@ -1379,6 +1379,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	/* deployment data */
 	/* items that not yet exist in the ruleset are put in comment */
 	RuleAlienDeployment *asscout = new RuleAlienDeployment("STR_SMALL_SCOUT");
+	asscout->setDimensions(40, 40, 4);
 	DeploymentData dd;
 	dd.alienRank = AR_SOLDIER;
 	dd.lowQty = 1;
@@ -1405,11 +1406,13 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	asscout->getDeploymentData()->push_back(dd);
 
 	RuleAlienDeployment *amscout = new RuleAlienDeployment("STR_MEDIUM_SCOUT");
+	amscout->setDimensions(40, 40, 4);
 	dd.alienRank = AR_SOLDIER;
 	dd.lowQty = 2;
 	dd.highQty = 4;
 	dd.dQty = 2;
 	dd.percentageOutsideUFO = 60;
+	dd.itemSets.clear();
 	is.items.clear();
 	is.items.push_back("STR_PLASMA_PISTOL");
 	is.items.push_back("STR_PLASMA_PISTOL_CLIP");
@@ -1432,6 +1435,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	dd.highQty = 2;
 	dd.dQty = 1;
 	dd.percentageOutsideUFO = 20;
+	dd.itemSets.clear();
 	is.items.clear();
 	is.items.push_back("STR_PLASMA_PISTOL");
 	is.items.push_back("STR_PLASMA_PISTOL_CLIP");
@@ -1448,11 +1452,13 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	amscout->getDeploymentData()->push_back(dd);
 
 	RuleAlienDeployment *alscout = new RuleAlienDeployment("STR_LARGE_SCOUT");
+	alscout->setDimensions(50, 50, 4);
 	dd.alienRank = AR_SOLDIER;
 	dd.lowQty = 1;
 	dd.highQty = 3;
 	dd.dQty = 5;
 	dd.percentageOutsideUFO = 65;
+	dd.itemSets.clear();
 	is.items.clear();
 	is.items.push_back("STR_PLASMA_PISTOL");
 	is.items.push_back("STR_PLASMA_PISTOL_CLIP");
@@ -1475,6 +1481,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	dd.highQty = 1;
 	dd.dQty = 1;
 	dd.percentageOutsideUFO = 25;
+	dd.itemSets.clear();
 	is.items.clear();
 	is.items.push_back("STR_PLASMA_PISTOL");
 	is.items.push_back("STR_PLASMA_PISTOL_CLIP");
@@ -1498,6 +1505,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	dd.highQty = 2;
 	dd.dQty = 1;
 	dd.percentageOutsideUFO = 35;
+	dd.itemSets.clear();
 	is.items.clear();
 	is.items.push_back("STR_PLASMA_PISTOL");
 	is.items.push_back("STR_PLASMA_PISTOL_CLIP");
@@ -1517,9 +1525,35 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	dd.itemSets.push_back(is);
 	alscout->getDeploymentData()->push_back(dd);
 
+	RuleAlienDeployment *aterror = new RuleAlienDeployment("STR_TERROR_MISSION");
+	aterror->setDimensions(50, 50, 4);
+	dd.alienRank = AR_SOLDIER;
+	dd.lowQty = 4;
+	dd.highQty = 6;
+	dd.dQty = 1;
+	dd.percentageOutsideUFO = 0;
+	dd.itemSets.clear();
+	is.items.clear();
+	is.items.push_back("STR_PLASMA_PISTOL");
+	is.items.push_back("STR_PLASMA_PISTOL_CLIP");
+	is.items.push_back("STR_PLASMA_PISTOL_CLIP");
+	dd.itemSets.push_back(is);
+	aterror->getDeploymentData()->push_back(dd);
+
+	dd.alienRank = AR_TERRORIST;
+	dd.lowQty = 1;
+	dd.highQty = 3;
+	dd.dQty = 2;
+	dd.percentageOutsideUFO = 0;
+	dd.itemSets.clear();
+	is.items.clear();
+	dd.itemSets.push_back(is);
+	aterror->getDeploymentData()->push_back(dd);
+
 	_alienDeployments.insert(std::pair<std::string, RuleAlienDeployment*>("STR_SMALL_SCOUT", asscout));
 	_alienDeployments.insert(std::pair<std::string, RuleAlienDeployment*>("STR_MEDIUM_SCOUT", amscout));
 	_alienDeployments.insert(std::pair<std::string, RuleAlienDeployment*>("STR_LARGE_SCOUT", alscout));
+	_alienDeployments.insert(std::pair<std::string, RuleAlienDeployment*>("STR_TERROR_MISSION", aterror));
 
 	// Add inventory
 	RuleInventory *rshoulder = new RuleInventory("STR_RIGHT_SHOULDER");
@@ -1832,6 +1866,11 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	tankArmor->setCorpseItem("STR_TANK_CORPSE_");
 	tankArmor->setDamageModifier(0, DT_STUN);
 
+	RuleArmor *cyberdiscArmor = new RuleArmor("CYBERDISC_ARMOR", "CYBER.PCK", 3, MT_FLY, 2);
+	cyberdiscArmor->setArmor(90, 75, 60, 60);
+	cyberdiscArmor->setCorpseItem("STR_TANK_CORPSE_");
+	cyberdiscArmor->setDamageModifier(0, DT_STUN);
+
 	_armors.insert(std::pair<std::string, RuleArmor*>("STR_NONE_UC", coveralls));
 	_armors.insert(std::pair<std::string, RuleArmor*>("STR_PERSONAL_ARMOR_UC", personalArmor));
 	_armors.insert(std::pair<std::string, RuleArmor*>("STR_POWER_SUIT_UC" ,powerSuit));
@@ -1839,6 +1878,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_armors.insert(std::pair<std::string, RuleArmor*>("SECTOID_ARMOR0", sectoidSoldierArmor));
 	_armors.insert(std::pair<std::string, RuleArmor*>("FLOATER_ARMOR0", floaterSoldierArmor));
 	_armors.insert(std::pair<std::string, RuleArmor*>("TANK_ARMOR", tankArmor));
+	_armors.insert(std::pair<std::string, RuleArmor*>("CYBERDISC_ARMOR", cyberdiscArmor));
 
 	// Add units
 	RuleSoldier *xcom = new RuleSoldier("XCOM");
@@ -1923,6 +1963,23 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	sectoidNavigator->setVoxelParameters(16, 12, 2);
 	sectoidNavigator->setValue(12);
 
+	RuleGenUnit *cyberdisc = new RuleGenUnit("CYBERDISC", "STR_CYBERDISC", "");
+	cyberdisc->setArmor("CYBERDISC_ARMOR");
+	s1.tu = 70;
+	s1.stamina = 100;
+	s1.health = 90;
+	s1.bravery = 110;
+	s1.reactions = 20;
+	s1.firing = 60;
+	s1.throwing = 0;
+	s1.strength = 60;
+	s1.psiStrength = 100;
+	s1.psiSkill = 0;
+	s1.melee = 0;
+	cyberdisc->setStats(s1);
+	cyberdisc->setVoxelParameters(15, 15, 4);
+	cyberdisc->setValue(20);
+
 	RuleGenUnit *floaterSoldier = new RuleGenUnit("FLOATER_SOLDIER", "STR_FLOATER", "STR_LIVE_SOLDIER");
 	floaterSoldier->setArmor("FLOATER_ARMOR0");
 	s1.tu = 50;
@@ -1960,6 +2017,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_genUnits.insert(std::pair<std::string, RuleGenUnit*>("SECTOID_SOLDIER", sectoidSoldier));
 	_genUnits.insert(std::pair<std::string, RuleGenUnit*>("SECTOID_ENGINEER", sectoidEngineer));
 	_genUnits.insert(std::pair<std::string, RuleGenUnit*>("SECTOID_NAVIGATOR", sectoidNavigator));
+	_genUnits.insert(std::pair<std::string, RuleGenUnit*>("CYBERDISC", cyberdisc));
 	_genUnits.insert(std::pair<std::string, RuleGenUnit*>("FLOATER_SOLDIER", floaterSoldier));
 	_genUnits.insert(std::pair<std::string, RuleGenUnit*>("TANK_CANNON", tankCannon));
 

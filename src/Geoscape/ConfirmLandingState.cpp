@@ -120,10 +120,10 @@ void ConfirmLandingState::btnYesClick(Action *action)
 	Ufo* u = dynamic_cast<Ufo*>(_craft->getDestination());
 	if (u != 0)
 	{
-		_game->getSavedGame()->setBattleGame(new SavedBattleGame());
-
+		SavedBattleGame *bgame = new SavedBattleGame();
+		_game->getSavedGame()->setBattleGame(bgame);
+		bgame->setMissionType("STR_UFO_CRASH_RECOVERY");
 		BattlescapeGenerator *bgen = new BattlescapeGenerator(_game);
-		bgen->setMissionType(MISS_UFORECOVERY);
 		bgen->setWorldTexture(_texture);
 		bgen->setWorldShade(_shade);
 		bgen->setCraft(_craft);

@@ -35,6 +35,9 @@
 #include "../Ruleset/RuleInventory.h"
 #include "../Battlescape/PatrolBAIState.h"
 #include "../Battlescape/AggroBAIState.h"
+#include "../Engine/RNG.h"
+#include "../Savegame/NodeLink.h"
+
 
 namespace OpenXcom
 {
@@ -42,7 +45,7 @@ namespace OpenXcom
 /**
  * Initializes a brand new battlescape saved game.
  */
-SavedBattleGame::SavedBattleGame() : _tiles(), _selectedUnit(0), _nodes(), _units(), _items(), _pathfinding(0), _tileEngine(0), _missionType(MISS_TERROR), _side(FACTION_PLAYER), _turn(1), _debugMode(false), _aborted(false), _itemId(0)
+SavedBattleGame::SavedBattleGame() : _tiles(), _selectedUnit(0), _nodes(), _units(), _items(), _pathfinding(0), _tileEngine(0), _missionType(""), _side(FACTION_PLAYER), _turn(1), _debugMode(false), _aborted(false), _itemId(0)
 {
 }
 
@@ -370,7 +373,7 @@ void SavedBattleGame::initUtilities(ResourcePack *res)
  * Sets the mission type.
  * @param missionType
  */
-void SavedBattleGame::setMissionType(MissionType missionType)
+void SavedBattleGame::setMissionType(const std::string missionType)
 {
 	_missionType = missionType;
 }
@@ -379,7 +382,7 @@ void SavedBattleGame::setMissionType(MissionType missionType)
  * Gets the mission type.
  * @return missionType
  */
-MissionType SavedBattleGame::getMissionType() const
+std::string SavedBattleGame::getMissionType() const
 {
 	return _missionType;
 }
@@ -805,5 +808,82 @@ int *SavedBattleGame::getCurrentItemId()
 	return &_itemId;
 }
 
+/**
+ * Finds a fitting node where a unit can spawn.
+ * @param nodeRank Rank of the node (is not rank of the alien!).
+ * @param unit Pointer to the unit (to get its position)
+ * @return pointer to the choosen node.
+ */
+Node *SavedBattleGame::getSpawnNode(int nodeRank, BattleUnit *unit)
+{
+	Node *n = 0;
+
+	for (std::vector<Node*>::iterator i = getNodes()->begin(); i != getNodes()->end(); ++i)
+	{
+		if ((*i)->getRank() == nodeRank										// ranks must match
+			&& (!((*i)->getType() & Node::TYPE_SMALL) 
+				|| unit->getUnit()->getArmor()->getSize() == 1)				// the small unit bit is not set or the unit is small
+			&& (!((*i)->getType() & Node::TYPE_FLYING) 
+				|| unit->getUnit()->getArmor()->getMovementType() == MT_FLY)// the flying unit bit is not set or the unit can fly
+			&& (*i)->getPriority() > 0										// priority 0 is no spawnplace
+			&& getTileEngine()->setUnitPosition(unit, (*i)->getPosition(), true))	// check if not already occupied
+		{
+			// we can spawn here - but we continue searching, as we may find better (priority wise)
+			if (n == 0)
+			{
+				n = *i;
+			}
+			else
+			{
+				// either the priority is heigher then it is going to be this one,
+				// or the priority is the same, then there is a 33% chance we choose this node over the last one
+				if ((*i)->getPriority() > n->getPriority() || ((*i)->getPriority() == n->getPriority() && (RNG::generate(0,2) == 1)))
+				{
+					n = *i;
+				}
+			}
+		}
+	}
+
+	return n;
+}
+
+/**
+ * Finds a fitting node where a unit can patrol to.
+ * @param nodeRank Rank of the node (is not rank of the alien!).
+ * @param unit Pointer to the unit (to get its position)
+ * @return pointer to the choosen node.
+ */
+Node *SavedBattleGame::getPatrolNode(bool scout, BattleUnit *unit, Node *fromNode)
+{
+	Node *n = 0;
+	int tries = 0;
+
+	while (n == 0 && tries < 10)
+	{
+		int i = RNG::generate(0, 4);
+		tries++;
+		if (fromNode->getNodeLink(i)->getConnectedNodeID() > -1)
+		{
+			n = getNodes()->at(fromNode->getNodeLink(i)->getConnectedNodeID());
+			if ((n->getRank() > 0 || scout)										// for no scouts we find a node with a rank above 0
+				&& (!(n->getType() & Node::TYPE_SMALL) 
+					|| unit->getUnit()->getArmor()->getSize() == 1)				// the small unit bit is not set or the unit is small
+				&& (!(n->getType() & Node::TYPE_FLYING) 
+					|| unit->getUnit()->getArmor()->getMovementType() == MT_FLY)// the flying unit bit is not set or the unit can fly
+				&& !n->isAllocated() // check if not allocated
+				&& getTileEngine()->setUnitPosition(unit, n->getPosition(), true))	// check if not already occupied
+			{
+				n = n; // OK
+			}
+			else
+			{
+				n = 0; // NOK
+			}
+		}
+	}
+
+	return n;
+}
 
 }

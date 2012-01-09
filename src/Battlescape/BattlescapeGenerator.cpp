@@ -141,26 +141,18 @@ void BattlescapeGenerator::setAlienItemlevel(int alienItemLevel)
 }
 
 /**
- * Sets the mission type. This is used to determine the various elements of the battle.
- * @param missionType MissionType.
- */
-void BattlescapeGenerator::setMissionType(MissionType missionType)
-{
-	_missionType = missionType;
-}
-
-/**
  * This will start the generator: it will fill up the battlescapesavegame with data.
  */
 void BattlescapeGenerator::run()
 {
-	_width = 50;
-	_length = 50;
-	_height = 4;
+	RuleAlienDeployment *ruleDeploy = _game->getRuleset()->getDeployment(_ufo?_ufo->getRules()->getType():_save->getMissionType());
+
+	ruleDeploy->getDimensions(&_width, &_length, &_height);
+
 	_unitCount = 0;
 
 	// find out the terrain type
-	if (_missionType == MISS_TERROR)
+	if (_save->getMissionType() == "STR_TERROR_MISSION")
 	{
 		_terrain = _game->getRuleset()->getTerrain("URBAN");
 	}
@@ -272,22 +264,9 @@ void BattlescapeGenerator::run()
 
 	}
 
-	
-	if (_missionType == MISS_UFORECOVERY)
-	{
-		deployAliens(_game->getRuleset()->getAlienRace(_alienRace), _game->getRuleset()->getDeployment(_ufo->getRules()->getType()));
-	}
-	else
-	{
-		for (int i=0; i < 14; i++)
-		{
-			unit = addAlien(_game->getRuleset()->getGenUnit("FLOATER_SOLDIER"), AR_TERRORIST, true);
-			addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL"), unit);
-			addItem(_game->getRuleset()->getItem("STR_PLASMA_PISTOL_CLIP"), unit);
-		}
-	}
+	deployAliens(_game->getRuleset()->getAlienRace(_alienRace), ruleDeploy);
 
-	if (_missionType == MISS_UFORECOVERY)
+	if (_save->getMissionType() ==  "STR_UFO_CRASH_RECOVERY")
 	{
 		explodePowerSources();
 	}
@@ -348,6 +327,8 @@ void BattlescapeGenerator::deployAliens(RuleAlienRace *race, RuleAlienDeployment
 		for (int i = 0; i < quantity; i++)
 		{
 			bool outside = RNG::generate(0,99) < (*d).percentageOutsideUFO;
+			if (_ufo == 0)
+				outside = false;
 			BattleUnit *unit = addAlien(_game->getRuleset()->getGenUnit(alienName), (*d).alienRank, outside);
 			for (std::vector<std::string>::iterator it = (*d).itemSets.at(_alienItemLevel).items.begin(); it != (*d).itemSets.at(_alienItemLevel).items.end(); ++it)
 			{
@@ -389,9 +370,9 @@ BattleUnit *BattlescapeGenerator::addAlien(RuleGenUnit *rules, int alienRank, bo
 	for (int i = 0; i < 7 && node == 0; i++)
 	{
 		if (outside)
-			node = getSpawnNode(0, unit); // when alien is instructed to spawn outside, we only look for node 0 spawnpoints
+			node = _save->getSpawnNode(0, unit); // when alien is instructed to spawn outside, we only look for node 0 spawnpoints
 		else
-			node = getSpawnNode(nodeRank[alienRank][i], unit);
+			node = _save->getSpawnNode(nodeRank[alienRank][i], unit);
 	}
 
 	if (node)
@@ -417,7 +398,7 @@ BattleUnit *BattlescapeGenerator::addCivilian(RuleGenUnit *rules)
 	BattleUnit *unit = new BattleUnit(new GenUnit(rules, _game->getRuleset()->getArmor(rules->getArmor())), FACTION_NEUTRAL);
 	unit->setId(_unitCount++);
 
-	Node *node = getSpawnNode(0, unit);
+	Node *node = _save->getSpawnNode(0, unit);
 
 	if (node)
 	{
@@ -431,45 +412,7 @@ BattleUnit *BattlescapeGenerator::addCivilian(RuleGenUnit *rules)
 	return unit;
 }
 
-/**
- * Finds a fitting node where a unit can spawn.
- * @param nodeRank Rank of the node (is not rank of the alien!).
- * @param unit Pointer to the unit (to get its position)
- * @return pointer to the choosen node.
- */
-Node *BattlescapeGenerator::getSpawnNode(int nodeRank, BattleUnit *unit)
-{
-	Node *n = 0;
 
-	for (std::vector<Node*>::iterator i = _save->getNodes()->begin(); i != _save->getNodes()->end(); ++i)
-	{
-		if ((*i)->getRank() == nodeRank										// ranks must match
-			&& (!((*i)->getType() & Node::TYPE_SMALL) 
-				|| unit->getUnit()->getArmor()->getSize() == 1)				// the small unit bit is not set or the unit is small
-			&& (!((*i)->getType() & Node::TYPE_FLYING) 
-				|| unit->getUnit()->getArmor()->getMovementType() == MT_FLY)// the flying unit bit is not set or the unit can fly
-			&& (*i)->getPriority() > 0										// priority 0 is no spawnplace
-			&& _save->getTileEngine()->setUnitPosition(unit, (*i)->getPosition(), true))	// check if not already occupied
-		{
-			// we can spawn here - but we continue searching, as we may find better (priority wise)
-			if (n == 0)
-			{
-				n = *i;
-			}
-			else
-			{
-				// either the priority is heigher then it is going to be this one,
-				// or the priority is the same, then there is a 33% chance we choose this node over the last one
-				if ((*i)->getPriority() > n->getPriority() || ((*i)->getPriority() == n->getPriority() && (RNG::generate(0,2) == 1)))
-				{
-					n = *i;
-				}
-			}
-		}
-	}
-
-	return n;
-}
 
 
 /**
@@ -1042,13 +985,13 @@ void BattlescapeGenerator::loadRMP(MapBlock *mapblock, int xoff, int yoff, int s
 }
 
 /**
- * When a UFO crashes, there is a 75% chance for each powersource to explode.
+ * When a UFO crashes, there is a chance for each powersource to explode.
  */
 void BattlescapeGenerator::explodePowerSources()
 {
 	for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); ++i)
 	{
-		if (_save->getTiles()[i]->getMapData(MapData::O_OBJECT) && _save->getTiles()[i]->getMapData(MapData::O_OBJECT)->getSpecialType() == UFO_POWER_SOURCE && RNG::generate(0,100) < 75)
+		if (_save->getTiles()[i]->getMapData(MapData::O_OBJECT) && _save->getTiles()[i]->getMapData(MapData::O_OBJECT)->getSpecialType() == UFO_POWER_SOURCE && RNG::generate(0,100) < 50)
 		{
 			Position pos;
 			pos.x = _save->getTiles()[i]->getPosition().x*16;
