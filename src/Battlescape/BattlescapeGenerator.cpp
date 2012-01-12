@@ -705,14 +705,67 @@ void BattlescapeGenerator::generateMap()
 		}
 	}
 
+	/* determine positioning of the urban terrain roads */
+	if (_save->getMissionType() == "STR_TERROR_MISSION")
+	{
+		bool EWRoad = RNG::generate(0,99) < 33;
+		bool NSRoad = !EWRoad;
+		bool TwoRoads = RNG::generate(0,99) < 25;
+		int roadX = craftX;
+		int roadY = craftY;
+		// make sure the road(s) are not crossing the craftin landing site
+		while (roadX == craftX || roadY == craftY)
+		{
+			roadX = RNG::generate(0, (_length/10)- 1);
+			roadY = RNG::generate(0, (_width/10)- 1);
+		}
+		if (TwoRoads)
+		{
+			// put a crossing on the X,Y position and fill the rest with roads
+			blocks[roadX][roadY] = _terrain->getMapBlocks()->at(2);
+			blocksToDo--;
+			EWRoad = true;
+			NSRoad = true;
+		}
+		if (EWRoad)
+		{
+			while (x < (_width / 10))
+			{
+				if (blocks[x][roadY] == 0)
+				{
+					blocks[x][roadY] = _terrain->getMapBlocks()->at(0);
+					blocksToDo--;
+				}
+				x++;
+			}
+		}
+		if (NSRoad)
+		{
+			while (y < (_length / 10))
+			{
+				if (blocks[roadX][y] == 0)
+				{
+					blocks[roadX][y] = _terrain->getMapBlocks()->at(1);
+					blocksToDo--;
+				}
+				y++;
+			}
+		}
+	}
+
+	x = 0;
+	y = 0;
+
 	/* Random map generation for crash/landing sites */
 	while (blocksToDo)
 	{
 		if (blocks[x][y] == 0)
 		{
 			// last block of this row or column or next block is not free or big block would block landingzone
-			if (x == ((_width / 10) - 1) || y == ((_length / 10) - 1) || blocks[x + 1][y] == dummy
-				|| landingzone[x + 1][y] || landingzone[x + 1][y + 1] || landingzone[x][y + 1] || blocksToDo == 1)
+			if (x == ((_width / 10) - 1) || y == ((_length / 10) - 1)
+				|| landingzone[x + 1][y] || landingzone[x + 1][y + 1] || landingzone[x][y + 1]
+				|| blocks[x + 1][y] || blocks[x + 1][y + 1] || blocks[x][y + 1] 
+				|| blocksToDo == 1)
 			{
 				// only small block will fit
 				blocks[x][y] = _terrain->getRandomMapBlock(10, landingzone[x][y]);

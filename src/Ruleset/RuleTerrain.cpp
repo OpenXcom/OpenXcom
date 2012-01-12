@@ -156,6 +156,10 @@ MapBlock* RuleTerrain::getRandomMapBlock(int maxsize, bool landingzone)
 		{
 			mb = 0;
 		}
+		else if (mb->getName() == "URBAN00" || mb->getName() == "URBAN01" || mb->getName() == "URBAN02")
+		{
+			mb = 0;
+		}
 	}
 
 	return mb;
