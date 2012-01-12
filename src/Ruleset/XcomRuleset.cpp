@@ -1814,9 +1814,9 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	urban->getMapDataSets()->push_back(getMapDataSet("URBITS"));
 	urban->getMapDataSets()->push_back(getMapDataSet("URBAN"));
 	urban->getMapDataSets()->push_back(getMapDataSet("FRNITURE"));
-	//urban->getMapBlocks()->push_back(new MapBlock(urban,"URBAN00",10,10,false));
-	//urban->getMapBlocks()->push_back(new MapBlock(urban,"URBAN01",10,10,false));
-	//urban->getMapBlocks()->push_back(new MapBlock(urban,"URBAN02",10,10,false));
+	urban->getMapBlocks()->push_back(new MapBlock(urban,"URBAN00",10,10,false));
+	urban->getMapBlocks()->push_back(new MapBlock(urban,"URBAN01",10,10,false));
+	urban->getMapBlocks()->push_back(new MapBlock(urban,"URBAN02",10,10,false));
 	urban->getMapBlocks()->push_back(new MapBlock(urban,"URBAN03",10,10,true));
 	urban->getMapBlocks()->push_back(new MapBlock(urban,"URBAN04",10,10,true));
 	urban->getMapBlocks()->push_back(new MapBlock(urban,"URBAN05",20,20,false));
