@@ -113,7 +113,7 @@ void ExplosionBState::think()
 				// after the animation is done, the real explosion takes place
 				if (_item)
 				{
-					save->getTileEngine()->explode(_center, _item->getRules()->getPower(), _item->getRules()->getDamageType(), 100, _unit);
+					save->getTileEngine()->explode(_center, _item->getRules()->getPower(), _item->getRules()->getDamageType(), _item->getRules()->getExplosionRadius(), _unit);
 				}
 				if (_tile)
 				{

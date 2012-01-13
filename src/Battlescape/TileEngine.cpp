@@ -78,12 +78,12 @@ void TileEngine::calculateSunShading(Tile *tile)
 
 	int power = 15 - _save->getGlobalShade();
 
-	// At night/dusk sun isn't dropping shades
-	if (_save->getGlobalShade() <= 5)
+	// At night/dusk sun isn't dropping shades blocked by roofs
+	if (_save->getGlobalShade() <= 4)
 	{
 		if (verticalBlockage(_save->getTile(Position(tile->getPosition().x, tile->getPosition().y, _save->getHeight() - 1)), tile, DT_NONE))
 		{
-			power-=2;
+			power -= 2;
 		}
 	}
 
@@ -532,11 +532,14 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 			power /= 2;
 		}
 
+		for (int fi = 0; fi <= 90; fi += 10)
+		{
 		// raytrace every 3 degrees makes sure we cover all tiles in a circle.
 		for (int te = 0; te <= 360; te += 3)
 		{
 			double cos_te = cos(te * M_PI / 180.0);
 			double sin_te = sin(te * M_PI / 180.0);
+			double sin_fi = sin(fi * M_PI / 180.0);
 
 			Tile *origin = _save->getTile(center);
 			double l = 0;
@@ -548,7 +551,7 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 			{
 				vx = centerX + l * cos_te;
 				vy = centerY + l * sin_te;
-				vz = centerZ;
+				vz = centerZ + (l / 2.0) * sin_fi;
 
 				tileZ = int(floor(vz));
 				tileX = int(floor(vx));
@@ -577,11 +580,11 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 							if (dest->getUnit())
 								dest->getUnit()->damage(Position(0, 0, 0), (int)(RNG::generate(power_/2.0, power_*1.5)), type);
 							// destroy floors above
-							Tile *tileAbove = _save->getTile(Position(tileX, tileY, tileZ+1));
+							/*Tile *tileAbove = _save->getTile(Position(tileX, tileY, tileZ+1));
 							if ( tileAbove && tileAbove->getMapData(MapData::O_FLOOR) && power_ / 2 >= tileAbove->getMapData(MapData::O_FLOOR)->getArmor())
 							{
 								tileAbove->destroy(MapData::O_FLOOR);
-							}
+							}*/
 						}
 						if (type == DT_SMOKE)
 						{
@@ -610,7 +613,7 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 				l++;
 			}
 		}
-
+		}
 		// now detonate the tiles affected with HE
 		if (type == DT_HE)
 		{
@@ -621,6 +624,7 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 		}
 	}
 
+	calculateSunShading(); // roofs could have been destroyed
 	calculateFOV(center);
 	calculateTerrainLighting(); // fires could have been started
 }
@@ -664,6 +668,10 @@ int TileEngine::verticalBlockage(Tile *startTile, Tile *endTile, ItemDamageType 
 
 	if (direction < 0) // down
 	{
+		for (int z = startTile->getPosition().z; z > endTile->getPosition().z; z--)
+		{
+			block += blockage(_save->getTile(Position(x, y, z)), MapData::O_FLOOR, type);
+		}
 		if (x != endTile->getPosition().x || y != endTile->getPosition().y)
 		{
 			x = endTile->getPosition().x;
@@ -782,11 +790,20 @@ int TileEngine::blockage(Tile *tile, const int part, ItemDamageType type)
 
 	if (part == MapData::O_FLOOR && tile->getMapData(MapData::O_FLOOR))
 	{
-		// blockage modifiers of floors in ufo only counted for horizontal stuff, so this is kind of an experiment
+		// blockage modifiers for effect of explosions on floors is somewhat calculate from armor
+		// because we don't have HE block data on floors.
+		// If the tile has no DIEMCD it means the floor is already semi-destroyed, so it's not blocking a lot anymore
 		if (type == DT_HE)
-			blockage += 15;
+		{
+			if (tile->getMapData(MapData::O_FLOOR)->getDieMCD() || tile->getMapData(MapData::O_FLOOR)->getArmor() == 255)
+				blockage += tile->getMapData(MapData::O_FLOOR)->getArmor() * 2;
+			else
+				blockage += tile->getMapData(MapData::O_FLOOR)->getArmor() / 10;
+		}
 		else
+		{
 			blockage += 255;
+		}
 	}
 	else
 	{

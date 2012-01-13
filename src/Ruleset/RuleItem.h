@@ -206,6 +206,8 @@ public:
 	int getTUUse() const;
 	/// Set use Time Unit use
 	void setTUUse(int tu);
+	/// Gets the max explosion radius
+	int getExplosionRadius() const;
 };
 
 }
