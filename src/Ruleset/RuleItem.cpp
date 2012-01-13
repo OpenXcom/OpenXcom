@@ -894,4 +894,26 @@ void RuleItem::setTUUse(int tu)
 {
 	_tuUse = tu;
 }
+
+/**
+ * Returns the item's max explosion radius. Small explosions don't have a restriction.
+ * Larger explosions are restricted using a formula, with a maxium of radius 11 no matter how large the explosion is.
+ * @return radius.
+ */
+int RuleItem::getExplosionRadius() const
+{
+	int radius = 100;
+
+	if (_power > 61 && _power < 112)
+	{
+		radius = (_power-2)/10;
+	}
+	else if (_power >= 112)
+	{
+		radius = 11;
+	}
+
+	return radius;
+}
+
 }
