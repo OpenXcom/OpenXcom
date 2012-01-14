@@ -911,6 +911,38 @@ bool BattlescapeState::checkForCasualties(BattleItem *murderweapon, BattleUnit *
 				if ((*i)->getFaction() == victim->getFaction())
 				{
 					(*i)->moraleChange(-(22 - ((*i)->getUnit()->getBravery() / 10)*2));
+
+					// revenge procedure:
+					// if the victim is hostile, the nearest other hostile will aggro if he wasn't already
+					if (victim->getFaction() == FACTION_HOSTILE)
+					{
+						int closest = 1000000;
+						BattleUnit *revenger = 0;
+						for (std::vector<BattleUnit*>::iterator h = _battleGame->getUnits()->begin(); h != _battleGame->getUnits()->end(); ++h)
+						{
+							if ((*h)->getFaction() == FACTION_HOSTILE && !(*h)->isOut() && (*h) != victim)
+							{
+								int x = abs(victim->getPosition().x - (*h)->getPosition().x);
+								int y = abs(victim->getPosition().y - (*h)->getPosition().y);
+								int distance = int(floor(sqrt(float(x*x + y*y)) + 0.5));
+								if (distance < closest)
+								{
+									revenger = (*h);
+									closest = distance;
+								}
+							}
+						}
+						if (revenger)
+						{
+							AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(revenger->getCurrentAIState());
+							if (aggro == 0)
+							{
+								aggro = new AggroBAIState(_battleGame, revenger);
+								revenger->setAIState(aggro);
+							}
+							aggro->setAggroTarget(murderer);
+						}
+					}
 				}
 				// the winning squad all get a morale increase
 				if ((*i)->getFaction() != victim->getFaction())
