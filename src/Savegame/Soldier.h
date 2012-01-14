@@ -131,7 +131,10 @@ public:
 	bool isWoundable() const;
 	/// Get wether the unit is affected by fear.
 	bool isFearable() const;
-
+	/// Get the unit's intelligence.
+	int getIntelligence() const;
+	/// Get the unit's aggression.
+	int getAggression() const;
 };
 
 }

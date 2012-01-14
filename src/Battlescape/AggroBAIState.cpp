@@ -129,7 +129,7 @@ void AggroBAIState::think(BattleAction *action)
 	if (_aggroTarget == 0)
 	{
 		_timesNotSeen++;
-		if (_timesNotSeen > 3) // this should be the intelligence level of the unit
+		if (_timesNotSeen > _unit->getUnit()->getIntelligence())
 		{
 			// we lost aggro
 			return;
@@ -173,6 +173,8 @@ void AggroBAIState::think(BattleAction *action)
 
 /**
  * Sets the aggro target to be used by the AI.
+ * Note that this does not mean the AI will chase the unit, it will just walk towards this position.
+ * Until it forgets about it and goes back to patrolling.
  * @param unit Pointer to the unit.
  */
 void AggroBAIState::setAggroTarget(BattleUnit *unit)
