@@ -27,7 +27,7 @@ namespace OpenXcom
  * @param race String defining the race.
  * @param rank String defining the rank.
  */
-RuleGenUnit::RuleGenUnit(const std::string &type, std::string race, std::string rank) : _type(type), _race(race), _rank(rank), _armor(""), _standHeight(0), _kneelHeight(0), _loftemps(0), _value(0), _deathSound(0)
+RuleGenUnit::RuleGenUnit(const std::string &type, std::string race, std::string rank) : _type(type), _race(race), _rank(rank), _armor(""), _standHeight(0), _kneelHeight(0), _loftemps(0), _value(0), _deathSound(0), _intelligence(0), _aggression(0)
 {
 
 }
@@ -77,6 +77,16 @@ void RuleGenUnit::setVoxelParameters(int standHeight, int kneelHeight, int lofte
 	_standHeight = standHeight;
 	_kneelHeight = kneelHeight;
 	_loftemps = loftemps;
+}
+
+/**
+ * Set the unit's intelligence and aggression.
+ * @param string.
+ */
+void RuleGenUnit::setAIParameters(int intelligence, int aggression)
+{
+	_intelligence = intelligence;
+	_aggression = aggression;
 }
 
 /**
@@ -176,6 +186,24 @@ void RuleGenUnit::setDeathSound(int id)
 int RuleGenUnit::getDeathSound() const
 {
 	return _deathSound;
+}
+
+/**
+ * Get the intelligence. This is the number of turns AI remembers your troops position.
+ * @return intelligence.
+ */
+int RuleGenUnit::getIntelligence() const
+{
+	return _intelligence;
+}
+
+/**
+ * Get the aggression. Determines the chance of revenge and taking cover.
+ * @return intelligence.
+ */
+int RuleGenUnit::getAggression() const
+{
+	return _aggression;
 }
 
 }

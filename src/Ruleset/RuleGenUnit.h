@@ -39,6 +39,7 @@ private:
 	std::string _armor;
 	int _standHeight, _kneelHeight, _loftemps;
 	int _value, _deathSound;
+	int _intelligence, _aggression;
 public:
 	/// Creates a blank unit ruleset.
 	RuleGenUnit(const std::string &type, std::string race, std::string rank);
@@ -52,6 +53,8 @@ public:
 	void setArmor(const std::string &armor);
 	/// Sets the voxel parameters.
 	void setVoxelParameters(int standHeight, int kneelHeight, int loftemps);
+	/// Sets various AI parameters.
+	void setAIParameters(int intelligence, int aggression);
 	/// Get the unit's stats.
 	UnitStats getStats() const;
 	/// Get the unit's height when standing.
@@ -74,6 +77,10 @@ public:
 	void setDeathSound(int id);
 	/// Get the death sound id.
 	int getDeathSound() const;
+	/// Get the intelligence. This is the number of turns AI remembers your troops position.
+	int getIntelligence() const;
+	/// Get the aggression. Determines the chance of revenge and taking cover.
+	int getAggression() const;
 };
 
 }

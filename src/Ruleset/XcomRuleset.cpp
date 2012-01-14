@@ -1928,6 +1928,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	sectoidSoldier->setStats(s1);
 	sectoidSoldier->setVoxelParameters(16, 12, 2);
 	sectoidSoldier->setValue(10);
+	sectoidSoldier->setAIParameters(3, 2);
 
 	RuleGenUnit *sectoidEngineer = new RuleGenUnit("SECTOID_ENGINEER", "STR_SECTOID", "STR_LIVE_ENGINEER");
 	sectoidEngineer->setArmor("SECTOID_ARMOR0");
@@ -1945,6 +1946,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	sectoidEngineer->setStats(s1);
 	sectoidEngineer->setVoxelParameters(16, 12, 2);
 	sectoidEngineer->setValue(16);
+	sectoidEngineer->setAIParameters(6, 2);
 
 	RuleGenUnit *sectoidNavigator = new RuleGenUnit("SECTOID_NAVIGATOR", "STR_SECTOID", "STR_LIVE_NAVIGATOR");
 	sectoidNavigator->setArmor("SECTOID_ARMOR0");
@@ -1962,6 +1964,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	sectoidNavigator->setStats(s1);
 	sectoidNavigator->setVoxelParameters(16, 12, 2);
 	sectoidNavigator->setValue(12);
+	sectoidNavigator->setAIParameters(4, 2);
 
 	RuleGenUnit *cyberdisc = new RuleGenUnit("CYBERDISC", "STR_CYBERDISC", "");
 	cyberdisc->setArmor("CYBERDISC_ARMOR");
@@ -1979,6 +1982,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	cyberdisc->setStats(s1);
 	cyberdisc->setVoxelParameters(15, 15, 4);
 	cyberdisc->setValue(20);
+	cyberdisc->setAIParameters(5, 1);
 
 	RuleGenUnit *floaterSoldier = new RuleGenUnit("FLOATER_SOLDIER", "STR_FLOATER", "STR_LIVE_SOLDIER");
 	floaterSoldier->setArmor("FLOATER_ARMOR0");
@@ -1996,6 +2000,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	floaterSoldier->setStats(s1);
 	floaterSoldier->setVoxelParameters(21, 16, 3);
 	floaterSoldier->setValue(12);
+	floaterSoldier->setAIParameters(4, 2);
 
 	RuleGenUnit *tankCannon = new RuleGenUnit("TANK_CANNON", "STR_TANK_CANNON", "");
 	tankCannon->setArmor("TANK_ARMOR");

@@ -914,10 +914,11 @@ bool BattlescapeState::checkForCasualties(BattleItem *murderweapon, BattleUnit *
 
 					// revenge procedure:
 					// if the victim is hostile, the nearest other hostile will aggro if he wasn't already
-					if (victim->getFaction() == FACTION_HOSTILE)
+					if (victim->getFaction() == FACTION_HOSTILE && murderer)
 					{
 						int closest = 1000000;
 						BattleUnit *revenger = 0;
+						bool revenge = RNG::generate(0,100) < 50;
 						for (std::vector<BattleUnit*>::iterator h = _battleGame->getUnits()->begin(); h != _battleGame->getUnits()->end(); ++h)
 						{
 							if ((*h)->getFaction() == FACTION_HOSTILE && !(*h)->isOut() && (*h) != victim)
@@ -932,7 +933,10 @@ bool BattlescapeState::checkForCasualties(BattleItem *murderweapon, BattleUnit *
 								}
 							}
 						}
-						if (revenger)
+						// aliens with aggression level 2 always revenge
+						// aliens with aggression level 1 have 50% chance to revenge
+						// aliens with aggression level 0 never revenge
+						if (revenger && (revenger->getUnit()->getAggression() == 2 || (revenger->getUnit()->getAggression() == 1 && revenge)))
 						{
 							AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(revenger->getCurrentAIState());
 							if (aggro == 0)

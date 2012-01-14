@@ -81,6 +81,10 @@ public:
 	virtual bool isWoundable() const = 0;
 	/// Get wether the unit is affected by fear.
 	virtual bool isFearable() const = 0;
+	/// Get the unit's intelligence.
+	virtual int getIntelligence() const = 0;
+	/// Get the unit's aggression.
+	virtual int getAggression() const = 0;
 
 };
 

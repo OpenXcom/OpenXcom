@@ -480,4 +480,22 @@ bool Soldier::isFearable() const
 	return true;
 }
 
+/**
+ * Returns the unit's intelligence.
+ * @return int
+ */
+int Soldier::getIntelligence() const
+{
+	return 5;
+}
+
+/**
+ * Returns the unit's aggression.
+ * @return int
+ */
+int Soldier::getAggression() const
+{
+	return 1;
+}
+
 }
