@@ -146,6 +146,7 @@ void PatrolBAIState::think(BattleAction *action)
 			if (distance < closest)
 			{
 				_fromNode = node;
+				closest = distance;
 			}
 		}
 	}

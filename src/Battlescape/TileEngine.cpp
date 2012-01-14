@@ -62,8 +62,11 @@ TileEngine::~TileEngine()
   */
 void TileEngine::calculateSunShading()
 {
+	const int layer = 0; // Ambient lighting layer.
+
 	for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); ++i)
 	{
+		_save->getTiles()[i]->resetLight(layer);
 		calculateSunShading(_save->getTiles()[i]);
 	}
 }
@@ -443,37 +446,34 @@ bool TileEngine::checkReactionFire(BattleUnit *unit, BattleAction *action, Battl
 		action->actor->addReactionExp();
 		action->type = BA_SNAPSHOT;
 		action->target = unit->getPosition();
-		// lets try and shoot
+		// lets try and shoot: we need a weapon, ammo and enough time units
 		action->weapon = action->actor->getMainHandWeapon();
 		int tu = action->actor->getActionTUs(action->type, action->weapon);
-		if (action->weapon && action->weapon->getAmmoItem() && action->weapon->getAmmoItem()->getAmmoQuantity())
+		if (action->weapon && action->weapon->getAmmoItem() && action->weapon->getAmmoItem()->getAmmoQuantity() && action->actor->getTimeUnits() >= tu)
 		{
-			if (action->actor->spendTimeUnits(tu, _save->getDebugMode()))
+			// if the target is hostile, it will aggro
+			if (unit->getFaction() == FACTION_HOSTILE)
 			{
-				// if the target is hostile, it will aggro
-				if (unit->getFaction() == FACTION_HOSTILE)
+				AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(unit->getCurrentAIState());
+				if (aggro == 0)
 				{
-					AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(unit->getCurrentAIState());
-					if (aggro == 0)
-					{
-						aggro = new AggroBAIState(_save, unit);
-						unit->setAIState(aggro);
-					}
-					aggro->setAggroTarget(action->actor);
+					aggro = new AggroBAIState(_save, unit);
+					unit->setAIState(aggro);
 				}
-				// if the shooter is hostile, he will aggro
-				if (action->actor->getFaction() == FACTION_HOSTILE)
-				{
-					AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(action->actor->getCurrentAIState());
-					if (aggro == 0)
-					{
-						aggro = new AggroBAIState(_save, action->actor);
-						action->actor->setAIState(aggro);
-					}
-					aggro->setAggroTarget(unit);
-				}
-				return true;
+				aggro->setAggroTarget(action->actor);
 			}
+			// if the shooter is hostile, he will aggro if he wasn't already
+			if (action->actor->getFaction() == FACTION_HOSTILE)
+			{
+				AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(action->actor->getCurrentAIState());
+				if (aggro == 0)
+				{
+					aggro = new AggroBAIState(_save, action->actor);
+					action->actor->setAIState(aggro);
+				}
+				aggro->setAggroTarget(unit);
+			}
+			return true;
 		}
 	}
 
@@ -1189,7 +1189,7 @@ void TileEngine::prepareNewTurn()
 		int y = (*i)->getPosition().y;
 		int z = (*i)->getPosition().z;
 
-		if ((*i)->getUnit())
+		if ((*i)->getUnit() && !(*i)->getUnit()->isOut())
 		{
 			// units in smoke suffer stun
 			(*i)->getUnit()->damage(Position(), ((*i)->getSmoke()/5)+1, DT_STUN);
@@ -1284,7 +1284,8 @@ void TileEngine::reviveUnconsciousUnits()
 		Position originalPosition = (*i)->getPosition();
 		for (int dir = 0; dir < 9 && (*i)->getStatus() == STATUS_UNCONSCIOUS && (*i)->getStunlevel() < (*i)->getHealth() && (*i)->getHealth() > 0; dir++)
 		{
-			if (_save->getTile(originalPosition + Position(xd[dir],yd[dir],0))->getUnit() == 0)
+			Tile *t = _save->getTile(originalPosition + Position(xd[dir],yd[dir],0));
+			if (t && t->getUnit() == 0 && !t->hasNoFloor())
 			{
 				// recover from unconscious
 				(*i)->setPosition(originalPosition + Position(xd[dir],yd[dir],0));
