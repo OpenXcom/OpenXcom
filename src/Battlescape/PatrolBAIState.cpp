@@ -151,7 +151,7 @@ void PatrolBAIState::think(BattleAction *action)
 		}
 	}
 
-	if (_toNode == 0)
+	if (_toNode == 0 && RNG::generate(0,10) < 9)
 	{
 		// look for a new node to walk towards
 		bool scout = true;
@@ -159,7 +159,7 @@ void PatrolBAIState::think(BattleAction *action)
 			|| _game->getMissionType() == "STR_UFO_GROUND_ASSAULT")
 		{
 			// after turn 20 or if the morale is low, everyone moves out the UFO and scout
-			if (_unit->getMorale() < 50 || _game->getTurn() > 20 || _fromNode->getRank() == 0)
+			if (_game->getTurn() > 20 || _fromNode->getRank() == 0)
 			{
 				scout = true;
 			}

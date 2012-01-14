@@ -22,6 +22,8 @@
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/SavedBattleGame.h"
+#include "../Battlescape/TileEngine.h"
+#include "../Battlescape/Pathfinding.h"
 #include "../Engine/RNG.h"
 
 namespace OpenXcom
@@ -119,6 +121,7 @@ void AggroBAIState::think(BattleAction *action)
 	/* Aggro is mainly either shooting a target or running towards it (melee).
 	   If we do no action here - we assume we lost aggro and will go back to patrol state.
 	*/
+	int aggression = _unit->getUnit()->getAggression();
 
 	_aggroTarget = 0;
 	for (std::vector<BattleUnit*>::iterator j = _unit->getVisibleUnits()->begin(); j != _unit->getVisibleUnits()->end(); ++j)
@@ -126,29 +129,69 @@ void AggroBAIState::think(BattleAction *action)
 		_aggroTarget = (*j);
 	}
 
+	// if we currently see no target, we either can move to it's last seen position or loose aggro
 	if (_aggroTarget == 0)
 	{
 		_timesNotSeen++;
-		if (_timesNotSeen > _unit->getUnit()->getIntelligence())
+		if (_timesNotSeen > _unit->getUnit()->getIntelligence() || aggression == 0)
 		{
 			// we lost aggro
 			return;
 		}
-		// lets go looking in the neighbourhood where we've last seen him
+		// lets go looking where we've last seen him
 		action->type = BA_WALK;
 		action->target = _lastKnownPosition;
-		action->target.x += RNG::generate(-1,1);
-		action->target.y += RNG::generate(-1,1);
 	}
 	else
 	{
-		// from time to time, don't shoot him, but just move a bit around
-		if (RNG::generate(1,10) == 1)
+		// if we see the target, we either can shoot him, or take cover.
+		bool takeCover = true;
+		int number = RNG::generate(0,100);
+
+		// lost health, chances to take cover get bigger
+		if (_unit->getHealth() < _unit->getUnit()->getHealth())
+			number += 10;
+
+		// out of ammo or no weapon or ammo at all, chance to take cover get bigger
+		if (!action->weapon || !action->weapon->getAmmoItem() || !action->weapon->getAmmoItem()->getAmmoQuantity())
+			number += 25;
+
+		if (aggression == 0 && number < 10)
+			takeCover = false;
+		if (aggression == 1 && number < 50)
+			takeCover = false;
+		if (aggression == 2 && number < 90)
+			takeCover = false;
+
+		if (takeCover)
 		{
+			// the idea is to check within a 5 tile radius for a tile which is not seen by our aggroTarget
+			// if there is no such tile, we run away from the target.
 			action->type = BA_WALK;
-			action->target = _unit->getPosition();
-			action->target.x += RNG::generate(-5,5);
-			action->target.y += RNG::generate(-5,5);
+			int tries = 0;
+			bool coverFound = false;
+			while (tries < 30 && !coverFound)
+			{
+				tries++;
+				action->target = _unit->getPosition();
+				action->target.x += RNG::generate(-5,5);
+				action->target.y += RNG::generate(-5,5);
+				if (tries < 20)
+					coverFound = !_game->getTileEngine()->checkIfTileVisible(_aggroTarget, _game->getTile(action->target));
+				else
+					coverFound = true;
+
+				if (coverFound)
+				{
+					// check if we can reach this tile
+					_game->getPathfinding()->calculate(_unit, action->target);
+					if (_game->getPathfinding()->getStartDirection() == -1)
+					{
+						coverFound = false;
+					}
+					_game->getPathfinding()->abortPath();
+				}
+			}
 		}
 		else
 		{
@@ -159,7 +202,10 @@ void AggroBAIState::think(BattleAction *action)
 			/*int tu = action->actor->getActionTUs(action->type, action->weapon);*/
 			if (action->weapon && action->weapon->getAmmoItem() && action->weapon->getAmmoItem()->getAmmoQuantity())
 			{
-				action->type = BA_SNAPSHOT;
+				if (RNG::generate(1,10) < 5)
+					action->type = BA_SNAPSHOT;
+				else
+					action->type = BA_AUTOSHOT;
 			}
 			else
 			{
