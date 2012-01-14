@@ -1337,4 +1337,81 @@ bool TileEngine::setUnitPosition(BattleUnit *bu, const Position &position, bool 
 	return true;
 }
 
+/**
+ * Check for an opposing unit on this tile
+ * @param currentUnit the watcher
+ * @param otherUnit the unit to check for
+ */
+bool TileEngine::checkIfTileVisible(BattleUnit *currentUnit, Tile *tile)
+{
+	// if the tile is too dark, we can't see the unit
+	if (!tile || tile->getShade() > MAX_DARKNESS_TO_SEE_UNITS)
+	{
+		return false;
+	}
+
+	// determine the origin and target voxels for the raytrace
+	Position originVoxel, targetVoxel;
+	std::vector<Position> _trajectory;
+	originVoxel = Position((currentUnit->getPosition().x * 16) + 8, (currentUnit->getPosition().y * 16) + 8, currentUnit->getPosition().z*24);
+	originVoxel.z += -_save->getTile(currentUnit->getPosition())->getTerrainLevel();
+	originVoxel.z += currentUnit->getHeight();
+	bool unitSeen = false;
+
+	targetVoxel = Position((tile->getPosition().x * 16) + 8, (tile->getPosition().y * 16) + 8, tile->getPosition().z*24);
+	int targetMinHeight = targetVoxel.z - tile->getTerrainLevel();
+	int targetMaxHeight = targetMinHeight + 12;
+
+	// scan ray from top to bottom
+	for (int i = targetMaxHeight; i > targetMinHeight; i-=2)
+	{
+		targetVoxel.z = i;
+		_trajectory.clear();
+		int test = calculateLine(originVoxel, targetVoxel, false, &_trajectory, currentUnit);
+		if (test == -1)
+		{
+			unitSeen = true; // succesfully reached the target
+			break;
+		}
+		else
+		{
+			// bumped into something
+			unitSeen = false;
+		}
+	}
+
+	if (unitSeen)
+	{
+		// now check if we really see it taking into account smoke tiles
+		// initial smoke "density" of a smoke grenade is around 10 per tile
+		// we do density/2 to get the decay of visibility, so in fresh smoke we only have 4 tiles of visibility
+		_trajectory.clear();
+		calculateLine(originVoxel, targetVoxel, true, &_trajectory, currentUnit);
+		Tile *t = _save->getTile(currentUnit->getPosition());
+		int maxViewDistance = MAX_VIEW_DISTANCE - (t->getSmoke()/2);
+		for (unsigned int i = 0; i < _trajectory.size(); i++)
+		{
+			if (t != _save->getTile(Position(_trajectory.at(i).x/16,_trajectory.at(i).y/16, _trajectory.at(i).z/24)))
+			{
+				t = _save->getTile(Position(_trajectory.at(i).x/16,_trajectory.at(i).y/16, _trajectory.at(i).z/24));
+				maxViewDistance -= t->getSmoke()/2;
+			}
+		}
+		int x = abs(currentUnit->getPosition().x - tile->getPosition().x);
+		int y = abs(currentUnit->getPosition().y - tile->getPosition().y);
+		int distance = int(floor(sqrt(float(x*x + y*y)) + 0.5));
+		if (distance <= maxViewDistance)
+		{
+			unitSeen = true;
+		}
+		else
+		{
+			unitSeen = false;
+		}
+	}
+
+	return unitSeen;
+}
+
+
 }

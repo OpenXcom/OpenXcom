@@ -101,6 +101,11 @@ void ProjectileFlyBState::init()
 			return;
 		}
 	}
+
+	// autoshot will default back to snapshot if it's not possible
+	if (weapon->getRules()->getAccuracyAuto() == 0 && _action.type == BA_AUTOSHOT)
+		_action.type = BA_SNAPSHOT;
+
 	// action specific initialisation
 	switch (_action.type)
 	{

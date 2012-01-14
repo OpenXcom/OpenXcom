@@ -71,6 +71,13 @@ void UnitWalkBState::think()
 {
 	bool unitspotted = false;
 
+	if (_unit->isOut())
+	{
+		_pf->abortPath();
+		_parent->popState();
+		return;
+	}
+
 	// during a walking cycle we make step sounds
 	if (_unit->getStatus() == STATUS_WALKING || _unit->getStatus() == STATUS_FLYING)
 	{

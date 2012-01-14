@@ -51,7 +51,6 @@ private:
 	int vectorToDirection(const Position &vector);
 	int voxelCheck(const Position& voxel, BattleUnit *excludeUnit, bool excludeAllUnits = false);
 	bool checkIfUnitVisible(BattleUnit *currentUnit, BattleUnit *otherUnit);
-	bool checkIfTileVisible(BattleUnit *currentUnit, Tile *tile);
 public:
 	/// Creates a new TileEngine class.
 	TileEngine(SavedBattleGame *save, std::vector<Uint16> *voxelData);
@@ -87,6 +86,7 @@ public:
 	void prepareNewTurn();
 	void reviveUnconsciousUnits();
 	bool setUnitPosition(BattleUnit *bu, const Position &position, bool testOnly = false);
+	bool checkIfTileVisible(BattleUnit *currentUnit, Tile *tile);
 };
 
 }

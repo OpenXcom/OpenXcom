@@ -425,23 +425,45 @@ void BattlescapeState::handleAI(BattleUnit *unit)
 	BattleAIState *ai = unit->getCurrentAIState();
 	if (!ai) return;
 
+	AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(ai);
+	PatrolBAIState *patrol = dynamic_cast<PatrolBAIState*>(ai);
+
+
 	unit->think(&_action);
 	if (_action.type == BA_WALK)
 	{
+		if (patrol)
+			debug(L"Patrolling");
+		else
+			debug(L"Walking to target");
 		_battleGame->getPathfinding()->calculate(_action.actor, _action.target);
 		statePushBack(new UnitWalkBState(this, _action));
 	}
 
-	if (_action.type == BA_SNAPSHOT)
+	if (_action.type == BA_SNAPSHOT || _action.type == BA_AUTOSHOT)
 	{
+		debug(L"Firing 1");
 		statePushBack(new ProjectileFlyBState(this, _action));
+		// give the option to take cover or keep shooting
+		unit->think(&_action);
+		if (_action.type == BA_WALK)
+		{
+			debug(L"Take cover");
+			_battleGame->getPathfinding()->calculate(_action.actor, _action.target);
+			statePushBack(new UnitWalkBState(this, _action));
+		}
+		if (_action.type == BA_SNAPSHOT || _action.type == BA_AUTOSHOT)
+		{
+			debug(L"Firing 2");
+			statePushBack(new ProjectileFlyBState(this, _action));
+		}
 	}
 
 	if (_action.type == BA_NONE)
 	{
-		AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(ai);
 		if (aggro != 0)
 		{
+			debug(L"Aggro lost");
 			// we lost aggro
 			unit->setAIState(new PatrolBAIState(_battleGame, unit, 0));
 		}
@@ -944,6 +966,7 @@ bool BattlescapeState::checkForCasualties(BattleItem *murderweapon, BattleUnit *
 								aggro = new AggroBAIState(_battleGame, revenger);
 								revenger->setAIState(aggro);
 							}
+							debug(L"Aggro Target : revenge");
 							aggro->setAggroTarget(murderer);
 						}
 					}
