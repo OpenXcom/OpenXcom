@@ -34,7 +34,6 @@ class ProjectileFlyBState : public BattleState
 {
 private:
 	BattleUnit *_unit;
-	bool validThrowRange();
 	BattleItem *_ammo;
 	BattleAction _action;
 	BattleItem *_projectileItem;
@@ -56,6 +55,7 @@ public:
 	void think();
 	/// Get the result of the state.
 	std::string getResult() const;
+	static bool validThrowRange(BattleAction *action);
 
 };
 

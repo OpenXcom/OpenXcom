@@ -225,6 +225,8 @@ public:
 	BattleItem *getItem(const std::string &slot, int x = 0, int y = 0) const;
 	/// Gets the item in the main hand.
 	BattleItem *getMainHandWeapon() const;
+	/// Gets a grenade from the belt, if any.
+	BattleItem *getGrenadeFromBelt() const;
 	/// Check if this unit is in the exit area
 	bool isInExitArea() const;
 	/// Gets the unit height taking into account kneeling/standing.

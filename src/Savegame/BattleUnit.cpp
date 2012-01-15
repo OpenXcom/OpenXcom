@@ -1337,6 +1337,22 @@ BattleItem *BattleUnit::getMainHandWeapon() const
 }
 
 /**
+* Get the "main hand weapon" from the unit.
+* @return Pointer to item.
+*/
+BattleItem *BattleUnit::getGrenadeFromBelt() const
+{
+	for (std::vector<BattleItem*>::const_iterator i = _inventory.begin(); i != _inventory.end(); ++i)
+	{
+		if ((*i)->getRules()->getBattleType() == BT_GRENADE)
+		{
+			return *i;
+		}
+	}
+	return 0;
+}
+
+/**
 * Check if this unit is in the exit area.
 * @return Is in the exit area?
 */

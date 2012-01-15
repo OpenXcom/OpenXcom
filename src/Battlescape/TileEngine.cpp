@@ -43,7 +43,7 @@ namespace OpenXcom
  * Sets up a TileEngine.
  * @param save pointer to SavedBattleGame object.
  */
-TileEngine::TileEngine(SavedBattleGame *save, std::vector<Uint16> *voxelData) : _save(save), _voxelData(voxelData)
+TileEngine::TileEngine(SavedBattleGame *save, std::vector<Uint16> *voxelData) : _save(save), _voxelData(voxelData), _personalLighting(true)
 {
 
 }
@@ -154,15 +154,17 @@ void TileEngine::calculateUnitLighting()
 		_save->getTiles()[i]->resetLight(layer);
 	}
 
-	// add lighting of soldiers
-	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
+	if (_personalLighting)
 	{
-		if ((*i)->getFaction() == FACTION_PLAYER && !(*i)->isOut())
+		// add lighting of soldiers
+		for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 		{
-			addLight((*i)->getPosition(), personalLightPower, layer);
+			if ((*i)->getFaction() == FACTION_PLAYER && !(*i)->isOut())
+			{
+				addLight((*i)->getPosition(), personalLightPower, layer);
+			}
 		}
 	}
-
 }
 
 /**
@@ -244,9 +246,21 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 					test.y = center.y + signY[unit->getDirection()]*(swap?x:y);
 					if (_save->getTile(test))
 					{
-						checkIfUnitVisible(unit, _save->getTile(test)->getUnit());
+						BattleUnit *visibleUnit = _save->getTile(test)->getUnit();
+						if (visibleUnit && !visibleUnit->isOut() && visible(unit, _save->getTile(test)))
+						{
+							if ((visibleUnit->getFaction() == FACTION_HOSTILE && unit->getFaction() == FACTION_PLAYER)
+								|| (visibleUnit->getFaction() != FACTION_HOSTILE && unit->getFaction() == FACTION_HOSTILE))
+							{
+								unit->addToVisibleUnits(visibleUnit);
+							}
+						}
+
 						if (unit->getFaction() == FACTION_PLAYER)
+						{
+							// this sets tiles to discovered if they are in LOS - tile visibility is not calculated in voxelspace but in tilespace
 							calculateLine(unit->getPosition(), test, false, 0, unit, false);
+						}
 					}
 				}
 			}
@@ -265,29 +279,12 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 /**
  * Check for an opposing unit on this tile
  * @param currentUnit the watcher
- * @param otherUnit the unit to check for
+ * @param tile the tile to check for
  */
-bool TileEngine::checkIfUnitVisible(BattleUnit *currentUnit, BattleUnit *otherUnit)
+bool TileEngine::visible(BattleUnit *currentUnit, Tile *tile)
 {
-	// only check if unit is alive
-	if (otherUnit == 0 || otherUnit->isOut())
-	{
-		return false;
-	}
-
-	// only check for opposing factions
-	if (currentUnit->getFaction() == FACTION_PLAYER && (otherUnit->getFaction() == FACTION_PLAYER || otherUnit->getFaction() == FACTION_NEUTRAL))
-	{
-		return false;
-	}
-
-	if (currentUnit->getFaction() == FACTION_HOSTILE && otherUnit->getFaction() == FACTION_HOSTILE)
-	{
-		return false;
-	}
-
-	// if the tile is too dark, we can't see the unit
-	if (_save->getTile(otherUnit->getPosition())->getShade() > MAX_DARKNESS_TO_SEE_UNITS)
+	// if the tile is too dark, we can't see it
+	if (!tile || tile->getShade() > MAX_DARKNESS_TO_SEE_UNITS)
 	{
 		return false;
 	}
@@ -300,9 +297,19 @@ bool TileEngine::checkIfUnitVisible(BattleUnit *currentUnit, BattleUnit *otherUn
 	originVoxel.z += currentUnit->getHeight();
 	bool unitSeen = false;
 
-	targetVoxel = Position((otherUnit->getPosition().x * 16) + 8, (otherUnit->getPosition().y * 16) + 8, otherUnit->getPosition().z*24);
-	int targetMinHeight = targetVoxel.z - _save->getTile(otherUnit->getPosition())->getTerrainLevel();
-	int targetMaxHeight = targetMinHeight + otherUnit->getHeight();
+	targetVoxel = Position((tile->getPosition().x * 16) + 8, (tile->getPosition().y * 16) + 8, tile->getPosition().z*24);
+	int targetMinHeight = targetVoxel.z - tile->getTerrainLevel();
+	int targetMaxHeight = targetMinHeight;
+	// if there is an other unit on target tile, we assume we want to check against this unit's height
+	BattleUnit *otherUnit = tile->getUnit();
+	if (otherUnit && !otherUnit->isOut())
+	{
+		targetMaxHeight += otherUnit->getHeight();
+	}
+	else
+	{
+		targetMaxHeight += 12;
+	}
 
 	// scan ray from top to bottom
 	for (int i = targetMaxHeight; i > targetMinHeight; i-=2)
@@ -313,7 +320,7 @@ bool TileEngine::checkIfUnitVisible(BattleUnit *currentUnit, BattleUnit *otherUn
 		if (test == 4)
 		{
 			Position hitPosition = Position(_trajectory.at(0).x/16, _trajectory.at(0).y/16, _trajectory.at(0).z/24);
-			if (otherUnit->getPosition() == hitPosition)
+			if (tile->getPosition() == hitPosition)
 			{
 				unitSeen = true;
 				break;
@@ -343,12 +350,9 @@ bool TileEngine::checkIfUnitVisible(BattleUnit *currentUnit, BattleUnit *otherUn
 				maxViewDistance -= t->getSmoke()/2;
 			}
 		}
-		int x = abs(currentUnit->getPosition().x - otherUnit->getPosition().x);
-		int y = abs(currentUnit->getPosition().y - otherUnit->getPosition().y);
-		int distance = int(floor(sqrt(float(x*x + y*y)) + 0.5));
-		if (distance <= maxViewDistance)
+		if (distance(currentUnit->getPosition(), tile->getPosition()) <= maxViewDistance)
 		{
-			currentUnit->addToVisibleUnits(otherUnit);
+			unitSeen = true;
 		}
 		else
 		{
@@ -358,7 +362,6 @@ bool TileEngine::checkIfUnitVisible(BattleUnit *currentUnit, BattleUnit *otherUn
 
 	return unitSeen;
 }
-
 /**
  * Calculates line of sight of a soldiers within range of the Position
  * (used when terrain has changed, which can reveil new parts of terrain or units)
@@ -368,11 +371,7 @@ void TileEngine::calculateFOV(const Position &position)
 {
 	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
-		int x = abs(position.x - (*i)->getPosition().x);
-		int y = abs(position.y - (*i)->getPosition().y);
-		int distance = int(floor(sqrt(float(x*x + y*y)) + 0.5));
-
-		if (distance < 20 && (*i)->getFaction() == _save->getSide())
+		if (distance(position, (*i)->getPosition()) < 20 && (*i)->getFaction() == _save->getSide())
 		{
 			calculateFOV(*i);
 		}
@@ -420,10 +419,7 @@ bool TileEngine::checkReactionFire(BattleUnit *unit, BattleAction *action, Battl
 
 	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
-		int x = abs(unit->getPosition().x - (*i)->getPosition().x);
-		int y = abs(unit->getPosition().y - (*i)->getPosition().y);
-		int distance = int(floor(sqrt(float(x*x + y*y)) + 0.5));
-		if (distance < 19 && (*i)->getFaction() != _save->getSide() && !(*i)->isOut())
+		if (distance(unit->getPosition(), (*i)->getPosition()) < 19 && (*i)->getFaction() != _save->getSide() && !(*i)->isOut())
 		{
 			if (recalculateFOV)
 			{
@@ -449,8 +445,10 @@ bool TileEngine::checkReactionFire(BattleUnit *unit, BattleAction *action, Battl
 		// lets try and shoot: we need a weapon, ammo and enough time units
 		action->weapon = action->actor->getMainHandWeapon();
 		int tu = action->actor->getActionTUs(action->type, action->weapon);
+		action->TU = tu;
 		if (action->weapon && action->weapon->getAmmoItem() && action->weapon->getAmmoItem()->getAmmoQuantity() && action->actor->getTimeUnits() >= tu)
 		{
+			action->targeting = true;
 			// if the target is hostile, it will aggro
 			if (unit->getFaction() == FACTION_HOSTILE)
 			{
@@ -1338,80 +1336,23 @@ bool TileEngine::setUnitPosition(BattleUnit *bu, const Position &position, bool 
 }
 
 /**
- * Check for an opposing unit on this tile
- * @param currentUnit the watcher
- * @param otherUnit the unit to check for
+ * Toggles personal lighting on / off.
  */
-bool TileEngine::checkIfTileVisible(BattleUnit *currentUnit, Tile *tile)
+void TileEngine::togglePersonalLighting()
 {
-	// if the tile is too dark, we can't see the unit
-	if (!tile || tile->getShade() > MAX_DARKNESS_TO_SEE_UNITS)
-	{
-		return false;
-	}
-
-	// determine the origin and target voxels for the raytrace
-	Position originVoxel, targetVoxel;
-	std::vector<Position> _trajectory;
-	originVoxel = Position((currentUnit->getPosition().x * 16) + 8, (currentUnit->getPosition().y * 16) + 8, currentUnit->getPosition().z*24);
-	originVoxel.z += -_save->getTile(currentUnit->getPosition())->getTerrainLevel();
-	originVoxel.z += currentUnit->getHeight();
-	bool unitSeen = false;
-
-	targetVoxel = Position((tile->getPosition().x * 16) + 8, (tile->getPosition().y * 16) + 8, tile->getPosition().z*24);
-	int targetMinHeight = targetVoxel.z - tile->getTerrainLevel();
-	int targetMaxHeight = targetMinHeight + 12;
-
-	// scan ray from top to bottom
-	for (int i = targetMaxHeight; i > targetMinHeight; i-=2)
-	{
-		targetVoxel.z = i;
-		_trajectory.clear();
-		int test = calculateLine(originVoxel, targetVoxel, false, &_trajectory, currentUnit);
-		if (test == -1)
-		{
-			unitSeen = true; // succesfully reached the target
-			break;
-		}
-		else
-		{
-			// bumped into something
-			unitSeen = false;
-		}
-	}
-
-	if (unitSeen)
-	{
-		// now check if we really see it taking into account smoke tiles
-		// initial smoke "density" of a smoke grenade is around 10 per tile
-		// we do density/2 to get the decay of visibility, so in fresh smoke we only have 4 tiles of visibility
-		_trajectory.clear();
-		calculateLine(originVoxel, targetVoxel, true, &_trajectory, currentUnit);
-		Tile *t = _save->getTile(currentUnit->getPosition());
-		int maxViewDistance = MAX_VIEW_DISTANCE - (t->getSmoke()/2);
-		for (unsigned int i = 0; i < _trajectory.size(); i++)
-		{
-			if (t != _save->getTile(Position(_trajectory.at(i).x/16,_trajectory.at(i).y/16, _trajectory.at(i).z/24)))
-			{
-				t = _save->getTile(Position(_trajectory.at(i).x/16,_trajectory.at(i).y/16, _trajectory.at(i).z/24));
-				maxViewDistance -= t->getSmoke()/2;
-			}
-		}
-		int x = abs(currentUnit->getPosition().x - tile->getPosition().x);
-		int y = abs(currentUnit->getPosition().y - tile->getPosition().y);
-		int distance = int(floor(sqrt(float(x*x + y*y)) + 0.5));
-		if (distance <= maxViewDistance)
-		{
-			unitSeen = true;
-		}
-		else
-		{
-			unitSeen = false;
-		}
-	}
-
-	return unitSeen;
+	_personalLighting = !_personalLighting;
+	calculateUnitLighting();
 }
 
+/**
+ * Distance between 2 points. Rounded up to first INT.
+ * @return distance
+ */
+int TileEngine::distance(const Position &pos1, const Position &pos2) const
+{
+	int x = abs(pos1.x - pos2.x);
+	int y = abs(pos1.y - pos2.y);
+	return int(floor(sqrt(float(x*x + y*y)) + 0.5));
+}
 
 }

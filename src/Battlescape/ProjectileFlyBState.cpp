@@ -119,7 +119,7 @@ void ProjectileFlyBState::init()
 		_baseAcc = weapon->getRules()->getAccuracyAimed();
 		break;
 	case BA_THROW:
-		if (!validThrowRange())
+		if (!validThrowRange(&_action))
 		{
 			// out of range
 			_result = "STR_OUT_OF_RANGE";
@@ -301,14 +301,14 @@ std::string ProjectileFlyBState::getResult() const
  * Validate the throwing range.
  * @return true when range is valid.
  */
-bool ProjectileFlyBState::validThrowRange()
+bool ProjectileFlyBState::validThrowRange(BattleAction *action)
 {
 	// Throwing Distance roughly = 2.5 × Strength / Weight
 	// note that all coordinates and thus also distances below are in number of tiles (not in voxels).
-	double maxDistance = 2.5 * _action.actor->getUnit()->getStrength() / _action.weapon->getRules()->getWeight();
-	int xdiff = _action.target.x - _unit->getPosition().x;
-	int ydiff = _action.target.y - _unit->getPosition().y;
-	int zdiff = _action.target.z - _unit->getPosition().z;
+	double maxDistance = 2.5 * action->actor->getUnit()->getStrength() / action->weapon->getRules()->getWeight();
+	int xdiff = action->target.x - action->actor->getPosition().x;
+	int ydiff = action->target.y - action->actor->getPosition().y;
+	int zdiff = action->target.z - action->actor->getPosition().z;
 	double realDistance = sqrt((double)(xdiff*xdiff)+(double)(ydiff*ydiff));
 
 	// throwing off a building of 1 level lets you throw 2 tiles further than normal range,

@@ -21,7 +21,7 @@ New features:
 -- Large units.
 -- Motion scanner.
 -- Alien deployment rules.
--- AI taking cover.
+-- AI taking cover & throwing grenades.
 
  
 Bugfixes:

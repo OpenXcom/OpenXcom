@@ -50,7 +50,7 @@ private:
 	int verticalBlockage(Tile *startTile, Tile *endTile, ItemDamageType type);
 	int vectorToDirection(const Position &vector);
 	int voxelCheck(const Position& voxel, BattleUnit *excludeUnit, bool excludeAllUnits = false);
-	bool checkIfUnitVisible(BattleUnit *currentUnit, BattleUnit *otherUnit);
+	bool _personalLighting;
 public:
 	/// Creates a new TileEngine class.
 	TileEngine(SavedBattleGame *save, std::vector<Uint16> *voxelData);
@@ -86,7 +86,9 @@ public:
 	void prepareNewTurn();
 	void reviveUnconsciousUnits();
 	bool setUnitPosition(BattleUnit *bu, const Position &position, bool testOnly = false);
-	bool checkIfTileVisible(BattleUnit *currentUnit, Tile *tile);
+	bool visible(BattleUnit *currentUnit, Tile *tile);
+	void togglePersonalLighting();
+	int distance(const Position &pos1, const Position &pos2) const;
 };
 
 }
