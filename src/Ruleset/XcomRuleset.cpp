@@ -1170,6 +1170,17 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	scanner->setInventoryHeight(1);
 	scanner->setFloorSprite(23);
 
+	RuleItem *agrenade = new RuleItem("STR_ALIEN_GRENADE");
+	agrenade->setSize(0.1f);
+	agrenade->setCost(29700);
+	agrenade->setBigSprite(39);
+	agrenade->setFloorSprite(38);
+	agrenade->setPower(90);
+	agrenade->setDamageType(DT_HE);
+	agrenade->setBattleType(BT_GRENADE);
+	agrenade->setWeight(3);
+
+
 	_items.insert(std::pair<std::string, RuleItem*>("STR_STINGRAY_LAUNCHER", slauncher));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_AVALANCHE_LAUNCHER", alauncher));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_CANNON", icannon));
@@ -1212,6 +1223,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_items.insert(std::pair<std::string, RuleItem*>("STR_LASER_RIFLE", lr));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_MEDI_KIT", medikit));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_MOTION_SCANNER", scanner));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_ALIEN_GRENADE", agrenade));
 
 
 	RuleManufactureInfo *mlp = new RuleManufactureInfo("STR_LASER_PISTOL");
@@ -1536,7 +1548,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	is.items.clear();
 	is.items.push_back("STR_PLASMA_PISTOL");
 	is.items.push_back("STR_PLASMA_PISTOL_CLIP");
-	is.items.push_back("STR_PLASMA_PISTOL_CLIP");
+	is.items.push_back("STR_ALIEN_GRENADE");
 	dd.itemSets.push_back(is);
 	aterror->getDeploymentData()->push_back(dd);
 

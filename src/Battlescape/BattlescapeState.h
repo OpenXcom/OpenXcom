@@ -88,6 +88,7 @@ private:
 	BattleActionType _tuReserved;
 	std::vector<State*> _popups;
 	bool _debugPlay, _playerPanicHandled;
+	int _AIActionCounter;
 
 	void selectNextPlayerUnit(bool checkReselect);
 	void endTurn();

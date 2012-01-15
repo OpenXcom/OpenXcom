@@ -593,18 +593,17 @@ BattleUnit *SavedBattleGame::selectNextPlayerUnit(bool checkReselect)
  */
 BattleUnit *SavedBattleGame::selectUnit(const Position& pos)
 {
-	BattleUnit *bu = 0;
+	BattleUnit *bu = getTile(pos)->getUnit();
 
-	for (std::vector<BattleUnit*>::iterator i = _units.begin(); i != _units.end(); ++i)
+	if (bu && bu->isOut())
 	{
-		if ((*i)->getPosition() == pos && !(*i)->isOut())
-		{
-			bu = *i;
-			break;
-		}
+		return 0;
+	}
+	else
+	{
+		return bu;
 	}
 
-	return bu;
 }
 
 /**

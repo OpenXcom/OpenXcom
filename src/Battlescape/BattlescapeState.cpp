@@ -328,6 +328,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_tuReserved = BA_NONE;
 	_debugPlay = false;
 	_playerPanicHandled = true;
+	_AIActionCounter = 0;
 
 	updateSoldierInfo();
 	_map->getCamera()->centerOnPosition(_battleGame->getSelectedUnit()->getPosition());
@@ -425,42 +426,28 @@ void BattlescapeState::handleAI(BattleUnit *unit)
 	BattleAIState *ai = unit->getCurrentAIState();
 	if (!ai) return;
 
+	_AIActionCounter++;
+
 	AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(ai);
 	PatrolBAIState *patrol = dynamic_cast<PatrolBAIState*>(ai);
-
-
+	
 	unit->think(&_action);
 	if (_action.type == BA_WALK)
 	{
-		if (patrol)
-			debug(L"Patrolling");
-		else
-			debug(L"Walking to target");
+		debug(L"Walking");
 		_battleGame->getPathfinding()->calculate(_action.actor, _action.target);
 		statePushBack(new UnitWalkBState(this, _action));
 	}
 
-	if (_action.type == BA_SNAPSHOT || _action.type == BA_AUTOSHOT)
+	if (_action.type == BA_SNAPSHOT || _action.type == BA_AUTOSHOT || _action.type == BA_THROW)
 	{
-		debug(L"Firing 1");
+		debug(L"Firing");
 		statePushBack(new ProjectileFlyBState(this, _action));
-		// give the option to take cover or keep shooting
-		unit->think(&_action);
-		if (_action.type == BA_WALK)
-		{
-			debug(L"Take cover");
-			_battleGame->getPathfinding()->calculate(_action.actor, _action.target);
-			statePushBack(new UnitWalkBState(this, _action));
-		}
-		if (_action.type == BA_SNAPSHOT || _action.type == BA_AUTOSHOT)
-		{
-			debug(L"Firing 2");
-			statePushBack(new ProjectileFlyBState(this, _action));
-		}
 	}
 
 	if (_action.type == BA_NONE)
 	{
+		_AIActionCounter = 0;
 		if (aggro != 0)
 		{
 			debug(L"Aggro lost");
@@ -550,7 +537,7 @@ void BattlescapeState::mapClick(Action *action)
 		else
 		{
 			BattleUnit *unit = _battleGame->selectUnit(pos);
-			if (unit && !unit->isOut())
+			if (unit)
 			{
 			//  -= select unit =-
 				if (unit->getFaction() == _battleGame->getSide())
@@ -945,13 +932,11 @@ bool BattlescapeState::checkForCasualties(BattleItem *murderweapon, BattleUnit *
 						{
 							if ((*h)->getFaction() == FACTION_HOSTILE && !(*h)->isOut() && (*h) != victim)
 							{
-								int x = abs(victim->getPosition().x - (*h)->getPosition().x);
-								int y = abs(victim->getPosition().y - (*h)->getPosition().y);
-								int distance = int(floor(sqrt(float(x*x + y*y)) + 0.5));
-								if (distance < closest)
+								int d = _battleGame->getTileEngine()->distance(victim->getPosition(), (*h)->getPosition());
+								if (d < closest)
 								{
 									revenger = (*h);
-									closest = distance;
+									closest = d;
 								}
 							}
 						}
@@ -1457,21 +1442,27 @@ void BattlescapeState::popState()
 		// it's the alien side, select next unit
 		if (_battleGame->getSide() != FACTION_PLAYER && !_debugPlay)
 		{
-			if (_battleGame->selectNextPlayerUnit(true) == 0)
+			_action.actor->spendTimeUnits(_action.TU, false);
+			 // AI does two things per unit, before switching to the next, or it got killed before doing the second thing
+			if (_AIActionCounter > 1 || _battleGame->getSelectedUnit() == 0 || _battleGame->getSelectedUnit()->isOut())
 			{
-				if (!_battleGame->getDebugMode())
+				_AIActionCounter = 0;
+				if (_battleGame->selectNextPlayerUnit(true) == 0)
 				{
-					statePushBack(0); // end AI turn
+					if (!_battleGame->getDebugMode())
+					{
+						statePushBack(0); // end AI turn
+					}
+					else
+					{
+						_battleGame->selectNextPlayerUnit(false);
+						_debugPlay = true;
+					}
 				}
-				else
+				if (_battleGame->getSelectedUnit())
 				{
-					_battleGame->selectNextPlayerUnit(false);
-					_debugPlay = true;
+					_map->getCamera()->centerOnPosition(_battleGame->getSelectedUnit()->getPosition());
 				}
-			}
-			if (_battleGame->getSelectedUnit())
-			{
-				_map->getCamera()->centerOnPosition(_battleGame->getSelectedUnit()->getPosition());
 			}
 		}
 	}
@@ -1539,6 +1530,11 @@ void BattlescapeState::handle(Action *action)
 				debug(L"Debug Mode");
 			}
 #endif
+			// "l" - toggle personal lighting
+			if (action->getDetails()->key.keysym.sym == SDLK_l)
+			{
+				_battleGame->getTileEngine()->togglePersonalLighting();
+			}
 		}
 	}
 

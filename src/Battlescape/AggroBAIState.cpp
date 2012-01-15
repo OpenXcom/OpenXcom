@@ -19,6 +19,7 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include "AggroBAIState.h"
+#include "ProjectileFlyBState.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/SavedBattleGame.h"
@@ -130,12 +131,12 @@ void AggroBAIState::think(BattleAction *action)
 	}
 
 	// if we currently see no target, we either can move to it's last seen position or loose aggro
-	if (_aggroTarget == 0)
+	if (_aggroTarget == 0 || _aggroTarget->isOut())
 	{
 		_timesNotSeen++;
 		if (_timesNotSeen > _unit->getUnit()->getIntelligence() || aggression == 0)
 		{
-			// we lost aggro
+			// we lost aggro - going back to patrol state
 			return;
 		}
 		// lets go looking where we've last seen him
@@ -152,9 +153,6 @@ void AggroBAIState::think(BattleAction *action)
 		if (_unit->getHealth() < _unit->getUnit()->getHealth())
 			number += 10;
 
-		// out of ammo or no weapon or ammo at all, chance to take cover get bigger
-		if (!action->weapon || !action->weapon->getAmmoItem() || !action->weapon->getAmmoItem()->getAmmoQuantity())
-			number += 25;
 
 		if (aggression == 0 && number < 10)
 			takeCover = false;
@@ -162,6 +160,64 @@ void AggroBAIState::think(BattleAction *action)
 			takeCover = false;
 		if (aggression == 2 && number < 90)
 			takeCover = false;
+
+		if (!takeCover)
+		{
+			_timesNotSeen = 0;
+			_lastKnownPosition = _aggroTarget->getPosition();
+			action->target = _aggroTarget->getPosition();
+			action->type = BA_NONE;
+
+			// lets' evaluate if we could throw a grenade
+			int tu = 4; // 4TUs for picking up the grenade
+
+			// distance must be more than 6 tiles, otherwise it's too dangerous to play with explosives
+			if (_game->getTileEngine()->distance(_unit->getPosition(), _aggroTarget->getPosition()) > 6)
+			{
+				// do we have a grenade on our belt?
+				BattleItem *grenade = _unit->getGrenadeFromBelt();
+				// do we have enough TUs to prime and throw the grenade?
+				if (grenade)
+				{
+					action->weapon = grenade;
+					tu += _unit->getActionTUs(BA_PRIME, grenade);
+					tu += _unit->getActionTUs(BA_THROW, grenade);
+					if (tu <= _unit->getTimeUnits())
+					{
+						// are we within range?
+						if (ProjectileFlyBState::validThrowRange(action))
+						{
+							grenade->setExplodeTurn(_game->getTurn());
+							_unit->spendTimeUnits(_unit->getActionTUs(BA_PRIME, grenade), false);
+							action->type = BA_THROW;
+						}
+					}
+				}
+			}
+
+			if (action->type == BA_NONE)
+			{
+				action->weapon = action->actor->getMainHandWeapon();
+				// out of ammo or no weapon or ammo at all, we have to take cover
+				if (!action->weapon || !action->weapon->getAmmoItem() || !action->weapon->getAmmoItem()->getAmmoQuantity())
+				{
+					takeCover = true;
+				}
+				else
+				{
+					if (RNG::generate(1,10) < 5)
+						action->type = BA_SNAPSHOT;
+					else
+						action->type = BA_AUTOSHOT;
+					tu = action->actor->getActionTUs(action->type, action->weapon);
+					// enough time units to shoot?
+					if (tu > _unit->getTimeUnits())
+					{
+						takeCover = true;
+					}
+				}
+			}
+		}
 
 		if (takeCover)
 		{
@@ -177,7 +233,8 @@ void AggroBAIState::think(BattleAction *action)
 				action->target.x += RNG::generate(-5,5);
 				action->target.y += RNG::generate(-5,5);
 				if (tries < 20)
-					coverFound = !_game->getTileEngine()->checkIfTileVisible(_aggroTarget, _game->getTile(action->target));
+
+					coverFound = !_game->getTileEngine()->visible(_aggroTarget, _game->getTile(action->target));
 				else
 					coverFound = true;
 
@@ -193,28 +250,9 @@ void AggroBAIState::think(BattleAction *action)
 				}
 			}
 		}
-		else
-		{
-			_timesNotSeen = 0;
-			_lastKnownPosition = _aggroTarget->getPosition();
-			action->target = _aggroTarget->getPosition();
-			action->weapon = action->actor->getMainHandWeapon();
-			/*int tu = action->actor->getActionTUs(action->type, action->weapon);*/
-			if (action->weapon && action->weapon->getAmmoItem() && action->weapon->getAmmoItem()->getAmmoQuantity())
-			{
-				if (RNG::generate(1,10) < 5)
-					action->type = BA_SNAPSHOT;
-				else
-					action->type = BA_AUTOSHOT;
-			}
-			else
-			{
-				// now we are in trouble, flee
-				return;
-			}
-		}
 	}
 
+	action->TU = action->actor->getActionTUs(action->type, action->weapon);
 }
 
 /**

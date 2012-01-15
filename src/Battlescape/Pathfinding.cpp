@@ -179,6 +179,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 	bool triedStairs = false;
 	int size = _unit->getUnit()->getArmor()->getSize() - 1;
 	int cost = 0;
+	int numberOfPartsChangingLevel = 0;
 
 
 	for (int x = size; x >= 0; x--)
@@ -197,7 +198,6 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 			// check if the destination tile can be walked over
 			if (isBlocked(destinationTile, MapData::O_FLOOR) || isBlocked(destinationTile, MapData::O_OBJECT))
 				return 255;
-
 
 			if (direction < DIR_UP)
 			{
@@ -240,6 +240,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 				endPosition->z--;
 				destinationTile = _save->getTile(*endPosition);
 				fellDown = true;
+				numberOfPartsChangingLevel++;
 			}
 
 			// if we don't want to fall down and there is no floor, it ends here
@@ -270,6 +271,11 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 				cost = (int)((double)cost * 1.5);
 			}
 
+			if (startTile->getTerrainLevel() != destinationTile->getTerrainLevel())
+			{
+				numberOfPartsChangingLevel++;
+			}
+
 		}
 	}
 
@@ -280,6 +286,11 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 			Tile *destinationTile = _save->getTile(*endPosition);
 			int tmpDirection = 7;
 			if (isBlocked(startTile, destinationTile, tmpDirection))
+				return 255;
+
+			// also check if we change level, that there are two parts changing level,
+			// so a big sized unit can not go up a small sized stairs
+			if (numberOfPartsChangingLevel == 1)
 				return 255;
 	}
 

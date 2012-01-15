@@ -874,7 +874,7 @@ void GeoscapeState::btnGraphsClick(Action *action)
 	bgame->setMissionType("STR_TERROR_MISSION");
 	BattlescapeGenerator *bgen = new BattlescapeGenerator(_game);
 	bgen->setWorldTexture(1);
-	bgen->setWorldShade(0);
+	bgen->setWorldShade(7);
 	bgen->setCraft(_game->getSavedGame()->getBases()->at(0)->getCrafts()->at(0));
 	bgen->setAlienRace("STR_SECTOID");
 	bgen->setAlienItemlevel(0);

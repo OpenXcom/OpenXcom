@@ -215,7 +215,6 @@ void UnitWalkBState::think()
 				{
 					_unit->setAIState(new AggroBAIState(_parent->getGame()->getSavedGame()->getBattleGame(), _unit));
 				}
-				_parent->handleAI(_unit);
 			}
 			return;
 		}

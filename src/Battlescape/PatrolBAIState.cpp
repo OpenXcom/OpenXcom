@@ -19,6 +19,8 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include "PatrolBAIState.h"
+#include "TileEngine.h"
+#include "AggroBAIState.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Node.h"
@@ -140,13 +142,11 @@ void PatrolBAIState::think(BattleAction *action)
 		for (std::vector<Node*>::iterator i = _game->getNodes()->begin(); i != _game->getNodes()->end(); ++i)
 		{
 			node = *i;
-			int x = abs(_unit->getPosition().x - node->getPosition().x);
-			int y = abs(_unit->getPosition().y - node->getPosition().y);
-			int distance = int(floor(sqrt(float(x*x + y*y)) + 0.5));
-			if (distance < closest)
+			int d = _game->getTileEngine()->distance(_unit->getPosition(), node->getPosition());
+			if (d < closest)
 			{
 				_fromNode = node;
-				closest = distance;
+				closest = d;
 			}
 		}
 	}
@@ -177,12 +177,23 @@ void PatrolBAIState::think(BattleAction *action)
 		action->actor = _unit;
 		action->type = BA_WALK;
 		action->target = _toNode->getPosition();
+		_unit->lookAt(action->target);
+		while (_unit->getStatus() == STATUS_TURNING)
+		{
+			_unit->turn();
+		}
+		bool unitspotted = _game->getTileEngine()->calculateFOV(_unit);
+		if (unitspotted)
+		{
+			_unit->setAIState(new AggroBAIState(_game, _unit));
+		}
 	}
 	else
 	{
 		action->type = BA_NONE;
 	}
 
+	action->TU = 0; // tus are already decreased while walking
 }
 
 }
