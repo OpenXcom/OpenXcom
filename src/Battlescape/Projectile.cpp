@@ -131,12 +131,14 @@ int Projectile::calculateTrajectory(double accuracy)
 		{
 			// first try is at half the unit height
 			targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + tile->getUnit()->getUnit()->getStandHeight()/2);
+			targetVoxel.z += -tile->getTerrainLevel();
 			int test = _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, false, &_trajectory, bu);
 			_trajectory.clear();
 			if (test != 4)
 			{
 				// did not hit a unit, try at different heights (for ex: unit behind a window can only be hit in the head)
 				targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + (tile->getUnit()->getUnit()->getStandHeight()*3)/4);
+				targetVoxel.z += -tile->getTerrainLevel();
 				test = _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, false, &_trajectory, bu);
 				_trajectory.clear();
 			}

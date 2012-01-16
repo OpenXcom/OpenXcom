@@ -151,7 +151,7 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 			if (b->getId() == selectedUnit)
 				_selectedUnit = b;
 		}
-		else
+		else if (b->getStatus() != STATUS_DEAD)
 		{
 			std::string state;
 			BattleAIState *aiState;
