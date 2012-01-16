@@ -149,6 +149,7 @@ int Screen::_zoomSurfaceY(SDL_Surface * src, SDL_Surface * dst, int flipx, int f
 			csx -= dst->w;
 			(*csax)++;
 		}
+		(*csax) *= (flipx ? -1 : 1);
 		csax++;
 	}
 	csy = 0;
@@ -160,6 +161,7 @@ int Screen::_zoomSurfaceY(SDL_Surface * src, SDL_Surface * dst, int flipx, int f
 			csy -= dst->h;
 			(*csay)++;
 		}
+		(*csay) *= src->pitch * (flipy ? -1 : 1);
 		csay++;
 	}
 
@@ -178,7 +180,7 @@ int Screen::_zoomSurfaceY(SDL_Surface * src, SDL_Surface * dst, int flipx, int f
 			/*
 			* Advance source pointers
 			*/
-			sp += (*csax) * (flipx ? -1 : 1);
+			sp += (*csax);
 			csax++;
 			/*
 			* Advance destination pointer
@@ -188,7 +190,7 @@ int Screen::_zoomSurfaceY(SDL_Surface * src, SDL_Surface * dst, int flipx, int f
 		/*
 		* Advance source pointer (for row)
 		*/
-		csp += ((*csay) * src->pitch) * (flipy ? -1 : 1);
+		csp += (*csay);
 		csay++;
 
 		/*
