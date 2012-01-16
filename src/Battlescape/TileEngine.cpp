@@ -492,23 +492,39 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 {
 	if (type == DT_AP || type == DT_PLASMA || type == DT_LASER)
 	{
+		Tile *tile = _save->getTile(Position(center.x/16, center.y/16, center.z/24));
 		int part = voxelCheck(center, unit);
 		if (part >= 0 && part <= 3)
 		{
 			// power 25% to 75%
 			int rndPower = RNG::generate(power/4, (power*3)/4); //RNG::boxMuller(power, power/6)
-			_save->getTile(Position(center.x/16, center.y/16, center.z/24))->damage(part, rndPower);
+			tile->damage(part, rndPower);
 		}
 		else if (part == 4)
 		{
 			// power 0 - 200%
 			int rndPower = RNG::generate(0, power*2); // RNG::boxMuller(power, power/3)
-			BattleUnit *bu = _save->getTile(Position(center.x/16, center.y/16, center.z/24))->getUnit();
-			
-			bu->damage(Position(center.x%16, center.y%16, center.z%24), rndPower, type);
+			BattleUnit *bu = tile->getUnit();
+			if (bu)
+			{
+				bu->damage(Position(center.x%16, center.y%16, center.z%24 + tile->getTerrainLevel()), rndPower, type);
+			}
+			else
+			{
+				Tile *below = _save->getTile(Position(center.x/16, center.y/16, (center.z/24)-1));
+				if (below)
+				{
+					BattleUnit *buBelow = below->getUnit();
+					if (buBelow)
+					{
+						buBelow->damage(Position(center.x%16, center.y%16, center.z%24 + below->getTerrainLevel() + 24), rndPower, type);
+						bu = buBelow;
+					}
+				}
+			}
 
 			// conventional weapons can cause additional stun damage
-			if (type == DT_AP)
+			if (type == DT_AP && bu)
 			{
 				bu->damage(Position(center.x%16, center.y%16, center.z%24), RNG::generate(0, rndPower/4), DT_STUN);
 			}
@@ -1108,7 +1124,7 @@ int TileEngine::voxelCheck(const Position& voxel, BattleUnit *excludeUnit, bool 
 		BattleUnit *unit = tile->getUnit();
 		if (unit != 0 && unit != excludeUnit)
 		{
-			if ((voxel.z%24) < unit->getHeight() && (voxel.z%24) > 1)
+			if ((voxel.z%24) < (unit->getHeight()+(-tile->getTerrainLevel())) && (voxel.z%24) > (1+(-tile->getTerrainLevel())))
 			{
 				int x = voxel.x%16;
 				int y = voxel.y%16;
@@ -1116,6 +1132,25 @@ int TileEngine::voxelCheck(const Position& voxel, BattleUnit *excludeUnit, bool 
 				if ((_voxelData->at(idx) & (1 << x))==(1 << x))
 				{
 					return 4;
+				}
+			}
+		}
+		// sometimes there is unit on the tile below, but sticks up to this tile with his head
+		Tile *below = _save->getTile(Position(voxel.x/16, voxel.y/16, (voxel.z/24)-1));
+		if (below)
+		{
+			BattleUnit *unit = below->getUnit();
+			if (unit != 0 && unit != excludeUnit)
+			{
+				if ((voxel.z%24) < ((unit->getHeight()+(-below->getTerrainLevel()))-24))
+				{
+					int x = voxel.x%16;
+					int y = voxel.y%16;
+					int idx = (unit->getUnit()->getLoftemps() * 16) + y;
+					if ((_voxelData->at(idx) & (1 << x))==(1 << x))
+					{
+						return 4;
+					}
 				}
 			}
 		}
