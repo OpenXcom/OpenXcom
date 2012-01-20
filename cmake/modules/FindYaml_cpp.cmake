@@ -20,8 +20,14 @@
 # (To distribute this file outside of CMake, substitute the full
 #  License text for the above reference.)
 
+FIND_PACKAGE(PkgConfig)
+PKG_CHECK_MODULES(PC_YAMLCPP QUIET yaml-cpp)
+
+
 FIND_PATH(YAMLCPP_INCLUDE_DIR yaml.h
   HINTS
+  ${PC_YAMLCPP_INCLUDEDIR}
+  ${PC_YAMLCPP_INCLUDE_DIRS}
   $ENV{YAMLCPPDIR}
   PATH_SUFFIXES include/yaml-cpp include
   PATHS
@@ -38,6 +44,8 @@ FIND_PATH(YAMLCPP_INCLUDE_DIR yaml.h
 FIND_LIBRARY(YAMLCPP_LIBRARY 
   NAMES yaml-cpp
   HINTS
+  ${PC_YAMLCPP_LIBDIR}
+  ${PC_YAMLCPP_LIBRARY_DIRS}
   $ENV{YAMLCPPDIR}
   PATH_SUFFIXES lib64 lib
   PATHS
