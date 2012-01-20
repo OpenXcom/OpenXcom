@@ -84,11 +84,11 @@ private:
 	SavedBattleGame *_battleGame;
 	Text *_txtDebug;
 	std::list<BattleState*> _states;
-	BattleAction _action;
 	BattleActionType _tuReserved;
 	std::vector<State*> _popups;
 	bool _debugPlay, _playerPanicHandled;
 	int _AIActionCounter;
+	BattleAction _currentAction;
 
 	void selectNextPlayerUnit(bool checkReselect);
 	void endTurn();
@@ -98,6 +98,7 @@ private:
 	void setupCursor();
 	bool handlePanickingPlayer();
 	bool handlePanickingUnit(BattleUnit *unit);
+	void cancelCurrentAction();
 public:
 	static const int DEFAULT_ANIM_SPEED = 100;
 	/// Creates the Battlescape state.

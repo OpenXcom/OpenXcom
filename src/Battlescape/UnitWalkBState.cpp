@@ -45,7 +45,7 @@ namespace OpenXcom
 /**
  * Sets up an UnitWalkBState.
  */
-UnitWalkBState::UnitWalkBState(BattlescapeState *parent, BattleAction action) : BattleState(parent), _unit(0), _pf(0), _terrain(0), _action(action)
+UnitWalkBState::UnitWalkBState(BattlescapeState *parent, BattleAction action) : BattleState(parent, action), _unit(0), _pf(0), _terrain(0)
 {
 
 }
@@ -235,7 +235,7 @@ void UnitWalkBState::think()
 
 			if (tu > _unit->getTimeUnits() && !_parent->dontSpendTUs())
 			{
-				_result = "STR_NOT_ENOUGH_TIME_UNITS";
+				_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
 				_pf->abortPath();
 				return;
 			}
@@ -280,13 +280,13 @@ void UnitWalkBState::think()
 				}
 				else
 				{
-					_result = "STR_NOT_ENOUGH_ENERGY";
+					_action.result = "STR_NOT_ENOUGH_ENERGY";
 					_parent->popState();
 				}
 			}
 			else
 			{
-				_result = "STR_NOT_ENOUGH_TIME_UNITS";
+				_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
 				_parent->popState();
 			}
 			// make sure the unit sprites are up to date
@@ -321,16 +321,6 @@ void UnitWalkBState::cancel()
 {
 	_pf->abortPath();
 }
-
-/*
- * Get the action result. Returns error messages or an empty string when everything went fine.
- * @return returnmessage Empty when everything is fine.
- */
-std::string UnitWalkBState::getResult() const
-{
-	return _result;
-}
-
 
 /*
  * Handle some calculations when the path is finished.

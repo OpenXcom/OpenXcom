@@ -694,8 +694,9 @@ void Map::calculateWalkingOffset(BattleUnit *unit, Position *offset)
 	int dir = unit->getDirection();
 	int midphase = 4 + 4 * (dir % 2);
 	int endphase = 8 + 8 * (dir % 2);
+	int size = unit->getUnit()->getArmor()->getSize();
 
-	if (unit->getUnit()->getArmor()->getSize() > 1)
+	if (size > 1)
 	{
 		if (dir < 1 || dir > 4)
 			midphase = endphase;
@@ -728,8 +729,8 @@ void Map::calculateWalkingOffset(BattleUnit *unit, Position *offset)
 	{
 		if (phase < midphase)
 		{
-			int fromLevel = unit->getTile()->getTerrainLevel();
-			int toLevel = _save->getTile(unit->getDestination())->getTerrainLevel();
+			int fromLevel = getTerrainLevel(unit->getPosition(), size);
+			int toLevel = getTerrainLevel(unit->getDestination(), size);
 			if (unit->getPosition().z > unit->getDestination().z)
 			{
 				// going down a level, so toLevel 0 becomes +24, -8 becomes  16
@@ -745,8 +746,8 @@ void Map::calculateWalkingOffset(BattleUnit *unit, Position *offset)
 		{
 			// from phase 4 onwards the unit behind the scenes already is on the destination tile
 			// we have to get it's last position to calculate the correct offset
-			int fromLevel = _save->getTile(unit->getLastPosition())->getTerrainLevel();
-			int toLevel = _save->getTile(unit->getDestination())->getTerrainLevel();
+			int fromLevel = getTerrainLevel(unit->getLastPosition(), size);
+			int toLevel = getTerrainLevel(unit->getDestination(), size);
 			if (unit->getLastPosition().z > unit->getDestination().z)
 			{
 				// going down a level, so fromLevel 0 becomes -24, -8 becomes -32
@@ -761,9 +762,33 @@ void Map::calculateWalkingOffset(BattleUnit *unit, Position *offset)
 	}
 	else
 	{
-		offset->y += unit->getTile()->getTerrainLevel();
+		offset->y += getTerrainLevel(unit->getPosition(), size);
 	}
 
+}
+
+
+/**
+  * Terrainlevel goes from 0 to -24. For a larger sized unit, we need to pick the heighest terrain level, which is the lowest number...
+  * @param pos
+  * @param size Of the unit we want to get the level from.
+  * @return terrainlevel
+  */
+int Map::getTerrainLevel(Position pos, int size)
+{
+	int lowestlevel = 0;
+
+	for (int x = 0; x < size; x++)
+	{
+		for (int y = 0; y < size; y++)
+		{
+			int l = _save->getTile(pos + Position(x,y,0))->getTerrainLevel();
+			if (l < lowestlevel)
+				lowestlevel = l;
+		}
+	}
+
+	return lowestlevel;
 }
 
 /**

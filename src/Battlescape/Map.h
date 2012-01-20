@@ -65,6 +65,7 @@ private:
 	Camera *_camera;
 	int _visibleMapHeight;
 	void drawTerrain(Surface *surface);
+	int getTerrainLevel(Position pos, int size);
 public:
 	/// Creates a new map at the specified position and size.
 	Map(Game *game, int width, int height, int x, int y, int visibleMapHeight);

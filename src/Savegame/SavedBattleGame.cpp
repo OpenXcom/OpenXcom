@@ -697,7 +697,7 @@ void SavedBattleGame::endTurn()
 	}
 	else if (_side == FACTION_HOSTILE)
 	{
-		_tileEngine->prepareNewTurn();
+		prepareNewTurn();
 		_turn++;
 		_side = FACTION_PLAYER;
 	}
@@ -825,7 +825,7 @@ Node *SavedBattleGame::getSpawnNode(int nodeRank, BattleUnit *unit)
 			&& (!((*i)->getType() & Node::TYPE_FLYING) 
 				|| unit->getUnit()->getArmor()->getMovementType() == MT_FLY)// the flying unit bit is not set or the unit can fly
 			&& (*i)->getPriority() > 0										// priority 0 is no spawnplace
-			&& getTileEngine()->setUnitPosition(unit, (*i)->getPosition(), true))	// check if not already occupied
+			&& setUnitPosition(unit, (*i)->getPosition(), true))	// check if not already occupied
 		{
 			// we can spawn here - but we continue searching, as we may find better (priority wise)
 			if (n == 0)
@@ -871,7 +871,7 @@ Node *SavedBattleGame::getPatrolNode(bool scout, BattleUnit *unit, Node *fromNod
 				&& (!(n->getType() & Node::TYPE_FLYING) 
 					|| unit->getUnit()->getArmor()->getMovementType() == MT_FLY)// the flying unit bit is not set or the unit can fly
 				&& !n->isAllocated() // check if not allocated
-				&& getTileEngine()->setUnitPosition(unit, n->getPosition(), true))	// check if not already occupied
+				&& setUnitPosition(unit, n->getPosition(), true))	// check if not already occupied
 			{
 				n = n; // OK
 			}
@@ -883,6 +883,185 @@ Node *SavedBattleGame::getPatrolNode(bool scout, BattleUnit *unit, Node *fromNod
 	}
 
 	return n;
+}
+
+
+/**
+ * New turn preparations. Like fire and smoke spreading.
+ */
+void SavedBattleGame::prepareNewTurn()
+{
+	std::vector<Tile*> tilesOnFire;
+	std::vector<Tile*> tilesOnSmoke;
+
+	// prepare a list of tiles on fire/smoke
+	for (int i = 0; i < getWidth() * getLength() * getHeight(); ++i)
+	{
+		if (getTiles()[i]->getFire() > 0)
+		{
+			tilesOnFire.push_back(getTiles()[i]);
+		}
+		if (getTiles()[i]->getSmoke() > 0)
+		{
+			tilesOnSmoke.push_back(getTiles()[i]);
+		}
+	}
+
+	// smoke spreads in 1 random direction, but the direction is same for all smoke
+	int spreadX = RNG::generate(-1, +1);
+	int spreadY = RNG::generate(-1, +1);
+	for (std::vector<Tile*>::iterator i = tilesOnSmoke.begin(); i != tilesOnSmoke.end(); ++i)
+	{
+		int x = (*i)->getPosition().x;
+		int y = (*i)->getPosition().y;
+		int z = (*i)->getPosition().z;
+
+		if ((*i)->getUnit() && !(*i)->getUnit()->isOut())
+		{
+			// units in smoke suffer stun
+			(*i)->getUnit()->damage(Position(), ((*i)->getSmoke()/5)+1, DT_STUN);
+		}
+
+		Tile *t = getTile(Position(x+spreadX, y+spreadY, z));
+		if (t && !t->getSmoke() && getTileEngine()->horizontalBlockage((*i), t, DT_SMOKE) == 0)
+		{
+			t->addSmoke((*i)->getSmoke()/2);
+		}
+		Tile *t2 = getTile(Position(x+spreadX+spreadX, y+spreadY+spreadY, z));
+		if (t && t2 && !t2->getSmoke() && getTileEngine()->horizontalBlockage(t, t2, DT_SMOKE) == 0)
+		{
+			t2->addSmoke((*i)->getSmoke()/4);
+		}
+
+		// smoke also spreads upwards
+		t = getTile(Position(x, y, z+1));
+		if (t && !t->getSmoke() && getTileEngine()->verticalBlockage((*i), t, DT_SMOKE) == 0)
+		{
+			t->addSmoke((*i)->getSmoke()/2);
+		}
+
+		(*i)->prepareNewTurn();
+	}
+
+	for (std::vector<Tile*>::iterator i = tilesOnFire.begin(); i != tilesOnFire.end(); ++i)
+	{
+		if ((*i)->getUnit())
+		{
+			// units on a flaming tile suffer damage
+			(*i)->getUnit()->damage(Position(0,0,0), RNG::generate(1,12), DT_IN);
+			// units on a flaming tile can catch fire 33% chance
+			if (RNG::generate(0,2) == 1)
+			{
+				(*i)->getUnit()->setFire(RNG::generate(1,5));
+			}
+		}
+
+		int z = (*i)->getPosition().z;
+		for (int x = (*i)->getPosition().x-1; x <= (*i)->getPosition().x+1; ++x)
+		{
+			for (int y = (*i)->getPosition().y-1; y <= (*i)->getPosition().y+1; ++y)
+			{
+				Tile *t = getTile(Position(x, y, z));
+				if (t && t->getFire() == 0)
+				{
+					// check adjacent tiles - if they have a flammability of < 255, there is a chance...
+					if (getTileEngine()->horizontalBlockage((*i), t, DT_IN) == 0)
+					{
+						int flam = t->getFlammability();
+						if (flam < 255)
+						{
+							double base = RNG::boxMuller(0,126);
+							if (base < 0) base *= -1;
+
+							if (flam < base)
+							{
+								if (RNG::generate(0, flam) < 2)
+								{
+									t->ignite();
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		(*i)->prepareNewTurn();
+	}
+
+	if (!tilesOnFire.empty())
+	{
+		getTileEngine()->calculateTerrainLighting(); // fires could have been stopped
+	}
+
+	reviveUnconsciousUnits();
+
+}
+
+/**
+ * Units that are unconscious but shouldn't are revived, they need a tile to stand on. The unit's current position could be occupied.
+ * We will search in all directions for a free tile, if not found, the unit stays unconscious...
+ */
+void SavedBattleGame::reviveUnconsciousUnits()
+{
+	int xd[9] = {0, 0, 1, 1, 1, 0, -1, -1, -1};
+	int yd[9] = {0, -1, -1, 0, 1, 1, 1, 0, -1};
+
+	for (std::vector<BattleUnit*>::iterator i = getUnits()->begin(); i != getUnits()->end(); ++i)
+	{
+		Position originalPosition = (*i)->getPosition();
+		for (int dir = 0; dir < 9 && (*i)->getStatus() == STATUS_UNCONSCIOUS && (*i)->getStunlevel() < (*i)->getHealth() && (*i)->getHealth() > 0; dir++)
+		{
+			Tile *t = getTile(originalPosition + Position(xd[dir],yd[dir],0));
+			if (t && t->getUnit() == 0 && !t->hasNoFloor())
+			{
+				// recover from unconscious
+				(*i)->setPosition(originalPosition + Position(xd[dir],yd[dir],0));
+				getTile(originalPosition + Position(xd[dir],yd[dir],0))->setUnit(*i);
+				(*i)->turn(false); // makes the unit stand up again
+				(*i)->setCache(0);
+				getTileEngine()->calculateFOV((*i));
+				getTileEngine()->calculateUnitLighting();
+			}
+		}
+	}
+}
+
+
+/**
+ * Function handles the placement of units on the map. This handles large units that are placed on multiple tiles.
+ * @return Whether the unit could be succesfully placed or not.
+ */
+bool SavedBattleGame::setUnitPosition(BattleUnit *bu, const Position &position, bool testOnly)
+{
+	int size = bu->getUnit()->getArmor()->getSize() - 1;
+
+	// first check if the tiles are occupied
+	for (int x = size; x >= 0; x--)
+	{
+		for (int y = size; y >= 0; y--)
+		{
+			if (getTile(position + Position(x,y,0))->getUnit() != 0 && getTile(position + Position(x,y,0))->getUnit() != bu)
+			{
+				return false;
+			}
+		}
+	}
+
+	if (testOnly) return true;
+
+	for (int x = size; x >= 0; x--)
+	{
+		for (int y = size; y >= 0; y--)
+		{
+			if (x==0 && y==0)
+			{
+				bu->setPosition(position + Position(x,y,0));
+			}
+			getTile(position + Position(x,y,0))->setUnit(bu);
+		}
+	}
+
+	return true;
 }
 
 }

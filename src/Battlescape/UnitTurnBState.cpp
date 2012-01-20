@@ -39,7 +39,7 @@ namespace OpenXcom
 /**
  * Sets up an UnitTurnBState.
  */
-UnitTurnBState::UnitTurnBState(BattlescapeState *parent, BattleAction action) : BattleState(parent), _unit(0), _action(action)
+UnitTurnBState::UnitTurnBState(BattlescapeState *parent, BattleAction action) : BattleState(parent, action), _unit(0)
 {
 
 }
@@ -104,7 +104,7 @@ void UnitTurnBState::think()
 	}
 	else
 	{
-		_result = "STR_NOT_ENOUGH_TIME_UNITS";
+		_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
 		_unit->abortTurn();
 		_parent->popState();
 	}
@@ -115,16 +115,6 @@ void UnitTurnBState::think()
  */
 void UnitTurnBState::cancel()
 {
-}
-
-
-/*
- * Get the action result. Returns error messages or an empty string when everything went fine.
- * @return returnmessage Empty when everything is fine.
- */
-std::string UnitTurnBState::getResult() const
-{
-  return _result;
 }
 
 }

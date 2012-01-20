@@ -38,7 +38,6 @@ private:
 	BattleUnit *_unit;
 	Pathfinding *_pf;
 	TileEngine *_terrain;
-	BattleAction _action;
 	void postPathProcedures();
 	void setNormalWalkSpeed();
 public:
@@ -54,8 +53,6 @@ public:
 	void cancel();
 	/// Runs state functionality every cycle. Returns false when finished.
 	void think();
-	/// Get the result of the state.
-	std::string getResult() const;
 };
 
 }
