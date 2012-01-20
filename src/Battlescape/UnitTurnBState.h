@@ -32,7 +32,6 @@ class UnitTurnBState : public BattleState
 {
 private:
 	BattleUnit *_unit;
-	BattleAction _action;
 	bool turret;
 public:
 	/// Creates a new UnitTurnBState class

@@ -152,13 +152,4 @@ void ExplosionBState::cancel()
 {
 }
 
-/*
- * Get the action result. Returns error messages or an empty string when everything went fine.
- * @return returnmessage Empty when everything is fine.
- */
-std::string ExplosionBState::getResult() const
-{
-	return _result;
-}
-
 }

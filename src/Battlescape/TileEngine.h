@@ -46,8 +46,6 @@ private:
 	std::vector<Uint16> *_voxelData;
 	void addLight(const Position &center, int power, int layer);
 	int blockage(Tile *tile, const int part, ItemDamageType type);
-	int horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageType type);
-	int verticalBlockage(Tile *startTile, Tile *endTile, ItemDamageType type);
 	int vectorToDirection(const Position &vector);
 	int voxelCheck(const Position& voxel, BattleUnit *excludeUnit, bool excludeAllUnits = false);
 	bool _personalLighting;
@@ -82,13 +80,11 @@ public:
 	int calculateLine(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, bool doVoxelCheck = true);
 	/// Calculate a parabola trajectory.
 	int calculateParabola(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, double curvature, double accuracy);
-	/// New turn preparations.
-	void prepareNewTurn();
-	void reviveUnconsciousUnits();
-	bool setUnitPosition(BattleUnit *bu, const Position &position, bool testOnly = false);
 	bool visible(BattleUnit *currentUnit, Tile *tile);
 	void togglePersonalLighting();
 	int distance(const Position &pos1, const Position &pos2) const;
+	int horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageType type);
+	int verticalBlockage(Tile *startTile, Tile *endTile, ItemDamageType type);
 };
 
 }

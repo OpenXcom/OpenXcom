@@ -20,6 +20,7 @@
 #define OPENXCOM_BATTLESTATE_H
 
 #include <string>
+#include "BattlescapeState.h"
 
 namespace OpenXcom
 {
@@ -34,9 +35,10 @@ class BattleState
 {
 protected:
 	BattlescapeState *_parent;
-	std::string _result;
+	BattleAction _action;
 public:
 	/// Creates a new BattleState linked to the game.
+	BattleState(BattlescapeState *parent, BattleAction action);
 	BattleState(BattlescapeState *parent);
 	/// Cleans up the BattleState.
 	virtual ~BattleState();
@@ -46,8 +48,8 @@ public:
 	virtual void cancel();
 	/// Runs state functionality every cycle.
 	virtual void think();
-	/// Get the result of the state.
-	std::string getResult() const;
+	/// Get a copy of the action.
+	BattleAction getAction() const;
 };
 
 }

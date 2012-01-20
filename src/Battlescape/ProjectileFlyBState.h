@@ -21,7 +21,6 @@
 
 #include "BattleState.h"
 #include "Position.h"
-#include "BattlescapeState.h"
 
 namespace OpenXcom
 {
@@ -35,7 +34,6 @@ class ProjectileFlyBState : public BattleState
 private:
 	BattleUnit *_unit;
 	BattleItem *_ammo;
-	BattleAction _action;
 	BattleItem *_projectileItem;
 	int _baseAcc;
 	int _autoshotCounter;
@@ -53,10 +51,7 @@ public:
 	void cancel();
 	/// Runs state functionality every cycle.
 	void think();
-	/// Get the result of the state.
-	std::string getResult() const;
 	static bool validThrowRange(BattleAction *action);
-
 };
 
 }

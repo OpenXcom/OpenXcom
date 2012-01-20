@@ -154,7 +154,14 @@ public:
 	int *getCurrentItemId();
 	/// Gets a spawn node.
 	Node *getSpawnNode(int nodeRank, BattleUnit *unit);
+	/// Gets a patrol node.
 	Node *getPatrolNode(bool scout, BattleUnit *unit, Node *fromNode);
+	/// New turn preparations.
+	void prepareNewTurn();
+	/// Revive unconscious units (healthcheck).
+	void reviveUnconsciousUnits();
+	/// Set or try to set a unit of a certain size on a certain position of the map.
+	bool setUnitPosition(BattleUnit *bu, const Position &position, bool testOnly = false);
 
 };
 

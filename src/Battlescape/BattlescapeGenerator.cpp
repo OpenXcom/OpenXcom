@@ -302,7 +302,7 @@ void BattlescapeGenerator::addSoldier(Soldier *soldier)
 
 			_save->getTileCoords(i, &x, &y, &z);
 			pos = Position(x, y, z);
-			if (_save->getTileEngine()->setUnitPosition(unit, pos))
+			if (_save->setUnitPosition(unit, pos))
 			{
 				break;
 			}
@@ -377,7 +377,7 @@ BattleUnit *BattlescapeGenerator::addAlien(RuleGenUnit *rules, int alienRank, bo
 
 	if (node)
 	{
-		_save->getTileEngine()->setUnitPosition(unit, node->getPosition());
+		_save->setUnitPosition(unit, node->getPosition());
 		unit->setAIState(new PatrolBAIState(_game->getSavedGame()->getBattleGame(), unit, node));
 		unit->setDirection(RNG::generate(0,7));
 	}
@@ -402,7 +402,7 @@ BattleUnit *BattlescapeGenerator::addCivilian(RuleGenUnit *rules)
 
 	if (node)
 	{
-		_save->getTileEngine()->setUnitPosition(unit, node->getPosition());
+		_save->setUnitPosition(unit, node->getPosition());
 		unit->setAIState(new PatrolBAIState(_game->getSavedGame()->getBattleGame(), unit, node));
 		unit->setDirection(RNG::generate(0,7));
 	}
@@ -438,7 +438,7 @@ BattleUnit *BattlescapeGenerator::addVehicle(RuleGenUnit *rules)
 
 			_save->getTileCoords(i, &x, &y, &z);
 			pos = Position(x, y, z);
-			if (_save->getTileEngine()->setUnitPosition(unit, pos))
+			if (_save->setUnitPosition(unit, pos))
 			{
 				break;
 			}

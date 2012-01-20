@@ -41,7 +41,7 @@ namespace OpenXcom
 /**
  * Sets up an ProjectileFlyBState.
  */
-ProjectileFlyBState::ProjectileFlyBState(BattlescapeState *parent, BattleAction action) : BattleState(parent), _unit(0), _ammo(0), _action(action), _projectileImpact(0), _initialized(false)
+ProjectileFlyBState::ProjectileFlyBState(BattlescapeState *parent, BattleAction action) : BattleState(parent, action), _unit(0), _ammo(0), _projectileImpact(0), _initialized(false)
 {
 
 }
@@ -73,7 +73,7 @@ void ProjectileFlyBState::init()
 
 	if (_action.actor->getTimeUnits() < _action.TU && !_parent->dontSpendTUs())
 	{
-		_result = "STR_NOT_ENOUGH_TIME_UNITS";
+		_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
 		_parent->popState();
 		return;
 	}
@@ -90,13 +90,13 @@ void ProjectileFlyBState::init()
 	{
 		if (_ammo == 0)
 		{
-			_result = "STR_NO_AMMUNITION_LOADED";
+			_action.result = "STR_NO_AMMUNITION_LOADED";
 			_parent->popState();
 			return;
 		}
 		if (_ammo->getAmmoQuantity() == 0)
 		{
-			_result = "STR_NO_ROUNDS_LEFT";
+			_action.result = "STR_NO_ROUNDS_LEFT";
 			_parent->popState();
 			return;
 		}
@@ -122,7 +122,7 @@ void ProjectileFlyBState::init()
 		if (!validThrowRange(&_action))
 		{
 			// out of range
-			_result = "STR_OUT_OF_RANGE";
+			_action.result = "STR_OUT_OF_RANGE";
 			_parent->popState();
 			return;
 		}
@@ -179,7 +179,7 @@ void ProjectileFlyBState::createNewProjectile()
 			// unable to throw here
 			delete projectile;
 			_parent->getMap()->setProjectile(0);
-			_result = "STR_UNABLE_TO_THROW_HERE";
+			_action.result = "STR_UNABLE_TO_THROW_HERE";
 			_parent->popState();
 			return;
 		}
@@ -205,7 +205,7 @@ void ProjectileFlyBState::createNewProjectile()
 			// no line of fire
 			delete projectile;
 			_parent->getMap()->setProjectile(0);
-			_result = "STR_NO_LINE_OF_FIRE";
+			_action.result = "STR_NO_LINE_OF_FIRE";
 			_parent->popState();
 			return;
 		}
@@ -286,15 +286,6 @@ void ProjectileFlyBState::think()
  */
 void ProjectileFlyBState::cancel()
 {
-}
-
-/*
- * Get the action result. Returns error messages or an empty string when everything went fine.
- * @return returnmessage Empty when everything is fine.
- */
-std::string ProjectileFlyBState::getResult() const
-{
-	return _result;
 }
 
 /*

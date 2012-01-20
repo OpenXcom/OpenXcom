@@ -141,15 +141,6 @@ void UnitDieBState::cancel()
 }
 
 /*
- * Get the action result. Returns error messages or an empty string when everything went fine.
- * @return returnmessage Empty when everything is fine.
- */
-std::string UnitDieBState::getResult() const
-{
-	return _result;
-}
-
-/*
  * Convert unit to corpse(item).
  * @param unit
  * @param terrain
