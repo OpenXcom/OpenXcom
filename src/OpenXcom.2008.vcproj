@@ -732,6 +732,14 @@
 				>
 			</File>						
 			<File
+				RelativePath=".\Battlescape\BattlescapeGame.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\BattlescapeGame.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Battlescape\BattlescapeGenerator.cpp"
 				>
 			</File>

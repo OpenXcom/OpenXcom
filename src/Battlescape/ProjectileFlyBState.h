@@ -25,7 +25,7 @@
 namespace OpenXcom
 {
 
-class BattlescapeState;
+class BattlescapeGame;
 class BattleUnit;
 class BattleItem;
 
@@ -42,7 +42,7 @@ private:
 	bool _initialized;
 public:
 	/// Creates a new ProjectileFly class
-	ProjectileFlyBState(BattlescapeState *parent, BattleAction action);
+	ProjectileFlyBState(BattlescapeGame *parent, BattleAction action);
 	/// Cleans up the ProjectileFly.
 	~ProjectileFlyBState();
 	/// Initializes the state.

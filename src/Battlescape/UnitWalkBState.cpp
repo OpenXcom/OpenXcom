@@ -29,7 +29,6 @@
 #include "ExplosionBState.h"
 #include "../Engine/Game.h"
 #include "../Savegame/BattleUnit.h"
-#include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
 #include "../Resource/ResourcePack.h"
@@ -45,7 +44,7 @@ namespace OpenXcom
 /**
  * Sets up an UnitWalkBState.
  */
-UnitWalkBState::UnitWalkBState(BattlescapeState *parent, BattleAction action) : BattleState(parent, action), _unit(0), _pf(0), _terrain(0)
+UnitWalkBState::UnitWalkBState(BattlescapeGame *parent, BattleAction action) : BattleState(parent, action), _unit(0), _pf(0), _terrain(0)
 {
 
 }
@@ -62,8 +61,8 @@ void UnitWalkBState::init()
 {
 	_unit = _action.actor;
 	setNormalWalkSpeed();
-	_pf = _parent->getGame()->getSavedGame()->getBattleGame()->getPathfinding();
-	_terrain = _parent->getGame()->getSavedGame()->getBattleGame()->getTileEngine();
+	_pf = _parent->getPathfinding();
+	_terrain = _parent->getTileEngine();
 	_target = _action.target;
 }
 
@@ -91,9 +90,9 @@ void UnitWalkBState::think()
 				{
 					// tank with threads "walks"
 					if (_unit->getUnit()->getArmor()->getMovementType() == MT_WALK)
-						_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(14)->play();
+						_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(14)->play();
 					else // hovering tank hovers
-						_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(40)->play();
+						_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(40)->play();
 				}
 			}
 			else
@@ -104,7 +103,7 @@ void UnitWalkBState::think()
 					Tile *tile = _unit->getTile();
 					if (tile->getFootstepSound())
 					{
-						_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(22 + (tile->getFootstepSound()*2))->play();
+						_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(22 + (tile->getFootstepSound()*2))->play();
 					}
 				}
 				// play footstep sound 2
@@ -113,7 +112,7 @@ void UnitWalkBState::think()
 					Tile *tile = _unit->getTile();
 					if (tile->getFootstepSound())
 					{
-						_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(23 + (tile->getFootstepSound()*2))->play();
+						_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(23 + (tile->getFootstepSound()*2))->play();
 					}
 				}
 			}
@@ -129,14 +128,14 @@ void UnitWalkBState::think()
 			{
 				for (int y = size; y >= 0; y--)
 				{
-					_parent->getGame()->getSavedGame()->getBattleGame()->getTile(_unit->getLastPosition() + Position(x,y,0))->setUnit(0);
+					_parent->getSave()->getTile(_unit->getLastPosition() + Position(x,y,0))->setUnit(0);
 				}
 			}
 			for (int x = size; x >= 0; x--)
 			{
 				for (int y = size; y >= 0; y--)
 				{
-					_parent->getGame()->getSavedGame()->getBattleGame()->getTile(_unit->getPosition() + Position(x,y,0))->setUnit(_unit);
+					_parent->getSave()->getTile(_unit->getPosition() + Position(x,y,0))->setUnit(_unit);
 				}
 			}
 
@@ -162,7 +161,7 @@ void UnitWalkBState::think()
 					{
 						for (int ty = -1; ty < 2; ty++)
 						{
-							Tile *t = _parent->getGame()->getSavedGame()->getBattleGame()->getTile(_unit->getPosition() + Position(x,y,0) + Position(tx,ty,0));
+							Tile *t = _parent->getSave()->getTile(_unit->getPosition() + Position(x,y,0) + Position(tx,ty,0));
 							if (t)
 							for (std::vector<BattleItem*>::iterator i = t->getInventory()->begin(); i != t->getInventory()->end(); ++i)
 							{
@@ -213,7 +212,7 @@ void UnitWalkBState::think()
 				AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(_unit->getCurrentAIState());
 				if (aggro == 0)
 				{
-					_unit->setAIState(new AggroBAIState(_parent->getGame()->getSavedGame()->getBattleGame(), _unit));
+					_unit->setAIState(new AggroBAIState(_parent->getSave(), _unit));
 				}
 			}
 			return;
@@ -262,11 +261,11 @@ void UnitWalkBState::think()
 			}
 			if (door == 0)
 			{
-				_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(3)->play(); // normal door
+				_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(3)->play(); // normal door
 			}
 			if (door == 1)
 			{
-				_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(20)->play(); // ufo door
+				_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(20)->play(); // ufo door
 				return; // don't start walking yet, wait for the ufo door to open
 			}
 
@@ -338,7 +337,7 @@ void UnitWalkBState::postPathProcedures()
  */
 void UnitWalkBState::setNormalWalkSpeed()
 {
-	if (_parent->getGame()->getSavedGame()->getBattleGame()->getDebugMode())
+	if (_parent->getSave()->getDebugMode())
 	{
 		_parent->setStateInterval(1);
 	}

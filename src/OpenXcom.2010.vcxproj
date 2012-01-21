@@ -145,6 +145,7 @@
     <ClCompile Include="Battlescape\ActionMenuState.cpp" />
     <ClCompile Include="Battlescape\AggroBAIState.cpp" />
     <ClCompile Include="Battlescape\BattleAIState.cpp" />
+    <ClCompile Include="Battlescape\BattlescapeGame.cpp" />
     <ClCompile Include="Battlescape\BattlescapeGenerator.cpp" />
     <ClCompile Include="Battlescape\BattlescapeMessage.cpp" />
     <ClCompile Include="Battlescape\BattlescapeOptionsState.cpp" />
@@ -357,6 +358,7 @@
     <ClInclude Include="Battlescape\ActionMenuState.h" />
     <ClInclude Include="Battlescape\AggroBAIState.h" />
     <ClInclude Include="Battlescape\BattleAIState.h" />
+    <ClInclude Include="Battlescape\BattlescapeGame.h" />
     <ClInclude Include="Battlescape\BattlescapeGenerator.h" />
     <ClInclude Include="Battlescape\BattlescapeMessage.h" />
     <ClInclude Include="Battlescape\BattlescapeOptionsState.h" />

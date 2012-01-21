@@ -124,6 +124,8 @@
 		<Unit filename="Battlescape\BattleAIState.h" />
 		<Unit filename="Battlescape\BattleState.cpp" />
 		<Unit filename="Battlescape\BattleState.h" />
+		<Unit filename="Battlescape\BattlescapeGame.cpp" />
+		<Unit filename="Battlescape\BattlescapeGame.h" />
 		<Unit filename="Battlescape\BattlescapeGenerator.cpp" />
 		<Unit filename="Battlescape\BattlescapeGenerator.h" />
 		<Unit filename="Battlescape\BattlescapeMessage.cpp" />

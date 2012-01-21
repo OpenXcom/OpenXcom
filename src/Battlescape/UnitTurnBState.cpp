@@ -24,7 +24,6 @@
 #include "../Engine/Game.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/SavedBattleGame.h"
-#include "../Savegame/SavedGame.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/SoundSet.h"
 #include "../Engine/Sound.h"
@@ -39,7 +38,7 @@ namespace OpenXcom
 /**
  * Sets up an UnitTurnBState.
  */
-UnitTurnBState::UnitTurnBState(BattlescapeState *parent, BattleAction action) : BattleState(parent, action), _unit(0)
+UnitTurnBState::UnitTurnBState(BattlescapeGame *parent, BattleAction action) : BattleState(parent, action), _unit(0)
 {
 
 }
@@ -68,14 +67,14 @@ void UnitTurnBState::init()
 	if (_unit->getStatus() != STATUS_TURNING)
 	{
 		// try to open a door
-		int door = _parent->getGame()->getSavedGame()->getBattleGame()->getTileEngine()->unitOpensDoor(_unit);
+		int door = _parent->getTileEngine()->unitOpensDoor(_unit);
 		if (door == 0)
 		{
-			_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(3)->play(); // normal door
+			_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(3)->play(); // normal door
 		}
 		if (door == 1)
 		{
-			_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(RNG::generate(20,21))->play(); // ufo door
+			_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(RNG::generate(20,21))->play(); // ufo door
 		}
 		_parent->popState();
 	}
@@ -95,7 +94,7 @@ void UnitTurnBState::think()
 	if (_unit->spendTimeUnits(tu, _parent->dontSpendTUs()))
 	{
 		_unit->turn(turret);
-		_parent->getGame()->getSavedGame()->getBattleGame()->getTileEngine()->calculateFOV(_unit);
+		_parent->getTileEngine()->calculateFOV(_unit);
 		_parent->getMap()->cacheUnit(_unit);
 		if (_unit->getStatus() == STATUS_STANDING)
 		{

@@ -46,7 +46,7 @@ namespace OpenXcom
  * @param unit Unit involved in the explosion (eg unit throwing the grenade)
  * @param tile Tile the explosion is on.
  */
-ExplosionBState::ExplosionBState(BattlescapeState *parent, Position center, BattleItem *item, BattleUnit *unit, Tile *tile) : BattleState(parent), _unit(unit), _center(center), _item(item), _tile(tile)
+ExplosionBState::ExplosionBState(BattlescapeGame *parent, Position center, BattleItem *item, BattleUnit *unit, Tile *tile) : BattleState(parent), _unit(unit), _center(center), _item(item), _tile(tile)
 {
 
 }
@@ -81,7 +81,7 @@ void ExplosionBState::init()
 				_parent->getMap()->getExplosions()->insert(explosion);
 			}
 		// explosion sound
-		_parent->getGame()->getResourcePack()->getSoundSet("GEO.CAT")->getSound(10)->play();
+		_parent->getResourcePack()->getSoundSet("GEO.CAT")->getSound(10)->play();
 	}
 	else
 	{
@@ -91,7 +91,7 @@ void ExplosionBState::init()
 		// add the explosion on the map
 		_parent->getMap()->getExplosions()->insert(explosion);
 		// bullet hit sound
-		_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(_item->getRules()->getHitSound())->play();
+		_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(_item->getRules()->getHitSound())->play();
 	}
 }
 
@@ -109,7 +109,7 @@ void ExplosionBState::think()
 			_parent->getMap()->getExplosions()->erase((*i));
 			if (_parent->getMap()->getExplosions()->empty())
 			{
-				SavedBattleGame *save = _parent->getGame()->getSavedGame()->getBattleGame();
+				SavedBattleGame *save = _parent->getSave();
 				// after the animation is done, the real explosion takes place
 				if (_item)
 				{

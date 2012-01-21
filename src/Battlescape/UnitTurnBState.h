@@ -21,7 +21,6 @@
 
 #include "BattleState.h"
 #include "Position.h"
-#include "BattlescapeState.h"
 
 namespace OpenXcom
 {
@@ -35,7 +34,7 @@ private:
 	bool turret;
 public:
 	/// Creates a new UnitTurnBState class
-	UnitTurnBState(BattlescapeState *parent, BattleAction action);
+	UnitTurnBState(BattlescapeGame *parent, BattleAction action);
 	/// Cleans up the UnitTurnBState.
 	~UnitTurnBState();
 	/// Initializes the state.

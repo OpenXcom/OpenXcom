@@ -21,7 +21,7 @@
 
 #include "../Engine/State.h"
 #include "Position.h"
-#include <list>
+
 #include <vector>
 #include <string>
 
@@ -43,21 +43,7 @@ class BattleState;
 class Timer;
 class ActionMenuItem;
 class WarningMessage;
-
-enum BattleActionType { BA_NONE, BA_TURN, BA_WALK, BA_PRIME, BA_THROW, BA_AUTOSHOT, BA_SNAPSHOT, BA_AIMEDSHOT, BA_STUN, BA_HIT, BA_USE };
-
-struct BattleAction
-{
-	BattleActionType type;
-	BattleUnit *actor;
-	BattleItem *weapon;
-	Position target;
-	int TU;
-	bool targeting;
-	int value;
-	std::string result;
-};
-
+class BattlescapeGame;
 
 /**
  * Battlescape screen which shows the tactical battle
@@ -80,25 +66,15 @@ private:
 	Text *_txtName;
 	NumberText *_numTimeUnits, *_numEnergy, *_numHealth, *_numMorale, *_numLayers, *_numAmmoLeft, *_numAmmoRight;
 	Bar *_barTimeUnits, *_barEnergy, *_barHealth, *_barMorale;
-	Timer *_stateTimer, *_animTimer;
-	SavedBattleGame *_battleGame;
+	Timer *_animTimer, *_gameTimer;
+	SavedBattleGame *_save;
 	Text *_txtDebug;
-	std::list<BattleState*> _states;
-	BattleActionType _tuReserved;
 	std::vector<State*> _popups;
-	bool _debugPlay, _playerPanicHandled;
-	int _AIActionCounter;
-	BattleAction _currentAction;
+	BattlescapeGame *_battleGame;
 
 	void selectNextPlayerUnit(bool checkReselect);
-	void endTurn();
 	void handleItemClick(BattleItem *item);
 	void blinkVisibleUnitButtons();
-	void handleNonTargetAction();
-	void setupCursor();
-	bool handlePanickingPlayer();
-	bool handlePanickingUnit(BattleUnit *unit);
-	void cancelCurrentAction();
 public:
 	static const int DEFAULT_ANIM_SPEED = 100;
 	/// Creates the Battlescape state.
@@ -159,46 +135,29 @@ public:
 	bool playableUnitSelected();
 	/// updates soldier name/rank/tu/energy/health/morale
 	void updateSoldierInfo();
-	/// handlestates timer.
-	void handleState();
 	/// Animate other stuff.
 	void animate();
+	/// handlestates timer.
+	void handleState();
+	/// state timer interval.
+	void setStateInterval(Uint32 interval);
 	/// Get game.
 	Game *getGame() const;
 	/// Get map.
 	Map *getMap() const;
-	/// Push a state at the front of the list.
-	void statePushFront(BattleState *bs);
-	/// Push a state at the second of the list.
-	void statePushNext(BattleState *bs);
-	/// Push a state at the back of the list.
-	void statePushBack(BattleState *bs);
-	/// Remove current state.
-	void popState();
-	/// Set state think interval.
-	void setStateInterval(Uint32 interval);
 	/// Show debug message.
 	void debug(const std::wstring message);
+	/// Show warning message.
+	void warning(std::string message);
 	/// Handle keypresses.
 	void handle(Action *action);
 	/// Displays a popup window.
 	void popup(State *state);
-	/// Checks for casualties in battle.
-	bool checkForCasualties(BattleItem *murderweapon, BattleUnit *murderer, bool noSound = false);
-	/// Checks if a unit panics.
-	void checkForPanic(BattleUnit *unit);
-	/// Check reserved tu.
-	bool checkReservedTU(BattleUnit *bu, int tu);
-	/// Handles unit AI.
-	void handleAI(BattleUnit *unit);
-	/// Finishes a battle.
-	void finishBattle(bool abort);
-	/// Add item & affect with gravity.
-	void dropItem(const Position &position, BattleItem *item, bool newItem = false);
 	/// Check whether TUs should be spent.
 	bool dontSpendTUs();
-	/// Handle kneeling action.
-	void kneel(BattleUnit *bu);
+	/// Finishes a battle.
+	void finishBattle(bool abort);
+
 };
 
 }

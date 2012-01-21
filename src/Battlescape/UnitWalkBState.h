@@ -21,14 +21,12 @@
 
 #include "BattleState.h"
 #include "Position.h"
-#include "BattlescapeState.h"
 
 namespace OpenXcom
 {
 
 class BattleUnit;
 class Pathfinding;
-class BattlescapeState;
 class TileEngine;
 
 class UnitWalkBState : public BattleState
@@ -42,7 +40,7 @@ private:
 	void setNormalWalkSpeed();
 public:
 	/// Creates a new UnitWalkBState class
-	UnitWalkBState(BattlescapeState *parent, BattleAction _action);
+	UnitWalkBState(BattlescapeGame *parent, BattleAction _action);
 	/// Cleans up the UnitWalkBState.
 	~UnitWalkBState();
 	/// Set the target to walk to.

@@ -127,11 +127,15 @@ InventoryState::~InventoryState()
  */
 void InventoryState::init()
 {
-	BattleUnit *unit = _battleGame->getSelectedUnit();
+	BattleUnit *oldUnit = _battleGame->getSelectedUnit();
+	BattleUnit *unit = oldUnit;
+
 	while (_battleGame->getSelectedUnit()->getUnit()->getArmor()->getSize() > 1)
 	{
 		unit = _battleGame->selectNextPlayerUnit();
 	}
+
+	_battleGame->setSelectedUnit(oldUnit);
 
 	unit->setCache(0);
 	_soldier->clear();
