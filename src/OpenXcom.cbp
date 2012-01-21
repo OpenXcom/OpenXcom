@@ -168,6 +168,8 @@
 		<Unit filename="Battlescape\Projectile.h" />
 		<Unit filename="Battlescape\ProjectileFlyBState.cpp" />
 		<Unit filename="Battlescape\ProjectileFlyBState.h" />
+		<Unit filename="Battlescape\PromotionsState.cpp" />
+		<Unit filename="Battlescape\PromotionsState.h" />
 		<Unit filename="Battlescape\TileEngine.cpp" />
 		<Unit filename="Battlescape\TileEngine.h" />
 		<Unit filename="Battlescape\UnitDieBState.cpp" />
