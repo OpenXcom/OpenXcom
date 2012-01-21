@@ -20,7 +20,7 @@
 #define OPENXCOM_BATTLEAISTATE_H
 
 #include "yaml.h"
-#include "BattlescapeState.h"
+#include "BattlescapeGame.h"
 
 namespace OpenXcom
 {

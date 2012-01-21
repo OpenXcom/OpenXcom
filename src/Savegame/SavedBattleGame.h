@@ -58,7 +58,7 @@ private:
 	int _width, _length, _height;
 	std::vector<MapDataSet*> _mapDataSets;
 	Tile **_tiles;
-	BattleUnit *_selectedUnit;
+	BattleUnit *_selectedUnit, *_lastSelectedUnit;
 	std::vector<Node*> _nodes;
 	std::vector<BattleUnit*> _units;
 	std::vector<BattleItem*> _items;
@@ -162,7 +162,6 @@ public:
 	void reviveUnconsciousUnits();
 	/// Set or try to set a unit of a certain size on a certain position of the map.
 	bool setUnitPosition(BattleUnit *bu, const Position &position, bool testOnly = false);
-
 };
 
 }

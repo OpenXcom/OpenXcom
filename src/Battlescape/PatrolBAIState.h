@@ -24,7 +24,7 @@
 namespace OpenXcom
 {
 
-class SavedBattleGame;
+class BattlescapeGame;
 class BattleUnit;
 class BattlescapeState;
 class Node;

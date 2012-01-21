@@ -23,7 +23,7 @@
 #include "Position.h"
 #include "../Ruleset/MapData.h"
 #include "SDL.h"
-#include "BattlescapeState.h"
+#include "BattlescapeGame.h"
 
 namespace OpenXcom
 {

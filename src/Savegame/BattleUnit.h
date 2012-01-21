@@ -22,7 +22,7 @@
 #include <vector>
 #include <string>
 #include "../Battlescape/Position.h"
-#include "../Battlescape/BattlescapeState.h"
+#include "../Battlescape/BattlescapeGame.h"
 #include "Soldier.h"
 #include "../Ruleset/RuleItem.h"
 

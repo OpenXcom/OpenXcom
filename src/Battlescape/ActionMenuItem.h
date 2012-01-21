@@ -20,7 +20,7 @@
 #define OPENXCOM_ACTIONMENUITEM_H
 
 #include "../Engine/InteractiveSurface.h"
-#include "BattlescapeState.h"
+#include "BattlescapeGame.h"
 
 namespace OpenXcom
 {
@@ -28,6 +28,7 @@ namespace OpenXcom
 class BattleItem;
 class State;
 class Font;
+class Text;
 
 /**
  * A class that represents a single box in the action popup menu on the battlescape.

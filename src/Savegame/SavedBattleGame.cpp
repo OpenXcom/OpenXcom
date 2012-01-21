@@ -685,6 +685,7 @@ void SavedBattleGame::endTurn()
 {
 	if (_side == FACTION_PLAYER)
 	{
+		_lastSelectedUnit = _selectedUnit;
 		_side = FACTION_HOSTILE;
 		// hide all aliens
 		for (std::vector<BattleUnit*>::iterator i = _units.begin(); i != _units.end(); ++i)
@@ -700,6 +701,11 @@ void SavedBattleGame::endTurn()
 		prepareNewTurn();
 		_turn++;
 		_side = FACTION_PLAYER;
+		if (_lastSelectedUnit && !_lastSelectedUnit->isOut())
+			_selectedUnit = _lastSelectedUnit;
+		else
+			selectNextPlayerUnit();
+
 	}
 
 	for (std::vector<BattleUnit*>::iterator i = _units.begin(); i != _units.end(); ++i)
@@ -711,8 +717,8 @@ void SavedBattleGame::endTurn()
 		_tileEngine->calculateFOV(*i);
 	}
 
-	_selectedUnit = 0;
-	selectNextPlayerUnit();
+	if (_side != FACTION_PLAYER)
+		selectNextPlayerUnit();
 }
 
 /**

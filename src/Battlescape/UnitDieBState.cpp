@@ -25,7 +25,6 @@
 #include "../Engine/Game.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/SavedBattleGame.h"
-#include "../Savegame/SavedGame.h"
 #include "../Savegame/Tile.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/SoundSet.h"
@@ -40,7 +39,7 @@ namespace OpenXcom
 /**
  * Sets up an UnitDieBState.
  */
-UnitDieBState::UnitDieBState(BattlescapeState *parent, BattleUnit *unit, ItemDamageType damageType, bool noSound) : BattleState(parent), _unit(unit), _damageType(damageType), _noSound(noSound)
+UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDamageType damageType, bool noSound) : BattleState(parent), _unit(unit), _damageType(damageType), _noSound(noSound)
 {
 
 }
@@ -78,11 +77,11 @@ void UnitDieBState::init()
 			// soldiers have screams depending on gender
 			if (s->getGender() == GENDER_MALE)
 			{
-				_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(RNG::generate(41,43))->play();
+				_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(RNG::generate(41,43))->play();
 			}
 			else
 			{
-				_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(RNG::generate(44,46))->play();
+				_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(RNG::generate(44,46))->play();
 			}
 		}
 		else
@@ -91,11 +90,11 @@ void UnitDieBState::init()
 			if (_unit->getUnit()->getArmor()->getSize() > 1)
 			{
 				// HWP destroy sound
-				_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(23)->play();
+				_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(23)->play();
 			}
 			else
 			{
-				_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(10)->play();
+				_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(10)->play();
 			}
 		}
 	}
@@ -124,7 +123,7 @@ void UnitDieBState::think()
 	if (_unit->isOut())
 	{
 		_unit->keepFalling();
-		TileEngine *terrain = _parent->getGame()->getSavedGame()->getBattleGame()->getTileEngine();
+		TileEngine *terrain = _parent->getTileEngine();
 		convertUnitToCorpse(_unit, terrain);
 		terrain->calculateUnitLighting();
 		_parent->popState();
@@ -164,8 +163,8 @@ void UnitDieBState::convertUnitToCorpse(BattleUnit *unit, TileEngine *terrain)
 
 	if (size == 0)
 	{
-		_parent->getGame()->getSavedGame()->getBattleGame()->getTile(_unit->getPosition())->setUnit(0);
-		BattleItem *corpse = new BattleItem(_parent->getGame()->getRuleset()->getItem(_unit->getUnit()->getArmor()->getCorpseItem()),_parent->getGame()->getSavedGame()->getBattleGame()->getCurrentItemId());
+		_parent->getSave()->getTile(_unit->getPosition())->setUnit(0);
+		BattleItem *corpse = new BattleItem(_parent->getRuleset()->getItem(_unit->getUnit()->getArmor()->getCorpseItem()),_parent->getSave()->getCurrentItemId());
 		corpse->setUnit(unit);
 		_parent->dropItem(_unit->getPosition(), corpse, true);
 	}
@@ -176,10 +175,10 @@ void UnitDieBState::convertUnitToCorpse(BattleUnit *unit, TileEngine *terrain)
 		{
 			for (int x = 0; x <= size; x++)
 			{
-				_parent->getGame()->getSavedGame()->getBattleGame()->getTile(_unit->getPosition() + Position(x,y,0))->setUnit(0);
+				_parent->getSave()->getTile(_unit->getPosition() + Position(x,y,0))->setUnit(0);
 				std::stringstream ss;
 				ss << _unit->getUnit()->getArmor()->getCorpseItem() << i;
-				BattleItem *corpse = new BattleItem(_parent->getGame()->getRuleset()->getItem(ss.str()),_parent->getGame()->getSavedGame()->getBattleGame()->getCurrentItemId());
+				BattleItem *corpse = new BattleItem(_parent->getRuleset()->getItem(ss.str()),_parent->getSave()->getCurrentItemId());
 				//corpse->setUnit(unit); // no need for this, because large units never can be revived as they don't go unconscious
 				_parent->dropItem(_unit->getPosition() + Position(x,y,0), corpse, true);
 				i++;

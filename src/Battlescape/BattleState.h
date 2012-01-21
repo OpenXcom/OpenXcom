@@ -20,12 +20,12 @@
 #define OPENXCOM_BATTLESTATE_H
 
 #include <string>
-#include "BattlescapeState.h"
+#include "BattlescapeGame.h"
 
 namespace OpenXcom
 {
 
-class BattlescapeState;
+class BattlescapeGame;
 
 /**
  * This class sets the battlescape in a certain sub-state.
@@ -34,12 +34,12 @@ class BattlescapeState;
 class BattleState
 {
 protected:
-	BattlescapeState *_parent;
+	BattlescapeGame *_parent;
 	BattleAction _action;
 public:
 	/// Creates a new BattleState linked to the game.
-	BattleState(BattlescapeState *parent, BattleAction action);
-	BattleState(BattlescapeState *parent);
+	BattleState(BattlescapeGame *parent, BattleAction action);
+	BattleState(BattlescapeGame *parent);
 	/// Cleans up the BattleState.
 	virtual ~BattleState();
 	/// Initializes the state.

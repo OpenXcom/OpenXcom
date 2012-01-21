@@ -41,7 +41,7 @@ namespace OpenXcom
 /**
  * Sets up an ProjectileFlyBState.
  */
-ProjectileFlyBState::ProjectileFlyBState(BattlescapeState *parent, BattleAction action) : BattleState(parent, action), _unit(0), _ammo(0), _projectileImpact(0), _initialized(false)
+ProjectileFlyBState::ProjectileFlyBState(BattlescapeGame *parent, BattleAction action) : BattleState(parent, action), _unit(0), _ammo(0), _projectileImpact(0), _initialized(false)
 {
 
 }
@@ -136,10 +136,10 @@ void ProjectileFlyBState::init()
 	createNewProjectile();
 
 	BattleAction action;
-	BattleUnit *potentialVictim = _parent->getGame()->getSavedGame()->getBattleGame()->getTile(_action.target)->getUnit();
+	BattleUnit *potentialVictim = _parent->getSave()->getTile(_action.target)->getUnit();
 	if (potentialVictim && potentialVictim->getFaction() != _unit->getFaction())
 	{
-		if (_parent->getGame()->getSavedGame()->getBattleGame()->getTileEngine()->checkReactionFire(_unit, &action, potentialVictim, false))
+		if (_parent->getSave()->getTileEngine()->checkReactionFire(_unit, &action, potentialVictim, false))
 		{
 			_parent->statePushBack(new ProjectileFlyBState(_parent, action));
 		}
@@ -153,9 +153,7 @@ void ProjectileFlyBState::init()
 void ProjectileFlyBState::createNewProjectile()
 {
 	// create a new projectile
-	Projectile *projectile = new Projectile(_parent->getGame()->getResourcePack(),
-									_parent->getGame()->getSavedGame()->getBattleGame(),
-									_action);
+	Projectile *projectile = new Projectile(_parent->getResourcePack(), _parent->getSave(), _action);
 
 	_autoshotCounter++;
 	// add the projectile on the map
@@ -171,7 +169,7 @@ void ProjectileFlyBState::createNewProjectile()
 			_projectileItem->moveToOwner(0);
 			_unit->setCache(0);
 			_parent->getMap()->cacheUnit(_unit);
-			_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(39)->play();
+			_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(39)->play();
 			_unit->addThrowingExp();
 		}
 		else
@@ -193,10 +191,10 @@ void ProjectileFlyBState::createNewProjectile()
 				_unit->aim(true);
 				_parent->getMap()->cacheUnit(_unit);
 				// and we have a lift-off
-				_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(_action.weapon->getRules()->getFireSound())->play();
-				if (!_parent->getGame()->getSavedGame()->getBattleGame()->getDebugMode() && _ammo->spendBullet() == false)
+				_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(_action.weapon->getRules()->getFireSound())->play();
+				if (!_parent->getSave()->getDebugMode() && _ammo->spendBullet() == false)
 				{
-					_parent->getGame()->getSavedGame()->getBattleGame()->removeItem(_ammo);
+					_parent->getSave()->removeItem(_ammo);
 					_action.weapon->setAmmoItem(0);
 				}
 		}
@@ -219,6 +217,7 @@ void ProjectileFlyBState::createNewProjectile()
  */
 void ProjectileFlyBState::think()
 {
+	/* TODO refactoring : store the projectile in this state, instead of getting it from the map each time? */
 	if (_parent->getMap()->getProjectile() == 0)
 	{
 		if (_action.type == BA_AUTOSHOT && _autoshotCounter < 3 && !_action.actor->isOut())
@@ -242,7 +241,7 @@ void ProjectileFlyBState::think()
 				pos.y /= 16;
 				pos.z /= 24;
 				BattleItem *item = _parent->getMap()->getProjectile()->getItem();
-				_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(38)->play();
+				_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(38)->play();
 
 				if (Options::getBool("battleAltGrenade") && item->getRules()->getBattleType() == BT_GRENADE)
 				{
