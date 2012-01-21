@@ -98,7 +98,7 @@ SaveGameState::SaveGameState(Game *game, bool geo) : State(game), _selected(""),
 	}
 	else
 	{
-			_window->setColor(Palette::blockOffset(0));
+		_window->setColor(Palette::blockOffset(0));
 		_window->setHighContrast(true);
 		_window->setBackground(_game->getResourcePack()->getSurface("TAC00.SCR"));
 

@@ -916,6 +916,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Battlescape\PromotionsState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\PromotionsState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Battlescape\TileEngine.cpp"
 				>
 			</File>

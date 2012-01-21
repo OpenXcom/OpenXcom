@@ -626,6 +626,9 @@
     <ClCompile Include="Ruleset\RuleAlienDeployment.cpp">
       <Filter>Ruleset</Filter>
     </ClCompile>
+    <ClCompile Include="Battlescape\PromotionsState.cpp">
+      <Filter>Battlescape</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1253,6 +1256,9 @@
     </ClInclude>
     <ClInclude Include="Ruleset\RuleAlienDeployment.h">
       <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Battlescape\PromotionsState.h">
+      <Filter>Battlescape</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

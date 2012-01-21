@@ -152,6 +152,8 @@ set ( battlescape_src
   Battlescape/ScannerState.h
   Battlescape/ScannerView.cpp
   Battlescape/ScannerView.h
+  Battlescape/PromotionsState.cpp
+  Battlescape/PromotionsState.h
 )
 
 set ( engine_src

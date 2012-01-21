@@ -37,6 +37,7 @@
 #include "../Savegame/ItemContainer.h"
 #include "../Ruleset/RuleInventory.h"
 #include "../Ruleset/RuleItem.h"
+#include "PromotionsState.h"
 
 namespace OpenXcom
 {
@@ -201,6 +202,10 @@ void DebriefingState::btnOkClick(Action *action)
 {
 	_game->getSavedGame()->setBattleGame(0);
 	_game->popState();
+	if (_game->getSavedGame()->handlePromotions())
+	{
+		_game->pushState(new PromotionsState(_game));
+	}
 }
 
 

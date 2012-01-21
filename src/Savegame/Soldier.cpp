@@ -225,6 +225,7 @@ std::string Soldier::getRankString() const
 /**
  * Returns a graphic representation of
  * the soldier's military rank.
+ * @note THE MEANING OF LIFE
  * @return Sprite ID for rank.
  */
 int Soldier::getRankSprite() const
@@ -496,6 +497,17 @@ int Soldier::getIntelligence() const
 int Soldier::getAggression() const
 {
 	return 1;
+}
+
+/**
+ * Returns the unit's promotion status and resets it.
+ * @return True if recently promoted, False otherwise.
+ */
+bool Soldier::isPromoted()
+{
+	bool promoted = _recentlyPromoted;
+	_recentlyPromoted = false;
+	return promoted;
 }
 
 }
