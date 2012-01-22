@@ -41,7 +41,7 @@ namespace OpenXcom
  */
 UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDamageType damageType, bool noSound) : BattleState(parent), _unit(unit), _damageType(damageType), _noSound(noSound)
 {
-
+	
 }
 
 /**
@@ -69,7 +69,7 @@ void UnitDieBState::init()
 		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
 		_unit->lookAt(3);
 	}
-	if (_unit->getHealth() == 0 && !_noSound)
+	if (!_noSound)
 	{
 		Soldier *s = dynamic_cast<Soldier*>(_unit->getUnit());
 		if (s)
@@ -123,9 +123,8 @@ void UnitDieBState::think()
 	if (_unit->isOut())
 	{
 		_unit->keepFalling();
-		TileEngine *terrain = _parent->getTileEngine();
-		convertUnitToCorpse(_unit, terrain);
-		terrain->calculateUnitLighting();
+		convertUnitToCorpse();
+		_parent->getTileEngine()->calculateUnitLighting();
 		_parent->popState();
 	}
 
@@ -144,10 +143,12 @@ void UnitDieBState::cancel()
  * @param unit
  * @param terrain
  */
-void UnitDieBState::convertUnitToCorpse(BattleUnit *unit, TileEngine *terrain)
+void UnitDieBState::convertUnitToCorpse()
 {
-	int size = _unit->getUnit()->getArmor()->getSize() - 1;
+	// in case the unit was unconscious
+	_parent->getSave()->removeUnconsciousBodyItem(_unit);
 
+	int size = _unit->getUnit()->getArmor()->getSize() - 1;
 	// move inventory from unit to the ground for non-large units
 	if (size == 0)
 	{
@@ -165,7 +166,7 @@ void UnitDieBState::convertUnitToCorpse(BattleUnit *unit, TileEngine *terrain)
 	{
 		_parent->getSave()->getTile(_unit->getPosition())->setUnit(0);
 		BattleItem *corpse = new BattleItem(_parent->getRuleset()->getItem(_unit->getUnit()->getArmor()->getCorpseItem()),_parent->getSave()->getCurrentItemId());
-		corpse->setUnit(unit);
+		corpse->setUnit(_unit);
 		_parent->dropItem(_unit->getPosition(), corpse, true);
 	}
 	else

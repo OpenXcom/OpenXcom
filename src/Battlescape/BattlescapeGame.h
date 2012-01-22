@@ -51,6 +51,7 @@ struct BattleAction
 	bool targeting;
 	int value;
 	std::string result;
+	BattleAction() : type(BA_NONE), actor(0), weapon(0), TU(0), targeting(false), value(0), result("") { }
 };
 
 /**
@@ -96,7 +97,7 @@ public:
 	/// Set state think interval.
 	void setStateInterval(Uint32 interval);
 	/// Checks for casualties in battle.
-	bool checkForCasualties(BattleItem *murderweapon, BattleUnit *murderer, bool noSound = false);
+	bool checkForCasualties(BattleItem *murderweapon, BattleUnit *murderer, bool hiddenExplosion = false, bool terrainExplosion = false);
 	/// Checks if a unit panics.
 	void checkForPanic(BattleUnit *unit);
 	/// Check reserved tu.

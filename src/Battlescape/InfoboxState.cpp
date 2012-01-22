@@ -40,7 +40,7 @@ InfoboxState::InfoboxState(Game *game, const std::wstring &msg) : State(game)
 
 	// Create objects
 	_window = new Window(this, 261, 122, 34, 10);
-	_text = new Text(175, 40, 46, 40);
+	_text = new Text(235, 40, 16, 40);
 
 	add(_window);
 
