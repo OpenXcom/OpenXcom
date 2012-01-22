@@ -257,7 +257,7 @@ void Camera::setViewHeight(int viewheight)
  * Center map on a certain position.
  * @param mapPos Position to center on.
  */
-void Camera::centerOnPosition(const Position &mapPos)
+void Camera::centerOnPosition(const Position &mapPos, bool redraw)
 {
 	Position screenPos;
 
@@ -269,7 +269,7 @@ void Camera::centerOnPosition(const Position &mapPos)
 	convertScreenToMap((_screenWidth / 2), (_visibleMapHeight / 2), &_centerX, &_centerY);
 
 	_mapOffset.z = mapPos.z;
-	_map->draw();
+	if (redraw) _map->draw();
 }
 
 /**

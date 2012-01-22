@@ -784,6 +784,20 @@ void SavedBattleGame::removeItem(BattleItem *item)
 			break;
 		}
 	}
+	// due to strange design, the item has to be removed from the tile it is on too (if it is on a tile)
+	for (int i = 0; i < getWidth() * getLength() * getHeight(); ++i)
+	{
+		for (std::vector<BattleItem*>::iterator it = _tiles[i]->getInventory()->begin(); it != _tiles[i]->getInventory()->end(); )
+		{
+			if ((*it) == item)
+			{
+				it = _tiles[i]->getInventory()->erase(it);
+				return;
+			}
+			++it;
+		}
+	}
+
 }
 
 /**
@@ -1027,12 +1041,28 @@ void SavedBattleGame::reviveUnconsciousUnits()
 				(*i)->setCache(0);
 				getTileEngine()->calculateFOV((*i));
 				getTileEngine()->calculateUnitLighting();
+				removeUnconsciousBodyItem((*i));
 			}
 		}
 	}
 }
 
-
+/**
+  *   Remove the body item that corresponds to the unit
+  */
+void SavedBattleGame::removeUnconsciousBodyItem(BattleUnit *bu)
+{
+	// remove the unconscious body item corresponding to this unit
+	for (std::vector<BattleItem*>::iterator it = getItems()->begin(); it != getItems()->end(); )
+	{
+		if ((*it)->getUnit() == bu)
+		{
+			removeItem((*it));
+			break;
+		}
+		++it;
+	}
+}
 /**
  * Function handles the placement of units on the map. This handles large units that are placed on multiple tiles.
  * @return Whether the unit could be succesfully placed or not.

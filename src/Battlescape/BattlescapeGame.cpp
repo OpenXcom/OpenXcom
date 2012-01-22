@@ -94,6 +94,7 @@ BattlescapeGame::BattlescapeGame(SavedBattleGame *save, BattlescapeState *parent
 	checkForCasualties(0, 0, true);
 	cancelCurrentAction();
 	_currentAction.targeting = false;
+	_currentAction.type = BA_NONE;
 }
 
 
@@ -152,7 +153,12 @@ void BattlescapeGame::init()
 void BattlescapeGame::handleAI(BattleUnit *unit)
 {
 	BattleAIState *ai = unit->getCurrentAIState();
-	if (!ai) return;
+	if (!ai)
+	{
+		// for some reason the unit had no AI routine assigned..
+		unit->setAIState(new PatrolBAIState(_save, unit, 0));
+		ai = unit->getCurrentAIState();
+	}
 
 	_AIActionCounter++;
 
@@ -249,7 +255,7 @@ void BattlescapeGame::endTurn()
 				p.y = _save->getTiles()[i]->getPosition().y*16 + 8;
 				p.z = _save->getTiles()[i]->getPosition().z*24 + _save->getTiles()[i]->getTerrainLevel();
 				statePushNext(new ExplosionBState(this, p, (*it), (*it)->getPreviousOwner()));
-				it = _save->getTiles()[i]->getInventory()->erase(it);
+				_save->removeItem((*it));
 				statePushBack(0);
 				return;
 			}
@@ -257,38 +263,17 @@ void BattlescapeGame::endTurn()
 		}
 	}
 
-	// check for hot grenades in the hands (by default grenades don't explode in soldiers hands)
-	if (Options::getBool("battleAltGrenade"))
-	{
-		for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
-		{
-			for (std::vector<BattleItem*>::iterator it = _save->getItems()->begin(); it != _save->getItems()->end(); )
-			{
-				if ((*it)->getOwner() == (*i)) // TODO refactor - removal of getOwner
-				{
-					if ((*it)->getRules()->getBattleType() == BT_GRENADE && (*it)->getExplodeTurn() > 0 && (*it)->getExplodeTurn() <= _save->getTurn())  // it's a grenade to explode now
-					{
-							p.x = (*i)->getPosition().x*16 + 8;
-							p.y = (*i)->getPosition().y*16 + 8;
-							p.z = (*i)->getPosition().z*24 + 18;
-							statePushNext(new ExplosionBState(this, p, (*it), (*it)->getPreviousOwner()));
-							it = _save->getItems()->erase(it);
-							statePushBack(0);
-							return;
-					}
-				}
-				++it;
-			}
-		}
-	}
-
-
 	if (_save->getTileEngine()->closeUfoDoors())
 	{
 		getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(21)->play(); // ufo door closed
 	}
 
 	_save->endTurn();
+	bool bBattleIsOver = checkForCasualties(0, 0, false, false);
+	if (bBattleIsOver)
+	{
+		return;
+	}
 
 	if (_save->getSide() == FACTION_PLAYER)
 	{
@@ -307,7 +292,7 @@ void BattlescapeGame::endTurn()
 		statePushNext(new ExplosionBState(this, p, 0, 0, t));
 	}
 
-	bool bBattleIsOver = checkForCasualties(0, 0);
+	bBattleIsOver = checkForCasualties(0, 0, false, true);
 	if (bBattleIsOver)
 	{
 		return;
@@ -332,7 +317,7 @@ void BattlescapeGame::endTurn()
  * @param murderer
  * @return Whether the battle is finished.
  */
-bool BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *murderer, bool noSound)
+bool BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *murderer, bool hiddenExplosion, bool terrainExplosion)
 {
 	for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
 	{
@@ -410,19 +395,50 @@ bool BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 
 			if (murderweapon)
 			{
-				statePushNext(new UnitDieBState(this, (*j), murderweapon->getRules()->getDamageType(), noSound));
+				statePushNext(new UnitDieBState(this, (*j), murderweapon->getRules()->getDamageType(), false));
 			}
 			else
 			{
-				if (noSound)
-					statePushNext(new UnitDieBState(this, (*j), DT_HE, noSound)); // simulate instant death
+				if (hiddenExplosion)
+				{
+					// this is instant death from UFO powersources, without screaming sounds
+					statePushNext(new UnitDieBState(this, (*j), DT_HE, true)); 
+				}
 				else
-					statePushNext(new UnitDieBState(this, (*j), DT_AP, noSound)); // do a die animation
+				{
+					if (terrainExplosion)
+					{
+						// terrain explosion
+						statePushNext(new UnitDieBState(this, (*j), DT_HE, false));
+					}
+					else
+					{
+						// no murderer, and no terrain explosion, must be fatal wounds
+						statePushNext(new UnitDieBState(this, (*j), DT_AP, false));  // STR_HAS_DIED_FROM_A_FATAL_WOUND
+						// show a little infobox with the name of the unit and "... is panicking"
+						std::wstringstream ss;
+						ss << (*j)->getUnit()->getName(_parentState->getGame()->getLanguage()) << L'\n' << _parentState->getGame()->getLanguage()->getString("STR_HAS_DIED_FROM_A_FATAL_WOUND");
+						_parentState->getGame()->pushState(new InfoboxState(_parentState->getGame(), ss.str()));
+					}
+				}
 			}
 		}
 		else if ((*j)->getStunlevel() >= (*j)->getHealth() && (*j)->getStatus() != STATUS_DEAD && (*j)->getStatus() != STATUS_UNCONSCIOUS && (*j)->getStatus() != STATUS_FALLING)
 		{
-				statePushNext(new UnitDieBState(this, (*j), DT_STUN, noSound));
+			
+			if (!murderer)
+			{
+				// fell unconscious from stun level
+				statePushNext(new UnitDieBState(this, (*j), DT_STUN, true));  // STR_HAS_BECOME_UNCONSCIOUS
+				// show a little infobox with the name of the unit and "... is panicking"
+				std::wstringstream ss;
+				ss << (*j)->getUnit()->getName(_parentState->getGame()->getLanguage()) << L'\n' << _parentState->getGame()->getLanguage()->getString("STR_HAS_BECOME_UNCONSCIOUS");
+				_parentState->getGame()->pushState(new InfoboxState(_parentState->getGame(), ss.str()));
+			}
+			else
+			{
+				statePushNext(new UnitDieBState(this, (*j), DT_STUN, true));
+			}
 		}
 	}
 
@@ -578,7 +594,7 @@ void BattlescapeGame::popState()
 
 	BattleAction action = _states.front()->getAction();
 
-	if (action.result.length() > 0 && _save->getSide() == FACTION_PLAYER && !dontSpendTUs())
+	if (action.result.length() > 0 && _save->getSide() == FACTION_PLAYER && _playerPanicHandled)
 	{
 		_parentState->warning(action.result);
 		actionFailed = true;
@@ -647,6 +663,15 @@ void BattlescapeGame::popState()
 		_save->setSelectedUnit(0);
 	}
 	_parentState->updateSoldierInfo();
+
+	// the unit became unconscious - show popup
+	if (action.actor && action.actor->getStatus() == STATUS_UNCONSCIOUS)
+	{
+		std::wstringstream ss;
+		ss << action.actor->getUnit()->getName(_parentState->getGame()->getLanguage()) << L'\n' << _parentState->getGame()->getLanguage()->getString("STR_HAS_BECOME_UNCONSCIOUS");
+		_parentState->getGame()->pushState(new InfoboxState(_parentState->getGame(), ss.str()));
+	}
+
 }
 
 /**

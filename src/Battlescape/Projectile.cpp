@@ -119,8 +119,9 @@ int Projectile::calculateTrajectory(double accuracy)
 	// aim at the center of the unit, the object, the walls or the floor (in that priority)
 	// if there is no LOF to the center, try elsewhere (more outward).
 	// Store this target voxel.
-	Tile *tile = _save->getTile(_action.target);
-	if (tile->getUnit() != 0)
+	Tile *targetTile = _save->getTile(_action.target);
+	int test = -1;
+	if (targetTile->getUnit() != 0)
 	{
 		if (_origin == _action.target)
 		{
@@ -130,39 +131,48 @@ int Projectile::calculateTrajectory(double accuracy)
 		else
 		{
 			// first try is at half the unit height
-			targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + tile->getUnit()->getUnit()->getStandHeight()/2);
-			targetVoxel.z += -tile->getTerrainLevel();
-			int test = _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, false, &_trajectory, bu);
+			targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + targetTile->getUnit()->getUnit()->getStandHeight()/2);
+			targetVoxel.z += -targetTile->getTerrainLevel();
+			test = _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, false, &_trajectory, bu);
+			Position hitPos = Position(_trajectory.at(0).x/16, _trajectory.at(0).y/16, _trajectory.at(0).z/24);
 			_trajectory.clear();
-			if (test != 4)
+			if (hitPos != targetTile->getPosition())
 			{
 				// did not hit a unit, try at different heights (for ex: unit behind a window can only be hit in the head)
-				targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + (tile->getUnit()->getUnit()->getStandHeight()*3)/4);
-				targetVoxel.z += -tile->getTerrainLevel();
-				test = _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, false, &_trajectory, bu);
-				_trajectory.clear();
+				targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + (targetTile->getUnit()->getUnit()->getStandHeight()*3)/4);
+				targetVoxel.z += -targetTile->getTerrainLevel();
 			}
 		}
 	}
-	else if (tile->getMapData(MapData::O_OBJECT) != 0)
+	else if (targetTile->getMapData(MapData::O_OBJECT) != 0)
 	{
 		targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + 10);
 	}
-	else if (tile->getMapData(MapData::O_NORTHWALL) != 0)
+	else if (targetTile->getMapData(MapData::O_NORTHWALL) != 0)
 	{
 		targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16, _action.target.z*24 + 10);
 	}
-	else if (tile->getMapData(MapData::O_WESTWALL) != 0)
+	else if (targetTile->getMapData(MapData::O_WESTWALL) != 0)
 	{
 		targetVoxel = Position(_action.target.x*16, _action.target.y*16 + 8, _action.target.z*24 + 10);
 	}
-	else if (tile->getMapData(MapData::O_FLOOR) != 0)
+	else if (targetTile->getMapData(MapData::O_FLOOR) != 0)
 	{
 		targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24);
 	}
 	else
 	{
-		return -1; // no line of fire
+		return -1; // no line of fire as there is nothing on this tile
+	}
+	test = _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, false, &_trajectory, bu);
+	if (test == 4 && _trajectory.size() > 0)
+	{
+		Position hitPos = Position(_trajectory.at(0).x/16, _trajectory.at(0).y/16, _trajectory.at(0).z/24);
+		_trajectory.clear();
+		if (hitPos != targetTile->getPosition())
+		{
+			return -1; // still no line of fire as we can't reach the target tile due to a unit blocking
+		}
 	}
 
 	// apply some accuracy modifiers (todo: calculate this)

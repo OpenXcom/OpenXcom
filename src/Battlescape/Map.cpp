@@ -242,7 +242,7 @@ void Map::drawTerrain(Surface *surface)
 		if (bulletPositionScreen.x < 0 || bulletPositionScreen.x > surface->getWidth() ||
 			bulletPositionScreen.y < 0 || bulletPositionScreen.y > _visibleMapHeight  )
 		{
-			_camera->centerOnPosition(Position(bulletLowX, bulletLowY, bulletLowZ));
+			_camera->centerOnPosition(Position(bulletLowX, bulletLowY, bulletLowZ), false);
 		}
 	}
 
@@ -572,7 +572,7 @@ void Map::drawTerrain(Surface *surface)
 			if (bulletPositionScreen.x < -_spriteWidth || bulletPositionScreen.x > surface->getWidth() ||
 				bulletPositionScreen.y < -_spriteHeight || bulletPositionScreen.y > surface->getHeight()  )
 			{
-				_camera->centerOnPosition(Position(voxelPos.x/16, voxelPos.y/16, voxelPos.z/24));
+				_camera->centerOnPosition(Position(voxelPos.x/16, voxelPos.y/16, voxelPos.z/24), false);
 			}
 		}
 		else

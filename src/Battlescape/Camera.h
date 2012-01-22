@@ -77,7 +77,7 @@ public:
 	void convertVoxelToScreen(const Position &voxelPos, Position *screenPos) const;
 	void convertScreenToMap(int screenX, int screenY, int *mapX, int *mapY) const;
 	/// Center map on a unit.
-	void centerOnPosition(const Position &pos);
+	void centerOnPosition(const Position &pos, bool redraw = true);
 	/// Check if the camera was following a bullet.
 	bool didCameraFollow();
 	/// Get the map displayed level

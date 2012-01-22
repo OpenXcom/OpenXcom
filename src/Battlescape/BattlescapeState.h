@@ -153,8 +153,6 @@ public:
 	void handle(Action *action);
 	/// Displays a popup window.
 	void popup(State *state);
-	/// Check whether TUs should be spent.
-	bool dontSpendTUs();
 	/// Finishes a battle.
 	void finishBattle(bool abort);
 
