@@ -148,6 +148,8 @@
 		<Unit filename="Battlescape\ExplosionBState.h" />
 		<Unit filename="Battlescape\InfoboxState.cpp" />
 		<Unit filename="Battlescape\InfoboxState.h" />
+		<Unit filename="Battlescape\InfoboxOKState.cpp" />
+		<Unit filename="Battlescape\InfoboxOKState.h" />
 		<Unit filename="Battlescape\Inventory.cpp" />
 		<Unit filename="Battlescape\Inventory.h" />
 		<Unit filename="Battlescape\InventoryState.cpp" />

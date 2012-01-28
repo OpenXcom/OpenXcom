@@ -626,8 +626,6 @@ void BattlescapeState::btnVisibleUnitClick(Action *action)
 {
 	int btnID = -1;
 
-	_battleGame->cancelCurrentAction();
-
 	// got to find out which button was pressed
 	for (int i = 0; i < 10 && btnID == -1; ++i)
 	{

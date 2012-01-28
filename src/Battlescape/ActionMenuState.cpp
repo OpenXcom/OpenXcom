@@ -94,7 +94,7 @@ ActionMenuState::ActionMenuState(Game *game, BattleAction *action, int x, int y)
 	if (_action->weapon->getRules()->getAccuracyAuto() != 0)
 	{
 		tu = _action->actor->getActionTUs(BA_AUTOSHOT, _action->weapon);
-		ss1 << strAcc.c_str() << (int)floor(_action->actor->getFiringAccuracy(_action->weapon->getRules()->getAccuracyAuto()) * 100) << "%";
+		ss1 << strAcc.c_str() << (int)floor(_action->actor->getFiringAccuracy(BA_AUTOSHOT, _action->weapon) * 100) << "%";
 		ss2 << strTU.c_str() << tu;
 		_actionMenu[id]->setAction(BA_AUTOSHOT, _game->getLanguage()->getString("STR_AUTO_SHOT"), ss1.str(), ss2.str(), tu);
 		_actionMenu[id]->setVisible(true);
@@ -105,7 +105,7 @@ ActionMenuState::ActionMenuState(Game *game, BattleAction *action, int x, int y)
 	if (_action->weapon->getRules()->getAccuracySnap() != 0)
 	{
 		tu = _action->actor->getActionTUs(BA_SNAPSHOT, _action->weapon);
-		ss1 << strAcc.c_str() << (int)floor(_action->actor->getFiringAccuracy(_action->weapon->getRules()->getAccuracySnap()) * 100) << "%";
+		ss1 << strAcc.c_str() << (int)floor(_action->actor->getFiringAccuracy(BA_SNAPSHOT, _action->weapon) * 100) << "%";
 		ss2 << strTU.c_str() << tu;
 		_actionMenu[id]->setAction(BA_SNAPSHOT, _game->getLanguage()->getString("STR_SNAP_SHOT"), ss1.str(), ss2.str(), tu);
 		_actionMenu[id]->setVisible(true);
@@ -116,7 +116,7 @@ ActionMenuState::ActionMenuState(Game *game, BattleAction *action, int x, int y)
 	if (_action->weapon->getRules()->getAccuracyAimed() != 0)
 	{
 		tu = _action->actor->getActionTUs(BA_AIMEDSHOT, _action->weapon);
-		ss1 << strAcc.c_str() << (int)floor(_action->actor->getFiringAccuracy(_action->weapon->getRules()->getAccuracyAimed()) * 100) << "%";
+		ss1 << strAcc.c_str() << (int)floor(_action->actor->getFiringAccuracy(BA_AIMEDSHOT, _action->weapon) * 100) << "%";
 		ss2 << strTU.c_str() << tu;
 		_actionMenu[id]->setAction(BA_AIMEDSHOT, _game->getLanguage()->getString("STR_AIMED_SHOT"), ss1.str(), ss2.str(), tu);
 		_actionMenu[id]->setVisible(true);

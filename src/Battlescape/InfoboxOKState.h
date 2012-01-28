@@ -16,41 +16,39 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_PROJECTILEFLYBSTATE_H
-#define OPENXCOM_PROJECTILEFLYBSTATE_H
+#ifndef OPENXCOM_INFOBOXOKSTATE_H
+#define OPENXCOM_INFOBOXOKSTATE_H
 
-#include "BattleState.h"
-#include "Position.h"
+#include "../Engine/State.h"
+#include <string>
 
 namespace OpenXcom
 {
 
-class BattlescapeGame;
-class BattleUnit;
-class BattleItem;
+class TextButton;
+class Window;
+class Text;
 
-class ProjectileFlyBState : public BattleState
+/**
+ * Notifies the player about things like soldiers going unconscious or dying from wounds.
+ */
+class InfoboxOKState : public State
 {
 private:
-	BattleUnit *_unit;
-	BattleItem *_ammo;
-	BattleItem *_projectileItem;
-	int _autoshotCounter;
-	int _projectileImpact;
-	void createNewProjectile();
-	bool _initialized;
+	TextButton *_btnOk;
+	Window *_window;
+	Text *_txtTitle;
+	std::wstring _name;
+	std::string _message;
 public:
-	/// Creates a new ProjectileFly class
-	ProjectileFlyBState(BattlescapeGame *parent, BattleAction action);
-	/// Cleans up the ProjectileFly.
-	~ProjectileFlyBState();
-	/// Initializes the state.
+	/// Creates the InfoboxOKState.
+	InfoboxOKState(Game *game, std::wstring name, std::string message);
+	/// Cleans up the InfoboxOKState.
+	~InfoboxOKState();
+	/// Updates the palette.
 	void init();
-	/// Handles a cancels request.
-	void cancel();
-	/// Runs state functionality every cycle.
-	void think();
-	static bool validThrowRange(BattleAction *action);
+	/// Handler for clicking the OK button.
+	void btnOkClick(Action *action);
 };
 
 }

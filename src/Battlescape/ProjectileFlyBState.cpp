@@ -101,24 +101,8 @@ void ProjectileFlyBState::init()
 			return;
 		}
 	}
-
-	// autoshot will default back to snapshot if it's not possible
-	if (weapon->getRules()->getAccuracyAuto() == 0 && _action.type == BA_AUTOSHOT)
-		_action.type = BA_SNAPSHOT;
-
-	// action specific initialisation
-	switch (_action.type)
+	else
 	{
-	case BA_AUTOSHOT:
-		_baseAcc = weapon->getRules()->getAccuracyAuto();
-		break;
-	case BA_SNAPSHOT:
-		_baseAcc = weapon->getRules()->getAccuracySnap();
-		break;
-	case BA_AIMEDSHOT:
-		_baseAcc = weapon->getRules()->getAccuracyAimed();
-		break;
-	case BA_THROW:
 		if (!validThrowRange(&_action))
 		{
 			// out of range
@@ -126,12 +110,12 @@ void ProjectileFlyBState::init()
 			_parent->popState();
 			return;
 		}
-		_baseAcc = (int)(_unit->getThrowingAccuracy()*100.0);
 		_projectileItem = weapon;
-		break;
-	default:
-		_baseAcc = 0;
 	}
+
+	// autoshot will default back to snapshot if it's not possible
+	if (weapon->getRules()->getAccuracyAuto() == 0 && _action.type == BA_AUTOSHOT)
+		_action.type = BA_SNAPSHOT;
 
 	createNewProjectile();
 
@@ -164,7 +148,7 @@ void ProjectileFlyBState::createNewProjectile()
 	_projectileImpact = -1;
 	if (_action.type == BA_THROW)
 	{
-		if (projectile->calculateThrow(_baseAcc))
+		if (projectile->calculateThrow(_unit->getThrowingAccuracy()))
 		{
 			_projectileItem->moveToOwner(0);
 			_unit->setCache(0);
@@ -184,7 +168,7 @@ void ProjectileFlyBState::createNewProjectile()
 	}
 	else
 	{
-		_projectileImpact = projectile->calculateTrajectory(_unit->getFiringAccuracy(_baseAcc));
+		_projectileImpact = projectile->calculateTrajectory(_unit->getFiringAccuracy(_action.type, _action.weapon));
 		if (_projectileImpact != -1)
 		{
 				// set the soldier in an aiming position

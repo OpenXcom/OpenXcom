@@ -41,19 +41,6 @@ namespace OpenXcom
  */
 UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDamageType damageType, bool noSound) : BattleState(parent), _unit(unit), _damageType(damageType), _noSound(noSound)
 {
-	
-}
-
-/**
- * Deletes the UnitDieBState.
- */
-UnitDieBState::~UnitDieBState()
-{
-
-}
-
-void UnitDieBState::init()
-{
 	// don't show the "fall to death" animation when a unit is blasted with explosives or he is already unconscious
 	if (_damageType == DT_HE || _unit->getStatus() == STATUS_UNCONSCIOUS)
 	{
@@ -68,7 +55,20 @@ void UnitDieBState::init()
 		_parent->getMap()->getCamera()->centerOnPosition(_unit->getPosition());
 		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
 		_unit->lookAt(3);
-	}
+	}	
+}
+
+/**
+ * Deletes the UnitDieBState.
+ */
+UnitDieBState::~UnitDieBState()
+{
+
+}
+
+void UnitDieBState::init()
+{
+
 	if (!_noSound)
 	{
 		Soldier *s = dynamic_cast<Soldier*>(_unit->getUnit());
