@@ -150,6 +150,8 @@ openxcom_SOURCES = \
 	src/Battlescape/ExplosionBState.h \
 	src/Battlescape/Explosion.cpp \
 	src/Battlescape/Explosion.h \
+	src/Battlescape/InfoboxOKState.cpp \
+	src/Battlescape/InfoboxOKState.h \
 	src/Battlescape/Inventory.cpp \
 	src/Battlescape/Inventory.h \
 	src/Battlescape/InventoryState.cpp \
@@ -172,10 +174,12 @@ openxcom_SOURCES = \
 	src/Battlescape/Position.h \
 	src/Battlescape/PrimeGrenadeState.cpp \
 	src/Battlescape/PrimeGrenadeState.h \
-	src/Battlescape/Projectile.cpp \
 	src/Battlescape/ProjectileFlyBState.cpp \
 	src/Battlescape/ProjectileFlyBState.h \
+	src/Battlescape/Projectile.cpp \
 	src/Battlescape/Projectile.h \
+	src/Battlescape/PromotionsState.cpp \
+	src/Battlescape/PromotionsState.h \
 	src/Battlescape/UnitInfoState.cpp \
 	src/Battlescape/UnitInfoState.h \
 	src/Battlescape/UnitSprite.cpp \
