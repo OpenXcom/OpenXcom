@@ -126,6 +126,8 @@ openxcom_SOURCES = \
 	src/Battlescape/AggroBAIState.h \
 	src/Battlescape/BattleAIState.cpp \
 	src/Battlescape/BattleAIState.h \
+	src/Battlescape/BattlescapeGame.cpp \
+	src/Battlescape/BattlescapeGame.h \
 	src/Battlescape/BattlescapeGenerator.cpp \
 	src/Battlescape/BattlescapeGenerator.h \
 	src/Battlescape/BattlescapeMessage.cpp \
