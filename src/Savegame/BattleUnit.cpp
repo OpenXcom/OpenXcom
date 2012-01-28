@@ -1040,7 +1040,7 @@ int BattleUnit::getFatalWounds() const
  */
 double BattleUnit::getReactionScore() const
 {
-	//(Reactions Stat) � (Current Time Units / Max TUs)
+	//(Reactions Stat) x (Current Time Units / Max TUs)
 	double score = ((double)_unit->getReactions() * (double)getTimeUnits()) / (double)_unit->getTimeUnits();
 	return score;
 }
