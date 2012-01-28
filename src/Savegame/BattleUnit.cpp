@@ -554,6 +554,7 @@ void BattleUnit::setCache(Surface *cache, int part)
  */
 Surface *BattleUnit::getCache(bool *invalid, int part) const
 {
+        if (part < 0) part = 0;
 	*invalid = _cacheInvalid;
 	return _cache[part];
 }
@@ -1039,7 +1040,7 @@ int BattleUnit::getFatalWounds() const
  */
 double BattleUnit::getReactionScore() const
 {
-	//(Reactions Stat) × (Current Time Units / Max TUs)
+	//(Reactions Stat) ï¿½ (Current Time Units / Max TUs)
 	double score = ((double)_unit->getReactions() * (double)getTimeUnits()) / (double)_unit->getTimeUnits();
 	return score;
 }
