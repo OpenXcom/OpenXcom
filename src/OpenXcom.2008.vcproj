@@ -836,6 +836,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Battlescape\InfoboxOKState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\InfoboxOKState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Battlescape\Inventory.cpp"
 				>
 			</File>

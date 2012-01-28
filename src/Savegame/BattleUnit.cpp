@@ -947,19 +947,37 @@ void BattleUnit::clearVisibleUnits()
 /**
  * Calculate firing accuracy.
  * Formula = accuracyStat * weaponAccuracy * kneelingbonus(1.15) * one-handPenalty(0.8) * woundsPenalty(% health) * critWoundsPenalty (-10%/wound)
- * @param weaponAccuracy
+ * @param actionType
+ * @param item
  * @return firing Accuracy
  */
-double BattleUnit::getFiringAccuracy(int weaponAccuracy) const
+double BattleUnit::getFiringAccuracy(BattleActionType actionType, BattleItem *item) const
 {
-	double result = (double)(_unit->getFiringAccuracy()/100.0);
+	double result = (double)(_unit->getFiringAccuracy() / 100.0);
 
-	result *= (double)(weaponAccuracy/100.0);
+	double weaponAcc = item->getRules()->getAccuracySnap();
+	if (actionType == BA_AIMEDSHOT)
+		weaponAcc = item->getRules()->getAccuracyAimed();
+	if (actionType == BA_AUTOSHOT)
+		weaponAcc = item->getRules()->getAccuracyAuto();
+
+	result *= (double)(weaponAcc/100.0);
 
 	if (_kneeled)
 		result *= 1.15;
 
+	if (item->getRules()->getTwoHanded())
+	{
+		// two handed weapon, means one hand should be empty
+		if (getItem("STR_RIGHT_HAND") != 0 && getItem("STR_LEFT_HAND") != 0)
+		{
+			result *= 0.80;
+		}
+	}
+
 	result *= ((double)_health/(double)_unit->getHealth());
+
+	result *= 1 + (-0.1*getFatalWounds());
 
 	return result;
 }

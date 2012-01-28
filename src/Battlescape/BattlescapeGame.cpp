@@ -73,6 +73,7 @@
 #include "DebriefingState.h"
 #include "../Engine/RNG.h"
 #include "InfoboxState.h"
+#include "InfoboxOKState.h"
 #include "MiniMapState.h"
 
 namespace OpenXcom
@@ -416,14 +417,12 @@ bool BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 						// no murderer, and no terrain explosion, must be fatal wounds
 						statePushNext(new UnitDieBState(this, (*j), DT_AP, false));  // STR_HAS_DIED_FROM_A_FATAL_WOUND
 						// show a little infobox with the name of the unit and "... is panicking"
-						std::wstringstream ss;
-						ss << (*j)->getUnit()->getName(_parentState->getGame()->getLanguage()) << L'\n' << _parentState->getGame()->getLanguage()->getString("STR_HAS_DIED_FROM_A_FATAL_WOUND");
-						_parentState->getGame()->pushState(new InfoboxState(_parentState->getGame(), ss.str()));
+						_parentState->getGame()->pushState(new InfoboxOKState(_parentState->getGame(), (*j)->getUnit()->getName(_parentState->getGame()->getLanguage()), "STR_HAS_DIED_FROM_A_FATAL_WOUND"));
 					}
 				}
 			}
 		}
-		else if ((*j)->getStunlevel() >= (*j)->getHealth() && (*j)->getStatus() != STATUS_DEAD && (*j)->getStatus() != STATUS_UNCONSCIOUS && (*j)->getStatus() != STATUS_FALLING)
+		else if ((*j)->getStunlevel() >= (*j)->getHealth() && (*j)->getStatus() != STATUS_DEAD && (*j)->getStatus() != STATUS_UNCONSCIOUS && (*j)->getStatus() != STATUS_FALLING && (*j)->getStatus() != STATUS_TURNING)
 		{
 			
 			if (!murderer)
@@ -431,9 +430,7 @@ bool BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 				// fell unconscious from stun level
 				statePushNext(new UnitDieBState(this, (*j), DT_STUN, true));  // STR_HAS_BECOME_UNCONSCIOUS
 				// show a little infobox with the name of the unit and "... is panicking"
-				std::wstringstream ss;
-				ss << (*j)->getUnit()->getName(_parentState->getGame()->getLanguage()) << L'\n' << _parentState->getGame()->getLanguage()->getString("STR_HAS_BECOME_UNCONSCIOUS");
-				_parentState->getGame()->pushState(new InfoboxState(_parentState->getGame(), ss.str()));
+				_parentState->getGame()->pushState(new InfoboxOKState(_parentState->getGame(), (*j)->getUnit()->getName(_parentState->getGame()->getLanguage()), "STR_HAS_BECOME_UNCONSCIOUS"));
 			}
 			else
 			{
@@ -594,7 +591,7 @@ void BattlescapeGame::popState()
 
 	BattleAction action = _states.front()->getAction();
 
-	if (action.result.length() > 0 && _save->getSide() == FACTION_PLAYER && _playerPanicHandled)
+	if (action.result.length() > 0 && action.actor->getFaction() == FACTION_PLAYER && _playerPanicHandled)
 	{
 		_parentState->warning(action.result);
 		actionFailed = true;
@@ -769,8 +766,11 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 			BattleAction ba;
 			ba.actor = unit;
 			ba.target = Position(unit->getPosition().x + RNG::generate(-5,5), unit->getPosition().y + RNG::generate(-5,5), unit->getPosition().z);
-			_save->getPathfinding()->calculate(ba.actor, ba.target);
-			statePushBack(new UnitWalkBState(this, ba));
+			if (_save->getTile(ba.target)) // only walk towards it when the place exists
+			{
+				_save->getPathfinding()->calculate(ba.actor, ba.target);
+				statePushBack(new UnitWalkBState(this, ba));
+			}
 		}
 		break;
 	case STATUS_BERSERK: // berserk - do some weird turning around and then aggro towards an enemy unit or shoot towards random place

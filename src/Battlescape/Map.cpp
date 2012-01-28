@@ -415,7 +415,7 @@ void Map::drawTerrain(Surface *surface)
 									{
 										Position voxelPos = _projectile->getPosition(1-i);
 										if (voxelPos.x / 16 == mapPosition.x &&
-											voxelPos.y / 16 == mapPosition.y )
+											voxelPos.y / 16 == mapPosition.y)
 										{
 											_camera->convertVoxelToScreen(voxelPos, &bulletPositionScreen);
 											_bullet[_projectile->getParticle(i)]->blitNShade(surface, bulletPositionScreen.x, bulletPositionScreen.y, 0);

@@ -180,7 +180,7 @@ public:
 	/// Clear visible units.
 	void clearVisibleUnits();
 	/// Calculate firing accuracy.
-	double getFiringAccuracy(int baseAccuracy) const;
+	double getFiringAccuracy(BattleActionType actionType, BattleItem *item) const;
 	/// Calculate throwing accuracy.
 	double getThrowingAccuracy() const;
 	/// Set armor value.

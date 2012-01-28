@@ -168,12 +168,13 @@ int Projectile::calculateTrajectory(double accuracy)
 	if (test == 4 && _trajectory.size() > 0)
 	{
 		Position hitPos = Position(_trajectory.at(0).x/16, _trajectory.at(0).y/16, _trajectory.at(0).z/24);
-		_trajectory.clear();
 		if (hitPos != targetTile->getPosition())
 		{
+			_trajectory.clear();
 			return -1; // still no line of fire as we can't reach the target tile due to a unit blocking
 		}
 	}
+	_trajectory.clear();
 
 	// apply some accuracy modifiers (todo: calculate this)
 	// This will results in a new target voxel
@@ -234,11 +235,11 @@ bool Projectile::calculateThrow(double accuracy)
 	}
 
 	// apply some accuracy modifiers
-	if (accuracy > 100)
-		accuracy = 100;
+	if (accuracy > 1)
+		accuracy = 1;
 	static const double maxDeviation = 0.08;
 	static const double minDeviation = 0;
-	double baseDeviation = (maxDeviation - (maxDeviation * accuracy / 100.0)) + minDeviation;
+	double baseDeviation = (maxDeviation - (maxDeviation * accuracy)) + minDeviation;
 	double deviation = RNG::boxMuller(0, baseDeviation);
 
 	_trajectory.clear();

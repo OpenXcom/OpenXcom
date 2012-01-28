@@ -138,6 +138,8 @@ set ( battlescape_src
   Battlescape/DebriefingState.h
   Battlescape/InfoboxState.cpp
   Battlescape/InfoboxState.h
+  Battlescape/InfoboxOKState.cpp
+  Battlescape/InfoboxOKState.h
   Battlescape/TileEngine.cpp
   Battlescape/TileEngine.h
   Battlescape/MiniMapView.h

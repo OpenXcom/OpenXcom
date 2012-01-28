@@ -632,6 +632,9 @@
     <ClCompile Include="Battlescape\BattlescapeGame.cpp">
       <Filter>Battlescape</Filter>
     </ClCompile>
+    <ClCompile Include="Battlescape\InfoboxOKState.cpp">
+      <Filter>Battlescape</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1264,6 +1267,9 @@
       <Filter>Battlescape</Filter>
     </ClInclude>
     <ClInclude Include="Battlescape\BattlescapeGame.h">
+      <Filter>Battlescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Battlescape\InfoboxOKState.h">
       <Filter>Battlescape</Filter>
     </ClInclude>
   </ItemGroup>

@@ -91,7 +91,7 @@ void MiniMapView::draw()
 					data = t->getMapData(i);
 
 					Surface * s = 0;
-					if(data)
+					if(data && data->getMiniMapIndex())
 					{
 						s = _set->getFrame (data->getMiniMapIndex()+35);
 					}
