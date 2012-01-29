@@ -22,6 +22,7 @@
 #include <vector>
 #include <string>
 #include "yaml.h"
+#include "MapBlock.h"
 
 namespace OpenXcom
 {
@@ -30,7 +31,6 @@ class MapBlock;
 class MapDataSet;
 class MapData;
 class Ruleset;
-enum MapBlockType;
 
 /**
  * Represents a specific type of Battlescape Terrain.
