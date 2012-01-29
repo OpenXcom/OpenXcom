@@ -40,6 +40,7 @@ private:
 	int _size, _buildCost, _buildTime, _monthlyCost;
 	int _storage, _personnel, _aliens, _crafts, _labs, _workshops, _psiLabs;
 	int _radarRange, _radarChance, _defence, _hitRatio;
+	std::string _mapName;
 public:
 	/// Creates a blank facility ruleset.
 	RuleBaseFacility(const std::string &type);
@@ -135,6 +136,10 @@ public:
 	int getHitRatio() const;
 	/// Sets the facility's weapon hit ratio.
 	void setHitRatio(int ratio);
+	/// Gets the facility's battlescape map name.
+	std::string getMapName() const;
+	/// Sets the facility's battlescape map name.
+	void setMapName(const std::string &name);
 };
 
 }

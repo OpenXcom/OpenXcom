@@ -135,6 +135,10 @@ void RuleBaseFacility::load(const YAML::Node &node)
 		{
 			i.second() >> _hitRatio;
 		}
+		else if (key == "mapName")
+		{
+			i.second() >> _mapName;
+		}
 	}
 }
 
@@ -167,6 +171,7 @@ void RuleBaseFacility::save(YAML::Emitter &out) const
 	out << YAML::Key << "radarChance" << YAML::Value << _radarChance;
 	out << YAML::Key << "defence" << YAML::Value << _defence;
 	out << YAML::Key << "hitRatio" << YAML::Value << _hitRatio;
+	out << YAML::Key << "mapName" << YAML::Value << _mapName;
 	out << YAML::EndMap;
 }
 
@@ -593,6 +598,26 @@ int RuleBaseFacility::getHitRatio() const
 void RuleBaseFacility::setHitRatio(int ratio)
 {
 	_hitRatio = ratio;
+}
+
+/**
+ * Returns the battlescape map block name for this facility
+ * to construct the base defense mission map.
+ * @return Ratio in percentage.
+ */
+std::string RuleBaseFacility::getMapName() const
+{
+	return _mapName;
+}
+
+/**
+ * Changes the hit ratio of this facility's weaponry
+ * against UFO invasions on the base.
+ * @param ratio Ratio in percentage.
+ */
+void RuleBaseFacility::setMapName(const std::string &name)
+{
+	_mapName = name;
 }
 
 }

@@ -182,11 +182,6 @@ void PatrolBAIState::think(BattleAction *action)
 		{
 			_unit->turn();
 		}
-		bool unitspotted = _game->getTileEngine()->calculateFOV(_unit);
-		if (unitspotted)
-		{
-			_unit->setAIState(new AggroBAIState(_game, _unit));
-		}
 	}
 	else
 	{

@@ -38,6 +38,7 @@ class RuleGenUnit;
 class RuleAlienRace;
 class RuleAlienDeployment;
 class Game;
+class Base;
 
 /**
  * A utility class that generates the initial battlescape data. Taking into account mission type, craft and ufo involved, terrain type,...
@@ -50,6 +51,7 @@ private:
 	ResourcePack *_res;
 	Craft *_craft;
 	Ufo *_ufo;
+	Base *_base;
 	RuleTerrain *_terrain;
 	int _width, _length, _height;
 	int _worldTexture, _worldShade;
@@ -63,11 +65,10 @@ private:
 	/// links tiles with terrainobjects, for easier/faster lookup
 	void linkTilesWithMapDatas();
 	/// Add a soldier to the game
-	void addSoldier(Soldier *soldier);
+	BattleUnit *addXCOMUnit(BattleUnit *unit);
 	/// Add an alien to the game
 	BattleUnit *addAlien(RuleGenUnit *rules, int alienRank, bool outside);
 	BattleUnit *addCivilian(RuleGenUnit *rules);
-	BattleUnit *addVehicle(RuleGenUnit *rules);
 	/// Add an item to the game
 	void addItem(RuleItem *item);
 	// Add an item to a unit
@@ -95,6 +96,8 @@ public:
 	void setAlienRace(std::string alienRace);
 	/// Set the alien item level.
 	void setAlienItemlevel(int alienItemLevel);
+	/// Sets the xcom base.
+	void setBase(Base *base);
 	/// Runs the generator.
 	void run();
 

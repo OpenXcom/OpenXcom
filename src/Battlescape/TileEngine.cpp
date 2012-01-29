@@ -222,6 +222,9 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 
 	unit->clearVisibleUnits();
 
+	if (unit->isOut())
+		return false;
+
 	for (int x = 0; x <= MAX_VIEW_DISTANCE; ++x)
 	{
 		if (unit->getDirection()%2)
@@ -271,7 +274,24 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 	for (std::vector<BattleUnit*>::iterator i = unit->getVisibleUnits()->begin(); i != unit->getVisibleUnits()->end(); ++i)
 		newChecksum += (*i)->getId()+1;
 
-	return visibleUnitsChecksum < newChecksum;
+	if (visibleUnitsChecksum < newChecksum && unit->getVisibleUnits()->size())
+	{
+		// a hostile unit will aggro on the new unit if it sees one - it will not start walking
+		if (unit->getFaction() == FACTION_HOSTILE)
+		{
+			AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(unit->getCurrentAIState());
+			if (aggro == 0)
+			{
+				aggro = new AggroBAIState(_save, unit);
+				unit->setAIState(aggro);
+			}
+			aggro->setAggroTarget(unit->getVisibleUnits()->at(0)); // just pick the first one - maybe we need to prioritze on distance to unit or other parameters?
+		}
+
+		return true;
+	}
+
+	return false;
 
 }
 
@@ -405,6 +425,18 @@ bool TileEngine::checkReactionFire(BattleUnit *unit, BattleAction *action, Battl
 			recalculateFOV = true;
 			potentialVictim->turn();
 		}
+		// if the potentialVictim is hostile, he will aggro if he wasn't already or at least change aggro target
+		if (potentialVictim->getFaction() == FACTION_HOSTILE)
+		{
+			AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(potentialVictim->getCurrentAIState());
+			if (aggro == 0)
+			{
+				aggro = new AggroBAIState(_save, potentialVictim);
+				potentialVictim->setAIState(aggro);
+			}
+			aggro->setAggroTarget(unit);
+		}
+
 	}
 
 	// we reset the unit to false here - if it is seen by any unit in range below the unit becomes visible again
@@ -430,7 +462,7 @@ bool TileEngine::checkReactionFire(BattleUnit *unit, BattleAction *action, Battl
 		}
 	}
 
-	if (action->actor && highestReactionScore > unit->getReactionScore())
+	if (action->actor /*&& highestReactionScore > unit->getReactionScore()*/)
 	{
 		action->actor->addReactionExp();
 		action->type = BA_SNAPSHOT;
@@ -452,17 +484,6 @@ bool TileEngine::checkReactionFire(BattleUnit *unit, BattleAction *action, Battl
 					unit->setAIState(aggro);
 				}
 				aggro->setAggroTarget(action->actor);
-			}
-			// if the shooter is hostile, he will aggro if he wasn't already
-			if (action->actor->getFaction() == FACTION_HOSTILE)
-			{
-				AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(action->actor->getCurrentAIState());
-				if (aggro == 0)
-				{
-					aggro = new AggroBAIState(_save, action->actor);
-					action->actor->setAIState(aggro);
-				}
-				aggro->setAggroTarget(unit);
 			}
 			return true;
 		}
@@ -795,35 +816,15 @@ int TileEngine::blockage(Tile *tile, const int part, ItemDamageType type)
 
 	if (tile == 0) return 0; // probably outside the map here
 
-	if (part == MapData::O_FLOOR && tile->getMapData(MapData::O_FLOOR))
+	if (tile->getMapData(part))
 	{
-		// blockage modifiers for effect of explosions on floors is somewhat calculate from armor
-		// because we don't have HE block data on floors.
-		// If the tile has no DIEMCD it means the floor is already semi-destroyed, so it's not blocking a lot anymore
-		if (type == DT_HE)
-		{
-			if (tile->getMapData(MapData::O_FLOOR)->getDieMCD() || tile->getMapData(MapData::O_FLOOR)->getArmor() == 255)
-				blockage += tile->getMapData(MapData::O_FLOOR)->getArmor() * 2;
-			else
-				blockage += tile->getMapData(MapData::O_FLOOR)->getArmor() / 10;
-		}
-		else
-		{
-			blockage += 255;
-		}
+		blockage += tile->getMapData(part)->getBlock(type);
 	}
-	else
-	{
-		if (tile->getMapData(part))
-		{
-			blockage += tile->getMapData(part)->getBlock(type);
-		}
 
-		// open ufo doors are actually still closed behind the scenes
-		// so a special trick is needed to see if they are open, if they are, they obviously don't block anything
-		if (tile->isUfoDoorOpen(part))
-			blockage = 0;
-	}
+	// open ufo doors are actually still closed behind the scenes
+	// so a special trick is needed to see if they are open, if they are, they obviously don't block anything
+	if (tile->isUfoDoorOpen(part))
+		blockage = 0;
 
 	return blockage;
 }
@@ -876,6 +877,10 @@ int TileEngine::unitOpensDoor(BattleUnit *unit)
 					if (tile) tile->openDoor(MapData::O_NORTHWALL);
 					tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(-1, 0, 0));
 					if (tile) tile->openDoor(MapData::O_NORTHWALL);
+					tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(2, 0, 0));
+					if (tile) tile->openDoor(MapData::O_NORTHWALL);
+					tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(-2, 0, 0));
+					if (tile) tile->openDoor(MapData::O_NORTHWALL);
 				}
 			}
 			if ((unit->getDirection() == 2 || unit->getDirection() == 1 || unit->getDirection() == 3) && door == -1) // east, northeast or southeast
@@ -888,6 +893,10 @@ int TileEngine::unitOpensDoor(BattleUnit *unit)
 					tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(1, 1, 0));
 					if (tile) tile->openDoor(MapData::O_WESTWALL);
 					tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(1, -1, 0));
+					if (tile) tile->openDoor(MapData::O_WESTWALL);
+					tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(1, 2, 0));
+					if (tile) tile->openDoor(MapData::O_WESTWALL);
+					tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(1, -2, 0));
 					if (tile) tile->openDoor(MapData::O_WESTWALL);
 				}
 			}
@@ -902,6 +911,10 @@ int TileEngine::unitOpensDoor(BattleUnit *unit)
 					if (tile) tile->openDoor(MapData::O_NORTHWALL);
 					tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(-1, 1, 0));
 					if (tile) tile->openDoor(MapData::O_NORTHWALL);
+					tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(2, 1, 0));
+					if (tile) tile->openDoor(MapData::O_NORTHWALL);
+					tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(-2, 1, 0));
+					if (tile) tile->openDoor(MapData::O_NORTHWALL);
 				}
 			}
 			if ((unit->getDirection() == 6 || unit->getDirection() == 5 || unit->getDirection() == 7) && door == -1) // west, southwest or northwest
@@ -914,6 +927,10 @@ int TileEngine::unitOpensDoor(BattleUnit *unit)
 					if (tile) tile->openDoor(MapData::O_WESTWALL);
 					tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(0, -1, 0));
 					if (tile) tile->openDoor(MapData::O_WESTWALL);
+					tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(0, 2, 0));
+					if (tile) tile->openDoor(MapData::O_WESTWALL);
+					tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(0, -2, 0));
+					if (tile) tile->openDoor(MapData::O_WESTWALL);
 				}
 			}
 		}
@@ -922,7 +939,7 @@ int TileEngine::unitOpensDoor(BattleUnit *unit)
 
 	if (door == 0 || door == 1)
 	{
-		_save->getTileEngine()->calculateFOV(unit->getPosition());
+		calculateFOV(unit->getPosition());
 	}
 
 	return door;

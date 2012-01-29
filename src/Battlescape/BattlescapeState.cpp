@@ -323,8 +323,6 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_gameTimer->onTimer((StateHandler)&BattlescapeState::handleState);
 	_gameTimer->start();
 
-	_map->getCamera()->centerOnPosition(_save->getSelectedUnit()->getPosition());
-
 	_battleGame = new BattlescapeGame(_save, this);
 }
 

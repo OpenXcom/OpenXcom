@@ -25,7 +25,6 @@
 #include "Map.h"
 #include "Camera.h"
 #include "BattleAIState.h"
-#include "AggroBAIState.h"
 #include "ExplosionBState.h"
 #include "../Engine/Game.h"
 #include "../Savegame/BattleUnit.h"
@@ -205,16 +204,6 @@ void UnitWalkBState::think()
 		if (unitspotted)
 		{
 			_pf->abortPath();
-
-			// a hostile unit will aggro on the new unit if it sees one - it will not start walking
-			if (_unit->getFaction() == FACTION_HOSTILE)
-			{
-				AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(_unit->getCurrentAIState());
-				if (aggro == 0)
-				{
-					_unit->setAIState(new AggroBAIState(_parent->getSave(), _unit));
-				}
-			}
 			return;
 		}
 

@@ -72,6 +72,7 @@ private:
 	void endTurn();
 	bool handlePanickingPlayer();
 	bool handlePanickingUnit(BattleUnit *unit);
+	bool noActionsPending(BattleUnit *bu);
 public:
 	/// Creates the BattlescapeGame state.
 	BattlescapeGame(SavedBattleGame *save, BattlescapeState *parentState);

@@ -227,7 +227,6 @@ void Inventory::drawItems()
 			// note that you can make items invisible by setting their width or height to 0 (for example used with tank corpse items)
 			if ((*i) == _selItem || (*i)->getSlotX() < _groundOffset || (*i)->getRules()->getInventoryHeight() == 0 || (*i)->getRules()->getInventoryWidth() == 0)
 				continue;
-
 			Surface *frame = texture->getFrame((*i)->getRules()->getBigSprite());
 			frame->setX((*i)->getSlot()->getX() + ((*i)->getSlotX() - _groundOffset) * RuleInventory::SLOT_W);
 			frame->setY((*i)->getSlot()->getY() + (*i)->getSlotY() * RuleInventory::SLOT_H);
