@@ -95,12 +95,12 @@ Bugfixes:
 - Various UI issues.
 - Various translation issues.
 - Bug in craft rearming.
-- FPS Counter didn’t always show up properly.
-- Crash sites didn’t vanish properly.
+- FPS Counter didn't always show up properly.
+- Crash sites didn't vanish properly.
 - Failing to load a game could crash the Geoscape.
-- Games weren’t always saved properly.
-- Monthly report didn’t show correct date.
-- Crafts in base view weren’t positioned correctly.
+- Games weren't always saved properly.
+- Monthly report didn't show correct date.
+- Crafts in base view weren't positioned correctly.
 - Music loading issues.
 - Various battlescape fixes.
 - Various performance improvements.
