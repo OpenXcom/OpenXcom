@@ -239,6 +239,20 @@ void MapDataSet::load(ResourcePack *res)
 
 	mapFile.close();
 
+	// process the mapdataset to put block values on floortiles (as we don't have em in UFO)
+	for (std::vector<MapData*>::iterator i = _objects.begin(); i != _objects.end(); ++i)
+	{
+		if ((*i)->getObjectType() == MapData::O_FLOOR && (*i)->getBlock(DT_HE) == 0)
+		{
+			(*i)->setBlockValue(1,1,(*i)->getArmor(),1,1,1);
+			if ((*i)->getDieMCD())
+			{
+				_objects.at((*i)->getDieMCD())->setBlockValue(1,1,(*i)->getArmor(),1,1,1);
+			}
+		}
+	}
+
+
 	// Load terrain sprites/surfaces/PCK files into a surfaceset
 	std::stringstream s1,s2;
 	s1 << "TERRAIN/" << _name << ".PCK";

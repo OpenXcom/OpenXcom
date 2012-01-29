@@ -30,6 +30,7 @@ class MapBlock;
 class MapDataSet;
 class MapData;
 class Ruleset;
+enum MapBlockType;
 
 /**
  * Represents a specific type of Battlescape Terrain.
@@ -57,7 +58,9 @@ public:
 	/// Gets the terrain's mapdatafiles.
 	std::vector<MapDataSet*> *getMapDataSets();
 	/// Gets a random mapblock.
-	MapBlock *getRandomMapBlock(int maxsize, bool landingzone);
+	MapBlock *getRandomMapBlock(int maxsize, MapBlockType type);
+	/// Get a mapblock given it's name.
+	MapBlock* getMapBlock(const std::string &name);
 	/// Get the mapdata object.
 	MapData *getMapData(int *id, int *mapDataSetID) const;
 };

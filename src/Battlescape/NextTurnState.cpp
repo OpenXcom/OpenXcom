@@ -126,6 +126,8 @@ void NextTurnState::handle(Action *action)
 		{
 			_state->finishBattle(false);
 		}
+
+		_state->btnCenterClick(0);
 	}
 }
 

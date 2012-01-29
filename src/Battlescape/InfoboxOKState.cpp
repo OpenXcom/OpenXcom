@@ -25,6 +25,7 @@
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
+#include "../Interface/Cursor.h"
 
 namespace OpenXcom
 {
@@ -64,6 +65,8 @@ InfoboxOKState::InfoboxOKState(Game *game, std::wstring name, std::string messag
 	s += L'\n';
 	s += _game->getLanguage()->getString(_message);
 	_txtTitle->setText(s);
+
+	_game->getCursor()->setVisible(true);
 }
 
 /**

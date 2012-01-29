@@ -24,7 +24,7 @@ namespace OpenXcom
 /**
 * MapBlock construction
 */
-MapBlock::MapBlock(RuleTerrain *terrain, std::string name, int width, int length, bool landingZone):_terrain(terrain), _name(name), _width(width), _length(length), _height(0), _landingZone(landingZone)
+MapBlock::MapBlock(RuleTerrain *terrain, std::string name, int width, int length, MapBlockType type):_terrain(terrain), _name(name), _width(width), _length(length), _height(0), _type(type)
 {
 }
 
@@ -61,9 +61,11 @@ void MapBlock::load(const YAML::Node &node)
 		{
 			i.second() >> _height;
 		}
-		else if (key == "landingZone")
+		else if (key == "type")
 		{
-			i.second() >> _landingZone;
+			int a;
+			i.second() >> a;
+			_type = (MapBlockType)a;
 		}
 	}
 }
@@ -79,7 +81,7 @@ void MapBlock::save(YAML::Emitter &out) const
 	out << YAML::Key << "width" << YAML::Value << _width;
 	out << YAML::Key << "length" << YAML::Value << _length;
 	out << YAML::Key << "height" << YAML::Value << _height;
-	out << YAML::Key << "landingZone" << YAML::Value << _landingZone;
+	out << YAML::Key << "type" << YAML::Value << (int)_type;
 	out << YAML::EndMap;
 }
 
@@ -129,12 +131,13 @@ int MapBlock::getHeight() const
 }
 
 /**
-* Is this mapblock usable as a landingzone.
-* @return bool whether usable as landingzone.
+* Get the type of mapblock.
+* @return type
 */
-bool MapBlock::isLandingZone() const
+MapBlockType MapBlock::getType() const
 {
-	return _landingZone;
+	return _type;
 }
+
 
 }

@@ -598,48 +598,58 @@ void BattlescapeGame::popState()
 	}
 	_states.pop_front();
 
-	if (_states.empty())
+	// handle the end of this unit's actions
+	if (action.actor && noActionsPending(action.actor))
 	{
-		// spend TUs of "target triggered actions" (shooting, throwing)
-		if (action.targeting && _save->getSelectedUnit() && !actionFailed)
+		if (action.actor->getFaction() == FACTION_PLAYER)
 		{
-			action.actor->spendTimeUnits(action.TU, dontSpendTUs());
-		}
-		// after throwing the cursor returns to default cursor, after shooting it stays in targeting mode and the player can shoot again in the same mode (autoshot,snap,aimed)
-		if (action.type == BA_THROW && !actionFailed)
-		{
-			cancelCurrentAction();
-		}
-		_parentState->getGame()->getCursor()->setVisible(true);
-		setupCursor();
-		// it's the AI side, select next unit
-		if (_save->getSide() != FACTION_PLAYER && !_debugPlay)
-		{
-			action.actor->spendTimeUnits(action.TU, false);
-			 // AI does two things per unit, before switching to the next, or it got killed before doing the second thing
-			if (_AIActionCounter > 1 || _save->getSelectedUnit() == 0 || _save->getSelectedUnit()->isOut())
+			// spend TUs of "target triggered actions" (shooting, throwing)
+			if (action.targeting && _save->getSelectedUnit() && !actionFailed)
 			{
-				_AIActionCounter = 0;
-				if (_save->selectNextPlayerUnit(true) == 0)
+				action.actor->spendTimeUnits(action.TU, dontSpendTUs());
+			}
+			if (_save->getSide() == FACTION_PLAYER)
+			{
+				// after throwing the cursor returns to default cursor, after shooting it stays in targeting mode and the player can shoot again in the same mode (autoshot,snap,aimed)
+				if (action.type == BA_THROW && !actionFailed)
 				{
-					if (!_save->getDebugMode())
-					{
-						statePushBack(0); // end AI turn
-					}
-					else
-					{
-						_save->selectNextPlayerUnit(false);
-						_debugPlay = true;
-					}
+					cancelCurrentAction();
 				}
-				if (_save->getSelectedUnit())
+				_parentState->getGame()->getCursor()->setVisible(true);
+				setupCursor();
+			}
+		}
+		else
+		{
+			if (_save->getSide() != FACTION_PLAYER && !_debugPlay)
+			{
+				action.actor->spendTimeUnits(action.TU, false);
+				 // AI does two things per unit, before switching to the next, or it got killed before doing the second thing
+				if (_AIActionCounter > 1 || _save->getSelectedUnit() == 0 || _save->getSelectedUnit()->isOut())
 				{
-					getMap()->getCamera()->centerOnPosition(_save->getSelectedUnit()->getPosition());
+					_AIActionCounter = 0;
+					if (_save->selectNextPlayerUnit(true) == 0)
+					{
+						if (!_save->getDebugMode())
+						{
+							statePushBack(0); // end AI turn
+						}
+						else
+						{
+							_save->selectNextPlayerUnit(false);
+							_debugPlay = true;
+						}
+					}
+					if (_save->getSelectedUnit())
+					{
+						getMap()->getCamera()->centerOnPosition(_save->getSelectedUnit()->getPosition());
+					}
 				}
 			}
 		}
 	}
-	else
+	
+	if (!_states.empty())
 	{
 		// end turn request?
 		if (_states.front() == 0)
@@ -651,6 +661,7 @@ void BattlescapeGame::popState()
 		// init the next state in queue
 		_states.front()->init();
 	}
+
 	// the currently selected unit died or became unconscious or disappeared inexplicably
 	if (_save->getSelectedUnit() == 0 || _save->getSelectedUnit()->isOut())
 	{
@@ -671,6 +682,18 @@ void BattlescapeGame::popState()
 
 }
 
+bool BattlescapeGame::noActionsPending(BattleUnit *bu)
+{
+	if (_states.empty()) return true;
+
+	for (std::list<BattleState*>::iterator i = _states.begin(); i != _states.end(); ++i)
+	{
+		if ((*i) != 0 && (*i)->getAction().actor == bu)
+			return false;
+	}
+
+	return true;
+}
 /**
  * Sets the timer interval for think() calls of the state.
  * @param interval An interval in ms.
@@ -692,7 +715,8 @@ bool BattlescapeGame::checkReservedTU(BattleUnit *bu, int tu)
 	if (dontSpendTUs() || _save->getSide() != FACTION_PLAYER) return true; // aliens don't reserve TUs
 
 	if (_tuReserved != BA_NONE &&
-		tu + bu->getActionTUs(_tuReserved, bu->getMainHandWeapon()) > bu->getTimeUnits())
+		tu + bu->getActionTUs(_tuReserved, bu->getMainHandWeapon()) > bu->getTimeUnits() &&
+		bu->getActionTUs(_tuReserved, bu->getMainHandWeapon()) <= bu->getTimeUnits())
 	{
 		if (_save->getSide() == FACTION_PLAYER)
 		{
@@ -736,6 +760,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 	if (status != STATUS_PANICKING && status != STATUS_BERSERK) return false;
 	unit->setVisible(true);
 	getMap()->getCamera()->centerOnPosition(unit->getPosition());
+	_save->setSelectedUnit(unit);
 
 	// show a little infobox with the name of the unit and "... is panicking"
 	std::wstringstream ss;

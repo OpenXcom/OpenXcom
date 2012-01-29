@@ -752,6 +752,10 @@ void SavedBattleGame::resetUnitTiles()
 	{
 		if (!(*i)->isOut())
 		{
+			if ((*i)->getTile()->getUnit() == (*i))
+			{
+				(*i)->getTile()->setUnit(0);
+			}
 			int size = (*i)->getUnit()->getArmor()->getSize() - 1;
 			for (int x = size; x >= 0; x--)
 			{
