@@ -26,7 +26,7 @@ namespace OpenXcom
 /**
  * Initializes a moving target with blank coordinates.
  */
-MovingTarget::MovingTarget() : Target(), _dest(0), _speedLon(0.0), _speedLat(0.0), _speedRadian(0.0), _distCurrent(0.0), _distMax(0.0), _speed(0)
+MovingTarget::MovingTarget() : Target(), _dest(0), _speedLon(0.0), _speedLat(0.0), _speedRadian(0.0), _distMax(0.0), _distCurrent(0.0), _speed(0)
 {
 }
 

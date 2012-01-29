@@ -31,7 +31,18 @@ namespace OpenXcom
  * @param rules Soldier ruleset.
  * @param armor Soldier armor.
  */
-Soldier::Soldier(RuleSoldier *rules, Armor *armor) : _armor(armor), _name(L""), _rules(rules), _rank(RANK_ROOKIE), _craft(0), _gender(GENDER_MALE), _look(LOOK_BLONDE), _missions(0), _kills(0), _recovery(0), _recentlyPromoted(false)
+Soldier::Soldier(RuleSoldier *rules, Armor *armor) :
+	_name(L""),
+	_rules(rules),
+	_rank(RANK_ROOKIE),
+	_craft(0),
+	_gender(GENDER_MALE),
+	_look(LOOK_BLONDE),
+	_missions(0),
+	_kills(0),
+	_recovery(0),
+	_recentlyPromoted(false),
+	_armor(armor)
 {
 	_initialStats.bravery = 0;
 	_initialStats.firing = 0;
@@ -55,7 +66,16 @@ Soldier::Soldier(RuleSoldier *rules, Armor *armor) : _armor(armor), _name(L""), 
  * @param armor Soldier armor.
  * @param names List of name pools.
  */
-Soldier::Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierNamePool*> *names, int *id) : _armor(armor), _id(*id), _rules(rules), _rank(RANK_ROOKIE), _craft(0), _missions(0), _kills(0), _recovery(0), _recentlyPromoted(false)
+Soldier::Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierNamePool*> *names, int *id) :
+	_id(*id),
+	_rules(rules),
+	_rank(RANK_ROOKIE),
+	_craft(0),
+	_missions(0),
+	_kills(0),
+	_recovery(0),
+	_recentlyPromoted(false),
+	_armor(armor)
 {
 	UnitStats minStats = rules->getMinStats();
 	UnitStats maxStats = rules->getMaxStats();
