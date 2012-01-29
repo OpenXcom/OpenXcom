@@ -60,7 +60,7 @@ public:
 	/// Checks if a point is inside the region.
 	bool insideRegion(double lon, double lat) const;
 	/// Gets the cities in this region.
-	std::vector<City*> *const getCities();
+	std::vector<City*> *getCities();
 };
 
 }

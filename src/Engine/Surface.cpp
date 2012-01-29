@@ -493,7 +493,7 @@ void Surface::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
  * Returns the surface's 8bpp palette.
  * @return Pointer to the palette's colors.
  */
-SDL_Color *const Surface::getPalette() const
+SDL_Color *Surface::getPalette() const
 {
 	return _surface->format->palette->colors;
 }
@@ -548,7 +548,7 @@ Uint8 Surface::getPixel(int x, int y) const
  * Returns the internal SDL_Surface for SDL calls.
  * @return Pointer to the surface.
  */
-SDL_Surface *const Surface::getSurface() const
+SDL_Surface *Surface::getSurface() const
 {
 	return _surface;
 }

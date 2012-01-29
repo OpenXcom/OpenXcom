@@ -818,7 +818,7 @@ void GeoscapeState::popup(State *state)
  * access by other substates.
  * @return Pointer to globe.
  */
-Globe *const GeoscapeState::getGlobe() const
+Globe *GeoscapeState::getGlobe() const
 {
 	return _globe;
 }

@@ -60,7 +60,7 @@ public:
 	/// Saves the item to YAML.
 	void save(YAML::Emitter& out) const;
 	/// Gets the item's ruleset.
-	RuleItem *const getRules() const;
+	RuleItem *getRules() const;
 	/// Gets the item's ammo quantity
 	int getAmmoQuantity() const;
 	/// Sets the item's ammo quantity.

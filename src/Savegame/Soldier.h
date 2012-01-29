@@ -73,7 +73,7 @@ public:
 	/// Sets the soldier's name.
 	void setName(const std::wstring &name);
 	/// Gets the soldier's craft.
-	Craft *const getCraft() const;
+	Craft *getCraft() const;
 	/// Sets the soldier's craft.
 	void setCraft(Craft *craft);
 	/// Gets the soldier's craft string.

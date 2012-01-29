@@ -207,7 +207,7 @@ void SurfaceSet::loadDat(const std::string &filename)
  * @param i Frame number in the set.
  * @return Pointer to the respective surface.
  */
-Surface *const SurfaceSet::getFrame(int i) const
+Surface *SurfaceSet::getFrame(int i) const
 {
 	return _frames[i];
 }

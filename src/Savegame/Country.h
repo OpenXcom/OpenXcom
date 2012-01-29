@@ -47,7 +47,7 @@ public:
 	/// Saves the country to YAML.
 	void save(YAML::Emitter& out) const;
 	/// Gets the country's ruleset.
-	RuleCountry *const getRules() const;
+	RuleCountry *getRules() const;
 	/// Gets the country's funding.
 	int getFunding() const;
 	/// Sets the country's funding.

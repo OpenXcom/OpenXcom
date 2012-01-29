@@ -168,7 +168,7 @@ void Soldier::setName(const std::wstring &name)
  * Returns the craft the soldier is assigned to.
  * @return Pointer to craft.
  */
-Craft *const Soldier::getCraft() const
+Craft *Soldier::getCraft() const
 {
 	return _craft;
 }

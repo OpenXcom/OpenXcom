@@ -90,29 +90,29 @@ public:
 	/// Handles monthly funding.
 	void monthlyFunding();
 	/// Gets the current game time.
-	GameTime *const getTime() const;
+	GameTime *getTime() const;
 	/// Gets the list of countries.
-	std::vector<Country*> *const getCountries();
+	std::vector<Country*> *getCountries();
 	/// Gets the total country funding.
 	int getCountryFunding() const;
 	/// Gets the list of regions.
-	std::vector<Region*> *const getRegions();
+	std::vector<Region*> *getRegions();
 	/// Gets the list of bases.
-	std::vector<Base*> *const getBases();
+	std::vector<Base*> *getBases();
 	/// Gets the total base maintenance.
 	int getBaseMaintenance() const;
 	/// Gets the current craft IDs.
-	std::map<std::string, int> *const getCraftIds();
+	std::map<std::string, int> *getCraftIds();
 	/// Gets the list of UFOs.
-	std::vector<Ufo*> *const getUfos();
+	std::vector<Ufo*> *getUfos();
 	/// Gets the current UFO ID.
-	int *const getUfoId();
+	int *getUfoId();
 	/// Gets the list of waypoints.
-	std::vector<Waypoint*> *const getWaypoints();
+	std::vector<Waypoint*> *getWaypoints();
 	/// Gets the current waypoint ID.
-	int *const getWaypointId();
+	int *getWaypointId();
 	/// Gets the current battle game.
-	SavedBattleGame *const getBattleGame();
+	SavedBattleGame *getBattleGame();
 	/// Sets the current battle game.
 	void setBattleGame(SavedBattleGame *battleGame);
 	/// Gets the current Ufopaedia parameters.
@@ -128,9 +128,9 @@ public:
 	///Get the list of newly available research projects once a research has been completed.
 	void getDependableResearch (std::vector<RuleResearchProject *> & dependables, const RuleResearchProject *research, Ruleset * ruleset, Base * base) const;
 	/// Gets the current soldier ID.
-	int *const getSoldierId() ;
+	int *getSoldierId() ;
 	/// Gets the soldier matching this ID.
-	Soldier *const getSoldier(int id) const;
+	Soldier *getSoldier(int id) const;
 	/// Handles the higher promotions.
 	bool handlePromotions();
 	/// Checks how many soldiers of a rank exist and which one has the highest score.

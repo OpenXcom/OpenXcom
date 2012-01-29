@@ -47,7 +47,7 @@ public:
 	/// Saves the region to YAML.
 	void save(YAML::Emitter& out) const;
 	/// Gets the region's ruleset.
-	RuleRegion *const getRules() const;
+	RuleRegion *getRules() const;
 };
 
 }

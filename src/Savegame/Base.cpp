@@ -296,7 +296,7 @@ void Base::setName(const std::wstring &name)
  * Returns the list of facilities in the base.
  * @return Pointer to the facility list.
  */
-std::vector<BaseFacility*> *const Base::getFacilities()
+std::vector<BaseFacility*> *Base::getFacilities()
 {
 	return &_facilities;
 }
@@ -305,7 +305,7 @@ std::vector<BaseFacility*> *const Base::getFacilities()
  * Returns the list of soldiers in the base.
  * @return Pointer to the soldier list.
  */
-std::vector<Soldier*> *const Base::getSoldiers()
+std::vector<Soldier*> *Base::getSoldiers()
 {
 	return &_soldiers;
 }
@@ -314,7 +314,7 @@ std::vector<Soldier*> *const Base::getSoldiers()
  * Returns the list of crafts in the base.
  * @return Pointer to the craft list.
  */
-std::vector<Craft*> *const Base::getCrafts()
+std::vector<Craft*> *Base::getCrafts()
 {
 	return &_crafts;
 }
@@ -324,7 +324,7 @@ std::vector<Craft*> *const Base::getCrafts()
  * to this base.
  * @return Pointer to the transfer list.
  */
-std::vector<Transfer*> *const Base::getTransfers()
+std::vector<Transfer*> *Base::getTransfers()
 {
 	return &_transfers;
 }
@@ -333,7 +333,7 @@ std::vector<Transfer*> *const Base::getTransfers()
  * Returns the list of items in the base.
  * @return Pointer to the item list.
  */
-ItemContainer *const Base::getItems()
+ItemContainer *Base::getItems()
 {
 	return _items;
 }

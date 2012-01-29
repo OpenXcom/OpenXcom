@@ -62,13 +62,13 @@ public:
 	/// Saves the craft's ID to YAML.
 	void saveId(YAML::Emitter& out) const;
 	/// Gets the craft's ruleset.
-	RuleCraft *const getRules() const;
+	RuleCraft *getRules() const;
 	/// Gets the craft's ID.
 	int getId() const;
 	/// Gets the craft's name.
 	std::wstring getName(Language *lang) const;
 	/// Gets the craft's base.
-	Base *const getBase() const;
+	Base *getBase() const;
 	/// Sets the craft's base.
 	void setBase(Base *base);
 	/// Gets the craft's status.
@@ -86,9 +86,9 @@ public:
 	/// Gets the craft's amount of HWPs.
 	int getNumHWPs() const;
 	/// Gets the craft's weapons.
-	std::vector<CraftWeapon*> *const getWeapons();
+	std::vector<CraftWeapon*> *getWeapons();
 	/// Gets the craft's items.
-	ItemContainer *const getItems();
+	ItemContainer *getItems();
 	/// Gets the craft's amount of fuel.
 	int getFuel() const;
 	/// Sets the craft's amount of fuel.

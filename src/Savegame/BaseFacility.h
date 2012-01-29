@@ -51,7 +51,7 @@ public:
 	/// Saves the base facility to YAML.
 	void save(YAML::Emitter& out) const;
 	/// Gets the facility's ruleset.
-	RuleBaseFacility *const getRules() const;
+	RuleBaseFacility *getRules() const;
 	/// Gets the facility's X position.
 	int getX() const;
 	/// Gets the facility's Y position.

@@ -99,7 +99,7 @@ void Ufo::saveId(YAML::Emitter &out) const
  * Returns the ruleset for the UFO's type.
  * @return Pointer to ruleset.
  */
-RuleUfo *const Ufo::getRules() const
+RuleUfo *Ufo::getRules() const
 {
 	return _rules;
 }

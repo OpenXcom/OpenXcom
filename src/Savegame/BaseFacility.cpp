@@ -73,7 +73,7 @@ void BaseFacility::save(YAML::Emitter &out) const
  * Returns the ruleset for the base facility's type.
  * @return Pointer to ruleset.
  */
-RuleBaseFacility *const BaseFacility::getRules() const
+RuleBaseFacility *BaseFacility::getRules() const
 {
 	return _rules;
 }

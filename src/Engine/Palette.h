@@ -42,7 +42,7 @@ public:
 	/// Loads the colors from an X-Com palette.
 	void loadDat(const std::string &filename, int ncolors, int offset = 0);
 	// Gets a certain color from the palette.
-	SDL_Color *const getColors(int offset = 0) const;
+	SDL_Color *getColors(int offset = 0) const;
 
 	/// Converts a given color into a RGBA color value.
 	static Uint32 getRGBA(SDL_Color* pal, Uint8 color);

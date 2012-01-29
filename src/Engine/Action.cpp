@@ -156,7 +156,7 @@ double Action::getRelativeYMouse() const
  * this action (the sender).
  * @return Pointer to interactive surface.
  */
-InteractiveSurface *const Action::getSender() const
+InteractiveSurface *Action::getSender() const
 {
 	return _sender;
 }
@@ -175,7 +175,7 @@ void Action::setSender(InteractiveSurface *sender)
  * Returns the details about this action.
  * @return Pointer to SDL_event.
  */
-SDL_Event *const Action::getDetails() const
+SDL_Event *Action::getDetails() const
 {
 	return _ev;
 }

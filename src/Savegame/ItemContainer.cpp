@@ -142,7 +142,7 @@ double ItemContainer::getTotalSize(const Ruleset *rule) const
  * Returns all the items currently contained within.
  * @return List of contents.
  */
-std::map<std::string, int> *const ItemContainer::getContents()
+std::map<std::string, int> *ItemContainer::getContents()
 {
 	return &_qty;
 }

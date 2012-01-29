@@ -79,7 +79,7 @@ public:
 	/// Adds a slot to the inventory.
 	void addSlot(int x, int y);
 	/// Gets all the slots in the inventory.
-	std::vector<struct RuleSlot> *const getSlots();
+	std::vector<struct RuleSlot> *getSlots();
 	/// Checks for a slot in a certain position.
 	bool checkSlotInPosition(int *x, int *y) const;
 	/// Checks if an item fits in a slot.

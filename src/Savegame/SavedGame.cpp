@@ -382,7 +382,7 @@ void SavedGame::monthlyFunding()
  * Returns the current time of the game.
  * @return Pointer to the game time.
  */
-GameTime *const SavedGame::getTime() const
+GameTime *SavedGame::getTime() const
 {
 	return _time;
 }
@@ -391,7 +391,7 @@ GameTime *const SavedGame::getTime() const
  * Returns the list of countries in the game world.
  * @return Pointer to country list.
  */
-std::vector<Country*> *const SavedGame::getCountries()
+std::vector<Country*> *SavedGame::getCountries()
 {
 	return &_countries;
 }
@@ -414,7 +414,7 @@ int SavedGame::getCountryFunding() const
  * Returns the list of world regions.
  * @return Pointer to region list.
  */
-std::vector<Region*> *const SavedGame::getRegions()
+std::vector<Region*> *SavedGame::getRegions()
 {
 	return &_regions;
 }
@@ -423,7 +423,7 @@ std::vector<Region*> *const SavedGame::getRegions()
  * Returns the list of player bases.
  * @return Pointer to base list.
  */
-std::vector<Base*> *const SavedGame::getBases()
+std::vector<Base*> *SavedGame::getBases()
 {
 	return &_bases;
 }
@@ -446,7 +446,7 @@ int SavedGame::getBaseMaintenance() const
  * Returns the latest craft IDs for each type.
  * @return Pointer to ID list.
  */
-std::map<std::string, int> *const SavedGame::getCraftIds()
+std::map<std::string, int> *SavedGame::getCraftIds()
 {
 	return &_craftId;
 }
@@ -455,7 +455,7 @@ std::map<std::string, int> *const SavedGame::getCraftIds()
  * Returns the list of alien UFOs.
  * @return Pointer to UFO list.
  */
-std::vector<Ufo*> *const SavedGame::getUfos()
+std::vector<Ufo*> *SavedGame::getUfos()
 {
 	return &_ufos;
 }
@@ -464,7 +464,7 @@ std::vector<Ufo*> *const SavedGame::getUfos()
  * Returns the latest ufo ID.
  * @return Pointer to ID value.
  */
-int *const SavedGame::getUfoId()
+int *SavedGame::getUfoId()
 {
 	return &_ufoId;
 }
@@ -473,7 +473,7 @@ int *const SavedGame::getUfoId()
  * Returns the latest waypoint ID.
  * @return Pointer to ID value.
  */
-int *const SavedGame::getWaypointId()
+int *SavedGame::getWaypointId()
 {
 	return &_waypointId;
 }
@@ -482,7 +482,7 @@ int *const SavedGame::getWaypointId()
  * Returns the list of craft waypoints.
  * @return Pointer to waypoint list.
  */
-std::vector<Waypoint*> *const SavedGame::getWaypoints()
+std::vector<Waypoint*> *SavedGame::getWaypoints()
 {
 	return &_waypoints;
 }
@@ -491,7 +491,7 @@ std::vector<Waypoint*> *const SavedGame::getWaypoints()
  * Get pointer to the battleGame object.
  * @return Pointer to the battleGame object.
  */
-SavedBattleGame *const SavedGame::getBattleGame()
+SavedBattleGame *SavedGame::getBattleGame()
 {
 	return _battleGame;
 }
@@ -702,7 +702,7 @@ void SavedGame::getDependableResearchBasic (std::vector<RuleResearchProject *> &
  * Returns the latest soldier ID.
  * @return Pointer to ID value.
  */
-int *const SavedGame::getSoldierId()
+int *SavedGame::getSoldierId()
 {
 	return &_soldierId;
 }
@@ -712,7 +712,7 @@ int *const SavedGame::getSoldierId()
  * @param id A soldier's unique id.
  * @return Pointer to Soldier.
  */
-Soldier *const SavedGame::getSoldier(int id) const
+Soldier *SavedGame::getSoldier(int id) const
 {
 	for (std::vector<Base*>::const_iterator i = _bases.begin(); i != _bases.end(); ++i)
 	{

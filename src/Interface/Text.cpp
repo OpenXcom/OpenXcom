@@ -99,7 +99,7 @@ void Text::setSmall()
  * Returns the font currently used by the text.
  * @return Pointer to font.
  */
-Font *const Text::getFont() const
+Font *Text::getFont() const
 {
 	return _font;
 }

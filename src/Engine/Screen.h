@@ -52,7 +52,7 @@ public:
 	/// Cleans up the display screen.
 	~Screen();
 	/// Gets the internal buffer.
-	Surface *const getSurface() const;
+	Surface *getSurface() const;
 	/// Handles keyboard events.
 	void handle(Action *action);
 	/// Renders the screen onto the game window.
@@ -62,7 +62,7 @@ public:
 	/// Sets the screen's 8bpp palette.
 	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
 	/// Gets the screen's 8bpp palette.
-	SDL_Color *const getPalette() const;
+	SDL_Color *getPalette() const;
 	/// Gets the screen's width.
 	int getWidth() const;
 	/// Gets the screen's height.

@@ -63,7 +63,7 @@ Screen::~Screen()
  * contents that need to be shown will be blitted to this.
  * @return Pointer to the buffer surface.
  */
-Surface *const Screen::getSurface() const
+Surface *Screen::getSurface() const
 {
 	return _surface;
 }
@@ -261,7 +261,7 @@ void Screen::setPalette(SDL_Color* colors, int firstcolor, int ncolors)
  * Returns the screen's 8bpp palette.
  * @return Pointer to the palette's colors.
  */
-SDL_Color *const Screen::getPalette() const
+SDL_Color *Screen::getPalette() const
 {
 	return _surface->getPalette();
 }

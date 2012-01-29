@@ -81,7 +81,7 @@ ResourcePack::~ResourcePack()
  * @param name Name of the font.
  * @return Pointer to the font.
  */
-Font *const ResourcePack::getFont(const std::string &name) const
+Font *ResourcePack::getFont(const std::string &name) const
 {
 	return _fonts.find(name)->second;
 }
@@ -91,7 +91,7 @@ Font *const ResourcePack::getFont(const std::string &name) const
  * @param name Name of the surface.
  * @return Pointer to the surface.
  */
-Surface *const ResourcePack::getSurface(const std::string &name) const
+Surface *ResourcePack::getSurface(const std::string &name) const
 {
 	return _surfaces.find(name)->second;
 }
@@ -101,7 +101,7 @@ Surface *const ResourcePack::getSurface(const std::string &name) const
  * @param name Name of the surface set.
  * @return Pointer to the surface set.
  */
-SurfaceSet *const ResourcePack::getSurfaceSet(const std::string &name) const
+SurfaceSet *ResourcePack::getSurfaceSet(const std::string &name) const
 {
 	return _sets.find(name)->second;
 }
@@ -110,7 +110,7 @@ SurfaceSet *const ResourcePack::getSurfaceSet(const std::string &name) const
  * Returns the list of polygons in the resource set.
  * @return Pointer to the list of polygons.
  */
-std::list<Polygon*> *const ResourcePack::getPolygons()
+std::list<Polygon*> *ResourcePack::getPolygons()
 {
 	return &_polygons;
 }
@@ -119,7 +119,7 @@ std::list<Polygon*> *const ResourcePack::getPolygons()
  * Returns the list of polylines in the resource set.
  * @return Pointer to the list of polylines.
  */
-std::list<Polyline*> *const ResourcePack::getPolylines()
+std::list<Polyline*> *ResourcePack::getPolylines()
 {
 	return &_polylines;
 }
@@ -129,7 +129,7 @@ std::list<Polyline*> *const ResourcePack::getPolylines()
  * @param name Name of the music.
  * @return Pointer to the music.
  */
-Music *const ResourcePack::getMusic(const std::string &name) const
+Music *ResourcePack::getMusic(const std::string &name) const
 {
 	return _musics.find(name)->second;
 }
@@ -139,7 +139,7 @@ Music *const ResourcePack::getMusic(const std::string &name) const
  * @param name Name of the sound set.
  * @return Pointer to the sound set.
  */
-SoundSet *const ResourcePack::getSoundSet(const std::string &name) const
+SoundSet *ResourcePack::getSoundSet(const std::string &name) const
 {
 	return _sounds.find(name)->second;
 }
@@ -149,7 +149,7 @@ SoundSet *const ResourcePack::getSoundSet(const std::string &name) const
  * @param name Name of the palette.
  * @return Pointer to the palette.
  */
-Palette *const ResourcePack::getPalette(const std::string &name) const
+Palette *ResourcePack::getPalette(const std::string &name) const
 {
 	return _palettes.find(name)->second;
 }
@@ -180,7 +180,7 @@ void ResourcePack::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
  * Returns the list of voxeldata in the resource set.
  * @return Pointer to the list of voxeldata.
  */
-std::vector<Uint16> *const ResourcePack::getVoxelData()
+std::vector<Uint16> *ResourcePack::getVoxelData()
 {
 	return &_voxelData;
 }
