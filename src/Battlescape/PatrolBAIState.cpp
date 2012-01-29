@@ -126,7 +126,6 @@ void PatrolBAIState::think(BattleAction *action)
 	*/
 
 	Node *node;
-	bool bFound = false;
 
 	if (_toNode != 0 && _unit->getPosition() == _toNode->getPosition())
 	{

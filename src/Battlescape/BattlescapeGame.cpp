@@ -179,7 +179,6 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	_AIActionCounter++;
 
 	AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(ai);
-	PatrolBAIState *patrol = dynamic_cast<PatrolBAIState*>(ai);
 	
 	BattleAction action;
 	unit->think(&action);
