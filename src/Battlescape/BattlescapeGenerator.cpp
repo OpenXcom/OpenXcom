@@ -645,9 +645,9 @@ void BattlescapeGenerator::generateMap()
 {
 	int x = 0, y = 0;
 	int blocksToDo = 0;
-	std::vector<std::vector<MapBlock*>> blocks;
-	std::vector<std::vector<bool>> landingzone;
-	std::vector<std::vector<int>> segments;
+	std::vector< std::vector<MapBlock*> > blocks;
+	std::vector< std::vector<bool> > landingzone;
+	std::vector< std::vector<int> > segments;
 	int craftX = 0, craftY = 0;
 	int ufoX = 0, ufoY = 0;
 	bool placed = false;
@@ -659,7 +659,7 @@ void BattlescapeGenerator::generateMap()
 	int mapDataSetIDOffset = 0;
 	int craftDataSetIDOffset = 0;
 
-	blocks.resize((_width / 10), std::vector<MapBlock*>((_length / 10),0));
+	blocks.resize((_width / 10), std::vector<MapBlock*>((_length / 10)));
 	landingzone.resize((_width / 10), std::vector<bool>((_length / 10),false));
 	segments.resize((_width / 10), std::vector<int>((_length / 10),0));
 
