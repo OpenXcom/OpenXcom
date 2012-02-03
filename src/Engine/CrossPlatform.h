@@ -37,14 +37,18 @@ namespace CrossPlatform
 	void showError(const std::string &error);
 	/// Displays an error message.
 	void showError(const std::wstring &error);
-	/// Finds the game's data folder in the system.
-	std::string findDataFolder(bool exists);
+	/// Finds the game's data folders in the system.
+	void findDataFolders(bool exists, std::vector<std::string> & dirs);
 	/// Finds the game's user folder in the system.
 	std::string findUserFolder(bool exists);
 	/// Creates a folder.
 	int createFolder(const char *path);
 	/// Returns the list of files in a folder.
 	std::vector<std::string> getFolderContents(const std::string &path, const std::string &ext = "");
+	// Split string containing a list of path
+	void splitPathList(const std::string & str, std::vector<std::string> & splitted);
+	/// Find  the configuration folder
+	std::string getConfigFolder(bool exists);
 }
 
 }

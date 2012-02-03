@@ -32,7 +32,7 @@ namespace Options
 {
 
 std::string _version = "0.3";
-std::string _dataFolder = "";
+std::vector<std::string> _dataFolders;
 std::string _userFolder = "";
 std::map<std::string, std::string> _options;
 
@@ -89,7 +89,7 @@ void loadArgs(int argc, char** args)
 			}
 			else if (arg == "-data")
 			{
-				_dataFolder = args[i+1];
+				CrossPlatform::splitPathList(args[i+1], _dataFolders);
 			}
 			else if (arg == "-user")
 			{
@@ -113,19 +113,25 @@ void init(int argc, char** args)
 {
 	createDefault();
 	loadArgs(argc, args);
-	if (_dataFolder == "")
+	if (_dataFolders.empty())
 	{
-		_dataFolder = CrossPlatform::findDataFolder(true);
+		CrossPlatform::findDataFolders(true, _dataFolders);
 		// Missing data folder is handled in StartState
 	}
 	if (_userFolder == "")
 	{
 		_userFolder = CrossPlatform::findUserFolder(true);
-		// Create user folder and save options
+		std::string configFolder = CrossPlatform::getConfigFolder(true);
 		if (_userFolder == "")
 		{
 			_userFolder = CrossPlatform::findUserFolder(false);
-			CrossPlatform::createFolder(Options::getUserFolder().c_str());
+			CrossPlatform::createFolder(_userFolder.c_str());
+		}
+		// Create user folder and save options
+		if (configFolder == "")
+		{
+			configFolder = CrossPlatform::getConfigFolder(false);
+			CrossPlatform::createFolder(configFolder.c_str());
 			save();
 		}
 		// Load existing options
@@ -142,7 +148,7 @@ void init(int argc, char** args)
  */
 void load(const std::string &filename)
 {
-	std::string s = Options::getUserFolder() + filename + ".cfg";
+	std::string s = CrossPlatform::getConfigFolder(true) + filename + ".cfg";
 	std::ifstream fin(s.c_str());
 	if (!fin)
 	{
@@ -170,7 +176,7 @@ void load(const std::string &filename)
  */
 void save(const std::string &filename)
 {
-	std::string s = Options::getUserFolder() + filename + ".cfg";
+	std::string s = CrossPlatform::getConfigFolder(true) + filename + ".cfg";
 	std::ofstream sav(s.c_str());
 	if (!sav)
 	{
@@ -195,13 +201,27 @@ std::string getVersion()
 }
 
 /**
- * Returns the game's Data folder where resources
+ * Returns the game's main data folder where resources
  * and X-Com files are loaded from.
  * @return Full path to Data folder.
  */
 std::string getDataFolder()
 {
-	return _dataFolder;
+	if(_dataFolders.empty())
+	{
+		return "";
+	}
+	return _dataFolders[0];
+}
+
+/**
+ * Returns the game's Data folders where resources
+ * and X-Com files are loaded from.
+ * @return the list of Data folder.
+ */
+const std::vector<std::string> & getDataFolders()
+{
+	return _dataFolders;
 }
 
 /**

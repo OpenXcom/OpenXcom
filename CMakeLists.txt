@@ -9,6 +9,12 @@ option ( ENABLE_WARNING "Always show warnings(even for release build" OFF )
 option ( FATAL_WARNING "Treats warnings as errors" OFF )
 set ( MSVC_WARNING_LEVEL 3 CACHE STRING "Visual Studio warning levels" )
 
+if ( UNIX AND NOT APPLE )
+  option ( XDG_FOLDER "Use XDG folder specification for Data/Config folders" ON )
+else ( )
+  set ( XDG_FOLDER OFF )
+endif ( )
+
 if ( WIN32 )
   set ( default_deps_dir "${CMAKE_SOURCE_DIR}/deps" )
 endif ()
