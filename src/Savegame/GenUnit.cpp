@@ -18,7 +18,6 @@
  */
 #include "GenUnit.h"
 #include <sstream>
-#include "../Ruleset/RuleGenUnit.h"
 #include "../Engine/Language.h"
 
 
@@ -216,6 +215,15 @@ int GenUnit::getIntelligence() const
 int GenUnit::getAggression() const
 {
 	return _rules->getAggression();
+}
+
+/**
+ * Returns the units's special ability.
+ * @return none.
+ */
+int GenUnit::getSpecialAbility() const
+{
+	return (int)_rules->getSpecialAbility();
 }
 
 }

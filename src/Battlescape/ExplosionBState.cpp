@@ -109,6 +109,7 @@ void ExplosionBState::think()
 			_parent->getMap()->getExplosions()->erase((*i));
 			if (_parent->getMap()->getExplosions()->empty())
 			{
+				bool terrainExplosion = false;
 				SavedBattleGame *save = _parent->getSave();
 				// after the animation is done, the real explosion takes place
 				if (_item)
@@ -119,9 +120,15 @@ void ExplosionBState::think()
 				{
 					save->getTileEngine()->explode(_center, _tile->getExplosive(), DT_HE, 100, _unit);
 				}
+				if (!_tile && !_item)
+				{
+					// explosion of a cyberdisc
+					save->getTileEngine()->explode(_center, 120, DT_HE, 8, _unit);
+					terrainExplosion = true;
+				}
 
 				// now check for new casualties
-				_parent->checkForCasualties(_item, _unit);
+				_parent->checkForCasualties(_item, _unit, false, terrainExplosion);
 
 				// if this explosion was caused by a unit shooting, now it's the time to put the gun down
 				if (_unit && !_unit->isOut())

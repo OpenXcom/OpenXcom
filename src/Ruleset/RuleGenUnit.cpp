@@ -90,6 +90,15 @@ void RuleGenUnit::setAIParameters(int intelligence, int aggression)
 }
 
 /**
+ * Set the unit's special ability.
+ * @param specab.
+ */
+void RuleGenUnit::setSpecialAbility(SpecialAbility specab)
+{
+	_specab = specab;
+}
+
+/**
  * Returns the unit's stats data object.
  * @return Stats.
  */
@@ -204,6 +213,15 @@ int RuleGenUnit::getIntelligence() const
 int RuleGenUnit::getAggression() const
 {
 	return _aggression;
+}
+
+/**
+ * Get the unit's special ability.
+ * @return specab.
+ */
+int RuleGenUnit::getSpecialAbility() const
+{
+	return (int)_specab;
 }
 
 }

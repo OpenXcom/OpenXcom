@@ -22,6 +22,7 @@
 #include <string>
 #include "yaml.h"
 #include "Unit.h"
+#include "../Ruleset/RuleGenUnit.h"
 
 namespace OpenXcom
 {
@@ -137,6 +138,8 @@ public:
 	int getAggression() const;
 	/// Get whether the unit was recently promoted.
 	bool isPromoted();
+	/// Get the alien's special ability.
+	int getSpecialAbility() const;
 };
 
 }

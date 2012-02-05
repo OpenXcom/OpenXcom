@@ -85,6 +85,8 @@ public:
 	virtual int getIntelligence() const = 0;
 	/// Get the unit's aggression.
 	virtual int getAggression() const = 0;
+	/// Get the units's special ability.
+	virtual int getSpecialAbility() const = 0;
 
 };
 

@@ -392,6 +392,18 @@ void BattlescapeGenerator::deployAliens(RuleAlienRace *race, RuleAlienDeployment
 					addItem(ruleItem, unit);
 				}
 			}
+			// terrorist alien's equipment is a special case - they are fitted with a weapon which is the alien's name with suffix _WEAPON
+			if ((*d).alienRank == AR_TERRORIST)
+			{
+				std::stringstream terroristWeapon;
+				terroristWeapon << alienName;
+				terroristWeapon << "_WEAPON";
+				RuleItem *ruleItem = _game->getRuleset()->getItem(terroristWeapon.str());
+				if (ruleItem)
+				{
+					addItem(ruleItem, unit);
+				}
+			}
 		}
 	}
 }

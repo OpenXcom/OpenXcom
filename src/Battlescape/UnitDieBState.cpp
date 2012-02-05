@@ -18,6 +18,7 @@
  */
 
 #include "UnitDieBState.h"
+#include "ExplosionBState.h"
 #include "TileEngine.h"
 #include "BattlescapeState.h"
 #include "Map.h"
@@ -32,6 +33,7 @@
 #include "../Engine/RNG.h"
 #include "../Ruleset/XcomRuleset.h"
 #include "../Ruleset/RuleArmor.h"
+#include "../Ruleset/RuleGenUnit.h"
 
 namespace OpenXcom
 {
@@ -126,6 +128,11 @@ void UnitDieBState::think()
 		convertUnitToCorpse();
 		_parent->getTileEngine()->calculateUnitLighting();
 		_parent->popState();
+		if (_unit->getUnit()->getSpecialAbility() == SPECAB_EXPLODEONDEATH)
+		{
+			Position p = Position(_unit->getPosition().x * 16, _unit->getPosition().y * 16, _unit->getPosition().z * 24);
+			_parent->statePushNext(new ExplosionBState(_parent, p, 0, _unit, 0));
+		}
 	}
 
 	_parent->getMap()->cacheUnit(_unit);

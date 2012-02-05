@@ -21,6 +21,7 @@
 
 #include <string>
 #include "Unit.h"
+#include "../Ruleset/RuleGenUnit.h"
 
 namespace OpenXcom
 {
@@ -76,6 +77,8 @@ public:
 	int getIntelligence() const;
 	/// Get the unit's aggression.
 	int getAggression() const;
+	/// Get the unit's special ability.
+	int getSpecialAbility() const;
 
 };
 

@@ -71,6 +71,9 @@ void ProjectileFlyBState::init()
 	if (!weapon) // can't shoot without weapon
 		return;
 
+	if (!_parent->getSave()->getTile(_action.target)) // invalid target position
+		return;
+
 	if (_action.actor->getTimeUnits() < _action.TU && !_parent->dontSpendTUs())
 	{
 		_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
