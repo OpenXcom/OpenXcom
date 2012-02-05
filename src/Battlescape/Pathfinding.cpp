@@ -106,8 +106,12 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition)
 
 	_path.clear();
 
-	if (startPosition.z == endPosition.z && bresenhamPath(startPosition, endPosition))
+	// look for a possible fast and accurate bresenham path and skip A*
+	if (startPosition.z == endPosition.z && bresenhamPath(startPosition,endPosition))
+	{
+		std::reverse(_path.begin(), _path.end()); //paths are stored in reverse order
 		return;
+	}
 
 	_path.clear();
 
@@ -653,7 +657,8 @@ bool Pathfinding::bresenhamPath(const Position& origin, const Position& target)
 				if (xd[dir] == cx-lastPoint.x && yd[dir] == cy-lastPoint.y) break;
 			}
 			int tuCost = getTUCost(lastPoint, dir, &nextPoint, _unit);
-			if (tuCost < 255 && (tuCost == lastTUCost || (dir&1 && tuCost == lastTUCost*1.5) || (!(dir&1) && tuCost*1.5 == lastTUCost) || lastTUCost == -1))
+			if (tuCost < 255 && (tuCost == lastTUCost || (dir&1 && tuCost == lastTUCost*1.5) || (!(dir&1) && tuCost*1.5 == lastTUCost) || lastTUCost == -1)
+				&& !isBlocked(_save->getTile(lastPoint), _save->getTile(nextPoint), dir))
 			{
 				_path.push_back(dir);
 			}

@@ -123,7 +123,7 @@ int Projectile::calculateTrajectory(double accuracy)
 	int test = -1;
 	if (targetTile->getUnit() != 0)
 	{
-		if (_origin == _action.target)
+		if (_origin == _action.target || targetTile->getUnit() == _action.actor)
 		{
 			// don't shoot at yourself but shoot at the floor
 			targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24);

@@ -273,6 +273,8 @@ void DebriefingState::prepareDebriefing()
 
 	for (std::vector<Base*>::iterator i = save->getBases()->begin(); i != save->getBases()->end(); ++i)
 	{
+
+		// in case we have a craft - check which craft it is about
 		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); ++j)
 		{
 			if ((*j)->isInBattlescape())
@@ -382,10 +384,19 @@ void DebriefingState::prepareDebriefing()
 			}
 		}
 		_txtTitle->setText(_game->getLanguage()->getString("STR_CRAFT_IS_LOST"));
-	} else
+		return;
+	}
+
 	if (!aborted && playersSurvived > 0) 	// RECOVER UFO : run through all tiles to recover UFO components and items
 	{
-		_txtTitle->setText(_game->getLanguage()->getString("STR_UFO_IS_RECOVERED"));
+		if (battle->getMissionType() == "STR_BASE_DEFENCE")
+		{
+			_txtTitle->setText(_game->getLanguage()->getString("STR_BASE_IS_SAVED"));
+		}
+		else
+		{
+			_txtTitle->setText(_game->getLanguage()->getString("STR_UFO_IS_RECOVERED"));
+		}
 
 		for (int i = 0; i < battle->getHeight() * battle->getLength() * battle->getWidth(); ++i)
 		{
@@ -439,7 +450,14 @@ void DebriefingState::prepareDebriefing()
 	}
 	else
 	{
-		_txtTitle->setText(_game->getLanguage()->getString("STR_UFO_IS_NOT_RECOVERED"));
+		if (battle->getMissionType() == "STR_BASE_DEFENCE")
+		{
+			_txtTitle->setText(_game->getLanguage()->getString("STR_BASE_IS_LOST"));
+		}
+		else
+		{
+			_txtTitle->setText(_game->getLanguage()->getString("STR_UFO_IS_NOT_RECOVERED"));
+		}
 	}
 
 }

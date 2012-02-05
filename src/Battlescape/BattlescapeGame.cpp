@@ -124,6 +124,21 @@ void BattlescapeGame::think()
 					if (!handlePanickingUnit(_save->getSelectedUnit()))
 						handleAI(_save->getSelectedUnit());
 				}
+				else
+				{
+					if (_save->selectNextPlayerUnit(true) == 0)
+					{
+						if (!_save->getDebugMode())
+						{
+							statePushBack(0); // end AI turn
+						}
+						else
+						{
+							_save->selectNextPlayerUnit(false);
+							_debugPlay = true;
+						}
+					}
+				}
 			}
 		}
 		else
