@@ -32,7 +32,7 @@ namespace OpenXcom
 /**
  * Sets up a camera.
  */
-Camera::Camera(int spriteWidth, int spriteHeight, int mapWidth, int mapLength, int mapHeight, Map *map, int visibleMapHeight) : _scrollX(0), _scrollY(0), _RMBDragging(false), _spriteWidth(spriteWidth), _spriteHeight(spriteHeight), _mapWidth(mapWidth), _mapLength(mapLength), _mapHeight(mapHeight), _map(map), _visibleMapHeight(visibleMapHeight)
+Camera::Camera(int spriteWidth, int spriteHeight, int mapWidth, int mapLength, int mapHeight, Map *map, int visibleMapHeight) : _spriteWidth(spriteWidth), _spriteHeight(spriteHeight), _mapWidth(mapWidth), _mapLength(mapLength), _mapHeight(mapHeight), _scrollX(0), _scrollY(0), _RMBDragging(false), _visibleMapHeight(visibleMapHeight), _map(map)
 {
 	_mapOffset = Position(-250,250,0);
 	_screenWidth = _map->getWidth();

@@ -164,9 +164,11 @@ void MovingTarget::calculateSpeed()
 {
 	if (_dest != 0)
 	{
-		double dLon, dLat;
-		double length = getDistance(_dest, &dLon, &dLat);
-		_speedLon = dLon / length * getRadianSpeed();
+		double dLon, dLat, length;
+		dLon = sin(_dest->getLongitude() - _lon) * cos(_dest->getLatitude());
+		dLat = cos(_lat) * sin(_dest->getLatitude()) - sin(_lat) * cos(_dest->getLatitude()) * cos(_dest->getLongitude() - _lon);
+		length = sqrt(dLon * dLon + dLat * dLat);
+		_speedLon = dLon / length * getRadianSpeed() / cos(dLat);
 		_speedLat = dLat / length * getRadianSpeed();
 	}
 	else

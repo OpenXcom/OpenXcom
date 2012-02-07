@@ -165,7 +165,7 @@ int Projectile::calculateTrajectory(double accuracy)
 		return -1; // no line of fire as there is nothing on this tile
 	}
 	test = _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, false, &_trajectory, bu);
-	if (test == 4 && _trajectory.size() > 0)
+	if (test == 4 && !_trajectory.empty())
 	{
 		Position hitPos = Position(_trajectory.at(0).x/16, _trajectory.at(0).y/16, _trajectory.at(0).z/24);
 		if (hitPos != targetTile->getPosition())

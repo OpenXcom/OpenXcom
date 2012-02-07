@@ -438,7 +438,7 @@ int Base::getTotalScientists() const
 	const std::vector<ResearchProject *> & researchs (getResearch());
 	for (std::vector<ResearchProject *>::const_iterator itResearch = researchs.begin ();
 		 itResearch != researchs.end ();
-		 itResearch++)
+		 ++itResearch)
 	{
 		total += (*itResearch)->getAssigned ();
 	}
@@ -556,7 +556,7 @@ int Base::getUsedLaboratories() const
 	int usedLabSpace = 0;
 	for (std::vector<ResearchProject *>::const_iterator itResearch = researchs.begin ();
 		 itResearch != researchs.end ();
-		 itResearch++)
+		 ++itResearch)
 	{
 		usedLabSpace += (*itResearch)->getAssigned ();
 	}
@@ -678,7 +678,7 @@ int Base::getAllocatedScientists() const
 	const std::vector<ResearchProject *> & researchs (getResearch());
 	for (std::vector<ResearchProject *>::const_iterator itResearch = researchs.begin ();
 		 itResearch != researchs.end ();
-		 itResearch++)
+		 ++itResearch)
 	{
 		total += (*itResearch)->getAssigned ();
 	}
