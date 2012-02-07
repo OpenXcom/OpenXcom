@@ -152,7 +152,7 @@ MapBlock* RuleTerrain::getRandomMapBlock(int maxsize, MapBlockType type)
 		}
 	}
 
-	if (compliantMapBlocks.size() == 0) return 0;
+	if (compliantMapBlocks.empty()) return 0;
 
 	int n = RNG::generate(0, compliantMapBlocks.size() - 1);
 

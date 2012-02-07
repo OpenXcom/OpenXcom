@@ -718,19 +718,11 @@ void Globe::rotate()
  */
 void Globe::draw()
 {
-	drawRefresh();
-	drawDetail();
-}
-
-/**
- * Only draws what needs updating every tick.
- */
-void Globe::drawRefresh()
-{
 	Surface::draw();
 	drawOcean();
 	drawLand();
 	drawMarkers();
+	drawDetail();
 }
 
 /**

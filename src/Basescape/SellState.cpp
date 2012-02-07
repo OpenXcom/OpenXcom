@@ -382,9 +382,11 @@ void SellState::increase()
 	if (_qtys[_sel] < getQuantity())
 	{
 		_qtys[_sel]++;
-		std::wstringstream ss;
+		std::wstringstream ss, ss2;
 		ss << _qtys[_sel];
 		_lstItems->setCellText(_sel, 2, ss.str());
+		ss2 << getQuantity() - _qtys[_sel];
+		_lstItems->setCellText(_sel, 1, ss2.str());
 		_total += getPrice();
 		std::wstring s = _game->getLanguage()->getString("STR_VALUE_OF_SALES");
 		s += Text::formatFunding(_total);
@@ -400,9 +402,11 @@ void SellState::decrease()
 	if (_qtys[_sel] > 0)
 	{
 		_qtys[_sel]--;
-		std::wstringstream ss;
+		std::wstringstream ss, ss2;
 		ss << _qtys[_sel];
 		_lstItems->setCellText(_sel, 2, ss.str());
+		ss2 << getQuantity() - _qtys[_sel];
+		_lstItems->setCellText(_sel, 1, ss2.str());
 		_total -= getPrice();
 		std::wstring s = _game->getLanguage()->getString("STR_VALUE_OF_SALES");
 		s += Text::formatFunding(_total);

@@ -2533,11 +2533,11 @@ XcomRuleset::XcomRuleset() : Ruleset()
 		}
 		for(std::map<RuleResearchProject *, std::vector<std::string> >::iterator iter = projectDependencys.begin ();
 			iter != projectDependencys.end ();
-			iter++)
+			++iter)
 		{
 			for(std::vector<std::string>::iterator itDep = iter->second.begin ();
 				itDep != iter->second.end ();
-				itDep++)
+				++itDep)
 			{
 				std::map<std::string, RuleResearchProject *>::iterator it = _researchProjects.find(*itDep);
 				if (it != _researchProjects.end ())
@@ -2548,11 +2548,11 @@ XcomRuleset::XcomRuleset() : Ruleset()
 		  }
 		for(std::map<RuleResearchProject *, std::vector<std::string> >::iterator iter = unlocks.begin ();
 			iter != unlocks.end ();
-			iter++)
+			++iter)
 		{
 			for(std::vector<std::string>::iterator itDep = iter->second.begin ();
 				itDep != iter->second.end ();
-				itDep++)
+				++itDep)
 			{
 				std::map<std::string, RuleResearchProject *>::iterator it = _researchProjects.find(*itDep);
 				if (it != _researchProjects.end ())

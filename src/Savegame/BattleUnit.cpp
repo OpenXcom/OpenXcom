@@ -77,7 +77,6 @@ void BattleUnit::load(const YAML::Node &node)
 	int a = 0;
 
 	node["id"] >> _id;
-	std::string name;
 	node["faction"] >> a;
 	_faction = (UnitFaction)a;
 	node["status"] >> a;
@@ -646,7 +645,7 @@ void BattleUnit::damage(Position position, int power, ItemDamageType type)
 		return;
 	}
 
-	power *= _unit->getArmor()->getDamageModifier(type);
+	power = (int)floor(power * _unit->getArmor()->getDamageModifier(type));
 
 	if (type == DT_STUN)
 	{

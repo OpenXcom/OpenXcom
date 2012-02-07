@@ -39,7 +39,6 @@ RuleAlienRace::~RuleAlienRace()
  */
 void RuleAlienRace::load(const YAML::Node &node)
 {
-	int a = 0;
 	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
 	{
 		std::string key;

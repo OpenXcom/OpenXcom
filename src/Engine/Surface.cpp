@@ -68,6 +68,7 @@ Surface::Surface(const Surface& other)
 	_crop.y = other._crop.y;
 	_visible = other._visible;
 	_hidden = other._hidden;
+	_redraw = other._redraw;
 	_originalColors = other._originalColors;
 }
 

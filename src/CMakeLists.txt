@@ -493,9 +493,7 @@ if ( MSVC )
   endif ( FATAL_WARNING )
 endif ()
 
-if ( NOT WIN32 )
-  add_definitions ( -DDATADIR="${CMAKE_INSTALL_PREFIX}/share/openxcom/" )
-else ()
+if ( WIN32 )
   set ( application_type WIN32 )
 endif ()
 

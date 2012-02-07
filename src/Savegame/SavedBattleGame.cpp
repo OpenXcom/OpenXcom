@@ -373,7 +373,7 @@ void SavedBattleGame::initUtilities(ResourcePack *res)
  * Sets the mission type.
  * @param missionType
  */
-void SavedBattleGame::setMissionType(const std::string missionType)
+void SavedBattleGame::setMissionType(const std::string &missionType)
 {
 	_missionType = missionType;
 }
@@ -864,7 +864,7 @@ Node *SavedBattleGame::getSpawnNode(int nodeRank, BattleUnit *unit)
 		}
 	}
 	
-	if (compliantNodes.size() == 0) return 0;
+	if (compliantNodes.empty()) return 0;
 
 	int n = RNG::generate(0, compliantNodes.size() - 1);
 
@@ -899,7 +899,7 @@ Node *SavedBattleGame::getPatrolNode(bool scout, BattleUnit *unit, Node *fromNod
 		}
 	}
 
-	if (compliantNodes.size() == 0) return 0;
+	if (compliantNodes.empty()) return 0;
 
 	return compliantNodes[RNG::generate(0, compliantNodes.size() - 1)];
 }

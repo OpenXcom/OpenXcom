@@ -87,7 +87,7 @@ public:
 	/// Gets the game's mapdatafiles.
 	std::vector<MapDataSet*> *const getMapDataSets();
 	/// Set the mission type.
-	void setMissionType(const std::string missionType);
+	void setMissionType(const std::string &missionType);
 	/// Get the mission type.
 	std::string getMissionType() const;
 	/// Set the global shade.
