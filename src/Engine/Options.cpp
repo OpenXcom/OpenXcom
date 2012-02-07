@@ -32,7 +32,8 @@ namespace Options
 {
 
 std::string _version = "0.3";
-std::vector<std::string> _dataFolders;
+std::string _dataFolder = "";
+std::vector<std::string> _dataList;
 std::string _userFolder = "";
 std::map<std::string, std::string> _options;
 
@@ -89,11 +90,11 @@ void loadArgs(int argc, char** args)
 			}
 			else if (arg == "-data")
 			{
-				CrossPlatform::splitPathList(args[i+1], _dataFolders);
+				_dataFolder = CrossPlatform::endPath(args[i+1]);
 			}
 			else if (arg == "-user")
 			{
-				_userFolder = args[i+1];
+				_userFolder = CrossPlatform::endPath(args[i+1]);
 			}
 		}
 	}
@@ -113,25 +114,19 @@ void init(int argc, char** args)
 {
 	createDefault();
 	loadArgs(argc, args);
-	if (_dataFolders.empty())
+	if (_dataFolder == "")
 	{
-		CrossPlatform::findDataFolders(true, _dataFolders);
+		_dataList = CrossPlatform::findDataFolders();
 		// Missing data folder is handled in StartState
 	}
 	if (_userFolder == "")
 	{
 		_userFolder = CrossPlatform::findUserFolder(true);
-		std::string configFolder = CrossPlatform::getConfigFolder(true);
+		// Create user folder and save options
 		if (_userFolder == "")
 		{
 			_userFolder = CrossPlatform::findUserFolder(false);
-			CrossPlatform::createFolder(_userFolder.c_str());
-		}
-		// Create user folder and save options
-		if (configFolder == "")
-		{
-			configFolder = CrossPlatform::getConfigFolder(false);
-			CrossPlatform::createFolder(configFolder.c_str());
+			CrossPlatform::createFolder(Options::getUserFolder().c_str());
 			save();
 		}
 		// Load existing options
@@ -148,7 +143,7 @@ void init(int argc, char** args)
  */
 void load(const std::string &filename)
 {
-	std::string s = CrossPlatform::getConfigFolder(true) + filename + ".cfg";
+	std::string s = Options::getUserFolder() + filename + ".cfg";
 	std::ifstream fin(s.c_str());
 	if (!fin)
 	{
@@ -176,7 +171,7 @@ void load(const std::string &filename)
  */
 void save(const std::string &filename)
 {
-	std::string s = CrossPlatform::getConfigFolder(true) + filename + ".cfg";
+	std::string s = Options::getUserFolder() + filename + ".cfg";
 	std::ofstream sav(s.c_str());
 	if (!sav)
 	{
@@ -201,27 +196,22 @@ std::string getVersion()
 }
 
 /**
- * Returns the game's main data folder where resources
+ * Returns the game's current Data folder where resources
  * and X-Com files are loaded from.
  * @return Full path to Data folder.
  */
 std::string getDataFolder()
 {
-	if(_dataFolders.empty())
-	{
-		return "";
-	}
-	return _dataFolders[0];
+	return _dataFolder;
 }
 
 /**
- * Returns the game's Data folders where resources
- * and X-Com files are loaded from.
- * @return the list of Data folder.
+ * Returns the game's list of possible Data folders.
+ * @return List of Data paths.
  */
-const std::vector<std::string> & getDataFolders()
+std::vector<std::string> *getDataList()
 {
-	return _dataFolders;
+	return &_dataList;
 }
 
 /**

@@ -44,10 +44,10 @@ namespace Options
 	void save(const std::string &filename = "options");
 	/// Gets the current game version.
 	std::string getVersion();
-	/// Gets the game's main data folder.
+	/// Gets the game's data folder.
 	std::string getDataFolder();
-	// Get the list of game's data folder.
-	const std::vector<std::string> & getDataFolders();
+	/// Gets the game's data list.
+	std::vector<std::string> *getDataList();
 	/// Gets the game's user folder.
 	std::string getUserFolder();
 	/// Gets a string option.

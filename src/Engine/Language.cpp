@@ -294,6 +294,8 @@ std::wstring Language::getName() const
  */
 std::wstring Language::getString(const std::string &id) const
 {
+	if (id.empty())
+		return L"";
 	std::map<std::string, std::wstring>::const_iterator s = _strings.find(id);
 	if (s == _strings.end())
 	{
