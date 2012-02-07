@@ -510,4 +510,14 @@ bool Soldier::isPromoted()
 	return promoted;
 }
 
+/**
+ * Returns the soldier's special ability. Which is none.
+ * @return none.
+ */
+int Soldier::getSpecialAbility() const
+{
+	return 0;
+}
+
+
 }

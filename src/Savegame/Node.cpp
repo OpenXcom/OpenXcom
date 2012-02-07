@@ -208,4 +208,9 @@ void Node::free()
 	_allocated = false;
 }
 
+bool Node::isTarget() const
+{
+	return _reserved == 5;
+}
+
 }

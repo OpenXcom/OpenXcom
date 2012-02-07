@@ -124,6 +124,21 @@ void BattlescapeGame::think()
 					if (!handlePanickingUnit(_save->getSelectedUnit()))
 						handleAI(_save->getSelectedUnit());
 				}
+				else
+				{
+					if (_save->selectNextPlayerUnit(true) == 0)
+					{
+						if (!_save->getDebugMode())
+						{
+							statePushBack(0); // end AI turn
+						}
+						else
+						{
+							_save->selectNextPlayerUnit(false);
+							_debugPlay = true;
+						}
+					}
+				}
 			}
 		}
 		else
@@ -314,8 +329,10 @@ void BattlescapeGame::endTurn()
 
 /**
  * Checks for casualties and adjusts morale accordingly.
- * @param murderweapon
- * @param murderer
+ * @param murderweapon Need to know this, for a HE explosion there is an instant death.
+ * @param murderer This is needed for credits for the kill.
+ * @param hiddenExplosion Set to true for the explosions of UFO Power sources at start of battlescape.
+ * @param terrainExplosion Set to true for the explosions of terrain.
  * @return Whether the battle is finished.
  */
 bool BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *murderer, bool hiddenExplosion, bool terrainExplosion)
@@ -811,11 +828,14 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 			ba.target = (*j)->getPosition();
 			statePushBack(new UnitTurnBState(this, ba));
 		}
-		ba.type = BA_SNAPSHOT;
-		ba.weapon = unit->getMainHandWeapon();
-		for (int i= 0; i < 10; i++)
+		if (_save->getTile(ba.target) != 0)
 		{
-			statePushBack(new ProjectileFlyBState(this, ba));
+			ba.type = BA_SNAPSHOT;
+			ba.weapon = unit->getMainHandWeapon();
+			for (int i= 0; i < 10; i++)
+			{
+				statePushBack(new ProjectileFlyBState(this, ba));
+			}
 		}
 		ba.type = BA_NONE;
 		break;

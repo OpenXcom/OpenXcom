@@ -127,15 +127,7 @@ InventoryState::~InventoryState()
  */
 void InventoryState::init()
 {
-	BattleUnit *oldUnit = _battleGame->getSelectedUnit();
-	BattleUnit *unit = oldUnit;
-
-	while (_battleGame->getSelectedUnit()->getUnit()->getArmor()->getSize() > 1)
-	{
-		unit = _battleGame->selectNextPlayerUnit();
-	}
-
-	_battleGame->setSelectedUnit(oldUnit);
+	BattleUnit *unit = _battleGame->getSelectedUnit();
 
 	unit->setCache(0);
 	_soldier->clear();
@@ -196,6 +188,11 @@ void InventoryState::btnOkClick(Action *action)
 void InventoryState::btnPrevClick(Action *action)
 {
 	_battleGame->selectPreviousPlayerUnit();
+	// skip large units
+	while (_battleGame->getSelectedUnit()->getUnit()->getArmor()->getSize() > 1)
+	{
+		_battleGame->selectPreviousPlayerUnit();
+	}
 	init();
 }
 
@@ -206,6 +203,11 @@ void InventoryState::btnPrevClick(Action *action)
 void InventoryState::btnNextClick(Action *action)
 {
 	_battleGame->selectNextPlayerUnit();
+	// skip large units
+	while (_battleGame->getSelectedUnit()->getUnit()->getArmor()->getSize() > 1)
+	{
+		_battleGame->selectNextPlayerUnit();
+	}
 	init();
 }
 

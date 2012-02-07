@@ -839,7 +839,8 @@ int *SavedBattleGame::getCurrentItemId()
  */
 Node *SavedBattleGame::getSpawnNode(int nodeRank, BattleUnit *unit)
 {
-	Node *n = 0;
+	int highestPriority = -1;
+	std::vector<Node*> compliantNodes;	
 
 	for (std::vector<Node*>::iterator i = getNodes()->begin(); i != getNodes()->end(); ++i)
 	{
@@ -851,24 +852,23 @@ Node *SavedBattleGame::getSpawnNode(int nodeRank, BattleUnit *unit)
 			&& (*i)->getPriority() > 0										// priority 0 is no spawnplace
 			&& setUnitPosition(unit, (*i)->getPosition(), true))	// check if not already occupied
 		{
-			// we can spawn here - but we continue searching, as we may find better (priority wise)
-			if (n == 0)
+			if ((*i)->getPriority() > highestPriority)
 			{
-				n = *i;
+				highestPriority = (*i)->getPriority();
+				compliantNodes.clear(); // drop the last nodes, as we found a higher priority now
 			}
-			else
+			if ((*i)->getPriority() == highestPriority)
 			{
-				// either the priority is heigher then it is going to be this one,
-				// or the priority is the same, then there is a 33% chance we choose this node over the last one
-				if ((*i)->getPriority() > n->getPriority() || ((*i)->getPriority() == n->getPriority() && (RNG::generate(0,2) == 1)))
-				{
-					n = *i;
-				}
+				compliantNodes.push_back((*i));
 			}
 		}
 	}
+	
+	if (compliantNodes.size() == 0) return 0;
 
-	return n;
+	int n = RNG::generate(0, compliantNodes.size() - 1);
+
+	return compliantNodes[n];
 }
 
 /**
@@ -879,16 +879,13 @@ Node *SavedBattleGame::getSpawnNode(int nodeRank, BattleUnit *unit)
  */
 Node *SavedBattleGame::getPatrolNode(bool scout, BattleUnit *unit, Node *fromNode)
 {
-	Node *n = 0;
-	int tries = 0;
+	std::vector<Node*> compliantNodes;	
 
-	while (n == 0 && tries < 10)
+	for (int i = 0; i < 4; i ++)
 	{
-		int i = RNG::generate(0, 4);
-		tries++;
 		if (fromNode->getNodeLink(i)->getConnectedNodeID() > -1)
 		{
-			n = getNodes()->at(fromNode->getNodeLink(i)->getConnectedNodeID());
+			Node *n = getNodes()->at(fromNode->getNodeLink(i)->getConnectedNodeID());
 			if ((n->getRank() > 0 || scout)										// for no scouts we find a node with a rank above 0
 				&& (!(n->getType() & Node::TYPE_SMALL) 
 					|| unit->getUnit()->getArmor()->getSize() == 1)				// the small unit bit is not set or the unit is small
@@ -897,18 +894,15 @@ Node *SavedBattleGame::getPatrolNode(bool scout, BattleUnit *unit, Node *fromNod
 				&& !n->isAllocated() // check if not allocated
 				&& setUnitPosition(unit, n->getPosition(), true))	// check if not already occupied
 			{
-				n = n; // OK
-			}
-			else
-			{
-				n = 0; // NOK
+				compliantNodes.push_back(n);
 			}
 		}
 	}
 
-	return n;
-}
+	if (compliantNodes.size() == 0) return 0;
 
+	return compliantNodes[RNG::generate(0, compliantNodes.size() - 1)];
+}
 
 /**
  * New turn preparations. Like fire and smoke spreading.

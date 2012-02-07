@@ -1078,6 +1078,34 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	tcorpse4->setInventoryHeight(0);
 	tcorpse4->setWeight(100);
 
+	RuleItem *cdcorpse1 = new RuleItem("STR_CYBERDISC_CORPSE_1");
+	cdcorpse1->setBigSprite(43);
+	cdcorpse1->setFloorSprite(56);
+	cdcorpse1->setInventoryWidth(0);
+	cdcorpse1->setInventoryHeight(0);
+	cdcorpse1->setWeight(100);
+
+	RuleItem *cdcorpse2 = new RuleItem("STR_CYBERDISC_CORPSE_2");
+	cdcorpse2->setBigSprite(43);
+	cdcorpse2->setFloorSprite(57);
+	cdcorpse2->setInventoryWidth(0);
+	cdcorpse2->setInventoryHeight(0);
+	cdcorpse2->setWeight(100);
+
+	RuleItem *cdcorpse3 = new RuleItem("STR_CYBERDISC_CORPSE_3");
+	cdcorpse3->setBigSprite(43);
+	cdcorpse3->setFloorSprite(58);
+	cdcorpse3->setInventoryWidth(0);
+	cdcorpse3->setInventoryHeight(0);
+	cdcorpse3->setWeight(100);
+
+	RuleItem *cdcorpse4 = new RuleItem("STR_CYBERDISC_CORPSE_4");
+	cdcorpse4->setBigSprite(43);
+	cdcorpse4->setFloorSprite(59);
+	cdcorpse4->setInventoryWidth(0);
+	cdcorpse4->setInventoryHeight(0);
+	cdcorpse4->setWeight(100);
+
 	RuleItem *lp = new RuleItem("STR_LASER_PISTOL");
 	lp->setSize(0.1f);
 	lp->setCost(70);
@@ -1190,6 +1218,28 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	agrenade->setBattleType(BT_GRENADE);
 	agrenade->setWeight(3);
 
+	RuleItem *cdweapon = new RuleItem("CYBERDISC_WEAPON");
+	cdweapon->setSize(0.1f);
+	cdweapon->setCost(800);
+	cdweapon->setBigSprite(32);
+	cdweapon->setHandSprite(104);
+	cdweapon->setFloorSprite(31);
+	cdweapon->setBulletSprite(8);
+	cdweapon->setFireSound(18);
+	cdweapon->setAccuracySnap(75);
+	cdweapon->setTUSnap(30);
+	cdweapon->setAccuracyAimed(110);
+	cdweapon->setTUAimed(60);
+	cdweapon->setBattleType(BT_FIREARM);
+	cdweapon->setInventoryWidth(1);
+	cdweapon->setInventoryHeight(2);
+	cdweapon->setWeight(3);
+	cdweapon->setDamageType(DT_PLASMA);
+	cdweapon->setClipSize(-1);
+	cdweapon->setFixed(true);
+	cdweapon->setPower(130);
+	cdweapon->setHitAnimation(46);
+	cdweapon->setHitSound(19);
 
 	_items.insert(std::pair<std::string, RuleItem*>("STR_STINGRAY_LAUNCHER", slauncher));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_AVALANCHE_LAUNCHER", alauncher));
@@ -1222,6 +1272,10 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_items.insert(std::pair<std::string, RuleItem*>("STR_TANK_CORPSE_2", tcorpse2));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_TANK_CORPSE_3", tcorpse3));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_TANK_CORPSE_4", tcorpse4));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_CYBERDISC_CORPSE_1", cdcorpse1));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_CYBERDISC_CORPSE_2", cdcorpse2));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_CYBERDISC_CORPSE_3", cdcorpse3));
+	_items.insert(std::pair<std::string, RuleItem*>("STR_CYBERDISC_CORPSE_4", cdcorpse4));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_PLASMA_PISTOL", ppistol));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_PLASMA_PISTOL_CLIP", ppclip));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_ELECTRO_FLARE", flare));
@@ -1234,6 +1288,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_items.insert(std::pair<std::string, RuleItem*>("STR_MEDI_KIT", medikit));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_MOTION_SCANNER", scanner));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_ALIEN_GRENADE", agrenade));
+	_items.insert(std::pair<std::string, RuleItem*>("CYBERDISC_WEAPON", cdweapon));
 
 
 	RuleManufactureInfo *mlp = new RuleManufactureInfo("STR_LASER_PISTOL");
@@ -1569,7 +1624,6 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	dd.percentageOutsideUFO = 0;
 	dd.itemSets.clear();
 	is.items.clear();
-	is.items.push_back("STR_LASER_RIFLE");
 	dd.itemSets.push_back(is);
 	aterror->getDeploymentData()->push_back(dd);
 
@@ -1595,7 +1649,6 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	dd.percentageOutsideUFO = 0;
 	dd.itemSets.clear();
 	is.items.clear();
-	is.items.push_back("STR_LASER_RIFLE");
 	dd.itemSets.push_back(is);
 	basedef->getDeploymentData()->push_back(dd);
 
@@ -1969,7 +2022,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 
 	RuleArmor *cyberdiscArmor = new RuleArmor("CYBERDISC_ARMOR", "CYBER.PCK", 3, MT_FLY, 2);
 	cyberdiscArmor->setArmor(90, 75, 60, 60);
-	cyberdiscArmor->setCorpseItem("STR_TANK_CORPSE_");
+	cyberdiscArmor->setCorpseItem("STR_CYBERDISC_CORPSE_");
 	cyberdiscArmor->setDamageModifier(0, DT_STUN);
 
 	_armors.insert(std::pair<std::string, RuleArmor*>("STR_NONE_UC", coveralls));
@@ -2084,6 +2137,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	cyberdisc->setVoxelParameters(15, 15, 4);
 	cyberdisc->setValue(20);
 	cyberdisc->setAIParameters(5, 1);
+	cyberdisc->setSpecialAbility(SPECAB_EXPLODEONDEATH);
 
 	RuleGenUnit *floaterSoldier = new RuleGenUnit("FLOATER_SOLDIER", "STR_FLOATER", "STR_LIVE_SOLDIER");
 	floaterSoldier->setArmor("FLOATER_ARMOR0");

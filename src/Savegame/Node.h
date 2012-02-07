@@ -79,6 +79,7 @@ public:
 	bool isAllocated() const;
 	void allocate();
 	void free();
+	bool isTarget() const;
 };
 
 }

@@ -26,6 +26,7 @@
 #include "../Savegame/Node.h"
 #include "../Engine/RNG.h"
 #include "../Ruleset/RuleArmor.h"
+#include "../Savegame/Tile.h"
 
 namespace OpenXcom
 {
@@ -151,7 +152,7 @@ void PatrolBAIState::think(BattleAction *action)
 		}
 	}
 
-	if (_toNode == 0 && RNG::generate(0,10) < 9)
+	if (_toNode == 0)
 	{
 		// look for a new node to walk towards
 		bool scout = true;
@@ -168,7 +169,59 @@ void PatrolBAIState::think(BattleAction *action)
 				scout = false;
 			}
 		}
-		_toNode = _game->getPatrolNode(scout, _unit, _fromNode);
+
+		// in base defence missions, the smaller aliens walk towards target nodes - or if there, shoot objects around them
+		if (_game->getMissionType() == "STR_BASE_DEFENCE" && _unit->getUnit()->getArmor()->getSize() == 1)
+		{
+			if (_fromNode->isTarget())
+			{
+				// scan this room for objects to destroy
+				int x = (_unit->getPosition().x/10)*10;
+				int y = (_unit->getPosition().y/10)*10;
+				for (int i = x; i < x+9; i++)
+				for (int j = y; j < y+9; j++)
+				{
+					MapData *md = _game->getTile(Position(i, j, 1))->getMapData(MapData::O_OBJECT);
+					if (md && md->getDieMCD() && md->getArmor() < 60 )
+					{
+						action->actor = _unit;
+						action->target = Position(i, j, 1);
+						action->weapon = action->actor->getMainHandWeapon();
+						action->type = BA_SNAPSHOT;
+						action->TU = action->actor->getActionTUs(action->type, action->weapon);
+						_unit->lookAt(action->target);
+						while (_unit->getStatus() == STATUS_TURNING)
+						{
+							_unit->turn();
+						}
+						return;
+					}
+				}
+			}
+			else
+			{
+				// find closest target which is not already allocated
+				int closest = 1000000;
+				for (std::vector<Node*>::iterator i = _game->getNodes()->begin(); i != _game->getNodes()->end(); ++i)
+				{
+					if ((*i)->isTarget() && !(*i)->isAllocated())
+					{
+						node = *i;
+						int d = _game->getTileEngine()->distance(_unit->getPosition(), node->getPosition());
+						if (d < closest)
+						{
+							_toNode = node;
+							closest = d;
+						}
+					}
+				}
+			}
+		}
+
+		if (_toNode == 0)
+		{
+			_toNode = _game->getPatrolNode(scout, _unit, _fromNode);
+		}
 	}
 
 	if (_toNode != 0)
@@ -182,13 +235,14 @@ void PatrolBAIState::think(BattleAction *action)
 		{
 			_unit->turn();
 		}
+		action->TU = 0; // tus are already decreased while walking
 	}
 	else
 	{
 		action->type = BA_NONE;
+		action->TU = 0;
 	}
 
-	action->TU = 0; // tus are already decreased while walking
 }
 
 }
