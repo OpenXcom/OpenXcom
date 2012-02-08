@@ -18,7 +18,6 @@
  */
 #include "XcomResourcePack.h"
 #include <sstream>
-#include <sys/stat.h>
 #include "../Engine/CrossPlatform.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Font.h"
@@ -289,7 +288,7 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 							 "GMSTORY",
 							 "GMTACTIC",
 							 "GMWIN"};
-		std::string exts[] = {"ogg", "mp3", "mid"};
+		std::string exts[] = {"ogg", "mp3", "mod", "mid"};
 		int tracks[] = {3, 6, 0, 18, 2, 19, 20, 21, 10, 9, 8, 12, 17, 11};
 
 		// Check which music version is available
@@ -297,8 +296,7 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 		GMCatFile *gmcat = 0;
 
 		std::string musDos = "SOUND/GM.CAT";
-		struct stat musInfo;
-		if (stat(CrossPlatform::getDataFile(musDos).c_str(), &musInfo) == 0)
+		if (CrossPlatform::fileExists(CrossPlatform::getDataFile(musDos)))
 		{
 			cat = true;
 			gmcat = new GMCatFile(CrossPlatform::getDataFile(musDos).c_str());
@@ -317,12 +315,11 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 			else
 			{
 				_musics[mus[i]] = new Music();
-				for (int j = 0; j < 3; ++j)
+				for (int j = 0; j < 4; ++j)
 				{
 					std::stringstream s;
 					s << "SOUND/" << mus[i] << "." << exts[j];
-					struct stat info;
-					if (stat(CrossPlatform::getDataFile(s.str()).c_str(), &info) == 0)
+					if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str()).c_str()))
 					{
 						_musics[mus[i]]->load(CrossPlatform::getDataFile(s.str()));
 						break;
@@ -350,13 +347,12 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 		std::stringstream win, dos;
 		win << "SOUND/" << catsWin[0];
 		dos << "SOUND/" << catsDos[0];
-		struct stat sndInfo;
-		if (stat(CrossPlatform::getDataFile(win.str()).c_str(), &sndInfo) == 0)
+		if (CrossPlatform::fileExists(CrossPlatform::getDataFile(win.str())))
 		{
 			cats = catsWin;
 			wav = true;
 		}
-		else if (stat(CrossPlatform::getDataFile(dos.str()).c_str(), &sndInfo) == 0)
+		else if (CrossPlatform::fileExists(CrossPlatform::getDataFile(dos.str())))
 		{
 			cats = catsDos;
 			wav = false;

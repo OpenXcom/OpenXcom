@@ -46,6 +46,8 @@ namespace Options
 	std::string getVersion();
 	/// Gets the game's data folder.
 	std::string getDataFolder();
+	/// Sets the game's data folder.
+	void setDataFolder(const std::string &folder);
 	/// Gets the game's data list.
 	std::vector<std::string> *getDataList();
 	/// Gets the game's user folder.

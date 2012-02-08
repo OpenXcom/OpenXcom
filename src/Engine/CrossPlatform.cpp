@@ -19,7 +19,6 @@
 #include "CrossPlatform.h"
 #include <iostream>
 #include <algorithm>
-#include <sys/stat.h>
 #include "../dirent.h"
 #include "Exception.h"
 #include "Options.h"
@@ -35,6 +34,7 @@
 #pragma comment(lib, "shell32.lib")
 #pragma comment(lib, "shlwapi.lib")
 #else
+#include <sys/stat.h>
 #include <string.h>
 #include <unistd.h>
 #include <stdio.h>
@@ -95,7 +95,7 @@ std::vector<std::string> findDataFolders()
 	// Get Documents folder
 	if (SUCCEEDED(SHGetFolderPathA(NULL, CSIDL_PERSONAL, NULL, SHGFP_TYPE_CURRENT, path)))
 	{
-		PathAppendA(path, "OpenXcom\\Data\\");
+		PathAppendA(path, "OpenXcom\\data\\");
 		list.push_back(path);
 	}
 
@@ -103,14 +103,14 @@ std::vector<std::string> findDataFolders()
 	if (GetModuleFileNameA(NULL, path, MAX_PATH) != 0)
 	{
 		PathRemoveFileSpecA(path);
-		PathAppendA(path, "Data\\");
+		PathAppendA(path, "data\\");
 		list.push_back(path);
 	}
 
 	// Get working directory
 	if (GetCurrentDirectoryA(MAX_PATH, path) != 0)
 	{
-		PathAppendA(path, "Data\\");
+		PathAppendA(path, "data\\");
 		list.push_back(path);
 	}
 #else
@@ -124,7 +124,7 @@ std::vector<std::string> findDataFolders()
 
 	char path[MAXPATHLEN];
 #ifdef __APPLE__
-	snprintf(path, MAXPATHLEN, "%s/Library/Application Support/OpenXcom/Data/", home);
+	snprintf(path, MAXPATHLEN, "%s/Library/Application Support/OpenXcom/data/", home);
 	list.push_back(path);
 #else
 	// Get user-specific data folders
@@ -165,6 +165,106 @@ std::vector<std::string> findDataFolders()
 }
 
 /**
+ * Builds a list of predefined paths for the User folder
+ * according to the running system.
+ * @return List of data paths.
+ */
+std::vector<std::string> findUserFolders()
+{
+	std::vector<std::string> list;
+#ifdef _WIN32
+	char path[MAX_PATH];
+
+	// Get Documents folder
+	if (SUCCEEDED(SHGetFolderPathA(NULL, CSIDL_PERSONAL, NULL, SHGFP_TYPE_CURRENT, path)))
+	{
+		PathAppendA(path, "OpenXcom\\");
+		list.push_back(path);
+	}
+
+	// Get binary directory
+	if (GetModuleFileNameA(NULL, path, MAX_PATH) != 0)
+	{
+		PathRemoveFileSpecA(path);
+		PathAppendA(path, "user\\");
+		list.push_back(path);
+	}
+
+	// Get working directory
+	if (GetCurrentDirectoryA(MAX_PATH, path) != 0)
+	{
+		PathAppendA(path, "user\\");
+		list.push_back(path);
+	}
+#else
+	char *xdg_data_home = getenv("XDG_DATA_HOME"), *home = getenv("HOME");
+	if (!home)
+	{
+		struct passwd* pwd = getpwuid(getuid());
+		home = pwd->pw_dir;
+	}
+
+	char path[MAXPATHLEN];
+#ifdef __APPLE__
+	snprintf(path, MAXPATHLEN, "%s/Library/Application Support/OpenXcom/", home);
+	list.push_back(path);
+#else
+	// Get user folders
+	if (xdg_data_home == 0)
+	{
+		snprintf(path, MAXPATHLEN, "%s/.local/share/openxcom/", home);
+		list.push_back(path);
+	}
+	else
+	{
+		snprintf(path, MAXPATHLEN, "%s/openxcom/", xdg_data_home);
+		list.push_back(path);
+	}
+
+	// Get old-style folder
+	snprintf(path, MAXPATHLEN, "%s/.openxcom/", home);
+	list.push_back(path);
+
+#endif
+	// Get working directory
+	list.push_back("./user/");
+#endif
+
+	return list;
+}
+
+/**
+ * Finds the Config folder according to the running system.
+ * @return Gonfig path.
+ */
+std::string findConfigFolder()
+{
+#if defined(_WIN32) || defined(__APPLE__)
+	return "";
+#else
+	char *xdg_config_home = getenv("XDG_CONFIG_HOME"), *home = getenv("HOME");
+	if (!home)
+	{
+		struct passwd* pwd = getpwuid(getuid());
+		home = pwd->pw_dir;
+	}
+
+	char path[MAXPATHLEN];
+	// Get config folders
+	if (xdg_config_home == 0)
+	{
+		snprintf(path, MAXPATHLEN, "%s/.config/openxcom/", home);
+		return path;
+	}
+	else
+	{
+		snprintf(path, MAXPATHLEN, "%s/openxcom/", xdg_data_home);
+		return path;
+	}
+#endif
+}
+
+/**
  * Takes a path and tries to find it based on the
  * system's case-sensitivity.
  * @param base Base unaltered path.
@@ -179,8 +279,7 @@ std::string caseInsensitive(const std::string &base, const std::string &path)
 
 	// Try all various case mutations
 	// Normal unmangled
-	struct stat info;
-	if (stat(fullPath.c_str(), &info) == 0)
+	if (fileExists(fullPath.c_str()))
 	{
 		return fullPath;
 	}
@@ -188,7 +287,7 @@ std::string caseInsensitive(const std::string &base, const std::string &path)
 	// UPPERCASE
 	std::transform(newPath.begin(), newPath.end(), newPath.begin(), toupper);
 	fullPath = base + path;
-	if (stat(fullPath.c_str(), &info) == 0)
+	if (fileExists(fullPath.c_str()))
 	{
 		return fullPath;
 	}
@@ -196,7 +295,7 @@ std::string caseInsensitive(const std::string &base, const std::string &path)
 	// lowercase
 	std::transform(newPath.begin(), newPath.end(), newPath.begin(), tolower);
 	fullPath = base + path;
-	if (stat(fullPath.c_str(), &info) == 0)
+	if (fileExists(fullPath.c_str()))
 	{
 		return fullPath;
 	}
@@ -232,7 +331,7 @@ std::string getDataFile(const std::string &filename)
 		std::string path = caseInsensitive(*i, name);
 		if (path != "")
 		{
-			//Options::setDataFolder(*i);
+			Options::setDataFolder(*i);
 			return path;
 		}
 	}
@@ -242,92 +341,27 @@ std::string getDataFile(const std::string &filename)
 }
 
 /**
- * Checks a bunch of predefined paths for the User folder according
- * to the system and returns the full path.
- * @param exists Check if the folder actually exists.
- * @return Full path to User folder.
- */
-std::string findUserFolder(bool exists)
-{
-#ifdef _WIN32
-	char path[MAX_PATH];
-
-	// Check in Documents folder
-	if (SUCCEEDED(SHGetFolderPathA(NULL, CSIDL_PERSONAL, NULL, SHGFP_TYPE_CURRENT, path)))
-	{
-		PathAppendA(path, "OpenXcom\\");
-		if (!exists || PathIsDirectoryA(path))
-		{
-			return path;
-		}
-	}
-
-	// Check in binary directory
-	if (GetModuleFileNameA(NULL, path, MAX_PATH) != 0)
-	{
-		PathRemoveFileSpecA(path);
-		PathAppendA(path, "User\\");
-		if (!exists || PathIsDirectoryA(path))
-		{
-			return path;
-		}
-	}
-
-	// Check in working directory
-	if (GetCurrentDirectoryA(MAX_PATH, path) != 0)
-	{
-		PathAppendA(path, "User\\");
-		if (!exists || PathIsDirectoryA(path))
-		{
-			return path;
-		}
-	}
-#else
-	struct stat info;
-
-	// Check HOME directory
-	char *home = getenv("HOME");
-	if (!home)
-	{
-		struct passwd* pwd = getpwuid(getuid());
-		home = pwd->pw_dir;
-	}
-	else
-	{
-		char homePath[MAXPATHLEN];
-#ifdef __APPLE__
-		snprintf(homePath, MAXPATHLEN, "%s/Library/Application Support/OpenXcom/", home);
-#else
-		snprintf(homePath, MAXPATHLEN, "%s/.openxcom/", home);
-#endif
-		if (!exists || (stat(homePath, &info) == 0 && S_ISDIR(info.st_mode)))
-		{
-			return homePath;
-		}
-	}
-
-	// Check working directory
-	const char* working = "./user/";
-	if (!exists || (stat(working, &info) == 0 && S_ISDIR(info.st_mode)))
-	{
-		return working;
-	}
-#endif
-	return "";
-}
-
-/**
  * Creates a folder at the specified path.
  * @note Only creates the last folder on the path.
  * @param path Full path.
- * @return Error code.
+ * @return Folder created or not.
  */
-int createFolder(const char *path)
+bool createFolder(const std::string &path)
 {
 #ifdef _WIN32
-	return _mkdir(path);
+	int result = CreateDirectoryA(path.c_str(), 0);
+	if (result == 0)
+		return false;
+	else
+		return true;
 #else
-	return mkdir(path, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+	mode_t process_mask = umask(0);
+	int result = mkdir(path.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+	umask(process_mask);
+	if (result == 0)
+		return true;
+	else
+		return false;
 #endif
 }
 
@@ -391,6 +425,26 @@ std::vector<std::string> getFolderContents(const std::string &path, const std::s
 	std::sort(files.begin(), files.end());
 #endif
 	return files;
+}
+
+bool folderExists(const std::string &path)
+{
+#ifdef _WIN32
+	return (PathIsDirectoryA(path.c_str()) != FALSE);
+#else
+	struct stat info;
+	return (stat(path && S_ISDIR(info.st_mode));
+#endif
+}
+
+bool fileExists(const std::string &path)
+{
+#ifdef _WIN32
+	return (PathFileExistsA(path.c_str()) != FALSE);
+#else
+	struct stat info;
+	return (stat(path && S_ISREG(info.st_mode));
+#endif
 }
 
 }

@@ -180,7 +180,7 @@ int GenUnit::getValue() const
 }
 
 /**
- * Returns wether the unit is affected by fatal wounds.
+ * Returns whether the unit is affected by fatal wounds.
  * Aliens can't stop bleeding of fatal wounds, so it's only fair they don't receive fatail wounds.
  * @return bool
  */
@@ -190,7 +190,7 @@ bool GenUnit::isWoundable() const
 }
 
 /**
- * Returns wether the unit is affected by fear..
+ * Returns whether the unit is affected by fear..
  * @return bool
  */
 bool GenUnit::isFearable() const

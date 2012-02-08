@@ -69,9 +69,9 @@ public:
 	int getLoftemps() const;
 	/// Gets the generated unit's value.
 	int getValue() const;
-	/// Get wether the unit is affected by fatal wounds.
+	/// Get whether the unit is affected by fatal wounds.
 	bool isWoundable() const;
-	/// Get wether the unit is affected by fear.
+	/// Get whether the unit is affected by fear.
 	bool isFearable() const;
 	/// Get the unit's intelligence.
 	int getIntelligence() const;

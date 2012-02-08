@@ -142,7 +142,7 @@ void Tile::getMapData(int *mapDataID, int *mapDataSetID, int part) const
 }
 
 /**
- * Gets wether this tile has no objects. Note that we can have a unit or smoke on this tile.
+ * Gets whether this tile has no objects. Note that we can have a unit or smoke on this tile.
  * @return bool True if there is nothing but air on this tile.
  */
 bool Tile::isVoid() const

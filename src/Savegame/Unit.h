@@ -77,9 +77,9 @@ public:
 	virtual int getLoftemps() const = 0;
 	/// Get the unit's value.
 	virtual int getValue() const = 0;
-	/// Get wether the unit is affected by fatal wounds.
+	/// Get whether the unit is affected by fatal wounds.
 	virtual bool isWoundable() const = 0;
-	/// Get wether the unit is affected by fear.
+	/// Get whether the unit is affected by fear.
 	virtual bool isFearable() const = 0;
 	/// Get the unit's intelligence.
 	virtual int getIntelligence() const = 0;
