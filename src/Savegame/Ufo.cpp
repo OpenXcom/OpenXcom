@@ -295,8 +295,7 @@ void Ufo::think()
 {
 	if (!isCrashed())
 	{
-		setLongitude(_lon + _speedLon);
-		setLatitude(_lat + _speedLat);
+		move();
 		if (_dest != 0 && finishedRoute())
 		{
 			_lon = _dest->getLongitude();
