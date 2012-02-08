@@ -493,6 +493,59 @@ bool TileEngine::checkReactionFire(BattleUnit *unit, BattleAction *action, Battl
 }
 
 /**
+ * A bullet/weapon hits a voxel.
+ * @param center Center of the explosion in voxelspace.
+ * @param power Power of the explosion.
+ * @param type The damage type of the explosion.
+ * @param unit The unit that caused the explosion.
+ */
+void TileEngine::hit(const Position &center, int power, ItemDamageType type, BattleUnit *unit)
+{
+	Tile *tile = _save->getTile(Position(center.x/16, center.y/16, center.z/24));
+	int part = voxelCheck(center, unit);
+	if (part >= 0 && part <= 3)
+	{
+		// power 25% to 75%
+		int rndPower = RNG::generate(power/4, (power*3)/4); //RNG::boxMuller(power, power/6)
+		tile->damage(part, rndPower);
+	}
+	else if (part == 4)
+	{
+		// power 0 - 200%
+		int rndPower = RNG::generate(0, power*2); // RNG::boxMuller(power, power/3)
+		BattleUnit *bu = tile->getUnit();
+		if (bu)
+		{
+			bu->damage(Position(center.x%16, center.y%16, center.z%24 + tile->getTerrainLevel()), rndPower, type);
+		}
+		else
+		{
+			Tile *below = _save->getTile(Position(center.x/16, center.y/16, (center.z/24)-1));
+			if (below)
+			{
+				BattleUnit *buBelow = below->getUnit();
+				if (buBelow)
+				{
+					buBelow->damage(Position(center.x%16, center.y%16, center.z%24 + below->getTerrainLevel() + 24), rndPower, type);
+					bu = buBelow;
+				}
+			}
+		}
+
+		// conventional weapons can cause additional stun damage
+		if (type == DT_AP && bu)
+		{
+			bu->damage(Position(center.x%16, center.y%16, center.z%24), RNG::generate(0, rndPower/4), DT_STUN, true);
+		}
+
+		unit->addFiringExp();
+	}
+	calculateSunShading(); // roofs could have been destroyed
+	calculateFOV(center);
+	calculateTerrainLighting(); // fires could have been started
+}
+
+/**
  * HE, smoke and fire explodes in a circular pattern on 1 level only. HE however damages floor tiles of the above level. Not the units on it.
  * HE destroys an object if its armor is lower than the explosive power, then it's HE blockage is applied for further propagation.
  * See http://www.ufopaedia.org/index.php?title=Explosions for more info.
@@ -504,64 +557,20 @@ bool TileEngine::checkReactionFire(BattleUnit *unit, BattleAction *action, Battl
  */
 void TileEngine::explode(const Position &center, int power, ItemDamageType type, int maxRadius, BattleUnit *unit)
 {
-	if (type == DT_AP || type == DT_PLASMA || type == DT_LASER)
+	double centerZ = (int)(center.z / 24) + 0.5;
+	double centerX = (int)(center.x / 16) + 0.5;
+	double centerY = (int)(center.y / 16) + 0.5;
+	int power_;
+	std::set<Tile*> tilesAffected;
+	std::pair<std::set<Tile*>::iterator,bool> ret;
+
+	if (type == DT_IN)
 	{
-		Tile *tile = _save->getTile(Position(center.x/16, center.y/16, center.z/24));
-		int part = voxelCheck(center, unit);
-		if (part >= 0 && part <= 3)
-		{
-			// power 25% to 75%
-			int rndPower = RNG::generate(power/4, (power*3)/4); //RNG::boxMuller(power, power/6)
-			tile->damage(part, rndPower);
-		}
-		else if (part == 4)
-		{
-			// power 0 - 200%
-			int rndPower = RNG::generate(0, power*2); // RNG::boxMuller(power, power/3)
-			BattleUnit *bu = tile->getUnit();
-			if (bu)
-			{
-				bu->damage(Position(center.x%16, center.y%16, center.z%24 + tile->getTerrainLevel()), rndPower, type);
-			}
-			else
-			{
-				Tile *below = _save->getTile(Position(center.x/16, center.y/16, (center.z/24)-1));
-				if (below)
-				{
-					BattleUnit *buBelow = below->getUnit();
-					if (buBelow)
-					{
-						buBelow->damage(Position(center.x%16, center.y%16, center.z%24 + below->getTerrainLevel() + 24), rndPower, type);
-						bu = buBelow;
-					}
-				}
-			}
-
-			// conventional weapons can cause additional stun damage
-			if (type == DT_AP && bu)
-			{
-				bu->damage(Position(center.x%16, center.y%16, center.z%24), RNG::generate(0, rndPower/4), DT_STUN);
-			}
-
-			unit->addFiringExp();
-		}
+		power /= 2;
 	}
-	else
+
+	for (int fi = -90; fi <= 90; fi += 10)
 	{
-		double centerZ = (int)(center.z / 24) + 0.5;
-		double centerX = (int)(center.x / 16) + 0.5;
-		double centerY = (int)(center.y / 16) + 0.5;
-		int power_;
-		std::set<Tile*> tilesAffected;
-		std::pair<std::set<Tile*>::iterator,bool> ret;
-
-		if (type == DT_IN)
-		{
-			power /= 2;
-		}
-
-		for (int fi = 0; fi <= 90; fi += 10)
-		{
 		// raytrace every 3 degrees makes sure we cover all tiles in a circle.
 		for (int te = 0; te <= 360; te += 3)
 		{
@@ -607,12 +616,6 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 							// power 50 - 150%
 							if (dest->getUnit())
 								dest->getUnit()->damage(Position(0, 0, 0), (int)(RNG::generate(power_/2.0, power_*1.5)), type);
-							// destroy floors above
-							/*Tile *tileAbove = _save->getTile(Position(tileX, tileY, tileZ+1));
-							if ( tileAbove && tileAbove->getMapData(MapData::O_FLOOR) && power_ / 2 >= tileAbove->getMapData(MapData::O_FLOOR)->getArmor())
-							{
-								tileAbove->destroy(MapData::O_FLOOR);
-							}*/
 						}
 						if (type == DT_SMOKE)
 						{
@@ -641,14 +644,13 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 				l++;
 			}
 		}
-		}
-		// now detonate the tiles affected with HE
-		if (type == DT_HE)
+	}
+	// now detonate the tiles affected with HE
+	if (type == DT_HE)
+	{
+		for (std::set<Tile*>::iterator i = tilesAffected.begin(); i != tilesAffected.end(); ++i)
 		{
-			for (std::set<Tile*>::iterator i = tilesAffected.begin(); i != tilesAffected.end(); ++i)
-			{
-				(*i)->detonate();
-			}
+			(*i)->detonate();
 		}
 	}
 

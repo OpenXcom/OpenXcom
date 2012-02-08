@@ -111,10 +111,24 @@ void ExplosionBState::think()
 			{
 				bool terrainExplosion = false;
 				SavedBattleGame *save = _parent->getSave();
-				// after the animation is done, the real explosion takes place
+				// after the animation is done, the real explosion/hit takes place
 				if (_item)
 				{
-					save->getTileEngine()->explode(_center, _item->getRules()->getPower(), _item->getRules()->getDamageType(), _item->getRules()->getExplosionRadius(), _unit);
+					// heavy explosions, incendiary, smoke or stun bombs create AOE explosions
+					// all the rest hits one point:
+					// AP, melee (stun or AP), laser, plasma, acid
+					if (_item->getRules()->getBattleType() != BT_MELEE && 
+						(_item->getRules()->getDamageType() == DT_HE 
+						|| _item->getRules()->getDamageType() == DT_IN 
+						|| _item->getRules()->getDamageType() == DT_SMOKE
+						|| _item->getRules()->getDamageType() == DT_STUN))
+					{
+						save->getTileEngine()->explode(_center, _item->getRules()->getPower(), _item->getRules()->getDamageType(), _item->getRules()->getExplosionRadius(), _unit);
+					}
+					else
+					{
+						save->getTileEngine()->hit(_center, _item->getRules()->getPower(), _item->getRules()->getDamageType(), _unit);
+					}
 				}
 				if (_tile)
 				{
@@ -122,7 +136,7 @@ void ExplosionBState::think()
 				}
 				if (!_tile && !_item)
 				{
-					// explosion of a cyberdisc
+					// explosion not caused by terrain or an item, must be by a unit (cyberdisc)
 					save->getTileEngine()->explode(_center, 120, DT_HE, 8, _unit);
 					terrainExplosion = true;
 				}

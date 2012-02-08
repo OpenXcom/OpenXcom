@@ -23,6 +23,7 @@
 #include "Projectile.h"
 #include "TileEngine.h"
 #include "Map.h"
+#include "Pathfinding.h"
 #include "../Engine/Game.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/BattleItem.h"
@@ -85,12 +86,25 @@ void ProjectileFlyBState::init()
 	_ammo = weapon->getAmmoItem();
 	if (_unit->isOut())
 	{
-		// something went wrong
+		// something went wrong - we can't shoot when dead or unconscious
 		_parent->popState();
 		return;
 	}
-	if (_action.type != BA_THROW)
+
+	// autoshot will default back to snapshot if it's not possible
+	if (weapon->getRules()->getAccuracyAuto() == 0 && _action.type == BA_AUTOSHOT)
+		_action.type = BA_SNAPSHOT;
+
+	// snapshot defaults to "hit" if it's a melee weapon
+	// (in case of reaction "shots" with a melee weapon)
+	if (weapon->getRules()->getBattleType() == BT_MELEE && _action.type == BA_SNAPSHOT)
+		_action.type = BA_HIT;
+
+	switch (_action.type)
 	{
+	case BA_SNAPSHOT:
+	case BA_AIMEDSHOT:
+	case BA_AUTOSHOT:
 		if (_ammo == 0)
 		{
 			_action.result = "STR_NO_AMMUNITION_LOADED";
@@ -103,9 +117,8 @@ void ProjectileFlyBState::init()
 			_parent->popState();
 			return;
 		}
-	}
-	else
-	{
+		break;
+	case BA_THROW:
 		if (!validThrowRange(&_action))
 		{
 			// out of range
@@ -114,11 +127,19 @@ void ProjectileFlyBState::init()
 			return;
 		}
 		_projectileItem = weapon;
+		break;
+	case BA_HIT:
+		if (!validMeleeRange(&_action))
+		{
+			_action.result = "STR_THERE_IS_NO_ONE_THERE";
+			_parent->popState();
+			return;
+		}
+		break;
+	default:
+		_parent->popState();
+		return;
 	}
-
-	// autoshot will default back to snapshot if it's not possible
-	if (weapon->getRules()->getAccuracyAuto() == 0 && _action.type == BA_AUTOSHOT)
-		_action.type = BA_SNAPSHOT;
 
 	createNewProjectile();
 
@@ -178,7 +199,8 @@ void ProjectileFlyBState::createNewProjectile()
 				_unit->aim(true);
 				_parent->getMap()->cacheUnit(_unit);
 				// and we have a lift-off
-				_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(_action.weapon->getRules()->getFireSound())->play();
+				if (_action.weapon->getRules()->getFireSound() != -1)
+					_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(_action.weapon->getRules()->getFireSound())->play();
 				if (!_parent->getSave()->getDebugMode() && _ammo->spendBullet() == false)
 				{
 					_parent->getSave()->removeItem(_ammo);
@@ -293,6 +315,21 @@ bool ProjectileFlyBState::validThrowRange(BattleAction *action)
 	realDistance += zdiff*2;
 
 	return realDistance < maxDistance;
+}
+
+/*
+ * Validate the melee range.
+ * @return true when range is valid.
+ */
+bool ProjectileFlyBState::validMeleeRange(BattleAction *action)
+{
+	Position p;
+	Pathfinding::directionToVector(action->actor->getDirection(), &p);
+	Tile * tile (_parent->getSave()->getTile(action->actor->getPosition() + p));
+	if (tile->getUnit())
+		return true;
+	else
+		return false;
 }
 
 }

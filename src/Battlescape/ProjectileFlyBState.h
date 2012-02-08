@@ -51,6 +51,7 @@ public:
 	/// Runs state functionality every cycle.
 	void think();
 	static bool validThrowRange(BattleAction *action);
+	bool validMeleeRange(BattleAction *action);
 };
 
 }

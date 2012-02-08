@@ -633,9 +633,8 @@ int BattleUnit::getMorale() const
  * @param power
  * @param type
  */
-void BattleUnit::damage(Position position, int power, ItemDamageType type)
+void BattleUnit::damage(Position position, int power, ItemDamageType type, bool ignoreArmor)
 {
-	int damage;
 	UnitSide side;
 	int impactheight;
 	UnitBodyPart bodypart;
@@ -647,117 +646,125 @@ void BattleUnit::damage(Position position, int power, ItemDamageType type)
 
 	power = (int)floor(power * _unit->getArmor()->getDamageModifier(type));
 
-	if (type == DT_STUN)
+	if (!ignoreArmor)
 	{
-		_stunlevel += power;
-		return;
-	}
-
-	if (position == Position(0, 0, 0))
-	{
-		side = SIDE_UNDER;
-	}
-	else
-	{
-		// normalize x and y towards north
-		int x = 8, y = 8;
-		switch(_direction)
+		if (position == Position(0, 0, 0))
 		{
-		case 0: // heading north
-			x = position.x;
-			y = 15 - position.y;
-			break;
-		case 1: // somewhere in between 0 and 2
-			x = (position.x + position.y)/2;
-			y = ((15 - position.y) + position.x)/2;
-			break;
-		case 2: // heading east
-			x = 15 - position.y;
-			y = 15 - position.x;
-			break;
-		case 3:
-			x = (position.y + (15 - position.x))/2;
-			y = (position.x + position.y)/2;
-			break;
-		case 4: // heading south
-			x = 15 - position.x;
-			y = position.y;
-			break;
-		case 5:
-			x = ((15 - position.x) + (15 - position.y))/2;
-			y = (position.y + (15 - position.x))/2;
-			break;
-		case 6: // heading west
-			x = 15 - position.y;
-			y = 15 - position.x;
-			break;
-		case 7:
-			x = ((15 - position.y) + position.x)/2;
-			y = ((15 - position.x) + (15 - position.y))/2;
-			break;
+			side = SIDE_UNDER;
 		}
-		// determine side
-		if (y > 9)
-			side = SIDE_FRONT;
-		else if (y < 6)
-			side = SIDE_REAR;
-		else if (x < 6)
-			side = SIDE_LEFT;
-		else if (x > 9)
-			side = SIDE_RIGHT;
 		else
-			side = SIDE_FRONT;
+		{
+			// normalize x and y towards north
+			int x = 8, y = 8;
+			switch(_direction)
+			{
+			case 0: // heading north
+				x = position.x;
+				y = 15 - position.y;
+				break;
+			case 1: // somewhere in between 0 and 2
+				x = (position.x + position.y)/2;
+				y = ((15 - position.y) + position.x)/2;
+				break;
+			case 2: // heading east
+				x = 15 - position.y;
+				y = 15 - position.x;
+				break;
+			case 3:
+				x = (position.y + (15 - position.x))/2;
+				y = (position.x + position.y)/2;
+				break;
+			case 4: // heading south
+				x = 15 - position.x;
+				y = position.y;
+				break;
+			case 5:
+				x = ((15 - position.x) + (15 - position.y))/2;
+				y = (position.y + (15 - position.x))/2;
+				break;
+			case 6: // heading west
+				x = 15 - position.y;
+				y = 15 - position.x;
+				break;
+			case 7:
+				x = ((15 - position.y) + position.x)/2;
+				y = ((15 - position.x) + (15 - position.y))/2;
+				break;
+			}
+			// determine side
+			if (y > 9)
+				side = SIDE_FRONT;
+			else if (y < 6)
+				side = SIDE_REAR;
+			else if (x < 6)
+				side = SIDE_LEFT;
+			else if (x > 9)
+				side = SIDE_RIGHT;
+			else
+				side = SIDE_FRONT;
+		}
+
+		impactheight = 10*position.z/getHeight();
+
+		if (impactheight > 4 && impactheight < 7) // torso
+		{
+			if (side == SIDE_LEFT)
+			{
+				bodypart = BODYPART_LEFTARM;
+			}else if (side == SIDE_RIGHT)
+			{
+				bodypart = BODYPART_RIGHTARM;
+			}else
+			{
+				bodypart = BODYPART_TORSO;
+			}
+		}else if (impactheight >= 7) //head
+		{
+			bodypart = BODYPART_HEAD;
+		}else if (impactheight <=4) //legs
+		{
+			if (side == SIDE_LEFT || side == SIDE_FRONT)
+			{
+				bodypart = BODYPART_LEFTLEG;
+			}else
+			{
+				bodypart = BODYPART_RIGHTLEG;
+			}
+		}
+
+		power -= getArmor(side);
 	}
 
-	impactheight = 10*position.z/getHeight();
-
-	if (impactheight > 4 && impactheight < 7) // torso
+	if (power > 0)
 	{
-		if (side == SIDE_LEFT)
+		if (type == DT_STUN)
 		{
-			bodypart = BODYPART_LEFTARM;
-		}else if (side == SIDE_RIGHT)
-		{
-			bodypart = BODYPART_RIGHTARM;
-		}else
-		{
-			bodypart = BODYPART_TORSO;
+			_stunlevel += power;
 		}
-	}else if (impactheight >= 7) //head
-	{
-		bodypart = BODYPART_HEAD;
-	}else if (impactheight <=4) //legs
-	{
-		if (side == SIDE_LEFT || side == SIDE_FRONT)
+		else
 		{
-			bodypart = BODYPART_LEFTLEG;
-		}else
-		{
-			bodypart = BODYPART_RIGHTLEG;
+			// health damage
+			_health -= power;
+			if (_health < 0)
+				_health = 0;
+
+			if (type != DT_IN)
+			{
+				// fatal wounds
+				if (_unit->isWoundable())
+				{
+					if (RNG::generate(0,power) > 2)
+						_fatalWounds[bodypart] += RNG::generate(1,3);
+
+					if (_fatalWounds[bodypart])
+						moraleChange(-_fatalWounds[bodypart]);
+				}
+				// armor damage
+				setArmor(getArmor(side) - (power/10) - 1, side);
+			}
+			_needPainKiller = true;
 		}
 	}
-
-	damage = (power - getArmor(side));
-
-	if (damage > 0)
-	{
-		if (_unit->isWoundable())
-		{
-			// fatal wounds
-			if (RNG::generate(0,damage) > 2)
-				_fatalWounds[bodypart] += RNG::generate(1,3);
-
-			if (_fatalWounds[bodypart])
-				moraleChange(-_fatalWounds[bodypart]);
-		}
-		// armor damage
-		setArmor(getArmor(side) - (damage/10) - 1, side);
-		// health damage
-		_health -= damage;
-		if (_health < 0)
-			_health = 0;
-	}
-	_needPainKiller = true;
 }
 
 /**
@@ -844,6 +851,7 @@ int BattleUnit::getActionTUs(BattleActionType actionType, BattleItem *item) cons
 		case BA_AUTOSHOT:
 			return (int)(getUnit()->getTimeUnits() * item->getRules()->getTUAuto() / 100);
 		case BA_SNAPSHOT:
+		case BA_HIT:
 			return (int)(getUnit()->getTimeUnits() * item->getRules()->getTUSnap() / 100);
 		case BA_AIMEDSHOT:
 			return (int)(getUnit()->getTimeUnits() * item->getRules()->getTUAimed() / 100);

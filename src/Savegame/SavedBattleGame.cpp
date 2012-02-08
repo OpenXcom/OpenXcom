@@ -937,7 +937,7 @@ void SavedBattleGame::prepareNewTurn()
 		if ((*i)->getUnit() && !(*i)->getUnit()->isOut())
 		{
 			// units in smoke suffer stun
-			(*i)->getUnit()->damage(Position(), ((*i)->getSmoke()/5)+1, DT_STUN);
+			(*i)->getUnit()->damage(Position(), ((*i)->getSmoke()/5)+1, DT_STUN, true);
 		}
 
 		Tile *t = getTile(Position(x+spreadX, y+spreadY, z));
@@ -966,7 +966,7 @@ void SavedBattleGame::prepareNewTurn()
 		if ((*i)->getUnit())
 		{
 			// units on a flaming tile suffer damage
-			(*i)->getUnit()->damage(Position(0,0,0), RNG::generate(1,12), DT_IN);
+			(*i)->getUnit()->damage(Position(0,0,0), RNG::generate(1,12), DT_IN, true);
 			// units on a flaming tile can catch fire 33% chance
 			if (RNG::generate(0,2) == 1)
 			{

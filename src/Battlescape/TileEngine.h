@@ -69,6 +69,7 @@ public:
 	/// Recalculate lighting of the battlescape.
 	void calculateUnitLighting();
 	/// Explosions.
+	void hit(const Position &center, int power, ItemDamageType type, BattleUnit *unit);
 	void explode(const Position &center, int power, ItemDamageType type, int maxRadius, BattleUnit *unit);
 	/// Check if a destroyed tile starts an explosion.
 	Tile *checkForTerrainExplosions();
