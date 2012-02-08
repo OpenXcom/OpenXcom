@@ -25,7 +25,7 @@
 namespace OpenXcom
 {
 
-enum SpecialAbility { SPECAB_NONE = 0, SPECAB_EXPLODEONDEATH, SPECAB_MORPHONDEATH, SPECAB_BURNSFLOOR };
+enum SpecialAbility { SPECAB_NONE = 0, SPECAB_EXPLODEONDEATH, SPECAB_MORPHONDEATH, SPECAB_BURNFLOOR };
 
 /**
  * Represents the static data for a unit that is generated on the battlescape, this includes: HWPs, aliens and civilians.

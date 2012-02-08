@@ -375,7 +375,10 @@ Position Projectile::getPosition(int offset) const
  */
 int Projectile::getParticle(int i) const
 {
-	return _trail[_action.weapon->getRules()->getBulletSprite()][i];
+	if (_action.weapon->getRules()->getBulletSprite() == -1)
+		return 0;
+	else
+		return _trail[_action.weapon->getRules()->getBulletSprite()][i];
 }
 
 /**
