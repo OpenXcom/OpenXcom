@@ -338,7 +338,7 @@ int createFolder(const char *path)
  */
 std::string endPath(const std::string &path)
 {
-	if (path.back() != PATH_SEPARATOR)
+	if (path.at(path.size()-1) != PATH_SEPARATOR)
 		return path + PATH_SEPARATOR;
 	return path;
 }
