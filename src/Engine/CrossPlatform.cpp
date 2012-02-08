@@ -372,7 +372,7 @@ bool createFolder(const std::string &path)
  */
 std::string endPath(const std::string &path)
 {
-	if (path.at(path.size()-1) != PATH_SEPARATOR)
+	if (!path.empty() && path.at(path.size()-1) != PATH_SEPARATOR)
 		return path + PATH_SEPARATOR;
 	return path;
 }
