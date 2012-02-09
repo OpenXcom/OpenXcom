@@ -89,14 +89,14 @@ void loadArgs(int argc, char** args)
 				{
 					it->second = args[i+1];
 				}
-			}
-			else if (arg == "-data")
-			{
-				_dataFolder = CrossPlatform::endPath(args[i+1]);
-			}
-			else if (arg == "-user")
-			{
-				_userFolder = CrossPlatform::endPath(args[i+1]);
+				else if (arg == "-data")
+				{
+					_dataFolder = CrossPlatform::endPath(args[i+1]);
+				}
+				else if (arg == "-user")
+				{
+					_userFolder = CrossPlatform::endPath(args[i+1]);
+				}
 			}
 		}
 	}
