@@ -536,6 +536,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Basescape\ListPossibleProductionState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\ListPossibleProductionState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Basescape\ManufactureState.cpp"
 				>
 			</File>
@@ -584,11 +592,19 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Basescape\PurchaseState.cpp"
+				RelativePath=".\Basescape\ProductionStartState.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Basescape\PurchaseState.h"
+				RelativePath=".\Basescape\ProductionStartState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\ProductionState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\ProductionState.h"
 				>
 			</File>
 			<File
@@ -597,6 +613,14 @@
 			</File>
 			<File
 				RelativePath=".\Basescape\PurchaseErrorState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\PurchaseState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\PurchaseState.h"
 				>
 			</File>
 			<File
@@ -664,6 +688,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Basescape\TransferConfirmState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\TransferConfirmState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Basescape\TransferItemsState.cpp"
 				>
 			</File>
@@ -679,14 +711,6 @@
 				RelativePath=".\Basescape\TransfersState.h"
 				>
 			</File>
-			<File
-				RelativePath=".\Basescape\TransferConfirmState.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Basescape\TransferConfirmState.h"
-				>
-			</File>			
 		</Filter>
 		<Filter
 			Name="Battlescape"
@@ -698,7 +722,7 @@
 			<File
 				RelativePath=".\Battlescape\AbortMissionState.h"
 				>
-			</File>				
+			</File>
 			<File
 				RelativePath=".\Battlescape\ActionMenuItem.cpp"
 				>
@@ -706,7 +730,7 @@
 			<File
 				RelativePath=".\Battlescape\ActionMenuItem.h"
 				>
-			</File>				
+			</File>
 			<File
 				RelativePath=".\Battlescape\ActionMenuState.cpp"
 				>
@@ -714,7 +738,7 @@
 			<File
 				RelativePath=".\Battlescape\ActionMenuState.h"
 				>
-			</File>						
+			</File>
 			<File
 				RelativePath=".\Battlescape\AggroBAIState.cpp"
 				>
@@ -722,7 +746,7 @@
 			<File
 				RelativePath=".\Battlescape\AggroBAIState.h"
 				>
-			</File>						
+			</File>
 			<File
 				RelativePath=".\Battlescape\BattleAIState.cpp"
 				>
@@ -730,7 +754,7 @@
 			<File
 				RelativePath=".\Battlescape\BattleAIState.h"
 				>
-			</File>						
+			</File>
 			<File
 				RelativePath=".\Battlescape\BattlescapeGame.cpp"
 				>
@@ -778,7 +802,7 @@
 			<File
 				RelativePath=".\Battlescape\BattleState.h"
 				>
-			</File>			
+			</File>
 			<File
 				RelativePath=".\Battlescape\BriefingCrashState.cpp"
 				>
@@ -810,7 +834,7 @@
 			<File
 				RelativePath=".\Battlescape\DebriefingState.h"
 				>
-			</File>	
+			</File>
 			<File
 				RelativePath=".\Battlescape\Explosion.cpp"
 				>
@@ -828,19 +852,19 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Battlescape\InfoboxState.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Battlescape\InfoboxState.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Battlescape\InfoboxOKState.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\Battlescape\InfoboxOKState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\InfoboxState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\InfoboxState.h"
 				>
 			</File>
 			<File
@@ -865,6 +889,38 @@
 			</File>
 			<File
 				RelativePath=".\Battlescape\Map.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\MedikitState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\MedikitState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\MedikitView.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\MedikitView.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\MiniMapState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\MiniMapState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\MiniMapView.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\MiniMapView.h"
 				>
 			</File>
 			<File
@@ -940,19 +996,27 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Battlescape\ScannerState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\ScannerState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\ScannerView.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\ScannerView.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Battlescape\TileEngine.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\Battlescape\TileEngine.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Battlescape\UnitSprite.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Battlescape\UnitSprite.h"
 				>
 			</File>
 			<File
@@ -970,7 +1034,15 @@
 			<File
 				RelativePath=".\Battlescape\UnitInfoState.h"
 				>
-			</File>			
+			</File>
+			<File
+				RelativePath=".\Battlescape\UnitSprite.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\UnitSprite.h"
+				>
+			</File>
 			<File
 				RelativePath=".\Battlescape\UnitTurnBState.cpp"
 				>
@@ -1252,6 +1324,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Ufopaedia\ArticleStateArmor.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ufopaedia\ArticleStateArmor.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Ufopaedia\ArticleStateBaseFacility.cpp"
 				>
 			</File>
@@ -1282,7 +1362,7 @@
 			<File
 				RelativePath=".\Ufopaedia\ArticleStateItem.h"
 				>
-			</File>			
+			</File>
 			<File
 				RelativePath=".\Ufopaedia\ArticleStateText.cpp"
 				>
@@ -1306,7 +1386,7 @@
 			<File
 				RelativePath=".\Ufopaedia\ArticleStateUfo.h"
 				>
-			</File>			
+			</File>
 			<File
 				RelativePath=".\Ufopaedia\Ufopaedia.cpp"
 				>
@@ -1404,14 +1484,6 @@
 			Name="Savegame"
 			>
 			<File
-				RelativePath=".\Savegame\Alien.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Savegame\Alien.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Savegame\Base.cpp"
 				>
 			</File>
@@ -1476,6 +1548,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Savegame\GenUnit.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\GenUnit.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Savegame\ItemContainer.cpp"
 				>
 			</File>
@@ -1505,6 +1585,14 @@
 			</File>
 			<File
 				RelativePath=".\Savegame\NodeLink.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\Production.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\Production.h"
 				>
 			</File>
 			<File
@@ -1668,11 +1756,19 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Ruleset\RuleAlien.cpp"
+				RelativePath=".\Ruleset\RuleAlienDeployment.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Ruleset\RuleAlien.h"
+				RelativePath=".\Ruleset\RuleAlienDeployment.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\RuleAlienRace.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\RuleAlienRace.h"
 				>
 			</File>
 			<File
@@ -1716,6 +1812,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Ruleset\RuleGenUnit.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\RuleGenUnit.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Ruleset\RuleInventory.cpp"
 				>
 			</File>
@@ -1729,6 +1833,14 @@
 			</File>
 			<File
 				RelativePath=".\Ruleset\RuleItem.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\RuleManufactureInfo.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\RuleManufactureInfo.h"
 				>
 			</File>
 			<File
