@@ -1961,7 +1961,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 
 	RuleTerrain *ubase = new RuleTerrain("UBASE");
 	ubase->getMapDataSets()->push_back(getMapDataSet("BLANKS"));
-	ubase->getMapDataSets()->push_back(getMapDataSet("UBASE"));
+	ubase->getMapDataSets()->push_back(getMapDataSet("U_BASE"));
 	ubase->getMapDataSets()->push_back(getMapDataSet("U_WALL02"));
 	ubase->getMapDataSets()->push_back(getMapDataSet("U_PODS"));
 	ubase->getMapDataSets()->push_back(getMapDataSet("BRAIN"));
