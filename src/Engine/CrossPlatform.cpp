@@ -258,7 +258,7 @@ std::string findConfigFolder()
 	}
 	else
 	{
-		snprintf(path, MAXPATHLEN, "%s/openxcom/", xdg_data_home);
+		snprintf(path, MAXPATHLEN, "%s/openxcom/", xdg_config_home);
 		return path;
 	}
 #endif
@@ -433,7 +433,7 @@ bool folderExists(const std::string &path)
 	return (PathIsDirectoryA(path.c_str()) != FALSE);
 #else
 	struct stat info;
-	return (stat(path && S_ISDIR(info.st_mode));
+	return (stat(path.c_str(), &info) == 0 && S_ISDIR(info.st_mode));
 #endif
 }
 
@@ -443,7 +443,7 @@ bool fileExists(const std::string &path)
 	return (PathFileExistsA(path.c_str()) != FALSE);
 #else
 	struct stat info;
-	return (stat(path && S_ISREG(info.st_mode));
+	return (stat(path.c_str(), &info) == 0 && S_ISREG(info.st_mode));
 #endif
 }
 
