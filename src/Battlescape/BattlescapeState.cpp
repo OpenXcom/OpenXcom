@@ -155,22 +155,24 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_4")->getColors());
 
 	// Last 16 colors are a greyish gradient
-	SDL_Color color[] = {{140, 152, 148},
-						 {132, 136, 140},
-						 {116, 124, 132},
-						 {108, 116, 124},
-						 {92, 104, 108},
-						 {84, 92, 100},
-						 {76, 80, 92},
-						 {56, 68, 84},
-						 {48, 56, 68},
-						 {40, 48, 56},
-						 {32, 36, 48},
-						 {24, 28, 32},
-						 {16, 20, 24},
-						 {8, 12, 16},
-						 {3, 4, 8},
-						 {3, 3, 6}};
+	static SDL_Color color[] = {
+		{ 140, 152, 148, 0 },
+		{ 132, 136, 140, 0 },
+		{ 116, 124, 132, 0 },
+		{ 108, 116, 124, 0 },
+		{  92, 104, 108, 0 },
+		{  84,  92, 100, 0 },
+		{  76,  80,  92, 0 },
+		{  56,  68,  84, 0 },
+		{  48,  56,  68, 0 },
+		{  40,  48,  56, 0 },
+		{  32,  36,  48, 0 },
+		{  24,  28,  32, 0 },
+		{  16,  20,  24, 0 },
+		{   8,  12,  16, 0 },
+		{   3,   4,   8, 0 },
+		{   3,   3,   6, 0 }
+	};
 	_game->setPalette(color, Palette::backPos+16, 16);
 
 	// Fix system colors
