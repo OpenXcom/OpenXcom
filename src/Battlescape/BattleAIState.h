@@ -43,15 +43,15 @@ public:
 	/// Cleans up the BattleAIState.
 	virtual ~BattleAIState();
 	/// Loads the AI state from YAML.
-	virtual void load(const YAML::Node& node);
+	virtual void load(const YAML::Node& node) = 0;
 	/// Saves the AI state to YAML.
-	virtual void save(YAML::Emitter& out) const;
+	virtual void save(YAML::Emitter& out) const = 0;
 	/// Enters the state.
-	virtual void enter();
+	virtual void enter() = 0;
 	/// Exits the state.
-	virtual void exit();
+	virtual void exit() = 0;
 	/// Runs state functionality every AI cycle.
-	virtual void think(BattleAction *action);
+	virtual void think(BattleAction *action) = 0;
 };
 
 }
