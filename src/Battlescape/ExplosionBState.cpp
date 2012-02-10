@@ -123,7 +123,7 @@ void ExplosionBState::think()
 						|| _item->getRules()->getDamageType() == DT_SMOKE
 						|| _item->getRules()->getDamageType() == DT_STUN))
 					{
-						save->getTileEngine()->explode(_center, _item->getRules()->getPower(), _item->getRules()->getDamageType(), _item->getRules()->getExplosionRadius(), _unit);
+						save->getTileEngine()->explode(_center, _item->getRules()->getPower(), _item->getRules()->getDamageType(), _item->getRules()->getExplosionRadius());
 					}
 					else
 					{
@@ -132,12 +132,12 @@ void ExplosionBState::think()
 				}
 				if (_tile)
 				{
-					save->getTileEngine()->explode(_center, _tile->getExplosive(), DT_HE, 100, _unit);
+					save->getTileEngine()->explode(_center, _tile->getExplosive(), DT_HE, 100);
 				}
 				if (!_tile && !_item)
 				{
 					// explosion not caused by terrain or an item, must be by a unit (cyberdisc)
-					save->getTileEngine()->explode(_center, 120, DT_HE, 8, _unit);
+					save->getTileEngine()->explode(_center, 120, DT_HE, 8);
 					terrainExplosion = true;
 				}
 

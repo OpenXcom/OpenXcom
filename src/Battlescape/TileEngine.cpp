@@ -552,9 +552,8 @@ void TileEngine::hit(const Position &center, int power, ItemDamageType type, Bat
  * @param power Power of the explosion.
  * @param type The damage type of the explosion.
  * @param maxRadius The maximum radius othe explosion.
- * @param unit The unit that caused the explosion.
  */
-void TileEngine::explode(const Position &center, int power, ItemDamageType type, int maxRadius, BattleUnit *unit)
+void TileEngine::explode(const Position &center, int power, ItemDamageType type, int maxRadius)
 {
 	double centerZ = (int)(center.z / 24) + 0.5;
 	double centerX = (int)(center.x / 16) + 0.5;
