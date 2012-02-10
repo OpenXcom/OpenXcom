@@ -402,9 +402,9 @@ void DebriefingState::prepareDebriefing()
 		{
 			for (int part = 0; part < 4; part++)
 			{
-				if (battle->getTiles()[i]->getMapData(part))
+				if (MapData const *const d = battle->getTiles()[i]->getMapData(part))
 				{
-					switch (battle->getTiles()[i]->getMapData(part)->getSpecialType())
+					switch (d->getSpecialType())
 					{
 					case UFO_POWER_SOURCE:
 						addStat("STR_UFO_POWER_SOURCE", 1, 1); break;
