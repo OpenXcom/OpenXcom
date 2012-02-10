@@ -811,6 +811,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 		}
 		break;
 	case STATUS_BERSERK: // berserk - do some weird turning around and then aggro towards an enemy unit or shoot towards random place
+	{
 		BattleAction ba;
 		for (int i= 0; i < 4; i++)
 		{
@@ -834,6 +835,16 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 		}
 		ba.type = BA_NONE;
 		break;
+	}
+
+	case STATUS_AIMING:      break;
+	case STATUS_DEAD:        break;
+	case STATUS_FALLING:     break;
+	case STATUS_FLYING:      break;
+	case STATUS_STANDING:    break;
+	case STATUS_TURNING:     break;
+	case STATUS_UNCONSCIOUS: break;
+	case STATUS_WALKING:     break;
 	}
 	unit->setTimeUnits(0);
 	unit->moraleChange(+15);

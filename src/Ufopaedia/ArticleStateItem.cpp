@@ -204,6 +204,15 @@ namespace OpenXcom
 				ss << defs->item->getPower();
 				_txtAmmoDamage[0]->setText(ss.str().c_str());
 				break;
+
+			case BT_FLARE:            break;
+			case BT_MEDIKIT:          break;
+			case BT_MELEE:            break;
+			case BT_MINDPROBE:        break;
+			case BT_NONE:             break;
+			case BT_PROXIMITYGRENADE: break;
+			case BT_PSIAMP:           break;
+			case BT_SCANNER:          break;
 		}
 	}
 

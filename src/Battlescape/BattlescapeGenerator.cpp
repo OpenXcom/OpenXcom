@@ -565,8 +565,11 @@ void BattlescapeGenerator::addItem(RuleItem *item)
 			}
 		}
 		break;
-	case BT_NONE:
-		break;
+
+	case BT_FLARE:     break;
+	case BT_MINDPROBE: break;
+	case BT_NONE:      break;
+	case BT_PSIAMP:    break;
 	}
 
 	_save->getItems()->push_back(bi);
@@ -635,9 +638,12 @@ void BattlescapeGenerator::addItem(RuleItem *item, BattleUnit *unit)
 			placed = true;
 		}
 		break;
-	case BT_NONE:
-		break;
-	}
+
+	case BT_FLARE:     break;
+	case BT_MINDPROBE: break;
+	case BT_NONE:      break;
+	case BT_PSIAMP:    break;
+}
 
 	// if we did not auto equip the item, place it on the ground
 	if (!placed)
