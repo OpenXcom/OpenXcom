@@ -211,7 +211,6 @@ void SellState::btnOkClick(Action *action)
 			// Sell soldiers
 			if (i < _soldiers.size())
 			{
-				delete _soldiers[i];
 				for (std::vector<Soldier*>::iterator s = _base->getSoldiers()->begin(); s != _base->getSoldiers()->end(); ++s)
 				{
 					if (*s == _soldiers[i])
@@ -220,6 +219,7 @@ void SellState::btnOkClick(Action *action)
 						break;
 					}
 				}
+				delete _soldiers[i];
 			}
 			// Sell crafts
 			else if (i >= _soldiers.size() && i < _soldiers.size() + _crafts.size())
