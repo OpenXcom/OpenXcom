@@ -24,19 +24,18 @@
 #include "../Engine/Surface.h"
 #include "../Battlescape/Position.h"
 #include "../Resource/ResourcePack.h"
-#include "../Ruleset/RuleGenUnit.h"
+#include "../Ruleset/Unit.h"
 #include "../Ruleset/RuleSoldier.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/MapData.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/Soldier.h"
-#include "../Savegame/GenUnit.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Options.h"
-#include "../Ruleset/RuleArmor.h"
+#include "../Ruleset/Armor.h"
 
 namespace OpenXcom
 {
@@ -98,7 +97,7 @@ int Projectile::calculateTrajectory(double accuracy)
 	originVoxel.z += -_save->getTile(_origin)->getTerrainLevel();
 	BattleUnit *bu = _save->getTile(_origin)->getUnit();
 
-	if (bu->getUnit()->getArmor()->getSize() > 1)
+	if (bu->getArmor()->getSize() > 1)
 	{
 		originVoxel.x += 8;
 		originVoxel.y += 8;
@@ -131,7 +130,7 @@ int Projectile::calculateTrajectory(double accuracy)
 		else
 		{
 			// first try is at half the unit height
-			targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + targetTile->getUnit()->getUnit()->getStandHeight()/2);
+			targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + targetTile->getUnit()->getStandHeight()/2);
 			targetVoxel.z += -targetTile->getTerrainLevel();
 			test = _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, false, &_trajectory, bu);
 			Position hitPos = Position(_trajectory.at(0).x/16, _trajectory.at(0).y/16, _trajectory.at(0).z/24);
@@ -139,7 +138,7 @@ int Projectile::calculateTrajectory(double accuracy)
 			if (hitPos != targetTile->getPosition())
 			{
 				// did not hit a unit, try at different heights (for ex: unit behind a window can only be hit in the head)
-				targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + (targetTile->getUnit()->getUnit()->getStandHeight()*3)/4);
+				targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + (targetTile->getUnit()->getStandHeight()*3)/4);
 				targetVoxel.z += -targetTile->getTerrainLevel();
 			}
 		}

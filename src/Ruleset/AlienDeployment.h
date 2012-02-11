@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_RULEALIENDEPLOYMENT_H
-#define OPENXCOM_RULEALIENDEPLOYMENT_H
+#ifndef OPENXCOM_ALIENDEPLOYMENT_H
+#define OPENXCOM_ALIENDEPLOYMENT_H
 
 #include <vector>
 #include <string>
@@ -52,7 +52,7 @@ struct DeploymentData
  *   + to match to a specific unit (=race/rank combination) that should be deployed.
  * @sa Node
  */
-class RuleAlienDeployment
+class AlienDeployment
 {
 private:
 	std::string _type;
@@ -60,9 +60,9 @@ private:
 	int _width, _length, _height;
 public:
 	/// Creates a blank Alien Deployment ruleset.
-	RuleAlienDeployment(const std::string &type);
+	AlienDeployment(const std::string &type);
 	/// Cleans up the Alien Deployment ruleset.
-	~RuleAlienDeployment();
+	~AlienDeployment();
 	/// Loads Alien Deployment data from YAML.
 	void load(const YAML::Node& node, const Ruleset *ruleset);
 	/// Saves the Alien Deployment data to YAML.

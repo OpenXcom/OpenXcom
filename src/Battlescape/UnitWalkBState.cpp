@@ -35,7 +35,7 @@
 #include "../Engine/Sound.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Options.h"
-#include "../Ruleset/RuleArmor.h"
+#include "../Ruleset/Armor.h"
 
 namespace OpenXcom
 {
@@ -82,13 +82,13 @@ void UnitWalkBState::think()
 
 		if (_unit->getVisible() && _unit->getStatus() == STATUS_WALKING)
 		{
-			if (_unit->getUnit()->getArmor()->getSize() > 1)
+			if (_unit->getArmor()->getSize() > 1)
 			{
 				// play hwp engine sound
 				if (_unit->getWalkingPhase() == 0)
 				{
 					// tank with threads "walks"
-					if (_unit->getUnit()->getArmor()->getMovementType() == MT_WALK)
+					if (_unit->getArmor()->getMovementType() == MT_WALK)
 						_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(14)->play();
 					else // hovering tank hovers
 						_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(40)->play();
@@ -122,7 +122,7 @@ void UnitWalkBState::think()
 		// unit moved from one tile to the other, update the tiles
 		if (_unit->getPosition() != _unit->getLastPosition())
 		{
-			int size = _unit->getUnit()->getArmor()->getSize() - 1;
+			int size = _unit->getArmor()->getSize() - 1;
 			for (int x = size; x >= 0; x--)
 			{
 				for (int y = size; y >= 0; y--)
@@ -151,7 +151,7 @@ void UnitWalkBState::think()
 			BattleAction action;
 			
 			// check for proximity grenades (1 tile around the unit in every direction) (for large units, we need to check every tile it occupies)
-			int size = _unit->getUnit()->getArmor()->getSize() - 1;
+			int size = _unit->getArmor()->getSize() - 1;
 			for (int x = size; x >= 0; x--)
 			{
 				for (int y = size; y >= 0; y--)
@@ -221,7 +221,7 @@ void UnitWalkBState::think()
 			Position destination;
 			int tu = _pf->getTUCost(_unit->getPosition(), dir, &destination, _unit); // gets tu cost, but also gets the destination position.
 
-			if (tu > _unit->getTimeUnits() && !_parent->dontSpendTUs())
+			if (tu > _unit->getStats()->tu && !_parent->dontSpendTUs())
 			{
 				_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
 				_pf->abortPath();

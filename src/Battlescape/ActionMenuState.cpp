@@ -248,7 +248,7 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 			for(std::vector<BattleUnit*>::const_iterator i = units->begin (); i != units->end () && !targetUnit; ++i)
 			{
 				// we can heal a unit that is at the same position, unconscious and healable(=woundable)
-				if ((*i)->getPosition() == _action->actor->getPosition() && *i != _action->actor && (*i)->getStatus () == STATUS_UNCONSCIOUS && (*i)->getUnit()->isWoundable())
+				if ((*i)->getPosition() == _action->actor->getPosition() && *i != _action->actor && (*i)->getStatus () == STATUS_UNCONSCIOUS && (*i)->isWoundable())
 				{
 					targetUnit = *i;
 				}
@@ -258,7 +258,7 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 				Position p;
 				Pathfinding::directionToVector(_action->actor->getDirection(), &p);
 				Tile * tile (_game->getSavedGame()->getBattleGame()->getTile(_action->actor->getPosition() + p));
-				if (tile->getUnit() && tile->getUnit()->getUnit()->isWoundable())
+				if (tile->getUnit() && tile->getUnit()->isWoundable())
 					targetUnit = tile->getUnit();
 			}
 			if (targetUnit)

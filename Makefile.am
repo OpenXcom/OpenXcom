@@ -359,14 +359,14 @@ openxcom_SOURCES = \
 	src/Ruleset/MapData.h \
 	src/Ruleset/MapDataSet.cpp \
 	src/Ruleset/MapDataSet.h \
-	src/Ruleset/RuleAlienDeployment.cpp \
-	src/Ruleset/RuleAlienDeployment.h \
-	src/Ruleset/RuleAlienRace.cpp \
-	src/Ruleset/RuleAlienRace.h \
-	src/Ruleset/RuleGenUnit.cpp \
-	src/Ruleset/RuleGenUnit.h \
-	src/Ruleset/RuleArmor.cpp \
-	src/Ruleset/RuleArmor.h \
+	src/Ruleset/AlienDeployment.cpp \
+	src/Ruleset/AlienDeployment.h \
+	src/Ruleset/AlienRace.cpp \
+	src/Ruleset/AlienRace.h \
+	src/Ruleset/Armor.cpp \
+	src/Ruleset/Armor.h \
+	src/Ruleset/Unit.cpp \
+	src/Ruleset/Unit.h \
 	src/Ruleset/RuleBaseFacility.cpp \
 	src/Ruleset/RuleBaseFacility.h \
 	src/Ruleset/RuleCountry.cpp \

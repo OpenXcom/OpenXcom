@@ -21,8 +21,7 @@
 
 #include <string>
 #include "yaml.h"
-#include "Unit.h"
-#include "../Ruleset/RuleGenUnit.h"
+#include "../Ruleset/Unit.h"
 
 namespace OpenXcom
 {
@@ -34,13 +33,14 @@ enum SoldierLook { LOOK_BLONDE, LOOK_BROWNHAIR, LOOK_ORIENTAL, LOOK_AFRICAN };
 class Craft;
 class SoldierNamePool;
 class RuleSoldier;
+class Armor;
 
 /**
  * Represents a soldier hired by the player.
  * Soldiers have a wide variety of stats that affect
  * their performance during battles.
  */
-class Soldier : public Unit
+class Soldier
 {
 private:
 	std::wstring _name;
@@ -53,11 +53,12 @@ private:
 	SoldierLook _look;
 	int _missions, _kills;
 	bool _recentlyPromoted;
+	Armor *_armor;
 public:
 	/// Creates a new soldier.
-	Soldier(RuleSoldier *rules, RuleArmor *armor);
+	Soldier(RuleSoldier *rules, Armor *armor);
 	/// Creates a new soldier with random stats.
-	Soldier(RuleSoldier *rules, RuleArmor *armor, const std::vector<SoldierNamePool*> *names, int *id);
+	Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierNamePool*> *names, int *id);
 	/// Cleans up the soldier.
 	~Soldier();
 	/// Initialises
@@ -67,7 +68,7 @@ public:
 	/// Saves the soldier to YAML.
 	void save(YAML::Emitter& out) const;
 	/// Gets the soldier's name.
-	std::wstring getName(Language *lang = 0) const;
+	std::wstring getName() const;
 	/// Sets the soldier's name.
 	void setName(const std::wstring &name);
 	/// Gets the soldier's craft.
@@ -82,24 +83,6 @@ public:
 	SoldierRank getRank() const;
 	/// Increase the soldier's military rank.
 	void promoteRank();
-	/// Gets the soldier's time units.
-	int getTimeUnits() const;
-	/// Gets the soldier's stamina.
-	int getStamina() const;
-	/// Gets the soldier's health.
-	int getHealth() const;
-	/// Gets the soldier's bravery.
-	int getBravery() const;
-	/// Gets the soldier's reactions.
-	int getReactions() const;
-	/// Gets the soldier's firing accuracy.
-	int getFiringAccuracy() const;
-	/// Gets the soldier's throwing accuracy.
-	int getThrowingAccuracy() const;
-	/// Gets the soldier's melee accuracy.
-	int getMeleeAccuracy() const;
-	/// Gets the soldier's strength.
-	int getStrength() const;
 	/// Gets the soldier's missions.
 	int getMissions() const;
 	/// Gets the soldier's kills.
@@ -112,34 +95,21 @@ public:
 	std::string getArmor() const;
 	/// Gets soldier rules.
 	RuleSoldier *getRules() const;
-	/// Gets the soldier's stand height.
-	int getStandHeight() const;
-	/// Gets the soldier's kneel height.
-	int getKneelHeight() const;
-	/// Gets the soldier's loft ID.
-	int getLoftemps() const;
-	/// Gets the soldier's value.
-	int getValue() const;
 	/// Gets the soldier's unique ID.
 	int getId() const;
 	/// Add a mission to the counter.
 	void addMissionCount();
 	/// Add a kill to the counter.
-	void addKillCount();
+	void addKillCount(int count);
+	/// Get pointer to initial stats.
+	UnitStats *getInitStats();
 	/// Get pointer to current stats.
 	UnitStats *getCurrentStats();
-	/// Get whether the unit is affected by fatal wounds.
-	bool isWoundable() const;
-	/// Get whether the unit is affected by fear.
-	bool isFearable() const;
-	/// Get the unit's intelligence.
-	int getIntelligence() const;
-	/// Get the unit's aggression.
-	int getAggression() const;
 	/// Get whether the unit was recently promoted.
 	bool isPromoted();
-	/// Get the alien's special ability.
-	int getSpecialAbility() const;
+	/// Gets a pointer to the armor data.
+	Armor *getArmorData() const;
+
 };
 
 }

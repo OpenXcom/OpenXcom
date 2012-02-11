@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_RULEARMOR_H
-#define OPENXCOM_RULEARMOR_H
+#ifndef OPENXCOM_ARMOR_H
+#define OPENXCOM_ARMOR_H
 
 #include <string>
 #include "yaml.h"
@@ -32,7 +32,7 @@ namespace OpenXcom
  * Not only soldier armor, but also alien armor - some alien races wear Soldier Armor, Leader Armor or Commander Armor
  * depending on their rank.
  */
-class RuleArmor
+class Armor
 {
 private:
 	std::string _type, _spriteSheet, _corpseItem;
@@ -42,9 +42,9 @@ private:
 	float _damageModifier[8];
 public:
 	/// Creates a blank armor ruleset.
-	RuleArmor(const std::string &type, std::string spriteSheet, int drawingRoutine, MovementType _movementType = MT_WALK, int size = 1);
+	Armor(const std::string &type, std::string spriteSheet, int drawingRoutine, MovementType _movementType = MT_WALK, int size = 1);
 	/// Cleans up the armor ruleset.
-	~RuleArmor();
+	~Armor();
 	/// Loads armor data from YAML.
 	void load(const YAML::Node& node);
 	/// Saves the armor data to YAML.

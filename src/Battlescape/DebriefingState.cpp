@@ -305,8 +305,8 @@ void DebriefingState::prepareDebriefing()
 	{
 		UnitStatus status = (*j)->getStatus();
 		UnitFaction faction = (*j)->getFaction();
-		int value = (*j)->getUnit()->getValue();
-		Soldier *soldier = dynamic_cast<Soldier*>((*j)->getUnit());
+		int value = (*j)->getValue();
+		Soldier *soldier = save->getSoldier((*j)->getId());
 
 		if (status == STATUS_DEAD)
 		{
@@ -349,14 +349,14 @@ void DebriefingState::prepareDebriefing()
 			if ((*j)->isInExitArea() || !aborted)
 			{
 				playerInExitArea++;
-				(*j)->postMissionProcedures();
+				(*j)->postMissionProcedures(save);
 			}
 			else
 			{
 				addStat("STR_XCOM_OPERATIVES_MISSING_IN_ACTION", 1, -value);
 				for (std::vector<Soldier*>::iterator i = base->getSoldiers()->begin(); i != base->getSoldiers()->end(); ++i)
 				{
-					if ((*i) == dynamic_cast<Soldier*>((*j)->getUnit()))
+					if ((*i) == soldier)
 					{
 						delete (*i);
 						base->getSoldiers()->erase(i);

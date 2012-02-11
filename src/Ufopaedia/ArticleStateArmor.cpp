@@ -22,7 +22,7 @@
 #include "Ufopaedia.h"
 #include "ArticleStateArmor.h"
 #include "../Ruleset/ArticleDefinition.h"
-#include "../Ruleset/RuleArmor.h"
+#include "../Ruleset/Armor.h"
 #include "../Engine/Game.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
@@ -63,7 +63,7 @@ namespace OpenXcom
 		add(_image);
 
 		std::string look = "MAN_1M0.SPK";
-		// TODO: add this background sprite to RuleArmor
+		// TODO: add this background sprite to Armor
 		// personal armor: MAN_1M0.SKP
 		// power suit: MAN_2.SPK
 		// flying suit: MAN_3.SPK

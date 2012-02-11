@@ -122,7 +122,7 @@ void AggroBAIState::think(BattleAction *action)
 	/* Aggro is mainly either shooting a target or running towards it (melee).
 	   If we do no action here - we assume we lost aggro and will go back to patrol state.
 	*/
-	int aggression = _unit->getUnit()->getAggression();
+	int aggression = _unit->getAggression();
 
 	_aggroTarget = 0;
 	for (std::vector<BattleUnit*>::iterator j = _unit->getVisibleUnits()->begin(); j != _unit->getVisibleUnits()->end(); ++j)
@@ -134,7 +134,7 @@ void AggroBAIState::think(BattleAction *action)
 	if (_aggroTarget == 0 || _aggroTarget->isOut())
 	{
 		_timesNotSeen++;
-		if (_timesNotSeen > _unit->getUnit()->getIntelligence() || aggression == 0)
+		if (_timesNotSeen > _unit->getIntelligence() || aggression == 0)
 		{
 			// we lost aggro - going back to patrol state
 			return;
@@ -150,7 +150,7 @@ void AggroBAIState::think(BattleAction *action)
 		int number = RNG::generate(0,100);
 
 		// lost health, chances to take cover get bigger
-		if (_unit->getHealth() < _unit->getUnit()->getHealth())
+		if (_unit->getHealth() < _unit->getStats()->health)
 			number += 10;
 
 
@@ -182,7 +182,7 @@ void AggroBAIState::think(BattleAction *action)
 					action->weapon = grenade;
 					tu += _unit->getActionTUs(BA_PRIME, grenade);
 					tu += _unit->getActionTUs(BA_THROW, grenade);
-					if (tu <= _unit->getTimeUnits())
+					if (tu <= _unit->getStats()->tu)
 					{
 						// are we within range?
 						if (ProjectileFlyBState::validThrowRange(action))

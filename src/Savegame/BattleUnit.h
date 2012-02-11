@@ -23,8 +23,9 @@
 #include <string>
 #include "../Battlescape/Position.h"
 #include "../Battlescape/BattlescapeGame.h"
-#include "Soldier.h"
 #include "../Ruleset/RuleItem.h"
+#include "../Ruleset/Unit.h"
+#include "Soldier.h"
 
 namespace OpenXcom
 {
@@ -32,17 +33,21 @@ namespace OpenXcom
 class Tile;
 class BattleItem;
 class Unit;
-class RuleUnit;
 class BattleAIState;
 class BattlescapeState;
 class Node;
 class Surface;
 class RuleInventory;
+class Soldier;
+class Armor;
+class SavedGame;
+class Language;
 
 enum UnitStatus {STATUS_STANDING, STATUS_WALKING, STATUS_FLYING, STATUS_TURNING, STATUS_AIMING, STATUS_FALLING, STATUS_DEAD, STATUS_UNCONSCIOUS, STATUS_PANICKING, STATUS_BERSERK};
 enum UnitFaction {FACTION_PLAYER, FACTION_HOSTILE, FACTION_NEUTRAL};
 enum UnitSide {SIDE_FRONT, SIDE_LEFT, SIDE_RIGHT, SIDE_REAR, SIDE_UNDER};
 enum UnitBodyPart {BODYPART_HEAD, BODYPART_TORSO, BODYPART_RIGHTARM, BODYPART_LEFTARM, BODYPART_RIGHTLEG, BODYPART_LEFTLEG};
+
 
 /**
  * Represents a moving unit in the battlescape, player controlled or AI controlled
@@ -51,7 +56,6 @@ enum UnitBodyPart {BODYPART_HEAD, BODYPART_TORSO, BODYPART_RIGHTARM, BODYPART_LE
 class BattleUnit
 {
 private:
-	Unit *_unit;
 	UnitFaction _faction;
 	int _id;
 	Position _pos;
@@ -67,7 +71,7 @@ private:
 	std::vector<Tile *> _visibleTiles;
 	int _tu, _energy, _health, _morale, _stunlevel;
 	bool _kneeled, _dontReselect;
-	int _armor[5];
+	int _currentArmor[5];
 	int _fatalWounds[6];
 	int _fire;
 	std::vector<BattleItem*> _inventory;
@@ -80,9 +84,24 @@ private:
 	int _turretType;
 	bool _needPainKiller;
 	int _motionPoints;
+	int _kills;
+	
+	// static data
+	std::string _type;
+	std::string _rank;
+	std::string _race;
+	std::wstring _name;
+	UnitStats _stats;
+	int _standHeight, _kneelHeight, _loftemps;
+	int _value, _deathSound;
+	int _intelligence, _aggression;
+	SpecialAbility _specab;
+	Armor *_armor;
+	SoldierGender _gender;
 public:
 	/// Creates a BattleUnit.
-	BattleUnit(Unit *_unit, UnitFaction faction);
+	BattleUnit(Soldier *soldier, UnitFaction faction);
+	BattleUnit(Unit *unit, UnitFaction faction, Armor *armor);
 	/// Cleans up the BattleUnit.
 	virtual ~BattleUnit();
 	/// Loads the unit from YAML.
@@ -91,10 +110,6 @@ public:
 	void save(YAML::Emitter& out) const;
 	/// Gets the BattleUnit's ID.
 	int getId() const;
-	/// Sets the BattleUnit's ID.
-	void setId(int id);
-	/// Gets the unit's soldier data.
-	Unit *const getUnit() const;
 	/// Sets the unit's position
 	void setPosition(const Position& pos);
 	/// Gets the unit's position.
@@ -166,7 +181,7 @@ public:
 	/// The unit is out - either dead or unconscious.
 	bool isOut() const;
 	/// Get the number of time units a certain action takes.
-	int getActionTUs(BattleActionType actionType, BattleItem *item) const;
+	int getActionTUs(BattleActionType actionType, BattleItem *item);
 	/// Spend time units if it can.
 	bool spendTimeUnits(int tu, bool debugmode);
 	/// Spend energy if it can.
@@ -180,9 +195,9 @@ public:
 	/// Clear visible units.
 	void clearVisibleUnits();
 	/// Calculate firing accuracy.
-	double getFiringAccuracy(BattleActionType actionType, BattleItem *item) const;
+	double getFiringAccuracy(BattleActionType actionType, BattleItem *item);
 	/// Calculate throwing accuracy.
-	double getThrowingAccuracy() const;
+	double getThrowingAccuracy();
 	/// Set armor value.
 	void setArmor(int armor, UnitSide side);
 	/// Get armor value.
@@ -190,7 +205,7 @@ public:
 	/// Get total number of fatal wounds.
 	int getFatalWounds() const;
 	/// Get the current reaction score.
-	double getReactionScore() const;
+	double getReactionScore();
 	/// Prepare for a new turn.
 	void prepareNewTurn();
 	/// Morale change
@@ -242,7 +257,7 @@ public:
 	/// Adds one to the melee exp counter.
 	void addMeleeExp();
 	/// Check if unit eligible for squaddie promotion.
-	bool postMissionProcedures();
+	bool postMissionProcedures(SavedGame *geoscape);
 	/// Get the sprite index for the minimap
 	int getMiniMapSpriteIndex () const;
 	/// Set the turret type. -1 is no turret.
@@ -259,7 +274,36 @@ public:
 	void stimulant (int energy, int stun);
 	/// Get motion points for the motion scanner.
 	int getMotionPoints() const;
-
+	/// Gets the unit's armor.
+	Armor *getArmor() const;
+	/// Gets the unit's name.
+	std::wstring getName(Language *lang) const;
+	/// Gets the unit's stats.
+	UnitStats *getStats();
+	/// Get the unit's stand height.
+	int getStandHeight() const;
+	/// Get the unit's kneel height.
+	int getKneelHeight() const;
+	/// Get the unit's loft ID.
+	int getLoftemps() const;
+	/// Get the unit's value.
+	int getValue() const;
+	/// Get wether the unit is affected by fatal wounds.
+	bool isWoundable() const;
+	/// Get wether the unit is affected by fear.
+	bool isFearable() const;
+	/// Get the unit's intelligence.
+	int getIntelligence() const;
+	/// Get the unit's aggression.
+	int getAggression() const;
+	/// Get the units's special ability.
+	int getSpecialAbility() const;
+	/// Get the units's rank string.
+	std::string getRankString() const;
+	/// Add a kill to the counter.
+	void addKillCount();
+	/// Get unit type.
+	std::string getType() const;
 };
 
 }

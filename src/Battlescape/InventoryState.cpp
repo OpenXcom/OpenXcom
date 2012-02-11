@@ -36,7 +36,7 @@
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/RuleInventory.h"
-#include "../Ruleset/RuleArmor.h"
+#include "../Ruleset/Armor.h"
 #include "UnitInfoState.h"
 #include "TileEngine.h"
 
@@ -133,9 +133,9 @@ void InventoryState::init()
 	_soldier->clear();
 	_btnRank->clear();
 
-	_txtName->setText(unit->getUnit()->getName(_game->getLanguage()));
+	_txtName->setText(unit->getName(_game->getLanguage()));
 	_inv->setSelectedUnit(unit);
-	Soldier *s = dynamic_cast<Soldier*>(unit->getUnit());
+	Soldier *s = _game->getSavedGame()->getSoldier(unit->getId());
 	if (s)
 	{
 		SurfaceSet *texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
@@ -189,7 +189,7 @@ void InventoryState::btnPrevClick(Action *action)
 {
 	_battleGame->selectPreviousPlayerUnit();
 	// skip large units
-	while (_battleGame->getSelectedUnit()->getUnit()->getArmor()->getSize() > 1)
+	while (_battleGame->getSelectedUnit()->getArmor()->getSize() > 1)
 	{
 		_battleGame->selectPreviousPlayerUnit();
 	}
@@ -204,7 +204,7 @@ void InventoryState::btnNextClick(Action *action)
 {
 	_battleGame->selectNextPlayerUnit();
 	// skip large units
-	while (_battleGame->getSelectedUnit()->getUnit()->getArmor()->getSize() > 1)
+	while (_battleGame->getSelectedUnit()->getArmor()->getSize() > 1)
 	{
 		_battleGame->selectNextPlayerUnit();
 	}
@@ -255,7 +255,7 @@ void InventoryState::invClick(Action *action)
 	{
 		if (item->getUnit() && item->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
 		{
-			_txtItem->setText(item->getUnit()->getUnit()->getName(_game->getLanguage()));
+			_txtItem->setText(item->getUnit()->getName(_game->getLanguage()));
 		}
 		else
 		{

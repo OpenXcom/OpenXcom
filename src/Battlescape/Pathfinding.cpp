@@ -22,7 +22,7 @@
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
 #include "../Ruleset/MapData.h"
-#include "../Ruleset/RuleArmor.h"
+#include "../Ruleset/Armor.h"
 #include "../Savegame/BattleUnit.h"
 
 namespace OpenXcom
@@ -81,7 +81,7 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition)
 	Position currentPos, nextPos, startPosition = unit->getPosition();
 	int tuCost, totalTuCost = 0;
 
-	_movementType = unit->getUnit()->getArmor()->getMovementType();
+	_movementType = unit->getArmor()->getMovementType();
 	_unit = unit;
 
 	Tile *destinationTile = _save->getTile(endPosition);
@@ -181,7 +181,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 	*endPosition += startPosition;
 	bool fellDown = false;
 	bool triedStairs = false;
-	int size = _unit->getUnit()->getArmor()->getSize() - 1;
+	int size = _unit->getArmor()->getSize() - 1;
 	int cost = 0;
 	int numberOfPartsChangingLevel = 0;
 
@@ -520,7 +520,7 @@ bool Pathfinding::validateUpDown(BattleUnit *bu, Position startPosition, const i
 	}
 	else
 	{
-		if (bu->getUnit()->getArmor()->getMovementType() == MT_FLY)
+		if (bu->getArmor()->getMovementType() == MT_FLY)
 		{
 			if ((direction == DIR_UP && destinationTile && !destinationTile->getMapData(MapData::O_FLOOR)) // flying up only possible when there is no roof
 				|| (direction == DIR_DOWN && destinationTile && !startTile->getMapData(MapData::O_FLOOR)) // flying down only possible when there is no floor
@@ -550,8 +550,8 @@ bool Pathfinding::previewPath(bool bRemove)
  
 	Position pos = _unit->getPosition();
 	Position destination;
-	int tus = _unit->getTimeUnits();
-	int size = _unit->getUnit()->getArmor()->getSize() - 1;
+	int tus = _unit->getStats()->tu;
+	int size = _unit->getArmor()->getSize() - 1;
  
 	for (std::vector<int>::reverse_iterator i = _path.rbegin(); i != _path.rend(); ++i)
 	{

@@ -16,18 +16,18 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "RuleGenUnit.h"
+#include "Unit.h"
 
 namespace OpenXcom
 {
 
 /**
- * Creates a blank ruleunit for a certain type of unit.
+ * Creates a certain type of unit.
  * @param type String defining the type.
  * @param race String defining the race.
  * @param rank String defining the rank.
  */
-RuleGenUnit::RuleGenUnit(const std::string &type, std::string race, std::string rank) : _type(type), _race(race), _rank(rank), _armor(""), _standHeight(0), _kneelHeight(0), _loftemps(0), _value(0), _deathSound(0), _intelligence(0), _aggression(0)
+Unit::Unit(const std::string &type, std::string race, std::string rank) : _type(type), _race(race), _rank(rank), _armor(""), _standHeight(0), _kneelHeight(0), _loftemps(0), _value(0), _deathSound(0), _intelligence(0), _aggression(0)
 {
 
 }
@@ -35,7 +35,7 @@ RuleGenUnit::RuleGenUnit(const std::string &type, std::string race, std::string 
 /**
  *
  */
-RuleGenUnit::~RuleGenUnit()
+Unit::~Unit()
 {
 
 }
@@ -45,7 +45,7 @@ RuleGenUnit::~RuleGenUnit()
  * this unit. Each unit type has a unique name.
  * @return Unit name.
  */
-std::string RuleGenUnit::getType() const
+std::string Unit::getType() const
 {
 	return _type;
 }
@@ -54,7 +54,7 @@ std::string RuleGenUnit::getType() const
  * Sets the unit's stats data object.
  * @param Stats.
  */
-void RuleGenUnit::setStats(struct UnitStats stats)
+void Unit::setStats(struct UnitStats stats)
 {
 	_stats = stats;
 }
@@ -63,7 +63,7 @@ void RuleGenUnit::setStats(struct UnitStats stats)
  * Sets the unit's armor type.
  * @param string.
  */
-void RuleGenUnit::setArmor(const std::string &armor)
+void Unit::setArmor(const std::string &armor)
 {
 	_armor = armor;
 }
@@ -72,7 +72,7 @@ void RuleGenUnit::setArmor(const std::string &armor)
  * Set the unit's height at standing, kneeling and 3D template.
  * @param string.
  */
-void RuleGenUnit::setVoxelParameters(int standHeight, int kneelHeight, int loftemps)
+void Unit::setVoxelParameters(int standHeight, int kneelHeight, int loftemps)
 {
 	_standHeight = standHeight;
 	_kneelHeight = kneelHeight;
@@ -83,7 +83,7 @@ void RuleGenUnit::setVoxelParameters(int standHeight, int kneelHeight, int lofte
  * Set the unit's intelligence and aggression.
  * @param string.
  */
-void RuleGenUnit::setAIParameters(int intelligence, int aggression)
+void Unit::setAIParameters(int intelligence, int aggression)
 {
 	_intelligence = intelligence;
 	_aggression = aggression;
@@ -93,7 +93,7 @@ void RuleGenUnit::setAIParameters(int intelligence, int aggression)
  * Set the unit's special ability.
  * @param specab.
  */
-void RuleGenUnit::setSpecialAbility(SpecialAbility specab)
+void Unit::setSpecialAbility(SpecialAbility specab)
 {
 	_specab = specab;
 }
@@ -102,16 +102,16 @@ void RuleGenUnit::setSpecialAbility(SpecialAbility specab)
  * Returns the unit's stats data object.
  * @return Stats.
  */
-UnitStats RuleGenUnit::getStats() const
+UnitStats *Unit::getStats()
 {
-	return _stats;
+	return &_stats;
 }
 
 /**
  * Returns the unit's height at standing.
  * @return height.
  */
-int RuleGenUnit::getStandHeight() const
+int Unit::getStandHeight() const
 {
 	return _standHeight;
 }
@@ -120,7 +120,7 @@ int RuleGenUnit::getStandHeight() const
  * Returns the unit's height at kneeling.
  * @return height.
  */
-int RuleGenUnit::getKneelHeight() const
+int Unit::getKneelHeight() const
 {
 	return _kneelHeight;
 }
@@ -129,7 +129,7 @@ int RuleGenUnit::getKneelHeight() const
  * Returns the unit's 3D template ID.
  * @return template ID.
  */
-int RuleGenUnit::getLoftemps() const
+int Unit::getLoftemps() const
 {
 	return _loftemps;
 }
@@ -138,7 +138,7 @@ int RuleGenUnit::getLoftemps() const
  * Gets the unit's armor type.
  * @return string.
  */
-std::string RuleGenUnit::getArmor() const
+std::string Unit::getArmor() const
 {
 	return _armor;
 }
@@ -147,7 +147,7 @@ std::string RuleGenUnit::getArmor() const
  * Gets the alien's race.
  * @return string.
  */
-std::string RuleGenUnit::getRace() const
+std::string Unit::getRace() const
 {
 	return _race;
 }
@@ -156,7 +156,7 @@ std::string RuleGenUnit::getRace() const
  * Gets the alien's rank.
  * @return string.
  */
-std::string RuleGenUnit::getRank() const
+std::string Unit::getRank() const
 {
 	return _rank;
 }
@@ -165,7 +165,7 @@ std::string RuleGenUnit::getRank() const
  * Set the unit's value - for scoring.
  * @param value.
  */
-void RuleGenUnit::setValue(int value)
+void Unit::setValue(int value)
 {
 	_value = value;
 }
@@ -174,7 +174,7 @@ void RuleGenUnit::setValue(int value)
  * Get the unit's value - for scoring.
  * @return value.
  */
-int RuleGenUnit::getValue() const
+int Unit::getValue() const
 {
 	return _value;
 }
@@ -183,7 +183,7 @@ int RuleGenUnit::getValue() const
  * Set the unit's death sound.
  * @param id.
  */
-void RuleGenUnit::setDeathSound(int id)
+void Unit::setDeathSound(int id)
 {
 	_deathSound = id;
 }
@@ -192,7 +192,7 @@ void RuleGenUnit::setDeathSound(int id)
  * Get the unit's death sound.
  * @return id.
  */
-int RuleGenUnit::getDeathSound() const
+int Unit::getDeathSound() const
 {
 	return _deathSound;
 }
@@ -201,7 +201,7 @@ int RuleGenUnit::getDeathSound() const
  * Get the intelligence. This is the number of turns AI remembers your troops position.
  * @return intelligence.
  */
-int RuleGenUnit::getIntelligence() const
+int Unit::getIntelligence() const
 {
 	return _intelligence;
 }
@@ -210,7 +210,7 @@ int RuleGenUnit::getIntelligence() const
  * Get the aggression. Determines the chance of revenge and taking cover.
  * @return intelligence.
  */
-int RuleGenUnit::getAggression() const
+int Unit::getAggression() const
 {
 	return _aggression;
 }
@@ -219,7 +219,7 @@ int RuleGenUnit::getAggression() const
  * Get the unit's special ability.
  * @return specab.
  */
-int RuleGenUnit::getSpecialAbility() const
+int Unit::getSpecialAbility() const
 {
 	return (int)_specab;
 }

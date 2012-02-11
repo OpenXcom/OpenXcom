@@ -30,7 +30,7 @@ namespace OpenXcom
 	class RuleBaseFacility;
 	class RuleItem;
 	class RuleUfo;
-	class RuleArmor;
+	class Armor;
 
 	/// define article types
 	enum UfopaediaTypeId {
@@ -205,7 +205,7 @@ namespace OpenXcom
 		/// Constructor
 		ArticleDefinitionArmor();
 
-		RuleArmor *armor;
+		Armor *armor;
 	};
 
 }

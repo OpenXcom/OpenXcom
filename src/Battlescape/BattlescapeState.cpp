@@ -64,7 +64,7 @@
 #include "../Savegame/BattleItem.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleItem.h"
-#include "../Ruleset/RuleArmor.h"
+#include "../Ruleset/Armor.h"
 #include "../Engine/Timer.h"
 #include "../Engine/Options.h"
 #include "WarningMessage.h"
@@ -490,7 +490,7 @@ void BattlescapeState::btnKneelClick(Action *action)
  */
 void BattlescapeState::btnInventoryClick(Action *action)
 {
-	if (playableUnitSelected() && _save->getSelectedUnit()->getUnit()->getArmor()->getSize() == 1)
+	if (playableUnitSelected() && _save->getSelectedUnit()->getArmor()->getSize() == 1)
 	{
 		_game->pushState(new InventoryState(_game, !_save->getDebugMode()));
 	}
@@ -725,21 +725,21 @@ void BattlescapeState::updateSoldierInfo()
 		return;
 	}
 
-	_txtName->setText(battleUnit->getUnit()->getName(_game->getLanguage()));
-	Soldier *soldier = dynamic_cast<Soldier*>(battleUnit->getUnit());
+	_txtName->setText(battleUnit->getName(_game->getLanguage()));
+	Soldier *soldier = _game->getSavedGame()->getSoldier(battleUnit->getId());
 	if (soldier != 0)
 	{
 		SurfaceSet *texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
 		texture->getFrame(soldier->getRankSprite())->blit(_rank);
 	}
 	_numTimeUnits->setValue(battleUnit->getTimeUnits());
-	_barTimeUnits->setMax(battleUnit->getUnit()->getTimeUnits());
+	_barTimeUnits->setMax(battleUnit->getStats()->tu);
 	_barTimeUnits->setValue(battleUnit->getTimeUnits());
 	_numEnergy->setValue(battleUnit->getEnergy());
-	_barEnergy->setMax(battleUnit->getUnit()->getStamina());
+	_barEnergy->setMax(battleUnit->getStats()->stamina);
 	_barEnergy->setValue(battleUnit->getEnergy());
 	_numHealth->setValue(battleUnit->getHealth());
-	_barHealth->setMax(battleUnit->getUnit()->getHealth());
+	_barHealth->setMax(battleUnit->getStats()->health);
 	_barHealth->setValue(battleUnit->getHealth());
 	_barHealth->setValue2(battleUnit->getStunlevel());
 	_numMorale->setValue(battleUnit->getMorale());

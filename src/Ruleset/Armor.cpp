@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "RuleArmor.h"
+#include "Armor.h"
 
 namespace OpenXcom
 {
@@ -27,7 +27,7 @@ namespace OpenXcom
  * @param type String defining the type.
  * @param spriteSheet Spritesheet used to render the unit.
  */
-RuleArmor::RuleArmor(const std::string &type, std::string spriteSheet, int drawingRoutine, MovementType movementType, int size) : _type(type), _spriteSheet(spriteSheet), _corpseItem(""), _frontArmor(0), _sideArmor(0), _rearArmor(0), _underArmor(0), _drawingRoutine(drawingRoutine), _movementType(movementType), _size(size)
+Armor::Armor(const std::string &type, std::string spriteSheet, int drawingRoutine, MovementType movementType, int size) : _type(type), _spriteSheet(spriteSheet), _corpseItem(""), _frontArmor(0), _sideArmor(0), _rearArmor(0), _underArmor(0), _drawingRoutine(drawingRoutine), _movementType(movementType), _size(size)
 {
 	for (int i=0; i < 8; i++)
 		_damageModifier[i] = 1.0;
@@ -36,7 +36,7 @@ RuleArmor::RuleArmor(const std::string &type, std::string spriteSheet, int drawi
 /**
  *
  */
-RuleArmor::~RuleArmor()
+Armor::~Armor()
 {
 
 }
@@ -45,7 +45,7 @@ RuleArmor::~RuleArmor()
  * Loads the armor from a YAML file.
  * @param node YAML node.
  */
-void RuleArmor::load(const YAML::Node &node)
+void Armor::load(const YAML::Node &node)
 {
 	int a = 0;
 
@@ -101,7 +101,7 @@ void RuleArmor::load(const YAML::Node &node)
  * Saves the armor to a YAML file.
  * @param out YAML emitter.
  */
-void RuleArmor::save(YAML::Emitter &out) const
+void Armor::save(YAML::Emitter &out) const
 {
 
 	out << YAML::BeginMap;
@@ -123,7 +123,7 @@ void RuleArmor::save(YAML::Emitter &out) const
  * this armor. Each armor has a unique name. Coveralls, Power Suit,...
  * @return Armor name.
  */
-std::string RuleArmor::getType() const
+std::string Armor::getType() const
 {
 	return _type;
 }
@@ -132,7 +132,7 @@ std::string RuleArmor::getType() const
  * Gets the unit's sprite sheet.
  * @return Sprite sheet name.
  */
-std::string RuleArmor::getSpriteSheet() const
+std::string Armor::getSpriteSheet() const
 {
 	return _spriteSheet;
 }
@@ -144,7 +144,7 @@ std::string RuleArmor::getSpriteSheet() const
  * @param rear armor level.
  * @param under armor level.
  */
-void RuleArmor::setArmor(int front, int side, int rear, int under)
+void Armor::setArmor(int front, int side, int rear, int under)
 {
 	_frontArmor = front;
 	_sideArmor = side;
@@ -156,7 +156,7 @@ void RuleArmor::setArmor(int front, int side, int rear, int under)
  * Get the front armor level.
  * @return Front armor level.
  */
-int RuleArmor::getFrontArmor() const
+int Armor::getFrontArmor() const
 {
 	return _frontArmor;
 }
@@ -165,7 +165,7 @@ int RuleArmor::getFrontArmor() const
  * Get the side armor level.
  * @return Side armor level. 
  */
-int RuleArmor::getSideArmor() const
+int Armor::getSideArmor() const
 {
 	return _sideArmor;
 }
@@ -174,7 +174,7 @@ int RuleArmor::getSideArmor() const
  * get the rear armor level.
  * @return Rear armor level. 
  */
-int RuleArmor::getRearArmor() const
+int Armor::getRearArmor() const
 {
 	return _rearArmor;
 }
@@ -183,7 +183,7 @@ int RuleArmor::getRearArmor() const
  * get the under armor level.
  * @return Under armor level. 
  */
-int RuleArmor::getUnderArmor() const
+int Armor::getUnderArmor() const
 {
 	return _underArmor;
 }
@@ -192,7 +192,7 @@ int RuleArmor::getUnderArmor() const
  * Set the corpse item.
  * @param Name of the corpse item.
  */
-void RuleArmor::setCorpseItem(const std::string &corpseItem)
+void Armor::setCorpseItem(const std::string &corpseItem)
 {
 	_corpseItem = corpseItem;
 }
@@ -201,7 +201,7 @@ void RuleArmor::setCorpseItem(const std::string &corpseItem)
  * Get the corpse item.
  * @return Name of the corpse item.
  */
-std::string RuleArmor::getCorpseItem() const
+std::string Armor::getCorpseItem() const
 {
 	return _corpseItem;
 }
@@ -210,7 +210,7 @@ std::string RuleArmor::getCorpseItem() const
  * get the drawing routine ID.
  * @return The drawing routine ID.
  */
-int RuleArmor::getDrawingRoutine() const
+int Armor::getDrawingRoutine() const
 {
 	return _drawingRoutine;
 }
@@ -219,7 +219,7 @@ int RuleArmor::getDrawingRoutine() const
  * Get whether the armor can fly.
  * @return Movementtype
  */
-MovementType RuleArmor::getMovementType() const
+MovementType Armor::getMovementType() const
 {
 	return _movementType;
 }
@@ -228,7 +228,7 @@ MovementType RuleArmor::getMovementType() const
  * Get the size of the unit. Normally this is 1(small) or 2(big).
  * @return size
  */
-int RuleArmor::getSize() const
+int Armor::getSize() const
 {
 	return _size;
 }
@@ -238,7 +238,7 @@ int RuleArmor::getSize() const
  * @param dm Damage Modifier.
  * @param dt Damage Type.
  */
-void RuleArmor::setDamageModifier(float dm, ItemDamageType dt)
+void Armor::setDamageModifier(float dm, ItemDamageType dt)
 {
 	_damageModifier[(int)dt] = dm;
 }
@@ -248,7 +248,7 @@ void RuleArmor::setDamageModifier(float dm, ItemDamageType dt)
  * @param dt DamageType
  * @return damage modifier 0->1
  */
-float RuleArmor::getDamageModifier(ItemDamageType dt)
+float Armor::getDamageModifier(ItemDamageType dt)
 {
 	return _damageModifier[(int)dt];
 }

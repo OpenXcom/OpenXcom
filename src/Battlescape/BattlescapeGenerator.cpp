@@ -27,7 +27,6 @@
 #include "../Savegame/Base.h"
 #include "../Savegame/BaseFacility.h"
 #include "../Savegame/Soldier.h"
-#include "../Savegame/GenUnit.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/Ufo.h"
@@ -44,10 +43,10 @@
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/MapDataSet.h"
 #include "../Ruleset/MapData.h"
-#include "../Ruleset/RuleArmor.h"
-#include "../Ruleset/RuleGenUnit.h"
-#include "../Ruleset/RuleAlienRace.h"
-#include "../Ruleset/RuleAlienDeployment.h"
+#include "../Ruleset/Armor.h"
+#include "../Ruleset/Unit.h"
+#include "../Ruleset/AlienRace.h"
+#include "../Ruleset/AlienDeployment.h"
 #include "../Ruleset/RuleBaseFacility.h"
 #include "../Resource/XcomResourcePack.h"
 #include "../Engine/Game.h"
@@ -157,7 +156,7 @@ void BattlescapeGenerator::setBase(Base *base)
  */
 void BattlescapeGenerator::run()
 {
-	RuleAlienDeployment *ruleDeploy = _game->getRuleset()->getDeployment(_ufo?_ufo->getRules()->getType():_save->getMissionType());
+	AlienDeployment *ruleDeploy = _game->getRuleset()->getDeployment(_ufo?_ufo->getRules()->getType():_save->getMissionType());
 
 	ruleDeploy->getDimensions(&_width, &_length, &_height);
 
@@ -241,7 +240,7 @@ void BattlescapeGenerator::run()
 
 		// add vehicles that are in the craft - a vehicle is actually an item, which you will never see as it is converted to a unit
 		// however the item itself becomes the weapon it "holds".
-		unit = addXCOMUnit(new BattleUnit(new GenUnit(_game->getRuleset()->getGenUnit("TANK_CANNON"), _game->getRuleset()->getArmor(_game->getRuleset()->getGenUnit("TANK_CANNON")->getArmor())), FACTION_PLAYER));
+		unit = addXCOMUnit(new BattleUnit(_game->getRuleset()->getUnit("TANK_CANNON"), FACTION_PLAYER, _game->getRuleset()->getArmor(_game->getRuleset()->getUnit("TANK_CANNON")->getArmor())));
 		addItem(_game->getRuleset()->getItem("STR_TANK_CANNON"), unit);
 		addItem(_game->getRuleset()->getItem("STR_HWP_CANNON_SHELLS"), unit);
 		unit->setTurretType(0);
@@ -334,7 +333,7 @@ void BattlescapeGenerator::run()
  */
 BattleUnit *BattlescapeGenerator::addXCOMUnit(BattleUnit *unit)
 {
-	unit->setId(_unitCount++);
+//	unit->setId(_unitCount++);
 
 	if (_craft == 0)
 	{
@@ -371,7 +370,7 @@ BattleUnit *BattlescapeGenerator::addXCOMUnit(BattleUnit *unit)
  * @param race Pointer to the alien race.
  * @param deployment Pointer to the deployment ruels.
  */
-void BattlescapeGenerator::deployAliens(RuleAlienRace *race, RuleAlienDeployment *deployment)
+void BattlescapeGenerator::deployAliens(AlienRace *race, AlienDeployment *deployment)
 {
 	for (std::vector<DeploymentData>::iterator d = deployment->getDeploymentData()->begin(); d != deployment->getDeploymentData()->end(); ++d)
 	{
@@ -383,7 +382,7 @@ void BattlescapeGenerator::deployAliens(RuleAlienRace *race, RuleAlienDeployment
 			bool outside = RNG::generate(0,99) < (*d).percentageOutsideUFO;
 			if (_ufo == 0)
 				outside = false;
-			BattleUnit *unit = addAlien(_game->getRuleset()->getGenUnit(alienName), (*d).alienRank, outside);
+			BattleUnit *unit = addAlien(_game->getRuleset()->getUnit(alienName), (*d).alienRank, outside);
 			for (std::vector<std::string>::iterator it = (*d).itemSets.at(_alienItemLevel).items.begin(); it != (*d).itemSets.at(_alienItemLevel).items.end(); ++it)
 			{
 				RuleItem *ruleItem = _game->getRuleset()->getItem((*it));
@@ -410,15 +409,15 @@ void BattlescapeGenerator::deployAliens(RuleAlienRace *race, RuleAlienDeployment
 
 /**
  * Adds an alien to the game and place him on a free spawnpoint.
- * @param rules pointer to the RuleGenUnit which holds info about alien .
+ * @param rules pointer to the Unit which holds info about alien .
  * @param alienRank The rank of the alien, used for spawn point search.
  * @param outside Whether the alien should spawn outside or inside the UFO.
  * @return pointer to the created unit.
  */
-BattleUnit *BattlescapeGenerator::addAlien(RuleGenUnit *rules, int alienRank, bool outside)
+BattleUnit *BattlescapeGenerator::addAlien(Unit *rules, int alienRank, bool outside)
 {
-	BattleUnit *unit = new BattleUnit(new GenUnit(rules, _game->getRuleset()->getArmor(rules->getArmor())), FACTION_HOSTILE);
-	unit->setId(_unitCount++);
+	BattleUnit *unit = new BattleUnit(rules, FACTION_HOSTILE, _game->getRuleset()->getArmor(rules->getArmor()));
+	//unit->setId(_unitCount++);
 
 	Node *node = 0;
 
@@ -456,13 +455,13 @@ BattleUnit *BattlescapeGenerator::addAlien(RuleGenUnit *rules, int alienRank, bo
 
 /**
  * Adds a civilian to the game and place him on a free spawnpoint.
- * @param rules pointer to the RuleGenUnit which holds info about civilian .
+ * @param rules pointer to the Unit which holds info about civilian .
  * @return pointer to the created unit.
  */
-BattleUnit *BattlescapeGenerator::addCivilian(RuleGenUnit *rules)
+BattleUnit *BattlescapeGenerator::addCivilian(Unit *rules)
 {
-	BattleUnit *unit = new BattleUnit(new GenUnit(rules, _game->getRuleset()->getArmor(rules->getArmor())), FACTION_NEUTRAL);
-	unit->setId(_unitCount++);
+	BattleUnit *unit = new BattleUnit(rules, FACTION_NEUTRAL, _game->getRuleset()->getArmor(rules->getArmor()));
+//	unit->setId(_unitCount++);
 
 	Node *node = _save->getSpawnNode(0, unit);
 
@@ -512,7 +511,7 @@ void BattlescapeGenerator::addItem(RuleItem *item)
 		// find the first soldier with a free belt slot to equip grenades
 		for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 		{
-			if ((*i)->getUnit()->getArmor()->getSize() > 1) continue;
+			if ((*i)->getArmor()->getSize() > 1) continue;
 
 			if (!(*i)->getItem("STR_BELT"))
 			{
@@ -553,7 +552,7 @@ void BattlescapeGenerator::addItem(RuleItem *item)
 		// find the first soldier with a free belt for medikit (2 spaces)
 		for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 		{
-			if ((*i)->getUnit()->getArmor()->getSize() > 1) continue;
+			if ((*i)->getArmor()->getSize() > 1) continue;
 
 			if (!(*i)->getItem("STR_BELT",3,0))
 			{

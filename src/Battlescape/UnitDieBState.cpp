@@ -32,8 +32,8 @@
 #include "../Engine/Sound.h"
 #include "../Engine/RNG.h"
 #include "../Ruleset/XcomRuleset.h"
-#include "../Ruleset/RuleArmor.h"
-#include "../Ruleset/RuleGenUnit.h"
+#include "../Ruleset/Armor.h"
+#include "../Ruleset/Unit.h"
 
 namespace OpenXcom
 {
@@ -73,11 +73,10 @@ void UnitDieBState::init()
 
 	if (!_noSound)
 	{
-		Soldier *s = dynamic_cast<Soldier*>(_unit->getUnit());
-		if (s)
+		if (_unit->getType() == "SOLDIER")
 		{
 			// soldiers have screams depending on gender
-			if (s->getGender() == GENDER_MALE)
+			if (_unit->getGender() == GENDER_MALE)
 			{
 				_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(RNG::generate(41,43))->play();
 			}
@@ -88,8 +87,8 @@ void UnitDieBState::init()
 		}
 		else
 		{
-			// todo get death sound from RuleGenUnit
-			if (_unit->getUnit()->getArmor()->getSize() > 1)
+			// todo get death sound from Unit
+			if (_unit->getArmor()->getSize() > 1)
 			{
 				// HWP destroy sound
 				_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(23)->play();
@@ -128,7 +127,7 @@ void UnitDieBState::think()
 		convertUnitToCorpse();
 		_parent->getTileEngine()->calculateUnitLighting();
 		_parent->popState();
-		if (_unit->getUnit()->getSpecialAbility() == SPECAB_EXPLODEONDEATH)
+		if (_unit->getSpecialAbility() == SPECAB_EXPLODEONDEATH)
 		{
 			Position p = Position(_unit->getPosition().x * 16, _unit->getPosition().y * 16, _unit->getPosition().z * 24);
 			_parent->statePushNext(new ExplosionBState(_parent, p, 0, _unit, 0));
@@ -155,7 +154,7 @@ void UnitDieBState::convertUnitToCorpse()
 	// in case the unit was unconscious
 	_parent->getSave()->removeUnconsciousBodyItem(_unit);
 
-	int size = _unit->getUnit()->getArmor()->getSize() - 1;
+	int size = _unit->getArmor()->getSize() - 1;
 	// move inventory from unit to the ground for non-large units
 	if (size == 0)
 	{
@@ -172,7 +171,7 @@ void UnitDieBState::convertUnitToCorpse()
 	if (size == 0)
 	{
 		_parent->getSave()->getTile(_unit->getPosition())->setUnit(0);
-		BattleItem *corpse = new BattleItem(_parent->getRuleset()->getItem(_unit->getUnit()->getArmor()->getCorpseItem()),_parent->getSave()->getCurrentItemId());
+		BattleItem *corpse = new BattleItem(_parent->getRuleset()->getItem(_unit->getArmor()->getCorpseItem()),_parent->getSave()->getCurrentItemId());
 		corpse->setUnit(_unit);
 		_parent->dropItem(_unit->getPosition(), corpse, true);
 	}
@@ -185,7 +184,7 @@ void UnitDieBState::convertUnitToCorpse()
 			{
 				_parent->getSave()->getTile(_unit->getPosition() + Position(x,y,0))->setUnit(0);
 				std::stringstream ss;
-				ss << _unit->getUnit()->getArmor()->getCorpseItem() << i;
+				ss << _unit->getArmor()->getCorpseItem() << i;
 				BattleItem *corpse = new BattleItem(_parent->getRuleset()->getItem(ss.str()),_parent->getSave()->getCurrentItemId());
 				//corpse->setUnit(unit); // no need for this, because large units never can be revived as they don't go unconscious
 				_parent->dropItem(_unit->getPosition() + Position(x,y,0), corpse, true);

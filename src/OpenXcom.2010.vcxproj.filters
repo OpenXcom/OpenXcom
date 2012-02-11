@@ -419,12 +419,6 @@
     <ClCompile Include="Geoscape\ItemsArrivingState.cpp">
       <Filter>Geoscape</Filter>
     </ClCompile>
-    <ClCompile Include="Ruleset\RuleArmor.cpp">
-      <Filter>Ruleset</Filter>
-    </ClCompile>
-    <ClCompile Include="Savegame\Unit.cpp">
-      <Filter>Savegame</Filter>
-    </ClCompile>
     <ClCompile Include="Ruleset\RuleSoldier.cpp">
       <Filter>Ruleset</Filter>
     </ClCompile>
@@ -602,12 +596,6 @@
     <ClCompile Include="Battlescape\Camera.cpp">
       <Filter>Battlescape</Filter>
     </ClCompile>
-    <ClCompile Include="Ruleset\RuleGenUnit.cpp">
-      <Filter>Ruleset</Filter>
-    </ClCompile>
-    <ClCompile Include="Savegame\GenUnit.cpp">
-      <Filter>Savegame</Filter>
-    </ClCompile>
     <ClCompile Include="Battlescape\MedikitState.cpp">
       <Filter>Battlescape</Filter>
     </ClCompile>
@@ -620,12 +608,6 @@
     <ClCompile Include="Battlescape\ScannerView.cpp">
       <Filter>Battlescape</Filter>
     </ClCompile>
-    <ClCompile Include="Ruleset\RuleAlienRace.cpp">
-      <Filter>Ruleset</Filter>
-    </ClCompile>
-    <ClCompile Include="Ruleset\RuleAlienDeployment.cpp">
-      <Filter>Ruleset</Filter>
-    </ClCompile>
     <ClCompile Include="Battlescape\PromotionsState.cpp">
       <Filter>Battlescape</Filter>
     </ClCompile>
@@ -634,6 +616,18 @@
     </ClCompile>
     <ClCompile Include="Battlescape\InfoboxOKState.cpp">
       <Filter>Battlescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Ruleset\Unit.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
+    <ClCompile Include="Ruleset\AlienDeployment.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
+    <ClCompile Include="Ruleset\AlienRace.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
+    <ClCompile Include="Ruleset\Armor.cpp">
+      <Filter>Ruleset</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1056,12 +1050,6 @@
     <ClInclude Include="Geoscape\ItemsArrivingState.h">
       <Filter>Geoscape</Filter>
     </ClInclude>
-    <ClInclude Include="Ruleset\RuleArmor.h">
-      <Filter>Ruleset</Filter>
-    </ClInclude>
-    <ClInclude Include="Savegame\Unit.h">
-      <Filter>Savegame</Filter>
-    </ClInclude>
     <ClInclude Include="Ruleset\RuleSoldier.h">
       <Filter>Ruleset</Filter>
     </ClInclude>
@@ -1239,12 +1227,6 @@
     <ClInclude Include="Battlescape\Camera.h">
       <Filter>Battlescape</Filter>
     </ClInclude>
-    <ClInclude Include="Ruleset\RuleGenUnit.h">
-      <Filter>Ruleset</Filter>
-    </ClInclude>
-    <ClInclude Include="Savegame\GenUnit.h">
-      <Filter>Savegame</Filter>
-    </ClInclude>
     <ClInclude Include="Battlescape\MedikitState.h">
       <Filter>Battlescape</Filter>
     </ClInclude>
@@ -1257,12 +1239,6 @@
     <ClInclude Include="Battlescape\ScannerView.h">
       <Filter>Battlescape</Filter>
     </ClInclude>
-    <ClInclude Include="Ruleset\RuleAlienRace.h">
-      <Filter>Ruleset</Filter>
-    </ClInclude>
-    <ClInclude Include="Ruleset\RuleAlienDeployment.h">
-      <Filter>Ruleset</Filter>
-    </ClInclude>
     <ClInclude Include="Battlescape\PromotionsState.h">
       <Filter>Battlescape</Filter>
     </ClInclude>
@@ -1271,6 +1247,18 @@
     </ClInclude>
     <ClInclude Include="Battlescape\InfoboxOKState.h">
       <Filter>Battlescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\Unit.h">
+      <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\AlienDeployment.h">
+      <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\AlienRace.h">
+      <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\Armor.h">
+      <Filter>Ruleset</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

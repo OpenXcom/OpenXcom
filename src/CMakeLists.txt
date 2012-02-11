@@ -322,8 +322,8 @@ set ( ruleset_src
   Ruleset/RuleCraft.h
   Ruleset/XcomRuleset.cpp
   Ruleset/XcomRuleset.h
-  Ruleset/RuleArmor.cpp
-  Ruleset/RuleArmor.h
+  Ruleset/Armor.cpp
+  Ruleset/Armor.h
   Ruleset/MapDataSet.h
   Ruleset/MapDataSet.cpp
   Ruleset/RuleSoldier.h
@@ -336,8 +336,6 @@ set ( ruleset_src
   Ruleset/RuleCraftWeapon.h
   Ruleset/RuleInventory.h
   Ruleset/RuleInventory.cpp
-  Ruleset/RuleGenUnit.h
-  Ruleset/RuleGenUnit.cpp
   Ruleset/MapBlock.h
   Ruleset/MapBlock.cpp
   Ruleset/RuleBaseFacility.cpp
@@ -362,10 +360,12 @@ set ( ruleset_src
   Ruleset/RuleResearchProject.cpp
   Ruleset/RuleManufactureInfo.h
   Ruleset/RuleManufactureInfo.cpp
-  Ruleset/RuleAlienDeployment.h
-  Ruleset/RuleAlienDeployment.cpp
-  Ruleset/RuleAlienRace.h
-  Ruleset/RuleAlienRace.cpp
+  Ruleset/AlienDeployment.h
+  Ruleset/AlienDeployment.cpp
+  Ruleset/AlienRace.h
+  Ruleset/AlienRace.cpp
+  Ruleset/Unit.h
+  Ruleset/Unit.cpp
 )
 
 set ( savegame_src
@@ -385,8 +385,6 @@ set ( savegame_src
   Savegame/BaseFacility.cpp
   Savegame/Craft.cpp
   Savegame/Craft.h
-  Savegame/GenUnit.cpp
-  Savegame/GenUnit.h
   Savegame/Country.cpp
   Savegame/Country.h
   Savegame/NodeLink.cpp
@@ -415,8 +413,6 @@ set ( savegame_src
   Savegame/Waypoint.cpp
   Savegame/Target.h
   Savegame/Target.cpp
-  Savegame/Unit.h
-  Savegame/Unit.cpp
   Savegame/ResearchProject.h
   Savegame/ResearchProject.cpp
   Savegame/Production.h

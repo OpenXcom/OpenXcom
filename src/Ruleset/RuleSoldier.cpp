@@ -88,7 +88,7 @@ int RuleSoldier::getKneelHeight() const
 	return _kneelHeight;
 }
 ///
-int RuleSoldier::gotLoftemps() const
+int RuleSoldier::getLoftemps() const
 {
 	return _loftemps;
 }

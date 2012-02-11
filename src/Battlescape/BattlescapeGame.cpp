@@ -66,7 +66,7 @@
 #include "../Savegame/BattleItem.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleItem.h"
-#include "../Ruleset/RuleArmor.h"
+#include "../Ruleset/Armor.h"
 #include "../Engine/Options.h"
 #include "WarningMessage.h"
 #include "BattlescapeOptionsState.h"
@@ -345,16 +345,12 @@ bool BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 
 			if (murderer)
 			{
+				murderer->addKillCount();
 				// if there is a known murderer, he will get a morale bonus if he is of a different faction (what with neutral?)
 				if ((victim->getFaction() == FACTION_PLAYER && murderer->getFaction() == FACTION_HOSTILE) ||
 					(victim->getFaction() == FACTION_HOSTILE && murderer->getFaction() == FACTION_PLAYER))
 				{
 					murderer->moraleChange(+20);
-					Soldier *s = dynamic_cast<Soldier*>(murderer->getUnit());
-					if (s != 0)
-					{
-						s->addKillCount();
-					}
 				}
 				// murderer will get a penalty with friendly fire
 				if (victim->getFaction() == murderer->getFaction())
@@ -368,7 +364,7 @@ bool BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 				// the losing squad all get a morale loss
 				if ((*i)->getFaction() == victim->getFaction())
 				{
-					(*i)->moraleChange(-(22 - ((*i)->getUnit()->getBravery() / 10)*2));
+					(*i)->moraleChange(-(22 - ((*i)->getStats()->bravery / 10)*2));
 
 					// revenge procedure:
 					// if the victim is hostile, the nearest other hostile will aggro if he wasn't already
@@ -392,7 +388,7 @@ bool BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 						// aliens with aggression level 2 always revenge
 						// aliens with aggression level 1 have 50% chance to revenge
 						// aliens with aggression level 0 never revenge
-						if (revenger && (revenger->getUnit()->getAggression() == 2 || (revenger->getUnit()->getAggression() == 1 && revenge)))
+						if (revenger && (revenger->getAggression() == 2 || (revenger->getAggression() == 1 && revenge)))
 						{
 							AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(revenger->getCurrentAIState());
 							if (aggro == 0)
@@ -434,7 +430,7 @@ bool BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 						// no murderer, and no terrain explosion, must be fatal wounds
 						statePushNext(new UnitDieBState(this, (*j), DT_AP, false));  // STR_HAS_DIED_FROM_A_FATAL_WOUND
 						// show a little infobox with the name of the unit and "... is panicking"
-						_parentState->getGame()->pushState(new InfoboxOKState(_parentState->getGame(), (*j)->getUnit()->getName(_parentState->getGame()->getLanguage()), "STR_HAS_DIED_FROM_A_FATAL_WOUND"));
+						_parentState->getGame()->pushState(new InfoboxOKState(_parentState->getGame(), (*j)->getName(_parentState->getGame()->getLanguage()), "STR_HAS_DIED_FROM_A_FATAL_WOUND"));
 					}
 				}
 			}
@@ -447,7 +443,7 @@ bool BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 				// fell unconscious from stun level
 				statePushNext(new UnitDieBState(this, (*j), DT_STUN, true));  // STR_HAS_BECOME_UNCONSCIOUS
 				// show a little infobox with the name of the unit and "... is panicking"
-				_parentState->getGame()->pushState(new InfoboxOKState(_parentState->getGame(), (*j)->getUnit()->getName(_parentState->getGame()->getLanguage()), "STR_HAS_BECOME_UNCONSCIOUS"));
+				_parentState->getGame()->pushState(new InfoboxOKState(_parentState->getGame(), (*j)->getName(_parentState->getGame()->getLanguage()), "STR_HAS_BECOME_UNCONSCIOUS"));
 			}
 			else
 			{
@@ -513,7 +509,7 @@ void BattlescapeGame::setupCursor()
 		_currentAction.actor = _save->getSelectedUnit();
 		if (_currentAction.actor)
 		{
-			getMap()->setCursorType(CT_NORMAL, _currentAction.actor->getUnit()->getArmor()->getSize());
+			getMap()->setCursorType(CT_NORMAL, _currentAction.actor->getArmor()->getSize());
 		}
 	}
 }
@@ -693,7 +689,7 @@ void BattlescapeGame::popState()
 	if (action.actor && action.actor->getStatus() == STATUS_UNCONSCIOUS)
 	{
 		std::wstringstream ss;
-		ss << action.actor->getUnit()->getName(_parentState->getGame()->getLanguage()) << L'\n' << _parentState->getGame()->getLanguage()->getString("STR_HAS_BECOME_UNCONSCIOUS");
+		ss << action.actor->getName(_parentState->getGame()->getLanguage()) << L'\n' << _parentState->getGame()->getLanguage()->getString("STR_HAS_BECOME_UNCONSCIOUS");
 		_parentState->getGame()->pushState(new InfoboxState(_parentState->getGame(), ss.str()));
 	}
 
@@ -781,7 +777,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 
 	// show a little infobox with the name of the unit and "... is panicking"
 	std::wstringstream ss;
-	ss << unit->getUnit()->getName(_parentState->getGame()->getLanguage()) << L'\n' << _parentState->getGame()->getLanguage()->getString(status==STATUS_PANICKING?"STR_HAS_PANICKED":"STR_HAS_GONE_BERSERK");
+	ss << unit->getName(_parentState->getGame()->getLanguage()) << L'\n' << _parentState->getGame()->getLanguage()->getString(status==STATUS_PANICKING?"STR_HAS_PANICKED":"STR_HAS_GONE_BERSERK");
 	_parentState->getGame()->pushState(new InfoboxState(_parentState->getGame(), ss.str()));
 
 	unit->abortTurn(); //makes the unit go to status STANDING :p

@@ -797,9 +797,10 @@ void SavedGame::inspectSoldiers(Soldier **highestRanked, int *total, int rank)
 			if ((*j)->getRank() == (SoldierRank)rank)
 			{
 				(*total)++;
-				int v1 = 2 * (*j)->getHealth() + 2 * (*j)->getStamina() + 4 * (*j)->getReactions() + 4 * (*j)->getBravery();
-				int v2 = v1 + 3*( (*j)->getTimeUnits() + 2*( (*j)->getFiringAccuracy() ) );
-				int v3 = v2 + (*j)->getMeleeAccuracy() + (*j)->getThrowingAccuracy() + (*j)->getStrength();
+				UnitStats *s = (*j)->getCurrentStats();
+				int v1 = 2 * s->health + 2 * s->stamina + 4 * s->reactions + 4 * s->bravery;
+				int v2 = v1 + 3*( s->tu + 2*( s->firing ) );
+				int v3 = v2 + s->melee + s->throwing + s->strength;
 				//if (PsiSkill>0) c3 += PsiStrength + 2* PsiSkill
 				int score = v3 + 10 * ( (*j)->getMissions() + (*j)->getKills() );
 				if (score > highestScore)
