@@ -146,16 +146,14 @@ http://www.ferzkopp.net/joomla/content/view/19/14/
 - yaml-cpp, version 0.2.6 or later:
 http://code.google.com/p/yaml-cpp/
 
-The source code has been tested on Windows/Mac/Linux and
-includes the following:
-- Microsoft Visual C++ 2008 project.
-- Microsoft Visual C++ 2010 project.
-- XCode project (check the website).
-- Code::Blocks project.
-- Eclipse project.
-- CMake makefile.
-- Autotools makefile.
+The source code includes files for the following tools:
+- Microsoft Visual C++ 2010.
+- Microsoft Visual C++ 2008.
+- XCode (check the forum).
+- CMake.
+- Autotools.
 
-More detailed compiling instructions and pre-compiled
-dependencies are available at:
+It's also been tested on a variety of other tools on
+Windows/Mac/Linux. More detailed compiling instructions
+and pre-compiled dependencies are available at:
 http://ufopaedia.org/index.php?title=Compiling_(OpenXcom)

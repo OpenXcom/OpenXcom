@@ -536,9 +536,8 @@ target_link_libraries ( openxcom ${system_libs} ${SDLMIXER_LIBRARY} ${SDLGFX_LIB
 
 add_custom_command ( TARGET openxcom
   POST_BUILD
-  COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/bin/USER ${EXECUTABLE_OUTPUT_PATH}/USER
-  COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/bin/DATA ${EXECUTABLE_OUTPUT_PATH}/DATA )
-install ( DIRECTORY ${CMAKE_SOURCE_DIR}/bin/DATA DESTINATION bin )
+  COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/bin/data ${EXECUTABLE_OUTPUT_PATH}/data )
+install ( DIRECTORY ${CMAKE_SOURCE_DIR}/bin/data DESTINATION bin )
 
 # Copy Windows DLL to bin folder
 if ( WIN32 )
