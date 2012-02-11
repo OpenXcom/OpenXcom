@@ -65,7 +65,7 @@ public:
 	/// Get surfaces in this dataset.
 	SurfaceSet *getSurfaceset() const;
 	/// Load the objects from an MCD file.
-	void load(ResourcePack *res);
+	void load();
 	///	Unload to free memory.
 	void unload();
 	///

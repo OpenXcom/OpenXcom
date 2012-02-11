@@ -238,7 +238,7 @@ void SavedBattleGame::loadMapResources(ResourcePack *res)
 {
 	for (std::vector<MapDataSet*>::const_iterator i = _mapDataSets.begin(); i != _mapDataSets.end(); ++i)
 	{
-		(*i)->load(res);
+		(*i)->load();
 	}
 
 	int mdsID, mdID;

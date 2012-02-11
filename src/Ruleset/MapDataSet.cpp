@@ -116,10 +116,9 @@ SurfaceSet *MapDataSet::getSurfaceset() const
 
 /**
  * Loads terraindata in X-Com format (MCD & PCK files)
- * @param res The resourcepack.
  * @sa http://www.ufopaedia.org/index.php?title=MCD
  */
-void MapDataSet::load(ResourcePack *res)
+void MapDataSet::load()
 {
 	// prevents loading twice
 	if (_loaded) return;
