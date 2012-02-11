@@ -12,14 +12,17 @@
 		<Platform
 			Name="Win32"
 		/>
+		<Platform
+			Name="x64"
+		/>
 	</Platforms>
 	<ToolFiles>
 	</ToolFiles>
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="..\bin\$(ConfigurationName)"
-			IntermediateDirectory="..\obj\$(ConfigurationName)"
+			OutputDirectory="$(ProjectDir)..\bin\$(ConfigurationName)\$(PlatformName)"
+			IntermediateDirectory="$(ProjectDir)..\obj\$(ConfigurationName)\$(PlatformName)"
 			ConfigurationType="1"
 			CharacterSet="1"
 			>
@@ -41,7 +44,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;..\deps\include&quot;;&quot;..\deps\include\SDL&quot;;&quot;..\deps\include\yaml-cpp&quot;"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\deps\include&quot;;&quot;$(ProjectDir)..\deps\include\SDL&quot;;&quot;$(ProjectDir)..\deps\include\yaml-cpp&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -64,7 +67,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="SDLmain.lib SDL.lib SDL_gfx.lib SDL_mixer.lib yaml-cppd.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;..\deps\lib&quot;"
+				AdditionalLibraryDirectories="&quot;$(ProjectDir)..\deps\lib\$(PlatformName)&quot;"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
 				SubSystem="1"
@@ -93,13 +96,93 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy /y ..\deps\lib\*.dll ..\bin\"
+				CommandLine="copy /y &quot;$(ProjectDir)..\deps\lib\$(PlatformName)\*.dll&quot; &quot;$(ProjectDir)..\bin\$(PlatformName)\&quot;"
+			/>
+		</Configuration>
+		<Configuration
+			Name="Debug|x64"
+			OutputDirectory="$(ProjectDir)..\bin\$(ConfigurationName)\$(PlatformName)"
+			IntermediateDirectory="$(ProjectDir)..\obj\$(ConfigurationName)\$(PlatformName)"
+			ConfigurationType="1"
+			CharacterSet="1"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\deps\include&quot;;&quot;$(ProjectDir)..\deps\include\SDL&quot;;&quot;$(ProjectDir)..\deps\include\yaml-cpp&quot;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
+				MinimalRebuild="true"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="3"
+				UsePrecompiledHeader="0"
+				WarningLevel="3"
+				Detect64BitPortabilityProblems="false"
+				DebugInformationFormat="4"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies="SDLmain.lib SDL.lib SDL_gfx.lib SDL_mixer.lib yaml-cppd.lib"
+				LinkIncremental="2"
+				AdditionalLibraryDirectories="&quot;$(ProjectDir)..\deps\lib\$(PlatformName)&quot;"
+				GenerateManifest="true"
+				GenerateDebugInformation="true"
+				SubSystem="1"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
+				TargetMachine="1"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+				EmbedManifest="true"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				CommandLine="copy /y &quot;$(ProjectDir)..\deps\lib\$(PlatformName)\*.dll&quot; &quot;$(ProjectDir)..\bin\$(PlatformName)\&quot;"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="..\bin\$(ConfigurationName)"
-			IntermediateDirectory="..\obj\$(ConfigurationName)"
+			OutputDirectory="$(ProjectDir)..\bin\$(ConfigurationName)\$(PlatformName)"
+			IntermediateDirectory="$(ProjectDir)..\obj\$(ConfigurationName)\$(PlatformName)"
 			ConfigurationType="1"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
@@ -121,7 +204,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;..\deps\include&quot;;&quot;..\deps\include\SDL&quot;;&quot;..\deps\include\yaml-cpp&quot;"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\deps\include&quot;;&quot;$(ProjectDir)..\deps\include\SDL&quot;;&quot;$(ProjectDir)..\deps\include\yaml-cpp&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -142,7 +225,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="SDLmain.lib SDL.lib SDL_gfx.lib SDL_mixer.lib yaml-cpp.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;..\deps\lib&quot;"
+				AdditionalLibraryDirectories="&quot;$(ProjectDir)..\deps\lib\$(PlatformName)&quot;"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
 				SubSystem="1"
@@ -173,7 +256,87 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy /y ..\deps\lib\*.dll ..\bin\"
+				CommandLine="copy /y &quot;$(ProjectDir)..\deps\lib\$(PlatformName)\*.dll&quot; &quot;$(ProjectDir)..\bin\$(PlatformName)\&quot;"
+			/>
+		</Configuration>
+		<Configuration
+			Name="Release|x64"
+			OutputDirectory="$(ProjectDir)..\bin\$(ConfigurationName)\$(PlatformName)"
+			IntermediateDirectory="$(ProjectDir)..\obj\$(ConfigurationName)\$(PlatformName)"
+			ConfigurationType="1"
+			CharacterSet="1"
+			WholeProgramOptimization="1"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\deps\include&quot;;&quot;$(ProjectDir)..\deps\include\SDL&quot;;&quot;$(ProjectDir)..\deps\include\yaml-cpp&quot;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
+				RuntimeLibrary="2"
+				UsePrecompiledHeader="0"
+				WarningLevel="3"
+				Detect64BitPortabilityProblems="false"
+				DebugInformationFormat="3"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies="SDLmain.lib SDL.lib SDL_gfx.lib SDL_mixer.lib yaml-cpp.lib"
+				LinkIncremental="1"
+				AdditionalLibraryDirectories="&quot;$(ProjectDir)..\deps\lib\$(PlatformName)&quot;"
+				GenerateManifest="true"
+				GenerateDebugInformation="true"
+				SubSystem="1"
+				OptimizeReferences="2"
+				EnableCOMDATFolding="2"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
+				TargetMachine="1"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+				EmbedManifest="true"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				CommandLine="copy /y &quot;$(ProjectDir)..\deps\lib\$(PlatformName)\*.dll&quot; &quot;$(ProjectDir)..\bin\$(PlatformName)\&quot;"
 			/>
 		</Configuration>
 	</Configurations>

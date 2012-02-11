@@ -5,6 +5,7 @@
 
 	!include "MUI2.nsh"
 	!include "FileFunc.nsh"
+	!include "x64.nsh"
 
 ;--------------------------------
 ;General
@@ -15,7 +16,7 @@
 
 	;Name and file
 	Name "${GAME_NAME} ${GAME_VERSION}"
-	OutFile "openxcom-v${GAME_VERSION}-win32.exe"
+	OutFile "openxcom-v${GAME_VERSION}-win.exe"
 
 	;Default installation folder
 	InstallDir "$PROGRAMFILES\${GAME_NAME}"
@@ -36,6 +37,11 @@
 ;Get UFO folder from Steam
 
 Function .onInit
+${If} ${RunningX64}
+	StrCpy $INSTDIR "$PROGRAMFILES64\${GAME_NAME}"
+${Else}
+	StrCpy $INSTDIR "$PROGRAMFILES32\${GAME_NAME}"
+${EndIf}
 	StrCpy $StartMenuFolder "${GAME_NAME}"
 	StrCpy $UFODIR ""
 	ReadRegStr $R0 HKLM "Software\Valve\Steam" "InstallPath"
@@ -110,18 +116,13 @@ Section "Game Files" SecMain
 
 	SetOutPath "$INSTDIR"
 
-	File "..\..\bin\Release\OpenXcom.exe"
-	File "..\..\bin\libogg-0.dll"
-	File "..\..\bin\libvorbis-0.dll"
-	File "..\..\bin\libvorbisfile-3.dll"
-	File "..\..\bin\mikmod.dll"
-	File "..\..\bin\SDL.dll"
-	File "..\..\bin\SDL_gfx.dll"
-	File "..\..\bin\SDL_mixer.dll"
-	File "..\..\bin\smpeg.dll"
-	File "..\..\bin\msvcp100.dll"
-	File "..\..\bin\msvcr100.dll"
-	File "..\..\bin\yaml-cpp.dll"
+${If} ${RunningX64}
+	File "..\..\bin\x64\Release\OpenXcom.exe"
+	File "..\..\bin\x64\*.dll"
+${Else}
+	File "..\..\bin\Win32\Release\OpenXcom.exe"
+	File "..\..\bin\Win32\*.dll"
+${EndIf}
 	File "..\..\COPYING"
 	File "..\..\README.txt"
 	
