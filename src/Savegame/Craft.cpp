@@ -403,8 +403,7 @@ void Craft::setLowFuel(bool low)
  */
 double Craft::getDistanceFromBase() const
 {
-	double dLon, dLat;
-	return getDistance(_base, &dLon, &dLat);
+	return getDistance(_base);
 }
 
 /**
@@ -424,7 +423,7 @@ int Craft::getFuelConsumption() const
  */
 int Craft::getFuelLimit() const
 {
-	return (int)floor(getFuelConsumption() * getDistanceFromBase() / (getRadianSpeed() * 120));
+	return (int)floor(getFuelConsumption() * getDistanceFromBase() / (_radianSpeed * 120));
 }
 
 /**
@@ -444,8 +443,7 @@ void Craft::think()
 	{
 		calculateSpeed();
 	}
-	setLongitude(_lon + _speedLon);
-	setLatitude(_lat + _speedLat);
+	move();
 	if (_dest != 0 && finishedRoute())
 	{
 		_lon = _dest->getLongitude();

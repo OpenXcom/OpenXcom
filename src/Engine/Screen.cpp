@@ -19,12 +19,12 @@
 #include "Screen.h"
 #include <sstream>
 #include <iomanip>
-#include <sys/stat.h>
 #include "SDL_rotozoom.h"
 #include "Exception.h"
 #include "Surface.h"
 #include "Action.h"
 #include "Options.h"
+#include "CrossPlatform.h"
 
 namespace OpenXcom
 {
@@ -82,14 +82,13 @@ void Screen::handle(Action *action)
 	{
 		std::stringstream ss;
 		int i = 0;
-		struct stat info;
 		do
 		{
 			ss.str("");
 			ss << Options::getUserFolder() << "screen" << std::setfill('0') << std::setw(3) << i << ".bmp";
 			i++;
 		}
-		while (stat(ss.str().c_str(), &info) == 0);
+		while (CrossPlatform::fileExists(ss.str()));
 		SDL_SaveBMP(_screen, ss.str().c_str());
 	}
 }

@@ -619,7 +619,7 @@ void SavedGame::getAvailableProductions (std::vector<RuleManufactureInfo *> & pr
 }
 
 /**
-   Check wether a ResearchProject can be researched.
+   Check whether a ResearchProject can be researched.
    * @param r the RuleResearchProject to test.
    * @param unlockeds the list of currently unlocked RuleResearchProject
    * @return true if the RuleResearchProject can be researched
