@@ -69,9 +69,8 @@ AlienDeployment::~AlienDeployment()
 /**
  * Loads the Deployment from a YAML file.
  * @param node YAML node.
- * @param rule Ruleset for the craft.
  */
-void AlienDeployment::load(const YAML::Node &node, const Ruleset *ruleset)
+void AlienDeployment::load(const YAML::Node &node)
 {
 	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
 	{
