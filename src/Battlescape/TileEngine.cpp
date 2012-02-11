@@ -27,13 +27,12 @@
 #include "../Savegame/Tile.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/Soldier.h"
-#include "../Savegame/GenUnit.h"
 #include "../Engine/RNG.h"
 #include "../Ruleset/MapDataSet.h"
 #include "../Ruleset/MapData.h"
-#include "../Ruleset/RuleGenUnit.h"
+#include "../Ruleset/Unit.h"
 #include "../Ruleset/RuleSoldier.h"
-#include "../Ruleset/RuleArmor.h"
+#include "../Ruleset/Armor.h"
 #include "../Resource/ResourcePack.h"
 
 namespace OpenXcom
@@ -462,7 +461,7 @@ bool TileEngine::checkReactionFire(BattleUnit *unit, BattleAction *action, Battl
 		}
 	}
 
-	if (action->actor /*&& highestReactionScore > unit->getReactionScore()*/)
+	if (action->actor && highestReactionScore > unit->getReactionScore())
 	{
 		action->actor->addReactionExp();
 		action->type = BA_SNAPSHOT;
@@ -862,7 +861,7 @@ int TileEngine::unitOpensDoor(BattleUnit *unit)
 {
 	int door = -1;
 
-	int size = unit->getUnit()->getArmor()->getSize();
+	int size = unit->getArmor()->getSize();
 
 	for (int x = 0; x < size; x++)
 	{
@@ -1166,7 +1165,7 @@ int TileEngine::voxelCheck(const Position& voxel, BattleUnit *excludeUnit, bool 
 			{
 				int x = voxel.x%16;
 				int y = voxel.y%16;
-				int idx = (unit->getUnit()->getLoftemps() * 16) + y;
+				int idx = (unit->getLoftemps() * 16) + y;
 				if ((_voxelData->at(idx) & (1 << x))==(1 << x))
 				{
 					return 4;
@@ -1184,7 +1183,7 @@ int TileEngine::voxelCheck(const Position& voxel, BattleUnit *excludeUnit, bool 
 				{
 					int x = voxel.x%16;
 					int y = voxel.y%16;
-					int idx = (unit->getUnit()->getLoftemps() * 16) + y;
+					int idx = (unit->getLoftemps() * 16) + y;
 					if ((_voxelData->at(idx) & (1 << x))==(1 << x))
 					{
 						return 4;

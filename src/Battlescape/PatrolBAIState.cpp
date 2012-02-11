@@ -25,7 +25,7 @@
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Node.h"
 #include "../Engine/RNG.h"
-#include "../Ruleset/RuleArmor.h"
+#include "../Ruleset/Armor.h"
 #include "../Savegame/Tile.h"
 
 namespace OpenXcom
@@ -171,7 +171,7 @@ void PatrolBAIState::think(BattleAction *action)
 		}
 
 		// in base defence missions, the smaller aliens walk towards target nodes - or if there, shoot objects around them
-		if (_game->getMissionType() == "STR_BASE_DEFENCE" && _unit->getUnit()->getArmor()->getSize() == 1)
+		if (_game->getMissionType() == "STR_BASE_DEFENCE" && _unit->getArmor()->getSize() == 1)
 		{
 			if (_fromNode->isTarget())
 			{

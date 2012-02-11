@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "RuleAlienRace.h"
+#include "AlienRace.h"
 
 namespace OpenXcom
 {
@@ -25,11 +25,11 @@ namespace OpenXcom
  * Creates a blank alien race.
  * @param id String defining the id.
  */
-RuleAlienRace::RuleAlienRace(const std::string &id): _id(id), _members()
+AlienRace::AlienRace(const std::string &id): _id(id), _members()
 {
 }
 
-RuleAlienRace::~RuleAlienRace()
+AlienRace::~AlienRace()
 {
 }
 
@@ -37,7 +37,7 @@ RuleAlienRace::~RuleAlienRace()
  * Loads the alien race from a YAML file.
  * @param node YAML node.
  */
-void RuleAlienRace::load(const YAML::Node &node)
+void AlienRace::load(const YAML::Node &node)
 {
 	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
 	{
@@ -58,7 +58,7 @@ void RuleAlienRace::load(const YAML::Node &node)
  * Saves the alien race to a YAML file.
  * @param out YAML emitter.
  */
-void RuleAlienRace::save(YAML::Emitter &out) const
+void AlienRace::save(YAML::Emitter &out) const
 {
 	out << YAML::BeginMap;
 	out << YAML::Key << "id" << YAML::Value << _id;
@@ -71,7 +71,7 @@ void RuleAlienRace::save(YAML::Emitter &out) const
  * this alien race. Each race has a unique name.
  * @return Race name.
  */
-std::string RuleAlienRace::getId() const
+std::string AlienRace::getId() const
 {
 	return _id;
 }
@@ -84,7 +84,7 @@ std::string RuleAlienRace::getId() const
  * @param slot The new section id.
  * @param cost The time unit cost.
  */
-void RuleAlienRace::addMember(const std::string &member)
+void AlienRace::addMember(const std::string &member)
 {
 	_members.push_back(member);
 }
@@ -94,7 +94,7 @@ void RuleAlienRace::addMember(const std::string &member)
  * @param id The members id.
  * @return The members name.
  */
-std::string RuleAlienRace::getMember(int id) const
+std::string AlienRace::getMember(int id) const
 {
 	return _members[id];
 }

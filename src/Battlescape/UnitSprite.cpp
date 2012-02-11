@@ -23,9 +23,9 @@
 #include "../Battlescape/Position.h"
 #include "../Resource/ResourcePack.h"
 #include "../Ruleset/RuleSoldier.h"
-#include "../Ruleset/RuleGenUnit.h"
+#include "../Ruleset/Unit.h"
 #include "../Ruleset/RuleItem.h"
-#include "../Ruleset/RuleArmor.h"
+#include "../Ruleset/Armor.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/Soldier.h"
@@ -104,7 +104,7 @@ void UnitSprite::draw()
 {
 	Surface::draw();
 
-	switch (_unit->getUnit()->getArmor()->getDrawingRoutine())
+	switch (_unit->getArmor()->getDrawingRoutine())
 	{
 	case 0:
 		drawRoutine0();
@@ -140,8 +140,6 @@ void UnitSprite::drawRoutine0()
 	const int offY[8] = { -6, -3, 0, 2, 0, -4, -7, -9 }; // for the weapons
 	const int offYKneel = 4;
 
-	Soldier *soldier = dynamic_cast<Soldier*>(_unit->getUnit());
-
 	if (_unit->isOut())
 	{
 		// unit is drawn as an item
@@ -155,7 +153,7 @@ void UnitSprite::drawRoutine0()
 		return;
 	}
 
-	if (soldier != 0 && soldier->getGender() == GENDER_FEMALE)
+	if (_unit->getGender() == GENDER_FEMALE)
 	{
 		torso = _unitSurface->getFrame(femaleTorso + _unit->getDirection());
 	}
@@ -250,7 +248,7 @@ void UnitSprite::drawRoutine0()
 	// items are calculated for soldier height (22) - some aliens are smaller, so item is drawn lower.
 	if (item)
 	{
-		item->setY(item->getY() + (22 - _unit->getUnit()->getStandHeight()));
+		item->setY(item->getY() + (22 - _unit->getStandHeight()));
 	}
 
 	// blit order depends on unit direction
@@ -394,7 +392,7 @@ void UnitSprite::drawRoutine2()
 	}
 
 	int hoverTank = 0;
-	if (_unit->getUnit()->getArmor()->getMovementType() == MT_FLY)
+	if (_unit->getArmor()->getMovementType() == MT_FLY)
 	{
 		hoverTank = 32;
 	}

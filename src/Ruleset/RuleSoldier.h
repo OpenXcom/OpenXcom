@@ -20,7 +20,7 @@
 #define OPENXCOM_RULESOLDIER_H
 
 #include <string>
-#include "../Savegame/Unit.h"
+#include "../Ruleset/Unit.h"
 
 namespace OpenXcom
 {
@@ -51,17 +51,17 @@ public:
 	void setArmor(const std::string &armor);
 	/// Sets the voxel parameters.
 	void setVoxelParameters(int standHeight, int kneelHeight, int loftemps);
-	///
+	/// Get the minimum stats for the random stats generator.
 	UnitStats getMinStats() const;
-	///
+	/// Get the maximum stats for the random stats generator.
 	UnitStats getMaxStats() const;
-	///
+	/// Get the height of the soldier when it's standing.
 	int getStandHeight() const;
-	///
+	/// Get the height of the soldier when it's kneeling.
 	int getKneelHeight() const;
-	///
-	int gotLoftemps() const;
-	///
+	/// Get the line of fire template (3D voxels)
+	int getLoftemps() const;
+	/// Get the armor name.
 	std::string getArmor() const;
 
 };

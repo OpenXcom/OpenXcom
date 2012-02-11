@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "RuleAlienDeployment.h"
+#include "AlienDeployment.h"
 
 namespace OpenXcom
 {
@@ -55,14 +55,14 @@ YAML::Emitter& operator << (YAML::Emitter& out, const DeploymentData& s)
  * type of deployment data.
  * @param type String defining the type.
  */
-RuleAlienDeployment::RuleAlienDeployment(const std::string &type) : _type(type), _data(), _width(0), _length(0), _height(0)
+AlienDeployment::AlienDeployment(const std::string &type) : _type(type), _data(), _width(0), _length(0), _height(0)
 {
 }
 
 /**
  *
  */
-RuleAlienDeployment::~RuleAlienDeployment()
+AlienDeployment::~AlienDeployment()
 {
 }
 
@@ -71,7 +71,7 @@ RuleAlienDeployment::~RuleAlienDeployment()
  * @param node YAML node.
  * @param rule Ruleset for the craft.
  */
-void RuleAlienDeployment::load(const YAML::Node &node, const Ruleset *ruleset)
+void AlienDeployment::load(const YAML::Node &node, const Ruleset *ruleset)
 {
 	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
 	{
@@ -104,7 +104,7 @@ void RuleAlienDeployment::load(const YAML::Node &node, const Ruleset *ruleset)
  * Saves the Deployment to a YAML file.
  * @param out YAML emitter.
  */
-void RuleAlienDeployment::save(YAML::Emitter &out) const
+void AlienDeployment::save(YAML::Emitter &out) const
 {
 	out << YAML::BeginMap;
 	out << YAML::Key << "type" << YAML::Value << _type;
@@ -121,19 +121,19 @@ void RuleAlienDeployment::save(YAML::Emitter &out) const
  * this deployment. Each deployment type has a unique name.
  * @return Deployment name.
  */
-std::string RuleAlienDeployment::getType() const
+std::string AlienDeployment::getType() const
 {
 	return _type;
 }
 
 /// Gets a pointer to the data.
-std::vector<DeploymentData>* RuleAlienDeployment::getDeploymentData()
+std::vector<DeploymentData>* AlienDeployment::getDeploymentData()
 {
 	return &_data;
 }
 
 /// Set dimensions.
-void RuleAlienDeployment::setDimensions(int width, int length, int height)
+void AlienDeployment::setDimensions(int width, int length, int height)
 {
 	_width = width;
 	_length = length;
@@ -141,7 +141,7 @@ void RuleAlienDeployment::setDimensions(int width, int length, int height)
 }
 
 /// Get dimensions.
-void RuleAlienDeployment::getDimensions(int *width, int *length, int *height)
+void AlienDeployment::getDimensions(int *width, int *length, int *height)
 {
 	*width = _width;
 	*length = _length;

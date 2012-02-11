@@ -16,22 +16,29 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_RULEGENUNIT_H
-#define OPENXCOM_RULEGENUNIT_H
+#ifndef OPENXCOM_UNIT_H
+#define OPENXCOM_UNIT_H
 
 #include <string>
-#include "../Savegame/Unit.h"
 
 namespace OpenXcom
 {
 
 enum SpecialAbility { SPECAB_NONE = 0, SPECAB_EXPLODEONDEATH, SPECAB_MORPHONDEATH, SPECAB_BURNFLOOR };
+/**
+ * This struct holds some plain unit attribute data together.
+ */
+struct UnitStats
+{
+	int tu, stamina, health, bravery, reactions, firing, throwing, strength, psiStrength, psiSkill, melee;
+};
+
 
 /**
  * Represents the static data for a unit that is generated on the battlescape, this includes: HWPs, aliens and civilians.
- * @sa GenUnit Soldier BattleUnit
+ * @sa Soldier BattleUnit
  */
-class RuleGenUnit
+class Unit
 {
 private:
 	std::string _type;
@@ -45,9 +52,9 @@ private:
 	SpecialAbility _specab;
 public:
 	/// Creates a blank unit ruleset.
-	RuleGenUnit(const std::string &type, std::string race, std::string rank);
+	Unit(const std::string &type, std::string race, std::string rank);
 	/// Cleans up the unit ruleset.
-	~RuleGenUnit();
+	~Unit();
 	/// Gets the unit's type.
 	std::string getType() const;
 	/// Sets the unit's stats.
@@ -61,7 +68,7 @@ public:
 	/// Sets various AI parameters.
 	void setSpecialAbility(SpecialAbility specab);
 	/// Get the unit's stats.
-	UnitStats getStats() const;
+	UnitStats *getStats();
 	/// Get the unit's height when standing.
 	int getStandHeight() const;
 	/// Get the unit's height when kneeling.

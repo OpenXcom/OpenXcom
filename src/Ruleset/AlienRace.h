@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_RULEALIENRACE_H
-#define OPENXCOM_RULEALIENRACE_H
+#ifndef OPENXCOM_ALIENRACE_H
+#define OPENXCOM_ALIENRACE_H
 
 #include <string>
 #include <vector>
@@ -32,16 +32,16 @@ namespace OpenXcom
  * Represents a specific race "family", or a "main race" if you wish.
  * Here is defined which ranks it contains and also which accompanying terror units.
  */
-class RuleAlienRace
+class AlienRace
 {
 private:
 	std::string _id;
 	std::vector<std::string> _members;
 public:
 	/// Creates a blank alien race ruleset.
-	RuleAlienRace(const std::string &id);
+	AlienRace(const std::string &id);
 	/// Cleans up the alien race ruleset.
-	~RuleAlienRace();
+	~AlienRace();
 	/// Loads alien race data from YAML.
 	void load(const YAML::Node& node);
 	/// Saves the alien race data to YAML.

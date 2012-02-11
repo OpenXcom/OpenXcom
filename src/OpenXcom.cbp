@@ -340,10 +340,12 @@
 		<Unit filename="Ruleset\MapData.h" />
 		<Unit filename="Ruleset\MapDataSet.cpp" />
 		<Unit filename="Ruleset\MapDataSet.h" />
-		<Unit filename="Ruleset\RuleAlien.cpp" />
-		<Unit filename="Ruleset\RuleAlien.h" />
-		<Unit filename="Ruleset\RuleArmor.cpp" />
-		<Unit filename="Ruleset\RuleArmor.h" />
+		<Unit filename="Ruleset\AlienDeployment.cpp" />
+		<Unit filename="Ruleset\AlienDeployment.h" />
+		<Unit filename="Ruleset\AlienRace.cpp" />
+		<Unit filename="Ruleset\AlienRace.h" />
+		<Unit filename="Ruleset\Armor.cpp" />
+		<Unit filename="Ruleset\Armor.h" />
 		<Unit filename="Ruleset\RuleBaseFacility.cpp" />
 		<Unit filename="Ruleset\RuleBaseFacility.h" />
 		<Unit filename="Ruleset\RuleCountry.cpp" />
@@ -366,6 +368,8 @@
 		<Unit filename="Ruleset\RuleTerrain.h" />
 		<Unit filename="Ruleset\RuleUfo.cpp" />
 		<Unit filename="Ruleset\RuleUfo.h" />
+		<Unit filename="Ruleset\Unit.cpp" />
+		<Unit filename="Ruleset\Unit.h" />
 		<Unit filename="Ruleset\Ruleset.cpp" />
 		<Unit filename="Ruleset\Ruleset.h" />
 		<Unit filename="Ruleset\SoldierNamePool.cpp" />
@@ -418,8 +422,6 @@
 		<Unit filename="Savegame\Ufo.h" />
 		<Unit filename="Savegame\UfopaediaSaved.cpp" />
 		<Unit filename="Savegame\UfopaediaSaved.h" />
-		<Unit filename="Savegame\Unit.cpp" />
-		<Unit filename="Savegame\Unit.h" />
 		<Unit filename="Savegame\Waypoint.cpp" />
 		<Unit filename="Savegame\Waypoint.h" />
 		<Unit filename="Ufopaedia\ArticleState.cpp" />

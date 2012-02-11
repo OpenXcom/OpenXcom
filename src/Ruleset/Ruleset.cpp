@@ -32,10 +32,10 @@
 #include "RuleTerrain.h"
 #include "MapDataSet.h"
 #include "RuleSoldier.h"
-#include "RuleGenUnit.h"
-#include "RuleAlienRace.h"
-#include "RuleAlienDeployment.h"
-#include "RuleArmor.h"
+#include "Unit.h"
+#include "AlienRace.h"
+#include "AlienDeployment.h"
+#include "Armor.h"
 #include "ArticleDefinition.h"
 #include "RuleInventory.h"
 #include "RuleResearchProject.h"
@@ -48,7 +48,7 @@ namespace OpenXcom
  * Creates a ruleset with blank sets of rules.
  */
 Ruleset::Ruleset() : _names(), _countries(), _regions(), _facilities(), _crafts(), _craftWeapons(), _items(), _ufos(),
-					 _terrains(), _mapDataSets(), _soldiers(), _genUnits(), _invs(), _costSoldier(0), _costEngineer(0), _costScientist(0), _timePersonnel(0)
+					 _terrains(), _mapDataSets(), _soldiers(), _units(), _invs(), _costSoldier(0), _costEngineer(0), _costScientist(0), _timePersonnel(0)
 {
 }
 
@@ -101,11 +101,11 @@ Ruleset::~Ruleset()
 	{
 		delete i->second;
 	}
-	for (std::map<std::string, RuleGenUnit*>::iterator i = _genUnits.begin(); i != _genUnits.end(); ++i)
+	for (std::map<std::string, Unit*>::iterator i = _units.begin(); i != _units.end(); ++i)
 	{
 		delete i->second;
 	}
-	for (std::map<std::string, RuleArmor*>::iterator i = _armors.begin(); i != _armors.end(); ++i)
+	for (std::map<std::string, Armor*>::iterator i = _armors.begin(); i != _armors.end(); ++i)
 	{
 		delete i->second;
 	}
@@ -349,14 +349,14 @@ void Ruleset::load(const std::string &filename)
 			{
 				std::string type;
 				j.second()["type"] >> type;
-				RuleArmor *rule;
+				Armor *rule;
 				if (_armors.find(type) != _armors.end())
 				{
 					rule = _armors[type];
 				}
 				else
 				{
-					rule = new RuleArmor(type, "", 0);
+					rule = new Armor(type, "", 0);
 					_armors[type] = rule;
 					_armorsIndex.push_back(type);
 				}
@@ -473,7 +473,7 @@ void Ruleset::save(const std::string &filename) const
 	out << YAML::EndSeq;
 	out << YAML::Key << "armors" << YAML::Value;
 	out << YAML::BeginSeq;
-	for (std::map<std::string, RuleArmor*>::const_iterator i = _armors.begin(); i != _armors.end(); ++i)
+	for (std::map<std::string, Armor*>::const_iterator i = _armors.begin(); i != _armors.end(); ++i)
 	{
 		i->second->save(out);
 	}
@@ -615,9 +615,9 @@ RuleSoldier *const Ruleset::getSoldier(const std::string &name) const
  * @param name Unit name.
  * @return Rules for the units.
  */
-RuleGenUnit *const Ruleset::getGenUnit(const std::string &name) const
+Unit *const Ruleset::getUnit(const std::string &name) const
 {
-	return _genUnits.find(name)->second;
+	return _units.find(name)->second;
 }
 
 /**
@@ -625,7 +625,7 @@ RuleGenUnit *const Ruleset::getGenUnit(const std::string &name) const
  * @param name Race name.
  * @return Rules for the race.
  */
-RuleAlienRace *const Ruleset::getAlienRace(const std::string &name) const
+AlienRace *const Ruleset::getAlienRace(const std::string &name) const
 {
 	return _alienRaces.find(name)->second;
 }
@@ -635,7 +635,7 @@ RuleAlienRace *const Ruleset::getAlienRace(const std::string &name) const
  * @param name Deployment name.
  * @return Rules for the deployment.
  */
-RuleAlienDeployment *const Ruleset::getDeployment(const std::string &name) const
+AlienDeployment *const Ruleset::getDeployment(const std::string &name) const
 {
 	return _alienDeployments.find(name)->second;
 }
@@ -645,7 +645,7 @@ RuleAlienDeployment *const Ruleset::getDeployment(const std::string &name) const
  * @param name Armor name.
  * @return Rules for the armor.
  */
-RuleArmor *const Ruleset::getArmor(const std::string &name) const
+Armor *const Ruleset::getArmor(const std::string &name) const
 {
 	return _armors.find(name)->second;
 }

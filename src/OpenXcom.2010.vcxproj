@@ -261,10 +261,10 @@
     <ClCompile Include="Ruleset\MapBlock.cpp" />
     <ClCompile Include="Ruleset\MapDataSet.cpp" />
     <ClCompile Include="Ruleset\MapData.cpp" />
-    <ClCompile Include="Ruleset\RuleAlienDeployment.cpp" />
-    <ClCompile Include="Ruleset\RuleAlienRace.cpp" />
-    <ClCompile Include="Ruleset\RuleGenUnit.cpp" />
-    <ClCompile Include="Ruleset\RuleArmor.cpp" />
+    <ClCompile Include="Ruleset\AlienDeployment.cpp" />
+    <ClCompile Include="Ruleset\AlienRace.cpp" />
+    <ClCompile Include="Ruleset\Unit.cpp" />
+    <ClCompile Include="Ruleset\Armor.cpp" />
     <ClCompile Include="Ruleset\RuleBaseFacility.cpp" />
     <ClCompile Include="Ruleset\RuleCountry.cpp" />
     <ClCompile Include="Ruleset\RuleCraft.cpp" />
@@ -280,7 +280,6 @@
     <ClCompile Include="Ruleset\RuleTerrain.cpp" />
     <ClCompile Include="Ruleset\SoldierNamePool.cpp" />
     <ClCompile Include="Ruleset\XcomRuleset.cpp" />
-    <ClCompile Include="Savegame\GenUnit.cpp" />
     <ClCompile Include="Savegame\Base.cpp" />
     <ClCompile Include="Savegame\BaseFacility.cpp" />
     <ClCompile Include="Savegame\BattleItem.cpp" />
@@ -303,7 +302,6 @@
     <ClCompile Include="Savegame\Tile.cpp" />
     <ClCompile Include="Savegame\Transfer.cpp" />
     <ClCompile Include="Savegame\Ufo.cpp" />
-    <ClCompile Include="Savegame\Unit.cpp" />
     <ClCompile Include="Savegame\UfopaediaSaved.cpp" />
     <ClCompile Include="Savegame\Waypoint.cpp" />
     <ClCompile Include="Ufopaedia\ArticleState.cpp" />
@@ -476,10 +474,10 @@
     <ClInclude Include="Ruleset\MapBlock.h" />
     <ClInclude Include="Ruleset\MapDataSet.h" />
     <ClInclude Include="Ruleset\MapData.h" />
-    <ClInclude Include="Ruleset\RuleAlienDeployment.h" />
-    <ClInclude Include="Ruleset\RuleAlienRace.h" />
-    <ClInclude Include="Ruleset\RuleGenUnit.h" />
-    <ClInclude Include="Ruleset\RuleArmor.h" />
+    <ClInclude Include="Ruleset\AlienDeployment.h" />
+    <ClInclude Include="Ruleset\AlienRace.h" />
+    <ClInclude Include="Ruleset\Unit.h" />
+    <ClInclude Include="Ruleset\Armor.h" />
     <ClInclude Include="Ruleset\RuleBaseFacility.h" />
     <ClInclude Include="Ruleset\RuleCountry.h" />
     <ClInclude Include="Ruleset\RuleCraft.h" />
@@ -495,7 +493,6 @@
     <ClInclude Include="Ruleset\RuleTerrain.h" />
     <ClInclude Include="Ruleset\SoldierNamePool.h" />
     <ClInclude Include="Ruleset\XcomRuleset.h" />
-    <ClInclude Include="Savegame\GenUnit.h" />
     <ClInclude Include="Savegame\Base.h" />
     <ClInclude Include="Savegame\BaseFacility.h" />
     <ClInclude Include="Savegame\BattleItem.h" />
@@ -518,7 +515,6 @@
     <ClInclude Include="Savegame\Tile.h" />
     <ClInclude Include="Savegame\Transfer.h" />
     <ClInclude Include="Savegame\Ufo.h" />
-    <ClInclude Include="Savegame\Unit.h" />
     <ClInclude Include="Savegame\UfopaediaSaved.h" />
     <ClInclude Include="Savegame\Waypoint.h" />
     <ClInclude Include="Ufopaedia\ArticleState.h" />

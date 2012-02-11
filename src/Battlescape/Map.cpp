@@ -42,7 +42,7 @@
 #include "../Savegame/BattleUnit.h"
 #include "../Ruleset/MapDataSet.h"
 #include "../Ruleset/MapData.h"
-#include "../Ruleset/RuleArmor.h"
+#include "../Ruleset/Armor.h"
 #include "BattlescapeMessage.h"
 #include "../Savegame/SavedGame.h"
 #include "../Interface/Cursor.h"
@@ -309,13 +309,14 @@ void Map::drawTerrain(Surface *surface)
 					}
 
 					// Draw walls
-					if (!tile->isVoid() && (tile->isDiscovered(0) || tile->isDiscovered(1)))
+					if (!tile->isVoid())
 					{
 						// Draw west wall
 						tmpSurface = tile->getSprite(MapData::O_WESTWALL);
 						if (tmpSurface)
 						{
-							if (tile->getMapData(MapData::O_WESTWALL)->isDoor() || tile->getMapData(MapData::O_WESTWALL)->isUFODoor())
+							if ((tile->getMapData(MapData::O_WESTWALL)->isDoor() || tile->getMapData(MapData::O_WESTWALL)->isUFODoor())
+								 && (tile->isDiscovered(0) || tile->isDiscovered(1)))
 								wallShade = 0;
 							else
 								wallShade = tileShade;
@@ -325,7 +326,8 @@ void Map::drawTerrain(Surface *surface)
 						tmpSurface = tile->getSprite(MapData::O_NORTHWALL);
 						if (tmpSurface)
 						{
-							if (tile->getMapData(MapData::O_NORTHWALL)->isDoor() || tile->getMapData(MapData::O_NORTHWALL)->isUFODoor())
+							if ((tile->getMapData(MapData::O_NORTHWALL)->isDoor() || tile->getMapData(MapData::O_NORTHWALL)->isUFODoor())
+								 && (tile->isDiscovered(0) || tile->isDiscovered(1)))
 								wallShade = 0;
 							else
 								wallShade = tileShade;
@@ -440,7 +442,7 @@ void Map::drawTerrain(Surface *surface)
 							Position offset;
 							calculateWalkingOffset(unit, &offset);
 							tmpSurface->blitNShade(surface, screenPosition.x + offset.x, screenPosition.y + offset.y, tileShade);
-							if (unit->getUnit()->getArmor()->getSize() > 1)
+							if (unit->getArmor()->getSize() > 1)
 							{
 								offset.y += 4;
 							}
@@ -474,7 +476,7 @@ void Map::drawTerrain(Surface *surface)
 								calculateWalkingOffset(tunit, &offset);
 								offset.y += 24;
 								tmpSurface->blitNShade(surface, screenPosition.x + offset.x, screenPosition.y + offset.y, tileShade);
-								if (tunit->getUnit()->getArmor()->getSize() > 1)
+								if (tunit->getArmor()->getSize() > 1)
 								{
 									offset.y += 4;
 								}
@@ -660,7 +662,7 @@ void Map::animate(bool redraw)
 	// animate certain units (large flying units have a propultion animation)
 	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
-		if ((*i)->getUnit()->getArmor()->getSize() > 1 && (*i)->getUnit()->getArmor()->getMovementType() == MT_FLY)
+		if ((*i)->getArmor()->getSize() > 1 && (*i)->getArmor()->getMovementType() == MT_FLY)
 		{
 			(*i)->setCache(0);
 			cacheUnit(*i);
@@ -694,7 +696,7 @@ void Map::calculateWalkingOffset(BattleUnit *unit, Position *offset)
 	int dir = unit->getDirection();
 	int midphase = 4 + 4 * (dir % 2);
 	int endphase = 8 + 8 * (dir % 2);
-	int size = unit->getUnit()->getArmor()->getSize();
+	int size = unit->getArmor()->getSize();
 
 	if (size > 1)
 	{
@@ -833,7 +835,7 @@ void Map::cacheUnit(BattleUnit *unit)
 	UnitSprite *unitSprite = new UnitSprite(_spriteWidth, _spriteHeight, 0, 0);
 	unitSprite->setPalette(this->getPalette());
 	bool invalid, dummy;
-	int numOfParts = unit->getUnit()->getArmor()->getSize() == 1?1:4;
+	int numOfParts = unit->getArmor()->getSize() == 1?1:4;
 
 	unit->getCache(&invalid);
 	if (invalid)
@@ -857,7 +859,7 @@ void Map::cacheUnit(BattleUnit *unit)
 			{
 				unitSprite->setBattleItem(0);
 			}
-			unitSprite->setSurfaces(_res->getSurfaceSet(unit->getUnit()->getArmor()->getSpriteSheet()),
+			unitSprite->setSurfaces(_res->getSurfaceSet(unit->getArmor()->getSpriteSheet()),
 									_res->getSurfaceSet("HANDOB.PCK"));
 			unitSprite->setAnimationFrame(_animFrame);
 			cache->clear();

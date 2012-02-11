@@ -265,6 +265,8 @@ void SoldierInfoState::init()
 {
 	Soldier *s = _base->getSoldiers()->at(_soldier);
 	_edtSoldier->setText(s->getName());
+	UnitStats *stat1 = s->getInitStats();
+	UnitStats *stat2 = s->getCurrentStats();
 
 	SurfaceSet *texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
 	texture->getFrame(s->getRankSprite())->setX(0);
@@ -272,52 +274,52 @@ void SoldierInfoState::init()
 	texture->getFrame(s->getRankSprite())->blit(_rank);
 
 	std::wstringstream ss;
-	ss << s->getTimeUnits();
+	ss << stat2->tu;
 	_numTimeUnits->setText(ss.str());
-	_barTimeUnits->setMax(s->getTimeUnits());
-	_barTimeUnits->setValue(s->getTimeUnits());
+	_barTimeUnits->setMax(stat2->tu);
+	_barTimeUnits->setValue(stat2->tu);
 
 	std::wstringstream ss2;
-	ss2 << s->getStamina();
+	ss2 << stat2->stamina;
 	_numStamina->setText(ss2.str());
-	_barStamina->setMax(s->getStamina());
-	_barStamina->setValue(s->getStamina());
+	_barStamina->setMax(stat2->stamina);
+	_barStamina->setValue(stat2->stamina);
 
 	std::wstringstream ss3;
-	ss3 << s->getHealth();
+	ss3 << stat2->health;
 	_numHealth->setText(ss3.str());
-	_barHealth->setMax(s->getHealth());
-	_barHealth->setValue(s->getHealth());
+	_barHealth->setMax(stat2->health);
+	_barHealth->setValue(stat2->health);
 
 	std::wstringstream ss4;
-	ss4 << s->getBravery();
+	ss4 << stat2->bravery;
 	_numBravery->setText(ss4.str());
-	_barBravery->setMax(s->getBravery());
-	_barBravery->setValue(s->getBravery());
+	_barBravery->setMax(stat2->bravery);
+	_barBravery->setValue(stat2->bravery);
 
 	std::wstringstream ss5;
-	ss5 << s->getReactions();
+	ss5 << stat2->reactions;
 	_numReactions->setText(ss5.str());
-	_barReactions->setMax(s->getReactions());
-	_barReactions->setValue(s->getReactions());
+	_barReactions->setMax(stat2->reactions);
+	_barReactions->setValue(stat2->reactions);
 
 	std::wstringstream ss6;
-	ss6 << s->getFiringAccuracy();
+	ss6 << stat2->firing;
 	_numFiring->setText(ss6.str());
-	_barFiring->setMax(s->getFiringAccuracy());
-	_barFiring->setValue(s->getFiringAccuracy());
+	_barFiring->setMax(stat2->firing);
+	_barFiring->setValue(stat2->firing);
 
 	std::wstringstream ss7;
-	ss7 << s->getThrowingAccuracy();
+	ss7 << stat2->throwing;
 	_numThrowing->setText(ss7.str());
-	_barThrowing->setMax(s->getThrowingAccuracy());
-	_barThrowing->setValue(s->getThrowingAccuracy());
+	_barThrowing->setMax(stat2->throwing);
+	_barThrowing->setValue(stat2->throwing);
 
 	std::wstringstream ss8;
-	ss8 << s->getStrength();
+	ss8 << stat2->strength;
 	_numStrength->setText(ss8.str());
-	_barStrength->setMax(s->getStrength());
-	_barStrength->setValue(s->getStrength());
+	_barStrength->setMax(stat2->strength);
+	_barStrength->setValue(stat2->strength);
 
 	_txtArmor->setText(_game->getLanguage()->getString("STR_NONE_UC"));
 

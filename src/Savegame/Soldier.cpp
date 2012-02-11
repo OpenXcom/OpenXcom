@@ -31,7 +31,7 @@ namespace OpenXcom
  * @param rules Soldier ruleset.
  * @param armor Soldier armor.
  */
-Soldier::Soldier(RuleSoldier *rules, RuleArmor *armor) : Unit(armor), _name(L""), _rules(rules), _rank(RANK_ROOKIE), _craft(0), _gender(GENDER_MALE), _look(LOOK_BLONDE), _missions(0), _kills(0), _recentlyPromoted(false)
+Soldier::Soldier(RuleSoldier *rules, Armor *armor) : _armor(armor), _name(L""), _rules(rules), _rank(RANK_ROOKIE), _craft(0), _gender(GENDER_MALE), _look(LOOK_BLONDE), _missions(0), _kills(0), _recentlyPromoted(false)
 {
 	_initialStats.bravery = 0;
 	_initialStats.firing = 0;
@@ -55,7 +55,7 @@ Soldier::Soldier(RuleSoldier *rules, RuleArmor *armor) : Unit(armor), _name(L"")
  * @param armor Soldier armor.
  * @param names List of name pools.
  */
-Soldier::Soldier(RuleSoldier *rules, RuleArmor *armor, const std::vector<SoldierNamePool*> *names, int *id) : Unit(armor), _id(*id), _rules(rules), _rank(RANK_ROOKIE), _craft(0), _missions(0), _kills(0)
+Soldier::Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierNamePool*> *names, int *id) : _armor(armor), _id(*id), _rules(rules), _rank(RANK_ROOKIE), _craft(0), _missions(0), _kills(0)
 {
 	UnitStats minStats = rules->getMinStats();
 	UnitStats maxStats = rules->getMaxStats();
@@ -159,7 +159,7 @@ void Soldier::save(YAML::Emitter &out) const
  * Returns the soldier's full name.
  * @return Soldier name.
  */
-std::wstring Soldier::getName(Language *lang) const
+std::wstring Soldier::getName() const
 {
 	return _name;
 }
@@ -257,87 +257,6 @@ void Soldier::promoteRank()
 }
 
 /**
- * Returns the soldier's amount of time units.
- * @return Time units.
- */
-int Soldier::getTimeUnits() const
-{
-	return _currentStats.tu;
-}
-
-/**
- * Returns the soldier's amount of stamina.
- * @return Stamina.
- */
-int Soldier::getStamina() const
-{
-	return _currentStats.stamina;
-}
-
-/**
- * Returns the soldier's amount of health.
- * @return Health.
- */
-int Soldier::getHealth() const
-{
-	return _currentStats.health;
-}
-
-/**
- * Returns the soldier's amount of bravery.
- * @return Bravery.
- */
-int Soldier::getBravery() const
-{
-	return _currentStats.bravery;
-}
-
-/**
- * Returns the soldier's amount of reactions.
- * @return Reactions.
- */
-int Soldier::getReactions() const
-{
-	return _currentStats.reactions;
-}
-
-/**
- * Returns the soldier's amount of firing accuracy.
- * @return Firing accuracy.
- */
-int Soldier::getFiringAccuracy() const
-{
-	return _currentStats.firing;
-}
-
-/**
- * Returns the soldier's amount of throwing accuracy.
- * @return Throwing accuracy.
- */
-int Soldier::getThrowingAccuracy() const
-{
-	return _currentStats.throwing;
-}
-
-/**
- * Returns the soldier's amount of melee accuracy.
- * @return Melee accuracy.
- */
-int Soldier::getMeleeAccuracy() const
-{
-	return _currentStats.melee;
-}
-
-/**
- * Returns the soldier's amount of strength.
- * @return Strength.
- */
-int Soldier::getStrength() const
-{
-	return _currentStats.strength;
-}
-
-/**
  * Returns the soldier's amount of missions.
  * @return Missions.
  */
@@ -383,53 +302,6 @@ RuleSoldier *Soldier::getRules() const
 }
 
 /**
- * Returns the soldier's stand height.
- * @return stand height
- */
-int Soldier::getStandHeight() const
-{
-	return _rules->getStandHeight();
-}
-
-/**
- * Returns the soldier's kneel height.
- * @return kneel height
- */
-int Soldier::getKneelHeight() const
-{
-	return _rules->getKneelHeight();
-}
-/**
- * Returns the soldier's loftemps ID.
- * @return loftemps ID
- */
-int Soldier::getLoftemps() const
-{
-	return _rules->gotLoftemps();
-}
-
-/**
- * Returns the soldier's value.
- * Determines the victory point loss if he dies on a mission and
- * may also affect the likelihood and severity of allied morale checks.
- * @return value
- */
-int Soldier::getValue() const
-{
-	int rankbonus = 0;
-
-	switch (_rank)
-	{
-	case RANK_SERGEANT:  rankbonus =  1; break;
-	case RANK_CAPTAIN:   rankbonus =  3; break;
-	case RANK_COLONEL:   rankbonus =  6; break;
-	case RANK_COMMANDER: rankbonus = 10; break;
-	}
-
-	return 20 + _missions + rankbonus;
-}
-
-/**
  * Returns the soldier's unique ID. Each soldier
  * can be identified by its ID. (not it's name)
  * @return Unique ID.
@@ -450,9 +322,17 @@ void Soldier::addMissionCount()
 /**
  * Add a kill to the counter.
  */
-void Soldier::addKillCount()
+void Soldier::addKillCount(int count)
 {
-	_kills++;
+	_kills += count;
+}
+
+/**
+ * Get pointer to initial stats.
+ */
+UnitStats *Soldier::getInitStats()
+{
+	return &_initialStats;
 }
 
 /**
@@ -461,42 +341,6 @@ void Soldier::addKillCount()
 UnitStats *Soldier::getCurrentStats()
 {
 	return &_currentStats;
-}
-
-/**
- * Returns wether the unit is affected by fatal wounds.
- * @return bool
- */
-bool Soldier::isWoundable() const
-{
-	return true;
-}
-
-/**
- * Returns wether the unit is affected by fear..
- * @return bool
- */
-bool Soldier::isFearable() const
-{
-	return true;
-}
-
-/**
- * Returns the unit's intelligence.
- * @return int
- */
-int Soldier::getIntelligence() const
-{
-	return 5;
-}
-
-/**
- * Returns the unit's aggression.
- * @return int
- */
-int Soldier::getAggression() const
-{
-	return 1;
 }
 
 /**
@@ -510,14 +354,10 @@ bool Soldier::isPromoted()
 	return promoted;
 }
 
-/**
- * Returns the soldier's special ability. Which is none.
- * @return none.
- */
-int Soldier::getSpecialAbility() const
+/// Gets a pointer to the armor data.
+Armor *Soldier::getArmorData() const
 {
-	return 0;
+	return _armor;
 }
-
 
 }

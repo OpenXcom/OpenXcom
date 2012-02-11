@@ -22,15 +22,13 @@
 #include "Tile.h"
 #include "Node.h"
 #include "SDL.h"
-#include "Unit.h"
-#include "GenUnit.h"
 #include "../Ruleset/MapDataSet.h"
 #include "../Battlescape/Pathfinding.h"
 #include "../Battlescape/TileEngine.h"
 #include "../Battlescape/Position.h"
 #include "../Resource/ResourcePack.h"
 #include "../Ruleset/Ruleset.h"
-#include "../Ruleset/RuleArmor.h"
+#include "../Ruleset/Armor.h"
 #include "../Engine/Language.h"
 #include "../Ruleset/RuleInventory.h"
 #include "../Battlescape/PatrolBAIState.h"
@@ -129,11 +127,11 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 
 		(*i)["soldierId"] >> a;
 
-		Unit *unit;
+		BattleUnit *b;
 		if (a != -1) // Unit is linked to a geoscape soldier
 		{
 			// look up the matching soldier
-			unit = savedGame->getSoldier(a);
+			b = new BattleUnit(savedGame->getSoldier(a), faction);
 		}
 		else
 		{
@@ -141,9 +139,8 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 			(*i)["genUnitType"] >> type;
 			(*i)["genUnitArmor"] >> armor;
 			// create a new Unit.
-			unit = new GenUnit(rule->getGenUnit(type), rule->getArmor(armor));
+			b = new BattleUnit(rule->getUnit(type), faction, rule->getArmor(armor));
 		}
-		BattleUnit *b = new BattleUnit(unit, faction);
 		b->load(*i);
 		_units.push_back(b);
 		if (faction == FACTION_PLAYER)
@@ -752,11 +749,11 @@ void SavedBattleGame::resetUnitTiles()
 	{
 		if (!(*i)->isOut())
 		{
-			if ((*i)->getTile()->getUnit() == (*i))
+			if ((*i)->getTile() && (*i)->getTile()->getUnit() == (*i))
 			{
 				(*i)->getTile()->setUnit(0);
 			}
-			int size = (*i)->getUnit()->getArmor()->getSize() - 1;
+			int size = (*i)->getArmor()->getSize() - 1;
 			for (int x = size; x >= 0; x--)
 			{
 				for (int y = size; y >= 0; y--)
@@ -846,9 +843,9 @@ Node *SavedBattleGame::getSpawnNode(int nodeRank, BattleUnit *unit)
 	{
 		if ((*i)->getRank() == nodeRank										// ranks must match
 			&& (!((*i)->getType() & Node::TYPE_SMALL) 
-				|| unit->getUnit()->getArmor()->getSize() == 1)				// the small unit bit is not set or the unit is small
+				|| unit->getArmor()->getSize() == 1)				// the small unit bit is not set or the unit is small
 			&& (!((*i)->getType() & Node::TYPE_FLYING) 
-				|| unit->getUnit()->getArmor()->getMovementType() == MT_FLY)// the flying unit bit is not set or the unit can fly
+				|| unit->getArmor()->getMovementType() == MT_FLY)// the flying unit bit is not set or the unit can fly
 			&& (*i)->getPriority() > 0										// priority 0 is no spawnplace
 			&& setUnitPosition(unit, (*i)->getPosition(), true))	// check if not already occupied
 		{
@@ -888,9 +885,9 @@ Node *SavedBattleGame::getPatrolNode(bool scout, BattleUnit *unit, Node *fromNod
 			Node *n = getNodes()->at(fromNode->getNodeLink(i)->getConnectedNodeID());
 			if ((n->getRank() > 0 || scout)										// for no scouts we find a node with a rank above 0
 				&& (!(n->getType() & Node::TYPE_SMALL) 
-					|| unit->getUnit()->getArmor()->getSize() == 1)				// the small unit bit is not set or the unit is small
+					|| unit->getArmor()->getSize() == 1)				// the small unit bit is not set or the unit is small
 				&& (!(n->getType() & Node::TYPE_FLYING) 
-					|| unit->getUnit()->getArmor()->getMovementType() == MT_FLY)// the flying unit bit is not set or the unit can fly
+					|| unit->getArmor()->getMovementType() == MT_FLY)// the flying unit bit is not set or the unit can fly
 				&& !n->isAllocated() // check if not allocated
 				&& setUnitPosition(unit, n->getPosition(), true))	// check if not already occupied
 			{
@@ -1067,7 +1064,7 @@ void SavedBattleGame::removeUnconsciousBodyItem(BattleUnit *bu)
  */
 bool SavedBattleGame::setUnitPosition(BattleUnit *bu, const Position &position, bool testOnly)
 {
-	int size = bu->getUnit()->getArmor()->getSize() - 1;
+	int size = bu->getArmor()->getSize() - 1;
 
 	// first check if the tiles are occupied
 	for (int x = size; x >= 0; x--)

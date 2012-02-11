@@ -30,7 +30,7 @@
 #include "../Engine/RNG.h"
 #include "../Engine/Language.h"
 #include "../Engine/Options.h"
-#include "../Ruleset/RuleArmor.h"
+#include "../Ruleset/Armor.h"
 
 namespace OpenXcom
 {

@@ -1588,14 +1588,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Savegame\Unit.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Savegame\Unit.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Savegame\Waypoint.cpp"
 				>
 			</File>
@@ -1668,19 +1660,27 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Ruleset\RuleAlien.cpp"
+				RelativePath=".\Ruleset\AlienDeployment.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Ruleset\RuleAlien.h"
+				RelativePath=".\Ruleset\AlienDeployment.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Ruleset\RuleArmor.cpp"
+				RelativePath=".\Ruleset\AlienRace.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Ruleset\RuleArmor.h"
+				RelativePath=".\Ruleset\AlienRace.h"
+				>
+			</File>			
+			<File
+				RelativePath=".\Ruleset\Armor.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\Armor.h"
 				>
 			</File>
 			<File
@@ -1771,6 +1771,14 @@
 				RelativePath=".\Ruleset\RuleTerrain.h"
 				>
 			</File>
+			<File
+				RelativePath=".\Ruleset\Unit.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\Unit.h"
+				>
+			</File>			
 			<File
 				RelativePath=".\Ruleset\RuleUfo.cpp"
 				>

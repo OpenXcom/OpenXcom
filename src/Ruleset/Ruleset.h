@@ -39,14 +39,14 @@ class RuleTerrain;
 class MapDataSet;
 class ResourcePack;
 class RuleSoldier;
-class RuleGenUnit;
-class RuleArmor;
+class Unit;
+class Armor;
 class ArticleDefinition;
 class RuleInventory;
 class RuleResearchProject;
 class RuleManufactureInfo;
-class RuleAlienRace;
-class RuleAlienDeployment;
+class AlienRace;
+class AlienDeployment;
 
 /**
  * Set of rules and stats for a game.
@@ -68,10 +68,10 @@ protected:
 	std::map<std::string, RuleTerrain*> _terrains;
 	std::map<std::string, MapDataSet*> _mapDataSets;
 	std::map<std::string, RuleSoldier*> _soldiers;
-	std::map<std::string, RuleGenUnit*> _genUnits;
-	std::map<std::string, RuleAlienRace*> _alienRaces;
-	std::map<std::string, RuleAlienDeployment*> _alienDeployments;
-	std::map<std::string, RuleArmor*> _armors;
+	std::map<std::string, Unit*> _units;
+	std::map<std::string, AlienRace*> _alienRaces;
+	std::map<std::string, AlienDeployment*> _alienDeployments;
+	std::map<std::string, Armor*> _armors;
 	std::map<std::string, ArticleDefinition*> _ufopaediaArticles;
 	std::map<std::string, RuleInventory*> _invs;
 	int _costSoldier, _costEngineer, _costScientist, _timePersonnel;
@@ -112,13 +112,13 @@ public:
 	/// Gets soldier unit rules.
 	RuleSoldier *const getSoldier(const std::string &name) const;
 	/// Gets generated unit rules.
-	RuleGenUnit *const getGenUnit(const std::string &name) const;
+	Unit *const getUnit(const std::string &name) const;
 	/// Gets alien race rules.
-	RuleAlienRace *const getAlienRace(const std::string &name) const;
+	AlienRace *const getAlienRace(const std::string &name) const;
 	/// Gets deployment rules.
-	RuleAlienDeployment *const getDeployment(const std::string &name) const;
+	AlienDeployment *const getDeployment(const std::string &name) const;
 	/// Gets armor rules.
-	RuleArmor *const getArmor(const std::string &name) const;
+	Armor *const getArmor(const std::string &name) const;
 	/// Gets Ufopaedia article definition.
 	ArticleDefinition *const getUfopaediaArticle(const std::string &name) const;
 	/// Gets the inventory list.

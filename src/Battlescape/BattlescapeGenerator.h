@@ -32,11 +32,11 @@ class RuleTerrain;
 class ResourcePack;
 class RuleSet;
 class Soldier;
-class RuleArmor;
+class Armor;
 class RuleItem;
-class RuleGenUnit;
-class RuleAlienRace;
-class RuleAlienDeployment;
+class Unit;
+class AlienRace;
+class AlienDeployment;
 class Game;
 class Base;
 
@@ -67,8 +67,8 @@ private:
 	/// Add a soldier to the game
 	BattleUnit *addXCOMUnit(BattleUnit *unit);
 	/// Add an alien to the game
-	BattleUnit *addAlien(RuleGenUnit *rules, int alienRank, bool outside);
-	BattleUnit *addCivilian(RuleGenUnit *rules);
+	BattleUnit *addAlien(Unit *rules, int alienRank, bool outside);
+	BattleUnit *addCivilian(Unit *rules);
 	/// Add an item to the game
 	void addItem(RuleItem *item);
 	// Add an item to a unit
@@ -78,7 +78,7 @@ private:
 	/// loads an XCOM RMP file
 	void loadRMP(MapBlock *mapblock, int xoff, int yoff, int segment);
 	void explodePowerSources();
-	void deployAliens(RuleAlienRace *race, RuleAlienDeployment *deployment);
+	void deployAliens(AlienRace *race, AlienDeployment *deployment);
 public:
 	/// Creates a new BattlescapeGenerator class
 	BattlescapeGenerator(Game *game);
