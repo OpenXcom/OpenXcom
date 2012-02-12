@@ -60,6 +60,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, unsigned int soldier)
 	_txtMissions = new Text(100, 9, 130, 48);
 	_txtKills = new Text(100, 9, 230, 48);
 	_txtCraft = new Text(130, 9, 0, 56);
+	_txtRecovery = new Text(180, 9, 130, 56);
 
 	_txtTimeUnits = new Text(120, 9, 6, 82);
 	_numTimeUnits = new Text(18, 9, 131, 82);
@@ -105,6 +106,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, unsigned int soldier)
 	add(_txtMissions);
 	add(_txtKills);
 	add(_txtCraft);
+	add(_txtRecovery);
 
 	add(_txtTimeUnits);
 	add(_numTimeUnits);
@@ -175,6 +177,9 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, unsigned int soldier)
 	_txtCraft->setColor(Palette::blockOffset(13)+10);
 	_txtCraft->setSecondaryColor(Palette::blockOffset(13));
 
+	_txtRecovery->setColor(Palette::blockOffset(13)+10);
+	_txtRecovery->setSecondaryColor(Palette::blockOffset(13));
+
 
 	_txtTimeUnits->setColor(Palette::blockOffset(15)+1);
 	_txtTimeUnits->setText(_game->getLanguage()->getString("STR_TIME_UNITS"));
@@ -182,6 +187,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, unsigned int soldier)
 	_numTimeUnits->setColor(Palette::blockOffset(13));
 
 	_barTimeUnits->setColor(Palette::blockOffset(3));
+	_barTimeUnits->setColor2(Palette::blockOffset(3)+4);
 	_barTimeUnits->setScale(1.0);
 	_barTimeUnits->setInvert(true);
 
@@ -191,6 +197,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, unsigned int soldier)
 	_numStamina->setColor(Palette::blockOffset(13));
 
 	_barStamina->setColor(Palette::blockOffset(9));
+	_barStamina->setColor2(Palette::blockOffset(9)+4);
 	_barStamina->setScale(1.0);
 	_barStamina->setInvert(true);
 
@@ -200,6 +207,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, unsigned int soldier)
 	_numHealth->setColor(Palette::blockOffset(13));
 
 	_barHealth->setColor(Palette::blockOffset(2));
+	_barHealth->setColor2(Palette::blockOffset(2)+4);
 	_barHealth->setScale(1.0);
 	_barHealth->setInvert(true);
 
@@ -209,6 +217,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, unsigned int soldier)
 	_numBravery->setColor(Palette::blockOffset(13));
 
 	_barBravery->setColor(Palette::blockOffset(4));
+	_barBravery->setColor2(Palette::blockOffset(4)+4);
 	_barBravery->setScale(1.0);
 	_barBravery->setInvert(true);
 
@@ -218,6 +227,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, unsigned int soldier)
 	_numReactions->setColor(Palette::blockOffset(13));
 
 	_barReactions->setColor(Palette::blockOffset(1));
+	_barReactions->setColor2(Palette::blockOffset(1)+4);
 	_barReactions->setScale(1.0);
 	_barReactions->setInvert(true);
 
@@ -227,6 +237,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, unsigned int soldier)
 	_numFiring->setColor(Palette::blockOffset(13));
 
 	_barFiring->setColor(Palette::blockOffset(8));
+	_barFiring->setColor2(Palette::blockOffset(8)+4);
 	_barFiring->setScale(1.0);
 	_barFiring->setInvert(true);
 
@@ -236,6 +247,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, unsigned int soldier)
 	_numThrowing->setColor(Palette::blockOffset(13));
 
 	_barThrowing->setColor(Palette::blockOffset(10));
+	_barThrowing->setColor2(Palette::blockOffset(10)+4);
 	_barThrowing->setScale(1.0);
 	_barThrowing->setInvert(true);
 
@@ -245,6 +257,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, unsigned int soldier)
 	_numStrength->setColor(Palette::blockOffset(13));
 
 	_barStrength->setColor(Palette::blockOffset(5));
+	_barStrength->setColor2(Palette::blockOffset(5)+4);
 	_barStrength->setScale(1.0);
 	_barStrength->setInvert(true);
 }
@@ -265,8 +278,8 @@ void SoldierInfoState::init()
 {
 	Soldier *s = _base->getSoldiers()->at(_soldier);
 	_edtSoldier->setText(s->getName());
-	UnitStats *stat1 = s->getInitStats();
-	UnitStats *stat2 = s->getCurrentStats();
+	UnitStats *initial = s->getInitStats();
+	UnitStats *current = s->getCurrentStats();
 
 	SurfaceSet *texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
 	texture->getFrame(s->getRankSprite())->setX(0);
@@ -274,52 +287,60 @@ void SoldierInfoState::init()
 	texture->getFrame(s->getRankSprite())->blit(_rank);
 
 	std::wstringstream ss;
-	ss << stat2->tu;
+	ss << current->tu;
 	_numTimeUnits->setText(ss.str());
-	_barTimeUnits->setMax(stat2->tu);
-	_barTimeUnits->setValue(stat2->tu);
+	_barTimeUnits->setMax(current->tu);
+	_barTimeUnits->setValue(current->tu);
+	_barTimeUnits->setValue2(initial->tu);
 
 	std::wstringstream ss2;
-	ss2 << stat2->stamina;
+	ss2 << current->stamina;
 	_numStamina->setText(ss2.str());
-	_barStamina->setMax(stat2->stamina);
-	_barStamina->setValue(stat2->stamina);
+	_barStamina->setMax(current->stamina);
+	_barStamina->setValue(current->stamina);
+	_barStamina->setValue2(initial->stamina);
 
 	std::wstringstream ss3;
-	ss3 << stat2->health;
+	ss3 << current->health;
 	_numHealth->setText(ss3.str());
-	_barHealth->setMax(stat2->health);
-	_barHealth->setValue(stat2->health);
+	_barHealth->setMax(current->health);
+	_barHealth->setValue(current->health);
+	_barHealth->setValue2(initial->health);
 
 	std::wstringstream ss4;
-	ss4 << stat2->bravery;
+	ss4 << current->bravery;
 	_numBravery->setText(ss4.str());
-	_barBravery->setMax(stat2->bravery);
-	_barBravery->setValue(stat2->bravery);
+	_barBravery->setMax(current->bravery);
+	_barBravery->setValue(current->bravery);
+	_barBravery->setValue2(initial->bravery);
 
 	std::wstringstream ss5;
-	ss5 << stat2->reactions;
+	ss5 << current->reactions;
 	_numReactions->setText(ss5.str());
-	_barReactions->setMax(stat2->reactions);
-	_barReactions->setValue(stat2->reactions);
+	_barReactions->setMax(current->reactions);
+	_barReactions->setValue(current->reactions);
+	_barReactions->setValue2(initial->reactions);
 
 	std::wstringstream ss6;
-	ss6 << stat2->firing;
+	ss6 << current->firing;
 	_numFiring->setText(ss6.str());
-	_barFiring->setMax(stat2->firing);
-	_barFiring->setValue(stat2->firing);
+	_barFiring->setMax(current->firing);
+	_barFiring->setValue(current->firing);
+	_barFiring->setValue2(initial->firing);
 
 	std::wstringstream ss7;
-	ss7 << stat2->throwing;
+	ss7 << current->throwing;
 	_numThrowing->setText(ss7.str());
-	_barThrowing->setMax(stat2->throwing);
-	_barThrowing->setValue(stat2->throwing);
+	_barThrowing->setMax(current->throwing);
+	_barThrowing->setValue(current->throwing);
+	_barThrowing->setValue2(initial->throwing);
 
 	std::wstringstream ss8;
-	ss8 << stat2->strength;
+	ss8 << current->strength;
 	_numStrength->setText(ss8.str());
-	_barStrength->setMax(stat2->strength);
-	_barStrength->setValue(stat2->strength);
+	_barStrength->setMax(initial->strength);
+	_barStrength->setValue(current->strength);
+	_barStrength->setValue2(current->strength);
 
 	_txtArmor->setText(_game->getLanguage()->getString("STR_NONE_UC"));
 
@@ -338,10 +359,25 @@ void SoldierInfoState::init()
 	std::wstringstream ss12;
 	ss12 << _game->getLanguage()->getString("STR_CRAFT_") << L'\x01';
 	if (s->getCraft() == 0)
-		ss12 << _game->getLanguage()->getString("STR_NONE");
+		ss12 << _game->getLanguage()->getString("STR_NONE_UC");
 	else
 		ss12 << s->getCraft()->getName(_game->getLanguage());
 	_txtCraft->setText(ss12.str());
+
+	if (s->getWoundRecovery() > 1)
+	{
+		std::wstringstream ss13;
+		ss13 << _game->getLanguage()->getString("STR_WOUND_RECOVERY") << L'\x01' << s->getWoundRecovery();
+		if (s->getWoundRecovery() > 1)
+			ss13 << _game->getLanguage()->getString("STR_DAYS");
+		else
+			ss13 << _game->getLanguage()->getString("STR_DAY");
+		_txtRecovery->setText(ss13.str());
+	}
+	else
+	{
+		_txtRecovery->setText(L"");
+	}
 }
 
 /**

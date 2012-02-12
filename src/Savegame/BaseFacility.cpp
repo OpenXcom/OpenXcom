@@ -136,16 +136,8 @@ bool BaseFacility::insideRadarRange(Target *target) const
 {
 	if (_rules->getRadarRange() == 0)
 		return false;
-
-	bool inside = false;
 	double newrange = _rules->getRadarRange() * (1 / 60.0) * (M_PI / 180);
-	for (double lon = target->getLongitude() - 2*M_PI; lon <= target->getLongitude() + 2*M_PI + 0.01; lon += 2*M_PI)
-	{
-		double dLon = lon - _base->getLongitude();
-		double dLat = target->getLatitude() - _base->getLatitude();
-		inside = inside || (dLon * dLon + dLat * dLat <= newrange * newrange);
-	}
-	return inside;
+	return (_base->getDistance(target) <= newrange);
 }
 
 /**

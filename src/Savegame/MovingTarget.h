@@ -34,7 +34,7 @@ protected:
 	static const double GLOBE_RADIUS;
 
 	Target *_dest;
-	double _speedLon, _speedLat, _radianSpeed;
+	double _speedLon, _speedLat, _speedRadian;
 	double _distMax, _distCurrent;
 	int _speed;
 
@@ -59,8 +59,6 @@ public:
 	int getSpeed() const;
 	/// Sets the moving target's speed.
 	void setSpeed(int speed);
-	/// Gets the distance to another target.
-	double getDistance(Target *target) const;
 	/// Has the moving target reached its destination?
 	bool reachedDestination() const;
 	/// Move towards the destination.

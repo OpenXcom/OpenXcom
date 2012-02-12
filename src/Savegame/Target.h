@@ -60,6 +60,8 @@ public:
 	virtual std::wstring getName(Language *lang) const = 0;
 	/// Gets the target's followers.
 	std::vector<Target*> *getFollowers();
+	/// Gets the distance to another target.
+	double getDistance(Target *target) const;
 };
 
 }

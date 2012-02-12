@@ -21,6 +21,39 @@
 namespace OpenXcom
 {
 
+void operator>> (const YAML::Node& node, UnitStats& stats)
+{
+	node["tu"] >> stats.tu;
+	node["stamina"] >> stats.stamina;
+	node["health"] >> stats.health;
+	node["bravery"] >> stats.bravery;
+	node["reactions"] >> stats.reactions;
+	node["firing"] >> stats.firing;
+	node["throwing"] >> stats.throwing;
+	node["strength"] >> stats.strength;
+	node["psiStrength"] >> stats.psiStrength;
+	node["psiSkill"] >> stats.psiSkill;
+	node["melee"] >> stats.melee;
+}
+
+YAML::Emitter& operator<< (YAML::Emitter& out, const UnitStats& stats)
+{
+	out << YAML::BeginMap;
+    out << YAML::Key << "tu" << YAML::Value << stats.tu;
+	out << YAML::Key << "stamina" << YAML::Value << stats.stamina;
+	out << YAML::Key << "health" << YAML::Value << stats.health;
+	out << YAML::Key << "bravery" << YAML::Value << stats.bravery;
+	out << YAML::Key << "reactions" << YAML::Value << stats.reactions;
+	out << YAML::Key << "firing" << YAML::Value << stats.firing;
+	out << YAML::Key << "throwing" << YAML::Value << stats.throwing;
+	out << YAML::Key << "strength" << YAML::Value << stats.strength;
+	out << YAML::Key << "psiStrength" << YAML::Value << stats.psiStrength;
+	out << YAML::Key << "psiSkill" << YAML::Value << stats.psiSkill;
+	out << YAML::Key << "melee" << YAML::Value << stats.melee;
+	out << YAML::EndMap;
+    return out;
+}
+
 /**
  * Creates a certain type of unit.
  * @param type String defining the type.

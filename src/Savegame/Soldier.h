@@ -34,6 +34,7 @@ class Craft;
 class SoldierNamePool;
 class RuleSoldier;
 class Armor;
+class Language;
 
 /**
  * Represents a soldier hired by the player.
@@ -51,7 +52,7 @@ private:
 	Craft *_craft;
 	SoldierGender _gender;
 	SoldierLook _look;
-	int _missions, _kills;
+	int _missions, _kills, _recovery;
 	bool _recentlyPromoted;
 	Armor *_armor;
 public:
@@ -75,6 +76,8 @@ public:
 	Craft *const getCraft() const;
 	/// Sets the soldier's craft.
 	void setCraft(Craft *craft);
+	/// Gets the soldier's craft string.
+	std::wstring getCraftString(Language *lang) const;
 	/// Gets a string version of the soldier's rank.
 	std::string getRankString() const;
 	/// Gets a sprite version of the soldier's rank.
@@ -109,7 +112,12 @@ public:
 	bool isPromoted();
 	/// Gets a pointer to the armor data.
 	Armor *getArmorData() const;
-
+	/// Gets the soldier's wound recovery time.
+	int getWoundRecovery() const;
+	/// Sets the soldier's wound recovery time.
+	void setWoundRecovery(int recovery);
+	/// Heals wound recoveries.
+	void heal();
 };
 
 }

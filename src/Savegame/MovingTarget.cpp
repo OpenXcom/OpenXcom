@@ -26,7 +26,7 @@ namespace OpenXcom
 /**
  * Initializes a moving target with blank coordinates.
  */
-MovingTarget::MovingTarget() : Target(), _dest(0), _speedLon(0.0), _speedLat(0.0), _radianSpeed(0.0), _distCurrent(0.0), _distMax(0.0), _speed(0)
+MovingTarget::MovingTarget() : Target(), _dest(0), _speedLon(0.0), _speedLat(0.0), _speedRadian(0.0), _distCurrent(0.0), _distMax(0.0), _speed(0)
 {
 }
 
@@ -60,6 +60,9 @@ void MovingTarget::save(YAML::Emitter &out) const
 	}
 	out << YAML::Key << "speedLon" << YAML::Value << _speedLon;
 	out << YAML::Key << "speedLat" << YAML::Value << _speedLat;
+	out << YAML::Key << "speedRadian" << YAML::Value << _speedRadian;
+	out << YAML::Key << "distMax" << YAML::Value << _distMax;
+	out << YAML::Key << "distCurrent" << YAML::Value << _distCurrent;
 	out << YAML::Key << "speed" << YAML::Value << _speed;
 }
 
@@ -125,19 +128,8 @@ void MovingTarget::setSpeed(int speed)
 	_speed = speed;
 	// Each nautical mile is 1/60th of a degree.
 	// Each hour contains 720 5-seconds.
-	_radianSpeed = _speed * (1 / 60.0) * (M_PI / 180) / 720.0;
+	_speedRadian = _speed * (1 / 60.0) * (M_PI / 180) / 720.0;
 	calculateSpeed();
-}
-
-/**
- * Returns the great circle distance to another
- * target on the globe.
- * @param target Pointer to other target.
- * @returns Distance in radian.
- */
-double MovingTarget::getDistance(Target *target) const
-{
-	return acos(cos(_lat) * cos(target->getLatitude()) * cos(target->getLongitude() - _lon) + sin(_lat) * sin(target->getLatitude()));
 }
 
 /**
@@ -153,8 +145,8 @@ void MovingTarget::calculateSpeed()
 		dLon = sin(_dest->getLongitude() - _lon) * cos(_dest->getLatitude());
 		dLat = cos(_lat) * sin(_dest->getLatitude()) - sin(_lat) * cos(_dest->getLatitude()) * cos(_dest->getLongitude() - _lon);
 		length = sqrt(dLon * dLon + dLat * dLat);
-		_speedLon = dLon / length * _radianSpeed / cos(_lat + _speedLat);
-		_speedLat = dLat / length * _radianSpeed;
+		_speedLon = dLon / length * _speedRadian / cos(_lat + _speedLat);
+		_speedLat = dLat / length * _speedRadian;
 	}
 	else
 	{
@@ -193,7 +185,7 @@ void MovingTarget::move()
 {
 	setLongitude(_lon + _speedLon);
 	setLatitude(_lat + _speedLat);
-	_distCurrent += _radianSpeed;
+	_distCurrent += _speedRadian;
 }
 
 }

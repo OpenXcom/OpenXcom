@@ -730,9 +730,9 @@ void GeoscapeState::time1Hour()
  */
 void GeoscapeState::time1Day()
 {
-	// Handle facility construction and science project
 	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
 	{
+		// Handle facility construction
 		for (std::vector<BaseFacility*>::iterator j = (*i)->getFacilities()->begin(); j != (*i)->getFacilities()->end(); ++j)
 		{
 			if ((*j)->getBuildTime() > 0)
@@ -745,6 +745,7 @@ void GeoscapeState::time1Day()
 				}
 			}
 		}
+		// Handle science project
 		std::vector<ResearchProject*> finished;
 		for(std::vector<ResearchProject*>::const_iterator iter = (*i)->getResearch().begin (); iter != (*i)->getResearch().end (); ++iter)
 		{
@@ -765,7 +766,14 @@ void GeoscapeState::time1Day()
 			popup(new NewPossibleResearchState(_game, *i, newPossibleResearch));
 			delete(*iter);
 		}
-
+		// Handle soldier wounds
+		for (std::vector<Soldier*>::iterator j = (*i)->getSoldiers()->begin(); j != (*i)->getSoldiers()->end(); ++j)
+		{
+			if ((*j)->getWoundRecovery() > 0)
+			{
+				(*j)->heal();
+			}
+		}
 	}
 }
 

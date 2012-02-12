@@ -58,6 +58,7 @@
 #include "RuleManufactureInfo.h"
 #include "AlienRace.h"
 #include "AlienDeployment.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -68,29 +69,15 @@ namespace OpenXcom
 XcomRuleset::XcomRuleset() : Ruleset()
 {
 	// Add soldier names
-	SoldierNamePool *american = new SoldierNamePool();
-	american->load("American");
-	_names.push_back(american);
+	std::vector<std::string> names = CrossPlatform::getFolderContents(Options::getDataFolder() + "SoldierName/", "nam");
 
-	SoldierNamePool *british = new SoldierNamePool();
-	british->load("British");
-	_names.push_back(british);
-
-	SoldierNamePool *french = new SoldierNamePool();
-	french->load("French");
-	_names.push_back(french);
-
-	SoldierNamePool *german = new SoldierNamePool();
-	german->load("German");
-	_names.push_back(german);
-
-	SoldierNamePool *japanese = new SoldierNamePool();
-	japanese->load("Japanese");
-	_names.push_back(japanese);
-
-	SoldierNamePool *russian = new SoldierNamePool();
-	russian->load("Russian");
-	_names.push_back(russian);
+	for (std::vector<std::string>::iterator i = names.begin(); i != names.end(); ++i)
+	{
+		std::string file = (*i).substr(0, (*i).length()-4);
+		SoldierNamePool *pool = new SoldierNamePool();
+		pool->load(file);
+		_names.push_back(pool);
+	}
 
 	// Add countries
 	RuleCountry *usa = new RuleCountry("STR_USA");

@@ -31,7 +31,7 @@ namespace OpenXcom
  * @param rules Soldier ruleset.
  * @param armor Soldier armor.
  */
-Soldier::Soldier(RuleSoldier *rules, Armor *armor) : _armor(armor), _name(L""), _rules(rules), _rank(RANK_ROOKIE), _craft(0), _gender(GENDER_MALE), _look(LOOK_BLONDE), _missions(0), _kills(0), _recentlyPromoted(false)
+Soldier::Soldier(RuleSoldier *rules, Armor *armor) : _armor(armor), _name(L""), _rules(rules), _rank(RANK_ROOKIE), _craft(0), _gender(GENDER_MALE), _look(LOOK_BLONDE), _missions(0), _kills(0), _recovery(0), _recentlyPromoted(false)
 {
 	_initialStats.bravery = 0;
 	_initialStats.firing = 0;
@@ -55,7 +55,7 @@ Soldier::Soldier(RuleSoldier *rules, Armor *armor) : _armor(armor), _name(L""), 
  * @param armor Soldier armor.
  * @param names List of name pools.
  */
-Soldier::Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierNamePool*> *names, int *id) : _armor(armor), _id(*id), _rules(rules), _rank(RANK_ROOKIE), _craft(0), _missions(0), _kills(0)
+Soldier::Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierNamePool*> *names, int *id) : _armor(armor), _id(*id), _rules(rules), _rank(RANK_ROOKIE), _craft(0), _missions(0), _kills(0), _recovery(0), _recentlyPromoted(false)
 {
 	UnitStats minStats = rules->getMinStats();
 	UnitStats maxStats = rules->getMaxStats();
@@ -63,7 +63,7 @@ Soldier::Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierName
 	_initialStats.tu = RNG::generate(minStats.tu, maxStats.tu);
 	_initialStats.stamina = RNG::generate(minStats.stamina, maxStats.stamina);
 	_initialStats.health = RNG::generate(minStats.health, maxStats.health);
-	_initialStats.bravery = RNG::generate(minStats.bravery, maxStats.bravery);
+	_initialStats.bravery = RNG::generate(minStats.bravery/10, maxStats.bravery/10)*10;
 	_initialStats.reactions = RNG::generate(minStats.reactions, maxStats.reactions);
 	_initialStats.firing = RNG::generate(minStats.firing, maxStats.firing);
 	_initialStats.throwing = RNG::generate(minStats.throwing, maxStats.throwing);
@@ -74,9 +74,17 @@ Soldier::Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierName
 
 	_currentStats = _initialStats;
 
-	int gender;
-	_name = names->at(RNG::generate(0, names->size()-1))->genName(&gender);
-	_gender = (SoldierGender)gender;
+	if (!names->empty())
+	{
+		int gender;
+		_name = names->at(RNG::generate(0, names->size()-1))->genName(&gender);
+		_gender = (SoldierGender)gender;
+	}
+	else
+	{
+		_name = L"";
+		_gender = (SoldierGender)RNG::generate(0, 1);
+	}
 	_look = (SoldierLook)RNG::generate(0, 3);
 
 	(*id)++; // increase id for next soldier
@@ -100,18 +108,8 @@ void Soldier::load(const YAML::Node &node)
 	std::string name;
 	node["name"] >> name;
 	_name = Language::utf8ToWstr(name);
-	node["tu"] >> _initialStats.tu;
-	node["stamina"] >> _initialStats.stamina;
-	node["health"] >> _initialStats.health;
-	node["bravery"] >> _initialStats.bravery;
-	node["reactions"] >> _initialStats.reactions;
-	node["firing"] >> _initialStats.firing;
-	node["throwing"] >> _initialStats.throwing;
-	node["strength"] >> _initialStats.strength;
-	node["psiStrength"] >> _initialStats.psiStrength;
-	node["psiSkill"] >> _initialStats.psiSkill;
-	node["melee"] >> _initialStats.melee;
-	_currentStats = _initialStats;
+	node["initialStats"] >> _initialStats;
+	node["currentStats"] >> _currentStats;
 	node["rank"] >> a;
 	_rank = (SoldierRank)a;
 	node["gender"] >> a;
@@ -120,6 +118,7 @@ void Soldier::load(const YAML::Node &node)
 	_look = (SoldierLook)a;
 	node["missions"] >> _missions;
 	node["kills"] >> _kills;
+	node["recovery"] >> _recovery;
 }
 
 /**
@@ -131,17 +130,8 @@ void Soldier::save(YAML::Emitter &out) const
 	out << YAML::BeginMap;
 	out << YAML::Key << "id" << YAML::Value << _id;
 	out << YAML::Key << "name" << YAML::Value << Language::wstrToUtf8(_name);
-	out << YAML::Key << "tu" << YAML::Value << _initialStats.tu;
-	out << YAML::Key << "stamina" << YAML::Value << _initialStats.stamina;
-	out << YAML::Key << "health" << YAML::Value << _initialStats.health;
-	out << YAML::Key << "bravery" << YAML::Value << _initialStats.bravery;
-	out << YAML::Key << "reactions" << YAML::Value << _initialStats.reactions;
-	out << YAML::Key << "firing" << YAML::Value << _initialStats.firing;
-	out << YAML::Key << "throwing" << YAML::Value << _initialStats.throwing;
-	out << YAML::Key << "strength" << YAML::Value << _initialStats.strength;
-	out << YAML::Key << "psiStrength" << YAML::Value << _initialStats.psiStrength;
-	out << YAML::Key << "psiSkill" << YAML::Value << _initialStats.psiSkill;
-	out << YAML::Key << "melee" << YAML::Value << _initialStats.melee;
+	out << YAML::Key << "initialStats" << YAML::Value << _initialStats;
+	out << YAML::Key << "currentStats" << YAML::Value << _currentStats;
 	out << YAML::Key << "rank" << YAML::Value << _rank;
 	if (_craft != 0)
 	{
@@ -152,6 +142,7 @@ void Soldier::save(YAML::Emitter &out) const
 	out << YAML::Key << "look" << YAML::Value << _look;
 	out << YAML::Key << "missions" << YAML::Value << _missions;
 	out << YAML::Key << "kills" << YAML::Value << _kills;
+	out << YAML::Key << "recovery" << YAML::Value << _recovery;
 	out << YAML::EndMap;
 }
 
@@ -189,6 +180,31 @@ Craft *const Soldier::getCraft() const
 void Soldier::setCraft(Craft *craft)
 {
 	_craft = craft;
+}
+
+/**
+ * Returns the soldier's craft string, which
+ * is either the soldier's wounded status,
+ * the assigned craft name, or none.
+ * @param lang Language to get strings from.
+ * @return Full name.
+ */
+std::wstring Soldier::getCraftString(Language *lang) const
+{
+	std::wstring s;
+	if (_recovery > 0)
+	{
+		s = lang->getString("STR_WOUNDED");
+	}
+	else if (_craft == 0)
+	{
+		s = lang->getString("STR_NONE_UC");
+	}
+	else
+	{
+		s = _craft->getName(lang);
+	}
+	return s;
 }
 
 /**
@@ -358,6 +374,32 @@ bool Soldier::isPromoted()
 Armor *Soldier::getArmorData() const
 {
 	return _armor;
+}
+
+/**
+ * Returns the amount of time until the soldier is healed.
+ * @return Number of days.
+ */
+int Soldier::getWoundRecovery() const
+{
+	return _recovery;
+}
+
+/**
+ * Changes the amount of time until the soldier is healed.
+ * @param recovery Number of days.
+ */
+void Soldier::setWoundRecovery(int recovery)
+{
+	_recovery = recovery;
+}
+
+/**
+ * Heals soldier wounds.
+ */
+void Soldier::heal()
+{
+	_recovery--;
 }
 
 }

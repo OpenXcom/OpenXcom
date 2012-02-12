@@ -115,16 +115,7 @@ CraftSoldiersState::CraftSoldiersState(Game *game, Base *base, unsigned int craf
 	int row = 0;
 	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
 	{
-		std::wstring s;
-		if ((*i)->getCraft() == 0)
-		{
-			s = _game->getLanguage()->getString("STR_NONE_UC");
-		}
-		else
-		{
-			s = (*i)->getCraft()->getName(_game->getLanguage());
-		}
-		_lstSoldiers->addRow(3, (*i)->getName().c_str(), _game->getLanguage()->getString((*i)->getRankString()).c_str(), s.c_str());
+		_lstSoldiers->addRow(3, (*i)->getName().c_str(), _game->getLanguage()->getString((*i)->getRankString()).c_str(), (*i)->getCraftString(_game->getLanguage()).c_str());
 
 		Uint8 color;
 		if ((*i)->getCraft() == c)
@@ -176,7 +167,7 @@ void CraftSoldiersState::lstSoldiersClick(Action *action)
 		_lstSoldiers->setCellText(row, 2, _game->getLanguage()->getString("STR_NONE_UC"));
 		color = Palette::blockOffset(13)+10;
 	}
-	else if (c->getRules()->getSoldiers() - c->getNumSoldiers() > 0)
+	else if (c->getRules()->getSoldiers() - c->getNumSoldiers() > 0 && s->getWoundRecovery() == 0)
 	{
 		s->setCraft(c);
 		_lstSoldiers->setCellText(row, 2, c->getName(_game->getLanguage()));

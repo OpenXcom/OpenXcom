@@ -20,6 +20,7 @@
 #define OPENXCOM_UNIT_H
 
 #include <string>
+#include "yaml.h"
 
 namespace OpenXcom
 {
@@ -32,7 +33,8 @@ struct UnitStats
 {
 	int tu, stamina, health, bravery, reactions, firing, throwing, strength, psiStrength, psiSkill, melee;
 };
-
+void operator>> (const YAML::Node& node, UnitStats& stats);
+YAML::Emitter& operator<< (YAML::Emitter& out, const UnitStats& stats);
 
 /**
  * Represents the static data for a unit that is generated on the battlescape, this includes: HWPs, aliens and civilians.

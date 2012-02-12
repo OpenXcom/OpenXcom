@@ -423,7 +423,7 @@ int Craft::getFuelConsumption() const
  */
 int Craft::getFuelLimit() const
 {
-	return (int)floor(getFuelConsumption() * getDistanceFromBase() / (_radianSpeed * 120));
+	return (int)floor(getFuelConsumption() * getDistanceFromBase() / (_speedRadian * 120));
 }
 
 /**
@@ -494,15 +494,10 @@ void Craft::think()
  */
 bool Craft::insideRadarRange(Target *target) const
 {
-	bool inside = false;
+	if (_rules->getRadarRange() == 0)
+		return false;
 	double newrange = _rules->getRadarRange() * (1 / 60.0) * (M_PI / 180);
-	for (double lon = target->getLongitude() - 2*M_PI; lon <= target->getLongitude() + 2*M_PI + 0.01; lon += 2*M_PI)
-	{
-		double dLon = lon - _lon;
-		double dLat = target->getLatitude() - _lat;
-		inside = inside || (dLon * dLon + dLat * dLat <= newrange * newrange);
-	}
-	return inside;
+	return (getDistance(target) <= newrange);
 }
 
 /**
