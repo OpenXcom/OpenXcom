@@ -288,7 +288,7 @@ void Map::drawTerrain(Surface *surface)
 							if (_cursorType == CT_NORMAL || _cursorType == CT_THROW)
 							{
 								if (unit && (unit->getVisible() || _save->getDebugMode()))
-									frameNumber = 1; // yellow box
+									frameNumber = (_animFrame % 2); // yellow box
 								else
 									frameNumber = 0; // red box
 							}
@@ -502,7 +502,7 @@ void Map::drawTerrain(Surface *surface)
 							if (_cursorType == CT_NORMAL || _cursorType == CT_THROW)
 							{
 								if (unit && (unit->getVisible() || _save->getDebugMode()))
-									frameNumber = 4; // yellow box
+									frameNumber = 3 + (_animFrame % 2); // yellow box
 								else
 									frameNumber = 3; // red box
 							}
