@@ -175,6 +175,7 @@ void BattleUnit::load(const YAML::Node &node)
 	node["directionTurret"] >> _directionTurret;
 	node["tu"] >> _tu;
 	node["health"] >> _health;
+	node["stunlevel"] >> _stunlevel;
 	node["energy"] >> _energy;
 	node["morale"] >> _morale;
 	node["kneeled"] >> _kneeled;
@@ -213,6 +214,7 @@ void BattleUnit::save(YAML::Emitter &out) const
 	out << YAML::Key << "directionTurret" << YAML::Value << _directionTurret;
 	out << YAML::Key << "tu" << YAML::Value << _tu;
 	out << YAML::Key << "health" << YAML::Value << _health;
+	out << YAML::Key << "stunlevel" << YAML::Value << _stunlevel;
 	out << YAML::Key << "energy" << YAML::Value << _energy;
 	out << YAML::Key << "morale" << YAML::Value << _morale;
 	out << YAML::Key << "kneeled" << YAML::Value << _kneeled;
@@ -1523,6 +1525,9 @@ bool BattleUnit::postMissionProcedures(SavedGame *geoscape)
 	s->addKillCount(s->getKills());
 
 	UnitStats *stats = s->getCurrentStats();
+	int healthLoss = stats->health - _health;
+
+	s->setWoundRecovery(RNG::generate((healthLoss*0.5),(healthLoss*1.5)));
 
 	if (_expBravery && stats->bravery < 100)
 	{
@@ -1548,8 +1553,6 @@ bool BattleUnit::postMissionProcedures(SavedGame *geoscape)
 	{
 		stats->psiSkill += improveStat(_expPsiSkill);
 	}
-
-	/* TODO wound recovery :  Soldier->Wound_Recovery_Days = v / 2 + randmod(v) (v = UnitRef->BaseHPs - UnitRef->CurHP) */
 
 	if (_expBravery || _expReactions || _expFiring || _expPsiSkill || _expMelee)
 	{

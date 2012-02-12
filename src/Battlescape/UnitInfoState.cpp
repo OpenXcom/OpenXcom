@@ -354,7 +354,7 @@ UnitInfoState::~UnitInfoState()
 void UnitInfoState::init()
 {
 	std::wstringstream ss;
-	ss << _unit->getStats()->tu;
+	ss << _unit->getTimeUnits();
 	_numTimeUnits->setText(ss.str());
 	_barTimeUnits->setMax(_unit->getStats()->tu);
 	_barTimeUnits->setValue(_unit->getTimeUnits());
@@ -375,7 +375,7 @@ void UnitInfoState::init()
 	_barEnergy->setValue(_unit->getEnergy());
 
 	ss.str(L"");
-	ss << _unit->getStats()->health;
+	ss << _unit->getHealth();
 	_numHealth->setText(ss.str());
 	_barHealth->setMax(_unit->getStats()->health);
 	_barHealth->setValue(_unit->getHealth());
