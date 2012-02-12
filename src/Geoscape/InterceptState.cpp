@@ -31,6 +31,7 @@
 #include "../Savegame/Craft.h"
 #include "../Ruleset/RuleCraft.h"
 #include "../Savegame/SavedGame.h"
+#include "../Engine/Options.h"
 #include "SelectDestinationState.h"
 
 namespace OpenXcom
@@ -170,7 +171,7 @@ void InterceptState::btnCancelClick(Action *action)
 void InterceptState::lstCraftsClick(Action *action)
 {
 	Craft* c = _crafts[_lstCrafts->getSelectedRow()];
-	if (c->getStatus() == "STR_READY")
+	if (c->getStatus() != "STR_OUT" && (c->getStatus() == "STR_READY" || Options::getBool("craftLaunchAlways")))
 	{
 		_game->popState();
 		_game->pushState(new SelectDestinationState(_game, c, _globe));

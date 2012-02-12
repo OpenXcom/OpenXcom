@@ -67,6 +67,7 @@ void createDefault()
 	setBool("battlePreviewPath", false);
 	setBool("battleRangeBasedAccuracy", false);
 	setBool("fpsCounter", false);
+	setBool("craftLaunchAlways", false);
 }
 
 /**
