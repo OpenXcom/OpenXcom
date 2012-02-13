@@ -338,9 +338,9 @@ void SoldierInfoState::init()
 	std::wstringstream ss8;
 	ss8 << current->strength;
 	_numStrength->setText(ss8.str());
-	_barStrength->setMax(initial->strength);
+	_barStrength->setMax(current->strength);
 	_barStrength->setValue(current->strength);
-	_barStrength->setValue2(current->strength);
+	_barStrength->setValue2(initial->strength);
 
 	_txtArmor->setText(_game->getLanguage()->getString("STR_NONE_UC"));
 
