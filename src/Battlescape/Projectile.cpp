@@ -135,7 +135,7 @@ int Projectile::calculateTrajectory(double accuracy)
 			test = _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, false, &_trajectory, bu);
 			Position hitPos = Position(_trajectory.at(0).x/16, _trajectory.at(0).y/16, _trajectory.at(0).z/24);
 			_trajectory.clear();
-			if (hitPos != targetTile->getPosition())
+			if (hitPos.x != targetTile->getPosition().x || hitPos.y != targetTile->getPosition().y)
 			{
 				// did not hit a unit, try at different heights (for ex: unit behind a window can only be hit in the head)
 				targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + (targetTile->getUnit()->getStandHeight()*3)/4);
@@ -167,7 +167,7 @@ int Projectile::calculateTrajectory(double accuracy)
 	if (test == 4 && !_trajectory.empty())
 	{
 		Position hitPos = Position(_trajectory.at(0).x/16, _trajectory.at(0).y/16, _trajectory.at(0).z/24);
-		if (hitPos != targetTile->getPosition())
+		if (hitPos.x != targetTile->getPosition().x || hitPos.y != targetTile->getPosition().y)
 		{
 			_trajectory.clear();
 			return -1; // still no line of fire as we can't reach the target tile due to a unit blocking
