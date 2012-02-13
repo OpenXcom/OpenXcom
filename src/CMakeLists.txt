@@ -537,7 +537,11 @@ install ( DIRECTORY ${CMAKE_SOURCE_DIR}/bin/data DESTINATION bin )
 
 # Copy Windows DLL to bin folder
 if ( WIN32 )
-  file ( GLOB Windows_dll "${DEPS_DIR}/lib/*.dll" )
+  if ( CMAKE_CL_64 )
+    file ( GLOB Windows_dll "${DEPS_DIR}/lib/x64/*.dll" )
+  else ( )
+    file ( GLOB Windows_dll "${DEPS_DIR}/lib/Win32/*.dll" )
+  endif()
   foreach ( dll ${Windows_dll} )
     add_custom_command ( TARGET openxcom
       POST_BUILD
