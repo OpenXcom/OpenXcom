@@ -361,8 +361,9 @@ bool Projectile::move()
  */
 Position Projectile::getPosition(int offset) const
 {
-	if (_position + offset >= 0 && _position + offset < _trajectory.size())
-		return _trajectory.at(_position + offset);
+	int offposition = (int)_position + offset;
+	if (offposition >= 0 && offposition < _trajectory.size())
+		return _trajectory.at(offposition);
 	else
 		return _trajectory.at(_position);
 }
