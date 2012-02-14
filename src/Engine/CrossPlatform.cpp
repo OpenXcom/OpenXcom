@@ -88,11 +88,13 @@ void showError(const std::wstring &error)
 static char const *getHome()
 {
 	char const *home = getenv("HOME");
+#ifndef _WIN32
 	if (!home)
 	{
 		struct passwd *const pwd = getpwuid(getuid());
 		home = pwd->pw_dir;
 	}
+#endif
 	return home;
 }
 
