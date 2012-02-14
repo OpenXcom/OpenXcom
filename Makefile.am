@@ -5,39 +5,39 @@ doc_DATA = \
 	CHANGELOG.txt
 
 pkgdata_DATA = \
-	bin/DATA/README.txt \
-	bin/DATA/research.dat
+	bin/data/README.txt \
+	bin/data/research.dat
 
 languagedir = $(pkgdatadir)/Language
 language_DATA = \
-	bin/DATA/Language/Big.fnt \
-	bin/DATA/Language/Czech.lng \
-	bin/DATA/Language/English.lng \
-	bin/DATA/Language/EnglishUk.lng \
-	bin/DATA/Language/Font.dat \
-	bin/DATA/Language/French.geo \
-	bin/DATA/Language/French.lng \
-	bin/DATA/Language/German.geo \
-	bin/DATA/Language/German.lng \
-	bin/DATA/Language/Italian.geo \
-	bin/DATA/Language/Italian.lng \
-	bin/DATA/Language/Polish.geo \
-	bin/DATA/Language/Polish.lng \
-	bin/DATA/Language/Romanian.lng \
-	bin/DATA/Language/Russian.geo \
-	bin/DATA/Language/Russian.lng \
-	bin/DATA/Language/Small.fnt \
-	bin/DATA/Language/Spanish.geo \
-	bin/DATA/Language/Spanish.lng
+	bin/data/Language/Big.fnt \
+	bin/data/Language/Czech.lng \
+	bin/data/Language/English.lng \
+	bin/data/Language/EnglishUk.lng \
+	bin/data/Language/Font.dat \
+	bin/data/Language/French.geo \
+	bin/data/Language/French.lng \
+	bin/data/Language/German.geo \
+	bin/data/Language/German.lng \
+	bin/data/Language/Italian.geo \
+	bin/data/Language/Italian.lng \
+	bin/data/Language/Polish.geo \
+	bin/data/Language/Polish.lng \
+	bin/data/Language/Romanian.lng \
+	bin/data/Language/Russian.geo \
+	bin/data/Language/Russian.lng \
+	bin/data/Language/Small.fnt \
+	bin/data/Language/Spanish.geo \
+	bin/data/Language/Spanish.lng
 
 namedir = $(pkgdatadir)/SoldierName
 name_DATA = \
-	bin/DATA/SoldierName/American.nam \
-	bin/DATA/SoldierName/British.nam \
-	bin/DATA/SoldierName/French.nam \
-	bin/DATA/SoldierName/German.nam \
-	bin/DATA/SoldierName/Japanese.nam \
-	bin/DATA/SoldierName/Russian.nam
+	bin/data/SoldierName/American.nam \
+	bin/data/SoldierName/British.nam \
+	bin/data/SoldierName/French.nam \
+	bin/data/SoldierName/German.nam \
+	bin/data/SoldierName/Japanese.nam \
+	bin/data/SoldierName/Russian.nam
 
 bin_PROGRAMS = openxcom
 openxcom_LDADD = $(SDL_LIBS) $(YAML_LIBS)
@@ -397,8 +397,6 @@ openxcom_SOURCES = \
 	src/Ruleset/SoldierNamePool.h \
 	src/Ruleset/XcomRuleset.cpp \
 	src/Ruleset/XcomRuleset.h \
-	src/Savegame/GenUnit.cpp \
-	src/Savegame/GenUnit.h \
 	src/Savegame/Base.cpp \
 	src/Savegame/BaseFacility.cpp \
 	src/Savegame/BaseFacility.h \
@@ -445,8 +443,6 @@ openxcom_SOURCES = \
 	src/Savegame/Ufo.h \
 	src/Savegame/UfopaediaSaved.cpp \
 	src/Savegame/UfopaediaSaved.h \
-	src/Savegame/Unit.cpp \
-	src/Savegame/Unit.h \
 	src/Savegame/Waypoint.cpp \
 	src/Savegame/Waypoint.h \
 	src/Ufopaedia/ArticleStateBaseFacility.cpp \
