@@ -82,6 +82,21 @@ void showError(const std::wstring &error)
 }
 
 /**
+ * Gets the user's home folder according to the system.
+ * @return Absolute path to home folder.
+ */
+static char const *getHome()
+{
+	char const *home = getenv("HOME");
+	if (!home)
+	{
+		struct passwd *const pwd = getpwuid(getuid());
+		home = pwd->pw_dir;
+	}
+	return home;
+}
+
+/**
  * Builds a list of predefined paths for the Data folder
  * according to the running system.
  * @return List of data paths.
@@ -114,13 +129,7 @@ std::vector<std::string> findDataFolders()
 		list.push_back(path);
 	}
 #else
-	char const *home = getenv("HOME");
-	if (!home)
-	{
-		struct passwd* pwd = getpwuid(getuid());
-		home = pwd->pw_dir;
-	}
-
+	char const *home = getHome();
 	char path[MAXPATHLEN];
 #ifdef __APPLE__
 	snprintf(path, MAXPATHLEN, "%s/Library/Application Support/OpenXcom/data/", home);
@@ -196,13 +205,7 @@ std::vector<std::string> findUserFolders()
 		list.push_back(path);
 	}
 #else
-	char const *home = getenv("HOME");
-	if (!home)
-	{
-		struct passwd* pwd = getpwuid(getuid());
-		home = pwd->pw_dir;
-	}
-
+	char const *home = getHome();
 	char path[MAXPATHLEN];
 #ifdef __APPLE__
 	snprintf(path, MAXPATHLEN, "%s/Library/Application Support/OpenXcom/", home);
@@ -234,20 +237,14 @@ std::vector<std::string> findUserFolders()
 
 /**
  * Finds the Config folder according to the running system.
- * @return Gonfig path.
+ * @return Config path.
  */
 std::string findConfigFolder()
 {
 #if defined(_WIN32) || defined(__APPLE__)
 	return "";
 #else
-	char const *home = getenv("HOME");
-	if (!home)
-	{
-		struct passwd* pwd = getpwuid(getuid());
-		home = pwd->pw_dir;
-	}
-
+	char const *home = getHome();
 	char path[MAXPATHLEN];
 	// Get config folders
 	if (char const *const xdg_config_home = getenv("XDG_CONFIG_HOME"))
