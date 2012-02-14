@@ -114,8 +114,7 @@ std::vector<std::string> findDataFolders()
 		list.push_back(path);
 	}
 #else
-	char *xdg_data_home = getenv("XDG_DATA_HOME"), *xdg_data_dirs = getenv("XDG_DATA_DIRS"),
-		*home = getenv("HOME");
+	char const *home = getenv("HOME");
 	if (!home)
 	{
 		struct passwd* pwd = getpwuid(getuid());
@@ -128,24 +127,19 @@ std::vector<std::string> findDataFolders()
 	list.push_back(path);
 #else
 	// Get user-specific data folders
-	if (xdg_data_home == 0)
-	{
-		snprintf(path, MAXPATHLEN, "%s/.local/share/openxcom/data/", home);
-		list.push_back(path);
-	}
-	else
-	{
+	if (char const *const xdg_data_home = getenv("XDG_DATA_HOME"))
+ 	{
 		snprintf(path, MAXPATHLEN, "%s/openxcom/data/", xdg_data_home);
-		list.push_back(path);
-	}
+ 		list.push_back(path);
+ 	}
+ 	else
+ 	{
+		snprintf(path, MAXPATHLEN, "%s/.local/share/openxcom/data/", home);
+ 		list.push_back(path);
+ 	}
 
 	// Get global data folders
-	if (xdg_data_dirs == 0)
-	{
-		list.push_back("/usr/local/share/openxcom/data/");
-		list.push_back("/usr/share/openxcom/data/");
-	}
-	else
+	if (char const *xdg_data_dirs = getenv("XDG_DATA_DIRS"))
 	{
 		char *dir = strtok(xdg_data_dirs, ":");
 		while (dir != 0)
@@ -154,6 +148,11 @@ std::vector<std::string> findDataFolders()
 			list.push_back(path);
 			dir = strtok(0, ":");
 		}
+	}
+	else
+	{
+		list.push_back("/usr/local/share/openxcom/data/");
+		list.push_back("/usr/share/openxcom/data/");
 	}
 
 #endif
@@ -197,7 +196,7 @@ std::vector<std::string> findUserFolders()
 		list.push_back(path);
 	}
 #else
-	char *xdg_data_home = getenv("XDG_DATA_HOME"), *home = getenv("HOME");
+	char const *home = getenv("HOME");
 	if (!home)
 	{
 		struct passwd* pwd = getpwuid(getuid());
@@ -210,14 +209,14 @@ std::vector<std::string> findUserFolders()
 	list.push_back(path);
 #else
 	// Get user folders
-	if (xdg_data_home == 0)
+	if (char const *const xdg_data_home = getenv("XDG_DATA_HOME"))
 	{
-		snprintf(path, MAXPATHLEN, "%s/.local/share/openxcom/", home);
+		snprintf(path, MAXPATHLEN, "%s/openxcom/", xdg_data_home);
 		list.push_back(path);
 	}
 	else
 	{
-		snprintf(path, MAXPATHLEN, "%s/openxcom/", xdg_data_home);
+		snprintf(path, MAXPATHLEN, "%s/.local/share/openxcom/", home);
 		list.push_back(path);
 	}
 
@@ -242,7 +241,7 @@ std::string findConfigFolder()
 #if defined(_WIN32) || defined(__APPLE__)
 	return "";
 #else
-	char *xdg_config_home = getenv("XDG_CONFIG_HOME"), *home = getenv("HOME");
+	char const *home = getenv("HOME");
 	if (!home)
 	{
 		struct passwd* pwd = getpwuid(getuid());
@@ -251,14 +250,14 @@ std::string findConfigFolder()
 
 	char path[MAXPATHLEN];
 	// Get config folders
-	if (xdg_config_home == 0)
+	if (char const *const xdg_config_home = getenv("XDG_CONFIG_HOME"))
 	{
-		snprintf(path, MAXPATHLEN, "%s/.config/openxcom/", home);
+		snprintf(path, MAXPATHLEN, "%s/openxcom/", xdg_config_home);
 		return path;
 	}
 	else
 	{
-		snprintf(path, MAXPATHLEN, "%s/openxcom/", xdg_config_home);
+		snprintf(path, MAXPATHLEN, "%s/.config/openxcom/", home);
 		return path;
 	}
 #endif
