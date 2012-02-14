@@ -62,7 +62,7 @@ Aceștia sunt roboți dotați cu o puternică armă cu fascicul de plasmă. Cont
 STR_SECTOPOD_AUTOPSY_UFOPEDIA
 Robotul are o construcție solidă, cu armură alimentată capabilă sa reziste la majoritatea atacurilor, în special cele cu plasmă.  Totuși, circuitele senzoriale par în special vulnerabile la armele laser.
 STR_CYBERDISC_UFOPEDIA
-Această farfurie zburătoare miniaturală este o armă de terorizare automatizată, înarmată cu un puternic fascicul de plasmă.  Propulsia antigravitațională îi oferă un avantaj major pe teren accidentat.  Principala activitate este de distrugere și terorizare în slujba rasei 'Sectoid'. 
+Această farfurie zburătoare miniaturală este o armă de terorizare automatizată, înarmată cu un puternic fascicul de plasmă.  Propulsia antigravitațională îi oferă un avantaj major pe teren accidentat.  Principala activitate este de distrugere și terorizare în slujba rasei 'Sectoid'.
 STR_CYBERDISC_AUTOPSY_UFOPEDIA
 Acest dispozitiv este bine ecranat și rezistent în special la munițiile explozibile.  Principalul sistem antigravitațional este prea avariat pentru a îi intelege funcționalitatea.
 STR_UFO_POWER_SOURCE_UFOPEDIA
@@ -678,19 +678,19 @@ COSTUM DE ZBOR
 STR_SELECT_ARMOR
 Selectează armura
 STR_NORTH
-NORD     
+NORD
 STR_NORTH_EAST
 NORD-EST
 STR_EAST
-EST      
+EST
 STR_SOUTH_EAST
 SUD-EST
 STR_SOUTH
-SUD     
+SUD
 STR_SOUTH_WEST
 SUD-VEST
 STR_WEST
-VEST      
+VEST
 STR_NORTH_WEST
 NORD-VEST
 STR_SELECT_ACTION

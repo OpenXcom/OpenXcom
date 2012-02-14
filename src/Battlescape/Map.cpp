@@ -866,7 +866,7 @@ void Map::cacheUnit(BattleUnit *unit)
 			unitSprite->blit(cache);
 			unit->setCache(cache, i);
 		}
-	}	
+	}
 	delete unitSprite;
 }
 

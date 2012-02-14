@@ -416,7 +416,7 @@ void BattleUnit::keepWalking()
 		else
 		{
 			// sectoids actually have less motion points
-			// but instead of create yet another variable, 
+			// but instead of create yet another variable,
 			// I used the height of the unit instead (logical)
 			if (getStandHeight() > 16)
 				_motionPoints += 4;
@@ -1712,7 +1712,7 @@ int BattleUnit::getMotionPoints() const
  */
 Armor *BattleUnit::getArmor() const
 {
-	return _armor;		
+	return _armor;
 }
 /**
  * Get unit's name.
@@ -1796,7 +1796,7 @@ bool BattleUnit::isFearable() const
 
 /**
   * Get the unit's intelligence. Is the number of turns AI remembers a soldiers position.
-  * @return intelligence 
+  * @return intelligence
   */
 int BattleUnit::getIntelligence() const
 {
@@ -1844,4 +1844,3 @@ std::string BattleUnit::getType() const
 }
 
 }
-

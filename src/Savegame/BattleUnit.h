@@ -85,7 +85,7 @@ private:
 	bool _needPainKiller;
 	int _motionPoints;
 	int _kills;
-	
+
 	// static data
 	std::string _type;
 	std::string _rank;

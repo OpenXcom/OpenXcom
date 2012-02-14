@@ -454,4 +454,3 @@ void RuleCraft::setBattlescapeTerrainData(RuleTerrain *terrain)
 }
 
 }
-

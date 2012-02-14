@@ -52,7 +52,7 @@ Das Außenskelett dieses Wesens ist äußerst hart, jedoch erstaunlich empfindli
 STR_FLOATER_UFOPEDIA
 Die Treiber sind vorwiegend Soldaten und Terror-Agenten.  Sie sind von Natur aus räuberisch veranlagt, jedoch durch genetische und kybernetische Veränderungen in furchterregende Krieger verwandelt worden.  Die untere Körperhälfte und die meisten inneren Organe wurden chirurgisch entfernt und durch ein Lebenserhaltungssystem ersetzt.  Dieses Implantat enthält eine Antischwerkraft-Einheit, die dem Wesen ermöglicht, mehr oder weniger sicher durch die Luft zu treiben.
 STR_FLOATER_AUTOPSY_UFOPEDIA
-Das Geschöpf wurde durch chirurgische Eingriffe stark verändert.  Den Kern des Körpers scheint ein Lebenserhaltungssystem zu bilden, das die Funktionen von Herz, Lunge und Verdauungstrakt übernimmt.  Dadurch kann das Wesen in einer äußerst feindseligen Umwelt überleben.  Das Gehirn ist kleiner als unseres, doch die Sinnesorgane sind gut entwickelt. 
+Das Geschöpf wurde durch chirurgische Eingriffe stark verändert.  Den Kern des Körpers scheint ein Lebenserhaltungssystem zu bilden, das die Funktionen von Herz, Lunge und Verdauungstrakt übernimmt.  Dadurch kann das Wesen in einer äußerst feindseligen Umwelt überleben.  Das Gehirn ist kleiner als unseres, doch die Sinnesorgane sind gut entwickelt.
 STR_REAPER_UFOPEDIA
 Dieser zweibeinige Fleischfresser hat mächtige Kiefer und einen ungeheuren Appetit.  Seine Handlungen werden durch eine Reihe von Gehirn-Implantaten gesteuert.  Die primitiven räuberischen Instinkte dieses Geschöpfes können lediglich für Terror- und Vernichtungsakte genutzt werden.  Schnitter werden im allgemeinen mit Treibern in Verbindung gebracht.
 STR_REAPER_AUTOPSY_UFOPEDIA
@@ -60,7 +60,7 @@ Der Schnitter besitzt zwei 'Herzen' und zwei 'Gehirne' und kann daher auch dann 
 STR_SECTOPOD_UFOPEDIA
 Sektopoden sind Roboterwesen mit einer mächtigen Plasmastrahlenwaffe.  Diese mechanischen Ungeheuer werden durch eine telepathische Verbindung von ihren Beherrschern, den Ätherern, gesteuert.  Sektopoden sind die vernichtendsten Terrorwaffen, die den Außerirdischen zur Verfügung stehen.
 STR_SECTOPOD_AUTOPSY_UFOPEDIA
-Der Roboter ist stabil konstruiert, und seine kraftbetriebene Panzerung kann den meisten Angriffen widerstehen, insbesondere Plasmawaffen.  Die Sensorenkreise scheinen jedoch sehr empfindlich gegenüber Laserwaffen zu sein. 
+Der Roboter ist stabil konstruiert, und seine kraftbetriebene Panzerung kann den meisten Angriffen widerstehen, insbesondere Plasmawaffen.  Die Sensorenkreise scheinen jedoch sehr empfindlich gegenüber Laserwaffen zu sein.
 STR_CYBERDISC_UFOPEDIA
 Diese fliegende Untertasse im Kleinformat ist eine mit einem mächtigen Plasmastrahl ausgerüstete Terrorwaffe.  Der Antischwerkraft-Antrieb bringt ihr große Vorteile in schwierigem Gelände.  Ihre Hauptaufgaben sind Zerstörung und Terror im Auftrag des Sektoiden-Volkes.
 STR_CYBERDISC_AUTOPSY_UFOPEDIA
@@ -90,7 +90,7 @@ Dieses Element besitzt die ungewöhnliche Eigenschaft, Antimaterie-Energie zu er
 STR_ALIEN_ORIGINS_UFOPEDIA
 Es wird deutlich, daß wir den Kampf auf der Erde verlieren.  Die Horden der Außerirdischen sind uns zahlenmäßig zu stark überlegen.  Es könnte uns lediglich gelingen, den Strom zu verlangsamen.  Wir müssen die Außerirdischen an der Quelle bekämpfen, das ist unsere einzige Chance.  Unsere Forschungen weisen auf eine nahegelegene Operationsbasis in unserem Sonnensystem hin.  Die Außerirdischen geben an, daß dieser Ort das Zentrum einer alten Zivilisation vor der Entwicklung der Menschheit ist.  Wir müssen diesen Ort so bald wie möglich finden.  Dazu müssen wir einen Anführer der Außerirdischen fangen und verhören, um genauere Informationen zu erhalten.  An Bord der größeren UFOs befindet sich vermutlich mindestens einer ihrer Anführer.
 STR_THE_MARTIAN_SOLUTION_UFOPEDIA
-Unsere Forschungsergebnisse deuten jetzt auf den Mars als Basis der außerirdischen Operationen hin.  Der Stützpunkt ist gut versteckt und birgt sämtliche Produktions- und Kloning-Einrichtungen, die zum Infiltrieren der Erde nötig sind.  Es scheint sich dort auch eine Art Kontrollcomputer zu befinden, der die gesamte Operation steuert.  Das bienenstockähnliche außerirdische Volk scheint eine Art 'Königin' zu besitzen.  Diese ist seine größte Schwäche.  Wenn es uns gelingt, das Gehirn zu vernichten, stirbt der Körper.  Wir müssen unsere Forschungen vorantreiben, bevor es zu spät ist.  Um dies zu erreichen, müssen wir die höchstrangigen Außerirdischen die Kommandanten, gefangennehmen, die sich nur auf den Stützpunkten der Außerirdischen aufhalten. 
+Unsere Forschungsergebnisse deuten jetzt auf den Mars als Basis der außerirdischen Operationen hin.  Der Stützpunkt ist gut versteckt und birgt sämtliche Produktions- und Kloning-Einrichtungen, die zum Infiltrieren der Erde nötig sind.  Es scheint sich dort auch eine Art Kontrollcomputer zu befinden, der die gesamte Operation steuert.  Das bienenstockähnliche außerirdische Volk scheint eine Art 'Königin' zu besitzen.  Diese ist seine größte Schwäche.  Wenn es uns gelingt, das Gehirn zu vernichten, stirbt der Körper.  Wir müssen unsere Forschungen vorantreiben, bevor es zu spät ist.  Um dies zu erreichen, müssen wir die höchstrangigen Außerirdischen die Kommandanten, gefangennehmen, die sich nur auf den Stützpunkten der Außerirdischen aufhalten.
 STR_CYDONIA_OR_BUST_UFOPEDIA
 Es ist inzwischen deutlich geworden, daß die außerirdischen Horden von einem unterirdischen Stützpunkt in Cydonia aus gelenkt werden, einem ungewöhnlichen Gebiet auf dem Mars mit fünfseitigen Pyramiden und einer großen Formation, die einem menschlichen Gesicht gleicht.  Die cydonische Zivilisation lebte vor Millionen von Jahren auf dem Mars, doch wir wissen nicht, warum sie ausstarb oder welche Verbindung zu den neuesten Aktivitäten der Außerirdischen besteht.  Auf jeden Fall müssen wir eine Expedition nach Cydonia durchführen.  Nur so können wir die Außerirdischen besiegen.  Wir müssen das 'Gehirn' vernichten, das sie steuert.  Wir werden ein Avenger-Raumschiff mit den tödlichsten Waffen brauchen, die uns zur Verfügung stehen.  Hier kommen wir nicht weiter - wir müssen den Ausgang des Angriffs auf Cydonia abwarten.
 STR_TERROR_SITE
@@ -678,19 +678,19 @@ FLUGANZUG
 STR_SELECT_ARMOR
 Rüstung wählen
 STR_NORTH
-NORDEN     
+NORDEN
 STR_NORTH_EAST
 NORDOSTEN
 STR_EAST
-OSTEN      
+OSTEN
 STR_SOUTH_EAST
 SÜDOSTEN
 STR_SOUTH
-SÜDEN     
+SÜDEN
 STR_SOUTH_WEST
 SÜDWESTEN
 STR_WEST
-WESTEN      
+WESTEN
 STR_NORTH_WEST
 NORDWESTEN
 STR_SELECT_ACTION
@@ -1218,11 +1218,11 @@ Die Plasmastrahl-Abwehr bildet einen mächtigen und wirkungsvollen Schutz vor ge
 STR_FUSION_BALL_DEFENCES_UFOPEDIA
 Fusionsraketen bieten die effektivste Verteidigung gegen Angriffe der Außerirdischen.  Sie erzeugen eine Antimaterie-Implosion, die alles in einem bestimmten Radiuszerstört.
 STR_GRAV_SHIELD_UFOPEDIA
-Die Gravitationsschilde wehren so lange alle außerirdischen Raumschiffe ab, bis die Verteidigungssysteme wieder feuern können.  Dadurch wird die Wirksamkeit der Verteidigungssysteme Ihres Stützpunktes praktisch verdoppelt. 
+Die Gravitationsschilde wehren so lange alle außerirdischen Raumschiffe ab, bis die Verteidigungssysteme wieder feuern können.  Dadurch wird die Wirksamkeit der Verteidigungssysteme Ihres Stützpunktes praktisch verdoppelt.
 STR_MIND_SHIELD_UFOPEDIA
-Die Außerirdischen stellen die Anwesenheit von Menschen anhand von Gehirnströmen fest.  Daher ist es sinnvoll, als Gegenmaßnahme Gehirnstromschilde um den Stützpunkt zu errichten.  Damit wird die Gefahr der Entdeckung durch außerirdische Raumschiffe stark verringert. 
+Die Außerirdischen stellen die Anwesenheit von Menschen anhand von Gehirnströmen fest.  Daher ist es sinnvoll, als Gegenmaßnahme Gehirnstromschilde um den Stützpunkt zu errichten.  Damit wird die Gefahr der Entdeckung durch außerirdische Raumschiffe stark verringert.
 STR_PSIONIC_LABORATORY_UFOPEDIA
-Die Psi-Labors beurteilen das Psi-Potential aller Soldaten des Stützpunktes und ermöglichen die weitere Ausbildung dieser Fähigkeiten.  In jedem Labor können bis zu 10 Soldaten gleichzeitig trainiert werden.  Der Trainingsplan wird am Ende des Monats aufgestellt.  Psionische Fähigkeiten können im Kampf eingesetzt werden, wenn gleichzeitig ein Psi-Verstärker benutzt wird. 
+Die Psi-Labors beurteilen das Psi-Potential aller Soldaten des Stützpunktes und ermöglichen die weitere Ausbildung dieser Fähigkeiten.  In jedem Labor können bis zu 10 Soldaten gleichzeitig trainiert werden.  Der Trainingsplan wird am Ende des Monats aufgestellt.  Psionische Fähigkeiten können im Kampf eingesetzt werden, wenn gleichzeitig ein Psi-Verstärker benutzt wird.
 STR_HYPER_WAVE_DECODER_UFOPEDIA
 Die Kommunikationssysteme der Außerirdischen nutzen supra-dimensionale Wellen, die sich sehr schnell ausbreiten.  Dabei werden die Nachrichten von den UFOs aufgenommen und decodiert.  Die Nachricht enthält außerdem Informationen über den Typ des UFOs, sein Volk und dessen Aktivitäten.
 STR_HANGAR_UFOPEDIA
@@ -1320,7 +1320,7 @@ Der Rat der Geldgebenden Nationen ist mit Ihrem bisherigen Fortschritt sehr zufr
 STR_COUNCIL_IS_DISSATISFIED
 Der Rat der Geldgebenden Nationen ist mit Ihrem bisherigen Fortschritt nicht zufrieden.  Sie müssen effektiver handeln, um die Bedrohung durch die Außerirdischen abzuwenden, andernfalls wird das Projekt abgebrochen.
 STR_YOU_HAVE_NOT_SUCCEEDED
-Es ist Ihnen nicht gelungen, die Invasion der Außerirdischen abzuwenden.  Der Rat der Geldgebenden Nationen hat leider entschieden, das Projekt abzubrechen.  Jede Nation muß dieses Problem nun nach eigenem Ermessen lösen.  Wir hoffen, daß wir mit diesen feindlich gesinnten Mächten auskommen und die Bevölkerung nicht unter der Invasion leiden muß. 
+Es ist Ihnen nicht gelungen, die Invasion der Außerirdischen abzuwenden.  Der Rat der Geldgebenden Nationen hat leider entschieden, das Projekt abzubrechen.  Jede Nation muß dieses Problem nun nach eigenem Ermessen lösen.  Wir hoffen, daß wir mit diesen feindlich gesinnten Mächten auskommen und die Bevölkerung nicht unter der Invasion leiden muß.
 STR_COUNTRY_IS_PARTICULARLY_PLEASED
  ist besonders von Ihrer Fähigkeit beeindruckt, auf die Bedrohung vor Ort zu reagieren, und hat eine Erhöhung der Gelder geplant.
 STR_COUNTRIES_ARE_PARTICULARLY_HAPPY
@@ -1550,7 +1550,7 @@ Laserwaffen sind nützliche Ergänzungen für SWTs.  Sie besitzen eine starke Fe
 STR_HOVERTANK_PLASMA_UFOPEDIA
 Dank der Außerirdischen-Technologie haben die SWTs eine neue Bedeutung erhalten.  Die bessere Manövrierfähigkeit und die Stärke der Plasmastrahlen bilden eine tödliche Kombination.
 STR_HOVERTANK_LAUNCHER_UFOPEDIA
-Die Fusionskugel-Abschußrampe dieses Luftkissenpanzers verursacht starke Zerstörungen.  Setzen Sie sie sehr vorsichtig ein.  Sie müssen außerdem Fusionskugeln herstellen, um diese SWT bewaffnen zu können.  Eine Fusionskugel ist eine intelligente gelenkte Waffe.  Um sie abzufeuern, müssen Sie mehrere 'Wegmarken' mit dem Cursor auswählen und dann das Abschuß-Icon anklicken. 
+Die Fusionskugel-Abschußrampe dieses Luftkissenpanzers verursacht starke Zerstörungen.  Setzen Sie sie sehr vorsichtig ein.  Sie müssen außerdem Fusionskugeln herstellen, um diese SWT bewaffnen zu können.  Eine Fusionskugel ist eine intelligente gelenkte Waffe.  Um sie abzufeuern, müssen Sie mehrere 'Wegmarken' mit dem Cursor auswählen und dann das Abschuß-Icon anklicken.
 STR_HEAVY_PLASMA_CLIP_UFOPEDIA
 Dieses kompakte Gerät wird als Munition für schwere Plasmageschütze verwendet.  Es enthält eine kleine Menge Elerium.
 STR_PLASMA_RIFLE_CLIP_UFOPEDIA
@@ -1560,7 +1560,7 @@ Energiequelle für die kleine Plasmapistole der Außerirdischen.  Enthält Eleri
 STR_STUN_BOMB_UFOPEDIA
 Die Betäubungsbombe wird zum Fangen von Menschenexemplaren verwendet, kann jedoch auch gegen die meisten Außerirdischenvölker eingesetzt werden.  Sie wird von einer kleinen Abschußrampe aus abgefeuert.
 STR_ALIEN_RESEARCH_UFOPEDIA
-Die Forschungsmission der Außerirdischen dient der Sammlung grundlegender Daten über die Erde und ihre Bewohner.  Es werden vornehmlich kleine Raumschiffe eingesetzt, die gelegentlich in einsamen Gebieten landen.  Diese Aktivitäten der Außerirdischen stellen nur geringe Gefahren für die XCom dar, und die Regierungen und Öffentlichkeit fühlen sich nicht bedroht. 
+Die Forschungsmission der Außerirdischen dient der Sammlung grundlegender Daten über die Erde und ihre Bewohner.  Es werden vornehmlich kleine Raumschiffe eingesetzt, die gelegentlich in einsamen Gebieten landen.  Diese Aktivitäten der Außerirdischen stellen nur geringe Gefahren für die XCom dar, und die Regierungen und Öffentlichkeit fühlen sich nicht bedroht.
 STR_ALIEN_HARVEST_UFOPEDIA
 Die Außerirdischen haben verschiedene Nutzungsmöglichkeiten für die Lebewesen der Erde.  Tiere werden heimlich entführt und nach der Entnahme bestimmter Organe wieder zurückgebracht.  Im Zusammenhang mit UFO-Entdeckungen hört man häufig Meldungen über verstümmelte Rinder.  Diese Aktivitäten der Außerirdischen beunruhigen die Regierungen und die Öffentlichkeit in beträchtlichem Maße.  Sie treten häufig in landwirtschaftlichen Gebieten auf.  Eine Theorie vermutet, daß die Außerirdischen auf dem Planeten ursprünglich Fauna und Flora 'gesät' haben und nun zurückkehren, um die 'Ernte' einzufahren.
 STR_ALIEN_ABDUCTION_UFOPEDIA

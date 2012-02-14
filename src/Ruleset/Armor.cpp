@@ -163,7 +163,7 @@ int Armor::getFrontArmor() const
 
 /**
  * Get the side armor level.
- * @return Side armor level. 
+ * @return Side armor level.
  */
 int Armor::getSideArmor() const
 {
@@ -172,7 +172,7 @@ int Armor::getSideArmor() const
 
 /**
  * get the rear armor level.
- * @return Rear armor level. 
+ * @return Rear armor level.
  */
 int Armor::getRearArmor() const
 {
@@ -181,7 +181,7 @@ int Armor::getRearArmor() const
 
 /**
  * get the under armor level.
- * @return Under armor level. 
+ * @return Under armor level.
  */
 int Armor::getUnderArmor() const
 {

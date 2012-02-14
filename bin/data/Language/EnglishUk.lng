@@ -52,7 +52,7 @@ The exo-skeleton of this creature is extremely tough, but surprisingly vulnerabl
 STR_FLOATER_UFOPEDIA
 The Floaters are primarily soldiers and terror agents. They are naturally predatory beasts, genetically engineered and cybernetically enhanced to make formidable warriors. The lower half of the body and most internal organs are surgically removed, and a life support system is installed. This implant contains an anti-grav unit which enables the creature to float, albeit unsteadily, through the air.
 STR_FLOATER_AUTOPSY_UFOPEDIA
-The creature has been drastically altered by surgery.  The device which seems to form the core of the body is a life support system, taking over the function of heart, lungs and digestive system.  This would enable the creature to survive in extremely hostile environments.  The brain is smaller than ours, but the sensory organs are well developed. 
+The creature has been drastically altered by surgery.  The device which seems to form the core of the body is a life support system, taking over the function of heart, lungs and digestive system.  This would enable the creature to survive in extremely hostile environments.  The brain is smaller than ours, but the sensory organs are well developed.
 STR_REAPER_UFOPEDIA
 This bipedal carnivore has powerful jaws and a voracious appetite. It has a number of brain implants which are used to control its activity. the primitive predatory instincts of this creature are of little use except to terrorise and destroy. Reapers are commonly associated with Floaters.
 STR_REAPER_AUTOPSY_UFOPEDIA
@@ -60,7 +60,7 @@ The Reaper contains two 'brains' and two 'hearts' which allow it to function eve
 STR_SECTOPOD_UFOPEDIA
 Sectopods are robot creatures with a powerful plasma beam weapon. The control if these mechanical beasts is via a telepathic link to their controllers, the Ethereals.  Sectopods are the most powerful terror weapon available to the alien forces.
 STR_SECTOPOD_AUTOPSY_UFOPEDIA
-The robot is sturdily constructed with powered armour capable of resisting most forms of attack, in particular plasma weapons.  However, the sensing circuitry seems particularly vulnerable to laser weapons. 
+The robot is sturdily constructed with powered armour capable of resisting most forms of attack, in particular plasma weapons.  However, the sensing circuitry seems particularly vulnerable to laser weapons.
 STR_CYBERDISC_UFOPEDIA
 This miniature flying saucer is an automated terror weapon armed with a powerful plasma beam. The anti-grav propulsion gives it a big advantage in difficult terrain. Its primary function is destruction and terror in the service of the Sectoid race.
 STR_CYBERDISC_AUTOPSY_UFOPEDIA
@@ -90,7 +90,7 @@ This element has the unusual property of generating anti-matter power when bomba
 STR_ALIEN_ORIGINS_UFOPEDIA
 It is clear that we are fighting a losing battle on earth. The alien hordes are overwhelming in number.  The best we can do is slow down their progress.  The only hope for humanity is to tackle the aliens at their source.  Our research seems to indicate a nearby base of operations within our solar system.  Aliens indicate this place to be the centre of an ancient civilisation that pre-dates Human history.  We must locate this place as soon as possible.  However we need to capture and interrogate an alien leader to gain more detailed information. The larger UFOs probably contain at least one Alien leader.
 STR_THE_MARTIAN_SOLUTION_UFOPEDIA
-Our research now points to Mars as the base of alien operations.  The base is well hidden, and contains all the manufacturing and cloning facilities to fuel the infiltration of earth.  It also seems to contain a controlling computer of some kind that controls the whole operation. It seems that the hive-like alien society has some kind of 'queen bee'. This is their fundamental weakness - if we can eliminate the 'brain' then the body will die.  We must step up our research efforts before it is too late.  In order to progress we must capture the highest ranking aliens - the commanders - which only reside in alien bases. 
+Our research now points to Mars as the base of alien operations.  The base is well hidden, and contains all the manufacturing and cloning facilities to fuel the infiltration of earth.  It also seems to contain a controlling computer of some kind that controls the whole operation. It seems that the hive-like alien society has some kind of 'queen bee'. This is their fundamental weakness - if we can eliminate the 'brain' then the body will die.  We must step up our research efforts before it is too late.  In order to progress we must capture the highest ranking aliens - the commanders - which only reside in alien bases.
 STR_CYDONIA_OR_BUST_UFOPEDIA
 It is now clear that the alien hordes are being controlled from an underground base in Cydonia - which is an unusual area of Mars featuring five sided pyramids and a large formation resembling a human face.  Cydonian civilisation once flourished on Mars many millions of years ago, but we do not know why it died out, or what the connection is with the latest alien activity there. Whatever the explanation we must send an expedition to Cydonia.  This is the only way that we can defeat the aliens.  We must destroy the controlling master 'brain'.  We will need an Avenger craft equipped with the most awesome destructive power at our disposal.  There is nothing more we can learn here - we must await the outcome of the Cydonian assault.
 STR_TERROR_SITE
@@ -678,19 +678,19 @@ FLYING SUIT
 STR_SELECT_ARMOR
 Select Armour
 STR_NORTH
-NORTH     
+NORTH
 STR_NORTH_EAST
 NORTH EAST
 STR_EAST
-EAST      
+EAST
 STR_SOUTH_EAST
 SOUTH EAST
 STR_SOUTH
-SOUTH     
+SOUTH
 STR_SOUTH_WEST
 SOUTH WEST
 STR_WEST
-WEST      
+WEST
 STR_NORTH_WEST
 NORTH WEST
 STR_SELECT_ACTION
@@ -1566,7 +1566,7 @@ The aliens have many uses for earth's fauna.  Animals are abducted secretly, and
 STR_ALIEN_ABDUCTION_UFOPEDIA
 This is the most insidious form of alien activity.  The abduction by aliens is widely reported, despite the aliens' attempts to erase the experience from their victims' memories. Abductees report being subject to humiliating physical examinations, including impregnation of alien foetuses and bizarre genetic experiments. The purpose behind this activity appears to be linked to genetic mutation and manipulation of the aliens own genetic material. This activity causes great alarm, and occurs in populated areas or cities
 STR_ALIEN_INFILTRATION_UFOPEDIA
-Earth governments can be infiltrated by alien agents which are human in appearance.  This can result in official contact between aliens and governments at the highest level. The climax of this activity is characterised by intense UFO activity in the vicinity of major cities. The aliens will attempt to sign a pact with an earth government by offering knowledge of their superior technology. In return the government will allow the aliens to conduct their activity unhindered. This alien mission represents the worst threat to XCom. If a government agrees to a pact then its funding will cease. 
+Earth governments can be infiltrated by alien agents which are human in appearance.  This can result in official contact between aliens and governments at the highest level. The climax of this activity is characterised by intense UFO activity in the vicinity of major cities. The aliens will attempt to sign a pact with an earth government by offering knowledge of their superior technology. In return the government will allow the aliens to conduct their activity unhindered. This alien mission represents the worst threat to XCom. If a government agrees to a pact then its funding will cease.
 STR_ALIEN_BASE_UFOPEDIA
 Aliens will construct secret underground bases in remote locations. After some initial reconnaissance flights some intense UFO activity will occur as the base is being built.  These bases are known to contain experimental labs for human abductees, and supplies for further activity in the region.  The presence of alien bases will generate a large amount of reported alien activity without the presence of UFOs. In order to locate a base an XCom craft must patrol an area for a few hours to stand some chance of detection.
 STR_ALIEN_TERROR_UFOPEDIA

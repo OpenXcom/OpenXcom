@@ -23,7 +23,7 @@ New features:
 -- Alien deployment rules.
 -- AI taking cover & throwing grenades.
 
- 
+
 Bugfixes:
 - Two duplicating ammo bugs.
 - Wrong rocket launcher hand sprite.
@@ -61,13 +61,13 @@ Bugfixes:
 Version 0.3 (01-09-2011)
 -------------------------
 New features:
-- Basescape: 
+- Basescape:
 -- Craft rearming.
 -- Craft equipping.
 -- Purchase/Recruit.
 -- Sell/Sack.
 -- Base transfers.
-- Battlescape: 
+- Battlescape:
 -- Battle turns.
 -- Item equipping, firing, throwing.
 -- Environment: fire, smoke, explosions, damage, kills.
@@ -108,7 +108,7 @@ Bugfixes:
 Version 0.2 (28-01-2011)
 -------------------------
 New features:
-- Battlescape! 
+- Battlescape!
 -- Crash site missions.
 -- Map generation.
 -- Pathfinding.

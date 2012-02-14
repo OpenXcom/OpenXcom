@@ -179,7 +179,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	_AIActionCounter++;
 
 	AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(ai);
-	
+
 	BattleAction action;
 	unit->think(&action);
 	if (action.type == BA_WALK)
@@ -415,7 +415,7 @@ bool BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 				if (hiddenExplosion)
 				{
 					// this is instant death from UFO powersources, without screaming sounds
-					statePushNext(new UnitDieBState(this, (*j), DT_HE, true)); 
+					statePushNext(new UnitDieBState(this, (*j), DT_HE, true));
 				}
 				else
 				{
@@ -436,7 +436,7 @@ bool BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 		}
 		else if ((*j)->getStunlevel() >= (*j)->getHealth() && (*j)->getStatus() != STATUS_DEAD && (*j)->getStatus() != STATUS_UNCONSCIOUS && (*j)->getStatus() != STATUS_FALLING && (*j)->getStatus() != STATUS_TURNING)
 		{
-			
+
 			if (!murderer)
 			{
 				// fell unconscious from stun level
@@ -660,7 +660,7 @@ void BattlescapeGame::popState()
 			}
 		}
 	}
-	
+
 	if (!_states.empty())
 	{
 		// end turn request?

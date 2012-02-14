@@ -434,7 +434,7 @@ void UnitSprite::drawRoutine3()
 	}
 
 	Surface *s = 0;
-	
+
 	// draw the animated propulsion below the hwp
 	if (_part > 0)
 	{

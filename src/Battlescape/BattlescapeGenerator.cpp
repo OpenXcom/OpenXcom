@@ -265,7 +265,7 @@ void BattlescapeGenerator::run()
 				(*i)->setVisible(false);
 			}
 		}
-		
+
 		// test data - uncomment to easely debug a certain item
 		addItem(_game->getRuleset()->getItem("STR_MOTION_SCANNER"));
 		addItem(_game->getRuleset()->getItem("STR_LASER_RIFLE"));
@@ -833,7 +833,7 @@ void BattlescapeGenerator::generateMap()
 			// last block of this row or column or next block is not free or big block would block landingzone
 			if (x == ((_width / 10) - 1) || y == ((_length / 10) - 1)
 				|| landingzone[x + 1][y] || landingzone[x + 1][y + 1] || landingzone[x][y + 1]
-				|| blocks[x + 1][y] || blocks[x + 1][y + 1] || blocks[x][y + 1] 
+				|| blocks[x + 1][y] || blocks[x + 1][y + 1] || blocks[x][y + 1]
 				|| blocksToDo == 1)
 			{
 				// only small block will fit
@@ -1026,7 +1026,7 @@ void BattlescapeGenerator::generateMap()
 			neighbourSegments[3] = -1;
 		else
 			neighbourSegments[3] = segments[segmentX][segmentY-1];
-			
+
 		for (int j = 0; j < 5; j++)
 		{
 			for (int n = 0; n < 4; n++)

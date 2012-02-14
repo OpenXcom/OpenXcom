@@ -26,7 +26,7 @@
 
 	;Request application privileges for Windows Vista
 	RequestExecutionLevel admin
-	
+
 ;--------------------------------
 ;Variables
 
@@ -60,18 +60,18 @@ FunctionEnd
 
 ;--------------------------------
 ;Pages
-	
+
 	;Language strings
 	LangString PAGE_UfoFolder ${LANG_ENGLISH} "${GAME_NAME} requires a copy of UFO: Enemy Unknown / X-Com: UFO Defense. You can skip this step if you're upgrading an existing installation.$\n$\nSetup will copy the required files from the following folder. To copy from a different folder, click Browse and select another folder. Click Next to continue."
 	LangString PAGE_UfoFolder_TITLE ${LANG_ENGLISH} "Choose UFO Location"
 	LangString PAGE_UfoFolder_SUBTITLE ${LANG_ENGLISH} "Choose the folder where you have UFO installed."
 	LangString DEST_UfoFolder ${LANG_ENGLISH} "UFO Folder"
-	
+
 	!insertmacro MUI_PAGE_WELCOME
 	!insertmacro MUI_PAGE_LICENSE "gpl.txt"
 	!insertmacro MUI_PAGE_COMPONENTS
 	!insertmacro MUI_PAGE_DIRECTORY
-	
+
 	; UFO Folder Page Configuration
 	!define MUI_PAGE_HEADER_TEXT $(PAGE_UfoFolder_TITLE)
 	!define MUI_PAGE_HEADER_SUBTEXT $(PAGE_UfoFolder_SUBTITLE)
@@ -80,20 +80,20 @@ FunctionEnd
 	!define MUI_DIRECTORYPAGE_VARIABLE $UFODIR
 	!define MUI_DIRECTORYPAGE_VERIFYONLEAVE
 	!insertmacro MUI_PAGE_DIRECTORY
-	
+
 	;Start Menu Folder Page Configuration
-	!define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKLM" 
-	!define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\${GAME_NAME}" 
+	!define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKLM"
+	!define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\${GAME_NAME}"
 	!define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "Start Menu Folder"
 
 	!insertmacro MUI_PAGE_STARTMENU Application $StartMenuFolder
-	
+
 	!insertmacro MUI_PAGE_INSTFILES
-	
+
 	;Finish Page Configuration
 	!define MUI_FINISHPAGE_RUN "$INSTDIR\OpenXcom.exe"
 	!define MUI_FINISHPAGE_NOREBOOTSUPPORT
-	
+
 	!insertmacro MUI_PAGE_FINISH
 
 	!insertmacro MUI_UNPAGE_WELCOME
@@ -125,15 +125,15 @@ ${Else}
 ${EndIf}
 	File "..\..\COPYING"
 	File "..\..\README.txt"
-	
+
 	SetOutPath "$INSTDIR\DATA"
-	
+
 	File "..\..\bin\DATA\README.txt"
-	
+
 	;Copy UFO files
 	${DirState} $UFODIR $R1
 	IntCmp $R1 -1 ufo_no
-	
+
 	CreateDirectory "$INSTDIR\DATA\GEODATA"
 	CopyFiles /SILENT "$UFODIR\GEODATA\*.*" "$INSTDIR\DATA\GEODATA" 361
 	CreateDirectory "$INSTDIR\DATA\GEOGRAPH"
@@ -152,11 +152,11 @@ ${EndIf}
 	CopyFiles /SILENT "$UFODIR\UFOINTRO\*.*" "$INSTDIR\DATA\UFOINTRO" 2736
 	CreateDirectory "$INSTDIR\DATA\UNITS"
 	CopyFiles /SILENT "$UFODIR\UNITS\*.*" "$INSTDIR\DATA\UNITS" 467
-	
+
 	ufo_no:
-	
+
 	SetOutPath "$INSTDIR\DATA\Language"
-	
+
 	File "..\..\bin\DATA\Language\Big.fnt"
 	File "..\..\bin\DATA\Language\Czech.lng"
 	File "..\..\bin\DATA\Language\English.lng"
@@ -176,9 +176,9 @@ ${EndIf}
 	File "..\..\bin\DATA\Language\Small.fnt"
 	File "..\..\bin\DATA\Language\Spanish.geo"
 	File "..\..\bin\DATA\Language\Spanish.lng"
-	
+
 	SetOutPath "$INSTDIR\DATA\SoldierName"
-	
+
 	File "..\..\bin\DATA\SoldierName\American.nam"
 	File "..\..\bin\DATA\SoldierName\British.nam"
 	File "..\..\bin\DATA\SoldierName\French.nam"
@@ -188,7 +188,7 @@ ${EndIf}
 
 	;Store installation folder
 	WriteRegStr HKLM "Software\${GAME_NAME}" "" $INSTDIR
-	
+
 	;Write the uninstall keys for Windows
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GAME_NAME}" "DisplayName" "${GAME_NAME} ${GAME_VERSION}"
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GAME_NAME}" "DisplayVersion" "${GAME_VERSION}.0.0"
@@ -201,17 +201,17 @@ ${EndIf}
 
 	;Create uninstaller
 	WriteUninstaller "$INSTDIR\Uninstall.exe"
-	
+
 	;Create shortcuts
 	SetOutPath "$INSTDIR"
-	
+
 	!insertmacro MUI_STARTMENU_WRITE_BEGIN Application
-    
+
 		CreateDirectory "$SMPROGRAMS\$StartMenuFolder"
 		CreateShortCut "$SMPROGRAMS\$StartMenuFolder\OpenXcom.lnk" "$INSTDIR\OpenXcom.exe"
 		CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Readme.lnk" "$INSTDIR\README.TXT"
 		CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
-  
+
 	!insertmacro MUI_STARTMENU_WRITE_END
 
 SectionEnd
@@ -219,7 +219,7 @@ SectionEnd
 Section /o "Desktop Shortcut" SecDesktop
 
 	SetOutPath "$INSTDIR"
-	
+
 	CreateShortCut "$DESKTOP\OpenXcom.lnk" "$INSTDIR\OpenXcom.exe"
 
 SectionEnd
@@ -245,9 +245,9 @@ Section "un.Delete X-Com Data" UnData
 SectionEnd
 
 Section "-un.Main"
-	
+
 	SetOutPath "$TEMP"
-	
+
 	Delete "$INSTDIR\OpenXcom.exe"
 	Delete "$INSTDIR\libogg-0.dll"
 	Delete "$INSTDIR\libvorbis-0.dll"
@@ -262,7 +262,7 @@ Section "-un.Main"
 	Delete "$INSTDIR\yaml-cpp.dll"
 	Delete "$INSTDIR\COPYING"
 	Delete "$INSTDIR\README.txt"
-	
+
 	Delete "$INSTDIR\DATA\README.txt"
 	Delete "$INSTDIR\DATA\Language\Big.fnt"
 	Delete "$INSTDIR\DATA\Language\Czech.lng"
@@ -295,16 +295,16 @@ Section "-un.Main"
 
 	Delete "$INSTDIR\Uninstall.exe"
 	RMDir "$INSTDIR"
-	
+
 	!insertmacro MUI_STARTMENU_GETFOLDER Application $StartMenuFolder
-    
+
 	Delete "$SMPROGRAMS\$StartMenuFolder\OpenXcom.lnk"
 	Delete "$SMPROGRAMS\$StartMenuFolder\Readme.lnk"
 	Delete "$SMPROGRAMS\$StartMenuFolder\Uninstall.lnk"
 	RMDir "$SMPROGRAMS\$StartMenuFolder"
-	
+
 	Delete "$DESKTOP\OpenXcom.lnk"
-	
+
 	DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GAME_NAME}"
 	DeleteRegKey /ifempty HKLM "Software\${GAME_NAME}"
 

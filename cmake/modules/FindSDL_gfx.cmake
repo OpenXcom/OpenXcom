@@ -8,7 +8,7 @@
 # correspond to the ./configure --prefix=$SDLDIR
 # used in building SDL.
 #
-# Created by Guillaume Chevallereau. This was influenced by the FindSDL.cmake 
+# Created by Guillaume Chevallereau. This was influenced by the FindSDL.cmake
 # module.
 
 #=============================================================================
@@ -45,12 +45,12 @@ FIND_PATH(SDLGFX_INCLUDE_DIR SDL_gfx.h
   /opt/local/include/SDL # DarwinPorts
   /opt/local/include
   /opt/csw/include/SDL # Blastwave
-  /opt/csw/include 
+  /opt/csw/include
   /opt/include/SDL
   /opt/include
 )
 
-FIND_LIBRARY(SDLGFX_LIBRARY 
+FIND_LIBRARY(SDLGFX_LIBRARY
   NAMES SDL_gfx
   HINTS
   $ENV{SDLGFXDIR}
@@ -89,10 +89,10 @@ IF(NOT SDLGFX_INCLUDE_DIR)
     /opt/local/include/SDL # DarwinPorts
     /opt/local/include
     /opt/csw/include/SDL # Blastwave
-    /opt/csw/include 
+    /opt/csw/include
     /opt/include/SDL
     /opt/include
-)  
+)
 endif(NOT SDLGFX_INCLUDE_DIR)
 
 SET(SDLGFX_FOUND "NO")
@@ -100,4 +100,3 @@ SET(SDLGFX_FOUND "NO")
 IF(SDLGFX_LIBRARY AND SDLGFX_INCLUDE_DIR)
   SET(SDLGFX_FOUND "YES")
 ENDIF(SDLGFX_LIBRARY AND SDLGFX_INCLUDE_DIR)
-

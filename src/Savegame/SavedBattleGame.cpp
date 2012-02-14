@@ -837,14 +837,14 @@ int *SavedBattleGame::getCurrentItemId()
 Node *SavedBattleGame::getSpawnNode(int nodeRank, BattleUnit *unit)
 {
 	int highestPriority = -1;
-	std::vector<Node*> compliantNodes;	
+	std::vector<Node*> compliantNodes;
 
 	for (std::vector<Node*>::iterator i = getNodes()->begin(); i != getNodes()->end(); ++i)
 	{
 		if ((*i)->getRank() == nodeRank										// ranks must match
-			&& (!((*i)->getType() & Node::TYPE_SMALL) 
+			&& (!((*i)->getType() & Node::TYPE_SMALL)
 				|| unit->getArmor()->getSize() == 1)				// the small unit bit is not set or the unit is small
-			&& (!((*i)->getType() & Node::TYPE_FLYING) 
+			&& (!((*i)->getType() & Node::TYPE_FLYING)
 				|| unit->getArmor()->getMovementType() == MT_FLY)// the flying unit bit is not set or the unit can fly
 			&& (*i)->getPriority() > 0										// priority 0 is no spawnplace
 			&& setUnitPosition(unit, (*i)->getPosition(), true))	// check if not already occupied
@@ -860,7 +860,7 @@ Node *SavedBattleGame::getSpawnNode(int nodeRank, BattleUnit *unit)
 			}
 		}
 	}
-	
+
 	if (compliantNodes.empty()) return 0;
 
 	int n = RNG::generate(0, compliantNodes.size() - 1);
@@ -876,7 +876,7 @@ Node *SavedBattleGame::getSpawnNode(int nodeRank, BattleUnit *unit)
  */
 Node *SavedBattleGame::getPatrolNode(bool scout, BattleUnit *unit, Node *fromNode)
 {
-	std::vector<Node*> compliantNodes;	
+	std::vector<Node*> compliantNodes;
 
 	for (int i = 0; i < 4; i ++)
 	{
@@ -884,9 +884,9 @@ Node *SavedBattleGame::getPatrolNode(bool scout, BattleUnit *unit, Node *fromNod
 		{
 			Node *n = getNodes()->at(fromNode->getNodeLink(i)->getConnectedNodeID());
 			if ((n->getRank() > 0 || scout)										// for no scouts we find a node with a rank above 0
-				&& (!(n->getType() & Node::TYPE_SMALL) 
+				&& (!(n->getType() & Node::TYPE_SMALL)
 					|| unit->getArmor()->getSize() == 1)				// the small unit bit is not set or the unit is small
-				&& (!(n->getType() & Node::TYPE_FLYING) 
+				&& (!(n->getType() & Node::TYPE_FLYING)
 					|| unit->getArmor()->getMovementType() == MT_FLY)// the flying unit bit is not set or the unit can fly
 				&& !n->isAllocated() // check if not allocated
 				&& setUnitPosition(unit, n->getPosition(), true))	// check if not already occupied

@@ -542,17 +542,17 @@ bool Pathfinding::previewPath(bool bRemove)
 {
 	if (_path.empty())
 		return false;
- 
+
 	if (!bRemove && _pathPreviewed)
 		return false;
- 
+
 	_pathPreviewed = !bRemove;
- 
+
 	Position pos = _unit->getPosition();
 	Position destination;
 	int tus = _unit->getStats()->tu;
 	int size = _unit->getArmor()->getSize() - 1;
- 
+
 	for (std::vector<int>::reverse_iterator i = _path.rbegin(); i != _path.rend(); ++i)
 	{
 		int dir = *i;
@@ -563,7 +563,7 @@ bool Pathfinding::previewPath(bool bRemove)
 		{
 			for (int y = size; y >= 0; y--)
 			{
-				_save->getTile(pos + Position(x,y,0))->setMarkerColor(bRemove?0:(tus>0?4:3));           
+				_save->getTile(pos + Position(x,y,0))->setMarkerColor(bRemove?0:(tus>0?4:3));
 			}
 		}
 	}
