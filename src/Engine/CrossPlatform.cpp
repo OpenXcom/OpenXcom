@@ -136,7 +136,6 @@ std::vector<std::string> findDataFolders()
 	if (char const *const xdg_data_home = getenv("XDG_DATA_HOME"))
  	{
 		snprintf(path, MAXPATHLEN, "%s/openxcom/data/", xdg_data_home);
- 		list.push_back(path);
  	}
  	else
  	{
@@ -145,8 +144,8 @@ std::vector<std::string> findDataFolders()
 #else
 		snprintf(path, MAXPATHLEN, "%s/.local/share/openxcom/data/", home);
 #endif
- 		list.push_back(path);
  	}
+ 	list.push_back(path);
 
 	// Get global data folders
 	if (char const *xdg_data_dirs = getenv("XDG_DATA_DIRS"))
@@ -163,6 +162,7 @@ std::vector<std::string> findDataFolders()
 	{
 #ifdef __APPLE__
 		snprintf(path, MAXPATHLEN, "%s/Users/Shared/OpenXcom/data/", home);
+		list.puish_back(path);
 #else
 		list.push_back("/usr/local/share/openxcom/data/");
 		list.push_back("/usr/share/openxcom/data/");
@@ -216,7 +216,6 @@ std::vector<std::string> findUserFolders()
 	if (char const *const xdg_data_home = getenv("XDG_DATA_HOME"))
  	{
 		snprintf(path, MAXPATHLEN, "%s/openxcom/", xdg_data_home);
- 		list.push_back(path);
  	}
  	else
  	{
@@ -225,8 +224,8 @@ std::vector<std::string> findUserFolders()
 #else
 		snprintf(path, MAXPATHLEN, "%s/.local/share/openxcom/", home);
 #endif
- 		list.push_back(path);
  	}
+	list.push_back(path);
 
 	// Get old-style folder
 	snprintf(path, MAXPATHLEN, "%s/.openxcom/", home);
