@@ -150,7 +150,7 @@ std::vector<std::string> findDataFolders()
  	list.push_back(path);
 
 	// Get global data folders
-	if (char const *xdg_data_dirs = getenv("XDG_DATA_DIRS"))
+	if (char *xdg_data_dirs = getenv("XDG_DATA_DIRS"))
 	{
 		char *dir = strtok(xdg_data_dirs, ":");
 		while (dir != 0)
