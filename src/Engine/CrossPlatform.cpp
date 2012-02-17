@@ -82,6 +82,23 @@ void showError(const std::wstring &error)
 }
 
 /**
+ * Gets the user's home folder according to the system.
+ * @return Absolute path to home folder.
+ */
+static char const *getHome()
+{
+	char const *home = getenv("HOME");
+#ifndef _WIN32
+	if (!home)
+	{
+		struct passwd *const pwd = getpwuid(getuid());
+		home = pwd->pw_dir;
+	}
+#endif
+	return home;
+}
+
+/**
  * Builds a list of predefined paths for the Data folder
  * according to the running system.
  * @return List of data paths.
@@ -114,38 +131,26 @@ std::vector<std::string> findDataFolders()
 		list.push_back(path);
 	}
 #else
-	char *xdg_data_home = getenv("XDG_DATA_HOME"), *xdg_data_dirs = getenv("XDG_DATA_DIRS"),
-		*home = getenv("HOME");
-	if (!home)
-	{
-		struct passwd* pwd = getpwuid(getuid());
-		home = pwd->pw_dir;
-	}
-
+	char const *home = getHome();
 	char path[MAXPATHLEN];
-#ifdef __APPLE__
-	snprintf(path, MAXPATHLEN, "%s/Library/Application Support/OpenXcom/data/", home);
-	list.push_back(path);
-#else
+
 	// Get user-specific data folders
-	if (xdg_data_home == 0)
-	{
-		snprintf(path, MAXPATHLEN, "%s/.local/share/openxcom/data/", home);
-		list.push_back(path);
-	}
-	else
-	{
+	if (char const *const xdg_data_home = getenv("XDG_DATA_HOME"))
+ 	{
 		snprintf(path, MAXPATHLEN, "%s/openxcom/data/", xdg_data_home);
-		list.push_back(path);
-	}
+ 	}
+ 	else
+ 	{
+#ifdef __APPLE__
+		snprintf(path, MAXPATHLEN, "%s/Library/Application Support/OpenXcom/data/", home);
+#else
+		snprintf(path, MAXPATHLEN, "%s/.local/share/openxcom/data/", home);
+#endif
+ 	}
+ 	list.push_back(path);
 
 	// Get global data folders
-	if (xdg_data_dirs == 0)
-	{
-		list.push_back("/usr/local/share/openxcom/data/");
-		list.push_back("/usr/share/openxcom/data/");
-	}
-	else
+	if (char *xdg_data_dirs = getenv("XDG_DATA_DIRS"))
 	{
 		char *dir = strtok(xdg_data_dirs, ":");
 		while (dir != 0)
@@ -155,8 +160,17 @@ std::vector<std::string> findDataFolders()
 			dir = strtok(0, ":");
 		}
 	}
-
+	else
+	{
+#ifdef __APPLE__
+		snprintf(path, MAXPATHLEN, "%s/Users/Shared/OpenXcom/data/", home);
+		list.push_back(path);
+#else
+		list.push_back("/usr/local/share/openxcom/data/");
+		list.push_back("/usr/share/openxcom/data/");
 #endif
+	}
+	
 	// Get working directory
 	list.push_back("./data/");
 #endif
@@ -197,35 +211,28 @@ std::vector<std::string> findUserFolders()
 		list.push_back(path);
 	}
 #else
-	char *xdg_data_home = getenv("XDG_DATA_HOME"), *home = getenv("HOME");
-	if (!home)
-	{
-		struct passwd* pwd = getpwuid(getuid());
-		home = pwd->pw_dir;
-	}
-
+	char const *home = getHome();
 	char path[MAXPATHLEN];
-#ifdef __APPLE__
-	snprintf(path, MAXPATHLEN, "%s/Library/Application Support/OpenXcom/", home);
-	list.push_back(path);
-#else
+	
 	// Get user folders
-	if (xdg_data_home == 0)
-	{
-		snprintf(path, MAXPATHLEN, "%s/.local/share/openxcom/", home);
-		list.push_back(path);
-	}
-	else
-	{
+	if (char const *const xdg_data_home = getenv("XDG_DATA_HOME"))
+ 	{
 		snprintf(path, MAXPATHLEN, "%s/openxcom/", xdg_data_home);
-		list.push_back(path);
-	}
+ 	}
+ 	else
+ 	{
+#ifdef __APPLE__
+		snprintf(path, MAXPATHLEN, "%s/Library/Application Support/OpenXcom/", home);
+#else
+		snprintf(path, MAXPATHLEN, "%s/.local/share/openxcom/", home);
+#endif
+ 	}
+	list.push_back(path);
 
 	// Get old-style folder
 	snprintf(path, MAXPATHLEN, "%s/.openxcom/", home);
 	list.push_back(path);
 
-#endif
 	// Get working directory
 	list.push_back("./user/");
 #endif
@@ -235,30 +242,24 @@ std::vector<std::string> findUserFolders()
 
 /**
  * Finds the Config folder according to the running system.
- * @return Gonfig path.
+ * @return Config path.
  */
 std::string findConfigFolder()
 {
 #if defined(_WIN32) || defined(__APPLE__)
 	return "";
 #else
-	char *xdg_config_home = getenv("XDG_CONFIG_HOME"), *home = getenv("HOME");
-	if (!home)
-	{
-		struct passwd* pwd = getpwuid(getuid());
-		home = pwd->pw_dir;
-	}
-
+	char const *home = getHome();
 	char path[MAXPATHLEN];
 	// Get config folders
-	if (xdg_config_home == 0)
+	if (char const *const xdg_config_home = getenv("XDG_CONFIG_HOME"))
 	{
-		snprintf(path, MAXPATHLEN, "%s/.config/openxcom/", home);
+		snprintf(path, MAXPATHLEN, "%s/openxcom/", xdg_config_home);
 		return path;
 	}
 	else
 	{
-		snprintf(path, MAXPATHLEN, "%s/openxcom/", xdg_config_home);
+		snprintf(path, MAXPATHLEN, "%s/.config/openxcom/", home);
 		return path;
 	}
 #endif
