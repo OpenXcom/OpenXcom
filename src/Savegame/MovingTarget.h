@@ -35,11 +35,8 @@ protected:
 
 	Target *_dest;
 	double _speedLon, _speedLat, _speedRadian;
-	double _distMax, _distCurrent;
 	int _speed;
 
-	/// Has the moving target finished its route?
-	bool finishedRoute() const;
 	/// Calculates a new speed vector to the destination.
 	virtual void calculateSpeed();
 public:

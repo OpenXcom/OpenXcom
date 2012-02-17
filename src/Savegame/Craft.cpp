@@ -439,50 +439,40 @@ void Craft::returnToBase()
  */
 void Craft::think()
 {
-	if (_dest != 0)
-	{
-		calculateSpeed();
-	}
 	move();
-	if (_dest != 0 && finishedRoute())
+	if (reachedDestination() && _dest == (Target*)_base)
 	{
-		_lon = _dest->getLongitude();
-		_lat = _dest->getLatitude();
-
-		if (_dest == (Target*)_base)
+		int available = 0, full = 0;
+		for (std::vector<CraftWeapon*>::iterator i = _weapons.begin(); i != _weapons.end(); ++i)
 		{
-			int available = 0, full = 0;
-			for (std::vector<CraftWeapon*>::iterator i = _weapons.begin(); i != _weapons.end(); ++i)
+			if ((*i) == 0)
+				continue;
+			available++;
+			if ((*i)->getAmmo() >= (*i)->getRules()->getAmmoMax())
 			{
-				if ((*i) == 0)
-					continue;
-				available++;
-				if ((*i)->getAmmo() >= (*i)->getRules()->getAmmoMax())
-				{
-					full++;
-				}
-				else
-				{
-					(*i)->setRearming(true);
-				}
-			}
-
-			if (_damage > 0)
-			{
-				_status = "STR_REPAIRS";
-			}
-			else if (available != full)
-			{
-				_status = "STR_REARMING";
+				full++;
 			}
 			else
 			{
-				_status = "STR_REFUELLING";
+				(*i)->setRearming(true);
 			}
-			setSpeed(0);
-			setDestination(0);
-			_lowFuel = false;
 		}
+
+		if (_damage > 0)
+		{
+			_status = "STR_REPAIRS";
+		}
+		else if (available != full)
+		{
+			_status = "STR_REARMING";
+		}
+		else
+		{
+			_status = "STR_REFUELLING";
+		}
+		setSpeed(0);
+		setDestination(0);
+		_lowFuel = false;
 	}
 }
 

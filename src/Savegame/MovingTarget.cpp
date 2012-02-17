@@ -26,7 +26,7 @@ namespace OpenXcom
 /**
  * Initializes a moving target with blank coordinates.
  */
-MovingTarget::MovingTarget() : Target(), _dest(0), _speedLon(0.0), _speedLat(0.0), _speedRadian(0.0), _distCurrent(0.0), _distMax(0.0), _speed(0)
+MovingTarget::MovingTarget() : Target(), _dest(0), _speedLon(0.0), _speedLat(0.0), _speedRadian(0.0), _speed(0)
 {
 }
 
@@ -43,6 +43,7 @@ void MovingTarget::load(const YAML::Node &node)
 	Target::load(node);
 	node["speedLon"] >> _speedLon;
 	node["speedLat"] >> _speedLat;
+	node["speedRadian"] >> _speedRadian;
 	node["speed"] >> _speed;
 }
 
@@ -61,8 +62,6 @@ void MovingTarget::save(YAML::Emitter &out) const
 	out << YAML::Key << "speedLon" << YAML::Value << _speedLon;
 	out << YAML::Key << "speedLat" << YAML::Value << _speedLat;
 	out << YAML::Key << "speedRadian" << YAML::Value << _speedRadian;
-	out << YAML::Key << "distMax" << YAML::Value << _distMax;
-	out << YAML::Key << "distCurrent" << YAML::Value << _distCurrent;
 	out << YAML::Key << "speed" << YAML::Value << _speed;
 }
 
@@ -98,12 +97,6 @@ void MovingTarget::setDestination(Target *dest)
 	if (_dest != 0)
 	{
 		_dest->getFollowers()->push_back(this);
-		_distMax = getDistance(_dest);
-		_distCurrent = 0.0;
-	}
-	else
-	{
-		_distMax = _distCurrent = 0.0;
 	}
 	calculateSpeed();
 }
@@ -156,16 +149,6 @@ void MovingTarget::calculateSpeed()
 }
 
 /**
- * Checks if the moving target has finished its route by checking
- * if it has exceeded the destination position based on the speed vector.
- * @return True if it has, False otherwise.
- */
-bool MovingTarget::finishedRoute() const
-{
-	return (_distCurrent >= _distMax);
-}
-
-/**
  * Checks if the moving target has reached its destination.
  * @return True if it has, False otherwise.
  */
@@ -183,9 +166,20 @@ bool MovingTarget::reachedDestination() const
  */
 void MovingTarget::move()
 {
-	setLongitude(_lon + _speedLon);
-	setLatitude(_lat + _speedLat);
-	_distCurrent += _speedRadian;
+	calculateSpeed();
+	if (_dest != 0)
+	{
+		if (getDistance(_dest) > _speedRadian)
+		{
+			setLongitude(_lon + _speedLon);
+			setLatitude(_lat + _speedLat);
+		}
+		else
+		{
+			setLongitude(_dest->getLongitude());
+			setLatitude(_dest->getLatitude());
+		}
+	}
 }
 
 }

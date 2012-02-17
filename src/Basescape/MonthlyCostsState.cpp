@@ -49,9 +49,9 @@ MonthlyCostsState::MonthlyCostsState(Game *game, Base *base) : State(game), _bas
 	_txtCost = new Text(80, 9, 115, 32);
 	_txtQuantity = new Text(55, 9, 195, 32);
 	_txtTotal = new Text(60, 9, 250, 32);
-	_txtRental = new Text(80, 9, 10, 48);
-	_txtSalaries = new Text(80, 9, 10, 80);
-	_txtIncome = new Text(100, 9, 10, 136);
+	_txtRental = new Text(150, 9, 10, 48);
+	_txtSalaries = new Text(150, 9, 10, 80);
+	_txtIncome = new Text(150, 9, 10, 136);
 	_lstCrafts = new TextList(300, 20, 10, 56);
 	_lstSalaries = new TextList(300, 30, 10, 88);
 	_lstMaintenance = new TextList(300, 9, 10, 120);

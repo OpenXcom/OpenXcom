@@ -296,10 +296,8 @@ void Ufo::think()
 	if (!isCrashed())
 	{
 		move();
-		if (_dest != 0 && finishedRoute())
+		if (reachedDestination())
 		{
-			_lon = _dest->getLongitude();
-			_lat = _dest->getLatitude();
 			setSpeed(0);
 		}
 	}
