@@ -678,19 +678,19 @@ TUTA DA VOLO
 STR_SELECT_ARMOR
 Scegli armatura
 STR_NORTH
-NORD     
+NORD
 STR_NORTH_EAST
 NORD-EST
 STR_EAST
-EST      
+EST
 STR_SOUTH_EAST
 SUD-EST
 STR_SOUTH
-SUD     
+SUD
 STR_SOUTH_WEST
 SUD-OVEST
 STR_WEST
-OVEST      
+OVEST
 STR_NORTH_WEST
 NORD-OVEST
 STR_SELECT_ACTION
@@ -1254,7 +1254,7 @@ Questo esplosivo dovrebbe essere usato soltanto per demolizioni. E' importante c
 STR_MOTION_SCANNER_UFOPEDIA
 Questo congegno usa diversi rivelatori e algoritmi di computer per identificare le unità mobili.Seleziona lo scanner di immagine nella modalità tattica, poi seleziona "Usa Scanner" dalmenu. Lo scanner mostra una freccia nel centro che rappresentala direzione verso cui è rivolto il soldato (Nord si trova in alto).I puntini lampeggianti rappresentano le unità che hai mosso per ultime. Unitàgrandi o veloci verranno indicate con un punto lampeggiante piú grande. Le unità fisse non vengono rilevate.
 STR_MEDI_KIT_UFOPEDIA
-Utilizzalo quando sei rivolto verso l'agente X-Com infortunato o sopra il corpo di un soldato stordito.{NEWLINE}GUARIRE>Rosso indica le ferite. Seleziona la parte del corpo usando i pulsanti sinistro e destro  (a sinistra  e destra in alto) dietro il controller, e premi 'CROCE' sul pulsante 'Guarire'Una ferita letale verrà guarita e la salute verrà ripristinata.{NEWLINE}STIMOLANTI>Rigenera energia e migliora le condizioni dei soldati storditi. Per riprendere un soldatosvenuto devi posizionarti davanti a lui.{NEWLINE}MEDICINA>Ripristina il morale dei soldati feriti.
+Utilizzalo quando sei rivolto verso l'agente X-Com infortunato o sopra il corpo di un soldato stordito.{NEWLINE}GUARIRE>Rosso indica le ferite. Seleziona la parte del corpo usando i pulsanti sinistro e destro (a sinistra e destra in alto) dietro il controller, e premi 'CROCE' sul pulsante 'Guarire'. Una ferita letale verrà guarita e la salute verrà ripristinata.{NEWLINE}STIMOLANTI>Rigenera energia e migliora le condizioni dei soldati storditi. Per riprendere un soldatosvenuto devi posizionarti davanti a lui.{NEWLINE}MEDICINA>Ripristina il morale dei soldati feriti.
 STR_PSI_AMP_UFOPEDIA
 L'iperforza biopsichica puó essere usata soltanto da soldati che abbiano doti psicobioniche. Durante il combattimento, fai clic su Iper-Psi, scegli il tipo di attacco e poi scegli una unità bersaglio con il cursore. Ci sono due tipi di attacco psicobionico:{NEWLINE}UNITA' DI PANICO> Se l'attacco ha successo, influenzerà pesantemente il morale delle forze nemiche e farà sì che queste entrino in stato di panico{NEWLINE}CONTROLLO MENTALE> Se l'attacco ha successo si ottiene il controllo immediato dell'unità nemica, come se fosse una propria unità (peró non si ha accesso allo schermo degli oggetti).
 STR_STUN_ROD_UFOPEDIA

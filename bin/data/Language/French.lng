@@ -48,7 +48,7 @@ Le coeur de cette créature est extrêmement chaud et semble être la base d'un 
 STR_CHRYSSALID_UFOPEDIA
 Les pinces de cette créature sont une arme puissante dans le combat rapproché.  Le métabolisme puissant et la force de cette créature lui donnent de la vitesse et de la dextérité.  Au lieu de tuer sa victime, elle l'imprègne d'un oeuf et injecte un venin qui la transforme en un mort-vivant.  Un nouveau Chryssalid sortira de la victime peu après.  Les Chryssalids sont associés à la race des hommes-serpents.
 STR_CHRYSSALID_AUTOPSY_UFOPEDIA
-L'exosquelette de cette créature est très dur, mais étonnamment vulnérable aux munitions explosives.  Le cerveau est bien développé, et le taux de croissance de ses cellules est très rapide.  La créature porte vingt oeufs qu'elle pond dans d'autres organismes.  Cette créature est une arme de terreur très efficace. 
+L'exosquelette de cette créature est très dur, mais étonnamment vulnérable aux munitions explosives.  Le cerveau est bien développé, et le taux de croissance de ses cellules est très rapide.  La créature porte vingt oeufs qu'elle pond dans d'autres organismes.  Cette créature est une arme de terreur très efficace.
 STR_FLOATER_UFOPEDIA
 Les Flottants sont avant tout des soldats et des agents de terreur.  Ce sont des prédateurs naturels, des produits génétiques qui sont cybernétiquement renforcés pour faire d'exceptionnels guerriers.  La partie inférieure de leur corps et la plupart des organes internes sont enlevés par une opération chirurgicale, et un système de survie est installé.  Cet implant contient une unité anti-gravitationnelle qui permet à la créature de flotter, même avec difficulté, dans l'air.
 STR_FLOATER_AUTOPSY_UFOPEDIA
@@ -678,19 +678,19 @@ COMBINAISON DE VOL
 STR_SELECT_ARMOR
 Sélectionner Armure
 STR_NORTH
-NORD     
+NORD
 STR_NORTH_EAST
 NORD EST
 STR_EAST
-EST      
+EST
 STR_SOUTH_EAST
 SUD EST
 STR_SOUTH
-SUD     
+SUD
 STR_SOUTH_WEST
 SUD OUEST
 STR_WEST
-OUEST      
+OUEST
 STR_NORTH_WEST
 NORD OUEST
 STR_SELECT_ACTION
@@ -1566,7 +1566,7 @@ Les aliens utilisent la faune terrienne de différentes façons.  Les animaux so
 STR_ALIEN_ABDUCTION_UFOPEDIA
 C'est le type d'activité alienne le plus insidieux.  De nombreux témoignages font état d'enlèvements par les aliens, et ceci malgré les efforts faits par les aliens pour effacer cette expérience de la mémoire de leurs victimes.  Les personnes enlevées disent avoir été soumises à des examens physiques humiliants, et parlent même d'implantations de foetus aliens et d'expériences génétiques étranges.  Le but de cette activité semble être lié à la mutation génétique et à la manipulation du propre code génétique des aliens.  Cette activité provoque une vive inquiétude, et se produit dans les zones peuplées ou les villes.
 STR_ALIEN_INFILTRATION_UFOPEDIA
-Les gouvernements de la Terre peuvent être infiltrés par des agents aliens ayant une apparence humaine.  Cela peut aboutir à des contacts entre aliens et gouvernements au plus haut niveau.  Cette activité se caractérise à son plus haut point par une intense activité des OVNIS dans les environs des grandes villes.  Les aliens vont essayer de signer un pacte avec un gouvernement terrien en lui offrant la connaissance de leur technologie supérieure.  En échange, le gouvernement permettra aux aliens de continuer leurs activités en toute tranquillité.  Cette mission alienne représente la pire menace pour XCom.  Si un gouvernement accepte de signer un pacte, alors il cessera de financer XCom. 
+Les gouvernements de la Terre peuvent être infiltrés par des agents aliens ayant une apparence humaine.  Cela peut aboutir à des contacts entre aliens et gouvernements au plus haut niveau.  Cette activité se caractérise à son plus haut point par une intense activité des OVNIS dans les environs des grandes villes.  Les aliens vont essayer de signer un pacte avec un gouvernement terrien en lui offrant la connaissance de leur technologie supérieure.  En échange, le gouvernement permettra aux aliens de continuer leurs activités en toute tranquillité.  Cette mission alienne représente la pire menace pour XCom.  Si un gouvernement accepte de signer un pacte, alors il cessera de financer XCom.
 STR_ALIEN_BASE_UFOPEDIA
 Les aliens vont construire des bases souterraines secrètes dans des endroits isolés.  Après quelques vols de reconnaissance, une intense activité des OVNIS se produira pendant la construction de la base.  On sait que ces bases ont des laboratoires d'expérimentations pour les humains qui ont été enlevés, et du ravitaillement pour une activité plus poussée dans la région.  La présence de bases aliennes va créer une intense activité alienne sans la présence d'OVNIS.  Afin de localiser une base, un vaisseau XCom doit patrouiller dans une région pendant quelques heures pour avoir une chance de la détecter.
 STR_ALIEN_TERROR_UFOPEDIA

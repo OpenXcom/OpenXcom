@@ -22,7 +22,7 @@ TENTO KONVENČNÍ LASEROVÝ PAPRSEK JE POHÁNĚN KOMOROU S PROBÍHAJÍCÍ REAKC�
 STR_PLASMA_BEAM_UFOPEDIA
 GRAVITAČNÍ SVAZEK SMĚRUJE PŘESNĚ ZAOSTŘENÉ IMPLODUJÍCÍ GRAVITAČNÍ POLE.
 STR_SECTOID_UFOPEDIA
-Hierarchie Sektanů sahá od vojaků až po vůdce s mohutnými psionickými schopnostmi. Tyto psionické síly mohou být použity k demoralizaci vojaků v boji, nebo dokonce k ovladnutí jejich myslí. Jsou zapleteni do únosů lidí a mrzačení skotu. Únosy jsou používany pro získání genetického materialu pro křížení a vývoj klonů vhodných k infiltraci lidské společnosti. Dobytek poskytuje jednak potravu, jednak genetický material. Zdá se, že tato rasa chce vyvinout vysoce kvalitní genetické hybridy, vhodné pro zvyšení efektivity jejich společnosti podobné strukturou roji. 
+Hierarchie Sektanů sahá od vojaků až po vůdce s mohutnými psionickými schopnostmi. Tyto psionické síly mohou být použity k demoralizaci vojaků v boji, nebo dokonce k ovladnutí jejich myslí. Jsou zapleteni do únosů lidí a mrzačení skotu. Únosy jsou používany pro získání genetického materialu pro křížení a vývoj klonů vhodných k infiltraci lidské společnosti. Dobytek poskytuje jednak potravu, jednak genetický material. Zdá se, že tato rasa chce vyvinout vysoce kvalitní genetické hybridy, vhodné pro zvyšení efektivity jejich společnosti podobné strukturou roji.
 STR_SECTOID_AUTOPSY_UFOPEDIA
 Pitva odhaluje zakrnělé trávící orgány a jednoduchou strukturu. Mozek a oči jsou velmi dobře vyvinuty. Dle struktury lze očekávat genetickou alteraci nebo mutaci. Malá ústa a nos mají pravděpodobně mizivou funkci. Blána mezi prsty a plochá chodila naznačují vodní původ. Tělo neobsahuje žádné pohlavní orgány a nebyli nalezeny žádné náznaky způsobu rozmnožování. Jde s vysokou pravděpodobností o geneticky vyvinuté druhy.
 STR_SNAKEMAN_UFOPEDIA
@@ -678,19 +678,19 @@ LÉTAJÍCÍ SKAFANDR
 STR_SELECT_ARMOR
 Vyber zbroj
 STR_NORTH
-SEVER     
+SEVER
 STR_NORTH_EAST
 SEVEROVÝCHOD
 STR_EAST
-VÝCHOD      
+VÝCHOD
 STR_SOUTH_EAST
 JIHOVÝCHOD
 STR_SOUTH
-JIH     
+JIH
 STR_SOUTH_WEST
 JIHOZÁPAD
 STR_WEST
-ZÁPAD      
+ZÁPAD
 STR_NORTH_WEST
 SEVEROZÁPAD
 STR_SELECT_ACTION
@@ -1254,9 +1254,9 @@ Tato vybušnina by měla být využívána pouze pro demoliční účely. Zdržu
 STR_MOTION_SCANNER_UFOPEDIA
 Toto sofistikované zařízení používá rozmanitých detektorů a počítačových algoritmů k identifikaci pohybujících se nepřátelských jednotek. Nicméně k efektivnímu využití vyžaduje určitou praxi. Na taktické obrazovce klikněte na ikonu skaneru pohybu. Z menu vyberte 'Použít skaner'. Displej skaneru zobrazuje ve středu šipku, která detekuje natočení vojáka (nahoře je sever). Blikající tečky značí jednotky, které se v poslední době pohnuly. Velké nebo rychle se pohybující jednotky jsou znázorněny většími tečkami. Statické jednotky nejsou detekovány.
 STR_MEDI_KIT_UFOPEDIA
-Medkit kombinuje léčivé prostředky s tišícími a se stimulanty. Pro správné použití medkitu je nutné být natočen k vojákovi vyžadujícímu ošetření. Je-li voják ochromen, je nutné stát nad jeho tělem. Klikněte na ikonu medkitu a zvolte v menu položku 'použít medkit'. {NEWLINE}LECBA> Červené části těla utrpěla smrtelná zranění. Klikněte na zraněnou část těla. Klikněte na tlačítko 'Léčba'. Bude vyléčeno jedno ze smrtelných zranění a obnovena část zdraví. {NEWLINE}STIMULANT> Obnoví energii a oživý vojáka v bezvědomí (nebo ochromeného). Aby bylo možné oživit vojáka v bezvědomí, je nutné stát přesně nad jeho tělem. {NEWLINE}UTIŠOVAČ> Obnoví morálku zraněného vojáka až na hranici ekvivalentní ztracenému zdraví.
+Medkit kombinuje léčivé prostředky s tišícími a se stimulanty. Pro správné použití medkitu je nutné být natočen k vojákovi vyžadujícímu ošetření. Je-li voják ochromen, je nutné stát nad jeho tělem. Klikněte na ikonu medkitu a zvolte v menu položku 'použít medkit'.{NEWLINE}LECBA> Červené části těla utrpěla smrtelná zranění. Klikněte na zraněnou část těla. Klikněte na tlačítko 'Léčba'. Bude vyléčeno jedno ze smrtelných zranění a obnovena část zdraví.{NEWLINE}STIMULANT> Obnoví energii a oživý vojáka v bezvědomí (nebo ochromeného). Aby bylo možné oživit vojáka v bezvědomí, je nutné stát přesně nad jeho tělem.{NEWLINE}UTIŠOVAČ> Obnoví morálku zraněného vojáka až na hranici ekvivalentní ztracenému zdraví.
 STR_PSI_AMP_UFOPEDIA
-Psi-amp může být používán pouze vojáky s psionickou dovedností. Klikněte na psi-amp během boje, vyberte si druh útoku a umístěte kurzor na cílovou jednotku. Jsou dva možné způsoby psionického útoku: {NEWLINE}ZPANIKAŘIT JEDNOTKU> Je-li útok úspěšný, sníží morálku cíle a může způsobit jeho paniku. {NEWLINE}OVLÁDNUTÍ MYSLI> Je-li tento útok úspěšný, získáte okamžitou kontrolu nad nepřátelskou jednotkou, jako by to byla vaše (jen není možné získat přístup do inventáře). Být úspěšný v tomto druhu útoku je težší.
+Psi-amp může být používán pouze vojáky s psionickou dovedností. Klikněte na psi-amp během boje, vyberte si druh útoku a umístěte kurzor na cílovou jednotku. Jsou dva možné způsoby psionického útoku: {NEWLINE}ZPANIKAŘIT JEDNOTKU> Je-li útok úspěšný, sníží morálku cíle a může způsobit jeho paniku.{NEWLINE}OVLÁDNUTÍ MYSLI> Je-li tento útok úspěšný, získáte okamžitou kontrolu nad nepřátelskou jednotkou, jako by to byla vaše (jen není možné získat přístup do inventáře). Být úspěšný v tomto druhu útoku je težší.
 STR_STUN_ROD_UFOPEDIA
 Toto zařízení může být použito pouze v boji zblízka. Ochromí živý organismus elektrickým šokem, aniž by ho zabilo.
 STR_THE_SUBJECT_HAS_DIED

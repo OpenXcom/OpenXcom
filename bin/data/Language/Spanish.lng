@@ -646,7 +646,7 @@ HERIDO
 STR_EQUIPMENT_FOR
 Equipo para 
 STR_ARM
-Bli. 
+Bli.
 STR_DEFENCE_VALUE
 Eficacia defensiva
 STR_HIT_RATIO
@@ -678,19 +678,19 @@ TRAJE VOLANTE
 STR_SELECT_ARMOR
 Seleccionar blindaje
 STR_NORTH
-NORTE     
+NORTE
 STR_NORTH_EAST
 NORESTE
 STR_EAST
-ESTE      
+ESTE
 STR_SOUTH_EAST
 SURESTE
 STR_SOUTH
-SUR     
+SUR
 STR_SOUTH_WEST
 SUROESTE
 STR_WEST
-OESTE     
+OESTE
 STR_NORTH_WEST
 NOROESTE
 STR_SELECT_ACTION
@@ -1206,9 +1206,9 @@ Un sistema de detección pequeño tiene un alcance efectivo de 300 millas náuti
 STR_LARGE_RADAR_SYSTEM_UFOPEDIA
 Un sistema de detección grande cubre una zona de más de 450 millas náuticas y está conectado a sistemas satélites para el análisis de la superficie. Cada  sistema tiene una probabilidad del 5% de detectar un objeto de tamaño medio cada 10 minutos.
 STR_MISSILE_DEFENCES_UFOPEDIA
-Los sistemas de defensa basados en misiles proporcionan protección contra las incursiones de naves hostiles que intenten aterrizar en la base. 
+Los sistemas de defensa basados en misiles proporcionan protección contra las incursiones de naves hostiles que intenten aterrizar en la base.
 STR_GENERAL_STORES_UFOPEDIA
-Todo se guarda en los almacenes:  equipo, sistemas de armas, munición, material recuperado y plataformas de armamento pesado (PAP); se exceptúa el equipo destinado a las naves que hay en los hangares. 
+Todo se guarda en los almacenes:  equipo, sistemas de armas, munición, material recuperado y plataformas de armamento pesado (PAP); se exceptúa el equipo destinado a las naves que hay en los hangares.
 STR_ALIEN_CONTAINMENT_UFOPEDIA
 Es probable que los alienígenas capturados con vida necesiten un  hábitat especial para mantener sus sistemas vitales. En cada unidad de retención caben 10 alienígenas metidos en otras tantas unidades independientes.
 STR_LASER_DEFENCES_UFOPEDIA
@@ -1228,7 +1228,7 @@ Las comunicaciones alienígenas emplean una onda supradimensional que se desplaz
 STR_HANGAR_UFOPEDIA
 Cada hangar puede cobijar una nave y cuenta con instalaciones para el mantenimiento, reabastecimiento y reparación de la flota de XCom. Cada nave estacionada en una base debe tener un hangar reservado exclusivamente para ella, incluso cuando ha salido en una misión.
 STR_PISTOL_UFOPEDIA
-La pistola estándar de XCom es una semiautomática con capacidad para 12 disparos. 
+La pistola estándar de XCom es una semiautomática con capacidad para 12 disparos.
 STR_RIFLE_UFOPEDIA
 Este rifle de gran precisión para francotiradores tiene alzas guiadas por láser y usa munición de 6,7mm en cargadores de 20 disparos.
 STR_HEAVY_CANNON_UFOPEDIA
@@ -1254,31 +1254,31 @@ Este explosivo debe emplearse únicamente para demolición. Mantén a tu persona
 STR_MOTION_SCANNER_UFOPEDIA
 Este sofisticado artefacto emplea una variedad de detectores y avanzados algoritmos informáticos para identificar unidades enemigas en movimiento. Selecciona el icono del escáner de movimiento que hay en el muestrario táctico. Elige 'Usar escáner' en el menú. En el centro del escáner aparece una flecha que indica la dirección en la que mira el soldado (el norte está arriba). Las manchas destellantes son unidades que se han movido hace poco. Las unidades grandes o las que se desplazan rápidamente aparecen como manchas más grandes. Las que están paradas no salen en la pantalla.
 STR_MEDI_KIT_UFOPEDIA
-Para utilizar esto debes ponerte enfrente del agente de XCom herido o colocarte sobre un soldado aturdido.{NEWLINE} REMEDIO> El rojo indica heridas. Elige una parte del cuerpo utilizando el botón  izdo y dcho que hay en el borde superior del controlador y pulsa la CRUZ sobre el botón de 'Curar'.. Se curarán las heridas mortales y el individuo recuperará la saludESTIMULANTE> Repone la energía y reaviva a los soldados aturdidos. Para reavivar a un soldado, colócate justo encima de su cuerpo.CALMANTE> Le sube la moral a los soldados heridos. 
+Para utilizar esto debes ponerte enfrente del agente de XCom herido o colocarte sobre un soldado aturdido.{NEWLINE}REMEDIO> El rojo indica heridas. Elige una parte del cuerpo utilizando el botón izdo y dcho que hay en el borde superior del controlador y pulsa la CRUZ sobre el botón de 'Curar'. Se curarán las heridas mortales y el individuo recuperará la salud.{NEWLINE}ESTIMULANTE> Repone la energía y reaviva a los soldados aturdidos. Para reavivar a un soldado, colócate justo encima de su cuerpo.{NEWLINE}CALMANTE> Le sube la moral a los soldados heridos.
 STR_PSI_AMP_UFOPEDIA
 El amp-psi sólo puede ser utilizado por soldados con habilidades psiónicas. Durante el combate, pulsa sobre el amp-psi, selecciona con el cursor el tipo de ataque y un blanco. Hay dos tipos de ataque psiónico:{NEWLINE}PáNICO> si el ataque tiene éxito, la moral de la víctima bajará y le entrará pánico.{NEWLINE}CONTROL MENTAL> si tiene éxito, controlarás inmediatamente al enemigo como si fuese uno de los tuyos (aunque no puedes acceder a su pantalla). Es más difícil tener éxito con este tipo de ataque que con el de pánico.
 STR_STUN_ROD_UFOPEDIA
-Este ingenio sólo se puede usar en el combate cuerpo a cuerpo y aturde a un organismo vivo con descargas eléctricas, sin llegar a matarlo. 
+Este ingenio sólo se puede usar en el combate cuerpo a cuerpo y aturde a un organismo vivo con descargas eléctricas, sin llegar a matarlo.
 STR_THE_SUBJECT_HAS_DIED
-El sujeto ha muerto como consecuencia del trauma del interrogatorio. 
+El sujeto ha muerto como consecuencia del trauma del interrogatorio.
 STR_MIND_PROBE_UFOPEDIA
 La sonda mental es un dispositivo alienígena de comunicación que sirve para obtener información directamente de las ondas cerebrales. Las unidades de XCom pueden utilizarlo durante el combate para averiguar las características de un alienígena. Pulsa sobre la sonda mental y la opción 'Usar'. Luego pulsa sobre el alienígena que quieras examinar.
 STR_PLASMA_PISTOL_UFOPEDIA
 La pistola de plasma es un arma alienígena mortífera basada en la aceleración de partículas desde un diminuto campo antigravitatorio.
 STR_PLASMA_RIFLE_UFOPEDIA
-Ésta es un arma potente y devastadora basada en la aceleración de partículas desde un diminuto campo antigravitatorio. 
+Ésta es un arma potente y devastadora basada en la aceleración de partículas desde un diminuto campo antigravitatorio.
 STR_SIZE
 Tamaño
 STR_THE_CORPSE_MAY_BE_RESEARCHED
 Se le puede hacer la autopsia al cadáver para un informe completo.
 STR_NOT_ENOUGH_AMMUNITION_TO_ARM
-No hay munición suficiente. 
+No hay munición suficiente.
 STR_BLASTER_LAUNCHER_UFOPEDIA
 Esta arma dispara potentes bombas expansivas. Cuando pulses para disparar con esta arma, observarás que en la pantalla aparecen puntos indicando el itinerario que seguirá la bomba. Cuando tengas suficientes puntos, pulsa START para destacar el icono especial de lanzamiento. Luego pulsa la CRUZ para efectuar el lanzamiento.
 STR_SMALL_LAUNCHER_UFOPEDIA
-Un pequeño lanzador que dispara bombas aturdidoras. Muy útil para capturar vivos a los alienígenas. 
+Un pequeño lanzador que dispara bombas aturdidoras. Muy útil para capturar vivos a los alienígenas.
 STR_ALIEN_GRENADE_UFOPEDIA
-Este artefacto funciona igual que una granada terrestre, pero es mucho más potente. 
+Este artefacto funciona igual que una granada terrestre, pero es mucho más potente.
 STR_SMALL_SCOUT
 Explorador pequeño
 STR_MEDIUM_SCOUT
@@ -1316,9 +1316,9 @@ Mes>
 STR_COUNCIL_IS_GENERALLY_SATISFIED
 El comité de naciones patrocinadoras está satisfecho con los progresos que has hecho hasta el momento.
 STR_COUNCIL_IS_VERY_PLEASED
-El comité de naciones patrocinadoras está muy satisfecho con los progresos que has hecho hasta el momento. Sigue así. 
+El comité de naciones patrocinadoras está muy satisfecho con los progresos que has hecho hasta el momento. Sigue así.
 STR_COUNCIL_IS_DISSATISFIED
-El comité de naciones patrocinadoras no está satisfecho con tu actuación. Debes ser más eficaz a la hora de enfrentarte a la amenaza alienígena o te arriesgas a que se suspenda el proyecto. 
+El comité de naciones patrocinadoras no está satisfecho con tu actuación. Debes ser más eficaz a la hora de enfrentarte a la amenaza alienígena o te arriesgas a que se suspenda el proyecto.
 STR_YOU_HAVE_NOT_SUCCEEDED
 Has fracasado en tu lucha contra la invasión alienígena y el comité de naciones patrocinadoras se ha visto obligado a cancelar el proyecto. Cada nación se enfrentará al problema como puede. Esperamos que sea posible llegar a un acuerdo con estas fuerzas aparentemente hostiles y que la población se adapte a la presencia de los visitantes alienígenas.
 STR_COUNTRY_IS_PARTICULARLY_PLEASED
@@ -1334,7 +1334,7 @@ STR_COUNTRIES_ARE_UNHAPPY_WITH_YOUR_ABILITY
 STR_KNOTS
 nudos
 STR_COUNTRY_HAS_SIGNED_A_SECRET_PACT
- ha firmado un pacto secreto con fuerzas alienígenas desconocidas y ha abandonado el proyecto. 
+ ha firmado un pacto secreto con fuerzas alienígenas desconocidas y ha abandonado el proyecto.
 STR_COUNTRIES_HAVE_SIGNED_A_SECRET_PACT
  han firmado un pacto secreto con fuerzas alienígenas desconocidas y han abandonado el proyecto.
 STR_MONTHLY_RATING
@@ -1342,9 +1342,9 @@ Evaluación mensual>
 STR_FUNDING_CHANGE
 Cambio en la financiación> 
 STR_COUNCIL_REDUCE_DEBTS
-Al comité patrocinador no le gusta tu situación financiera. Tus deudas deben bajar de los 2 millones de dólares o será el fin del proyecto. 
+Al comité patrocinador no le gusta tu situación financiera. Tus deudas deben bajar de los 2 millones de dólares o será el fin del proyecto.
 STR_HYPER_WAVE_TRANSMISSIONS_ARE_DECODED
-TRANSMISIONES DE HIPERONDAS DESCODIFICADAS. 
+TRANSMISIONES DE HIPERONDAS DESCODIFICADAS.
 STR_CRAFT_TYPE
 TIPO DE NAVE
 STR_RACE
@@ -1558,7 +1558,7 @@ Este pequeño objeto es la fuente de energía de un rifle de plasma: un arma ali
 STR_PLASMA_PISTOL_CLIP_UFOPEDIA
 Fuente de energía de la pequeña pistola alienígena de plasma. Lleva elerio, la fuente de toda la energía alienígena.
 STR_STUN_BOMB_UFOPEDIA
-La bomba aturdidora se usa para capturar vivos a los humanos, pero también se puede usar contra las razas alienígenas. Se dispara con un pequeño lanzador. 
+La bomba aturdidora se usa para capturar vivos a los humanos, pero también se puede usar contra las razas alienígenas. Se dispara con un pequeño lanzador.
 STR_ALIEN_RESEARCH_UFOPEDIA
 La misión de investigación alienígena sirve para recoger información básica sobre la Tierra y sus habitantes. Utilizan sobre todo vehículos pequeños y aterrizan de vez en cuando en zonas desérticas. Este tipo de actividad alienígena supone una amenaza poco seria para XCom. A los gobiernos y al público les preocupa poco
 STR_ALIEN_HARVEST_UFOPEDIA
@@ -1718,7 +1718,7 @@ El ascensor de la pirámide lleva a tus soldados, cansados por la batalla,hacia 
 STR_IN_ORDER_TO_USE_OR_PRODUCE_THE
 {NEWLINE}para usar o fabricar {NEWLINE}
 STR_THE_ALIENS_HAVE_DESTROYED_THE_UNDEFENDED_BASE
-Los alienígenas han destruido la base indefensa. 
+Los alienígenas han destruido la base indefensa.
 STR_XCOM_AGENTS_HAVE_LOCATED_AN_ALIEN_BASE_IN
 Agentes de XCom han localizado una base alienígena en 
 STR_STANDOFF
