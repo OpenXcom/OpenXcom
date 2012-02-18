@@ -31,9 +31,9 @@ namespace OpenXcom
 {
 
 /**
- * Initializes all the elements in the Ufo Lost window.
+ * Initializes all the elements.
  * @param game Pointer to the core game.
- * @param id Name of the UFO.
+ * @param message Pointer to  the message.
  */
 InfoboxOKState::InfoboxOKState(Game *game, std::wstring name, std::string message) : State(game), _name(name), _message(message)
 {

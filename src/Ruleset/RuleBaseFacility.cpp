@@ -603,7 +603,7 @@ void RuleBaseFacility::setHitRatio(int ratio)
 /**
  * Returns the battlescape map block name for this facility
  * to construct the base defense mission map.
- * @return Ratio in percentage.
+ * @return Map name.
  */
 std::string RuleBaseFacility::getMapName() const
 {
@@ -611,9 +611,9 @@ std::string RuleBaseFacility::getMapName() const
 }
 
 /**
- * Changes the hit ratio of this facility's weaponry
- * against UFO invasions on the base.
- * @param ratio Ratio in percentage.
+ * Changes the battlescape map block name for this facility
+ * to construct the base defense mission map.
+ * @param name Map name.
  */
 void RuleBaseFacility::setMapName(const std::string &name)
 {

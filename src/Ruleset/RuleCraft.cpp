@@ -43,7 +43,7 @@ RuleCraft::~RuleCraft()
 /**
  * Loads the craft from a YAML file.
  * @param node YAML node.
- * @param rule Ruleset for the craft.
+ * @param ruleset Ruleset for the craft.
  */
 void RuleCraft::load(const YAML::Node &node, const Ruleset *ruleset)
 {

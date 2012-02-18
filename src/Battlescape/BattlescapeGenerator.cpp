@@ -867,7 +867,7 @@ void BattlescapeGenerator::generateMap()
 
 	for (std::vector<MapDataSet*>::iterator i = _terrain->getMapDataSets()->begin(); i != _terrain->getMapDataSets()->end(); ++i)
 	{
-		(*i)->load(_res);
+		(*i)->loadData();
 		_save->getMapDataSets()->push_back(*i);
 		mapDataSetIDOffset++;
 	}
@@ -961,7 +961,7 @@ void BattlescapeGenerator::generateMap()
 	{
 		for (std::vector<MapDataSet*>::iterator i = _ufo->getRules()->getBattlescapeTerrainData()->getMapDataSets()->begin(); i != _ufo->getRules()->getBattlescapeTerrainData()->getMapDataSets()->end(); ++i)
 		{
-			(*i)->load(_res);
+			(*i)->loadData();
 			_save->getMapDataSets()->push_back(*i);
 			craftDataSetIDOffset++;
 		}
@@ -980,7 +980,7 @@ void BattlescapeGenerator::generateMap()
 	{
 		for (std::vector<MapDataSet*>::iterator i = _craft->getRules()->getBattlescapeTerrainData()->getMapDataSets()->begin(); i != _craft->getRules()->getBattlescapeTerrainData()->getMapDataSets()->end(); ++i)
 		{
-			(*i)->load(_res);
+			(*i)->loadData();
 			_save->getMapDataSets()->push_back(*i);
 		}
 		loadMAP(craftMap, craftX * 10, craftY * 10, _craft->getRules()->getBattlescapeTerrainData(), mapDataSetIDOffset + craftDataSetIDOffset, true);
@@ -1198,7 +1198,7 @@ void BattlescapeGenerator::explodePowerSources()
 			pos.x = _save->getTiles()[i]->getPosition().x*16;
 			pos.y = _save->getTiles()[i]->getPosition().y*16;
 			pos.z = (_save->getTiles()[i]->getPosition().z*24) +12;
-			_save->getTileEngine()->explode(pos, 180+RNG::generate(0,70), DT_HE, 11, 0);
+			_save->getTileEngine()->explode(pos, 180+RNG::generate(0,70), DT_HE, 11);
 		}
 	}
 }

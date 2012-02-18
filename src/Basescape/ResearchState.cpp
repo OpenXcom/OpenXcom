@@ -144,6 +144,7 @@ void ResearchState::btnNewClick(Action *action)
 
 /**
  * Display list of possible ResearchProject
+ * @param action Pointer to an action.
 */
 void ResearchState::onSelectProject(Action *action)
 {

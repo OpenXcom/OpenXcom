@@ -40,6 +40,7 @@ namespace OpenXcom
  * Initializes all the elements in the Abort Mission window.
  * @param game Pointer to the core game.
  * @param battleGame Pointer to the saved game.
+ * @param state Pointer to the Battlescape state.
  */
 AbortMissionState::AbortMissionState(Game *game, SavedBattleGame *battleGame, BattlescapeState *state) : State(game), _battleGame(battleGame), _state(state), _inExitArea(0), _outExitArea(0)
 {

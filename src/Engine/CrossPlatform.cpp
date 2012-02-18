@@ -383,6 +383,7 @@ std::string endPath(const std::string &path)
  * contained in a certain folder.
  * @param path Full path to folder.
  * @param ext Extension of files ("" if it doesn't matter).
+ * @return Ordered list of all the files.
  */
 std::vector<std::string> getFolderContents(const std::string &path, const std::string &ext)
 {

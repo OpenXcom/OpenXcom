@@ -75,6 +75,7 @@ public:
 	void convertMapToScreen(const Position &mapPos, Position *screenPos) const;
 	/// Converts voxel coordinates to screen coordinates.
 	void convertVoxelToScreen(const Position &voxelPos, Position *screenPos) const;
+	/// Converts screen coordinates to map coordinates.
 	void convertScreenToMap(int screenX, int screenY, int *mapX, int *mapY) const;
 	/// Center map on a unit.
 	void centerOnPosition(const Position &pos, bool redraw = true);

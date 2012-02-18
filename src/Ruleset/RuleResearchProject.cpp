@@ -72,6 +72,7 @@ bool RuleResearchProject::needItem() const
 
 /**
    Change if this ResearchProject need a corresponding Item to be researched.
+   @param b true if the ResearchProject need a corresponding item
 */
 void RuleResearchProject::setNeedItem(bool b)
 {

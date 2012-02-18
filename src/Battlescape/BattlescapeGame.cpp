@@ -179,7 +179,6 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	_AIActionCounter++;
 
 	AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(ai);
-	PatrolBAIState *patrol = dynamic_cast<PatrolBAIState*>(ai);
 	
 	BattleAction action;
 	unit->think(&action);
@@ -858,6 +857,7 @@ bool BattlescapeGame::dontSpendTUs()
 
 /**
   * This will cancel the current action the user had selected (firing, throwing,..)
+  * @return Whether an action was cancelled or not.
   */
 bool BattlescapeGame::cancelCurrentAction()
 {
@@ -904,7 +904,7 @@ bool BattlescapeGame::isBusy()
 
 /**
  * Activate primary action (left click)
- * @param Position on the map.
+ * @param pos Position on the map.
  */
 void BattlescapeGame::primaryAction(const Position &pos)
 {
@@ -962,7 +962,7 @@ void BattlescapeGame::primaryAction(const Position &pos)
 
 /**
  * Activate secondary action (right click)
- * @param Position on the map.
+ * @param pos Position on the map.
  */
 void BattlescapeGame::secondaryAction(const Position &pos)
 {

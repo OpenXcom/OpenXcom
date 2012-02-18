@@ -47,7 +47,7 @@ RuleTerrain::~RuleTerrain()
 /**
  * Loads the terrain from a YAML file.
  * @param node YAML node.
- * @param rule Ruleset for the terrain.
+ * @param ruleset Ruleset for the terrain.
  */
 void RuleTerrain::load(const YAML::Node &node, const Ruleset *ruleset)
 {
@@ -177,6 +177,7 @@ MapBlock* RuleTerrain::getMapBlock(const std::string &name)
 /**
 * Gets a mapdata object.
 * @param id the id in the terrain
+* @param mapDataSetID id to the map data set
 * @return pointer to object
 */
 MapData *RuleTerrain::getMapData(int *id, int *mapDataSetID) const

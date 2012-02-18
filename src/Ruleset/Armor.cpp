@@ -139,10 +139,10 @@ std::string Armor::getSpriteSheet() const
 
 /**
  * Sets the different armor levels.
- * @param front armor level.
- * @param side armor level.
- * @param rear armor level.
- * @param under armor level.
+ * @param front Front armor level.
+ * @param side Side armor level.
+ * @param rear Rear armor level.
+ * @param under Under armor level.
  */
 void Armor::setArmor(int front, int side, int rear, int under)
 {
@@ -190,7 +190,7 @@ int Armor::getUnderArmor() const
 
 /**
  * Set the corpse item.
- * @param Name of the corpse item.
+ * @param corpseItem Name of the corpse item.
  */
 void Armor::setCorpseItem(const std::string &corpseItem)
 {

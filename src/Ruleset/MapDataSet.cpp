@@ -43,7 +43,7 @@ MapDataSet::MapDataSet(const std::string &name, int size) : _name(name), _size(s
 */
 MapDataSet::~MapDataSet()
 {
-	unload();
+	unloadData();
 }
 
 /**
@@ -116,10 +116,9 @@ SurfaceSet *MapDataSet::getSurfaceset() const
 
 /**
  * Loads terraindata in X-Com format (MCD & PCK files)
- * @param res The resourcepack.
  * @sa http://www.ufopaedia.org/index.php?title=MCD
  */
-void MapDataSet::load(ResourcePack *res)
+void MapDataSet::loadData()
 {
 	// prevents loading twice
 	if (_loaded) return;
@@ -262,7 +261,7 @@ void MapDataSet::load(ResourcePack *res)
 
 }
 
-void MapDataSet::unload()
+void MapDataSet::unloadData()
 {
 	if (_loaded)
 	{

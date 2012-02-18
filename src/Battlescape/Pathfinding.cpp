@@ -503,6 +503,7 @@ bool Pathfinding::isOnStairs(const Position &startPosition, const Position &endP
 /**
  * Check for the up/down button if the movement is valid. Either is a grav lift or the unit can fly and there are no obstructions.
  * @param bu Pointer to unit.
+ * @param startPosition Unit starting position.
  * @param direction Up or Down
  * @return bool Whether it's valid.
  */

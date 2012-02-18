@@ -64,7 +64,7 @@ public:
 	/// Cleans up the Alien Deployment ruleset.
 	~AlienDeployment();
 	/// Loads Alien Deployment data from YAML.
-	void load(const YAML::Node& node, const Ruleset *ruleset);
+	void load(const YAML::Node& node);
 	/// Saves the Alien Deployment data to YAML.
 	void save(YAML::Emitter& out) const;
 	/// Gets the Alien Deployment's type.

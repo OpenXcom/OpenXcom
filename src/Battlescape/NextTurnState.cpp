@@ -38,6 +38,7 @@ namespace OpenXcom
  * Initializes all the elements in the Next Turn screen.
  * @param game Pointer to the core game.
  * @param battleGame Pointer to the saved game.
+ * @param state Pointer to the Battlescape state.
  */
 NextTurnState::NextTurnState(Game *game, SavedBattleGame *battleGame, BattlescapeState *state) : State(game), _battleGame(battleGame), _state(state)
 {

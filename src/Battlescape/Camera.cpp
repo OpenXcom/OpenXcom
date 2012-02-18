@@ -256,6 +256,7 @@ void Camera::setViewHeight(int viewheight)
 /**
  * Center map on a certain position.
  * @param mapPos Position to center on.
+ * @param redraw Redraw map or not.
  */
 void Camera::centerOnPosition(const Position &mapPos, bool redraw)
 {
@@ -310,8 +311,8 @@ void Camera::convertMapToScreen(const Position &mapPos, Position *screenPos) con
 }
 
 /**
- * Convert map coordinates X,Y,Z to screen positions X, Y.
- * @param mapPos X,Y,Z coordinates on the map.
+ * Convert voxel coordinates X,Y,Z to screen positions X, Y.
+ * @param voxelPos X,Y,Z coordinates on the voxel.
  * @param screenPos to screen position.
  */
 void Camera::convertVoxelToScreen(const Position &voxelPos, Position *screenPos) const

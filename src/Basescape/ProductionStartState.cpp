@@ -38,6 +38,7 @@ namespace OpenXcom
  * Initializes all the elements in the productions start screen
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
+ * @param item the RuleManufactureInfo to produce
  */
 ProductionStartState::ProductionStartState(Game * game, Base * base, RuleManufactureInfo * item) : State(game), _base(base), _item(item)
 {

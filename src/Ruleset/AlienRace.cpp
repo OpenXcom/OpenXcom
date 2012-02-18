@@ -81,8 +81,7 @@ std::string AlienRace::getId() const
  * Adds a member to the alien race family.
  * The sequence in which you add members is important,
  * as the vector's elements are accessed by it's position.
- * @param slot The new section id.
- * @param cost The time unit cost.
+ * @param member The members name.
  */
 void AlienRace::addMember(const std::string &member)
 {

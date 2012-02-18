@@ -59,10 +59,6 @@ const int Projectile::_trail[11][36] = {
  * Sets up a UnitSprite with the specified size and position.
  * @param res Pointer to resourcepack.
  * @param save Pointer to battlesavegame.
- * @param origin Projectile's start position in tile x/y/z.
- * @param target Projectile's target position in tile x/y/z.
- * @param bulletType A number that corresponds to the type of bullet this is.
- * @param item Pointer to item that produced the bullet.
  */
 Projectile::Projectile(ResourcePack *res, SavedBattleGame *save, BattleAction action) : _res(res), _save(save), _action(action), _position(0)
 {
@@ -361,8 +357,9 @@ bool Projectile::move()
  */
 Position Projectile::getPosition(int offset) const
 {
-	if (_position + offset >= 0 && _position + offset < _trajectory.size())
-		return _trajectory.at(_position + offset);
+	int posOffset = (int)_position + offset;
+	if (posOffset >= 0 && posOffset < _trajectory.size())
+		return _trajectory.at(posOffset);
 	else
 		return _trajectory.at(_position);
 }

@@ -34,6 +34,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param item Item that finished producing.
  * @param base Base the item belongs to.
+ * @param endType What ended the production.
  */
 ProductionCompleteState::ProductionCompleteState(Game *game, const std::wstring &item, const std::wstring &base, productionProgress_e endType) : State(game)
 {

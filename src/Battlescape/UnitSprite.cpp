@@ -80,7 +80,7 @@ void UnitSprite::setBattleUnit(BattleUnit *unit, int part)
 
 /**
  * Links this sprite to a BattleItem to get the data for rendering.
- * @param unit Pointer to the BattleItem.
+ * @param item Pointer to the BattleItem.
  */
 void UnitSprite::setBattleItem(BattleItem *item)
 {
@@ -90,7 +90,7 @@ void UnitSprite::setBattleItem(BattleItem *item)
 
 /**
  * Sets the animation frame for animated units.
- * @param frame.
+ * @param frame Frame number.
  */
 void UnitSprite::setAnimationFrame(int frame)
 {

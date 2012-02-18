@@ -113,9 +113,8 @@ MedikitButton::MedikitButton(int y) : InteractiveSurface(30, 20, 190, y)
 /**
  * Initialize the Medikit State
  * @param game Pointer to the core game.
- * @param targetUnit Tthe wounded unit
- * @param unit The unit hodling the medikit
- * @param item The medikit item
+ * @param targetUnit The wounded unit.
+ * @param action The healing action.
  */
 MedikitState::MedikitState (Game * game, BattleUnit * targetUnit, BattleAction *action) : State (game), _targetUnit(targetUnit), _action(action)
 {

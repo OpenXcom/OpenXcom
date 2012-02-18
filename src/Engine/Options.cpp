@@ -239,7 +239,7 @@ std::string getDataFolder()
 /**
  * Changes the game's current Data folder where resources
  * and X-Com files are loaded from.
- * @param path Full path to Data folder.
+ * @param folder Full path to Data folder.
  */
 void setDataFolder(const std::string &folder)
 {

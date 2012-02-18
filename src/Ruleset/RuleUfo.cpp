@@ -42,7 +42,7 @@ RuleUfo::~RuleUfo()
 /**
  * Loads the UFO from a YAML file.
  * @param node YAML node.
- * @param rule Ruleset for the craft.
+ * @param ruleset Ruleset for the UFO.
  */
 void RuleUfo::load(const YAML::Node &node, const Ruleset *ruleset)
 {

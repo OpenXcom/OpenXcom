@@ -90,7 +90,7 @@ void TextList::unpress(State *state)
 /**
  * Changes the color of a specific Text object in the list.
  * @param row Row number.
- * @param col Column number.
+ * @param column Column number.
  * @param color Text color.
  */
 void TextList::setCellColor(int row, int column, Uint8 color)
@@ -99,9 +99,8 @@ void TextList::setCellColor(int row, int column, Uint8 color)
 }
 
 /**
- * Changes the text color of a specific row in the list.
+ * Changes the text color of a whole row in the list.
  * @param row Row number.
- * @param col Column number.
  * @param color Text color.
  */
 void TextList::setRowColor(int row, Uint8 color)
@@ -116,8 +115,8 @@ void TextList::setRowColor(int row, Uint8 color)
 /**
  * Returns the text of a specific Text object in the list.
  * @param row Row number.
- * @param col Column number.
- * @param color Text color.
+ * @param column Column number.
+ * @return Text string.
  */
 std::wstring TextList::getCellText(int row, int column) const
 {
@@ -125,10 +124,10 @@ std::wstring TextList::getCellText(int row, int column) const
 }
 
 /**
- * Returns the text of a specific Text object in the list.
+ * Changes the text of a specific Text object in the list.
  * @param row Row number.
- * @param col Column number.
- * @param color Text color.
+ * @param column Column number.
+ * @param text Text string.
  */
 void TextList::setCellText(int row, int column, const std::wstring &text)
 {

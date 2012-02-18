@@ -66,6 +66,7 @@ const int BulletSprite::pixels[37][9] = {
 
 /**
  * Sets up a BulletSprite 3x3 surface.
+ * @param type The type of sprite to draw.
  */
 BulletSprite::BulletSprite(int type) : Surface(3, 3), _type(type)
 {

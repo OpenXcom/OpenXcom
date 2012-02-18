@@ -552,9 +552,8 @@ void TileEngine::hit(const Position &center, int power, ItemDamageType type, Bat
  * @param power Power of the explosion.
  * @param type The damage type of the explosion.
  * @param maxRadius The maximum radius othe explosion.
- * @param unit The unit that caused the explosion.
  */
-void TileEngine::explode(const Position &center, int power, ItemDamageType type, int maxRadius, BattleUnit *unit)
+void TileEngine::explode(const Position &center, int power, ItemDamageType type, int maxRadius)
 {
 	double centerZ = (int)(center.z / 24) + 0.5;
 	double centerX = (int)(center.x / 16) + 0.5;
@@ -967,7 +966,7 @@ int TileEngine::closeUfoDoors()
  * @param origin
  * @param target
  * @param storeTrajectory true will store the whole trajectory - otherwise it just stores the last position.
- * @param trajector A vector of positions in which the trajectory is stored.
+ * @param trajectory A vector of positions in which the trajectory is stored.
  * @param excludeUnit Excludes this unit in the collision detection.
  * @param doVoxelCheck Check against voxel or tile blocking? (first one for units visibility and line of fire, second one for terrain visibility)
  * @return the objectnumber(0-3) or unit(4) or out of map (5) or -1(hit nothing)

@@ -33,7 +33,7 @@ namespace OpenXcom
 /**
  * Initializes all the elements in the EndResearch screen.
  * @param game Pointer to the core game.
- * @param base Pointer to the base to get info from.
+ * @param research Pointer to the completed research.
  */
 EndResearchState::EndResearchState(Game * game, const RuleResearchProject * research) : State (game), _research(research)
 {

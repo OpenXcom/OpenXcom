@@ -65,9 +65,9 @@ public:
 	/// Get surfaces in this dataset.
 	SurfaceSet *getSurfaceset() const;
 	/// Load the objects from an MCD file.
-	void load(ResourcePack *res);
+	void loadData();
 	///	Unload to free memory.
-	void unload();
+	void unloadData();
 	///
 	static MapData *getBlankFloorTile();
 	static MapData *getScourgedEarthTile();
