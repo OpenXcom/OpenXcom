@@ -161,7 +161,7 @@ void InteractiveSurface::unpress(State *state)
 }
 
 /**
- * Called everytime there's a mouse press over the surface.
+ * Called every time there's a mouse press over the surface.
  * Allows the surface to have custom functionality for this action,
  * and can be called externally to simulate the action.
  * @param action Pointer to an action.
@@ -176,7 +176,7 @@ void InteractiveSurface::mousePress(Action *action, State *state)
 }
 
 /**
- * Called everytime there's a mouse release over the surface.
+ * Called every time there's a mouse release over the surface.
  * Allows the surface to have custom functionality for this action,
  * and can be called externally to simulate the action.
  * @param action Pointer to an action.
@@ -191,7 +191,7 @@ void InteractiveSurface::mouseRelease(Action *action, State *state)
 }
 
 /**
- * Called everytime there's a mouse click on the surface.
+ * Called every time there's a mouse click on the surface.
  * Allows the surface to have custom functionality for this action,
  * and can be called externally to simulate the action.
  * @param action Pointer to an action.
@@ -206,7 +206,7 @@ void InteractiveSurface::mouseClick(Action *action, State *state)
 }
 
 /**
- * Called everytime the mouse moves into the surface.
+ * Called every time the mouse moves into the surface.
  * Allows the surface to have custom functionality for this action,
  * and can be called externally to simulate the action.
  * @param action Pointer to an action.
@@ -221,7 +221,7 @@ void InteractiveSurface::mouseIn(Action *action, State *state)
 }
 
 /**
- * Called everytime the mouse moves over the surface.
+ * Called every time the mouse moves over the surface.
  * Allows the surface to have custom functionality for this action,
  * and can be called externally to simulate the action.
  * @param action Pointer to an action.
@@ -236,7 +236,7 @@ void InteractiveSurface::mouseOver(Action *action, State *state)
 }
 
 /**
- * Called everytime the mouse moves out of the surface.
+ * Called every time the mouse moves out of the surface.
  * Allows the surface to have custom functionality for this action,
  * and can be called externally to simulate the action.
  * @param action Pointer to an action.
@@ -251,7 +251,7 @@ void InteractiveSurface::mouseOut(Action *action, State *state)
 }
 
 /**
- * Called everytime there's a keyboard press when the surface is focused.
+ * Called every time there's a keyboard press when the surface is focused.
  * Allows the surface to have custom functionality for this action,
  * and can be called externally to simulate the action.
  * @param action Pointer to an action.
@@ -266,7 +266,7 @@ void InteractiveSurface::keyboardPress(Action *action, State *state)
 }
 
 /**
- * Called everytime there's a keyboard release over the surface.
+ * Called every time there's a keyboard release over the surface.
  * Allows the surface to have custom functionality for this action,
  * and can be called externally to simulate the action.
  * @param action Pointer to an action.
@@ -281,7 +281,7 @@ void InteractiveSurface::keyboardRelease(Action *action, State *state)
 }
 
 /**
- * Sets a function to be called everytime the surface is mouse clicked.
+ * Sets a function to be called every time the surface is mouse clicked.
  * @param handler Action handler.
  */
 void InteractiveSurface::onMouseClick(ActionHandler handler)
@@ -290,7 +290,7 @@ void InteractiveSurface::onMouseClick(ActionHandler handler)
 }
 
 /**
- * Sets a function to be called everytime the surface is mouse pressed.
+ * Sets a function to be called every time the surface is mouse pressed.
  * @param handler Action handler.
  */
 void InteractiveSurface::onMousePress(ActionHandler handler)
@@ -299,7 +299,7 @@ void InteractiveSurface::onMousePress(ActionHandler handler)
 }
 
 /**
- * Sets a function to be called everytime the surface is mouse released.
+ * Sets a function to be called every time the surface is mouse released.
  * @param handler Action handler.
  */
 void InteractiveSurface::onMouseRelease(ActionHandler handler)
@@ -308,7 +308,7 @@ void InteractiveSurface::onMouseRelease(ActionHandler handler)
 }
 
 /**
- * Sets a function to be called everytime the mouse moves into the surface.
+ * Sets a function to be called every time the mouse moves into the surface.
  * @param handler Action handler.
  */
 void InteractiveSurface::onMouseIn(ActionHandler handler)
@@ -317,7 +317,7 @@ void InteractiveSurface::onMouseIn(ActionHandler handler)
 }
 
 /**
- * Sets a function to be called everytime the mouse moves over the surface.
+ * Sets a function to be called every time the mouse moves over the surface.
  * @param handler Action handler.
  */
 void InteractiveSurface::onMouseOver(ActionHandler handler)
@@ -326,7 +326,7 @@ void InteractiveSurface::onMouseOver(ActionHandler handler)
 }
 
 /**
- * Sets a function to be called everytime the mouse moves out of the surface.
+ * Sets a function to be called every time the mouse moves out of the surface.
  * @param handler Action handler.
  */
 void InteractiveSurface::onMouseOut(ActionHandler handler)
@@ -335,7 +335,7 @@ void InteractiveSurface::onMouseOut(ActionHandler handler)
 }
 
 /**
- * Sets a function to be called everytime a key is pressed when the surface is focused.
+ * Sets a function to be called every time a key is pressed when the surface is focused.
  * @param handler Action handler.
  */
 void InteractiveSurface::onKeyboardPress(ActionHandler handler)
@@ -344,7 +344,7 @@ void InteractiveSurface::onKeyboardPress(ActionHandler handler)
 }
 
 /**
- * Sets a function to be called everytime a key is released when the surface is focused.
+ * Sets a function to be called every time a key is released when the surface is focused.
  * @param handler Action handler.
  */
 void InteractiveSurface::onKeyboardRelease(ActionHandler handler)

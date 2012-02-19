@@ -75,7 +75,7 @@ void BattleState::think()
 
 /*
  * Get the action result. Returns error messages or an empty string when everything went fine.
- * @return returnmessage Empty when everything is fine.
+ * @return Error or empty when everything is fine.
  */
 BattleAction BattleState::getAction() const
 {

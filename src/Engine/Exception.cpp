@@ -36,7 +36,7 @@ Exception::~Exception() throw()
 
 /**
  * Returns the message describing the exception
- * that occured.
+ * that occurred.
  * @return Exception message.
  */
 const char *Exception::what() const throw()

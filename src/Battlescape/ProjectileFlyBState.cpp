@@ -254,7 +254,7 @@ void ProjectileFlyBState::think()
 
 				if (Options::getBool("battleAltGrenade") && item->getRules()->getBattleType() == BT_GRENADE)
 				{
-					// it's a hot grenade to explode immediatly
+					// it's a hot grenade to explode immediately
 					_parent->statePushFront(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(-1), item, _action.actor));
 				}
 				else

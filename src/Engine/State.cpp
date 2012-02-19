@@ -129,7 +129,7 @@ void State::toggleScreen()
 
 /**
  * Initializes the state and its child elements. This is
- * used for settings that have to be reset everytime the
+ * used for settings that have to be reset every time the
  * state is returned to focus (eg. palettes), so can't
  * just be put in the constructor (remember there's a stack
  * of states, so they can be created once while being

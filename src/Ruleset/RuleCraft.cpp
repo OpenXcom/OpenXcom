@@ -196,7 +196,7 @@ void RuleCraft::setMaxFuel(int fuel)
 }
 
 /**
- * Returns the maximum damage (damage the craft can take) const
+ * Returns the maximum damage (damage the craft can take)
  * of the craft.
  * @return Damage.
  */

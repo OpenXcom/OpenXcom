@@ -451,7 +451,7 @@ if ( CMAKE_COMPILER_IS_GNUCXX AND "${CMAKE_BUILD_TYPE}" STREQUAL "Debug" )
   add_definitions ( -D_DEBUG )
 endif ()
 if ( CMAKE_COMPILER_IS_GNUCXX AND ( "${CMAKE_BUILD_TYPE}" STREQUAL "Debug" OR ENABLE_WARNING) )
-    # Enable more GCC warnings if we are doing a Debug build or requested.
+    # Enable more GCC warnings if requested or we are doing a Debug build.
     add_definitions ( -Wall
       -Wsign-compare
       -Winit-self
@@ -467,7 +467,7 @@ if ( CMAKE_COMPILER_IS_GNUCXX AND ( "${CMAKE_BUILD_TYPE}" STREQUAL "Debug" OR EN
       -Wlogical-op
       -Wuninitialized
       -Wshadow
-# Those two warnings options actually generates way too much warning. Should be enabled later.
+# These two warning options actually generate way too many warnings. Should be enabled later.
 #      -Wignored-qualifiers
 #      -Weffc++
       )
@@ -480,7 +480,7 @@ if ( MSVC )
   if ( ENABLE_WARNING )
     add_definitions ( /W${MSVC_WARNING_LEVEL} )
   else ()
-    # Set warning levels for Debug and Release With debug info
+    # Set warning levels for Debug and Release with debug info
     set ( CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /W${MSVC_WARNING_LEVEL}" )
     set ( CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} /W${MSVC_WARNING_LEVEL}" )
   endif ()
@@ -514,7 +514,7 @@ endif ()
 
 add_executable ( openxcom  ${application_type} ${openxcom_src} )
 install ( TARGETS openxcom ${install_dest} DESTINATION bin )
-# Extra link flags for windows. they need to be before the SDL/YAML link flags. Otherwise, you will get strange link errors('Undefined reference to WinMain@16')
+# Extra link flags for Windows. They need to be set before the SDL/YAML link flags, otherwise you will get strange link errors ('Undefined reference to WinMain@16')
 if ( WIN32 )
   set ( basic_windows_libs advapi32.lib shell32.lib shlwapi.lib )
   if ( MINGW )
@@ -535,7 +535,7 @@ add_custom_command ( TARGET openxcom
   COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/bin/data ${EXECUTABLE_OUTPUT_PATH}/data )
 install ( DIRECTORY ${CMAKE_SOURCE_DIR}/bin/data DESTINATION bin )
 
-# Copy Windows DLL to bin folder
+# Copy Windows DLLs to bin folder
 if ( WIN32 )
   if ( CMAKE_CL_64 )
     file ( GLOB Windows_dll "${DEPS_DIR}/lib/x64/*.dll" )
@@ -576,7 +576,7 @@ if ( APPLE AND CREATE_BUNDLE )
   endforeach ()
 endif ()
 
-#Setup source group for IDE
+#Setup source groups for IDE
 if ( MSVC )
   source_group ( "Basescape" FILES ${basescape_src} )
   source_group ( "Battlescape" FILES ${battlescape_src} )

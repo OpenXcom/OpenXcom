@@ -802,7 +802,7 @@ void SavedBattleGame::removeItem(BattleItem *item)
 }
 
 /**
- * Is the mission aborted or succesful.
+ * Is the mission aborted or successful.
  * @param bool.
  */
 void SavedBattleGame::setAborted(bool flag)
@@ -811,7 +811,7 @@ void SavedBattleGame::setAborted(bool flag)
 }
 
 /**
- * Is the mission aborted or succesful.
+ * Is the mission aborted or successful.
  * @return bool.
  */
 bool SavedBattleGame::isAborted()
@@ -832,7 +832,7 @@ int *SavedBattleGame::getCurrentItemId()
  * Finds a fitting node where a unit can spawn.
  * @param nodeRank Rank of the node (is not rank of the alien!).
  * @param unit Pointer to the unit (to get its position)
- * @return pointer to the choosen node.
+ * @return pointer to the chosen node.
  */
 Node *SavedBattleGame::getSpawnNode(int nodeRank, BattleUnit *unit)
 {
@@ -1060,7 +1060,7 @@ void SavedBattleGame::removeUnconsciousBodyItem(BattleUnit *bu)
 }
 /**
  * Function handles the placement of units on the map. This handles large units that are placed on multiple tiles.
- * @return Whether the unit could be succesfully placed or not.
+ * @return Whether the unit could be successfully placed or not.
  */
 bool SavedBattleGame::setUnitPosition(BattleUnit *bu, const Position &position, bool testOnly)
 {

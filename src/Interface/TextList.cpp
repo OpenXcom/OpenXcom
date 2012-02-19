@@ -489,7 +489,7 @@ void TextList::setArrowColumn(int pos, ArrowOrientation type)
 }
 
 /**
- * Sets a function to be called everytime the left arrows are mouse clicked.
+ * Sets a function to be called every time the left arrows are mouse clicked.
  * @param handler Action handler.
  */
 void TextList::onLeftArrowClick(ActionHandler handler)
@@ -502,7 +502,7 @@ void TextList::onLeftArrowClick(ActionHandler handler)
 }
 
 /**
- * Sets a function to be called everytime the left arrows are mouse pressed.
+ * Sets a function to be called every time the left arrows are mouse pressed.
  * @param handler Action handler.
  */
 void TextList::onLeftArrowPress(ActionHandler handler)
@@ -515,7 +515,7 @@ void TextList::onLeftArrowPress(ActionHandler handler)
 }
 
 /**
- * Sets a function to be called everytime the left arrows are mouse released.
+ * Sets a function to be called every time the left arrows are mouse released.
  * @param handler Action handler.
  */
 void TextList::onLeftArrowRelease(ActionHandler handler)
@@ -528,7 +528,7 @@ void TextList::onLeftArrowRelease(ActionHandler handler)
 }
 
 /**
- * Sets a function to be called everytime the right arrows are mouse clicked.
+ * Sets a function to be called every time the right arrows are mouse clicked.
  * @param handler Action handler.
  */
 void TextList::onRightArrowClick(ActionHandler handler)
@@ -541,7 +541,7 @@ void TextList::onRightArrowClick(ActionHandler handler)
 }
 
 /**
- * Sets a function to be called everytime the right arrows are mouse pressed.
+ * Sets a function to be called every time the right arrows are mouse pressed.
  * @param handler Action handler.
  */
 void TextList::onRightArrowPress(ActionHandler handler)
@@ -554,7 +554,7 @@ void TextList::onRightArrowPress(ActionHandler handler)
 }
 
 /**
- * Sets a function to be called everytime the right arrows are mouse released.
+ * Sets a function to be called every time the right arrows are mouse released.
  * @param handler Action handler.
  */
 void TextList::onRightArrowRelease(ActionHandler handler)

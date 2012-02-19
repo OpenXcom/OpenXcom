@@ -82,7 +82,7 @@ public:
 	void save(YAML::Emitter& out) const;
 	/// Set the dimensions of the map and initializes it.
 	void initMap(int width, int length, int height);
-	/// initiliases pathfinding and tileengine
+	/// initialises pathfinding and tileengine
 	void initUtilities(ResourcePack *res);
 	/// Gets the game's mapdatafiles.
 	std::vector<MapDataSet*> *const getMapDataSets();

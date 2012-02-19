@@ -219,7 +219,7 @@ void MapDataSet::loadData()
 			to->setLoftID(loft, layer);
 		}
 
-		// store the 2 tiles of blanks in a static - so they are accesible everywhere
+		// store the 2 tiles of blanks in a static - so they are accessible everywhere
 		if (_name.compare("BLANKS") == 0)
 		{
 			if (objNumber == 0)

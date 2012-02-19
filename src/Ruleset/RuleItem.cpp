@@ -450,7 +450,7 @@ int RuleItem::getBulletSprite() const
 }
 
 /**
- * Changes the item's bulet sprite reference.
+ * Changes the item's bullet sprite reference.
  * @param sprite Sprite reference.
  */
 void RuleItem::setBulletSprite(int sprite)
@@ -568,7 +568,7 @@ void RuleItem::setAccuracyAuto(int accuracy)
 
 /**
  * Returns the item's accuracy for aimed shots.
- * @return Accuracy the item's accuracy for aimed sthos.
+ * @return Accuracy the item's accuracy for aimed shots.
  */
 int RuleItem::getAccuracyAimed() const
 {
@@ -622,7 +622,7 @@ void RuleItem::setTUAuto(int tu)
 
 /**
  * Returns the item's time units for aimed shots.
- * @return item's time units for aimed sthos.
+ * @return item's time units for aimed shots.
  */
 int RuleItem::getTUAimed() const
 {
@@ -897,7 +897,7 @@ void RuleItem::setTUUse(int tu)
 
 /**
  * Returns the item's max explosion radius. Small explosions don't have a restriction.
- * Larger explosions are restricted using a formula, with a maxium of radius 11 no matter how large the explosion is.
+ * Larger explosions are restricted using a formula, with a maximum of radius 11 no matter how large the explosion is.
  * @return radius.
  */
 int RuleItem::getExplosionRadius() const

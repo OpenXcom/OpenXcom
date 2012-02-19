@@ -141,7 +141,7 @@ void TextButton::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 }
 
 /**
- * Draws the labelled button.
+ * Draws the labeled button.
  * The colors are inverted if the button is pressed.
  */
 void TextButton::draw()

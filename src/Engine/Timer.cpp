@@ -23,7 +23,7 @@ namespace OpenXcom
 
 /**
  * Initializes a new timer with a set interval.
- * @param interval Time interval in miliseconds.
+ * @param interval Time interval in milliseconds.
  */
 Timer::Timer(Uint32 interval) : _start(0), _interval(interval), _running(false), _state(0), _surface(0)
 {
@@ -56,7 +56,7 @@ void Timer::stop()
 
 /**
  * Returns the time passed since the last interval.
- * @return Time in miliseconds.
+ * @return Time in milliseconds.
  */
 Uint32 Timer::getTime() const
 {
@@ -103,7 +103,7 @@ void Timer::think(State* state, Surface* surface)
 
 /**
  * Changes the timer's interval to a new value.
- * @param interval Interval in miliseconds.
+ * @param interval Interval in milliseconds.
  */
 void Timer::setInterval(Uint32 interval)
 {

@@ -69,7 +69,7 @@ namespace OpenXcom
 		/// load a vector with article ids that are currently visible of a given section.
 		void getSectionList(const std::string &section, ArticleDefinitionList &data);
 
-		/// TODO: get current visible article list as storeable data (for save).
+		/// TODO: get current visible article list as storable data (for save).
 		void getSavegameProperties(const std::string &info) const;
 
 		/// TODO: set current visible article list from stored data (on load).

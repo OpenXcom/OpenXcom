@@ -766,7 +766,7 @@ void Globe::fillLongitudeSegments(double startLon, double endLon, int colourShif
 	// Draw globe depending on the direction
 	if (direction == 1)
 	{
-		// draw fisrt longtitude line from pole
+		// draw first longitude line from pole
 		traceLon = startLon;
 		dL = (startLan + M_PI_2) / 20;
 		for (traceLat = -M_PI_2; traceLat < startLan; traceLat += dL)
@@ -776,7 +776,7 @@ void Globe::fillLongitudeSegments(double startLon, double endLon, int colourShif
 			polyPointsY.push_back(y);
 		}
 
-		// if aperture of longtitude is big then we need find first angle of sector
+		// if aperture of longitude is big then we need find first angle of sector
 		if (bigLonAperture)
 		{
 			sx = x - _cenX;
@@ -785,7 +785,7 @@ void Globe::fillLongitudeSegments(double startLon, double endLon, int colourShif
 			if (sx < 0) angle1 += M_PI;
 		}
 
-		// draw second longtitude line from pole
+		// draw second longitude line from pole
 		traceLon = endLon;
 		dL = (endLan + M_PI_2) / 20;
 		for (traceLat = -M_PI_2; traceLat < endLan; traceLat += dL)
@@ -795,7 +795,7 @@ void Globe::fillLongitudeSegments(double startLon, double endLon, int colourShif
 			polyPointsY2.push_back(y);
 		}
 
-		// if aperture of longtitudes is big we need find second angle of sector and draw pie of circle between two longtitudes
+		// if aperture of longitudes is big we need find second angle of sector and draw pie of circle between two longitudes
 		if (bigLonAperture)
 		{
 			sx = x - _cenX;
@@ -833,7 +833,7 @@ void Globe::fillLongitudeSegments(double startLon, double endLon, int colourShif
 	}
 	else // another direction
 	{
-		// draw fisrt longtitude line from pole
+		// draw first longitude line from pole
 		traceLon = startLon;
 		dL = (startLan - M_PI_2) / 20;
 		for (traceLat = M_PI_2; traceLat > startLan; traceLat += dL)
@@ -843,7 +843,7 @@ void Globe::fillLongitudeSegments(double startLon, double endLon, int colourShif
 			polyPointsY.push_back(y);
 		}
 
-		// if aperture of longtitude is big then we need find first angle of sector of pie between longtitudes
+		// if aperture of longitude is big then we need find first angle of sector of pie between longitudes
 		if (bigLonAperture)
 		{
 			sx = x - _cenX;
@@ -855,7 +855,7 @@ void Globe::fillLongitudeSegments(double startLon, double endLon, int colourShif
 			}
 		}
 
-		// draw second longtitude line from pole
+		// draw second longitude line from pole
 		traceLon = endLon;
 		dL = (endLan - M_PI_2) / 20;
 		for (traceLat = M_PI_2; traceLat > endLan; traceLat += dL)
@@ -865,7 +865,7 @@ void Globe::fillLongitudeSegments(double startLon, double endLon, int colourShif
 			polyPointsY2.push_back(y);
 		}
 
-		// if aperture of longtitudes is big we need find second angle of sector and draw pie of circle between two longtitudes
+		// if aperture of longitudes is big we need find second angle of sector and draw pie of circle between two longitudes
 		if (bigLonAperture)
 		{
 			sx = x - _cenX;

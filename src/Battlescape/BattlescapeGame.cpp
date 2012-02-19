@@ -232,7 +232,7 @@ void BattlescapeGame::kneel(BattleUnit *bu)
 		if (bu->spendTimeUnits(tu, _save->getDebugMode()))
 		{
 			bu->kneel(!bu->isKneeled());
-			// kneeling or standing up can reveil new terrain or units. I guess.
+			// kneeling or standing up can reveal new terrain or units. I guess.
 			getTileEngine()->calculateFOV(bu);
 			getMap()->cacheUnits();
 			_parentState->updateSoldierInfo();
@@ -763,7 +763,7 @@ bool BattlescapeGame::handlePanickingPlayer()
 }
 
 /**
- * Cmmon function for panicking units.
+ * Common function for panicking units.
  * @return False when unit not in panicking mode.
  */
 bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)

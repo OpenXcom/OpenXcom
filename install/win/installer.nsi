@@ -128,63 +128,63 @@ ${EndIf}
 	
 	SetOutPath "$INSTDIR\DATA"
 	
-	File "..\..\bin\DATA\README.txt"
+	File "..\..\bin\data\README.txt"
 	
 	;Copy UFO files
 	${DirState} $UFODIR $R1
 	IntCmp $R1 -1 ufo_no
 	
-	CreateDirectory "$INSTDIR\DATA\GEODATA"
-	CopyFiles /SILENT "$UFODIR\GEODATA\*.*" "$INSTDIR\DATA\GEODATA" 361
-	CreateDirectory "$INSTDIR\DATA\GEOGRAPH"
-	CopyFiles /SILENT "$UFODIR\GEOGRAPH\*.*" "$INSTDIR\DATA\GEOGRAPH" 2770
-	CreateDirectory "$INSTDIR\DATA\MAPS"
-	CopyFiles /SILENT "$UFODIR\MAPS\*.*" "$INSTDIR\DATA\MAPS" 278
-	CreateDirectory "$INSTDIR\DATA\ROUTES"
-	CopyFiles /SILENT "$UFODIR\ROUTES\*.*" "$INSTDIR\DATA\ROUTES" 27
-	CreateDirectory "$INSTDIR\DATA\SOUND"
-	CopyFiles /SILENT "$UFODIR\SOUND\*.*" "$INSTDIR\DATA\SOUND" 2386
-	CreateDirectory "$INSTDIR\DATA\TERRAIN"
-	CopyFiles /SILENT "$UFODIR\TERRAIN\*.*" "$INSTDIR\DATA\TERRAIN" 620
-	CreateDirectory "$INSTDIR\DATA\UFOGRAPH"
-	CopyFiles /SILENT "$UFODIR\UFOGRAPH\*.*" "$INSTDIR\DATA\UFOGRAPH" 437
-	CreateDirectory "$INSTDIR\DATA\UFOINTRO"
-	CopyFiles /SILENT "$UFODIR\UFOINTRO\*.*" "$INSTDIR\DATA\UFOINTRO" 2736
-	CreateDirectory "$INSTDIR\DATA\UNITS"
-	CopyFiles /SILENT "$UFODIR\UNITS\*.*" "$INSTDIR\DATA\UNITS" 467
+	CreateDirectory "$INSTDIR\data\GEODATA"
+	CopyFiles /SILENT "$UFODIR\GEODATA\*.*" "$INSTDIR\data\GEODATA" 361
+	CreateDirectory "$INSTDIR\data\GEOGRAPH"
+	CopyFiles /SILENT "$UFODIR\GEOGRAPH\*.*" "$INSTDIR\data\GEOGRAPH" 2770
+	CreateDirectory "$INSTDIR\data\MAPS"
+	CopyFiles /SILENT "$UFODIR\MAPS\*.*" "$INSTDIR\data\MAPS" 278
+	CreateDirectory "$INSTDIR\data\ROUTES"
+	CopyFiles /SILENT "$UFODIR\ROUTES\*.*" "$INSTDIR\data\ROUTES" 27
+	CreateDirectory "$INSTDIR\data\SOUND"
+	CopyFiles /SILENT "$UFODIR\SOUND\*.*" "$INSTDIR\data\SOUND" 2386
+	CreateDirectory "$INSTDIR\data\TERRAIN"
+	CopyFiles /SILENT "$UFODIR\TERRAIN\*.*" "$INSTDIR\data\TERRAIN" 620
+	CreateDirectory "$INSTDIR\data\UFOGRAPH"
+	CopyFiles /SILENT "$UFODIR\UFOGRAPH\*.*" "$INSTDIR\data\UFOGRAPH" 437
+	CreateDirectory "$INSTDIR\data\UFOINTRO"
+	CopyFiles /SILENT "$UFODIR\UFOINTRO\*.*" "$INSTDIR\data\UFOINTRO" 2736
+	CreateDirectory "$INSTDIR\data\UNITS"
+	CopyFiles /SILENT "$UFODIR\UNITS\*.*" "$INSTDIR\data\UNITS" 467
 	
 	ufo_no:
 	
-	SetOutPath "$INSTDIR\DATA\Language"
+	SetOutPath "$INSTDIR\data\Language"
 	
-	File "..\..\bin\DATA\Language\Big.fnt"
-	File "..\..\bin\DATA\Language\Czech.lng"
-	File "..\..\bin\DATA\Language\English.lng"
-	File "..\..\bin\DATA\Language\EnglishUk.lng"
-	File "..\..\bin\DATA\Language\Font.dat"
-	File "..\..\bin\DATA\Language\French.geo"
-	File "..\..\bin\DATA\Language\French.lng"
-	File "..\..\bin\DATA\Language\German.geo"
-	File "..\..\bin\DATA\Language\German.lng"
-	File "..\..\bin\DATA\Language\Italian.geo"
-	File "..\..\bin\DATA\Language\Italian.lng"
-	File "..\..\bin\DATA\Language\Polish.geo"
-	File "..\..\bin\DATA\Language\Polish.lng"
-	File "..\..\bin\DATA\Language\Romanian.lng"
-	File "..\..\bin\DATA\Language\Russian.geo"
-	File "..\..\bin\DATA\Language\Russian.lng"
-	File "..\..\bin\DATA\Language\Small.fnt"
-	File "..\..\bin\DATA\Language\Spanish.geo"
-	File "..\..\bin\DATA\Language\Spanish.lng"
+	File "..\..\bin\data\Language\Big.fnt"
+	File "..\..\bin\data\Language\Czech.lng"
+	File "..\..\bin\data\Language\English.lng"
+	File "..\..\bin\data\Language\EnglishUk.lng"
+	File "..\..\bin\data\Language\Font.dat"
+	File "..\..\bin\data\Language\French.geo"
+	File "..\..\bin\data\Language\French.lng"
+	File "..\..\bin\data\Language\German.geo"
+	File "..\..\bin\data\Language\German.lng"
+	File "..\..\bin\data\Language\Italian.geo"
+	File "..\..\bin\data\Language\Italian.lng"
+	File "..\..\bin\data\Language\Polish.geo"
+	File "..\..\bin\data\Language\Polish.lng"
+	File "..\..\bin\data\Language\Romanian.lng"
+	File "..\..\bin\data\Language\Russian.geo"
+	File "..\..\bin\data\Language\Russian.lng"
+	File "..\..\bin\data\Language\Small.fnt"
+	File "..\..\bin\data\Language\Spanish.geo"
+	File "..\..\bin\data\Language\Spanish.lng"
 	
-	SetOutPath "$INSTDIR\DATA\SoldierName"
+	SetOutPath "$INSTDIR\data\SoldierName"
 	
-	File "..\..\bin\DATA\SoldierName\American.nam"
-	File "..\..\bin\DATA\SoldierName\British.nam"
-	File "..\..\bin\DATA\SoldierName\French.nam"
-	File "..\..\bin\DATA\SoldierName\German.nam"
-	File "..\..\bin\DATA\SoldierName\Japanese.nam"
-	File "..\..\bin\DATA\SoldierName\Russian.nam"
+	File "..\..\bin\data\SoldierName\American.nam"
+	File "..\..\bin\data\SoldierName\British.nam"
+	File "..\..\bin\data\SoldierName\French.nam"
+	File "..\..\bin\data\SoldierName\German.nam"
+	File "..\..\bin\data\SoldierName\Japanese.nam"
+	File "..\..\bin\data\SoldierName\Russian.nam"
 
 	;Store installation folder
 	WriteRegStr HKLM "Software\${GAME_NAME}" "" $INSTDIR
@@ -241,7 +241,7 @@ SectionEnd
 ;Uninstaller Sections
 
 Section "un.Delete X-Com Data" UnData
-	RMDir /r "$INSTDIR\DATA"
+	RMDir /r "$INSTDIR\data"
 SectionEnd
 
 Section "-un.Main"
@@ -263,35 +263,35 @@ Section "-un.Main"
 	Delete "$INSTDIR\COPYING"
 	Delete "$INSTDIR\README.txt"
 	
-	Delete "$INSTDIR\DATA\README.txt"
-	Delete "$INSTDIR\DATA\Language\Big.fnt"
-	Delete "$INSTDIR\DATA\Language\Czech.lng"
-	Delete "$INSTDIR\DATA\Language\English.lng"
-	Delete "$INSTDIR\DATA\Language\EnglishUk.lng"
-	Delete "$INSTDIR\DATA\Language\Font.dat"
-	Delete "$INSTDIR\DATA\Language\French.geo"
-	Delete "$INSTDIR\DATA\Language\French.lng"
-	Delete "$INSTDIR\DATA\Language\German.geo"
-	Delete "$INSTDIR\DATA\Language\German.lng"
-	Delete "$INSTDIR\DATA\Language\Italian.geo"
-	Delete "$INSTDIR\DATA\Language\Italian.lng"
-	Delete "$INSTDIR\DATA\Language\Polish.geo"
-	Delete "$INSTDIR\DATA\Language\Polish.lng"
-	Delete "$INSTDIR\DATA\Language\Romanian.lng"
-	Delete "$INSTDIR\DATA\Language\Russian.geo"
-	Delete "$INSTDIR\DATA\Language\Russian.lng"
-	Delete "$INSTDIR\DATA\Language\Small.fnt"
-	Delete "$INSTDIR\DATA\Language\Spanish.geo"
-	Delete "$INSTDIR\DATA\Language\Spanish.lng"
-	RMDir "$INSTDIR\DATA\Language"
-	Delete "$INSTDIR\DATA\SoldierName\American.nam"
-	Delete "$INSTDIR\DATA\SoldierName\British.nam"
-	Delete "$INSTDIR\DATA\SoldierName\French.nam"
-	Delete "$INSTDIR\DATA\SoldierName\German.nam"
-	Delete "$INSTDIR\DATA\SoldierName\Japanese.nam"
-	Delete "$INSTDIR\DATA\SoldierName\Russian.nam"
-	RMDir "$INSTDIR\DATA\SoldierName"
-	RMDir "$INSTDIR\DATA"
+	Delete "$INSTDIR\data\README.txt"
+	Delete "$INSTDIR\data\Language\Big.fnt"
+	Delete "$INSTDIR\data\Language\Czech.lng"
+	Delete "$INSTDIR\data\Language\English.lng"
+	Delete "$INSTDIR\data\Language\EnglishUk.lng"
+	Delete "$INSTDIR\data\Language\Font.dat"
+	Delete "$INSTDIR\data\Language\French.geo"
+	Delete "$INSTDIR\data\Language\French.lng"
+	Delete "$INSTDIR\data\Language\German.geo"
+	Delete "$INSTDIR\data\Language\German.lng"
+	Delete "$INSTDIR\data\Language\Italian.geo"
+	Delete "$INSTDIR\data\Language\Italian.lng"
+	Delete "$INSTDIR\data\Language\Polish.geo"
+	Delete "$INSTDIR\data\Language\Polish.lng"
+	Delete "$INSTDIR\data\Language\Romanian.lng"
+	Delete "$INSTDIR\data\Language\Russian.geo"
+	Delete "$INSTDIR\data\Language\Russian.lng"
+	Delete "$INSTDIR\data\Language\Small.fnt"
+	Delete "$INSTDIR\data\Language\Spanish.geo"
+	Delete "$INSTDIR\data\Language\Spanish.lng"
+	RMDir "$INSTDIR\data\Language"
+	Delete "$INSTDIR\data\SoldierName\American.nam"
+	Delete "$INSTDIR\data\SoldierName\British.nam"
+	Delete "$INSTDIR\data\SoldierName\French.nam"
+	Delete "$INSTDIR\data\SoldierName\German.nam"
+	Delete "$INSTDIR\data\SoldierName\Japanese.nam"
+	Delete "$INSTDIR\data\SoldierName\Russian.nam"
+	RMDir "$INSTDIR\data\SoldierName"
+	RMDir "$INSTDIR\data"
 
 	Delete "$INSTDIR\Uninstall.exe"
 	RMDir "$INSTDIR"

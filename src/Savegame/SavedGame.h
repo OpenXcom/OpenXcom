@@ -43,7 +43,7 @@ class Soldier;
 class RuleManufactureInfo;
 
 /**
- * Enumator containing all the possible game difficulties.
+ * Enumerator containing all the possible game difficulties.
  */
 enum GameDifficulty { DIFF_BEGINNER, DIFF_EXPERIENCED, DIFF_VETERAN, DIFF_GENIUS, DIFF_SUPERHUMAN };
 

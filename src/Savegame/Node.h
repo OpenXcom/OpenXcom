@@ -68,7 +68,7 @@ public:
 	void assignNodeLink(NodeLink *link, int index);
 	/// Gets node's rank.
 	NodeRank getRank() const;
-	/// Gets node's priorty.
+	/// Gets node's priority.
 	int getPriority() const;
 	/// Gets the node's position.
 	const Position& getPosition() const;

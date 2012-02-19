@@ -81,7 +81,7 @@ public:
 	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
 	/// Special handling for mouse clicks.
 	void mouseClick(Action *action, State *state);
-	/// Special handling for mous over
+	/// Special handling for mouse over
 	void mouseOver(Action *action, State *state);
 	/// Special handling for key presses.
 	void keyboardPress(Action *action, State *state);

@@ -1182,7 +1182,7 @@ void BattleUnit::prepareNewTurn()
 		}
 		else
 		{
-			// succesfully avoided panic
+			// successfully avoided panic
 			// increase bravery experience counter
 			if (chance > 1)
 				_expBravery++;
@@ -1682,7 +1682,7 @@ void BattleUnit::painKillers ()
 }
 
 /**
- * Restore soldier energy and reducce stun level
+ * Restore soldier energy and reduce stun level
  * @param energy The amount of energy to add
  * @param s The amount of stun level to reduce
  */
@@ -1757,7 +1757,7 @@ int BattleUnit::getKneelHeight() const
 }
 
 /**
-  * Get the unit's loft ID. This is only one, as it is repated over the entire height of the unit.
+  * Get the unit's loft ID. This is only one, as it is repeated over the entire height of the unit.
   * @return The unit's line of fire template ID.
   */
 int BattleUnit::getLoftemps() const
@@ -1774,7 +1774,7 @@ int BattleUnit::getValue() const
 }
 
 /**
-  * Get wether the unit is affected by fatal wounds.
+  * Get whether the unit is affected by fatal wounds.
   * Normally only soldiers are affected by fatal wounds.
   * @return true or false
   */
@@ -1783,7 +1783,7 @@ bool BattleUnit::isWoundable() const
 	return (_type=="SOLDIER");
 }
 /**
-  * Get wether the unit is affected by morale loss.
+  * Get whether the unit is affected by morale loss.
   * Normally only small units are affected by morale loss.
   * @return true or false
   */

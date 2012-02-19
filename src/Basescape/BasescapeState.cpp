@@ -389,7 +389,7 @@ void BasescapeState::viewClick(Action *action)
 		{
 			_game->pushState(new BasescapeErrorState(_game, "STR_FACILITY_IN_USE"));
 		}
-		// Would base become disconnected? (ocuppied squares connected to Access Lift < total squares occupied by base)
+		// Would base become disconnected? (occupied squares connected to Access Lift < total squares occupied by base)
 		else if (_view->countConnected(x, y, 0, fac) < squares)
 		{
 			_game->pushState(new BasescapeErrorState(_game, "STR_CANNOT_DISMANTLE_FACILITY"));

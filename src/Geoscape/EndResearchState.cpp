@@ -88,7 +88,7 @@ void EndResearchState::btnOkClick(Action *action)
 }
 
 /**
- * open the Ufopeadia to the entry about the Research.
+ * open the Ufopaedia to the entry about the Research.
  * @param action Pointer to an action.
  */
 void EndResearchState::btnReportClick(Action *action)

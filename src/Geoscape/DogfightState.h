@@ -83,7 +83,7 @@ public:
 	void btnCautiousClick(Action *action);
 	/// Handler for clicking the Standard Attack button.
 	void btnStandardClick(Action *action);
-	/// Handler for clicking the Agressive Attack button.
+	/// Handler for clicking the Aggressive Attack button.
 	void btnAggressiveClick(Action *action);
 	/// Handler for clicking the Disengage button.
 	void btnDisengageClick(Action *action);

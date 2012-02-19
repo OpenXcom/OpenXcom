@@ -266,7 +266,7 @@ void BattlescapeGenerator::run()
 			}
 		}
 		
-		// test data - uncomment to easely debug a certain item
+		// test data - uncomment to easily debug a certain item
 		addItem(_game->getRuleset()->getItem("STR_MOTION_SCANNER"));
 		addItem(_game->getRuleset()->getItem("STR_LASER_RIFLE"));
 		addItem(_game->getRuleset()->getItem("STR_LASER_PISTOL"));
@@ -368,7 +368,7 @@ BattleUnit *BattlescapeGenerator::addXCOMUnit(BattleUnit *unit)
 /**
  * Deploy the aliens, according to the alien deployment rules.
  * @param race Pointer to the alien race.
- * @param deployment Pointer to the deployment ruels.
+ * @param deployment Pointer to the deployment rules.
  */
 void BattlescapeGenerator::deployAliens(AlienRace *race, AlienDeployment *deployment)
 {
@@ -421,7 +421,7 @@ BattleUnit *BattlescapeGenerator::addAlien(Unit *rules, int alienRank, bool outs
 
 	Node *node = 0;
 
-	/* following data is the order in wich certain alien ranks spawn on certain node ranks */
+	/* following data is the order in which certain alien ranks spawn on certain node ranks */
 	/* note that they all can fall back to rank 0 nodes - which is scout (outside ufo) */
 
 	int nodeRank[8][7] = { { 4, 3, 5, 8, 7, 2, 0 }, // commander

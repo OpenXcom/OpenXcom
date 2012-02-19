@@ -26,7 +26,7 @@ RuleResearchProject::RuleResearchProject(const std::string & name, int cost) : _
 }
 
 /**
- * Add a ResearchProject must be discoved before this researchProject
+ * Add a ResearchProject must be discovered before this researchProject
  * @param rp a pointer to a ResearchProject
 */
 void RuleResearchProject::addDependency (RuleResearchProject * rp)

@@ -284,7 +284,7 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 				aggro = new AggroBAIState(_save, unit);
 				unit->setAIState(aggro);
 			}
-			aggro->setAggroTarget(unit->getVisibleUnits()->at(0)); // just pick the first one - maybe we need to prioritze on distance to unit or other parameters?
+			aggro->setAggroTarget(unit->getVisibleUnits()->at(0)); // just pick the first one - maybe we need to prioritize on distance to unit or other parameters?
 		}
 
 		return true;
@@ -383,7 +383,7 @@ bool TileEngine::visible(BattleUnit *currentUnit, Tile *tile)
 }
 /**
  * Calculates line of sight of a soldiers within range of the Position
- * (used when terrain has changed, which can reveil new parts of terrain or units)
+ * (used when terrain has changed, which can reveal new parts of terrain or units)
  * @param position Position of the changed terrain.
  */
 void TileEngine::calculateFOV(const Position &position)
@@ -402,7 +402,7 @@ void TileEngine::calculateFOV(const Position &position)
  * If it's higher, a shot is fired when enough time units a weapon and ammo available.
  * @param unit
  * @param action
- * @param potentialVictim The unit that is targetted when shot.
+ * @param potentialVictim The unit that is targeted when shot.
  * @param recalculateFOV Whether to recalculate first the FOV of the units within range.
  */
 bool TileEngine::checkReactionFire(BattleUnit *unit, BattleAction *action, BattleUnit *potentialVictim, bool recalculateFOV)
@@ -658,9 +658,9 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 }
 
 /**
- * Chained explosions are explosions wich occur after an explosive map object is destroyed.
+ * Chained explosions are explosions which occur after an explosive map object is destroyed.
  * May be due a direct hit, other explosion or fire.
- * @return tile on which a explosion occured
+ * @return tile on which a explosion occurred
  */
 Tile *TileEngine::checkForTerrainExplosions()
 {
@@ -679,7 +679,7 @@ Tile *TileEngine::checkForTerrainExplosions()
  * The amount of power that is blocked going from one tile to another on a different level.
  * Can cross more than one level. Only floor tiles are taken into account.
  * @param startTile The tile where the power starts.
- * @param endTile The adjecant tile where the power ends.
+ * @param endTile The adjacent tile where the power ends.
  * @param type The type of power/damage.
  * @return Amount of blockage of this power.
  */
@@ -733,7 +733,7 @@ int TileEngine::verticalBlockage(Tile *startTile, Tile *endTile, ItemDamageType 
 /**
  * The amount of power that is blocked going from one tile to another on the same level.
  * @param startTile The tile where the power starts.
- * @param endTile The adjecant tile where the power ends.
+ * @param endTile The adjacent tile where the power ends.
  * @param type The type of power/damage.
  * @return amount of blockage
  */
@@ -852,8 +852,8 @@ int TileEngine::vectorToDirection(const Position &vector)
  * Soldier opens a door (if any) by rightclick, or by walking through it. The unit has to face in the right direction.
  * @param unit
  * @return -1 there is no door, you can walk through.
- *		  0 normal door opened, make a squeeky sound and you can walk through.
- *		  1 ufo door is starting to open, make a woosh sound, don't walk through.
+ *		  0 normal door opened, make a squeaky sound and you can walk through.
+ *		  1 ufo door is starting to open, make a whoosh sound, don't walk through.
  *		  3 ufo door is still opening, don't walk through it yet. (have patience, futuristic technology...)
  */
 int TileEngine::unitOpensDoor(BattleUnit *unit)

@@ -35,7 +35,7 @@ namespace OpenXcom
 	ArticleState::ArticleState(Game *game, std::string article_id) :
 		State(game), _id(article_id)
 	{
-		// init background and navigation eleemnts
+		// init background and navigation elements
 		_bg = new Surface(320, 200, 0, 0);
 		_btnOk = new TextButton(30, 14, 5, 5);
 		_btnPrev = new TextButton(30, 14, 40, 5);

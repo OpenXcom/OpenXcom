@@ -33,7 +33,7 @@ class TextList;
 class RuleBaseFacility;
 
 /**
- * Window shown wih all the facilities
+ * Window shown with all the facilities
  * available to build.
  */
 class BuildFacilitiesState : public State

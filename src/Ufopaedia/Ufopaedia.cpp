@@ -159,7 +159,7 @@ namespace OpenXcom
 
 	/**
 	 * Build a string from a string template. A template can be a concatenation of string ids,
-	 * f.i. "STR_SECTOID + STR_AUTOPSY". Maybe must add constant for whitepace also.
+	 * f.i. "STR_SECTOID + STR_AUTOPSY". Maybe must add constant for whitespace also.
 	 * @param game Pointer to actual game.
 	 * @param str_template String containing the text constants
 	 * @returns The string built using the text constant(s).

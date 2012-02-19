@@ -1,4 +1,4 @@
-option ( FEDORA_DEPENDENCYS "Create RPM with dependencies rules for Fedora" OFF )
+option ( FEDORA_DEPENDENCYS "Create RPM with dependency rules for Fedora" OFF )
 if ( FEDORA_DEPENDENCYS )
   set ( CPACK_RPM_PACKAGE_REQUIRES "SDL >= 1.2.14, SDL_gfx >= 2.0.22, SDL_mixer >= 1.2.11" )
 endif ()

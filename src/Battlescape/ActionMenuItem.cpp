@@ -65,7 +65,7 @@ ActionMenuItem::~ActionMenuItem()
  * @param action the battlescape action
  * @param description the actions description
  * @param accuracy the actions accuracy, including the Acc> prefix
- * @param timeunits the timeunits string, incliding the TUs> prefix
+ * @param timeunits the timeunits string, including the TUs> prefix
  * @param tu the timeunits value
  */
 void ActionMenuItem::setAction(BattleActionType action, std::wstring description, std::wstring accuracy, std::wstring timeunits, int tu)
