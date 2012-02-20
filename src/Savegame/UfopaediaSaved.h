@@ -22,10 +22,12 @@
 #include <vector>
 #include <string>
 #include "../Ufopaedia/Ufopaedia.h"
+#include "yaml.h"
 
 namespace OpenXcom
 {
 	class ArticleDefinition;
+	class Ruleset;
 
 	/**
 	 * This class encapsulates the saved game properties concerning Ufopaedia.
@@ -74,6 +76,12 @@ namespace OpenXcom
 
 		/// TODO: set current visible article list from stored data (on load).
 		void setSavegameProperties(const std::string &info);
+
+		/// Loads Ufopaedia from YAML.
+		void load(const YAML::Node& node, Ruleset *rule);
+
+		/// Saves Ufopaedia to YAML.
+		void save(YAML::Emitter& out);
 
 	protected:
 
