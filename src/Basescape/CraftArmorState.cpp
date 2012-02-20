@@ -31,6 +31,7 @@
 #include "../Savegame/Soldier.h"
 #include "../Savegame/Craft.h"
 #include "../Ruleset/RuleCraft.h"
+#include "../Ruleset/Armor.h"
 #include "SoldierArmorState.h"
 
 namespace OpenXcom
@@ -96,7 +97,7 @@ CraftArmorState::CraftArmorState(Game *game, Base *base, unsigned int craft) : S
 	Craft *c = _base->getCrafts()->at(_craft);
 	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
 	{
-		_lstSoldiers->addRow(3, (*i)->getName().c_str(), (*i)->getCraftString(_game->getLanguage()).c_str(), _game->getLanguage()->getString("STR_NONE_UC").c_str());
+		_lstSoldiers->addRow(3, (*i)->getName().c_str(), (*i)->getCraftString(_game->getLanguage()).c_str(), _game->getLanguage()->getString((*i)->getArmor()->getType()).c_str());
 
 		Uint8 color;
 		if ((*i)->getCraft() == c)

@@ -94,8 +94,6 @@ public:
 	SoldierGender getGender() const;
 	/// Gets the soldier's look.
 	SoldierLook getLook() const;
-	/// Gets a string version of the soldier's armor.
-	std::string getArmor() const;
 	/// Gets soldier rules.
 	RuleSoldier *getRules() const;
 	/// Gets the soldier's unique ID.
@@ -110,8 +108,10 @@ public:
 	UnitStats *getCurrentStats();
 	/// Get whether the unit was recently promoted.
 	bool isPromoted();
-	/// Gets a pointer to the armor data.
-	Armor *getArmorData() const;
+	/// Gets the soldier armor.
+	Armor *const getArmor() const;
+	/// Sets the soldier armor.
+	void setArmor(Armor *armor);
 	/// Gets the soldier's wound recovery time.
 	int getWoundRecovery() const;
 	/// Sets the soldier's wound recovery time.

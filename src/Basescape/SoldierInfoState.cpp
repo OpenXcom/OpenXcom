@@ -34,6 +34,7 @@
 #include "../Ruleset/RuleCraft.h"
 #include "../Savegame/Soldier.h"
 #include "../Engine/SurfaceSet.h"
+#include "../Ruleset/Armor.h"
 #include "SoldierArmorState.h"
 
 namespace OpenXcom
@@ -342,7 +343,7 @@ void SoldierInfoState::init()
 	_barStrength->setValue(current->strength);
 	_barStrength->setValue2(initial->strength);
 
-	_txtArmor->setText(_game->getLanguage()->getString("STR_NONE_UC"));
+	_txtArmor->setText(_game->getLanguage()->getString(s->getArmor()->getType()));
 
 	std::wstringstream ss9;
 	ss9 << _game->getLanguage()->getString("STR_RANK_") << L'\x01' << _game->getLanguage()->getString(s->getRankString());

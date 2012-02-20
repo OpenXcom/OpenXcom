@@ -2069,6 +2069,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	sectoidSoldier->setStats(s1);
 	sectoidSoldier->setVoxelParameters(16, 12, 2);
 	sectoidSoldier->setValue(10);
+	sectoidSoldier->setDeathSound(10);
 	sectoidSoldier->setAIParameters(3, 2);
 
 	Unit *sectoidEngineer = new Unit("SECTOID_ENGINEER", "STR_SECTOID", "STR_LIVE_ENGINEER");
@@ -2087,6 +2088,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	sectoidEngineer->setStats(s1);
 	sectoidEngineer->setVoxelParameters(16, 12, 2);
 	sectoidEngineer->setValue(16);
+	sectoidEngineer->setDeathSound(10);
 	sectoidEngineer->setAIParameters(6, 2);
 
 	Unit *sectoidNavigator = new Unit("SECTOID_NAVIGATOR", "STR_SECTOID", "STR_LIVE_NAVIGATOR");
@@ -2105,6 +2107,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	sectoidNavigator->setStats(s1);
 	sectoidNavigator->setVoxelParameters(16, 12, 2);
 	sectoidNavigator->setValue(12);
+	sectoidNavigator->setDeathSound(10);
 	sectoidNavigator->setAIParameters(4, 2);
 
 	Unit *cyberdisc = new Unit("CYBERDISC", "STR_CYBERDISC", "");
@@ -2123,6 +2126,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	cyberdisc->setStats(s1);
 	cyberdisc->setVoxelParameters(15, 15, 4);
 	cyberdisc->setValue(20);
+	cyberdisc->setDeathSound(23);
 	cyberdisc->setAIParameters(5, 1);
 	cyberdisc->setSpecialAbility(SPECAB_EXPLODEONDEATH);
 
@@ -2142,6 +2146,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	floaterSoldier->setStats(s1);
 	floaterSoldier->setVoxelParameters(21, 16, 3);
 	floaterSoldier->setValue(12);
+	floaterSoldier->setDeathSound(10);
 	floaterSoldier->setAIParameters(4, 2);
 
 	Unit *tankCannon = new Unit("TANK_CANNON", "STR_TANK_CANNON", "");
@@ -2160,6 +2165,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	tankCannon->setStats(s1);
 	tankCannon->setVoxelParameters(15, 15, 4);
 	tankCannon->setValue(20);
+	tankCannon->setDeathSound(23);
 
 	_units.insert(std::pair<std::string, Unit*>("SECTOID_SOLDIER", sectoidSoldier));
 	_units.insert(std::pair<std::string, Unit*>("SECTOID_ENGINEER", sectoidEngineer));

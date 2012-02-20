@@ -371,10 +371,22 @@ bool Soldier::isPromoted()
 	return promoted;
 }
 
-/// Gets a pointer to the armor data.
-Armor *Soldier::getArmorData() const
+/**
+ * Returns the unit's current armor.
+ * @return Pointer to armor data.
+ */
+Armor *const Soldier::getArmor() const
 {
 	return _armor;
+}
+
+/**
+ * Changes the unit's current armor.
+ * @param armor Pointer to armor data.
+ */
+void Soldier::setArmor(Armor *armor)
+{
+	_armor = armor;
 }
 
 /**

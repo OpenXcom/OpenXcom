@@ -48,17 +48,7 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction
 	_id = soldier->getId();
 	_type = "SOLDIER";
 	_rank = soldier->getRankString();
-	_stats.bravery = soldier->getCurrentStats()->bravery;
-	_stats.firing = soldier->getCurrentStats()->firing;
-	_stats.health = soldier->getCurrentStats()->health;
-	_stats.melee = soldier->getCurrentStats()->melee;
-	_stats.psiSkill = soldier->getCurrentStats()->psiSkill;
-	_stats.psiStrength = soldier->getCurrentStats()->psiStrength;
-	_stats.reactions = soldier->getCurrentStats()->reactions;
-	_stats.stamina = soldier->getCurrentStats()->stamina;
-	_stats.strength = soldier->getCurrentStats()->strength;
-	_stats.throwing = soldier->getCurrentStats()->throwing;
-	_stats.tu = soldier->getCurrentStats()->tu;
+	_stats = *soldier->getCurrentStats();
 	_standHeight = soldier->getRules()->getStandHeight();
 	_kneelHeight = soldier->getRules()->getKneelHeight();
 	_loftemps = soldier->getRules()->getLoftemps();
@@ -66,7 +56,7 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction
 	_intelligence = 2;
 	_aggression = 1;
 	_specab = SPECAB_NONE;
-	_armor = soldier->getArmorData();
+	_armor = soldier->getArmor();
 	_gender = soldier->getGender();
 
 	int rankbonus = 0;
@@ -108,17 +98,7 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, Armor *armor) : _faction
 	_type = unit->getType();
 	_rank = unit->getRank();
 	_race = unit->getRace();
-	_stats.bravery = unit->getStats()->bravery;
-	_stats.firing = unit->getStats()->firing;
-	_stats.health = unit->getStats()->health;
-	_stats.melee = unit->getStats()->melee;
-	_stats.psiSkill = unit->getStats()->psiSkill;
-	_stats.psiStrength = unit->getStats()->psiStrength;
-	_stats.reactions = unit->getStats()->reactions;
-	_stats.stamina = unit->getStats()->stamina;
-	_stats.strength = unit->getStats()->strength;
-	_stats.throwing = unit->getStats()->throwing;
-	_stats.tu = unit->getStats()->tu;
+	_stats = *unit->getStats();
 	_standHeight = unit->getStandHeight();
 	_kneelHeight = unit->getKneelHeight();
 	_loftemps = unit->getLoftemps();
@@ -1764,6 +1744,7 @@ int BattleUnit::getLoftemps() const
 {
 	return _loftemps;
 }
+
 /**
   * Get the unit's value. Used for score at debriefing.
   * @return value score
@@ -1771,6 +1752,15 @@ int BattleUnit::getLoftemps() const
 int BattleUnit::getValue() const
 {
 	return _value;
+}
+
+/**
+ * Get the unit's death sound.
+ * @return id.
+ */
+int BattleUnit::getDeathSound() const
+{
+	return _deathSound;
 }
 
 /**

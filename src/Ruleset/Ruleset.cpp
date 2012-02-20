@@ -21,6 +21,7 @@
 #include "yaml.h"
 #include "../Engine/Options.h"
 #include "../Engine/Exception.h"
+#include "../Engine/CrossPlatform.h"
 #include "SoldierNamePool.h"
 #include "RuleCountry.h"
 #include "RuleRegion.h"
@@ -50,6 +51,16 @@ namespace OpenXcom
 Ruleset::Ruleset() : _names(), _countries(), _regions(), _facilities(), _crafts(), _craftWeapons(), _items(), _ufos(),
 					 _terrains(), _mapDataSets(), _soldiers(), _units(), _invs(), _costSoldier(0), _costEngineer(0), _costScientist(0), _timePersonnel(0)
 {
+	// Add soldier names
+	std::vector<std::string> names = CrossPlatform::getFolderContents(Options::getDataFolder() + "SoldierName/", "nam");
+
+	for (std::vector<std::string>::iterator i = names.begin(); i != names.end(); ++i)
+	{
+		std::string file = (*i).substr(0, (*i).length()-4);
+		SoldierNamePool *pool = new SoldierNamePool();
+		pool->load(file);
+		_names.push_back(pool);
+	}
 }
 
 /**

@@ -288,6 +288,8 @@ public:
 	int getLoftemps() const;
 	/// Get the unit's value.
 	int getValue() const;
+	/// Get the unit's death sound.
+	int getDeathSound() const;
 	/// Get whether the unit is affected by fatal wounds.
 	bool isWoundable() const;
 	/// Get whether the unit is affected by fear.

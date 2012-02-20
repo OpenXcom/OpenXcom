@@ -87,16 +87,7 @@ void UnitDieBState::init()
 		}
 		else
 		{
-			// todo get death sound from Unit
-			if (_unit->getArmor()->getSize() > 1)
-			{
-				// HWP destroy sound
-				_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(23)->play();
-			}
-			else
-			{
-				_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(10)->play();
-			}
+			_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(_unit->getDeathSound())->play();
 		}
 	}
 
