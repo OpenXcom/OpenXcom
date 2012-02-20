@@ -447,6 +447,7 @@ set ( ufopedia_src
   Ufopaedia/ArticleStateArmor.h
 )
 
+set ( data_install_dir bin )
 if ( CMAKE_COMPILER_IS_GNUCXX AND "${CMAKE_BUILD_TYPE}" STREQUAL "Debug" )
   add_definitions ( -D_DEBUG )
 endif ()
@@ -498,6 +499,9 @@ set ( openxcom_src main.cpp ${basescape_src} ${battlescape_src} ${engine_src} ${
 set ( install_dest RUNTIME )
 set ( set_exec_path ON )
 set ( install_dest_dir bin )
+if ( UNIX AND NOT APPLE )
+  set ( data_install_dir ${CMAKE_INSTALL_PREFIX}/share/openxcom )
+endif ()
 if ( APPLE )
   set ( openxcom_src ${openxcom_src} ${MACOS_SDLMAIN_M_PATH} )
   if ( CREATE_BUNDLE )
@@ -506,10 +510,17 @@ if ( APPLE )
     set ( install_dest BUNDLE )
     set ( set_exec_path OFF )
     set ( install_dest_dir "" )
+    set ( data_install_dir bin )
+  else ()
+    set ( data_install_dir ${CMAKE_INSTALL_PREFIX}/share/openxcom )
   endif ()
 endif ()
 if ( set_exec_path )
   set ( EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin )
+endif ()
+
+if ( FORCE_INSTALL_DATA_TO_BIN )
+  set ( data_install_dir bin )
 endif ()
 
 add_executable ( openxcom  ${application_type} ${openxcom_src} )
@@ -533,7 +544,7 @@ target_link_libraries ( openxcom ${system_libs} ${SDLMIXER_LIBRARY} ${SDLGFX_LIB
 add_custom_command ( TARGET openxcom
   POST_BUILD
   COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/bin/data ${EXECUTABLE_OUTPUT_PATH}/data )
-install ( DIRECTORY ${CMAKE_SOURCE_DIR}/bin/data DESTINATION bin )
+install ( DIRECTORY ${CMAKE_SOURCE_DIR}/bin/data DESTINATION ${data_install_dir} )
 
 # Copy Windows DLLs to bin folder
 if ( WIN32 )

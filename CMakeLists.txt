@@ -8,6 +8,7 @@ option ( BUILD_PACKAGE "Prepares build for creation of a package with CPack" ON 
 option ( ENABLE_WARNING "Always show warnings (even for release builds)" OFF )
 option ( FATAL_WARNING "Treat warnings as errors" OFF )
 set ( MSVC_WARNING_LEVEL 3 CACHE STRING "Visual Studio warning levels" )
+option ( FORCE_INSTALL_DATA_TO_BIN "Force installation of data to binary directory" OFF )
 
 if ( WIN32 )
   set ( default_deps_dir "${CMAKE_SOURCE_DIR}/deps" )
