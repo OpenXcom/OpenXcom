@@ -57,9 +57,7 @@ private:
 	Armor *_armor;
 public:
 	/// Creates a new soldier.
-	Soldier(RuleSoldier *rules, Armor *armor);
-	/// Creates a new soldier with random stats.
-	Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierNamePool*> *names, int *id);
+	Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierNamePool*> *names = 0, int *id = 0);
 	/// Cleans up the soldier.
 	~Soldier();
 	/// Initialises

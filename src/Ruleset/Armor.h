@@ -45,7 +45,7 @@ public:
 	Armor(const std::string &type, std::string spriteSheet, int drawingRoutine, MovementType _movementType = MT_WALK, int size = 1);
 	/// Cleans up the armor ruleset.
 	~Armor();
-	/// Loads armor data from YAML.
+	/// Loads the armor data from YAML.
 	void load(const YAML::Node& node);
 	/// Saves the armor data to YAML.
 	void save(YAML::Emitter& out) const;

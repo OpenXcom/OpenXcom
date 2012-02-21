@@ -94,6 +94,15 @@ void Armor::load(const YAML::Node &node)
 		{
 			i.second() >> _size;
 		}
+		else if (key == "damageModifier")
+		{
+			int dmg = 0;
+			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
+			{
+				j.second() >> _damageModifier[dmg];
+				++dmg;
+			}
+		}
 	}
 }
 
@@ -115,7 +124,10 @@ void Armor::save(YAML::Emitter &out) const
 	out << YAML::Key << "drawingRoutine" << YAML::Value << _drawingRoutine;
 	out << YAML::Key << "movementType" << YAML::Value << _movementType;
 	out << YAML::Key << "size" << YAML::Value << _size;
-	out << YAML::EndMap;
+	out << YAML::Key << "damageModifier" << YAML::Value << YAML::BeginSeq;
+	for (int i=0; i < 8; i++)
+		out << _damageModifier[i];
+	out << YAML::EndSeq << YAML::EndMap;
 }
 
 /**

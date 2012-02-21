@@ -23,10 +23,10 @@ namespace OpenXcom
 
 /**
  * Creates a blank ruleunit for a certain
- * type of craft.
+ * type of soldier.
  * @param type String defining the type.
  */
-RuleSoldier::RuleSoldier(const std::string &type) : _type(type), _armor(""), _standHeight(0), _kneelHeight(0), _loftemps(0)
+RuleSoldier::RuleSoldier(const std::string &type) : _type(type), _minStats(), _maxStats(), _armor(""), _standHeight(0), _kneelHeight(0), _loftemps(0)
 {
 
 }
@@ -37,6 +37,65 @@ RuleSoldier::RuleSoldier(const std::string &type) : _type(type), _armor(""), _st
 RuleSoldier::~RuleSoldier()
 {
 
+}
+
+/**
+ * Loads the unit from a YAML file.
+ * @param node YAML node.
+ */
+void RuleSoldier::load(const YAML::Node &node)
+{
+	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
+	{
+		std::string key;
+		i.first() >> key;
+		if (key == "type")
+		{
+			i.second() >> _type;
+		}
+		else if (key == "minStats")
+		{
+			i.second() >> _minStats;
+		}
+		else if (key == "maxStats")
+		{
+			i.second() >> _maxStats;
+		}
+		else if (key == "armor")
+		{
+			i.second() >> _armor;
+		}
+		else if (key == "standHeight")
+		{
+			i.second() >> _standHeight;
+		}
+		else if (key == "kneelHeight")
+		{
+			i.second() >> _kneelHeight;
+		}
+		else if (key == "loftemps")
+		{
+			i.second() >> _loftemps;
+		}
+	}
+}
+
+/**
+ * Saves the unit to a YAML file.
+ * @param out YAML emitter.
+ */
+void RuleSoldier::save(YAML::Emitter &out) const
+{
+
+	out << YAML::BeginMap;
+	out << YAML::Key << "type" << YAML::Value << _type;
+	out << YAML::Key << "minStats" << YAML::Value << _minStats;
+	out << YAML::Key << "maxStats" << YAML::Value << _maxStats;
+	out << YAML::Key << "armor" << YAML::Value << _armor;
+	out << YAML::Key << "standHeight" << YAML::Value << _standHeight;
+	out << YAML::Key << "kneelHeight" << YAML::Value << _kneelHeight;
+	out << YAML::Key << "loftemps" << YAML::Value << _loftemps;
+	out << YAML::EndMap;
 }
 
 /**

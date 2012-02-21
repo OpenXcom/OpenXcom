@@ -27,68 +27,51 @@ namespace OpenXcom
 {
 
 /**
- * Initializes a new blank soldier.
+ * Initializes a new soldier, either blank or randomly generated.
  * @param rules Soldier ruleset.
  * @param armor Soldier armor.
+ * @param names List of name pools for soldier generation.
+ * @param id Pointer to unique soldier id for soldier generation.
  */
-Soldier::Soldier(RuleSoldier *rules, Armor *armor) : _armor(armor), _name(L""), _id(0), _rules(rules), _rank(RANK_ROOKIE), _craft(0), _gender(GENDER_MALE), _look(LOOK_BLONDE), _missions(0), _kills(0), _recovery(0), _recentlyPromoted(false)
+Soldier::Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierNamePool*> *names, int *id) : _name(L""), _id(0), _rules(rules), _initialStats(), _currentStats(), _rank(RANK_ROOKIE), _craft(0), _gender(GENDER_MALE), _look(LOOK_BLONDE), _missions(0), _kills(0), _recovery(0), _recentlyPromoted(false), _armor(armor)
 {
-	_initialStats.bravery = 0;
-	_initialStats.firing = 0;
-	_initialStats.health = 0;
-	_initialStats.melee = 0;
-	_initialStats.psiSkill = 0;
-	_initialStats.psiStrength = 0;
-	_initialStats.reactions = 0;
-	_initialStats.stamina = 0;
-	_initialStats.strength = 0;
-	_initialStats.throwing = 0;
-	_initialStats.tu = 0;
-
-	_currentStats = _initialStats;
-}
-
-/**
- * Initializes a new soldier with random stats and a name
- * pulled from a set of SoldierNamePool's.
- * @param rules Soldier ruleset.
- * @param armor Soldier armor.
- * @param names List of name pools.
- * @param id Pointer to unique soldier id.
- */
-Soldier::Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierNamePool*> *names, int *id) : _armor(armor), _id(*id), _rules(rules), _rank(RANK_ROOKIE), _craft(0), _missions(0), _kills(0), _recovery(0), _recentlyPromoted(false)
-{
-	UnitStats minStats = rules->getMinStats();
-	UnitStats maxStats = rules->getMaxStats();
-
-	_initialStats.tu = RNG::generate(minStats.tu, maxStats.tu);
-	_initialStats.stamina = RNG::generate(minStats.stamina, maxStats.stamina);
-	_initialStats.health = RNG::generate(minStats.health, maxStats.health);
-	_initialStats.bravery = RNG::generate(minStats.bravery/10, maxStats.bravery/10)*10;
-	_initialStats.reactions = RNG::generate(minStats.reactions, maxStats.reactions);
-	_initialStats.firing = RNG::generate(minStats.firing, maxStats.firing);
-	_initialStats.throwing = RNG::generate(minStats.throwing, maxStats.throwing);
-	_initialStats.strength = RNG::generate(minStats.strength, maxStats.strength);
-	_initialStats.psiStrength = RNG::generate(minStats.psiStrength, maxStats.psiStrength);
-	_initialStats.melee = RNG::generate(minStats.melee, maxStats.melee);
-	_initialStats.psiSkill = 0;
-
-	_currentStats = _initialStats;
-
-	if (!names->empty())
+	if (names != 0)
 	{
-		int gender;
-		_name = names->at(RNG::generate(0, names->size()-1))->genName(&gender);
-		_gender = (SoldierGender)gender;
-	}
-	else
-	{
-		_name = L"";
-		_gender = (SoldierGender)RNG::generate(0, 1);
-	}
-	_look = (SoldierLook)RNG::generate(0, 3);
+		UnitStats minStats = rules->getMinStats();
+		UnitStats maxStats = rules->getMaxStats();
 
-	(*id)++; // increase id for next soldier
+		_initialStats.tu = RNG::generate(minStats.tu, maxStats.tu);
+		_initialStats.stamina = RNG::generate(minStats.stamina, maxStats.stamina);
+		_initialStats.health = RNG::generate(minStats.health, maxStats.health);
+		_initialStats.bravery = RNG::generate(minStats.bravery/10, maxStats.bravery/10)*10;
+		_initialStats.reactions = RNG::generate(minStats.reactions, maxStats.reactions);
+		_initialStats.firing = RNG::generate(minStats.firing, maxStats.firing);
+		_initialStats.throwing = RNG::generate(minStats.throwing, maxStats.throwing);
+		_initialStats.strength = RNG::generate(minStats.strength, maxStats.strength);
+		_initialStats.psiStrength = RNG::generate(minStats.psiStrength, maxStats.psiStrength);
+		_initialStats.melee = RNG::generate(minStats.melee, maxStats.melee);
+		_initialStats.psiSkill = 0;
+
+		_currentStats = _initialStats;	
+
+		if (!names->empty())
+		{
+			int gender;
+			_name = names->at(RNG::generate(0, names->size()-1))->genName(&gender);
+			_gender = (SoldierGender)gender;
+		}
+		else
+		{
+			_name = L"";
+			_gender = (SoldierGender)RNG::generate(0, 1);
+		}
+		_look = (SoldierLook)RNG::generate(0, 3);
+	}
+	if (id != 0)
+	{
+		_id = *id;
+		(*id)++; // increase id for next soldier
+	}
 }
 
 /**

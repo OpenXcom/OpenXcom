@@ -374,6 +374,63 @@ void Ruleset::load(const std::string &filename)
 				rule->load(j.second());
 			}
 		}
+		else if (key == "soldiers")
+		{
+			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
+			{
+				std::string type;
+				j.second()["type"] >> type;
+				RuleSoldier *rule;
+				if (_soldiers.find(type) != _soldiers.end())
+				{
+					rule = _soldiers[type];
+				}
+				else
+				{
+					rule = new RuleSoldier(type);
+					_soldiers[type] = rule;
+				}
+				rule->load(j.second());
+			}
+		}
+		else if (key == "units")
+		{
+			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
+			{
+				std::string type;
+				j.second()["type"] >> type;
+				Unit *rule;
+				if (_units.find(type) != _units.end())
+				{
+					rule = _units[type];
+				}
+				else
+				{
+					rule = new Unit(type, "", "");
+					_units[type] = rule;
+				}
+				rule->load(j.second());
+			}
+		}
+		else if (key == "alienRaces")
+		{
+			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
+			{
+				std::string type;
+				j.second()["type"] >> type;
+				AlienRace *rule;
+				if (_alienRaces.find(type) != _alienRaces.end())
+				{
+					rule = _alienRaces[type];
+				}
+				else
+				{
+					rule = new AlienRace(type);
+					_alienRaces[type] = rule;
+				}
+				rule->load(j.second());
+			}
+		}
 		else if (key == "costSoldier")
 		{
 			i.second() >> _costSoldier;
@@ -485,6 +542,27 @@ void Ruleset::save(const std::string &filename) const
 	out << YAML::Key << "armors" << YAML::Value;
 	out << YAML::BeginSeq;
 	for (std::map<std::string, Armor*>::const_iterator i = _armors.begin(); i != _armors.end(); ++i)
+	{
+		i->second->save(out);
+	}
+	out << YAML::EndSeq;
+	out << YAML::Key << "soldiers" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::map<std::string, RuleSoldier*>::const_iterator i = _soldiers.begin(); i != _soldiers.end(); ++i)
+	{
+		i->second->save(out);
+	}
+	out << YAML::EndSeq;
+	out << YAML::Key << "units" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::map<std::string, Unit*>::const_iterator i = _units.begin(); i != _units.end(); ++i)
+	{
+		i->second->save(out);
+	}
+	out << YAML::EndSeq;
+	out << YAML::Key << "alienRaces" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::map<std::string, AlienRace*>::const_iterator i = _alienRaces.begin(); i != _alienRaces.end(); ++i)
 	{
 		i->second->save(out);
 	}
