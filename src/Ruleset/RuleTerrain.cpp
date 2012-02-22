@@ -64,7 +64,7 @@ void RuleTerrain::load(const YAML::Node &node, const Ruleset *ruleset)
 			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
 			{
 				std::string name;
-				j.second() >> name;
+				*j >> name;
 				_mapDataSets.push_back(ruleset->getMapDataSet(name));
 			}
 		}
@@ -73,9 +73,9 @@ void RuleTerrain::load(const YAML::Node &node, const Ruleset *ruleset)
 			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
 			{
 				std::string name;
-				j.second()["name"] >> name;
+				(*j)["name"] >> name;
 				MapBlock *map = new MapBlock(this, name, 0, 0, MT_DEFAULT);
-				map->load(j.second());
+				map->load(*j);
 				_mapBlocks.push_back(map);
 			}
 		}

@@ -81,7 +81,7 @@ void RuleRegion::load(const YAML::Node &node)
 			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
 			{
 				City *rule = new City("", 0.0, 0.0);
-				rule->load(j.second());
+				rule->load(*j);
 				_cities.push_back(rule);
 			}
 		}

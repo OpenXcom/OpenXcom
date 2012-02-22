@@ -146,7 +146,6 @@ void Unit::load(const YAML::Node &node)
  */
 void Unit::save(YAML::Emitter &out) const
 {
-
 	out << YAML::BeginMap;
 	out << YAML::Key << "type" << YAML::Value << _type;
 	out << YAML::Key << "race" << YAML::Value << _race;

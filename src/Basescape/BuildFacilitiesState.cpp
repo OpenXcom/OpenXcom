@@ -47,7 +47,7 @@ BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base, State *state)
 	_window = new Window(this, 128, 160, 192, 40, POPUP_VERTICAL);
 	_btnOk = new TextButton(112, 16, 200, 176);
 	_txtTitle = new Text(118, 16, 197, 48);
-	_lstFacilities = new TextList(115, 110, 200, 64);
+	_lstFacilities = new TextList(115, 96, 200, 64);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
@@ -71,21 +71,20 @@ BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base, State *state)
 	_txtTitle->setText(_game->getLanguage()->getString("STR_INSTALLATION"));
 
 	_lstFacilities->setColor(Palette::blockOffset(13)+5);
+	_lstFacilities->setArrowColor(Palette::blockOffset(13)+5);
 	_lstFacilities->setColumns(1, 115);
 	_lstFacilities->setSelectable(true);
 	_lstFacilities->setBackground(_window);
 	_lstFacilities->setMargin(2);
 	_lstFacilities->onMouseClick((ActionHandler)&BuildFacilitiesState::lstFacilitiesClick);
 
-	_facilities.push_back(_game->getRuleset()->getBaseFacility("STR_LIVING_QUARTERS"));
-	_facilities.push_back(_game->getRuleset()->getBaseFacility("STR_LABORATORY"));
-	_facilities.push_back(_game->getRuleset()->getBaseFacility("STR_WORKSHOP"));
-	_facilities.push_back(_game->getRuleset()->getBaseFacility("STR_GENERAL_STORES"));
-	_facilities.push_back(_game->getRuleset()->getBaseFacility("STR_ALIEN_CONTAINMENT"));
-	_facilities.push_back(_game->getRuleset()->getBaseFacility("STR_SMALL_RADAR_SYSTEM"));
-	_facilities.push_back(_game->getRuleset()->getBaseFacility("STR_LARGE_RADAR_SYSTEM"));
-	_facilities.push_back(_game->getRuleset()->getBaseFacility("STR_MISSILE_DEFENSES"));
-	_facilities.push_back(_game->getRuleset()->getBaseFacility("STR_HANGAR"));
+	std::vector<std::string> facilities = _game->getRuleset()->getBaseFacilitiesList();
+	for (std::vector<std::string>::iterator i = facilities.begin(); i != facilities.end(); ++i)
+	{
+		RuleBaseFacility *rule = _game->getRuleset()->getBaseFacility(*i);
+		if (_game->getSavedGame()->isResearched(rule->getRequirement()) && !rule->getLift())
+			_facilities.push_back(rule);
+	}
 
 	for (std::vector<RuleBaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); ++i)
 	{

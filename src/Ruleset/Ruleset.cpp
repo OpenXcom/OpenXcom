@@ -163,7 +163,7 @@ void Ruleset::load(const std::string &filename)
 			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
 			{
 				std::string type;
-				j.second()["type"] >> type;
+				(*j)["type"] >> type;
 				RuleCountry *rule;
 				if (_countries.find(type) != _countries.end())
 				{
@@ -175,7 +175,7 @@ void Ruleset::load(const std::string &filename)
 					_countries[type] = rule;
 					_countriesIndex.push_back(type);
 				}
-				rule->load(j.second());
+				rule->load(*j);
 			}
 		}
 		else if (key == "regions")
@@ -183,7 +183,7 @@ void Ruleset::load(const std::string &filename)
 			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
 			{
 				std::string type;
-				j.second()["type"] >> type;
+				(*j)["type"] >> type;
 				RuleRegion *rule;
 				if (_regions.find(type) != _regions.end())
 				{
@@ -195,7 +195,7 @@ void Ruleset::load(const std::string &filename)
 					_regions[type] = rule;
 					_regionsIndex.push_back(type);
 				}
-				rule->load(j.second());
+				rule->load(*j);
 			}
 		}
 		else if (key == "facilities")
@@ -203,7 +203,7 @@ void Ruleset::load(const std::string &filename)
 			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
 			{
 				std::string type;
-				j.second()["type"] >> type;
+				(*j)["type"] >> type;
 				RuleBaseFacility *rule;
 				if (_facilities.find(type) != _facilities.end())
 				{
@@ -215,7 +215,7 @@ void Ruleset::load(const std::string &filename)
 					_facilities[type] = rule;
 					_facilitiesIndex.push_back(type);
 				}
-				rule->load(j.second());
+				rule->load(*j);
 			}
 		}
 		else if (key == "mapDataSets")
@@ -223,7 +223,7 @@ void Ruleset::load(const std::string &filename)
 			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
 			{
 				std::string type;
-				j.second()["name"] >> type;
+				(*j)["name"] >> type;
 				MapDataSet *rule;
 				if (_mapDataSets.find(type) != _mapDataSets.end())
 				{
@@ -234,7 +234,7 @@ void Ruleset::load(const std::string &filename)
 					rule = new MapDataSet(type, 0);
 					_mapDataSets[type] = rule;
 				}
-				rule->load(j.second());
+				rule->load(*j);
 			}
 		}
 		else if (key == "crafts")
@@ -242,7 +242,7 @@ void Ruleset::load(const std::string &filename)
 			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
 			{
 				std::string type;
-				j.second()["type"] >> type;
+				(*j)["type"] >> type;
 				RuleCraft *rule;
 				if (_crafts.find(type) != _crafts.end())
 				{
@@ -254,7 +254,7 @@ void Ruleset::load(const std::string &filename)
 					_crafts[type] = rule;
 					_craftsIndex.push_back(type);
 				}
-				rule->load(j.second(), this);
+				rule->load(*j, this);
 			}
 		}
 		else if (key == "craftWeapons")
@@ -262,7 +262,7 @@ void Ruleset::load(const std::string &filename)
 			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
 			{
 				std::string type;
-				j.second()["type"] >> type;
+				(*j)["type"] >> type;
 				RuleCraftWeapon *rule;
 				if (_craftWeapons.find(type) != _craftWeapons.end())
 				{
@@ -274,7 +274,7 @@ void Ruleset::load(const std::string &filename)
 					_craftWeapons[type] = rule;
 					_craftWeaponsIndex.push_back(type);
 				}
-				rule->load(j.second());
+				rule->load(*j);
 			}
 		}
 		else if (key == "items")
@@ -282,7 +282,7 @@ void Ruleset::load(const std::string &filename)
 			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
 			{
 				std::string type;
-				j.second()["type"] >> type;
+				(*j)["type"] >> type;
 				RuleItem *rule;
 				if (_items.find(type) != _items.end())
 				{
@@ -294,7 +294,7 @@ void Ruleset::load(const std::string &filename)
 					_items[type] = rule;
 					_itemsIndex.push_back(type);
 				}
-				rule->load(j.second());
+				rule->load(*j);
 			}
 		}
 		else if (key == "ufos")
@@ -302,7 +302,7 @@ void Ruleset::load(const std::string &filename)
 			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
 			{
 				std::string type;
-				j.second()["type"] >> type;
+				(*j)["type"] >> type;
 				RuleUfo *rule;
 				if (_ufos.find(type) != _ufos.end())
 				{
@@ -313,7 +313,7 @@ void Ruleset::load(const std::string &filename)
 					rule = new RuleUfo(type);
 					_ufos[type] = rule;
 				}
-				rule->load(j.second(), this);
+				rule->load(*j, this);
 			}
 		}
 		else if (key == "invs")
@@ -321,7 +321,7 @@ void Ruleset::load(const std::string &filename)
 			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
 			{
 				std::string type;
-				j.second()["id"] >> type;
+				(*j)["id"] >> type;
 				RuleInventory *rule;
 				if (_invs.find(type) != _invs.end())
 				{
@@ -332,7 +332,7 @@ void Ruleset::load(const std::string &filename)
 					rule = new RuleInventory(type);
 					_invs[type] = rule;
 				}
-				rule->load(j.second());
+				rule->load(*j);
 			}
 		}
 		else if (key == "terrains")
@@ -340,7 +340,7 @@ void Ruleset::load(const std::string &filename)
 			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
 			{
 				std::string type;
-				j.second()["name"] >> type;
+				(*j)["name"] >> type;
 				RuleTerrain *rule;
 				if (_terrains.find(type) != _terrains.end())
 				{
@@ -351,7 +351,7 @@ void Ruleset::load(const std::string &filename)
 					rule = new RuleTerrain(type);
 					_terrains[type] = rule;
 				}
-				rule->load(j.second(), this);
+				rule->load(*j, this);
 			}
 		}
 		else if (key == "armors")
@@ -359,7 +359,7 @@ void Ruleset::load(const std::string &filename)
 			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
 			{
 				std::string type;
-				j.second()["type"] >> type;
+				(*j)["type"] >> type;
 				Armor *rule;
 				if (_armors.find(type) != _armors.end())
 				{
@@ -371,7 +371,7 @@ void Ruleset::load(const std::string &filename)
 					_armors[type] = rule;
 					_armorsIndex.push_back(type);
 				}
-				rule->load(j.second());
+				rule->load(*j);
 			}
 		}
 		else if (key == "soldiers")
@@ -379,7 +379,7 @@ void Ruleset::load(const std::string &filename)
 			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
 			{
 				std::string type;
-				j.second()["type"] >> type;
+				(*j)["type"] >> type;
 				RuleSoldier *rule;
 				if (_soldiers.find(type) != _soldiers.end())
 				{
@@ -390,7 +390,7 @@ void Ruleset::load(const std::string &filename)
 					rule = new RuleSoldier(type);
 					_soldiers[type] = rule;
 				}
-				rule->load(j.second());
+				rule->load(*j);
 			}
 		}
 		else if (key == "units")
@@ -398,7 +398,7 @@ void Ruleset::load(const std::string &filename)
 			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
 			{
 				std::string type;
-				j.second()["type"] >> type;
+				(*j)["type"] >> type;
 				Unit *rule;
 				if (_units.find(type) != _units.end())
 				{
@@ -409,7 +409,7 @@ void Ruleset::load(const std::string &filename)
 					rule = new Unit(type, "", "");
 					_units[type] = rule;
 				}
-				rule->load(j.second());
+				rule->load(*j);
 			}
 		}
 		else if (key == "alienRaces")
@@ -417,7 +417,7 @@ void Ruleset::load(const std::string &filename)
 			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
 			{
 				std::string type;
-				j.second()["type"] >> type;
+				(*j)["id"] >> type;
 				AlienRace *rule;
 				if (_alienRaces.find(type) != _alienRaces.end())
 				{
@@ -428,7 +428,7 @@ void Ruleset::load(const std::string &filename)
 					rule = new AlienRace(type);
 					_alienRaces[type] = rule;
 				}
-				rule->load(j.second());
+				rule->load(*j);
 			}
 		}
 		else if (key == "costSoldier")
@@ -625,6 +625,16 @@ RuleRegion *const Ruleset::getRegion(const std::string &id) const
 RuleBaseFacility *const Ruleset::getBaseFacility(const std::string &id) const
 {
 	return _facilities.find(id)->second;
+}
+
+/**
+ * Returns the list of all base facilities
+ * provided by the ruleset.
+ * @return List of base faciliies.
+ */
+std::vector<std::string> Ruleset::getBaseFacilitiesList() const
+{
+	return _facilitiesIndex;
 }
 
 /**

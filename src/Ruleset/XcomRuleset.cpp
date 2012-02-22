@@ -68,16 +68,7 @@ namespace OpenXcom
  */
 XcomRuleset::XcomRuleset() : Ruleset()
 {
-	// Add soldier names
-	std::vector<std::string> names = CrossPlatform::getFolderContents(Options::getDataFolder() + "SoldierName/", "nam");
-
-	for (std::vector<std::string>::iterator i = names.begin(); i != names.end(); ++i)
-	{
-		std::string file = (*i).substr(0, (*i).length()-4);
-		SoldierNamePool *pool = new SoldierNamePool();
-		pool->load(file);
-		_names.push_back(pool);
-	}
+	load("UfoBase");
 
 	// Add countries
 	RuleCountry *usa = new RuleCountry("STR_USA");
@@ -340,112 +331,6 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_regions.insert(std::pair<std::string, RuleRegion*>("STR_NORTH_ATLANTIC", natlantic));
 	_regions.insert(std::pair<std::string, RuleRegion*>("STR_SOUTH_ATLANTIC", satlantic));
 	_regions.insert(std::pair<std::string, RuleRegion*>("STR_INDIAN_OCEAN", indian));
-
-	// Add base facilities
-	RuleBaseFacility *lift = new RuleBaseFacility("STR_ACCESS_LIFT");
-	lift->setSpriteShape(2);
-	lift->setSpriteFacility(17);
-	lift->setBuildCost(300000);
-	lift->setBuildTime(1);
-	lift->setMonthlyCost(4000);
-	lift->setLift(true);
-	lift->setMapName("XBASE_00");
-
-	RuleBaseFacility *quarters = new RuleBaseFacility("STR_LIVING_QUARTERS");
-	quarters->setSpriteShape(1);
-	quarters->setSpriteFacility(18);
-	quarters->setBuildCost(400000);
-	quarters->setBuildTime(16);
-	quarters->setMonthlyCost(10000);
-	quarters->setPersonnel(50);
-	quarters->setMapName("XBASE_01");
-
-	RuleBaseFacility *lab = new RuleBaseFacility("STR_LABORATORY");
-	lab->setSpriteShape(1);
-	lab->setSpriteFacility(19);
-	lab->setBuildCost(750000);
-	lab->setBuildTime(26);
-	lab->setMonthlyCost(30000);
-	lab->setLaboratories(50);
-	lab->setMapName("XBASE_02");
-
-	RuleBaseFacility *workshop = new RuleBaseFacility("STR_WORKSHOP");
-	workshop->setSpriteShape(1);
-	workshop->setSpriteFacility(20);
-	workshop->setBuildCost(800000);
-	workshop->setBuildTime(32);
-	workshop->setMonthlyCost(35000);
-	workshop->setWorkshops(50);
-	workshop->setMapName("XBASE_03");
-
-	RuleBaseFacility *stores = new RuleBaseFacility("STR_GENERAL_STORES");
-	stores->setSpriteShape(1);
-	stores->setSpriteFacility(24);
-	stores->setBuildCost(150000);
-	stores->setBuildTime(10);
-	stores->setMonthlyCost(5000);
-	stores->setStorage(50);
-	stores->setMapName("XBASE_07");
-
-	RuleBaseFacility *aliens = new RuleBaseFacility("STR_ALIEN_CONTAINMENT");
-	aliens->setSpriteShape(1);
-	aliens->setSpriteFacility(25);
-	aliens->setBuildCost(400000);
-	aliens->setBuildTime(18);
-	aliens->setMonthlyCost(15000);
-	aliens->setAliens(10);
-	aliens->setMapName("XBASE_08");
-
-	RuleBaseFacility *hangar = new RuleBaseFacility("STR_HANGAR");
-	hangar->setSpriteShape(9);
-	hangar->setSpriteFacility(9);
-	hangar->setSize(2);
-	hangar->setBuildCost(200000);
-	hangar->setBuildTime(25);
-	hangar->setMonthlyCost(25000);
-	hangar->setCrafts(1);
-	hangar->setMapName("XBASE_16");
-
-	RuleBaseFacility *sRadar = new RuleBaseFacility("STR_SMALL_RADAR_SYSTEM");
-	sRadar->setSpriteShape(2);
-	sRadar->setSpriteFacility(21);
-	sRadar->setBuildCost(500000);
-	sRadar->setBuildTime(12);
-	sRadar->setMonthlyCost(10000);
-	sRadar->setRadarRange(1500);
-	sRadar->setRadarChance(10);
-	sRadar->setMapName("XBASE_04");
-
-	RuleBaseFacility *lRadar = new RuleBaseFacility("STR_LARGE_RADAR_SYSTEM");
-	lRadar->setSpriteShape(1);
-	lRadar->setSpriteFacility(22);
-	lRadar->setBuildCost(800000);
-	lRadar->setBuildTime(25);
-	lRadar->setMonthlyCost(15000);
-	lRadar->setRadarRange(2250);
-	lRadar->setRadarChance(20);
-	lRadar->setMapName("XBASE_05");
-
-	RuleBaseFacility *missile = new RuleBaseFacility("STR_MISSILE_DEFENSES");
-	missile->setSpriteShape(2);
-	missile->setSpriteFacility(23);
-	missile->setBuildCost(200000);
-	missile->setBuildTime(16);
-	missile->setMonthlyCost(5000);
-	missile->setDefenceValue(500);
-	missile->setHitRatio(50);
-	missile->setMapName("XBASE_06");
-
-	_facilities.insert(std::pair<std::string, RuleBaseFacility*>("STR_ACCESS_LIFT", lift));
-	_facilities.insert(std::pair<std::string, RuleBaseFacility*>("STR_LIVING_QUARTERS", quarters));
-	_facilities.insert(std::pair<std::string, RuleBaseFacility*>("STR_LABORATORY", lab));
-	_facilities.insert(std::pair<std::string, RuleBaseFacility*>("STR_WORKSHOP", workshop));
-	_facilities.insert(std::pair<std::string, RuleBaseFacility*>("STR_GENERAL_STORES", stores));
-	_facilities.insert(std::pair<std::string, RuleBaseFacility*>("STR_ALIEN_CONTAINMENT", aliens));
-	_facilities.insert(std::pair<std::string, RuleBaseFacility*>("STR_HANGAR", hangar));
-	_facilities.insert(std::pair<std::string, RuleBaseFacility*>("STR_SMALL_RADAR_SYSTEM", sRadar));
-	_facilities.insert(std::pair<std::string, RuleBaseFacility*>("STR_LARGE_RADAR_SYSTEM", lRadar));
-	_facilities.insert(std::pair<std::string, RuleBaseFacility*>("STR_MISSILE_DEFENSES", missile));
 
 	// Add mapdatafiles
 	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("AVENGER",new MapDataSet("AVENGER",59)));

@@ -97,6 +97,8 @@ public:
 	RuleRegion *const getRegion(const std::string &id) const;
 	/// Gets the ruleset for a facility type.
 	RuleBaseFacility *const getBaseFacility(const std::string &id) const;
+	/// Gets the available facilities.
+	std::vector<std::string> getBaseFacilitiesList() const;
 	/// Gets the ruleset for a craft type.
 	RuleCraft *const getCraft(const std::string &id) const;
 	/// Gets the ruleset for a craft weapon type.

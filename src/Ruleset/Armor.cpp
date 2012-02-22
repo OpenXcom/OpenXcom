@@ -99,7 +99,7 @@ void Armor::load(const YAML::Node &node)
 			int dmg = 0;
 			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
 			{
-				j.second() >> _damageModifier[dmg];
+				*j >> _damageModifier[dmg];
 				++dmg;
 			}
 		}

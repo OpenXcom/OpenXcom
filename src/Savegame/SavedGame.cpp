@@ -699,6 +699,24 @@ void SavedGame::getDependableResearchBasic (std::vector<RuleResearchProject *> &
 }
 
 /**
+ * Returns if a certain research has been completed.
+ * @param research Research ID.
+ * @return Whether it's researched or not.
+ */
+bool SavedGame::isResearched(const std::string &research) const
+{
+	if (research.empty())
+		return true;
+	for (std::vector<const RuleResearchProject *>::const_iterator i = _discovered.begin(); i != _discovered.end(); ++i)
+	{
+		if ((*i)->getName() == research)
+			return true;
+	}
+
+	return false;
+}
+
+/**
  * Returns the latest soldier ID.
  * @return Pointer to ID value.
  */
