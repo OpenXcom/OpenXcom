@@ -157,7 +157,8 @@ int Projectile::calculateTrajectory(double accuracy)
 	}
 	else
 	{
-		return -1; // no line of fire as there is nothing on this tile
+		// target nothing, targets the middle of the tile
+		targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + 10);
 	}
 	test = _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, false, &_trajectory, bu);
 	if (test == 4 && !_trajectory.empty())
