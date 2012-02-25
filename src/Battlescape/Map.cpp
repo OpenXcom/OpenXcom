@@ -341,20 +341,20 @@ void Map::drawTerrain(Surface *surface)
 							}
 						}
 						// Draw object
-						if (tile->isDiscovered(2) || (tile->getMapData(MapData::O_OBJECT) && tile->getMapData(MapData::O_OBJECT)->isBigWall() && (tile->isDiscovered(0) || tile->isDiscovered(1))))
+						if (tile->getMapData(MapData::O_OBJECT))
 						{
 							tmpSurface = tile->getSprite(MapData::O_OBJECT);
 							if (tmpSurface)
 								tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y - tile->getMapData(MapData::O_OBJECT)->getYOffset(), tileShade);
-
-							// draw an item on top of the floor (if any)
-							int sprite = tile->getTopItemSprite();
-							if (sprite != -1)
-							{
-								tmpSurface = _res->getSurfaceSet("FLOOROB.PCK")->getFrame(sprite);
-								tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y + tile->getTerrainLevel(), tileShade);
-							}
 						}
+						// draw an item on top of the floor (if any)
+						int sprite = tile->getTopItemSprite();
+						if (sprite != -1)
+						{
+							tmpSurface = _res->getSurfaceSet("FLOOROB.PCK")->getFrame(sprite);
+							tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y + tile->getTerrainLevel(), tileShade);
+						}
+						
 					}
 
 					// check if we got bullet

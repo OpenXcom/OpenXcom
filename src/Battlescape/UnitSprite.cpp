@@ -188,7 +188,7 @@ void UnitSprite::drawRoutine0()
 	if (_item)
 	{
 		// draw handob item
-		if (_unit->getStatus() == STATUS_AIMING)
+		if (_unit->getStatus() == STATUS_AIMING && _item->getRules()->getTwoHanded())
 		{
 			int dir = (_unit->getDirection() + 2)%8;
 			item = _itemSurface->getFrame(_item->getRules()->getHandSprite() + dir);
@@ -311,7 +311,7 @@ void UnitSprite::drawRoutine1()
 	if (_item)
 	{
 		// draw handob item
-		if (_unit->getStatus() == STATUS_AIMING)
+		if (_unit->getStatus() == STATUS_AIMING && _item->getRules()->getTwoHanded())
 		{
 			int dir = (_unit->getDirection() + 2)%8;
 			item = _itemSurface->getFrame(_item->getRules()->getHandSprite() + dir);

@@ -879,11 +879,11 @@ void GeoscapeState::btnGraphsClick(Action *action)
 	/* Daiky: uncomment this bit to start a terror mission */
 	SavedBattleGame *bgame = new SavedBattleGame();
 	_game->getSavedGame()->setBattleGame(bgame);
-	bgame->setMissionType("STR_BASE_DEFENCE");
+	bgame->setMissionType("STR_TERROR_MISSION");
 	BattlescapeGenerator *bgen = new BattlescapeGenerator(_game);
 	bgen->setWorldTexture(1);
 	bgen->setWorldShade(7);
-	//bgen->setCraft(_game->getSavedGame()->getBases()->at(0)->getCrafts()->at(0));
+	bgen->setCraft(_game->getSavedGame()->getBases()->at(0)->getCrafts()->at(0));
 	bgen->setBase(_game->getSavedGame()->getBases()->at(0));
 	bgen->setAlienRace("STR_SECTOID");
 	bgen->setAlienItemlevel(0);

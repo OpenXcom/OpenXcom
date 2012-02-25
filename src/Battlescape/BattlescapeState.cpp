@@ -732,6 +732,10 @@ void BattlescapeState::updateSoldierInfo()
 		SurfaceSet *texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
 		texture->getFrame(soldier->getRankSprite())->blit(_rank);
 	}
+	else
+	{
+		_rank->clear();
+	}
 	_numTimeUnits->setValue(battleUnit->getTimeUnits());
 	_barTimeUnits->setMax(battleUnit->getStats()->tu);
 	_barTimeUnits->setValue(battleUnit->getTimeUnits());

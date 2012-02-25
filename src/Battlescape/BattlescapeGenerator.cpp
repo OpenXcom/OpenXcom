@@ -166,7 +166,7 @@ void BattlescapeGenerator::run()
 	if (_save->getMissionType() == "STR_TERROR_MISSION")
 	{
 		_terrain = _game->getRuleset()->getTerrain("URBAN");
-	}
+	}else
 	if (_save->getMissionType() == "STR_BASE_DEFENCE")
 	{
 		_terrain = _game->getRuleset()->getTerrain("XBASE");
