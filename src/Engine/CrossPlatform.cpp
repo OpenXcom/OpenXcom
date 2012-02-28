@@ -287,7 +287,7 @@ std::string caseInsensitive(const std::string &base, const std::string &path)
 
 	// UPPERCASE
 	std::transform(newPath.begin(), newPath.end(), newPath.begin(), toupper);
-	fullPath = base + path;
+	fullPath = base + newPath;
 	if (fileExists(fullPath.c_str()))
 	{
 		return fullPath;
@@ -295,7 +295,7 @@ std::string caseInsensitive(const std::string &base, const std::string &path)
 
 	// lowercase
 	std::transform(newPath.begin(), newPath.end(), newPath.begin(), tolower);
-	fullPath = base + path;
+	fullPath = base + newPath;
 	if (fileExists(fullPath.c_str()))
 	{
 		return fullPath;
