@@ -231,7 +231,7 @@ void Ruleset::load(const std::string &filename)
 				}
 				else
 				{
-					rule = new MapDataSet(type, 0);
+					rule = new MapDataSet(type);
 					_mapDataSets[type] = rule;
 				}
 				rule->load(*j);

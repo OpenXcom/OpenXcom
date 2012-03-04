@@ -321,7 +321,10 @@ void BattlescapeGame::endTurn()
 		setupCursor();
 	}
 
-	_parentState->getGame()->pushState(new NextTurnState(_parentState->getGame(), _save, _parentState));
+	if (_save->getSide() != FACTION_NEUTRAL)
+	{
+		_parentState->getGame()->pushState(new NextTurnState(_parentState->getGame(), _save, _parentState));
+	}
 
 }
 
@@ -657,6 +660,11 @@ void BattlescapeGame::popState()
 						getMap()->getCamera()->centerOnPosition(_save->getSelectedUnit()->getPosition());
 					}
 				}
+			}
+			else if (_debugPlay)
+			{
+				_parentState->getGame()->getCursor()->setVisible(true);
+				setupCursor();
 			}
 		}
 	}

@@ -259,7 +259,7 @@ void InventoryState::invClick(Action *action)
 		}
 		else
 		{
-			_txtItem->setText(_game->getLanguage()->getString(item->getRules()->getType()));
+			_txtItem->setText(_game->getLanguage()->getString(item->getRules()->getName()));
 		}
 		std::wstringstream ss;
 		if (item->getAmmoItem() != 0 && item->needsAmmo())

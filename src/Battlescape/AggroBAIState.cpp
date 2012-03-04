@@ -153,6 +153,9 @@ void AggroBAIState::think(BattleAction *action)
 		if (_unit->getHealth() < _unit->getStats()->health)
 			number += 10;
 
+		// aggrotarget has no weapon - changes of take cover get smaller
+		if (!_aggroTarget->getMainHandWeapon())
+			number -= 50;
 
 		if (aggression == 0 && number < 10)
 			takeCover = false;

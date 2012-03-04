@@ -118,6 +118,9 @@ void UnitSprite::draw()
 	case 3:
 		drawRoutine3();
 		break;
+	case 4:
+		drawRoutine4();
+		break;
 	}
 
 }
@@ -447,4 +450,42 @@ void UnitSprite::drawRoutine3()
 	s->blit(this);
 }
 
+/**
+ * Drawing routine for civilians.
+ * Very easy: first 8 is standing positions, then 8 walking sequences of 8, finally death sequence of 3
+ */
+void UnitSprite::drawRoutine4()
+{
+	if (_unit->isOut())
+	{
+		// unit is drawn as an item
+		return;
+	}
+
+	Surface *s = 0;
+	const int stand = 0, walk = 8, die = 72;
+
+	
+	if (_unit->isOut())
+	{
+		// unit is drawn as an item
+		return;
+	}
+
+	if (_unit->getStatus() == STATUS_FALLING)
+	{
+		s = _unitSurface->getFrame(die + _unit->getFallingPhase());
+	}
+	else
+	if (_unit->getStatus() == STATUS_WALKING)
+	{
+		s = _unitSurface->getFrame(walk + (8 * _unit->getDirection()) + _unit->getWalkingPhase());
+	}
+	else
+	{
+		s = _unitSurface->getFrame(stand + _unit->getDirection());
+	}
+
+	s->blit(this);
+}
 }

@@ -48,7 +48,7 @@ private:
 	static MapData *_blankTile;
 	static MapData *_scourgedTile;
 public:
-	MapDataSet(const std::string &name, int size = 0);
+	MapDataSet(const std::string &name);
 	~MapDataSet();
 	/// Loads the map data set from YAML.
 	void load(const YAML::Node& node);

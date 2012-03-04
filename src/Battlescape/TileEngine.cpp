@@ -207,7 +207,7 @@ void TileEngine::addLight(const Position &center, int power, int layer)
  */
 bool TileEngine::calculateFOV(BattleUnit *unit)
 {
-	int visibleUnitsChecksum = 0;
+	int visibleUnitsChecksum = 0, oldNumVisibleUnits = 0;
 	Position center = unit->getPosition();
 	Position test;
 	bool swap = (unit->getDirection()==0 || unit->getDirection()==4);
@@ -216,8 +216,11 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 	int y1, y2;
 
 	// calculate a visible units checksum - if it changed during this step, the soldier stops walking
+	// the unit's Xposition * 100 + y seems a simple but unique ID for each unit
 	for (std::vector<BattleUnit*>::iterator i = unit->getVisibleUnits()->begin(); i != unit->getVisibleUnits()->end(); ++i)
-		visibleUnitsChecksum += (*i)->getId()+1;
+		visibleUnitsChecksum += (*i)->getPosition().x*100 + (*i)->getPosition().y;
+
+	oldNumVisibleUnits = unit->getVisibleUnits()->size();
 
 	unit->clearVisibleUnits();
 
@@ -251,7 +254,7 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 						BattleUnit *visibleUnit = _save->getTile(test)->getUnit();
 						if (visibleUnit && !visibleUnit->isOut() && visible(unit, _save->getTile(test)))
 						{
-							if ((visibleUnit->getFaction() == FACTION_HOSTILE && unit->getFaction() == FACTION_PLAYER)
+							if ((visibleUnit->getFaction() == FACTION_HOSTILE && unit->getFaction() != FACTION_HOSTILE)
 								|| (visibleUnit->getFaction() != FACTION_HOSTILE && unit->getFaction() == FACTION_HOSTILE))
 							{
 								unit->addToVisibleUnits(visibleUnit);
@@ -271,9 +274,12 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 
 	int newChecksum = 0;
 	for (std::vector<BattleUnit*>::iterator i = unit->getVisibleUnits()->begin(); i != unit->getVisibleUnits()->end(); ++i)
-		newChecksum += (*i)->getId()+1;
+		newChecksum += (*i)->getPosition().x*100 + (*i)->getPosition().y;
 
-	if (visibleUnitsChecksum < newChecksum && unit->getVisibleUnits()->size())
+	// we only react when there are at least the same amount of visible units as before AND the checksum is different
+	// this way we stop if there are the same amount of visible units, but a different unit is seen
+	// or we stop if there are more visible units seen
+	if (visibleUnitsChecksum != newChecksum && unit->getVisibleUnits()->size() >= oldNumVisibleUnits)
 	{
 		// a hostile unit will aggro on the new unit if it sees one - it will not start walking
 		if (unit->getFaction() == FACTION_HOSTILE)

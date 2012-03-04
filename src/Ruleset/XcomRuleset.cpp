@@ -333,33 +333,33 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_regions.insert(std::pair<std::string, RuleRegion*>("STR_INDIAN_OCEAN", indian));
 
 	// Add mapdatafiles
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("AVENGER",new MapDataSet("AVENGER",59)));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("BARN",new MapDataSet("BARN",29)));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("BLANKS",new MapDataSet("BLANKS",2)));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("BRAIN",new MapDataSet("BRAIN",4)));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("CULTIVAT",new MapDataSet("CULTIVAT",37)));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("DESERT",new MapDataSet("DESERT",66)));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("FOREST",new MapDataSet("FOREST",83)));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("FRNITURE",new MapDataSet("FRNITURE",26)));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("JUNGLE",new MapDataSet("JUNGLE",82)));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("LIGHTNIN",new MapDataSet("LIGHTNIN",42)));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("MARS",new MapDataSet("MARS",36)));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("MOUNT",new MapDataSet("MOUNT",78)));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("PLANE",new MapDataSet("PLANE",65)));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("POLAR",new MapDataSet("POLAR",81)));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("ROADS",new MapDataSet("ROADS",23)));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("UFO1",new MapDataSet("UFO1",20)));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("URBAN",new MapDataSet("URBAN",112)));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("URBITS",new MapDataSet("URBITS",25)));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("U_BASE",new MapDataSet("U_BASE",67)));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("U_BITS",new MapDataSet("U_BITS",8)));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("U_DISEC2",new MapDataSet("U_DISEC2",17)));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("U_EXT02",new MapDataSet("U_EXT02",34)));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("U_OPER2",new MapDataSet("U_OPER2",15)));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("U_PODS",new MapDataSet("U_PODS",11)));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("U_WALL02",new MapDataSet("U_WALL02",47)));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("XBASE1",new MapDataSet("XBASE1",97)));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("XBASE2",new MapDataSet("XBASE2",62)));
+	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("AVENGER",new MapDataSet("AVENGER")));
+	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("BARN",new MapDataSet("BARN")));
+	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("BLANKS",new MapDataSet("BLANKS")));
+	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("BRAIN",new MapDataSet("BRAIN")));
+	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("CULTIVAT",new MapDataSet("CULTIVAT")));
+	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("DESERT",new MapDataSet("DESERT")));
+	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("FOREST",new MapDataSet("FOREST")));
+	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("FRNITURE",new MapDataSet("FRNITURE")));
+	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("JUNGLE",new MapDataSet("JUNGLE")));
+	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("LIGHTNIN",new MapDataSet("LIGHTNIN")));
+	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("MARS",new MapDataSet("MARS")));
+	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("MOUNT",new MapDataSet("MOUNT")));
+	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("PLANE",new MapDataSet("PLANE")));
+	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("POLAR",new MapDataSet("POLAR")));
+	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("ROADS",new MapDataSet("ROADS")));
+	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("UFO1",new MapDataSet("UFO1")));
+	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("URBAN",new MapDataSet("URBAN")));
+	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("URBITS",new MapDataSet("URBITS")));
+	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("U_BASE",new MapDataSet("U_BASE")));
+	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("U_BITS",new MapDataSet("U_BITS")));
+	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("U_DISEC2",new MapDataSet("U_DISEC2")));
+	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("U_EXT02",new MapDataSet("U_EXT02")));
+	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("U_OPER2",new MapDataSet("U_OPER2")));
+	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("U_PODS",new MapDataSet("U_PODS")));
+	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("U_WALL02",new MapDataSet("U_WALL02")));
+	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("XBASE1",new MapDataSet("XBASE1")));
+	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("XBASE2",new MapDataSet("XBASE2")));
 
 	// Add crafts
 	RuleCraft* skyranger = new RuleCraft("STR_SKYRANGER");
@@ -855,6 +855,22 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	fcorpse->setInventoryHeight(3);
 	fcorpse->setWeight(30);
 
+	RuleItem *civmcorpse = new RuleItem("CIVM_CORPSE");
+	civmcorpse->setName("STR_CORPSE");
+	civmcorpse->setBigSprite(45);
+	civmcorpse->setFloorSprite(50);
+	civmcorpse->setInventoryWidth(2);
+	civmcorpse->setInventoryHeight(3);
+	civmcorpse->setWeight(22);
+
+	RuleItem *civfcorpse = new RuleItem("CIVF_CORPSE");
+	civfcorpse->setName("STR_CORPSE");
+	civfcorpse->setBigSprite(45);
+	civfcorpse->setFloorSprite(51);
+	civfcorpse->setInventoryWidth(2);
+	civfcorpse->setInventoryHeight(3);
+	civfcorpse->setWeight(20);
+
 	RuleItem *ppistol = new RuleItem("STR_PLASMA_PISTOL");
 	ppistol->setSize(0.1f);
 	ppistol->setCost(800);
@@ -922,56 +938,56 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	tankcs->setClipSize(30);
 	tankcs->setWeight(1);
 
-	RuleItem *tcorpse1 = new RuleItem("STR_TANK_CORPSE_1");
+	RuleItem *tcorpse1 = new RuleItem("TANK_CORPSE_1");
 	tcorpse1->setBigSprite(43);
 	tcorpse1->setFloorSprite(68);
 	tcorpse1->setInventoryWidth(0);
 	tcorpse1->setInventoryHeight(0);
 	tcorpse1->setWeight(100);
 
-	RuleItem *tcorpse2 = new RuleItem("STR_TANK_CORPSE_2");
+	RuleItem *tcorpse2 = new RuleItem("TANK_CORPSE_2");
 	tcorpse2->setBigSprite(43);
 	tcorpse2->setFloorSprite(69);
 	tcorpse2->setInventoryWidth(0);
 	tcorpse2->setInventoryHeight(0);
 	tcorpse2->setWeight(100);
 
-	RuleItem *tcorpse3 = new RuleItem("STR_TANK_CORPSE_3");
+	RuleItem *tcorpse3 = new RuleItem("TANK_CORPSE_3");
 	tcorpse3->setBigSprite(43);
 	tcorpse3->setFloorSprite(70);
 	tcorpse3->setInventoryWidth(0);
 	tcorpse3->setInventoryHeight(0);
 	tcorpse3->setWeight(100);
 
-	RuleItem *tcorpse4 = new RuleItem("STR_TANK_CORPSE_4");
+	RuleItem *tcorpse4 = new RuleItem("TANK_CORPSE_4");
 	tcorpse4->setBigSprite(43);
 	tcorpse4->setFloorSprite(71);
 	tcorpse4->setInventoryWidth(0);
 	tcorpse4->setInventoryHeight(0);
 	tcorpse4->setWeight(100);
 
-	RuleItem *cdcorpse1 = new RuleItem("STR_CYBERDISC_CORPSE_1");
+	RuleItem *cdcorpse1 = new RuleItem("CYBERDISC_CORPSE_1");
 	cdcorpse1->setBigSprite(43);
 	cdcorpse1->setFloorSprite(56);
 	cdcorpse1->setInventoryWidth(0);
 	cdcorpse1->setInventoryHeight(0);
 	cdcorpse1->setWeight(100);
 
-	RuleItem *cdcorpse2 = new RuleItem("STR_CYBERDISC_CORPSE_2");
+	RuleItem *cdcorpse2 = new RuleItem("CYBERDISC_CORPSE_2");
 	cdcorpse2->setBigSprite(43);
 	cdcorpse2->setFloorSprite(57);
 	cdcorpse2->setInventoryWidth(0);
 	cdcorpse2->setInventoryHeight(0);
 	cdcorpse2->setWeight(100);
 
-	RuleItem *cdcorpse3 = new RuleItem("STR_CYBERDISC_CORPSE_3");
+	RuleItem *cdcorpse3 = new RuleItem("CYBERDISC_CORPSE_3");
 	cdcorpse3->setBigSprite(43);
 	cdcorpse3->setFloorSprite(58);
 	cdcorpse3->setInventoryWidth(0);
 	cdcorpse3->setInventoryHeight(0);
 	cdcorpse3->setWeight(100);
 
-	RuleItem *cdcorpse4 = new RuleItem("STR_CYBERDISC_CORPSE_4");
+	RuleItem *cdcorpse4 = new RuleItem("CYBERDISC_CORPSE_4");
 	cdcorpse4->setBigSprite(43);
 	cdcorpse4->setFloorSprite(59);
 	cdcorpse4->setInventoryWidth(0);
@@ -1140,14 +1156,14 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_items.insert(std::pair<std::string, RuleItem*>("STR_CORPSE", corpse));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_SECTOID_CORPSE", scorpse));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_FLOATER_CORPSE", fcorpse));
-	_items.insert(std::pair<std::string, RuleItem*>("STR_TANK_CORPSE_1", tcorpse1));
-	_items.insert(std::pair<std::string, RuleItem*>("STR_TANK_CORPSE_2", tcorpse2));
-	_items.insert(std::pair<std::string, RuleItem*>("STR_TANK_CORPSE_3", tcorpse3));
-	_items.insert(std::pair<std::string, RuleItem*>("STR_TANK_CORPSE_4", tcorpse4));
-	_items.insert(std::pair<std::string, RuleItem*>("STR_CYBERDISC_CORPSE_1", cdcorpse1));
-	_items.insert(std::pair<std::string, RuleItem*>("STR_CYBERDISC_CORPSE_2", cdcorpse2));
-	_items.insert(std::pair<std::string, RuleItem*>("STR_CYBERDISC_CORPSE_3", cdcorpse3));
-	_items.insert(std::pair<std::string, RuleItem*>("STR_CYBERDISC_CORPSE_4", cdcorpse4));
+	_items.insert(std::pair<std::string, RuleItem*>("TANK_CORPSE_1", tcorpse1));
+	_items.insert(std::pair<std::string, RuleItem*>("TANK_CORPSE_2", tcorpse2));
+	_items.insert(std::pair<std::string, RuleItem*>("TANK_CORPSE_3", tcorpse3));
+	_items.insert(std::pair<std::string, RuleItem*>("TANK_CORPSE_4", tcorpse4));
+	_items.insert(std::pair<std::string, RuleItem*>("CYBERDISC_CORPSE_1", cdcorpse1));
+	_items.insert(std::pair<std::string, RuleItem*>("CYBERDISC_CORPSE_2", cdcorpse2));
+	_items.insert(std::pair<std::string, RuleItem*>("CYBERDISC_CORPSE_3", cdcorpse3));
+	_items.insert(std::pair<std::string, RuleItem*>("CYBERDISC_CORPSE_4", cdcorpse4));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_PLASMA_PISTOL", ppistol));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_PLASMA_PISTOL_CLIP", ppclip));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_ELECTRO_FLARE", flare));
@@ -1161,6 +1177,8 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_items.insert(std::pair<std::string, RuleItem*>("STR_MOTION_SCANNER", scanner));
 	_items.insert(std::pair<std::string, RuleItem*>("STR_ALIEN_GRENADE", agrenade));
 	_items.insert(std::pair<std::string, RuleItem*>("CYBERDISC_WEAPON", cdweapon));
+	_items.insert(std::pair<std::string, RuleItem*>("CIVM_CORPSE", civmcorpse));
+	_items.insert(std::pair<std::string, RuleItem*>("CIVF_CORPSE", civfcorpse));
 
 
 	RuleManufactureInfo *mlp = new RuleManufactureInfo("STR_LASER_PISTOL");
@@ -1889,13 +1907,22 @@ XcomRuleset::XcomRuleset() : Ruleset()
 
 	Armor *tankArmor = new Armor("TANK_ARMOR", "TANKS.PCK", 2, MT_WALK, 2);
 	tankArmor->setArmor(90, 75, 60, 60);
-	tankArmor->setCorpseItem("STR_TANK_CORPSE_");
+	tankArmor->setCorpseItem("TANK_CORPSE_");
 	tankArmor->setDamageModifier(0, DT_STUN);
 
 	Armor *cyberdiscArmor = new Armor("CYBERDISC_ARMOR", "CYBER.PCK", 3, MT_FLY, 2);
 	cyberdiscArmor->setArmor(90, 75, 60, 60);
-	cyberdiscArmor->setCorpseItem("STR_CYBERDISC_CORPSE_");
+	cyberdiscArmor->setCorpseItem("CYBERDISC_CORPSE_");
 	cyberdiscArmor->setDamageModifier(0, DT_STUN);
+
+	Armor *civmArmor = new Armor("CIVM_ARMOR", "CIVM.PCK", 4);
+	civmArmor->setArmor(4, 3, 2, 2);
+	civmArmor->setCorpseItem("CIVM_CORPSE");
+
+	Armor *civfArmor = new Armor("CIVF_ARMOR", "CIVF.PCK", 4);
+	civfArmor->setArmor(4, 3, 2, 2);
+	civfArmor->setCorpseItem("CIVF_CORPSE");
+
 
 	_armors.insert(std::pair<std::string, Armor*>("STR_NONE_UC", coveralls));
 	_armors.insert(std::pair<std::string, Armor*>("STR_PERSONAL_ARMOR_UC", personalArmor));
@@ -1905,6 +1932,8 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_armors.insert(std::pair<std::string, Armor*>("FLOATER_ARMOR0", floaterSoldierArmor));
 	_armors.insert(std::pair<std::string, Armor*>("TANK_ARMOR", tankArmor));
 	_armors.insert(std::pair<std::string, Armor*>("CYBERDISC_ARMOR", cyberdiscArmor));
+	_armors.insert(std::pair<std::string, Armor*>("CIVM_ARMOR", civmArmor));
+	_armors.insert(std::pair<std::string, Armor*>("CIVF_ARMOR", civfArmor));
 
 	// Add units
 	RuleSoldier *xcom = new RuleSoldier("XCOM");
@@ -2052,12 +2081,50 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	tankCannon->setValue(20);
 	tankCannon->setDeathSound(23);
 
+	Unit *civM = new Unit("MALE_CIVILIAN", "STR_CIVILIAN", "");
+	civM->setArmor("CIVM_ARMOR");
+	s1.tu = 35;
+	s1.stamina = 65;
+	s1.health = 30;
+	s1.bravery = 80;
+	s1.reactions = 30;
+	s1.firing = 30;
+	s1.throwing = 50;
+	s1.strength = 20;
+	s1.psiStrength = 5;
+	s1.psiSkill = 0;
+	s1.melee = 50;
+	civM->setStats(s1);
+	civM->setVoxelParameters(22, 14, 3);
+	civM->setValue(30);
+	civM->setAIParameters(4, 0);
+
+	Unit *civF = new Unit("FEMALE_CIVILIAN", "STR_CIVILIAN", "");
+	civF->setArmor("CIVF_ARMOR");
+	s1.tu = 35;
+	s1.stamina = 65;
+	s1.health = 30;
+	s1.bravery = 80;
+	s1.reactions = 30;
+	s1.firing = 30;
+	s1.throwing = 50;
+	s1.strength = 20;
+	s1.psiStrength = 5;
+	s1.psiSkill = 0;
+	s1.melee = 50;
+	civF->setStats(s1);
+	civF->setVoxelParameters(22, 14, 3);
+	civF->setValue(30);
+	civF->setAIParameters(4, 0);
+
 	_units.insert(std::pair<std::string, Unit*>("SECTOID_SOLDIER", sectoidSoldier));
 	_units.insert(std::pair<std::string, Unit*>("SECTOID_ENGINEER", sectoidEngineer));
 	_units.insert(std::pair<std::string, Unit*>("SECTOID_NAVIGATOR", sectoidNavigator));
 	_units.insert(std::pair<std::string, Unit*>("CYBERDISC", cyberdisc));
 	_units.insert(std::pair<std::string, Unit*>("FLOATER_SOLDIER", floaterSoldier));
 	_units.insert(std::pair<std::string, Unit*>("TANK_CANNON", tankCannon));
+	_units.insert(std::pair<std::string, Unit*>("MALE_CIVILIAN", civM));
+	_units.insert(std::pair<std::string, Unit*>("FEMALE_CIVILIAN", civF));
 
 	/*
 	1         2         3         4         5         6         7          8
@@ -2440,6 +2507,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 			}
 		  }
 	}
+
 }
 
 /**

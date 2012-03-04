@@ -136,7 +136,7 @@ std::string RuleTerrain::getName() const
 
 /**
 * gets a random mapblock within the given constraints
-* @param maxsize maximum size of the mapblock (1 or 2)
+* @param maxsize maximum size of the mapblock (10 or 20 or 999-don't care)
 * @param type whether this must be a block of a certain type
 * @return pointer to mapblock
 */

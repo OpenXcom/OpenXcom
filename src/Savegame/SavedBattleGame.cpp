@@ -695,6 +695,22 @@ void SavedBattleGame::endTurn()
 	}
 	else if (_side == FACTION_HOSTILE)
 	{
+		_side = FACTION_NEUTRAL;
+		// if there is no neutral team, we skip this and instantly prepare the new turn for the player
+		if (selectNextPlayerUnit() == 0)
+		{
+			prepareNewTurn();
+			_turn++;
+			_side = FACTION_PLAYER;
+			if (_lastSelectedUnit && !_lastSelectedUnit->isOut())
+				_selectedUnit = _lastSelectedUnit;
+			else
+				selectNextPlayerUnit();
+		}
+
+	}
+	else if (_side == FACTION_NEUTRAL)
+	{
 		prepareNewTurn();
 		_turn++;
 		_side = FACTION_PLAYER;
@@ -702,7 +718,6 @@ void SavedBattleGame::endTurn()
 			_selectedUnit = _lastSelectedUnit;
 		else
 			selectNextPlayerUnit();
-
 	}
 
 	for (std::vector<BattleUnit*>::iterator i = _units.begin(); i != _units.end(); ++i)

@@ -42,7 +42,7 @@ class RuleManufactureInfo;
 class RuleItem
 {
 private:
-	std::string _type;
+	std::string _type, _name; // two types of objects can have the same name
 	float _size;
 	int _cost, _time, _weight;
 	int _bigSprite, _floorSprite, _handSprite, _bulletSprite;
@@ -70,6 +70,10 @@ public:
 	void save(YAML::Emitter& out) const;
 	/// Gets the item's type.
 	std::string getType() const;
+	/// Sets the item's name.
+	void setName(const std::string &name);
+	/// Gets the item's name.
+	std::string getName() const;
 	/// Gets the item's size.
 	float getSize() const;
 	/// Sets the item's size.

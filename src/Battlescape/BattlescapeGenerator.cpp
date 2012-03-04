@@ -302,6 +302,12 @@ void BattlescapeGenerator::run()
 
 	deployAliens(_game->getRuleset()->getAlienRace(_alienRace), ruleDeploy);
 
+	if (_save->getMissionType() ==  "STR_TERROR_MISSION")
+	{
+		deployCivilians();
+	}
+
+
 	if (_save->getMissionType() ==  "STR_UFO_CRASH_RECOVERY")
 	{
 		explodePowerSources();
@@ -681,8 +687,8 @@ void BattlescapeGenerator::generateMap()
 	/* Determine UFO landingzone (do this first because ufo is generally bigger) */
 	if (_ufo != 0)
 	{
-		// crafts always consist of 1 mapblock, but can have all sorts of sizes
-		ufoMap = _ufo->getRules()->getBattlescapeTerrainData()->getMapBlocks()->at(0);
+		// pick a random ufo mapblock, can have all kinds of sizes
+		ufoMap = _ufo->getRules()->getBattlescapeTerrainData()->getRandomMapBlock(999, MT_DEFAULT);
 
 		ufoX = RNG::generate(0, (_length / 10) - ufoMap->getWidth() / 10);
 		ufoY = RNG::generate(0, (_width / 10) - ufoMap->getLength() / 10);
@@ -699,8 +705,8 @@ void BattlescapeGenerator::generateMap()
 	/* Determine Craft landingzone */
 	if (_craft != 0)
 	{
-		// crafts always consist of 1 mapblock, but can have all sorts of sizes
-		craftMap = _craft->getRules()->getBattlescapeTerrainData()->getMapBlocks()->at(0);
+		// pick a random craft mapblock, can have all kinds of sizes
+		craftMap = _craft->getRules()->getBattlescapeTerrainData()->getRandomMapBlock(999, MT_DEFAULT);
 		while (!placed)
 		{
 			craftX = RNG::generate(0, (_length/10)- craftMap->getWidth() / 10);
@@ -1092,6 +1098,17 @@ int BattlescapeGenerator::loadMAP(MapBlock *mapblock, int xoff, int yoff, RuleTe
 	z += height - 1;
 	mapblock->setHeight(height);
 
+	for (int i = _height-1; i >0; i--)
+	{
+		// check if there is already a layer - if so, we have to move Z up
+		MapData *floor = _save->getTile(Position(x, y, i))->getMapData(MapData::O_FLOOR);
+		if (floor != 0)
+		{
+			z += i;
+			break;
+		}
+	}
+
 	while (mapFile.read((char*)&value, sizeof(value)))
 	{
 		for (int part = 0; part < 4; part++)
@@ -1199,6 +1216,26 @@ void BattlescapeGenerator::explodePowerSources()
 			pos.y = _save->getTiles()[i]->getPosition().y*16;
 			pos.z = (_save->getTiles()[i]->getPosition().z*24) +12;
 			_save->getTileEngine()->explode(pos, 180+RNG::generate(0,70), DT_HE, 11);
+		}
+	}
+}
+
+/**
+ * spawn 1-16 civilians on a terror mission.
+ */
+void BattlescapeGenerator::deployCivilians()
+{
+	int number = RNG::generate(1, 16);
+
+	for (int i = 0; i < number; ++i)
+	{
+		if (RNG::generate(0,100) < 50)
+		{
+			addCivilian(_game->getRuleset()->getUnit("MALE_CIVILIAN"));
+		}
+		else
+		{
+			addCivilian(_game->getRuleset()->getUnit("FEMALE_CIVILIAN"));
 		}
 	}
 }

@@ -34,7 +34,7 @@ MapData *MapDataSet::_scourgedTile = 0;
 /**
 * MapDataSet construction.
 */
-MapDataSet::MapDataSet(const std::string &name, int size) : _name(name), _size(size), _objects(), _surfaceSet(0), _loaded(false)
+MapDataSet::MapDataSet(const std::string &name) : _name(name), _objects(), _surfaceSet(0), _loaded(false)
 {
 }
 
@@ -60,10 +60,6 @@ void MapDataSet::load(const YAML::Node &node)
 		{
 			i.second() >> _name;
 		}
-		else if (key == "size")
-		{
-			i.second() >> _size;
-		}
 	}
 }
 
@@ -75,7 +71,6 @@ void MapDataSet::save(YAML::Emitter &out) const
 {
 	out << YAML::BeginMap;
 	out << YAML::Key << "name" << YAML::Value << _name;
-	out << YAML::Key << "size" << YAML::Value << _size;
 	out << YAML::EndMap;
 }
 
@@ -94,7 +89,7 @@ std::string MapDataSet::getName() const
 */
 int MapDataSet::getSize() const
 {
-	return _size;
+	return _objects.size();
 }
 
 
@@ -250,7 +245,6 @@ void MapDataSet::loadData()
 			}
 		}
 	}
-
 
 	// Load terrain sprites/surfaces/PCK files into a surfaceset
 	std::stringstream s1,s2;

@@ -73,17 +73,13 @@ void UnitDieBState::init()
 
 	if (!_noSound)
 	{
-		if (_unit->getType() == "SOLDIER")
+		if ((_unit->getType() == "SOLDIER" && _unit->getGender() == GENDER_MALE) || _unit->getType() == "MALE_CIVILIAN")
 		{
-			// soldiers have screams depending on gender
-			if (_unit->getGender() == GENDER_MALE)
-			{
-				_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(RNG::generate(41,43))->play();
-			}
-			else
-			{
-				_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(RNG::generate(44,46))->play();
-			}
+			_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(RNG::generate(41,43))->play();
+		}
+		else if ((_unit->getType() == "SOLDIER" && _unit->getGender() == GENDER_FEMALE) || _unit->getType() == "FEMALE_CIVILIAN")
+		{
+			_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(RNG::generate(44,46))->play();
 		}
 		else
 		{
