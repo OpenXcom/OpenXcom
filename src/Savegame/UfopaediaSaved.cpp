@@ -19,6 +19,7 @@
 
 #include "UfopaediaSaved.h"
 #include "../Ruleset/ArticleDefinition.h"
+#include "../Ruleset/Ruleset.h"
 
 namespace OpenXcom {
 	/**
@@ -156,4 +157,33 @@ namespace OpenXcom {
 		return -1;
 	}
 
+	/**
+	 * Load the Ufopaedia from YAML
+	 * @param node YAML node.
+	 * @param rule Pointer to Ruleset.
+	 */
+	void UfopaediaSaved::load(const YAML::Node& node, Ruleset *rule)
+	{
+		for (YAML::Iterator it = node.begin (); it != node.end (); ++it)
+		{
+			std::string id;
+			*it >> id;
+			insertArticle(rule->getUfopaediaArticle(id));
+		}
+	}
+
+	/**
+	 * Save the Ufopaedia to YAML
+	 * @param out YAML emitter.
+	 */
+	void UfopaediaSaved::save(YAML::Emitter& out)
+	{
+		ArticleDefinitionList::iterator it;
+		out << YAML::BeginSeq;
+		for (it=_visible_articles.begin(); it!=_visible_articles.end(); ++it)
+		{
+			out << (*it)->id;
+		}
+		out << YAML::EndSeq;
+	}
 }

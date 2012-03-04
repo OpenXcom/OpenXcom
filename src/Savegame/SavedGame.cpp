@@ -264,6 +264,10 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 		_battleGame->load(*pName, rule, this);
 	}
 
+	if (const YAML::Node *pName = doc.FindValue("ufopaedia"))
+	{
+		_ufopaedia->load(*pName, rule);
+	}
 	fin.close();
 }
 
@@ -346,6 +350,8 @@ void SavedGame::save(const std::string &filename) const
 		out << YAML::Key << "battleGame" << YAML::Value;
 		_battleGame->save(out);
 	}
+	out << YAML::Key << "ufopaedia" << YAML::Value;
+	_ufopaedia->save(out);
 	out << YAML::EndMap;
 	sav << out.c_str();
 	sav.close();
