@@ -684,14 +684,6 @@ void SavedBattleGame::endTurn()
 	{
 		_lastSelectedUnit = _selectedUnit;
 		_side = FACTION_HOSTILE;
-		// hide all aliens
-		for (std::vector<BattleUnit*>::iterator i = _units.begin(); i != _units.end(); ++i)
-		{
-			if ((*i)->getFaction() == _side)
-			{
-				(*i)->setVisible(false);
-			}
-		}
 	}
 	else if (_side == FACTION_HOSTILE)
 	{
@@ -718,6 +710,15 @@ void SavedBattleGame::endTurn()
 			_selectedUnit = _lastSelectedUnit;
 		else
 			selectNextPlayerUnit();
+	}
+	
+	// hide all aliens (VOF calculations below will turn them visible again)
+	for (std::vector<BattleUnit*>::iterator i = _units.begin(); i != _units.end(); ++i)
+	{
+		if ((*i)->getFaction() != FACTION_PLAYER)
+		{
+			(*i)->setVisible(false);
+		}
 	}
 
 	for (std::vector<BattleUnit*>::iterator i = _units.begin(); i != _units.end(); ++i)
@@ -921,6 +922,7 @@ Node *SavedBattleGame::getPatrolNode(bool scout, BattleUnit *unit, Node *fromNod
  */
 void SavedBattleGame::prepareNewTurn()
 {
+
 	std::vector<Tile*> tilesOnFire;
 	std::vector<Tile*> tilesOnSmoke;
 

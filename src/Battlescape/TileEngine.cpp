@@ -279,7 +279,7 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 	// we only react when there are at least the same amount of visible units as before AND the checksum is different
 	// this way we stop if there are the same amount of visible units, but a different unit is seen
 	// or we stop if there are more visible units seen
-	if (visibleUnitsChecksum != newChecksum && unit->getVisibleUnits()->size() >= oldNumVisibleUnits)
+	if (visibleUnitsChecksum != newChecksum && unit->getVisibleUnits()->size() >= oldNumVisibleUnits && unit->getVisibleUnits()->size() > 0)
 	{
 		// a hostile unit will aggro on the new unit if it sees one - it will not start walking
 		if (unit->getFaction() == FACTION_HOSTILE)
@@ -445,7 +445,7 @@ bool TileEngine::checkReactionFire(BattleUnit *unit, BattleAction *action, Battl
 	}
 
 	// we reset the unit to false here - if it is seen by any unit in range below the unit becomes visible again
-	unit->setVisible(false);
+	//unit->setVisible(false);
 
 	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
