@@ -259,6 +259,8 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 							{
 								unit->addToVisibleUnits(visibleUnit);
 							}
+							if (unit->getFaction() == FACTION_PLAYER)
+								visibleUnit->setVisible(true);
 						}
 
 						if (unit->getFaction() == FACTION_PLAYER)

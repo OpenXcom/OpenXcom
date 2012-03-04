@@ -304,7 +304,7 @@ void BattlescapeGenerator::run()
 
 	if (_save->getMissionType() ==  "STR_TERROR_MISSION")
 	{
-		deployCivilians();
+		deployCivilians(16);
 	}
 
 
@@ -1223,9 +1223,9 @@ void BattlescapeGenerator::explodePowerSources()
 /**
  * spawn 1-16 civilians on a terror mission.
  */
-void BattlescapeGenerator::deployCivilians()
+void BattlescapeGenerator::deployCivilians(int max)
 {
-	int number = RNG::generate(1, 16);
+	int number = RNG::generate(1, max);
 
 	for (int i = 0; i < number; ++i)
 	{

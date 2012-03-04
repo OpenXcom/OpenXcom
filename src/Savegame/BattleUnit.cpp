@@ -981,8 +981,6 @@ bool BattleUnit::addToVisibleUnits(BattleUnit *unit)
 			return false;
 		}
 	}
-	if (getFaction() == FACTION_PLAYER)
-		unit->setVisible(true);
 	_visibleUnits.push_back(unit);
 	return true;
 }
