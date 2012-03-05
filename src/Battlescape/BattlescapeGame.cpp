@@ -618,7 +618,8 @@ void BattlescapeGame::popState()
 	{
 		if (action.actor->getFaction() == FACTION_PLAYER)
 		{
-			// spend TUs of "target triggered actions" (shooting, throwing)
+			// spend TUs of "target triggered actions" (shooting, throwing) only
+			// the other actions' TUs (healing,scanning,..) are already take care of
 			if (action.targeting && _save->getSelectedUnit() && !actionFailed)
 			{
 				action.actor->spendTimeUnits(action.TU, dontSpendTUs());
@@ -636,9 +637,10 @@ void BattlescapeGame::popState()
 		}
 		else
 		{
+			// spend TUs
+			action.actor->spendTimeUnits(action.TU, false);
 			if (_save->getSide() != FACTION_PLAYER && !_debugPlay)
 			{
-				action.actor->spendTimeUnits(action.TU, false);
 				 // AI does two things per unit, before switching to the next, or it got killed before doing the second thing
 				if (_AIActionCounter > 1 || _save->getSelectedUnit() == 0 || _save->getSelectedUnit()->isOut())
 				{

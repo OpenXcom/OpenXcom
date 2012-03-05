@@ -875,7 +875,7 @@ void GeoscapeState::btnBasesClick(Action *action)
  */
 void GeoscapeState::btnGraphsClick(Action *action)
 {
-#ifdef _DEBUG
+//#ifdef _DEBUG
 	/* Daiky: uncomment this bit to start a terror mission */
 	SavedBattleGame *bgame = new SavedBattleGame();
 	_game->getSavedGame()->setBattleGame(bgame);
@@ -892,9 +892,9 @@ void GeoscapeState::btnGraphsClick(Action *action)
 	_music = false;
 	_game->getSavedGame()->getBattleGame()->resetUnitTiles();
 	_game->pushState(new BattlescapeState(_game));
-#else
-	_game->pushState(new GraphsState(_game));
-#endif
+//#else
+//	_game->pushState(new GraphsState(_game));
+//#endif
 }
 
 /**
