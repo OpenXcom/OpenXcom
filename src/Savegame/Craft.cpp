@@ -277,11 +277,11 @@ int Craft::getNumEquipment() const
 }
 
 /**
- * Returns the amount of HWPs currently
+ * Returns the amount of vehicles currently
  * contained in this craft.
- * @return Number of HWPs.
+ * @return Number of vehicles.
  */
-int Craft::getNumHWPs() const
+int Craft::getNumVehicles() const
 {
 	return 0;
 }

@@ -49,7 +49,7 @@ RuleTerrain::~RuleTerrain()
  * @param node YAML node.
  * @param ruleset Ruleset for the terrain.
  */
-void RuleTerrain::load(const YAML::Node &node, const Ruleset *ruleset)
+void RuleTerrain::load(const YAML::Node &node, Ruleset *ruleset)
 {
 	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
 	{

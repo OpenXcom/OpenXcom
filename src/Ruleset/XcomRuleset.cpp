@@ -68,7 +68,7 @@ namespace OpenXcom
  */
 XcomRuleset::XcomRuleset() : Ruleset()
 {
-	load("UfoBase");
+	load("Xcom1Ruleset");
 
 	// Add countries
 	RuleCountry *usa = new RuleCountry("STR_USA");
@@ -331,112 +331,6 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_regions.insert(std::pair<std::string, RuleRegion*>("STR_NORTH_ATLANTIC", natlantic));
 	_regions.insert(std::pair<std::string, RuleRegion*>("STR_SOUTH_ATLANTIC", satlantic));
 	_regions.insert(std::pair<std::string, RuleRegion*>("STR_INDIAN_OCEAN", indian));
-
-	// Add mapdatafiles
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("AVENGER",new MapDataSet("AVENGER")));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("BARN",new MapDataSet("BARN")));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("BLANKS",new MapDataSet("BLANKS")));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("BRAIN",new MapDataSet("BRAIN")));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("CULTIVAT",new MapDataSet("CULTIVAT")));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("DESERT",new MapDataSet("DESERT")));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("FOREST",new MapDataSet("FOREST")));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("FRNITURE",new MapDataSet("FRNITURE")));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("JUNGLE",new MapDataSet("JUNGLE")));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("LIGHTNIN",new MapDataSet("LIGHTNIN")));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("MARS",new MapDataSet("MARS")));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("MOUNT",new MapDataSet("MOUNT")));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("PLANE",new MapDataSet("PLANE")));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("POLAR",new MapDataSet("POLAR")));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("ROADS",new MapDataSet("ROADS")));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("UFO1",new MapDataSet("UFO1")));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("URBAN",new MapDataSet("URBAN")));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("URBITS",new MapDataSet("URBITS")));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("U_BASE",new MapDataSet("U_BASE")));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("U_BITS",new MapDataSet("U_BITS")));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("U_DISEC2",new MapDataSet("U_DISEC2")));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("U_EXT02",new MapDataSet("U_EXT02")));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("U_OPER2",new MapDataSet("U_OPER2")));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("U_PODS",new MapDataSet("U_PODS")));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("U_WALL02",new MapDataSet("U_WALL02")));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("XBASE1",new MapDataSet("XBASE1")));
-	_mapDataSets.insert(std::pair<std::string, MapDataSet*>("XBASE2",new MapDataSet("XBASE2")));
-
-	// Add crafts
-	RuleCraft* skyranger = new RuleCraft("STR_SKYRANGER");
-	skyranger->setSprite(0);
-	skyranger->setMaxSpeed(760);
-	skyranger->setAcceleration(2);
-	skyranger->setMaxFuel(1500);
-	skyranger->setWeapons(0);
-	skyranger->setMaxDamage(150);
-	skyranger->setSoldiers(14);
-	skyranger->setCost(500000);
-	skyranger->setHWPs(3);
-	skyranger->setRefuelRate(50);
-	skyranger->setTransferTime(72);
-	skyranger->setScore(200);
-
-	RuleTerrain *ruleTerrain = new RuleTerrain("PLANE");
-	skyranger->setBattlescapeTerrainData(ruleTerrain);
-	ruleTerrain->getMapDataSets()->push_back(getMapDataSet("BLANKS"));
-	ruleTerrain->getMapDataSets()->push_back(getMapDataSet("PLANE"));
-	ruleTerrain->getMapBlocks()->push_back(new MapBlock(ruleTerrain,"PLANE",10,20,MT_DEFAULT));
-
-	RuleCraft* lightning = new RuleCraft("STR_LIGHTNING");
-	lightning->setSprite(1);
-	lightning->setMaxSpeed(3100);
-	lightning->setAcceleration(9);
-	lightning->setMaxFuel(30);
-	lightning->setWeapons(1);
-	lightning->setMaxDamage(800);
-	lightning->setSoldiers(12);
-	lightning->setHWPs(0);
-	lightning->setRefuelRate(5);
-	lightning->setScore(300);
-
-	RuleCraft* avenger = new RuleCraft("STR_AVENGER");
-	avenger->setSprite(2);
-	avenger->setMaxSpeed(5400);
-	avenger->setAcceleration(10);
-	avenger->setMaxFuel(60);
-	avenger->setWeapons(2);
-	avenger->setMaxDamage(1200);
-	avenger->setSoldiers(26);
-	avenger->setHWPs(4);
-	avenger->setRefuelRate(5);
-	avenger->setScore(400);
-
-	RuleCraft* interceptor = new RuleCraft("STR_INTERCEPTOR");
-	interceptor->setSprite(3);
-	interceptor->setMaxSpeed(2100);
-	interceptor->setAcceleration(3);
-	interceptor->setMaxFuel(1000);
-	interceptor->setWeapons(2);
-	interceptor->setMaxDamage(100);
-	interceptor->setSoldiers(0);
-	interceptor->setCost(600000);
-	interceptor->setHWPs(0);
-	interceptor->setRefuelRate(50);
-	interceptor->setTransferTime(96);
-	interceptor->setScore(250);
-
-	RuleCraft* firestorm = new RuleCraft("STR_FIRESTORM");
-	firestorm->setSprite(4);
-	firestorm->setMaxSpeed(4200);
-	firestorm->setAcceleration(9);
-	firestorm->setMaxFuel(20);
-	firestorm->setWeapons(2);
-	firestorm->setMaxDamage(50);
-	firestorm->setSoldiers(0);
-	firestorm->setHWPs(0);
-	firestorm->setRefuelRate(5);
-	firestorm->setScore(250);
-
-	_crafts.insert(std::pair<std::string, RuleCraft*>("STR_SKYRANGER", skyranger));
-	_crafts.insert(std::pair<std::string, RuleCraft*>("STR_LIGHTNING", lightning));
-	_crafts.insert(std::pair<std::string, RuleCraft*>("STR_AVENGER", avenger));
-	_crafts.insert(std::pair<std::string, RuleCraft*>("STR_INTERCEPTOR", interceptor));
-	_crafts.insert(std::pair<std::string, RuleCraft*>("STR_FIRESTORM", firestorm));
 
 	// Add craft weapons
 	RuleCraftWeapon *stingray = new RuleCraftWeapon("STR_STINGRAY");
@@ -1233,7 +1127,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	sscout->setAcceleration(12);
 	sscout->setMaxDamage(50);
 	sscout->setScore(50);
-	ruleTerrain = new RuleTerrain("UFO1A");
+	RuleTerrain *ruleTerrain = new RuleTerrain("UFO1A");
 	sscout->setBattlescapeTerrainData(ruleTerrain);
 	ruleTerrain->getMapDataSets()->push_back(getMapDataSet("BLANKS"));
 	ruleTerrain->getMapDataSets()->push_back(getMapDataSet("UFO1"));

@@ -101,6 +101,8 @@ public:
 	std::vector<std::string> getBaseFacilitiesList() const;
 	/// Gets the ruleset for a craft type.
 	RuleCraft *const getCraft(const std::string &id) const;
+	/// Gets the available crafts.
+	std::vector<std::string> getCraftsList() const;
 	/// Gets the ruleset for a craft weapon type.
 	RuleCraftWeapon *const getCraftWeapon(const std::string &id) const;
 	/// Gets the ruleset for an item type.
@@ -110,7 +112,7 @@ public:
 	/// Gets terrains for battlescape games.
 	RuleTerrain *const getTerrain(const std::string &name) const;
 	/// Gets mapdatafile for battlescape games.
-	MapDataSet *const getMapDataSet(const std::string &name) const;
+	MapDataSet *const getMapDataSet(const std::string &name);
 	/// Gets soldier unit rules.
 	RuleSoldier *const getSoldier(const std::string &name) const;
 	/// Gets generated unit rules.

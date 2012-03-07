@@ -27,7 +27,7 @@ namespace OpenXcom
  * type of craft.
  * @param type String defining the type.
  */
-RuleCraft::RuleCraft(const std::string &type) : _type(type), _sprite(-1), _fuelMax(0), _damageMax(0), _speedMax(0), _accel(0), _weapons(0), _soldiers(0), _hwps(0), _cost(0), _repair(1), _refuel(1), _range(600), _time(0), _score(0), _battlescapeTerrainData(0)
+RuleCraft::RuleCraft(const std::string &type) : _type(type), _sprite(-1), _rental(false), _fuelMax(0), _damageMax(0), _speedMax(0), _accel(0), _weapons(0), _soldiers(0), _vehicles(0), _cost(0), _refuelItem(""), _repairRate(1), _refuelRate(1), _radarRange(600), _transferTime(0), _score(0), _battlescapeTerrainData(0)
 {
 
 }
@@ -45,7 +45,7 @@ RuleCraft::~RuleCraft()
  * @param node YAML node.
  * @param ruleset Ruleset for the craft.
  */
-void RuleCraft::load(const YAML::Node &node, const Ruleset *ruleset)
+void RuleCraft::load(const YAML::Node &node, Ruleset *ruleset)
 {
 	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
 	{
@@ -58,6 +58,10 @@ void RuleCraft::load(const YAML::Node &node, const Ruleset *ruleset)
 		else if (key == "sprite")
 		{
 			i.second() >> _sprite;
+		}
+		else if (key == "rental")
+		{
+			i.second() >> _rental;
 		}
 		else if (key == "fuelMax")
 		{
@@ -83,25 +87,33 @@ void RuleCraft::load(const YAML::Node &node, const Ruleset *ruleset)
 		{
 			i.second() >> _soldiers;
 		}
-		else if (key == "hwps")
+		else if (key == "vehicles")
 		{
-			i.second() >> _hwps;
+			i.second() >> _vehicles;
 		}
 		else if (key == "cost")
 		{
 			i.second() >> _cost;
 		}
-		else if (key == "repair")
+		else if (key == "refuelItem")
 		{
-			i.second() >> _repair;
+			i.second() >> _refuelItem;
 		}
-		else if (key == "refuel")
+		else if (key == "repairRate")
 		{
-			i.second() >> _refuel;
+			i.second() >> _repairRate;
 		}
-		else if (key == "time")
+		else if (key == "refuelRate")
 		{
-			i.second() >> _time;
+			i.second() >> _refuelRate;
+		}
+		else if (key == "radarRange")
+		{
+			i.second() >> _radarRange;
+		}
+		else if (key == "transferTime")
+		{
+			i.second() >> _transferTime;
 		}
 		else if (key == "score")
 		{
@@ -113,6 +125,7 @@ void RuleCraft::load(const YAML::Node &node, const Ruleset *ruleset)
 			i.second()["name"] >> name;
 			RuleTerrain *rule = new RuleTerrain(name);
 			rule->load(i.second(), ruleset);
+			_battlescapeTerrainData = rule;
 		}
 	}
 }
@@ -126,18 +139,20 @@ void RuleCraft::save(YAML::Emitter &out) const
 	out << YAML::BeginMap;
 	out << YAML::Key << "type" << YAML::Value << _type;
 	out << YAML::Key << "sprite" << YAML::Value << _sprite;
+	out << YAML::Key << "rental" << YAML::Value << _rental;
 	out << YAML::Key << "fuelMax" << YAML::Value << _fuelMax;
 	out << YAML::Key << "damageMax" << YAML::Value << _damageMax;
 	out << YAML::Key << "speedMax" << YAML::Value << _speedMax;
 	out << YAML::Key << "accel" << YAML::Value << _accel;
 	out << YAML::Key << "weapons" << YAML::Value << _weapons;
 	out << YAML::Key << "soldiers" << YAML::Value << _soldiers;
-	out << YAML::Key << "hwps" << YAML::Value << _hwps;
+	out << YAML::Key << "vehicles" << YAML::Value << _vehicles;
 	out << YAML::Key << "cost" << YAML::Value << _cost;
-	out << YAML::Key << "repair" << YAML::Value << _repair;
-	out << YAML::Key << "refuel" << YAML::Value << _refuel;
-	out << YAML::Key << "range" << YAML::Value << _range;
-	out << YAML::Key << "time" << YAML::Value << _time;
+	out << YAML::Key << "refuelItem" << YAML::Value << _refuelItem;
+	out << YAML::Key << "repairRate" << YAML::Value << _repairRate;
+	out << YAML::Key << "refuelRate" << YAML::Value << _refuelRate;
+	out << YAML::Key << "radarRange" << YAML::Value << _radarRange;
+	out << YAML::Key << "transferTime" << YAML::Value << _transferTime;
 	out << YAML::Key << "score" << YAML::Value << _score;
 	if (_battlescapeTerrainData != 0)
 	{
@@ -168,13 +183,12 @@ int RuleCraft::getSprite() const
 }
 
 /**
- * Changes the ID of the sprite used to draw the craft
- * in the Basescape and Equip Craft screens.
- * @param sprite Sprite ID.
+ * Returns whether the craft is rented (paid for monthly).
+ * @return True if it's a rental, False otherwise.
  */
-void RuleCraft::setSprite(int sprite)
+bool RuleCraft::isRental() const
 {
-	_sprite = sprite;
+	return _rental;
 }
 
 /**
@@ -184,15 +198,6 @@ void RuleCraft::setSprite(int sprite)
 int RuleCraft::getMaxFuel() const
 {
 	return _fuelMax;
-}
-
-/**
- * Changes the maximum fuel the craft can contain.
- * @param fuel Fuel amount.
- */
-void RuleCraft::setMaxFuel(int fuel)
-{
-	_fuelMax = fuel;
 }
 
 /**
@@ -206,16 +211,6 @@ int RuleCraft::getMaxDamage() const
 }
 
 /**
- * Changes the maximum damage (damage the craft can take)
- * of the craft.
- * @param damage Damage.
- */
-void RuleCraft::setMaxDamage(int damage)
-{
-	_damageMax = damage;
-}
-
-/**
  * Returns the maximum speed of the craft flying
  * around the Geoscape.
  * @return Speed in knots.
@@ -223,16 +218,6 @@ void RuleCraft::setMaxDamage(int damage)
 int RuleCraft::getMaxSpeed() const
 {
 	return _speedMax;
-}
-
-/**
- * Changes the maximum speed of the craft flying
- * around the Geoscape.
- * @param speed Speed in knots.
- */
-void RuleCraft::setMaxSpeed(int speed)
-{
-	_speedMax = speed;
 }
 
 /**
@@ -246,16 +231,6 @@ int RuleCraft::getAcceleration() const
 }
 
 /**
- * Changes the acceleration of the craft for
- * taking off / stopping.
- * @param accel Acceleration.
- */
-void RuleCraft::setAcceleration(int accel)
-{
-	_accel = accel;
-}
-
-/**
  * Returns the maximum number of weapons that
  * can be equipped onto the craft.
  * @return Weapon capacity.
@@ -263,16 +238,6 @@ void RuleCraft::setAcceleration(int accel)
 int RuleCraft::getWeapons() const
 {
 	return _weapons;
-}
-
-/**
- * Changes the maximum number of weapons that
- * can be equipped onto the craft.
- * @param weapons Weapon capacity.
- */
-void RuleCraft::setWeapons(int weapons)
-{
-	_weapons = weapons;
 }
 
 /**
@@ -286,33 +251,13 @@ int RuleCraft::getSoldiers() const
 }
 
 /**
- * Changes the maximum number of soldiers that
+ * Returns the maximum number of vehicles that
  * the craft can carry.
- * @param soldiers Soldier capacity.
+ * @return vehicle capacity.
  */
-void RuleCraft::setSoldiers(int soldiers)
+int RuleCraft::getVehicles() const
 {
-	_soldiers = soldiers;
-}
-
-/**
- * Returns the maximum number of HWPs that
- * the craft can carry.
- * @return HWP capacity.
- */
-int RuleCraft::getHWPs() const
-{
-	return _hwps;
-}
-
-/**
- * Changes the maximum number of HWPs that
- * the craft can carry.
- * @param hwps HWP capacity.
- */
-void RuleCraft::setHWPs(int hwps)
-{
-	_hwps = hwps;
+	return _vehicles;
 }
 
 /**
@@ -326,13 +271,13 @@ int RuleCraft::getCost() const
 }
 
 /**
- * Changes the cost of this craft for
- * purchase/maintenance.
- * @param cost Cost.
+ * Returns what item is required while
+ * the craft is refuelling.
+ * @return Item ID or "" if none.
  */
-void RuleCraft::setCost(int cost)
+std::string RuleCraft::getRefuelItem() const
 {
-	_cost = cost;
+	return _refuelItem;
 }
 
 /**
@@ -342,17 +287,7 @@ void RuleCraft::setCost(int cost)
  */
 int RuleCraft::getRepairRate() const
 {
-	return _repair;
-}
-
-/**
- * Changes how much damage is removed from the
- * craft while repairing.
- * @param repair Amount of damage.
- */
-void RuleCraft::setRepairRate(int repair)
-{
-	_repair = repair;
+	return _repairRate;
 }
 
 /**
@@ -362,17 +297,7 @@ void RuleCraft::setRepairRate(int repair)
  */
 int RuleCraft::getRefuelRate() const
 {
-	return _refuel;
-}
-
-/**
- * Changes how much fuel is added to the
- * craft while refuelling.
- * @param refuel Amount of fuel.
- */
-void RuleCraft::setRefuelRate(int refuel)
-{
-	_refuel = refuel;
+	return _refuelRate;
 }
 
 /**
@@ -382,17 +307,7 @@ void RuleCraft::setRefuelRate(int refuel)
  */
 int RuleCraft::getRadarRange() const
 {
-	return _range;
-}
-
-/**
- * Changes the craft's radar range
- * for detecting UFOs.
- * @param range Range in nautical miles.
- */
-void RuleCraft::setRadarRange(int range)
-{
-	_range = range;
+	return _radarRange;
 }
 
 /**
@@ -402,17 +317,7 @@ void RuleCraft::setRadarRange(int range)
  */
 int RuleCraft::getTransferTime() const
 {
-	return _time;
-}
-
-/**
- * Changes the amount of time this item
- * takes to arrive at a base.
- * @param time Time in hours.
- */
-void RuleCraft::setTransferTime(int time)
-{
-	_time = time;
+	return _transferTime;
 }
 
 /**
@@ -426,31 +331,12 @@ int RuleCraft::getScore() const
 }
 
 /**
- * Changes the amount of score you lose
- * when this craft is destroyed.
- * @param score Score in points.
- */
-void RuleCraft::setScore(int score)
-{
-	_score = score;
-}
-
-/**
  * Returns the terrain data needed to draw the Craft in the battlescape.
  * @return Terrain.
  */
 RuleTerrain *RuleCraft::getBattlescapeTerrainData()
 {
 	return _battlescapeTerrainData;
-}
-
-/**
- * Changes the terrain data needed to draw the Craft in the battlescape.
- * @param terrain pointer to a RuleTerrain.
- */
-void RuleCraft::setBattlescapeTerrainData(RuleTerrain *terrain)
-{
-	_battlescapeTerrainData = terrain;
 }
 
 }

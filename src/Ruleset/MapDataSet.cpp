@@ -54,12 +54,7 @@ void MapDataSet::load(const YAML::Node &node)
 {
 	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
 	{
-		std::string key;
-		i.first() >> key;
-		if (key == "name")
-		{
-			i.second() >> _name;
-		}
+		*i >> _name;
 	}
 }
 
@@ -69,9 +64,7 @@ void MapDataSet::load(const YAML::Node &node)
  */
 void MapDataSet::save(YAML::Emitter &out) const
 {
-	out << YAML::BeginMap;
-	out << YAML::Key << "name" << YAML::Value << _name;
-	out << YAML::EndMap;
+	out << _name;
 }
 
 /**

@@ -218,25 +218,6 @@ void Ruleset::load(const std::string &filename)
 				rule->load(*j);
 			}
 		}
-		else if (key == "mapDataSets")
-		{
-			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
-			{
-				std::string type;
-				(*j)["name"] >> type;
-				MapDataSet *rule;
-				if (_mapDataSets.find(type) != _mapDataSets.end())
-				{
-					rule = _mapDataSets[type];
-				}
-				else
-				{
-					rule = new MapDataSet(type);
-					_mapDataSets[type] = rule;
-				}
-				rule->load(*j);
-			}
-		}
 		else if (key == "crafts")
 		{
 			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
@@ -490,13 +471,6 @@ void Ruleset::save(const std::string &filename) const
 		i->second->save(out);
 	}
 	out << YAML::EndSeq;
-	out << YAML::Key << "mapDataSets" << YAML::Value;
-	out << YAML::BeginSeq;
-	for (std::map<std::string, MapDataSet*>::const_iterator i = _mapDataSets.begin(); i != _mapDataSets.end(); ++i)
-	{
-		i->second->save(out);
-	}
-	out << YAML::EndSeq;
 	out << YAML::Key << "crafts" << YAML::Value;
 	out << YAML::BeginSeq;
 	for (std::map<std::string, RuleCraft*>::const_iterator i = _crafts.begin(); i != _crafts.end(); ++i)
@@ -648,6 +622,16 @@ RuleCraft *const Ruleset::getCraft(const std::string &id) const
 }
 
 /**
+ * Returns the list of all crafts
+ * provided by the ruleset.
+ * @return List of crafts.
+ */
+std::vector<std::string> Ruleset::getCraftsList() const
+{
+	return _craftsIndex;
+}
+
+/**
  * Returns the rules for the specified craft weapon.
  * @param id Craft weapon type.
  * @return Rules for the craft weapon.
@@ -694,9 +678,19 @@ RuleTerrain *const Ruleset::getTerrain(const std::string &name) const
  * @param name datafile name.
  * @return Rules for the datafile.
  */
-MapDataSet *const Ruleset::getMapDataSet(const std::string &name) const
+MapDataSet *const Ruleset::getMapDataSet(const std::string &name)
 {
-	return _mapDataSets.find(name)->second;
+	std::map<std::string, MapDataSet*>::iterator map = _mapDataSets.find(name);
+	if (map == _mapDataSets.end())
+	{
+		MapDataSet *set = new MapDataSet(name);
+		_mapDataSets[name] = set;
+		return set;
+	}
+	else
+	{
+		return map->second;
+	}
 }
 
 /**

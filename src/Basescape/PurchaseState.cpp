@@ -125,8 +125,14 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 	_lstItems->onRightArrowPress((ActionHandler)&PurchaseState::lstItemsRightArrowPress);
 	_lstItems->onRightArrowRelease((ActionHandler)&PurchaseState::lstItemsRightArrowRelease);
 
-	_crafts.push_back("STR_SKYRANGER");
-	_crafts.push_back("STR_INTERCEPTOR");
+	std::vector<std::string> crafts = _game->getRuleset()->getCraftsList();
+	for (std::vector<std::string>::iterator i = crafts.begin(); i != crafts.end(); ++i)
+	{
+		if (_game->getRuleset()->getCraft(*i)->isRental())
+		{
+			_crafts.push_back(*i);
+		}
+	}
 	_items.push_back("STR_STINGRAY_LAUNCHER");
 	_items.push_back("STR_AVALANCHE_LAUNCHER");
 	_items.push_back("STR_CANNON");

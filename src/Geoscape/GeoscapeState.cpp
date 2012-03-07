@@ -73,6 +73,7 @@
 #include "NewPossibleResearchState.h"
 #include "../Savegame/Production.h"
 #include "../Ruleset/RuleManufactureInfo.h"
+#include "../Savegame/ItemContainer.h"
 
 namespace OpenXcom
 {
@@ -589,7 +590,24 @@ void GeoscapeState::time30Minutes()
 		{
 			if ((*j)->getStatus() == "STR_REFUELLING")
 			{
-				(*j)->refuel();
+				std::string item = (*j)->getRules()->getRefuelItem();
+				if (item == "")
+				{
+					(*j)->refuel();
+				}
+				else
+				{
+					if ((*i)->getItems()->getItem(item) > 0)
+					{
+						(*i)->getItems()->removeItem(item);
+						(*j)->refuel();
+					}
+					else
+					{
+						// TODO: No fuel popup
+						(*j)->setStatus("STR_READY");
+					}
+				}
 			}
 		}
 	}
@@ -930,11 +948,7 @@ void GeoscapeState::btnFundingClick(Action *action)
  */
 void GeoscapeState::btnRotateLeftPress(Action *action)
 {
-#ifdef _DEBUG
-	_game->getRuleset()->save("UfoBase");
-#else
 	_globe->rotateLeft();
-#endif
 }
 
 /**

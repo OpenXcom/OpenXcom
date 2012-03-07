@@ -128,13 +128,13 @@ InterceptState::InterceptState(Game *game, Globe *globe, Base *base) : State(gam
 				ss << (*j)->getNumSoldiers();
 			}
 			ss << "/";
-			if ((*j)->getNumHWPs() > 0)
+			if ((*j)->getNumVehicles() > 0)
 			{
 				ss << L'\x01' << (*j)->getNumWeapons() << L'\x01';
 			}
 			else
 			{
-				ss << (*j)->getNumHWPs();
+				ss << (*j)->getNumVehicles();
 			}
 			_crafts.push_back(*j);
 			_lstCrafts->addRow(4, (*j)->getName(_game->getLanguage()).c_str(), _game->getLanguage()->getString((*j)->getStatus()).c_str(), (*i)->getName().c_str(), ss.str().c_str());

@@ -104,19 +104,24 @@ MonthlyCostsState::MonthlyCostsState(Game *game, Base *base) : State(game), _bas
 
 	_txtIncome->setColor(Palette::blockOffset(13)+10);
 	std::wstringstream ss;
-	ss << _game->getLanguage()->getString("STR_INCOME") << "=" << Text::formatFunding(_game->getSavedGame()->getCountryFunding());
+	ss << _game->getLanguage()->getString("STR_INCOME") << L"=" << Text::formatFunding(_game->getSavedGame()->getCountryFunding());
 	_txtIncome->setText(ss.str());
 
 	_lstCrafts->setColor(Palette::blockOffset(13)+10);
 	_lstCrafts->setColumns(4, 125, 70, 45, 60);
 	_lstCrafts->setDot(true);
 
-	std::wstringstream ss2;
-	ss2 << _base->getCraftCount("STR_SKYRANGER");
-	_lstCrafts->addRow(4, _game->getLanguage()->getString("STR_SKYRANGER").c_str(), Text::formatFunding(_game->getRuleset()->getCraft("STR_SKYRANGER")->getCost()).c_str(), ss2.str().c_str(), Text::formatFunding(_base->getCraftCount("STR_SKYRANGER") * _game->getRuleset()->getCraft("STR_SKYRANGER")->getCost()).c_str());
-	std::wstringstream ss3;
-	ss3 << _base->getCraftCount("STR_INTERCEPTOR");
-	_lstCrafts->addRow(4, _game->getLanguage()->getString("STR_INTERCEPTOR").c_str(), Text::formatFunding(_game->getRuleset()->getCraft("STR_INTERCEPTOR")->getCost()).c_str(), ss3.str().c_str(), Text::formatFunding(_base->getCraftCount("STR_INTERCEPTOR") * _game->getRuleset()->getCraft("STR_INTERCEPTOR")->getCost()).c_str());
+	std::vector<std::string> crafts = _game->getRuleset()->getCraftsList();
+	for (std::vector<std::string>::iterator i = crafts.begin(); i != crafts.end(); ++i)
+	{
+		RuleCraft *craft = _game->getRuleset()->getCraft(*i);
+		if (craft->isRental())
+		{
+			std::wstringstream ss2;
+			ss2 << _base->getCraftCount((*i));
+			_lstCrafts->addRow(4, _game->getLanguage()->getString(*i).c_str(), Text::formatFunding(craft->getCost()).c_str(), ss2.str().c_str(), Text::formatFunding(_base->getCraftCount(*i) * craft->getCost()).c_str());
+		}
+	}
 
 	_lstSalaries->setColor(Palette::blockOffset(13)+10);
 	_lstSalaries->setColumns(4, 125, 70, 45, 60);

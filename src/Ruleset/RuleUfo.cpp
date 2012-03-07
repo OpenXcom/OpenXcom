@@ -44,7 +44,7 @@ RuleUfo::~RuleUfo()
  * @param node YAML node.
  * @param ruleset Ruleset for the UFO.
  */
-void RuleUfo::load(const YAML::Node &node, const Ruleset *ruleset)
+void RuleUfo::load(const YAML::Node &node, Ruleset *ruleset)
 {
 	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
 	{

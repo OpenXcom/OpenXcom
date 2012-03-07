@@ -62,6 +62,10 @@ void ItemContainer::save(YAML::Emitter &out) const
  */
 void ItemContainer::addItem(const std::string &id, int qty)
 {
+	if (id.empty())
+	{
+		return;
+	}
 	if (_qty.find(id) == _qty.end())
 	{
 		_qty[id] = 0;
@@ -76,7 +80,7 @@ void ItemContainer::addItem(const std::string &id, int qty)
  */
 void ItemContainer::removeItem(const std::string &id, int qty)
 {
-	if (_qty.find(id) == _qty.end())
+	if (id.empty() || _qty.find(id) == _qty.end())
 	{
 		return;
 	}
@@ -97,8 +101,12 @@ void ItemContainer::removeItem(const std::string &id, int qty)
  */
 int ItemContainer::getItem(const std::string &id) const
 {
-	std::map<std::string, int>::const_iterator it = _qty.find(id);
+	if (id.empty())
+	{
+		return 0;
+	}
 
+	std::map<std::string, int>::const_iterator it = _qty.find(id);
 	if (it == _qty.end())
 	{
 		return 0;

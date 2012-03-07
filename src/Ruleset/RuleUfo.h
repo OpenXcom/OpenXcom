@@ -48,7 +48,7 @@ public:
 	/// Cleans up the UFO ruleset.
 	~RuleUfo();
 	/// Loads UFO data from YAML.
-	void load(const YAML::Node& node, const Ruleset *ruleset);
+	void load(const YAML::Node& node, Ruleset *ruleset);
 	/// Saves the UFO data to YAML.
 	void save(YAML::Emitter& out) const;
 	/// Gets the UFO's type.

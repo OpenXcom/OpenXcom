@@ -152,3 +152,73 @@ facilities:
     monthlyCost: 25000
     crafts: 1
     mapName: XBASE_16
+crafts:
+  - type: STR_SKYRANGER
+    sprite: 0
+    rental: true
+    fuelMax: 1500
+    damageMax: 150
+    speedMax: 760
+    accel: 2
+    soldiers: 14
+    vehicles: 3
+    cost: 500000
+    refuelRate: 50
+    transferTime: 72
+    score: 200
+    battlescapeTerrainData:
+      name: PLANE
+      mapDataSets:
+        - BLANKS
+        - PLANE
+      mapBlocks:
+        - name: PLANE
+          width: 10
+          length: 20
+          height: 0
+          type: 0
+  - type: STR_INTERCEPTOR
+    sprite: 3
+    rental: true
+    fuelMax: 1000
+    damageMax: 100
+    speedMax: 2100
+    accel: 3
+    weapons: 2
+    cost: 600000
+    refuelRate: 50
+    transferTime: 96
+    score: 250
+  - type: STR_FIRESTORM
+    sprite: 4
+    fuelMax: 20
+    damageMax: 50
+    speedMax: 4200
+    accel: 9
+    weapons: 2
+    refuelItem: STR_ELERIUM_115
+    refuelRate: 5
+    score: 250
+  - type: STR_LIGHTNING
+    sprite: 1
+    fuelMax: 30
+    damageMax: 800
+    speedMax: 3100
+    accel: 9
+    weapons: 1
+    soldiers: 12
+    refuelItem: STR_ELERIUM_115
+    refuelRate: 5
+    score: 300
+  - type: STR_AVENGER
+    sprite: 2
+    fuelMax: 60
+    damageMax: 1200
+    speedMax: 5400
+    accel: 10
+    weapons: 2
+    soldiers: 26
+    vehicles: 4
+    refuelItem: STR_ELERIUM_115
+    refuelRate: 5
+    score: 400
