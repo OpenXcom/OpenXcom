@@ -413,6 +413,8 @@ double Craft::getDistanceFromBase() const
  */
 int Craft::getFuelConsumption() const
 {
+	if (_rules->getRefuelItem() != "")
+		return 1;
 	return (int)floor(_speed / 100.0);
 }
 
@@ -542,7 +544,7 @@ std::string Craft::rearm()
 		}
 		if (*i != 0 && (*i)->isRearming())
 		{
-			if (_base->getItems()->getItem((*i)->getRules()->getClipItem()) > 0)
+			if ((*i)->getRules()->getClipItem() == "" || _base->getItems()->getItem((*i)->getRules()->getClipItem()) > 0)
 			{
 				(*i)->rearm();
 				_base->getItems()->removeItem((*i)->getRules()->getClipItem());

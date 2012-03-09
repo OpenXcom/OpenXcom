@@ -222,3 +222,77 @@ crafts:
     refuelItem: STR_ELERIUM_115
     refuelRate: 5
     score: 400
+craftWeapons:
+  - type: STR_STINGRAY
+    sprite: 0
+    sound: 8
+    damage: 70
+    range: 30
+    accuracy: 70
+    reloadCautious: 32
+    reloadStandard: 24
+    reloadAggressive: 16
+    ammoMax: 6
+    launcher: STR_STINGRAY_LAUNCHER
+    clip: STR_STINGRAY_MISSILES
+  - type: STR_AVALANCHE
+    sprite: 1
+    sound: 8
+    damage: 100
+    range: 60
+    accuracy: 80
+    reloadCautious: 48
+    reloadStandard: 36
+    reloadAggressive: 24
+    ammoMax: 3
+    launcher: STR_AVALANCHE_LAUNCHER
+    clip: STR_AVALANCHE_MISSILES
+  - type: STR_CANNON_UC
+    sprite: 2
+    sound: 4
+    damage: 10
+    range: 10
+    accuracy: 25
+    reloadCautious: 2
+    reloadStandard: 2
+    reloadAggressive: 2
+    ammoMax: 200
+    rearmRate: 50
+    launcher: STR_CANNON
+    clip: STR_CANNON_ROUNDS_X50
+  - type: STR_LASER_CANNON_UC
+    sprite: 4
+    sound: 5
+    damage: 70
+    range: 21
+    accuracy: 35
+    reloadCautious: 12
+    reloadStandard: 12
+    reloadAggressive: 12
+    ammoMax: 99
+    rearmRate: 99
+    launcher: STR_LASER_CANNON
+  - type: STR_PLASMA_BEAM_UC
+    sprite: 5
+    sound: 9
+    damage: 140
+    range: 52
+    accuracy: 50
+    reloadCautious: 12
+    reloadStandard: 12
+    reloadAggressive: 12
+    ammoMax: 100
+    rearmRate: 100
+    launcher: STR_PLASMA_BEAM
+  - type: STR_FUSION_BALL_UC
+    sprite: 3
+    sound: 7
+    damage: 230
+    range: 65
+    accuracy: 100
+    reloadCautious: 32
+    reloadStandard: 24
+    reloadAggressive: 16
+    ammoMax: 2
+    launcher: STR_FUSION_BALL_LAUNCHER
+    clip: STR_FUSION_BALL

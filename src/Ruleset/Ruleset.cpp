@@ -640,6 +640,17 @@ RuleCraftWeapon *const Ruleset::getCraftWeapon(const std::string &id) const
 {
 	return _craftWeapons.find(id)->second;
 }
+
+/**
+ * Returns the list of all craft weapons
+ * provided by the ruleset.
+ * @return List of craft weapons.
+ */
+std::vector<std::string> Ruleset::getCraftWeaponsList() const
+{
+	return _craftWeaponsIndex;
+}
+
 /**
  * Returns the rules for the specified item.
  * @param id Item type.
