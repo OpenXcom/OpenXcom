@@ -536,6 +536,7 @@ void BattlescapeState::btnNextStopClick(Action *action)
  */
 void BattlescapeState::selectNextPlayerUnit(bool checkReselect)
 {
+	if (_battleGame->getCurrentAction()->type != BA_NONE) return;
 	BattleUnit *unit = _save->selectNextPlayerUnit(checkReselect);
 	updateSoldierInfo();
 	if (unit) _map->getCamera()->centerOnPosition(unit->getPosition());
