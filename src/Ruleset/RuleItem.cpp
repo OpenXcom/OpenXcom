@@ -446,6 +446,24 @@ void RuleItem::setTwoHanded(bool flag)
 }
 
 /**
+ * Returns whether this uses waypoints.
+ * @return Uses waypoints?
+ */
+bool RuleItem::getWaypoint() const
+{
+	return _waypoint;
+}
+
+/**
+ * Sets whether this item uses waypoints.
+ * @param flag Uses waypoints?
+ */
+void RuleItem::setWaypoint(bool flag)
+{
+	_waypoint = flag;
+}
+
+/**
  * Returns whether this item is a fixed weapon.
  * You can't move/throw/drop fixed weapons - ie. HWP turrets.
  * @return Is it fixed weapon?

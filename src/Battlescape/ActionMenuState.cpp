@@ -64,9 +64,10 @@ ActionMenuState::ActionMenuState(Game *game, BattleAction *action, int x, int y)
 	std::wstring strAcc = _game->getLanguage()->getString("STR_ACC");
 	std::wstring strTU = _game->getLanguage()->getString("STR_TUS");
 	std::wstringstream ss1, ss2;
+	RuleItem *weapon = _action->weapon->getRules();
 
 	// throwing (if not a fixed weapon)
-	if (!_action->weapon->getRules()->getFixed())
+	if (!weapon->getFixed())
 	{
 		tu = _action->actor->getActionTUs(BA_THROW, _action->weapon);
 		ss1 << strAcc.c_str() << (int)floor(_action->actor->getThrowingAccuracy() * 100) << "%";
@@ -79,7 +80,7 @@ ActionMenuState::ActionMenuState(Game *game, BattleAction *action, int x, int y)
 	}
 
 	// priming
-	if ((_action->weapon->getRules()->getBattleType() == BT_GRENADE || _action->weapon->getRules()->getBattleType() == BT_PROXIMITYGRENADE)
+	if ((weapon->getBattleType() == BT_GRENADE || weapon->getBattleType() == BT_PROXIMITYGRENADE)
 		&& _action->weapon->getExplodeTurn() == 0)
 	{
 		tu = _action->actor->getActionTUs(BA_PRIME, _action->weapon);
@@ -91,47 +92,60 @@ ActionMenuState::ActionMenuState(Game *game, BattleAction *action, int x, int y)
 		ss2.str(L"");
 	}
 
-	if (_action->weapon->getRules()->getBattleType() == BT_FIREARM)
+	if (weapon->getBattleType() == BT_FIREARM)
 	{
-		if (_action->weapon->getRules()->getAccuracyAuto() != 0)
+		if (weapon->getWaypoint())
 		{
-			tu = _action->actor->getActionTUs(BA_AUTOSHOT, _action->weapon);
-			ss1 << strAcc.c_str() << (int)floor(_action->actor->getFiringAccuracy(BA_AUTOSHOT, _action->weapon) * 100) << "%";
+			tu = _action->actor->getActionTUs(BA_LAUNCH, _action->weapon);
 			ss2 << strTU.c_str() << tu;
-			_actionMenu[id]->setAction(BA_AUTOSHOT, _game->getLanguage()->getString("STR_AUTO_SHOT"), ss1.str(), ss2.str(), tu);
+			_actionMenu[id]->setAction(BA_LAUNCH, _game->getLanguage()->getString("STR_LAUNCH_MISSILE"), ss1.str(), ss2.str(), tu);
 			_actionMenu[id]->setVisible(true);
 			id++;
 			ss1.str(L"");
 			ss2.str(L"");
 		}
-		if (_action->weapon->getRules()->getAccuracySnap() != 0)
+		else
 		{
-			tu = _action->actor->getActionTUs(BA_SNAPSHOT, _action->weapon);
-			ss1 << strAcc.c_str() << (int)floor(_action->actor->getFiringAccuracy(BA_SNAPSHOT, _action->weapon) * 100) << "%";
-			ss2 << strTU.c_str() << tu;
-			_actionMenu[id]->setAction(BA_SNAPSHOT, _game->getLanguage()->getString("STR_SNAP_SHOT"), ss1.str(), ss2.str(), tu);
-			_actionMenu[id]->setVisible(true);
-			id++;
-			ss1.str(L"");
-			ss2.str(L"");
-		}
-		if (_action->weapon->getRules()->getAccuracyAimed() != 0)
-		{
-			tu = _action->actor->getActionTUs(BA_AIMEDSHOT, _action->weapon);
-			ss1 << strAcc.c_str() << (int)floor(_action->actor->getFiringAccuracy(BA_AIMEDSHOT, _action->weapon) * 100) << "%";
-			ss2 << strTU.c_str() << tu;
-			_actionMenu[id]->setAction(BA_AIMEDSHOT, _game->getLanguage()->getString("STR_AIMED_SHOT"), ss1.str(), ss2.str(), tu);
-			_actionMenu[id]->setVisible(true);
-			id++;
-			ss1.str(L"");
-			ss2.str(L"");
+			if (weapon->getAccuracyAuto() != 0)
+			{
+				tu = _action->actor->getActionTUs(BA_AUTOSHOT, _action->weapon);
+				ss1 << strAcc.c_str() << (int)floor(_action->actor->getFiringAccuracy(BA_AUTOSHOT, _action->weapon) * 100) << "%";
+				ss2 << strTU.c_str() << tu;
+				_actionMenu[id]->setAction(BA_AUTOSHOT, _game->getLanguage()->getString("STR_AUTO_SHOT"), ss1.str(), ss2.str(), tu);
+				_actionMenu[id]->setVisible(true);
+				id++;
+				ss1.str(L"");
+				ss2.str(L"");
+			}
+			if (weapon->getAccuracySnap() != 0)
+			{
+				tu = _action->actor->getActionTUs(BA_SNAPSHOT, _action->weapon);
+				ss1 << strAcc.c_str() << (int)floor(_action->actor->getFiringAccuracy(BA_SNAPSHOT, _action->weapon) * 100) << "%";
+				ss2 << strTU.c_str() << tu;
+				_actionMenu[id]->setAction(BA_SNAPSHOT, _game->getLanguage()->getString("STR_SNAP_SHOT"), ss1.str(), ss2.str(), tu);
+				_actionMenu[id]->setVisible(true);
+				id++;
+				ss1.str(L"");
+				ss2.str(L"");
+			}
+			if (weapon->getAccuracyAimed() != 0)
+			{
+				tu = _action->actor->getActionTUs(BA_AIMEDSHOT, _action->weapon);
+				ss1 << strAcc.c_str() << (int)floor(_action->actor->getFiringAccuracy(BA_AIMEDSHOT, _action->weapon) * 100) << "%";
+				ss2 << strTU.c_str() << tu;
+				_actionMenu[id]->setAction(BA_AIMEDSHOT, _game->getLanguage()->getString("STR_AIMED_SHOT"), ss1.str(), ss2.str(), tu);
+				_actionMenu[id]->setVisible(true);
+				id++;
+				ss1.str(L"");
+				ss2.str(L"");
+			}
 		}
 	}
 
-	if (_action->weapon->getRules()->getBattleType() == BT_MELEE)
+	if (weapon->getBattleType() == BT_MELEE)
 	{
 		// stun rod
-		if (_action->weapon->getRules()->getDamageType() == DT_STUN)
+		if (weapon->getDamageType() == DT_STUN)
 		{
 			tu = _action->actor->getActionTUs(BA_HIT, _action->weapon);
 			ss1 << strAcc.c_str() << (int)floor(_action->actor->getFiringAccuracy(BA_HIT, _action->weapon) * 100) << "%";
@@ -157,9 +171,9 @@ ActionMenuState::ActionMenuState(Game *game, BattleAction *action, int x, int y)
 	}
 
 	// special items
-	if (_action->weapon->getRules()->getBattleType() == BT_MEDIKIT)
+	if (weapon->getBattleType() == BT_MEDIKIT)
 	{
-		tu = _action->weapon->getRules()->getTUUse();
+		tu = weapon->getTUUse();
 		ss2 << strTU.c_str() << tu;
 		_actionMenu[id]->setAction(BA_USE, _game->getLanguage()->getString("STR_USE_MEDI_KIT"), L"", ss2.str(), tu);
 		_actionMenu[id]->setVisible(true);
@@ -167,7 +181,7 @@ ActionMenuState::ActionMenuState(Game *game, BattleAction *action, int x, int y)
 		ss2.str(L"");
 	}
 
-	if (_action->weapon->getRules()->getBattleType() == BT_SCANNER)
+	if (weapon->getBattleType() == BT_SCANNER)
 	{
 		tu = _action->actor->getActionTUs(BA_USE, _action->weapon);
 		ss2 << strTU.c_str() << tu;
@@ -209,6 +223,7 @@ void ActionMenuState::handle(Action *action)
 void ActionMenuState::btnActionMenuItemClick(Action *action)
 {
 	int btnID = -1;
+	RuleItem *weapon = _action->weapon->getRules();
 
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
@@ -231,7 +246,7 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 		_action->TU = _actionMenu[btnID]->getTUs();
 		if (_action->type == BA_PRIME)
 		{
-			if (Options::getBool("battleAltGrenade") || _action->weapon->getRules()->getBattleType() == BT_PROXIMITYGRENADE)
+			if (Options::getBool("battleAltGrenade") || weapon->getBattleType() == BT_PROXIMITYGRENADE)
 			{
 				_action->value = 0;
 				_game->popState();
@@ -241,7 +256,7 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 				_game->pushState(new PrimeGrenadeState(_game, _action));
 			}
 		}
-		else if (_action->type == BA_USE && _action->weapon->getRules()->getBattleType() == BT_MEDIKIT)
+		else if (_action->type == BA_USE && weapon->getBattleType() == BT_MEDIKIT)
 		{
 			BattleUnit *targetUnit = NULL;
 			std::vector<BattleUnit*> *const units (_game->getSavedGame()->getBattleGame()->getUnits());
@@ -271,7 +286,7 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 				_game->popState();
 			}
 		}
-		else if (_action->type == BA_USE && _action->weapon->getRules()->getBattleType() == BT_SCANNER)
+		else if (_action->type == BA_USE && weapon->getBattleType() == BT_SCANNER)
 		{
 			// spend TUs first, then show the scanner
 			if (_action->actor->spendTimeUnits (_action->TU, false))
@@ -283,6 +298,23 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 				_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
 				_game->popState();
 			}
+		}
+		else if (_action->type == BA_LAUNCH)
+		{
+			// check beforehand if we have enough time units
+			if (_action->TU > _action->actor->getTimeUnits())
+			{
+				_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
+			}
+			else if (_action->weapon->getAmmoItem() ==0 || (_action->weapon->getAmmoItem() && _action->weapon->getAmmoItem()->getAmmoQuantity() == 0))
+			{
+				_action->result = "STR_NO_AMMUNITION_LOADED";
+			}
+			else
+			{
+				_action->targeting = true;
+			}
+			_game->popState();
 		}
 		else
 		{

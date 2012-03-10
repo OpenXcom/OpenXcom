@@ -35,6 +35,7 @@ private:
 	BattleUnit *_unit;
 	BattleItem *_ammo;
 	BattleItem *_projectileItem;
+	Position _origin;
 	int _autoshotCounter;
 	int _projectileImpact;
 	void createNewProjectile();
@@ -42,6 +43,7 @@ private:
 public:
 	/// Creates a new ProjectileFly class
 	ProjectileFlyBState(BattlescapeGame *parent, BattleAction action);
+	ProjectileFlyBState(BattlescapeGame *parent, BattleAction action, Position origin);
 	/// Cleans up the ProjectileFly.
 	~ProjectileFlyBState();
 	/// Initializes the state.

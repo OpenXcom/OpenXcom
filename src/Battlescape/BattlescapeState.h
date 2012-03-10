@@ -55,7 +55,7 @@ private:
 	Map *_map;
 	InteractiveSurface *_btnUnitUp, *_btnUnitDown, *_btnMapUp, *_btnMapDown, *_btnShowMap, *_btnKneel;
 	InteractiveSurface *_btnInventory, *_btnCenter, *_btnNextSoldier, *_btnNextStop, *_btnShowLayers, *_btnHelp;
-	InteractiveSurface *_btnEndTurn, *_btnAbort, *_btnStats;
+	InteractiveSurface *_btnEndTurn, *_btnAbort, *_btnStats, *_btnLaunch;
 	ImageButton *_reserve;
 	ImageButton *_btnReserveNone, *_btnReserveSnap, *_btnReserveAimed, *_btnReserveAuto;
 	InteractiveSurface *_btnLeftHandItem, *_btnRightHandItem;
@@ -124,6 +124,8 @@ public:
 	/// Handler for clicking a visible unit button.
 	void btnVisibleUnitClick(Action *action);
 	/// Handler for clicking a reserved button.
+	void btnLaunchClick(Action *action);
+	/// Handler for clicking a reserved button.
 	void btnReserveNoneClick(Action *action);
 	/// Handler for clicking a reserved button.
 	void btnReserveSnapClick(Action *action);
@@ -155,6 +157,8 @@ public:
 	void popup(State *state);
 	/// Finishes a battle.
 	void finishBattle(bool abort);
+	/// show launch button
+	void showLaunchButton(bool show);
 
 };
 

@@ -106,6 +106,10 @@ public:
 	bool getTwoHanded() const;
 	/// Sets if the item is two-handed.
 	void setTwoHanded(bool flag);
+	/// Gets if the item is a launcher.
+	bool getWaypoint() const;
+	/// Sets if the item is a launcher.
+	void setWaypoint(bool flag);
 	/// Gets if the item is fixed.
 	bool getFixed() const;
 	/// Sets if the item is fixed.

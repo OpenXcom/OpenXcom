@@ -131,6 +131,8 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	}
 	_numVisibleUnit[9]->setX(304); // center number 10
 	_warning = new WarningMessage(224, 24, _icons->getX() + 48, _icons->getY() + 32);
+	_btnLaunch = new InteractiveSurface(32, 24, (game->getScreen()->getWidth() / game->getScreen()->getXScale())-32, 0);
+	_btnLaunch->setVisible(false);
 
 	// Create soldier stats summary
 	_txtName = new Text(120, 10, _icons->getX() + 135, _icons->getY() + 32);
@@ -219,8 +221,9 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 		add(_numVisibleUnit[i]);
 	}
 	add(_warning);
-
 	add(_txtDebug);
+	add(_btnLaunch);
+	_game->getResourcePack()->getSurfaceSet("SPICONS.DAT")->getFrame(0)->blit(_btnLaunch);
 
 	// Set up objects
 
@@ -276,6 +279,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	}
 	_warning->setColor(Palette::blockOffset(2));
 	_warning->setTextColor(Palette::blockOffset(1));
+	_btnLaunch->onMouseClick((ActionHandler)&BattlescapeState::btnLaunchClick);
 
 	_txtName->setColor(Palette::blockOffset(8));
 	_txtName->setHighContrast(true);
@@ -642,6 +646,16 @@ void BattlescapeState::btnVisibleUnitClick(Action *action)
 }
 
 /**
+ * Launch the blaster bomb.
+ * @param action Pointer to an action.
+ */
+void BattlescapeState::btnLaunchClick(Action *action)
+{
+	_battleGame->launchAction();
+	action->getDetails()->type = SDL_NOEVENT; // consume the event
+}
+
+/**
  * Reserve time units.
  * @param action Pointer to an action.
  */
@@ -955,5 +969,15 @@ void BattlescapeState::finishBattle(bool abort)
 	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
 	_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
 }
+
+/**
+ * Show launch button.
+ * @param show Show launch button?
+ */
+void BattlescapeState::showLaunchButton(bool show)
+{
+	_btnLaunch->setVisible(show);
+}
+
 
 }

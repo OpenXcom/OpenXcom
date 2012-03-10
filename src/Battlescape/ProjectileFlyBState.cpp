@@ -42,10 +42,15 @@ namespace OpenXcom
 /**
  * Sets up an ProjectileFlyBState.
  */
+ProjectileFlyBState::ProjectileFlyBState(BattlescapeGame *parent, BattleAction action, Position origin) : BattleState(parent, action), _unit(0), _ammo(0), _projectileImpact(0), _initialized(false), _origin(origin)
+{
+}
+
 ProjectileFlyBState::ProjectileFlyBState(BattlescapeGame *parent, BattleAction action) : BattleState(parent, action), _unit(0), _ammo(0), _projectileImpact(0), _initialized(false)
 {
-
+	_origin = action.actor->getPosition();
 }
+
 
 /**
  * Deletes the ProjectileFlyBState.
@@ -105,6 +110,7 @@ void ProjectileFlyBState::init()
 	case BA_SNAPSHOT:
 	case BA_AIMEDSHOT:
 	case BA_AUTOSHOT:
+	case BA_LAUNCH:
 		if (_ammo == 0)
 		{
 			_action.result = "STR_NO_AMMUNITION_LOADED";
@@ -161,7 +167,7 @@ void ProjectileFlyBState::init()
 void ProjectileFlyBState::createNewProjectile()
 {
 	// create a new projectile
-	Projectile *projectile = new Projectile(_parent->getResourcePack(), _parent->getSave(), _action);
+	Projectile *projectile = new Projectile(_parent->getResourcePack(), _parent->getSave(), _action, _origin);
 
 	_autoshotCounter++;
 	// add the projectile on the map
@@ -193,7 +199,7 @@ void ProjectileFlyBState::createNewProjectile()
 	else
 	{
 		_projectileImpact = projectile->calculateTrajectory(_unit->getFiringAccuracy(_action.type, _action.weapon));
-		if (_projectileImpact != -1)
+		if (_projectileImpact != -1 || _action.type == BA_LAUNCH)
 		{
 				// set the soldier in an aiming position
 				_unit->aim(true);
@@ -201,7 +207,7 @@ void ProjectileFlyBState::createNewProjectile()
 				// and we have a lift-off
 				if (_action.weapon->getRules()->getFireSound() != -1)
 					_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(_action.weapon->getRules()->getFireSound())->play();
-				if (!_parent->getSave()->getDebugMode() && _ammo->spendBullet() == false)
+				if (!_parent->getSave()->getDebugMode() && _action.type != BA_LAUNCH && _ammo->spendBullet() == false)
 				{
 					_parent->getSave()->removeItem(_ammo);
 					_action.weapon->setAmmoItem(0);
@@ -262,8 +268,22 @@ void ProjectileFlyBState::think()
 					_parent->dropItem(pos, item);
 				}
 			}
+			else if (_action.type == BA_LAUNCH && _action.waypoints.size() > 1 && _projectileImpact == -1)
+			{
+				_origin = _action.waypoints.front();
+				_action.waypoints.pop_front();
+				_action.target = _action.waypoints.front();
+				// launch the next projectile in the waypoint cascade
+				_parent->statePushBack(new ProjectileFlyBState(_parent, _action, _origin));
+			}
 			else
 			{
+				if (_action.type == BA_LAUNCH && _ammo->spendBullet() == false)
+				{
+					_parent->getSave()->removeItem(_ammo);
+					_action.weapon->setAmmoItem(0);
+				}
+
 				if (_projectileImpact != 5) // out of map
 				{
 					int offset = 0;

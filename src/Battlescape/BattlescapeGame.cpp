@@ -475,7 +475,7 @@ void BattlescapeGame::handleNonTargetAction()
 				_parentState->warning("STR_NOT_ENOUGH_TIME_UNITS");
 			}
 		}
-		if (_currentAction.type == BA_USE)
+		if (_currentAction.type == BA_USE || _currentAction.type == BA_LAUNCH)
 		{
 			if (_currentAction.result.length() > 0)
 			{
@@ -487,6 +487,7 @@ void BattlescapeGame::handleNonTargetAction()
 		_currentAction.type = BA_NONE;
 		_parentState->updateSoldierInfo();
 	}
+
 	setupCursor();
 }
 
@@ -500,6 +501,10 @@ void BattlescapeGame::setupCursor()
 		if (_currentAction.type == BA_THROW)
 		{
 			getMap()->setCursorType(CT_THROW);
+		}
+		else if (_currentAction.type == BA_LAUNCH)
+		{
+			getMap()->setCursorType(CT_WAYPOINT);
 		}
 		else
 		{
@@ -627,8 +632,14 @@ void BattlescapeGame::popState()
 			if (_save->getSide() == FACTION_PLAYER)
 			{
 				// after throwing the cursor returns to default cursor, after shooting it stays in targeting mode and the player can shoot again in the same mode (autoshot,snap,aimed)
-				if (action.type == BA_THROW && !actionFailed)
+				if ((action.type == BA_THROW || action.type == BA_LAUNCH) && !actionFailed)
 				{
+					// clean up the waypoints
+					if (action.type == BA_LAUNCH)
+					{
+						_currentAction.waypoints.clear();
+					}
+
 					cancelCurrentAction();
 				}
 				_parentState->getGame()->getCursor()->setVisible(true);
@@ -879,11 +890,27 @@ bool BattlescapeGame::cancelCurrentAction()
 	{
 		if (_currentAction.targeting)
 		{
-			_currentAction.targeting = false;
-			_currentAction.type = BA_NONE;
-			setupCursor();
-			_parentState->getGame()->getCursor()->setVisible(true);
-			return true;
+			if (_currentAction.type == BA_LAUNCH && _currentAction.waypoints.size() > 0)
+			{
+				_currentAction.waypoints.pop_back();
+				if (getMap()->getWaypoints()->size() > 0)
+				{
+					getMap()->getWaypoints()->pop_back();
+				}
+				if (_currentAction.waypoints.size() == 0)
+				{
+					_parentState->showLaunchButton(false);
+				}
+				return true;
+			}
+			else
+			{
+				_currentAction.targeting = false;
+				_currentAction.type = BA_NONE;
+				setupCursor();
+				_parentState->getGame()->getCursor()->setVisible(true);
+				return true;
+			}
 		}
 	}
 	else
@@ -922,11 +949,20 @@ void BattlescapeGame::primaryAction(const Position &pos)
 
 	if (_currentAction.targeting && _save->getSelectedUnit())
 	{
-		_currentAction.target = pos;
-		getMap()->setCursorType(CT_NONE);
-		_parentState->getGame()->getCursor()->setVisible(false);
-		_states.push_back(new ProjectileFlyBState(this, _currentAction));
-		statePushFront(new UnitTurnBState(this, _currentAction)); // first of all turn towards the target
+		if (_currentAction.type == BA_LAUNCH)
+		{
+			_parentState->showLaunchButton(true);
+			_currentAction.waypoints.push_back(pos);
+			getMap()->getWaypoints()->push_back(pos);
+		}
+		else
+		{
+			_currentAction.target = pos;
+			getMap()->setCursorType(CT_NONE);
+			_parentState->getGame()->getCursor()->setVisible(false);
+			_states.push_back(new ProjectileFlyBState(this, _currentAction));
+			statePushFront(new UnitTurnBState(this, _currentAction)); // first of all turn towards the target
+		}
 	}
 	else
 	{
@@ -979,6 +1015,20 @@ void BattlescapeGame::secondaryAction(const Position &pos)
 	//  -= turn to or open door =-
 	_currentAction.target = pos;
 	statePushBack(new UnitTurnBState(this, _currentAction));
+}
+
+/**
+ * Pressed the blaster launcher button.
+ */
+void BattlescapeGame::launchAction()
+{
+	_parentState->showLaunchButton(false);
+	getMap()->getWaypoints()->clear();
+	_currentAction.target = _currentAction.waypoints.front();
+	getMap()->setCursorType(CT_NONE);
+	_parentState->getGame()->getCursor()->setVisible(false);
+	_states.push_back(new ProjectileFlyBState(this, _currentAction));
+	statePushFront(new UnitTurnBState(this, _currentAction)); // first of all turn towards the target
 }
 
 /**

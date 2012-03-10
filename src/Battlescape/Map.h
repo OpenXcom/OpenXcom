@@ -21,6 +21,7 @@
 
 #include "../Engine/InteractiveSurface.h"
 #include <set>
+#include <vector>
 
 namespace OpenXcom
 {
@@ -66,6 +67,7 @@ private:
 	int _visibleMapHeight;
 	void drawTerrain(Surface *surface);
 	int getTerrainLevel(Position pos, int size);
+	std::vector<Position> _waypoints;
 public:
 	/// Creates a new map at the specified position and size.
 	Map(Game *game, int width, int height, int x, int y, int visibleMapHeight);
@@ -110,6 +112,8 @@ public:
 	/// Get pointer to camera
 	Camera *getCamera();
 	void scroll();
+	/// Get waypoints vector
+	std::vector<Position> *getWaypoints();
 
 };
 

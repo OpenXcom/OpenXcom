@@ -47,6 +47,8 @@
 #include "../Savegame/SavedGame.h"
 #include "../Interface/Cursor.h"
 #include "../Engine/Options.h"
+#include "../Interface/NumberText.h"
+
 
 /*
   1) Map origin is top corner.
@@ -198,6 +200,7 @@ void Map::drawTerrain(Surface *surface)
 	BattleUnit *unit = 0;
 	bool invalid;
 	int tileShade, wallShade;
+	NumberText *_numWaypid = 0;
 
 	// get corner map coordinates to give rough boundaries in which tiles to redraw are
 	_camera->convertScreenToMap(0, 0, &beginX, &dummy);
@@ -246,6 +249,13 @@ void Map::drawTerrain(Surface *surface)
 		}
 	}
 
+	if (_waypoints.size() > 0)
+	{
+		_numWaypid = new NumberText(15, 15, 20, 30);
+		_numWaypid->setPalette(getPalette());
+		_numWaypid->setColor(Palette::blockOffset(1));
+	}
+
 	surface->lock();
 
     for (int itZ = beginZ; itZ <= endZ; itZ++)
@@ -285,7 +295,7 @@ void Map::drawTerrain(Surface *surface)
 					{
 						if (_camera->getViewHeight() == itZ)
 						{
-							if (_cursorType == CT_NORMAL || _cursorType == CT_THROW)
+							if (_cursorType == CT_NORMAL || _cursorType == CT_THROW || _cursorType == CT_WAYPOINT)
 							{
 								if (unit && (unit->getVisible() || _save->getDebugMode()))
 									frameNumber = (_animFrame % 2); // yellow box
@@ -499,7 +509,7 @@ void Map::drawTerrain(Surface *surface)
 					{
 						if (_camera->getViewHeight() == itZ)
 						{
-							if (_cursorType == CT_NORMAL || _cursorType == CT_THROW)
+							if (_cursorType == CT_NORMAL || _cursorType == CT_THROW || _cursorType == CT_WAYPOINT)
 							{
 								if (unit && (unit->getVisible() || _save->getDebugMode()))
 									frameNumber = 3 + (_animFrame % 2); // yellow box
@@ -525,7 +535,28 @@ void Map::drawTerrain(Surface *surface)
 							tmpSurface = _res->getSurfaceSet("CURSOR.PCK")->getFrame(15 + (_animFrame / 4));
 							tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y, 0);
 						}
+						if (_cursorType == CT_WAYPOINT && _camera->getViewHeight() == itZ)
+						{
+							tmpSurface = _res->getSurfaceSet("CURSOR.PCK")->getFrame(13 + (_animFrame / 4));
+							tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y, 0);
+						}
 					}
+
+					// Draw waypoints if any on this tile
+					int waypid = 1;
+					for (std::vector<Position>::const_iterator i = _waypoints.begin(); i != _waypoints.end(); ++i)
+					{
+						if ((*i) == mapPosition)
+						{
+							tmpSurface = _res->getSurfaceSet("CURSOR.PCK")->getFrame(7);
+							tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y, 0);
+							_numWaypid->setValue(waypid);
+							_numWaypid->draw();
+							_numWaypid->blitNShade(surface, screenPosition.x+2, screenPosition.y+2, 0);
+						}
+						waypid++;
+					}
+
 
 					// Draw smoke/fire
 					if (tile->getFire() && tile->isDiscovered(2))
@@ -560,6 +591,8 @@ void Map::drawTerrain(Surface *surface)
 			}
 		}
 	}
+
+	delete _numWaypid;
 
 	// check if we got big explosions
 	for (std::set<Explosion*>::const_iterator i = _explosions.begin(); i != _explosions.end(); ++i)
@@ -912,6 +945,15 @@ Camera *Map::getCamera()
 void Map::scroll()
 {
 	_camera->scroll();
+}
+
+/**
+ * Get a list of waypoints on the map.
+ * @return a list of waypoints
+ */
+std::vector<Position> *Map::getWaypoints()
+{
+	return &_waypoints;
 }
 
 }

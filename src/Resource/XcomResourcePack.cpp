@@ -399,6 +399,11 @@ void XcomResourcePack::loadBattlescapeResources()
 	_surfaces["ICONS.PCK"]->loadSpk(CrossPlatform::getDataFile(s.str()));
 
 	s.str("");
+	s << "UFOGRAPH/" << "SPICONS.DAT";
+	_sets["SPICONS.DAT"] = new SurfaceSet(32, 24);
+	_sets["SPICONS.DAT"]->loadDat(CrossPlatform::getDataFile(s.str()));
+
+	s.str("");
 	std::stringstream s2;
 	s << "UFOGRAPH/" << "CURSOR.PCK";
 	s2 << "UFOGRAPH/" << "CURSOR.TAB";

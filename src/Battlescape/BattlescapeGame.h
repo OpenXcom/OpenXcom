@@ -39,7 +39,7 @@ class TileEngine;
 class Pathfinding;
 class Ruleset;
 
-enum BattleActionType { BA_NONE, BA_TURN, BA_WALK, BA_PRIME, BA_THROW, BA_AUTOSHOT, BA_SNAPSHOT, BA_AIMEDSHOT, BA_STUN, BA_HIT, BA_USE };
+enum BattleActionType { BA_NONE, BA_TURN, BA_WALK, BA_PRIME, BA_THROW, BA_AUTOSHOT, BA_SNAPSHOT, BA_AIMEDSHOT, BA_STUN, BA_HIT, BA_USE, BA_LAUNCH };
 
 struct BattleAction
 {
@@ -47,6 +47,7 @@ struct BattleAction
 	BattleUnit *actor;
 	BattleItem *weapon;
 	Position target;
+	std::list<Position> waypoints;
 	int TU;
 	bool targeting;
 	int value;
@@ -121,6 +122,8 @@ public:
 	void primaryAction(const Position &pos);
 	/// Activate secondary action (right click)
 	void secondaryAction(const Position &pos);
+	/// Pressed the launch action.
+	void launchAction();
 	/// Move a unit up or down.
 	void moveUpDown(BattleUnit *unit, int dir);
 	/// Request of the end of the turn (wait for explosions etc to really end the turn)

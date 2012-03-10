@@ -1052,12 +1052,6 @@ void BattlescapeGenerator::generateMap()
 		}
 	}
 
-	/* TODO: map generation for terror sites */
-
-	/* TODO: map generation for base defense mission */
-
-	/* TODO: map generation for alien base assault */
-
 	delete dummy;
 }
 

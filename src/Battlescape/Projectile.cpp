@@ -60,14 +60,12 @@ const int Projectile::_trail[11][36] = {
  * @param res Pointer to resourcepack.
  * @param save Pointer to battlesavegame.
  */
-Projectile::Projectile(ResourcePack *res, SavedBattleGame *save, BattleAction action) : _res(res), _save(save), _action(action), _position(0)
+Projectile::Projectile(ResourcePack *res, SavedBattleGame *save, BattleAction action, Position origin) : _res(res), _save(save), _action(action), _origin(origin), _position(0)
 {
 	if (_action.weapon && _action.type == BA_THROW)
 	{
 		_sprite = _res->getSurfaceSet("FLOOROB.PCK")->getFrame(getItem()->getRules()->getFloorSprite());
 	}
-
-	_origin = _action.actor->getPosition();
 }
 
 /**
@@ -90,91 +88,108 @@ int Projectile::calculateTrajectory(double accuracy)
 	int dirXshift[8] = {8, 14, 15, 15, 8, 1, 1, 1 };
 
 	originVoxel = Position(_origin.x*16, _origin.y*16, _origin.z*24);
-	originVoxel.z += -_save->getTile(_origin)->getTerrainLevel();
-	BattleUnit *bu = _save->getTile(_origin)->getUnit();
+	BattleUnit *bu = _action.actor;
 
-	if (bu->getArmor()->getSize() > 1)
+	if (_action.type == BA_LAUNCH && _action.actor->getPosition() == _origin)
 	{
-		originVoxel.x += 8;
-		originVoxel.y += 8;
-	}
-
-	originVoxel.z += bu->getHeight();
-	originVoxel.z -= 3;
-	if (originVoxel.z >= (_origin.z + 1)*24)
-	{
-		_origin.z++;
-	}
-	direction = bu->getDirection();
-	if (bu->getTurretType() != -1)
-		direction = bu->getTurretDirection();
-	originVoxel.x += dirXshift[direction];
-	originVoxel.y += dirYshift[direction];
-	// determine the target voxel.
-	// aim at the center of the unit, the object, the walls or the floor (in that priority)
-	// if there is no LOF to the center, try elsewhere (more outward).
-	// Store this target voxel.
-	Tile *targetTile = _save->getTile(_action.target);
-	int test = -1;
-	if (targetTile->getUnit() != 0)
-	{
-		if (_origin == _action.target || targetTile->getUnit() == _action.actor)
+		// calculate offset of the starting point of the projectile
+		originVoxel.z += -_save->getTile(_origin)->getTerrainLevel();
+		if (bu->getArmor()->getSize() > 1)
 		{
-			// don't shoot at yourself but shoot at the floor
+			originVoxel.x += 8;
+			originVoxel.y += 8;
+		}
+
+		originVoxel.z += bu->getHeight();
+		originVoxel.z -= 3;
+		if (originVoxel.z >= (_origin.z + 1)*24)
+		{
+			_origin.z++;
+		}
+		direction = bu->getDirection();
+		if (bu->getTurretType() != -1)
+			direction = bu->getTurretDirection();
+		originVoxel.x += dirXshift[direction];
+		originVoxel.y += dirYshift[direction];
+	}
+	else
+	{
+		originVoxel.z += 12;
+	}
+
+	if (_action.type == BA_LAUNCH)
+	{
+		// target nothing, targets the middle of the tile
+		targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + 12);
+	}
+	else
+	{
+		// determine the target voxel.
+		// aim at the center of the unit, the object, the walls or the floor (in that priority)
+		// if there is no LOF to the center, try elsewhere (more outward).
+		// Store this target voxel.
+		Tile *targetTile = _save->getTile(_action.target);
+		int test = -1;
+		if (targetTile->getUnit() != 0)
+		{
+			if (_origin == _action.target || targetTile->getUnit() == _action.actor)
+			{
+				// don't shoot at yourself but shoot at the floor
+				targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24);
+			}
+			else
+			{
+				// first try is at half the unit height
+				targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + targetTile->getUnit()->getStandHeight()/2);
+				targetVoxel.z += -targetTile->getTerrainLevel();
+				test = _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, false, &_trajectory, bu);
+				Position hitPos = Position(_trajectory.at(0).x/16, _trajectory.at(0).y/16, _trajectory.at(0).z/24);
+				_trajectory.clear();
+				if (hitPos.x != targetTile->getPosition().x || hitPos.y != targetTile->getPosition().y)
+				{
+					// did not hit a unit, try at different heights (for ex: unit behind a window can only be hit in the head)
+					targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + (targetTile->getUnit()->getStandHeight()*3)/4);
+					targetVoxel.z += -targetTile->getTerrainLevel();
+				}
+			}
+		}
+		else if (targetTile->getMapData(MapData::O_OBJECT) != 0)
+		{
+			targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + 10);
+		}
+		else if (targetTile->getMapData(MapData::O_NORTHWALL) != 0)
+		{
+			targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16, _action.target.z*24 + 10);
+		}
+		else if (targetTile->getMapData(MapData::O_WESTWALL) != 0)
+		{
+			targetVoxel = Position(_action.target.x*16, _action.target.y*16 + 8, _action.target.z*24 + 10);
+		}
+		else if (targetTile->getMapData(MapData::O_FLOOR) != 0)
+		{
 			targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24);
 		}
 		else
 		{
-			// first try is at half the unit height
-			targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + targetTile->getUnit()->getStandHeight()/2);
-			targetVoxel.z += -targetTile->getTerrainLevel();
-			test = _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, false, &_trajectory, bu);
+			// target nothing, targets the middle of the tile
+			targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + 10);
+		}
+		test = _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, false, &_trajectory, bu);
+		if (test == 4 && !_trajectory.empty())
+		{
 			Position hitPos = Position(_trajectory.at(0).x/16, _trajectory.at(0).y/16, _trajectory.at(0).z/24);
-			_trajectory.clear();
 			if (hitPos.x != targetTile->getPosition().x || hitPos.y != targetTile->getPosition().y)
 			{
-				// did not hit a unit, try at different heights (for ex: unit behind a window can only be hit in the head)
-				targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + (targetTile->getUnit()->getStandHeight()*3)/4);
-				targetVoxel.z += -targetTile->getTerrainLevel();
+				_trajectory.clear();
+				return -1; // still no line of fire as we can't reach the target tile due to a unit blocking
 			}
 		}
+		_trajectory.clear();
 	}
-	else if (targetTile->getMapData(MapData::O_OBJECT) != 0)
-	{
-		targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + 10);
-	}
-	else if (targetTile->getMapData(MapData::O_NORTHWALL) != 0)
-	{
-		targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16, _action.target.z*24 + 10);
-	}
-	else if (targetTile->getMapData(MapData::O_WESTWALL) != 0)
-	{
-		targetVoxel = Position(_action.target.x*16, _action.target.y*16 + 8, _action.target.z*24 + 10);
-	}
-	else if (targetTile->getMapData(MapData::O_FLOOR) != 0)
-	{
-		targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24);
-	}
-	else
-	{
-		// target nothing, targets the middle of the tile
-		targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + 10);
-	}
-	test = _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, false, &_trajectory, bu);
-	if (test == 4 && !_trajectory.empty())
-	{
-		Position hitPos = Position(_trajectory.at(0).x/16, _trajectory.at(0).y/16, _trajectory.at(0).z/24);
-		if (hitPos.x != targetTile->getPosition().x || hitPos.y != targetTile->getPosition().y)
-		{
-			_trajectory.clear();
-			return -1; // still no line of fire as we can't reach the target tile due to a unit blocking
-		}
-	}
-	_trajectory.clear();
 
 	// apply some accuracy modifiers (todo: calculate this)
 	// This will results in a new target voxel
-	applyAccuracy(originVoxel, &targetVoxel, accuracy);
+	applyAccuracy(originVoxel, &targetVoxel, accuracy, _action.type == BA_LAUNCH);
 
 	// finally do a line calculation and store this trajectory.
 	return _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, true, &_trajectory, bu);
@@ -265,10 +280,13 @@ bool Projectile::calculateThrow(double accuracy)
  * @param target Endpoint of the trajectory.
  * @param accuracy Accuracy modifier.
  */
-void Projectile::applyAccuracy(const Position& origin, Position *target, double accuracy)
+void Projectile::applyAccuracy(const Position& origin, Position *target, double accuracy, bool keepRange)
 {
+	int xdiff = origin.x - target->x;
+	int ydiff = origin.y - target->y;
+	double realDistance = sqrt((double)(xdiff*xdiff)+(double)(ydiff*ydiff));
 	// maxRange is the maximum range a projectile shall ever travel in voxel space
-	static const double maxRange = 16*1000; // 1000 tiles
+	double maxRange = keepRange?realDistance:16*1000; // 1000 tiles
 
 	/*
 	This modifies the accuracy based on the distance from the target. The accuracy decreases linearly (2% per tile or 0.125% per voxel) when shooting beyond the limit of the firing mode:
@@ -278,9 +296,6 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 	*/
 	if (Options::getBool("battleRangeBasedAccuracy"))
 	{
-		int xdiff = origin.x - target->x;
-		int ydiff = origin.y - target->y;
-		double realDistance = sqrt((double)(xdiff*xdiff)+(double)(ydiff*ydiff));
 		if (_action.type == BA_AUTOSHOT && realDistance > 112)
 		{
 			accuracy -= 0.00125 * (realDistance - 112);
