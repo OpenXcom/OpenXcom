@@ -109,6 +109,8 @@ public:
 	std::vector<std::string> getCraftWeaponsList() const;
 	/// Gets the ruleset for an item type.
 	RuleItem *const getItem(const std::string &id) const;
+	/// Gets the available items.
+	std::vector<std::string> getItemsList() const;
 	/// Gets the ruleset for a UFO type.
 	RuleUfo *const getUfo(const std::string &id) const;
 	/// Gets terrains for battlescape games.

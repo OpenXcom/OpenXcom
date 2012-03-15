@@ -68,6 +68,7 @@ PromotionsState::PromotionsState(Game *game) : State(game)
 	_btnOk->onMouseClick((ActionHandler)&PromotionsState::btnOkClick);
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
+	_txtName->setText(_game->getLanguage()->getString("STR_PROMOTIONS"));
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
 

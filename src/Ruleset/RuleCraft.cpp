@@ -27,7 +27,7 @@ namespace OpenXcom
  * type of craft.
  * @param type String defining the type.
  */
-RuleCraft::RuleCraft(const std::string &type) : _type(type), _sprite(-1), _rental(false), _fuelMax(0), _damageMax(0), _speedMax(0), _accel(0), _weapons(0), _soldiers(0), _vehicles(0), _cost(0), _refuelItem(""), _repairRate(1), _refuelRate(1), _radarRange(600), _transferTime(0), _score(0), _battlescapeTerrainData(0)
+RuleCraft::RuleCraft(const std::string &type) : _type(type), _sprite(-1), _fuelMax(0), _damageMax(0), _speedMax(0), _accel(0), _weapons(0), _soldiers(0), _vehicles(0), _costBuy(0), _refuelItem(""), _repairRate(1), _refuelRate(1), _radarRange(600), _transferTime(0), _score(0), _battlescapeTerrainData(0)
 {
 
 }
@@ -59,10 +59,6 @@ void RuleCraft::load(const YAML::Node &node, Ruleset *ruleset)
 		{
 			i.second() >> _sprite;
 		}
-		else if (key == "rental")
-		{
-			i.second() >> _rental;
-		}
 		else if (key == "fuelMax")
 		{
 			i.second() >> _fuelMax;
@@ -91,9 +87,9 @@ void RuleCraft::load(const YAML::Node &node, Ruleset *ruleset)
 		{
 			i.second() >> _vehicles;
 		}
-		else if (key == "cost")
+		else if (key == "costBuy")
 		{
-			i.second() >> _cost;
+			i.second() >> _costBuy;
 		}
 		else if (key == "refuelItem")
 		{
@@ -139,7 +135,6 @@ void RuleCraft::save(YAML::Emitter &out) const
 	out << YAML::BeginMap;
 	out << YAML::Key << "type" << YAML::Value << _type;
 	out << YAML::Key << "sprite" << YAML::Value << _sprite;
-	out << YAML::Key << "rental" << YAML::Value << _rental;
 	out << YAML::Key << "fuelMax" << YAML::Value << _fuelMax;
 	out << YAML::Key << "damageMax" << YAML::Value << _damageMax;
 	out << YAML::Key << "speedMax" << YAML::Value << _speedMax;
@@ -147,7 +142,7 @@ void RuleCraft::save(YAML::Emitter &out) const
 	out << YAML::Key << "weapons" << YAML::Value << _weapons;
 	out << YAML::Key << "soldiers" << YAML::Value << _soldiers;
 	out << YAML::Key << "vehicles" << YAML::Value << _vehicles;
-	out << YAML::Key << "cost" << YAML::Value << _cost;
+	out << YAML::Key << "costBuy" << YAML::Value << _costBuy;
 	out << YAML::Key << "refuelItem" << YAML::Value << _refuelItem;
 	out << YAML::Key << "repairRate" << YAML::Value << _repairRate;
 	out << YAML::Key << "refuelRate" << YAML::Value << _refuelRate;
@@ -180,15 +175,6 @@ std::string RuleCraft::getType() const
 int RuleCraft::getSprite() const
 {
 	return _sprite;
-}
-
-/**
- * Returns whether the craft is rented (paid for monthly).
- * @return True if it's a rental, False otherwise.
- */
-bool RuleCraft::isRental() const
-{
-	return _rental;
 }
 
 /**
@@ -262,12 +248,12 @@ int RuleCraft::getVehicles() const
 
 /**
  * Returns the cost of this craft for
- * purchase/maintenance.
+ * purchase/rent (0 if not purchasable).
  * @return Cost.
  */
-int RuleCraft::getCost() const
+int RuleCraft::getBuyCost() const
 {
-	return _cost;
+	return _costBuy;
 }
 
 /**

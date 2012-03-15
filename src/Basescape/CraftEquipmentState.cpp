@@ -114,44 +114,18 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, unsigned int cr
 	_lstEquipment->onRightArrowPress((ActionHandler)&CraftEquipmentState::lstEquipmentRightArrowPress);
 	_lstEquipment->onRightArrowRelease((ActionHandler)&CraftEquipmentState::lstEquipmentRightArrowRelease);
 
-	_items.push_back("STR_PISTOL");
-	_items.push_back("STR_PISTOL_CLIP");
-	_items.push_back("STR_RIFLE");
-	_items.push_back("STR_RIFLE_CLIP");
-	_items.push_back("STR_HEAVY_CANNON");
-	_items.push_back("STR_HC_AP_AMMO");
-	_items.push_back("STR_HC_HE_AMMO");
-	_items.push_back("STR_HC_I_AMMO");
-	_items.push_back("STR_AUTO_CANNON");
-	_items.push_back("STR_AC_AP_AMMO");
-	_items.push_back("STR_AC_HE_AMMO");
-	_items.push_back("STR_AC_I_AMMO");
-	_items.push_back("STR_ROCKET_LAUNCHER");
-	_items.push_back("STR_SMALL_ROCKET");
-	_items.push_back("STR_LARGE_ROCKET");
-	_items.push_back("STR_INCENDIARY_ROCKET");
-	_items.push_back("STR_GRENADE");
-	_items.push_back("STR_SMOKE_GRENADE");
-	_items.push_back("STR_ELECTRO_FLARE");
-	_items.push_back("STR_MEDI_KIT");
-	_items.push_back("STR_LASER_PISTOL");
-	_items.push_back("STR_LASER_RIFLE");
-	_items.push_back("STR_MOTION_SCANNER");
-
 	int row = 0;
-	for (std::vector<std::string>::iterator i = _items.begin(); i != _items.end();)
+	std::vector<std::string> items = _game->getRuleset()->getItemsList();
+	for (std::vector<std::string>::iterator i = items.begin(); i != items.end(); ++i)
 	{
-		if (_base->getItems()->getItem(*i) == 0 && c->getItems()->getItem(*i) == 0)
+		RuleItem *rule = _game->getRuleset()->getItem(*i);
+		if (rule->getBattleType() != BT_NONE && (_base->getItems()->getItem(*i) > 0 || c->getItems()->getItem(*i) > 0))
 		{
-			i = _items.erase(i);
-		}
-		else
-		{
+			_items.push_back(*i);
 			std::wstringstream ss, ss2;
 			ss << _base->getItems()->getItem(*i);
 			ss2 << c->getItems()->getItem(*i);
 
-			RuleItem *rule = _game->getRuleset()->getItem(*i);
 			std::wstring s = _game->getLanguage()->getString(*i);
 			if (rule->getBattleType() == BT_AMMO)
 			{
@@ -177,8 +151,7 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, unsigned int cr
 			}
 			_lstEquipment->setRowColor(row, color);
 
-			++i;
-			row++;
+			++row;
 		}
 	}
 

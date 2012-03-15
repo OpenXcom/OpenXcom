@@ -155,14 +155,13 @@ facilities:
 crafts:
   - type: STR_SKYRANGER
     sprite: 0
-    rental: true
     fuelMax: 1500
     damageMax: 150
     speedMax: 760
     accel: 2
     soldiers: 14
     vehicles: 3
-    cost: 500000
+    costBuy: 500000
     refuelRate: 50
     transferTime: 72
     score: 200
@@ -179,13 +178,12 @@ crafts:
           type: 0
   - type: STR_INTERCEPTOR
     sprite: 3
-    rental: true
     fuelMax: 1000
     damageMax: 100
     speedMax: 2100
     accel: 3
     weapons: 2
-    cost: 600000
+    costBuy: 600000
     refuelRate: 50
     transferTime: 96
     score: 250
@@ -296,3 +294,843 @@ craftWeapons:
     ammoMax: 2
     launcher: STR_FUSION_BALL_LAUNCHER
     clip: STR_FUSION_BALL
+items:
+  - type: STR_STINGRAY_LAUNCHER
+    size: 0.8
+    costBuy: 16000
+    costSell: 12000
+    transferTime: 48
+  - type: STR_AVALANCHE_LAUNCHER
+    size: 1
+    costBuy: 17000
+    costSell: 12750
+    transferTime: 48
+  - type: STR_CANNON
+    size: 1.5
+    costBuy: 30000
+    costSell: 22500
+    transferTime: 48
+  - type: STR_FUSION_BALL_LAUNCHER
+    size: 2.0
+    costSell: 281000
+    transferTime: 48
+  - type: STR_LASER_CANNON
+    size: 2.0
+    costSell: 211000
+    transferTime: 48
+  - type: STR_PLASMA_BEAM
+    size: 1.2
+    costSell: 267300
+    transferTime: 48
+  - type: STR_STINGRAY_MISSILES
+    size: 0.4
+    costBuy: 3000
+    costSell: 2400
+    transferTime: 48
+  - type: STR_AVALANCHE_MISSILES
+    size: 1.5
+    costBuy: 9000
+    costSell: 7200
+    transferTime: 48
+  - type: STR_CANNON_ROUNDS_X50
+    size: 0
+    costBuy: 1240
+    costSell: 1012
+    transferTime: 96
+  - type: STR_FUSION_BALL
+    size: 0.6
+    costSell: 53300
+    transferTime: 48
+  - type: STR_TANK_CANNON
+    size: 6
+    costBuy: 420000
+    costSell: 340000
+    transferTime: 96
+    weight: 1
+    bigSprite: 43
+    floorSprite: 0
+    handSprite: 0
+    bulletSprite: 4
+    fireSound: 2
+    compatibleAmmo:
+      - STR_HWP_CANNON_SHELLS
+    accuracySnap: 60
+    accuracyAimed: 90
+    tuSnap: 33
+    tuAimed: 80
+    battleType: 1
+    fixedWeapon: true
+    invWidth: 2
+    invHeight: 3
+  - type: STR_HWP_CANNON_SHELLS
+    size: 0.1
+    costBuy: 200
+    costSell: 100
+    transferTime: 48
+    weight: 1
+    bigSprite: 12
+    floorSprite: 12
+    hitSound: 13
+    hitAnimation: 26
+    power: 60
+    damageType: 1
+    clipSize: 30
+    battleType: 2
+    invWidth: 2
+    invHeight: 1
+  - type: STR_TANK_ROCKET_LAUNCHER
+    size: 6
+    costBuy: 480000
+    costSell: 360000
+    transferTime: 96
+    weight: 1
+  - type: STR_HWP_ROCKETS
+    size: 0.6
+    costBuy: 3000
+    costSell: 2250
+    transferTime: 48
+    weight: 1
+  - type: STR_TANK_LASER_CANNON
+    size: 6
+    costSell: 594000
+    transferTime: 96
+    weight: 1
+  - type: STR_HOVERTANK_PLASMA
+    size: 6
+    costSell: 980000
+    transferTime: 96
+  - type: STR_HOVERTANK_LAUNCHER
+    size: 6
+    costSell: 1043000
+    transferTime: 96
+    weight: 1
+  - type: STR_HWP_FUSION_BOMB
+    size: 6
+    costSell: 31500
+    transferTime: 48
+    weight: 1
+  - type: STR_PISTOL
+    size: 0.1
+    costBuy: 800
+    costSell: 600
+    weight: 5
+    bigSprite: 3
+    floorSprite: 3
+    handSprite: 96
+    bulletSprite: 1
+    fireSound: 4
+    compatibleAmmo:
+      - STR_PISTOL_CLIP
+    accuracySnap: 60
+    accuracyAimed: 78
+    tuSnap: 18
+    tuAimed: 30
+    battleType: 1
+    invWidth: 1
+    invHeight: 2
+  - type: STR_PISTOL_CLIP
+    size: 0.1
+    costBuy: 70
+    costSell: 52
+    weight: 3
+    bigSprite: 4
+    floorSprite: 4
+    hitSound: 22
+    hitAnimation: 26
+    power: 26
+    damageType: 1
+    clipSize: 12
+    battleType: 2
+  - type: STR_RIFLE
+    size: 0.2
+    costBuy: 3000
+    costSell: 2250
+    weight: 8
+    bigSprite: 1
+    floorSprite: 1
+    handSprite: 0
+    bulletSprite: 2
+    fireSound: 4
+    compatibleAmmo:
+      - STR_RIFLE_CLIP
+    accuracyAuto: 35
+    accuracySnap: 60
+    accuracyAimed: 110
+    tuAuto: 35
+    tuSnap: 25
+    tuAimed: 80
+    battleType: 1
+    twoHanded: true
+    invWidth: 1
+    invHeight: 3
+  - type: STR_RIFLE_CLIP
+    size: 0.1
+    costBuy: 200
+    costSell: 150
+    weight: 3
+    bigSprite: 2
+    floorSprite: 2
+    hitSound: 22
+    hitAnimation: 26
+    power: 30
+    damageType: 1
+    clipSize: 20
+    battleType: 2
+  - type: STR_HEAVY_CANNON
+    size: 0.3
+    costBuy: 6400
+    costSell: 4800
+    weight: 18
+    bigSprite: 11
+    floorSprite: 11
+    handSprite: 24
+    bulletSprite: 4
+    fireSound: 2
+    compatibleAmmo:
+      - STR_HC_AP_AMMO
+      - STR_HC_HE_AMMO
+      - STR_HC_I_AMMO
+    accuracySnap: 60
+    accuracyAimed: 90
+    tuSnap: 33
+    tuAimed: 80
+    battleType: 1
+    twoHanded: true
+    invWidth: 2
+    invHeight: 3
+  - type: STR_HC_AP_AMMO
+    size: 0.1
+    costBuy: 300
+    costSell: 225
+    weight: 6
+    bigSprite: 12
+    floorSprite: 12
+    hitSound: 13
+    hitAnimation: 26
+    power: 56
+    damageType: 1
+    clipSize: 6
+    battleType: 2
+    invWidth: 2
+    invHeight: 1
+  - type: STR_HC_HE_AMMO
+    size: 0.1
+    costBuy: 500
+    costSell: 275
+    weight: 6
+    bigSprite: 13
+    floorSprite: 13
+    hitSound: 0
+    hitAnimation: 0
+    power: 52
+    damageType: 3
+    clipSize: 6
+    battleType: 2
+    invWidth: 2
+    invHeight: 1
+  - type: STR_HC_I_AMMO
+    size: 0.1
+    costBuy: 400
+    costSell: 300
+    weight: 6
+    bigSprite: 14
+    floorSprite: 14
+    hitSound: 0
+    hitAnimation: 0
+    power: 60
+    damageType: 2
+    clipSize: 6
+    battleType: 2
+    invWidth: 2
+    invHeight: 1
+  - type: STR_AUTO_CANNON
+    size: 0.3
+    costBuy: 13500
+    costSell: 10125
+    weight: 19
+    bigSprite: 7
+    floorSprite: 7
+    handSprite: 32
+    bulletSprite: 3
+    fireSound: 2
+    compatibleAmmo:
+      - STR_AC_AP_AMMO
+      - STR_AC_HE_AMMO
+      - STR_AC_I_AMMO
+    accuracyAuto: 32
+    accuracySnap: 56
+    accuracyAimed: 82
+    tuAuto: 40
+    tuSnap: 33
+    tuAimed: 80
+    battleType: 1
+    twoHanded: true
+    invWidth: 2
+    invHeight: 3
+  - type: STR_AC_AP_AMMO
+    size: 0.1
+    costBuy: 500
+    costSell: 400
+    weight: 5
+    bigSprite: 8
+    floorSprite: 8
+    hitSound: 13
+    hitAnimation: 26
+    power: 42
+    damageType: 1
+    clipSize: 14
+    battleType: 2
+    invWidth: 2
+    invHeight: 1
+  - type: STR_AC_HE_AMMO
+    size: 0.1
+    costBuy: 700
+    costSell: 560
+    weight: 5
+    bigSprite: 9
+    floorSprite: 9
+    hitSound: 0
+    hitAnimation: 0
+    power: 44
+    damageType: 3
+    clipSize: 14
+    battleType: 2
+    invWidth: 2
+    invHeight: 1
+  - type: STR_AC_I_AMMO
+    size: 0.1
+    costBuy: 650
+    costSell: 520
+    weight: 5
+    bigSprite: 10
+    floorSprite: 10
+    hitSound: 0
+    hitAnimation: 0
+    power: 42
+    damageType: 2
+    clipSize: 14
+    battleType: 2
+    invWidth: 2
+    invHeight: 1
+  - type: STR_ROCKET_LAUNCHER
+    size: 0.4
+    costBuy: 4000
+    costSell: 3000
+    weight: 10
+    bigSprite: 15
+    floorSprite: 15
+    handSprite: 72
+    bulletSprite: 0
+    fireSound: 52
+    compatibleAmmo:
+      - STR_SMALL_ROCKET
+      - STR_LARGE_ROCKET
+      - STR_INCENDIARY_ROCKET
+    accuracySnap: 55
+    accuracyAimed: 115
+    tuSnap: 45
+    tuAimed: 75
+    battleType: 1
+    twoHanded: true
+    invWidth: 2
+    invHeight: 3
+  - type: STR_SMALL_ROCKET
+    size: 0.2
+    costBuy: 600
+    costSell: 480
+    weight: 6
+    bigSprite: 16
+    floorSprite: 16
+    hitSound: 0
+    hitAnimation: 0
+    power: 75
+    damageType: 3
+    clipSize: 1
+    battleType: 2
+    invWidth: 1
+    invHeight: 3
+  - type: STR_LARGE_ROCKET
+    size: 0.2
+    costBuy: 900
+    costSell: 720
+    weight: 8
+    bigSprite: 17
+    floorSprite: 17
+    hitSound: 0
+    hitAnimation: 0
+    power: 100
+    damageType: 3
+    clipSize: 1
+    battleType: 2
+    invWidth: 1
+    invHeight: 3
+  - type: STR_INCENDIARY_ROCKET
+    size: 0.2
+    costBuy: 1200
+    costSell: 960
+    weight: 8
+    bigSprite: 18
+    floorSprite: 18
+    hitSound: 0
+    hitAnimation: 0
+    power: 90
+    damageType: 2
+    clipSize: 1
+    battleType: 2
+    invWidth: 1
+    invHeight: 3
+  - type: STR_LASER_PISTOL
+    size: 0.1
+    costSell: 20000
+    weight: 7
+    bigSprite: 5
+    floorSprite: 5
+    handSprite: 112
+    bulletSprite: 5
+    fireSound: 11
+    hitSound: 19
+    hitAnimation: 36
+    power: 46
+    damageType: 4
+    accuracyAuto: 28
+    accuracySnap: 40
+    accuracyAimed: 68
+    tuAuto: 25
+    tuSnap: 20
+    tuAimed: 55
+    clipSize: -1
+    battleType: 1
+    invWidth: 1
+    invHeight: 2
+  - type: STR_LASER_RIFLE
+    size: 0.2
+    costSell: 36900
+    weight: 8
+    bigSprite: 0
+    floorSprite: 0
+    handSprite: 8
+    bulletSprite: 6
+    fireSound: 11
+    hitSound: 19
+    hitAnimation: 36
+    power: 60
+    damageType: 4
+    accuracyAuto: 46
+    accuracySnap: 65
+    accuracyAimed: 100
+    tuAuto: 34
+    tuSnap: 25
+    tuAimed: 50
+    clipSize: -1
+    battleType: 1
+    twoHanded: true
+    invWidth: 1
+    invHeight: 3
+  - type: STR_HEAVY_LASER
+    size: 0.3
+    costSell: 61000
+    weight: 18
+    bigSprite: 6
+    floorSprite: 6
+    handSprite: 16
+    bulletSprite: 6
+    fireSound: 11
+    hitSound: 19
+    hitAnimation: 36
+    power: 85
+    damageType: 4
+    accuracySnap: 50
+    accuracyAimed: 84
+    tuSnap: 33
+    tuAimed: 75
+    clipSize: -1
+    battleType: 1
+    twoHanded: true
+    invWidth: 2
+    invHeight: 3
+  - type: STR_GRENADE
+    size: 0.1
+    costBuy: 300
+    costSell: 240
+    weight: 3
+    bigSprite: 19
+    floorSprite: 19
+    power: 50
+    damageType: 3
+    battleType: 4
+  - type: STR_SMOKE_GRENADE
+    size: 0.1
+    costBuy: 150
+    costSell: 120
+    weight: 3
+    bigSprite: 20
+    floorSprite: 20
+    power: 60
+    damageType: 9
+    battleType: 4
+  - type: STR_PROXIMITY_GRENADE
+    size: 0.1
+    costBuy: 500
+    costSell: 400
+    weight: 3
+    bigSprite: 21
+    floorSprite: 21
+    power: 70
+    damageType: 5
+    battleType: 4
+  - type: STR_HIGH_EXPLOSIVE
+    size: 0.25
+    costBuy: 1500
+    costSell: 1200
+    weight: 6
+    bigSprite: 22
+    floorSprite: 22
+    power: 110
+    damageType: 3
+    battleType: 4
+    invWidth: 2
+    invHeight: 1
+  - type: STR_MOTION_SCANNER
+    size: 0.1
+    costSell: 45600
+    weight: 3
+    bigSprite: 23
+    floorSprite: 23
+    battleType: 7
+    tuUse: 25
+  - type: STR_MEDI_KIT
+    size: 0.1
+    costSell: 46500
+    weight: 5
+    bigSprite: 24
+    floorSprite: 24
+    battleType: 6
+    invWidth: 1
+    invHeight: 2
+    painKiller: 10
+    heal: 10
+    stimulant: 10
+    healAmount: 1
+    healthAmount: 3
+    stun: 4
+    energy: 10
+    tuUse: 10
+  - type: STR_PSI_AMP
+    size: 0.1
+    costSell: 194700
+  - type: STR_STUN_ROD
+    size: 0.1
+    costBuy: 1260
+    costSell: 945
+  - type: STR_ELECTRO_FLARE
+    size: 0.1
+    costBuy: 60
+    costSell: 40
+    weight: 3
+    bigSprite: 55
+    floorSprite: 72
+    power: 15
+    battleType: 10
+  - type: STR_CORPSE
+    weight: 22
+    bigSprite: 45
+    floorSprite: 39
+    invWidth: 2
+    invHeight: 3
+  - type: STR_CORPSE_ARMOR
+    name: STR_CORPSE
+    weight: 24
+    bigSprite: 28
+    floorSprite: 40
+    invWidth: 2
+    invHeight: 3
+  - type: STR_CORPSE_SUIT
+    name: STR_CORPSE
+    weight: 26
+    bigSprite: 44
+    floorSprite: 41
+    invWidth: 2
+    invHeight: 3
+  - type: STR_HEAVY_PLASMA
+    size: 0.2
+    costSell: 171600
+    weight: 8
+  - type: STR_HEAVY_PLASMA_CLIP
+    size: 0.3
+    costSell: 9590
+    weight: 3
+  - type: STR_PLASMA_RIFLE
+    size: 0.2
+    costSell: 126500
+    weight: 5
+  - type: STR_PLASMA_RIFLE_CLIP
+    size: 0.1
+    costSell: 6290
+    weight: 3
+  - type: STR_PLASMA_PISTOL
+    size: 0.1
+    costSell: 84000
+    weight: 3
+    bigSprite: 32
+    floorSprite: 31
+    handSprite: 104
+    bulletSprite: 8
+    fireSound: 18
+    compatibleAmmo:
+      - STR_PLASMA_PISTOL_CLIP
+    accuracyAuto: 50
+    accuracySnap: 65
+    accuracyAimed: 85
+    tuAuto: 30
+    tuSnap: 30
+    tuAimed: 60
+    battleType: 1
+    invWidth: 1
+    invHeight: 2
+  - type: STR_PLASMA_PISTOL_CLIP
+    size: 0.1
+    costSell: 4440
+    weight: 3
+    bigSprite: 34
+    floorSprite: 34
+    hitSound: 19
+    hitAnimation: 46
+    power: 52
+    damageType: 5
+    clipSize: 26
+    battleType: 2
+  - type: STR_BLASTER_LAUNCHER
+    size: 0.3
+    costSell: 144000
+    weight: 16
+  - type: STR_BLASTER_BOMB
+    size: 0.2
+    costSell: 17028
+    weight: 3
+  - type: STR_SMALL_LAUNCHER
+    size: 0.2
+    costSell: 120000
+    weight: 10
+  - type: STR_STUN_BOMB
+    size: 0.1
+    costSell: 15200
+    weight: 3
+  - type: STR_ALIEN_GRENADE
+    size: 0.1
+    costSell: 14850
+    weight: 3
+    bigSprite: 39
+    floorSprite: 38
+    power: 90
+    damageType: 3
+    battleType: 4
+  - type: STR_ELERIUM_115
+    size: 0.1
+    costSell: 5000
+    weight: 3
+    bigSprite: 56
+    floorSprite: 37
+    invWidth: 2
+    invHeight: 2
+  - type: STR_MIND_PROBE
+    size: 0.1
+    costSell: 304000
+    weight: 5
+  - type: STR_SECTOID_CORPSE
+    size: 0.4
+    costSell: 20000
+    weight: 30
+    bigSprite: 46
+    floorSprite: 42
+    invWidth: 2
+    invHeight: 3
+  - type: STR_SNAKEMAN_CORPSE
+    size: 0.4
+    costSell: 20000
+    weight: 40
+  - type: STR_ETHEREAL_CORPSE
+    size: 0.4
+    costSell: 20000
+    weight: 25
+  - type: STR_MUTON_CORPSE
+    size: 0.4
+    costSell: 20000
+    weight: 40
+  - type: STR_FLOATER_CORPSE
+    size: 0.4
+    costSell: 20000
+    weight: 20
+    bigSprite: 52
+    floorSprite: 48
+    invWidth: 2
+    invHeight: 3
+  - type: STR_CELATID_CORPSE
+    size: 0.4
+    costSell: 20000
+    weight: 35
+  - type: STR_SILACOID_CORPSE
+    size: 0.4
+    costSell: 20000
+    weight: 40
+  - type: STR_CHRYSSALID_CORPSE
+    size: 0.4
+    costSell: 20000
+    weight: 40
+  - type: STR_REAPER_CORPSE
+    size: 1
+    costSell: 20000
+  - type: REAPER_CORPSE_1
+    name: STR_REAPER_CORPSE
+    weight: 50
+  - type: REAPER_CORPSE_2
+    name: STR_REAPER_CORPSE
+    weight: 50
+  - type: REAPER_CORPSE_3
+    name: STR_REAPER_CORPSE
+    weight: 50
+  - type: REAPER_CORPSE_4
+    name: STR_REAPER_CORPSE
+    weight: 50
+  - type: STR_SECTOPOD_CORPSE
+    size: 1
+    costSell: 20000
+  - type: SECTOPOD_CORPSE_1
+    name: STR_SECTOPOD_CORPSE
+    weight: 50
+  - type: SECTOPOD_CORPSE_2
+    name: STR_SECTOPOD_CORPSE
+    weight: 50
+  - type: SECTOPOD_CORPSE_3
+    name: STR_SECTOPOD_CORPSE
+    weight: 50
+  - type: SECTOPOD_CORPSE_4
+    name: STR_SECTOPOD_CORPSE
+    weight: 50
+  - type: STR_CYBERDISC_CORPSE
+    size: 1
+    costSell: 20000
+  - type: CYBERDISC_CORPSE_1
+    name: STR_CYBERDISC_CORPSE
+    weight: 50
+    bigSprite: 43
+    floorSprite: 56
+  - type: CYBERDISC_CORPSE_2
+    name: STR_CYBERDISC_CORPSE
+    weight: 50
+    bigSprite: 43
+    floorSprite: 57
+  - type: CYBERDISC_CORPSE_3
+    name: STR_CYBERDISC_CORPSE
+    weight: 50
+    bigSprite: 43
+    floorSprite: 58
+  - type: CYBERDISC_CORPSE_4
+    name: STR_CYBERDISC_CORPSE
+    weight: 50
+    bigSprite: 43
+    floorSprite: 59
+  - type: HOVERTANK_CORPSE_1
+    name: STR_CORPSE
+    weight: 50
+  - type: HOVERTANK_CORPSE_2
+    name: STR_CORPSE
+    weight: 50
+  - type: HOVERTANK_CORPSE_3
+    name: STR_CORPSE
+    weight: 50
+  - type: HOVERTANK_CORPSE_4
+    name: STR_CORPSE
+    weight: 50
+  - type: TANK_CORPSE_1
+    name: STR_CORPSE
+    weight: 50
+    bigSprite: 43
+    floorSprite: 68
+  - type: TANK_CORPSE_2
+    name: STR_CORPSE
+    weight: 50
+    bigSprite: 43
+    floorSprite: 69
+  - type: TANK_CORPSE_3
+    name: STR_CORPSE
+    weight: 50
+    bigSprite: 43
+    floorSprite: 70
+  - type: TANK_CORPSE_4
+    name: STR_CORPSE
+    weight: 50
+    bigSprite: 43
+    floorSprite: 71
+  - type: CIVM_CORPSE
+    name: STR_CORPSE
+    weight: 30
+    bigSprite: 45
+    floorSprite: 50
+    invWidth: 2
+    invHeight: 3
+  - type: CIVF_CORPSE
+    name: STR_CORPSE
+    weight: 50
+    bigSprite: 45
+    floorSprite: 51
+    invWidth: 2
+    invHeight: 3
+  - type: STR_UFO_POWER_SOURCE
+    size: 0.7
+    costSell: 250000
+  - type: STR_UFO_NAVIGATION
+    size: 0.2
+    costSell: 80000
+  - type: STR_UFO_CONSTRUCTION
+    size: 0.1
+    costSell: 20000
+  - type: STR_ALIEN_FOOD
+    size: 0.2
+    costSell: 5000
+  - type: STR_ALIEN_REPRODUCTION
+    size: 0.2
+    costSell: 40000
+  - type: STR_ALIEN_ENTERTAINMENT
+    size: 0.2
+    costSell: 20000
+  - type: STR_ALIEN_SURGERY
+    size: 0.2
+    costSell: 38000
+  - type: STR_EXAMINATION_ROOM
+    size: 0.2
+    costSell: 9000
+  - type: STR_ALIEN_ALLOYS
+    size: 0.1
+    costSell: 6500
+  - type: STR_ALIEN_HABITAT
+    size: 0.1
+    costSell: 100
+  - type: STR_PERSONAL_ARMOR
+    size: 0.8
+    costSell: 54000
+  - type: STR_POWER_SUIT
+    size: 0.8
+    costSell: 85000
+  - type: STR_FLYING_SUIT
+    size: 0.8
+    costSell: 115000
+  - type: CYBERDISC_WEAPON
+    weight: 3
+    bigSprite: 32
+    floorSprite: 31
+    handSprite: 104
+    bulletSprite: 8
+    fireSound: 18
+    hitSound: 19
+    hitAnimation: 46
+    power: 130
+    damageType: 5
+    accuracySnap: 75
+    accuracyAimed: 110
+    tuSnap: 30
+    tuAimed: 60
+    clipSize: -1
+    battleType: 1
+    fixedWeapon: true
+    invWidth: 1
+    invHeight: 2

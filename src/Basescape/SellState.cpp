@@ -161,14 +161,19 @@ SellState::SellState(Game *game, Base *base) : State(game), _base(base), _qtys()
 		ss << _base->getAvailableEngineers();
 		_lstItems->addRow(4, _game->getLanguage()->getString("STR_ENGINEER").c_str(), ss.str().c_str(), L"0", Text::formatFunding(0).c_str());
 	}
-	for (std::map<std::string, int>::iterator i = _base->getItems()->getContents()->begin(); i != _base->getItems()->getContents()->end(); ++i)
+	std::vector<std::string> items = _game->getRuleset()->getItemsList();
+	for (std::vector<std::string>::iterator i = items.begin(); i != items.end(); ++i)
 	{
-		_qtys.push_back(0);
-		_items.push_back(i->first);
-		RuleItem *rule = _game->getRuleset()->getItem(i->first);
-		std::wstringstream ss;
-		ss << i->second;
-		_lstItems->addRow(4, _game->getLanguage()->getString(i->first).c_str(), ss.str().c_str(), L"0", Text::formatFunding(rule->getCost() / 2).c_str());
+		int qty = _base->getItems()->getItem(*i);
+		if (qty > 0)
+		{
+			_qtys.push_back(0);
+			_items.push_back(*i);
+			RuleItem *rule = _game->getRuleset()->getItem(*i);
+			std::wstringstream ss;
+			ss << qty;
+			_lstItems->addRow(4, _game->getLanguage()->getString(*i).c_str(), ss.str().c_str(), L"0", Text::formatFunding(rule->getSellCost()).c_str());
+		}
 	}
 
 	_timerInc = new Timer(50);
@@ -342,7 +347,7 @@ int SellState::getPrice()
 	// Item cost
 	else
 	{
-		return _game->getRuleset()->getItem(_items[_sel - _soldiers.size() - _crafts.size() - _sOffset - _eOffset])->getCost() / 2;
+		return _game->getRuleset()->getItem(_items[_sel - _soldiers.size() - _crafts.size() - _sOffset - _eOffset])->getSellCost();
 	}
 }
 

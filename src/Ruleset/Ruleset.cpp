@@ -665,6 +665,16 @@ RuleItem *const Ruleset::getItem(const std::string &id) const
 }
 
 /**
+ * Returns the list of all items
+ * provided by the ruleset.
+ * @return List of items.
+ */
+std::vector<std::string> Ruleset::getItemsList() const
+{
+	return _itemsIndex;
+}
+
+/**
  * Returns the rules for the specified UFO.
  * @param id UFO type.
  * @return Rules for the UFO.

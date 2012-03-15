@@ -782,10 +782,7 @@ int Base::getCraftMaintenance() const
 	int total = 0;
 	for (std::vector<Craft*>::const_iterator i = _crafts.begin(); i != _crafts.end(); ++i)
 	{
-		if ((*i)->getRules()->isRental())
-		{
-			total += (*i)->getRules()->getCost();
-		}
+		total += (*i)->getRules()->getBuyCost();
 	}
 	return total;
 }

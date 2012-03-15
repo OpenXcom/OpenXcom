@@ -115,11 +115,11 @@ MonthlyCostsState::MonthlyCostsState(Game *game, Base *base) : State(game), _bas
 	for (std::vector<std::string>::iterator i = crafts.begin(); i != crafts.end(); ++i)
 	{
 		RuleCraft *craft = _game->getRuleset()->getCraft(*i);
-		if (craft->isRental())
+		if (craft->getBuyCost() > 0)
 		{
 			std::wstringstream ss2;
 			ss2 << _base->getCraftCount((*i));
-			_lstCrafts->addRow(4, _game->getLanguage()->getString(*i).c_str(), Text::formatFunding(craft->getCost()).c_str(), ss2.str().c_str(), Text::formatFunding(_base->getCraftCount(*i) * craft->getCost()).c_str());
+			_lstCrafts->addRow(4, _game->getLanguage()->getString(*i).c_str(), Text::formatFunding(craft->getBuyCost()).c_str(), ss2.str().c_str(), Text::formatFunding(_base->getCraftCount(*i) * craft->getBuyCost()).c_str());
 		}
 	}
 
