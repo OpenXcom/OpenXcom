@@ -851,7 +851,7 @@ void BattlescapeState::handleItemClick(BattleItem *item)
 	if (item && !_battleGame->isBusy())
 	{
 		_battleGame->getCurrentAction()->weapon = item;
-		popup(new ActionMenuState(_game, _battleGame->getCurrentAction(), _icons->getX(), _icons->getY()+20));
+		popup(new ActionMenuState(_game, _battleGame->getCurrentAction(), _icons->getX(), _icons->getY()+16));
 	}
 }
 

@@ -388,15 +388,6 @@ bool RuleItem::getWaypoint() const
 }
 
 /**
- * Sets whether this item uses waypoints.
- * @param flag Uses waypoints?
- */
-void RuleItem::setWaypoint(bool flag)
-{
-	_waypoint = flag;
-}
-
-/**
  * Returns whether this item is a fixed weapon.
  * You can't move/throw/drop fixed weapons - ie. HWP turrets.
  * @return Is it fixed weapon?
@@ -444,7 +435,7 @@ int RuleItem::getHitAnimation() const
 
 /**
  * Returns the item's power.
- * @return power Teh powah.
+ * @return Teh powah.
  */
 int RuleItem::getPower() const
 {
@@ -453,7 +444,7 @@ int RuleItem::getPower() const
 
 /**
  * Returns the item's accuracy for snapshots.
- * @return Accuracy the item's accuracy for snapshots.
+ * @return item's accuracy for snapshots.
  */
 int RuleItem::getAccuracySnap() const
 {
@@ -462,7 +453,7 @@ int RuleItem::getAccuracySnap() const
 
 /**
  * Returns the item's accuracy for autoshots.
- * @return Accuracy the item's accuracy for autoshots.
+ * @return item's accuracy for autoshots.
  */
 int RuleItem::getAccuracyAuto() const
 {
@@ -471,7 +462,7 @@ int RuleItem::getAccuracyAuto() const
 
 /**
  * Returns the item's accuracy for aimed shots.
- * @return Accuracy the item's accuracy for aimed shots.
+ * @return item's accuracy for aimed shots.
  */
 int RuleItem::getAccuracyAimed() const
 {
@@ -479,8 +470,17 @@ int RuleItem::getAccuracyAimed() const
 }
 
 /**
- * Returns the item's time units for snapshots.
- * @return item's time units for snapshots.
+ * Returns the item's accuracy for melee.
+ * @return item's accuracy for melee.
+ */
+int RuleItem::getAccuracyMelee() const
+{
+	return _accuracyMelee;
+}
+
+/**
+ * Returns the item's time unit percentage for snapshots.
+ * @return item's time unit percentage for snapshots.
  */
 int RuleItem::getTUSnap() const
 {
@@ -488,8 +488,8 @@ int RuleItem::getTUSnap() const
 }
 
 /**
- * Returns the item's time units for autoshots.
- * @return item's time units for autoshots.
+ * Returns the item's time unit percentage for autoshots.
+ * @return item's time unit percentage for autoshots.
  */
 int RuleItem::getTUAuto() const
 {
@@ -497,12 +497,21 @@ int RuleItem::getTUAuto() const
 }
 
 /**
- * Returns the item's time units for aimed shots.
- * @return item's time units for aimed shots.
+ * Returns the item's time unit percentage for aimed shots.
+ * @return item's time unit percentage for aimed shots.
  */
 int RuleItem::getTUAimed() const
 {
 	return _tuAimed;
+}
+
+/**
+ * Returns the item's time unit percentage for melee.
+ * @return item's time unit percentage for melee.
+ */
+int RuleItem::getTUMelee() const
+{
+	return _tuMelee;
 }
 
 /**

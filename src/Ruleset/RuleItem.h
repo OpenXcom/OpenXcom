@@ -92,8 +92,6 @@ public:
 	bool getTwoHanded() const;
 	/// Gets if the item is a launcher.
 	bool getWaypoint() const;
-	/// Sets if the item is a launcher.
-	void setWaypoint(bool flag);
 	/// Gets if the item is fixed.
 	bool getFixed() const;
 	/// Gets the item's bullet sprite reference.
@@ -106,18 +104,22 @@ public:
 	int getHitAnimation() const;
 	/// Gets the item's power.
 	int getPower() const;
-	/// Gets the item's accuracy.
+	/// Gets the item's snapshot accuracy.
 	int getAccuracySnap() const;
-	/// Gets the item's accuracy.
+	/// Gets the item's autoshot accuracy.
 	int getAccuracyAuto() const;
-	/// Gets the item's accuracy.
+	/// Gets the item's aimed shot accuracy.
 	int getAccuracyAimed() const;
-	/// Gets the item's tu.
+	/// Gets the item's melee accuracy.
+	int getAccuracyMelee() const;
+	/// Gets the item's snapshot TU cost.
 	int getTUSnap() const;
-	/// Gets the item's tu.
+	/// Gets the item's autoshot TU cost.
 	int getTUAuto() const;
-	/// Gets the item's tu.
+	/// Gets the item's aimed shot TU cost.
 	int getTUAimed() const;
+	/// Gets the item's melee TU cost.
+	int getTUMelee() const;
 	/// Gets list of compatible ammo.
 	std::vector<std::string> *getCompatibleAmmo();
 	/// Gets the item's damage type.

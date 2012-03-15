@@ -776,8 +776,8 @@ items:
     bigSprite: 21
     floorSprite: 21
     power: 70
-    damageType: 5
-    battleType: 4
+    damageType: 3
+    battleType: 5
   - type: STR_HIGH_EXPLOSIVE
     size: 0.25
     costBuy: 1500
@@ -818,10 +818,33 @@ items:
   - type: STR_PSI_AMP
     size: 0.1
     costSell: 194700
+    weight: 10
+    bigSprite: 33
+    floorSprite: 32
+    handSprite: 88
+    battleType: 9
+    twoHanded: true
+    invWidth: 1
+    invHeight: 3
+    tuUse: 25
   - type: STR_STUN_ROD
     size: 0.1
     costBuy: 1260
     costSell: 945
+    weight: 6
+    bigSprite: 26
+    floorSprite: 26
+    handSprite: 80
+    hitSound: 19
+    hitAnimation: 36
+    power: 65
+    damageType: 6
+    accuracyMelee: 100
+    tuMelee: 30
+    battleType: 3
+    twoHanded: true
+    invWidth: 1
+    invHeight: 3
   - type: STR_ELECTRO_FLARE
     size: 0.1
     costBuy: 60
@@ -855,18 +878,68 @@ items:
     size: 0.2
     costSell: 171600
     weight: 8
+    bigSprite: 30
+    floorSprite: 29
+    handSprite: 40
+    bulletSprite: 8
+    fireSound: 18
+    compatibleAmmo:
+      - STR_HEAVY_PLASMA_CLIP
+    accuracyAuto: 50
+    accuracySnap: 75
+    accuracyAimed: 110
+    tuAuto: 35
+    tuSnap: 30
+    tuAimed: 60
+    battleType: 1
+    twoHanded: true
+    invWidth: 2
+    invHeight: 3
   - type: STR_HEAVY_PLASMA_CLIP
     size: 0.3
     costSell: 9590
     weight: 3
+    bigSprite: 25
+    floorSprite: 33
+    hitSound: 19
+    hitAnimation: 46
+    power: 115
+    damageType: 5
+    clipSize: 35
+    battleType: 2
   - type: STR_PLASMA_RIFLE
     size: 0.2
     costSell: 126500
     weight: 5
+    bigSprite: 31
+    floorSprite: 30
+    handSprite: 48
+    bulletSprite: 8
+    fireSound: 18
+    compatibleAmmo:
+      - STR_PLASMA_RIFLE_CLIP
+    accuracyAuto: 55
+    accuracySnap: 86
+    accuracyAimed: 100
+    tuAuto: 36
+    tuSnap: 30
+    tuAimed: 60
+    battleType: 1
+    twoHanded: true
+    invWidth: 1
+    invHeight: 3
   - type: STR_PLASMA_RIFLE_CLIP
     size: 0.1
     costSell: 6290
     weight: 3
+    bigSprite: 41
+    floorSprite: 33
+    hitSound: 19
+    hitAnimation: 46
+    power: 80
+    damageType: 5
+    clipSize: 28
+    battleType: 2
   - type: STR_PLASMA_PISTOL
     size: 0.1
     costSell: 84000
@@ -892,7 +965,7 @@ items:
     costSell: 4440
     weight: 3
     bigSprite: 34
-    floorSprite: 34
+    floorSprite: 33
     hitSound: 19
     hitAnimation: 46
     power: 52
@@ -903,18 +976,65 @@ items:
     size: 0.3
     costSell: 144000
     weight: 16
+    bigSprite: 35
+    floorSprite: 34
+    handSprite: 56
+    bulletSprite: 0
+    fireSound: 52
+    compatibleAmmo:
+      - STR_BLASTER_BOMB
+    accuracyAimed: 120
+    tuAimed: 80
+    battleType: 1
+    twoHanded: true
+    waypoint: true
+    invWidth: 2
+    invHeight: 3
   - type: STR_BLASTER_BOMB
     size: 0.2
     costSell: 17028
     weight: 3
+    bigSprite: 36
+    floorSprite: 35
+    hitSound: 0
+    hitAnimation: 0
+    power: 200
+    damageType: 3
+    clipSize: 1
+    battleType: 2
+    invWidth: 1
+    invHeight: 2
   - type: STR_SMALL_LAUNCHER
     size: 0.2
     costSell: 120000
     weight: 10
+    bigSprite: 35
+    floorSprite: 37
+    handSprite: 64
+    bulletSprite: 0
+    fireSound: 52
+    compatibleAmmo:
+      - STR_STUN_BOMB
+    accuracySnap: 65
+    accuracyAimed: 110
+    tuSnap: 40
+    tuAimed: 75
+    battleType: 1
+    twoHanded: true
+    invWidth: 2
+    invHeight: 2
   - type: STR_STUN_BOMB
     size: 0.1
     costSell: 15200
     weight: 3
+    bigSprite: 38
+    floorSprite: 37
+    hitSound: 0
+    hitAnimation: 0
+    power: 90
+    damageType: 6
+    clipSize: 1
+    battleType: 2
   - type: STR_ALIEN_GRENADE
     size: 0.1
     costSell: 14850
@@ -936,6 +1056,12 @@ items:
     size: 0.1
     costSell: 304000
     weight: 5
+    bigSprite: 29
+    floorSprite: 28
+    battleType: 8
+    invWidth: 2
+    invHeight: 2
+    tuUse: 50
   - type: STR_SECTOID_CORPSE
     size: 0.4
     costSell: 20000
@@ -948,14 +1074,26 @@ items:
     size: 0.4
     costSell: 20000
     weight: 40
+    bigSprite: 50
+    floorSprite: 46
+    invWidth: 2
+    invHeight: 3
   - type: STR_ETHEREAL_CORPSE
     size: 0.4
     costSell: 20000
     weight: 25
+    bigSprite: 49
+    floorSprite: 45
+    invWidth: 2
+    invHeight: 3
   - type: STR_MUTON_CORPSE
     size: 0.4
     costSell: 20000
     weight: 40
+    bigSprite: 48
+    floorSprite: 44
+    invWidth: 2
+    invHeight: 3
   - type: STR_FLOATER_CORPSE
     size: 0.4
     costSell: 20000
@@ -968,98 +1106,74 @@ items:
     size: 0.4
     costSell: 20000
     weight: 35
+    bigSprite: 47
+    floorSprite: 43
+    invWidth: 2
+    invHeight: 3
   - type: STR_SILACOID_CORPSE
     size: 0.4
     costSell: 20000
     weight: 40
+    bigSprite: 51
+    floorSprite: 47
+    invWidth: 2
+    invHeight: 3
   - type: STR_CHRYSSALID_CORPSE
     size: 0.4
     costSell: 20000
     weight: 40
+    bigSprite: 53
+    floorSprite: 49
+    invWidth: 2
+    invHeight: 3
   - type: STR_REAPER_CORPSE
     size: 1
     costSell: 20000
   - type: REAPER_CORPSE_1
-    name: STR_REAPER_CORPSE
-    weight: 50
+    floorSprite: 52
   - type: REAPER_CORPSE_2
-    name: STR_REAPER_CORPSE
-    weight: 50
+    floorSprite: 53
   - type: REAPER_CORPSE_3
-    name: STR_REAPER_CORPSE
-    weight: 50
+    floorSprite: 54
   - type: REAPER_CORPSE_4
-    name: STR_REAPER_CORPSE
-    weight: 50
+    floorSprite: 55
   - type: STR_SECTOPOD_CORPSE
     size: 1
     costSell: 20000
   - type: SECTOPOD_CORPSE_1
-    name: STR_SECTOPOD_CORPSE
-    weight: 50
+    floorSprite: 60
   - type: SECTOPOD_CORPSE_2
-    name: STR_SECTOPOD_CORPSE
-    weight: 50
+    floorSprite: 61
   - type: SECTOPOD_CORPSE_3
-    name: STR_SECTOPOD_CORPSE
-    weight: 50
+    floorSprite: 62
   - type: SECTOPOD_CORPSE_4
-    name: STR_SECTOPOD_CORPSE
-    weight: 50
+    floorSprite: 63
   - type: STR_CYBERDISC_CORPSE
     size: 1
     costSell: 20000
   - type: CYBERDISC_CORPSE_1
-    name: STR_CYBERDISC_CORPSE
-    weight: 50
-    bigSprite: 43
     floorSprite: 56
   - type: CYBERDISC_CORPSE_2
-    name: STR_CYBERDISC_CORPSE
-    weight: 50
-    bigSprite: 43
     floorSprite: 57
   - type: CYBERDISC_CORPSE_3
-    name: STR_CYBERDISC_CORPSE
-    weight: 50
-    bigSprite: 43
     floorSprite: 58
   - type: CYBERDISC_CORPSE_4
-    name: STR_CYBERDISC_CORPSE
-    weight: 50
-    bigSprite: 43
     floorSprite: 59
   - type: HOVERTANK_CORPSE_1
-    name: STR_CORPSE
-    weight: 50
+    floorSprite: 64
   - type: HOVERTANK_CORPSE_2
-    name: STR_CORPSE
-    weight: 50
+    floorSprite: 65
   - type: HOVERTANK_CORPSE_3
-    name: STR_CORPSE
-    weight: 50
+    floorSprite: 66
   - type: HOVERTANK_CORPSE_4
-    name: STR_CORPSE
-    weight: 50
+    floorSprite: 67
   - type: TANK_CORPSE_1
-    name: STR_CORPSE
-    weight: 50
-    bigSprite: 43
     floorSprite: 68
   - type: TANK_CORPSE_2
-    name: STR_CORPSE
-    weight: 50
-    bigSprite: 43
     floorSprite: 69
   - type: TANK_CORPSE_3
-    name: STR_CORPSE
-    weight: 50
-    bigSprite: 43
     floorSprite: 70
   - type: TANK_CORPSE_4
-    name: STR_CORPSE
-    weight: 50
-    bigSprite: 43
     floorSprite: 71
   - type: CIVM_CORPSE
     name: STR_CORPSE

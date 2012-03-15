@@ -60,135 +60,65 @@ ActionMenuState::ActionMenuState(Game *game, BattleAction *action, int x, int y)
 	}
 
 	// Build up the popup menu
-	int id = 0, tu;
-	std::wstring strAcc = _game->getLanguage()->getString("STR_ACC");
-	std::wstring strTU = _game->getLanguage()->getString("STR_TUS");
-	std::wstringstream ss1, ss2;
+	int id = 0;
 	RuleItem *weapon = _action->weapon->getRules();
 
 	// throwing (if not a fixed weapon)
 	if (!weapon->getFixed())
 	{
-		tu = _action->actor->getActionTUs(BA_THROW, _action->weapon);
-		ss1 << strAcc.c_str() << (int)floor(_action->actor->getThrowingAccuracy() * 100) << "%";
-		ss2 << strTU.c_str() << tu;
-		_actionMenu[id]->setAction(BA_THROW, _game->getLanguage()->getString("STR_THROW"), ss1.str(), ss2.str(), tu);
-		_actionMenu[id]->setVisible(true);
-		id++;
-		ss1.str(L"");
-		ss2.str(L"");
+		addItem(BA_THROW, "STR_THROW", &id);
 	}
 
 	// priming
 	if ((weapon->getBattleType() == BT_GRENADE || weapon->getBattleType() == BT_PROXIMITYGRENADE)
 		&& _action->weapon->getExplodeTurn() == 0)
 	{
-		tu = _action->actor->getActionTUs(BA_PRIME, _action->weapon);
-		ss2 << strTU.c_str() << tu;
-		_actionMenu[id]->setAction(BA_PRIME, _game->getLanguage()->getString("STR_PRIME_GRENADE"), ss1.str(), ss2.str(), tu);
-		_actionMenu[id]->setVisible(true);
-		id++;
-		ss1.str(L"");
-		ss2.str(L"");
+		addItem(BA_PRIME, "STR_PRIME_GRENADE", &id);
 	}
 
 	if (weapon->getBattleType() == BT_FIREARM)
 	{
 		if (weapon->getWaypoint())
 		{
-			tu = _action->actor->getActionTUs(BA_LAUNCH, _action->weapon);
-			ss2 << strTU.c_str() << tu;
-			_actionMenu[id]->setAction(BA_LAUNCH, _game->getLanguage()->getString("STR_LAUNCH_MISSILE"), ss1.str(), ss2.str(), tu);
-			_actionMenu[id]->setVisible(true);
-			id++;
-			ss1.str(L"");
-			ss2.str(L"");
+			addItem(BA_LAUNCH, "STR_LAUNCH_MISSILE", &id);
 		}
 		else
 		{
 			if (weapon->getAccuracyAuto() != 0)
 			{
-				tu = _action->actor->getActionTUs(BA_AUTOSHOT, _action->weapon);
-				ss1 << strAcc.c_str() << (int)floor(_action->actor->getFiringAccuracy(BA_AUTOSHOT, _action->weapon) * 100) << "%";
-				ss2 << strTU.c_str() << tu;
-				_actionMenu[id]->setAction(BA_AUTOSHOT, _game->getLanguage()->getString("STR_AUTO_SHOT"), ss1.str(), ss2.str(), tu);
-				_actionMenu[id]->setVisible(true);
-				id++;
-				ss1.str(L"");
-				ss2.str(L"");
+				addItem(BA_AUTOSHOT, "STR_AUTO_SHOT", &id);
 			}
 			if (weapon->getAccuracySnap() != 0)
 			{
-				tu = _action->actor->getActionTUs(BA_SNAPSHOT, _action->weapon);
-				ss1 << strAcc.c_str() << (int)floor(_action->actor->getFiringAccuracy(BA_SNAPSHOT, _action->weapon) * 100) << "%";
-				ss2 << strTU.c_str() << tu;
-				_actionMenu[id]->setAction(BA_SNAPSHOT, _game->getLanguage()->getString("STR_SNAP_SHOT"), ss1.str(), ss2.str(), tu);
-				_actionMenu[id]->setVisible(true);
-				id++;
-				ss1.str(L"");
-				ss2.str(L"");
+				addItem(BA_SNAPSHOT, "STR_SNAP_SHOT", &id);
 			}
 			if (weapon->getAccuracyAimed() != 0)
 			{
-				tu = _action->actor->getActionTUs(BA_AIMEDSHOT, _action->weapon);
-				ss1 << strAcc.c_str() << (int)floor(_action->actor->getFiringAccuracy(BA_AIMEDSHOT, _action->weapon) * 100) << "%";
-				ss2 << strTU.c_str() << tu;
-				_actionMenu[id]->setAction(BA_AIMEDSHOT, _game->getLanguage()->getString("STR_AIMED_SHOT"), ss1.str(), ss2.str(), tu);
-				_actionMenu[id]->setVisible(true);
-				id++;
-				ss1.str(L"");
-				ss2.str(L"");
+				addItem(BA_AIMEDSHOT, "STR_AIMED_SHOT", &id);
 			}
 		}
 	}
-
-	if (weapon->getBattleType() == BT_MELEE)
+	else if (weapon->getBattleType() == BT_MELEE)
 	{
 		// stun rod
 		if (weapon->getDamageType() == DT_STUN)
 		{
-			tu = _action->actor->getActionTUs(BA_HIT, _action->weapon);
-			ss1 << strAcc.c_str() << (int)floor(_action->actor->getFiringAccuracy(BA_HIT, _action->weapon) * 100) << "%";
-			ss2 << strTU.c_str() << tu;
-			_actionMenu[id]->setAction(BA_HIT, _game->getLanguage()->getString("STR_STUN"), ss1.str(), ss2.str(), tu);
-			_actionMenu[id]->setVisible(true);
-			id++;
-			ss1.str(L"");
-			ss2.str(L"");
+			addItem(BA_HIT, "STR_STUN", &id);
 		}
 		else
 		// melee weapon
 		{
-			tu = _action->actor->getActionTUs(BA_HIT, _action->weapon);
-			ss1 << strAcc.c_str() << (int)floor(_action->actor->getFiringAccuracy(BA_HIT, _action->weapon) * 100) << "%";
-			ss2 << strTU.c_str() << tu;
-			_actionMenu[id]->setAction(BA_HIT, _game->getLanguage()->getString("STR_HIT"), ss1.str(), ss2.str(), tu);
-			_actionMenu[id]->setVisible(true);
-			id++;
-			ss1.str(L"");
-			ss2.str(L"");
+			addItem(BA_HIT, "STR_HIT", &id);
 		}
 	}
-
 	// special items
-	if (weapon->getBattleType() == BT_MEDIKIT)
+	else if (weapon->getBattleType() == BT_MEDIKIT)
 	{
-		tu = weapon->getTUUse();
-		ss2 << strTU.c_str() << tu;
-		_actionMenu[id]->setAction(BA_USE, _game->getLanguage()->getString("STR_USE_MEDI_KIT"), L"", ss2.str(), tu);
-		_actionMenu[id]->setVisible(true);
-		id++;
-		ss2.str(L"");
+		addItem(BA_USE, "STR_USE_MEDI_KIT", &id);
 	}
-
-	if (weapon->getBattleType() == BT_SCANNER)
+	else if (weapon->getBattleType() == BT_SCANNER)
 	{
-		tu = _action->actor->getActionTUs(BA_USE, _action->weapon);
-		ss2 << strTU.c_str() << tu;
-		_actionMenu[id]->setAction(BA_USE, _game->getLanguage()->getString("STR_USE_SCANNER"), L"", ss2.str(), tu);
-		_actionMenu[id]->setVisible(true);
-		id++;
-		ss2.str(L"");
+		addItem(BA_USE, "STR_USE_SCANNER", &id);
 	}
 
 }
@@ -199,6 +129,28 @@ ActionMenuState::ActionMenuState(Game *game, BattleAction *action, int x, int y)
 ActionMenuState::~ActionMenuState()
 {
 
+}
+
+/**
+ * Adds a new menu item for an action.
+ * @param ba Action type.
+ * @param name Action description.
+ * @param id Pointer to the new item ID.
+ */
+void ActionMenuState::addItem(BattleActionType ba, const std::string &name, int *id)
+{
+	std::wstringstream ss1, ss2;
+	int acc = (int)floor(_action->actor->getFiringAccuracy(ba, _action->weapon) * 100);
+	if (ba == BA_THROW)
+		acc = (int)floor(_action->actor->getThrowingAccuracy() * 100);
+	int tu = _action->actor->getActionTUs(ba, _action->weapon);
+
+	if (acc > 0)
+		ss1 << _game->getLanguage()->getString("STR_ACC") << acc << "%";
+	ss2 << _game->getLanguage()->getString("STR_TUS") << tu;
+	_actionMenu[*id]->setAction(ba, _game->getLanguage()->getString(name), ss1.str(), ss2.str(), tu);
+	_actionMenu[*id]->setVisible(true);
+	(*id)++;
 }
 
 /**
