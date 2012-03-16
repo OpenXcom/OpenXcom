@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -21,7 +21,7 @@
 
 #include <string>
 #include <map>
-#include "yaml.h"
+#include <yaml-cpp/yaml.h>
 
 namespace OpenXcom
 {

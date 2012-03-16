@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -18,7 +18,7 @@
  */
 #ifndef OPENXCOM_RESEARCHPROJECT
 #define OPENXCOM_RESEARCHPROJECT
-#include "yaml.h"
+#include <yaml-cpp/yaml.h>
 
 namespace OpenXcom
 {

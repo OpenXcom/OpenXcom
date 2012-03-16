@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -20,7 +20,7 @@
 #include <fstream>
 #include <sstream>
 #include <iomanip>
-#include "yaml.h"
+#include <yaml-cpp/yaml.h>
 #include "../Ruleset/Ruleset.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Language.h"

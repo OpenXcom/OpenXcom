@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -21,7 +21,7 @@
 
 #include <string>
 #include <vector>
-#include "yaml.h"
+#include <yaml-cpp/yaml.h>
 
 enum AlienRank{AR_COMMANDER, AR_LEADER, AR_ENGINEER, AR_MEDIC, AR_NAVIGATOR, AR_SOLDIER, AR_TERRORIST};
 

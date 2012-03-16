@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -23,7 +23,7 @@
 #include <algorithm>
 #include <vector>
 #include <string>
-#include "yaml.h"
+#include <yaml-cpp/yaml.h>
 #include "BattleItem.h"
 #include "BattleUnit.h"
 

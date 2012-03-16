@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -18,7 +18,7 @@
  */
 #include "Ruleset.h"
 #include <fstream>
-#include "yaml.h"
+#include <yaml-cpp/yaml.h>
 #include "../Engine/Options.h"
 #include "../Engine/Exception.h"
 #include "../Engine/CrossPlatform.h"

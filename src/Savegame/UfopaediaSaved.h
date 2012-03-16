@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -22,7 +22,7 @@
 #include <vector>
 #include <string>
 #include "../Ufopaedia/Ufopaedia.h"
-#include "yaml.h"
+#include <yaml-cpp/yaml.h>
 
 namespace OpenXcom
 {

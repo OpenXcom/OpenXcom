@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -20,7 +20,7 @@
 #include <cmath>
 #include <set>
 #include "TileEngine.h"
-#include "SDL.h"
+#include <SDL.h>
 #include "BattleAIState.h"
 #include "AggroBAIState.h"
 #include "../Savegame/SavedBattleGame.h"

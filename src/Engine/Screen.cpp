@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -19,7 +19,7 @@
 #include "Screen.h"
 #include <sstream>
 #include <iomanip>
-#include "SDL_rotozoom.h"
+#include <SDL_rotozoom.h>
 #include "Exception.h"
 #include "Surface.h"
 #include "Action.h"

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -20,7 +20,7 @@
 #define OPENXCOM_MUSIC_H
 
 #include <string>
-#include "SDL_mixer.h"
+#include <SDL_mixer.h>
 
 namespace OpenXcom
 {

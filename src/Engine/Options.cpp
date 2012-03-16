@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -18,11 +18,11 @@
  */
 
 #include "Options.h"
-#include "SDL_mixer.h"
+#include <SDL_mixer.h>
 #include <map>
 #include <sstream>
 #include <fstream>
-#include "yaml.h"
+#include <yaml-cpp/yaml.h>
 #include "Exception.h"
 #include "CrossPlatform.h"
 
@@ -31,7 +31,7 @@ namespace OpenXcom
 namespace Options
 {
 
-std::string _version = "0.3";
+std::string _version = "0.4";
 std::string _dataFolder = "";
 std::vector<std::string> _dataList;
 std::string _userFolder = "";
