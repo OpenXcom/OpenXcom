@@ -120,7 +120,7 @@ public:
 		const int zufall_xy = 60;
 		losowy_szum.resize(zufall_xy * zufall_xy);
 		for(int i=0; i< losowy_szum.size(); ++i)
-			losowy_szum[i] = rand()%20;
+			losowy_szum[i] = rand()%64;
 		random_noise = new ShaderRepeat<Sint16>(losowy_szum, zufall_xy, zufall_xy );
 		
 	}
@@ -175,11 +175,12 @@ struct CreateShadow
 		temp.x = sqrt(temp.x);
 		//we have norm of distans betwen 2 vectors in `x`
 		temp.x -= sqrt(2);
-		temp.x *= 500.;
+		temp.x *= 8*500.;
 		temp.x -= noise;
 		if(temp.x > 0.)
 		{
-			const Sint16 val = (temp.x> 31.)? 31 : (Sint16)temp.x;
+			const Sint16 val_pre = ((Sint16)temp.x)>>3;
+			const Sint16 val = (val_pre> 31)? 31 : val_pre;
 			const int d = dest & helper::ColorGroup;
 			if(d ==  Palette::blockOffset(12) || d ==  Palette::blockOffset(13))
 			{
