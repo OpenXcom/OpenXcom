@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -18,7 +18,7 @@
  */
 #include "Surface.h"
 #include <fstream>
-#include "SDL_gfxPrimitives.h"
+#include <SDL_gfxPrimitives.h>
 #include "Palette.h"
 #include "Exception.h"
 
@@ -68,6 +68,7 @@ Surface::Surface(const Surface& other)
 	_crop.y = other._crop.y;
 	_visible = other._visible;
 	_hidden = other._hidden;
+	_redraw = other._redraw;
 	_originalColors = other._originalColors;
 }
 
@@ -575,6 +576,7 @@ int Surface::getHeight() const
  * for temporary effects like window popups,
  * so as to not override the default visibility setting.
  * @note Do not confuse with setVisible!
+ * @param hidden Shown or hidden.
  */
 void Surface::setHidden(bool hidden)
 {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -23,6 +23,7 @@
 #include "Projectile.h"
 #include "TileEngine.h"
 #include "Map.h"
+#include "Pathfinding.h"
 #include "../Engine/Game.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/BattleItem.h"
@@ -41,10 +42,15 @@ namespace OpenXcom
 /**
  * Sets up an ProjectileFlyBState.
  */
-ProjectileFlyBState::ProjectileFlyBState(BattlescapeState *parent, BattleAction action) : BattleState(parent), _unit(0), _ammo(0), _action(action), _projectileImpact(0), _initialized(false)
+ProjectileFlyBState::ProjectileFlyBState(BattlescapeGame *parent, BattleAction action, Position origin) : BattleState(parent, action), _unit(0), _ammo(0), _projectileImpact(0), _initialized(false), _origin(origin)
 {
-
 }
+
+ProjectileFlyBState::ProjectileFlyBState(BattlescapeGame *parent, BattleAction action) : BattleState(parent, action), _unit(0), _ammo(0), _projectileImpact(0), _initialized(false)
+{
+	_origin = action.actor->getPosition();
+}
+
 
 /**
  * Deletes the ProjectileFlyBState.
@@ -71,9 +77,12 @@ void ProjectileFlyBState::init()
 	if (!weapon) // can't shoot without weapon
 		return;
 
+	if (!_parent->getSave()->getTile(_action.target)) // invalid target position
+		return;
+
 	if (_action.actor->getTimeUnits() < _action.TU && !_parent->dontSpendTUs())
 	{
-		_result = "STR_NOT_ENOUGH_TIME_UNITS";
+		_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
 		_parent->popState();
 		return;
 	}
@@ -82,59 +91,69 @@ void ProjectileFlyBState::init()
 	_ammo = weapon->getAmmoItem();
 	if (_unit->isOut())
 	{
-		// something went wrong
+		// something went wrong - we can't shoot when dead or unconscious
 		_parent->popState();
 		return;
 	}
-	if (_action.type != BA_THROW)
+
+	// autoshot will default back to snapshot if it's not possible
+	if (weapon->getRules()->getAccuracyAuto() == 0 && _action.type == BA_AUTOSHOT)
+		_action.type = BA_SNAPSHOT;
+
+	// snapshot defaults to "hit" if it's a melee weapon
+	// (in case of reaction "shots" with a melee weapon)
+	if (weapon->getRules()->getBattleType() == BT_MELEE && _action.type == BA_SNAPSHOT)
+		_action.type = BA_HIT;
+
+	switch (_action.type)
 	{
+	case BA_SNAPSHOT:
+	case BA_AIMEDSHOT:
+	case BA_AUTOSHOT:
+	case BA_LAUNCH:
 		if (_ammo == 0)
 		{
-			_result = "STR_NO_AMMUNITION_LOADED";
+			_action.result = "STR_NO_AMMUNITION_LOADED";
 			_parent->popState();
 			return;
 		}
 		if (_ammo->getAmmoQuantity() == 0)
 		{
-			_result = "STR_NO_ROUNDS_LEFT";
+			_action.result = "STR_NO_ROUNDS_LEFT";
 			_parent->popState();
 			return;
 		}
-	}
-	// action specific initialisation
-	switch (_action.type)
-	{
-	case BA_AUTOSHOT:
-		_baseAcc = weapon->getRules()->getAccuracyAuto();
-		break;
-	case BA_SNAPSHOT:
-		_baseAcc = weapon->getRules()->getAccuracySnap();
-		break;
-	case BA_AIMEDSHOT:
-		_baseAcc = weapon->getRules()->getAccuracyAimed();
 		break;
 	case BA_THROW:
-		if (!validThrowRange())
+		if (!validThrowRange(&_action))
 		{
 			// out of range
-			_result = "STR_OUT_OF_RANGE";
+			_action.result = "STR_OUT_OF_RANGE";
 			_parent->popState();
 			return;
 		}
-		_baseAcc = (int)(_unit->getThrowingAccuracy()*100.0);
 		_projectileItem = weapon;
 		break;
+	case BA_HIT:
+		if (!validMeleeRange(&_action))
+		{
+			_action.result = "STR_THERE_IS_NO_ONE_THERE";
+			_parent->popState();
+			return;
+		}
+		break;
 	default:
-		_baseAcc = 0;
+		_parent->popState();
+		return;
 	}
 
 	createNewProjectile();
 
 	BattleAction action;
-	BattleUnit *potentialVictim = _parent->getGame()->getSavedGame()->getBattleGame()->getTile(_action.target)->getUnit();
+	BattleUnit *potentialVictim = _parent->getSave()->getTile(_action.target)->getUnit();
 	if (potentialVictim && potentialVictim->getFaction() != _unit->getFaction())
 	{
-		if (_parent->getGame()->getSavedGame()->getBattleGame()->getTileEngine()->checkReactionFire(_unit, &action, potentialVictim, false))
+		if (_parent->getSave()->getTileEngine()->checkReactionFire(_unit, &action, potentialVictim, false))
 		{
 			_parent->statePushBack(new ProjectileFlyBState(_parent, action));
 		}
@@ -148,9 +167,7 @@ void ProjectileFlyBState::init()
 void ProjectileFlyBState::createNewProjectile()
 {
 	// create a new projectile
-	Projectile *projectile = new Projectile(_parent->getGame()->getResourcePack(),
-									_parent->getGame()->getSavedGame()->getBattleGame(),
-									_action);
+	Projectile *projectile = new Projectile(_parent->getResourcePack(), _parent->getSave(), _action, _origin);
 
 	_autoshotCounter++;
 	// add the projectile on the map
@@ -161,12 +178,12 @@ void ProjectileFlyBState::createNewProjectile()
 	_projectileImpact = -1;
 	if (_action.type == BA_THROW)
 	{
-		if (projectile->calculateThrow(_baseAcc))
+		if (projectile->calculateThrow(_unit->getThrowingAccuracy()))
 		{
 			_projectileItem->moveToOwner(0);
 			_unit->setCache(0);
 			_parent->getMap()->cacheUnit(_unit);
-			_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(39)->play();
+			_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(39)->play();
 			_unit->addThrowingExp();
 		}
 		else
@@ -174,24 +191,25 @@ void ProjectileFlyBState::createNewProjectile()
 			// unable to throw here
 			delete projectile;
 			_parent->getMap()->setProjectile(0);
-			_result = "STR_UNABLE_TO_THROW_HERE";
+			_action.result = "STR_UNABLE_TO_THROW_HERE";
 			_parent->popState();
 			return;
 		}
 	}
 	else
 	{
-		_projectileImpact = projectile->calculateTrajectory(_unit->getFiringAccuracy(_baseAcc));
-		if (_projectileImpact != -1)
+		_projectileImpact = projectile->calculateTrajectory(_unit->getFiringAccuracy(_action.type, _action.weapon));
+		if (_projectileImpact != -1 || _action.type == BA_LAUNCH)
 		{
 				// set the soldier in an aiming position
 				_unit->aim(true);
 				_parent->getMap()->cacheUnit(_unit);
 				// and we have a lift-off
-				_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(_action.weapon->getRules()->getFireSound())->play();
-				if (!_parent->getGame()->getSavedGame()->getBattleGame()->getDebugMode() && _ammo->spendBullet() == false)
+				if (_action.weapon->getRules()->getFireSound() != -1)
+					_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(_action.weapon->getRules()->getFireSound())->play();
+				if (!_parent->getSave()->getDebugMode() && _action.type != BA_LAUNCH && _ammo->spendBullet() == false)
 				{
-					_parent->getGame()->getSavedGame()->getBattleGame()->removeItem(_ammo);
+					_parent->getSave()->removeItem(_ammo);
 					_action.weapon->setAmmoItem(0);
 				}
 		}
@@ -200,7 +218,7 @@ void ProjectileFlyBState::createNewProjectile()
 			// no line of fire
 			delete projectile;
 			_parent->getMap()->setProjectile(0);
-			_result = "STR_NO_LINE_OF_FIRE";
+			_action.result = "STR_NO_LINE_OF_FIRE";
 			_parent->popState();
 			return;
 		}
@@ -214,6 +232,7 @@ void ProjectileFlyBState::createNewProjectile()
  */
 void ProjectileFlyBState::think()
 {
+	/* TODO refactoring : store the projectile in this state, instead of getting it from the map each time? */
 	if (_parent->getMap()->getProjectile() == 0)
 	{
 		if (_action.type == BA_AUTOSHOT && _autoshotCounter < 3 && !_action.actor->isOut())
@@ -237,11 +256,11 @@ void ProjectileFlyBState::think()
 				pos.y /= 16;
 				pos.z /= 24;
 				BattleItem *item = _parent->getMap()->getProjectile()->getItem();
-				_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(38)->play();
+				_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(38)->play();
 
 				if (Options::getBool("battleAltGrenade") && item->getRules()->getBattleType() == BT_GRENADE)
 				{
-					// it's a hot grenade to explode immediatly
+					// it's a hot grenade to explode immediately
 					_parent->statePushFront(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(-1), item, _action.actor));
 				}
 				else
@@ -249,8 +268,22 @@ void ProjectileFlyBState::think()
 					_parent->dropItem(pos, item);
 				}
 			}
+			else if (_action.type == BA_LAUNCH && _action.waypoints.size() > 1 && _projectileImpact == -1)
+			{
+				_origin = _action.waypoints.front();
+				_action.waypoints.pop_front();
+				_action.target = _action.waypoints.front();
+				// launch the next projectile in the waypoint cascade
+				_parent->statePushBack(new ProjectileFlyBState(_parent, _action, _origin));
+			}
 			else
 			{
+				if (_action.type == BA_LAUNCH && _ammo->spendBullet() == false)
+				{
+					_parent->getSave()->removeItem(_ammo);
+					_action.weapon->setAmmoItem(0);
+				}
+
 				if (_projectileImpact != 5) // out of map
 				{
 					int offset = 0;
@@ -284,26 +317,17 @@ void ProjectileFlyBState::cancel()
 }
 
 /*
- * Get the action result. Returns error messages or an empty string when everything went fine.
- * @return returnmessage Empty when everything is fine.
- */
-std::string ProjectileFlyBState::getResult() const
-{
-	return _result;
-}
-
-/*
  * Validate the throwing range.
  * @return true when range is valid.
  */
-bool ProjectileFlyBState::validThrowRange()
+bool ProjectileFlyBState::validThrowRange(BattleAction *action)
 {
 	// Throwing Distance roughly = 2.5 × Strength / Weight
 	// note that all coordinates and thus also distances below are in number of tiles (not in voxels).
-	double maxDistance = 2.5 * _action.actor->getUnit()->getStrength() / _action.weapon->getRules()->getWeight();
-	int xdiff = _action.target.x - _unit->getPosition().x;
-	int ydiff = _action.target.y - _unit->getPosition().y;
-	int zdiff = _action.target.z - _unit->getPosition().z;
+	double maxDistance = 2.5 * action->actor->getStats()->strength / action->weapon->getRules()->getWeight();
+	int xdiff = action->target.x - action->actor->getPosition().x;
+	int ydiff = action->target.y - action->actor->getPosition().y;
+	int zdiff = action->target.z - action->actor->getPosition().z;
 	double realDistance = sqrt((double)(xdiff*xdiff)+(double)(ydiff*ydiff));
 
 	// throwing off a building of 1 level lets you throw 2 tiles further than normal range,
@@ -311,6 +335,21 @@ bool ProjectileFlyBState::validThrowRange()
 	realDistance += zdiff*2;
 
 	return realDistance < maxDistance;
+}
+
+/*
+ * Validate the melee range.
+ * @return true when range is valid.
+ */
+bool ProjectileFlyBState::validMeleeRange(BattleAction *action)
+{
+	Position p;
+	Pathfinding::directionToVector(action->actor->getDirection(), &p);
+	Tile * tile (_parent->getSave()->getTile(action->actor->getPosition() + p));
+	if (tile->getUnit())
+		return true;
+	else
+		return false;
 }
 
 }

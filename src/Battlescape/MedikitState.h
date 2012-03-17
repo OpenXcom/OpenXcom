@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -20,6 +20,7 @@
 #define OPENXCOM_MEDIKITSTATE_H
 
 #include "../Engine/State.h"
+#include "BattlescapeGame.h"
 
 namespace OpenXcom
 {
@@ -41,6 +42,7 @@ class MedikitState : public State
 	BattleUnit * _targetUnit;
 	BattleUnit *_unit;
 	BattleItem *_item;
+	BattleAction *_action;
 	/// Handler for end button
 	void onEndClick(Action * action);
 	/// Handler for heal button
@@ -51,9 +53,11 @@ class MedikitState : public State
 	void onPainKillerClick(Action * action);
 	/// update medikit interface
 	void update();
+	/// Special handling for mouse clicks.
+	void mouseClick(Action *action);
 public:
 	/// Create the MedikitState
-	MedikitState (Game * game, BattleUnit * targetUnit, BattleUnit * unit, BattleItem *_item);
+	MedikitState (Game * game, BattleUnit * targetUnit, BattleAction *action);
 };
 }
 

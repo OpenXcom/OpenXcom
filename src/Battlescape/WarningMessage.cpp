@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -17,7 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "WarningMessage.h"
-#include "SDL.h"
+#include <SDL.h>
 #include "../Engine/Timer.h"
 #include "../Engine/Sound.h"
 #include "../Interface/Text.h"

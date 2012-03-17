@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -37,6 +37,7 @@
 #include "AggroBAIState.h"
 #include "PatrolBAIState.h"
 #include "Pathfinding.h"
+#include "BattlescapeGame.h"
 #include "../Engine/Game.h"
 #include "../Engine/Music.h"
 #include "../Engine/Language.h"
@@ -63,7 +64,7 @@
 #include "../Savegame/BattleItem.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleItem.h"
-#include "../Ruleset/RuleArmor.h"
+#include "../Ruleset/Armor.h"
 #include "../Engine/Timer.h"
 #include "../Engine/Options.h"
 #include "WarningMessage.h"
@@ -130,6 +131,8 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	}
 	_numVisibleUnit[9]->setX(304); // center number 10
 	_warning = new WarningMessage(224, 24, _icons->getX() + 48, _icons->getY() + 32);
+	_btnLaunch = new InteractiveSurface(32, 24, (game->getScreen()->getWidth() / game->getScreen()->getXScale())-32, 0);
+	_btnLaunch->setVisible(false);
 
 	// Create soldier stats summary
 	_txtName = new Text(120, 10, _icons->getX() + 135, _icons->getY() + 32);
@@ -218,12 +221,13 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 		add(_numVisibleUnit[i]);
 	}
 	add(_warning);
-
 	add(_txtDebug);
+	add(_btnLaunch);
+	_game->getResourcePack()->getSurfaceSet("SPICONS.DAT")->getFrame(0)->blit(_btnLaunch);
 
 	// Set up objects
 
-	_battleGame = _game->getSavedGame()->getBattleGame();
+	_save = _game->getSavedGame()->getBattleGame();
 	_map->init();
 	_map->onMouseClick((ActionHandler)&BattlescapeState::mapClick);
 
@@ -275,6 +279,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	}
 	_warning->setColor(Palette::blockOffset(2));
 	_warning->setTextColor(Palette::blockOffset(1));
+	_btnLaunch->onMouseClick((ActionHandler)&BattlescapeState::btnLaunchClick);
 
 	_txtName->setColor(Palette::blockOffset(8));
 	_txtName->setHighContrast(true);
@@ -314,25 +319,15 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	// Set music
 	_game->getResourcePack()->getMusic("GMTACTIC")->play();
 
-	_stateTimer = new Timer(DEFAULT_ANIM_SPEED);
-	_stateTimer->onTimer((StateHandler)&BattlescapeState::handleState);
-	_stateTimer->start();
-
 	_animTimer = new Timer(DEFAULT_ANIM_SPEED);
 	_animTimer->onTimer((StateHandler)&BattlescapeState::animate);
 	_animTimer->start();
 
-	_action.type = BA_NONE;
-	_action.TU = 0;
-	_action.targeting = false;
-	_tuReserved = BA_NONE;
-	_debugPlay = false;
-	_playerPanicHandled = true;
+	_gameTimer = new Timer(DEFAULT_ANIM_SPEED);
+	_gameTimer->onTimer((StateHandler)&BattlescapeState::handleState);
+	_gameTimer->start();
 
-	updateSoldierInfo();
-	_map->getCamera()->centerOnPosition(_battleGame->getSelectedUnit()->getPosition());
-	setupCursor();
-	checkForCasualties(0, 0, true);
+	_battleGame = new BattlescapeGame(_save, this);
 }
 
 
@@ -341,8 +336,9 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
  */
 BattlescapeState::~BattlescapeState()
 {
-	delete _stateTimer;
 	delete _animTimer;
+	delete _gameTimer;
+	delete _battleGame;
 }
 
 /**
@@ -353,9 +349,9 @@ void BattlescapeState::init()
 	_map->focus();
 	_map->cacheUnits();
 	_map->draw();
+	_battleGame->init();
 	updateSoldierInfo();
-	if (_battleGame->getSide() == FACTION_PLAYER)
-		_playerPanicHandled = false;
+	_battleGame->setupCursor();
 }
 
 /**
@@ -368,12 +364,12 @@ void BattlescapeState::think()
 	if (_popups.empty())
 	{
 		State::think();
-		_stateTimer->think(this, 0);
+		_battleGame->think();
 		_animTimer->think(this, 0);
+		_gameTimer->think(this, 0);
 		if (popped)
 		{
-			handleNonTargetAction();
-			setupCursor();
+			_battleGame->handleNonTargetAction();
 			popped = false;
 		}
 	}
@@ -386,82 +382,6 @@ void BattlescapeState::think()
 		return;
 	}
 
-	// nothing is happening - see if we need some alien AI or units panicking or what have you
-	if (_states.empty())
-	{
-		// it's a non player side (ALIENS or CIVILIANS)
-		if (_battleGame->getSide() != FACTION_PLAYER)
-		{
-			if (!_debugPlay)
-			{
-				if (_battleGame->getSelectedUnit())
-				{
-					if (!handlePanickingUnit(_battleGame->getSelectedUnit()))
-						handleAI(_battleGame->getSelectedUnit());
-				}
-			}
-		}
-		else
-		{
-			// it's a player side && we have not handled all panicking units
-			if (!_playerPanicHandled)
-			{
-				_playerPanicHandled = handlePanickingPlayer();
-			}
-
-		}
-
-	}
-
-}
-
-
-/**
- * Handles the processing of the AI states of a unit.
- * @param unit Pointer to an unit.
- */
-void BattlescapeState::handleAI(BattleUnit *unit)
-{
-	BattleAIState *ai = unit->getCurrentAIState();
-	if (!ai) return;
-
-	unit->think(&_action);
-	if (_action.type == BA_WALK)
-	{
-		_battleGame->getPathfinding()->calculate(_action.actor, _action.target);
-		statePushBack(new UnitWalkBState(this, _action));
-	}
-
-	if (_action.type == BA_SNAPSHOT)
-	{
-		statePushBack(new ProjectileFlyBState(this, _action));
-	}
-
-	if (_action.type == BA_NONE)
-	{
-		AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(ai);
-		if (aggro != 0)
-		{
-			// we lost aggro
-			unit->setAIState(new PatrolBAIState(_battleGame, unit, 0));
-		}
-		if (_battleGame->selectNextPlayerUnit(true) == 0)
-		{
-			if (!_battleGame->getDebugMode())
-			{
-				statePushBack(0); // end AI turn
-			}
-			else
-			{
-				_battleGame->selectNextPlayerUnit(false);
-				_debugPlay = true;
-			}
-		}
-		if (_battleGame->getSelectedUnit())
-		{
-			_map->getCamera()->centerOnPosition(_battleGame->getSelectedUnit()->getPosition());
-		}
-	}
 }
 
 /**
@@ -471,28 +391,11 @@ void BattlescapeState::handleAI(BattleUnit *unit)
  */
 void BattlescapeState::mapClick(Action *action)
 {
-	bool bPreviewed = Options::getBool("battlePreviewPath");
-
 	// right-click aborts walking state
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
-		if (_battleGame->getPathfinding()->removePreview() && bPreviewed)
-			return;
-
-		if (_states.empty())
+		if (_battleGame->cancelCurrentAction())
 		{
-			if (_action.targeting)
-			{
-				_action.targeting = false;
-				_action.type = BA_NONE;
-				setupCursor();
-				_game->getCursor()->setVisible(true);
-				return;
-			}
-		}
-		else
-		{
-			_states.front()->cancel();
 			return;
 		}
 	}
@@ -504,73 +407,18 @@ void BattlescapeState::mapClick(Action *action)
 
 
 	// don't accept leftclicks if there is no cursor or there is an action busy
-	if (_map->getCursorType() == CT_NONE || !_states.empty()) return;
+	if (_map->getCursorType() == CT_NONE || _battleGame->isBusy()) return;
 
 	Position pos;
 	_map->getSelectorPosition(&pos);
 
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		if (_action.targeting && _battleGame->getSelectedUnit())
-		{
-			//  -= fire weapon or throw =-
-			if (_battleGame->getSelectedUnit()->getTimeUnits() < _action.TU && _battleGame->getSide() == FACTION_PLAYER)
-			{
-				_warning->showMessage(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS"));
-				return;
-			}
-			_action.target = pos;
-			_map->setCursorType(CT_NONE);
-			_game->getCursor()->setVisible(false);
-			_states.push_back(new ProjectileFlyBState(this, _action));
-			statePushFront(new UnitTurnBState(this, _action)); // first of all turn towards the target
-		}
-		else
-		{
-			BattleUnit *unit = _battleGame->selectUnit(pos);
-			if (unit && !unit->isOut())
-			{
-			//  -= select unit =-
-				if (unit->getFaction() == _battleGame->getSide())
-				{
-					_battleGame->setSelectedUnit(unit);
-					updateSoldierInfo();
-					_action.targeting = false;
-					_action.type = BA_NONE;
-					setupCursor();
-				}
-			}
-			else if (playableUnitSelected())
-			{
-				if (_action.target != pos && bPreviewed)
-					_battleGame->getPathfinding()->removePreview();
-				_action.target = pos;
-				_battleGame->getPathfinding()->calculate(_action.actor, _action.target);
-				if (bPreviewed && !_battleGame->getPathfinding()->previewPath())
-				{
-					_battleGame->getPathfinding()->removePreview();
-					bPreviewed = false;
-				}
-
-				if (!bPreviewed)
-				{
-					//  -= start walking =-
-					_map->setCursorType(CT_NONE);
-					_game->getCursor()->setVisible(false);
-					if (_battleGame->getSelectedUnit()->isKneeled())
-					{
-						kneel(_battleGame->getSelectedUnit());
-					}
-					statePushBack(new UnitWalkBState(this, _action));
-				}
-			}
-		}
+		_battleGame->primaryAction(pos);
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT && playableUnitSelected())
 	{
-		//  -= turn to or open door =-
-		_action.target = pos;
-		statePushBack(new UnitTurnBState(this, _action));
+		_battleGame->secondaryAction(pos);
 	}
 
 }
@@ -581,18 +429,9 @@ void BattlescapeState::mapClick(Action *action)
  */
 void BattlescapeState::btnUnitUpClick(Action *action)
 {
-	if (playableUnitSelected() && _battleGame->getPathfinding()->validateUpDown(_battleGame->getSelectedUnit(), _battleGame->getSelectedUnit()->getPosition(), Pathfinding::DIR_UP))
+	if (playableUnitSelected() && _save->getPathfinding()->validateUpDown(_save->getSelectedUnit(), _save->getSelectedUnit()->getPosition(), Pathfinding::DIR_UP))
 	{
-		_action.target = _battleGame->getSelectedUnit()->getPosition();
-		_action.target.z++;
-		_map->setCursorType(CT_NONE);
-		_game->getCursor()->setVisible(false);
-		if (_battleGame->getSelectedUnit()->isKneeled())
-		{
-			kneel(_battleGame->getSelectedUnit());
-		}
-		_battleGame->getPathfinding()->calculate(_action.actor, _action.target);
-		statePushBack(new UnitWalkBState(this, _action));
+		_battleGame->moveUpDown(_save->getSelectedUnit(), Pathfinding::DIR_UP);
 	}
 }
 
@@ -602,19 +441,9 @@ void BattlescapeState::btnUnitUpClick(Action *action)
  */
 void BattlescapeState::btnUnitDownClick(Action *action)
 {
-	if (playableUnitSelected() && _battleGame->getPathfinding()->validateUpDown(_battleGame->getSelectedUnit(), _battleGame->getSelectedUnit()->getPosition(), Pathfinding::DIR_DOWN))
+	if (playableUnitSelected() && _save->getPathfinding()->validateUpDown(_save->getSelectedUnit(), _save->getSelectedUnit()->getPosition(), Pathfinding::DIR_DOWN))
 	{
-	//  -= start walking =-
-		_action.target = _battleGame->getSelectedUnit()->getPosition();
-		_action.target.z--;
-		_map->setCursorType(CT_NONE);
-		_game->getCursor()->setVisible(false);
-		if (_battleGame->getSelectedUnit()->isKneeled())
-		{
-			kneel(_battleGame->getSelectedUnit());
-		}
-		_battleGame->getPathfinding()->calculate(_action.actor, _action.target);
-		statePushBack(new UnitWalkBState(this, _action));
+		_battleGame->moveUpDown(_save->getSelectedUnit(), Pathfinding::DIR_DOWN);
 	}
 }
 
@@ -643,7 +472,7 @@ void BattlescapeState::btnMapDownClick(Action *action)
 void BattlescapeState::btnShowMapClick(Action *action)
 {
 	//MiniMapState
-	_game->pushState (new MiniMapState (_game, _map, _battleGame));
+	_game->pushState (new MiniMapState (_game, _map, _save));
 }
 
 /**
@@ -652,50 +481,22 @@ void BattlescapeState::btnShowMapClick(Action *action)
  */
 void BattlescapeState::btnKneelClick(Action *action)
 {
-	BattleUnit *bu = _battleGame->getSelectedUnit();
+	BattleUnit *bu = _save->getSelectedUnit();
 	if (bu)
 	{
-		kneel(bu);
+		_battleGame->kneel(bu);
 	}
 }
 
-/**
- * Kneel/Standup.
- * @param bu Pointer to a unit.
- */
-void BattlescapeState::kneel(BattleUnit *bu)
-{
-	int tu = bu->isKneeled()?8:4;
-	if (checkReservedTU(bu, tu))
-	{
-		if (bu->spendTimeUnits(tu, _battleGame->getDebugMode()))
-		{
-			bu->kneel(!bu->isKneeled());
-			// kneeling or standing up can reveil new terrain or units. I guess.
-			_battleGame->getTileEngine()->calculateFOV(bu);
-			_map->cacheUnits();
-			updateSoldierInfo();
-			BattleAction action;
-			if (_battleGame->getTileEngine()->checkReactionFire(bu, &action, 0, false))
-			{
-				statePushBack(new ProjectileFlyBState(this, action));
-			}
-		}
-		else
-		{
-			_warning->showMessage(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS"));
-		}
-	}
-}
 /**
  * Go to soldier info screen.
  * @param action Pointer to an action.
  */
 void BattlescapeState::btnInventoryClick(Action *action)
 {
-	if (playableUnitSelected())
+	if (playableUnitSelected() && _save->getSelectedUnit()->getArmor()->getSize() == 1)
 	{
-		_game->pushState(new InventoryState(_game, !_battleGame->getDebugMode()));
+		_game->pushState(new InventoryState(_game, !_save->getDebugMode()));
 	}
 }
 
@@ -707,7 +508,7 @@ void BattlescapeState::btnCenterClick(Action *action)
 {
 	if (playableUnitSelected())
 	{
-		_map->getCamera()->centerOnPosition(_battleGame->getSelectedUnit()->getPosition());
+		_map->getCamera()->centerOnPosition(_save->getSelectedUnit()->getPosition());
 	}
 }
 
@@ -735,12 +536,13 @@ void BattlescapeState::btnNextStopClick(Action *action)
  */
 void BattlescapeState::selectNextPlayerUnit(bool checkReselect)
 {
-	BattleUnit *unit = _battleGame->selectNextPlayerUnit(checkReselect);
+	if (_battleGame->getCurrentAction()->type != BA_NONE) return;
+	BattleUnit *unit = _save->selectNextPlayerUnit(checkReselect);
 	updateSoldierInfo();
 	if (unit) _map->getCamera()->centerOnPosition(unit->getPosition());
-	_action.targeting = false;
-	_action.type = BA_NONE;
-	setupCursor();
+	_battleGame->cancelCurrentAction();
+	_battleGame->getCurrentAction()->actor = unit;
+	_battleGame->setupCursor();
 }
 
 /**
@@ -768,185 +570,15 @@ void BattlescapeState::btnHelpClick(Action *action)
  */
 void BattlescapeState::btnEndTurnClick(Action *action)
 {
-	_action.targeting = false;
-	_action.type = BA_NONE;
-	statePushBack(0);
+	_battleGame->requestEndTurn();
 }
-
-/**
- * End turn.
- */
-void BattlescapeState::endTurn()
-{
-	Position p;
-
-	_debugPlay = false;
-	_action.type = BA_NONE;
-
-	// check for hot grenades on the ground
-	for (int i = 0; i < _battleGame->getWidth() * _battleGame->getLength() * _battleGame->getHeight(); ++i)
-	{
-		for (std::vector<BattleItem*>::iterator it = _battleGame->getTiles()[i]->getInventory()->begin(); it != _battleGame->getTiles()[i]->getInventory()->end(); )
-		{
-			if ((*it)->getRules()->getBattleType() == BT_GRENADE && (*it)->getExplodeTurn() > 0 && (*it)->getExplodeTurn() <= _battleGame->getTurn())  // it's a grenade to explode now
-			{
-				p.x = _battleGame->getTiles()[i]->getPosition().x*16 + 8;
-				p.y = _battleGame->getTiles()[i]->getPosition().y*16 + 8;
-				p.z = _battleGame->getTiles()[i]->getPosition().z*24 + _battleGame->getTiles()[i]->getTerrainLevel();
-				statePushNext(new ExplosionBState(this, p, (*it), (*it)->getPreviousOwner()));
-				it = _battleGame->getTiles()[i]->getInventory()->erase(it);
-				statePushBack(0);
-				return;
-			}
-			++it;
-		}
-	}
-
-	// check for hot grenades in the hands (by default grenades don't explode in soldiers hands)
-	if (Options::getBool("battleAltGrenade"))
-	{
-		for (std::vector<BattleUnit*>::iterator i = _battleGame->getUnits()->begin(); i != _battleGame->getUnits()->end(); ++i)
-		{
-			for (std::vector<BattleItem*>::iterator it = _battleGame->getItems()->begin(); it != _battleGame->getItems()->end(); )
-			{
-				if ((*it)->getOwner() == (*i)) // TODO refactor - removal of getOwner
-				{
-					if ((*it)->getRules()->getBattleType() == BT_GRENADE && (*it)->getExplodeTurn() > 0 && (*it)->getExplodeTurn() <= _battleGame->getTurn())  // it's a grenade to explode now
-					{
-							p.x = (*i)->getPosition().x*16 + 8;
-							p.y = (*i)->getPosition().y*16 + 8;
-							p.z = (*i)->getPosition().z*24 + 18;
-							statePushNext(new ExplosionBState(this, p, (*it), (*it)->getPreviousOwner()));
-							it = _battleGame->getItems()->erase(it);
-							statePushBack(0);
-							return;
-					}
-				}
-				++it;
-			}
-		}
-	}
-
-
-	if (_battleGame->getTileEngine()->closeUfoDoors())
-	{
-		_game->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(21)->play(); // ufo door closed
-	}
-
-	_battleGame->endTurn();
-
-	if (_battleGame->getSide() == FACTION_PLAYER)
-	{
-		setupCursor();
-	}
-	else
-	{
-		_map->setCursorType(CT_NONE);
-	}
-
-	// check for terrain explosions
-	Tile *t = _battleGame->getTileEngine()->checkForTerrainExplosions();
-	if (t)
-	{
-		Position p = Position(t->getPosition().x * 16, t->getPosition().y * 16, t->getPosition().z * 24);
-		statePushNext(new ExplosionBState(this, p, 0, 0, t));
-	}
-
-	bool bBattleIsOver = checkForCasualties(0, 0);
-	if (bBattleIsOver)
-	{
-		return;
-	}
-
-	updateSoldierInfo();
-
-	if (playableUnitSelected())
-	{
-		_map->getCamera()->centerOnPosition(_battleGame->getSelectedUnit()->getPosition());
-		setupCursor();
-	}
-
-	_game->pushState(new NextTurnState(_game, _battleGame, this));
-
-}
-
-
-/**
- * Checks for casualties and adjusts morale accordingly.
- * @param murderweapon
- * @param murderer
- * @return Whether the battle is finished.
- */
-bool BattlescapeState::checkForCasualties(BattleItem *murderweapon, BattleUnit *murderer, bool noSound)
-{
-	for (std::vector<BattleUnit*>::iterator j = _battleGame->getUnits()->begin(); j != _battleGame->getUnits()->end(); ++j)
-	{
-		if ((*j)->getHealth() == 0 && (*j)->getStatus() != STATUS_DEAD && (*j)->getStatus() != STATUS_FALLING)
-		{
-			BattleUnit *victim = (*j);
-
-			if (murderer)
-			{
-				// if there is a known murderer, he will get a morale bonus if he is of a different faction (what with neutral?)
-				if ((victim->getFaction() == FACTION_PLAYER && murderer->getFaction() == FACTION_HOSTILE) ||
-					(victim->getFaction() == FACTION_HOSTILE && murderer->getFaction() == FACTION_PLAYER))
-				{
-					murderer->moraleChange(+20);
-					Soldier *s = dynamic_cast<Soldier*>(murderer->getUnit());
-					if (s != 0)
-					{
-						s->addKillCount();
-					}
-				}
-				// murderer will get a penalty with friendly fire
-				if (victim->getFaction() == murderer->getFaction())
-				{
-					murderer->moraleChange(-20);
-				}
-			}
-
-			for (std::vector<BattleUnit*>::iterator i = _battleGame->getUnits()->begin(); i != _battleGame->getUnits()->end(); ++i)
-			{
-				// the losing squad all get a morale loss
-				if ((*i)->getFaction() == victim->getFaction())
-				{
-					(*i)->moraleChange(-(22 - ((*i)->getUnit()->getBravery() / 10)*2));
-				}
-				// the winning squad all get a morale increase
-				if ((*i)->getFaction() != victim->getFaction())
-				{
-					(*i)->moraleChange(+10);
-				}
-			}
-
-			if (murderweapon)
-			{
-				statePushNext(new UnitDieBState(this, (*j), murderweapon->getRules()->getDamageType(), noSound));
-			}
-			else
-			{
-				if (noSound)
-					statePushNext(new UnitDieBState(this, (*j), DT_HE, noSound)); // simulate instant death
-				else
-					statePushNext(new UnitDieBState(this, (*j), DT_AP, noSound)); // do a die animation
-			}
-		}
-		else if ((*j)->getStunlevel() >= (*j)->getHealth() && (*j)->getStatus() != STATUS_DEAD && (*j)->getStatus() != STATUS_UNCONSCIOUS && (*j)->getStatus() != STATUS_FALLING)
-		{
-				statePushNext(new UnitDieBState(this, (*j), DT_STUN, noSound));
-		}
-	}
-
-	return false;
-}
-
 /**
  * Abort game.
  * @param action Pointer to an action.
  */
 void BattlescapeState::btnAbortClick(Action *action)
 {
-	_game->pushState(new AbortMissionState(_game, _battleGame, this));
+	_game->pushState(new AbortMissionState(_game, _save, this));
 }
 
 /**
@@ -957,7 +589,7 @@ void BattlescapeState::btnStatsClick(Action *action)
 {
 	if (playableUnitSelected())
 	{
-		popup(new UnitInfoState(_game, _battleGame->getSelectedUnit()));
+		popup(new UnitInfoState(_game, _save->getSelectedUnit()));
 	}
 }
 
@@ -967,10 +599,10 @@ void BattlescapeState::btnStatsClick(Action *action)
  */
 void BattlescapeState::btnLeftHandItemClick(Action *action)
 {
-	if (_action.type != BA_NONE) return;
+	if (_battleGame->getCurrentAction()->type != BA_NONE) return;
 	if (playableUnitSelected())
 	{
-		BattleItem *leftHandItem = _battleGame->getSelectedUnit()->getItem("STR_LEFT_HAND");
+		BattleItem *leftHandItem = _save->getSelectedUnit()->getItem("STR_LEFT_HAND");
 		handleItemClick(leftHandItem);
 	}
 }
@@ -981,10 +613,10 @@ void BattlescapeState::btnLeftHandItemClick(Action *action)
  */
 void BattlescapeState::btnRightHandItemClick(Action *action)
 {
-	if (_action.type != BA_NONE) return;
+	if (_battleGame->getCurrentAction()->type != BA_NONE) return;
 	if (playableUnitSelected())
 	{
-		BattleItem *rightHandItem = _battleGame->getSelectedUnit()->getItem("STR_RIGHT_HAND");
+		BattleItem *rightHandItem = _save->getSelectedUnit()->getItem("STR_RIGHT_HAND");
 		handleItemClick(rightHandItem);
 	}
 }
@@ -996,10 +628,6 @@ void BattlescapeState::btnRightHandItemClick(Action *action)
 void BattlescapeState::btnVisibleUnitClick(Action *action)
 {
 	int btnID = -1;
-
-	_states.clear();
-	setupCursor();
-	_game->getCursor()->setVisible(true);
 
 	// got to find out which button was pressed
 	for (int i = 0; i < 10 && btnID == -1; ++i)
@@ -1019,12 +647,22 @@ void BattlescapeState::btnVisibleUnitClick(Action *action)
 }
 
 /**
+ * Launch the blaster bomb.
+ * @param action Pointer to an action.
+ */
+void BattlescapeState::btnLaunchClick(Action *action)
+{
+	_battleGame->launchAction();
+	action->getDetails()->type = SDL_NOEVENT; // consume the event
+}
+
+/**
  * Reserve time units.
  * @param action Pointer to an action.
  */
 void BattlescapeState::btnReserveNoneClick(Action *action)
 {
-	_tuReserved = BA_NONE;
+	_battleGame->setTUReserved(BA_NONE);
 }
 
 /**
@@ -1033,7 +671,7 @@ void BattlescapeState::btnReserveNoneClick(Action *action)
  */
 void BattlescapeState::btnReserveSnapClick(Action *action)
 {
-	_tuReserved = BA_SNAPSHOT;
+	_battleGame->setTUReserved(BA_SNAPSHOT);
 }
 
 /**
@@ -1042,7 +680,7 @@ void BattlescapeState::btnReserveSnapClick(Action *action)
  */
 void BattlescapeState::btnReserveAimedClick(Action *action)
 {
-	_tuReserved = BA_AIMEDSHOT;
+	_battleGame->setTUReserved(BA_AIMEDSHOT);
 }
 
 /**
@@ -1051,61 +689,17 @@ void BattlescapeState::btnReserveAimedClick(Action *action)
  */
 void BattlescapeState::btnReserveAutoClick(Action *action)
 {
-	_tuReserved = BA_AUTOSHOT;
+	_battleGame->setTUReserved(BA_AUTOSHOT);
 }
 
 /**
- * Handles non target actions, like priming a grenade.
- */
-void BattlescapeState::handleNonTargetAction()
-{
-	if (!_action.targeting)
-	{
-		if (_action.type == BA_PRIME && _action.value > -1)
-		{
-			if (_action.actor->spendTimeUnits(_action.TU, dontSpendTUs()))
-			{
-				_action.weapon->setExplodeTurn(_game->getSavedGame()->getBattleGame()->getTurn() + _action.value);
-			}
-			else
-			{
-				_warning->showMessage(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS"));
-			}
-		}
-		_action.type = BA_NONE;
-		updateSoldierInfo();
-	}
-}
-
-/**
- * Set the cursor according to the selected action.
- */
-void BattlescapeState::setupCursor()
-{
-	if (_action.targeting)
-	{
-		if (_action.type == BA_THROW)
-		{
-			_map->setCursorType(CT_THROW);
-		}
-		else
-		{
-			_map->setCursorType(CT_AIM);
-		}
-	}
-	else
-	{
-		_map->setCursorType(CT_NORMAL, _action.actor->getUnit()->getArmor()->getSize());
-	}
-}
-
-/**
- * Whether a playable unit is selected
+ * Whether a playable unit is selected. Normally only player side units can be selected, but in debug mode one can play with aliens too :)
+ * Is used to see if stats can be displayed and action buttons will work.
  * @return whether a playable unit is selected.
  */
 bool BattlescapeState::playableUnitSelected()
 {
-	return _battleGame->getSelectedUnit() != 0 && (_battleGame->getSide() == FACTION_PLAYER || _battleGame->getDebugMode());
+	return _save->getSelectedUnit() != 0 && (_save->getSide() == FACTION_PLAYER || _save->getDebugMode());
 }
 
 /**
@@ -1113,7 +707,7 @@ bool BattlescapeState::playableUnitSelected()
  */
 void BattlescapeState::updateSoldierInfo()
 {
-	BattleUnit *battleUnit = _battleGame->getSelectedUnit();
+	BattleUnit *battleUnit = _save->getSelectedUnit();
 
 	for (int i = 0; i < 10; ++i)
 	{
@@ -1122,46 +716,49 @@ void BattlescapeState::updateSoldierInfo()
 		_visibleUnit[i] = 0;
 	}
 
-	_rank->setVisible(playableUnitSelected());
-	_numTimeUnits->setVisible(playableUnitSelected());
-	_barTimeUnits->setVisible(playableUnitSelected());
-	_barTimeUnits->setVisible(playableUnitSelected());
-	_numEnergy->setVisible(playableUnitSelected());
-	_barEnergy->setVisible(playableUnitSelected());
-	_barEnergy->setVisible(playableUnitSelected());
-	_numHealth->setVisible(playableUnitSelected());
-	_barHealth->setVisible(playableUnitSelected());
-	_barHealth->setVisible(playableUnitSelected());
-	_numMorale->setVisible(playableUnitSelected());
-	_barMorale->setVisible(playableUnitSelected());
-	_barMorale->setVisible(playableUnitSelected());
-	_btnLeftHandItem->setVisible(playableUnitSelected());
-	_btnRightHandItem->setVisible(playableUnitSelected());
-	_numAmmoLeft->setVisible(playableUnitSelected());
-	_numAmmoRight->setVisible(playableUnitSelected());
-	if (!playableUnitSelected())
+	bool playableUnit = playableUnitSelected();
+	_rank->setVisible(playableUnit);
+	_numTimeUnits->setVisible(playableUnit);
+	_barTimeUnits->setVisible(playableUnit);
+	_barTimeUnits->setVisible(playableUnit);
+	_numEnergy->setVisible(playableUnit);
+	_barEnergy->setVisible(playableUnit);
+	_barEnergy->setVisible(playableUnit);
+	_numHealth->setVisible(playableUnit);
+	_barHealth->setVisible(playableUnit);
+	_barHealth->setVisible(playableUnit);
+	_numMorale->setVisible(playableUnit);
+	_barMorale->setVisible(playableUnit);
+	_barMorale->setVisible(playableUnit);
+	_btnLeftHandItem->setVisible(playableUnit);
+	_btnRightHandItem->setVisible(playableUnit);
+	_numAmmoLeft->setVisible(playableUnit);
+	_numAmmoRight->setVisible(playableUnit);
+	if (!playableUnit)
 	{
 		_txtName->setText(L"");
 		return;
 	}
 
-	_action.actor = battleUnit;
-
-	_txtName->setText(battleUnit->getUnit()->getName(_game->getLanguage()));
-	Soldier *soldier = dynamic_cast<Soldier*>(battleUnit->getUnit());
+	_txtName->setText(battleUnit->getName(_game->getLanguage()));
+	Soldier *soldier = _game->getSavedGame()->getSoldier(battleUnit->getId());
 	if (soldier != 0)
 	{
 		SurfaceSet *texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
 		texture->getFrame(soldier->getRankSprite())->blit(_rank);
 	}
+	else
+	{
+		_rank->clear();
+	}
 	_numTimeUnits->setValue(battleUnit->getTimeUnits());
-	_barTimeUnits->setMax(battleUnit->getUnit()->getTimeUnits());
+	_barTimeUnits->setMax(battleUnit->getStats()->tu);
 	_barTimeUnits->setValue(battleUnit->getTimeUnits());
 	_numEnergy->setValue(battleUnit->getEnergy());
-	_barEnergy->setMax(battleUnit->getUnit()->getStamina());
+	_barEnergy->setMax(battleUnit->getStats()->stamina);
 	_barEnergy->setValue(battleUnit->getEnergy());
 	_numHealth->setValue(battleUnit->getHealth());
-	_barHealth->setMax(battleUnit->getUnit()->getHealth());
+	_barHealth->setMax(battleUnit->getStats()->health);
 	_barHealth->setValue(battleUnit->getHealth());
 	_barHealth->setValue2(battleUnit->getStunlevel());
 	_numMorale->setValue(battleUnit->getMorale());
@@ -1174,7 +771,7 @@ void BattlescapeState::updateSoldierInfo()
 	if (leftHandItem)
 	{
 		leftHandItem->getRules()->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _btnLeftHandItem);
-		if (leftHandItem->getRules()->getBattleType() == BT_FIREARM)
+		if (leftHandItem->getRules()->getBattleType() == BT_FIREARM && leftHandItem->needsAmmo())
 		{
 			_numAmmoLeft->setVisible(true);
 			if (leftHandItem->getAmmoItem())
@@ -1189,7 +786,7 @@ void BattlescapeState::updateSoldierInfo()
 	if (rightHandItem)
 	{
 		rightHandItem->getRules()->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _btnRightHandItem);
-		if (rightHandItem->getRules()->getBattleType() == BT_FIREARM)
+		if (rightHandItem->getRules()->getBattleType() == BT_FIREARM && rightHandItem->needsAmmo())
 		{
 			_numAmmoRight->setVisible(true);
 			if (rightHandItem->getAmmoItem())
@@ -1199,7 +796,7 @@ void BattlescapeState::updateSoldierInfo()
 		}
 	}
 
-	_battleGame->getTileEngine()->calculateFOV(_battleGame->getSelectedUnit());
+	_save->getTileEngine()->calculateFOV(_save->getSelectedUnit());
 	int j = 0;
 	for (std::vector<BattleUnit*>::iterator i = battleUnit->getVisibleUnits()->begin(); i != battleUnit->getVisibleUnits()->end(); ++i)
 	{
@@ -1251,24 +848,10 @@ void BattlescapeState::blinkVisibleUnitButtons()
 void BattlescapeState::handleItemClick(BattleItem *item)
 {
 	// make sure there is an item, and the battlescape is in an idle state
-	if (item && _states.empty())
+	if (item && !_battleGame->isBusy())
 	{
-		BattleUnit *bu = _battleGame->getSelectedUnit();
-		_action.actor = bu;
-		_action.weapon = item;
-		popup(new ActionMenuState(_game, &_action, _icons->getX(), _icons->getY()+20));
-	}
-}
-
-/**
- * Give time slice to the front state.
- */
-void BattlescapeState::handleState()
-{
-	if (!_states.empty())
-	{
-		_states.front()->think();
-		_map->draw(); // redraw map
+		_battleGame->getCurrentAction()->weapon = item;
+		popup(new ActionMenuState(_game, _battleGame->getCurrentAction(), _icons->getX(), _icons->getY()+16));
 	}
 }
 
@@ -1277,9 +860,26 @@ void BattlescapeState::handleState()
  */
 void BattlescapeState::animate()
 {
-	_map->animate(_states.empty());
+	_map->animate(!_battleGame->isBusy());
 
 	blinkVisibleUnitButtons();
+}
+
+/**
+ * handles the battle game state
+ */
+void BattlescapeState::handleState()
+{
+	_battleGame->handleState();
+}
+
+/**
+ * Sets the timer interval for think() calls of the state.
+ * @param interval An interval in ms.
+ */
+void BattlescapeState::setStateInterval(Uint32 interval)
+{
+	_gameTimer->setInterval(interval);
 }
 
 /**
@@ -1301,154 +901,20 @@ Map *BattlescapeState::getMap() const
 }
 
 /**
- * Push a state at the front of the queue and start it.
- * @param bs Battlestate.
- */
-void BattlescapeState::statePushFront(BattleState *bs)
-{
-	_states.push_front(bs);
-	bs->init();
-}
-
-/**
- * Push a state as the next state after the current one.
- * @param bs Battlestate.
- */
-void BattlescapeState::statePushNext(BattleState *bs)
-{
-	if (_states.empty())
-	{
-		_states.push_front(bs);
-		bs->init();
-	}
-	else
-	{
-		_states.insert(++_states.begin(), bs);
-	}
-
-}
-
-/**
- * Push a state at the back.
- * @param bs Battlestate.
- */
-void BattlescapeState::statePushBack(BattleState *bs)
-{
-	if (_states.empty())
-	{
-		_states.push_front(bs);
-		// end turn request?
-		if (_states.front() == 0)
-		{
-			_states.pop_front();
-			endTurn();
-			return;
-		}
-		else
-		{
-			bs->init();
-		}
-	}
-	else
-	{
-		_states.push_back(bs);
-	}
-}
-
-/**
- * Pop the current state. Handle errors and mouse cursor appearing again.
- * States pop themselves when they are finished.
- */
-void BattlescapeState::popState()
-{
-	bool actionFailed = false;
-
-	if (_states.empty()) return;
-
-	if (_states.front()->getResult().length() > 0 && _battleGame->getSide() == FACTION_PLAYER && !dontSpendTUs())
-	{
-		_warning->showMessage(_game->getLanguage()->getString(_states.front()->getResult()));
-		actionFailed = true;
-	}
-	_states.pop_front();
-
-	if (_states.empty())
-	{
-		if (_action.targeting && _battleGame->getSelectedUnit() && !actionFailed)
-		{
-			_action.actor->spendTimeUnits(_action.TU, dontSpendTUs());
-		}
-		// after throwing the cursor returns, otherwise it stays in targeting mode
-		if (_action.type == BA_THROW && !actionFailed)
-		{
-			_action.targeting = false;
-			_action.type = BA_NONE;
-		}
-		_game->getCursor()->setVisible(true);
-		setupCursor();
-		// it's the alien side, select next unit
-		if (_battleGame->getSide() != FACTION_PLAYER && !_debugPlay)
-		{
-			if (_battleGame->selectNextPlayerUnit(true) == 0)
-			{
-				if (!_battleGame->getDebugMode())
-				{
-					statePushBack(0); // end AI turn
-				}
-				else
-				{
-					_battleGame->selectNextPlayerUnit(false);
-					_debugPlay = true;
-				}
-			}
-			if (_battleGame->getSelectedUnit())
-			{
-				_map->getCamera()->centerOnPosition(_battleGame->getSelectedUnit()->getPosition());
-			}
-		}
-	}
-	else
-	{
-		// end turn request?
-		if (_states.front() == 0)
-		{
-			_states.pop_front();
-			endTurn();
-			return;
-		}
-		// init the next state in queue
-		_states.front()->init();
-	}
-	if (_battleGame->getSelectedUnit() == 0 || _battleGame->getSelectedUnit()->isOut())
-	{
-		_action.targeting = false;
-		_action.type = BA_NONE;
-		_map->setCursorType(CT_NORMAL, _action.actor->getUnit()->getArmor()->getSize());
-		_game->getCursor()->setVisible(true);
-		_battleGame->setSelectedUnit(0);
-	}
-	updateSoldierInfo();
-}
-
-/**
- * Sets the timer interval for think() calls of the state.
- * @param interval An interval in ms.
- */
-void BattlescapeState::setStateInterval(Uint32 interval)
-{
-	_stateTimer->setInterval(interval);
-}
-
-/**
  * Show a debug message in the topleft corner.
  * @param message Debug message.
  */
 void BattlescapeState::debug(const std::wstring message)
 {
-	if (_battleGame->getDebugMode())
+	if (_save->getDebugMode())
 	{
 		_txtDebug->setText(message);
 	}
+}
+
+void BattlescapeState::warning(std::string message)
+{
+	_warning->showMessage(_game->getLanguage()->getString(message));
 }
 
 /**
@@ -1467,10 +933,15 @@ void BattlescapeState::handle(Action *action)
 			// "d" - enable debug mode
 			if (action->getDetails()->key.keysym.sym == SDLK_d)
 			{
-				_battleGame->setDebugMode();
+				_save->setDebugMode();
 				debug(L"Debug Mode");
 			}
 #endif
+			// "l" - toggle personal lighting
+			if (action->getDetails()->key.keysym.sym == SDLK_l)
+			{
+				_save->getTileEngine()->togglePersonalLighting();
+			}
 		}
 	}
 
@@ -1487,35 +958,6 @@ void BattlescapeState::popup(State *state)
 }
 
 /**
- * Check against reserved time units.
- * @param bu Pointer to the unit.
- * @param tu Number of time units to check.
- * @return bool Whether or not we got enough time units.
- */
-bool BattlescapeState::checkReservedTU(BattleUnit *bu, int tu)
-{
-	if (dontSpendTUs() || _battleGame->getSide() != FACTION_PLAYER) return true; // aliens don't reserve TUs
-
-	if (_tuReserved != BA_NONE &&
-		tu + bu->getActionTUs(_tuReserved, bu->getMainHandWeapon()) > bu->getTimeUnits())
-	{
-		if (_battleGame->getSide() == FACTION_PLAYER)
-		{
-			switch (_tuReserved)
-			{
-			case BA_SNAPSHOT: _warning->showMessage(_game->getLanguage()->getString("STR_TIME_UNITS_RESERVED_FOR_SNAP_SHOT")); break;
-			case BA_AUTOSHOT: _warning->showMessage(_game->getLanguage()->getString("STR_TIME_UNITS_RESERVED_FOR_AUTO_SHOT")); break;
-			case BA_AIMEDSHOT: _warning->showMessage(_game->getLanguage()->getString("STR_TIME_UNITS_RESERVED_FOR_AIMED_SHOT")); break;
-			default: ;
-			}
-		}
-		return false;
-	}
-
-	return true;
-}
-
-/**
  * Finishes up the current battle, shuts down the battlescape
  * and presents the debriefing the screen for the mission.
  * @param abort Was the mission aborted?
@@ -1523,143 +965,20 @@ bool BattlescapeState::checkReservedTU(BattleUnit *bu, int tu)
 void BattlescapeState::finishBattle(bool abort)
 {
 	_game->popState();
-	_battleGame->setAborted(abort);
+	_save->setAborted(abort);
 	_game->pushState(new DebriefingState(_game));
 	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
 	_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
 }
 
 /**
- * Drop item to the floor & affect with gravity.
- * @param position Position to spawn the item.
- * @param item Pointer to the item.
- * @param newItem Bool whether this is a new item.
+ * Show launch button.
+ * @param show Show launch button?
  */
-void BattlescapeState::dropItem(const Position &position, BattleItem *item, bool newItem)
+void BattlescapeState::showLaunchButton(bool show)
 {
-	Position p = position;
-
-	// don't spawn anything outside of bounds
-	if (_battleGame->getTile(p) == 0)
-		return;
-
-	while (_battleGame->getTile(p)->getMapData(MapData::O_FLOOR) == 0 && p.z > 0)
-	{
-		p.z--;
-	}
-
-	_battleGame->getTile(p)->addItem(item);
-
-	if(newItem)
-	{
-		_battleGame->getItems()->push_back(item);
-	}
-
-	item->setSlot(_game->getRuleset()->getInventory("STR_GROUND"));
-	item->setOwner(0);
-
-	if (item->getRules()->getBattleType() == BT_FLARE)
-	{
-		_battleGame->getTileEngine()->calculateTerrainLighting();
-	}
-
+	_btnLaunch->setVisible(show);
 }
 
-/**
- * Pick the first soldier from the list in status panic.
- * @return True when all panicking is over.
- */
-bool BattlescapeState::handlePanickingPlayer()
-{
-	for (std::vector<BattleUnit*>::iterator j = _battleGame->getUnits()->begin(); j != _battleGame->getUnits()->end(); ++j)
-	{
-		if (handlePanickingUnit(*j))
-			return false;
-	}
-	return true;
-}
-
-/**
- * Cmmon function for panicking units.
- * @return False when unit not in panicking mode.
- */
-bool BattlescapeState::handlePanickingUnit(BattleUnit *unit)
-{
-	UnitStatus status = unit->getStatus();
-	if (status != STATUS_PANICKING && status != STATUS_BERSERK) return false;
-	unit->setVisible(true);
-	_map->getCamera()->centerOnPosition(unit->getPosition());
-
-	std::wstringstream ss;
-	ss << unit->getUnit()->getName(_game->getLanguage()) << L'\n' << _game->getLanguage()->getString(status==STATUS_PANICKING?"STR_HAS_PANICKED":"STR_HAS_GONE_BERSERK");
-	_game->pushState(new InfoboxState(_game, ss.str()));
-
-	unit->abortTurn(); //makes the unit go to status STANDING :p
-
-	int flee = RNG::generate(0,100);
-	switch (status)
-	{
-	case STATUS_PANICKING: // 1/2 chance to freeze and 1/2 chance try to flee
-		if (flee <= 50)
-		{
-			BattleItem *item = unit->getItem("STR_RIGHT_HAND");
-			if (item)
-			{
-				dropItem(unit->getPosition(), item);
-				item->moveToOwner(0);
-			}
-			item = unit->getItem("STR_LEFT_HAND");
-			if (item)
-			{
-				dropItem(unit->getPosition(), item);
-				item->moveToOwner(0);
-			}
-			unit->setCache(0);
-			_action.actor = unit;
-			_action.target = Position(unit->getPosition().x + RNG::generate(-5,5), unit->getPosition().y + RNG::generate(-5,5), unit->getPosition().z);
-			_battleGame->getPathfinding()->calculate(_action.actor, _action.target);
-			statePushBack(new UnitWalkBState(this, _action));
-		}
-		break;
-	case STATUS_BERSERK: // berserk - do some weird turning around and then aggro towards an enemy unit or shoot towards random place
-		for (int i= 0; i < 4; i++)
-		{
-			_action.actor = unit;
-			_action.target = Position(unit->getPosition().x + RNG::generate(-5,5), unit->getPosition().y + RNG::generate(-5,5), unit->getPosition().z);
-			statePushBack(new UnitTurnBState(this, _action));
-		}
-		for (std::vector<BattleUnit*>::iterator j = unit->getVisibleUnits()->begin(); j != unit->getVisibleUnits()->end(); ++j)
-		{
-			_action.target = (*j)->getPosition();
-			statePushBack(new UnitTurnBState(this, _action));
-		}
-		_action.type = BA_SNAPSHOT;
-		_action.weapon = unit->getMainHandWeapon();
-		for (int i= 0; i < 10; i++)
-		{
-			statePushBack(new ProjectileFlyBState(this, _action));
-		}
-		_action.type = BA_NONE;
-		break;
-	}
-	unit->setTimeUnits(0);
-	unit->moraleChange(+15);
-
-	return true;
-}
-
-/**
- * TUs are not spent when handling panicking mode or in debug mode.
- * @return Whether TUs are spent or not.
- */
-bool BattlescapeState::dontSpendTUs()
-{
-	if (_battleGame->getDebugMode())
-		return true;
-	if (!_playerPanicHandled)
-		return true;
-
-	return false;
-}
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -26,7 +26,7 @@ namespace OpenXcom
 /**
  * Initializes a moving target with blank coordinates.
  */
-MovingTarget::MovingTarget() : Target(), _dest(0), _speedLon(0.0), _speedLat(0.0), _speed(0)
+MovingTarget::MovingTarget() : Target(), _dest(0), _speedLon(0.0), _speedLat(0.0), _speedRadian(0.0), _speed(0)
 {
 }
 
@@ -43,6 +43,7 @@ void MovingTarget::load(const YAML::Node &node)
 	Target::load(node);
 	node["speedLon"] >> _speedLon;
 	node["speedLat"] >> _speedLat;
+	node["speedRadian"] >> _speedRadian;
 	node["speed"] >> _speed;
 }
 
@@ -60,6 +61,7 @@ void MovingTarget::save(YAML::Emitter &out) const
 	}
 	out << YAML::Key << "speedLon" << YAML::Value << _speedLon;
 	out << YAML::Key << "speedLat" << YAML::Value << _speedLat;
+	out << YAML::Key << "speedRadian" << YAML::Value << _speedRadian;
 	out << YAML::Key << "speed" << YAML::Value << _speed;
 }
 
@@ -109,82 +111,41 @@ int MovingTarget::getSpeed() const
 }
 
 /**
- * Changes the speed of the moving target.
+ * Changes the speed of the moving target
+ * and converts it from standard knots (nautical miles per hour)
+ * into radians per 5 in-game seconds.
  * @param speed Speed in knots.
  */
 void MovingTarget::setSpeed(int speed)
 {
 	_speed = speed;
+	// Each nautical mile is 1/60th of a degree.
+	// Each hour contains 720 5-seconds.
+	_speedRadian = _speed * (1 / 60.0) * (M_PI / 180) / 720.0;
 	calculateSpeed();
 }
 
 /**
- * Converts the speed from the standard knots (nautical miles per hour),
- * and converts it into radians per 5 in-game seconds.
- * @return Speed in radians.
- */
-double MovingTarget::getRadianSpeed() const
-{
-	// Each nautical mile is 1/60th of a degree.
-	// Each hour contains 300 5-seconds.
-	return _speed * (1 / 60.0) * (M_PI / 180) / 300.0;
-}
-
-/**
- * Returns the distance between this moving target and any other
- * target on the globe, accounting for the wrap-around.
- * @param target Pointer to other target.
- * @param dLon Returned longitude difference.
- * @param dLat Returned latitude difference.
- * @returns Distance in radian.
- */
-double MovingTarget::getDistance(Target *target, double *dLon, double *dLat) const
-{
-	double minLength = 2*M_PI, lat = target->getLatitude();
-	for (double lon = target->getLongitude() - 2*M_PI; lon <= target->getLongitude() + 2*M_PI + 0.01; lon += 2*M_PI)
-	{
-		double dx = lon - _lon;
-		double dy = lat - _lat;
-		double length = sqrt(dx * dx + dy * dy);
-		if (length < minLength)
-		{
-			minLength = length;
-			*dLon = dx;
-			*dLat = dy;
-		}
-	}
-	return minLength;
-}
-
-/**
- * Calculates the speed vector for the moving target
- * based on the current raw speed and destination.
+ * Calculates the speed vector based on the
+ * great circle distance to destination and
+ * current raw speed.
  */
 void MovingTarget::calculateSpeed()
 {
 	if (_dest != 0)
 	{
-		double dLon, dLat;
-		double length = getDistance(_dest, &dLon, &dLat);
-		_speedLon = dLon / length * getRadianSpeed();
-		_speedLat = dLat / length * getRadianSpeed();
+		double dLon, dLat, length;
+		dLon = sin(_dest->getLongitude() - _lon) * cos(_dest->getLatitude());
+		dLat = cos(_lat) * sin(_dest->getLatitude()) - sin(_lat) * cos(_dest->getLatitude()) * cos(_dest->getLongitude() - _lon);
+		length = sqrt(dLon * dLon + dLat * dLat);
+		_speedLon = dLon / length * _speedRadian / cos(_lat + _speedLat);
+		_speedLat = dLat / length * _speedRadian;
 	}
 	else
 	{
 		_speedLon = 0;
 		_speedLat = 0;
 	}
-}
-
-/**
- * Checks if the moving target has finished its route by checking
- * if it has exceeded the destination position based on the speed vector.
- * @return True if it has, False otherwise.
- */
-bool MovingTarget::finishedRoute() const
-{
-	return (((_speedLon > 0 && _lon >= _dest->getLongitude()) || (_speedLon < 0 && _lon <= _dest->getLongitude()) || _speedLon == 0) &&
-			((_speedLat > 0 && _lat >= _dest->getLatitude()) || (_speedLat < 0 && _lat <= _dest->getLatitude()) || _speedLat == 0));
 }
 
 /**
@@ -198,6 +159,27 @@ bool MovingTarget::reachedDestination() const
 		return false;
 	}
 	return (_lon == _dest->getLongitude() && _lat == _dest->getLatitude());
+}
+
+/**
+ * Executes a movement cycle for the moving target.
+ */
+void MovingTarget::move()
+{
+	calculateSpeed();
+	if (_dest != 0)
+	{
+		if (getDistance(_dest) > _speedRadian)
+		{
+			setLongitude(_lon + _speedLon);
+			setLatitude(_lat + _speedLat);
+		}
+		else
+		{
+			setLongitude(_dest->getLongitude());
+			setLatitude(_dest->getLatitude());
+		}
+	}
 }
 
 }

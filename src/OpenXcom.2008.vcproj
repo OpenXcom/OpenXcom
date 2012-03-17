@@ -12,14 +12,17 @@
 		<Platform
 			Name="Win32"
 		/>
+		<Platform
+			Name="x64"
+		/>
 	</Platforms>
 	<ToolFiles>
 	</ToolFiles>
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="..\bin\$(ConfigurationName)"
-			IntermediateDirectory="..\obj\$(ConfigurationName)"
+			OutputDirectory="$(ProjectDir)..\bin\$(ConfigurationName)\$(PlatformName)"
+			IntermediateDirectory="$(ProjectDir)..\obj\$(ConfigurationName)\$(PlatformName)"
 			ConfigurationType="1"
 			CharacterSet="1"
 			>
@@ -41,7 +44,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;..\deps\include&quot;;&quot;..\deps\include\SDL&quot;;&quot;..\deps\include\yaml-cpp&quot;"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\deps\include&quot;;&quot;$(ProjectDir)..\deps\include\SDL&quot;;&quot;$(ProjectDir)..\deps\include\yaml-cpp&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -64,7 +67,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="SDLmain.lib SDL.lib SDL_gfx.lib SDL_mixer.lib yaml-cppd.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;..\deps\lib&quot;"
+				AdditionalLibraryDirectories="&quot;$(ProjectDir)..\deps\lib\$(PlatformName)&quot;"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
 				SubSystem="1"
@@ -93,13 +96,93 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy /y ..\deps\lib\*.dll ..\bin\"
+				CommandLine="copy /y &quot;$(ProjectDir)..\deps\lib\$(PlatformName)\*.dll&quot; &quot;$(ProjectDir)..\bin\$(PlatformName)\&quot;"
+			/>
+		</Configuration>
+		<Configuration
+			Name="Debug|x64"
+			OutputDirectory="$(ProjectDir)..\bin\$(ConfigurationName)\$(PlatformName)"
+			IntermediateDirectory="$(ProjectDir)..\obj\$(ConfigurationName)\$(PlatformName)"
+			ConfigurationType="1"
+			CharacterSet="1"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\deps\include&quot;;&quot;$(ProjectDir)..\deps\include\SDL&quot;;&quot;$(ProjectDir)..\deps\include\yaml-cpp&quot;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
+				MinimalRebuild="true"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="3"
+				UsePrecompiledHeader="0"
+				WarningLevel="3"
+				Detect64BitPortabilityProblems="false"
+				DebugInformationFormat="4"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies="SDLmain.lib SDL.lib SDL_gfx.lib SDL_mixer.lib yaml-cppd.lib"
+				LinkIncremental="2"
+				AdditionalLibraryDirectories="&quot;$(ProjectDir)..\deps\lib\$(PlatformName)&quot;"
+				GenerateManifest="true"
+				GenerateDebugInformation="true"
+				SubSystem="1"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
+				TargetMachine="1"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+				EmbedManifest="true"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				CommandLine="copy /y &quot;$(ProjectDir)..\deps\lib\$(PlatformName)\*.dll&quot; &quot;$(ProjectDir)..\bin\$(PlatformName)\&quot;"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="..\bin\$(ConfigurationName)"
-			IntermediateDirectory="..\obj\$(ConfigurationName)"
+			OutputDirectory="$(ProjectDir)..\bin\$(ConfigurationName)\$(PlatformName)"
+			IntermediateDirectory="$(ProjectDir)..\obj\$(ConfigurationName)\$(PlatformName)"
 			ConfigurationType="1"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
@@ -121,7 +204,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;..\deps\include&quot;;&quot;..\deps\include\SDL&quot;;&quot;..\deps\include\yaml-cpp&quot;"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\deps\include&quot;;&quot;$(ProjectDir)..\deps\include\SDL&quot;;&quot;$(ProjectDir)..\deps\include\yaml-cpp&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -142,7 +225,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="SDLmain.lib SDL.lib SDL_gfx.lib SDL_mixer.lib yaml-cpp.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;..\deps\lib&quot;"
+				AdditionalLibraryDirectories="&quot;$(ProjectDir)..\deps\lib\$(PlatformName)&quot;"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
 				SubSystem="1"
@@ -173,7 +256,87 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy /y ..\deps\lib\*.dll ..\bin\"
+				CommandLine="copy /y &quot;$(ProjectDir)..\deps\lib\$(PlatformName)\*.dll&quot; &quot;$(ProjectDir)..\bin\$(PlatformName)\&quot;"
+			/>
+		</Configuration>
+		<Configuration
+			Name="Release|x64"
+			OutputDirectory="$(ProjectDir)..\bin\$(ConfigurationName)\$(PlatformName)"
+			IntermediateDirectory="$(ProjectDir)..\obj\$(ConfigurationName)\$(PlatformName)"
+			ConfigurationType="1"
+			CharacterSet="1"
+			WholeProgramOptimization="1"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\deps\include&quot;;&quot;$(ProjectDir)..\deps\include\SDL&quot;;&quot;$(ProjectDir)..\deps\include\yaml-cpp&quot;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
+				RuntimeLibrary="2"
+				UsePrecompiledHeader="0"
+				WarningLevel="3"
+				Detect64BitPortabilityProblems="false"
+				DebugInformationFormat="3"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies="SDLmain.lib SDL.lib SDL_gfx.lib SDL_mixer.lib yaml-cpp.lib"
+				LinkIncremental="1"
+				AdditionalLibraryDirectories="&quot;$(ProjectDir)..\deps\lib\$(PlatformName)&quot;"
+				GenerateManifest="true"
+				GenerateDebugInformation="true"
+				SubSystem="1"
+				OptimizeReferences="2"
+				EnableCOMDATFolding="2"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
+				TargetMachine="1"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+				EmbedManifest="true"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				CommandLine="copy /y &quot;$(ProjectDir)..\deps\lib\$(PlatformName)\*.dll&quot; &quot;$(ProjectDir)..\bin\$(PlatformName)\&quot;"
 			/>
 		</Configuration>
 	</Configurations>
@@ -536,6 +699,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Basescape\ListPossibleProductionState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\ListPossibleProductionState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Basescape\ManufactureState.cpp"
 				>
 			</File>
@@ -584,11 +755,19 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Basescape\PurchaseState.cpp"
+				RelativePath=".\Basescape\ProductionStartState.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Basescape\PurchaseState.h"
+				RelativePath=".\Basescape\ProductionStartState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\ProductionState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\ProductionState.h"
 				>
 			</File>
 			<File
@@ -597,6 +776,14 @@
 			</File>
 			<File
 				RelativePath=".\Basescape\PurchaseErrorState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\PurchaseState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\PurchaseState.h"
 				>
 			</File>
 			<File
@@ -664,6 +851,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Basescape\TransferConfirmState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\TransferConfirmState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Basescape\TransferItemsState.cpp"
 				>
 			</File>
@@ -679,14 +874,6 @@
 				RelativePath=".\Basescape\TransfersState.h"
 				>
 			</File>
-			<File
-				RelativePath=".\Basescape\TransferConfirmState.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Basescape\TransferConfirmState.h"
-				>
-			</File>			
 		</Filter>
 		<Filter
 			Name="Battlescape"
@@ -698,7 +885,7 @@
 			<File
 				RelativePath=".\Battlescape\AbortMissionState.h"
 				>
-			</File>				
+			</File>
 			<File
 				RelativePath=".\Battlescape\ActionMenuItem.cpp"
 				>
@@ -706,7 +893,7 @@
 			<File
 				RelativePath=".\Battlescape\ActionMenuItem.h"
 				>
-			</File>				
+			</File>
 			<File
 				RelativePath=".\Battlescape\ActionMenuState.cpp"
 				>
@@ -714,7 +901,7 @@
 			<File
 				RelativePath=".\Battlescape\ActionMenuState.h"
 				>
-			</File>						
+			</File>
 			<File
 				RelativePath=".\Battlescape\AggroBAIState.cpp"
 				>
@@ -722,7 +909,7 @@
 			<File
 				RelativePath=".\Battlescape\AggroBAIState.h"
 				>
-			</File>						
+			</File>
 			<File
 				RelativePath=".\Battlescape\BattleAIState.cpp"
 				>
@@ -730,7 +917,15 @@
 			<File
 				RelativePath=".\Battlescape\BattleAIState.h"
 				>
-			</File>						
+			</File>
+			<File
+				RelativePath=".\Battlescape\BattlescapeGame.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\BattlescapeGame.h"
+				>
+			</File>
 			<File
 				RelativePath=".\Battlescape\BattlescapeGenerator.cpp"
 				>
@@ -770,7 +965,7 @@
 			<File
 				RelativePath=".\Battlescape\BattleState.h"
 				>
-			</File>			
+			</File>
 			<File
 				RelativePath=".\Battlescape\BriefingCrashState.cpp"
 				>
@@ -802,7 +997,7 @@
 			<File
 				RelativePath=".\Battlescape\DebriefingState.h"
 				>
-			</File>	
+			</File>
 			<File
 				RelativePath=".\Battlescape\Explosion.cpp"
 				>
@@ -817,6 +1012,14 @@
 			</File>
 			<File
 				RelativePath=".\Battlescape\ExplosionBState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\InfoboxOKState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\InfoboxOKState.h"
 				>
 			</File>
 			<File
@@ -849,6 +1052,38 @@
 			</File>
 			<File
 				RelativePath=".\Battlescape\Map.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\MedikitState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\MedikitState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\MedikitView.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\MedikitView.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\MiniMapState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\MiniMapState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\MiniMapView.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\MiniMapView.h"
 				>
 			</File>
 			<File
@@ -916,19 +1151,35 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Battlescape\PromotionsState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\PromotionsState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\ScannerState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\ScannerState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\ScannerView.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\ScannerView.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Battlescape\TileEngine.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\Battlescape\TileEngine.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Battlescape\UnitSprite.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Battlescape\UnitSprite.h"
 				>
 			</File>
 			<File
@@ -946,7 +1197,15 @@
 			<File
 				RelativePath=".\Battlescape\UnitInfoState.h"
 				>
-			</File>			
+			</File>
+			<File
+				RelativePath=".\Battlescape\UnitSprite.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\UnitSprite.h"
+				>
+			</File>
 			<File
 				RelativePath=".\Battlescape\UnitTurnBState.cpp"
 				>
@@ -1228,6 +1487,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Ufopaedia\ArticleStateArmor.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ufopaedia\ArticleStateArmor.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Ufopaedia\ArticleStateBaseFacility.cpp"
 				>
 			</File>
@@ -1258,7 +1525,7 @@
 			<File
 				RelativePath=".\Ufopaedia\ArticleStateItem.h"
 				>
-			</File>			
+			</File>
 			<File
 				RelativePath=".\Ufopaedia\ArticleStateText.cpp"
 				>
@@ -1282,7 +1549,7 @@
 			<File
 				RelativePath=".\Ufopaedia\ArticleStateUfo.h"
 				>
-			</File>			
+			</File>
 			<File
 				RelativePath=".\Ufopaedia\Ufopaedia.cpp"
 				>
@@ -1380,14 +1647,6 @@
 			Name="Savegame"
 			>
 			<File
-				RelativePath=".\Savegame\Alien.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Savegame\Alien.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Savegame\Base.cpp"
 				>
 			</File>
@@ -1452,6 +1711,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Savegame\GenUnit.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\GenUnit.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Savegame\ItemContainer.cpp"
 				>
 			</File>
@@ -1481,6 +1748,14 @@
 			</File>
 			<File
 				RelativePath=".\Savegame\NodeLink.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\Production.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\Production.h"
 				>
 			</File>
 			<File
@@ -1564,14 +1839,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Savegame\Unit.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Savegame\Unit.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Savegame\Waypoint.cpp"
 				>
 			</File>
@@ -1644,19 +1911,27 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Ruleset\RuleAlien.cpp"
+				RelativePath=".\Ruleset\AlienDeployment.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Ruleset\RuleAlien.h"
+				RelativePath=".\Ruleset\AlienDeployment.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Ruleset\RuleArmor.cpp"
+				RelativePath=".\Ruleset\AlienRace.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Ruleset\RuleArmor.h"
+				RelativePath=".\Ruleset\AlienRace.h"
+				>
+			</File>			
+			<File
+				RelativePath=".\Ruleset\Armor.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\Armor.h"
 				>
 			</File>
 			<File
@@ -1692,6 +1967,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Ruleset\RuleGenUnit.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\RuleGenUnit.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Ruleset\RuleInventory.cpp"
 				>
 			</File>
@@ -1705,6 +1988,14 @@
 			</File>
 			<File
 				RelativePath=".\Ruleset\RuleItem.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\RuleManufactureInfo.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\RuleManufactureInfo.h"
 				>
 			</File>
 			<File
@@ -1747,6 +2038,14 @@
 				RelativePath=".\Ruleset\RuleTerrain.h"
 				>
 			</File>
+			<File
+				RelativePath=".\Ruleset\Unit.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\Unit.h"
+				>
+			</File>			
 			<File
 				RelativePath=".\Ruleset\RuleUfo.cpp"
 				>

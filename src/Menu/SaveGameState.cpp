@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -18,7 +18,7 @@
  */
 #include "SaveGameState.h"
 #include <iostream>
-#include "yaml.h"
+#include <yaml-cpp/yaml.h>
 #include "../Savegame/SavedGame.h"
 #include "../Engine/Game.h"
 #include "../Engine/Action.h"
@@ -98,7 +98,7 @@ SaveGameState::SaveGameState(Game *game, bool geo) : State(game), _selected(""),
 	}
 	else
 	{
-			_window->setColor(Palette::blockOffset(0));
+		_window->setColor(Palette::blockOffset(0));
 		_window->setHighContrast(true);
 		_window->setBackground(_game->getResourcePack()->getSurface("TAC00.SCR"));
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -107,6 +107,17 @@ double Target::getLatitude() const
 void Target::setLatitude(double lat)
 {
 	_lat = lat;
+	// Keep between -PI and PI
+	while (_lat < -M_PI)
+	{
+		_lat = 2*M_PI - _lat;
+		setLongitude(_lon + M_PI);
+	}
+	while (_lat > M_PI)
+	{
+		_lat = -2*M_PI + _lat;
+		setLongitude(_lon - M_PI);
+	}
 }
 
 /**
@@ -117,6 +128,17 @@ void Target::setLatitude(double lat)
 std::vector<Target*> *Target::getFollowers()
 {
 	return &_followers;
+}
+
+/**
+ * Returns the great circle distance to another
+ * target on the globe.
+ * @param target Pointer to other target.
+ * @returns Distance in radian.
+ */
+double Target::getDistance(Target *target) const
+{
+	return acos(cos(_lat) * cos(target->getLatitude()) * cos(target->getLongitude() - _lon) + sin(_lat) * sin(target->getLatitude()));
 }
 
 }

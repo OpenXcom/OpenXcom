@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -33,7 +33,7 @@ namespace OpenXcom
 /**
  * Initializes all the elements in the EndResearch screen.
  * @param game Pointer to the core game.
- * @param base Pointer to the base to get info from.
+ * @param research Pointer to the completed research.
  */
 EndResearchState::EndResearchState(Game * game, const RuleResearchProject * research) : State (game), _research(research)
 {
@@ -88,7 +88,7 @@ void EndResearchState::btnOkClick(Action *action)
 }
 
 /**
- * open the Ufopeadia to the entry about the Research.
+ * open the Ufopaedia to the entry about the Research.
  * @param action Pointer to an action.
  */
 void EndResearchState::btnReportClick(Action *action)

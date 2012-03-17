@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -22,7 +22,7 @@
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
 #include "../Ruleset/MapData.h"
-#include "../Ruleset/RuleArmor.h"
+#include "../Ruleset/Armor.h"
 #include "../Savegame/BattleUnit.h"
 
 namespace OpenXcom
@@ -81,7 +81,7 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition)
 	Position currentPos, nextPos, startPosition = unit->getPosition();
 	int tuCost, totalTuCost = 0;
 
-	_movementType = unit->getUnit()->getArmor()->getMovementType();
+	_movementType = unit->getArmor()->getMovementType();
 	_unit = unit;
 
 	Tile *destinationTile = _save->getTile(endPosition);
@@ -106,8 +106,12 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition)
 
 	_path.clear();
 
-	if (startPosition.z == endPosition.z && bresenhamPath(startPosition, endPosition))
+	// look for a possible fast and accurate bresenham path and skip A*
+	if (startPosition.z == endPosition.z && bresenhamPath(startPosition,endPosition))
+	{
+		std::reverse(_path.begin(), _path.end()); //paths are stored in reverse order
 		return;
+	}
 
 	_path.clear();
 
@@ -177,8 +181,9 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 	*endPosition += startPosition;
 	bool fellDown = false;
 	bool triedStairs = false;
-	int size = _unit->getUnit()->getArmor()->getSize() - 1;
+	int size = _unit->getArmor()->getSize() - 1;
 	int cost = 0;
+	int numberOfPartsChangingLevel = 0;
 
 
 	for (int x = size; x >= 0; x--)
@@ -197,7 +202,6 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 			// check if the destination tile can be walked over
 			if (isBlocked(destinationTile, MapData::O_FLOOR) || isBlocked(destinationTile, MapData::O_OBJECT))
 				return 255;
-
 
 			if (direction < DIR_UP)
 			{
@@ -240,6 +244,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 				endPosition->z--;
 				destinationTile = _save->getTile(*endPosition);
 				fellDown = true;
+				numberOfPartsChangingLevel++;
 			}
 
 			// if we don't want to fall down and there is no floor, it ends here
@@ -270,6 +275,11 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 				cost = (int)((double)cost * 1.5);
 			}
 
+			if (startTile->getTerrainLevel() != destinationTile->getTerrainLevel())
+			{
+				numberOfPartsChangingLevel++;
+			}
+
 		}
 	}
 
@@ -280,6 +290,11 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 			Tile *destinationTile = _save->getTile(*endPosition);
 			int tmpDirection = 7;
 			if (isBlocked(startTile, destinationTile, tmpDirection))
+				return 255;
+
+			// also check if we change level, that there are two parts changing level,
+			// so a big sized unit can not go up a small sized stairs
+			if (numberOfPartsChangingLevel == 1)
 				return 255;
 	}
 
@@ -488,6 +503,7 @@ bool Pathfinding::isOnStairs(const Position &startPosition, const Position &endP
 /**
  * Check for the up/down button if the movement is valid. Either is a grav lift or the unit can fly and there are no obstructions.
  * @param bu Pointer to unit.
+ * @param startPosition Unit starting position.
  * @param direction Up or Down
  * @return bool Whether it's valid.
  */
@@ -505,7 +521,7 @@ bool Pathfinding::validateUpDown(BattleUnit *bu, Position startPosition, const i
 	}
 	else
 	{
-		if (bu->getUnit()->getArmor()->getMovementType() == MT_FLY)
+		if (bu->getArmor()->getMovementType() == MT_FLY)
 		{
 			if ((direction == DIR_UP && destinationTile && !destinationTile->getMapData(MapData::O_FLOOR)) // flying up only possible when there is no roof
 				|| (direction == DIR_DOWN && destinationTile && !startTile->getMapData(MapData::O_FLOOR)) // flying down only possible when there is no floor
@@ -535,8 +551,8 @@ bool Pathfinding::previewPath(bool bRemove)
  
 	Position pos = _unit->getPosition();
 	Position destination;
-	int tus = _unit->getTimeUnits();
-	int size = _unit->getUnit()->getArmor()->getSize() - 1;
+	int tus = _unit->getStats()->tu;
+	int size = _unit->getArmor()->getSize() - 1;
  
 	for (std::vector<int>::reverse_iterator i = _path.rbegin(); i != _path.rend(); ++i)
 	{
@@ -642,7 +658,8 @@ bool Pathfinding::bresenhamPath(const Position& origin, const Position& target)
 				if (xd[dir] == cx-lastPoint.x && yd[dir] == cy-lastPoint.y) break;
 			}
 			int tuCost = getTUCost(lastPoint, dir, &nextPoint, _unit);
-			if (tuCost < 255 && (tuCost == lastTUCost || (dir&1 && tuCost == lastTUCost*1.5) || (!(dir&1) && tuCost*1.5 == lastTUCost) || lastTUCost == -1))
+			if (tuCost < 255 && (tuCost == lastTUCost || (dir&1 && tuCost == lastTUCost*1.5) || (!(dir&1) && tuCost*1.5 == lastTUCost) || lastTUCost == -1)
+				&& !isBlocked(_save->getTile(lastPoint), _save->getTile(nextPoint), dir))
 			{
 				_path.push_back(dir);
 			}

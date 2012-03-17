@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -20,7 +20,7 @@
 #define OPENXCOM_PRIMEGRENADESTATE_H
 
 #include "../Engine/State.h"
-#include "BattlescapeState.h"
+#include "BattlescapeGame.h"
 
 namespace OpenXcom
 {
@@ -28,6 +28,7 @@ namespace OpenXcom
 class Game;
 class Text;
 class InteractiveSurface;
+class Window;
 
 /**
  * Window that allows the player

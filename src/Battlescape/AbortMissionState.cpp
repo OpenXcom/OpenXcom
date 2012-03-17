@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -40,6 +40,7 @@ namespace OpenXcom
  * Initializes all the elements in the Abort Mission window.
  * @param game Pointer to the core game.
  * @param battleGame Pointer to the saved game.
+ * @param state Pointer to the Battlescape state.
  */
 AbortMissionState::AbortMissionState(Game *game, SavedBattleGame *battleGame, BattlescapeState *state) : State(game), _battleGame(battleGame), _state(state), _inExitArea(0), _outExitArea(0)
 {
@@ -62,7 +63,7 @@ AbortMissionState::AbortMissionState(Game *game, SavedBattleGame *battleGame, Ba
 	// Calculate values
 	for (std::vector<BattleUnit*>::iterator i = _battleGame->getUnits()->begin(); i != _battleGame->getUnits()->end(); ++i)
 	{
-		if ((*i)->getFaction() == FACTION_PLAYER && (*i)->getStatus() != STATUS_DEAD)
+		if ((*i)->getFaction() == FACTION_PLAYER && !(*i)->isOut())
 		{
 			if ((*i)->isInExitArea())
 			{

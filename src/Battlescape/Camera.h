@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -59,7 +59,7 @@ public:
 	void setScrollTimer(Timer *timer);
 	/// Special handling for mouse clicks.
 	void mouseClick(Action *action, State *state);
-	/// Special handling for mous over
+	/// Special handling for mouse over
 	void mouseOver(Action *action, State *state);
 	/// Special handling for key presses.
 	void keyboardPress(Action *action, State *state);
@@ -75,9 +75,10 @@ public:
 	void convertMapToScreen(const Position &mapPos, Position *screenPos) const;
 	/// Converts voxel coordinates to screen coordinates.
 	void convertVoxelToScreen(const Position &voxelPos, Position *screenPos) const;
+	/// Converts screen coordinates to map coordinates.
 	void convertScreenToMap(int screenX, int screenY, int *mapX, int *mapY) const;
 	/// Center map on a unit.
-	void centerOnPosition(const Position &pos);
+	void centerOnPosition(const Position &pos, bool redraw = true);
 	/// Check if the camera was following a bullet.
 	bool didCameraFollow();
 	/// Get the map displayed level

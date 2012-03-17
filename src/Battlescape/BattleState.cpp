@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -24,11 +24,20 @@ namespace OpenXcom
 /**
  * Sets up a BattleState.
  * @param parent pointer to the parent state.
+ * @param action Struct containing info about the action.
  */
-BattleState::BattleState(BattlescapeState *parent) : _parent(parent), _result("")
+BattleState::BattleState(BattlescapeGame *parent, BattleAction action) : _parent(parent), _action(action)
 {
 
 }
+
+BattleState::BattleState(BattlescapeGame *parent) : _parent(parent)
+{
+	_action.result = "";
+	_action.targeting = false;
+	_action.TU = 0;
+}
+
 
 /**
  * Deletes the BattleState.
@@ -66,11 +75,11 @@ void BattleState::think()
 
 /*
  * Get the action result. Returns error messages or an empty string when everything went fine.
- * @return returnmessage Empty when everything is fine.
+ * @return Error or empty when everything is fine.
  */
-std::string BattleState::getResult() const
+BattleAction BattleState::getAction() const
 {
-	return _result;
+	return _action;
 }
 
 }

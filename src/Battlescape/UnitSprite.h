@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -44,6 +44,7 @@ private:
 	void drawRoutine1();
 	void drawRoutine2();
 	void drawRoutine3();
+	void drawRoutine4();
 public:
 	/// Creates a new UnitSprite at the specified position and size.
 	UnitSprite(int width, int height, int x, int y);

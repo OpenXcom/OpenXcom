@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -91,7 +91,7 @@ void MiniMapView::draw()
 					data = t->getMapData(i);
 
 					Surface * s = 0;
-					if(data)
+					if(data && data->getMiniMapIndex())
 					{
 						s = _set->getFrame (data->getMiniMapIndex()+35);
 					}

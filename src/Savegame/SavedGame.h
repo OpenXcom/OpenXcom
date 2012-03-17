@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -43,7 +43,7 @@ class Soldier;
 class RuleManufactureInfo;
 
 /**
- * Enumator containing all the possible game difficulties.
+ * Enumerator containing all the possible game difficulties.
  */
 enum GameDifficulty { DIFF_BEGINNER, DIFF_EXPERIENCED, DIFF_VETERAN, DIFF_GENIUS, DIFF_SUPERHUMAN };
 
@@ -125,8 +125,10 @@ public:
 	void getAvailableResearchProjects (std::vector<RuleResearchProject *> & projects, Ruleset * ruleset, Base * base) const;
 	/// Get the list of Productions which can be manufactured in a Base
 	void getAvailableProductions (std::vector<RuleManufactureInfo *> & productions, Ruleset * ruleset, Base * base) const;
-	///Get the list of newly available research projects once a research has been completed.
+	/// Get the list of newly available research projects once a research has been completed.
 	void getDependableResearch (std::vector<RuleResearchProject *> & dependables, const RuleResearchProject *research, Ruleset * ruleset, Base * base) const;
+	/// Gets if a research has been unlocked.
+	bool isResearched(const std::string &research) const;
 	/// Gets the current soldier ID.
 	int *const getSoldierId() ;
 	/// Gets the soldier matching this ID.

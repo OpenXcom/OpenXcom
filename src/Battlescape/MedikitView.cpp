@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -55,7 +55,7 @@ const std::string PARTS_STRING[6] =
  * @param partTxt a pointer to a Text. Will be updated with selected body part
  * @param woundTxt a pointer to a Text. Will be updated with the amount of fatal wound
  */
-MedikitView::MedikitView (int w, int h, int x, int y, Game * game, BattleUnit *unit, Text *partTxt, Text *woundTxt) : InteractiveSurface(w, h, x, y), _game(game), _selectedPart(-1), _unit(unit), _partTxt(partTxt), _woundTxt(woundTxt)
+MedikitView::MedikitView (int w, int h, int x, int y, Game * game, BattleUnit *unit, Text *partTxt, Text *woundTxt) : InteractiveSurface(w, h, x, y), _game(game), _selectedPart(0), _unit(unit), _partTxt(partTxt), _woundTxt(woundTxt)
 {
 	_redraw = true;
 }

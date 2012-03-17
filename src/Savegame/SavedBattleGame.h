@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -23,7 +23,7 @@
 #include <algorithm>
 #include <vector>
 #include <string>
-#include "yaml.h"
+#include <yaml-cpp/yaml.h>
 #include "BattleItem.h"
 #include "BattleUnit.h"
 
@@ -48,11 +48,6 @@ class RuleInventory;
 class Ruleset;
 
 /**
- * Enumator containing all the possible mission types.
- */
-enum MissionType { MISS_UFORECOVERY, MISS_UFOASSAULT, MISS_TERROR, MISS_ALIENBASE, MISS_BASEDEFENSE, MISS_CYDONIA };
-
-/**
  * The battlescape data that gets written to disk when the game is saved.
  * A saved game holds all the variable info in a game like mapdata
  * soldiers, items, etc.
@@ -63,13 +58,13 @@ private:
 	int _width, _length, _height;
 	std::vector<MapDataSet*> _mapDataSets;
 	Tile **_tiles;
-	BattleUnit *_selectedUnit;
+	BattleUnit *_selectedUnit, *_lastSelectedUnit;
 	std::vector<Node*> _nodes;
 	std::vector<BattleUnit*> _units;
 	std::vector<BattleItem*> _items;
 	Pathfinding *_pathfinding;
 	TileEngine *_tileEngine;
-	MissionType _missionType;
+	std::string _missionType;
 	int _globalShade;
 	UnitFaction _side;
 	int _turn;
@@ -87,14 +82,14 @@ public:
 	void save(YAML::Emitter& out) const;
 	/// Set the dimensions of the map and initializes it.
 	void initMap(int width, int length, int height);
-	/// initiliases pathfinding and tileengine
+	/// initialises pathfinding and tileengine
 	void initUtilities(ResourcePack *res);
 	/// Gets the game's mapdatafiles.
 	std::vector<MapDataSet*> *const getMapDataSets();
 	/// Set the mission type.
-	void setMissionType(MissionType missionType);
+	void setMissionType(const std::string &missionType);
 	/// Get the mission type.
-	MissionType getMissionType() const;
+	std::string getMissionType() const;
 	/// Set the global shade.
 	void setGlobalShade(int shade);
 	/// Get the global shade.
@@ -157,7 +152,18 @@ public:
 	bool isAborted();
 	/// Gets the current item ID.
 	int *getCurrentItemId();
-
+	/// Gets a spawn node.
+	Node *getSpawnNode(int nodeRank, BattleUnit *unit);
+	/// Gets a patrol node.
+	Node *getPatrolNode(bool scout, BattleUnit *unit, Node *fromNode);
+	/// New turn preparations.
+	void prepareNewTurn();
+	/// Revive unconscious units (healthcheck).
+	void reviveUnconsciousUnits();
+	/// Remove the body item that corresponds to the unit
+	void removeUnconsciousBodyItem(BattleUnit *bu);
+	/// Set or try to set a unit of a certain size on a certain position of the map.
+	bool setUnitPosition(BattleUnit *bu, const Position &position, bool testOnly = false);
 };
 
 }

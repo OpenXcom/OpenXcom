@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -21,6 +21,7 @@
 
 #include "../Engine/InteractiveSurface.h"
 #include <set>
+#include <vector>
 
 namespace OpenXcom
 {
@@ -65,6 +66,8 @@ private:
 	Camera *_camera;
 	int _visibleMapHeight;
 	void drawTerrain(Surface *surface);
+	int getTerrainLevel(Position pos, int size);
+	std::vector<Position> _waypoints;
 public:
 	/// Creates a new map at the specified position and size.
 	Map(Game *game, int width, int height, int x, int y, int visibleMapHeight);
@@ -80,7 +83,7 @@ public:
 	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
 	/// Special handling for mouse clicks.
 	void mouseClick(Action *action, State *state);
-	/// Special handling for mous over
+	/// Special handling for mouse over
 	void mouseOver(Action *action, State *state);
 	/// Special handling for key presses.
 	void keyboardPress(Action *action, State *state);
@@ -109,6 +112,8 @@ public:
 	/// Get pointer to camera
 	Camera *getCamera();
 	void scroll();
+	/// Get waypoints vector
+	std::vector<Position> *getWaypoints();
 
 };
 

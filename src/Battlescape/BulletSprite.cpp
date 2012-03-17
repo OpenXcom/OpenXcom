@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -23,7 +23,7 @@
 namespace OpenXcom
 {
 
-// the fantastic harcoded pixel-art
+// the fantastic hardcoded pixel-art
 const int BulletSprite::pixels[37][9] = {
 { 0x00, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00, 0x00, 0x00 },
 { 0x26, 0x22, 0x26, 0x22, 0x22, 0x22, 0x26, 0x22, 0x26 },
@@ -66,6 +66,7 @@ const int BulletSprite::pixels[37][9] = {
 
 /**
  * Sets up a BulletSprite 3x3 surface.
+ * @param type The type of sprite to draw.
  */
 BulletSprite::BulletSprite(int type) : Surface(3, 3), _type(type)
 {

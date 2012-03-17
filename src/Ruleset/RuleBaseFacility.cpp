@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -26,7 +26,7 @@ namespace OpenXcom
  * type of base facility.
  * @param type String defining the type.
  */
-RuleBaseFacility::RuleBaseFacility(const std::string &type) : _type(type), _spriteShape(-1), _spriteFacility(-1), _lift(false), _hyper(false), _mind(false), _grav(false), _size(1), _buildCost(0), _buildTime(0), _monthlyCost(0), _storage(0), _personnel(0), _aliens(0), _crafts(0), _labs(0), _workshops(0), _psiLabs(0), _radarRange(0), _radarChance(0), _defence(0), _hitRatio(0)
+RuleBaseFacility::RuleBaseFacility(const std::string &type) : _type(type), _requires(""), _spriteShape(-1), _spriteFacility(-1), _lift(false), _hyper(false), _mind(false), _grav(false), _size(1), _buildCost(0), _buildTime(0), _monthlyCost(0), _storage(0), _personnel(0), _aliens(0), _crafts(0), _labs(0), _workshops(0), _psiLabs(0), _radarRange(0), _radarChance(0), _defence(0), _hitRatio(0)
 {
 }
 
@@ -38,7 +38,7 @@ RuleBaseFacility::~RuleBaseFacility()
 }
 
 /**
- * Loads the region type from a YAML file.
+ * Loads the base facility type from a YAML file.
  * @param node YAML node.
  */
 void RuleBaseFacility::load(const YAML::Node &node)
@@ -50,6 +50,10 @@ void RuleBaseFacility::load(const YAML::Node &node)
 		if (key == "type")
 		{
 			i.second() >> _type;
+		}
+		else if (key == "requires")
+		{
+			i.second() >> _requires;
 		}
 		else if (key == "spriteShape")
 		{
@@ -135,17 +139,22 @@ void RuleBaseFacility::load(const YAML::Node &node)
 		{
 			i.second() >> _hitRatio;
 		}
+		else if (key == "mapName")
+		{
+			i.second() >> _mapName;
+		}
 	}
 }
 
 /**
- * Saves the region type to a YAML file.
+ * Saves the base facility type to a YAML file.
  * @param out YAML emitter.
  */
 void RuleBaseFacility::save(YAML::Emitter &out) const
 {
 	out << YAML::BeginMap;
 	out << YAML::Key << "type" << YAML::Value << _type;
+	out << YAML::Key << "requires" << YAML::Value << _requires;
 	out << YAML::Key << "spriteShape" << YAML::Value << _spriteShape;
 	out << YAML::Key << "spriteFacility" << YAML::Value << _spriteFacility;
 	out << YAML::Key << "lift" << YAML::Value << _lift;
@@ -167,6 +176,7 @@ void RuleBaseFacility::save(YAML::Emitter &out) const
 	out << YAML::Key << "radarChance" << YAML::Value << _radarChance;
 	out << YAML::Key << "defence" << YAML::Value << _defence;
 	out << YAML::Key << "hitRatio" << YAML::Value << _hitRatio;
+	out << YAML::Key << "mapName" << YAML::Value << _mapName;
 	out << YAML::EndMap;
 }
 
@@ -182,6 +192,16 @@ std::string RuleBaseFacility::getType() const
 }
 
 /**
+ * Returns the research required to be able to
+ * build this base facility.
+ * @return Research ID or "" if none.
+ */
+std::string RuleBaseFacility::getRequirement() const
+{
+	return _requires;
+}
+
+/**
  * Returns the ID of the sprite used to draw the
  * base structure of the facility that defines its shape.
  * @return Sprite ID.
@@ -189,16 +209,6 @@ std::string RuleBaseFacility::getType() const
 int RuleBaseFacility::getSpriteShape() const
 {
 	return _spriteShape;
-}
-
-/**
- * Changes the ID of the sprite used to draw the
- * base structure of the facility that defines its shape.
- * @param sprite Sprite ID.
- */
-void RuleBaseFacility::setSpriteShape(int sprite)
-{
-	_spriteShape = sprite;
 }
 
 /**
@@ -212,31 +222,12 @@ int RuleBaseFacility::getSpriteFacility() const
 }
 
 /**
- * Changes the ID of the sprite used to draw the
- * facility's contents inside the base shape.
- * @param sprite Sprite ID.
- */
-void RuleBaseFacility::setSpriteFacility(int sprite)
-{
-	_spriteFacility = sprite;
-}
-
-/**
  * Returns the size of the facility on the base grid.
  * @return Length in grid squares.
  */
 int RuleBaseFacility::getSize() const
 {
 	return _size;
-}
-
-/**
- * Changes the size of the facility on the base grid.
- * @param size Length in grid squares.
- */
-void RuleBaseFacility::setSize(int size)
-{
-	_size = size;
 }
 
 /**
@@ -251,16 +242,6 @@ bool RuleBaseFacility::getLift() const
 }
 
 /**
- * Changes whether this facility is the core access lift
- * of a base.
- * @param lift Lift flag.
- */
-void RuleBaseFacility::setLift(bool lift)
-{
-	_lift = lift;
-}
-
-/**
  * Returns whether this facility has hyperwave detection
  * capabilities. This allows it to get extra details about UFOs.
  * @return Hyperwave flag.
@@ -268,16 +249,6 @@ void RuleBaseFacility::setLift(bool lift)
 bool RuleBaseFacility::getHyperwave() const
 {
 	return _hyper;
-}
-
-/**
- * Changes whether this facility has hyperwave detection
- * capabilities.
- * @param hyper Hyperwave flag.
- */
-void RuleBaseFacility::setHyperwave(bool hyper)
-{
-	_hyper = hyper;
 }
 
 /**
@@ -291,15 +262,6 @@ bool RuleBaseFacility::getMindShield() const
 }
 
 /**
- * Changes whether this facility has a mind shield.
- * @param mind Mind Shield flag.
- */
-void RuleBaseFacility::setMindShield(bool mind)
-{
-	_mind = mind;
-}
-
-/**
  * Returns whether this facility has a grav shield,
  * which doubles base defense's fire ratio.
  * @return Grav Shield flag.
@@ -307,15 +269,6 @@ void RuleBaseFacility::setMindShield(bool mind)
 bool RuleBaseFacility::getGravShield() const
 {
 	return _grav;
-}
-
-/**
- * Changes whether this facility has a grav shield.
- * @param grav Grav Shield flag.
- */
-void RuleBaseFacility::setGravShield(bool grav)
-{
-	_grav = grav;
 }
 
 /**
@@ -329,16 +282,6 @@ int RuleBaseFacility::getBuildCost() const
 }
 
 /**
- * Changes the amount of funds that this facility costs
- * to place on a base.
- * @param cost Building cost.
- */
-void RuleBaseFacility::setBuildCost(int cost)
-{
-	_buildCost = cost;
-}
-
-/**
  * Returns the amount of time that this facility takes
  * to be constructed since placement.
  * @return Time in days.
@@ -346,16 +289,6 @@ void RuleBaseFacility::setBuildCost(int cost)
 int RuleBaseFacility::getBuildTime() const
 {
 	return _buildTime;
-}
-
-/**
- * Changes the amount of time that this facility takes
- * to be constructed since placement.
- * @param time Time in days.
- */
-void RuleBaseFacility::setBuildTime(int time)
-{
-	_buildTime = time;
 }
 
 /**
@@ -369,16 +302,6 @@ int RuleBaseFacility::getMonthlyCost() const
 }
 
 /**
- * Changes the amount of funds this facility costs monthly
- * to maintain once it's fully built.
- * @param cost Monthly cost.
- */
-void RuleBaseFacility::setMonthlyCost(int cost)
-{
-	_monthlyCost = cost;
-}
-
-/**
  * Returns the amount of storage space this facility provides
  * for base equipment.
  * @return Storage space.
@@ -386,16 +309,6 @@ void RuleBaseFacility::setMonthlyCost(int cost)
 int RuleBaseFacility::getStorage() const
 {
 	return _storage;
-}
-
-/**
- * Changes the amount of storage space this facility provides
- * for base equipment.
- * @param storage Storage space.
- */
-void RuleBaseFacility::setStorage(int storage)
-{
-	_storage = storage;
 }
 
 /**
@@ -409,15 +322,6 @@ int RuleBaseFacility::getPersonnel() const
 }
 
 /**
- * Changes the amount of base personnel this facility can contain.
- * @param personnel Amount of personnel.
- */
-void RuleBaseFacility::setPersonnel(int personnel)
-{
-	_personnel = personnel;
-}
-
-/**
  * Returns the amount of captured live aliens this facility
  * can contain.
  * @return Amount of aliens.
@@ -428,31 +332,12 @@ int RuleBaseFacility::getAliens() const
 }
 
 /**
- * Changes the amount of captured live aliens this
- * facility can contain.
- * @param aliens Amount of aliens.
- */
-void RuleBaseFacility::setAliens(int aliens)
-{
-	_aliens = aliens;
-}
-
-/**
  * Returns the amount of base craft this facility can contain.
  * @return Amount of craft.
  */
 int RuleBaseFacility::getCrafts() const
 {
 	return _crafts;
-}
-
-/**
- * Changes the amount of base craft this facility can contain.
- * @param crafts Amount of craft.
- */
-void RuleBaseFacility::setCrafts(int crafts)
-{
-	_crafts = crafts;
 }
 
 /**
@@ -466,16 +351,6 @@ int RuleBaseFacility::getLaboratories() const
 }
 
 /**
- * Changes the amount of laboratory space this facility provides
- * for research projects.
- * @param labs Laboratory space.
- */
-void RuleBaseFacility::setLaboratories(int labs)
-{
-	_labs = labs;
-}
-
-/**
  * Returns the amount of workshop space this facility provides
  * for manufacturing projects.
  * @return Workshop space.
@@ -483,16 +358,6 @@ void RuleBaseFacility::setLaboratories(int labs)
 int RuleBaseFacility::getWorkshops() const
 {
 	return _workshops;
-}
-
-/**
- * Changes the amount of workshop space this facility provides
- * for manufacturing projects.
- * @param workshops Workshop space.
- */
-void RuleBaseFacility::setWorkshops(int workshops)
-{
-	_workshops = workshops;
 }
 
 /**
@@ -506,16 +371,6 @@ int RuleBaseFacility::getPsiLaboratories() const
 }
 
 /**
- * Changes the amount of soldiers this facility can contain
- * for monthly psi-training.
- * @param psi Amount of soldiers.
- */
-void RuleBaseFacility::setPsiLaboratories(int psi)
-{
-	_psiLabs = psi;
-}
-
-/**
  * Returns the radar range this facility provides for the
  * detection of UFOs.
  * @return Range in nautical miles.
@@ -523,16 +378,6 @@ void RuleBaseFacility::setPsiLaboratories(int psi)
 int RuleBaseFacility::getRadarRange() const
 {
 	return _radarRange;
-}
-
-/**
- * Changes the radar range this facility provides for the
- * detection of UFOs.
- * @param range Range in nautical miles.
- */
-void RuleBaseFacility::setRadarRange(int range)
-{
-	_radarRange = range;
 }
 
 /**
@@ -546,16 +391,6 @@ int RuleBaseFacility::getRadarChance() const
 }
 
 /**
- * Changes the chance of UFOs that come within the facility's
- * radar range to be detected.
- * @param chance Chance in percentage.
- */
-void RuleBaseFacility::setRadarChance(int chance)
-{
-	_radarChance = chance;
-}
-
-/**
  * Returns the defence value of this facility's weaponry
  * against UFO invasions on the base.
  * @return Defence value.
@@ -563,16 +398,6 @@ void RuleBaseFacility::setRadarChance(int chance)
 int RuleBaseFacility::getDefenceValue() const
 {
 	return _defence;
-}
-
-/**
- * Changes the defence value of this facility's weaponry
- * against UFO invasions on the base.
- * @param defence Defence value.
- */
-void RuleBaseFacility::setDefenceValue(int defence)
-{
-	_defence = defence;
 }
 
 /**
@@ -586,13 +411,13 @@ int RuleBaseFacility::getHitRatio() const
 }
 
 /**
- * Changes the hit ratio of this facility's weaponry
- * against UFO invasions on the base.
- * @param ratio Ratio in percentage.
+ * Returns the battlescape map block name for this facility
+ * to construct the base defense mission map.
+ * @return Map name.
  */
-void RuleBaseFacility::setHitRatio(int ratio)
+std::string RuleBaseFacility::getMapName() const
 {
-	_hitRatio = ratio;
+	return _mapName;
 }
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -154,14 +154,19 @@ TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo)
 		ss2 << _baseTo->getAvailableEngineers();
 		_lstItems->addRow(4, _game->getLanguage()->getString("STR_ENGINEER").c_str(), ss.str().c_str(), L"0", ss2.str().c_str());
 	}
-	for (std::map<std::string, int>::iterator i = _baseFrom->getItems()->getContents()->begin(); i != _baseFrom->getItems()->getContents()->end(); ++i)
+	std::vector<std::string> items = _game->getRuleset()->getItemsList();
+	for (std::vector<std::string>::iterator i = items.begin(); i != items.end(); ++i)
 	{
-		_qtys.push_back(0);
-		_items.push_back(i->first);
-		std::wstringstream ss, ss2;
-		ss << i->second;
-		ss2 << _baseTo->getItems()->getItem(i->first);
-		_lstItems->addRow(4, _game->getLanguage()->getString(i->first).c_str(), ss.str().c_str(), L"0", ss2.str().c_str());
+		int qty = _baseFrom->getItems()->getItem(*i);
+		if (qty > 0)
+		{
+			_qtys.push_back(0);
+			_items.push_back(*i);
+			std::wstringstream ss, ss2;
+			ss << qty;
+			ss2 << _baseTo->getItems()->getItem(*i);
+			_lstItems->addRow(4, _game->getLanguage()->getString(*i).c_str(), ss.str().c_str(), L"0", ss2.str().c_str());
+		}
 	}
 	_distance = getDistance();
 

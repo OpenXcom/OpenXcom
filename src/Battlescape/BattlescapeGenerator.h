@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -32,10 +32,13 @@ class RuleTerrain;
 class ResourcePack;
 class RuleSet;
 class Soldier;
-class RuleArmor;
+class Armor;
 class RuleItem;
-class RuleGenUnit;
+class Unit;
+class AlienRace;
+class AlienDeployment;
 class Game;
+class Base;
 
 /**
  * A utility class that generates the initial battlescape data. Taking into account mission type, craft and ufo involved, terrain type,...
@@ -48,22 +51,24 @@ private:
 	ResourcePack *_res;
 	Craft *_craft;
 	Ufo *_ufo;
+	Base *_base;
 	RuleTerrain *_terrain;
 	int _width, _length, _height;
 	int _worldTexture, _worldShade;
-	MissionType _missionType;
 	int _unitCount;
 	Tile *_craftInventoryTile;
+	std::string _alienRace;
+	int _alienItemLevel;
 
 	/// Generate a new battlescape map.
 	void generateMap();
 	/// links tiles with terrainobjects, for easier/faster lookup
 	void linkTilesWithMapDatas();
 	/// Add a soldier to the game
-	void addSoldier(Soldier *soldier);
+	BattleUnit *addXCOMUnit(BattleUnit *unit);
 	/// Add an alien to the game
-	BattleUnit *addAlien(RuleGenUnit *rules, NodeRank rank);
-	BattleUnit *addVehicle(RuleGenUnit *rules);
+	BattleUnit *addAlien(Unit *rules, int alienRank, bool outside);
+	BattleUnit *addCivilian(Unit *rules);
 	/// Add an item to the game
 	void addItem(RuleItem *item);
 	// Add an item to a unit
@@ -73,6 +78,8 @@ private:
 	/// loads an XCOM RMP file
 	void loadRMP(MapBlock *mapblock, int xoff, int yoff, int segment);
 	void explodePowerSources();
+	void deployAliens(AlienRace *race, AlienDeployment *deployment);
+	void deployCivilians(int max);
 public:
 	/// Creates a new BattlescapeGenerator class
 	BattlescapeGenerator(Game *game);
@@ -86,8 +93,12 @@ public:
 	void setWorldTexture(int texture);
 	/// Sets the polygon shade.
 	void setWorldShade(int shade);
-	/// Set the mission type.
-	void setMissionType(MissionType missionType);
+	/// Set the alien race.
+	void setAlienRace(std::string alienRace);
+	/// Set the alien item level.
+	void setAlienItemlevel(int alienItemLevel);
+	/// Sets the xcom base.
+	void setBase(Base *base);
 	/// Runs the generator.
 	void run();
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -39,7 +39,7 @@ Node::Node()
  * @param reserved
  * @param priority
  */
-Node::Node(int id, Position pos, int segment, int type, int rank, int flags, int reserved, int priority) : _id(id), _pos(pos), _segment(segment), _type(type), _rank(rank), _flags(flags), _reserved(reserved), _priority(priority)
+Node::Node(int id, Position pos, int segment, int type, int rank, int flags, int reserved, int priority) : _id(id), _pos(pos), _segment(segment), _type(type), _rank(rank), _flags(flags), _reserved(reserved), _priority(priority), _allocated(false)
 {
 	_nodeLinks[0] = 0;
 	_nodeLinks[1] = 0;
@@ -191,6 +191,26 @@ NodeLink *Node::getNodeLink(int index)
 int Node::getType() const
 {
 	return _type;
+}
+
+bool Node::isAllocated() const
+{
+	return _allocated;
+}
+
+void Node::allocate()
+{
+	_allocated = true;
+}
+
+void Node::free()
+{
+	_allocated = false;
+}
+
+bool Node::isTarget() const
+{
+	return _reserved == 5;
 }
 
 }

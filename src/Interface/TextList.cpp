@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -90,7 +90,7 @@ void TextList::unpress(State *state)
 /**
  * Changes the color of a specific Text object in the list.
  * @param row Row number.
- * @param col Column number.
+ * @param column Column number.
  * @param color Text color.
  */
 void TextList::setCellColor(int row, int column, Uint8 color)
@@ -99,9 +99,8 @@ void TextList::setCellColor(int row, int column, Uint8 color)
 }
 
 /**
- * Changes the text color of a specific row in the list.
+ * Changes the text color of a whole row in the list.
  * @param row Row number.
- * @param col Column number.
  * @param color Text color.
  */
 void TextList::setRowColor(int row, Uint8 color)
@@ -116,8 +115,8 @@ void TextList::setRowColor(int row, Uint8 color)
 /**
  * Returns the text of a specific Text object in the list.
  * @param row Row number.
- * @param col Column number.
- * @param color Text color.
+ * @param column Column number.
+ * @return Text string.
  */
 std::wstring TextList::getCellText(int row, int column) const
 {
@@ -125,10 +124,10 @@ std::wstring TextList::getCellText(int row, int column) const
 }
 
 /**
- * Returns the text of a specific Text object in the list.
+ * Changes the text of a specific Text object in the list.
  * @param row Row number.
- * @param col Column number.
- * @param color Text color.
+ * @param column Column number.
+ * @param text Text string.
  */
 void TextList::setCellText(int row, int column, const std::wstring &text)
 {
@@ -490,7 +489,7 @@ void TextList::setArrowColumn(int pos, ArrowOrientation type)
 }
 
 /**
- * Sets a function to be called everytime the left arrows are mouse clicked.
+ * Sets a function to be called every time the left arrows are mouse clicked.
  * @param handler Action handler.
  */
 void TextList::onLeftArrowClick(ActionHandler handler)
@@ -503,7 +502,7 @@ void TextList::onLeftArrowClick(ActionHandler handler)
 }
 
 /**
- * Sets a function to be called everytime the left arrows are mouse pressed.
+ * Sets a function to be called every time the left arrows are mouse pressed.
  * @param handler Action handler.
  */
 void TextList::onLeftArrowPress(ActionHandler handler)
@@ -516,7 +515,7 @@ void TextList::onLeftArrowPress(ActionHandler handler)
 }
 
 /**
- * Sets a function to be called everytime the left arrows are mouse released.
+ * Sets a function to be called every time the left arrows are mouse released.
  * @param handler Action handler.
  */
 void TextList::onLeftArrowRelease(ActionHandler handler)
@@ -529,7 +528,7 @@ void TextList::onLeftArrowRelease(ActionHandler handler)
 }
 
 /**
- * Sets a function to be called everytime the right arrows are mouse clicked.
+ * Sets a function to be called every time the right arrows are mouse clicked.
  * @param handler Action handler.
  */
 void TextList::onRightArrowClick(ActionHandler handler)
@@ -542,7 +541,7 @@ void TextList::onRightArrowClick(ActionHandler handler)
 }
 
 /**
- * Sets a function to be called everytime the right arrows are mouse pressed.
+ * Sets a function to be called every time the right arrows are mouse pressed.
  * @param handler Action handler.
  */
 void TextList::onRightArrowPress(ActionHandler handler)
@@ -555,7 +554,7 @@ void TextList::onRightArrowPress(ActionHandler handler)
 }
 
 /**
- * Sets a function to be called everytime the right arrows are mouse released.
+ * Sets a function to be called every time the right arrows are mouse released.
  * @param handler Action handler.
  */
 void TextList::onRightArrowRelease(ActionHandler handler)

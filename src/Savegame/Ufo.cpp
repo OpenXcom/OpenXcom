@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -295,12 +295,9 @@ void Ufo::think()
 {
 	if (!isCrashed())
 	{
-		setLongitude(_lon + _speedLon);
-		setLatitude(_lat + _speedLat);
-		if (_dest != 0 && finishedRoute())
+		move();
+		if (reachedDestination())
 		{
-			_lon = _dest->getLongitude();
-			_lat = _dest->getLatitude();
 			setSpeed(0);
 		}
 	}

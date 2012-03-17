@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -25,10 +25,9 @@
 #include "Map.h"
 #include "Camera.h"
 #include "BattleAIState.h"
-#include "AggroBAIState.h"
+#include "ExplosionBState.h"
 #include "../Engine/Game.h"
 #include "../Savegame/BattleUnit.h"
-#include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
 #include "../Resource/ResourcePack.h"
@@ -36,7 +35,7 @@
 #include "../Engine/Sound.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Options.h"
-#include "../Ruleset/RuleArmor.h"
+#include "../Ruleset/Armor.h"
 
 namespace OpenXcom
 {
@@ -44,7 +43,7 @@ namespace OpenXcom
 /**
  * Sets up an UnitWalkBState.
  */
-UnitWalkBState::UnitWalkBState(BattlescapeState *parent, BattleAction action) : BattleState(parent), _unit(0), _pf(0), _terrain(0), _action(action)
+UnitWalkBState::UnitWalkBState(BattlescapeGame *parent, BattleAction action) : BattleState(parent, action), _unit(0), _pf(0), _terrain(0)
 {
 
 }
@@ -61,8 +60,8 @@ void UnitWalkBState::init()
 {
 	_unit = _action.actor;
 	setNormalWalkSpeed();
-	_pf = _parent->getGame()->getSavedGame()->getBattleGame()->getPathfinding();
-	_terrain = _parent->getGame()->getSavedGame()->getBattleGame()->getTileEngine();
+	_pf = _parent->getPathfinding();
+	_terrain = _parent->getTileEngine();
 	_target = _action.target;
 }
 
@@ -70,22 +69,29 @@ void UnitWalkBState::think()
 {
 	bool unitspotted = false;
 
+	if (_unit->isOut())
+	{
+		_pf->abortPath();
+		_parent->popState();
+		return;
+	}
+
 	// during a walking cycle we make step sounds
 	if (_unit->getStatus() == STATUS_WALKING || _unit->getStatus() == STATUS_FLYING)
 	{
 
 		if (_unit->getVisible() && _unit->getStatus() == STATUS_WALKING)
 		{
-			if (_unit->getUnit()->getArmor()->getSize() > 1)
+			if (_unit->getArmor()->getSize() > 1)
 			{
 				// play hwp engine sound
 				if (_unit->getWalkingPhase() == 0)
 				{
-					// conventional tank
-					if (_unit->getUnit()->getArmor()->getMovementType() == MT_WALK)
-						_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(14)->play();
-					else // cyberdisc
-						_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(40)->play();
+					// tank with threads "walks"
+					if (_unit->getArmor()->getMovementType() == MT_WALK)
+						_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(14)->play();
+					else // hovering tank hovers
+						_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(40)->play();
 				}
 			}
 			else
@@ -96,7 +102,7 @@ void UnitWalkBState::think()
 					Tile *tile = _unit->getTile();
 					if (tile->getFootstepSound())
 					{
-						_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(22 + (tile->getFootstepSound()*2))->play();
+						_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(22 + (tile->getFootstepSound()*2))->play();
 					}
 				}
 				// play footstep sound 2
@@ -105,7 +111,7 @@ void UnitWalkBState::think()
 					Tile *tile = _unit->getTile();
 					if (tile->getFootstepSound())
 					{
-						_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(23 + (tile->getFootstepSound()*2))->play();
+						_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(23 + (tile->getFootstepSound()*2))->play();
 					}
 				}
 			}
@@ -116,19 +122,19 @@ void UnitWalkBState::think()
 		// unit moved from one tile to the other, update the tiles
 		if (_unit->getPosition() != _unit->getLastPosition())
 		{
-			int size = _unit->getUnit()->getArmor()->getSize() - 1;
+			int size = _unit->getArmor()->getSize() - 1;
 			for (int x = size; x >= 0; x--)
 			{
 				for (int y = size; y >= 0; y--)
 				{
-					_parent->getGame()->getSavedGame()->getBattleGame()->getTile(_unit->getLastPosition() + Position(x,y,0))->setUnit(0);
+					_parent->getSave()->getTile(_unit->getLastPosition() + Position(x,y,0))->setUnit(0);
 				}
 			}
 			for (int x = size; x >= 0; x--)
 			{
 				for (int y = size; y >= 0; y--)
 				{
-					_parent->getGame()->getSavedGame()->getBattleGame()->getTile(_unit->getPosition() + Position(x,y,0))->setUnit(_unit);
+					_parent->getSave()->getTile(_unit->getPosition() + Position(x,y,0))->setUnit(_unit);
 				}
 			}
 
@@ -139,23 +145,42 @@ void UnitWalkBState::think()
 		// is the step finished?
 		if (_unit->getStatus() == STATUS_STANDING)
 		{
+			// move our personal lighting with us
 			_terrain->calculateUnitLighting();
-			unitspotted = _terrain->calculateFOV(_unit);
-			if (unitspotted)
-			{
-				_pf->abortPath();
-				if (_unit->getFaction() == FACTION_HOSTILE)
-				{
-					AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(_unit->getCurrentAIState());
-					if (aggro == 0)
-					{
-						_unit->setAIState(new AggroBAIState(_parent->getGame()->getSavedGame()->getBattleGame(), _unit));
-					}
-					_parent->handleAI(_unit);
-				}
-				return;
-			}
+
 			BattleAction action;
+			
+			// check for proximity grenades (1 tile around the unit in every direction) (for large units, we need to check every tile it occupies)
+			int size = _unit->getArmor()->getSize() - 1;
+			for (int x = size; x >= 0; x--)
+			{
+				for (int y = size; y >= 0; y--)
+				{
+					for (int tx = -1; tx < 2; tx++)
+					{
+						for (int ty = -1; ty < 2; ty++)
+						{
+							Tile *t = _parent->getSave()->getTile(_unit->getPosition() + Position(x,y,0) + Position(tx,ty,0));
+							if (t)
+							for (std::vector<BattleItem*>::iterator i = t->getInventory()->begin(); i != t->getInventory()->end(); ++i)
+							{
+								if ((*i)->getRules()->getBattleType() == BT_PROXIMITYGRENADE && (*i)->getExplodeTurn() > 0)
+								{
+									Position p;
+									p.x = t->getPosition().x*16 + 8;
+									p.y = t->getPosition().y*16 + 8;
+									p.z = t->getPosition().z*24 + t->getTerrainLevel();
+									_parent->statePushNext(new ExplosionBState(_parent, p, (*i), (*i)->getPreviousOwner()));
+									t->getInventory()->erase(i);
+									return;
+								}
+							}
+						}
+					}
+				}
+			}
+
+			// check for reaction fire
 			if (_terrain->checkReactionFire(_unit, &action))
 			{
 				_parent->statePushBack(new ProjectileFlyBState(_parent, action));
@@ -174,6 +199,14 @@ void UnitWalkBState::think()
 	// we are just standing around, shouldn't we be walking?
 	if (_unit->getStatus() == STATUS_STANDING)
 	{
+		// check if we can spot new units
+		unitspotted = _terrain->calculateFOV(_unit);
+		if (unitspotted)
+		{
+			_pf->abortPath();
+			return;
+		}
+
 		if (_unit->getVisible())
 		{
 			setNormalWalkSpeed();
@@ -188,9 +221,9 @@ void UnitWalkBState::think()
 			Position destination;
 			int tu = _pf->getTUCost(_unit->getPosition(), dir, &destination, _unit); // gets tu cost, but also gets the destination position.
 
-			if (tu > _unit->getTimeUnits() && !_parent->dontSpendTUs())
+			if (tu > _unit->getStats()->tu && !_parent->dontSpendTUs())
 			{
-				_result = "STR_NOT_ENOUGH_TIME_UNITS";
+				_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
 				_pf->abortPath();
 				return;
 			}
@@ -217,11 +250,11 @@ void UnitWalkBState::think()
 			}
 			if (door == 0)
 			{
-				_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(3)->play(); // normal door
+				_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(3)->play(); // normal door
 			}
 			if (door == 1)
 			{
-				_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(20)->play(); // ufo door
+				_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(20)->play(); // ufo door
 				return; // don't start walking yet, wait for the ufo door to open
 			}
 
@@ -235,13 +268,13 @@ void UnitWalkBState::think()
 				}
 				else
 				{
-					_result = "STR_NOT_ENOUGH_ENERGY";
+					_action.result = "STR_NOT_ENOUGH_ENERGY";
 					_parent->popState();
 				}
 			}
 			else
 			{
-				_result = "STR_NOT_ENOUGH_TIME_UNITS";
+				_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
 				_parent->popState();
 			}
 			// make sure the unit sprites are up to date
@@ -278,16 +311,6 @@ void UnitWalkBState::cancel()
 }
 
 /*
- * Get the action result. Returns error messages or an empty string when everything went fine.
- * @return returnmessage Empty when everything is fine.
- */
-std::string UnitWalkBState::getResult() const
-{
-	return _result;
-}
-
-
-/*
  * Handle some calculations when the path is finished.
  */
 void UnitWalkBState::postPathProcedures()
@@ -303,7 +326,7 @@ void UnitWalkBState::postPathProcedures()
  */
 void UnitWalkBState::setNormalWalkSpeed()
 {
-	if (_parent->getGame()->getSavedGame()->getBattleGame()->getDebugMode())
+	if (_parent->getSave()->getDebugMode())
 	{
 		_parent->setStateInterval(1);
 	}

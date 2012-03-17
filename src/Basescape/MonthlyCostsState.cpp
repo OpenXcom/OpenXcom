@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -49,9 +49,9 @@ MonthlyCostsState::MonthlyCostsState(Game *game, Base *base) : State(game), _bas
 	_txtCost = new Text(80, 9, 115, 32);
 	_txtQuantity = new Text(55, 9, 195, 32);
 	_txtTotal = new Text(60, 9, 250, 32);
-	_txtRental = new Text(80, 9, 10, 48);
-	_txtSalaries = new Text(80, 9, 10, 80);
-	_txtIncome = new Text(100, 9, 10, 136);
+	_txtRental = new Text(150, 9, 10, 48);
+	_txtSalaries = new Text(150, 9, 10, 80);
+	_txtIncome = new Text(150, 9, 10, 136);
 	_lstCrafts = new TextList(300, 20, 10, 56);
 	_lstSalaries = new TextList(300, 30, 10, 88);
 	_lstMaintenance = new TextList(300, 9, 10, 120);
@@ -104,19 +104,24 @@ MonthlyCostsState::MonthlyCostsState(Game *game, Base *base) : State(game), _bas
 
 	_txtIncome->setColor(Palette::blockOffset(13)+10);
 	std::wstringstream ss;
-	ss << _game->getLanguage()->getString("STR_INCOME") << "=" << Text::formatFunding(_game->getSavedGame()->getCountryFunding());
+	ss << _game->getLanguage()->getString("STR_INCOME") << L"=" << Text::formatFunding(_game->getSavedGame()->getCountryFunding());
 	_txtIncome->setText(ss.str());
 
 	_lstCrafts->setColor(Palette::blockOffset(13)+10);
 	_lstCrafts->setColumns(4, 125, 70, 45, 60);
 	_lstCrafts->setDot(true);
 
-	std::wstringstream ss2;
-	ss2 << _base->getCraftCount("STR_SKYRANGER");
-	_lstCrafts->addRow(4, _game->getLanguage()->getString("STR_SKYRANGER").c_str(), Text::formatFunding(_game->getRuleset()->getCraft("STR_SKYRANGER")->getCost()).c_str(), ss2.str().c_str(), Text::formatFunding(_base->getCraftCount("STR_SKYRANGER") * _game->getRuleset()->getCraft("STR_SKYRANGER")->getCost()).c_str());
-	std::wstringstream ss3;
-	ss3 << _base->getCraftCount("STR_INTERCEPTOR");
-	_lstCrafts->addRow(4, _game->getLanguage()->getString("STR_INTERCEPTOR").c_str(), Text::formatFunding(_game->getRuleset()->getCraft("STR_INTERCEPTOR")->getCost()).c_str(), ss3.str().c_str(), Text::formatFunding(_base->getCraftCount("STR_INTERCEPTOR") * _game->getRuleset()->getCraft("STR_INTERCEPTOR")->getCost()).c_str());
+	std::vector<std::string> crafts = _game->getRuleset()->getCraftsList();
+	for (std::vector<std::string>::iterator i = crafts.begin(); i != crafts.end(); ++i)
+	{
+		RuleCraft *craft = _game->getRuleset()->getCraft(*i);
+		if (craft->getBuyCost() > 0)
+		{
+			std::wstringstream ss2;
+			ss2 << _base->getCraftCount((*i));
+			_lstCrafts->addRow(4, _game->getLanguage()->getString(*i).c_str(), Text::formatFunding(craft->getBuyCost()).c_str(), ss2.str().c_str(), Text::formatFunding(_base->getCraftCount(*i) * craft->getBuyCost()).c_str());
+		}
+	}
 
 	_lstSalaries->setColor(Palette::blockOffset(13)+10);
 	_lstSalaries->setColumns(4, 125, 70, 45, 60);

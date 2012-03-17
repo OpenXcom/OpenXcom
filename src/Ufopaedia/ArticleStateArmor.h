@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -33,7 +33,7 @@ namespace OpenXcom
 
 	/**
 	 * ArticleStateArmor has a caption, preview image and a stats block.
-	 * The image is found using the RuleArmor class.
+	 * The image is found using the Armor class.
 	 */
 
 	class ArticleStateArmor : public ArticleState

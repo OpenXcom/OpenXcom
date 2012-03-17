@@ -138,6 +138,8 @@ set ( battlescape_src
   Battlescape/DebriefingState.h
   Battlescape/InfoboxState.cpp
   Battlescape/InfoboxState.h
+  Battlescape/InfoboxOKState.cpp
+  Battlescape/InfoboxOKState.h
   Battlescape/TileEngine.cpp
   Battlescape/TileEngine.h
   Battlescape/MiniMapView.h
@@ -148,6 +150,14 @@ set ( battlescape_src
   Battlescape/MedikitState.h
   Battlescape/MedikitView.cpp
   Battlescape/MedikitView.h
+  Battlescape/ScannerState.cpp
+  Battlescape/ScannerState.h
+  Battlescape/ScannerView.cpp
+  Battlescape/ScannerView.h
+  Battlescape/PromotionsState.cpp
+  Battlescape/PromotionsState.h
+  Battlescape/BattlescapeGame.cpp
+  Battlescape/BattlescapeGame.h
 )
 
 set ( engine_src
@@ -312,8 +322,8 @@ set ( ruleset_src
   Ruleset/RuleCraft.h
   Ruleset/XcomRuleset.cpp
   Ruleset/XcomRuleset.h
-  Ruleset/RuleArmor.cpp
-  Ruleset/RuleArmor.h
+  Ruleset/Armor.cpp
+  Ruleset/Armor.h
   Ruleset/MapDataSet.h
   Ruleset/MapDataSet.cpp
   Ruleset/RuleSoldier.h
@@ -326,8 +336,6 @@ set ( ruleset_src
   Ruleset/RuleCraftWeapon.h
   Ruleset/RuleInventory.h
   Ruleset/RuleInventory.cpp
-  Ruleset/RuleGenUnit.h
-  Ruleset/RuleGenUnit.cpp
   Ruleset/MapBlock.h
   Ruleset/MapBlock.cpp
   Ruleset/RuleBaseFacility.cpp
@@ -352,6 +360,12 @@ set ( ruleset_src
   Ruleset/RuleResearchProject.cpp
   Ruleset/RuleManufactureInfo.h
   Ruleset/RuleManufactureInfo.cpp
+  Ruleset/AlienDeployment.h
+  Ruleset/AlienDeployment.cpp
+  Ruleset/AlienRace.h
+  Ruleset/AlienRace.cpp
+  Ruleset/Unit.h
+  Ruleset/Unit.cpp
 )
 
 set ( savegame_src
@@ -371,8 +385,6 @@ set ( savegame_src
   Savegame/BaseFacility.cpp
   Savegame/Craft.cpp
   Savegame/Craft.h
-  Savegame/GenUnit.cpp
-  Savegame/GenUnit.h
   Savegame/Country.cpp
   Savegame/Country.h
   Savegame/NodeLink.cpp
@@ -401,8 +413,6 @@ set ( savegame_src
   Savegame/Waypoint.cpp
   Savegame/Target.h
   Savegame/Target.cpp
-  Savegame/Unit.h
-  Savegame/Unit.cpp
   Savegame/ResearchProject.h
   Savegame/ResearchProject.cpp
   Savegame/Production.h
@@ -437,11 +447,12 @@ set ( ufopedia_src
   Ufopaedia/ArticleStateArmor.h
 )
 
+set ( data_install_dir bin )
 if ( CMAKE_COMPILER_IS_GNUCXX AND "${CMAKE_BUILD_TYPE}" STREQUAL "Debug" )
   add_definitions ( -D_DEBUG )
 endif ()
 if ( CMAKE_COMPILER_IS_GNUCXX AND ( "${CMAKE_BUILD_TYPE}" STREQUAL "Debug" OR ENABLE_WARNING) )
-    # Enable more GCC warnings if we are doing a Debug build or requested.
+    # Enable more GCC warnings if requested or we are doing a Debug build.
     add_definitions ( -Wall
       -Wsign-compare
       -Winit-self
@@ -457,7 +468,7 @@ if ( CMAKE_COMPILER_IS_GNUCXX AND ( "${CMAKE_BUILD_TYPE}" STREQUAL "Debug" OR EN
       -Wlogical-op
       -Wuninitialized
       -Wshadow
-# Those two warnings options actually generates way too much warning. Should be enabled later.
+# These two warning options actually generate way too many warnings. Should be enabled later.
 #      -Wignored-qualifiers
 #      -Weffc++
       )
@@ -470,7 +481,7 @@ if ( MSVC )
   if ( ENABLE_WARNING )
     add_definitions ( /W${MSVC_WARNING_LEVEL} )
   else ()
-    # Set warning levels for Debug and Release With debug info
+    # Set warning levels for Debug and Release with debug info
     set ( CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /W${MSVC_WARNING_LEVEL}" )
     set ( CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} /W${MSVC_WARNING_LEVEL}" )
   endif ()
@@ -479,9 +490,7 @@ if ( MSVC )
   endif ( FATAL_WARNING )
 endif ()
 
-if ( NOT WIN32 )
-  add_definitions ( -DDATADIR="${CMAKE_INSTALL_PREFIX}/share/openxcom/" )
-else ()
+if ( WIN32 )
   set ( application_type WIN32 )
 endif ()
 
@@ -490,6 +499,9 @@ set ( openxcom_src main.cpp ${basescape_src} ${battlescape_src} ${engine_src} ${
 set ( install_dest RUNTIME )
 set ( set_exec_path ON )
 set ( install_dest_dir bin )
+if ( UNIX AND NOT APPLE )
+  set ( data_install_dir ${CMAKE_INSTALL_PREFIX}/share/openxcom )
+endif ()
 if ( APPLE )
   set ( openxcom_src ${openxcom_src} ${MACOS_SDLMAIN_M_PATH} )
   if ( CREATE_BUNDLE )
@@ -498,15 +510,22 @@ if ( APPLE )
     set ( install_dest BUNDLE )
     set ( set_exec_path OFF )
     set ( install_dest_dir "" )
+    set ( data_install_dir bin )
+  else ()
+    set ( data_install_dir ${CMAKE_INSTALL_PREFIX}/share/openxcom )
   endif ()
 endif ()
 if ( set_exec_path )
   set ( EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin )
 endif ()
 
+if ( FORCE_INSTALL_DATA_TO_BIN )
+  set ( data_install_dir bin )
+endif ()
+
 add_executable ( openxcom  ${application_type} ${openxcom_src} )
 install ( TARGETS openxcom ${install_dest} DESTINATION bin )
-# Extra link flags for windows. they need to be before the SDL/YAML link flags. Otherwise, you will get strange link errors('Undefined reference to WinMain@16')
+# Extra link flags for Windows. They need to be set before the SDL/YAML link flags, otherwise you will get strange link errors ('Undefined reference to WinMain@16')
 if ( WIN32 )
   set ( basic_windows_libs advapi32.lib shell32.lib shlwapi.lib )
   if ( MINGW )
@@ -524,13 +543,16 @@ target_link_libraries ( openxcom ${system_libs} ${SDLMIXER_LIBRARY} ${SDLGFX_LIB
 
 add_custom_command ( TARGET openxcom
   POST_BUILD
-  COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/bin/USER ${EXECUTABLE_OUTPUT_PATH}/USER
-  COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/bin/DATA ${EXECUTABLE_OUTPUT_PATH}/DATA )
-install ( DIRECTORY ${CMAKE_SOURCE_DIR}/bin/DATA DESTINATION bin )
+  COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/bin/data ${EXECUTABLE_OUTPUT_PATH}/data )
+install ( DIRECTORY ${CMAKE_SOURCE_DIR}/bin/data DESTINATION ${data_install_dir} )
 
-# Copy Windows DLL to bin folder
+# Copy Windows DLLs to bin folder
 if ( WIN32 )
-  file ( GLOB Windows_dll "${DEPS_DIR}/lib/*.dll" )
+  if ( CMAKE_CL_64 )
+    file ( GLOB Windows_dll "${DEPS_DIR}/lib/x64/*.dll" )
+  else ( )
+    file ( GLOB Windows_dll "${DEPS_DIR}/lib/Win32/*.dll" )
+  endif()
   foreach ( dll ${Windows_dll} )
     add_custom_command ( TARGET openxcom
       POST_BUILD
@@ -565,7 +587,7 @@ if ( APPLE AND CREATE_BUNDLE )
   endforeach ()
 endif ()
 
-#Setup source group for IDE
+#Setup source groups for IDE
 if ( MSVC )
   source_group ( "Basescape" FILES ${basescape_src} )
   source_group ( "Battlescape" FILES ${battlescape_src} )

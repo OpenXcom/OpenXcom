@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -224,9 +224,9 @@ void Inventory::drawItems()
 		// Ground items
 		for (std::vector<BattleItem*>::iterator i = _selUnit->getTile()->getInventory()->begin(); i != _selUnit->getTile()->getInventory()->end(); ++i)
 		{
-			if ((*i) == _selItem || (*i)->getSlotX() < _groundOffset)
+			// note that you can make items invisible by setting their width or height to 0 (for example used with tank corpse items)
+			if ((*i) == _selItem || (*i)->getSlotX() < _groundOffset || (*i)->getRules()->getInventoryHeight() == 0 || (*i)->getRules()->getInventoryWidth() == 0)
 				continue;
-
 			Surface *frame = texture->getFrame((*i)->getRules()->getBigSprite());
 			frame->setX((*i)->getSlot()->getX() + ((*i)->getSlotX() - _groundOffset) * RuleInventory::SLOT_W);
 			frame->setY((*i)->getSlot()->getY() + (*i)->getSlotY() * RuleInventory::SLOT_H);
@@ -419,6 +419,10 @@ void Inventory::mouseClick(Action *action, State *state)
 				if (item != 0)
 				{
 					setSelectedItem(item);
+					if (item->getExplodeTurn() > 0)
+					{
+						_warning->showMessage(_game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED"));
+					}
 				}
 			}
 		}
@@ -536,23 +540,60 @@ void Inventory::arrangeGround()
 {
 	RuleInventory *ground = _game->getRuleset()->getInventory("STR_GROUND");
 
-	// Lazy arranging
+	int slotsX = (320 - ground->getX()) / RuleInventory::SLOT_W;
+	int slotsY = (200 - ground->getY()) / RuleInventory::SLOT_H;
 	int x = 0;
+	int y = 0;
+	bool ok = false;
+	int xLastItem = 0;
+
 	if (_selUnit != 0)
 	{
+		// first move all items out of the way - a big number in X direction
 		for (std::vector<BattleItem*>::iterator i = _selUnit->getTile()->getInventory()->begin(); i != _selUnit->getTile()->getInventory()->end(); ++i)
 		{
 			(*i)->setSlot(ground);
-			(*i)->setSlotX(x);
+			(*i)->setSlotX(1000000);
 			(*i)->setSlotY(0);
-			x += (*i)->getRules()->getInventoryWidth();
 		}
 
+		// now for each item, find the most topleft position that is not occupied and will fit
+		for (std::vector<BattleItem*>::iterator i = _selUnit->getTile()->getInventory()->begin(); i != _selUnit->getTile()->getInventory()->end(); ++i)
+		{
+			x = 0;
+			y = 0;
+			ok = false;
+			while (!ok)
+			{
+				ok = true; // assume we can put the item here, if one of the following checks fails, we can't.
+				for (int xd = 0; xd < (*i)->getRules()->getInventoryWidth() && ok; xd++)
+				{
+					for (int yd = 0; yd < (*i)->getRules()->getInventoryHeight() && ok; yd++)
+					{
+						ok = _selUnit->getItem(ground, x + xd, y + yd) == 0;
+					}
+				}
+				if (ok)
+				{
+					(*i)->setSlotX(x);
+					(*i)->setSlotY(y);
+					xLastItem = x + (*i)->getRules()->getInventoryWidth();
+				}
+				else
+				{
+					y++;
+					if (y > slotsY - (*i)->getRules()->getInventoryHeight())
+					{
+						y = 0;
+						x++;
+					}
+				}
+			}
+		}
 	}
-	int slots = (320 - ground->getX()) / RuleInventory::SLOT_W;
-	if (x > _groundOffset + slots)
+	if (xLastItem > _groundOffset + slotsX)
 	{
-		_groundOffset += slots;
+		_groundOffset += slotsX;
 	}
 	else
 	{
@@ -560,6 +601,5 @@ void Inventory::arrangeGround()
 	}
 	drawItems();
 }
-
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -144,6 +144,7 @@ void ResearchState::btnNewClick(Action *action)
 
 /**
  * Display list of possible ResearchProject
+ * @param action Pointer to an action.
 */
 void ResearchState::onSelectProject(Action *action)
 {

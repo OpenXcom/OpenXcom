@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -32,7 +32,7 @@ namespace OpenXcom
 /**
  * Sets up a camera.
  */
-Camera::Camera(int spriteWidth, int spriteHeight, int mapWidth, int mapLength, int mapHeight, Map *map, int visibleMapHeight) : _scrollX(0), _scrollY(0), _RMBDragging(false), _spriteWidth(spriteWidth), _spriteHeight(spriteHeight), _mapWidth(mapWidth), _mapLength(mapLength), _mapHeight(mapHeight), _map(map), _visibleMapHeight(visibleMapHeight)
+Camera::Camera(int spriteWidth, int spriteHeight, int mapWidth, int mapLength, int mapHeight, Map *map, int visibleMapHeight) : _spriteWidth(spriteWidth), _spriteHeight(spriteHeight), _mapWidth(mapWidth), _mapLength(mapLength), _mapHeight(mapHeight), _scrollX(0), _scrollY(0), _RMBDragging(false), _visibleMapHeight(visibleMapHeight), _map(map)
 {
 	_mapOffset = Position(-250,250,0);
 	_screenWidth = _map->getWidth();
@@ -256,8 +256,9 @@ void Camera::setViewHeight(int viewheight)
 /**
  * Center map on a certain position.
  * @param mapPos Position to center on.
+ * @param redraw Redraw map or not.
  */
-void Camera::centerOnPosition(const Position &mapPos)
+void Camera::centerOnPosition(const Position &mapPos, bool redraw)
 {
 	Position screenPos;
 
@@ -269,7 +270,7 @@ void Camera::centerOnPosition(const Position &mapPos)
 	convertScreenToMap((_screenWidth / 2), (_visibleMapHeight / 2), &_centerX, &_centerY);
 
 	_mapOffset.z = mapPos.z;
-	_map->draw();
+	if (redraw) _map->draw();
 }
 
 /**
@@ -310,8 +311,8 @@ void Camera::convertMapToScreen(const Position &mapPos, Position *screenPos) con
 }
 
 /**
- * Convert map coordinates X,Y,Z to screen positions X, Y.
- * @param mapPos X,Y,Z coordinates on the map.
+ * Convert voxel coordinates X,Y,Z to screen positions X, Y.
+ * @param voxelPos X,Y,Z coordinates on the voxel.
  * @param screenPos to screen position.
  */
 void Camera::convertVoxelToScreen(const Position &voxelPos, Position *screenPos) const

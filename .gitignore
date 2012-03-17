@@ -24,7 +24,7 @@ Thumbs.db
 *.exp
 *.pdb
 *.dll
-*.user
+*.*.*.user
 *.aps
 *.pch
 *.vspscc
@@ -54,17 +54,17 @@ _ReSharper.*/
 *.mvf
 *.*sdf
 *.idc
+*.tmp
 #OpenXcom stuff
-bin/DATA/GEODATA/
-bin/DATA/GEOGRAPH/
-bin/DATA/MAPS/
-bin/DATA/ROUTES/
-bin/DATA/SOUND/
-bin/DATA/TERRAIN/
-bin/DATA/UFOGRAPH/
-bin/DATA/UFOINTRO/
-bin/DATA/UNITS/
-bin/USER/
+bin/data/GEODATA/
+bin/data/GEOGRAPH/
+bin/data/MAPS/
+bin/data/ROUTES/
+bin/data/SOUND/
+bin/data/TERRAIN/
+bin/data/UFOGRAPH/
+bin/data/UFOINTRO/
+bin/data/UNITS/
 deps/
 docs/html/
 build/

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -125,34 +125,6 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 	_lstItems->onRightArrowPress((ActionHandler)&PurchaseState::lstItemsRightArrowPress);
 	_lstItems->onRightArrowRelease((ActionHandler)&PurchaseState::lstItemsRightArrowRelease);
 
-	_crafts.push_back("STR_SKYRANGER");
-	_crafts.push_back("STR_INTERCEPTOR");
-	_items.push_back("STR_STINGRAY_LAUNCHER");
-	_items.push_back("STR_AVALANCHE_LAUNCHER");
-	_items.push_back("STR_CANNON");
-	_items.push_back("STR_STINGRAY_MISSILES");
-	_items.push_back("STR_AVALANCHE_MISSILES");
-	_items.push_back("STR_CANNON_ROUNDS_X50");
-	_items.push_back("STR_PISTOL");
-	_items.push_back("STR_PISTOL_CLIP");
-	_items.push_back("STR_RIFLE");
-	_items.push_back("STR_RIFLE_CLIP");
-	_items.push_back("STR_HEAVY_CANNON");
-	_items.push_back("STR_HC_AP_AMMO");
-	_items.push_back("STR_HC_HE_AMMO");
-	_items.push_back("STR_HC_I_AMMO");
-	_items.push_back("STR_AUTO_CANNON");
-	_items.push_back("STR_AC_AP_AMMO");
-	_items.push_back("STR_AC_HE_AMMO");
-	_items.push_back("STR_AC_I_AMMO");
-	_items.push_back("STR_ROCKET_LAUNCHER");
-	_items.push_back("STR_SMALL_ROCKET");
-	_items.push_back("STR_LARGE_ROCKET");
-	_items.push_back("STR_INCENDIARY_ROCKET");
-	_items.push_back("STR_GRENADE");
-	_items.push_back("STR_SMOKE_GRENADE");
-	_items.push_back("STR_ELECTRO_FLARE");
-
 	_qtys.push_back(0);
 	std::wstringstream ss;
 	ss << _base->getTotalSoldiers();
@@ -165,25 +137,36 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 	std::wstringstream ss3;
 	ss3 << _base->getTotalEngineers();
 	_lstItems->addRow(4, _game->getLanguage()->getString("STR_ENGINEER").c_str(), Text::formatFunding(_game->getRuleset()->getEngineerCost() * 2).c_str(), ss3.str().c_str(), L"0");
-	for (std::vector<std::string>::iterator i = _crafts.begin(); i != _crafts.end(); ++i)
+
+	std::vector<std::string> crafts = _game->getRuleset()->getCraftsList();
+	for (std::vector<std::string>::iterator i = crafts.begin(); i != crafts.end(); ++i)
 	{
-		_qtys.push_back(0);
-		int crafts = 0;
-		for (std::vector<Craft*>::iterator c = _base->getCrafts()->begin(); c != _base->getCrafts()->end(); ++c)
+		if (_game->getRuleset()->getCraft(*i)->getBuyCost() > 0)
 		{
-			if ((*c)->getRules()->getType() == *i)
-				crafts++;
+			_crafts.push_back(*i);
+			_qtys.push_back(0);
+			int crafts = 0;
+			for (std::vector<Craft*>::iterator c = _base->getCrafts()->begin(); c != _base->getCrafts()->end(); ++c)
+			{
+				if ((*c)->getRules()->getType() == *i)
+					crafts++;
+			}
+			std::wstringstream ss4;
+			ss4 << crafts;
+			_lstItems->addRow(4, _game->getLanguage()->getString(*i).c_str(), Text::formatFunding(_game->getRuleset()->getCraft(*i)->getBuyCost()).c_str(), ss4.str().c_str(), L"0");
 		}
-		std::wstringstream ss4;
-		ss4 << crafts;
-		_lstItems->addRow(4, _game->getLanguage()->getString(*i).c_str(), Text::formatFunding(_game->getRuleset()->getCraft(*i)->getCost()).c_str(), ss4.str().c_str(), L"0");
 	}
-	for (std::vector<std::string>::iterator i = _items.begin(); i != _items.end(); ++i)
+	std::vector<std::string> items = _game->getRuleset()->getItemsList();
+	for (std::vector<std::string>::iterator i = items.begin(); i != items.end(); ++i)
 	{
-		_qtys.push_back(0);
-		std::wstringstream ss5;
-		ss5 << _base->getItems()->getItem(*i);
-		_lstItems->addRow(4, _game->getLanguage()->getString(*i).c_str(), Text::formatFunding(_game->getRuleset()->getItem(*i)->getCost()).c_str(), ss5.str().c_str(), L"0");
+		if (_game->getRuleset()->getItem(*i)->getBuyCost() > 0)
+		{
+			_items.push_back(*i);
+			_qtys.push_back(0);
+			std::wstringstream ss5;
+			ss5 << _base->getItems()->getItem(*i);
+			_lstItems->addRow(4, _game->getLanguage()->getString(*i).c_str(), Text::formatFunding(_game->getRuleset()->getItem(*i)->getBuyCost()).c_str(), ss5.str().c_str(), L"0");
+		}
 	}
 
 	_timerInc = new Timer(50);
@@ -341,12 +324,12 @@ int PurchaseState::getPrice()
 	// Craft cost
 	else if (_sel >= 3 && _sel < 3 + _crafts.size())
 	{
-		return _game->getRuleset()->getCraft(_crafts[_sel - 3])->getCost();
+		return _game->getRuleset()->getCraft(_crafts[_sel - 3])->getBuyCost();
 	}
 	// Item cost
 	else
 	{
-		return _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getCost();
+		return _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getBuyCost();
 	}
 }
 

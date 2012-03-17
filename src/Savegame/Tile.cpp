@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -112,7 +112,7 @@ MapData *Tile::getMapData(int part) const
 {
 	if (part < 0 || part > 3)
 	{
-		throw Exception("unkown MapDataID part");
+		throw Exception("unknown MapDataID part");
 	}
 	return _objects[part];
 }
@@ -142,7 +142,7 @@ void Tile::getMapData(int *mapDataID, int *mapDataSetID, int part) const
 }
 
 /**
- * Gets wether this tile has no objects. Note that we can have a unit or smoke on this tile.
+ * Gets whether this tile has no objects. Note that we can have a unit or smoke on this tile.
  * @return bool True if there is nothing but air on this tile.
  */
 bool Tile::isVoid() const
@@ -291,7 +291,7 @@ int Tile::closeUfoDoor()
 }
 
 /**
- * Sets the tile's cache flag. - TODO: set this for each object seperatly?
+ * Sets the tile's cache flag. - TODO: set this for each object separately?
  * @param flag true/false
  * @param part 0-2 westwall/northwall/content+floor
  */
@@ -326,7 +326,7 @@ bool Tile::isDiscovered(int part) const
 
 /**
  * Reset the light amount on the tile. This is done before a light level recalculation.
- * @param layer Light is seperated in 3 layers: Ambient, Static and Dynamic.
+ * @param layer Light is separated in 3 layers: Ambient, Static and Dynamic.
  */
 void Tile::resetLight(int layer)
 {
@@ -337,7 +337,7 @@ void Tile::resetLight(int layer)
 /**
  * Add the light amount on the tile. Only add light if the current light is lower.
  * @param light Amount of light to add.
- * @param layer Light is seperated in 3 layers: Ambient, Static and Dynamic.
+ * @param layer Light is separated in 3 layers: Ambient, Static and Dynamic.
  */
 void Tile::addLight(int light, int layer)
 {
@@ -365,7 +365,7 @@ int Tile::getShade() const
 
 /**
  * Destroy a part on this tile. We first remove the old object, then replace it with the destroyed one.
- * This is because the object type of the old and new one are not nescessarly the same.
+ * This is because the object type of the old and new one are not necessarily the same.
  * If the destroyed part is an explosive, set the tile's explosive value, which will trigger a chained explosion.
  * @param part
  */
@@ -389,7 +389,7 @@ void Tile::destroy(int part)
 	/* check if the floor on the lowest level is gone */
 	if (part == MapData::O_FLOOR && getPosition().z == 0 && _objects[MapData::O_FLOOR] == 0)
 	{
-		/* replace with scourched earth */
+		/* replace with scorched earth */
 		setMapData(MapDataSet::getScourgedEarthTile(), 1, 0, MapData::O_FLOOR);
 	}
 }

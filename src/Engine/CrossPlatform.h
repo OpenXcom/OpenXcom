@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -31,20 +31,28 @@ namespace OpenXcom
  */
 namespace CrossPlatform
 {
-	/// Gets the path for a data file.
-	std::string getDataFile(const std::string &filename);
 	/// Displays an error message.
 	void showError(const std::string &error);
 	/// Displays an error message.
 	void showError(const std::wstring &error);
-	/// Finds the game's data folder in the system.
-	std::string findDataFolder(bool exists);
-	/// Finds the game's user folder in the system.
-	std::string findUserFolder(bool exists);
+	/// Finds the game's data folders in the system.
+	std::vector<std::string> findDataFolders();
+	/// Finds the game's user folders in the system.
+	std::vector<std::string> findUserFolders();
+	/// Finds the game's config folder in the system.
+	std::string findConfigFolder();
+	/// Gets the path for a data file.
+	std::string getDataFile(const std::string &filename);
 	/// Creates a folder.
-	int createFolder(const char *path);
+	bool createFolder(const std::string &path);
+	/// Terminates a path.
+	std::string endPath(const std::string &path);
 	/// Returns the list of files in a folder.
 	std::vector<std::string> getFolderContents(const std::string &path, const std::string &ext = "");
+	/// Checks if the path is an existing folder.
+	bool folderExists(const std::string &path);
+	/// Checks if the path is an existing file.
+	bool fileExists(const std::string &path);
 }
 
 }

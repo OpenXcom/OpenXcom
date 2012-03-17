@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -876,20 +876,12 @@ void Globe::rotate()
  */
 void Globe::draw()
 {
-	drawRefresh();
-	drawDetail();
-}
-
-/**
- * Only draws what needs updating every tick.
- */
-void Globe::drawRefresh()
-{
 	Surface::draw();
 	drawOcean();
 	drawLand();
 	drawShadow();
 	drawMarkers();
+	drawDetail();
 }
 
 

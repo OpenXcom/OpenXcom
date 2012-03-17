@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -18,9 +18,10 @@
  */
 #include "Ruleset.h"
 #include <fstream>
-#include "yaml.h"
+#include <yaml-cpp/yaml.h>
 #include "../Engine/Options.h"
 #include "../Engine/Exception.h"
+#include "../Engine/CrossPlatform.h"
 #include "SoldierNamePool.h"
 #include "RuleCountry.h"
 #include "RuleRegion.h"
@@ -32,8 +33,10 @@
 #include "RuleTerrain.h"
 #include "MapDataSet.h"
 #include "RuleSoldier.h"
-#include "RuleGenUnit.h"
-#include "RuleArmor.h"
+#include "Unit.h"
+#include "AlienRace.h"
+#include "AlienDeployment.h"
+#include "Armor.h"
 #include "ArticleDefinition.h"
 #include "RuleInventory.h"
 #include "RuleResearchProject.h"
@@ -46,8 +49,18 @@ namespace OpenXcom
  * Creates a ruleset with blank sets of rules.
  */
 Ruleset::Ruleset() : _names(), _countries(), _regions(), _facilities(), _crafts(), _craftWeapons(), _items(), _ufos(),
-					 _terrains(), _mapDataSets(), _soldiers(), _genUnits(), _invs(), _costSoldier(0), _costEngineer(0), _costScientist(0), _timePersonnel(0)
+					 _terrains(), _mapDataSets(), _soldiers(), _units(), _invs(), _costSoldier(0), _costEngineer(0), _costScientist(0), _timePersonnel(0)
 {
+	// Add soldier names
+	std::vector<std::string> names = CrossPlatform::getFolderContents(Options::getDataFolder() + "SoldierName/", "nam");
+
+	for (std::vector<std::string>::iterator i = names.begin(); i != names.end(); ++i)
+	{
+		std::string file = (*i).substr(0, (*i).length()-4);
+		SoldierNamePool *pool = new SoldierNamePool();
+		pool->load(file);
+		_names.push_back(pool);
+	}
 }
 
 /**
@@ -99,11 +112,11 @@ Ruleset::~Ruleset()
 	{
 		delete i->second;
 	}
-	for (std::map<std::string, RuleGenUnit*>::iterator i = _genUnits.begin(); i != _genUnits.end(); ++i)
+	for (std::map<std::string, Unit*>::iterator i = _units.begin(); i != _units.end(); ++i)
 	{
 		delete i->second;
 	}
-	for (std::map<std::string, RuleArmor*>::iterator i = _armors.begin(); i != _armors.end(); ++i)
+	for (std::map<std::string, Armor*>::iterator i = _armors.begin(); i != _armors.end(); ++i)
 	{
 		delete i->second;
 	}
@@ -150,7 +163,7 @@ void Ruleset::load(const std::string &filename)
 			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
 			{
 				std::string type;
-				j.second()["type"] >> type;
+				(*j)["type"] >> type;
 				RuleCountry *rule;
 				if (_countries.find(type) != _countries.end())
 				{
@@ -162,7 +175,7 @@ void Ruleset::load(const std::string &filename)
 					_countries[type] = rule;
 					_countriesIndex.push_back(type);
 				}
-				rule->load(j.second());
+				rule->load(*j);
 			}
 		}
 		else if (key == "regions")
@@ -170,7 +183,7 @@ void Ruleset::load(const std::string &filename)
 			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
 			{
 				std::string type;
-				j.second()["type"] >> type;
+				(*j)["type"] >> type;
 				RuleRegion *rule;
 				if (_regions.find(type) != _regions.end())
 				{
@@ -182,7 +195,7 @@ void Ruleset::load(const std::string &filename)
 					_regions[type] = rule;
 					_regionsIndex.push_back(type);
 				}
-				rule->load(j.second());
+				rule->load(*j);
 			}
 		}
 		else if (key == "facilities")
@@ -190,7 +203,7 @@ void Ruleset::load(const std::string &filename)
 			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
 			{
 				std::string type;
-				j.second()["type"] >> type;
+				(*j)["type"] >> type;
 				RuleBaseFacility *rule;
 				if (_facilities.find(type) != _facilities.end())
 				{
@@ -202,26 +215,7 @@ void Ruleset::load(const std::string &filename)
 					_facilities[type] = rule;
 					_facilitiesIndex.push_back(type);
 				}
-				rule->load(j.second());
-			}
-		}
-		else if (key == "mapDataSets")
-		{
-			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
-			{
-				std::string type;
-				j.second()["name"] >> type;
-				MapDataSet *rule;
-				if (_mapDataSets.find(type) != _mapDataSets.end())
-				{
-					rule = _mapDataSets[type];
-				}
-				else
-				{
-					rule = new MapDataSet(type, 0);
-					_mapDataSets[type] = rule;
-				}
-				rule->load(j.second());
+				rule->load(*j);
 			}
 		}
 		else if (key == "crafts")
@@ -229,7 +223,7 @@ void Ruleset::load(const std::string &filename)
 			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
 			{
 				std::string type;
-				j.second()["type"] >> type;
+				(*j)["type"] >> type;
 				RuleCraft *rule;
 				if (_crafts.find(type) != _crafts.end())
 				{
@@ -241,7 +235,7 @@ void Ruleset::load(const std::string &filename)
 					_crafts[type] = rule;
 					_craftsIndex.push_back(type);
 				}
-				rule->load(j.second(), this);
+				rule->load(*j, this);
 			}
 		}
 		else if (key == "craftWeapons")
@@ -249,7 +243,7 @@ void Ruleset::load(const std::string &filename)
 			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
 			{
 				std::string type;
-				j.second()["type"] >> type;
+				(*j)["type"] >> type;
 				RuleCraftWeapon *rule;
 				if (_craftWeapons.find(type) != _craftWeapons.end())
 				{
@@ -261,7 +255,7 @@ void Ruleset::load(const std::string &filename)
 					_craftWeapons[type] = rule;
 					_craftWeaponsIndex.push_back(type);
 				}
-				rule->load(j.second());
+				rule->load(*j);
 			}
 		}
 		else if (key == "items")
@@ -269,7 +263,7 @@ void Ruleset::load(const std::string &filename)
 			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
 			{
 				std::string type;
-				j.second()["type"] >> type;
+				(*j)["type"] >> type;
 				RuleItem *rule;
 				if (_items.find(type) != _items.end())
 				{
@@ -281,7 +275,7 @@ void Ruleset::load(const std::string &filename)
 					_items[type] = rule;
 					_itemsIndex.push_back(type);
 				}
-				rule->load(j.second());
+				rule->load(*j);
 			}
 		}
 		else if (key == "ufos")
@@ -289,7 +283,7 @@ void Ruleset::load(const std::string &filename)
 			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
 			{
 				std::string type;
-				j.second()["type"] >> type;
+				(*j)["type"] >> type;
 				RuleUfo *rule;
 				if (_ufos.find(type) != _ufos.end())
 				{
@@ -300,7 +294,7 @@ void Ruleset::load(const std::string &filename)
 					rule = new RuleUfo(type);
 					_ufos[type] = rule;
 				}
-				rule->load(j.second(), this);
+				rule->load(*j, this);
 			}
 		}
 		else if (key == "invs")
@@ -308,7 +302,7 @@ void Ruleset::load(const std::string &filename)
 			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
 			{
 				std::string type;
-				j.second()["id"] >> type;
+				(*j)["id"] >> type;
 				RuleInventory *rule;
 				if (_invs.find(type) != _invs.end())
 				{
@@ -319,7 +313,7 @@ void Ruleset::load(const std::string &filename)
 					rule = new RuleInventory(type);
 					_invs[type] = rule;
 				}
-				rule->load(j.second());
+				rule->load(*j);
 			}
 		}
 		else if (key == "terrains")
@@ -327,7 +321,7 @@ void Ruleset::load(const std::string &filename)
 			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
 			{
 				std::string type;
-				j.second()["name"] >> type;
+				(*j)["name"] >> type;
 				RuleTerrain *rule;
 				if (_terrains.find(type) != _terrains.end())
 				{
@@ -338,7 +332,7 @@ void Ruleset::load(const std::string &filename)
 					rule = new RuleTerrain(type);
 					_terrains[type] = rule;
 				}
-				rule->load(j.second(), this);
+				rule->load(*j, this);
 			}
 		}
 		else if (key == "armors")
@@ -346,19 +340,76 @@ void Ruleset::load(const std::string &filename)
 			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
 			{
 				std::string type;
-				j.second()["type"] >> type;
-				RuleArmor *rule;
+				(*j)["type"] >> type;
+				Armor *rule;
 				if (_armors.find(type) != _armors.end())
 				{
 					rule = _armors[type];
 				}
 				else
 				{
-					rule = new RuleArmor(type, "", 0);
+					rule = new Armor(type, "", 0);
 					_armors[type] = rule;
 					_armorsIndex.push_back(type);
 				}
-				rule->load(j.second());
+				rule->load(*j);
+			}
+		}
+		else if (key == "soldiers")
+		{
+			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
+			{
+				std::string type;
+				(*j)["type"] >> type;
+				RuleSoldier *rule;
+				if (_soldiers.find(type) != _soldiers.end())
+				{
+					rule = _soldiers[type];
+				}
+				else
+				{
+					rule = new RuleSoldier(type);
+					_soldiers[type] = rule;
+				}
+				rule->load(*j);
+			}
+		}
+		else if (key == "units")
+		{
+			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
+			{
+				std::string type;
+				(*j)["type"] >> type;
+				Unit *rule;
+				if (_units.find(type) != _units.end())
+				{
+					rule = _units[type];
+				}
+				else
+				{
+					rule = new Unit(type, "", "");
+					_units[type] = rule;
+				}
+				rule->load(*j);
+			}
+		}
+		else if (key == "alienRaces")
+		{
+			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
+			{
+				std::string type;
+				(*j)["id"] >> type;
+				AlienRace *rule;
+				if (_alienRaces.find(type) != _alienRaces.end())
+				{
+					rule = _alienRaces[type];
+				}
+				else
+				{
+					rule = new AlienRace(type);
+					_alienRaces[type] = rule;
+				}
+				rule->load(*j);
 			}
 		}
 		else if (key == "costSoldier")
@@ -420,13 +471,6 @@ void Ruleset::save(const std::string &filename) const
 		i->second->save(out);
 	}
 	out << YAML::EndSeq;
-	out << YAML::Key << "mapDataSets" << YAML::Value;
-	out << YAML::BeginSeq;
-	for (std::map<std::string, MapDataSet*>::const_iterator i = _mapDataSets.begin(); i != _mapDataSets.end(); ++i)
-	{
-		i->second->save(out);
-	}
-	out << YAML::EndSeq;
 	out << YAML::Key << "crafts" << YAML::Value;
 	out << YAML::BeginSeq;
 	for (std::map<std::string, RuleCraft*>::const_iterator i = _crafts.begin(); i != _crafts.end(); ++i)
@@ -471,7 +515,28 @@ void Ruleset::save(const std::string &filename) const
 	out << YAML::EndSeq;
 	out << YAML::Key << "armors" << YAML::Value;
 	out << YAML::BeginSeq;
-	for (std::map<std::string, RuleArmor*>::const_iterator i = _armors.begin(); i != _armors.end(); ++i)
+	for (std::map<std::string, Armor*>::const_iterator i = _armors.begin(); i != _armors.end(); ++i)
+	{
+		i->second->save(out);
+	}
+	out << YAML::EndSeq;
+	out << YAML::Key << "soldiers" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::map<std::string, RuleSoldier*>::const_iterator i = _soldiers.begin(); i != _soldiers.end(); ++i)
+	{
+		i->second->save(out);
+	}
+	out << YAML::EndSeq;
+	out << YAML::Key << "units" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::map<std::string, Unit*>::const_iterator i = _units.begin(); i != _units.end(); ++i)
+	{
+		i->second->save(out);
+	}
+	out << YAML::EndSeq;
+	out << YAML::Key << "alienRaces" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::map<std::string, AlienRace*>::const_iterator i = _alienRaces.begin(); i != _alienRaces.end(); ++i)
 	{
 		i->second->save(out);
 	}
@@ -537,6 +602,16 @@ RuleBaseFacility *const Ruleset::getBaseFacility(const std::string &id) const
 }
 
 /**
+ * Returns the list of all base facilities
+ * provided by the ruleset.
+ * @return List of base faciliies.
+ */
+std::vector<std::string> Ruleset::getBaseFacilitiesList() const
+{
+	return _facilitiesIndex;
+}
+
+/**
  * Returns the rules for the specified craft.
  * @param id Craft type.
  * @return Rules for the craft.
@@ -544,6 +619,16 @@ RuleBaseFacility *const Ruleset::getBaseFacility(const std::string &id) const
 RuleCraft *const Ruleset::getCraft(const std::string &id) const
 {
 	return _crafts.find(id)->second;
+}
+
+/**
+ * Returns the list of all crafts
+ * provided by the ruleset.
+ * @return List of crafts.
+ */
+std::vector<std::string> Ruleset::getCraftsList() const
+{
+	return _craftsIndex;
 }
 
 /**
@@ -555,14 +640,38 @@ RuleCraftWeapon *const Ruleset::getCraftWeapon(const std::string &id) const
 {
 	return _craftWeapons.find(id)->second;
 }
+
+/**
+ * Returns the list of all craft weapons
+ * provided by the ruleset.
+ * @return List of craft weapons.
+ */
+std::vector<std::string> Ruleset::getCraftWeaponsList() const
+{
+	return _craftWeaponsIndex;
+}
+
 /**
  * Returns the rules for the specified item.
  * @param id Item type.
- * @return Rules for the item.
+ * @return Rules for the item. Or 0 when the item is not found.
  */
 RuleItem *const Ruleset::getItem(const std::string &id) const
 {
-	return _items.find(id)->second;
+	if (_items.find(id) != _items.end())
+		return _items.find(id)->second;
+	else
+		return 0;
+}
+
+/**
+ * Returns the list of all items
+ * provided by the ruleset.
+ * @return List of items.
+ */
+std::vector<std::string> Ruleset::getItemsList() const
+{
+	return _itemsIndex;
 }
 
 /**
@@ -590,9 +699,19 @@ RuleTerrain *const Ruleset::getTerrain(const std::string &name) const
  * @param name datafile name.
  * @return Rules for the datafile.
  */
-MapDataSet *const Ruleset::getMapDataSet(const std::string &name) const
+MapDataSet *const Ruleset::getMapDataSet(const std::string &name)
 {
-	return _mapDataSets.find(name)->second;
+	std::map<std::string, MapDataSet*>::iterator map = _mapDataSets.find(name);
+	if (map == _mapDataSets.end())
+	{
+		MapDataSet *set = new MapDataSet(name);
+		_mapDataSets[name] = set;
+		return set;
+	}
+	else
+	{
+		return map->second;
+	}
 }
 
 /**
@@ -610,9 +729,29 @@ RuleSoldier *const Ruleset::getSoldier(const std::string &name) const
  * @param name Unit name.
  * @return Rules for the units.
  */
-RuleGenUnit *const Ruleset::getGenUnit(const std::string &name) const
+Unit *const Ruleset::getUnit(const std::string &name) const
 {
-	return _genUnits.find(name)->second;
+	return _units.find(name)->second;
+}
+
+/**
+ * Returns the info about a specific alien race
+ * @param name Race name.
+ * @return Rules for the race.
+ */
+AlienRace *const Ruleset::getAlienRace(const std::string &name) const
+{
+	return _alienRaces.find(name)->second;
+}
+
+/**
+ * Returns the info about a specific deployment
+ * @param name Deployment name.
+ * @return Rules for the deployment.
+ */
+AlienDeployment *const Ruleset::getDeployment(const std::string &name) const
+{
+	return _alienDeployments.find(name)->second;
 }
 
 /**
@@ -620,7 +759,7 @@ RuleGenUnit *const Ruleset::getGenUnit(const std::string &name) const
  * @param name Armor name.
  * @return Rules for the armor.
  */
-RuleArmor *const Ruleset::getArmor(const std::string &name) const
+Armor *const Ruleset::getArmor(const std::string &name) const
 {
 	return _armors.find(name)->second;
 }

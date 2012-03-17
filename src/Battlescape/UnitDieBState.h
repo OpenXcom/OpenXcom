@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -39,7 +39,7 @@ private:
 	bool _noSound;
 public:
 	/// Creates a new UnitDieBState class
-	UnitDieBState(BattlescapeState *parent, BattleUnit *unit, ItemDamageType damageType, bool noSound);
+	UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDamageType damageType, bool noSound);
 	/// Cleans up the UnitDieBState.
 	~UnitDieBState();
 	/// Initializes the state.
@@ -51,7 +51,7 @@ public:
 	/// Get the result of the state.
 	std::string getResult() const;
 	/// Convert a unit to a corpse.
-	void convertUnitToCorpse(BattleUnit *unit, TileEngine *terrain);
+	void convertUnitToCorpse();
 };
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -21,8 +21,8 @@
 
 #include <string>
 #include <vector>
-#include "SDL.h"
-#include "yaml.h"
+#include <SDL.h>
+#include <yaml-cpp/yaml.h>
 
 namespace OpenXcom
 {
@@ -48,7 +48,7 @@ private:
 	static MapData *_blankTile;
 	static MapData *_scourgedTile;
 public:
-	MapDataSet(const std::string &name, int size = 0);
+	MapDataSet(const std::string &name);
 	~MapDataSet();
 	/// Loads the map data set from YAML.
 	void load(const YAML::Node& node);
@@ -65,9 +65,9 @@ public:
 	/// Get surfaces in this dataset.
 	SurfaceSet *getSurfaceset() const;
 	/// Load the objects from an MCD file.
-	void load(ResourcePack *res);
+	void loadData();
 	///	Unload to free memory.
-	void unload();
+	void unloadData();
 	///
 	static MapData *getBlankFloorTile();
 	static MapData *getScourgedEarthTile();

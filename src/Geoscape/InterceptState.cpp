@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -31,6 +31,7 @@
 #include "../Savegame/Craft.h"
 #include "../Ruleset/RuleCraft.h"
 #include "../Savegame/SavedGame.h"
+#include "../Engine/Options.h"
 #include "SelectDestinationState.h"
 
 namespace OpenXcom
@@ -127,13 +128,13 @@ InterceptState::InterceptState(Game *game, Globe *globe, Base *base) : State(gam
 				ss << (*j)->getNumSoldiers();
 			}
 			ss << "/";
-			if ((*j)->getNumHWPs() > 0)
+			if ((*j)->getNumVehicles() > 0)
 			{
 				ss << L'\x01' << (*j)->getNumWeapons() << L'\x01';
 			}
 			else
 			{
-				ss << (*j)->getNumHWPs();
+				ss << (*j)->getNumVehicles();
 			}
 			_crafts.push_back(*j);
 			_lstCrafts->addRow(4, (*j)->getName(_game->getLanguage()).c_str(), _game->getLanguage()->getString((*j)->getStatus()).c_str(), (*i)->getName().c_str(), ss.str().c_str());
@@ -170,7 +171,7 @@ void InterceptState::btnCancelClick(Action *action)
 void InterceptState::lstCraftsClick(Action *action)
 {
 	Craft* c = _crafts[_lstCrafts->getSelectedRow()];
-	if (c->getStatus() == "STR_READY")
+	if (c->getStatus() != "STR_OUT" && (c->getStatus() == "STR_READY" || Options::getBool("craftLaunchAlways")))
 	{
 		_game->popState();
 		_game->pushState(new SelectDestinationState(_game, c, _globe));

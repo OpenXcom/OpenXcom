@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -130,7 +130,7 @@ void CraftsState::init()
 		std::wstringstream ss, ss2, ss3;
 		ss << (*i)->getNumWeapons() << "/" << (*i)->getRules()->getWeapons();
 		ss2 << (*i)->getNumSoldiers();
-		ss3 << (*i)->getNumHWPs();
+		ss3 << (*i)->getNumVehicles();
 		_lstCrafts->addRow(5, (*i)->getName(_game->getLanguage()).c_str(), _game->getLanguage()->getString((*i)->getStatus()).c_str(), ss.str().c_str(), ss2.str().c_str(), ss3.str().c_str());
 	}
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -21,7 +21,8 @@
 
 #include <vector>
 #include <string>
-#include "yaml.h"
+#include <yaml-cpp/yaml.h>
+#include "MapBlock.h"
 
 namespace OpenXcom
 {
@@ -47,7 +48,7 @@ public:
 	RuleTerrain(const std::string &name);
 	~RuleTerrain();
 	/// Loads the terrain from YAML.
-	void load(const YAML::Node& node, const Ruleset *ruleset);
+	void load(const YAML::Node& node, Ruleset *ruleset);
 	/// Saves the terrain to YAML.
 	void save(YAML::Emitter& out) const;
 	/// Gets the terrain's name (used for MAP generation).
@@ -57,7 +58,9 @@ public:
 	/// Gets the terrain's mapdatafiles.
 	std::vector<MapDataSet*> *getMapDataSets();
 	/// Gets a random mapblock.
-	MapBlock *getRandomMapBlock(int maxsize, bool landingzone);
+	MapBlock *getRandomMapBlock(int maxsize, MapBlockType type);
+	/// Get a mapblock given it's name.
+	MapBlock* getMapBlock(const std::string &name);
 	/// Get the mapdata object.
 	MapData *getMapData(int *id, int *mapDataSetID) const;
 };

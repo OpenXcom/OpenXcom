@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -438,7 +438,7 @@ int Base::getTotalScientists() const
 	const std::vector<ResearchProject *> & researchs (getResearch());
 	for (std::vector<ResearchProject *>::const_iterator itResearch = researchs.begin ();
 		 itResearch != researchs.end ();
-		 itResearch++)
+		 ++itResearch)
 	{
 		total += (*itResearch)->getAssigned ();
 	}
@@ -556,7 +556,7 @@ int Base::getUsedLaboratories() const
 	int usedLabSpace = 0;
 	for (std::vector<ResearchProject *>::const_iterator itResearch = researchs.begin ();
 		 itResearch != researchs.end ();
-		 itResearch++)
+		 ++itResearch)
 	{
 		usedLabSpace += (*itResearch)->getAssigned ();
 	}
@@ -678,7 +678,7 @@ int Base::getAllocatedScientists() const
 	const std::vector<ResearchProject *> & researchs (getResearch());
 	for (std::vector<ResearchProject *>::const_iterator itResearch = researchs.begin ();
 		 itResearch != researchs.end ();
-		 itResearch++)
+		 ++itResearch)
 	{
 		total += (*itResearch)->getAssigned ();
 	}
@@ -782,7 +782,7 @@ int Base::getCraftMaintenance() const
 	int total = 0;
 	for (std::vector<Craft*>::const_iterator i = _crafts.begin(); i != _crafts.end(); ++i)
 	{
-		total += (*i)->getRules()->getCost();
+		total += (*i)->getRules()->getBuyCost();
 	}
 	return total;
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -25,37 +25,105 @@
 #include "../Engine/Language.h"
 #include "../Battlescape/Pathfinding.h"
 #include "../Battlescape/BattleAIState.h"
-#include "GenUnit.h"
 #include "Soldier.h"
-#include "../Ruleset/RuleArmor.h"
+#include "../Ruleset/Armor.h"
+#include "../Ruleset/Unit.h"
 #include "../Engine/RNG.h"
 #include "../Ruleset/RuleInventory.h"
+#include "../Ruleset/RuleSoldier.h"
 #include "Tile.h"
+#include "SavedGame.h"
 
 namespace OpenXcom
 {
 
 /**
- * Initializes a BattleUnit.
- * @param unit Pointer to Unit object.
+ * Initializes a BattleUnit from a Soldier
+ * @param soldier Pointer to the Soldier.
  * @param faction Which faction the units belongs to.
  */
-BattleUnit::BattleUnit(Unit *unit, UnitFaction faction) : _unit(unit), _faction(faction), _id(0), _pos(Position()), _tile(0), _lastPos(Position()), _direction(0), _directionTurret(0), _toDirectionTurret(0),  _verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true), _expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expMelee(0), _turretType(-1)
+BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction), _id(0), _pos(Position()), _tile(0), _lastPos(Position()), _direction(0), _directionTurret(0), _toDirectionTurret(0),  _verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true), _expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expMelee(0), _turretType(-1), _motionPoints(0), _kills(0)
 {
-	_tu = unit->getTimeUnits();
-	_energy = unit->getStamina();
-	_health = unit->getHealth();
+	_name = soldier->getName();
+	_id = soldier->getId();
+	_type = "SOLDIER";
+	_rank = soldier->getRankString();
+	_stats = *soldier->getCurrentStats();
+	_standHeight = soldier->getRules()->getStandHeight();
+	_kneelHeight = soldier->getRules()->getKneelHeight();
+	_loftemps = soldier->getRules()->getLoftemps();
+	_deathSound = 0; // this one is hardcoded
+	_intelligence = 2;
+	_aggression = 1;
+	_specab = SPECAB_NONE;
+	_armor = soldier->getArmor();
+	_gender = soldier->getGender();
+
+	int rankbonus = 0;
+
+	switch (soldier->getRank())
+	{
+	case RANK_SERGEANT:  rankbonus =  1; break;
+	case RANK_CAPTAIN:   rankbonus =  3; break;
+	case RANK_COLONEL:   rankbonus =  6; break;
+	case RANK_COMMANDER: rankbonus = 10; break;
+	}
+
+	_value = 20 + soldier->getMissions() + rankbonus;
+
+	_tu = _stats.tu;
+	_energy = _stats.stamina;
+	_health = _stats.health;
 	_morale = 100;
 	_stunlevel = 0;
-	_armor[SIDE_FRONT] = unit->getArmor()->getFrontArmor();
-	_armor[SIDE_LEFT] = unit->getArmor()->getSideArmor();
-	_armor[SIDE_RIGHT] = unit->getArmor()->getSideArmor();
-	_armor[SIDE_REAR] = unit->getArmor()->getRearArmor();
-	_armor[SIDE_UNDER] = unit->getArmor()->getUnderArmor();
+	_currentArmor[SIDE_FRONT] = _armor->getFrontArmor();
+	_currentArmor[SIDE_LEFT] = _armor->getSideArmor();
+	_currentArmor[SIDE_RIGHT] = _armor->getSideArmor();
+	_currentArmor[SIDE_REAR] = _armor->getRearArmor();
+	_currentArmor[SIDE_UNDER] = _armor->getUnderArmor();
 	for (int i = 0; i < 6; ++i)
 		_fatalWounds[i] = 0;
 	for (int i = 0; i < 5; ++i)
 		_cache[i] = 0;
+
+}
+
+/**
+ * Initializes a BattleUnit from a Unit object.
+ * @param unit Pointer to Unit object.
+ * @param faction Which faction the units belongs to.
+ */
+BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, Armor *armor) : _faction(faction), _id(-1), _pos(Position()), _tile(0), _lastPos(Position()), _direction(0), _directionTurret(0), _toDirectionTurret(0),  _verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true), _expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expMelee(0), _turretType(-1), _motionPoints(0), _kills(0), _armor(armor)
+{
+	_type = unit->getType();
+	_rank = unit->getRank();
+	_race = unit->getRace();
+	_stats = *unit->getStats();
+	_standHeight = unit->getStandHeight();
+	_kneelHeight = unit->getKneelHeight();
+	_loftemps = unit->getLoftemps();
+	_deathSound = unit->getDeathSound();
+	_intelligence = unit->getIntelligence();
+	_aggression = unit->getAggression();
+	_specab = (SpecialAbility) unit->getSpecialAbility();
+	_value = unit->getValue();
+	_gender = GENDER_MALE;
+
+	_tu = _stats.tu;
+	_energy = _stats.stamina;
+	_health = _stats.health;
+	_morale = 100;
+	_stunlevel = 0;
+	_currentArmor[SIDE_FRONT] = _armor->getFrontArmor();
+	_currentArmor[SIDE_LEFT] = _armor->getSideArmor();
+	_currentArmor[SIDE_RIGHT] = _armor->getSideArmor();
+	_currentArmor[SIDE_REAR] = _armor->getRearArmor();
+	_currentArmor[SIDE_UNDER] = _armor->getUnderArmor();
+	for (int i = 0; i < 6; ++i)
+		_fatalWounds[i] = 0;
+	for (int i = 0; i < 5; ++i)
+		_cache[i] = 0;
+
 }
 
 /**
@@ -76,7 +144,6 @@ void BattleUnit::load(const YAML::Node &node)
 	int a = 0;
 
 	node["id"] >> _id;
-	std::string name;
 	node["faction"] >> a;
 	_faction = (UnitFaction)a;
 	node["status"] >> a;
@@ -85,13 +152,15 @@ void BattleUnit::load(const YAML::Node &node)
 	node["position"][1] >> _pos.y;
 	node["position"][2] >> _pos.z;
 	node["direction"] >> _direction;
+	node["directionTurret"] >> _directionTurret;
 	node["tu"] >> _tu;
 	node["health"] >> _health;
+	node["stunlevel"] >> _stunlevel;
 	node["energy"] >> _energy;
 	node["morale"] >> _morale;
 	node["kneeled"] >> _kneeled;
 	for (int i=0; i < 5; i++)
-		node["armor"][i] >> _armor[i];
+		node["armor"][i] >> _currentArmor[i];
 	for (int i=0; i < 6; i++)
 		node["fatalWounds"][i] >> _fatalWounds[i];
 	node["expBravery"] >> _expBravery;
@@ -100,6 +169,7 @@ void BattleUnit::load(const YAML::Node &node)
 	node["expThrowing"] >> _expThrowing;
 	node["expPsiSkill"] >> _expPsiSkill;
 	node["expMelee"] >> _expMelee;
+	node["turretType"] >> _turretType;
 
 }
 
@@ -113,28 +183,24 @@ void BattleUnit::save(YAML::Emitter &out) const
 
 	out << YAML::Key << "id" << YAML::Value << _id;
 	out << YAML::Key << "faction" << YAML::Value << _faction;
-	Soldier *soldier = dynamic_cast<Soldier*>(this->getUnit());
-	if (soldier != 0)
-	{
-		out << YAML::Key << "soldierId" << YAML::Value << soldier->getId();
-	}
-	else
-	{
-		out << YAML::Key << "soldierId" << YAML::Value << -1;
-	}
-	out << YAML::Key << "name" << YAML::Value << Language::wstrToUtf8(_unit->getName(0));
+	out << YAML::Key << "soldierId" << YAML::Value << _id;
+	out << YAML::Key << "genUnitType" << YAML::Value << _type;
+	out << YAML::Key << "genUnitArmor" << YAML::Value << _armor->getType();
+	out << YAML::Key << "name" << YAML::Value << Language::wstrToUtf8(getName(0));
 	out << YAML::Key << "status" << YAML::Value << _status;
 	out << YAML::Key << "position" << YAML::Value << YAML::Flow;
 	out << YAML::BeginSeq << _pos.x << _pos.y << _pos.z << YAML::EndSeq;
 	out << YAML::Key << "direction" << YAML::Value << _direction;
+	out << YAML::Key << "directionTurret" << YAML::Value << _directionTurret;
 	out << YAML::Key << "tu" << YAML::Value << _tu;
 	out << YAML::Key << "health" << YAML::Value << _health;
+	out << YAML::Key << "stunlevel" << YAML::Value << _stunlevel;
 	out << YAML::Key << "energy" << YAML::Value << _energy;
 	out << YAML::Key << "morale" << YAML::Value << _morale;
 	out << YAML::Key << "kneeled" << YAML::Value << _kneeled;
 	out << YAML::Key << "armor" << YAML::Value;
 	out << YAML::Flow << YAML::BeginSeq;
-	for (int i=0; i < 5; i++) out << _armor[i];
+	for (int i=0; i < 5; i++) out << _currentArmor[i];
 	out << YAML::EndSeq;
 	out << YAML::Key << "fatalWounds" << YAML::Value;
 	out << YAML::Flow << YAML::BeginSeq;
@@ -147,6 +213,7 @@ void BattleUnit::save(YAML::Emitter &out) const
 	out << YAML::Key << "expThrowing" << YAML::Value << _expThrowing;
 	out << YAML::Key << "expPsiSkill" << YAML::Value << _expPsiSkill;
 	out << YAML::Key << "expMelee" << YAML::Value << _expMelee;
+	out << YAML::Key << "turretType" << YAML::Value << _turretType;
 
 	if (getCurrentAIState())
 	{
@@ -164,24 +231,6 @@ void BattleUnit::save(YAML::Emitter &out) const
 int BattleUnit::getId() const
 {
 	return _id;
-}
-
-/**
- * Changes the BattleUnit's unique ID.
- * @param id Unique ID.
- */
-void BattleUnit::setId(int id)
-{
-	_id = id;
-}
-
-/**
- * Returns the BattleUnit's unit.
- * @return Pointer to unit.
- */
-Unit *const BattleUnit::getUnit() const
-{
-	return _unit;
 }
 
 /**
@@ -312,6 +361,13 @@ void BattleUnit::keepWalking()
 		// diagonal walking takes double the steps
 		middle = 4 + 4 * (_direction % 2);
 		end = 8 + 8 * (_direction % 2);
+		if (_armor->getSize() > 1)
+		{
+			if (_direction < 1 || _direction > 4)
+				middle = end;
+			else
+				middle = 1;
+		}
 	}
 
 	_walkPhase++;
@@ -329,6 +385,22 @@ void BattleUnit::keepWalking()
 		_status = STATUS_STANDING;
 		_walkPhase = 0;
 		_verticalDirection = 0;
+
+		// motion points calculation for the motion scanner blips
+		if (_armor->getSize() > 1)
+		{
+			_motionPoints += 30;
+		}
+		else
+		{
+			// sectoids actually have less motion points
+			// but instead of create yet another variable, 
+			// I used the height of the unit instead (logical)
+			if (getStandHeight() > 16)
+				_motionPoints += 4;
+			else
+				_motionPoints += 3;
+		}
 	}
 
 	_cacheInvalid = true;
@@ -489,6 +561,15 @@ void BattleUnit::abortTurn()
 	_status = STATUS_STANDING;
 }
 
+
+/**
+ * Gets the soldier's gender.
+ */
+SoldierGender BattleUnit::getGender() const
+{
+	return _gender;
+}
+
 /**
  * Returns the unit's faction.
  * @return Faction. (player, hostile or neutral)
@@ -524,6 +605,7 @@ void BattleUnit::setCache(Surface *cache, int part)
  */
 Surface *BattleUnit::getCache(bool *invalid, int part) const
 {
+        if (part < 0) part = 0;
 	*invalid = _cacheInvalid;
 	return _cache[part];
 }
@@ -603,9 +685,8 @@ int BattleUnit::getMorale() const
  * @param power
  * @param type
  */
-void BattleUnit::damage(Position position, int power, ItemDamageType type)
+void BattleUnit::damage(Position position, int power, ItemDamageType type, bool ignoreArmor)
 {
-	int damage;
 	UnitSide side;
 	int impactheight;
 	UnitBodyPart bodypart;
@@ -615,119 +696,127 @@ void BattleUnit::damage(Position position, int power, ItemDamageType type)
 		return;
 	}
 
-	power *= _unit->getArmor()->getDamageModifier(type);
+	power = (int)floor(power * _armor->getDamageModifier(type));
 
-	if (type == DT_STUN)
+	if (!ignoreArmor)
 	{
-		_stunlevel += power;
-		return;
-	}
-
-	if (position == Position(0, 0, 0))
-	{
-		side = SIDE_UNDER;
-	}
-	else
-	{
-		// normalize x and y towards north
-		int x = 8, y = 8;
-		switch(_direction)
+		if (position == Position(0, 0, 0))
 		{
-		case 0: // heading north
-			x = position.x;
-			y = 15 - position.y;
-			break;
-		case 1: // somewhere in between 0 and 2
-			x = (position.x + position.y)/2;
-			y = ((15 - position.y) + position.x)/2;
-			break;
-		case 2: // heading east
-			x = 15 - position.y;
-			y = 15 - position.x;
-			break;
-		case 3:
-			x = (position.y + (15 - position.x))/2;
-			y = (position.x + position.y)/2;
-			break;
-		case 4: // heading south
-			x = 15 - position.x;
-			y = position.y;
-			break;
-		case 5:
-			x = ((15 - position.x) + (15 - position.y))/2;
-			y = (position.y + (15 - position.x))/2;
-			break;
-		case 6: // heading west
-			x = 15 - position.y;
-			y = 15 - position.x;
-			break;
-		case 7:
-			x = ((15 - position.y) + position.x)/2;
-			y = ((15 - position.x) + (15 - position.y))/2;
-			break;
+			side = SIDE_UNDER;
 		}
-		// determine side
-		if (y > 9)
-			side = SIDE_FRONT;
-		else if (y < 6)
-			side = SIDE_REAR;
-		else if (x < 6)
-			side = SIDE_LEFT;
-		else if (x > 9)
-			side = SIDE_RIGHT;
 		else
-			side = SIDE_FRONT;
+		{
+			// normalize x and y towards north
+			int x = 8, y = 8;
+			switch(_direction)
+			{
+			case 0: // heading north
+				x = position.x;
+				y = 15 - position.y;
+				break;
+			case 1: // somewhere in between 0 and 2
+				x = (position.x + position.y)/2;
+				y = ((15 - position.y) + position.x)/2;
+				break;
+			case 2: // heading east
+				x = 15 - position.y;
+				y = 15 - position.x;
+				break;
+			case 3:
+				x = (position.y + (15 - position.x))/2;
+				y = (position.x + position.y)/2;
+				break;
+			case 4: // heading south
+				x = 15 - position.x;
+				y = position.y;
+				break;
+			case 5:
+				x = ((15 - position.x) + (15 - position.y))/2;
+				y = (position.y + (15 - position.x))/2;
+				break;
+			case 6: // heading west
+				x = 15 - position.y;
+				y = 15 - position.x;
+				break;
+			case 7:
+				x = ((15 - position.y) + position.x)/2;
+				y = ((15 - position.x) + (15 - position.y))/2;
+				break;
+			}
+			// determine side
+			if (y > 9)
+				side = SIDE_FRONT;
+			else if (y < 6)
+				side = SIDE_REAR;
+			else if (x < 6)
+				side = SIDE_LEFT;
+			else if (x > 9)
+				side = SIDE_RIGHT;
+			else
+				side = SIDE_FRONT;
+		}
+
+		impactheight = 10*position.z/getHeight();
+
+		if (impactheight > 4 && impactheight < 7) // torso
+		{
+			if (side == SIDE_LEFT)
+			{
+				bodypart = BODYPART_LEFTARM;
+			}else if (side == SIDE_RIGHT)
+			{
+				bodypart = BODYPART_RIGHTARM;
+			}else
+			{
+				bodypart = BODYPART_TORSO;
+			}
+		}else if (impactheight >= 7) //head
+		{
+			bodypart = BODYPART_HEAD;
+		}else if (impactheight <=4) //legs
+		{
+			if (side == SIDE_LEFT || side == SIDE_FRONT)
+			{
+				bodypart = BODYPART_LEFTLEG;
+			}else
+			{
+				bodypart = BODYPART_RIGHTLEG;
+			}
+		}
+
+		power -= getArmor(side);
 	}
 
-	impactheight = 10*position.z/getHeight();
-
-	if (impactheight > 4 && impactheight < 7) // torso
+	if (power > 0)
 	{
-		if (side == SIDE_LEFT)
+		if (type == DT_STUN)
 		{
-			bodypart = BODYPART_LEFTARM;
-		}else if (side == SIDE_RIGHT)
-		{
-			bodypart = BODYPART_RIGHTARM;
-		}else
-		{
-			bodypart = BODYPART_TORSO;
+			_stunlevel += power;
 		}
-	}else if (impactheight >= 7) //head
-	{
-		bodypart = BODYPART_HEAD;
-	}else if (impactheight <=4) //legs
-	{
-		if (side == SIDE_LEFT || side == SIDE_FRONT)
+		else
 		{
-			bodypart = BODYPART_LEFTLEG;
-		}else
-		{
-			bodypart = BODYPART_RIGHTLEG;
+			// health damage
+			_health -= power;
+			if (_health < 0)
+				_health = 0;
+
+			if (type != DT_IN)
+			{
+				// fatal wounds
+				if (isWoundable())
+				{
+					if (RNG::generate(0,power) > 2)
+						_fatalWounds[bodypart] += RNG::generate(1,3);
+
+					if (_fatalWounds[bodypart])
+						moraleChange(-_fatalWounds[bodypart]);
+				}
+				// armor damage
+				setArmor(getArmor(side) - (power/10) - 1, side);
+			}
+			_needPainKiller = true;
 		}
 	}
-
-	damage = (power - getArmor(side));
-
-	if (damage > 0)
-	{
-		if (!_unit->getArmor()->isMechanical())
-		{
-			// fatal wounds
-			if (RNG::generate(0,damage) > 2)
-				_fatalWounds[bodypart] += RNG::generate(1,3);
-
-			if (_fatalWounds[bodypart])
-				moraleChange(-_fatalWounds[bodypart]);
-		}
-		// armor damage
-		setArmor(getArmor(side) - (damage+5)/10, side);
-		// health damage
-		_health -= damage;
-		if (_health < 0)
-			_health = 0;
-	}
-	_needPainKiller = true;
 }
 
 /**
@@ -737,11 +826,7 @@ void BattleUnit::damage(Position position, int power, ItemDamageType type)
 void BattleUnit::healStun(int power)
 {
 	_stunlevel -= power;
-	// recover from unconscious
-	if (_status == STATUS_UNCONSCIOUS && _stunlevel < _health && _health > 0)
-	{
-		_status = STATUS_STANDING;
-	}
+	if (_stunlevel < 0) _stunlevel = 0;
 }
 
 int BattleUnit::getStunlevel() const
@@ -802,7 +887,7 @@ bool BattleUnit::isOut() const
  * @param item
  * @return TUs
  */
-int BattleUnit::getActionTUs(BattleActionType actionType, BattleItem *item) const
+int BattleUnit::getActionTUs(BattleActionType actionType, BattleItem *item)
 {
 	if (item == 0)
 	{
@@ -812,15 +897,20 @@ int BattleUnit::getActionTUs(BattleActionType actionType, BattleItem *item) cons
 	switch (actionType)
 	{
 		case BA_PRIME:
-			return (int)floor(getUnit()->getTimeUnits() * 0.50);
+			return (int)floor(getStats()->tu * 0.50);
 		case BA_THROW:
-			return (int)floor(getUnit()->getTimeUnits() * 0.25);
+			return (int)floor(getStats()->tu * 0.25);
 		case BA_AUTOSHOT:
-			return (int)(getUnit()->getTimeUnits() * item->getRules()->getTUAuto() / 100);
+			return (int)(getStats()->tu * item->getRules()->getTUAuto() / 100);
 		case BA_SNAPSHOT:
-			return (int)(getUnit()->getTimeUnits() * item->getRules()->getTUSnap() / 100);
+			return (int)(getStats()->tu * item->getRules()->getTUSnap() / 100);
+		case BA_HIT:
+			return (int)(getStats()->tu * item->getRules()->getTUMelee() / 100);
+		case BA_LAUNCH:
 		case BA_AIMEDSHOT:
-			return (int)(getUnit()->getTimeUnits() * item->getRules()->getTUAimed() / 100);
+			return (int)(getStats()->tu * item->getRules()->getTUAimed() / 100);
+		case BA_USE:
+			return (int)(getStats()->tu * item->getRules()->getTUUse() / 100);
 		default:
 			return 0;
 	}
@@ -893,8 +983,6 @@ bool BattleUnit::addToVisibleUnits(BattleUnit *unit)
 			return false;
 		}
 	}
-	if (getFaction() == FACTION_PLAYER)
-		unit->setVisible(true);
 	_visibleUnits.push_back(unit);
 	return true;
 }
@@ -919,19 +1007,39 @@ void BattleUnit::clearVisibleUnits()
 /**
  * Calculate firing accuracy.
  * Formula = accuracyStat * weaponAccuracy * kneelingbonus(1.15) * one-handPenalty(0.8) * woundsPenalty(% health) * critWoundsPenalty (-10%/wound)
- * @param weaponAccuracy
+ * @param actionType
+ * @param item
  * @return firing Accuracy
  */
-double BattleUnit::getFiringAccuracy(int weaponAccuracy) const
+double BattleUnit::getFiringAccuracy(BattleActionType actionType, BattleItem *item)
 {
-	double result = (double)(_unit->getFiringAccuracy()/100.0);
+	double result = (double)(getStats()->firing / 100.0);
 
-	result *= (double)(weaponAccuracy/100.0);
+	double weaponAcc = item->getRules()->getAccuracySnap();
+	if (actionType == BA_AIMEDSHOT || actionType == BA_LAUNCH)
+		weaponAcc = item->getRules()->getAccuracyAimed();
+	else if (actionType == BA_AUTOSHOT)
+		weaponAcc = item->getRules()->getAccuracyAuto();
+	else if (actionType == BA_HIT)
+		weaponAcc = item->getRules()->getAccuracyMelee();
+
+	result *= (double)(weaponAcc/100.0);
 
 	if (_kneeled)
 		result *= 1.15;
 
-	result *= ((double)_health/(double)_unit->getHealth());
+	if (item->getRules()->getTwoHanded())
+	{
+		// two handed weapon, means one hand should be empty
+		if (getItem("STR_RIGHT_HAND") != 0 && getItem("STR_LEFT_HAND") != 0)
+		{
+			result *= 0.80;
+		}
+	}
+
+	result *= ((double)_health/(double)getStats()->health);
+
+	result *= 1 + (-0.1*getFatalWounds());
 
 	return result;
 }
@@ -941,11 +1049,11 @@ double BattleUnit::getFiringAccuracy(int weaponAccuracy) const
  * Formula = accuracyStat * woundsPenalty(% health) * critWoundsPenalty (-10%/wound)
  * @return throwing Accuracy
  */
-double BattleUnit::getThrowingAccuracy() const
+double BattleUnit::getThrowingAccuracy()
 {
-	double result = (double)(_unit->getFiringAccuracy()/100.0);
+	double result = (double)(getStats()->firing/100.0);
 
-	result *= ((double)_health/(double)_unit->getHealth());
+	result *= ((double)_health/(double)getStats()->health);
 
 	return result;
 }
@@ -961,7 +1069,7 @@ void BattleUnit::setArmor(int armor, UnitSide side)
 	{
 		armor = 0;
 	}
-	_armor[side] = armor;
+	_currentArmor[side] = armor;
 }
 
 /**
@@ -971,7 +1079,7 @@ void BattleUnit::setArmor(int armor, UnitSide side)
  */
 int BattleUnit::getArmor(UnitSide side) const
 {
-	return _armor[side];
+	return _currentArmor[side];
 }
 
 /**
@@ -991,10 +1099,10 @@ int BattleUnit::getFatalWounds() const
  * Little formula to calculate reaction score.
  * @return Reaction score.
  */
-double BattleUnit::getReactionScore() const
+double BattleUnit::getReactionScore()
 {
-	//(Reactions Stat) × (Current Time Units / Max TUs)
-	double score = ((double)_unit->getReactions() * (double)getTimeUnits()) / (double)_unit->getTimeUnits();
+	//(Reactions Stat) x (Current Time Units / Max TUs)
+	double score = ((double)getStats()->reactions * (double)getTimeUnits()) / (double)getStats()->tu;
 	return score;
 }
 
@@ -1005,7 +1113,7 @@ double BattleUnit::getReactionScore() const
 void BattleUnit::prepareNewTurn()
 {
 	// recover TUs
-	int TURecovery = _unit->getTimeUnits();
+	int TURecovery = getStats()->tu;
 	// Each fatal wound to the left or right leg reduces the soldier's TUs by 10%.
 	TURecovery -= (TURecovery * (_fatalWounds[BODYPART_LEFTLEG]+_fatalWounds[BODYPART_RIGHTLEG] * 10))/100;
 	setTimeUnits(TURecovery);
@@ -1013,12 +1121,12 @@ void BattleUnit::prepareNewTurn()
 	// recover energy
 	if (!isOut())
 	{
-		int ENRecovery = _unit->getTimeUnits() / 3;
+		int ENRecovery = getStats()->tu / 3;
 		// Each fatal wound to the body reduces the soldier's energy recovery by 10%.
 		ENRecovery -= (_energy * (_fatalWounds[BODYPART_TORSO] * 10))/100;
 		_energy += ENRecovery;
-		if (_energy > _unit->getStamina())
-			_energy = _unit->getStamina();
+		if (_energy > getStats()->stamina)
+			_energy = getStats()->stamina;
 	}
 
 	// suffer from fatal wounds
@@ -1034,6 +1142,14 @@ void BattleUnit::prepareNewTurn()
 	if (_health < 0)
 		_health = 0;
 
+	// if unit is dead, AI state should be gone
+	if (_health == 0 && _currentAIState)
+	{
+		_currentAIState->exit();
+		delete _currentAIState;
+		_currentAIState = 0;
+	}
+
 	// recover stun 1pt/turn
 	if (_stunlevel > 0)
 		healStun(1);
@@ -1048,7 +1164,7 @@ void BattleUnit::prepareNewTurn()
 		}
 		else
 		{
-			// succesfully avoided panic
+			// successfully avoided panic
 			// increase bravery experience counter
 			if (chance > 1)
 				_expBravery++;
@@ -1056,6 +1172,7 @@ void BattleUnit::prepareNewTurn()
 	}
 
 	_dontReselect = false;
+	_motionPoints = 0;
 }
 
 
@@ -1065,7 +1182,7 @@ void BattleUnit::prepareNewTurn()
  */
 void BattleUnit::moraleChange(int change)
 {
-	if (_unit->getArmor()->isMechanical()) return;
+	if (!isFearable()) return;
 
 	_morale += change;
 	if (_morale > 100)
@@ -1300,6 +1417,22 @@ BattleItem *BattleUnit::getMainHandWeapon() const
 }
 
 /**
+* Get the "main hand weapon" from the unit.
+* @return Pointer to item.
+*/
+BattleItem *BattleUnit::getGrenadeFromBelt() const
+{
+	for (std::vector<BattleItem*>::const_iterator i = _inventory.begin(); i != _inventory.end(); ++i)
+	{
+		if ((*i)->getRules()->getBattleType() == BT_GRENADE)
+		{
+			return *i;
+		}
+	}
+	return 0;
+}
+
+/**
 * Check if this unit is in the exit area.
 * @return Is in the exit area?
 */
@@ -1314,7 +1447,7 @@ bool BattleUnit::isInExitArea() const
 */
 int BattleUnit::getHeight() const
 {
-	return isKneeled()?_unit->getKneelHeight():_unit->getStandHeight();
+	return isKneeled()?getKneelHeight():getStandHeight();
 }
 
 /**
@@ -1362,17 +1495,21 @@ void BattleUnit::addMeleeExp()
 * Increase the mission counter. Calculate the experience increases.
 * @return True if the soldier was eligible for squaddie promotion.
 */
-bool BattleUnit::postMissionProcedures()
+bool BattleUnit::postMissionProcedures(SavedGame *geoscape)
 {
-	Soldier *s = dynamic_cast<Soldier*>(_unit);
+	Soldier *s = geoscape->getSoldier(_id);
 	if (s == 0)
 	{
 		return false;
 	}
 
 	s->addMissionCount();
+	s->addKillCount(s->getKills());
 
 	UnitStats *stats = s->getCurrentStats();
+	int healthLoss = stats->health - _health;
+
+	s->setWoundRecovery(RNG::generate((healthLoss*0.5),(healthLoss*1.5)));
 
 	if (_expBravery && stats->bravery < 100)
 	{
@@ -1398,8 +1535,6 @@ bool BattleUnit::postMissionProcedures()
 	{
 		stats->psiSkill += improveStat(_expPsiSkill);
 	}
-
-	/* TODO wound recovery :  Soldier->Wound_Recovery_Days = v / 2 + randmod(v) (v = UnitRef->BaseHPs - UnitRef->CurHP) */
 
 	if (_expBravery || _expReactions || _expFiring || _expPsiSkill || _expMelee)
 	{
@@ -1483,8 +1618,7 @@ void BattleUnit::setTurretType(int turretType)
   */
 int BattleUnit::getTurretType() const
 {
-	return 0;
-	//return _turretType;
+	return _turretType;
 }
 
 /**
@@ -1525,12 +1659,12 @@ void BattleUnit::painKillers ()
 		return ;
 	}
 	_needPainKiller = false;
-	int lostHealth = _unit->getHealth() - _health;
+	int lostHealth = getStats()->health - _health;
 	_morale += lostHealth;
 }
 
 /**
- * Restore soldier energy and reducce stun level
+ * Restore soldier energy and reduce stun level
  * @param energy The amount of energy to add
  * @param s The amount of stun level to reduce
  */
@@ -1539,5 +1673,165 @@ void BattleUnit::stimulant (int energy, int s)
 	_energy += energy;
 	healStun (s);
 }
+
+
+/**
+ * Get motion points for the motion scanner. More points
+ * is a larger blip on the scanner.
+ * @return points.
+ */
+int BattleUnit::getMotionPoints() const
+{
+	return _motionPoints;
+}
+
+
+/**
+ * Gets the unit's armor.
+ * @return Pointer to armor.
+ */
+Armor *BattleUnit::getArmor() const
+{
+	return _armor;		
+}
+/**
+ * Get unit's name.
+ * An aliens name is the translation of it's race and rank.
+ * hence the language pointer needed.
+ * @param lang Pointer to language.
+ * @return name Widecharstring of the unit's name.
+ */
+std::wstring BattleUnit::getName(Language *lang) const
+{
+	if (_type != "SOLDIER" && lang != 0)
+	{
+		std::wstringstream wss;
+		wss << lang->getString(_race.c_str()) << lang->getString(_rank.c_str());
+		return wss.str();
+	}
+	return _name;
+}
+/**
+  * Gets pointer to the unit's stats.
+  * @return stats Pointer to the unit's stats.
+  */
+UnitStats *BattleUnit::getStats()
+{
+	return &_stats;
+}
+
+/**
+  * Get the unit's stand height.
+  * @return The unit's height in voxels, when standing up.
+  */
+int BattleUnit::getStandHeight() const
+{
+	return _standHeight;
+}
+
+/**
+  * Get the unit's kneel height.
+  * @return The unit's height in voxels, when kneeling.
+  */
+int BattleUnit::getKneelHeight() const
+{
+	return _kneelHeight;
+}
+
+/**
+  * Get the unit's loft ID. This is only one, as it is repeated over the entire height of the unit.
+  * @return The unit's line of fire template ID.
+  */
+int BattleUnit::getLoftemps() const
+{
+	return _loftemps;
+}
+
+/**
+  * Get the unit's value. Used for score at debriefing.
+  * @return value score
+  */
+int BattleUnit::getValue() const
+{
+	return _value;
+}
+
+/**
+ * Get the unit's death sound.
+ * @return id.
+ */
+int BattleUnit::getDeathSound() const
+{
+	return _deathSound;
+}
+
+/**
+  * Get whether the unit is affected by fatal wounds.
+  * Normally only soldiers are affected by fatal wounds.
+  * @return true or false
+  */
+bool BattleUnit::isWoundable() const
+{
+	return (_type=="SOLDIER");
+}
+/**
+  * Get whether the unit is affected by morale loss.
+  * Normally only small units are affected by morale loss.
+  * @return true or false
+  */
+bool BattleUnit::isFearable() const
+{
+	return (_armor->getSize() == 1);
+}
+
+/**
+  * Get the unit's intelligence. Is the number of turns AI remembers a soldiers position.
+  * @return intelligence 
+  */
+int BattleUnit::getIntelligence() const
+{
+	return _intelligence;
+}
+
+/**
+/// Get the unit's aggression.
+ */
+int BattleUnit::getAggression() const
+{
+	return _aggression;
+}
+
+/**
+/// Get the units's special ability.
+ */
+int BattleUnit::getSpecialAbility() const
+{
+	return _specab;
+}
+
+/**
+/// Get the units's rank string.
+ */
+std::string BattleUnit::getRankString() const
+{
+	return _rank;
+}
+
+/**
+/// Add a kill to the counter.
+ */
+void BattleUnit::addKillCount()
+{
+	_kills++;
+}
+
+/**
+/// Get unit type.
+ */
+std::string BattleUnit::getType() const
+{
+	return _type;
+}
+
 }
 

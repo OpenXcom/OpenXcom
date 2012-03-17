@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -71,7 +71,7 @@ public:
 	void setMapData(MapData *dat, int mapDataID, int mapDataSetID, int part);
 	/// Gets the IDs to the mapdata for a specific part of the tile
 	void getMapData(int *mapDataID, int *mapDataSetID, int part) const;
-	/// Gets wether this tile has no objects
+	/// Gets whether this tile has no objects
 	bool isVoid() const;
 	/// Get the TU cost to walk over a certain part of the tile.
 	int getTUCost(int part, MovementType movementType) const;

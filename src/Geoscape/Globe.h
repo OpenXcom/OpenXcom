@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -126,8 +126,6 @@ public:
 	void rotate();
 	/// Draws the whole globe.
 	void draw();
-	/// Refreshes the globe.
-	void drawRefresh();
 	/// Draws the ocean of the globe.
 	void drawOcean();
 	/// Draws the land of the globe.

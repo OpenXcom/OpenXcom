@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -20,13 +20,14 @@
 #define OPENXCOM_RULEUFO_H
 
 #include <string>
-#include "yaml.h"
+#include <yaml-cpp/yaml.h>
 
 namespace OpenXcom
 {
 
 class RuleTerrain;
 class Ruleset;
+
 
 /**
  * Represents a specific type of UFO.
@@ -47,7 +48,7 @@ public:
 	/// Cleans up the UFO ruleset.
 	~RuleUfo();
 	/// Loads UFO data from YAML.
-	void load(const YAML::Node& node, const Ruleset *ruleset);
+	void load(const YAML::Node& node, Ruleset *ruleset);
 	/// Saves the UFO data to YAML.
 	void save(YAML::Emitter& out) const;
 	/// Gets the UFO's type.
@@ -86,8 +87,9 @@ public:
 	int getScore() const;
 	/// Sets the UFO's score.
 	void setScore(int score);
-	/// stuff needed to draw this UFO on the battlescape
+	/// Sets the battlescape terrain data ruleset for this UFO
 	RuleTerrain *getBattlescapeTerrainData();
+	/// Gets the battlescape terrain data ruleset for this UFO
 	void setBattlescapeTerrainData(RuleTerrain *t);
 };
 

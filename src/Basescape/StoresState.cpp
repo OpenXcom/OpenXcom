@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -91,13 +91,18 @@ StoresState::StoresState(Game *game, Base *base) : State(game), _base(base)
 	_lstStores->setBackground(_window);
 	_lstStores->setMargin(2);
 
-	for (std::map<std::string, int>::iterator i = _base->getItems()->getContents()->begin(); i != _base->getItems()->getContents()->end(); ++i)
+	std::vector<std::string> items = _game->getRuleset()->getItemsList();
+	for (std::vector<std::string>::iterator i = items.begin(); i != items.end(); ++i)
 	{
-		RuleItem *rule = _game->getRuleset()->getItem(i->first);
-		std::wstringstream ss, ss2;
-		ss << i->second;
-		ss2 << i->second * rule->getSize();
-		_lstStores->addRow(3, _game->getLanguage()->getString(i->first).c_str(), ss.str().c_str(), ss2.str().c_str());
+		int qty = _base->getItems()->getItem(*i);
+		if (qty > 0)
+		{
+			RuleItem *rule = _game->getRuleset()->getItem(*i);
+			std::wstringstream ss, ss2;
+			ss << qty;
+			ss2 << qty * rule->getSize();
+			_lstStores->addRow(3, _game->getLanguage()->getString(*i).c_str(), ss.str().c_str(), ss2.str().c_str());
+		}
 	}
 }
 

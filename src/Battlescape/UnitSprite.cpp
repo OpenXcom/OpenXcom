@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -23,9 +23,9 @@
 #include "../Battlescape/Position.h"
 #include "../Resource/ResourcePack.h"
 #include "../Ruleset/RuleSoldier.h"
-#include "../Ruleset/RuleGenUnit.h"
+#include "../Ruleset/Unit.h"
 #include "../Ruleset/RuleItem.h"
-#include "../Ruleset/RuleArmor.h"
+#include "../Ruleset/Armor.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/Soldier.h"
@@ -80,7 +80,7 @@ void UnitSprite::setBattleUnit(BattleUnit *unit, int part)
 
 /**
  * Links this sprite to a BattleItem to get the data for rendering.
- * @param unit Pointer to the BattleItem.
+ * @param item Pointer to the BattleItem.
  */
 void UnitSprite::setBattleItem(BattleItem *item)
 {
@@ -90,7 +90,7 @@ void UnitSprite::setBattleItem(BattleItem *item)
 
 /**
  * Sets the animation frame for animated units.
- * @param frame.
+ * @param frame Frame number.
  */
 void UnitSprite::setAnimationFrame(int frame)
 {
@@ -104,7 +104,7 @@ void UnitSprite::draw()
 {
 	Surface::draw();
 
-	switch (_unit->getUnit()->getArmor()->getDrawingRoutine())
+	switch (_unit->getArmor()->getDrawingRoutine())
 	{
 	case 0:
 		drawRoutine0();
@@ -117,6 +117,9 @@ void UnitSprite::draw()
 		break;
 	case 3:
 		drawRoutine3();
+		break;
+	case 4:
+		drawRoutine4();
 		break;
 	}
 
@@ -140,8 +143,6 @@ void UnitSprite::drawRoutine0()
 	const int offY[8] = { -6, -3, 0, 2, 0, -4, -7, -9 }; // for the weapons
 	const int offYKneel = 4;
 
-	Soldier *soldier = dynamic_cast<Soldier*>(_unit->getUnit());
-
 	if (_unit->isOut())
 	{
 		// unit is drawn as an item
@@ -155,7 +156,7 @@ void UnitSprite::drawRoutine0()
 		return;
 	}
 
-	if (soldier != 0 && soldier->getGender() == GENDER_FEMALE)
+	if (_unit->getGender() == GENDER_FEMALE)
 	{
 		torso = _unitSurface->getFrame(femaleTorso + _unit->getDirection());
 	}
@@ -190,7 +191,7 @@ void UnitSprite::drawRoutine0()
 	if (_item)
 	{
 		// draw handob item
-		if (_unit->getStatus() == STATUS_AIMING)
+		if (_unit->getStatus() == STATUS_AIMING && _item->getRules()->getTwoHanded())
 		{
 			int dir = (_unit->getDirection() + 2)%8;
 			item = _itemSurface->getFrame(_item->getRules()->getHandSprite() + dir);
@@ -250,7 +251,7 @@ void UnitSprite::drawRoutine0()
 	// items are calculated for soldier height (22) - some aliens are smaller, so item is drawn lower.
 	if (item)
 	{
-		item->setY(item->getY() + (22 - _unit->getUnit()->getStandHeight()));
+		item->setY(item->getY() + (22 - _unit->getStandHeight()));
 	}
 
 	// blit order depends on unit direction
@@ -313,7 +314,7 @@ void UnitSprite::drawRoutine1()
 	if (_item)
 	{
 		// draw handob item
-		if (_unit->getStatus() == STATUS_AIMING)
+		if (_unit->getStatus() == STATUS_AIMING && _item->getRules()->getTwoHanded())
 		{
 			int dir = (_unit->getDirection() + 2)%8;
 			item = _itemSurface->getFrame(_item->getRules()->getHandSprite() + dir);
@@ -394,7 +395,7 @@ void UnitSprite::drawRoutine2()
 	}
 
 	int hoverTank = 0;
-	if (_unit->getUnit()->getArmor()->getMovementType() == MT_FLY)
+	if (_unit->getArmor()->getMovementType() == MT_FLY)
 	{
 		hoverTank = 32;
 	}
@@ -449,4 +450,42 @@ void UnitSprite::drawRoutine3()
 	s->blit(this);
 }
 
+/**
+ * Drawing routine for civilians.
+ * Very easy: first 8 is standing positions, then 8 walking sequences of 8, finally death sequence of 3
+ */
+void UnitSprite::drawRoutine4()
+{
+	if (_unit->isOut())
+	{
+		// unit is drawn as an item
+		return;
+	}
+
+	Surface *s = 0;
+	const int stand = 0, walk = 8, die = 72;
+
+	
+	if (_unit->isOut())
+	{
+		// unit is drawn as an item
+		return;
+	}
+
+	if (_unit->getStatus() == STATUS_FALLING)
+	{
+		s = _unitSurface->getFrame(die + _unit->getFallingPhase());
+	}
+	else
+	if (_unit->getStatus() == STATUS_WALKING)
+	{
+		s = _unitSurface->getFrame(walk + (8 * _unit->getDirection()) + _unit->getWalkingPhase());
+	}
+	else
+	{
+		s = _unitSurface->getFrame(stand + _unit->getDirection());
+	}
+
+	s->blit(this);
+}
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -20,7 +20,7 @@
 #define OPENXCOM_RULECRAFTWEAPON_H
 
 #include <string>
-#include "yaml.h"
+#include <yaml-cpp/yaml.h>
 
 namespace OpenXcom
 {
@@ -50,52 +50,28 @@ public:
 	std::string getType() const;
 	/// Gets the craft weapon's sprite.
 	int getSprite() const;
-	/// Sets the craft weapon's sprite.
-	void setSprite(int sprite);
 	/// Gets the craft weapon's sound.
 	int getSound() const;
-	/// Sets the craft weapon's sound.
-	void setSound(int sound);
 	/// Gets the craft weapon's damage.
 	int getDamage() const;
-	/// Sets the craft weapon's damage.
-	void setDamage(int damage);
 	/// Gets the craft weapon's range.
 	int getRange() const;
-	/// Sets the craft weapon's range.
-	void setRange(int range);
 	/// Gets the craft weapon's accuracy.
 	int getAccuracy() const;
-	/// Sets the craft weapon's accuracy.
-	void setAccuracy(int accuracy);
 	/// Gets the craft weapon's cautious reload time.
 	int getCautiousReload() const;
-	/// Sets the craft weapon's cautious reload time.
-	void setCautiousReload(int reload);
 	/// Gets the craft weapon's standard reload time.
 	int getStandardReload() const;
-	/// Sets the craft weapon's standard reload time.
-	void setStandardReload(int reload);
 	/// Gets the craft weapon's aggressive reload time.
 	int getAggressiveReload() const;
-	/// Sets the craft weapon's aggressive reload time.
-	void setAggressiveReload(int reload);
 	/// Gets the craft weapon's maximum ammo.
 	int getAmmoMax() const;
-	/// Sets the craft weapon's maximum ammo.
-	void setAmmoMax(int ammo);
 	/// Gets the craft weapon's rearm rate.
 	int getRearmRate() const;
-	/// Sets the craft weapon's rearm rate.
-	void setRearmRate(int rearm);
 	/// Gets the craft weapon's launcher item.
 	std::string getLauncherItem() const;
-	/// Sets the craft weapon's launcher item.
-	void setLauncherItem(const std::string &launcher);
 	/// Gets the craft weapon's clip item.
 	std::string getClipItem() const;
-	/// Sets the craft weapon's clip item.
-	void setClipItem(const std::string &clip);
 };
 
 }

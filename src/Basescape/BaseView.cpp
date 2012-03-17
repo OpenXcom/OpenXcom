@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -77,7 +77,7 @@ void BaseView::setFonts(Font *big, Font *small)
 
 /**
  * Changes the current base to display and
- * initalizes the internal base grid.
+ * initializes the internal base grid.
  * @param base Pointer to base to display.
  */
 void BaseView::setBase(Base *base)

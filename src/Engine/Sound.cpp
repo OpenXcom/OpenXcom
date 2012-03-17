@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -18,7 +18,7 @@
  */
 #include "Sound.h"
 #include <iostream>
-#include "SDL.h"
+#include <SDL.h>
 #include "Exception.h"
 #include "Options.h"
 

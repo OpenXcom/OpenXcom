@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -47,9 +47,9 @@ RuleTerrain::~RuleTerrain()
 /**
  * Loads the terrain from a YAML file.
  * @param node YAML node.
- * @param rule Ruleset for the terrain.
+ * @param ruleset Ruleset for the terrain.
  */
-void RuleTerrain::load(const YAML::Node &node, const Ruleset *ruleset)
+void RuleTerrain::load(const YAML::Node &node, Ruleset *ruleset)
 {
 	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
 	{
@@ -64,7 +64,7 @@ void RuleTerrain::load(const YAML::Node &node, const Ruleset *ruleset)
 			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
 			{
 				std::string name;
-				j.second() >> name;
+				*j >> name;
 				_mapDataSets.push_back(ruleset->getMapDataSet(name));
 			}
 		}
@@ -73,9 +73,9 @@ void RuleTerrain::load(const YAML::Node &node, const Ruleset *ruleset)
 			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
 			{
 				std::string name;
-				j.second()["name"] >> name;
-				MapBlock *map = new MapBlock(this, name, 0, 0, false);
-				map->load(j.second());
+				(*j)["name"] >> name;
+				MapBlock *map = new MapBlock(this, name, 0, 0, MT_DEFAULT);
+				map->load(*j);
 				_mapBlocks.push_back(map);
 			}
 		}
@@ -136,34 +136,48 @@ std::string RuleTerrain::getName() const
 
 /**
 * gets a random mapblock within the given constraints
-* @param maxsize maximum size of the mapblock (1 or 2)
-* @param landingzone whether this must be a landingzone (true) or don't care (false)
+* @param maxsize maximum size of the mapblock (10 or 20 or 999-don't care)
+* @param type whether this must be a block of a certain type
 * @return pointer to mapblock
 */
-MapBlock* RuleTerrain::getRandomMapBlock(int maxsize, bool landingzone)
+MapBlock* RuleTerrain::getRandomMapBlock(int maxsize, MapBlockType type)
 {
-	MapBlock* mb = 0;
+	std::vector<MapBlock*> compliantMapBlocks;
 
-	while (mb == 0)
+	for (std::vector<MapBlock*>::const_iterator i = _mapBlocks.begin(); i != _mapBlocks.end(); ++i)
 	{
-		int n = RNG::generate(0, _mapBlocks.size() - 1);
-		mb = _mapBlocks[n];
-		if (landingzone && !mb->isLandingZone())
+		if ((*i)->getWidth() <= maxsize && (*i)->getType() == type)
 		{
-			mb = 0;
-		}
-		else if (maxsize < mb->getWidth())
-		{
-			mb = 0;
+			compliantMapBlocks.push_back((*i));
 		}
 	}
 
-	return mb;
+	if (compliantMapBlocks.empty()) return 0;
+
+	int n = RNG::generate(0, compliantMapBlocks.size() - 1);
+
+	return compliantMapBlocks[n];
+}
+
+/**
+* gets a mapblock with a given name
+* @param name
+* @return pointer to mapblock
+*/
+MapBlock* RuleTerrain::getMapBlock(const std::string &name)
+{
+	for (std::vector<MapBlock*>::const_iterator i = _mapBlocks.begin(); i != _mapBlocks.end(); ++i)
+	{
+		if((*i)->getName() == name)
+			return (*i);
+	}
+	return 0;
 }
 
 /**
 * Gets a mapdata object.
 * @param id the id in the terrain
+* @param mapDataSetID id to the map data set
 * @return pointer to object
 */
 MapData *RuleTerrain::getMapData(int *id, int *mapDataSetID) const

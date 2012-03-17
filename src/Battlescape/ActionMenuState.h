@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -20,7 +20,7 @@
 #define OPENXCOM_ACTIONMENUSTATE_H
 
 #include "../Engine/State.h"
-#include "BattlescapeState.h"
+#include "BattlescapeGame.h"
 
 namespace OpenXcom
 {
@@ -37,6 +37,7 @@ class ActionMenuState : public State
 private:
 	BattleAction *_action;
 	ActionMenuItem *_actionMenu[6];
+	void addItem(BattleActionType ba, const std::string &name, int *id);
 public:
 	/// Creates the Action Menu state.
 	ActionMenuState(Game *game, BattleAction *action, int x, int y);

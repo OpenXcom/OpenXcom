@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -46,7 +46,7 @@ namespace OpenXcom
  * @param unit Unit involved in the explosion (eg unit throwing the grenade)
  * @param tile Tile the explosion is on.
  */
-ExplosionBState::ExplosionBState(BattlescapeState *parent, Position center, BattleItem *item, BattleUnit *unit, Tile *tile) : BattleState(parent), _unit(unit), _center(center), _item(item), _tile(tile)
+ExplosionBState::ExplosionBState(BattlescapeGame *parent, Position center, BattleItem *item, BattleUnit *unit, Tile *tile) : BattleState(parent), _unit(unit), _center(center), _item(item), _tile(tile)
 {
 
 }
@@ -81,7 +81,7 @@ void ExplosionBState::init()
 				_parent->getMap()->getExplosions()->insert(explosion);
 			}
 		// explosion sound
-		_parent->getGame()->getResourcePack()->getSoundSet("GEO.CAT")->getSound(10)->play();
+		_parent->getResourcePack()->getSoundSet("GEO.CAT")->getSound(10)->play();
 	}
 	else
 	{
@@ -91,7 +91,7 @@ void ExplosionBState::init()
 		// add the explosion on the map
 		_parent->getMap()->getExplosions()->insert(explosion);
 		// bullet hit sound
-		_parent->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(_item->getRules()->getHitSound())->play();
+		_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(_item->getRules()->getHitSound())->play();
 	}
 }
 
@@ -109,19 +109,40 @@ void ExplosionBState::think()
 			_parent->getMap()->getExplosions()->erase((*i));
 			if (_parent->getMap()->getExplosions()->empty())
 			{
-				SavedBattleGame *save = _parent->getGame()->getSavedGame()->getBattleGame();
-				// after the animation is done, the real explosion takes place
+				bool terrainExplosion = false;
+				SavedBattleGame *save = _parent->getSave();
+				// after the animation is done, the real explosion/hit takes place
 				if (_item)
 				{
-					save->getTileEngine()->explode(_center, _item->getRules()->getPower(), _item->getRules()->getDamageType(), 100, _unit);
+					// heavy explosions, incendiary, smoke or stun bombs create AOE explosions
+					// all the rest hits one point:
+					// AP, melee (stun or AP), laser, plasma, acid
+					if (_item->getRules()->getBattleType() != BT_MELEE && 
+						(_item->getRules()->getDamageType() == DT_HE 
+						|| _item->getRules()->getDamageType() == DT_IN 
+						|| _item->getRules()->getDamageType() == DT_SMOKE
+						|| _item->getRules()->getDamageType() == DT_STUN))
+					{
+						save->getTileEngine()->explode(_center, _item->getRules()->getPower(), _item->getRules()->getDamageType(), _item->getRules()->getExplosionRadius());
+					}
+					else
+					{
+						save->getTileEngine()->hit(_center, _item->getRules()->getPower(), _item->getRules()->getDamageType(), _unit);
+					}
 				}
 				if (_tile)
 				{
-					save->getTileEngine()->explode(_center, _tile->getExplosive(), DT_HE, 100, _unit);
+					save->getTileEngine()->explode(_center, _tile->getExplosive(), DT_HE, 100);
+				}
+				if (!_tile && !_item)
+				{
+					// explosion not caused by terrain or an item, must be by a unit (cyberdisc)
+					save->getTileEngine()->explode(_center, 120, DT_HE, 8);
+					terrainExplosion = true;
 				}
 
 				// now check for new casualties
-				_parent->checkForCasualties(_item, _unit);
+				_parent->checkForCasualties(_item, _unit, false, terrainExplosion);
 
 				// if this explosion was caused by a unit shooting, now it's the time to put the gun down
 				if (_unit && !_unit->isOut())
@@ -150,15 +171,6 @@ void ExplosionBState::think()
  */
 void ExplosionBState::cancel()
 {
-}
-
-/*
- * Get the action result. Returns error messages or an empty string when everything went fine.
- * @return returnmessage Empty when everything is fine.
- */
-std::string ExplosionBState::getResult() const
-{
-	return _result;
 }
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -18,11 +18,11 @@
  */
 
 #include "Options.h"
-#include "SDL_mixer.h"
+#include <SDL_mixer.h>
 #include <map>
 #include <sstream>
 #include <fstream>
-#include "yaml.h"
+#include <yaml-cpp/yaml.h>
 #include "Exception.h"
 #include "CrossPlatform.h"
 
@@ -31,9 +31,12 @@ namespace OpenXcom
 namespace Options
 {
 
-std::string _version = "0.3";
+std::string _version = "0.4";
 std::string _dataFolder = "";
+std::vector<std::string> _dataList;
 std::string _userFolder = "";
+std::string _configFolder = "";
+std::vector<std::string> _userList;
 std::map<std::string, std::string> _options;
 
 /**
@@ -64,6 +67,7 @@ void createDefault()
 	setBool("battlePreviewPath", false);
 	setBool("battleRangeBasedAccuracy", false);
 	setBool("fpsCounter", false);
+	setBool("craftLaunchAlways", false);
 }
 
 /**
@@ -86,14 +90,14 @@ void loadArgs(int argc, char** args)
 				{
 					it->second = args[i+1];
 				}
-			}
-			else if (arg == "-data")
-			{
-				_dataFolder = args[i+1];
-			}
-			else if (arg == "-user")
-			{
-				_userFolder = args[i+1];
+				else if (arg == "-data")
+				{
+					_dataFolder = CrossPlatform::endPath(args[i+1]);
+				}
+				else if (arg == "-user")
+				{
+					_userFolder = CrossPlatform::endPath(args[i+1]);
+				}
 			}
 		}
 	}
@@ -115,23 +119,51 @@ void init(int argc, char** args)
 	loadArgs(argc, args);
 	if (_dataFolder == "")
 	{
-		_dataFolder = CrossPlatform::findDataFolder(true);
+		_dataList = CrossPlatform::findDataFolders();
 		// Missing data folder is handled in StartState
 	}
 	if (_userFolder == "")
 	{
-		_userFolder = CrossPlatform::findUserFolder(true);
-		// Create user folder and save options
+		std::vector<std::string> user = CrossPlatform::findUserFolders();
+		_configFolder = CrossPlatform::findConfigFolder();
+
+		// Look for an existing user folder
+		for (std::vector<std::string>::iterator i = user.begin(); i != user.end(); ++i)
+		{
+			if (CrossPlatform::folderExists(*i))
+			{
+				_userFolder = *i;
+				break;
+			}
+		}
+
+		// Set up folders
 		if (_userFolder == "")
 		{
-			_userFolder = CrossPlatform::findUserFolder(false);
-			CrossPlatform::createFolder(Options::getUserFolder().c_str());
-			save();
+			for (std::vector<std::string>::iterator i = user.begin(); i != user.end(); ++i)
+			{
+				if (CrossPlatform::createFolder(*i))
+				{
+					_userFolder = *i;
+					break;
+				}
+			}
 		}
+		if (_configFolder == "")
+		{
+			_configFolder = _userFolder;
+		}
+
 		// Load existing options
-		else
+		if (CrossPlatform::folderExists(_configFolder))
 		{
 			load();
+		}
+		// Create config folder and save options
+		else
+		{
+			CrossPlatform::createFolder(_configFolder);
+			save();
 		}
 	}
 }
@@ -142,7 +174,7 @@ void init(int argc, char** args)
  */
 void load(const std::string &filename)
 {
-	std::string s = Options::getUserFolder() + filename + ".cfg";
+	std::string s = _configFolder + filename + ".cfg";
 	std::ifstream fin(s.c_str());
 	if (!fin)
 	{
@@ -170,7 +202,7 @@ void load(const std::string &filename)
  */
 void save(const std::string &filename)
 {
-	std::string s = Options::getUserFolder() + filename + ".cfg";
+	std::string s = _configFolder + filename + ".cfg";
 	std::ofstream sav(s.c_str());
 	if (!sav)
 	{
@@ -195,13 +227,32 @@ std::string getVersion()
 }
 
 /**
- * Returns the game's Data folder where resources
+ * Returns the game's current Data folder where resources
  * and X-Com files are loaded from.
  * @return Full path to Data folder.
  */
 std::string getDataFolder()
 {
 	return _dataFolder;
+}
+
+/**
+ * Changes the game's current Data folder where resources
+ * and X-Com files are loaded from.
+ * @param folder Full path to Data folder.
+ */
+void setDataFolder(const std::string &folder)
+{
+	_dataFolder = folder;
+}
+
+/**
+ * Returns the game's list of possible Data folders.
+ * @return List of Data paths.
+ */
+std::vector<std::string> *getDataList()
+{
+	return &_dataList;
 }
 
 /**

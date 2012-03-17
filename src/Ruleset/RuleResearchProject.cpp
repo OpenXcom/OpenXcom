@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -26,7 +26,7 @@ RuleResearchProject::RuleResearchProject(const std::string & name, int cost) : _
 }
 
 /**
- * Add a ResearchProject must be discoved before this researchProject
+ * Add a ResearchProject must be discovered before this researchProject
  * @param rp a pointer to a ResearchProject
 */
 void RuleResearchProject::addDependency (RuleResearchProject * rp)
@@ -72,6 +72,7 @@ bool RuleResearchProject::needItem() const
 
 /**
    Change if this ResearchProject need a corresponding Item to be researched.
+   @param b true if the ResearchProject need a corresponding item
 */
 void RuleResearchProject::setNeedItem(bool b)
 {

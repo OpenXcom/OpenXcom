@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -19,9 +19,12 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include "AggroBAIState.h"
+#include "ProjectileFlyBState.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/SavedBattleGame.h"
+#include "../Battlescape/TileEngine.h"
+#include "../Battlescape/Pathfinding.h"
 #include "../Engine/RNG.h"
 
 namespace OpenXcom
@@ -119,6 +122,7 @@ void AggroBAIState::think(BattleAction *action)
 	/* Aggro is mainly either shooting a target or running towards it (melee).
 	   If we do no action here - we assume we lost aggro and will go back to patrol state.
 	*/
+	int aggression = _unit->getAggression();
 
 	_aggroTarget = 0;
 	for (std::vector<BattleUnit*>::iterator j = _unit->getVisibleUnits()->begin(); j != _unit->getVisibleUnits()->end(); ++j)
@@ -126,53 +130,138 @@ void AggroBAIState::think(BattleAction *action)
 		_aggroTarget = (*j);
 	}
 
-	if (_aggroTarget == 0)
+	// if we currently see no target, we either can move to it's last seen position or loose aggro
+	if (_aggroTarget == 0 || _aggroTarget->isOut())
 	{
 		_timesNotSeen++;
-		if (_timesNotSeen > 3) // this should be the intelligence level of the unit
+		if (_timesNotSeen > _unit->getIntelligence() || aggression == 0)
 		{
-			// we lost aggro
+			// we lost aggro - going back to patrol state
 			return;
 		}
-		// lets go looking in the neighbourhood where we've last seen him
+		// lets go looking where we've last seen him
 		action->type = BA_WALK;
 		action->target = _lastKnownPosition;
-		action->target.x += RNG::generate(-1,1);
-		action->target.y += RNG::generate(-1,1);
 	}
 	else
 	{
-		// from time to time, don't shoot him, but just move a bit around
-		if (RNG::generate(1,10) == 1)
-		{
-			action->type = BA_WALK;
-			action->target = _unit->getPosition();
-			action->target.x += RNG::generate(-5,5);
-			action->target.y += RNG::generate(-5,5);
-		}
-		else
+		// if we see the target, we either can shoot him, or take cover.
+		bool takeCover = true;
+		int number = RNG::generate(0,100);
+
+		// lost health, chances to take cover get bigger
+		if (_unit->getHealth() < _unit->getStats()->health)
+			number += 10;
+
+		// aggrotarget has no weapon - changes of take cover get smaller
+		if (!_aggroTarget->getMainHandWeapon())
+			number -= 50;
+
+		if (aggression == 0 && number < 10)
+			takeCover = false;
+		if (aggression == 1 && number < 50)
+			takeCover = false;
+		if (aggression == 2 && number < 90)
+			takeCover = false;
+
+		if (!takeCover)
 		{
 			_timesNotSeen = 0;
 			_lastKnownPosition = _aggroTarget->getPosition();
 			action->target = _aggroTarget->getPosition();
-			action->weapon = action->actor->getMainHandWeapon();
-			/*int tu = action->actor->getActionTUs(action->type, action->weapon);*/
-			if (action->weapon && action->weapon->getAmmoItem() && action->weapon->getAmmoItem()->getAmmoQuantity())
+			action->type = BA_NONE;
+
+			// lets' evaluate if we could throw a grenade
+			int tu = 4; // 4TUs for picking up the grenade
+
+			// distance must be more than 6 tiles, otherwise it's too dangerous to play with explosives
+			if (_game->getTileEngine()->distance(_unit->getPosition(), _aggroTarget->getPosition()) > 6)
 			{
-				action->type = BA_SNAPSHOT;
+				// do we have a grenade on our belt?
+				BattleItem *grenade = _unit->getGrenadeFromBelt();
+				// do we have enough TUs to prime and throw the grenade?
+				if (grenade)
+				{
+					action->weapon = grenade;
+					tu += _unit->getActionTUs(BA_PRIME, grenade);
+					tu += _unit->getActionTUs(BA_THROW, grenade);
+					if (tu <= _unit->getStats()->tu)
+					{
+						// are we within range?
+						if (ProjectileFlyBState::validThrowRange(action))
+						{
+							grenade->setExplodeTurn(_game->getTurn());
+							_unit->spendTimeUnits(_unit->getActionTUs(BA_PRIME, grenade), false);
+							action->type = BA_THROW;
+						}
+					}
+				}
 			}
-			else
+
+			if (action->type == BA_NONE)
 			{
-				// now we are in trouble, flee
-				return;
+				action->weapon = action->actor->getMainHandWeapon();
+				// out of ammo or no weapon or ammo at all, we have to take cover
+				if (!action->weapon || !action->weapon->getAmmoItem() || !action->weapon->getAmmoItem()->getAmmoQuantity())
+				{
+					takeCover = true;
+				}
+				else
+				{
+					if (RNG::generate(1,10) < 5)
+						action->type = BA_SNAPSHOT;
+					else
+						action->type = BA_AUTOSHOT;
+					tu = action->actor->getActionTUs(action->type, action->weapon);
+					// enough time units to shoot?
+					if (tu > _unit->getTimeUnits())
+					{
+						takeCover = true;
+					}
+				}
+			}
+		}
+
+		if (takeCover)
+		{
+			// the idea is to check within a 5 tile radius for a tile which is not seen by our aggroTarget
+			// if there is no such tile, we run away from the target.
+			action->type = BA_WALK;
+			int tries = 0;
+			bool coverFound = false;
+			while (tries < 30 && !coverFound)
+			{
+				tries++;
+				action->target = _unit->getPosition();
+				action->target.x += RNG::generate(-5,5);
+				action->target.y += RNG::generate(-5,5);
+				if (tries < 20)
+
+					coverFound = !_game->getTileEngine()->visible(_aggroTarget, _game->getTile(action->target));
+				else
+					coverFound = true;
+
+				if (coverFound)
+				{
+					// check if we can reach this tile
+					_game->getPathfinding()->calculate(_unit, action->target);
+					if (_game->getPathfinding()->getStartDirection() == -1)
+					{
+						coverFound = false;
+					}
+					_game->getPathfinding()->abortPath();
+				}
 			}
 		}
 	}
 
+	action->TU = action->actor->getActionTUs(action->type, action->weapon);
 }
 
 /**
  * Sets the aggro target to be used by the AI.
+ * Note that this does not mean the AI will chase the unit, it will just walk towards this position.
+ * Until it forgets about it and goes back to patrolling.
  * @param unit Pointer to the unit.
  */
 void AggroBAIState::setAggroTarget(BattleUnit *unit)

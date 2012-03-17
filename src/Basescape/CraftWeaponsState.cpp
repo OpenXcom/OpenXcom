@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -106,11 +106,10 @@ CraftWeaponsState::CraftWeaponsState(Game *game, Base *base, unsigned int craft,
 	_lstWeapons->addRow(1, _game->getLanguage()->getString("STR_NONE_UC").c_str());
 	_weapons.push_back(0);
 
-	std::string s[] = {"STR_STINGRAY", "STR_AVALANCHE", "STR_CANNON_UC"};
-
-	for (int i = 0; i < 3; ++i)
+	std::vector<std::string> weapons = _game->getRuleset()->getCraftWeaponsList();
+	for (std::vector<std::string>::iterator i = weapons.begin(); i != weapons.end(); ++i)
 	{
-		RuleCraftWeapon *w = _game->getRuleset()->getCraftWeapon(s[i]);
+		RuleCraftWeapon *w = _game->getRuleset()->getCraftWeapon(*i);
 		if (_base->getItems()->getItem(w->getLauncherItem()) > 0)
 		{
 			_weapons.push_back(w);

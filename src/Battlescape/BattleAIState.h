@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -19,8 +19,8 @@
 #ifndef OPENXCOM_BATTLEAISTATE_H
 #define OPENXCOM_BATTLEAISTATE_H
 
-#include "yaml.h"
-#include "BattlescapeState.h"
+#include <yaml-cpp/yaml.h>
+#include "BattlescapeGame.h"
 
 namespace OpenXcom
 {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -36,7 +36,7 @@ Exception::~Exception() throw()
 
 /**
  * Returns the message describing the exception
- * that occured.
+ * that occurred.
  * @return Exception message.
  */
 const char *Exception::what() const throw()

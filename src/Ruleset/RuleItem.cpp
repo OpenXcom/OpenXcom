@@ -28,11 +28,11 @@ namespace OpenXcom
  * Creates a blank ruleset for a certain type of item.
  * @param type String defining the type.
  */
-RuleItem::RuleItem(const std::string &type) : _type(type), _size(0.0), _cost(0), _time(24), _weight(0), _bigSprite(-1), _floorSprite(-1), _handSprite(120), _bulletSprite(-1),
-									   _fireSound(-1), _hitSound(-1), _hitAnimation(0), _power(0), _priority(0), _compatibleAmmo(), _damageType(DT_NONE),
-									   _accuracyAuto(0), _accuracySnap(0), _accuracyAimed(0), _tuAuto(0), _tuSnap(0), _tuAimed(0), _clipSize(0), _accuracyMelee(0), _tuMelee(0),
-					   _battleType(BT_NONE), _twoHanded(false), _waypoint(false), _fixedWeapon(false), _invWidth(1), _invHeight(1),
-					   _painKiller(0), _heal(0), _stimulant(0), _healAmount(0), _healthAmount(0), _energy(0), _stun(0), _tuUse(0)
+RuleItem::RuleItem(const std::string &type) : _type(type), _name(type), _size(0.0), _costBuy(0), _costSell(0), _transferTime(24), _weight(0), _bigSprite(-1), _floorSprite(-1), _handSprite(120), _bulletSprite(-1),
+											_fireSound(-1), _hitSound(-1), _hitAnimation(0), _power(0), _priority(0), _compatibleAmmo(), _damageType(DT_NONE),
+											_accuracyAuto(0), _accuracySnap(0), _accuracyAimed(0), _tuAuto(0), _tuSnap(0), _tuAimed(0), _clipSize(0), _accuracyMelee(0), _tuMelee(0),
+											_battleType(BT_NONE), _twoHanded(false), _waypoint(false), _fixedWeapon(false), _invWidth(1), _invHeight(1),
+											_painKiller(0), _heal(0), _stimulant(0), _healAmount(0), _healthAmount(0), _energy(0), _stun(0), _tuUse(0)
 {
 }
 
@@ -58,17 +58,25 @@ void RuleItem::load(const YAML::Node &node)
 		{
 			i.second() >> _type;
 		}
+		else if (key == "name")
+		{
+			i.second() >> _name;
+		}
 		else if (key == "size")
 		{
 			i.second() >> _size;
 		}
-		else if (key == "cost")
+		else if (key == "costBuy")
 		{
-			i.second() >> _cost;
+			i.second() >> _costBuy;
 		}
-		else if (key == "time")
+		else if (key == "costSell")
 		{
-			i.second() >> _time;
+			i.second() >> _costSell;
+		}
+		else if (key == "transferTime")
+		{
+			i.second() >> _transferTime;
 		}
 		else if (key == "weight")
 		{
@@ -168,6 +176,10 @@ void RuleItem::load(const YAML::Node &node)
 		{
 			i.second() >> _waypoint;
 		}
+		else if (key == "fixedWeapon")
+		{
+			i.second() >> _fixedWeapon;
+		}
 		else if (key == "invWidth")
 		{
 			i.second() >> _invWidth;
@@ -219,9 +231,11 @@ void RuleItem::save(YAML::Emitter &out) const
 {
 	out << YAML::BeginMap;
 	out << YAML::Key << "type" << YAML::Value << _type;
+	out << YAML::Key << "name" << YAML::Value << _name;
 	out << YAML::Key << "size" << YAML::Value << _size;
-	out << YAML::Key << "cost" << YAML::Value << _cost;
-	out << YAML::Key << "time" << YAML::Value << _time;
+	out << YAML::Key << "costBuy" << YAML::Value << _costBuy;
+	out << YAML::Key << "costSell" << YAML::Value << _costSell;
+	out << YAML::Key << "transferTime" << YAML::Value << _transferTime;
 	out << YAML::Key << "weight" << YAML::Value << _weight;
 	out << YAML::Key << "bigSprite" << YAML::Value << _bigSprite;
 	out << YAML::Key << "floorSprite" << YAML::Value << _floorSprite;
@@ -246,6 +260,7 @@ void RuleItem::save(YAML::Emitter &out) const
 	out << YAML::Key << "battleType" << YAML::Value << _battleType;
 	out << YAML::Key << "twoHanded" << YAML::Value << _twoHanded;
 	out << YAML::Key << "waypoint" << YAML::Value << _waypoint;
+	out << YAML::Key << "fixedWeapon" << YAML::Value << _fixedWeapon;
 	out << YAML::Key << "invWidth" << YAML::Value << _invWidth;
 	out << YAML::Key << "invHeight" << YAML::Value << _invHeight;
 	out << YAML::Key << "painKiller" << YAML::Value << _painKiller;
@@ -260,13 +275,22 @@ void RuleItem::save(YAML::Emitter &out) const
 }
 
 /**
- * Returns the language string that names
- * this item. Each item type has a unique name.
+ * Returns the item type. Each item has a unique type.
  * @return Item name.
  */
 std::string RuleItem::getType() const
 {
 	return _type;
+}
+
+/**
+ * Returns the language string that names
+ * this item. This is not necessarily unique.
+ * @return Item name.
+ */
+std::string RuleItem::getName() const
+{
+	return _name;
 }
 
 /**
@@ -280,33 +304,23 @@ float RuleItem::getSize() const
 }
 
 /**
- * Changes the amount of space this item
- * takes up in a storage facility.
- * @param size Storage size.
+ * Returns the amount of money this item
+ * costs to purchase (0 if not purchasable).
+ * @return Cost.
  */
-void RuleItem::setSize(float size)
+int RuleItem::getBuyCost() const
 {
-	_size = size;
+	return _costBuy;
 }
 
 /**
  * Returns the amount of money this item
- * costs in purchase/sale.
+ * is worth to sell.
  * @return Cost.
  */
-int RuleItem::getCost() const
+int RuleItem::getSellCost() const
 {
-	return _cost;
-}
-
-/**
- * Changes the amount of money this item
- * costs in purchase/sale.
- * @param cost Cost.
- */
-void RuleItem::setCost(int cost)
-{
-	_cost = cost;
+	return _costSell;
 }
 
 /**
@@ -316,17 +330,7 @@ void RuleItem::setCost(int cost)
  */
 int RuleItem::getTransferTime() const
 {
-	return _time;
-}
-
-/**
- * Changes the amount of time this item
- * takes to arrive at a base.
- * @param time Time in hours.
- */
-void RuleItem::setTransferTime(int time)
-{
-	_time = time;
+	return _transferTime;
 }
 
 /**
@@ -339,31 +343,12 @@ int RuleItem::getWeight() const
 }
 
 /**
- * Changes the weight of this item
- * @param weight Weight in strength units.
- */
-void RuleItem::setWeight(int weight)
-{
-	_weight = weight;
-}
-
-/**
  * Returns the reference in BIGOBS.PCK for use in inventory.
  * @return Sprite reference.
  */
 int RuleItem::getBigSprite() const
 {
 	return _bigSprite;
-}
-
-/**
- * Changes the reference in BIGOBS.PCK for use in inventory.
- * @param sprite Sprite reference.
- */
-void RuleItem::setBigSprite(int sprite)
-{
-	_bigSprite = sprite;
-	_floorSprite = sprite;
 }
 
 /**
@@ -376,30 +361,12 @@ int RuleItem::getFloorSprite() const
 }
 
 /**
- * Changes the reference in FLOOROB.PCK for use in inventory.
- * @param sprite Sprite reference.
- */
-void RuleItem::setFloorSprite(int sprite)
-{
-	_floorSprite = sprite;
-}
-
-/**
  * Returns the reference in HANDOB.PCK for use in inventory.
  * @return Sprite reference.
  */
 int RuleItem::getHandSprite() const
 {
 	return _handSprite;
-}
-
-/**
- * Changes the reference in HANDOB.PCK for use in inventory.
- * @param sprite Sprite reference.
- */
-void RuleItem::setHandSprite(int sprite)
-{
-	_handSprite = sprite;
 }
 
 /**
@@ -412,12 +379,12 @@ bool RuleItem::getTwoHanded() const
 }
 
 /**
- * Changes whether this item is held with two hands.
- * @param flag Is it two-handed?
+ * Returns whether this uses waypoints.
+ * @return Uses waypoints?
  */
-void RuleItem::setTwoHanded(bool flag)
+bool RuleItem::getWaypoint() const
 {
-	_twoHanded = flag;
+	return _waypoint;
 }
 
 /**
@@ -431,31 +398,12 @@ bool RuleItem::getFixed() const
 }
 
 /**
- * Changes whether this item is a fixed weapon.
- * You can't move/throw/drop fixed weapons - ie. HWP turrets.
- * @param flag Is it a fixed weapon?
- */
-void RuleItem::setFixed(bool flag)
-{
-	_fixedWeapon = flag;
-}
-
-/**
  * Returns the item's bullet sprite reference.
  * @return Sprite reference.
  */
 int RuleItem::getBulletSprite() const
 {
 	return _bulletSprite;
-}
-
-/**
- * Changes the item's bulet sprite reference.
- * @param sprite Sprite reference.
- */
-void RuleItem::setBulletSprite(int sprite)
-{
-	_bulletSprite = sprite;
 }
 
 /**
@@ -468,30 +416,12 @@ int RuleItem::getFireSound() const
 }
 
 /**
- * Changes the item's fire sound.
- * @param sound Sound id.
- */
-void RuleItem::setFireSound(int sound)
-{
-	_fireSound = sound;
-}
-
-/**
  * Returns the item's hit sound.
  * @return Sound id.
  */
 int RuleItem::getHitSound() const
 {
 	return _hitSound;
-}
-
-/**
- * Changes the item's fire sound.
- * @param sound Sound id.
- */
-void RuleItem::setHitSound(int sound)
-{
-	_hitSound = sound;
 }
 
 /**
@@ -504,17 +434,8 @@ int RuleItem::getHitAnimation() const
 }
 
 /**
- * Changes the item's hit animation.
- * @param animation Animation id.
- */
-void RuleItem::setHitAnimation(int animation)
-{
-	_hitAnimation = animation;
-}
-
-/**
  * Returns the item's power.
- * @return power Teh powah.
+ * @return Teh powah.
  */
 int RuleItem::getPower() const
 {
@@ -522,17 +443,8 @@ int RuleItem::getPower() const
 }
 
 /**
- * Sets the item's power.
- * @param power the item's power.
- */
-void RuleItem::setPower(int power)
-{
-	_power = power;
-}
-
-/**
  * Returns the item's accuracy for snapshots.
- * @return Accuracy the item's accuracy for snapshots.
+ * @return item's accuracy for snapshots.
  */
 int RuleItem::getAccuracySnap() const
 {
@@ -540,17 +452,8 @@ int RuleItem::getAccuracySnap() const
 }
 
 /**
- * Sets the item's accuracy for snapshots.
- * @param accuracy item's accuracy for snapshots.
- */
-void RuleItem::setAccuracySnap(int accuracy)
-{
-	_accuracySnap = accuracy;
-}
-
-/**
  * Returns the item's accuracy for autoshots.
- * @return Accuracy the item's accuracy for autoshots.
+ * @return item's accuracy for autoshots.
  */
 int RuleItem::getAccuracyAuto() const
 {
@@ -558,17 +461,8 @@ int RuleItem::getAccuracyAuto() const
 }
 
 /**
- * Sets the item's accuracy for autoshots.
- * @param accuracy item's accuracy for autoshots.
- */
-void RuleItem::setAccuracyAuto(int accuracy)
-{
-	_accuracyAuto = accuracy;
-}
-
-/**
  * Returns the item's accuracy for aimed shots.
- * @return Accuracy the item's accuracy for aimed sthos.
+ * @return item's accuracy for aimed shots.
  */
 int RuleItem::getAccuracyAimed() const
 {
@@ -576,17 +470,17 @@ int RuleItem::getAccuracyAimed() const
 }
 
 /**
- * Sets the item's accuracy for aimed shot.
- * @param accuracy item's accuracy for aimed shots.
+ * Returns the item's accuracy for melee.
+ * @return item's accuracy for melee.
  */
-void RuleItem::setAccuracyAimed(int accuracy)
+int RuleItem::getAccuracyMelee() const
 {
-	_accuracyAimed = accuracy;
+	return _accuracyMelee;
 }
 
 /**
- * Returns the item's time units for snapshots.
- * @return item's time units for snapshots.
+ * Returns the item's time unit percentage for snapshots.
+ * @return item's time unit percentage for snapshots.
  */
 int RuleItem::getTUSnap() const
 {
@@ -594,17 +488,8 @@ int RuleItem::getTUSnap() const
 }
 
 /**
- * Sets the item's time units for snapshots.
- * @param tu item's time units for snapshots.
- */
-void RuleItem::setTUSnap(int tu)
-{
-	_tuSnap = tu;
-}
-
-/**
- * Returns the item's time units for autoshots.
- * @return item's time units for autoshots.
+ * Returns the item's time unit percentage for autoshots.
+ * @return item's time unit percentage for autoshots.
  */
 int RuleItem::getTUAuto() const
 {
@@ -612,17 +497,8 @@ int RuleItem::getTUAuto() const
 }
 
 /**
- * Sets the item's time units for autoshots.
- * @param tu item's time units for autoshots.
- */
-void RuleItem::setTUAuto(int tu)
-{
-	_tuAuto = tu;
-}
-
-/**
- * Returns the item's time units for aimed shots.
- * @return item's time units for aimed sthos.
+ * Returns the item's time unit percentage for aimed shots.
+ * @return item's time unit percentage for aimed shots.
  */
 int RuleItem::getTUAimed() const
 {
@@ -630,12 +506,12 @@ int RuleItem::getTUAimed() const
 }
 
 /**
- * Sets the item's time units for aimed shot.
- * @param tu item's time units for aimed shots.
+ * Returns the item's time unit percentage for melee.
+ * @return item's time unit percentage for melee.
  */
-void RuleItem::setTUAimed(int tu)
+int RuleItem::getTUMelee() const
 {
-	_tuAimed = tu;
+	return _tuMelee;
 }
 
 /**
@@ -657,30 +533,12 @@ ItemDamageType RuleItem::getDamageType() const
 }
 
 /**
- * Sets the item's damage type.
- * @param damageType the item's damage type.
- */
-void RuleItem::setDamageType(ItemDamageType damageType)
-{
-	_damageType = damageType;
-}
-
-/**
  * Returns the item's type.
  * @return type the item's type.
  */
 BattleType RuleItem::getBattleType() const
 {
 	return _battleType;
-}
-
-/**
- * Sets the item's type.
- * @param type the item's type.
- */
-void RuleItem::setBattleType(BattleType type)
-{
-	_battleType = type;
 }
 
 /**
@@ -693,15 +551,6 @@ int RuleItem::getInventoryWidth() const
 }
 
 /**
- * Sets the item's width in a soldier's inventory.
- * @param width the item's width.
- */
-void RuleItem::setInventoryWidth(int width)
-{
-	_invWidth = width;
-}
-
-/**
  * Returns the item's height in a soldier's inventory.
  * @return the item's height.
  */
@@ -711,30 +560,12 @@ int RuleItem::getInventoryHeight() const
 }
 
 /**
- * Sets the item's height in a soldier's inventory.
- * @param height the item's height.
- */
-void RuleItem::setInventoryHeight(int height)
-{
-	_invHeight = height;
-}
-
-/**
  * Returns the item's ammo clip size.
  * @return the item's ammo clip size.
  */
 int RuleItem::getClipSize() const
 {
 	return _clipSize;
-}
-
-/**
- * Sets the item's ammo clip size.
- * @param size the item's ammo clip size.
- */
-void RuleItem::setClipSize(int size)
-{
-	_clipSize = size;
 }
 
 /**
@@ -752,15 +583,6 @@ void RuleItem::drawHandSprite(SurfaceSet *texture, Surface *surface) const
 }
 
 /**
- * Set the heal quantity of item
- * @param heal the new heal quantity
- */
-void RuleItem::setHealQuantity (int heal)
-{
-	_heal = heal;
-}
-
-/**
  * Get the heal quantity of item
  * @return The new heal quantity
  */
@@ -770,30 +592,12 @@ int RuleItem::getHealQuantity () const
 }
 
 /**
- * Set the pain killer quantity of item
- * @param pk the new pain killer quantity
- */
-void RuleItem::setPainKillerQuantity (int pk)
-{
-	_painKiller = pk;
-}
-
-/**
  * Get the pain killer quantity of item
  * @return The new pain killer quantity
  */
 int RuleItem::getPainKillerQuantity () const
 {
 	return _painKiller;
-}
-
-/**
- * Set the stimulant quantity of item
- * @param stimulant the new stimulant quantity
- */
-void RuleItem::setStimulantQuantity (int stimulant)
-{
-	_stimulant = stimulant;
 }
 
 /**
@@ -824,24 +628,6 @@ int RuleItem::getHealthAmount () const
 }
 
 /**
- * Set the amount of fatal wound healed per usage
- * @param h The amount of fatal wound healed
- */
-void RuleItem::setHealAmount (int h)
-{
-	_healAmount = h;
-}
-
-/**
- * Set the amount of health added to wounded soldier health
- * @param h The amount of health to add
- */
-void RuleItem::setHealthAmount (int h)
-{
-	_healthAmount = h;
-}
-
-/**
  * Get the amount of energy added to soldier energy
  * @return The amount of energy to add
  */
@@ -860,24 +646,6 @@ int RuleItem::getStun () const
 }
 
 /**
- * Set the amount of energy added to soldier energy
- * @param e The amount of energy to add
- */
-void RuleItem::setEnergy (int e)
-{
-	_energy = e;
-}
-
-/**
- * Set the amount of stun removed to soldier stun level
- * @param s The amount of stun to remove
- */
-void RuleItem::setStun (int s)
-{
-	_stun = s;
-}
-
-/**
  * Get the amount of Time Unit needed to use this item
  * @return The amount of Time Unit needed to use this item
  */
@@ -887,11 +655,24 @@ int RuleItem::getTUUse() const
 }
 
 /**
- * Set the amount of Time Unit needed to use this item
- * @param tu The amount of Time Unit needed to use this item
+ * Returns the item's max explosion radius. Small explosions don't have a restriction.
+ * Larger explosions are restricted using a formula, with a maximum of radius 11 no matter how large the explosion is.
+ * @return radius.
  */
-void RuleItem::setTUUse(int tu)
+int RuleItem::getExplosionRadius() const
 {
-	_tuUse = tu;
+	int radius = 100;
+
+	if (_power > 61 && _power < 112)
+	{
+		radius = (_power-2)/10;
+	}
+	else if (_power >= 112)
+	{
+		radius = 11;
+	}
+
+	return radius;
 }
+
 }

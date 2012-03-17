@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -73,6 +73,7 @@
 #include "NewPossibleResearchState.h"
 #include "../Savegame/Production.h"
 #include "../Ruleset/RuleManufactureInfo.h"
+#include "../Savegame/ItemContainer.h"
 
 namespace OpenXcom
 {
@@ -418,7 +419,7 @@ void GeoscapeState::timeAdvance()
 	_pause = false;
 
 	timeDisplay();
-	_globe->drawRefresh();
+	_globe->draw();
 }
 
 /**
@@ -589,7 +590,24 @@ void GeoscapeState::time30Minutes()
 		{
 			if ((*j)->getStatus() == "STR_REFUELLING")
 			{
-				(*j)->refuel();
+				std::string item = (*j)->getRules()->getRefuelItem();
+				if (item == "")
+				{
+					(*j)->refuel();
+				}
+				else
+				{
+					if ((*i)->getItems()->getItem(item) > 0)
+					{
+						(*i)->getItems()->removeItem(item);
+						(*j)->refuel();
+					}
+					else
+					{
+						// TODO: No fuel popup
+						(*j)->setStatus("STR_READY");
+					}
+				}
 			}
 		}
 	}
@@ -730,9 +748,9 @@ void GeoscapeState::time1Hour()
  */
 void GeoscapeState::time1Day()
 {
-	// Handle facility construction and science project
 	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
 	{
+		// Handle facility construction
 		for (std::vector<BaseFacility*>::iterator j = (*i)->getFacilities()->begin(); j != (*i)->getFacilities()->end(); ++j)
 		{
 			if ((*j)->getBuildTime() > 0)
@@ -745,6 +763,7 @@ void GeoscapeState::time1Day()
 				}
 			}
 		}
+		// Handle science project
 		std::vector<ResearchProject*> finished;
 		for(std::vector<ResearchProject*>::const_iterator iter = (*i)->getResearch().begin (); iter != (*i)->getResearch().end (); ++iter)
 		{
@@ -765,7 +784,14 @@ void GeoscapeState::time1Day()
 			popup(new NewPossibleResearchState(_game, *i, newPossibleResearch));
 			delete(*iter);
 		}
-
+		// Handle soldier wounds
+		for (std::vector<Soldier*>::iterator j = (*i)->getSoldiers()->begin(); j != (*i)->getSoldiers()->end(); ++j)
+		{
+			if ((*j)->getWoundRecovery() > 0)
+			{
+				(*j)->heal();
+			}
+		}
 	}
 }
 
@@ -867,23 +893,26 @@ void GeoscapeState::btnBasesClick(Action *action)
  */
 void GeoscapeState::btnGraphsClick(Action *action)
 {
-#ifdef _DEBUG
+//#ifdef _DEBUG
 	/* Daiky: uncomment this bit to start a terror mission */
-	_game->getSavedGame()->setBattleGame(new SavedBattleGame());
+	SavedBattleGame *bgame = new SavedBattleGame();
+	_game->getSavedGame()->setBattleGame(bgame);
+	bgame->setMissionType("STR_TERROR_MISSION");
 	BattlescapeGenerator *bgen = new BattlescapeGenerator(_game);
-	bgen->setMissionType(MISS_TERROR);
-	//bgen->setMissionType(MISS_UFOASSAULT);
 	bgen->setWorldTexture(1);
 	bgen->setWorldShade(0);
 	bgen->setCraft(_game->getSavedGame()->getBases()->at(0)->getCrafts()->at(0));
+	bgen->setBase(_game->getSavedGame()->getBases()->at(0));
+	bgen->setAlienRace("STR_SECTOID");
+	bgen->setAlienItemlevel(0);
 	bgen->run();
 	delete bgen;
 	_music = false;
 	_game->getSavedGame()->getBattleGame()->resetUnitTiles();
 	_game->pushState(new BattlescapeState(_game));
-#else
-	_game->pushState(new GraphsState(_game));
-#endif
+//#else
+//	_game->pushState(new GraphsState(_game));
+//#endif
 }
 
 /**
@@ -919,11 +948,7 @@ void GeoscapeState::btnFundingClick(Action *action)
  */
 void GeoscapeState::btnRotateLeftPress(Action *action)
 {
-#ifdef _DEBUG
-	_game->getRuleset()->save("UfoBase");
-#else
 	_globe->rotateLeft();
-#endif
 }
 
 /**

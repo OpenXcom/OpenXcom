@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -22,10 +22,12 @@
 #include <vector>
 #include <string>
 #include "../Ufopaedia/Ufopaedia.h"
+#include <yaml-cpp/yaml.h>
 
 namespace OpenXcom
 {
 	class ArticleDefinition;
+	class Ruleset;
 
 	/**
 	 * This class encapsulates the saved game properties concerning Ufopaedia.
@@ -69,11 +71,17 @@ namespace OpenXcom
 		/// load a vector with article ids that are currently visible of a given section.
 		void getSectionList(const std::string &section, ArticleDefinitionList &data);
 
-		/// TODO: get current visible article list as storeable data (for save).
+		/// TODO: get current visible article list as storable data (for save).
 		void getSavegameProperties(const std::string &info) const;
 
 		/// TODO: set current visible article list from stored data (on load).
 		void setSavegameProperties(const std::string &info);
+
+		/// Loads Ufopaedia from YAML.
+		void load(const YAML::Node& node, Ruleset *rule);
+
+		/// Saves Ufopaedia to YAML.
+		void save(YAML::Emitter& out);
 
 	protected:
 

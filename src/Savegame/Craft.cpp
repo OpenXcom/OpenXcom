@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -277,11 +277,11 @@ int Craft::getNumEquipment() const
 }
 
 /**
- * Returns the amount of HWPs currently
+ * Returns the amount of vehicles currently
  * contained in this craft.
- * @return Number of HWPs.
+ * @return Number of vehicles.
  */
-int Craft::getNumHWPs() const
+int Craft::getNumVehicles() const
 {
 	return 0;
 }
@@ -403,8 +403,7 @@ void Craft::setLowFuel(bool low)
  */
 double Craft::getDistanceFromBase() const
 {
-	double dLon, dLat;
-	return getDistance(_base, &dLon, &dLat);
+	return getDistance(_base);
 }
 
 /**
@@ -414,6 +413,8 @@ double Craft::getDistanceFromBase() const
  */
 int Craft::getFuelConsumption() const
 {
+	if (_rules->getRefuelItem() != "")
+		return 1;
 	return (int)floor(_speed / 100.0);
 }
 
@@ -424,7 +425,7 @@ int Craft::getFuelConsumption() const
  */
 int Craft::getFuelLimit() const
 {
-	return (int)floor(getFuelConsumption() * getDistanceFromBase() / (getRadianSpeed() * 120));
+	return (int)floor(getFuelConsumption() * getDistanceFromBase() / (_speedRadian * 120));
 }
 
 /**
@@ -440,51 +441,40 @@ void Craft::returnToBase()
  */
 void Craft::think()
 {
-	if (_dest != 0)
+	move();
+	if (reachedDestination() && _dest == (Target*)_base)
 	{
-		calculateSpeed();
-	}
-	setLongitude(_lon + _speedLon);
-	setLatitude(_lat + _speedLat);
-	if (_dest != 0 && finishedRoute())
-	{
-		_lon = _dest->getLongitude();
-		_lat = _dest->getLatitude();
-
-		if (_dest == (Target*)_base)
+		int available = 0, full = 0;
+		for (std::vector<CraftWeapon*>::iterator i = _weapons.begin(); i != _weapons.end(); ++i)
 		{
-			int available = 0, full = 0;
-			for (std::vector<CraftWeapon*>::iterator i = _weapons.begin(); i != _weapons.end(); ++i)
+			if ((*i) == 0)
+				continue;
+			available++;
+			if ((*i)->getAmmo() >= (*i)->getRules()->getAmmoMax())
 			{
-				if ((*i) == 0)
-					continue;
-				available++;
-				if ((*i)->getAmmo() >= (*i)->getRules()->getAmmoMax())
-				{
-					full++;
-				}
-				else
-				{
-					(*i)->setRearming(true);
-				}
-			}
-
-			if (_damage > 0)
-			{
-				_status = "STR_REPAIRS";
-			}
-			else if (available != full)
-			{
-				_status = "STR_REARMING";
+				full++;
 			}
 			else
 			{
-				_status = "STR_REFUELLING";
+				(*i)->setRearming(true);
 			}
-			setSpeed(0);
-			setDestination(0);
-			_lowFuel = false;
 		}
+
+		if (_damage > 0)
+		{
+			_status = "STR_REPAIRS";
+		}
+		else if (available != full)
+		{
+			_status = "STR_REARMING";
+		}
+		else
+		{
+			_status = "STR_REFUELLING";
+		}
+		setSpeed(0);
+		setDestination(0);
+		_lowFuel = false;
 	}
 }
 
@@ -496,15 +486,10 @@ void Craft::think()
  */
 bool Craft::insideRadarRange(Target *target) const
 {
-	bool inside = false;
+	if (_rules->getRadarRange() == 0)
+		return false;
 	double newrange = _rules->getRadarRange() * (1 / 60.0) * (M_PI / 180);
-	for (double lon = target->getLongitude() - 2*M_PI; lon <= target->getLongitude() + 2*M_PI + 0.01; lon += 2*M_PI)
-	{
-		double dLon = lon - _lon;
-		double dLat = target->getLatitude() - _lat;
-		inside = inside || (dLon * dLon + dLat * dLat <= newrange * newrange);
-	}
-	return inside;
+	return (getDistance(target) <= newrange);
 }
 
 /**
@@ -559,7 +544,7 @@ std::string Craft::rearm()
 		}
 		if (*i != 0 && (*i)->isRearming())
 		{
-			if (_base->getItems()->getItem((*i)->getRules()->getClipItem()) > 0)
+			if ((*i)->getRules()->getClipItem() == "" || _base->getItems()->getItem((*i)->getRules()->getClipItem()) > 0)
 			{
 				(*i)->rearm();
 				_base->getItems()->removeItem((*i)->getRules()->getClipItem());

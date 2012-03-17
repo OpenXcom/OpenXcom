@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -20,6 +20,7 @@
 #define OPENXCOM_OPTIONS_H
 
 #include <string>
+#include <vector>
 
 namespace OpenXcom
 {
@@ -45,6 +46,10 @@ namespace Options
 	std::string getVersion();
 	/// Gets the game's data folder.
 	std::string getDataFolder();
+	/// Sets the game's data folder.
+	void setDataFolder(const std::string &folder);
+	/// Gets the game's data list.
+	std::vector<std::string> *getDataList();
 	/// Gets the game's user folder.
 	std::string getUserFolder();
 	/// Gets a string option.

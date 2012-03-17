@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -80,7 +80,7 @@ namespace OpenXcom
 		ss << _game->getLanguage()->getString("STR_WEAPON_PODS") << L'\x01' << defs->craft->getWeapons() << L'\x01' << L'\n';
 		ss << _game->getLanguage()->getString("STR_DAMAGE_CAPACITY_UC") << L'\x01' << defs->craft->getMaxDamage() << L'\x01' << L'\n';
 		ss << _game->getLanguage()->getString("STR_CARGO_SPACE") << L'\x01' << defs->craft->getSoldiers() << L'\x01' << L'\n';
-		ss << _game->getLanguage()->getString("STR_HWP_CAPACITY") << L'\x01' << defs->craft->getHWPs();
+		ss << _game->getLanguage()->getString("STR_HWP_CAPACITY") << L'\x01' << defs->craft->getVehicles();
 		_txtStats->setText(ss.str());
 	}
 

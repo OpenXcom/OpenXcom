@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -20,7 +20,7 @@
 #define OPENXCOM_ACTIONMENUITEM_H
 
 #include "../Engine/InteractiveSurface.h"
-#include "BattlescapeState.h"
+#include "BattlescapeGame.h"
 
 namespace OpenXcom
 {
@@ -28,6 +28,7 @@ namespace OpenXcom
 class BattleItem;
 class State;
 class Font;
+class Text;
 
 /**
  * A class that represents a single box in the action popup menu on the battlescape.
@@ -44,7 +45,7 @@ private:
 	Text *_txtDescription, *_txtAcc, *_txtTU;
 public:
 	/// Creates a new ActionMenuItem.
-	ActionMenuItem(State *state, int id, Font *bigFont, int x, int y);
+	ActionMenuItem(int id, Font *bigFont, int x, int y);
 	/// Cleans up the ActionMenuItem.
 	~ActionMenuItem();
 	/// Assign an action to it.

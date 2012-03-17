@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -113,14 +113,16 @@ MedikitButton::MedikitButton(int y) : InteractiveSurface(30, 20, 190, y)
 /**
  * Initialize the Medikit State
  * @param game Pointer to the core game.
- * @param targetUnit Tthe wounded unit
- * @param unit The unit hodling the medikit
- * @param item The medikit item
+ * @param targetUnit The wounded unit.
+ * @param action The healing action.
  */
-MedikitState::MedikitState (Game * game, BattleUnit * targetUnit, BattleUnit * unit, BattleItem *item) : State (game), _targetUnit(targetUnit), _unit(unit), _item(item)
+MedikitState::MedikitState (Game * game, BattleUnit * targetUnit, BattleAction *action) : State (game), _targetUnit(targetUnit), _action(action)
 {
+	_unit = action->actor;
+	_item = action->weapon;
 	_surface = new InteractiveSurface(320, 200);
 	_surface->loadSpk(CrossPlatform::getDataFile("UFOGRAPH/MEDIBORD.PCK"));
+	_surface->onMouseClick((ActionHandler)&MedikitState::mouseClick);
 	_partTxt = new Text(50, 15, 90, 120);
 	_woundTxt = new Text(10, 15, 145, 120);
 	_medikitView = new MedikitView(52, 58, 95, 60, _game, _targetUnit, _partTxt, _woundTxt);
@@ -180,15 +182,23 @@ void MedikitState::onHealClick(Action * action)
 {
 	int heal = _item->getHealQuantity();
 	RuleItem *rule = _item->getRules();
-	if (heal == 0 || _unit->getTimeUnits () < rule->getTUUse())
+	if (heal == 0)
 	{
 		return;
 	}
-	_targetUnit->heal(_medikitView->getSelectedPart(), rule->getHealAmount(), rule->getHealthAmount());
-	_item->setHealQuantity(--heal);
-	_unit->spendTimeUnits (rule->getTUUse(), false);
-	_medikitView->invalidate();
-	update();
+	if (_unit->spendTimeUnits (rule->getTUUse(), false))
+	{
+		_targetUnit->heal(_medikitView->getSelectedPart(), rule->getHealAmount(), rule->getHealthAmount());
+		_item->setHealQuantity(--heal);
+		_medikitView->invalidate();
+		update();
+	}
+	else
+	{
+		_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
+		_game->popState();
+		_game->popState();
+	}
 }
 
 /**
@@ -199,19 +209,29 @@ void MedikitState::onStimulantClick(Action * action)
 {
 	int stimulant = _item->getStimulantQuantity();
 	RuleItem *rule = _item->getRules();
-	if (stimulant == 0 || _unit->getTimeUnits () < rule->getTUUse())
+	if (stimulant == 0)
 	{
 		return;
 	}
-	if (_targetUnit->getStatus () == STATUS_UNCONSCIOUS &&
-	    _targetUnit->getTile() != _unit->getTile())
+	if (_unit->spendTimeUnits (rule->getTUUse(), false))
 	{
-		return;
+		_targetUnit->stimulant(rule->getEnergy(), rule->getStun());
+		_item->setStimulantQuantity(--stimulant);
+		update();
+
+		// if the unit has revived we quit this screen automatically
+		if (_targetUnit->getStatus() == STATUS_UNCONSCIOUS && _targetUnit->getStunlevel() < _targetUnit->getHealth() && _targetUnit->getHealth() > 0)
+		{
+			_game->popState();
+			_game->popState();
+		}
 	}
-	_targetUnit->stimulant(rule->getEnergy(), rule->getStun());
-	_unit->spendTimeUnits (rule->getTUUse(), false);
-	_item->setStimulantQuantity(--stimulant);
-	update();
+	else
+	{
+		_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
+		_game->popState();
+		_game->popState();
+	}
 }
 
 /**
@@ -222,13 +242,21 @@ void MedikitState::onPainKillerClick(Action * action)
 {
 	int pk = _item->getPainKillerQuantity();
 	RuleItem *rule = _item->getRules();
-	if (pk == 0 || _unit->getTimeUnits () < rule->getTUUse())
+	if (pk == 0)
 	{
 		return;
 	}
-	_unit->spendTimeUnits (rule->getTUUse(), false);
-	_item->setPainKillerQuantity(--pk);
-	update();
+	if (_unit->spendTimeUnits (rule->getTUUse(), false))
+	{
+		_item->setPainKillerQuantity(--pk);
+		update();
+	}
+	else
+	{
+		_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
+		_game->popState();
+		_game->popState();
+	}
 }
 
 /**
@@ -240,4 +268,18 @@ void MedikitState::update()
 	_stimulantTxt->setText(toString(_item->getStimulantQuantity()));
 	_healTxt->setText(toString(_item->getHealQuantity()));
 }
+
+/**
+ * @param action Pointer to an action.
+ */
+void MedikitState::mouseClick(Action *action)
+{
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	{
+		_game->popState();
+		_game->popState();
+	}
+}
+
+
 }

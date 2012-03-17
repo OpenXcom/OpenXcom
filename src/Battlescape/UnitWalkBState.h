@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -21,14 +21,12 @@
 
 #include "BattleState.h"
 #include "Position.h"
-#include "BattlescapeState.h"
 
 namespace OpenXcom
 {
 
 class BattleUnit;
 class Pathfinding;
-class BattlescapeState;
 class TileEngine;
 
 class UnitWalkBState : public BattleState
@@ -38,12 +36,11 @@ private:
 	BattleUnit *_unit;
 	Pathfinding *_pf;
 	TileEngine *_terrain;
-	BattleAction _action;
 	void postPathProcedures();
 	void setNormalWalkSpeed();
 public:
 	/// Creates a new UnitWalkBState class
-	UnitWalkBState(BattlescapeState *parent, BattleAction _action);
+	UnitWalkBState(BattlescapeGame *parent, BattleAction _action);
 	/// Cleans up the UnitWalkBState.
 	~UnitWalkBState();
 	/// Set the target to walk to.
@@ -54,8 +51,6 @@ public:
 	void cancel();
 	/// Runs state functionality every cycle. Returns false when finished.
 	void think();
-	/// Get the result of the state.
-	std::string getResult() const;
 };
 
 }

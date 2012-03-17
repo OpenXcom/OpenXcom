@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -31,12 +31,12 @@ namespace OpenXcom
 class MovingTarget : public Target
 {
 protected:
+	static const double GLOBE_RADIUS;
+
 	Target *_dest;
-	double _speedLon, _speedLat;
+	double _speedLon, _speedLat, _speedRadian;
 	int _speed;
 
-	/// Has the moving target finished its route?
-	bool finishedRoute() const;
 	/// Calculates a new speed vector to the destination.
 	virtual void calculateSpeed();
 public:
@@ -56,12 +56,10 @@ public:
 	int getSpeed() const;
 	/// Sets the moving target's speed.
 	void setSpeed(int speed);
-	/// Gets the moving target's speed in radian.
-	double getRadianSpeed() const;
-	/// Gets the distance to another target.
-	double getDistance(Target *target, double *dLon, double *dLat) const;
 	/// Has the moving target reached its destination?
 	bool reachedDestination() const;
+	/// Move towards the destination.
+	void move();
 };
 
 }

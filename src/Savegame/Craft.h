@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -83,8 +83,8 @@ public:
 	int getNumSoldiers() const;
 	/// Gets the craft's amount of equipment.
 	int getNumEquipment() const;
-	/// Gets the craft's amount of HWPs.
-	int getNumHWPs() const;
+	/// Gets the craft's amount of vehicles.
+	int getNumVehicles() const;
 	/// Gets the craft's weapons.
 	std::vector<CraftWeapon*> *const getWeapons();
 	/// Gets the craft's items.

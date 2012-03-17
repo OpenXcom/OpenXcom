@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -29,7 +29,7 @@ namespace OpenXcom
  * Initializes a item of the specified type.
  * @param rules Pointer to ruleset.
  */
-BattleItem::BattleItem(RuleItem *rules, int *id) : _id(*id), _rules(rules), _owner(0), _previousOwner(0), _inventorySlot(0), _inventoryX(0), _inventoryY(0), _ammoItem(0), _explodeTurn(0), _ammoQuantity(0), _tile(0), _unit(0), _painKiller(0), _heal(0), _stimulant(0)
+BattleItem::BattleItem(RuleItem *rules, int *id) : _id(*id), _rules(rules), _owner(0), _previousOwner(0), _unit(0), _tile(0), _inventorySlot(0), _inventoryX(0), _inventoryY(0), _ammoItem(0), _explodeTurn(0), _ammoQuantity(0), _painKiller(0), _heal(0), _stimulant(0)
 {
 	if (_rules->getBattleType() == BT_AMMO)
 	{
@@ -41,6 +41,13 @@ BattleItem::BattleItem(RuleItem *rules, int *id) : _id(*id), _rules(rules), _own
 		setStimulantQuantity (_rules->getStimulantQuantity ());
 	}
 	(*id)++;
+
+	// weapon does not need ammo, ammo item points to weapon
+	if (_rules->getClipSize() == -1)
+	{
+		_ammoItem = this;
+		setAmmoQuantity(99999);
+	}
 }
 
 /**
@@ -318,12 +325,23 @@ BattleItem *BattleItem::getAmmoItem()
 }
 
 /**
+ * Gets the item's ammo item.
+ * @return BattleItem
+ */
+bool BattleItem::needsAmmo() const
+{
+	return !(_ammoItem == this); // no ammo for this weapon is needed
+}
+
+/**
  * Sets the item's ammo item.
  * @param item BattleItem
  * @return -2 when ammo doesn't fit, or -1 when weapon already contains ammo
  */
 int BattleItem::setAmmoItem(BattleItem *item)
 {
+	if (!needsAmmo()) return -2;
+
 	if (item == 0)
 	{
 		_ammoItem = 0;

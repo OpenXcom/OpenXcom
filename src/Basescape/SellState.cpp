@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -161,14 +161,19 @@ SellState::SellState(Game *game, Base *base) : State(game), _base(base), _qtys()
 		ss << _base->getAvailableEngineers();
 		_lstItems->addRow(4, _game->getLanguage()->getString("STR_ENGINEER").c_str(), ss.str().c_str(), L"0", Text::formatFunding(0).c_str());
 	}
-	for (std::map<std::string, int>::iterator i = _base->getItems()->getContents()->begin(); i != _base->getItems()->getContents()->end(); ++i)
+	std::vector<std::string> items = _game->getRuleset()->getItemsList();
+	for (std::vector<std::string>::iterator i = items.begin(); i != items.end(); ++i)
 	{
-		_qtys.push_back(0);
-		_items.push_back(i->first);
-		RuleItem *rule = _game->getRuleset()->getItem(i->first);
-		std::wstringstream ss;
-		ss << i->second;
-		_lstItems->addRow(4, _game->getLanguage()->getString(i->first).c_str(), ss.str().c_str(), L"0", Text::formatFunding(rule->getCost() / 2).c_str());
+		int qty = _base->getItems()->getItem(*i);
+		if (qty > 0)
+		{
+			_qtys.push_back(0);
+			_items.push_back(*i);
+			RuleItem *rule = _game->getRuleset()->getItem(*i);
+			std::wstringstream ss;
+			ss << qty;
+			_lstItems->addRow(4, _game->getLanguage()->getString(*i).c_str(), ss.str().c_str(), L"0", Text::formatFunding(rule->getSellCost()).c_str());
+		}
 	}
 
 	_timerInc = new Timer(50);
@@ -211,7 +216,6 @@ void SellState::btnOkClick(Action *action)
 			// Sell soldiers
 			if (i < _soldiers.size())
 			{
-				delete _soldiers[i];
 				for (std::vector<Soldier*>::iterator s = _base->getSoldiers()->begin(); s != _base->getSoldiers()->end(); ++s)
 				{
 					if (*s == _soldiers[i])
@@ -220,6 +224,7 @@ void SellState::btnOkClick(Action *action)
 						break;
 					}
 				}
+				delete _soldiers[i];
 			}
 			// Sell crafts
 			else if (i >= _soldiers.size() && i < _soldiers.size() + _crafts.size())
@@ -252,7 +257,6 @@ void SellState::btnOkClick(Action *action)
 				}
 
 				// Remove craft
-				delete craft;
 				for (std::vector<Craft*>::iterator c = _base->getCrafts()->begin(); c != _base->getCrafts()->end(); ++c)
 				{
 					if (*c == craft)
@@ -261,6 +265,7 @@ void SellState::btnOkClick(Action *action)
 						break;
 					}
 				}
+				delete craft;
 			}
 			// Sell scientists
 			else if (_base->getAvailableScientists() > 0 && i == _soldiers.size() + _crafts.size())
@@ -342,7 +347,7 @@ int SellState::getPrice()
 	// Item cost
 	else
 	{
-		return _game->getRuleset()->getItem(_items[_sel - _soldiers.size() - _crafts.size() - _sOffset - _eOffset])->getCost() / 2;
+		return _game->getRuleset()->getItem(_items[_sel - _soldiers.size() - _crafts.size() - _sOffset - _eOffset])->getSellCost();
 	}
 }
 
@@ -382,9 +387,11 @@ void SellState::increase()
 	if (_qtys[_sel] < getQuantity())
 	{
 		_qtys[_sel]++;
-		std::wstringstream ss;
+		std::wstringstream ss, ss2;
 		ss << _qtys[_sel];
 		_lstItems->setCellText(_sel, 2, ss.str());
+		ss2 << getQuantity() - _qtys[_sel];
+		_lstItems->setCellText(_sel, 1, ss2.str());
 		_total += getPrice();
 		std::wstring s = _game->getLanguage()->getString("STR_VALUE_OF_SALES");
 		s += Text::formatFunding(_total);
@@ -400,9 +407,11 @@ void SellState::decrease()
 	if (_qtys[_sel] > 0)
 	{
 		_qtys[_sel]--;
-		std::wstringstream ss;
+		std::wstringstream ss, ss2;
 		ss << _qtys[_sel];
 		_lstItems->setCellText(_sel, 2, ss.str());
+		ss2 << getQuantity() - _qtys[_sel];
+		_lstItems->setCellText(_sel, 1, ss2.str());
 		_total -= getPrice();
 		std::wstring s = _game->getLanguage()->getString("STR_VALUE_OF_SALES");
 		s += Text::formatFunding(_total);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -19,12 +19,12 @@
 #include "Screen.h"
 #include <sstream>
 #include <iomanip>
-#include <sys/stat.h>
-#include "SDL_rotozoom.h"
+#include <SDL_rotozoom.h>
 #include "Exception.h"
 #include "Surface.h"
 #include "Action.h"
 #include "Options.h"
+#include "CrossPlatform.h"
 
 namespace OpenXcom
 {
@@ -82,14 +82,13 @@ void Screen::handle(Action *action)
 	{
 		std::stringstream ss;
 		int i = 0;
-		struct stat info;
 		do
 		{
 			ss.str("");
 			ss << Options::getUserFolder() << "screen" << std::setfill('0') << std::setw(3) << i << ".bmp";
 			i++;
 		}
-		while (stat(ss.str().c_str(), &info) == 0);
+		while (CrossPlatform::fileExists(ss.str()));
 		SDL_SaveBMP(_screen, ss.str().c_str());
 	}
 }
@@ -149,6 +148,7 @@ int Screen::_zoomSurfaceY(SDL_Surface * src, SDL_Surface * dst, int flipx, int f
 			csx -= dst->w;
 			(*csax)++;
 		}
+		(*csax) *= (flipx ? -1 : 1);
 		csax++;
 	}
 	csy = 0;
@@ -160,6 +160,7 @@ int Screen::_zoomSurfaceY(SDL_Surface * src, SDL_Surface * dst, int flipx, int f
 			csy -= dst->h;
 			(*csay)++;
 		}
+		(*csay) *= src->pitch * (flipy ? -1 : 1);
 		csay++;
 	}
 
@@ -178,7 +179,7 @@ int Screen::_zoomSurfaceY(SDL_Surface * src, SDL_Surface * dst, int flipx, int f
 			/*
 			* Advance source pointers
 			*/
-			sp += (*csax) * (flipx ? -1 : 1);
+			sp += (*csax);
 			csax++;
 			/*
 			* Advance destination pointer
@@ -188,7 +189,7 @@ int Screen::_zoomSurfaceY(SDL_Surface * src, SDL_Surface * dst, int flipx, int f
 		/*
 		* Advance source pointer (for row)
 		*/
-		csp += ((*csay) * src->pitch) * (flipy ? -1 : 1);
+		csp += (*csay);
 		csay++;
 
 		/*

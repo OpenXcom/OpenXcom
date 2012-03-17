@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -21,7 +21,6 @@
 
 #include "BattleState.h"
 #include "Position.h"
-#include "BattlescapeState.h"
 
 namespace OpenXcom
 {
@@ -32,11 +31,10 @@ class UnitTurnBState : public BattleState
 {
 private:
 	BattleUnit *_unit;
-	BattleAction _action;
 	bool turret;
 public:
 	/// Creates a new UnitTurnBState class
-	UnitTurnBState(BattlescapeState *parent, BattleAction action);
+	UnitTurnBState(BattlescapeGame *parent, BattleAction action);
 	/// Cleans up the UnitTurnBState.
 	~UnitTurnBState();
 	/// Initializes the state.

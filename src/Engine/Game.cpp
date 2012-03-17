@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -19,7 +19,7 @@
 #include "Game.h"
 #include <sstream>
 #include <iostream>
-#include "SDL_mixer.h"
+#include <SDL_mixer.h>
 #include "State.h"
 #include "Screen.h"
 #include "Language.h"

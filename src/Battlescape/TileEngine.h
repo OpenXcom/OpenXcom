@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -22,8 +22,8 @@
 #include <vector>
 #include "Position.h"
 #include "../Ruleset/MapData.h"
-#include "SDL.h"
-#include "BattlescapeState.h"
+#include <SDL.h>
+#include "BattlescapeGame.h"
 
 namespace OpenXcom
 {
@@ -46,12 +46,9 @@ private:
 	std::vector<Uint16> *_voxelData;
 	void addLight(const Position &center, int power, int layer);
 	int blockage(Tile *tile, const int part, ItemDamageType type);
-	int horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageType type);
-	int verticalBlockage(Tile *startTile, Tile *endTile, ItemDamageType type);
 	int vectorToDirection(const Position &vector);
 	int voxelCheck(const Position& voxel, BattleUnit *excludeUnit, bool excludeAllUnits = false);
-	bool checkIfUnitVisible(BattleUnit *currentUnit, BattleUnit *otherUnit);
-	bool checkIfTileVisible(BattleUnit *currentUnit, Tile *tile);
+	bool _personalLighting;
 public:
 	/// Creates a new TileEngine class.
 	TileEngine(SavedBattleGame *save, std::vector<Uint16> *voxelData);
@@ -72,7 +69,8 @@ public:
 	/// Recalculate lighting of the battlescape.
 	void calculateUnitLighting();
 	/// Explosions.
-	void explode(const Position &center, int power, ItemDamageType type, int maxRadius, BattleUnit *unit);
+	void hit(const Position &center, int power, ItemDamageType type, BattleUnit *unit);
+	void explode(const Position &center, int power, ItemDamageType type, int maxRadius);
 	/// Check if a destroyed tile starts an explosion.
 	Tile *checkForTerrainExplosions();
 	/// Unit opens door?
@@ -83,9 +81,11 @@ public:
 	int calculateLine(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, bool doVoxelCheck = true);
 	/// Calculate a parabola trajectory.
 	int calculateParabola(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, double curvature, double accuracy);
-	/// New turn preparations.
-	void prepareNewTurn();
-	bool setUnitPosition(BattleUnit *bu, const Position &position, bool testOnly = false);
+	bool visible(BattleUnit *currentUnit, Tile *tile);
+	void togglePersonalLighting();
+	int distance(const Position &pos1, const Position &pos2) const;
+	int horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageType type);
+	int verticalBlockage(Tile *startTile, Tile *endTile, ItemDamageType type);
 };
 
 }

@@ -3,6 +3,7 @@ Version 0.4 (??-??-????)
 New features:
 - Basescape:
 -- Research screens.
+-- Manufacture screens.
 
 - Battlescape:
 -- Abort screen.
@@ -15,6 +16,13 @@ New features:
 -- Flying units.
 -- Grav lifts.
 -- Optional pathfinding preview.
+-- Medikits.
+-- Laser weapons.
+-- Large units.
+-- Motion scanner.
+-- Alien deployment rules.
+-- AI taking cover & throwing grenades.
+
  
 Bugfixes:
 - Two duplicating ammo bugs.
@@ -27,7 +35,7 @@ Bugfixes:
 - Geoscape sidebar didn't show up on first start on some languages.
 - Bug with line of sight inside UFOs along diagonal walls.
 - Bug with pathfinding inside UFOs along diagonal walls.
-- Aliens not black when in undiscoverd terrain.
+- Aliens not black when in undiscovered terrain.
 - Issue with turn and shoot.
 - Too many reaction fires from autoshot (each shot had a chance of a reaction shot which is wrong).
 - Unit selection arrow showed up during alien turn.
@@ -46,6 +54,9 @@ Bugfixes:
 - Crash when starting mission on back side of globe.
 - Endless number of soldiers in Skyranger.
 - Clicking visible enemy units clicks other stuff too.
+- Fixed lazy ground inventory arrangement.
+- Aliens do not suffer from fatal wounds anymore.
+- Improved straight line pathfinding in battlescape.
 
 Version 0.3 (01-09-2011)
 -------------------------
@@ -84,12 +95,12 @@ Bugfixes:
 - Various UI issues.
 - Various translation issues.
 - Bug in craft rearming.
-- FPS Counter didn’t always show up properly.
-- Crash sites didn’t vanish properly.
+- FPS Counter didn't always show up properly.
+- Crash sites didn't vanish properly.
 - Failing to load a game could crash the Geoscape.
-- Games weren’t always saved properly.
-- Monthly report didn’t show correct date.
-- Crafts in base view weren’t positioned correctly.
+- Games weren't always saved properly.
+- Monthly report didn't show correct date.
+- Crafts in base view weren't positioned correctly.
 - Music loading issues.
 - Various battlescape fixes.
 - Various performance improvements.

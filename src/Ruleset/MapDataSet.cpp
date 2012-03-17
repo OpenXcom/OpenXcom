@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -34,7 +34,7 @@ MapData *MapDataSet::_scourgedTile = 0;
 /**
 * MapDataSet construction.
 */
-MapDataSet::MapDataSet(const std::string &name, int size) : _name(name), _size(size), _objects(), _surfaceSet(0), _loaded(false)
+MapDataSet::MapDataSet(const std::string &name) : _name(name), _objects(), _surfaceSet(0), _loaded(false)
 {
 }
 
@@ -43,7 +43,7 @@ MapDataSet::MapDataSet(const std::string &name, int size) : _name(name), _size(s
 */
 MapDataSet::~MapDataSet()
 {
-	unload();
+	unloadData();
 }
 
 /**
@@ -54,16 +54,7 @@ void MapDataSet::load(const YAML::Node &node)
 {
 	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
 	{
-		std::string key;
-		i.first() >> key;
-		if (key == "name")
-		{
-			i.second() >> _name;
-		}
-		else if (key == "size")
-		{
-			i.second() >> _size;
-		}
+		*i >> _name;
 	}
 }
 
@@ -73,10 +64,7 @@ void MapDataSet::load(const YAML::Node &node)
  */
 void MapDataSet::save(YAML::Emitter &out) const
 {
-	out << YAML::BeginMap;
-	out << YAML::Key << "name" << YAML::Value << _name;
-	out << YAML::Key << "size" << YAML::Value << _size;
-	out << YAML::EndMap;
+	out << _name;
 }
 
 /**
@@ -94,7 +82,7 @@ std::string MapDataSet::getName() const
 */
 int MapDataSet::getSize() const
 {
-	return _size;
+	return _objects.size();
 }
 
 
@@ -116,10 +104,9 @@ SurfaceSet *MapDataSet::getSurfaceset() const
 
 /**
  * Loads terraindata in X-Com format (MCD & PCK files)
- * @param res The resourcepack.
  * @sa http://www.ufopaedia.org/index.php?title=MCD
  */
-void MapDataSet::load(ResourcePack *res)
+void MapDataSet::loadData()
 {
 	// prevents loading twice
 	if (_loaded) return;
@@ -220,7 +207,7 @@ void MapDataSet::load(ResourcePack *res)
 			to->setLoftID(loft, layer);
 		}
 
-		// store the 2 tiles of blanks in a static - so they are accesible everywhere
+		// store the 2 tiles of blanks in a static - so they are accessible everywhere
 		if (_name.compare("BLANKS") == 0)
 		{
 			if (objNumber == 0)
@@ -239,6 +226,19 @@ void MapDataSet::load(ResourcePack *res)
 
 	mapFile.close();
 
+	// process the mapdataset to put block values on floortiles (as we don't have em in UFO)
+	for (std::vector<MapData*>::iterator i = _objects.begin(); i != _objects.end(); ++i)
+	{
+		if ((*i)->getObjectType() == MapData::O_FLOOR && (*i)->getBlock(DT_HE) == 0)
+		{
+			(*i)->setBlockValue(1,1,(*i)->getArmor(),1,1,1);
+			if ((*i)->getDieMCD())
+			{
+				_objects.at((*i)->getDieMCD())->setBlockValue(1,1,(*i)->getArmor(),1,1,1);
+			}
+		}
+	}
+
 	// Load terrain sprites/surfaces/PCK files into a surfaceset
 	std::stringstream s1,s2;
 	s1 << "TERRAIN/" << _name << ".PCK";
@@ -248,7 +248,7 @@ void MapDataSet::load(ResourcePack *res)
 
 }
 
-void MapDataSet::unload()
+void MapDataSet::unloadData()
 {
 	if (_loaded)
 	{

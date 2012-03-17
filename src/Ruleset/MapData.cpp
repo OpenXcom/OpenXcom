@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -336,7 +336,11 @@ void MapData::setDieMCD(int value)
   */
 int MapData::getLightSource() const
 {
-	return _lightSource;
+	// lamp posts have 1, but they should emit more light
+	if (_lightSource == 1)
+		return 15;
+	else
+		return _lightSource - 1;
 }
 
 /**

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -42,9 +42,9 @@ RuleUfo::~RuleUfo()
 /**
  * Loads the UFO from a YAML file.
  * @param node YAML node.
- * @param rule Ruleset for the craft.
+ * @param ruleset Ruleset for the UFO.
  */
-void RuleUfo::load(const YAML::Node &node, const Ruleset *ruleset)
+void RuleUfo::load(const YAML::Node &node, Ruleset *ruleset)
 {
 	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
 	{

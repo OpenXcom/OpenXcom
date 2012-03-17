@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -43,7 +43,7 @@ private:
 
 	Surface *_bg, *_rank;
 	TextButton *_btnOk, *_btnPrev, *_btnNext, *_btnArmor;
-	Text *_txtArmor, *_txtRank, *_txtMissions, *_txtKills, *_txtCraft;
+	Text *_txtArmor, *_txtRank, *_txtMissions, *_txtKills, *_txtCraft, *_txtRecovery;
 	TextEdit *_edtSoldier;
 
 	Text *_txtTimeUnits, *_txtStamina, *_txtHealth, *_txtBravery, *_txtReactions, *_txtFiring, *_txtThrowing, *_txtStrength;

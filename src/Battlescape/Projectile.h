@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -21,7 +21,7 @@
 
 #include <vector>
 #include "Position.h"
-#include "BattlescapeState.h"
+#include "BattlescapeGame.h"
 
 namespace OpenXcom
 {
@@ -46,10 +46,10 @@ private:
 	unsigned int _position;
 	static const int _trail[11][36];
 	Surface *_sprite;
-	void applyAccuracy(const Position& origin, Position *target, double accuracy);
+	void applyAccuracy(const Position& origin, Position *target, double accuracy, bool keepRange = false);
 public:
 	/// Creates a new Projectile.
-	Projectile(ResourcePack *res, SavedBattleGame *save, BattleAction action);
+	Projectile(ResourcePack *res, SavedBattleGame *save, BattleAction action, Position origin);
 	/// Cleans up the Projectile.
 	~Projectile();
 	/// Calculates the trajectory for straight path.

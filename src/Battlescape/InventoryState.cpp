@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -36,6 +36,7 @@
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/RuleInventory.h"
+#include "../Ruleset/Armor.h"
 #include "UnitInfoState.h"
 #include "TileEngine.h"
 
@@ -127,13 +128,14 @@ InventoryState::~InventoryState()
 void InventoryState::init()
 {
 	BattleUnit *unit = _battleGame->getSelectedUnit();
+
 	unit->setCache(0);
 	_soldier->clear();
 	_btnRank->clear();
 
-	_txtName->setText(unit->getUnit()->getName(_game->getLanguage()));
+	_txtName->setText(unit->getName(_game->getLanguage()));
 	_inv->setSelectedUnit(unit);
-	Soldier *s = dynamic_cast<Soldier*>(unit->getUnit());
+	Soldier *s = _game->getSavedGame()->getSoldier(unit->getId());
 	if (s)
 	{
 		SurfaceSet *texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
@@ -186,6 +188,11 @@ void InventoryState::btnOkClick(Action *action)
 void InventoryState::btnPrevClick(Action *action)
 {
 	_battleGame->selectPreviousPlayerUnit();
+	// skip large units
+	while (_battleGame->getSelectedUnit()->getArmor()->getSize() > 1)
+	{
+		_battleGame->selectPreviousPlayerUnit();
+	}
 	init();
 }
 
@@ -196,6 +203,11 @@ void InventoryState::btnPrevClick(Action *action)
 void InventoryState::btnNextClick(Action *action)
 {
 	_battleGame->selectNextPlayerUnit();
+	// skip large units
+	while (_battleGame->getSelectedUnit()->getArmor()->getSize() > 1)
+	{
+		_battleGame->selectNextPlayerUnit();
+	}
 	init();
 }
 
@@ -205,7 +217,7 @@ void InventoryState::btnNextClick(Action *action)
  */
 void InventoryState::btnUnloadClick(Action *action)
 {
-	if (_inv->getSelectedItem() != 0 && _inv->getSelectedItem()->getAmmoItem() != 0)
+	if (_inv->getSelectedItem() != 0 && _inv->getSelectedItem()->getAmmoItem() != 0 && _inv->getSelectedItem()->needsAmmo())
 	{
 		_inv->unload();
 	}
@@ -243,14 +255,14 @@ void InventoryState::invClick(Action *action)
 	{
 		if (item->getUnit() && item->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
 		{
-			_txtItem->setText(item->getUnit()->getUnit()->getName(_game->getLanguage()));
+			_txtItem->setText(item->getUnit()->getName(_game->getLanguage()));
 		}
 		else
 		{
-			_txtItem->setText(_game->getLanguage()->getString(item->getRules()->getType()));
+			_txtItem->setText(_game->getLanguage()->getString(item->getRules()->getName()));
 		}
 		std::wstringstream ss;
-		if (item->getAmmoItem() != 0)
+		if (item->getAmmoItem() != 0 && item->needsAmmo())
 		{
 			ss << _game->getLanguage()->getString("STR_AMMO_ROUNDS_LEFT") << L'\x01' << item->getAmmoItem()->getAmmoQuantity();
 			SDL_Rect r;
@@ -266,7 +278,7 @@ void InventoryState::invClick(Action *action)
 			_selAmmo->drawRect(&r, 0);
 			item->getAmmoItem()->getRules()->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _selAmmo);
 		}
-		else if (item->getAmmoQuantity() != 0)
+		else if (item->getAmmoQuantity() != 0 && item->needsAmmo())
 		{
 			ss << _game->getLanguage()->getString("STR_AMMO_ROUNDS_LEFT") << L'\x01' << item->getAmmoQuantity();
 		}

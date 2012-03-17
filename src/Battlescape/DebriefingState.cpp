@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -37,6 +37,7 @@
 #include "../Savegame/ItemContainer.h"
 #include "../Ruleset/RuleInventory.h"
 #include "../Ruleset/RuleItem.h"
+#include "PromotionsState.h"
 
 namespace OpenXcom
 {
@@ -201,6 +202,10 @@ void DebriefingState::btnOkClick(Action *action)
 {
 	_game->getSavedGame()->setBattleGame(0);
 	_game->popState();
+	if (_game->getSavedGame()->handlePromotions())
+	{
+		_game->pushState(new PromotionsState(_game));
+	}
 }
 
 
@@ -268,6 +273,8 @@ void DebriefingState::prepareDebriefing()
 
 	for (std::vector<Base*>::iterator i = save->getBases()->begin(); i != save->getBases()->end(); ++i)
 	{
+
+		// in case we have a craft - check which craft it is about
 		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); ++j)
 		{
 			if ((*j)->isInBattlescape())
@@ -298,7 +305,8 @@ void DebriefingState::prepareDebriefing()
 	{
 		UnitStatus status = (*j)->getStatus();
 		UnitFaction faction = (*j)->getFaction();
-		int value = (*j)->getUnit()->getValue();
+		int value = (*j)->getValue();
+		Soldier *soldier = save->getSoldier((*j)->getId());
 
 		if (status == STATUS_DEAD)
 		{
@@ -308,15 +316,23 @@ void DebriefingState::prepareDebriefing()
 			}
 			if (faction == FACTION_PLAYER)
 			{
-				addStat("STR_XCOM_OPERATIVES_KILLED", 1, -value);
-				for (std::vector<Soldier*>::iterator i = base->getSoldiers()->begin(); i != base->getSoldiers()->end(); ++i)
+				if (soldier != 0)
 				{
-					if ((*i) == dynamic_cast<Soldier*>((*j)->getUnit()))
+					addStat("STR_XCOM_OPERATIVES_KILLED", 1, -value);
+					for (std::vector<Soldier*>::iterator i = base->getSoldiers()->begin(); i != base->getSoldiers()->end(); ++i)
 					{
-						delete (*i);
-						base->getSoldiers()->erase(i);
-						break;
+						if ((*i) == soldier)
+						{
+							delete (*i);
+							base->getSoldiers()->erase(i);
+							break;
+						}
 					}
+				}
+				else
+				{
+					// non soldier player = tank
+					addStat("STR_TANKS_DESTROYED", 1, -value);
 				}
 			}
 		}
@@ -333,14 +349,14 @@ void DebriefingState::prepareDebriefing()
 			if ((*j)->isInExitArea() || !aborted)
 			{
 				playerInExitArea++;
-				(*j)->postMissionProcedures();
+				(*j)->postMissionProcedures(save);
 			}
 			else
 			{
 				addStat("STR_XCOM_OPERATIVES_MISSING_IN_ACTION", 1, -value);
 				for (std::vector<Soldier*>::iterator i = base->getSoldiers()->begin(); i != base->getSoldiers()->end(); ++i)
 				{
-					if ((*i) == dynamic_cast<Soldier*>((*j)->getUnit()))
+					if ((*i) == soldier)
 					{
 						delete (*i);
 						base->getSoldiers()->erase(i);
@@ -368,10 +384,19 @@ void DebriefingState::prepareDebriefing()
 			}
 		}
 		_txtTitle->setText(_game->getLanguage()->getString("STR_CRAFT_IS_LOST"));
-	} else
+		return;
+	}
+
 	if (!aborted && playersSurvived > 0) 	// RECOVER UFO : run through all tiles to recover UFO components and items
 	{
-		_txtTitle->setText(_game->getLanguage()->getString("STR_UFO_IS_RECOVERED"));
+		if (battle->getMissionType() == "STR_BASE_DEFENCE")
+		{
+			_txtTitle->setText(_game->getLanguage()->getString("STR_BASE_IS_SAVED"));
+		}
+		else
+		{
+			_txtTitle->setText(_game->getLanguage()->getString("STR_UFO_IS_RECOVERED"));
+		}
 
 		for (int i = 0; i < battle->getHeight() * battle->getLength() * battle->getWidth(); ++i)
 		{
@@ -406,8 +431,8 @@ void DebriefingState::prepareDebriefing()
 			}
 		}
 
-		// alien alloys recovery values are divided by 10 or devided by 150 in case of an alien base
-		int divider = battle->getMissionType()==MISS_ALIENBASE?150:10;
+		// alien alloys recovery values are divided by 10 or divided by 150 in case of an alien base
+		int divider = battle->getMissionType()=="STR_ALIEN_BASE_ASSAULT"?150:10;
 		for (std::vector<DebriefingStat*>::iterator i = _stats.begin(); i != _stats.end(); ++i)
 		{
 			if ((*i)->item == "STR_ALIEN_ALLOYS")
@@ -425,7 +450,14 @@ void DebriefingState::prepareDebriefing()
 	}
 	else
 	{
-		_txtTitle->setText(_game->getLanguage()->getString("STR_UFO_IS_NOT_RECOVERED"));
+		if (battle->getMissionType() == "STR_BASE_DEFENCE")
+		{
+			_txtTitle->setText(_game->getLanguage()->getString("STR_BASE_IS_LOST"));
+		}
+		else
+		{
+			_txtTitle->setText(_game->getLanguage()->getString("STR_UFO_IS_NOT_RECOVERED"));
+		}
 	}
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -18,7 +18,6 @@
  */
 #include "XcomResourcePack.h"
 #include <sstream>
-#include <sys/stat.h>
 #include "../Engine/CrossPlatform.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Font.h"
@@ -201,10 +200,6 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 	std::stringstream scang;
 	scang << "GEODATA/" << "SCANG.DAT";
 	_sets["SCANG.DAT"]->loadDat (CrossPlatform::getDataFile(scang.str()));
-	_sets["MEDIBITS.DAT"] = new SurfaceSet(52, 58);
-	std::stringstream medibits;
-	medibits << "UFOGRAPH/" << "MEDIBITS.DAT";
-	_sets["MEDIBITS.DAT"]->loadDat (CrossPlatform::getDataFile(medibits.str()));
 	// Load polygons
 	std::stringstream s;
 	s << "GEODATA/" << "WORLD.DAT";
@@ -293,7 +288,7 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 							 "GMSTORY",
 							 "GMTACTIC",
 							 "GMWIN"};
-		std::string exts[] = {"ogg", "mp3", "mid"};
+		std::string exts[] = {"ogg", "mp3", "mod", "mid"};
 		int tracks[] = {3, 6, 0, 18, 2, 19, 20, 21, 10, 9, 8, 12, 17, 11};
 
 		// Check which music version is available
@@ -301,8 +296,7 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 		GMCatFile *gmcat = 0;
 
 		std::string musDos = "SOUND/GM.CAT";
-		struct stat musInfo;
-		if (stat(CrossPlatform::getDataFile(musDos).c_str(), &musInfo) == 0)
+		if (CrossPlatform::fileExists(CrossPlatform::getDataFile(musDos)))
 		{
 			cat = true;
 			gmcat = new GMCatFile(CrossPlatform::getDataFile(musDos).c_str());
@@ -321,12 +315,11 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 			else
 			{
 				_musics[mus[i]] = new Music();
-				for (int j = 0; j < 3; ++j)
+				for (int j = 0; j < 4; ++j)
 				{
 					std::stringstream s;
 					s << "SOUND/" << mus[i] << "." << exts[j];
-					struct stat info;
-					if (stat(CrossPlatform::getDataFile(s.str()).c_str(), &info) == 0)
+					if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str()).c_str()))
 					{
 						_musics[mus[i]]->load(CrossPlatform::getDataFile(s.str()));
 						break;
@@ -354,13 +347,12 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 		std::stringstream win, dos;
 		win << "SOUND/" << catsWin[0];
 		dos << "SOUND/" << catsDos[0];
-		struct stat sndInfo;
-		if (stat(CrossPlatform::getDataFile(win.str()).c_str(), &sndInfo) == 0)
+		if (CrossPlatform::fileExists(CrossPlatform::getDataFile(win.str())))
 		{
 			cats = catsWin;
 			wav = true;
 		}
-		else if (stat(CrossPlatform::getDataFile(dos.str()).c_str(), &sndInfo) == 0)
+		else if (CrossPlatform::fileExists(CrossPlatform::getDataFile(dos.str())))
 		{
 			cats = catsDos;
 			wav = false;
@@ -407,6 +399,11 @@ void XcomResourcePack::loadBattlescapeResources()
 	_surfaces["ICONS.PCK"]->loadSpk(CrossPlatform::getDataFile(s.str()));
 
 	s.str("");
+	s << "UFOGRAPH/" << "SPICONS.DAT";
+	_sets["SPICONS.DAT"] = new SurfaceSet(32, 24);
+	_sets["SPICONS.DAT"]->loadDat(CrossPlatform::getDataFile(s.str()));
+
+	s.str("");
 	std::stringstream s2;
 	s << "UFOGRAPH/" << "CURSOR.PCK";
 	s2 << "UFOGRAPH/" << "CURSOR.TAB";
@@ -432,6 +429,25 @@ void XcomResourcePack::loadBattlescapeResources()
 	_surfaces["UNIBORD.PCK"] = new Surface(320, 200);
 	_surfaces["UNIBORD.PCK"]->loadSpk(CrossPlatform::getDataFile(s.str()));
 
+	s.str("");
+	_sets["MEDIBITS.DAT"] = new SurfaceSet(52, 58);
+	s << "UFOGRAPH/" << "MEDIBITS.DAT";
+	_sets["MEDIBITS.DAT"]->loadDat (CrossPlatform::getDataFile(s.str()));
+
+	s.str("");
+	_sets["DETBLOB.DAT"] = new SurfaceSet(16, 16);
+	s << "UFOGRAPH/" << "DETBLOB.DAT";
+	_sets["DETBLOB.DAT"]->loadDat (CrossPlatform::getDataFile(s.str()));
+
+	s.str("");
+	s << "UFOGRAPH/" << "DETBORD.PCK";
+	_surfaces["DETBORD.PCK"] = new Surface(320, 200);
+	_surfaces["DETBORD.PCK"]->loadSpk(CrossPlatform::getDataFile(s.str()));
+
+	s.str("");
+	s << "UFOGRAPH/" << "DETBORD2.PCK";
+	_surfaces["DETBORD2.PCK"] = new Surface(320, 200);
+	_surfaces["DETBORD2.PCK"]->loadSpk(CrossPlatform::getDataFile(s.str()));
 
 	// Load Battlescape Terrain (only blacks are loaded, others are loaded just in time)
 	std::string bsets[] = {"BLANKS.PCK"};

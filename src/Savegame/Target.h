@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -21,7 +21,7 @@
 
 #include <string>
 #include <vector>
-#include "yaml.h"
+#include <yaml-cpp/yaml.h>
 
 namespace OpenXcom
 {
@@ -60,6 +60,8 @@ public:
 	virtual std::wstring getName(Language *lang) const = 0;
 	/// Gets the target's followers.
 	std::vector<Target*> *getFollowers();
+	/// Gets the distance to another target.
+	double getDistance(Target *target) const;
 };
 
 }

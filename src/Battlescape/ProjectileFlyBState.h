@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -21,12 +21,11 @@
 
 #include "BattleState.h"
 #include "Position.h"
-#include "BattlescapeState.h"
 
 namespace OpenXcom
 {
 
-class BattlescapeState;
+class BattlescapeGame;
 class BattleUnit;
 class BattleItem;
 
@@ -34,18 +33,17 @@ class ProjectileFlyBState : public BattleState
 {
 private:
 	BattleUnit *_unit;
-	bool validThrowRange();
 	BattleItem *_ammo;
-	BattleAction _action;
 	BattleItem *_projectileItem;
-	int _baseAcc;
+	Position _origin;
 	int _autoshotCounter;
 	int _projectileImpact;
 	void createNewProjectile();
 	bool _initialized;
 public:
 	/// Creates a new ProjectileFly class
-	ProjectileFlyBState(BattlescapeState *parent, BattleAction action);
+	ProjectileFlyBState(BattlescapeGame *parent, BattleAction action);
+	ProjectileFlyBState(BattlescapeGame *parent, BattleAction action, Position origin);
 	/// Cleans up the ProjectileFly.
 	~ProjectileFlyBState();
 	/// Initializes the state.
@@ -54,9 +52,8 @@ public:
 	void cancel();
 	/// Runs state functionality every cycle.
 	void think();
-	/// Get the result of the state.
-	std::string getResult() const;
-
+	static bool validThrowRange(BattleAction *action);
+	bool validMeleeRange(BattleAction *action);
 };
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -39,12 +39,14 @@ class RuleTerrain;
 class MapDataSet;
 class ResourcePack;
 class RuleSoldier;
-class RuleGenUnit;
-class RuleArmor;
+class Unit;
+class Armor;
 class ArticleDefinition;
 class RuleInventory;
 class RuleResearchProject;
 class RuleManufactureInfo;
+class AlienRace;
+class AlienDeployment;
 
 /**
  * Set of rules and stats for a game.
@@ -66,8 +68,10 @@ protected:
 	std::map<std::string, RuleTerrain*> _terrains;
 	std::map<std::string, MapDataSet*> _mapDataSets;
 	std::map<std::string, RuleSoldier*> _soldiers;
-	std::map<std::string, RuleGenUnit*> _genUnits;
-	std::map<std::string, RuleArmor*> _armors;
+	std::map<std::string, Unit*> _units;
+	std::map<std::string, AlienRace*> _alienRaces;
+	std::map<std::string, AlienDeployment*> _alienDeployments;
+	std::map<std::string, Armor*> _armors;
 	std::map<std::string, ArticleDefinition*> _ufopaediaArticles;
 	std::map<std::string, RuleInventory*> _invs;
 	int _costSoldier, _costEngineer, _costScientist, _timePersonnel;
@@ -93,24 +97,36 @@ public:
 	RuleRegion *const getRegion(const std::string &id) const;
 	/// Gets the ruleset for a facility type.
 	RuleBaseFacility *const getBaseFacility(const std::string &id) const;
+	/// Gets the available facilities.
+	std::vector<std::string> getBaseFacilitiesList() const;
 	/// Gets the ruleset for a craft type.
 	RuleCraft *const getCraft(const std::string &id) const;
+	/// Gets the available crafts.
+	std::vector<std::string> getCraftsList() const;
 	/// Gets the ruleset for a craft weapon type.
 	RuleCraftWeapon *const getCraftWeapon(const std::string &id) const;
+	/// Gets the available craft weapons.
+	std::vector<std::string> getCraftWeaponsList() const;
 	/// Gets the ruleset for an item type.
 	RuleItem *const getItem(const std::string &id) const;
+	/// Gets the available items.
+	std::vector<std::string> getItemsList() const;
 	/// Gets the ruleset for a UFO type.
 	RuleUfo *const getUfo(const std::string &id) const;
 	/// Gets terrains for battlescape games.
 	RuleTerrain *const getTerrain(const std::string &name) const;
 	/// Gets mapdatafile for battlescape games.
-	MapDataSet *const getMapDataSet(const std::string &name) const;
+	MapDataSet *const getMapDataSet(const std::string &name);
 	/// Gets soldier unit rules.
 	RuleSoldier *const getSoldier(const std::string &name) const;
 	/// Gets generated unit rules.
-	RuleGenUnit *const getGenUnit(const std::string &name) const;
+	Unit *const getUnit(const std::string &name) const;
+	/// Gets alien race rules.
+	AlienRace *const getAlienRace(const std::string &name) const;
+	/// Gets deployment rules.
+	AlienDeployment *const getDeployment(const std::string &name) const;
 	/// Gets armor rules.
-	RuleArmor *const getArmor(const std::string &name) const;
+	Armor *const getArmor(const std::string &name) const;
 	/// Gets Ufopaedia article definition.
 	ArticleDefinition *const getUfopaediaArticle(const std::string &name) const;
 	/// Gets the inventory list.

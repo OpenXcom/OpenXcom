@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -31,9 +31,11 @@
 #include "ActionMenuItem.h"
 #include "PrimeGrenadeState.h"
 #include "MedikitState.h"
+#include "ScannerState.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
+#include "Pathfinding.h"
 
 namespace OpenXcom
 {
@@ -51,82 +53,72 @@ ActionMenuState::ActionMenuState(Game *game, BattleAction *action, int x, int y)
 
 	for (int i = 0; i < 6; ++i)
 	{
-		_actionMenu[i] = new ActionMenuItem(this, i, _game->getResourcePack()->getFont("Big.fnt"), x, y);
+		_actionMenu[i] = new ActionMenuItem(i, _game->getResourcePack()->getFont("Big.fnt"), x, y);
 		add(_actionMenu[i]);
 		_actionMenu[i]->setVisible(false);
 		_actionMenu[i]->onMouseClick((ActionHandler)&ActionMenuState::btnActionMenuItemClick);
 	}
 
 	// Build up the popup menu
-	int id = 0, tu;
-	std::wstring strAcc = _game->getLanguage()->getString("STR_ACC");
-	std::wstring strTU = _game->getLanguage()->getString("STR_TUS");
-	std::wstringstream ss1, ss2;
+	int id = 0;
+	RuleItem *weapon = _action->weapon->getRules();
 
-	// throwing
-	tu = _action->actor->getActionTUs(BA_THROW, _action->weapon);
-	ss1 << strAcc.c_str() << (int)floor(_action->actor->getThrowingAccuracy() * 100) << "%";
-	ss2 << strTU.c_str() << tu;
-	_actionMenu[id]->setAction(BA_THROW, _game->getLanguage()->getString("STR_THROW"), ss1.str(), ss2.str(), tu);
-	_actionMenu[id]->setVisible(true);
-	id++;
-	ss1.str(L"");
-	ss2.str(L"");
+	// throwing (if not a fixed weapon)
+	if (!weapon->getFixed())
+	{
+		addItem(BA_THROW, "STR_THROW", &id);
+	}
 
 	// priming
-	if ((_action->weapon->getRules()->getBattleType() == BT_GRENADE || _action->weapon->getRules()->getBattleType() == BT_PROXIMITYGRENADE)
+	if ((weapon->getBattleType() == BT_GRENADE || weapon->getBattleType() == BT_PROXIMITYGRENADE)
 		&& _action->weapon->getExplodeTurn() == 0)
 	{
-		tu = _action->actor->getActionTUs(BA_PRIME, _action->weapon);
-		ss2 << strTU.c_str() << tu;
-		_actionMenu[id]->setAction(BA_PRIME, _game->getLanguage()->getString("STR_PRIME_GRENADE"), ss1.str(), ss2.str(), tu);
-		_actionMenu[id]->setVisible(true);
-		id++;
-		ss1.str(L"");
-		ss2.str(L"");
+		addItem(BA_PRIME, "STR_PRIME_GRENADE", &id);
 	}
 
-	if (_action->weapon->getRules()->getAccuracyAuto() != 0)
+	if (weapon->getBattleType() == BT_FIREARM)
 	{
-		tu = _action->actor->getActionTUs(BA_AUTOSHOT, _action->weapon);
-		ss1 << strAcc.c_str() << (int)floor(_action->actor->getFiringAccuracy(_action->weapon->getRules()->getAccuracyAuto()) * 100) << "%";
-		ss2 << strTU.c_str() << tu;
-		_actionMenu[id]->setAction(BA_AUTOSHOT, _game->getLanguage()->getString("STR_AUTO_SHOT"), ss1.str(), ss2.str(), tu);
-		_actionMenu[id]->setVisible(true);
-		id++;
-		ss1.str(L"");
-		ss2.str(L"");
+		if (weapon->getWaypoint())
+		{
+			addItem(BA_LAUNCH, "STR_LAUNCH_MISSILE", &id);
+		}
+		else
+		{
+			if (weapon->getAccuracyAuto() != 0)
+			{
+				addItem(BA_AUTOSHOT, "STR_AUTO_SHOT", &id);
+			}
+			if (weapon->getAccuracySnap() != 0)
+			{
+				addItem(BA_SNAPSHOT, "STR_SNAP_SHOT", &id);
+			}
+			if (weapon->getAccuracyAimed() != 0)
+			{
+				addItem(BA_AIMEDSHOT, "STR_AIMED_SHOT", &id);
+			}
+		}
 	}
-	if (_action->weapon->getRules()->getAccuracySnap() != 0)
+	else if (weapon->getBattleType() == BT_MELEE)
 	{
-		tu = _action->actor->getActionTUs(BA_SNAPSHOT, _action->weapon);
-		ss1 << strAcc.c_str() << (int)floor(_action->actor->getFiringAccuracy(_action->weapon->getRules()->getAccuracySnap()) * 100) << "%";
-		ss2 << strTU.c_str() << tu;
-		_actionMenu[id]->setAction(BA_SNAPSHOT, _game->getLanguage()->getString("STR_SNAP_SHOT"), ss1.str(), ss2.str(), tu);
-		_actionMenu[id]->setVisible(true);
-		id++;
-		ss1.str(L"");
-		ss2.str(L"");
+		// stun rod
+		if (weapon->getDamageType() == DT_STUN)
+		{
+			addItem(BA_HIT, "STR_STUN", &id);
+		}
+		else
+		// melee weapon
+		{
+			addItem(BA_HIT, "STR_HIT", &id);
+		}
 	}
-	if (_action->weapon->getRules()->getAccuracyAimed() != 0)
+	// special items
+	else if (weapon->getBattleType() == BT_MEDIKIT)
 	{
-		tu = _action->actor->getActionTUs(BA_AIMEDSHOT, _action->weapon);
-		ss1 << strAcc.c_str() << (int)floor(_action->actor->getFiringAccuracy(_action->weapon->getRules()->getAccuracyAimed()) * 100) << "%";
-		ss2 << strTU.c_str() << tu;
-		_actionMenu[id]->setAction(BA_AIMEDSHOT, _game->getLanguage()->getString("STR_AIMED_SHOT"), ss1.str(), ss2.str(), tu);
-		_actionMenu[id]->setVisible(true);
-		id++;
-		ss1.str(L"");
-		ss2.str(L"");
+		addItem(BA_USE, "STR_USE_MEDI_KIT", &id);
 	}
-	if (_action->weapon->getRules()->getTUUse() != 0)
+	else if (weapon->getBattleType() == BT_SCANNER)
 	{
-		tu = _action->weapon->getRules()->getTUUse();
-		ss2 << strTU.c_str() << tu;
-		_actionMenu[id]->setAction(BA_MEDIKIT, _game->getLanguage()->getString("STR_USE_MEDI_KIT"), L"", ss2.str(), tu);
-		_actionMenu[id]->setVisible(true);
-		id++;
-		ss2.str(L"");
+		addItem(BA_USE, "STR_USE_SCANNER", &id);
 	}
 
 }
@@ -137,6 +129,28 @@ ActionMenuState::ActionMenuState(Game *game, BattleAction *action, int x, int y)
 ActionMenuState::~ActionMenuState()
 {
 
+}
+
+/**
+ * Adds a new menu item for an action.
+ * @param ba Action type.
+ * @param name Action description.
+ * @param id Pointer to the new item ID.
+ */
+void ActionMenuState::addItem(BattleActionType ba, const std::string &name, int *id)
+{
+	std::wstringstream ss1, ss2;
+	int acc = (int)floor(_action->actor->getFiringAccuracy(ba, _action->weapon) * 100);
+	if (ba == BA_THROW)
+		acc = (int)floor(_action->actor->getThrowingAccuracy() * 100);
+	int tu = _action->actor->getActionTUs(ba, _action->weapon);
+
+	if (acc > 0)
+		ss1 << _game->getLanguage()->getString("STR_ACC") << acc << "%";
+	ss2 << _game->getLanguage()->getString("STR_TUS") << tu;
+	_actionMenu[*id]->setAction(ba, _game->getLanguage()->getString(name), ss1.str(), ss2.str(), tu);
+	_actionMenu[*id]->setVisible(true);
+	(*id)++;
 }
 
 /**
@@ -161,6 +175,7 @@ void ActionMenuState::handle(Action *action)
 void ActionMenuState::btnActionMenuItemClick(Action *action)
 {
 	int btnID = -1;
+	RuleItem *weapon = _action->weapon->getRules();
 
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
@@ -183,7 +198,7 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 		_action->TU = _actionMenu[btnID]->getTUs();
 		if (_action->type == BA_PRIME)
 		{
-			if (Options::getBool("battleAltGrenade"))
+			if (Options::getBool("battleAltGrenade") || weapon->getBattleType() == BT_PROXIMITYGRENADE)
 			{
 				_action->value = 0;
 				_game->popState();
@@ -193,71 +208,65 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 				_game->pushState(new PrimeGrenadeState(_game, _action));
 			}
 		}
-		else if (_action->type == BA_MEDIKIT)
+		else if (_action->type == BA_USE && weapon->getBattleType() == BT_MEDIKIT)
 		{
 			BattleUnit *targetUnit = NULL;
 			std::vector<BattleUnit*> *const units (_game->getSavedGame()->getBattleGame()->getUnits());
 			for(std::vector<BattleUnit*>::const_iterator i = units->begin (); i != units->end () && !targetUnit; ++i)
 			{
-				if (*i == _action->actor)
+				// we can heal a unit that is at the same position, unconscious and healable(=woundable)
+				if ((*i)->getPosition() == _action->actor->getPosition() && *i != _action->actor && (*i)->getStatus () == STATUS_UNCONSCIOUS && (*i)->isWoundable())
 				{
-					continue;
+					targetUnit = *i;
 				}
-				if ((*i)->getTile () != _action->actor->getTile ())
-				{
-					continue;
-				}
-				if ((*i)->getStatus () != STATUS_UNCONSCIOUS)
-				{
-					continue;
-				}
-				targetUnit = *i;
 			}
 			if (!targetUnit)
 			{
-				Position p = _action->actor->getPosition();
-				switch (_action->actor->getDirection())
-				{
-				case 0:
-					p.y--;
-					break;
-				case 1:
-					p.x++;
-					p.y--;
-					break;
-				case 2:
-					p.x++;
-					break;
-				case 3:
-					p.x++;
-					p.y++;
-					break;
-				case 4:
-					p.y++;
-					break;
-				case 5:
-					p.x--;
-					p.y++;
-					break;
-				case 6:
-					p.x--;
-					break;
-				case 7:
-					p.y--;
-					p.x--;
-					break;
-				}
-				Tile * tile (_game->getSavedGame()->getBattleGame()->getTile(p));
-				targetUnit = tile->getUnit ();
+				Position p;
+				Pathfinding::directionToVector(_action->actor->getDirection(), &p);
+				Tile * tile (_game->getSavedGame()->getBattleGame()->getTile(_action->actor->getPosition() + p));
+				if (tile->getUnit() && tile->getUnit()->isWoundable())
+					targetUnit = tile->getUnit();
 			}
 			if (targetUnit)
 			{
-				_game->pushState (new MedikitState (_game, targetUnit, _action->actor, _action->weapon));
+				_game->pushState (new MedikitState (_game, targetUnit, _action));
 			}
 			else
 			{
+				_action->result = "STR_THERE_IS_NO_ONE_THERE";
 				_game->popState();
 			}
+		}
+		else if (_action->type == BA_USE && weapon->getBattleType() == BT_SCANNER)
+		{
+			// spend TUs first, then show the scanner
+			if (_action->actor->spendTimeUnits (_action->TU, false))
+			{
+				_game->pushState (new ScannerState (_game, _action));
+			}
+			else
+			{
+				_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
+				_game->popState();
+			}
+		}
+		else if (_action->type == BA_LAUNCH)
+		{
+			// check beforehand if we have enough time units
+			if (_action->TU > _action->actor->getTimeUnits())
+			{
+				_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
+			}
+			else if (_action->weapon->getAmmoItem() ==0 || (_action->weapon->getAmmoItem() && _action->weapon->getAmmoItem()->getAmmoQuantity() == 0))
+			{
+				_action->result = "STR_NO_AMMUNITION_LOADED";
+			}
+			else
+			{
+				_action->targeting = true;
+			}
+			_game->popState();
 		}
 		else
 		{

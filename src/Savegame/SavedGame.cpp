@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -20,7 +20,7 @@
 #include <fstream>
 #include <sstream>
 #include <iomanip>
-#include "yaml.h"
+#include <yaml-cpp/yaml.h>
 #include "../Ruleset/Ruleset.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Language.h"
@@ -84,7 +84,7 @@ bool equalProduction::operator()(const Production * p) const
  * Initializes a brand new saved game according to the specified difficulty.
  * @param difficulty Game difficulty.
  */
-SavedGame::SavedGame(GameDifficulty difficulty) : _difficulty(difficulty), _funds(0), _countries(), _regions(), _bases(), _ufos(), _craftId(), _waypoints(), _ufoId(1), _waypointId(1), _battleGame(0), _soldierId(1)
+SavedGame::SavedGame(GameDifficulty difficulty) : _difficulty(difficulty), _funds(0), _countries(), _regions(), _bases(), _ufos(), _craftId(), _waypoints(), _ufoId(1), _waypointId(1), _soldierId(1), _battleGame(0)
 {
 	RNG::init();
 	_time = new GameTime(6, 1, 1, 1999, 12, 0, 0);
@@ -264,6 +264,10 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 		_battleGame->load(*pName, rule, this);
 	}
 
+	if (const YAML::Node *pName = doc.FindValue("ufopaedia"))
+	{
+		_ufopaedia->load(*pName, rule);
+	}
 	fin.close();
 }
 
@@ -346,6 +350,8 @@ void SavedGame::save(const std::string &filename) const
 		out << YAML::Key << "battleGame" << YAML::Value;
 		_battleGame->save(out);
 	}
+	out << YAML::Key << "ufopaedia" << YAML::Value;
+	_ufopaedia->save(out);
 	out << YAML::EndMap;
 	sav << out.c_str();
 	sav.close();
@@ -619,7 +625,7 @@ void SavedGame::getAvailableProductions (std::vector<RuleManufactureInfo *> & pr
 }
 
 /**
-   Check wether a ResearchProject can be researched.
+   Check whether a ResearchProject can be researched.
    * @param r the RuleResearchProject to test.
    * @param unlockeds the list of currently unlocked RuleResearchProject
    * @return true if the RuleResearchProject can be researched
@@ -640,7 +646,7 @@ bool SavedGame::isResearchAvailable (RuleResearchProject * r, const std::vector<
 		{
 			return false;
 		}
-		iter++;
+		++iter;
 	}
 
 	return true;
@@ -696,6 +702,24 @@ void SavedGame::getDependableResearchBasic (std::vector<RuleResearchProject *> &
 			}
 		}
 	}
+}
+
+/**
+ * Returns if a certain research has been completed.
+ * @param research Research ID.
+ * @return Whether it's researched or not.
+ */
+bool SavedGame::isResearched(const std::string &research) const
+{
+	if (research.empty())
+		return true;
+	for (std::vector<const RuleResearchProject *>::const_iterator i = _discovered.begin(); i != _discovered.end(); ++i)
+	{
+		if ((*i)->getName() == research)
+			return true;
+	}
+
+	return false;
 }
 
 /**
@@ -797,9 +821,10 @@ void SavedGame::inspectSoldiers(Soldier **highestRanked, int *total, int rank)
 			if ((*j)->getRank() == (SoldierRank)rank)
 			{
 				(*total)++;
-				int v1 = 2 * (*j)->getHealth() + 2 * (*j)->getStamina() + 4 * (*j)->getReactions() + 4 * (*j)->getBravery();
-				int v2 = v1 + 3*( (*j)->getTimeUnits() + 2*( (*j)->getFiringAccuracy() ) );
-				int v3 = v2 + (*j)->getMeleeAccuracy() + (*j)->getThrowingAccuracy() + (*j)->getStrength();
+				UnitStats *s = (*j)->getCurrentStats();
+				int v1 = 2 * s->health + 2 * s->stamina + 4 * s->reactions + 4 * s->bravery;
+				int v2 = v1 + 3*( s->tu + 2*( s->firing ) );
+				int v3 = v2 + s->melee + s->throwing + s->strength;
 				//if (PsiSkill>0) c3 += PsiStrength + 2* PsiSkill
 				int score = v3 + 10 * ( (*j)->getMissions() + (*j)->getKills() );
 				if (score > highestScore)

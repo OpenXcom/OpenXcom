@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -21,7 +21,7 @@
 
 #include <string>
 #include <vector>
-#include "yaml.h"
+#include <yaml-cpp/yaml.h>
 
 enum ItemDamageType { DT_NONE, DT_AP, DT_IN, DT_HE, DT_LASER, DT_PLASMA, DT_STUN, DT_MELEE, DT_ACID, DT_SMOKE };
 enum BattleType { BT_NONE, BT_FIREARM, BT_AMMO, BT_MELEE, BT_GRENADE, BT_PROXIMITYGRENADE, BT_MEDIKIT, BT_SCANNER, BT_MINDPROBE, BT_PSIAMP, BT_FLARE };
@@ -42,9 +42,9 @@ class RuleManufactureInfo;
 class RuleItem
 {
 private:
-	std::string _type;
+	std::string _type, _name; // two types of objects can have the same name
 	float _size;
-	int _cost, _time, _weight;
+	int _costBuy, _costSell, _transferTime, _weight;
 	int _bigSprite, _floorSprite, _handSprite, _bulletSprite;
 	int _fireSound, _hitSound, _hitAnimation;
 	int _power, _priority;
@@ -70,142 +70,88 @@ public:
 	void save(YAML::Emitter& out) const;
 	/// Gets the item's type.
 	std::string getType() const;
+	/// Gets the item's name.
+	std::string getName() const;
 	/// Gets the item's size.
 	float getSize() const;
-	/// Sets the item's size.
-	void setSize(float size);
-	/// Gets the item's cost.
-	int getCost() const;
-	/// Sets the item's cost.
-	void setCost(int cost);
+	/// Gets the item's purchase cost.
+	int getBuyCost() const;
+	/// Gets the item's sale cost.
+	int getSellCost() const;
 	/// Gets the item's transfer time.
 	int getTransferTime() const;
-	/// Sets the item's transfer time.
-	void setTransferTime(int time);
 	/// Gets the item's weight.
 	int getWeight() const;
-	/// Sets the item's weight.
-	void setWeight(int cost);
 	/// Gets the item's reference in BIGOBS.PCK for use in inventory.
 	int getBigSprite() const;
-	/// Sets the item's reference in BIGOBS.PCK for use in inventory.
-	void setBigSprite(int sprite);
 	/// Gets the item's reference in FLOOROB.PCK for use in inventory.
 	int getFloorSprite() const;
-	/// Sets the item's reference in FLOOROB.PCK for use in inventory.
-	void setFloorSprite(int sprite);
 	/// Gets the item's reference in HANDOB.PCK for use in inventory.
 	int getHandSprite() const;
-	/// Sets the item's reference in HANDOB.PCK for use in inventory.
-	void setHandSprite(int sprite);
 	/// Gets if the item is two-handed.
 	bool getTwoHanded() const;
-	/// Sets if the item is two-handed.
-	void setTwoHanded(bool flag);
+	/// Gets if the item is a launcher.
+	bool getWaypoint() const;
 	/// Gets if the item is fixed.
 	bool getFixed() const;
-	/// Sets if the item is fixed.
-	void setFixed(bool flag);
 	/// Gets the item's bullet sprite reference.
 	int getBulletSprite() const;
-	/// Sets the item's bulet sprite reference.
-	void setBulletSprite(int sprite);
 	/// Gets the item's fire sound.
 	int getFireSound() const;
-	/// Sets the item's fire sound.
-	void setFireSound(int sound);
 	/// Gets the item's hit sound.
 	int getHitSound() const;
-	/// Sets the item's hit sound.
-	void setHitSound(int sound);
 	/// Gets the item's hit animation.
 	int getHitAnimation() const;
-	/// Sets the item's hit animation.
-	void setHitAnimation(int animation);
 	/// Gets the item's power.
 	int getPower() const;
-	/// Sets the item's power.
-	void setPower(int power);
-	/// Gets the item's accuracy.
+	/// Gets the item's snapshot accuracy.
 	int getAccuracySnap() const;
-	/// Sets the item's accuracy.
-	void setAccuracySnap(int accuracy);
-	/// Gets the item's accuracy.
+	/// Gets the item's autoshot accuracy.
 	int getAccuracyAuto() const;
-	/// Sets the item's accuracy.
-	void setAccuracyAuto(int accuracy);
-	/// Gets the item's accuracy.
+	/// Gets the item's aimed shot accuracy.
 	int getAccuracyAimed() const;
-	/// Sets the item's accuracy.
-	void setAccuracyAimed(int accuracy);
-	/// Gets the item's tu.
+	/// Gets the item's melee accuracy.
+	int getAccuracyMelee() const;
+	/// Gets the item's snapshot TU cost.
 	int getTUSnap() const;
-	/// Sets the item's tu.
-	void setTUSnap(int tu);
-	/// Gets the item's tu.
+	/// Gets the item's autoshot TU cost.
 	int getTUAuto() const;
-	/// Sets the item's tu.
-	void setTUAuto(int tu);
-	/// Gets the item's tu.
+	/// Gets the item's aimed shot TU cost.
 	int getTUAimed() const;
-	/// Sets the item's tu.
-	void setTUAimed(int tu);
+	/// Gets the item's melee TU cost.
+	int getTUMelee() const;
 	/// Gets list of compatible ammo.
 	std::vector<std::string> *getCompatibleAmmo();
 	/// Gets the item's damage type.
 	ItemDamageType getDamageType() const;
-	/// Sets the item's damage type.
-	void setDamageType(ItemDamageType damageType);
 	/// Gets the item's type.
 	BattleType getBattleType() const;
-	/// Sets the item's type.
-	void setBattleType(BattleType type);
 	/// Gets the item's inventory width.
 	int getInventoryWidth() const;
-	/// Sets the item's inventory width.
-	void setInventoryWidth(int width);
 	/// Gets the item's inventory height.
 	int getInventoryHeight() const;
-	/// Sets the item's inventory height.
-	void setInventoryHeight(int height);
 	/// Gets the ammo amount.
 	int getClipSize() const;
-	/// Sets the item's ammo amount.
-	void setClipSize(int size);
 	/// Draws the item's hand sprite onto a surface.
 	void drawHandSprite(SurfaceSet *texture, Surface *surface) const;
-	/// Set medikit heal quantity
-	void setHealQuantity (int heal);
 	/// Get medikit heal quantity
 	int getHealQuantity () const;
-	/// Set medikit pain killer quantity
-	void setPainKillerQuantity (int pk);
 	/// Get medikit pain killer quantity
 	int getPainKillerQuantity () const;
-	/// Set medikit stimulant quantity
-	void setStimulantQuantity (int stimulant);
 	/// Get medikit stimulant quantity
 	int getStimulantQuantity () const;
 	/// Get medikit heal amount per shot
 	int getHealAmount () const;
 	/// Get medikit health amount per shot
 	int getHealthAmount () const;
-	/// Set medikit heal amount per shot
-	void setHealAmount (int h);
-	/// Set medikit health amount per shot
-	void setHealthAmount (int h);
 	/// Get medikit energy amount per shot
 	int getEnergy () const;
 	/// Get medikit stun amount per shot
 	int getStun () const;
-	/// Set medikit energy amount per shot
-	void setEnergy (int e);
-	/// Set medikit stun amount per shot
-	void setStun (int s);
 	/// Get use Time Unit use
 	int getTUUse() const;
-	/// Set use Time Unit use
-	void setTUUse(int tu);
+	/// Gets the max explosion radius
+	int getExplosionRadius() const;
 };
 
 }

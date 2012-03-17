@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -72,7 +72,7 @@ void Font::load()
 		}
 		for (int x = _width - 1; x >= 0; --x)
 		{
-			for (unsigned int y = (i + 1) * _height - 1; y >= i * _height && right == -1; --y)
+			for (unsigned int y = (i + 1) * _height; y-- != i * _height && right == -1;)
 			{
 				Uint8 pixel = _surface->getPixel(x, y);
 				if (pixel != 0)

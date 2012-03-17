@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -145,16 +145,6 @@ int RuleCraftWeapon::getSprite() const
 }
 
 /**
- * Changes the ID of the sprite used to draw the craft weapon
- * in the Equip Craft and Interception screens.
- * @param sprite Sprite ID.
- */
-void RuleCraftWeapon::setSprite(int sprite)
-{
-	_sprite = sprite;
-}
-
-/**
  * Returns the ID of the sound used when firing the weapon
  * in the Dogfight screen.
  * @return Sound ID.
@@ -162,16 +152,6 @@ void RuleCraftWeapon::setSprite(int sprite)
 int RuleCraftWeapon::getSound() const
 {
 	return _sound;
-}
-
-/**
- * Changes the ID of the sound used when firing the weapon
- * in the Dogfight screen.
- * @param sound Sound ID.
- */
-void RuleCraftWeapon::setSound(int sound)
-{
-	_sound = sound;
 }
 
 /**
@@ -185,31 +165,12 @@ int RuleCraftWeapon::getDamage() const
 }
 
 /**
- * Changes the amount of damage this craft weapon
- * inflicts on enemy crafts.
- * @param damage Damage amount.
- */
-void RuleCraftWeapon::setDamage(int damage)
-{
-	_damage = damage;
-}
-
-/**
  * Returns the maximum range of this craft weapon.
  * @return Range in km.
  */
 int RuleCraftWeapon::getRange() const
 {
 	return _range;
-}
-
-/**
- * Changes the maximum range of this craft weapon.
- * @param range Range in km.
- */
-void RuleCraftWeapon::setRange(int range)
-{
-	_range = range;
 }
 
 /**
@@ -223,16 +184,6 @@ int RuleCraftWeapon::getAccuracy() const
 }
 
 /**
- * Changes the percentage chance of each shot of
- * this craft weapon hitting an enemy craft.
- * @param accuracy Percentage accuracy.
- */
-void RuleCraftWeapon::setAccuracy(int accuracy)
-{
-	_accuracy = accuracy;
-}
-
-/**
  * Returns the amount of time the craft weapon takes to
  * reload in cautious mode.
  * @return Time in game seconds.
@@ -240,16 +191,6 @@ void RuleCraftWeapon::setAccuracy(int accuracy)
 int RuleCraftWeapon::getCautiousReload() const
 {
 	return _reloadCautious;
-}
-
-/**
- * Changes the amount of time the craft weapon takes to
- * reload in cautious mode.
- * @param reload Time in game seconds.
- */
-void RuleCraftWeapon::setCautiousReload(int reload)
-{
-	_reloadCautious = reload;
 }
 
 /**
@@ -263,16 +204,6 @@ int RuleCraftWeapon::getStandardReload() const
 }
 
 /**
- * Changes the amount of time the craft weapon takes to
- * reload in standard mode.
- * @param reload Time in game seconds.
- */
-void RuleCraftWeapon::setStandardReload(int reload)
-{
-	_reloadStandard = reload;
-}
-
-/**
  * Returns the amount of time the craft weapon takes to
  * reload in aggressive mode.
  * @return Time in game seconds.
@@ -280,16 +211,6 @@ void RuleCraftWeapon::setStandardReload(int reload)
 int RuleCraftWeapon::getAggressiveReload() const
 {
 	return _reloadAggressive;
-}
-
-/**
- * Changes the amount of time the craft weapon takes to
- * reload in aggressive mode.
- * @param reload Time in game seconds.
- */
-void RuleCraftWeapon::setAggressiveReload(int reload)
-{
-	_reloadAggressive = reload;
 }
 
 /**
@@ -303,16 +224,6 @@ int RuleCraftWeapon::getAmmoMax() const
 }
 
 /**
- * Changes the maximum amount of ammo the craft weapon
- * can carry.
- * @param ammo Amount of ammo.
- */
-void RuleCraftWeapon::setAmmoMax(int ammo)
-{
-	_ammoMax = ammo;
-}
-
-/**
  * Returns how much ammo is added to the craft weapon
  * while rearming (the amount of ammo in each clip item).
  * @return Amount of ammo.
@@ -320,16 +231,6 @@ void RuleCraftWeapon::setAmmoMax(int ammo)
 int RuleCraftWeapon::getRearmRate() const
 {
 	return _rearmRate;
-}
-
-/**
- * Changes how much ammo is added to the craft weapon
- * while rearming (the amount of ammo in each clip item).
- * @param rearm Amount of ammo.
- */
-void RuleCraftWeapon::setRearmRate(int rearm)
-{
-	_rearmRate = rearm;
 }
 
 /**
@@ -343,16 +244,6 @@ std::string RuleCraftWeapon::getLauncherItem() const
 }
 
 /**
- * Changes the language string of the item used to
- * equip this craft weapon.
- * @param launcher Item name.
- */
-void RuleCraftWeapon::setLauncherItem(const std::string &launcher)
-{
-	_launcher = launcher;
-}
-
-/**
  * Returns the language string of the item used to
  * load this craft weapon with ammo.
  * @return Item name.
@@ -360,16 +251,6 @@ void RuleCraftWeapon::setLauncherItem(const std::string &launcher)
 std::string RuleCraftWeapon::getClipItem() const
 {
 	return _clip;
-}
-
-/**
- * Changes the language string of the item used to
- * load this craft weapon with ammo.
- * @param clip Item name.
- */
-void RuleCraftWeapon::setClipItem(const std::string &clip)
-{
-	_clip = clip;
 }
 
 }

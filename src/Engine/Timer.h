@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -19,7 +19,7 @@
 #ifndef OPENXCOM_TIMER_H
 #define OPENXCOM_TIMER_H
 
-#include "SDL.h"
+#include <SDL.h>
 #include "State.h"
 #include "Surface.h"
 

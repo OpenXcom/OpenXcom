@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 OpenXcom Developers.
+ * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -18,7 +18,7 @@
  */
 #include "Cursor.h"
 #include <cmath>
-#include "SDL.h"
+#include <SDL.h>
 #include "../Engine/Action.h"
 
 namespace OpenXcom
@@ -28,7 +28,7 @@ namespace OpenXcom
  * Sets up a cursor with the specified size and position
  * and hides the system cursor.
  * @note The size and position don't really matter since
- * it's a 9x13 shape, they're just there for inhertiance.
+ * it's a 9x13 shape, they're just there for inheritance.
  * @param width Width in pixels.
  * @param height Height in pixels.
  * @param x X position in pixels.
