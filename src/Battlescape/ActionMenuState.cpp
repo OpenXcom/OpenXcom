@@ -120,6 +120,11 @@ ActionMenuState::ActionMenuState(Game *game, BattleAction *action, int x, int y)
 	{
 		addItem(BA_USE, "STR_USE_SCANNER", &id);
 	}
+	else if (weapon->getBattleType() == BT_PSIAMP)
+	{
+		addItem(BA_MINDCONTROL, "STR_MIND_CONTROL", &id);
+		addItem(BA_PANIC, "STR_PANIC_UNIT", &id);
+	}
 
 }
 

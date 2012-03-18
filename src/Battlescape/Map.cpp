@@ -295,14 +295,13 @@ void Map::drawTerrain(Surface *surface)
 					{
 						if (_camera->getViewHeight() == itZ)
 						{
-							if (_cursorType == CT_NORMAL || _cursorType == CT_THROW || _cursorType == CT_WAYPOINT)
+							if (_cursorType != CT_AIM)
 							{
 								if (unit && (unit->getVisible() || _save->getDebugMode()))
 									frameNumber = (_animFrame % 2); // yellow box
 								else
 									frameNumber = 0; // red box
-							}
-							if (_cursorType == CT_AIM)
+							}else
 							{
 								if (unit)
 									frameNumber = 7 + (_animFrame / 2); // yellow animated crosshairs
@@ -509,14 +508,13 @@ void Map::drawTerrain(Surface *surface)
 					{
 						if (_camera->getViewHeight() == itZ)
 						{
-							if (_cursorType == CT_NORMAL || _cursorType == CT_THROW || _cursorType == CT_WAYPOINT)
+							if (_cursorType != CT_AIM)
 							{
 								if (unit && (unit->getVisible() || _save->getDebugMode()))
 									frameNumber = 3 + (_animFrame % 2); // yellow box
 								else
 									frameNumber = 3; // red box
-							}
-							if (_cursorType == CT_AIM)
+							}else
 							{
 								if (unit)
 									frameNumber = 7 + (_animFrame / 2); // yellow animated crosshairs
@@ -530,14 +528,10 @@ void Map::drawTerrain(Surface *surface)
 						}
 						tmpSurface = _res->getSurfaceSet("CURSOR.PCK")->getFrame(frameNumber);
 						tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y, 0);
-						if (_cursorType == CT_THROW && _camera->getViewHeight() == itZ)
+						if (_cursorType > 2 && _camera->getViewHeight() == itZ)
 						{
-							tmpSurface = _res->getSurfaceSet("CURSOR.PCK")->getFrame(15 + (_animFrame / 4));
-							tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y, 0);
-						}
-						if (_cursorType == CT_WAYPOINT && _camera->getViewHeight() == itZ)
-						{
-							tmpSurface = _res->getSurfaceSet("CURSOR.PCK")->getFrame(13 + (_animFrame / 4));
+							int frame[6] = {0, 0, 0, 11, 13, 15};
+							tmpSurface = _res->getSurfaceSet("CURSOR.PCK")->getFrame(frame[_cursorType] + (_animFrame / 4));
 							tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y, 0);
 						}
 					}

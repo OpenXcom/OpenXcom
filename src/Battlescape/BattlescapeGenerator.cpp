@@ -267,7 +267,7 @@ void BattlescapeGenerator::run()
 		}
 		
 		// test data - uncomment to easily debug a certain item
-		addItem(_game->getRuleset()->getItem("STR_MOTION_SCANNER"));
+		addItem(_game->getRuleset()->getItem("STR_PSI_AMP"));
 		addItem(_game->getRuleset()->getItem("STR_LASER_RIFLE"));
 		addItem(_game->getRuleset()->getItem("STR_LASER_PISTOL"));
 		addItem(_game->getRuleset()->getItem("STR_MEDI_KIT"));
@@ -1089,6 +1089,12 @@ int BattlescapeGenerator::loadMAP(MapBlock *mapblock, int xoff, int yoff, RuleTe
 	length = (int)size[0];
 	width = (int)size[1];
 	height = (int)size[2];
+
+	if (height > _save->getHeight())
+	{
+		throw Exception("Height of map too big for this mission");
+	}
+
 	z += height - 1;
 	mapblock->setHeight(height);
 
@@ -1101,6 +1107,11 @@ int BattlescapeGenerator::loadMAP(MapBlock *mapblock, int xoff, int yoff, RuleTe
 			z += i;
 			break;
 		}
+	}
+
+	if (z > (_save->getHeight()-1))
+	{
+		throw Exception("Something is wrong in your map definitions");
 	}
 
 	while (mapFile.read((char*)&value, sizeof(value)))

@@ -502,6 +502,10 @@ void BattlescapeGame::setupCursor()
 		{
 			getMap()->setCursorType(CT_THROW);
 		}
+		else if (_currentAction.type == BA_MINDCONTROL || _currentAction.type == BA_PANIC)
+		{
+			getMap()->setCursorType(CT_PSI);
+		}
 		else if (_currentAction.type == BA_LAUNCH)
 		{
 			getMap()->setCursorType(CT_WAYPOINT);
