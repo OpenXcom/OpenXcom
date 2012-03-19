@@ -674,9 +674,8 @@ struct ColorReplace
 	* @param shade value of shade of this surface
 	* @param newColor new color to set (it should be offseted by 4)
 	* @param notused
-	* @return new value for destination pixel
 	*/
-	static inline Uint8 func(Uint8& dest, const Uint8& src, const int& shade, const int& newColor, const int&)
+	static inline void func(Uint8& dest, const Uint8& src, const int& shade, const int& newColor, const int&)
 	{
 		if(src)
 		{
@@ -704,9 +703,8 @@ struct StandartShade
 	* @param shade value of shade of this surface
 	* @param notused
 	* @param notused
-	* @return new value for destination pixel
 	*/
-	static inline Uint8 func(Uint8& dest, const Uint8& src, const int& shade, const int&, const int&)
+	static inline void func(Uint8& dest, const Uint8& src, const int& shade, const int&, const int&)
 	{
 		if(src)
 		{
