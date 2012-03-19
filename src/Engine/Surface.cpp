@@ -17,10 +17,12 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Surface.h"
+#include "ShaderDraw.h"
 #include <fstream>
 #include <SDL_gfxPrimitives.h>
 #include "Palette.h"
 #include "Exception.h"
+#include "ShaderMove.h"
 
 namespace OpenXcom
 {
@@ -659,6 +661,69 @@ void Surface::paletteRestore()
 }
 
 /**
+ * help class used for Surface::blitNShade
+ */
+struct ColorReplace
+{
+	
+	/**
+	* Function used by ShaderDraw in Surface::blitNShade
+	* set shade and replace color in that surface
+	* @param dest destination pixel
+	* @param src source pixel
+	* @param shade value of shade of this surface
+	* @param newColor new color to set (it should be offseted by 4)
+	* @param notused
+	* @return new value for destination pixel
+	*/
+	static inline Uint8 func(Uint8& dest, const Uint8& src, const int& shade, const int& newColor, const int&)
+	{
+		if(src)
+		{
+			const int newShade = (src&15) + shade;
+			if (newShade > 15)
+				// so dark it would flip over to another color - make it black instead
+				dest = 15;
+			else
+				dest = newColor | newShade;
+		}
+	}
+	
+};
+
+/**
+ * help class used for Surface::blitNShade
+ */
+struct StandartShade
+{
+	/**
+	* Function used by ShaderDraw in Surface::blitNShade
+	* set shade
+	* @param dest destination pixel
+	* @param src source pixel
+	* @param shade value of shade of this surface
+	* @param notused
+	* @param notused
+	* @return new value for destination pixel
+	*/
+	static inline Uint8 func(Uint8& dest, const Uint8& src, const int& shade, const int&, const int&)
+	{
+		if(src)
+		{
+			const int newShade = (src&15) + shade;
+			if (newShade > 15)
+				// so dark it would flip over to another color - make it black instead
+				dest = 15;
+			else
+				dest = (src&(15<<4)) | newShade;
+		}
+	}
+	
+};
+
+
+
+/**
  * Specific blit function to blit battlescape terrain data in different shades in a fast way.
  * Notice there is no surface locking here - you have to make sure you lock the surface yourself
  * at the start of blitting and unlock it when done.
@@ -671,48 +736,22 @@ void Surface::paletteRestore()
  */
 void Surface::blitNShade(Surface *surface, int x, int y, int off, bool half, int newBaseColor)
 {
-	// get Width and Height only once
-	int w = getWidth();
-	int h = getHeight();
-	int dw = surface->getWidth();
-	int dh = surface->getHeight();
-	int baseColor;
-
-	// get src and dest memory (so there's no need to use getPixel & setPixel)
-	Uint8* src = (Uint8*) getSurface()->pixels;
-	Uint8* dest = (Uint8*) surface->getSurface()->pixels;
-
-	int spitch = getSurface()->pitch;
-	int dpitch = surface->getSurface()->pitch;
-
-	const int start_x = std::max((half)? w/2 : 0, -x);
-	const int start_y = std::max(0, -y);
-	const int end_x = std::min( w, dw - x);
-	const int end_y = std::min( h, dh - y);
-
-	int dest_y = (y + start_y) * dpitch + x;
-	int src_y = start_y * spitch;
-	for(int iy = start_y; iy < end_y; ++iy, dest_y += dpitch, src_y += spitch)
-		for(int ix = start_x; ix<end_x; ++ix)
-		{
-			int pixel = src[src_y + ix];
-			if(pixel)
-			{
-				if (newBaseColor)
-					baseColor = newBaseColor - 1;
-				else
-					baseColor = pixel>>4;
-
-				int newShade = (pixel&15) + off;
-				if (newShade > 15)
-				{
-					// so dark it would flip over to another color - make it black instead
-					baseColor = 0;
-					newShade = 15;
-				}
-				dest[dest_y + ix] = (baseColor<<4) | newShade;
-			}
-		}
+	ShaderMove<Uint8> src(this, x, y);
+	if(half)
+	{
+		GraphSubset g = src.getDomain();
+		g.beg_x = g.end_x/2;
+		src.setDomain(g);
+	}
+	if(newBaseColor)
+	{
+		--newBaseColor;
+		newBaseColor <<= 4;
+		ShaderDraw<ColorReplace>(ShaderSurface(surface), src, ShaderScalar(off), ShaderScalar(newBaseColor));
+	}
+	else
+		ShaderDraw<StandartShade>(ShaderSurface(surface), src, ShaderScalar(off));
+		
 }
 
 /**

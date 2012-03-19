@@ -20,7 +20,6 @@
 #ifndef OPENXCOM_SHADERMOVE_H
 #define	OPENXCOM_SHADERMOVE_H
 
-#include <vector>
 #include "ShaderDraw.h"
 
 namespace OpenXcom
@@ -111,11 +110,11 @@ struct controler<ShaderMove<Pixel> > : public controler_base<typename ShaderMove
 
 }//namespace helper
 
-ShaderMove<Uint8> ShaderSurface(Surface* s)
+inline ShaderMove<Uint8> ShaderSurface(Surface* s)
 {
 	return ShaderMove<Uint8>(s);
 }
-ShaderMove<Uint8> ShaderSurface(Surface* s, int x, int y)
+inline ShaderMove<Uint8> ShaderSurface(Surface* s, int x, int y)
 {
 	return ShaderMove<Uint8>(s, x, y);
 }

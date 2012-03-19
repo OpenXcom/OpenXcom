@@ -55,19 +55,34 @@ const double Globe::QUAD_LATITUDE = 0.2;
 const double Globe::ROTATE_LONGITUDE = 0.25;
 const double Globe::ROTATE_LATITUDE = 0.15;
 
+///helper class for `Globe` for drawing earth globe with shadows
 class GlobeStaticData
 {
+	///list of dimension of earth on screen per zoom level
 	std::vector<double> radius;
-	std::vector<std::vector<Cord> > ziemia;
-	std::vector<Sint16> losowy_szum;
+	///normal of each pixel in earth globe per zoom level
+	std::vector<std::vector<Cord> > earth_data;
+	///data sample used for noise in shading
+	std::vector<Sint16> random_noise_data;
 	
+	///warper araund `earth_data` for `ShaderDraw` function
 	std::vector<ShaderMove<Cord>* > earth;
+	///warper araund `random_noise_data` for `ShaderDraw` function
 	ShaderRepeat<Sint16>* random_noise;
 public: 
-	const std::pair<int,int> erde_xy;
+	///dimension of earth graphic
+	const std::pair<int,int> earth_size;
 	
 	
-	
+	/**
+	 * Function returning normal vector of sphere surface
+     * @param ox x cord of sphere center
+     * @param oy y cord of sphere center
+     * @param r radius of sphere
+     * @param x cord of point where we getting this vector
+     * @param y cord of point where we getting this vector
+     * @return normal vector of sphere surface 
+     */
 	inline Cord circle_norm(double ox, double oy, double r, double x, double y)
 	{
 		const double limit = r*r;
@@ -94,7 +109,7 @@ public:
 	
 	
 	GlobeStaticData():
-			erde_xy(std::make_pair(300, 200))
+			earth_size(std::make_pair(300, 200))
 	{
 		
 		radius.push_back(90);
@@ -103,25 +118,25 @@ public:
 		radius.push_back(280);
 		radius.push_back(450);
 		radius.push_back(720);
-		ziemia.resize(radius.size());
+		earth_data.resize(radius.size());
 		
 		for(int r = 0; r<radius.size(); ++r)
 		{
-			ziemia[r].resize(erde_xy.first * erde_xy.second);
-			for(int j=0; j<erde_xy.second; ++j)
-				for(int i=0; i<erde_xy.first; ++i)
+			earth_data[r].resize(earth_size.first * earth_size.second);
+			for(int j=0; j<earth_size.second; ++j)
+				for(int i=0; i<earth_size.first; ++i)
 				{
-					ziemia[r][erde_xy.first*j + i] = circle_norm(erde_xy.first/2, erde_xy.second/2, radius[r], i+.5, j+.5);
+					earth_data[r][earth_size.first*j + i] = circle_norm(earth_size.first/2, earth_size.second/2, radius[r], i+.5, j+.5);
 				}
-			earth.push_back(new ShaderMove<Cord>(ziemia[r], erde_xy.first, erde_xy.second));
-			earth[r]->setMove(-erde_xy.first/2, -erde_xy.second/2);
+			earth.push_back(new ShaderMove<Cord>(earth_data[r], earth_size.first, earth_size.second));
+			earth[r]->setMove(-earth_size.first/2, -earth_size.second/2);
 		}
 		
-		const int zufall_xy = 60;
-		losowy_szum.resize(zufall_xy * zufall_xy);
-		for(int i=0; i< losowy_szum.size(); ++i)
-			losowy_szum[i] = rand()%64;
-		random_noise = new ShaderRepeat<Sint16>(losowy_szum, zufall_xy, zufall_xy );
+		const int random_surf_size = 60;
+		random_noise_data.resize(random_surf_size * random_surf_size);
+		for(int i=0; i< random_noise_data.size(); ++i)
+			random_noise_data[i] = rand()%64;
+		random_noise = new ShaderRepeat<Sint16>(random_noise_data, random_surf_size, random_surf_size );
 		
 	}
 	~GlobeStaticData()
@@ -143,7 +158,7 @@ public:
 	{
 		return radius[zoom];
 	}
-	inline int getRadiusSize()
+	inline int getRadiusNum()
 	{
 		return radius.size();
 	}
@@ -154,9 +169,9 @@ GlobeStaticData static_data;
 
 struct Ocean
 {
-	static inline Uint8 func(const Uint8& dest, const Cord& src, const int&, const int&, const int&)
+	static inline Uint8 func(Uint8& dest, const int&, const int&, const int&, const int&)
 	{
-		return (src.z > 0. )? Palette::blockOffset(12) + 0 : dest;
+		dest = Palette::blockOffset(12) + 0;
 	}
 };
 
@@ -173,7 +188,7 @@ struct CreateShadow
 		temp.z *= temp.z;
 		temp.x += temp.z + temp.y;
 		temp.x = sqrt(temp.x);
-		//we have norm of distans betwen 2 vectors in `x`
+		//we have norm of distance between 2 vectors, now stored in `x`
 		temp.x -= sqrt(2);
 		temp.x *= 8*500.;
 		temp.x -= noise;
@@ -213,14 +228,12 @@ struct CreateShadow
 		}
 	}
 	
-	static inline Uint8 func(const Uint8& dest, const Cord& earth, const Cord& sun, const Sint16& noise, const int&)
+	static inline void func(Uint8& dest, const Cord& earth, const Cord& sun, const Sint16& noise, const int&)
 	{
 		if(dest && earth.z)
-		{
-			return getShadowValue(dest, earth, sun, noise);
-		}
+			dest = getShadowValue(dest, earth, sun, noise);
 		else
-			return 0;
+			dest = 0;
 	}
 };
 
@@ -581,7 +594,7 @@ void Globe::rotateStop()
  */
 void Globe::zoomIn()
 {
-	if (_zoom < static_data.getRadiusSize() - 1)
+	if (_zoom < static_data.getRadiusNum() - 1)
 	{
 		_zoom++;
 		cachePolygons();
@@ -614,7 +627,7 @@ void Globe::zoomMin()
  */
 void Globe::zoomMax()
 {
-	_zoom = static_data.getRadiusSize() - 1;
+	_zoom = static_data.getRadiusNum() - 1;
 	cachePolygons();
 }
 
@@ -891,9 +904,7 @@ void Globe::draw()
 void Globe::drawOcean()
 {
 	lock();
-	ShaderMove<Cord> earth(static_data.getEarthShape(_zoom));
-	earth.addMove(_cenX, _cenY);
-	ShaderDraw<Ocean>(ShaderSurface(this), earth);
+	ShaderDraw<Ocean>(ShaderSurface(this));
 	unlock();
 }
 

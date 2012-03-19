@@ -22,18 +22,26 @@
 
 #include "Surface.h"
 #include "GraphSubset.h"
+#include <vector>
 
 namespace OpenXcom
 {
 namespace helper
 {
 	
-	
+/**
+ * This is empty argument to `ShaderDraw`.
+ * when used in `ShaderDraw` return always 0 to `ColorFunc::func` for every pixel
+ */	
 class Nothing
 {
 	
 };
-
+	
+/**
+ * This is scalar argument to `ShaderDraw`.
+ * when used in `ShaderDraw` return value of `t` to `ColorFunc::func` for every pixel
+ */	
 template<typename T>
 class Scalar
 {
@@ -46,6 +54,11 @@ public:
 };
 
 
+/**
+ * This is surface argument to `ShaderDraw`.
+ * every pixel of this surface will have type `Pixel`.
+ * Modify pixels of this surface, that will modifying original data.
+ */	
 template<typename Pixel>
 class ShaderBase
 {
@@ -60,6 +73,7 @@ protected:
 	const int _pitch;
 	
 public:
+	///copy constructor
 	inline ShaderBase(const ShaderBase& s):
 		_orgin(s.ptr()),
 		_range_base(s._range_base),
@@ -68,7 +82,17 @@ public:
 	{
 			
 	}
-		
+	
+	/**
+	 * create surface using vector `f` as data source.
+	 * surface will have `max_y` x `max_x` dimensions.
+	 * size of `f` should be bigger than `max_y*max_x`.
+	 * Attention: after use of this constructor you change size of `f` then `_orgin` will be invalid
+	 * and use of this object will cause memory exception. 
+     * @param f vector that are treated as surface
+     * @param max_x x dimension of `f`
+     * @param max_y y dimension of `f`
+     */
 	inline ShaderBase(std::vector<Pixel>& f, int max_x, int max_y):
 		_orgin(&(f[0])),
 		_range_base(max_x, max_y),
@@ -106,6 +130,11 @@ public:
 	}
 };
 
+/**
+ * This is surface argument to `ShaderDraw`.
+ * every pixel of this surface will have type `Pixel`.
+ * You cant modify pixel in that surface.
+ */	
 template<typename Pixel>
 class ShaderBase<const Pixel>
 {
@@ -120,6 +149,7 @@ protected:
 	const int _pitch;
 	
 public:
+	///copy constructor
 	inline ShaderBase(const ShaderBase& s):
 		_orgin(s.ptr()),
 		_range_base(s.getBaseDomain()),
@@ -128,7 +158,8 @@ public:
 	{
 			
 	}
-		
+	
+	///copy constructor	
 	inline ShaderBase(const ShaderBase<Pixel>& s):
 		_orgin(s.ptr()),
 		_range_base(s.getBaseDomain()),
@@ -137,7 +168,17 @@ public:
 	{
 			
 	}
-		
+	
+	/**
+	 * create surface using vector `f` as data source.
+	 * surface will have `max_y` x `max_x` dimensions.
+	 * size of `f` should be bigger than `max_y*max_x`.
+	 * Attention: after use of this constructor you change size of `f` then `_orgin` will be invalid
+	 * and use of this object will cause memory exception. 
+     * @param f vector that are treated as surface
+     * @param max_x x dimension of `f`
+     * @param max_y y dimension of `f`
+     */	
 	inline ShaderBase(const std::vector<Pixel>& f, int max_x, int max_y):
 		_orgin(&(f[0])),
 		_range_base(max_x, max_y),
@@ -175,6 +216,12 @@ public:
 	}
 };
 
+/**
+ * This is surface argument to `ShaderDraw`.
+ * every pixel of this surface will have type `Uint8`.
+ * Can be constructed from `Surface*`.
+ * Modify pixels of this surface, that will modifying original data.
+ */	
 template<>
 class ShaderBase<Uint8>
 {
@@ -189,6 +236,7 @@ protected:
 	const int _pitch;
 	
 public:
+	///copy constructor
 	inline ShaderBase(const ShaderBase& s):
 		_orgin(s.ptr()),
 		_range_base(s.getBaseDomain()),
@@ -197,7 +245,16 @@ public:
 	{
 			
 	}
-		
+	
+	/**
+	 * create surface using surface `s` as data source.
+	 * surface will have same dimensions as `s`.
+	 * Attention: after use of this constructor you change size of surface `s` 
+	 * then `_orgin` will be invalid and use of this object will cause memory exception. 
+     * @param f vector that are treated as surface
+     * @param max_x x dimension of `s`
+     * @param max_y y dimension of `s`
+     */		
 	inline ShaderBase(Surface* s):
 		_orgin((Uint8*) s->getSurface()->pixels),
 		_range_base(s->getWidth(), s->getHeight()),
@@ -206,7 +263,17 @@ public:
 	{
 			
 	}
-		
+	
+	/**
+	 * create surface using vector `f` as data source.
+	 * surface will have `max_y` x `max_x` dimensions.
+	 * size of `f` should be bigger than `max_y*max_x`.
+	 * Attention: after use of this constructor you change size of `f` then `_orgin` will be invalid
+	 * and use of this object will cause memory exception. 
+     * @param f vector that are treated as surface
+     * @param max_x x dimension of `f`
+     * @param max_y y dimension of `f`
+     */	
 	inline ShaderBase(std::vector<Uint8>& f, int max_x, int max_y):
 		_orgin(&(f[0])),
 		_range_base(max_x, max_y),
@@ -244,6 +311,12 @@ public:
 	}
 };
 
+/**
+ * This is surface argument to `ShaderDraw`.
+ * every pixel of this surface will have type `const Uint8`.
+ * Can be constructed from `const Surface*`.
+ * You cant modify pixel in that surface.
+ */	
 template<>
 class ShaderBase<const Uint8>
 {
@@ -258,6 +331,7 @@ protected:
 	const int _pitch;
 	
 public:
+	///copy constructor
 	inline ShaderBase(const ShaderBase& s):
 		_orgin(s.ptr()),
 		_range_base(s.getBaseDomain()),
@@ -266,7 +340,8 @@ public:
 	{
 			
 	}
-		
+	
+	///copy constructor	
 	inline ShaderBase(const ShaderBase<Uint8>& s):
 		_orgin(s.ptr()),
 		_range_base(s.getBaseDomain()),
@@ -275,7 +350,16 @@ public:
 	{
 			
 	}
-		
+	
+	/**
+	 * create surface using surface `s` as data source.
+	 * surface will have same dimensions as `s`.
+	 * Attention: after use of this constructor you change size of surface `s` 
+	 * then `_orgin` will be invalid and use of this object will cause memory exception. 
+     * @param f vector that are treated as surface
+     * @param max_x x dimension of `s`
+     * @param max_y y dimension of `s`
+     */	
 	inline ShaderBase(const Surface* s):
 		_orgin((Uint8*) s->getSurface()->pixels),
 		_range_base(s->getWidth(), s->getHeight()),
@@ -285,6 +369,16 @@ public:
 			
 	}
 	
+	/**
+	 * create surface using vector `f` as data source.
+	 * surface will have `max_y` x `max_x` dimensions.
+	 * size of `f` should be bigger than `max_y*max_x`.
+	 * Attention: after use of this constructor you change size of `f` then `_orgin` will be invalid
+	 * and use of this object will case memory exception. 
+     * @param f vector that are treated as surface
+     * @param max_x x dimension of `f`
+     * @param max_y y dimension of `f`
+     */
 	inline ShaderBase(const std::vector<Uint8>& f, int max_x, int max_y):
 		_orgin(&(f[0])),
 		_range_base(max_x, max_y),
@@ -323,15 +417,16 @@ public:
 };
 
 
-/// helper class for handlig implementation differece in different surfacestypes
+/// helper class for handling implementation differences in different surfaces types
+/// Used in function `ShaderDraw`.
 template<typename SurfaceType>
 struct controler
 {
 	//NOT IMPLEMENTED ANYWHERE!
-	//you need create your own specification or use diffrent type, no default version
+	//you need create your own specification or use different type, no default version
 
 	/**
-	 * function used only when `SurfaceType` can be used as destionation surface
+	 * function used only when `SurfaceType` can be used as destination surface
 	 * if that type should not be used as `dest` dont implements this.
 	 * @return start drawing range 
 	 */
@@ -339,7 +434,7 @@ struct controler
 	/**
 	 * function used only when `SurfaceType` is used as source surface.
 	 * function reduce drawing range.
-	 * @param g modyfed drawing range 
+	 * @param g modify drawing range 
 	 */
 	inline void mod_range(GraphSubset& g);
 	/**
@@ -360,7 +455,7 @@ struct controler
 	inline int& get_ref();
 };
 
-/// implementation for scalar types aka int, double, float
+/// implementation for scalars types aka `int`, `double`, `float`
 template<typename T>
 struct controler<Scalar<T> >
 {
@@ -371,7 +466,7 @@ struct controler<Scalar<T> >
 		
 	}
 	
-	//cant use
+	//cant use this function
 	//inline GraphSubset get_range()
 	
 	inline void mod_range(GraphSubset&)
@@ -426,7 +521,7 @@ struct controler<Nothing>
 		
 	}
 	
-	//cant use
+	//cant use this function
 	//inline GraphSubset get_range()
 	
 	inline void mod_range(GraphSubset&)

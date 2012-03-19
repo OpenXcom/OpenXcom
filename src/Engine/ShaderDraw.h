@@ -27,8 +27,8 @@ namespace OpenXcom
 	
 /**
  * Universal blit function
- * @tparam ColorFunc class that containt static function `func` that get 5 params
- * and return type equal to first param. function is used to modyfy pixel in `dest_frame`
+ * @tparam ColorFunc class that contains static function `func` that get 5 arguments
+ * function is used to modify these arguments.
  * @param dest_frame destination surface modified by function.
  * @param src0_frame surface or scalar
  * @param src1_frame surface or scalar
@@ -38,14 +38,14 @@ namespace OpenXcom
 template<typename ColorFunc, typename DestType, typename Src0Type, typename Src1Type, typename Src2Type, typename Src3Type>
 inline void ShaderDraw(const DestType& dest_frame, const Src0Type& src0_frame, const Src1Type& src1_frame, const Src2Type& src2_frame, const Src3Type& src3_frame)
 {
-	//creating heleper objects
+	//creating helper objects
 	helper::controler<DestType> dest(dest_frame);
 	helper::controler<Src0Type> src0(src0_frame);
 	helper::controler<Src1Type> src1(src1_frame);
 	helper::controler<Src2Type> src2(src2_frame);
 	helper::controler<Src3Type> src3(src3_frame);
 
-	//get basic draw range in 2d spcae
+	//get basic draw range in 2d space
 	GraphSubset end_temp = dest.get_range();
 	
 	//intersections with src ranges
@@ -66,7 +66,7 @@ inline void ShaderDraw(const DestType& dest_frame, const Src0Type& src0_frame, c
 
 
 	int begin_y = 0, end_y = end.size_y();
-	//determinig interation range in y-axis
+	//determining iteration range in y-axis
 	dest.mod_y(begin_y, end_y);
 	src0.mod_y(begin_y, end_y);
 	src1.mod_y(begin_y, end_y);
@@ -85,7 +85,7 @@ inline void ShaderDraw(const DestType& dest_frame, const Src0Type& src0_frame, c
 	for(int y = end_y-begin_y; y>0; --y, dest.inc_y(), src0.inc_y(), src1.inc_y(), src2.inc_y(), src3.inc_y())
 	{
 		int begin_x = 0, end_x = end.size_x();
-		//determinig interation range in x-axis
+		//determining iteration range in x-axis
 		dest.mod_x(begin_x, end_x);
 		src0.mod_x(begin_x, end_x);
 		src1.mod_x(begin_x, end_x);
@@ -103,7 +103,7 @@ inline void ShaderDraw(const DestType& dest_frame, const Src0Type& src0_frame, c
 		//iteration on x-axis
 		for(int x = end_x-begin_x; x>0; --x, dest.inc_x(), src0.inc_x(), src1.inc_x(), src2.inc_x(), src3.inc_x())
 		{
-			dest.get_ref() = ColorFunc::func(dest.get_ref(), src0.get_ref(), src1.get_ref(), src2.get_ref(), src3.get_ref());				
+			ColorFunc::func(dest.get_ref(), src0.get_ref(), src1.get_ref(), src2.get_ref(), src3.get_ref());				
 		}
 	}
 
