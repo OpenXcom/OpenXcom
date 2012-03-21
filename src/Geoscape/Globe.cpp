@@ -63,7 +63,7 @@ const double Globe::ROTATE_LATITUDE = 0.15;
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Globe::Globe(Game *game, int cenX, int cenY, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _radius(), _cenLon(-0.01), _cenLat(-0.1), _rotLon(0.0), _rotLat(0.0), _cenX(cenX), _cenY(cenY), _zoom(0), _game(game), _blink(true), _detail(true), _cacheLand()
+Globe::Globe(Game *game, int cenX, int cenY, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _radius(), _rotLon(0.0), _rotLat(0.0), _cenX(cenX), _cenY(cenY), _game(game), _blink(true), _detail(true), _cacheLand()
 {
 	_texture[0] = _game->getResourcePack()->getSurfaceSet("TEXTURE.DAT");
 	for (int shade = 1; shade < NUM_SHADES; shade++)
@@ -181,7 +181,8 @@ Globe::Globe(Game *game, int cenX, int cenY, int width, int height, int x, int y
 	_mkAlienSite->setPixel(1, 2, 1);
 	_mkAlienSite->unlock();
 
-	cachePolygons();
+	_zoom = (*_game->getSavedGame()->getGlobeZoom());
+	center((*_game->getSavedGame()->getGlobeLon()), (*_game->getSavedGame()->getGlobeLat()));
 }
 
 /**
@@ -247,11 +248,7 @@ void Globe::cartToPolar(Sint16 x, Sint16 y, double *lon, double *lat) const
 	*lat = asin((y * sin(c) * cos(_cenLat)) / rho + cos(c) * sin(_cenLat));
 	*lon = atan2(x * sin(c),(rho * cos(_cenLat) * cos(c) - y * sin(_cenLat) * sin(c))) + _cenLon;
 
-	// Keep between 0 and 2xPI
-	while (*lon < 0)
-		*lon += 2 * M_PI;
-	while (*lon >= 2 * M_PI)
-		*lon -= 2 * M_PI;
+	*lon = normalizeAngle(*lon);
 }
 
 /**
@@ -425,6 +422,7 @@ void Globe::zoomIn()
 	if (_zoom < _radius.size() - 1)
 	{
 		_zoom++;
+		(*_game->getSavedGame()->getGlobeZoom()) = _zoom;
 		cachePolygons();
 	}
 }
@@ -437,6 +435,7 @@ void Globe::zoomOut()
 	if (_zoom > 0)
 	{
 		_zoom--;
+		(*_game->getSavedGame()->getGlobeZoom()) = _zoom;
 		cachePolygons();
 	}
 }
@@ -447,6 +446,7 @@ void Globe::zoomOut()
 void Globe::zoomMin()
 {
 	_zoom = 0;
+	(*_game->getSavedGame()->getGlobeZoom()) = _zoom;
 	cachePolygons();
 }
 
@@ -456,6 +456,7 @@ void Globe::zoomMin()
 void Globe::zoomMax()
 {
 	_zoom = _radius.size() - 1;
+	(*_game->getSavedGame()->getGlobeZoom()) = _zoom;
 	cachePolygons();
 }
 
@@ -467,9 +468,16 @@ void Globe::zoomMax()
  */
 void Globe::center(double lon, double lat)
 {
-	_cenLon = lon;
-	_cenLat = lat;
+	// Constraining lon and lat to [-M_PI; M_PI]
+	_cenLon = normalizeAngle(lon);
+	_cenLat = normalizeAngle(lat);
+
+	// Updating SavedGame
+	(*_game->getSavedGame()->getGlobeLon()) = _cenLon;
+	(*_game->getSavedGame()->getGlobeLat()) = _cenLat;
+
 	// HORRIBLE HORRORS CONTAINED WITHIN
+	// TODO: This containment is not really effective, do something about the root cause in rendering code
 	if (_cenLon > -0.01 && _cenLon < 0.01)
 	{
 		_cenLon = -0.01;
@@ -478,6 +486,7 @@ void Globe::center(double lon, double lat)
 	{
 		_cenLat = -0.1;
 	}
+
 	cachePolygons();
 }
 
@@ -699,18 +708,7 @@ void Globe::blink()
  */
 void Globe::rotate()
 {
-	_cenLon += _rotLon;
-	_cenLat += _rotLat;
-	// DON'T UNLEASH THE TERRORS
-	if (_cenLon > -0.01 && _cenLon < 0.01)
-	{
-		_cenLon = -0.01;
-	}
-	if (_cenLat > -0.01 && _cenLat < 0.01)
-	{
-		_cenLat = -0.1;
-	}
-	cachePolygons();
+	center(_cenLon + _rotLon, _cenLat + _rotLat);
 }
 
 /**
@@ -1296,6 +1294,16 @@ void Globe::getPolygonTextureAndShade(double lon, double lat, int *texture, int 
 			return;
 		}
 	}
+}
+
+/**
+ * Constrains angle to [-M_PI, M_PI]
+ * @param angle Angle.
+ * @return Normalized angle.
+ */
+double Globe::normalizeAngle(double angle) const
+{
+	return (angle - 2 * M_PI * floor((angle + M_PI) / (2 * M_PI)));
 }
 
 }

@@ -84,7 +84,7 @@ bool equalProduction::operator()(const Production * p) const
  * Initializes a brand new saved game according to the specified difficulty.
  * @param difficulty Game difficulty.
  */
-SavedGame::SavedGame(GameDifficulty difficulty) : _difficulty(difficulty), _funds(0), _countries(), _regions(), _bases(), _ufos(), _craftId(), _waypoints(), _ufoId(1), _waypointId(1), _soldierId(1), _battleGame(0)
+SavedGame::SavedGame(GameDifficulty difficulty) : _difficulty(difficulty), _funds(0), _countries(), _regions(), _bases(), _ufos(), _craftId(), _waypoints(), _ufoId(1), _waypointId(1), _soldierId(1), _battleGame(0), _globeLon(0.0), _globeLat(0.0), _globeZoom(0)
 {
 	RNG::init();
 	_time = new GameTime(6, 1, 1, 1999, 12, 0, 0);
@@ -268,6 +268,14 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	{
 		_ufopaedia->load(*pName, rule);
 	}
+
+	if (doc.FindValue("globeLon"))
+	{
+		doc["globeLon"] >> _globeLon;
+		doc["globeLat"] >> _globeLat;
+		doc["globeZoom"] >> _globeZoom;
+	}
+
 	fin.close();
 }
 
@@ -352,6 +360,9 @@ void SavedGame::save(const std::string &filename) const
 	}
 	out << YAML::Key << "ufopaedia" << YAML::Value;
 	_ufopaedia->save(out);
+	out << YAML::Key << "globeLon" << YAML::Value << _globeLon;
+	out << YAML::Key << "globeLat" << YAML::Value << _globeLat;
+	out << YAML::Key << "globeZoom" << YAML::Value << _globeZoom;
 	out << YAML::EndMap;
 	sav << out.c_str();
 	sav.close();
@@ -835,6 +846,22 @@ void SavedGame::inspectSoldiers(Soldier **highestRanked, int *total, int rank)
 			}
 		}
 	}
+}
+
+/// Gets the current Globe longitude.
+double *const SavedGame::getGlobeLon()
+{
+	return &_globeLon;
+}
+/// Gets the current Globe latitude.
+double *const SavedGame::getGlobeLat()
+{
+	return &_globeLat;
+}
+/// Gets the current Globe zoom.
+unsigned int *const SavedGame::getGlobeZoom()
+{
+	return &_globeZoom;
 }
 
 }

@@ -78,6 +78,8 @@ private:
 	void fillLongitudeSegments(double startLon, double endLon, int colourShift);
 	/// Gets the shade of a land polygon.
 	int getShade(Polygon *p) const;
+	/// Normalizes angle in [-M_PI; M_PI].
+	double normalizeAngle(double angle) const;
 public:
 	/// Creates a new globe at the specified position and size.
 	Globe(Game *game, int cenX, int cenY, int width, int height, int x = 0, int y = 0);
