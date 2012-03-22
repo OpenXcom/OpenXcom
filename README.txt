@@ -1,5 +1,5 @@
 #################
-# OpenXcom v0.3 #
+# OpenXcom v0.4 #
 #################
 
 OpenXcom is an open-source reimplementation of the popular

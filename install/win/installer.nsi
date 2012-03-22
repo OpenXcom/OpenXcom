@@ -11,7 +11,7 @@
 ;General
 
 	!define GAME_NAME "OpenXcom"
-	!define GAME_VERSION "0.3"
+	!define GAME_VERSION "0.4"
 	!define GAME_AUTHOR "OpenXcom Developers"
 
 	;Name and file
@@ -177,6 +177,10 @@ ${EndIf}
 	File "..\..\bin\data\Language\Spanish.geo"
 	File "..\..\bin\data\Language\Spanish.lng"
 	
+	SetOutPath "$INSTDIR\data\Ruleset"
+	
+	File "..\..\bin\data\Ruleset\Xcom1Ruleset.nam"
+	
 	SetOutPath "$INSTDIR\data\SoldierName"
 	
 	File "..\..\bin\data\SoldierName\American.nam"
@@ -249,17 +253,7 @@ Section "-un.Main"
 	SetOutPath "$TEMP"
 	
 	Delete "$INSTDIR\OpenXcom.exe"
-	Delete "$INSTDIR\libogg-0.dll"
-	Delete "$INSTDIR\libvorbis-0.dll"
-	Delete "$INSTDIR\libvorbisfile-3.dll"
-	Delete "$INSTDIR\mikmod.dll"
-	Delete "$INSTDIR\SDL.dll"
-	Delete "$INSTDIR\SDL_gfx.dll"
-	Delete "$INSTDIR\SDL_mixer.dll"
-	Delete "$INSTDIR\smpeg.dll"
-	Delete "$INSTDIR\msvcp100.dll"
-	Delete "$INSTDIR\msvcr100.dll"
-	Delete "$INSTDIR\yaml-cpp.dll"
+	Delete "$INSTDIR\*.dll"
 	Delete "$INSTDIR\COPYING"
 	Delete "$INSTDIR\README.txt"
 	
@@ -328,6 +322,6 @@ SectionEnd
 	VIAddVersionKey /LANG=${LANG_ENGLISH} "ProductName" "${GAME_NAME} Installer"
 	VIAddVersionKey /LANG=${LANG_ENGLISH} "ProductVersion" "${GAME_VERSION}.0.0"
 	VIAddVersionKey /LANG=${LANG_ENGLISH} "CompanyName" "${GAME_AUTHOR}"
-	VIAddVersionKey /LANG=${LANG_ENGLISH} "LegalCopyright" "Copyright 2010 ${GAME_AUTHOR}"
+	VIAddVersionKey /LANG=${LANG_ENGLISH} "LegalCopyright" "Copyright 2010-2012 ${GAME_AUTHOR}"
 	VIAddVersionKey /LANG=${LANG_ENGLISH} "FileDescription" "${GAME_NAME} Installer"
 	VIAddVersionKey /LANG=${LANG_ENGLISH} "FileVersion" "${GAME_VERSION}.0.0"

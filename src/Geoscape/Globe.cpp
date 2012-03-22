@@ -169,7 +169,7 @@ GlobeStaticData static_data;
 
 struct Ocean
 {
-	static inline Uint8 func(Uint8& dest, const int&, const int&, const int&, const int&)
+	static inline void func(Uint8& dest, const int&, const int&, const int&, const int&)
 	{
 		dest = Palette::blockOffset(12) + 0;
 	}
@@ -189,7 +189,7 @@ struct CreateShadow
 		temp.x += temp.z + temp.y;
 		temp.x = sqrt(temp.x);
 		//we have norm of distance between 2 vectors, now stored in `x`
-		temp.x -= sqrt(2);
+		temp.x -= sqrt(2.0);
 		temp.x *= 8*500.;
 		temp.x -= noise;
 		if(temp.x > 0.)
@@ -249,7 +249,7 @@ struct CreateShadow
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Globe::Globe(Game *game, int cenX, int cenY, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _cenLon(-0.01), _cenLat(-0.1), _rotLon(0.0), _rotLat(0.0), _cenX(cenX), _cenY(cenY), _zoom(0), _game(game), _blink(true), _detail(true), _cacheLand()
+Globe::Globe(Game *game, int cenX, int cenY, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _cenLon(0.0), _cenLat(0.0), _rotLon(0.0), _rotLat(0.0), _cenX(cenX), _cenY(cenY), _zoom(0), _game(game), _blink(true), _detail(true), _cacheLand()
 {
 	_texture = new SurfaceSet(*_game->getResourcePack()->getSurfaceSet("TEXTURE.DAT"));
 
@@ -641,15 +641,6 @@ void Globe::center(double lon, double lat)
 {
 	_cenLon = lon;
 	_cenLat = lat;
-	// HORRIBLE HORRORS CONTAINED WITHIN
-	if (_cenLon > -0.01 && _cenLon < 0.01)
-	{
-		_cenLon = -0.01;
-	}
-	if (_cenLat > -0.01 && _cenLat < 0.01)
-	{
-		_cenLat = -0.1;
-	}
 	cachePolygons();
 }
 
@@ -872,15 +863,6 @@ void Globe::rotate()
 {
 	_cenLon += _rotLon;
 	_cenLat += _rotLat;
-	// DON'T UNLEASH THE TERRORS
-	if (_cenLon > -0.01 && _cenLon < 0.01)
-	{
-		_cenLon = -0.01;
-	}
-	if (_cenLat > -0.01 && _cenLat < 0.01)
-	{
-		_cenLat = -0.1;
-	}
 	cachePolygons();
 }
 
