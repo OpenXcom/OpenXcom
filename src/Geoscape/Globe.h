@@ -22,6 +22,7 @@
 #include <vector>
 #include <list>
 #include "../Engine/InteractiveSurface.h"
+#include "Cord.h"
 
 namespace OpenXcom
 {
@@ -41,7 +42,6 @@ class Target;
 class Globe : public InteractiveSurface
 {
 private:
-	static const int NUM_SHADES = 8;
 	static const int NUM_TEXTURES = 13;
 	static const int NUM_LANDSHADES = 48;
 	static const int NUM_SEASHADES = 72;
@@ -51,11 +51,10 @@ private:
 	static const double ROTATE_LONGITUDE;
 	static const double ROTATE_LATITUDE;
 
-	std::vector<double> _radius;
 	double _cenLon, _cenLat, _rotLon, _rotLat;
 	Sint16 _cenX, _cenY;
 	unsigned int _zoom;
-	SurfaceSet *_texture[NUM_SHADES];
+	SurfaceSet *_texture;
 	Game *_game;
 	Surface *_markers, *_countries;
 	bool _blink, _detail;
@@ -74,10 +73,8 @@ private:
 	bool targetNear(Target* target, int x, int y) const;
 	/// Caches a set of polygons.
 	void cache(std::list<Polygon*> *polygons, std::list<Polygon*> *cache);
-	/// Fills the ocean longitude segments.
-	void fillLongitudeSegments(double startLon, double endLon, int colourShift);
-	/// Gets the shade of a land polygon.
-	int getShade(Polygon *p) const;
+	/// Get position of sun relative to given position in polar cords and date.
+	Cord getSunDirection(double lon, double lat) const;
 	/// Normalizes angle in [-M_PI; M_PI].
 	double normalizeAngle(double angle) const;
 public:
@@ -135,6 +132,8 @@ public:
 	void drawOcean();
 	/// Draws the land of the globe.
 	void drawLand();
+	/// Draws the shadow.
+	void drawShadow();
 	/// Draws the country details of the globe.
 	void drawDetail();
 	/// Draws all the markers over the globe.
