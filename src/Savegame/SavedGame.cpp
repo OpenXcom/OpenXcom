@@ -848,20 +848,58 @@ void SavedGame::inspectSoldiers(Soldier **highestRanked, int *total, int rank)
 	}
 }
 
-/// Gets the current Globe longitude.
-double *const SavedGame::getGlobeLon()
+/**
+ * Gets the current Globe viewpoint longitude.
+ * @return Globe longitude.
+ */
+double SavedGame::getGlobeLon() const
 {
-	return &_globeLon;
+	return _globeLon;
 }
-/// Gets the current Globe latitude.
-double *const SavedGame::getGlobeLat()
+
+/**
+ * Sets the current Globe viewpoint longitude.
+ * @param lon Globe longitude.
+ */
+void SavedGame::setGlobeLon(double lon)
 {
-	return &_globeLat;
+	_globeLon = lon;
 }
-/// Gets the current Globe zoom.
-unsigned int *const SavedGame::getGlobeZoom()
+
+/**
+ * Gets the current Globe viewpoint latitude.
+ * @return Globe latitude.
+ */
+double SavedGame::getGlobeLat() const
 {
-	return &_globeZoom;
+	return _globeLat;
+}
+
+/**
+ * Sets the current Globe viewpoint latitude.
+ * @param lat Globe latitude.
+ */
+void SavedGame::setGlobeLat(double lat)
+{
+	_globeLat = lat;
+}
+
+/**
+ * Gets the current Globe zoom.
+ * @return Globe zoom level.
+ */
+unsigned int SavedGame::getGlobeZoom() const
+{
+	return _globeZoom;
+}
+
+/**
+ * Sets the current Globe zoom.
+ * @param zoom Globe zoom level.
+ */
+void SavedGame::setGlobeZoom(unsigned int zoom)
+{
+	_globeZoom = zoom;
 }
 
 }

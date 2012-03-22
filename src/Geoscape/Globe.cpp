@@ -354,8 +354,8 @@ Globe::Globe(Game *game, int cenX, int cenY, int width, int height, int x, int y
 	_mkAlienSite->setPixel(1, 2, 1);
 	_mkAlienSite->unlock();
 
-	_zoom = (*_game->getSavedGame()->getGlobeZoom());
-	center((*_game->getSavedGame()->getGlobeLon()), (*_game->getSavedGame()->getGlobeLat()));
+	_zoom = _game->getSavedGame()->getGlobeZoom();
+	center(_game->getSavedGame()->getGlobeLon(), _game->getSavedGame()->getGlobeLat());
 }
 
 /**
@@ -594,7 +594,7 @@ void Globe::zoomIn()
 	if (_zoom < static_data.getRadiusNum() - 1)
 	{
 		_zoom++;
-		(*_game->getSavedGame()->getGlobeZoom()) = _zoom;
+		_game->getSavedGame()->setGlobeZoom(_zoom);
 		cachePolygons();
 	}
 }
@@ -607,7 +607,7 @@ void Globe::zoomOut()
 	if (_zoom > 0)
 	{
 		_zoom--;
-		(*_game->getSavedGame()->getGlobeZoom()) = _zoom;
+		_game->getSavedGame()->setGlobeZoom(_zoom);
 		cachePolygons();
 	}
 }
@@ -618,7 +618,7 @@ void Globe::zoomOut()
 void Globe::zoomMin()
 {
 	_zoom = 0;
-	(*_game->getSavedGame()->getGlobeZoom()) = _zoom;
+	_game->getSavedGame()->setGlobeZoom(_zoom);
 	cachePolygons();
 }
 
@@ -628,7 +628,7 @@ void Globe::zoomMin()
 void Globe::zoomMax()
 {
 	_zoom = static_data.getRadiusNum() - 1;
-	(*_game->getSavedGame()->getGlobeZoom()) = _zoom;
+	_game->getSavedGame()->setGlobeZoom(_zoom);
 	cachePolygons();
 }
 
@@ -645,9 +645,8 @@ void Globe::center(double lon, double lat)
 	_cenLat = normalizeAngle(lat);
 
 	// Updating SavedGame
-	(*_game->getSavedGame()->getGlobeLon()) = _cenLon;
-	(*_game->getSavedGame()->getGlobeLat()) = _cenLat;
-
+	_game->getSavedGame()->setGlobeLon(_cenLon);
+	_game->getSavedGame()->setGlobeLat(_cenLat);
 
 	cachePolygons();
 }

@@ -140,11 +140,17 @@ public:
 	/// Checks how many soldiers of a rank exist and which one has the highest score.
 	void inspectSoldiers(Soldier **highestRanked, int *total, int rank);
 	/// Gets the current Globe longitude.
-	double *const getGlobeLon();
+	double getGlobeLon() const;
+	/// Sets the current Globe longitude.
+	void setGlobeLon(double lon);
 	/// Gets the current Globe latitude.
-	double *const getGlobeLat();
+	double getGlobeLat() const;
+	/// Sets the current Globe latitude.
+	void setGlobeLat(double lat);
 	/// Gets the current Globe zoom.
-	unsigned int *const getGlobeZoom();
+	unsigned int getGlobeZoom() const;
+	/// Sets the current Globe zoom.
+	void setGlobeZoom(unsigned int zoom);
 };
 
 }
