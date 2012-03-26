@@ -143,7 +143,7 @@ void InventoryState::init()
 		texture->getFrame(s->getRankSprite())->setY(0);
 		texture->getFrame(s->getRankSprite())->blit(_btnRank);
 
-		std::string look = "MAN_0";
+		std::string look = s->getArmor()->getSpriteInventory();
 		if (s->getGender() == GENDER_MALE)
 			look += "M";
 		else

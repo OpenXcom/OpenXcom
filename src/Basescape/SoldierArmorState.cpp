@@ -28,8 +28,10 @@
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
 #include "../Ruleset/Ruleset.h"
+#include "../Ruleset/Armor.h"
 #include "../Savegame/Soldier.h"
 #include "../Savegame/Base.h"
+#include "../Savegame/ItemContainer.h"
 
 namespace OpenXcom
 {
@@ -93,9 +95,25 @@ SoldierArmorState::SoldierArmorState(Game *game, Base *base, unsigned int soldie
 	_lstArmor->setSelectable(true);
 	_lstArmor->setBackground(_window);
 	_lstArmor->setMargin(8);
-	_lstArmor->onMouseClick((ActionHandler)&SoldierArmorState::lstArmorClick);
 
-	_lstArmor->addRow(1, _game->getLanguage()->getString("STR_NONE_UC").c_str());
+	std::vector<std::string> armors = _game->getRuleset()->getArmorsList();
+	for (std::vector<std::string>::iterator i = armors.begin(); i != armors.end(); ++i)
+	{
+		Armor *a = _game->getRuleset()->getArmor(*i);
+		if (_base->getItems()->getItem(a->getStoreItem()) > 0)
+		{
+			_armors.push_back(a);
+			std::wstringstream ss;
+			ss << _base->getItems()->getItem(a->getStoreItem());
+			_lstArmor->addRow(2, _game->getLanguage()->getString(a->getType()).c_str(), ss.str().c_str());
+		}
+		else if (a->getStoreItem() == "STR_NONE")
+		{
+			_armors.push_back(a);
+			_lstArmor->addRow(1, _game->getLanguage()->getString(a->getType()).c_str());
+		}
+	}
+	_lstArmor->onMouseClick((ActionHandler)&SoldierArmorState::lstArmorClick);
 }
 
 /**
@@ -121,6 +139,17 @@ void SoldierArmorState::btnCancelClick(Action *action)
  */
 void SoldierArmorState::lstArmorClick(Action *action)
 {
+	Soldier *soldier = _base->getSoldiers()->at(_soldier);
+	if (soldier->getArmor()->getStoreItem() != "STR_NONE")
+	{
+		_base->getItems()->addItem(soldier->getArmor()->getStoreItem());
+	}
+	if (_armors[_lstArmor->getSelectedRow()]->getStoreItem() != "STR_NONE")
+	{
+		_base->getItems()->removeItem(_armors[_lstArmor->getSelectedRow()]->getStoreItem());
+	}
+	soldier->setArmor(_armors[_lstArmor->getSelectedRow()]);
+
 	_game->popState();
 }
 

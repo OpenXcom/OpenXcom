@@ -27,7 +27,7 @@ namespace OpenXcom
  * @param type String defining the type.
  * @param spriteSheet Spritesheet used to render the unit.
  */
-Armor::Armor(const std::string &type, std::string spriteSheet, int drawingRoutine, MovementType movementType, int size) : _type(type), _spriteSheet(spriteSheet), _corpseItem(""), _frontArmor(0), _sideArmor(0), _rearArmor(0), _underArmor(0), _drawingRoutine(drawingRoutine), _movementType(movementType), _size(size)
+Armor::Armor(const std::string &type, std::string spriteSheet, int drawingRoutine, MovementType movementType, int size) : _type(type), _spriteSheet(spriteSheet), _spriteInv(""), _corpseItem(""), _storeItem(""), _frontArmor(0), _sideArmor(0), _rearArmor(0), _underArmor(0), _drawingRoutine(drawingRoutine), _movementType(movementType), _size(size)
 {
 	for (int i=0; i < 8; i++)
 		_damageModifier[i] = 1.0;
@@ -61,9 +61,17 @@ void Armor::load(const YAML::Node &node)
 		{
 			i.second() >> _spriteSheet;
 		}
+		else if (key == "spriteInv")
+		{
+			i.second() >> _spriteInv;
+		}
 		else if (key == "corpseItem")
 		{
 			i.second() >> _corpseItem;
+		}
+		else if (key == "storeItem")
+		{
+			i.second() >> _storeItem;
 		}
 		else if (key == "frontArmor")
 		{
@@ -116,7 +124,9 @@ void Armor::save(YAML::Emitter &out) const
 	out << YAML::BeginMap;
 	out << YAML::Key << "type" << YAML::Value << _type;
 	out << YAML::Key << "spriteSheet" << YAML::Value << _spriteSheet;
+	out << YAML::Key << "spriteInv" << YAML::Value << _spriteInv;
 	out << YAML::Key << "corpseItem" << YAML::Value << _corpseItem;
+	out << YAML::Key << "storeItem" << YAML::Value << _storeItem;
 	out << YAML::Key << "frontArmor" << YAML::Value << _frontArmor;
 	out << YAML::Key << "sideArmor" << YAML::Value << _sideArmor;
 	out << YAML::Key << "rearArmor" << YAML::Value << _rearArmor;
@@ -147,6 +157,15 @@ std::string Armor::getType() const
 std::string Armor::getSpriteSheet() const
 {
 	return _spriteSheet;
+}
+
+/**
+ * Gets the unit's inventory sprite.
+ * @return Inventory sprite name.
+ */
+std::string Armor::getSpriteInventory() const
+{
+	return _spriteInv;
 }
 
 /**
@@ -216,6 +235,15 @@ void Armor::setCorpseItem(const std::string &corpseItem)
 std::string Armor::getCorpseItem() const
 {
 	return _corpseItem;
+}
+
+/**
+ * Get the storage item needed to equip this.
+ * @return Name of the store item.
+ */
+std::string Armor::getStoreItem() const
+{
+	return _storeItem;
 }
 
 /**

@@ -127,6 +127,8 @@ public:
 	AlienDeployment *const getDeployment(const std::string &name) const;
 	/// Gets armor rules.
 	Armor *const getArmor(const std::string &name) const;
+	/// Gets the available armors.
+	std::vector<std::string> getArmorsList() const;
 	/// Gets Ufopaedia article definition.
 	ArticleDefinition *const getUfopaediaArticle(const std::string &name) const;
 	/// Gets the inventory list.

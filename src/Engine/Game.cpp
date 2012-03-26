@@ -201,7 +201,12 @@ void Game::run()
 		}
 		_screen->flip();
 
-		SDL_Delay(0);
+		// Save on CPU
+		Uint8 state = SDL_GetAppState();
+		if (state == SDL_APPACTIVE || !state)
+			SDL_Delay(100);
+		else
+			SDL_Delay(1);
 	}
 }
 

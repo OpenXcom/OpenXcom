@@ -174,8 +174,6 @@ crafts:
         - name: PLANE
           width: 10
           length: 20
-          height: 0
-          type: 0
   - type: STR_INTERCEPTOR
     sprite: 3
     fuelMax: 1000
@@ -1248,3 +1246,1130 @@ items:
     fixedWeapon: true
     invWidth: 1
     invHeight: 2
+ufos:
+  - type: STR_SMALL_SCOUT
+    size: STR_VERY_SMALL
+    sprite: 0
+    damageMax: 50
+    speedMax: 2200
+    accel: 12
+    power: 0
+    range: 0
+    score: 50
+    battlescapeTerrainData:
+      name: UFO1A
+      mapDataSets:
+        - BLANKS
+        - UFO1
+      mapBlocks:
+        - name: UFO1A
+          width: 10
+          length: 10
+  - type: STR_MEDIUM_SCOUT
+    size: STR_SMALL
+    sprite: 1
+    damageMax: 200
+    speedMax: 2400
+    accel: 9
+    power: 20
+    range: 15
+    score: 75
+    battlescapeTerrainData:
+      name: UFO_110
+      mapDataSets:
+        - BLANKS
+        - U_EXT02
+        - U_WALL02
+        - U_BITS
+      mapBlocks:
+        - name: UFO_110
+          width: 10
+          length: 10
+  - type: STR_LARGE_SCOUT
+    size: STR_SMALL
+    sprite: 2
+    damageMax: 250
+    speedMax: 2700
+    accel: 9
+    power: 20
+    range: 34
+    score: 125
+    battlescapeTerrainData:
+      name: UFO_120
+      mapDataSets:
+        - BLANKS
+        - U_EXT02
+        - U_WALL02
+        - U_BITS
+      mapBlocks:
+        - name: UFO_120
+          width: 20
+          length: 20
+  - type: STR_ABDUCTER
+    size: STR_MEDIUM
+    sprite: 3
+    damageMax: 500
+    speedMax: 4000
+    accel: 8
+    power: 40
+    range: 22
+    score: 250
+    battlescapeTerrainData:
+      name: UFO_130
+      mapDataSets:
+        - BLANKS
+        - U_EXT02
+        - U_WALL02
+        - U_DISEC2
+        - U_BITS
+      mapBlocks:
+        - name: UFO_130
+          width: 20
+          length: 20
+  - type: STR_HARVESTER
+    size: STR_MEDIUM
+    sprite: 4
+    damageMax: 500
+    speedMax: 4300
+    accel: 8
+    power: 40
+    range: 20
+    score: 250
+  - type: STR_SUPPLY_SHIP
+    size: STR_LARGE
+    sprite: 5
+    damageMax: 2200
+    speedMax: 3200
+    accel: 6
+    power: 60
+    range: 36
+    score: 400
+  - type: STR_TERROR_SHIP
+    size: STR_LARGE
+    sprite: 6
+    damageMax: 1200
+    speedMax: 4800
+    accel: 6
+    power: 120
+    range: 42
+    score: 500
+  - type: STR_BATTLESHIP
+    size: STR_VERY_LARGE
+    sprite: 7
+    damageMax: 3200
+    speedMax: 5000
+    accel: 6
+    power: 148
+    range: 65
+    score: 700
+invs:
+  - id: STR_BACK_PACK
+    x: 192
+    y: 40
+    slots:
+      - [0, 0]
+      - [1, 0]
+      - [2, 0]
+      - [0, 1]
+      - [1, 1]
+      - [2, 1]
+      - [0, 2]
+      - [1, 2]
+      - [2, 2]
+    costs:
+      STR_BELT: 12
+      STR_GROUND: 10
+      STR_LEFT_HAND: 8
+      STR_LEFT_LEG: 16
+      STR_LEFT_SHOULDER: 14
+      STR_RIGHT_HAND: 8
+      STR_RIGHT_LEG: 16
+      STR_RIGHT_SHOULDER: 14
+  - id: STR_BELT
+    x: 192
+    y: 104
+    slots:
+      - [0, 0]
+      - [1, 0]
+      - [2, 0]
+      - [3, 0]
+      - [0, 1]
+      - [3, 1]
+    costs:
+      STR_BACK_PACK: 16
+      STR_GROUND: 6
+      STR_LEFT_HAND: 4
+      STR_LEFT_LEG: 10
+      STR_LEFT_SHOULDER: 12
+      STR_RIGHT_HAND: 4
+      STR_RIGHT_LEG: 10
+      STR_RIGHT_SHOULDER: 12
+  - id: STR_GROUND
+    x: 0
+    y: 152
+    type: 2
+    costs:
+      STR_BACK_PACK: 20
+      STR_BELT: 12
+      STR_LEFT_HAND: 8
+      STR_LEFT_LEG: 10
+      STR_LEFT_SHOULDER: 12
+      STR_RIGHT_HAND: 8
+      STR_RIGHT_LEG: 10
+      STR_RIGHT_SHOULDER: 12
+  - id: STR_LEFT_HAND
+    x: 128
+    y: 64
+    type: 1
+    costs:
+      STR_BACK_PACK: 14
+      STR_BELT: 8
+      STR_GROUND: 2
+      STR_LEFT_LEG: 8
+      STR_LEFT_SHOULDER: 10
+      STR_RIGHT_HAND: 4
+      STR_RIGHT_LEG: 10
+      STR_RIGHT_SHOULDER: 10
+  - id: STR_LEFT_LEG
+    x: 128
+    y: 120
+    slots:
+      - [0, 0]
+      - [1, 0]
+    costs:
+      STR_BACK_PACK: 18
+      STR_BELT: 10
+      STR_GROUND: 6
+      STR_LEFT_HAND: 4
+      STR_LEFT_SHOULDER: 10
+      STR_RIGHT_HAND: 6
+      STR_RIGHT_LEG: 10
+      STR_RIGHT_SHOULDER: 10
+  - id: STR_LEFT_SHOULDER
+    x: 112
+    y: 40
+    slots:
+      - [0, 0]
+      - [1, 0]
+    costs:
+      STR_BACK_PACK: 16
+      STR_BELT: 10
+      STR_GROUND: 4
+      STR_LEFT_HAND: 3
+      STR_LEFT_LEG: 12
+      STR_RIGHT_HAND: 3
+      STR_RIGHT_LEG: 12
+      STR_RIGHT_SHOULDER: 8
+  - id: STR_RIGHT_HAND
+    x: 0
+    y: 64
+    type: 1
+    costs:
+      STR_BACK_PACK: 14
+      STR_BELT: 8
+      STR_GROUND: 2
+      STR_LEFT_HAND: 4
+      STR_LEFT_LEG: 10
+      STR_LEFT_SHOULDER: 10
+      STR_RIGHT_LEG: 8
+      STR_RIGHT_SHOULDER: 10
+  - id: STR_RIGHT_LEG
+    x: 0
+    y: 120
+    slots:
+      - [0, 0]
+      - [1, 0]
+    costs:
+      STR_BACK_PACK: 18
+      STR_BELT: 10
+      STR_GROUND: 6
+      STR_LEFT_HAND: 6
+      STR_LEFT_LEG: 10
+      STR_LEFT_SHOULDER: 10
+      STR_RIGHT_HAND: 4
+      STR_RIGHT_SHOULDER: 10
+  - id: STR_RIGHT_SHOULDER
+    x: 16
+    y: 40
+    slots:
+      - [0, 0]
+      - [1, 0]
+    costs:
+      STR_BACK_PACK: 16
+      STR_BELT: 10
+      STR_GROUND: 4
+      STR_LEFT_HAND: 3
+      STR_LEFT_LEG: 12
+      STR_LEFT_SHOULDER: 8
+      STR_RIGHT_HAND: 3
+      STR_RIGHT_LEG: 12
+terrains:
+  - name: CULTA
+    mapDataSets:
+      - BLANKS
+      - CULTIVAT
+      - BARN
+    mapBlocks:
+      - name: CULTA00
+        width: 10
+        length: 10
+        type: 1
+      - name: CULTA01
+        width: 10
+        length: 10
+      - name: CULTA02
+        width: 10
+        length: 10
+      - name: CULTA03
+        width: 10
+        length: 10
+      - name: CULTA04
+        width: 10
+        length: 10
+      - name: CULTA05
+        width: 10
+        length: 10
+      - name: CULTA06
+        width: 10
+        length: 10
+      - name: CULTA07
+        width: 10
+        length: 10
+        type: 1
+      - name: CULTA08
+        width: 10
+        length: 10
+      - name: CULTA09
+        width: 10
+        length: 10
+      - name: CULTA10
+        width: 10
+        length: 10
+      - name: CULTA11
+        width: 10
+        length: 10
+        type: 1
+      - name: CULTA12
+        width: 10
+        length: 10
+      - name: CULTA13
+        width: 10
+        length: 10
+      - name: CULTA14
+        width: 10
+        length: 10
+      - name: CULTA15
+        width: 10
+        length: 10
+      - name: CULTA16
+        width: 10
+        length: 10
+      - name: CULTA17
+        width: 10
+        length: 10
+      - name: CULTA18
+        width: 10
+        length: 10
+  - name: DESERT
+    mapDataSets:
+      - BLANKS
+      - DESERT
+    mapBlocks:
+      - name: DESERT00
+        width: 10
+        length: 10
+        type: 1
+      - name: DESERT01
+        width: 10
+        length: 10
+        type: 1
+      - name: DESERT02
+        width: 10
+        length: 10
+        type: 1
+      - name: DESERT03
+        width: 10
+        length: 10
+      - name: DESERT04
+        width: 10
+        length: 10
+      - name: DESERT05
+        width: 10
+        length: 10
+      - name: DESERT06
+        width: 10
+        length: 10
+      - name: DESERT07
+        width: 10
+        length: 10
+      - name: DESERT08
+        width: 10
+        length: 10
+      - name: DESERT09
+        width: 20
+        length: 20
+      - name: DESERT10
+        width: 20
+        length: 20
+      - name: DESERT11
+        width: 20
+        length: 20
+  - name: FOREST
+    mapDataSets:
+      - BLANKS
+      - FOREST
+    mapBlocks:
+      - name: FOREST00
+        width: 10
+        length: 10
+        type: 1
+      - name: FOREST01
+        width: 10
+        length: 10
+        type: 1
+      - name: FOREST02
+        width: 10
+        length: 10
+      - name: FOREST03
+        width: 10
+        length: 10
+      - name: FOREST04
+        width: 10
+        length: 10
+      - name: FOREST05
+        width: 10
+        length: 10
+      - name: FOREST06
+        width: 10
+        length: 10
+      - name: FOREST07
+        width: 10
+        length: 10
+      - name: FOREST08
+        width: 10
+        length: 10
+      - name: FOREST09
+        width: 10
+        length: 10
+      - name: FOREST10
+        width: 20
+        length: 20
+      - name: FOREST11
+        width: 20
+        length: 20
+  - name: JUNGLE
+    mapDataSets:
+      - BLANKS
+      - JUNGLE
+    mapBlocks:
+      - name: JUNGLE00
+        width: 10
+        length: 10
+        type: 1
+      - name: JUNGLE01
+        width: 10
+        length: 10
+        type: 1
+      - name: JUNGLE02
+        width: 10
+        length: 10
+        type: 1
+      - name: JUNGLE03
+        width: 10
+        length: 10
+      - name: JUNGLE04
+        width: 10
+        length: 10
+      - name: JUNGLE05
+        width: 10
+        length: 10
+      - name: JUNGLE06
+        width: 10
+        length: 10
+      - name: JUNGLE07
+        width: 10
+        length: 10
+      - name: JUNGLE08
+        width: 10
+        length: 10
+      - name: JUNGLE09
+        width: 10
+        length: 10
+      - name: JUNGLE10
+        width: 10
+        length: 10
+      - name: JUNGLE11
+        width: 10
+        length: 10
+  - name: MARS
+    mapDataSets:
+      - BLANKS
+      - MARS
+      - U_WALL02
+    mapBlocks:
+      - name: MARS00
+        width: 10
+        length: 10
+        type: 1
+  - name: MOUNT
+    mapDataSets:
+      - BLANKS
+      - MOUNT
+    mapBlocks:
+      - name: MOUNT00
+        width: 10
+        length: 10
+        type: 1
+      - name: MOUNT01
+        width: 10
+        length: 10
+        type: 1
+      - name: MOUNT02
+        width: 10
+        length: 10
+        type: 1
+      - name: MOUNT03
+        width: 10
+        length: 10
+      - name: MOUNT04
+        width: 10
+        length: 10
+      - name: MOUNT05
+        width: 10
+        length: 10
+      - name: MOUNT06
+        width: 10
+        length: 10
+      - name: MOUNT07
+        width: 10
+        length: 10
+      - name: MOUNT08
+        width: 10
+        length: 10
+      - name: MOUNT09
+        width: 10
+        length: 10
+      - name: MOUNT10
+        width: 10
+        length: 10
+      - name: MOUNT11
+        width: 20
+        length: 20
+      - name: MOUNT12
+        width: 20
+        length: 20
+  - name: POLAR
+    mapDataSets:
+      - BLANKS
+      - POLAR
+    mapBlocks:
+      - name: POLAR00
+        width: 10
+        length: 10
+        type: 1
+      - name: POLAR01
+        width: 10
+        length: 10
+        type: 1
+      - name: POLAR02
+        width: 10
+        length: 10
+        type: 1
+      - name: POLAR03
+        width: 10
+        length: 10
+      - name: POLAR04
+        width: 10
+        length: 10
+      - name: POLAR05
+        width: 10
+        length: 10
+      - name: POLAR06
+        width: 10
+        length: 10
+      - name: POLAR07
+        width: 10
+        length: 10
+      - name: POLAR08
+        width: 10
+        length: 10
+      - name: POLAR09
+        width: 10
+        length: 10
+      - name: POLAR10
+        width: 10
+        length: 10
+      - name: POLAR11
+        width: 10
+        length: 10
+      - name: POLAR12
+        width: 20
+        length: 20
+      - name: POLAR13
+        width: 20
+        length: 20
+  - name: UBASE
+    mapDataSets:
+      - BLANKS
+      - U_BASE
+      - U_WALL02
+      - U_PODS
+      - BRAIN
+    mapBlocks:
+      - name: UBASE_00
+        width: 20
+        length: 20
+        type: 7
+      - name: UBASE_01
+        width: 20
+        length: 20
+      - name: UBASE_02
+        width: 20
+        length: 20
+      - name: UBASE_03
+        width: 20
+        length: 20
+      - name: UBASE_04
+        width: 10
+        length: 10
+        type: 6
+      - name: UBASE_05
+        width: 10
+        length: 10
+      - name: UBASE_06
+        width: 10
+        length: 10
+      - name: UBASE_07
+        width: 10
+        length: 10
+      - name: UBASE_08
+        width: 10
+        length: 10
+      - name: UBASE_09
+        width: 10
+        length: 10
+      - name: UBASE_10
+        width: 10
+        length: 10
+      - name: UBASE_11
+        width: 10
+        length: 10
+      - name: UBASE_12
+        width: 10
+        length: 10
+      - name: UBASE_13
+        width: 10
+        length: 10
+      - name: UBASE_14
+        width: 10
+        length: 10
+      - name: UBASE_15
+        width: 20
+        length: 20
+        type: 8
+  - name: URBAN
+    mapDataSets:
+      - BLANKS
+      - ROADS
+      - URBITS
+      - URBAN
+      - FRNITURE
+    mapBlocks:
+      - name: URBAN00
+        width: 10
+        length: 10
+        type: 2
+      - name: URBAN01
+        width: 10
+        length: 10
+        type: 3
+      - name: URBAN02
+        width: 10
+        length: 10
+        type: 4
+      - name: URBAN03
+        width: 10
+        length: 10
+        type: 1
+      - name: URBAN04
+        width: 10
+        length: 10
+        type: 1
+      - name: URBAN05
+        width: 20
+        length: 20
+      - name: URBAN06
+        width: 20
+        length: 20
+      - name: URBAN07
+        width: 20
+        length: 20
+      - name: URBAN08
+        width: 20
+        length: 20
+      - name: URBAN09
+        width: 20
+        length: 20
+      - name: URBAN14
+        width: 10
+        length: 10
+      - name: URBAN15
+        width: 10
+        length: 10
+      - name: URBAN16
+        width: 10
+        length: 10
+      - name: URBAN17
+        width: 10
+        length: 10
+      - name: URBAN18
+        width: 10
+        length: 10
+  - name: XBASE
+    mapDataSets:
+      - BLANKS
+      - XBASE1
+      - XBASE2
+    mapBlocks:
+      - name: XBASE_00
+        width: 10
+        length: 10
+      - name: XBASE_01
+        width: 10
+        length: 10
+      - name: XBASE_02
+        width: 10
+        length: 10
+      - name: XBASE_03
+        width: 10
+        length: 10
+      - name: XBASE_04
+        width: 10
+        length: 10
+      - name: XBASE_05
+        width: 10
+        length: 10
+      - name: XBASE_06
+        width: 10
+        length: 10
+      - name: XBASE_07
+        width: 10
+        length: 10
+      - name: XBASE_08
+        width: 10
+        length: 10
+      - name: XBASE_09
+        width: 10
+        length: 10
+      - name: XBASE_10
+        width: 10
+        length: 10
+      - name: XBASE_11
+        width: 10
+        length: 10
+      - name: XBASE_12
+        width: 10
+        length: 10
+      - name: XBASE_13
+        width: 10
+        length: 10
+      - name: XBASE_14
+        width: 10
+        length: 10
+      - name: XBASE_15
+        width: 10
+        length: 10
+      - name: XBASE_16
+        width: 10
+        length: 10
+      - name: XBASE_17
+        width: 10
+        length: 10
+      - name: XBASE_18
+        width: 10
+        length: 10
+      - name: XBASE_19
+        width: 10
+        length: 10
+      - name: XBASE_20
+        width: 10
+        length: 10
+        type: 5
+armors:
+  - type: STR_NONE_UC
+    spriteSheet: XCOM_0.PCK
+    spriteInv: MAN_0
+    storeItem: STR_NONE
+    corpseItem: STR_CORPSE
+    frontArmor: 12
+    sideArmor: 8
+    rearArmor: 5
+    underArmor: 2
+  - type: STR_PERSONAL_ARMOR_UC
+    spriteSheet: XCOM_1.PCK
+    spriteInv: MAN_1
+    corpseItem: STR_CORPSE_ARMOR
+    storeItem: STR_PERSONAL_ARMOR
+    frontArmor: 50
+    sideArmor: 40
+    rearArmor: 40
+    underArmor: 30
+  - type: STR_POWER_SUIT_UC
+    spriteSheet: XCOM_2.PCK
+    spriteInv: MAN_2
+    corpseItem: STR_CORPSE_SUIT
+    storeItem: STR_POWER_SUIT
+    frontArmor: 100
+    sideArmor: 80
+    rearArmor: 70
+    underArmor: 60
+  - type: STR_FLYING_SUIT_UC
+    spriteSheet: XCOM_2.PCK
+    spriteInv: MAN_3
+    corpseItem: STR_CORPSE_SUIT
+    storeItem: STR_FLYING_SUIT
+    frontArmor: 110
+    sideArmor: 90
+    rearArmor: 80
+    underArmor: 70
+    movementType: 1
+  - type: SECTOID_ARMOR0
+    spriteSheet: SECTOID.PCK
+    corpseItem: STR_SECTOID_CORPSE
+    frontArmor: 4
+    sideArmor: 3
+    rearArmor: 2
+    underArmor: 2
+  - type: FLOATER_ARMOR0
+    spriteSheet: FLOATER.PCK
+    corpseItem: STR_FLOATER_CORPSE
+    frontArmor: 8
+    sideArmor: 6
+    rearArmor: 4
+    underArmor: 12
+    drawingRoutine: 1
+    movementType: 1
+  - type: CYBERDISC_ARMOR
+    spriteSheet: CYBER.PCK
+    corpseItem: STR_CYBERDISC_CORPSE_
+    frontArmor: 90
+    sideArmor: 75
+    rearArmor: 60
+    underArmor: 60
+    drawingRoutine: 3
+    movementType: 1
+    size: 2
+    damageModifier:
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+  - type: TANK_ARMOR
+    spriteSheet: TANKS.PCK
+    corpseItem: STR_TANK_CORPSE_
+    frontArmor: 90
+    sideArmor: 75
+    rearArmor: 60
+    underArmor: 60
+    drawingRoutine: 2
+    size: 2
+    damageModifier:
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+  - type: CIVM_ARMOR
+    spriteSheet: CIVM.PCK
+    corpseItem: CIVM_CORPSE
+    frontArmor: 4
+    sideArmor: 3
+    rearArmor: 2
+    underArmor: 2
+    drawingRoutine: 4
+  - type: CIVF_ARMOR
+    spriteSheet: CIVF.PCK
+    corpseItem: CIVF_CORPSE
+    frontArmor: 4
+    sideArmor: 3
+    rearArmor: 2
+    underArmor: 2
+    drawingRoutine: 4
+soldiers:
+  - type: XCOM
+    minStats:
+      tu: 50
+      stamina: 40
+      health: 25
+      bravery: 10
+      reactions: 30
+      firing: 40
+      throwing: 50
+      strength: 20
+      psiStrength: 0
+      psiSkill: 16
+      melee: 20
+    maxStats:
+      tu: 60
+      stamina: 70
+      health: 40
+      bravery: 60
+      reactions: 60
+      firing: 70
+      throwing: 80
+      strength: 40
+      psiStrength: 100
+      psiSkill: 24
+      melee: 40
+    armor: STR_NONE_UC
+    standHeight: 22
+    kneelHeight: 14
+    loftemps: 3
+units:
+  - type: SECTOID_SOLDIER
+    race: STR_SECTOID
+    rank: STR_LIVE_SOLDIER
+    stats:
+      tu: 54
+      stamina: 90
+      health: 30
+      bravery: 80
+      reactions: 63
+      firing: 52
+      throwing: 58
+      strength: 30
+      psiStrength: 40
+      psiSkill: 0
+      melee: 76
+    armor: SECTOID_ARMOR0
+    standHeight: 16
+    kneelHeight: 12
+    loftemps: 2
+    value: 10
+    deathSound: 10
+    intelligence: 3
+    aggression: 2
+  - type: SECTOID_ENGINEER
+    race: STR_SECTOID
+    rank: STR_LIVE_ENGINEER
+    stats:
+      tu: 54
+      stamina: 90
+      health: 30
+      bravery: 80
+      reactions: 63
+      firing: 52
+      throwing: 58
+      strength: 30
+      psiStrength: 40
+      psiSkill: 0
+      melee: 76
+    armor: SECTOID_ARMOR0
+    standHeight: 16
+    kneelHeight: 12
+    loftemps: 2
+    value: 16
+    deathSound: 10
+    intelligence: 6
+    aggression: 2
+  - type: SECTOID_NAVIGATOR
+    race: STR_SECTOID
+    rank: STR_LIVE_NAVIGATOR
+    stats:
+      tu: 54
+      stamina: 90
+      health: 30
+      bravery: 80
+      reactions: 63
+      firing: 52
+      throwing: 58
+      strength: 30
+      psiStrength: 40
+      psiSkill: 0
+      melee: 76
+    armor: SECTOID_ARMOR0
+    standHeight: 16
+    kneelHeight: 12
+    loftemps: 2
+    value: 12
+    deathSound: 10
+    intelligence: 4
+    aggression: 2
+  - type: CYBERDISC
+    race: STR_CYBERDISC
+    stats:
+      tu: 70
+      stamina: 100
+      health: 90
+      bravery: 110
+      reactions: 20
+      firing: 60
+      throwing: 0
+      strength: 60
+      psiStrength: 100
+      psiSkill: 0
+      melee: 0
+    armor: CYBERDISC_ARMOR
+    standHeight: 15
+    kneelHeight: 15
+    loftemps: 4
+    value: 20
+    deathSound: 23
+    intelligence: 5
+    aggression: 1
+    specab: 1
+  - type: FLOATER_SOLDIER
+    race: STR_FLOATER
+    rank: STR_LIVE_SOLDIER
+    stats:
+      tu: 50
+      stamina: 90
+      health: 35
+      bravery: 80
+      reactions: 50
+      firing: 50
+      throwing: 58
+      strength: 40
+      psiStrength: 35
+      psiSkill: 0
+      melee: 70
+    armor: FLOATER_ARMOR0
+    standHeight: 21
+    kneelHeight: 16
+    loftemps: 3
+    value: 12
+    deathSound: 10
+    intelligence: 4
+    aggression: 2
+  - type: TANK_CANNON
+    race: STR_TANK_CANNON
+    stats:
+      tu: 70
+      stamina: 100
+      health: 90
+      bravery: 110
+      reactions: 20
+      firing: 60
+      throwing: 0
+      strength: 60
+      psiStrength: 100
+      psiSkill: 0
+      melee: 0
+    armor: TANK_ARMOR
+    standHeight: 15
+    kneelHeight: 15
+    loftemps: 4
+    value: 20
+    deathSound: 23
+  - type: MALE_CIVILIAN
+    race: STR_CIVILIAN
+    stats:
+      tu: 35
+      stamina: 65
+      health: 30
+      bravery: 80
+      reactions: 30
+      firing: 30
+      throwing: 50
+      strength: 20
+      psiStrength: 5
+      psiSkill: 0
+      melee: 50
+    armor: CIVM_ARMOR
+    standHeight: 22
+    kneelHeight: 14
+    loftemps: 3
+    value: 30
+    intelligence: 4
+  - type: FEMALE_CIVILIAN
+    race: STR_CIVILIAN
+    stats:
+      tu: 35
+      stamina: 65
+      health: 30
+      bravery: 80
+      reactions: 30
+      firing: 30
+      throwing: 50
+      strength: 20
+      psiStrength: 5
+      psiSkill: 0
+      melee: 50
+    armor: CIVF_ARMOR
+    standHeight: 22
+    kneelHeight: 14
+    loftemps: 3
+    value: 30
+    intelligence: 4
+alienRaces:
+  - id: STR_SECTOID
+    members:
+      - SECTOID_COMMANDER
+      - SECTOID_LEADER
+      - SECTOID_ENGINEER
+      - SECTOID_MEDIC
+      - SECTOID_NAVIGATOR
+      - SECTOID_SOLDIER
+      - CYBERDISC
+      - CYBERDISC
+  - id: STR_SNAKEMAN
+    members:
+      - SNAKEMAN_COMMANDER
+      - SNAKEMAN_LEADER
+      - SNAKEMAN_ENGINEER
+      - SNAKEMAN_SOLDIER
+      - SNAKEMAN_NAVIGATOR
+      - SNAKEMAN_SOLDIER
+      - CHRYSSALID
+      - CHRYSSALID
+  - id: STR_ETHEREAL
+    members:
+      - ETHEREAL_COMMANDER
+      - ETHEREAL_LEADER
+      - ETHEREAL_LEADER
+      - ETHEREAL_LEADER
+      - ETHEREAL_LEADER
+      - ETHEREAL_SOLDIER
+      - SECTOPOD
+      - SECTOPOD
+  - id: STR_MUTON
+    members:
+      - MUTON_SOLDIER
+      - MUTON_SOLDIER
+      - MUTON_ENGINEER
+      - MUTON_SOLDIER
+      - MUTON_NAVIGATOR
+      - MUTON_SOLDIER
+      - CELATID
+      - SILACOID
+  - id: STR_FLOATER
+    members:
+      - FLOATER_COMMANDER
+      - FLOATER_LEADER
+      - FLOATER_ENGINEER
+      - FLOATER_MEDIC
+      - FLOATER_NAVIGATOR
+      - FLOATER_SOLDIER
+      - REAPER
+      - REAPER
+  - id: STR_MIXED
+    members:
+      - ETHEREAL_SOLDIER
+      - ETHEREAL_LEADER
+      - ETHEREAL_COMMANDER
+      - CHRYSSALID
+      - SILACOID
+      - CELATID
+      - SECTOPOD
+      - FLOATER_SOLDIER
+costSoldier: 20000
+costEngineer: 25000
+costScientist: 30000
+timePersonnel: 72

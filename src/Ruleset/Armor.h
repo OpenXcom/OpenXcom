@@ -35,7 +35,7 @@ namespace OpenXcom
 class Armor
 {
 private:
-	std::string _type, _spriteSheet, _corpseItem;
+	std::string _type, _spriteSheet, _spriteInv, _corpseItem, _storeItem;
 	int _frontArmor, _sideArmor, _rearArmor, _underArmor, _drawingRoutine;
 	MovementType _movementType;
 	int _size;
@@ -53,6 +53,8 @@ public:
 	std::string getType() const;
 	/// Gets the unit's sprite sheet.
 	std::string getSpriteSheet() const;
+	/// Gets the unit's inventory sprite.
+	std::string getSpriteInventory() const;
 	/// Sets the different armor levels.
 	void setArmor(int front, int side, int rear, int under);
 	/// Get the front armor level.
@@ -67,6 +69,8 @@ public:
 	void setCorpseItem(const std::string &corpseItem);
 	/// Get the corpse item.
 	std::string getCorpseItem() const;
+	/// Get the stores item.
+	std::string getStoreItem() const;
 	/// Get the battlescape drawing routine ID.
 	int getDrawingRoutine() const;
 	/// Get whether the armor can fly.

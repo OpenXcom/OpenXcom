@@ -765,6 +765,16 @@ Armor *const Ruleset::getArmor(const std::string &name) const
 }
 
 /**
+ * Returns the list of all armors
+ * provided by the ruleset.
+ * @return List of armors.
+ */
+std::vector<std::string> Ruleset::getArmorsList() const
+{
+	return _armorsIndex;
+}
+
+/**
  * Returns the cost of an individual soldier
  * for purchase/maintenance.
  * @return Cost.

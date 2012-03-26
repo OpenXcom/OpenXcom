@@ -30,7 +30,7 @@ class TextButton;
 class Window;
 class Text;
 class TextList;
-class RuleCraftWeapon;
+class Armor;
 
 /**
  * Select Armor window that allows to
@@ -46,6 +46,7 @@ private:
 	Window *_window;
 	Text *_txtTitle, *_txtSoldier, *_txtType, *_txtQuantity;
 	TextList *_lstArmor;
+	std::vector<Armor*> _armors;
 public:
 	/// Creates the Soldier Armor state.
 	SoldierArmorState(Game *game, Base *base, unsigned int soldier);
