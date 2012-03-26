@@ -1117,7 +1117,18 @@ void BattleUnit::prepareNewTurn()
 	// recover TUs
 	int TURecovery = getStats()->tu;
 	// Each fatal wound to the left or right leg reduces the soldier's TUs by 10%.
-	TURecovery -= (TURecovery * (_fatalWounds[BODYPART_LEFTLEG]+_fatalWounds[BODYPART_RIGHTLEG] * 10))/100;
+	TURecovery -= (TURecovery * (_fatalWounds[BODYPART_LEFTLEG]+_fatalWounds[BODYPART_RIGHTLEG]) * 10)/100;
+	// Calculating encumbrance
+	int totalWeight = 0;
+	for (std::vector<BattleItem*>::const_iterator i = _inventory.begin(); i != _inventory.end(); ++i)
+	{
+		totalWeight += (*i)->getRules()->getWeight();
+	}
+	// If encumbered, account for it, second check is a safeguard
+	if(getStats()->strength < totalWeight && totalWeight > 0)
+	{
+		TURecovery = (TURecovery * getStats()->strength)/totalWeight;
+	}
 	setTimeUnits(TURecovery);
 
 	// recover energy

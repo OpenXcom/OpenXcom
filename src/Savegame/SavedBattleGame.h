@@ -164,6 +164,8 @@ public:
 	void removeUnconsciousBodyItem(BattleUnit *bu);
 	/// Set or try to set a unit of a certain size on a certain position of the map.
 	bool setUnitPosition(BattleUnit *bu, const Position &position, bool testOnly = false);
+	/// Beginning-of-turn preparations for all units of a faction
+	void prepareFactionNewTurn(UnitFaction side);
 };
 
 }

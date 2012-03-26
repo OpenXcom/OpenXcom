@@ -177,6 +177,8 @@ void InventoryState::btnOkClick(Action *action)
 	if (!_tu)
 	{
 		_battleGame->resetUnitTiles();
+		// Have to recalculate all new turn effects before first turn (handle encumbrance and first turn of two-part mission)
+		_battleGame->prepareFactionNewTurn(FACTION_PLAYER);
 	}
 	_battleGame->getTileEngine()->calculateTerrainLighting(); // dropping/picking up flares
 }

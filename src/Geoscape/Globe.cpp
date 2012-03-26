@@ -1254,7 +1254,7 @@ void Globe::getPolygonTextureAndShade(double lon, double lat, int *texture, int 
  * @param angle Angle.
  * @return Normalized angle.
  */
-double Globe::normalizeAngle(double angle) const
+inline double Globe::normalizeAngle(double angle) const
 {
 	return (angle - 2 * M_PI * floor((angle + M_PI) / (2 * M_PI)));
 }
