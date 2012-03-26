@@ -92,6 +92,7 @@ void RuleUfo::load(const YAML::Node &node, Ruleset *ruleset)
 			i.second()["name"] >> name;
 			RuleTerrain *rule = new RuleTerrain(name);
 			rule->load(i.second(), ruleset);
+			_battlescapeTerrainData = rule;
 		}
 	}
 }
