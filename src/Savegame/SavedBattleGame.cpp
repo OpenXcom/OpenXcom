@@ -712,7 +712,7 @@ void SavedBattleGame::endTurn()
 			selectNextPlayerUnit();
 	}
 	
-	// hide all aliens (VOF calculations below will turn them visible again)
+	// hide all aliens (FOV calculations below will turn them visible again)
 	for (std::vector<BattleUnit*>::iterator i = _units.begin(); i != _units.end(); ++i)
 	{
 		if ((*i)->getFaction() != FACTION_PLAYER)
@@ -721,12 +721,10 @@ void SavedBattleGame::endTurn()
 		}
 	}
 
+	prepareFactionNewTurn(_side);
+
 	for (std::vector<BattleUnit*>::iterator i = _units.begin(); i != _units.end(); ++i)
 	{
-		if ((*i)->getFaction() == _side)
-		{
-			(*i)->prepareNewTurn();
-		}
 		_tileEngine->calculateFOV(*i);
 	}
 
@@ -1110,6 +1108,19 @@ bool SavedBattleGame::setUnitPosition(BattleUnit *bu, const Position &position, 
 	}
 
 	return true;
+}
+/**
+ * Function updates all units of a faction for a new turn.
+ * @param side Faction to prepare for new turn.
+ */
+void SavedBattleGame::prepareFactionNewTurn(UnitFaction side){
+	for (std::vector<BattleUnit*>::iterator i = _units.begin(); i != _units.end(); ++i)
+	{
+		if ((*i)->getFaction() == _side)
+		{
+			(*i)->prepareNewTurn();
+		}
+	}
 }
 
 }

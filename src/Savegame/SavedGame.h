@@ -68,6 +68,8 @@ private:
 	SavedBattleGame *_battleGame;
 	UfopaediaSaved *_ufopaedia;
 	std::vector<const RuleResearchProject *> _discovered;
+	double _globeLon, _globeLat;
+	unsigned int _globeZoom;
 
 	/// Check whether a ResearchProject can be researched
 	bool isResearchAvailable (RuleResearchProject * r, const std::vector<const RuleResearchProject *> & unlockeds) const;
@@ -130,13 +132,25 @@ public:
 	/// Gets if a research has been unlocked.
 	bool isResearched(const std::string &research) const;
 	/// Gets the current soldier ID.
-	int *const getSoldierId() ;
+	int *const getSoldierId();
 	/// Gets the soldier matching this ID.
 	Soldier *const getSoldier(int id) const;
 	/// Handles the higher promotions.
 	bool handlePromotions();
 	/// Checks how many soldiers of a rank exist and which one has the highest score.
 	void inspectSoldiers(Soldier **highestRanked, int *total, int rank);
+	/// Gets the current Globe longitude.
+	double getGlobeLon() const;
+	/// Sets the current Globe longitude.
+	void setGlobeLon(double lon);
+	/// Gets the current Globe latitude.
+	double getGlobeLat() const;
+	/// Sets the current Globe latitude.
+	void setGlobeLat(double lat);
+	/// Gets the current Globe zoom.
+	unsigned int getGlobeZoom() const;
+	/// Sets the current Globe zoom.
+	void setGlobeZoom(unsigned int zoom);
 };
 
 }

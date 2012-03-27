@@ -354,7 +354,8 @@ Globe::Globe(Game *game, int cenX, int cenY, int width, int height, int x, int y
 	_mkAlienSite->setPixel(1, 2, 1);
 	_mkAlienSite->unlock();
 
-	cachePolygons();
+	_zoom = _game->getSavedGame()->getGlobeZoom();
+	center(_game->getSavedGame()->getGlobeLon(), _game->getSavedGame()->getGlobeLat());
 }
 
 /**
@@ -419,11 +420,7 @@ void Globe::cartToPolar(Sint16 x, Sint16 y, double *lon, double *lat) const
 	*lat = asin((y * sin(c) * cos(_cenLat)) / rho + cos(c) * sin(_cenLat));
 	*lon = atan2(x * sin(c),(rho * cos(_cenLat) * cos(c) - y * sin(_cenLat) * sin(c))) + _cenLon;
 
-	// Keep between 0 and 2xPI
-	while (*lon < 0)
-		*lon += 2 * M_PI;
-	while (*lon >= 2 * M_PI)
-		*lon -= 2 * M_PI;
+	*lon = normalizeAngle(*lon);
 }
 
 /**
@@ -597,6 +594,7 @@ void Globe::zoomIn()
 	if (_zoom < static_data.getRadiusNum() - 1)
 	{
 		_zoom++;
+		_game->getSavedGame()->setGlobeZoom(_zoom);
 		cachePolygons();
 	}
 }
@@ -609,6 +607,7 @@ void Globe::zoomOut()
 	if (_zoom > 0)
 	{
 		_zoom--;
+		_game->getSavedGame()->setGlobeZoom(_zoom);
 		cachePolygons();
 	}
 }
@@ -619,6 +618,7 @@ void Globe::zoomOut()
 void Globe::zoomMin()
 {
 	_zoom = 0;
+	_game->getSavedGame()->setGlobeZoom(_zoom);
 	cachePolygons();
 }
 
@@ -628,6 +628,7 @@ void Globe::zoomMin()
 void Globe::zoomMax()
 {
 	_zoom = static_data.getRadiusNum() - 1;
+	_game->getSavedGame()->setGlobeZoom(_zoom);
 	cachePolygons();
 }
 
@@ -639,8 +640,14 @@ void Globe::zoomMax()
  */
 void Globe::center(double lon, double lat)
 {
-	_cenLon = lon;
-	_cenLat = lat;
+	// Constraining lon and lat to [-M_PI; M_PI]
+	_cenLon = normalizeAngle(lon);
+	_cenLat = normalizeAngle(lat);
+
+	// Updating SavedGame
+	_game->getSavedGame()->setGlobeLon(_cenLon);
+	_game->getSavedGame()->setGlobeLat(_cenLat);
+
 	cachePolygons();
 }
 
@@ -861,9 +868,7 @@ void Globe::blink()
  */
 void Globe::rotate()
 {
-	_cenLon += _rotLon;
-	_cenLat += _rotLat;
-	cachePolygons();
+	center(_cenLon + _rotLon, _cenLat + _rotLat);
 }
 
 /**
@@ -1242,6 +1247,16 @@ void Globe::getPolygonTextureAndShade(double lon, double lat, int *texture, int 
 			return;
 		}
 	}
+}
+
+/**
+ * Constrains angle to [-M_PI, M_PI]
+ * @param angle Angle.
+ * @return Normalized angle.
+ */
+inline double Globe::normalizeAngle(double angle) const
+{
+	return (angle - 2 * M_PI * floor((angle + M_PI) / (2 * M_PI)));
 }
 
 }

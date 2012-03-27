@@ -75,6 +75,8 @@ private:
 	void cache(std::list<Polygon*> *polygons, std::list<Polygon*> *cache);
 	/// Get position of sun relative to given position in polar cords and date.
 	Cord getSunDirection(double lon, double lat) const;
+	/// Normalizes angle in [-M_PI; M_PI].
+	inline double normalizeAngle(double angle) const;
 public:
 	/// Creates a new globe at the specified position and size.
 	Globe(Game *game, int cenX, int cenY, int width, int height, int x = 0, int y = 0);

@@ -84,7 +84,7 @@ bool equalProduction::operator()(const Production * p) const
  * Initializes a brand new saved game according to the specified difficulty.
  * @param difficulty Game difficulty.
  */
-SavedGame::SavedGame(GameDifficulty difficulty) : _difficulty(difficulty), _funds(0), _countries(), _regions(), _bases(), _ufos(), _craftId(), _waypoints(), _ufoId(1), _waypointId(1), _soldierId(1), _battleGame(0)
+SavedGame::SavedGame(GameDifficulty difficulty) : _difficulty(difficulty), _funds(0), _countries(), _regions(), _bases(), _ufos(), _craftId(), _waypoints(), _ufoId(1), _waypointId(1), _soldierId(1), _battleGame(0), _globeLon(0.0), _globeLat(0.0), _globeZoom(0)
 {
 	RNG::init();
 	_time = new GameTime(6, 1, 1, 1999, 12, 0, 0);
@@ -268,6 +268,14 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	{
 		_ufopaedia->load(*pName, rule);
 	}
+
+	if (doc.FindValue("globeLon"))
+	{
+		doc["globeLon"] >> _globeLon;
+		doc["globeLat"] >> _globeLat;
+		doc["globeZoom"] >> _globeZoom;
+	}
+
 	fin.close();
 }
 
@@ -352,6 +360,9 @@ void SavedGame::save(const std::string &filename) const
 	}
 	out << YAML::Key << "ufopaedia" << YAML::Value;
 	_ufopaedia->save(out);
+	out << YAML::Key << "globeLon" << YAML::Value << _globeLon;
+	out << YAML::Key << "globeLat" << YAML::Value << _globeLat;
+	out << YAML::Key << "globeZoom" << YAML::Value << _globeZoom;
 	out << YAML::EndMap;
 	sav << out.c_str();
 	sav.close();
@@ -835,6 +846,60 @@ void SavedGame::inspectSoldiers(Soldier **highestRanked, int *total, int rank)
 			}
 		}
 	}
+}
+
+/**
+ * Gets the current Globe viewpoint longitude.
+ * @return Globe longitude.
+ */
+double SavedGame::getGlobeLon() const
+{
+	return _globeLon;
+}
+
+/**
+ * Sets the current Globe viewpoint longitude.
+ * @param lon Globe longitude.
+ */
+void SavedGame::setGlobeLon(double lon)
+{
+	_globeLon = lon;
+}
+
+/**
+ * Gets the current Globe viewpoint latitude.
+ * @return Globe latitude.
+ */
+double SavedGame::getGlobeLat() const
+{
+	return _globeLat;
+}
+
+/**
+ * Sets the current Globe viewpoint latitude.
+ * @param lat Globe latitude.
+ */
+void SavedGame::setGlobeLat(double lat)
+{
+	_globeLat = lat;
+}
+
+/**
+ * Gets the current Globe zoom.
+ * @return Globe zoom level.
+ */
+unsigned int SavedGame::getGlobeZoom() const
+{
+	return _globeZoom;
+}
+
+/**
+ * Sets the current Globe zoom.
+ * @param zoom Globe zoom level.
+ */
+void SavedGame::setGlobeZoom(unsigned int zoom)
+{
+	_globeZoom = zoom;
 }
 
 }
