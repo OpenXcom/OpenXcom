@@ -46,6 +46,7 @@
 #include "../Savegame/Waypoint.h"
 #include "../Engine/ShaderMove.h"
 #include "../Engine/ShaderRepeat.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -58,8 +59,6 @@ const double Globe::ROTATE_LATITUDE = 0.15;
 ///helper class for `Globe` for drawing earth globe with shadows
 class GlobeStaticData
 {
-	///list of dimension of earth on screen per zoom level
-	std::vector<double> radius;
 	///normal of each pixel in earth globe per zoom level
 	std::vector<std::vector<Cord> > earth_data;
 	///data sample used for noise in shading
@@ -69,10 +68,19 @@ class GlobeStaticData
 	std::vector<ShaderMove<Cord>* > earth;
 	///warper araund `random_noise_data` for `ShaderDraw` function
 	ShaderRepeat<Sint16>* random_noise;
+	///list of dimension of earth on screen per zoom level
+	std::vector<double> radius;
+
 public: 
 	///dimension of earth graphic
 	const std::pair<int,int> earth_size;
-	
+
+	///array of shading gradient
+	Sint16 shade_gradient[240];
+
+	///earth inclination flag
+	bool is_seasons;
+
 	
 	/**
 	 * Function returning normal vector of sphere surface
@@ -107,9 +115,9 @@ public:
 		}
 	}
 	
-	
+	//initialization	
 	GlobeStaticData():
-			earth_size(std::make_pair(300, 200))
+			earth_size(std::make_pair(260, 200))
 	{
 		
 		radius.push_back(90);
@@ -119,7 +127,8 @@ public:
 		radius.push_back(450);
 		radius.push_back(720);
 		earth_data.resize(radius.size());
-		
+
+		//filling normal field for each radius
 		for(int r = 0; r<radius.size(); ++r)
 		{
 			earth_data[r].resize(earth_size.first * earth_size.second);
@@ -131,13 +140,58 @@ public:
 			earth.push_back(new ShaderMove<Cord>(earth_data[r], earth_size.first, earth_size.second));
 			earth[r]->setMove(-earth_size.first/2, -earth_size.second/2);
 		}
-		
+
+		//filling random noise "texture"
 		const int random_surf_size = 60;
 		random_noise_data.resize(random_surf_size * random_surf_size);
 		for(int i=0; i< random_noise_data.size(); ++i)
-			random_noise_data[i] = rand()%64;
+			random_noise_data[i] = rand()%4;
 		random_noise = new ShaderRepeat<Sint16>(random_noise_data, random_surf_size, random_surf_size );
-		
+
+		//filling terminator gradient LUT
+		for (int i=0; i<240; ++i)
+		{
+			int j = i - 120;
+
+			if (j<-66) j=-16;
+			else
+			if (j<-48) j=-15;
+			else
+			if (j<-33) j=-14;
+			else
+			if (j<-22) j=-13;
+			else
+			if (j<-15) j=-12;
+			else
+			if (j<-11) j=-11;
+			else
+			if (j<-9) j=-10;
+
+			if (j>120) j=19;
+			else
+			if (j>98) j=18;
+			else
+			if (j>86) j=17;
+			else
+			if (j>74) j=16;
+			else
+			if (j>54) j=15;
+			else
+			if (j>38) j=14;
+			else
+			if (j>26) j=13;
+			else
+			if (j>18) j=12;
+			else
+			if (j>13) j=11;
+			else
+			if (j>10) j=10;
+			else
+			if (j>8) j=9;
+
+			shade_gradient[i]= j+16;
+		}
+
 	}
 	~GlobeStaticData()
 	{
@@ -161,6 +215,10 @@ public:
 	inline int getRadiusNum()
 	{
 		return radius.size();
+	}
+	inline void initSeasons()
+	{
+		is_seasons = Options::getBool("globeSeasons");
 	}
 };
 
@@ -187,15 +245,22 @@ struct CreateShadow
 		temp.y *= temp.y;
 		temp.z *= temp.z;
 		temp.x += temp.z + temp.y;
-		temp.x = sqrt(temp.x);
 		//we have norm of distance between 2 vectors, now stored in `x`
-		temp.x -= sqrt(2.0);
-		temp.x *= 8*500.;
+
+		temp.x -= 2;
+		temp.x *= 125.;
+
+		if (temp.x < -110) temp.x = -31;
+		else
+		if (temp.x > 120) temp.x = 50;
+		else
+		temp.x = static_data.shade_gradient[(Sint16)temp.x + 120];
+
 		temp.x -= noise;
+
 		if(temp.x > 0.)
 		{
-			const Sint16 val_pre = ((Sint16)temp.x)>>3;
-			const Sint16 val = (val_pre> 31)? 31 : val_pre;
+			const Sint16 val = (temp.x> 31)? 31 : (Sint16)temp.x;
 			const int d = dest & helper::ColorGroup;
 			if(d ==  Palette::blockOffset(12) || d ==  Palette::blockOffset(13))
 			{
@@ -205,7 +270,8 @@ struct CreateShadow
 			else
 			{
 				//this pixel is land
-				const int s = (val>>2);
+				if (dest==0) return val;
+				const int s = val / 3;
 				const int e = dest+s;
 				if(e > d + helper::ColorShade)
 					return d + helper::ColorShade;
@@ -355,6 +421,8 @@ Globe::Globe(Game *game, int cenX, int cenY, int width, int height, int x, int y
 	_mkAlienSite->unlock();
 
 	cachePolygons();
+	
+	static_data.initSeasons();
 }
 
 /**
@@ -886,7 +954,8 @@ void Globe::draw()
 void Globe::drawOcean()
 {
 	lock();
-	ShaderDraw<Ocean>(ShaderSurface(this));
+	drawCircle(_cenX+1, _cenY, static_data.getRadius(_zoom)+20, Palette::blockOffset(12)+0);
+//	ShaderDraw<Ocean>(ShaderSurface(this));
 	unlock();
 }
 
@@ -925,22 +994,49 @@ void Globe::drawLand()
 Cord Globe::getSunDirection(double lon, double lat) const
 {
 	const double curTime = _game->getSavedGame()->getTime()->getDaylight();
-	const double rot = curTime* 2*M_PI;
-	
-	const double sun = - 0.26 * cos( M_PI*( 1. - (_game->getSavedGame()->getTime()->getMonth()*31 + _game->getSavedGame()->getTime()->getDay())/178.));
-	const double sun_min = 1. - sun;
-	
+	const double rot = curTime * 2*M_PI;
+	double sun;
+
+	if (static_data.is_seasons)
+	{
+		const int MonthDays1[] = {0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365};
+		const int MonthDays2[] = {0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335, 366};
+
+		int year=_game->getSavedGame()->getTime()->getYear();
+		int month=_game->getSavedGame()->getTime()->getMonth()-1;
+		int day=_game->getSavedGame()->getTime()->getDay()-1;
+
+		double tm = (double)(( _game->getSavedGame()->getTime()->getHour() * 60
+			+ _game->getSavedGame()->getTime()->getMinute() ) * 60
+			+ _game->getSavedGame()->getTime()->getSecond() ) / 86400; //day fraction is also taken into account
+
+		double CurDay;
+		if (year%4 == 0 && !(year%100 == 0 && year%400 != 0))
+			CurDay = (MonthDays2[month] + day + tm )/366 - 0.219; //spring equinox (start of astronomic year)
+		else
+			CurDay = (MonthDays1[month] + day + tm )/365 - 0.219;
+		if (CurDay<0) CurDay += 1.;
+
+		sun = -0.261 * sin(CurDay*2*M_PI);
+	}
+	else
+		sun = 0;
+
 	Cord sun_direction(cos(rot+lon), sin(rot+lon)*-sin(lat), sin(rot+lon)*cos(lat));
 
 	Cord pole(0, cos(lat), sin(lat));
 
-	sun_direction *= sun_min;
+	if (sun>0)
+		 sun_direction *= 1. - sun;
+	else
+		 sun_direction *= 1. + sun;
+
 	pole *= sun;
 	sun_direction += pole;
 	double norm = sun_direction.norm();
 	//norm should be always greater than 0
 	norm = 1./norm;
-	sun_direction *=norm;
+	sun_direction *= norm;
 	return sun_direction;
 }
 
@@ -1232,8 +1328,14 @@ void Globe::keyboardPress(Action *action, State *state)
  */
 void Globe::getPolygonTextureAndShade(double lon, double lat, int *texture, int *shade)
 {
+	///this is shade conversion from 0..31 levels of geoscape to battlescape levels 0..15
+	int worldshades[32] = {  0, 0, 0, 0, 1, 1, 2, 2,
+							 3, 3, 4, 4, 5, 5, 6, 6,
+							 7, 7, 8, 8, 9, 9,10,11,
+							11,12,12,13,13,14,15,15};
+
 	*texture = -1;
-	*shade = CreateShadow::getShadowValue(0, Cord(0.,0.,1.), getSunDirection(lon, lat), 0);
+	*shade = worldshades[ CreateShadow::getShadowValue(0, Cord(0.,0.,1.), getSunDirection(lon, lat), 0) ];
 	for (std::list<Polygon*>::iterator i = _game->getResourcePack()->getPolygons()->begin(); i != _game->getResourcePack()->getPolygons()->end(); ++i)
 	{
 		if (insidePolygon(lon, lat, *i))

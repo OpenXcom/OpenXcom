@@ -68,6 +68,7 @@ void createDefault()
 	setBool("battleRangeBasedAccuracy", false);
 	setBool("fpsCounter", false);
 	setBool("craftLaunchAlways", false);
+	setBool("globeSeasons", false);
 }
 
 /**

@@ -115,7 +115,7 @@ void BattlescapeGenerator::setWorldTexture(int texture)
  */
 void BattlescapeGenerator::setWorldShade(int shade)
 {
-	if (shade > 7) shade = 7;
+	if (shade > 15) shade = 15;
 	if (shade < 0) shade = 0;
 	_worldShade = shade;
 }
@@ -323,8 +323,7 @@ void BattlescapeGenerator::run()
 
 
 	// set shade (alien bases are a little darker, sites depend on worldshade)
-	int worldshades[8] = { 0, 1, 2, 3, 5, 7, 9 , 15 };
-	_save->setGlobalShade(worldshades[_worldShade]);
+	_save->setGlobalShade(_worldShade);
 
 	_save->getTileEngine()->calculateSunShading();
 	_save->getTileEngine()->calculateTerrainLighting();
