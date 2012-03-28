@@ -385,7 +385,7 @@ void BattlescapeGenerator::deployAliens(AlienRace *race, AlienDeployment *deploy
 		int quantity = (*d).lowQty + RNG::generate(0, (*d).dQty);
 		for (int i = 0; i < quantity; i++)
 		{
-			bool outside = RNG::generate(0,99) < (*d).percentageOutsideUFO;
+			bool outside = RNG::generate(0,99) < (*d).percentageOutsideUfo;
 			if (_ufo == 0)
 				outside = false;
 			BattleUnit *unit = addAlien(_game->getRuleset()->getUnit(alienName), (*d).alienRank, outside);

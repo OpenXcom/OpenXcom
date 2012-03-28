@@ -23,30 +23,58 @@ namespace OpenXcom
 
 void operator >> (const YAML::Node& node, ItemSet& s)
 {
-	node[0] >> s.items;
+	node >> s.items;
 }
 
 YAML::Emitter& operator << (YAML::Emitter& out, const ItemSet& s)
 {
-	out << YAML::Flow;
-	out << YAML::BeginSeq << s.items << YAML::EndSeq;
+	out << s.items;
 	return out;
 }
 
 void operator >> (const YAML::Node& node, DeploymentData& s)
 {
-	node[0] >> s.alienRank;
-	node[1] >> s.lowQty;
-	node[2] >> s.highQty;
-	node[3] >> s.dQty;
-	node[4] >> s.percentageOutsideUFO;
-	node[5] >> s.itemSets;
+	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
+	{
+		std::string key;
+		i.first() >> key;
+		if (key == "alienRank")
+		{
+			i.second() >> s.alienRank;
+		}
+		else if (key == "lowQty")
+		{
+			i.second() >> s.lowQty;
+		}
+		else if (key == "highQty")
+		{
+			i.second() >> s.highQty;
+		}
+		else if (key == "dQty")
+		{
+			i.second() >> s.dQty;
+		}
+		else if (key == "percentageOutsideUfo")
+		{
+			i.second() >> s.percentageOutsideUfo;
+		}
+		else if (key == "itemSets")
+		{
+			i.second() >> s.itemSets;
+		}
+	}
 }
 
 YAML::Emitter& operator << (YAML::Emitter& out, const DeploymentData& s)
 {
-	out << YAML::Flow;
-	out << YAML::BeginSeq << s.alienRank << s.lowQty << s.highQty << s.dQty << s.percentageOutsideUFO << s.itemSets << YAML::EndSeq;
+	out << YAML::BeginMap;
+	out << YAML::Key << "alienRank" << YAML::Value << s.alienRank;
+	out << YAML::Key << "lowQty" << YAML::Value << s.lowQty;
+	out << YAML::Key << "highQty" << YAML::Value << s.highQty;
+	out << YAML::Key << "dQty" << YAML::Value << s.dQty;
+	out << YAML::Key << "percentageOutsideUfo" << YAML::Value << s.percentageOutsideUfo;
+	out << YAML::Key << "itemSets" << YAML::Value << s.itemSets;
+	out << YAML::EndMap;
 	return out;
 }
 

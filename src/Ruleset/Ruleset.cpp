@@ -116,6 +116,14 @@ Ruleset::~Ruleset()
 	{
 		delete i->second;
 	}
+	for (std::map<std::string, AlienRace*>::iterator i = _alienRaces.begin(); i != _alienRaces.end(); ++i)
+	{
+		delete i->second;
+	}
+	for (std::map<std::string, AlienDeployment*>::iterator i = _alienDeployments.begin(); i != _alienDeployments.end(); ++i)
+	{
+		delete i->second;
+	}
 	for (std::map<std::string, Armor*>::iterator i = _armors.begin(); i != _armors.end(); ++i)
 	{
 		delete i->second;
@@ -412,6 +420,25 @@ void Ruleset::load(const std::string &filename)
 				rule->load(*j);
 			}
 		}
+		else if (key == "alienDeployments")
+		{
+			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
+			{
+				std::string type;
+				(*j)["type"] >> type;
+				AlienDeployment *rule;
+				if (_alienDeployments.find(type) != _alienDeployments.end())
+				{
+					rule = _alienDeployments[type];
+				}
+				else
+				{
+					rule = new AlienDeployment(type);
+					_alienDeployments[type] = rule;
+				}
+				rule->load(*j);
+			}
+		}
 		else if (key == "costSoldier")
 		{
 			i.second() >> _costSoldier;
@@ -537,6 +564,13 @@ void Ruleset::save(const std::string &filename) const
 	out << YAML::Key << "alienRaces" << YAML::Value;
 	out << YAML::BeginSeq;
 	for (std::map<std::string, AlienRace*>::const_iterator i = _alienRaces.begin(); i != _alienRaces.end(); ++i)
+	{
+		i->second->save(out);
+	}
+	out << YAML::EndSeq;
+	out << YAML::Key << "alienDeployments" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::map<std::string, AlienDeployment*>::const_iterator i = _alienDeployments.begin(); i != _alienDeployments.end(); ++i)
 	{
 		i->second->save(out);
 	}
