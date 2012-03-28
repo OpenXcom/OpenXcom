@@ -540,7 +540,7 @@ void XcomResourcePack::loadBattlescapeResources()
 						  "M2",
 						  "M3"};
 
-	for (int i = 0; i < 3; ++i)
+	for (int i = 0; i < 4; ++i)
 	{
 		std::stringstream s1, s1full, s2, s2full;
 		s1 << invs[i] << ".SPK";
