@@ -517,32 +517,54 @@ void XcomResourcePack::loadBattlescapeResources()
 		_surfaces[scrs[i]]->loadScr(CrossPlatform::getDataFile(s.str()));
 	}
 
-	std::string spks[] = {"TAC01.SCR",
-						  "MAN_0F0.SPK",
-						  "MAN_0F1.SPK",
-						  "MAN_0F2.SPK",
-						  "MAN_0F3.SPK",
-						  "MAN_0M0.SPK",
-						  "MAN_0M1.SPK",
-						  "MAN_0M2.SPK",
-						  "MAN_0M3.SPK",
-						  "MAN_1F0.SPK",
-						  "MAN_1F1.SPK",
-						  "MAN_1F2.SPK",
-						  "MAN_1F3.SPK",
-						  "MAN_1M0.SPK",
-						  "MAN_1M1.SPK",
-						  "MAN_1M2.SPK",
-						  "MAN_1M3.SPK",
-						  "MAN_2.SPK",
-						  "MAN_3.SPK"};
+	std::string spks[] = {"TAC01.SCR"};
 
-	for (int i = 0; i < 19; ++i)
+	for (int i = 0; i < 1; ++i)
 	{
 		std::stringstream s;
 		s << "UFOGRAPH/" << spks[i];
 		_surfaces[spks[i]] = new Surface(320, 200);
 		_surfaces[spks[i]]->loadSpk(CrossPlatform::getDataFile(s.str()));
+	}
+
+	std::string invs[] = {"MAN_0",
+						  "MAN_1",
+						  "MAN_2",
+						  "MAN_3"};
+	std::string sets[] = {"F0",
+						  "F1",
+						  "F2",
+						  "F3",
+						  "M0",
+						  "M1",
+						  "M2",
+						  "M3"};
+
+	for (int i = 0; i < 3; ++i)
+	{
+		std::stringstream s1, s1full, s2, s2full;
+		s1 << invs[i] << ".SPK";
+		s1full << "UFOGRAPH/" << s1.str();
+		s2 << invs[i] << sets[0] << ".SPK";
+		s2full << "UFOGRAPH/" << s2.str();
+		// Load fixed inventory image
+		if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s1full.str())))
+		{
+			_surfaces[s1.str()] = new Surface(320, 200);
+			_surfaces[s1.str()]->loadSpk(CrossPlatform::getDataFile(s1full.str()));
+		}
+		// Load gender-based inventory image
+		if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s2full.str())))
+		{
+			for (int j = 0; j < 8; j++)
+			{
+				std::stringstream s3, s3full;
+				s3 << invs[i] << sets[j] << ".SPK";
+				s3full << "UFOGRAPH/" << s3.str();
+				_surfaces[s3.str()] = new Surface(320, 200);
+				_surfaces[s3.str()]->loadSpk(CrossPlatform::getDataFile(s3full.str()));
+			}
+		}
 	}
 }
 

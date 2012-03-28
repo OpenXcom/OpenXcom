@@ -19,6 +19,7 @@
 #include "InventoryState.h"
 #include <sstream>
 #include "../Engine/Game.h"
+#include "../Engine/CrossPlatform.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
 #include "../Engine/Font.h"
@@ -157,6 +158,10 @@ void InventoryState::init()
 		if (s->getLook() == LOOK_AFRICAN)
 			look += "3";
 		look += ".SPK";
+		if (!CrossPlatform::fileExists(CrossPlatform::getDataFile("UFOGRAPH/" + look)))
+		{
+			look = s->getArmor()->getSpriteInventory() + ".SPK";
+		}
 		_game->getResourcePack()->getSurface(look)->blit(_soldier);
 	}
 	if (_tu)
