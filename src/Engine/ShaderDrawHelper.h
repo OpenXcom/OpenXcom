@@ -252,8 +252,6 @@ public:
 	 * Attention: after use of this constructor you change size of surface `s` 
 	 * then `_orgin` will be invalid and use of this object will cause memory exception. 
      * @param f vector that are treated as surface
-     * @param max_x x dimension of `s`
-     * @param max_y y dimension of `s`
      */		
 	inline ShaderBase(Surface* s):
 		_orgin((Uint8*) s->getSurface()->pixels),
@@ -357,8 +355,6 @@ public:
 	 * Attention: after use of this constructor you change size of surface `s` 
 	 * then `_orgin` will be invalid and use of this object will cause memory exception. 
      * @param f vector that are treated as surface
-     * @param max_x x dimension of `s`
-     * @param max_y y dimension of `s`
      */	
 	inline ShaderBase(const Surface* s):
 		_orgin((Uint8*) s->getSurface()->pixels),
@@ -574,13 +570,18 @@ struct controler_base
 	PixelPtr ptr_pos_y;
 	PixelPtr ptr_pos_x;
 	GraphSubset range;
-	int beg_x;
-	int beg_y;
+	int start_x;
+	int start_y;
 	
 	const std::pair<int, int> step;
 
 		
-	controler_base(PixelPtr base, const GraphSubset& r, const std::pair<int, int>& s) : data(base), ptr_pos_y(0), ptr_pos_x(0), range(r), beg_x(), beg_y(), step(s)
+	controler_base(PixelPtr base, const GraphSubset& d, const GraphSubset& r, const std::pair<int, int>& s) :
+		data(base + d.beg_x*s.first + d.beg_y*s.second),
+		ptr_pos_y(0), ptr_pos_x(0),
+		range(r),
+		start_x(), start_y(),
+		step(s)
 	{
 		
 	}
@@ -598,14 +599,14 @@ struct controler_base
 	
 	inline void set_range(const GraphSubset& r)
 	{
-		beg_x = r.beg_x - range.beg_x;
-		beg_y = r.beg_y - range.beg_y;
+		start_x = r.beg_x - range.beg_x;
+		start_y = r.beg_y - range.beg_y;
 		range = r;
 	}
 	
 	inline void mod_y(int& begin, int& end)
 	{
-		ptr_pos_y = data + step.first * beg_x + step.second * beg_y;
+		ptr_pos_y = data + step.first * start_x + step.second * start_y;
 	}
 	inline void set_y(const int& begin, const int& end)
 	{
@@ -646,7 +647,7 @@ struct controler<ShaderBase<Pixel> > : public controler_base<typename ShaderBase
 	
 	typedef controler_base<PixelPtr, PixelRef> base_type;
 		
-	controler(const ShaderBase<Pixel>& f) : base_type(f.ptr(), f.getImage(), std::make_pair(1, f.pitch()))
+	controler(const ShaderBase<Pixel>& f) : base_type(f.ptr(), f.getDomain(), f.getImage(), std::make_pair(1, f.pitch()))
 	{
 		
 	}
