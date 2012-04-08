@@ -8,6 +8,10 @@ pkgdata_DATA = \
 	bin/data/README.txt \
 	bin/data/research.dat
 
+rulesetdir =  $(pkgdatadir)/Ruleset
+ruleset_DATA = \
+	bin/data/Ruleset/Xcom1Ruleset.rul
+
 languagedir = $(pkgdatadir)/Language
 language_DATA = \
 	bin/data/Language/Big.fnt \
