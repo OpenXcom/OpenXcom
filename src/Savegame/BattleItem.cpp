@@ -31,7 +31,7 @@ namespace OpenXcom
  */
 BattleItem::BattleItem(RuleItem *rules, int *id) : _id(*id), _rules(rules), _owner(0), _previousOwner(0), _unit(0), _tile(0), _inventorySlot(0), _inventoryX(0), _inventoryY(0), _ammoItem(0), _explodeTurn(0), _ammoQuantity(0), _painKiller(0), _heal(0), _stimulant(0)
 {
-	if (_rules->getBattleType() == BT_AMMO)
+	if (_rules && _rules->getBattleType() == BT_AMMO)
 	{
 		setAmmoQuantity(_rules->getClipSize());
 	} else if (_rules && _rules->getBattleType() == BT_MEDIKIT)
@@ -43,7 +43,7 @@ BattleItem::BattleItem(RuleItem *rules, int *id) : _id(*id), _rules(rules), _own
 	(*id)++;
 
 	// weapon does not need ammo, ammo item points to weapon
-	if (_rules->getClipSize() == -1)
+	if (_rules && _rules->getClipSize() == -1)
 	{
 		_ammoItem = this;
 		setAmmoQuantity(99999);

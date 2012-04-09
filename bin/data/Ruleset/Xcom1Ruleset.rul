@@ -2051,7 +2051,7 @@ armors:
     movementType: 1
   - type: CYBERDISC_ARMOR
     spriteSheet: CYBER.PCK
-    corpseItem: STR_CYBERDISC_CORPSE_
+    corpseItem: CYBERDISC_CORPSE_
     frontArmor: 90
     sideArmor: 75
     rearArmor: 60
@@ -2070,7 +2070,7 @@ armors:
       - 1
   - type: TANK_ARMOR
     spriteSheet: TANKS.PCK
-    corpseItem: STR_TANK_CORPSE_
+    corpseItem: TANK_CORPSE_
     frontArmor: 90
     sideArmor: 75
     rearArmor: 60

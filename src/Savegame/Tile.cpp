@@ -655,7 +655,7 @@ void Tile::removeItem(BattleItem *item)
  */
 int Tile::getTopItemSprite()
 {
-	int biggestWeight = 0;
+	int biggestWeight = -1;
 	int biggestItem = -1;
 	for (std::vector<BattleItem*>::iterator i = _inventory.begin(); i != _inventory.end(); ++i)
 	{
