@@ -84,13 +84,14 @@ int Projectile::calculateTrajectory(double accuracy)
 {
 	Position originVoxel, targetVoxel;
 	int direction;
-	int dirYshift[8] = {1, 1, 8, 15, 15, 15, 8, 1 };
-	int dirXshift[8] = {8, 14, 15, 15, 8, 1, 1, 1 };
+	int dirYshift[8] = {1, 4, 12, 15, 15, 15, 8, 1 };
+	int dirXshift[8] = {12, 14, 15, 15, 8, 1, 1, 1 };
 
 	originVoxel = Position(_origin.x*16, _origin.y*16, _origin.z*24);
 	BattleUnit *bu = _action.actor;
 
-	if (_action.type == BA_LAUNCH && _action.actor->getPosition() == _origin)
+	// take into account soldier height and terrain level if the projectile is launched from a soldier
+	if (_action.actor->getPosition() == _origin)
 	{
 		// calculate offset of the starting point of the projectile
 		originVoxel.z += -_save->getTile(_origin)->getTerrainLevel();
@@ -101,7 +102,7 @@ int Projectile::calculateTrajectory(double accuracy)
 		}
 
 		originVoxel.z += bu->getHeight();
-		originVoxel.z -= 3;
+		originVoxel.z -= 4;
 		if (originVoxel.z >= (_origin.z + 1)*24)
 		{
 			_origin.z++;
@@ -114,6 +115,7 @@ int Projectile::calculateTrajectory(double accuracy)
 	}
 	else
 	{
+		// don't take into account soldier height and terrain level if the projectile is not launched from a soldier(from a waypoint)
 		originVoxel.z += 12;
 	}
 

@@ -71,6 +71,7 @@ private:
 	Text *_txtDebug;
 	std::vector<State*> _popups;
 	BattlescapeGame *_battleGame;
+	bool firstInit;
 
 	void selectNextPlayerUnit(bool checkReselect);
 	void handleItemClick(BattleItem *item);

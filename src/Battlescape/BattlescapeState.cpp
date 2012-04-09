@@ -328,6 +328,8 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_gameTimer->start();
 
 	_battleGame = new BattlescapeGame(_save, this);
+
+	firstInit = true;
 }
 
 
@@ -352,6 +354,11 @@ void BattlescapeState::init()
 	_battleGame->init();
 	updateSoldierInfo();
 	_battleGame->setupCursor();
+	if (firstInit && playableUnitSelected())
+	{
+		_map->getCamera()->centerOnPosition(_save->getSelectedUnit()->getPosition());
+		firstInit = false;
+	}
 }
 
 /**

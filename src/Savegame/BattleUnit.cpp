@@ -910,9 +910,10 @@ int BattleUnit::getActionTUs(BattleActionType actionType, BattleItem *item)
 		case BA_AIMEDSHOT:
 			return (int)(getStats()->tu * item->getRules()->getTUAimed() / 100);
 		case BA_USE:
+			return (int)(getStats()->tu * item->getRules()->getTUUse() / 100);
 		case BA_MINDCONTROL:
 		case BA_PANIC:
-			return (int)(getStats()->tu * item->getRules()->getTUUse() / 100);
+			return item->getRules()->getTUUse();
 		default:
 			return 0;
 	}
