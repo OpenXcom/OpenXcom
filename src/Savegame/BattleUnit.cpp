@@ -1507,7 +1507,7 @@ bool BattleUnit::postMissionProcedures(SavedGame *geoscape)
 	}
 
 	s->addMissionCount();
-	s->addKillCount(s->getKills());
+	s->addKillCount(_kills);
 
 	UnitStats *stats = s->getCurrentStats();
 	int healthLoss = stats->health - _health;
