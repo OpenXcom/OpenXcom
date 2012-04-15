@@ -148,9 +148,7 @@ void BattleUnit::load(const YAML::Node &node)
 	_faction = (UnitFaction)a;
 	node["status"] >> a;
 	_status = (UnitStatus)a;
-	node["position"][0] >> _pos.x;
-	node["position"][1] >> _pos.y;
-	node["position"][2] >> _pos.z;
+	node["position"] >> _pos;
 	node["direction"] >> _direction;
 	node["directionTurret"] >> _directionTurret;
 	node["tu"] >> _tu;
@@ -188,8 +186,7 @@ void BattleUnit::save(YAML::Emitter &out) const
 	out << YAML::Key << "genUnitArmor" << YAML::Value << _armor->getType();
 	out << YAML::Key << "name" << YAML::Value << Language::wstrToUtf8(getName(0));
 	out << YAML::Key << "status" << YAML::Value << _status;
-	out << YAML::Key << "position" << YAML::Value << YAML::Flow;
-	out << YAML::BeginSeq << _pos.x << _pos.y << _pos.z << YAML::EndSeq;
+	out << YAML::Key << "position" << YAML::Value << _pos;
 	out << YAML::Key << "direction" << YAML::Value << _direction;
 	out << YAML::Key << "directionTurret" << YAML::Value << _directionTurret;
 	out << YAML::Key << "tu" << YAML::Value << _tu;

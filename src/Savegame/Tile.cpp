@@ -68,9 +68,7 @@ Tile::~Tile()
  */
 void Tile::load(const YAML::Node &node)
 {
-	//node["position"][0] >> _pos.x;
-	//node["position"][1] >> _pos.y;
-	//node["position"][2] >> _pos.z;
+	//node["position"] >> _pos;
 	for (int i =0; i < 4; i++)
 	{
 		node["mapDataID"][i] >> _mapDataID[i];
@@ -90,8 +88,7 @@ void Tile::load(const YAML::Node &node)
 void Tile::save(YAML::Emitter &out) const
 {
 	out << YAML::BeginMap;
-	out << YAML::Key << "position" << YAML::Value << YAML::Flow;
-	out << YAML::BeginSeq << _pos.x << _pos.y << _pos.z << YAML::EndSeq;
+	out << YAML::Key << "position" << YAML::Value << _pos;
 	out << YAML::Key << "mapDataID" << YAML::Value << YAML::Flow;
 	out << YAML::BeginSeq << _mapDataID[0] << _mapDataID[1] << _mapDataID[2] << _mapDataID[3] << YAML::EndSeq;
 	out << YAML::Key << "mapDataSetID" << YAML::Value << YAML::Flow;

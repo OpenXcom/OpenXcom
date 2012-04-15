@@ -67,9 +67,7 @@ Node::~Node()
 void Node::load(const YAML::Node &node)
 {
 	int a = 0;
-	node["position"][0] >> _pos.x;
-	node["position"][1] >> _pos.y;
-	node["position"][2] >> _pos.z;
+	node["position"] >> _pos;
 	node["id"] >> _id;
 	node["segment"] >> _segment;
 	node["rank"] >> _rank;
@@ -92,8 +90,7 @@ void Node::save(YAML::Emitter &out) const
 {
 	out << YAML::BeginMap;
 	out << YAML::Key << "id" << YAML::Value << _id;
-	out << YAML::Key << "position" << YAML::Value << YAML::Flow;
-	out << YAML::BeginSeq << _pos.x << _pos.y << _pos.z << YAML::EndSeq;
+	out << YAML::Key << "position" << YAML::Value << _pos;
 	out << YAML::Key << "segment" << YAML::Value << _segment;
 	out << YAML::Key << "type" << YAML::Value << _type;
 	out << YAML::Key << "rank" << YAML::Value << _rank;

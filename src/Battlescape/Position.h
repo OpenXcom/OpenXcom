@@ -19,6 +19,8 @@
 #ifndef OPENXCOM_POSITION_H
 #define OPENXCOM_POSITION_H
 
+#include <yaml-cpp/yaml.h>
+
 namespace OpenXcom
 {
 
@@ -62,6 +64,9 @@ public:
 	}
 
 };
+
+void operator>> (const YAML::Node& node, Position& pos);
+YAML::Emitter& operator<< (YAML::Emitter& out, const Position& pos);
 
 }
 

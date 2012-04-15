@@ -18,3 +18,21 @@
  */
 
 #include "Position.h"
+
+namespace OpenXcom
+{
+
+void operator>> (const YAML::Node& node, Position& pos)
+{
+	node[0] >> pos.x;
+	node[1] >> pos.y;
+	node[2] >> pos.z;
+}
+
+YAML::Emitter& operator<< (YAML::Emitter& out, const Position& pos)
+{
+	out << YAML::Flow << YAML::BeginSeq << pos.x << pos.y << pos.z << YAML::EndSeq;
+    return out;
+}
+
+}
