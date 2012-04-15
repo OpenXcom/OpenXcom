@@ -26,6 +26,7 @@
 #include "../Engine/SurfaceSet.h"
 #include "../Resource/ResourcePack.h"
 #include "../Savegame/SavedGame.h"
+#include "../Ruleset/Armor.h"
 #include <sstream>
 
 namespace OpenXcom
@@ -104,7 +105,12 @@ void MiniMapView::draw()
 				// alive units
 				if (t->getUnit() && t->getUnit()->getVisible())
 				{
-					Surface * s = _set->getFrame (t->getUnit()->getMiniMapSpriteIndex () + _frame);
+					int frame = t->getUnit()->getMiniMapSpriteIndex();
+					int size = t->getUnit()->getArmor()->getSize();
+					frame += (t->getPosition().y - t->getUnit()->getPosition().y) * size;
+					frame += t->getPosition().x - t->getUnit()->getPosition().x;
+					frame += _frame * size * size;
+					Surface * s = _set->getFrame(frame);
 					s->blitNShade(this, x, y, 0);
 				}
 				else
@@ -114,7 +120,12 @@ void MiniMapView::draw()
 					{
 						if ((*it)->getUnit())
 						{
-							Surface * s = _set->getFrame ((*it)->getUnit()->getMiniMapSpriteIndex () + _frame);
+							int frame = t->getUnit()->getMiniMapSpriteIndex();
+							int size = t->getUnit()->getArmor()->getSize();
+							frame += (t->getPosition().y - t->getUnit()->getPosition().y) * size;
+							frame += t->getPosition().x - t->getUnit()->getPosition().x;
+							frame += _frame * size * size;
+							Surface * s = _set->getFrame(frame);
 							s->blitNShade(this, x, y, 0);
 						}
 					}
@@ -127,7 +138,7 @@ void MiniMapView::draw()
 	}
 	int centerX = getWidth() / 2;
 	int centerY = getHeight() / 2;
-	Uint8 color = 1;
+	Uint8 color = 1 + _frame * 3;
 	int xOffset = CELL_WIDTH / 2;
 	int yOffset = CELL_HEIGHT / 2;
 	drawLine(centerX - CELL_WIDTH, centerY - CELL_HEIGHT,

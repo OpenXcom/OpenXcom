@@ -1577,11 +1577,10 @@ int BattleUnit::improveStat(int exp)
  */
 int BattleUnit::getMiniMapSpriteIndex () const
 {
-	int unitSpriteId;
 	//minimap sprite index:
 	// * 0-2   : Xcom soldier
-	// * 3-5   : Civilian
-	// * 6-8   : alien
+	// * 3-5   : Alien
+	// * 6-8   : Civilian
 	// * 9-11  : Dead unit
 	// * 12-23 : Xcom HWP
 	// * 24-35 : Alien big terror unit(cyberdisk, ...)
@@ -1592,15 +1591,18 @@ int BattleUnit::getMiniMapSpriteIndex () const
 	switch (getFaction())
 	{
 	case FACTION_HOSTILE:
-		unitSpriteId = 3;
-		break;
+		if (_armor->getSize() == 1)
+			return 3;
+		else
+			return 24;
 	case FACTION_NEUTRAL:
-		unitSpriteId = 6;
-		break;
+		return 6;
 	default:
-		unitSpriteId = 0;
+		if (_armor->getSize() == 1)
+			return 0;
+		else
+			return 12;
 	}
-	return unitSpriteId;
 }
 
 /**
