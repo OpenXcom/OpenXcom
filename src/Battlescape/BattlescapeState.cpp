@@ -131,7 +131,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	}
 	_numVisibleUnit[9]->setX(304); // center number 10
 	_warning = new WarningMessage(224, 24, _icons->getX() + 48, _icons->getY() + 32);
-	_btnLaunch = new InteractiveSurface(32, 24, (game->getScreen()->getWidth() / game->getScreen()->getXScale())-32, 0);
+	_btnLaunch = new InteractiveSurface(32, 24, game->getScreen()->getWidth() / game->getScreen()->getXScale() - 32, 0);
 	_btnLaunch->setVisible(false);
 
 	// Create soldier stats summary

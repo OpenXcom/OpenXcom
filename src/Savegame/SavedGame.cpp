@@ -757,8 +757,7 @@ Soldier *const SavedGame::getSoldier(int id) const
  */
 bool SavedGame::handlePromotions()
 {
-	int soldiersPromoted = 0;
-	int soldiersTotal = 0;
+	size_t soldiersPromoted = 0, soldiersTotal = 0;
 
 	for (std::vector<Base*>::iterator i = _bases.begin(); i != _bases.end(); ++i)
 	{

@@ -44,7 +44,7 @@ namespace OpenXcom
 		ArticleDefinitionList _visible_articles;
 
 		/// current selected article index (for prev/next navigation).
-		unsigned int _current_index;
+		size_t _current_index;
 
 	public:
 		/// Ufopaedia constructor.

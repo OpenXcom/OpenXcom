@@ -314,7 +314,7 @@ static int gmext_write_midi (const struct gmstream *stream,
 		for (int i=0; i<4; ++i)
 			midi.push_back(midi_track_header[i]);
 
-		unsigned int loffset = midi.size();
+		size_t loffset = midi.size();
 		for (int i=0; i<4; ++i)
 			midi.push_back(0);
 
@@ -339,7 +339,7 @@ static int gmext_write_midi (const struct gmstream *stream,
 
 		// rewrite track length
 		unsigned char *p = &midi[loffset];
-		unsigned int length = midi.size() - loffset - 4;
+		size_t length = midi.size() - loffset - 4;
 		p[0] = length >> 24;
 		p[1] = length >> 16;
 		p[2] = length >> 8;

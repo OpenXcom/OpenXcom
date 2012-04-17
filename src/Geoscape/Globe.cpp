@@ -200,7 +200,7 @@ public:
 		delete random_noise;
 	}
 	
-	inline const ShaderMove<Cord >& getEarthShape(int zoom)
+	inline const ShaderMove<Cord >& getEarthShape(size_t zoom)
 	{
 		return *earth[zoom];
 	}
@@ -208,11 +208,11 @@ public:
 	{
 		return *random_noise;
 	}
-	inline double getRadius(int zoom)
+	inline double getRadius(size_t zoom)
 	{
 		return radius[zoom];
 	}
-	inline int getRadiusNum()
+	inline size_t getRadiusNum()
 	{
 		return radius.size();
 	}

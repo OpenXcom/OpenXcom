@@ -47,13 +47,13 @@ private:
 	Timer *_timerLeft, *_timerRight;
 	unsigned int _sel;
 	Base *_base;
-	unsigned int _craft;
+	size_t _craft;
 	std::vector<std::string> _items;
 	/// Updates quantities of item.
 	void updateQuantity();
 public:
 	/// Creates the Craft Equipment state.
-	CraftEquipmentState(Game *game, Base *base, unsigned int craft);
+	CraftEquipmentState(Game *game, Base *base, size_t craft);
 	/// Cleans up the Craft Equipment state.
 	~CraftEquipmentState();
 	/// Runs the timers.

@@ -53,7 +53,7 @@ private:
 
 	double _cenLon, _cenLat, _rotLon, _rotLat;
 	Sint16 _cenX, _cenY;
-	unsigned int _zoom;
+	size_t _zoom;
 	SurfaceSet *_texture;
 	Game *_game;
 	Surface *_markers, *_countries;

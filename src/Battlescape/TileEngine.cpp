@@ -207,7 +207,7 @@ void TileEngine::addLight(const Position &center, int power, int layer)
  */
 bool TileEngine::calculateFOV(BattleUnit *unit)
 {
-	int visibleUnitsChecksum = 0, oldNumVisibleUnits = 0;
+	size_t visibleUnitsChecksum = 0, oldNumVisibleUnits = 0;
 	Position center = unit->getPosition();
 	Position test;
 	bool swap = (unit->getDirection()==0 || unit->getDirection()==4);

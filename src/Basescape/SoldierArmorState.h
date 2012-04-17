@@ -40,7 +40,7 @@ class SoldierArmorState : public State
 {
 private:
 	Base *_base;
-	unsigned int _soldier;
+	size_t _soldier;
 
 	TextButton *_btnCancel;
 	Window *_window;
@@ -49,7 +49,7 @@ private:
 	std::vector<Armor*> _armors;
 public:
 	/// Creates the Soldier Armor state.
-	SoldierArmorState(Game *game, Base *base, unsigned int soldier);
+	SoldierArmorState(Game *game, Base *base, size_t soldier);
 	/// Cleans up the Soldier Armor state.
 	~SoldierArmorState();
 	/// Handler for clicking the Cancel button.

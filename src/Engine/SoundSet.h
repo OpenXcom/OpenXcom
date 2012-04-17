@@ -46,7 +46,7 @@ public:
 	/// Gets a particular sound from the set.
 	Sound *const getSound(unsigned int i) const;
 	/// Gets the total sounds in the set.
-	int getTotalSounds() const;
+	size_t getTotalSounds() const;
 };
 
 }

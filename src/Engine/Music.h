@@ -41,7 +41,7 @@ public:
 	/// Loads music from the specified file.
 	void load(const std::string &filename);
 	/// Loads music from a chunk of memory.
-	void load(const void *data, unsigned int size);
+	void load(const void *data, size_t size);
 	/// Plays the music.
 	void play() const;
 };

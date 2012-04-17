@@ -46,7 +46,7 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param soldier ID of the selected soldier.
  */
-SoldierInfoState::SoldierInfoState(Game *game, Base *base, unsigned int soldier) : State(game), _base(base), _soldier(soldier)
+SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : State(game), _base(base), _soldier(soldier)
 {
 	// Create objects
 	_bg = new Surface(320, 200, 0, 0);

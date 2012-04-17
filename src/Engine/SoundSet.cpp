@@ -128,7 +128,7 @@ Sound *const SoundSet::getSound(unsigned int i) const
  * stored in the set.
  * @return Number of sounds.
  */
-int SoundSet::getTotalSounds() const
+size_t SoundSet::getTotalSounds() const
 {
 	return _sounds.size();
 }

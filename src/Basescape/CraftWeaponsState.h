@@ -40,7 +40,7 @@ class CraftWeaponsState : public State
 {
 private:
 	Base *_base;
-	unsigned int _craft, _weapon;
+	size_t _craft, _weapon;
 
 	TextButton *_btnCancel;
 	Window *_window;
@@ -49,7 +49,7 @@ private:
 	std::vector<RuleCraftWeapon*> _weapons;
 public:
 	/// Creates the Craft Weapons state.
-	CraftWeaponsState(Game *game, Base *base, unsigned int craft, unsigned int weapon);
+	CraftWeaponsState(Game *game, Base *base, size_t craft, size_t weapon);
 	/// Cleans up the Craft Weapons state.
 	~CraftWeaponsState();
 	/// Handler for clicking the Cancel button.

@@ -102,19 +102,19 @@ void SoldierNamePool::load(const std::string &filename)
 std::wstring SoldierNamePool::genName(int *gender) const
 {
 	std::wstringstream name;
-	unsigned int first = RNG::generate(1, _maleFirst.size() + _femaleFirst.size());
+	size_t first = RNG::generate(1, _maleFirst.size() + _femaleFirst.size());
 	if (first <= _maleFirst.size())
 	{
 		*gender = 0;
 		name << _maleFirst[first - 1];
-		unsigned int last = RNG::generate(1, _maleLast.size());
+		size_t last = RNG::generate(1, _maleLast.size());
 		name << " " << _maleLast[last - 1];
 	}
 	else
 	{
 		*gender = 1;
 		name << _femaleFirst[first - _maleFirst.size() - 1];
-		unsigned int last = RNG::generate(1, _femaleLast.size());
+		size_t last = RNG::generate(1, _femaleLast.size());
 		name << " " << _femaleLast[last - 1];
 	}
 	return name.str();

@@ -39,7 +39,7 @@ class SoldierInfoState : public State
 {
 private:
 	Base *_base;
-	unsigned int _soldier;
+	size_t _soldier;
 
 	Surface *_bg, *_rank;
 	TextButton *_btnOk, *_btnPrev, *_btnNext, *_btnArmor;
@@ -51,7 +51,7 @@ private:
 	Bar *_barTimeUnits, *_barStamina, *_barHealth, *_barBravery, *_barReactions, *_barFiring, *_barThrowing, *_barStrength;
 public:
 	/// Creates the Soldier Info state.
-	SoldierInfoState(Game *game, Base *base, unsigned int soldier);
+	SoldierInfoState(Game *game, Base *base, size_t soldier);
 	/// Cleans up the Soldier Info state.
 	~SoldierInfoState();
 	/// Updates the soldier info.

@@ -43,10 +43,10 @@ private:
 	TextList *_lstSoldiers;
 
 	Base *_base;
-	unsigned int _craft;
+	size_t _craft;
 public:
 	/// Creates the Craft Soldiers state.
-	CraftSoldiersState(Game *game, Base *base, unsigned int craft);
+	CraftSoldiersState(Game *game, Base *base, size_t craft);
 	/// Cleans up the Craft Soldiers state.
 	~CraftSoldiersState();
 	/// Handler for clicking the OK button.

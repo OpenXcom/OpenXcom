@@ -38,7 +38,7 @@ class CraftInfoState : public State
 {
 private:
 	Base *_base;
-	unsigned int _craft;
+	size_t _craft;
 
 	TextButton *_btnOk, *_btnW1, *_btnW2, *_btnCrew, *_btnEquip, *_btnArmor;
 	Window *_window;
@@ -47,7 +47,7 @@ private:
 	Surface *_sprite, *_weapon1, *_weapon2, *_crew, *_equip;
 public:
 	/// Creates the Craft Info state.
-	CraftInfoState(Game *game, Base *base, unsigned int craft);
+	CraftInfoState(Game *game, Base *base, size_t craft);
 	/// Cleans up the Craft Info state.
 	~CraftInfoState();
 	/// Updates the craft info.

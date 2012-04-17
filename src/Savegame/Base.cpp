@@ -399,7 +399,7 @@ int Base::getAvailableSoldiers() const
  */
 int Base::getTotalSoldiers() const
 {
-	int total = _soldiers.size();
+	size_t total = _soldiers.size();
 	for (std::vector<Transfer*>::const_iterator i = _transfers.begin(); i != _transfers.end(); ++i)
 	{
 		if ((*i)->getType() == TRANSFER_SOLDIER)
@@ -621,7 +621,7 @@ int Base::getAvailableWorkshops() const
  */
 int Base::getUsedHangars() const
 {
-	int total = _crafts.size();
+	size_t total = _crafts.size();
 	for (std::vector<Transfer*>::const_iterator i = _transfers.begin(); i != _transfers.end(); ++i)
 	{
 		if ((*i)->getType() == TRANSFER_CRAFT)
@@ -794,7 +794,7 @@ int Base::getCraftMaintenance() const
  */
 int Base::getPersonnelMaintenance() const
 {
-	int total = 0;
+	size_t total = 0;
 	total += _soldiers.size() * _rule->getSoldierCost();
 	total += _engineers * _rule->getEngineerCost();
 	total += _scientists * _rule->getScientistCost();

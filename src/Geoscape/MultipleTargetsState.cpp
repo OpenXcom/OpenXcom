@@ -55,7 +55,7 @@ MultipleTargetsState::MultipleTargetsState(Game *game, std::vector<Target*> targ
 
 	if (_targets.size() > 1)
 	{
-		int listHeight = _targets.size() * 8;
+		size_t listHeight = _targets.size() * 8;
 		int winHeight = listHeight + BUTTON_HEIGHT + OUTER_MARGIN * 2 + INNER_MARGIN + BORDER * 2;
 		int winY = (200 - winHeight) / 2;
 		int listY = winY + BORDER + OUTER_MARGIN;

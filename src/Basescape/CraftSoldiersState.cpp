@@ -42,7 +42,7 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param craft ID of the selected craft.
  */
-CraftSoldiersState::CraftSoldiersState(Game *game, Base *base, unsigned int craft) : State(game), _base(base), _craft(craft)
+CraftSoldiersState::CraftSoldiersState(Game *game, Base *base, size_t craft) : State(game), _base(base), _craft(craft)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);

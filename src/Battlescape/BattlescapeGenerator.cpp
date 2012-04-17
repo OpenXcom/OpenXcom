@@ -1180,7 +1180,7 @@ void BattlescapeGenerator::loadRMP(MapBlock *mapblock, int xoff, int yoff, int s
 		throw Exception("Failed to load RMP");
 	}
 
-	int nodeOffset = _save->getNodes()->size();
+	size_t nodeOffset = _save->getNodes()->size();
 
 	while (mapFile.read((char*)&value, sizeof(value)))
 	{
