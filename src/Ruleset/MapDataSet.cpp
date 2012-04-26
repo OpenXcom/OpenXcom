@@ -80,7 +80,7 @@ std::string MapDataSet::getName() const
 * Gets the MapDataSet size.
 * @return size in number of records.
 */
-size_t MapDataSet::getSize() const
+int MapDataSet::getSize() const
 {
 	return _objects.size();
 }

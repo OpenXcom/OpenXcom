@@ -394,11 +394,6 @@ void XcomResourcePack::loadBattlescapeResources()
 {
 	// Load Battlescape ICONS
 	std::stringstream s;
-	s << "UFOGRAPH/" << "ICONS.PCK";
-	_surfaces["ICONS.PCK"] = new Surface(320, 200);
-	_surfaces["ICONS.PCK"]->loadSpk(CrossPlatform::getDataFile(s.str()));
-
-	s.str("");
 	s << "UFOGRAPH/" << "SPICONS.DAT";
 	_sets["SPICONS.DAT"] = new SurfaceSet(32, 24);
 	_sets["SPICONS.DAT"]->loadDat(CrossPlatform::getDataFile(s.str()));
@@ -425,11 +420,6 @@ void XcomResourcePack::loadBattlescapeResources()
 	_sets["X1.PCK"]->loadPck(CrossPlatform::getDataFile(s.str()), CrossPlatform::getDataFile(s2.str()));
 
 	s.str("");
-	s << "UFOGRAPH/" << "UNIBORD.PCK";
-	_surfaces["UNIBORD.PCK"] = new Surface(320, 200);
-	_surfaces["UNIBORD.PCK"]->loadSpk(CrossPlatform::getDataFile(s.str()));
-
-	s.str("");
 	_sets["MEDIBITS.DAT"] = new SurfaceSet(52, 58);
 	s << "UFOGRAPH/" << "MEDIBITS.DAT";
 	_sets["MEDIBITS.DAT"]->loadDat (CrossPlatform::getDataFile(s.str()));
@@ -438,16 +428,6 @@ void XcomResourcePack::loadBattlescapeResources()
 	_sets["DETBLOB.DAT"] = new SurfaceSet(16, 16);
 	s << "UFOGRAPH/" << "DETBLOB.DAT";
 	_sets["DETBLOB.DAT"]->loadDat (CrossPlatform::getDataFile(s.str()));
-
-	s.str("");
-	s << "UFOGRAPH/" << "DETBORD.PCK";
-	_surfaces["DETBORD.PCK"] = new Surface(320, 200);
-	_surfaces["DETBORD.PCK"]->loadSpk(CrossPlatform::getDataFile(s.str()));
-
-	s.str("");
-	s << "UFOGRAPH/" << "DETBORD2.PCK";
-	_surfaces["DETBORD2.PCK"] = new Surface(320, 200);
-	_surfaces["DETBORD2.PCK"]->loadSpk(CrossPlatform::getDataFile(s.str()));
 
 	// Load Battlescape Terrain (only blacks are loaded, others are loaded just in time)
 	std::string bsets[] = {"BLANKS.PCK"};
@@ -517,9 +497,15 @@ void XcomResourcePack::loadBattlescapeResources()
 		_surfaces[scrs[i]]->loadScr(CrossPlatform::getDataFile(s.str()));
 	}
 
-	std::string spks[] = {"TAC01.SCR"};
+	std::string spks[] = {"TAC01.SCR",
+						  "DETBORD.PCK",
+						  "DETBORD2.PCK",
+						  "ICONS.PCK",
+						  "MEDIBORD.PCK",
+						  "SCANBORD.PCK",
+						  "UNIBORD.PCK"};
 
-	for (int i = 0; i < 1; ++i)
+	for (int i = 0; i < 7; ++i)
 	{
 		std::stringstream s;
 		s << "UFOGRAPH/" << spks[i];

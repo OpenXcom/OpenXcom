@@ -44,7 +44,6 @@ namespace OpenXcom
 MiniMapState::MiniMapState (Game * game, Map * map, SavedBattleGame * battleGame) : State (game), _map (map), _displayedLevel(0)
 {
 	_surface = new InteractiveSurface(320, 200);
-	_surface->loadSpk(CrossPlatform::getDataFile("UFOGRAPH/SCANBORD.PCK"));
 	_miniMapView = new MiniMapView(224, 150, 46, 15, game, map, battleGame);
 	InteractiveSurface * btnLvlUp = new InteractiveSurface(18, 20, 24, 62);
 	InteractiveSurface * btnLvlDwn = new InteractiveSurface(18, 20, 24, 88);
@@ -56,6 +55,7 @@ MiniMapState::MiniMapState (Game * game, Map * map, SavedBattleGame * battleGame
 	add(btnLvlDwn);
 	add(btnOk);
 	add(_txtLevel);
+	_game->getResourcePack()->getSurface("SCANBORD.PCK")->blit(_surface);
 	btnLvlUp->onMouseClick((ActionHandler)&MiniMapState::btnLevelUpClick);
 	btnLvlDwn->onMouseClick((ActionHandler)&MiniMapState::btnLevelDownClick);
 	btnOk->onMouseClick((ActionHandler)&MiniMapState::btnOkClick);

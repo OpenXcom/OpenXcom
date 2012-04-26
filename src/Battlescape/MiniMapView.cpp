@@ -48,10 +48,8 @@ const int MAX_FRAME = 2;
 */
 MiniMapView::MiniMapView(int w, int h, int x, int y, Game * game, Map * map, SavedBattleGame * battleGame) : InteractiveSurface(w, h, x, y), _game(game), _map(map), _startX(0),  _startY(0), _lvl(_map->getCamera()->getViewHeight()), _battleGame(battleGame), _frame(0)
 {
-//#ifndef _DEBUG
-	_startX = _map->getCamera()->getCenterX () - ((getWidth () / CELL_WIDTH) / 2);
-	_startY = _map->getCamera()->getCenterY () - ((getHeight () / CELL_HEIGHT) / 2);
-//#endif
+	_startX = _map->getCamera()->getCenterX() - ((getWidth() / CELL_WIDTH) / 2);
+	_startY = _map->getCamera()->getCenterY() - ((getHeight() / CELL_HEIGHT) / 2);
 	_set = _game->getResourcePack()->getSurfaceSet("SCANG.DAT");
 }
 

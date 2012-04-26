@@ -41,7 +41,6 @@ class MapDataSet
 {
 private:
 	std::string _name;
-	size_t _size;
 	std::vector<MapData*> _objects;
 	SurfaceSet *_surfaceSet;
 	bool _loaded;
@@ -59,7 +58,7 @@ public:
 	/// Get the dataset name (used for MAP generation).
 	std::string getName() const;
 	/// Get the dataset size.
-	size_t getSize() const;
+	int getSize() const;
 	/// Get objects in this dataset.
 	std::vector<MapData*> *getObjects();
 	/// Get surfaces in this dataset.

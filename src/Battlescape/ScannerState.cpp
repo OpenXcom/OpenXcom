@@ -44,11 +44,9 @@ namespace OpenXcom
 ScannerState::ScannerState (Game * game, BattleAction *action) : State (game), _action(action)
 {
 	_surface1 = new InteractiveSurface(320, 200);
-	_surface1->loadSpk(CrossPlatform::getDataFile("UFOGRAPH/DETBORD.PCK"));
 	_surface1->onMouseClick((ActionHandler)&ScannerState::mouseClick);
 
 	_surface2 = new InteractiveSurface(320, 200);
-	_surface2->loadSpk(CrossPlatform::getDataFile("UFOGRAPH/DETBORD2.PCK"));
 	_surface2->onMouseClick((ActionHandler)&ScannerState::mouseClick);
 
 	_scannerView = new ScannerView(152, 152, 56, 24, _game, _action->actor);
@@ -56,6 +54,9 @@ ScannerState::ScannerState (Game * game, BattleAction *action) : State (game), _
 	add(_surface2);
 	add(_scannerView);
 	add(_surface1);
+	
+	_game->getResourcePack()->getSurface("DETBORD.PCK")->blit(_surface1);
+	_game->getResourcePack()->getSurface("DETBORD2.PCK")->blit(_surface2);
 
 	_timerAnimate = new Timer(125);
 	_timerAnimate->onTimer((StateHandler)&ScannerState::animate);

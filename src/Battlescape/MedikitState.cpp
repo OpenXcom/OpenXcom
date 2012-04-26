@@ -121,7 +121,6 @@ MedikitState::MedikitState (Game * game, BattleUnit * targetUnit, BattleAction *
 	_unit = action->actor;
 	_item = action->weapon;
 	_surface = new InteractiveSurface(320, 200);
-	_surface->loadSpk(CrossPlatform::getDataFile("UFOGRAPH/MEDIBORD.PCK"));
 	_surface->onMouseClick((ActionHandler)&MedikitState::mouseClick);
 	_partTxt = new Text(50, 15, 90, 120);
 	_woundTxt = new Text(10, 15, 145, 120);
@@ -150,6 +149,7 @@ MedikitState::MedikitState (Game * game, BattleUnit * targetUnit, BattleAction *
 	add(_healTxt);
 	add(_partTxt);
 	add(_woundTxt);
+	_game->getResourcePack()->getSurface("MEDIBORD.PCK")->blit(_surface);
 	_pkText->setBig();
 	_stimulantTxt->setBig();
 	_healTxt->setBig();
