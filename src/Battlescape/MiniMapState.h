@@ -23,7 +23,7 @@
 
 namespace OpenXcom
 {
-class Map;
+class Camera;
 class InteractiveSurface;
 class Text;
 class MiniMapView;
@@ -35,7 +35,6 @@ class SavedBattleGame;
 */
 class MiniMapState : public State
 {
-	Map * _map;
 	InteractiveSurface * _surface;
 	MiniMapView * _miniMapView;
 	int _displayedLevel;
@@ -45,7 +44,7 @@ class MiniMapState : public State
 	void animate();
 public:
 	/// Create the MiniMapState
-	MiniMapState (Game * game, Map * map, SavedBattleGame * battleGame);
+	MiniMapState (Game * game, Camera * camera, SavedBattleGame * battleGame);
 	/// Handler for the OK button
 	void btnOkClick (Action * action);
 	/// Handler for the one level up button

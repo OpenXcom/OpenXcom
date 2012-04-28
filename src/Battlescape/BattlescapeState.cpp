@@ -479,7 +479,7 @@ void BattlescapeState::btnMapDownClick(Action *action)
 void BattlescapeState::btnShowMapClick(Action *action)
 {
 	//MiniMapState
-	_game->pushState (new MiniMapState (_game, _map, _save));
+	_game->pushState (new MiniMapState (_game, _map->getCamera(), _save));
 }
 
 /**

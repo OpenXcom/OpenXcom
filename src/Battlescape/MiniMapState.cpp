@@ -41,10 +41,10 @@ namespace OpenXcom
  * @param map The Battlescape map.
  * @param battleGame The Battlescape save.
 */
-MiniMapState::MiniMapState (Game * game, Map * map, SavedBattleGame * battleGame) : State (game), _map (map), _displayedLevel(0)
+MiniMapState::MiniMapState (Game * game, Camera * camera, SavedBattleGame * battleGame) : State (game)
 {
 	_surface = new InteractiveSurface(320, 200);
-	_miniMapView = new MiniMapView(224, 150, 46, 15, game, map, battleGame);
+	_miniMapView = new MiniMapView(222, 150, 49, 15, game, camera, battleGame);
 	InteractiveSurface * btnLvlUp = new InteractiveSurface(18, 20, 24, 62);
 	InteractiveSurface * btnLvlDwn = new InteractiveSurface(18, 20, 24, 88);
 	InteractiveSurface * btnOk = new InteractiveSurface(32, 32, 275, 145);
@@ -63,7 +63,7 @@ MiniMapState::MiniMapState (Game * game, Map * map, SavedBattleGame * battleGame
 	_txtLevel->setColor(Palette::blockOffset(4));
 	_txtLevel->setHighContrast(true);
 	std::wstringstream s;
-	s << _miniMapView->getDisplayedLevel ();
+	s << camera->getViewHeight();
 	_txtLevel->setText(s.str());
 	_timerAnimate = new Timer(125);
 	_timerAnimate->onTimer((StateHandler)&MiniMapState::animate);
@@ -77,7 +77,6 @@ MiniMapState::MiniMapState (Game * game, Map * map, SavedBattleGame * battleGame
  */
 void MiniMapState::btnOkClick (Action * action)
 {
-	_map->getCamera()->centerOnPosition(_miniMapView->getCenter ());
 	_game->popState();
 }
 
@@ -87,9 +86,8 @@ void MiniMapState::btnOkClick (Action * action)
  */
 void MiniMapState::btnLevelUpClick (Action * action)
 {
-	_miniMapView->up ();
 	std::wstringstream s;
-	s << _miniMapView->getDisplayedLevel ();
+	s << _miniMapView->up();
 	_txtLevel->setText(s.str());
 }
 
@@ -99,9 +97,8 @@ void MiniMapState::btnLevelUpClick (Action * action)
  */
 void MiniMapState::btnLevelDownClick (Action * action)
 {
-	_miniMapView->down ();
 	std::wstringstream s;
-	s << _miniMapView->getDisplayedLevel ();
+	s << _miniMapView->down ();
 	_txtLevel->setText(s.str());
 }
 

@@ -100,7 +100,7 @@ void Camera::mouseOver(Action *action, State *state)
 	int posY = action->getYMouse();
 
 	// handle RMB dragging
-	if ((action->getDetails()->motion.state & SDL_BUTTON(SDL_BUTTON_RIGHT)) && Options::getInt("battleScrollType") == SCROLL_RMB)
+	if ((action->getDetails()->button.button == SDL_BUTTON_RIGHT) && Options::getInt("battleScrollType") == SCROLL_RMB)
 	{
 		_RMBDragging = true;
 		_scrollX = (int)(-(double)(_RMBClickX - posX) * (action->getXScale() * 2));
@@ -194,10 +194,10 @@ void Camera::scroll()
 	_mapOffset.x += _scrollX;
 	_mapOffset.y += _scrollY;
 
-	convertScreenToMap((_screenWidth / 2), (_screenHeight / 2), &_centerX, &_centerY);
+	convertScreenToMap((_screenWidth / 2), (_screenHeight / 2), &_center.x, &_center.y);
 
 	// if center goes out of map bounds, hold the scrolling (may need further tweaking)
-	if (_centerX > _mapWidth - 1 || _centerY > _mapLength - 1 || _centerX < 0 || _centerY < 0)
+	if (_center.x > _mapWidth - 1 || _center.y > _mapLength - 1 || _center.x < 0 || _center.y < 0)
 	{
 		_mapOffset.x -= _scrollX;
 		_mapOffset.y -= _scrollY;
@@ -212,8 +212,6 @@ void Camera::scroll()
 
 	_map->draw();
 }
-
-
 
 /**
  * Go one level up.
@@ -261,16 +259,26 @@ void Camera::setViewHeight(int viewheight)
 void Camera::centerOnPosition(const Position &mapPos, bool redraw)
 {
 	Position screenPos;
+	_scrollX = 0;
+	_scrollY = 0;
+	_center = mapPos;
 
 	convertMapToScreen(mapPos, &screenPos);
 
 	_mapOffset.x = -(screenPos.x - (_screenWidth / 2));
 	_mapOffset.y = -(screenPos.y - (_visibleMapHeight / 2));
 
-	convertScreenToMap((_screenWidth / 2), (_visibleMapHeight / 2), &_centerX, &_centerY);
-
 	_mapOffset.z = mapPos.z;
 	if (redraw) _map->draw();
+}
+
+/**
+ * Get map's center position.
+ */
+Position Camera::getCenterPosition()
+{
+	_center.z = _mapOffset.z;
+	return _center;
 }
 
 /**
@@ -283,7 +291,7 @@ void Camera::centerOnPosition(const Position &mapPos, bool redraw)
 void Camera::convertScreenToMap(int screenX, int screenY, int *mapX, int *mapY) const
 {
 	// add half a tileheight to the mouseposition per layer we are above the floor
-	screenY += (-_spriteWidth/2) + (_mapOffset.z) * (_spriteWidth);
+	screenY += (-_spriteWidth/2) + (_mapOffset.z) * ((_spriteHeight + _spriteWidth / 4) / 2);
 
 	// calculate the actual x/y pixelposition on a diamond shaped map
 	// taking the view offset into account
@@ -335,24 +343,6 @@ void Camera::convertVoxelToScreen(const Position &voxelPos, Position *screenPos)
 int Camera::getViewHeight() const
 {
 	return _mapOffset.z;
-}
-
-/**
- * Get the X displayed map center
- * @return the X displayed map center
-*/
-int Camera::getCenterX() const
-{
-	return _centerX;
-}
-
-/**
- * Get the Y displayed map center
- * @return the Y displayed map center
-*/
-int Camera::getCenterY() const
-{
-	return _centerY;
 }
 
 Position Camera::getMapOffset()

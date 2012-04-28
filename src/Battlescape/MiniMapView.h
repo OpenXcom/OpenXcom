@@ -26,7 +26,7 @@
 namespace OpenXcom
 {
 class Game;
-class Map;
+class Camera;
 class SavedBattleGame;
 class Tile;
 class BattleUnit;
@@ -37,10 +37,7 @@ class SurfaceSet;
 class MiniMapView : public InteractiveSurface
 {
 	Game * _game;
-	Map * _map;
-	int _startX;
-	int _startY;
-	int _lvl;
+	Camera * _camera;
 	SavedBattleGame * _battleGame;
 	int _frame;
 	SurfaceSet * _set;
@@ -48,21 +45,15 @@ class MiniMapView : public InteractiveSurface
 	void mouseClick (Action *action, State *state);
 public:
 	/// Create the MiniMapView
-	MiniMapView(int w, int h, int x, int y, Game * game, Map * map, SavedBattleGame * battleGame);
+	MiniMapView(int w, int h, int x, int y, Game * game, Camera * camera, SavedBattleGame * battleGame);
 	/// Draw the minimap
 	void draw();
 	/// Change the displayed minimap level
-	void up ();
+	int up ();
 	/// Change the displayed minimap level
-	void down ();
-	/// Get the displayed minimap level
-	int getDisplayedLevel ();
-	/// Set the displayed minimap level
-	void setDisplayedLevel (int level);
+	int down ();
 	/// update minimap animation
 	void animate();
-	/// Return the minimap center position
-	Position getCenter();
 };
 
 }

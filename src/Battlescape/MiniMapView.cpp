@@ -46,10 +46,8 @@ const int MAX_FRAME = 2;
  * @param map The Battlescape map
  * @param battleGame Pointer to the SavedBattleGame
 */
-MiniMapView::MiniMapView(int w, int h, int x, int y, Game * game, Map * map, SavedBattleGame * battleGame) : InteractiveSurface(w, h, x, y), _game(game), _map(map), _startX(0),  _startY(0), _lvl(_map->getCamera()->getViewHeight()), _battleGame(battleGame), _frame(0)
+MiniMapView::MiniMapView(int w, int h, int x, int y, Game * game, Camera * camera, SavedBattleGame * battleGame) : InteractiveSurface(w, h, x, y), _game(game), _camera(camera), _battleGame(battleGame), _frame(0)
 {
-	_startX = _map->getCamera()->getCenterX() - ((getWidth() / CELL_WIDTH) / 2);
-	_startY = _map->getCamera()->getCenterY() - ((getHeight() / CELL_HEIGHT) / 2);
 	_set = _game->getResourcePack()->getSurfaceSet("SCANG.DAT");
 }
 
@@ -58,6 +56,9 @@ MiniMapView::MiniMapView(int w, int h, int x, int y, Game * game, Map * map, Sav
  */
 void MiniMapView::draw()
 {
+	int _startX = _camera->getCenterPosition().x - ((getWidth() / CELL_WIDTH) / 2);
+	int _startY = _camera->getCenterPosition().y - ((getHeight() / CELL_HEIGHT) / 2);
+
 	InteractiveSurface::draw();
 	if(!_set)
 	{
@@ -68,13 +69,13 @@ void MiniMapView::draw()
 	current.w = getWidth ();
 	current.h = getHeight ();
 	drawRect(&current, 0);
-	for (int lvl = 0; lvl <= _lvl; lvl++)
+	for (int lvl = 0; lvl <= _camera->getCenterPosition().z; lvl++)
 	{
 		int py = _startY;
-		for (int y = 0; y < getHeight (); y += CELL_HEIGHT)
+		for (int y = Surface::getY(); y < getHeight () + Surface::getY(); y += CELL_HEIGHT)
 		{
 			int px = _startX;
-			for (int x = 0; x < getWidth (); x += CELL_WIDTH)
+			for (int x = Surface::getX(); x < getWidth () + Surface::getX(); x += CELL_WIDTH)
 			{
 				MapData * data = 0;
 				Tile * t = 0;
@@ -156,31 +157,23 @@ void MiniMapView::draw()
 /**
  * Increment the displayed level
  */
-void MiniMapView::up ()
+int MiniMapView::up ()
 {
-	_lvl++;
-	if (_lvl > MAX_LEVEL)
-	{
-		_lvl = 0;
-	}
-	_redraw = true;
+	_camera->setViewHeight(_camera->getViewHeight()+1);
+	return _camera->getViewHeight();
 }
 
 /**
  * Decrement the displayed level
  */
-void MiniMapView::down ()
+int MiniMapView::down ()
 {
-	_lvl--;
-	if (_lvl < 0)
-	{
-		_lvl = MAX_LEVEL;
-	}
-	_redraw = true;
+	_camera->setViewHeight(_camera->getViewHeight()-1);
+	return _camera->getViewHeight();
 }
 
 /**
- * Handle click on the minimap. Will change the minimap center to the clicked point
+ * Handle click on the minimap. Will change the camera center to the clicked point
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
 */
@@ -189,27 +182,15 @@ void MiniMapView::mouseClick (Action *action, State *state)
 	InteractiveSurface::mouseClick(action, state);
 	int origX = action->getRelativeXMouse() / action->getXScale();
 	int origY = action->getRelativeYMouse() / action->getYScale();
-	_startY += (origY / CELL_HEIGHT) - ((getHeight () / 2) / CELL_HEIGHT);
-	_startX += (origX / CELL_HEIGHT) - ((getWidth () / 2) / CELL_HEIGHT);
+	// get offset (in cells) of the click relative to center of screen
+	int xOff = (origX / CELL_WIDTH) - ((getWidth() / 2) / CELL_WIDTH);
+	int yOff = (origY / CELL_HEIGHT) - ((getHeight() / 2) / CELL_HEIGHT);
+	// center the camera on this new position
+	int newX = _camera->getCenterPosition().x + xOff;
+	int newY = _camera->getCenterPosition().y + yOff;
+	_camera->centerOnPosition(Position(newX,newY,_camera->getViewHeight()));
+
 	_redraw = true;
-}
-
-/**
- * Get the displayed level
- * @return the displayed level
-*/
-int MiniMapView::getDisplayedLevel ()
-{
-	return _lvl;
-}
-
-/**
- * Change the displayed level
- * @param level the new displayed level
-*/
-void MiniMapView::setDisplayedLevel (int level)
-{
-	_lvl = level;
 }
 
 /**
@@ -225,15 +206,4 @@ void MiniMapView::animate()
 	_redraw = true;
 }
 
-/**
- * Get the minimap center position
- * @return the minimap center
-*/
-Position MiniMapView::getCenter()
-{
-	Position p(_startX + ((getWidth () / 2) / CELL_HEIGHT),
-		   _startY + ((getHeight () / 2) / CELL_HEIGHT),
-		   _lvl);
-	return p;
-}
 }

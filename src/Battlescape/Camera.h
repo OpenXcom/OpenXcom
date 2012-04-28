@@ -42,11 +42,10 @@ private:
 	int _spriteWidth, _spriteHeight;
 	int _mapWidth, _mapLength, _mapHeight;
 	int _screenWidth, _screenHeight;
-	Position _mapOffset;
+	Position _mapOffset, _center;
 	int _RMBClickX, _RMBClickY;
 	int _scrollX, _scrollY;
 	bool _RMBDragging;
-	int _centerX, _centerY;
 	bool _cameraFollowed;
 	int _visibleMapHeight;
 	void minMaxInt(int *value, const int minValue, const int maxValue) const;
@@ -77,16 +76,15 @@ public:
 	void convertVoxelToScreen(const Position &voxelPos, Position *screenPos) const;
 	/// Converts screen coordinates to map coordinates.
 	void convertScreenToMap(int screenX, int screenY, int *mapX, int *mapY) const;
-	/// Center map on a unit.
+	/// Center map on a position.
 	void centerOnPosition(const Position &pos, bool redraw = true);
+	/// Get map's center position.
+	Position getCenterPosition();
 	/// Check if the camera was following a bullet.
 	bool didCameraFollow();
 	/// Get the map displayed level
 	int getViewHeight() const;
-	/// Get the center X of displayed map
-	int getCenterX() const;
-	/// Get the center Y of displayed map
-	int getCenterY() const;
+	/// Get the map x/y screen offset
 	Position getMapOffset();
 };
 
