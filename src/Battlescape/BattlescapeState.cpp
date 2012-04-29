@@ -353,9 +353,9 @@ void BattlescapeState::init()
 	_map->draw();
 	_battleGame->init();
 	updateSoldierInfo();
-	_battleGame->setupCursor();
 	if (firstInit && playableUnitSelected())
 	{
+		_battleGame->setupCursor();
 		_map->getCamera()->centerOnPosition(_save->getSelectedUnit()->getPosition());
 		firstInit = false;
 	}

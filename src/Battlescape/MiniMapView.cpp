@@ -69,6 +69,7 @@ void MiniMapView::draw()
 	current.w = getWidth ();
 	current.h = getHeight ();
 	drawRect(&current, 0);
+	this->lock();
 	for (int lvl = 0; lvl <= _camera->getCenterPosition().z; lvl++)
 	{
 		int py = _startY;
@@ -135,6 +136,7 @@ void MiniMapView::draw()
 			py++;
 		}
 	}
+	this->unlock();
 	int centerX = getWidth() / 2;
 	int centerY = getHeight() / 2;
 	Uint8 color = 1 + _frame * 3;

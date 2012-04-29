@@ -147,6 +147,7 @@ void UnitWalkBState::think()
 		{
 			// move our personal lighting with us
 			_terrain->calculateUnitLighting();
+			unitspotted = _terrain->calculateFOV(_unit);
 
 			BattleAction action;
 			
@@ -199,8 +200,7 @@ void UnitWalkBState::think()
 	// we are just standing around, shouldn't we be walking?
 	if (_unit->getStatus() == STATUS_STANDING)
 	{
-		// check if we can spot new units
-		unitspotted = _terrain->calculateFOV(_unit);
+		// check if we did spot new units
 		if (unitspotted)
 		{
 			_pf->abortPath();

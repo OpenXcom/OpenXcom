@@ -43,9 +43,7 @@ private:
 	int _mapWidth, _mapLength, _mapHeight;
 	int _screenWidth, _screenHeight;
 	Position _mapOffset, _center;
-	int _RMBClickX, _RMBClickY;
 	int _scrollX, _scrollY;
-	bool _RMBDragging;
 	bool _cameraFollowed;
 	int _visibleMapHeight;
 	void minMaxInt(int *value, const int minValue, const int maxValue) const;

@@ -274,6 +274,8 @@ void Map::drawTerrain(Surface *surface)
 				{
 					tile = _save->getTile(mapPosition);
 
+					if (!tile) continue;
+
 					if (tile->isDiscovered(2))
 					{
 						tileShade = tile->getShade();

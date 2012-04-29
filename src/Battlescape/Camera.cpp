@@ -32,7 +32,7 @@ namespace OpenXcom
 /**
  * Sets up a camera.
  */
-Camera::Camera(int spriteWidth, int spriteHeight, int mapWidth, int mapLength, int mapHeight, Map *map, int visibleMapHeight) : _spriteWidth(spriteWidth), _spriteHeight(spriteHeight), _mapWidth(mapWidth), _mapLength(mapLength), _mapHeight(mapHeight), _scrollX(0), _scrollY(0), _RMBDragging(false), _visibleMapHeight(visibleMapHeight), _map(map)
+Camera::Camera(int spriteWidth, int spriteHeight, int mapWidth, int mapLength, int mapHeight, Map *map, int visibleMapHeight) : _spriteWidth(spriteWidth), _spriteHeight(spriteHeight), _mapWidth(mapWidth), _mapLength(mapLength), _mapHeight(mapHeight), _scrollX(0), _scrollY(0), _visibleMapHeight(visibleMapHeight), _map(map)
 {
 	_mapOffset = Position(-250,250,0);
 	_screenWidth = _map->getWidth();
@@ -96,82 +96,78 @@ void Camera::mouseClick(Action *action, State *state)
  */
 void Camera::mouseOver(Action *action, State *state)
 {
+	if (_map->getCursorType() == CT_NONE)
+	{
+		return;
+	}
+
 	int posX = action->getXMouse();
 	int posY = action->getYMouse();
 
-	// handle RMB dragging
-	if ((action->getDetails()->button.button == SDL_BUTTON_RIGHT) && Options::getInt("battleScrollType") == SCROLL_RMB)
+	if (posX < (SCROLL_BORDER * action->getXScale()) && posX > 0)
 	{
-		_RMBDragging = true;
-		_scrollX = (int)(-(double)(_RMBClickX - posX) * (action->getXScale() * 2));
-		_scrollY = (int)(-(double)(_RMBClickY - posY) * (action->getYScale() * 2));
-		_RMBClickX = posX;
-		_RMBClickY = posY;
+		_scrollX = Options::getInt("battleScrollSpeed");
+		// if close to top or bottom, also scroll diagonally
+		if (posY < (SCROLL_DIAGONAL_EDGE * action->getYScale()) && posY > 0)
+		{
+			_scrollY = Options::getInt("battleScrollSpeed")/2;
+		}
+		else if (posY > (_screenHeight - SCROLL_DIAGONAL_EDGE) * action->getYScale())
+		{
+			_scrollY = -Options::getInt("battleScrollSpeed")/2;
+		}
 	}
-	// handle scrolling with mouse at edge of screen
-	else
+	else if (posX > (_screenWidth - SCROLL_BORDER) * action->getXScale())
 	{
-		if (posX < (SCROLL_BORDER * action->getXScale()) && posX > 0)
+		_scrollX = -Options::getInt("battleScrollSpeed");
+		// if close to top or bottom, also scroll diagonally
+		if (posY < (SCROLL_DIAGONAL_EDGE * action->getYScale()) && posY > 0)
+		{
+			_scrollY = Options::getInt("battleScrollSpeed")/2;
+		}
+		else if (posY > (_screenHeight - SCROLL_DIAGONAL_EDGE) * action->getYScale())
+		{
+			_scrollY = -Options::getInt("battleScrollSpeed")/2;
+		}
+	}
+	else if (posX)
+	{
+		_scrollX = 0;
+	}
+
+	if (posY < (SCROLL_BORDER * action->getYScale()) && posY > 0)
+	{
+		_scrollY = Options::getInt("battleScrollSpeed");
+		// if close to left or right edge, also scroll diagonally
+		if (posX < (SCROLL_DIAGONAL_EDGE * action->getXScale()) && posX > 0)
 		{
 			_scrollX = Options::getInt("battleScrollSpeed");
-			// if close to top or bottom, also scroll diagonally
-			if (posY < (SCROLL_DIAGONAL_EDGE * action->getYScale()) && posY > 0)
-			{
-				_scrollY = Options::getInt("battleScrollSpeed");
-			}
-			else if (posY > (_screenHeight - SCROLL_DIAGONAL_EDGE) * action->getYScale())
-			{
-				_scrollY = -Options::getInt("battleScrollSpeed");
-			}
+			_scrollY /=2;
 		}
-		else if (posX > (_screenWidth - SCROLL_BORDER) * action->getXScale())
+		else if (posX > (_screenWidth - SCROLL_DIAGONAL_EDGE) * action->getXScale())
 		{
 			_scrollX = -Options::getInt("battleScrollSpeed");
-			// if close to top or bottom, also scroll diagonally
-			if (posY < (SCROLL_DIAGONAL_EDGE * action->getYScale()) && posY > 0)
-			{
-				_scrollY = Options::getInt("battleScrollSpeed");
-			}
-			else if (posY > (_screenHeight - SCROLL_DIAGONAL_EDGE) * action->getYScale())
-			{
-				_scrollY = -Options::getInt("battleScrollSpeed");
-			}
+			_scrollY /=2;
 		}
-		else if (posX)
+	}
+	else if (posY > (_screenHeight- SCROLL_BORDER) * action->getYScale())
+	{
+		_scrollY = -Options::getInt("battleScrollSpeed");
+		// if close to left or right edge, also scroll diagonally
+		if (posX < (SCROLL_DIAGONAL_EDGE * action->getXScale()) && posX > 0)
 		{
-			_scrollX = 0;
+			_scrollX = Options::getInt("battleScrollSpeed");
+			_scrollY /=2;
 		}
-
-		if (posY < (SCROLL_BORDER * action->getYScale()) && posY > 0)
+		else if (posX > (_screenWidth - SCROLL_DIAGONAL_EDGE) * action->getXScale())
 		{
-			_scrollY = Options::getInt("battleScrollSpeed");
-			// if close to left or right edge, also scroll diagonally
-			if (posX < (SCROLL_DIAGONAL_EDGE * action->getXScale()) && posX > 0)
-			{
-				_scrollX = Options::getInt("battleScrollSpeed");
-			}
-			else if (posX > (_screenWidth - SCROLL_DIAGONAL_EDGE) * action->getXScale())
-			{
-				_scrollX = -Options::getInt("battleScrollSpeed");
-			}
+			_scrollX = -Options::getInt("battleScrollSpeed");
+			_scrollY /=2;
 		}
-		else if (posY > (_screenHeight- SCROLL_BORDER) * action->getYScale())
-		{
-			_scrollY = -Options::getInt("battleScrollSpeed");
-			// if close to left or right edge, also scroll diagonally
-			if (posX < (SCROLL_DIAGONAL_EDGE * action->getXScale()) && posX > 0)
-			{
-				_scrollX = Options::getInt("battleScrollSpeed");
-			}
-			else if (posX > (_screenWidth - SCROLL_DIAGONAL_EDGE) * action->getXScale())
-			{
-				_scrollX = -Options::getInt("battleScrollSpeed");
-			}
-		}
-		else if (posY && _scrollX == 0)
-		{
-			_scrollY = 0;
-		}
+	}
+	else if (posY && _scrollX == 0)
+	{
+		_scrollY = 0;
 	}
 
 	if ((_scrollX || _scrollY) && !_scrollTimer->isRunning())
@@ -202,14 +198,6 @@ void Camera::scroll()
 		_mapOffset.x -= _scrollX;
 		_mapOffset.y -= _scrollY;
 	}
-
-	if (_RMBDragging)
-	{
-		_RMBDragging = false;
-		_scrollX = 0;
-		_scrollY = 0;
-	}
-
 	_map->draw();
 }
 
@@ -259,16 +247,15 @@ void Camera::setViewHeight(int viewheight)
 void Camera::centerOnPosition(const Position &mapPos, bool redraw)
 {
 	Position screenPos;
-	_scrollX = 0;
-	_scrollY = 0;
 	_center = mapPos;
-
-	convertMapToScreen(mapPos, &screenPos);
+	minMaxInt(&_center.x, -1, _mapLength);
+	minMaxInt(&_center.y, -1, _mapWidth);
+	convertMapToScreen(_center, &screenPos);
 
 	_mapOffset.x = -(screenPos.x - (_screenWidth / 2));
 	_mapOffset.y = -(screenPos.y - (_visibleMapHeight / 2));
 
-	_mapOffset.z = mapPos.z;
+	_mapOffset.z = _center.z;
 	if (redraw) _map->draw();
 }
 
@@ -302,8 +289,8 @@ void Camera::convertScreenToMap(int screenX, int screenY, int *mapX, int *mapY) 
 	*mapX /= (_spriteWidth / 4);
 	*mapY /= _spriteWidth;
 
-	minMaxInt(mapX, 0, _mapLength - 1);
-	minMaxInt(mapY, 0, _mapWidth - 1);
+	minMaxInt(mapX, -1, _mapLength);
+	minMaxInt(mapY, -1, _mapWidth);
 }
 
 /**
