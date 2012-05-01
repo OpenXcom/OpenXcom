@@ -542,7 +542,17 @@ void BattlescapeGame::handleState()
 {
 	if (!_states.empty())
 	{
-		_states.front()->think();
+		// end turn request?
+		if (_states.front() == 0)
+		{
+			_states.pop_front();
+			endTurn();
+			return;
+		}
+		else
+		{
+			_states.front()->think();
+		}
 		getMap()->draw(); // redraw map
 	}
 }

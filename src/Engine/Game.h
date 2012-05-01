@@ -54,6 +54,7 @@ private:
 	Ruleset *_rules;
 	bool _quit, _init;
 	FpsCounter *_fpsCounter;
+	bool _mouseActive;
 public:
 	/// Creates a new game and initializes SDL.
 	Game(const std::string &title, int width, int height, int bpp);
@@ -89,12 +90,14 @@ public:
 	void setResourcePack(ResourcePack *res);
 	/// Gets the currently loaded saved game.
 	SavedGame *const getSavedGame() const;
-	/// Sets a new saved game for the game
+	/// Sets a new saved game for the game.
 	void setSavedGame(SavedGame *save);
-	/// Gets the currently loaded ruleset
+	/// Gets the currently loaded ruleset.
 	Ruleset *const getRuleset() const;
-	/// Sets a new ruleset for the game
+	/// Sets a new ruleset for the game.
 	void setRuleset(Ruleset *rules);
+	/// Sets whether the mouse cursor is activated.
+	void setMouseActive(bool active);
 };
 
 }

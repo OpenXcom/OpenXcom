@@ -113,22 +113,12 @@ void MiniMapView::draw()
 					Surface * s = _set->getFrame(frame);
 					s->blitNShade(this, x, y, 0);
 				}
-				else
+				// perhaps (at least one) item on this tile?
+				if (!t->getInventory()->empty())
 				{
-					// or perhaps (at least one) corpse on this tile?
-					for (std::vector<BattleItem*>::iterator it = t->getInventory()->begin(); it != t->getInventory()->end(); ++it)
-					{
-						if ((*it)->getUnit())
-						{
-							int frame = t->getUnit()->getMiniMapSpriteIndex();
-							int size = t->getUnit()->getArmor()->getSize();
-							frame += (t->getPosition().y - t->getUnit()->getPosition().y) * size;
-							frame += t->getPosition().x - t->getUnit()->getPosition().x;
-							frame += _frame * size * size;
-							Surface * s = _set->getFrame(frame);
-							s->blitNShade(this, x, y, 0);
-						}
-					}
+					int frame = 9 + _frame;
+					Surface * s = _set->getFrame(frame);
+					s->blitNShade(this, x, y, 0);
 				}
 
 				px++;

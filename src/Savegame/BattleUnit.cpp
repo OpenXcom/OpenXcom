@@ -1581,7 +1581,7 @@ int BattleUnit::getMiniMapSpriteIndex () const
 	// * 0-2   : Xcom soldier
 	// * 3-5   : Alien
 	// * 6-8   : Civilian
-	// * 9-11  : Dead unit
+	// * 9-11  : Item
 	// * 12-23 : Xcom HWP
 	// * 24-35 : Alien big terror unit(cyberdisk, ...)
 	if (isOut())

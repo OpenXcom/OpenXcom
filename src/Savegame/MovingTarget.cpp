@@ -140,6 +140,12 @@ void MovingTarget::calculateSpeed()
 		length = sqrt(dLon * dLon + dLat * dLat);
 		_speedLon = dLon / length * _speedRadian / cos(_lat + _speedLat);
 		_speedLat = dLat / length * _speedRadian;
+		// Check for invalid speeds
+		if (!(_speedLon == _speedLon) || !(_speedLat == _speedLat))
+		{
+			_speedLon = 0;
+			_speedLat = 0;
+		}
 	}
 	else
 	{

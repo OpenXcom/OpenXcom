@@ -48,7 +48,7 @@ namespace OpenXcom
  * @warning Currently the game is designed for 8bpp, so there's no telling what'll
  * happen if you use a different value.
  */
-Game::Game(const std::string &title, int width, int height, int bpp) : _screen(0), _cursor(0), _lang(0), _states(), _deleted(), _res(0), _save(0), _rules(0), _quit(false), _init(false)
+Game::Game(const std::string &title, int width, int height, int bpp) : _screen(0), _cursor(0), _lang(0), _states(), _deleted(), _res(0), _save(0), _rules(0), _quit(false), _init(false), _mouseActive(true)
 {
 	// Initialize SDL
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
@@ -163,6 +163,15 @@ void Game::run()
 		// Process events
 		while (SDL_PollEvent(&_event))
 		{
+			// Skip mouse events if they're disabled
+			if (!_mouseActive &&
+				(_event.type == SDL_MOUSEMOTION ||
+				 _event.type == SDL_MOUSEBUTTONDOWN ||
+				 _event.type == SDL_MOUSEBUTTONUP))
+			{
+				continue;
+			}
+
 			if (_event.type == SDL_QUIT)
 			{
 				_quit = true;
@@ -410,6 +419,18 @@ void Game::setRuleset(Ruleset *rules)
 {
 	delete _rules;
 	_rules = rules;
+}
+
+/**
+ * Sets whether the mouse is activated.
+ * If it is, mouse events are processed, otherwise
+ * they are ignored and the cursor is hidden.
+ * @param active Is mouse activated?
+ */
+void Game::setMouseActive(bool active)
+{
+	_mouseActive = active;
+	_cursor->setVisible(active);
 }
 
 }
