@@ -1129,50 +1129,90 @@ items:
     costSell: 20000
   - type: REAPER_CORPSE_1
     floorSprite: 52
+    invWidth: 0
+    invHeight: 0
   - type: REAPER_CORPSE_2
     floorSprite: 53
+    invWidth: 0
+    invHeight: 0
   - type: REAPER_CORPSE_3
     floorSprite: 54
+    invWidth: 0
+    invHeight: 0
   - type: REAPER_CORPSE_4
     floorSprite: 55
+    invWidth: 0
+    invHeight: 0
   - type: STR_SECTOPOD_CORPSE
     size: 1
     costSell: 20000
   - type: SECTOPOD_CORPSE_1
     floorSprite: 60
+    invWidth: 0
+    invHeight: 0
   - type: SECTOPOD_CORPSE_2
     floorSprite: 61
+    invWidth: 0
+    invHeight: 0
   - type: SECTOPOD_CORPSE_3
     floorSprite: 62
+    invWidth: 0
+    invHeight: 0
   - type: SECTOPOD_CORPSE_4
     floorSprite: 63
+    invWidth: 0
+    invHeight: 0
   - type: STR_CYBERDISC_CORPSE
     size: 1
     costSell: 20000
   - type: CYBERDISC_CORPSE_1
     floorSprite: 56
+    invWidth: 0
+    invHeight: 0
   - type: CYBERDISC_CORPSE_2
     floorSprite: 57
+    invWidth: 0
+    invHeight: 0
   - type: CYBERDISC_CORPSE_3
     floorSprite: 58
+    invWidth: 0
+    invHeight: 0
   - type: CYBERDISC_CORPSE_4
     floorSprite: 59
+    invWidth: 0
+    invHeight: 0
   - type: HOVERTANK_CORPSE_1
     floorSprite: 64
+    invWidth: 0
+    invHeight: 0
   - type: HOVERTANK_CORPSE_2
     floorSprite: 65
+    invWidth: 0
+    invHeight: 0
   - type: HOVERTANK_CORPSE_3
     floorSprite: 66
+    invWidth: 0
+    invHeight: 0
   - type: HOVERTANK_CORPSE_4
     floorSprite: 67
+    invWidth: 0
+    invHeight: 0
   - type: TANK_CORPSE_1
     floorSprite: 68
+    invWidth: 0
+    invHeight: 0
   - type: TANK_CORPSE_2
     floorSprite: 69
+    invWidth: 0
+    invHeight: 0
   - type: TANK_CORPSE_3
     floorSprite: 70
+    invWidth: 0
+    invHeight: 0
   - type: TANK_CORPSE_4
     floorSprite: 71
+    invWidth: 0
+    invHeight: 0
   - type: CIVM_CORPSE
     name: STR_CORPSE
     weight: 30
