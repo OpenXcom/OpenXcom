@@ -89,6 +89,10 @@ void SoundSet::loadCat(const std::string &filename, bool wav)
 		Sound *s = new Sound();
 		try
 		{
+			if (size == 0)
+			{
+				throw Exception("Invalid sound file");
+			}
 			if (wav)
 				s->load(sound, size);
 			else
