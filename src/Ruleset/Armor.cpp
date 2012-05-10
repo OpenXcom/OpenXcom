@@ -169,21 +169,6 @@ std::string Armor::getSpriteInventory() const
 }
 
 /**
- * Sets the different armor levels.
- * @param front Front armor level.
- * @param side Side armor level.
- * @param rear Rear armor level.
- * @param under Under armor level.
- */
-void Armor::setArmor(int front, int side, int rear, int under)
-{
-	_frontArmor = front;
-	_sideArmor = side;
-	_rearArmor = rear;
-	_underArmor = under;
-}
-
-/**
  * Get the front armor level.
  * @return Front armor level.
  */
@@ -219,14 +204,6 @@ int Armor::getUnderArmor() const
 	return _underArmor;
 }
 
-/**
- * Set the corpse item.
- * @param corpseItem Name of the corpse item.
- */
-void Armor::setCorpseItem(const std::string &corpseItem)
-{
-	_corpseItem = corpseItem;
-}
 
 /**
  * Get the corpse item.
@@ -271,16 +248,6 @@ MovementType Armor::getMovementType() const
 int Armor::getSize() const
 {
 	return _size;
-}
-
-/**
- * Sets damage modifier for a certain damage type. Only need to set when <> 1 (=100%)
- * @param dm Damage Modifier.
- * @param dt Damage Type.
- */
-void Armor::setDamageModifier(float dm, ItemDamageType dt)
-{
-	_damageModifier[(int)dt] = dm;
 }
 
 /**

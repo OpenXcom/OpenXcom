@@ -159,14 +159,6 @@ std::vector<DeploymentData>* AlienDeployment::getDeploymentData()
 	return &_data;
 }
 
-/// Set dimensions.
-void AlienDeployment::setDimensions(int width, int length, int height)
-{
-	_width = width;
-	_length = length;
-	_height = height;
-}
-
 /// Get dimensions.
 void AlienDeployment::getDimensions(int *width, int *length, int *height)
 {

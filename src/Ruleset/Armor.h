@@ -55,8 +55,6 @@ public:
 	std::string getSpriteSheet() const;
 	/// Gets the unit's inventory sprite.
 	std::string getSpriteInventory() const;
-	/// Sets the different armor levels.
-	void setArmor(int front, int side, int rear, int under);
 	/// Get the front armor level.
 	int getFrontArmor() const;
 	/// Get the side armor level.
@@ -65,8 +63,6 @@ public:
 	int getRearArmor() const;
 	/// get the under armor level.
 	int getUnderArmor() const;
-	/// Set the corpse item.
-	void setCorpseItem(const std::string &corpseItem);
 	/// Get the corpse item.
 	std::string getCorpseItem() const;
 	/// Get the stores item.
@@ -77,8 +73,6 @@ public:
 	MovementType getMovementType() const;
 	/// Get whether this is a normal or big unit.
 	int getSize() const;
-	/// Sets damage modifier. Only need to set when <> 1
-	void setDamageModifier(float dm, ItemDamageType dt);
 	/// Gets damage modifier.
 	float getDamageModifier(ItemDamageType dt);
 };

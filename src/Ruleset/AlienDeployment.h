@@ -71,8 +71,6 @@ public:
 	std::string getType() const;
 	/// Gets a pointer to the data.
 	std::vector<DeploymentData>* getDeploymentData();
-	/// Set dimensions.
-	void setDimensions(int width, int length, int height);
 	/// Get dimensions.
 	void getDimensions(int *width, int *length, int *height);
 };

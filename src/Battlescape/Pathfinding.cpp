@@ -247,13 +247,10 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 				numberOfPartsChangingLevel++;
 			}
 
-			// if we don't want to fall down and there is no floor, it ends here
+			// if we don't want to fall down and there is no floor, we can't know the TUs so it's default to 4
 			if (!fellDown && destinationTile->hasNoFloor() && x==0 && y==0)
 			{
-				if (_movementType != MT_FLY)
-					return 255;
-				else
-					cost = 4;
+				cost = 4;
 			}
 
 			// check if the destination tile can be walked over
@@ -449,10 +446,6 @@ bool Pathfinding::canFallDown(Tile *here)
 
 	if (_save->selectUnit(here->getPosition() + Position(0, 0, -1)) &&
 		_save->selectUnit(here->getPosition() + Position(0, 0, -1)) != _unit)
-		return false;
-
-	if (_save->getTile(here->getPosition() + Position(0, 0, -1))->getMapData(MapData::O_OBJECT)
-		&& _save->getTile(here->getPosition() + Position(0, 0, -1))->getMapData(MapData::O_OBJECT)->getTerrainLevel() == 0)
 		return false;
 
 	if (!here || here->hasNoFloor())

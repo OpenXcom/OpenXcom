@@ -76,18 +76,6 @@ std::string AlienRace::getId() const
 	return _id;
 }
 
-
-/**
- * Adds a member to the alien race family.
- * The sequence in which you add members is important,
- * as the vector's elements are accessed by it's position.
- * @param member The members name.
- */
-void AlienRace::addMember(const std::string &member)
-{
-	_members.push_back(member);
-}
-
 /**
  * Gets a certain member of this alien race family.
  * @param id The members id.

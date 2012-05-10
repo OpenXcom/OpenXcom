@@ -48,8 +48,6 @@ public:
 	void save(YAML::Emitter& out) const;
 	/// Gets the alien race's id.
 	std::string getId() const;
-	/// Adds a member to the alien race family.
-	void addMember(const std::string &member);
 	/// Gets a certain member of this alien race family.
 	std::string getMember(int id) const;
 };
