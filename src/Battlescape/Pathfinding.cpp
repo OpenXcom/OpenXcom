@@ -644,14 +644,15 @@ bool Pathfinding::bresenhamPath(const Position& origin, const Position& target)
 
 		if (x != x0 || y != y0 || z != z0)
 		{
-			nextPoint = Position(cx, cy, cz);
+			Position realNextPoint = Position(cx, cy, cz);
+			nextPoint = realNextPoint;
 			// get direction
 			for (dir = 0; dir < 8; ++dir)
 			{
 				if (xd[dir] == cx-lastPoint.x && yd[dir] == cy-lastPoint.y) break;
 			}
 			int tuCost = getTUCost(lastPoint, dir, &nextPoint, _unit);
-			if (tuCost < 255 && (tuCost == lastTUCost || (dir&1 && tuCost == lastTUCost*1.5) || (!(dir&1) && tuCost*1.5 == lastTUCost) || lastTUCost == -1)
+			if (nextPoint == realNextPoint && tuCost < 255 && (tuCost == lastTUCost || (dir&1 && tuCost == lastTUCost*1.5) || (!(dir&1) && tuCost*1.5 == lastTUCost) || lastTUCost == -1)
 				&& !isBlocked(_save->getTile(lastPoint), _save->getTile(nextPoint), dir))
 			{
 				_path.push_back(dir);

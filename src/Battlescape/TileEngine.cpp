@@ -545,7 +545,10 @@ void TileEngine::hit(const Position &center, int power, ItemDamageType type, Bat
 			bu->damage(Position(center.x%16, center.y%16, center.z%24), RNG::generate(0, rndPower/4), DT_STUN, true);
 		}
 
-		unit->addFiringExp();
+		if (bu && bu->getFaction() != unit->getFaction())
+		{
+			unit->addFiringExp();
+		}
 	}
 	calculateSunShading(); // roofs could have been destroyed
 	calculateFOV(center);
@@ -560,8 +563,9 @@ void TileEngine::hit(const Position &center, int power, ItemDamageType type, Bat
  * @param power Power of the explosion.
  * @param type The damage type of the explosion.
  * @param maxRadius The maximum radius othe explosion.
+ * @param unit The unit that caused the explosion.
  */
-void TileEngine::explode(const Position &center, int power, ItemDamageType type, int maxRadius)
+void TileEngine::explode(const Position &center, int power, ItemDamageType type, int maxRadius, BattleUnit *unit)
 {
 	double centerZ = (int)(center.z / 24) + 0.5;
 	double centerX = (int)(center.x / 16) + 0.5;
@@ -643,6 +647,12 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 								dest->getUnit()->setFire(RNG::generate(1, 5)); // catch fire and burn for 1-5 rounds
 							}
 						}
+
+						if (unit && dest->getUnit() && dest->getUnit()->getFaction() != unit->getFaction())
+						{
+							unit->addFiringExp();
+						}
+
 					}
 				}
 				power_ -= 10; // explosive damage decreases by 10

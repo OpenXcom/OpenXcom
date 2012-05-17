@@ -98,6 +98,7 @@ private:
 	SpecialAbility _specab;
 	Armor *_armor;
 	SoldierGender _gender;
+	std::string _activeHand;
 public:
 	/// Creates a BattleUnit.
 	BattleUnit(Soldier *soldier, UnitFaction faction);
@@ -306,6 +307,9 @@ public:
 	void addKillCount();
 	/// Get unit type.
 	std::string getType() const;
+	void setActiveHand(const std::string &slot);
+	/// Get unit's active hand.
+	std::string getActiveHand() const;
 };
 
 }

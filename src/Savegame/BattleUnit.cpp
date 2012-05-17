@@ -86,6 +86,7 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction
 	for (int i = 0; i < 5; ++i)
 		_cache[i] = 0;
 
+	_activeHand = "STR_RIGHT_HAND";
 }
 
 /**
@@ -124,6 +125,7 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, Armor *armor) : _faction
 	for (int i = 0; i < 5; ++i)
 		_cache[i] = 0;
 
+	_activeHand = "STR_RIGHT_HAND";
 }
 
 /**
@@ -1833,6 +1835,24 @@ void BattleUnit::addKillCount()
 std::string BattleUnit::getType() const
 {
 	return _type;
+}
+
+/**
+/// Set unit's active hand.
+ */
+void BattleUnit::setActiveHand(const std::string &hand)
+{
+	if (_activeHand != hand) _cacheInvalid = true;
+	_activeHand = hand;
+}
+/**
+/// Get unit's active hand.
+ */
+std::string BattleUnit::getActiveHand() const
+{
+	if (getItem(_activeHand)) return _activeHand;
+	if (getItem("STR_LEFT_HAND")) return "STR_LEFT_HAND";
+	return "STR_RIGHT_HAND";
 }
 
 }

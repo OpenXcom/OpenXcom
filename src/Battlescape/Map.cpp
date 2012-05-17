@@ -879,7 +879,7 @@ void Map::cacheUnit(BattleUnit *unit)
 				cache->setPalette(this->getPalette());
 			}
 			unitSprite->setBattleUnit(unit, i);
-			BattleItem *handItem = unit->getItem("STR_RIGHT_HAND");
+			BattleItem *handItem = unit->getItem(unit->getActiveHand());
 			if (handItem)
 			{
 				unitSprite->setBattleItem(handItem);

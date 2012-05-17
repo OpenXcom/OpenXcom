@@ -70,7 +70,7 @@ public:
 	void calculateUnitLighting();
 	/// Explosions.
 	void hit(const Position &center, int power, ItemDamageType type, BattleUnit *unit);
-	void explode(const Position &center, int power, ItemDamageType type, int maxRadius);
+	void explode(const Position &center, int power, ItemDamageType type, int maxRadius, BattleUnit *unit = 0);
 	/// Check if a destroyed tile starts an explosion.
 	Tile *checkForTerrainExplosions();
 	/// Unit opens door?

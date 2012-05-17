@@ -609,6 +609,9 @@ void BattlescapeState::btnLeftHandItemClick(Action *action)
 	if (_battleGame->getCurrentAction()->type != BA_NONE) return;
 	if (playableUnitSelected())
 	{
+		_save->getSelectedUnit()->setActiveHand("STR_LEFT_HAND");
+		_map->cacheUnits();
+		_map->draw();
 		BattleItem *leftHandItem = _save->getSelectedUnit()->getItem("STR_LEFT_HAND");
 		handleItemClick(leftHandItem);
 	}
@@ -623,6 +626,9 @@ void BattlescapeState::btnRightHandItemClick(Action *action)
 	if (_battleGame->getCurrentAction()->type != BA_NONE) return;
 	if (playableUnitSelected())
 	{
+		_save->getSelectedUnit()->setActiveHand("STR_RIGHT_HAND");
+		_map->cacheUnits();
+		_map->draw();
 		BattleItem *rightHandItem = _save->getSelectedUnit()->getItem("STR_RIGHT_HAND");
 		handleItemClick(rightHandItem);
 	}

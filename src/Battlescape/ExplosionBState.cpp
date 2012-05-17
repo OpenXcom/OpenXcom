@@ -123,7 +123,7 @@ void ExplosionBState::think()
 						|| _item->getRules()->getDamageType() == DT_SMOKE
 						|| _item->getRules()->getDamageType() == DT_STUN))
 					{
-						save->getTileEngine()->explode(_center, _item->getRules()->getPower(), _item->getRules()->getDamageType(), _item->getRules()->getExplosionRadius());
+						save->getTileEngine()->explode(_center, _item->getRules()->getPower(), _item->getRules()->getDamageType(), _item->getRules()->getExplosionRadius(), _unit);
 					}
 					else
 					{
