@@ -368,27 +368,29 @@ void BattlescapeState::think()
 {
 	static bool popped = false;
 
-	if (_popups.empty())
+	if (_gameTimer->isRunning())
 	{
-		State::think();
-		_battleGame->think();
-		_animTimer->think(this, 0);
-		_gameTimer->think(this, 0);
-		if (popped)
+		if (_popups.empty())
 		{
-			_battleGame->handleNonTargetAction();
-			popped = false;
+			State::think();
+			_battleGame->think();
+			_animTimer->think(this, 0);
+			_gameTimer->think(this, 0);
+			if (popped)
+			{
+				_battleGame->handleNonTargetAction();
+				popped = false;
+			}
+		}
+		else
+		{
+			// Handle popups
+			_game->pushState(*_popups.begin());
+			_popups.erase(_popups.begin());
+			popped = true;
+			return;
 		}
 	}
-	else
-	{
-		// Handle popups
-		_game->pushState(*_popups.begin());
-		_popups.erase(_popups.begin());
-		popped = true;
-		return;
-	}
-
 }
 
 /**
@@ -977,8 +979,11 @@ void BattlescapeState::popup(State *state)
  */
 void BattlescapeState::finishBattle(bool abort)
 {
-	_game->popState();
+	_popups.clear();
+	_animTimer->stop();
+	_gameTimer->stop();
 	_save->setAborted(abort);
+	_game->popState();
 	_game->pushState(new DebriefingState(_game));
 	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
 	_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);

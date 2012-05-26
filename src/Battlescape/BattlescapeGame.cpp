@@ -284,11 +284,6 @@ void BattlescapeGame::endTurn()
 	}
 
 	_save->endTurn();
-	bool bBattleIsOver = checkForCasualties(0, 0, false, false);
-	if (bBattleIsOver)
-	{
-		return;
-	}
 
 	if (_save->getSide() == FACTION_PLAYER)
 	{
@@ -307,18 +302,33 @@ void BattlescapeGame::endTurn()
 		statePushNext(new ExplosionBState(this, p, 0, 0, t));
 	}
 
-	bBattleIsOver = checkForCasualties(0, 0, false, true);
-	if (bBattleIsOver)
+	checkForCasualties(0, 0, false, true);
+
+	// if all units from either faction are killed - the mission is over.
+	int liveAliens = 0;
+	int liveSoldiers = 0;
+	for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
 	{
-		return;
+		if ((*j)->getHealth() > 0 && (*j)->getHealth() > (*j)->getStunlevel())
+		{
+			if ((*j)->getFaction() == FACTION_HOSTILE)
+				liveAliens++;
+			if ((*j)->getFaction() == FACTION_PLAYER)
+				liveSoldiers++;
+		}
 	}
 
-	_parentState->updateSoldierInfo();
-
-	if (playableUnitSelected())
+	if (liveAliens > 0 && liveSoldiers > 0)
 	{
-		getMap()->getCamera()->centerOnPosition(_save->getSelectedUnit()->getPosition());
-		setupCursor();
+		showInfoBoxQueue();
+
+		_parentState->updateSoldierInfo();
+
+		if (playableUnitSelected())
+		{
+			getMap()->getCamera()->centerOnPosition(_save->getSelectedUnit()->getPosition());
+			setupCursor();
+		}
 	}
 
 	if (_save->getSide() != FACTION_NEUTRAL)
@@ -337,7 +347,7 @@ void BattlescapeGame::endTurn()
  * @param terrainExplosion Set to true for the explosions of terrain.
  * @return Whether the battle is finished.
  */
-bool BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *murderer, bool hiddenExplosion, bool terrainExplosion)
+void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *murderer, bool hiddenExplosion, bool terrainExplosion)
 {
 	for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
 	{
@@ -432,7 +442,7 @@ bool BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 						// no murderer, and no terrain explosion, must be fatal wounds
 						statePushNext(new UnitDieBState(this, (*j), DT_AP, false));  // STR_HAS_DIED_FROM_A_FATAL_WOUND
 						// show a little infobox with the name of the unit and "... is panicking"
-						_parentState->getGame()->pushState(new InfoboxOKState(_parentState->getGame(), (*j)->getName(_parentState->getGame()->getLanguage()), "STR_HAS_DIED_FROM_A_FATAL_WOUND"));
+						_infoboxQueue.push_back(new InfoboxOKState(_parentState->getGame(), (*j)->getName(_parentState->getGame()->getLanguage()), "STR_HAS_DIED_FROM_A_FATAL_WOUND"));
 					}
 				}
 			}
@@ -445,7 +455,8 @@ bool BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 				// fell unconscious from stun level
 				statePushNext(new UnitDieBState(this, (*j), DT_STUN, true));  // STR_HAS_BECOME_UNCONSCIOUS
 				// show a little infobox with the name of the unit and "... is panicking"
-				_parentState->getGame()->pushState(new InfoboxOKState(_parentState->getGame(), (*j)->getName(_parentState->getGame()->getLanguage()), "STR_HAS_BECOME_UNCONSCIOUS"));
+				//_parentState->getGame()->pushState(
+				_infoboxQueue.push_back(new InfoboxOKState(_parentState->getGame(), (*j)->getName(_parentState->getGame()->getLanguage()), "STR_HAS_BECOME_UNCONSCIOUS"));
 			}
 			else
 			{
@@ -453,8 +464,19 @@ bool BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 			}
 		}
 	}
+}
 
-	return false;
+/**
+ * Shows the infoboxes in the queue (if any).
+ */
+void BattlescapeGame::showInfoBoxQueue()
+{
+	for (std::vector<InfoboxOKState*>::iterator i = _infoboxQueue.begin(); i != _infoboxQueue.end(); ++i)
+	{
+		_parentState->getGame()->pushState(*i);
+	}
+
+	_infoboxQueue.clear();
 }
 
 /**
@@ -726,6 +748,7 @@ void BattlescapeGame::popState()
 		ss << action.actor->getName(_parentState->getGame()->getLanguage()) << L'\n' << _parentState->getGame()->getLanguage()->getString("STR_HAS_BECOME_UNCONSCIOUS");
 		_parentState->getGame()->pushState(new InfoboxState(_parentState->getGame(), ss.str()));
 	}
+	
 
 }
 

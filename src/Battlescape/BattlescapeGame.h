@@ -38,6 +38,7 @@ class Map;
 class TileEngine;
 class Pathfinding;
 class Ruleset;
+class InfoboxOKState;
 
 enum BattleActionType { BA_NONE, BA_TURN, BA_WALK, BA_PRIME, BA_THROW, BA_AUTOSHOT, BA_SNAPSHOT, BA_AIMEDSHOT, BA_STUN, BA_HIT, BA_USE, BA_LAUNCH, BA_MINDCONTROL, BA_PANIC };
 
@@ -74,6 +75,8 @@ private:
 	bool handlePanickingPlayer();
 	bool handlePanickingUnit(BattleUnit *unit);
 	bool noActionsPending(BattleUnit *bu);
+	std::vector<InfoboxOKState*> _infoboxQueue;
+	void showInfoBoxQueue();
 public:
 	/// Creates the BattlescapeGame state.
 	BattlescapeGame(SavedBattleGame *save, BattlescapeState *parentState);
@@ -99,7 +102,7 @@ public:
 	/// Set state think interval.
 	void setStateInterval(Uint32 interval);
 	/// Checks for casualties in battle.
-	bool checkForCasualties(BattleItem *murderweapon, BattleUnit *murderer, bool hiddenExplosion = false, bool terrainExplosion = false);
+	void checkForCasualties(BattleItem *murderweapon, BattleUnit *murderer, bool hiddenExplosion = false, bool terrainExplosion = false);
 	/// Checks if a unit panics.
 	void checkForPanic(BattleUnit *unit);
 	/// Check reserved tu.

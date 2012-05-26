@@ -544,7 +544,7 @@ bool Pathfinding::previewPath(bool bRemove)
  
 	Position pos = _unit->getPosition();
 	Position destination;
-	int tus = _unit->getStats()->tu;
+	int tus = _unit->getTimeUnits();
 	int size = _unit->getArmor()->getSize() - 1;
  
 	for (std::vector<int>::reverse_iterator i = _path.rbegin(); i != _path.rend(); ++i)
