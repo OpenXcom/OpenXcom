@@ -877,7 +877,7 @@ int BattleUnit::getFallingPhase() const
  */
 bool BattleUnit::isOut() const
 {
-	return _status == STATUS_FALLING || _status == STATUS_DEAD || _status == STATUS_UNCONSCIOUS;
+	return _status == STATUS_DEAD || _status == STATUS_UNCONSCIOUS;
 }
 
 /**

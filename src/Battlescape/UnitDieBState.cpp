@@ -110,9 +110,8 @@ void UnitDieBState::think()
 		_unit->keepFalling();
 	}
 
-	if (_unit->isOut())
+	if (_unit->getStatus() == STATUS_DEAD || _unit->getStatus() == STATUS_UNCONSCIOUS)
 	{
-		_unit->keepFalling();
 		convertUnitToCorpse();
 		_parent->getTileEngine()->calculateUnitLighting();
 		_parent->popState();
