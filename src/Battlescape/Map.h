@@ -61,7 +61,9 @@ private:
 	int _animFrame;
 	BulletSprite *_bullet[36];
 	Projectile *_projectile;
+	bool projectileInFOV;
 	std::set<Explosion *> _explosions;
+	bool explosionInFOV;
 	BattlescapeMessage *_message;
 	Camera *_camera;
 	int _visibleMapHeight;

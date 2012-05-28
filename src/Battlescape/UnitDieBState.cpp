@@ -56,7 +56,7 @@ UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDama
 	{
 		_parent->getMap()->getCamera()->centerOnPosition(_unit->getPosition());
 		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
-		_unit->lookAt(3);
+		_unit->lookAt(3); // unit goes into status TURNING to prepare for a nice dead animation
 	}
 
 	if (!_noSound)
@@ -74,8 +74,6 @@ UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDama
 			_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(_unit->getDeathSound())->play();
 		}
 	}
-
-	think();
 }
 
 /**

@@ -240,10 +240,10 @@ void BattlescapeGenerator::run()
 
 		// add vehicles that are in the craft - a vehicle is actually an item, which you will never see as it is converted to a unit
 		// however the item itself becomes the weapon it "holds".
-		unit = addXCOMUnit(new BattleUnit(_game->getRuleset()->getUnit("TANK_CANNON"), FACTION_PLAYER, _game->getRuleset()->getArmor(_game->getRuleset()->getUnit("TANK_CANNON")->getArmor())));
-		addItem(_game->getRuleset()->getItem("STR_TANK_CANNON"), unit);
-		addItem(_game->getRuleset()->getItem("STR_HWP_CANNON_SHELLS"), unit);
-		unit->setTurretType(0);
+		//unit = addXCOMUnit(new BattleUnit(_game->getRuleset()->getUnit("TANK_CANNON"), FACTION_PLAYER, _game->getRuleset()->getArmor(_game->getRuleset()->getUnit("TANK_CANNON")->getArmor())));
+		//addItem(_game->getRuleset()->getItem("STR_TANK_CANNON"), unit);
+		//addItem(_game->getRuleset()->getItem("STR_HWP_CANNON_SHELLS"), unit);
+		//unit->setTurretType(0);
 
 		// add soldiers that are in the craft or base
 		for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
@@ -267,12 +267,12 @@ void BattlescapeGenerator::run()
 		}
 		
 		// test data - uncomment to easily debug a certain item
-		addItem(_game->getRuleset()->getItem("STR_PSI_AMP"));
-		addItem(_game->getRuleset()->getItem("STR_LASER_RIFLE"));
-		addItem(_game->getRuleset()->getItem("STR_LASER_PISTOL"));
-		addItem(_game->getRuleset()->getItem("STR_MEDI_KIT"));
-		addItem(_game->getRuleset()->getItem("STR_SMOKE_GRENADE"));
-		addItem(_game->getRuleset()->getItem("STR_ELECTRO_FLARE"));
+		//addItem(_game->getRuleset()->getItem("STR_PSI_AMP"));
+		//addItem(_game->getRuleset()->getItem("STR_LASER_RIFLE"));
+		//addItem(_game->getRuleset()->getItem("STR_LASER_PISTOL"));
+		//addItem(_game->getRuleset()->getItem("STR_MEDI_KIT"));
+		addItem(_game->getRuleset()->getItem("STR_AUTO_CANNON"));
+		addItem(_game->getRuleset()->getItem("STR_AC_HE_AMMO"));
 
 		if (_craft != 0)
 		{

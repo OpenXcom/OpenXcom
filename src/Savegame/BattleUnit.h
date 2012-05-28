@@ -195,6 +195,12 @@ public:
 	std::vector<BattleUnit*> *const getVisibleUnits();
 	/// Clear visible units.
 	void clearVisibleUnits();
+	/// Add unit to visible tiles.
+	bool addToVisibleTiles(Tile *tile);
+	/// Get the list of visible tiles.
+	std::vector<Tile*> *const getVisibleTiles();
+	/// Clear visible tiles.
+	void clearVisibleTiles();
 	/// Calculate firing accuracy.
 	double getFiringAccuracy(BattleActionType actionType, BattleItem *item);
 	/// Calculate throwing accuracy.

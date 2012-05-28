@@ -223,6 +223,7 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 	oldNumVisibleUnits = unit->getVisibleUnits()->size();
 
 	unit->clearVisibleUnits();
+	unit->clearVisibleTiles();
 
 	if (unit->isOut())
 		return false;
@@ -266,7 +267,16 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 						if (unit->getFaction() == FACTION_PLAYER)
 						{
 							// this sets tiles to discovered if they are in LOS - tile visibility is not calculated in voxelspace but in tilespace
-							calculateLine(unit->getPosition(), test, false, 0, unit, false);
+							if (calculateLine(unit->getPosition(), test, false, 0, unit, false) <= 0)
+							{
+								unit->addToVisibleTiles(_save->getTile(test));
+								 _save->getTile(test)->setDiscovered(true, 2);
+								// walls to the east or south of a visible tile, we see that too
+								Tile* t = _save->getTile(Position(test.x + 1, test.y, test.z));
+								if (t) t->setDiscovered(true, 0);
+								t = _save->getTile(Position(test.x, test.y + 1, test.z));
+								if (t) t->setDiscovered(true, 1);
+							}
 						}
 					}
 				}
@@ -307,6 +317,7 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
  * Check for an opposing unit on this tile
  * @param currentUnit the watcher
  * @param tile the tile to check for
+ * @return true/false
  */
 bool TileEngine::visible(BattleUnit *currentUnit, Tile *tile)
 {
@@ -1074,12 +1085,6 @@ int TileEngine::calculateLine(const Position& origin, const Position& target, bo
 			{
 				return result;
 			}
-			 _save->getTile(Position(cx, cy, cz))->setDiscovered(true, 2);
-			// walls to the east or south of a visible tile, we see that too
-			Tile* t = _save->getTile(Position(cx + 1, cy, cz));
-			if (t) t->setDiscovered(true, 0);
-			t = _save->getTile(Position(cx, cy + 1, cz));
-			if (t) t->setDiscovered(true, 1);
 
 			lastPoint = Position(cx, cy, cz);
 		}
@@ -1249,6 +1254,32 @@ int TileEngine::distance(const Position &pos1, const Position &pos2) const
 	int x = abs(pos1.x - pos2.x);
 	int y = abs(pos1.y - pos2.y);
 	return int(floor(sqrt(float(x*x + y*y)) + 0.5));
+}
+
+
+/**
+ * Check if a certain tile is within a teams' FOV. Assumes the FOV is calculated before this is called.
+ * @param pos Position of the tile
+ * @param team Team
+ * @return true/false
+ */
+bool TileEngine::inTeamFOV(const Position &pos, UnitFaction team)
+{
+	if (!_save->getTile(pos)) return false; // the position is undefined, it's certainly not in FOV
+
+	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
+	{
+		// unit is of the correct team and it's still alive
+		if ((*i)->getFaction() == team && !(*i)->isOut())
+		{
+			for (std::vector<Tile*>::iterator j = (*i)->getVisibleTiles()->begin(); j != (*i)->getVisibleTiles()->end(); ++j)
+			{
+				if ((*j)->getPosition().x == pos.x && (*j)->getPosition().y == pos.y)
+					return true; // a unit sees this tile, yay!
+			}
+		}
+	}
+	return false;
 }
 
 }

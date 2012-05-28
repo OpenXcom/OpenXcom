@@ -24,6 +24,7 @@
 #include "../Ruleset/MapData.h"
 #include <SDL.h>
 #include "BattlescapeGame.h"
+#include "../Savegame/BattleUnit.h"
 
 namespace OpenXcom
 {
@@ -86,6 +87,7 @@ public:
 	int distance(const Position &pos1, const Position &pos2) const;
 	int horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageType type);
 	int verticalBlockage(Tile *startTile, Tile *endTile, ItemDamageType type);
+	bool inTeamFOV(const Position &pos, UnitFaction team);
 };
 
 }

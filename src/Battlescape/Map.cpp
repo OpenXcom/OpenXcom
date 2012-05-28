@@ -152,7 +152,26 @@ void Map::think()
 void Map::draw()
 {
 	Surface::draw();
-	if ((_save->getSelectedUnit() && _save->getSelectedUnit()->getVisible()) || _save->getSelectedUnit() == 0 || _save->getDebugMode() || _projectile || !_explosions.empty())
+
+	projectileInFOV = false;
+	if (_projectile)
+	{
+		if (_save->getTileEngine()->inTeamFOV(Position(_projectile->getPosition(0).x/16, _projectile->getPosition(0).y/16, _projectile->getPosition(0).z/24), FACTION_PLAYER))
+		{
+			projectileInFOV = true;
+		}
+	}
+	explosionInFOV = false;
+	if (!_explosions.empty())
+	{
+		std::set<Explosion*>::iterator i = _explosions.begin();
+		if (_save->getTileEngine()->inTeamFOV(Position((*i)->getPosition().x/16, (*i)->getPosition().y/16, (*i)->getPosition().z/24), FACTION_PLAYER))
+		{
+			explosionInFOV = true;
+		}
+	}
+
+	if ((_save->getSelectedUnit() && _save->getSelectedUnit()->getVisible()) || _save->getSelectedUnit() == 0 || _save->getDebugMode() || projectileInFOV || explosionInFOV)
 	{
 		drawTerrain(this);
 	}
@@ -201,7 +220,7 @@ void Map::drawTerrain(Surface *surface)
 	bool invalid;
 	int tileShade, wallShade;
 	NumberText *_numWaypid = 0;
-
+	
 	// get corner map coordinates to give rough boundaries in which tiles to redraw are
 	_camera->convertScreenToMap(0, 0, &beginX, &dummy);
 	_camera->convertScreenToMap(surface->getWidth(), 0, &dummy, &beginY);
@@ -242,8 +261,9 @@ void Map::drawTerrain(Surface *surface)
 
 		// if the projectile is outside the viewport - center it back on it
 		_camera->convertVoxelToScreen(_projectile->getPosition(), &bulletPositionScreen);
-		if (bulletPositionScreen.x < 0 || bulletPositionScreen.x > surface->getWidth() ||
+		if ((bulletPositionScreen.x < 0 || bulletPositionScreen.x > surface->getWidth() ||
 			bulletPositionScreen.y < 0 || bulletPositionScreen.y > _visibleMapHeight  )
+			&& projectileInFOV)
 		{
 			_camera->centerOnPosition(Position(bulletLowX, bulletLowY, bulletLowZ), false);
 		}
@@ -368,8 +388,8 @@ void Map::drawTerrain(Surface *surface)
 						
 					}
 
-					// check if we got bullet
-					if (_projectile)
+					// check if we got bullet && it is in Field Of View
+					if (_projectile && projectileInFOV)
 					{
 						tmpSurface = 0;
 						if (_projectile->getItem())
@@ -591,30 +611,32 @@ void Map::drawTerrain(Surface *surface)
 	delete _numWaypid;
 
 	// check if we got big explosions
-	for (std::set<Explosion*>::const_iterator i = _explosions.begin(); i != _explosions.end(); ++i)
+	if (explosionInFOV)
 	{
-		if ((*i)->isBig())
+		for (std::set<Explosion*>::const_iterator i = _explosions.begin(); i != _explosions.end(); ++i)
 		{
-			Position voxelPos = (*i)->getPosition();
-			_camera->convertVoxelToScreen(voxelPos, &bulletPositionScreen);
-			tmpSurface = _res->getSurfaceSet("X1.PCK")->getFrame((*i)->getCurrentFrame());
-			tmpSurface->blitNShade(surface, bulletPositionScreen.x - 64, bulletPositionScreen.y - 64, 0);
-			// if the projectile is outside the viewport - center it back on it
-			if (bulletPositionScreen.x < -_spriteWidth || bulletPositionScreen.x > surface->getWidth() ||
-				bulletPositionScreen.y < -_spriteHeight || bulletPositionScreen.y > surface->getHeight()  )
+			if ((*i)->isBig())
 			{
-				_camera->centerOnPosition(Position(voxelPos.x/16, voxelPos.y/16, voxelPos.z/24), false);
+				Position voxelPos = (*i)->getPosition();
+				_camera->convertVoxelToScreen(voxelPos, &bulletPositionScreen);
+				tmpSurface = _res->getSurfaceSet("X1.PCK")->getFrame((*i)->getCurrentFrame());
+				tmpSurface->blitNShade(surface, bulletPositionScreen.x - 64, bulletPositionScreen.y - 64, 0);
+				// if the projectile is outside the viewport - center it back on it
+				if (bulletPositionScreen.x < -_spriteWidth || bulletPositionScreen.x > surface->getWidth() ||
+					bulletPositionScreen.y < -_spriteHeight || bulletPositionScreen.y > surface->getHeight()  )
+				{
+					_camera->centerOnPosition(Position(voxelPos.x/16, voxelPos.y/16, voxelPos.z/24), false);
+				}
+			}
+			else
+			{
+				Position voxelPos = (*i)->getPosition();
+				_camera->convertVoxelToScreen(voxelPos, &bulletPositionScreen);
+				tmpSurface = _res->getSurfaceSet("SMOKE.PCK")->getFrame((*i)->getCurrentFrame());
+				tmpSurface->blitNShade(surface, bulletPositionScreen.x - 15, bulletPositionScreen.y - 15, 0);
 			}
 		}
-		else
-		{
-			Position voxelPos = (*i)->getPosition();
-			_camera->convertVoxelToScreen(voxelPos, &bulletPositionScreen);
-			tmpSurface = _res->getSurfaceSet("SMOKE.PCK")->getFrame((*i)->getCurrentFrame());
-			tmpSurface->blitNShade(surface, bulletPositionScreen.x - 15, bulletPositionScreen.y - 15, 0);
-		}
 	}
-
 	surface->unlock();
 }
 

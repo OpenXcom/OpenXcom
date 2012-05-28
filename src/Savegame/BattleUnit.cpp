@@ -1007,6 +1007,34 @@ void BattleUnit::clearVisibleUnits()
 }
 
 /**
+ * Add this unit to the list of visible tiles. Returns true if this is a new one.
+ * @param tile
+ * @return
+ */
+bool BattleUnit::addToVisibleTiles(Tile *tile)
+{
+	_visibleTiles.push_back(tile);
+	return true;
+}
+
+/**
+ * Get the pointer to the vector of visible tiles.
+ * @return pointer to vector.
+ */
+std::vector<Tile*> *const BattleUnit::getVisibleTiles()
+{
+	return &_visibleTiles;
+}
+
+/**
+ * Clear visible tiles.
+ */
+void BattleUnit::clearVisibleTiles()
+{
+	_visibleTiles.clear();
+}
+
+/**
  * Calculate firing accuracy.
  * Formula = accuracyStat * weaponAccuracy * kneelingbonus(1.15) * one-handPenalty(0.8) * woundsPenalty(% health) * critWoundsPenalty (-10%/wound)
  * @param actionType
