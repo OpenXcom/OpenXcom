@@ -55,7 +55,7 @@ private:
 	RuleTerrain *_terrain;
 	int _width, _length, _height;
 	int _worldTexture, _worldShade;
-	int _unitCount;
+	int _unitSequence;
 	Tile *_craftInventoryTile;
 	std::string _alienRace;
 	int _alienItemLevel;

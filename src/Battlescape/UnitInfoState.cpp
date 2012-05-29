@@ -360,11 +360,8 @@ void UnitInfoState::init()
 	_barTimeUnits->setValue(_unit->getTimeUnits());
 
 	ss.str(L"");
-	if (_unit->getId() != -1)
-	{
-		ss << _game->getLanguage()->getString(_unit->getRankString());
-		ss << " ";
-	}
+	ss << _game->getLanguage()->getString(_unit->getRankString());
+	ss << " ";
 	ss << _unit->getName(_game->getLanguage());
 	_txtName->setText(ss.str());
 

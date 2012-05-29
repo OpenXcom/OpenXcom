@@ -89,6 +89,7 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 	node["width"] >> _width;
 	node["length"] >> _length;
 	node["height"] >> _height;
+	node["missionType"] >> _missionType;
 	node["globalshade"] >> _globalShade;
 	node["selectedUnit"] >> selectedUnit;
 
@@ -128,7 +129,7 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 		(*i)["soldierId"] >> a;
 
 		BattleUnit *b;
-		if (a != -1) // Unit is linked to a geoscape soldier
+		if (a < BattleUnit::MAX_SOLDIER_ID) // Unit is linked to a geoscape soldier
 		{
 			// look up the matching soldier
 			b = new BattleUnit(savedGame->getSoldier(a), faction);
@@ -139,7 +140,7 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 			(*i)["genUnitType"] >> type;
 			(*i)["genUnitArmor"] >> armor;
 			// create a new Unit.
-			b = new BattleUnit(rule->getUnit(type), faction, rule->getArmor(armor));
+			b = new BattleUnit(rule->getUnit(type), faction, a, rule->getArmor(armor));
 		}
 		b->load(*i);
 		_units.push_back(b);
@@ -276,6 +277,7 @@ void SavedBattleGame::save(YAML::Emitter &out) const
 	out << YAML::Key << "width" << YAML::Value << _width;
 	out << YAML::Key << "length" << YAML::Value << _length;
 	out << YAML::Key << "height" << YAML::Value << _height;
+	out << YAML::Key << "missionType" << YAML::Value << _missionType;
 	out << YAML::Key << "globalshade" << YAML::Value << _globalShade;
 	out << YAML::Key << "selectedUnit" << YAML::Value << (_selectedUnit?_selectedUnit->getId():-1);
 

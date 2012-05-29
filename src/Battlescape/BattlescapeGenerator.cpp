@@ -160,7 +160,7 @@ void BattlescapeGenerator::run()
 
 	ruleDeploy->getDimensions(&_width, &_length, &_height);
 
-	_unitCount = 0;
+	_unitSequence = BattleUnit::MAX_SOLDIER_ID; // geoscape soldier IDs should stay below this number
 
 	// find out the terrain type
 	if (_save->getMissionType() == "STR_TERROR_MISSION")
@@ -240,7 +240,7 @@ void BattlescapeGenerator::run()
 
 		// add vehicles that are in the craft - a vehicle is actually an item, which you will never see as it is converted to a unit
 		// however the item itself becomes the weapon it "holds".
-		//unit = addXCOMUnit(new BattleUnit(_game->getRuleset()->getUnit("TANK_CANNON"), FACTION_PLAYER, _game->getRuleset()->getArmor(_game->getRuleset()->getUnit("TANK_CANNON")->getArmor())));
+		//unit = addXCOMUnit(new BattleUnit(_game->getRuleset()->getUnit("TANK_CANNON"), FACTION_PLAYER, _unitSequence++, _game->getRuleset()->getArmor(_game->getRuleset()->getUnit("TANK_CANNON")->getArmor())));
 		//addItem(_game->getRuleset()->getItem("STR_TANK_CANNON"), unit);
 		//addItem(_game->getRuleset()->getItem("STR_HWP_CANNON_SHELLS"), unit);
 		//unit->setTurretType(0);
@@ -421,9 +421,7 @@ void BattlescapeGenerator::deployAliens(AlienRace *race, AlienDeployment *deploy
  */
 BattleUnit *BattlescapeGenerator::addAlien(Unit *rules, int alienRank, bool outside)
 {
-	BattleUnit *unit = new BattleUnit(rules, FACTION_HOSTILE, _game->getRuleset()->getArmor(rules->getArmor()));
-	//unit->setId(_unitCount++);
-
+	BattleUnit *unit = new BattleUnit(rules, FACTION_HOSTILE, _unitSequence++, _game->getRuleset()->getArmor(rules->getArmor()));
 	Node *node = 0;
 
 	/* following data is the order in which certain alien ranks spawn on certain node ranks */
@@ -465,9 +463,7 @@ BattleUnit *BattlescapeGenerator::addAlien(Unit *rules, int alienRank, bool outs
  */
 BattleUnit *BattlescapeGenerator::addCivilian(Unit *rules)
 {
-	BattleUnit *unit = new BattleUnit(rules, FACTION_NEUTRAL, _game->getRuleset()->getArmor(rules->getArmor()));
-//	unit->setId(_unitCount++);
-
+	BattleUnit *unit = new BattleUnit(rules, FACTION_NEUTRAL, _unitSequence++, _game->getRuleset()->getArmor(rules->getArmor()));
 	Node *node = _save->getSpawnNode(0, unit);
 
 	if (node)

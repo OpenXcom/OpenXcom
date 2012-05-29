@@ -67,13 +67,15 @@ Node::~Node()
 void Node::load(const YAML::Node &node)
 {
 	int a = 0;
-	node["position"] >> _pos;
 	node["id"] >> _id;
+	node["position"] >> _pos;
 	node["segment"] >> _segment;
+	node["type"] >> _type;
 	node["rank"] >> _rank;
 	node["flags"] >> _flags;
 	node["reserved"] >> _reserved;
 	node["priority"] >> _priority;
+	node["allocated"] >> _allocated;
 	for (int i=0; i < 5; i++)
 	{
 		node["links"][i]["connectedNodeId"] >> a;
@@ -97,6 +99,7 @@ void Node::save(YAML::Emitter &out) const
 	out << YAML::Key << "flags" << YAML::Value << _flags;
 	out << YAML::Key << "reserved" << YAML::Value << _reserved;
 	out << YAML::Key << "priority" << YAML::Value << _priority;
+	out << YAML::Key << "allocated" << YAML::Value << _allocated;
 	out << YAML::Key << "links" << YAML::Value;
 	out << YAML::BeginSeq;
 	for (int i=0; i < 5; i++)

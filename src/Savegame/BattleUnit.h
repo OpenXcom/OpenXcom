@@ -100,9 +100,10 @@ private:
 	SoldierGender _gender;
 	std::string _activeHand;
 public:
+	static const int MAX_SOLDIER_ID = 1000000;
 	/// Creates a BattleUnit.
 	BattleUnit(Soldier *soldier, UnitFaction faction);
-	BattleUnit(Unit *unit, UnitFaction faction, Armor *armor);
+	BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor);
 	/// Cleans up the BattleUnit.
 	virtual ~BattleUnit();
 	/// Loads the unit from YAML.
