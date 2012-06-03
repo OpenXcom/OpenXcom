@@ -156,7 +156,7 @@ void Map::draw()
 	projectileInFOV = false;
 	if (_projectile)
 	{
-		if (_save->getTileEngine()->inTeamFOV(Position(_projectile->getPosition(0).x/16, _projectile->getPosition(0).y/16, _projectile->getPosition(0).z/24), FACTION_PLAYER))
+		if (_save->getTile(Position(_projectile->getPosition(0).x/16, _projectile->getPosition(0).y/16, _projectile->getPosition(0).z/24))->getVisible())
 		{
 			projectileInFOV = true;
 		}
@@ -165,7 +165,7 @@ void Map::draw()
 	if (!_explosions.empty())
 	{
 		std::set<Explosion*>::iterator i = _explosions.begin();
-		if (_save->getTileEngine()->inTeamFOV(Position((*i)->getPosition().x/16, (*i)->getPosition().y/16, (*i)->getPosition().z/24), FACTION_PLAYER))
+		if (_save->getTile(Position((*i)->getPosition().x/16, (*i)->getPosition().y/16, (*i)->getPosition().z/24))->getVisible())
 		{
 			explosionInFOV = true;
 		}
@@ -218,7 +218,7 @@ void Map::drawTerrain(Surface *surface)
 	int dummy;
 	BattleUnit *unit = 0;
 	bool invalid;
-	int tileShade, wallShade;
+	int tileShade, wallShade, tileColor, wallColor;
 	NumberText *_numWaypid = 0;
 	
 	// get corner map coordinates to give rough boundaries in which tiles to redraw are
@@ -306,10 +306,22 @@ void Map::drawTerrain(Surface *surface)
 						unit = 0;
 					}
 
+					tileColor = tile->getMarkerColor();
+					wallColor = 0;
+
+					/*
+					 * with this we can enable FOV visibility, todo one day
+					if (!tileColor && !tile->getVisible())
+					{
+						tileColor = 6;
+						wallColor = 6;
+					}
+					*/
+
 					// Draw floor
 					tmpSurface = tile->getSprite(MapData::O_FLOOR);
 					if (tmpSurface)
-						tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y - tile->getMapData(MapData::O_FLOOR)->getYOffset(), tileShade, false, tile->getMarkerColor());
+						tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y - tile->getMapData(MapData::O_FLOOR)->getYOffset(), tileShade, false, tileColor);
 					unit = tile->getUnit();
 
 					// Draw cursor back
@@ -351,7 +363,7 @@ void Map::drawTerrain(Surface *surface)
 								wallShade = 0;
 							else
 								wallShade = tileShade;
-							tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y - tile->getMapData(MapData::O_WESTWALL)->getYOffset(), wallShade);
+							tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y - tile->getMapData(MapData::O_WESTWALL)->getYOffset(), wallShade, false, wallColor);
 						}
 						// Draw north wall
 						tmpSurface = tile->getSprite(MapData::O_NORTHWALL);
@@ -364,11 +376,11 @@ void Map::drawTerrain(Surface *surface)
 								wallShade = tileShade;
 							if (tile->getMapData(MapData::O_WESTWALL))
 							{
-								tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y - tile->getMapData(MapData::O_NORTHWALL)->getYOffset(), wallShade, true);
+								tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y - tile->getMapData(MapData::O_NORTHWALL)->getYOffset(), wallShade, true, wallColor);
 							}
 							else
 							{
-								tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y - tile->getMapData(MapData::O_NORTHWALL)->getYOffset(), wallShade);
+								tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y - tile->getMapData(MapData::O_NORTHWALL)->getYOffset(), wallShade, false, wallColor);
 							}
 						}
 						// Draw object
@@ -376,14 +388,14 @@ void Map::drawTerrain(Surface *surface)
 						{
 							tmpSurface = tile->getSprite(MapData::O_OBJECT);
 							if (tmpSurface)
-								tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y - tile->getMapData(MapData::O_OBJECT)->getYOffset(), tileShade);
+								tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y - tile->getMapData(MapData::O_OBJECT)->getYOffset(), tileShade, false, wallColor);
 						}
 						// draw an item on top of the floor (if any)
 						int sprite = tile->getTopItemSprite();
 						if (sprite != -1)
 						{
 							tmpSurface = _res->getSurfaceSet("FLOOROB.PCK")->getFrame(sprite);
-							tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y + tile->getTerrainLevel(), tileShade);
+							tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y + tile->getTerrainLevel(), tileShade, false, wallColor);
 						}
 						
 					}

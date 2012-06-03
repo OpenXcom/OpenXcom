@@ -91,6 +91,7 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 	node["height"] >> _height;
 	node["missionType"] >> _missionType;
 	node["globalshade"] >> _globalShade;
+	node["turn"] >> _turn;
 	node["selectedUnit"] >> selectedUnit;
 
 	for (YAML::Iterator i = node["mapdatasets"].begin(); i != node["mapdatasets"].end(); ++i)
@@ -279,6 +280,7 @@ void SavedBattleGame::save(YAML::Emitter &out) const
 	out << YAML::Key << "height" << YAML::Value << _height;
 	out << YAML::Key << "missionType" << YAML::Value << _missionType;
 	out << YAML::Key << "globalshade" << YAML::Value << _globalShade;
+	out << YAML::Key << "turn" << YAML::Value << _turn;
 	out << YAML::Key << "selectedUnit" << YAML::Value << (_selectedUnit?_selectedUnit->getId():-1);
 
 	out << YAML::Key << "mapdatasets" << YAML::Value;

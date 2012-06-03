@@ -1031,6 +1031,11 @@ std::vector<Tile*> *const BattleUnit::getVisibleTiles()
  */
 void BattleUnit::clearVisibleTiles()
 {
+	for (std::vector<Tile*>::iterator j = _visibleTiles.begin(); j != _visibleTiles.end(); ++j)
+	{
+		(*j)->setVisible(-1);
+	}
+
 	_visibleTiles.clear();
 }
 
@@ -1069,7 +1074,11 @@ double BattleUnit::getFiringAccuracy(BattleActionType actionType, BattleItem *it
 
 	result *= ((double)_health/(double)getStats()->health);
 
-	result *= 1 + (-0.1*getFatalWounds());
+	int wounds = _fatalWounds[BODYPART_HEAD] + _fatalWounds[BODYPART_RIGHTARM];
+	if (wounds > 9)
+		wounds = 9;
+
+	result *= 1 + (-0.1*wounds);
 
 	return result;
 }
@@ -1084,6 +1093,12 @@ double BattleUnit::getThrowingAccuracy()
 	double result = (double)(getStats()->firing/100.0);
 
 	result *= ((double)_health/(double)getStats()->health);
+
+	int wounds = _fatalWounds[BODYPART_HEAD] + _fatalWounds[BODYPART_RIGHTARM];
+	if (wounds > 9)
+		wounds = 9;
+
+	result *= 1 + (-0.1*wounds);
 
 	return result;
 }

@@ -34,7 +34,7 @@ namespace OpenXcom
 * constructor
 * @param pos Position.
 */
-Tile::Tile(const Position& pos): _smoke(0), _fire(0),  _explosive(0), _pos(pos), _unit(0), _animationOffset(0), _markerColor(0)
+Tile::Tile(const Position& pos): _smoke(0), _fire(0),  _explosive(0), _pos(pos), _unit(0), _animationOffset(0), _markerColor(0), _visible(false)
 {
 	for (int i = 0; i < 4; ++i)
 	{
@@ -728,6 +728,22 @@ void Tile::setMarkerColor(int color)
 int Tile::getMarkerColor()
 {
 	return _markerColor;
+}
+
+/**
+ * Set the tile visible flag.
+ */
+void Tile::setVisible(int visibility)
+{
+	_visible += visibility;
+}
+
+/**
+ * Get the tile visible flag.
+ */
+int Tile::getVisible()
+{
+	return _visible;
 }
 
 }

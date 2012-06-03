@@ -56,6 +56,7 @@ protected:
 	std::vector<BattleItem *> _inventory;
 	int _animationOffset;
 	int _markerColor;
+	int _visible;
 public:
 	/// Creates a tile.
 	Tile(const Position& pos);
@@ -147,6 +148,10 @@ public:
 	void setMarkerColor(int color);
 	/// Get the tile marker color.
 	int getMarkerColor();
+	/// Set the tile visible flag.
+	void setVisible(int visibility);
+	/// Get the tile visible flag.
+	int getVisible();
 
 };
 

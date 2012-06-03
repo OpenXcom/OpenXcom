@@ -449,18 +449,10 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 		}
 		else if ((*j)->getStunlevel() >= (*j)->getHealth() && (*j)->getStatus() != STATUS_DEAD && (*j)->getStatus() != STATUS_UNCONSCIOUS && (*j)->getStatus() != STATUS_FALLING && (*j)->getStatus() != STATUS_TURNING)
 		{
-			
-			if (!murderer)
+			statePushNext(new UnitDieBState(this, (*j), DT_STUN, true));
+			if ((*j)->getFaction() == FACTION_PLAYER)
 			{
-				// fell unconscious from stun level
-				statePushNext(new UnitDieBState(this, (*j), DT_STUN, true));  // STR_HAS_BECOME_UNCONSCIOUS
-				// show a little infobox with the name of the unit and "... is panicking"
-				//_parentState->getGame()->pushState(
 				_infoboxQueue.push_back(new InfoboxOKState(_parentState->getGame(), (*j)->getName(_parentState->getGame()->getLanguage()), "STR_HAS_BECOME_UNCONSCIOUS"));
-			}
-			else
-			{
-				statePushNext(new UnitDieBState(this, (*j), DT_STUN, true));
 			}
 		}
 	}
