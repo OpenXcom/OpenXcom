@@ -271,8 +271,8 @@ void BattlescapeGenerator::run()
 		//addItem(_game->getRuleset()->getItem("STR_LASER_RIFLE"));
 		//addItem(_game->getRuleset()->getItem("STR_LASER_PISTOL"));
 		//addItem(_game->getRuleset()->getItem("STR_MEDI_KIT"));
-		addItem(_game->getRuleset()->getItem("STR_AUTO_CANNON"));
-		addItem(_game->getRuleset()->getItem("STR_AC_HE_AMMO"));
+		//addItem(_game->getRuleset()->getItem("STR_AUTO_CANNON"));
+		//addItem(_game->getRuleset()->getItem("STR_AC_HE_AMMO"));
 
 		if (_craft != 0)
 		{

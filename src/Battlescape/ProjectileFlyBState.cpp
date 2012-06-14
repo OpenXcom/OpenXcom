@@ -235,7 +235,7 @@ void ProjectileFlyBState::think()
 	/* TODO refactoring : store the projectile in this state, instead of getting it from the map each time? */
 	if (_parent->getMap()->getProjectile() == 0)
 	{
-		if (_action.type == BA_AUTOSHOT && _autoshotCounter < 3 && !_action.actor->isOut())
+		if (_action.type == BA_AUTOSHOT && _autoshotCounter < 3 && !_action.actor->isOut() && _ammo->getAmmoQuantity() != 0)
 		{
 			createNewProjectile();
 		}
