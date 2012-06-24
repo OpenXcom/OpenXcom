@@ -50,6 +50,7 @@ private:
 	BattleItem *_ammoItem;
 	int _explodeTurn, _ammoQuantity;
 	int _painKiller, _heal, _stimulant;
+	bool _XCOMProperty;
 public:
 	/// Creates a item of the specified type.
 	BattleItem(RuleItem *rules, int *id);
@@ -120,6 +121,10 @@ public:
 	void setStimulantQuantity (int stimulant);
 	/// Get medikit stimulant quantity
 	int getStimulantQuantity () const;
+	/// Set xcom property flag
+	void setXCOMProperty (bool flag);
+	/// Get xcom property flag
+	bool getXCOMProperty () const;
 };
 
 }

@@ -350,6 +350,7 @@ void DebriefingState::prepareDebriefing()
 			{
 				playerInExitArea++;
 				(*j)->postMissionProcedures(save);
+				recoverItems((*j)->getInventory(), craft, base);		
 			}
 			else
 			{
@@ -400,6 +401,7 @@ void DebriefingState::prepareDebriefing()
 
 		for (int i = 0; i < battle->getHeight() * battle->getLength() * battle->getWidth(); ++i)
 		{
+			// get recoverable map data objects from the battlescape map
 			for (int part = 0; part < 4; part++)
 			{
 				if (battle->getTiles()[i]->getMapData(part))
@@ -407,45 +409,47 @@ void DebriefingState::prepareDebriefing()
 					switch (battle->getTiles()[i]->getMapData(part)->getSpecialType())
 					{
 					case UFO_POWER_SOURCE:
-						addStat("STR_UFO_POWER_SOURCE", 1, 1); break;
+						addStat("STR_UFO_POWER_SOURCE", 1, 20); break;
 					case DESTROY_OBJECTIVE:break; // this is the brain
 					case UFO_NAVIGATION:
-						addStat("STR_UFO_NAVIGATION", 1, 1); break;
+						addStat("STR_UFO_NAVIGATION", 1, 5); break;
 					case ALIEN_FOOD:
-						addStat("STR_ALIEN_FOOD", 1, 1); break;
+						addStat("STR_ALIEN_FOOD", 1, 2); break;
 					case ALIEN_REPRODUCTION:
-						addStat("STR_ALIEN_REPRODUCTION", 1, 1); break;
+						addStat("STR_ALIEN_REPRODUCTION", 1, 2); break;
 					case ALIEN_ENTERTAINMENT:
-						addStat("STR_ALIEN_ENTERTAINMENT", 1, 1); break;
+						addStat("STR_ALIEN_ENTERTAINMENT", 1, 2); break;
 					case ALIEN_SURGERY:
-						addStat("STR_ALIEN_SURGERY", 1, 1); break;
+						addStat("STR_ALIEN_SURGERY", 1, 2); break;
 					case UNKNOWN09:
-						addStat("STR_UFO_CONSTRUCTION", 1, 1); break;
+						addStat("STR_UFO_CONSTRUCTION", 1, 2); break;
 					case ALIEN_ALLOYS:
 						addStat("STR_ALIEN_ALLOYS", 1, 1); break;
 					case EXAM_ROOM:
-						addStat("STR_EXAMINATION_ROOM", 1, 1); break;
+						addStat("STR_EXAMINATION_ROOM", 1, 2); break;
 					}
 
 				}
 			}
+			// recover items from the floor
+			recoverItems(battle->getTiles()[i]->getInventory(), craft, base);		
 		}
 
-		// alien alloys recovery values are divided by 10 or divided by 150 in case of an alien base
-		int divider = battle->getMissionType()=="STR_ALIEN_BASE_ASSAULT"?150:10;
+		int aadivider = battle->getMissionType()=="STR_ALIEN_BASE_ASSAULT"?150:10;
 		for (std::vector<DebriefingStat*>::iterator i = _stats.begin(); i != _stats.end(); ++i)
 		{
+			// alien alloys recovery values are divided by 10 or divided by 150 in case of an alien base
 			if ((*i)->item == "STR_ALIEN_ALLOYS")
 			{
-				(*i)->qty = (*i)->qty / divider;
-				(*i)->score = (*i)->score / divider;
-				break;
+				(*i)->qty = (*i)->qty / aadivider;
+				(*i)->score = (*i)->score / aadivider;
 			}
 
-			/*if ((*i)->recovery && (*i)->qty > 0)
+			// recoverable battlescape tiles are now converted to items and put in base inventory
+			if ((*i)->recovery && (*i)->qty > 0)
 			{
 				base->getItems()->addItem((*i)->item, (*i)->qty);
-			}*/
+			}
 		}
 	}
 	else
@@ -458,10 +462,47 @@ void DebriefingState::prepareDebriefing()
 		{
 			_txtTitle->setText(_game->getLanguage()->getString("STR_UFO_IS_NOT_RECOVERED"));
 		}
+
+		if (playersSurvived > 0)
+		{
+			//
+			// recover items from the craft floor
+			for (int i = 0; i < battle->getHeight() * battle->getLength() * battle->getWidth(); ++i)
+			{
+				if (battle->getTiles()[i]->getMapData(MapData::O_FLOOR) && (battle->getTiles()[i]->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT))
+					recoverItems(battle->getTiles()[i]->getInventory(), craft, base);		
+			}
+
+		}
 	}
+
 
 }
 
+/* converts battlescape inventory into geoscape itemcontainer */
+void DebriefingState::recoverItems(std::vector<BattleItem*> *from, Craft *craft, Base *base)
+{
+	for (std::vector<BattleItem*>::iterator it = from->begin(); it != from->end(); ++it)
+	{
+
+		if ((*it)->getRules()->getRecoveryPoints())
+		{
+			if ((*it)->getRules()->getBattleType() == BT_CORPSE && (*it)->getUnit()->getStatus() == STATUS_DEAD)
+			{
+				addStat("STR_ALIEN_CORPSES_RECOVERED", 1, (*it)->getRules()->getRecoveryPoints());
+			}
+			else
+			{
+				addStat("STR_ALIEN_ARTIFACTS_RECOVERED", 1, (*it)->getRules()->getRecoveryPoints());
+			}
+		}
+
+		if ((*it)->getXCOMProperty() && craft)
+			craft->getItems()->addItem((*it)->getRules()->getType(), 1);
+		else
+			base->getItems()->addItem((*it)->getRules()->getType(), 1);
+	}
+}
 
 
 

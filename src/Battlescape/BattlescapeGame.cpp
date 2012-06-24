@@ -498,6 +498,30 @@ void BattlescapeGame::handleNonTargetAction()
 			}
 			_save->reviveUnconsciousUnits();
 		}
+		if (_currentAction.type == BA_HIT)
+		{
+			if (_currentAction.result.length() > 0)
+			{
+				_parentState->warning(_currentAction.result);
+				_currentAction.result = "";
+			}
+			else
+			{
+				if (_currentAction.actor->spendTimeUnits(_currentAction.TU, dontSpendTUs()))
+				{
+					Position p;
+					Pathfinding::directionToVector(_currentAction.actor->getDirection(), &p);
+					Tile * tile (_save->getTile(_currentAction.actor->getPosition() + p));
+					Position voxel = Position(tile->getPosition().x*16,tile->getPosition().y*16,tile->getPosition().z*24);
+					voxel.x += 8;voxel.y += 8;voxel.z += 8;
+					statePushNext(new ExplosionBState(this, voxel, _currentAction.weapon, _currentAction.actor));
+				}
+				else
+				{
+					_parentState->warning("STR_NOT_ENOUGH_TIME_UNITS");
+				}
+			}
+		}
 		_currentAction.type = BA_NONE;
 		_parentState->updateSoldierInfo();
 	}
@@ -776,19 +800,17 @@ bool BattlescapeGame::checkReservedTU(BattleUnit *bu, int tu)
 {
 	if (dontSpendTUs() || _save->getSide() != FACTION_PLAYER) return true; // aliens don't reserve TUs
 
+	// check TUs against slowest weapon if we have two weapons
 	if (_tuReserved != BA_NONE &&
-		tu + bu->getActionTUs(_tuReserved, bu->getMainHandWeapon()) > bu->getTimeUnits() &&
-		bu->getActionTUs(_tuReserved, bu->getMainHandWeapon()) <= bu->getTimeUnits())
+		tu + bu->getActionTUs(_tuReserved, bu->getMainHandWeapon(false)) > bu->getTimeUnits() &&
+		bu->getActionTUs(_tuReserved, bu->getMainHandWeapon(false)) <= bu->getTimeUnits())
 	{
-		if (_save->getSide() == FACTION_PLAYER)
+		switch (_tuReserved)
 		{
-			switch (_tuReserved)
-			{
-			case BA_SNAPSHOT: _parentState->warning("STR_TIME_UNITS_RESERVED_FOR_SNAP_SHOT"); break;
-			case BA_AUTOSHOT: _parentState->warning("STR_TIME_UNITS_RESERVED_FOR_AUTO_SHOT"); break;
-			case BA_AIMEDSHOT: _parentState->warning("STR_TIME_UNITS_RESERVED_FOR_AIMED_SHOT"); break;
-			default: ;
-			}
+		case BA_SNAPSHOT: _parentState->warning("STR_TIME_UNITS_RESERVED_FOR_SNAP_SHOT"); break;
+		case BA_AUTOSHOT: _parentState->warning("STR_TIME_UNITS_RESERVED_FOR_AUTO_SHOT"); break;
+		case BA_AIMEDSHOT: _parentState->warning("STR_TIME_UNITS_RESERVED_FOR_AIMED_SHOT"); break;
+		default: ;
 		}
 		return false;
 	}

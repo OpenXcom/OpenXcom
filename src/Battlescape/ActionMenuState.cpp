@@ -273,6 +273,25 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 			}
 			_game->popState();
 		}
+		else if ((_action->type == BA_STUN || _action->type == BA_HIT) && weapon->getBattleType() == BT_MELEE)
+		{
+			BattleUnit *targetUnit = NULL;
+			Position p;
+			Pathfinding::directionToVector(_action->actor->getDirection(), &p);
+			Tile * tile (_game->getSavedGame()->getBattleGame()->getTile(_action->actor->getPosition() + p));
+			if (tile->getUnit())
+				targetUnit = tile->getUnit();
+			if (targetUnit)
+			{
+				_game->popState();
+			}
+			else
+			{
+				_action->result = "STR_THERE_IS_NO_ONE_THERE";
+				_game->popState();
+			}
+
+		}
 		else
 		{
 			_action->targeting = true;

@@ -522,7 +522,7 @@ BattleUnit *SavedBattleGame::selectPreviousPlayerUnit()
 		}
 		--i;
 		// back to where we started... no more units found
-		if (wraps == 2)
+		if (wraps == 3)
 		{
 			_selectedUnit = 0;
 			return _selectedUnit;

@@ -24,7 +24,7 @@
 #include <yaml-cpp/yaml.h>
 
 enum ItemDamageType { DT_NONE, DT_AP, DT_IN, DT_HE, DT_LASER, DT_PLASMA, DT_STUN, DT_MELEE, DT_ACID, DT_SMOKE };
-enum BattleType { BT_NONE, BT_FIREARM, BT_AMMO, BT_MELEE, BT_GRENADE, BT_PROXIMITYGRENADE, BT_MEDIKIT, BT_SCANNER, BT_MINDPROBE, BT_PSIAMP, BT_FLARE };
+enum BattleType { BT_NONE, BT_FIREARM, BT_AMMO, BT_MELEE, BT_GRENADE, BT_PROXIMITYGRENADE, BT_MEDIKIT, BT_SCANNER, BT_MINDPROBE, BT_PSIAMP, BT_FLARE, BT_CORPSE };
 
 namespace OpenXcom
 {
@@ -59,6 +59,7 @@ private:
 	int _healAmount, _healthAmount;
 	int _stun, _energy;
 	int _tuUse;
+	int _recoveryPoints;
 public:
 	/// Creates a blank item ruleset.
 	RuleItem(const std::string &type);
@@ -152,6 +153,8 @@ public:
 	int getTUUse() const;
 	/// Gets the max explosion radius
 	int getExplosionRadius() const;
+	/// Gets the recovery points score
+	int getRecoveryPoints() const;
 };
 
 }

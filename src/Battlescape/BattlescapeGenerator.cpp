@@ -251,9 +251,10 @@ void BattlescapeGenerator::run()
 			if (_craft == 0 || (*i)->getCraft() == _craft)
 			{
 				unit = addXCOMUnit(new BattleUnit(*i, FACTION_PLAYER));
+				if (!_save->getSelectedUnit())
+					_save->setSelectedUnit(unit);
 			}
 		}
-		_save->setSelectedUnit(unit);
 
 		// maybe we should assign all units to the first tile of the skyranger before the inventory pre-equip and then reassign them to their correct tile afterwards?
 		// fix: make them invisible, they are made visible afterwards.
@@ -267,12 +268,14 @@ void BattlescapeGenerator::run()
 		}
 		
 		// test data - uncomment to easily debug a certain item
-		//addItem(_game->getRuleset()->getItem("STR_PSI_AMP"));
-		//addItem(_game->getRuleset()->getItem("STR_LASER_RIFLE"));
-		//addItem(_game->getRuleset()->getItem("STR_LASER_PISTOL"));
-		//addItem(_game->getRuleset()->getItem("STR_MEDI_KIT"));
-		//addItem(_game->getRuleset()->getItem("STR_AUTO_CANNON"));
-		//addItem(_game->getRuleset()->getItem("STR_AC_HE_AMMO"));
+		//addItem(_game->getRuleset()->getItem("STR_STUN_ROD"));
+		//addItem(_game->getRuleset()->getItem("STR_PLASMA_RIFLE"));
+		//addItem(_game->getRuleset()->getItem("STR_PLASMA_RIFLE_CLIP"));
+		//addItem(_game->getRuleset()->getItem("STR_HEAVY_PLASMA"));
+		//addItem(_game->getRuleset()->getItem("STR_HEAVY_PLASMA_CLIP"));
+		//addItem(_game->getRuleset()->getItem("STR_ALIEN_GRENADE"));
+		//addItem(_game->getRuleset()->getItem("STR_SMALL_LAUNCHER"));
+		//addItem(_game->getRuleset()->getItem("STR_STUN_BOMB"));
 
 		if (_craft != 0)
 		{
@@ -280,9 +283,12 @@ void BattlescapeGenerator::run()
 			for (std::map<std::string, int>::iterator i = _craft->getItems()->getContents()->begin(); i != _craft->getItems()->getContents()->end(); ++i)
 			{
 				for (int count=0; count < (*i).second; count++)
-					addItem(_game->getRuleset()->getItem((*i).first));
+				{
+					addItem(_game->getRuleset()->getItem((*i).first))->setXCOMProperty(true);
+				}
 			}
-			//_craft->getItems()->getContents()->clear();
+			// inventory of craft is now cleared
+			_craft->getItems()->getContents()->clear();
 		}
 		else
 		{
@@ -293,7 +299,7 @@ void BattlescapeGenerator::run()
 				if (_game->getRuleset()->getItem((*i).first)->getBigSprite() > -1)
 				{
 					for (int count=0; count < (*i).second; count++)
-						addItem(_game->getRuleset()->getItem((*i).first));
+						addItem(_game->getRuleset()->getItem((*i).first))->setXCOMProperty(true);
 				}
 			}
 		}
@@ -484,7 +490,7 @@ BattleUnit *BattlescapeGenerator::addCivilian(Unit *rules)
  * Adds an item to the game.
  * @param item pointer to the Item
  */
-void BattlescapeGenerator::addItem(RuleItem *item)
+BattleItem* BattlescapeGenerator::addItem(RuleItem *item)
 {
 	BattleItem *bi = new BattleItem(item, _save->getCurrentItemId());
 	bool placed = false;
@@ -578,6 +584,8 @@ void BattlescapeGenerator::addItem(RuleItem *item)
 		bi->setSlot(_game->getRuleset()->getInventory("STR_GROUND"));
 		_craftInventoryTile->addItem(bi);
 	}
+
+	return bi;
 }
 
 
@@ -586,7 +594,7 @@ void BattlescapeGenerator::addItem(RuleItem *item)
  * @param item pointer to the Item
  * @param unit pointer to the Unit
  */
-void BattlescapeGenerator::addItem(RuleItem *item, BattleUnit *unit)
+BattleItem* BattlescapeGenerator::addItem(RuleItem *item, BattleUnit *unit)
 {
 	BattleItem *bi = new BattleItem(item, _save->getCurrentItemId());
 	bool placed = false;
@@ -649,6 +657,7 @@ void BattlescapeGenerator::addItem(RuleItem *item, BattleUnit *unit)
 	{
 		_save->getItems()->push_back(bi);
 	}
+	return bi;
 }
 
 

@@ -833,7 +833,7 @@ items:
     bigSprite: 26
     floorSprite: 26
     handSprite: 80
-    hitSound: 19
+    hitSound: 54
     hitAnimation: 36
     power: 65
     damageType: 6
@@ -893,6 +893,7 @@ items:
     twoHanded: true
     invWidth: 2
     invHeight: 3
+    recoveryPoints: 5
   - type: STR_HEAVY_PLASMA_CLIP
     size: 0.3
     costSell: 9590
@@ -905,6 +906,7 @@ items:
     damageType: 5
     clipSize: 35
     battleType: 2
+    recoveryPoints: 1
   - type: STR_PLASMA_RIFLE
     size: 0.2
     costSell: 126500
@@ -926,6 +928,7 @@ items:
     twoHanded: true
     invWidth: 1
     invHeight: 3
+    recoveryPoints: 4
   - type: STR_PLASMA_RIFLE_CLIP
     size: 0.1
     costSell: 6290
@@ -938,6 +941,7 @@ items:
     damageType: 5
     clipSize: 28
     battleType: 2
+    recoveryPoints: 1
   - type: STR_PLASMA_PISTOL
     size: 0.1
     costSell: 84000
@@ -958,6 +962,7 @@ items:
     battleType: 1
     invWidth: 1
     invHeight: 2
+    recoveryPoints: 3
   - type: STR_PLASMA_PISTOL_CLIP
     size: 0.1
     costSell: 4440
@@ -970,6 +975,7 @@ items:
     damageType: 5
     clipSize: 26
     battleType: 2
+    recoveryPoints: 1
   - type: STR_BLASTER_LAUNCHER
     size: 0.3
     costSell: 144000
@@ -977,7 +983,7 @@ items:
     bigSprite: 35
     floorSprite: 34
     handSprite: 56
-    bulletSprite: 0
+    bulletSprite: 10
     fireSound: 52
     compatibleAmmo:
       - STR_BLASTER_BOMB
@@ -988,6 +994,7 @@ items:
     waypoint: true
     invWidth: 2
     invHeight: 3
+    recoveryPoints: 5
   - type: STR_BLASTER_BOMB
     size: 0.2
     costSell: 17028
@@ -1002,14 +1009,15 @@ items:
     battleType: 2
     invWidth: 1
     invHeight: 2
+    recoveryPoints: 1
   - type: STR_SMALL_LAUNCHER
     size: 0.2
     costSell: 120000
     weight: 10
-    bigSprite: 35
-    floorSprite: 37
+    bigSprite: 37
+    floorSprite: 36
     handSprite: 64
-    bulletSprite: 0
+    bulletSprite: 9
     fireSound: 52
     compatibleAmmo:
       - STR_STUN_BOMB
@@ -1021,6 +1029,7 @@ items:
     twoHanded: true
     invWidth: 2
     invHeight: 2
+    recoveryPoints: 4
   - type: STR_STUN_BOMB
     size: 0.1
     costSell: 15200
@@ -1033,6 +1042,7 @@ items:
     damageType: 6
     clipSize: 1
     battleType: 2
+    recoveryPoints: 1
   - type: STR_ALIEN_GRENADE
     size: 0.1
     costSell: 14850
@@ -1042,6 +1052,7 @@ items:
     power: 90
     damageType: 3
     battleType: 4
+    recoveryPoints: 1
   - type: STR_ELERIUM_115
     size: 0.1
     costSell: 5000
@@ -1060,6 +1071,7 @@ items:
     invWidth: 2
     invHeight: 2
     tuUse: 50
+    recoveryPoints: 1
   - type: STR_SECTOID_CORPSE
     size: 0.4
     costSell: 20000
@@ -1068,6 +1080,8 @@ items:
     floorSprite: 42
     invWidth: 2
     invHeight: 3
+    recoveryPoints: 5
+    battleType: 11
   - type: STR_SNAKEMAN_CORPSE
     size: 0.4
     costSell: 20000
@@ -1076,6 +1090,8 @@ items:
     floorSprite: 46
     invWidth: 2
     invHeight: 3
+    recoveryPoints: 5
+    battleType: 11    
   - type: STR_ETHEREAL_CORPSE
     size: 0.4
     costSell: 20000
@@ -1084,6 +1100,8 @@ items:
     floorSprite: 45
     invWidth: 2
     invHeight: 3
+    recoveryPoints: 5
+    battleType: 11
   - type: STR_MUTON_CORPSE
     size: 0.4
     costSell: 20000
@@ -1092,6 +1110,8 @@ items:
     floorSprite: 44
     invWidth: 2
     invHeight: 3
+    recoveryPoints: 5
+    battleType: 11
   - type: STR_FLOATER_CORPSE
     size: 0.4
     costSell: 20000
@@ -1100,6 +1120,8 @@ items:
     floorSprite: 48
     invWidth: 2
     invHeight: 3
+    recoveryPoints: 5
+    battleType: 11
   - type: STR_CELATID_CORPSE
     size: 0.4
     costSell: 20000
@@ -1108,6 +1130,8 @@ items:
     floorSprite: 43
     invWidth: 2
     invHeight: 3
+    recoveryPoints: 3
+    battleType: 11
   - type: STR_SILACOID_CORPSE
     size: 0.4
     costSell: 20000
@@ -1116,6 +1140,8 @@ items:
     floorSprite: 47
     invWidth: 2
     invHeight: 3
+    recoveryPoints: 3
+    battleType: 11
   - type: STR_CHRYSSALID_CORPSE
     size: 0.4
     costSell: 20000
@@ -1124,9 +1150,13 @@ items:
     floorSprite: 49
     invWidth: 2
     invHeight: 3
+    recoveryPoints: 3
+    battleType: 11    
   - type: STR_REAPER_CORPSE
     size: 1
     costSell: 20000
+    recoveryPoints: 3
+    battleType: 11    
   - type: REAPER_CORPSE_1
     floorSprite: 52
     invWidth: 0
@@ -1146,6 +1176,8 @@ items:
   - type: STR_SECTOPOD_CORPSE
     size: 1
     costSell: 20000
+    recoveryPoints: 3
+    battleType: 11    
   - type: SECTOPOD_CORPSE_1
     floorSprite: 60
     invWidth: 0
@@ -1165,6 +1197,8 @@ items:
   - type: STR_CYBERDISC_CORPSE
     size: 1
     costSell: 20000
+    recoveryPoints: 3
+    battleType: 11    
   - type: CYBERDISC_CORPSE_1
     floorSprite: 56
     invWidth: 0
@@ -2288,6 +2322,52 @@ units:
     deathSound: 10
     intelligence: 4
     aggression: 2
+  - type: FLOATER_ENGINEER
+    race: STR_FLOATER
+    rank: STR_LIVE_ENGINEER
+    stats:
+      tu: 50
+      stamina: 90
+      health: 35
+      bravery: 80
+      reactions: 50
+      firing: 50
+      throwing: 58
+      strength: 40
+      psiStrength: 35
+      psiSkill: 0
+      melee: 70
+    armor: FLOATER_ARMOR0
+    standHeight: 21
+    kneelHeight: 16
+    loftemps: 3
+    value: 12
+    deathSound: 10
+    intelligence: 7
+    aggression: 2
+  - type: FLOATER_NAVIGATOR
+    race: STR_FLOATER
+    rank: STR_LIVE_NAVIGATOR
+    stats:
+      tu: 50
+      stamina: 90
+      health: 35
+      bravery: 80
+      reactions: 50
+      firing: 50
+      throwing: 58
+      strength: 40
+      psiStrength: 35
+      psiSkill: 0
+      melee: 70
+    armor: FLOATER_ARMOR0
+    standHeight: 21
+    kneelHeight: 16
+    loftemps: 3
+    value: 12
+    deathSound: 10
+    intelligence: 5
+    aggression: 2
   - type: TANK_CANNON
     race: STR_TANK_CANNON
     stats:
@@ -2531,9 +2611,9 @@ alienDeployments:
             - STR_MIND_PROBE
           -
             - STR_SMALL_LAUNCHER
-            - STR_STUN_MISSLE
-            - STR_STUN_MISSLE
-            - STR_STUN_MISSLE
+            - STR_STUN_BOMB
+            - STR_STUN_BOMB
+            - STR_STUN_BOMB
     width: 50
     length: 50
     height: 4

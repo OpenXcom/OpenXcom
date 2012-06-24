@@ -29,6 +29,9 @@ class TextButton;
 class Window;
 class Text;
 class TextList;
+class BattleItem;
+class Craft;
+class Base;
 
 struct DebriefingStat { DebriefingStat(std::string _item, bool recovery) : item(_item), qty(0), score(0), recovery(recovery) {}; std::string item; int qty; int score; bool recovery; };
 
@@ -47,6 +50,7 @@ private:
 	TextList *_lstStats, *_lstUfoRecovery, *_lstTotal;
 	void addStat(const std::string &name, int quantity, int score);
 	void prepareDebriefing();
+	void recoverItems(std::vector<BattleItem*> *from, Craft *craft, Base *base);
 public:
 	/// Creates the Debriefing state.
 	DebriefingState(Game *game);

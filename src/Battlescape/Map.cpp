@@ -129,7 +129,7 @@ void Map::init()
 			_arrow->setPixel(x, y, pixels[x+(y*9)]);
 	_arrow->unlock();
 
-	for (int i = 0; i < 36; ++i)
+	for (int i = 0; i < 37; ++i)
 	{
 		_bullet[i] = new BulletSprite(i);
 		_bullet[i]->setPalette(this->getPalette());
@@ -152,11 +152,13 @@ void Map::think()
 void Map::draw()
 {
 	Surface::draw();
+	Tile *t;
 
 	projectileInFOV = false;
 	if (_projectile)
 	{
-		if (_save->getTile(Position(_projectile->getPosition(0).x/16, _projectile->getPosition(0).y/16, _projectile->getPosition(0).z/24))->getVisible())
+		t = _save->getTile(Position(_projectile->getPosition(0).x/16, _projectile->getPosition(0).y/16, _projectile->getPosition(0).z/24));
+		if (t && t->getVisible())
 		{
 			projectileInFOV = true;
 		}
@@ -165,7 +167,8 @@ void Map::draw()
 	if (!_explosions.empty())
 	{
 		std::set<Explosion*>::iterator i = _explosions.begin();
-		if (_save->getTile(Position((*i)->getPosition().x/16, (*i)->getPosition().y/16, (*i)->getPosition().z/24))->getVisible())
+		t = _save->getTile(Position((*i)->getPosition().x/16, (*i)->getPosition().y/16, (*i)->getPosition().z/24));
+		if (t && t->getVisible())
 		{
 			explosionInFOV = true;
 		}
@@ -337,7 +340,7 @@ void Map::drawTerrain(Surface *surface)
 									frameNumber = 0; // red box
 							}else
 							{
-								if (unit)
+								if (unit && (unit->getVisible() || _save->getDebugMode()))
 									frameNumber = 7 + (_animFrame / 2); // yellow animated crosshairs
 								else
 									frameNumber = 6; // red static crosshairs
@@ -550,7 +553,7 @@ void Map::drawTerrain(Surface *surface)
 									frameNumber = 3; // red box
 							}else
 							{
-								if (unit)
+								if (unit && (unit->getVisible() || _save->getDebugMode()))
 									frameNumber = 7 + (_animFrame / 2); // yellow animated crosshairs
 								else
 									frameNumber = 6; // red static crosshairs

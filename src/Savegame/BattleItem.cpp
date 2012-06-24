@@ -29,7 +29,7 @@ namespace OpenXcom
  * Initializes a item of the specified type.
  * @param rules Pointer to ruleset.
  */
-BattleItem::BattleItem(RuleItem *rules, int *id) : _id(*id), _rules(rules), _owner(0), _previousOwner(0), _unit(0), _tile(0), _inventorySlot(0), _inventoryX(0), _inventoryY(0), _ammoItem(0), _explodeTurn(0), _ammoQuantity(0), _painKiller(0), _heal(0), _stimulant(0)
+BattleItem::BattleItem(RuleItem *rules, int *id) : _id(*id), _rules(rules), _owner(0), _previousOwner(0), _unit(0), _tile(0), _inventorySlot(0), _inventoryX(0), _inventoryY(0), _ammoItem(0), _explodeTurn(0), _ammoQuantity(0), _painKiller(0), _heal(0), _stimulant(0), _XCOMProperty(false)
 {
 	if (_rules && _rules->getBattleType() == BT_AMMO)
 	{
@@ -457,5 +457,22 @@ void BattleItem::setStimulantQuantity (int stimulant)
 int BattleItem::getStimulantQuantity () const
 {
 	return _stimulant;
+}
+
+/**
+ * Set the XCOM property flag. This is to determine at debriefing what goes into base/craft
+ * @param bool
+ */
+void BattleItem::setXCOMProperty (bool flag)
+{
+	_XCOMProperty = flag;
+}
+/**
+ * Get the XCOM property flag. This is to determine at debriefing what goes into base/craft
+ * @return bool
+ */
+bool BattleItem::getXCOMProperty () const
+{
+	return _XCOMProperty;
 }
 }

@@ -1435,9 +1435,10 @@ BattleItem *BattleUnit::getItem(const std::string &slot, int x, int y) const
 
 /**
 * Get the "main hand weapon" from the unit.
+* @param quickest Wether to get the quickest weapon, default true
 * @return Pointer to item.
 */
-BattleItem *BattleUnit::getMainHandWeapon() const
+BattleItem *BattleUnit::getMainHandWeapon(bool quickest) const
 {
 	BattleItem *weaponRightHand = getItem("STR_RIGHT_HAND");
 	BattleItem *weaponLeftHand = getItem("STR_LEFT_HAND");
@@ -1450,19 +1451,19 @@ BattleItem *BattleUnit::getMainHandWeapon() const
 
 	// otherwise pick the one with the least snapshot TUs
 	int tuRightHand = weaponRightHand->getRules()->getTUSnap();
-	int tuLeftHand = weaponRightHand->getRules()->getTUSnap();
+	int tuLeftHand = weaponLeftHand->getRules()->getTUSnap();
 	if (tuLeftHand >= tuRightHand)
 	{
-		return weaponRightHand;
+		return quickest?weaponRightHand:weaponLeftHand;
 	}
 	else
 	{
-		return weaponLeftHand;
+		return quickest?weaponLeftHand:weaponRightHand;
 	}
 }
 
 /**
-* Get the "main hand weapon" from the unit.
+* Get a grenade from the belt (used for AI)
 * @return Pointer to item.
 */
 BattleItem *BattleUnit::getGrenadeFromBelt() const

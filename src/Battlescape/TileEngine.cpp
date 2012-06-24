@@ -633,7 +633,7 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 					ret = tilesAffected.insert(dest); // check if we had this tile already
 					if (ret.second)
 					{
-						if (type == DT_HE)
+						if (type == DT_HE || type == DT_STUN)
 						{
 							// power 50 - 150%
 							if (dest->getUnit())

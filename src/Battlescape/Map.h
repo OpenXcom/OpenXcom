@@ -59,7 +59,7 @@ private:
 	CursorType _cursorType;
 	int _cursorSize;
 	int _animFrame;
-	BulletSprite *_bullet[36];
+	BulletSprite *_bullet[37];
 	Projectile *_projectile;
 	bool projectileInFOV;
 	std::set<Explosion *> _explosions;

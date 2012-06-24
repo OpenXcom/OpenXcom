@@ -32,7 +32,7 @@ RuleItem::RuleItem(const std::string &type) : _type(type), _name(type), _size(0.
 											_fireSound(-1), _hitSound(-1), _hitAnimation(0), _power(0), _priority(0), _compatibleAmmo(), _damageType(DT_NONE),
 											_accuracyAuto(0), _accuracySnap(0), _accuracyAimed(0), _tuAuto(0), _tuSnap(0), _tuAimed(0), _clipSize(0), _accuracyMelee(0), _tuMelee(0),
 											_battleType(BT_NONE), _twoHanded(false), _waypoint(false), _fixedWeapon(false), _invWidth(1), _invHeight(1),
-											_painKiller(0), _heal(0), _stimulant(0), _healAmount(0), _healthAmount(0), _energy(0), _stun(0), _tuUse(0)
+											_painKiller(0), _heal(0), _stimulant(0), _healAmount(0), _healthAmount(0), _energy(0), _stun(0), _tuUse(0), _recoveryPoints(0)
 {
 }
 
@@ -220,6 +220,10 @@ void RuleItem::load(const YAML::Node &node)
 		{
 			i.second() >> _tuUse;
 		}
+		else if (key == "recoveryPoints")
+		{
+			i.second() >> _recoveryPoints;
+		}
 	}
 }
 
@@ -271,6 +275,7 @@ void RuleItem::save(YAML::Emitter &out) const
 	out << YAML::Key << "stun" << YAML::Value << _stun;
 	out << YAML::Key << "energy" << YAML::Value << _energy;
 	out << YAML::Key << "tuUse" << YAML::Value << _tuUse;
+	out << YAML::Key << "recoveryPoints" << YAML::Value << _recoveryPoints;
 	out << YAML::EndMap;
 }
 
@@ -673,6 +678,12 @@ int RuleItem::getExplosionRadius() const
 	}
 
 	return radius;
+}
+
+/// Gets the recovery points score
+int RuleItem::getRecoveryPoints() const
+{
+	return _recoveryPoints;
 }
 
 }
