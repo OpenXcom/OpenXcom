@@ -232,7 +232,7 @@ void ProductionState::setAssignedEngineer()
 	s1 << _game->getLanguage()->getString("STR_ENGINEERS_AVAILABLE_UC") << L"\x01" << availableEngineer;
 	_txtAvailableEngineer->setText(s1.str());
 	std::wstringstream s2;
-	s2 << _game->getLanguage()->getString("STR_SPACE_AVAILABLE") << L"\x01" << availableWorkSpace;
+	s2 << _game->getLanguage()->getString("STR_WORKSHOP_SPACE_AVAILABLE_UC") << L"\x01" << availableWorkSpace;
 	_txtAvailableSpace->setText(s2.str());
 	std::wstringstream s3;
 	s3 << L">\x01" << _production->getAssignedEngineers();
