@@ -121,6 +121,9 @@ void UnitSprite::draw()
 	case 4:
 		drawRoutine4();
 		break;
+	case 5:
+		drawRoutine5();
+		break;
 	}
 
 }
@@ -488,4 +491,30 @@ void UnitSprite::drawRoutine4()
 
 	s->blit(this);
 }
+
+/**
+ * Drawing routine for sectopods.
+ */
+void UnitSprite::drawRoutine5()
+{
+	if (_unit->isOut())
+	{
+		// unit is drawn as an item
+		return;
+	}
+
+	Surface *s = 0;
+
+	if (_unit->getStatus() == STATUS_WALKING)
+	{
+		s = _unitSurface->getFrame( 32 + (_unit->getDirection() * 16) + (_part * 4) + (_unit->getWalkingPhase() % 4) );
+	}
+	else
+	{
+		s = _unitSurface->getFrame((_part * 8) + _unit->getDirection());
+	}
+	
+	s->blit(this);
+}
+
 }
