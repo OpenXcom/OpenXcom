@@ -130,7 +130,7 @@ KUPNO/ZATRUDNIANIE
 STR_SELL_SACK_UC
 SPRZEDAŻ/ZWALNIANIE
 STR_GEOSCAPE
-KULA ZIEMSKA
+WIDOK GLOBU
 STR_XCOM_BASES
 Bazy X-COMu
 STR_NAME
@@ -156,9 +156,9 @@ AKTUALNIE BADANE
 STR_SCIENTISTS_AVAILABLE
   Naukowców dostępnych>
 STR_SCIENTISTS_ALLOCATED
-Naukowców pracujących>
+Odesłani do badań>
 STR_LABORATORY_SPACE_AVAILABLE
-Laboratoriów dostępnych>
+Wolnych stanowisk badań>
 STR_RESEARCH_PROJECT
 BADANY PROJEKT
 STR_SCIENTISTS_ALLOCATED_UC
@@ -172,7 +172,7 @@ NOWE PROJEKTY
 STR_SCIENTISTS_AVAILABLE_UC
    NAUKOWCÓW DOSTĘPNYCH>
 STR_LABORATORY_SPACE_AVAILABLE_UC
-LABORATORIÓW DOSTĘPNYCH>
+WOLNYCH STANOWISK BADAŃ>
 STR_INCREASE
  Zwiększ
 STR_DECREASE
@@ -186,19 +186,19 @@ STR_ENGINEERS_AVAILABLE
 STR_ENGINEERS_ALLOCATED
 Inżynierów pracujących>
 STR_WORKSHOP_SPACE_AVAILABLE
-Warsztatów dostępnych>
+Wolnych stanowisk pracy>
 STR_CURRENT_FUNDS
 Stan konta>
 STR_ITEM
 PRZEDMIOT
 STR_ENGINEERS__ALLOCATED
- Inżynierów{NEWLINE}     pracu-{NEWLINE}     jących
+Wysłano{NEWLINE}do pracy
 STR_UNITS_PRODUCED
-   Wypro-{NEWLINE}    duko-{NEWLINE}     wano
+Wykonano{NEWLINE}  sztuk
 STR_TOTAL_TO_PRODUCE
- Zlecono{NEWLINE}   do{NEWLINE}produkcji
+  Ilość{NEWLINE} zlecona
 STR_COST__PER__UNIT
-Koszt{NEWLINE}  za{NEWLINE}sztukę
+ Koszt{NEWLINE}   za{NEWLINE} sztukę
 STR_DAYS_HOURS_LEFT
 Pozostało{NEWLINE}dni/godzin
 STR_NEW_PRODUCTION
@@ -210,11 +210,11 @@ KATEGORIA
 STR_START_PRODUCTION
 ROZPOCZĘCIE PRODUKCJI
 STR_ENGINEER_HOURS_TO_PRODUCE_ONE_UNIT
-roboczogodzin na jedną sztukę
+ roboczogodzin na jedną sztukę
 STR_COST_PER_UNIT_
 Koszt jednej sztuki>$
 STR_WORK_SPACE_REQUIRED
-Warsztatów wymaganych>
+Wymagana przestrzeń dla rozpoczęcia produkcji>
 STR_SPECIAL_MATERIALS_REQUIRED
 WYMAGANE SPECJALNE MATERIAŁY
 STR_ITEM_REQUIRED
@@ -228,7 +228,7 @@ PRZERWANIE PRODUKCJI
 STR_ENGINEERS_AVAILABLE_UC
  INŻYNIERÓW DOSTĘPNYCH>
 STR_WORKSHOP_SPACE_AVAILABLE_UC
-WARSZTATÓW DOSTĘPNYCH>
+WOLNYCH STANOWISK PRACY>
 STR_ENGINEERS
 Inżynierów
 STR_ALLOCATED
@@ -294,11 +294,11 @@ Wybierz bazę docelową
 STR_COST
 Koszt
 STR_VICTORY_1
-Po wejściu do sali zobaczyłeś 'Mózg' Obcych - obiekt Twoich poszukiwań. Zanim postanowiłeś strzelić skomunikował się z Tobą poprzez ekran w swojej bazie. Nim podjąłeś decyzję o pociągnięciu za spust błagał Cię, abyś wysłuchał Jego argumentów będących za nie zabijaniem Go...
+Po wejściu do sali zobaczyłeś 'Mózg' Obcych - obiekt Twoich poszukiwań. Zanim postanowiłeś strzelić skomunikował się z Tobą poprzez ekran w swojej bazie. To 'coś' błagało Cię o wysłuchanie argumentów obrony nim podejmiesz decyzję, by pociągnąć za spust...
 STR_VICTORY_2
-'Mózg' wyświetlił na ekranie: 'Wiele milionów lat temu planeta zwana przez Was Marsem była pełna życia. Życie zostało sprowadzone na tą jałową planetę, tak samo jak na Waszą: przez naszą cywilizację. Przez miliony lat odwiedzaliśmy Waszą planetę i genetycznie rozwijaliśmy Wasz gatunek. Nie możecie nas zabić, jesteście częścią nas...
+'Mózg' mówi: 'Wiele milionów lat temu planeta zwana przez Was Marsem była pełna życia. Nasza cywilizacja sprowadziła na tą jałowa planetę życie, tak jak i sprowadziła na Waszą. Przez miliony lat odwiedzaliśmy Waszą planetę i genetycznie rozwijaliśmy Wasz gatunek. Nie możecie nas zabić, jesteście częścią nas… 
 STR_VICTORY_3
-Jesteś w centrum byłej marsjańskiej cywilizacji. Piramidy zostały wybudowane miliony lat przed Wami przez gatunek, który jest Waszym przodkiem. Nie ma planety poza naszym zasięgiem. Ta możliwość powinna być wkrótce także i Wasza. Wszyscy prosimy Was o współpracę...'
+To jest centrum marsjańskiej cywilizacji -  piramidy wybudowano miliony lat przed Wami - przez gatunek, który jest Waszym przodkiem. Nie ma planety poza naszym zasięgiem. Ta potęga może być wkrótce Wasza. Pytanie czy zechcesz współpracować...'
 STR_GAME_OVER_1
 Obcym udało się wytępić prawie całą ludzkość, niszcząc miasta oraz zatruwając powietrze i wodę. Opór ziemskich armii był daremny w starciu z o wiele wyższą technologią. Pokolenia, które przetrwały cierpią z powodu okropnych mutacji, jak i ucieczek przed tępiącymi ludzi Obcymi. Wielu ludzi przebywa w obozach pracy pomagając przekształcać Ziemię w kolonię Obcych, która jest częścią pewnego nieznanego imperium.
 STR_GAME_OVER_2
@@ -306,7 +306,7 @@ Wiedza zdobyta przez projekt X-COM została utracona na zawsze. Nie udało Ci si
 STR_VICTORY_4
 'Mózg' Obcych został rozerwany przez wybuch gorącej plazmy przez co cała armia Obcych została pokonana.
 STR_VICTORY_5
-Gdy tylko Obcy stracili Marsa stracili też Ziemię. Niedługo potem dano ludzkości Marsa oraz technologię zdobytą przez X-COM, by ziemska cywilizacja jeszcze bardziej rozkwitła. Zagrożenie ze strony Obcych zniknęło, ale za jakiś czas kto wie...
+Obcy utracili Marsa a teraz stracili też Ziemię. Wkrótce odkrycia X-COM pozwolą ludzkości raz jeszcze rozkwitnąć i posiąść Mars już dla siebie. Zagrożenie ze strony Obcych zniknęło, ale kto wie na jak długo...
 STR_YOU_HAVE_FAILED
 Nie udało Ci się powstrzymać najazdu Obcych. Państwa sponsorujące X-COM, jedne po drugim, podpisały pakty obiecujące dostęp do technologii Obcych - w myśl dobrobytu i pokoju. Jednak niebawem stało się jasne, że Obcy mają inne plany...
 STR_TOTAL_UC
@@ -1310,11 +1310,11 @@ ZNAKOMITA!
 STR_SCORE
 PUNKTY
 STR_XCOM_PROJECT_MONTHLY_REPORT
-MIESIĘCZNY RAPORT PROJEKTU X-COM
+OKRESOWY RAPORT PROJEKTU X-COM
 STR_MONTH
 Miesiąc> 
 STR_COUNCIL_IS_GENERALLY_SATISFIED
-Rada krajów utrzymujących projekt jest ogólnie zadowolona z Twoich dotychczasowych postępów.
+Rada krajów utrzymujących projekt jest ogólnie zadowolona{NEWLINE}z Twoich dotychczasowych postępów.
 STR_COUNCIL_IS_VERY_PLEASED
 Rada krajów utrzymujących projekt jest bardzo zadowolona z Twojego znakomitego postępu. Oby tak dalej!
 STR_COUNCIL_IS_DISSATISFIED
@@ -2032,9 +2032,9 @@ Zarezerwowano czas dla strzału seryjnego.
 STR_TIME_UNITS_RESERVED_FOR_AIMED_SHOT
 Zarezerwowano czas dla strzału wycelowanego.
 STR_UNITS_IN_EXIT_AREA
- - ilość jednostek na terenie ewakuacji
+ jednostek można ewakuować
 STR_UNITS_OUTSIDE_EXIT_AREA
- - ilość jednostek poza terenem ewakuacji
+ poza terenem ewakuacji
 STR_ABORT_MISSION
 Przerwać misję?
 STR_CORPSE
