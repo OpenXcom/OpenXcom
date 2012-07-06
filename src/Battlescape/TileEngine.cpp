@@ -637,7 +637,27 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 						{
 							// power 50 - 150%
 							if (dest->getUnit())
+							{
 								dest->getUnit()->damage(Position(0, 0, 0), (int)(RNG::generate(power_/2.0, power_*1.5)), type);
+							}
+							bool done = false;
+							while (!done)
+							{
+								done = dest->getInventory()->size() == 0;
+								for (std::vector<BattleItem*>::iterator it = dest->getInventory()->begin(); it != dest->getInventory()->end(); )
+								{
+									if (power_ > (*it)->getRules()->getArmor())
+									{
+										_save->removeItem((*it));
+										break;
+									}
+									else
+									{
+										++it;
+										done = it == dest->getInventory()->end();
+									}
+								}
+							}
 						}
 						if (type == DT_SMOKE)
 						{

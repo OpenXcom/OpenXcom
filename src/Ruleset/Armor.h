@@ -28,7 +28,7 @@ namespace OpenXcom
 {
 
 /**
- * Represents a specific type of armor. (why the american spelling? - it's just shorter :)
+ * Represents a specific type of armor.
  * Not only soldier armor, but also alien armor - some alien races wear Soldier Armor, Leader Armor or Commander Armor
  * depending on their rank.
  */

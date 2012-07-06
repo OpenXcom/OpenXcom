@@ -540,7 +540,7 @@ void BattlescapeGame::setupCursor()
 		{
 			getMap()->setCursorType(CT_THROW);
 		}
-		else if (_currentAction.type == BA_MINDCONTROL || _currentAction.type == BA_PANIC)
+		else if (_currentAction.type == BA_MINDCONTROL || _currentAction.type == BA_PANIC || _currentAction.type == BA_USE)
 		{
 			getMap()->setCursorType(CT_PSI);
 		}
@@ -1005,6 +1005,17 @@ void BattlescapeGame::primaryAction(const Position &pos)
 			_parentState->showLaunchButton(true);
 			_currentAction.waypoints.push_back(pos);
 			getMap()->getWaypoints()->push_back(pos);
+		}
+		else if (_currentAction.type == BA_USE 
+			&& _currentAction.weapon->getRules()->getBattleType() == BT_MINDPROBE 
+			)
+		{
+			if (_save->selectUnit(pos)->getFaction() != _save->getSelectedUnit()->getFaction())
+			{
+				_parentState->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(37)->play();
+				_parentState->getGame()->pushState (new UnitInfoState (_parentState->getGame(), _save->selectUnit(pos)));
+				cancelCurrentAction();
+			}
 		}
 		else
 		{

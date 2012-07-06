@@ -360,8 +360,12 @@ void UnitInfoState::init()
 	_barTimeUnits->setValue(_unit->getTimeUnits());
 
 	ss.str(L"");
-	ss << _game->getLanguage()->getString(_unit->getRankString());
-	ss << " ";
+	// aliens have their rank in their "name", soldiers don't
+	if (_unit->getType() == "SOLDIER")
+	{
+		ss << _game->getLanguage()->getString(_unit->getRankString());
+		ss << " ";
+	}
 	ss << _unit->getName(_game->getLanguage());
 	_txtName->setText(ss.str());
 

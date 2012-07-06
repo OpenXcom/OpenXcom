@@ -360,6 +360,7 @@ items:
     fixedWeapon: true
     invWidth: 2
     invHeight: 3
+    armor: 20
   - type: STR_HWP_CANNON_SHELLS
     size: 0.1
     costBuy: 200
@@ -376,6 +377,7 @@ items:
     battleType: 2
     invWidth: 2
     invHeight: 1
+    armor: 20    
   - type: STR_TANK_ROCKET_LAUNCHER
     size: 6
     costBuy: 480000
@@ -426,6 +428,7 @@ items:
     battleType: 1
     invWidth: 1
     invHeight: 2
+    armor: 20    
   - type: STR_PISTOL_CLIP
     size: 0.1
     costBuy: 70
@@ -439,6 +442,7 @@ items:
     damageType: 1
     clipSize: 12
     battleType: 2
+    armor: 12    
   - type: STR_RIFLE
     size: 0.2
     costBuy: 3000
@@ -461,6 +465,7 @@ items:
     twoHanded: true
     invWidth: 1
     invHeight: 3
+    armor: 20    
   - type: STR_RIFLE_CLIP
     size: 0.1
     costBuy: 200
@@ -474,6 +479,7 @@ items:
     damageType: 1
     clipSize: 20
     battleType: 2
+    armor: 20    
   - type: STR_HEAVY_CANNON
     size: 0.3
     costBuy: 6400
@@ -496,6 +502,7 @@ items:
     twoHanded: true
     invWidth: 2
     invHeight: 3
+    armor: 20    
   - type: STR_HC_AP_AMMO
     size: 0.1
     costBuy: 300
@@ -511,6 +518,7 @@ items:
     battleType: 2
     invWidth: 2
     invHeight: 1
+    armor: 20    
   - type: STR_HC_HE_AMMO
     size: 0.1
     costBuy: 500
@@ -526,6 +534,7 @@ items:
     battleType: 2
     invWidth: 2
     invHeight: 1
+    armor: 20    
   - type: STR_HC_I_AMMO
     size: 0.1
     costBuy: 400
@@ -541,6 +550,7 @@ items:
     battleType: 2
     invWidth: 2
     invHeight: 1
+    armor: 20    
   - type: STR_AUTO_CANNON
     size: 0.3
     costBuy: 13500
@@ -565,6 +575,7 @@ items:
     twoHanded: true
     invWidth: 2
     invHeight: 3
+    armor: 20    
   - type: STR_AC_AP_AMMO
     size: 0.1
     costBuy: 500
@@ -580,6 +591,7 @@ items:
     battleType: 2
     invWidth: 2
     invHeight: 1
+    armor: 20    
   - type: STR_AC_HE_AMMO
     size: 0.1
     costBuy: 700
@@ -595,6 +607,7 @@ items:
     battleType: 2
     invWidth: 2
     invHeight: 1
+    armor: 20    
   - type: STR_AC_I_AMMO
     size: 0.1
     costBuy: 650
@@ -610,6 +623,7 @@ items:
     battleType: 2
     invWidth: 2
     invHeight: 1
+    armor: 20    
   - type: STR_ROCKET_LAUNCHER
     size: 0.4
     costBuy: 4000
@@ -632,6 +646,7 @@ items:
     twoHanded: true
     invWidth: 2
     invHeight: 3
+    armor: 20    
   - type: STR_SMALL_ROCKET
     size: 0.2
     costBuy: 600
@@ -647,6 +662,7 @@ items:
     battleType: 2
     invWidth: 1
     invHeight: 3
+    armor: 20    
   - type: STR_LARGE_ROCKET
     size: 0.2
     costBuy: 900
@@ -662,6 +678,7 @@ items:
     battleType: 2
     invWidth: 1
     invHeight: 3
+    armor: 20    
   - type: STR_INCENDIARY_ROCKET
     size: 0.2
     costBuy: 1200
@@ -677,6 +694,7 @@ items:
     battleType: 2
     invWidth: 1
     invHeight: 3
+    armor: 20    
   - type: STR_LASER_PISTOL
     size: 0.1
     costSell: 20000
@@ -700,6 +718,7 @@ items:
     battleType: 1
     invWidth: 1
     invHeight: 2
+    armor: 20    
   - type: STR_LASER_RIFLE
     size: 0.2
     costSell: 36900
@@ -724,6 +743,7 @@ items:
     twoHanded: true
     invWidth: 1
     invHeight: 3
+    armor: 20    
   - type: STR_HEAVY_LASER
     size: 0.3
     costSell: 61000
@@ -746,6 +766,7 @@ items:
     twoHanded: true
     invWidth: 2
     invHeight: 3
+    armor: 20    
   - type: STR_GRENADE
     size: 0.1
     costBuy: 300
@@ -756,6 +777,7 @@ items:
     power: 50
     damageType: 3
     battleType: 4
+    armor: 20    
   - type: STR_SMOKE_GRENADE
     size: 0.1
     costBuy: 150
@@ -766,6 +788,7 @@ items:
     power: 60
     damageType: 9
     battleType: 4
+    armor: 20    
   - type: STR_PROXIMITY_GRENADE
     size: 0.1
     costBuy: 500
@@ -776,6 +799,7 @@ items:
     power: 70
     damageType: 3
     battleType: 5
+    armor: 20    
   - type: STR_HIGH_EXPLOSIVE
     size: 0.25
     costBuy: 1500
@@ -788,6 +812,7 @@ items:
     battleType: 4
     invWidth: 2
     invHeight: 1
+    armor: 20    
   - type: STR_MOTION_SCANNER
     size: 0.1
     costSell: 45600
@@ -796,6 +821,7 @@ items:
     floorSprite: 23
     battleType: 7
     tuUse: 25
+    armor: 20    
   - type: STR_MEDI_KIT
     size: 0.1
     costSell: 46500
@@ -813,6 +839,7 @@ items:
     stun: 4
     energy: 10
     tuUse: 10
+    armor: 20    
   - type: STR_PSI_AMP
     size: 0.1
     costSell: 194700
@@ -825,6 +852,7 @@ items:
     invWidth: 1
     invHeight: 3
     tuUse: 25
+    armor: 20    
   - type: STR_STUN_ROD
     size: 0.1
     costBuy: 1260
@@ -843,6 +871,7 @@ items:
     twoHanded: true
     invWidth: 1
     invHeight: 3
+    armor: 20    
   - type: STR_ELECTRO_FLARE
     size: 0.1
     costBuy: 60
@@ -852,12 +881,14 @@ items:
     floorSprite: 72
     power: 15
     battleType: 10
+    armor: 8    
   - type: STR_CORPSE
     weight: 22
     bigSprite: 45
     floorSprite: 39
     invWidth: 2
     invHeight: 3
+    armor: 20    
   - type: STR_CORPSE_ARMOR
     name: STR_CORPSE
     weight: 24
@@ -865,6 +896,7 @@ items:
     floorSprite: 40
     invWidth: 2
     invHeight: 3
+    armor: 30    
   - type: STR_CORPSE_SUIT
     name: STR_CORPSE
     weight: 26
@@ -872,6 +904,7 @@ items:
     floorSprite: 41
     invWidth: 2
     invHeight: 3
+    armor: 40    
   - type: STR_HEAVY_PLASMA
     size: 0.2
     costSell: 171600
@@ -894,6 +927,7 @@ items:
     invWidth: 2
     invHeight: 3
     recoveryPoints: 5
+    armor: 50    
   - type: STR_HEAVY_PLASMA_CLIP
     size: 0.3
     costSell: 9590
@@ -907,6 +941,7 @@ items:
     clipSize: 35
     battleType: 2
     recoveryPoints: 1
+    armor: 20    
   - type: STR_PLASMA_RIFLE
     size: 0.2
     costSell: 126500
@@ -929,6 +964,7 @@ items:
     invWidth: 1
     invHeight: 3
     recoveryPoints: 4
+    armor: 50    
   - type: STR_PLASMA_RIFLE_CLIP
     size: 0.1
     costSell: 6290
@@ -942,6 +978,7 @@ items:
     clipSize: 28
     battleType: 2
     recoveryPoints: 1
+    armor: 20    
   - type: STR_PLASMA_PISTOL
     size: 0.1
     costSell: 84000
@@ -963,6 +1000,7 @@ items:
     invWidth: 1
     invHeight: 2
     recoveryPoints: 3
+    armor: 45    
   - type: STR_PLASMA_PISTOL_CLIP
     size: 0.1
     costSell: 4440
@@ -976,6 +1014,7 @@ items:
     clipSize: 26
     battleType: 2
     recoveryPoints: 1
+    armor: 20    
   - type: STR_BLASTER_LAUNCHER
     size: 0.3
     costSell: 144000
@@ -995,6 +1034,7 @@ items:
     invWidth: 2
     invHeight: 3
     recoveryPoints: 5
+    armor: 40    
   - type: STR_BLASTER_BOMB
     size: 0.2
     costSell: 17028
@@ -1010,6 +1050,7 @@ items:
     invWidth: 1
     invHeight: 2
     recoveryPoints: 1
+    armor: 20    
   - type: STR_SMALL_LAUNCHER
     size: 0.2
     costSell: 120000
@@ -1030,6 +1071,7 @@ items:
     invWidth: 2
     invHeight: 2
     recoveryPoints: 4
+    armor: 20    
   - type: STR_STUN_BOMB
     size: 0.1
     costSell: 15200
@@ -1043,6 +1085,7 @@ items:
     clipSize: 1
     battleType: 2
     recoveryPoints: 1
+    armor: 20    
   - type: STR_ALIEN_GRENADE
     size: 0.1
     costSell: 14850
@@ -1053,6 +1096,7 @@ items:
     damageType: 3
     battleType: 4
     recoveryPoints: 1
+    armor: 20    
   - type: STR_ELERIUM_115
     size: 0.1
     costSell: 5000
@@ -1061,6 +1105,7 @@ items:
     floorSprite: 37
     invWidth: 2
     invHeight: 2
+    armor: 20    
   - type: STR_MIND_PROBE
     size: 0.1
     costSell: 304000
@@ -1072,6 +1117,7 @@ items:
     invHeight: 2
     tuUse: 50
     recoveryPoints: 1
+    armor: 20    
   - type: STR_SECTOID_CORPSE
     size: 0.4
     costSell: 20000
@@ -1082,6 +1128,7 @@ items:
     invHeight: 3
     recoveryPoints: 5
     battleType: 11
+    armor: 26    
   - type: STR_SNAKEMAN_CORPSE
     size: 0.4
     costSell: 20000
@@ -1092,6 +1139,7 @@ items:
     invHeight: 3
     recoveryPoints: 5
     battleType: 11    
+    armor: 26    
   - type: STR_ETHEREAL_CORPSE
     size: 0.4
     costSell: 20000
@@ -1102,6 +1150,7 @@ items:
     invHeight: 3
     recoveryPoints: 5
     battleType: 11
+    armor: 26    
   - type: STR_MUTON_CORPSE
     size: 0.4
     costSell: 20000
@@ -1112,6 +1161,7 @@ items:
     invHeight: 3
     recoveryPoints: 5
     battleType: 11
+    armor: 26    
   - type: STR_FLOATER_CORPSE
     size: 0.4
     costSell: 20000
@@ -1122,6 +1172,7 @@ items:
     invHeight: 3
     recoveryPoints: 5
     battleType: 11
+    armor: 26    
   - type: STR_CELATID_CORPSE
     size: 0.4
     costSell: 20000
@@ -1132,6 +1183,7 @@ items:
     invHeight: 3
     recoveryPoints: 3
     battleType: 11
+    armor: 26    
   - type: STR_SILACOID_CORPSE
     size: 0.4
     costSell: 20000
@@ -1142,6 +1194,7 @@ items:
     invHeight: 3
     recoveryPoints: 3
     battleType: 11
+    armor: 26    
   - type: STR_CHRYSSALID_CORPSE
     size: 0.4
     costSell: 20000
@@ -1152,11 +1205,13 @@ items:
     invHeight: 3
     recoveryPoints: 3
     battleType: 11    
+    armor: 20    
   - type: STR_REAPER_CORPSE
     size: 1
     costSell: 20000
     recoveryPoints: 3
     battleType: 11    
+    armor: 20    
   - type: REAPER_CORPSE_1
     floorSprite: 52
     invWidth: 0
@@ -1177,7 +1232,8 @@ items:
     size: 1
     costSell: 20000
     recoveryPoints: 3
-    battleType: 11    
+    battleType: 11   
+    armor: 20
   - type: SECTOPOD_CORPSE_1
     floorSprite: 60
     invWidth: 0
@@ -1198,7 +1254,8 @@ items:
     size: 1
     costSell: 20000
     recoveryPoints: 3
-    battleType: 11    
+    battleType: 11   
+    armor: 20
   - type: CYBERDISC_CORPSE_1
     floorSprite: 56
     invWidth: 0
@@ -1254,6 +1311,7 @@ items:
     floorSprite: 50
     invWidth: 2
     invHeight: 3
+    armor: 12    
   - type: CIVF_CORPSE
     name: STR_CORPSE
     weight: 50
@@ -1261,6 +1319,7 @@ items:
     floorSprite: 51
     invWidth: 2
     invHeight: 3
+    armor: 12    
   - type: STR_UFO_POWER_SOURCE
     size: 0.7
     costSell: 250000
@@ -1317,6 +1376,23 @@ items:
     tuAimed: 60
     clipSize: -1
     battleType: 1
+    fixedWeapon: true
+    invWidth: 1
+    invHeight: 2
+  - type: REAPER_WEAPON
+    weight: 3
+    bigSprite: 32
+    floorSprite: 31
+    handSprite: 104
+    bulletSprite: 8
+    fireSound: 18
+    power: 90
+    hitSound: 48
+    hitAnimation: 36
+    accuracyMelee: 80
+    tuMelee: 15
+    clipSize: -1
+    battleType: 3
     fixedWeapon: true
     invWidth: 1
     invHeight: 2

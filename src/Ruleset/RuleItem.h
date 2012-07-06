@@ -60,6 +60,7 @@ private:
 	int _stun, _energy;
 	int _tuUse;
 	int _recoveryPoints;
+	int _armor;
 public:
 	/// Creates a blank item ruleset.
 	RuleItem(const std::string &type);
@@ -155,6 +156,8 @@ public:
 	int getExplosionRadius() const;
 	/// Gets the recovery points score
 	int getRecoveryPoints() const;
+	/// Gets the item's armor
+	int getArmor() const;
 };
 
 }
