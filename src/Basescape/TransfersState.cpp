@@ -44,13 +44,13 @@ TransfersState::TransfersState(Game *game, Base *base) : State(game), _base(base
 	_screen = false;
 
 	// Create objects
-	_window = new Window(this, 288, 180, 16, 10, POPUP_BOTH);
-	_btnOk = new TextButton(272, 16, 24, 166);
+	_window = new Window(this, 320, 184, 0, 8, POPUP_BOTH);
+	_btnOk = new TextButton(288, 16, 16, 166);
 	_txtTitle = new Text(278, 16, 21, 18);
-	_txtItem = new Text(114, 8, 26, 34);
-	_txtQuantity = new Text(54, 8, 131, 34);
-	_txtArrivalTime = new Text(112, 8, 186, 34);
-	_lstTransfers = new TextList(256, 112, 24, 50);
+	_txtItem = new Text(114, 8, 16, 34);
+	_txtQuantity = new Text(54, 8, 152, 34);
+	_txtArrivalTime = new Text(112, 8, 212, 34);
+	_lstTransfers = new TextList(288, 112, 16, 50);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
@@ -87,7 +87,7 @@ TransfersState::TransfersState(Game *game, Base *base) : State(game), _base(base
 
 	_lstTransfers->setColor(Palette::blockOffset(13)+10);
 	_lstTransfers->setArrowColor(Palette::blockOffset(15)+6);
-	_lstTransfers->setColumns(3, 155, 55, 46);
+	_lstTransfers->setColumns(3, 155, 75, 46);
 	_lstTransfers->setSelectable(true);
 	_lstTransfers->setBackground(_window);
 	_lstTransfers->setMargin(2);
