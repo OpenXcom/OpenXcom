@@ -244,7 +244,7 @@ produkcji
 STR_PURCHASE_HIRE_PERSONNEL
 Kupno/Zatrudnianie personelu
 STR_COST_OF_PURCHASES
-Wartość zakupów>
+Koszty zakupu>
 STR_COST_PER_UNIT_UC
 KOSZT ZA SZTUKĘ
 STR_QUANTITY_UC
@@ -670,9 +670,9 @@ WYBIERZ PANCERZ>
 STR_TYPE
 TYP
 STR_PERSONAL_ARMOR_UC
-PANCERZ CIENKI
+PANCERZ LEKKI
 STR_POWER_SUIT_UC
-PANCERZ GRUBY
+PANCERZ WZMOCNIONY
 STR_FLYING_SUIT_UC
 PANCERZ LATAJĄCY
 STR_SELECT_ARMOR
@@ -858,7 +858,7 @@ Ciało Obcego
 STR_UFO_COMPONENT
 Komponent NOLa
 STR_PERSONAL_ARMOR
-Pancerz Obcych
+Pancerz lekki
 STR_RAW_MATERIALS
 Surowiec
 STR_HWP_CANNON_SHELLS
@@ -922,7 +922,7 @@ Obce stopy metali
 STR_ALIEN_HABITAT
 Środowisko Obcych
 STR_POWER_SUIT
-Pancerz gruby
+Pancerz wzmocniony
 STR_FLYING_SUIT
 Pancerz latający
 STR_HWP_ROCKETS
@@ -1188,7 +1188,7 @@ Dotacje
 STR_CHANGE
 Zmiana
 STR_WEAPON_SYSTEMS
-SYSTEMY{NEWLINE} BRONI
+SYSTEMY{NEWLINE} BOJOWE
 STR_HWPS
 SBCów
 STR_DAMAGE_UC_
@@ -1232,7 +1232,7 @@ Standardowy półautomatyczny pistolet X-COMu wysokiej mocy z 12-to nabojowym ma
 STR_RIFLE_UFOPEDIA
 Ten bardzo celny karabin snajperski z celownikiem laserowym posiada magazynek na 20 naboi 6,7 mm.
 STR_HEAVY_CANNON_UFOPEDIA
-Ciężki karabin (CK) jest dewastacyjną, ale nieporęczną bronią. Jego wszechstronność wynika z faktu, że może przyjmować trzy typy amunicji - amunicję penetrującą ciężkiego karabinu, amunicję eksplodującą i zapalającą.
+Ciężki karabin (CK) jest dewastacyjną, ale nieporęczną bronią. Jego wszechstronność wynika z faktu, że może przyjmować trzy typy amunicji - amunicję penetrującą dużego klibru, amunicję eksplodującą i zapalającą.
 STR_AUTO_CANNON_UFOPEDIA
 Karabin maszynowy (KM) łączy w sobie szybkostrzelność z mocą i wszechstronnością ciężkiego karabinu.
 STR_ROCKET_LAUNCHER_UFOPEDIA
@@ -1798,7 +1798,7 @@ Wypłaty
 STR_BASE_MAINTENANCE
 Utrzymanie bazy
 STR_COST_PER_UNIT
-Opłata/sztukę
+Koszt za sztukę
 STR_QUANTITY
   Sztuk
 STR_TOTAL
