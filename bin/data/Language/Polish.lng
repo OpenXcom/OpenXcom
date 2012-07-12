@@ -1,18 +1,18 @@
 POLSKI
 STR_AVENGER_UFOPEDIA
-TRANSPORTOWY MYŚLIWIEC KOSMICZNY. WIERNIE ODWZOROWANA TECHNOLOGIA OBCYCH.
+TRANSPORTOWY MYŚLIWIEC KOSMICZNY. DOSŁOWNA REPLIKA TECHNOLOGII OBCYCH.
 STR_INTERCEPTOR_UFOPEDIA
-MYŚLIWIEC O PODWÓJNYM NAPĘDZIE SILNIÓW PULSACYJNYCH, DODATKOWE ZABEZPIECZENIA SYSTEMÓW ELEKTRONICZNYCH. NAJDOSKONALSZA Z ZIEMSKICH TECHNOLIGII.
+SPECJALNIE EKRANOWANY SYSTEMAMI ELEKTRONICZNYMI MYŚLIWIEC Z DWOMA SILNIKAMI PULSACYJNYMI. JEST NAJWIĘKSZYM OSIĄGNIĘCIEM ZIEMSKIEJ TECHNOLOGII.
 STR_LIGHTNING_UFOPEDIA
-MYŚLIWIEC TRANSPORTOWY. EFEKTYWNA, CHOĆ PRYMITYWNIE UŻYTA, REPLIKA NAPĘDU IMPULSOWEGO OBCYCH.
+MYŚLIWIEC TRANSPORTOWY. NIEPRZEROBIONA, ALE EFEKTYWNA REPLIKA SYSTEMÓW NAPĘDOWYCH NOLi.
 STR_SKYRANGER_UFOPEDIA
-TRANSPORTOWIEC WOJSKA. NAJSZYBSZY TEGO TYPU. POSIADA ZDOLNOŚĆ PIONOWEGO STARTU I LĄDOWANIA (VTOL).
+TRANSPORTOWIEC WOJSKA. NAJSZYBSZY TEGO TYPU. MA ZDOLNOŚĆ PIONOWEGO STARTU I LĄDOWANIA (VTOL).
 STR_FIRESTORM_UFOPEDIA
 TEN JEDNOMIEJSCOWY MYŚLIWIEC JEST REPLIKĄ WZOROWANĄ NA KLASYCZNYM LATAJĄCYM SPODKU OBCYCH Z CENTRALNIE UMIESZCZONĄ JEDNOSTKĄ NAPĘDOWĄ.
 STR_STINGRAY_UFOPEDIA
-ZAAWANSOWANY POCISK KLASY POWIETRZE-POWIETRZE Z DODATKOWA OSŁONĄ ZABEZPIECZAJĄCĄ ELEKTRONIKĘ.
+ZAAWANSOWANY POCISK KLASY POWIETRZE-POWIETRZE SPECJALNIE EKRANOWANY ELEKTRONIKĄ.
 STR_AVALANCHE_UFOPEDIA
-POCISK KLASY POWIETRZE-POWIETRZE UZBROJONY W GŁOWICĘ NUKLEARNĄ O EKSTREMALNIE DUŻEJ MOCY.
+POCISK KLASY POWIETRZE-POWIETRZE Z NUKLEARNĄ GŁOWICĄ BOJOWĄ Z EKSTREMALNIE DUŻYM ŁADUNKIEM.
 STR_CANNON_UFOPEDIA
 DZIAŁKO WYSOKIEJ MOCY STRZELAJĄCE NABOJAMI PENETRUJĄCYMI ZDOLNYMI PRZEBIĆ 40-TO CENTYMETROWĄ STAL.
 STR_FUSION_BALL_UFOPEDIA
@@ -92,7 +92,7 @@ Jest jasne, że na Ziemi walczymy w przegranej bitwie. Hordy Obcych są przytła
 STR_THE_MARTIAN_SOLUTION_UFOPEDIA
 Nasze badania wykazują teraz, że baza operacyjna Obcych jest na Marsie. Jest ona dobrze ukryta i zawiera wszystkie urządzenia produkcyjne i klonujące potrzebne do infiltracji Ziemi. Wydaje się, że zawiera również jakiegoś rodzaju komputer kontrolujący całą operację. Prawdopodobnie społeczność Obcych, która przypomina rój, ma swego rodzaju 'królowę pszczół'. Jest to istotna słabość Obcych - jeśli potrafimy unicestwić 'Mózg' wtedy ciało umrze. Musimy zwiększyć tempo i wysiłek naszych badań zanim będzie za późno. W pierwszej kolejności musimy pojmać najwyższego rangą Obcego - Dowódcę. Dowódcy przebywają tylko w bazach Obcych.
 STR_CYDONIA_OR_BUST_UFOPEDIA
-Teraz jest jasne, że hordy Obcych są kontrolowane z podziemnej bazy Cydonii. Jest to niezwykłye miejsce na Marsie, cechujące się pięciobocznymi piramidami i dużą formacją przypominającą ludzką twarz. Miliony lat temu na Marsie kwitła cydońska cywilizacja. Nie wiemy jednak dlaczego wymarła ani jakie jest jej powiązanie z ostatnią aktywnością Obcych na tamtym obszarze. Jakby nie było musimy wysłać ekspedycję na Cydonię. Jest to jedyny sposób by pokonać Obcych. Musimy zniszczyć główny kontrolujący 'Mózg'. Potrzebujemy Niszczyciela wyposażonego w najbardziej dewastacyjne bronie jakie mamy do dyspozycji. Nic więcej nie ma tu do odkrycja - pozostaje jedynie nadzieja w ataku na Cydonię.
+Teraz jest jasne, że hordy Obcych są kontrolowane z podziemnej bazy w Cydonii. Cydonia jest niezwykłym miejscem na Marsie cechującym się pięciobocznymi piramidami i dużą formacją przypominającą ludzką twarz. Miliony lat temu na Marsie kwitła cydońska cywilizacja. Nie wiemy jednak dlaczego wymarła ani jakie jest jej powiązanie z ostatnią aktywnością Obcych na tamtym obszarze. Jakby nie było musimy wysłać ekspedycję na Cydonię. Jest to jedyny sposób by pokonać Obcych. Musimy zniszczyć główny kontrolujący 'Mózg'. Potrzebujemy Niszczyciela wyposażonego w najbardziej dewastacyjne bronie jakie mamy do dyspozycji. Nic innego nam nie pozostaje. Musimy czekać na rezultat napadu w Cydonii.
 STR_TERROR_SITE
 Miejsce terroru-
 STR_CENTER_ON_SITE_TIME_5_SECS
@@ -154,7 +154,7 @@ Instalacje
 STR_CURRENT_RESEARCH
 AKTUALNIE BADANE
 STR_SCIENTISTS_AVAILABLE
-Naukowców dostępnych>
+  Naukowców dostępnych>
 STR_SCIENTISTS_ALLOCATED
 Odesłani do badań>
 STR_LABORATORY_SPACE_AVAILABLE
@@ -170,7 +170,7 @@ Nowy projekt
 STR_NEW_RESEARCH_PROJECTS
 NOWE PROJEKTY
 STR_SCIENTISTS_AVAILABLE_UC
-NAUKOWCÓW DOSTĘPNYCH>
+   NAUKOWCÓW DOSTĘPNYCH>
 STR_LABORATORY_SPACE_AVAILABLE_UC
 WOLNYCH STANOWISK BADAŃ>
 STR_INCREASE
@@ -182,7 +182,7 @@ START BADAŃ
 STR_CURRENT_PRODUCTION
 AKTUALNIE PRODUKOWANE
 STR_ENGINEERS_AVAILABLE
-Inżynierów dostępnych>
+ Inżynierów dostępnych>
 STR_ENGINEERS_ALLOCATED
 Inżynierów pracujących>
 STR_WORKSHOP_SPACE_AVAILABLE
@@ -226,7 +226,7 @@ SZTUK{NEWLINE}DOSTĘPNYCH
 STR_STOP_PRODUCTION
 PRZERWANIE PRODUKCJI
 STR_ENGINEERS_AVAILABLE_UC
-INŻYNIERÓW DOSTĘPNYCH>
+ INŻYNIERÓW DOSTĘPNYCH>
 STR_WORKSHOP_SPACE_AVAILABLE_UC
 WOLNYCH STANOWISK PRACY>
 STR_ENGINEERS
@@ -248,7 +248,7 @@ Wartość zakupów>
 STR_COST_PER_UNIT_UC
 KOSZT ZA SZTUKĘ
 STR_QUANTITY_UC
-  SZTUK
+SZTUK
 STR_PERSONNEL_AVAILABLE_PERSONNEL_TOTAL
 DOSTĘPNY PERSONEL : CAŁY PERSONEL>
 STR_SOLDIERS
@@ -276,7 +276,7 @@ TRANSFERY
 STR_TRANSFERS
 Transfery
 STR_ARRIVAL_TIME_HOURS
-Godzin do przysłania
+    Godzin do przysłania
 STR_COST_
 Koszt>$
 STR_AREA_
@@ -670,9 +670,9 @@ WYBIERZ PANCERZ>
 STR_TYPE
 TYP
 STR_PERSONAL_ARMOR_UC
-PANCERZ LEKKI
+PANCERZ CIENKI
 STR_POWER_SUIT_UC
-PANCERZ WZMOCNIONY
+PANCERZ GRUBY
 STR_FLYING_SUIT_UC
 PANCERZ LATAJĄCY
 STR_SELECT_ARMOR
@@ -744,7 +744,7 @@ MIEJSCE TERRORU-
 STR_HAS_REACHED
 osiągnął
 STR_DESTINATION
-Dostarczono do:
+cel:
 STR_NOW_PATROLLING
 Teraz patroluje
 STR_ALIEN_ORIGINS
@@ -752,7 +752,7 @@ Pochodzenie Obcych
 STR_THE_MARTIAN_SOLUTION
 Baza operacyjna Obcych
 STR_CYDONIA_OR_BUST
-Cydonia lub Śmierć
+Cydonia lub Bust
 STR_UFOPAEDIA
 NOLopedia
 STR_XCOM_CRAFT_ARMAMENT
@@ -858,7 +858,7 @@ Ciało Obcego
 STR_UFO_COMPONENT
 Komponent NOLa
 STR_PERSONAL_ARMOR
-Pancerz lekki
+Pancerz Obcych
 STR_RAW_MATERIALS
 Surowiec
 STR_HWP_CANNON_SHELLS
@@ -922,7 +922,7 @@ Obce stopy metali
 STR_ALIEN_HABITAT
 Środowisko Obcych
 STR_POWER_SUIT
-Pancerz wzmocniony
+Pancerz gruby
 STR_FLYING_SUIT
 Pancerz latający
 STR_HWP_ROCKETS
@@ -1000,23 +1000,23 @@ Naukowiec
 STR_ENGINEER
 Inżynier
 STR_NORTH_AMERICA
-Ameryka Północna
+Ameryka Pn.
 STR_ARCTIC
 Arktyka
 STR_ANTARCTICA
 Antarktyda
 STR_SOUTH_AMERICA
-Ameryka Południowa
+Ameryka Pd.
 STR_EUROPE
 Europa
 STR_NORTH_AFRICA
-Afryka Północna
+Afryka pn.
 STR_SOUTHERN_AFRICA
-Afryka Południowa
+Afryka pd.
 STR_CENTRAL_ASIA
-Azja Centralna
+Azja centralna
 STR_SOUTH_EAST_ASIA
-Azja Pd-Wschodnia
+Azja pd.-wsch.
 STR_SIBERIA
 Syberia
 STR_AUSTRALASIA
@@ -1024,11 +1024,11 @@ Australia
 STR_PACIFIC
 Pacyfik
 STR_NORTH_ATLANTIC
-Atlantyk Północny
+Atlantyk pn.
 STR_SOUTH_ATLANTIC
-Atlantyk Południowy
+Atlantyk pd.
 STR_INDIAN_OCEAN
-Ocean Indyjski
+Indyk
 STR_ALIEN_RESEARCH
 Badania Obcych
 STR_ALIEN_HARVEST
@@ -1188,7 +1188,7 @@ Dotacje
 STR_CHANGE
 Zmiana
 STR_WEAPON_SYSTEMS
-SYSTEMY{NEWLINE} BOJOWE
+SYSTEMY{NEWLINE} BRONI
 STR_HWPS
 SBCów
 STR_DAMAGE_UC_
@@ -1232,7 +1232,7 @@ Standardowy półautomatyczny pistolet X-COMu wysokiej mocy z 12-to nabojowym ma
 STR_RIFLE_UFOPEDIA
 Ten bardzo celny karabin snajperski z celownikiem laserowym posiada magazynek na 20 naboi 6,7 mm.
 STR_HEAVY_CANNON_UFOPEDIA
-Ciężki karabin (CK) jest dewastacyjną, ale nieporęczną bronią. Jego wszechstronność wynika z faktu, że może przyjmować trzy typy amunicji - amunicję penetrującą dużego kalibru, amunicję eksplodującą i zapalającą.
+Ciężki karabin (CK) jest dewastacyjną, ale nieporęczną bronią. Jego wszechstronność wynika z faktu, że może przyjmować trzy typy amunicji - amunicję penetrującą ciężkiego karabinu, amunicję eksplodującą i zapalającą.
 STR_AUTO_CANNON_UFOPEDIA
 Karabin maszynowy (KM) łączy w sobie szybkostrzelność z mocą i wszechstronnością ciężkiego karabinu.
 STR_ROCKET_LAUNCHER_UFOPEDIA
@@ -1798,9 +1798,9 @@ Wypłaty
 STR_BASE_MAINTENANCE
 Utrzymanie bazy
 STR_COST_PER_UNIT
-Koszt za sztukę
+Opłata/sztukę
 STR_QUANTITY
-  Sztuk
+Sztuk
 STR_TOTAL
 Razem
 STR_DAY
