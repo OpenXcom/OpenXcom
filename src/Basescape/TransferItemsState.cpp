@@ -62,7 +62,7 @@ TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo)
 	_txtQuantity = new Text(50, 9, 150, 22);
 	_txtAmountTransfer = new Text(60, 16, 200, 22);
 	_txtAmountDestination = new Text(60, 16, 260, 22);
-	_lstItems = new TextList(288, 128, 8, 40);
+	_lstItems = new TextList(287, 128, 8, 40);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
@@ -109,7 +109,7 @@ TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo)
 	_lstItems->setColor(Palette::blockOffset(15)+1);
 	_lstItems->setArrowColor(Palette::blockOffset(13)+10);
 	_lstItems->setArrowColumn(193, ARROW_VERTICAL);
-	_lstItems->setColumns(4, 162, 58, 55, 11);
+	_lstItems->setColumns(4, 162, 58, 40, 20);
 	_lstItems->setSelectable(true);
 	_lstItems->setBackground(_window);
 	_lstItems->setMargin(2);

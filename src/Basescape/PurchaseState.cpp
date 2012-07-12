@@ -60,7 +60,7 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 	_txtItem = new Text(140, 9, 10, 32);
 	_txtCost = new Text(102, 9, 152, 32);
 	_txtQuantity = new Text(60, 9, 256, 32);
-	_lstItems = new TextList(288, 128, 8, 40);
+	_lstItems = new TextList(287, 128, 8, 40);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
@@ -116,7 +116,7 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 
 	_lstItems->setColor(Palette::blockOffset(13)+10);
 	_lstItems->setArrowColumn(227, ARROW_VERTICAL);
-	_lstItems->setColumns(4, 152, 58, 44, 32);
+	_lstItems->setColumns(4, 150, 55, 46, 32);
 	_lstItems->setSelectable(true);
 	_lstItems->setBackground(_window);
 	_lstItems->setMargin(2);
