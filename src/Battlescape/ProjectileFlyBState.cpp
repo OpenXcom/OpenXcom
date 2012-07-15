@@ -142,6 +142,10 @@ void ProjectileFlyBState::init()
 			return;
 		}
 		break;
+	case BA_PANIC:
+	case BA_MINDCONTROL:
+		_parent->statePushFront(new ExplosionBState(_parent, Position((_action.target.x*16)+8,(_action.target.y*16)+8,(_action.target.z*24)+10), weapon, _action.actor));
+		return;
 	default:
 		_parent->popState();
 		return;

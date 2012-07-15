@@ -91,9 +91,13 @@ UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit) : State(game), _unit(
 	_numStrength = new Text(18, 9, 150, 121);
 	_barStrength = new Bar(170, 5, 170, 122);
 
-	// 131
+	_txtPsiStrength = new Text(120, 9, 8, 131);
+	_numPsiStrength = new Text(18, 9, 150, 131);
+	_barPsiStrength = new Bar(170, 5, 170, 134);
 
-	// 141
+	_txtPsiSkill = new Text(120, 9, 8, 141);
+	_numPsiSkill = new Text(18, 9, 150, 141);
+	_barPsiSkill = new Bar(170, 5, 170, 142);
 
 	_txtFrontArmour = new Text(120, 9, 8, 151);
 	_numFrontArmour= new Text(18, 9, 150, 151);
@@ -157,6 +161,17 @@ UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit) : State(game), _unit(
 	add(_txtStrength);
 	add(_numStrength);
 	add(_barStrength);
+
+	if (unit->getStats()->psiSkill > 0)
+	{
+		add(_txtPsiStrength);
+		add(_numPsiStrength);
+		add(_barPsiStrength);
+
+		add(_txtPsiSkill);
+		add(_numPsiSkill);
+		add(_barPsiSkill);
+	}
 
 	add(_txtFrontArmour);
 	add(_numFrontArmour);
@@ -286,6 +301,26 @@ UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit) : State(game), _unit(
 
 	_barStrength->setColor(Palette::blockOffset(3));
 	_barStrength->setScale(1.0);
+
+	_txtPsiStrength->setColor(Palette::blockOffset(3));
+	_txtPsiStrength->setHighContrast(true);
+	_txtPsiStrength->setText(_game->getLanguage()->getString("STR_PSIONIC_STRENGTH"));
+
+	_numPsiStrength->setColor(Palette::blockOffset(9));
+	_numPsiStrength->setHighContrast(true);
+
+	_barPsiStrength->setColor(Palette::blockOffset(12));
+	_barPsiStrength->setScale(1.0);
+
+	_txtPsiSkill->setColor(Palette::blockOffset(3));
+	_txtPsiSkill->setHighContrast(true);
+	_txtPsiSkill->setText(_game->getLanguage()->getString("STR_PSIONIC_SKILL"));
+
+	_numPsiSkill->setColor(Palette::blockOffset(9));
+	_numPsiSkill->setHighContrast(true);
+
+	_barPsiSkill->setColor(Palette::blockOffset(12));
+	_barPsiSkill->setScale(1.0);
 
 	_txtFrontArmour->setColor(Palette::blockOffset(3));
 	_txtFrontArmour->setHighContrast(true);
@@ -423,6 +458,18 @@ void UnitInfoState::init()
 	_numStrength->setText(ss.str());
 	_barStrength->setMax(_unit->getStats()->strength);
 	_barStrength->setValue(_unit->getStats()->strength);
+
+	ss.str(L"");
+	ss << _unit->getStats()->psiStrength;
+	_numPsiStrength->setText(ss.str());
+	_barPsiStrength->setMax(_unit->getStats()->psiStrength);
+	_barPsiStrength->setValue(_unit->getStats()->psiStrength);
+
+	ss.str(L"");
+	ss << _unit->getStats()->psiSkill;
+	_numPsiSkill->setText(ss.str());
+	_barPsiSkill->setMax(_unit->getStats()->psiSkill);
+	_barPsiSkill->setValue(_unit->getStats()->psiSkill);
 
 	ss.str(L"");
 	ss << _unit->getArmor(SIDE_FRONT);

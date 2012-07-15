@@ -88,6 +88,7 @@ public:
 	int horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageType type);
 	int verticalBlockage(Tile *startTile, Tile *endTile, ItemDamageType type);
 	bool inTeamFOV(const Position &pos, UnitFaction team);
+	bool psiAttack(BattleAction *action);
 };
 
 }

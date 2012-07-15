@@ -89,6 +89,15 @@ void BattleItem::save(YAML::Emitter &out) const
 	{
 		out << YAML::Key << "owner" << YAML::Value << -1;
 	}
+	if (_unit)
+	{
+		out << YAML::Key << "unit" << YAML::Value << _unit->getId();
+	}
+	else
+	{
+		out << YAML::Key << "unit" << YAML::Value << -1;
+	}
+
 	if (_inventorySlot)
 	{
 		out << YAML::Key << "inventoryslot" << YAML::Value << _inventorySlot->getId();

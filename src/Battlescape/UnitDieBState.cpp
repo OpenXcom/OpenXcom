@@ -47,7 +47,7 @@ UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDama
 	if (_damageType == DT_HE || _unit->getStatus() == STATUS_UNCONSCIOUS)
 	{
 		_unit->startFalling();
-		while (_unit->getStatus() == STATUS_FALLING)
+		while (_unit->getStatus() == STATUS_COLLAPSING)
 		{
 			_unit->keepFalling();
 		}
@@ -103,7 +103,7 @@ void UnitDieBState::think()
 	{
 		_unit->startFalling();
 	}
-	else if (_unit->getStatus() == STATUS_FALLING)
+	else if (_unit->getStatus() == STATUS_COLLAPSING)
 	{
 		_unit->keepFalling();
 	}

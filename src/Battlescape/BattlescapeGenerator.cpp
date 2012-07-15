@@ -274,8 +274,8 @@ void BattlescapeGenerator::run()
 		//addItem(_game->getRuleset()->getItem("STR_HEAVY_PLASMA"));
 		//addItem(_game->getRuleset()->getItem("STR_HEAVY_PLASMA_CLIP"));
 		//addItem(_game->getRuleset()->getItem("STR_ALIEN_GRENADE"));
-		//addItem(_game->getRuleset()->getItem("STR_SMALL_LAUNCHER"));
-		//addItem(_game->getRuleset()->getItem("STR_STUN_BOMB"));
+		//addItem(_game->getRuleset()->getItem("STR_MIND_PROBE"));
+		//addItem(_game->getRuleset()->getItem("STR_PSI_AMP"));
 
 		if (_craft != 0)
 		{

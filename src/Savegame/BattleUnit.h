@@ -43,7 +43,7 @@ class Armor;
 class SavedGame;
 class Language;
 
-enum UnitStatus {STATUS_STANDING, STATUS_WALKING, STATUS_FLYING, STATUS_TURNING, STATUS_AIMING, STATUS_FALLING, STATUS_DEAD, STATUS_UNCONSCIOUS, STATUS_PANICKING, STATUS_BERSERK};
+enum UnitStatus {STATUS_STANDING, STATUS_WALKING, STATUS_FLYING, STATUS_TURNING, STATUS_AIMING, STATUS_COLLAPSING, STATUS_DEAD, STATUS_UNCONSCIOUS, STATUS_PANICKING, STATUS_BERSERK};
 enum UnitFaction {FACTION_PLAYER, FACTION_HOSTILE, FACTION_NEUTRAL};
 enum UnitSide {SIDE_FRONT, SIDE_LEFT, SIDE_RIGHT, SIDE_REAR, SIDE_UNDER};
 enum UnitBodyPart {BODYPART_HEAD, BODYPART_TORSO, BODYPART_RIGHTARM, BODYPART_LEFTARM, BODYPART_RIGHTLEG, BODYPART_LEFTLEG};
@@ -56,7 +56,7 @@ enum UnitBodyPart {BODYPART_HEAD, BODYPART_TORSO, BODYPART_RIGHTARM, BODYPART_LE
 class BattleUnit
 {
 private:
-	UnitFaction _faction;
+	UnitFaction _faction, _originalFaction;
 	int _id;
 	Position _pos;
 	Tile *_tile;
@@ -317,6 +317,8 @@ public:
 	void setActiveHand(const std::string &slot);
 	/// Get unit's active hand.
 	std::string getActiveHand() const;
+	/// Convert's unit to a faction
+	void convertToFaction(UnitFaction f);
 };
 
 }

@@ -152,7 +152,7 @@ void UnitSprite::drawRoutine0()
 		return;
 	}
 
-	if (_unit->getStatus() == STATUS_FALLING)
+	if (_unit->getStatus() == STATUS_COLLAPSING)
 	{
 		torso = _unitSurface->getFrame(die + _unit->getFallingPhase());
 		torso->blit(this);
@@ -292,7 +292,7 @@ void UnitSprite::drawRoutine1()
 		return;
 	}
 
-	if (_unit->getStatus() == STATUS_FALLING)
+	if (_unit->getStatus() == STATUS_COLLAPSING)
 	{
 		torso = _unitSurface->getFrame(die + _unit->getFallingPhase());
 		torso->blit(this);
@@ -475,7 +475,7 @@ void UnitSprite::drawRoutine4()
 		return;
 	}
 
-	if (_unit->getStatus() == STATUS_FALLING)
+	if (_unit->getStatus() == STATUS_COLLAPSING)
 	{
 		s = _unitSurface->getFrame(die + _unit->getFallingPhase());
 	}

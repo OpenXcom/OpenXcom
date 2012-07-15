@@ -83,7 +83,7 @@ SavedBattleGame::~SavedBattleGame()
  */
 void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* savedGame)
 {
-	int a;
+	int a,b;
 	int selectedUnit = 0;
 
 	node["width"] >> _width;
@@ -187,6 +187,7 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 			if (type != "NULL")
 				item->setSlot(rule->getInventory(type));
 			(*i)["owner"] >> a;
+			(*i)["unit"] >> b;
 
 			// match up items and units
 			for (std::vector<BattleUnit*>::iterator bu = _units.begin(); bu != _units.end(); ++bu)
@@ -194,7 +195,10 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 				if ((*bu)->getId() == a)
 				{
 					item->moveToOwner(*bu);
-					break;
+				}
+				if ((*bu)->getId() == b)
+				{
+					item->setUnit(*bu);
 				}
 			}
 

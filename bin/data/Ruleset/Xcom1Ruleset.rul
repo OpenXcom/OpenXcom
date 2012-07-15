@@ -847,6 +847,8 @@ items:
     bigSprite: 33
     floorSprite: 32
     handSprite: 88
+    hitSound: 36
+    hitAnimation: 36
     battleType: 9
     twoHanded: true
     invWidth: 1
@@ -1112,6 +1114,8 @@ items:
     weight: 5
     bigSprite: 29
     floorSprite: 28
+    hitSound: 37
+    hitAnimation: 0		
     battleType: 8
     invWidth: 2
     invHeight: 2

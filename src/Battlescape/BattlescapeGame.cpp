@@ -351,7 +351,7 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 {
 	for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
 	{
-		if ((*j)->getHealth() == 0 && (*j)->getStatus() != STATUS_DEAD && (*j)->getStatus() != STATUS_FALLING)
+		if ((*j)->getHealth() == 0 && (*j)->getStatus() != STATUS_DEAD && (*j)->getStatus() != STATUS_COLLAPSING)
 		{
 			BattleUnit *victim = (*j);
 
@@ -447,7 +447,7 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 				}
 			}
 		}
-		else if ((*j)->getStunlevel() >= (*j)->getHealth() && (*j)->getStatus() != STATUS_DEAD && (*j)->getStatus() != STATUS_UNCONSCIOUS && (*j)->getStatus() != STATUS_FALLING && (*j)->getStatus() != STATUS_TURNING)
+		else if ((*j)->getStunlevel() >= (*j)->getHealth() && (*j)->getStatus() != STATUS_DEAD && (*j)->getStatus() != STATUS_UNCONSCIOUS && (*j)->getStatus() != STATUS_COLLAPSING && (*j)->getStatus() != STATUS_TURNING)
 		{
 			statePushNext(new UnitDieBState(this, (*j), DT_STUN, true));
 			if ((*j)->getFaction() == FACTION_PLAYER)
@@ -1006,15 +1006,31 @@ void BattlescapeGame::primaryAction(const Position &pos)
 			_currentAction.waypoints.push_back(pos);
 			getMap()->getWaypoints()->push_back(pos);
 		}
-		else if (_currentAction.type == BA_USE 
-			&& _currentAction.weapon->getRules()->getBattleType() == BT_MINDPROBE 
-			)
+		else if (_currentAction.type == BA_USE && _currentAction.weapon->getRules()->getBattleType() == BT_MINDPROBE)
 		{
 			if (_save->selectUnit(pos)->getFaction() != _save->getSelectedUnit()->getFaction())
 			{
-				_parentState->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(37)->play();
+				_parentState->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(_currentAction.weapon->getRules()->getHitSound())->play();
 				_parentState->getGame()->pushState (new UnitInfoState (_parentState->getGame(), _save->selectUnit(pos)));
 				cancelCurrentAction();
+			}
+		}
+		else if (_currentAction.weapon->getRules()->getBattleType() == BT_PSIAMP && _currentAction.type != BA_THROW)
+		{
+			if (_save->selectUnit(pos) && _save->selectUnit(pos)->getFaction() != _save->getSelectedUnit()->getFaction())
+			{
+				_currentAction.target = pos;
+				// get the sound/animation started
+				getMap()->setCursorType(CT_NONE);
+				_parentState->getGame()->getCursor()->setVisible(false);
+				statePushBack(new ProjectileFlyBState(this, _currentAction));
+				if (getTileEngine()->psiAttack(&_currentAction))
+				{
+					_parentState->updateSoldierInfo();
+					_currentAction.targeting = false;
+					_currentAction.type = BA_NONE;
+					setupCursor();
+				}
 			}
 		}
 		else

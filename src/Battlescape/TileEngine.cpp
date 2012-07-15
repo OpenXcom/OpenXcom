@@ -1277,4 +1277,57 @@ int TileEngine::distance(const Position &pos1, const Position &pos2) const
 	return int(floor(sqrt(float(x*x + y*y)) + 0.5));
 }
 
+
+/**
+ * Psionic attack mechanism.
+ * @param action
+ * @return whether it failed or succeeded
+ */
+bool TileEngine::psiAttack(BattleAction *action)
+{
+	BattleUnit *victim = _save->getTile(action->target)->getUnit();
+	double attackStrength = action->actor->getStats()->psiStrength * action->actor->getStats()->psiSkill / 50;
+	double defenseStrength = victim->getStats()->psiStrength + (victim->getStats()->psiSkill / 5);
+	int d = distance(action->actor->getPosition(), action->target);
+	int random100 = RNG::generate(0,99);
+
+	if (action->type == BA_PANIC)
+	{
+		if (100 / 56 * (45 + attackStrength - defenseStrength - d) > random100)
+		{
+			action->actor->addPsiExp();
+			action->actor->addPsiExp();
+			action->actor->addPsiExp();
+			int moraleLoss = (110-_save->getTile(action->target)->getUnit()->getStats()->bravery);
+			if (moraleLoss > 0)
+			_save->getTile(action->target)->getUnit()->moraleChange(-moraleLoss);
+			return true;
+		}
+		else
+		{
+			action->actor->addPsiExp();
+			return false;
+		}
+	}
+	else if (action->type == BA_MINDCONTROL)
+	{
+		if (100 / 56 * (25 + attackStrength - defenseStrength - d) > random100)
+		{
+			action->actor->addPsiExp();
+			action->actor->addPsiExp();
+			action->actor->addPsiExp();
+			victim->convertToFaction(action->actor->getFaction());
+			calculateFOV(victim);
+			_save->setSelectedUnit(victim);
+			return true;
+		}
+		else
+		{
+			action->actor->addPsiExp();
+			return false;
+		}
+	}
+
+}
+
 }
