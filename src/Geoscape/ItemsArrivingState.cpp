@@ -45,14 +45,14 @@ ItemsArrivingState::ItemsArrivingState(Game *game, GeoscapeState *state) : State
 	_screen = false;
 
 	// Create objects
-	_window = new Window(this, 320, 180, 0, 10, POPUP_BOTH);
-	_btnOk = new TextButton(148, 16, 8, 166);
-	_btnOk5Secs = new TextButton(148, 16, 160, 166);
+	_window = new Window(this, 320, 184, 0, 8, POPUP_BOTH);
+	_btnOk = new TextButton(142, 16, 16, 166);
+	_btnOk5Secs = new TextButton(142, 16, 162, 166);
 	_txtTitle = new Text(310, 16, 5, 18);
-	_txtItem = new Text(120, 8, 10, 34);
-	_txtQuantity = new Text(50, 8, 150, 34);
-	_txtDestination = new Text(110, 8, 205, 34);
-	_lstTransfers = new TextList(288, 112, 8, 50);
+	_txtItem = new Text(114, 8, 16, 34);
+	_txtQuantity = new Text(54, 8, 152, 34);
+	_txtDestination = new Text(112, 8, 212, 34);
+	_lstTransfers = new TextList(288, 112, 16, 50);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
@@ -93,7 +93,7 @@ ItemsArrivingState::ItemsArrivingState(Game *game, GeoscapeState *state) : State
 	_txtDestination->setText(_game->getLanguage()->getString("STR_DESTINATION"));
 
 	_lstTransfers->setColor(Palette::blockOffset(8)+10);
-	_lstTransfers->setColumns(3, 165, 25, 98);
+	_lstTransfers->setColumns(3, 155, 35, 98);
 	_lstTransfers->setSelectable(true);
 	_lstTransfers->setBackground(_window);
 	_lstTransfers->setMargin(2);
