@@ -50,7 +50,7 @@ TransfersState::TransfersState(Game *game, Base *base) : State(game), _base(base
 	_txtItem = new Text(114, 8, 16, 34);
 	_txtQuantity = new Text(54, 8, 152, 34);
 	_txtArrivalTime = new Text(112, 8, 212, 34);
-	_lstTransfers = new TextList(288, 112, 16, 50);
+	_lstTransfers = new TextList(271, 112, 16, 50);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
