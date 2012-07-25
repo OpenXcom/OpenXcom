@@ -137,8 +137,6 @@ public:
 	bool handlePromotions();
 	/// Checks how many soldiers of a rank exist and which one has the highest score.
 	void inspectSoldiers(Soldier **highestRanked, int *total, int rank);
-	/// Gets saved game difficulty.
-	GameDifficulty getDifficulty() const;
 };
 
 }
