@@ -26,6 +26,7 @@ namespace OpenXcom
 {
 
 class RuleCraftWeapon;
+class CraftWeaponProjectile;
 
 /**
  * Represents a craft weapon equipped by a craft.
@@ -59,6 +60,8 @@ public:
 	void setRearming(bool rearming);
 	/// Rearms the craft weapon.
 	void rearm();
+	/// Fires the craft weapon. Used during dogfights.
+	CraftWeaponProjectile* fire() const;
 };
 
 }

@@ -578,4 +578,16 @@ void Craft::setInBattlescape(bool inbattle)
 	_inBattlescape = inbattle;
 }
 
+/// Returns the craft destroyed status.
+/**
+ * If the amount of damage the craft take
+ * is more than it's health it will be
+ * destroyed.
+ * @return Is the craft destroyed?
+ */
+bool Craft::isDestroyed() const
+{
+	return (_damage >= _rules->getMaxDamage());
+}
+
 }

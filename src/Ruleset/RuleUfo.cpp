@@ -338,4 +338,40 @@ void RuleUfo::setBattlescapeTerrainData(RuleTerrain *t)
 	_battlescapeTerrainData = t;
 }
 
+/**
+ * Gets weapon reload for UFO ships.
+ * @return UFO weapon relod time.
+ */
+int RuleUfo::getWeaponReload() const
+{
+	return _reload;
+}
+
+/**
+ * Gets weapon reload time for UFO ships.
+ * @param reload Reload time used for UFO weapon.
+ */
+void RuleUfo::setWeaponReload(int reload)
+{
+	_reload = reload;
+}
+
+/**
+ * Gets UFO break off time.
+ * @return UFO break off time in game seconds.
+ */
+int RuleUfo::getUFObreakOffTime() const
+{
+	return _breakOffTime;
+}
+
+/**
+ * Sets UFO break off time.
+ * @param time UFO break off time in game seconds.
+ */
+void RuleUfo::setUFObreakOffTime(int time)
+{
+	_breakOffTime = time;
+}
+
 }
