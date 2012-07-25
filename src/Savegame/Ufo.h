@@ -43,6 +43,7 @@ private:
 	bool _detected;
 	int _hoursCrashed;
 	bool _inBattlescape;
+	int _hit;
 
 	/// Calculates a new speed vector to the destination.
 	void calculateSpeed();
@@ -91,6 +92,10 @@ public:
 	void setInBattlescape(bool inbattle);
 	/// Gets if the UFO is in battlescape.
 	bool isInBattlescape() const;
+	/// Set hit status.
+	void setHit(int hit);
+	/// Get hit status.
+	int getHit() const;
 };
 
 }

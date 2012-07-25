@@ -18,6 +18,7 @@
  */
 #include "CraftWeapon.h"
 #include "../Ruleset/RuleCraftWeapon.h"
+#include "CraftWeaponProjectile.h"
 
 namespace OpenXcom
 {
@@ -121,6 +122,19 @@ void CraftWeapon::rearm()
 	{
 		_rearming = false;
 	}
+}
+
+/*
+ * Fires a projectile from crafts weapon.
+ * @return Pointer to the new projectile.
+ */
+CraftWeaponProjectile* CraftWeapon::fire() const
+{
+	CraftWeaponProjectile *p = new CraftWeaponProjectile();
+	p->setType(this->getRules()->getType());
+	p->setAccuracy(this->getRules()->getAccuracy());
+	p->setDamage(this->getRules()->getDamage());
+	return p;
 }
 
 }
