@@ -1,4 +1,4 @@
-/*
+	/*
  * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.

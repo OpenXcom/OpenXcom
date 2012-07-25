@@ -1410,8 +1410,8 @@ ufos:
     power: 0
     range: 0
     score: 50
-	reload: 56
-	breakOffTime: 200
+    reload: 56
+    breakOffTime: 200
     battlescapeTerrainData:
       name: UFO1A
       mapDataSets:
@@ -1430,8 +1430,8 @@ ufos:
     power: 20
     range: 15
     score: 75
-	reload: 56
-	breakOffTime: 250
+    reload: 56
+    breakOffTime: 250
     battlescapeTerrainData:
       name: UFO_110
       mapDataSets:
@@ -1452,8 +1452,8 @@ ufos:
     power: 20
     range: 34
     score: 125
-	reload: 48
-	breakOffTime: 300
+    reload: 48
+    breakOffTime: 300
     battlescapeTerrainData:
       name: UFO_120
       mapDataSets:
@@ -1474,8 +1474,8 @@ ufos:
     power: 40
     range: 22
     score: 250
-	reload: 48
-	breakOffTime: 500
+    reload: 48
+    breakOffTime: 500
     battlescapeTerrainData:
       name: UFO_130
       mapDataSets:
@@ -1496,9 +1496,9 @@ ufos:
     accel: 8
     power: 40
     range: 20
+    score: 250
     reload: 32
-	breakOffTime: 500
-	score: 250
+    breakOffTime: 500
   - type: STR_SUPPLY_SHIP
     size: STR_LARGE
     sprite: 5
@@ -1507,9 +1507,9 @@ ufos:
     accel: 6
     power: 60
     range: 36
-	reload: 24
-	breakOffTime: 3000
     score: 400
+    reload: 24
+    breakOffTime: 3000
   - type: STR_TERROR_SHIP
     size: STR_LARGE
     sprite: 6
@@ -1518,9 +1518,9 @@ ufos:
     accel: 6
     power: 120
     range: 42
-	reload: 24
-	breakOffTime: 2000
     score: 500
+    reload: 24
+    breakOffTime: 2000
   - type: STR_BATTLESHIP
     size: STR_VERY_LARGE
     sprite: 7
@@ -1529,9 +1529,9 @@ ufos:
     accel: 6
     power: 148
     range: 65
-	reload: 24
-	breakOffTime: 4000
     score: 700
+    reload: 24
+    breakOffTime: 4000
 invs:
   - id: STR_BACK_PACK
     x: 192
