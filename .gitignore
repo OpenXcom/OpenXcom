@@ -71,3 +71,7 @@ build/
 Dependencies/
 #Ignore Vim swap files
 *.swp
+
+/src/OpenXcom.2010.vcxproj.filters
+/src/OpenXcom.2010.vcxproj
+/src/ufoBlobs.txt

@@ -40,7 +40,7 @@ class RuleUfo
 private:
 	std::string _type, _size;
 	int _sprite;
-	int _damageMax, _speedMax, _accel, _power, _range, _score;
+	int _damageMax, _speedMax, _accel, _power, _range, _score, _reload, _breakOffTime;
 	RuleTerrain *_battlescapeTerrainData;
 public:
 	/// Creates a blank UFO ruleset.
@@ -91,6 +91,14 @@ public:
 	RuleTerrain *getBattlescapeTerrainData();
 	/// Gets the battlescape terrain data ruleset for this UFO
 	void setBattlescapeTerrainData(RuleTerrain *t);
+	/// Get reload time of UFO weapon.
+	int getWeaponReload() const;
+	/// Set realod time of UFO weapon.
+	void setWeaponReload(int reload);
+	/// Get UFO escape time.
+	int getUFObreakOffTime() const;
+	/// Set UFO escape time.
+	void setUFObreakOffTime(int time);
 };
 
 }

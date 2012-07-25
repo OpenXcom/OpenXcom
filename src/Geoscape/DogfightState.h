@@ -34,6 +34,7 @@ class Timer;
 class Globe;
 class Craft;
 class Ufo;
+class CraftWeaponProjectile;
 
 /**
  * Shows a dogfight (interception) between a
@@ -42,7 +43,7 @@ class Ufo;
 class DogfightState : public State
 {
 private:
-	Timer *_animTimer, *_moveTimer, *_w1Timer, *_w2Timer;
+	Timer *_animTimer, *_moveTimer, *_w1Timer, *_w2Timer, *_ufoWtimer, *_ufoEscapeTimer, *_ufoHitBlingTimer;
 	Surface *_window, *_battle, *_weapon1, *_range1, *_weapon2, *_range2, *_damage;
 	InteractiveSurface *_btnMinimize, *_preview;
 	ImageButton *_btnStandoff, *_btnCautious, *_btnStandard, *_btnAggressive, *_btnDisengage, *_btnUfo;
@@ -51,9 +52,13 @@ private:
 	Globe *_globe;
 	Craft *_craft;
 	Ufo *_ufo;
-	int _timeout, _currentDist, _targetDist, _currentRadius, _targetRadius;
-	std::vector<int> _w1Dist, _w2Dist;
-	bool _end, _destroy;
+	int _timeout, _currentDist, _targetDist, _currentRadius, _targetRadius, _ufoFireInterval, _paletteOffset;
+	bool _end, _destroyUfo, _destroyCraft, _ufoBreakingOff;
+	std::vector<CraftWeaponProjectile*> _projectiles;
+	static const int _ufoBlobs[8][13][13];
+	static const int _projectileBlobs[4][6][3];
+	int _ufoSize, _ufoHitFrame;
+
 public:
 	/// Creates the Dogfight state.
 	DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo);
@@ -69,6 +74,8 @@ public:
 	void fireWeapon1();
 	// Fires the second weapon.
 	void fireWeapon2();
+	// Fires UFO weapon.
+	void ufoFireWeapon();
 	// Sets the craft to minimum distance.
 	void minimumDistance();
 	// Sets the craft to maximum distance.
@@ -91,6 +98,12 @@ public:
 	void btnUfoClick(Action *action);
 	/// Handler for clicking the Preview graphic.
 	void previewClick(Action *action);
+	/// Makes the UFO break off the interception... or at least tries to.
+	void ufoBreakOff();
+	/// Draws UFO.
+	void drawUfo();
+	/// Draws projectiles.
+	void drawProjectile(const CraftWeaponProjectile* p);
 };
 
 }
