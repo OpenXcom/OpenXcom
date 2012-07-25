@@ -86,6 +86,14 @@ void RuleUfo::load(const YAML::Node &node, Ruleset *ruleset)
 		{
 			i.second() >> _score;
 		}
+		else if (key == "reload")
+		{
+			i.second() >> _reload;
+		}
+		else if (key == "breakOffTime")
+		{
+			i.second() >> _breakOffTime;
+		}
 		else if (key == "battlescapeTerrainData")
 		{
 			std::string name;
@@ -113,6 +121,8 @@ void RuleUfo::save(YAML::Emitter &out) const
 	out << YAML::Key << "power" << YAML::Value << _power;
 	out << YAML::Key << "range" << YAML::Value << _range;
 	out << YAML::Key << "score" << YAML::Value << _score;
+	out << YAML::Key << "reload" << YAML::Value << _reload;
+	out << YAML::Key << "breakOffTime" << YAML::Value << _breakOffTime;
 	if (_battlescapeTerrainData != 0)
 	{
 		out << YAML::Key << "battlescapeTerrainData" << YAML::Value;
