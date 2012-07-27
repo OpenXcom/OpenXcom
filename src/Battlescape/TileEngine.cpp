@@ -1327,7 +1327,7 @@ bool TileEngine::psiAttack(BattleAction *action)
 			return false;
 		}
 	}
-
+	return false;
 }
 
 }

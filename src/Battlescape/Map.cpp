@@ -215,7 +215,7 @@ void Map::drawTerrain(Surface *surface)
 	Tile *tile;
 	int beginX = 0, endX = _save->getWidth() - 1;
     int beginY = 0, endY = _save->getLength() - 1;
-	int beginZ = 0, endZ = _camera->getViewHeight();
+	int beginZ = 0, endZ = _camera->getShowAllLayers()?_save->getHeight() - 1:_camera->getViewHeight();
 	Position mapPosition, screenPosition, bulletPositionScreen;
 	int bulletLowX=16000, bulletLowY=16000, bulletLowZ=16000, bulletHighX=0, bulletHighY=0, bulletHighZ=0;
 	int dummy;
@@ -345,13 +345,15 @@ void Map::drawTerrain(Surface *surface)
 								else
 									frameNumber = 6; // red static crosshairs
 							}
+							tmpSurface = _res->getSurfaceSet("CURSOR.PCK")->getFrame(frameNumber);
+							tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y, 0);
 						}
 						else if (_camera->getViewHeight() > itZ)
 						{
 							frameNumber = 2; // blue box
+							tmpSurface = _res->getSurfaceSet("CURSOR.PCK")->getFrame(frameNumber);
+							tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y, 0);
 						}
-						tmpSurface = _res->getSurfaceSet("CURSOR.PCK")->getFrame(frameNumber);
-						tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y, 0);
 					}
 
 					// Draw walls
@@ -558,13 +560,15 @@ void Map::drawTerrain(Surface *surface)
 								else
 									frameNumber = 6; // red static crosshairs
 							}
+							tmpSurface = _res->getSurfaceSet("CURSOR.PCK")->getFrame(frameNumber);
+							tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y, 0);
 						}
 						else if (_camera->getViewHeight() > itZ)
 						{
 							frameNumber = 5; // blue box
+							tmpSurface = _res->getSurfaceSet("CURSOR.PCK")->getFrame(frameNumber);
+							tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y, 0);
 						}
-						tmpSurface = _res->getSurfaceSet("CURSOR.PCK")->getFrame(frameNumber);
-						tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y, 0);
 						if (_cursorType > 2 && _camera->getViewHeight() == itZ)
 						{
 							int frame[6] = {0, 0, 0, 11, 13, 15};

@@ -560,7 +560,7 @@ void BattlescapeState::selectNextPlayerUnit(bool checkReselect)
  */
 void BattlescapeState::btnShowLayersClick(Action *action)
 {
-
+	_numLayers->setValue(_map->getCamera()->toggleShowAllLayers());
 }
 
 /**

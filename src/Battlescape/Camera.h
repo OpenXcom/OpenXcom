@@ -46,6 +46,7 @@ private:
 	int _scrollX, _scrollY;
 	bool _cameraFollowed;
 	int _visibleMapHeight;
+	bool _showAllLayers;
 	void minMaxInt(int *value, const int minValue, const int maxValue) const;
 	Map *_map;
 public:
@@ -84,8 +85,9 @@ public:
 	int getViewHeight() const;
 	/// Get the map x/y screen offset
 	Position getMapOffset();
+	int toggleShowAllLayers();
+	bool getShowAllLayers() const;
+
 };
-
 }
-
 #endif
