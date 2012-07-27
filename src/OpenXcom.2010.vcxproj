@@ -92,7 +92,7 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>
       </PrecompiledHeader>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level1</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
@@ -373,6 +373,7 @@
     <ClCompile Include="Savegame\Country.cpp" />
     <ClCompile Include="Savegame\Craft.cpp" />
     <ClCompile Include="Savegame\CraftWeapon.cpp" />
+    <ClCompile Include="Savegame\CraftWeaponProjectile.cpp" />
     <ClCompile Include="Savegame\GameTime.cpp" />
     <ClCompile Include="Savegame\ItemContainer.cpp" />
     <ClCompile Include="Savegame\MovingTarget.cpp" />
@@ -586,6 +587,7 @@
     <ClInclude Include="Savegame\Country.h" />
     <ClInclude Include="Savegame\Craft.h" />
     <ClInclude Include="Savegame\CraftWeapon.h" />
+    <ClInclude Include="Savegame\CraftWeaponProjectile.h" />
     <ClInclude Include="Savegame\GameTime.h" />
     <ClInclude Include="Savegame\ItemContainer.h" />
     <ClInclude Include="Savegame\MovingTarget.h" />

@@ -629,6 +629,9 @@
     <ClCompile Include="Ruleset\Armor.cpp">
       <Filter>Ruleset</Filter>
     </ClCompile>
+    <ClCompile Include="Savegame\CraftWeaponProjectile.cpp">
+      <Filter>Savegame</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1259,6 +1262,9 @@
     </ClInclude>
     <ClInclude Include="Ruleset\Armor.h">
       <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Savegame\CraftWeaponProjectile.h">
+      <Filter>Savegame</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

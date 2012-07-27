@@ -836,4 +836,12 @@ void SavedGame::inspectSoldiers(Soldier **highestRanked, int *total, int rank)
 	}
 }
 
+/**
+ * Returns game difficulty.
+ */
+GameDifficulty SavedGame::getDifficulty() const
+{
+	return _difficulty;
+}
+
 }
