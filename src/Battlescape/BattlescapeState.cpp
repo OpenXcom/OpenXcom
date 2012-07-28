@@ -421,15 +421,17 @@ void BattlescapeState::mapClick(Action *action)
 	Position pos;
 	_map->getSelectorPosition(&pos);
 
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	if (_save->getTile(pos) != 0) // don't allow to click into void
 	{
-		_battleGame->primaryAction(pos);
+		if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+		{
+			_battleGame->primaryAction(pos);
+		}
+		else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT && playableUnitSelected())
+		{
+			_battleGame->secondaryAction(pos);
+		}
 	}
-	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT && playableUnitSelected())
-	{
-		_battleGame->secondaryAction(pos);
-	}
-
 }
 
 /**
