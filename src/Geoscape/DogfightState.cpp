@@ -42,7 +42,7 @@
 #include "../Engine/SoundSet.h"
 #include "../Engine/Sound.h"
 #include "../Savegame/Base.h"
-#include "../SaveGame/CraftWeaponProjectile.h"
+#include "../Savegame/CraftWeaponProjectile.h"
 #include <cstdlib>
 
 namespace OpenXcom

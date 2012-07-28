@@ -403,6 +403,8 @@ set ( savegame_src
   Savegame/Tile.h
   Savegame/CraftWeapon.cpp
   Savegame/CraftWeapon.h
+  Savegame/CraftWeaponProjectile.cpp
+  Savegame/CraftWeaponProjectile.h
   Savegame/SavedGame.h
   Savegame/SavedGame.cpp
   Savegame/Soldier.h
