@@ -801,9 +801,16 @@ bool BattlescapeGame::checkReservedTU(BattleUnit *bu, int tu)
 	if (dontSpendTUs() || _save->getSide() != FACTION_PLAYER) return true; // aliens don't reserve TUs
 
 	// check TUs against slowest weapon if we have two weapons
+	BattleItem *slowestWeapon = bu->getMainHandWeapon(false);
+	// if the weapon has no autoshot, reserve TUs for snapshot
+	if (bu->getActionTUs(_tuReserved, slowestWeapon) == 0 && _tuReserved == BA_AUTOSHOT)
+	{
+		_tuReserved = BA_SNAPSHOT;
+	}
+
 	if (_tuReserved != BA_NONE &&
-		tu + bu->getActionTUs(_tuReserved, bu->getMainHandWeapon(false)) > bu->getTimeUnits() &&
-		bu->getActionTUs(_tuReserved, bu->getMainHandWeapon(false)) <= bu->getTimeUnits())
+		tu + bu->getActionTUs(_tuReserved, slowestWeapon) > bu->getTimeUnits() &&
+		bu->getActionTUs(_tuReserved, slowestWeapon) <= bu->getTimeUnits())
 	{
 		switch (_tuReserved)
 		{
