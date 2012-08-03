@@ -71,7 +71,7 @@ MainMenuState::MainMenuState(Game *game) : State(game)
 	_btnNewGame->onMouseClick((ActionHandler)&MainMenuState::btnNewGameClick);
 
 	_btnNewBattle->setColor(Palette::blockOffset(8)+5);
-	_btnNewBattle->setText(L"New Battle");
+	_btnNewBattle->setText(_game->getLanguage()->getString("STR_NEW_BATTLE"));
 	_btnNewBattle->onMouseClick((ActionHandler)&MainMenuState::btnNewBattleClick);
 
 	_btnLoad->setColor(Palette::blockOffset(8)+5);
@@ -79,7 +79,7 @@ MainMenuState::MainMenuState(Game *game) : State(game)
 	_btnLoad->onMouseClick((ActionHandler)&MainMenuState::btnLoadClick);
 
 	_btnOptions->setColor(Palette::blockOffset(8)+5);
-	_btnOptions->setText(L"Options");
+	_btnOptions->setText(_game->getLanguage()->getString("STR_OPTIONS_"));
 	_btnOptions->onMouseClick((ActionHandler)&MainMenuState::btnOptionsClick);
 
 	_btnQuit->setColor(Palette::blockOffset(8)+5);

@@ -1753,6 +1753,12 @@ STR_GRAPHS
 GRAFICE
 STR_UFOPAEDIA_UC
 UFOPEDIA
+STR_NEW_BATTLE
+New Battle
+STR_THE_SIMULATRON
+THE SIMULATRON
+STR_OPTIONS_
+Options
 STR_OPTIONS
 OPȚIUNI
 STR_FUNDING_UC
@@ -1803,8 +1809,6 @@ STR_IN_PSIONIC_TRAINING
 Antrenament Psionic
 STR_BLASTER_BOMB_UFOPEDIA
 Acest dispozitiv este o rachetă explozivă dotată cu un sistem inteligent de ghidare.  Este proiectată de un lansator de bombe.
-STR_PLEASE_LOOK_UP_THE_PAGE
-Caută următoarea pagină în Manualul Jocului și introdu codul format din opt cifre aflat în josul paginii.{NEWLINE}EX:  Pagina 13 din Manualul jocului Cod: 3994-9668{NEWLINE}Introdu codul de la pagina 
 STR_FRONT_ARMOR
 Armură Frontală
 STR_LEFT_ARMOR
