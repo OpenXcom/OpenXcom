@@ -133,7 +133,7 @@ void Soldier::save(YAML::Emitter &out) const
 	out << YAML::Key << "missions" << YAML::Value << _missions;
 	out << YAML::Key << "kills" << YAML::Value << _kills;
 	out << YAML::Key << "recovery" << YAML::Value << _recovery;
-	out << YAML::Key << "armor" << YAML::Value << _armor->getStoreItem();
+	out << YAML::Key << "armor" << YAML::Value << _armor->getType();
 	out << YAML::EndMap;
 }
 
