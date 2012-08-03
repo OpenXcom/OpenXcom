@@ -367,6 +367,7 @@ BattleUnit *BattlescapeGenerator::addXCOMUnit(BattleUnit *unit)
 
 				if (_save->setUnitPosition(unit, _save->getTiles()[i]->getPosition()))
 				{
+					_save->getTileEngine()->calculateFOV(unit);
 					break;
 				}
 			}

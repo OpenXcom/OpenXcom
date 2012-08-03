@@ -1044,6 +1044,7 @@ void BattlescapeGame::primaryAction(const Position &pos)
 	}
 	else
 	{
+		_currentAction.actor = _save->getSelectedUnit();
 		BattleUnit *unit = _save->selectUnit(pos);
 		if (unit && unit != _save->getSelectedUnit())
 		{
@@ -1092,6 +1093,7 @@ void BattlescapeGame::secondaryAction(const Position &pos)
 {
 	//  -= turn to or open door =-
 	_currentAction.target = pos;
+	_currentAction.actor = _save->getSelectedUnit();
 	statePushBack(new UnitTurnBState(this, _currentAction));
 }
 
