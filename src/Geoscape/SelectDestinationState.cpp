@@ -86,9 +86,11 @@ SelectDestinationState::SelectDestinationState(Game *game, Craft *craft, Globe *
 	_btnRotateDown->onMousePress((ActionHandler)&SelectDestinationState::btnRotateDownPress);
 	_btnRotateDown->onMouseRelease((ActionHandler)&SelectDestinationState::btnRotateDownRelease);
 
-	_btnZoomIn->onMouseClick((ActionHandler)&SelectDestinationState::btnZoomInClick);
+	_btnZoomIn->onMouseClick((ActionHandler)&SelectDestinationState::btnZoomInLeftClick, SDL_BUTTON_LEFT);
+	_btnZoomIn->onMouseClick((ActionHandler)&SelectDestinationState::btnZoomInRightClick, SDL_BUTTON_RIGHT);
 
-	_btnZoomOut->onMouseClick((ActionHandler)&SelectDestinationState::btnZoomOutClick);
+	_btnZoomOut->onMouseClick((ActionHandler)&SelectDestinationState::btnZoomOutLeftClick, SDL_BUTTON_LEFT);
+	_btnZoomOut->onMouseClick((ActionHandler)&SelectDestinationState::btnZoomOutRightClick, SDL_BUTTON_RIGHT);
 
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
@@ -244,32 +246,36 @@ void SelectDestinationState::btnRotateDownRelease(Action *action)
  * Zooms into the globe.
  * @param action Pointer to an action.
  */
-void SelectDestinationState::btnZoomInClick(Action *action)
+void SelectDestinationState::btnZoomInLeftClick(Action *action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
-	{
-		_globe->zoomIn();
-	}
-	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-	{
-		_globe->zoomMax();
-	}
+	_globe->zoomIn();
+}
+
+/**
+ * Zooms the globe maximum.
+ * @param action Pointer to an action.
+ */
+void SelectDestinationState::btnZoomInRightClick(Action *action)
+{
+	_globe->zoomMax();
 }
 
 /**
  * Zooms out of the globe.
  * @param action Pointer to an action.
  */
-void SelectDestinationState::btnZoomOutClick(Action *action)
+void SelectDestinationState::btnZoomOutLeftClick(Action *action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
-	{
-		_globe->zoomOut();
-	}
-	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-	{
-		_globe->zoomMin();
-	}
+	_globe->zoomOut();
+}
+
+/**
+ * Zooms the globe minimum.
+ * @param action Pointer to an action.
+ */
+void SelectDestinationState::btnZoomOutRightClick(Action *action)
+{
+	_globe->zoomMin();
 }
 
 /**

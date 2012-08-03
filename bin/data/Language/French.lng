@@ -475,8 +475,6 @@ STR_ALIEN_BASE_ASSAULT_BRIEFING
 Les agents XCom ont pénétré dans une base alienne.  Le centre de contrôle doit être détruit pour rendre la base inopérante.  La mission sera terminée quand tous les ennemis auront été éliminés, ou quand votre escouade sera revenue à la zone verte de sortie (cliquez sur l'icône 'Annuler Mission' pour sortir).
 STR_CYDONIA_BRIEFING
 Vous êtes arrivé à Cydonia.  Vous pénétrez dans un grand complexe souterrain près du Sphinx martien.  Vous devez détruire le Cerveau Alien qui contrôle toute l'activité alienne.  Le sort de l'humanité est entre vos mains....
-STR_TERROR_SITE_UC
-SITE DE TERREUR-
 STR_TERROR_MISSION
 MISSION DE TERREUR
 STR_TERROR_MISSION_BRIEFING
@@ -559,14 +557,8 @@ STR_INTERCEPTING_UFO
 INTERCEPTION DE L'OVNI-
 STR_RETURNING_TO_BASE
 RETOUR A LA BASE
-STR_DESTINATION_ALIEN_BASE
-DESTINATION: BASE ALIENNE-
-STR_DESTINATION_CRASH_SITE
-DESTINATION: LIEU DU CRASH-
-STR_DESTINATION_LANDING_SITE
-DESTINATION: SITE D'ATTERRISSAGE-
-STR_DESTINATION_WAY_POINT
-DESTINATION: POINT DE REPERE-
+STR_DESTINATION_UC
+DESTINATION: 
 STR_SPEED_
 VITESSE>
 STR_MAXIMUM_SPEED_UC
@@ -739,7 +731,7 @@ STR_LANDING_SITE_
 SITE D'ATTERRISSAGE-
 STR_WAY_POINT_
 POINT DE REPERE-
-STR_TERROR_SITE_
+STR_TERROR_SITE_UC
 SITE DE TERREUR-
 STR_HAS_REACHED
 a atteint

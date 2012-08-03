@@ -120,7 +120,7 @@ void ConfirmNewBaseState::btnOkClick(Action *action)
 	}
 	else
 	{
-		_game->pushState(new GeoscapeErrorState(_game, "STR_NOT_ENOUGH_MONEY"));
+		_game->pushState(new GeoscapeErrorState(_game, _game->getLanguage()->getString("STR_NOT_ENOUGH_MONEY")));
 	}
 }
 

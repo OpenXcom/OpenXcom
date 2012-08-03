@@ -59,9 +59,6 @@
     <ClCompile Include="Basescape\DismantleFacilityState.cpp">
       <Filter>Basescape</Filter>
     </ClCompile>
-    <ClCompile Include="Basescape\ManufactureState.cpp">
-      <Filter>Basescape</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Screen.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
@@ -545,20 +542,11 @@
     <ClCompile Include="Basescape\NewResearchListState.cpp">
       <Filter>Basescape</Filter>
     </ClCompile>
-    <ClCompile Include="Basescape\ResearchProjectState.cpp">
-      <Filter>Basescape</Filter>
-    </ClCompile>
     <ClCompile Include="Geoscape\NewPossibleResearchState.cpp">
       <Filter>Geoscape</Filter>
     </ClCompile>
-    <ClCompile Include="Ruleset\RuleResearchProject.cpp">
-      <Filter>Ruleset</Filter>
-    </ClCompile>
     <ClCompile Include="Savegame\ResearchProject.cpp">
       <Filter>Savegame</Filter>
-    </ClCompile>
-    <ClCompile Include="Geoscape\EndResearchState.cpp">
-      <Filter>Geoscape</Filter>
     </ClCompile>
     <ClCompile Include="Battlescape\InfoboxState.cpp">
       <Filter>Battlescape</Filter>
@@ -577,18 +565,6 @@
     </ClCompile>
     <ClCompile Include="Battlescape\MiniMapView.cpp">
       <Filter>Battlescape</Filter>
-    </ClCompile>
-    <ClCompile Include="Basescape\ProductionState.cpp">
-      <Filter>Basescape</Filter>
-    </ClCompile>
-    <ClCompile Include="Basescape\ListPossibleProductionState.cpp">
-      <Filter>Basescape</Filter>
-    </ClCompile>
-    <ClCompile Include="Basescape\ProductionStartState.cpp">
-      <Filter>Basescape</Filter>
-    </ClCompile>
-    <ClCompile Include="Ruleset\RuleManufactureInfo.cpp">
-      <Filter>Ruleset</Filter>
     </ClCompile>
     <ClCompile Include="Savegame\Production.cpp">
       <Filter>Savegame</Filter>
@@ -631,6 +607,39 @@
     </ClCompile>
     <ClCompile Include="Savegame\CraftWeaponProjectile.cpp">
       <Filter>Savegame</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\NewBattleState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Ruleset\RuleManufacture.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
+    <ClCompile Include="Ruleset\RuleResearch.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
+    <ClCompile Include="Basescape\ManufactureStartState.cpp">
+      <Filter>Basescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Basescape\ManufactureInfoState.cpp">
+      <Filter>Basescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Basescape\NewManufactureListState.cpp">
+      <Filter>Basescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Basescape\ResearchInfoState.cpp">
+      <Filter>Basescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Basescape\ManufactureState.cpp">
+      <Filter>Basescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Savegame\TerrorSite.cpp">
+      <Filter>Savegame</Filter>
+    </ClCompile>
+    <ClCompile Include="Geoscape\AlienTerrorState.cpp">
+      <Filter>Geoscape</Filter>
+    </ClCompile>
+    <ClCompile Include="Geoscape\ResearchCompleteState.cpp">
+      <Filter>Geoscape</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1179,20 +1188,11 @@
     <ClInclude Include="Basescape\NewResearchListState.h">
       <Filter>Basescape</Filter>
     </ClInclude>
-    <ClInclude Include="Basescape\ResearchProjectState.h">
-      <Filter>Basescape</Filter>
-    </ClInclude>
     <ClInclude Include="Geoscape\NewPossibleResearchState.h">
       <Filter>Geoscape</Filter>
     </ClInclude>
-    <ClInclude Include="Ruleset\RuleResearchProject.h">
-      <Filter>Ruleset</Filter>
-    </ClInclude>
     <ClInclude Include="Savegame\ResearchProject.h">
       <Filter>Savegame</Filter>
-    </ClInclude>
-    <ClInclude Include="Geoscape\EndResearchState.h">
-      <Filter>Geoscape</Filter>
     </ClInclude>
     <ClInclude Include="Battlescape\InfoboxState.h">
       <Filter>Battlescape</Filter>
@@ -1211,18 +1211,6 @@
     </ClInclude>
     <ClInclude Include="Battlescape\MiniMapView.h">
       <Filter>Battlescape</Filter>
-    </ClInclude>
-    <ClInclude Include="Basescape\ProductionState.h">
-      <Filter>Basescape</Filter>
-    </ClInclude>
-    <ClInclude Include="Basescape\ListPossibleProductionState.h">
-      <Filter>Basescape</Filter>
-    </ClInclude>
-    <ClInclude Include="Basescape\ProductionStartState.h">
-      <Filter>Basescape</Filter>
-    </ClInclude>
-    <ClInclude Include="Ruleset\RuleManufactureInfo.h">
-      <Filter>Ruleset</Filter>
     </ClInclude>
     <ClInclude Include="Savegame\Production.h">
       <Filter>Savegame</Filter>
@@ -1265,6 +1253,54 @@
     </ClInclude>
     <ClInclude Include="Savegame\CraftWeaponProjectile.h">
       <Filter>Savegame</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\ShaderDraw.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\ShaderDrawHelper.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\ShaderMove.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\ShaderRepeat.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\ShaderRotate.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\NewBattleState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\RuleManufacture.h">
+      <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\RuleResearch.h">
+      <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Basescape\ManufactureStartState.h">
+      <Filter>Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Basescape\ManufactureInfoState.h">
+      <Filter>Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Basescape\ResearchInfoState.h">
+      <Filter>Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Basescape\NewManufactureListState.h">
+      <Filter>Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Savegame\TerrorSite.h">
+      <Filter>Savegame</Filter>
+    </ClInclude>
+    <ClInclude Include="Geoscape\AlienTerrorState.h">
+      <Filter>Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Geoscape\ResearchCompleteState">
+      <Filter>Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Geoscape\ResearchCompleteState.h">
+      <Filter>Geoscape</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

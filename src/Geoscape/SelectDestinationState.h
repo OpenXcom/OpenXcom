@@ -74,10 +74,14 @@ public:
 	void btnRotateDownPress(Action *action);
 	/// Handler for releasing the Rotate Down arrow.
 	void btnRotateDownRelease(Action *action);
-	/// Handler for clicking the Zoom In icon.
-	void btnZoomInClick(Action *action);
-	/// Handler for clicking the Zoom Out icon.
-	void btnZoomOutClick(Action *action);
+	/// Handler for left-clicking the Zoom In icon.
+	void btnZoomInLeftClick(Action *action);
+	/// Handler for right-clicking the Zoom In icon.
+	void btnZoomInRightClick(Action *action);
+	/// Handler for left-clicking the Zoom Out icon.
+	void btnZoomOutLeftClick(Action *action);
+	/// Handler for right-clicking the Zoom Out icon.
+	void btnZoomOutRightClick(Action *action);
 	/// Handler for clicking the Cancel button.
 	void btnCancelClick(Action *action);
 };

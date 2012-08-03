@@ -30,14 +30,12 @@
 #include "../Savegame/Base.h"
 #include "../Savegame/Craft.h"
 #include "../Savegame/Ufo.h"
-#include "../Savegame/Waypoint.h"
 #include "GeoscapeState.h"
 #include "ConfirmDestinationState.h"
 #include "InterceptState.h"
 #include "UfoDetectedState.h"
 #include "GeoscapeCraftState.h"
 #include "TargetInfoState.h"
-#include "MultipleTargetsState.h"
 
 namespace OpenXcom
 {
@@ -128,7 +126,6 @@ void MultipleTargetsState::popupTarget(Target *target)
 		Base* b = dynamic_cast<Base*>(target);
 		Craft* c = dynamic_cast<Craft*>(target);
 		Ufo* u = dynamic_cast<Ufo*>(target);
-		Waypoint* w = dynamic_cast<Waypoint*>(target);
 		if (b != 0)
 		{
 			_game->pushState(new InterceptState(_game, _state->getGlobe(), b));
@@ -141,9 +138,9 @@ void MultipleTargetsState::popupTarget(Target *target)
 		{
 			_game->pushState(new UfoDetectedState(_game, u, _state, false));
 		}
-		else if (w != 0)
+		else
 		{
-			_game->pushState(new TargetInfoState(_game, w));
+			_game->pushState(new TargetInfoState(_game, target));
 		}
 	}
 	else

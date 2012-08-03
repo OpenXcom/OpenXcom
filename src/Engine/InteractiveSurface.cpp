@@ -29,9 +29,15 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-InteractiveSurface::InteractiveSurface(int width, int height, int x, int y) : Surface(width, height, x, y), _click(0), _press(0), _release(0), _in(0), _over(0), _out(0), _keyPress(0), _keyRelease(0), _isPressed(false), _isHovered(false), _isFocused(false), _validButton(0)
+InteractiveSurface::InteractiveSurface(int width, int height, int x, int y) : Surface(width, height, x, y), _press(0), _release(0), _in(0), _over(0), _out(0), _keyPress(0), _keyRelease(0), _isHovered(false), _isFocused(false)
 {
-
+	_clicks = new ActionHandler[NUM_BUTTONS+1];
+	_buttonsPressed = new bool[NUM_BUTTONS+1];
+	for (int i = 0; i <= NUM_BUTTONS; ++i)
+	{
+		_clicks[i] = 0;
+		_buttonsPressed[i] = false;
+	}
 }
 
 /**
@@ -39,6 +45,8 @@ InteractiveSurface::InteractiveSurface(int width, int height, int x, int y) : Su
  */
 InteractiveSurface::~InteractiveSurface()
 {
+	delete[] _clicks;
+	delete[] _buttonsPressed;
 }
 
 /**
@@ -102,21 +110,24 @@ void InteractiveSurface::handle(Action *action, State *state)
 		}
 	}
 
-	if (!_isPressed && action->getDetails()->type == SDL_MOUSEBUTTONDOWN && (_validButton == 0 || _validButton == action->getDetails()->button.button))
+	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
 	{
-		if (_isHovered)
+		if (_isHovered && !_buttonsPressed[action->getDetails()->button.button])
 		{
-			_isPressed = true;
+			_buttonsPressed[action->getDetails()->button.button] = true;
 			mousePress(action, state);
 		}
 	}
-	else if (_isPressed && action->getDetails()->type == SDL_MOUSEBUTTONUP && (_validButton == 0 || _validButton == action->getDetails()->button.button))
+	else if (action->getDetails()->type == SDL_MOUSEBUTTONUP)
 	{
-		_isPressed = false;
-		mouseRelease(action, state);
-		if (_isHovered)
+		if (_buttonsPressed[action->getDetails()->button.button])
 		{
-			mouseClick(action, state);
+			_buttonsPressed[action->getDetails()->button.button] = false;
+			mouseRelease(action, state);
+			if (_isHovered)
+			{
+				mouseClick(action, state);
+			}
 		}
 	}
 
@@ -149,9 +160,9 @@ void InteractiveSurface::focus()
  */
 void InteractiveSurface::unpress(State *state)
 {
-	if (_isPressed)
+	if (_buttonsPressed[SDL_BUTTON_LEFT])
 	{
-		_isPressed = false;
+		_buttonsPressed[SDL_BUTTON_LEFT] = false;
 		SDL_Event ev;
 		ev.type = SDL_MOUSEBUTTONUP;
 		ev.button.button = SDL_BUTTON_LEFT;
@@ -199,9 +210,13 @@ void InteractiveSurface::mouseRelease(Action *action, State *state)
  */
 void InteractiveSurface::mouseClick(Action *action, State *state)
 {
-	if (_click != 0)
+	if (_clicks[0] != 0)
 	{
-		(state->*_click)(action);
+		(state->*_clicks[0])(action);
+	}
+	if (_clicks[action->getDetails()->button.button] != 0)
+	{
+		(state->*_clicks[action->getDetails()->button.button])(action);
 	}
 }
 
@@ -283,10 +298,11 @@ void InteractiveSurface::keyboardRelease(Action *action, State *state)
 /**
  * Sets a function to be called every time the surface is mouse clicked.
  * @param handler Action handler.
+ * @param button Mouse button to check for. Set to 0 for any button.
  */
-void InteractiveSurface::onMouseClick(ActionHandler handler)
+void InteractiveSurface::onMouseClick(ActionHandler handler, Uint8 button)
 {
-	_click = handler;
+	_clicks[button] = handler;
 }
 
 /**

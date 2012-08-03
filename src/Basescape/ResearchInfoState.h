@@ -16,8 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_RESEARCHPROJECTSTATE
-#define OPENXCOM_RESEARCHPROJECTSTATE
+#ifndef OPENXCOM_RESEARCHINFOSTATE
+#define OPENXCOM_RESEARCHINFOSTATE
+
 #include "../Engine/State.h"
 
 namespace OpenXcom
@@ -28,7 +29,7 @@ class Window;
 class Text;
 class TextList;
 class Base;
-class RuleResearchProject;
+class RuleResearch;
 class ResearchProject;
 class ResearchState;
 class NewResearchListState;
@@ -38,7 +39,7 @@ class Timer;
 /**
    Window which allow to change number of assigned scientist to a project.
 */
-class ResearchProjectState : public State
+class ResearchInfoState : public State
 {
 private:
 	Base *_base;
@@ -50,13 +51,13 @@ private:
 	std::vector<Text*> texts_;
 	void SetAssignedScientist();
 	ResearchProject * _project;
-	RuleResearchProject * _rule;
+	RuleResearch * _rule;
 	void buildUi ();
 	Timer *_timerMore, *_timerLess;
 public:
 	/// Creates the ResearchProject state.
-	ResearchProjectState(Game *game, Base *base, RuleResearchProject * rule);
-	ResearchProjectState(Game *game, Base *base, ResearchProject * project);
+	ResearchInfoState(Game *game, Base *base, RuleResearch * rule);
+	ResearchInfoState(Game *game, Base *base, ResearchProject * project);
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
 	/// Function called every time the _timerMore timer is triggered.

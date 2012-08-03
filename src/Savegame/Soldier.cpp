@@ -22,6 +22,8 @@
 #include "../Savegame/Craft.h"
 #include "../Ruleset/SoldierNamePool.h"
 #include "../Ruleset/RuleSoldier.h"
+#include "../Ruleset/Armor.h"
+#include "../Ruleset/Ruleset.h"
 
 namespace OpenXcom
 {
@@ -84,8 +86,9 @@ Soldier::~Soldier()
 /**
  * Loads the soldier from a YAML file.
  * @param node YAML node.
+ * @param rule Game ruleset.
  */
-void Soldier::load(const YAML::Node &node)
+void Soldier::load(const YAML::Node &node, const Ruleset *rule)
 {
 	int a = 0;
 	node["id"] >> _id;
@@ -103,6 +106,9 @@ void Soldier::load(const YAML::Node &node)
 	node["missions"] >> _missions;
 	node["kills"] >> _kills;
 	node["recovery"] >> _recovery;
+	std::string armor;
+	node["armor"] >> armor;
+	_armor = rule->getArmor(armor);
 }
 
 /**
@@ -127,6 +133,7 @@ void Soldier::save(YAML::Emitter &out) const
 	out << YAML::Key << "missions" << YAML::Value << _missions;
 	out << YAML::Key << "kills" << YAML::Value << _kills;
 	out << YAML::Key << "recovery" << YAML::Value << _recovery;
+	out << YAML::Key << "armor" << YAML::Value << _armor->getStoreItem();
 	out << YAML::EndMap;
 }
 

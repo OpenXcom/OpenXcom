@@ -48,6 +48,8 @@ public:
 	PrimeGrenadeState(Game *game, BattleAction *action);
 	/// Cleans up the Prime Grenade state.
 	~PrimeGrenadeState();
+	/// Handler for right-clicking anything.
+	void handle(Action *action);
 	/// Handler for clicking a button.
 	void btnClick(Action *action);
 };

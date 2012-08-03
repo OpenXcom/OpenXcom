@@ -38,7 +38,6 @@ namespace OpenXcom
  */
 MiniBaseView::MiniBaseView(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _bases(), _texture(0), _base(0), _hoverBase(0)
 {
-	_validButton = SDL_BUTTON_LEFT;
 }
 
 /**

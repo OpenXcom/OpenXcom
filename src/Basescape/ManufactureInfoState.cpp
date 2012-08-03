@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "ProductionState.h"
+#include "ManufactureInfoState.h"
 #include "../Interface/Window.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Text.h"
@@ -26,7 +26,7 @@
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
 #include "../Resource/ResourcePack.h"
-#include "../Ruleset/RuleManufactureInfo.h"
+#include "../Ruleset/RuleManufacture.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/Production.h"
 #include "../Engine/Timer.h"
@@ -37,9 +37,9 @@ namespace OpenXcom
  * Initialize all elements in the Production settings screen(new Production)
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
- * @param item the RuleManufactureInfo to produce
+ * @param item the RuleManufacture to produce
 */
-ProductionState::ProductionState (Game * game, Base * base, RuleManufactureInfo * item) : State (game), _base(base), _item(item), _production(0)
+ManufactureInfoState::ManufactureInfoState (Game * game, Base * base, RuleManufacture * item) : State (game), _base(base), _item(item), _production(0)
 {
 	buildUi();
 }
@@ -50,7 +50,7 @@ ProductionState::ProductionState (Game * game, Base * base, RuleManufactureInfo 
  * @param base Pointer to the base to get info from.
  * @param production the Production to modify
 */
-ProductionState::ProductionState (Game * game, Base * base, Production * production) : State (game), _base(base), _item(0), _production(production)
+ManufactureInfoState::ManufactureInfoState (Game * game, Base * base, Production * production) : State (game), _base(base), _item(0), _production(production)
 {
 	buildUi();
 }
@@ -58,7 +58,7 @@ ProductionState::ProductionState (Game * game, Base * base, Production * product
 /**
  * build screen User Interface
 */
-void ProductionState::buildUi()
+void ManufactureInfoState::buildUi()
 {
 	_screen = false;
 	int width = 320;
@@ -113,7 +113,7 @@ void ProductionState::buildUi()
 	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
 	_txtTitle->setColor(Palette::blockOffset(15)+1);
-	_txtTitle->setText(_game->getLanguage()->getString(_item ? _item->getName() : _production->getRuleManufactureInfo()->getName()));
+	_txtTitle->setText(_game->getLanguage()->getString(_item ? _item->getName() : _production->getRuleManufacture()->getName()));
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 
@@ -142,20 +142,20 @@ void ProductionState::buildUi()
 	_txtEngineerDown->setColor(Palette::blockOffset(15)+1);
 	_txtEngineerDown->setText(_game->getLanguage()->getString("STR_DECREASE_UC"));
 	_btnEngineerUp->setColor(Palette::blockOffset(15)+1);
-	_btnEngineerUp->onMousePress((ActionHandler)&ProductionState::moreEngineerPress);
-	_btnEngineerUp->onMouseRelease((ActionHandler)&ProductionState::moreEngineerRelease);
+	_btnEngineerUp->onMousePress((ActionHandler)&ManufactureInfoState::moreEngineerPress);
+	_btnEngineerUp->onMouseRelease((ActionHandler)&ManufactureInfoState::moreEngineerRelease);
 
 	_btnEngineerDown->setColor(Palette::blockOffset(15)+1);
-	_btnEngineerDown->onMousePress((ActionHandler)&ProductionState::lessEngineerPress);
-	_btnEngineerDown->onMouseRelease((ActionHandler)&ProductionState::lessEngineerRelease);
+	_btnEngineerDown->onMousePress((ActionHandler)&ManufactureInfoState::lessEngineerPress);
+	_btnEngineerDown->onMouseRelease((ActionHandler)&ManufactureInfoState::lessEngineerRelease);
 
 	_btnUnitUp->setColor(Palette::blockOffset(15)+1);
-	_btnUnitUp->onMousePress((ActionHandler)&ProductionState::moreUnitPress);
-	_btnUnitUp->onMouseRelease((ActionHandler)&ProductionState::moreUnitRelease);
+	_btnUnitUp->onMousePress((ActionHandler)&ManufactureInfoState::moreUnitPress);
+	_btnUnitUp->onMouseRelease((ActionHandler)&ManufactureInfoState::moreUnitRelease);
 
 	_btnUnitDown->setColor(Palette::blockOffset(15)+1);
-	_btnUnitDown->onMousePress((ActionHandler)&ProductionState::lessUnitPress);
-	_btnUnitDown->onMouseRelease((ActionHandler)&ProductionState::lessUnitRelease);
+	_btnUnitDown->onMousePress((ActionHandler)&ManufactureInfoState::lessUnitPress);
+	_btnUnitDown->onMouseRelease((ActionHandler)&ManufactureInfoState::lessUnitRelease);
 
 	_txtUnitUp->setColor(Palette::blockOffset(15)+1);
 	_txtUnitUp->setText(_game->getLanguage()->getString("STR_INCREASE_UC"));
@@ -164,11 +164,11 @@ void ProductionState::buildUi()
 
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)&ProductionState::btnOkClick);
+	_btnOk->onMouseClick((ActionHandler)&ManufactureInfoState::btnOkClick);
 
 	_btnStop->setColor(Palette::blockOffset(13)+10);
 	_btnStop->setText(_game->getLanguage()->getString("STR_STOP_PRODUCTION"));
-	_btnStop->onMouseClick((ActionHandler)&ProductionState::btnStopClick);
+	_btnStop->onMouseClick((ActionHandler)&ManufactureInfoState::btnStopClick);
 	if(!_production)
 	{
 		_production = new Production (_item, 0);
@@ -180,17 +180,17 @@ void ProductionState::buildUi()
 	_timerLessEngineer = new Timer(30);
 	_timerMoreUnit = new Timer(30);
 	_timerLessUnit = new Timer(30);
-	_timerMoreEngineer->onTimer((StateHandler)&ProductionState::onMoreEngineer);
-	_timerLessEngineer->onTimer((StateHandler)&ProductionState::onLessEngineer);
-	_timerMoreUnit->onTimer((StateHandler)&ProductionState::onMoreUnit);
-	_timerLessUnit->onTimer((StateHandler)&ProductionState::onLessUnit);
+	_timerMoreEngineer->onTimer((StateHandler)&ManufactureInfoState::onMoreEngineer);
+	_timerLessEngineer->onTimer((StateHandler)&ManufactureInfoState::onLessEngineer);
+	_timerMoreUnit->onTimer((StateHandler)&ManufactureInfoState::onMoreUnit);
+	_timerLessUnit->onTimer((StateHandler)&ManufactureInfoState::onLessUnit);
 }
 
 /**
  * Stop this Production. Return to previous screen
  * @param action a pointer to an Action
 */
-void ProductionState::btnStopClick (Action * action)
+void ManufactureInfoState::btnStopClick (Action * action)
 {
 	_base->removeProduction(_production);
 	exitState();
@@ -200,7 +200,7 @@ void ProductionState::btnStopClick (Action * action)
  * Start this Production(if new). Return to previous screen
  * @param action a pointer to an Action
 */
-void ProductionState::btnOkClick (Action * action)
+void ManufactureInfoState::btnOkClick (Action * action)
 {
 	if(_item)
 	{
@@ -212,7 +212,7 @@ void ProductionState::btnOkClick (Action * action)
 /**
  * Return to previous screen
 */
-void ProductionState::exitState()
+void ManufactureInfoState::exitState()
 {
 	_game->popState();
 	if(_item)
@@ -224,7 +224,7 @@ void ProductionState::exitState()
 /**
  * Update display of assigned/available engineer/workshop space
  */
-void ProductionState::setAssignedEngineer()
+void ManufactureInfoState::setAssignedEngineer()
 {
 	int availableEngineer = _base->getAvailableEngineers();
 	int availableWorkSpace = _base->getFreeWorkshops();
@@ -246,7 +246,7 @@ void ProductionState::setAssignedEngineer()
  * Start the timerMoreEngineer
  * @param action a pointer to an Action
 */
-void ProductionState::moreEngineerPress(Action * action)
+void ManufactureInfoState::moreEngineerPress(Action * action)
 {
 	_timerMoreEngineer->start();
 }
@@ -255,7 +255,7 @@ void ProductionState::moreEngineerPress(Action * action)
  * Stop the timerMoreEngineer
  * @param action a pointer to an Action
 */
-void ProductionState::moreEngineerRelease(Action * action)
+void ManufactureInfoState::moreEngineerRelease(Action * action)
 {
 	_timerMoreEngineer->stop();
 }
@@ -264,7 +264,7 @@ void ProductionState::moreEngineerRelease(Action * action)
  * Start the timerLessEngineer
  * @param action a pointer to an Action
 */
-void ProductionState::lessEngineerPress(Action * action)
+void ManufactureInfoState::lessEngineerPress(Action * action)
 {
 	_timerLessEngineer->start();
 }
@@ -273,7 +273,7 @@ void ProductionState::lessEngineerPress(Action * action)
  * Stop the timerLessEngineer
  * @param action a pointer to an Action
 */
-void ProductionState::lessEngineerRelease(Action * action)
+void ManufactureInfoState::lessEngineerRelease(Action * action)
 {
 	_timerLessEngineer->stop();
 }
@@ -282,7 +282,7 @@ void ProductionState::lessEngineerRelease(Action * action)
  * Start the timerMoreUnit
  * @param action a pointer to an Action
 */
-void ProductionState::moreUnitPress(Action * action)
+void ManufactureInfoState::moreUnitPress(Action * action)
 {
 	_timerMoreUnit->start();
 }
@@ -291,7 +291,7 @@ void ProductionState::moreUnitPress(Action * action)
  * Stop the timerMoreUnit
  * @param action a pointer to an Action
 */
-void ProductionState::moreUnitRelease(Action * action)
+void ManufactureInfoState::moreUnitRelease(Action * action)
 {
 	_timerMoreUnit->stop();
 }
@@ -300,7 +300,7 @@ void ProductionState::moreUnitRelease(Action * action)
  * Start the timerLessUnit
  * @param action a pointer to an Action
 */
-void ProductionState::lessUnitPress(Action * action)
+void ManufactureInfoState::lessUnitPress(Action * action)
 {
 	_timerLessUnit->start();
 }
@@ -309,7 +309,7 @@ void ProductionState::lessUnitPress(Action * action)
  * Stop the timerLessUnit
  * @param action a pointer to an Action
 */
-void ProductionState::lessUnitRelease(Action * action)
+void ManufactureInfoState::lessUnitRelease(Action * action)
 {
 	_timerLessUnit->stop();
 }
@@ -317,7 +317,7 @@ void ProductionState::lessUnitRelease(Action * action)
 /**
  * Assign one more engineer(if possible)
  */
-void ProductionState::onMoreEngineer()
+void ManufactureInfoState::onMoreEngineer()
 {
 	int assigned = _production->getAssignedEngineers();
 	int availableEngineer = _base->getAvailableEngineers();
@@ -333,7 +333,7 @@ void ProductionState::onMoreEngineer()
 /**
  * Remove one engineer(if possible)
  */
-void ProductionState::onLessEngineer()
+void ManufactureInfoState::onLessEngineer()
 {
 	int assigned = _production->getAssignedEngineers();
 	if(assigned > 0)
@@ -347,7 +347,7 @@ void ProductionState::onLessEngineer()
 /**
  * Build one more unit
  */
-void ProductionState::onMoreUnit()
+void ManufactureInfoState::onMoreUnit()
 {
 	int more = _production->getNumberOfItemTodo ();
 	_production->setNumberOfItemTodo (++more);
@@ -357,7 +357,7 @@ void ProductionState::onMoreUnit()
 /**
  * Build one less unit(if possible)
  */
-void ProductionState::onLessUnit()
+void ManufactureInfoState::onLessUnit()
 {
 	int less = _production->getNumberOfItemTodo ();
 	if(less > (_production->getNumberOfItemDone () + 1))
@@ -370,7 +370,7 @@ void ProductionState::onLessUnit()
 /**
  * Runs state functionality every cycle(used to update the timer).
  */
-void ProductionState::think()
+void ManufactureInfoState::think()
 {
 	State::think();
 	_timerMoreEngineer->think(this, 0);

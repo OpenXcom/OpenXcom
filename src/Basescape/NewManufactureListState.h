@@ -16,39 +16,47 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_PRODUCTIONSTARTSTATE_H
-#define OPENXCOM_PRODUCTIONSTARTSTATE_H
+#ifndef OPENXCOM_NEWMANUFACTURELISTSTATE_H
+#define OPENXCOM_NEWMANUFACTURELISTSTATE_H
 
 #include "../Engine/State.h"
+#include <vector>
 
 namespace OpenXcom
 {
 class Base;
-class RuleManufactureInfo;
-class Window;
 class TextButton;
+class Window;
 class Text;
 class TextList;
+class RuleManufacture;
+class ManufactureState;
 
 /**
- * Screen which display needed elements to start productions(items/required workshop state/cost to build a unit, ...).
-*/
-class ProductionStartState : public State
+ * Screen which list possible productions.
+ */
+class NewManufactureListState : public State
 {
 private:
-	Base * _base;
-	RuleManufactureInfo * _item;
-	Window * _window;
-	TextButton * _btnCancel, * _btnStart;
-	Text * _txtTitle, * _txtManHour, * _txtCost, * _txtWorkSpace, * _txtNeededItemsTitle, * _txtItemNameColumn, * _txtUnitRequiredColumn, * _txtUnitAvailableColumn;
-	TextList * _lstNeededItems;
+	Base *_base;
+	TextButton *_btnOk;
+	Window *_window;
+	Text *_txtTitle, *_txtItem, *_txtCategory;
+	TextList *_lstManufacture;
+	ManufactureState * _manufactureState;
+	std::vector<RuleManufacture *> _possibleProductions;
+
 public:
-	/// Create the State
-	ProductionStartState(Game * game, Base * base, RuleManufactureInfo * item);
-	/// Handler for the Cancel button
-	void btnCancelClick(Action * action);
-	/// Handler for the start button
-	void btnStartClick(Action * action);
+	/// Create the state
+	NewManufactureListState(Game *game, Base *base);
+	/// Initialize state
+	void init ();
+	/// Handler for clicking the OK button
+	void btnOkClick(Action * action);
+	/// Handler for clicking on the list
+	void lstProdClick (Action * action);
+	/// Fill the list with Base production's
+	void fillProductionList();
 };
 }
 #endif

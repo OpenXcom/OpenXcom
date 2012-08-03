@@ -41,14 +41,14 @@ class ScannerState : public State
 	BattleAction *_action;
 	/// update scanner interface
 	void update();
-	/// Special handling for mouse clicks.
-	void mouseClick(Action *action);
 	Timer *_timerAnimate;
 	/// Handle Minimap animation
 	void animate();
 public:
 	/// Create the ScannerState
 	ScannerState (Game * game, BattleAction *action);
+	/// Handler for right-clicking anything.
+	void handle(Action *action);
 	/// Handle timers
 	void think ();
 };

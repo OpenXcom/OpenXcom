@@ -121,7 +121,6 @@ MedikitState::MedikitState (Game * game, BattleUnit * targetUnit, BattleAction *
 	_unit = action->actor;
 	_item = action->weapon;
 	_surface = new InteractiveSurface(320, 200);
-	_surface->onMouseClick((ActionHandler)&MedikitState::mouseClick);
 	_partTxt = new Text(50, 15, 90, 120);
 	_woundTxt = new Text(10, 15, 145, 120);
 	_medikitView = new MedikitView(52, 58, 95, 60, _game, _targetUnit, _partTxt, _woundTxt);
@@ -162,6 +161,20 @@ MedikitState::MedikitState (Game * game, BattleUnit * targetUnit, BattleAction *
 	stimulantButton->onMouseClick((ActionHandler)&MedikitState::onStimulantClick);
 	pkButton->onMouseClick((ActionHandler)&MedikitState::onPainKillerClick);
 	update();
+}
+
+/**
+ * Closes the window on right-click.
+ * @param action Pointer to an action.
+ */
+void MedikitState::handle(Action *action)
+{
+	State::handle(action);
+	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN && action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	{
+		_game->popState();
+		_game->popState();
+	}
 }
 
 /**
@@ -268,18 +281,5 @@ void MedikitState::update()
 	_stimulantTxt->setText(toString(_item->getStimulantQuantity()));
 	_healTxt->setText(toString(_item->getHealQuantity()));
 }
-
-/**
- * @param action Pointer to an action.
- */
-void MedikitState::mouseClick(Action *action)
-{
-	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-	{
-		_game->popState();
-		_game->popState();
-	}
-}
-
 
 }

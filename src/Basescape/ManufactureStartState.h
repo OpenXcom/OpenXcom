@@ -16,44 +16,39 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_NEWRESEARCHLISTSTATE_H
-#define OPENXCOM_NEWRESEARCHLISTSTATE_H
+#ifndef OPENXCOM_MANUFACTURESTARTSTATE_H
+#define OPENXCOM_MANUFACTURESTARTSTATE_H
+
 #include "../Engine/State.h"
 
 namespace OpenXcom
 {
-
-class TextButton;
+class Base;
+class RuleManufacture;
 class Window;
+class TextButton;
 class Text;
 class TextList;
-class Base;
-class RuleResearch;
-class ResearchState;
 
 /**
-   Window which display possible research projects.
+ * Screen which display needed elements to start productions(items/required workshop state/cost to build a unit, ...).
 */
-class NewResearchListState : public State
+class ManufactureStartState : public State
 {
 private:
-	Base *_base;
-	TextButton *_btnOK;
-	Window *_window;
-	Text *_txtTitle;
-	TextList *_lstResearch;
-	void onSelectProject(Action *action);
-	std::vector<RuleResearch *> _projects;
+	Base * _base;
+	RuleManufacture * _item;
+	Window * _window;
+	TextButton * _btnCancel, * _btnStart;
+	Text * _txtTitle, * _txtManHour, * _txtCost, * _txtWorkSpace, * _txtNeededItemsTitle, * _txtItemNameColumn, * _txtUnitRequiredColumn, * _txtUnitAvailableColumn;
+	TextList * _lstNeededItems;
 public:
-	/// Creates the New research list state.
-	NewResearchListState(Game *game, Base *base);
-	/// Handler for clicking the OK button
-	void btnOKClick(Action *action);
-	/// Fill the ResearchProject list with possible ResearchProject.
-	void fillProjectList ();
-	/// Initializes the state.
-	void init();
+	/// Create the State
+	ManufactureStartState(Game * game, Base * base, RuleManufacture * item);
+	/// Handler for the Cancel button
+	void btnCancelClick(Action * action);
+	/// Handler for the start button
+	void btnStartClick(Action * action);
 };
 }
-
 #endif

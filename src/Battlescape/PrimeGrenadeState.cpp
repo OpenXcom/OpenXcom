@@ -115,6 +115,20 @@ PrimeGrenadeState::~PrimeGrenadeState()
 
 }
 
+/**
+ * Closes the window on right-click.
+ * @param action Pointer to an action.
+ */
+void PrimeGrenadeState::handle(Action *action)
+{
+	State::handle(action);
+	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN && action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	{
+		_action->value = -1;
+		_game->popState();
+	}
+}
+
 
 /**
  * Execute the action corresponding with this action menu item.

@@ -108,7 +108,7 @@ void OptionsState::init()
  */
 void OptionsState::btnLoadClick(Action *action)
 {
-	_game->pushState(new LoadGameState(_game));
+	_game->pushState(new LoadGameState(_game, true));
 }
 
 /**

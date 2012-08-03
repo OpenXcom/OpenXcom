@@ -1,4 +1,486 @@
 ---
+countries:
+  - type: STR_AUSTRALIA
+    fundingMin: 280
+    fundingMax: 560
+    labelLon: 2.35619
+    labelLat: 0.436332
+  - type: STR_BRAZIL
+    fundingMin: 300
+    fundingMax: 600
+    labelLon: 5.32325
+    labelLat: 0.0872665
+  - type: STR_CANADA
+    fundingMin: 230
+    fundingMax: 460
+    labelLon: 4.53786
+    labelLat: -0.959931
+  - type: STR_CHINA
+    fundingMin: 245
+    fundingMax: 490
+    labelLon: 1.74533
+    labelLat: -0.610865
+  - type: STR_EGYPT
+    fundingMin: 230
+    fundingMax: 460
+    labelLon: 0.506145
+    labelLat: -0.453786
+  - type: STR_FRANCE
+    fundingMin: 320
+    fundingMax: 640
+    labelLon: 0.0436332
+    labelLat: -0.811578
+  - type: STR_GERMANY
+    fundingMin: 250
+    fundingMax: 500
+    labelLon: 0.200713
+    labelLat: -0.872665
+  - type: STR_INDIA
+    fundingMin: 150
+    fundingMax: 300
+    labelLon: 1.39626
+    labelLat: -0.418879
+  - type: STR_ITALY
+    fundingMin: 160
+    fundingMax: 320
+    labelLon: 0.218166
+    labelLat: -0.765763
+  - type: STR_JAPAN
+    fundingMin: 400
+    fundingMax: 800
+    labelLon: 2.40855
+    labelLat: -0.667588
+  - type: STR_NIGERIA
+    fundingMin: 180
+    fundingMax: 360
+    labelLon: 0.1309
+    labelLat: -0.174533
+  - type: STR_RUSSIA
+    fundingMin: 230
+    fundingMax: 460
+    labelLon: 1.0472
+    labelLat: -1.0472
+  - type: STR_SOUTH_AFRICA
+    fundingMin: 230
+    fundingMax: 460
+    labelLon: 0.436332
+    labelLat: 0.523599
+  - type: STR_SPAIN
+    fundingMin: 140
+    fundingMax: 280
+    labelLon: 6.23955
+    labelLat: -0.743947
+  - type: STR_UK
+    fundingMin: 240
+    fundingMax: 480
+    labelLon: 6.24828
+    labelLat: -0.935933
+  - type: STR_USA
+    fundingMin: 600
+    fundingMax: 1200
+    labelLon: 4.53786
+    labelLat: -0.698132
+regions:
+  - type: STR_ANTARCTICA
+    cost: 900000
+    lonMin:
+      - 0
+    lonMax:
+      - 6.281
+    latMin:
+      - 1.0472
+    latMax:
+      - 1.5708
+    cities:
+      []
+  - type: STR_ARCTIC
+    cost: 950000
+    lonMin:
+      - 0
+    lonMax:
+      - 6.281
+    latMin:
+      - -1.5708
+    latMax:
+      - -1.22391
+    cities:
+      []
+  - type: STR_AUSTRALASIA
+    cost: 750000
+    lonMin:
+      - 1.8326
+    lonMax:
+      - 3.13941
+    latMin:
+      - -0.0872665
+    latMax:
+      - 1.04502
+    cities:
+      - name: STR_CANBERRA
+        lon: 2.60272
+        lat: 0.61741
+      - name: STR_WELLINGTON
+        lon: 3.05651
+        lat: 0.719948
+      - name: STR_MELBOURNE
+        lon: 2.53073
+        lat: 0.661043
+      - name: STR_PERTH
+        lon: 2.02022
+        lat: 0.558505
+  - type: STR_CENTRAL_ASIA
+    cost: 500000
+    lonMin:
+      - 0.698132
+      - 1.0472
+      - 1.22173
+    lonMax:
+      - 1.21955
+      - 1.56861
+      - 1.56861
+    latMin:
+      - -0.610865
+      - -0.872665
+      - -0.610865
+    latMax:
+      - -0.263981
+      - -0.613047
+      - -0.0894481
+    cities:
+      - name: STR_ANKARA
+        lon: 0.571595
+        lat: -0.69595
+      - name: STR_DELHI
+        lon: 1.34827
+        lat: -0.4996
+      - name: STR_KARACHI
+        lon: 1.16937
+        lat: -0.434151
+      - name: STR_BAGHDAD
+        lon: 0.776672
+        lat: -0.580322
+      - name: STR_TEHRAN
+        lon: 0.898845
+        lat: -0.621774
+      - name: STR_BOMBAY
+        lon: 1.27627
+        lat: -0.329431
+      - name: STR_CALCUTTA
+        lon: 1.54243
+        lat: -0.394881
+  - type: STR_EUROPE
+    cost: 1000000
+    lonMin:
+      - 5.84685
+    lonMax:
+      - 1.04502
+    latMin:
+      - -1.22173
+    latMax:
+      - -0.613047
+    cities:
+      - name: STR_LONDON
+        lon: 6.281
+        lat: -0.898845
+      - name: STR_PARIS
+        lon: 0.0414516
+        lat: -0.850848
+      - name: STR_BERLIN
+        lon: 0.233438
+        lat: -0.916298
+      - name: STR_MOSCOW
+        lon: 0.65668
+        lat: -0.973021
+      - name: STR_ROME
+        lon: 0.218166
+        lat: -0.730857
+      - name: STR_MADRID
+        lon: 6.21774
+        lat: -0.704677
+      - name: STR_BUDAPEST
+        lon: 0.333794
+        lat: -0.829031
+  - type: STR_INDIAN_OCEAN
+    cost: 500000
+    lonMin:
+      - 0.959931
+      - 1.22173
+      - 0.959931
+    lonMax:
+      - 1.21955
+      - 1.56861
+      - 1.83041
+    latMin:
+      - -0.261799
+      - -0.0872665
+      - 0.174533
+    latMax:
+      - 0.172351
+      - 0.172351
+      - 1.04502
+    cities:
+      []
+  - type: STR_NORTH_AFRICA
+    cost: 650000
+    lonMin:
+      - 5.84685
+      - 5.84685
+    lonMax:
+      - 0.69595
+      - 0.957749
+    latMin:
+      - -0.610865
+      - -0.261799
+    latMax:
+      - -0.263981
+      - -0.00218166
+    cities:
+      - name: STR_LAGOS
+        lon: 0.0545415
+        lat: -0.113446
+      - name: STR_CAIRO
+        lon: 0.545415
+        lat: -0.523599
+      - name: STR_CASABLANCA
+        lon: 6.1501
+        lat: -0.584685
+  - type: STR_NORTH_AMERICA
+    cost: 800000
+    lonMin:
+      - 3.40339
+      - 4.01426
+      - 4.18879
+    lonMax:
+      - 5.32107
+      - 5.32107
+      - 5.23381
+    latMin:
+      - -1.22173
+      - -0.959931
+      - -0.523599
+    latMax:
+      - -0.962113
+      - -0.52578
+      - -0.176715
+    cities:
+      - name: STR_NEW_YORK
+        lon: 4.99382
+        lat: -0.711222
+      - name: STR_WASHINGTON
+        lon: 4.9371
+        lat: -0.676315
+      - name: STR_LOS_ANGELES
+        lon: 4.21933
+        lat: -0.595594
+      - name: STR_MONTREAL
+        lon: 4.9611
+        lat: -0.794125
+      - name: STR_HAVANA
+        lon: 4.84547
+        lat: -0.392699
+      - name: STR_MEXICO_CITY
+        lon: 4.55313
+        lat: -0.338158
+      - name: STR_CHICAGO
+        lon: 4.75384
+        lat: -0.730857
+      - name: STR_VANCOUVER
+        lon: 4.13207
+        lat: -0.861756
+      - name: STR_DALLAS
+        lon: 4.59676
+        lat: -0.571595
+  - type: STR_NORTH_ATLANTIC
+    cost: 500000
+    lonMin:
+      - 5.32325
+      - 5.23599
+      - 5.49779
+    lonMax:
+      - 5.84467
+      - 5.84467
+      - 5.84467
+    latMin:
+      - -1.22173
+      - -0.523599
+      - -0.174533
+    latMax:
+      - -0.52578
+      - -0.176715
+      - -0.00218166
+    cities:
+      []
+  - type: STR_PACIFIC
+    cost: 600000
+    lonMin:
+      - 3.14159
+      - 3.14159
+      - 3.14159
+      - 3.14159
+      - 3.14159
+      - 2.61799
+    lonMax:
+      - 3.40121
+      - 4.01208
+      - 4.18661
+      - 4.71021
+      - 4.79747
+      - 3.13941
+    latMin:
+      - -1.22173
+      - -0.959931
+      - -0.523599
+      - -0.174533
+      - 0
+      - -0.872665
+    latMax:
+      - -0.962113
+      - -0.52578
+      - -0.176715
+      - -0.00218166
+      - 1.04502
+      - -0.0894481
+    cities:
+      []
+  - type: STR_SIBERIA
+    cost: 800000
+    lonMin:
+      - 1.0472
+    lonMax:
+      - 3.13941
+    latMin:
+      - -1.22173
+    latMax:
+      - -0.874846
+    cities:
+      - name: STR_NOVOSIBIRSK
+        lon: 1.44426
+        lat: -0.959931
+  - type: STR_SOUTHERN_AFRICA
+    cost: 550000
+    lonMin:
+      - 0.0872665
+    lonMax:
+      - 0.957749
+    latMin:
+      - 0
+    latMax:
+      - 0.69595
+    cities:
+      - name: STR_PRETORIA
+        lon: 0.490874
+        lat: 0.458149
+      - name: STR_NAIROBI
+        lon: 0.641409
+        lat: 0.0218166
+      - name: STR_CAPE_TOWN
+        lon: 0.322886
+        lat: 0.593412
+      - name: STR_KINSHASA
+        lon: 0.268344
+        lat: 0.0763582
+  - type: STR_SOUTH_AMERICA
+    cost: 600000
+    lonMin:
+      - 4.71239
+      - 4.79966
+      - 4.79966
+    lonMax:
+      - 5.49561
+      - 5.7574
+      - 5.67014
+    latMin:
+      - -0.174533
+      - 0
+      - 0.261799
+    latMax:
+      - -0.00218166
+      - 0.259618
+      - 1.04502
+    cities:
+      - name: STR_BRASILIA
+        lon: 5.44761
+        lat: 0.274889
+      - name: STR_BOGOTA
+        lon: 4.98946
+        lat: -0.0785398
+      - name: STR_BUENOS_AIRES
+        lon: 5.27962
+        lat: 0.602139
+      - name: STR_SANTIAGO
+        lon: 5.05055
+        lat: 0.582504
+      - name: STR_RIO_DE_JANEIRO
+        lon: 5.53051
+        lat: 0.399244
+      - name: STR_LIMA
+        lon: 4.93928
+        lat: 0.20944
+      - name: STR_CARACAS
+        lon: 5.116
+        lat: -0.18326
+  - type: STR_SOUTH_ATLANTIC
+    cost: 500000
+    lonMin:
+      - 5.75959
+      - 5.67232
+      - 0.0872665
+    lonMax:
+      - 0.0850848
+      - 0.0850848
+      - 0.959931
+    latMin:
+      - 0
+      - 0.261799
+      - 0.698132
+    latMax:
+      - 0.259618
+      - 1.04502
+      - 1.04502
+    cities:
+      []
+  - type: STR_SOUTH_EAST_ASIA
+    cost: 750000
+    lonMin:
+      - 1.5708
+      - 1.8326
+    lonMax:
+      - 1.83041
+      - 2.61581
+    latMin:
+      - -0.872665
+      - -0.872665
+    latMax:
+      - 0.172351
+      - -0.0894481
+    cities:
+      - name: STR_TOKYO
+        lon: 2.4391
+        lat: -0.621774
+      - name: STR_BEIJING
+        lon: 2.03113
+        lat: -0.69595
+      - name: STR_BANGKOK
+        lon: 1.75624
+        lat: -0.237801
+      - name: STR_MANILA
+        lon: 2.11185
+        lat: -0.255254
+      - name: STR_SEOUL
+        lon: 2.21657
+        lat: -0.654498
+      - name: STR_SINGAPORE
+        lon: 1.81296
+        lat: -0.0239983
+      - name: STR_JAKARTA
+        lon: 1.86314
+        lat: 0.109083
+      - name: STR_SHANGHAI
+        lon: 2.12058
+        lat: -0.545415
+      - name: STR_HONG_KONG
+        lon: 1.99186
+        lat: -0.388336
 facilities:
   - type: STR_ACCESS_LIFT
     spriteShape: 2
@@ -1466,7 +1948,7 @@ ufos:
           width: 20
           length: 20
   - type: STR_ABDUCTER
-    size: STR_MEDIUM
+    size: STR_MEDIUM_UC
     sprite: 3
     damageMax: 500
     speedMax: 4000
@@ -1475,6 +1957,29 @@ ufos:
     range: 22
     score: 250
     reload: 48
+    breakOffTime: 500
+    battlescapeTerrainData:
+      name: UFO_140
+      mapDataSets:
+        - BLANKS
+        - U_EXT02
+        - U_WALL02
+        - U_OPER2
+        - U_BITS
+      mapBlocks:
+        - name: UFO_140
+          width: 20
+          length: 20
+  - type: STR_HARVESTER
+    size: STR_MEDIUM_UC
+    sprite: 4
+    damageMax: 500
+    speedMax: 4300
+    accel: 8
+    power: 40
+    range: 20
+    score: 250
+    reload: 32
     breakOffTime: 500
     battlescapeTerrainData:
       name: UFO_130
@@ -1488,17 +1993,6 @@ ufos:
         - name: UFO_130
           width: 20
           length: 20
-  - type: STR_HARVESTER
-    size: STR_MEDIUM
-    sprite: 4
-    damageMax: 500
-    speedMax: 4300
-    accel: 8
-    power: 40
-    range: 20
-    score: 250
-    reload: 32
-    breakOffTime: 500
   - type: STR_SUPPLY_SHIP
     size: STR_LARGE
     sprite: 5
@@ -1510,6 +2004,18 @@ ufos:
     score: 400
     reload: 24
     breakOffTime: 3000
+    battlescapeTerrainData:
+      name: UFO_170
+      mapDataSets:
+        - BLANKS
+        - U_EXT02
+        - U_WALL02
+        - U_DISEC2
+        - U_BITS
+      mapBlocks:
+        - name: UFO_170
+          width: 20
+          length: 30
   - type: STR_TERROR_SHIP
     size: STR_LARGE
     sprite: 6
@@ -1521,6 +2027,18 @@ ufos:
     score: 500
     reload: 24
     breakOffTime: 2000
+    battlescapeTerrainData:
+      name: UFO_150
+      mapDataSets:
+        - BLANKS
+        - U_EXT02
+        - U_WALL02
+        - U_PODS
+        - U_BITS
+      mapBlocks:
+        - name: UFO_150
+          width: 20
+          length: 30
   - type: STR_BATTLESHIP
     size: STR_VERY_LARGE
     sprite: 7
@@ -1532,6 +2050,18 @@ ufos:
     score: 700
     reload: 24
     breakOffTime: 4000
+    battlescapeTerrainData:
+      name: UFO_160
+      mapDataSets:
+        - BLANKS
+        - U_EXT02
+        - U_WALL02
+        - U_PODS
+        - U_BITS
+      mapBlocks:
+        - name: UFO_160
+          width: 30
+          length: 30
 invs:
   - id: STR_BACK_PACK
     x: 192
@@ -2611,7 +3141,6 @@ alienDeployments:
     width: 40
     length: 40
     height: 4
-
   - type: STR_MEDIUM_SCOUT
     data:
       - alienRank: 5

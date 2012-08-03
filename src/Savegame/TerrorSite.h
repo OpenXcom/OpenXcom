@@ -16,36 +16,40 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_GEOSCAPEERRORSTATE_H
-#define OPENXCOM_GEOSCAPEERRORSTATE_H
+#ifndef OPENXCOM_TERRORSITE_H
+#define OPENXCOM_TERRORSITE_H
 
+#include "Target.h"
 #include <string>
-#include "../Engine/State.h"
+#include <yaml-cpp/yaml.h>
 
 namespace OpenXcom
 {
 
-class TextButton;
-class Window;
-class Text;
-
 /**
- * Generic window used to display error messages
- * when the player is on the Geoscape.
+ * Represents an alien terror site on the world.
  */
-class GeoscapeErrorState : public State
+class TerrorSite : public Target
 {
 private:
-	TextButton *_btnOk;
-	Window *_window;
-	Text *_txtMessage;
+	int _id;
 public:
-	/// Creates the Geoscape Error state.
-	GeoscapeErrorState(Game *game, std::wstring str);
-	/// Cleans up the Geoscape Error state.
-	~GeoscapeErrorState();
-	/// Handler for clicking the OK button.
-	void btnOkClick(Action *action);
+	/// Creates a terror site.
+	TerrorSite();
+	/// Cleans up the terror site.
+	~TerrorSite();
+	/// Loads the terror site from YAML.
+	void load(const YAML::Node& node);
+	/// Saves the terror site to YAML.
+	void save(YAML::Emitter& out) const;
+	/// Saves the terror site's ID to YAML.
+	void saveId(YAML::Emitter& out) const;
+	/// Gets the terror site's ID.
+	int getId() const;
+	/// Sets the terror site's ID.
+	void setId(int id);
+	/// Gets the terror site's name.
+	std::wstring getName(Language *lang) const;
 };
 
 }

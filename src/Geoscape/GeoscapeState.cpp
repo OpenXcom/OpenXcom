@@ -47,6 +47,7 @@
 #include "../Ruleset/RuleUfo.h"
 #include "../Savegame/Waypoint.h"
 #include "../Savegame/Transfer.h"
+#include "../Savegame/Soldier.h"
 #include "OptionsState.h"
 #include "InterceptState.h"
 #include "../Basescape/BasescapeState.h"
@@ -64,16 +65,18 @@
 #include "ConfirmLandingState.h"
 #include "ItemsArrivingState.h"
 #include "CannotRearmState.h"
-#include "../Battlescape/BattlescapeState.h"
-#include "../Battlescape/BattlescapeGenerator.h"
 #include "../Ufopaedia/Ufopaedia.h"
 #include "../Savegame/ResearchProject.h"
-#include "EndResearchState.h"
-#include "../Ruleset/RuleResearchProject.h"
+#include "ResearchCompleteState.h"
+#include "../Ruleset/RuleResearch.h"
 #include "NewPossibleResearchState.h"
 #include "../Savegame/Production.h"
-#include "../Ruleset/RuleManufactureInfo.h"
+#include "../Ruleset/RuleManufacture.h"
 #include "../Savegame/ItemContainer.h"
+#include "../Savegame/TerrorSite.h"
+#include "../Ruleset/RuleRegion.h"
+#include "../Ruleset/City.h"
+#include "AlienTerrorState.h"
 
 namespace OpenXcom
 {
@@ -222,9 +225,11 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(fa
 	_btnRotateDown->onMousePress((ActionHandler)&GeoscapeState::btnRotateDownPress);
 	_btnRotateDown->onMouseRelease((ActionHandler)&GeoscapeState::btnRotateDownRelease);
 
-	_btnZoomIn->onMouseClick((ActionHandler)&GeoscapeState::btnZoomInClick);
+	_btnZoomIn->onMouseClick((ActionHandler)&GeoscapeState::btnZoomInLeftClick, SDL_BUTTON_LEFT);
+	_btnZoomIn->onMouseClick((ActionHandler)&GeoscapeState::btnZoomInRightClick, SDL_BUTTON_RIGHT);
 
-	_btnZoomOut->onMouseClick((ActionHandler)&GeoscapeState::btnZoomOutClick);
+	_btnZoomOut->onMouseClick((ActionHandler)&GeoscapeState::btnZoomOutLeftClick, SDL_BUTTON_LEFT);
+	_btnZoomOut->onMouseClick((ActionHandler)&GeoscapeState::btnZoomOutRightClick, SDL_BUTTON_RIGHT);
 
 	_txtHour->setBig();
 	_txtHour->setColor(Palette::blockOffset(15)+4);
@@ -461,6 +466,7 @@ void GeoscapeState::time5Seconds()
 			{
 				Ufo* u = dynamic_cast<Ufo*>((*j)->getDestination());
 				Waypoint *w = dynamic_cast<Waypoint*>((*j)->getDestination());
+				TerrorSite* t = dynamic_cast<TerrorSite*>((*j)->getDestination());
 				if (u != 0)
 				{
 					if (!u->isCrashed())
@@ -491,6 +497,22 @@ void GeoscapeState::time5Seconds()
 					popup(new CraftPatrolState(_game, (*j), _globe));
 					(*j)->setSpeed((*j)->getRules()->getMaxSpeed() / 2);
 					(*j)->setDestination(0);
+				}
+				else if (t != 0)
+				{
+					if ((*j)->getNumSoldiers() > 0)
+					{
+						// look up polygons texture
+						int texture, shade;
+						_globe->getPolygonTextureAndShade(t->getLongitude(), t->getLatitude(), &texture, &shade);
+						_music = false;
+						timerReset();
+						popup(new ConfirmLandingState(_game, *j, texture, shade));
+					}
+					else
+					{
+						(*j)->returnToBase();
+					}
 				}
 			}
 		}
@@ -556,23 +578,12 @@ void GeoscapeState::time10Minutes()
 void GeoscapeState::time30Minutes()
 {
 	// Spawn UFOs
+	std::vector<std::string> ufos = _game->getRuleset()->getUfosList();
 	int chance = RNG::generate(1, 100);
 	if (chance <= 50)
 	{
-		int type = RNG::generate(1, 3);
-		Ufo *u;
-		switch (type)
-		{
-		case 1:
-			u = new Ufo(_game->getRuleset()->getUfo("STR_SMALL_SCOUT"));
-			break;
-		case 2:
-			u = new Ufo(_game->getRuleset()->getUfo("STR_MEDIUM_SCOUT"));
-			break;
-		case 3:
-			u = new Ufo(_game->getRuleset()->getUfo("STR_LARGE_SCOUT"));
-			break;
-		}
+		int type = RNG::generate(0, ufos.size()-1);
+		Ufo *u = new Ufo(_game->getRuleset()->getUfo(ufos[type]));
 		u->setLongitude(RNG::generate(0.0, 2*M_PI));
 		u->setLatitude(RNG::generate(-M_PI_2, M_PI_2));
 		Waypoint *w = new Waypoint();
@@ -735,7 +746,7 @@ void GeoscapeState::time1Hour()
 			if (j->second > PRODUCTION_PROGRESS_NOT_COMPLETE)
 			{
 				(*i)->removeProduction (j->first);
-				_game->pushState(new ProductionCompleteState(_game, _game->getLanguage()->getString(j->first->getRuleManufactureInfo()->getName()), (*i)->getName(), j->second));
+				_game->pushState(new ProductionCompleteState(_game, _game->getLanguage()->getString(j->first->getRuleManufacture()->getName()), (*i)->getName(), j->second));
 				timerReset();
 			}
 		}
@@ -748,6 +759,30 @@ void GeoscapeState::time1Hour()
  */
 void GeoscapeState::time1Day()
 {
+	// Spawn terror sites
+	int chance = RNG::generate(1, 100);
+	if (chance <= 25)
+	{
+		// Pick a city
+		RuleRegion* region = 0;
+		std::vector<std::string> regions = _game->getRuleset()->getRegionsList();
+		do
+		{
+			region = _game->getRuleset()->getRegion(regions[RNG::generate(0, regions.size()-1)]);
+		}
+		while (region->getCities()->empty());
+		City *city = (*region->getCities())[RNG::generate(0, region->getCities()->size()-1)];
+
+		int *id = _game->getSavedGame()->getTerrorSiteId();
+		TerrorSite *t = new TerrorSite();
+		t->setLongitude(city->getLongitude());
+		t->setLatitude(city->getLatitude());
+		t->setId(*id);
+		_game->getSavedGame()->getTerrorSites()->push_back(t);
+		*id++;
+		popup(new AlienTerrorState(_game, city, this));
+	}
+
 	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
 	{
 		// Handle facility construction
@@ -775,12 +810,12 @@ void GeoscapeState::time1Day()
 		for(std::vector<ResearchProject*>::const_iterator iter = finished.begin (); iter != finished.end (); ++iter)
 		{
 			(*i)->removeResearch(*iter);
-			const RuleResearchProject * research = (*iter)->getRuleResearchProject ();
+			const RuleResearch * research = (*iter)->getRuleResearch ();
 			_game->getSavedGame()->addFinishedResearch(research, _game->getRuleset ());
-			std::vector<RuleResearchProject *> newPossibleResearch;
-			_game->getSavedGame()->getDependableResearch (newPossibleResearch, (*iter)->getRuleResearchProject(), _game->getRuleset(), *i);
+			std::vector<RuleResearch *> newPossibleResearch;
+			_game->getSavedGame()->getDependableResearch (newPossibleResearch, (*iter)->getRuleResearch(), _game->getRuleset(), *i);
 			timerReset();
-			popup(new EndResearchState (_game, research));
+			popup(new ResearchCompleteState (_game, research));
 			popup(new NewPossibleResearchState(_game, *i, newPossibleResearch));
 			delete(*iter);
 		}
@@ -893,26 +928,7 @@ void GeoscapeState::btnBasesClick(Action *action)
  */
 void GeoscapeState::btnGraphsClick(Action *action)
 {
-//#ifdef _DEBUG
-	/* Daiky: uncomment this bit to start a terror mission */
-	SavedBattleGame *bgame = new SavedBattleGame();
-	_game->getSavedGame()->setBattleGame(bgame);
-	bgame->setMissionType("STR_TERROR_MISSION");
-	BattlescapeGenerator *bgen = new BattlescapeGenerator(_game);
-	bgen->setWorldTexture(1);
-	bgen->setWorldShade(0);
-	bgen->setCraft(_game->getSavedGame()->getBases()->at(0)->getCrafts()->at(0));
-	bgen->setBase(_game->getSavedGame()->getBases()->at(0));
-	bgen->setAlienRace("STR_SECTOID");
-	bgen->setAlienItemlevel(0);
-	bgen->run();
-	delete bgen;
-	_music = false;
-	_game->getSavedGame()->getBattleGame()->resetUnitTiles();
-	_game->pushState(new BattlescapeState(_game));
-//#else
-//	_game->pushState(new GraphsState(_game));
-//#endif
+	_game->pushState(new GraphsState(_game));
 }
 
 /**
@@ -1018,32 +1034,36 @@ void GeoscapeState::btnRotateDownRelease(Action *action)
  * Zooms into the globe.
  * @param action Pointer to an action.
  */
-void GeoscapeState::btnZoomInClick(Action *action)
+void GeoscapeState::btnZoomInLeftClick(Action *action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
-	{
-		_globe->zoomIn();
-	}
-	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-	{
-		_globe->zoomMax();
-	}
+	_globe->zoomIn();
+}
+
+/**
+ * Zooms the globe maximum.
+ * @param action Pointer to an action.
+ */
+void GeoscapeState::btnZoomInRightClick(Action *action)
+{
+	_globe->zoomMax();
 }
 
 /**
  * Zooms out of the globe.
  * @param action Pointer to an action.
  */
-void GeoscapeState::btnZoomOutClick(Action *action)
+void GeoscapeState::btnZoomOutLeftClick(Action *action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
-	{
-		_globe->zoomOut();
-	}
-	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-	{
-		_globe->zoomMin();
-	}
+	_globe->zoomOut();
+}
+
+/**
+ * Zooms the globe minimum.
+ * @param action Pointer to an action.
+ */
+void GeoscapeState::btnZoomOutRightClick(Action *action)
+{
+	_globe->zoomMin();
 }
 
 }

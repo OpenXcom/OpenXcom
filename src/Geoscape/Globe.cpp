@@ -47,6 +47,7 @@
 #include "../Engine/ShaderMove.h"
 #include "../Engine/ShaderRepeat.h"
 #include "../Engine/Options.h"
+#include "../Savegame/TerrorSite.h"
 
 namespace OpenXcom
 {
@@ -808,6 +809,13 @@ std::vector<Target*> Globe::getTargets(int x, int y, bool craft) const
 			v.push_back(*i);
 		}
 	}
+	for (std::vector<TerrorSite*>::iterator i = _game->getSavedGame()->getTerrorSites()->begin(); i != _game->getSavedGame()->getTerrorSites()->end(); ++i)
+	{
+		if (targetNear((*i), x, y))
+		{
+			v.push_back(*i);
+		}
+	}
 	return v;
 }
 
@@ -1154,6 +1162,34 @@ void Globe::drawDetail()
 
 		delete label;
 	}
+
+	// Draw the radar ranges
+	/*
+	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
+	{
+		// Cheap hack to hide bases when they haven't been placed yet
+		if (((*i)->getLongitude() != 0.0 || (*i)->getLatitude() != 0.0) &&
+			!pointBack((*i)->getLongitude(), (*i)->getLatitude()))
+		{
+			int n = 16;
+			for (int j = 1; j <= n; ++j)
+			{
+				double r = 0.25;
+				double lon1 = (*i)->getLongitude() + r*cos(2*M_PI*j/n);
+				double lat1 = (*i)->getLatitude() + r*sin(2*M_PI*j/n);
+				double lon2 = (*i)->getLongitude() + r*cos(2*M_PI*(j+1)/n);
+				double lat2 = (*i)->getLatitude() + r*sin(2*M_PI*(j+1)/n);
+				if (!pointBack(lon2, lat2))
+				{
+					Sint16 x1, x2, y1, y2;
+					polarToCart(lon1, lat1, &x1, &y1);
+					polarToCart(lon2, lat2, &x2, &y2);
+					_countries->drawLine(x1, y1, x2, y2, 10);
+				}
+			}
+		}
+	}
+	*/
 }
 
 /**
@@ -1229,6 +1265,19 @@ void Globe::drawMarkers()
 		_mkWaypoint->setX(x - 1);
 		_mkWaypoint->setY(y - 1);
 		_mkWaypoint->blit(_markers);
+	}
+
+	// Draw the terror site markers
+	for (std::vector<TerrorSite*>::iterator i = _game->getSavedGame()->getTerrorSites()->begin(); i != _game->getSavedGame()->getTerrorSites()->end(); ++i)
+	{
+		if (pointBack((*i)->getLongitude(), (*i)->getLatitude()))
+			continue;
+
+		polarToCart((*i)->getLongitude(), (*i)->getLatitude(), &x, &y);
+
+		_mkAlienSite->setX(x - 1);
+		_mkAlienSite->setY(y - 1);
+		_mkAlienSite->blit(_markers);
 	}
 }
 

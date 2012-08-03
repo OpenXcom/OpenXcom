@@ -19,6 +19,7 @@
 #include "ArrowButton.h"
 #include "TextList.h"
 #include "../Engine/Timer.h"
+#include "../Engine/Action.h"
 
 namespace OpenXcom
 {
@@ -33,8 +34,6 @@ namespace OpenXcom
  */
 ArrowButton::ArrowButton(ArrowShape shape, int width, int height, int x, int y) : ImageButton(width, height, x, y), _shape(shape), _list(0)
 {
-	_validButton = SDL_BUTTON_LEFT;
-
 	_timer = new Timer(50);
 	_timer->onTimer((SurfaceHandler)&ArrowButton::scroll);
 }
@@ -313,7 +312,7 @@ void ArrowButton::scroll()
 void ArrowButton::mousePress(Action *action, State *state)
 {
 	ImageButton::mousePress(action, state);
-	if (_list != 0)
+	if (_list != 0 && action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
 		_timer->start();
 	}
@@ -327,7 +326,7 @@ void ArrowButton::mousePress(Action *action, State *state)
 void ArrowButton::mouseRelease(Action *action, State *state)
 {
 	ImageButton::mouseRelease(action, state);
-	if (_list != 0)
+	if (_list != 0 && action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
 		_timer->stop();
 	}

@@ -31,6 +31,11 @@ namespace OpenXcom
 enum ScrollType { SCROLL_TRIGGER, SCROLL_AUTO };
 
 /**
+ * Enumeration for the keyboard modes.
+ */
+enum KeyboardType { KEYBOARD_ON, KEYBOARD_VIRTUAL, KEYBOARD_OFF };
+
+/**
  * Container for all the various global game options
  * and customizable settings.
  */

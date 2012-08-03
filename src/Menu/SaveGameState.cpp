@@ -142,8 +142,6 @@ SaveGameState::SaveGameState(Game *game, bool geo) : State(game), _selected(""),
 	_lstSaves->setBackground(_window);
 	_lstSaves->setMargin(8);
 	_lstSaves->onMouseClick((ActionHandler)&SaveGameState::lstSavesClick);
-	_lstSaves->addRow(1, L"<NEW SAVED GAME>");
-	SavedGame::getList(_lstSaves, _game->getLanguage());
 
 	_edtSave->setVisible(false);
 	_edtSave->onKeyboardPress((ActionHandler)&SaveGameState::edtSaveKeyPress);
@@ -165,6 +163,18 @@ void SaveGameState::init()
 	if (_geo)
 	{
 		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
+	}
+	
+	_lstSaves->clearList();
+	_lstSaves->addRow(1, L"<NEW SAVED GAME>");
+	try
+	{
+		SavedGame::getList(_lstSaves, _game->getLanguage());
+	}
+	catch (Exception &e)
+	{
+		std::cerr << "ERROR: " << e.what() << std::endl;
+		std::cerr << Options::getUserFolder() << std::endl;
 	}
 }
 
@@ -239,12 +249,14 @@ void SaveGameState::edtSaveKeyPress(Action *action)
 		catch (Exception &e)
 		{
 			std::cerr << "ERROR: " << e.what() << std::endl;
-			_game->pushState(new GeoscapeErrorState(_game, "STR_SAVE_UNSUCCESSFUL"));
+			std::wstring error = _game->getLanguage()->getString("STR_SAVE_UNSUCCESSFUL") + L'\x02' + Language::utf8ToWstr(e.what());
+			_game->pushState(new GeoscapeErrorState(_game, error));
 		}
 		catch (YAML::Exception &e)
 		{
 			std::cerr << "ERROR: " << e.what() << std::endl;
-			_game->pushState(new GeoscapeErrorState(_game, "STR_SAVE_UNSUCCESSFUL"));
+			std::wstring error = _game->getLanguage()->getString("STR_SAVE_UNSUCCESSFUL") + L'\x02' + Language::utf8ToWstr(e.what());
+			_game->pushState(new GeoscapeErrorState(_game, error));
 		}
 		_game->popState();
 	}

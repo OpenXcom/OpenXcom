@@ -229,7 +229,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 
 	_save = _game->getSavedGame()->getBattleGame();
 	_map->init();
-	_map->onMouseClick((ActionHandler)&BattlescapeState::mapClick);
+	_map->onMouseClick((ActionHandler)&BattlescapeState::mapClick, 0);
 
 	// there is some cropping going on here, because the icons image is 320x200 while we only need the bottom of it.
 	Surface *s = _game->getResourcePack()->getSurface("ICONS.PCK");
@@ -940,20 +940,18 @@ void BattlescapeState::warning(std::string message)
  */
 void BattlescapeState::handle(Action *action)
 {
-	if (_game->getCursor()->getVisible() || action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	if (_game->getCursor()->getVisible())
 	{
 		State::handle(action);
 
 		if (action->getDetails()->type == SDL_KEYDOWN)
 		{
-#ifdef _DEBUG
 			// "d" - enable debug mode
-			if (action->getDetails()->key.keysym.sym == SDLK_d)
+			if (Options::getBool("debug") && action->getDetails()->key.keysym.sym == SDLK_d)
 			{
 				_save->setDebugMode();
 				debug(L"Debug Mode");
 			}
-#endif
 			// "l" - toggle personal lighting
 			if (action->getDetails()->key.keysym.sym == SDLK_l)
 			{

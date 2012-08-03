@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "ResearchProjectState.h"
+#include "ResearchInfoState.h"
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
@@ -27,7 +27,7 @@
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
 #include "../Savegame/Base.h"
-#include "../Ruleset/RuleResearchProject.h"
+#include "../Ruleset/RuleResearch.h"
 #include "../Savegame/ResearchProject.h"
 #include "ResearchState.h"
 #include "NewResearchListState.h"
@@ -44,9 +44,9 @@ namespace OpenXcom
  * Initializes all the elements in the ResearchProject screen.
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
- * @param rule A RuleResearchProject which will be used to create a new ResearchProject
+ * @param rule A RuleResearch which will be used to create a new ResearchProject
  */
-ResearchProjectState::ResearchProjectState(Game *game, Base *base, RuleResearchProject * rule) : State(game), _base(base), _project(new ResearchProject(rule, int(rule->getCost() * OpenXcom::RNG::generate(50, 150)/100))), _rule(rule)
+ResearchInfoState::ResearchInfoState(Game *game, Base *base, RuleResearch * rule) : State(game), _base(base), _project(new ResearchProject(rule, int(rule->getCost() * OpenXcom::RNG::generate(50, 150)/100))), _rule(rule)
 {
 	buildUi ();
 }
@@ -57,7 +57,7 @@ ResearchProjectState::ResearchProjectState(Game *game, Base *base, RuleResearchP
  * @param base Pointer to the base to get info from.
  * @param project A ResearchProject to modify
  */
-ResearchProjectState::ResearchProjectState(Game *game, Base *base, ResearchProject * project) : State(game), _base(base), _project(project), _rule(0)
+ResearchInfoState::ResearchInfoState(Game *game, Base *base, ResearchProject * project) : State(game), _base(base), _project(project), _rule(0)
 {
 	buildUi ();
 }
@@ -65,7 +65,7 @@ ResearchProjectState::ResearchProjectState(Game *game, Base *base, ResearchProje
 /**
  * Build dialog
  */
-void ResearchProjectState::buildUi ()
+void ResearchInfoState::buildUi ()
 {
 	int width = 230;
 	int height = 140;
@@ -109,7 +109,7 @@ void ResearchProjectState::buildUi ()
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
 	_txtTitle->setColor(Palette::blockOffset(13)+5);
 	_txtTitle->setBig();
-	_txtTitle->setText(_rule ? _game->getLanguage()->getString(_rule->getName()) : _game->getLanguage()->getString(_project->getRuleResearchProject ()->getName()));
+	_txtTitle->setText(_rule ? _game->getLanguage()->getString(_rule->getName()) : _game->getLanguage()->getString(_project->getRuleResearch ()->getName()));
 	_txtAvailableScientist->setColor(Palette::blockOffset(13)+5);
 	_txtAvailableScientist->setSecondaryColor(Palette::blockOffset(13));
 
@@ -136,26 +136,26 @@ void ResearchProjectState::buildUi ()
 	SetAssignedScientist();
 	_btnMore->setColor(Palette::blockOffset(13)+5);
 	_btnLess->setColor(Palette::blockOffset(13)+5);
-	_btnMore->onMousePress((ActionHandler)&ResearchProjectState::morePress);
-	_btnMore->onMouseRelease((ActionHandler)&ResearchProjectState::moreRelease);
-	_btnLess->onMousePress((ActionHandler)&ResearchProjectState::lessPress);
-	_btnLess->onMouseRelease((ActionHandler)&ResearchProjectState::lessRelease);
+	_btnMore->onMousePress((ActionHandler)&ResearchInfoState::morePress);
+	_btnMore->onMouseRelease((ActionHandler)&ResearchInfoState::moreRelease);
+	_btnLess->onMousePress((ActionHandler)&ResearchInfoState::lessPress);
+	_btnLess->onMouseRelease((ActionHandler)&ResearchInfoState::lessRelease);
 
 	_timerMore = new Timer(50);
-	_timerMore->onTimer((StateHandler)&ResearchProjectState::more);
+	_timerMore->onTimer((StateHandler)&ResearchInfoState::more);
 	_timerLess = new Timer(50);
-	_timerLess->onTimer((StateHandler)&ResearchProjectState::less);
+	_timerLess->onTimer((StateHandler)&ResearchInfoState::less);
 
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)&ResearchProjectState::btnOkClick);
+	_btnOk->onMouseClick((ActionHandler)&ResearchInfoState::btnOkClick);
 }
 
 /**
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void ResearchProjectState::btnOkClick(Action *action)
+void ResearchInfoState::btnOkClick(Action *action)
 {
 	_game->popState();
 }
@@ -163,7 +163,7 @@ void ResearchProjectState::btnOkClick(Action *action)
 /**
  * update count of assigned/free scientist, and available space lab
  */
-void ResearchProjectState::SetAssignedScientist()
+void ResearchInfoState::SetAssignedScientist()
 {
 	std::wstringstream s1;
 	s1 << _game->getLanguage()->getString("STR_SCIENTISTS_AVAILABLE_UC") << L'\x01' << _base->getAvailableScientists();
@@ -180,7 +180,7 @@ void ResearchProjectState::SetAssignedScientist()
  * Start the timeMore timer
  * @param action a Pointer to an Action
  */
-void ResearchProjectState::morePress(Action *action)
+void ResearchInfoState::morePress(Action *action)
 {
 	_timerMore->start ();
 }
@@ -189,7 +189,7 @@ void ResearchProjectState::morePress(Action *action)
  * Stop the timeMore timer
  * @param action a Pointer to an Action
  */
-void ResearchProjectState::moreRelease(Action *action)
+void ResearchInfoState::moreRelease(Action *action)
 {
 	_timerMore->stop ();
 }
@@ -198,7 +198,7 @@ void ResearchProjectState::moreRelease(Action *action)
  * Start the timeLess timer
  * @param action a Pointer to an Action
  */
-void ResearchProjectState::lessPress(Action *action)
+void ResearchInfoState::lessPress(Action *action)
 {
 	_timerLess->start ();
 }
@@ -207,7 +207,7 @@ void ResearchProjectState::lessPress(Action *action)
  * Stop the timeLess timer
  * @param action a Pointer to an Action
  */
-void ResearchProjectState::lessRelease(Action *action)
+void ResearchInfoState::lessRelease(Action *action)
 {
 	_timerLess->stop ();
 }
@@ -215,7 +215,7 @@ void ResearchProjectState::lessRelease(Action *action)
 /**
  * Add one scientist to the project if possible
  */
-void ResearchProjectState::more()
+void ResearchInfoState::more()
 {
 	int assigned = _project->getAssigned ();
 	int freeScientist = _base->getAvailableScientists();
@@ -231,7 +231,7 @@ void ResearchProjectState::more()
 /**
  * Remove one scientist to the project if possible
  */
-void ResearchProjectState::less()
+void ResearchInfoState::less()
 {
 	int assigned = _project->getAssigned ();
 	if (assigned > 0)
@@ -245,7 +245,7 @@ void ResearchProjectState::less()
 /**
  * Runs state functionality every cycle(used to update the timer).
  */
-void ResearchProjectState::think()
+void ResearchInfoState::think()
 {
 	State::think();
 

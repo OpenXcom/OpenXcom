@@ -23,6 +23,7 @@
 #include "../Savegame/SavedBattleGame.h"
 #include "../Engine/Game.h"
 #include "../Engine/Exception.h"
+#include "../Engine/Options.h"
 #include "../Resource/ResourcePack.h"
 #include "../Ruleset/XcomRuleset.h"
 #include "../Engine/Language.h"
@@ -42,11 +43,15 @@ namespace OpenXcom
 /**
  * Initializes all the elements in the Load Game screen.
  * @param game Pointer to the core game.
+ * @param geo True to use Geoscape palette, false to use Battlescape palette.
  */
-LoadGameState::LoadGameState(Game *game) : State(game)
+LoadGameState::LoadGameState(Game *game, bool geo) : State(game), _geo(geo)
 {
 	// Create objects
-	_window = new Window(this, 320, 200, 0, 0, POPUP_BOTH);
+	WindowPopup p = POPUP_BOTH;
+	if (!geo)
+		p = POPUP_NONE;
+	_window = new Window(this, 320, 200, 0, 0, p);
 	_btnCancel = new TextButton(80, 16, 120, 172);
 	_txtTitle = new Text(310, 16, 5, 8);
 	_txtName = new Text(150, 9, 16, 24);
@@ -55,7 +60,10 @@ LoadGameState::LoadGameState(Game *game) : State(game)
 	_lstSaves = new TextList(288, 128, 8, 32);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
+	if (_geo)
+	{
+		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
+	}
 
 	add(_window);
 	add(_btnCancel);
@@ -66,34 +74,66 @@ LoadGameState::LoadGameState(Game *game) : State(game)
 	add(_lstSaves);
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(8)+5);
-	_window->setBackground(game->getResourcePack()->getSurface("BACK01.SCR"));
+	if (_geo)
+	{
+		_window->setColor(Palette::blockOffset(8)+5);
+		_window->setBackground(game->getResourcePack()->getSurface("BACK01.SCR"));
 
-	_btnCancel->setColor(Palette::blockOffset(8)+5);
+		_btnCancel->setColor(Palette::blockOffset(8)+5);
+
+		_txtTitle->setColor(Palette::blockOffset(15)-1);
+
+		_txtName->setColor(Palette::blockOffset(15)-1);
+
+		_txtTime->setColor(Palette::blockOffset(15)-1);
+
+		_txtDate->setColor(Palette::blockOffset(15)-1);
+
+		_lstSaves->setColor(Palette::blockOffset(8)+10);
+	}
+	else
+	{
+		_window->setColor(Palette::blockOffset(0));
+		_window->setHighContrast(true);
+		_window->setBackground(_game->getResourcePack()->getSurface("TAC00.SCR"));
+
+		_btnCancel->setColor(Palette::blockOffset(0));
+		_btnCancel->setHighContrast(true);
+
+		_txtTitle->setColor(Palette::blockOffset(0));
+		_txtTitle->setHighContrast(true);
+
+		_txtName->setColor(Palette::blockOffset(0));
+		_txtName->setHighContrast(true);
+
+		_txtTime->setColor(Palette::blockOffset(0));
+		_txtTime->setHighContrast(true);
+
+		_txtDate->setColor(Palette::blockOffset(0));
+		_txtDate->setHighContrast(true);
+
+		_lstSaves->setColor(Palette::blockOffset(0));
+		_lstSaves->setHighContrast(true);
+	}
+
 	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&LoadGameState::btnCancelClick);
 
-	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(_game->getLanguage()->getString("STR_SELECT_GAME_TO_LOAD"));
 
-	_txtName->setColor(Palette::blockOffset(15)-1);
 	_txtName->setText(_game->getLanguage()->getString("STR_NAME"));
 
-	_txtTime->setColor(Palette::blockOffset(15)-1);
 	_txtTime->setText(_game->getLanguage()->getString("STR_TIME"));
 
-	_txtDate->setColor(Palette::blockOffset(15)-1);
 	_txtDate->setText(_game->getLanguage()->getString("STR_DATE"));
 
-	_lstSaves->setColor(Palette::blockOffset(8)+10);
 	_lstSaves->setColumns(5, 168, 30, 30, 30, 30);
 	_lstSaves->setSelectable(true);
 	_lstSaves->setBackground(_window);
 	_lstSaves->setMargin(8);
 	_lstSaves->onMouseClick((ActionHandler)&LoadGameState::lstSavesClick);
-	SavedGame::getList(_lstSaves, _game->getLanguage());
 }
 
 /**
@@ -105,11 +145,25 @@ LoadGameState::~LoadGameState()
 }
 
 /**
- * Resets the palette since it's bound to change on other screens.
+ * Resets the palette and refreshes saves.
  */
 void LoadGameState::init()
 {
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
+	if (_geo)
+	{
+		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
+	}
+
+	_lstSaves->clearList();
+	try
+	{
+		SavedGame::getList(_lstSaves, _game->getLanguage());
+	}
+	catch (Exception &e)
+	{
+		std::cerr << "ERROR: " << e.what() << std::endl;
+		std::cerr << Options::getUserFolder() << std::endl;
+	}
 }
 
 /**
@@ -127,38 +181,39 @@ void LoadGameState::btnCancelClick(Action *action)
  */
 void LoadGameState::lstSavesClick(Action *action)
 {
-	Ruleset *r = new XcomRuleset();
+	//Ruleset *r = new XcomRuleset();
 	SavedGame *s = new SavedGame(DIFF_BEGINNER);
 	try
 	{
-		s->load(Language::wstrToUtf8(_lstSaves->getCellText(_lstSaves->getSelectedRow(), 0)), r);
+		//_game->setRuleset(r);
+		s->load(Language::wstrToUtf8(_lstSaves->getCellText(_lstSaves->getSelectedRow(), 0)), _game->getRuleset());
 		_game->setSavedGame(s);
-		_game->setRuleset(r);
-		if (_game->getSavedGame()->getBattleGame() == 0)
-		{
-			_game->setState(new GeoscapeState(_game));
-		}
-		else
+		_game->setState(new GeoscapeState(_game));
+		if (_game->getSavedGame()->getBattleGame() != 0)
 		{
 			_game->getSavedGame()->getBattleGame()->loadMapResources(_game->getResourcePack());
-			_game->popState();
-			_game->pushState(new GeoscapeState(_game));
 			_game->pushState(new BattlescapeState(_game));
 		}
 	}
 	catch (Exception &e)
 	{
 		std::cerr << "ERROR: " << e.what() << std::endl;
-		_game->pushState(new GeoscapeErrorState(_game, "STR_LOAD_UNSUCCESSFUL"));
-		delete r;
+		std::wstring error = _game->getLanguage()->getString("STR_LOAD_UNSUCCESSFUL") + L'\x02' + Language::utf8ToWstr(e.what());
+		_game->pushState(new GeoscapeErrorState(_game, error));
+		//delete r;
 		delete s;
+		//_game->setRuleset(0);
+		_game->setSavedGame(0);
 	}
 	catch (YAML::Exception &e)
 	{
 		std::cerr << "ERROR: " << e.what() << std::endl;
-		_game->pushState(new GeoscapeErrorState(_game, "STR_LOAD_UNSUCCESSFUL"));
-		delete r;
+		std::wstring error = _game->getLanguage()->getString("STR_LOAD_UNSUCCESSFUL") + L'\x02' + Language::utf8ToWstr(e.what());
+		_game->pushState(new GeoscapeErrorState(_game, error));
+		//delete r;
 		delete s;
+		//_game->setRuleset(0);
+		_game->setSavedGame(0);
 	}
 }
 

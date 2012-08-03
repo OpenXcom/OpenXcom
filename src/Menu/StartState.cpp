@@ -21,11 +21,14 @@
 #include "../Engine/Game.h"
 #include "../Engine/Action.h"
 #include "../Resource/XcomResourcePack.h"
+#include "../Ruleset/XcomRuleset.h"
 #include "../Engine/Surface.h"
 #include "../Engine/Exception.h"
 #include "../Engine/Options.h"
+#include "../Engine/Language.h"
 #include "TestState.h"
 #include "NoteState.h"
+#include "LanguageState.h"
 #include "MainMenuState.h"
 
 namespace OpenXcom
@@ -80,6 +83,12 @@ void StartState::think()
 		try
 		{
 			_game->setResourcePack(new XcomResourcePack());
+			_game->setRuleset(new XcomRuleset());
+			std::vector<std::string> langs = Language::getList(0);
+			if (langs.empty())
+			{
+				throw Exception("No languages available");
+			}
 			_load = LOADING_SUCCESSFUL;
 		}
 		catch (Exception &e)
@@ -101,13 +110,19 @@ void StartState::think()
 	case LOADING_SUCCESSFUL:
 		if (Options::getString("language") == "" || Options::getString("language") == "~")
 		{
-			//_game->setState(new TestState(_game));
 			_game->setState(new NoteState(_game));
 		}
 		else
 		{
-			_game->loadLanguage(Options::getString("language"));
-			_game->setState(new MainMenuState(_game));
+			try
+			{
+				_game->loadLanguage(Options::getString("language"));
+				_game->setState(new MainMenuState(_game));
+			}
+			catch (Exception e)
+			{
+				_game->setState(new LanguageState(_game));
+			}
 		}
 		break;
 	default:

@@ -198,7 +198,10 @@ std::vector<std::string> Language::getList(TextList *list)
 				}
 			}
 			fin.close();
-			list->addRow(1, Language::utf8ToWstr(langname).c_str());
+			if (list != 0)
+			{
+				list->addRow(1, Language::utf8ToWstr(langname).c_str());
+			}
 			(*i) = file.substr(0, file.length()-4);
 			++i;
 		}

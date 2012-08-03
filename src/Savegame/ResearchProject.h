@@ -16,13 +16,14 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_RESEARCHPROJECT
-#define OPENXCOM_RESEARCHPROJECT
+#ifndef OPENXCOM_RESEARCHPROJECT_H
+#define OPENXCOM_RESEARCHPROJECT_H
+
 #include <yaml-cpp/yaml.h>
 
 namespace OpenXcom
 {
-class RuleResearchProject;
+class RuleResearch;
 class Ruleset;
 
 /**
@@ -31,12 +32,12 @@ class Ruleset;
 */
 class ResearchProject
 {
-	RuleResearchProject * _project;
+	RuleResearch * _project;
 	int _assigned;
 	int _spent;
 	int _cost;
 public:
-	ResearchProject(RuleResearchProject * p, int c = 0);
+	ResearchProject(RuleResearch * p, int c = 0);
 	/// Game logic. Called every new day to compute time spent.
 	bool step();
 	/// set the number of scientist assigned to this ResearchProject
@@ -52,7 +53,7 @@ public:
 	/// set time cost of this ResearchProject
 	void setCost(int f);
 	/// get the ResearchProject Ruleset
-	const RuleResearchProject * getRuleResearchProject () const;
+	const RuleResearch * getRuleResearch () const;
 	/// load the ResearchProject from YAML
 	void load(const YAML::Node& node);
 	/// save the ResearchProject to YAML

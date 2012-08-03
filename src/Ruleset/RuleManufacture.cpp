@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "RuleManufactureInfo.h"
+#include "RuleManufacture.h"
 
 namespace OpenXcom
 {
@@ -24,7 +24,7 @@ namespace OpenXcom
  * Create a new ManufactureInfo
  * @param name The unique manufacture name
 */
-RuleManufactureInfo::RuleManufactureInfo(const std::string &name) : _name(name)
+RuleManufacture::RuleManufacture(const std::string &name) : _name(name)
 {
 }
 
@@ -32,7 +32,7 @@ RuleManufactureInfo::RuleManufactureInfo(const std::string &name) : _name(name)
  * Get the unique name of the manufacture
  * @return the name
 */
-std::string RuleManufactureInfo::getName () const
+std::string RuleManufacture::getName () const
 {
 	return _name;
 }
@@ -41,7 +41,7 @@ std::string RuleManufactureInfo::getName () const
  * Change the category shown in the manufacture list
  * @param category The new category
 */
-void RuleManufactureInfo::setCategory (const std::string &category)
+void RuleManufacture::setCategory (const std::string &category)
 {
 	_category = category;
 }
@@ -50,7 +50,7 @@ void RuleManufactureInfo::setCategory (const std::string &category)
  * Get the category shown in the manufacture list
  * @return the category
 */
-std::string RuleManufactureInfo::getCategory () const
+std::string RuleManufacture::getCategory () const
 {
 	return _category;
 }
@@ -59,7 +59,7 @@ std::string RuleManufactureInfo::getCategory () const
  * Change required workshop space
  * @param workspace The new required workspace
 */
-void RuleManufactureInfo::setRequiredSpace (int workspace)
+void RuleManufacture::setRequiredSpace (int workspace)
 {
 	_space = workspace;
 }
@@ -68,7 +68,7 @@ void RuleManufactureInfo::setRequiredSpace (int workspace)
  * Get the required workspace
  * @return the required workspace to start production
 */
-int RuleManufactureInfo::getRequiredSpace () const
+int RuleManufacture::getRequiredSpace () const
 {
 	return _space;
 }
@@ -77,7 +77,7 @@ int RuleManufactureInfo::getRequiredSpace () const
  * Change the time needed to manufacture one item
  * @param time the time needed to manufacture one item(in man/hour)
 */
-void RuleManufactureInfo::setManufactureTime (int time)
+void RuleManufacture::setManufactureTime (int time)
 {
 	_time = time;
 }
@@ -86,7 +86,7 @@ void RuleManufactureInfo::setManufactureTime (int time)
  * Get the time needed to manufacture one item
  * @return The time needed to manufacture one item(in man/hour)
 */
-int RuleManufactureInfo::getManufactureTime () const
+int RuleManufacture::getManufactureTime () const
 {
 	return _time;
 }
@@ -95,7 +95,7 @@ int RuleManufactureInfo::getManufactureTime () const
  * Change the cost of manufacturing one item
  * @param cost The cost of one item
 */
-void RuleManufactureInfo::setManufactureCost (int cost)
+void RuleManufacture::setManufactureCost (int cost)
 {
 	_cost = cost;
 }
@@ -104,7 +104,7 @@ void RuleManufactureInfo::setManufactureCost (int cost)
  * Get the cost of one item
  * @return the cost of manufacturing one item
 */
-int RuleManufactureInfo::getManufactureCost () const
+int RuleManufacture::getManufactureCost () const
 {
 	return _cost;
 }
@@ -113,7 +113,7 @@ int RuleManufactureInfo::getManufactureCost () const
  * Get the list of needed items to manufacture one item
  * @return the list of needed items to manufacture one item
 */
-const std::map<std::string, int> & RuleManufactureInfo::getNeededItems() const
+const std::map<std::string, int> & RuleManufacture::getNeededItems() const
 {
 	return _neededItems;
 }
@@ -123,7 +123,7 @@ const std::map<std::string, int> & RuleManufactureInfo::getNeededItems() const
  * @param type The item type
  * @param quantity Item quantity's needed to manufacture one item
 */
-void RuleManufactureInfo::addNeededItem (std::string type, int quantity)
+void RuleManufacture::addNeededItem (std::string type, int quantity)
 {
 	_neededItems[type] = quantity;
 }

@@ -16,38 +16,45 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_ENDRESEARCHSTATE
-#define OPENXCOM_ENDRESEARCHSTATE
+#ifndef OPENXCOM_ALIENTERRORSTATE_H
+#define OPENXCOM_ALIENTERRORSTATE_H
 
 #include "../Engine/State.h"
+
 namespace OpenXcom
 {
-class Game;
-class Window;
+
+class City;
 class TextButton;
+class Window;
 class Text;
-class Base;
-class RuleResearchProject;
+class GeoscapeState;
 
 /**
- * Window which inform the player that a research project is finished.
- * Allow him to view information about the project(Ufopaedia).
+ * Displays info on a terror site.
  */
-class EndResearchState : public State
+class AlienTerrorState : public State
 {
+private:
+	City *_city;
+	GeoscapeState *_state;
+
+	TextButton *_btnCentre, *_btnCancel;
 	Window *_window;
-	Text *_txtTitle;
-    TextButton *_btnReport, *_btnOk;
-	const RuleResearchProject * _research;
+	Text *_txtTitle, *_txtCity;
 public:
-	/// Creates the EndResearch state.
-	EndResearchState(Game * game, const RuleResearchProject * research);
+	/// Creates the Ufo Detected state.
+	AlienTerrorState(Game *game, City *city, GeoscapeState *state);
+	/// Cleans up the Ufo Detected state.
+	~AlienTerrorState();
 	/// Updates the palette.
 	void init();
-	/// Handler for clicking the OK button.
-	void btnOkClick(Action *action);
-	/// Handler for clicking the Report button.
-	void btnReportClick(Action *action);
+	/// Handler for clicking the Centre on UFO button.
+	void btnCentreClick(Action *action);
+	/// Handler for clicking the Cancel button.
+	void btnCancelClick(Action *action);
 };
+
 }
+
 #endif

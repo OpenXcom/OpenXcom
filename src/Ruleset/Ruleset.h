@@ -43,8 +43,8 @@ class Unit;
 class Armor;
 class ArticleDefinition;
 class RuleInventory;
-class RuleResearchProject;
-class RuleManufactureInfo;
+class RuleResearch;
+class RuleManufacture;
 class AlienRace;
 class AlienDeployment;
 
@@ -75,9 +75,9 @@ protected:
 	std::map<std::string, ArticleDefinition*> _ufopaediaArticles;
 	std::map<std::string, RuleInventory*> _invs;
 	int _costSoldier, _costEngineer, _costScientist, _timePersonnel;
-	std::map<std::string, RuleResearchProject *> _researchProjects;
-	std::map<std::string, RuleManufactureInfo *> _manufacture;
-	std::vector<std::string> _countriesIndex, _regionsIndex, _facilitiesIndex, _craftsIndex, _craftWeaponsIndex, _itemsIndex, _armorsIndex, _researchIndex, _manufactureIndex;
+	std::map<std::string, RuleResearch *> _researchProjects;
+	std::map<std::string, RuleManufacture *> _manufacture;
+	std::vector<std::string> _countriesIndex, _regionsIndex, _facilitiesIndex, _craftsIndex, _craftWeaponsIndex, _itemsIndex, _ufosIndex, _armorsIndex, _researchIndex, _manufactureIndex;
 public:
 	/// Creates a blank ruleset.
 	Ruleset();
@@ -93,8 +93,12 @@ public:
 	std::vector<SoldierNamePool*> *const getPools();
 	/// Gets the ruleset for a country type.
 	RuleCountry *const getCountry(const std::string &id) const;
+	/// Gets the available countries.
+	std::vector<std::string> getCountriesList() const;
 	/// Gets the ruleset for a region type.
 	RuleRegion *const getRegion(const std::string &id) const;
+	/// Gets the available regions.
+	std::vector<std::string> getRegionsList() const;
 	/// Gets the ruleset for a facility type.
 	RuleBaseFacility *const getBaseFacility(const std::string &id) const;
 	/// Gets the available facilities.
@@ -113,6 +117,8 @@ public:
 	std::vector<std::string> getItemsList() const;
 	/// Gets the ruleset for a UFO type.
 	RuleUfo *const getUfo(const std::string &id) const;
+	/// Gets the available UFOs.
+	std::vector<std::string> getUfosList() const;
 	/// Gets terrains for battlescape games.
 	RuleTerrain *const getTerrain(const std::string &name) const;
 	/// Gets mapdatafile for battlescape games.
@@ -144,13 +150,13 @@ public:
 	/// Gets the transfer time of personnel.
 	int getPersonnelTime() const;
 	/// Gets the ruleset for a specific research project.
-	RuleResearchProject *getResearchProject (const std::string &id) const;
+	RuleResearch *getResearchProject (const std::string &id) const;
 	/// Get the list of all research projects.
-	const std::map<std::string, RuleResearchProject *> & getResearchProjects () const;
+	const std::map<std::string, RuleResearch *> & getResearchProjects () const;
 	/// Gets the ruleset for a specific manufacture project.
-	RuleManufactureInfo *getManufactureProject (const std::string &id) const;
+	RuleManufacture *getManufactureProject (const std::string &id) const;
 	/// Get the list of all manufacture projects.
-	const std::map<std::string, RuleManufactureInfo *> & getManufactureProjects () const;
+	const std::map<std::string, RuleManufacture *> & getManufactureProjects () const;
 };
 
 }

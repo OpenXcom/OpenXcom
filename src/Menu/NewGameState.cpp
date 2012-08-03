@@ -99,7 +99,7 @@ NewGameState::~NewGameState()
  */
 void NewGameState::newGame(GameDifficulty diff)
 {
-	_game->setRuleset(new XcomRuleset());
+	//_game->setRuleset(new XcomRuleset());
 	_game->setSavedGame(_game->getRuleset()->newSave(diff));
 	GeoscapeState *gs = new GeoscapeState(_game);
 	_game->setState(gs);

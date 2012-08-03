@@ -30,8 +30,8 @@
 #include "../Savegame/Base.h"
 #include "NewResearchListState.h"
 #include "../Savegame/ResearchProject.h"
-#include "../Ruleset/RuleResearchProject.h"
-#include "ResearchProjectState.h"
+#include "../Ruleset/RuleResearch.h"
+#include "ResearchInfoState.h"
 
 namespace OpenXcom
 {
@@ -149,7 +149,7 @@ void ResearchState::btnNewClick(Action *action)
 void ResearchState::onSelectProject(Action *action)
 {
 	const std::vector<ResearchProject *> & baseProjects(_base->getResearch());
-	_game->pushState(new ResearchProjectState(_game, _base, baseProjects[_lstResearch->getSelectedRow()]));
+	_game->pushState(new ResearchInfoState(_game, _base, baseProjects[_lstResearch->getSelectedRow()]));
 }
 
 /**
@@ -171,7 +171,7 @@ void ResearchState::fillProjectList()
 	{
 		std::wstringstream sstr;
 		sstr << (*iter)->getAssigned ();
-		const RuleResearchProject *r = (*iter)->getRuleResearchProject();
+		const RuleResearch *r = (*iter)->getRuleResearch();
 		std::wstring wstr = _game->getLanguage()->getString(r->getName ());
 		_lstResearch->addRow(3, wstr.c_str(), sstr.str().c_str(), _game->getLanguage()->getString((*iter)->getResearchProgress()).c_str());
 	}

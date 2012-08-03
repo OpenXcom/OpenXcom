@@ -51,11 +51,11 @@
 #include "../Savegame/UfopaediaSaved.h"
 #include "ArticleDefinition.h"
 #include "RuleInventory.h"
-#include "RuleResearchProject.h"
+#include "RuleResearch.h"
 #include "../Engine/CrossPlatform.h"
 #include <fstream>
 #include <algorithm>
-#include "RuleManufactureInfo.h"
+#include "RuleManufacture.h"
 #include "AlienRace.h"
 #include "AlienDeployment.h"
 #include "../Engine/Options.h"
@@ -70,6 +70,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 {
 	load("Xcom1Ruleset");
 
+	/*
 	// Add countries
 	RuleCountry *usa = new RuleCountry("STR_USA");
 	usa->setMinFunding(600);
@@ -331,51 +332,52 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	_regions.insert(std::pair<std::string, RuleRegion*>("STR_NORTH_ATLANTIC", natlantic));
 	_regions.insert(std::pair<std::string, RuleRegion*>("STR_SOUTH_ATLANTIC", satlantic));
 	_regions.insert(std::pair<std::string, RuleRegion*>("STR_INDIAN_OCEAN", indian));
+	*/
 
 	// Add manufactures
-	RuleManufactureInfo *mlp = new RuleManufactureInfo("STR_LASER_PISTOL");
+	RuleManufacture *mlp = new RuleManufacture("STR_LASER_PISTOL");
 	mlp->setCategory("STR_WEAPON");
 	mlp->setRequiredSpace(2);
 	mlp->setManufactureTime(300);
 	mlp->setManufactureCost(8000);
 
-	RuleManufactureInfo *maa = new RuleManufactureInfo("STR_ALIEN_ALLOYS");
+	RuleManufacture *maa = new RuleManufacture("STR_ALIEN_ALLOYS");
 	maa->setCategory("STR_EQUIPMENT");
 	maa->setRequiredSpace(2);
 	maa->setManufactureTime(300);
 	maa->setManufactureCost(8000);
 
-	RuleManufactureInfo *mpa = new RuleManufactureInfo("STR_PERSONAL_ARMOR");
+	RuleManufacture *mpa = new RuleManufacture("STR_PERSONAL_ARMOR");
 	mpa->setCategory("STR_EQUIPMENT");
 	mpa->setRequiredSpace(2);
 	mpa->setManufactureTime(300);
 	mpa->setManufactureCost(8000);
 
 
-	RuleManufactureInfo *mlr = new RuleManufactureInfo("STR_LASER_RIFLE");
+	RuleManufacture *mlr = new RuleManufacture("STR_LASER_RIFLE");
 	mlr->setCategory("STR_WEAPON");
 	mlr->setRequiredSpace(2);
 	mlr->setManufactureTime(300);
 	mlr->setManufactureCost(8000000);
 
-	RuleManufactureInfo *mdd = new RuleManufactureInfo("STR_MEDI_KIT");
+	RuleManufacture *mdd = new RuleManufacture("STR_MEDI_KIT");
 	mdd->setCategory("STR_EQUIPMENT");
 	mdd->setRequiredSpace(2);
 	mdd->setManufactureTime(420);
 	mdd->setManufactureCost(28000);
 
-	RuleManufactureInfo *msc = new RuleManufactureInfo("STR_MOTION_SCANNER");
+	RuleManufacture *msc = new RuleManufacture("STR_MOTION_SCANNER");
 	msc->setCategory("STR_EQUIPMENT");
 	msc->setRequiredSpace(2);
 	msc->setManufactureTime(440);
 	msc->setManufactureCost(34000);
 
-	_manufacture.insert(std::pair<std::string, RuleManufactureInfo*>("STR_ALIEN_ALLOYS", maa));
-	_manufacture.insert(std::pair<std::string, RuleManufactureInfo*>("STR_LASER_PISTOL", mlp));
-	_manufacture.insert(std::pair<std::string, RuleManufactureInfo*>("STR_PERSONAL_ARMOR", mpa));
-	_manufacture.insert(std::pair<std::string, RuleManufactureInfo*>("STR_LASER_RIFLE", mlr));
-	_manufacture.insert(std::pair<std::string, RuleManufactureInfo*>("STR_MEDI_KIT", mdd));
-	_manufacture.insert(std::pair<std::string, RuleManufactureInfo*>("STR_MOTION_SCANNER", msc));
+	_manufacture.insert(std::pair<std::string, RuleManufacture*>("STR_ALIEN_ALLOYS", maa));
+	_manufacture.insert(std::pair<std::string, RuleManufacture*>("STR_LASER_PISTOL", mlp));
+	_manufacture.insert(std::pair<std::string, RuleManufacture*>("STR_PERSONAL_ARMOR", mpa));
+	_manufacture.insert(std::pair<std::string, RuleManufacture*>("STR_LASER_RIFLE", mlr));
+	_manufacture.insert(std::pair<std::string, RuleManufacture*>("STR_MEDI_KIT", mdd));
+	_manufacture.insert(std::pair<std::string, RuleManufacture*>("STR_MOTION_SCANNER", msc));
 
 	// create Ufopaedia article definitions
 	int sort_key = 1;
@@ -667,8 +669,8 @@ XcomRuleset::XcomRuleset() : Ruleset()
 	YAML::Parser parser(fin);
 
 	YAML::Node doc;
-	std::map<RuleResearchProject *, std::vector<std::string> > projectDependencys;
-	std::map<RuleResearchProject *, std::vector<std::string> > unlocks;
+	std::map<RuleResearch *, std::vector<std::string> > projectDependencys;
+	std::map<RuleResearch *, std::vector<std::string> > unlocks;
 	while(parser.GetNextDocument(doc))
 	{
 		for(YAML::Iterator it=doc.begin();it!=doc.end();++it)
@@ -683,13 +685,13 @@ XcomRuleset::XcomRuleset() : Ruleset()
 			(*it)["dependencys"] >> deps;
 			(*it)["needItem"] >> needItem;
 			(*it)["unlock"] >> unlock;
-			RuleResearchProject * r = new RuleResearchProject(name, cost);
+			RuleResearch * r = new RuleResearch(name, cost);
 			r->setNeedItem(needItem);
 			projectDependencys[r] = deps;
 			unlocks[r] = unlock;
 			_researchProjects[r->getName ()] = r;
 		}
-		for(std::map<RuleResearchProject *, std::vector<std::string> >::iterator iter = projectDependencys.begin ();
+		for(std::map<RuleResearch *, std::vector<std::string> >::iterator iter = projectDependencys.begin ();
 			iter != projectDependencys.end ();
 			++iter)
 		{
@@ -697,14 +699,14 @@ XcomRuleset::XcomRuleset() : Ruleset()
 				itDep != iter->second.end ();
 				++itDep)
 			{
-				std::map<std::string, RuleResearchProject *>::iterator it = _researchProjects.find(*itDep);
+				std::map<std::string, RuleResearch *>::iterator it = _researchProjects.find(*itDep);
 				if (it != _researchProjects.end ())
 				{
 					iter->first->addDependency(it->second);
 				}
 			}
 		  }
-		for(std::map<RuleResearchProject *, std::vector<std::string> >::iterator iter = unlocks.begin ();
+		for(std::map<RuleResearch *, std::vector<std::string> >::iterator iter = unlocks.begin ();
 			iter != unlocks.end ();
 			++iter)
 		{
@@ -712,7 +714,7 @@ XcomRuleset::XcomRuleset() : Ruleset()
 				itDep != iter->second.end ();
 				++itDep)
 			{
-				std::map<std::string, RuleResearchProject *>::iterator it = _researchProjects.find(*itDep);
+				std::map<std::string, RuleResearch *>::iterator it = _researchProjects.find(*itDep);
 				if (it != _researchProjects.end ())
 				{
 					iter->first->addUnlocked(it->second);

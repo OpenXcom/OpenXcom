@@ -772,7 +772,10 @@ void TextList::mouseOver(Action *action, State *state)
 		{
 			_selector->setY(getY() + (_selRow - _scroll) * h);
 			_selector->copy(_bg);
-			_selector->offset(-10, Palette::backPos);
+			if (_contrast)
+				_selector->offset(-10, 1);
+			else
+				_selector->offset(-10, Palette::backPos);
 			_selector->setVisible(true);
 		}
 		else

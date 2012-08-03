@@ -59,14 +59,14 @@ set ( basescape_src
   Basescape/SoldiersState.h
   Basescape/NewResearchListState.h
   Basescape/NewResearchListState.cpp
-  Basescape/ResearchProjectState.h
-  Basescape/ResearchProjectState.cpp
-  Basescape/ListPossibleProductionState.h
-  Basescape/ListPossibleProductionState.cpp
-  Basescape/ProductionStartState.h
-  Basescape/ProductionStartState.cpp
-  Basescape/ProductionState.h
-  Basescape/ProductionState.cpp
+  Basescape/ResearchInfoState.h
+  Basescape/ResearchInfoState.cpp
+  Basescape/NewManufactureListState.h
+  Basescape/NewManufactureListState.cpp
+  Basescape/ManufactureStartState.h
+  Basescape/ManufactureStartState.cpp
+  Basescape/ManufactureInfoState.h
+  Basescape/ManufactureInfoState.cpp
 )
 
 set ( battlescape_src
@@ -260,10 +260,12 @@ set ( geoscape_src
   Geoscape/DogfightState.h
   Geoscape/GeoscapeState.cpp
   Geoscape/GeoscapeState.h
-  Geoscape/EndResearchState.h
-  Geoscape/EndResearchState.cpp
+  Geoscape/ResearchCompleteState.h
+  Geoscape/ResearchCompleteState.cpp
   Geoscape/NewPossibleResearchState.h
   Geoscape/NewPossibleResearchState.cpp
+  Geoscape/AlienTerrorState.h
+  Geoscape/AlienTerrorState.cpp
 )
 
 set ( interface_src
@@ -308,6 +310,8 @@ set ( menu_src
   Menu/LoadGameState.h
   Menu/NewGameState.cpp
   Menu/NewGameState.h
+  Menu/NewBattleState.cpp
+  Menu/NewBattleState.h
 )
 
 set ( resource_src
@@ -356,10 +360,10 @@ set ( ruleset_src
   Ruleset/RuleTerrain.h
   Ruleset/MapData.cpp
   Ruleset/MapData.h
-  Ruleset/RuleResearchProject.h
-  Ruleset/RuleResearchProject.cpp
-  Ruleset/RuleManufactureInfo.h
-  Ruleset/RuleManufactureInfo.cpp
+  Ruleset/RuleResearch.h
+  Ruleset/RuleResearch.cpp
+  Ruleset/RuleManufacture.h
+  Ruleset/RuleManufacture.cpp
   Ruleset/AlienDeployment.h
   Ruleset/AlienDeployment.cpp
   Ruleset/AlienRace.h
@@ -419,8 +423,9 @@ set ( savegame_src
   Savegame/ResearchProject.cpp
   Savegame/Production.h
   Savegame/Production.cpp
+  Savegame/TerrorSite.h
+  Savegame/TerrorSite.cpp
 )
-
 
 set ( ufopedia_src
   Ufopaedia/ArticleStateBaseFacility.cpp

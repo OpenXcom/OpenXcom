@@ -504,15 +504,15 @@ void UnitInfoState::init()
 
 
 /**
- * Takes care of any events from the core game engine.
+ * Closes the window on right-click.
  * @param action Pointer to an action.
  */
 void UnitInfoState::handle(Action *action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	State::handle(action);
+	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN && action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
 		_game->popState();
-		State::handle(action);
 	}
 }
 

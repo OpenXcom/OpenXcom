@@ -49,6 +49,8 @@ public:
 	CraftArmorState(Game *game, Base *base, size_t craft);
 	/// Cleans up the Craft Armor state.
 	~CraftArmorState();
+	/// Updates the soldier armors.
+	void init();
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
 	/// Handler for clicking the Soldiers list.

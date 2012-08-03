@@ -59,7 +59,7 @@ void Transfer::load(const YAML::Node &node, Base *base, const Ruleset *rule)
 	if (const YAML::Node *pName = node.FindValue("soldier"))
 	{
 		_soldier = new Soldier(rule->getSoldier("XCOM"), rule->getArmor("STR_NONE_UC"));
-		_soldier->load(*pName);
+		_soldier->load(*pName, rule);
 	}
 	else if (const YAML::Node *pName = node.FindValue("craft"))
 	{

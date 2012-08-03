@@ -475,8 +475,6 @@ STR_ALIEN_BASE_ASSAULT_BRIEFING
 Příslušníci Xcom získali přístup do cizácké báze. Musí být zničeno řídící centrum a tak přerušena funkce báze. Mise bude ukončena, budou-li všichni nepřátelé eliminováni, nebo vrátí-li se jednotka do zelené únikové oblasti (únik bude zahájen kliknutím na ikonu 'Zrušit misi').
 STR_CYDONIA_BRIEFING
 Přistáli jste v Cydonii. Získali jste přístup do rozlehlého podzemního komplexu pobliž Marťanské Sfingy. Musíte zničit Cizácký Mozek, který řídí veškerou cizáckou činnost. Osud lidstva leží ve vašich rukou...
-STR_TERROR_SITE_UC
-CENTRUM TERORU
 STR_TERROR_MISSION
 PROTITERORISTICKÁ MISE
 STR_TERROR_MISSION_BRIEFING
@@ -559,14 +557,8 @@ STR_INTERCEPTING_UFO
 ÚTOK NA UFO
 STR_RETURNING_TO_BASE
 NÁVRAT DO BÁZE
-STR_DESTINATION_ALIEN_BASE
-CÍL: CIZÁCKÁ BÁZE--
-STR_DESTINATION_CRASH_SITE
-CÍL: MÍSTO HAVÁRIE-
-STR_DESTINATION_LANDING_SITE
-CÍL: MÍSTO PŘISTÁNÍ-
-STR_DESTINATION_WAY_POINT
-CÍL: VYTYČENÝ BOD
+STR_DESTINATION_UC
+CÍL: 
 STR_SPEED_
 RYCHLOST>
 STR_MAXIMUM_SPEED_UC
@@ -739,7 +731,7 @@ STR_LANDING_SITE_
 MÍSTO PŘISTÁNÍ-
 STR_WAY_POINT_
 VYTYČENÝ BOD-
-STR_TERROR_SITE_
+STR_TERROR_SITE_UC
 MÍSTO TERORU-
 STR_HAS_REACHED
 Dosažený

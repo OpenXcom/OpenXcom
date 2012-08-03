@@ -37,7 +37,7 @@ LanguageState::LanguageState(Game *game) : State(game)
 {
 	// Create objects
 	_window = new Window(this, 256, 160, 32, 20, POPUP_BOTH);
-	_lstLanguages = new TextList(192, 166, 64, 34);
+	_lstLanguages = new TextList(224, 136, 40, 34);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
@@ -51,7 +51,7 @@ LanguageState::LanguageState(Game *game) : State(game)
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_lstLanguages->setColor(Palette::blockOffset(8)+10);
-	_lstLanguages->setColumns(1, 192);
+	_lstLanguages->setColumns(1, 224);
 	_lstLanguages->setSelectable(true);
 	_lstLanguages->setBackground(_window);
 	_lstLanguages->setMargin(2);

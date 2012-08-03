@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef PRODUCTION_STATE_H
-#define PRODUCTION_STATE_H
+#ifndef OPENXCOM_MANUFACTUREINFOSTATE_H
+#define OPENXCOM_MANUFACTUREINFOSTATE_H
 
 #include "../Engine/State.h"
 
@@ -28,18 +28,18 @@ class Window;
 class Text;
 class ArrowButton;
 class TextButton;
-class RuleManufactureInfo;
+class RuleManufacture;
 class Production;
 class Timer;
 
 /**
  * Screen which allow to change Production settings(assigned engineer, units to build).
 */
-class ProductionState : public State
+class ManufactureInfoState : public State
 {
 private:
 	Base * _base;
-	RuleManufactureInfo * _item;
+	RuleManufacture * _item;
 	Production * _production;
 	Window * _window;
 	ArrowButton * _btnUnitUp, * _btnUnitDown, * _btnEngineerUp, * _btnEngineerDown;
@@ -84,9 +84,9 @@ private:
 	void exitState();
 public:
 	/// Create the State(new production)
-	ProductionState (Game * game, Base * base, RuleManufactureInfo * _item);
+	ManufactureInfoState (Game * game, Base * base, RuleManufacture * _item);
 	/// Create the State(modify production)
-	ProductionState (Game * game, Base * base, Production * production);
+	ManufactureInfoState (Game * game, Base * base, Production * production);
 };
 }
 #endif

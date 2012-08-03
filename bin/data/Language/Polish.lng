@@ -475,8 +475,6 @@ STR_ALIEN_BASE_ASSAULT_BRIEFING
 Żołnierze X-COMu znaleźli wejście do bazy Obcych. Sterownie bazy mają zostać zniszczone, aby wysadzić bazę. Misja zostanie zakończona, gdy wszyscy wrogowie zostaną wyeliminowani bądź zneutralizowani lub gdy Twój oddział wróci do zielonego obszaru będącego wyjściem i gdy klikniesz na ikonę ewakuacji. Powrócisz wtedy do swojego transportowca.
 STR_CYDONIA_BRIEFING
 Przybyłeś do Cydonii. Znalazłeś wejście do wielkiego podziemnego kompleksu niedaleko marsjańskiego Sfinksa. Musisz zniszczyć 'Mózg' Obcych, który kontroluje działalność wszystkich Obcych. Los ludzkości jest w Twoich rękach....
-STR_TERROR_SITE_UC
-MIEJSCE TERRORU-
 STR_TERROR_MISSION
 MISJA ANTYTERRORYSTYCZNA
 STR_TERROR_MISSION_BRIEFING
@@ -559,14 +557,8 @@ STR_INTERCEPTING_UFO
 PRZECHWYTUJE NOLa-
 STR_RETURNING_TO_BASE
 WRACA DO BAZY
-STR_DESTINATION_ALIEN_BASE
-CEL: BAZA OBCYCH-
-STR_DESTINATION_CRASH_SITE
-CEL: ROZBITY NOL-
-STR_DESTINATION_LANDING_SITE
-CEL: LĄDOWISKO NOLa-
-STR_DESTINATION_WAY_POINT
-CEL: PUNKT KONTROLNY-
+STR_DESTINATION_UC
+CEL: 
 STR_SPEED_
 PRĘDKOŚĆ>
 STR_MAXIMUM_SPEED_UC
@@ -739,7 +731,7 @@ STR_LANDING_SITE_
 LĄDOWISKO NOLa-
 STR_WAY_POINT_
 PUNKT KONTROLNY-
-STR_TERROR_SITE_
+STR_TERROR_SITE_UC
 MIEJSCE TERRORU-
 STR_HAS_REACHED
 osiągnął

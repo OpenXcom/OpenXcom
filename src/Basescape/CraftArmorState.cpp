@@ -125,6 +125,20 @@ CraftArmorState::~CraftArmorState()
 }
 
 /**
+ * The soldier armors can change
+ * after going into other screens.
+ */
+void CraftArmorState::init()
+{
+	int row = 0;
+	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
+	{
+		_lstSoldiers->setCellText(row, 2, _game->getLanguage()->getString((*i)->getArmor()->getType()));
+		row++;
+	}
+}
+
+/**
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */

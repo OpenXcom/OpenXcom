@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "ImageButton.h"
+#include "../Engine/Action.h"
 
 namespace OpenXcom
 {
@@ -30,7 +31,6 @@ namespace OpenXcom
  */
 ImageButton::ImageButton(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _color(0), _group(0)
 {
-	_validButton = SDL_BUTTON_LEFT;
 }
 
 /**
@@ -79,12 +79,15 @@ void ImageButton::setGroup(ImageButton **group)
  */
 void ImageButton::mousePress(Action *action, State *state)
 {
-	if (_group != 0)
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		(*_group)->invert((*_group)->getColor() + 3);
-		*_group = this;
+		if (_group != 0)
+		{
+			(*_group)->invert((*_group)->getColor() + 3);
+			*_group = this;
+		}
+		invert(_color + 3);
 	}
-	invert(_color + 3);
 	InteractiveSurface::mousePress(action, state);
 }
 
@@ -95,8 +98,11 @@ void ImageButton::mousePress(Action *action, State *state)
  */
 void ImageButton::mouseRelease(Action *action, State *state)
 {
-	if (_group == 0)
-		invert(_color + 3);
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	{
+		if (_group == 0)
+			invert(_color + 3);
+	}
 	InteractiveSurface::mouseRelease(action, state);
 }
 

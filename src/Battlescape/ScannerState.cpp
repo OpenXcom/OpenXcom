@@ -44,11 +44,7 @@ namespace OpenXcom
 ScannerState::ScannerState (Game * game, BattleAction *action) : State (game), _action(action)
 {
 	_surface1 = new InteractiveSurface(320, 200);
-	_surface1->onMouseClick((ActionHandler)&ScannerState::mouseClick);
-
 	_surface2 = new InteractiveSurface(320, 200);
-	_surface2->onMouseClick((ActionHandler)&ScannerState::mouseClick);
-
 	_scannerView = new ScannerView(152, 152, 56, 24, _game, _action->actor);
 
 	add(_surface2);
@@ -66,22 +62,24 @@ ScannerState::ScannerState (Game * game, BattleAction *action) : State (game), _
 }
 
 /**
+ * Closes the window on right-click.
+ * @param action Pointer to an action.
+ */
+void ScannerState::handle(Action *action)
+{
+	State::handle(action);
+	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN && action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	{
+		_game->popState();
+	}
+}
+
+/**
  * Update scanner state
  */
 void ScannerState::update()
 {
 	//_scannerView->draw();
-}
-
-/**
- * @param action Pointer to an action.
- */
-void ScannerState::mouseClick(Action *action)
-{
-	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-	{
-		_game->popState();
-	}
 }
 
 /**

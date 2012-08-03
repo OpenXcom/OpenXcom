@@ -30,10 +30,10 @@
 #include "../Savegame/Base.h"
 #include "../Savegame/SavedGame.h"
 #include "../Ruleset/Ruleset.h"
-#include "../Ruleset/RuleManufactureInfo.h"
+#include "../Ruleset/RuleManufacture.h"
 #include "../Savegame/Production.h"
-#include "ListPossibleProductionState.h"
-#include "ProductionState.h"
+#include "NewManufactureListState.h"
+#include "ManufactureInfoState.h"
 
 namespace OpenXcom
 {
@@ -170,7 +170,7 @@ void ManufactureState::btnOkClick(Action *action)
 */
 void ManufactureState::btnNewProductionClick(Action * action)
 {
-	_game->pushState(new ListPossibleProductionState(_game, _base));
+	_game->pushState(new NewManufactureListState(_game, _base));
 }
 
 /**
@@ -189,11 +189,11 @@ void ManufactureState::fillProductionList()
 		std::wstringstream s3;
 		s3 << (*iter)->getNumberOfItemTodo();
 		std::wstringstream s4;
-		s4 << (*iter)->getRuleManufactureInfo()->getManufactureCost();
+		s4 << (*iter)->getRuleManufacture()->getManufactureCost();
 		std::wstringstream s5;
 		if ((*iter)->getAssignedEngineers() > 0)
 		{
-			int timeLeft = (*iter)->getNumberOfItemTodo () * (*iter)->getRuleManufactureInfo()->getManufactureTime() - (*iter)->getTimeSpent ();
+			int timeLeft = (*iter)->getNumberOfItemTodo () * (*iter)->getRuleManufacture()->getManufactureTime() - (*iter)->getTimeSpent ();
 			timeLeft /= (*iter)->getAssignedEngineers();
 			float dayLeft = timeLeft / 24.0f;
 			int hours = (dayLeft - static_cast<int>(dayLeft)) * 24;
@@ -204,7 +204,7 @@ void ManufactureState::fillProductionList()
 
 			s5 << L"-";
 		}
-		_lstManufacture->addRow (6, _game->getLanguage()->getString((*iter)->getRuleManufactureInfo()->getName()).c_str(), s1.str().c_str(), s2.str().c_str(), s3.str().c_str(), s4.str().c_str(), s5.str().c_str());
+		_lstManufacture->addRow (6, _game->getLanguage()->getString((*iter)->getRuleManufacture()->getName()).c_str(), s1.str().c_str(), s2.str().c_str(), s3.str().c_str(), s4.str().c_str(), s5.str().c_str());
 	}
 	_lstManufacture->draw();
 	std::wstringstream ss;
@@ -225,7 +225,7 @@ void ManufactureState::fillProductionList()
 void ManufactureState::lstManufactureClick(Action * action)
 {
 	const std::vector<Production *> productions(_base->getProductions ());
-	_game->pushState(new ProductionState(_game, _base, productions[_lstManufacture->getSelectedRow()]));
+	_game->pushState(new ManufactureInfoState(_game, _base, productions[_lstManufacture->getSelectedRow()]));
 }
 
 }

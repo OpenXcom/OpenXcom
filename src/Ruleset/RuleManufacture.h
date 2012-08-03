@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_RULEMANUFACTUREINFO_H
-#define OPENXCOM_RULEMANUFACTUREINFO_H
+#ifndef OPENXCOM_RULEMANUFACTURE_H
+#define OPENXCOM_RULEMANUFACTURE_H
 
 #include <string>
 #include <map>
@@ -27,7 +27,7 @@ namespace OpenXcom
 /**
  * Represents information needed to manufacture a RuleItem
 */
-class RuleManufactureInfo
+class RuleManufacture
 {
 private:
 	std::map<std::string, int> _neededItems;
@@ -35,7 +35,7 @@ private:
 	std::string _category, _name;
 public:
 	/// Create ManufactureInfo
-	RuleManufactureInfo(const std::string &name);
+	RuleManufacture(const std::string &name);
 	///Get the manufacture name
 	std::string getName () const;
 	///Set the manufacture category

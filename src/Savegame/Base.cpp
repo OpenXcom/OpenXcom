@@ -30,13 +30,13 @@
 #include "Waypoint.h"
 #include "../Engine/Language.h"
 #include "../Ruleset/RuleItem.h"
-#include "../Ruleset/RuleManufactureInfo.h"
+#include "../Ruleset/RuleManufacture.h"
 #include "Transfer.h"
 #include <algorithm>
 #include "ResearchProject.h"
-#include "../Ruleset/RuleResearchProject.h"
+#include "../Ruleset/RuleResearch.h"
 #include "Production.h"
-#include <algorithm>
+#include "TerrorSite.h"
 
 namespace OpenXcom
 {
@@ -140,14 +140,26 @@ void Base::load(const YAML::Node &node, SavedGame *save)
 					}
 				}
 			}
+			else if (type == "STR_TERROR_SITE")
+			{
+				for (std::vector<TerrorSite*>::iterator j = save->getTerrorSites()->begin(); j != save->getTerrorSites()->end(); ++j)
+				{
+					if ((*j)->getId() == id)
+					{
+						c->setDestination(*j);
+						break;
+					}
+				}
+			}
 		}
+		
 		_crafts.push_back(c);
 	}
 
 	for (YAML::Iterator i = node["soldiers"].begin(); i != node["soldiers"].end(); ++i)
 	{
 		Soldier *s = new Soldier(_rule->getSoldier("XCOM"), _rule->getArmor("STR_NONE_UC"));
-		s->load(*i);
+		s->load(*i, _rule);
 		if (const YAML::Node *pName = (*i).FindValue("craft"))
 		{
 			std::string type;
@@ -591,7 +603,7 @@ int Base::getUsedWorkshops() const
 	int usedWorkShop = 0;
 	for (std::vector<Production *>::const_iterator iter = _productions.begin (); iter != _productions.end (); ++iter)
 	{
-		usedWorkShop += ((*iter)->getAssignedEngineers() + (*iter)->getRuleManufactureInfo()->getRequiredSpace ());
+		usedWorkShop += ((*iter)->getAssignedEngineers() + (*iter)->getRuleManufacture()->getRequiredSpace ());
 	}
 	return usedWorkShop;
 }

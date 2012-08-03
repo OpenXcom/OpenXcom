@@ -21,6 +21,7 @@
 #include "Text.h"
 #include "../Engine/Font.h"
 #include "../Engine/Sound.h"
+#include "../Engine/Action.h"
 
 namespace OpenXcom
 {
@@ -37,8 +38,6 @@ Sound *TextButton::soundPress = 0;
  */
 TextButton::TextButton(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _color(0), _group(0), _contrast(false)
 {
-	_validButton = SDL_BUTTON_LEFT;
-
 	_text = new Text(width, height, 0, 0);
 	_text->setSmall();
 	_text->setAlign(ALIGN_CENTER);
@@ -195,7 +194,7 @@ void TextButton::draw()
 
 	bool press;
 	if (_group == 0)
-		press = _isPressed;
+		press = _buttonsPressed[SDL_BUTTON_LEFT];
 	else
 		press = (*_group == this);
 
@@ -215,14 +214,17 @@ void TextButton::draw()
  */
 void TextButton::mousePress(Action *action, State *state)
 {
-	if (soundPress != 0 && _group == 0)
-		soundPress->play();
-
-	if (_group != 0)
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		TextButton *old = *_group;
-		*_group = this;
-		old->draw();
+		if (soundPress != 0 && _group == 0)
+			soundPress->play();
+
+		if (_group != 0)
+		{
+			TextButton *old = *_group;
+			*_group = this;
+			old->draw();
+		}
 	}
 
 	InteractiveSurface::mousePress(action, state);

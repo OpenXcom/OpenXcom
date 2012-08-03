@@ -40,9 +40,10 @@ private:
 	Window *_window;
 	Text *_txtTitle, *_txtName, *_txtTime, *_txtDate;
 	TextList *_lstSaves;
+	bool _geo;
 public:
 	/// Creates the Load Game state.
-	LoadGameState(Game *game);
+	LoadGameState(Game *game, bool geo);
 	/// Cleans up the Load Game state.
 	~LoadGameState();
 	/// Updates the palette.

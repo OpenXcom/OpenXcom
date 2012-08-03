@@ -27,6 +27,7 @@ namespace OpenXcom
 {
 
 class Window;
+class Text;
 class TextList;
 
 /**

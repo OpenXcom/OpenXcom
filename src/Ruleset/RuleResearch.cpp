@@ -16,12 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "RuleResearchProject.h"
+#include "RuleResearch.h"
 
 namespace OpenXcom
 {
 
-RuleResearchProject::RuleResearchProject(const std::string & name, int cost) : _name(name), _cost(cost)
+RuleResearch::RuleResearch(const std::string & name, int cost) : _name(name), _cost(cost)
 {
 }
 
@@ -29,7 +29,7 @@ RuleResearchProject::RuleResearchProject(const std::string & name, int cost) : _
  * Add a ResearchProject must be discovered before this researchProject
  * @param rp a pointer to a ResearchProject
 */
-void RuleResearchProject::addDependency (RuleResearchProject * rp)
+void RuleResearch::addDependency (RuleResearch * rp)
 {
 	_dependencys.push_back(rp);
 }
@@ -38,7 +38,7 @@ void RuleResearchProject::addDependency (RuleResearchProject * rp)
    Get the cost of this ResearchProject
    @return cost of this ResearchProject(in man/day)
 */
-int RuleResearchProject::getCost() const
+int RuleResearch::getCost() const
 {
 	return _cost;
 }
@@ -47,7 +47,7 @@ int RuleResearchProject::getCost() const
    Get the name of this ResearchProject
    @return name of this ResearchProject
 */
-const std::string & RuleResearchProject::getName () const
+const std::string & RuleResearch::getName () const
 {
 	return _name;
 }
@@ -56,7 +56,7 @@ const std::string & RuleResearchProject::getName () const
    Get the list of dependencies
    @return the list of ResearchProject that must be discovered before this one
 */
-const std::vector<RuleResearchProject *> & RuleResearchProject::getDependencys () const
+const std::vector<RuleResearch *> & RuleResearch::getDependencys () const
 {
 	return _dependencys;
 }
@@ -65,7 +65,7 @@ const std::vector<RuleResearchProject *> & RuleResearchProject::getDependencys (
    Does this ResearchProject need a corresponding Item to be researched ?
    @return true if the ResearchProject need a corresponding item
 */
-bool RuleResearchProject::needItem() const
+bool RuleResearch::needItem() const
 {
 	return _needItem;
 }
@@ -74,7 +74,7 @@ bool RuleResearchProject::needItem() const
    Change if this ResearchProject need a corresponding Item to be researched.
    @param b true if the ResearchProject need a corresponding item
 */
-void RuleResearchProject::setNeedItem(bool b)
+void RuleResearch::setNeedItem(bool b)
 {
 	_needItem = b;
 }
@@ -82,7 +82,7 @@ void RuleResearchProject::setNeedItem(bool b)
 /**
    @return The list of ResearchProject unlocked by this research project.
 */
-const std::vector<RuleResearchProject *> & RuleResearchProject::getUnlocked () const
+const std::vector<RuleResearch *> & RuleResearch::getUnlocked () const
 {
 	return _unlocks;
 }
@@ -91,7 +91,7 @@ const std::vector<RuleResearchProject *> & RuleResearchProject::getUnlocked () c
  * Add a ResearchProject which can be unlocked by this researchProject
  * @param rp a pointer to a ResearchProject
 */
-void RuleResearchProject::addUnlocked (RuleResearchProject * rp)
+void RuleResearch::addUnlocked (RuleResearch * rp)
 {
 	_unlocks.push_back(rp);
 }

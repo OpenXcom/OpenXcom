@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "ListPossibleProductionState.h"
+#include "NewManufactureListState.h"
 #include "../Interface/Window.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Text.h"
@@ -25,9 +25,9 @@
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
 #include "../Resource/ResourcePack.h"
-#include "../Ruleset/RuleManufactureInfo.h"
+#include "../Ruleset/RuleManufacture.h"
 #include "../Ruleset/Ruleset.h"
-#include "ProductionStartState.h"
+#include "ManufactureStartState.h"
 #include "../Savegame/Production.h"
 #include "../Savegame/Base.h"
 #include <algorithm>
@@ -40,7 +40,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-ListPossibleProductionState::ListPossibleProductionState(Game *game, Base *base) : State(game), _base(base)
+NewManufactureListState::NewManufactureListState(Game *game, Base *base) : State(game), _base(base)
 {
 	int width = 320;
 	int height = 140;
@@ -87,17 +87,17 @@ ListPossibleProductionState::ListPossibleProductionState(Game *game, Base *base)
 	_lstManufacture->setMargin(2);
 	_lstManufacture->setArrowColor(Palette::blockOffset(15));
 	_lstManufacture->setColor(Palette::blockOffset(13));
-	_lstManufacture->onMouseClick((ActionHandler)&ListPossibleProductionState::lstProdClick);
+	_lstManufacture->onMouseClick((ActionHandler)&NewManufactureListState::lstProdClick);
 
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)&ListPossibleProductionState::btnOkClick);
+	_btnOk->onMouseClick((ActionHandler)&NewManufactureListState::btnOkClick);
 }
 
 /**
    Initialize state(fill list of possible productions)
 */
-void ListPossibleProductionState::init ()
+void NewManufactureListState::init ()
 {
 	fillProductionList();
 }
@@ -106,7 +106,7 @@ void ListPossibleProductionState::init ()
  * Return to previous screen
  * @param action a pointer to an Action
 */
-void ListPossibleProductionState::btnOkClick(Action * action)
+void NewManufactureListState::btnOkClick(Action * action)
 {
 	_game->popState();
 }
@@ -115,22 +115,22 @@ void ListPossibleProductionState::btnOkClick(Action * action)
  * Open the Production settings screen
  * @param action a pointer to an Action
 */
-void ListPossibleProductionState::lstProdClick (Action * action)
+void NewManufactureListState::lstProdClick (Action * action)
 {
-	_game->pushState(new ProductionStartState(_game, _base, _possibleProductions[_lstManufacture->getSelectedRow()]));
+	_game->pushState(new ManufactureStartState(_game, _base, _possibleProductions[_lstManufacture->getSelectedRow()]));
 }
 
 
 /**
  * Fill the list of possible productions
  */
-void ListPossibleProductionState::fillProductionList()
+void NewManufactureListState::fillProductionList()
 {
 	_lstManufacture->clearList();
 	_possibleProductions.clear();
 	_game->getSavedGame()->getAvailableProductions(_possibleProductions, _game->getRuleset(), _base);
 
-	for (std::vector<RuleManufactureInfo *>::iterator it = _possibleProductions.begin (); it != _possibleProductions.end (); ++it)
+	for (std::vector<RuleManufacture *>::iterator it = _possibleProductions.begin (); it != _possibleProductions.end (); ++it)
 	{
 		_lstManufacture->addRow(2, _game->getLanguage()->getString((*it)->getName()).c_str(), _game->getLanguage()->getString((*it)->getCategory ()).c_str());
 	}

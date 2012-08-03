@@ -39,8 +39,8 @@
 #include "Armor.h"
 #include "ArticleDefinition.h"
 #include "RuleInventory.h"
-#include "RuleResearchProject.h"
-#include "RuleManufactureInfo.h"
+#include "RuleResearch.h"
+#include "RuleManufacture.h"
 
 namespace OpenXcom
 {
@@ -136,11 +136,11 @@ Ruleset::~Ruleset()
 	{
 		delete i->second;
 	}
-	for (std::map<std::string, RuleResearchProject *>::const_iterator i = _researchProjects.begin (); i != _researchProjects.end (); ++i)
+	for (std::map<std::string, RuleResearch *>::const_iterator i = _researchProjects.begin (); i != _researchProjects.end (); ++i)
 	{
 		delete i->second;
 	}
-	for (std::map<std::string, RuleManufactureInfo *>::const_iterator i = _manufacture.begin (); i != _manufacture.end (); ++i)
+	for (std::map<std::string, RuleManufacture *>::const_iterator i = _manufacture.begin (); i != _manufacture.end (); ++i)
 	{
 		delete i->second;
 	}
@@ -301,6 +301,7 @@ void Ruleset::load(const std::string &filename)
 				{
 					rule = new RuleUfo(type);
 					_ufos[type] = rule;
+					_ufosIndex.push_back(type);
 				}
 				rule->load(*j, this);
 			}
@@ -616,6 +617,16 @@ RuleCountry *const Ruleset::getCountry(const std::string &id) const
 }
 
 /**
+ * Returns the list of all countries.
+ * provided by the ruleset.
+ * @return List of countries.
+ */
+std::vector<std::string> Ruleset::getCountriesList() const
+{
+	return _countriesIndex;
+}
+
+/**
  * Returns the rules for the specified region.
  * @param id Region type.
  * @return Rules for the region.
@@ -623,6 +634,16 @@ RuleCountry *const Ruleset::getCountry(const std::string &id) const
 RuleRegion *const Ruleset::getRegion(const std::string &id) const
 {
 	return _regions.find(id)->second;
+}
+
+/**
+ * Returns the list of all regions
+ * provided by the ruleset.
+ * @return List of regions.
+ */
+std::vector<std::string> Ruleset::getRegionsList() const
+{
+	return _regionsIndex;
 }
 
 /**
@@ -716,6 +737,16 @@ std::vector<std::string> Ruleset::getItemsList() const
 RuleUfo *const Ruleset::getUfo(const std::string &id) const
 {
 	return _ufos.find(id)->second;
+}
+
+/**
+ * Returns the list of all ufos
+ * provided by the ruleset.
+ * @return List of ufos.
+ */
+std::vector<std::string> Ruleset::getUfosList() const
+{
+	return _ufosIndex;
 }
 
 /**
@@ -882,7 +913,7 @@ RuleInventory *const Ruleset::getInventory(const std::string &id) const
  * @param id Research project type.
  * @return Rules for the research project.
  */
-RuleResearchProject *Ruleset::getResearchProject (const std::string &id) const
+RuleResearch *Ruleset::getResearchProject (const std::string &id) const
 {
 	return _researchProjects.find(id)->second;
 }
@@ -891,7 +922,7 @@ RuleResearchProject *Ruleset::getResearchProject (const std::string &id) const
  * Returns the list of research projects.
  * @return The list of research projects.
  */
-const std::map<std::string, RuleResearchProject *> & Ruleset::getResearchProjects () const
+const std::map<std::string, RuleResearch *> & Ruleset::getResearchProjects () const
 {
 	return _researchProjects;
 }
@@ -901,7 +932,7 @@ const std::map<std::string, RuleResearchProject *> & Ruleset::getResearchProject
  * @param id Manufacture project type.
  * @return Rules for the manufacture project.
  */
-RuleManufactureInfo *Ruleset::getManufactureProject (const std::string &id) const
+RuleManufacture *Ruleset::getManufactureProject (const std::string &id) const
 {
 	return _manufacture.find(id)->second;
 }
@@ -910,7 +941,7 @@ RuleManufactureInfo *Ruleset::getManufactureProject (const std::string &id) cons
  * Returns the list of manufacture projects.
  * @return The list of manufacture projects.
  */
-const std::map<std::string, RuleManufactureInfo *> & Ruleset::getManufactureProjects () const
+const std::map<std::string, RuleManufacture *> & Ruleset::getManufactureProjects () const
 {
 	return _manufacture;
 }

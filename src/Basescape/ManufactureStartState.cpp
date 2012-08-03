@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "ProductionStartState.h"
+#include "ManufactureStartState.h"
 #include "../Interface/Window.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Text.h"
@@ -25,10 +25,10 @@
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
 #include "../Resource/ResourcePack.h"
-#include "../Ruleset/RuleManufactureInfo.h"
+#include "../Ruleset/RuleManufacture.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/ItemContainer.h"
-#include "ProductionState.h"
+#include "ManufactureInfoState.h"
 #include "../Savegame/SavedGame.h"
 #include <sstream>
 
@@ -38,9 +38,9 @@ namespace OpenXcom
  * Initializes all the elements in the productions start screen
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
- * @param item the RuleManufactureInfo to produce
+ * @param item the RuleManufacture to produce
  */
-ProductionStartState::ProductionStartState(Game * game, Base * base, RuleManufactureInfo * item) : State(game), _base(base), _item(item)
+ManufactureStartState::ManufactureStartState(Game * game, Base * base, RuleManufacture * item) : State(game), _base(base), _item(item)
 {
 	_screen = false;
 	int width = 320;
@@ -113,7 +113,7 @@ ProductionStartState::ProductionStartState(Game * game, Base * base, RuleManufac
 
 	_btnCancel->setColor(Palette::blockOffset(13)+10);
 	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
-	_btnCancel->onMouseClick((ActionHandler)&ProductionStartState::btnCancelClick);
+	_btnCancel->onMouseClick((ActionHandler)&ManufactureStartState::btnCancelClick);
 
 	const std::map<std::string, int> & neededItems (_item->getNeededItems());
 	int availableWorkSpace = _base->getFreeWorkshops();
@@ -155,7 +155,7 @@ ProductionStartState::ProductionStartState(Game * game, Base * base, RuleManufac
 
 	_btnStart->setColor(Palette::blockOffset(13)+10);
 	_btnStart->setText(_game->getLanguage()->getString("STR_START_PRODUCTION"));
-	_btnStart->onMouseClick((ActionHandler)&ProductionStartState::btnStartClick);
+	_btnStart->onMouseClick((ActionHandler)&ManufactureStartState::btnStartClick);
 	_btnStart->setVisible(productionPossible);
 }
 
@@ -163,7 +163,7 @@ ProductionStartState::ProductionStartState(Game * game, Base * base, RuleManufac
  * Return to previous screen
  * @param action a pointer to an Action
 */
-void ProductionStartState::btnCancelClick(Action * action)
+void ManufactureStartState::btnCancelClick(Action * action)
 {
 	_game->popState();
 }
@@ -172,8 +172,8 @@ void ProductionStartState::btnCancelClick(Action * action)
  * Go to the Production settings screen
  * @param action a pointer to an Action
 */
-void ProductionStartState::btnStartClick(Action * action)
+void ManufactureStartState::btnStartClick(Action * action)
 {
-	_game->pushState(new ProductionState(_game, _base, _item));
+	_game->pushState(new ManufactureInfoState(_game, _base, _item));
 }
 }
