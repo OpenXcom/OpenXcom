@@ -5,8 +5,7 @@ doc_DATA = \
 	CHANGELOG.txt
 
 pkgdata_DATA = \
-	bin/data/README.txt \
-	bin/data/research.dat
+	bin/data/README.txt
 
 rulesetdir =  $(pkgdatadir)/Ruleset
 ruleset_DATA = \
@@ -76,30 +75,30 @@ openxcom_SOURCES = \
 	src/Basescape/CraftWeaponsState.h \
 	src/Basescape/DismantleFacilityState.cpp \
 	src/Basescape/DismantleFacilityState.h \
-	src/Basescape/ListPossibleProductionState.cpp \
-	src/Basescape/ListPossibleProductionState.h \
+	src/Basescape/ManufactureInfoState.cpp \
+	src/Basescape/ManufactureInfoState.h \
+	src/Basescape/ManufactureStartState.cpp \
+	src/Basescape/ManufactureStartState.h \
 	src/Basescape/ManufactureState.cpp \
 	src/Basescape/ManufactureState.h \
 	src/Basescape/MiniBaseView.cpp \
 	src/Basescape/MiniBaseView.h \
 	src/Basescape/MonthlyCostsState.cpp \
 	src/Basescape/MonthlyCostsState.h \
+	src/Basescape/NewManufactureListState.cpp \
+	src/Basescape/NewManufactureListState.h \
 	src/Basescape/NewResearchListState.cpp \
 	src/Basescape/NewResearchListState.h \
 	src/Basescape/PlaceFacilityState.cpp \
 	src/Basescape/PlaceFacilityState.h \
 	src/Basescape/PlaceLiftState.cpp \
 	src/Basescape/PlaceLiftState.h \
-	src/Basescape/ProductionStartState.cpp \
-	src/Basescape/ProductionStartState.h \
-	src/Basescape/ProductionState.cpp \
-	src/Basescape/ProductionState.h \
 	src/Basescape/PurchaseErrorState.cpp \
 	src/Basescape/PurchaseErrorState.h \
 	src/Basescape/PurchaseState.cpp \
 	src/Basescape/PurchaseState.h \
-	src/Basescape/ResearchProjectState.cpp \
-	src/Basescape/ResearchProjectState.h \
+	src/Basescape/ResearchInfoState.cpp \
+	src/Basescape/ResearchInfoState.h \
 	src/Basescape/ResearchState.cpp \
 	src/Basescape/ResearchState.h \
 	src/Basescape/SellState.cpp \
@@ -142,8 +141,8 @@ openxcom_SOURCES = \
 	src/Battlescape/BattlescapeState.h \
 	src/Battlescape/BattleState.cpp \
 	src/Battlescape/BattleState.h \
-	src/Battlescape/BriefingCrashState.cpp \
-	src/Battlescape/BriefingCrashState.h \
+	src/Battlescape/BriefingState.cpp \
+	src/Battlescape/BriefingState.h \
 	src/Battlescape/BulletSprite.cpp \
 	src/Battlescape/BulletSprite.h \
 	src/Battlescape/Camera.cpp \
@@ -251,6 +250,8 @@ openxcom_SOURCES = \
 	src/Engine/Timer.h \
 	src/Geoscape/AbandonGameState.cpp \
 	src/Geoscape/AbandonGameState.h \
+	src/Geoscape/AlienTerrorState.cpp \
+	src/Geoscape/AlienTerrorState.h \
 	src/Geoscape/BaseNameState.cpp \
 	src/Geoscape/BaseNameState.h \
 	src/Geoscape/BuildNewBaseState.cpp \
@@ -267,8 +268,6 @@ openxcom_SOURCES = \
 	src/Geoscape/CraftPatrolState.h \
 	src/Geoscape/DogfightState.cpp \
 	src/Geoscape/DogfightState.h \
-	src/Geoscape/EndResearchState.cpp \
-	src/Geoscape/EndResearchState.h \
 	src/Geoscape/FundingState.cpp \
 	src/Geoscape/FundingState.h \
 	src/Geoscape/GeoscapeCraftState.cpp \
@@ -293,14 +292,16 @@ openxcom_SOURCES = \
 	src/Geoscape/MultipleTargetsState.h \
 	src/Geoscape/NewPossibleResearchState.cpp \
 	src/Geoscape/NewPossibleResearchState.h \
-	src/Geoscape/OptionsState.cpp \
-	src/Geoscape/OptionsState.h \
+	src/Geoscape/GeoscapeOptionsState.cpp \
+	src/Geoscape/GeoscapeOptionsState.h \
 	src/Geoscape/Polygon.cpp \
 	src/Geoscape/Polygon.h \
 	src/Geoscape/Polyline.cpp \
 	src/Geoscape/Polyline.h \
 	src/Geoscape/ProductionCompleteState.cpp \
 	src/Geoscape/ProductionCompleteState.h \
+	src/Geoscape/ResearchCompleteState.cpp \
+	src/Geoscape/ResearchCompleteState.h \
 	src/Geoscape/SelectDestinationState.cpp \
 	src/Geoscape/SelectDestinationState.h \
 	src/Geoscape/TargetInfoState.cpp \
@@ -338,17 +339,20 @@ openxcom_SOURCES = \
 	src/Menu/LoadGameState.h \
 	src/Menu/MainMenuState.cpp \
 	src/Menu/MainMenuState.h \
+	src/Menu/NewBattleState.cpp \
+	src/Menu/NewBattleState.h \
 	src/Menu/NewGameState.cpp \
 	src/Menu/NewGameState.h \
 	src/Menu/NoteState.cpp \
 	src/Menu/NoteState.h \
+	src/Menu/OptionsState.cpp \
+	src/Menu/OptionsState.h \
 	src/Menu/SaveGameState.cpp \
 	src/Menu/SaveGameState.h \
 	src/Menu/StartState.cpp \
 	src/Menu/StartState.h \
 	src/Menu/TestState.cpp \
 	src/Menu/TestState.h \
-	src/resource.h \
 	src/Resource/ResourcePack.cpp \
 	src/Resource/ResourcePack.h \
 	src/Resource/XcomResourcePack.cpp \
@@ -383,10 +387,10 @@ openxcom_SOURCES = \
 	src/Ruleset/RuleInventory.h \
 	src/Ruleset/RuleItem.cpp \
 	src/Ruleset/RuleItem.h \
-	src/Ruleset/RuleManufactureInfo.cpp \
-	src/Ruleset/RuleManufactureInfo.h \
-	src/Ruleset/RuleResearchProject.cpp \
-	src/Ruleset/RuleResearchProject.h \
+	src/Ruleset/RuleManufacture.cpp \
+	src/Ruleset/RuleManufacture.h \
+	src/Ruleset/RuleResearch.cpp \
+	src/Ruleset/RuleResearch.h \
 	src/Ruleset/RuleRegion.cpp \
 	src/Ruleset/RuleRegion.h \
 	src/Ruleset/Ruleset.cpp \

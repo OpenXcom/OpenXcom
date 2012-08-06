@@ -86,8 +86,8 @@ set ( battlescape_src
   Battlescape/UnitTurnBState.h
   Battlescape/ActionMenuItem.h
   Battlescape/ActionMenuItem.cpp
-  Battlescape/BriefingCrashState.h
-  Battlescape/BriefingCrashState.cpp
+  Battlescape/BriefingState.h
+  Battlescape/BriefingState.cpp
   Battlescape/ProjectileFlyBState.cpp
   Battlescape/ProjectileFlyBState.h
   Battlescape/PrimeGrenadeState.cpp
@@ -248,8 +248,8 @@ set ( geoscape_src
   Geoscape/GraphsState.h
   Geoscape/ConfirmLandingState.cpp
   Geoscape/ConfirmLandingState.h
-  Geoscape/OptionsState.h
-  Geoscape/OptionsState.cpp
+  Geoscape/GeoscapeOptionsState.h
+  Geoscape/GeoscapeOptionsState.cpp
   Geoscape/BaseNameState.cpp
   Geoscape/BaseNameState.h
   Geoscape/MultipleTargetsState.cpp
@@ -312,6 +312,8 @@ set ( menu_src
   Menu/NewGameState.h
   Menu/NewBattleState.cpp
   Menu/NewBattleState.h
+  Menu/OptionsState.cpp
+  Menu/OptionsState.h
 )
 
 set ( resource_src

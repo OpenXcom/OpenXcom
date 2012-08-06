@@ -48,7 +48,7 @@
 #include "../Savegame/Waypoint.h"
 #include "../Savegame/Transfer.h"
 #include "../Savegame/Soldier.h"
-#include "OptionsState.h"
+#include "GeoscapeOptionsState.h"
 #include "InterceptState.h"
 #include "../Basescape/BasescapeState.h"
 #include "GraphsState.h"
@@ -773,13 +773,11 @@ void GeoscapeState::time1Day()
 		while (region->getCities()->empty());
 		City *city = (*region->getCities())[RNG::generate(0, region->getCities()->size()-1)];
 
-		int *id = _game->getSavedGame()->getTerrorSiteId();
 		TerrorSite *t = new TerrorSite();
 		t->setLongitude(city->getLongitude());
 		t->setLatitude(city->getLatitude());
-		t->setId(*id);
+		t->setId(_game->getSavedGame()->getId("STR_TERROR_SITE"));
 		_game->getSavedGame()->getTerrorSites()->push_back(t);
-		*id++;
 		popup(new AlienTerrorState(_game, city, this));
 	}
 
@@ -946,7 +944,7 @@ void GeoscapeState::btnUfopaediaClick(Action *action)
  */
 void GeoscapeState::btnOptionsClick(Action *action)
 {
-	_game->pushState(new OptionsState(_game));
+	_game->pushState(new GeoscapeOptionsState(_game));
 }
 
 /**

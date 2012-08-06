@@ -33,7 +33,7 @@
 #include "../Savegame/Ufo.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Savegame/TerrorSite.h"
-#include "../Battlescape/BriefingCrashState.h"
+#include "../Battlescape/BriefingState.h"
 #include "../Battlescape/BattlescapeGenerator.h"
 
 namespace OpenXcom
@@ -134,7 +134,7 @@ void ConfirmLandingState::btnYesClick(Action *action)
 		bgen.setAlienItemlevel(0);
 		bgen.run();
 
-		_game->pushState(new BriefingCrashState(_game, _craft));
+		_game->pushState(new BriefingState(_game, _craft));
 	}
 	else if (t != 0)
 	{
@@ -149,7 +149,7 @@ void ConfirmLandingState::btnYesClick(Action *action)
 		bgen.setAlienItemlevel(0);
 		bgen.run();
 
-		_game->pushState(new BriefingCrashState(_game, _craft));
+		_game->pushState(new BriefingState(_game, _craft));
 	}
 }
 

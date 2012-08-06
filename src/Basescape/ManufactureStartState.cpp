@@ -115,7 +115,7 @@ ManufactureStartState::ManufactureStartState(Game * game, Base * base, RuleManuf
 	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&ManufactureStartState::btnCancelClick);
 
-	const std::map<std::string, int> & neededItems (_item->getNeededItems());
+	const std::map<std::string, int> & neededItems (_item->getRequiredItems());
 	int availableWorkSpace = _base->getFreeWorkshops();
 	bool productionPossible (game->getSavedGame()->getFunds() > _item->getManufactureCost ());
 	productionPossible &= (availableWorkSpace > 0);

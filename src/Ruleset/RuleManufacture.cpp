@@ -21,11 +21,59 @@
 namespace OpenXcom
 {
 /**
- * Create a new ManufactureInfo
+ * Create a new Manufacture
  * @param name The unique manufacture name
 */
-RuleManufacture::RuleManufacture(const std::string &name) : _name(name)
+RuleManufacture::RuleManufacture(const std::string &name) : _name(name), _space(0), _time(0), _cost(0)
 {
+}
+
+/**
+ * Loads the manufacture project from a YAML file.
+ * @param node YAML node.
+ */
+void RuleManufacture::load(const YAML::Node &node)
+{
+	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
+	{
+		std::string key;
+		i.first() >> key;
+		if (key == "name")
+		{
+			i.second() >> _name;
+		}
+		else if (key == "space")
+		{
+			i.second() >> _space;
+		}
+		else if (key == "time")
+		{
+			i.second() >> _time;
+		}
+		else if (key == "cost")
+		{
+			i.second() >> _cost;
+		}
+		else if (key == "requiredItems")
+		{
+			i.second() >> _requiredItems;
+		}
+	}
+}
+
+/**
+ * Saves the manufacture project to a YAML file.
+ * @param out YAML emitter.
+ */
+void RuleManufacture::save(YAML::Emitter &out) const
+{
+	out << YAML::BeginMap;
+	out << YAML::Key << "name" << YAML::Value << _name;
+	out << YAML::Key << "space" << YAML::Value << _space;
+	out << YAML::Key << "time" << YAML::Value << _time;
+	out << YAML::Key << "cost" << YAML::Value << _cost;
+	out << YAML::Key << "requiredItems" << YAML::Value << _requiredItems;
+	out << YAML::EndMap;
 }
 
 /**
@@ -38,30 +86,12 @@ std::string RuleManufacture::getName () const
 }
 
 /**
- * Change the category shown in the manufacture list
- * @param category The new category
-*/
-void RuleManufacture::setCategory (const std::string &category)
-{
-	_category = category;
-}
-
-/**
  * Get the category shown in the manufacture list
  * @return the category
 */
 std::string RuleManufacture::getCategory () const
 {
 	return _category;
-}
-
-/**
- * Change required workshop space
- * @param workspace The new required workspace
-*/
-void RuleManufacture::setRequiredSpace (int workspace)
-{
-	_space = workspace;
 }
 
 /**
@@ -74,35 +104,18 @@ int RuleManufacture::getRequiredSpace () const
 }
 
 /**
- * Change the time needed to manufacture one item
- * @param time the time needed to manufacture one item(in man/hour)
-*/
-void RuleManufacture::setManufactureTime (int time)
-{
-	_time = time;
-}
-
-/**
- * Get the time needed to manufacture one item
- * @return The time needed to manufacture one item(in man/hour)
+ * Get the time needed to manufacture one object
+ * @return The time needed to manufacture one object(in man/hour)
 */
 int RuleManufacture::getManufactureTime () const
 {
 	return _time;
 }
 
-/**
- * Change the cost of manufacturing one item
- * @param cost The cost of one item
-*/
-void RuleManufacture::setManufactureCost (int cost)
-{
-	_cost = cost;
-}
 
 /**
- * Get the cost of one item
- * @return the cost of manufacturing one item
+ * Get the cost of one object
+ * @return the cost of manufacturing one object
 */
 int RuleManufacture::getManufactureCost () const
 {
@@ -110,21 +123,12 @@ int RuleManufacture::getManufactureCost () const
 }
 
 /**
- * Get the list of needed items to manufacture one item
- * @return the list of needed items to manufacture one item
+ * Get the list of items required to manufacture one object
+ * @return the list of items required to manufacture one object
 */
-const std::map<std::string, int> & RuleManufacture::getNeededItems() const
+const std::map<std::string, int> & RuleManufacture::getRequiredItems() const
 {
-	return _neededItems;
+	return _requiredItems;
 }
 
-/**
- * Add a new item to the list of needed items
- * @param type The item type
- * @param quantity Item quantity's needed to manufacture one item
-*/
-void RuleManufacture::addNeededItem (std::string type, int quantity)
-{
-	_neededItems[type] = quantity;
-}
 }

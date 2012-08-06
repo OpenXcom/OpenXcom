@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_BRIEFINGCRASHSTATE_H
-#define OPENXCOM_BRIEFINGCRASHSTATE_H
+#ifndef OPENXCOM_BRIEFINGSTATE_H
+#define OPENXCOM_BRIEFINGSTATE_H
 
 #include "../Engine/State.h"
 
@@ -33,18 +33,17 @@ class Craft;
  * Briefing screen which displays info
  * about a Crash Site mission.
  */
-class BriefingCrashState : public State
+class BriefingState : public State
 {
 private:
 	TextButton *_btnOk;
 	Window *_window;
-	Text *_txtTitle, *_txtUfo, *_txtCraft, *_txtBriefing;
-	Craft *_craft;
+	Text *_txtTitle, *_txtTarget, *_txtCraft, *_txtBriefing;
 public:
-	/// Creates the Crash Briefing state.
-	BriefingCrashState(Game *game, Craft *craft);
-	/// Cleans up the Crash Briefing state.
-	~BriefingCrashState();
+	/// Creates the Briefing state.
+	BriefingState(Game *game, Craft *craft);
+	/// Cleans up the Briefing state.
+	~BriefingState();
 	/// Handler for clicking the Ok button.
 	void btnOkClick(Action *action);
 };

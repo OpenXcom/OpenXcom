@@ -248,9 +248,6 @@
     <ClCompile Include="Geoscape\MultipleTargetsState.cpp">
       <Filter>Geoscape</Filter>
     </ClCompile>
-    <ClCompile Include="Geoscape\OptionsState.cpp">
-      <Filter>Geoscape</Filter>
-    </ClCompile>
     <ClCompile Include="Geoscape\Polygon.cpp">
       <Filter>Geoscape</Filter>
     </ClCompile>
@@ -340,9 +337,6 @@
     </ClCompile>
     <ClCompile Include="Geoscape\ConfirmLandingState.cpp">
       <Filter>Geoscape</Filter>
-    </ClCompile>
-    <ClCompile Include="Battlescape\BriefingCrashState.cpp">
-      <Filter>Battlescape</Filter>
     </ClCompile>
     <ClCompile Include="Battlescape\BattlescapeGenerator.cpp">
       <Filter>Battlescape</Filter>
@@ -641,6 +635,15 @@
     <ClCompile Include="Geoscape\ResearchCompleteState.cpp">
       <Filter>Geoscape</Filter>
     </ClCompile>
+    <ClCompile Include="Geoscape\GeoscapeOptionsState.cpp">
+      <Filter>Geoscape</Filter>
+    </ClCompile>
+    <ClCompile Include="Battlescape\BriefingState.cpp">
+      <Filter>Battlescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\OptionsState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -893,9 +896,6 @@
     <ClInclude Include="Geoscape\MultipleTargetsState.h">
       <Filter>Geoscape</Filter>
     </ClInclude>
-    <ClInclude Include="Geoscape\OptionsState.h">
-      <Filter>Geoscape</Filter>
-    </ClInclude>
     <ClInclude Include="Geoscape\Polygon.h">
       <Filter>Geoscape</Filter>
     </ClInclude>
@@ -985,9 +985,6 @@
     </ClInclude>
     <ClInclude Include="Geoscape\ConfirmLandingState.h">
       <Filter>Geoscape</Filter>
-    </ClInclude>
-    <ClInclude Include="Battlescape\BriefingCrashState.h">
-      <Filter>Battlescape</Filter>
     </ClInclude>
     <ClInclude Include="Battlescape\BattlescapeGenerator.h">
       <Filter>Battlescape</Filter>
@@ -1296,11 +1293,17 @@
     <ClInclude Include="Geoscape\AlienTerrorState.h">
       <Filter>Geoscape</Filter>
     </ClInclude>
-    <ClInclude Include="Geoscape\ResearchCompleteState">
-      <Filter>Geoscape</Filter>
-    </ClInclude>
     <ClInclude Include="Geoscape\ResearchCompleteState.h">
       <Filter>Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Geoscape\GeoscapeOptionsState.h">
+      <Filter>Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Battlescape\BriefingState.h">
+      <Filter>Battlescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\OptionsState.h">
+      <Filter>Menu</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

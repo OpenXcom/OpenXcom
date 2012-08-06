@@ -133,10 +133,10 @@ std::wstring Ufo::getName(Language *lang) const
 	std::wstringstream name;
 	if (!isCrashed())
 	{
-		if (_altitude == 0)
-			name << lang->getString("STR_LANDING_SITE_") << _id;
-		else
-			name << lang->getString("STR_UFO_") << _id;
+		// apparently this string is never actually used ingame??
+		//if (_altitude == 0)
+		//	name << lang->getString("STR_LANDING_SITE_") << _id;
+		name << lang->getString("STR_UFO_") << _id;
 	}
 	else
 	{

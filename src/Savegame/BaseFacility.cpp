@@ -30,10 +30,8 @@ namespace OpenXcom
  * Initializes a base facility of the specified type.
  * @param rules Pointer to ruleset.
  * @param base Pointer to base of origin.
- * @param x X position in grid squares.
- * @param y Y position in grid squares.
  */
-BaseFacility::BaseFacility(RuleBaseFacility *rules, Base *base, int x, int y) : _rules(rules), _base(base), _x(x), _y(y), _buildTime(0)
+BaseFacility::BaseFacility(RuleBaseFacility *rules, Base *base) : _rules(rules), _base(base), _x(-1), _y(-1), _buildTime(0)
 {
 }
 
@@ -89,6 +87,16 @@ int BaseFacility::getX() const
 }
 
 /**
+ * Changes the base facility's X position on the
+ * base grid that it's placed on.
+ * @param x X position in grid squares.
+ */
+void BaseFacility::setX(int x)
+{
+	_x = x;
+}
+
+/**
  * Returns the base facility's Y position on the
  * base grid that it's placed on.
  * @return Y position in grid squares.
@@ -96,6 +104,16 @@ int BaseFacility::getX() const
 int BaseFacility::getY() const
 {
 	return _y;
+}
+
+/**
+ * Changes the base facility's Y position on the
+ * base grid that it's placed on.
+ * @param y Y position in grid squares.
+ */
+void BaseFacility::setY(int y)
+{
+	_y = y;
 }
 
 /**

@@ -22,6 +22,7 @@
 #include <map>
 #include <vector>
 #include <string>
+#include <yaml-cpp/yaml.h>
 #include "../Savegame/SavedGame.h"
 
 namespace OpenXcom
@@ -74,9 +75,10 @@ protected:
 	std::map<std::string, Armor*> _armors;
 	std::map<std::string, ArticleDefinition*> _ufopaediaArticles;
 	std::map<std::string, RuleInventory*> _invs;
-	int _costSoldier, _costEngineer, _costScientist, _timePersonnel;
-	std::map<std::string, RuleResearch *> _researchProjects;
+	std::map<std::string, RuleResearch *> _research;
 	std::map<std::string, RuleManufacture *> _manufacture;
+	int _costSoldier, _costEngineer, _costScientist, _timePersonnel;
+	std::auto_ptr<YAML::Node> _startingBase;
 	std::vector<std::string> _countriesIndex, _regionsIndex, _facilitiesIndex, _craftsIndex, _craftWeaponsIndex, _itemsIndex, _ufosIndex, _armorsIndex, _researchIndex, _manufactureIndex;
 public:
 	/// Creates a blank ruleset.
@@ -150,13 +152,13 @@ public:
 	/// Gets the transfer time of personnel.
 	int getPersonnelTime() const;
 	/// Gets the ruleset for a specific research project.
-	RuleResearch *getResearchProject (const std::string &id) const;
+	RuleResearch *getResearch (const std::string &id) const;
 	/// Get the list of all research projects.
-	const std::map<std::string, RuleResearch *> & getResearchProjects () const;
+	std::vector<std::string> getResearchList () const;
 	/// Gets the ruleset for a specific manufacture project.
-	RuleManufacture *getManufactureProject (const std::string &id) const;
+	RuleManufacture *getManufacture (const std::string &id) const;
 	/// Get the list of all manufacture projects.
-	const std::map<std::string, RuleManufacture *> & getManufactureProjects () const;
+	std::vector<std::string> getManufactureList () const;
 };
 
 }

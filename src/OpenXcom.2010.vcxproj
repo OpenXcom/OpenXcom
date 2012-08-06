@@ -237,7 +237,7 @@
     <ClCompile Include="Battlescape\BattlescapeOptionsState.cpp" />
     <ClCompile Include="Battlescape\BattlescapeState.cpp" />
     <ClCompile Include="Battlescape\BattleState.cpp" />
-    <ClCompile Include="Battlescape\BriefingCrashState.cpp" />
+    <ClCompile Include="Battlescape\BriefingState.cpp" />
     <ClCompile Include="Battlescape\BulletSprite.cpp" />
     <ClCompile Include="Battlescape\Camera.cpp" />
     <ClCompile Include="Battlescape\DebriefingState.cpp" />
@@ -314,7 +314,7 @@
     <ClCompile Include="Geoscape\LowFuelState.cpp" />
     <ClCompile Include="Geoscape\MonthlyReportState.cpp" />
     <ClCompile Include="Geoscape\MultipleTargetsState.cpp" />
-    <ClCompile Include="Geoscape\OptionsState.cpp" />
+    <ClCompile Include="Geoscape\GeoscapeOptionsState.cpp" />
     <ClCompile Include="Geoscape\Polygon.cpp" />
     <ClCompile Include="Geoscape\Polyline.cpp" />
     <ClCompile Include="Geoscape\SelectDestinationState.cpp" />
@@ -339,6 +339,7 @@
     <ClCompile Include="Menu\NewBattleState.cpp" />
     <ClCompile Include="Menu\NewGameState.cpp" />
     <ClCompile Include="Menu\NoteState.cpp" />
+    <ClCompile Include="Menu\OptionsState.cpp" />
     <ClCompile Include="Menu\SaveGameState.cpp" />
     <ClCompile Include="Menu\StartState.cpp" />
     <ClCompile Include="Menu\TestState.cpp" />
@@ -453,7 +454,7 @@
     <ClInclude Include="Battlescape\BattlescapeOptionsState.h" />
     <ClInclude Include="Battlescape\BattlescapeState.h" />
     <ClInclude Include="Battlescape\BattleState.h" />
-    <ClInclude Include="Battlescape\BriefingCrashState.h" />
+    <ClInclude Include="Battlescape\BriefingState.h" />
     <ClInclude Include="Battlescape\BulletSprite.h" />
     <ClInclude Include="Battlescape\Camera.h" />
     <ClInclude Include="Battlescape\DebriefingState.h" />
@@ -535,7 +536,7 @@
     <ClInclude Include="Geoscape\LowFuelState.h" />
     <ClInclude Include="Geoscape\MonthlyReportState.h" />
     <ClInclude Include="Geoscape\MultipleTargetsState.h" />
-    <ClInclude Include="Geoscape\OptionsState.h" />
+    <ClInclude Include="Geoscape\GeoscapeOptionsState.h" />
     <ClInclude Include="Geoscape\Polygon.h" />
     <ClInclude Include="Geoscape\Polyline.h" />
     <ClInclude Include="Geoscape\ResearchCompleteState.h" />
@@ -560,6 +561,7 @@
     <ClInclude Include="Menu\NewBattleState.h" />
     <ClInclude Include="Menu\NewGameState.h" />
     <ClInclude Include="Menu\NoteState.h" />
+    <ClInclude Include="Menu\OptionsState.h" />
     <ClInclude Include="Menu\SaveGameState.h" />
     <ClInclude Include="Menu\StartState.h" />
     <ClInclude Include="Menu\TestState.h" />
