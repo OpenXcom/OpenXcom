@@ -124,6 +124,7 @@ ${Else}
 	File "..\..\bin\Win32\*.dll"
 ${EndIf}
 	File "..\..\COPYING"
+	File "..\..\CHANGELOG.txt"
 	File "..\..\README.txt"
 	
 	SetOutPath "$INSTDIR\DATA"
@@ -179,7 +180,7 @@ ${EndIf}
 	
 	SetOutPath "$INSTDIR\data\Ruleset"
 	
-	File "..\..\bin\data\Ruleset\Xcom1Ruleset.nam"
+	File "..\..\bin\data\Ruleset\Xcom1Ruleset.rul"
 	
 	SetOutPath "$INSTDIR\data\SoldierName"
 	
@@ -248,6 +249,10 @@ Section "un.Delete X-Com Data" UnData
 	RMDir /r "$INSTDIR\data"
 SectionEnd
 
+Section "un.Delete User Data" UnUser
+	RMDir /r "$DOCUMENTS\OpenXcom"
+SectionEnd
+
 Section "-un.Main"
 	
 	SetOutPath "$TEMP"
@@ -256,6 +261,7 @@ Section "-un.Main"
 	Delete "$INSTDIR\*.dll"
 	Delete "$INSTDIR\COPYING"
 	Delete "$INSTDIR\README.txt"
+	Delete "$INSTDIR\CHANGELOG.txt"
 	
 	Delete "$INSTDIR\data\README.txt"
 	Delete "$INSTDIR\data\Language\Big.fnt"
@@ -278,6 +284,8 @@ Section "-un.Main"
 	Delete "$INSTDIR\data\Language\Spanish.geo"
 	Delete "$INSTDIR\data\Language\Spanish.lng"
 	RMDir "$INSTDIR\data\Language"
+	Delete "$INSTDIR\data\Ruleset\Xcom1Ruleset.rul"
+	RMDir "$INSTDIR\Ruleset"
 	Delete "$INSTDIR\data\SoldierName\American.nam"
 	Delete "$INSTDIR\data\SoldierName\British.nam"
 	Delete "$INSTDIR\data\SoldierName\French.nam"
@@ -309,10 +317,12 @@ SectionEnd
 
 	;Language strings
 	LangString DESC_UnData ${LANG_ENGLISH} "Deletes the copied X-Com resources."
+	LangString DESC_UnUser ${LANG_ENGLISH} "Deletes all OpenXcom user data, like savegames, screenshots and options."
 
 	;Assign language strings to sections
 	!insertmacro MUI_UNFUNCTION_DESCRIPTION_BEGIN
 		!insertmacro MUI_DESCRIPTION_TEXT ${UnData} $(DESC_UnData)
+		!insertmacro MUI_DESCRIPTION_TEXT ${UnUser} $(DESC_UnUser)
 	!insertmacro MUI_UNFUNCTION_DESCRIPTION_END
 
 ;--------------------------------

@@ -940,7 +940,7 @@ void BattlescapeState::warning(std::string message)
  */
 void BattlescapeState::handle(Action *action)
 {
-	if (_game->getCursor()->getVisible())
+	if (_game->getCursor()->getVisible() || action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
 		State::handle(action);
 

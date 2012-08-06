@@ -763,19 +763,10 @@ void DogfightState::move()
 		if(_destroyCraft)
 		{
 			// Remove the craft.
-			for(std::map<std::string, int>::iterator it = _game->getSavedGame()->getCraftIds()->begin(); it != _game->getSavedGame()->getCraftIds()->end(); ++it)
-			{
-				if((*it).second == _craft->getId())
-				{
-					_game->getSavedGame()->getCraftIds()->erase(it);
-					break;
-				}
-			}
 			for(std::vector<Base*>::iterator b = _game->getSavedGame()->getBases()->begin(); b != _game->getSavedGame()->getBases()->end(); ++b)
 			{
 				for(std::vector<Craft*>::iterator c = (*b)->getCrafts()->begin(); c != (*b)->getCrafts()->end(); ++c)
 				{
-					std::cout << (*c)->getId();
 					if(*c == _craft)
 					{
 						delete *c;

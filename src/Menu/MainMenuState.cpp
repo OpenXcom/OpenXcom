@@ -31,6 +31,7 @@
 #include "NewGameState.h"
 #include "NewBattleState.h"
 #include "LoadGameState.h"
+#include "OptionsState.h"
 
 namespace OpenXcom
 {
@@ -125,7 +126,7 @@ void MainMenuState::btnNewGameClick(Action *action)
 }
 
 /**
- * Opens the New Battle window.
+ * Opens the New Battle screen.
  * @param action Pointer to an action.
  */
 void MainMenuState::btnNewBattleClick(Action *action)
@@ -143,12 +144,12 @@ void MainMenuState::btnLoadClick(Action *action)
 }
 
 /**
- * Opens the Options window.
+ * Opens the Options screen.
  * @param action Pointer to an action.
  */
 void MainMenuState::btnOptionsClick(Action *action)
 {
-	//_game->pushState(new OptionsState(_game));
+	_game->pushState(new OptionsState(_game));
 }
 
 /**

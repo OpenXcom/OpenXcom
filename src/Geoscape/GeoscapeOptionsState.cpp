@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "OptionsState.h"
+#include "GeoscapeOptionsState.h"
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
@@ -33,10 +33,10 @@ namespace OpenXcom
 {
 
 /**
- * Initializes all the elements in the Game Options window.
+ * Initializes all the elements in the Geoscape Options window.
  * @param game Pointer to the core game.
  */
-OptionsState::OptionsState(Game *game) : State(game)
+GeoscapeOptionsState::GeoscapeOptionsState(Game *game) : State(game)
 {
 	_screen = false;
 
@@ -64,19 +64,19 @@ OptionsState::OptionsState(Game *game) : State(game)
 
 	_btnLoad->setColor(Palette::blockOffset(15)-1);
 	_btnLoad->setText(_game->getLanguage()->getString("STR_LOAD_GAME"));
-	_btnLoad->onMouseClick((ActionHandler)&OptionsState::btnLoadClick);
+	_btnLoad->onMouseClick((ActionHandler)&GeoscapeOptionsState::btnLoadClick);
 
 	_btnSave->setColor(Palette::blockOffset(15)-1);
 	_btnSave->setText(_game->getLanguage()->getString("STR_SAVE_GAME"));
-	_btnSave->onMouseClick((ActionHandler)&OptionsState::btnSaveClick);
+	_btnSave->onMouseClick((ActionHandler)&GeoscapeOptionsState::btnSaveClick);
 
 	_btnAbandon->setColor(Palette::blockOffset(15)-1);
 	_btnAbandon->setText(_game->getLanguage()->getString("STR_ABANDON_GAME"));
-	_btnAbandon->onMouseClick((ActionHandler)&OptionsState::btnAbandonClick);
+	_btnAbandon->onMouseClick((ActionHandler)&GeoscapeOptionsState::btnAbandonClick);
 
 	_btnCancel->setColor(Palette::blockOffset(15)-1);
 	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
-	_btnCancel->onMouseClick((ActionHandler)&OptionsState::btnCancelClick);
+	_btnCancel->onMouseClick((ActionHandler)&GeoscapeOptionsState::btnCancelClick);
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setAlign(ALIGN_CENTER);
@@ -87,7 +87,7 @@ OptionsState::OptionsState(Game *game) : State(game)
 /**
  *
  */
-OptionsState::~OptionsState()
+GeoscapeOptionsState::~GeoscapeOptionsState()
 {
 
 }
@@ -96,7 +96,7 @@ OptionsState::~OptionsState()
  * Resets the palette
  * since it's bound to change on other screens.
  */
-void OptionsState::init()
+void GeoscapeOptionsState::init()
 {
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
@@ -106,7 +106,7 @@ void OptionsState::init()
  * Opens the Load Game screen.
  * @param action Pointer to an action.
  */
-void OptionsState::btnLoadClick(Action *action)
+void GeoscapeOptionsState::btnLoadClick(Action *action)
 {
 	_game->pushState(new LoadGameState(_game, true));
 }
@@ -115,7 +115,7 @@ void OptionsState::btnLoadClick(Action *action)
  * Opens the Save Game screen.
  * @param action Pointer to an action.
  */
-void OptionsState::btnSaveClick(Action *action)
+void GeoscapeOptionsState::btnSaveClick(Action *action)
 {
 	_game->pushState(new SaveGameState(_game, true));
 }
@@ -124,7 +124,7 @@ void OptionsState::btnSaveClick(Action *action)
  * Opens the Abandon Game window.
  * @param action Pointer to an action.
  */
-void OptionsState::btnAbandonClick(Action *action)
+void GeoscapeOptionsState::btnAbandonClick(Action *action)
 {
 	_game->pushState(new AbandonGameState(_game));
 }
@@ -133,7 +133,7 @@ void OptionsState::btnAbandonClick(Action *action)
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void OptionsState::btnCancelClick(Action *action)
+void GeoscapeOptionsState::btnCancelClick(Action *action)
 {
 	_game->popState();
 }

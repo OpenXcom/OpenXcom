@@ -21,6 +21,7 @@
 
 #include <string>
 #include <vector>
+#include <yaml-cpp/yaml.h>
 
 namespace OpenXcom
 {
@@ -38,29 +39,25 @@ class RuleResearch
 {
  private:
 	std::string _name;
-	std::wstring _description;
 	int _cost;
-	std::vector<RuleResearch *> _dependencys;
-	std::vector<RuleResearch *> _unlocks;
+	std::vector<std::string> _dependencies, _unlocks;
 	bool _needItem;
 public:
-	RuleResearch(const std::string & name, int cost);
-	/// Add a Dependency
-	void addDependency (RuleResearch * rp);
+	RuleResearch(const std::string & name);
+	/// Loads the research from YAML.
+	void load(const YAML::Node& node);
+	/// Saves the research to YAML.
+	void save(YAML::Emitter& out) const;
 	/// Get time needed to discover this ResearchProject
 	int getCost() const;
 	/// Get the research name
 	const std::string & getName () const;
-	/// Get the research dependencys
-	const std::vector<RuleResearch *> & getDependencys () const;
+	/// Get the research dependencies
+	const std::vector<std::string> & getDependencies () const;
 	/// Does this ResearchProject need a corresponding Item to be researched ?
 	bool needItem() const;
-	/// Set if this ResearchProject need a corresponding Item to be researched.
-	void setNeedItem(bool b);
 	/// Get the list of ResearchProjects unlocked by this research
-	const std::vector<RuleResearch *> & getUnlocked () const;
-	/// Add a ResearchProject which can be unlocked
-	void addUnlocked (RuleResearch * rp);
+	const std::vector<std::string> & getUnlocked () const;
 };
 }
 

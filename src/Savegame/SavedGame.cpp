@@ -85,7 +85,7 @@ bool equalProduction::operator()(const Production * p) const
  * Initializes a brand new saved game according to the specified difficulty.
  * @param difficulty Game difficulty.
  */
-SavedGame::SavedGame(GameDifficulty difficulty) : _difficulty(difficulty), _funds(0), _countries(), _regions(), _bases(), _ufos(), _craftId(), _waypoints(), _terrorSites(), _ufoId(1), _waypointId(1), _soldierId(1), _terrorId(1), _battleGame(0)
+SavedGame::SavedGame(GameDifficulty difficulty) : _difficulty(difficulty), _funds(0), _ids(), _countries(), _regions(), _bases(), _ufos(), _waypoints(), _terrorSites(), _battleGame(0)
 {
 	RNG::init();
 	_time = new GameTime(6, 1, 1, 1999, 12, 0, 0);
@@ -208,6 +208,7 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	doc["difficulty"] >> a;
 	_difficulty = (GameDifficulty)a;
 	doc["funds"] >> _funds;
+	doc["ids"] >> _ids;
 
 	for (YAML::Iterator i = doc["countries"].begin(); i != doc["countries"].end(); ++i)
 	{
@@ -236,19 +237,12 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 		_ufos.push_back(u);
 	}
 
-	doc["craftId"] >> _craftId;
-
 	for (YAML::Iterator i = doc["waypoints"].begin(); i != doc["waypoints"].end(); ++i)
 	{
 		Waypoint *w = new Waypoint();
 		w->load(*i);
 		_waypoints.push_back(w);
 	}
-
-	doc["ufoId"] >> _ufoId;
-	doc["waypointId"] >> _waypointId;
-	doc["soldierId"] >> _soldierId;
-	doc["terrorId"] >> _terrorId;
 
 	for (YAML::Iterator i = doc["terrorSites"].begin(); i != doc["terrorSites"].end(); ++i)
 	{
@@ -268,7 +262,7 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	{
 		std::string research;
 		*it >> research;
-		_discovered.push_back(rule->getResearchProject(research));
+		_discovered.push_back(rule->getResearch(research));
 	}
 
 	if (const YAML::Node *pName = doc.FindValue("battleGame"))
@@ -312,6 +306,7 @@ void SavedGame::save(const std::string &filename) const
 	out << YAML::BeginMap;
 	out << YAML::Key << "difficulty" << YAML::Value << _difficulty;
 	out << YAML::Key << "funds" << YAML::Value << _funds;
+	out << YAML::Key << "ids" << YAML::Value << _ids;
 	out << YAML::Key << "countries" << YAML::Value;
 	out << YAML::BeginSeq;
 	for (std::vector<Country*>::const_iterator i = _countries.begin(); i != _countries.end(); ++i)
@@ -340,7 +335,6 @@ void SavedGame::save(const std::string &filename) const
 		(*i)->save(out);
 	}
 	out << YAML::EndSeq;
-	out << YAML::Key << "craftId" << YAML::Value << _craftId;
 	out << YAML::Key << "waypoints" << YAML::Value;
 	out << YAML::BeginSeq;
 	for (std::vector<Waypoint*>::const_iterator i = _waypoints.begin(); i != _waypoints.end(); ++i)
@@ -362,10 +356,6 @@ void SavedGame::save(const std::string &filename) const
 		out << (*i)->getName ();
 	}
 	out << YAML::EndSeq;
-	out << YAML::Key << "ufoId" << YAML::Value << _ufoId;
-	out << YAML::Key << "waypointId" << YAML::Value << _waypointId;
-	out << YAML::Key << "soldierId" << YAML::Value << _soldierId;
-	out << YAML::Key << "terrorId" << YAML::Value << _terrorId;
 	if (_battleGame != 0)
 	{
 		out << YAML::Key << "battleGame" << YAML::Value;
@@ -412,6 +402,28 @@ void SavedGame::monthlyFunding()
 GameTime *const SavedGame::getTime() const
 {
 	return _time;
+}
+
+/**
+ * Returns the latest ID for the specified object
+ * and increases it.
+ * @param name Object name.
+ * @return Latest ID number.
+ */
+int SavedGame::getId(const std::string &name)
+{
+	int id = _ids[name];
+	_ids[name]++;
+	return id;
+}
+
+/**
+ * Initializes the list of object IDs.
+ * @param ids ID number list.
+ */
+void SavedGame::initIds(const std::map<std::string, int> &ids)
+{
+	_ids = ids;
 }
 
 /**
@@ -470,15 +482,6 @@ int SavedGame::getBaseMaintenance() const
 }
 
 /**
- * Returns the latest craft IDs for each type.
- * @return Pointer to ID list.
- */
-std::map<std::string, int> *const SavedGame::getCraftIds()
-{
-	return &_craftId;
-}
-
-/**
  * Returns the list of alien UFOs.
  * @return Pointer to UFO list.
  */
@@ -488,39 +491,12 @@ std::vector<Ufo*> *const SavedGame::getUfos()
 }
 
 /**
- * Returns the latest ufo ID.
- * @return Pointer to ID value.
- */
-int *const SavedGame::getUfoId()
-{
-	return &_ufoId;
-}
-
-/**
- * Returns the latest waypoint ID.
- * @return Pointer to ID value.
- */
-int *const SavedGame::getWaypointId()
-{
-	return &_waypointId;
-}
-
-/**
  * Returns the list of craft waypoints.
  * @return Pointer to waypoint list.
  */
 std::vector<Waypoint*> *const SavedGame::getWaypoints()
 {
 	return &_waypoints;
-}
-
-/**
- * Returns the latest terror site ID.
- * @return Pointer to ID value.
- */
-int *const SavedGame::getTerrorSiteId()
-{
-	return &_terrorId;
 }
 
 /**
@@ -588,7 +564,7 @@ void SavedGame::addFinishedResearch (const RuleResearch * r, Ruleset * ruleset)
    Returns the list of already discovered ResearchProject
  * @return the list of already discovered ResearchProject
 */
-const std::vector<const RuleResearch *> & SavedGame::getDiscoveredResearchs() const
+const std::vector<const RuleResearch *> & SavedGame::getDiscoveredResearch() const
 {
 	return _discovered;
 }
@@ -601,37 +577,38 @@ const std::vector<const RuleResearch *> & SavedGame::getDiscoveredResearchs() co
 */
 void SavedGame::getAvailableResearchProjects (std::vector<RuleResearch *> & projects, Ruleset * ruleset, Base * base) const
 {
-	const std::vector<const RuleResearch *> & discovereds(getDiscoveredResearchs());
-	const std::map<std::string, RuleResearch *> & researchProjects = ruleset->getResearchProjects();
+	const std::vector<const RuleResearch *> & discovered(getDiscoveredResearch());
+	std::vector<std::string> researchProjects = ruleset->getResearchList();
 	const std::vector<ResearchProject *> & baseResearchProjects = base->getResearch();
-	std::vector<const RuleResearch *> unlockeds;
-	for(std::vector<const RuleResearch *>::const_iterator it = discovereds.begin (); it != discovereds.end (); ++it)
+	std::vector<const RuleResearch *> unlocked;
+	for(std::vector<const RuleResearch *>::const_iterator it = discovered.begin (); it != discovered.end (); ++it)
 	{
-		for(std::vector<RuleResearch *>::const_iterator itUnlocked = (*it)->getUnlocked ().begin (); itUnlocked != (*it)->getUnlocked ().end (); ++itUnlocked)
+		for(std::vector<std::string>::const_iterator itUnlocked = (*it)->getUnlocked ().begin (); itUnlocked != (*it)->getUnlocked ().end (); ++itUnlocked)
 		{
-			unlockeds.push_back(*itUnlocked);
+			unlocked.push_back(ruleset->getResearch(*itUnlocked));
 		}
 	}
-	for(std::map<std::string, RuleResearch *>::const_iterator iter = researchProjects.begin (); iter != researchProjects.end (); ++iter)
+	for(std::vector<std::string>::const_iterator iter = researchProjects.begin (); iter != researchProjects.end (); ++iter)
 	{
-		if (!isResearchAvailable(iter->second, unlockeds))
+		RuleResearch *research = ruleset->getResearch(*iter);
+		if (!isResearchAvailable(research, unlocked, ruleset))
 		{
 			continue;
 		}
-		std::vector<const RuleResearch *>::const_iterator itDiscovered = std::find(discovereds.begin (), discovereds.end (), iter->second);
-		if (itDiscovered != discovereds.end ())
+		std::vector<const RuleResearch *>::const_iterator itDiscovered = std::find(discovered.begin (), discovered.end (), research);
+		if (itDiscovered != discovered.end ())
 		{
 			continue;
 		}
-		if (std::find_if (baseResearchProjects.begin(), baseResearchProjects.end (), findRuleResearch(iter->second)) != baseResearchProjects.end ())
+		if (std::find_if (baseResearchProjects.begin(), baseResearchProjects.end (), findRuleResearch(research)) != baseResearchProjects.end ())
 		{
 			continue;
 		}
-		if (iter->second->needItem() && base->getItems()->getItem(iter->second->getName ()) == 0)
+		if (research->needItem() && base->getItems()->getItem(research->getName ()) == 0)
 		{
 			continue;
 		}
-		projects.push_back (iter->second);
+		projects.push_back (research);
 	}
 }
 
@@ -643,45 +620,47 @@ void SavedGame::getAvailableResearchProjects (std::vector<RuleResearch *> & proj
 */
 void SavedGame::getAvailableProductions (std::vector<RuleManufacture *> & productions, Ruleset * ruleset, Base * base) const
 {
-	const std::vector<const RuleResearch *> & discovereds(getDiscoveredResearchs());
-	const std::map<std::string, RuleManufacture *> & items (ruleset->getManufactureProjects ());
+	const std::vector<const RuleResearch *> & discovered(getDiscoveredResearch());
+	const std::vector<std::string> items (ruleset->getManufactureList ());
 	const std::vector<Production *> baseProductions (base->getProductions ());
 
-	for(std::map<std::string, RuleManufacture *>::const_iterator iter = items.begin ();
+	for(std::vector<std::string>::const_iterator iter = items.begin ();
 		iter != items.end ();
 		++iter)
 	{
-		if(std::find(discovereds.begin (), discovereds.end (), ruleset->getResearchProject(iter->first)) == discovereds.end ())
+		RuleManufacture *m = ruleset->getManufacture(*iter);
+		if(std::find(discovered.begin (), discovered.end (), ruleset->getResearch(*iter)) == discovered.end ())
 		{
 		 	continue;
 		}
-		if(std::find_if(baseProductions.begin (), baseProductions.end (), equalProduction(iter->second)) != baseProductions.end ())
+		if(std::find_if(baseProductions.begin (), baseProductions.end (), equalProduction(m)) != baseProductions.end ())
 		{
 			continue;
 		}
-		productions.push_back(iter->second);
+		productions.push_back(m);
 	}
 }
 
 /**
    Check whether a ResearchProject can be researched.
    * @param r the RuleResearch to test.
-   * @param unlockeds the list of currently unlocked RuleResearch
+   * @param unlocked the list of currently unlocked RuleResearch
    * @return true if the RuleResearch can be researched
 */
-bool SavedGame::isResearchAvailable (RuleResearch * r, const std::vector<const RuleResearch *> & unlockeds) const
+bool SavedGame::isResearchAvailable (RuleResearch * r, const std::vector<const RuleResearch *> & unlocked, Ruleset * ruleset) const
 {
-	std::vector<RuleResearch *>::const_iterator iter = r->getDependencys().begin ();
-	const std::vector<const RuleResearch *> & discovereds(getDiscoveredResearchs());
-	if(std::find(unlockeds.begin (), unlockeds.end (),
-			 r) != unlockeds.end ())
+	std::vector<std::string> deps = r->getDependencies();
+	const std::vector<const RuleResearch *> & discovered(getDiscoveredResearch());
+	if(std::find(unlocked.begin (), unlocked.end (),
+			 r) != unlocked.end ())
 	{
 		return true;
 	}
-	while (iter != r->getDependencys().end ())
+	for(std::vector<std::string>::const_iterator iter = deps.begin (); iter != deps.end (); ++ iter)
 	{
-		std::vector<const RuleResearch *>::const_iterator itDiscovered = std::find(discovereds.begin (), discovereds.end (), *iter);
-		if (itDiscovered == discovereds.end ())
+		RuleResearch *research = ruleset->getResearch(*iter);
+		std::vector<const RuleResearch *>::const_iterator itDiscovered = std::find(discovered.begin (), discovered.end (), research);
+		if (itDiscovered == discovered.end ())
 		{
 			return false;
 		}
@@ -705,7 +684,7 @@ void SavedGame::getDependableResearch (std::vector<RuleResearch *> & dependables
 	{
 		if((*iter)->getCost() == 0)
 		{
-			if (std::find((*iter)->getDependencys().begin (), (*iter)->getDependencys().end (), research) != (*iter)->getDependencys().end ())
+			if (std::find((*iter)->getDependencies().begin (), (*iter)->getDependencies().end (), research->getName()) != (*iter)->getDependencies().end ())
 			{
 				getDependableResearchBasic(dependables, *iter, ruleset, base);
 			}
@@ -726,9 +705,9 @@ void SavedGame::getDependableResearchBasic (std::vector<RuleResearch *> & depend
 	getAvailableResearchProjects(possibleProjects, ruleset, base);
 	for(std::vector<RuleResearch *>::iterator iter = possibleProjects.begin (); iter != possibleProjects.end (); ++iter)
 	{
-		if (std::find((*iter)->getDependencys().begin (), (*iter)->getDependencys().end (), research) != (*iter)->getDependencys().end ()
+		if (std::find((*iter)->getDependencies().begin (), (*iter)->getDependencies().end (), research->getName()) != (*iter)->getDependencies().end ()
 			||
-			std::find((*iter)->getUnlocked().begin (), (*iter)->getUnlocked().end (), research) != (*iter)->getUnlocked().end ()
+			std::find((*iter)->getUnlocked().begin (), (*iter)->getUnlocked().end (), research->getName()) != (*iter)->getUnlocked().end ()
 			)
 		{
 				dependables.push_back(*iter);
@@ -759,15 +738,6 @@ bool SavedGame::isResearched(const std::string &research) const
 	}
 
 	return false;
-}
-
-/**
- * Returns the latest soldier ID.
- * @return Pointer to ID value.
- */
-int *const SavedGame::getSoldierId()
-{
-	return &_soldierId;
 }
 
 /**

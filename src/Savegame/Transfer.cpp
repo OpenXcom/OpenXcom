@@ -66,7 +66,7 @@ void Transfer::load(const YAML::Node &node, Base *base, const Ruleset *rule)
 		std::string type;
 		(*pName)["type"] >> type;
 		_craft = new Craft(rule->getCraft(type), base);
-		_craft->load(*pName, rule);
+		_craft->load(*pName, rule, 0);
 	}
 	else if (const YAML::Node *pName = node.FindValue("itemId"))
 	{

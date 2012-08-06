@@ -77,7 +77,7 @@ productionProgress_e Production::step(Base * b, SavedGame * g)
 		{
 			return PRODUCTION_PROGRESS_NOT_ENOUGH_MONEY;
 		}
-		for(std::map<std::string,int>::const_iterator iter = _item->getNeededItems ().begin (); iter != _item->getNeededItems ().end (); ++iter)
+		for(std::map<std::string,int>::const_iterator iter = _item->getRequiredItems ().begin (); iter != _item->getRequiredItems ().end (); ++iter)
 		{
 			if (b->getItems ()->getItem(iter->first) < iter->second)
 			{
@@ -105,7 +105,7 @@ const RuleManufacture * Production::getRuleManufacture() const
 void Production::startItem(Base * b, SavedGame * g)
 {
 	g->setFunds(g->getFunds() - _item->getManufactureCost ());
-	for(std::map<std::string,int>::const_iterator iter = _item->getNeededItems ().begin (); iter != _item->getNeededItems ().end (); ++iter)
+	for(std::map<std::string,int>::const_iterator iter = _item->getRequiredItems ().begin (); iter != _item->getRequiredItems ().end (); ++iter)
 	{
 		b->getItems ()->removeItem(iter->first, iter->second);
 	}

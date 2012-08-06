@@ -394,6 +394,14 @@ void DebriefingState::prepareDebriefing()
 		{
 			_txtTitle->setText(_game->getLanguage()->getString("STR_BASE_IS_SAVED"));
 		}
+		else if (battle->getMissionType() == "STR_TERROR_MISSION")
+		{
+			_txtTitle->setText(_game->getLanguage()->getString("STR_ALIENS_DEFEATED"));
+		}
+		else if (battle->getMissionType() == "STR_ALIEN_BASE_ASSAULT")
+		{
+			_txtTitle->setText(_game->getLanguage()->getString("STR_ALIEN_BASE_DESTROYED"));
+		}
 		else
 		{
 			_txtTitle->setText(_game->getLanguage()->getString("STR_UFO_IS_RECOVERED"));
@@ -457,6 +465,14 @@ void DebriefingState::prepareDebriefing()
 		if (battle->getMissionType() == "STR_BASE_DEFENCE")
 		{
 			_txtTitle->setText(_game->getLanguage()->getString("STR_BASE_IS_LOST"));
+		}
+		else if (battle->getMissionType() == "STR_TERROR_MISSION")
+		{
+			_txtTitle->setText(_game->getLanguage()->getString("STR_TERROR_CONTINUES"));
+		}
+		else if (battle->getMissionType() == "STR_ALIEN_BASE_ASSAULT")
+		{
+			_txtTitle->setText(_game->getLanguage()->getString("STR_ALIEN_BASE_STILL_INTACT"));
 		}
 		else
 		{

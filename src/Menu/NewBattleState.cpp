@@ -37,7 +37,7 @@ namespace OpenXcom
 {
 
 /**
- * Initializes all the elements in the Difficulty window.
+ * Initializes all the elements in the New Battle window.
  * @param game Pointer to the core game.
  */
 NewBattleState::NewBattleState(Game *game) : State(game)
@@ -88,13 +88,13 @@ void NewBattleState::initSave()
 	SavedGame *save = new SavedGame(DIFF_BEGINNER);
 	Base *base = new Base(rule);
 	save->getBases()->push_back(base);
-	Craft *craft = new Craft(rule->getCraft("STR_SKYRANGER"), base, save->getCraftIds());
+	Craft *craft = new Craft(rule->getCraft("STR_SKYRANGER"), base, save->getId("STR_SKYRANGER"));
 	base->getCrafts()->push_back(craft);
 
 	// Generate soldiers
 	for (int i = 0; i < 30; ++i)
 	{
-		Soldier *soldier = new Soldier(rule->getSoldier("XCOM"), rule->getArmor("STR_NONE_UC"), rule->getPools(), save->getSoldierId());
+		Soldier *soldier = new Soldier(rule->getSoldier("XCOM"), rule->getArmor("STR_NONE_UC"), rule->getPools(), save->getId("STR_SOLDIER"));
 		base->getSoldiers()->push_back(soldier);
 		if (i < 8)
 			soldier->setCraft(craft);
@@ -105,6 +105,13 @@ void NewBattleState::initSave()
 	for (std::vector<std::string>::iterator i = items.begin(); i != items.end(); ++i)
 	{
 		base->getItems()->addItem(*i, 99);
+	}
+
+	// Add research
+	std::vector<std::string> research = rule->getResearchList();
+	for (std::vector<std::string>::iterator i = research.begin(); i != research.end(); ++i)
+	{
+		save->addFinishedResearch(rule->getResearch(*i));
 	}
 
 	_game->setSavedGame(save);

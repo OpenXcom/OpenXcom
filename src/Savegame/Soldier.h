@@ -58,11 +58,9 @@ private:
 	Armor *_armor;
 public:
 	/// Creates a new soldier.
-	Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierNamePool*> *names = 0, int *id = 0);
+	Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierNamePool*> *names = 0, int id = 0);
 	/// Cleans up the soldier.
 	~Soldier();
-	/// Initialises
-	void initStatsIncrease();
 	/// Loads the soldier from YAML.
 	void load(const YAML::Node& node, const Ruleset *rule);
 	/// Saves the soldier to YAML.

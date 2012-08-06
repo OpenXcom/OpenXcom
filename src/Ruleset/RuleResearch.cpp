@@ -21,17 +21,56 @@
 namespace OpenXcom
 {
 
-RuleResearch::RuleResearch(const std::string & name, int cost) : _name(name), _cost(cost)
+RuleResearch::RuleResearch(const std::string & name) : _name(name), _cost(0), _needItem(false)
 {
 }
 
 /**
- * Add a ResearchProject must be discovered before this researchProject
- * @param rp a pointer to a ResearchProject
-*/
-void RuleResearch::addDependency (RuleResearch * rp)
+ * Loads the research project from a YAML file.
+ * @param node YAML node.
+ */
+void RuleResearch::load(const YAML::Node &node)
 {
-	_dependencys.push_back(rp);
+	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
+	{
+		std::string key;
+		i.first() >> key;
+		if (key == "name")
+		{
+			i.second() >> _name;
+		}
+		else if (key == "cost")
+		{
+			i.second() >> _cost;
+		}
+		else if (key == "needItem")
+		{
+			i.second() >> _needItem;
+		}
+		else if (key == "dependencies")
+		{
+			i.second() >> _dependencies;
+		}
+		else if (key == "unlocks")
+		{
+			i.second() >> _unlocks;
+		}
+	}
+}
+
+/**
+ * Saves the research project to a YAML file.
+ * @param out YAML emitter.
+ */
+void RuleResearch::save(YAML::Emitter &out) const
+{
+	out << YAML::BeginMap;
+	out << YAML::Key << "name" << YAML::Value << _name;
+	out << YAML::Key << "cost" << YAML::Value << _cost;
+	out << YAML::Key << "needItem" << YAML::Value << _needItem;
+	out << YAML::Key << "dependencies" << YAML::Value << _dependencies;
+	out << YAML::Key << "unlocks" << YAML::Value << _unlocks;
+	out << YAML::EndMap;
 }
 
 /**
@@ -56,9 +95,9 @@ const std::string & RuleResearch::getName () const
    Get the list of dependencies
    @return the list of ResearchProject that must be discovered before this one
 */
-const std::vector<RuleResearch *> & RuleResearch::getDependencys () const
+const std::vector<std::string> & RuleResearch::getDependencies () const
 {
-	return _dependencys;
+	return _dependencies;
 }
 
 /**
@@ -71,29 +110,11 @@ bool RuleResearch::needItem() const
 }
 
 /**
-   Change if this ResearchProject need a corresponding Item to be researched.
-   @param b true if the ResearchProject need a corresponding item
-*/
-void RuleResearch::setNeedItem(bool b)
-{
-	_needItem = b;
-}
-
-/**
    @return The list of ResearchProject unlocked by this research project.
 */
-const std::vector<RuleResearch *> & RuleResearch::getUnlocked () const
+const std::vector<std::string> & RuleResearch::getUnlocked () const
 {
 	return _unlocks;
-}
-
-/**
- * Add a ResearchProject which can be unlocked by this researchProject
- * @param rp a pointer to a ResearchProject
-*/
-void RuleResearch::addUnlocked (RuleResearch * rp)
-{
-	_unlocks.push_back(rp);
 }
 
 }

@@ -967,11 +967,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Battlescape\BriefingCrashState.cpp"
+				RelativePath=".\Battlescape\BriefingState.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Battlescape\BriefingCrashState.h"
+				RelativePath=".\Battlescape\BriefingState.h"
 				>
 			</File>
 			<File
@@ -1411,11 +1411,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Geoscape\OptionsState.cpp"
+				RelativePath=".\Geoscape\GeoscapeOptionsState.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Geoscape\OptionsState.h"
+				RelativePath=".\Geoscape\GeoscapeOptionsState.h"
 				>
 			</File>
 			<File

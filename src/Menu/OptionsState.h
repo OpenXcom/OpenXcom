@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_NEWBATTLESTATE_H
-#define OPENXCOM_NEWBATTLESTATE_H
+#ifndef OPENXCOM_OPTIONSSTATE_H
+#define OPENXCOM_OPTIONSSTATE_H
 
 #include "../Engine/State.h"
 
@@ -27,27 +27,22 @@ namespace OpenXcom
 class TextButton;
 class Window;
 class Text;
-class Selector;
 
 /**
- * New Battle that displays a list
- * of options to configure a new
- * standalone mission.
+ * Options window that displays all
+ * the settings the player can configure.
  */
-class NewBattleState : public State
+class OptionsState : public State
 {
 private:
 	Window *_window;
-	Text *_txtTitle, *_txtMissionType, *_txtMissionOption, *_txtAlien, *_txtSunlight, *_txtCraft;
-	Selector *_selMissionType, *_selMissionOption, *_selAlienRace, *_selSunlight, *_selCraft;
-	TextButton *_btnOk, *_btnCancel, *_btnCraft;
+	Text *_txtTitle;
+	TextButton *_btnOk, *_btnCancel, *_btnLanguage;
 public:
-	/// Creates the New Battle state.
-	NewBattleState(Game *game);
-	/// Cleans up the New Battle state.
-	~NewBattleState();
-	/// Initializes a blank savegame.
-	void initSave();
+	/// Creates the Options state.
+	OptionsState(Game *game);
+	/// Cleans up the Options state.
+	~OptionsState();
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
 	/// Handler for clicking the Cancel button.

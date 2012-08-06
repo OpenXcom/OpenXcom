@@ -21,43 +21,38 @@
 
 #include <string>
 #include <map>
+#include <yaml-cpp/yaml.h>
 
 namespace OpenXcom
 {
 /**
- * Represents information needed to manufacture a RuleItem
+ * Represents information needed to manufacture an object
 */
 class RuleManufacture
 {
 private:
-	std::map<std::string, int> _neededItems;
-	int _space, _time, _cost;
 	std::string _category, _name;
+	int _space, _time, _cost;
+	std::map<std::string, int> _requiredItems;
 public:
 	/// Create ManufactureInfo
 	RuleManufacture(const std::string &name);
+	/// Loads the manufacture from YAML.
+	void load(const YAML::Node& node);
+	/// Saves the manufacture to YAML.
+	void save(YAML::Emitter& out) const;
 	///Get the manufacture name
 	std::string getName () const;
-	///Set the manufacture category
-	void setCategory (const std::string &category);
 	///Get the manufacture category
 	std::string getCategory () const;
-	///Set the required workshop space
-	void setRequiredSpace (int);
 	///Get the required workshop space
 	int getRequiredSpace () const;
-	///Set the time required to manufacture one item
-	void setManufactureTime (int);
-	///Get the time required to manufacture one item
+	///Get the time required to manufacture one object
 	int getManufactureTime () const;
-	///Set the cost of manufacturing one item
-	void setManufactureCost (int);
-	///Get the cost of manufacturing one item
+	///Get the cost of manufacturing one object
 	int getManufactureCost () const;
-	///Get the list of needed items to manufacture one item
-	const std::map<std::string, int> & getNeededItems() const;
-	///Add one required item
-	void addNeededItem (std::string type, int quantity);
+	///Get the list of items required to manufacture one object
+	const std::map<std::string, int> & getRequiredItems() const;
 };
 
 }
