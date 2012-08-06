@@ -60,7 +60,7 @@ NewBattleState::NewBattleState(Game *game) : State(game)
 	_txtTitle->setColor(Palette::blockOffset(8)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
-	_txtTitle->setText(L"THE SIMULATRON");
+	_txtTitle->setText(_game->getLanguage()->getString("STR_THE_SIMULATRON"));
 
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
