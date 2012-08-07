@@ -478,7 +478,7 @@ You have arrived in Cydonia.  You gain entry to a large underground complex near
 STR_TERROR_MISSION
 TERROR MISSION
 STR_TERROR_MISSION_BRIEFING
-Mission will be successful when all enemy units have been eliminated or neutralised. You must attempt to save the lives of any civilians in the area by neutralising the alien menace.	To abort the mission return XCom operatives to transport vehicle and  click on the 'Abort Mission' icon.
+Mission will be successful when all enemy units have been eliminated or neutralized.  You must attempt to save the lives of any civilians in the area by neutralizing the alien menace.  To abort the mission return XCom operatives to transport vehicle and  click on the 'Abort Mission' icon.
 STR_NO_FREE_HANGARS_FOR_CRAFT_PRODUCTION
 NO FREE HANGARS FOR CRAFT PRODUCTION!{SMALLLINE}Each craft assigned to a base, transferred to a base, purchased or constructed uses one hangar.  Build a new hangar or transfer a craft to another base.
 STR_NO_FREE_HANGARS_FOR_PURCHASE
