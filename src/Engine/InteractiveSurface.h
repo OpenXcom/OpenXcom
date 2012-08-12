@@ -37,10 +37,11 @@ typedef void (State::* ActionHandler)(Action*);
  */
 class InteractiveSurface : public Surface
 {
+private:
+	static const int NUM_BUTTONS = 5;
 protected:
-	ActionHandler _click, _press, _release, _in, _over, _out, _keyPress, _keyRelease;
-	bool _isPressed, _isHovered, _isFocused;
-	int _validButton;
+	ActionHandler *_clicks, _press, _release, _in, _over, _out, _keyPress, _keyRelease;
+	bool *_buttonsPressed, _isHovered, _isFocused;
 
 public:
 	/// Creates a new interactive surface with the specified size and position.
@@ -56,7 +57,7 @@ public:
 	/// Unpresses the surface.
 	virtual void unpress(State *state);
 	/// Hooks an action handler to a mouse click on the surface.
-	void onMouseClick(ActionHandler handler);
+	void onMouseClick(ActionHandler handler, Uint8 button = SDL_BUTTON_LEFT);
 	/// Hooks an action handler to a mouse press over the surface.
 	void onMousePress(ActionHandler handler);
 	/// Hooks an action handler to a mouse release over the surface.

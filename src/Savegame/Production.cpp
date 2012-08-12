@@ -17,14 +17,14 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Production.h"
-#include "../Ruleset/RuleManufactureInfo.h"
+#include "../Ruleset/RuleManufacture.h"
 #include "Base.h"
 #include "SavedGame.h"
 #include "ItemContainer.h"
 
 namespace OpenXcom
 {
-Production::Production (RuleManufactureInfo * item, int todo) : _item(item), _todo(todo), _timeSpent(0), _engineers(0)
+Production::Production (RuleManufacture * item, int todo) : _item(item), _todo(todo), _timeSpent(0), _engineers(0)
 {
 }
 
@@ -77,7 +77,7 @@ productionProgress_e Production::step(Base * b, SavedGame * g)
 		{
 			return PRODUCTION_PROGRESS_NOT_ENOUGH_MONEY;
 		}
-		for(std::map<std::string,int>::const_iterator iter = _item->getNeededItems ().begin (); iter != _item->getNeededItems ().end (); ++iter)
+		for(std::map<std::string,int>::const_iterator iter = _item->getRequiredItems ().begin (); iter != _item->getRequiredItems ().end (); ++iter)
 		{
 			if (b->getItems ()->getItem(iter->first) < iter->second)
 			{
@@ -97,7 +97,7 @@ int Production::getNumberOfItemDone () const
 	return _timeSpent / _item->getManufactureTime ();
 }
 
-const RuleManufactureInfo * Production::getRuleManufactureInfo() const
+const RuleManufacture * Production::getRuleManufacture() const
 {
 	return _item;
 }
@@ -105,7 +105,7 @@ const RuleManufactureInfo * Production::getRuleManufactureInfo() const
 void Production::startItem(Base * b, SavedGame * g)
 {
 	g->setFunds(g->getFunds() - _item->getManufactureCost ());
-	for(std::map<std::string,int>::const_iterator iter = _item->getNeededItems ().begin (); iter != _item->getNeededItems ().end (); ++iter)
+	for(std::map<std::string,int>::const_iterator iter = _item->getRequiredItems ().begin (); iter != _item->getRequiredItems ().end (); ++iter)
 	{
 		b->getItems ()->removeItem(iter->first, iter->second);
 	}
@@ -114,7 +114,7 @@ void Production::startItem(Base * b, SavedGame * g)
 void Production::save(YAML::Emitter &out)
 {
 	out << YAML::BeginMap;
-	out << YAML::Key << "item" << YAML::Value << getRuleManufactureInfo ()->getName ();
+	out << YAML::Key << "item" << YAML::Value << getRuleManufacture ()->getName ();
 	out << YAML::Key << "assigned" << YAML::Value << getAssignedEngineers ();
 	out << YAML::Key << "spent" << YAML::Value << getTimeSpent ();
 	out << YAML::Key << "todo" << YAML::Value << getNumberOfItemTodo ();

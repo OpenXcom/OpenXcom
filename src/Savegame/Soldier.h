@@ -32,6 +32,7 @@ enum SoldierLook { LOOK_BLONDE, LOOK_BROWNHAIR, LOOK_ORIENTAL, LOOK_AFRICAN };
 
 class Craft;
 class SoldierNamePool;
+class Ruleset;
 class RuleSoldier;
 class Armor;
 class Language;
@@ -57,13 +58,11 @@ private:
 	Armor *_armor;
 public:
 	/// Creates a new soldier.
-	Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierNamePool*> *names = 0, int *id = 0);
+	Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierNamePool*> *names = 0, int id = 0);
 	/// Cleans up the soldier.
 	~Soldier();
-	/// Initialises
-	void initStatsIncrease();
 	/// Loads the soldier from YAML.
-	void load(const YAML::Node& node);
+	void load(const YAML::Node& node, const Ruleset *rule);
 	/// Saves the soldier to YAML.
 	void save(YAML::Emitter& out) const;
 	/// Gets the soldier's name.

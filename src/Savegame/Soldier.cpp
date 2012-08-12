@@ -22,6 +22,8 @@
 #include "../Savegame/Craft.h"
 #include "../Ruleset/SoldierNamePool.h"
 #include "../Ruleset/RuleSoldier.h"
+#include "../Ruleset/Armor.h"
+#include "../Ruleset/Ruleset.h"
 
 namespace OpenXcom
 {
@@ -33,7 +35,7 @@ namespace OpenXcom
  * @param names List of name pools for soldier generation.
  * @param id Pointer to unique soldier id for soldier generation.
  */
-Soldier::Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierNamePool*> *names, int *id) : _name(L""), _id(0), _rules(rules), _initialStats(), _currentStats(), _rank(RANK_ROOKIE), _craft(0), _gender(GENDER_MALE), _look(LOOK_BLONDE), _missions(0), _kills(0), _recovery(0), _recentlyPromoted(false), _armor(armor)
+Soldier::Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierNamePool*> *names, int id) : _name(L""), _id(0), _rules(rules), _initialStats(), _currentStats(), _rank(RANK_ROOKIE), _craft(0), _gender(GENDER_MALE), _look(LOOK_BLONDE), _missions(0), _kills(0), _recovery(0), _recentlyPromoted(false), _armor(armor)
 {
 	if (names != 0)
 	{
@@ -69,8 +71,7 @@ Soldier::Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierName
 	}
 	if (id != 0)
 	{
-		_id = *id;
-		(*id)++; // increase id for next soldier
+		_id = id;
 	}
 }
 
@@ -84,8 +85,9 @@ Soldier::~Soldier()
 /**
  * Loads the soldier from a YAML file.
  * @param node YAML node.
+ * @param rule Game ruleset.
  */
-void Soldier::load(const YAML::Node &node)
+void Soldier::load(const YAML::Node &node, const Ruleset *rule)
 {
 	int a = 0;
 	node["id"] >> _id;
@@ -103,6 +105,9 @@ void Soldier::load(const YAML::Node &node)
 	node["missions"] >> _missions;
 	node["kills"] >> _kills;
 	node["recovery"] >> _recovery;
+	std::string armor;
+	node["armor"] >> armor;
+	_armor = rule->getArmor(armor);
 }
 
 /**
@@ -127,6 +132,7 @@ void Soldier::save(YAML::Emitter &out) const
 	out << YAML::Key << "missions" << YAML::Value << _missions;
 	out << YAML::Key << "kills" << YAML::Value << _kills;
 	out << YAML::Key << "recovery" << YAML::Value << _recovery;
+	out << YAML::Key << "armor" << YAML::Value << _armor->getType();
 	out << YAML::EndMap;
 }
 

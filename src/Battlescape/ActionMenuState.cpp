@@ -169,12 +169,10 @@ void ActionMenuState::addItem(BattleActionType ba, const std::string &name, int 
 void ActionMenuState::handle(Action *action)
 {
 	State::handle(action);
-
 	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN && action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
 		_game->popState();
 	}
-
 }
 
 /**
@@ -185,12 +183,6 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 {
 	int btnID = -1;
 	RuleItem *weapon = _action->weapon->getRules();
-
-	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-	{
-		_game->popState();
-		return;
-	}
 
 	// got to find out which button was pressed
 	for (int i = 0; i < 10 && btnID == -1; ++i)

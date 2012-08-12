@@ -89,9 +89,11 @@ BuildNewBaseState::BuildNewBaseState(Game *game, Base *base, Globe *globe, bool 
 	_btnRotateDown->onMousePress((ActionHandler)&BuildNewBaseState::btnRotateDownPress);
 	_btnRotateDown->onMouseRelease((ActionHandler)&BuildNewBaseState::btnRotateDownRelease);
 
-	_btnZoomIn->onMouseClick((ActionHandler)&BuildNewBaseState::btnZoomInClick);
+	_btnZoomIn->onMouseClick((ActionHandler)&BuildNewBaseState::btnZoomInLeftClick, SDL_BUTTON_LEFT);
+	_btnZoomIn->onMouseClick((ActionHandler)&BuildNewBaseState::btnZoomInRightClick, SDL_BUTTON_RIGHT);
 
-	_btnZoomOut->onMouseClick((ActionHandler)&BuildNewBaseState::btnZoomOutClick);
+	_btnZoomOut->onMouseClick((ActionHandler)&BuildNewBaseState::btnZoomOutLeftClick, SDL_BUTTON_LEFT);
+	_btnZoomOut->onMouseClick((ActionHandler)&BuildNewBaseState::btnZoomOutRightClick, SDL_BUTTON_RIGHT);
 
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
@@ -262,24 +264,36 @@ void BuildNewBaseState::btnRotateDownRelease(Action *action)
  * Zooms into the globe.
  * @param action Pointer to an action.
  */
-void BuildNewBaseState::btnZoomInClick(Action *action)
+void BuildNewBaseState::btnZoomInLeftClick(Action *action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
-		_globe->zoomIn();
-	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-		_globe->zoomMax();
+	_globe->zoomIn();
+}
+
+/**
+ * Zooms the globe maximum.
+ * @param action Pointer to an action.
+ */
+void BuildNewBaseState::btnZoomInRightClick(Action *action)
+{
+	_globe->zoomMax();
 }
 
 /**
  * Zooms out of the globe.
  * @param action Pointer to an action.
  */
-void BuildNewBaseState::btnZoomOutClick(Action *action)
+void BuildNewBaseState::btnZoomOutLeftClick(Action *action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
-		_globe->zoomOut();
-	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-		_globe->zoomMin();
+	_globe->zoomOut();
+}
+
+/**
+ * Zooms the globe minimum.
+ * @param action Pointer to an action.
+ */
+void BuildNewBaseState::btnZoomOutRightClick(Action *action)
+{
+	_globe->zoomMin();
 }
 
 /**

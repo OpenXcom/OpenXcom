@@ -27,6 +27,7 @@
 #include "../Interface/Text.h"
 #include "../Engine/Action.h"
 #include "../Engine/Options.h"
+#include "../Menu/LoadGameState.h"
 #include "../Menu/SaveGameState.h"
 
 namespace OpenXcom
@@ -79,8 +80,9 @@ BattlescapeOptionsState::BattlescapeOptionsState(Game *game) : State(game)
 	_btnAlienSpeed5 = new TextButton(56, 12, 155, 148);
 	_btnAlienSpeed6 = new TextButton(69, 12, 213, 148);
 
-	_btnOk = new TextButton(120, 16, 16, 174);
-	_btnSave = new TextButton(120, 16, 184, 174);
+	_btnOk = new TextButton(90, 16, 16, 174);
+	_btnLoad = new TextButton(90, 16, 117, 174);
+	_btnSave = new TextButton(90, 16, 214, 174);
 
 	switch (Options::getInt("battleScrollSpeed"))
 	{
@@ -169,6 +171,7 @@ BattlescapeOptionsState::BattlescapeOptionsState(Game *game) : State(game)
 	add(_btnAlienSpeed6);
 
 	add(_btnOk);
+	add(_btnLoad);
 	add(_btnSave);
 
 	// Set up objects
@@ -340,6 +343,11 @@ BattlescapeOptionsState::BattlescapeOptionsState(Game *game) : State(game)
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&BattlescapeOptionsState::btnOkClick);
 
+	_btnLoad->setColor(Palette::blockOffset(0));
+	_btnLoad->setHighContrast(true);
+	_btnLoad->setText(_game->getLanguage()->getString("STR_LOAD_GAME"));
+	_btnLoad->onMouseClick((ActionHandler)&BattlescapeOptionsState::btnLoadClick);
+
 	_btnSave->setColor(Palette::blockOffset(0));
 	_btnSave->setHighContrast(true);
 	_btnSave->setText(_game->getLanguage()->getString("STR_SAVE_GAME"));
@@ -417,6 +425,15 @@ void BattlescapeOptionsState::btnOkClick(Action *action)
 
 	Options::save();
 	_game->popState();
+}
+
+/**
+ * Opens the Load Game screen.
+ * @param action Pointer to an action.
+ */
+void BattlescapeOptionsState::btnLoadClick(Action *action)
+{
+	_game->pushState(new LoadGameState(_game, false));
 }
 
 /**

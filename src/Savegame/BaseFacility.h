@@ -43,7 +43,7 @@ private:
 	int _x, _y, _buildTime;
 public:
 	/// Creates a base facility of the specified type.
-	BaseFacility(RuleBaseFacility *rules, Base *base, int x, int y);
+	BaseFacility(RuleBaseFacility *rules, Base *base);
 	/// Cleans up the base facility.
 	~BaseFacility();
 	/// Loads the base facility from YAML.
@@ -54,8 +54,12 @@ public:
 	RuleBaseFacility *const getRules() const;
 	/// Gets the facility's X position.
 	int getX() const;
+	/// Sets the facility's X position.
+	void setX(int x);
 	/// Gets the facility's Y position.
 	int getY() const;
+	/// Sets the facility's Y position.
+	void setY(int y);
 	/// Gets the facility's construction time.
 	int getBuildTime() const;
 	/// Sets the facility's construction time.

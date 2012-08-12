@@ -35,7 +35,7 @@ class Text;
 class MainMenuState : public State
 {
 private:
-	TextButton *_btnNew, *_btnLoad, *_btnQuit;
+	TextButton *_btnNewGame, *_btnNewBattle, *_btnLoad, *_btnOptions, *_btnQuit;
 	Window *_window;
 	Text *_txtTitle;
 public:
@@ -46,9 +46,13 @@ public:
 	/// Updates the palette.
 	void init();
 	/// Handler for clicking the New Game button.
-	void btnNewClick(Action *action);
+	void btnNewGameClick(Action *action);
+	/// Handler for clicking the New Battle button.
+	void btnNewBattleClick(Action *action);
 	/// Handler for clicking the Load Saved Game button.
 	void btnLoadClick(Action *action);
+	/// Handler for clicking the Options button.
+	void btnOptionsClick(Action *action);
 	/// Handler for clicking the Quit button.
 	void btnQuitClick(Action *action);
 };

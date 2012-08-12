@@ -16,47 +16,45 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_LISTPOSSIBLEPRODUCTIONSTATE_H
-#define OPENXCOM_LISTPOSSIBLEPRODUCTIONSTATE_H
+#ifndef OPENXCOM_ALIENTERRORSTATE_H
+#define OPENXCOM_ALIENTERRORSTATE_H
 
 #include "../Engine/State.h"
-#include <vector>
 
 namespace OpenXcom
 {
-class Base;
+
+class City;
 class TextButton;
 class Window;
 class Text;
-class TextList;
-class RuleManufactureInfo;
-class ManufactureState;
+class GeoscapeState;
 
 /**
- * Screen which list possible productions.
+ * Displays info on a terror site.
  */
-class ListPossibleProductionState : public State
+class AlienTerrorState : public State
 {
 private:
-	Base *_base;
-	TextButton *_btnOk;
-	Window *_window;
-	Text *_txtTitle, *_txtItem, *_txtCategory;
-	TextList *_lstManufacture;
-	ManufactureState * _manufactureState;
-	std::vector<RuleManufactureInfo *> _possibleProductions;
+	City *_city;
+	GeoscapeState *_state;
 
+	TextButton *_btnCentre, *_btnCancel;
+	Window *_window;
+	Text *_txtTitle, *_txtCity;
 public:
-	/// Create the state
-	ListPossibleProductionState(Game *game, Base *base);
-	/// Initialize state
-	void init ();
-	/// Handler for clicking the OK button
-	void btnOkClick(Action * action);
-	/// Handler for clicking on the list
-	void lstProdClick (Action * action);
-	/// Fill the list with Base production's
-	void fillProductionList();
+	/// Creates the Ufo Detected state.
+	AlienTerrorState(Game *game, City *city, GeoscapeState *state);
+	/// Cleans up the Ufo Detected state.
+	~AlienTerrorState();
+	/// Updates the palette.
+	void init();
+	/// Handler for clicking the Centre on UFO button.
+	void btnCentreClick(Action *action);
+	/// Handler for clicking the Cancel button.
+	void btnCancelClick(Action *action);
 };
+
 }
+
 #endif

@@ -41,7 +41,7 @@ private:
 	Text *_txtMessage;
 public:
 	/// Creates the Geoscape Error state.
-	GeoscapeErrorState(Game *game, std::string str);
+	GeoscapeErrorState(Game *game, std::wstring str);
 	/// Cleans up the Geoscape Error state.
 	~GeoscapeErrorState();
 	/// Handler for clicking the OK button.

@@ -22,6 +22,17 @@ New features:
 -- Motion scanner.
 -- Alien deployment rules.
 -- AI taking cover & throwing grenades.
+-- Damage to items.
+-- Mind probe.
+-- Stun rod.
+-- Show/hide battlescape layers button.
+-- Rough battlescape artefacts salvaging functionality.
+-- Added civilians.
+-- Added support for skyranger landing on non 0-level.
+-- Added support for multiple craft/ufo maps.
+-- Psi Amp.
+
+
 
  
 Bugfixes:
@@ -57,6 +68,26 @@ Bugfixes:
 - Fixed lazy ground inventory arrangement.
 - Aliens do not suffer from fatal wounds anymore.
 - Improved straight line pathfinding in battlescape.
+- Fixed unable to hit unit on stairs.
+- Fixed drawing hidden object's outlines.
+- Fixed pistol aiming position.
+- Fixed HWP rank image.
+- Fixed no LOF error issues.
+- Fixed issue where unit stopped walking when not seeing new alien units.
+- Fixed alien reaction shots costing no TUs. 
+- Camera centers on selected unit on battlescape start.
+- Fixed battlescape kill counter not working.
+- Fix cursor hiding and scrolling during AI turn 
+- Fix camera scrolling into dark infinite and beyond
+- Fix unit FOV calculated before AI reaction shot.
+- Fixed "alien floating error".
+- Fixed walking under skyranger.
+- Fixed firing XP from explosive ammo.
+- Fixed active weapon display.
+- Fixed issue with dead alien count.
+- Fixed autoshot of HE ammo issue.
+- Save turn number in savegame.
+- Fixed free autoshot ammo. 
 
 Version 0.3 (01-09-2011)
 -------------------------

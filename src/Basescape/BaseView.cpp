@@ -42,8 +42,6 @@ namespace OpenXcom
  */
 BaseView::BaseView(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _base(0), _texture(0), _selFacility(0), _big(0), _small(0), _gridX(0), _gridY(0), _selSize(0), _selector(0), _blink(true)
 {
-	_validButton = SDL_BUTTON_LEFT;
-
 	for (int x = 0; x < BASE_SIZE; ++x)
 		for (int y = 0; y < BASE_SIZE; ++y)
 			_facilities[x][y] = 0;

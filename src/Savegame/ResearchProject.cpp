@@ -17,7 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "ResearchProject.h"
-#include "../Ruleset/RuleResearchProject.h"
+#include "../Ruleset/RuleResearch.h"
 #include "../Ruleset/Ruleset.h"
 #include <algorithm>
 
@@ -28,7 +28,7 @@ const float PROGRESS_LIMIT_POOR = 0.008f;
 const float PROGRESS_LIMIT_AVERAGE = 0.14f;
 const float PROGRESS_LIMIT_GOOD = 0.26f;
 
-ResearchProject::ResearchProject(RuleResearchProject * p, int c) : _project(p), _assigned(0), _spent(0), _cost(c)
+ResearchProject::ResearchProject(RuleResearch * p, int c) : _project(p), _assigned(0), _spent(0), _cost(c)
 {
 }
 
@@ -55,7 +55,7 @@ void ResearchProject::setAssigned (int nb)
 	_assigned = nb;
 }
 
-const RuleResearchProject * ResearchProject::getRuleResearchProject () const
+const RuleResearch * ResearchProject::getRuleResearch () const
 {
 	return _project;
 }
@@ -129,7 +129,7 @@ void ResearchProject::load(const YAML::Node& node)
 void ResearchProject::save(YAML::Emitter& out) const
 {
 	out << YAML::BeginMap;
-	out << YAML::Key << "project" << YAML::Value << getRuleResearchProject ()->getName ();
+	out << YAML::Key << "project" << YAML::Value << getRuleResearch ()->getName ();
 	out << YAML::Key << "assigned" << YAML::Value << getAssigned ();
 	out << YAML::Key << "spent" << YAML::Value << getSpent ();
 	out << YAML::Key << "cost" << YAML::Value << getCost ();
@@ -142,7 +142,7 @@ void ResearchProject::save(YAML::Emitter& out) const
 */
 std::string ResearchProject::getResearchProgress () const
 {
-	float progress = (float)getSpent () / getRuleResearchProject ()->getCost();
+	float progress = (float)getSpent () / getRuleResearch ()->getCost();
 	if (getAssigned () == 0)
 	{
 		return "STR_NONE";
@@ -154,7 +154,7 @@ std::string ResearchProject::getResearchProgress () const
 	else
 	{
 		float rating = (float)getAssigned ();
-		rating /= getRuleResearchProject ()->getCost();
+		rating /= getRuleResearch ()->getCost();
 		if (rating < PROGRESS_LIMIT_POOR)
 		{
 			return "STR_POOR";

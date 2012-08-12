@@ -16,38 +16,44 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_ENDRESEARCHSTATE
-#define OPENXCOM_ENDRESEARCHSTATE
+#ifndef OPENXCOM_NEWBATTLESTATE_H
+#define OPENXCOM_NEWBATTLESTATE_H
 
 #include "../Engine/State.h"
+
 namespace OpenXcom
 {
-class Game;
-class Window;
+
 class TextButton;
+class Window;
 class Text;
-class Base;
-class RuleResearchProject;
+class Selector;
 
 /**
- * Window which inform the player that a research project is finished.
- * Allow him to view information about the project(Ufopaedia).
+ * New Battle that displays a list
+ * of options to configure a new
+ * standalone mission.
  */
-class EndResearchState : public State
+class NewBattleState : public State
 {
+private:
 	Window *_window;
-	Text *_txtTitle;
-    TextButton *_btnReport, *_btnOk;
-	const RuleResearchProject * _research;
+	Text *_txtTitle, *_txtMissionType, *_txtMissionOption, *_txtAlien, *_txtSunlight, *_txtCraft;
+	Selector *_selMissionType, *_selMissionOption, *_selAlienRace, *_selSunlight, *_selCraft;
+	TextButton *_btnOk, *_btnCancel, *_btnCraft;
 public:
-	/// Creates the EndResearch state.
-	EndResearchState(Game * game, const RuleResearchProject * research);
-	/// Updates the palette.
-	void init();
+	/// Creates the New Battle state.
+	NewBattleState(Game *game);
+	/// Cleans up the New Battle state.
+	~NewBattleState();
+	/// Initializes a blank savegame.
+	void initSave();
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
-	/// Handler for clicking the Report button.
-	void btnReportClick(Action *action);
+	/// Handler for clicking the Cancel button.
+	void btnCancelClick(Action *action);
 };
+
 }
+
 #endif

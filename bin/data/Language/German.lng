@@ -475,8 +475,6 @@ STR_ALIEN_BASE_ASSAULT_BRIEFING
 XCom-Mitarbeiter sind in einen Stützpunkt der Außerirdischen eingedrungen.  Das Kontrollzentrum muß zerstört werden, um den Stützpunkt funktionsunfähig zu machen.  Der Einsatz endet, wenn alle Gegner eliminiert sind oder Ihre Einsatztruppe zum grünen Ausgangsbereich zurückgekehrt ist.  (Für eine Flucht das Icon 'Mission abbrechen' anklicken.)
 STR_CYDONIA_BRIEFING
 Sie haben Cydonia erreicht.  Sie dringen in einen großen unterirdischen Komplex in der Nähe der Mars-Sphinx ein.  Sie müssen das Außerirdische Gehirn vernichten, das alle Aktivitäten der Eindringlinge steuert.  Das Schicksal der Menschheit liegt in Ihrer Hand....
-STR_TERROR_SITE_UC
-TERRORISTENLAGER-
 STR_TERROR_MISSION
 TERRORISTEN-MISSION
 STR_TERROR_MISSION_BRIEFING
@@ -559,14 +557,8 @@ STR_INTERCEPTING_UFO
 ABFANGVORGANG UFO-
 STR_RETURNING_TO_BASE
 RÜCKKEHR ZUM STÜTZPUNKT
-STR_DESTINATION_ALIEN_BASE
-ZIEL: AUSSERIRDISCHEN-STÜTZPUNKT-
-STR_DESTINATION_CRASH_SITE
-ZIEL: ABSTURZSTELLE-
-STR_DESTINATION_LANDING_SITE
-ZIEL: LANDEPLATZ-
-STR_DESTINATION_WAY_POINT
-ZIEL: WEGMARKE-
+STR_DESTINATION_UC
+ZIEL: 
 STR_SPEED_
 GESCHWINDIGKEIT>
 STR_MAXIMUM_SPEED_UC
@@ -739,7 +731,7 @@ STR_LANDING_SITE_
 LANDEPLATZ-
 STR_WAY_POINT_
 WEGMARKE-
-STR_TERROR_SITE_
+STR_TERROR_SITE_UC
 TERRORISTENLAGER-
 STR_HAS_REACHED
 erreicht
@@ -1761,6 +1753,12 @@ STR_GRAPHS
 DIAGRAMME
 STR_UFOPAEDIA_UC
 UFOPÄDIE
+STR_NEW_BATTLE
+New Battle
+STR_THE_SIMULATRON
+THE SIMULATRON
+STR_OPTIONS_
+Optionen
 STR_OPTIONS
 OPTIONEN
 STR_FUNDING_UC

@@ -37,10 +37,11 @@ class SavedBattleGame;
 class TextList;
 class Language;
 class UfopaediaSaved;
-class RuleResearchProject;
+class RuleResearch;
 class ResearchProject;
 class Soldier;
-class RuleManufactureInfo;
+class RuleManufacture;
+class TerrorSite;
 
 /**
  * Enumerator containing all the possible game difficulties.
@@ -58,20 +59,20 @@ private:
 	GameDifficulty _difficulty;
 	GameTime *_time;
 	int _funds;
+	std::map<std::string, int> _ids;
 	std::vector<Country*> _countries;
 	std::vector<Region*> _regions;
 	std::vector<Base*> _bases;
 	std::vector<Ufo*> _ufos;
-	std::map<std::string, int> _craftId;
 	std::vector<Waypoint*> _waypoints;
-	int _ufoId, _waypointId, _soldierId;
+	std::vector<TerrorSite*> _terrorSites;
 	SavedBattleGame *_battleGame;
 	UfopaediaSaved *_ufopaedia;
-	std::vector<const RuleResearchProject *> _discovered;
+	std::vector<const RuleResearch *> _discovered;
 
 	/// Check whether a ResearchProject can be researched
-	bool isResearchAvailable (RuleResearchProject * r, const std::vector<const RuleResearchProject *> & unlockeds) const;
-	void getDependableResearchBasic (std::vector<RuleResearchProject *> & dependables, const RuleResearchProject *research, Ruleset * ruleset, Base * base) const;
+	bool isResearchAvailable (RuleResearch * r, const std::vector<const RuleResearch *> & unlocked, Ruleset * ruleset) const;
+	void getDependableResearchBasic (std::vector<RuleResearch *> & dependables, const RuleResearch *research, Ruleset * ruleset, Base * base) const;
 public:
 	/// Creates a new save with a certain difficulty.
 	SavedGame(GameDifficulty difficulty);
@@ -91,6 +92,10 @@ public:
 	void monthlyFunding();
 	/// Gets the current game time.
 	GameTime *const getTime() const;
+	/// Gets the current ID for an object.
+	int getId(const std::string &name);
+	/// Initializes te IDs list.
+	void initIds(const std::map<std::string, int> &ids);
 	/// Gets the list of countries.
 	std::vector<Country*> *const getCountries();
 	/// Gets the total country funding.
@@ -101,16 +106,12 @@ public:
 	std::vector<Base*> *const getBases();
 	/// Gets the total base maintenance.
 	int getBaseMaintenance() const;
-	/// Gets the current craft IDs.
-	std::map<std::string, int> *const getCraftIds();
 	/// Gets the list of UFOs.
 	std::vector<Ufo*> *const getUfos();
-	/// Gets the current UFO ID.
-	int *const getUfoId();
 	/// Gets the list of waypoints.
 	std::vector<Waypoint*> *const getWaypoints();
-	/// Gets the current waypoint ID.
-	int *const getWaypointId();
+	/// Gets the list of terror sites.
+	std::vector<TerrorSite*> *const getTerrorSites();
 	/// Gets the current battle game.
 	SavedBattleGame *const getBattleGame();
 	/// Sets the current battle game.
@@ -118,25 +119,23 @@ public:
 	/// Gets the current Ufopaedia parameters.
 	UfopaediaSaved *getUfopaedia();
 	/// Add a finished ResearchProject
-	void addFinishedResearch (const RuleResearchProject * r, Ruleset * ruleset = NULL);
+	void addFinishedResearch (const RuleResearch * r, Ruleset * ruleset = NULL);
 	/// Get the list of already discovered research projects
-	const std::vector<const RuleResearchProject *> & getDiscoveredResearchs() const;
+	const std::vector<const RuleResearch *> & getDiscoveredResearch() const;
 	/// Get the list of ResearchProject which can be researched in a Base
-	void getAvailableResearchProjects (std::vector<RuleResearchProject *> & projects, Ruleset * ruleset, Base * base) const;
+	void getAvailableResearchProjects (std::vector<RuleResearch *> & projects, Ruleset * ruleset, Base * base) const;
 	/// Get the list of Productions which can be manufactured in a Base
-	void getAvailableProductions (std::vector<RuleManufactureInfo *> & productions, Ruleset * ruleset, Base * base) const;
+	void getAvailableProductions (std::vector<RuleManufacture *> & productions, Ruleset * ruleset, Base * base) const;
 	/// Get the list of newly available research projects once a research has been completed.
-	void getDependableResearch (std::vector<RuleResearchProject *> & dependables, const RuleResearchProject *research, Ruleset * ruleset, Base * base) const;
+	void getDependableResearch (std::vector<RuleResearch *> & dependables, const RuleResearch *research, Ruleset * ruleset, Base * base) const;
 	/// Gets if a research has been unlocked.
 	bool isResearched(const std::string &research) const;
-	/// Gets the current soldier ID.
-	int *const getSoldierId() ;
 	/// Gets the soldier matching this ID.
 	Soldier *const getSoldier(int id) const;
 	/// Handles the higher promotions.
 	bool handlePromotions();
 	/// Checks how many soldiers of a rank exist and which one has the highest score.
-	void inspectSoldiers(Soldier **highestRanked, int *total, int rank);
+	void inspectSoldiers(Soldier **highestRanked, size_t *total, int rank);
 	/// Gets saved game difficulty.
 	GameDifficulty getDifficulty() const;
 };

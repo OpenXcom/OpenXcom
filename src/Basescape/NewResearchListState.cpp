@@ -27,8 +27,8 @@
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
 #include "../Savegame/Base.h"
-#include "ResearchProjectState.h"
-#include "../Ruleset/RuleResearchProject.h"
+#include "ResearchInfoState.h"
+#include "../Ruleset/RuleResearch.h"
 #include "../Ruleset/Ruleset.h"
 #include <algorithm>
 
@@ -93,12 +93,12 @@ void NewResearchListState::init()
 }
 
 /**
- * Select the RuleResearchProject to work on.
+ * Select the RuleResearch to work on.
  * @param action Pointer to an action.
  */
 void NewResearchListState::onSelectProject(Action *action)
 {
-	_game->pushState(new ResearchProjectState(_game, _base, _projects[_lstResearch->getSelectedRow()]));
+	_game->pushState(new ResearchInfoState(_game, _base, _projects[_lstResearch->getSelectedRow()]));
 }
 
 /**
@@ -118,7 +118,7 @@ void NewResearchListState::fillProjectList ()
 	_projects.clear();
 	_lstResearch->clearList();
 	_game->getSavedGame()->getAvailableResearchProjects(_projects, _game->getRuleset() , _base);
-	for (std::vector<RuleResearchProject *>::iterator it = _projects.begin (); it != _projects.end (); ++it)
+	for (std::vector<RuleResearch *>::iterator it = _projects.begin (); it != _projects.end (); ++it)
 	{
 		_lstResearch->addRow(1, _game->getLanguage()->getString((*it)->getName ()).c_str());
 	}

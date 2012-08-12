@@ -475,8 +475,6 @@ STR_ALIEN_BASE_ASSAULT_BRIEFING
 XCom operatives have gained entrance to an alien base.  The control centre must be destroyed to render the base inoperative.  The Mission will terminate when all enemies are eliminated, or when your squad has returned to the green exit area (click on the 'abort mission' icon to escape).
 STR_CYDONIA_BRIEFING
 You have arrived in Cydonia.  You gain entry to a large underground complex near the Martian Sphinx.  You must destroy the Alien Brain that controls all alien activity.  The fate of humanity is in your hands....
-STR_TERROR_SITE_UC
-TERROR SITE-
 STR_TERROR_MISSION
 TERROR MISSION
 STR_TERROR_MISSION_BRIEFING
@@ -559,14 +557,8 @@ STR_INTERCEPTING_UFO
 INTERCEPTING UFO-
 STR_RETURNING_TO_BASE
 RETURNING TO BASE
-STR_DESTINATION_ALIEN_BASE
-DESTINATION: ALIEN BASE-
-STR_DESTINATION_CRASH_SITE
-DESTINATION: CRASH SITE-
-STR_DESTINATION_LANDING_SITE
-DESTINATION: LANDING SITE-
-STR_DESTINATION_WAY_POINT
-DESTINATION: WAY POINT-
+STR_DESTINATION_UC
+DESTINATION: 
 STR_SPEED_
 SPEED>
 STR_MAXIMUM_SPEED_UC
@@ -739,7 +731,7 @@ STR_LANDING_SITE_
 LANDING SITE-
 STR_WAY_POINT_
 WAY POINT-
-STR_TERROR_SITE_
+STR_TERROR_SITE_UC
 TERROR SITE-
 STR_HAS_REACHED
 has reached
@@ -1761,6 +1753,12 @@ STR_GRAPHS
 GRAPHS
 STR_UFOPAEDIA_UC
 UFOPAEDIA
+STR_NEW_BATTLE
+New Battle
+STR_THE_SIMULATRON
+THE SIMULATRON
+STR_OPTIONS_
+Options
 STR_OPTIONS
 OPTIONS
 STR_FUNDING_UC

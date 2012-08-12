@@ -143,7 +143,6 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 	else
 	{
 		Ufo *u = dynamic_cast<Ufo*>(_craft->getDestination());
-		Waypoint *w = dynamic_cast<Waypoint*>(_craft->getDestination());
 		if (u != 0)
 		{
 			if (!u->isCrashed())
@@ -152,12 +151,12 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 			}
 			else
 			{
-				ss << _game->getLanguage()->getString("STR_DESTINATION_CRASH_SITE") << u->getId();
+				ss << _game->getLanguage()->getString("STR_DESTINATION_UC") << u->getName(_game->getLanguage());
 			}
 		}
-		else if (w != 0)
+		else
 		{
-			ss << _game->getLanguage()->getString("STR_DESTINATION_WAY_POINT") << w->getId();
+			ss << _game->getLanguage()->getString("STR_DESTINATION_UC") << _craft->getDestination()->getName(_game->getLanguage());
 		}
 	}
 	_txtStatus->setText(ss.str());
@@ -306,8 +305,7 @@ void GeoscapeCraftState::btnTargetClick(Action *action)
 	// Go to the last known UFO position
 	if (_waypoint != 0)
 	{
-		_waypoint->setId(*_game->getSavedGame()->getWaypointId());
-		(*_game->getSavedGame()->getWaypointId())++;
+		_waypoint->setId(_game->getSavedGame()->getId("STR_WAYPOINT"));
 		_game->getSavedGame()->getWaypoints()->push_back(_waypoint);
 		_craft->setDestination(_waypoint);
 	}

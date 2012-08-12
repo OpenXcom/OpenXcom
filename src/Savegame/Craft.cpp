@@ -28,6 +28,9 @@
 #include "ItemContainer.h"
 #include "Soldier.h"
 #include "Base.h"
+#include "Ufo.h"
+#include "Waypoint.h"
+#include "TerrorSite.h"
 
 namespace OpenXcom
 {
@@ -39,13 +42,12 @@ namespace OpenXcom
  * @param base Pointer to base of origin.
  * @param ids List of craft IDs (Leave NULL for no ID).
  */
-Craft::Craft(RuleCraft *rules, Base *base, std::map<std::string, int> *ids) : MovingTarget(), _rules(rules), _base(base), _id(0), _fuel(0), _damage(0), _weapons(), _status("STR_READY"), _lowFuel(false), _inBattlescape(false)
+Craft::Craft(RuleCraft *rules, Base *base, int id) : MovingTarget(), _rules(rules), _base(base), _id(0), _fuel(0), _damage(0), _weapons(), _status("STR_READY"), _lowFuel(false), _inBattlescape(false)
 {
 	_items = new ItemContainer();
-	if (ids != 0)
+	if (id != 0)
 	{
-		_id = (*ids)[_rules->getType()];
-		(*ids)[_rules->getType()]++;
+		_id = id;
 	}
 	for (int i = 0; i < _rules->getWeapons(); ++i)
 	{
@@ -70,12 +72,57 @@ Craft::~Craft()
  * @param node YAML node.
  * @param rule Ruleset for the saved game.
  */
-void Craft::load(const YAML::Node &node, const Ruleset *rule)
+void Craft::load(const YAML::Node &node, const Ruleset *rule, SavedGame *save)
 {
 	MovingTarget::load(node);
 	node["id"] >> _id;
 	node["fuel"] >> _fuel;
 	node["damage"] >> _damage;
+
+	if (const YAML::Node *pName = node.FindValue("dest"))
+	{
+		std::string type;
+		int id;
+		(*pName)["type"] >> type;
+		(*pName)["id"] >> id;
+		if (type == "STR_BASE")
+		{
+			returnToBase();
+		}
+		else if (type == "STR_UFO")
+		{
+			for (std::vector<Ufo*>::iterator i = save->getUfos()->begin(); i != save->getUfos()->end(); ++i)
+			{
+				if ((*i)->getId() == id)
+				{
+					setDestination(*i);
+					break;
+				}
+			}
+		}
+		else if (type == "STR_WAYPOINT")
+		{
+			for (std::vector<Waypoint*>::iterator i = save->getWaypoints()->begin(); i != save->getWaypoints()->end(); ++i)
+			{
+				if ((*i)->getId() == id)
+				{
+					setDestination(*i);
+					break;
+				}
+			}
+		}
+		else if (type == "STR_TERROR_SITE")
+		{
+			for (std::vector<TerrorSite*>::iterator i = save->getTerrorSites()->begin(); i != save->getTerrorSites()->end(); ++i)
+			{
+				if ((*i)->getId() == id)
+				{
+					setDestination(*i);
+					break;
+				}
+			}
+		}
+	}
 
 	unsigned int j = 0;
 	for (YAML::Iterator i = node["weapons"].begin(); i != node["weapons"].end(); ++i)

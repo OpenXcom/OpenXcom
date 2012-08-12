@@ -475,8 +475,6 @@ STR_ALIEN_BASE_ASSAULT_BRIEFING
 Бойцы X-COM проникли на базу пришельцев. Для уничтожения базы необходимо разрушить командный центр. Все находящиеся на базе пришельцы должны быть уничтожены или нейтрализованы. В случае необходимости прервать миссию, верните бойцов в зеленую зону высадки и нажмите кнопку "прервать задание".
 STR_CYDONIA_BRIEFING
 Вы прибыли в Кидонию. Необходимо проникнуть в подземный компллекс сооружений рядом с Марсианским Сфинксом. Вы должны найти и уничтожить центральный мозг инопланетной колонии, управляющий вторжением. Судьба человечества находится в ваших руках..
-STR_TERROR_SITE_UC
-УЧАСТОК ТЕРРОРА-
 STR_TERROR_MISSION
 ПОДАВЛЕНИЕ ТЕРРОРА
 STR_TERROR_MISSION_BRIEFING
@@ -559,14 +557,8 @@ STR_INTERCEPTING_UFO
 ПЕРЕХВАТ НЛО-
 STR_RETURNING_TO_BASE
 ВОЗВРАТ НА БАЗУ
-STR_DESTINATION_ALIEN_BASE
-ПУНКТ НАЗНАЧЕНИЯ: БАЗА ПРИШЕЛЬЦЕВ
-STR_DESTINATION_CRASH_SITE
-ПУНКТ НАЗНАЧЕНИЯ: МЕСТО АВАРИИ-
-STR_DESTINATION_LANDING_SITE
-ПУНКТ НАЗНАЧЕНИЯ: МЕСТО ПОСАДКИ-
-STR_DESTINATION_WAY_POINT
-ПУНКТ НАЗНАЧЕНИЯ: УКАЗАННАЯ ТОЧКА-
+STR_DESTINATION_UC
+ПУНКТ НАЗНАЧЕНИЯ: 
 STR_SPEED_
 СКОРОСТЬ>
 STR_MAXIMUM_SPEED_UC
@@ -739,7 +731,7 @@ STR_LANDING_SITE_
 МЕСТО ПОСАДКИ-
 STR_WAY_POINT_
 УКАЗАННАЯ ТОЧКА-
-STR_TERROR_SITE_
+STR_TERROR_SITE_UC
 УЧАСТОК ТЕРРОРА-
 STR_HAS_REACHED
 достиг
@@ -1761,6 +1753,12 @@ STR_GRAPHS
 ГРАФИКИ
 STR_UFOPAEDIA_UC
 НЛОПЕДИЯ
+STR_NEW_BATTLE
+New Battle
+STR_THE_SIMULATRON
+THE SIMULATRON
+STR_OPTIONS_
+Options
 STR_OPTIONS
 ПАРАМЕТРЫ
 STR_FUNDING_UC

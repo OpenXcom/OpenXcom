@@ -25,7 +25,7 @@
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
-#include "../Ruleset/RuleResearchProject.h"
+#include "../Ruleset/RuleResearch.h"
 #include "../Basescape/ResearchState.h"
 
 namespace OpenXcom
@@ -36,7 +36,7 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param possibilities List of newly possible ResearchProject
  */
-NewPossibleResearchState::NewPossibleResearchState(Game * game, Base * base, const std::vector<RuleResearchProject *> & possibilities) : State (game), _base(base)
+NewPossibleResearchState::NewPossibleResearchState(Game * game, Base * base, const std::vector<RuleResearch *> & possibilities) : State (game), _base(base)
 {
 	_screen = false;
 
@@ -78,7 +78,7 @@ NewPossibleResearchState::NewPossibleResearchState(Game * game, Base * base, con
 	_lstPossibilities->setColumns(1, 288);
 	_lstPossibilities->setBig();
 	_lstPossibilities->setAlign(ALIGN_CENTER);
-	for(std::vector<RuleResearchProject *>::const_iterator iter = possibilities.begin (); iter != possibilities.end (); ++iter)
+	for(std::vector<RuleResearch *>::const_iterator iter = possibilities.begin (); iter != possibilities.end (); ++iter)
 	{
 		_lstPossibilities->addRow (1, _game->getLanguage()->getString((*iter)->getName ()).c_str());
 	}

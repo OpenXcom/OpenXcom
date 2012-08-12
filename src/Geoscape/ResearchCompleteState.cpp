@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "EndResearchState.h"
+#include "ResearchCompleteState.h"
 #include "../Engine/Game.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Language.h"
@@ -24,7 +24,7 @@
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
-#include "../Ruleset/RuleResearchProject.h"
+#include "../Ruleset/RuleResearch.h"
 #include "../Ufopaedia/Ufopaedia.h"
 #include <algorithm>
 
@@ -35,7 +35,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param research Pointer to the completed research.
  */
-EndResearchState::EndResearchState(Game * game, const RuleResearchProject * research) : State (game), _research(research)
+ResearchCompleteState::ResearchCompleteState(Game * game, const RuleResearch * research) : State (game), _research(research)
 {
 	_screen = false;
 
@@ -59,10 +59,10 @@ EndResearchState::EndResearchState(Game * game, const RuleResearchProject * rese
 
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)&EndResearchState::btnOkClick);
+	_btnOk->onMouseClick((ActionHandler)&ResearchCompleteState::btnOkClick);
 	_btnReport->setColor(Palette::blockOffset(8)+5);
 	_btnReport->setText(_game->getLanguage()->getString("STR_VIEW_REPORTS"));
-	_btnReport->onMouseClick((ActionHandler)&EndResearchState::btnReportClick);
+	_btnReport->onMouseClick((ActionHandler)&ResearchCompleteState::btnReportClick);
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
@@ -73,7 +73,7 @@ EndResearchState::EndResearchState(Game * game, const RuleResearchProject * rese
 /**
  * Resets the palette.
  */
-void EndResearchState::init()
+void ResearchCompleteState::init()
 {
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
 }
@@ -82,7 +82,7 @@ void EndResearchState::init()
  * return to the previous screen
  * @param action Pointer to an action.
  */
-void EndResearchState::btnOkClick(Action *action)
+void ResearchCompleteState::btnOkClick(Action *action)
 {
 	_game->popState ();
 }
@@ -91,7 +91,7 @@ void EndResearchState::btnOkClick(Action *action)
  * open the Ufopaedia to the entry about the Research.
  * @param action Pointer to an action.
  */
-void EndResearchState::btnReportClick(Action *action)
+void ResearchCompleteState::btnReportClick(Action *action)
 {
 	_game->popState();
 	std::string name (_research->getName ());

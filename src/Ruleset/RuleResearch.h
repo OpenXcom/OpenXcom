@@ -16,51 +16,48 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_RULRESEARCHPROJECT_H
-#define OPENXCOM_RULRESEARCHPROJECT_H
+#ifndef OPENXCOM_RULERESEARCH_H
+#define OPENXCOM_RULERESEARCH_H
 
 #include <string>
 #include <vector>
+#include <yaml-cpp/yaml.h>
 
 namespace OpenXcom
 {
 /**
    Represent one research project.
-   Dependency and unlock. Dependency is the list of RuleResearchProject which must be discovered before a RuleResearchProject became available. Unlock  are used to immediately unlock a RuleResearchProject(even if not all dependency have been researched).
+   Dependency and unlock. Dependency is the list of RuleResearch which must be discovered before a RuleResearch became available. Unlock  are used to immediately unlock a RuleResearch(even if not all dependency have been researched).
 
-   Fake ResearchProject. A RuleResearchProject is fake one, if t's cost is 0. They are used to to create check point in the dependency tree.
+   Fake ResearchProject. A RuleResearch is fake one, if t's cost is 0. They are used to to create check point in the dependency tree.
    For example if we have a Research E which need either A & B or C & D. We create 2 fake research project:
    * F which need A & B
    * G which need C & D
    both F and G can unlock E.
 */
-class RuleResearchProject
+class RuleResearch
 {
  private:
 	std::string _name;
-	std::wstring _description;
 	int _cost;
-	std::vector<RuleResearchProject *> _dependencys;
-	std::vector<RuleResearchProject *> _unlocks;
+	std::vector<std::string> _dependencies, _unlocks;
 	bool _needItem;
 public:
-	RuleResearchProject(const std::string & name, int cost);
-	/// Add a Dependency
-	void addDependency (RuleResearchProject * rp);
+	RuleResearch(const std::string & name);
+	/// Loads the research from YAML.
+	void load(const YAML::Node& node);
+	/// Saves the research to YAML.
+	void save(YAML::Emitter& out) const;
 	/// Get time needed to discover this ResearchProject
 	int getCost() const;
 	/// Get the research name
 	const std::string & getName () const;
-	/// Get the research dependencys
-	const std::vector<RuleResearchProject *> & getDependencys () const;
+	/// Get the research dependencies
+	const std::vector<std::string> & getDependencies () const;
 	/// Does this ResearchProject need a corresponding Item to be researched ?
 	bool needItem() const;
-	/// Set if this ResearchProject need a corresponding Item to be researched.
-	void setNeedItem(bool b);
 	/// Get the list of ResearchProjects unlocked by this research
-	const std::vector<RuleResearchProject *> & getUnlocked () const;
-	/// Add a ResearchProject which can be unlocked
-	void addUnlocked (RuleResearchProject * rp);
+	const std::vector<std::string> & getUnlocked () const;
 };
 }
 

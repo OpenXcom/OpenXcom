@@ -16,37 +16,40 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_BRIEFINGCRASHSTATE_H
-#define OPENXCOM_BRIEFINGCRASHSTATE_H
+#ifndef OPENXCOM_TERRORSITE_H
+#define OPENXCOM_TERRORSITE_H
 
-#include "../Engine/State.h"
+#include "Target.h"
+#include <string>
+#include <yaml-cpp/yaml.h>
 
 namespace OpenXcom
 {
 
-class TextButton;
-class Window;
-class Text;
-class Craft;
-
 /**
- * Briefing screen which displays info
- * about a Crash Site mission.
+ * Represents an alien terror site on the world.
  */
-class BriefingCrashState : public State
+class TerrorSite : public Target
 {
 private:
-	TextButton *_btnOk;
-	Window *_window;
-	Text *_txtTitle, *_txtUfo, *_txtCraft, *_txtBriefing;
-	Craft *_craft;
+	int _id;
 public:
-	/// Creates the Crash Briefing state.
-	BriefingCrashState(Game *game, Craft *craft);
-	/// Cleans up the Crash Briefing state.
-	~BriefingCrashState();
-	/// Handler for clicking the Ok button.
-	void btnOkClick(Action *action);
+	/// Creates a terror site.
+	TerrorSite();
+	/// Cleans up the terror site.
+	~TerrorSite();
+	/// Loads the terror site from YAML.
+	void load(const YAML::Node& node);
+	/// Saves the terror site to YAML.
+	void save(YAML::Emitter& out) const;
+	/// Saves the terror site's ID to YAML.
+	void saveId(YAML::Emitter& out) const;
+	/// Gets the terror site's ID.
+	int getId() const;
+	/// Sets the terror site's ID.
+	void setId(int id);
+	/// Gets the terror site's name.
+	std::wstring getName(Language *lang) const;
 };
 
 }

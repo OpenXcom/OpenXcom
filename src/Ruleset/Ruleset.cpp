@@ -18,7 +18,6 @@
  */
 #include "Ruleset.h"
 #include <fstream>
-#include <yaml-cpp/yaml.h>
 #include "../Engine/Options.h"
 #include "../Engine/Exception.h"
 #include "../Engine/CrossPlatform.h"
@@ -39,8 +38,13 @@
 #include "Armor.h"
 #include "ArticleDefinition.h"
 #include "RuleInventory.h"
-#include "RuleResearchProject.h"
-#include "RuleManufactureInfo.h"
+#include "RuleResearch.h"
+#include "RuleManufacture.h"
+#include "../Savegame/Region.h"
+#include "../Savegame/Base.h"
+#include "../Savegame/Country.h"
+#include "../Savegame/Soldier.h"
+#include "../Savegame/Craft.h"
 
 namespace OpenXcom
 {
@@ -136,11 +140,11 @@ Ruleset::~Ruleset()
 	{
 		delete i->second;
 	}
-	for (std::map<std::string, RuleResearchProject *>::const_iterator i = _researchProjects.begin (); i != _researchProjects.end (); ++i)
+	for (std::map<std::string, RuleResearch *>::const_iterator i = _research.begin (); i != _research.end (); ++i)
 	{
 		delete i->second;
 	}
-	for (std::map<std::string, RuleManufactureInfo *>::const_iterator i = _manufacture.begin (); i != _manufacture.end (); ++i)
+	for (std::map<std::string, RuleManufacture *>::const_iterator i = _manufacture.begin (); i != _manufacture.end (); ++i)
 	{
 		delete i->second;
 	}
@@ -301,6 +305,7 @@ void Ruleset::load(const std::string &filename)
 				{
 					rule = new RuleUfo(type);
 					_ufos[type] = rule;
+					_ufosIndex.push_back(type);
 				}
 				rule->load(*j, this);
 			}
@@ -439,6 +444,51 @@ void Ruleset::load(const std::string &filename)
 				rule->load(*j);
 			}
 		}
+		else if (key == "research")
+		{
+			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
+			{
+				std::string type;
+				(*j)["name"] >> type;
+				RuleResearch *rule;
+				if (_research.find(type) != _research.end())
+				{
+					rule = _research[type];
+				}
+				else
+				{
+					rule = new RuleResearch(type);
+					_research[type] = rule;
+					_researchIndex.push_back(type);
+				}
+				rule->load(*j);
+			}
+		}
+		else if (key == "manufacture")
+		{
+			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
+			{
+				std::string type;
+				(*j)["name"] >> type;
+				RuleManufacture *rule;
+				if (_manufacture.find(type) != _manufacture.end())
+				{
+					rule = _manufacture[type];
+				}
+				else
+				{
+					rule = new RuleManufacture(type);
+					_manufacture[type] = rule;
+					_manufactureIndex.push_back(type);
+				}
+				rule->load(*j);
+			}
+		}
+		else if (key == "startingBase")
+		{
+			//_startingBase->load(i.second(), 0);
+			_startingBase = i.second().Clone();
+		}
 		else if (key == "costSoldier")
 		{
 			i.second() >> _costSoldier;
@@ -575,6 +625,22 @@ void Ruleset::save(const std::string &filename) const
 		i->second->save(out);
 	}
 	out << YAML::EndSeq;
+	out << YAML::Key << "research" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::map<std::string, RuleResearch*>::const_iterator i = _research.begin(); i != _research.end(); ++i)
+	{
+		i->second->save(out);
+	}
+	out << YAML::EndSeq;
+	out << YAML::Key << "manufacture" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::map<std::string, RuleManufacture*>::const_iterator i = _manufacture.begin(); i != _manufacture.end(); ++i)
+	{
+		i->second->save(out);
+	}
+	out << YAML::EndSeq;
+	/*out << YAML::Key << "startingBase" << YAML::Value;
+	_startingBase->save(out);*/
 	out << YAML::Key << "costSoldier" << YAML::Value << _costSoldier;
 	out << YAML::Key << "costEngineer" << YAML::Value << _costEngineer;
 	out << YAML::Key << "costScientist" << YAML::Value << _costScientist;
@@ -585,13 +651,58 @@ void Ruleset::save(const std::string &filename) const
 }
 
 /**
- * Generates a brand new blank saved game.
+ * Generates a brand new saved game with starting data.
  * @param diff Difficulty for the save.
  * @return New saved game.
  */
 SavedGame *Ruleset::newSave(GameDifficulty diff) const
 {
 	SavedGame *save = new SavedGame(diff);
+
+	// Add countries
+	for (std::vector<std::string>::const_iterator i = _countriesIndex.begin(); i != _countriesIndex.end(); ++i)
+	{
+		save->getCountries()->push_back(new Country(getCountry(*i)));
+	}
+	save->setFunds(save->getCountryFunding());
+
+	// Add regions
+	for (std::vector<std::string>::const_iterator i = _regionsIndex.begin(); i != _regionsIndex.end(); ++i)
+	{
+		save->getRegions()->push_back(new Region(getRegion(*i)));
+	}
+
+	// Set up IDs
+	std::map<std::string, int> ids;
+	for (std::vector<std::string>::const_iterator i = _craftsIndex.begin(); i != _craftsIndex.end(); ++i)
+	{
+		ids[*i] = 1;
+	}
+	ids["STR_UFO"] = 1;
+	ids["STR_WAYPOINT"] = 1;
+	ids["STR_TERROR_SITE"] = 1;
+	ids["STR_SOLDIER"] = 1;
+	save->initIds(ids);
+
+	// Set up starting base
+	Base *base = new Base(this);
+	base->load(*_startingBase->begin(), save);
+
+	// Correct IDs
+	for (std::vector<Craft*>::const_iterator i = base->getCrafts()->begin(); i != base->getCrafts()->end(); ++i)
+	{
+		save->getId((*i)->getRules()->getType());
+	}
+
+	// Generate soldiers
+	for (int i = 0; i < 8; ++i)
+	{
+		Soldier *soldier = new Soldier(getSoldier("XCOM"), getArmor("STR_NONE_UC"), &_names, save->getId("STR_SOLDIER"));
+		soldier->setCraft(base->getCrafts()->front());
+		base->getSoldiers()->push_back(soldier);
+	}
+
+	save->getBases()->push_back(base);
 
 	return save;
 }
@@ -616,6 +727,16 @@ RuleCountry *const Ruleset::getCountry(const std::string &id) const
 }
 
 /**
+ * Returns the list of all countries.
+ * provided by the ruleset.
+ * @return List of countries.
+ */
+std::vector<std::string> Ruleset::getCountriesList() const
+{
+	return _countriesIndex;
+}
+
+/**
  * Returns the rules for the specified region.
  * @param id Region type.
  * @return Rules for the region.
@@ -623,6 +744,16 @@ RuleCountry *const Ruleset::getCountry(const std::string &id) const
 RuleRegion *const Ruleset::getRegion(const std::string &id) const
 {
 	return _regions.find(id)->second;
+}
+
+/**
+ * Returns the list of all regions
+ * provided by the ruleset.
+ * @return List of regions.
+ */
+std::vector<std::string> Ruleset::getRegionsList() const
+{
+	return _regionsIndex;
 }
 
 /**
@@ -716,6 +847,16 @@ std::vector<std::string> Ruleset::getItemsList() const
 RuleUfo *const Ruleset::getUfo(const std::string &id) const
 {
 	return _ufos.find(id)->second;
+}
+
+/**
+ * Returns the list of all ufos
+ * provided by the ruleset.
+ * @return List of ufos.
+ */
+std::vector<std::string> Ruleset::getUfosList() const
+{
+	return _ufosIndex;
 }
 
 /**
@@ -882,18 +1023,18 @@ RuleInventory *const Ruleset::getInventory(const std::string &id) const
  * @param id Research project type.
  * @return Rules for the research project.
  */
-RuleResearchProject *Ruleset::getResearchProject (const std::string &id) const
+RuleResearch *Ruleset::getResearch (const std::string &id) const
 {
-	return _researchProjects.find(id)->second;
+	return _research.find(id)->second;
 }
 
 /**
  * Returns the list of research projects.
  * @return The list of research projects.
  */
-const std::map<std::string, RuleResearchProject *> & Ruleset::getResearchProjects () const
+std::vector<std::string> Ruleset::getResearchList () const
 {
-	return _researchProjects;
+	return _researchIndex;
 }
 
 /**
@@ -901,7 +1042,7 @@ const std::map<std::string, RuleResearchProject *> & Ruleset::getResearchProject
  * @param id Manufacture project type.
  * @return Rules for the manufacture project.
  */
-RuleManufactureInfo *Ruleset::getManufactureProject (const std::string &id) const
+RuleManufacture *Ruleset::getManufacture (const std::string &id) const
 {
 	return _manufacture.find(id)->second;
 }
@@ -910,9 +1051,9 @@ RuleManufactureInfo *Ruleset::getManufactureProject (const std::string &id) cons
  * Returns the list of manufacture projects.
  * @return The list of manufacture projects.
  */
-const std::map<std::string, RuleManufactureInfo *> & Ruleset::getManufactureProjects () const
+std::vector<std::string> Ruleset::getManufactureList () const
 {
-	return _manufacture;
+	return _manufactureIndex;
 }
 
 }

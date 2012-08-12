@@ -475,8 +475,6 @@ STR_ALIEN_BASE_ASSAULT_BRIEFING
 Los hombres de XCom han entrado en una base alienígena. Hay que destruir el centro de control para que la base quede inservible. El objetivo de la misión es eliminar a todos los enemigos o devolver a tus hombres al área verde de salida (pulsa sobre el icono de 'Cancelar misión' para escapar).
 STR_CYDONIA_BRIEFING
 Has llegado a Cydonia. Entras en un gran complejo subterráneo cercano a la Esfinge Marciana. Tienes que destruir al cerebro alienígena que controla todas sus actividades. El destino de la humanidad está en tus manos.
-STR_TERROR_SITE_UC
-LUGAR DEL TERROR
 STR_TERROR_MISSION
 MISIÓN DE TERROR
 STR_TERROR_MISSION_BRIEFING
@@ -559,14 +557,8 @@ STR_INTERCEPTING_UFO
 INTERCEPTANDO A UN OVNI-
 STR_RETURNING_TO_BASE
 REGRESANDO A LA BASE
-STR_DESTINATION_ALIEN_BASE
-DESTINO: BASE ALIENÍGENA-
-STR_DESTINATION_CRASH_SITE
-DESTINO: LUGAR DEL CHOQUE-
-STR_DESTINATION_LANDING_SITE
-DESTINO: PUNTO DE ATERRIZAJE-
-STR_DESTINATION_WAY_POINT
-DESTINO: PUNTO MARCADO-
+STR_DESTINATION_UC
+DESTINO: 
 STR_SPEED_
 VELOCIDAD>
 STR_MAXIMUM_SPEED_UC
@@ -739,7 +731,7 @@ STR_LANDING_SITE_
 PUNTO DE ATERRIZAJE-
 STR_WAY_POINT_
 PUNTO MARCADO-
-STR_TERROR_SITE_
+STR_TERROR_SITE_UC
 LUGAR DEL TERROR-
 STR_HAS_REACHED
 ha llegado a
@@ -1761,6 +1753,12 @@ STR_GRAPHS
 GRáFICOS
 STR_UFOPAEDIA_UC
 OVNICLOPEDIA
+STR_NEW_BATTLE
+New Battle
+STR_THE_SIMULATRON
+THE SIMULATRON
+STR_OPTIONS_
+Opciones
 STR_OPTIONS
 OPCIONES
 STR_FUNDING_UC

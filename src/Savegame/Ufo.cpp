@@ -30,7 +30,7 @@ namespace OpenXcom
  * Initializes a UFO of the specified type.
  * @param rules Pointer to ruleset.
  */
-Ufo::Ufo(RuleUfo *rules) : MovingTarget(), _rules(rules), _id(0), _damage(0), _altitude(0), _direction("STR_NORTH"), _detected(false), _hoursCrashed(-1), _inBattlescape(false), _hit(0)
+Ufo::Ufo(RuleUfo *rules) : MovingTarget(), _rules(rules), _id(0), _damage(0), _altitude(1000), _direction("STR_NORTH"), _detected(false), _hoursCrashed(-1), _inBattlescape(false), _hit(0)
 {
 }
 
@@ -133,6 +133,9 @@ std::wstring Ufo::getName(Language *lang) const
 	std::wstringstream name;
 	if (!isCrashed())
 	{
+		// apparently this string is never actually used ingame??
+		//if (_altitude == 0)
+		//	name << lang->getString("STR_LANDING_SITE_") << _id;
 		name << lang->getString("STR_UFO_") << _id;
 	}
 	else

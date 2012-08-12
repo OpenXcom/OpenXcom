@@ -79,8 +79,9 @@ PlaceLiftState::~PlaceLiftState()
  */
 void PlaceLiftState::viewClick(Action *action)
 {
-	BaseFacility *fac = new BaseFacility(_game->getRuleset()->getBaseFacility("STR_ACCESS_LIFT"), _base, _view->getGridX(), _view->getGridY());
-	fac->setBuildTime(0);
+	BaseFacility *fac = new BaseFacility(_game->getRuleset()->getBaseFacility("STR_ACCESS_LIFT"), _base);
+	fac->setX(_view->getGridX());
+	fac->setY(_view->getGridY());
 	_base->getFacilities()->push_back(fac);
 	_game->popState();
 	_game->pushState(new BasescapeState(_game, _base, _globe));

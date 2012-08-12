@@ -18,6 +18,7 @@
  */
 #include "Base.h"
 #include <cmath>
+#include <algorithm>
 #include "BaseFacility.h"
 #include "../Ruleset/RuleBaseFacility.h"
 #include "Craft.h"
@@ -25,18 +26,12 @@
 #include "../Ruleset/Ruleset.h"
 #include "ItemContainer.h"
 #include "Soldier.h"
-#include "SavedGame.h"
-#include "Ufo.h"
-#include "Waypoint.h"
 #include "../Engine/Language.h"
 #include "../Ruleset/RuleItem.h"
-#include "../Ruleset/RuleManufactureInfo.h"
+#include "../Ruleset/RuleManufacture.h"
 #include "Transfer.h"
-#include <algorithm>
 #include "ResearchProject.h"
-#include "../Ruleset/RuleResearchProject.h"
 #include "Production.h"
-#include <algorithm>
 
 namespace OpenXcom
 {
@@ -92,12 +87,9 @@ void Base::load(const YAML::Node &node, SavedGame *save)
 
 	for (YAML::Iterator i = node["facilities"].begin(); i != node["facilities"].end(); ++i)
 	{
-		int x, y;
-		(*i)["x"] >> x;
-		(*i)["y"] >> y;
 		std::string type;
 		(*i)["type"] >> type;
-		BaseFacility *f = new BaseFacility(_rule->getBaseFacility(type), this, x, y);
+		BaseFacility *f = new BaseFacility(_rule->getBaseFacility(type), this);
 		f->load(*i);
 		_facilities.push_back(f);
 	}
@@ -107,47 +99,14 @@ void Base::load(const YAML::Node &node, SavedGame *save)
 		std::string type;
 		(*i)["type"] >> type;
 		Craft *c = new Craft(_rule->getCraft(type), this);
-		c->load(*i, _rule);
-		if (const YAML::Node *pName = (*i).FindValue("dest"))
-		{
-			std::string type;
-			int id;
-			(*pName)["type"] >> type;
-			(*pName)["id"] >> id;
-			if (type == "STR_BASE")
-			{
-				c->returnToBase();
-			}
-			else if (type == "STR_UFO")
-			{
-				for (std::vector<Ufo*>::iterator j = save->getUfos()->begin(); j != save->getUfos()->end(); ++j)
-				{
-					if ((*j)->getId() == id)
-					{
-						c->setDestination(*j);
-						break;
-					}
-				}
-			}
-			else if (type == "STR_WAYPOINT")
-			{
-				for (std::vector<Waypoint*>::iterator j = save->getWaypoints()->begin(); j != save->getWaypoints()->end(); ++j)
-				{
-					if ((*j)->getId() == id)
-					{
-						c->setDestination(*j);
-						break;
-					}
-				}
-			}
-		}
+		c->load(*i, _rule, save);		
 		_crafts.push_back(c);
 	}
 
 	for (YAML::Iterator i = node["soldiers"].begin(); i != node["soldiers"].end(); ++i)
 	{
 		Soldier *s = new Soldier(_rule->getSoldier("XCOM"), _rule->getArmor("STR_NONE_UC"));
-		s->load(*i);
+		s->load(*i, _rule);
 		if (const YAML::Node *pName = (*i).FindValue("craft"))
 		{
 			std::string type;
@@ -187,7 +146,7 @@ void Base::load(const YAML::Node &node, SavedGame *save)
 	{
 		std::string research;
 		(*i)["project"] >> research;
-		ResearchProject *r = new ResearchProject(_rule->getResearchProject(research));
+		ResearchProject *r = new ResearchProject(_rule->getResearch(research));
 		r->load(*i);
 		_research.push_back(r);
 	}
@@ -196,7 +155,7 @@ void Base::load(const YAML::Node &node, SavedGame *save)
 	{
 		std::string item;
 		(*i)["item"] >> item;
-		Production *p = new Production(_rule->getManufactureProject(item), 0);
+		Production *p = new Production(_rule->getManufacture(item), 0);
 		p->load(*i);
 		_productions.push_back(p);
 	}
@@ -435,9 +394,9 @@ int Base::getTotalScientists() const
 			total += (*i)->getQuantity();
 		}
 	}
-	const std::vector<ResearchProject *> & researchs (getResearch());
-	for (std::vector<ResearchProject *>::const_iterator itResearch = researchs.begin ();
-		 itResearch != researchs.end ();
+	const std::vector<ResearchProject *> & research (getResearch());
+	for (std::vector<ResearchProject *>::const_iterator itResearch = research.begin ();
+		 itResearch != research.end ();
 		 ++itResearch)
 	{
 		total += (*itResearch)->getAssigned ();
@@ -552,10 +511,10 @@ int Base::getAvailableStores() const
  */
 int Base::getUsedLaboratories() const
 {
-	const std::vector<ResearchProject *> & researchs (getResearch());
+	const std::vector<ResearchProject *> & research (getResearch());
 	int usedLabSpace = 0;
-	for (std::vector<ResearchProject *>::const_iterator itResearch = researchs.begin ();
-		 itResearch != researchs.end ();
+	for (std::vector<ResearchProject *>::const_iterator itResearch = research.begin ();
+		 itResearch != research.end ();
 		 ++itResearch)
 	{
 		usedLabSpace += (*itResearch)->getAssigned ();
@@ -591,7 +550,7 @@ int Base::getUsedWorkshops() const
 	int usedWorkShop = 0;
 	for (std::vector<Production *>::const_iterator iter = _productions.begin (); iter != _productions.end (); ++iter)
 	{
-		usedWorkShop += ((*iter)->getAssignedEngineers() + (*iter)->getRuleManufactureInfo()->getRequiredSpace ());
+		usedWorkShop += ((*iter)->getAssignedEngineers() + (*iter)->getRuleManufacture()->getRequiredSpace ());
 	}
 	return usedWorkShop;
 }
@@ -675,9 +634,9 @@ int Base::getFreeWorkshops () const
 int Base::getAllocatedScientists() const
 {
 	int total = 0;
-	const std::vector<ResearchProject *> & researchs (getResearch());
-	for (std::vector<ResearchProject *>::const_iterator itResearch = researchs.begin ();
-		 itResearch != researchs.end ();
+	const std::vector<ResearchProject *> & research (getResearch());
+	for (std::vector<ResearchProject *>::const_iterator itResearch = research.begin ();
+		 itResearch != research.end ();
 		 ++itResearch)
 	{
 		total += (*itResearch)->getAssigned ();

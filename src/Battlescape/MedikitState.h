@@ -39,8 +39,7 @@ class MedikitState : public State
 	InteractiveSurface *_surface;
 	MedikitView *_medikitView;
 	Text *_pkText, *_stimulantTxt,  *_healTxt, *_partTxt, *_woundTxt;
-	BattleUnit * _targetUnit;
-	BattleUnit *_unit;
+	BattleUnit * _targetUnit, *_unit;
 	BattleItem *_item;
 	BattleAction *_action;
 	/// Handler for end button
@@ -53,11 +52,11 @@ class MedikitState : public State
 	void onPainKillerClick(Action * action);
 	/// update medikit interface
 	void update();
-	/// Special handling for mouse clicks.
-	void mouseClick(Action *action);
 public:
 	/// Create the MedikitState
 	MedikitState (Game * game, BattleUnit * targetUnit, BattleAction *action);
+	/// Handler for right-clicking anything.
+	void handle(Action *action);
 };
 }
 

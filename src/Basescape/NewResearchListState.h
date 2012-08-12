@@ -28,7 +28,7 @@ class Window;
 class Text;
 class TextList;
 class Base;
-class RuleResearchProject;
+class RuleResearch;
 class ResearchState;
 
 /**
@@ -43,7 +43,7 @@ private:
 	Text *_txtTitle;
 	TextList *_lstResearch;
 	void onSelectProject(Action *action);
-	std::vector<RuleResearchProject *> _projects;
+	std::vector<RuleResearch *> _projects;
 public:
 	/// Creates the New research list state.
 	NewResearchListState(Game *game, Base *base);

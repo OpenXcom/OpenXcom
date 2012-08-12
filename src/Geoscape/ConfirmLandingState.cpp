@@ -32,7 +32,8 @@
 #include "../Savegame/Target.h"
 #include "../Savegame/Ufo.h"
 #include "../Ruleset/Ruleset.h"
-#include "../Battlescape/BriefingCrashState.h"
+#include "../Savegame/TerrorSite.h"
+#include "../Battlescape/BriefingState.h"
 #include "../Battlescape/BattlescapeGenerator.h"
 
 namespace OpenXcom
@@ -118,22 +119,37 @@ void ConfirmLandingState::btnYesClick(Action *action)
 {
 	_game->popState();
 	Ufo* u = dynamic_cast<Ufo*>(_craft->getDestination());
+	TerrorSite* t = dynamic_cast<TerrorSite*>(_craft->getDestination());
 	if (u != 0)
 	{
 		SavedBattleGame *bgame = new SavedBattleGame();
 		_game->getSavedGame()->setBattleGame(bgame);
 		bgame->setMissionType("STR_UFO_CRASH_RECOVERY");
-		BattlescapeGenerator *bgen = new BattlescapeGenerator(_game);
-		bgen->setWorldTexture(_texture);
-		bgen->setWorldShade(_shade);
-		bgen->setCraft(_craft);
-		bgen->setUfo(u);
-		bgen->setAlienRace("STR_SECTOID");
-		bgen->setAlienItemlevel(0);
-		bgen->run();
-		delete bgen;
+		BattlescapeGenerator bgen = BattlescapeGenerator(_game);
+		bgen.setWorldTexture(_texture);
+		bgen.setWorldShade(_shade);
+		bgen.setCraft(_craft);
+		bgen.setUfo(u);
+		bgen.setAlienRace("STR_SECTOID");
+		bgen.setAlienItemlevel(0);
+		bgen.run();
 
-		_game->pushState(new BriefingCrashState(_game, _craft));
+		_game->pushState(new BriefingState(_game, _craft));
+	}
+	else if (t != 0)
+	{
+		SavedBattleGame *bgame = new SavedBattleGame();
+		_game->getSavedGame()->setBattleGame(bgame);
+		bgame->setMissionType("STR_TERROR_MISSION");
+		BattlescapeGenerator bgen = BattlescapeGenerator(_game);
+		bgen.setWorldTexture(_texture);
+		bgen.setWorldShade(_shade);
+		bgen.setCraft(_craft);
+		bgen.setAlienRace("STR_SECTOID");
+		bgen.setAlienItemlevel(0);
+		bgen.run();
+
+		_game->pushState(new BriefingState(_game, _craft));
 	}
 }
 

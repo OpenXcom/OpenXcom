@@ -34,7 +34,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param str Error message to display.
  */
-GeoscapeErrorState::GeoscapeErrorState(Game *game, std::string str) : State(game)
+GeoscapeErrorState::GeoscapeErrorState(Game *game, std::wstring str) : State(game)
 {
 	_screen = false;
 
@@ -63,7 +63,7 @@ GeoscapeErrorState::GeoscapeErrorState(Game *game, std::string str) : State(game
 	_txtMessage->setVerticalAlign(ALIGN_MIDDLE);
 	_txtMessage->setBig();
 	_txtMessage->setWordWrap(true);
-	_txtMessage->setText(_game->getLanguage()->getString(str));
+	_txtMessage->setText(str);
 }
 
 /**

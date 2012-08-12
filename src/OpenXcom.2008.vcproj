@@ -699,11 +699,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Basescape\ListPossibleProductionState.cpp"
+				RelativePath=".\Basescape\NewManufactureListState.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Basescape\ListPossibleProductionState.h"
+				RelativePath=".\Basescape\NewManufactureListState.h"
 				>
 			</File>
 			<File
@@ -755,19 +755,19 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Basescape\ProductionStartState.cpp"
+				RelativePath=".\Basescape\ManufactureStartState.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Basescape\ProductionStartState.h"
+				RelativePath=".\Basescape\ManufactureStartState.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Basescape\ProductionState.cpp"
+				RelativePath=".\Basescape\ManufactureInfoState.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Basescape\ProductionState.h"
+				RelativePath=".\Basescape\ManufactureInfoState.h"
 				>
 			</File>
 			<File
@@ -787,11 +787,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Basescape\ResearchProjectState.cpp"
+				RelativePath=".\Basescape\ResearchInfoState.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Basescape\ResearchProjectState.h"
+				RelativePath=".\Basescape\ResearchInfoState.h"
 				>
 			</File>
 			<File
@@ -967,11 +967,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Battlescape\BriefingCrashState.cpp"
+				RelativePath=".\Battlescape\BriefingState.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Battlescape\BriefingCrashState.h"
+				RelativePath=".\Battlescape\BriefingState.h"
 				>
 			</File>
 			<File
@@ -1307,11 +1307,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Geoscape\EndResearchState.cpp"
+				RelativePath=".\Geoscape\ResearchCompleteState.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Geoscape\EndResearchState.h"
+				RelativePath=".\Geoscape\ResearchCompleteState.h"
 				>
 			</File>
 			<File
@@ -1411,11 +1411,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Geoscape\OptionsState.cpp"
+				RelativePath=".\Geoscape\GeoscapeOptionsState.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Geoscape\OptionsState.h"
+				RelativePath=".\Geoscape\GeoscapeOptionsState.h"
 				>
 			</File>
 			<File
@@ -1991,11 +1991,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Ruleset\RuleManufactureInfo.cpp"
+				RelativePath=".\Ruleset\RuleManufacture.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Ruleset\RuleManufactureInfo.h"
+				RelativePath=".\Ruleset\RuleManufacture.h"
 				>
 			</File>
 			<File
@@ -2007,11 +2007,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Ruleset\RuleResearchProject.cpp"
+				RelativePath=".\Ruleset\RuleResearch.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Ruleset\RuleResearchProject.h"
+				RelativePath=".\Ruleset\RuleResearch.h"
 				>
 			</File>
 			<File

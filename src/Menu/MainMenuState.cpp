@@ -29,7 +29,9 @@
 #include "../Engine/Music.h"
 #include "../Engine/Options.h"
 #include "NewGameState.h"
+#include "NewBattleState.h"
 #include "LoadGameState.h"
+#include "OptionsState.h"
 
 namespace OpenXcom
 {
@@ -42,8 +44,10 @@ MainMenuState::MainMenuState(Game *game) : State(game)
 {
 	// Create objects
 	_window = new Window(this, 256, 160, 32, 20, POPUP_BOTH);
-	_btnNew = new TextButton(192, 20, 64, 90);
-	_btnLoad = new TextButton(192, 20, 64, 118);
+	_btnNewGame = new TextButton(96, 20, 64, 90);
+	_btnNewBattle = new TextButton(96, 20, 160, 90);
+	_btnLoad = new TextButton(96, 20, 64, 118);
+	_btnOptions = new TextButton(96, 20, 160, 118);
 	_btnQuit = new TextButton(192, 20, 64, 146);
 	_txtTitle = new Text(256, 30, 32, 45);
 
@@ -52,8 +56,10 @@ MainMenuState::MainMenuState(Game *game) : State(game)
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
 
 	add(_window);
-	add(_btnNew);
+	add(_btnNewGame);
+	add(_btnNewBattle);
 	add(_btnLoad);
+	add(_btnOptions);
 	add(_btnQuit);
 	add(_txtTitle);
 
@@ -61,13 +67,21 @@ MainMenuState::MainMenuState(Game *game) : State(game)
 	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
-	_btnNew->setColor(Palette::blockOffset(8)+5);
-	_btnNew->setText(_game->getLanguage()->getString("STR_NEW_GAME"));
-	_btnNew->onMouseClick((ActionHandler)&MainMenuState::btnNewClick);
+	_btnNewGame->setColor(Palette::blockOffset(8)+5);
+	_btnNewGame->setText(_game->getLanguage()->getString("STR_NEW_GAME"));
+	_btnNewGame->onMouseClick((ActionHandler)&MainMenuState::btnNewGameClick);
+
+	_btnNewBattle->setColor(Palette::blockOffset(8)+5);
+	_btnNewBattle->setText(_game->getLanguage()->getString("STR_NEW_BATTLE"));
+	_btnNewBattle->onMouseClick((ActionHandler)&MainMenuState::btnNewBattleClick);
 
 	_btnLoad->setColor(Palette::blockOffset(8)+5);
 	_btnLoad->setText(_game->getLanguage()->getString("STR_LOAD_SAVED_GAME"));
 	_btnLoad->onMouseClick((ActionHandler)&MainMenuState::btnLoadClick);
+
+	_btnOptions->setColor(Palette::blockOffset(8)+5);
+	_btnOptions->setText(_game->getLanguage()->getString("STR_OPTIONS_"));
+	_btnOptions->onMouseClick((ActionHandler)&MainMenuState::btnOptionsClick);
 
 	_btnQuit->setColor(Palette::blockOffset(8)+5);
 	_btnQuit->setText(_game->getLanguage()->getString("STR_QUIT"));
@@ -106,9 +120,18 @@ void MainMenuState::init()
  * Opens the New Game window.
  * @param action Pointer to an action.
  */
-void MainMenuState::btnNewClick(Action *action)
+void MainMenuState::btnNewGameClick(Action *action)
 {
 	_game->setState(new NewGameState(_game));
+}
+
+/**
+ * Opens the New Battle screen.
+ * @param action Pointer to an action.
+ */
+void MainMenuState::btnNewBattleClick(Action *action)
+{
+	_game->pushState(new NewBattleState(_game));
 }
 
 /**
@@ -117,7 +140,16 @@ void MainMenuState::btnNewClick(Action *action)
  */
 void MainMenuState::btnLoadClick(Action *action)
 {
-	_game->pushState(new LoadGameState(_game));
+	_game->pushState(new LoadGameState(_game, true));
+}
+
+/**
+ * Opens the Options screen.
+ * @param action Pointer to an action.
+ */
+void MainMenuState::btnOptionsClick(Action *action)
+{
+	_game->pushState(new OptionsState(_game));
 }
 
 /**

@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_OPTIONSSTATE_H
-#define OPENXCOM_OPTIONSSTATE_H
+#ifndef OPENXCOM_GEOSCAPEOPTIONSSTATE_H
+#define OPENXCOM_GEOSCAPEOPTIONSSTATE_H
 
 #include "../Engine/State.h"
 
@@ -34,17 +34,17 @@ class Text;
  * Not to be confused with an actual Settings window that
  * might come later for changing game settings during runtime.
  */
-class OptionsState : public State
+class GeoscapeOptionsState : public State
 {
 private:
 	TextButton *_btnLoad, *_btnSave, *_btnAbandon, *_btnCancel;
 	Window *_window;
 	Text *_txtTitle;
 public:
-	/// Creates the Options state.
-	OptionsState(Game *game);
-	/// Cleans up the Options state.
-	~OptionsState();
+	/// Creates the Geoscape Options state.
+	GeoscapeOptionsState(Game *game);
+	/// Cleans up the Geoscape Options state.
+	~GeoscapeOptionsState();
 	/// Updates the palette.
 	void init();
 	/// Handler for clicking the Load Game button.

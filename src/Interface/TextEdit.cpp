@@ -21,6 +21,7 @@
 #include "../Engine/Action.h"
 #include "../Engine/Font.h"
 #include "../Engine/Timer.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -34,8 +35,6 @@ namespace OpenXcom
  */
 TextEdit::TextEdit(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _value(L""), _blink(true), _ascii(L'A'), _caretPos(0)
 {
-	_validButton = SDL_BUTTON_LEFT;
-
 	_text = new Text(width, height, 0, 0);
 	_timer = new Timer(100);
 	_timer->onTimer((SurfaceHandler)&TextEdit::blink);
@@ -253,35 +252,37 @@ void TextEdit::draw()
 {
 	Surface::draw();
 	_text->setText(_value);
-#ifdef DINGOO
-	std::wstring newValue = _value;
-	if (_isFocused && _blink)
+	if (Options::getInt("keyboardMode") == KEYBOARD_OFF)
 	{
-		newValue += _ascii;
-		_text->setText(newValue);
+		std::wstring newValue = _value;
+		if (_isFocused && _blink)
+		{
+			newValue += _ascii;
+			_text->setText(newValue);
+		}
 	}
-#endif
 	clear();
 	_text->blit(this);
-#ifndef DINGOO
-	if (_isFocused && _blink)
+	if (Options::getInt("keyboardMode") == KEYBOARD_ON)
 	{
-		int x = 0;
-		for (unsigned int i = 0; i < _caretPos; ++i)
+		if (_isFocused && _blink)
 		{
-			if (_value[i] == ' ')
+			int x = 0;
+			for (unsigned int i = 0; i < _caretPos; ++i)
 			{
-				x += _text->getFont()->getWidth() / 2;
+				if (_value[i] == ' ')
+				{
+					x += _text->getFont()->getWidth() / 2;
+				}
+				else
+				{
+					x += _text->getFont()->getChar(_value[i])->getCrop()->w + _text->getFont()->getSpacing();
+				}
 			}
-			else
-			{
-				x += _text->getFont()->getChar(_value[i])->getCrop()->w + _text->getFont()->getSpacing();
-			}
+			_caret->setX(x);
+			_caret->blit(this);
 		}
-		_caret->setX(x);
-		_caret->blit(this);
 	}
-#endif
 }
 
 /**
@@ -319,8 +320,11 @@ bool TextEdit::exceedsMaxWidth(wchar_t c)
  */
 void TextEdit::mousePress(Action *action, State *state)
 {
-	focus();
-		InteractiveSurface::mousePress(action, state);
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	{
+		focus();
+	}
+	InteractiveSurface::mousePress(action, state);
 }
 
 /**
@@ -331,82 +335,88 @@ void TextEdit::mousePress(Action *action, State *state)
  */
 void TextEdit::keyboardPress(Action *action, State *state)
 {
-	switch (action->getDetails()->key.keysym.sym)
+	if (Options::getInt("keyboardMode") == KEYBOARD_OFF)
 	{
-#ifdef DINGOO
-	case SDLK_UP:
-		_ascii++;
-		if (_ascii > L'~')
+		switch (action->getDetails()->key.keysym.sym)
 		{
-			_ascii = L' ';
-		}
-		break;
-	case SDLK_DOWN:
-		_ascii--;
-		if (_ascii < L' ')
-		{
-			_ascii = L'~';
-		}
-		break;
-	case SDLK_LEFT:
-		if (_value.length() > 0)
-		{
-			_value.resize(_value.length() - 1);
-		}
-		break;
-	case SDLK_RIGHT:
-		if (!exceedsMaxWidth(_ascii))
-		{
-			_value += _ascii;
-		}
-		break;
-#else
-	case SDLK_LEFT:
-		if (_caretPos > 0)
-		{
-			_caretPos--;
-		}
-		break;
-	case SDLK_RIGHT:
-		if (_caretPos < _value.length())
-		{
-			_caretPos++;
-		}
-		break;
-	case SDLK_HOME:
-		_caretPos = 0;
-		break;
-	case SDLK_END:
-		_caretPos = _value.length();
-		break;
-	case SDLK_BACKSPACE:
-		if (_caretPos > 0)
-		{
-			_value.erase(_caretPos - 1, 1);
-			_caretPos--;
-		}
-		break;
-	case SDLK_DELETE:
-		if (_caretPos < _value.length())
-		{
-			_value.erase(_caretPos, 1);
-		}
-		break;
-	case SDLK_RETURN:
-		_isFocused = false;
-		_blink = false;
-		_timer->stop();
-		break;
-	default:
-		if (action->getDetails()->key.keysym.unicode != 0)
-		{
-			if (action->getDetails()->key.keysym.unicode >= L' ' && action->getDetails()->key.keysym.unicode <= L'~' && !exceedsMaxWidth((wchar_t)action->getDetails()->key.keysym.unicode))
+		case SDLK_UP:
+			_ascii++;
+			if (_ascii > L'~')
 			{
-				_value.insert(_caretPos, 1, (wchar_t)action->getDetails()->key.keysym.unicode);
+				_ascii = L' ';
+			}
+			break;
+		case SDLK_DOWN:
+			_ascii--;
+			if (_ascii < L' ')
+			{
+				_ascii = L'~';
+			}
+			break;
+		case SDLK_LEFT:
+			if (_value.length() > 0)
+			{
+				_value.resize(_value.length() - 1);
+			}
+			break;
+		case SDLK_RIGHT:
+			if (!exceedsMaxWidth(_ascii))
+			{
+				_value += _ascii;
+			}
+			break;
+		}
+	}
+	else if (Options::getInt("keyboardMode") == KEYBOARD_ON)
+	{
+		switch (action->getDetails()->key.keysym.sym)
+		{
+		case SDLK_LEFT:
+			if (_caretPos > 0)
+			{
+				_caretPos--;
+			}
+			break;
+		case SDLK_RIGHT:
+			if (_caretPos < _value.length())
+			{
 				_caretPos++;
 			}
+			break;
+		case SDLK_HOME:
+			_caretPos = 0;
+			break;
+		case SDLK_END:
+			_caretPos = _value.length();
+			break;
+		case SDLK_BACKSPACE:
+			if (_caretPos > 0)
+			{
+				_value.erase(_caretPos - 1, 1);
+				_caretPos--;
+			}
+			break;
+		case SDLK_DELETE:
+			if (_caretPos < _value.length())
+			{
+				_value.erase(_caretPos, 1);
+			}
+			break;
+		case SDLK_RETURN:
+			_isFocused = false;
+			_blink = false;
+			_timer->stop();
+			break;
+		default:
+			if (action->getDetails()->key.keysym.unicode != 0)
+			{
+				if (action->getDetails()->key.keysym.unicode >= L' ' && action->getDetails()->key.keysym.unicode <= L'~' && !exceedsMaxWidth((wchar_t)action->getDetails()->key.keysym.unicode))
+				{
+					_value.insert(_caretPos, 1, (wchar_t)action->getDetails()->key.keysym.unicode);
+					_caretPos++;
+				}
+			}
 		}
-#endif
 	}
 	_redraw = true;
 

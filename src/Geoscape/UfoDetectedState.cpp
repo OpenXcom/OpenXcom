@@ -48,8 +48,7 @@ UfoDetectedState::UfoDetectedState(Game *game, Ufo *ufo, GeoscapeState *state, b
 	// Generate UFO ID
 	if (_ufo->getId() == 0)
 	{
-		_ufo->setId(*_game->getSavedGame()->getUfoId());
-		(*_game->getSavedGame()->getUfoId())++;
+		_ufo->setId(_game->getSavedGame()->getId("STR_UFO"));
 	}
 
 	_screen = false;

@@ -59,14 +59,14 @@ set ( basescape_src
   Basescape/SoldiersState.h
   Basescape/NewResearchListState.h
   Basescape/NewResearchListState.cpp
-  Basescape/ResearchProjectState.h
-  Basescape/ResearchProjectState.cpp
-  Basescape/ListPossibleProductionState.h
-  Basescape/ListPossibleProductionState.cpp
-  Basescape/ProductionStartState.h
-  Basescape/ProductionStartState.cpp
-  Basescape/ProductionState.h
-  Basescape/ProductionState.cpp
+  Basescape/ResearchInfoState.h
+  Basescape/ResearchInfoState.cpp
+  Basescape/NewManufactureListState.h
+  Basescape/NewManufactureListState.cpp
+  Basescape/ManufactureStartState.h
+  Basescape/ManufactureStartState.cpp
+  Basescape/ManufactureInfoState.h
+  Basescape/ManufactureInfoState.cpp
 )
 
 set ( battlescape_src
@@ -86,8 +86,8 @@ set ( battlescape_src
   Battlescape/UnitTurnBState.h
   Battlescape/ActionMenuItem.h
   Battlescape/ActionMenuItem.cpp
-  Battlescape/BriefingCrashState.h
-  Battlescape/BriefingCrashState.cpp
+  Battlescape/BriefingState.h
+  Battlescape/BriefingState.cpp
   Battlescape/ProjectileFlyBState.cpp
   Battlescape/ProjectileFlyBState.h
   Battlescape/PrimeGrenadeState.cpp
@@ -248,8 +248,8 @@ set ( geoscape_src
   Geoscape/GraphsState.h
   Geoscape/ConfirmLandingState.cpp
   Geoscape/ConfirmLandingState.h
-  Geoscape/OptionsState.h
-  Geoscape/OptionsState.cpp
+  Geoscape/GeoscapeOptionsState.h
+  Geoscape/GeoscapeOptionsState.cpp
   Geoscape/BaseNameState.cpp
   Geoscape/BaseNameState.h
   Geoscape/MultipleTargetsState.cpp
@@ -260,10 +260,12 @@ set ( geoscape_src
   Geoscape/DogfightState.h
   Geoscape/GeoscapeState.cpp
   Geoscape/GeoscapeState.h
-  Geoscape/EndResearchState.h
-  Geoscape/EndResearchState.cpp
+  Geoscape/ResearchCompleteState.h
+  Geoscape/ResearchCompleteState.cpp
   Geoscape/NewPossibleResearchState.h
   Geoscape/NewPossibleResearchState.cpp
+  Geoscape/AlienTerrorState.h
+  Geoscape/AlienTerrorState.cpp
 )
 
 set ( interface_src
@@ -308,6 +310,10 @@ set ( menu_src
   Menu/LoadGameState.h
   Menu/NewGameState.cpp
   Menu/NewGameState.h
+  Menu/NewBattleState.cpp
+  Menu/NewBattleState.h
+  Menu/OptionsState.cpp
+  Menu/OptionsState.h
 )
 
 set ( resource_src
@@ -356,10 +362,10 @@ set ( ruleset_src
   Ruleset/RuleTerrain.h
   Ruleset/MapData.cpp
   Ruleset/MapData.h
-  Ruleset/RuleResearchProject.h
-  Ruleset/RuleResearchProject.cpp
-  Ruleset/RuleManufactureInfo.h
-  Ruleset/RuleManufactureInfo.cpp
+  Ruleset/RuleResearch.h
+  Ruleset/RuleResearch.cpp
+  Ruleset/RuleManufacture.h
+  Ruleset/RuleManufacture.cpp
   Ruleset/AlienDeployment.h
   Ruleset/AlienDeployment.cpp
   Ruleset/AlienRace.h
@@ -403,6 +409,8 @@ set ( savegame_src
   Savegame/Tile.h
   Savegame/CraftWeapon.cpp
   Savegame/CraftWeapon.h
+  Savegame/CraftWeaponProjectile.cpp
+  Savegame/CraftWeaponProjectile.h
   Savegame/SavedGame.h
   Savegame/SavedGame.cpp
   Savegame/Soldier.h
@@ -417,11 +425,9 @@ set ( savegame_src
   Savegame/ResearchProject.cpp
   Savegame/Production.h
   Savegame/Production.cpp
-  Savegame/CraftWeaponProjectile.cpp
-  Savegame/CraftWeaponProjectile.h
-
+  Savegame/TerrorSite.h
+  Savegame/TerrorSite.cpp
 )
-
 
 set ( ufopedia_src
   Ufopaedia/ArticleStateBaseFacility.cpp

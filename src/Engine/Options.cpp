@@ -48,11 +48,14 @@ void createDefault()
 	setInt("displayWidth", 320);
 	setInt("displayHeight", 200);
 	setBool("fullscreen", true);
+	setInt("keyboardMode", KEYBOARD_OFF);
 #else
 	setInt("displayWidth", 640);
 	setInt("displayHeight", 400);
 	setBool("fullscreen", false);
+	setInt("keyboardMode", KEYBOARD_ON);
 #endif
+	setBool("debug", false);
 	setBool("mute", false);
 	setInt("soundVolume", MIX_MAX_VOLUME);
 	setInt("musicVolume", MIX_MAX_VOLUME);
@@ -207,7 +210,8 @@ void save(const std::string &filename)
 	std::ofstream sav(s.c_str());
 	if (!sav)
 	{
-		throw Exception("Failed to save options");
+		//throw Exception("Failed to save options");
+		return;
 	}
 	YAML::Emitter out;
 

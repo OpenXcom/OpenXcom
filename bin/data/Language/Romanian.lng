@@ -475,8 +475,6 @@ STR_ALIEN_BASE_ASSAULT_BRIEFING
 Soldații XCom au pătruns într-o bază extraterestră.  Centrul de control trebuie distrus pentru a face baza inoperantă.  Misiunea va avea succes când toți inamicii au fost eliminați sau când echipa ta s-a întors în zona de ieșire marcată cu verde (apasă pe iconul 'Anulează Misiunea' pentru a fugi).
 STR_CYDONIA_BRIEFING
 Ai ajuns în Cydonia.  Pătrunzi într-un mare complex subteran de lângă Sfinxul marțian.  Trebuie să distrugi creierul care controlează toate acțiunile extratereștrilor.  Soarta umanității se află în mâinile tale...
-STR_TERROR_SITE_UC
-ZONA TERORIZATĂ-
 STR_TERROR_MISSION
 MISIUNE DE GROAZĂ
 STR_TERROR_MISSION_BRIEFING
@@ -559,14 +557,8 @@ STR_INTERCEPTING_UFO
 INTERCEPTEAZĂ OZN-
 STR_RETURNING_TO_BASE
 SE ÎNTOARCE LA BAZĂ
-STR_DESTINATION_ALIEN_BASE
-DESTINAȚIE: BAZA EXTRATERESTRĂ-
-STR_DESTINATION_CRASH_SITE
-DESTINAȚIE: OZN PRĂBUȘIT-
-STR_DESTINATION_LANDING_SITE
-DESTINAȚIE: OZN ATERIZAT-
-STR_DESTINATION_WAY_POINT
-DESTINAȚIE: PUNCT RUTĂ-
+STR_DESTINATION_UC
+DESTINAȚIE: 
 STR_SPEED_
 VITEZĂ>
 STR_MAXIMUM_SPEED_UC
@@ -739,7 +731,7 @@ STR_LANDING_SITE_
 OZN ATERIZAT-
 STR_WAY_POINT_
 PUNCT RUTĂ-
-STR_TERROR_SITE_
+STR_TERROR_SITE_UC
 ZONA TERORIZATĂ-
 STR_HAS_REACHED
 a ajuns la
@@ -1761,6 +1753,12 @@ STR_GRAPHS
 GRAFICE
 STR_UFOPAEDIA_UC
 UFOPEDIA
+STR_NEW_BATTLE
+New Battle
+STR_THE_SIMULATRON
+THE SIMULATRON
+STR_OPTIONS_
+Options
 STR_OPTIONS
 OPȚIUNI
 STR_FUNDING_UC
@@ -1811,8 +1809,6 @@ STR_IN_PSIONIC_TRAINING
 Antrenament Psionic
 STR_BLASTER_BOMB_UFOPEDIA
 Acest dispozitiv este o rachetă explozivă dotată cu un sistem inteligent de ghidare.  Este proiectată de un lansator de bombe.
-STR_PLEASE_LOOK_UP_THE_PAGE
-Caută următoarea pagină în Manualul Jocului și introdu codul format din opt cifre aflat în josul paginii.{NEWLINE}EX:  Pagina 13 din Manualul jocului Cod: 3994-9668{NEWLINE}Introdu codul de la pagina 
 STR_FRONT_ARMOR
 Armură Frontală
 STR_LEFT_ARMOR

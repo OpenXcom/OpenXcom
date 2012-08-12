@@ -90,7 +90,7 @@ void AbandonGameState::btnYesClick(Action *action)
 {
 	_game->setState(new MainMenuState(_game));
 	_game->setSavedGame(0);
-	_game->setRuleset(0);
+	//_game->setRuleset(0);
 }
 
 /**
